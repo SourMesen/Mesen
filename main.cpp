@@ -2,44 +2,6 @@
 #include "CPU.h"
 
 /*
-template<typename... Types>
-class Event
-{
-	typedef void(*Func)(Types...);
-	private: 
-		std::list<Func> handlerList;
-		Func lastFunc;
-
-	public:
-		void RegisterHandler(Func handler);
-		void operator+=(Func handler);
-		void operator()(Types ...types);
-};
-
-template<typename... Types>
-void Event<Types...>::RegisterHandler(Func handler)
-{
-	this->handlerList.push_back(handler);
-	lastFunc = this->handlerList.size() == 1 ? handler : nullptr;
-}
-
-template<typename... Types>
-void Event<Types...>::operator+=(Func handler) {
-	this->RegisterHandler(handler);
-}
-
-template<typename... Types>
-void Event<Types...>::operator()(Types... types)
-{
-	if (lastFunc) {
-		lastFunc(types...);
-	} else {
-		for (auto handler : this->handlerList) {
-			handler(types...);
-		}
-	}
-}
-
 template<typename T>
 class TemplatedClass
 {
@@ -103,19 +65,14 @@ void func2(int a)
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	std::ifstream romFile("6502_functional_test.bin", std::ios::in | std::ios::binary);
-	if(!romFile) {
-		std::cout << "Error";
-	}
-
-	int8_t romMemory[65536];
-	romFile.read((char *)romMemory, 65536);
-	/*int8_t* memory = new int8_t[8000];
-	memory[0x0600] = 0xA9;
-	memory[0x0601] = 0x55;*/
-	
-	Core core(romMemory);
-	core.Exec();
+/*	BaseMemoryHandler a;
+	Test b;
+	EventHandler<BaseMemoryHandler, uint16_t> eventHandler;
+	eventHandler.RegisterHandler(&a, &BaseMemoryHandler::CallbackTest);
+	eventHandler.RegisterHandler(&b, &BaseMemoryHandler::CallbackTest);
+	eventHandler(eMemoryOperation::Read, 0);
+	*/
+	CPU::RunBenchmark();
 		
 	/*Event<> eventHandler;
 	eventHandler += somefunction;
