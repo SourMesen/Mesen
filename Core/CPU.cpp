@@ -102,7 +102,7 @@ void CPU::RunBenchmark()
 {
 	std::ifstream romFile("6502_functional_test.bin", std::ios::in | std::ios::binary);
 	if(!romFile) {
-		std::cout << "Error";
+		return;
 	}
 
 	uint8_t *romMemory = new uint8_t[65536];

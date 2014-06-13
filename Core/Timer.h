@@ -19,6 +19,13 @@ class Timer
 			_start = li;
 		}
 
+		void Reset()
+		{
+			LARGE_INTEGER li;
+			QueryPerformanceCounter(&li);
+			_start = li;
+		}
+
 		double GetElapsedMS()
 		{
 			LARGE_INTEGER li;
