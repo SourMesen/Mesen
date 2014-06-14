@@ -11,18 +11,31 @@ class BaseMapper : public IMemoryHandler
 		vector<MemoryBank> _romBanks;
 		vector<MemoryBank> _vromBanks;
 
+		virtual void InitMapper() = 0;
+
 	public:
 		void Initialize(NESHeader header, vector<MemoryBank> romBanks, vector<MemoryBank> vromBanks)
 		{
 			_header = header;
 			_romBanks = romBanks;
 			_vromBanks = vromBanks;
+
+			InitMapper();
 		}
 };
 
 class DefaultMapper : public BaseMapper
 {
+	vector<MemoryBank*> _mappedRomBanks;
 	private:
+		void InitMapper()
+		{
+			if(_romBanks.size() == 1) {
+				_mappedRomBanks = { &_romBanks[0], &_romBanks[0] };
+			} else {
+				_mappedRomBanks = { &_romBanks[0], &_romBanks[1] };
+			}
+		}
 
 	public:
 		std::array<int, 2> GetIOAddresses()
@@ -32,19 +45,19 @@ class DefaultMapper : public BaseMapper
 
 		uint8_t MemoryRead(uint16_t addr)
 		{
-			return _romBanks[(addr >> 14) & 0x01][addr & 0x3FFF];
+			return (*_mappedRomBanks[(addr >> 14) & 0x01])[addr & 0x3FFF];
 		}
 
 		void MemoryWrite(uint16_t addr, uint8_t value)
 		{
-			_romBanks[(addr >> 14) & 0x01][addr & 0x3FFF] = value;
+			(*_mappedRomBanks[(addr >> 14) & 0x01])[addr & 0x3FFF] = value;
 		}
 };
 
 class MapperFactory
 {
 	public:
-		static shared_ptr<BaseMapper> InitializeFromFile(char *filename)
+		static shared_ptr<BaseMapper> InitializeFromFile(string filename)
 		{
 			ROMLoader loader(filename);
 

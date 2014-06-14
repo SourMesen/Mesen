@@ -20,6 +20,7 @@
 #include <thread>
 #include <vector>
 #include <array>
+#include <sstream>
 
 #include <windows.h>
 
@@ -28,5 +29,6 @@ using std::shared_ptr;
 using std::unique_ptr;
 using std::ios;
 using std::ifstream;
+using std::string;
 
 // TODO: reference additional headers your program requires here

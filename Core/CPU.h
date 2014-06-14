@@ -40,6 +40,8 @@ private:
 
 	MemoryManager *_memoryManager = nullptr;
 
+	static uint64_t CycleCount;
+
 	uint16_t _currentPC = 0;
 	uint8_t _cyclePenalty = 0;
 
@@ -599,6 +601,13 @@ private:
 
 public:
 	CPU(MemoryManager *memoryManager);
+	static uint64_t GetCycleCount() {
+		return CPU::CycleCount;
+	}
 	void Reset();
 	void Exec();
+	State GetState()
+	{
+		return _state;
+	}
 };

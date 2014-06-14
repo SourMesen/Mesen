@@ -30,7 +30,7 @@ class ROMLoader
 		vector<MemoryBank> _vromBanks;
 
 	public:
-		ROMLoader(const char* filename)
+		ROMLoader(string filename)
 		{
 			_romBanks.clear();
 			_vromBanks.clear();
@@ -38,7 +38,7 @@ class ROMLoader
 			ifstream romFile(filename, ios::in | ios::binary);
 
 			if(!romFile) {
-				return;
+				throw std::exception("File could not be read");
 			}
 
 			romFile.read((char*)&_header, sizeof(NESHeader));

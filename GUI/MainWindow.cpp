@@ -41,7 +41,7 @@ namespace NES
 					frameCount = 0;
 				}*/
 			}
-			//std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
+			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
 		}
 
 		return (int)msg.wParam;
@@ -106,7 +106,7 @@ namespace NES
 
 	void MainWindow::RunBenchmark()
 	{
-		std::thread bmThread(&Console::RunBenchmark);
+		std::thread bmThread(&Console::RunTests);
 		bmThread.detach();
 	}
 

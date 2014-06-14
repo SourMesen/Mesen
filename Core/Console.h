@@ -13,9 +13,10 @@ class Console
 		MemoryManager _memoryManager;
 
 	public:
-		Console(char* filename);
+		Console(string filename);
 		~Console();
 		void Run();
+		void RunTest(bool callback(Console*));
 		void Reset();
-		static void RunBenchmark();
+		static void RunTests();
 };

@@ -15,9 +15,36 @@ enum PPURegisters
 	VideoMemoryData = 0x07
 };
 
+struct PPUControlFlags
+{
+	uint16_t NameTableAddr;
+	bool VerticalWrite;
+	uint16_t SpritePatternAddr;
+	uint16_t BackgroundPatternAddr;
+	bool LargeSprites;
+	bool VBlank;
+
+	bool Grayscale;
+	bool BackgroundMask;
+	bool SpriteMask;
+	bool BackgroundEnabled;
+	bool SpritesEnabled;
+	bool IntensifyRed;
+	bool IntensifyGreen;
+	bool IntensifyBlue;
+};
+
+struct PPUStatusFlags
+{
+	bool SpriteOverflow;
+	bool Sprite0Hit;
+	bool VerticalBlank;
+};
+
 struct PPUState
 {
-	uint16_t Control;
+	uint8_t Control;
+	uint8_t Control2;
 	uint8_t Status;
 	uint8_t SpriteRamAddr;
 	uint16_t VideoRamAddr;
@@ -27,8 +54,24 @@ class PPU : public IMemoryHandler
 {
 	private:
 		PPUState _state;
+		uint64_t _cycleCount;
+
+		uint8_t _memoryReadBuffer;
 		uint8_t _spriteRAM[256];
 		uint8_t _videoRAM[16*1024];
+
+		uint8_t *_outputBuffer;
+
+		int16_t _scanline = -1;
+		uint16_t _cycle = 0;
+
+		PPUControlFlags _flags = {};
+		PPUStatusFlags _statusFlags = {};
+
+		void PPU::UpdateStatusFlag();
+
+		void PPU::UpdateFlags();
+		bool PPU::CheckFlag(PPUControlFlags flag);
 
 		PPURegisters GetRegisterID(uint16_t addr)
 		{
@@ -37,7 +80,8 @@ class PPU : public IMemoryHandler
 
 	public:
 		PPU();
-		
+		~PPU();
+
 		std::array<int, 2> GetIOAddresses() 
 		{ 
 			return std::array<int, 2> {{ 0x2000, 0x3FFF }};
@@ -45,4 +89,6 @@ class PPU : public IMemoryHandler
 
 		uint8_t MemoryRead(uint16_t addr);
 		void MemoryWrite(uint16_t addr, uint8_t value);
+
+		void Exec();
 };

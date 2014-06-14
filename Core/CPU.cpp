@@ -2,6 +2,8 @@
 #include "CPU.h"
 #include "Timer.h"
 
+uint64_t CPU::CycleCount = 0;
+
 CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 {
 	Reset();
@@ -50,6 +52,7 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 
 void CPU::Reset()
 {
+	CPU::CycleCount = 0;
 	_state.A = 0;
 	_state.PC = MemoryReadWord(0xFFFC);
 	_state.SP = 0xFF;
@@ -60,25 +63,11 @@ void CPU::Reset()
 
 void CPU::Exec()
 {
-	uint32_t cycleCount = 0;
-
-	Timer timer;
-	while(true) {
-		_currentPC = _state.PC;
-		uint8_t opCode = ReadByte();
-		if(_opTable[opCode] != nullptr) {
-			(this->*_opTable[opCode])();
-			cycleCount += this->_cycles[opCode];
-			//std::cout << "OPCode: " << std::hex << (short)opCode << " PC:" << _currentPC << std::endl;
-		} else {
-			//std::cout << "Invalid opcode: PC:" << _currentPC << std::endl;
-			throw std::exception("Invalid opcode");
-		}
-
-		if(cycleCount >= 200000000) {
-			break;
-		}
+	uint8_t opCode = ReadByte();
+	if(_opTable[opCode] != nullptr) {
+		(this->*_opTable[opCode])();
+		CPU::CycleCount += this->_cycles[opCode];
+	} else {
+		//throw std::exception("Invalid opcode");
 	}
-	std::wstring result = L"Frequency: " + std::to_wstring((int)(cycleCount / timer.GetElapsedMS() * 1000 / 1000000)) + L"mhz\n";
-	OutputDebugString(result.c_str());
 }
