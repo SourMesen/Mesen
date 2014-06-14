@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MainWindow.h"
-#include "..\Core\CPU.h"
+#include "..\Core\Console.h"
 #include "..\Core\Timer.h"
 using namespace DirectX;
 
@@ -106,7 +106,7 @@ namespace NES
 
 	void MainWindow::RunBenchmark()
 	{
-		std::thread bmThread(&CPU::RunBenchmark);
+		std::thread bmThread(&Console::RunBenchmark);
 		bmThread.detach();
 	}
 

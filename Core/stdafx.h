@@ -18,18 +18,15 @@
 #include <string>
 #include <memory>
 #include <thread>
-#include <list>
 #include <vector>
+#include <array>
 
 #include <windows.h>
 
-
-class IMemoryHandler
-{
-	public:
-		virtual uint8_t MemoryRead(uint16_t addr) = 0;
-		virtual void MemoryWrite(uint16_t addr, uint8_t value) = 0;
-};
-
+using std::vector;
+using std::shared_ptr;
+using std::unique_ptr;
+using std::ios;
+using std::ifstream;
 
 // TODO: reference additional headers your program requires here

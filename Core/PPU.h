@@ -1,4 +1,7 @@
+#pragma once
+
 #include "stdafx.h"
+#include "IMemoryHandler.h"
 
 enum PPURegisters
 {
@@ -22,37 +25,24 @@ struct PPUState
 
 class PPU : public IMemoryHandler
 {
-private:
-	PPUState _state;
-	uint8_t _spriteRAM[256];
-	uint8_t _videoRAM[16*1024];
+	private:
+		PPUState _state;
+		uint8_t _spriteRAM[256];
+		uint8_t _videoRAM[16*1024];
 
-	PPURegisters GetRegisterID(uint16_t addr) {
-		return (PPURegisters)(addr & 0x07);
-	}
-
-public:
-	PPU() {
-		_state = {};
-		_state.Status |= 0xFF;
-	}
-
-	uint8_t MemoryRead(uint16_t addr)	{
-		switch(GetRegisterID(addr)) {
-			case PPURegisters::Control:
-				return (uint8_t)_state.Control;
-			case PPURegisters::Control2:
-				return (uint8_t)(_state.Control >> 8);
-			case PPURegisters::Status:
-				return _state.Status;
-			case PPURegisters::SpriteData:
-				return _spriteRAM[_state.SpriteRamAddr];
-			case PPURegisters::VideoMemoryData:
-				return _videoRAM[_state.VideoRamAddr];
+		PPURegisters GetRegisterID(uint16_t addr)
+		{
+			return (PPURegisters)(addr & 0x07);
 		}
-	}
 
-	void MemoryWrite(uint16_t addr, uint8_t value) {
+	public:
+		PPU();
+		
+		std::array<int, 2> GetIOAddresses() 
+		{ 
+			return std::array<int, 2> {{ 0x2000, 0x3FFF }};
+		}
 
-	}
+		uint8_t MemoryRead(uint16_t addr);
+		void MemoryWrite(uint16_t addr, uint8_t value);
 };

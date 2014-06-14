@@ -1,5 +1,7 @@
+#pragma once
+
 #include "stdafx.h"
-#include "Memory.h"
+#include "MemoryManager.h"
 
 namespace PSFlags
 {
@@ -37,7 +39,6 @@ private:
 	State _state;
 
 	MemoryManager *_memoryManager = nullptr;
-
 
 	uint16_t _currentPC = 0;
 	uint8_t _cyclePenalty = 0;
@@ -600,5 +601,4 @@ public:
 	CPU(MemoryManager *memoryManager);
 	void Reset();
 	void Exec();
-	static void RunBenchmark();
 };

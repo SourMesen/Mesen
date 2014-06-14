@@ -60,7 +60,6 @@ void CPU::Reset()
 
 void CPU::Exec()
 {
-	uint16_t lastPC = 65535;
 	uint32_t cycleCount = 0;
 
 	Timer timer;
@@ -75,7 +74,6 @@ void CPU::Exec()
 			//std::cout << "Invalid opcode: PC:" << _currentPC << std::endl;
 			throw std::exception("Invalid opcode");
 		}
-		lastPC = _currentPC;
 
 		if(cycleCount >= 200000000) {
 			break;
@@ -83,22 +81,4 @@ void CPU::Exec()
 	}
 	std::wstring result = L"Frequency: " + std::to_wstring((int)(cycleCount / timer.GetElapsedMS() * 1000 / 1000000)) + L"mhz\n";
 	OutputDebugString(result.c_str());
-}
-
-void CPU::RunBenchmark()
-{
-	std::ifstream romFile("6502_functional_test.bin", std::ios::in | std::ios::binary);
-	if(!romFile) {
-		return;
-	}
-
-	uint8_t *romMemory = new uint8_t[65536];
-	romFile.read((char *)romMemory, 65536);
-
-	//Test a;
-
-	MemoryManager memoryManager(MapperFactory::InitializeFromFile("mario.nes"));
-	//memoryManager.OnMemoryRead()->RegisterHandler(&a, &IMemoryHandler::MemoryRead);
-	CPU core(&memoryManager);
-	core.Exec();
 }
