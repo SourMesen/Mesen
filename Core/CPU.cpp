@@ -51,7 +51,7 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 void CPU::Reset()
 {
 	_state.A = 0;
-	_state.PC = 0x0400;
+	_state.PC = MemoryReadWord(0xFFFC);
 	_state.SP = 0xFF;
 	_state.X = 0;
 	_state.Y = 0;
@@ -72,8 +72,8 @@ void CPU::Exec()
 			cycleCount += this->_cycles[opCode];
 			//std::cout << "OPCode: " << std::hex << (short)opCode << " PC:" << _currentPC << std::endl;
 		} else {
-			std::cout << "Invalid opcode: PC:" << _currentPC << std::endl;
-			throw;
+			//std::cout << "Invalid opcode: PC:" << _currentPC << std::endl;
+			throw std::exception("Invalid opcode");
 		}
 		lastPC = _currentPC;
 
@@ -85,19 +85,6 @@ void CPU::Exec()
 	OutputDebugString(result.c_str());
 }
 
-class Test : public IMemoryHandler
-{
-	public:
-		int _counter = 0;
-	public:
-		void MemoryRead(uint16_t aa) {
-			//_counter++;
-		}
-		void MemoryWrite(uint16_t aa) {
-
-		}
-};
-
 void CPU::RunBenchmark()
 {
 	std::ifstream romFile("6502_functional_test.bin", std::ios::in | std::ios::binary);
@@ -108,10 +95,10 @@ void CPU::RunBenchmark()
 	uint8_t *romMemory = new uint8_t[65536];
 	romFile.read((char *)romMemory, 65536);
 
-	Test a;
+	//Test a;
 
-	MemoryManager memoryManager(romMemory);
-	memoryManager.OnMemoryRead()->RegisterHandler(&a, &IMemoryHandler::MemoryRead);
+	MemoryManager memoryManager(MapperFactory::InitializeFromFile("mario.nes"));
+	//memoryManager.OnMemoryRead()->RegisterHandler(&a, &IMemoryHandler::MemoryRead);
 	CPU core(&memoryManager);
 	core.Exec();
 }

@@ -17,40 +17,6 @@ namespace NES
 	}
 
 	//--------------------------------------------------------------------------------------
-	// Helper for compiling shaders with D3DCompile
-	//
-	// With VS 11, we could load up prebuilt .cso files instead...
-	//--------------------------------------------------------------------------------------
-	HRESULT Renderer::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
-	{
-		HRESULT hr = S_OK;
-
-		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#if defined( DEBUG ) || defined( _DEBUG )
-		// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
-		// Setting this flag improves the shader debugging experience, but still allows 
-		// the shaders to be optimized and to run exactly the way they will run in 
-		// the release configuration of this program.
-		dwShaderFlags |= D3DCOMPILE_DEBUG;
-#endif
-
-		ID3DBlob* pErrorBlob = nullptr;
-		hr = D3DCompileFromFile(szFileName, nullptr, nullptr, szEntryPoint, szShaderModel,
-			dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
-		if(FAILED(hr)) {
-			if(pErrorBlob) {
-				OutputDebugStringA(reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer()));
-				pErrorBlob->Release();
-			}
-			return hr;
-		}
-		if(pErrorBlob) pErrorBlob->Release();
-
-		return S_OK;
-	}
-
-
-	//--------------------------------------------------------------------------------------
 	// Create Direct3D device and swap chain
 	//--------------------------------------------------------------------------------------
 	HRESULT Renderer::InitDevice()
@@ -218,12 +184,7 @@ namespace NES
 	void Renderer::Render()
 	{
 		// Clear the back buffer 
-		_pImmediateContext->ClearRenderTargetView(_pRenderTargetView, Colors::MidnightBlue);
-
-		// Render a triangle
-		/*_pImmediateContext->VSSetShader(_pVertexShader, nullptr, 0);
-		_pImmediateContext->PSSetShader(_pPixelShader, nullptr, 0);
-		_pImmediateContext->Draw(3, 0);*/
+		//_pImmediateContext->ClearRenderTargetView(_pRenderTargetView, Colors::MidnightBlue);
 
 		UINT screenwidth = 320, screenheight = 240;
 
@@ -239,10 +200,7 @@ namespace NES
 		dd.DepthPitch = screenwidth* screenheight * 4;
 
 		_pImmediateContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-
 		memcpy(dd.pData, _videoRAM, screenwidth*screenheight * 4);
-
-
 		_pImmediateContext->Unmap(_pTexture, 0);
 		
 		///////////////////////////////////////////////////////////////////////////////
@@ -259,11 +217,11 @@ namespace NES
 		ID3D11ShaderResourceView *pSRView = NULL;
 		_pd3dDevice->CreateShaderResourceView(_pTexture, &srvDesc, &pSRView);
 
-
+		/*
 		D3D11_RENDER_TARGET_VIEW_DESC rtDesc;
 		rtDesc.Format = desc.Format;
 		rtDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-		rtDesc.Texture2D.MipSlice = 0;
+		rtDesc.Texture2D.MipSlice = 0;*/
 
 		////////////////////////////////////////////////////////////////////////////
 

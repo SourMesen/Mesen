@@ -32,14 +32,14 @@ namespace NES
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			} else {
-				_renderer.Render();
+				/*_renderer.Render();
 				frameCount++;
 				if(frameCount == 500) {
 					double fps = (double)frameCount / (timer.GetElapsedMS() / 1000);
 					OutputDebugString((std::to_wstring((int)fps) + L"\n").c_str());
 					timer.Reset();
 					frameCount = 0;
-				}
+				}*/
 			}
 			//std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
 		}

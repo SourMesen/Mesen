@@ -19,8 +19,17 @@
 #include <memory>
 #include <thread>
 #include <list>
+#include <vector>
 
 #include <windows.h>
+
+
+class IMemoryHandler
+{
+	public:
+		virtual uint8_t MemoryRead(uint16_t addr) = 0;
+		virtual void MemoryWrite(uint16_t addr, uint8_t value) = 0;
+};
 
 
 // TODO: reference additional headers your program requires here

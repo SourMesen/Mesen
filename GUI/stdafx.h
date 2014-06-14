@@ -11,6 +11,12 @@
 // Windows Header Files:
 #include <windows.h>
 
+#ifdef _DEBUG
+	#pragma comment( lib, "DirectXTK.debug.lib" )
+#else 
+	#pragma comment( lib, "DirectXTK.lib" )
+#endif
+
 // C RunTime Header Files
 #include <stdlib.h>
 #include <malloc.h>

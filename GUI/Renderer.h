@@ -30,10 +30,9 @@ namespace NES {
 		ID3D11Texture2D*			_pTexture = nullptr;
 
 		byte*							_videoRAM;
-		//SpriteBatch*				_sprites;
+
 		std::unique_ptr<SpriteBatch> _sprites;
 
-		HRESULT Renderer::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 		HRESULT Renderer::InitDevice();
 		void Renderer::CleanupDevice();
 
