@@ -3,6 +3,7 @@
 #include "Timer.h"
 
 uint64_t CPU::CycleCount = 0;
+bool CPU::NMIFlag = false;
 
 CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 {
@@ -63,11 +64,17 @@ void CPU::Reset()
 
 void CPU::Exec()
 {
-	uint8_t opCode = ReadByte();
-	if(_opTable[opCode] != nullptr) {
-		(this->*_opTable[opCode])();
-		CPU::CycleCount += this->_cycles[opCode];
+	if(!CPU::NMIFlag) {
+		uint8_t opCode = ReadByte();
+		if(_opTable[opCode] != nullptr) {
+			(this->*_opTable[opCode])();
+			CPU::CycleCount += this->_cycles[opCode];
+		} else {
+			//throw std::exception("Invalid opcode");
+		}
 	} else {
-		//throw std::exception("Invalid opcode");
+		NMI();
+		CPU::CycleCount += 7;
+		CPU::NMIFlag = false;
 	}
 }

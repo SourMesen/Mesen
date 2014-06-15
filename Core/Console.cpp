@@ -12,7 +12,7 @@ Console::Console(string filename)
 
 Console::~Console()
 {
-
+	_cpu.release();
 }
 
 void Console::Reset()
@@ -46,7 +46,7 @@ void Console::RunTests()
 	console->Run();
 	delete console;*/
 
-	vector<std::string> testROMs = { { "nestest", "01-basics", "02-implied", "03-immediate", "04-zero_page", "05-zp_xy", "06-absolute", "07-abs_xy", "08-ind_x", "09-ind_y", "10-branches", "11-stack", "12-jmp_jsr", "13-rts", "14-rti", "15-brk", "16-special" } };
+	vector<std::string> testROMs = { { "01-basics", "02-implied", "03-immediate", "04-zero_page", "05-zp_xy", "06-absolute", "07-abs_xy", "08-ind_x", "09-ind_y", "10-branches", "11-stack", "12-jmp_jsr", "13-rts", "14-rti", "15-brk", "16-special" } };
 
 	for(string testROM : testROMs) {
 		Console *console = new Console(string("TestSuite/") + testROM + ".nes");
@@ -64,7 +64,7 @@ void Console::RunTests()
 				uint8_t testStatus = console->_memoryManager.Read(0x6000);
 				if(testStatus == 0x81) {
 					//need reset
-					throw std::exception("reset needed");
+					OutputDebugStringA("reset needed");
 				} else if(testStatus == 0x80) {
 					testStarted = true;
 				} else if(testStatus < 0x80 && testStarted) {

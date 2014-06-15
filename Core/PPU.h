@@ -64,9 +64,10 @@ class PPU : public IMemoryHandler
 
 		int16_t _scanline = -1;
 		uint16_t _cycle = 0;
+		uint32_t _frameCount = 0;
 
-		PPUControlFlags _flags = {};
-		PPUStatusFlags _statusFlags = {};
+		PPUControlFlags _flags;
+		PPUStatusFlags _statusFlags;
 
 		void PPU::UpdateStatusFlag();
 

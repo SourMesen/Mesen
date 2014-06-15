@@ -5,7 +5,9 @@
 PPU::PPU() 
 {
 	_state = {};
-	
+	_flags = {};
+	_statusFlags = {};
+
 	_outputBuffer = new uint8_t[256 * 240 * 4];
 }
 
@@ -105,7 +107,8 @@ void PPU::UpdateStatusFlag()
 {
 	_state.Status = ((uint8_t)_statusFlags.SpriteOverflow << 5) |
 						 ((uint8_t)_statusFlags.Sprite0Hit << 6) |
-						 ((uint8_t)_statusFlags.VerticalBlank << 7));
+						 ((uint8_t)_statusFlags.VerticalBlank << 7);
+	_statusFlags.VerticalBlank = false;
 }
 
 void PPU::Exec()
@@ -113,14 +116,19 @@ void PPU::Exec()
 	uint64_t equivalentCycleCount = CPU::GetCycleCount() * 3;
 	while(_cycleCount < equivalentCycleCount) {
 		if(_scanline == -1) {
+			//Pre-render scanline
 			if(_cycle == 1) {
 				_statusFlags.SpriteOverflow = false;
 				_statusFlags.Sprite0Hit = false;
+				_statusFlags.VerticalBlank = false;
 			} else if(_cycle == 304) {
 				// Copy scroll latch into VRAMADDR register
-				if(_flags.BackgroundEnabled || _flags.SpritesEnabled) {
+				/*if(_flags.BackgroundEnabled || _flags.SpritesEnabled) {
 					//p->registers.vramAddress = p->registers.vramLatch;
-				}
+				}*/
+			} else if(_cycle == 339 && (_frameCount % 2 == 1)) {
+				//Skip a cycle for odd frames
+				_cycle++;
 			}
 		} else if(_scanline < 240) {
 			if(_cycle == 254) {
@@ -136,38 +144,42 @@ void PPU::Exec()
 					//Ppu_updateEndScanlineRegisters(p);
 				}
 			}
-		} else if(_scanline == 240) {
+		} else if(_scanline == 241) {
+			//Start of VBlank
 			if(_cycle == 1) {
-				if(!_suppressVBlank) {
+				_statusFlags.VerticalBlank = true;
+				/*if(!_suppressVBlank) {
 					// We're in VBlank
 					Ppu_setStatus(p, STATUS_VBLANK_STARTED);
 					p->cycleCount = 0;
+				}*/
+				if(_flags.VBlank) {
+					CPU::SetNMIFlag();
 				}
-				if(_flags.VBlank && !_suppressNMI) {
+				/*if(_flags.VBlank && !_suppressNMI) {
 					VBlankInterrupt();
-				}
+				}*/
 				//Ppu_raster(p);
 			}
 		} else if(_scanline == 260) {
-			// End of vblank
-			if(_cycle == 1) {
-				// Clear VBlank flag
-				Ppu_clearStatus(p, STATUS_VBLANK_STARTED);
-				_cycleCount = 0;
-			} else if(_cycle == 341) {
-				_scanline = -1;
-				_cycle = 1;
+			//End of VBlank
+			if(_cycle == 340) {
 				_frameCount++;
-				return;
 			}
 		}
 
-		if(_cycle == 341) {
+		if(_cycle == 340) {
 			_cycle = 0;
 			_scanline++;
+
+			if(_scanline == 261) {
+				_scanline = -1;
+				_frameCount++;
+			}
+		} else {
+			_cycle++;
 		}
 
-		_cycle++;
 		_cycleCount++;
 	}
 }

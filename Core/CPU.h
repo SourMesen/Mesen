@@ -41,6 +41,7 @@ private:
 	MemoryManager *_memoryManager = nullptr;
 
 	static uint64_t CycleCount;
+	static bool NMIFlag;
 
 	uint16_t _currentPC = 0;
 	uint8_t _cyclePenalty = 0;
@@ -592,6 +593,14 @@ private:
 		SetPC(MemoryReadWord(0xFFFE));
 	}
 
+	void NMI() {
+		Push((uint16_t)(PC() + 1));
+		Push((uint8_t)PS());
+		SetFlags(PSFlags::Interrupt);
+		SetPC(MemoryReadWord(0xFFFA));
+	}
+
+
 	void NOP() {}
 	void RTI() {
 		SetPS(Pop());
@@ -601,13 +610,10 @@ private:
 
 public:
 	CPU(MemoryManager *memoryManager);
-	static uint64_t GetCycleCount() {
-		return CPU::CycleCount;
-	}
+	static uint64_t GetCycleCount() { return CPU::CycleCount; }
+	static void SetNMIFlag() { CPU::NMIFlag = true; }
 	void Reset();
 	void Exec();
-	State GetState()
-	{
-		return _state;
-	}
+	State GetState() { return _state; }
+
 };
