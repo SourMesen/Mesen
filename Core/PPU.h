@@ -57,14 +57,16 @@ class PPU : public IMemoryHandler
 		uint64_t _cycleCount;
 
 		uint8_t _memoryReadBuffer;
-		uint8_t _spriteRAM[256];
-		uint8_t _videoRAM[16*1024];
+		uint8_t _spriteRAM[0x100];
+		uint8_t _videoRAM[0x4000];
 
 		uint8_t *_outputBuffer;
 
-		int16_t _scanline = -1;
+		int16_t _scanline = 0;
 		uint16_t _cycle = 0;
 		uint32_t _frameCount = 0;
+
+		bool _writeLow = false;
 
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;

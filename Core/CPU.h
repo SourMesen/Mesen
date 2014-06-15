@@ -107,7 +107,7 @@ private:
 		return _memoryManager->ReadWord(addr);
 	}
 
-	void SetRegister(uint8_t &reg, int8_t value) {
+	void SetRegister(uint8_t &reg, uint8_t value) {
 		ClearFlags(PSFlags::Zero | PSFlags::Negative);
 		SetZeroNegativeFlags(value);
 		reg = value;
@@ -155,13 +155,13 @@ private:
 	uint8_t GetZeroX() { return MemoryRead(GetZeroXAddr()); }
 	uint8_t GetZeroXAddr() { return ReadByte() + X(); }
 
-	int8_t GetZeroY() { return MemoryRead(GetZeroYAddr()); }
-	int8_t GetZeroYAddr() { return ReadByte() + Y(); }
+	uint8_t GetZeroY() { return MemoryRead(GetZeroYAddr()); }
+	uint8_t GetZeroYAddr() { return ReadByte() + Y(); }
 	
-	int8_t GetAbs() { return MemoryRead(GetAbsAddr()); }
+	uint8_t GetAbs() { return MemoryRead(GetAbsAddr()); }
 	uint16_t GetAbsAddr() { return ReadWord(); }
 
-	int8_t GetAbsX() { return MemoryRead(GetAbsXAddr()); }
+	uint8_t GetAbsX() { return MemoryRead(GetAbsXAddr()); }
 	uint16_t GetAbsXAddr() { 
 		uint16_t baseAddr = ReadWord();
 		if(IsPageCrossed(baseAddr, X())) {
@@ -170,7 +170,7 @@ private:
 		return baseAddr + X(); 
 	}
 
-	int8_t GetAbsY() { return MemoryRead(GetAbsYAddr()); }
+	uint8_t GetAbsY() { return MemoryRead(GetAbsYAddr()); }
 	uint16_t GetAbsYAddr() { 
 		uint16_t baseAddr = ReadWord();
 		if(IsPageCrossed(baseAddr, Y())) {
@@ -180,28 +180,48 @@ private:
 		return baseAddr + Y(); 
 	}
 
-	uint16_t GetInd() { return MemoryReadWord(ReadWord()); }
+	uint16_t GetInd() { 
+		uint16_t addr = ReadWord();
+		if(addr & 0xFF == 0xFF) {
+			//Emulate a CPU bug when crossing page boundary
+			auto lo = MemoryRead(addr);
+			auto hi = MemoryRead(addr - 0xFF);
+			return (lo | hi << 8);
+		} else {
+			return MemoryReadWord(addr);
+		}
+	}
 
-	int8_t GetIndX() { return MemoryRead(GetIndXAddr()); }
+	uint8_t GetIndX() { return MemoryRead(GetIndXAddr()); }
 	uint16_t GetIndXAddr() {
 		uint8_t zero = ReadByte() + X();
-		uint16_t addr = MemoryReadWord(zero);
+		uint16_t addr;
+		if(zero == 0xFF) {
+			addr = MemoryRead(0xFF) | MemoryReadWord(0x00) << 8;
+		} else {
+			addr = MemoryReadWord(zero);
+		}
 		return addr;
 	}
 
-	int8_t GetIndY() { return MemoryRead(GetIndYAddr()); }
+	uint8_t GetIndY() { return MemoryRead(GetIndYAddr()); }
 	uint16_t GetIndYAddr() {
 		uint8_t zero = ReadByte();
-		uint16_t addr = MemoryReadWord(zero);
+		uint16_t addr;
+		if(zero == 0xFF) {
+			addr = MemoryRead(0xFF) | MemoryReadWord(0x00) << 8;
+		} else {
+			addr = MemoryReadWord(zero);
+		}
 		if(IsPageCrossed(addr, Y())) {
 			SetCyclePenalty(1);
 		}
 		return addr + Y();
 	}
 
-	void AND(int8_t value) { SetA(A() & value); }
-	void XOR(int8_t value) { SetA(A() ^ value); }
-	void OR(int8_t value) { SetA(A() | value); }
+	void AND(uint8_t value) { SetA(A() & value); }
+	void XOR(uint8_t value) { SetA(A() ^ value); }
+	void OR(uint8_t value) { SetA(A() | value); }
 
 	void ADC(uint8_t value) {
 		uint16_t result = (uint16_t)A() + (uint16_t)value + (CheckFlag(PSFlags::Carry) ? PSFlags::Carry : 0x00);
@@ -217,24 +237,27 @@ private:
 		SetA((uint8_t)result);
 	}
 
-	void SBC(int8_t value) { ADC(value ^ 0xFF); }
+	void SBC(uint8_t value) { ADC(value ^ 0xFF); }
 
 	void CMP(uint8_t reg, uint8_t value) {
 		ClearFlags(PSFlags::Carry | PSFlags::Negative | PSFlags::Zero);
+
+		auto result = reg - value;
+
 		if(reg >= value) {
 			SetFlags(PSFlags::Carry);
 		}
 		if(reg == value) {
 			SetFlags(PSFlags::Zero);
 		}
-		if(reg < value) {
+		if(result & 0x80 == 0x80) {
 			SetFlags(PSFlags::Negative);
 		}
 	}
 
-	void CPA(int8_t value) { CMP(A(), value); }
-	void CPX(int8_t value) { CMP(X(), value); }
-	void CPY(int8_t value) { CMP(Y(), value); }
+	void CPA(uint8_t value) { CMP(A(), value); }
+	void CPX(uint8_t value) { CMP(X(), value); }
+	void CPY(uint8_t value) { CMP(Y(), value); }
 
 	void INC(uint16_t addr) {
 		ClearFlags(PSFlags::Negative | PSFlags::Zero);
@@ -299,22 +322,22 @@ private:
 	}
 
 	void ASLAddr(uint16_t addr) {
-		int8_t value = MemoryRead(addr);
+		uint8_t value = MemoryRead(addr);
 		MemoryWrite(addr, ASL(value));
 	}
 
 	void LSRAddr(uint16_t addr) {
-		int8_t value = MemoryRead(addr);
+		uint8_t value = MemoryRead(addr);
 		MemoryWrite(addr, LSR(value));
 	}
 
 	void ROLAddr(uint16_t addr) {
-		int8_t value = MemoryRead(addr);
+		uint8_t value = MemoryRead(addr);
 		MemoryWrite(addr, ROL(value));
 	}
 
 	void RORAddr(uint16_t addr) {
-		int8_t value = MemoryRead(addr);
+		uint8_t value = MemoryRead(addr);
 		MemoryWrite(addr, ROR(value));
 	}
 

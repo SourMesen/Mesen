@@ -29,6 +29,7 @@ uint8_t PPU::MemoryRead(uint16_t addr)
 		case PPURegisters::Control2:
 			return (uint8_t)_state.Control2;
 		case PPURegisters::Status:
+			_writeLow = true;
 			UpdateStatusFlag();
 			return _state.Status;
 		case PPURegisters::SpriteData:
@@ -43,8 +44,6 @@ uint8_t PPU::MemoryRead(uint16_t addr)
 
 void PPU::MemoryWrite(uint16_t addr, uint8_t value)
 {
-	static bool videoLow = true;
-
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Control:
 			_state.Control = value;
@@ -58,22 +57,22 @@ void PPU::MemoryWrite(uint16_t addr, uint8_t value)
 			_state.SpriteRamAddr = value;
 			break;
 		case PPURegisters::SpriteData:
-			_spriteRAM[_state.SpriteRamAddr] = value;
+			_spriteRAM[_state.SpriteRamAddr&0xFF] = value;
 			break;
 		case PPURegisters::ScrollOffsets:
+			_writeLow = !_writeLow;
 			break;
 		case PPURegisters::VideoMemoryAddr:
-			if(videoLow) {
+			if(_writeLow) {
 				_state.VideoRamAddr &= 0xFF00;
 				_state.VideoRamAddr |= value;
-				videoLow = false;
 			} else {
 				_state.VideoRamAddr |= value<<8;
-				videoLow = true;
 			}
+			_writeLow = !_writeLow;
 			break;
 		case PPURegisters::VideoMemoryData:
-			_videoRAM[_state.VideoRamAddr] = value;
+			_videoRAM[_state.VideoRamAddr&0x3FFF] = value;
 			break;
 	}
 }
