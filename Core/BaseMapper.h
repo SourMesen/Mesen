@@ -27,6 +27,7 @@ class BaseMapper : public IMemoryHandler
 class DefaultMapper : public BaseMapper
 {
 	vector<MemoryBank*> _mappedRomBanks;
+	MemoryBank *_mappedVromBank;
 	private:
 		void InitMapper()
 		{
@@ -35,22 +36,39 @@ class DefaultMapper : public BaseMapper
 			} else {
 				_mappedRomBanks = { &_romBanks[0], &_romBanks[1] };
 			}
+
+			_mappedVromBank = &_vromBanks[0];
 		}
 
 	public:
-		std::array<int, 2> GetIOAddresses()
+		vector<std::array<uint16_t, 2>> GetRAMAddresses()
 		{
-			return std::array<int, 2> {{ 0x8000, 0xFFFF }};
+			return { { { 0x8000, 0xFFFF } } };
+		}
+		
+		vector<std::array<uint16_t, 2>> GetVRAMAddresses()
+		{
+			return { { { 0x0000, 0x1FFF } } };
 		}
 
-		uint8_t MemoryRead(uint16_t addr)
+		uint8_t ReadRAM(uint16_t addr)
 		{
 			return (*_mappedRomBanks[(addr >> 14) & 0x01])[addr & 0x3FFF];
 		}
 
-		void MemoryWrite(uint16_t addr, uint8_t value)
+		void WriteRAM(uint16_t addr, uint8_t value)
 		{
 			(*_mappedRomBanks[(addr >> 14) & 0x01])[addr & 0x3FFF] = value;
+		}
+
+		uint8_t ReadVRAM(uint16_t addr)
+		{
+			return (*_mappedVromBank)[addr & 0x1FFF];
+		}
+
+		void WriteVRAM(uint16_t addr, uint8_t value)
+		{
+			(*_mappedVromBank)[addr & 0x1FFF] = value;
 		}
 };
 

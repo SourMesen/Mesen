@@ -8,7 +8,7 @@ class Console
 {
 	private:
 		unique_ptr<CPU> _cpu;
-		PPU _ppu;
+		unique_ptr<PPU> _ppu;
 		shared_ptr<BaseMapper> _mapper;
 		MemoryManager _memoryManager;
 

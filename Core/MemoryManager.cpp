@@ -3,8 +3,8 @@
 
 uint8_t MemoryManager::ReadRegister(uint16_t addr)
 {
-	if(_registerHandlers[addr]) {
-		return _registerHandlers[addr]->MemoryRead(addr);
+	if(_ramHandlers[addr]) {
+		return _ramHandlers[addr]->ReadRAM(addr);
 	} else {
 		return 0;
 	}
@@ -12,8 +12,24 @@ uint8_t MemoryManager::ReadRegister(uint16_t addr)
 
 void MemoryManager::WriteRegister(uint16_t addr, uint8_t value)
 {
-	if(_registerHandlers[addr]) {
-		_registerHandlers[addr]->MemoryWrite(addr, value);
+	if(_ramHandlers[addr]) {
+		_ramHandlers[addr]->WriteRAM(addr, value);
+	}
+}
+
+uint8_t MemoryManager::ReadMappedVRAM(uint16_t addr)
+{
+	if(_vramHandlers[addr]) {
+		return _vramHandlers[addr]->ReadVRAM(addr);
+	} else {
+		return 0;
+	}
+}
+
+void MemoryManager::WriteMappedVRAM(uint16_t addr, uint8_t value)
+{
+	if(_vramHandlers[addr]) {
+		_vramHandlers[addr]->WriteVRAM(addr, value);
 	}
 }
 
@@ -21,13 +37,19 @@ MemoryManager::MemoryManager()
 {
 	_internalRAM = new uint8_t[InternalRAMSize];
 	_SRAM = new uint8_t[SRAMSize];
+	_videoRAM = new uint8_t[VRAMSize];
 	_expansionRAM = new uint8_t[0x2000];
 	ZeroMemory(_internalRAM, InternalRAMSize);
 	ZeroMemory(_SRAM, SRAMSize);
+	ZeroMemory(_videoRAM, VRAMSize);
 	ZeroMemory(_expansionRAM, 0x2000);
 
 	for(int i = 0; i <= 0xFFFF; i++) {
-		_registerHandlers.push_back(nullptr);
+		_ramHandlers.push_back(nullptr);
+	}
+
+	for(int i = 0; i <= 0x3FFF; i++) {
+		_vramHandlers.push_back(nullptr);
 	}
 }
 
@@ -40,9 +62,18 @@ MemoryManager::~MemoryManager()
 
 void MemoryManager::RegisterIODevice(IMemoryHandler *handler)
 {
-	std::array<int, 2> addresses = handler->GetIOAddresses();
-	for(int i = addresses[0]; i < addresses[1]; i++) {
-		_registerHandlers[i] = handler;
+	vector<std::array<uint16_t, 2>> addresses = handler->GetRAMAddresses();
+	for(std::array<uint16_t, 2> startEndAddr : addresses) {
+		for(int i = startEndAddr[0]; i <= startEndAddr[1]; i++) {
+			_ramHandlers[i] = handler;
+		}
+	}
+
+	addresses = handler->GetVRAMAddresses();
+	for(std::array<uint16_t, 2> startEndAddr : addresses) {
+		for(int i = startEndAddr[0]; i <= startEndAddr[1]; i++) {
+			_vramHandlers[i] = handler;
+		}
 	}
 }
 
@@ -82,4 +113,21 @@ uint16_t MemoryManager::ReadWord(uint16_t addr)
 	uint8_t hi = Read(addr+1);
 	return lo | hi << 8;
 }
-	
+
+uint8_t MemoryManager::ReadVRAM(uint16_t addr)
+{
+	if(addr <= 0x1FFF) {
+		return ReadMappedVRAM(addr & 0x1FFF);
+	} else {
+		return _videoRAM[addr & 0x3FFF];
+	}
+}
+
+void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
+{
+	if(addr <= 0x1FFF) {
+		WriteMappedVRAM(addr, value);
+	} else {
+		_videoRAM[addr & 0x3FFF] = value;
+	}
+}

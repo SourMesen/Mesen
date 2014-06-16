@@ -144,7 +144,7 @@ private:
 	uint8_t SP() { return _state.SP; }
 	void SetSP(uint8_t value) { _state.SP = value; }
 	uint8_t PS() { return _state.PS; }
-	void SetPS(uint8_t value) { _state.PS = value | PSFlags::Reserved; }
+	void SetPS(uint8_t value) { _state.PS = (value & 0xDF) | PSFlags::Reserved; }
 	uint16_t PC() { return _state.PC; }
 	void SetPC(uint16_t value) { _state.PC = value; }
 
@@ -182,8 +182,7 @@ private:
 
 	uint16_t GetInd() { 
 		uint16_t addr = ReadWord();
-		if(addr & 0xFF == 0xFF) {
-			//Emulate a CPU bug when crossing page boundary
+		if((addr & 0xFF) == 0xFF) {
 			auto lo = MemoryRead(addr);
 			auto hi = MemoryRead(addr - 0xFF);
 			return (lo | hi << 8);
@@ -250,7 +249,7 @@ private:
 		if(reg == value) {
 			SetFlags(PSFlags::Zero);
 		}
-		if(result & 0x80 == 0x80) {
+		if((result & 0x80) == 0x80) {
 			SetFlags(PSFlags::Negative);
 		}
 	}
@@ -437,8 +436,8 @@ private:
 
 	void PHA() { Push(A()); }
 	void PHP() {
-		SetFlags(PSFlags::Break);
-		Push((uint8_t)PS());
+		uint8_t flags = PS() | PSFlags::Break;
+		Push((uint8_t)flags);
 	}
 	void PLA() { SetA(Pop()); }
 	void PLP() { SetPS(Pop()); }
@@ -607,11 +606,11 @@ private:
 	void SEI() { SetFlags(PSFlags::Interrupt); }
 
 	void BRK() {
-		SetFlags(PSFlags::Break);
 		Push((uint16_t)(PC() + 1));
-		Push((uint8_t)PS());
+		
+		uint8_t flags = PS() | PSFlags::Break;
+		Push((uint8_t)flags);
 		SetFlags(PSFlags::Interrupt);
-		ClearFlags(PSFlags::Break);
 
 		SetPC(MemoryReadWord(0xFFFE));
 	}

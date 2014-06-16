@@ -2,8 +2,9 @@
 #include "PPU.h"
 #include "CPU.h"
 
-PPU::PPU() 
+PPU::PPU(MemoryManager *memoryManager)
 {
+	_memoryManager = memoryManager;
 	_state = {};
 	_flags = {};
 	_statusFlags = {};
@@ -21,7 +22,7 @@ bool PPU::CheckFlag(PPUControlFlags flag)
 	return false;
 }
 
-uint8_t PPU::MemoryRead(uint16_t addr)
+uint8_t PPU::ReadRAM(uint16_t addr)
 {
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Control:
@@ -36,13 +37,14 @@ uint8_t PPU::MemoryRead(uint16_t addr)
 			return _spriteRAM[_state.SpriteRamAddr];
 		case PPURegisters::VideoMemoryData:
 			uint8_t returnValue = _memoryReadBuffer;
-			_memoryReadBuffer = _videoRAM[_state.VideoRamAddr];
+			_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr);
+			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
 			return returnValue;
 	}
 	return 0;
 }
 
-void PPU::MemoryWrite(uint16_t addr, uint8_t value)
+void PPU::WriteRAM(uint16_t addr, uint8_t value)
 {
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Control:
@@ -72,7 +74,8 @@ void PPU::MemoryWrite(uint16_t addr, uint8_t value)
 			_writeLow = !_writeLow;
 			break;
 		case PPURegisters::VideoMemoryData:
-			_videoRAM[_state.VideoRamAddr&0x3FFF] = value;
+			_memoryManager->WriteVRAM(_state.VideoRamAddr, value);
+			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
 			break;
 	}
 }
@@ -125,8 +128,8 @@ void PPU::Exec()
 				/*if(_flags.BackgroundEnabled || _flags.SpritesEnabled) {
 					//p->registers.vramAddress = p->registers.vramLatch;
 				}*/
-			} else if(_cycle == 339 && (_frameCount % 2 == 1)) {
-				//Skip a cycle for odd frames
+			} else if(_cycle == 339 && _flags.BackgroundEnabled && (_frameCount % 2 == 1)) {
+				//Skip a cycle for odd frames, if background drawing is enabled
 				_cycle++;
 			}
 		} else if(_scanline < 240) {
