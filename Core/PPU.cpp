@@ -24,22 +24,30 @@ bool PPU::CheckFlag(PPUControlFlags flag)
 
 uint8_t PPU::ReadRAM(uint16_t addr)
 {
+	uint8_t returnValue;
 	switch(GetRegisterID(addr)) {
-		case PPURegisters::Control:
-			return (uint8_t)_state.Control;
-		case PPURegisters::Control2:
-			return (uint8_t)_state.Control2;
 		case PPURegisters::Status:
-			_writeLow = true;
+			_state.WriteToggle = false;
+			_flags.IntensifyBlue = false;
 			UpdateStatusFlag();
 			return _state.Status;
 		case PPURegisters::SpriteData:
 			return _spriteRAM[_state.SpriteRamAddr];
 		case PPURegisters::VideoMemoryData:
-			uint8_t returnValue = _memoryReadBuffer;
+			returnValue = _memoryReadBuffer;
 			_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr);
 			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
-			return returnValue;
+
+			if(_state.VideoRamAddr >= 0x3F00) {
+				//No buffer for palette
+				//TODO: Update read buffer when reading palette (See: http://wiki.nesdev.com/w/index.php/PPU_registers#The_PPUDATA_read_buffer_.28post-fetch.29)
+				return _memoryReadBuffer;
+			} else {
+				return returnValue;
+			}
+		default:
+			//other registers are meant to be read-only
+			break;
 	}
 	return 0;
 }
@@ -59,25 +67,37 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			_state.SpriteRamAddr = value;
 			break;
 		case PPURegisters::SpriteData:
-			_spriteRAM[_state.SpriteRamAddr&0xFF] = value;
+			_spriteRAM[_state.SpriteRamAddr] = value;
+			_state.SpriteRamAddr++;
 			break;
 		case PPURegisters::ScrollOffsets:
-			_writeLow = !_writeLow;
+			if(_state.WriteToggle) {				
+				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x73E0) | ((value & 0xF8) << 2) | ((value & 0x0F) << 12);
+			} else {
+				_state.XScroll = value & 0x07;
+				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x00F8) | (value >> 3);
+			}
+			_state.WriteToggle = !_state.WriteToggle;
 			break;
 		case PPURegisters::VideoMemoryAddr:
-			if(_writeLow) {
-				_state.VideoRamAddr &= 0xFF00;
-				_state.VideoRamAddr |= value;
+			if(_state.WriteToggle) {
+				_state.TmpVideoRamAddr |= (_state.TmpVideoRamAddr & ~0xFF00) | (value & 0x3F) << 8;
+				_state.VideoRamAddr = _state.TmpVideoRamAddr;
 			} else {
-				_state.VideoRamAddr |= value<<8;
+				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x00FF) | value;
 			}
-			_writeLow = !_writeLow;
+			_state.WriteToggle = !_state.WriteToggle;
 			break;
 		case PPURegisters::VideoMemoryData:
 			_memoryManager->WriteVRAM(_state.VideoRamAddr, value);
 			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
 			break;
 	}
+}
+
+bool PPU::IsRenderingEnabled()
+{
+	return _flags.BackgroundEnabled || _flags.SpritesEnabled;
 }
 
 void PPU::UpdateFlags()
@@ -89,6 +109,8 @@ void PPU::UpdateFlags()
 		case 2: _flags.NameTableAddr = 0x2800; break;
 		case 3: _flags.NameTableAddr = 0x2C00; break;
 	}
+	_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0xC0000) | (nameTable << 10);
+
 	_flags.VerticalWrite = (_state.Control & 0x04) == 0x04;
 	_flags.SpritePatternAddr = ((_state.Control & 0x08) == 0x08) ? 0x1000 : 0x0000;
 	_flags.BackgroundPatternAddr = ((_state.Control & 0x10) == 0x10) ? 0x1000 : 0x0000;
@@ -113,61 +135,149 @@ void PPU::UpdateStatusFlag()
 	_statusFlags.VerticalBlank = false;
 }
 
+//Taken from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Wrapping_around
+void PPU::IncVerticalScrolling()
+{
+	uint16_t addr = _state.VideoRamAddr;
+
+	if((addr & 0x7000) != 0x7000) {
+		// if fine Y < 7
+		addr += 0x1000;                    // increment fine Y
+	} else {
+		// fine Y = 0
+		addr &= ~0x7000;
+		int y = (addr & 0x03E0) >> 5;	// let y = coarse Y
+		if(y == 29) {
+			y = 0;                  // coarse Y = 0
+			addr ^= 0x0800;                  // switch vertical nametable
+		} else if(y == 31){
+			y = 0;              // coarse Y = 0, nametable not switched
+		} else {
+			y += 1;                  // increment coarse Y
+		}
+		addr = (addr & ~0x03E0) | (y << 5);     // put coarse Y back into v
+	}
+	_state.VideoRamAddr = addr;
+}
+
+//Taken from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Wrapping_around
+void PPU::IncHorizontalScrolling()
+{
+	//Increase coarse X scrolling value.
+	//When the value is 31, wrap around to 0 and switch nametable
+	uint16_t addr = _state.VideoRamAddr;
+	if((addr & 0x001F) == 31) {
+		addr &= ~0x001F;
+		addr ^= 0x0400; // switch horizontal nametable
+	} else {
+		addr += 1;
+	}
+	_state.VideoRamAddr = addr;
+}
+
+//Take from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Tile_and_attribute_fetching
+uint16_t PPU::GetTileAddr()
+{
+	return 0x2000 | (_state.VideoRamAddr & 0x0FFF);
+}
+
+//Take from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Tile_and_attribute_fetching
+uint16_t PPU::GetAttributeAddr()
+{
+	return 0x23C0 | (_state.VideoRamAddr & 0x0C00) | ((_state.VideoRamAddr >> 4) & 0x38) | ((_state.VideoRamAddr >> 2) & 0x07);
+}
+
+void PPU::UpdateScrolling()
+{
+	//For pre-render scanline & all visible scanlines
+	if(_cycle == 256) {
+		IncVerticalScrolling();
+	} else if(_cycle == 257) {
+		//copy horizontal scrolling value from t
+		_state.VideoRamAddr = (_state.VideoRamAddr & ~0x041F) | (_state.TmpVideoRamAddr & 0x041F);
+	} else if((_cycle % 8 == 0 && _cycle < 256) || _cycle == 328 || _cycle == 336) {
+		IncHorizontalScrolling();
+	}
+}
+
+void PPU::ProcessPrerenderScanline()
+{
+	if(IsRenderingEnabled()) {
+		UpdateScrolling();
+	}
+
+	if(_cycle == 1) {
+		_statusFlags.SpriteOverflow = false;
+		_statusFlags.Sprite0Hit = false;
+		_statusFlags.VerticalBlank = false;
+	} else if(_cycle >= 280 && _cycle <= 304) {
+		if(IsRenderingEnabled()) {
+			//copy vertical scrolling value from t
+			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x7BF0) | (_state.TmpVideoRamAddr & 0x7BF0);
+		}
+	} else if(_cycle == 339 && _flags.BackgroundEnabled && (_frameCount % 2 == 1)) {
+		//Skip a cycle for odd frames, if background drawing is enabled
+		_cycle++;
+	}
+}
+
+void PPU::ProcessVisibleScanline()
+{
+	if(IsRenderingEnabled()) {
+		UpdateScrolling();
+	}
+
+	if(_cycle == 254) {
+		if(_flags.BackgroundEnabled) {
+			//Ppu_renderTileRow(p);
+		}
+
+		if(_flags.SpritesEnabled) {
+			//Ppu_evaluateScanlineSprites(p, p->scanline);
+		}
+	} else if(_cycle == 256) {
+		if(_flags.BackgroundEnabled) {
+			//Ppu_updateEndScanlineRegisters(p);
+		}
+	}
+}
+
+void PPU::BeginVBlank()
+{
+	if(_cycle == 1) {
+		_statusFlags.VerticalBlank = true;
+		/*if(!_suppressVBlank) {
+			// We're in VBlank
+			Ppu_setStatus(p, STATUS_VBLANK_STARTED);
+			p->cycleCount = 0;
+		}*/
+		if(_flags.VBlank) {
+			CPU::SetNMIFlag();
+		}
+		//Ppu_raster(p);
+	}
+}
+
+void PPU::EndVBlank()
+{
+	if(_cycle == 340) {
+		_frameCount++;
+	}
+}
+
 void PPU::Exec()
 {
+	bool renderingEnabled = IsRenderingEnabled();
 	uint64_t equivalentCycleCount = CPU::GetCycleCount() * 3;
 	while(_cycleCount < equivalentCycleCount) {
 		if(_scanline == -1) {
-			//Pre-render scanline
-			if(_cycle == 1) {
-				_statusFlags.SpriteOverflow = false;
-				_statusFlags.Sprite0Hit = false;
-				_statusFlags.VerticalBlank = false;
-			} else if(_cycle == 304) {
-				// Copy scroll latch into VRAMADDR register
-				/*if(_flags.BackgroundEnabled || _flags.SpritesEnabled) {
-					//p->registers.vramAddress = p->registers.vramLatch;
-				}*/
-			} else if(_cycle == 339 && _flags.BackgroundEnabled && (_frameCount % 2 == 1)) {
-				//Skip a cycle for odd frames, if background drawing is enabled
-				_cycle++;
-			}
+			ProcessPrerenderScanline();
 		} else if(_scanline < 240) {
-			if(_cycle == 254) {
-				if(_flags.BackgroundEnabled) {
-					//Ppu_renderTileRow(p);
-				}
-
-				if(_flags.SpritesEnabled) {
-					//Ppu_evaluateScanlineSprites(p, p->scanline);
-				}
-			} else if(_cycle == 256) {
-				if(_flags.BackgroundEnabled) {
-					//Ppu_updateEndScanlineRegisters(p);
-				}
-			}
+			ProcessVisibleScanline();
 		} else if(_scanline == 241) {
-			//Start of VBlank
-			if(_cycle == 1) {
-				_statusFlags.VerticalBlank = true;
-				/*if(!_suppressVBlank) {
-					// We're in VBlank
-					Ppu_setStatus(p, STATUS_VBLANK_STARTED);
-					p->cycleCount = 0;
-				}*/
-				if(_flags.VBlank) {
-					CPU::SetNMIFlag();
-				}
-				/*if(_flags.VBlank && !_suppressNMI) {
-					VBlankInterrupt();
-				}*/
-				//Ppu_raster(p);
-			}
+			BeginVBlank();
 		} else if(_scanline == 260) {
-			//End of VBlank
-			if(_cycle == 340) {
-				_frameCount++;
-			}
+			EndVBlank();
 		}
 
 		if(_cycle == 340) {

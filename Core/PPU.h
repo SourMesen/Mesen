@@ -48,6 +48,9 @@ struct PPUState
 	uint8_t Status;
 	uint8_t SpriteRamAddr;
 	uint16_t VideoRamAddr;
+	uint8_t XScroll;
+	uint16_t TmpVideoRamAddr;
+	bool WriteToggle;
 };
 
 class PPU : public IMemoryHandler
@@ -67,15 +70,27 @@ class PPU : public IMemoryHandler
 		uint16_t _cycle = 0;
 		uint32_t _frameCount = 0;
 
-		bool _writeLow = false;
-
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;
 
-		void PPU::UpdateStatusFlag();
+		void UpdateStatusFlag();
 
-		void PPU::UpdateFlags();
-		bool PPU::CheckFlag(PPUControlFlags flag);
+		void UpdateFlags();
+		bool CheckFlag(PPUControlFlags flag);
+
+		bool IsRenderingEnabled();
+
+		void IncVerticalScrolling();
+		void IncHorizontalScrolling();
+		uint16_t GetTileAddr();
+		uint16_t GetAttributeAddr();
+
+		void UpdateScrolling();
+		void ProcessPrerenderScanline();
+		void ProcessVisibleScanline();
+
+		void BeginVBlank();
+		void EndVBlank();
 
 		PPURegisters GetRegisterID(uint16_t addr)
 		{
