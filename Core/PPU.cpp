@@ -230,10 +230,6 @@ void PPU::UpdateScrolling()
 		_state.VideoRamAddr = (_state.VideoRamAddr & ~0x041F) | (_state.TmpVideoRamAddr & 0x041F);
 	} else if((_cycle % 8 == 0 && _cycle > 0 && _cycle < 256) || _cycle == 328 || _cycle == 336) {
 		IncHorizontalScrolling();
-	} else if((_cycle - 1) % 8 == 0 && _cycle < 250) {
-		LoadTileInfo();
-	} else if(_cycle == 321 || _cycle == 329) {
-		LoadTileInfo();
 	}
 }
 
@@ -258,6 +254,7 @@ void PPU::ProcessPrerenderScanline()
 		_scanline = 0;
 	} else if(_cycle == 321 || _cycle == 329) {
 		LoadTileInfo();
+		LoadShiftRegisters();
 	}
 }
 
@@ -268,12 +265,14 @@ void PPU::LoadTileInfo()
 	uint16_t tileIndex = _memoryManager->ReadVRAM(GetTileAddr());
 	uint16_t tileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
 	
-	//std::cout << std::hex << GetAttributeAddr() << " ";
 	uint16_t shift = _state.VideoRamAddr&0x3FF;
 	_nextTile.Attributes = ((_memoryManager->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
 	_nextTile.LowByte = _memoryManager->ReadVRAM(tileAddr);
 	_nextTile.HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
+}
 
+void PPU::LoadShiftRegisters()
+{
 	_state.LowBitShift = (_state.LowBitShift << 8) | _nextTile.LowByte;
 	_state.HighBitShift = (_state.HighBitShift << 8) | _nextTile.HighByte;
 }
@@ -282,7 +281,7 @@ void PPU::DrawPixel()
 {
 	uint8_t palette = 0;
 
-	uint8_t tileXPixel = _cycle % 8;
+	uint8_t tileXPixel = (_cycle - 1) % 8;
 	uint32_t bufferPosition = _scanline * 256 + _cycle;
 
 	uint8_t fineXScroll = _state.XScroll;
@@ -291,14 +290,7 @@ void PPU::DrawPixel()
 
 	uint8_t pixelColor = ((_state.LowBitShift >> offset) & 0x01) | (((_state.HighBitShift >> offset) & 0x01) << 1);
 
-	// If we're grabbing the pixel from the high
-	// part of the shift register, use the buffered
-	// palette, not the current one
-	
-	if(pixelColor != 0 && _frameCount > 1000) {
-		//std::cout << std::hex << (short)pixelColor << std::endl;
-	}
-
+	// If we're grabbing the pixel from the high part of the shift register, use the buffered palette, not the current one
 	if(offset < 8) {
 		palette = GetBGPaletteEntry(_nextTile.Attributes, pixelColor);
 	} else {
@@ -319,12 +311,21 @@ void PPU::DrawPixel()
 
 void PPU::ProcessVisibleScanline()
 {
-	if(IsRenderingEnabled()) {
-		UpdateScrolling();
+	if((_cycle - 1) % 8 == 0 && _cycle <= 250) {
+		LoadShiftRegisters();
+		LoadTileInfo();
+	} else if(_cycle == 321 || _cycle == 329) {
+		LoadShiftRegisters();
+		LoadTileInfo();
 	}
 
-	if(_cycle <= 254) {
+
+	if(_cycle > 0 && _cycle <= 255) {
 		DrawPixel();
+	}
+
+	if(IsRenderingEnabled()) {
+		UpdateScrolling();
 	}
 
 	if(_cycle == 254) {

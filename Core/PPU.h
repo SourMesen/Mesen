@@ -112,6 +112,7 @@ class PPU : public IMemoryHandler
 		void DrawScanline();
 
 		void LoadTileInfo();
+		void LoadShiftRegisters();
 		void DrawPixel();
 
 		void CopyFrame();
