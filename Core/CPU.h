@@ -616,7 +616,7 @@ private:
 	}
 
 	void NMI() {
-		Push((uint16_t)(PC() + 1));
+		Push((uint16_t)(PC()));
 		Push((uint8_t)PS());
 		SetFlags(PSFlags::Interrupt);
 		SetPC(MemoryReadWord(0xFFFA));

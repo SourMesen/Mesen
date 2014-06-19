@@ -119,15 +119,36 @@ uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 	if(addr <= 0x1FFF) {
 		return ReadMappedVRAM(addr & 0x1FFF);
 	} else {
+		if(addr >= 0x3F00) {
+			addr &= 0x3F1F;
+		}
 		return _videoRAM[addr & 0x3FFF];
 	}
 }
 
 void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 {
+	addr = addr & 0x3FFF;
 	if(addr <= 0x1FFF) {
 		WriteMappedVRAM(addr, value);
 	} else {
-		_videoRAM[addr & 0x3FFF] = value;
+		if(addr >= 0x3F00) {
+			addr &= 0x3F1F;
+			//std::cout << "palette:" << std::hex << (short)addr << " = " << (short)value << std::endl;
+		}
+		if(addr == 0x2000) {
+			//std::cout << "test" << std::endl;
+		}
+		_videoRAM[addr] = value;
+
+		if(addr >= 0x2000 && addr < 0x2400) {
+			_videoRAM[addr + 0x800] = value;
+		} else if(addr >= 0x2400 && addr < 0x2800) {
+			_videoRAM[addr + 0x800] = value;
+		} else if(addr >= 0x2800 && addr < 0x2C00) {
+			_videoRAM[addr - 0x800] = value;
+		} else if(addr >= 0x2C00 && addr < 0x3000) {
+			_videoRAM[addr - 0x800] = value;
+		}
 	}
 }

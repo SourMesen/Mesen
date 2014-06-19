@@ -23,6 +23,8 @@
 #include <array>
 #include <sstream>
 
+#include <atomic>
+
 #include <windows.h>
 
 using std::vector;
@@ -31,5 +33,5 @@ using std::unique_ptr;
 using std::ios;
 using std::ifstream;
 using std::string;
-
-// TODO: reference additional headers your program requires here
+using std::exception;
+using std::atomic;

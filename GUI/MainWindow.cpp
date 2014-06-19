@@ -71,16 +71,16 @@ namespace NES
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			} else {
-				/*_renderer.Render();
+				_renderer.Render();
 				frameCount++;
 				if(frameCount == 500) {
 					double fps = (double)frameCount / (timer.GetElapsedMS() / 1000);
-					OutputDebugString((std::to_wstring((int)fps) + L"\n").c_str());
+					//std::cout << "FPS: " << fps << std::endl;
 					timer.Reset();
 					frameCount = 0;
-				}*/
+				}
 			}
-			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
+			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1));
 		}
 
 		return (int)msg.wParam;
@@ -109,7 +109,7 @@ namespace NES
 			return E_FAIL;
 
 		// Create window
-		RECT rc = { 0, 0, 320, 240 };
+		RECT rc = { 0, 0, 256, 240 };
 		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 		_hWnd = CreateWindow(L"NESEmu", L"NESEmu",
 			WS_OVERLAPPEDWINDOW,

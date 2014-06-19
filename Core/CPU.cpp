@@ -70,7 +70,8 @@ void CPU::Exec()
 			(this->*_opTable[opCode])();
 			CPU::CycleCount += this->_cycles[opCode];
 		} else {
-			//throw std::exception("Invalid opcode");
+			//std::cout << "Invalid opcode: " << std::hex << (short)opCode;
+			//throw exception("Invalid opcode");
 		}
 	} else {
 		NMI();

@@ -51,11 +51,24 @@ struct PPUState
 	uint8_t XScroll;
 	uint16_t TmpVideoRamAddr;
 	bool WriteToggle;
+
+   uint16_t HighBitShift;
+   uint16_t LowBitShift;
+};
+
+struct TileInfo
+{
+	uint8_t LowByte;
+	uint8_t HighByte;
+	uint8_t Attributes;
 };
 
 class PPU : public IMemoryHandler
 {
 	private:
+		static uint8_t *FrameBuffer;
+		static atomic<int> WaitCounter;
+
 		MemoryManager *_memoryManager;
 
 		PPUState _state;
@@ -73,6 +86,9 @@ class PPU : public IMemoryHandler
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;
 
+		TileInfo _currentTile;
+		TileInfo _nextTile;
+		
 		void UpdateStatusFlag();
 
 		void UpdateFlags();
@@ -92,6 +108,14 @@ class PPU : public IMemoryHandler
 		void BeginVBlank();
 		void EndVBlank();
 
+		uint8_t GetBGPaletteEntry(uint8_t a, uint16_t pix);
+		void DrawScanline();
+
+		void LoadTileInfo();
+		void DrawPixel();
+
+		void CopyFrame();
+
 		PPURegisters GetRegisterID(uint16_t addr)
 		{
 			return (PPURegisters)(addr & 0x07);
@@ -110,4 +134,11 @@ class PPU : public IMemoryHandler
 		void WriteRAM(uint16_t addr, uint8_t value);
 
 		void Exec();
+
+		static uint8_t* GetFrame();
+
+		uint32_t GetFrameCount()
+		{
+			return _frameCount;
+		}
 };

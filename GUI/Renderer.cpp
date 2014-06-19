@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Renderer.h"
 #include "DirectXTK\SpriteBatch.h"
+#include "..\Core\PPU.h"
 
 namespace NES 
 {
@@ -117,7 +118,7 @@ namespace NES
 
 		_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 16, &fred);
 
-		uint16_t screenwidth = 320;
+		uint16_t screenwidth = 256;
 		uint16_t screenheight = 240;
 
 		D3D11_TEXTURE2D_DESC desc;
@@ -141,7 +142,7 @@ namespace NES
 		renderTargetViewDescription.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // MS;
 
 		_videoRAM = new byte[screenwidth*screenheight * 4];
-		memset(_videoRAM, 0xFF, screenwidth*screenheight);
+		memset(_videoRAM, 0xFF, screenwidth*screenheight*4);
 
 		D3D11_SUBRESOURCE_DATA tbsd;
 		tbsd.pSysMem = (void *)_videoRAM;
@@ -186,23 +187,20 @@ namespace NES
 		// Clear the back buffer 
 		//_pImmediateContext->ClearRenderTargetView(_pRenderTargetView, Colors::MidnightBlue);
 
-		UINT screenwidth = 320, screenheight = 240;
-
-		if(rand() % 15 == 0) {
-			for(int i = 0; i < screenwidth*screenheight * 4; i++) {
-				_videoRAM[i] += rand() % 255;
-			}
-		}
+		UINT screenwidth = 256, screenheight = 240;
 
 		D3D11_MAPPED_SUBRESOURCE dd;
 		dd.pData = (void *)_videoRAM;
 		dd.RowPitch = screenwidth * 4;
 		dd.DepthPitch = screenwidth* screenheight * 4;
 
+		uint8_t *frameData = PPU::GetFrame();
 		_pImmediateContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		memcpy(dd.pData, _videoRAM, screenwidth*screenheight * 4);
+		memcpy(dd.pData, frameData, screenwidth*screenheight * 4);
 		_pImmediateContext->Unmap(_pTexture, 0);
-		
+		delete[] frameData;
+
+
 		///////////////////////////////////////////////////////////////////////////////
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 		D3D11_TEXTURE2D_DESC desc;
@@ -228,7 +226,7 @@ namespace NES
 		_sprites->Begin();
 		RECT x;
 		x.left = 0;
-		x.right = 320;
+		x.right = 256;
 		x.bottom = 240;
 		x.top = 0;
 		_sprites->Draw(pSRView, x);
