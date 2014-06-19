@@ -6,6 +6,8 @@
 namespace NES 
 {
 	bool Renderer::Initialize(HINSTANCE hInstance, HWND hWnd) {
+		PPU::RegisterVideoDevice(this);
+
 		_hInst = hInstance;
 		_hWnd = hWnd;
 		
@@ -141,8 +143,10 @@ namespace NES
 		renderTargetViewDescription.Format = desc.Format;
 		renderTargetViewDescription.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // MS;
 
-		_videoRAM = new byte[screenwidth*screenheight * 4];
-		memset(_videoRAM, 0xFF, screenwidth*screenheight*4);
+		_videoRAM = new uint8_t[screenwidth*screenheight * 4];
+		_nextFrameBuffer = new uint8_t[screenwidth*screenheight * 4];
+		memset(_videoRAM, 0x00, screenwidth*screenheight*4);
+		memset(_nextFrameBuffer, 0x00, screenwidth*screenheight*4);
 
 		D3D11_SUBRESOURCE_DATA tbsd;
 		tbsd.pSysMem = (void *)_videoRAM;
@@ -194,12 +198,9 @@ namespace NES
 		dd.RowPitch = screenwidth * 4;
 		dd.DepthPitch = screenwidth* screenheight * 4;
 
-		uint8_t *frameData = PPU::GetFrame();
 		_pImmediateContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		memcpy(dd.pData, frameData, screenwidth*screenheight * 4);
+		memcpy(dd.pData, _nextFrameBuffer, screenwidth*screenheight * 4);
 		_pImmediateContext->Unmap(_pTexture, 0);
-		delete[] frameData;
-
 
 		///////////////////////////////////////////////////////////////////////////////
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -231,6 +232,8 @@ namespace NES
 		x.top = 0;
 		_sprites->Draw(pSRView, x);
 		_sprites->End();
+
+		pSRView->Release();
 
 		// Present the information rendered to the back buffer to the front buffer (the screen)
 		_pSwapChain->Present(0, 0);

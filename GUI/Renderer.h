@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DirectXTK\SpriteBatch.h"
+#include "../Core/IVideoDevice.h"
 
 using namespace DirectX;
 
@@ -9,7 +10,7 @@ namespace NES {
 		XMFLOAT3 Pos;
 	};
 
-	class Renderer
+	class Renderer : IVideoDevice
 	{
 	private:
 		HINSTANCE               _hInst = nullptr;
@@ -30,6 +31,7 @@ namespace NES {
 		ID3D11Texture2D*			_pTexture = nullptr;
 
 		byte*							_videoRAM;
+		uint8_t*						_nextFrameBuffer;
 
 		std::unique_ptr<SpriteBatch> _sprites;
 
@@ -39,5 +41,10 @@ namespace NES {
 	public:
 		bool Initialize(HINSTANCE hInst, HWND hWnd);
 		void Render();
+
+		void UpdateFrame(uint8_t* frameBuffer)
+		{
+			memcpy(_nextFrameBuffer, frameBuffer, 256 * 240 * 4);
+		}
 	};
 }

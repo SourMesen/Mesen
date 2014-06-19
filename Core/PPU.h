@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "MemoryManager.h"
+#include "IVideoDevice.h"
 
 enum PPURegisters
 {
@@ -66,23 +67,21 @@ struct TileInfo
 class PPU : public IMemoryHandler
 {
 	private:
-		static uint8_t *FrameBuffer;
-		static atomic<int> WaitCounter;
+		static IVideoDevice *VideoDevice;
 
 		MemoryManager *_memoryManager;
 
 		PPUState _state;
-		uint64_t _cycleCount;
+		int32_t _scanline = 0;
+		uint32_t _cycle = 0;
+		uint32_t _frameCount = 0;
+		uint64_t _cycleCount = 0;
+		uint8_t _memoryReadBuffer = 0;
 
-		uint8_t _memoryReadBuffer;
 		uint8_t _spriteRAM[0x100];
 
 		uint8_t *_outputBuffer;
-
-		int16_t _scanline = 0;
-		uint16_t _cycle = 0;
-		uint32_t _frameCount = 0;
-
+		
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;
 
@@ -135,7 +134,10 @@ class PPU : public IMemoryHandler
 
 		void Exec();
 
-		static uint8_t* GetFrame();
+		static void RegisterVideoDevice(IVideoDevice *videoDevice)
+		{
+			PPU::VideoDevice = videoDevice;
+		}
 
 		uint32_t GetFrameCount()
 		{

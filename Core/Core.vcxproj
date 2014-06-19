@@ -87,6 +87,7 @@
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="IMemoryHandler.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="IVideoDevice.h" />
     <ClInclude Include="PPU.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="MemoryManager.h" />

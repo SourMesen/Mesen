@@ -2,6 +2,8 @@
 #include "PPU.h"
 #include "CPU.h"
 
+IVideoDevice *PPU::VideoDevice = nullptr;
+
 uint32_t PPU_PALETTE_RGB[] = {
     0x666666, 0x002A88, 0x1412A7, 0x3B00A4, 0x5C007E,
     0x6E0040, 0x6C0600, 0x561D00, 0x333500, 0x0B4800,
@@ -17,9 +19,6 @@ uint32_t PPU_PALETTE_RGB[] = {
     0xF7D8A5, 0xE4E594, 0xCFEF96, 0xBDF4AB, 0xB3F3CC,
     0xB5EBF2, 0xB8B8B8, 0x000000, 0x000000,
 };
-
-uint8_t *PPU::FrameBuffer = new uint8_t[256*240*4];
-atomic<int> PPU::WaitCounter = 0;
 
 PPU::PPU(MemoryManager *memoryManager)
 {
@@ -267,13 +266,13 @@ void PPU::LoadShiftRegisters()
 
 void PPU::DrawPixel()
 {
-	uint8_t tileXPixel = (_cycle - 1) % 8;
-	uint8_t offset = (15 - tileXPixel - _state.XScroll);
+	uint32_t tileXPixel = (_cycle - 1) % 8;
+	uint32_t offset = (15 - tileXPixel - _state.XScroll);
 
 	uint8_t pixelColor = ((_state.LowBitShift >> offset) & 0x01) | (((_state.HighBitShift >> offset) & 0x01) << 1);
 
 	// If we're grabbing the pixel from the high part of the shift register, use the buffered palette, not the current one
-	uint8_t palette = 0;
+	uint32_t palette = 0;
 	if(offset < 8) {
 		palette = GetBGPaletteEntry(_nextTile.Attributes, pixelColor);
 	} else {
@@ -314,7 +313,7 @@ void PPU::ProcessVisibleScanline()
 
 	if(_cycle == 256) {
 		if(_scanline == 239) {
-			CopyFrame();
+			PPU::VideoDevice->UpdateFrame(_outputBuffer);
 		}
 		if(_flags.BackgroundEnabled) {
 			//Ppu_renderTileRow(p);
@@ -328,51 +327,11 @@ void PPU::ProcessVisibleScanline()
 
 uint8_t PPU::GetBGPaletteEntry(uint8_t a, uint16_t pix) 
 {
-	uint16_t baseAddr = 0x3F00;
-	if(pix == 0x0) {
-		return _memoryManager->ReadVRAM(baseAddr);
+	if(pix == 0) {
+		return _memoryManager->ReadVRAM(0x3F00);
+	} else {
+		return _memoryManager->ReadVRAM(0x3F00 + a + pix);
 	}
-
-	switch(a) {
-		case 0x0:
-			return _memoryManager->ReadVRAM(baseAddr + pix);
-		case 0x4:
-			return _memoryManager->ReadVRAM(baseAddr + 0x04 + pix);
-		case 0x8:
-			return _memoryManager->ReadVRAM(baseAddr + 0x08 + pix);
-		case 0xC:
-			return _memoryManager->ReadVRAM(baseAddr + 0x0C + pix);
-	}
-
-	return 0;
-}
-
-void PPU::CopyFrame()
-{
-	int counter = PPU::WaitCounter.fetch_add(1);
-	if(counter != 0) {
-		//We weren't the first thread to increment the value, wait until other locks are released
-		while(PPU::WaitCounter > 1) {}
-	}
-	
-	memcpy(PPU::FrameBuffer, _outputBuffer, 256 * 240 * 4);	
-	PPU::WaitCounter--;
-}
-
-uint8_t* PPU::GetFrame()
-{
-	uint8_t *copyBuffer = new uint8_t[256 * 240 * 4];
-	
-	int counter = PPU::WaitCounter.fetch_add(1);
-	if(counter != 0) {
-		//We weren't the first thread to increment the value, wait until other locks are released
-		while(PPU::WaitCounter > 1) {}
-	}
-	
-	memcpy(copyBuffer, PPU::FrameBuffer, 256 * 240 * 4);
-	PPU::WaitCounter--;
-
-	return copyBuffer;
 }
 
 void PPU::BeginVBlank()
@@ -402,7 +361,9 @@ void PPU::EndVBlank()
 void PPU::Exec()
 {
 	uint64_t equivalentCycleCount = CPU::GetCycleCount() * 3;
-	while(_cycleCount < equivalentCycleCount) {
+	uint32_t gap = equivalentCycleCount - _cycleCount;
+	_cycleCount += gap;
+	while(gap > 0) {
 		if(_scanline == -1) {
 			ProcessPrerenderScanline();
 		} else if(_scanline < 240) {
@@ -424,6 +385,6 @@ void PPU::Exec()
 			_cycle++;
 		}
 
-		_cycleCount++;
+		gap--;
 	}
 }
