@@ -301,7 +301,8 @@ void PPU::DrawPixel()
 
 	//p->palettebuffer[fbRow].color = PPU_PALETTE_RGB[palette % 64];
 	uint32_t bufferPosition = _scanline * 256 + _cycle;
-	((uint32_t*)_outputBuffer)[bufferPosition] = PPU_PALETTE_RGB[palette % 64] | (0xFF << 24);
+	uint32_t paletteColor = PPU_PALETTE_RGB[palette % 64];
+	((uint32_t*)_outputBuffer)[bufferPosition] = (paletteColor & 0xFF00) | ((paletteColor & 0xFF) << 16) | ((paletteColor & 0xFF0000) >> 16) | (0xFF << 24);
 	//p->palettebuffer[fbRow].value = pixel;
 	//p->palettebuffer[fbRow].pindex = -1;
 }
@@ -315,8 +316,7 @@ void PPU::ProcessVisibleScanline()
 		LoadShiftRegisters();
 		LoadTileInfo();
 	}
-
-
+	
 	if(_cycle > 0 && _cycle <= 255) {
 		DrawPixel();
 	}
