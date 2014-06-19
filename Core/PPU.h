@@ -109,7 +109,6 @@ class PPU : public IMemoryHandler
 		void EndVBlank();
 
 		uint8_t GetBGPaletteEntry(uint8_t a, uint16_t pix);
-		void DrawScanline();
 
 		void LoadTileInfo();
 		void LoadShiftRegisters();

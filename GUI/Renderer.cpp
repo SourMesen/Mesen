@@ -56,7 +56,7 @@ namespace NES
 		sd.BufferCount = 1;
 		sd.BufferDesc.Width = width;
 		sd.BufferDesc.Height = height;
-		sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		sd.BufferDesc.RefreshRate.Numerator = 60;
 		sd.BufferDesc.RefreshRate.Denominator = 1;
 		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -116,7 +116,7 @@ namespace NES
 		vp.TopLeftY = 0;
 		_pImmediateContext->RSSetViewports(1, &vp);
 
-		_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 16, &fred);
+		_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM, 16, &fred);
 
 		uint16_t screenwidth = 256;
 		uint16_t screenheight = 240;
@@ -126,7 +126,7 @@ namespace NES
 		desc.ArraySize = 1;
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		desc.MipLevels = 1;
 		desc.MiscFlags = 0;
 		desc.SampleDesc.Count = 1;

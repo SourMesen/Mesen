@@ -100,27 +100,15 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
 		case PPURegisters::VideoMemoryAddr:
-			if(counter < 50) {
-				std::cout << "=> " << std::hex << (short)value << std::endl;
-			}
-
 			if(_state.WriteToggle) {
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x00FF) | value;
 				_state.VideoRamAddr = _state.TmpVideoRamAddr;
-				if(counter < 50) {
-					std::cout << std::hex << _state.VideoRamAddr << std::endl;
-				}
-				counter++;
-
 			} else {
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0xFF00) | ((value & 0x3F) << 8);
 			}
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
 		case PPURegisters::VideoMemoryData:
-			if(_state.VideoRamAddr == 0x2001 || _state.VideoRamAddr == 0x2401 || _state.VideoRamAddr == 0x2801 || _state.VideoRamAddr == 0x2C01) {
-				//std::cout << "test";
-			}
 			_memoryManager->WriteVRAM(_state.VideoRamAddr, value);
 			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
 			break;
@@ -188,7 +176,6 @@ void PPU::IncVerticalScrolling()
 			y += 1;                  // increment coarse Y
 		}
 		addr = (addr & ~0x03E0) | (y << 5);     // put coarse Y back into v
-		//std::cout << std::endl;
 	}
 	_state.VideoRamAddr = addr;
 }
@@ -300,9 +287,9 @@ void PPU::DrawPixel()
 	}*/
 
 	//p->palettebuffer[fbRow].color = PPU_PALETTE_RGB[palette % 64];
-	uint32_t bufferPosition = _scanline * 256 + _cycle;
+	uint32_t bufferPosition = _scanline * 256 + (_cycle - 1);
 	uint32_t paletteColor = PPU_PALETTE_RGB[palette % 64];
-	((uint32_t*)_outputBuffer)[bufferPosition] = (paletteColor & 0xFF00) | ((paletteColor & 0xFF) << 16) | ((paletteColor & 0xFF0000) >> 16) | (0xFF << 24);
+	((uint32_t*)_outputBuffer)[bufferPosition] = paletteColor | (0xFF << 24);
 	//p->palettebuffer[fbRow].value = pixel;
 	//p->palettebuffer[fbRow].pindex = -1;
 }
@@ -317,7 +304,7 @@ void PPU::ProcessVisibleScanline()
 		LoadTileInfo();
 	}
 	
-	if(_cycle > 0 && _cycle <= 255) {
+	if(_cycle > 0 && _cycle <= 256) {
 		DrawPixel();
 	}
 
@@ -325,11 +312,9 @@ void PPU::ProcessVisibleScanline()
 		UpdateScrolling();
 	}
 
-	if(_cycle == 254) {
-		//DrawScanline();
+	if(_cycle == 256) {
 		if(_scanline == 239) {
 			CopyFrame();
-			//std::cout << std::endl << std::endl << std::endl;
 		}
 		if(_flags.BackgroundEnabled) {
 			//Ppu_renderTileRow(p);
@@ -339,68 +324,6 @@ void PPU::ProcessVisibleScanline()
 			//Ppu_evaluateScanlineSprites(p, p->scanline);
 		}
 	}
-}
-
-void PPU::DrawScanline()
-{
-	// Generates each tile, one scanline at a time and applies the palette
-
-	// Move first tile into shift registers
-	//PpuTileAttributes tileAttrs;
-	//FetchTileAttributes(&tileAttrs);
-/*	_state.LowBitShift = tileAttrs.low;
-	_state.HighBitShift = tileAttrs.high;
-	uint8_t attr = tileAttrs.attr;
-
-	FetchTileAttributes(&tileAttrs);
-	// Get second tile, move the pixels into the right side of
-	// shift registers
-	_state.LowBitShift = (_state.LowBitShift << 8) | tileAttrs.low;
-	_state.HighBitShift = (_state.HighBitShift << 8) | tileAttrs.high;
-	// Current tile to render is attrBuf
-	uint8_t attrBuf = tileAttrs.attr;
-
-	for(int x = 0; x < 32; x++) {
-		int palette = 0;
-
-		for(unsigned int b = 0; b < 8; b++) {
-			int intB = b;
-			int fbRow = _scanline * 256 + ((x * 8) + intB);
-
-			unsigned int uintFineX = _state.XScroll;
-			uint16_t pixel = (_state.LowBitShift >> (15 - b - uintFineX)) & 0x01;
-			pixel += ((_state.HighBitShift >> (15 - b - uintFineX) & 0x01) << 1);
-
-			// If we're grabbing the pixel from the high
-			// part of the shift register, use the buffered
-			// palette, not the current one
-			if((15 - b - uintFineX) < 8) {
-				palette = GetBGPaletteEntry(attrBuf, pixel);
-			} else {
-				palette = GetBGPaletteEntry(attr, pixel);
-			}
-			
-			if(p->palettebuffer[fbRow].value != 0) {
-			// Pixel is already rendered and priority
-			// 1 means show behind background
-			continue;
-			}
-
-			//p->palettebuffer[fbRow].color = PPU_PALETTE_RGB[palette % 64];
-			_outputBuffer[fbRow] = PPU_PALETTE_RGB[palette % 64];
-			//p->palettebuffer[fbRow].value = pixel;
-			//p->palettebuffer[fbRow].pindex = -1;
-		}
-
-		// xcoord = p->registers.vramAddress & 0x1F
-		attr = attrBuf;
-
-		// Shift the first tile out, bring the new tile in
-		FetchTileAttributes(&tileAttrs);
-		_state.LowBitShift = (_state.LowBitShift << 8) | tileAttrs.low;
-		_state.HighBitShift = (_state.HighBitShift << 8) | tileAttrs.high;
-		attrBuf = tileAttrs.attr;
-	}*/
 }
 
 uint8_t PPU::GetBGPaletteEntry(uint8_t a, uint16_t pix) 
