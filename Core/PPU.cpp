@@ -265,7 +265,8 @@ void PPU::LoadTileInfo()
 	uint16_t tileIndex = _memoryManager->ReadVRAM(GetTileAddr());
 	uint16_t tileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
 	
-	uint16_t shift = _state.VideoRamAddr&0x3FF;
+	uint16_t addrMask = _state.VideoRamAddr & 0x3FF;
+	uint16_t shift = ((addrMask >> 4) & 0x04) | (addrMask & 0x02);
 	_nextTile.Attributes = ((_memoryManager->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
 	_nextTile.LowByte = _memoryManager->ReadVRAM(tileAddr);
 	_nextTile.HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
@@ -279,18 +280,13 @@ void PPU::LoadShiftRegisters()
 
 void PPU::DrawPixel()
 {
-	uint8_t palette = 0;
-
 	uint8_t tileXPixel = (_cycle - 1) % 8;
-	uint32_t bufferPosition = _scanline * 256 + _cycle;
-
-	uint8_t fineXScroll = _state.XScroll;
-
-	uint8_t offset = (15 - tileXPixel - fineXScroll);
+	uint8_t offset = (15 - tileXPixel - _state.XScroll);
 
 	uint8_t pixelColor = ((_state.LowBitShift >> offset) & 0x01) | (((_state.HighBitShift >> offset) & 0x01) << 1);
 
 	// If we're grabbing the pixel from the high part of the shift register, use the buffered palette, not the current one
+	uint8_t palette = 0;
 	if(offset < 8) {
 		palette = GetBGPaletteEntry(_nextTile.Attributes, pixelColor);
 	} else {
@@ -304,6 +300,7 @@ void PPU::DrawPixel()
 	}*/
 
 	//p->palettebuffer[fbRow].color = PPU_PALETTE_RGB[palette % 64];
+	uint32_t bufferPosition = _scanline * 256 + _cycle;
 	((uint32_t*)_outputBuffer)[bufferPosition] = PPU_PALETTE_RGB[palette % 64] | (0xFF << 24);
 	//p->palettebuffer[fbRow].value = pixel;
 	//p->palettebuffer[fbRow].pindex = -1;
