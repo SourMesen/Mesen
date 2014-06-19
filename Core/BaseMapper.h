@@ -22,6 +22,11 @@ class BaseMapper : public IMemoryHandler
 
 			InitMapper();
 		}
+
+		const NESHeader GetHeader()
+		{
+			return _header;
+		}
 };
 
 class DefaultMapper : public BaseMapper
@@ -75,16 +80,16 @@ class DefaultMapper : public BaseMapper
 class MapperFactory
 {
 	public:
-		static shared_ptr<BaseMapper> InitializeFromFile(string filename)
+		static unique_ptr<BaseMapper> InitializeFromFile(string filename)
 		{
 			ROMLoader loader(filename);
 
 			NESHeader header = loader.GetHeader();
 			
 			uint8_t mapperID = header.GetMapperID();
-			shared_ptr<BaseMapper> mapper = nullptr;
+			unique_ptr<BaseMapper> mapper = nullptr;
 			switch(mapperID) {
-				case 0: mapper = shared_ptr<BaseMapper>(new DefaultMapper()); break;
+				case 0: mapper = unique_ptr<BaseMapper>(new DefaultMapper()); break;
 			}			
 
 			if(!mapper) {

@@ -9,8 +9,8 @@ class Console
 	private:
 		unique_ptr<CPU> _cpu;
 		unique_ptr<PPU> _ppu;
-		shared_ptr<BaseMapper> _mapper;
-		MemoryManager _memoryManager;
+		unique_ptr<BaseMapper> _mapper;
+		unique_ptr<MemoryManager> _memoryManager;
 
 	public:
 		Console(string filename);

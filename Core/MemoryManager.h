@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "IMemoryHandler.h"
+#include "ROMLoader.h"
 
 class MemoryManager
 {
@@ -9,6 +10,9 @@ class MemoryManager
 		const int InternalRAMSize = 0x800;
 		const int SRAMSize = 0x2000;
 		const int VRAMSize = 0x4000;
+
+		NESHeader _header;
+		MirroringType _mirroringType;
 
 		uint8_t *_internalRAM;
 		uint8_t *_expansionRAM;
@@ -25,7 +29,7 @@ class MemoryManager
 		void WriteMappedVRAM(uint16_t addr, uint8_t value);
 
 	public:
-		MemoryManager();
+		MemoryManager(NESHeader header);
 		~MemoryManager();
 
 		void RegisterIODevice(IMemoryHandler *handler);
@@ -36,7 +40,6 @@ class MemoryManager
 
 		uint8_t ReadVRAM(uint16_t addr);
 		void WriteVRAM(uint16_t addr, uint8_t value);
-
 
 		char* GetTestResult()
 		{

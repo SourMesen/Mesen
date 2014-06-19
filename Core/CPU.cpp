@@ -7,7 +7,6 @@ bool CPU::NMIFlag = false;
 
 CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 {
-	Reset();
 	Func opTable[] = { 
 	//	0						1						2						3				4						5						6						7				8						9						A						B				C						D						E						F
 		&CPU::BRK,			&CPU::ORA_IndX,	nullptr,				nullptr,		nullptr,				&CPU::ORA_Zero,	&CPU::ASL_Zero,	nullptr,		&CPU::PHP,			&CPU::ORA_Imm,		&CPU::ASL_Acc,		nullptr,		nullptr,				&CPU::ORA_Abs,		&CPU::ASL_Abs,		nullptr, //0

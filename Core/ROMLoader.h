@@ -2,6 +2,13 @@
 
 #include "stdafx.h"
 
+enum class MirroringType
+{
+	Horizontal,
+	Vertical,
+	FourScreens,
+};
+
 struct NESHeader
 {
 	char NES[4];
@@ -16,6 +23,15 @@ struct NESHeader
 	uint8_t GetMapperID()
 	{
 		return (Flags2 & 0xF0) | (Flags1 >> 4);
+	}
+
+	MirroringType GetMirroringType()
+	{
+		if(Flags1 & 0x08) {
+			return MirroringType::FourScreens;
+		} else {
+			return Flags1 & 0x01 ? MirroringType::Vertical : MirroringType::Horizontal;
+		}
 	}
 };
 

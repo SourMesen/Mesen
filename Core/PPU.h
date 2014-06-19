@@ -61,7 +61,7 @@ struct TileInfo
 {
 	uint8_t LowByte;
 	uint8_t HighByte;
-	uint8_t Attributes;
+	uint8_t PaletteOffset;
 };
 
 class PPU : public IMemoryHandler
@@ -87,6 +87,7 @@ class PPU : public IMemoryHandler
 
 		TileInfo _currentTile;
 		TileInfo _nextTile;
+		TileInfo _previousTile;
 		
 		void UpdateStatusFlag();
 
@@ -97,7 +98,7 @@ class PPU : public IMemoryHandler
 
 		void IncVerticalScrolling();
 		void IncHorizontalScrolling();
-		uint16_t GetTileAddr();
+		uint16_t GetNameTableAddr();
 		uint16_t GetAttributeAddr();
 
 		void UpdateScrolling();
@@ -107,10 +108,12 @@ class PPU : public IMemoryHandler
 		void BeginVBlank();
 		void EndVBlank();
 
-		uint8_t GetBGPaletteEntry(uint8_t a, uint16_t pix);
+		uint8_t GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel);
 
 		void LoadTileInfo();
-		void LoadShiftRegisters();
+		void ShiftTileRegisters();
+		void InitializeShiftRegisters();
+		void LoadNextTile();
 		void DrawPixel();
 
 		void CopyFrame();

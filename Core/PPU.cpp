@@ -195,7 +195,7 @@ void PPU::IncHorizontalScrolling()
 }
 
 //Take from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Tile_and_attribute_fetching
-uint16_t PPU::GetTileAddr()
+uint16_t PPU::GetNameTableAddr()
 {
 	return 0x2000 | (_state.VideoRamAddr & 0x0FFF);
 }
@@ -204,6 +204,69 @@ uint16_t PPU::GetTileAddr()
 uint16_t PPU::GetAttributeAddr()
 {
 	return 0x23C0 | (_state.VideoRamAddr & 0x0C00) | ((_state.VideoRamAddr >> 4) & 0x38) | ((_state.VideoRamAddr >> 2) & 0x07);
+}
+
+void PPU::LoadTileInfo()
+{
+	_previousTile = _currentTile;
+	_currentTile = _nextTile;
+
+	uint16_t tileIndex = _memoryManager->ReadVRAM(GetNameTableAddr());
+	uint16_t tileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
+	
+	uint16_t shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
+	_nextTile.PaletteOffset = ((_memoryManager->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
+	_nextTile.LowByte = _memoryManager->ReadVRAM(tileAddr);
+	_nextTile.HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
+}
+
+void PPU::LoadNextTile()
+{
+	_state.LowBitShift |= _nextTile.LowByte;
+	_state.HighBitShift |= _nextTile.HighByte;
+}
+
+void PPU::InitializeShiftRegisters()
+{
+	_state.LowBitShift = (_currentTile.LowByte << 8) | _nextTile.LowByte;
+	_state.HighBitShift = (_currentTile.HighByte << 8) | _nextTile.HighByte;
+}
+
+void PPU::ShiftTileRegisters()
+{
+	_state.LowBitShift <<= 1;
+	_state.HighBitShift <<= 1;
+}
+
+void PPU::DrawPixel()
+{
+	uint32_t offset = _state.XScroll;
+	uint32_t pixelColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+
+	// If we're grabbing the pixel from the high part of the shift register, use the buffered palette, not the current one
+	uint8_t palette = GetBGPaletteEntry(offset < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, pixelColor);
+
+	/*
+	if(p->palettebuffer[fbRow].value != 0) {
+	// Pixel is already rendered and priority
+	// 1 means show behind background
+	continue;
+	}*/
+
+	//p->palettebuffer[fbRow].color = PPU_PALETTE_RGB[palette % 64];
+	uint32_t bufferPosition = _scanline * 256 + (_cycle - 1);
+	((uint32_t*)_outputBuffer)[bufferPosition] = 0xFF000000 | PPU_PALETTE_RGB[palette % 64];
+	//p->palettebuffer[fbRow].value = pixel;
+	//p->palettebuffer[fbRow].pindex = -1;
+}
+
+uint8_t PPU::GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel)
+{
+	if(pixel == 0) {
+		return _memoryManager->ReadVRAM(0x3F00);
+	} else {
+		return _memoryManager->ReadVRAM(0x3F00 + paletteOffset + pixel);
+	}
 }
 
 void PPU::UpdateScrolling()
@@ -240,71 +303,29 @@ void PPU::ProcessPrerenderScanline()
 		_scanline = 0;
 	} else if(_cycle == 321 || _cycle == 329) {
 		LoadTileInfo();
-		LoadShiftRegisters();
+		if(_cycle == 329) {
+			InitializeShiftRegisters();
+		}
 	}
-}
-
-void PPU::LoadTileInfo()
-{
-	_currentTile = _nextTile;
-
-	uint16_t tileIndex = _memoryManager->ReadVRAM(GetTileAddr());
-	uint16_t tileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
-	
-	uint16_t addrMask = _state.VideoRamAddr & 0x3FF;
-	uint16_t shift = ((addrMask >> 4) & 0x04) | (addrMask & 0x02);
-	_nextTile.Attributes = ((_memoryManager->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
-	_nextTile.LowByte = _memoryManager->ReadVRAM(tileAddr);
-	_nextTile.HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
-}
-
-void PPU::LoadShiftRegisters()
-{
-	_state.LowBitShift = (_state.LowBitShift << 8) | _nextTile.LowByte;
-	_state.HighBitShift = (_state.HighBitShift << 8) | _nextTile.HighByte;
-}
-
-void PPU::DrawPixel()
-{
-	uint32_t tileXPixel = (_cycle - 1) % 8;
-	uint32_t offset = (15 - tileXPixel - _state.XScroll);
-
-	uint8_t pixelColor = ((_state.LowBitShift >> offset) & 0x01) | (((_state.HighBitShift >> offset) & 0x01) << 1);
-
-	// If we're grabbing the pixel from the high part of the shift register, use the buffered palette, not the current one
-	uint32_t palette = 0;
-	if(offset < 8) {
-		palette = GetBGPaletteEntry(_nextTile.Attributes, pixelColor);
-	} else {
-		palette = GetBGPaletteEntry(_currentTile.Attributes, pixelColor);
-	}
-	/*
-	if(p->palettebuffer[fbRow].value != 0) {
-	// Pixel is already rendered and priority
-	// 1 means show behind background
-	continue;
-	}*/
-
-	//p->palettebuffer[fbRow].color = PPU_PALETTE_RGB[palette % 64];
-	uint32_t bufferPosition = _scanline * 256 + (_cycle - 1);
-	uint32_t paletteColor = PPU_PALETTE_RGB[palette % 64];
-	((uint32_t*)_outputBuffer)[bufferPosition] = paletteColor | (0xFF << 24);
-	//p->palettebuffer[fbRow].value = pixel;
-	//p->palettebuffer[fbRow].pindex = -1;
 }
 
 void PPU::ProcessVisibleScanline()
 {
 	if((_cycle - 1) % 8 == 0 && _cycle <= 250) {
-		LoadShiftRegisters();
+		if(_cycle > 1) {
+			LoadNextTile();
+		}
 		LoadTileInfo();
 	} else if(_cycle == 321 || _cycle == 329) {
-		LoadShiftRegisters();
 		LoadTileInfo();
+		if(_cycle == 329) {
+			InitializeShiftRegisters();
+		}
 	}
 	
 	if(_cycle > 0 && _cycle <= 256) {
 		DrawPixel();
+		ShiftTileRegisters();
 	}
 
 	if(IsRenderingEnabled()) {
@@ -322,15 +343,6 @@ void PPU::ProcessVisibleScanline()
 		if(_flags.SpritesEnabled) {
 			//Ppu_evaluateScanlineSprites(p, p->scanline);
 		}
-	}
-}
-
-uint8_t PPU::GetBGPaletteEntry(uint8_t a, uint16_t pix) 
-{
-	if(pix == 0) {
-		return _memoryManager->ReadVRAM(0x3F00);
-	} else {
-		return _memoryManager->ReadVRAM(0x3F00 + a + pix);
 	}
 }
 

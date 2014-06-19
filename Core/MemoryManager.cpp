@@ -1,5 +1,36 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
+#include "ROMLoader.h"
+
+MemoryManager::MemoryManager(NESHeader header)
+{
+	_header = header;
+	_mirroringType = _header.GetMirroringType();
+
+	_internalRAM = new uint8_t[InternalRAMSize];
+	_SRAM = new uint8_t[SRAMSize];
+	_videoRAM = new uint8_t[VRAMSize];
+	_expansionRAM = new uint8_t[0x2000];
+	ZeroMemory(_internalRAM, InternalRAMSize);
+	ZeroMemory(_SRAM, SRAMSize);
+	ZeroMemory(_videoRAM, VRAMSize);
+	ZeroMemory(_expansionRAM, 0x2000);
+
+	for(int i = 0; i <= 0xFFFF; i++) {
+		_ramHandlers.push_back(nullptr);
+	}
+
+	for(int i = 0; i <= 0x3FFF; i++) {
+		_vramHandlers.push_back(nullptr);
+	}
+}
+
+MemoryManager::~MemoryManager()
+{
+	delete[] _internalRAM;
+	delete[] _SRAM;
+	delete[] _expansionRAM;
+}
 
 uint8_t MemoryManager::ReadRegister(uint16_t addr)
 {
@@ -31,33 +62,6 @@ void MemoryManager::WriteMappedVRAM(uint16_t addr, uint8_t value)
 	if(_vramHandlers[addr]) {
 		_vramHandlers[addr]->WriteVRAM(addr, value);
 	}
-}
-
-MemoryManager::MemoryManager()
-{
-	_internalRAM = new uint8_t[InternalRAMSize];
-	_SRAM = new uint8_t[SRAMSize];
-	_videoRAM = new uint8_t[VRAMSize];
-	_expansionRAM = new uint8_t[0x2000];
-	ZeroMemory(_internalRAM, InternalRAMSize);
-	ZeroMemory(_SRAM, SRAMSize);
-	ZeroMemory(_videoRAM, VRAMSize);
-	ZeroMemory(_expansionRAM, 0x2000);
-
-	for(int i = 0; i <= 0xFFFF; i++) {
-		_ramHandlers.push_back(nullptr);
-	}
-
-	for(int i = 0; i <= 0x3FFF; i++) {
-		_vramHandlers.push_back(nullptr);
-	}
-}
-
-MemoryManager::~MemoryManager()
-{
-	delete[] _internalRAM;
-	delete[] _SRAM;
-	delete[] _expansionRAM;
 }
 
 void MemoryManager::RegisterIODevice(IMemoryHandler *handler)
@@ -124,6 +128,8 @@ uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 			if(addr == 0x3F10 || addr == 0x3F14 || addr == 0x3F18 || addr == 0x3F1C) {
 				addr &= ~0x0010;
 			}
+		} else if(addr >= 0x3000) {
+			addr -= 0x1000;
 		}
 		return _videoRAM[addr & 0x3FFF];
 	}
@@ -140,21 +146,34 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 			if(addr == 0x3F10 || addr == 0x3F14 || addr == 0x3F18 || addr == 0x3F1C) {
 				addr &= ~0x0010;
 			}
-			//std::cout << "palette:" << std::hex << (short)addr << " = " << (short)value << std::endl;
+		} else if(addr >= 0x3000) {
+			addr -= 0x1000;
 		}
-		if(addr == 0x2000) {
-			//std::cout << "test" << std::endl;
-		}
+
 		_videoRAM[addr] = value;
 
-		if(addr >= 0x2000 && addr < 0x2400) {
-			_videoRAM[addr + 0x800] = value;
-		} else if(addr >= 0x2400 && addr < 0x2800) {
-			_videoRAM[addr + 0x800] = value;
-		} else if(addr >= 0x2800 && addr < 0x2C00) {
-			_videoRAM[addr - 0x800] = value;
-		} else if(addr >= 0x2C00 && addr < 0x3000) {
-			_videoRAM[addr - 0x800] = value;
+		if(_mirroringType == MirroringType::Vertical) {
+			if(addr >= 0x2000 && addr < 0x2400) {
+				_videoRAM[addr + 0x800] = value;
+			} else if(addr >= 0x2400 && addr < 0x2800) {
+				_videoRAM[addr + 0x800] = value;
+			} else if(addr >= 0x2800 && addr < 0x2C00) {
+				_videoRAM[addr - 0x800] = value;
+			} else if(addr >= 0x2C00 && addr < 0x3000) {
+				_videoRAM[addr - 0x800] = value;
+			}
+		} else if(_mirroringType == MirroringType::Horizontal) {
+			if(addr >= 0x2000 && addr < 0x2400) {
+				_videoRAM[addr + 0x400] = value;
+			} else if(addr >= 0x2400 && addr < 0x2800) {
+				_videoRAM[addr - 0x400] = value;
+			} else if(addr >= 0x2800 && addr < 0x2C00) {
+				_videoRAM[addr + 0x400] = value;
+			} else if(addr >= 0x2C00 && addr < 0x3000) {
+				_videoRAM[addr - 0x400] = value;
+			}
+		} else {
+			throw exception("Not implemented yet");
 		}
 	}
 }

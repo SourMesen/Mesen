@@ -5,10 +5,13 @@
 Console::Console(string filename)
 {
 	_mapper = MapperFactory::InitializeFromFile(filename);
-	_memoryManager.RegisterIODevice(_mapper.get());
-	_cpu.reset(new CPU(&_memoryManager));
-	_ppu.reset(new PPU(&_memoryManager));	
-	_memoryManager.RegisterIODevice(_ppu.get());
+	_memoryManager.reset(new MemoryManager(_mapper->GetHeader()));
+	_cpu.reset(new CPU(_memoryManager.get()));
+	_ppu.reset(new PPU(_memoryManager.get()));	
+	_memoryManager->RegisterIODevice(_mapper.get());
+	_memoryManager->RegisterIODevice(_ppu.get());
+
+	Reset();
 }
 
 Console::~Console()
@@ -40,7 +43,7 @@ void Console::RunTest(bool callback(Console*))
 		_cpu->Exec();
 		_ppu->Exec();
 
-		if(timer.GetElapsedMS() > 5000) {
+		if(timer.GetElapsedMS() > 2000) {
 			uint32_t frameCount = _ppu->GetFrameCount();
 			std::cout << ((frameCount - lastFrameCount) / (timer.GetElapsedMS() / 1000)) << std::endl;
 			timer.Reset();
@@ -51,8 +54,14 @@ void Console::RunTest(bool callback(Console*))
 
 void Console::RunTests()
 {
+	//(new Console("TestSuite/mario.nes"))->Run();
+
+
 	vector<string> testROMs {
-		"dk",
+		//"Bomberman",
+		"IceClimber",
+		//"Excitebike",
+		//"dk",
 		"mario",
 		"01-basics",
 		"02-implied",
@@ -90,7 +99,7 @@ void Console::RunTests()
 			console->RunTest([] (Console *console) {
 				//static std::ofstream output("test.log", ios::out | ios::binary);
 				static bool testStarted = false;
-				uint8_t testStatus = console->_memoryManager.Read(0x6000);
+				uint8_t testStatus = console->_memoryManager->Read(0x6000);
 				
 				State state = console->_cpu->GetState();
 				/*output << std::hex << std::uppercase << 
@@ -107,7 +116,7 @@ void Console::RunTests()
 				} else if(testStatus == 0x80) {
 					testStarted = true;
 				} else if(testStatus < 0x80 && testStarted) {
-					char *result = console->_memoryManager.GetTestResult();
+					char *result = console->_memoryManager->GetTestResult();
 					std::cout << result;
 					delete[] result;
 					testStarted = false;
