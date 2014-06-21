@@ -28,5 +28,10 @@
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include <directxcolors.h>
+#include <io.h>
+#include <Fcntl.h>
+#include <thread>
+
+using std::thread;
 
 // TODO: reference additional headers your program requires here

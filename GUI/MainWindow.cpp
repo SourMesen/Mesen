@@ -1,7 +1,5 @@
 #include "stdafx.h"
-#include <io.h>
-#include <Fcntl.h>
-#include "resource.h"
+#include "Resource.h"
 #include "MainWindow.h"
 #include "..\Core\Console.h"
 #include "..\Core\Timer.h"
@@ -68,25 +66,23 @@ namespace NES
 		Initialize();
 
 		InputManager inputManager;
-
 		ControlManager::RegisterControlDevice(&inputManager, 0);
-
+  
+		HACCEL hAccel = LoadAccelerators(_hInstance, MAKEINTRESOURCE(IDC_Accelerator)); 
+		if(hAccel == nullptr) {
+			//error
+			std::cout << "error";
+		}
+		
 		MSG msg = { 0 };
-		Timer timer;
-		int frameCount = 0;
 		while(WM_QUIT != msg.message) {
 			if(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
+				if(!TranslateAccelerator(_hWnd, hAccel, &msg)) {
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
 			} else {
 				_renderer.Render();
-				frameCount++;
-				if(frameCount == 500) {
-					double fps = (double)frameCount / (timer.GetElapsedMS() / 1000);
-					//std::cout << "FPS: " << fps << std::endl;
-					timer.Reset();
-					frameCount = 0;
-				}
 			}
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1));
 		}
@@ -177,8 +173,7 @@ namespace NES
 			Stop();
 
 			_console.reset(new Console(filename));
-			std::thread nesThread(&Console::Run, _console.get());
-			nesThread.detach();
+			_emuThread.reset(new thread(&Console::Run, _console.get()));
 		}
 	}
 
@@ -186,12 +181,32 @@ namespace NES
 	{
 		if(_console) {
 			_console->Stop();
+			_emuThread->join();
+
 			_console.release();
+		}
+	}
+
+	bool MainWindow::ToggleMenuCheck(int resourceID)
+	{
+		HMENU hMenu = GetMenu(_hWnd);		
+		bool checked = (GetMenuState(hMenu, resourceID, MF_BYCOMMAND) & MF_CHECKED) == MF_CHECKED;
+		CheckMenuItem(hMenu, resourceID, MF_BYCOMMAND | (checked ? MF_UNCHECKED : MF_CHECKED));
+		return !checked;
+	}
+
+	void MainWindow::LimitFPS_Click()
+	{
+		if(ToggleMenuCheck(ID_OPTIONS_LIMITFPS)) {
+			Console::SetFlags(EmulationFlags::LimitFPS);
+		} else {
+			Console::ClearFlags(EmulationFlags::LimitFPS);
 		}
 	}
 
 	LRESULT CALLBACK MainWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
+		static MainWindow *mainWindow = MainWindow::GetInstance();
 		PAINTSTRUCT ps;
 		int wmId, wmEvent;
 		HDC hdc;
@@ -201,13 +216,15 @@ namespace NES
 				wmId    = LOWORD(wParam);
 				wmEvent = HIWORD(wParam);
 				// Parse the menu selections:
-				switch (wmId)
-				{
+				switch (wmId) {
 					case IDM_FILE_OPEN:
-						MainWindow::GetInstance()->OpenROM();
+						mainWindow->OpenROM();
 						break;
 					case IDM_FILE_RUNTESTS:
 						
+						break;
+					case ID_OPTIONS_LIMITFPS:
+						mainWindow->LimitFPS_Click();
 						break;
 					case IDM_ABOUT:
 						DialogBox(nullptr, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
@@ -224,8 +241,25 @@ namespace NES
 				EndPaint(hWnd, &ps);
 				break;
 
+			case WM_WINDOWPOSCHANGING:
+				WINDOWPOS* windowPos;
+				windowPos = (WINDOWPOS*)lParam;
+				
+				RECT clientRect;
+				RECT windowRect;
+				LONG xGap;
+				LONG yGap;
+				GetWindowRect(hWnd, &windowRect);
+				GetClientRect(hWnd, &clientRect);
+
+				xGap = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left);
+				yGap = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top);
+
+				windowPos->cy = (windowPos->cx - xGap) * 240 / 256 + yGap;
+				break;
+
 			case WM_DESTROY:
-				MainWindow::GetInstance()->Stop();
+				mainWindow->Stop();
 				PostQuitMessage(0);
 				break;
 

@@ -33,8 +33,8 @@ void ControlManager::RefreshStateBuffer(uint8_t port)
 		ButtonState buttonState = controlDevice->GetButtonState();
 
 		//"Button status for each controller is returned as an 8-bit report in the following order: A, B, Select, Start, Up, Down, Left, Right."
-		uint8_t state = buttonState.A | (buttonState.B << 1) | (buttonState.Select << 2) | (buttonState.Start << 3) |
-							(buttonState.Up << 4) | (buttonState.Down << 5) | (buttonState.Left << 6) | (buttonState.Right << 7);
+		uint8_t state = (uint8_t)buttonState.A | ((uint8_t)buttonState.B << 1) | ((uint8_t)buttonState.Select << 2) | ((uint8_t)buttonState.Start << 3) |
+							((uint8_t)buttonState.Up << 4) | ((uint8_t)buttonState.Down << 5) | ((uint8_t)buttonState.Left << 6) | ((uint8_t)buttonState.Right << 7);
 
 		_stateBuffer[port] = state;
 	} else {

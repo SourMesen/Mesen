@@ -2,6 +2,8 @@
 #include "Console.h"
 #include "Timer.h"
 
+uint32_t Console::Flags = 0;
+
 Console::Console(wstring filename)
 {
 	_mapper = MapperFactory::InitializeFromFile(filename);
@@ -30,7 +32,21 @@ void Console::Reset()
 void Console::Stop()
 {
 	_stop = true;
-	while(!_stopped) { }
+}
+
+void Console::SetFlags(int flags)
+{
+	Console::Flags |= flags;
+}
+
+void Console::ClearFlags(int flags)
+{
+	Console::Flags  ^= flags;
+}
+
+bool Console::CheckFlag(int flag)
+{
+	return (Console::Flags & flag) == flag;
 }
 
 void Console::Run()
@@ -45,7 +61,7 @@ void Console::Run()
 		executedCycles += _cpu->Exec();
 		_ppu->Exec();
 
-		if(limitFrameRate && executedCycles > 30000) {
+		if(CheckFlag(EmulationFlags::LimitFPS) && executedCycles > 30000) {
 			double targetTime = 16.77;
 			elapsedTime = clockTimer.GetElapsedMS();
 			while(targetTime > elapsedTime) {
@@ -66,7 +82,6 @@ void Console::Run()
 		}
 
 		if(_stop) {
-			_stopped = true;
 			break;
 		}
 	}

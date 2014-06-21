@@ -12,6 +12,7 @@ namespace NES {
 		int _nCmdShow;
 		Renderer _renderer;
 		unique_ptr<Console> _console;
+		unique_ptr<thread> _emuThread;
 
 		bool Initialize();
 		HRESULT InitWindow();
@@ -22,6 +23,10 @@ namespace NES {
 		{
 			return MainWindow::Instance;
 		}
+
+		void LimitFPS_Click();
+
+		bool ToggleMenuCheck(int resourceID);
 
 	public:
 		MainWindow(HINSTANCE hInstance, int nCmdShow) : _hInstance(hInstance), _nCmdShow(nCmdShow) 
