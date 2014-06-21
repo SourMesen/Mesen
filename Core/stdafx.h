@@ -32,6 +32,7 @@ using std::shared_ptr;
 using std::unique_ptr;
 using std::ios;
 using std::ifstream;
-using std::string;
+//using std::string;
+using std::wstring;
 using std::exception;
 using std::atomic;

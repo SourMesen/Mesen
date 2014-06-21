@@ -46,7 +46,7 @@ class ROMLoader
 		vector<MemoryBank> _vromBanks;
 
 	public:
-		ROMLoader(string filename)
+		ROMLoader(wstring filename)
 		{
 			_romBanks.clear();
 			_vromBanks.clear();

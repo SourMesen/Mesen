@@ -9,6 +9,8 @@ using namespace DirectX;
 
 namespace NES 
 {
+	MainWindow* MainWindow::Instance = nullptr;
+
 	bool MainWindow::Initialize()
 	{
 		if(FAILED(InitWindow())) {
@@ -109,7 +111,7 @@ namespace NES
 			return E_FAIL;
 
 		// Create window
-		RECT rc = { 0, 0, 256, 240 };
+		RECT rc = { 0, 0, 260, 270 };
 		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 		_hWnd = CreateWindow(L"NESEmu", L"NESEmu",
 			WS_OVERLAPPEDWINDOW,
@@ -143,10 +145,43 @@ namespace NES
 		return (INT_PTR)FALSE;
 	}
 
-	void MainWindow::RunBenchmark()
+	void MainWindow::OpenROM()
 	{
-		std::thread bmThread(&Console::RunTests);
-		bmThread.detach();
+		wchar_t buffer[2000];
+
+		OPENFILENAME ofn;
+		ZeroMemory(&ofn , sizeof(ofn));
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = nullptr;
+		ofn.lpstrFile = buffer;
+		ofn.lpstrFile[0] = '\0';
+		ofn.nMaxFile = sizeof(buffer);
+		ofn.lpstrFilter = L"NES Roms\0*.NES\0All\0*.*";
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFileTitle = nullptr;
+		ofn.nMaxFileTitle = 0 ;
+		ofn.lpstrInitialDir= nullptr;
+		ofn.Flags = OFN_PATHMUSTEXIST|OFN_FILEMUSTEXIST ;
+
+		GetOpenFileName(&ofn);
+		
+		wstring filename = wstring(buffer);
+
+		if(filename.length() > 0) {
+			Stop();
+
+			_console.reset(new Console(filename));
+			std::thread nesThread(&Console::Run, _console.get());
+			nesThread.detach();
+		}
+	}
+
+	void MainWindow::Stop()
+	{
+		if(_console) {
+			_console->Stop();
+			_console.release();
+		}
 	}
 
 	LRESULT CALLBACK MainWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -162,8 +197,11 @@ namespace NES
 				// Parse the menu selections:
 				switch (wmId)
 				{
-					case IDM_RunBenchmark:
-						RunBenchmark();
+					case IDM_FILE_OPEN:
+						MainWindow::GetInstance()->OpenROM();
+						break;
+					case IDM_FILE_RUNTESTS:
+						
 						break;
 					case IDM_ABOUT:
 						DialogBox(nullptr, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
@@ -181,6 +219,7 @@ namespace NES
 				break;
 
 			case WM_DESTROY:
+				MainWindow::GetInstance()->Stop();
 				PostQuitMessage(0);
 				break;
 

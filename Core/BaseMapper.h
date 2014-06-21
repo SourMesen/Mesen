@@ -80,7 +80,7 @@ class DefaultMapper : public BaseMapper
 class MapperFactory
 {
 	public:
-		static unique_ptr<BaseMapper> InitializeFromFile(string filename)
+		static unique_ptr<BaseMapper> InitializeFromFile(wstring filename)
 		{
 			ROMLoader loader(filename);
 

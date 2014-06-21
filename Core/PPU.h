@@ -13,7 +13,8 @@ enum PPURegisters
 	SpriteData = 0x04,
 	ScrollOffsets = 0x05,
 	VideoMemoryAddr = 0x06,
-	VideoMemoryData = 0x07
+	VideoMemoryData = 0x07,
+	SpriteDMA = 0x4014,
 };
 
 struct PPUControlFlags
@@ -47,7 +48,7 @@ struct PPUState
 	uint8_t Control;
 	uint8_t Control2;
 	uint8_t Status;
-	uint8_t SpriteRamAddr;
+	uint32_t SpriteRamAddr;
 	uint16_t VideoRamAddr;
 	uint8_t XScroll;
 	uint16_t TmpVideoRamAddr;
@@ -62,6 +63,7 @@ struct TileInfo
 	uint8_t LowByte;
 	uint8_t HighByte;
 	uint8_t PaletteOffset;
+	bool HorizontalMirror;
 };
 
 class PPU : public IMemoryHandler
@@ -79,6 +81,7 @@ class PPU : public IMemoryHandler
 		uint8_t _memoryReadBuffer = 0;
 
 		uint8_t _spriteRAM[0x100];
+		uint8_t _secondarySpriteRAM[0x40];
 
 		uint8_t *_outputBuffer;
 		
@@ -88,6 +91,9 @@ class PPU : public IMemoryHandler
 		TileInfo _currentTile;
 		TileInfo _nextTile;
 		TileInfo _previousTile;
+
+		int32_t _spriteX[8];
+		TileInfo _spriteTiles[8];
 		
 		void UpdateStatusFlag();
 
@@ -101,16 +107,20 @@ class PPU : public IMemoryHandler
 		uint16_t GetNameTableAddr();
 		uint16_t GetAttributeAddr();
 
-		void UpdateScrolling();
+		void ProcessPreVBlankScanline();
 		void ProcessPrerenderScanline();
 		void ProcessVisibleScanline();
+
+		void CopyOAMData();
 
 		void BeginVBlank();
 		void EndVBlank();
 
 		uint8_t GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel);
+		uint8_t GetSpritePaletteEntry(uint8_t paletteOffset, uint8_t pixel);
 
 		void LoadTileInfo();
+		void LoadSpriteTileInfo(uint8_t spriteIndex);
 		void ShiftTileRegisters();
 		void InitializeShiftRegisters();
 		void LoadNextTile();
@@ -120,7 +130,11 @@ class PPU : public IMemoryHandler
 
 		PPURegisters GetRegisterID(uint16_t addr)
 		{
-			return (PPURegisters)(addr & 0x07);
+			if(addr == 0x4014) {
+				return PPURegisters::SpriteDMA;
+			} else {
+				return (PPURegisters)(addr & 0x07);
+			}
 		}
 
 	public:

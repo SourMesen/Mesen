@@ -11,10 +11,10 @@ MemoryManager::MemoryManager(NESHeader header)
 	_SRAM = new uint8_t[SRAMSize];
 	_videoRAM = new uint8_t[VRAMSize];
 	_expansionRAM = new uint8_t[0x2000];
-	ZeroMemory(_internalRAM, InternalRAMSize);
-	ZeroMemory(_SRAM, SRAMSize);
-	ZeroMemory(_videoRAM, VRAMSize);
-	ZeroMemory(_expansionRAM, 0x2000);
+	memset(_internalRAM, 0, InternalRAMSize);
+	memset(_SRAM, 0, SRAMSize);
+	memset(_videoRAM, 0, VRAMSize);
+	memset(_expansionRAM, 0, 0x2000);
 
 	for(int i = 0; i <= 0xFFFF; i++) {
 		_ramHandlers.push_back(nullptr);

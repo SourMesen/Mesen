@@ -2,7 +2,7 @@
 #include "Console.h"
 #include "Timer.h"
 
-Console::Console(string filename)
+Console::Console(wstring filename)
 {
 	_mapper = MapperFactory::InitializeFromFile(filename);
 	_memoryManager.reset(new MemoryManager(_mapper->GetHeader()));
@@ -23,12 +23,23 @@ void Console::Reset()
 	_cpu->Reset();
 }
 
+void Console::Stop()
+{
+	_stop = true;
+	while(!_stopped) { }
+}
+
 void Console::Run()
 {
 	while(true) {
 		_cpu->Exec();
 		_ppu->Exec();
+
+		if(_stop) {
+			break;
+		}
 	}
+	_stopped = true;
 }
 
 void Console::RunTest(bool callback(Console*))
@@ -52,17 +63,22 @@ void Console::RunTest(bool callback(Console*))
 	}
 }
 
+void Console::Load(wstring filename)
+{
+	(new Console(filename))->Run();
+}
+
 void Console::RunTests()
 {
 	//(new Console("TestSuite/mario.nes"))->Run();
+/*
 
-
-	vector<string> testROMs {
+	vector<wstring> testROMs {
 		//"Bomberman",
-		"IceClimber",
+		L"IceClimber",
 		//"Excitebike",
-		//"dk",
-		"mario",
+		"dk",
+		//"mario",
 		"01-basics",
 		"02-implied",
 		"03-immediate",
@@ -81,9 +97,9 @@ void Console::RunTests()
 		"16-special"
 	};
 
-	for(string testROM : testROMs) {
-		Console *console = new Console(string("TestSuite/") + testROM + ".nes");
-		if(testROM == "nestest") {
+	for(wstring testROM : testROMs) {
+		Console *console = new Console(wstring(L"TestSuite/") + testROM + L".nes");
+		if(testROM == L"nestest") {
 			console->RunTest([] (Console *console) {
 				State state = console->_cpu->GetState();
 				std::cout << std::hex << std::uppercase << 
@@ -109,7 +125,7 @@ void Console::RunTests()
 							" S:" << std::setfill('0') << std::setw(2) << (short)state.SP << 
 							" P:........ $" << 
 							std::setfill('0') << std::setw(4) << (short)state.PC <<std::endl;*/
-				
+			/*	
 				if(testStatus == 0x81) {
 					//need reset
 					std::cout << "reset needed";
@@ -126,5 +142,5 @@ void Console::RunTests()
 			});
 		}
 		delete console;
-	}
+	}*/
 }

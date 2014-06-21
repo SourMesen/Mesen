@@ -1,24 +1,35 @@
 #include "stdafx.h"
 #include "Renderer.h"
+#include "../Core/Console.h"
 
 namespace NES {
 	class MainWindow
 	{
 	private:
+		static MainWindow *Instance;
 		HINSTANCE _hInstance;
 		HWND _hWnd;
 		int _nCmdShow;
 		Renderer _renderer;
+		unique_ptr<Console> _console;
 
 		bool Initialize();
 		HRESULT InitWindow();
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 		static INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-		static void RunBenchmark();
+		static MainWindow* GetInstance() 
+		{
+			return MainWindow::Instance;
+		}
 
 	public:
-		MainWindow(HINSTANCE hInstance, int nCmdShow) : _hInstance(hInstance), _nCmdShow(nCmdShow) { }
+		MainWindow(HINSTANCE hInstance, int nCmdShow) : _hInstance(hInstance), _nCmdShow(nCmdShow) 
+		{
+			MainWindow::Instance = this;
+		}
 		int Run();
+		void OpenROM();
+		void Stop();
 	};
 }

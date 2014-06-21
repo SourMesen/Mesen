@@ -27,6 +27,8 @@ PPU::PPU(MemoryManager *memoryManager)
 	_flags = {};
 	_statusFlags = {};
 
+	memset(_spriteRAM, 0xFF, 0x100);
+
 	_outputBuffer = new uint8_t[256 * 240 * 4];
 }
 
@@ -72,7 +74,6 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 
 void PPU::WriteRAM(uint16_t addr, uint8_t value)
 {
-	static int counter = 0;
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Control:
 			_state.Control = value;
@@ -87,10 +88,10 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			break;
 		case PPURegisters::SpriteData:
 			_spriteRAM[_state.SpriteRamAddr] = value;
-			_state.SpriteRamAddr++;
+			_state.SpriteRamAddr = (_state.SpriteRamAddr + 1) % 0x100;
 			break;
 		case PPURegisters::ScrollOffsets:
-			if(_state.WriteToggle) {				
+			if(_state.WriteToggle) {
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x73E0) | ((value & 0xF8) << 2) | ((value & 0x07) << 12);
 			} else {
 				_state.XScroll = value & 0x07;
@@ -110,6 +111,11 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 		case PPURegisters::VideoMemoryData:
 			_memoryManager->WriteVRAM(_state.VideoRamAddr, value);
 			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
+			break;
+		case PPURegisters::SpriteDMA:
+			for(int i = 0; i < 0x100; i++) {
+				_spriteRAM[i] = _memoryManager->Read(value*0x100 + i);
+			}
 			break;
 	}
 }
@@ -220,6 +226,42 @@ void PPU::LoadTileInfo()
 	_nextTile.HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
 }
 
+void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
+{
+	uint32_t spriteAddr = spriteIndex * 4;
+	uint8_t spriteY = _secondarySpriteRAM[spriteAddr];
+	uint8_t tileIndex = _secondarySpriteRAM[spriteAddr+1];
+	uint8_t attributes = _secondarySpriteRAM[spriteAddr+2];
+	uint8_t spriteX = _secondarySpriteRAM[spriteAddr+3];
+	bool horizontalMirror = (attributes & 0x40) == 0x40;
+
+	if(spriteY < 240 && spriteY == _spriteRAM[63 * 4] && tileIndex == 0xFF && attributes == 0xFF && spriteX == 0xFF) {
+		//Skip this sprite
+		spriteY = 255;
+	}
+
+	
+	if(spriteY < 240) {
+		uint16_t tileAddr;
+		if(_flags.LargeSprites) {
+			throw exception("Not implemented yet");
+		} else {
+			tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + (_scanline - spriteY);
+		}
+
+		_spriteX[spriteIndex] = spriteX;
+		_spriteTiles[spriteIndex].HorizontalMirror = horizontalMirror;
+		_spriteTiles[spriteIndex].PaletteOffset = (attributes & 0x03) << 2;
+		_spriteTiles[spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
+		_spriteTiles[spriteIndex].HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
+	} else {
+		_spriteX[spriteIndex] = 256;
+		_spriteTiles[spriteIndex].PaletteOffset = 0;
+		_spriteTiles[spriteIndex].LowByte = 0;
+		_spriteTiles[spriteIndex].HighByte = 0;
+	}
+}
+
 void PPU::LoadNextTile()
 {
 	_state.LowBitShift |= _nextTile.LowByte;
@@ -240,24 +282,44 @@ void PPU::ShiftTileRegisters()
 
 void PPU::DrawPixel()
 {
+	bool useBackground = true;
+	uint32_t pixelColor = 0;
+
 	uint32_t offset = _state.XScroll;
-	uint32_t pixelColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+	uint32_t backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+	
+	for(int i = 0; i < 8; i++) {
+		if(useBackground && _spriteX[i] <= 0 && _spriteX[i] > -8) {
+			if(_cycle == 256) {
+				pixelColor = 10;
+			}
+			uint32_t spriteColor;
+			if(_spriteTiles[i].HorizontalMirror) {
+				spriteColor = ((_spriteTiles[i].LowByte >> -_spriteX[i]) & 0x01) | ((_spriteTiles[i].HighByte >> -_spriteX[i]) & 0x01) << 1;
+			} else {
+				spriteColor = ((_spriteTiles[i].LowByte << -_spriteX[i]) & 0x80) >> 7 | ((_spriteTiles[i].HighByte << -_spriteX[i]) & 0x80) >> 6;
+			}
 
-	// If we're grabbing the pixel from the high part of the shift register, use the buffered palette, not the current one
-	uint8_t palette = GetBGPaletteEntry(offset < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, pixelColor);
+			if(spriteColor != 0) {
+				uint8_t spritePaletteColor = GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor);
+				pixelColor = 0xFF000000 | PPU_PALETTE_RGB[spritePaletteColor % 64];
+				useBackground = false;
+			}
+		}
+		_spriteX[i]--;
+	}
+	
+	if(useBackground) {
+		// If we're grabbing the pixel from the high part of the shift register, use the previous tile's palette, not the current one
+		uint8_t backgroundPaletteColor = GetBGPaletteEntry(offset < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor);
+		pixelColor = 0xFF000000 | PPU_PALETTE_RGB[backgroundPaletteColor % 64];
+	}
 
-	/*
-	if(p->palettebuffer[fbRow].value != 0) {
-	// Pixel is already rendered and priority
-	// 1 means show behind background
-	continue;
-	}*/
-
-	//p->palettebuffer[fbRow].color = PPU_PALETTE_RGB[palette % 64];
 	uint32_t bufferPosition = _scanline * 256 + (_cycle - 1);
-	((uint32_t*)_outputBuffer)[bufferPosition] = 0xFF000000 | PPU_PALETTE_RGB[palette % 64];
-	//p->palettebuffer[fbRow].value = pixel;
-	//p->palettebuffer[fbRow].pindex = -1;
+	((uint32_t*)_outputBuffer)[bufferPosition] = pixelColor;
+
+	//Shift the tile registers to prepare for the next cycle
+	ShiftTileRegisters();
 }
 
 uint8_t PPU::GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel)
@@ -269,24 +331,39 @@ uint8_t PPU::GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel)
 	}
 }
 
-void PPU::UpdateScrolling()
+uint8_t PPU::GetSpritePaletteEntry(uint8_t paletteOffset, uint8_t pixel)
+{
+	if(pixel == 0) {
+		return _memoryManager->ReadVRAM(0x3F00);
+	} else {
+		return _memoryManager->ReadVRAM(0x3F10 + paletteOffset + pixel);
+	}
+}
+
+void PPU::ProcessPreVBlankScanline()
 {
 	//For pre-render scanline & all visible scanlines
-	if(_cycle == 256) {
-		IncVerticalScrolling();
-	} else if(_cycle == 257) {
-		//copy horizontal scrolling value from t
-		_state.VideoRamAddr = (_state.VideoRamAddr & ~0x041F) | (_state.TmpVideoRamAddr & 0x041F);
-	} else if((_cycle % 8 == 0 && _cycle > 0 && _cycle < 256) || _cycle == 328 || _cycle == 336) {
-		IncHorizontalScrolling();
+	if(IsRenderingEnabled()) {
+		//Update video ram address according to scrolling logic
+		if(_cycle == 256) {
+			IncVerticalScrolling();
+		} else if(_cycle == 257) {
+			//copy horizontal scrolling value from t
+			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x041F) | (_state.TmpVideoRamAddr & 0x041F);
+		} else if((_cycle % 8 == 0 && _cycle > 0 && _cycle < 256) || _cycle == 328 || _cycle == 336) {
+			IncHorizontalScrolling();
+		}
+	}
+
+	if(_cycle >= 257 && _cycle <= 320) {
+		//"OAMADDR is set to 0 during each of ticks 257-320 (the sprite tile loading interval) of the pre-render and visible scanlines."
+		_state.SpriteRamAddr = 0;
 	}
 }
 
 void PPU::ProcessPrerenderScanline()
 {
-	if(IsRenderingEnabled()) {
-		UpdateScrolling();
-	}
+	ProcessPreVBlankScanline();
 
 	if(_cycle == 1) {
 		_statusFlags.SpriteOverflow = false;
@@ -311,38 +388,83 @@ void PPU::ProcessPrerenderScanline()
 
 void PPU::ProcessVisibleScanline()
 {
-	if((_cycle - 1) % 8 == 0 && _cycle <= 250) {
-		if(_cycle > 1) {
-			LoadNextTile();
+	if(_cycle > 0 && _cycle <= 256) {
+		if((_cycle - 1) % 8 == 0) {
+			//Cycle 1, 9, 17, etc.
+			if(_cycle != 1) {
+				LoadNextTile();
+			} else {
+				//Clear secondary OAM at the start of every visible scanline (cycle 1)
+				memset(_secondarySpriteRAM, 0xFF, 0x40);
+			}
+			LoadTileInfo();
+		} 
+
+		DrawPixel();
+		CopyOAMData();
+
+		if(_cycle == 256 && _scanline == 239) {
+			//Send frame to GUI once the last pixel has been output
+			PPU::VideoDevice->UpdateFrame(_outputBuffer);
 		}
-		LoadTileInfo();
+	} else if((_cycle - 261) % 8 == 0 && _cycle <= 320) {
+		LoadSpriteTileInfo((_cycle - 261) / 8);
 	} else if(_cycle == 321 || _cycle == 329) {
 		LoadTileInfo();
 		if(_cycle == 329) {
 			InitializeShiftRegisters();
 		}
 	}
+
+	ProcessPreVBlankScanline();
+}
+
+void PPU::CopyOAMData()
+{
+	static uint32_t _secondaryOAMAddr = 0;
+	static uint8_t _buffer = 0;
+	static bool _writeData = false;
+	static bool _done = false;
 	
-	if(_cycle > 0 && _cycle <= 256) {
-		DrawPixel();
-		ShiftTileRegisters();
-	}
-
-	if(IsRenderingEnabled()) {
-		UpdateScrolling();
-	}
-
-	if(_cycle == 256) {
-		if(_scanline == 239) {
-			PPU::VideoDevice->UpdateFrame(_outputBuffer);
-		}
-		if(_flags.BackgroundEnabled) {
-			//Ppu_renderTileRow(p);
+	if(_cycle >= 65 && _cycle <= 256) {
+		if(_cycle == 65) {
+			_secondaryOAMAddr = 0;
+			_done = false;
 		}
 
-		if(_flags.SpritesEnabled) {
-			//Ppu_evaluateScanlineSprites(p, p->scanline);
+		if(_state.SpriteRamAddr >= 0x100) {
+			_done = true;
 		}
+
+		//if(!_done) {
+			if(_cycle & 0x01) {
+				//Read a byte from the primary OAM
+				_buffer = _spriteRAM[_state.SpriteRamAddr & 0xFF];
+				_state.SpriteRamAddr++;
+			} else {
+				if(!_writeData && _state.SpriteRamAddr < 0x100 && _scanline >= _buffer && _scanline < _buffer + (_flags.LargeSprites ? 16 : 8)) {
+					_writeData = true;
+				}
+
+				if(_secondaryOAMAddr < 0x40) {
+					//Copy 1 byte to secondary OAM
+					_secondarySpriteRAM[_secondaryOAMAddr] = _buffer;
+
+					if(_writeData) {
+						_secondaryOAMAddr++;
+
+						if((_secondaryOAMAddr & 0x03) == 0) {
+							//Done copying
+							_writeData = false;
+						}
+					} else {
+						_state.SpriteRamAddr += 3;
+					}
+				} else {
+					//8 sprites have been found, check flags, etc?
+				}
+			}
+		//}
 	}
 }
 
@@ -373,7 +495,7 @@ void PPU::EndVBlank()
 void PPU::Exec()
 {
 	uint64_t equivalentCycleCount = CPU::GetCycleCount() * 3;
-	uint32_t gap = equivalentCycleCount - _cycleCount;
+	uint32_t gap = (uint32_t)(equivalentCycleCount - _cycleCount);
 	_cycleCount += gap;
 	while(gap > 0) {
 		if(_scanline == -1) {
