@@ -39,13 +39,14 @@ typedef vector<uint8_t> MemoryBank;
 class ROMLoader
 {
 	private:
-		const int ROMBankSize = 0x4000;
-		const int VROMBankSize = 0x2000;
 		NESHeader _header;
 		vector<MemoryBank> _romBanks;
 		vector<MemoryBank> _vromBanks;
 
 	public:
+		const static int ROMBankSize = 0x4000;
+		const static int VROMBankSize = 0x2000;
+
 		ROMLoader(wstring filename)
 		{
 			_romBanks.clear();

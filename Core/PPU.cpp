@@ -56,15 +56,13 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 		case PPURegisters::VideoMemoryData:
 			returnValue = _memoryReadBuffer;
 			_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr);
-			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
 
 			if(_state.VideoRamAddr >= 0x3F00) {
-				//No buffer for palette
-				//TODO: Update read buffer when reading palette (See: http://wiki.nesdev.com/w/index.php/PPU_registers#The_PPUDATA_read_buffer_.28post-fetch.29)
-				return _memoryReadBuffer;
-			} else {
-				return returnValue;
+				returnValue = ReadPaletteRAM(_state.VideoRamAddr);
 			}
+
+			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
+			return returnValue;
 		default:
 			//other registers are meant to be read-only
 			break;
@@ -109,14 +107,54 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
 		case PPURegisters::VideoMemoryData:
-			_memoryManager->WriteVRAM(_state.VideoRamAddr, value);
+			if(_state.VideoRamAddr >= 0x3F00) {
+				WritePaletteRAM(_state.VideoRamAddr, value);
+			} else {
+				_memoryManager->WriteVRAM(_state.VideoRamAddr, value);
+			}
 			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
 			break;
 		case PPURegisters::SpriteDMA:
 			for(int i = 0; i < 0x100; i++) {
-				_spriteRAM[i] = _memoryManager->Read(value*0x100 + i);
+				_spriteRAM[(_state.SpriteRamAddr+i)&0xFF] = _memoryManager->Read(value*0x100 + i);
 			}
 			break;
+	}
+}
+
+uint8_t PPU::ReadPaletteRAM(uint16_t addr)
+{
+	addr &= 0x1F;
+	if(addr == 0x10 || addr == 0x14 || addr == 0x18 || addr == 0x1C) {
+		addr &= ~0x10;
+	}
+	return _paletteRAM[addr];
+}
+
+void PPU::WritePaletteRAM(uint16_t addr, uint8_t value)
+{
+	addr &= 0x1F;
+	if(addr == 0x10 || addr == 0x14 || addr == 0x18 || addr == 0x1C) {
+		addr &= ~0x10;
+	}
+	_paletteRAM[addr] = value;
+}
+
+uint8_t PPU::GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel)
+{
+	if(pixel == 0) {
+		return ReadPaletteRAM(0x3F00);
+	} else {
+		return ReadPaletteRAM(0x3F00 + paletteOffset + pixel);
+	}
+}
+
+uint8_t PPU::GetSpritePaletteEntry(uint8_t paletteOffset, uint8_t pixel)
+{
+	if(pixel == 0) {
+		return ReadPaletteRAM(0x3F00);
+	} else {
+		return ReadPaletteRAM(0x3F10 + paletteOffset + pixel);
 	}
 }
 
@@ -239,7 +277,6 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		//Skip this sprite
 		spriteY = 255;
 	}
-
 	
 	if(spriteY < 240) {
 		uint16_t tileAddr;
@@ -320,24 +357,6 @@ void PPU::DrawPixel()
 
 	//Shift the tile registers to prepare for the next cycle
 	ShiftTileRegisters();
-}
-
-uint8_t PPU::GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel)
-{
-	if(pixel == 0) {
-		return _memoryManager->ReadVRAM(0x3F00);
-	} else {
-		return _memoryManager->ReadVRAM(0x3F00 + paletteOffset + pixel);
-	}
-}
-
-uint8_t PPU::GetSpritePaletteEntry(uint8_t paletteOffset, uint8_t pixel)
-{
-	if(pixel == 0) {
-		return _memoryManager->ReadVRAM(0x3F00);
-	} else {
-		return _memoryManager->ReadVRAM(0x3F10 + paletteOffset + pixel);
-	}
 }
 
 void PPU::ProcessPreVBlankScanline()
@@ -436,7 +455,7 @@ void PPU::CopyOAMData()
 			_done = true;
 		}
 
-		//if(!_done) {
+		if(!_done) {
 			if(_cycle & 0x01) {
 				//Read a byte from the primary OAM
 				_buffer = _spriteRAM[_state.SpriteRamAddr & 0xFF];
@@ -464,7 +483,7 @@ void PPU::CopyOAMData()
 					//8 sprites have been found, check flags, etc?
 				}
 			}
-		//}
+		}
 	}
 }
 

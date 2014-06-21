@@ -123,12 +123,7 @@ uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 	if(addr <= 0x1FFF) {
 		return ReadMappedVRAM(addr & 0x1FFF);
 	} else {
-		if(addr >= 0x3F00) {
-			addr &= 0x3F1F;
-			if(addr == 0x3F10 || addr == 0x3F14 || addr == 0x3F18 || addr == 0x3F1C) {
-				addr &= ~0x0010;
-			}
-		} else if(addr >= 0x3000) {
+		if(addr >= 0x3000) {
 			addr -= 0x1000;
 		}
 		return _videoRAM[addr & 0x3FFF];
@@ -141,12 +136,7 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 	if(addr <= 0x1FFF) {
 		WriteMappedVRAM(addr, value);
 	} else {
-		if(addr >= 0x3F00) {
-			addr &= 0x3F1F;
-			if(addr == 0x3F10 || addr == 0x3F14 || addr == 0x3F18 || addr == 0x3F1C) {
-				addr &= ~0x0010;
-			}
-		} else if(addr >= 0x3000) {
+		if(addr >= 0x3000) {
 			addr -= 0x1000;
 		}
 

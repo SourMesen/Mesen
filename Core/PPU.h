@@ -80,6 +80,8 @@ class PPU : public IMemoryHandler
 		uint64_t _cycleCount = 0;
 		uint8_t _memoryReadBuffer = 0;
 
+		uint8_t _paletteRAM[0x100];
+
 		uint8_t _spriteRAM[0x100];
 		uint8_t _secondarySpriteRAM[0x40];
 
@@ -118,6 +120,9 @@ class PPU : public IMemoryHandler
 
 		uint8_t GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel);
 		uint8_t GetSpritePaletteEntry(uint8_t paletteOffset, uint8_t pixel);
+
+		uint8_t ReadPaletteRAM(uint16_t addr);
+		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
 		void LoadTileInfo();
 		void LoadSpriteTileInfo(uint8_t spriteIndex);

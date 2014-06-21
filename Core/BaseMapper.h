@@ -42,6 +42,10 @@ class DefaultMapper : public BaseMapper
 				_mappedRomBanks = { &_romBanks[0], &_romBanks[1] };
 			}
 
+			if(_vromBanks.size() == 0) {
+				uint8_t *buffer = new uint8_t[ROMLoader::VROMBankSize];
+				_vromBanks.push_back(MemoryBank(buffer, buffer + ROMLoader::VROMBankSize));
+			}
 			_mappedVromBank = &_vromBanks[0];
 		}
 
