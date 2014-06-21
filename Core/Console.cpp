@@ -31,12 +31,21 @@ void Console::Stop()
 
 void Console::Run()
 {
+	Timer timer;
+	uint32_t lastFrameCount = 0;
 	while(true) {
 		_cpu->Exec();
 		_ppu->Exec();
 
 		if(_stop) {
 			break;
+		}
+
+		if(timer.GetElapsedMS() > 2000) {
+			uint32_t frameCount = _ppu->GetFrameCount();
+			std::cout << ((frameCount - lastFrameCount) / (timer.GetElapsedMS() / 1000)) << std::endl;
+			timer.Reset();
+			lastFrameCount = frameCount;
 		}
 	}
 	_stopped = true;
