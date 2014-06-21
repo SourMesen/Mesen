@@ -35,6 +35,7 @@ private:
 
 	Func _opTable[256];
 	uint8_t _cycles[256];
+	uint8_t _cyclesPageCrossed[256];
 
 	State _state;
 
@@ -42,9 +43,10 @@ private:
 
 	static uint64_t CycleCount;
 	static bool NMIFlag;
+	bool _runNMI = false;
 
 	uint16_t _currentPC = 0;
-	uint8_t _cyclePenalty = 0;
+	bool _pageCrossed = false;
 
 	uint8_t ReadByte()
 	{
@@ -82,21 +84,14 @@ private:
 		}
 	}
 
-	bool IsPageCrossed(uint16_t valA, uint8_t valB)
+	bool IsPageCrossed(uint16_t valA, int8_t valB)
 	{
-		return (uint8_t)valA + valB >= 0x100;
+		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
 	}
 
 	void MemoryWrite(uint16_t addr, uint8_t value)
 	{
 		_memoryManager->Write(addr, value);
-		/*if(addr == 0x200) {
-			std::cout << "------------------" << std::endl;
-			std::cout << "(0x" << std::hex << (short)_currentPC << ") TEST NUMBER: " << std::dec << (int)value << std::endl;
-			std::cout << "------------------" << std::endl;
-		} else {
-			//std::cout << "(0x" << std::hex << (short)_currentPC << ") W: 0x" << std::hex << (short)addr << " = 0x" << std::hex << (short)value << std::endl;
-		}*/
 	}
 
 	uint8_t MemoryRead(uint16_t addr) {
@@ -165,7 +160,7 @@ private:
 	uint16_t GetAbsXAddr() { 
 		uint16_t baseAddr = ReadWord();
 		if(IsPageCrossed(baseAddr, X())) {
-			SetCyclePenalty(1);
+			SetPageCrossed();
 		}
 		return baseAddr + X(); 
 	}
@@ -174,7 +169,7 @@ private:
 	uint16_t GetAbsYAddr() { 
 		uint16_t baseAddr = ReadWord();
 		if(IsPageCrossed(baseAddr, Y())) {
-			SetCyclePenalty(1);
+			SetPageCrossed();
 		}
 
 		return baseAddr + Y(); 
@@ -213,7 +208,7 @@ private:
 			addr = MemoryReadWord(zero);
 		}
 		if(IsPageCrossed(addr, Y())) {
-			SetCyclePenalty(1);
+			SetPageCrossed();
 		}
 		return addr + Y();
 	}
@@ -341,7 +336,6 @@ private:
 	}
 
 	void JMP(uint16_t addr) {
-		//std::cout << "JMP from 0x" << std::hex << _currentPC << " to " << addr << std::endl;
 		SetPC(addr);
 	}
 
@@ -349,20 +343,11 @@ private:
 		int8_t offset = GetImmediate();
 		if(branch) {
 			if(IsPageCrossed(PC(), offset)) {
-				SetCyclePenalty(2);
-			} else {
-				SetCyclePenalty(1);
+				SetPageCrossed();
 			}
-			SetPC(PC() + offset);
+			CPU::CycleCount++;
 
-			if(_currentPC == PC()) {
-				if(_currentPC != 0x33a7) {
-					std::cout << "Infinite loop at: 0x" << std::hex << (short)_currentPC;
-					std::cout << std::endl;
-				} else {
-					Reset();
-				}
-			}
+			SetPC(PC() + offset);
 		}
 	}
 
@@ -379,14 +364,14 @@ private:
 		}
 	}
 
-	void SetCyclePenalty(uint8_t penalty) {
-		_cyclePenalty = penalty;
+	void SetPageCrossed() {
+		_pageCrossed = true;
 	}
 
-	uint8_t GetCyclePenalty() {
-		uint8_t penalty = _cyclePenalty;
-		_cyclePenalty = 0;
-		return penalty;
+	bool GetPageCrossed() {
+		bool pageCrossed = _pageCrossed;
+		_pageCrossed = false;
+		return pageCrossed;
 	}
 
 	#pragma region OP Codes
@@ -555,13 +540,11 @@ private:
 	void JMP_Ind() { JMP(GetInd()); }
 	void JSR() {
 		uint16_t addr = GetAbsAddr();
-		//std::cout << "JSR from 0x" << std::hex << _currentPC << " to " << addr;
 		Push((uint16_t)(PC() - 1));
 		JMP(addr);
 	}
 	void RTS() {
 		uint16_t addr = PopWord();
-		//std::cout << "RTS from 0x" << std::hex << _currentPC << " to " << addr;
 		SetPC(addr + 1);
 	}
 
