@@ -63,7 +63,15 @@ struct TileInfo
 	uint8_t LowByte;
 	uint8_t HighByte;
 	uint8_t PaletteOffset;
+};
+
+struct SpriteInfo
+{
+	uint8_t LowByte;
+	uint8_t HighByte;
+	uint8_t PaletteOffset;
 	bool HorizontalMirror;
+	bool BackgroundPriority;
 };
 
 class PPU : public IMemoryHandler
@@ -97,7 +105,8 @@ class PPU : public IMemoryHandler
 		TileInfo _previousTile;
 
 		int32_t _spriteX[8];
-		TileInfo _spriteTiles[8];
+		SpriteInfo _spriteTiles[8];
+		bool _sprite0Visible = false;
 		
 		void UpdateStatusFlag();
 

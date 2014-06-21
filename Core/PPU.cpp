@@ -275,7 +275,9 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 	uint8_t tileIndex = _secondarySpriteRAM[spriteAddr+1];
 	uint8_t attributes = _secondarySpriteRAM[spriteAddr+2];
 	uint8_t spriteX = _secondarySpriteRAM[spriteAddr+3];
+	bool backgroundPriority = (attributes & 0x20) == 0x20;
 	bool horizontalMirror = (attributes & 0x40) == 0x40;
+	bool verticalMirror = (attributes & 0x80) == 0x80;
 
 	if(spriteY < 240 && spriteY == _spriteRAM[63 * 4] && tileIndex == 0xFF && attributes == 0xFF && spriteX == 0xFF) {
 		//Skip this sprite
@@ -284,13 +286,25 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 	
 	if(spriteY < 240) {
 		uint16_t tileAddr;
-		if(_flags.LargeSprites) {
-			throw exception("Not implemented yet");
+		uint8_t lineOffset;
+		if(verticalMirror) {
+			if(_flags.LargeSprites) {
+				//TODO: Is this ok for large sprites?
+				std::cout << "TODO";
+			}
+			lineOffset = (_flags.LargeSprites ? 15 : 7) - (_scanline - spriteY);
 		} else {
-			tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + (_scanline - spriteY);
+			lineOffset = _scanline - spriteY;
+		}
+
+		if(_flags.LargeSprites) {
+			tileAddr = ((tileIndex & 0x01) ? 0x1000 : 0x0000) | (tileIndex & ~0x01) + lineOffset;
+		} else {
+			tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
 		}
 
 		_spriteX[spriteIndex] = spriteX;
+		_spriteTiles[spriteIndex].BackgroundPriority = backgroundPriority;
 		_spriteTiles[spriteIndex].HorizontalMirror = horizontalMirror;
 		_spriteTiles[spriteIndex].PaletteOffset = (attributes & 0x03) << 2;
 		_spriteTiles[spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
@@ -324,16 +338,17 @@ void PPU::ShiftTileRegisters()
 void PPU::DrawPixel()
 {
 	//This is called 3.7 million times per second - needs to be as fast as possible.
-	bool useBackground = true;
-	uint32_t pixelColor = 0;
+	uint8_t offset = _state.XScroll;
 
-	uint32_t offset = _state.XScroll;
+	bool useBackground = true;
 	uint32_t backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+
+	uint32_t spriteColor = 0;
 	
-	for(int i = 0; i < 8; i++) {
+	uint8_t i;
+	for(i = 0; i < 8; i++) {
 		int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
 		if(shift >= 0 && shift < 8) {
-			uint32_t spriteColor;
 			if(_spriteTiles[i].HorizontalMirror) {
 				spriteColor = ((_spriteTiles[i].LowByte >> shift) & 0x01) | ((_spriteTiles[i].HighByte >> shift) & 0x01) << 1;
 			} else {
@@ -341,20 +356,46 @@ void PPU::DrawPixel()
 			}
 
 			if(spriteColor != 0) {
-				pixelColor = 0xFF000000 | PPU_PALETTE_RGB[GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor)];
-				useBackground = false;
+				//First sprite without a 00 color, use it.
 				break;
 			}
 		}
 	}
-	
-	if(useBackground) {
-		// If we're grabbing the pixel from the high part of the shift register, use the previous tile's palette, not the current one
-		pixelColor = 0xFF000000 | PPU_PALETTE_RGB[GetBGPaletteEntry(offset < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor)];
+
+	if(_cycle <= 8) {
+		if(!_flags.BackgroundMask) {
+			//"0: Hide background in leftmost 8 pixels of screen;"
+			backgroundColor = 0;
+		}
+		if(!_flags.SpriteMask) {
+			//"0: Hide sprites in leftmost 8 pixels of screen;"
+			spriteColor = 0;
+		}
 	}
 
+	if(spriteColor != 0 && (backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority)) {
+		//Check sprite priority
+		useBackground = false;
+	}
+	
+	if(i == 0 && spriteColor != 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && _flags.SpritesEnabled) {
+		//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
+		//"Sprite zero hits do not register at x=255" (cycle 256)
+		//"... provided that background and sprite rendering are both enabled"
+		//"Should always miss when Y >= 239"
+		_statusFlags.Sprite0Hit = true;
+	}
+
+	uint32_t pixelColor = 0;
+	if(useBackground) {
+		// If we're grabbing the pixel from the high part of the shift register, use the previous tile's palette, not the current one
+		pixelColor = PPU_PALETTE_RGB[GetBGPaletteEntry(offset < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor)];
+	} else {
+		pixelColor = PPU_PALETTE_RGB[GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor)];
+	}
+	
 	uint32_t bufferPosition = _scanline * 256 + (_cycle - 1);
-	((uint32_t*)_outputBuffer)[bufferPosition] = pixelColor;
+	((uint32_t*)_outputBuffer)[bufferPosition] = 0xFF000000 | pixelColor;
 
 	//Shift the tile registers to prepare for the next cycle
 	ShiftTileRegisters();
@@ -448,11 +489,15 @@ void PPU::CopyOAMData()
 	static uint8_t _buffer = 0;
 	static bool _writeData = false;
 	static bool _done = false;
+	static bool _sprite0Added = true;
 	
 	if(_cycle >= 65 && _cycle <= 256) {
 		if(_cycle == 65) {
+			_sprite0Added = false;
 			_secondaryOAMAddr = 0;
 			_done = false;
+		} else if(_cycle == 256) {
+			_sprite0Visible = _sprite0Added;
 		}
 
 		if(_state.SpriteRamAddr >= 0x100) {
@@ -475,6 +520,10 @@ void PPU::CopyOAMData()
 
 					if(_writeData) {
 						_secondaryOAMAddr++;
+
+						if(_state.SpriteRamAddr == 0x01) {
+							_sprite0Added = true;
+						}
 
 						if((_secondaryOAMAddr & 0x03) == 0) {
 							//Done copying
