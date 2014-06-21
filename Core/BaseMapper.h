@@ -31,9 +31,10 @@ class BaseMapper : public IMemoryHandler
 
 class DefaultMapper : public BaseMapper
 {
-	vector<MemoryBank*> _mappedRomBanks;
-	MemoryBank *_mappedVromBank;
-	private:
+	protected:
+		vector<MemoryBank*> _mappedRomBanks;
+		MemoryBank *_mappedVromBank;
+
 		void InitMapper()
 		{
 			if(_romBanks.size() == 1) {
@@ -81,6 +82,24 @@ class DefaultMapper : public BaseMapper
 		}
 };
 
+class Mapper2 : public DefaultMapper
+{
+	private:
+		void InitMapper() 
+		{
+			DefaultMapper::InitMapper();
+
+			_mappedRomBanks[1] = &_romBanks[_romBanks.size() - 1];
+		}
+
+	public:		
+		void WriteRAM(uint16_t addr, uint8_t value)
+		{
+			_mappedRomBanks[0] = &_romBanks[value];
+			//(*_mappedRomBanks[(addr >> 14) & 0x01])[addr & 0x3FFF] = value;
+		}
+};
+
 class MapperFactory
 {
 	public:
@@ -91,9 +110,10 @@ class MapperFactory
 			NESHeader header = loader.GetHeader();
 			
 			uint8_t mapperID = header.GetMapperID();
-			unique_ptr<BaseMapper> mapper = nullptr;
+			BaseMapper* mapper = nullptr;
 			switch(mapperID) {
-				case 0: mapper = unique_ptr<BaseMapper>(new DefaultMapper()); break;
+				case 0: mapper = new DefaultMapper(); break;
+				case 2: mapper = new Mapper2(); break;
 			}			
 
 			if(!mapper) {
@@ -101,6 +121,6 @@ class MapperFactory
 			}
 
 			mapper->Initialize(header, loader.GetROMBanks(), loader.GetVROMBanks());
-			return mapper;
+			return unique_ptr<BaseMapper>(mapper);
 		}
 };
