@@ -90,6 +90,8 @@ class PPU : public IMemoryHandler
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;
 
+		bool _doNotSetVBFlag = false;
+
 		TileInfo _currentTile;
 		TileInfo _nextTile;
 		TileInfo _previousTile;

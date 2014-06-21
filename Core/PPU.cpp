@@ -196,6 +196,10 @@ void PPU::UpdateStatusFlag()
 						 ((uint8_t)_statusFlags.Sprite0Hit << 6) |
 						 ((uint8_t)_statusFlags.VerticalBlank << 7);
 	_statusFlags.VerticalBlank = false;
+
+	if(_scanline == 241 && _cycle == 0) {
+		_doNotSetVBFlag = true;
+	}
 }
 
 //Taken from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Wrapping_around
@@ -490,16 +494,13 @@ void PPU::CopyOAMData()
 void PPU::BeginVBlank()
 {
 	if(_cycle == 1) {
-		_statusFlags.VerticalBlank = true;
-		/*if(!_suppressVBlank) {
-			// We're in VBlank
-			Ppu_setStatus(p, STATUS_VBLANK_STARTED);
-			p->cycleCount = 0;
-		}*/
+		if(!_doNotSetVBFlag) {
+			_statusFlags.VerticalBlank = true;
+		}
 		if(_flags.VBlank) {
 			CPU::SetNMIFlag();
 		}
-		//Ppu_raster(p);
+		_doNotSetVBFlag = false;
 	}
 }
 
@@ -507,7 +508,6 @@ void PPU::EndVBlank()
 {
 	if(_cycle == 340) {
 		_frameCount++;
-		//std::cout << _frameCount << std::endl;
 	}
 }
 
