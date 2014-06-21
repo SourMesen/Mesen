@@ -45,6 +45,12 @@
     <ClInclude Include="IVideoDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IControlDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Timer.h">
@@ -63,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

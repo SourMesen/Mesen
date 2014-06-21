@@ -5,6 +5,8 @@
 #include "MainWindow.h"
 #include "..\Core\Console.h"
 #include "..\Core\Timer.h"
+#include "InputManager.h"
+
 using namespace DirectX;
 
 namespace NES 
@@ -64,6 +66,10 @@ namespace NES
 		//#endif
 
 		Initialize();
+
+		InputManager inputManager;
+
+		ControlManager::RegisterControlDevice(&inputManager, 0);
 
 		MSG msg = { 0 };
 		Timer timer;

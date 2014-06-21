@@ -88,6 +88,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BaseMapper.h" />
+    <ClInclude Include="ControlManager.h" />
+    <ClInclude Include="IControlDevice.h" />
     <ClInclude Include="IMemoryHandler.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="IVideoDevice.h" />
@@ -100,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="PPU.cpp" />
     <ClCompile Include="CPU.cpp" />

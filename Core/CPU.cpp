@@ -81,8 +81,9 @@ void CPU::Reset()
 	_state.PS = PSFlags::Zero | PSFlags::Reserved;// | PSFlags::Interrupt;
 }
 
-void CPU::Exec()
+uint32_t CPU::Exec()
 {
+	uint32_t executedCycles = 0;
 	if(!_runNMI) {
 		if(CPU::NMIFlag) {
 			_runNMI = true;
@@ -91,15 +92,18 @@ void CPU::Exec()
 		if(_opTable[opCode] != nullptr) {
 			(this->*_opTable[opCode])();
 
-			CPU::CycleCount += GetPageCrossed() ? this->_cyclesPageCrossed[opCode] : this->_cycles[opCode];
+			executedCycles = GetPageCrossed() ? this->_cyclesPageCrossed[opCode] : this->_cycles[opCode];
 		} else {
 			//std::cout << "Invalid opcode: " << std::hex << (short)opCode;
 			//throw exception("Invalid opcode");
 		}
 	} else {
 		NMI();
-		CPU::CycleCount += 7;
 		_runNMI = false;
+		executedCycles = 7;
 		CPU::NMIFlag = false;
 	}
+	
+	CPU::CycleCount += executedCycles;
+	return executedCycles;
 }

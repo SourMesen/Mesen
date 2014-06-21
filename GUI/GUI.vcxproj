@@ -113,6 +113,7 @@
     <ClInclude Include="DirectXTK\VertexTypes.h" />
     <ClInclude Include="DirectXTK\WICTextureLoader.h" />
     <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -120,6 +121,7 @@
     <ClInclude Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="stdafx.cpp">

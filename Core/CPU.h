@@ -618,7 +618,7 @@ public:
 	static uint64_t GetCycleCount() { return CPU::CycleCount; }
 	static void SetNMIFlag() { CPU::NMIFlag = true; }
 	void Reset();
-	void Exec();
+	uint32_t Exec();
 	State GetState() { return _state; }
 
 };

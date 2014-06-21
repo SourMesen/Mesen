@@ -8,8 +8,12 @@ Console::Console(wstring filename)
 	_memoryManager.reset(new MemoryManager(_mapper->GetHeader()));
 	_cpu.reset(new CPU(_memoryManager.get()));
 	_ppu.reset(new PPU(_memoryManager.get()));	
+	
+	_controlManager.reset(new ControlManager());
+
 	_memoryManager->RegisterIODevice(_mapper.get());
 	_memoryManager->RegisterIODevice(_ppu.get());
+	_memoryManager->RegisterIODevice(_controlManager.get());
 
 	Reset();
 }
@@ -31,24 +35,41 @@ void Console::Stop()
 
 void Console::Run()
 {
-	Timer timer;
+	Timer clockTimer;
+	Timer fpsTimer;
 	uint32_t lastFrameCount = 0;
-	while(true) {
-		_cpu->Exec();
+	double elapsedTime = 0.0;
+	uint32_t executedCycles = 0;
+	bool limitFrameRate = true;
+	while(true) { 
+		executedCycles += _cpu->Exec();
 		_ppu->Exec();
 
-		if(_stop) {
-			break;
+		if(limitFrameRate && executedCycles > 30000) {
+			double targetTime = 16.77;
+			elapsedTime = clockTimer.GetElapsedMS();
+			while(targetTime > elapsedTime) {
+				if(targetTime - elapsedTime > 2) {
+					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1));
+				}
+				elapsedTime = clockTimer.GetElapsedMS();
+			}
+			executedCycles = 0;
+			clockTimer.Reset();
+		}
+		
+		if(fpsTimer.GetElapsedMS() > 2000) {
+			uint32_t frameCount = _ppu->GetFrameCount();
+			std::cout << ((frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000)) << std::endl;
+			lastFrameCount = frameCount;
+			fpsTimer.Reset();
 		}
 
-		if(timer.GetElapsedMS() > 2000) {
-			uint32_t frameCount = _ppu->GetFrameCount();
-			std::cout << ((frameCount - lastFrameCount) / (timer.GetElapsedMS() / 1000)) << std::endl;
-			timer.Reset();
-			lastFrameCount = frameCount;
+		if(_stop) {
+			_stopped = true;
+			break;
 		}
 	}
-	_stopped = true;
 }
 
 void Console::RunTest(bool callback(Console*))
