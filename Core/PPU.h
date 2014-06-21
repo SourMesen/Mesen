@@ -83,7 +83,7 @@ class PPU : public IMemoryHandler
 		uint8_t _paletteRAM[0x100];
 
 		uint8_t _spriteRAM[0x100];
-		uint8_t _secondarySpriteRAM[0x40];
+		uint8_t _secondarySpriteRAM[0x20];
 
 		uint8_t *_outputBuffer;
 		

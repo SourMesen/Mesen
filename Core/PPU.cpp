@@ -143,18 +143,18 @@ void PPU::WritePaletteRAM(uint16_t addr, uint8_t value)
 uint8_t PPU::GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel)
 {
 	if(pixel == 0) {
-		return ReadPaletteRAM(0x3F00);
+		return ReadPaletteRAM(0x3F00) % 64;
 	} else {
-		return ReadPaletteRAM(0x3F00 + paletteOffset + pixel);
+		return ReadPaletteRAM(0x3F00 + paletteOffset + pixel) % 64;
 	}
 }
 
 uint8_t PPU::GetSpritePaletteEntry(uint8_t paletteOffset, uint8_t pixel)
 {
 	if(pixel == 0) {
-		return ReadPaletteRAM(0x3F00);
+		return ReadPaletteRAM(0x3F00) % 64;
 	} else {
-		return ReadPaletteRAM(0x3F10 + paletteOffset + pixel);
+		return ReadPaletteRAM(0x3F10 + paletteOffset + pixel) % 64;
 	}
 }
 
@@ -323,6 +323,7 @@ void PPU::ShiftTileRegisters()
 
 void PPU::DrawPixel()
 {
+	//This is called 3.7 million times per second - needs to be as fast as possible.
 	bool useBackground = true;
 	uint32_t pixelColor = 0;
 
@@ -330,30 +331,26 @@ void PPU::DrawPixel()
 	uint32_t backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
 	
 	for(int i = 0; i < 8; i++) {
-		if(useBackground && _spriteX[i] <= 0 && _spriteX[i] > -8) {
-			if(_cycle == 256) {
-				pixelColor = 10;
-			}
+		int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
+		if(shift >= 0 && shift < 8) {
 			uint32_t spriteColor;
 			if(_spriteTiles[i].HorizontalMirror) {
-				spriteColor = ((_spriteTiles[i].LowByte >> -_spriteX[i]) & 0x01) | ((_spriteTiles[i].HighByte >> -_spriteX[i]) & 0x01) << 1;
+				spriteColor = ((_spriteTiles[i].LowByte >> shift) & 0x01) | ((_spriteTiles[i].HighByte >> shift) & 0x01) << 1;
 			} else {
-				spriteColor = ((_spriteTiles[i].LowByte << -_spriteX[i]) & 0x80) >> 7 | ((_spriteTiles[i].HighByte << -_spriteX[i]) & 0x80) >> 6;
+				spriteColor = ((_spriteTiles[i].LowByte << shift) & 0x80) >> 7 | ((_spriteTiles[i].HighByte << shift) & 0x80) >> 6;
 			}
 
 			if(spriteColor != 0) {
-				uint8_t spritePaletteColor = GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor);
-				pixelColor = 0xFF000000 | PPU_PALETTE_RGB[spritePaletteColor % 64];
+				pixelColor = 0xFF000000 | PPU_PALETTE_RGB[GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor)];
 				useBackground = false;
+				break;
 			}
 		}
-		_spriteX[i]--;
 	}
 	
 	if(useBackground) {
 		// If we're grabbing the pixel from the high part of the shift register, use the previous tile's palette, not the current one
-		uint8_t backgroundPaletteColor = GetBGPaletteEntry(offset < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor);
-		pixelColor = 0xFF000000 | PPU_PALETTE_RGB[backgroundPaletteColor % 64];
+		pixelColor = 0xFF000000 | PPU_PALETTE_RGB[GetBGPaletteEntry(offset < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor)];
 	}
 
 	uint32_t bufferPosition = _scanline * 256 + (_cycle - 1);
@@ -418,13 +415,16 @@ void PPU::ProcessVisibleScanline()
 				LoadNextTile();
 			} else {
 				//Clear secondary OAM at the start of every visible scanline (cycle 1)
-				memset(_secondarySpriteRAM, 0xFF, 0x40);
+				memset(_secondarySpriteRAM, 0xFF, 0x20);
 			}
 			LoadTileInfo();
 		} 
 
 		DrawPixel();
-		CopyOAMData();
+		
+		if(IsRenderingEnabled()) {
+			CopyOAMData();
+		}
 
 		if(_cycle == 256 && _scanline == 239) {
 			//Send frame to GUI once the last pixel has been output
@@ -469,7 +469,7 @@ void PPU::CopyOAMData()
 					_writeData = true;
 				}
 
-				if(_secondaryOAMAddr < 0x40) {
+				if(_secondaryOAMAddr < 0x20) {
 					//Copy 1 byte to secondary OAM
 					_secondarySpriteRAM[_secondaryOAMAddr] = _buffer;
 
@@ -485,6 +485,11 @@ void PPU::CopyOAMData()
 					}
 				} else {
 					//8 sprites have been found, check flags, etc?
+					if(_scanline >= _buffer && _scanline < _buffer + (_flags.LargeSprites ? 16 : 8)) {
+						_statusFlags.SpriteOverflow = true;
+					} else {
+						_state.SpriteRamAddr += 4;
+					}
 				}
 			}
 		}
