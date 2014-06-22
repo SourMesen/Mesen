@@ -307,7 +307,7 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		}
 
 		if(_flags.LargeSprites) {
-			tileAddr = (((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4)) + (lineOffset > 8 ? lineOffset + 8 : lineOffset);
+			tileAddr = (((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4)) + (lineOffset >= 8 ? lineOffset + 8 : lineOffset);
 		} else {
 			tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
 		}
