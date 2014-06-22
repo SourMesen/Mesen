@@ -233,6 +233,7 @@ namespace NES
 	{
 		Stop();
 		int passCount = 0;
+		int failCount = 0;
 		int totalCount = 0;
 		for(wstring testROM : GetFilesInFolder(L"TestSuite/*.nes")) {
 			ifstream testResult(L"TestSuite/" + testROM + L".trt", ios::in | ios::binary);
@@ -247,6 +248,7 @@ namespace NES
 					passCount++;
 				} else {
 					std::cout << "FAILED";
+					failCount++;
 				}
 				std::cout << std::endl;
 
@@ -254,13 +256,13 @@ namespace NES
 
 				delete[] expectedResult;
 			} else {
-				std::wcout << testROM << ": [NO KNOWN RESULT]" << std::endl;
+				std::wcout << testROM << ": [No result]" << std::endl;
 			}
 			totalCount++;
 		}
 
 		std::cout << "------------------------" << std::endl;
-		std::cout << passCount << " / " << totalCount << std::endl;
+		std::cout << passCount << " / " << totalCount << " + " << failCount << " FAILED" << std::endl;
 		std::cout << "------------------------" << std::endl;
 	}
 
