@@ -414,7 +414,7 @@ void PPU::DrawPixel()
 	uint32_t pixelColor = 0;
 	if(useBackground) {
 		// If we're grabbing the pixel from the high part of the shift register, use the previous tile's palette, not the current one
-		pixelColor = PPU_PALETTE_RGB[GetBGPaletteEntry(offset < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor)];
+		pixelColor = PPU_PALETTE_RGB[GetBGPaletteEntry(offset + ((_cycle - 1) % 8) < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor)];
 	} else {
 		pixelColor = PPU_PALETTE_RGB[GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor)];
 	}
