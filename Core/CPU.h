@@ -33,6 +33,8 @@ class CPU
 private:
 	typedef void(CPU::*Func)();
 
+	static uint64_t CycleCount;
+
 	Func _opTable[256];
 	uint8_t _cycles[256];
 	uint8_t _cyclesPageCrossed[256];
@@ -41,7 +43,6 @@ private:
 
 	MemoryManager *_memoryManager = nullptr;
 
-	static uint64_t CycleCount;
 	static bool NMIFlag;
 	bool _runNMI = false;
 
@@ -616,6 +617,7 @@ private:
 public:
 	CPU(MemoryManager *memoryManager);
 	static uint64_t GetCycleCount() { return CPU::CycleCount; }
+	static void IncCycleCount(uint64_t cycles) { CPU::CycleCount += cycles; }
 	static void SetNMIFlag() { CPU::NMIFlag = true; }
 	void Reset();
 	uint32_t Exec();

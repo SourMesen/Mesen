@@ -118,6 +118,9 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			for(int i = 0; i < 0x100; i++) {
 				_spriteRAM[(_state.SpriteRamAddr+i)&0xFF] = _memoryManager->Read(value*0x100 + i);
 			}
+
+			//"the DMA procedure takes 513 CPU cycles (+1 on odd CPU cycles)"
+			CPU::IncCycleCount((CPU::GetCycleCount() % 2 == 0) ? 513 : 514);
 			break;
 	}
 }
@@ -288,17 +291,13 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		uint16_t tileAddr;
 		uint8_t lineOffset;
 		if(verticalMirror) {
-			if(_flags.LargeSprites) {
-				//TODO: Is this ok for large sprites?
-				std::cout << "TODO";
-			}
 			lineOffset = (_flags.LargeSprites ? 15 : 7) - (_scanline - spriteY);
 		} else {
 			lineOffset = _scanline - spriteY;
 		}
 
 		if(_flags.LargeSprites) {
-			tileAddr = ((tileIndex & 0x01) ? 0x1000 : 0x0000) | (tileIndex & ~0x01) + lineOffset;
+			tileAddr = ((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4) + lineOffset;
 		} else {
 			tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
 		}
@@ -341,23 +340,28 @@ void PPU::DrawPixel()
 	uint8_t offset = _state.XScroll;
 
 	bool useBackground = true;
-	uint32_t backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
-
+	uint32_t backgroundColor = 0;
 	uint32_t spriteColor = 0;
 	
-	uint8_t i;
-	for(i = 0; i < 8; i++) {
-		int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
-		if(shift >= 0 && shift < 8) {
-			if(_spriteTiles[i].HorizontalMirror) {
-				spriteColor = ((_spriteTiles[i].LowByte >> shift) & 0x01) | ((_spriteTiles[i].HighByte >> shift) & 0x01) << 1;
-			} else {
-				spriteColor = ((_spriteTiles[i].LowByte << shift) & 0x80) >> 7 | ((_spriteTiles[i].HighByte << shift) & 0x80) >> 6;
-			}
+	if(_flags.BackgroundEnabled) {
+		backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+	}
 
-			if(spriteColor != 0) {
-				//First sprite without a 00 color, use it.
-				break;
+	uint8_t i;
+	if(_flags.SpritesEnabled) {
+		for(i = 0; i < 8; i++) {
+			int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
+			if(shift >= 0 && shift < 8) {
+				if(_spriteTiles[i].HorizontalMirror) {
+					spriteColor = ((_spriteTiles[i].LowByte >> shift) & 0x01) | ((_spriteTiles[i].HighByte >> shift) & 0x01) << 1;
+				} else {
+					spriteColor = ((_spriteTiles[i].LowByte << shift) & 0x80) >> 7 | ((_spriteTiles[i].HighByte << shift) & 0x80) >> 6;
+				}
+
+				if(spriteColor != 0) {
+					//First sprite without a 00 color, use it.
+					break;
+				}
 			}
 		}
 	}
