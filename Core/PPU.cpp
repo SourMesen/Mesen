@@ -42,6 +42,18 @@ bool PPU::CheckFlag(PPUControlFlags flag)
 	return false;
 }
 
+void PPU::UpdateVideoRamAddr()
+{
+	if(_scanline >= 239 || !IsRenderingEnabled()) {
+		_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
+	} else {
+		//"During rendering (on the pre-render line and the visible lines 0-239, provided either background or sprite rendering is enabled), "
+		//it will update v in an odd way, triggering a coarse X increment and a Y increment simultaneously"
+		IncHorizontalScrolling();
+		IncVerticalScrolling();
+	}
+}
+
 uint8_t PPU::ReadRAM(uint16_t addr)
 {
 	uint8_t returnValue;
@@ -61,7 +73,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 				returnValue = ReadPaletteRAM(_state.VideoRamAddr);
 			}
 
-			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
+			UpdateVideoRamAddr();
 			return returnValue;
 		default:
 			//other registers are meant to be read-only
@@ -74,12 +86,10 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 {
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Control:
-			_state.Control = value;
-			UpdateFlags();
+			SetControlRegister(value);
 			break;
-		case PPURegisters::Control2:
-			_state.Control2 = value;
-			UpdateFlags();
+		case PPURegisters::Mask:
+			SetMaskRegister(value);
 			break;
 		case PPURegisters::SpriteAddr:
 			_state.SpriteRamAddr = value;
@@ -112,9 +122,10 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			} else {
 				_memoryManager->WriteVRAM(_state.VideoRamAddr, value);
 			}
-			_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
+			UpdateVideoRamAddr();
 			break;
 		case PPURegisters::SpriteDMA:
+			//DMA transfer starts at SpriteRamAddr and wraps around
 			for(int i = 0; i < 0x100; i++) {
 				_spriteRAM[(_state.SpriteRamAddr+i)&0xFF] = _memoryManager->Read(value*0x100 + i);
 			}
@@ -166,8 +177,10 @@ bool PPU::IsRenderingEnabled()
 	return _flags.BackgroundEnabled || _flags.SpritesEnabled;
 }
 
-void PPU::UpdateFlags()
+void PPU::SetControlRegister(uint8_t value)
 {
+	_state.Control = value;
+
 	uint8_t nameTable = (_state.Control & 0x03);
 	switch(nameTable) {
 		case 0: _flags.NameTableAddr = 0x2000; break;
@@ -187,15 +200,19 @@ void PPU::UpdateFlags()
 	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank) {
 		CPU::SetNMIFlag();
 	}
+}
 
-	_flags.Grayscale = (_state.Control2 & 0x01) == 0x01;
-	_flags.BackgroundMask = (_state.Control2 & 0x02) == 0x02;
-	_flags.SpriteMask = (_state.Control2 & 0x04) == 0x04;
-	_flags.BackgroundEnabled = (_state.Control2 & 0x08) == 0x08;
-	_flags.SpritesEnabled = (_state.Control2 & 0x10) == 0x10;
-	_flags.IntensifyRed = (_state.Control2 & 0x20) == 0x20;
-	_flags.IntensifyGreen = (_state.Control2 & 0x40) == 0x40;
-	_flags.IntensifyBlue = (_state.Control2 & 0x80) == 0x80;
+void PPU::SetMaskRegister(uint8_t value)
+{
+	_state.Mask = value;
+	_flags.Grayscale = (_state.Mask & 0x01) == 0x01;
+	_flags.BackgroundMask = (_state.Mask & 0x02) == 0x02;
+	_flags.SpriteMask = (_state.Mask & 0x04) == 0x04;
+	_flags.BackgroundEnabled = (_state.Mask & 0x08) == 0x08;
+	_flags.SpritesEnabled = (_state.Mask & 0x10) == 0x10;
+	_flags.IntensifyRed = (_state.Mask & 0x20) == 0x20;
+	_flags.IntensifyGreen = (_state.Mask & 0x40) == 0x40;
+	_flags.IntensifyBlue = (_state.Mask & 0x80) == 0x80;
 }
 
 void PPU::UpdateStatusFlag()
@@ -441,7 +458,7 @@ void PPU::ProcessPrerenderScanline()
 	} else if(_cycle >= 280 && _cycle <= 304) {
 		if(IsRenderingEnabled()) {
 			//copy vertical scrolling value from t
-			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x7BF0) | (_state.TmpVideoRamAddr & 0x7BF0);
+			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x7BE0) | (_state.TmpVideoRamAddr & 0x7BE0);
 		}
 	} else if(_cycle == 339 && _flags.BackgroundEnabled && (_frameCount % 2 == 1)) {
 		//Skip a cycle for odd frames, if background drawing is enabled

@@ -7,7 +7,7 @@
 enum PPURegisters
 {
 	Control = 0x00,
-	Control2 = 0x01,
+	Mask = 0x01,
 	Status = 0x02,
 	SpriteAddr = 0x03,
 	SpriteData = 0x04,
@@ -46,7 +46,7 @@ struct PPUStatusFlags
 struct PPUState
 {
 	uint8_t Control;
-	uint8_t Control2;
+	uint8_t Mask;
 	uint8_t Status;
 	uint32_t SpriteRamAddr;
 	uint16_t VideoRamAddr;
@@ -110,11 +110,13 @@ class PPU : public IMemoryHandler
 		
 		void UpdateStatusFlag();
 
-		void UpdateFlags();
+		void SetControlRegister(uint8_t value);
+		void SetMaskRegister(uint8_t value);
 		bool CheckFlag(PPUControlFlags flag);
 
 		bool IsRenderingEnabled();
 
+		void UpdateVideoRamAddr();
 		void IncVerticalScrolling();
 		void IncHorizontalScrolling();
 		uint16_t GetNameTableAddr();
