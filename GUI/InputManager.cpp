@@ -9,8 +9,8 @@ bool InputManager::IsKeyPressed(int key)
 ButtonState InputManager::GetButtonState()
 {
 	ButtonState state;
-	state.A = IsKeyPressed('A') || _gamePad.IsPressed(XINPUT_GAMEPAD_X);
-	state.B = IsKeyPressed('S') || _gamePad.IsPressed(XINPUT_GAMEPAD_A);
+	state.A = IsKeyPressed('A') || _gamePad.IsPressed(XINPUT_GAMEPAD_A);
+	state.B = IsKeyPressed('S') || _gamePad.IsPressed(XINPUT_GAMEPAD_X);
 	state.Select = IsKeyPressed('W') || _gamePad.IsPressed(XINPUT_GAMEPAD_BACK);
 	state.Start = IsKeyPressed('Q') || _gamePad.IsPressed(XINPUT_GAMEPAD_START);
 	state.Up = IsKeyPressed(VK_UP) || _gamePad.IsPressed(XINPUT_GAMEPAD_DPAD_UP);
