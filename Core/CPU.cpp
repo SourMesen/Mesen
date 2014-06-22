@@ -3,6 +3,7 @@
 #include "Timer.h"
 
 uint64_t CPU::CycleCount = 0;
+uint32_t CPU::CyclePenalty = 0;
 bool CPU::NMIFlag = false;
 
 CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
@@ -91,8 +92,7 @@ uint32_t CPU::Exec()
 		uint8_t opCode = ReadByte();
 		if(_opTable[opCode] != nullptr) {
 			(this->*_opTable[opCode])();
-
-			executedCycles = GetPageCrossed() ? this->_cyclesPageCrossed[opCode] : this->_cycles[opCode];
+			executedCycles = (IsPageCrossed() ? _cyclesPageCrossed[opCode] : _cycles[opCode]);
 		} else {
 			//std::cout << "Invalid opcode: " << std::hex << (short)opCode;
 			//throw exception("Invalid opcode");
@@ -105,5 +105,5 @@ uint32_t CPU::Exec()
 	}
 	
 	CPU::CycleCount += executedCycles;
-	return executedCycles;
+	return executedCycles + GetCyclePenalty();
 }

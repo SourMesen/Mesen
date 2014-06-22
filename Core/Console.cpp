@@ -56,19 +56,18 @@ void Console::Run()
 	Timer clockTimer;
 	Timer fpsTimer;
 	uint32_t lastFrameCount = 0;
-	double elapsedTime = 0.0;
+	double elapsedTime = 0;
 	uint32_t executedCycles = 0;
-	bool limitFrameRate = true;
 	while(true) { 
 		executedCycles += _cpu->Exec();
 		_ppu->Exec();
 
-		if(CheckFlag(EmulationFlags::LimitFPS) && executedCycles > 30000) {
-			double targetTime = 16.77;
+		if(CheckFlag(EmulationFlags::LimitFPS) && executedCycles >= 29780) {
+			double targetTime = 16.638935108153078202995008319468;
 			elapsedTime = clockTimer.GetElapsedMS();
 			while(targetTime > elapsedTime) {
 				if(targetTime - elapsedTime > 2) {
-					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1));
+					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>((int)(targetTime - elapsedTime - 1)));
 				}
 				elapsedTime = clockTimer.GetElapsedMS();
 			}
@@ -76,7 +75,7 @@ void Console::Run()
 			clockTimer.Reset();
 		}
 		
-		if(fpsTimer.GetElapsedMS() > 2000) {
+		if(fpsTimer.GetElapsedMS() > 1000) {
 			uint32_t frameCount = _ppu->GetFrameCount();
 			std::cout << ((frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000)) << std::endl;
 			lastFrameCount = frameCount;

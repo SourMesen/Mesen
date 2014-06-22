@@ -34,20 +34,19 @@ private:
 	typedef void(CPU::*Func)();
 
 	static uint64_t CycleCount;
+	static uint32_t CyclePenalty;
 
 	Func _opTable[256];
 	uint8_t _cycles[256];
 	uint8_t _cyclesPageCrossed[256];
+	bool _pageCrossed = false;
+	uint16_t _currentPC = 0;
 
 	State _state;
-
 	MemoryManager *_memoryManager = nullptr;
 
 	static bool NMIFlag;
 	bool _runNMI = false;
-
-	uint16_t _currentPC = 0;
-	bool _pageCrossed = false;
 
 	uint8_t ReadByte()
 	{
@@ -346,7 +345,7 @@ private:
 			if(IsPageCrossed(PC(), offset)) {
 				SetPageCrossed();
 			}
-			CPU::CycleCount++;
+			IncCycleCount(1);
 
 			SetPC(PC() + offset);
 		}
@@ -369,10 +368,16 @@ private:
 		_pageCrossed = true;
 	}
 
-	bool GetPageCrossed() {
+	bool IsPageCrossed() {
 		bool pageCrossed = _pageCrossed;
 		_pageCrossed = false;
 		return pageCrossed;
+	}
+
+	uint32_t GetCyclePenalty() {
+		uint32_t cyclePenalty = CPU::CyclePenalty;
+		CPU::CyclePenalty = 0;
+		return cyclePenalty;
 	}
 
 	#pragma region OP Codes
@@ -617,7 +622,10 @@ private:
 public:
 	CPU(MemoryManager *memoryManager);
 	static uint64_t GetCycleCount() { return CPU::CycleCount; }
-	static void IncCycleCount(uint64_t cycles) { CPU::CycleCount += cycles; }
+	static void IncCycleCount(uint32_t cycles) { 
+		CPU::CyclePenalty += cycles;
+		CPU::CycleCount += cycles;
+	}
 	static void SetNMIFlag() { CPU::NMIFlag = true; }
 	void Reset();
 	uint32_t Exec();
