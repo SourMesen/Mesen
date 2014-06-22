@@ -106,6 +106,8 @@ class PPU : public IMemoryHandler
 
 		int32_t _spriteX[8];
 		SpriteInfo _spriteTiles[8];
+		uint32_t _spriteCount = 0;
+		uint32_t _secondaryOAMAddr = 0;
 		bool _sprite0Visible = false;
 		
 		void UpdateStatusFlag();

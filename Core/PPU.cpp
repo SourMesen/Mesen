@@ -302,12 +302,7 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 	bool backgroundPriority = (attributes & 0x20) == 0x20;
 	bool horizontalMirror = (attributes & 0x40) == 0x40;
 	bool verticalMirror = (attributes & 0x80) == 0x80;
-
-	if(spriteY < 240 && spriteY == _spriteRAM[63 * 4] && tileIndex == 0xFF && attributes == 0xFF && spriteX == 0xFF) {
-		//Skip this sprite
-		spriteY = 255;
-	}
-	
+		
 	if(spriteY < 240) {
 		uint16_t tileAddr;
 		uint8_t lineOffset;
@@ -329,12 +324,9 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		_spriteTiles[spriteIndex].PaletteOffset = (attributes & 0x03) << 2;
 		_spriteTiles[spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
 		_spriteTiles[spriteIndex].HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
-	} else {
-		_spriteX[spriteIndex] = 256;
-		_spriteTiles[spriteIndex].PaletteOffset = 0;
-		_spriteTiles[spriteIndex].LowByte = 0;
-		_spriteTiles[spriteIndex].HighByte = 0;
 	}
+
+	_spriteCount = (_secondaryOAMAddr >> 2);
 }
 
 void PPU::LoadNextTile()
@@ -370,7 +362,7 @@ void PPU::DrawPixel()
 
 	uint8_t i;
 	if(_flags.SpritesEnabled) {
-		for(i = 0; i < 8; i++) {
+		for(i = 0; i < _spriteCount; i++) {
 			int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
 			if(shift >= 0 && shift < 8) {
 				if(_spriteTiles[i].HorizontalMirror) {
@@ -479,9 +471,6 @@ void PPU::ProcessVisibleScanline()
 			//Cycle 1, 9, 17, etc.
 			if(_cycle != 1) {
 				LoadNextTile();
-			} else {
-				//Clear secondary OAM at the start of every visible scanline (cycle 1)
-				memset(_secondarySpriteRAM, 0xFF, 0x20);
 			}
 			LoadTileInfo();
 		} 
@@ -510,62 +499,57 @@ void PPU::ProcessVisibleScanline()
 
 void PPU::CopyOAMData()
 {
-	static uint32_t _secondaryOAMAddr = 0;
 	static uint8_t _buffer = 0;
 	static bool _writeData = false;
-	static bool _done = false;
 	static bool _sprite0Added = true;
 	
-	if(_cycle >= 65 && _cycle <= 256) {
+	if(_cycle < 65) {
+		//Clear secondary OAM at between cycle 0 and 64
+		_secondarySpriteRAM[_cycle >> 1] = 0xFF;
+	} else {
 		if(_cycle == 65) {
 			_sprite0Added = false;
 			_secondaryOAMAddr = 0;
-			_done = false;
 		} else if(_cycle == 256) {
 			_sprite0Visible = _sprite0Added;
 		}
 
-		if(_state.SpriteRamAddr >= 0x100) {
-			_done = true;
-		}
+		if(_cycle & 0x01) {
+			//Read a byte from the primary OAM on odd cycles
+			_buffer = _spriteRAM[_state.SpriteRamAddr & 0xFF];
+			_state.SpriteRamAddr++;
+		} else {
+			if(!_writeData && _state.SpriteRamAddr < 0x100 && _scanline >= _buffer && _scanline < _buffer + (_flags.LargeSprites ? 16 : 8)) {
+				_writeData = true;
+			}
 
-		if(!_done) {
-			if(_cycle & 0x01) {
-				//Read a byte from the primary OAM
-				_buffer = _spriteRAM[_state.SpriteRamAddr & 0xFF];
-				_state.SpriteRamAddr++;
-			} else {
-				if(!_writeData && _state.SpriteRamAddr < 0x100 && _scanline >= _buffer && _scanline < _buffer + (_flags.LargeSprites ? 16 : 8)) {
-					_writeData = true;
-				}
+			if(_secondaryOAMAddr < 0x20) {
+				//Copy 1 byte to secondary OAM
+				_secondarySpriteRAM[_secondaryOAMAddr] = _buffer;
 
-				if(_secondaryOAMAddr < 0x20) {
-					//Copy 1 byte to secondary OAM
-					_secondarySpriteRAM[_secondaryOAMAddr] = _buffer;
+				if(_writeData) {
+					_secondaryOAMAddr++;
 
-					if(_writeData) {
-						_secondaryOAMAddr++;
+					if(_state.SpriteRamAddr == 0x01) {
+						_sprite0Added = true;
+					}
 
-						if(_state.SpriteRamAddr == 0x01) {
-							_sprite0Added = true;
-						}
-
-						if((_secondaryOAMAddr & 0x03) == 0) {
-							//Done copying
-							_writeData = false;
-						}
-					} else {
-						_state.SpriteRamAddr += 3;
+					if((_secondaryOAMAddr & 0x03) == 0) {
+						//Done copying
+						_writeData = false;
 					}
 				} else {
-					//8 sprites have been found, check flags, etc?
-					if(!_statusFlags.SpriteOverflow) {
-						if(_writeData) {
-							//Sprite is visible, consider this to be an overflow
-							_statusFlags.SpriteOverflow = true;
-						} else {
-							_state.SpriteRamAddr += 4;
-						}
+					_state.SpriteRamAddr += 3;
+				}
+			} else {
+				//8 sprites have been found, check flags, etc?
+				if(!_statusFlags.SpriteOverflow) {
+					if(_writeData) {
+						//Sprite is visible, consider this to be an overflow
+						_statusFlags.SpriteOverflow = true;
+					} else {
+						//Emulate PPU bug
+						_state.SpriteRamAddr += 4;
 					}
 				}
 			}
