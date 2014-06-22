@@ -182,12 +182,6 @@ void PPU::SetControlRegister(uint8_t value)
 	_state.Control = value;
 
 	uint8_t nameTable = (_state.Control & 0x03);
-	switch(nameTable) {
-		case 0: _flags.NameTableAddr = 0x2000; break;
-		case 1: _flags.NameTableAddr = 0x2400; break;
-		case 2: _flags.NameTableAddr = 0x2800; break;
-		case 3: _flags.NameTableAddr = 0x2C00; break;
-	}
 	_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x0C00) | (nameTable << 10);
 
 	_flags.VerticalWrite = (_state.Control & 0x04) == 0x04;

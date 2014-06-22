@@ -19,7 +19,6 @@ enum PPURegisters
 
 struct PPUControlFlags
 {
-	uint16_t NameTableAddr;
 	bool VerticalWrite;
 	uint16_t SpritePatternAddr;
 	uint16_t BackgroundPatternAddr;
