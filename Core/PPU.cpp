@@ -175,13 +175,18 @@ void PPU::UpdateFlags()
 		case 2: _flags.NameTableAddr = 0x2800; break;
 		case 3: _flags.NameTableAddr = 0x2C00; break;
 	}
-	_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0xC0000) | (nameTable << 10);
+	_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x0C00) | (nameTable << 10);
 
 	_flags.VerticalWrite = (_state.Control & 0x04) == 0x04;
 	_flags.SpritePatternAddr = ((_state.Control & 0x08) == 0x08) ? 0x1000 : 0x0000;
 	_flags.BackgroundPatternAddr = ((_state.Control & 0x10) == 0x10) ? 0x1000 : 0x0000;
 	_flags.LargeSprites = (_state.Control & 0x20) == 0x20;
+
+	bool originalVBlank = _flags.VBlank;
 	_flags.VBlank = (_state.Control & 0x80) == 0x80;
+	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank) {
+		CPU::SetNMIFlag();
+	}
 
 	_flags.Grayscale = (_state.Control2 & 0x01) == 0x01;
 	_flags.BackgroundMask = (_state.Control2 & 0x02) == 0x02;
@@ -439,9 +444,9 @@ void PPU::ProcessPrerenderScanline()
 			//copy vertical scrolling value from t
 			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x7BF0) | (_state.TmpVideoRamAddr & 0x7BF0);
 		}
-	} else if(_cycle == 340 && _flags.BackgroundEnabled && (_frameCount % 2 == 1)) {
+	} else if(_cycle == 339 && _flags.BackgroundEnabled && (_frameCount % 2 == 1)) {
 		//Skip a cycle for odd frames, if background drawing is enabled
-		_cycle = 0;
+		_cycle = -1;
 		_scanline = 0;
 	} else if(_cycle == 321 || _cycle == 329) {
 		LoadTileInfo();
@@ -538,10 +543,13 @@ void PPU::CopyOAMData()
 					}
 				} else {
 					//8 sprites have been found, check flags, etc?
-					if(_scanline >= _buffer && _scanline < _buffer + (_flags.LargeSprites ? 16 : 8)) {
-						_statusFlags.SpriteOverflow = true;
-					} else {
-						_state.SpriteRamAddr += 4;
+					if(!_statusFlags.SpriteOverflow) {
+						if(_writeData) {
+							//Sprite is visible, consider this to be an overflow
+							_statusFlags.SpriteOverflow = true;
+						} else {
+							_state.SpriteRamAddr += 4;
+						}
 					}
 				}
 			}
@@ -554,9 +562,9 @@ void PPU::BeginVBlank()
 	if(_cycle == 1) {
 		if(!_doNotSetVBFlag) {
 			_statusFlags.VerticalBlank = true;
-		}
-		if(_flags.VBlank) {
-			CPU::SetNMIFlag();
+			if(_flags.VBlank) {
+				CPU::SetNMIFlag();
+			}
 		}
 		_doNotSetVBFlag = false;
 	}
