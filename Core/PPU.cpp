@@ -496,14 +496,17 @@ void PPU::CopyOAMData()
 {
 	static uint8_t _buffer = 0;
 	static bool _writeData = false;
+	static uint32_t _overflowCounter = 0;
 	static bool _sprite0Added = true;
-	
+
 	if(_cycle < 65) {
 		//Clear secondary OAM at between cycle 0 and 64
 		_secondarySpriteRAM[_cycle >> 1] = 0xFF;
 	} else {
 		if(_cycle == 65) {
+			_overflowCounter = 0;
 			_sprite0Added = false;
+			_writeData = false;
 			_secondaryOAMAddr = 0;
 		} else if(_cycle == 256) {
 			_sprite0Visible = _sprite0Added;
@@ -538,14 +541,26 @@ void PPU::CopyOAMData()
 					_state.SpriteRamAddr += 3;
 				}
 			} else {
-				//8 sprites have been found, check flags, etc?
+				//8 sprites have been found, check next sprite for overflow + emulate PPU bug
+				//Based on: http://forums.nesdev.com/viewtopic.php?p=85431#p85431
+				//Behavior matches: http://forums.nesdev.com/viewtopic.php?p=1387#p1387
 				if(!_statusFlags.SpriteOverflow) {
 					if(_writeData) {
 						//Sprite is visible, consider this to be an overflow
 						_statusFlags.SpriteOverflow = true;
-					} else {
-						//Emulate PPU bug
+						_overflowCounter = 3;
+					} else if((_state.SpriteRamAddr & 0x3) != 0) {
+						//Sprite isn't on this scanline, trigger sprite evaluation bug
 						_state.SpriteRamAddr += 4;
+					}
+				} else {
+					if(_overflowCounter != 0) {
+						_overflowCounter--;
+						if(_overflowCounter == 0) {
+							_state.SpriteRamAddr = (_state.SpriteRamAddr + 3) & 0x0FFC;
+						}
+					} else {
+						_state.SpriteRamAddr = (_state.SpriteRamAddr + 4) & 0x0FFC;
 					}
 				}
 			}
