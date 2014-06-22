@@ -176,6 +176,11 @@ class PPU : public IMemoryHandler
 			PPU::VideoDevice = videoDevice;
 		}
 
+		uint8_t* GetFrameBuffer()
+		{
+			return _outputBuffer;
+		}
+
 		uint32_t GetFrameCount()
 		{
 			return _frameCount;

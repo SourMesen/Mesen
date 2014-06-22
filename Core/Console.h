@@ -23,6 +23,8 @@ class Console
 		unique_ptr<ControlManager> _controlManager;
 		unique_ptr<MemoryManager> _memoryManager;
 
+		wstring _romFilename;
+
 		bool _stop = false;
 
 	public:
@@ -30,13 +32,12 @@ class Console
 		~Console();
 		void Run();
 		void Stop();
-		void RunTest(bool callback(Console*));
 		void Reset();
+
+		bool RunTest(uint8_t* expectedResult);
+		void SaveTestResult();
 
 		static bool CheckFlag(int flag);
 		static void SetFlags(int flags);
 		static void ClearFlags(int flags);
-
-		static void RunTests();
-		static void Load(wstring filename);
 };

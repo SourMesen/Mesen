@@ -19,10 +19,12 @@ namespace NES {
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 		static INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-		static MainWindow* GetInstance() 
-		{
-			return MainWindow::Instance;
-		}
+		static MainWindow* GetInstance() { return MainWindow::Instance; }
+
+		void SaveTestResult();
+		void RunTests();
+
+		vector<wstring> GetFilesInFolder(wstring folderMask);
 
 		void LimitFPS_Click();
 

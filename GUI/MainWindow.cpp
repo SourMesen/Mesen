@@ -204,6 +204,58 @@ namespace NES
 		}
 	}
 
+	void MainWindow::SaveTestResult()
+	{
+		if(_console) {
+			_console->SaveTestResult();
+		}
+	}
+
+	vector<wstring> MainWindow::GetFilesInFolder(wstring folderMask)
+	{
+		HANDLE hFind;
+		WIN32_FIND_DATA data;
+
+		vector<wstring> files;
+
+		hFind = FindFirstFile(folderMask.c_str(), &data);
+		if(hFind != INVALID_HANDLE_VALUE) {
+			do {
+				files.push_back(data.cFileName);
+			} while(FindNextFile(hFind, &data));
+			FindClose(hFind);
+		}
+
+		return files;
+	}
+
+	void MainWindow::RunTests()
+	{
+		Stop();
+		for(wstring testROM : GetFilesInFolder(L"TestSuite/*.nes")) {
+			ifstream testResult(L"TestSuite/" + testROM + L".trt", ios::in | ios::binary);
+
+			if(testResult) {
+				uint8_t* expectedResult = new uint8_t[256 * 240 * 4];
+
+				Console *console = new Console(L"TestSuite/" + testROM);
+				std::wcout << testROM << ": ";
+				if(console->RunTest(expectedResult)) {
+					std::cout << "Passed";
+				} else {
+					std::cout << "FAILED";
+				}
+				std::cout << std::endl;
+
+				testResult.close();
+
+				delete[] expectedResult;
+			} else {
+				std::wcout << testROM << ": [NO KNOWN RESULT]" << std::endl;
+			}
+		}
+	}
+
 	LRESULT CALLBACK MainWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		static MainWindow *mainWindow = MainWindow::GetInstance();
@@ -217,19 +269,22 @@ namespace NES
 				wmEvent = HIWORD(wParam);
 				// Parse the menu selections:
 				switch (wmId) {
-					case IDM_FILE_OPEN:
+					case ID_FILE_OPEN:
 						mainWindow->OpenROM();
 						break;
-					case IDM_FILE_RUNTESTS:
-						
+					case ID_TESTS_RUNTESTS:
+						mainWindow->RunTests();
+						break;
+					case ID_TESTS_SAVETESTRESULT:
+						mainWindow->SaveTestResult();
 						break;
 					case ID_OPTIONS_LIMITFPS:
 						mainWindow->LimitFPS_Click();
 						break;
-					case IDM_ABOUT:
+					case ID_HELP_ABOUT:
 						DialogBox(nullptr, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 						break;
-					case IDM_EXIT:
+					case ID_FILE_EXIT:
 						DestroyWindow(hWnd);
 						break;
 					default:
