@@ -307,7 +307,7 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		}
 
 		if(_flags.LargeSprites) {
-			tileAddr = ((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4) + lineOffset;
+			tileAddr = (((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4)) + (lineOffset > 8 ? lineOffset + 8 : lineOffset);
 		} else {
 			tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
 		}
@@ -319,8 +319,6 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		_spriteTiles[spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
 		_spriteTiles[spriteIndex].HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
 	}
-
-	_spriteCount = (_secondaryOAMAddr >> 2);
 }
 
 void PPU::LoadNextTile()
@@ -480,7 +478,10 @@ void PPU::ProcessVisibleScanline()
 			PPU::VideoDevice->UpdateFrame(_outputBuffer);
 		}
 	} else if((_cycle - 261) % 8 == 0 && _cycle <= 320) {
-		LoadSpriteTileInfo((_cycle - 261) / 8);
+		uint32_t spriteIndex = (_cycle - 261) / 8;
+		if(spriteIndex < _spriteCount) {
+			LoadSpriteTileInfo(spriteIndex);
+		}
 	} else if(_cycle == 321 || _cycle == 329) {
 		LoadTileInfo();
 		if(_cycle == 329) {
@@ -506,6 +507,7 @@ void PPU::CopyOAMData()
 			_secondaryOAMAddr = 0;
 		} else if(_cycle == 256) {
 			_sprite0Visible = _sprite0Added;
+			_spriteCount = (_secondaryOAMAddr >> 2);
 		}
 
 		if(_cycle & 0x01) {
