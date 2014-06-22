@@ -228,7 +228,7 @@ void PPU::IncVerticalScrolling()
 		} else if(y == 31){
 			y = 0;              // coarse Y = 0, nametable not switched
 		} else {
-			y += 1;                  // increment coarse Y
+			y++;                  // increment coarse Y
 		}
 		addr = (addr & ~0x03E0) | (y << 5);     // put coarse Y back into v
 	}
@@ -239,13 +239,12 @@ void PPU::IncVerticalScrolling()
 void PPU::IncHorizontalScrolling()
 {
 	//Increase coarse X scrolling value.
-	//When the value is 31, wrap around to 0 and switch nametable
 	uint16_t addr = _state.VideoRamAddr;
 	if((addr & 0x001F) == 31) {
-		addr &= ~0x001F;
-		addr ^= 0x0400; // switch horizontal nametable
+		//When the value is 31, wrap around to 0 and switch nametable
+		addr = (addr & ~0x001F) ^ 0x0400; 
 	} else {
-		addr += 1;
+		addr++;
 	}
 	_state.VideoRamAddr = addr;
 }
