@@ -154,7 +154,7 @@ void PPU::WritePaletteRAM(uint16_t addr, uint8_t value)
 	_paletteRAM[addr] = value;
 }
 
-uint8_t PPU::GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel)
+uint32_t PPU::GetBGPaletteEntry(uint32_t paletteOffset, uint32_t pixel)
 {
 	if(pixel == 0) {
 		return ReadPaletteRAM(0x3F00) % 64;
@@ -163,7 +163,7 @@ uint8_t PPU::GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel)
 	}
 }
 
-uint8_t PPU::GetSpritePaletteEntry(uint8_t paletteOffset, uint8_t pixel)
+uint32_t PPU::GetSpritePaletteEntry(uint32_t paletteOffset, uint32_t pixel)
 {
 	if(pixel == 0) {
 		return ReadPaletteRAM(0x3F00) % 64;

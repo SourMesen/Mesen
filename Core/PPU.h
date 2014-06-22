@@ -61,14 +61,14 @@ struct TileInfo
 {
 	uint8_t LowByte;
 	uint8_t HighByte;
-	uint8_t PaletteOffset;
+	uint32_t PaletteOffset;
 };
 
 struct SpriteInfo
 {
 	uint8_t LowByte;
 	uint8_t HighByte;
-	uint8_t PaletteOffset;
+	uint32_t PaletteOffset;
 	bool HorizontalMirror;
 	bool BackgroundPriority;
 };
@@ -132,8 +132,8 @@ class PPU : public IMemoryHandler
 		void BeginVBlank();
 		void EndVBlank();
 
-		uint8_t GetBGPaletteEntry(uint8_t paletteOffset, uint8_t pixel);
-		uint8_t GetSpritePaletteEntry(uint8_t paletteOffset, uint8_t pixel);
+		uint32_t GetBGPaletteEntry(uint32_t paletteOffset, uint32_t pixel);
+		uint32_t GetSpritePaletteEntry(uint32_t paletteOffset, uint32_t pixel);
 
 		uint8_t ReadPaletteRAM(uint16_t addr);
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
