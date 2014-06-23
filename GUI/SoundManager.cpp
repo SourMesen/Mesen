@@ -174,7 +174,7 @@ void SoundManager::Reset()
 
 void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize)
 {
-	static int32_t byteLatency = _latency * (APU::BitsPerSample / 8);
+	static const int32_t byteLatency = _latency * (APU::BitsPerSample / 8);
 	DWORD status;
 	_secondaryBuffer->GetStatus(&status);
 
@@ -207,12 +207,6 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize)
 		} else {
 			//Normal playback
 			_secondaryBuffer->SetFrequency(44100);
-		}
-
-		static int counter = 0;
-		counter++;
-		if(counter % 5 == 0) {
-			std::cout << latencyGap << std::endl;
 		}
 	}
 }
