@@ -28,6 +28,7 @@ class Console
 		wstring _romFilename;
 
 		bool _stop = false;
+		bool _reset = false;
 
 	public:
 		Console(wstring filename);

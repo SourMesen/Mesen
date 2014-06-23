@@ -620,6 +620,8 @@ private:
 	#pragma endregion
 
 public:
+	static const uint32_t ClockRate = 1789773;
+
 	CPU(MemoryManager *memoryManager);
 	static uint64_t GetCycleCount() { return CPU::CycleCount; }
 	static void IncCycleCount(uint32_t cycles) { 

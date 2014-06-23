@@ -160,6 +160,8 @@ class PPU : public IMemoryHandler
 		PPU(MemoryManager *memoryManager);
 		~PPU();
 
+		void Reset();
+
 		vector<std::array<uint16_t, 2>> GetRAMAddresses()
 		{
 			return{ { { 0x2000, 0x3FFF } }, { {0x4014, 0x4014 } } };

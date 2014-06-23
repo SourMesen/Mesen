@@ -30,7 +30,7 @@ Console::~Console()
 
 void Console::Reset()
 {
-	_cpu->Reset();
+	_reset = true;
 }
 
 void Console::Stop()
@@ -59,16 +59,13 @@ void Console::Run()
 	Timer fpsTimer;
 	uint32_t lastFrameCount = 0;
 	double elapsedTime = 0;
-	uint32_t cycleCount = 0;
+	double targetTime = 16.6666666666666666;
 	while(true) { 
 		uint32_t executedCycles = _cpu->Exec();
 		_ppu->Exec();
-		_apu->Exec(executedCycles);
+		bool frameDone = _apu->Exec(executedCycles);
 
-		cycleCount += executedCycles;
-
-		if(CheckFlag(EmulationFlags::LimitFPS) && cycleCount >= 29780) {
-			double targetTime = 16.638935108153078202995008319468;
+		if(CheckFlag(EmulationFlags::LimitFPS) && frameDone) {
 			elapsedTime = clockTimer.GetElapsedMS();
 			while(targetTime > elapsedTime) {
 				if(targetTime - elapsedTime > 2) {
@@ -76,7 +73,6 @@ void Console::Run()
 				}
 				elapsedTime = clockTimer.GetElapsedMS();
 			}
-			cycleCount = 0;
 			clockTimer.Reset();
 		}
 		
@@ -88,7 +84,19 @@ void Console::Run()
 		}
 
 		if(_stop) {
+			_stop = false;
 			break;
+		}
+
+		if(_reset) {
+			clockTimer.Reset();
+			fpsTimer.Reset();
+			lastFrameCount = 0;
+			elapsedTime = 0;
+			_cpu->Reset();
+			_ppu->Reset();
+			_apu->Reset();
+			_reset = false;
 		}
 	}
 }

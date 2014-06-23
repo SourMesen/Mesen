@@ -7,8 +7,10 @@
 
 class APU : public IMemoryHandler
 {
-	Nes_Apu _apu;
-	Blip_Buffer _buf;
+	private:
+		Nes_Apu _apu;
+		Blip_Buffer _buf;
+		int16_t* _outputBuffer;
 
 	private:
 		static IAudioDevice* AudioDevice;
@@ -16,7 +18,15 @@ class APU : public IMemoryHandler
 		static APU* Instance;
 
 	public:
+		static const uint32_t SampleRate = 44100;
+		static const uint32_t SamplesPerFrame = 44100 / 60;
+		static const uint32_t BitsPerSample = 16;
+
+	public:
 		APU();
+		~APU();
+
+		void Reset();
 
 		vector<std::array<uint16_t, 2>> GetRAMAddresses()
 		{
@@ -31,5 +41,5 @@ class APU : public IMemoryHandler
 		uint8_t ReadRAM(uint16_t addr);
 		void WriteRAM(uint16_t addr, uint8_t value);
 
-		void Exec(uint32_t executedCycles);
+		bool Exec(uint32_t executedCycles);
 };

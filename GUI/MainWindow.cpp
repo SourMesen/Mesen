@@ -7,8 +7,7 @@
 
 using namespace DirectX;
 
-namespace NES 
-{
+namespace NES {
 	MainWindow* MainWindow::Instance = nullptr;
 
 	bool MainWindow::Initialize()
@@ -69,15 +68,16 @@ namespace NES
 
 		Initialize();
 
+		InitializeOptions();
 		InputManager inputManager;
 		ControlManager::RegisterControlDevice(&inputManager, 0);
-  
-		HACCEL hAccel = LoadAccelerators(_hInstance, MAKEINTRESOURCE(IDC_Accelerator)); 
+
+		HACCEL hAccel = LoadAccelerators(_hInstance, MAKEINTRESOURCE(IDC_Accelerator));
 		if(hAccel == nullptr) {
 			//error
 			std::cout << "error";
 		}
-		
+
 		MSG msg = { 0 };
 		while(WM_QUIT != msg.message) {
 			if(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -135,28 +135,31 @@ namespace NES
 	INT_PTR CALLBACK MainWindow::About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		UNREFERENCED_PARAMETER(lParam);
-		switch (message)
-		{
-		case WM_INITDIALOG:
-			return (INT_PTR)TRUE;
-
-		case WM_COMMAND:
-			if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-			{
-				EndDialog(hDlg, LOWORD(wParam));
+		switch(message) {
+			case WM_INITDIALOG:
 				return (INT_PTR)TRUE;
-			}
-			break;
+
+			case WM_COMMAND:
+				if(LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL) {
+					EndDialog(hDlg, LOWORD(wParam));
+					return (INT_PTR)TRUE;
+				}
+				break;
 		}
 		return (INT_PTR)FALSE;
 	}
 
-	void MainWindow::OpenROM()
+	void MainWindow::InitializeOptions()
+	{
+		Console::SetFlags(EmulationFlags::LimitFPS);
+	}
+
+	wstring MainWindow::SelectROM()
 	{
 		wchar_t buffer[2000];
 
 		OPENFILENAME ofn;
-		ZeroMemory(&ofn , sizeof(ofn));
+		ZeroMemory(&ofn, sizeof(ofn));
 		ofn.lStructSize = sizeof(ofn);
 		ofn.hwndOwner = nullptr;
 		ofn.lpstrFile = buffer;
@@ -165,38 +168,90 @@ namespace NES
 		ofn.lpstrFilter = L"NES Roms\0*.NES\0All\0*.*";
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = nullptr;
-		ofn.nMaxFileTitle = 0 ;
-		ofn.lpstrInitialDir= nullptr;
-		ofn.Flags = OFN_PATHMUSTEXIST|OFN_FILEMUSTEXIST ;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = nullptr;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
 		GetOpenFileName(&ofn);
-		
-		wstring filename = wstring(buffer);
 
-		if(filename.length() > 0) {
-			Stop();
+		return wstring(buffer);
+	}
 
-			_console.reset(new Console(filename));
+	void MainWindow::Start(wstring romFilename = L"")
+	{
+		if(_emuThread) {
+			Stop(false);
+		}
+
+		if(romFilename.length() > 0) {
+			_currentROM = romFilename;
+			_console.reset(new Console(_currentROM));
+		}
+
+		if(!_console) {
+			_console.reset(new Console(_currentROM));
+		}
+
+		if(_console) {
 			_emuThread.reset(new thread(&Console::Run, _console.get()));
+
+			SetMenuEnabled(ID_NES_PAUSE, true);
+			SetMenuEnabled(ID_NES_RESET, true);
+			SetMenuEnabled(ID_NES_STOP, true);
+			SetMenuEnabled(ID_NES_RESUME, false);
 		}
 	}
 
-	void MainWindow::Stop()
+	void MainWindow::Stop(bool powerOff)
 	{
+		_soundManager.Reset();
 		if(_console) {
 			_console->Stop();
-			_emuThread->join();
-
-			_console.release();
+			if(powerOff) {
+				_console.release();
+			}
 		}
+		if(_emuThread) {
+			_emuThread->join();
+			_emuThread.release();
+		}
+
+		SetMenuEnabled(ID_NES_PAUSE, false);
+		SetMenuEnabled(ID_NES_RESET, !powerOff);
+		SetMenuEnabled(ID_NES_STOP, !powerOff);
+		SetMenuEnabled(ID_NES_RESUME, true);
+	}
+
+	void MainWindow::Reset()
+	{
+		if(_console) {
+			_soundManager.Reset();
+			_console->Reset();
+		}
+	}
+
+	void MainWindow::SetMenuEnabled(int resourceID, bool enabled)
+	{
+		HMENU hMenu = GetMenu(_hWnd);
+		EnableMenuItem(hMenu, resourceID, enabled ? MF_ENABLED : MF_GRAYED);
+	}
+
+	bool MainWindow::IsMenuChecked(int resourceID)
+	{
+		HMENU hMenu = GetMenu(_hWnd);
+		return (GetMenuState(hMenu, resourceID, MF_BYCOMMAND) & MF_CHECKED) == MF_CHECKED;
+	}
+
+	bool MainWindow::SetMenuCheck(int resourceID, bool checked)
+	{
+		HMENU hMenu = GetMenu(_hWnd);		
+		CheckMenuItem(hMenu, resourceID, MF_BYCOMMAND | (checked ? MF_CHECKED : MF_UNCHECKED));
+		return checked;
 	}
 
 	bool MainWindow::ToggleMenuCheck(int resourceID)
 	{
-		HMENU hMenu = GetMenu(_hWnd);		
-		bool checked = (GetMenuState(hMenu, resourceID, MF_BYCOMMAND) & MF_CHECKED) == MF_CHECKED;
-		CheckMenuItem(hMenu, resourceID, MF_BYCOMMAND | (checked ? MF_UNCHECKED : MF_CHECKED));
-		return !checked;
+		return SetMenuCheck(resourceID, !IsMenuChecked(resourceID));
 	}
 
 	void MainWindow::LimitFPS_Click()
@@ -235,7 +290,7 @@ namespace NES
 
 	void MainWindow::RunTests()
 	{
-		Stop();
+		Stop(true);
 		int passCount = 0;
 		int failCount = 0;
 		int totalCount = 0;
@@ -264,6 +319,7 @@ namespace NES
 			}
 			totalCount++;
 		}
+		Stop(true);
 
 		std::cout << "------------------------" << std::endl;
 		std::cout << passCount << " / " << totalCount << " + " << failCount << " FAILED" << std::endl;
@@ -273,6 +329,7 @@ namespace NES
 	LRESULT CALLBACK MainWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		static MainWindow *mainWindow = MainWindow::GetInstance();
+		wstring filename;
 		PAINTSTRUCT ps;
 		int wmId, wmEvent;
 		HDC hdc;
@@ -284,23 +341,43 @@ namespace NES
 				// Parse the menu selections:
 				switch (wmId) {
 					case ID_FILE_OPEN:
-						mainWindow->OpenROM();
+						filename = mainWindow->SelectROM();
+						if(filename.length() > 0) {
+							mainWindow->Start(filename);
+						}
 						break;
+					case ID_FILE_EXIT:
+						DestroyWindow(hWnd);
+						break;
+
+					case ID_NES_RESUME:
+						mainWindow->Start();
+						break;
+					case ID_NES_PAUSE:
+						mainWindow->Stop(false);
+						break;
+					case ID_NES_STOP:
+						mainWindow->Stop(true);
+						break;
+					case ID_NES_RESET:
+						mainWindow->Reset();
+						break;
+
+					case ID_OPTIONS_LIMITFPS:
+						mainWindow->LimitFPS_Click();
+						break;
+
 					case ID_TESTS_RUNTESTS:
 						mainWindow->RunTests();
 						break;
 					case ID_TESTS_SAVETESTRESULT:
 						mainWindow->SaveTestResult();
 						break;
-					case ID_OPTIONS_LIMITFPS:
-						mainWindow->LimitFPS_Click();
-						break;
+
 					case ID_HELP_ABOUT:
 						DialogBox(nullptr, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 						break;
-					case ID_FILE_EXIT:
-						DestroyWindow(hWnd);
-						break;
+
 					default:
 						return DefWindowProc(hWnd, message, wParam, lParam);
 				}
@@ -328,7 +405,7 @@ namespace NES
 				break;
 
 			case WM_DESTROY:
-				mainWindow->Stop();
+				mainWindow->Stop(true);
 				PostQuitMessage(0);
 				break;
 

@@ -76,8 +76,8 @@ bool SoundManager::InitializeDirectSound(HWND hwnd)
 
 	// Set the buffer description of the secondary sound buffer that the wave file will be loaded onto.
 	bufferDesc.dwSize = sizeof(DSBUFFERDESC);
-	bufferDesc.dwFlags = DSBCAPS_CTRLPOSITIONNOTIFY | DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_GLOBALFOCUS | DSBCAPS_LOCSOFTWARE | DSBCAPS_CTRLVOLUME;
-	bufferDesc.dwBufferBytes = 0xFFFFF;
+	bufferDesc.dwFlags = DSBCAPS_CTRLPOSITIONNOTIFY | DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_GLOBALFOCUS | DSBCAPS_LOCSOFTWARE | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY;
+	bufferDesc.dwBufferBytes = 0xFFFF;
 	bufferDesc.dwReserved = 0;
 	bufferDesc.lpwfxFormat = &waveFormat;
 	bufferDesc.guid3DAlgorithm = GUID_NULL;
@@ -133,36 +133,86 @@ void SoundManager::ClearSecondaryBuffer()
 	_secondaryBuffer->Lock(0, 0, (void**)&bufferPtr, (DWORD*)&bufferSize, nullptr, 0, DSBLOCK_ENTIREBUFFER);
 	memset(bufferPtr, 0, bufferSize);
 	_secondaryBuffer->Unlock((void*)bufferPtr, bufferSize, nullptr, 0);
+
+	_secondaryBuffer->SetCurrentPosition(0);
+	_lastWriteOffset = 0;
 }
 
 void SoundManager::CopyToSecondaryBuffer(uint8_t *data, uint32_t size)
 {
-	unsigned char* bufferPtrA;
-	unsigned char* bufferPtrB;
+	uint8_t* bufferPtrA;
+	uint8_t* bufferPtrB;
 	DWORD bufferASize;
 	DWORD bufferBSize;
 
-	_secondaryBuffer->Lock(0, size, (void**)&bufferPtrA, (DWORD*)&bufferASize, (void**)&bufferPtrB, (DWORD*)&bufferBSize, DSBLOCK_FROMWRITECURSOR);
+	_secondaryBuffer->Lock(_lastWriteOffset, size, (void**)&bufferPtrA, (DWORD*)&bufferASize, (void**)&bufferPtrB, (DWORD*)&bufferBSize, 0);
+	_lastWriteOffset += size;
 
-	memcpy(bufferPtrA, data, min(bufferASize, size));
-	if(bufferPtrB) {
+	memcpy(bufferPtrA, data, bufferASize);
+	if(bufferPtrB && bufferBSize > 0) {
 		memcpy(bufferPtrB, data + bufferASize, bufferBSize);
 	}
 
 	_secondaryBuffer->Unlock((void*)bufferPtrA, bufferASize, (void*)bufferPtrB, bufferBSize);
 }
 
+void SoundManager::Pause()
+{
+	_secondaryBuffer->Stop();
+}
+
+void SoundManager::Play()
+{
+	_secondaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
+}
+
+void SoundManager::Reset()
+{
+	_secondaryBuffer->Stop();
+	ClearSecondaryBuffer();
+}
+
 void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize)
 {
+	static int32_t byteLatency = _latency * (APU::BitsPerSample / 8);
 	DWORD status;
 	_secondaryBuffer->GetStatus(&status);
 
 	if(!(status & DSBSTATUS_PLAYING)) {
-		ClearSecondaryBuffer();
 		CopyToSecondaryBuffer((uint8_t*)soundBuffer, soundBufferSize);
-		_secondaryBuffer->SetCurrentPosition(0);
-		_secondaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
+		if(_lastWriteOffset >= byteLatency) {
+			Play();
+		}
 	} else {
 		CopyToSecondaryBuffer((uint8_t*)soundBuffer, soundBufferSize);
+		DWORD currentPlayCursor;
+		_secondaryBuffer->GetCurrentPosition(&currentPlayCursor, nullptr);
+		
+		int32_t playWriteByteLatency = (_lastWriteOffset - currentPlayCursor);
+		if(playWriteByteLatency < -byteLatency * 2) {
+			playWriteByteLatency = 0xFFFF - currentPlayCursor + _lastWriteOffset;
+		}
+
+		int32_t latencyGap = playWriteByteLatency - byteLatency;
+		if(abs(latencyGap) > 3000) {
+			//Out of sync, move back to where we should be (start of the latency buffer)
+			_secondaryBuffer->SetFrequency(44100);
+			_secondaryBuffer->SetCurrentPosition(_lastWriteOffset - byteLatency);
+		} else if(latencyGap < -200) {
+			//Playing too fast, slow down playing
+			_secondaryBuffer->SetFrequency(43900);
+		} else if(latencyGap > 200) {
+			//Playing too slow, speed up
+			_secondaryBuffer->SetFrequency(44300);
+		} else {
+			//Normal playback
+			_secondaryBuffer->SetFrequency(44100);
+		}
+
+		static int counter = 0;
+		counter++;
+		if(counter % 5 == 0) {
+			std::cout << latencyGap << std::endl;
+		}
 	}
 }

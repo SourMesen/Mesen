@@ -23,18 +23,29 @@ uint32_t PPU_PALETTE_RGB[] = {
 PPU::PPU(MemoryManager *memoryManager)
 {
 	_memoryManager = memoryManager;
-	_state = {};
-	_flags = {};
-	_statusFlags = {};
-
-	memset(_spriteRAM, 0xFF, 0x100);
-
 	_outputBuffer = new uint8_t[256 * 240 * 4];
+
+	Reset();
 }
 
 PPU::~PPU() 
 {
 	delete[] _outputBuffer;
+}
+
+void PPU::Reset()
+{
+	_state = {};
+	_flags = {};
+	_statusFlags = {};
+
+	_scanline = 0;
+	_cycle = 0;
+	_frameCount = 0;
+	_cycleCount = 0;
+	_memoryReadBuffer = 0;
+
+	memset(_spriteRAM, 0xFF, 0x100);
 }
 
 bool PPU::CheckFlag(PPUControlFlags flag)

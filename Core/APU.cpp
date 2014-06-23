@@ -4,8 +4,6 @@
 #include "APU.h"
 #include "CPU.h"
 
-void output_samples(const blip_sample_t*, size_t count);
-
 APU* APU::Instance = nullptr;
 IAudioDevice* APU::AudioDevice = nullptr;
 
@@ -13,16 +11,24 @@ APU::APU()
 {
 	APU::Instance = this;
 
-	blargg_err_t error = _buf.sample_rate(44100);
-	if(error) {
-		//report_error(error);
-	}
-
-	_buf.clock_rate(1789773);
+	_buf.sample_rate(APU::SampleRate);
+	_buf.clock_rate(CPU::ClockRate);
 	_apu.output(&_buf);
 
 	_apu.dmc_reader(&APU::DMCRead);
 	//_apu.irq_notifier(irq_changed);
+
+	_outputBuffer = new int16_t[APU::SamplesPerFrame];
+}
+
+APU::~APU()
+{
+	delete[] _outputBuffer;
+}
+
+void APU::Reset()
+{
+	_apu.reset();
 }
 
 int APU::DMCRead(void*, cpu_addr_t addr)
@@ -34,7 +40,7 @@ uint8_t APU::ReadRAM(uint16_t addr)
 {
 	switch(addr) {
 		case 0x4015:
-			return _apu.read_status(0);
+			return _apu.read_status(5);
 			break;
 	}
 
@@ -43,22 +49,22 @@ uint8_t APU::ReadRAM(uint16_t addr)
 
 void APU::WriteRAM(uint16_t addr, uint8_t value)
 {
-	_apu.write_register(0, addr, value);
+	_apu.write_register(5, addr, value);
 }
 
-void APU::Exec(uint32_t executedCycles)
+bool APU::Exec(uint32_t executedCycles)
 {
 	_apu.end_frame(executedCycles);
 	_buf.end_frame(executedCycles);
 	
-	// Read some samples out of Blip_Buffer if there are enough to
-	// fill our output buffer
-	const size_t out_size = 4096;
-	blip_sample_t out_buf[out_size];
+	// Read some samples out of Blip_Buffer if there are enough to fill our output buffer
+	uint32_t availableSampleCount = _buf.samples_avail();
+	if(availableSampleCount >= APU::SamplesPerFrame) {
+		size_t sampleCount = _buf.read_samples(_outputBuffer, APU::SamplesPerFrame);
+		APU::AudioDevice->PlayBuffer(_outputBuffer, sampleCount * BitsPerSample / 8);
 
-	if(_buf.samples_avail() >= out_size) {
-		size_t count = _buf.read_samples(out_buf, out_size);
-		APU::AudioDevice->PlayBuffer(out_buf, count * sizeof(blip_sample_t));
+		return true;
 	}
 
+	return false;
 }

@@ -15,7 +15,9 @@ namespace NES {
 		SoundManager _soundManager;
 		unique_ptr<Console> _console;
 		unique_ptr<thread> _emuThread;
+		wstring _currentROM;
 
+	private:
 		bool Initialize();
 		HRESULT InitWindow();
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -30,15 +32,27 @@ namespace NES {
 
 		void LimitFPS_Click();
 
+		void SetMenuEnabled(int resourceID, bool enabled);
+		
+		bool IsMenuChecked(int resourceID);
+		bool SetMenuCheck(int resourceID, bool checked);
 		bool ToggleMenuCheck(int resourceID);
+
+		wstring SelectROM();
+		void Start(wstring romFilename);
+		void Reset();
+		void Stop(bool powerOff);
+
+		void InitializeOptions();
+
+
 
 	public:
 		MainWindow(HINSTANCE hInstance, int nCmdShow) : _hInstance(hInstance), _nCmdShow(nCmdShow) 
 		{
 			MainWindow::Instance = this;
 		}
+
 		int Run();
-		void OpenROM();
-		void Stop();
 	};
 }
