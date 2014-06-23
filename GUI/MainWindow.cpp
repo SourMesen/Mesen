@@ -188,7 +188,7 @@ namespace NES {
 			_console.reset(new Console(_currentROM));
 		}
 
-		if(!_console) {
+		if(!_console && _currentROM.length() > 0) {
 			_console.reset(new Console(_currentROM));
 		}
 
