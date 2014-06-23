@@ -21,6 +21,10 @@ namespace NES
 			return false;
 		}
 
+		if(_soundManager.Initialize(_hWnd)) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -113,7 +117,7 @@ namespace NES
 			return E_FAIL;
 
 		// Create window
-		RECT rc = { 0, 0, 260, 270 };
+		RECT rc = { 0, 0, 800, 700 };
 		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 		_hWnd = CreateWindow(L"NESEmu", L"NESEmu",
 			WS_OVERLAPPEDWINDOW,

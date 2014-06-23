@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "CPU.h"
 #include "PPU.h"
+#include "APU.h"
 #include "BaseMapper.h"
 #include "MemoryManager.h"
 #include "ControlManager.h"
@@ -19,6 +20,7 @@ class Console
 
 		unique_ptr<CPU> _cpu;
 		unique_ptr<PPU> _ppu;
+		unique_ptr<APU> _apu;
 		unique_ptr<BaseMapper> _mapper;
 		unique_ptr<ControlManager> _controlManager;
 		unique_ptr<MemoryManager> _memoryManager;

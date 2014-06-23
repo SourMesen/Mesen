@@ -12,11 +12,13 @@ Console::Console(wstring filename)
 	_memoryManager.reset(new MemoryManager(_mapper->GetHeader()));
 	_cpu.reset(new CPU(_memoryManager.get()));
 	_ppu.reset(new PPU(_memoryManager.get()));	
-	
+	_apu.reset(new APU());
+
 	_controlManager.reset(new ControlManager());
 
 	_memoryManager->RegisterIODevice(_mapper.get());
 	_memoryManager->RegisterIODevice(_ppu.get());
+	_memoryManager->RegisterIODevice(_apu.get());
 	_memoryManager->RegisterIODevice(_controlManager.get());
 
 	Reset();
@@ -57,12 +59,15 @@ void Console::Run()
 	Timer fpsTimer;
 	uint32_t lastFrameCount = 0;
 	double elapsedTime = 0;
-	uint32_t executedCycles = 0;
+	uint32_t cycleCount = 0;
 	while(true) { 
-		executedCycles += _cpu->Exec();
+		uint32_t executedCycles = _cpu->Exec();
 		_ppu->Exec();
+		_apu->Exec(executedCycles);
 
-		if(CheckFlag(EmulationFlags::LimitFPS) && executedCycles >= 29780) {
+		cycleCount += executedCycles;
+
+		if(CheckFlag(EmulationFlags::LimitFPS) && cycleCount >= 29780) {
 			double targetTime = 16.638935108153078202995008319468;
 			elapsedTime = clockTimer.GetElapsedMS();
 			while(targetTime > elapsedTime) {
@@ -71,7 +76,7 @@ void Console::Run()
 				}
 				elapsedTime = clockTimer.GetElapsedMS();
 			}
-			executedCycles = 0;
+			cycleCount = 0;
 			clockTimer.Reset();
 		}
 		

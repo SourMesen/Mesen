@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Nes_Apu">
+      <UniqueIdentifier>{c6dc2048-98f6-4551-89dc-830f12f1bb2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -51,6 +54,45 @@
     <ClInclude Include="ControlManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="APU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\apu_snapshot.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\blargg_common.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\blargg_source.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\Blip_Buffer.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\Blip_Synth.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\Multi_Buffer.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\Nes_Apu.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\Nes_Namco.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\Nes_Oscs.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\Nes_Vrc6.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="Nes_Apu\Nonlinear_Buffer.h">
+      <Filter>Header Files\Nes_Apu</Filter>
+    </ClInclude>
+    <ClInclude Include="IAudioDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Timer.h">
@@ -72,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ControlManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="APU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

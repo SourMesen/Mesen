@@ -18,16 +18,31 @@
 	#pragma comment( lib, "DirectXTK.lib" )
 #endif
 
+#ifdef _DEBUG
+	#pragma comment( lib, "../Core/Nes_Apu/Nes_Apu.debug.lib" )	
+#else 
+	#pragma comment( lib, "../Core/Nes_Apu/Nes_Apu.lib" )	
+#endif
+
+#pragma comment(lib, "dsound.lib")
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "winmm.lib")
+
+
 // C RunTime Header Files
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
 
+#include <mmsystem.h>
+#include <stdio.h>
+
 #include <d3d11_1.h>
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include <directxcolors.h>
+#include <dsound.h>
 #include <io.h>
 #include <Fcntl.h>
 #include <thread>

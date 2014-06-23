@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Renderer.h"
+#include "SoundManager.h"
 #include "../Core/Console.h"
 
 namespace NES {
@@ -11,6 +12,7 @@ namespace NES {
 		HWND _hWnd;
 		int _nCmdShow;
 		Renderer _renderer;
+		SoundManager _soundManager;
 		unique_ptr<Console> _console;
 		unique_ptr<thread> _emuThread;
 

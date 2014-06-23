@@ -87,12 +87,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="APU.h" />
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="ControlManager.h" />
+    <ClInclude Include="IAudioDevice.h" />
     <ClInclude Include="IControlDevice.h" />
     <ClInclude Include="IMemoryHandler.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="IVideoDevice.h" />
+    <ClInclude Include="Nes_Apu\apu_snapshot.h" />
+    <ClInclude Include="Nes_Apu\blargg_common.h" />
+    <ClInclude Include="Nes_Apu\blargg_source.h" />
+    <ClInclude Include="Nes_Apu\Blip_Buffer.h" />
+    <ClInclude Include="Nes_Apu\Blip_Synth.h" />
+    <ClInclude Include="Nes_Apu\Multi_Buffer.h" />
+    <ClInclude Include="Nes_Apu\Nes_Apu.h" />
+    <ClInclude Include="Nes_Apu\Nes_Namco.h" />
+    <ClInclude Include="Nes_Apu\Nes_Oscs.h" />
+    <ClInclude Include="Nes_Apu\Nes_Vrc6.h" />
+    <ClInclude Include="Nes_Apu\Nonlinear_Buffer.h" />
     <ClInclude Include="PPU.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="MemoryManager.h" />
@@ -101,6 +114,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="APU.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
