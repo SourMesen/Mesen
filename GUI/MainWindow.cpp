@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Resource.h"
 #include "MainWindow.h"
-#include "..\Core\Console.h"
-#include "..\Core\Timer.h"
+#include "../Core/Console.h"
+#include "../Utilities/Timer.h"
 #include "InputManager.h"
 
 using namespace DirectX;
@@ -16,13 +16,8 @@ namespace NES {
 			return false;
 		}
 
-		if(!_renderer.Initialize(_hInstance, _hWnd)) {
-			return false;
-		}
-
-		if(_soundManager.Initialize(_hWnd)) {
-			return false;
-		}
+		_renderer.reset(new Renderer(_hWnd));
+		_soundManager.reset(new SoundManager(_hWnd));
 
 		return true;
 	}
@@ -62,9 +57,9 @@ namespace NES {
 
 	int MainWindow::Run()
 	{
-		//#if _DEBUG
-		CreateConsole();
-		//#endif
+		#if _DEBUG
+			CreateConsole();
+		#endif
 
 		Initialize();
 
@@ -86,7 +81,7 @@ namespace NES {
 					DispatchMessage(&msg);
 				}
 			} else {
-				_renderer.Render();
+				_renderer->Render();
 			}
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1));
 		}
@@ -204,7 +199,7 @@ namespace NES {
 
 	void MainWindow::Stop(bool powerOff)
 	{
-		_soundManager.Reset();
+		_soundManager->Reset();
 		if(_console) {
 			_console->Stop();
 			if(powerOff) {
@@ -225,7 +220,7 @@ namespace NES {
 	void MainWindow::Reset()
 	{
 		if(_console) {
-			_soundManager.Reset();
+			_soundManager->Reset();
 			_console->Reset();
 		}
 	}

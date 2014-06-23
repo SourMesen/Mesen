@@ -5,18 +5,33 @@
 
 namespace NES 
 {
-	bool Renderer::Initialize(HINSTANCE hInstance, HWND hWnd) {
+	Renderer::Renderer(HWND hWnd)
+	{
 		PPU::RegisterVideoDevice(this);
 
-		_hInst = hInstance;
 		_hWnd = hWnd;
 
 		if(FAILED(InitDevice())) {
 			CleanupDevice();
-			return false;
-		} else {
-			return true;
 		}
+	}
+
+	Renderer::~Renderer()
+	{
+		CleanupDevice();
+	}
+
+	void Renderer::CleanupDevice()
+	{
+		if(_pImmediateContext) _pImmediateContext->ClearState();
+
+		if(_pRenderTargetView) _pRenderTargetView->Release();
+		if(_samplerState) _samplerState->Release();
+
+		if(_pSwapChain) _pSwapChain->Release();
+		if(_pImmediateContext1) _pImmediateContext1->Release();
+		if(_pd3dDevice1) _pd3dDevice1->Release();
+		if(_pd3dDevice) _pd3dDevice->Release();
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -200,23 +215,6 @@ namespace NES
 		_pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
 
 		return S_OK;
-	}
-
-
-	//--------------------------------------------------------------------------------------
-	// Clean up the objects we've created
-	//--------------------------------------------------------------------------------------
-	void Renderer::CleanupDevice()
-	{
-		if(_pImmediateContext) _pImmediateContext->ClearState();
-
-		if(_pRenderTargetView) _pRenderTargetView->Release();
-		if(_samplerState) _samplerState->Release();
-
-		if(_pSwapChain) _pSwapChain->Release();
-		if(_pImmediateContext1) _pImmediateContext1->Release();
-		if(_pd3dDevice1) _pd3dDevice1->Release();
-		if(_pd3dDevice) _pd3dDevice->Release();
 	}
 
 	ID3D11ShaderResourceView* Renderer::GetDisplayBufferShaderResourceView()

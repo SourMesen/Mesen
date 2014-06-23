@@ -6,15 +6,9 @@
 using namespace DirectX;
 
 namespace NES {
-	struct SimpleVertex
-	{
-		XMFLOAT3 Pos;
-	};
-
 	class Renderer : IVideoDevice
 	{
 	private:
-		HINSTANCE               _hInst = nullptr;
 		HWND                    _hWnd = nullptr;
 
 		D3D_DRIVER_TYPE         _driverType = D3D_DRIVER_TYPE_NULL;
@@ -44,7 +38,8 @@ namespace NES {
 		ID3D11ShaderResourceView* GetDisplayBufferShaderResourceView();
 
 	public:
-		bool Initialize(HINSTANCE hInst, HWND hWnd);
+		Renderer(HWND hWnd);
+		~Renderer();
 
 		void Render();
 

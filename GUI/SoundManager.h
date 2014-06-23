@@ -6,10 +6,9 @@
 class SoundManager : public IAudioDevice
 {
 public:
-	SoundManager();
+	SoundManager(HWND hWnd);
 	~SoundManager();
 
-	bool Initialize(HWND hWnd);
 	void Release();
 	void PlayBuffer(int16_t *soundBuffer, uint32_t bufferSize);
 	void Play();	

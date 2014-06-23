@@ -1,29 +1,20 @@
 #include "stdafx.h"
 #include "SoundManager.h"
 
-SoundManager::SoundManager()
+SoundManager::SoundManager(HWND hwnd)
 {
+	APU::RegisterAudioDevice(this);
+
 	_directSound = 0;
 	_primaryBuffer = 0;
 	_secondaryBuffer = 0;
+
+	InitializeDirectSound(hwnd);
 }
 
 SoundManager::~SoundManager()
 {
 	Release();
-}
-
-bool SoundManager::Initialize(HWND hwnd)
-{
-	APU::RegisterAudioDevice(this);
-	bool result;
-
-	result = InitializeDirectSound(hwnd);
-	if(!result) {
-		return false;
-	}
-
-	return true;
 }
 
 bool SoundManager::InitializeDirectSound(HWND hwnd)

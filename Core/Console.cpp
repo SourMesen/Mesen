@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Console.h"
-#include "Timer.h"
+#include "../Utilities/Timer.h"
 
 uint32_t Console::Flags = 0;
 uint32_t Console::CurrentFPS = 0;

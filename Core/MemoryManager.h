@@ -40,14 +40,5 @@ class MemoryManager
 
 		uint8_t ReadVRAM(uint16_t addr);
 		void WriteVRAM(uint16_t addr, uint8_t value);
-
-		char* GetTestResult()
-		{
-			char *buffer = new char[0x2000];
-			for(int i = 0; i < 0x1000; i++) {
-				buffer[i] = Read(0x6004 + i);
-			}
-			return buffer;
-		}
 };
 

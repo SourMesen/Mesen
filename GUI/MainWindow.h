@@ -11,8 +11,8 @@ namespace NES {
 		HINSTANCE _hInstance;
 		HWND _hWnd;
 		int _nCmdShow;
-		Renderer _renderer;
-		SoundManager _soundManager;
+		unique_ptr<Renderer> _renderer;
+		unique_ptr<SoundManager> _soundManager;
 		unique_ptr<Console> _console;
 		unique_ptr<thread> _emuThread;
 		wstring _currentROM;
@@ -44,8 +44,6 @@ namespace NES {
 		void Stop(bool powerOff);
 
 		void InitializeOptions();
-
-
 
 	public:
 		MainWindow(HINSTANCE hInstance, int nCmdShow) : _hInstance(hInstance), _nCmdShow(nCmdShow) 

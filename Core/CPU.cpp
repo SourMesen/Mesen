@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "CPU.h"
-#include "Timer.h"
 
 uint64_t CPU::CycleCount = 0;
 uint32_t CPU::CyclePenalty = 0;
