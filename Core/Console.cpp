@@ -98,7 +98,7 @@ bool Console::RunTest(uint8_t *expectedResult)
 	Timer timer;
 	uint8_t maxWait = 30;
 	while(true) {
-		_cpu->Exec();
+		_apu->Exec(_cpu->Exec());
 		_ppu->Exec();
 
 		if(timer.GetElapsedMS() > 100) {

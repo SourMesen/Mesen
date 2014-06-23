@@ -11,6 +11,8 @@ IAudioDevice* APU::AudioDevice = nullptr;
 
 APU::APU()
 {
+	APU::Instance = this;
+
 	blargg_err_t error = _buf.sample_rate(44100);
 	if(error) {
 		//report_error(error);
