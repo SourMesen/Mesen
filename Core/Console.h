@@ -17,6 +17,7 @@ class Console
 {
 	private:
 		static uint32_t Flags;
+		static uint32_t CurrentFPS;
 
 		unique_ptr<CPU> _cpu;
 		unique_ptr<PPU> _ppu;
@@ -43,4 +44,5 @@ class Console
 		static bool CheckFlag(int flag);
 		static void SetFlags(int flags);
 		static void ClearFlags(int flags);
+		static uint32_t GetFPS();
 };

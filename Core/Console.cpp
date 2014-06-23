@@ -3,6 +3,7 @@
 #include "Timer.h"
 
 uint32_t Console::Flags = 0;
+uint32_t Console::CurrentFPS = 0;
 
 Console::Console(wstring filename)
 {
@@ -53,6 +54,11 @@ bool Console::CheckFlag(int flag)
 	return (Console::Flags & flag) == flag;
 }
 
+uint32_t Console::GetFPS()
+{
+	return Console::CurrentFPS;
+}
+
 void Console::Run()
 {
 	Timer clockTimer;
@@ -78,8 +84,9 @@ void Console::Run()
 		
 		if(fpsTimer.GetElapsedMS() > 1000) {
 			uint32_t frameCount = _ppu->GetFrameCount();
-			std::cout << ((frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000)) << std::endl;
+			Console::CurrentFPS = (int)((frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000));
 			lastFrameCount = frameCount;
+			//std::cout << Console::CurrentFPS << std::endl;
 			fpsTimer.Reset();
 		}
 

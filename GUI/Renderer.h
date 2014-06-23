@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DirectXTK\SpriteBatch.h"
+#include "DirectXTK\SpriteFont.h"
 #include "../Core/IVideoDevice.h"
 
 using namespace DirectX;
@@ -24,22 +25,27 @@ namespace NES {
 		ID3D11DeviceContext1*   _pImmediateContext1 = nullptr;
 		IDXGISwapChain*         _pSwapChain = nullptr;
 		ID3D11RenderTargetView* _pRenderTargetView = nullptr;
-		ID3D11VertexShader*     _pVertexShader = nullptr;
-		ID3D11PixelShader*      _pPixelShader = nullptr;
-		ID3D11InputLayout*      _pVertexLayout = nullptr;
-		ID3D11Buffer*           _pVertexBuffer = nullptr;
-		ID3D11Texture2D*			_pTexture = nullptr;
 
+		ID3D11SamplerState*		_samplerState = nullptr;
+		
+		ID3D11Texture2D*			_pTexture = nullptr;
 		byte*							_videoRAM;
 		uint8_t*						_nextFrameBuffer;
 
+		unique_ptr<SpriteFont>	_font;
+		ID3D11Texture2D*			_overlayTexture = nullptr;
+		byte*							_overlayBuffer;
+		std::unique_ptr<SpriteBatch> _overlaySpriteBatch;
+
 		std::unique_ptr<SpriteBatch> _sprites;
 
-		HRESULT Renderer::InitDevice();
-		void Renderer::CleanupDevice();
+		HRESULT InitDevice();
+		void CleanupDevice();
+		ID3D11ShaderResourceView* GetDisplayBufferShaderResourceView();
 
 	public:
 		bool Initialize(HINSTANCE hInst, HWND hWnd);
+
 		void Render();
 
 		void UpdateFrame(uint8_t* frameBuffer)

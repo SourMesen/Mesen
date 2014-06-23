@@ -138,7 +138,9 @@
     <ResourceCompile Include="GUI.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="GUI.ico" />
+    <Image Include="GUI.ico">
+      <DeploymentContent>false</DeploymentContent>
+    </Image>
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -147,13 +149,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Calibri.30.spritefont">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="DirectXTK\SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
+    <Content Include="Calibri.30.spritefont">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</Content>  
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

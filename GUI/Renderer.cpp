@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Renderer.h"
-#include "DirectXTK\SpriteBatch.h"
 #include "..\Core\PPU.h"
+#include "..\Core\Console.h"
 
 namespace NES 
 {
@@ -10,7 +10,7 @@ namespace NES
 
 		_hInst = hInstance;
 		_hWnd = hWnd;
-		
+
 		if(FAILED(InitDevice())) {
 			CleanupDevice();
 			return false;
@@ -56,8 +56,8 @@ namespace NES
 		DXGI_SWAP_CHAIN_DESC sd;
 		ZeroMemory(&sd, sizeof(sd));
 		sd.BufferCount = 1;
-		sd.BufferDesc.Width = width;
-		sd.BufferDesc.Height = height;
+		sd.BufferDesc.Width = width*4;
+		sd.BufferDesc.Height = height*4;
 		sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		sd.BufferDesc.RefreshRate.Numerator = 60;
 		sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -110,8 +110,8 @@ namespace NES
 		// Setup the viewport
 		UINT fred;
 		D3D11_VIEWPORT vp;
-		vp.Width = (FLOAT)width;
-		vp.Height = (FLOAT)height;
+		vp.Width = (FLOAT)width*4;
+		vp.Height = (FLOAT)height*4;
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
@@ -138,11 +138,6 @@ namespace NES
 		desc.Height = screenheight;
 		desc.MiscFlags = 0;
 
-		D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDescription;
-		ZeroMemory(&renderTargetViewDescription, sizeof(renderTargetViewDescription));
-		renderTargetViewDescription.Format = desc.Format;
-		renderTargetViewDescription.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // MS;
-
 		_videoRAM = new uint8_t[screenwidth*screenheight * 4];
 		_nextFrameBuffer = new uint8_t[screenwidth*screenheight * 4];
 		memset(_videoRAM, 0x00, screenwidth*screenheight*4);
@@ -157,8 +152,52 @@ namespace NES
 			return 0;
 		}
 
+		_overlayBuffer = new uint8_t[screenwidth*screenheight*4*4*4];  //High res overlay for UI elements (4x res)
+		memset(_overlayBuffer, 0x00, screenwidth*screenheight*4*4*4);
+
+		ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
+		desc.ArraySize = 1;
+		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		desc.MipLevels = 1;
+		desc.MiscFlags = 0;
+		desc.SampleDesc.Count = 1;
+		desc.SampleDesc.Quality = fred;
+		desc.Usage = D3D11_USAGE_DYNAMIC;
+		desc.Width = screenwidth * 4;
+		desc.Height = screenheight * 4;
+		desc.MiscFlags = 0;
+
+		tbsd.pSysMem = (void *)_overlayBuffer;
+		tbsd.SysMemPitch = screenwidth * 4 * 4;
+		tbsd.SysMemSlicePitch = screenwidth*screenheight * 4 * 4;
+
+		if(FAILED(_pd3dDevice->CreateTexture2D(&desc, &tbsd, &_overlayTexture))) {
+			return 0;
+		}
+
 		////////////////////////////////////////////////////////////////////////////
 		_sprites.reset(new SpriteBatch(_pImmediateContext));
+		_overlaySpriteBatch.reset(new SpriteBatch(_pImmediateContext));
+
+		_font.reset(new SpriteFont(_pd3dDevice, L"Calibri.30.spritefont"));
+
+		//Sample state
+		D3D11_SAMPLER_DESC samplerDesc;
+		ZeroMemory(&desc, sizeof(desc));
+		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+		//samplerDesc.BorderColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+		samplerDesc.MinLOD = -FLT_MAX;
+		samplerDesc.MaxLOD = FLT_MAX;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.MaxAnisotropy = 1;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		
+		_pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
 
 		return S_OK;
 	}
@@ -171,26 +210,17 @@ namespace NES
 	{
 		if(_pImmediateContext) _pImmediateContext->ClearState();
 
-		if(_pVertexBuffer) _pVertexBuffer->Release();
-		if(_pVertexLayout) _pVertexLayout->Release();
-		if(_pVertexShader) _pVertexShader->Release();
-		if(_pPixelShader) _pPixelShader->Release();
 		if(_pRenderTargetView) _pRenderTargetView->Release();
+		if(_samplerState) _samplerState->Release();
+
 		if(_pSwapChain) _pSwapChain->Release();
 		if(_pImmediateContext1) _pImmediateContext1->Release();
-		if(_pImmediateContext) _pImmediateContext->Release();
 		if(_pd3dDevice1) _pd3dDevice1->Release();
 		if(_pd3dDevice) _pd3dDevice->Release();
 	}
 
-	//--------------------------------------------------------------------------------------
-	// Render a frame
-	//--------------------------------------------------------------------------------------
-	void Renderer::Render()
+	ID3D11ShaderResourceView* Renderer::GetDisplayBufferShaderResourceView()
 	{
-		// Clear the back buffer 
-		//_pImmediateContext->ClearRenderTargetView(_pRenderTargetView, Colors::MidnightBlue);
-
 		UINT screenwidth = 256, screenheight = 240;
 
 		D3D11_MAPPED_SUBRESOURCE dd;
@@ -201,7 +231,7 @@ namespace NES
 		_pImmediateContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
 		memcpy(dd.pData, _nextFrameBuffer, screenwidth*screenheight * 4);
 		_pImmediateContext->Unmap(_pTexture, 0);
-
+		
 		///////////////////////////////////////////////////////////////////////////////
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 		D3D11_TEXTURE2D_DESC desc;
@@ -213,28 +243,39 @@ namespace NES
 		srvDesc.Texture2D.MipLevels = desc.MipLevels;
 		srvDesc.Texture2D.MostDetailedMip = desc.MipLevels - 1;
 
-		ID3D11ShaderResourceView *pSRView = NULL;
+		ID3D11ShaderResourceView *pSRView = nullptr;
 		_pd3dDevice->CreateShaderResourceView(_pTexture, &srvDesc, &pSRView);
 
-		/*
-		D3D11_RENDER_TARGET_VIEW_DESC rtDesc;
-		rtDesc.Format = desc.Format;
-		rtDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-		rtDesc.Texture2D.MipSlice = 0;*/
+		return pSRView;
+	}
 
-		////////////////////////////////////////////////////////////////////////////
+	//--------------------------------------------------------------------------------------
+	// Render a frame
+	//--------------------------------------------------------------------------------------
+	void Renderer::Render()
+	{
+		// Clear the back buffer 
+		_pImmediateContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
 
-		_sprites->Begin();
-		RECT x;
-		x.left = 0;
-		x.right = 256;
-		x.bottom = 240;
-		x.top = 0;
-		_sprites->Draw(pSRView, x);
-		_sprites->End();
+		ID3D11ShaderResourceView *shaderResourceView = GetDisplayBufferShaderResourceView();
 
-		pSRView->Release();
+		RECT sourceRect;
+		sourceRect.left = 0;
+		sourceRect.right = 256;
+		sourceRect.bottom = 240;
+		sourceRect.top = 0;
 
+		XMVECTOR position{ { 0, 0 } };
+		
+		_overlaySpriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
+		_overlaySpriteBatch->Draw(shaderResourceView, position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
+
+		_font->DrawString(_overlaySpriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256*4-150,11), Colors::Yellow, 0.0f, XMFLOAT2(0,0), 1.0f);
+
+		_overlaySpriteBatch->End();
+
+		shaderResourceView->Release();
+		
 		// Present the information rendered to the back buffer to the front buffer (the screen)
 		_pSwapChain->Present(0, 0);
 	}

@@ -16,9 +16,6 @@
     <Filter Include="Header Files\DirectXTK">
       <UniqueIdentifier>{e3fb11e9-60dd-47df-8444-72d62eb07828}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{ac76b5fc-ef73-414c-a9c5-a67ea8c3ed57}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -131,10 +128,8 @@
     <None Include="DirectXTK\SimpleMath.inl">
       <Filter>Header Files\DirectXTK</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Shader.fx">
-      <Filter>Shaders</Filter>
-    </FxCompile>
+    <None Include="Calibri.30.spritefont">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
