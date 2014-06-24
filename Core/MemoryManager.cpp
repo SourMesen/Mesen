@@ -165,6 +165,27 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 				}
 				break;
 
+			case MirroringType::ScreenAOnly:
+			case MirroringType::ScreenBOnly:
+				if(addr >= 0x2000 && addr < 0x2400) {
+					_videoRAM[addr + 0x400] = value;
+					_videoRAM[addr + 0x800] = value;
+					_videoRAM[addr + 0xC00] = value;
+				} else if(addr >= 0x2400 && addr < 0x2800) {
+					_videoRAM[addr - 0x400] = value;
+					_videoRAM[addr + 0x400] = value;
+					_videoRAM[addr + 0x800] = value;
+				} else if(addr >= 0x2800 && addr < 0x2C00) {
+					_videoRAM[addr + 0x400] = value;
+					_videoRAM[addr - 0x400] = value;
+					_videoRAM[addr - 0x800] = value;
+				} else if(addr >= 0x2C00 && addr < 0x3000) {
+					_videoRAM[addr - 0x400] = value;
+					_videoRAM[addr - 0x800] = value;
+					_videoRAM[addr - 0xC00] = value;
+				}
+				break;
+
 			default:
 				throw exception("Not implemented yet");
 		}
