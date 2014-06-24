@@ -14,6 +14,9 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	memset(_videoRAM, 0, VRAMSize);
 	memset(_expansionRAM, 0, 0x2000);
 
+	//Load battery data if present
+	_mapper->LoadBattery(_SRAM);
+
 	for(int i = 0; i <= 0xFFFF; i++) {
 		_ramHandlers.push_back(nullptr);
 	}
@@ -103,7 +106,10 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 	} else if(addr <= 0x5FFF) {
 		_expansionRAM[addr & 0x1FFF] = value;
 	} else if(addr <= 0x7FFF) {
-		_SRAM[addr & 0x1FFF] = value;
+		if(_SRAM[addr & 0x1FFF] != value) {
+			_SRAM[addr & 0x1FFF] = value;
+			_mapper->SaveBattery(_SRAM);
+		}
 	} else {
 		WriteRegister(addr, value);
 	}

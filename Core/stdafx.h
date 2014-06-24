@@ -12,6 +12,7 @@
 #include <iomanip>
 #include <fstream>
 #include <string>
+#include <cctype>
 #include <memory>
 #include <thread>
 #include <vector>

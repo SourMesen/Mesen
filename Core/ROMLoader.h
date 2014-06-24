@@ -27,6 +27,16 @@ struct NESHeader
 		return (Flags2 & 0xF0) | (Flags1 >> 4);
 	}
 
+	bool HasBattery()
+	{
+		return (Flags1 & 0x02) == 0x02;
+	}
+
+	bool HasTrainer()
+	{
+		return (Flags1 & 0x04) == 0x04;
+	}
+
 	MirroringType GetMirroringType()
 	{
 		if(Flags1 & 0x08) {
@@ -41,12 +51,15 @@ class ROMLoader
 {
 	private:
 		NESHeader _header;
+		wstring _filename;
 		uint8_t* _prgRAM;
 		uint8_t* _chrRAM;
 
 	public:
 		ROMLoader(wstring filename)
 		{
+			_filename = filename;
+
 			ifstream romFile(filename, ios::in | ios::binary);
 
 			if(!romFile) {
@@ -98,6 +111,16 @@ class ROMLoader
 		uint8_t GetMapperID()
 		{
 			return _header.GetMapperID();
+		}
+
+		uint8_t HasBattery()
+		{
+			return _header.HasBattery();
+		}
+
+		wstring GetFilename()
+		{
+			return _filename;
 		}
 };
 

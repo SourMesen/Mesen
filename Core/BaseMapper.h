@@ -12,6 +12,9 @@ class BaseMapper : public IMemoryHandler
 		uint32_t _prgSize;
 		uint32_t _chrSize;
 		
+		bool _hasBattery;
+		wstring _romFilename;
+
 		MirroringType _mirroringType;
 
 		vector<uint8_t*> _prgPages;
@@ -22,6 +25,7 @@ class BaseMapper : public IMemoryHandler
 	public:
 		const static int PRGSize = 0x8000;
 		const static int CHRSize = 0x2000;
+		const static int PRGRAMSize = 0x2000;
 
 	protected:
 		virtual uint32_t GetPRGPageSize() = 0;
@@ -88,6 +92,20 @@ class BaseMapper : public IMemoryHandler
 			return (addr >> (13 - chrShift)) & (GetCHRSlotCount() - 1);
 		}
 
+		wstring GetBatteryFilename()
+		{
+			wstring filename = _romFilename;
+			std::transform(filename.begin(), filename.end(), filename.begin(), std::tolower);
+			if(filename.compare(filename.length() - 4, 4, L".nes") == 0) {
+				//filename ends in .nes, remove it
+				filename = _romFilename.substr(0, _romFilename.length() - 4);
+			} else {
+				filename = _romFilename;
+			}
+			filename += L".sav";
+			return filename;
+		}
+
 	public:
 		void Initialize(ROMLoader &romLoader)
 		{
@@ -96,6 +114,8 @@ class BaseMapper : public IMemoryHandler
 			_chrRAM = romLoader.GetCHRRam();
 			_prgSize = romLoader.GetPRGSize();
 			_chrSize = romLoader.GetCHRSize();
+			_hasBattery = romLoader.HasBattery();
+			_romFilename = romLoader.GetFilename();
 
 			if(_chrSize == 0) {
 				_chrRAM = new uint8_t[BaseMapper::CHRSize];
@@ -129,9 +149,36 @@ class BaseMapper : public IMemoryHandler
 			return { { { 0x0000, 0x1FFF } } };
 		}
 
-		virtual MirroringType GetMirroringType()
+		bool HasBattery()
+		{
+			return _hasBattery;
+		}
+
+		MirroringType GetMirroringType()
 		{
 			return _mirroringType;
+		}
+
+		void LoadBattery(uint8_t *sramBuffer)
+		{
+			ifstream batteryFile(GetBatteryFilename(), ios::in | ios::binary);
+
+			if(batteryFile) {
+				batteryFile.read((char*)sramBuffer, BaseMapper::PRGRAMSize);
+
+				batteryFile.close();
+			}
+		}
+
+		void SaveBattery(uint8_t *sramBuffer)
+		{
+			ofstream batteryFile(GetBatteryFilename(), ios::out | ios::binary);
+
+			if(batteryFile) {
+				batteryFile.write((char*)sramBuffer, BaseMapper::PRGRAMSize);
+
+				batteryFile.close();
+			}
 		}
 		
 		uint8_t ReadRAM(uint16_t addr)
