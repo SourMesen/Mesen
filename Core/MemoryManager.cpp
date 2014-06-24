@@ -140,28 +140,33 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 
 		_videoRAM[addr] = value;
 
-		if(_mapper->GetMirroringType() == MirroringType::Vertical) {
-			if(addr >= 0x2000 && addr < 0x2400) {
-				_videoRAM[addr + 0x800] = value;
-			} else if(addr >= 0x2400 && addr < 0x2800) {
-				_videoRAM[addr + 0x800] = value;
-			} else if(addr >= 0x2800 && addr < 0x2C00) {
-				_videoRAM[addr - 0x800] = value;
-			} else if(addr >= 0x2C00 && addr < 0x3000) {
-				_videoRAM[addr - 0x800] = value;
-			}
-		} else if(_mapper->GetMirroringType() == MirroringType::Horizontal) {
-			if(addr >= 0x2000 && addr < 0x2400) {
-				_videoRAM[addr + 0x400] = value;
-			} else if(addr >= 0x2400 && addr < 0x2800) {
-				_videoRAM[addr - 0x400] = value;
-			} else if(addr >= 0x2800 && addr < 0x2C00) {
-				_videoRAM[addr + 0x400] = value;
-			} else if(addr >= 0x2C00 && addr < 0x3000) {
-				_videoRAM[addr - 0x400] = value;
-			}
-		} else {
-			throw exception("Not implemented yet");
+		switch(_mapper->GetMirroringType()) {
+			case MirroringType::Vertical:
+				if(addr >= 0x2000 && addr < 0x2400) {
+					_videoRAM[addr + 0x800] = value;
+				} else if(addr >= 0x2400 && addr < 0x2800) {
+					_videoRAM[addr + 0x800] = value;
+				} else if(addr >= 0x2800 && addr < 0x2C00) {
+					_videoRAM[addr - 0x800] = value;
+				} else if(addr >= 0x2C00 && addr < 0x3000) {
+					_videoRAM[addr - 0x800] = value;
+				}
+				break;
+
+			case MirroringType::Horizontal:
+				if(addr >= 0x2000 && addr < 0x2400) {
+					_videoRAM[addr + 0x400] = value;
+				} else if(addr >= 0x2400 && addr < 0x2800) {
+					_videoRAM[addr - 0x400] = value;
+				} else if(addr >= 0x2800 && addr < 0x2C00) {
+					_videoRAM[addr + 0x400] = value;
+				} else if(addr >= 0x2C00 && addr < 0x3000) {
+					_videoRAM[addr - 0x400] = value;
+				}
+				break;
+
+			default:
+				throw exception("Not implemented yet");
 		}
 	}
 }

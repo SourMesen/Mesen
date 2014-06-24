@@ -15,16 +15,84 @@ class BaseMapper : public IMemoryHandler
 		uint32_t _prgSize;
 		uint32_t _chrSize;
 
+		vector<uint8_t*> _prgPages;
+		vector<uint8_t*> _chrPages;
+
 		virtual void InitMapper() = 0;
 
 	public:
 		const static int PRGSize = 0x8000;
 		const static int CHRSize = 0x2000;
 
-	public:
-		void Initialize(MirroringType mirroringType, ROMLoader &romLoader)
+	protected:
+		virtual uint32_t GetPRGPageSize() = 0;
+		virtual uint32_t GetCHRPageSize() = 0;
+
+		void SelectPRGPage(uint32_t slot, uint32_t page)
 		{
-			_mirroringType = mirroringType;
+			//std::cout << std::dec << "PRG Slot " << (short)slot << ": " << (short)page << std::endl;
+			_prgPages[slot] = &_prgRAM[(page & (GetPRGPageCount() - 1))  * GetPRGPageSize()];
+		}
+
+		void SelectCHRPage(uint32_t slot, uint32_t page)
+		{
+			//std::cout << std::dec << "CHR Slot " << (short)slot << ": " << (short)page << std::endl;
+			_chrPages[slot] = &_chrRAM[(page & (GetCHRPageCount() - 1)) * GetCHRPageSize()];
+		}
+
+		uint32_t GetPRGSlotCount()
+		{
+			return BaseMapper::PRGSize / GetPRGPageSize();
+		}
+
+		uint32_t GetCHRSlotCount()
+		{
+			return BaseMapper::CHRSize / GetCHRPageSize();
+		}
+
+		uint32_t GetPRGPageCount()
+		{
+			return _prgSize / GetPRGPageSize();
+		}
+
+		uint32_t GetCHRPageCount()
+		{
+			return _chrSize / GetCHRPageSize();
+		}
+
+		uint32_t log2(uint32_t value)
+		{
+			uint32_t counter = 0;
+			while(value >>= 1) {
+				counter++;
+			}
+			return counter;
+		}
+
+		uint32_t AddrToPRGPage(uint16_t addr)
+		{
+			static uint32_t prgShift = -1;
+			if(prgShift == -1) {
+				prgShift = this->log2(GetPRGSlotCount());
+			}
+
+			return (addr >> (15 - prgShift)) & (GetPRGSlotCount() - 1);
+		}
+
+		uint32_t AddrToCHRPage(uint16_t addr)
+		{
+			static uint32_t chrShift = -1;
+			if(chrShift == -1) {
+				chrShift = this->log2(GetCHRSlotCount());
+			}
+
+			return (addr >> (13 - chrShift)) & (GetCHRSlotCount() - 1);
+		}
+
+	public:
+		void Initialize(ROMLoader &romLoader)
+		{
+			_mirroringType = romLoader.GetMirroringType();
 			_prgRAM = romLoader.GetPRGRam();
 			_chrRAM = romLoader.GetCHRRam();
 			_prgSize = romLoader.GetPRGSize();
@@ -33,6 +101,14 @@ class BaseMapper : public IMemoryHandler
 			if(_chrSize == 0) {
 				_chrRAM = new uint8_t[BaseMapper::CHRSize];
 				_chrSize = BaseMapper::CHRSize;
+			}
+
+			for(int i = GetPRGSlotCount(); i > 0; i--) {
+				_prgPages.push_back(nullptr);
+			}
+
+			for(int i = GetCHRSlotCount(); i > 0; i--) {
+				_chrPages.push_back(nullptr);
 			}
 
 			InitMapper();
@@ -44,30 +120,6 @@ class BaseMapper : public IMemoryHandler
 			delete[] _chrRAM;
 		}
 
-		virtual MirroringType GetMirroringType()
-		{
-			return _mirroringType;
-		}
-};
-
-class DefaultMapper : public BaseMapper
-{
-	protected:
-		vector<uint8_t*> _mappedRomBanks;
-		vector<uint8_t*> _mappedVromBanks;
-
-		virtual void InitMapper()
-		{
-			if(_prgSize == 0x4000) {
-				_mappedRomBanks = { _prgRAM, _prgRAM };
-			} else {
-				_mappedRomBanks = { _prgRAM, &_prgRAM[0x4000] };
-			}
-
-			_mappedVromBanks.push_back(_chrRAM);
-		}
-
-	public:
 		vector<std::array<uint16_t, 2>> GetRAMAddresses()
 		{
 			return { { { 0x8000, 0xFFFF } } };
@@ -78,41 +130,70 @@ class DefaultMapper : public BaseMapper
 			return { { { 0x0000, 0x1FFF } } };
 		}
 
-		virtual uint8_t ReadRAM(uint16_t addr)
+		virtual MirroringType GetMirroringType()
 		{
-			return _mappedRomBanks[(addr >> 14) & 0x01][addr & 0x3FFF];
+			return _mirroringType;
+		}
+		
+		uint8_t ReadRAM(uint16_t addr)
+		{
+			return _prgPages[AddrToPRGPage(addr)][addr & (GetPRGPageSize() - 1)];
 		}
 
-		virtual void WriteRAM(uint16_t addr, uint8_t value)
+		void WriteRAM(uint16_t addr, uint8_t value)
 		{
-			_mappedRomBanks[(addr >> 14) & 0x01][addr & 0x3FFF] = value;
+			_prgPages[AddrToPRGPage(addr)][addr & (GetPRGPageSize() - 1)] = value;
 		}
-
+		
 		virtual uint8_t ReadVRAM(uint16_t addr)
 		{
-			return _mappedVromBanks[0][addr & 0x1FFF];
+			return _chrPages[AddrToCHRPage(addr)][addr & (GetCHRPageSize() - 1)];
 		}
 
 		virtual void WriteVRAM(uint16_t addr, uint8_t value)
 		{
-			_mappedVromBanks[0][addr & 0x1FFF] = value;
+			_chrPages[AddrToCHRPage(addr)][addr & (GetCHRPageSize() - 1)] = value;
 		}
 };
 
-class Mapper2 : public DefaultMapper
+class DefaultMapper : public BaseMapper
 {
-	private:
+	protected:
+		virtual uint32_t GetPRGPageSize() { return 0x4000; }
+		virtual uint32_t GetCHRPageSize() {	return 0x2000; }
+
+		virtual void InitMapper()
+		{
+			if(_prgSize == 0x4000) {
+				SelectPRGPage(0, 0);
+				SelectPRGPage(1, 0);
+			} else {
+				SelectPRGPage(0, 0);
+				SelectPRGPage(1, 1);
+			}
+
+			SelectCHRPage(0, 0);
+		}
+};
+
+class Mapper2 : public BaseMapper
+{
+	protected:
+		virtual uint32_t GetPRGPageSize() { return 0x4000; }
+		virtual uint32_t GetCHRPageSize() {	return 0x2000; }
+
 		void InitMapper() 
 		{
-			DefaultMapper::InitMapper();
+			//First and last PRG page
+			SelectPRGPage(0, 0);
+			SelectPRGPage(1, 0xFF);
 
-			uint8_t numberOfBanks = _prgSize / 0x4000;
-			_mappedRomBanks[1] = &_prgRAM[(numberOfBanks - 1) * 0x4000];
+			SelectCHRPage(0, 0);
 		}
 
 	public:		
 		void WriteRAM(uint16_t addr, uint8_t value)
 		{
-			_mappedRomBanks[0] = &_prgRAM[value * 0x4000];
+			SelectPRGPage(0, value);
 		}
 };

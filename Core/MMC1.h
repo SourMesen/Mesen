@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 
-class MMC1 : public DefaultMapper
+class MMC1 : public BaseMapper
 {
 	private:
 		enum class MMC1Registers
@@ -107,54 +107,34 @@ class MMC1 : public DefaultMapper
 			_chrReg2 = _state.RegC000 & 0x1F;
 			_prgReg = _state.RegE000 & 0x0F;
 
-			uint8_t page1;
-			uint8_t page2;
-
 			if(_prgMode == PrgMode::_32k) {
-				page1 = (_prgReg >> 1);
-				page2 = page1 + 1;
+				SelectPRGPage(0, (_prgReg >> 1));
+				SelectPRGPage(1, (_prgReg >> 1) + 1);
 			} else if(_prgMode == PrgMode::_16k) {
 				if(_slotSelect == SlotSelect::x8000) {
-					page1 = _prgReg;
-					page2 = 0x0F; //$C000 fixed to page $0F (mode B)
+					SelectPRGPage(0, _prgReg);
+					SelectPRGPage(1, 0x0F);
 				} else if(_slotSelect == SlotSelect::xC000) {
-					page1 = 0;
-					page2 = _prgReg;
+					SelectPRGPage(0, 0);
+					SelectPRGPage(1, _prgReg);
 				}
 			}
 
-			uint8_t numberOfPRGPages = _prgSize / 0x4000;
-			page1 &= (numberOfPRGPages - 1);
-			page2 &= (numberOfPRGPages - 1);
-			_mappedRomBanks[0] = &_prgRAM[page1 * 0x4000];
-			_mappedRomBanks[1] = &_prgRAM[page2 * 0x4000];
-			//std::cout << std::dec << "PRG Bank: " << (short)page1 << " & " << (short)page2 << std::endl;
-
-
 			if(_chrMode == ChrMode::_8k) {
-				page1 = (_chrReg1 >> 1);
-				page2 = page1 + 1;
+				SelectCHRPage(0, (_chrReg1 >> 1));
+				SelectCHRPage(1, (_chrReg1 >> 1) + 1);
 			} else if(_chrMode == ChrMode::_4k) {
-				page1 = _chrReg1;
-				page2 = _chrReg2;
+				SelectCHRPage(0, _chrReg1);
+				SelectCHRPage(1, _chrReg2);
 			}
-
-			uint8_t numberOfCHRPages = _chrSize / 0x1000;
-			page1 &= (numberOfCHRPages - 1);
-			page2 &= (numberOfCHRPages - 1);
-			_mappedVromBanks[0] = &_chrRAM[page1 * 0x1000];
-			_mappedVromBanks[1] = &_chrRAM[page2 * 0x1000];
-			//std::cout << std::dec << "CHR Bank: " << (short)page1 << " & " << (short)page2 << std::endl;
 		}
 
 	protected:
+		virtual uint32_t GetPRGPageSize() { return 0x4000; }
+		virtual uint32_t GetCHRPageSize() {	return 0x1000; }
+
 		void InitMapper()
 		{
-			_mappedRomBanks.push_back(nullptr);
-			_mappedRomBanks.push_back(nullptr);
-			_mappedVromBanks.push_back(nullptr);
-			_mappedVromBanks.push_back(nullptr);
-
 			_state.Reg8000 = 0x0C; //On powerup: bits 2,3 of $8000 are set 
 			_state.RegA000 = 0x00;
 			_state.RegC000 = 0x00;
@@ -179,21 +159,6 @@ class MMC1 : public DefaultMapper
 				//Reset buffer after writing 5 bits
 				ResetBuffer();
 			}
-		}
-
-		uint8_t ReadRAM(uint16_t addr)
-		{
-			return _mappedRomBanks[(addr >> 14) & 0x01][addr & 0x3FFF];
-		}
-
-		uint8_t ReadVRAM(uint16_t addr)
-		{
-			return _mappedVromBanks[(addr >> 12) & 0x01][addr & 0x0FFF];
-		}
-
-		void WriteVRAM(uint16_t addr, uint8_t value)
-		{
-			_mappedVromBanks[(addr >> 12) & 0x01][addr & 0x0FFF] = value;
 		}
 		
 		MirroringType GetMirroringType()

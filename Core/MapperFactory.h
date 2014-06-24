@@ -10,9 +10,8 @@ class MapperFactory
 		{
 			ROMLoader loader(filename);
 
-			NESHeader header = loader.GetHeader();
+			uint8_t mapperID = loader.GetMapperID();
 			
-			uint8_t mapperID = header.GetMapperID();
 			BaseMapper* mapper = nullptr;
 			switch(mapperID) {
 				case 0: mapper = new DefaultMapper(); break;
@@ -24,7 +23,7 @@ class MapperFactory
 				throw std::exception("Unsupported mapper");
 			}
 
-			mapper->Initialize(header.GetMirroringType(), loader);
+			mapper->Initialize(loader);
 			return shared_ptr<BaseMapper>(mapper);
 		}
 };

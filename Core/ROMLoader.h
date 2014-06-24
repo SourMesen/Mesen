@@ -92,9 +92,14 @@ class ROMLoader
 			return _header.VROMCount * 0x2000;
 		}
 
-		NESHeader GetHeader()
+		MirroringType GetMirroringType()
 		{
-			return _header;
+			return _header.GetMirroringType();
+		}
+
+		uint8_t GetMapperID()
+		{
+			return _header.GetMapperID();
 		}
 };
 
