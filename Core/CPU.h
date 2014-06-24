@@ -40,7 +40,6 @@ private:
 	uint8_t _cycles[256];
 	uint8_t _cyclesPageCrossed[256];
 	bool _pageCrossed = false;
-	uint16_t _currentPC = 0;
 
 	State _state;
 	MemoryManager *_memoryManager = nullptr;
