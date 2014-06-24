@@ -6,14 +6,13 @@
 
 class BaseMapper : public IMemoryHandler
 {
-	private:
-		MirroringType _mirroringType;
-
 	protected:
 		uint8_t* _prgRAM;
 		uint8_t* _chrRAM;
 		uint32_t _prgSize;
 		uint32_t _chrSize;
+		
+		MirroringType _mirroringType;
 
 		vector<uint8_t*> _prgPages;
 		vector<uint8_t*> _chrPages;

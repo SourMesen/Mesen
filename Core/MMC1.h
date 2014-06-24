@@ -33,7 +33,6 @@ class MMC1 : public BaseMapper
 		uint8_t _writeBuffer = 0;
 		uint8_t _shiftCount = 0;
 
-		MirroringType _mirroringType;
 		bool _wramDisable;
 		ChrMode _chrMode;
 		PrgMode _prgMode;
@@ -159,10 +158,5 @@ class MMC1 : public BaseMapper
 				//Reset buffer after writing 5 bits
 				ResetBuffer();
 			}
-		}
-		
-		MirroringType GetMirroringType()
-		{
-			return _mirroringType;
 		}
 };
