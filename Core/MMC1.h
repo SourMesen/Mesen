@@ -39,8 +39,8 @@ class MMC1 : public BaseMapper
 		PrgMode _prgMode;
 		SlotSelect _slotSelect;
 
+		uint8_t _chrReg0;
 		uint8_t _chrReg1;
-		uint8_t _chrReg2;
 		uint8_t _prgReg;
 
 		struct {
@@ -103,13 +103,13 @@ class MMC1 : public BaseMapper
 			_prgMode = ((_state.Reg8000 & 0x08) == 0x08) ? PrgMode::_16k : PrgMode::_32k;
 			_chrMode = ((_state.Reg8000 & 0x10) == 0x10) ? ChrMode::_4k : ChrMode::_8k;
 
-			_chrReg1 = _state.RegA000 & 0x1F;
-			_chrReg2 = _state.RegC000 & 0x1F;
+			_chrReg0 = _state.RegA000 & 0x1F;
+			_chrReg1 = _state.RegC000 & 0x1F;
 			_prgReg = _state.RegE000 & 0x0F;
 
 			if(_prgMode == PrgMode::_32k) {
-				SelectPRGPage(0, (_prgReg >> 1));
-				SelectPRGPage(1, (_prgReg >> 1) + 1);
+				SelectPRGPage(0, _prgReg);
+				SelectPRGPage(1, _prgReg + 1);
 			} else if(_prgMode == PrgMode::_16k) {
 				if(_slotSelect == SlotSelect::x8000) {
 					SelectPRGPage(0, _prgReg);
@@ -121,11 +121,11 @@ class MMC1 : public BaseMapper
 			}
 
 			if(_chrMode == ChrMode::_8k) {
-				SelectCHRPage(0, (_chrReg1 >> 1));
-				SelectCHRPage(1, (_chrReg1 >> 1) + 1);
+				SelectCHRPage(0, _chrReg0);
+				SelectCHRPage(1, _chrReg0 + 1);
 			} else if(_chrMode == ChrMode::_4k) {
-				SelectCHRPage(0, _chrReg1);
-				SelectCHRPage(1, _chrReg2);
+				SelectCHRPage(0, _chrReg0);
+				SelectCHRPage(1, _chrReg1);
 			}
 		}
 

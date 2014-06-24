@@ -69,7 +69,7 @@ class BaseMapper : public IMemoryHandler
 			return counter;
 		}
 
-		uint32_t AddrToPRGPage(uint16_t addr)
+		uint32_t AddrToPRGSlot(uint16_t addr)
 		{
 			static uint32_t prgShift = -1;
 			if(prgShift == -1) {
@@ -79,7 +79,7 @@ class BaseMapper : public IMemoryHandler
 			return (addr >> (15 - prgShift)) & (GetPRGSlotCount() - 1);
 		}
 
-		uint32_t AddrToCHRPage(uint16_t addr)
+		uint32_t AddrToCHRSlot(uint16_t addr)
 		{
 			static uint32_t chrShift = -1;
 			if(chrShift == -1) {
@@ -137,22 +137,22 @@ class BaseMapper : public IMemoryHandler
 		
 		uint8_t ReadRAM(uint16_t addr)
 		{
-			return _prgPages[AddrToPRGPage(addr)][addr & (GetPRGPageSize() - 1)];
+			return _prgPages[AddrToPRGSlot(addr)][addr & (GetPRGPageSize() - 1)];
 		}
 
 		void WriteRAM(uint16_t addr, uint8_t value)
 		{
-			_prgPages[AddrToPRGPage(addr)][addr & (GetPRGPageSize() - 1)] = value;
+			_prgPages[AddrToPRGSlot(addr)][addr & (GetPRGPageSize() - 1)] = value;
 		}
 		
 		virtual uint8_t ReadVRAM(uint16_t addr)
 		{
-			return _chrPages[AddrToCHRPage(addr)][addr & (GetCHRPageSize() - 1)];
+			return _chrPages[AddrToCHRSlot(addr)][addr & (GetCHRPageSize() - 1)];
 		}
 
 		virtual void WriteVRAM(uint16_t addr, uint8_t value)
 		{
-			_chrPages[AddrToCHRPage(addr)][addr & (GetCHRPageSize() - 1)] = value;
+			_chrPages[AddrToCHRSlot(addr)][addr & (GetCHRPageSize() - 1)] = value;
 		}
 };
 
