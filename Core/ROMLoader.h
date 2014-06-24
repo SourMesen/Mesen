@@ -42,9 +42,7 @@ class ROMLoader
 	private:
 		NESHeader _header;
 		uint8_t* _prgRAM;
-		uint32_t _prgSize;
 		uint8_t* _chrRAM;
-		uint32_t _chrSize;
 
 	public:
 		ROMLoader(wstring filename)
