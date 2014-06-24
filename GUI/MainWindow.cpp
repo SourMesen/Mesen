@@ -307,13 +307,13 @@ namespace NES {
 		int passCount = 0;
 		int failCount = 0;
 		int totalCount = 0;
-		for(wstring testROM : GetFilesInFolder(L"TestSuite/*.nes")) {
-			ifstream testResult(L"TestSuite/" + testROM + L".trt", ios::in | ios::binary);
+		for(wstring testROM : GetFilesInFolder(L"../TestSuite/*.nes")) {
+			ifstream testResult(L"../TestSuite/" + testROM + L".trt", ios::in | ios::binary);
 
 			if(testResult) {
 				uint8_t* expectedResult = new uint8_t[256 * 240 * 4];
 
-				Console *console = new Console(L"TestSuite/" + testROM);
+				Console *console = new Console(L"../TestSuite/" + testROM);
 				std::wcout << testROM << ": ";
 				if(console->RunTest(expectedResult)) {
 					std::cout << "Passed";
