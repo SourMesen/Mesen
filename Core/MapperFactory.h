@@ -1,6 +1,8 @@
 #include "stdafx.h"
-#include "BaseMapper.h"
+#include "NROM.h"
 #include "MMC1.h"
+#include "UNROM.h"
+#include "CNROM.h"
 #include "ROMLoader.h"
 
 class MapperFactory
@@ -14,9 +16,11 @@ class MapperFactory
 			
 			BaseMapper* mapper = nullptr;
 			switch(mapperID) {
-				case 0: mapper = new DefaultMapper(); break;
+				case 0: mapper = new NROM(); break;
 				case 1: mapper = new MMC1(); break;
-				case 2: mapper = new Mapper2(); break;
+				case 2: mapper = new UNROM(); break;
+				case 3: mapper = new CNROM(); break;
+				//case 4: mapper = new MMC3(); break;
 			}			
 
 			if(!mapper) {

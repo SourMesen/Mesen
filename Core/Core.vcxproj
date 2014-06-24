@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="APU.h" />
     <ClInclude Include="BaseMapper.h" />
+    <ClInclude Include="CNROM.h" />
     <ClInclude Include="ControlManager.h" />
     <ClInclude Include="IAudioDevice.h" />
     <ClInclude Include="IControlDevice.h" />
@@ -108,12 +109,14 @@
     <ClInclude Include="Nes_Apu\Nes_Oscs.h" />
     <ClInclude Include="Nes_Apu\Nes_Vrc6.h" />
     <ClInclude Include="Nes_Apu\Nonlinear_Buffer.h" />
+    <ClInclude Include="NROM.h" />
     <ClInclude Include="PPU.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="ROMLoader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UNROM.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APU.cpp" />
