@@ -278,7 +278,10 @@ namespace NES
 		dd.DepthPitch = screenwidth* screenheight * 4;
 
 		_pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		std::fill_n((uint32_t*)dd.pData, screenwidth*screenheight, 0x99222222);
+		for(uint32_t i = 0, len = screenwidth*screenheight; i < len; i++) {
+			//Gray transparent overlay
+			((uint32_t*)dd.pData)[i] = 0x99222222;
+		}
 		_pDeviceContext->Unmap(_overlayTexture, 0);
 		
 		ID3D11ShaderResourceView *shaderResourceView = GetShaderResourceView(_overlayTexture);
