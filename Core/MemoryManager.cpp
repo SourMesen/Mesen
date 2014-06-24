@@ -1,11 +1,9 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
-#include "ROMLoader.h"
 
-MemoryManager::MemoryManager(NESHeader header)
+MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 {
-	_header = header;
-	_mirroringType = _header.GetMirroringType();
+	_mapper = mapper;
 
 	_internalRAM = new uint8_t[InternalRAMSize];
 	_SRAM = new uint8_t[SRAMSize];
@@ -142,7 +140,7 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 
 		_videoRAM[addr] = value;
 
-		if(_mirroringType == MirroringType::Vertical) {
+		if(_mapper->GetMirroringType() == MirroringType::Vertical) {
 			if(addr >= 0x2000 && addr < 0x2400) {
 				_videoRAM[addr + 0x800] = value;
 			} else if(addr >= 0x2400 && addr < 0x2800) {
@@ -152,7 +150,7 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 			} else if(addr >= 0x2C00 && addr < 0x3000) {
 				_videoRAM[addr - 0x800] = value;
 			}
-		} else if(_mirroringType == MirroringType::Horizontal) {
+		} else if(_mapper->GetMirroringType() == MirroringType::Horizontal) {
 			if(addr >= 0x2000 && addr < 0x2400) {
 				_videoRAM[addr + 0x400] = value;
 			} else if(addr >= 0x2400 && addr < 0x2800) {

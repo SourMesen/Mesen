@@ -1,53 +1,70 @@
 #pragma once
 
 #include "stdafx.h"
-#include "ROMLoader.h"
 #include "IMemoryHandler.h"
+#include "ROMLoader.h"
 
 class BaseMapper : public IMemoryHandler
 {
+	private:
+		MirroringType _mirroringType;
+
 	protected:
-		NESHeader _header;
-		vector<MemoryBank> _romBanks;
-		vector<MemoryBank> _vromBanks;
+		uint8_t* _prgRAM;
+		uint8_t* _chrRAM;
+		uint32_t _prgSize;
+		uint32_t _chrSize;
 
 		virtual void InitMapper() = 0;
 
 	public:
-		void Initialize(NESHeader header, vector<MemoryBank> romBanks, vector<MemoryBank> vromBanks)
+		const static int PRGSize = 0x8000;
+		const static int CHRSize = 0x2000;
+
+	public:
+		void Initialize(MirroringType mirroringType, ROMLoader &romLoader)
 		{
-			_header = header;
-			_romBanks = romBanks;
-			_vromBanks = vromBanks;
+			_mirroringType = mirroringType;
+			_prgRAM = romLoader.GetPRGRam();
+			_chrRAM = romLoader.GetCHRRam();
+			_prgSize = romLoader.GetPRGSize();
+			_chrSize = romLoader.GetCHRSize();
+
+			if(_chrSize == 0) {
+				_chrRAM = new uint8_t[BaseMapper::CHRSize];
+				_chrSize = BaseMapper::CHRSize;
+			}
 
 			InitMapper();
 		}
 
-		const NESHeader GetHeader()
+		~BaseMapper()
 		{
-			return _header;
+			delete[] _prgRAM;
+			delete[] _chrRAM;
+		}
+
+		virtual MirroringType GetMirroringType()
+		{
+			return _mirroringType;
 		}
 };
 
 class DefaultMapper : public BaseMapper
 {
 	protected:
-		vector<MemoryBank*> _mappedRomBanks;
-		MemoryBank *_mappedVromBank;
+		vector<uint8_t*> _mappedRomBanks;
+		vector<uint8_t*> _mappedVromBanks;
 
-		void InitMapper()
+		virtual void InitMapper()
 		{
-			if(_romBanks.size() == 1) {
-				_mappedRomBanks = { &_romBanks[0], &_romBanks[0] };
+			if(_prgSize == 0x4000) {
+				_mappedRomBanks = { _prgRAM, _prgRAM };
 			} else {
-				_mappedRomBanks = { &_romBanks[0], &_romBanks[1] };
+				_mappedRomBanks = { _prgRAM, &_prgRAM[0x4000] };
 			}
 
-			if(_vromBanks.size() == 0) {
-				uint8_t *buffer = new uint8_t[ROMLoader::VROMBankSize];
-				_vromBanks.push_back(MemoryBank(buffer, buffer + ROMLoader::VROMBankSize));
-			}
-			_mappedVromBank = &_vromBanks[0];
+			_mappedVromBanks.push_back(_chrRAM);
 		}
 
 	public:
@@ -61,24 +78,24 @@ class DefaultMapper : public BaseMapper
 			return { { { 0x0000, 0x1FFF } } };
 		}
 
-		uint8_t ReadRAM(uint16_t addr)
+		virtual uint8_t ReadRAM(uint16_t addr)
 		{
-			return (*_mappedRomBanks[(addr >> 14) & 0x01])[addr & 0x3FFF];
+			return _mappedRomBanks[(addr >> 14) & 0x01][addr & 0x3FFF];
 		}
 
-		void WriteRAM(uint16_t addr, uint8_t value)
+		virtual void WriteRAM(uint16_t addr, uint8_t value)
 		{
-			(*_mappedRomBanks[(addr >> 14) & 0x01])[addr & 0x3FFF] = value;
+			_mappedRomBanks[(addr >> 14) & 0x01][addr & 0x3FFF] = value;
 		}
 
-		uint8_t ReadVRAM(uint16_t addr)
+		virtual uint8_t ReadVRAM(uint16_t addr)
 		{
-			return (*_mappedVromBank)[addr & 0x1FFF];
+			return _mappedVromBanks[0][addr & 0x1FFF];
 		}
 
-		void WriteVRAM(uint16_t addr, uint8_t value)
+		virtual void WriteVRAM(uint16_t addr, uint8_t value)
 		{
-			(*_mappedVromBank)[addr & 0x1FFF] = value;
+			_mappedVromBanks[0][addr & 0x1FFF] = value;
 		}
 };
 
@@ -89,38 +106,13 @@ class Mapper2 : public DefaultMapper
 		{
 			DefaultMapper::InitMapper();
 
-			_mappedRomBanks[1] = &_romBanks[_romBanks.size() - 1];
+			uint8_t numberOfBanks = _prgSize / 0x4000;
+			_mappedRomBanks[1] = &_prgRAM[(numberOfBanks - 1) * 0x4000];
 		}
 
 	public:		
 		void WriteRAM(uint16_t addr, uint8_t value)
 		{
-			_mappedRomBanks[0] = &_romBanks[value];
-			//(*_mappedRomBanks[(addr >> 14) & 0x01])[addr & 0x3FFF] = value;
-		}
-};
-
-class MapperFactory
-{
-	public:
-		static unique_ptr<BaseMapper> InitializeFromFile(wstring filename)
-		{
-			ROMLoader loader(filename);
-
-			NESHeader header = loader.GetHeader();
-			
-			uint8_t mapperID = header.GetMapperID();
-			BaseMapper* mapper = nullptr;
-			switch(mapperID) {
-				case 0: mapper = new DefaultMapper(); break;
-				case 2: mapper = new Mapper2(); break;
-			}			
-
-			if(!mapper) {
-				throw std::exception("Unsupported mapper");
-			}
-
-			mapper->Initialize(header, loader.GetROMBanks(), loader.GetVROMBanks());
-			return unique_ptr<BaseMapper>(mapper);
+			_mappedRomBanks[0] = &_prgRAM[value * 0x4000];
 		}
 };

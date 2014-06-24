@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "IMemoryHandler.h"
 #include "ROMLoader.h"
+#include "BaseMapper.h"
 
 class MemoryManager
 {
@@ -11,8 +12,7 @@ class MemoryManager
 		const int SRAMSize = 0x2000;
 		const int VRAMSize = 0x4000;
 
-		NESHeader _header;
-		MirroringType _mirroringType;
+		shared_ptr<BaseMapper> _mapper;
 
 		uint8_t *_internalRAM;
 		uint8_t *_expansionRAM;
@@ -29,7 +29,7 @@ class MemoryManager
 		void WriteMappedVRAM(uint16_t addr, uint8_t value);
 
 	public:
-		MemoryManager(NESHeader header);
+		MemoryManager(shared_ptr<BaseMapper> mapper);
 		~MemoryManager();
 
 		void RegisterIODevice(IMemoryHandler *handler);

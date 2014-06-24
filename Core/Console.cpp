@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Console.h"
+#include "MapperFactory.h"
 #include "../Utilities/Timer.h"
 
 uint32_t Console::Flags = 0;
@@ -10,7 +11,7 @@ Console::Console(wstring filename)
 	_romFilename = filename;
 
 	_mapper = MapperFactory::InitializeFromFile(filename);
-	_memoryManager.reset(new MemoryManager(_mapper->GetHeader()));
+	_memoryManager.reset(new MemoryManager(_mapper));
 	_cpu.reset(new CPU(_memoryManager.get()));
 	_ppu.reset(new PPU(_memoryManager.get()));	
 	_apu.reset(new APU());
@@ -22,7 +23,7 @@ Console::Console(wstring filename)
 	_memoryManager->RegisterIODevice(_apu.get());
 	_memoryManager->RegisterIODevice(_controlManager.get());
 
-	Reset();
+	ResetComponents();
 }
 
 Console::~Console()
@@ -32,6 +33,13 @@ Console::~Console()
 void Console::Reset()
 {
 	_reset = true;
+}
+
+void Console::ResetComponents()
+{
+	_cpu->Reset();
+	_ppu->Reset();
+	_apu->Reset();
 }
 
 void Console::Stop()
@@ -100,9 +108,7 @@ void Console::Run()
 			fpsTimer.Reset();
 			lastFrameCount = 0;
 			elapsedTime = 0;
-			_cpu->Reset();
-			_ppu->Reset();
-			_apu->Reset();
+			ResetComponents();
 			_reset = false;
 		}
 	}

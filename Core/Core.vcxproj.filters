@@ -16,6 +16,12 @@
     <Filter Include="Header Files\Nes_Apu">
       <UniqueIdentifier>{c6dc2048-98f6-4551-89dc-830f12f1bb2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Interfaces">
+      <UniqueIdentifier>{ca661408-b52a-4378-aef4-80fda1d64cd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Mappers">
+      <UniqueIdentifier>{67b52e86-0ff2-4dbe-b9ed-7c92aace61d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -36,19 +42,7 @@
     <ClInclude Include="ROMLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseMapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IMemoryHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Console.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IVideoDevice.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IControlDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ControlManager.h">
@@ -91,7 +85,25 @@
       <Filter>Header Files\Nes_Apu</Filter>
     </ClInclude>
     <ClInclude Include="IAudioDevice.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IControlDevice.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IMemoryHandler.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IVideoDevice.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMapper.h">
+      <Filter>Header Files\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="MapperFactory.h">
+      <Filter>Header Files\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMC1.h">
+      <Filter>Header Files\Mappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

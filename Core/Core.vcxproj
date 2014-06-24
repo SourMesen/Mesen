@@ -95,6 +95,8 @@
     <ClInclude Include="IMemoryHandler.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="IVideoDevice.h" />
+    <ClInclude Include="MapperFactory.h" />
+    <ClInclude Include="MMC1.h" />
     <ClInclude Include="Nes_Apu\apu_snapshot.h" />
     <ClInclude Include="Nes_Apu\blargg_common.h" />
     <ClInclude Include="Nes_Apu\blargg_source.h" />

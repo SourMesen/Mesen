@@ -22,7 +22,7 @@ class Console
 		unique_ptr<CPU> _cpu;
 		unique_ptr<PPU> _ppu;
 		unique_ptr<APU> _apu;
-		unique_ptr<BaseMapper> _mapper;
+		shared_ptr<BaseMapper> _mapper;
 		unique_ptr<ControlManager> _controlManager;
 		unique_ptr<MemoryManager> _memoryManager;
 
@@ -30,6 +30,8 @@ class Console
 
 		bool _stop = false;
 		bool _reset = false;
+
+		void ResetComponents();
 
 	public:
 		Console(wstring filename);

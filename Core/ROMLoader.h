@@ -6,6 +6,8 @@ enum class MirroringType
 {
 	Horizontal,
 	Vertical,
+	ScreenAOnly,
+	ScreenBOnly,
 	FourScreens,
 };
 
@@ -35,23 +37,18 @@ struct NESHeader
 	}
 };
 
-typedef vector<uint8_t> MemoryBank;
 class ROMLoader
 {
 	private:
 		NESHeader _header;
-		vector<MemoryBank> _romBanks;
-		vector<MemoryBank> _vromBanks;
+		uint8_t* _prgRAM;
+		uint32_t _prgSize;
+		uint8_t* _chrRAM;
+		uint32_t _chrSize;
 
 	public:
-		const static int ROMBankSize = 0x4000;
-		const static int VROMBankSize = 0x2000;
-
 		ROMLoader(wstring filename)
 		{
-			_romBanks.clear();
-			_vromBanks.clear();
-
 			ifstream romFile(filename, ios::in | ios::binary);
 
 			if(!romFile) {
@@ -60,30 +57,39 @@ class ROMLoader
 
 			romFile.read((char*)&_header, sizeof(NESHeader));
 
-			uint8_t *buffer = new uint8_t[max(ROMBankSize, VROMBankSize)];
+			uint8_t* prgBuffer = new uint8_t[0x4000 * _header.ROMCount];
 			for(int i = 0; i < _header.ROMCount; i++) {
-				romFile.read((char*)buffer, ROMBankSize);
-				_romBanks.push_back(MemoryBank(buffer, buffer + ROMBankSize));
+				romFile.read((char*)prgBuffer+i*0x4000, 0x4000);
 			}
+			_prgRAM = prgBuffer;
 
+			uint8_t* chrBuffer = new uint8_t[0x2000 * _header.VROMCount];
 			for(int i = 0; i < _header.VROMCount; i++) {
-				romFile.read((char*)buffer, VROMBankSize);
-				_vromBanks.push_back(MemoryBank(buffer, buffer + VROMBankSize));
+				romFile.read((char*)chrBuffer+i*0x2000, 0x2000);
 			}
-			
-			delete[] buffer;
+			_chrRAM = chrBuffer;
 
 			romFile.close();
 		}
 
-		vector<MemoryBank> GetROMBanks()
+		uint8_t* GetPRGRam()
 		{
-			return _romBanks;
+			return _prgRAM;
 		}
 
-		vector<MemoryBank> GetVROMBanks()
+		uint8_t* GetCHRRam()
 		{
-			return _vromBanks;
+			return _chrRAM;
+		}
+
+		uint32_t GetPRGSize()
+		{
+			return _header.ROMCount * 0x4000;
+		}
+
+		uint32_t GetCHRSize()
+		{
+			return _header.VROMCount * 0x2000;
 		}
 
 		NESHeader GetHeader()
