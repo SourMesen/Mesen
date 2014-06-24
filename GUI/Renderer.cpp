@@ -23,13 +23,13 @@ namespace NES
 
 	void Renderer::CleanupDevice()
 	{
-		if(_pImmediateContext) _pImmediateContext->ClearState();
+		if(_pDeviceContext) _pDeviceContext->ClearState();
 
 		if(_pRenderTargetView) _pRenderTargetView->Release();
 		if(_samplerState) _samplerState->Release();
 
 		if(_pSwapChain) _pSwapChain->Release();
-		if(_pImmediateContext1) _pImmediateContext1->Release();
+		if(_pDeviceContext1) _pDeviceContext1->Release();
 		if(_pd3dDevice1) _pd3dDevice1->Release();
 		if(_pd3dDevice) _pd3dDevice->Release();
 	}
@@ -85,12 +85,12 @@ namespace NES
 		for(UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++) {
 			_driverType = driverTypes[driverTypeIndex];
 			hr = D3D11CreateDeviceAndSwapChain(nullptr, _driverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
-				D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &_featureLevel, &_pImmediateContext);
+				D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &_featureLevel, &_pDeviceContext);
 
 			if(hr == E_INVALIDARG) {
 				// DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1 so we need to retry without it
 				hr = D3D11CreateDeviceAndSwapChain(nullptr, _driverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1,
-					D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &_featureLevel, &_pImmediateContext);
+					D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &_featureLevel, &_pDeviceContext);
 			}
 
 			if(SUCCEEDED(hr)) {
@@ -104,7 +104,7 @@ namespace NES
 		// Obtain the Direct3D 11.1 versions if available
 		hr = _pd3dDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&_pd3dDevice1));
 		if(SUCCEEDED(hr)) {
-			(void)_pImmediateContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&_pImmediateContext1));
+			(void)_pDeviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&_pDeviceContext1));
 		}
 
 		// Create a render target view
@@ -120,7 +120,7 @@ namespace NES
 			return hr;
 		}
 
-		_pImmediateContext->OMSetRenderTargets(1, &_pRenderTargetView, nullptr);
+		_pDeviceContext->OMSetRenderTargets(1, &_pRenderTargetView, nullptr);
 
 		// Setup the viewport
 		UINT fred;
@@ -131,7 +131,7 @@ namespace NES
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
-		_pImmediateContext->RSSetViewports(1, &vp);
+		_pDeviceContext->RSSetViewports(1, &vp);
 
 		_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM, 16, &fred);
 
@@ -193,8 +193,7 @@ namespace NES
 		}
 
 		////////////////////////////////////////////////////////////////////////////
-		_sprites.reset(new SpriteBatch(_pImmediateContext));
-		_overlaySpriteBatch.reset(new SpriteBatch(_pImmediateContext));
+		_spriteBatch.reset(new SpriteBatch(_pDeviceContext));
 
 		_font.reset(new SpriteFont(_pd3dDevice, L"Calibri.30.spritefont"));
 
@@ -217,8 +216,34 @@ namespace NES
 		return S_OK;
 	}
 
-	ID3D11ShaderResourceView* Renderer::GetDisplayBufferShaderResourceView()
+	ID3D11ShaderResourceView* Renderer::GetShaderResourceView(ID3D11Texture2D* texture)
 	{
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		D3D11_TEXTURE2D_DESC desc;
+		D3D11_RESOURCE_DIMENSION type;
+		texture->GetType(&type);
+		texture->GetDesc(&desc);
+		srvDesc.Format = desc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = desc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = desc.MipLevels - 1;
+
+		ID3D11ShaderResourceView *shaderResourceView = nullptr;
+		_pd3dDevice->CreateShaderResourceView(texture, &srvDesc, &shaderResourceView);
+
+		return shaderResourceView;
+	}
+
+	void Renderer::DrawNESScreen()
+	{
+		RECT sourceRect;
+		sourceRect.left = 0;
+		sourceRect.right = 256;
+		sourceRect.bottom = 240;
+		sourceRect.top = 0;
+
+		XMVECTOR position{ { 0, 0 } };
+
 		UINT screenwidth = 256, screenheight = 240;
 
 		D3D11_MAPPED_SUBRESOURCE dd;
@@ -226,25 +251,43 @@ namespace NES
 		dd.RowPitch = screenwidth * 4;
 		dd.DepthPitch = screenwidth* screenheight * 4;
 
-		_pImmediateContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
+		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
 		memcpy(dd.pData, _nextFrameBuffer, screenwidth*screenheight * 4);
-		_pImmediateContext->Unmap(_pTexture, 0);
+		_pDeviceContext->Unmap(_pTexture, 0);
 		
-		///////////////////////////////////////////////////////////////////////////////
-		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-		D3D11_TEXTURE2D_DESC desc;
-		D3D11_RESOURCE_DIMENSION type;
-		_pTexture->GetType(&type);
-		_pTexture->GetDesc(&desc);
-		srvDesc.Format = desc.Format;
-		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = desc.MipLevels;
-		srvDesc.Texture2D.MostDetailedMip = desc.MipLevels - 1;
+		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
+		_spriteBatch->Draw(nesOutputBuffer, position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
+		nesOutputBuffer->Release();
+	}
 
-		ID3D11ShaderResourceView *pSRView = nullptr;
-		_pd3dDevice->CreateShaderResourceView(_pTexture, &srvDesc, &pSRView);
+	void Renderer::DrawPauseScreen()
+	{
+		RECT destRect;
+		destRect.left = 0;
+		destRect.right = 256*4;
+		destRect.bottom = 240*4;
+		destRect.top = 0;
 
-		return pSRView;
+		XMVECTOR position{ { 0, 0 } };
+
+		UINT screenwidth = 256*4, screenheight = 240*4;
+
+		D3D11_MAPPED_SUBRESOURCE dd;
+		dd.pData = (void *)_overlayBuffer;
+		dd.RowPitch = screenwidth * 4;
+		dd.DepthPitch = screenwidth* screenheight * 4;
+
+		_pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
+		std::fill_n((uint32_t*)dd.pData, screenwidth*screenheight, 0x99222222);
+		_pDeviceContext->Unmap(_overlayTexture, 0);
+		
+		ID3D11ShaderResourceView *shaderResourceView = GetShaderResourceView(_overlayTexture);
+		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
+		shaderResourceView->Release();
+
+		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2(256 * 2 - 142, 240 * 2 - 37), Colors::Black, 0.0f, XMFLOAT2(0, 0), 2.0f);
+		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2(256 * 2 - 145, 240 * 2 - 40), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 2.0f);
+
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -253,27 +296,24 @@ namespace NES
 	void Renderer::Render()
 	{
 		// Clear the back buffer 
-		_pImmediateContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
+		_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
 
-		ID3D11ShaderResourceView *shaderResourceView = GetDisplayBufferShaderResourceView();
+		_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
 
-		RECT sourceRect;
-		sourceRect.left = 0;
-		sourceRect.right = 256;
-		sourceRect.bottom = 240;
-		sourceRect.top = 0;
+		//Draw nes screen
+		DrawNESScreen();
 
-		XMVECTOR position{ { 0, 0 } };
-		
-		_overlaySpriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
-		_overlaySpriteBatch->Draw(shaderResourceView, position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
+		//Draw FPS counter
+		if(CheckFlag(UIFlags::ShowFPS)) {
+			_font->DrawString(_spriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256 * 4 - 150, 11), Colors::Yellow, 0.0f, XMFLOAT2(0, 0), 1.0f);
+		}
 
-		_font->DrawString(_overlaySpriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256*4-150,11), Colors::Yellow, 0.0f, XMFLOAT2(0,0), 1.0f);
+		if(CheckFlag(UIFlags::ShowPauseScreen)) {
+			DrawPauseScreen();
+		}
 
-		_overlaySpriteBatch->End();
+		_spriteBatch->End();
 
-		shaderResourceView->Release();
-		
 		// Present the information rendered to the back buffer to the front buffer (the screen)
 		_pSwapChain->Present(0, 0);
 	}

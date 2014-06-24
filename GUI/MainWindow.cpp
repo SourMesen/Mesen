@@ -194,16 +194,25 @@ namespace NES {
 			SetMenuEnabled(ID_NES_RESET, true);
 			SetMenuEnabled(ID_NES_STOP, true);
 			SetMenuEnabled(ID_NES_RESUME, false);
+
+			_renderer->ClearFlags(UIFlags::ShowPauseScreen);
+			if(IsMenuChecked(ID_OPTIONS_SHOWFPS)) {
+				_renderer->SetFlags(UIFlags::ShowFPS);
+			}
 		}
 	}
 
 	void MainWindow::Stop(bool powerOff)
 	{
+		_renderer->ClearFlags(UIFlags::ShowFPS | UIFlags::ShowPauseScreen);
+
 		_soundManager->Reset();
 		if(_console) {
 			_console->Stop();
 			if(powerOff) {
 				_console.release();
+			} else {
+				_renderer->SetFlags(UIFlags::ShowPauseScreen);
 			}
 		}
 		if(_emuThread) {
@@ -255,6 +264,15 @@ namespace NES {
 			Console::SetFlags(EmulationFlags::LimitFPS);
 		} else {
 			Console::ClearFlags(EmulationFlags::LimitFPS);
+		}
+	}
+
+	void MainWindow::ShowFPS_Click()
+	{
+		if(ToggleMenuCheck(ID_OPTIONS_SHOWFPS)) {
+			_renderer->SetFlags(UIFlags::ShowFPS);
+		} else {
+			_renderer->ClearFlags(UIFlags::ShowFPS);
 		}
 	}
 
@@ -360,6 +378,9 @@ namespace NES {
 
 					case ID_OPTIONS_LIMITFPS:
 						mainWindow->LimitFPS_Click();
+						break;
+					case ID_OPTIONS_SHOWFPS:
+						mainWindow->ShowFPS_Click();
 						break;
 
 					case ID_TESTS_RUNTESTS:

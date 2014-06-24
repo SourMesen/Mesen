@@ -46,7 +46,7 @@ void Console::SetFlags(int flags)
 
 void Console::ClearFlags(int flags)
 {
-	Console::Flags  ^= flags;
+	Console::Flags &= ~flags;
 }
 
 bool Console::CheckFlag(int flag)

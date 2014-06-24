@@ -31,6 +31,7 @@ namespace NES {
 		vector<wstring> GetFilesInFolder(wstring folderMask);
 
 		void LimitFPS_Click();
+		void ShowFPS_Click();
 
 		void SetMenuEnabled(int resourceID, bool enabled);
 		
