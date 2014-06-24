@@ -16,7 +16,7 @@ APU::APU()
 	_apu.output(&_buf);
 
 	_apu.dmc_reader(&APU::DMCRead);
-	//_apu.irq_notifier(irq_changed);
+	//_apu.irq_notifier(&APU::IRQChanged);
 
 	_outputBuffer = new int16_t[APU::SamplesPerFrame];
 }
@@ -54,6 +54,9 @@ void APU::WriteRAM(uint16_t addr, uint8_t value)
 
 bool APU::Exec(uint32_t executedCycles)
 {
+	if(APU::Instance->_apu.earliest_irq() == Nes_Apu::irq_waiting) {
+		CPU::SetIRQFlag();
+	}
 	_apu.end_frame(executedCycles);
 	_buf.end_frame(executedCycles);
 	

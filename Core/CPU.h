@@ -31,6 +31,10 @@ struct State
 class CPU
 {
 private:
+	const uint16_t NMIVector = 0xFFFA;
+	const uint16_t ResetVector = 0xFFFC;
+	const uint16_t IRQVector = 0xFFFE;
+
 	typedef void(CPU::*Func)();
 
 	static uint64_t CycleCount;
@@ -45,7 +49,9 @@ private:
 	MemoryManager *_memoryManager = nullptr;
 
 	static bool NMIFlag;
+	static bool IRQFlag;
 	bool _runNMI = false;
+	bool _runIRQ = false;
 
 	uint8_t ReadByte()
 	{
@@ -600,14 +606,21 @@ private:
 		Push((uint8_t)flags);
 		SetFlags(PSFlags::Interrupt);
 
-		SetPC(MemoryReadWord(0xFFFE));
+		SetPC(MemoryReadWord(CPU::IRQVector));
 	}
 
 	void NMI() {
 		Push((uint16_t)(PC()));
 		Push((uint8_t)PS());
 		SetFlags(PSFlags::Interrupt);
-		SetPC(MemoryReadWord(0xFFFA));
+		SetPC(MemoryReadWord(CPU::NMIVector));
+	}
+
+	void IRQ() {
+		Push((uint16_t)(PC()));
+		Push((uint8_t)PS());
+		SetFlags(PSFlags::Interrupt);
+		SetPC(MemoryReadWord(CPU::IRQVector));
 	}
 
 
@@ -628,6 +641,8 @@ public:
 		CPU::CycleCount += cycles;
 	}
 	static void SetNMIFlag() { CPU::NMIFlag = true; }
+	static void SetIRQFlag() { CPU::IRQFlag = true; }
+
 	void Reset();
 	uint32_t Exec();
 	State GetState() { return _state; }

@@ -4,6 +4,7 @@
 uint64_t CPU::CycleCount = 0;
 uint32_t CPU::CyclePenalty = 0;
 bool CPU::NMIFlag = false;
+bool CPU::IRQFlag = false;
 
 CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 {
@@ -83,13 +84,20 @@ void CPU::Reset()
 
 uint32_t CPU::Exec()
 {
+	//static ofstream log("log.txt", ios::out | ios::binary);
 	uint32_t executedCycles = 0;
-	if(!_runNMI) {
+	if(!_runNMI && !_runIRQ) {
+		if(CPU::IRQFlag && !CheckFlag(PSFlags::Interrupt)) {
+			_runIRQ = true;
+		}
+		CPU::IRQFlag = false;
+
 		if(CPU::NMIFlag) {
 			_runNMI = true;
 		}
 		uint8_t opCode = ReadByte();
 		if(_opTable[opCode] != nullptr) {
+			//log << std::hex << (_state.PC - 1) << ": " << (short)opCode << std::endl;
 			(this->*_opTable[opCode])();
 			executedCycles = (IsPageCrossed() ? _cyclesPageCrossed[opCode] : _cycles[opCode]);
 		} else {
@@ -97,10 +105,17 @@ uint32_t CPU::Exec()
 			//throw exception("Invalid opcode");
 		}
 	} else {
-		NMI();
-		_runNMI = false;
+		if(_runNMI) {
+			NMI();
+			_runNMI = false;
+			CPU::NMIFlag = false;
+		} else if(_runIRQ) {
+			IRQ();
+		}
+		_runIRQ = false;
+		CPU::IRQFlag = false;
+
 		executedCycles = 7;
-		CPU::NMIFlag = false;
 	}
 	
 	CPU::CycleCount += executedCycles;
