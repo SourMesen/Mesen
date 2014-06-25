@@ -113,7 +113,7 @@ class ROMLoader
 			return _header.GetMapperID();
 		}
 
-		uint8_t HasBattery()
+		bool HasBattery()
 		{
 			return _header.HasBattery();
 		}
