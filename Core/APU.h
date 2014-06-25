@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "MemoryManager.h"
 #include "IMemoryHandler.h"
 #include "IAudioDevice.h"
 #include "Nes_Apu/Nes_Apu.h"
@@ -8,14 +9,19 @@
 class APU : public IMemoryHandler
 {
 	private:
+		static IAudioDevice* AudioDevice;
+		static APU* Instance;
+
+		uint32_t _currentClock = 0;
+
 		Nes_Apu _apu;
 		Blip_Buffer _buf;
 		int16_t* _outputBuffer;
+		MemoryManager* _memoryManager;
 
 	private:
-		static IAudioDevice* AudioDevice;
 		static int DMCRead(void*, cpu_addr_t addr);
-		static APU* Instance;
+		static void IRQChanged(void* data);
 
 	public:
 		static const uint32_t SampleRate = 44100;
@@ -23,7 +29,7 @@ class APU : public IMemoryHandler
 		static const uint32_t BitsPerSample = 16;
 
 	public:
-		APU();
+		APU(MemoryManager* memoryManager);
 		~APU();
 
 		void Reset();

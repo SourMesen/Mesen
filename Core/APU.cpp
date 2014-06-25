@@ -7,9 +7,11 @@
 APU* APU::Instance = nullptr;
 IAudioDevice* APU::AudioDevice = nullptr;
 
-APU::APU()
+APU::APU(MemoryManager* memoryManager)
 {
 	APU::Instance = this;
+
+	_memoryManager = memoryManager;
 
 	_buf.sample_rate(APU::SampleRate);
 	_buf.clock_rate(CPU::ClockRate);
@@ -33,7 +35,7 @@ void APU::Reset()
 
 int APU::DMCRead(void*, cpu_addr_t addr)
 {
-	return APU::Instance->ReadRAM(addr);
+	return APU::Instance->_memoryManager->Read(addr);
 }
 
 uint8_t APU::ReadRAM(uint16_t addr)
@@ -54,21 +56,26 @@ void APU::WriteRAM(uint16_t addr, uint8_t value)
 
 bool APU::Exec(uint32_t executedCycles)
 {
-	_apu.end_frame(executedCycles);
-	_buf.end_frame(executedCycles);
+	_currentClock += executedCycles;
 
-	if(_apu.earliest_irq() == Nes_Apu::irq_waiting) {
-		CPU::SetIRQSource(IRQSource::FrameCounter);
+	if(_currentClock >= 29780) {
+		_apu.end_frame(_currentClock);
+		_buf.end_frame(_currentClock);
+
+		_currentClock -= 29780;
+
+		if(APU::Instance->_apu.earliest_irq() == Nes_Apu::irq_waiting) {
+			CPU::SetIRQSource(IRQSource::FrameCounter);
+		}
+
+		// Read some samples out of Blip_Buffer if there are enough to fill our output buffer
+		uint32_t availableSampleCount = _buf.samples_avail();
+		if(availableSampleCount >= APU::SamplesPerFrame) {
+			size_t sampleCount = _buf.read_samples(_outputBuffer, APU::SamplesPerFrame);
+			APU::AudioDevice->PlayBuffer(_outputBuffer, sampleCount * BitsPerSample / 8);
+
+			return true;
+		}
 	}
-	
-	// Read some samples out of Blip_Buffer if there are enough to fill our output buffer
-	uint32_t availableSampleCount = _buf.samples_avail();
-	if(availableSampleCount >= APU::SamplesPerFrame) {
-		size_t sampleCount = _buf.read_samples(_outputBuffer, APU::SamplesPerFrame);
-		APU::AudioDevice->PlayBuffer(_outputBuffer, sampleCount * BitsPerSample / 8);
-
-		return true;
-	}
-
 	return false;
 }
