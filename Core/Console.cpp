@@ -123,7 +123,7 @@ bool Console::RunTest(uint8_t *expectedResult)
 		_ppu->Exec();
 
 		if(timer.GetElapsedMS() > 100) {
-			if(memcmp(_ppu->GetFrameBuffer(), expectedResult, 256 * 240 * 4)) {
+			if(memcmp(_ppu->GetFrameBuffer(), expectedResult, 256 * 240 * 4) == 0) {
 				return true;
 			}
 			

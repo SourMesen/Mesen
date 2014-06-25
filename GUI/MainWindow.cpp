@@ -312,6 +312,7 @@ namespace NES {
 
 			if(testResult) {
 				uint8_t* expectedResult = new uint8_t[256 * 240 * 4];
+				testResult.read((char*)expectedResult, 256 * 240 * 4);
 
 				Console *console = new Console(L"../TestSuite/" + testROM);
 				std::wcout << testROM << ": ";
