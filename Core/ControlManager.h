@@ -20,9 +20,10 @@ class ControlManager : public IMemoryHandler
 
 		static void RegisterControlDevice(IControlDevice* controlDevice, uint8_t port);
 
-		virtual vector<std::array<uint16_t, 2>> GetRAMAddresses()
+		void GetMemoryRanges(MemoryRanges &ranges)
 		{
-			return { { { 0x4016, 0x4017 } } };
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4016, 0x4017);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4016);
 		}
 		
 		uint8_t ReadRAM(uint16_t addr);

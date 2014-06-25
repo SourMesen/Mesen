@@ -20,6 +20,9 @@ class BaseMapper : public IMemoryHandler
 		vector<uint8_t*> _prgPages;
 		vector<uint8_t*> _chrPages;
 
+		uint32_t _chrShift = -1;
+		uint32_t _prgShift = -1;
+
 		virtual void InitMapper() = 0;
 
 	public:
@@ -74,22 +77,20 @@ class BaseMapper : public IMemoryHandler
 
 		uint32_t AddrToPRGSlot(uint16_t addr)
 		{
-			static uint32_t prgShift = -1;
-			if(prgShift == -1) {
-				prgShift = this->log2(GetPRGSlotCount());
+			if(_prgShift == -1) {
+				_prgShift = this->log2(GetPRGSlotCount());
 			}
 
-			return (addr >> (15 - prgShift)) & (GetPRGSlotCount() - 1);
+			return (addr >> (15 - _prgShift)) & (GetPRGSlotCount() - 1);
 		}
 
 		uint32_t AddrToCHRSlot(uint16_t addr)
 		{
-			static uint32_t chrShift = -1;
-			if(chrShift == -1) {
-				chrShift = this->log2(GetCHRSlotCount());
+			if(_chrShift == -1) {
+				_chrShift = this->log2(GetCHRSlotCount());
 			}
 
-			return (addr >> (13 - chrShift)) & (GetCHRSlotCount() - 1);
+			return (addr >> (13 - _chrShift)) & (GetCHRSlotCount() - 1);
 		}
 
 		wstring GetBatteryFilename()
@@ -139,14 +140,13 @@ class BaseMapper : public IMemoryHandler
 			delete[] _chrRAM;
 		}
 
-		vector<std::array<uint16_t, 2>> GetRAMAddresses()
+		void GetMemoryRanges(MemoryRanges &ranges)
 		{
-			return { { { 0x8000, 0xFFFF } } };
-		}
-		
-		vector<std::array<uint16_t, 2>> GetVRAMAddresses()
-		{
-			return { { { 0x0000, 0x1FFF } } };
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x8000, 0xFFFF);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x8000, 0xFFFF);
+
+			ranges.AddHandler(MemoryType::VRAM, MemoryOperation::Read, 0x0000, 0x1FFF);
+			ranges.AddHandler(MemoryType::VRAM, MemoryOperation::Write, 0x0000, 0x1FFF);
 		}
 
 		bool HasBattery()

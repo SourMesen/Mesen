@@ -18,6 +18,13 @@ namespace PSFlags
 	};
 }
 
+enum class IRQSource
+{
+	External = 1,
+	FrameCounter = 2,
+	DMC = 4,
+};
+
 struct State
 {
 	uint16_t PC;
@@ -49,7 +56,7 @@ private:
 	MemoryManager *_memoryManager = nullptr;
 
 	static bool NMIFlag;
-	static bool IRQFlag;
+	static uint32_t IRQFlag;
 	bool _runNMI = false;
 	bool _runIRQ = false;
 
@@ -641,7 +648,14 @@ public:
 		CPU::CycleCount += cycles;
 	}
 	static void SetNMIFlag() { CPU::NMIFlag = true; }
-	static void SetIRQFlag() { CPU::IRQFlag = true; }
+	static void SetIRQSource(IRQSource source) 
+	{ 
+		CPU::IRQFlag |= (int)source; 
+	}
+	static void ClearIRQSource(IRQSource source)
+	{
+		CPU::IRQFlag &= ~(int)source;
+	}
 
 	void Reset();
 	uint32_t Exec();

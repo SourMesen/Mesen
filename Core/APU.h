@@ -27,10 +27,13 @@ class APU : public IMemoryHandler
 		~APU();
 
 		void Reset();
-
-		vector<std::array<uint16_t, 2>> GetRAMAddresses()
+		
+		void GetMemoryRanges(MemoryRanges &ranges)
 		{
-			return{ { { 0x4000, 0x4013 } }, { { 0x4015, 0x4015 } }, {{ 0x4017, 0x4017 } } };
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4015);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4000, 0x4013);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4015);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4017);
 		}
 
 		static void RegisterAudioDevice(IAudioDevice *audioDevice)

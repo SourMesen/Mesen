@@ -162,9 +162,12 @@ class PPU : public IMemoryHandler
 
 		void Reset();
 
-		vector<std::array<uint16_t, 2>> GetRAMAddresses()
+		void GetMemoryRanges(MemoryRanges &ranges)
 		{
-			return{ { { 0x2000, 0x3FFF } }, { {0x4014, 0x4014 } } };
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x2000, 0x3FFF);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4014);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x2000, 0x3FFF);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4014);
 		}
 
 		uint8_t ReadRAM(uint16_t addr);

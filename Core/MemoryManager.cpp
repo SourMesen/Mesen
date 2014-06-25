@@ -9,34 +9,44 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	_SRAM = new uint8_t[SRAMSize];
 	_videoRAM = new uint8_t[VRAMSize];
 	_expansionRAM = new uint8_t[0x2000];
+
+	_ramReadHandlers = new IMemoryHandler*[RAMSize];
+	_ramWriteHandlers = new IMemoryHandler*[RAMSize];
+	_vramReadHandlers = new IMemoryHandler*[VRAMSize];
+	_vramWriteHandlers = new IMemoryHandler*[VRAMSize];
+	
 	memset(_internalRAM, 0, InternalRAMSize);
 	memset(_SRAM, 0, SRAMSize);
 	memset(_videoRAM, 0, VRAMSize);
 	memset(_expansionRAM, 0, 0x2000);
 
+	memset(_ramReadHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
+	memset(_ramWriteHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
+
+	memset(_vramReadHandlers, 0, VRAMSize * sizeof(IMemoryHandler*));
+	memset(_vramWriteHandlers, 0, VRAMSize * sizeof(IMemoryHandler*));
+
 	//Load battery data if present
 	_mapper->LoadBattery(_SRAM);
-
-	for(int i = 0; i <= 0xFFFF; i++) {
-		_ramHandlers.push_back(nullptr);
-	}
-
-	for(int i = 0; i <= 0x3FFF; i++) {
-		_vramHandlers.push_back(nullptr);
-	}
 }
 
 MemoryManager::~MemoryManager()
 {
 	delete[] _internalRAM;
+	delete[] _videoRAM;
 	delete[] _SRAM;
 	delete[] _expansionRAM;
+
+	delete[] _ramReadHandlers;
+	delete[] _ramWriteHandlers;
+	delete[] _vramReadHandlers;
+	delete[] _vramWriteHandlers;
 }
 
 uint8_t MemoryManager::ReadRegister(uint16_t addr)
 {
-	if(_ramHandlers[addr]) {
-		return _ramHandlers[addr]->ReadRAM(addr);
+	if(_ramReadHandlers[addr]) {
+		return _ramReadHandlers[addr]->ReadRAM(addr);
 	} else {
 		return 0;
 	}
@@ -44,15 +54,15 @@ uint8_t MemoryManager::ReadRegister(uint16_t addr)
 
 void MemoryManager::WriteRegister(uint16_t addr, uint8_t value)
 {
-	if(_ramHandlers[addr]) {
-		_ramHandlers[addr]->WriteRAM(addr, value);
+	if(_ramWriteHandlers[addr]) {
+		_ramWriteHandlers[addr]->WriteRAM(addr, value);
 	}
 }
 
 uint8_t MemoryManager::ReadMappedVRAM(uint16_t addr)
 {
-	if(_vramHandlers[addr]) {
-		return _vramHandlers[addr]->ReadVRAM(addr);
+	if(_vramReadHandlers[addr]) {
+		return _vramReadHandlers[addr]->ReadVRAM(addr);
 	} else {
 		return 0;
 	}
@@ -60,26 +70,30 @@ uint8_t MemoryManager::ReadMappedVRAM(uint16_t addr)
 
 void MemoryManager::WriteMappedVRAM(uint16_t addr, uint8_t value)
 {
-	if(_vramHandlers[addr]) {
-		_vramHandlers[addr]->WriteVRAM(addr, value);
+	if(_vramWriteHandlers[addr]) {
+		_vramWriteHandlers[addr]->WriteVRAM(addr, value);
+	}
+}
+
+void MemoryManager::InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses)
+{
+	for(uint16_t address : *addresses) {
+		if(memoryHandlers[address] != nullptr) {
+			throw exception("Not supported");
+		}
+		memoryHandlers[address] = handler;
 	}
 }
 
 void MemoryManager::RegisterIODevice(IMemoryHandler *handler)
 {
-	vector<std::array<uint16_t, 2>> addresses = handler->GetRAMAddresses();
-	for(std::array<uint16_t, 2> startEndAddr : addresses) {
-		for(int i = startEndAddr[0]; i <= startEndAddr[1]; i++) {
-			_ramHandlers[i] = handler;
-		}
-	}
+	MemoryRanges ranges;
+	handler->GetMemoryRanges(ranges);
 
-	addresses = handler->GetVRAMAddresses();
-	for(std::array<uint16_t, 2> startEndAddr : addresses) {
-		for(int i = startEndAddr[0]; i <= startEndAddr[1]; i++) {
-			_vramHandlers[i] = handler;
-		}
-	}
+	InitializeMemoryHandlers(_ramReadHandlers, handler, ranges.GetRAMReadAddresses());
+	InitializeMemoryHandlers(_ramWriteHandlers, handler, ranges.GetRAMWriteAddresses());
+	InitializeMemoryHandlers(_vramReadHandlers, handler, ranges.GetVRAMReadAddresses());
+	InitializeMemoryHandlers(_vramWriteHandlers, handler, ranges.GetVRAMWriteAddresses());
 }
 
 uint8_t MemoryManager::Read(uint16_t addr)

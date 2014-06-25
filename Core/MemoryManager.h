@@ -8,6 +8,7 @@
 class MemoryManager
 {
 	private:
+		const int RAMSize = 0x10000;
 		const int InternalRAMSize = 0x800;
 		const int SRAMSize = 0x2000;
 		const int VRAMSize = 0x4000;
@@ -19,8 +20,10 @@ class MemoryManager
 		uint8_t *_SRAM;
 		uint8_t *_videoRAM;
 
-		vector<IMemoryHandler*> _ramHandlers;
-		vector<IMemoryHandler*> _vramHandlers;
+		IMemoryHandler** _ramReadHandlers;
+		IMemoryHandler** _ramWriteHandlers;
+		IMemoryHandler** _vramReadHandlers;
+		IMemoryHandler** _vramWriteHandlers;
 			
 		uint8_t ReadRegister(uint16_t addr);
 		void WriteRegister(uint16_t addr, uint8_t value);
@@ -32,6 +35,7 @@ class MemoryManager
 		MemoryManager(shared_ptr<BaseMapper> mapper);
 		~MemoryManager();
 
+		void InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses);
 		void RegisterIODevice(IMemoryHandler *handler);
 
 		uint8_t Read(uint16_t addr);

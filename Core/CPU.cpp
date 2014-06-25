@@ -4,7 +4,7 @@
 uint64_t CPU::CycleCount = 0;
 uint32_t CPU::CyclePenalty = 0;
 bool CPU::NMIFlag = false;
-bool CPU::IRQFlag = false;
+uint32_t CPU::IRQFlag = 0;
 
 CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 {
@@ -74,7 +74,7 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 void CPU::Reset()
 {
 	CPU::NMIFlag = false;
-	CPU::IRQFlag = false;
+	CPU::IRQFlag = 0;
 	CPU::CycleCount = 0;
 	_state.A = 0;
 	_state.PC = MemoryReadWord(0xFFFC);
@@ -82,6 +82,9 @@ void CPU::Reset()
 	_state.X = 0;
 	_state.Y = 0;
 	_state.PS = PSFlags::Zero | PSFlags::Reserved | PSFlags::Interrupt;
+
+	_runIRQ = false;
+	_runNMI = false;
 }
 
 uint32_t CPU::Exec()
@@ -89,22 +92,26 @@ uint32_t CPU::Exec()
 	//static ofstream log("log.txt", ios::out | ios::binary);
 	uint32_t executedCycles = 0;
 	if(!_runNMI && !_runIRQ) {
-		if(CPU::IRQFlag && !CheckFlag(PSFlags::Interrupt)) {
-			_runIRQ = true;
-		}
-		CPU::IRQFlag = false;
+		uint8_t opCode = ReadByte();
 
 		if(CPU::NMIFlag) {
 			_runNMI = true;
+		} else if(opCode != 0x40 && CPU::IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt)) {
+			_runIRQ = true;
 		}
-		uint8_t opCode = ReadByte();
+
 		if(_opTable[opCode] != nullptr) {
-			//log << std::hex << (_state.PC - 1) << ": " << (short)opCode << std::endl;
+			//std::cout << std::hex << (_state.PC - 1) << ": " << (short)opCode << std::endl;
 			(this->*_opTable[opCode])();
 			executedCycles = (IsPageCrossed() ? _cyclesPageCrossed[opCode] : _cycles[opCode]);
 		} else {
 			//std::cout << "Invalid opcode: " << std::hex << (short)opCode;
 			//throw exception("Invalid opcode");
+		}
+
+		if(!_runIRQ && opCode == 0x40 && CPU::IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt)) {
+			//"If an IRQ is pending and an RTI is executed that clears the I flag, the CPU will invoke the IRQ handler immediately after RTI finishes executing."
+			//_runIRQ = true;
 		}
 	} else {
 		if(_runNMI) {
@@ -115,7 +122,6 @@ uint32_t CPU::Exec()
 			IRQ();
 		}
 		_runIRQ = false;
-		CPU::IRQFlag = false;
 
 		executedCycles = 7;
 	}
