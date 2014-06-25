@@ -54,9 +54,9 @@ void APU::WriteRAM(uint16_t addr, uint8_t value)
 
 bool APU::Exec(uint32_t executedCycles)
 {
-	if(APU::Instance->_apu.earliest_irq() == Nes_Apu::irq_waiting) {
+	/*if(APU::Instance->_apu.earliest_irq() == Nes_Apu::irq_waiting) {
 		CPU::SetIRQFlag();
-	}
+	}*/
 	_apu.end_frame(executedCycles);
 	_buf.end_frame(executedCycles);
 	

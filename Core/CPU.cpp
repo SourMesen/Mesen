@@ -73,13 +73,15 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 
 void CPU::Reset()
 {
+	CPU::NMIFlag = false;
+	CPU::IRQFlag = false;
 	CPU::CycleCount = 0;
 	_state.A = 0;
 	_state.PC = MemoryReadWord(0xFFFC);
 	_state.SP = 0xFF;
 	_state.X = 0;
 	_state.Y = 0;
-	_state.PS = PSFlags::Zero | PSFlags::Reserved;// | PSFlags::Interrupt;
+	_state.PS = PSFlags::Zero | PSFlags::Reserved | PSFlags::Interrupt;
 }
 
 uint32_t CPU::Exec()
