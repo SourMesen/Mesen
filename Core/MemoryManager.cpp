@@ -138,6 +138,7 @@ uint16_t MemoryManager::ReadWord(uint16_t addr)
 
 uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 {
+	_mapper->NotifyVRAMAddressChange(addr);
 	if(addr <= 0x1FFF) {
 		return ReadMappedVRAM(addr & 0x1FFF);
 	} else {
@@ -150,6 +151,8 @@ uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 
 void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 {
+	_mapper->NotifyVRAMAddressChange(addr);
+
 	addr = addr & 0x3FFF;
 	if(addr <= 0x1FFF) {
 		WriteMappedVRAM(addr, value);

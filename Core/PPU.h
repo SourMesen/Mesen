@@ -76,6 +76,7 @@ struct SpriteInfo
 class PPU : public IMemoryHandler
 {
 	private:
+		static PPU* Instance;
 		static IVideoDevice *VideoDevice;
 
 		MemoryManager *_memoryManager;
@@ -188,5 +189,10 @@ class PPU : public IMemoryHandler
 		uint32_t GetFrameCount()
 		{
 			return _frameCount;
+		}
+
+		static uint32_t GetCurrentCycle()
+		{
+			return PPU::Instance->_cycle;
 		}
 };

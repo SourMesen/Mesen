@@ -159,6 +159,7 @@ class MMC3 : public BaseMapper
 				case MMC3Registers::RegE000:
 					_irqEnabled = false;
 					//Remove SetIRQ flag if it was added to cpu?
+					CPU::ClearIRQSource(IRQSource::External);
 					break;
 
 				case MMC3Registers::RegE001:
@@ -167,26 +168,37 @@ class MMC3 : public BaseMapper
 			}
 		}
 
-		uint32_t _a12Counter = 0;
 		uint32_t _lastCycle = 0xFFFF;
-
-		uint8_t ReadVRAM(uint16_t addr)
+		uint32_t _cyclesDown = 0;
+		virtual void NotifyVRAMAddressChange(uint16_t addr)
 		{
-			/*uint32_t cycle = PPU::GetCurrentCycle();
-			if((_lastCycle - cycle >= 8 || cycle < _lastCycle) && (addr & 0x1000)) {
-				uint32_t count = _irqCounter;
-				if(_irqCounter == 0 || _irqReload) {
-					_irqCounter = _irqReloadValue;
+			uint16_t cycle = PPU::GetCurrentCycle();
+			if((addr & 0x1000) == 0) {
+				if(_cyclesDown == 0) {
+					_cyclesDown = 1;
 				} else {
-					_irqCounter--;
+					if(_lastCycle > cycle) {
+						_cyclesDown += (340 - _lastCycle + cycle);
+					} else {
+						_cyclesDown += (_lastCycle - cycle);
+					}
 				}
-				if((count > 0 || _irqReload) && _irqCounter == 0 && _irqEnabled) {
-					CPU::SetIRQFlag();
+			} else if(addr & 0x1000) {
+				if(_cyclesDown > 8) {
+					//std::cout << "Cycle: " << PPU::GetCurrentCycle() << " - Cycles down: " << _cyclesDown << " - Going up? " << ((addr & 0x1000) ? "true" : "false") << std::endl;
+					uint32_t count = _irqCounter;
+					if(_irqCounter == 0 || _irqReload) {
+						_irqCounter = _irqReloadValue;
+					} else {
+						_irqCounter--;
+					}
+					if((count > 0 || _irqReload) && _irqCounter == 0 && _irqEnabled) {
+						CPU::SetIRQSource(IRQSource::External);
+					}
+					_irqReload = false;
 				}
-				_irqReload = false;
-
-				_lastCycle = cycle;
-			}*/
-			return BaseMapper::ReadVRAM(addr);
+				_cyclesDown = 0;
+			}
+			_lastCycle = cycle;
 		}
 };

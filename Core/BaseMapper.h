@@ -200,4 +200,9 @@ class BaseMapper : public IMemoryHandler
 		{
 			_chrPages[AddrToCHRSlot(addr)][addr & (GetCHRPageSize() - 1)] = value;
 		}
+
+		virtual void NotifyVRAMAddressChange(uint16_t addr)
+		{
+			//Used for MMC3 IRQ counter
+		}
 };

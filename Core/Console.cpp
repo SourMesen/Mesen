@@ -14,7 +14,7 @@ Console::Console(wstring filename)
 	_memoryManager.reset(new MemoryManager(_mapper));
 	_cpu.reset(new CPU(_memoryManager.get()));
 	_ppu.reset(new PPU(_memoryManager.get()));	
-	_apu.reset(new APU());
+	_apu.reset(new APU(_memoryManager.get()));
 
 	_controlManager.reset(new ControlManager());
 
