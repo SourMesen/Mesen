@@ -71,20 +71,26 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 	memcpy(_cyclesPageCrossed, cyclesPageCrossed, sizeof(uint8_t) * 256);
 }
 
-void CPU::Reset()
+void CPU::Reset(bool softReset)
 {
 	CPU::NMIFlag = false;
 	CPU::IRQFlag = 0;
 	CPU::CycleCount = 0;
-	_state.A = 0;
-	_state.PC = MemoryReadWord(0xFFFC);
-	_state.SP = 0xFF;
-	_state.X = 0;
-	_state.Y = 0;
-	_state.PS = PSFlags::Zero | PSFlags::Reserved | PSFlags::Interrupt;
 
-	_runIRQ = false;
-	_runNMI = false;
+	_state.PC = MemoryReadWord(CPU::ResetVector);
+	if(softReset) {
+		SetFlags(PSFlags::Interrupt);
+		_state.SP -= 0x03;
+	} else {
+		_state.A = 0;
+		_state.SP = 0xFD;
+		_state.X = 0;
+		_state.Y = 0;
+		_state.PS = PSFlags::Reserved | PSFlags::Interrupt;
+
+		_runIRQ = false;
+		_runNMI = false;
+	}
 }
 
 uint32_t CPU::Exec()
@@ -111,7 +117,7 @@ uint32_t CPU::Exec()
 
 		if(!_runIRQ && opCode == 0x40 && CPU::IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt)) {
 			//"If an IRQ is pending and an RTI is executed that clears the I flag, the CPU will invoke the IRQ handler immediately after RTI finishes executing."
-			//_runIRQ = true;
+			_runIRQ = true;
 		}
 	} else {
 		if(_runNMI) {

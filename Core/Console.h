@@ -31,7 +31,7 @@ class Console
 		bool _stop = false;
 		bool _reset = false;
 
-		void ResetComponents();
+		void ResetComponents(bool softReset);
 
 	public:
 		Console(wstring filename);

@@ -657,7 +657,7 @@ public:
 		CPU::IRQFlag &= ~(int)source;
 	}
 
-	void Reset();
+	void Reset(bool softReset);
 	uint32_t Exec();
 	State GetState() { return _state; }
 

@@ -23,7 +23,7 @@ Console::Console(wstring filename)
 	_memoryManager->RegisterIODevice(_apu.get());
 	_memoryManager->RegisterIODevice(_controlManager.get());
 
-	ResetComponents();
+	ResetComponents(false);
 }
 
 Console::~Console()
@@ -35,9 +35,9 @@ void Console::Reset()
 	_reset = true;
 }
 
-void Console::ResetComponents()
+void Console::ResetComponents(bool softReset)
 {
-	_cpu->Reset();
+	_cpu->Reset(softReset);
 	_ppu->Reset();
 	_apu->Reset();
 }
@@ -108,7 +108,7 @@ void Console::Run()
 			fpsTimer.Reset();
 			lastFrameCount = 0;
 			elapsedTime = 0;
-			ResetComponents();
+			ResetComponents(true);
 			_reset = false;
 		}
 	}
