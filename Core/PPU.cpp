@@ -322,12 +322,6 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		lineOffset = _scanline - spriteY;
 	}
 
-	if(spriteIndex < _spriteCount) {
-		//Useless fetches to sprite 0xFF for remaining sprites - used by MMC3 IRQ counter
-		lineOffset = 0;
-		tileIndex = 0xFF;
-	}
-
 	if(_flags.LargeSprites) {
 		tileAddr = (((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4)) + (lineOffset >= 8 ? lineOffset + 8 : lineOffset);
 	} else {
@@ -342,7 +336,15 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		_spriteTiles[spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
 		_spriteTiles[spriteIndex].HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
 	} else {
-		//Useless fetches to sprite 0xFF for remaining sprites - used by MMC3 IRQ counter
+		//Fetches to sprite 0xFF for remaining sprites/hidden - used by MMC3 IRQ counter
+		lineOffset = 0;
+		tileIndex = 0xFF;
+		if(_flags.LargeSprites) {
+			tileAddr = (((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4)) + (lineOffset >= 8 ? lineOffset + 8 : lineOffset);
+		} else {
+			tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
+		}
+
 		_memoryManager->ReadVRAM(tileAddr);
 		_memoryManager->ReadVRAM(tileAddr + 8);
 	}
