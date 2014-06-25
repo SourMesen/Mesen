@@ -308,6 +308,7 @@ namespace NES
 
 		//Draw FPS counter
 		if(CheckFlag(UIFlags::ShowFPS)) {
+			_font->DrawString(_spriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256 * 4 - 149, 13), Colors::Black, 0.0f, XMFLOAT2(0, 0), 1.0f);
 			_font->DrawString(_spriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256 * 4 - 150, 11), Colors::Yellow, 0.0f, XMFLOAT2(0, 0), 1.0f);
 		}
 
