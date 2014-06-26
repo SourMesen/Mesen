@@ -167,7 +167,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 			InitMapper();
 		}
 
-		~BaseMapper()
+		virtual ~BaseMapper()
 		{
 			delete[] _prgRAM;
 			delete[] _chrRAM;

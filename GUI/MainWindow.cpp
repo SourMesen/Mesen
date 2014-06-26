@@ -213,15 +213,17 @@ namespace NES {
 		_soundManager->Reset();
 		if(_console) {
 			_console->Stop();
-			if(powerOff) {
-				_console.release();
-			} else {
-				_renderer->SetFlags(UIFlags::ShowPauseScreen);
-			}
 		}
 		if(_emuThread) {
 			_emuThread->join();
-			_emuThread.release();
+
+			if(powerOff) {
+				_console.reset(nullptr);
+			} else {
+				_renderer->SetFlags(UIFlags::ShowPauseScreen);
+			}
+
+			_emuThread.reset(nullptr);
 		}
 
 		SetMenuEnabled(ID_NES_PAUSE, false);

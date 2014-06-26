@@ -27,11 +27,16 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	memset(_vramWriteHandlers, 0, VRAMSize * sizeof(IMemoryHandler*));
 
 	//Load battery data if present
-	_mapper->LoadBattery(_SRAM);
+	if(_mapper->HasBattery()) {
+		_mapper->LoadBattery(_SRAM);
+	}
 }
 
 MemoryManager::~MemoryManager()
 {
+	if(_mapper->HasBattery()) {
+		_mapper->SaveBattery(_SRAM);
+	}
 	delete[] _internalRAM;
 	delete[] _videoRAM;
 	delete[] _SRAM;
@@ -120,10 +125,7 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 	} else if(addr <= 0x5FFF) {
 		_expansionRAM[addr & 0x1FFF] = value;
 	} else if(addr <= 0x7FFF) {
-		if(_SRAM[addr & 0x1FFF] != value) {
-			_SRAM[addr & 0x1FFF] = value;
-			_mapper->SaveBattery(_SRAM);
-		}
+		_SRAM[addr & 0x1FFF] = value;
 	} else {
 		WriteRegister(addr, value);
 	}
