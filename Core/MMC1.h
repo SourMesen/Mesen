@@ -106,16 +106,19 @@ class MMC1 : public BaseMapper
 			_chrReg1 = _state.RegC000 & 0x1F;
 			_prgReg = _state.RegE000 & 0x0F;
 
+			//This is used for SUROM (Dragon Warrior 3/4, Dragon Quest 4)
+			uint8_t prgPageAdjust = (_state.RegA000 & 0x10);
+
 			if(_prgMode == PrgMode::_32k) {
-				SelectPRGPage(0, _prgReg);
-				SelectPRGPage(1, _prgReg + 1);
+				SelectPRGPage(0, _prgReg + prgPageAdjust);
+				SelectPRGPage(1, _prgReg + prgPageAdjust + 1);
 			} else if(_prgMode == PrgMode::_16k) {
 				if(_slotSelect == SlotSelect::x8000) {
-					SelectPRGPage(0, _prgReg);
-					SelectPRGPage(1, 0x0F);
+					SelectPRGPage(0, _prgReg + prgPageAdjust);
+					SelectPRGPage(1, 0xF + prgPageAdjust);
 				} else if(_slotSelect == SlotSelect::xC000) {
-					SelectPRGPage(0, 0);
-					SelectPRGPage(1, _prgReg);
+					SelectPRGPage(0, prgPageAdjust);
+					SelectPRGPage(1, _prgReg + prgPageAdjust);
 				}
 			}
 
