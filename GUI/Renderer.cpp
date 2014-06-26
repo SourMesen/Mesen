@@ -7,18 +7,33 @@ namespace NES
 {
 	Renderer::Renderer(HWND hWnd)
 	{
-		PPU::RegisterVideoDevice(this);
+		SetScreenSize(256, 240);
 
 		_hWnd = hWnd;
 
 		if(FAILED(InitDevice())) {
 			CleanupDevice();
+		} else {
+			PPU::RegisterVideoDevice(this);
 		}
 	}
 
 	Renderer::~Renderer()
 	{
 		CleanupDevice();
+	}
+
+	void Renderer::SetScreenSize(uint32_t screenWidth, uint32_t screenHeight)
+	{
+		_screenWidth = screenWidth;
+		_screenHeight = screenHeight;
+		_bytesPerPixel = 4;
+
+		_hdScreenWidth = _screenWidth * 4;
+		_hdScreenHeight = _screenHeight * 4;
+		
+		_screenBufferSize = _screenWidth * _screenHeight * _bytesPerPixel;
+		_hdScreenBufferSize = _hdScreenWidth * _hdScreenHeight * _bytesPerPixel;
 	}
 
 	void Renderer::CleanupDevice()
@@ -43,8 +58,6 @@ namespace NES
 
 		RECT rc;
 		GetClientRect(_hWnd, &rc);
-		UINT width = 256; // rc.right - rc.left;
-		UINT height = 240; // rc.bottom - rc.top;
 
 		UINT createDeviceFlags = 0;
 #ifdef _DEBUG
@@ -71,8 +84,8 @@ namespace NES
 		DXGI_SWAP_CHAIN_DESC sd;
 		ZeroMemory(&sd, sizeof(sd));
 		sd.BufferCount = 1;
-		sd.BufferDesc.Width = width*4;
-		sd.BufferDesc.Height = height*4;
+		sd.BufferDesc.Width = _hdScreenWidth;
+		sd.BufferDesc.Height = _hdScreenHeight - (16 *4);
 		sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		sd.BufferDesc.RefreshRate.Numerator = 60;
 		sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -123,20 +136,17 @@ namespace NES
 		_pDeviceContext->OMSetRenderTargets(1, &_pRenderTargetView, nullptr);
 
 		// Setup the viewport
-		UINT fred;
 		D3D11_VIEWPORT vp;
-		vp.Width = (FLOAT)width*4;
-		vp.Height = (FLOAT)height*4;
+		vp.Width = (FLOAT)_hdScreenWidth;
+		vp.Height = (FLOAT)_hdScreenHeight - (16 * 4);
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 		_pDeviceContext->RSSetViewports(1, &vp);
 
+		UINT fred;
 		_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM, 16, &fred);
-
-		uint16_t screenwidth = 256;
-		uint16_t screenheight = 240;
 
 		D3D11_TEXTURE2D_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
@@ -149,26 +159,26 @@ namespace NES
 		desc.SampleDesc.Count = 1;
 		desc.SampleDesc.Quality = fred;
 		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.Width = screenwidth;
-		desc.Height = screenheight;
+		desc.Width = _screenWidth;
+		desc.Height = _screenHeight;
 		desc.MiscFlags = 0;
 
-		_videoRAM = new uint8_t[screenwidth*screenheight * 4];
-		_nextFrameBuffer = new uint8_t[screenwidth*screenheight * 4];
-		memset(_videoRAM, 0x00, screenwidth*screenheight*4);
-		memset(_nextFrameBuffer, 0x00, screenwidth*screenheight*4);
+		_videoRAM = new uint8_t[_screenBufferSize];
+		_nextFrameBuffer = new uint8_t[_screenBufferSize];
+		memset(_videoRAM, 0x00, _screenBufferSize);
+		memset(_nextFrameBuffer, 0x00, _screenBufferSize);
 
 		D3D11_SUBRESOURCE_DATA tbsd;
 		tbsd.pSysMem = (void *)_videoRAM;
-		tbsd.SysMemPitch = screenwidth * 4;
-		tbsd.SysMemSlicePitch = screenwidth*screenheight * 4; // Not needed since this is a 2d texture
+		tbsd.SysMemPitch = _screenWidth * _bytesPerPixel;
+		tbsd.SysMemSlicePitch = _screenBufferSize; // Not needed since this is a 2d texture
 
 		if(FAILED(_pd3dDevice->CreateTexture2D(&desc, &tbsd, &_pTexture))) {
 			return 0;
 		}
 
-		_overlayBuffer = new uint8_t[screenwidth*screenheight*4*4*4];  //High res overlay for UI elements (4x res)
-		memset(_overlayBuffer, 0x00, screenwidth*screenheight*4*4*4);
+		_overlayBuffer = new uint8_t[_hdScreenBufferSize];  //High res overlay for UI elements (4x res)
+		memset(_overlayBuffer, 0x00, _hdScreenBufferSize);
 
 		ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
 		desc.ArraySize = 1;
@@ -180,13 +190,13 @@ namespace NES
 		desc.SampleDesc.Count = 1;
 		desc.SampleDesc.Quality = fred;
 		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.Width = screenwidth * 4;
-		desc.Height = screenheight * 4;
+		desc.Width = _hdScreenWidth;
+		desc.Height = _hdScreenHeight;
 		desc.MiscFlags = 0;
 
 		tbsd.pSysMem = (void *)_overlayBuffer;
-		tbsd.SysMemPitch = screenwidth * 4 * 4;
-		tbsd.SysMemSlicePitch = screenwidth*screenheight * 4 * 4;
+		tbsd.SysMemPitch = _hdScreenWidth * _bytesPerPixel;
+		tbsd.SysMemSlicePitch = _hdScreenBufferSize;
 
 		if(FAILED(_pd3dDevice->CreateTexture2D(&desc, &tbsd, &_overlayTexture))) {
 			return 0;
@@ -244,21 +254,19 @@ namespace NES
 	{
 		RECT sourceRect;
 		sourceRect.left = 0;
-		sourceRect.right = 256;
-		sourceRect.bottom = 240;
-		sourceRect.top = 0;
+		sourceRect.right = _screenWidth;
+		sourceRect.top = 8;
+		sourceRect.bottom = _screenHeight - 8;
 
 		XMVECTOR position{ { 0, 0 } };
 
-		UINT screenwidth = 256, screenheight = 240;
-
 		D3D11_MAPPED_SUBRESOURCE dd;
 		dd.pData = (void *)_videoRAM;
-		dd.RowPitch = screenwidth * 4;
-		dd.DepthPitch = screenwidth* screenheight * 4;
+		dd.RowPitch = _screenWidth * _bytesPerPixel;
+		dd.DepthPitch = _screenBufferSize;
 
 		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		memcpy(dd.pData, _nextFrameBuffer, screenwidth*screenheight * 4);
+		memcpy(dd.pData, _nextFrameBuffer, _screenBufferSize);
 		_pDeviceContext->Unmap(_pTexture, 0);
 		
 		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
@@ -270,21 +278,19 @@ namespace NES
 	{
 		RECT destRect;
 		destRect.left = 0;
-		destRect.right = 256*4;
-		destRect.bottom = 240*4;
+		destRect.right = _hdScreenWidth;
+		destRect.bottom = _hdScreenHeight;
 		destRect.top = 0;
 
 		XMVECTOR position{ { 0, 0 } };
 
-		UINT screenwidth = 256*4, screenheight = 240*4;
-
 		D3D11_MAPPED_SUBRESOURCE dd;
 		dd.pData = (void *)_overlayBuffer;
-		dd.RowPitch = screenwidth * 4;
-		dd.DepthPitch = screenwidth* screenheight * 4;
+		dd.RowPitch = _hdScreenWidth * _bytesPerPixel;
+		dd.DepthPitch = _hdScreenBufferSize;
 
 		_pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		for(uint32_t i = 0, len = screenwidth*screenheight; i < len; i++) {
+		for(uint32_t i = 0, len = _hdScreenHeight*_hdScreenWidth; i < len; i++) {
 			//Gray transparent overlay
 			((uint32_t*)dd.pData)[i] = 0x99222222;
 		}

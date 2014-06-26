@@ -37,6 +37,14 @@ namespace NES {
 		byte*							_overlayBuffer;
 		std::unique_ptr<SpriteBatch> _spriteBatch;
 
+		uint32_t _screenWidth;
+		uint32_t _screenHeight;
+		uint32_t _bytesPerPixel;
+		uint32_t _hdScreenWidth;
+		uint32_t _hdScreenHeight;
+		uint32_t _screenBufferSize;
+		uint32_t _hdScreenBufferSize;
+
 		uint32_t _flags = 0;
 
 		wstring _displayMessage = L"";
@@ -44,6 +52,8 @@ namespace NES {
 
 		HRESULT InitDevice();
 		void CleanupDevice();
+
+		void SetScreenSize(uint32_t screenWidth, uint32_t screenHeight);
 
 		ID3D11ShaderResourceView* GetShaderResourceView(ID3D11Texture2D* texture);
 		void DrawNESScreen();

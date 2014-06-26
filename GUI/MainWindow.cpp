@@ -422,17 +422,20 @@ namespace NES {
 				WINDOWPOS* windowPos;
 				windowPos = (WINDOWPOS*)lParam;
 				
-				RECT clientRect;
-				RECT windowRect;
-				LONG xGap;
-				LONG yGap;
-				GetWindowRect(hWnd, &windowRect);
-				GetClientRect(hWnd, &clientRect);
+				if(!(windowPos->flags & SWP_NOSIZE)) {
+					RECT clientRect;
+					RECT windowRect;
+					LONG xGap;
+					LONG yGap;
+					GetWindowRect(hWnd, &windowRect);
+					GetClientRect(hWnd, &clientRect);
 
-				xGap = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left);
-				yGap = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top);
 
-				windowPos->cy = (windowPos->cx - xGap) * 240 / 256 + yGap;
+					xGap = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left);
+					yGap = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top);
+
+					windowPos->cy = (windowPos->cx - xGap) * 224 / 256 + yGap;
+				}
 				break;
 
 			case WM_DESTROY:
