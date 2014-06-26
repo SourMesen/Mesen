@@ -44,7 +44,7 @@ uint8_t APU::ReadRAM(uint16_t addr)
 	switch(addr) {
 		case 0x4015:
 			CPU::ClearIRQSource(IRQSource::FrameCounter);
-			return _apu.read_status(5);
+			return _apu.read_status(_currentClock);
 	}
 
 	return 0;
@@ -52,7 +52,7 @@ uint8_t APU::ReadRAM(uint16_t addr)
 
 void APU::WriteRAM(uint16_t addr, uint8_t value)
 {
-	_apu.write_register(5, addr, value);
+	_apu.write_register(_currentClock, addr, value);
 }
 
 bool APU::Exec(uint32_t executedCycles)
