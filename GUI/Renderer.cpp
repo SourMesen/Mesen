@@ -316,8 +316,8 @@ namespace NES
 		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
 		shaderResourceView->Release();
 
-		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2(_hdScreenWidth / 2 - 142, _hdScreenHeight / 2 - 77), Colors::Black, 0.0f, XMFLOAT2(0, 0), 2.0f);
-		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2(_hdScreenWidth / 2 - 145, _hdScreenHeight / 2 - 80), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 2.0f);
+		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2((float)_hdScreenWidth / 2 - 142, (float)_hdScreenHeight / 2 - 77), Colors::Black, 0.0f, XMFLOAT2(0, 0), 2.0f);
+		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2((float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 80), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 2.0f);
 	}
 
 	//--------------------------------------------------------------------------------------
