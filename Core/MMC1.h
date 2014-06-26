@@ -141,15 +141,6 @@ class MMC1 : public BaseMapper
 
 			Stream<uint8_t>(_writeBuffer);
 			Stream<uint8_t>(_shiftCount);
-			
-			Stream<bool>(_wramDisable);
-			Stream<ChrMode>(_chrMode);
-			Stream<PrgMode>(_prgMode);
-			Stream<SlotSelect>(_slotSelect);
-
-			Stream<uint8_t>(_chrReg0);
-			Stream<uint8_t>(_chrReg1);
-			Stream<uint8_t>(_prgReg);
 
 			BaseMapper::StreamState(saving);
 		}

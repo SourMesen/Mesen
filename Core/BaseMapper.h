@@ -41,7 +41,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 
 		void SelectPRGPage(uint32_t slot, uint32_t page)
 		{
-			//std::cout << std::dec << "PRG Slot " << (short)slot << ": " << (short)page << std::endl;
+			//std::cout << std::dec << "PRG Slot " << (short)slot << ": " << (short)(page & (GetPRGPageCount() - 1)) << std::endl;
 			_prgPages[slot] = &_prgRAM[(page & (GetPRGPageCount() - 1))  * GetPRGPageSize()];
 			_prgSlotPages[slot] = page;
 		}
@@ -124,6 +124,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 			if(_hasCHRRAM) {
 				StreamArray<uint8_t>(_chrRAM, BaseMapper::CHRSize);
 			}
+
+			Stream<MirroringType>(_mirroringType);
 
 			if(!saving) {
 				for(int i = GetPRGSlotCount() - 1; i >= 0; i--) {
