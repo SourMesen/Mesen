@@ -38,15 +38,31 @@ namespace NES
 
 	void Renderer::CleanupDevice()
 	{
-		if(_pDeviceContext) _pDeviceContext->ClearState();
+		if(_pTexture) _pTexture->Release();
+		if(_overlayTexture) _pTexture->Release();
 
-		if(_pRenderTargetView) _pRenderTargetView->Release();
 		if(_samplerState) _samplerState->Release();
-
+		if(_pRenderTargetView) _pRenderTargetView->Release();
 		if(_pSwapChain) _pSwapChain->Release();
+		if(_pDeviceContext) _pDeviceContext->ClearState();
 		if(_pDeviceContext1) _pDeviceContext1->Release();
 		if(_pd3dDevice1) _pd3dDevice1->Release();
 		if(_pd3dDevice) _pd3dDevice->Release();
+
+		if(_videoRAM) {
+			delete[] _videoRAM;
+			_videoRAM = nullptr;
+		}
+
+		if(_nextFrameBuffer) {
+			delete[] _nextFrameBuffer;
+			_nextFrameBuffer = nullptr;
+		}
+
+		if(_overlayBuffer) {
+			delete[] _overlayBuffer;
+			_overlayBuffer = nullptr;
+		}
 	}
 
 	//--------------------------------------------------------------------------------------

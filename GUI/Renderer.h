@@ -29,12 +29,12 @@ namespace NES {
 		ID3D11SamplerState*		_samplerState = nullptr;
 		
 		ID3D11Texture2D*			_pTexture = nullptr;
-		byte*							_videoRAM;
-		uint8_t*						_nextFrameBuffer;
+		byte*							_videoRAM = nullptr;
+		uint8_t*						_nextFrameBuffer = nullptr;
 
 		unique_ptr<SpriteFont>	_font;
 		ID3D11Texture2D*			_overlayTexture = nullptr;
-		byte*							_overlayBuffer;
+		byte*							_overlayBuffer = nullptr;
 		std::unique_ptr<SpriteBatch> _spriteBatch;
 
 		uint32_t _screenWidth;
