@@ -195,8 +195,18 @@ class PPU : public IMemoryHandler, public Snapshotable
 			return _frameCount;
 		}
 
+		static uint32_t GetFrameCycle()
+		{
+			return ((PPU::Instance->_scanline + 1) * 341) + PPU::Instance->_cycle;
+		}
+
 		static uint32_t GetCurrentCycle()
 		{
 			return PPU::Instance->_cycle;
+		}
+
+		static uint32_t GetCurrentScanline()
+		{
+			return PPU::Instance->_scanline;
 		}
 };

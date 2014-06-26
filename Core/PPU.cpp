@@ -60,6 +60,10 @@ void PPU::UpdateVideoRamAddr()
 {
 	if(_scanline >= 239 || !IsRenderingEnabled()) {
 		_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
+		
+		//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
+		//"Should be clocked when A12 changes to 1 via $2007 read/write"
+		_memoryManager->ReadVRAM(_state.VideoRamAddr);
 	} else {
 		//"During rendering (on the pre-render line and the visible lines 0-239, provided either background or sprite rendering is enabled), "
 		//it will update v in an odd way, triggering a coarse X increment and a Y increment simultaneously"
@@ -127,6 +131,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				_state.VideoRamAddr = _state.TmpVideoRamAddr;
 				
 				//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
+				//"4) Should be clocked when A12 changes to 1 via $2006 write"
 				_memoryManager->ReadVRAM(_state.VideoRamAddr);
 			} else {
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0xFF00) | ((value & 0x3F) << 8);
@@ -291,62 +296,66 @@ uint16_t PPU::GetAttributeAddr()
 
 void PPU::LoadTileInfo()
 {
-	_previousTile = _currentTile;
-	_currentTile = _nextTile;
+	if(_flags.BackgroundEnabled) {
+		_previousTile = _currentTile;
+		_currentTile = _nextTile;
 
-	uint16_t tileIndex = _memoryManager->ReadVRAM(GetNameTableAddr());
-	uint16_t tileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
-	
-	uint16_t shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
-	_nextTile.PaletteOffset = ((_memoryManager->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
-	_nextTile.LowByte = _memoryManager->ReadVRAM(tileAddr);
-	_nextTile.HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
+		uint16_t tileIndex = _memoryManager->ReadVRAM(GetNameTableAddr());
+		uint16_t tileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
+
+		uint16_t shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
+		_nextTile.PaletteOffset = ((_memoryManager->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
+		_nextTile.LowByte = _memoryManager->ReadVRAM(tileAddr);
+		_nextTile.HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
+	}
 }
 
 void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 {
-	uint32_t spriteAddr = spriteIndex * 4;
-	uint8_t spriteY = _secondarySpriteRAM[spriteAddr];
-	uint8_t tileIndex = _secondarySpriteRAM[spriteAddr+1];
-	uint8_t attributes = _secondarySpriteRAM[spriteAddr+2];
-	uint8_t spriteX = _secondarySpriteRAM[spriteAddr+3];
-	bool backgroundPriority = (attributes & 0x20) == 0x20;
-	bool horizontalMirror = (attributes & 0x40) == 0x40;
-	bool verticalMirror = (attributes & 0x80) == 0x80;
+	if(_flags.SpritesEnabled) {
+		uint32_t spriteAddr = spriteIndex * 4;
+		uint8_t spriteY = _secondarySpriteRAM[spriteAddr];
+		uint8_t tileIndex = _secondarySpriteRAM[spriteAddr + 1];
+		uint8_t attributes = _secondarySpriteRAM[spriteAddr + 2];
+		uint8_t spriteX = _secondarySpriteRAM[spriteAddr + 3];
+		bool backgroundPriority = (attributes & 0x20) == 0x20;
+		bool horizontalMirror = (attributes & 0x40) == 0x40;
+		bool verticalMirror = (attributes & 0x80) == 0x80;
 
-	uint16_t tileAddr;
-	uint8_t lineOffset;
-	if(verticalMirror) {
-		lineOffset = (_flags.LargeSprites ? 15 : 7) - (_scanline - spriteY);
-	} else {
-		lineOffset = _scanline - spriteY;
-	}
+		uint16_t tileAddr;
+		uint8_t lineOffset;
+		if(verticalMirror) {
+			lineOffset = (_flags.LargeSprites ? 15 : 7) - (_scanline - spriteY);
+		} else {
+			lineOffset = _scanline - spriteY;
+		}
 
-	if(_flags.LargeSprites) {
-		tileAddr = (((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4)) + (lineOffset >= 8 ? lineOffset + 8 : lineOffset);
-	} else {
-		tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
-	}
-
-	if(spriteIndex < _spriteCount && spriteY < 240) {
-		_spriteX[spriteIndex] = spriteX;
-		_spriteTiles[spriteIndex].BackgroundPriority = backgroundPriority;
-		_spriteTiles[spriteIndex].HorizontalMirror = horizontalMirror;
-		_spriteTiles[spriteIndex].PaletteOffset = (attributes & 0x03) << 2;
-		_spriteTiles[spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
-		_spriteTiles[spriteIndex].HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
-	} else {
-		//Fetches to sprite 0xFF for remaining sprites/hidden - used by MMC3 IRQ counter
-		lineOffset = 0;
-		tileIndex = 0xFF;
 		if(_flags.LargeSprites) {
 			tileAddr = (((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4)) + (lineOffset >= 8 ? lineOffset + 8 : lineOffset);
 		} else {
 			tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
 		}
 
-		_memoryManager->ReadVRAM(tileAddr);
-		_memoryManager->ReadVRAM(tileAddr + 8);
+		if(spriteIndex < _spriteCount && spriteY < 240) {
+			_spriteX[spriteIndex] = spriteX;
+			_spriteTiles[spriteIndex].BackgroundPriority = backgroundPriority;
+			_spriteTiles[spriteIndex].HorizontalMirror = horizontalMirror;
+			_spriteTiles[spriteIndex].PaletteOffset = (attributes & 0x03) << 2;
+			_spriteTiles[spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
+			_spriteTiles[spriteIndex].HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
+		} else {
+			//Fetches to sprite 0xFF for remaining sprites/hidden - used by MMC3 IRQ counter
+			lineOffset = 0;
+			tileIndex = 0xFF;
+			if(_flags.LargeSprites) {
+				tileAddr = (((tileIndex & 0x01) ? 0x1000 : 0x0000) | ((tileIndex & ~0x01) << 4)) + (lineOffset >= 8 ? lineOffset + 8 : lineOffset);
+			} else {
+				tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
+			}
+
+			_memoryManager->ReadVRAM(tileAddr);
+			_memoryManager->ReadVRAM(tileAddr + 8);
+		}
 	}
 }
 
@@ -468,6 +477,10 @@ void PPU::ProcessPrerenderScanline()
 		_statusFlags.SpriteOverflow = false;
 		_statusFlags.Sprite0Hit = false;
 		_statusFlags.VerticalBlank = false;
+	}
+	
+	if((_cycle - 1) % 8 == 0 && _cycle < 250) {
+		LoadTileInfo();
 	} else if(_cycle >= 280 && _cycle <= 304) {
 		if(IsRenderingEnabled()) {
 			//copy vertical scrolling value from t
@@ -483,6 +496,12 @@ void PPU::ProcessPrerenderScanline()
 			InitializeShiftRegisters();
 		}
 	}
+
+	if(_cycle >= 261 && (_cycle - 261) % 8 == 0 && _cycle <= 320) {
+		//Unused sprite tile fetches, but vital for MMC3 IRQ counter
+		uint32_t spriteIndex = (_cycle - 261) / 8;
+		LoadSpriteTileInfo(spriteIndex);
+	} 
 }
 
 void PPU::ProcessVisibleScanline()

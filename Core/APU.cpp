@@ -44,7 +44,7 @@ uint8_t APU::ReadRAM(uint16_t addr)
 	switch(addr) {
 		case 0x4015:
 			CPU::ClearIRQSource(IRQSource::FrameCounter);
-			return _apu.read_status(_currentClock);
+			return _apu.read_status(_currentClock + 4);
 	}
 
 	return 0;
@@ -52,7 +52,11 @@ uint8_t APU::ReadRAM(uint16_t addr)
 
 void APU::WriteRAM(uint16_t addr, uint8_t value)
 {
-	_apu.write_register(_currentClock, addr, value);
+	_apu.write_register(_currentClock + 4, addr, value);
+	if(addr == 0x4017 && (value & 0x40) == 0x40) {
+		//Disable frame interrupts
+		CPU::ClearIRQSource(IRQSource::FrameCounter);
+	}
 }
 
 bool APU::Exec(uint32_t executedCycles)
@@ -63,7 +67,7 @@ bool APU::Exec(uint32_t executedCycles)
 		_apu.end_frame(_currentClock);
 		_buf.end_frame(_currentClock);
 
-		_currentClock -= 29780;
+		_currentClock = 0;
 
 		if(APU::Instance->_apu.earliest_irq() == Nes_Apu::irq_waiting) {
 			CPU::SetIRQSource(IRQSource::FrameCounter);
