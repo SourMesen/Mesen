@@ -31,6 +31,12 @@ class Console
 		bool _stop = false;
 		bool _reset = false;
 
+		wstring _loadStateFilename;
+		wstring _saveStateFilename;
+
+		void SaveState();
+		void LoadState();
+
 		void ResetComponents(bool softReset);
 
 	public:
@@ -42,6 +48,9 @@ class Console
 
 		bool RunTest(uint8_t* expectedResult);
 		void SaveTestResult();
+
+		void SaveState(wstring filename);
+		void LoadState(wstring filename);
 
 		static bool CheckFlag(int flag);
 		static void SetFlags(int flags);

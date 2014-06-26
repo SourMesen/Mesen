@@ -129,6 +129,28 @@ class MMC1 : public BaseMapper
 		}
 
 	protected:
+		void StreamState(bool saving)
+		{
+			Stream<uint8_t>(_state.Reg8000);
+			Stream<uint8_t>(_state.RegA000);
+			Stream<uint8_t>(_state.RegC000);
+			Stream<uint8_t>(_state.RegE000);
+
+			Stream<uint8_t>(_writeBuffer);
+			Stream<uint8_t>(_shiftCount);
+			
+			Stream<bool>(_wramDisable);
+			Stream<ChrMode>(_chrMode);
+			Stream<PrgMode>(_prgMode);
+			Stream<SlotSelect>(_slotSelect);
+
+			Stream<uint8_t>(_chrReg0);
+			Stream<uint8_t>(_chrReg1);
+			Stream<uint8_t>(_prgReg);
+
+			BaseMapper::StreamState(saving);
+		}
+
 		virtual uint32_t GetPRGPageSize() { return 0x4000; }
 		virtual uint32_t GetCHRPageSize() {	return 0x1000; }
 

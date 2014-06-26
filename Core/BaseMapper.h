@@ -1,10 +1,11 @@
 #pragma once
 
 #include "stdafx.h"
+#include "Snapshotable.h"
 #include "IMemoryHandler.h"
 #include "ROMLoader.h"
 
-class BaseMapper : public IMemoryHandler
+class BaseMapper : public IMemoryHandler, public Snapshotable
 {
 	protected:
 		uint8_t* _prgRAM;
@@ -12,6 +13,7 @@ class BaseMapper : public IMemoryHandler
 		uint32_t _prgSize;
 		uint32_t _chrSize;
 		
+		bool _hasCHRRAM;
 		bool _hasBattery;
 		wstring _romFilename;
 
@@ -19,6 +21,9 @@ class BaseMapper : public IMemoryHandler
 
 		vector<uint8_t*> _prgPages;
 		vector<uint8_t*> _chrPages;
+
+		uint32_t* _prgSlotPages;
+		uint32_t* _chrSlotPages;
 
 		uint32_t _chrShift = -1;
 		uint32_t _prgShift = -1;
@@ -38,12 +43,14 @@ class BaseMapper : public IMemoryHandler
 		{
 			//std::cout << std::dec << "PRG Slot " << (short)slot << ": " << (short)page << std::endl;
 			_prgPages[slot] = &_prgRAM[(page & (GetPRGPageCount() - 1))  * GetPRGPageSize()];
+			_prgSlotPages[slot] = page;
 		}
 
 		void SelectCHRPage(uint32_t slot, uint32_t page)
 		{
 			//std::cout << std::dec << "CHR Slot " << (short)slot << ": " << (short)page << std::endl;
 			_chrPages[slot] = &_chrRAM[(page & (GetCHRPageCount() - 1)) * GetCHRPageSize()];
+			_chrSlotPages[slot] = page;
 		}
 
 		uint32_t GetPRGSlotCount()
@@ -107,6 +114,28 @@ class BaseMapper : public IMemoryHandler
 			return filename;
 		}
 
+	protected:
+		virtual void StreamState(bool saving)
+		{
+			StreamArray<uint32_t>(_prgSlotPages, GetPRGSlotCount());
+			StreamArray<uint32_t>(_chrSlotPages, GetCHRSlotCount());
+			
+			Stream<bool>(_hasCHRRAM);
+			if(_hasCHRRAM) {
+				StreamArray<uint8_t>(_chrRAM, BaseMapper::CHRSize);
+			}
+
+			if(!saving) {
+				for(int i = GetPRGSlotCount() - 1; i >= 0; i--) {
+					SelectPRGPage(i, _prgSlotPages[i]);
+				}
+
+				for(int i = GetCHRSlotCount() - 1; i >= 0; i--) {
+					SelectCHRPage(i, _chrSlotPages[i]);
+				}
+			}
+		}
+
 	public:
 		void Initialize(ROMLoader &romLoader)
 		{
@@ -119,6 +148,7 @@ class BaseMapper : public IMemoryHandler
 			_romFilename = romLoader.GetFilename();
 
 			if(_chrSize == 0) {
+				_hasCHRRAM = true;
 				_chrRAM = new uint8_t[BaseMapper::CHRSize];
 				_chrSize = BaseMapper::CHRSize;
 			}
@@ -130,6 +160,9 @@ class BaseMapper : public IMemoryHandler
 			for(int i = GetCHRSlotCount(); i > 0; i--) {
 				_chrPages.push_back(nullptr);
 			}
+
+			_prgSlotPages = new uint32_t[GetPRGSlotCount()];
+			_chrSlotPages = new uint32_t[GetCHRSlotCount()];
 
 			InitMapper();
 		}

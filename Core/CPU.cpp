@@ -135,3 +135,19 @@ uint32_t CPU::Exec()
 	CPU::CycleCount += executedCycles;
 	return executedCycles + GetCyclePenalty();
 }
+
+void CPU::StreamState(bool saving)
+{
+	Stream<uint16_t>(_state.PC);
+	Stream<uint8_t>(_state.SP);
+	Stream<uint8_t>(_state.A);
+	Stream<uint8_t>(_state.X);
+	Stream<uint8_t>(_state.Y);
+	
+	Stream<uint64_t>(CPU::CycleCount);
+	Stream<bool>(CPU::NMIFlag);
+	Stream<uint32_t>(CPU::IRQFlag);
+
+	Stream<bool>(_runNMI);
+	Stream<bool>(_runIRQ);
+}

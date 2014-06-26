@@ -4,12 +4,14 @@
 #include "IMemoryHandler.h"
 #include "ROMLoader.h"
 #include "BaseMapper.h"
+#include "Snapshotable.h"
 
-class MemoryManager
+class MemoryManager: public Snapshotable
 {
 	private:
 		const int RAMSize = 0x10000;
 		const int InternalRAMSize = 0x800;
+		const int ExpansionRAMSize = 0x2000;
 		const int SRAMSize = 0x2000;
 		const int VRAMSize = 0x4000;
 
@@ -30,6 +32,9 @@ class MemoryManager
 
 		uint8_t ReadMappedVRAM(uint16_t addr);
 		void WriteMappedVRAM(uint16_t addr, uint8_t value);
+
+	protected:
+		void StreamState(bool saving);
 
 	public:
 		MemoryManager(shared_ptr<BaseMapper> mapper);

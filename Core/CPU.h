@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "MemoryManager.h"
+#include "Snapshotable.h"
 
 namespace PSFlags
 {
@@ -35,7 +36,7 @@ struct State
 	uint8_t PS;
 };
 
-class CPU
+class CPU : public Snapshotable
 {
 private:
 	const uint16_t NMIVector = 0xFFFA;
@@ -637,6 +638,9 @@ private:
 		SetPC(PopWord());
 	}
 	#pragma endregion
+
+protected:
+	void StreamState(bool saving);
 
 public:
 	static const uint32_t ClockRate = 1789773;

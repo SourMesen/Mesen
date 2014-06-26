@@ -8,7 +8,7 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	_internalRAM = new uint8_t[InternalRAMSize];
 	_SRAM = new uint8_t[SRAMSize];
 	_videoRAM = new uint8_t[VRAMSize];
-	_expansionRAM = new uint8_t[0x2000];
+	_expansionRAM = new uint8_t[ExpansionRAMSize];
 
 	_ramReadHandlers = new IMemoryHandler*[RAMSize];
 	_ramWriteHandlers = new IMemoryHandler*[RAMSize];
@@ -18,7 +18,7 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	memset(_internalRAM, 0, InternalRAMSize);
 	memset(_SRAM, 0, SRAMSize);
 	memset(_videoRAM, 0, VRAMSize);
-	memset(_expansionRAM, 0, 0x2000);
+	memset(_expansionRAM, 0, ExpansionRAMSize);
 
 	memset(_ramReadHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
 	memset(_ramWriteHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
@@ -213,4 +213,12 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 				throw exception("Not implemented yet");
 		}
 	}
+}
+
+void MemoryManager::StreamState(bool saving)
+{
+	StreamArray<uint8_t>(_internalRAM, MemoryManager::InternalRAMSize);
+	StreamArray<uint8_t>(_expansionRAM, MemoryManager::ExpansionRAMSize);
+	StreamArray<uint8_t>(_SRAM, MemoryManager::SRAMSize);
+	StreamArray<uint8_t>(_videoRAM, MemoryManager::VRAMSize);
 }

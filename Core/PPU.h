@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "Snapshotable.h"
 #include "MemoryManager.h"
 #include "IVideoDevice.h"
 
@@ -73,7 +74,7 @@ struct SpriteInfo
 	bool BackgroundPriority;
 };
 
-class PPU : public IMemoryHandler
+class PPU : public IMemoryHandler, public Snapshotable
 {
 	private:
 		static PPU* Instance;
@@ -156,6 +157,9 @@ class PPU : public IMemoryHandler
 				return (PPURegisters)(addr & 0x07);
 			}
 		}
+
+	protected:
+		void StreamState(bool saving);
 
 	public:
 		PPU(MemoryManager *memoryManager);

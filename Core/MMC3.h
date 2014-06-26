@@ -26,7 +26,8 @@ class MMC3 : public BaseMapper
 		bool _irqReload;
 
 		bool _irqEnabled;
-		int32_t _lastPPUCycle;
+		uint32_t _lastCycle;
+		uint32_t _cyclesDown;
 
 		bool _wramEnabled;
 		bool _wramWriteProtected;
@@ -51,7 +52,8 @@ class MMC3 : public BaseMapper
 			_irqReloadValue = 0;
 			_irqReload = false;
 			_irqEnabled = false;
-			_lastPPUCycle = 0xFFFF;
+			_lastCycle = 0xFFFF;
+			_cyclesDown = 0;
 
 			_wramEnabled = false;
 			_wramWriteProtected = false;
@@ -107,6 +109,32 @@ class MMC3 : public BaseMapper
 		}
 
 	protected:
+		void StreamState(bool saving)
+		{
+			Stream<uint8_t>(_state.Reg8000);
+			Stream<uint8_t>(_state.RegA000);
+			Stream<uint8_t>(_state.RegA001);
+
+			Stream<uint8_t>(_currentRegister);
+			StreamArray<uint8_t>(_registers, 8);
+			Stream<uint8_t>(_chrMode);
+			Stream<uint8_t>(_prgMode);
+
+			Stream<uint8_t>(_irqReloadValue);
+			Stream<uint8_t>(_irqCounter);
+			Stream<bool>(_irqReload);
+
+			Stream<bool>(_irqEnabled);
+			Stream<uint32_t>(_lastCycle);
+			Stream<uint32_t>(_cyclesDown);
+
+			Stream<bool>(_wramEnabled);
+			Stream<bool>(_wramWriteProtected);
+
+			BaseMapper::StreamState(saving);
+		}
+
+
 		virtual uint32_t GetPRGPageSize() { return 0x2000; }
 		virtual uint32_t GetCHRPageSize() {	return 0x0400; }
 
@@ -168,8 +196,6 @@ class MMC3 : public BaseMapper
 			}
 		}
 
-		uint32_t _lastCycle = 0xFFFF;
-		uint32_t _cyclesDown = 0;
 		virtual void NotifyVRAMAddressChange(uint16_t addr)
 		{
 			uint16_t cycle = PPU::GetCurrentCycle();

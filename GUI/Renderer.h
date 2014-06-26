@@ -39,6 +39,9 @@ namespace NES {
 
 		uint32_t _flags = 0;
 
+		wstring _displayMessage = L"";
+		uint32_t _displayTimestamp = 0;
+
 		HRESULT InitDevice();
 		void CleanupDevice();
 
@@ -51,6 +54,8 @@ namespace NES {
 		~Renderer();
 
 		void Render();
+
+		void Renderer::DisplayMessage(wstring text, uint32_t duration);
 		
 		void SetFlags(uint32_t flags)
 		{

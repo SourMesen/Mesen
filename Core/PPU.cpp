@@ -645,3 +645,56 @@ void PPU::Exec()
 		gap--;
 	}
 }
+
+void PPU::StreamState(bool saving)
+{
+	Stream<uint8_t>(_state.Control);
+	Stream<uint8_t>(_state.Mask);
+	Stream<uint8_t>(_state.Status);
+	Stream<uint32_t>(_state.SpriteRamAddr);
+	Stream<uint16_t>(_state.VideoRamAddr);
+	Stream<uint8_t>(_state.XScroll);
+	Stream<uint16_t>(_state.TmpVideoRamAddr);
+	Stream<bool>(_state.WriteToggle);
+	Stream<uint16_t>(_state.HighBitShift);
+	Stream<uint16_t>(_state.LowBitShift);
+
+	Stream<int32_t>(_scanline);
+	Stream<uint32_t>(_cycle);
+	Stream<uint32_t>(_frameCount);
+	Stream<uint64_t>(_cycleCount);
+	Stream<uint8_t>(_memoryReadBuffer);
+	
+	StreamArray<uint8_t>(_paletteRAM, 0x100);
+	StreamArray<uint8_t>(_spriteRAM, 0x100);
+	StreamArray<uint8_t>(_secondarySpriteRAM, 0x20);
+
+	Stream<uint8_t>(_currentTile.LowByte);
+	Stream<uint8_t>(_currentTile.HighByte);
+	Stream<uint32_t>(_currentTile.PaletteOffset);
+
+	Stream<uint8_t>(_nextTile.LowByte);
+	Stream<uint8_t>(_nextTile.HighByte);
+	Stream<uint32_t>(_nextTile.PaletteOffset);
+
+	Stream<uint8_t>(_previousTile.LowByte);
+	Stream<uint8_t>(_previousTile.HighByte);
+	Stream<uint32_t>(_previousTile.PaletteOffset);
+
+	StreamArray<int32_t>(_spriteX, 0x8);
+	for(int i = 0; i < 8; i++) {
+		Stream<uint8_t>(_spriteTiles[i].LowByte);
+		Stream<uint8_t>(_spriteTiles[i].HighByte);
+		Stream<uint32_t>(_spriteTiles[i].PaletteOffset);
+		Stream<bool>(_spriteTiles[i].HorizontalMirror);
+		Stream<bool>(_spriteTiles[i].BackgroundPriority);
+	}
+	Stream<uint32_t>(_spriteCount);
+	Stream<uint32_t>(_secondaryOAMAddr);
+	Stream<bool>(_sprite0Visible);
+
+	if(!saving) {
+		SetControlRegister(_state.Control);
+		SetMaskRegister(_state.Mask);
+	}
+}

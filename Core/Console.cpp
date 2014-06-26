@@ -94,8 +94,13 @@ void Console::Run()
 			uint32_t frameCount = _ppu->GetFrameCount();
 			Console::CurrentFPS = (int)((frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000));
 			lastFrameCount = frameCount;
-			//std::cout << Console::CurrentFPS << std::endl;
 			fpsTimer.Reset();
+		}
+
+		if(!_saveStateFilename.empty()) {
+			SaveState();
+		} else if(!_loadStateFilename.empty()) {
+			LoadState();
 		}
 
 		if(_stop) {
@@ -112,6 +117,48 @@ void Console::Run()
 			_reset = false;
 		}
 	}
+}
+
+void Console::SaveState(wstring filename)
+{
+	_saveStateFilename = filename;
+}
+
+void Console::SaveState()
+{
+	ofstream file(_saveStateFilename, ios::out | ios::binary);
+
+	if(file) {
+		_cpu->SaveSnapshot(&file);
+		_ppu->SaveSnapshot(&file);
+		_memoryManager->SaveSnapshot(&file);
+		_mapper->SaveSnapshot(&file);
+		_apu->SaveSnapshot(&file);
+		file.close();
+	}
+
+	_saveStateFilename.clear();
+}
+
+void Console::LoadState(wstring filename)
+{
+	_loadStateFilename = filename;
+}
+
+void Console::LoadState()
+{
+	ifstream file(_loadStateFilename, ios::out | ios::binary);
+	
+	if(file) {
+		_cpu->LoadSnapshot(&file);
+		_ppu->LoadSnapshot(&file);
+		_memoryManager->LoadSnapshot(&file);
+		_mapper->LoadSnapshot(&file);
+		_apu->LoadSnapshot(&file);
+		file.close();
+	}
+
+	_loadStateFilename.clear();
 }
 
 bool Console::RunTest(uint8_t *expectedResult)

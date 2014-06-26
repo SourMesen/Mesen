@@ -4,9 +4,10 @@
 #include "MemoryManager.h"
 #include "IMemoryHandler.h"
 #include "IAudioDevice.h"
+#include "Snapshotable.h"
 #include "Nes_Apu/Nes_Apu.h"
 
-class APU : public IMemoryHandler
+class APU : public IMemoryHandler, public Snapshotable
 {
 	private:
 		static IAudioDevice* AudioDevice;
@@ -22,6 +23,9 @@ class APU : public IMemoryHandler
 	private:
 		static int DMCRead(void*, cpu_addr_t addr);
 		static void IRQChanged(void* data);
+
+	protected:
+		void StreamState(bool saving);
 
 	public:
 		static const uint32_t SampleRate = 44100;

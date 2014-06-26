@@ -195,6 +195,10 @@ namespace NES {
 			SetMenuEnabled(ID_NES_STOP, true);
 			SetMenuEnabled(ID_NES_RESUME, false);
 
+			SetMenuEnabled(ID_FILE_QUICKLOAD, true);
+			
+			SetMenuEnabled(ID_FILE_QUICKSAVE, true);
+
 			_renderer->ClearFlags(UIFlags::ShowPauseScreen);
 			if(IsMenuChecked(ID_OPTIONS_SHOWFPS)) {
 				_renderer->SetFlags(UIFlags::ShowFPS);
@@ -223,6 +227,8 @@ namespace NES {
 		SetMenuEnabled(ID_NES_PAUSE, false);
 		SetMenuEnabled(ID_NES_RESET, !powerOff);
 		SetMenuEnabled(ID_NES_STOP, !powerOff);
+		SetMenuEnabled(ID_FILE_QUICKLOAD, !powerOff);
+		SetMenuEnabled(ID_FILE_QUICKSAVE, !powerOff);
 		SetMenuEnabled(ID_NES_RESUME, true);
 	}
 
@@ -359,6 +365,14 @@ namespace NES {
 						if(filename.length() > 0) {
 							mainWindow->Start(filename);
 						}
+						break;
+					case ID_FILE_QUICKLOAD:
+						mainWindow->_console->LoadState(mainWindow->_currentROM + L".svs");
+						mainWindow->_renderer->DisplayMessage(L"State loaded.", 3000);
+						break;
+					case ID_FILE_QUICKSAVE:
+						mainWindow->_console->SaveState(mainWindow->_currentROM + L".svs");
+						mainWindow->_renderer->DisplayMessage(L"State saved.", 3000);
 						break;
 					case ID_FILE_EXIT:
 						DestroyWindow(hWnd);
