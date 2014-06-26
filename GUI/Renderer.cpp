@@ -39,7 +39,7 @@ namespace NES
 	void Renderer::CleanupDevice()
 	{
 		if(_pTexture) _pTexture->Release();
-		if(_overlayTexture) _pTexture->Release();
+		if(_overlayTexture) _overlayTexture->Release();
 
 		if(_samplerState) _samplerState->Release();
 		if(_pRenderTargetView) _pRenderTargetView->Release();
