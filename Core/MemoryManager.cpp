@@ -147,7 +147,21 @@ uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 		if(addr >= 0x3000) {
 			addr -= 0x1000;
 		}
-		return _videoRAM[addr & 0x3FFF];
+
+		switch(_mapper->GetMirroringType()) {
+			case MirroringType::Vertical:
+			case MirroringType::Horizontal:
+			case MirroringType::FourScreens:
+			default:
+				return _videoRAM[addr & 0x3FFF];
+
+			case MirroringType::ScreenAOnly:
+				return _videoRAM[addr & 0x33FF];
+
+			case MirroringType::ScreenBOnly:
+				return _videoRAM[addr & 0x33FF | 0x400];
+		}
+		
 	}
 }
 
@@ -163,52 +177,27 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 			addr -= 0x1000;
 		}
 
-		_videoRAM[addr] = value;
-
 		switch(_mapper->GetMirroringType()) {
 			case MirroringType::Vertical:
-				if(addr >= 0x2000 && addr < 0x2400) {
-					_videoRAM[addr + 0x800] = value;
-				} else if(addr >= 0x2400 && addr < 0x2800) {
-					_videoRAM[addr + 0x800] = value;
-				} else if(addr >= 0x2800 && addr < 0x2C00) {
-					_videoRAM[addr - 0x800] = value;
-				} else if(addr >= 0x2C00 && addr < 0x3000) {
-					_videoRAM[addr - 0x800] = value;
-				}
+				_videoRAM[addr] = value;
+				_videoRAM[addr ^ 0x800] = value;
 				break;
 
 			case MirroringType::Horizontal:
-				if(addr >= 0x2000 && addr < 0x2400) {
-					_videoRAM[addr + 0x400] = value;
-				} else if(addr >= 0x2400 && addr < 0x2800) {
-					_videoRAM[addr - 0x400] = value;
-				} else if(addr >= 0x2800 && addr < 0x2C00) {
-					_videoRAM[addr + 0x400] = value;
-				} else if(addr >= 0x2C00 && addr < 0x3000) {
-					_videoRAM[addr - 0x400] = value;
-				}
+				_videoRAM[addr] = value;
+				_videoRAM[addr ^ 0x400] = value;
 				break;
 
-			case MirroringType::ScreenAOnly:
-			case MirroringType::ScreenBOnly:
-				if(addr >= 0x2000 && addr < 0x2400) {
-					_videoRAM[addr + 0x400] = value;
-					_videoRAM[addr + 0x800] = value;
-					_videoRAM[addr + 0xC00] = value;
-				} else if(addr >= 0x2400 && addr < 0x2800) {
-					_videoRAM[addr - 0x400] = value;
-					_videoRAM[addr + 0x400] = value;
-					_videoRAM[addr + 0x800] = value;
-				} else if(addr >= 0x2800 && addr < 0x2C00) {
-					_videoRAM[addr + 0x400] = value;
-					_videoRAM[addr - 0x400] = value;
-					_videoRAM[addr - 0x800] = value;
-				} else if(addr >= 0x2C00 && addr < 0x3000) {
-					_videoRAM[addr - 0x400] = value;
-					_videoRAM[addr - 0x800] = value;
-					_videoRAM[addr - 0xC00] = value;
-				}
+			case MirroringType::ScreenAOnly:  //Always write to 0x2000
+				_videoRAM[addr & ~0xC00] = value;
+				break;
+
+			case MirroringType::ScreenBOnly:  //Always write to 0x2400
+				_videoRAM[addr & ~0x800 | 0x400] = value;
+				break;
+
+			case MirroringType::FourScreens:
+				_videoRAM[addr] = value;
 				break;
 
 			default:
