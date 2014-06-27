@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
+#include "PPU.h"
 
 MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 {
@@ -103,21 +104,25 @@ void MemoryManager::RegisterIODevice(IMemoryHandler *handler)
 
 uint8_t MemoryManager::Read(uint16_t addr)
 {
+	uint8_t value;
+	PPU::ExecStatic(3);
 	if(addr <= 0x1FFF) {
-		return _internalRAM[addr & 0x07FF];
+		value = _internalRAM[addr & 0x07FF];
 	} else if(addr <= 0x401F) {
-		return ReadRegister(addr);
+		value = ReadRegister(addr);
 	} else if(addr <= 0x5FFF) {
-		return _expansionRAM[addr & 0x1FFF];
+		value = _expansionRAM[addr & 0x1FFF];
 	} else if(addr <= 0x7FFF) {
-		return _SRAM[addr & 0x1FFF];
+		value = _SRAM[addr & 0x1FFF];
 	} else {
-		return ReadRegister(addr);
+		value = ReadRegister(addr);
 	}
+	return value;
 }
 
 void MemoryManager::Write(uint16_t addr, uint8_t value)
 {
+	PPU::ExecStatic(3);
 	if(addr <= 0x1FFF) {
 		_internalRAM[addr & 0x07FF] = value;
 	} else if(addr <= 0x401F) {

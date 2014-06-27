@@ -211,10 +211,14 @@ void PPU::SetControlRegister(uint8_t value)
 	_flags.BackgroundPatternAddr = ((_state.Control & 0x10) == 0x10) ? 0x1000 : 0x0000;
 	_flags.LargeSprites = (_state.Control & 0x20) == 0x20;
 
+	//"By toggling NMI_output ($2000 bit 7) during vertical blank without reading $2002, a program can cause /NMI to be pulled low multiple times, causing multiple NMIs to be generated."
 	bool originalVBlank = _flags.VBlank;
 	_flags.VBlank = (_state.Control & 0x80) == 0x80;
+	
 	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank) {
 		CPU::SetNMIFlag();
+	} else if(_scanline == 241 && _cycle < 3 && !_flags.VBlank) {
+		CPU::ClearNMIFlag();
 	}
 }
 
@@ -238,8 +242,14 @@ void PPU::UpdateStatusFlag()
 						 ((uint8_t)_statusFlags.VerticalBlank << 7);
 	_statusFlags.VerticalBlank = false;
 
-	if(_scanline == 241 && _cycle == 0) {
-		_doNotSetVBFlag = true;
+	if(_scanline == 241) {
+		if(_cycle < 3) {
+			CPU::ClearNMIFlag();
+
+			if(_cycle == 0) {
+				_doNotSetVBFlag = true;
+			}
+		}
 	}
 }
 
@@ -473,7 +483,7 @@ void PPU::ProcessPrerenderScanline()
 {
 	ProcessPreVBlankScanline();
 
-	if(_cycle == 1) {
+	if(_cycle == 0) {
 		_statusFlags.SpriteOverflow = false;
 		_statusFlags.Sprite0Hit = false;
 		_statusFlags.VerticalBlank = false;
@@ -486,8 +496,8 @@ void PPU::ProcessPrerenderScanline()
 			//copy vertical scrolling value from t
 			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x7BE0) | (_state.TmpVideoRamAddr & 0x7BE0);
 		}
-	} else if(_cycle == 339 && _flags.BackgroundEnabled && (_frameCount % 2 == 1)) {
-		//Skip a cycle for odd frames, if background drawing is enabled
+	} else if(_cycle == 339 && IsRenderingEnabled() && (_frameCount % 2 == 1)) {
+		//"With rendering enabled, each odd PPU frame is one PPU clock shorter than normal" (skip from 339 to 0, going over 340)
 		_cycle = -1;
 		_scanline = 0;
 	} else if(_cycle == 321 || _cycle == 329) {
@@ -616,7 +626,7 @@ void PPU::CopyOAMData()
 
 void PPU::BeginVBlank()
 {
-	if(_cycle == 1) {
+	if(_cycle == 0) {
 		if(!_doNotSetVBFlag) {
 			_statusFlags.VerticalBlank = true;
 			if(_flags.VBlank) {
@@ -634,10 +644,15 @@ void PPU::EndVBlank()
 	}
 }
 
-void PPU::Exec()
+void PPU::Exec(uint32_t extraCycles)
 {
 	uint64_t equivalentCycleCount = CPU::GetCycleCount() * 3;
-	uint32_t gap = (uint32_t)(equivalentCycleCount - _cycleCount);
+	int32_t gap = (int32_t)((int64_t)equivalentCycleCount - (int64_t)_cycleCount);
+	if(gap < 0) {
+		gap = 0;
+	}
+	gap += extraCycles;
+
 	_cycleCount += gap;
 	while(gap > 0) {
 		if(_scanline == -1) {

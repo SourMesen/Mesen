@@ -152,7 +152,7 @@ private:
 	uint8_t SP() { return _state.SP; }
 	void SetSP(uint8_t value) { _state.SP = value; }
 	uint8_t PS() { return _state.PS; }
-	void SetPS(uint8_t value) { _state.PS = (value & 0xDF) | PSFlags::Reserved; }
+	void SetPS(uint8_t value) { _state.PS = (value & 0xCF) | PSFlags::Reserved; }
 	uint16_t PC() { return _state.PC; }
 	void SetPC(uint16_t value) { _state.PC = value; }
 
@@ -609,12 +609,20 @@ private:
 
 	void BRK() {
 		Push((uint16_t)(PC() + 1));
-		
-		uint8_t flags = PS() | PSFlags::Break;
-		Push((uint8_t)flags);
-		SetFlags(PSFlags::Interrupt);
 
-		SetPC(MemoryReadWord(CPU::IRQVector));
+		uint8_t flags = PS() | PSFlags::Break;
+		if(CPU::NMIFlag) {
+			Push((uint8_t)flags);
+			SetFlags(PSFlags::Interrupt);
+
+			SetPC(MemoryReadWord(CPU::NMIVector));
+		} else {
+
+			Push((uint8_t)flags);
+			SetFlags(PSFlags::Interrupt);
+
+			SetPC(MemoryReadWord(CPU::IRQVector));
+		}
 	}
 
 	void NMI() {
@@ -626,9 +634,17 @@ private:
 
 	void IRQ() {
 		Push((uint16_t)(PC()));
-		Push((uint8_t)PS());
-		SetFlags(PSFlags::Interrupt);
-		SetPC(MemoryReadWord(CPU::IRQVector));
+
+		if(CPU::NMIFlag) {
+			Push((uint8_t)PS());
+			SetFlags(PSFlags::Interrupt);
+
+			SetPC(MemoryReadWord(CPU::NMIVector));
+		} else {
+			Push((uint8_t)PS());
+			SetFlags(PSFlags::Interrupt);
+			SetPC(MemoryReadWord(CPU::IRQVector));
+		}
 	}
 
 
@@ -652,6 +668,7 @@ public:
 		CPU::CycleCount += cycles;
 	}
 	static void SetNMIFlag() { CPU::NMIFlag = true; }
+	static void ClearNMIFlag() { CPU::NMIFlag = false; }
 	static void SetIRQSource(IRQSource source) 
 	{ 
 		CPU::IRQFlag |= (int)source; 
