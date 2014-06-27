@@ -291,19 +291,54 @@ namespace NES {
 		}
 	}
 
-	vector<wstring> MainWindow::GetFilesInFolder(wstring folderMask)
+	vector<wstring> MainWindow::GetFolders(wstring rootFolder)
 	{
 		HANDLE hFind;
 		WIN32_FIND_DATA data;
 
-		vector<wstring> files;
+		vector<wstring> folders;
 
-		hFind = FindFirstFile(folderMask.c_str(), &data);
+		hFind = FindFirstFile((rootFolder + L"*").c_str(), &data);
 		if(hFind != INVALID_HANDLE_VALUE) {
 			do {
-				files.push_back(data.cFileName);
-			} while(FindNextFile(hFind, &data));
+				if(data.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY && wcscmp(data.cFileName, L".") != 0 && wcscmp(data.cFileName, L"..") != 0) {
+					wstring subfolder = rootFolder + data.cFileName + L"\\";
+					folders.push_back(subfolder);
+					for(wstring folderName : GetFolders(subfolder.c_str())) {
+						folders.push_back(folderName);
+					}
+				}
+			}
+			while(FindNextFile(hFind, &data));
 			FindClose(hFind);
+		}
+
+		return folders;
+	}
+
+	vector<wstring> MainWindow::GetFilesInFolder(wstring rootFolder, wstring mask, bool recursive)
+	{
+		HANDLE hFind;
+		WIN32_FIND_DATA data;
+
+		vector<wstring> folders;
+		vector<wstring> files;
+		folders.push_back(rootFolder);
+
+		if(recursive) {
+			for(wstring subFolder : GetFolders(rootFolder)) {
+				folders.push_back(subFolder);
+			}
+		}
+
+		for(wstring folder : folders) {
+			hFind = FindFirstFile((folder + mask).c_str(), &data);
+			if(hFind != INVALID_HANDLE_VALUE) {
+				do {
+					files.push_back(folder + data.cFileName);
+				} while(FindNextFile(hFind, &data));
+				FindClose(hFind);
+			}
 		}
 
 		return files;
@@ -315,15 +350,15 @@ namespace NES {
 		int passCount = 0;
 		int failCount = 0;
 		int totalCount = 0;
-		for(wstring testROM : GetFilesInFolder(L"../TestSuite/*.nes")) {
-			ifstream testResult(L"../TestSuite/" + testROM + L".trt", ios::in | ios::binary);
+		for(wstring testROM : GetFilesInFolder(L"..\\TestSuite\\", L"*.nes", true)) {
+			ifstream testResult(testROM + L".trt", ios::in | ios::binary);
 
 			if(testResult) {
+				std::wcout << testROM.substr(13) << ": ";
 				uint8_t* expectedResult = new uint8_t[256 * 240 * 4];
 				testResult.read((char*)expectedResult, 256 * 240 * 4);
 
-				Console *console = new Console(L"../TestSuite/" + testROM);
-				std::wcout << testROM << ": ";
+				Console *console = new Console(testROM);
 				if(console->RunTest(expectedResult)) {
 					std::cout << "Passed";
 					passCount++;
@@ -337,7 +372,7 @@ namespace NES {
 
 				delete[] expectedResult;
 			} else {
-				std::wcout << testROM << ": [No result]" << std::endl;
+				//std::wcout << "[No result]" << std::endl;
 			}
 			totalCount++;
 		}

@@ -164,7 +164,8 @@ void Console::LoadState()
 bool Console::RunTest(uint8_t *expectedResult)
 {
 	Timer timer;
-	uint8_t maxWait = 30;
+	uint8_t maxWait = 60;
+	uint8_t* lastFrameBuffer = new uint8_t[256 * 240 * 4];
 	while(true) {
 		_apu->Exec(_cpu->Exec());
 		_ppu->Exec();
@@ -173,15 +174,22 @@ bool Console::RunTest(uint8_t *expectedResult)
 			if(memcmp(_ppu->GetFrameBuffer(), expectedResult, 256 * 240 * 4) == 0) {
 				return true;
 			}
-			
-			timer.Reset();
-			maxWait--;
 
+			timer.Reset();
+
+			if(memcmp(lastFrameBuffer, _ppu->GetFrameBuffer(), 256 * 240 * 4) != 0) {
+				memcpy(lastFrameBuffer, _ppu->GetFrameBuffer(), 256 * 240 * 4);
+				maxWait = 60;
+			}
+
+			maxWait--;
 			if(maxWait == 0) {
 				return false;
 			}
 		}
 	}
+	
+	delete[] lastFrameBuffer;
 
 	return false;
 }

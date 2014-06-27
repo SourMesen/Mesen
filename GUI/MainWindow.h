@@ -27,8 +27,9 @@ namespace NES {
 
 		void SaveTestResult();
 		void RunTests();
-
-		vector<wstring> GetFilesInFolder(wstring folderMask);
+		
+		vector<wstring> GetFolders(wstring rootFolder);
+		vector<wstring> GetFilesInFolder(wstring folder, wstring mask, bool recursive);
 
 		void LimitFPS_Click();
 		void ShowFPS_Click();
