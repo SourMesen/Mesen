@@ -3,6 +3,7 @@
 #include "AXROM.h"
 #include "CNROM.h"
 #include "MMC1.h"
+#include "MMC2.h"
 #include "MMC3.h"
 #include "NROM.h"
 #include "UNROM.h"
@@ -19,6 +20,8 @@ class MapperFactory
 				case 3: return new CNROM();
 				case 4: return new MMC3();
 				case 7: return new AXROM();
+				case 9: return new MMC2();
+				case 71: return new UNROM(); //TODO: "It's largely a clone of UNROM, and Camerica games were initially emulated under iNES Mapper 002 before 071 was assigned."
 			}
 
 			throw std::exception("Unsupported mapper");

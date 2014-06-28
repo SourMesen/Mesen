@@ -96,6 +96,7 @@
     <ClInclude Include="IControlDevice.h" />
     <ClInclude Include="IMemoryHandler.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="MMC2.h" />
     <ClInclude Include="Snapshotable.h" />
     <ClInclude Include="IVideoDevice.h" />
     <ClInclude Include="MapperFactory.h" />
