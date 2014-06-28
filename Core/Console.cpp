@@ -92,7 +92,7 @@ void Console::Run()
 		
 		if(fpsTimer.GetElapsedMS() > 1000) {
 			uint32_t frameCount = _ppu->GetFrameCount();
-			Console::CurrentFPS = (int)((frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000));
+			Console::CurrentFPS = (int)(std::round((double)(frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000)));
 			lastFrameCount = frameCount;
 			fpsTimer.Reset();
 		}
