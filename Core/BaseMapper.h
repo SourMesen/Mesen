@@ -4,6 +4,7 @@
 #include "Snapshotable.h"
 #include "IMemoryHandler.h"
 #include "ROMLoader.h"
+#include <assert.h>
 
 class BaseMapper : public IMemoryHandler, public Snapshotable
 {
@@ -223,7 +224,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 
 		void WriteRAM(uint16_t addr, uint8_t value)
 		{
-			_prgPages[AddrToPRGSlot(addr)][addr & (GetPRGPageSize() - 1)] = value;
+			assert(false);
+			//_prgPages[AddrToPRGSlot(addr)][addr & (GetPRGPageSize() - 1)] = value;
 		}
 		
 		virtual uint8_t ReadVRAM(uint16_t addr)
@@ -233,7 +235,11 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 
 		virtual void WriteVRAM(uint16_t addr, uint8_t value)
 		{
-			_chrPages[AddrToCHRSlot(addr)][addr & (GetCHRPageSize() - 1)] = value;
+			if(_hasCHRRAM) {
+				_chrPages[AddrToCHRSlot(addr)][addr & (GetCHRPageSize() - 1)] = value;
+			} else {
+				assert(false);
+			}
 		}
 
 		virtual void NotifyVRAMAddressChange(uint16_t addr)
