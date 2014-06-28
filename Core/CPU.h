@@ -97,14 +97,16 @@ private:
 		}
 	}
 
-	bool IsPageCrossed(uint16_t valA, int8_t valB)
+	bool CheckPageCrossed(uint16_t valA, int8_t valB)
 	{
-		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
+		_pageCrossed = ((valA + valB) & 0xFF00) != (valA & 0xFF00);
+		return _pageCrossed;
 	}
 
-	bool IsPageCrossed(uint16_t valA, uint8_t valB)
+	bool CheckPageCrossed(uint16_t valA, uint8_t valB)
 	{
-		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
+		_pageCrossed = ((valA + valB) & 0xFF00) != (valA & 0xFF00);
+		return _pageCrossed;
 	}
 
 	void MemoryWrite(uint16_t addr, uint8_t value)
@@ -174,20 +176,26 @@ private:
 	uint8_t GetAbs() { return MemoryRead(GetAbsAddr()); }
 	uint16_t GetAbsAddr() { return ReadWord(); }
 
-	uint8_t GetAbsX() { return MemoryRead(GetAbsXAddr()); }
-	uint16_t GetAbsXAddr() { 
+	uint8_t GetAbsX() { return MemoryRead(GetAbsXAddr(false)); }
+	uint16_t GetAbsXAddr(bool dummyRead = true) { 
 		uint16_t baseAddr = ReadWord();
-		if(IsPageCrossed(baseAddr, X())) {
-			SetPageCrossed();
+		bool pageCrossed = CheckPageCrossed(baseAddr, X());
+
+		if(pageCrossed || dummyRead) {
+			//Dummy read done by the processor (only when page is crossed for READ instructions)
+			MemoryRead(baseAddr + X() - (pageCrossed ? 0x100 : 0));
 		}
 		return baseAddr + X(); 
 	}
 
-	uint8_t GetAbsY() { return MemoryRead(GetAbsYAddr()); }
-	uint16_t GetAbsYAddr() { 
+	uint8_t GetAbsY() { return MemoryRead(GetAbsYAddr(false)); }
+	uint16_t GetAbsYAddr(bool dummyRead = true) { 
 		uint16_t baseAddr = ReadWord();
-		if(IsPageCrossed(baseAddr, Y())) {
-			SetPageCrossed();
+		bool pageCrossed = CheckPageCrossed(baseAddr, Y());
+		
+		if(pageCrossed || dummyRead) {
+			//Dummy read done by the processor (only when page is crossed for READ instructions)
+			MemoryRead(baseAddr + Y() - (pageCrossed ? 0x100 : 0));
 		}
 
 		return baseAddr + Y(); 
@@ -206,27 +214,37 @@ private:
 
 	uint8_t GetIndX() { return MemoryRead(GetIndXAddr()); }
 	uint16_t GetIndXAddr() {
-		uint8_t zero = ReadByte() + X();
+		uint8_t zero = ReadByte();
+		
+		//Dummy read
+		MemoryRead(zero);
+
+		zero += X();
+		
 		uint16_t addr;
 		if(zero == 0xFF) {
-			addr = MemoryRead(0xFF) | MemoryReadWord(0x00) << 8;
+			addr = MemoryRead(0xFF) | MemoryRead(0x00) << 8;
 		} else {
 			addr = MemoryReadWord(zero);
 		}
 		return addr;
 	}
 
-	uint8_t GetIndY() { return MemoryRead(GetIndYAddr()); }
-	uint16_t GetIndYAddr() {
+	uint8_t GetIndY() { return MemoryRead(GetIndYAddr(false)); }
+	uint16_t GetIndYAddr(bool dummyRead = true) {
 		uint8_t zero = ReadByte();
+		
 		uint16_t addr;
 		if(zero == 0xFF) {
-			addr = MemoryRead(0xFF) | MemoryReadWord(0x00) << 8;
+			addr = MemoryRead(0xFF) | MemoryRead(0x00) << 8;
 		} else {
 			addr = MemoryReadWord(zero);
 		}
-		if(IsPageCrossed(addr, Y())) {
-			SetPageCrossed();
+
+		bool pageCrossed = CheckPageCrossed(addr, Y());			
+		if(pageCrossed || dummyRead) {
+			//Dummy read done by the processor (only when page is crossed for READ instructions)
+			MemoryRead(addr + Y() - (pageCrossed ? 0x100 : 0));
 		}
 		return addr + Y();
 	}
@@ -360,9 +378,7 @@ private:
 	void BranchRelative(bool branch) {
 		int8_t offset = GetImmediate();
 		if(branch) {
-			if(IsPageCrossed(PC(), offset)) {
-				SetPageCrossed();
-			}
+			CheckPageCrossed(PC(), offset);
 			IncCycleCount(1);
 
 			SetPC(PC() + offset);
@@ -380,10 +396,6 @@ private:
 		if(value & 0x80) {
 			SetFlags(PSFlags::Negative);
 		}
-	}
-
-	void SetPageCrossed() {
-		_pageCrossed = true;
 	}
 
 	bool IsPageCrossed() {
