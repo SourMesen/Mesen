@@ -123,8 +123,8 @@ class MMC1 : public BaseMapper
 			}
 
 			if(_chrMode == ChrMode::_8k) {
-				SelectCHRPage(0, _chrReg0);
-				SelectCHRPage(1, _chrReg0 + 1);
+				SelectCHRPage(0, _chrReg0 & 0x1E);
+				SelectCHRPage(1, (_chrReg0 & 0x1E) + 1);
 			} else if(_chrMode == ChrMode::_4k) {
 				SelectCHRPage(0, _chrReg0);
 				SelectCHRPage(1, _chrReg1);
