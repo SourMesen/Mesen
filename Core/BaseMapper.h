@@ -174,6 +174,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 		{
 			delete[] _prgRAM;
 			delete[] _chrRAM;
+			delete[] _prgSlotPages;
+			delete[] _chrSlotPages;
 		}
 
 		void GetMemoryRanges(MemoryRanges &ranges)
