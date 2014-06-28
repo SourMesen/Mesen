@@ -18,7 +18,7 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 		&CPU::BVC,			&CPU::EOR_IndY,	nullptr,				nullptr,		nullptr,				&CPU::EOR_ZeroX,	&CPU::LSR_ZeroX,	nullptr,		&CPU::CLI,			&CPU::EOR_AbsY,	nullptr,				nullptr,		nullptr,				&CPU::EOR_AbsX,	&CPU::LSR_AbsX,	nullptr, //5
 		&CPU::RTS,			&CPU::ADC_IndX,	nullptr,				nullptr,		nullptr,				&CPU::ADC_Zero,	&CPU::ROR_Zero,	nullptr,		&CPU::PLA,			&CPU::ADC_Imm,		&CPU::ROR_Acc,		nullptr,		&CPU::JMP_Ind,		&CPU::ADC_Abs,		&CPU::ROR_Abs,		nullptr, //6
 		&CPU::BVS,			&CPU::ADC_IndY,	nullptr,				nullptr,		nullptr,				&CPU::ADC_ZeroX,	&CPU::ROR_ZeroX,	nullptr,		&CPU::SEI,			&CPU::ADC_AbsY,	nullptr,				nullptr,		nullptr,				&CPU::ADC_AbsX,	&CPU::ROR_AbsX,	nullptr, //7
-		nullptr,				&CPU::STA_IndX,	nullptr,				nullptr,		&CPU::STY_Zero,	&CPU::STA_Zero,	&CPU::STX_Zero,	nullptr,		&CPU::DEY,			nullptr,				&CPU::TXA,			nullptr,		&CPU::STY_Abs,		&CPU::STA_Abs,		&CPU::STX_Abs,		nullptr, //8
+		nullptr,				&CPU::STA_IndX,	nullptr,				nullptr,		&CPU::STY_Zero,	&CPU::STA_Zero,	&CPU::STX_Zero,	nullptr,		&CPU::DEY,			&CPU::NOP2,			&CPU::TXA,			nullptr,		&CPU::STY_Abs,		&CPU::STA_Abs,		&CPU::STX_Abs,		nullptr, //8
 		&CPU::BCC,			&CPU::STA_IndY,	nullptr,				nullptr,		&CPU::STY_ZeroX,	&CPU::STA_ZeroX,	&CPU::STX_ZeroY,	nullptr,		&CPU::TYA,			&CPU::STA_AbsY,	&CPU::TXS,			nullptr,		nullptr,				&CPU::STA_AbsX,	nullptr,				nullptr, //9
 		&CPU::LDY_Imm,		&CPU::LDA_IndX,	&CPU::LDX_Imm,		nullptr,		&CPU::LDY_Zero,	&CPU::LDA_Zero,	&CPU::LDX_Zero,	nullptr,		&CPU::TAY,			&CPU::LDA_Imm,		&CPU::TAX,			nullptr,		&CPU::LDY_Abs,		&CPU::LDA_Abs,		&CPU::LDX_Abs,		nullptr, //A
 		&CPU::BCS,			&CPU::LDA_IndY,	nullptr,				nullptr,		&CPU::LDY_ZeroX,	&CPU::LDA_ZeroX,	&CPU::LDX_ZeroY,	nullptr,		&CPU::CLV,			&CPU::LDA_AbsY,	&CPU::TSX,			nullptr,		&CPU::LDY_AbsX,	&CPU::LDA_AbsX,	&CPU::LDX_AbsY,	nullptr, //B
@@ -111,7 +111,7 @@ uint32_t CPU::Exec()
 			(this->*_opTable[opCode])();
 			executedCycles = (IsPageCrossed() ? _cyclesPageCrossed[opCode] : _cycles[opCode]);
 		} else {
-			//std::cout << "Invalid opcode: " << std::hex << (short)opCode;
+			std::cout << "Invalid opcode: " << std::hex << (short)opCode;
 			//throw exception("Invalid opcode");
 		}
 

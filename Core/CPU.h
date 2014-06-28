@@ -666,6 +666,11 @@ private:
 
 
 	void NOP() {}
+	void NOP2() {
+		//Unofficial opcode, 2-byte NOP
+		ReadByte();
+	}
+
 	void RTI() {
 		SetPS(Pop());
 		SetPC(PopWord());
