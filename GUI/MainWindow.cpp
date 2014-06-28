@@ -455,6 +455,22 @@ namespace NES {
 				EndPaint(hWnd, &ps);
 				break;
 
+			case WM_SIZE:
+				if(wParam == SIZE_RESTORED) {
+					RECT clientRect;
+					RECT windowRect;
+					LONG xGap;
+					LONG yGap;
+					GetWindowRect(hWnd, &windowRect);
+					GetClientRect(hWnd, &clientRect);
+					
+					xGap = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left);
+					yGap = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top);
+
+					SetWindowPos(mainWindow->_hWnd, nullptr, windowRect.left, windowRect.top, windowRect.right - windowRect.left, (windowRect.bottom - windowRect.top - xGap) * 224 / 256 + yGap, 0);
+				}
+				break;
+
 			case WM_WINDOWPOSCHANGING:
 				WINDOWPOS* windowPos;
 				windowPos = (WINDOWPOS*)lParam;
@@ -466,8 +482,7 @@ namespace NES {
 					LONG yGap;
 					GetWindowRect(hWnd, &windowRect);
 					GetClientRect(hWnd, &clientRect);
-
-
+					
 					xGap = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left);
 					yGap = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top);
 
