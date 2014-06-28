@@ -102,6 +102,11 @@ private:
 		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
 	}
 
+	bool IsPageCrossed(uint16_t valA, uint8_t valB)
+	{
+		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
+	}
+
 	void MemoryWrite(uint16_t addr, uint8_t value)
 	{
 		_memoryManager->Write(addr, value);
