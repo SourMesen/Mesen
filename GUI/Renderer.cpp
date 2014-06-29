@@ -325,32 +325,39 @@ namespace NES
 	//--------------------------------------------------------------------------------------
 	void Renderer::Render()
 	{
-		// Clear the back buffer 
-		_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
-
-		_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
-
-		//Draw nes screen
-		DrawNESScreen();
-
-		//Draw FPS counter
-		if(CheckFlag(UIFlags::ShowFPS)) {
-			_font->DrawString(_spriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256 * 4 - 149, 13), Colors::Black, 0.0f, XMFLOAT2(0, 0), 1.0f);
-			_font->DrawString(_spriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256 * 4 - 150, 11), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 1.0f);
+		if(_displayTimestamp < timeGetTime()) {
+			_displayMessage.clear();
 		}
 
-		if(!_displayMessage.empty() && _displayTimestamp > timeGetTime()) {
-			_font->DrawString(_spriteBatch.get(), _displayMessage.c_str(), XMFLOAT2(12, 13), Colors::Black, 0.0f, XMFLOAT2(0, 0), 1.0f);
-			_font->DrawString(_spriteBatch.get(), _displayMessage.c_str(), XMFLOAT2(11, 11), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 1.0f);
+		if(_frameChanged || CheckFlag(UIFlags::ShowPauseScreen) || !_displayMessage.empty()) {
+			_frameChanged = false;
+			// Clear the back buffer 
+			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
+
+			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
+
+			//Draw nes screen
+			DrawNESScreen();
+
+			//Draw FPS counter
+			if(CheckFlag(UIFlags::ShowFPS)) {
+				_font->DrawString(_spriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256 * 4 - 149, 13), Colors::Black, 0.0f, XMFLOAT2(0, 0), 1.0f);
+				_font->DrawString(_spriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256 * 4 - 150, 11), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 1.0f);
+			}
+
+			if(!_displayMessage.empty() && _displayTimestamp > timeGetTime()) {
+				_font->DrawString(_spriteBatch.get(), _displayMessage.c_str(), XMFLOAT2(12, 13), Colors::Black, 0.0f, XMFLOAT2(0, 0), 1.0f);
+				_font->DrawString(_spriteBatch.get(), _displayMessage.c_str(), XMFLOAT2(11, 11), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 1.0f);
+			}
+
+			if(CheckFlag(UIFlags::ShowPauseScreen)) {
+				DrawPauseScreen();
+			}
+
+			_spriteBatch->End();
+
+			// Present the information rendered to the back buffer to the front buffer (the screen)
+			_pSwapChain->Present(0, 0);
 		}
-
-		if(CheckFlag(UIFlags::ShowPauseScreen)) {
-			DrawPauseScreen();
-		}
-
-		_spriteBatch->End();
-
-		// Present the information rendered to the back buffer to the front buffer (the screen)
-		_pSwapChain->Present(0, 0);
 	}
 }

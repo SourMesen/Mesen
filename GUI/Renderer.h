@@ -30,6 +30,8 @@ namespace NES {
 		
 		ID3D11Texture2D*			_pTexture = nullptr;
 		byte*							_videoRAM = nullptr;
+
+		bool							_frameChanged = true;
 		uint8_t*						_nextFrameBuffer = nullptr;
 
 		unique_ptr<SpriteFont>	_font;
@@ -84,6 +86,7 @@ namespace NES {
 
 		void UpdateFrame(uint8_t* frameBuffer)
 		{
+			_frameChanged = true;
 			memcpy(_nextFrameBuffer, frameBuffer, 256 * 240 * 4);
 		}
 	};
