@@ -114,7 +114,7 @@ namespace NES {
 		// Create window
 		RECT rc = { 0, 0, 800, 700 };
 		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-		_hWnd = CreateWindow(L"NESEmu", L"NESEmu",
+		_hWnd = CreateWindow(L"NESEmu", _windowName,
 			WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, _hInstance,
 			nullptr);
@@ -169,7 +169,12 @@ namespace NES {
 
 		GetOpenFileName(&ofn);
 
-		return wstring(buffer);
+		wstring filepath(buffer);
+		
+		wstring filename = filepath.substr(filepath.find_last_of(L"/\\") + 1);
+		SetWindowText(_hWnd, (wstring(_windowName) + L": " + filename).c_str());
+
+		return filepath;
 	}
 
 	void MainWindow::Start(wstring romFilename = L"")

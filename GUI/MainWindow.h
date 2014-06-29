@@ -8,6 +8,9 @@ namespace NES {
 	{
 	private:
 		static MainWindow *Instance;
+
+		const wchar_t* _windowName = L"NESEmu";
+
 		HINSTANCE _hInstance;
 		HWND _hWnd;
 		int _nCmdShow;
