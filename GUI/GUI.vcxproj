@@ -147,6 +147,9 @@
     <ProjectReference Include="..\Core\Core.vcxproj">
       <Project>{78fef1a1-6df1-4cbb-a373-ae6fa7ce5ce0}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
+      <Project>{b5330148-e8c7-46ba-b54e-69be59ea337d}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Calibri.30.spritefont">
@@ -157,7 +160,7 @@
   <ItemGroup>
     <Content Include="Calibri.30.spritefont">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</Content>  
+    </Content>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

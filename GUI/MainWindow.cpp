@@ -2,7 +2,7 @@
 #include "Resource.h"
 #include "MainWindow.h"
 #include "../Core/Console.h"
-#include "../Utilities/Timer.h"
+#include "../Utilities/ConfigManager.h"
 #include "InputManager.h"
 
 using namespace DirectX;
@@ -144,35 +144,201 @@ namespace NES {
 		return (INT_PTR)FALSE;
 	}
 
-	void MainWindow::InitializeOptions()
+	INT_PTR CALLBACK MainWindow::ControllerSetup(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	{
-		Console::SetFlags(EmulationFlags::LimitFPS);
+		UNREFERENCED_PARAMETER(lParam);
+		static HWND _focusedControl;
+		switch(message) {
+			case WM_INITDIALOG:
+				HWND cboPort1;
+				cboPort1 = GetDlgItem(hDlg, IDC_CBOPORT1);
+				SendMessage(cboPort1, CB_ADDSTRING, 0, (LPARAM)_T("<none>"));
+				SendMessage(cboPort1, CB_ADDSTRING, 0, (LPARAM)_T("Gamepad"));
+				SendMessage(cboPort1, CB_SETCURSEL, 0, 0);
+				return (INT_PTR)TRUE;
+
+			case WM_SETFOCUS:
+			case WM_SETCURSOR:
+				_focusedControl = GetFocus();
+				break;
+
+			case WM_KEYDOWN:
+				break;
+
+			case WM_COMMAND:
+				if(LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL) {
+					if(LOWORD(wParam) == IDOK) {
+						//Save settings
+						ConfigManager::SetValue(Config::Player1_ButtonA, "V");
+					}
+
+					EndDialog(hDlg, LOWORD(wParam));
+					return (INT_PTR)TRUE;
+				}
+				break;
+		}
+		return (INT_PTR)FALSE;
 	}
 
-	wstring MainWindow::SelectROM()
+	INT_PTR CALLBACK MainWindow::InputConfig(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	{
-		wchar_t buffer[2000];
+		UNREFERENCED_PARAMETER(lParam);
+		switch(message) {
+			case WM_INITDIALOG:
+				HWND cboPort1;
+				cboPort1 = GetDlgItem(hDlg, IDC_CBOPORT1);
+				SendMessage(cboPort1, CB_ADDSTRING, 0, (LPARAM)_T("<none>"));
+				SendMessage(cboPort1, CB_ADDSTRING, 0, (LPARAM)_T("Gamepad"));
+				SendMessage(cboPort1, CB_SETCURSEL, 0, 0);
+				return (INT_PTR)TRUE;
 
-		OPENFILENAME ofn;
-		ZeroMemory(&ofn, sizeof(ofn));
-		ofn.lStructSize = sizeof(ofn);
-		ofn.hwndOwner = nullptr;
-		ofn.lpstrFile = buffer;
-		ofn.lpstrFile[0] = '\0';
-		ofn.nMaxFile = sizeof(buffer);
-		ofn.lpstrFilter = L"NES Roms\0*.NES\0All\0*.*";
-		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = nullptr;
-		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = nullptr;
-		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+			case WM_COMMAND:
+				if(LOWORD(wParam) == IDC_BTNPORT1KEYS) {
+					DialogBox(nullptr, MAKEINTRESOURCE(IDD_CONTROLLERSETUP), hDlg, ControllerSetup);
+				} else if(LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL) {
+					if(LOWORD(wParam) == IDOK) {
+						//Save settings
+						ConfigManager::SetValue(Config::Player1_ButtonA, "V");
+					}
 
-		GetOpenFileName(&ofn);
+					EndDialog(hDlg, LOWORD(wParam));
+					return (INT_PTR)TRUE;
+				}
+				break;
+		}
+		return (INT_PTR)FALSE;
+	}
 
-		wstring filepath(buffer);
+	void MainWindow::InitializeOptions()
+	{
+		if(ConfigManager::GetValue<bool>(Config::LimitFPS)) {
+			Console::SetFlags(EmulationFlags::LimitFPS);
+			SetMenuCheck(ID_OPTIONS_LIMITFPS, true);
+		}
+
+		if(ConfigManager::GetValue<bool>(Config::ShowFPS)) {
+			_renderer->SetFlags(UIFlags::ShowFPS);
+			SetMenuCheck(ID_OPTIONS_SHOWFPS, true);
+		}
 		
-		wstring filename = filepath.substr(filepath.find_last_of(L"/\\") + 1);
-		SetWindowText(_hWnd, (wstring(_windowName) + L": " + filename).c_str());
+		UpdateMRUMenu();
+	}
+
+	void MainWindow::AddToMRU(wstring romFilename)
+	{
+		wstring MRU0 = ConfigManager::GetValue<wstring>(Config::MRU0);
+		wstring MRU1 = ConfigManager::GetValue<wstring>(Config::MRU1);
+		wstring MRU2 = ConfigManager::GetValue<wstring>(Config::MRU2);
+		wstring MRU3 = ConfigManager::GetValue<wstring>(Config::MRU3);
+		wstring MRU4 = ConfigManager::GetValue<wstring>(Config::MRU4);
+
+		if(MRU0.compare(romFilename) == 0) {
+			return;
+		} else if(MRU1.compare(romFilename) == 0) {
+			MRU1 = MRU0;
+			MRU0 = romFilename;
+		} else if(MRU2.compare(romFilename) == 0) {
+			MRU2 = MRU1;
+			MRU1 = MRU0;
+			MRU0 = romFilename;
+		} else if(MRU3.compare(romFilename) == 0) {
+			MRU3 = MRU2;
+			MRU2 = MRU1;
+			MRU1 = MRU0;
+			MRU0 = romFilename;
+		} else {
+			MRU4 = MRU3;
+			MRU3 = MRU2;
+			MRU2 = MRU1;
+			MRU1 = MRU0;
+			MRU0 = romFilename;
+		}
+
+		ConfigManager::SetValue(Config::MRU0, MRU0);
+		ConfigManager::SetValue(Config::MRU1, MRU1);
+		ConfigManager::SetValue(Config::MRU2, MRU2);
+		ConfigManager::SetValue(Config::MRU3, MRU3);
+		ConfigManager::SetValue(Config::MRU4, MRU4);
+		
+		UpdateMRUMenu();
+	}
+
+	void MainWindow::UpdateMRUMenu()
+	{
+		wstring MRU0 = ConfigManager::GetValue<wstring>(Config::MRU0);
+		wstring MRU1 = ConfigManager::GetValue<wstring>(Config::MRU1);
+		wstring MRU2 = ConfigManager::GetValue<wstring>(Config::MRU2);
+		wstring MRU3 = ConfigManager::GetValue<wstring>(Config::MRU3);
+		wstring MRU4 = ConfigManager::GetValue<wstring>(Config::MRU4);
+
+		HMENU hMenu = GetMenu(_hWnd);
+
+		MENUITEMINFOW info;
+		//Initialize MENUITEMINFO structure:
+		memset(&info, 0, sizeof(info));
+		info.cbSize = sizeof(info);
+		info.fMask = MIIM_TYPE;
+		info.fType = MFT_STRING;
+		info.cch = 256;
+
+		if(!MRU0.empty()) {
+			info.dwTypeData = (LPWSTR)MRU0.c_str();
+			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU1, false, &info);
+		}
+
+		if(!MRU1.empty()) {
+			info.dwTypeData = (LPWSTR)MRU1.c_str();
+			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU2, false, &info);
+		}
+
+		if(!MRU2.empty()) {
+			info.dwTypeData = (LPWSTR)MRU2.c_str();
+			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU3, false, &info);
+		}
+
+		if(!MRU3.empty()) {
+			info.dwTypeData = (LPWSTR)MRU3.c_str();
+			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU4, false, &info);
+		}
+
+		if(!MRU4.empty()) {
+			info.dwTypeData = (LPWSTR)MRU4.c_str();
+			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU5, false, &info);
+		}
+	}
+
+	wstring MainWindow::SelectROM(wstring filepath)
+	{
+		if(filepath.empty()) {
+			wchar_t buffer[2000];
+
+			OPENFILENAME ofn;
+			ZeroMemory(&ofn, sizeof(ofn));
+			ofn.lStructSize = sizeof(ofn);
+			ofn.hwndOwner = nullptr;
+			ofn.lpstrFile = buffer;
+			ofn.lpstrFile[0] = '\0';
+			ofn.nMaxFile = sizeof(buffer);
+			ofn.lpstrFilter = L"NES Roms\0*.NES\0All\0*.*";
+			ofn.nFilterIndex = 1;
+			ofn.lpstrFileTitle = nullptr;
+			ofn.nMaxFileTitle = 0;
+			ofn.lpstrInitialDir = nullptr;
+			ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+			GetOpenFileName(&ofn);
+			
+			filepath = wstring(buffer);
+		}
+		
+		if(!filepath.empty()) {
+			wstring filename = filepath.substr(filepath.find_last_of(L"/\\") + 1);
+			SetWindowText(_hWnd, (wstring(_windowName) + L": " + filename).c_str());
+
+			AddToMRU(filepath);
+
+			Start(filename);
+		}
 
 		return filepath;
 	}
@@ -200,8 +366,7 @@ namespace NES {
 			SetMenuEnabled(ID_NES_STOP, true);
 			SetMenuEnabled(ID_NES_RESUME, false);
 
-			SetMenuEnabled(ID_FILE_QUICKLOAD, true);
-			
+			SetMenuEnabled(ID_FILE_QUICKLOAD, true);			
 			SetMenuEnabled(ID_FILE_QUICKSAVE, true);
 
 			_renderer->ClearFlags(UIFlags::ShowPauseScreen);
@@ -275,8 +440,10 @@ namespace NES {
 	{
 		if(ToggleMenuCheck(ID_OPTIONS_LIMITFPS)) {
 			Console::SetFlags(EmulationFlags::LimitFPS);
+			ConfigManager::SetValue(Config::LimitFPS, true);
 		} else {
 			Console::ClearFlags(EmulationFlags::LimitFPS);
+			ConfigManager::SetValue(Config::LimitFPS, false);
 		}
 	}
 
@@ -284,8 +451,10 @@ namespace NES {
 	{
 		if(ToggleMenuCheck(ID_OPTIONS_SHOWFPS)) {
 			_renderer->SetFlags(UIFlags::ShowFPS);
+			ConfigManager::SetValue(Config::ShowFPS, true);
 		} else {
 			_renderer->ClearFlags(UIFlags::ShowFPS);
+			ConfigManager::SetValue(Config::ShowFPS, false);
 		}
 	}
 
@@ -388,6 +557,18 @@ namespace NES {
 		std::cout << "------------------------" << std::endl;
 	}
 
+	void MainWindow::SelectSaveSlot(int slot)
+	{
+		_currentSaveSlot = slot % 5;
+		_renderer->DisplayMessage(L"Savestate slot: " + std::to_wstring(_currentSaveSlot + 1), 3000);
+
+		SetMenuCheck(ID_SAVESTATESLOT_1, _currentSaveSlot == 0);
+		SetMenuCheck(ID_SAVESTATESLOT_2, _currentSaveSlot == 1);
+		SetMenuCheck(ID_SAVESTATESLOT_3, _currentSaveSlot == 2);
+		SetMenuCheck(ID_SAVESTATESLOT_4, _currentSaveSlot == 3);
+		SetMenuCheck(ID_SAVESTATESLOT_5, _currentSaveSlot == 4);
+	}
+
 	LRESULT CALLBACK MainWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		static MainWindow *mainWindow = MainWindow::GetInstance();
@@ -404,17 +585,53 @@ namespace NES {
 				switch (wmId) {
 					case ID_FILE_OPEN:
 						filename = mainWindow->SelectROM();
-						if(filename.length() > 0) {
-							mainWindow->Start(filename);
+						break;
+
+					case ID_SAVESTATESLOT_1:
+						mainWindow->SelectSaveSlot(0);
+						break;
+					case ID_SAVESTATESLOT_2:
+						mainWindow->SelectSaveSlot(1);
+						break;
+					case ID_SAVESTATESLOT_3:
+						mainWindow->SelectSaveSlot(2);
+						break;
+					case ID_SAVESTATESLOT_4:
+						mainWindow->SelectSaveSlot(3);
+						break;
+					case ID_SAVESTATESLOT_5:
+						mainWindow->SelectSaveSlot(4);
+						break;
+
+					case ID_RECENTFILES_MRU1:
+						mainWindow->SelectROM(ConfigManager::GetValue<wstring>(Config::MRU0));
+						break;
+					case ID_RECENTFILES_MRU2:
+						mainWindow->SelectROM(ConfigManager::GetValue<wstring>(Config::MRU1));
+						break;
+					case ID_RECENTFILES_MRU3:
+						mainWindow->SelectROM(ConfigManager::GetValue<wstring>(Config::MRU2));
+						break;
+					case ID_RECENTFILES_MRU4:
+						mainWindow->SelectROM(ConfigManager::GetValue<wstring>(Config::MRU3));
+						break;
+					case ID_RECENTFILES_MRU5:
+						mainWindow->SelectROM(ConfigManager::GetValue<wstring>(Config::MRU4));
+						break;
+
+					case ID_FILE_QUICKLOAD:
+						if(mainWindow->_console->LoadState(mainWindow->_currentROM + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1))) {
+							mainWindow->_renderer->DisplayMessage(L"State loaded.", 3000);
+						} else {
+							mainWindow->_renderer->DisplayMessage(L"Slot is empty.", 3000);
 						}
 						break;
-					case ID_FILE_QUICKLOAD:
-						mainWindow->_console->LoadState(mainWindow->_currentROM + L".svs");
-						mainWindow->_renderer->DisplayMessage(L"State loaded.", 3000);
-						break;
 					case ID_FILE_QUICKSAVE:
-						mainWindow->_console->SaveState(mainWindow->_currentROM + L".svs");
+						mainWindow->_console->SaveState(mainWindow->_currentROM + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1));
 						mainWindow->_renderer->DisplayMessage(L"State saved.", 3000);
+						break;
+					case ID_CHANGESLOT:
+						mainWindow->SelectSaveSlot(mainWindow->_currentSaveSlot + 1);
 						break;
 					case ID_FILE_EXIT:
 						DestroyWindow(hWnd);
@@ -438,6 +655,9 @@ namespace NES {
 						break;
 					case ID_OPTIONS_SHOWFPS:
 						mainWindow->ShowFPS_Click();
+						break;
+					case ID_OPTIONS_INPUT:
+						DialogBox(nullptr, MAKEINTRESOURCE(IDD_INPUTCONFIG), hWnd, InputConfig);
 						break;
 
 					case ID_TESTS_RUNTESTS:

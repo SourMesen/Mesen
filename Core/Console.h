@@ -50,7 +50,7 @@ class Console
 		void SaveTestResult();
 
 		void SaveState(wstring filename);
-		void LoadState(wstring filename);
+		bool LoadState(wstring filename);
 
 		static bool CheckFlag(int flag);
 		static void SetFlags(int flags);

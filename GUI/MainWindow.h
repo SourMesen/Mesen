@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "SoundManager.h"
 #include "../Core/Console.h"
+#include "../Utilities/ConfigManager.h"
 
 namespace NES {
 	class MainWindow
@@ -20,11 +21,17 @@ namespace NES {
 		unique_ptr<thread> _emuThread;
 		wstring _currentROM;
 
+		int _currentSaveSlot = 0;
+
 	private:
 		bool Initialize();
 		HRESULT InitWindow();
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 		static INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+		static INT_PTR CALLBACK InputConfig(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+		static INT_PTR CALLBACK ControllerSetup(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+
+		static wstring MainWindow::VKToString(int vk);
 
 		static MainWindow* GetInstance() { return MainWindow::Instance; }
 
@@ -43,12 +50,16 @@ namespace NES {
 		bool SetMenuCheck(int resourceID, bool checked);
 		bool ToggleMenuCheck(int resourceID);
 
-		wstring SelectROM();
+		wstring SelectROM(wstring filepath = L"");
 		void Start(wstring romFilename);
 		void Reset();
 		void Stop(bool powerOff);
 
 		void InitializeOptions();
+
+		void SelectSaveSlot(int slot);
+		void AddToMRU(wstring romFilename);
+		void UpdateMRUMenu();
 
 	public:
 		MainWindow(HINSTANCE hInstance, int nCmdShow) : _hInstance(hInstance), _nCmdShow(nCmdShow) 

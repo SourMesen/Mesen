@@ -140,9 +140,16 @@ void Console::SaveState()
 	_saveStateFilename.clear();
 }
 
-void Console::LoadState(wstring filename)
+bool Console::LoadState(wstring filename)
 {
-	_loadStateFilename = filename;
+	ifstream file(filename, ios::out | ios::binary);
+
+	if(file) {
+		file.close();
+		_loadStateFilename = filename;
+		return true;
+	}
+	return false;
 }
 
 void Console::LoadState()
