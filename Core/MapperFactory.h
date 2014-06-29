@@ -2,6 +2,7 @@
 #include "ROMLoader.h"
 #include "AXROM.h"
 #include "CNROM.h"
+#include "ColorDreams.h"
 #include "MMC1.h"
 #include "MMC2.h"
 #include "MMC3.h"
@@ -19,8 +20,12 @@ class MapperFactory
 				case 2: return new UNROM();
 				case 3: return new CNROM();
 				case 4: return new MMC3();
+				case 5: break; //11 games
 				case 7: return new AXROM();
 				case 9: return new MMC2();
+				case 11: return new ColorDreams(); break;
+				case 16: break; //18 games
+				case 19: break; //16 games
 				case 71: return new UNROM(); //TODO: "It's largely a clone of UNROM, and Camerica games were initially emulated under iNES Mapper 002 before 071 was assigned."
 			}
 

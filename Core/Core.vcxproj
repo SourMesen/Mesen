@@ -91,6 +91,7 @@
     <ClInclude Include="AXROM.h" />
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="CNROM.h" />
+    <ClInclude Include="ColorDreams.h" />
     <ClInclude Include="ControlManager.h" />
     <ClInclude Include="IAudioDevice.h" />
     <ClInclude Include="IControlDevice.h" />
