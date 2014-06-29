@@ -396,12 +396,14 @@ void PPU::DrawPixel()
 	uint32_t backgroundColor = 0;
 	uint32_t spriteColor = 0;
 	
-	if(_flags.BackgroundEnabled) {
+	if((_cycle > 8 || _flags.BackgroundMask) && _flags.BackgroundEnabled) {
+		//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
 		backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
 	}
 
 	uint8_t i;
-	if(_flags.SpritesEnabled) {
+	if((_cycle > 8 || _flags.SpriteMask) && _flags.SpritesEnabled) {
+		//SpriteMask = true: Hide sprites in leftmost 8 pixels of screen
 		for(i = 0; i < _spriteCount; i++) {
 			int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
 			if(shift >= 0 && shift < 8) {
@@ -413,36 +415,24 @@ void PPU::DrawPixel()
 
 				if(spriteColor != 0) {
 					//First sprite without a 00 color, use it.
+					if(backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority) {
+						//Check sprite priority
+						useBackground = false;
+					}
+
+					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled) {
+						//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
+						//"Sprite zero hits do not register at x=255" (cycle 256)
+						//"... provided that background and sprite rendering are both enabled"
+						//"Should always miss when Y >= 239"
+						_statusFlags.Sprite0Hit = true;
+					}
 					break;
 				}
 			}
 		}
 	}
-
-	if(_cycle <= 8) {
-		if(!_flags.BackgroundMask) {
-			//"0: Hide background in leftmost 8 pixels of screen;"
-			backgroundColor = 0;
-		}
-		if(!_flags.SpriteMask) {
-			//"0: Hide sprites in leftmost 8 pixels of screen;"
-			spriteColor = 0;
-		}
-	}
-
-	if(spriteColor != 0 && (backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority)) {
-		//Check sprite priority
-		useBackground = false;
-	}
 	
-	if(i == 0 && spriteColor != 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && _flags.SpritesEnabled) {
-		//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
-		//"Sprite zero hits do not register at x=255" (cycle 256)
-		//"... provided that background and sprite rendering are both enabled"
-		//"Should always miss when Y >= 239"
-		_statusFlags.Sprite0Hit = true;
-	}
-
 	uint32_t bufferPosition = _scanline * 256 + (_cycle - 1);
 	if(useBackground) {
 		// If we're grabbing the pixel from the high part of the shift register, use the previous tile's palette, not the current one
