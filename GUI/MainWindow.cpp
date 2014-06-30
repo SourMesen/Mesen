@@ -337,7 +337,7 @@ namespace NES {
 
 			AddToMRU(filepath);
 
-			Start(filename);
+			Start(filepath);
 		}
 
 		return filepath;
