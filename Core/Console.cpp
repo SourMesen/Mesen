@@ -77,7 +77,13 @@ void Console::Run()
 	while(true) { 
 		uint32_t executedCycles = _cpu->Exec();
 		_ppu->Exec();
+
 		bool frameDone = _apu->Exec(executedCycles);
+
+		if(frameDone) {
+			_cpu->EndFrame();
+			_ppu->EndFrame();
+		}
 
 		if(CheckFlag(EmulationFlags::LimitFPS) && frameDone) {
 			elapsedTime = clockTimer.GetElapsedMS();
@@ -174,8 +180,13 @@ bool Console::RunTest(uint8_t *expectedResult)
 	uint8_t maxWait = 60;
 	uint8_t* lastFrameBuffer = new uint8_t[256 * 240 * 4];
 	while(true) {
-		_apu->Exec(_cpu->Exec());
+		uint32_t executedCycles = _cpu->Exec();
 		_ppu->Exec();
+
+		if(_apu->Exec(executedCycles)) {
+			_cpu->EndFrame();
+			_ppu->EndFrame();
+		}
 
 		if(timer.GetElapsedMS() > 100) {
 			if(memcmp(_ppu->GetFrameBuffer(), expectedResult, 256 * 240 * 4) == 0) {

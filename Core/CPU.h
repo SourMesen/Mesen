@@ -45,7 +45,7 @@ private:
 
 	typedef void(CPU::*Func)();
 
-	static uint64_t CycleCount;
+	static int32_t CycleCount;
 	static uint32_t CyclePenalty;
 
 	Func _opTable[256];
@@ -684,7 +684,7 @@ public:
 	static const uint32_t ClockRate = 1789773;
 
 	CPU(MemoryManager *memoryManager);
-	static uint64_t GetCycleCount() { return CPU::CycleCount; }
+	static int32_t GetCycleCount() { return CPU::CycleCount; }
 	static void IncCycleCount(uint32_t cycles) { 
 		CPU::CyclePenalty += cycles;
 		CPU::CycleCount += cycles;
@@ -702,6 +702,8 @@ public:
 
 	void Reset(bool softReset);
 	uint32_t Exec();
+	void EndFrame();
+
 	State GetState() { return _state; }
 
 };

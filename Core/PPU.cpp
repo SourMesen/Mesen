@@ -633,8 +633,7 @@ void PPU::EndVBlank()
 
 void PPU::Exec(uint32_t extraCycles)
 {
-	uint64_t equivalentCycleCount = CPU::GetCycleCount() * 3;
-	int32_t gap = (int32_t)((int64_t)equivalentCycleCount - (int64_t)_cycleCount);
+	int32_t gap = CPU::GetCycleCount() * 3 - _cycleCount;
 	if(gap < 0) {
 		gap = 0;
 	}
@@ -683,7 +682,7 @@ void PPU::StreamState(bool saving)
 	Stream<int32_t>(_scanline);
 	Stream<uint32_t>(_cycle);
 	Stream<uint32_t>(_frameCount);
-	Stream<uint64_t>(_cycleCount);
+	Stream<int32_t>(_cycleCount);
 	Stream<uint8_t>(_memoryReadBuffer);
 	
 	StreamArray<uint8_t>(_paletteRAM, 0x100);

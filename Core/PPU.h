@@ -86,7 +86,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		int32_t _scanline = 0;
 		uint32_t _cycle = 0;
 		uint32_t _frameCount = 0;
-		uint64_t _cycleCount = 0;
+		int32_t _cycleCount = 0;
 		uint8_t _memoryReadBuffer = 0;
 		
 		uint8_t _paletteRAM[0x100];
@@ -213,5 +213,10 @@ class PPU : public IMemoryHandler, public Snapshotable
 		static void ExecStatic(uint32_t cycles)
 		{
 			PPU::Instance->Exec(cycles);
+		}
+
+		void EndFrame()
+		{
+			_cycleCount = 0;
 		}
 };

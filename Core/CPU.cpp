@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CPU.h"
 
-uint64_t CPU::CycleCount = 0;
+int32_t CPU::CycleCount = 0;
 uint32_t CPU::CyclePenalty = 0;
 bool CPU::NMIFlag = false;
 uint32_t CPU::IRQFlag = 0;
@@ -136,6 +136,11 @@ uint32_t CPU::Exec()
 	return executedCycles + GetCyclePenalty();
 }
 
+void CPU::EndFrame()
+{
+	CPU::CycleCount = 0;
+}
+
 void CPU::StreamState(bool saving)
 {
 	Stream<uint16_t>(_state.PC);
@@ -144,7 +149,7 @@ void CPU::StreamState(bool saving)
 	Stream<uint8_t>(_state.X);
 	Stream<uint8_t>(_state.Y);
 	
-	Stream<uint64_t>(CPU::CycleCount);
+	Stream<int32_t>(CPU::CycleCount);
 	Stream<bool>(CPU::NMIFlag);
 	Stream<uint32_t>(CPU::IRQFlag);
 
