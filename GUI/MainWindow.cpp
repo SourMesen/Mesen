@@ -710,12 +710,12 @@ namespace NES {
 						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", true);
 						if(!filename.empty()) {
 							mainWindow->_renderer->DisplayMessage(L"Recording...", 3000);
-							Movie::Record(filename, false);
+							Movie::Record(filename, true);
 						}						
 						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
 						break;
 					case ID_RECORDFROM_NOW:
-						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", false);
+						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", true);
 						if(!filename.empty()) {
 							mainWindow->_renderer->DisplayMessage(L"Recording...", 3000);
 							Movie::Record(filename, false);
