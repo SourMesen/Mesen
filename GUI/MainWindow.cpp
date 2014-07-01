@@ -317,7 +317,7 @@ namespace NES {
 		}
 	}
 
-	wstring MainWindow::OpenFile(LPCWSTR filter, bool forSave)
+	wstring MainWindow::OpenFile(LPCWSTR filter, bool forSave, LPCWSTR defaultExt)
 	{
 		wchar_t buffer[2000];
 
@@ -325,6 +325,7 @@ namespace NES {
 		ZeroMemory(&ofn, sizeof(ofn));
 		ofn.lStructSize = sizeof(ofn);
 		ofn.hwndOwner = nullptr;
+		ofn.lpstrDefExt = defaultExt;
 		ofn.lpstrFile = buffer;
 		ofn.lpstrFile[0] = '\0';
 		ofn.nMaxFile = sizeof(buffer);
@@ -436,7 +437,9 @@ namespace NES {
 	{
 		if(_console) {
 			_soundManager->Reset();
-			_console->Reset();
+			Console::Pause();
+			Console::Reset();
+			Console::Resume();
 		}
 	}
 
@@ -707,21 +710,15 @@ namespace NES {
 						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
 						break;
 					case ID_RECORDFROM_START:
-						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", true);
-						if(!filename.empty()) {
-							mainWindow->_renderer->DisplayMessage(L"Recording...", 3000);
-							Movie::Record(filename, true);
-						}						
-						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
-						break;
 					case ID_RECORDFROM_NOW:
-						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", true);
+						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", true, L"nmo");
 						if(!filename.empty()) {
 							mainWindow->_renderer->DisplayMessage(L"Recording...", 3000);
-							Movie::Record(filename, false);
+							Movie::Record(filename, wmId == ID_RECORDFROM_START);
 						}						
 						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
 						break;
+
 					case ID_MOVIES_STOP:
 						Movie::Stop();
 						mainWindow->_playingMovie = false;

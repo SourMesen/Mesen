@@ -51,8 +51,6 @@ struct MovieData
 			file.read((char*)&SaveStateSize, sizeof(uint32_t));
 			
 			if(SaveStateSize > 0) {
-				startState.clear();
-				startState.seekg(0, ios::beg);
 				uint8_t *stateBuffer = new uint8_t[SaveStateSize];
 				file.read((char*)stateBuffer, SaveStateSize);
 				startState.write((char*)stateBuffer, SaveStateSize);
@@ -97,6 +95,7 @@ class Movie
 		void StartRecording(wstring filename, bool reset);
 		void PlayMovie(wstring filename);
 		void StopAll();
+		void Reset();
 
 		void RecordState(uint8_t port, uint8_t state);
 		uint8_t GetState(uint8_t port);

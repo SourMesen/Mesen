@@ -537,11 +537,6 @@ void PPU::ProcessVisibleScanline()
 
 void PPU::CopyOAMData()
 {
-	static uint8_t _buffer = 0;
-	static bool _writeData = false;
-	static uint32_t _overflowCounter = 0;
-	static bool _sprite0Added = true;
-
 	if(_cycle < 65) {
 		//Clear secondary OAM at between cycle 0 and 64
 		_secondarySpriteRAM[_cycle >> 1] = 0xFF;
@@ -549,7 +544,7 @@ void PPU::CopyOAMData()
 		if(_cycle == 65) {
 			_overflowCounter = 0;
 			_sprite0Added = false;
-			_writeData = false;
+			_writeOAMData = false;
 			_secondaryOAMAddr = 0;
 		} else if(_cycle == 256) {
 			_sprite0Visible = _sprite0Added;
@@ -558,18 +553,18 @@ void PPU::CopyOAMData()
 
 		if(_cycle & 0x01) {
 			//Read a byte from the primary OAM on odd cycles
-			_buffer = _spriteRAM[_state.SpriteRamAddr & 0xFF];
+			_oamCopybuffer = _spriteRAM[_state.SpriteRamAddr & 0xFF];
 			_state.SpriteRamAddr++;
 		} else {
-			if(!_writeData && _state.SpriteRamAddr < 0x100 && _scanline >= _buffer && _scanline < _buffer + (_flags.LargeSprites ? 16 : 8)) {
-				_writeData = true;
+			if(!_writeOAMData && _state.SpriteRamAddr < 0x100 && _scanline >= _oamCopybuffer && _scanline < _oamCopybuffer + (_flags.LargeSprites ? 16 : 8)) {
+				_writeOAMData = true;
 			}
 
 			if(_secondaryOAMAddr < 0x20) {
 				//Copy 1 byte to secondary OAM
-				_secondarySpriteRAM[_secondaryOAMAddr] = _buffer;
+				_secondarySpriteRAM[_secondaryOAMAddr] = _oamCopybuffer;
 
-				if(_writeData) {
+				if(_writeOAMData) {
 					_secondaryOAMAddr++;
 
 					if(_state.SpriteRamAddr == 0x01) {
@@ -578,7 +573,7 @@ void PPU::CopyOAMData()
 
 					if((_secondaryOAMAddr & 0x03) == 0) {
 						//Done copying
-						_writeData = false;
+						_writeOAMData = false;
 					}
 				} else {
 					_state.SpriteRamAddr += 3;
@@ -588,7 +583,7 @@ void PPU::CopyOAMData()
 				//Based on: http://forums.nesdev.com/viewtopic.php?p=85431#p85431
 				//Behavior matches: http://forums.nesdev.com/viewtopic.php?p=1387#p1387
 				if(!_statusFlags.SpriteOverflow) {
-					if(_writeData) {
+					if(_writeOAMData) {
 						//Sprite is visible, consider this to be an overflow
 						_statusFlags.SpriteOverflow = true;
 						_overflowCounter = 3;
@@ -679,6 +674,25 @@ void PPU::StreamState(bool saving)
 	Stream<uint16_t>(_state.HighBitShift);
 	Stream<uint16_t>(_state.LowBitShift);
 
+	Stream<bool>(_flags.VerticalWrite);
+	Stream<uint16_t>(_flags.SpritePatternAddr);
+	Stream<uint16_t>(_flags.BackgroundPatternAddr);
+	Stream<bool>(_flags.LargeSprites);
+	Stream<bool>(_flags.VBlank);
+	
+	Stream<bool>(_flags.Grayscale);
+	Stream<bool>(_flags.BackgroundMask);
+	Stream<bool>(_flags.SpriteMask);
+	Stream<bool>(_flags.BackgroundEnabled);
+	Stream<bool>(_flags.SpritesEnabled);
+	Stream<bool>(_flags.IntensifyRed);
+	Stream<bool>(_flags.IntensifyGreen);
+	Stream<bool>(_flags.IntensifyBlue);
+
+	Stream<bool>(_statusFlags.SpriteOverflow);
+	Stream<bool>(_statusFlags.Sprite0Hit);
+	Stream<bool>(_statusFlags.VerticalBlank);
+
 	Stream<int32_t>(_scanline);
 	Stream<uint32_t>(_cycle);
 	Stream<uint32_t>(_frameCount);
@@ -713,8 +727,8 @@ void PPU::StreamState(bool saving)
 	Stream<uint32_t>(_secondaryOAMAddr);
 	Stream<bool>(_sprite0Visible);
 
-	if(!saving) {
-		SetControlRegister(_state.Control);
-		SetMaskRegister(_state.Mask);
-	}
+	Stream<uint8_t>(_oamCopybuffer);
+	Stream<bool>(_writeOAMData);
+	Stream<uint32_t>(_overflowCounter);
+	Stream<bool>(_sprite0Added);
 }

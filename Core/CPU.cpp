@@ -145,10 +145,11 @@ void CPU::StreamState(bool saving)
 {
 	Stream<uint16_t>(_state.PC);
 	Stream<uint8_t>(_state.SP);
+	Stream<uint8_t>(_state.PS);
 	Stream<uint8_t>(_state.A);
 	Stream<uint8_t>(_state.X);
 	Stream<uint8_t>(_state.Y);
-	
+		
 	Stream<int32_t>(CPU::CycleCount);
 	Stream<bool>(CPU::NMIFlag);
 	Stream<uint32_t>(CPU::IRQFlag);

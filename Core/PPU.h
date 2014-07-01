@@ -110,6 +110,11 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint32_t _spriteCount = 0;
 		uint32_t _secondaryOAMAddr = 0;
 		bool _sprite0Visible = false;
+
+		uint8_t _oamCopybuffer;
+		bool _writeOAMData;
+		uint32_t _overflowCounter;
+		bool _sprite0Added;
 		
 		void UpdateStatusFlag();
 

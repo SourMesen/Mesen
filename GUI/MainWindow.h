@@ -54,7 +54,7 @@ namespace NES {
 		bool SetMenuCheck(int resourceID, bool checked);
 		bool ToggleMenuCheck(int resourceID);
 
-		wstring OpenFile(LPCWSTR filter, bool forSave);
+		wstring MainWindow::OpenFile(LPCWSTR filter, bool forSave, LPCWSTR defaultExt = L"");
 		wstring SelectROM(wstring romFilepath = L"");
 		void Start(wstring romFilepath = L"");
 		void Reset();

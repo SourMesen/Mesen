@@ -49,51 +49,70 @@ uint8_t Movie::GetState(uint8_t port)
 	return (data >> 8);
 }
 
+void Movie::Reset()
+{
+	_startState.clear();
+	_startState.seekg(0, ios::beg);
+	_startState.seekp(0, ios::beg);
+
+	memset(_readPosition, 0, 4 * sizeof(uint32_t));
+	memset(_counter, 0, 4);
+	memset(_lastState, 0, 4);
+	_data = MovieData();
+
+	_recording = false;
+	_playing = false;
+}
+
 void Movie::StartRecording(wstring filename, bool reset)
 {
 	_file = ofstream(filename, ios::out | ios::binary);
 
 	if(_file) {
+		Console::Pause();
+
+		Reset();
+
 		if(reset) {
-			_startState.clear();
 			Console::Reset();
 		} else {
 			Console::SaveState(_startState);
 		}
 
-		memset(_counter, 0, 4);
-		memset(_lastState, 0, 4);
-		_data = MovieData();
 		_recording = true;
+
+		Console::Resume();
 	}
 }
 
 void Movie::StopAll()
 {
 	if(_recording) {
+		_recording = false;
 		for(int i = 0; i < 4; i++) {
 			PushState(i);
 		}
 		_data.Save(_file, _startState);
-		_recording = false;
 	}
 	_playing = false;
 }
 
 void Movie::PlayMovie(wstring filename)
 {
-	if(!_recording) {
-		memset(_readPosition, 0, 4 * sizeof(uint32_t));
-		_data = MovieData();
-		if(_data.Load(filename, _startState)) {
-			if(_startState.tellp() > 0) {
-				//Restore state if one was present in the movie
-				Console::LoadState(_startState);
-			} else {
-				Console::Reset();
-			}
-			_playing = true;
+	StopAll();
+
+	Reset();
+	
+	if(_data.Load(filename, _startState)) {
+		Console::Pause();
+		if(_startState.tellp() > 0) {
+			//Restore state if one was present in the movie
+			Console::LoadState(_startState);
+		} else {
+			Console::Reset();
 		}
+		_playing = true;
+		Console::Resume();
 	}
 }
 

@@ -37,6 +37,7 @@ Console::Console(wstring filename)
 
 Console::~Console()
 {
+	Movie::Stop();
 	Console::PauseFlag.clear();
 	Console::RunningFlag.clear();
 	Console::Instance = nullptr;
@@ -44,11 +45,10 @@ Console::~Console()
 
 void Console::Reset()
 {
-	Console::Pause();
+	Movie::Stop();
 	if(Instance) {
 		Instance->ResetComponents(true);
 	}
-	Console::Resume();
 }
 
 void Console::ResetComponents(bool softReset)
@@ -73,8 +73,8 @@ void Console::Pause()
 
 void Console::Resume()
 {
-	Console::PauseFlag.clear();
 	Console::RunningFlag.clear();
+	Console::PauseFlag.clear();
 }
 
 void Console::SetFlags(int flags)
@@ -160,7 +160,9 @@ void Console::SaveState(wstring filename)
 	ofstream file(filename, ios::out | ios::binary);
 
 	if(file) {
+		Console::Pause();
 		Console::SaveState(file);
+		Console::Resume();
 		file.close();
 	}
 }
@@ -170,7 +172,9 @@ bool Console::LoadState(wstring filename)
 	ifstream file(filename, ios::out | ios::binary);
 
 	if(file) {
+		Console::Pause();
 		Console::LoadState(file);
+		Console::Resume();
 		file.close();
 		return true;
 	}
@@ -179,24 +183,20 @@ bool Console::LoadState(wstring filename)
 
 void Console::SaveState(ostream &saveStream)
 {
-	Console::Pause();
 	Instance->_cpu->SaveSnapshot(&saveStream);
 	Instance->_ppu->SaveSnapshot(&saveStream);
 	Instance->_memoryManager->SaveSnapshot(&saveStream);
 	Instance->_mapper->SaveSnapshot(&saveStream);
 	Instance->_apu->SaveSnapshot(&saveStream);
-	Console::Resume();
 }
 
 void Console::LoadState(istream &loadStream)
 {
-	Console::Pause();
 	Instance->_cpu->LoadSnapshot(&loadStream);
 	Instance->_ppu->LoadSnapshot(&loadStream);
 	Instance->_memoryManager->LoadSnapshot(&loadStream);
 	Instance->_mapper->LoadSnapshot(&loadStream);
 	Instance->_apu->LoadSnapshot(&loadStream);
-	Console::Resume();
 }
 
 bool Console::RunTest(uint8_t *expectedResult)
