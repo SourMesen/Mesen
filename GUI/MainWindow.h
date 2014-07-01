@@ -20,8 +20,11 @@ namespace NES {
 		unique_ptr<Console> _console;
 		unique_ptr<thread> _emuThread;
 		wstring _currentROM;
+		wstring _currentROMName;
 
 		int _currentSaveSlot = 0;
+
+		bool _playingMovie = false;
 
 	private:
 		bool Initialize();
@@ -40,6 +43,7 @@ namespace NES {
 		
 		vector<wstring> GetFolders(wstring rootFolder);
 		vector<wstring> GetFilesInFolder(wstring folder, wstring mask, bool recursive);
+		wstring GetFilename(wstring filepath, bool includeExtension);
 
 		void LimitFPS_Click();
 		void ShowFPS_Click();
@@ -50,15 +54,16 @@ namespace NES {
 		bool SetMenuCheck(int resourceID, bool checked);
 		bool ToggleMenuCheck(int resourceID);
 
-		wstring SelectROM(wstring filepath = L"");
-		void Start(wstring romFilename);
+		wstring OpenFile(LPCWSTR filter, bool forSave);
+		wstring SelectROM(wstring romFilepath = L"");
+		void Start(wstring romFilepath = L"");
 		void Reset();
 		void Stop(bool powerOff);
 
 		void InitializeOptions();
 
 		void SelectSaveSlot(int slot);
-		void AddToMRU(wstring romFilename);
+		void AddToMRU(wstring romFilepath);
 		void UpdateMRUMenu();
 
 	public:

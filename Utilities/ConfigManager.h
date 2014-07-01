@@ -83,6 +83,8 @@ class ConfigManager
 		}
 
 	public:
+		static wstring ConfigManager::GetHomeFolder();
+
 		static shared_ptr<ConfigManager> GetInstance()
 		{
 			if(ConfigManager::Instance == nullptr) {

@@ -3,12 +3,19 @@
 #include "MapperFactory.h"
 #include "../Utilities/Timer.h"
 
+Console* Console::Instance = nullptr;
 uint32_t Console::Flags = 0;
 uint32_t Console::CurrentFPS = 0;
+atomic_flag Console::PauseFlag;
+atomic_flag Console::RunningFlag;
+
 
 Console::Console(wstring filename)
 {
 	_romFilename = filename;
+
+	Console::PauseFlag.clear();
+	Console::RunningFlag.clear();
 
 	_mapper = MapperFactory::InitializeFromFile(filename);
 	_memoryManager.reset(new MemoryManager(_mapper));
@@ -24,15 +31,24 @@ Console::Console(wstring filename)
 	_memoryManager->RegisterIODevice(_controlManager.get());
 
 	ResetComponents(false);
+
+	Console::Instance = this;
 }
 
 Console::~Console()
 {
+	Console::PauseFlag.clear();
+	Console::RunningFlag.clear();
+	Console::Instance = nullptr;
 }
 
 void Console::Reset()
 {
-	_reset = true;
+	Console::Pause();
+	if(Instance) {
+		Instance->ResetComponents(true);
+	}
+	Console::Resume();
 }
 
 void Console::ResetComponents(bool softReset)
@@ -45,6 +61,20 @@ void Console::ResetComponents(bool softReset)
 void Console::Stop()
 {
 	_stop = true;
+}
+
+void Console::Pause()
+{
+	while(Console::PauseFlag.test_and_set());
+	
+	//Spin wait until emu pauses
+	while(Console::RunningFlag.test_and_set());
+}
+
+void Console::Resume()
+{
+	Console::PauseFlag.clear();
+	Console::RunningFlag.clear();
 }
 
 void Console::SetFlags(int flags)
@@ -74,6 +104,7 @@ void Console::Run()
 	uint32_t lastFrameCount = 0;
 	double elapsedTime = 0;
 	double targetTime = 16.6666666666666666;
+	while(Console::RunningFlag.test_and_set());
 	while(true) { 
 		uint32_t executedCycles = _cpu->Exec();
 		_ppu->Exec();
@@ -83,67 +114,55 @@ void Console::Run()
 		if(frameDone) {
 			_cpu->EndFrame();
 			_ppu->EndFrame();
-		}
 
-		if(CheckFlag(EmulationFlags::LimitFPS) && frameDone) {
-			elapsedTime = clockTimer.GetElapsedMS();
-			while(targetTime > elapsedTime) {
-				if(targetTime - elapsedTime > 2) {
-					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>((int)(targetTime - elapsedTime - 1)));
-				}
-				elapsedTime = clockTimer.GetElapsedMS();
+			if(Console::PauseFlag.test_and_set()) {
+				//Need to temporarely pause the emu (to save/load a state, etc.)
+				Console::RunningFlag.clear();
+
+				//Spin wait until we are allowed to start again
+				while(Console::PauseFlag.test_and_set());
+				Console::PauseFlag.clear();
+
+				while(Console::RunningFlag.test_and_set());
+			} else {
+				Console::PauseFlag.clear();
 			}
-			clockTimer.Reset();
-		}
-		
-		if(fpsTimer.GetElapsedMS() > 1000) {
-			uint32_t frameCount = _ppu->GetFrameCount();
-			Console::CurrentFPS = (int)(std::round((double)(frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000)));
-			lastFrameCount = frameCount;
-			fpsTimer.Reset();
-		}
+			
+			if(_stop) {
+				_stop = false;
+				break;
+			}
 
-		if(!_saveStateFilename.empty()) {
-			SaveState();
-		} else if(!_loadStateFilename.empty()) {
-			LoadState();
-		}
+			if(CheckFlag(EmulationFlags::LimitFPS) && frameDone) {
+				elapsedTime = clockTimer.GetElapsedMS();
+				while(targetTime > elapsedTime) {
+					if(targetTime - elapsedTime > 2) {
+						std::this_thread::sleep_for(std::chrono::duration<int, std::milli>((int)(targetTime - elapsedTime - 1)));
+					}
+					elapsedTime = clockTimer.GetElapsedMS();
+				}
+				clockTimer.Reset();
+			}
 
-		if(_stop) {
-			_stop = false;
-			break;
-		}
-
-		if(_reset) {
-			clockTimer.Reset();
-			fpsTimer.Reset();
-			lastFrameCount = 0;
-			elapsedTime = 0;
-			ResetComponents(true);
-			_reset = false;
+			if(fpsTimer.GetElapsedMS() > 1000) {
+				uint32_t frameCount = _ppu->GetFrameCount();
+				Console::CurrentFPS = (int)(std::round((double)(frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000)));
+				lastFrameCount = frameCount;
+				fpsTimer.Reset();
+			}
 		}
 	}
+	Console::RunningFlag.clear();
 }
 
 void Console::SaveState(wstring filename)
 {
-	_saveStateFilename = filename;
-}
-
-void Console::SaveState()
-{
-	ofstream file(_saveStateFilename, ios::out | ios::binary);
+	ofstream file(filename, ios::out | ios::binary);
 
 	if(file) {
-		_cpu->SaveSnapshot(&file);
-		_ppu->SaveSnapshot(&file);
-		_memoryManager->SaveSnapshot(&file);
-		_mapper->SaveSnapshot(&file);
-		_apu->SaveSnapshot(&file);
+		Console::SaveState(file);
 		file.close();
 	}
-
-	_saveStateFilename.clear();
 }
 
 bool Console::LoadState(wstring filename)
@@ -151,27 +170,33 @@ bool Console::LoadState(wstring filename)
 	ifstream file(filename, ios::out | ios::binary);
 
 	if(file) {
+		Console::LoadState(file);
 		file.close();
-		_loadStateFilename = filename;
 		return true;
 	}
 	return false;
 }
 
-void Console::LoadState()
+void Console::SaveState(ostream &saveStream)
 {
-	ifstream file(_loadStateFilename, ios::out | ios::binary);
-	
-	if(file) {
-		_cpu->LoadSnapshot(&file);
-		_ppu->LoadSnapshot(&file);
-		_memoryManager->LoadSnapshot(&file);
-		_mapper->LoadSnapshot(&file);
-		_apu->LoadSnapshot(&file);
-		file.close();
-	}
+	Console::Pause();
+	Instance->_cpu->SaveSnapshot(&saveStream);
+	Instance->_ppu->SaveSnapshot(&saveStream);
+	Instance->_memoryManager->SaveSnapshot(&saveStream);
+	Instance->_mapper->SaveSnapshot(&saveStream);
+	Instance->_apu->SaveSnapshot(&saveStream);
+	Console::Resume();
+}
 
-	_loadStateFilename.clear();
+void Console::LoadState(istream &loadStream)
+{
+	Console::Pause();
+	Instance->_cpu->LoadSnapshot(&loadStream);
+	Instance->_ppu->LoadSnapshot(&loadStream);
+	Instance->_memoryManager->LoadSnapshot(&loadStream);
+	Instance->_mapper->LoadSnapshot(&loadStream);
+	Instance->_apu->LoadSnapshot(&loadStream);
+	Console::Resume();
 }
 
 bool Console::RunTest(uint8_t *expectedResult)

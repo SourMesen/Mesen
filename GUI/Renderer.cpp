@@ -238,6 +238,22 @@ namespace NES
 		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 		
 		_pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
+		/*
+		ID3DBlob* vertexShaderBlob = nullptr;
+		ID3D11VertexShader* vertexShader = nullptr;
+		CompileShader(L"PixelShader.hlsl", "VS", "vs_4_0", &vertexShaderBlob);
+		if(vertexShaderBlob) {
+			_pd3dDevice->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &vertexShader);
+			_pDeviceContext->VSSetShader(vertexShader, nullptr, 0);
+			//vertexShaderBlob->Release();
+		}
+		
+		ID3DBlob* pixelShaderBlob = nullptr;		
+		CompileShader(L"PixelShader.hlsl", "PShader", "ps_4_0", &pixelShaderBlob);
+		if(pixelShaderBlob) {
+			_pd3dDevice->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &_pixelShader);
+			//pixelShaderBlob->Release();
+		}*/
 
 		return S_OK;
 	}
@@ -320,9 +336,25 @@ namespace NES
 		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2((float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 80), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 2.0f);
 	}
 
-	//--------------------------------------------------------------------------------------
-	// Render a frame
-	//--------------------------------------------------------------------------------------
+	HRESULT Renderer::CompileShader(wstring filename, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+	{
+		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+		#ifdef _DEBUG
+			dwShaderFlags |= D3DCOMPILE_DEBUG;
+		#endif
+
+		ID3DBlob* pErrorBlob = nullptr;
+		HRESULT hr = D3DCompileFromFile(filename.c_str(), nullptr, nullptr, szEntryPoint, szShaderModel, dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
+		if(FAILED(hr) && pErrorBlob != nullptr) {
+			std::cout << (char*)pErrorBlob->GetBufferPointer();
+		}
+		if(pErrorBlob) {
+			pErrorBlob->Release();
+		}
+
+		return hr;
+	}
+
 	void Renderer::Render()
 	{
 		if(_displayTimestamp < timeGetTime()) {
@@ -334,10 +366,20 @@ namespace NES
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
 
-			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
+			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState, nullptr, nullptr, [=] {
+				//_pDeviceContext->PSSetShader(_pixelShader, 0, 0);
+			});
 
 			//Draw nes screen
 			DrawNESScreen();
+
+			_spriteBatch->End();
+
+			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
+
+			if(CheckFlag(UIFlags::ShowPauseScreen)) {
+				DrawPauseScreen();
+			}
 
 			//Draw FPS counter
 			if(CheckFlag(UIFlags::ShowFPS)) {
@@ -348,10 +390,6 @@ namespace NES
 			if(!_displayMessage.empty() && _displayTimestamp > timeGetTime()) {
 				_font->DrawString(_spriteBatch.get(), _displayMessage.c_str(), XMFLOAT2(12, 13), Colors::Black, 0.0f, XMFLOAT2(0, 0), 1.0f);
 				_font->DrawString(_spriteBatch.get(), _displayMessage.c_str(), XMFLOAT2(11, 11), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 1.0f);
-			}
-
-			if(CheckFlag(UIFlags::ShowPauseScreen)) {
-				DrawPauseScreen();
 			}
 
 			_spriteBatch->End();

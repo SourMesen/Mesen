@@ -84,6 +84,16 @@ namespace NES {
 				_renderer->Render();
 			}
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1));
+
+			if(_playingMovie) {
+				if(!Movie::Playing()) {
+					_playingMovie = false;
+					_renderer->DisplayMessage(L"Movie ended.", 3000);
+
+					//Pause game
+					Stop(false);
+				}
+			}
 		}
 
 		return (int)msg.wParam;
@@ -224,7 +234,7 @@ namespace NES {
 		UpdateMRUMenu();
 	}
 
-	void MainWindow::AddToMRU(wstring romFilename)
+	void MainWindow::AddToMRU(wstring romFilepath)
 	{
 		wstring MRU0 = ConfigManager::GetValue<wstring>(Config::MRU0);
 		wstring MRU1 = ConfigManager::GetValue<wstring>(Config::MRU1);
@@ -232,26 +242,26 @@ namespace NES {
 		wstring MRU3 = ConfigManager::GetValue<wstring>(Config::MRU3);
 		wstring MRU4 = ConfigManager::GetValue<wstring>(Config::MRU4);
 
-		if(MRU0.compare(romFilename) == 0) {
+		if(MRU0.compare(romFilepath) == 0) {
 			return;
-		} else if(MRU1.compare(romFilename) == 0) {
+		} else if(MRU1.compare(romFilepath) == 0) {
 			MRU1 = MRU0;
-			MRU0 = romFilename;
-		} else if(MRU2.compare(romFilename) == 0) {
+			MRU0 = romFilepath;
+		} else if(MRU2.compare(romFilepath) == 0) {
 			MRU2 = MRU1;
 			MRU1 = MRU0;
-			MRU0 = romFilename;
-		} else if(MRU3.compare(romFilename) == 0) {
+			MRU0 = romFilepath;
+		} else if(MRU3.compare(romFilepath) == 0) {
 			MRU3 = MRU2;
 			MRU2 = MRU1;
 			MRU1 = MRU0;
-			MRU0 = romFilename;
+			MRU0 = romFilepath;
 		} else {
 			MRU4 = MRU3;
 			MRU3 = MRU2;
 			MRU2 = MRU1;
 			MRU1 = MRU0;
-			MRU0 = romFilename;
+			MRU0 = romFilepath;
 		}
 
 		ConfigManager::SetValue(Config::MRU0, MRU0);
@@ -307,50 +317,57 @@ namespace NES {
 		}
 	}
 
+	wstring MainWindow::OpenFile(LPCWSTR filter, bool forSave)
+	{
+		wchar_t buffer[2000];
+
+		OPENFILENAME ofn;
+		ZeroMemory(&ofn, sizeof(ofn));
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = nullptr;
+		ofn.lpstrFile = buffer;
+		ofn.lpstrFile[0] = '\0';
+		ofn.nMaxFile = sizeof(buffer);
+		ofn.lpstrFilter = filter;
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFileTitle = nullptr;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = nullptr;
+		if(forSave) {
+			ofn.Flags = OFN_OVERWRITEPROMPT;
+			GetSaveFileName(&ofn);
+		} else {
+			ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+			GetOpenFileName(&ofn);
+		}
+			
+		return wstring(buffer);
+	}
+
 	wstring MainWindow::SelectROM(wstring filepath)
 	{
 		if(filepath.empty()) {
-			wchar_t buffer[2000];
-
-			OPENFILENAME ofn;
-			ZeroMemory(&ofn, sizeof(ofn));
-			ofn.lStructSize = sizeof(ofn);
-			ofn.hwndOwner = nullptr;
-			ofn.lpstrFile = buffer;
-			ofn.lpstrFile[0] = '\0';
-			ofn.nMaxFile = sizeof(buffer);
-			ofn.lpstrFilter = L"NES Roms\0*.NES\0All\0*.*";
-			ofn.nFilterIndex = 1;
-			ofn.lpstrFileTitle = nullptr;
-			ofn.nMaxFileTitle = 0;
-			ofn.lpstrInitialDir = nullptr;
-			ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-			GetOpenFileName(&ofn);
-			
-			filepath = wstring(buffer);
+			filepath = OpenFile(L"NES Roms (*.nes)\0*.NES\0All (*.*)\0*.*", false);
 		}
 		
 		if(!filepath.empty()) {
-			wstring filename = filepath.substr(filepath.find_last_of(L"/\\") + 1);
-			SetWindowText(_hWnd, (wstring(_windowName) + L": " + filename).c_str());
-
 			AddToMRU(filepath);
-
 			Start(filepath);
 		}
 
 		return filepath;
 	}
 
-	void MainWindow::Start(wstring romFilename = L"")
+	void MainWindow::Start(wstring romFilepath)
 	{
 		if(_emuThread) {
 			Stop(false);
 		}
 
-		if(romFilename.length() > 0) {
-			_currentROM = romFilename;
+		if(romFilepath.length() > 0) {
+			_currentROM = romFilepath;
+			_currentROMName = GetFilename(romFilepath, false);
+			SetWindowText(_hWnd, (wstring(_windowName) + L": " + _currentROMName).c_str());
 			_console.reset(new Console(_currentROM));
 		}
 
@@ -368,6 +385,11 @@ namespace NES {
 
 			SetMenuEnabled(ID_FILE_QUICKLOAD, true);			
 			SetMenuEnabled(ID_FILE_QUICKSAVE, true);
+
+			SetMenuEnabled(ID_MOVIES_PLAY, true);
+			SetMenuEnabled(ID_RECORDFROM_START, true);
+			SetMenuEnabled(ID_RECORDFROM_NOW, true);
+			SetMenuEnabled(ID_MOVIES_STOP, true);
 
 			_renderer->ClearFlags(UIFlags::ShowPauseScreen);
 			if(IsMenuChecked(ID_OPTIONS_SHOWFPS)) {
@@ -401,6 +423,12 @@ namespace NES {
 		SetMenuEnabled(ID_NES_STOP, !powerOff);
 		SetMenuEnabled(ID_FILE_QUICKLOAD, !powerOff);
 		SetMenuEnabled(ID_FILE_QUICKSAVE, !powerOff);
+
+		SetMenuEnabled(ID_MOVIES_PLAY, !powerOff);
+		SetMenuEnabled(ID_RECORDFROM_START, !powerOff);
+		SetMenuEnabled(ID_RECORDFROM_NOW, !powerOff);
+		SetMenuEnabled(ID_MOVIES_STOP, !powerOff);
+
 		SetMenuEnabled(ID_NES_RESUME, true);
 	}
 
@@ -569,6 +597,15 @@ namespace NES {
 		SetMenuCheck(ID_SAVESTATESLOT_5, _currentSaveSlot == 4);
 	}
 
+	wstring MainWindow::GetFilename(wstring filepath, bool includeExtension)
+	{
+		wstring filename = filepath.substr(filepath.find_last_of(L"/\\") + 1);
+		if(!includeExtension) {
+			filename = filename.substr(0, filename.find_last_of(L"."));
+		}
+		return filename;
+	}
+
 	LRESULT CALLBACK MainWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		static MainWindow *mainWindow = MainWindow::GetInstance();
@@ -582,9 +619,9 @@ namespace NES {
 				wmId    = LOWORD(wParam);
 				wmEvent = HIWORD(wParam);
 				// Parse the menu selections:
-				switch (wmId) {
+				switch(wmId) {
 					case ID_FILE_OPEN:
-						filename = mainWindow->SelectROM();
+						mainWindow->SelectROM();
 						break;
 
 					case ID_SAVESTATESLOT_1:
@@ -620,14 +657,14 @@ namespace NES {
 						break;
 
 					case ID_FILE_QUICKLOAD:
-						if(mainWindow->_console->LoadState(mainWindow->_currentROM + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1))) {
+						if(mainWindow->_console->LoadState(ConfigManager::GetHomeFolder() + mainWindow->_currentROMName + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1))) {
 							mainWindow->_renderer->DisplayMessage(L"State loaded.", 3000);
 						} else {
 							mainWindow->_renderer->DisplayMessage(L"Slot is empty.", 3000);
 						}
 						break;
 					case ID_FILE_QUICKSAVE:
-						mainWindow->_console->SaveState(mainWindow->_currentROM + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1));
+						mainWindow->_console->SaveState(ConfigManager::GetHomeFolder() + mainWindow->_currentROMName + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1));
 						mainWindow->_renderer->DisplayMessage(L"State saved.", 3000);
 						break;
 					case ID_CHANGESLOT:
@@ -658,6 +695,37 @@ namespace NES {
 						break;
 					case ID_OPTIONS_INPUT:
 						DialogBox(nullptr, MAKEINTRESOURCE(IDD_INPUTCONFIG), hWnd, InputConfig);
+						break;
+
+					case ID_MOVIES_PLAY:
+						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", false);
+						if(!filename.empty()) {
+							mainWindow->_renderer->DisplayMessage(L"Playing movie: " + mainWindow->GetFilename(filename, true), 3000);
+							mainWindow->_playingMovie = true;
+							Movie::Play(filename);
+						}
+						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
+						break;
+					case ID_RECORDFROM_START:
+						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", true);
+						if(!filename.empty()) {
+							mainWindow->_renderer->DisplayMessage(L"Recording...", 3000);
+							Movie::Record(filename, false);
+						}						
+						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
+						break;
+					case ID_RECORDFROM_NOW:
+						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", false);
+						if(!filename.empty()) {
+							mainWindow->_renderer->DisplayMessage(L"Recording...", 3000);
+							Movie::Record(filename, false);
+						}						
+						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
+						break;
+					case ID_MOVIES_STOP:
+						Movie::Stop();
+						mainWindow->_playingMovie = false;
+						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, false);
 						break;
 
 					case ID_TESTS_RUNTESTS:

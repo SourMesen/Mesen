@@ -98,6 +98,7 @@
     <ClInclude Include="IMemoryHandler.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="MMC2.h" />
+    <ClInclude Include="Movie.h" />
     <ClInclude Include="Snapshotable.h" />
     <ClInclude Include="IVideoDevice.h" />
     <ClInclude Include="MapperFactory.h" />
@@ -128,6 +129,7 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
+    <ClCompile Include="Movie.cpp" />
     <ClCompile Include="PPU.cpp" />
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="stdafx.cpp">

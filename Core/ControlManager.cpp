@@ -29,17 +29,25 @@ void ControlManager::RefreshStateBuffer(uint8_t port)
 
 	IControlDevice* controlDevice = ControlManager::ControlDevices[port];
 
-	if(controlDevice) {
-		ButtonState buttonState = controlDevice->GetButtonState();
-
-		//"Button status for each controller is returned as an 8-bit report in the following order: A, B, Select, Start, Up, Down, Left, Right."
-		uint8_t state = (uint8_t)buttonState.A | ((uint8_t)buttonState.B << 1) | ((uint8_t)buttonState.Select << 2) | ((uint8_t)buttonState.Start << 3) |
-							((uint8_t)buttonState.Up << 4) | ((uint8_t)buttonState.Down << 5) | ((uint8_t)buttonState.Left << 6) | ((uint8_t)buttonState.Right << 7);
-
-		_stateBuffer[port] = state;
+	uint8_t state;
+	if(Movie::Playing()) {
+		state = Movie::Instance->GetState(port);
 	} else {
-		_stateBuffer[port] = 0x00;
+		if(controlDevice) {
+			ButtonState buttonState = controlDevice->GetButtonState();
+
+			//"Button status for each controller is returned as an 8-bit report in the following order: A, B, Select, Start, Up, Down, Left, Right."
+			state = (uint8_t)buttonState.A | ((uint8_t)buttonState.B << 1) | ((uint8_t)buttonState.Select << 2) | ((uint8_t)buttonState.Start << 3) |
+				((uint8_t)buttonState.Up << 4) | ((uint8_t)buttonState.Down << 5) | ((uint8_t)buttonState.Left << 6) | ((uint8_t)buttonState.Right << 7);
+		} else {
+			state = 0x00;
+		}
 	}
+	
+	//Used when recording movies
+	Movie::Instance->RecordState(port, state);
+
+	_stateBuffer[port] = state;
 }
 
 uint8_t ControlManager::GetPortValue(uint8_t port)

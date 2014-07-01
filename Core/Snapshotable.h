@@ -6,6 +6,7 @@ class Snapshotable
 {
 	uint8_t* _stream;
 	uint32_t _position;
+	uint32_t _streamSize;
 	bool _saving;
 
 	protected:
@@ -44,7 +45,7 @@ class Snapshotable
 		}
 
 	public:
-		void SaveSnapshot(ofstream* file)
+		void SaveSnapshot(ostream* file)
 		{
 			_stream = new uint8_t[0xFFFF];
 			memset((char*)_stream, 0, 0xFFFF);
@@ -52,18 +53,21 @@ class Snapshotable
 			_saving = true;
 
 			StreamState(_saving);
-			file->write((char*)_stream, 0xFFFF);
+			file->write((char*)&_position, sizeof(_position));
+			file->write((char*)_stream, _position);
 
 			delete[] _stream;
 		}
 
-		void LoadSnapshot(ifstream* file)
+		void LoadSnapshot(istream* file)
 		{
 			_stream = new uint8_t[0xFFFF];
+			memset((char*)_stream, 0, 0xFFFF);
 			_position = 0;
 			_saving = false;
 			
-			file->read((char*)_stream, 0xFFFF);
+			file->read((char*)&_streamSize, sizeof(_streamSize));
+			file->read((char*)_stream, _streamSize);
 			StreamState(_saving);
 
 			delete[] _stream;

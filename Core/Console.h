@@ -16,8 +16,11 @@ enum EmulationFlags
 class Console
 {
 	private:
+		static Console* Instance;
 		static uint32_t Flags;
 		static uint32_t CurrentFPS;
+		static atomic_flag PauseFlag;
+		static atomic_flag RunningFlag;
 
 		unique_ptr<CPU> _cpu;
 		unique_ptr<PPU> _ppu;
@@ -31,12 +34,6 @@ class Console
 		bool _stop = false;
 		bool _reset = false;
 
-		wstring _loadStateFilename;
-		wstring _saveStateFilename;
-
-		void SaveState();
-		void LoadState();
-
 		void ResetComponents(bool softReset);
 
 	public:
@@ -44,13 +41,21 @@ class Console
 		~Console();
 		void Run();
 		void Stop();
-		void Reset();
+		static void Reset();
+
+		//Used to pause the emu loop to perform thread-safe operations
+		static void Pause();
+
+		//Used to resume the emu loop after calling Pause()
+		static void Resume();
 
 		bool RunTest(uint8_t* expectedResult);
 		void SaveTestResult();
 
-		void SaveState(wstring filename);
-		bool LoadState(wstring filename);
+		static void SaveState(wstring filename);
+		static void SaveState(ostream &saveStream);
+		static bool LoadState(wstring filename);
+		static void LoadState(istream &loadStream);
 
 		static bool CheckFlag(int flag);
 		static void SetFlags(int flags);

@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "IControlDevice.h"
 #include "IMemoryHandler.h"
+#include "Movie.h"
 
 class ControlManager : public IMemoryHandler
 {

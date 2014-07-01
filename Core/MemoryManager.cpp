@@ -6,6 +6,8 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 {
 	_mapper = mapper;
 
+	_hasExpansionRAM = false;
+
 	_internalRAM = new uint8_t[InternalRAMSize];
 	_SRAM = new uint8_t[SRAMSize];
 	_videoRAM = new uint8_t[VRAMSize];
@@ -128,6 +130,7 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 	} else if(addr <= 0x401F) {
 		WriteRegister(addr, value);
 	} else if(addr <= 0x5FFF) {
+		_hasExpansionRAM = true;
 		_expansionRAM[addr & 0x1FFF] = value;
 	} else if(addr <= 0x7FFF) {
 		_SRAM[addr & 0x1FFF] = value;
@@ -214,7 +217,10 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 void MemoryManager::StreamState(bool saving)
 {
 	StreamArray<uint8_t>(_internalRAM, MemoryManager::InternalRAMSize);
-	StreamArray<uint8_t>(_expansionRAM, MemoryManager::ExpansionRAMSize);
+	Stream<bool>(_hasExpansionRAM);
+	if(_hasExpansionRAM) {
+		StreamArray<uint8_t>(_expansionRAM, MemoryManager::ExpansionRAMSize);
+	}
 	StreamArray<uint8_t>(_SRAM, MemoryManager::SRAMSize);
-	StreamArray<uint8_t>(_videoRAM, MemoryManager::VRAMSize);
+	StreamArray<uint8_t>(_videoRAM + 0x2000, MemoryManager::VRAMSize - 0x2000); //First 0x2000 bytes are always empty
 }

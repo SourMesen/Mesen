@@ -22,15 +22,24 @@ string ConfigManager::ConfigTagNames[] = {
 
 shared_ptr<ConfigManager> ConfigManager::Instance = nullptr;
 
-void ConfigManager::LoadConfigFile()
+wstring ConfigManager::GetHomeFolder()
 {
+	wstring folder;
 	PWSTR pathName;
 	SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, nullptr, &pathName);
+	folder = wstring((wchar_t*)pathName) + L"\\NesEMU\\";
 
-	_configFilePath = wstring((wchar_t*)pathName) + L"\\NesEMU\\Settings.xml";
-	CreateDirectory((wstring((wchar_t*)pathName) + L"\\NesEMU").c_str(), nullptr);
+	//Make sure it exists
+	CreateDirectory(folder.c_str(), nullptr);
 
 	CoTaskMemFree(pathName);
+
+	return folder;
+}
+
+void ConfigManager::LoadConfigFile()
+{
+	_configFilePath = GetHomeFolder() + L"Settings.xml";
 
 	ifstream configFile(_configFilePath, ifstream::in);
 

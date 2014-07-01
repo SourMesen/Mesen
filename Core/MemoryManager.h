@@ -22,6 +22,8 @@ class MemoryManager: public Snapshotable
 		uint8_t *_SRAM;
 		uint8_t *_videoRAM;
 
+		bool _hasExpansionRAM;
+
 		IMemoryHandler** _ramReadHandlers;
 		IMemoryHandler** _ramWriteHandlers;
 		IMemoryHandler** _vramReadHandlers;

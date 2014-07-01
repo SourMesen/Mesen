@@ -37,7 +37,9 @@ namespace NES {
 		unique_ptr<SpriteFont>	_font;
 		ID3D11Texture2D*			_overlayTexture = nullptr;
 		byte*							_overlayBuffer = nullptr;
+		
 		std::unique_ptr<SpriteBatch> _spriteBatch;
+		ID3D11PixelShader* _pixelShader = nullptr;
 
 		uint32_t _screenWidth;
 		uint32_t _screenHeight;
@@ -60,6 +62,8 @@ namespace NES {
 		ID3D11ShaderResourceView* GetShaderResourceView(ID3D11Texture2D* texture);
 		void DrawNESScreen();
 		void DrawPauseScreen();
+
+		HRESULT CompileShader(wstring filename, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 
 	public:
 		Renderer(HWND hWnd);
