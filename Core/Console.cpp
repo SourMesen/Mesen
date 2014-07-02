@@ -14,9 +14,6 @@ Console::Console(wstring filename)
 {
 	_romFilename = filename;
 
-	Console::PauseFlag.clear();
-	Console::RunningFlag.clear();
-
 	_mapper = MapperFactory::InitializeFromFile(filename);
 	_memoryManager.reset(new MemoryManager(_mapper));
 	_cpu.reset(new CPU(_memoryManager.get()));
@@ -32,6 +29,8 @@ Console::Console(wstring filename)
 
 	ResetComponents(false);
 
+	Console::PauseFlag.clear();
+	Console::RunningFlag.clear();
 	Console::Instance = this;
 }
 
@@ -40,7 +39,9 @@ Console::~Console()
 	Movie::Stop();
 	Console::PauseFlag.clear();
 	Console::RunningFlag.clear();
-	Console::Instance = nullptr;
+	if(Console::Instance == this) {
+		Console::Instance = nullptr;
+	}
 }
 
 void Console::Reset()
