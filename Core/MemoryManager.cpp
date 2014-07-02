@@ -10,7 +10,10 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 
 	_internalRAM = new uint8_t[InternalRAMSize];
 	_SRAM = new uint8_t[SRAMSize];
-	_videoRAM = new uint8_t[VRAMSize];
+	for(int i = 0; i < 4; i++) {
+		_nametableRAM[i] = new uint8_t[NameTableScreenSize];
+		memset(_nametableRAM[i], 0, NameTableScreenSize);
+	}
 	_expansionRAM = new uint8_t[ExpansionRAMSize];
 
 	_ramReadHandlers = new IMemoryHandler*[RAMSize];
@@ -20,7 +23,6 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	
 	memset(_internalRAM, 0, InternalRAMSize);
 	memset(_SRAM, 0, SRAMSize);
-	memset(_videoRAM, 0, VRAMSize);
 	memset(_expansionRAM, 0, ExpansionRAMSize);
 
 	memset(_ramReadHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
@@ -41,7 +43,9 @@ MemoryManager::~MemoryManager()
 		_mapper->SaveBattery(_SRAM);
 	}
 	delete[] _internalRAM;
-	delete[] _videoRAM;
+	for(int i = 0; i < 4; i++) {
+		delete[] _nametableRAM[i];
+	}
 	delete[] _SRAM;
 	delete[] _expansionRAM;
 
@@ -152,22 +156,22 @@ uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 	if(addr <= 0x1FFF) {
 		return ReadMappedVRAM(addr & 0x1FFF);
 	} else {
-		if(addr >= 0x3000) {
-			addr -= 0x1000;
-		}
-
 		switch(_mapper->GetMirroringType()) {
 			case MirroringType::Vertical:
+				return _nametableRAM[(addr&0x400)>>10][addr & 0x3FF];
+			
 			case MirroringType::Horizontal:
+				return _nametableRAM[(addr&0x800)>>11][addr & 0x3FF];
+
 			case MirroringType::FourScreens:
 			default:
-				return _videoRAM[addr & 0x3FFF];
+				return _nametableRAM[(addr&0xC00)>>10][addr & 0x3FF];
 
 			case MirroringType::ScreenAOnly:
-				return _videoRAM[addr & 0x33FF];
+				return _nametableRAM[0][addr & 0x3FF];
 
 			case MirroringType::ScreenBOnly:
-				return _videoRAM[addr & 0x33FF | 0x400];
+				return _nametableRAM[1][addr & 0x3FF];
 		}
 		
 	}
@@ -181,31 +185,25 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 	if(addr <= 0x1FFF) {
 		WriteMappedVRAM(addr, value);
 	} else {
-		if(addr >= 0x3000) {
-			addr -= 0x1000;
-		}
-
 		switch(_mapper->GetMirroringType()) {
 			case MirroringType::Vertical:
-				_videoRAM[addr] = value;
-				_videoRAM[addr ^ 0x800] = value;
+				_nametableRAM[(addr&0x400)>>10][addr & 0x3FF] = value;
 				break;
 
 			case MirroringType::Horizontal:
-				_videoRAM[addr] = value;
-				_videoRAM[addr ^ 0x400] = value;
+				_nametableRAM[(addr&0x800)>>11][addr & 0x3FF] = value;
 				break;
 
 			case MirroringType::ScreenAOnly:  //Always write to 0x2000
-				_videoRAM[addr & ~0xC00] = value;
+				_nametableRAM[0][addr & 0x3FF] = value;
 				break;
 
 			case MirroringType::ScreenBOnly:  //Always write to 0x2400
-				_videoRAM[addr & ~0x800 | 0x400] = value;
+				_nametableRAM[1][addr & 0x3FF] = value;
 				break;
 
 			case MirroringType::FourScreens:
-				_videoRAM[addr] = value;
+				_nametableRAM[(addr&0xC00)>>10][addr & 0x3FF] = value;
 				break;
 
 			default:
@@ -222,5 +220,7 @@ void MemoryManager::StreamState(bool saving)
 		StreamArray<uint8_t>(_expansionRAM, MemoryManager::ExpansionRAMSize);
 	}
 	StreamArray<uint8_t>(_SRAM, MemoryManager::SRAMSize);
-	StreamArray<uint8_t>(_videoRAM + 0x2000, MemoryManager::VRAMSize - 0x2000); //First 0x2000 bytes are always empty
+	for(int i = 0; i < 4; i++) {
+		StreamArray<uint8_t>(_nametableRAM[i], MemoryManager::NameTableScreenSize);
+	}
 }

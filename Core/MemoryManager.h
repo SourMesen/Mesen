@@ -14,13 +14,14 @@ class MemoryManager: public Snapshotable
 		const int ExpansionRAMSize = 0x2000;
 		const int SRAMSize = 0x2000;
 		const int VRAMSize = 0x4000;
+		const int NameTableScreenSize = 0x400;
 
 		shared_ptr<BaseMapper> _mapper;
 
 		uint8_t *_internalRAM;
 		uint8_t *_expansionRAM;
 		uint8_t *_SRAM;
-		uint8_t *_videoRAM;
+		uint8_t *_nametableRAM[4];
 
 		bool _hasExpansionRAM;
 
