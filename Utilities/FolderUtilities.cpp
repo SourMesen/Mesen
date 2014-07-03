@@ -110,7 +110,7 @@ wstring FolderUtilities::GetFolderName(wstring filepath)
 		
 wstring FolderUtilities::OpenFile(LPCWSTR filter, wstring defaultFolder, bool forSave, wstring defaultExt)
 {
-	return OpenFile(filter, defaultFolder.substr(0, defaultFolder.length()-1).c_str(), forSave, defaultExt.c_str());
+	return OpenFile(filter, defaultFolder.c_str(), forSave, defaultExt.c_str());
 }
 
 wstring FolderUtilities::OpenFile(LPCWSTR filter, LPCWSTR defaultFolder, bool forSave, LPCWSTR defaultExt)
