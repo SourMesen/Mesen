@@ -237,45 +237,29 @@ namespace NES {
 
 	void MainWindow::UpdateMRUMenu()
 	{
-		wstring MRU0 = ConfigManager::GetValue<wstring>(Config::MRU0);
-		wstring MRU1 = ConfigManager::GetValue<wstring>(Config::MRU1);
-		wstring MRU2 = ConfigManager::GetValue<wstring>(Config::MRU2);
-		wstring MRU3 = ConfigManager::GetValue<wstring>(Config::MRU3);
-		wstring MRU4 = ConfigManager::GetValue<wstring>(Config::MRU4);
+		wstring MRU[5] = {
+			ConfigManager::GetValue<wstring>(Config::MRU0),
+			ConfigManager::GetValue<wstring>(Config::MRU1),
+			ConfigManager::GetValue<wstring>(Config::MRU2),
+			ConfigManager::GetValue<wstring>(Config::MRU3),
+			ConfigManager::GetValue<wstring>(Config::MRU4)
+		};
+		int menuIDs[5] = { ID_RECENTFILES_MRU1, ID_RECENTFILES_MRU2, ID_RECENTFILES_MRU3, ID_RECENTFILES_MRU4, ID_RECENTFILES_MRU5 };
 
 		HMENU hMenu = GetMenu(_hWnd);
 
 		MENUITEMINFOW info;
-		//Initialize MENUITEMINFO structure:
 		memset(&info, 0, sizeof(info));
 		info.cbSize = sizeof(info);
 		info.fMask = MIIM_TYPE;
 		info.fType = MFT_STRING;
 		info.cch = 256;
 
-		if(!MRU0.empty()) {
-			info.dwTypeData = (LPWSTR)MRU0.c_str();
-			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU1, false, &info);
-		}
-
-		if(!MRU1.empty()) {
-			info.dwTypeData = (LPWSTR)MRU1.c_str();
-			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU2, false, &info);
-		}
-
-		if(!MRU2.empty()) {
-			info.dwTypeData = (LPWSTR)MRU2.c_str();
-			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU3, false, &info);
-		}
-
-		if(!MRU3.empty()) {
-			info.dwTypeData = (LPWSTR)MRU3.c_str();
-			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU4, false, &info);
-		}
-
-		if(!MRU4.empty()) {
-			info.dwTypeData = (LPWSTR)MRU4.c_str();
-			SetMenuItemInfo(hMenu, ID_RECENTFILES_MRU5, false, &info);
+		for(int i = 0; i < 5; i++) {
+			if(!MRU[i].empty()) {
+				info.dwTypeData = (LPWSTR)MRU[i].c_str();
+				SetMenuItemInfo(hMenu, menuIDs[i], false, &info);
+			}
 		}
 	}
 
