@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 #include "../Core/Console.h"
 #include "../Utilities/ConfigManager.h"
+#include "../Utilities/FolderUtilities.h"
 #include "InputManager.h"
 
 using namespace DirectX;
@@ -234,45 +235,6 @@ namespace NES {
 		UpdateMRUMenu();
 	}
 
-	void MainWindow::AddToMRU(wstring romFilepath)
-	{
-		wstring MRU0 = ConfigManager::GetValue<wstring>(Config::MRU0);
-		wstring MRU1 = ConfigManager::GetValue<wstring>(Config::MRU1);
-		wstring MRU2 = ConfigManager::GetValue<wstring>(Config::MRU2);
-		wstring MRU3 = ConfigManager::GetValue<wstring>(Config::MRU3);
-		wstring MRU4 = ConfigManager::GetValue<wstring>(Config::MRU4);
-
-		if(MRU0.compare(romFilepath) == 0) {
-			return;
-		} else if(MRU1.compare(romFilepath) == 0) {
-			MRU1 = MRU0;
-			MRU0 = romFilepath;
-		} else if(MRU2.compare(romFilepath) == 0) {
-			MRU2 = MRU1;
-			MRU1 = MRU0;
-			MRU0 = romFilepath;
-		} else if(MRU3.compare(romFilepath) == 0) {
-			MRU3 = MRU2;
-			MRU2 = MRU1;
-			MRU1 = MRU0;
-			MRU0 = romFilepath;
-		} else {
-			MRU4 = MRU3;
-			MRU3 = MRU2;
-			MRU2 = MRU1;
-			MRU1 = MRU0;
-			MRU0 = romFilepath;
-		}
-
-		ConfigManager::SetValue(Config::MRU0, MRU0);
-		ConfigManager::SetValue(Config::MRU1, MRU1);
-		ConfigManager::SetValue(Config::MRU2, MRU2);
-		ConfigManager::SetValue(Config::MRU3, MRU3);
-		ConfigManager::SetValue(Config::MRU4, MRU4);
-		
-		UpdateMRUMenu();
-	}
-
 	void MainWindow::UpdateMRUMenu()
 	{
 		wstring MRU0 = ConfigManager::GetValue<wstring>(Config::MRU0);
@@ -317,42 +279,18 @@ namespace NES {
 		}
 	}
 
-	wstring MainWindow::OpenFile(LPCWSTR filter, bool forSave, LPCWSTR defaultExt)
-	{
-		wchar_t buffer[2000];
-
-		OPENFILENAME ofn;
-		ZeroMemory(&ofn, sizeof(ofn));
-		ofn.lStructSize = sizeof(ofn);
-		ofn.hwndOwner = nullptr;
-		ofn.lpstrDefExt = defaultExt;
-		ofn.lpstrFile = buffer;
-		ofn.lpstrFile[0] = '\0';
-		ofn.nMaxFile = sizeof(buffer);
-		ofn.lpstrFilter = filter;
-		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = nullptr;
-		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = nullptr;
-		if(forSave) {
-			ofn.Flags = OFN_OVERWRITEPROMPT;
-			GetSaveFileName(&ofn);
-		} else {
-			ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-			GetOpenFileName(&ofn);
-		}
-			
-		return wstring(buffer);
-	}
-
 	wstring MainWindow::SelectROM(wstring filepath)
 	{
 		if(filepath.empty()) {
-			filepath = OpenFile(L"NES Roms (*.nes)\0*.NES\0All (*.*)\0*.*", false);
+			filepath = FolderUtilities::OpenFile(L"NES Roms (*.nes)\0*.NES\0All (*.*)\0*.*", ConfigManager::GetValue<wstring>(Config::LastGameFolder), false);
+			if(!filepath.empty()) {
+				ConfigManager::SetValue(Config::LastGameFolder, FolderUtilities::GetFolderName(filepath));
+			}
 		}
 		
 		if(!filepath.empty()) {
-			AddToMRU(filepath);
+			ConfigManager::AddToMRU(filepath);			
+			UpdateMRUMenu();
 			Start(filepath);
 		}
 
@@ -367,7 +305,7 @@ namespace NES {
 
 		if(romFilepath.length() > 0) {
 			_currentROM = romFilepath;
-			_currentROMName = GetFilename(romFilepath, false);
+			_currentROMName = FolderUtilities::GetFilename(romFilepath, false);
 			SetWindowText(_hWnd, (wstring(_windowName) + L": " + _currentROMName).c_str());
 			_console.reset(new Console(_currentROM));
 		}
@@ -496,66 +434,13 @@ namespace NES {
 		}
 	}
 
-	vector<wstring> MainWindow::GetFolders(wstring rootFolder)
-	{
-		HANDLE hFind;
-		WIN32_FIND_DATA data;
-
-		vector<wstring> folders;
-
-		hFind = FindFirstFile((rootFolder + L"*").c_str(), &data);
-		if(hFind != INVALID_HANDLE_VALUE) {
-			do {
-				if(data.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY && wcscmp(data.cFileName, L".") != 0 && wcscmp(data.cFileName, L"..") != 0) {
-					wstring subfolder = rootFolder + data.cFileName + L"\\";
-					folders.push_back(subfolder);
-					for(wstring folderName : GetFolders(subfolder.c_str())) {
-						folders.push_back(folderName);
-					}
-				}
-			}
-			while(FindNextFile(hFind, &data));
-			FindClose(hFind);
-		}
-
-		return folders;
-	}
-
-	vector<wstring> MainWindow::GetFilesInFolder(wstring rootFolder, wstring mask, bool recursive)
-	{
-		HANDLE hFind;
-		WIN32_FIND_DATA data;
-
-		vector<wstring> folders;
-		vector<wstring> files;
-		folders.push_back(rootFolder);
-
-		if(recursive) {
-			for(wstring subFolder : GetFolders(rootFolder)) {
-				folders.push_back(subFolder);
-			}
-		}
-
-		for(wstring folder : folders) {
-			hFind = FindFirstFile((folder + mask).c_str(), &data);
-			if(hFind != INVALID_HANDLE_VALUE) {
-				do {
-					files.push_back(folder + data.cFileName);
-				} while(FindNextFile(hFind, &data));
-				FindClose(hFind);
-			}
-		}
-
-		return files;
-	}
-
 	void MainWindow::RunTests()
 	{
 		Stop(true);
 		int passCount = 0;
 		int failCount = 0;
 		int totalCount = 0;
-		for(wstring testROM : GetFilesInFolder(L"..\\TestSuite\\", L"*.nes", true)) {
+		for(wstring testROM : FolderUtilities::GetFilesInFolder(L"..\\TestSuite\\", L"*.nes", true)) {
 			ifstream testResult(testROM + L".trt", ios::in | ios::binary);
 
 			if(testResult) {
@@ -598,15 +483,6 @@ namespace NES {
 		SetMenuCheck(ID_SAVESTATESLOT_3, _currentSaveSlot == 2);
 		SetMenuCheck(ID_SAVESTATESLOT_4, _currentSaveSlot == 3);
 		SetMenuCheck(ID_SAVESTATESLOT_5, _currentSaveSlot == 4);
-	}
-
-	wstring MainWindow::GetFilename(wstring filepath, bool includeExtension)
-	{
-		wstring filename = filepath.substr(filepath.find_last_of(L"/\\") + 1);
-		if(!includeExtension) {
-			filename = filename.substr(0, filename.find_last_of(L"."));
-		}
-		return filename;
 	}
 
 	LRESULT CALLBACK MainWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -660,14 +536,14 @@ namespace NES {
 						break;
 
 					case ID_FILE_QUICKLOAD:
-						if(mainWindow->_console->LoadState(ConfigManager::GetHomeFolder() + mainWindow->_currentROMName + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1))) {
+						if(mainWindow->_console->LoadState(FolderUtilities::GetSaveStateFolder() + mainWindow->_currentROMName + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1))) {
 							mainWindow->_renderer->DisplayMessage(L"State loaded.", 3000);
 						} else {
 							mainWindow->_renderer->DisplayMessage(L"Slot is empty.", 3000);
 						}
 						break;
 					case ID_FILE_QUICKSAVE:
-						mainWindow->_console->SaveState(ConfigManager::GetHomeFolder() + mainWindow->_currentROMName + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1));
+						mainWindow->_console->SaveState(FolderUtilities::GetSaveStateFolder() + mainWindow->_currentROMName + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1));
 						mainWindow->_renderer->DisplayMessage(L"State saved.", 3000);
 						break;
 					case ID_CHANGESLOT:
@@ -701,9 +577,9 @@ namespace NES {
 						break;
 
 					case ID_MOVIES_PLAY:
-						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", false);
+						filename = FolderUtilities::OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", FolderUtilities::GetMovieFolder(), false);
 						if(!filename.empty()) {
-							mainWindow->_renderer->DisplayMessage(L"Playing movie: " + mainWindow->GetFilename(filename, true), 3000);
+							mainWindow->_renderer->DisplayMessage(L"Playing movie: " + FolderUtilities::GetFilename(filename, true), 3000);
 							mainWindow->_playingMovie = true;
 							Movie::Play(filename);
 						}
@@ -711,7 +587,7 @@ namespace NES {
 						break;
 					case ID_RECORDFROM_START:
 					case ID_RECORDFROM_NOW:
-						filename = mainWindow->OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", true, L"nmo");
+						filename = FolderUtilities::OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", FolderUtilities::GetMovieFolder(), true, L"nmo");
 						if(!filename.empty()) {
 							mainWindow->_renderer->DisplayMessage(L"Recording...", 3000);
 							Movie::Record(filename, wmId == ID_RECORDFROM_START);
@@ -791,5 +667,4 @@ namespace NES {
 
 		return 0;
 	}
-
 }

@@ -40,10 +40,6 @@ namespace NES {
 
 		void SaveTestResult();
 		void RunTests();
-		
-		vector<wstring> GetFolders(wstring rootFolder);
-		vector<wstring> GetFilesInFolder(wstring folder, wstring mask, bool recursive);
-		wstring GetFilename(wstring filepath, bool includeExtension);
 
 		void LimitFPS_Click();
 		void ShowFPS_Click();
@@ -54,7 +50,6 @@ namespace NES {
 		bool SetMenuCheck(int resourceID, bool checked);
 		bool ToggleMenuCheck(int resourceID);
 
-		wstring MainWindow::OpenFile(LPCWSTR filter, bool forSave, LPCWSTR defaultExt = L"");
 		wstring SelectROM(wstring romFilepath = L"");
 		void Start(wstring romFilepath = L"");
 		void Reset();

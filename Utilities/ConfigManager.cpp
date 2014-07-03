@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ConfigManager.h"
-#include <Shlobj.h>
+#include "FolderUtilities.h"
 
 string ConfigManager::ConfigTagNames[] = { 
 	"ShowFPS",
@@ -10,6 +10,7 @@ string ConfigManager::ConfigTagNames[] = {
 	"MRU2",
 	"MRU3",
 	"MRU4",
+	"LastGameFolder",
 	"Player1_ButtonA",
 	"Player1_ButtonB",
 	"Player1_Select",
@@ -22,24 +23,9 @@ string ConfigManager::ConfigTagNames[] = {
 
 shared_ptr<ConfigManager> ConfigManager::Instance = nullptr;
 
-wstring ConfigManager::GetHomeFolder()
-{
-	wstring folder;
-	PWSTR pathName;
-	SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, nullptr, &pathName);
-	folder = wstring((wchar_t*)pathName) + L"\\NesEMU\\";
-
-	//Make sure it exists
-	CreateDirectory(folder.c_str(), nullptr);
-
-	CoTaskMemFree(pathName);
-
-	return folder;
-}
-
 void ConfigManager::LoadConfigFile()
 {
-	_configFilePath = GetHomeFolder() + L"Settings.xml";
+	_configFilePath = FolderUtilities::GetHomeFolder() + L"Settings.xml";
 
 	ifstream configFile(_configFilePath, ifstream::in);
 
@@ -84,4 +70,41 @@ tinyxml2::XMLElement* ConfigManager::GetNode(Config config)
 	}
 
 	return configNode;
+}
+
+void ConfigManager::AddToMRU(wstring romFilepath)
+{
+	wstring MRU0 = ConfigManager::GetValue<wstring>(Config::MRU0);
+	wstring MRU1 = ConfigManager::GetValue<wstring>(Config::MRU1);
+	wstring MRU2 = ConfigManager::GetValue<wstring>(Config::MRU2);
+	wstring MRU3 = ConfigManager::GetValue<wstring>(Config::MRU3);
+	wstring MRU4 = ConfigManager::GetValue<wstring>(Config::MRU4);
+
+	if(MRU0.compare(romFilepath) == 0) {
+		return;
+	} else if(MRU1.compare(romFilepath) == 0) {
+		MRU1 = MRU0;
+		MRU0 = romFilepath;
+	} else if(MRU2.compare(romFilepath) == 0) {
+		MRU2 = MRU1;
+		MRU1 = MRU0;
+		MRU0 = romFilepath;
+	} else if(MRU3.compare(romFilepath) == 0) {
+		MRU3 = MRU2;
+		MRU2 = MRU1;
+		MRU1 = MRU0;
+		MRU0 = romFilepath;
+	} else {
+		MRU4 = MRU3;
+		MRU3 = MRU2;
+		MRU2 = MRU1;
+		MRU1 = MRU0;
+		MRU0 = romFilepath;
+	}
+
+	ConfigManager::SetValue(Config::MRU0, MRU0);
+	ConfigManager::SetValue(Config::MRU1, MRU1);
+	ConfigManager::SetValue(Config::MRU2, MRU2);
+	ConfigManager::SetValue(Config::MRU3, MRU3);
+	ConfigManager::SetValue(Config::MRU4, MRU4);
 }

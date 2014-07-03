@@ -5,6 +5,7 @@
 #include "IMemoryHandler.h"
 #include "ROMLoader.h"
 #include <assert.h>
+#include "../Utilities/FolderUtilities.h"
 
 class BaseMapper : public IMemoryHandler, public Snapshotable
 {
@@ -103,16 +104,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 
 		wstring GetBatteryFilename()
 		{
-			wstring filename = _romFilename;
-			std::transform(filename.begin(), filename.end(), filename.begin(), std::tolower);
-			if(filename.compare(filename.length() - 4, 4, L".nes") == 0) {
-				//filename ends in .nes, remove it
-				filename = _romFilename.substr(0, _romFilename.length() - 4);
-			} else {
-				filename = _romFilename;
-			}
-			filename += L".sav";
-			return filename;
+			return FolderUtilities::GetSaveFolder() + FolderUtilities::GetFilename(_romFilename, false) + L".sav";
 		}
 
 	protected:

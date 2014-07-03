@@ -13,6 +13,7 @@ enum class Config
 	MRU2,
 	MRU3,
 	MRU4,
+	LastGameFolder,
 	Player1_ButtonA,
 	Player1_ButtonB,
 	Player1_Select,
@@ -83,8 +84,6 @@ class ConfigManager
 		}
 
 	public:
-		static wstring ConfigManager::GetHomeFolder();
-
 		static shared_ptr<ConfigManager> GetInstance()
 		{
 			if(ConfigManager::Instance == nullptr) {
@@ -105,4 +104,6 @@ class ConfigManager
 			GetInstance()->SetValueAttribute(GetInstance()->GetNode(config), value);
 			GetInstance()->_xmlDocument.SaveFile(utf8util::UTF8FromUTF16(GetInstance()->_configFilePath).c_str(), false);
 		}
+
+		static void AddToMRU(wstring romFilepath);
 };
