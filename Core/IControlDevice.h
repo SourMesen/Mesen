@@ -4,16 +4,16 @@
 
 struct ButtonState
 {
-	bool Up;
-	bool Down;
-	bool Left;
-	bool Right;
+	bool Up = false;
+	bool Down = false;
+	bool Left = false;
+	bool Right = false;
 
-	bool A;
-	bool B;
+	bool A = false;
+	bool B = false;
 
-	bool Select;
-	bool Start;
+	bool Select = false;
+	bool Start = false;
 };
 
 class IControlDevice
