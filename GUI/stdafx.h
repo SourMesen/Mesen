@@ -47,6 +47,11 @@
 #include <Fcntl.h>
 #include <thread>
 
+#include <list>
+#include <vector>
+
 using std::thread;
+using std::list;
+using std::vector;
 
 // TODO: reference additional headers your program requires here

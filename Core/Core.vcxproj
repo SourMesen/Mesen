@@ -42,6 +42,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -93,12 +95,20 @@
     <ClInclude Include="CNROM.h" />
     <ClInclude Include="ColorDreams.h" />
     <ClInclude Include="ControlManager.h" />
+    <ClInclude Include="GameClient.h" />
+    <ClInclude Include="GameClientConnection.h" />
+    <ClInclude Include="GameConnection.h" />
+    <ClInclude Include="GameServer.h" />
+    <ClInclude Include="GameServerConnection.h" />
     <ClInclude Include="IAudioDevice.h" />
     <ClInclude Include="IControlDevice.h" />
+    <ClInclude Include="IGameBroadcaster.h" />
     <ClInclude Include="IMemoryHandler.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="IMessageManager.h" />
     <ClInclude Include="MMC2.h" />
     <ClInclude Include="Movie.h" />
+    <ClInclude Include="NetMessage.h" />
     <ClInclude Include="Snapshotable.h" />
     <ClInclude Include="IVideoDevice.h" />
     <ClInclude Include="MapperFactory.h" />
@@ -123,6 +133,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UNROM.h" />
+    <ClInclude Include="VirtualController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APU.cpp" />

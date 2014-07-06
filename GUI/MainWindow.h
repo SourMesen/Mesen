@@ -3,6 +3,8 @@
 #include "SoundManager.h"
 #include "../Core/Console.h"
 #include "../Utilities/ConfigManager.h"
+#include "../Core/GameServer.h"
+#include "../Core/GameClient.h"
 
 namespace NES {
 	class MainWindow
@@ -22,6 +24,9 @@ namespace NES {
 		wstring _currentROM;
 		wstring _currentROMName;
 
+		GameClient _gameClient;
+		GameServer _gameServer;
+
 		int _currentSaveSlot = 0;
 
 		bool _playingMovie = false;
@@ -31,6 +36,7 @@ namespace NES {
 		HRESULT InitWindow();
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 		static INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+		static INT_PTR CALLBACK ConnectWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 		static INT_PTR CALLBACK InputConfig(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 		static INT_PTR CALLBACK ControllerSetup(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 

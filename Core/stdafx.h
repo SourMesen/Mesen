@@ -19,6 +19,7 @@
 #include <array>
 #include <sstream>
 #include <atomic>
+#include <list>
 
 using std::vector;
 using std::shared_ptr;
@@ -32,4 +33,6 @@ using std::ofstream;
 using std::wstring;
 using std::exception;
 using std::atomic_flag;
+using std::atomic;
+using std::list;
 using std::max;

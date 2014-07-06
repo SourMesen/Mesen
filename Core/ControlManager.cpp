@@ -2,15 +2,58 @@
 #include "ControlManager.h"
 
 IControlDevice* ControlManager::ControlDevices[] = { nullptr, nullptr, nullptr, nullptr };
+IControlDevice* ControlManager::OriginalControlDevices[] = { nullptr, nullptr, nullptr, nullptr };
+IGameBroadcaster* ControlManager::GameBroadcaster = nullptr;
 
 ControlManager::ControlManager()
 {
 
 }
 
+void ControlManager::RegisterBroadcaster(IGameBroadcaster* gameBroadcaster)
+{
+	ControlManager::GameBroadcaster = gameBroadcaster;
+}
+
+void ControlManager::UnregisterBroadcaster(IGameBroadcaster* gameBroadcaster)
+{
+	if(ControlManager::GameBroadcaster == gameBroadcaster) {
+		ControlManager::GameBroadcaster = nullptr;
+	}
+}
+
+void ControlManager::BackupControlDevices()
+{
+	for(int i = 0; i < 4; i++) {
+		OriginalControlDevices[i] = ControlDevices[i];
+	}
+}
+
+void ControlManager::RestoreControlDevices()
+{
+	for(int i = 0; i < 4; i++) {
+		ControlDevices[i] = OriginalControlDevices[i];
+	}
+}
+
+IControlDevice* ControlManager::GetControlDevice(uint8_t port)
+{
+	return ControlManager::ControlDevices[port];
+}
+
 void ControlManager::RegisterControlDevice(IControlDevice* controlDevice, uint8_t port)
 {
 	ControlManager::ControlDevices[port] = controlDevice;
+}
+
+void ControlManager::UnregisterControlDevice(IControlDevice* controlDevice)
+{
+	for(int i = 0; i < 4; i++) {
+		if(ControlManager::ControlDevices[i] == controlDevice) {
+			ControlManager::ControlDevices[i] = nullptr;
+			break;
+		}
+	}
 }
 
 void ControlManager::RefreshAllPorts()
@@ -34,11 +77,7 @@ void ControlManager::RefreshStateBuffer(uint8_t port)
 		state = Movie::Instance->GetState(port);
 	} else {
 		if(controlDevice) {
-			ButtonState buttonState = controlDevice->GetButtonState();
-
-			//"Button status for each controller is returned as an 8-bit report in the following order: A, B, Select, Start, Up, Down, Left, Right."
-			state = (uint8_t)buttonState.A | ((uint8_t)buttonState.B << 1) | ((uint8_t)buttonState.Select << 2) | ((uint8_t)buttonState.Start << 3) |
-				((uint8_t)buttonState.Up << 4) | ((uint8_t)buttonState.Down << 5) | ((uint8_t)buttonState.Left << 6) | ((uint8_t)buttonState.Right << 7);
+			state = controlDevice->GetButtonState().ToByte();
 		} else {
 			state = 0x00;
 		}
@@ -46,6 +85,9 @@ void ControlManager::RefreshStateBuffer(uint8_t port)
 	
 	//Used when recording movies
 	Movie::Instance->RecordState(port, state);
+	if(ControlManager::GameBroadcaster) {
+		ControlManager::GameBroadcaster->BroadcastInput(state, port);
+	}
 
 	_stateBuffer[port] = state;
 }
@@ -96,4 +138,10 @@ void ControlManager::WriteRAM(uint16_t addr, uint8_t value)
 			break;
 	}
 
+}
+
+void ControlManager::StreamState(bool saving)
+{
+	StreamArray<uint8_t>(_stateBuffer, 4);
+	Stream<bool>(_refreshState);
 }

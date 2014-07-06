@@ -22,6 +22,9 @@
     <Filter Include="Header Files\Mappers">
       <UniqueIdentifier>{67b52e86-0ff2-4dbe-b9ed-7c92aace61d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\NetPlay">
+      <UniqueIdentifier>{43f375c6-d7c7-4bbf-8520-ad53e4e1b4a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -131,6 +134,33 @@
     </ClInclude>
     <ClInclude Include="Movie.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConnection.h">
+      <Filter>Header Files\NetPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient.h">
+      <Filter>Header Files\NetPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer.h">
+      <Filter>Header Files\NetPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualController.h">
+      <Filter>Header Files\NetPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="NetMessage.h">
+      <Filter>Header Files\NetPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameBroadcaster.h">
+      <Filter>Header Files\NetPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClientConnection.h">
+      <Filter>Header Files\NetPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServerConnection.h">
+      <Filter>Header Files\NetPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="IMessageManager.h">
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

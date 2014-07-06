@@ -11,6 +11,7 @@ string ConfigManager::ConfigTagNames[] = {
 	"MRU3",
 	"MRU4",
 	"LastGameFolder",
+	"LastNetPlayHost",
 	"Player1_ButtonA",
 	"Player1_ButtonB",
 	"Player1_Select",

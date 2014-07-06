@@ -7,6 +7,8 @@
 #include "BaseMapper.h"
 #include "MemoryManager.h"
 #include "ControlManager.h"
+#include "../Utilities/SimpleLock.h"
+#include "IMessageManager.h"
 
 enum EmulationFlags
 {
@@ -19,8 +21,9 @@ class Console
 		static Console* Instance;
 		static uint32_t Flags;
 		static uint32_t CurrentFPS;
-		static atomic_flag PauseFlag;
-		static atomic_flag RunningFlag;
+		static SimpleLock PauseLock;
+		static SimpleLock RunningLock;
+		static IMessageManager* MessageManager;
 
 		unique_ptr<CPU> _cpu;
 		unique_ptr<PPU> _ppu;
@@ -56,9 +59,13 @@ class Console
 		static void SaveState(ostream &saveStream);
 		static bool LoadState(wstring filename);
 		static void LoadState(istream &loadStream);
+		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
 		static bool CheckFlag(int flag);
 		static void SetFlags(int flags);
 		static void ClearFlags(int flags);
 		static uint32_t GetFPS();
+
+		static void RegisterMessageManager(IMessageManager* messageManager);
+		static void DisplayMessage(wstring message);
 };

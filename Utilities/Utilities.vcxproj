@@ -73,6 +73,9 @@
   <ItemGroup>
     <ClInclude Include="ConfigManager.h" />
     <ClInclude Include="FolderUtilities.h" />
+    <ClInclude Include="NATPortMapper.h" />
+    <ClInclude Include="SimpleLock.h" />
+    <ClInclude Include="Socket.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Timer.h" />

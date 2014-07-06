@@ -78,9 +78,8 @@ bool APU::Exec(uint32_t executedCycles)
 		if(availableSampleCount >= APU::SamplesPerFrame) {
 			size_t sampleCount = _buf.read_samples(_outputBuffer, APU::SamplesPerFrame);
 			APU::AudioDevice->PlayBuffer(_outputBuffer, sampleCount * BitsPerSample / 8);
-
-			return true;
 		}
+		return true;
 	}
 	return false;
 }
@@ -91,6 +90,8 @@ void APU::StreamState(bool saving)
 	if(saving) {
 		_apu.save_snapshot(&snapshot);
 	} 
+
+	Stream<uint32_t>(_currentClock);
 	
 	StreamArray<uint8_t>(snapshot.w40xx, 0x14);
 	Stream<uint8_t>(snapshot.w4015);

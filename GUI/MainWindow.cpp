@@ -20,6 +20,8 @@ namespace NES {
 		_renderer.reset(new Renderer(_hWnd));
 		_soundManager.reset(new SoundManager(_hWnd));
 
+		Console::RegisterMessageManager(_renderer.get());
+
 		return true;
 	}
 
@@ -58,9 +60,9 @@ namespace NES {
 
 	int MainWindow::Run()
 	{
-		#if _DEBUG
+		//#if _DEBUG
 			CreateConsole();
-		#endif
+		//#endif
 
 		Initialize();
 
@@ -83,14 +85,21 @@ namespace NES {
 				}
 			} else {
 				_renderer->Render();
+				_gameServer.Exec();
+				_gameClient.Exec();
 			}
+
+			SetMenuEnabled(ID_NETPLAY_STARTSERVER, !_gameServer.Started() && !_gameClient.Connected());
+			SetMenuEnabled(ID_NETPLAY_STOPSERVER, _gameServer.Started() && !_gameClient.Connected());
+
+			SetMenuEnabled(ID_NETPLAY_CONNECT, !_gameServer.Started() && !_gameClient.Connected());
+			SetMenuEnabled(ID_NETPLAY_DISCONNECT, !_gameServer.Started() && _gameClient.Connected());
+
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1));
 
 			if(_playingMovie) {
 				if(!Movie::Playing()) {
 					_playingMovie = false;
-					_renderer->DisplayMessage(L"Movie ended.", 3000);
-
 					//Pause game
 					Stop(false);
 				}
@@ -147,6 +156,35 @@ namespace NES {
 
 			case WM_COMMAND:
 				if(LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL) {
+					EndDialog(hDlg, LOWORD(wParam));
+					return (INT_PTR)TRUE;
+				}
+				break;
+		}
+		return (INT_PTR)FALSE;
+	}
+	
+	INT_PTR CALLBACK MainWindow::ConnectWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+	{
+		UNREFERENCED_PARAMETER(lParam);
+		wchar_t hostName[1000];
+		wstring lastHost;
+
+		switch(message) {
+			case WM_INITDIALOG:
+
+				lastHost = ConfigManager::GetValue<wstring>(Config::LastNetPlayHost);
+				SetDlgItemText(hDlg, IDC_HOSTNAME, lastHost.size() > 0 ? lastHost.c_str() : L"localhost");
+				return (INT_PTR)TRUE;
+
+			case WM_COMMAND:
+				if(LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL) {
+					if(LOWORD(wParam) == IDOK) {
+						GetDlgItemText(hDlg, IDC_HOSTNAME, (LPWSTR)hostName, 1000);
+						ConfigManager::SetValue(Config::LastNetPlayHost, wstring(hostName));
+						MainWindow::GetInstance()->_gameClient.Connect(utf8util::UTF8FromUTF16(hostName).c_str(), 8888);
+					}
+
 					EndDialog(hDlg, LOWORD(wParam));
 					return (INT_PTR)TRUE;
 				}
@@ -460,7 +498,7 @@ namespace NES {
 	void MainWindow::SelectSaveSlot(int slot)
 	{
 		_currentSaveSlot = slot % 5;
-		_renderer->DisplayMessage(L"Savestate slot: " + std::to_wstring(_currentSaveSlot + 1), 3000);
+		_renderer->DisplayMessage(L"Savestate slot: " + std::to_wstring(_currentSaveSlot + 1));
 
 		SetMenuCheck(ID_SAVESTATESLOT_1, _currentSaveSlot == 0);
 		SetMenuCheck(ID_SAVESTATESLOT_2, _currentSaveSlot == 1);
@@ -520,15 +558,10 @@ namespace NES {
 						break;
 
 					case ID_FILE_QUICKLOAD:
-						if(mainWindow->_console->LoadState(FolderUtilities::GetSaveStateFolder() + mainWindow->_currentROMName + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1))) {
-							mainWindow->_renderer->DisplayMessage(L"State loaded.", 3000);
-						} else {
-							mainWindow->_renderer->DisplayMessage(L"Slot is empty.", 3000);
-						}
+						mainWindow->_console->LoadState(FolderUtilities::GetSaveStateFolder() + mainWindow->_currentROMName + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1));
 						break;
 					case ID_FILE_QUICKSAVE:
 						mainWindow->_console->SaveState(FolderUtilities::GetSaveStateFolder() + mainWindow->_currentROMName + L".ss" + std::to_wstring(mainWindow->_currentSaveSlot + 1));
-						mainWindow->_renderer->DisplayMessage(L"State saved.", 3000);
 						break;
 					case ID_CHANGESLOT:
 						mainWindow->SelectSaveSlot(mainWindow->_currentSaveSlot + 1);
@@ -563,7 +596,6 @@ namespace NES {
 					case ID_MOVIES_PLAY:
 						filename = FolderUtilities::OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", FolderUtilities::GetMovieFolder(), false);
 						if(!filename.empty()) {
-							mainWindow->_renderer->DisplayMessage(L"Playing movie: " + FolderUtilities::GetFilename(filename, true), 3000);
 							mainWindow->_playingMovie = true;
 							Movie::Play(filename);
 						}
@@ -573,7 +605,6 @@ namespace NES {
 					case ID_RECORDFROM_NOW:
 						filename = FolderUtilities::OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", FolderUtilities::GetMovieFolder(), true, L"nmo");
 						if(!filename.empty()) {
-							mainWindow->_renderer->DisplayMessage(L"Recording...", 3000);
 							Movie::Record(filename, wmId == ID_RECORDFROM_START);
 						}						
 						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
@@ -583,6 +614,20 @@ namespace NES {
 						Movie::Stop();
 						mainWindow->_playingMovie = false;
 						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, false);
+						break;
+
+					case ID_NETPLAY_STARTSERVER:
+						mainWindow->_gameServer.Start();
+						break;
+					case ID_NETPLAY_STOPSERVER:
+						mainWindow->_gameServer.Stop();
+						break;
+
+					case ID_NETPLAY_CONNECT:
+						DialogBox(nullptr, MAKEINTRESOURCE(IDD_CONNECT), hWnd, ConnectWndProc);
+						break;
+					case ID_NETPLAY_DISCONNECT:
+						mainWindow->_gameClient.Disconnect();
 						break;
 
 					case ID_TESTS_RUNTESTS:
@@ -641,6 +686,7 @@ namespace NES {
 				break;
 
 			case WM_DESTROY:
+				mainWindow->_gameClient.Disconnect();
 				mainWindow->Stop(true);
 				PostQuitMessage(0);
 				break;

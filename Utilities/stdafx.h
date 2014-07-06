@@ -10,7 +10,9 @@
 #include <fstream>
 #include <memory>
 #include <vector>
+#include <atomic>
 
+using std::atomic_flag;
 using std::shared_ptr;
 using std::ifstream;
 using std::string;

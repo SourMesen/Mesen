@@ -2,6 +2,7 @@
 #include "DirectXTK\SpriteBatch.h"
 #include "DirectXTK\SpriteFont.h"
 #include "../Core/IVideoDevice.h"
+#include "../Core/IMessageManager.h"
 
 using namespace DirectX;
 
@@ -12,7 +13,7 @@ namespace NES {
 		ShowPauseScreen = 2,
 	};
 
-	class Renderer : IVideoDevice
+	class Renderer : public IVideoDevice, public IMessageManager
 	{
 	private:
 		HWND                    _hWnd = nullptr;
@@ -39,7 +40,7 @@ namespace NES {
 		byte*							_overlayBuffer = nullptr;
 		
 		std::unique_ptr<SpriteBatch> _spriteBatch;
-		ID3D11PixelShader* _pixelShader = nullptr;
+		//ID3D11PixelShader* _pixelShader = nullptr;
 
 		uint32_t _screenWidth;
 		uint32_t _screenHeight;
@@ -63,7 +64,7 @@ namespace NES {
 		void DrawNESScreen();
 		void DrawPauseScreen();
 
-		HRESULT CompileShader(wstring filename, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
+		//HRESULT CompileShader(wstring filename, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 
 	public:
 		Renderer(HWND hWnd);
@@ -71,7 +72,7 @@ namespace NES {
 
 		void Render();
 
-		void Renderer::DisplayMessage(wstring text, uint32_t duration);
+		void DisplayMessage(wstring text);
 		
 		void SetFlags(uint32_t flags)
 		{

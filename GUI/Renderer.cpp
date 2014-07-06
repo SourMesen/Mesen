@@ -276,10 +276,10 @@ namespace NES
 		return shaderResourceView;
 	}
 
-	void Renderer::DisplayMessage(wstring text, uint32_t duration)
+	void Renderer::DisplayMessage(wstring text)
 	{
 		_displayMessage = text;
-		_displayTimestamp = timeGetTime() + duration;
+		_displayTimestamp = timeGetTime() + 3000; //3 secs
 	}
 
 	void Renderer::DrawNESScreen()
@@ -335,7 +335,7 @@ namespace NES
 		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2((float)_hdScreenWidth / 2 - 142, (float)_hdScreenHeight / 2 - 77), Colors::Black, 0.0f, XMFLOAT2(0, 0), 2.0f);
 		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2((float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 80), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 2.0f);
 	}
-
+/*
 	HRESULT Renderer::CompileShader(wstring filename, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 	{
 		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
@@ -353,7 +353,7 @@ namespace NES
 		}
 
 		return hr;
-	}
+	}*/
 
 	void Renderer::Render()
 	{
