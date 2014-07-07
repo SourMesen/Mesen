@@ -58,14 +58,14 @@ public:
 
 		_controllerPort = controllerPort;
 		
-		Console::DisplayMessage(L"Player " + std::to_wstring(_controllerPort) + L" connected.");
+		Console::DisplayMessage(L"Player " + std::to_wstring(_controllerPort+1) + L" connected.");
 
 		ControlManager::BackupControlDevices();
 	}
 
 	~GameServerConnection()
 	{
-		Console::DisplayMessage(L"Player " + std::to_wstring(_controllerPort) + L" disconnected.");
+		Console::DisplayMessage(L"Player " + std::to_wstring(_controllerPort+1) + L" disconnected.");
 
 		ControlManager::RestoreControlDevices();
 	}
