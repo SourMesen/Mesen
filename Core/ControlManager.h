@@ -6,6 +6,7 @@
 #include "Movie.h"
 #include "IGameBroadcaster.h"
 #include "Snapshotable.h"
+#include "../Utilities/SimpleLock.h"
 
 class ControlManager : public Snapshotable, public IMemoryHandler
 {
@@ -13,6 +14,7 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		static IControlDevice* ControlDevices[4];
 		static IControlDevice* OriginalControlDevices[4];
 		static IGameBroadcaster* GameBroadcaster;
+		static SimpleLock ControllerLock[4];
 
 		bool _refreshState = false;
 		uint8_t _stateBuffer[4];

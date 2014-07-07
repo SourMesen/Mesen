@@ -53,6 +53,7 @@ public:
 
 	~GameClientConnection()
 	{
+		_virtualControllers.clear();
 		ControlManager::RestoreControlDevices();
 		Console::DisplayMessage(L"Connection to server lost.");
 	}

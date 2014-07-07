@@ -4,6 +4,7 @@
 IControlDevice* ControlManager::ControlDevices[] = { nullptr, nullptr, nullptr, nullptr };
 IControlDevice* ControlManager::OriginalControlDevices[] = { nullptr, nullptr, nullptr, nullptr };
 IGameBroadcaster* ControlManager::GameBroadcaster = nullptr;
+SimpleLock ControlManager::ControllerLock[4];
 
 ControlManager::ControlManager()
 {
@@ -32,8 +33,10 @@ void ControlManager::BackupControlDevices()
 void ControlManager::RestoreControlDevices()
 {
 	for(int i = 0; i < 4; i++) {
+		ControlManager::ControllerLock[i].Acquire();
 		ControlDevices[i] = OriginalControlDevices[i];
-	}
+		ControlManager::ControllerLock[i].Release();
+	}	
 }
 
 IControlDevice* ControlManager::GetControlDevice(uint8_t port)
@@ -43,17 +46,22 @@ IControlDevice* ControlManager::GetControlDevice(uint8_t port)
 
 void ControlManager::RegisterControlDevice(IControlDevice* controlDevice, uint8_t port)
 {
+	ControlManager::ControllerLock[port].Acquire();
 	ControlManager::ControlDevices[port] = controlDevice;
+	ControlManager::ControllerLock[port].Release();
 }
 
 void ControlManager::UnregisterControlDevice(IControlDevice* controlDevice)
 {
 	for(int i = 0; i < 4; i++) {
 		if(ControlManager::ControlDevices[i] == controlDevice) {
+			ControlManager::ControllerLock[i].Acquire();
 			ControlManager::ControlDevices[i] = nullptr;
+			ControlManager::ControllerLock[i].Release();
 			break;
 		}
 	}
+
 }
 
 void ControlManager::RefreshAllPorts()
@@ -70,6 +78,7 @@ void ControlManager::RefreshStateBuffer(uint8_t port)
 		throw exception("Invalid port");
 	}
 
+	ControlManager::ControllerLock[port].Acquire();
 	IControlDevice* controlDevice = ControlManager::ControlDevices[port];
 
 	uint8_t state;
@@ -82,6 +91,7 @@ void ControlManager::RefreshStateBuffer(uint8_t port)
 			state = 0x00;
 		}
 	}
+	ControlManager::ControllerLock[port].Release();
 	
 	//Used when recording movies
 	Movie::Instance->RecordState(port, state);
