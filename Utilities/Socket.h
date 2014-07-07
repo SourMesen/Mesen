@@ -1,6 +1,7 @@
 #pragma once
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 #include "stdafx.h"
+#include "UPnPPortMapper.h"
 #include <winsock2.h>
 
 class Socket
@@ -11,6 +12,7 @@ private:
 	bool _cleanupWSA = false;
 	char* _sendBuffer;
 	int _bufferPosition;
+	int32_t _UPnPPort = -1;
 
 public:
 	Socket()
@@ -51,6 +53,10 @@ public:
 
 	~Socket()
 	{
+		if(_UPnPPort != -1) {
+			UPnPPortMapper::RemoveNATPortMapping(_UPnPPort, IPProtocol::TCP);
+		}
+
 		if(_socket != INVALID_SOCKET) {
 			Close();
 		}
@@ -84,7 +90,7 @@ public:
 
 	void Close()
 	{
-		std::cout << "Client disconnected!\r\n";
+		std::cout << "Socket closed." << std::endl;
 		shutdown(_socket, SD_SEND);
 		closesocket(_socket);
 		SetConnectionErrorFlag();
@@ -101,6 +107,10 @@ public:
 		serverInf.sin_family = AF_INET;
 		serverInf.sin_addr.s_addr = INADDR_ANY;
 		serverInf.sin_port = htons(port);
+
+		if(UPnPPortMapper::AddNATPortMapping(port, port, IPProtocol::TCP)) {
+			_UPnPPort = port;
+		}
 
 		if(bind(_socket, (SOCKADDR*)(&serverInf), sizeof(serverInf)) == SOCKET_ERROR) {
 			std::cout << "Unable to bind socket." << std::endl;
@@ -193,7 +203,6 @@ public:
 
 	int Recv(char *buf, int len, int flags)
 	{
-		static ofstream received("received.log", ios::out | ios::binary);
 		int returnVal = recv(_socket, buf, len, flags);
 				
 		int nError = WSAGetLastError();

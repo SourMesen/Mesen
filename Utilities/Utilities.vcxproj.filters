@@ -48,7 +48,7 @@
     <ClInclude Include="SimpleLock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NATPortMapper.h">
+    <ClInclude Include="UPnPPortMapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
