@@ -100,6 +100,7 @@ void Console::RegisterMessageManager(IMessageManager* messageManager)
 
 void Console::DisplayMessage(wstring message)
 {
+	std::wcout << message << std::endl;
 	if(Console::MessageManager) {
 		Console::MessageManager->DisplayMessage(message);
 	}
