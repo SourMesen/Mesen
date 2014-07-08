@@ -210,6 +210,12 @@ public:
 			SetConnectionErrorFlag();
 		}
 
+		if(returnVal == 0) {
+			//Socket closed
+			std::cout << "Socket closed by peer." << std::endl;
+			Close();
+		}
+
 		return returnVal;
 	}
 };
