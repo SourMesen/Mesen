@@ -49,13 +49,18 @@ public:
 					hResult = spmc->Add(externalPort, proto, internalPort, clientStr, true, desc, &spm);
 					SysFreeString(clientStr);
 					SysFreeString(desc);
-
+					
 					if(SUCCEEDED(hResult) && spm) {
 						//Successfully added a new port mapping
 						std::cout << std::dec << "Forwarded port " << externalPort << " to IP ";
 						std::wcout << localIP.c_str() << std::endl;
 						spm->Release();
 						result = true;
+					} else {
+						std::cout << "Unable to add UPnP port mapping.  ";
+						std::cout << "IP: ";
+						std::wcout << localIP.c_str();
+						std::cout << " HRESULT: 0x" << std::hex << hResult << std::endl;
 					}
 					spmc->Release();
 				} else {
