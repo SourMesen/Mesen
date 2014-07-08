@@ -134,6 +134,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UNROM.h" />
     <ClInclude Include="VirtualController.h" />
+    <ClInclude Include="VRC2_4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APU.cpp" />
