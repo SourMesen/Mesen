@@ -8,6 +8,7 @@ class GameClientConnection : public GameConnection
 private:
 	vector<unique_ptr<VirtualController>> _virtualControllers;
 	IControlDevice* _controlDevice;
+	uint8_t _lastInputSent = 0x00;
 
 private:
 	void SendHandshake()
@@ -60,6 +61,10 @@ public:
 	
 	void SendInput()
 	{
-		SendNetMessage(InputDataMessage(_controlDevice->GetButtonState().ToByte()));
+		uint8_t inputState = _controlDevice->GetButtonState().ToByte();
+		if(_lastInputSent != inputState) {
+			SendNetMessage(InputDataMessage(inputState));
+			_lastInputSent = inputState;
+		}
 	}
 };
