@@ -8,7 +8,7 @@ class GamePad
 	private:
 		XINPUT_STATE _state;
 
-		bool Initialize();
+		bool RefreshState();
 
 	public:
 		GamePad();

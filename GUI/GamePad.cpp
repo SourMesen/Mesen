@@ -5,7 +5,7 @@ GamePad::GamePad()
 {
 }
 
-bool GamePad::Initialize()
+bool GamePad::RefreshState()
 {
 	int controllerId = -1;
 
@@ -22,6 +22,15 @@ bool GamePad::Initialize()
 
 bool GamePad::IsPressed(WORD button)
 {
-	Initialize();
+	RefreshState();
+	if(button == XINPUT_GAMEPAD_DPAD_LEFT && _state.Gamepad.sThumbLX < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+		_state.Gamepad.wButtons |= button;
+	} else if(button == XINPUT_GAMEPAD_DPAD_RIGHT && _state.Gamepad.sThumbLX > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+		_state.Gamepad.wButtons |= button;
+	} else if(button == XINPUT_GAMEPAD_DPAD_UP && _state.Gamepad.sThumbLY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+		_state.Gamepad.wButtons |= button;
+	} else if(button == XINPUT_GAMEPAD_DPAD_DOWN && _state.Gamepad.sThumbLY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+		_state.Gamepad.wButtons |= button;
+	}
 	return (_state.Gamepad.wButtons & button) != 0;
 }
