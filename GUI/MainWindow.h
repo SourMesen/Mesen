@@ -7,7 +7,7 @@
 #include "../Core/GameClient.h"
 
 namespace NES {
-	class MainWindow
+	class MainWindow : public INotificationListener
 	{
 	private:
 		static MainWindow *Instance;
@@ -23,9 +23,6 @@ namespace NES {
 		unique_ptr<thread> _emuThread;
 		wstring _currentROM;
 		wstring _currentROMName;
-
-		GameClient _gameClient;
-		GameServer _gameServer;
 
 		int _currentSaveSlot = 0;
 
@@ -57,6 +54,7 @@ namespace NES {
 		bool ToggleMenuCheck(int resourceID);
 
 		wstring SelectROM(wstring romFilepath = L"");
+		void StartEmuThread();
 		void Start(wstring romFilepath = L"");
 		void Reset();
 		void Stop(bool powerOff);
@@ -66,6 +64,7 @@ namespace NES {
 		void SelectSaveSlot(int slot);
 		void AddToMRU(wstring romFilepath);
 		void UpdateMRUMenu();
+		void UpdateMenu();
 
 	public:
 		MainWindow(HINSTANCE hInstance, int nCmdShow) : _hInstance(hInstance), _nCmdShow(nCmdShow) 
@@ -74,5 +73,7 @@ namespace NES {
 		}
 
 		int Run();
+
+		virtual void MainWindow::ProcessNotification(ConsoleNotificationType type);
 	};
 }

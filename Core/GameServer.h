@@ -2,90 +2,32 @@
 #include "stdafx.h"
 #include "GameServerConnection.h"
 
-class GameServer : public IGameBroadcaster
+class GameServer : public IGameBroadcaster, public INotificationListener
 {
 private:
-	shared_ptr<Socket> _listener;
+	static unique_ptr<GameServer> Instance;
+	unique_ptr<thread> _serverThread;
+	atomic<bool> _stop;
+
+	unique_ptr<Socket> _listener;
 	list<shared_ptr<GameServerConnection>> _openConnections;
 	bool _initialized = false;
 
-	void AcceptConnections()
-	{
-		while(true) {
-			shared_ptr<Socket> socket = _listener->Accept(NULL, NULL);
-			if(!socket->ConnectionError()) {
-				_openConnections.push_back(shared_ptr<GameServerConnection>(new GameServerConnection(socket, 1, this)));
-				std::cout << "Client connected." << std::endl;
-			} else {
-				break;
-			}
-		}
-		_listener->Listen(10);
-	}
+	void AcceptConnections();
+	void UpdateConnections();
 
-	void UpdateConnections()
-	{
-		vector<shared_ptr<GameServerConnection>> connectionsToRemove;
-		for(shared_ptr<GameServerConnection> connection : _openConnections) {
-			if(connection->ConnectionError()) {
-				connectionsToRemove.push_back(connection);
-			} else {
-				connection->ProcessMessages();
-			}
-		}
-
-		for(shared_ptr<GameServerConnection> gameConnection : connectionsToRemove) {
-			_openConnections.remove(gameConnection);
-		}
-	}
+	void Start();
+	void Exec();
+	void Stop();
 
 public:
-	GameServer()
-	{
-		ControlManager::RegisterBroadcaster(this);
-	}
+	GameServer();
+	~GameServer();
 
-	~GameServer()
-	{
-		ControlManager::UnregisterBroadcaster(this);
-	}
+	static void StartServer();
+	static void StopServer();
+	static bool Started();
 
-	void Start()
-	{
-		Console::DisplayMessage(L"Server started.");
-		_listener.reset(new Socket());
-		_listener->Bind(8888);
-		_listener->Listen(10);
-		_initialized = true;
-	}
-
-	void Exec()
-	{
-		if(_initialized) {
-			AcceptConnections();
-			UpdateConnections();
-		}
-	}
-
-	void Stop()
-	{
-		_initialized = false;
-		_listener.reset();
-		Console::DisplayMessage(L"Server stopped.");
-	}
-
-	bool Started()
-	{
-		return _initialized;
-	}
-
-	void BroadcastInput(uint8_t inputData, uint8_t port)
-	{
-		for(shared_ptr<GameServerConnection> connection : _openConnections) {
-			if(!connection->ConnectionError()) {
-				//Send movie stream
-				connection->SendMovieData(inputData, port);
-			}
-		}
-	}
+	virtual void BroadcastInput(uint8_t inputData, uint8_t port);
+	virtual void ProcessNotification(ConsoleNotificationType type);
 };

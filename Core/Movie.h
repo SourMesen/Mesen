@@ -105,4 +105,5 @@ class Movie
 		static void Play(wstring filename);
 		static void Stop();
 		static bool Playing();
+		static bool Recording();
 };

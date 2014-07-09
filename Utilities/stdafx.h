@@ -6,6 +6,8 @@
 #include <windows.h>
 
 #include <string>
+#include <stdint.h>
+#include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <memory>
@@ -18,3 +20,4 @@ using std::ifstream;
 using std::string;
 using std::wstring;
 using std::vector;
+using std::atomic;

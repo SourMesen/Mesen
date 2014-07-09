@@ -15,6 +15,21 @@ enum EmulationFlags
 	LimitFPS = 0x01,
 };
 
+enum class ConsoleNotificationType
+{
+	GameLoaded = 0,
+	StateLoaded = 1,
+	GameReset = 2,
+	GamePaused = 3,
+	GameStopped = 4,
+};
+
+class INotificationListener
+{
+public:
+	virtual void ProcessNotification(ConsoleNotificationType type) = 0;
+};
+
 class Console
 {
 	private:
@@ -24,6 +39,7 @@ class Console
 		static SimpleLock PauseLock;
 		static SimpleLock RunningLock;
 		static IMessageManager* MessageManager;
+		static list<INotificationListener*> NotificationListeners;
 
 		unique_ptr<CPU> _cpu;
 		unique_ptr<PPU> _ppu;
@@ -32,12 +48,13 @@ class Console
 		unique_ptr<ControlManager> _controlManager;
 		unique_ptr<MemoryManager> _memoryManager;
 
-		wstring _romFilename;
+		wstring _romFilepath;
 
 		bool _stop = false;
 		bool _reset = false;
 
 		void ResetComponents(bool softReset);
+		void Initialize(wstring filename);
 
 	public:
 		Console(wstring filename);
@@ -61,6 +78,10 @@ class Console
 		static void LoadState(istream &loadStream);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
+		static void LoadROM(wstring filename);		
+		static bool AttemptLoadROM(wstring filename, uint32_t crc32Hash);
+		static wstring GetROMPath();
+
 		static bool CheckFlag(int flag);
 		static void SetFlags(int flags);
 		static void ClearFlags(int flags);
@@ -68,4 +89,10 @@ class Console
 
 		static void RegisterMessageManager(IMessageManager* messageManager);
 		static void DisplayMessage(wstring message);
+
+		static void RegisterNotificationListener(INotificationListener* notificationListener);
+		static void UnregisterNotificationListener(INotificationListener* notificationListener);
+		static void SendNotification(ConsoleNotificationType type);
+
+		static Console* GetInstance();
 };

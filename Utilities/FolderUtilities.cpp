@@ -71,6 +71,10 @@ vector<wstring> FolderUtilities::GetFilesInFolder(wstring rootFolder, wstring ma
 
 	vector<wstring> folders;
 	vector<wstring> files;
+	if(rootFolder[rootFolder.size() - 1] != '/' && rootFolder[rootFolder.size() - 1] != '\\') {
+		rootFolder += L"/";
+	}
+
 	folders.push_back(rootFolder);
 
 	if(recursive) {

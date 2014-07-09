@@ -12,24 +12,6 @@ private:
 	IGameBroadcaster* _gameBroadcaster;
 	bool _handshakeCompleted = false;
 
-private:
-	void SendGameState()
-	{
-		Console::Pause();
-		stringstream state;
-		Console::SaveState(state);
-		_handshakeCompleted = true;
-		ControlManager::RegisterControlDevice(this, _controllerPort);
-		Console::Resume();
-
-		uint32_t size = (uint32_t)state.tellp();
-		
-		char* buffer = new char[size];
-		state.read(buffer, size);
-		SendNetMessage(SaveStateMessage(buffer, size));
-		delete[] buffer;
-	}
-
 protected:
 	void ProcessMessage(NetMessage* message)
 	{
@@ -37,7 +19,7 @@ protected:
 			case MessageType::HandShake:
 				//Send the game's current state to the client and register the controller
 				if(((HandShakeMessage*)message)->IsValid()) {
-					//SendPlayerNumber();
+					SendGameInformation();
 					SendGameState();
 				}
 				break;
@@ -68,6 +50,28 @@ public:
 		Console::DisplayMessage(L"Player " + std::to_wstring(_controllerPort+1) + L" disconnected.");
 
 		ControlManager::RestoreControlDevices();
+	}
+
+	void SendGameState()
+	{
+		Console::Pause();
+		stringstream state;
+		Console::SaveState(state);
+		_handshakeCompleted = true;
+		ControlManager::RegisterControlDevice(this, _controllerPort);
+		Console::Resume();
+
+		uint32_t size = (uint32_t)state.tellp();
+		
+		char* buffer = new char[size];
+		state.read(buffer, size);
+		SendNetMessage(SaveStateMessage(buffer, size));
+		delete[] buffer;
+	}
+
+	void SendGameInformation()
+	{
+		SendNetMessage(GameInformationMessage(Console::GetROMPath(), _controllerPort));
 	}
 
 	void SendMovieData(uint8_t state, uint8_t port)

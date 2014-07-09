@@ -8,7 +8,8 @@
 
 using namespace DirectX;
 
-namespace NES {
+namespace NES 
+{
 	MainWindow* MainWindow::Instance = nullptr;
 
 	bool MainWindow::Initialize()
@@ -21,6 +22,7 @@ namespace NES {
 		_soundManager.reset(new SoundManager(_hWnd));
 
 		Console::RegisterMessageManager(_renderer.get());
+		Console::RegisterNotificationListener(this);
 
 		return true;
 	}
@@ -85,15 +87,9 @@ namespace NES {
 				}
 			} else {
 				_renderer->Render();
-				_gameServer.Exec();
-				_gameClient.Exec();
 			}
 
-			SetMenuEnabled(ID_NETPLAY_STARTSERVER, !_gameServer.Started() && !_gameClient.Connected());
-			SetMenuEnabled(ID_NETPLAY_STOPSERVER, _gameServer.Started() && !_gameClient.Connected());
-
-			SetMenuEnabled(ID_NETPLAY_CONNECT, !_gameServer.Started() && !_gameClient.Connected());
-			SetMenuEnabled(ID_NETPLAY_DISCONNECT, !_gameServer.Started() && _gameClient.Connected());
+			UpdateMenu();
 
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1));
 
@@ -182,7 +178,7 @@ namespace NES {
 					if(LOWORD(wParam) == IDOK) {
 						GetDlgItemText(hDlg, IDC_HOSTNAME, (LPWSTR)hostName, 1000);
 						ConfigManager::SetValue(Config::LastNetPlayHost, wstring(hostName));
-						MainWindow::GetInstance()->_gameClient.Connect(utf8util::UTF8FromUTF16(hostName).c_str(), 8888);
+						GameClient::Connect(utf8util::UTF8FromUTF16(hostName).c_str(), 8888);
 					}
 
 					EndDialog(hDlg, LOWORD(wParam));
@@ -319,43 +315,78 @@ namespace NES {
 		return filepath;
 	}
 
+	void MainWindow::ProcessNotification(ConsoleNotificationType type)
+	{
+		if(type == ConsoleNotificationType::GameLoaded) {
+			if(_console.get() != Console::GetInstance()) {
+				_console.reset(Console::GetInstance());
+			}
+
+			StartEmuThread();
+		}
+	}
+
+	void MainWindow::UpdateMenu()
+	{
+		bool running = (bool)_emuThread;
+		bool romLoaded = (bool)_console;
+		bool clientConnected = GameClient::Connected();
+		bool serverStarted = GameServer::Started();
+		bool moviePlayingRecording = Movie::Playing() || Movie::Recording();
+
+		SetMenuEnabled(ID_NES_PAUSE, running && !clientConnected);
+		SetMenuEnabled(ID_NES_RESET, romLoaded && !clientConnected);
+		SetMenuEnabled(ID_NES_STOP, romLoaded && !clientConnected);
+		SetMenuEnabled(ID_NES_RESUME, !running && romLoaded);
+
+		SetMenuEnabled(ID_FILE_QUICKLOAD, running && !clientConnected);
+		SetMenuEnabled(ID_FILE_QUICKSAVE, running);
+
+		SetMenuEnabled(ID_MOVIES_PLAY, romLoaded && !clientConnected && !moviePlayingRecording);
+		SetMenuEnabled(ID_RECORDFROM_START, romLoaded && !clientConnected && !moviePlayingRecording);
+		SetMenuEnabled(ID_RECORDFROM_NOW, romLoaded && !moviePlayingRecording);
+		SetMenuEnabled(ID_MOVIES_STOP, moviePlayingRecording);
+
+		SetMenuEnabled(ID_NETPLAY_STARTSERVER, !serverStarted && !clientConnected);
+		SetMenuEnabled(ID_NETPLAY_STOPSERVER, serverStarted && !clientConnected);
+
+		SetMenuEnabled(ID_NETPLAY_CONNECT, !serverStarted && !clientConnected);
+		SetMenuEnabled(ID_NETPLAY_DISCONNECT, !serverStarted && clientConnected);
+
+		SetMenuCheck(ID_SAVESTATESLOT_1, _currentSaveSlot == 0);
+		SetMenuCheck(ID_SAVESTATESLOT_2, _currentSaveSlot == 1);
+		SetMenuCheck(ID_SAVESTATESLOT_3, _currentSaveSlot == 2);
+		SetMenuCheck(ID_SAVESTATESLOT_4, _currentSaveSlot == 3);
+		SetMenuCheck(ID_SAVESTATESLOT_5, _currentSaveSlot == 4);
+	}
+
+
+	void MainWindow::StartEmuThread()
+	{
+		if(!_emuThread) {
+			_emuThread.reset(new thread(&Console::Run, _console.get()));
+		}
+
+		_currentROM = _console->GetROMPath();
+		wstring currentROMName = FolderUtilities::GetFilename(_console->GetROMPath(), false);
+		SetWindowText(_hWnd, (wstring(_windowName) + L": " + currentROMName).c_str());
+
+		_renderer->ClearFlags(UIFlags::ShowPauseScreen);
+		if(IsMenuChecked(ID_OPTIONS_SHOWFPS)) {
+			_renderer->SetFlags(UIFlags::ShowFPS);
+		}
+	}
+
 	void MainWindow::Start(wstring romFilepath)
 	{
-		if(_emuThread) {
-			Stop(false);
-		}
-
-		if(romFilepath.length() > 0) {
-			_currentROM = romFilepath;
-			_currentROMName = FolderUtilities::GetFilename(romFilepath, false);
-			SetWindowText(_hWnd, (wstring(_windowName) + L": " + _currentROMName).c_str());
-			_console.reset(new Console(_currentROM));
-		}
-
-		if(!_console && _currentROM.length() > 0) {
-			_console.reset(new Console(_currentROM));
-		}
-
-		if(_console) {
-			_emuThread.reset(new thread(&Console::Run, _console.get()));
-
-			SetMenuEnabled(ID_NES_PAUSE, true);
-			SetMenuEnabled(ID_NES_RESET, true);
-			SetMenuEnabled(ID_NES_STOP, true);
-			SetMenuEnabled(ID_NES_RESUME, false);
-
-			SetMenuEnabled(ID_FILE_QUICKLOAD, true);			
-			SetMenuEnabled(ID_FILE_QUICKSAVE, true);
-
-			SetMenuEnabled(ID_MOVIES_PLAY, true);
-			SetMenuEnabled(ID_RECORDFROM_START, true);
-			SetMenuEnabled(ID_RECORDFROM_NOW, true);
-			SetMenuEnabled(ID_MOVIES_STOP, true);
-
-			_renderer->ClearFlags(UIFlags::ShowPauseScreen);
-			if(IsMenuChecked(ID_OPTIONS_SHOWFPS)) {
-				_renderer->SetFlags(UIFlags::ShowFPS);
+		if(romFilepath.length() == 0 && _console) {
+			//Resume where we paused
+			StartEmuThread();
+		} else {
+			if(romFilepath.length() > 0) {
+				_currentROM = romFilepath;
 			}
+			Console::LoadROM(_currentROM);
 		}
 	}
 
@@ -371,26 +402,13 @@ namespace NES {
 			_emuThread->join();
 
 			if(powerOff) {
-				_console.reset(nullptr);
+				_console.reset();
 			} else {
 				_renderer->SetFlags(UIFlags::ShowPauseScreen);
 			}
 
-			_emuThread.reset(nullptr);
+			_emuThread.reset();
 		}
-
-		SetMenuEnabled(ID_NES_PAUSE, false);
-		SetMenuEnabled(ID_NES_RESET, !powerOff);
-		SetMenuEnabled(ID_NES_STOP, !powerOff);
-		SetMenuEnabled(ID_FILE_QUICKLOAD, !powerOff);
-		SetMenuEnabled(ID_FILE_QUICKSAVE, !powerOff);
-
-		SetMenuEnabled(ID_MOVIES_PLAY, !powerOff);
-		SetMenuEnabled(ID_RECORDFROM_START, !powerOff);
-		SetMenuEnabled(ID_RECORDFROM_NOW, !powerOff);
-		SetMenuEnabled(ID_MOVIES_STOP, !powerOff);
-
-		SetMenuEnabled(ID_NES_RESUME, true);
 	}
 
 	void MainWindow::Reset()
@@ -499,12 +517,6 @@ namespace NES {
 	{
 		_currentSaveSlot = slot % 5;
 		_renderer->DisplayMessage(L"Savestate slot: " + std::to_wstring(_currentSaveSlot + 1));
-
-		SetMenuCheck(ID_SAVESTATESLOT_1, _currentSaveSlot == 0);
-		SetMenuCheck(ID_SAVESTATESLOT_2, _currentSaveSlot == 1);
-		SetMenuCheck(ID_SAVESTATESLOT_3, _currentSaveSlot == 2);
-		SetMenuCheck(ID_SAVESTATESLOT_4, _currentSaveSlot == 3);
-		SetMenuCheck(ID_SAVESTATESLOT_5, _currentSaveSlot == 4);
 	}
 
 	LRESULT CALLBACK MainWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -599,35 +611,32 @@ namespace NES {
 							mainWindow->_playingMovie = true;
 							Movie::Play(filename);
 						}
-						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
 						break;
 					case ID_RECORDFROM_START:
 					case ID_RECORDFROM_NOW:
 						filename = FolderUtilities::OpenFile(L"Movie Files (*.nmo)\0*.nmo\0All (*.*)\0*.*", FolderUtilities::GetMovieFolder(), true, L"nmo");
 						if(!filename.empty()) {
 							Movie::Record(filename, wmId == ID_RECORDFROM_START);
-						}						
-						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, true);
+						}
 						break;
 
 					case ID_MOVIES_STOP:
 						Movie::Stop();
 						mainWindow->_playingMovie = false;
-						mainWindow->SetMenuEnabled(ID_MOVIES_STOP, false);
 						break;
 
 					case ID_NETPLAY_STARTSERVER:
-						mainWindow->_gameServer.Start();
+						GameServer::StartServer();
 						break;
 					case ID_NETPLAY_STOPSERVER:
-						mainWindow->_gameServer.Stop();
+						GameServer::StopServer();
 						break;
 
 					case ID_NETPLAY_CONNECT:
 						DialogBox(nullptr, MAKEINTRESOURCE(IDD_CONNECT), hWnd, ConnectWndProc);
 						break;
 					case ID_NETPLAY_DISCONNECT:
-						mainWindow->_gameClient.Disconnect();
+						GameClient::Disconnect();
 						break;
 
 					case ID_TESTS_RUNTESTS:
@@ -686,7 +695,8 @@ namespace NES {
 				break;
 
 			case WM_DESTROY:
-				mainWindow->_gameClient.Disconnect();
+				GameServer::StopServer();
+				GameClient::Disconnect();
 				mainWindow->Stop(true);
 				PostQuitMessage(0);
 				break;

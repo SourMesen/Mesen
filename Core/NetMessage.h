@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Console.h"
+#include "../Utilities/CRC32.h"
 
 enum class MessageType : uint8_t
 {
@@ -8,6 +9,7 @@ enum class MessageType : uint8_t
 	SaveState = 1,
 	InputData = 2,
 	MovieData = 3,
+	GameInformation = 4,
 };
 
 class NetMessage
@@ -20,13 +22,35 @@ public:
 		Type = type;
 	}
 
-	virtual void Send(Socket &socket) = 0;
+	void Send(Socket &socket)
+	{
+		uint32_t messageLength = GetMessageLength() + sizeof(Type);
+		socket.BufferedSend((char*)&messageLength, sizeof(messageLength));
+		socket.BufferedSend((char*)&Type, sizeof(Type));
+		ProtectedSend(socket);
+		socket.SendBuffer();
+	}
+
+protected:
+	virtual uint32_t GetMessageLength() = 0;
+	virtual void ProtectedSend(Socket &socket) = 0;
 };
 
 class HandShakeMessage : public NetMessage
 {
 private:
 	const int CurrentVersion = 1;
+	
+protected:
+	virtual uint32_t GetMessageLength()
+	{
+		return sizeof(ProtocolVersion);
+	}
+
+	virtual void ProtectedSend(Socket &socket)
+	{
+		socket.BufferedSend((char*)&ProtocolVersion, sizeof(ProtocolVersion));
+	}
 
 public:
 	uint32_t ProtocolVersion;
@@ -45,19 +69,21 @@ public:
 	{
 		return ProtocolVersion == CurrentVersion;
 	}
-
-	virtual void Send(Socket &socket)
-	{
-		uint32_t messageLength = sizeof(Type) + sizeof(ProtocolVersion);
-		socket.BufferedSend((char*)&messageLength, sizeof(messageLength));
-		socket.BufferedSend((char*)&Type, sizeof(Type));
-		socket.BufferedSend((char*)&ProtocolVersion, sizeof(ProtocolVersion));
-		socket.SendBuffer();
-	}
 };
 
 class InputDataMessage : public NetMessage
 {
+protected:	
+	virtual uint32_t GetMessageLength()
+	{
+		return sizeof(InputState);
+	}
+
+	virtual void ProtectedSend(Socket &socket)
+	{
+		socket.BufferedSend((char*)&InputState, sizeof(InputState));
+	}
+
 public:
 	uint8_t InputState;
 
@@ -70,15 +96,6 @@ public:
 	{
 		InputState = inputState;
 	}
-
-	virtual void Send(Socket &socket)
-	{
-		uint32_t messageLength = sizeof(Type) + sizeof(InputState);
-		socket.BufferedSend((char*)&messageLength, sizeof(messageLength));
-		socket.BufferedSend((char*)&Type, sizeof(Type));
-		socket.BufferedSend((char*)&InputState, sizeof(InputState));
-		socket.SendBuffer();
-	}
 };
 
 class SaveStateMessage : public NetMessage
@@ -86,6 +103,17 @@ class SaveStateMessage : public NetMessage
 private:
 	char* _stateData;
 	uint32_t _dataSize;
+
+protected:
+	virtual uint32_t GetMessageLength()
+	{
+		return _dataSize;
+	}
+
+	virtual void ProtectedSend(Socket &socket)
+	{
+		socket.BufferedSend(_stateData, _dataSize);
+	}
 
 public:
 	SaveStateMessage(char *readBuffer, uint32_t bufferLength) : NetMessage(MessageType::SaveState)
@@ -100,15 +128,6 @@ public:
 		delete[] _stateData;
 	}
 
-	virtual void Send(Socket &socket)
-	{
-		uint32_t messageLength = _dataSize + sizeof(Type);
-		socket.BufferedSend((char*)&messageLength, sizeof(messageLength));
-		socket.BufferedSend((char*)&Type, sizeof(Type));
-		socket.BufferedSend(_stateData, _dataSize);
-		socket.SendBuffer();
-	}
-
 	void LoadState()
 	{
 		Console::LoadState((uint8_t*)_stateData, _dataSize);
@@ -117,6 +136,18 @@ public:
 
 class MovieDataMessage : public NetMessage
 {
+protected:
+	virtual uint32_t GetMessageLength()
+	{
+		return sizeof(PortNumber) + sizeof(InputState);
+	}
+
+	virtual void ProtectedSend(Socket &socket)
+	{
+		socket.BufferedSend((char*)&PortNumber, sizeof(PortNumber));
+		socket.BufferedSend((char*)&InputState, sizeof(InputState));
+	}
+
 public:
 	uint8_t PortNumber;
 	uint8_t InputState;
@@ -132,19 +163,54 @@ public:
 		PortNumber = port;
 		InputState = state;
 	}
+};
 
-	virtual void Send(Socket &socket)
+class GameInformationMessage : public NetMessage
+{
+protected:
+	virtual uint32_t GetMessageLength()
 	{
-		uint32_t messageLength = sizeof(Type) + sizeof(PortNumber) + sizeof(InputState);
-		uint8_t type = (uint8_t)Type;
-		uint8_t portNumber = PortNumber;
-		uint8_t inputState = InputState;
-
-		socket.BufferedSend((char*)&messageLength, sizeof(messageLength));
-		socket.BufferedSend((char*)&type, sizeof(type));
-		socket.BufferedSend((char*)&portNumber, sizeof(portNumber));
-		socket.BufferedSend((char*)&inputState, sizeof(inputState));
-		socket.SendBuffer();
+		return sizeof(ROMFilename) + sizeof(CRC32Hash) + sizeof(ControllerPort);
 	}
 
+	virtual void ProtectedSend(Socket &socket)
+	{
+		socket.BufferedSend((char*)&ROMFilename, sizeof(ROMFilename));
+		socket.BufferedSend((char*)&CRC32Hash, sizeof(CRC32Hash));
+		socket.BufferedSend((char*)&ControllerPort, sizeof(ControllerPort));
+	}
+
+public:
+	wchar_t ROMFilename[255];
+	uint32_t CRC32Hash;
+	uint8_t ControllerPort;
+
+	GameInformationMessage(char *readBuffer) : NetMessage(MessageType::GameInformation)
+	{
+		memcpy((char*)ROMFilename, readBuffer, sizeof(ROMFilename));
+		memcpy((char*)&CRC32Hash, readBuffer + sizeof(ROMFilename), sizeof(CRC32Hash));
+		ControllerPort = readBuffer[sizeof(ROMFilename) + sizeof(CRC32Hash)];
+	}
+
+	GameInformationMessage(wstring filepath, uint8_t port) : NetMessage(MessageType::GameInformation)
+	{
+		memset(ROMFilename, 0, sizeof(ROMFilename));
+		wcscpy_s(ROMFilename, FolderUtilities::GetFilename(filepath, true).c_str());
+		CRC32Hash = CRC32::GetCRC(filepath);
+		ControllerPort = port;
+	}
+
+	bool AttemptLoadGame()
+	{
+		wstring filename = ROMFilename;
+		if(filename.size() > 0) {
+			if(Console::AttemptLoadROM(filename, CRC32Hash)) {
+				return true;
+			} else {
+				Console::DisplayMessage(L"Could not find matching game ROM.");
+				return false;
+			}
+		}
+		return false;
+	}
 };

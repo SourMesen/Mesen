@@ -139,3 +139,8 @@ bool Movie::Playing()
 {
 	return Instance->_playing;
 }
+
+bool Movie::Recording()
+{
+	return Instance->_recording;
+}

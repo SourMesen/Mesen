@@ -2,9 +2,13 @@
 #include "Console.h"
 #include "MapperFactory.h"
 #include "../Utilities/Timer.h"
+#include "../Utilities/FolderUtilities.h"
+#include "../Utilities/ConfigManager.h"
+#include "../Utilities/CRC32.h"
 
 Console* Console::Instance = nullptr;
 IMessageManager* Console::MessageManager = nullptr;
+list<INotificationListener*> Console::NotificationListeners;
 uint32_t Console::Flags = 0;
 uint32_t Console::CurrentFPS = 0;
 SimpleLock Console::PauseLock;
@@ -12,7 +16,27 @@ SimpleLock Console::RunningLock;
 
 Console::Console(wstring filename)
 {
-	_romFilename = filename;
+	Console::Instance = this;
+
+	Initialize(filename);
+}
+
+Console::~Console()
+{
+	Movie::Stop();
+	if(Console::Instance == this) {
+		Console::Instance = nullptr;
+	}
+}
+
+Console* Console::GetInstance()
+{
+	return Console::Instance;
+}
+
+void Console::Initialize(wstring filename)
+{
+	_romFilepath = filename;
 
 	_mapper = MapperFactory::InitializeFromFile(filename);
 	_memoryManager.reset(new MemoryManager(_mapper));
@@ -29,19 +53,60 @@ Console::Console(wstring filename)
 
 	ResetComponents(false);
 
-	Console::PauseLock.Release();
-	Console::RunningLock.Release();
-	Console::Instance = this;
+	Console::SendNotification(ConsoleNotificationType::GameLoaded);
 }
 
-Console::~Console()
+void Console::LoadROM(wstring filename)
 {
-	Movie::Stop();
-	Console::PauseLock.Release();
-	Console::RunningLock.Release();
-	if(Console::Instance == this) {
-		Console::Instance = nullptr;
+	if(!Instance) {
+		new Console(filename);
+	} else {
+		Console::Pause();
+		Instance->Initialize(filename);
+		Console::Resume();
 	}
+}
+
+bool Console::AttemptLoadROM(wstring filename, uint32_t crc32Hash)
+{
+	if(Instance) {
+		if(CRC32::GetCRC(Instance->_romFilepath) == crc32Hash) {
+			//Current game matches, no need to do anything
+			return true;
+		}
+	}
+
+	vector<wstring> romFiles = FolderUtilities::GetFilesInFolder(ConfigManager::GetValue<wstring>(Config::LastGameFolder), L"*.nes", true);
+	for(wstring romFile : romFiles) {
+		//Quick search by filename
+		if(FolderUtilities::GetFilename(romFile, true).compare(filename) == 0) {
+			if(CRC32::GetCRC(romFile) == crc32Hash) {
+				//Matching ROM found
+				Console::LoadROM(romFile);
+				return true;
+			}
+		}
+	}
+
+	for(wstring romFile : romFiles) {
+		//Slower search by CRC value
+		if(CRC32::GetCRC(romFile) == crc32Hash) {
+			//Matching ROM found
+			Console::LoadROM(romFile);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+wstring Console::GetROMPath()
+{
+	wstring filepath;
+	if(Instance) {
+		filepath = Instance->_romFilepath;
+	}
+	return filepath;
 }
 
 void Console::Reset()
@@ -109,6 +174,27 @@ void Console::DisplayMessage(wstring message)
 uint32_t Console::GetFPS()
 {
 	return Console::CurrentFPS;
+}
+
+void Console::RegisterNotificationListener(INotificationListener* notificationListener)
+{
+	Console::NotificationListeners.push_back(notificationListener);
+	Console::NotificationListeners.unique();
+}
+
+void Console::UnregisterNotificationListener(INotificationListener* notificationListener)
+{
+	Console::NotificationListeners.remove(notificationListener);
+}
+
+void Console::SendNotification(ConsoleNotificationType type)
+{
+	list<INotificationListener*> listeners = Console::NotificationListeners;
+	
+	//Iterate on a copy to prevent issues if a notification causes a listener to unregister itself
+	for(INotificationListener* notificationListener : listeners) {
+		notificationListener->ProcessNotification(type);
+	}
 }
 
 void Console::Run()
@@ -221,6 +307,8 @@ void Console::LoadState(istream &loadStream)
 		Instance->_mapper->LoadSnapshot(&loadStream);
 		Instance->_apu->LoadSnapshot(&loadStream);
 		Instance->_controlManager->LoadSnapshot(&loadStream);
+
+		Console::SendNotification(ConsoleNotificationType::StateLoaded);
 	}
 }
 
@@ -272,7 +360,7 @@ bool Console::RunTest(uint8_t *expectedResult)
 
 void Console::SaveTestResult()
 {
-	wstring filename = _romFilename + L".trt";
+	wstring filename = _romFilepath + L".trt";
 	
 	ofstream testResultFile(filename, ios::out | ios::binary);
 

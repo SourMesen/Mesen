@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Header Files\Nes_Apu">
       <UniqueIdentifier>{c6dc2048-98f6-4551-89dc-830f12f1bb2e}</UniqueIdentifier>
     </Filter>
@@ -25,12 +21,12 @@
     <Filter Include="Header Files\NetPlay">
       <UniqueIdentifier>{43f375c6-d7c7-4bbf-8520-ad53e4e1b4a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\NetPlay">
+      <UniqueIdentifier>{44908561-f739-4c26-83db-588a9ef3e33a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CPU.h">
@@ -190,6 +186,12 @@
     </ClCompile>
     <ClCompile Include="Movie.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServer.cpp">
+      <Filter>Source Files\NetPlay</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClient.cpp">
+      <Filter>Source Files\NetPlay</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "targetver.h"
+#include <SDKDDKVer.h>
 
 #include <stdio.h>
 #include <tchar.h>
@@ -36,3 +36,4 @@ using std::atomic_flag;
 using std::atomic;
 using std::list;
 using std::max;
+using std::thread;
