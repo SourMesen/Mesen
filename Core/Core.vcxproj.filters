@@ -24,6 +24,9 @@
     <Filter Include="Source Files\NetPlay">
       <UniqueIdentifier>{44908561-f739-4c26-83db-588a9ef3e33a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\NetPlay\Messages">
+      <UniqueIdentifier>{8455d832-c72b-4ec2-b90d-ac30ad3d3ad8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -143,9 +146,6 @@
     <ClInclude Include="VirtualController.h">
       <Filter>Header Files\NetPlay</Filter>
     </ClInclude>
-    <ClInclude Include="NetMessage.h">
-      <Filter>Header Files\NetPlay</Filter>
-    </ClInclude>
     <ClInclude Include="IGameBroadcaster.h">
       <Filter>Header Files\NetPlay</Filter>
     </ClInclude>
@@ -160,6 +160,30 @@
     </ClInclude>
     <ClInclude Include="VRC2_4.h">
       <Filter>Header Files\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="NetMessage.h">
+      <Filter>Header Files\NetPlay\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="HandShakeMessage.h">
+      <Filter>Header Files\NetPlay\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDataMessage.h">
+      <Filter>Header Files\NetPlay\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveStateMessage.h">
+      <Filter>Header Files\NetPlay\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="MovieDataMessage.h">
+      <Filter>Header Files\NetPlay\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInformationMessage.h">
+      <Filter>Header Files\NetPlay\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageType.h">
+      <Filter>Header Files\NetPlay\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="INotificationListener.h">
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +216,21 @@
     </ClCompile>
     <ClCompile Include="GameClient.cpp">
       <Filter>Source Files\NetPlay</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClientConnection.cpp">
+      <Filter>Source Files\NetPlay</Filter>
+    </ClCompile>
+    <ClCompile Include="GameConnection.cpp">
+      <Filter>Source Files\NetPlay</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServerConnection.cpp">
+      <Filter>Source Files\NetPlay</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualController.cpp">
+      <Filter>Source Files\NetPlay</Filter>
+    </ClCompile>
+    <ClCompile Include="MapperFactory.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

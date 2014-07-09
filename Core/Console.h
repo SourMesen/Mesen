@@ -9,25 +9,11 @@
 #include "ControlManager.h"
 #include "../Utilities/SimpleLock.h"
 #include "IMessageManager.h"
+#include "INotificationListener.h"
 
 enum EmulationFlags
 {
 	LimitFPS = 0x01,
-};
-
-enum class ConsoleNotificationType
-{
-	GameLoaded = 0,
-	StateLoaded = 1,
-	GameReset = 2,
-	GamePaused = 3,
-	GameStopped = 4,
-};
-
-class INotificationListener
-{
-public:
-	virtual void ProcessNotification(ConsoleNotificationType type) = 0;
 };
 
 class Console

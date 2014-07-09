@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
+#include "CPU.h"
+#include "PPU.h"
 
 class MMC3 : public BaseMapper
 {

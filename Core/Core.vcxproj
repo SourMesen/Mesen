@@ -98,17 +98,24 @@
     <ClInclude Include="GameClient.h" />
     <ClInclude Include="GameClientConnection.h" />
     <ClInclude Include="GameConnection.h" />
+    <ClInclude Include="GameInformationMessage.h" />
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="GameServerConnection.h" />
+    <ClInclude Include="HandShakeMessage.h" />
     <ClInclude Include="IAudioDevice.h" />
     <ClInclude Include="IControlDevice.h" />
     <ClInclude Include="IGameBroadcaster.h" />
     <ClInclude Include="IMemoryHandler.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="IMessageManager.h" />
+    <ClInclude Include="INotificationListener.h" />
+    <ClInclude Include="InputDataMessage.h" />
+    <ClInclude Include="MessageType.h" />
     <ClInclude Include="MMC2.h" />
     <ClInclude Include="Movie.h" />
+    <ClInclude Include="MovieDataMessage.h" />
     <ClInclude Include="NetMessage.h" />
+    <ClInclude Include="SaveStateMessage.h" />
     <ClInclude Include="Snapshotable.h" />
     <ClInclude Include="IVideoDevice.h" />
     <ClInclude Include="MapperFactory.h" />
@@ -140,7 +147,11 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="GameClient.cpp" />
+    <ClCompile Include="GameClientConnection.cpp" />
+    <ClCompile Include="GameConnection.cpp" />
     <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="GameServerConnection.cpp" />
+    <ClCompile Include="MapperFactory.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="Movie.cpp" />
     <ClCompile Include="PPU.cpp" />
@@ -149,6 +160,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="VirtualController.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

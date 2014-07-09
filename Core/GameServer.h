@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameServerConnection.h"
+#include "INotificationListener.h"
 
 class GameServer : public IGameBroadcaster, public INotificationListener
 {

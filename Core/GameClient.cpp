@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameClient.h"
+#include "Console.h"
 
 unique_ptr<GameClient> GameClient::Instance;
 
