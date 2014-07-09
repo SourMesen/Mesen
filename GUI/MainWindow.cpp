@@ -339,7 +339,7 @@ namespace NES
 		SetMenuEnabled(ID_NES_STOP, romLoaded && !clientConnected);
 		SetMenuEnabled(ID_NES_RESUME, !running && romLoaded);
 
-		SetMenuEnabled(ID_FILE_QUICKLOAD, running && !clientConnected);
+		SetMenuEnabled(ID_FILE_QUICKLOAD, running && !clientConnected && !moviePlayingRecording);
 		SetMenuEnabled(ID_FILE_QUICKSAVE, running);
 
 		SetMenuEnabled(ID_MOVIES_PLAY, romLoaded && !clientConnected && !moviePlayingRecording);
@@ -347,10 +347,10 @@ namespace NES
 		SetMenuEnabled(ID_RECORDFROM_NOW, romLoaded && !moviePlayingRecording);
 		SetMenuEnabled(ID_MOVIES_STOP, moviePlayingRecording);
 
-		SetMenuEnabled(ID_NETPLAY_STARTSERVER, !serverStarted && !clientConnected);
+		SetMenuEnabled(ID_NETPLAY_STARTSERVER, !serverStarted && !clientConnected && !Movie::Playing());
 		SetMenuEnabled(ID_NETPLAY_STOPSERVER, serverStarted && !clientConnected);
 
-		SetMenuEnabled(ID_NETPLAY_CONNECT, !serverStarted && !clientConnected);
+		SetMenuEnabled(ID_NETPLAY_CONNECT, !serverStarted && !clientConnected && !Movie::Playing());
 		SetMenuEnabled(ID_NETPLAY_DISCONNECT, !serverStarted && clientConnected);
 
 		SetMenuCheck(ID_SAVESTATESLOT_1, _currentSaveSlot == 0);
