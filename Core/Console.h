@@ -14,6 +14,7 @@
 enum EmulationFlags
 {
 	LimitFPS = 0x01,
+	Paused = 0x02,
 };
 
 class Console

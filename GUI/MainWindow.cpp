@@ -317,18 +317,24 @@ namespace NES
 
 	void MainWindow::ProcessNotification(ConsoleNotificationType type)
 	{
-		if(type == ConsoleNotificationType::GameLoaded) {
-			if(_console.get() != Console::GetInstance()) {
-				_console.reset(Console::GetInstance());
-			}
+		switch(type) {
+			case ConsoleNotificationType::GameLoaded:
+				if(_console.get() != Console::GetInstance()) {
+					_console.reset(Console::GetInstance());
+				}
 
-			StartEmuThread();
+				StartEmuThread();
+				break;
+
+			case ConsoleNotificationType::GamePaused:
+				_soundManager->Reset();
+				break;
 		}
 	}
 
 	void MainWindow::UpdateMenu()
 	{
-		bool running = (bool)_emuThread;
+		bool running = (bool)_emuThread && !Console::CheckFlag(EmulationFlags::Paused);
 		bool romLoaded = (bool)_console;
 		bool clientConnected = GameClient::Connected();
 		bool serverStarted = GameServer::Started();
@@ -371,7 +377,8 @@ namespace NES
 		wstring currentROMName = FolderUtilities::GetFilename(_console->GetROMPath(), false);
 		SetWindowText(_hWnd, (wstring(_windowName) + L": " + currentROMName).c_str());
 
-		_renderer->ClearFlags(UIFlags::ShowPauseScreen);
+		Console::ClearFlags(EmulationFlags::Paused);
+
 		if(IsMenuChecked(ID_OPTIONS_SHOWFPS)) {
 			_renderer->SetFlags(UIFlags::ShowFPS);
 		}
@@ -392,22 +399,17 @@ namespace NES
 
 	void MainWindow::Stop(bool powerOff)
 	{
-		_renderer->ClearFlags(UIFlags::ShowFPS | UIFlags::ShowPauseScreen);
+		if(powerOff && _emuThread) {
+			_soundManager->Reset();
 
-		_soundManager->Reset();
-		if(_console) {
-			_console->Stop();
-		}
-		if(_emuThread) {
-			_emuThread->join();
-
-			if(powerOff) {
-				_console.reset();
-			} else {
-				_renderer->SetFlags(UIFlags::ShowPauseScreen);
+			if(_console) {
+				_console->Stop();
 			}
-
+			_emuThread->join();
+			_console.reset();
 			_emuThread.reset();
+		} else {
+			Console::SetFlags(EmulationFlags::Paused);
 		}
 	}
 
@@ -583,7 +585,7 @@ namespace NES
 						break;
 
 					case ID_NES_RESUME:
-						mainWindow->Start();
+						Console::ClearFlags(EmulationFlags::Paused);
 						break;
 					case ID_NES_PAUSE:
 						mainWindow->Stop(false);

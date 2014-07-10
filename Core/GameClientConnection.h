@@ -14,6 +14,8 @@ private:
 
 private:
 	void SendHandshake();
+	void InitializeVirtualControllers();
+	void DisposeVirtualControllers();
 
 protected:
 	void ProcessMessage(NetMessage* message);

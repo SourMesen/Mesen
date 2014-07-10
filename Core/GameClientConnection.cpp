@@ -31,6 +31,18 @@ void GameClientConnection::SendHandshake()
 	SendNetMessage(HandShakeMessage());
 }
 
+void GameClientConnection::InitializeVirtualControllers()
+{
+	for(int i = 0; i < 4; i++) {
+		_virtualControllers.push_back(unique_ptr<VirtualController>(new VirtualController(i)));
+	}
+}
+
+void GameClientConnection::DisposeVirtualControllers()
+{
+	_virtualControllers.clear();
+}
+
 void GameClientConnection::ProcessMessage(NetMessage* message)
 {
 	uint8_t port;
@@ -40,17 +52,15 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 	switch(message->Type) {
 		case MessageType::SaveState:
 			if(_gameLoaded) {
-				_virtualControllers.clear();
+				DisposeVirtualControllers();
 
 				Console::Pause();
 
 				((SaveStateMessage*)message)->LoadState();
 
-				for(int i = 0; i < 4; i++) {
-					_virtualControllers.push_back(unique_ptr<VirtualController>(new VirtualController(i)));
-				}
-
 				Console::Resume();
+
+				InitializeVirtualControllers();
 			}
 			break;
 		case MessageType::MovieData:
@@ -67,8 +77,16 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 				_controllerPort = gameInfo->ControllerPort;
 				Console::DisplayMessage(wstring(L"Connected as player ") + std::to_wstring(_controllerPort + 1));
 			}
-			_virtualControllers.clear();
+
+			DisposeVirtualControllers();
+
 			_gameLoaded = gameInfo->AttemptLoadGame();
+			if(gameInfo->Paused) {
+				Console::SetFlags(EmulationFlags::Paused);
+			} else {
+				Console::ClearFlags(EmulationFlags::Paused);
+			}
+
 			break;
 	}
 }

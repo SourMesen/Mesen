@@ -3,8 +3,9 @@
 #include "GameConnection.h"
 #include "IControlDevice.h"
 #include "IGameBroadcaster.h"
+#include "INotificationListener.h"
 
-class GameServerConnection : public GameConnection, public IControlDevice
+class GameServerConnection : public GameConnection, public IControlDevice, public INotificationListener
 {
 private:
 	int _controllerPort;
@@ -24,4 +25,6 @@ public:
 	void SendMovieData(uint8_t state, uint8_t port);
 
 	ButtonState GetButtonState();
+
+	virtual void ProcessNotification(ConsoleNotificationType type);
 };

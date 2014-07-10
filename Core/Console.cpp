@@ -237,6 +237,16 @@ void Console::Run()
 				Console::RunningLock.Acquire();
 			}
 
+			if(CheckFlag(EmulationFlags::Paused)) {
+				Console::SendNotification(ConsoleNotificationType::GamePaused);
+				Console::RunningLock.Release();
+				while(CheckFlag(EmulationFlags::Paused)) {
+					//Sleep until emulation is resumed
+					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
+				}
+				Console::RunningLock.Acquire();
+				Console::SendNotification(ConsoleNotificationType::GameResumed);
+			}
 			clockTimer.Reset();
 			
 			if(_stop) {
@@ -263,7 +273,8 @@ void Console::SaveState(wstring filename)
 		Console::Pause();
 		Console::SaveState(file);
 		Console::Resume();
-		file.close();
+		file.close();		
+		Console::DisplayMessage(L"State saved.");
 	}
 }
 
@@ -276,7 +287,7 @@ bool Console::LoadState(wstring filename)
 		Console::LoadState(file);
 		Console::Resume();
 		file.close();
-
+		Console::DisplayMessage(L"State loaded.");
 		return true;
 	}
 
@@ -293,8 +304,6 @@ void Console::SaveState(ostream &saveStream)
 		Instance->_mapper->SaveSnapshot(&saveStream);
 		Instance->_apu->SaveSnapshot(&saveStream);
 		Instance->_controlManager->SaveSnapshot(&saveStream);
-
-		Console::DisplayMessage(L"State saved.");
 	}
 }
 
@@ -308,7 +317,6 @@ void Console::LoadState(istream &loadStream)
 		Instance->_apu->LoadSnapshot(&loadStream);
 		Instance->_controlManager->LoadSnapshot(&loadStream);
 		
-		Console::DisplayMessage(L"State loaded.");
 		Console::SendNotification(ConsoleNotificationType::StateLoaded);
 	}
 }

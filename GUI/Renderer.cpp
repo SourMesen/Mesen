@@ -368,7 +368,7 @@ namespace NES
 
 	void Renderer::Render()
 	{
-		if(_frameChanged || CheckFlag(UIFlags::ShowPauseScreen) || !_displayMessages.empty()) {
+		if(_frameChanged || Console::CheckFlag(EmulationFlags::Paused) || !_displayMessages.empty()) {
 			_frameChanged = false;
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
@@ -384,14 +384,14 @@ namespace NES
 
 			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
 
-			if(CheckFlag(UIFlags::ShowPauseScreen)) {
+			if(Console::CheckFlag(EmulationFlags::Paused)) {
 				DrawPauseScreen();
-			}
-
-			//Draw FPS counter
-			if(CheckFlag(UIFlags::ShowFPS)) {
-				wstring fpsString = wstring(L"FPS: ") + std::to_wstring(Console::GetFPS());
-				DrawOutlinedString(fpsString, 256 * 4 - 149, 13, Colors::AntiqueWhite, 1.0f);
+			} else {
+				//Draw FPS counter
+				if(CheckFlag(UIFlags::ShowFPS)) {
+					wstring fpsString = wstring(L"FPS: ") + std::to_wstring(Console::GetFPS());
+					DrawOutlinedString(fpsString, 256 * 4 - 149, 13, Colors::AntiqueWhite, 1.0f);
+				}
 			}
 
 			RemoveOldMessages();

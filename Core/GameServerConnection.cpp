@@ -38,6 +38,8 @@ GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, int contro
 	Console::DisplayMessage(L"Player " + std::to_wstring(_controllerPort+1) + L" connected.");
 
 	ControlManager::BackupControlDevices();
+
+	Console::RegisterNotificationListener(this);
 }
 
 GameServerConnection::~GameServerConnection()
@@ -45,6 +47,8 @@ GameServerConnection::~GameServerConnection()
 	Console::DisplayMessage(L"Player " + std::to_wstring(_controllerPort+1) + L" disconnected.");
 
 	ControlManager::RestoreControlDevices();
+
+	Console::UnregisterNotificationListener(this);
 }
 
 void GameServerConnection::SendGameState()
@@ -66,7 +70,7 @@ void GameServerConnection::SendGameState()
 
 void GameServerConnection::SendGameInformation()
 {
-	SendNetMessage(GameInformationMessage(Console::GetROMPath(), _controllerPort));
+	SendNetMessage(GameInformationMessage(Console::GetROMPath(), _controllerPort, Console::CheckFlag(EmulationFlags::Paused)));
 }
 
 void GameServerConnection::SendMovieData(uint8_t state, uint8_t port)
@@ -90,4 +94,17 @@ ButtonState GameServerConnection::GetButtonState()
 	}
 	state.FromByte(stateData);
 	return state;
+}
+
+void GameServerConnection::ProcessNotification(ConsoleNotificationType type)
+{
+	switch(type) {
+		case ConsoleNotificationType::GamePaused:
+			SendGameInformation();
+			break;
+		case ConsoleNotificationType::GameResumed:
+			SendGameInformation();
+			SendGameState();
+			break;
+	}
 }

@@ -7,7 +7,8 @@ enum class ConsoleNotificationType
 	StateLoaded = 1,
 	GameReset = 2,
 	GamePaused = 3,
-	GameStopped = 4,
+	GameResumed = 4,
+	GameStopped = 5,
 };
 
 class INotificationListener

@@ -10,7 +10,6 @@ namespace NES {
 	enum UIFlags
 	{
 		ShowFPS = 1,
-		ShowPauseScreen = 2,
 	};
 
 	class Renderer : public IVideoDevice, public IMessageManager
