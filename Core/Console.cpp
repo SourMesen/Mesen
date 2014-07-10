@@ -54,6 +54,7 @@ void Console::Initialize(wstring filename)
 	ResetComponents(false);
 
 	Console::SendNotification(ConsoleNotificationType::GameLoaded);
+	Console::DisplayMessage(wstring(L"Game loaded: ") + FolderUtilities::GetFilename(filename, false));
 }
 
 void Console::LoadROM(wstring filename)
@@ -263,8 +264,6 @@ void Console::SaveState(wstring filename)
 		Console::SaveState(file);
 		Console::Resume();
 		file.close();
-
-		Console::DisplayMessage(L"State saved.");
 	}
 }
 
@@ -278,7 +277,6 @@ bool Console::LoadState(wstring filename)
 		Console::Resume();
 		file.close();
 
-		Console::DisplayMessage(L"State loaded.");
 		return true;
 	}
 
@@ -295,6 +293,8 @@ void Console::SaveState(ostream &saveStream)
 		Instance->_mapper->SaveSnapshot(&saveStream);
 		Instance->_apu->SaveSnapshot(&saveStream);
 		Instance->_controlManager->SaveSnapshot(&saveStream);
+
+		Console::DisplayMessage(L"State saved.");
 	}
 }
 
@@ -307,7 +307,8 @@ void Console::LoadState(istream &loadStream)
 		Instance->_mapper->LoadSnapshot(&loadStream);
 		Instance->_apu->LoadSnapshot(&loadStream);
 		Instance->_controlManager->LoadSnapshot(&loadStream);
-
+		
+		Console::DisplayMessage(L"State loaded.");
 		Console::SendNotification(ConsoleNotificationType::StateLoaded);
 	}
 }

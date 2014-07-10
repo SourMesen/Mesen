@@ -33,6 +33,10 @@ void GameClientConnection::SendHandshake()
 
 void GameClientConnection::ProcessMessage(NetMessage* message)
 {
+	uint8_t port;
+	uint8_t state;
+	GameInformationMessage* gameInfo;
+
 	switch(message->Type) {
 		case MessageType::SaveState:
 			if(_gameLoaded) {
@@ -51,8 +55,6 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 			break;
 		case MessageType::MovieData:
 			if(_gameLoaded) {
-				uint8_t port;
-				uint8_t state;
 				port = ((MovieDataMessage*)message)->PortNumber;
 				state = ((MovieDataMessage*)message)->InputState;
 
@@ -60,9 +62,11 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 			}
 			break;
 		case MessageType::GameInformation:
-			GameInformationMessage* gameInfo;
 			gameInfo = (GameInformationMessage*)message;
-			Console::DisplayMessage(wstring(L"Connected as player ") + std::to_wstring(((GameInformationMessage*)message)->ControllerPort + 1) + L".");
+			if(gameInfo->ControllerPort != _controllerPort) {
+				_controllerPort = gameInfo->ControllerPort;
+				Console::DisplayMessage(wstring(L"Connected as player ") + std::to_wstring(_controllerPort + 1));
+			}
 			_virtualControllers.clear();
 			_gameLoaded = gameInfo->AttemptLoadGame();
 			break;

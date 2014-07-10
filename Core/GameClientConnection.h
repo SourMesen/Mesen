@@ -10,6 +10,7 @@ private:
 	IControlDevice* _controlDevice;
 	uint8_t _lastInputSent = 0x00;
 	bool _gameLoaded = false;
+	uint8_t _controllerPort = 255;
 
 private:
 	void SendHandshake();

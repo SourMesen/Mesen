@@ -278,8 +278,39 @@ namespace NES
 
 	void Renderer::DisplayMessage(wstring text)
 	{
-		_displayMessage = text;
-		_displayTimestamp = timeGetTime() + 3000; //3 secs
+		_displayMessages.push_front(text);
+		_displayTimestamps.push_front(timeGetTime() + 4000); //4 secs
+	}
+
+	void Renderer::RemoveOldMessages()
+	{
+		uint32_t currentTime = timeGetTime();
+		while(!_displayTimestamps.empty()) {
+			if(_displayTimestamps.back() < currentTime) {
+				_displayMessages.pop_back();
+				_displayTimestamps.pop_back();
+			} else {
+				break;
+			}
+		}
+	}
+
+	void Renderer::DrawOutlinedString(wstring message, float x, float y, DirectX::FXMVECTOR color, float scale)
+	{
+		SpriteBatch* spritebatch = _spriteBatch.get();
+		const wchar_t* msg = message.c_str();
+
+		for(uint8_t offset = 3; offset > 0; offset--) {
+			_font->DrawString(spritebatch, msg, XMFLOAT2(x + offset, y + offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+			_font->DrawString(spritebatch, msg, XMFLOAT2(x - offset, y + offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+			_font->DrawString(spritebatch, msg, XMFLOAT2(x + offset, y - offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+			_font->DrawString(spritebatch, msg, XMFLOAT2(x - offset, y - offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+			_font->DrawString(spritebatch, msg, XMFLOAT2(x + offset, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+			_font->DrawString(spritebatch, msg, XMFLOAT2(x + offset, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+			_font->DrawString(spritebatch, msg, XMFLOAT2(x, y + offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+			_font->DrawString(spritebatch, msg, XMFLOAT2(x, y - offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+		}
+		_font->DrawString(spritebatch, msg, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
 	}
 
 	void Renderer::DrawNESScreen()
@@ -332,36 +363,12 @@ namespace NES
 		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
 		shaderResourceView->Release();
 
-		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2((float)_hdScreenWidth / 2 - 142, (float)_hdScreenHeight / 2 - 77), Colors::Black, 0.0f, XMFLOAT2(0, 0), 2.0f);
-		_font->DrawString(_spriteBatch.get(), L"PAUSED", XMFLOAT2((float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 80), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 2.0f);
+		DrawOutlinedString(L"PAUSED", (float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 77, Colors::AntiqueWhite, 2.0f);
 	}
-/*
-	HRESULT Renderer::CompileShader(wstring filename, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
-	{
-		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-		#ifdef _DEBUG
-			dwShaderFlags |= D3DCOMPILE_DEBUG;
-		#endif
-
-		ID3DBlob* pErrorBlob = nullptr;
-		HRESULT hr = D3DCompileFromFile(filename.c_str(), nullptr, nullptr, szEntryPoint, szShaderModel, dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
-		if(FAILED(hr) && pErrorBlob != nullptr) {
-			std::cout << (char*)pErrorBlob->GetBufferPointer();
-		}
-		if(pErrorBlob) {
-			pErrorBlob->Release();
-		}
-
-		return hr;
-	}*/
 
 	void Renderer::Render()
 	{
-		if(_displayTimestamp < timeGetTime()) {
-			_displayMessage.clear();
-		}
-
-		if(_frameChanged || CheckFlag(UIFlags::ShowPauseScreen) || !_displayMessage.empty()) {
+		if(_frameChanged || CheckFlag(UIFlags::ShowPauseScreen) || !_displayMessages.empty()) {
 			_frameChanged = false;
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
@@ -383,13 +390,15 @@ namespace NES
 
 			//Draw FPS counter
 			if(CheckFlag(UIFlags::ShowFPS)) {
-				_font->DrawString(_spriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256 * 4 - 149, 13), Colors::Black, 0.0f, XMFLOAT2(0, 0), 1.0f);
-				_font->DrawString(_spriteBatch.get(), (wstring(L"FPS: ") + std::to_wstring(Console::GetFPS())).c_str(), XMFLOAT2(256 * 4 - 150, 11), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 1.0f);
+				wstring fpsString = wstring(L"FPS: ") + std::to_wstring(Console::GetFPS());
+				DrawOutlinedString(fpsString, 256 * 4 - 149, 13, Colors::AntiqueWhite, 1.0f);
 			}
 
-			if(!_displayMessage.empty() && _displayTimestamp > timeGetTime()) {
-				_font->DrawString(_spriteBatch.get(), _displayMessage.c_str(), XMFLOAT2(12, 13), Colors::Black, 0.0f, XMFLOAT2(0, 0), 1.0f);
-				_font->DrawString(_spriteBatch.get(), _displayMessage.c_str(), XMFLOAT2(11, 11), Colors::AntiqueWhite, 0.0f, XMFLOAT2(0, 0), 1.0f);
+			RemoveOldMessages();
+			int counter = 0;
+			for(wstring message : _displayMessages) {
+				DrawOutlinedString(message, 11, 11 + (float)counter*50, Colors::AntiqueWhite, 1.0f);
+				counter++;
 			}
 
 			_spriteBatch->End();

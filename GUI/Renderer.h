@@ -52,8 +52,8 @@ namespace NES {
 
 		uint32_t _flags = 0;
 
-		wstring _displayMessage = L"";
-		uint32_t _displayTimestamp = 0;
+		list<wstring> _displayMessages;
+		list<uint32_t> _displayTimestamps;
 
 		HRESULT InitDevice();
 		void CleanupDevice();
@@ -63,6 +63,9 @@ namespace NES {
 		ID3D11ShaderResourceView* GetShaderResourceView(ID3D11Texture2D* texture);
 		void DrawNESScreen();
 		void DrawPauseScreen();
+
+		void RemoveOldMessages();
+		void DrawOutlinedString(wstring message, float x, float y, DirectX::FXMVECTOR color, float scale);
 
 		//HRESULT CompileShader(wstring filename, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 
