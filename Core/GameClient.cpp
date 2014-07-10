@@ -74,6 +74,7 @@ void GameClient::Exec()
 				_connection.reset();
 				break;
 			}
+			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1));
 		}
 	}
 }
