@@ -50,6 +50,12 @@
     <ClInclude Include="CRC32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ZIPReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="miniz.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -62,6 +68,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FolderUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZIPReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="miniz.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

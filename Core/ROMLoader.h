@@ -1,6 +1,8 @@
 #pragma once
 
 #include "stdafx.h"
+#include "../Utilities/FolderUtilities.h"
+#include "../Utilities/ZIPReader.h"
 
 enum class MirroringType
 {
@@ -52,35 +54,117 @@ class ROMLoader
 	private:
 		NESHeader _header;
 		wstring _filename;
-		uint8_t* _prgRAM;
-		uint8_t* _chrRAM;
+		uint8_t* _prgRAM = nullptr;
+		uint8_t* _chrRAM = nullptr;
+
+		bool LoadFromZIP(ifstream &zipFile)
+		{
+			bool result = false;
+
+			zipFile.seekg(0, ios::end);
+			uint32_t fileSize = (uint32_t)zipFile.tellg();
+			zipFile.seekg(0, ios::beg);
+
+			uint8_t* buffer = new uint8_t[fileSize];
+			zipFile.read((char*)buffer, fileSize);
+
+			ZIPReader reader;
+			reader.LoadZIPArchive(buffer, fileSize);
+			
+			vector<string> fileList = reader.GetFileList();
+			for(string filename : fileList) {
+				std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
+				if(filename.length() > 4) {
+					if(filename.substr(filename.length() - 4, 4).compare(".nes") == 0) {
+						uint8_t* fileBuffer = nullptr;
+						size_t fileSize = 0;
+						reader.ExtractFile(filename, &fileBuffer, fileSize);
+						if(fileBuffer) {
+							result = LoadFromMemory(fileBuffer, fileSize);
+							delete[] fileBuffer;
+							break;
+						}
+					}
+				}
+
+			}
+
+			delete[] buffer;
+			return result;
+		}
+
+		bool LoadFromFile(ifstream &romFile)
+		{
+			romFile.seekg(0, ios::end);
+			uint32_t fileSize = (uint32_t)romFile.tellg();
+			romFile.seekg(0, ios::beg);
+
+			uint8_t* buffer = new uint8_t[fileSize];
+			romFile.read((char*)buffer, fileSize);
+			bool result = LoadFromMemory(buffer, fileSize);
+			delete[] buffer;
+
+			return result;
+		}
+
+		bool LoadFromMemory(uint8_t* buffer, uint32_t length)
+		{
+			if(memcmp(buffer, "NES", 3) == 0) {
+				memcpy((char*)&_header, buffer, sizeof(NESHeader));
+
+				_prgRAM = new uint8_t[0x4000 * _header.ROMCount];
+				_chrRAM = new uint8_t[0x2000 * _header.VROMCount];
+
+				buffer += sizeof(NESHeader);
+				memcpy(_prgRAM, buffer, 0x4000 * _header.ROMCount);
+
+				buffer += 0x4000 * _header.ROMCount;
+				memcpy(_chrRAM, buffer, 0x2000 * _header.VROMCount);
+
+				return true;
+			}
+			return false;			
+		}
 
 	public:
-		ROMLoader(wstring filename)
+		ROMLoader()
 		{
-			_filename = filename;
+		}
 
-			ifstream romFile(filename, ios::in | ios::binary);
-
-			if(!romFile) {
-				throw std::exception("File could not be read");
+		bool LoadFile(wstring filename) 
+		{
+			bool result = false;
+			ifstream file(filename, ios::in | ios::binary);
+			if(file) {
+				char header[3];
+				file.read(header, 3);
+				if(memcmp(header, "NES", 3) == 0) {
+					_filename = FolderUtilities::GetFilename(filename, false);
+					file.seekg(0, ios::beg);
+					result = LoadFromFile(file);
+					file.close();
+				} else if(memcmp(header, "PK", 2) == 0) {
+					file.seekg(0, ios::beg);
+					result = LoadFromZIP(file);
+				} else {
+					//Unsupported file format
+					file.close();
+				}
+				file.close();
 			}
+			return result;
+		}
 
-			romFile.read((char*)&_header, sizeof(NESHeader));
-
-			uint8_t* prgBuffer = new uint8_t[0x4000 * _header.ROMCount];
-			for(int i = 0; i < _header.ROMCount; i++) {
-				romFile.read((char*)prgBuffer+i*0x4000, 0x4000);
+		void FreeMemory()
+		{
+			if(_prgRAM) {
+				delete[] _prgRAM;
+				_prgRAM = nullptr;
 			}
-			_prgRAM = prgBuffer;
-
-			uint8_t* chrBuffer = new uint8_t[0x2000 * _header.VROMCount];
-			for(int i = 0; i < _header.VROMCount; i++) {
-				romFile.read((char*)chrBuffer+i*0x2000, 0x2000);
+			if(_chrRAM) {
+				delete[] _chrRAM;
+				_chrRAM = nullptr;
 			}
-			_chrRAM = chrBuffer;
-
-			romFile.close();
 		}
 
 		uint8_t* GetPRGRam()

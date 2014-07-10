@@ -36,25 +36,31 @@ Console* Console::GetInstance()
 
 void Console::Initialize(wstring filename)
 {
-	_romFilepath = filename;
+	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(filename);
+	if(mapper) {
+		_romFilepath = filename;
 
-	_mapper = MapperFactory::InitializeFromFile(filename);
-	_memoryManager.reset(new MemoryManager(_mapper));
-	_cpu.reset(new CPU(_memoryManager.get()));
-	_ppu.reset(new PPU(_memoryManager.get()));	
-	_apu.reset(new APU(_memoryManager.get()));
+		_mapper = mapper;
+		_memoryManager.reset(new MemoryManager(_mapper));
+		_cpu.reset(new CPU(_memoryManager.get()));
+		_ppu.reset(new PPU(_memoryManager.get()));
+		_apu.reset(new APU(_memoryManager.get()));
 
-	_controlManager.reset(new ControlManager());
+		_controlManager.reset(new ControlManager());
 
-	_memoryManager->RegisterIODevice(_mapper.get());
-	_memoryManager->RegisterIODevice(_ppu.get());
-	_memoryManager->RegisterIODevice(_apu.get());
-	_memoryManager->RegisterIODevice(_controlManager.get());
+		_memoryManager->RegisterIODevice(_mapper.get());
+		_memoryManager->RegisterIODevice(_ppu.get());
+		_memoryManager->RegisterIODevice(_apu.get());
+		_memoryManager->RegisterIODevice(_controlManager.get());
 
-	ResetComponents(false);
+		ResetComponents(false);
 
-	Console::SendNotification(ConsoleNotificationType::GameLoaded);
-	Console::DisplayMessage(wstring(L"Game loaded: ") + FolderUtilities::GetFilename(filename, false));
+		Console::SendNotification(ConsoleNotificationType::GameLoaded);
+		Console::DisplayMessage(wstring(L"Game loaded: ") + FolderUtilities::GetFilename(filename, false));
+	} else {
+		Console::DisplayMessage(wstring(L"Could not load file: ") + FolderUtilities::GetFilename(filename, true));
+	}
+
 }
 
 void Console::LoadROM(wstring filename)

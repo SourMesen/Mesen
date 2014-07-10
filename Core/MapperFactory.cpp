@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "Console.h"
 #include "MapperFactory.h"
 #include "ROMLoader.h"
 #include "AXROM.h"
@@ -32,19 +33,29 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 25: return new VRC2_4(VRCVariant::VRC4b);  //Conflicts: VRC2c, VRC4d
 		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
 		case 71: return new UNROM(); //TODO: "It's largely a clone of UNROM, and Camerica games were initially emulated under iNES Mapper 002 before 071 was assigned."
+		default: Console::DisplayMessage(L"Unsupported mapper, cannot load file.");
 	}
 
-	throw std::exception("Unsupported mapper");
 	return nullptr;
 }
 
 shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(wstring filename)
 {
-	ROMLoader loader(filename);
+	ROMLoader loader;
 
-	uint8_t mapperID = loader.GetMapperID();
-			
-	BaseMapper* mapper = GetMapperFromID(mapperID);	
-	mapper->Initialize(loader);
-	return shared_ptr<BaseMapper>(mapper);
+	if(loader.LoadFile(filename)) {
+		uint8_t mapperID = loader.GetMapperID();
+
+		BaseMapper* mapper = GetMapperFromID(mapperID);
+
+		if(mapper) {
+			mapper->Initialize(loader);
+			return shared_ptr<BaseMapper>(mapper);
+		} else {
+			loader.FreeMemory();
+			return nullptr;
+		}
+	} else {
+		return nullptr;
+	}
 }

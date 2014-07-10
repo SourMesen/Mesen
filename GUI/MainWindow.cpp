@@ -300,7 +300,7 @@ namespace NES
 	wstring MainWindow::SelectROM(wstring filepath)
 	{
 		if(filepath.empty()) {
-			filepath = FolderUtilities::OpenFile(L"NES Roms (*.nes)\0*.NES\0All (*.*)\0*.*", ConfigManager::GetValue<wstring>(Config::LastGameFolder), false);
+			filepath = FolderUtilities::OpenFile(L"All supported formats (*.nes, *.zip)\0*.NES;*.ZIP\0NES Roms (*.nes)\0*.NES\0ZIP Archives (*.zip)\0*.ZIP\0All (*.*)\0*.*", ConfigManager::GetValue<wstring>(Config::LastGameFolder), false);
 			if(!filepath.empty()) {
 				ConfigManager::SetValue(Config::LastGameFolder, FolderUtilities::GetFolderName(filepath));
 			}
@@ -502,6 +502,7 @@ namespace NES
 
 				testResult.close();
 
+				delete console;
 				delete[] expectedResult;
 			} else {
 				//std::wcout << "[No result]" << std::endl;

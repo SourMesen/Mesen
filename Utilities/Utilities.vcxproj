@@ -74,6 +74,7 @@
     <ClInclude Include="ConfigManager.h" />
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
+    <ClInclude Include="miniz.h" />
     <ClInclude Include="UPnPPortMapper.h" />
     <ClInclude Include="SimpleLock.h" />
     <ClInclude Include="Socket.h" />
@@ -83,15 +84,18 @@
     <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="utf8conv.h" />
     <ClInclude Include="utf8conv_inl.h" />
+    <ClInclude Include="ZIPReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConfigManager.cpp" />
     <ClCompile Include="FolderUtilities.cpp" />
+    <ClCompile Include="miniz.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="tinyxml2.cpp" />
+    <ClCompile Include="ZIPReader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
