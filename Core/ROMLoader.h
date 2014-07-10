@@ -61,12 +61,8 @@ class ROMLoader
 		{
 			bool result = false;
 
-			zipFile.seekg(0, ios::end);
-			uint32_t fileSize = (uint32_t)zipFile.tellg();
-			zipFile.seekg(0, ios::beg);
-
-			uint8_t* buffer = new uint8_t[fileSize];
-			zipFile.read((char*)buffer, fileSize);
+			uint32_t fileSize;
+			uint8_t* buffer = ReadFile(zipFile, fileSize);
 
 			ZIPReader reader;
 			reader.LoadZIPArchive(buffer, fileSize);
@@ -95,16 +91,30 @@ class ROMLoader
 
 		bool LoadFromFile(ifstream &romFile)
 		{
-			romFile.seekg(0, ios::end);
-			uint32_t fileSize = (uint32_t)romFile.tellg();
-			romFile.seekg(0, ios::beg);
-
-			uint8_t* buffer = new uint8_t[fileSize];
-			romFile.read((char*)buffer, fileSize);
+			uint32_t fileSize;
+			uint8_t* buffer = ReadFile(romFile, fileSize);
 			bool result = LoadFromMemory(buffer, fileSize);
 			delete[] buffer;
 
 			return result;
+		}
+
+		uint32_t GetFileSize(ifstream &file)
+		{
+			file.seekg(0, ios::end);
+			uint32_t fileSize = (uint32_t)file.tellg();
+			file.seekg(0, ios::beg);
+
+			return fileSize;
+		}
+
+		uint8_t* ReadFile(ifstream &file, uint32_t &fileSize)
+		{
+			fileSize = GetFileSize(file);
+			
+			uint8_t* buffer = new uint8_t[fileSize];
+			file.read((char*)buffer, fileSize);
+			return buffer;
 		}
 
 		bool LoadFromMemory(uint8_t* buffer, uint32_t length)
