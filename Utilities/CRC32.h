@@ -1,6 +1,6 @@
 //From: http://tdistler.com/2011/06/22/crc32-a-simple-c-class
 //"You are free to use and adapt this code however you likeÅc that goes for anyone."
-
+#pragma once
 #include "stdafx.h"
 
 static const uint32_t kCrc32Table[256] = {

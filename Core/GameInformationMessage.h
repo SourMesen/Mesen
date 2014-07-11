@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "NetMessage.h"
 #include "Console.h"
-#include "../Utilities/CRC32.h"
+#include "ROMLoader.h"
 #include "../Utilities/FolderUtilities.h"
 
 class GameInformationMessage : public NetMessage
@@ -39,7 +39,7 @@ public:
 	{
 		memset(ROMFilename, 0, sizeof(ROMFilename));
 		wcscpy_s(ROMFilename, FolderUtilities::GetFilename(filepath, true).c_str());
-		CRC32Hash = CRC32::GetCRC(filepath);
+		CRC32Hash = ROMLoader::GetCRC32(filepath);
 		ControllerPort = port;
 		Paused = paused;
 	}

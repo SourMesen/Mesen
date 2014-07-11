@@ -4,7 +4,6 @@
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/ConfigManager.h"
-#include "../Utilities/CRC32.h"
 
 Console* Console::Instance = nullptr;
 IMessageManager* Console::MessageManager = nullptr;
@@ -77,17 +76,20 @@ void Console::LoadROM(wstring filename)
 bool Console::AttemptLoadROM(wstring filename, uint32_t crc32Hash)
 {
 	if(Instance) {
-		if(CRC32::GetCRC(Instance->_romFilepath) == crc32Hash) {
+		if(ROMLoader::GetCRC32(Instance->_romFilepath) == crc32Hash) {
 			//Current game matches, no need to do anything
 			return true;
 		}
 	}
 
 	vector<wstring> romFiles = FolderUtilities::GetFilesInFolder(ConfigManager::GetValue<wstring>(Config::LastGameFolder), L"*.nes", true);
+	for(wstring zipFile : FolderUtilities::GetFilesInFolder(ConfigManager::GetValue<wstring>(Config::LastGameFolder), L"*.zip", true)) {
+		romFiles.push_back(zipFile);
+	}
 	for(wstring romFile : romFiles) {
 		//Quick search by filename
 		if(FolderUtilities::GetFilename(romFile, true).compare(filename) == 0) {
-			if(CRC32::GetCRC(romFile) == crc32Hash) {
+			if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
 				//Matching ROM found
 				Console::LoadROM(romFile);
 				return true;
@@ -97,7 +99,7 @@ bool Console::AttemptLoadROM(wstring filename, uint32_t crc32Hash)
 
 	for(wstring romFile : romFiles) {
 		//Slower search by CRC value
-		if(CRC32::GetCRC(romFile) == crc32Hash) {
+		if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
 			//Matching ROM found
 			Console::LoadROM(romFile);
 			return true;

@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/ZIPReader.h"
+#include "../Utilities/CRC32.h"
 
 enum class MirroringType
 {
@@ -56,6 +57,7 @@ class ROMLoader
 		wstring _filename;
 		uint8_t* _prgRAM = nullptr;
 		uint8_t* _chrRAM = nullptr;
+		uint32_t _crc32;
 
 		bool LoadFromZIP(ifstream &zipFile)
 		{
@@ -119,6 +121,7 @@ class ROMLoader
 
 		bool LoadFromMemory(uint8_t* buffer, uint32_t length)
 		{
+			_crc32 = CRC32::GetCRC(buffer, length);
 			if(memcmp(buffer, "NES", 3) == 0) {
 				memcpy((char*)&_header, buffer, sizeof(NESHeader));
 
@@ -215,6 +218,17 @@ class ROMLoader
 		wstring GetFilename()
 		{
 			return _filename;
+		}
+
+		static uint32_t GetCRC32(wstring filename)
+		{
+			ROMLoader loader;
+			uint32_t crc = 0;
+			if(loader.LoadFile(filename)) {
+				crc = loader._crc32;
+				loader.FreeMemory();
+			}
+			return crc;
 		}
 };
 
