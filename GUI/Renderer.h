@@ -3,6 +3,9 @@
 #include "DirectXTK\SpriteFont.h"
 #include "../Core/IVideoDevice.h"
 #include "../Core/IMessageManager.h"
+#include "../Utilities/PNGWriter.h"
+#include "../Utilities/FolderUtilities.h"
+#include "../Utilities/SimpleLock.h"
 
 using namespace DirectX;
 
@@ -33,6 +36,8 @@ namespace NES {
 
 		bool							_frameChanged = true;
 		uint8_t*						_nextFrameBuffer = nullptr;
+		SimpleLock					_frameLock;
+
 
 		unique_ptr<SpriteFont>	_font;
 		ID3D11Texture2D*			_overlayTexture = nullptr;
@@ -91,10 +96,7 @@ namespace NES {
 			return (_flags & flag) == flag;
 		}
 
-		void UpdateFrame(uint8_t* frameBuffer)
-		{
-			_frameChanged = true;
-			memcpy(_nextFrameBuffer, frameBuffer, 256 * 240 * 4);
-		}
+		void UpdateFrame(uint8_t* frameBuffer);
+		void TakeScreenshot(wstring romFilename);
 	};
 }

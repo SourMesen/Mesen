@@ -75,6 +75,7 @@
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
     <ClInclude Include="miniz.h" />
+    <ClInclude Include="PNGWriter.h" />
     <ClInclude Include="UPnPPortMapper.h" />
     <ClInclude Include="SimpleLock.h" />
     <ClInclude Include="Socket.h" />

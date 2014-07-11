@@ -56,6 +56,9 @@
     <ClInclude Include="miniz.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PNGWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

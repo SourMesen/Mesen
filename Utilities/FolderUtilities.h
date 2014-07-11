@@ -9,6 +9,7 @@ class FolderUtilities
 		static wstring GetSaveFolder();
 		static wstring GetSaveStateFolder();
 		static wstring GetMovieFolder();
+		static wstring GetScreenshotFolder();
 
 		static vector<wstring> GetFolders(wstring rootFolder);
 		static vector<wstring> GetFilesInFolder(wstring rootFolder, wstring mask, bool recursive);

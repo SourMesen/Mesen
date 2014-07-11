@@ -329,7 +329,9 @@ namespace NES
 		dd.DepthPitch = _screenBufferSize;
 
 		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
+		_frameLock.Acquire();
 		memcpy(dd.pData, _nextFrameBuffer, _screenBufferSize);
+		_frameLock.Release();
 		_pDeviceContext->Unmap(_pTexture, 0);
 		
 		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
@@ -407,4 +409,48 @@ namespace NES
 			_pSwapChain->Present(0, 0);
 		}
 	}
+
+	void Renderer::UpdateFrame(uint8_t* frameBuffer)
+	{
+		_frameChanged = true;
+
+		_frameLock.Acquire();
+		memcpy(_nextFrameBuffer, frameBuffer, 256 * 240 * 4);
+		_frameLock.Release();
+	}
+
+	void Renderer::TakeScreenshot(wstring romFilename)
+	{
+		uint32_t* frameBuffer = new uint32_t[256 * 240];
+			
+		_frameLock.Acquire();
+		memcpy(frameBuffer, _nextFrameBuffer, 256 * 240 * 4);
+		_frameLock.Release();
+
+		//ARGB -> ABGR
+		for(uint32_t i = 0; i < 256 * 240; i++) {
+			frameBuffer[i] = (frameBuffer[i] & 0xFF00FF00) | ((frameBuffer[i] & 0xFF0000) >> 16) | ((frameBuffer[i] & 0xFF) << 16);
+		}
+
+		int counter = 0;
+		wstring baseFilename = FolderUtilities::GetScreenshotFolder() + romFilename;
+		wstring ssFilename;
+		while(true) {
+			wstring counterStr = std::to_wstring(counter);
+			while(counterStr.length() < 3) {
+				counterStr = L"0" + counterStr;
+			}
+			ssFilename = baseFilename + L"_" + counterStr + L".png";
+			ifstream file(ssFilename, ios::in);
+			if(file) {
+				file.close();
+			} else {
+				break;
+			}
+			counter++;
+		}
+
+		PNGWriter::WritePNG(ssFilename, (uint8_t*)frameBuffer, 256, 240);			
+	}
+
 }

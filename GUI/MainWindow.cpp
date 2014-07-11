@@ -359,6 +359,8 @@ namespace NES
 		SetMenuEnabled(ID_NETPLAY_CONNECT, !serverStarted && !clientConnected && !Movie::Playing());
 		SetMenuEnabled(ID_NETPLAY_DISCONNECT, !serverStarted && clientConnected);
 
+		SetMenuEnabled(ID_TOOLS_TAKESCREENSHOT, running);
+
 		SetMenuCheck(ID_SAVESTATESLOT_1, _currentSaveSlot == 0);
 		SetMenuCheck(ID_SAVESTATESLOT_2, _currentSaveSlot == 1);
 		SetMenuCheck(ID_SAVESTATESLOT_3, _currentSaveSlot == 2);
@@ -374,8 +376,8 @@ namespace NES
 		}
 
 		_currentROM = _console->GetROMPath();
-		wstring currentROMName = FolderUtilities::GetFilename(_console->GetROMPath(), false);
-		SetWindowText(_hWnd, (wstring(_windowName) + L": " + currentROMName).c_str());
+		_currentROMName = FolderUtilities::GetFilename(_console->GetROMPath(), false);
+		SetWindowText(_hWnd, (wstring(_windowName) + L": " + _currentROMName).c_str());
 
 		Console::ClearFlags(EmulationFlags::Paused);
 
@@ -640,6 +642,10 @@ namespace NES
 						break;
 					case ID_NETPLAY_DISCONNECT:
 						GameClient::Disconnect();
+						break;
+
+					case ID_TOOLS_TAKESCREENSHOT:
+						mainWindow->_renderer->TakeScreenshot(mainWindow->_currentROMName);
 						break;
 
 					case ID_TESTS_RUNTESTS:

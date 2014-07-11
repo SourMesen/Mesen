@@ -39,6 +39,13 @@ wstring FolderUtilities::GetMovieFolder()
 	return folder;
 }
 
+wstring FolderUtilities::GetScreenshotFolder()
+{
+	wstring folder = GetHomeFolder() + L"Screenshots\\";
+	CreateDirectory(folder.c_str(), nullptr);
+	return folder;
+}
+
 vector<wstring> FolderUtilities::GetFolders(wstring rootFolder)
 {
 	HANDLE hFind;
