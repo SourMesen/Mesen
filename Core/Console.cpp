@@ -136,6 +136,7 @@ void Console::ResetComponents(bool softReset)
 void Console::Stop()
 {
 	_stop = true;
+	Console::ClearFlags(EmulationFlags::Paused);
 }
 
 void Console::Pause()
@@ -245,7 +246,7 @@ void Console::Run()
 				Console::RunningLock.Acquire();
 			}
 
-			if(CheckFlag(EmulationFlags::Paused)) {
+			if(CheckFlag(EmulationFlags::Paused) && !_stop) {
 				Console::SendNotification(ConsoleNotificationType::GamePaused);
 				Console::RunningLock.Release();
 				while(CheckFlag(EmulationFlags::Paused)) {
