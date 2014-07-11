@@ -450,7 +450,8 @@ namespace NES
 			counter++;
 		}
 
-		PNGWriter::WritePNG(ssFilename, (uint8_t*)frameBuffer, 256, 240);			
+		PNGWriter::WritePNG(ssFilename, (uint8_t*)frameBuffer, 256, 240);	
+		Console::DisplayMessage(L"Screenshot saved.");
 	}
 
 }
