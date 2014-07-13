@@ -114,6 +114,7 @@
     <ClInclude Include="MMC2.h" />
     <ClInclude Include="Movie.h" />
     <ClInclude Include="MovieDataMessage.h" />
+    <ClInclude Include="Nanjing.h" />
     <ClInclude Include="NetMessage.h" />
     <ClInclude Include="SaveStateMessage.h" />
     <ClInclude Include="Snapshotable.h" />
