@@ -87,10 +87,10 @@ class MMC3 : public BaseMapper
 			}
 
 			if(_chrMode == 0) {
-				SelectCHRPage(0, _registers[0]);
-				SelectCHRPage(1, _registers[0]+1);
-				SelectCHRPage(2, _registers[1]);
-				SelectCHRPage(3, _registers[1]+1);
+				SelectCHRPage(0, _registers[0] & 0xFE);
+				SelectCHRPage(1, _registers[0] | 0x01);
+				SelectCHRPage(2, _registers[1] & 0xFE);
+				SelectCHRPage(3, _registers[1] | 0x01);
 
 				SelectCHRPage(4, _registers[2]);
 				SelectCHRPage(5, _registers[3]);
@@ -102,10 +102,10 @@ class MMC3 : public BaseMapper
 				SelectCHRPage(2, _registers[4]);
 				SelectCHRPage(3, _registers[5]);
 
-				SelectCHRPage(4, _registers[0]);
-				SelectCHRPage(5, _registers[0]+1);
-				SelectCHRPage(6, _registers[1]);
-				SelectCHRPage(7, _registers[1]+1);
+				SelectCHRPage(4, _registers[0] & 0xFE);
+				SelectCHRPage(5, _registers[0] | 0x01);
+				SelectCHRPage(6, _registers[1] & 0xFE);
+				SelectCHRPage(7, _registers[1] | 0x01);
 			}
 
 		}
