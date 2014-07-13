@@ -69,8 +69,10 @@ namespace NES
 		Initialize();
 
 		InitializeOptions();
-		InputManager inputManager(_hWnd);
+		InputManager inputManager(_hWnd, 0);
+		InputManager inputManager2(_hWnd, 1);
 		ControlManager::RegisterControlDevice(&inputManager, 0);
+		ControlManager::RegisterControlDevice(&inputManager2, 1);
 
 		HACCEL hAccel = LoadAccelerators(_hInstance, MAKEINTRESOURCE(IDC_Accelerator));
 		if(hAccel == nullptr) {
