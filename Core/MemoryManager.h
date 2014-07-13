@@ -11,8 +11,6 @@ class MemoryManager: public Snapshotable
 	private:
 		const int RAMSize = 0x10000;
 		const int InternalRAMSize = 0x800;
-		const int ExpansionRAMSize = 0x2000;
-		const int SRAMSize = 0x2000;
 		const int VRAMSize = 0x4000;
 		const int NameTableScreenSize = 0x400;
 

@@ -17,8 +17,7 @@ class UNROM : public BaseMapper
 			SelectCHRPage(0, 0);
 		}
 
-	public:		
-		void WriteRAM(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value)
 		{
 			SelectPRGPage(0, value);
 		}

@@ -6,15 +6,11 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 {
 	_mapper = mapper;
 
-	_hasExpansionRAM = false;
-
 	_internalRAM = new uint8_t[InternalRAMSize];
-	_SRAM = new uint8_t[SRAMSize];
 	for(int i = 0; i < 4; i++) {
 		_nametableRAM[i] = new uint8_t[NameTableScreenSize];
 		memset(_nametableRAM[i], 0, NameTableScreenSize);
 	}
-	_expansionRAM = new uint8_t[ExpansionRAMSize];
 
 	_ramReadHandlers = new IMemoryHandler*[RAMSize];
 	_ramWriteHandlers = new IMemoryHandler*[RAMSize];
@@ -22,32 +18,20 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	_vramWriteHandlers = new IMemoryHandler*[VRAMSize];
 	
 	memset(_internalRAM, 0, InternalRAMSize);
-	memset(_SRAM, 0, SRAMSize);
-	memset(_expansionRAM, 0, ExpansionRAMSize);
 
 	memset(_ramReadHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
 	memset(_ramWriteHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
 
 	memset(_vramReadHandlers, 0, VRAMSize * sizeof(IMemoryHandler*));
 	memset(_vramWriteHandlers, 0, VRAMSize * sizeof(IMemoryHandler*));
-
-	//Load battery data if present
-	if(_mapper->HasBattery()) {
-		_mapper->LoadBattery(_SRAM);
-	}
 }
 
 MemoryManager::~MemoryManager()
 {
-	if(_mapper->HasBattery()) {
-		_mapper->SaveBattery(_SRAM);
-	}
 	delete[] _internalRAM;
 	for(int i = 0; i < 4; i++) {
 		delete[] _nametableRAM[i];
 	}
-	delete[] _SRAM;
-	delete[] _expansionRAM;
 
 	delete[] _ramReadHandlers;
 	delete[] _ramWriteHandlers;
@@ -114,12 +98,6 @@ uint8_t MemoryManager::Read(uint16_t addr)
 	PPU::ExecStatic(3);
 	if(addr <= 0x1FFF) {
 		value = _internalRAM[addr & 0x07FF];
-	} else if(addr <= 0x401F) {
-		value = ReadRegister(addr);
-	} else if(addr <= 0x5FFF) {
-		value = _expansionRAM[addr & 0x1FFF];
-	} else if(addr <= 0x7FFF) {
-		value = _SRAM[addr & 0x1FFF];
 	} else {
 		value = ReadRegister(addr);
 	}
@@ -131,13 +109,6 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 	PPU::ExecStatic(3);
 	if(addr <= 0x1FFF) {
 		_internalRAM[addr & 0x07FF] = value;
-	} else if(addr <= 0x401F) {
-		WriteRegister(addr, value);
-	} else if(addr <= 0x5FFF) {
-		_hasExpansionRAM = true;
-		_expansionRAM[addr & 0x1FFF] = value;
-	} else if(addr <= 0x7FFF) {
-		_SRAM[addr & 0x1FFF] = value;
 	} else {
 		WriteRegister(addr, value);
 	}
@@ -215,11 +186,6 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 void MemoryManager::StreamState(bool saving)
 {
 	StreamArray<uint8_t>(_internalRAM, MemoryManager::InternalRAMSize);
-	Stream<bool>(_hasExpansionRAM);
-	if(_hasExpansionRAM) {
-		StreamArray<uint8_t>(_expansionRAM, MemoryManager::ExpansionRAMSize);
-	}
-	StreamArray<uint8_t>(_SRAM, MemoryManager::SRAMSize);
 	for(int i = 0; i < 4; i++) {
 		StreamArray<uint8_t>(_nametableRAM[i], MemoryManager::NameTableScreenSize);
 	}

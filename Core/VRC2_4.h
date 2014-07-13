@@ -69,6 +69,48 @@ class VRC2_4 : public BaseMapper
 			}
 		}
 
+		void WriteRegister(uint16_t addr, uint8_t value)
+		{
+			addr = TranslateAddress(addr);
+			if(addr >= 0x8000 && addr <= 0x8006) {
+				_prgReg0 = value & 0x1F;
+			} else if(addr == 0x9000 || addr == 0x9002) {
+				switch(value & 0x03) {
+					case 0: _mirroringType = MirroringType::Vertical; break;
+					case 1: _mirroringType = MirroringType::Horizontal; break;
+					case 2: _mirroringType = MirroringType::ScreenAOnly; break;
+					case 3: _mirroringType = MirroringType::ScreenBOnly; break;
+				}
+			} else if(addr == 0x9004 || addr == 0x9006) {
+				if(_variant >= VRCVariant::VRC4a) {
+					_prgMode = (value >> 1) & 0x01;
+				}
+			} else if(addr >= 0xA000 && addr <= 0xA006) {
+				_prgReg1 = value & 0x1F;
+			} else if(addr >= 0xB000 && addr <= 0xE006) {
+				uint8_t regNumber = ((((addr >> 12) & 0x07) - 3) << 1) + ((addr >> 1) & 0x01);
+				bool lowBits = (addr & 0x01) == 0x00;
+				if(lowBits) {
+					//The other reg contains the low 4 bits
+					_loCHRRegs[regNumber] = value & 0x0F;
+				} else {
+					//One reg contains the high 5 bits 
+					_hiCHRRegs[regNumber] = value & 0x1F;
+				}
+			} else if(addr == 0xF000 || addr == 0xF001) {
+				//IRQ Reload Value
+				_hasIRQ = true;
+			} else if(addr == 0xF002) {
+				//IRQ Control
+				_hasIRQ = true;
+			} else if(addr == 0xF003) {
+				//IRQ Acknowledge
+				_hasIRQ = true;
+			}
+
+			UpdateState();
+		}
+
 	public:		
 		VRC2_4(VRCVariant variant)
 		{
@@ -129,48 +171,6 @@ class VRC2_4 : public BaseMapper
 			}
 
 			return (addr & 0xFF00) | (A1 << 1) | A0;
-		}
-
-		void WriteRAM(uint16_t addr, uint8_t value)
-		{
-			addr = TranslateAddress(addr);
-			if(addr >= 0x8000 && addr <= 0x8006) {
-				_prgReg0 = value & 0x1F;
-			} else if(addr == 0x9000 || addr == 0x9002) {
-				switch(value & 0x03) {
-					case 0: _mirroringType = MirroringType::Vertical; break;
-					case 1: _mirroringType = MirroringType::Horizontal; break;
-					case 2: _mirroringType = MirroringType::ScreenAOnly; break;
-					case 3: _mirroringType = MirroringType::ScreenBOnly; break;
-				}
-			} else if(addr == 0x9004 || addr == 0x9006) {
-				if(_variant >= VRCVariant::VRC4a) {
-					_prgMode = (value >> 1) & 0x01;
-				}
-			} else if(addr >= 0xA000 && addr <= 0xA006) {
-				_prgReg1 = value & 0x1F;
-			} else if(addr >= 0xB000 && addr <= 0xE006) {
-				uint8_t regNumber = ((((addr >> 12) & 0x07) - 3) << 1) + ((addr >> 1) & 0x01);
-				bool lowBits = (addr & 0x01) == 0x00;
-				if(lowBits) {
-					//The other reg contains the low 4 bits
-					_loCHRRegs[regNumber] = value & 0x0F;
-				} else {
-					//One reg contains the high 5 bits 
-					_hiCHRRegs[regNumber] = value & 0x1F;
-				}
-			} else if(addr == 0xF000 || addr == 0xF001) {
-				//IRQ Reload Value
-				_hasIRQ = true;
-			} else if(addr == 0xF002) {
-				//IRQ Control
-				_hasIRQ = true;
-			} else if(addr == 0xF003) {
-				//IRQ Acknowledge
-				_hasIRQ = true;
-			}
-
-			UpdateState();
 		}
 
 		void StreamState(bool saving)

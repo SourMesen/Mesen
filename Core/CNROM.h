@@ -14,8 +14,7 @@ class CNROM : public BaseMapper
 			SelectCHRPage(0, 0);
 		}
 
-	public:		
-		void WriteRAM(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value)
 		{
 			SelectCHRPage(0, value);
 		}

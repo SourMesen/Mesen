@@ -50,8 +50,7 @@ class MMC2 : public BaseMapper
 			BaseMapper::StreamState(saving);
 		}
 
-	public:		
-		void WriteRAM(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value)
 		{
 			switch((MMC2Registers)(addr >> 12)) {
 				case MMC2Registers::RegA000:
@@ -84,6 +83,7 @@ class MMC2 : public BaseMapper
 			}
 		}
 
+	public:
 		virtual void NotifyVRAMAddressChange(uint16_t addr)
 		{
 			SelectCHRPage(0, _leftChrPage[_leftLatch]);

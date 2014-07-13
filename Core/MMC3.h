@@ -146,8 +146,7 @@ class MMC3 : public BaseMapper
 			UpdateState();
 		}
 
-	public:
-		void WriteRAM(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value)
 		{
 			switch((MMC3Registers)(addr & 0xE001)) {
 				case MMC3Registers::Reg8000:
@@ -197,6 +196,7 @@ class MMC3 : public BaseMapper
 			}
 		}
 
+	public:
 		virtual void NotifyVRAMAddressChange(uint16_t addr)
 		{
 			uint32_t cycle = PPU::GetFrameCycle();

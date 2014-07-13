@@ -10,10 +10,17 @@
 class BaseMapper : public IMemoryHandler, public Snapshotable
 {
 	protected:
+		const int ExpansionRAMSize = 0x2000;
+		const int SRAMSize = 0x2000;
+
 		uint8_t* _prgRAM;
 		uint8_t* _chrRAM;
 		uint32_t _prgSize;
 		uint32_t _chrSize;
+
+		uint8_t* _SRAM;
+		uint8_t* _expansionRAM;
+		bool _hasExpansionRAM;
 		
 		bool _hasCHRRAM;
 		bool _hasBattery;
@@ -129,6 +136,12 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 					SelectCHRPage(i, _chrSlotPages[i]);
 				}
 			}
+
+			Stream<bool>(_hasExpansionRAM);
+			if(_hasExpansionRAM) {
+				StreamArray<uint8_t>(_expansionRAM, BaseMapper::ExpansionRAMSize);
+			}
+			StreamArray<uint8_t>(_SRAM, BaseMapper::SRAMSize);
 		}
 
 	public:
@@ -141,6 +154,18 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 			_chrSize = romLoader.GetCHRSize();
 			_hasBattery = romLoader.HasBattery();
 			_romFilename = romLoader.GetFilename();
+
+			_hasExpansionRAM = false;
+			_SRAM = new uint8_t[SRAMSize];
+			_expansionRAM = new uint8_t[ExpansionRAMSize];
+
+			memset(_SRAM, 0, SRAMSize);
+			memset(_expansionRAM, 0, ExpansionRAMSize);
+
+			//Load battery data if present
+			if(HasBattery()) {
+				LoadBattery();
+			}
 
 			if(_chrSize == 0) {
 				_hasCHRRAM = true;
@@ -164,16 +189,22 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 
 		virtual ~BaseMapper()
 		{
+			if(HasBattery()) {
+				SaveBattery();
+			}
 			delete[] _prgRAM;
 			delete[] _chrRAM;
 			delete[] _prgSlotPages;
 			delete[] _chrSlotPages;
+
+			delete[] _SRAM;
+			delete[] _expansionRAM;
 		}
 
 		void GetMemoryRanges(MemoryRanges &ranges)
 		{
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x8000, 0xFFFF);
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x8000, 0xFFFF);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4018, 0xFFFF);
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4018, 0xFFFF);
 
 			ranges.AddHandler(MemoryType::VRAM, MemoryOperation::Read, 0x0000, 0x1FFF);
 			ranges.AddHandler(MemoryType::VRAM, MemoryOperation::Write, 0x0000, 0x1FFF);
@@ -189,37 +220,54 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 			return _mirroringType;
 		}
 
-		void LoadBattery(uint8_t *sramBuffer)
+		void LoadBattery()
 		{
 			ifstream batteryFile(GetBatteryFilename(), ios::in | ios::binary);
 
 			if(batteryFile) {
-				batteryFile.read((char*)sramBuffer, BaseMapper::PRGRAMSize);
+				batteryFile.read((char*)_SRAM, BaseMapper::PRGRAMSize);
 
 				batteryFile.close();
 			}
 		}
 
-		void SaveBattery(uint8_t *sramBuffer)
+		void SaveBattery()
 		{
 			ofstream batteryFile(GetBatteryFilename(), ios::out | ios::binary);
 
 			if(batteryFile) {
-				batteryFile.write((char*)sramBuffer, BaseMapper::PRGRAMSize);
+				batteryFile.write((char*)_SRAM, BaseMapper::PRGRAMSize);
 
 				batteryFile.close();
 			}
 		}
-		
-		uint8_t ReadRAM(uint16_t addr)
+
+		virtual uint8_t ReadRAM(uint16_t addr)
 		{
-			return _prgPages[AddrToPRGSlot(addr)][addr & (GetPRGPageSize() - 1)];
+			if(addr >= 0x8000) {
+				return _prgPages[AddrToPRGSlot(addr)][addr & (GetPRGPageSize() - 1)];
+			} else if(addr >= 0x6000) {
+				return _SRAM[addr & 0x1FFF];
+			} else if(addr >= 0x4000) {
+				return _expansionRAM[addr & 0x1FFF];
+			}
+			return 0;
 		}
 
-		void WriteRAM(uint16_t addr, uint8_t value)
+		virtual uint16_t RegisterStartAddress() { return 0x8000; }
+		virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
+		virtual void WriteRegister(uint16_t addr, uint8_t value) { }
+
+		virtual void WriteRAM(uint16_t addr, uint8_t value)
 		{
-			//assert(false); //Ms. Pacman triggers this assert?
-			//_prgPages[AddrToPRGSlot(addr)][addr & (GetPRGPageSize() - 1)] = value;
+			if(addr >= RegisterStartAddress() && addr <= RegisterEndAddress()) {
+				WriteRegister(addr, value);
+			} else if(addr >= 0x6000) {
+				_SRAM[addr & 0x1FFF] = value;
+			} else if(addr >= 0x4000) {
+				_hasExpansionRAM = true;
+				_expansionRAM[addr & 0x1FFF] = value;
+			}
 		}
 		
 		virtual uint8_t ReadVRAM(uint16_t addr)

@@ -158,8 +158,7 @@ class MMC1 : public BaseMapper
 			UpdateState();
 		}
 
-	public:
-		void WriteRAM(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value)
 		{
 			if(IsBufferFull(value)) {
 				switch((MMC1Registers)((addr & 0x6000) >> 13)) {
