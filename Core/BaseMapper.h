@@ -104,7 +104,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 
 		wstring GetBatteryFilename()
 		{
-			return FolderUtilities::GetSaveFolder() + FolderUtilities::GetFilename(_romFilename, false) + L".sav";
+			return FolderUtilities::GetSaveFolder() + _romFilename + L".sav";
 		}
 
 	protected:
@@ -218,7 +218,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 
 		void WriteRAM(uint16_t addr, uint8_t value)
 		{
-			assert(false);
+			//assert(false); //Ms. Pacman triggers this assert?
 			//_prgPages[AddrToPRGSlot(addr)][addr & (GetPRGPageSize() - 1)] = value;
 		}
 		

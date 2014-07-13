@@ -157,6 +157,7 @@ class ROMLoader
 					result = LoadFromFile(file);
 					file.close();
 				} else if(memcmp(header, "PK", 2) == 0) {
+					_filename = FolderUtilities::GetFilename(filename, false);
 					file.seekg(0, ios::beg);
 					result = LoadFromZIP(file);
 				} else {
