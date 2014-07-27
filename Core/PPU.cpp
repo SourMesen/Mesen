@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PPU.h"
 #include "CPU.h"
+#include "../Utilities/PNGWriter.h"
 
 PPU* PPU::Instance = nullptr;
 IVideoDevice *PPU::VideoDevice = nullptr;
@@ -306,7 +307,7 @@ uint16_t PPU::GetAttributeAddr()
 
 void PPU::LoadTileInfo()
 {
-	if(_flags.BackgroundEnabled) {
+	if(IsRenderingEnabled()) {
 		_previousTile = _currentTile;
 		_currentTile = _nextTile;
 
@@ -322,7 +323,7 @@ void PPU::LoadTileInfo()
 
 void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 {
-	if(_flags.SpritesEnabled) {
+	if(IsRenderingEnabled()) {
 		uint32_t spriteAddr = spriteIndex * 4;
 		uint8_t spriteY = _secondarySpriteRAM[spriteAddr];
 		uint8_t tileIndex = _secondarySpriteRAM[spriteAddr + 1];
