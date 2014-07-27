@@ -19,6 +19,14 @@ namespace PSFlags
 	};
 }
 
+enum AddrMode
+{
+	None,	Imp, Imm, Rel,
+	Zero, ZeroX, ZeroY,
+	IndX,	IndY, IndYW,
+	Abs, AbsX, AbsXW, AbsY, AbsYW
+};
+
 enum class IRQSource
 {
 	External = 1,
@@ -50,6 +58,8 @@ private:
 
 	Func _opTable[256];
 	uint8_t _cycles[256];
+	AddrMode _addrMode[256];
+	AddrMode _instAddrMode;
 	uint8_t _cyclesPageCrossed[256];
 	bool _pageCrossed = false;
 
@@ -163,6 +173,36 @@ private:
 	uint16_t PC() { return _state.PC; }
 	void SetPC(uint16_t value) { _state.PC = value; }
 
+	uint16_t GetOperandAddr()
+	{
+		switch(_instAddrMode) {
+			case AddrMode::Abs: return GetAbsAddr();
+			case AddrMode::AbsX: return GetAbsXAddr(false); 
+			case AddrMode::AbsXW: return GetAbsXAddr(true);
+			case AddrMode::AbsY: return GetAbsYAddr(false);
+			case AddrMode::AbsYW: return GetAbsYAddr(true);
+			case AddrMode::Imm: return GetImmediate();
+			case AddrMode::IndX: return GetIndXAddr();
+			case AddrMode::IndY: return GetIndYAddr(false);
+			case AddrMode::IndYW: return GetIndYAddr(true);
+			case AddrMode::Zero: return GetZeroAddr();
+			case AddrMode::ZeroX: return GetZeroXAddr();
+			case AddrMode::ZeroY: return GetZeroYAddr();
+		}
+		return 0;
+	}
+
+	uint8_t GetOperand()
+	{
+		uint16_t addr = GetOperandAddr();
+
+		if(_instAddrMode != AddrMode::Imm) {
+			return MemoryRead(addr);
+		} else {
+			return (uint8_t)addr;
+		}
+	}
+
 	uint8_t GetImmediate() { return ReadByte(); }
 	uint8_t GetZero() { return MemoryRead(GetZeroAddr()); }
 	uint8_t GetZeroAddr() { return ReadByte(); }
@@ -249,11 +289,12 @@ private:
 		return addr + Y();
 	}
 
-	void AND(uint8_t value) { SetA(A() & value); }
-	void XOR(uint8_t value) { SetA(A() ^ value); }
-	void OR(uint8_t value) { SetA(A() | value); }
+	void AND() { SetA(A() & GetOperand()); }
+	void EOR() { SetA(A() ^ GetOperand()); }
+	void ORA() { SetA(A() | GetOperand()); }
 
-	void ADC(uint8_t value) {
+	void ADD(uint8_t value)
+	{
 		uint16_t result = (uint16_t)A() + (uint16_t)value + (CheckFlag(PSFlags::Carry) ? PSFlags::Carry : 0x00);
 		
 		ClearFlags(PSFlags::Carry | PSFlags::Negative | PSFlags::Overflow | PSFlags::Zero);
@@ -267,9 +308,11 @@ private:
 		SetA((uint8_t)result);
 	}
 
-	void SBC(uint8_t value) { ADC(value ^ 0xFF); }
+	void ADC() { ADD(GetOperand()); }
+	void SBC() { ADD(GetOperand() ^ 0xFF); }
 
-	void CMP(uint8_t reg, uint8_t value) {
+	void CMP(uint8_t reg, uint8_t value) 
+	{
 		ClearFlags(PSFlags::Carry | PSFlags::Negative | PSFlags::Zero);
 
 		auto result = reg - value;
@@ -285,22 +328,33 @@ private:
 		}
 	}
 
-	void CPA(uint8_t value) { CMP(A(), value); }
-	void CPX(uint8_t value) { CMP(X(), value); }
-	void CPY(uint8_t value) { CMP(Y(), value); }
+	void CPA() { CMP(A(), GetOperand()); }
+	void CPX() { CMP(X(), GetOperand()); }
+	void CPY() { CMP(Y(), GetOperand()); }
 
-	void INC(uint16_t addr) {
+	void INC() 
+	{
+		uint16_t addr = GetOperandAddr();
 		ClearFlags(PSFlags::Negative | PSFlags::Zero);
-		uint8_t memory = MemoryRead(addr) + 1;
-		SetZeroNegativeFlags(memory);
-		MemoryWrite(addr, memory);
+		uint8_t value = MemoryRead(addr);		
+		
+		MemoryWrite(addr, value); //Dummy write
+		
+		value++;
+		SetZeroNegativeFlags(value);
+		MemoryWrite(addr, value);
 	}
 
-	void DEC(uint16_t addr) {
+	void DEC() 
+	{
+		uint16_t addr = GetOperandAddr();
 		ClearFlags(PSFlags::Negative | PSFlags::Zero);
-		uint8_t memory = MemoryRead(addr) - 1;
-		SetZeroNegativeFlags(memory);
-		MemoryWrite(addr, memory);
+		uint8_t value = MemoryRead(addr);
+		MemoryWrite(addr, value); //Dummy write
+		
+		value--;
+		SetZeroNegativeFlags(value);
+		MemoryWrite(addr, value);
 	}
 
 	uint8_t ASL(uint8_t value)
@@ -351,23 +405,31 @@ private:
 		return result;
 	}
 
-	void ASLAddr(uint16_t addr) {
+	void ASLAddr() {
+		uint16_t addr = GetOperandAddr();
 		uint8_t value = MemoryRead(addr);
+		MemoryWrite(addr, value); //Dummy write
 		MemoryWrite(addr, ASL(value));
 	}
 
-	void LSRAddr(uint16_t addr) {
+	void LSRAddr() {
+		uint16_t addr = GetOperandAddr();
 		uint8_t value = MemoryRead(addr);
+		MemoryWrite(addr, value); //Dummy write
 		MemoryWrite(addr, LSR(value));
 	}
 
-	void ROLAddr(uint16_t addr) {
+	void ROLAddr() {
+		uint16_t addr = GetOperandAddr();
 		uint8_t value = MemoryRead(addr);
+		MemoryWrite(addr, value); //Dummy write
 		MemoryWrite(addr, ROL(value));
 	}
 
-	void RORAddr(uint16_t addr) {
+	void RORAddr() {
+		uint16_t addr = GetOperandAddr();
 		uint8_t value = MemoryRead(addr);
+		MemoryWrite(addr, value); //Dummy write
 		MemoryWrite(addr, ROR(value));
 	}
 
@@ -385,7 +447,8 @@ private:
 		}
 	}
 
-	void BIT(uint8_t value) {
+	void BIT() {
+		uint8_t value = GetOperand();
 		ClearFlags(PSFlags::Zero | PSFlags::Overflow | PSFlags::Negative);
 		if((A() & value) == 0) {
 			SetFlags(PSFlags::Zero);
@@ -411,42 +474,13 @@ private:
 	}
 
 	#pragma region OP Codes
-	void LDA_Imm() { SetA(GetImmediate()); }
-	void LDA_Zero() { SetA(GetZero()); }
-	void LDA_ZeroX() { SetA(GetZeroX()); }
-	void LDA_Abs() { SetA(GetAbs()); }
-	void LDA_AbsX() { SetA(GetAbsX()); }
-	void LDA_AbsY() { SetA(GetAbsY()); }
-	void LDA_IndX() { SetA(GetIndX()); }
-	void LDA_IndY() { SetA(GetIndY()); }
+	void LDA() { SetA(GetOperand()); }
+	void LDX() { SetX(GetOperand()); }
+	void LDY() { SetY(GetOperand()); }
 
-	void LDX_Imm() { SetX(GetImmediate()); }
-	void LDX_Zero() { SetX(GetZero()); }
-	void LDX_ZeroY() { SetX(GetZeroY()); }
-	void LDX_Abs() { SetX(GetAbs()); }
-	void LDX_AbsY() { SetX(GetAbsY()); }
-
-	void LDY_Imm() { SetY(GetImmediate()); }
-	void LDY_Zero() { SetY(GetZero()); }
-	void LDY_ZeroX() { SetY(GetZeroX()); }
-	void LDY_Abs() { SetY(GetAbs()); }
-	void LDY_AbsX() { SetY(GetAbsX()); }
-
-	void STA_Zero() { MemoryWrite(GetZeroAddr(), A()); }
-	void STA_ZeroX() { MemoryWrite(GetZeroXAddr(), A()); }
-	void STA_Abs() { MemoryWrite(GetAbsAddr(), A()); }
-	void STA_AbsX() { MemoryWrite(GetAbsXAddr(), A()); }
-	void STA_AbsY() { MemoryWrite(GetAbsYAddr(), A()); }
-	void STA_IndX() { MemoryWrite(GetIndXAddr(), A()); }
-	void STA_IndY() { MemoryWrite(GetIndYAddr(), A()); }
-
-	void STX_Zero() { MemoryWrite(GetZeroAddr(), X()); }
-	void STX_ZeroY() { MemoryWrite(GetZeroYAddr(), X()); }
-	void STX_Abs() { MemoryWrite(GetAbsAddr(), X()); }
-
-	void STY_Zero() { MemoryWrite(GetZeroAddr(), Y()); }
-	void STY_ZeroX() { MemoryWrite(GetZeroXAddr(), Y()); }
-	void STY_Abs() { MemoryWrite(GetAbsAddr(), Y()); }
+	void STA() { MemoryWrite(GetOperandAddr(), A()); }
+	void STX() { MemoryWrite(GetOperandAddr(), X()); }
+	void STY() { MemoryWrite(GetOperandAddr(), Y()); }
 
 	void TAX() { SetX(A()); }
 	void TAY() { SetY(A()); }
@@ -463,112 +497,23 @@ private:
 	void PLA() { SetA(Pop()); }
 	void PLP() { SetPS(Pop()); }
 
-	void AND_Imm() { AND(GetImmediate()); }
-	void AND_Zero() { AND(GetZero()); }
-	void AND_ZeroX() { AND(GetZeroX()); }
-	void AND_Abs() { AND(GetAbs()); }
-	void AND_AbsX() { AND(GetAbsX()); }
-	void AND_AbsY() { AND(GetAbsY()); }
-	void AND_IndX() { AND(GetIndX()); }
-	void AND_IndY() { AND(GetIndY()); }
-
-	void EOR_Imm() { XOR(GetImmediate()); }
-	void EOR_Zero() { XOR(GetZero()); }
-	void EOR_ZeroX() { XOR(GetZeroX()); }
-	void EOR_Abs() { XOR(GetAbs()); }
-	void EOR_AbsX() { XOR(GetAbsX()); }
-	void EOR_AbsY() { XOR(GetAbsY()); }
-	void EOR_IndX() { XOR(GetIndX()); }
-	void EOR_IndY() { XOR(GetIndY()); }
-
-	void ORA_Imm() { OR(GetImmediate()); }
-	void ORA_Zero() { OR(GetZero()); }
-	void ORA_ZeroX() { OR(GetZeroX()); }
-	void ORA_Abs() { OR(GetAbs()); }
-	void ORA_AbsX() { OR(GetAbsX()); }
-	void ORA_AbsY() { OR(GetAbsY()); }
-	void ORA_IndX() { OR(GetIndX()); }
-	void ORA_IndY() { OR(GetIndY()); }
-
-	void BIT_Zero() {
-		BIT(GetZero());
-	}
-	void BIT_Abs() {
-		BIT(GetAbs());
-	}
-
-	void ADC_Imm() { ADC(GetImmediate()); }
-	void ADC_Zero() { ADC(GetZero()); }
-	void ADC_ZeroX() { ADC(GetZeroX()); }
-	void ADC_Abs() { ADC(GetAbs()); }
-	void ADC_AbsX() { ADC(GetAbsX()); }
-	void ADC_AbsY() { ADC(GetAbsY()); }
-	void ADC_IndX() { ADC(GetIndX()); }
-	void ADC_IndY() { ADC(GetIndY()); }
-
-	void SBC_Imm() { SBC(GetImmediate()); }
-	void SBC_Zero() { SBC(GetZero()); }
-	void SBC_ZeroX() { SBC(GetZeroX()); }
-	void SBC_Abs() { SBC(GetAbs()); }
-	void SBC_AbsX() { SBC(GetAbsX()); }
-	void SBC_AbsY() { SBC(GetAbsY()); }
-	void SBC_IndX() { SBC(GetIndX()); }
-	void SBC_IndY() { SBC(GetIndY()); }
-
-	void CMP_Imm() { CPA(GetImmediate()); }
-	void CMP_Zero() { CPA(GetZero()); }
-	void CMP_ZeroX() { CPA(GetZeroX()); }
-	void CMP_Abs() { CPA(GetAbs()); }
-	void CMP_AbsX() { CPA(GetAbsX()); }
-	void CMP_AbsY() { CPA(GetAbsY()); }
-	void CMP_IndX() { CPA(GetIndX()); }
-	void CMP_IndY() { CPA(GetIndY()); }
-
-	void CPX_Imm() { CPX(GetImmediate()); }
-	void CPX_Zero() { CPX(GetZero()); }
-	void CPX_Abs() { CPX(GetAbs()); }
-
-	void CPY_Imm() { CPY(GetImmediate()); }
-	void CPY_Zero() { CPY(GetZero()); }
-	void CPY_Abs() { CPY(GetAbs()); }
-
-	void INC_Zero() { INC(GetZeroAddr()); }
-	void INC_ZeroX() { INC(GetZeroXAddr()); }
-	void INC_Abs() { INC(GetAbsAddr()); }
-	void INC_AbsX() { INC(GetAbsXAddr()); }
 	void INX() { SetX(X() + 1); }
 	void INY() { SetY(Y() + 1); }
 
-	void DEC_Zero() { DEC(GetZeroAddr()); }
-	void DEC_ZeroX() { DEC(GetZeroXAddr()); }
-	void DEC_Abs() { DEC(GetAbsAddr()); }
-	void DEC_AbsX() { DEC(GetAbsXAddr()); }
 	void DEX() { SetX(X() - 1); }
 	void DEY() { SetY(Y() - 1); }
 
 	void ASL_Acc() { SetA(ASL(A())); }
-	void ASL_Zero() { ASLAddr(GetZeroAddr()); }
-	void ASL_ZeroX() { ASLAddr(GetZeroXAddr()); }
-	void ASL_Abs() { ASLAddr(GetAbsAddr()); }
-	void ASL_AbsX() { ASLAddr(GetAbsXAddr()); }
+	void ASL_Memory() { ASLAddr(); }
 
 	void LSR_Acc() { SetA(LSR(A())); }
-	void LSR_Zero() { LSRAddr(GetZeroAddr()); }
-	void LSR_ZeroX() { LSRAddr(GetZeroXAddr()); }
-	void LSR_Abs() { LSRAddr(GetAbsAddr()); }
-	void LSR_AbsX() { LSRAddr(GetAbsXAddr()); }
+	void LSR_Memory() { LSRAddr(); }
 
 	void ROL_Acc() { SetA(ROL(A())); }
-	void ROL_Zero() { ROLAddr(GetZeroAddr()); }
-	void ROL_ZeroX() { ROLAddr(GetZeroXAddr()); }
-	void ROL_Abs() { ROLAddr(GetAbsAddr()); }
-	void ROL_AbsX() { ROLAddr(GetAbsXAddr()); }
+	void ROL_Memory() { ROLAddr(); }
 
 	void ROR_Acc() { SetA(ROR(A())); }
-	void ROR_Zero() { RORAddr(GetZeroAddr()); }
-	void ROR_ZeroX() { RORAddr(GetZeroXAddr()); }
-	void ROR_Abs() { RORAddr(GetAbsAddr()); }
-	void ROR_AbsX() { RORAddr(GetAbsXAddr()); }
+	void ROR_Memory() { RORAddr(); }
 
 	void JMP_Abs() {
 		JMP(GetAbsAddr());
@@ -663,18 +608,16 @@ private:
 			SetPC(MemoryReadWord(CPU::IRQVector));
 		}
 	}
-
-
-	void NOP() {}
-	void NOP2() {
-		//Unofficial opcode, 2-byte NOP
-		ReadByte();
-	}
-
+	
 	void RTI() {
 		SetPS(Pop());
 		SetPC(PopWord());
 	}
+
+	void NOP() {
+		GetOperand();
+	}
+	
 	#pragma endregion
 
 protected:
