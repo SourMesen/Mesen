@@ -26,6 +26,7 @@ namespace NES {
 
 		int _currentSaveSlot = 0;
 
+		bool _runningTests = false;
 		bool _playingMovie = false;
 
 	private:

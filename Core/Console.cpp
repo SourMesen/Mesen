@@ -343,6 +343,10 @@ bool Console::RunTest(uint8_t *expectedResult)
 	Timer timer;
 	uint8_t maxWait = 60;
 	uint8_t* lastFrameBuffer = new uint8_t[256 * 240 * 4];
+	bool result = false;
+
+	Console::RunningLock.Acquire();
+
 	while(true) {
 		uint32_t executedCycles = _cpu->Exec();
 		_ppu->Exec();
@@ -354,7 +358,8 @@ bool Console::RunTest(uint8_t *expectedResult)
 
 		if(timer.GetElapsedMS() > 100) {
 			if(memcmp(_ppu->GetFrameBuffer(), expectedResult, 256 * 240 * 4) == 0) {
-				return true;
+				result = true;
+				break;
 			}
 
 			timer.Reset();
@@ -366,14 +371,16 @@ bool Console::RunTest(uint8_t *expectedResult)
 
 			maxWait--;
 			if(maxWait == 0) {
-				return false;
+				result = false;
+				break;
 			}
 		}
 	}
+
+	Console::RunningLock.Release();
 	
 	delete[] lastFrameBuffer;
-
-	return false;
+	return result;
 }
 
 void Console::SaveTestResult()

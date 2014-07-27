@@ -373,18 +373,20 @@ namespace NES
 
 	void MainWindow::StartEmuThread()
 	{
-		if(!_emuThread) {
-			_emuThread.reset(new thread(&Console::Run, _console.get()));
-		}
+		if(!_runningTests) {
+			if(!_emuThread) {
+				_emuThread.reset(new thread(&Console::Run, _console.get()));
+			}
 
-		_currentROM = _console->GetROMPath();
-		_currentROMName = FolderUtilities::GetFilename(_console->GetROMPath(), false);
-		SetWindowText(_hWnd, (wstring(_windowName) + L": " + _currentROMName).c_str());
+			_currentROM = _console->GetROMPath();
+			_currentROMName = FolderUtilities::GetFilename(_console->GetROMPath(), false);
+			SetWindowText(_hWnd, (wstring(_windowName) + L": " + _currentROMName).c_str());
 
-		Console::ClearFlags(EmulationFlags::Paused);
+			Console::ClearFlags(EmulationFlags::Paused);
 
-		if(IsMenuChecked(ID_OPTIONS_SHOWFPS)) {
-			_renderer->SetFlags(UIFlags::ShowFPS);
+			if(IsMenuChecked(ID_OPTIONS_SHOWFPS)) {
+				_renderer->SetFlags(UIFlags::ShowFPS);
+			}
 		}
 	}
 
@@ -403,9 +405,9 @@ namespace NES
 
 	void MainWindow::Stop(bool powerOff)
 	{
-		if(powerOff && _emuThread) {
-			_soundManager->Reset();
+		_soundManager->Reset();
 
+		if(powerOff && _emuThread) {
 			if(_console) {
 				_console->Stop();
 			}
@@ -486,16 +488,18 @@ namespace NES
 		int passCount = 0;
 		int failCount = 0;
 		int totalCount = 0;
+		Console::Pause();
+		_runningTests = true;
 		for(wstring testROM : FolderUtilities::GetFilesInFolder(L"..\\TestSuite\\", L"*.nes", true)) {
 			ifstream testResult(testROM + L".trt", ios::in | ios::binary);
 
 			if(testResult) {
-				std::wcout << testROM.substr(13) << ": ";
 				uint8_t* expectedResult = new uint8_t[256 * 240 * 4];
 				testResult.read((char*)expectedResult, 256 * 240 * 4);
 
-				Console *console = new Console(testROM);
-				if(console->RunTest(expectedResult)) {
+				Console::LoadROM(testROM);
+				std::wcout << testROM.substr(13) << ": ";
+				if(_console->RunTest(expectedResult)) {
 					std::cout << "Passed";
 					passCount++;
 				} else {
@@ -506,14 +510,16 @@ namespace NES
 
 				testResult.close();
 
-				delete console;
 				delete[] expectedResult;
 			} else {
 				//std::wcout << "[No result]" << std::endl;
 			}
 			totalCount++;
 		}
+		Console::Resume();
 		Stop(true);
+
+		_runningTests = false;
 
 		std::cout << "------------------------" << std::endl;
 		std::cout << passCount << " / " << totalCount << " + " << failCount << " FAILED" << std::endl;
