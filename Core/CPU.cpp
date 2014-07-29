@@ -2,6 +2,7 @@
 #include "CPU.h"
 
 int32_t CPU::CycleCount = 0;
+int32_t CPU::RelativeCycleCount = 0;
 uint32_t CPU::CyclePenalty = 0;
 bool CPU::NMIFlag = false;
 uint32_t CPU::IRQFlag = 0;
@@ -96,6 +97,7 @@ void CPU::Reset(bool softReset)
 	CPU::NMIFlag = false;
 	CPU::IRQFlag = 0;
 	CPU::CycleCount = 0;
+	CPU::RelativeCycleCount = 0;
 
 	_state.PC = MemoryReadWord(CPU::ResetVector);
 	if(softReset) {
@@ -160,6 +162,7 @@ uint32_t CPU::Exec()
 
 void CPU::EndFrame()
 {
+	CPU::RelativeCycleCount += CPU::CycleCount;
 	CPU::CycleCount = 0;
 }
 
@@ -178,4 +181,6 @@ void CPU::StreamState(bool saving)
 
 	Stream<bool>(_runNMI);
 	Stream<bool>(_runIRQ);
+
+	Stream<int32_t>(CPU::RelativeCycleCount);
 }

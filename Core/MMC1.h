@@ -42,6 +42,8 @@ class MMC1 : public BaseMapper
 		uint8_t _chrReg1;
 		uint8_t _prgReg;
 
+		int32_t _lastWriteCycle = -1;
+
 		struct {
 			uint8_t Reg8000; 
 			uint8_t RegA000;
@@ -73,15 +75,10 @@ class MMC1 : public BaseMapper
 				_state.Reg8000 |= 0x0C;
 				return false;
 			} else {
-				//std::cout << std::hex << "input value: " << (short)value << std::endl;
 				_writeBuffer >>= 1;
 				_writeBuffer |= ((value << 4) & 0x10);
 
 				_shiftCount++;
-
-				if(_shiftCount == 5) {
-					//std::cout << std::hex << "value: " << (short)_writeBuffer << std::endl;
-				}
 
 				return _shiftCount == 5;
 			}
@@ -142,6 +139,8 @@ class MMC1 : public BaseMapper
 			Stream<uint8_t>(_writeBuffer);
 			Stream<uint8_t>(_shiftCount);
 
+			Stream<int32_t>(_lastWriteCycle);
+
 			BaseMapper::StreamState(saving);
 		}
 
@@ -160,18 +159,24 @@ class MMC1 : public BaseMapper
 
 		void WriteRegister(uint16_t addr, uint8_t value)
 		{
-			if(IsBufferFull(value)) {
-				switch((MMC1Registers)((addr & 0x6000) >> 13)) {
-					case MMC1Registers::Reg8000: _state.Reg8000 = _writeBuffer; break;
-					case MMC1Registers::RegA000: _state.RegA000 = _writeBuffer; break;
-					case MMC1Registers::RegC000: _state.RegC000 = _writeBuffer; break;
-					case MMC1Registers::RegE000: _state.RegE000 = _writeBuffer; break;
+			int32_t currentCycle = CPU::GetRelativeCycleCount();
+			
+			//Ignore write if within 2 cycles of another write (i.e the real write after a dummy write)
+			if(abs(currentCycle - _lastWriteCycle) >= 2) {
+				if(IsBufferFull(value)) {
+					switch((MMC1Registers)((addr & 0x6000) >> 13)) {
+						case MMC1Registers::Reg8000: _state.Reg8000 = _writeBuffer; break;
+						case MMC1Registers::RegA000: _state.RegA000 = _writeBuffer; break;
+						case MMC1Registers::RegC000: _state.RegC000 = _writeBuffer; break;
+						case MMC1Registers::RegE000: _state.RegE000 = _writeBuffer; break;
+					}
+
+					UpdateState();
+
+					//Reset buffer after writing 5 bits
+					ResetBuffer();
 				}
-
-				UpdateState();
-
-				//Reset buffer after writing 5 bits
-				ResetBuffer();
 			}
+			_lastWriteCycle = currentCycle;
 		}
 };

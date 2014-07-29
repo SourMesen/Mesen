@@ -54,6 +54,7 @@ private:
 	typedef void(CPU::*Func)();
 
 	static int32_t CycleCount;
+	static int32_t RelativeCycleCount;
 	static uint32_t CyclePenalty;
 
 	Func _opTable[256];
@@ -628,6 +629,7 @@ public:
 
 	CPU(MemoryManager *memoryManager);
 	static int32_t GetCycleCount() { return CPU::CycleCount; }
+	static int32_t GetRelativeCycleCount() { return CPU::RelativeCycleCount + CPU::CycleCount; }
 	static void IncCycleCount(uint32_t cycles) { 
 		CPU::CyclePenalty += cycles;
 		CPU::CycleCount += cycles;
