@@ -112,6 +112,7 @@
     <ClInclude Include="InputDataMessage.h" />
     <ClInclude Include="MessageType.h" />
     <ClInclude Include="MMC2.h" />
+    <ClInclude Include="MMC3_189.h" />
     <ClInclude Include="Movie.h" />
     <ClInclude Include="MovieDataMessage.h" />
     <ClInclude Include="Nanjing.h" />

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "CPU.h"
@@ -61,7 +63,8 @@ class MMC3 : public BaseMapper
 			_wramWriteProtected = false;
 		}
 
-		void UpdateState()
+	protected:
+		virtual void UpdateState()
 		{
 			_currentRegister = _state.Reg8000 & 0x07;
 			_chrMode = (_state.Reg8000 & 0x80) >> 7;
@@ -110,8 +113,7 @@ class MMC3 : public BaseMapper
 
 		}
 
-	protected:
-		void StreamState(bool saving)
+		virtual void StreamState(bool saving)
 		{
 			Stream<uint8_t>(_state.Reg8000);
 			Stream<uint8_t>(_state.RegA000);
