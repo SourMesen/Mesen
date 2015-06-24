@@ -32,7 +32,7 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 	AddrMode addrMode[] = {
 		Imm,  IndX,  None, IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,
 		Rel,  IndY,  None, IndYW, ZeroX, ZeroX, ZeroX, ZeroX, Imp, AbsY,  Imp, AbsYW, AbsX,  AbsX,  AbsXW, AbsXW,
-		None, IndX,  None, IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,
+		Abs, IndX,  None, IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,
 		Rel,  IndY,  None, IndYW, ZeroX, ZeroX, ZeroX, ZeroX, Imp, AbsY,  Imp, AbsYW, AbsX,  AbsX,  AbsXW, AbsXW,
 		Imp,  IndX,  None, IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,
 		Rel,  IndY,  None, IndYW, ZeroX, ZeroX, ZeroX, ZeroX, Imp, AbsY,  Imp, AbsYW, AbsX,  AbsX,  AbsXW, AbsXW,
@@ -120,7 +120,7 @@ uint32_t CPU::Exec()
 	//static ofstream log("log.txt", ios::out | ios::binary);
 	uint32_t executedCycles = 0;
 	if(!_runNMI && !_runIRQ) {
-		uint8_t opCode = ReadByte();
+		uint8_t opCode = GetOPCode();
 
 		if(CPU::NMIFlag) {
 			_runNMI = true;

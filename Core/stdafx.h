@@ -37,3 +37,4 @@ using std::atomic;
 using std::list;
 using std::max;
 using std::thread;
+using std::string;

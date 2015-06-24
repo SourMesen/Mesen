@@ -51,14 +51,14 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 		void SelectPRGPage(uint32_t slot, uint32_t page)
 		{
 			//std::cout << std::dec << "PRG Slot " << (short)slot << ": " << (short)(page & (GetPRGPageCount() - 1)) << std::endl;
-			_prgPages[slot] = &_prgRAM[(page & (GetPRGPageCount() - 1))  * GetPRGPageSize()];
+			_prgPages[slot] = &_prgRAM[(page % GetPRGPageCount())  * GetPRGPageSize()];
 			_prgSlotPages[slot] = page;
 		}
 
 		void SelectCHRPage(uint32_t slot, uint32_t page)
 		{
 			//std::cout << std::dec << "CHR Slot " << (short)slot << ": " << (short)page << std::endl;
-			_chrPages[slot] = &_chrRAM[(page & (GetCHRPageCount() - 1)) * GetCHRPageSize()];
+			_chrPages[slot] = &_chrRAM[(page % GetCHRPageCount()) * GetCHRPageSize()];
 			_chrSlotPages[slot] = page;
 		}
 
@@ -252,6 +252,53 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 				return _expansionRAM[addr & 0x1FFF];
 			}
 			return 0;
+		}
+
+		uint8_t* GetPRGCopy()
+		{
+			uint8_t* prgCopy = new uint8_t[_prgSize];
+			memcpy(prgCopy, _prgRAM, _prgSize);
+			return prgCopy;
+		}
+
+		uint32_t GetPRGSize()
+		{
+			return _prgSize;
+		}
+
+		uint32_t ToAbsoluteAddress(uint16_t addr)
+		{
+			return GetPRGPageSize() * (_prgSlotPages[AddrToPRGSlot(addr)] % GetPRGPageCount()) + (addr & (GetPRGPageSize() - 1));
+		}
+
+		int32_t FromAbsoluteAddress(uint32_t addr)
+		{
+			uint32_t page = addr / GetPRGPageSize();
+			for(int i = 0, len = GetPRGSlotCount(); i < len; i++) {
+				if((_prgSlotPages[i] % GetPRGPageCount()) == page) {
+					uint32_t offset = addr - (page * GetPRGPageSize());
+					return GetPRGPageSize() * i + offset + 0x8000;
+				}
+			}
+
+			//Address is currently not mapped
+			return -1;
+		}
+
+		vector<uint32_t> GetPRGRanges()
+		{
+			vector<uint32_t> memoryRanges;
+			uint32_t slotCount = GetPRGSlotCount();
+
+			for(uint32_t i = 0; i < slotCount; i++) {
+				uint32_t page = _prgSlotPages[i] % GetPRGPageCount();
+				uint32_t pageStart = page * GetPRGPageSize();
+				uint32_t pageEnd = (page + 1) * GetPRGPageSize();
+				memoryRanges.push_back(pageStart);
+				memoryRanges.push_back(pageEnd);
+			}
+
+			return memoryRanges;
 		}
 
 		virtual uint16_t RegisterStartAddress() { return 0x8000; }

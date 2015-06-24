@@ -5,6 +5,7 @@
 #include "../Utilities/ConfigManager.h"
 #include "../Core/GameServer.h"
 #include "../Core/GameClient.h"
+#include "DebugWindow.h"
 
 namespace NES {
 	class MainWindow : public INotificationListener
@@ -24,6 +25,8 @@ namespace NES {
 		wstring _currentROM;
 		wstring _currentROMName;
 
+		unique_ptr<DebugWindow> _debugWindow;
+
 		int _currentSaveSlot = 0;
 
 		bool _runningTests = false;
@@ -37,8 +40,6 @@ namespace NES {
 		static INT_PTR CALLBACK ConnectWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 		static INT_PTR CALLBACK InputConfig(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 		static INT_PTR CALLBACK ControllerSetup(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
-
-		static wstring MainWindow::VKToString(int vk);
 
 		static MainWindow* GetInstance() { return MainWindow::Instance; }
 

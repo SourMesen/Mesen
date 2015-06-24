@@ -21,9 +21,9 @@ namespace PSFlags
 
 enum AddrMode
 {
-	None,	Imp, Imm, Rel,
+	None,	Acc, Imp, Imm, Rel,
 	Zero, ZeroX, ZeroY,
-	IndX,	IndY, IndYW,
+	Ind, IndX, IndY, IndYW,
 	Abs, AbsX, AbsXW, AbsY, AbsYW
 };
 
@@ -71,6 +71,13 @@ private:
 	static uint32_t IRQFlag;
 	bool _runNMI = false;
 	bool _runIRQ = false;
+
+	uint8_t GetOPCode()
+	{
+		uint8_t value = _memoryManager->Read(_state.PC, true);
+		_state.PC++;
+		return value;
+	}
 
 	uint8_t ReadByte()
 	{
@@ -205,19 +212,11 @@ private:
 	}
 
 	uint8_t GetImmediate() { return ReadByte(); }
-	uint8_t GetZero() { return MemoryRead(GetZeroAddr()); }
 	uint8_t GetZeroAddr() { return ReadByte(); }
-
-	uint8_t GetZeroX() { return MemoryRead(GetZeroXAddr()); }
 	uint8_t GetZeroXAddr() { return ReadByte() + X(); }
-
-	uint8_t GetZeroY() { return MemoryRead(GetZeroYAddr()); }
 	uint8_t GetZeroYAddr() { return ReadByte() + Y(); }
-	
-	uint8_t GetAbs() { return MemoryRead(GetAbsAddr()); }
 	uint16_t GetAbsAddr() { return ReadWord(); }
 
-	uint8_t GetAbsX() { return MemoryRead(GetAbsXAddr(false)); }
 	uint16_t GetAbsXAddr(bool dummyRead = true) { 
 		uint16_t baseAddr = ReadWord();
 		bool pageCrossed = CheckPageCrossed(baseAddr, X());
@@ -229,7 +228,6 @@ private:
 		return baseAddr + X(); 
 	}
 
-	uint8_t GetAbsY() { return MemoryRead(GetAbsYAddr(false)); }
 	uint16_t GetAbsYAddr(bool dummyRead = true) { 
 		uint16_t baseAddr = ReadWord();
 		bool pageCrossed = CheckPageCrossed(baseAddr, Y());
@@ -253,7 +251,6 @@ private:
 		}
 	}
 
-	uint8_t GetIndX() { return MemoryRead(GetIndXAddr()); }
 	uint16_t GetIndXAddr() {
 		uint8_t zero = ReadByte();
 		
@@ -271,7 +268,6 @@ private:
 		return addr;
 	}
 
-	uint8_t GetIndY() { return MemoryRead(GetIndYAddr(false)); }
 	uint16_t GetIndYAddr(bool dummyRead = true) {
 		uint8_t zero = ReadByte();
 		

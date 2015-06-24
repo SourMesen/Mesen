@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
 #include "PPU.h"
+#include "Debugger.h"
 
 MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 {
@@ -92,8 +93,21 @@ void MemoryManager::RegisterIODevice(IMemoryHandler *handler)
 	InitializeMemoryHandlers(_vramWriteHandlers, handler, ranges.GetVRAMWriteAddresses());
 }
 
-uint8_t MemoryManager::Read(uint16_t addr)
+uint8_t MemoryManager::DebugRead(uint16_t addr)
 {
+	if(addr <= 0x1FFF) {
+		return _internalRAM[addr & 0x07FF];
+	} else if(addr > 0x4017) {
+		return ReadRegister(addr);
+	}
+
+	return 0;
+}
+
+uint8_t MemoryManager::Read(uint16_t addr, bool forExecution)
+{
+	Debugger::CheckBreakpoint(forExecution ? BreakpointType::Execute : BreakpointType::Read, addr);
+
 	uint8_t value;
 	PPU::ExecStatic(3);
 	if(addr <= 0x1FFF) {
@@ -106,6 +120,8 @@ uint8_t MemoryManager::Read(uint16_t addr)
 
 void MemoryManager::Write(uint16_t addr, uint8_t value)
 {
+	Debugger::CheckBreakpoint(BreakpointType::Write, addr);
+
 	PPU::ExecStatic(3);
 	if(addr <= 0x1FFF) {
 		_internalRAM[addr & 0x07FF] = value;

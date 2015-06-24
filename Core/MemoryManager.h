@@ -46,7 +46,8 @@ class MemoryManager: public Snapshotable
 		void InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses);
 		void RegisterIODevice(IMemoryHandler *handler);
 
-		uint8_t Read(uint16_t addr);
+		uint8_t DebugRead(uint16_t addr);
+		uint8_t Read(uint16_t addr, bool forExecution = false);
 		uint16_t ReadWord(uint16_t addr);
 		void Write(uint16_t addr, uint8_t value);
 

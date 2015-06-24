@@ -338,6 +338,11 @@ void Console::LoadState(uint8_t *buffer, uint32_t bufferSize)
 	LoadState(stream);
 }
 
+shared_ptr<Debugger> Console::GetDebugger()
+{
+	return shared_ptr<Debugger>(new Debugger(shared_ptr<Console>(this), _cpu, _memoryManager, _mapper));
+}
+
 bool Console::RunTest(uint8_t *expectedResult)
 {
 	Timer timer;

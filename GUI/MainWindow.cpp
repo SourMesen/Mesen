@@ -5,6 +5,7 @@
 #include "../Utilities/ConfigManager.h"
 #include "../Utilities/FolderUtilities.h"
 #include "InputManager.h"
+#include "DebugWindow.h"
 
 using namespace DirectX;
 
@@ -75,14 +76,23 @@ namespace NES
 		ControlManager::RegisterControlDevice(&inputManager2, 1);
 
 		HACCEL hAccel = LoadAccelerators(_hInstance, MAKEINTRESOURCE(IDC_Accelerator));
-		if(hAccel == nullptr) {
-			//error
+		HACCEL hAccelDebugger = LoadAccelerators(_hInstance, MAKEINTRESOURCE(IDR_AcceleratorDebugger));
+		if(hAccel == nullptr || hAccelDebugger == nullptr) {
 			std::cout << "error";
 		}
 
 		MSG msg = { 0 };
 		while(WM_QUIT != msg.message) {
 			if(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+				if(_debugWindow != nullptr) {
+					if(TranslateAccelerator(_debugWindow->GetHWND(), hAccelDebugger, &msg)) {
+						continue;
+					}
+
+					if(IsDialogMessage(_debugWindow->GetHWND(), &msg)) {
+						continue;
+					}
+				} 
 				if(!TranslateAccelerator(_hWnd, hAccel, &msg)) {
 					TranslateMessage(&msg);
 					DispatchMessage(&msg);
@@ -161,7 +171,7 @@ namespace NES
 		}
 		return (INT_PTR)FALSE;
 	}
-	
+
 	INT_PTR CALLBACK MainWindow::ConnectWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		UNREFERENCED_PARAMETER(lParam);
@@ -636,6 +646,10 @@ namespace NES
 					case ID_MOVIES_STOP:
 						Movie::Stop();
 						mainWindow->_playingMovie = false;
+						break;
+
+					case ID_TOOLS_DEBUGGER:
+						mainWindow->_debugWindow.reset(new DebugWindow(hWnd, mainWindow->_console->GetDebugger()));
 						break;
 
 					case ID_NETPLAY_STARTSERVER:

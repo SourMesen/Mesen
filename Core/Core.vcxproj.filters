@@ -27,6 +27,9 @@
     <Filter Include="Header Files\NetPlay\Messages">
       <UniqueIdentifier>{8455d832-c72b-4ec2-b90d-ac30ad3d3ad8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Debugger">
+      <UniqueIdentifier>{ff3c6e48-3987-41d2-8916-b588a457ff30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -191,6 +194,18 @@
     <ClInclude Include="MMC3_189.h">
       <Filter>Header Files\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="Debugger.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Disassembler.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="DisassemblyInfo.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Breakpoint.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPU.cpp">
@@ -237,6 +252,18 @@
     </ClCompile>
     <ClCompile Include="MapperFactory.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debugger.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="Disassembler.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="DisassemblyInfo.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="Breakpoint.cpp">
+      <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

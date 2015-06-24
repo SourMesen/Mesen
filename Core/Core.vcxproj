@@ -92,9 +92,13 @@
     <ClInclude Include="APU.h" />
     <ClInclude Include="AXROM.h" />
     <ClInclude Include="BaseMapper.h" />
+    <ClInclude Include="Breakpoint.h" />
     <ClInclude Include="CNROM.h" />
     <ClInclude Include="ColorDreams.h" />
     <ClInclude Include="ControlManager.h" />
+    <ClInclude Include="Debugger.h" />
+    <ClInclude Include="Disassembler.h" />
+    <ClInclude Include="DisassemblyInfo.h" />
     <ClInclude Include="GameClient.h" />
     <ClInclude Include="GameClientConnection.h" />
     <ClInclude Include="GameConnection.h" />
@@ -146,8 +150,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APU.cpp" />
+    <ClCompile Include="Breakpoint.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlManager.cpp" />
+    <ClCompile Include="Debugger.cpp" />
+    <ClCompile Include="Disassembler.cpp" />
+    <ClCompile Include="DisassemblyInfo.cpp" />
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="GameClientConnection.cpp" />
     <ClCompile Include="GameConnection.cpp" />

@@ -9,6 +9,7 @@ enum class ConsoleNotificationType
 	GamePaused = 3,
 	GameResumed = 4,
 	GameStopped = 5,
+	CodeBreak = 6,
 };
 
 class INotificationListener

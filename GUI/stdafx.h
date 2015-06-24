@@ -50,8 +50,12 @@
 #include <list>
 #include <vector>
 
+#include <string>
+#include <memory>
+
 using std::thread;
 using std::list;
 using std::vector;
-
-// TODO: reference additional headers your program requires here
+using std::shared_ptr;
+using std::wstring;
+using std::string;

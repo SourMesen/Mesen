@@ -4,7 +4,7 @@
 class SimpleLock
 {
 private:
-	size_t _holderThreadID;
+	DWORD _holderThreadID;
 	uint32_t _lockCount;
 	atomic_flag _lock;
 
@@ -14,11 +14,12 @@ public:
 		_lockCount = 0;
 		_holderThreadID = ~0;
 	}
+
 	void Acquire()
 	{
-		if(_lockCount == 0 || _holderThreadID != std::this_thread::get_id().hash()) {
+		if(_lockCount == 0 || _holderThreadID != GetCurrentThreadId()) {
 			while(_lock.test_and_set());
-			_holderThreadID = std::this_thread::get_id().hash();
+			_holderThreadID = GetCurrentThreadId();
 			_lockCount = 1;
 		} else {
 			//Same thread can acquire the same lock multiple times
@@ -44,7 +45,7 @@ public:
 
 	void Release()
 	{
-		if(_lockCount > 0 && _holderThreadID == std::this_thread::get_id().hash()) {
+		if(_lockCount > 0 && _holderThreadID == GetCurrentThreadId()) {
 			_lockCount--;
 			if(_lockCount == 0) {
 				_holderThreadID = ~0;

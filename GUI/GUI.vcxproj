@@ -98,6 +98,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DebugWindow.h" />
     <ClInclude Include="DirectXTK\Audio.h" />
     <ClInclude Include="DirectXTK\CommonStates.h" />
     <ClInclude Include="DirectXTK\DDSTextureLoader.h" />
@@ -115,6 +116,7 @@
     <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h" />
     <ClInclude Include="GamePad.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="NavigationHistory.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SoundManager.h" />
@@ -122,6 +124,7 @@
     <ClInclude Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DebugWindow.cpp" />
     <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />

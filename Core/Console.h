@@ -7,6 +7,7 @@
 #include "BaseMapper.h"
 #include "MemoryManager.h"
 #include "ControlManager.h"
+#include "Debugger.h"
 #include "../Utilities/SimpleLock.h"
 #include "IMessageManager.h"
 #include "INotificationListener.h"
@@ -28,12 +29,12 @@ class Console
 		static IMessageManager* MessageManager;
 		static list<INotificationListener*> NotificationListeners;
 
-		unique_ptr<CPU> _cpu;
+		shared_ptr<CPU> _cpu;
 		unique_ptr<PPU> _ppu;
 		unique_ptr<APU> _apu;
 		shared_ptr<BaseMapper> _mapper;
 		unique_ptr<ControlManager> _controlManager;
-		unique_ptr<MemoryManager> _memoryManager;
+		shared_ptr<MemoryManager> _memoryManager;
 
 		wstring _romFilepath;
 
@@ -58,6 +59,8 @@ class Console
 
 		bool RunTest(uint8_t* expectedResult);
 		void SaveTestResult();
+
+		shared_ptr<Debugger> Console::GetDebugger();
 
 		static void SaveState(wstring filename);
 		static void SaveState(ostream &saveStream);
