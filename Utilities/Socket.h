@@ -166,10 +166,21 @@ public:
 
 	int Send(char *buf, int len, int flags)
 	{
-		int nError;
+		int retryCount = 15;
+		int nError = 0;
 		int returnVal;
 		do {
 			//Loop until everything has been sent (shouldn't loop at all in the vast majority of cases)
+			if(nError == WSAEWOULDBLOCK) {
+				retryCount--;
+				if(retryCount == 0) {
+					//Connection seems dead, close it.
+					std::cout << "Unable to send data, closing socket." << std::endl;
+					Close();
+					return 0;
+				}
+			}
+
 			returnVal = send(_socket, buf, len, flags);
 
 			nError = WSAGetLastError();

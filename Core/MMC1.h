@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CPU.h"
 #include "BaseMapper.h"
 
 class MMC1 : public BaseMapper

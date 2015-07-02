@@ -1,7 +1,10 @@
 #pragma once
 #include "stdafx.h"
 #include "GameConnection.h"
-#include "VirtualController.h"
+#include "IControlDevice.h"
+
+class ClientConnectionData;
+class VirtualController;
 
 class GameClientConnection : public GameConnection
 {
@@ -21,7 +24,7 @@ protected:
 	void ProcessMessage(NetMessage* message);
 
 public:
-	GameClientConnection(shared_ptr<Socket> socket);
+	GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData);
 	~GameClientConnection();
 	
 	void SendInput();

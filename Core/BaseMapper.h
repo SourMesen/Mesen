@@ -327,7 +327,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 			if(_hasCHRRAM) {
 				_chrPages[AddrToCHRSlot(addr)][addr & (GetCHRPageSize() - 1)] = value;
 			} else {
-				assert(false);
+				//assert(false);
 			}
 		}
 

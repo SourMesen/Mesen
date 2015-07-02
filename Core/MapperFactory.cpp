@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Console.h"
+#include "MessageManager.h"
 #include "MapperFactory.h"
 #include "ROMLoader.h"
 #include "AXROM.h"
@@ -37,7 +37,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 71: return new UNROM(); //TODO: "It's largely a clone of UNROM, and Camerica games were initially emulated under iNES Mapper 002 before 071 was assigned."
 		case 163: return new Nanjing();
 		case 189: return new MMC3_189();
-		default: Console::DisplayMessage(L"Unsupported mapper, cannot load file.");
+		default: MessageManager::DisplayMessage(L"Error", L"Unsupported mapper, cannot load game.");
 	}
 
 	return nullptr;

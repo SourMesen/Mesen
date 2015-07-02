@@ -22,7 +22,7 @@ void DisassemblyInfo::Initialize(uint32_t memoryAddr)
 	}
 
 	if(DisassemblyInfo::OPName[opCode].empty()) {
-		std::cout << "error";
+		output << "invalid opcode";
 	}
 
 	std::ostringstream nextByte;

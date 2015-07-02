@@ -37,7 +37,7 @@ class Snapshotable
 					_stream[_position++] = bytes[i];
 				}
 			} else {
-				for(uint32_t i = 0; i < length*typeSize; i++) {
+				for(uint32_t i = 0, len = length*typeSize; i < len;  i++) {
 					((uint8_t*)value)[i] = _stream[_position];
 					_position++;
 				}

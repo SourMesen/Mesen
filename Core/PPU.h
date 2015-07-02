@@ -74,6 +74,15 @@ struct SpriteInfo
 	bool BackgroundPriority;
 };
 
+struct PPUDebugState
+{
+	PPUControlFlags ControlFlags;
+	PPUStatusFlags StatusFlags;
+	PPUState State;
+	int32_t Scanline;
+	uint32_t Cycle;
+};
+
 class PPU : public IMemoryHandler, public Snapshotable
 {
 	private:
@@ -120,7 +129,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		void SetControlRegister(uint8_t value);
 		void SetMaskRegister(uint8_t value);
-		bool CheckFlag(PPUControlFlags flag);
 
 		bool IsRenderingEnabled();
 
@@ -171,6 +179,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		~PPU();
 
 		void Reset();
+
+		PPUDebugState GetState();
 
 		void GetMemoryRanges(MemoryRanges &ranges)
 		{

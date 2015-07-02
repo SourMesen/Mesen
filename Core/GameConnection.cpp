@@ -6,9 +6,11 @@
 #include "MovieDataMessage.h"
 #include "GameInformationMessage.h"
 #include "SaveStateMessage.h"
+#include "ClientConnectionData.h"
 
-GameConnection::GameConnection(shared_ptr<Socket> socket)
+GameConnection::GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData)
 {
+	_connectionData = connectionData;
 	_socket = socket;
 }
 
@@ -48,11 +50,11 @@ NetMessage* GameConnection::ReadMessage()
 	uint32_t messageLength;		
 	if(ExtractMessage(_messageBuffer, messageLength)) {
 		switch((MessageType)_messageBuffer[0]) {
-			case MessageType::HandShake: return new HandShakeMessage(_messageBuffer + 1);
-			case MessageType::SaveState: return new SaveStateMessage(_messageBuffer + 1, messageLength - 1);
-			case MessageType::InputData: return new InputDataMessage(_messageBuffer + 1);
-			case MessageType::MovieData: return new MovieDataMessage(_messageBuffer + 1);
-			case MessageType::GameInformation: return new GameInformationMessage(_messageBuffer + 1);
+			case MessageType::HandShake: return new HandShakeMessage(_messageBuffer, messageLength);
+			case MessageType::SaveState: return new SaveStateMessage(_messageBuffer, messageLength);
+			case MessageType::InputData: return new InputDataMessage(_messageBuffer, messageLength);
+			case MessageType::MovieData: return new MovieDataMessage(_messageBuffer, messageLength);
+			case MessageType::GameInformation: return new GameInformationMessage(_messageBuffer, messageLength);
 		}
 	}
 	return nullptr;
@@ -75,6 +77,7 @@ void GameConnection::ProcessMessages()
 	NetMessage* message;
 	while(message = ReadMessage()) {
 		//Loop until all messages have been processed
+		message->Initialize();
 		ProcessMessage(message);
 		delete message;
 	}		

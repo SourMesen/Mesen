@@ -2,9 +2,9 @@
 
 #include "stdafx.h"
 #include "IMemoryHandler.h"
-#include "ROMLoader.h"
-#include "BaseMapper.h"
 #include "Snapshotable.h"
+
+class BaseMapper;
 
 class MemoryManager: public Snapshotable
 {
@@ -47,6 +47,8 @@ class MemoryManager: public Snapshotable
 		void RegisterIODevice(IMemoryHandler *handler);
 
 		uint8_t DebugRead(uint16_t addr);
+		uint8_t* GetInternalRAM();
+
 		uint8_t Read(uint16_t addr, bool forExecution = false);
 		uint16_t ReadWord(uint16_t addr);
 		void Write(uint16_t addr, uint8_t value);

@@ -118,36 +118,25 @@ wstring FolderUtilities::GetFolderName(wstring filepath)
 	int index = filepath.find_last_of(L"/\\");
 	return filepath.substr(0, index);
 }
-		
-wstring FolderUtilities::OpenFile(LPCWSTR filter, wstring defaultFolder, bool forSave, wstring defaultExt)
-{
-	return OpenFile(filter, defaultFolder.c_str(), forSave, defaultExt.c_str());
-}
 
-wstring FolderUtilities::OpenFile(LPCWSTR filter, LPCWSTR defaultFolder, bool forSave, LPCWSTR defaultExt)
+wstring FolderUtilities::CombinePath(wstring folder, wstring filename)
 {
-	wchar_t buffer[2000];
-	buffer[0] = '\0';
+#ifdef WIN32
+	wstring separator = L"\\";
+#else 
+	wstring separator = L"/";
+#endif
 
-	OPENFILENAME ofn;
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = nullptr;
-	ofn.lpstrDefExt = defaultExt;
-	ofn.lpstrFile = buffer;
-	ofn.nMaxFile = sizeof(buffer);
-	ofn.lpstrFilter = filter;
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFileTitle = nullptr;
-	ofn.nMaxFileTitle = 0;
-	ofn.lpstrInitialDir = defaultFolder;
-	if(forSave) {
-		ofn.Flags = OFN_OVERWRITEPROMPT;
-		GetSaveFileName(&ofn);
-	} else {
-		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-		GetOpenFileName(&ofn);
+	if(folder.find_last_of(separator) != folder.length() - 1) {
+		folder += separator;
 	}
 
-	return wstring(buffer);
+	return folder + filename;
+}
+
+int64_t FolderUtilities::GetFileModificationTime(wstring filepath)
+{
+	WIN32_FILE_ATTRIBUTE_DATA fileAttrData = {0};
+	GetFileAttributesEx(filepath.c_str(), GetFileExInfoStandard, &fileAttrData);
+	return ((int64_t)fileAttrData.ftLastWriteTime.dwHighDateTime << 32) | (int64_t)fileAttrData.ftLastWriteTime.dwLowDateTime;
 }

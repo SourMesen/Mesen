@@ -1,20 +1,25 @@
 #pragma once
 
 #include "stdafx.h"
+#include <thread>
+#include "MessageManager.h"
 #include "Debugger.h"
 #include "Console.h"
+#include "BaseMapper.h"
 #include "Disassembler.h"
+#include "APU.h"
 
 Debugger* Debugger::Instance = nullptr;
 
-Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
+Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
 {
 	_console = console;
 	_cpu = cpu;
+	_ppu = ppu;
 	_memoryManager = memoryManager;
 	_mapper = mapper;
 
-	_disassembler.reset(new Disassembler(mapper->GetPRGCopy(), mapper->GetPRGSize()));
+	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPRGCopy(), mapper->GetPRGSize()));
 
 	_stepCount = -1;
 		
@@ -23,9 +28,12 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 Debugger::~Debugger()
 {
-	if(Debugger::Instance == this) {
-		Debugger::Instance = nullptr;
-	}
+	Console::Pause();
+	Debugger::Instance = nullptr;
+	Run();
+	_breakLock.Acquire();
+	_breakLock.Release();
+	Console::Resume();
 }
 
 void Debugger::AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr)
@@ -123,9 +131,20 @@ shared_ptr<Breakpoint> Debugger::GetMatchingBreakpoint(BreakpointType type, uint
 
 void Debugger::PrivateCheckBreakpoint(BreakpointType type, uint32_t addr)
 {
+	_breakLock.Acquire();
+
 	//Check if a breakpoint has been hit and freeze execution if one has
 	bool breakDone = false;
 	if(type == BreakpointType::Execute) {
+		_lastInstruction = _memoryManager->DebugRead(addr);
+		if(_stepOut && _lastInstruction == 0x60) {
+			//RTS found, set StepCount to 2 to break on the following instruction
+			Step(2);
+		} else if(_stepOverAddr != -1 && addr == _stepOverAddr) {
+			Step(1);
+		} else if(_stepCycleCount != -1 && abs(_cpu->GetRelativeCycleCount() - _stepCycleCount) < 100 && _cpu->GetRelativeCycleCount() >= _stepCycleCount) {
+			Step(1);
+		}
 		_disassembler->BuildCache(_mapper->ToAbsoluteAddress(addr), addr);
 		breakDone = SleepUntilResume();
 	}
@@ -135,6 +154,8 @@ void Debugger::PrivateCheckBreakpoint(BreakpointType type, uint32_t addr)
 		Step(1);
 		SleepUntilResume();
 	}
+
+	_breakLock.Release();
 }
 
 bool Debugger::SleepUntilResume()
@@ -147,7 +168,9 @@ bool Debugger::SleepUntilResume()
 
 	if(stepCount == 0) {
 		//Break
-		_console->SendNotification(ConsoleNotificationType::CodeBreak);
+		APU::StopAudio();
+		MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
+		_stepOverAddr = -1;
 		while(stepCount == 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();
@@ -157,15 +180,46 @@ bool Debugger::SleepUntilResume()
 	return false;
 }
 
-State Debugger::GetCPUState()
+void Debugger::GetState(DebugState *state)
 {
-	return _cpu->GetState();
+	state->CPU = _cpu->GetState();
+	state->PPU = _ppu->GetState();
 }
 
 void Debugger::Step(uint32_t count)
 {
-	//Run CPU for [count] cycles and before breaking again
+	//Run CPU for [count] INSTRUCTIONS and before breaking again
+	_stepOut = false;
 	_stepCount = count;
+	_stepOverAddr = -1;
+	_stepCycleCount = -1;
+}
+
+void Debugger::StepCycles(uint32_t count)
+{
+	//Run CPU for [count] CYCLES and before breaking again
+	_stepCycleCount = _cpu->GetRelativeCycleCount() + count;
+	Run();
+}
+
+void Debugger::StepOut()
+{
+	_stepOut = true;
+	_stepCount = -1;
+	_stepOverAddr = -1;
+	_stepCycleCount = -1;
+}
+
+void Debugger::StepOver()
+{
+	if(_lastInstruction == 0x20 || _lastInstruction == 0x00) {
+		//We are on a JSR/BRK instruction, need to continue until the following instruction
+		_stepOverAddr = _cpu->GetState().PC + (_lastInstruction == 0x20 ? 3 : 1);
+		Run();
+	} else {
+		//Except for JSR & BRK, StepOver behaves the same as StepTnto
+		Step(1);
+	}
 }
 
 void Debugger::Run()
@@ -187,9 +241,12 @@ bool Debugger::IsCodeChanged()
 
 string Debugger::GenerateOutput()
 {
+	std::ostringstream output;
 	vector<uint32_t> memoryRanges = _mapper->GetPRGRanges();
 
-	std::ostringstream output;
+	//RAM code viewer doesn't work well yet
+	//output << _disassembler->GetRAMCode();
+
 	uint16_t memoryAddr = 0x8000;
 	for(int i = 0, size = memoryRanges.size(); i < size; i += 2) {
 		output << _disassembler->GetCode(memoryRanges[i], memoryRanges[i+1], memoryAddr);
@@ -198,9 +255,9 @@ string Debugger::GenerateOutput()
 	return output.str();
 }
 
-string Debugger::GetCode()
+string* Debugger::GetCode()
 {
-	return _outputCache;
+	return &_outputCache;
 }
 
 uint8_t Debugger::GetMemoryValue(uint32_t addr)

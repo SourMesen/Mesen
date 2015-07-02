@@ -36,12 +36,14 @@ enum class IRQSource
 
 struct State
 {
-	uint16_t PC;
-	uint8_t SP;
-	uint8_t A;
-	uint8_t X;
-	uint8_t Y;
-	uint8_t PS;
+	uint16_t PC = 0;
+	uint8_t SP = 0;
+	uint8_t A = 0;
+	uint8_t X = 0;
+	uint8_t Y = 0;
+	uint8_t PS = 0;
+	uint32_t IRQFlag = 0;
+	bool NMIFlag = false;
 };
 
 class CPU : public Snapshotable
@@ -51,11 +53,13 @@ private:
 	const uint16_t ResetVector = 0xFFFC;
 	const uint16_t IRQVector = 0xFFFE;
 
+	static CPU* Instance;
+
 	typedef void(CPU::*Func)();
 
-	static int32_t CycleCount;
-	static int32_t RelativeCycleCount;
-	static uint32_t CyclePenalty;
+	int32_t _cycleCount;
+	int32_t _relativeCycleCount;
+	uint32_t _cyclePenalty;
 
 	Func _opTable[256];
 	uint8_t _cycles[256];
@@ -67,8 +71,6 @@ private:
 	State _state;
 	MemoryManager *_memoryManager = nullptr;
 
-	static bool NMIFlag;
-	static uint32_t IRQFlag;
 	bool _runNMI = false;
 	bool _runIRQ = false;
 
@@ -465,8 +467,8 @@ private:
 	}
 
 	uint32_t GetCyclePenalty() {
-		uint32_t cyclePenalty = CPU::CyclePenalty;
-		CPU::CyclePenalty = 0;
+		uint32_t cyclePenalty = _cyclePenalty;
+		_cyclePenalty = 0;
 		return cyclePenalty;
 	}
 
@@ -570,7 +572,7 @@ private:
 		Push((uint16_t)(PC() + 1));
 
 		uint8_t flags = PS() | PSFlags::Break;
-		if(CPU::NMIFlag) {
+		if(_state.NMIFlag) {
 			Push((uint8_t)flags);
 			SetFlags(PSFlags::Interrupt);
 
@@ -594,7 +596,7 @@ private:
 	void IRQ() {
 		Push((uint16_t)(PC()));
 
-		if(CPU::NMIFlag) {
+		if(_state.NMIFlag) {
 			Push((uint8_t)PS());
 			SetFlags(PSFlags::Interrupt);
 
@@ -624,27 +626,20 @@ public:
 	static const uint32_t ClockRate = 1789773;
 
 	CPU(MemoryManager *memoryManager);
-	static int32_t GetCycleCount() { return CPU::CycleCount; }
-	static int32_t GetRelativeCycleCount() { return CPU::RelativeCycleCount + CPU::CycleCount; }
+	static int32_t GetCycleCount() { return CPU::Instance->_cycleCount; }
+	static int32_t GetRelativeCycleCount() { return CPU::Instance->_relativeCycleCount + CPU::Instance->_cycleCount; }
 	static void IncCycleCount(uint32_t cycles) { 
-		CPU::CyclePenalty += cycles;
-		CPU::CycleCount += cycles;
+		CPU::Instance->_cyclePenalty += cycles;
+		CPU::Instance->_cycleCount += cycles;
 	}
-	static void SetNMIFlag() { CPU::NMIFlag = true; }
-	static void ClearNMIFlag() { CPU::NMIFlag = false; }
-	static void SetIRQSource(IRQSource source) 
-	{ 
-		CPU::IRQFlag |= (int)source; 
-	}
-	static void ClearIRQSource(IRQSource source)
-	{
-		CPU::IRQFlag &= ~(int)source;
-	}
+	static void SetNMIFlag() { CPU::Instance->_state.NMIFlag = true; }
+	static void ClearNMIFlag() { CPU::Instance->_state.NMIFlag = false; }
+	static void SetIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag |= (int)source; }
+	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
 
 	void Reset(bool softReset);
 	uint32_t Exec();
 	void EndFrame();
 
 	State GetState() { return _state; }
-
 };

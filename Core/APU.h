@@ -55,4 +55,5 @@ class APU : public IMemoryHandler, public Snapshotable
 		void WriteRAM(uint16_t addr, uint8_t value);
 
 		bool Exec(uint32_t executedCycles);
+		static void StopAudio();
 };

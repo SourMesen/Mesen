@@ -1,20 +1,26 @@
 #pragma once
 #include "stdafx.h"
+#include <thread>
+using std::thread;
+
+#include "MessageManager.h"
 #include "GameClient.h"
 #include "Console.h"
+#include "../Utilities/Socket.h"
+#include "ClientConnectionData.h"
 
 unique_ptr<GameClient> GameClient::Instance;
 
 GameClient::GameClient()
 {
-	Console::RegisterNotificationListener(this);
+	MessageManager::RegisterNotificationListener(this);
 }
 
 GameClient::~GameClient()
 {
 	_stop = true;
 	_clientThread->join();
-	Console::UnregisterNotificationListener(this);
+	MessageManager::UnregisterNotificationListener(this);
 }
 
 bool GameClient::Connected()
@@ -26,10 +32,10 @@ bool GameClient::Connected()
 	}
 }
 
-void GameClient::Connect(const char *host, u_short port)
+void GameClient::Connect(shared_ptr<ClientConnectionData> connectionData)
 {
 	Instance.reset(new GameClient());
-	Instance->PrivateConnect(host, port);
+	Instance->PrivateConnect(connectionData);
 	Instance->_clientThread.reset(new thread(&GameClient::Exec, Instance.get()));
 }
 
@@ -38,15 +44,15 @@ void GameClient::Disconnect()
 	Instance.reset();
 }
 
-void GameClient::PrivateConnect(const char *host, u_short port)
+void GameClient::PrivateConnect(shared_ptr<ClientConnectionData> connectionData)
 {
 	_stop = false;
 	_socket.reset(new Socket());
-	if(_socket->Connect(host, port)) {
-		_connection.reset(new GameClientConnection(_socket));
+	if(_socket->Connect(connectionData->Host.c_str(), connectionData->Port)) {
+		_connection.reset(new GameClientConnection(_socket, connectionData));
 		_connected = true;
 	} else {
-		Console::DisplayMessage(L"Could not connect to server.");
+		MessageManager::DisplayMessage(L"Net Play", L"Could not connect to server.");
 		_connected = false;
 		_socket.reset();
 	}

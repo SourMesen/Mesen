@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
+#include "BaseMapper.h"
 #include "PPU.h"
 #include "Debugger.h"
 
@@ -91,6 +92,11 @@ void MemoryManager::RegisterIODevice(IMemoryHandler *handler)
 	InitializeMemoryHandlers(_ramWriteHandlers, handler, ranges.GetRAMWriteAddresses());
 	InitializeMemoryHandlers(_vramReadHandlers, handler, ranges.GetVRAMReadAddresses());
 	InitializeMemoryHandlers(_vramWriteHandlers, handler, ranges.GetVRAMWriteAddresses());
+}
+
+uint8_t* MemoryManager::GetInternalRAM()
+{
+	return _internalRAM;
 }
 
 uint8_t MemoryManager::DebugRead(uint16_t addr)

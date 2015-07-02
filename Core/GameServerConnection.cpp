@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "MessageManager.h"
 #include "GameServerConnection.h"
 #include "HandShakeMessage.h"
 #include "InputDataMessage.h"
@@ -8,47 +9,30 @@
 #include "SaveStateMessage.h"
 #include "Console.h"
 #include "ControlManager.h"
+#include "ClientConnectionData.h"
 
-void GameServerConnection::ProcessMessage(NetMessage* message)
-{
-	switch(message->Type) {
-		case MessageType::HandShake:
-			//Send the game's current state to the client and register the controller
-			if(((HandShakeMessage*)message)->IsValid()) {
-				SendGameInformation();
-				SendGameState();
-			}
-			break;
-		case MessageType::InputData:
-			uint8_t state = ((InputDataMessage*)message)->InputState;
-			if(_inputData.size() == 0 || state != _inputData.back()) {
-				_inputData.push_back(state);
-			}
-			break;
-	}
-}
-	
-GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, int controllerPort, IGameBroadcaster* gameBroadcaster) : GameConnection(socket)
+GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, int controllerPort, IGameBroadcaster* gameBroadcaster) : GameConnection(socket, nullptr)
 {
 	//Server-side connection
 	_gameBroadcaster = gameBroadcaster;
-
 	_controllerPort = controllerPort;
 		
-	Console::DisplayMessage(L"Player " + std::to_wstring(_controllerPort+1) + L" connected.");
-
 	ControlManager::BackupControlDevices();
 
-	Console::RegisterNotificationListener(this);
+	MessageManager::RegisterNotificationListener(this);
 }
 
 GameServerConnection::~GameServerConnection()
 {
-	Console::DisplayMessage(L"Player " + std::to_wstring(_controllerPort+1) + L" disconnected.");
+	if(_connectionData) {
+		MessageManager::DisplayToast(L"Net Play", _connectionData->PlayerName + L" (Player " + std::to_wstring(_controllerPort + 1) + L") disconnected.", _connectionData->AvatarData, _connectionData->AvatarSize);
+	} else {
+		MessageManager::DisplayMessage(L"Net Play", L"Player " + std::to_wstring(_controllerPort + 1) + L" disconnected.");
+	}
 
 	ControlManager::RestoreControlDevices();
 
-	Console::UnregisterNotificationListener(this);
+	MessageManager::UnregisterNotificationListener(this);
 }
 
 void GameServerConnection::SendGameState()
@@ -64,7 +48,7 @@ void GameServerConnection::SendGameState()
 		
 	char* buffer = new char[size];
 	state.read(buffer, size);
-	SendNetMessage(SaveStateMessage(buffer, size));
+	SendNetMessage(SaveStateMessage(buffer, size, true));
 	delete[] buffer;
 }
 
@@ -96,13 +80,37 @@ ButtonState GameServerConnection::GetButtonState()
 	return state;
 }
 
+void GameServerConnection::ProcessMessage(NetMessage* message)
+{
+	switch(message->GetType()) {
+		case MessageType::HandShake:
+			//Send the game's current state to the client and register the controller
+			if(((HandShakeMessage*)message)->IsValid()) {
+				_connectionData.reset(new ClientConnectionData("", 0, ((HandShakeMessage*)message)->GetPlayerName(), ((HandShakeMessage*)message)->GetAvatarData(), ((HandShakeMessage*)message)->GetAvatarSize()));
+
+				MessageManager::DisplayToast(L"Net Play", _connectionData->PlayerName + L" (Player " + std::to_wstring(_controllerPort + 1) + L") connected.", _connectionData->AvatarData, _connectionData->AvatarSize);
+				SendGameInformation();
+				SendGameState();
+			}
+			break;
+		case MessageType::InputData:
+			uint8_t state = ((InputDataMessage*)message)->GetInputState();
+			if(_inputData.size() == 0 || state != _inputData.back()) {
+				_inputData.push_back(state);
+			}
+			break;
+	}
+}
+
 void GameServerConnection::ProcessNotification(ConsoleNotificationType type)
 {
 	switch(type) {
 		case ConsoleNotificationType::GamePaused:
 			SendGameInformation();
 			break;
+		case ConsoleNotificationType::GameLoaded:
 		case ConsoleNotificationType::GameResumed:
+		case ConsoleNotificationType::GameReset:
 			SendGameInformation();
 			SendGameState();
 			break;

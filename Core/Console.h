@@ -4,13 +4,9 @@
 #include "CPU.h"
 #include "PPU.h"
 #include "APU.h"
-#include "BaseMapper.h"
 #include "MemoryManager.h"
 #include "ControlManager.h"
-#include "Debugger.h"
 #include "../Utilities/SimpleLock.h"
-#include "IMessageManager.h"
-#include "INotificationListener.h"
 
 enum EmulationFlags
 {
@@ -18,19 +14,20 @@ enum EmulationFlags
 	Paused = 0x02,
 };
 
+class Debugger;
+class BaseMapper;
+
 class Console
 {
 	private:
-		static Console* Instance;
+		static shared_ptr<Console> Instance;
 		static uint32_t Flags;
 		static uint32_t CurrentFPS;
 		static SimpleLock PauseLock;
 		static SimpleLock RunningLock;
-		static IMessageManager* MessageManager;
-		static list<INotificationListener*> NotificationListeners;
 
 		shared_ptr<CPU> _cpu;
-		unique_ptr<PPU> _ppu;
+		shared_ptr<PPU> _ppu;
 		unique_ptr<APU> _apu;
 		shared_ptr<BaseMapper> _mapper;
 		unique_ptr<ControlManager> _controlManager;
@@ -62,14 +59,11 @@ class Console
 
 		shared_ptr<Debugger> Console::GetDebugger();
 
-		static void SaveState(wstring filename);
 		static void SaveState(ostream &saveStream);
-		static bool LoadState(wstring filename);
 		static void LoadState(istream &loadStream);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
 		static void LoadROM(wstring filename);		
-		static bool AttemptLoadROM(wstring filename, uint32_t crc32Hash);
 		static wstring GetROMPath();
 
 		static bool CheckFlag(int flag);
@@ -77,12 +71,5 @@ class Console
 		static void ClearFlags(int flags);
 		static uint32_t GetFPS();
 
-		static void RegisterMessageManager(IMessageManager* messageManager);
-		static void DisplayMessage(wstring message);
-
-		static void RegisterNotificationListener(INotificationListener* notificationListener);
-		static void UnregisterNotificationListener(INotificationListener* notificationListener);
-		static void SendNotification(ConsoleNotificationType type);
-
-		static Console* GetInstance();
+		static shared_ptr<Console> GetInstance();
 };

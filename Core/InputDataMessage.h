@@ -4,27 +4,24 @@
 
 class InputDataMessage : public NetMessage
 {
+private:
+	uint8_t _inputState;
 protected:	
-	virtual uint32_t GetMessageLength()
+	virtual void ProtectedStreamState()
 	{
-		return sizeof(InputState);
-	}
-
-	virtual void ProtectedSend(Socket &socket)
-	{
-		socket.BufferedSend((char*)&InputState, sizeof(InputState));
+		Stream<uint8_t>(_inputState);
 	}
 
 public:
-	uint8_t InputState;
-
-	InputDataMessage(char *readBuffer) : NetMessage(MessageType::InputData)
-	{
-		InputState = readBuffer[0];
-	}
+	InputDataMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
 
 	InputDataMessage(uint8_t inputState) : NetMessage(MessageType::InputData)
 	{
-		InputState = inputState;
+		_inputState = inputState;
+	}
+
+	uint8_t GetInputState()
+	{
+		return _inputState;
 	}
 };

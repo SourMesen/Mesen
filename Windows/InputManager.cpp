@@ -1,10 +1,17 @@
 #include "stdafx.h"
 #include "InputManager.h"
+#include "../Core/ControlManager.h"
 
 InputManager::InputManager(HWND hWnd, uint8_t port)
 {
 	_hWnd = hWnd;
 	_port = port;
+	ControlManager::RegisterControlDevice(this, port);
+}
+
+InputManager::~InputManager()
+{
+	ControlManager::UnregisterControlDevice(this);
 }
 
 bool InputManager::IsKeyPressed(int key)

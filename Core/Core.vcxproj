@@ -58,6 +58,7 @@
       <InlineFunctionExpansion />
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,6 +94,7 @@
     <ClInclude Include="AXROM.h" />
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="Breakpoint.h" />
+    <ClInclude Include="ClientConnectionData.h" />
     <ClInclude Include="CNROM.h" />
     <ClInclude Include="ColorDreams.h" />
     <ClInclude Include="ControlManager.h" />
@@ -114,6 +116,7 @@
     <ClInclude Include="IMessageManager.h" />
     <ClInclude Include="INotificationListener.h" />
     <ClInclude Include="InputDataMessage.h" />
+    <ClInclude Include="MessageManager.h" />
     <ClInclude Include="MessageType.h" />
     <ClInclude Include="MMC2.h" />
     <ClInclude Include="MMC3_189.h" />
@@ -121,6 +124,7 @@
     <ClInclude Include="MovieDataMessage.h" />
     <ClInclude Include="Nanjing.h" />
     <ClInclude Include="NetMessage.h" />
+    <ClInclude Include="SaveStateManager.h" />
     <ClInclude Include="SaveStateMessage.h" />
     <ClInclude Include="Snapshotable.h" />
     <ClInclude Include="IVideoDevice.h" />
@@ -163,9 +167,11 @@
     <ClCompile Include="GameServerConnection.cpp" />
     <ClCompile Include="MapperFactory.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
+    <ClCompile Include="MessageManager.cpp" />
     <ClCompile Include="Movie.cpp" />
     <ClCompile Include="PPU.cpp" />
     <ClCompile Include="CPU.cpp" />
+    <ClCompile Include="SaveStateManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

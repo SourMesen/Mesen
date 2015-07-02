@@ -14,10 +14,10 @@
 #include <vector>
 #include <atomic>
 
-using std::atomic_flag;
 using std::shared_ptr;
 using std::ifstream;
 using std::string;
 using std::wstring;
 using std::vector;
 using std::atomic;
+using std::atomic_flag;

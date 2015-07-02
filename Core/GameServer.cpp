@@ -1,9 +1,29 @@
 #pragma once
 #include "stdafx.h"
+#include <thread>
+using std::thread;
+
+#include "MessageManager.h"
 #include "GameServer.h"
 #include "Console.h"
+#include "../Utilities/Socket.h"
 
 unique_ptr<GameServer> GameServer::Instance;
+
+GameServer::GameServer()
+{
+	ControlManager::RegisterBroadcaster(this);
+}
+
+GameServer::~GameServer()
+{
+	_stop = true;
+	_serverThread->join();
+
+	Stop();
+
+	ControlManager::UnregisterBroadcaster(this);
+}
 
 void GameServer::AcceptConnections()
 {
@@ -35,18 +55,15 @@ void GameServer::UpdateConnections()
 	}
 }
 
-void GameServer::Start()
+void GameServer::Exec()
 {
-	Console::DisplayMessage(L"Server started.");
 	_listener.reset(new Socket());
-	_listener->Bind(8888);
+	_listener->Bind(_port);
 	_listener->Listen(10);
 	_stop = false;
 	_initialized = true;
-}
+	MessageManager::DisplayMessage(L"Net Play" , L"Server started (Port: " + std::to_wstring(_port) + L")");
 
-void GameServer::Exec()
-{
 	while(!_stop) {
 		AcceptConnections();
 		UpdateConnections();
@@ -59,28 +76,13 @@ void GameServer::Stop()
 {
 	_initialized = false;
 	_listener.reset();
-	Console::DisplayMessage(L"Server stopped.");
+	MessageManager::DisplayMessage(L"Net Play", L"Server stopped");
 }
 
-GameServer::GameServer()
-{
-	ControlManager::RegisterBroadcaster(this);
-	Console::RegisterNotificationListener(this);
-}
-
-GameServer::~GameServer()
-{
-	_stop = true;
-	_serverThread->join();
-
-	ControlManager::UnregisterBroadcaster(this);
-	Console::UnregisterNotificationListener(this);
-}
-
-void GameServer::StartServer()
+void GameServer::StartServer(uint16_t port)
 {
 	Instance.reset(new GameServer());
-	Instance->Start();
+	Instance->_port = port;
 	Instance->_serverThread.reset(new thread(&GameServer::Exec, Instance.get()));
 }
 
@@ -106,24 +108,6 @@ void GameServer::BroadcastInput(uint8_t inputData, uint8_t port)
 		if(!connection->ConnectionError()) {
 			//Send movie stream
 			connection->SendMovieData(inputData, port);
-		}
-	}
-}
-
-void GameServer::ProcessNotification(ConsoleNotificationType type)
-{
-	if(type == ConsoleNotificationType::StateLoaded) {
-		for(shared_ptr<GameServerConnection> connection : _openConnections) {
-			if(!connection->ConnectionError()) {
-				connection->SendGameState();
-			}
-		}
-	} else if(type == ConsoleNotificationType::GameLoaded) {
-		for(shared_ptr<GameServerConnection> connection : _openConnections) {
-			if(!connection->ConnectionError()) {
-				connection->SendGameInformation();
-				connection->SendGameState();
-			}
 		}
 	}
 }

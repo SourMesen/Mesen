@@ -206,6 +206,15 @@
     <ClInclude Include="Breakpoint.h">
       <Filter>Debugger</Filter>
     </ClInclude>
+    <ClInclude Include="ClientConnectionData.h">
+      <Filter>Header Files\NetPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveStateManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPU.cpp">
@@ -264,6 +273,12 @@
     </ClCompile>
     <ClCompile Include="Breakpoint.cpp">
       <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveStateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

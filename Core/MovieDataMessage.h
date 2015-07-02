@@ -4,31 +4,33 @@
 
 class MovieDataMessage : public NetMessage
 {
-protected:
-	virtual uint32_t GetMessageLength()
-	{
-		return sizeof(PortNumber) + sizeof(InputState);
-	}
+private:
+	uint8_t _portNumber;
+	uint8_t _inputState;
 
-	virtual void ProtectedSend(Socket &socket)
+protected:
+	virtual void ProtectedStreamState()
 	{
-		socket.BufferedSend((char*)&PortNumber, sizeof(PortNumber));
-		socket.BufferedSend((char*)&InputState, sizeof(InputState));
+		Stream<uint8_t>(_portNumber);
+		Stream<uint8_t>(_inputState);
 	}
 
 public:
-	uint8_t PortNumber;
-	uint8_t InputState;
-
-	MovieDataMessage(char *readBuffer) : NetMessage(MessageType::MovieData)
-	{
-		PortNumber = readBuffer[0];
-		InputState = readBuffer[1];
-	}
+	MovieDataMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
 
 	MovieDataMessage(uint8_t state, uint8_t port) : NetMessage(MessageType::MovieData)
 	{
-		PortNumber = port;
-		InputState = state;
+		_portNumber = port;
+		_inputState = state;
+	}
+
+	uint8_t GetPortNumber()
+	{
+		return _portNumber;
+	}
+
+	uint8_t GetInputState()
+	{
+		return _inputState;
 	}
 };

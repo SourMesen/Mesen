@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{08D83A7E-52A9-451E-A53A-1A7946F8BB77}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mesen.GUI</RootNamespace>
+    <AssemblyName>Mesen</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConfigManager\ConfigManager.cs" />
+    <Compile Include="Controls\DXViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DXViewer.Designer.cs">
+      <DependentUpon>DXViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlConsoleStatus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlConsoleStatus.Designer.cs">
+      <DependentUpon>ctrlConsoleStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlDebuggerCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlDebuggerCode.Designer.cs">
+      <DependentUpon>ctrlDebuggerCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlSyncTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlWatch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlWatch.Designer.cs">
+      <DependentUpon>ctrlWatch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\frmDebugger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmDebugger.Designer.cs">
+      <DependentUpon>frmDebugger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BaseConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\frmVideoConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\frmVideoConfig.Designer.cs">
+      <DependentUpon>frmVideoConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NetPlay\frmClientConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NetPlay\frmClientConfig.Designer.cs">
+      <DependentUpon>frmClientConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NetPlay\frmPlayerProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NetPlay\frmPlayerProfile.Designer.cs">
+      <DependentUpon>frmPlayerProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NetPlay\frmServerConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NetPlay\frmServerConfig.Designer.cs">
+      <DependentUpon>frmServerConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InteropEmu.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Debugger\Controls\ctrlConsoleStatus.resx">
+      <DependentUpon>ctrlConsoleStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlDebuggerCode.resx">
+      <DependentUpon>ctrlDebuggerCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlWatch.resx">
+      <DependentUpon>ctrlWatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmDebugger.resx">
+      <DependentUpon>frmDebugger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\frmVideoConfig.resx">
+      <DependentUpon>frmVideoConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NetPlay\frmClientConfig.resx">
+      <DependentUpon>frmClientConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NetPlay\frmPlayerProfile.resx">
+      <DependentUpon>frmPlayerProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NetPlay\frmServerConfig.resx">
+      <DependentUpon>frmServerConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+    <None Include="Resources\MesenLogo.bmp" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

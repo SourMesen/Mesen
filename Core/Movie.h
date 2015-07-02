@@ -10,7 +10,7 @@ struct MovieData
 
 	bool Save(ofstream &file, stringstream &startState)
 	{
-		file.write("NMO", 3);
+		file.write("MMO", 3);
 		SaveStateSize = (uint32_t)startState.tellp();
 		file.write((char*)&SaveStateSize, sizeof(uint32_t));
 		
@@ -43,7 +43,7 @@ struct MovieData
 			char header[3];
 			file.read((char*)&header, 3);
 
-			if(memcmp((char*)&header, "NMO", 3) != 0) {
+			if(memcmp((char*)&header, "MMO", 3) != 0) {
 				//Invalid movie file
 				return false;
 			}

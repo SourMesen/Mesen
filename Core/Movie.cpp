@@ -1,6 +1,8 @@
 #include "stdafx.h"
+#include "MessageManager.h"
 #include "Movie.h"
 #include "Console.h"
+#include "../Utilities/FolderUtilities.h"
 
 Movie* Movie::Instance = new Movie();
 
@@ -43,7 +45,7 @@ uint8_t Movie::GetState(uint8_t port)
 
 	if(_readPosition[port] >= _data.DataSize[port]) {
 		//End of movie file
-		Console::DisplayMessage(L"Movie ended.");
+		MessageManager::DisplayMessage(L"Movie ended.");
 		_playing = false;
 	}
 
@@ -84,7 +86,7 @@ void Movie::StartRecording(wstring filename, bool reset)
 
 		Console::Resume();
 
-		Console::DisplayMessage(L"Recording...");
+		MessageManager::DisplayMessage(L"Recording...");
 	}
 }
 
@@ -116,7 +118,7 @@ void Movie::PlayMovie(wstring filename)
 		}
 		_playing = true;
 		Console::Resume();
-		Console::DisplayMessage(L"Playing movie: " + FolderUtilities::GetFilename(filename, true));
+		MessageManager::DisplayMessage(L"Playing movie: " + FolderUtilities::GetFilename(filename, true));
 	}
 }
 

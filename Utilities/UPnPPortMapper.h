@@ -62,10 +62,10 @@ public:
 						std::wcout << localIP.c_str();
 						std::cout << " HRESULT: 0x" << std::hex << hResult << std::endl;
 					}
-					spmc->Release();
 				} else {
 					std::cout << "Unable to add UPnP port mapping." << std::endl;
 				}
+				spmc->Release();
 			}
 			nat->Release();
 		}

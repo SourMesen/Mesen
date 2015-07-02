@@ -16,5 +16,6 @@ class InputManager : public IControlDevice
 
 	public:
 		InputManager(HWND hWnd, uint8_t port);
+		~InputManager();
 		ButtonState GetButtonState();
 };

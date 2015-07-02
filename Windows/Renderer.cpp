@@ -1,7 +1,14 @@
 #include "stdafx.h"
 #include "Renderer.h"
+#include "DirectXTK\SpriteBatch.h"
+#include "DirectXTK\SpriteFont.h"
+#include "DirectXTK\DDSTextureLoader.h"
+#include "DirectXTK\WICTextureLoader.h"
 #include "..\Core\PPU.h"
 #include "..\Core\Console.h"
+#include "..\Core\MessageManager.h"
+
+using namespace DirectX;
 
 namespace NES 
 {
@@ -30,7 +37,7 @@ namespace NES
 		_bytesPerPixel = 4;
 
 		_hdScreenWidth = _screenWidth * 4;
-		_hdScreenHeight = _screenHeight * 4;
+		_hdScreenHeight = (_screenHeight - 16) * 4;
 		
 		_screenBufferSize = _screenWidth * _screenHeight * _bytesPerPixel;
 		_hdScreenBufferSize = _hdScreenWidth * _hdScreenHeight * _bytesPerPixel;
@@ -40,6 +47,7 @@ namespace NES
 	{
 		if(_pTexture) _pTexture->Release();
 		if(_overlayTexture) _overlayTexture->Release();
+		if(_toastTexture) { _toastTexture->Release(); }
 
 		if(_samplerState) _samplerState->Release();
 		if(_pRenderTargetView) _pRenderTargetView->Release();
@@ -48,6 +56,8 @@ namespace NES
 		if(_pDeviceContext1) _pDeviceContext1->Release();
 		if(_pd3dDevice1) _pd3dDevice1->Release();
 		if(_pd3dDevice) _pd3dDevice->Release();
+		if(_pAlphaEnableBlendingState) _pAlphaEnableBlendingState->Release();
+		if(_pDepthDisabledStencilState) _pDepthDisabledStencilState->Release();
 
 		if(_videoRAM) {
 			delete[] _videoRAM;
@@ -63,6 +73,7 @@ namespace NES
 			delete[] _overlayBuffer;
 			_overlayBuffer = nullptr;
 		}
+
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -71,9 +82,6 @@ namespace NES
 	HRESULT Renderer::InitDevice()
 	{
 		HRESULT hr = S_OK;
-
-		RECT rc;
-		GetClientRect(_hWnd, &rc);
 
 		UINT createDeviceFlags = 0;
 #ifdef _DEBUG
@@ -101,7 +109,7 @@ namespace NES
 		ZeroMemory(&sd, sizeof(sd));
 		sd.BufferCount = 1;
 		sd.BufferDesc.Width = _hdScreenWidth;
-		sd.BufferDesc.Height = _hdScreenHeight - (16 *4);
+		sd.BufferDesc.Height = _hdScreenHeight;
 		sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		sd.BufferDesc.RefreshRate.Numerator = 60;
 		sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -149,83 +157,94 @@ namespace NES
 			return hr;
 		}
 
+		D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
+		ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
+		depthDisabledStencilDesc.DepthEnable = false;
+		depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+		depthDisabledStencilDesc.StencilEnable = true;
+		depthDisabledStencilDesc.StencilReadMask = 0xFF;
+		depthDisabledStencilDesc.StencilWriteMask = 0xFF;
+		depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+		depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+		depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+		// Create the state using the device.
+		if(FAILED(_pd3dDevice->CreateDepthStencilState(&depthDisabledStencilDesc, &_pDepthDisabledStencilState))) {
+			return false;
+		}
+
+		// Clear the blend state description.
+		D3D11_BLEND_DESC blendStateDescription;
+		ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
+
+		// Create an alpha enabled blend state description.
+		blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+		blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+		blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+		// Create the blend state using the description.
+		if(FAILED(_pd3dDevice->CreateBlendState(&blendStateDescription, &_pAlphaEnableBlendingState))) {
+			return false;
+		}
+
+		float blendFactor[4];
+		blendFactor[0] = 0.0f;
+		blendFactor[1] = 0.0f;
+		blendFactor[2] = 0.0f;
+		blendFactor[3] = 0.0f;
+	
+		_pDeviceContext->OMSetBlendState(_pAlphaEnableBlendingState, blendFactor, 0xffffffff);
+		_pDeviceContext->OMSetDepthStencilState(_pDepthDisabledStencilState, 1);
 		_pDeviceContext->OMSetRenderTargets(1, &_pRenderTargetView, nullptr);
 
 		// Setup the viewport
 		D3D11_VIEWPORT vp;
 		vp.Width = (FLOAT)_hdScreenWidth;
-		vp.Height = (FLOAT)_hdScreenHeight - (16 * 4);
+		vp.Height = (FLOAT)_hdScreenHeight;
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 		_pDeviceContext->RSSetViewports(1, &vp);
 
-		UINT fred;
-		_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM, 16, &fred);
-
-		D3D11_TEXTURE2D_DESC desc;
-		ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
-		desc.ArraySize = 1;
-		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		desc.MipLevels = 1;
-		desc.MiscFlags = 0;
-		desc.SampleDesc.Count = 1;
-		desc.SampleDesc.Quality = fred;
-		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.Width = _screenWidth;
-		desc.Height = _screenHeight;
-		desc.MiscFlags = 0;
-
 		_videoRAM = new uint8_t[_screenBufferSize];
 		_nextFrameBuffer = new uint8_t[_screenBufferSize];
 		memset(_videoRAM, 0x00, _screenBufferSize);
 		memset(_nextFrameBuffer, 0x00, _screenBufferSize);
 
-		D3D11_SUBRESOURCE_DATA tbsd;
-		tbsd.pSysMem = (void *)_videoRAM;
-		tbsd.SysMemPitch = _screenWidth * _bytesPerPixel;
-		tbsd.SysMemSlicePitch = _screenBufferSize; // Not needed since this is a 2d texture
-
-		if(FAILED(_pd3dDevice->CreateTexture2D(&desc, &tbsd, &_pTexture))) {
+		_pTexture = CreateTexture(_screenWidth, _screenHeight);
+		if(!_pTexture) {
 			return 0;
 		}
 
 		_overlayBuffer = new uint8_t[_hdScreenBufferSize];  //High res overlay for UI elements (4x res)
 		memset(_overlayBuffer, 0x00, _hdScreenBufferSize);
 
-		ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
-		desc.ArraySize = 1;
-		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		desc.MipLevels = 1;
-		desc.MiscFlags = 0;
-		desc.SampleDesc.Count = 1;
-		desc.SampleDesc.Quality = fred;
-		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.Width = _hdScreenWidth;
-		desc.Height = _hdScreenHeight;
-		desc.MiscFlags = 0;
-
-		tbsd.pSysMem = (void *)_overlayBuffer;
-		tbsd.SysMemPitch = _hdScreenWidth * _bytesPerPixel;
-		tbsd.SysMemSlicePitch = _hdScreenBufferSize;
-
-		if(FAILED(_pd3dDevice->CreateTexture2D(&desc, &tbsd, &_overlayTexture))) {
+		_overlayTexture = CreateTexture(_hdScreenWidth, _hdScreenHeight);
+		if(!_overlayTexture) {
 			return 0;
 		}
 
 		////////////////////////////////////////////////////////////////////////////
 		_spriteBatch.reset(new SpriteBatch(_pDeviceContext));
 
-		_font.reset(new SpriteFont(_pd3dDevice, L"Calibri.30.spritefont"));
+		_smallFont.reset(new SpriteFont(_pd3dDevice, L"Roboto.9.spritefont"));
+		_font.reset(new SpriteFont(_pd3dDevice, L"Roboto.12.spritefont"));
 
 		//Sample state
 		D3D11_SAMPLER_DESC samplerDesc;
-		ZeroMemory(&desc, sizeof(desc));
+		ZeroMemory(&samplerDesc, sizeof(samplerDesc));
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -238,6 +257,11 @@ namespace NES
 		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 		
 		_pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
+
+		if(!FAILED(CreateDDSTextureFromFile(_pd3dDevice, L"Toast.dds", nullptr, &_toastTexture))) {
+			return 0;
+		}
+
 		/*
 		ID3DBlob* vertexShaderBlob = nullptr;
 		ID3D11VertexShader* vertexShader = nullptr;
@@ -258,6 +282,34 @@ namespace NES
 		return S_OK;
 	}
 
+	ID3D11Texture2D* Renderer::CreateTexture(uint32_t width, uint32_t height)
+	{
+		ID3D11Texture2D* texture;
+
+		UINT fred;
+		_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM, 16, &fred);
+
+		D3D11_TEXTURE2D_DESC desc;
+		ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
+		desc.ArraySize = 1;
+		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		desc.MipLevels = 1;
+		desc.MiscFlags = 0;
+		desc.SampleDesc.Count = 1;
+		desc.SampleDesc.Quality = fred;
+		desc.Usage = D3D11_USAGE_DYNAMIC;
+		desc.Width = width;
+		desc.Height = height;
+		desc.MiscFlags = 0;
+
+		if(FAILED(_pd3dDevice->CreateTexture2D(&desc, nullptr, &texture))) {
+			return nullptr;
+		}
+		return texture;
+	}
+
 	ID3D11ShaderResourceView* Renderer::GetShaderResourceView(ID3D11Texture2D* texture)
 	{
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -276,23 +328,15 @@ namespace NES
 		return shaderResourceView;
 	}
 
-	void Renderer::DisplayMessage(wstring text)
+	void Renderer::DisplayMessage(wstring title, wstring message)
 	{
-		_displayMessages.push_front(text);
-		_displayTimestamps.push_front(timeGetTime() + 4000); //4 secs
+		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, L"Icon.bmp"));
+		DisplayToast(toast);
 	}
 
-	void Renderer::RemoveOldMessages()
+	void Renderer::DisplayToast(shared_ptr<ToastInfo> toast)
 	{
-		uint32_t currentTime = timeGetTime();
-		while(!_displayTimestamps.empty()) {
-			if(_displayTimestamps.back() < currentTime) {
-				_displayMessages.pop_back();
-				_displayTimestamps.pop_back();
-			} else {
-				break;
-			}
-		}
+		_toasts.push_front(toast);
 	}
 
 	void Renderer::DrawOutlinedString(wstring message, float x, float y, DirectX::FXMVECTOR color, float scale)
@@ -333,7 +377,7 @@ namespace NES
 		memcpy(dd.pData, _nextFrameBuffer, _screenBufferSize);
 		_frameLock.Release();
 		_pDeviceContext->Unmap(_pTexture, 0);
-		
+
 		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
 		_spriteBatch->Draw(nesOutputBuffer, position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
 		nesOutputBuffer->Release();
@@ -365,12 +409,12 @@ namespace NES
 		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
 		shaderResourceView->Release();
 
-		DrawOutlinedString(L"PAUSED", (float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 77, Colors::AntiqueWhite, 2.0f);
+		DrawOutlinedString(L"PAUSED", (float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 47, Colors::AntiqueWhite, 4.5f);
 	}
 
 	void Renderer::Render()
 	{
-		if(_frameChanged || Console::CheckFlag(EmulationFlags::Paused) || !_displayMessages.empty()) {
+		if(_frameChanged || Console::CheckFlag(EmulationFlags::Paused) || !_toasts.empty()) {
 			_frameChanged = false;
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
@@ -382,9 +426,9 @@ namespace NES
 			//Draw nes screen
 			DrawNESScreen();
 
-			_spriteBatch->End();
+			/*_spriteBatch->End();
 
-			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
+			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);*/
 
 			if(Console::CheckFlag(EmulationFlags::Paused)) {
 				DrawPauseScreen();
@@ -392,22 +436,106 @@ namespace NES
 				//Draw FPS counter
 				if(CheckFlag(UIFlags::ShowFPS)) {
 					wstring fpsString = wstring(L"FPS: ") + std::to_wstring(Console::GetFPS());
-					DrawOutlinedString(fpsString, 256 * 4 - 149, 13, Colors::AntiqueWhite, 1.0f);
+					DrawOutlinedString(fpsString, 256 * 4 - 80, 13, Colors::AntiqueWhite, 1.0f);
 				}
 			}
 
-			RemoveOldMessages();
-			int counter = 0;
-			for(wstring message : _displayMessages) {
-				DrawOutlinedString(message, 11, 11 + (float)counter*50, Colors::AntiqueWhite, 1.0f);
-				counter++;
-			}
+			DrawToasts();
 
 			_spriteBatch->End();
 
 			// Present the information rendered to the back buffer to the front buffer (the screen)
 			_pSwapChain->Present(0, 0);
 		}
+	}
+
+	void Renderer::RemoveOldToasts()
+	{
+		_toasts.remove_if([](shared_ptr<ToastInfo> toast) { return toast->IsToastExpired(); });
+	}
+
+	void Renderer::DrawToasts()
+	{
+		RemoveOldToasts();
+
+		int counter = 0;
+		for(shared_ptr<ToastInfo> toast : _toasts) {
+			if(counter < 3) {
+				DrawToast(toast, counter);
+			} else {
+				break;
+			}
+			counter++;
+		}
+	}
+
+	wstring Renderer::WrapText(wstring text, SpriteFont* font, float maxLineWidth)
+	{
+		wstring wrappedText;
+		list<wstring> words;
+		wstring currentWord;
+		for(int i = 0, len = text.length(); i < len; i++) {
+			if(text[i] == L' ') {
+				if(currentWord.length() > 0) {
+					words.push_back(currentWord);
+					currentWord.clear();
+				}
+			} else {
+				currentWord += text[i];
+			}
+		}
+		if(currentWord.length() > 0) {
+			words.push_back(currentWord);
+		}
+
+		float spaceWidth = font->MeasureString(L" ").m128_f32[0];
+		float lineWidth = 0.0f;
+		for(wstring word : words) {
+			float wordWidth = font->MeasureString(word.c_str()).m128_f32[0];
+
+			if(lineWidth + wordWidth < maxLineWidth) {
+				wrappedText += word + L" ";
+				lineWidth += wordWidth + spaceWidth;
+			} else {
+				wrappedText += L"\n" + word + L" ";
+				lineWidth = wordWidth + spaceWidth;
+			}
+		}
+
+		return wrappedText;
+	}
+
+	void Renderer::DrawToast(shared_ptr<ToastInfo> toast, int posIndex)
+	{
+		RECT dest;
+		dest.top = _hdScreenHeight - (100 * (posIndex + 1)) - 50;
+		dest.left = (_hdScreenWidth - 340) / 2;
+		dest.bottom = dest.top + 70;
+		dest.right = dest.left + 340;
+
+		//Get opacity for fade in/out effect
+		float opacity = toast->GetOpacity();
+		XMVECTORF32 color = { opacity, opacity, opacity, opacity };
+
+		_spriteBatch->Draw(_toastTexture, dest, color);
+
+		float textLeftMargin = 10.0f;
+		if(toast->HasIcon()) {
+			ID3D11ShaderResourceView* icon;
+			if(!FAILED(CreateWICTextureFromMemory(_pd3dDevice, toast->GetToastIcon(), toast->GetIconSize(), nullptr, &icon))) {
+				RECT iconRect;
+				iconRect.top = dest.top + 3;
+				iconRect.bottom = dest.bottom - 3;
+				iconRect.left = dest.left + 3;
+				iconRect.right = iconRect.left + 64;
+				_spriteBatch->Draw(icon, iconRect, color);
+				textLeftMargin = 75.0f;
+				icon->Release();
+			}
+		}
+
+		_smallFont->DrawString(_spriteBatch.get(), WrapText(toast->GetToastTitle(), _smallFont.get(), 340 - 30 - textLeftMargin).c_str(), XMFLOAT2(dest.left + textLeftMargin - 5.0f, dest.top + 5.0f), color);
+		_font->DrawString(_spriteBatch.get(), WrapText(toast->GetToastMessage(), _font.get(), 340 - 30 - textLeftMargin).c_str(), XMFLOAT2(dest.left + textLeftMargin - 2.0f, dest.top + 19.0f), color);
 	}
 
 	void Renderer::UpdateFrame(uint8_t* frameBuffer)
@@ -433,7 +561,7 @@ namespace NES
 		}
 
 		int counter = 0;
-		wstring baseFilename = FolderUtilities::GetScreenshotFolder() + romFilename;
+		wstring baseFilename = FolderUtilities::GetScreenshotFolder() + FolderUtilities::GetFilename(romFilename, false);
 		wstring ssFilename;
 		while(true) {
 			wstring counterStr = std::to_wstring(counter);
@@ -451,7 +579,7 @@ namespace NES
 		}
 
 		PNGWriter::WritePNG(ssFilename, (uint8_t*)frameBuffer, 256, 240);	
-		Console::DisplayMessage(L"Screenshot saved.");
+		MessageManager::DisplayMessage(L"Screenshot saved", FolderUtilities::GetFilename(ssFilename, true));
 	}
 
 }

@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\DirectXTK">
-      <UniqueIdentifier>{e3fb11e9-60dd-47df-8444-72d62eb07828}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Debugger">
       <UniqueIdentifier>{5c2b5caf-e71a-40cc-823a-625c65ee7cb2}</UniqueIdentifier>
     </Filter>
@@ -27,64 +24,7 @@
     <ClInclude Include="MainWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\Audio.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\CommonStates.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\DDSTextureLoader.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\DirectXHelpers.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\Effects.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\GeometricPrimitive.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\Model.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\PrimitiveBatch.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\ScreenGrab.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\SimpleMath.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\SpriteBatch.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\SpriteFont.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\VertexTypes.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\WICTextureLoader.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h">
-      <Filter>Header Files\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GamePad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DebugWindow.h">
@@ -102,18 +42,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GamePad.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DebugWindow.cpp">
@@ -134,9 +62,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DirectXTK\SimpleMath.inl">
-      <Filter>Header Files\DirectXTK</Filter>
-    </None>
     <None Include="Calibri.30.spritefont">
       <Filter>Resource Files</Filter>
     </None>

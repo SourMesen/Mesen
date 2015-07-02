@@ -47,6 +47,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -71,7 +72,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ConfigManager.h" />
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
     <ClInclude Include="miniz.h" />
@@ -82,20 +82,16 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="tinyxml2.h" />
-    <ClInclude Include="utf8conv.h" />
-    <ClInclude Include="utf8conv_inl.h" />
     <ClInclude Include="ZIPReader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConfigManager.cpp" />
     <ClCompile Include="FolderUtilities.cpp" />
     <ClCompile Include="miniz.cpp" />
+    <ClCompile Include="SimpleLock.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="ZIPReader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

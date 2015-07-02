@@ -1,13 +1,14 @@
 #include "stdafx.h"
+#include <thread>
 #include "Console.h"
+#include "BaseMapper.h"
 #include "MapperFactory.h"
+#include "Debugger.h"
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
-#include "../Utilities/ConfigManager.h"
+#include "../Core/MessageManager.h"
 
-Console* Console::Instance = nullptr;
-IMessageManager* Console::MessageManager = nullptr;
-list<INotificationListener*> Console::NotificationListeners;
+shared_ptr<Console> Console::Instance = nullptr;
 uint32_t Console::Flags = 0;
 uint32_t Console::CurrentFPS = 0;
 SimpleLock Console::PauseLock;
@@ -15,26 +16,28 @@ SimpleLock Console::RunningLock;
 
 Console::Console(wstring filename)
 {
-	Console::Instance = this;
-
 	Initialize(filename);
 }
 
 Console::~Console()
 {
 	Movie::Stop();
-	if(Console::Instance == this) {
-		Console::Instance = nullptr;
+	if(Console::Instance.get() == this) {
+		Console::Instance.reset();
 	}
 }
 
-Console* Console::GetInstance()
+shared_ptr<Console> Console::GetInstance()
 {
 	return Console::Instance;
 }
 
 void Console::Initialize(wstring filename)
 {
+	if(Console::Instance == nullptr) {
+		Console::Instance.reset(this);
+	}
+
 	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(filename);
 	if(mapper) {
 		_romFilepath = filename;
@@ -54,10 +57,9 @@ void Console::Initialize(wstring filename)
 
 		ResetComponents(false);
 
-		Console::SendNotification(ConsoleNotificationType::GameLoaded);
-		Console::DisplayMessage(wstring(L"Game loaded: ") + FolderUtilities::GetFilename(filename, false));
+		MessageManager::DisplayMessage(L"Game loaded", FolderUtilities::GetFilename(filename, false));
 	} else {
-		Console::DisplayMessage(wstring(L"Could not load file: ") + FolderUtilities::GetFilename(filename, true));
+		MessageManager::DisplayMessage(L"Error", wstring(L"Could not load file: ") + FolderUtilities::GetFilename(filename, true));
 	}
 
 }
@@ -73,42 +75,6 @@ void Console::LoadROM(wstring filename)
 	}
 }
 
-bool Console::AttemptLoadROM(wstring filename, uint32_t crc32Hash)
-{
-	if(Instance) {
-		if(ROMLoader::GetCRC32(Instance->_romFilepath) == crc32Hash) {
-			//Current game matches, no need to do anything
-			return true;
-		}
-	}
-
-	vector<wstring> romFiles = FolderUtilities::GetFilesInFolder(ConfigManager::GetValue<wstring>(Config::LastGameFolder), L"*.nes", true);
-	for(wstring zipFile : FolderUtilities::GetFilesInFolder(ConfigManager::GetValue<wstring>(Config::LastGameFolder), L"*.zip", true)) {
-		romFiles.push_back(zipFile);
-	}
-	for(wstring romFile : romFiles) {
-		//Quick search by filename
-		if(FolderUtilities::GetFilename(romFile, true).compare(filename) == 0) {
-			if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
-				//Matching ROM found
-				Console::LoadROM(romFile);
-				return true;
-			}
-		}
-	}
-
-	for(wstring romFile : romFiles) {
-		//Slower search by CRC value
-		if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
-			//Matching ROM found
-			Console::LoadROM(romFile);
-			return true;
-		}
-	}
-
-	return false;
-}
-
 wstring Console::GetROMPath()
 {
 	wstring filepath;
@@ -122,21 +88,30 @@ void Console::Reset()
 {
 	Movie::Stop();
 	if(Instance) {
+		Console::Pause();
 		Instance->ResetComponents(true);
+		Console::Resume();
 	}
 }
 
 void Console::ResetComponents(bool softReset)
 {
-	_cpu->Reset(softReset);
 	_ppu->Reset();
 	_apu->Reset();
+	_cpu->Reset(softReset);
+	if(softReset) {
+		MessageManager::SendNotification(ConsoleNotificationType::GameReset);
+	} else {
+		MessageManager::SendNotification(ConsoleNotificationType::GameLoaded);
+	}
 }
 
 void Console::Stop()
 {
 	_stop = true;
 	Console::ClearFlags(EmulationFlags::Paused);
+	Console::RunningLock.Acquire();
+	Console::RunningLock.Release();
 }
 
 void Console::Pause()
@@ -168,43 +143,9 @@ bool Console::CheckFlag(int flag)
 	return (Console::Flags & flag) == flag;
 }
 
-void Console::RegisterMessageManager(IMessageManager* messageManager)
-{
-	Console::MessageManager = messageManager;
-}
-
-void Console::DisplayMessage(wstring message)
-{
-	std::wcout << message << std::endl;
-	if(Console::MessageManager) {
-		Console::MessageManager->DisplayMessage(message);
-	}
-}
-
 uint32_t Console::GetFPS()
 {
 	return Console::CurrentFPS;
-}
-
-void Console::RegisterNotificationListener(INotificationListener* notificationListener)
-{
-	Console::NotificationListeners.push_back(notificationListener);
-	Console::NotificationListeners.unique();
-}
-
-void Console::UnregisterNotificationListener(INotificationListener* notificationListener)
-{
-	Console::NotificationListeners.remove(notificationListener);
-}
-
-void Console::SendNotification(ConsoleNotificationType type)
-{
-	list<INotificationListener*> listeners = Console::NotificationListeners;
-	
-	//Iterate on a copy to prevent issues if a notification causes a listener to unregister itself
-	for(INotificationListener* notificationListener : listeners) {
-		notificationListener->ProcessNotification(type);
-	}
 }
 
 void Console::Run()
@@ -247,14 +188,18 @@ void Console::Run()
 			}
 
 			if(CheckFlag(EmulationFlags::Paused) && !_stop) {
-				Console::SendNotification(ConsoleNotificationType::GamePaused);
+				MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
 				Console::RunningLock.Release();
+				
+				//Prevent audio from looping endlessly while game is paused
+				_apu->StopAudio();
+
 				while(CheckFlag(EmulationFlags::Paused)) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
 				}
 				Console::RunningLock.Acquire();
-				Console::SendNotification(ConsoleNotificationType::GameResumed);
+				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
 			}
 			clockTimer.Reset();
 			
@@ -263,45 +208,20 @@ void Console::Run()
 				break;
 			}
 		}
-
+		
 		if(fpsTimer.GetElapsedMS() > 1000) {
 			uint32_t frameCount = _ppu->GetFrameCount();
-			Console::CurrentFPS = (int)(std::round((double)(frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000)));
+			if((int32_t)frameCount - (int32_t)lastFrameCount < 0) {
+				Console::CurrentFPS = 0;
+			} else {
+				Console::CurrentFPS = (int)(std::round((double)(frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000)));
+			}
 			lastFrameCount = frameCount;
 			fpsTimer.Reset();
 		}
 	}
 	Console::RunningLock.Release();
-}
-
-void Console::SaveState(wstring filename)
-{
-	ofstream file(filename, ios::out | ios::binary);
-
-	if(file) {
-		Console::Pause();
-		Console::SaveState(file);
-		Console::Resume();
-		file.close();		
-		Console::DisplayMessage(L"State saved.");
-	}
-}
-
-bool Console::LoadState(wstring filename)
-{
-	ifstream file(filename, ios::out | ios::binary);
-
-	if(file) {
-		Console::Pause();
-		Console::LoadState(file);
-		Console::Resume();
-		file.close();
-		Console::DisplayMessage(L"State loaded.");
-		return true;
-	}
-
-	Console::DisplayMessage(L"Slot is empty.");
-	return false;
+	_apu->StopAudio();
 }
 
 void Console::SaveState(ostream &saveStream)
@@ -326,7 +246,7 @@ void Console::LoadState(istream &loadStream)
 		Instance->_apu->LoadSnapshot(&loadStream);
 		Instance->_controlManager->LoadSnapshot(&loadStream);
 		
-		Console::SendNotification(ConsoleNotificationType::StateLoaded);
+		MessageManager::SendNotification(ConsoleNotificationType::StateLoaded);
 	}
 }
 
@@ -340,7 +260,7 @@ void Console::LoadState(uint8_t *buffer, uint32_t bufferSize)
 
 shared_ptr<Debugger> Console::GetDebugger()
 {
-	return shared_ptr<Debugger>(new Debugger(shared_ptr<Console>(this), _cpu, _memoryManager, _mapper));
+	return shared_ptr<Debugger>(new Debugger(Console::Instance, _cpu, _ppu, _memoryManager, _mapper));
 }
 
 bool Console::RunTest(uint8_t *expectedResult)

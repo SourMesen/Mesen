@@ -52,9 +52,15 @@ void PPU::Reset()
 	memset(_spriteRAM, 0xFF, 0x100);
 }
 
-bool PPU::CheckFlag(PPUControlFlags flag)
+PPUDebugState PPU::GetState()
 {
-	return false;
+	PPUDebugState state;
+	state.ControlFlags = _flags;
+	state.StatusFlags = _statusFlags;
+	state.State = _state;
+	state.Cycle = _cycle;
+	state.Scanline = _scanline;
+	return state;
 }
 
 void PPU::UpdateVideoRamAddr()
@@ -293,13 +299,13 @@ void PPU::IncHorizontalScrolling()
 	_state.VideoRamAddr = addr;
 }
 
-//Take from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Tile_and_attribute_fetching
+//Taken from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Tile_and_attribute_fetching
 uint16_t PPU::GetNameTableAddr()
 {
 	return 0x2000 | (_state.VideoRamAddr & 0x0FFF);
 }
 
-//Take from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Tile_and_attribute_fetching
+//Taken from http://wiki.nesdev.com/w/index.php/The_skinny_on_NES_scrolling#Tile_and_attribute_fetching
 uint16_t PPU::GetAttributeAddr()
 {
 	return 0x23C0 | (_state.VideoRamAddr & 0x0C00) | ((_state.VideoRamAddr >> 4) & 0x38) | ((_state.VideoRamAddr >> 2) & 0x07);

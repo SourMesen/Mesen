@@ -77,11 +77,20 @@ bool APU::Exec(uint32_t executedCycles)
 		uint32_t availableSampleCount = _buf.samples_avail();
 		if(availableSampleCount >= APU::SamplesPerFrame) {
 			size_t sampleCount = _buf.read_samples(_outputBuffer, APU::SamplesPerFrame);
-			APU::AudioDevice->PlayBuffer(_outputBuffer, sampleCount * BitsPerSample / 8);
+			if(APU::AudioDevice) {
+				APU::AudioDevice->PlayBuffer(_outputBuffer, sampleCount * BitsPerSample / 8);
+			}
 		}
 		return true;
 	}
 	return false;
+}
+
+void APU::StopAudio()
+{
+	if(APU::AudioDevice) {
+		APU::AudioDevice->Pause();
+	}
 }
 
 void APU::StreamState(bool saving)

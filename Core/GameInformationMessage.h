@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "MessageManager.h"
 #include "NetMessage.h"
 #include "Console.h"
 #include "ROMLoader.h"
@@ -7,54 +8,90 @@
 
 class GameInformationMessage : public NetMessage
 {
-protected:
-	virtual uint32_t GetMessageLength()
-	{
-		return sizeof(ROMFilename) + sizeof(CRC32Hash) + sizeof(ControllerPort) + sizeof(Paused);
-	}
+private:
+	wchar_t *_romFilename = nullptr;
+	uint32_t _romFilenameLength = 0;
+	uint32_t _crc32Hash = 0;
+	uint8_t _controllerPort = 0;
+	bool _paused = false;
 
-	virtual void ProtectedSend(Socket &socket)
+protected:
+	virtual void ProtectedStreamState()
 	{
-		socket.BufferedSend((char*)&ROMFilename, sizeof(ROMFilename));
-		socket.BufferedSend((char*)&CRC32Hash, sizeof(CRC32Hash));
-		socket.BufferedSend((char*)&ControllerPort, sizeof(ControllerPort));
-		socket.BufferedSend((char*)&Paused, sizeof(Paused));
+		StreamArray((void**)&_romFilename, _romFilenameLength);
+		Stream<uint32_t>(_crc32Hash);
+		Stream<uint8_t>(_controllerPort);
+		Stream<bool>(_paused);
 	}
 
 public:
-	wchar_t ROMFilename[255];
-	uint32_t CRC32Hash;
-	uint8_t ControllerPort;
-	bool Paused;
-
-	GameInformationMessage(char *readBuffer) : NetMessage(MessageType::GameInformation)
-	{
-		memcpy((char*)ROMFilename, readBuffer, sizeof(ROMFilename));
-		memcpy((char*)&CRC32Hash, readBuffer + sizeof(ROMFilename), sizeof(CRC32Hash));
-		ControllerPort = readBuffer[sizeof(ROMFilename) + sizeof(CRC32Hash)];
-		Paused = readBuffer[sizeof(ROMFilename) + sizeof(CRC32Hash) + sizeof(ControllerPort)] == 1;
-	}
+	GameInformationMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
 
 	GameInformationMessage(wstring filepath, uint8_t port, bool paused) : NetMessage(MessageType::GameInformation)
 	{
-		memset(ROMFilename, 0, sizeof(ROMFilename));
-		wcscpy_s(ROMFilename, FolderUtilities::GetFilename(filepath, true).c_str());
-		CRC32Hash = ROMLoader::GetCRC32(filepath);
-		ControllerPort = port;
-		Paused = paused;
+		CopyString(&_romFilename, _romFilenameLength, FolderUtilities::GetFilename(filepath, true));
+		_crc32Hash = ROMLoader::GetCRC32(filepath);
+		_controllerPort = port;
+		_paused = paused;
 	}
-
+	
 	bool AttemptLoadGame()
 	{
-		wstring filename = ROMFilename;
+		wstring filename = _romFilename;
 		if(filename.size() > 0) {
-			if(Console::AttemptLoadROM(filename, CRC32Hash)) {
+			if(AttemptLoadROM(filename, _crc32Hash)) {
 				return true;
 			} else {
-				Console::DisplayMessage(L"Could not find matching game ROM.");
+				MessageManager::DisplayMessage(L"Net Play", L"Could not find matching game ROM.");
 				return false;
 			}
 		}
+		return false;
+	}
+
+	uint8_t GetPort()
+	{
+		return _controllerPort;
+	}
+
+	bool IsPaused()
+	{
+		return _paused;
+	}
+
+	bool AttemptLoadROM(wstring filename, uint32_t crc32Hash)
+	{
+		if(!Console::GetROMPath().empty()) {
+			if(ROMLoader::GetCRC32(Console::GetROMPath()) == crc32Hash) {
+				//Current game matches, no need to do anything
+				return true;
+			}
+		}
+
+		vector<wstring> romFiles = FolderUtilities::GetFilesInFolder(L"D:\\Users\\Saitoh Hajime\\Desktop\\CPPApp\\NES\\Games", L"*.nes", true);
+		for(wstring zipFile : FolderUtilities::GetFilesInFolder(L"D:\\Users\\Saitoh Hajime\\Desktop\\CPPApp\\NES\\Games", L"*.zip", true)) {
+			romFiles.push_back(zipFile);
+		}
+		for(wstring romFile : romFiles) {
+			//Quick search by filename
+			if(FolderUtilities::GetFilename(romFile, true).compare(filename) == 0) {
+				if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
+					//Matching ROM found
+					Console::LoadROM(romFile);
+					return true;
+				}
+			}
+		}
+
+		for(wstring romFile : romFiles) {
+			//Slower search by CRC value
+			if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
+				//Matching ROM found
+				Console::LoadROM(romFile);
+				return true;
+			}
+		}
+
 		return false;
 	}
 };

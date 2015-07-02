@@ -17,6 +17,7 @@ class FolderUtilities
 		static wstring GetFilename(wstring filepath, bool includeExtension);
 		static wstring GetFolderName(wstring filepath);
 		
-		static wstring OpenFile(LPCWSTR filter, wstring defaultFolder, bool forSave, wstring defaultExt = L"");
-		static wstring OpenFile(LPCWSTR filter, LPCWSTR defaultFolder, bool forSave, LPCWSTR defaultExt = L"");
+		static int64_t GetFileModificationTime(wstring filepath);
+
+		static wstring CombinePath(wstring folder, wstring filename);
 };

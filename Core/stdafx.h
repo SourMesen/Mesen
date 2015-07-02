@@ -14,12 +14,11 @@
 #include <string>
 #include <cctype>
 #include <memory>
-#include <thread>
 #include <vector>
 #include <array>
 #include <sstream>
-#include <atomic>
 #include <list>
+#include <atomic>
 
 using std::vector;
 using std::shared_ptr;
@@ -32,9 +31,8 @@ using std::stringstream;
 using std::ofstream;
 using std::wstring;
 using std::exception;
-using std::atomic_flag;
-using std::atomic;
 using std::list;
 using std::max;
-using std::thread;
 using std::string;
+using std::atomic_flag;
+using std::atomic;

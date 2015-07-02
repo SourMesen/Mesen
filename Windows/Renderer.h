@@ -1,6 +1,6 @@
+#pragma once
+
 #include "stdafx.h"
-#include "DirectXTK\SpriteBatch.h"
-#include "DirectXTK\SpriteFont.h"
 #include "../Core/IVideoDevice.h"
 #include "../Core/IMessageManager.h"
 #include "../Utilities/PNGWriter.h"
@@ -8,6 +8,11 @@
 #include "../Utilities/SimpleLock.h"
 
 using namespace DirectX;
+
+namespace DirectX {
+	class SpriteBatch;
+	class SpriteFont;
+}
 
 namespace NES {
 	enum UIFlags
@@ -28,6 +33,9 @@ namespace NES {
 		ID3D11DeviceContext1*   _pDeviceContext1 = nullptr;
 		IDXGISwapChain*         _pSwapChain = nullptr;
 		ID3D11RenderTargetView* _pRenderTargetView = nullptr;
+		ID3D11DepthStencilState* _pDepthDisabledStencilState = nullptr;
+		ID3D11BlendState*			_pAlphaEnableBlendingState = nullptr;
+
 
 		ID3D11SamplerState*		_samplerState = nullptr;
 		
@@ -40,10 +48,11 @@ namespace NES {
 
 
 		unique_ptr<SpriteFont>	_font;
+		unique_ptr<SpriteFont>	_smallFont;
 		ID3D11Texture2D*			_overlayTexture = nullptr;
 		byte*							_overlayBuffer = nullptr;
 		
-		std::unique_ptr<SpriteBatch> _spriteBatch;
+		unique_ptr<SpriteBatch> _spriteBatch;
 		//ID3D11PixelShader* _pixelShader = nullptr;
 
 		uint32_t _screenWidth;
@@ -56,20 +65,25 @@ namespace NES {
 
 		uint32_t _flags = 0;
 
-		list<wstring> _displayMessages;
-		list<uint32_t> _displayTimestamps;
+		list<shared_ptr<ToastInfo>> _toasts;
+		ID3D11ShaderResourceView* _toastTexture;
 
 		HRESULT InitDevice();
 		void CleanupDevice();
 
 		void SetScreenSize(uint32_t screenWidth, uint32_t screenHeight);
 
+		ID3D11Texture2D* CreateTexture(uint32_t width, uint32_t height);
 		ID3D11ShaderResourceView* GetShaderResourceView(ID3D11Texture2D* texture);
 		void DrawNESScreen();
 		void DrawPauseScreen();
 
-		void RemoveOldMessages();
+		wstring WrapText(wstring text, SpriteFont* font, float maxLineWidth);
 		void DrawOutlinedString(wstring message, float x, float y, DirectX::FXMVECTOR color, float scale);
+
+		void DrawToasts();
+		void DrawToast(shared_ptr<ToastInfo> toast, int posIndex);
+		void RemoveOldToasts();
 
 		//HRESULT CompileShader(wstring filename, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 
@@ -79,7 +93,7 @@ namespace NES {
 
 		void Render();
 
-		void DisplayMessage(wstring text);
+		void DisplayMessage(wstring title, wstring message);
 		
 		void SetFlags(uint32_t flags)
 		{
@@ -97,6 +111,8 @@ namespace NES {
 		}
 
 		void UpdateFrame(uint8_t* frameBuffer);
+		void DisplayToast(shared_ptr<ToastInfo> toast);
+
 		void TakeScreenshot(wstring romFilename);
 	};
 }

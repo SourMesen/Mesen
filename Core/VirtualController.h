@@ -1,6 +1,9 @@
 #pragma once
 
 #include "stdafx.h"
+#include <atomic>
+using std::atomic;
+
 #include "IControlDevice.h"
 #include "../Utilities/SimpleLock.h"
 

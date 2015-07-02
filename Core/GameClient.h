@@ -1,7 +1,11 @@
 #pragma once
+
 #include "stdafx.h"
 #include "GameClientConnection.h"
 #include "INotificationListener.h"
+
+class ClientConnectionData;
+class thread;
 
 class GameClient : public INotificationListener
 {
@@ -14,7 +18,7 @@ private:
 	unique_ptr<GameClientConnection> _connection;
 	bool _connected = false;
 
-	void PrivateConnect(const char *host, u_short port);
+	void PrivateConnect(shared_ptr<ClientConnectionData> connectionData);
 	void Exec();
 	void PrivateDisconnect();
 
@@ -23,7 +27,7 @@ public:
 	~GameClient();
 
 	static bool Connected();
-	static void Connect(const char *host, u_short port);
+	static void Connect(shared_ptr<ClientConnectionData> connectionData);
 	static void Disconnect();
 
 	void ProcessNotification(ConsoleNotificationType type);

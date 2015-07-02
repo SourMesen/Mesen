@@ -3,13 +3,18 @@
 #include "DisassemblyInfo.h"
 #include "CPU.h"
 
-Disassembler::Disassembler(uint8_t* prgROM, uint32_t prgSize)
+Disassembler::Disassembler(uint8_t* internalRAM, uint8_t* prgROM, uint32_t prgSize)
 {
+	_internalRAM = internalRAM;
 	_prgROM = prgROM;
 	_prgSize = prgSize;
 	for(uint32_t i = 0; i < prgSize; i++) {
 		_disassembleCache.push_back(shared_ptr<DisassemblyInfo>(nullptr));
 	}
+	for(uint32_t i = 0; i < 0x2000; i++) {
+		_disassembleMemoryCache.push_back(shared_ptr<DisassemblyInfo>(nullptr));
+	}
+
 
 	string opName[256] = {
 	//	0			1			2			3			4			5			6			7			8			9			A					B			C					D			E				F
@@ -81,22 +86,72 @@ Disassembler::Disassembler(uint8_t* prgROM, uint32_t prgSize)
 	}
 }
 
+Disassembler::~Disassembler()
+{
+	if(_prgROM) {
+		delete[] _prgROM;
+	}
+}
+
 void Disassembler::BuildCache(uint32_t absoluteAddr, uint16_t memoryAddr)
 {
-	while(!_disassembleCache[absoluteAddr]) {
-		shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&_prgROM[absoluteAddr]));
-		_disassembleCache[absoluteAddr] = disInfo;
-
-		uint8_t opCode = _prgROM[absoluteAddr];
-
-		if(opCode == 0x10 || opCode == 0x20 || opCode == 0x30 || opCode == 0x40 || opCode == 0x50 || opCode == 0x60 || opCode == 0x70 || opCode == 0x90 || opCode == 0xB0 || opCode == 0xD0 || opCode == 0xF0 || opCode == 0x4C || opCode == 0x6C) {
-			//Hit a jump/return instruction, can't assume that what follows is actual code, stop disassembling
-			break;
+	if(memoryAddr < 0x2000) {
+		memoryAddr = memoryAddr & 0x7FF;
+		if(!_disassembleMemoryCache[memoryAddr]) {
+			shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&_internalRAM[memoryAddr]));
+			_disassembleMemoryCache[memoryAddr] = disInfo;
 		}
+	} else {
+		while(!_disassembleCache[absoluteAddr]) {
+			shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&_prgROM[absoluteAddr]));
+			_disassembleCache[absoluteAddr] = disInfo;
 
-		absoluteAddr += disInfo->GetSize();
-		memoryAddr += disInfo->GetSize();
+			uint8_t opCode = _prgROM[absoluteAddr];
+
+			if(opCode == 0x10 || opCode == 0x20 || opCode == 0x30 || opCode == 0x40 || opCode == 0x50 || opCode == 0x60 || opCode == 0x70 || opCode == 0x90 || opCode == 0xB0 || opCode == 0xD0 || opCode == 0xF0 || opCode == 0x4C || opCode == 0x6C) {
+				//Hit a jump/return instruction, can't assume that what follows is actual code, stop disassembling
+				break;
+			}
+
+			absoluteAddr += disInfo->GetSize();
+			memoryAddr += disInfo->GetSize();
+		}
 	}
+}
+
+string Disassembler::GetRAMCode()
+{
+	std::ostringstream output;
+
+	uint32_t addr = 0x0000;
+	uint32_t byteCount = 0;
+	while(addr < 0x2000) {
+		shared_ptr<DisassemblyInfo> info;
+		if(info = _disassembleMemoryCache[addr&0x7FF]) {
+			if(byteCount > 0) {
+				output << "\n";
+				byteCount = 0;
+			}
+			output << std::hex << std::uppercase << addr << ":" << info->ToString(addr) << "\n";
+			addr += info->GetSize();
+		} else {
+			if(byteCount >= 8) {
+				output << "\n";
+				byteCount = 0;
+			}
+			if(byteCount == 0) {
+				output << std::hex << std::uppercase << addr << ":" << ".db";
+			}
+			output << std::hex << " $" << std::setfill('0') << std::setw(2) << (short)_internalRAM[addr];
+
+			byteCount++;
+			addr++;
+		}
+	}
+	
+	output << "\n1FFF:--END OF INTERNAL RAM--\n";
+		
+	return output.str();
 }
 
 string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &memoryAddr)
@@ -109,31 +164,29 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &mem
 		shared_ptr<DisassemblyInfo> info;
 		if(info = _disassembleCache[addr]) {
 			if(byteCount > 0) {
-				output << "\\par\n";
+				output << "\n";
 				byteCount = 0;
 			}
-			output << "{\\highlight1\n   " << std::hex << std::uppercase << memoryAddr << ":} " << info->ToString(memoryAddr) << "\\par\n";
+			output << std::hex << std::uppercase << memoryAddr << ":" << info->ToString(memoryAddr) << "\n";
 			addr += info->GetSize();
 			memoryAddr += info->GetSize();
 		} else {
 			if(byteCount >= 8) {
-				output << "\\par\n";
+				output << "\n";
 				byteCount = 0;
 			}
 			if(byteCount == 0) {
-				output << "{\\highlight1\n   " << std::hex << std::uppercase << memoryAddr << ":} " << ".db";
+				output << std::hex << std::uppercase << memoryAddr << ":" << ".db";
 			}
 			output << std::hex << " $" << std::setfill('0') << std::setw(2) << (short)_prgROM[addr];
-				
+
 			byteCount++;
 			addr++;
 			memoryAddr++;
 		}
 	}
-
-	if(byteCount > 0) {
-		output << "\\par\n";
-	}
+	
+	output << "\n";
 		
 	return output.str();
 }

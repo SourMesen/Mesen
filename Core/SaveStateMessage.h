@@ -6,33 +6,24 @@
 class SaveStateMessage : public NetMessage
 {
 private:
-	char* _stateData;
+	void* _stateData;
 	uint32_t _dataSize;
 
 protected:
-	virtual uint32_t GetMessageLength()
+	virtual void ProtectedStreamState()
 	{
-		return _dataSize;
-	}
-
-	virtual void ProtectedSend(Socket &socket)
-	{
-		socket.BufferedSend(_stateData, _dataSize);
+		StreamArray(&_stateData, _dataSize);
 	}
 
 public:
-	SaveStateMessage(char *readBuffer, uint32_t bufferLength) : NetMessage(MessageType::SaveState)
-	{
-		_stateData = new char[bufferLength];
-		_dataSize = bufferLength;
-		memcpy(_stateData, readBuffer, bufferLength);
+	SaveStateMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
+	
+	SaveStateMessage(void* stateData, uint32_t dataSize, bool forSend) : NetMessage(MessageType::SaveState)
+	{ 
+		_stateData = stateData;
+		_dataSize = dataSize;
 	}
-
-	~SaveStateMessage()
-	{
-		delete[] _stateData;
-	}
-
+	
 	void LoadState()
 	{
 		Console::LoadState((uint8_t*)_stateData, _dataSize);

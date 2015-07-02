@@ -1,14 +1,12 @@
 #include "stdafx.h"
 #include "CPU.h"
 
-int32_t CPU::CycleCount = 0;
-int32_t CPU::RelativeCycleCount = 0;
-uint32_t CPU::CyclePenalty = 0;
-bool CPU::NMIFlag = false;
-uint32_t CPU::IRQFlag = 0;
+CPU* CPU::Instance = nullptr;
 
 CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 {
+	CPU::Instance = this;
+
 	Func opTable[] = { 
 	//	0				1				2				3				4				5				6						7				8				9				A						B				C						D						E						F
 		&CPU::BRK,	&CPU::ORA,	nullptr,		nullptr,		&CPU::NOP,	&CPU::ORA,	&CPU::ASL_Memory,	nullptr,		&CPU::PHP,	&CPU::ORA,	&CPU::ASL_Acc,		nullptr,		&CPU::NOP,			&CPU::ORA,	&CPU::ASL_Memory,		nullptr, //0
@@ -94,10 +92,11 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 
 void CPU::Reset(bool softReset)
 {
-	CPU::NMIFlag = false;
-	CPU::IRQFlag = 0;
-	CPU::CycleCount = 0;
-	CPU::RelativeCycleCount = 0;
+	_state.NMIFlag = false;
+	_state.IRQFlag = 0;
+	_cycleCount = 0;
+	_relativeCycleCount = 0;
+	_cyclePenalty = 0;
 
 	_state.PC = MemoryReadWord(CPU::ResetVector);
 	if(softReset) {
@@ -122,9 +121,9 @@ uint32_t CPU::Exec()
 	if(!_runNMI && !_runIRQ) {
 		uint8_t opCode = GetOPCode();
 
-		if(CPU::NMIFlag) {
+		if(_state.NMIFlag) {
 			_runNMI = true;
-		} else if(opCode != 0x40 && CPU::IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt)) {
+		} else if(opCode != 0x40 && _state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt)) {
 			_runIRQ = true;
 		}
 
@@ -139,7 +138,7 @@ uint32_t CPU::Exec()
 			//throw exception("Invalid opcode");
 		}
 
-		if(!_runIRQ && opCode == 0x40 && CPU::IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt)) {
+		if(!_runIRQ && opCode == 0x40 && _state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt)) {
 			//"If an IRQ is pending and an RTI is executed that clears the I flag, the CPU will invoke the IRQ handler immediately after RTI finishes executing."
 			_runIRQ = true;
 		}
@@ -147,7 +146,7 @@ uint32_t CPU::Exec()
 		if(_runNMI) {
 			NMI();
 			_runNMI = false;
-			CPU::NMIFlag = false;
+			_state.NMIFlag = false;
 		} else if(_runIRQ) {
 			IRQ();
 		}
@@ -156,14 +155,14 @@ uint32_t CPU::Exec()
 		executedCycles = 7;
 	}
 	
-	CPU::CycleCount += executedCycles;
+	_cycleCount += executedCycles;
 	return executedCycles + GetCyclePenalty();
 }
 
 void CPU::EndFrame()
 {
-	CPU::RelativeCycleCount += CPU::CycleCount;
-	CPU::CycleCount = 0;
+	_relativeCycleCount += _cycleCount;
+	_cycleCount = 0;
 }
 
 void CPU::StreamState(bool saving)
@@ -175,12 +174,12 @@ void CPU::StreamState(bool saving)
 	Stream<uint8_t>(_state.X);
 	Stream<uint8_t>(_state.Y);
 		
-	Stream<int32_t>(CPU::CycleCount);
-	Stream<bool>(CPU::NMIFlag);
-	Stream<uint32_t>(CPU::IRQFlag);
+	Stream<int32_t>(_cycleCount);
+	Stream<bool>(_state.NMIFlag);
+	Stream<uint32_t>(_state.IRQFlag);
 
 	Stream<bool>(_runNMI);
 	Stream<bool>(_runIRQ);
 
-	Stream<int32_t>(CPU::RelativeCycleCount);
+	Stream<int32_t>(_relativeCycleCount);
 }
