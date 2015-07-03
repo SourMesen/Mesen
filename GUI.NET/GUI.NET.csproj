@@ -39,6 +39,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,12 +51,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigManager\ConfigManager.cs" />
+    <Compile Include="Config\CheatInfo.cs" />
+    <Compile Include="Config\ClientConnection.cs" />
+    <Compile Include="Config\Configuration.cs" />
+    <Compile Include="Config\ImageExtensions.cs" />
+    <Compile Include="Config\PlayerProfile.cs" />
+    <Compile Include="Config\ConfigManager.cs" />
+    <Compile Include="Config\ServerInfo.cs" />
     <Compile Include="Controls\DXViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\DXViewer.Designer.cs">
       <DependentUpon>DXViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MyListView.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Debugger\Controls\ctrlConsoleStatus.cs">
       <SubType>UserControl</SubType>
@@ -83,14 +94,32 @@
     <Compile Include="Debugger\frmDebugger.Designer.cs">
       <DependentUpon>frmDebugger.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\BaseConfigForm.Designer.cs">
+      <DependentUpon>BaseConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\BaseConfigForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Cheats\frmCheat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Cheats\frmCheat.Designer.cs">
+      <DependentUpon>frmCheat.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Config\frmVideoConfig.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Config\frmVideoConfig.Designer.cs">
       <DependentUpon>frmVideoConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Cheats\frmCheatList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Cheats\frmCheatList.Designer.cs">
+      <DependentUpon>frmCheatList.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\NetPlay\frmClientConfig.cs">
       <SubType>Form</SubType>
@@ -131,8 +160,17 @@
     <EmbeddedResource Include="Debugger\frmDebugger.resx">
       <DependentUpon>frmDebugger.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BaseConfigForm.resx">
+      <DependentUpon>BaseConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Cheats\frmCheat.resx">
+      <DependentUpon>frmCheat.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmVideoConfig.resx">
       <DependentUpon>frmVideoConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Cheats\frmCheatList.resx">
+      <DependentUpon>frmCheatList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
@@ -171,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <None Include="Resources\MesenIcon.ico" />
     <None Include="Resources\MesenLogo.bmp" />
   </ItemGroup>
   <ItemGroup />

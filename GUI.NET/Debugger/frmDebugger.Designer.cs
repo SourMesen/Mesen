@@ -32,12 +32,14 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDebugger));
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
+			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
+			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpBreakpoints = new System.Windows.Forms.GroupBox();
 			this.lstBreakpoints = new System.Windows.Forms.ListView();
@@ -48,8 +50,12 @@
 			this.mnuDisableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpWatch = new System.Windows.Forms.GroupBox();
+			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuView = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSplitView = new System.Windows.Forms.ToolStripMenuItem();
 			this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuContinue = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreak = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,13 +71,6 @@
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindPrev = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuView = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSplitView = new System.Windows.Forms.ToolStripMenuItem();
-			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
-			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
-			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
-			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -123,6 +122,17 @@
 			this.tlpTop.Size = new System.Drawing.Size(984, 422);
 			this.tlpTop.TabIndex = 2;
 			// 
+			// ctrlDebuggerCode
+			// 
+			this.ctrlDebuggerCode.Code = null;
+			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
+			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
+			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(270, 416);
+			this.ctrlDebuggerCode.TabIndex = 2;
+			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchAddedEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			// 
 			// contextMenuCode
 			// 
 			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -147,6 +157,24 @@
 			this.mnuSetNextStatement.Size = new System.Drawing.Size(258, 22);
 			this.mnuSetNextStatement.Text = "Set Next Statement";
 			// 
+			// ctrlConsoleStatus
+			// 
+			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
+			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
+			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
+			this.ctrlConsoleStatus.TabIndex = 3;
+			// 
+			// ctrlDebuggerCodeSplit
+			// 
+			this.ctrlDebuggerCodeSplit.Code = null;
+			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(279, 3);
+			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
+			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(270, 416);
+			this.ctrlDebuggerCodeSplit.TabIndex = 4;
+			// 
 			// tableLayoutPanel10
 			// 
 			this.tableLayoutPanel10.ColumnCount = 2;
@@ -159,8 +187,8 @@
 			this.tableLayoutPanel10.Name = "tableLayoutPanel10";
 			this.tableLayoutPanel10.RowCount = 1;
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 195F));
-			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 195F));
+			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 162F));
+			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 162F));
 			this.tableLayoutPanel10.Size = new System.Drawing.Size(984, 162);
 			this.tableLayoutPanel10.TabIndex = 0;
 			// 
@@ -245,6 +273,14 @@
 			this.grpWatch.TabStop = false;
 			this.grpWatch.Text = "Watch";
 			// 
+			// ctrlWatch
+			// 
+			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
+			this.ctrlWatch.Name = "ctrlWatch";
+			this.ctrlWatch.Size = new System.Drawing.Size(480, 137);
+			this.ctrlWatch.TabIndex = 0;
+			// 
 			// menuStrip
 			// 
 			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -265,6 +301,28 @@
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
+			// 
+			// mnuClose
+			// 
+			this.mnuClose.Name = "mnuClose";
+			this.mnuClose.Size = new System.Drawing.Size(103, 22);
+			this.mnuClose.Text = "Close";
+			// 
+			// mnuView
+			// 
+			this.mnuView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuSplitView});
+			this.mnuView.Name = "mnuView";
+			this.mnuView.Size = new System.Drawing.Size(44, 20);
+			this.mnuView.Text = "View";
+			// 
+			// mnuSplitView
+			// 
+			this.mnuSplitView.CheckOnClick = true;
+			this.mnuSplitView.Name = "mnuSplitView";
+			this.mnuSplitView.Size = new System.Drawing.Size(125, 22);
+			this.mnuSplitView.Text = "Split View";
+			this.mnuSplitView.Click += new System.EventHandler(this.mnuSplitView_Click);
 			// 
 			// debugToolStripMenuItem
 			// 
@@ -390,63 +448,6 @@
 			this.mnuGoTo.Size = new System.Drawing.Size(196, 22);
 			this.mnuGoTo.Text = "Go to...";
 			// 
-			// mnuClose
-			// 
-			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(103, 22);
-			this.mnuClose.Text = "Close";
-			// 
-			// mnuView
-			// 
-			this.mnuView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuSplitView});
-			this.mnuView.Name = "mnuView";
-			this.mnuView.Size = new System.Drawing.Size(44, 20);
-			this.mnuView.Text = "View";
-			// 
-			// mnuSplitView
-			// 
-			this.mnuSplitView.CheckOnClick = true;
-			this.mnuSplitView.Name = "mnuSplitView";
-			this.mnuSplitView.Size = new System.Drawing.Size(125, 22);
-			this.mnuSplitView.Text = "Split View";
-			this.mnuSplitView.Click += new System.EventHandler(this.mnuSplitView_Click);
-			// 
-			// ctrlDebuggerCode
-			// 
-			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
-			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
-			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(270, 416);
-			this.ctrlDebuggerCode.TabIndex = 2;
-			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchAddedEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			// 
-			// ctrlConsoleStatus
-			// 
-			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
-			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
-			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
-			this.ctrlConsoleStatus.TabIndex = 3;
-			// 
-			// ctrlDebuggerCodeSplit
-			// 
-			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(279, 3);
-			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
-			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(270, 416);
-			this.ctrlDebuggerCodeSplit.TabIndex = 4;
-			// 
-			// ctrlWatch
-			// 
-			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
-			this.ctrlWatch.Name = "ctrlWatch";
-			this.ctrlWatch.Size = new System.Drawing.Size(480, 137);
-			this.ctrlWatch.TabIndex = 0;
-			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -454,7 +455,6 @@
 			this.ClientSize = new System.Drawing.Size(984, 612);
 			this.Controls.Add(this.splitContainer);
 			this.Controls.Add(this.menuStrip);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip;
 			this.MinimumSize = new System.Drawing.Size(1000, 650);
 			this.Name = "frmDebugger";

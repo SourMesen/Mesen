@@ -20,12 +20,12 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateCPUStatus(ref DebugState state)
 		{
-			txtA.Text = state.CPU.A.ToString("x").ToUpper();
-			txtX.Text = state.CPU.X.ToString("x").ToUpper();
-			txtY.Text = state.CPU.Y.ToString("x").ToUpper();
-			txtPC.Text = state.CPU.PC.ToString("x").ToUpper();
-			txtSP.Text = state.CPU.SP.ToString("x").ToUpper();
-			txtStatus.Text = state.CPU.PS.ToString("x").ToUpper();
+			txtA.Text = state.CPU.A.ToString("X");
+			txtX.Text = state.CPU.X.ToString("X");
+			txtY.Text = state.CPU.Y.ToString("X");
+			txtPC.Text = state.CPU.PC.ToString("X");
+			txtSP.Text = state.CPU.SP.ToString("X");
+			txtStatus.Text = state.CPU.PS.ToString("X");
 
 			PSFlags flags = (PSFlags)state.CPU.PS;
 			chkBreak.Checked = flags.HasFlag(PSFlags.Break);
@@ -62,20 +62,20 @@ namespace Mesen.GUI.Debugger
 			chkIntensifyGreen.Checked = Convert.ToBoolean(state.PPU.ControlFlags.IntensifyGreen);
 			chkIntensifyBlue.Checked = Convert.ToBoolean(state.PPU.ControlFlags.IntensifyBlue);
 
-			txtBGAddr.Text = state.PPU.ControlFlags.BackgroundPatternAddr.ToString("x").ToUpper();
-			txtSprAddr.Text = state.PPU.ControlFlags.SpritePatternAddr.ToString("x").ToUpper();
+			txtBGAddr.Text = state.PPU.ControlFlags.BackgroundPatternAddr.ToString("X");
+			txtSprAddr.Text = state.PPU.ControlFlags.SpritePatternAddr.ToString("X");
 
-			txtVRAMAddr.Text = state.PPU.State.VideoRamAddr.ToString("x").ToUpper();
+			txtVRAMAddr.Text = state.PPU.State.VideoRamAddr.ToString("X");
 			txtCycle.Text = state.PPU.Cycle.ToString();
 			txtScanline.Text = state.PPU.Scanline.ToString();
-			txtNTAddr.Text = (0x2000 | (state.PPU.State.VideoRamAddr & 0x0FFF)).ToString("x").ToUpper();
+			txtNTAddr.Text = (0x2000 | (state.PPU.State.VideoRamAddr & 0x0FFF)).ToString("X");
 		}
 
 		private void UpdateStack(UInt16 stackPointer)
 		{
 			lstStack.Items.Clear();
 			for(UInt32 i = (UInt32)0x100 + stackPointer; i <  0x200; i++) {
-				lstStack.Items.Add("$" + InteropEmu.DebugGetMemoryValue(i).ToString("x").ToUpper());
+				lstStack.Items.Add("$" + InteropEmu.DebugGetMemoryValue(i).ToString("X"));
 			}
 		}
 

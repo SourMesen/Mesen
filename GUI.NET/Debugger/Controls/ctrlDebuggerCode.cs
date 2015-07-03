@@ -138,7 +138,7 @@ namespace Mesen.GUI.Debugger
 						codeString.AppendLine("[code not disassembled]");
 
 						UInt32 previousAddress = lineParts[0].Length > 0 ? ParseHexAddress(lineParts[0])-1 : 0xFFFF;
-						lineNumbers.AppendLine(previousAddress.ToString("x").ToUpper());
+						lineNumbers.AppendLine(previousAddress.ToString("X"));
 						codeString.AppendLine("[code not disassembled]");
 
 						skippingCode = false;
@@ -221,7 +221,7 @@ namespace Mesen.GUI.Debugger
 				if(word.StartsWith("$")) {
 					UInt32 address = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
 					Byte memoryValue = InteropEmu.DebugGetMemoryValue(address);
-					string valueText = "$" + memoryValue.ToString("x").ToUpper();
+					string valueText = "$" + memoryValue.ToString("X");
 					toolTip.Show(valueText, txtCode, e.Location.X + 5, e.Location.Y + 5, 3000);
 				}
 				_previousLocation = e.Location;

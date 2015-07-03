@@ -30,15 +30,11 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmClientConfig));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtPort = new System.Windows.Forms.TextBox();
-			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-			this.btnCancel = new System.Windows.Forms.Button();
-			this.btnOK = new System.Windows.Forms.Button();
 			this.lblHost = new System.Windows.Forms.Label();
 			this.lblPort = new System.Windows.Forms.Label();
 			this.txtHost = new System.Windows.Forms.TextBox();
 			this.chkSpectator = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -47,7 +43,6 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.txtPort, 1, 1);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.lblHost, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lblPort, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.txtHost, 1, 0);
@@ -60,7 +55,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(290, 140);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(290, 110);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// txtPort
@@ -71,39 +66,6 @@
 			this.txtPort.Size = new System.Drawing.Size(246, 20);
 			this.txtPort.TabIndex = 6;
 			this.txtPort.TextChanged += new System.EventHandler(this.Field_TextChanged);
-			// 
-			// flowLayoutPanel1
-			// 
-			this.tableLayoutPanel1.SetColumnSpan(this.flowLayoutPanel1, 2);
-			this.flowLayoutPanel1.Controls.Add(this.btnCancel);
-			this.flowLayoutPanel1.Controls.Add(this.btnOK);
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 111);
-			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(290, 29);
-			this.flowLayoutPanel1.TabIndex = 2;
-			// 
-			// btnCancel
-			// 
-			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(212, 3);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 0;
-			this.btnCancel.Text = "Cancel";
-			this.btnCancel.UseVisualStyleBackColor = true;
-			// 
-			// btnOK
-			// 
-			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnOK.Location = new System.Drawing.Point(131, 3);
-			this.btnOK.Name = "btnOK";
-			this.btnOK.Size = new System.Drawing.Size(75, 23);
-			this.btnOK.TabIndex = 1;
-			this.btnOK.Text = "Connect";
-			this.btnOK.UseVisualStyleBackColor = true;
 			// 
 			// lblHost
 			// 
@@ -148,10 +110,8 @@
 			// 
 			// frmClientConfig
 			// 
-			this.AcceptButton = this.btnOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(290, 140);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -164,9 +124,9 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Connect...";
+			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			this.flowLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -175,9 +135,6 @@
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.TextBox txtPort;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-		private System.Windows.Forms.Button btnOK;
-		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Label lblHost;
 		private System.Windows.Forms.Label lblPort;
 		private System.Windows.Forms.TextBox txtHost;

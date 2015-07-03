@@ -75,7 +75,7 @@ namespace Mesen.GUI.Debugger
 					string newValue;
 					Byte memoryValue = InteropEmu.DebugGetMemoryValue((UInt32)item.Tag);
 					if(mnuHexDisplay.Checked) {
-						newValue = "$" + memoryValue.ToString("x").ToUpper();
+						newValue = "$" + memoryValue.ToString("X");
 					} else {
 						newValue = memoryValue.ToString();
 					}

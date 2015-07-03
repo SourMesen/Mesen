@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Forms.NetPlay
 {
@@ -32,13 +33,13 @@ namespace Mesen.GUI.Forms.NetPlay
 				}
 			}
 		}
-
+		/*
 		protected override void UpdateConfig()
 		{
 			PlayerProfile profile = new PlayerProfile();
 			profile.PlayerName = this.txtPlayerName.Text;
 			profile.SetAvatar(this.picAvatar.Image);
 			ConfigManager.Config.Profile = profile;
-		}
+		}*/
 	}
 }

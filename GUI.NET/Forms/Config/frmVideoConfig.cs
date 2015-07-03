@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Forms.Config
 {
-	public partial class frmVideoConfig : Form
+	public partial class frmVideoConfig : BaseConfigForm
 	{
 		public frmVideoConfig()
 		{

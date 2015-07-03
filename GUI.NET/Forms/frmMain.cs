@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 using Mesen.GUI.Debugger;
+using Mesen.GUI.Forms.Cheats;
 using Mesen.GUI.Forms.NetPlay;
 
 namespace Mesen.GUI.Forms
@@ -33,6 +35,8 @@ namespace Mesen.GUI.Forms
 			UpdateMenus();
 			UpdateRecentFiles();
 			StartRenderThread();
+
+			Icon = Properties.Resources.MesenIcon;
 		}
 
 		void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
@@ -348,6 +352,11 @@ namespace Mesen.GUI.Forms
 		private void mnuRecordFromNow_Click(object sender, EventArgs e)
 		{
 			RecordMovie(false);
+		}
+
+		private void mnuCheats_Click(object sender, EventArgs e)
+		{
+			new frmCheatList().Show(this);
 		}
 	}
 }

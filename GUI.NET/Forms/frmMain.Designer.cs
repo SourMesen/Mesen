@@ -33,11 +33,15 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSaveState = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSaveState1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuLoadState = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuLoadState1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRecentFiles = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +66,7 @@
 			this.mnuDisconnect = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuProfile = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCheats = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMovies = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPlayMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRecordFrom = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,11 +79,6 @@
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuSaveState = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuLoadState = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSaveState1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuLoadState1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -125,6 +125,46 @@
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
 			this.toolStripMenuItem4.Size = new System.Drawing.Size(143, 6);
 			// 
+			// mnuSaveState
+			// 
+			this.mnuSaveState.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuSaveState1});
+			this.mnuSaveState.Name = "mnuSaveState";
+			this.mnuSaveState.Size = new System.Drawing.Size(146, 22);
+			this.mnuSaveState.Text = "Save State";
+			this.mnuSaveState.DropDownOpening += new System.EventHandler(this.mnuSaveState_DropDownOpening);
+			// 
+			// mnuSaveState1
+			// 
+			this.mnuSaveState1.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.mnuSaveState1.Name = "mnuSaveState1";
+			this.mnuSaveState1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F1)));
+			this.mnuSaveState1.Size = new System.Drawing.Size(187, 22);
+			this.mnuSaveState1.Text = "1. <empty>";
+			this.mnuSaveState1.Click += new System.EventHandler(this.mnuSaveState1_Click);
+			// 
+			// mnuLoadState
+			// 
+			this.mnuLoadState.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuLoadState1});
+			this.mnuLoadState.Name = "mnuLoadState";
+			this.mnuLoadState.Size = new System.Drawing.Size(146, 22);
+			this.mnuLoadState.Text = "Load State";
+			this.mnuLoadState.DropDownOpening += new System.EventHandler(this.mnuLoadState_DropDownOpening);
+			// 
+			// mnuLoadState1
+			// 
+			this.mnuLoadState1.Name = "mnuLoadState1";
+			this.mnuLoadState1.ShortcutKeys = System.Windows.Forms.Keys.F1;
+			this.mnuLoadState1.Size = new System.Drawing.Size(155, 22);
+			this.mnuLoadState1.Text = "1. <empty>";
+			this.mnuLoadState1.Click += new System.EventHandler(this.mnuLoadState1_Click);
+			// 
+			// toolStripMenuItem7
+			// 
+			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(143, 6);
+			// 
 			// mnuRecentFiles
 			// 
 			this.mnuRecentFiles.Name = "mnuRecentFiles";
@@ -158,7 +198,7 @@
 			this.mnuPause.Enabled = false;
 			this.mnuPause.Name = "mnuPause";
 			this.mnuPause.ShortcutKeyDisplayString = "Esc";
-			this.mnuPause.Size = new System.Drawing.Size(152, 22);
+			this.mnuPause.Size = new System.Drawing.Size(129, 22);
 			this.mnuPause.Text = "Pause";
 			this.mnuPause.Click += new System.EventHandler(this.mnuPause_Click);
 			// 
@@ -166,7 +206,7 @@
 			// 
 			this.mnuReset.Enabled = false;
 			this.mnuReset.Name = "mnuReset";
-			this.mnuReset.Size = new System.Drawing.Size(152, 22);
+			this.mnuReset.Size = new System.Drawing.Size(129, 22);
 			this.mnuReset.Text = "Reset";
 			this.mnuReset.Click += new System.EventHandler(this.mnuReset_Click);
 			// 
@@ -174,7 +214,7 @@
 			// 
 			this.mnuStop.Enabled = false;
 			this.mnuStop.Name = "mnuStop";
-			this.mnuStop.Size = new System.Drawing.Size(152, 22);
+			this.mnuStop.Size = new System.Drawing.Size(129, 22);
 			this.mnuStop.Text = "Stop";
 			this.mnuStop.Click += new System.EventHandler(this.mnuStop_Click);
 			// 
@@ -197,7 +237,7 @@
 			this.mnuLimitFPS.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuLimitFPS.Name = "mnuLimitFPS";
 			this.mnuLimitFPS.ShortcutKeys = System.Windows.Forms.Keys.F9;
-			this.mnuLimitFPS.Size = new System.Drawing.Size(152, 22);
+			this.mnuLimitFPS.Size = new System.Drawing.Size(150, 22);
 			this.mnuLimitFPS.Text = "Limit FPS";
 			this.mnuLimitFPS.Click += new System.EventHandler(this.mnuLimitFPS_Click);
 			// 
@@ -205,27 +245,27 @@
 			// 
 			this.mnuShowFPS.Name = "mnuShowFPS";
 			this.mnuShowFPS.ShortcutKeys = System.Windows.Forms.Keys.F10;
-			this.mnuShowFPS.Size = new System.Drawing.Size(152, 22);
+			this.mnuShowFPS.Size = new System.Drawing.Size(150, 22);
 			this.mnuShowFPS.Text = "Show FPS";
 			this.mnuShowFPS.Click += new System.EventHandler(this.mnuShowFPS_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(147, 6);
 			// 
 			// mnuInputDevices
 			// 
 			this.mnuInputDevices.Enabled = false;
 			this.mnuInputDevices.Name = "mnuInputDevices";
-			this.mnuInputDevices.Size = new System.Drawing.Size(152, 22);
+			this.mnuInputDevices.Size = new System.Drawing.Size(150, 22);
 			this.mnuInputDevices.Text = "Input Devices";
 			// 
 			// mnuVideoConfig
 			// 
 			this.mnuVideoConfig.Enabled = false;
 			this.mnuVideoConfig.Name = "mnuVideoConfig";
-			this.mnuVideoConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoConfig.Size = new System.Drawing.Size(150, 22);
 			this.mnuVideoConfig.Text = "Video";
 			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
 			// 
@@ -233,13 +273,14 @@
 			// 
 			this.mnuAudioConfig.Enabled = false;
 			this.mnuAudioConfig.Name = "mnuAudioConfig";
-			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuAudioConfig.Size = new System.Drawing.Size(150, 22);
 			this.mnuAudioConfig.Text = "Audio";
 			// 
 			// mnuTools
 			// 
 			this.mnuTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuNetPlay,
+            this.mnuCheats,
             this.mnuMovies,
             this.mnuDebugger,
             this.mnuTakeScreenshot});
@@ -314,6 +355,13 @@
 			this.mnuProfile.Text = "Configure Profile";
 			this.mnuProfile.Click += new System.EventHandler(this.mnuProfile_Click);
 			// 
+			// mnuCheats
+			// 
+			this.mnuCheats.Name = "mnuCheats";
+			this.mnuCheats.Size = new System.Drawing.Size(185, 22);
+			this.mnuCheats.Text = "Cheats";
+			this.mnuCheats.Click += new System.EventHandler(this.mnuCheats_Click);
+			// 
 			// mnuMovies
 			// 
 			this.mnuMovies.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -327,7 +375,7 @@
 			// mnuPlayMovie
 			// 
 			this.mnuPlayMovie.Name = "mnuPlayMovie";
-			this.mnuPlayMovie.Size = new System.Drawing.Size(152, 22);
+			this.mnuPlayMovie.Size = new System.Drawing.Size(149, 22);
 			this.mnuPlayMovie.Text = "Play...";
 			this.mnuPlayMovie.Click += new System.EventHandler(this.mnuPlayMovie_Click);
 			// 
@@ -337,27 +385,27 @@
             this.mnuRecordFromStart,
             this.mnuRecordFromNow});
 			this.mnuRecordFrom.Name = "mnuRecordFrom";
-			this.mnuRecordFrom.Size = new System.Drawing.Size(152, 22);
+			this.mnuRecordFrom.Size = new System.Drawing.Size(149, 22);
 			this.mnuRecordFrom.Text = "Record from...";
 			// 
 			// mnuRecordFromStart
 			// 
 			this.mnuRecordFromStart.Name = "mnuRecordFromStart";
-			this.mnuRecordFromStart.Size = new System.Drawing.Size(152, 22);
+			this.mnuRecordFromStart.Size = new System.Drawing.Size(99, 22);
 			this.mnuRecordFromStart.Text = "Start";
 			this.mnuRecordFromStart.Click += new System.EventHandler(this.mnuRecordFromStart_Click);
 			// 
 			// mnuRecordFromNow
 			// 
 			this.mnuRecordFromNow.Name = "mnuRecordFromNow";
-			this.mnuRecordFromNow.Size = new System.Drawing.Size(152, 22);
+			this.mnuRecordFromNow.Size = new System.Drawing.Size(99, 22);
 			this.mnuRecordFromNow.Text = "Now";
 			this.mnuRecordFromNow.Click += new System.EventHandler(this.mnuRecordFromNow_Click);
 			// 
 			// mnuStopMovie
 			// 
 			this.mnuStopMovie.Name = "mnuStopMovie";
-			this.mnuStopMovie.Size = new System.Drawing.Size(152, 22);
+			this.mnuStopMovie.Size = new System.Drawing.Size(149, 22);
 			this.mnuStopMovie.Text = "Stop";
 			this.mnuStopMovie.Click += new System.EventHandler(this.mnuStopMovie_Click);
 			// 
@@ -405,46 +453,6 @@
 			this.mnuAbout.Size = new System.Drawing.Size(170, 22);
 			this.mnuAbout.Text = "About";
 			// 
-			// toolStripMenuItem7
-			// 
-			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(143, 6);
-			// 
-			// mnuSaveState
-			// 
-			this.mnuSaveState.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuSaveState1});
-			this.mnuSaveState.Name = "mnuSaveState";
-			this.mnuSaveState.Size = new System.Drawing.Size(146, 22);
-			this.mnuSaveState.Text = "Save State";
-			this.mnuSaveState.DropDownOpening += new System.EventHandler(this.mnuSaveState_DropDownOpening);
-			// 
-			// mnuLoadState
-			// 
-			this.mnuLoadState.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuLoadState1});
-			this.mnuLoadState.Name = "mnuLoadState";
-			this.mnuLoadState.Size = new System.Drawing.Size(146, 22);
-			this.mnuLoadState.Text = "Load State";
-			this.mnuLoadState.DropDownOpening += new System.EventHandler(this.mnuLoadState_DropDownOpening);
-			// 
-			// mnuSaveState1
-			// 
-			this.mnuSaveState1.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.mnuSaveState1.Name = "mnuSaveState1";
-			this.mnuSaveState1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F1)));
-			this.mnuSaveState1.Size = new System.Drawing.Size(187, 22);
-			this.mnuSaveState1.Text = "1. <empty>";
-			this.mnuSaveState1.Click += new System.EventHandler(this.mnuSaveState1_Click);
-			// 
-			// mnuLoadState1
-			// 
-			this.mnuLoadState1.Name = "mnuLoadState1";
-			this.mnuLoadState1.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.mnuLoadState1.Size = new System.Drawing.Size(155, 22);
-			this.mnuLoadState1.Text = "1. <empty>";
-			this.mnuLoadState1.Click += new System.EventHandler(this.mnuLoadState1_Click);
-			// 
 			// dxViewer
 			// 
 			this.dxViewer.BackColor = System.Drawing.Color.Black;
@@ -462,7 +470,6 @@
 			this.ClientSize = new System.Drawing.Size(365, 272);
 			this.Controls.Add(this.dxViewer);
 			this.Controls.Add(this.menuStrip);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip;
 			this.Name = "frmMain";
 			this.Text = "Mesen";
@@ -521,6 +528,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
 		private System.Windows.Forms.ToolStripMenuItem mnuSaveState1;
 		private System.Windows.Forms.ToolStripMenuItem mnuLoadState1;
+		private System.Windows.Forms.ToolStripMenuItem mnuCheats;
 	}
 }
 
