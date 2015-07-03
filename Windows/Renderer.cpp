@@ -344,15 +344,17 @@ namespace NES
 		SpriteBatch* spritebatch = _spriteBatch.get();
 		const wchar_t* msg = message.c_str();
 
-		for(uint8_t offset = 3; offset > 0; offset--) {
-			_font->DrawString(spritebatch, msg, XMFLOAT2(x + offset, y + offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-			_font->DrawString(spritebatch, msg, XMFLOAT2(x - offset, y + offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-			_font->DrawString(spritebatch, msg, XMFLOAT2(x + offset, y - offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-			_font->DrawString(spritebatch, msg, XMFLOAT2(x - offset, y - offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-			_font->DrawString(spritebatch, msg, XMFLOAT2(x + offset, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-			_font->DrawString(spritebatch, msg, XMFLOAT2(x + offset, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-			_font->DrawString(spritebatch, msg, XMFLOAT2(x, y + offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-			_font->DrawString(spritebatch, msg, XMFLOAT2(x, y - offset), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+		for(uint8_t offsetX = 2; offsetX > 0; offsetX--) {
+			for(uint8_t offsetY = 2; offsetY > 0; offsetY--) {
+				_font->DrawString(spritebatch, msg, XMFLOAT2(x + offsetX, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, msg, XMFLOAT2(x - offsetX, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, msg, XMFLOAT2(x + offsetX, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, msg, XMFLOAT2(x - offsetX, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, msg, XMFLOAT2(x + offsetX, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, msg, XMFLOAT2(x - offsetX, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, msg, XMFLOAT2(x, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, msg, XMFLOAT2(x, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+			}
 		}
 		_font->DrawString(spritebatch, msg, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
 	}
