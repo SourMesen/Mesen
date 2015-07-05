@@ -477,7 +477,7 @@ namespace NES
 		list<wstring> words;
 		wstring currentWord;
 		for(int i = 0, len = text.length(); i < len; i++) {
-			if(text[i] == L' ') {
+			if(text[i] == L' ' || text[i] == L'\n') {
 				if(currentWord.length() > 0) {
 					words.push_back(currentWord);
 					currentWord.clear();
