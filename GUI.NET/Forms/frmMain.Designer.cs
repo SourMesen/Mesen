@@ -38,9 +38,7 @@
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuSaveState = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSaveState1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuLoadState = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuLoadState1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRecentFiles = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
@@ -116,70 +114,49 @@
 			// 
 			this.mnuOpen.Name = "mnuOpen";
 			this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.mnuOpen.Size = new System.Drawing.Size(146, 22);
+			this.mnuOpen.Size = new System.Drawing.Size(152, 22);
 			this.mnuOpen.Text = "Open";
 			this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(143, 6);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuSaveState
 			// 
-			this.mnuSaveState.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuSaveState1});
 			this.mnuSaveState.Name = "mnuSaveState";
-			this.mnuSaveState.Size = new System.Drawing.Size(146, 22);
+			this.mnuSaveState.Size = new System.Drawing.Size(152, 22);
 			this.mnuSaveState.Text = "Save State";
 			this.mnuSaveState.DropDownOpening += new System.EventHandler(this.mnuSaveState_DropDownOpening);
 			// 
-			// mnuSaveState1
-			// 
-			this.mnuSaveState1.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.mnuSaveState1.Name = "mnuSaveState1";
-			this.mnuSaveState1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F1)));
-			this.mnuSaveState1.Size = new System.Drawing.Size(187, 22);
-			this.mnuSaveState1.Text = "1. <empty>";
-			this.mnuSaveState1.Click += new System.EventHandler(this.mnuSaveState1_Click);
-			// 
 			// mnuLoadState
 			// 
-			this.mnuLoadState.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuLoadState1});
 			this.mnuLoadState.Name = "mnuLoadState";
-			this.mnuLoadState.Size = new System.Drawing.Size(146, 22);
+			this.mnuLoadState.Size = new System.Drawing.Size(152, 22);
 			this.mnuLoadState.Text = "Load State";
 			this.mnuLoadState.DropDownOpening += new System.EventHandler(this.mnuLoadState_DropDownOpening);
-			// 
-			// mnuLoadState1
-			// 
-			this.mnuLoadState1.Name = "mnuLoadState1";
-			this.mnuLoadState1.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.mnuLoadState1.Size = new System.Drawing.Size(155, 22);
-			this.mnuLoadState1.Text = "1. <empty>";
-			this.mnuLoadState1.Click += new System.EventHandler(this.mnuLoadState1_Click);
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(143, 6);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuRecentFiles
 			// 
 			this.mnuRecentFiles.Name = "mnuRecentFiles";
-			this.mnuRecentFiles.Size = new System.Drawing.Size(146, 22);
+			this.mnuRecentFiles.Size = new System.Drawing.Size(152, 22);
 			this.mnuRecentFiles.Text = "Recent Files";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(143, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuExit
 			// 
 			this.mnuExit.Name = "mnuExit";
-			this.mnuExit.Size = new System.Drawing.Size(146, 22);
+			this.mnuExit.Size = new System.Drawing.Size(152, 22);
 			this.mnuExit.Text = "Exit";
 			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
@@ -526,8 +503,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuSaveState;
 		private System.Windows.Forms.ToolStripMenuItem mnuLoadState;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
-		private System.Windows.Forms.ToolStripMenuItem mnuSaveState1;
-		private System.Windows.Forms.ToolStripMenuItem mnuLoadState1;
 		private System.Windows.Forms.ToolStripMenuItem mnuCheats;
 	}
 }

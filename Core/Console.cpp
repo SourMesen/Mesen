@@ -109,22 +109,25 @@ void Console::Stop()
 {
 	_stop = true;
 	Console::ClearFlags(EmulationFlags::Paused);
-	Console::Instance->_stopLock.Acquire();
-	Console::Instance->_stopLock.Release();
+	_stopLock.Acquire();
+	_stopLock.Release();
 }
 
 void Console::Pause()
 {
-	Console::Instance->_pauseLock.Acquire();
-	
-	//Spin wait until emu pauses
-	Console::Instance->_runLock.Acquire();
+	if(Console::Instance) {
+		Console::Instance->_pauseLock.Acquire();
+		//Spin wait until emu pauses
+		Console::Instance->_runLock.Acquire();
+	}
 }
 
 void Console::Resume()
 {
-	Console::Instance->_runLock.Release();
-	Console::Instance->_pauseLock.Release();
+	if(Console::Instance) {
+		Console::Instance->_runLock.Release();
+		Console::Instance->_pauseLock.Release();
+	}
 }
 
 void Console::SetFlags(int flags)

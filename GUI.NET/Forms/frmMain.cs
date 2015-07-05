@@ -52,6 +52,8 @@ namespace Mesen.GUI.Forms
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameLoaded) {
 				CheatInfo.ApplyCheats();
+				InitializeStateMenu(mnuSaveState, true);
+				InitializeStateMenu(mnuLoadState, false);
 				this.StartEmuThread();
 			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameStopped) {
 				CheatInfo.ClearCheats();
