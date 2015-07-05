@@ -83,12 +83,12 @@ wstring Console::GetROMPath()
 	return filepath;
 }
 
-void Console::Reset()
+void Console::Reset(bool softReset)
 {
 	Movie::Stop();
 	if(Instance) {
 		Console::Pause();
-		Instance->ResetComponents(true);
+		Instance->ResetComponents(softReset);
 		Console::Resume();
 	}
 }

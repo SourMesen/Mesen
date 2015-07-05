@@ -77,7 +77,7 @@ void Movie::StartRecording(wstring filename, bool reset)
 		Reset();
 
 		if(reset) {
-			Console::Reset();
+			Console::Reset(false);
 		} else {
 			Console::SaveState(_startState);
 		}
@@ -114,7 +114,7 @@ void Movie::PlayMovie(wstring filename)
 			//Restore state if one was present in the movie
 			Console::LoadState(_startState);
 		} else {
-			Console::Reset();
+			Console::Reset(false);
 		}
 		_playing = true;
 		Console::Resume();

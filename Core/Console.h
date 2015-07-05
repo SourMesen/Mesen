@@ -47,7 +47,7 @@ class Console
 		~Console();
 		void Run();
 		void Stop();
-		static void Reset();
+		static void Reset(bool softReset = true);
 
 		//Used to pause the emu loop to perform thread-safe operations
 		static void Pause();
