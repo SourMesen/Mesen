@@ -59,7 +59,7 @@ private:
 
 	int32_t _cycleCount;
 	int32_t _relativeCycleCount;
-	uint32_t _cyclePenalty;
+	uint16_t _operand;
 
 	Func _opTable[256];
 	uint8_t _cycles[256];
@@ -77,8 +77,15 @@ private:
 	uint8_t GetOPCode()
 	{
 		uint8_t value = _memoryManager->Read(_state.PC, true);
+		_cycleCount++;
 		_state.PC++;
 		return value;
+	}
+
+	void DummyRead()
+	{
+		_memoryManager->Read(_state.PC, false);
+		_cycleCount++;
 	}
 
 	uint8_t ReadByte()
@@ -132,14 +139,19 @@ private:
 	void MemoryWrite(uint16_t addr, uint8_t value)
 	{
 		_memoryManager->Write(addr, value);
+		_cycleCount++;
 	}
 
 	uint8_t MemoryRead(uint16_t addr) {
-		return _memoryManager->Read(addr);
+		uint8_t value = _memoryManager->Read(addr);
+		_cycleCount++;
+		return value;
 	}
 
 	uint16_t MemoryReadWord(uint16_t addr) {
-		return _memoryManager->ReadWord(addr);
+		uint16_t value = _memoryManager->ReadWord(addr);
+		_cycleCount+=2;
+		return value;
 	}
 
 	void SetRegister(uint8_t &reg, uint8_t value) {
@@ -183,40 +195,56 @@ private:
 	uint16_t PC() { return _state.PC; }
 	void SetPC(uint16_t value) { _state.PC = value; }
 
-	uint16_t GetOperandAddr()
+	uint16_t FetchOperand()
 	{
 		switch(_instAddrMode) {
+			case AddrMode::Acc: 
+			case AddrMode::Imp: DummyRead(); return 0;
+			case AddrMode::Imm: 
+			case AddrMode::Rel: return GetImmediate();
+			case AddrMode::Zero: return GetZeroAddr();
+			case AddrMode::ZeroX: return GetZeroXAddr();
+			case AddrMode::ZeroY: return GetZeroYAddr();
+			case AddrMode::Ind: return GetIndAddr();
+			case AddrMode::IndX: return GetIndXAddr();
+			case AddrMode::IndY: return GetIndYAddr(false);
+			case AddrMode::IndYW: return GetIndYAddr(true);
 			case AddrMode::Abs: return GetAbsAddr();
 			case AddrMode::AbsX: return GetAbsXAddr(false); 
 			case AddrMode::AbsXW: return GetAbsXAddr(true);
 			case AddrMode::AbsY: return GetAbsYAddr(false);
 			case AddrMode::AbsYW: return GetAbsYAddr(true);
-			case AddrMode::Imm: return GetImmediate();
-			case AddrMode::IndX: return GetIndXAddr();
-			case AddrMode::IndY: return GetIndYAddr(false);
-			case AddrMode::IndYW: return GetIndYAddr(true);
-			case AddrMode::Zero: return GetZeroAddr();
-			case AddrMode::ZeroX: return GetZeroXAddr();
-			case AddrMode::ZeroY: return GetZeroYAddr();
 		}
-		return 0;
+		throw new exception();
 	}
 
-	uint8_t GetOperand()
+	uint16_t GetOperand()
 	{
-		uint16_t addr = GetOperandAddr();
+		return _operand;
+	}
 
-		if(_instAddrMode != AddrMode::Imm) {
-			return MemoryRead(addr);
+	uint8_t GetOperandValue()
+	{
+		if(_instAddrMode >= AddrMode::Zero) {
+			return MemoryRead(GetOperand());
 		} else {
-			return (uint8_t)addr;
+			return (uint8_t)GetOperand();
 		}
 	}
 
+	uint16_t GetIndAddr() { return ReadWord(); }
 	uint8_t GetImmediate() { return ReadByte(); }
 	uint8_t GetZeroAddr() { return ReadByte(); }
-	uint8_t GetZeroXAddr() { return ReadByte() + X(); }
-	uint8_t GetZeroYAddr() { return ReadByte() + Y(); }
+	uint8_t GetZeroXAddr() { 
+		uint8_t value = ReadByte();
+		MemoryRead(value); //Dummy read
+		return value + X();
+	}
+	uint8_t GetZeroYAddr() { 
+		uint8_t value = ReadByte();
+		MemoryRead(value); //Dummy read
+		return value + Y();
+	}
 	uint16_t GetAbsAddr() { return ReadWord(); }
 
 	uint16_t GetAbsXAddr(bool dummyRead = true) { 
@@ -243,7 +271,7 @@ private:
 	}
 
 	uint16_t GetInd() { 
-		uint16_t addr = ReadWord();
+		uint16_t addr = GetOperand();
 		if((addr & 0xFF) == 0xFF) {
 			auto lo = MemoryRead(addr);
 			auto hi = MemoryRead(addr - 0xFF);
@@ -288,9 +316,9 @@ private:
 		return addr + Y();
 	}
 
-	void AND() { SetA(A() & GetOperand()); }
-	void EOR() { SetA(A() ^ GetOperand()); }
-	void ORA() { SetA(A() | GetOperand()); }
+	void AND() { SetA(A() & GetOperandValue()); }
+	void EOR() { SetA(A() ^ GetOperandValue()); }
+	void ORA() { SetA(A() | GetOperandValue()); }
 
 	void ADD(uint8_t value)
 	{
@@ -307,8 +335,8 @@ private:
 		SetA((uint8_t)result);
 	}
 
-	void ADC() { ADD(GetOperand()); }
-	void SBC() { ADD(GetOperand() ^ 0xFF); }
+	void ADC() { ADD(GetOperandValue()); }
+	void SBC() { ADD(GetOperandValue() ^ 0xFF); }
 
 	void CMP(uint8_t reg, uint8_t value) 
 	{
@@ -327,13 +355,13 @@ private:
 		}
 	}
 
-	void CPA() { CMP(A(), GetOperand()); }
-	void CPX() { CMP(X(), GetOperand()); }
-	void CPY() { CMP(Y(), GetOperand()); }
+	void CPA() { CMP(A(), GetOperandValue()); }
+	void CPX() { CMP(X(), GetOperandValue()); }
+	void CPY() { CMP(Y(), GetOperandValue()); }
 
 	void INC() 
 	{
-		uint16_t addr = GetOperandAddr();
+		uint16_t addr = GetOperand();
 		ClearFlags(PSFlags::Negative | PSFlags::Zero);
 		uint8_t value = MemoryRead(addr);		
 		
@@ -346,7 +374,7 @@ private:
 
 	void DEC() 
 	{
-		uint16_t addr = GetOperandAddr();
+		uint16_t addr = GetOperand();
 		ClearFlags(PSFlags::Negative | PSFlags::Zero);
 		uint8_t value = MemoryRead(addr);
 		MemoryWrite(addr, value); //Dummy write
@@ -405,28 +433,28 @@ private:
 	}
 
 	void ASLAddr() {
-		uint16_t addr = GetOperandAddr();
+		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
 		MemoryWrite(addr, value); //Dummy write
 		MemoryWrite(addr, ASL(value));
 	}
 
 	void LSRAddr() {
-		uint16_t addr = GetOperandAddr();
+		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
 		MemoryWrite(addr, value); //Dummy write
 		MemoryWrite(addr, LSR(value));
 	}
 
 	void ROLAddr() {
-		uint16_t addr = GetOperandAddr();
+		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
 		MemoryWrite(addr, value); //Dummy write
 		MemoryWrite(addr, ROL(value));
 	}
 
 	void RORAddr() {
-		uint16_t addr = GetOperandAddr();
+		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
 		MemoryWrite(addr, value); //Dummy write
 		MemoryWrite(addr, ROR(value));
@@ -437,17 +465,19 @@ private:
 	}
 
 	void BranchRelative(bool branch) {
-		int8_t offset = GetImmediate();
+		int8_t offset = (int8_t)GetOperand();
 		if(branch) {
-			CheckPageCrossed(PC(), offset);
-			IncCycleCount(1);
+			if(CheckPageCrossed(PC(), offset)) {
+				DummyRead();
+			}
+			DummyRead();
 
 			SetPC(PC() + offset);
 		}
 	}
 
 	void BIT() {
-		uint8_t value = GetOperand();
+		uint8_t value = GetOperandValue();
 		ClearFlags(PSFlags::Zero | PSFlags::Overflow | PSFlags::Negative);
 		if((A() & value) == 0) {
 			SetFlags(PSFlags::Zero);
@@ -466,20 +496,14 @@ private:
 		return pageCrossed;
 	}
 
-	uint32_t GetCyclePenalty() {
-		uint32_t cyclePenalty = _cyclePenalty;
-		_cyclePenalty = 0;
-		return cyclePenalty;
-	}
-
 	#pragma region OP Codes
-	void LDA() { SetA(GetOperand()); }
-	void LDX() { SetX(GetOperand()); }
-	void LDY() { SetY(GetOperand()); }
+	void LDA() { SetA(GetOperandValue()); }
+	void LDX() { SetX(GetOperandValue()); }
+	void LDY() { SetY(GetOperandValue()); }
 
-	void STA() { MemoryWrite(GetOperandAddr(), A()); }
-	void STX() { MemoryWrite(GetOperandAddr(), X()); }
-	void STY() { MemoryWrite(GetOperandAddr(), Y()); }
+	void STA() { MemoryWrite(GetOperand(), A()); }
+	void STX() { MemoryWrite(GetOperand(), X()); }
+	void STY() { MemoryWrite(GetOperand(), Y()); }
 
 	void TAX() { SetX(A()); }
 	void TAY() { SetY(A()); }
@@ -493,8 +517,14 @@ private:
 		uint8_t flags = PS() | PSFlags::Break;
 		Push((uint8_t)flags);
 	}
-	void PLA() { SetA(Pop()); }
-	void PLP() { SetPS(Pop()); }
+	void PLA() { 
+		DummyRead();
+		SetA(Pop()); 
+	}
+	void PLP() { 
+		DummyRead();
+		SetPS(Pop()); 
+	}
 
 	void INX() { SetX(X() + 1); }
 	void INY() { SetY(Y() + 1); }
@@ -515,16 +545,19 @@ private:
 	void ROR_Memory() { RORAddr(); }
 
 	void JMP_Abs() {
-		JMP(GetAbsAddr());
+		JMP(GetOperand());
 	}
 	void JMP_Ind() { JMP(GetInd()); }
 	void JSR() {
-		uint16_t addr = GetAbsAddr();
+		uint16_t addr = GetOperand();
+		DummyRead();
 		Push((uint16_t)(PC() - 1));
 		JMP(addr);
 	}
 	void RTS() {
 		uint16_t addr = PopWord();
+		DummyRead();
+		DummyRead();
 		SetPC(addr + 1);
 	}
 
@@ -587,6 +620,8 @@ private:
 	}
 
 	void NMI() {
+		DummyRead();  //fetch opcode (and discard it - $00 (BRK) is forced into the opcode register instead)
+		DummyRead();  //read next instruction byte (actually the same as above, since PC increment is suppressed. Also discarded.)
 		Push((uint16_t)(PC()));
 		Push((uint8_t)PS());
 		SetFlags(PSFlags::Interrupt);
@@ -594,6 +629,8 @@ private:
 	}
 
 	void IRQ() {
+		DummyRead();  //fetch opcode (and discard it - $00 (BRK) is forced into the opcode register instead)
+		DummyRead();  //read next instruction byte (actually the same as above, since PC increment is suppressed. Also discarded.)
 		Push((uint16_t)(PC()));
 
 		if(_state.NMIFlag) {
@@ -609,14 +646,14 @@ private:
 	}
 	
 	void RTI() {
+		DummyRead();
 		SetPS(Pop());
 		SetPC(PopWord());
 	}
 
 	void NOP() {
-		GetOperand();
 	}
-	
+		
 	#pragma endregion
 
 protected:
@@ -628,14 +665,11 @@ public:
 	CPU(MemoryManager *memoryManager);
 	static int32_t GetCycleCount() { return CPU::Instance->_cycleCount; }
 	static int32_t GetRelativeCycleCount() { return CPU::Instance->_relativeCycleCount + CPU::Instance->_cycleCount; }
-	static void IncCycleCount(uint32_t cycles) { 
-		CPU::Instance->_cyclePenalty += cycles;
-		CPU::Instance->_cycleCount += cycles;
-	}
 	static void SetNMIFlag() { CPU::Instance->_state.NMIFlag = true; }
 	static void ClearNMIFlag() { CPU::Instance->_state.NMIFlag = false; }
 	static void SetIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag |= (int)source; }
 	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
+	static void RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue);
 
 	void Reset(bool softReset);
 	uint32_t Exec();

@@ -159,13 +159,10 @@ void Console::Run()
 	Console::RunningLock.Acquire();
 
 	while(true) { 
-		uint32_t executedCycles = _cpu->Exec();
-		_ppu->Exec();
-		bool frameDone = _apu->Exec(executedCycles);
+		bool frameDone = _apu->Exec(_cpu->Exec());
 
 		if(frameDone) {
 			_cpu->EndFrame();
-			_ppu->EndFrame();
 
 			if(CheckFlag(EmulationFlags::LimitFPS) && frameDone) {
 				elapsedTime = clockTimer.GetElapsedMS();
@@ -273,12 +270,8 @@ bool Console::RunTest(uint8_t *expectedResult)
 	Console::RunningLock.Acquire();
 
 	while(true) {
-		uint32_t executedCycles = _cpu->Exec();
-		_ppu->Exec();
-
-		if(_apu->Exec(executedCycles)) {
+		if(_apu->Exec(_cpu->Exec())) {
 			_cpu->EndFrame();
-			_ppu->EndFrame();
 		}
 
 		if(timer.GetElapsedMS() > 100) {

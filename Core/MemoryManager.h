@@ -34,8 +34,6 @@ class MemoryManager: public Snapshotable
 		uint8_t ReadMappedVRAM(uint16_t addr);
 		void WriteMappedVRAM(uint16_t addr, uint8_t value);
 
-		void ProcessVRAMAccess(uint16_t &addr);
-
 	protected:
 		void StreamState(bool saving);
 

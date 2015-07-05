@@ -46,7 +46,6 @@ void PPU::Reset()
 	_scanline = 0;
 	_cycle = 0;
 	_frameCount = 0;
-	_cycleCount = 0;
 	_memoryReadBuffer = 0;
 
 	memset(_spriteRAM, 0xFF, 0x100);
@@ -154,13 +153,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			UpdateVideoRamAddr();
 			break;
 		case PPURegisters::SpriteDMA:
-			//DMA transfer starts at SpriteRamAddr and wraps around
-			for(int i = 0; i < 0x100; i++) {
-				_spriteRAM[(_state.SpriteRamAddr+i)&0xFF] = _memoryManager->Read(value*0x100 + i);
-			}
-
-			//"the DMA procedure takes 513 CPU cycles (+1 on odd CPU cycles)"
-			CPU::IncCycleCount((CPU::GetCycleCount() % 2 == 0) ? 513 : 514);
+			CPU::RunDMATransfer(_spriteRAM, _state.SpriteRamAddr, value);
 			break;
 	}
 }
@@ -399,21 +392,20 @@ void PPU::DrawPixel()
 	//This is called 3.7 million times per second - needs to be as fast as possible.
 	uint8_t offset = _state.XScroll;
 
-	bool useBackground = true;
 	uint32_t backgroundColor = 0;
-	uint32_t spriteColor = 0;
-	
+	uint32_t &pixel = (((uint32_t*)_outputBuffer)[(_scanline << 8) + _cycle - 1]);
+
 	if((_cycle > 8 || _flags.BackgroundMask) && _flags.BackgroundEnabled) {
 		//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
 		backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
 	}
 
-	uint8_t i;
 	if((_cycle > 8 || _flags.SpriteMask) && _flags.SpritesEnabled) {
 		//SpriteMask = true: Hide sprites in leftmost 8 pixels of screen
-		for(i = 0; i < _spriteCount; i++) {
+		for(uint8_t i = 0; i < _spriteCount; i++) {
 			int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
 			if(shift >= 0 && shift < 8) {
+				uint32_t spriteColor;
 				if(_spriteTiles[i].HorizontalMirror) {
 					spriteColor = ((_spriteTiles[i].LowByte >> shift) & 0x01) | ((_spriteTiles[i].HighByte >> shift) & 0x01) << 1;
 				} else {
@@ -424,7 +416,7 @@ void PPU::DrawPixel()
 					//First sprite without a 00 color, use it.
 					if(backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority) {
 						//Check sprite priority
-						useBackground = false;
+						pixel = PPU_PALETTE_RGB[GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor)];
 					}
 
 					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled) {
@@ -434,22 +426,12 @@ void PPU::DrawPixel()
 						//"Should always miss when Y >= 239"
 						_statusFlags.Sprite0Hit = true;
 					}
-					break;
+					return;
 				}
 			}
 		}
 	}
-	
-	uint32_t bufferPosition = _scanline * 256 + (_cycle - 1);
-	if(useBackground) {
-		// If we're grabbing the pixel from the high part of the shift register, use the previous tile's palette, not the current one
-		((uint32_t*)_outputBuffer)[bufferPosition] = PPU_PALETTE_RGB[GetBGPaletteEntry(offset + ((_cycle - 1) % 8) < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor)];
-	} else {
-		((uint32_t*)_outputBuffer)[bufferPosition] = PPU_PALETTE_RGB[GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor)];
-	}
-
-	//Shift the tile registers to prepare for the next cycle
-	ShiftTileRegisters();
+	pixel = PPU_PALETTE_RGB[GetBGPaletteEntry(offset + ((_cycle - 1) % 8) < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor)];
 }
 
 void PPU::ProcessPreVBlankScanline()
@@ -457,13 +439,13 @@ void PPU::ProcessPreVBlankScanline()
 	//For pre-render scanline & all visible scanlines
 	if(IsRenderingEnabled()) {
 		//Update video ram address according to scrolling logic
-		if(_cycle == 256) {
+		if((_cycle > 0 && _cycle < 256 && _cycle % 8 == 0) || _cycle == 328 || _cycle == 336) {
+			IncHorizontalScrolling();
+		} else if(_cycle == 256) {
 			IncVerticalScrolling();
 		} else if(_cycle == 257) {
 			//copy horizontal scrolling value from t
 			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x041F) | (_state.TmpVideoRamAddr & 0x041F);
-		} else if((_cycle % 8 == 0 && _cycle > 0 && _cycle < 256) || _cycle == 328 || _cycle == 336) {
-			IncHorizontalScrolling();
 		}
 	}
 
@@ -477,7 +459,7 @@ void PPU::ProcessPrerenderScanline()
 {
 	ProcessPreVBlankScanline();
 
-	if(_cycle == 0) {
+	if(_cycle == 1) {
 		_statusFlags.SpriteOverflow = false;
 		_statusFlags.Sprite0Hit = false;
 		_statusFlags.VerticalBlank = false;
@@ -520,6 +502,7 @@ void PPU::ProcessVisibleScanline()
 		} 
 
 		DrawPixel();
+		ShiftTileRegisters();
 		
 		if(IsRenderingEnabled()) {
 			CopyOAMData();
@@ -527,9 +510,12 @@ void PPU::ProcessVisibleScanline()
 
 		if(_cycle == 256 && _scanline == 239) {
 			//Send frame to GUI once the last pixel has been output
-			PPU::VideoDevice->UpdateFrame(_outputBuffer);
+			if(PPU::VideoDevice) {
+				PPU::VideoDevice->UpdateFrame(_outputBuffer);
+			}
 		}
 	} else if((_cycle - 261) % 8 == 0 && _cycle <= 320) {
+		//Cycle 261, 269, etc.
 		uint32_t spriteIndex = (_cycle - 261) / 8;
 		LoadSpriteTileInfo(spriteIndex);
 	} else if(_cycle == 321 || _cycle == 329) {
@@ -615,7 +601,7 @@ void PPU::CopyOAMData()
 
 void PPU::BeginVBlank()
 {
-	if(_cycle == 0) {
+	if(_cycle == 1) {
 		if(!_doNotSetVBFlag) {
 			_statusFlags.VerticalBlank = true;
 			if(_flags.VBlank) {
@@ -633,39 +619,34 @@ void PPU::EndVBlank()
 	}
 }
 
-void PPU::Exec(uint32_t extraCycles)
+void PPU::Exec()
 {
-	int32_t gap = CPU::GetCycleCount() * 3 - _cycleCount;
-	if(gap < 0) {
-		gap = 0;
+	if(_scanline != -1 && _scanline < 240) {
+		ProcessVisibleScanline();
+	} else if(_scanline == -1) {
+		ProcessPrerenderScanline();
+	} else if(_scanline == 241) {
+		BeginVBlank();
+	} else if(_scanline == 260) {
+		EndVBlank();
 	}
-	gap += extraCycles;
 
-	_cycleCount += gap;
-	while(gap > 0) {
-		if(_scanline == -1) {
-			ProcessPrerenderScanline();
-		} else if(_scanline < 240) {
-			ProcessVisibleScanline();
-		} else if(_scanline == 241) {
-			BeginVBlank();
-		} else if(_scanline == 260) {
-			EndVBlank();
+	if(_cycle == 340) {
+		_cycle = -1;
+		_scanline++;
+
+		if(_scanline == 261) {
+			_scanline = -1;
 		}
-
-		if(_cycle == 340) {
-			_cycle = 0;
-			_scanline++;
-
-			if(_scanline == 261) {
-				_scanline = -1;
-			}
-		} else {
-			_cycle++;
-		}
-
-		gap--;
 	}
+	_cycle++;
+}
+
+void PPU::ExecStatic()
+{
+	PPU::Instance->Exec();
+	PPU::Instance->Exec();
+	PPU::Instance->Exec();
 }
 
 void PPU::StreamState(bool saving)
@@ -703,7 +684,6 @@ void PPU::StreamState(bool saving)
 	Stream<int32_t>(_scanline);
 	Stream<uint32_t>(_cycle);
 	Stream<uint32_t>(_frameCount);
-	Stream<int32_t>(_cycleCount);
 	Stream<uint8_t>(_memoryReadBuffer);
 	
 	StreamArray<uint8_t>(_paletteRAM, 0x100);

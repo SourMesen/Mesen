@@ -35,8 +35,13 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 		uint32_t* _chrSlotPages;
 
 		uint32_t _chrShift = -1;
+		uint32_t _chrSlotMaxIndex = -1;
 		uint32_t _prgShift = -1;
+		uint32_t _prgSlotMaxIndex = -1;
 
+		uint32_t _chrPageMask = -1;
+		uint32_t _prgPageMask = -1;
+		
 		virtual void InitMapper() = 0;
 
 	public:
@@ -93,20 +98,12 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 
 		uint32_t AddrToPRGSlot(uint16_t addr)
 		{
-			if(_prgShift == -1) {
-				_prgShift = this->log2(GetPRGSlotCount());
-			}
-
-			return (addr >> (15 - _prgShift)) & (GetPRGSlotCount() - 1);
+			return (addr >> _prgShift) & _prgSlotMaxIndex;
 		}
 
 		uint32_t AddrToCHRSlot(uint16_t addr)
 		{
-			if(_chrShift == -1) {
-				_chrShift = this->log2(GetCHRSlotCount());
-			}
-
-			return (addr >> (13 - _chrShift)) & (GetCHRSlotCount() - 1);
+			return (addr >> _chrShift) & _chrSlotMaxIndex;
 		}
 
 		wstring GetBatteryFilename()
@@ -184,6 +181,14 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 			_prgSlotPages = new uint32_t[GetPRGSlotCount()];
 			_chrSlotPages = new uint32_t[GetCHRSlotCount()];
 
+			_prgShift = 15 - this->log2(GetPRGSlotCount());
+			_prgSlotMaxIndex = GetPRGSlotCount() - 1;
+			_chrShift = 13 - this->log2(GetCHRSlotCount());
+			_chrSlotMaxIndex = GetCHRSlotCount() - 1;
+
+			_chrPageMask = GetCHRPageSize() - 1;
+			_prgPageMask = GetPRGPageSize() - 1;
+
 			InitMapper();
 		}
 
@@ -245,7 +250,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 		virtual uint8_t ReadRAM(uint16_t addr)
 		{
 			if(addr >= 0x8000) {
-				return _prgPages[AddrToPRGSlot(addr)][addr & (GetPRGPageSize() - 1)];
+				return _prgPages[AddrToPRGSlot(addr)][addr & _prgPageMask];
 			} else if(addr >= 0x6000) {
 				return _SRAM[addr & 0x1FFF];
 			} else if(addr >= 0x4000) {
@@ -268,7 +273,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 
 		uint32_t ToAbsoluteAddress(uint16_t addr)
 		{
-			return GetPRGPageSize() * (_prgSlotPages[AddrToPRGSlot(addr)] % GetPRGPageCount()) + (addr & (GetPRGPageSize() - 1));
+			return GetPRGPageSize() * (_prgSlotPages[AddrToPRGSlot(addr)] % GetPRGPageCount()) + (addr & _prgPageMask);
 		}
 
 		int32_t FromAbsoluteAddress(uint32_t addr)
@@ -319,13 +324,13 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 		
 		virtual uint8_t ReadVRAM(uint16_t addr)
 		{
-			return _chrPages[AddrToCHRSlot(addr)][addr & (GetCHRPageSize() - 1)];
+			return _chrPages[AddrToCHRSlot(addr)][addr & _chrPageMask];
 		}
 
 		virtual void WriteVRAM(uint16_t addr, uint8_t value)
 		{
 			if(_hasCHRRAM) {
-				_chrPages[AddrToCHRSlot(addr)][addr & (GetCHRPageSize() - 1)] = value;
+				_chrPages[AddrToCHRSlot(addr)][addr & _chrPageMask] = value;
 			} else {
 				//assert(false);
 			}

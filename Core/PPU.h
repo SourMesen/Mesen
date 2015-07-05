@@ -124,7 +124,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		bool _writeOAMData;
 		uint32_t _overflowCounter;
 		bool _sprite0Added;
-		
+
 		void UpdateStatusFlag();
 
 		void SetControlRegister(uint8_t value);
@@ -193,7 +193,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint8_t ReadRAM(uint16_t addr);
 		void WriteRAM(uint16_t addr, uint8_t value);
 
-		void Exec(uint32_t extraCycles = 0);
+		void Exec();
 
 		static void RegisterVideoDevice(IVideoDevice *videoDevice)
 		{
@@ -225,13 +225,5 @@ class PPU : public IMemoryHandler, public Snapshotable
 			return PPU::Instance->_scanline;
 		}
 
-		static void ExecStatic(uint32_t cycles)
-		{
-			PPU::Instance->Exec(cycles);
-		}
-
-		void EndFrame()
-		{
-			_cycleCount = 0;
-		}
+		static void ExecStatic();
 };

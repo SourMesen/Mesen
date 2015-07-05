@@ -59,18 +59,12 @@ void MemoryManager::WriteRegister(uint16_t addr, uint8_t value)
 
 uint8_t MemoryManager::ReadMappedVRAM(uint16_t addr)
 {
-	if(_vramReadHandlers[addr]) {
-		return _vramReadHandlers[addr]->ReadVRAM(addr);
-	} else {
-		return 0;
-	}
+	return _mapper->ReadVRAM(addr);
 }
 
 void MemoryManager::WriteMappedVRAM(uint16_t addr, uint8_t value)
 {
-	if(_vramWriteHandlers[addr]) {
-		_vramWriteHandlers[addr]->WriteVRAM(addr, value);
-	}
+	return _mapper->WriteVRAM(addr, value);
 }
 
 void MemoryManager::InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses)
@@ -115,7 +109,7 @@ uint8_t MemoryManager::Read(uint16_t addr, bool forExecution)
 	Debugger::CheckBreakpoint(forExecution ? BreakpointType::Execute : BreakpointType::Read, addr);
 
 	uint8_t value;
-	PPU::ExecStatic(3);
+	PPU::ExecStatic();
 	if(addr <= 0x1FFF) {
 		value = _internalRAM[addr & 0x07FF];
 	} else {
@@ -128,7 +122,7 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 {
 	Debugger::CheckBreakpoint(BreakpointType::Write, addr);
 
-	PPU::ExecStatic(3);
+	PPU::ExecStatic();
 	if(addr <= 0x1FFF) {
 		_internalRAM[addr & 0x07FF] = value;
 	} else {
@@ -143,24 +137,20 @@ uint16_t MemoryManager::ReadWord(uint16_t addr)
 	return lo | hi << 8;
 }
 
-void MemoryManager::ProcessVRAMAccess(uint16_t &addr)
-{
-	addr &= 0x3FFF;
-	if(addr >= 0x3000) {
-		//Need to mirror 0x3000 writes to 0x2000, this appears to be how hardware behaves
-		//Required for proper MMC3 IRQ timing in Burai Fighter
-		addr -= 0x1000;
-	}
-	_mapper->NotifyVRAMAddressChange(addr);
-}
-
 uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 {	
-	ProcessVRAMAccess(addr);
+	addr &= 0x3FFF;
 
 	if(addr <= 0x1FFF) {
-		return ReadMappedVRAM(addr & 0x1FFF);
+		_mapper->NotifyVRAMAddressChange(addr);
+		return ReadMappedVRAM(addr);
 	} else {
+		if(addr >= 0x3000) {
+			//Need to mirror 0x3000 writes to 0x2000, this appears to be how hardware behaves
+			//Required for proper MMC3 IRQ timing in Burai Fighter
+			addr -= 0x1000;
+		}
+		_mapper->NotifyVRAMAddressChange(addr);
 		switch(_mapper->GetMirroringType()) {
 			case MirroringType::Vertical:
 				return _nametableRAM[(addr&0x400)>>10][addr & 0x3FF];
@@ -178,17 +168,23 @@ uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 			case MirroringType::ScreenBOnly:
 				return _nametableRAM[1][addr & 0x3FF];
 		}
-		
 	}
 }
 
 void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 {
-	ProcessVRAMAccess(addr);
+	addr &= 0x3FFF;
 
 	if(addr <= 0x1FFF) {
+		_mapper->NotifyVRAMAddressChange(addr);
 		WriteMappedVRAM(addr, value);
 	} else {
+		if(addr >= 0x3000) {
+			//Need to mirror 0x3000 writes to 0x2000, this appears to be how hardware behaves
+			//Required for proper MMC3 IRQ timing in Burai Fighter
+			addr -= 0x1000;
+		}
+		_mapper->NotifyVRAMAddressChange(addr);
 		switch(_mapper->GetMirroringType()) {
 			case MirroringType::Vertical:
 				_nametableRAM[(addr&0x400)>>10][addr & 0x3FF] = value;

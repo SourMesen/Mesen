@@ -59,9 +59,9 @@ void APU::WriteRAM(uint16_t addr, uint8_t value)
 	}
 }
 
-bool APU::Exec(uint32_t executedCycles)
+bool APU::Exec(uint32_t currentCPUCycle)
 {
-	_currentClock += executedCycles;
+	_currentClock = currentCPUCycle;
 
 	if(_currentClock >= 29780) {
 		_apu.end_frame(_currentClock);
