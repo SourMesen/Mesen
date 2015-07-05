@@ -29,7 +29,6 @@ namespace Mesen.GUI.Forms.Cheats
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCheatList));
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tabCheats = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -99,6 +98,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.chkCurrentGameOnly.TabIndex = 0;
 			this.chkCurrentGameOnly.Text = "Only show cheats for the current game";
 			this.chkCurrentGameOnly.UseVisualStyleBackColor = true;
+			this.chkCurrentGameOnly.CheckedChanged += new System.EventHandler(this.chkCurrentGameOnly_CheckedChanged);
 			// 
 			// lstCheats
 			// 
@@ -190,7 +190,6 @@ namespace Mesen.GUI.Forms.Cheats
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(443, 255);
 			this.Controls.Add(this.tableLayoutPanel2);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "frmCheatList";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Cheats";

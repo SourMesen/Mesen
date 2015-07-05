@@ -2,6 +2,7 @@
 #include "MemoryManager.h"
 #include "BaseMapper.h"
 #include "Debugger.h"
+#include "CheatManager.h"
 
 MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 {
@@ -114,6 +115,7 @@ uint8_t MemoryManager::Read(uint16_t addr, bool forExecution)
 		value = ReadRegister(addr);
 	}
 
+	CheatManager::ApplyRamCodes(addr, value);
 	return value;
 }
 

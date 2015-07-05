@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -18,6 +20,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void Resume();
 		[DllImport(DLLPath)] public static extern bool IsPaused();
 		[DllImport(DLLPath)] public static extern void Stop();
+		[DllImport(DLLPath, EntryPoint="GetROMPath")] private static extern IntPtr GetROMPathWrapper();
 		[DllImport(DLLPath)] public static extern void Reset();
 		[DllImport(DLLPath)] public static extern void SetFlags(int flags);
 		[DllImport(DLLPath)] public static extern void ClearFlags(int flags);
@@ -27,11 +30,14 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void Connect(string host, UInt16 port, [MarshalAs(UnmanagedType.LPWStr)]string playerName, byte[] avatarData, UInt32 avatarSize);
 		[DllImport(DLLPath)] public static extern void Disconnect();
 		[DllImport(DLLPath)] public static extern bool IsConnected();
+		
 		[DllImport(DLLPath)] public static extern void Render();
+		[DllImport(DLLPath)] public static extern void TakeScreenshot();
+
 		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(NotificationListener.NotificationCallback callback);
 		[DllImport(DLLPath)] public static extern void UnregisterNotificationCallback(IntPtr notificationListener);
 
-		[DllImport(DLLPath)] public static extern void TakeScreenshot();
+		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.LPWStr)]string title, [MarshalAs(UnmanagedType.LPWStr)]string message);
 
 		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.LPWStr)]string filename);
 		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.LPWStr)]string filename, bool reset);
@@ -42,6 +48,11 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SaveState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern void LoadState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern Int64 GetStateInfo(UInt32 stateIndex);
+
+		[DllImport(DLLPath)] public static extern void CheatAddCustom(UInt32 address, Byte value, Int32 compareValue, bool isRelativeAddress);
+		[DllImport(DLLPath)] public static extern void CheatAddGameGenie(string code);
+		[DllImport(DLLPath)] public static extern void CheatAddProActionRocky(UInt32 code);
+		[DllImport(DLLPath)] public static extern void CheatClear();
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)]	public static extern void DebugRelease();
@@ -56,6 +67,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern IntPtr DebugGetCode();
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);
+
+		
+		public static string GetROMPath() { return Marshal.PtrToStringAuto(InteropEmu.GetROMPathWrapper()); }
+
 
 		public enum ConsoleNotificationType
 		{
@@ -191,5 +206,23 @@ namespace Mesen.GUI
 		Reserved = 0x20,
 		Overflow = 0x40,
 		Negative = 0x80
+	}
+
+	public class MD5Helper
+	{
+		public static string GetMD5Hash(string filename)
+		{
+			var md5 = System.Security.Cryptography.MD5.Create();
+			if(filename.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
+				return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
+			} else if(filename.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) {
+				foreach(var entry in ZipFile.OpenRead(filename).Entries) {
+					if(entry.Name.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
+						return BitConverter.ToString(md5.ComputeHash(entry.Open())).Replace("-", "");
+					}
+				}
+			}
+			return null;
+		}
 	}
 }

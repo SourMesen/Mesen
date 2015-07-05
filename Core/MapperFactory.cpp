@@ -50,16 +50,12 @@ shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(wstring filename)
 	if(loader.LoadFile(filename)) {
 		uint8_t mapperID = loader.GetMapperID();
 
-		BaseMapper* mapper = GetMapperFromID(mapperID);
+		shared_ptr<BaseMapper> mapper(GetMapperFromID(mapperID));
 
 		if(mapper) {
 			mapper->Initialize(loader);
-			return shared_ptr<BaseMapper>(mapper);
-		} else {
-			loader.FreeMemory();
-			return nullptr;
+			return mapper;
 		}
-	} else {
-		return nullptr;
 	}
+	return nullptr;
 }

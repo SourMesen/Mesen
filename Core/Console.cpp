@@ -11,8 +11,6 @@
 shared_ptr<Console> Console::Instance = nullptr;
 uint32_t Console::Flags = 0;
 uint32_t Console::CurrentFPS = 0;
-SimpleLock Console::PauseLock;
-SimpleLock Console::RunningLock;
 
 Console::Console(wstring filename)
 {
@@ -34,6 +32,7 @@ shared_ptr<Console> Console::GetInstance()
 
 void Console::Initialize(wstring filename)
 {
+	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
 	if(Console::Instance == nullptr) {
 		Console::Instance.reset(this);
 	}
@@ -110,22 +109,22 @@ void Console::Stop()
 {
 	_stop = true;
 	Console::ClearFlags(EmulationFlags::Paused);
-	Console::RunningLock.Acquire();
-	Console::RunningLock.Release();
+	Console::Instance->_stopLock.Acquire();
+	Console::Instance->_stopLock.Release();
 }
 
 void Console::Pause()
 {
-	Console::PauseLock.Acquire();
+	Console::Instance->_pauseLock.Acquire();
 	
 	//Spin wait until emu pauses
-	Console::RunningLock.Acquire();
+	Console::Instance->_runLock.Acquire();
 }
 
 void Console::Resume()
 {
-	Console::RunningLock.Release();
-	Console::PauseLock.Release();
+	Console::Instance->_runLock.Release();
+	Console::Instance->_pauseLock.Release();
 }
 
 void Console::SetFlags(int flags)
@@ -156,7 +155,8 @@ void Console::Run()
 	double elapsedTime = 0;
 	double targetTime = 16.6666666666666666;
 	
-	Console::RunningLock.Acquire();
+	_runLock.Acquire();
+	_stopLock.Acquire();
 
 	while(true) { 
 		bool frameDone = _apu->Exec(_cpu->Exec());
@@ -174,19 +174,19 @@ void Console::Run()
 				}
 			}
 			
-			if(!Console::PauseLock.IsFree()) {
+			if(!_pauseLock.IsFree()) {
 				//Need to temporarely pause the emu (to save/load a state, etc.)
-				Console::RunningLock.Release();
+				_runLock.Release();
 
 				//Spin wait until we are allowed to start again
-				Console::PauseLock.WaitForRelease();
+				_pauseLock.WaitForRelease();
 
-				Console::RunningLock.Acquire();
+				_runLock.Acquire();
 			}
 
 			if(CheckFlag(EmulationFlags::Paused) && !_stop) {
 				MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
-				Console::RunningLock.Release();
+				_runLock.Release();
 				
 				//Prevent audio from looping endlessly while game is paused
 				_apu->StopAudio();
@@ -195,7 +195,7 @@ void Console::Run()
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
 				}
-				Console::RunningLock.Acquire();
+				_runLock.Acquire();
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
 			}
 			clockTimer.Reset();
@@ -217,8 +217,9 @@ void Console::Run()
 			fpsTimer.Reset();
 		}
 	}
-	Console::RunningLock.Release();
 	_apu->StopAudio();
+	_stopLock.Release();
+	_runLock.Release();
 }
 
 void Console::SaveState(ostream &saveStream)
@@ -258,65 +259,4 @@ void Console::LoadState(uint8_t *buffer, uint32_t bufferSize)
 shared_ptr<Debugger> Console::GetDebugger()
 {
 	return shared_ptr<Debugger>(new Debugger(Console::Instance, _cpu, _ppu, _memoryManager, _mapper));
-}
-
-bool Console::RunTest(uint8_t *expectedResult)
-{
-	Timer timer;
-	uint8_t maxWait = 60;
-	uint8_t* lastFrameBuffer = new uint8_t[256 * 240 * 4];
-	bool result = false;
-
-	Console::RunningLock.Acquire();
-
-	while(true) {
-		if(_apu->Exec(_cpu->Exec())) {
-			_cpu->EndFrame();
-		}
-
-		if(timer.GetElapsedMS() > 100) {
-			if(memcmp(_ppu->GetFrameBuffer(), expectedResult, 256 * 240 * 4) == 0) {
-				result = true;
-				break;
-			}
-
-			timer.Reset();
-
-			if(memcmp(lastFrameBuffer, _ppu->GetFrameBuffer(), 256 * 240 * 4) != 0) {
-				memcpy(lastFrameBuffer, _ppu->GetFrameBuffer(), 256 * 240 * 4);
-				maxWait = 60;
-			}
-
-			maxWait--;
-			if(maxWait == 0) {
-				result = false;
-				break;
-			}
-		}
-	}
-
-	Console::RunningLock.Release();
-	
-	delete[] lastFrameBuffer;
-	return result;
-}
-
-void Console::SaveTestResult()
-{
-	wstring filename = _romFilepath + L".trt";
-	
-	ofstream testResultFile(filename, ios::out | ios::binary);
-
-	if(!testResultFile) {
-		throw std::exception("File could not be opened");
-	}
-
-	uint8_t* buffer = new uint8_t[256 * 240 * 4];
-	memcpy(buffer, _ppu->GetFrameBuffer(), 256 * 240 * 4);
-
-	testResultFile.write((char *)buffer, 256 * 240 * 4);
-	
-	testResultFile.close();
-
-	delete[] buffer;
 }

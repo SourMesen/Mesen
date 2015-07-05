@@ -9,12 +9,14 @@
 #include "../Core/GameClient.h"
 #include "../Core/ClientConnectionData.h"
 #include "../Core/SaveStateManager.h"
+#include "../Core/CheatManager.h"
 
 static NES::Renderer *_renderer = nullptr;
 static SoundManager *_soundManager = nullptr;
 static InputManager *_inputManager = nullptr;
 static HWND _windowHandle = nullptr;
 static HWND _viewerHandle = nullptr;
+static wstring _romFilename;
 
 typedef void (__stdcall *NotificationListenerCallback)(int);
 
@@ -65,6 +67,12 @@ namespace InteropEmu {
 				Console::GetInstance()->Stop();
 			}
 		}
+		DllExport const wchar_t* __stdcall GetROMPath() 
+		{
+			_romFilename = Console::GetROMPath();
+			return _romFilename.c_str();
+		}
+
 		DllExport void __stdcall Reset() { Console::Reset(); }
 		DllExport void __stdcall SetFlags(int flags) { Console::SetFlags(flags); }
 		DllExport void __stdcall ClearFlags(int flags) { Console::ClearFlags(flags); }
@@ -117,6 +125,8 @@ namespace InteropEmu {
 		}
 		DllExport void __stdcall UnregisterNotificationCallback(INotificationListener *listener) { MessageManager::UnregisterNotificationListener(listener); }
 
+		DllExport void __stdcall DisplayMessage(wchar_t* title, wchar_t* message) { MessageManager::DisplayMessage(title, message); }
+
 		DllExport void __stdcall SaveState(uint32_t stateIndex) { SaveStateManager::SaveState(stateIndex); }
 		DllExport uint32_t __stdcall LoadState(uint32_t stateIndex) { return SaveStateManager::LoadState(stateIndex); }
 		DllExport int64_t  __stdcall GetStateInfo(uint32_t stateIndex) { return SaveStateManager::GetStateInfo(stateIndex); }
@@ -126,5 +136,10 @@ namespace InteropEmu {
 		DllExport void __stdcall MovieStop() { Movie::Stop(); }
 		DllExport int __stdcall MoviePlaying() { return Movie::Playing(); }
 		DllExport int __stdcall MovieRecording() { return Movie::Recording(); }
+
+		DllExport void __stdcall CheatAddCustom(uint32_t address, uint8_t value, int32_t compareValue, int isRelativeAddress) { CheatManager::AddCustomCode(address, value, compareValue, isRelativeAddress != 0); }
+		DllExport void __stdcall CheatAddGameGenie(char* code) { CheatManager::AddGameGenieCode(code); }
+		DllExport void __stdcall CheatAddProActionRocky(uint32_t code) { CheatManager::AddProActionRockyCode(code); }
+		DllExport void __stdcall CheatClear() { CheatManager::ClearCodes(); }
 	}
 }

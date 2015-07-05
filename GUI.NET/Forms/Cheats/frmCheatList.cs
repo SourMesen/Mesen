@@ -17,7 +17,11 @@ namespace Mesen.GUI.Forms.Cheats
 		public frmCheatList()
 		{
 			InitializeComponent();
-			UpdateCheatList();
+			
+			chkCurrentGameOnly.Checked = ConfigManager.Config.ShowOnlyCheatsForCurrentGame;
+			if(!chkCurrentGameOnly.Checked) {
+				UpdateCheatList();
+			}
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -26,21 +30,31 @@ namespace Mesen.GUI.Forms.Cheats
 			Location = new Point(Owner.Location.X + (Owner.Width - Width) / 2, Owner.Location.Y + (Owner.Height - Height) / 2);
 		}
 
+		protected override void UpdateConfig()
+		{
+			ConfigManager.Config.ShowOnlyCheatsForCurrentGame = chkCurrentGameOnly.Checked;
+		}
+
 		private void UpdateCheatList()
 		{
+			string md5hash = MD5Helper.GetMD5Hash(InteropEmu.GetROMPath());
 			lstCheats.Items.Clear();
 			foreach(CheatInfo cheat in ConfigManager.Config.Cheats) {
-				ListViewItem item = lstCheats.Items.Add(cheat.GameName);
-				item.SubItems.AddRange(new string[] { cheat.CheatName, cheat.ToString() });
-				item.Tag = cheat;
-				item.Checked = cheat.Enabled;
+				if(!chkCurrentGameOnly.Checked || cheat.GameHash == md5hash) {
+					ListViewItem item = lstCheats.Items.Add(cheat.GameName);
+					item.SubItems.AddRange(new string[] { cheat.CheatName, cheat.ToString() });
+					item.Tag = cheat;
+					item.Checked = cheat.Enabled;
+				}
 			}
 		}
 
 		private void mnuAddCheat_Click(object sender, EventArgs e)
 		{
-			frmCheat frm = new frmCheat(null);
-			if(frm.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+			CheatInfo newCheat = new CheatInfo();
+			frmCheat frm = new frmCheat(newCheat);
+			if(frm.ShowDialog() == DialogResult.OK) {
+				ConfigManager.Config.Cheats.Add(newCheat);
 				UpdateCheatList();
 			}
 		}
@@ -49,7 +63,7 @@ namespace Mesen.GUI.Forms.Cheats
 		{
 			if(lstCheats.SelectedItems.Count == 1) {
 				frmCheat frm = new frmCheat((CheatInfo)lstCheats.SelectedItems[0].Tag);
-				if(frm.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(frm.ShowDialog() == DialogResult.OK) {
 					UpdateCheatList();
 				}
 			}
@@ -60,6 +74,11 @@ namespace Mesen.GUI.Forms.Cheats
 			if(e.Item.Tag is CheatInfo) {
 				((CheatInfo)e.Item.Tag).Enabled = e.Item.Checked;
 			}
+		}
+
+		private void chkCurrentGameOnly_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateCheatList();
 		}
 	}
 }

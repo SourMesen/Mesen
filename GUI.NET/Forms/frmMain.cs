@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,16 +28,19 @@ namespace Mesen.GUI.Forms
 			Application.ThreadException += Application_ThreadException;
 			InitializeComponent();
 
-			InteropEmu.InitializeEmu(this.Handle, this.dxViewer.Handle);
-			InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
+
+			InteropEmu.InitializeEmu(this.Handle, this.dxViewer.Handle);
+			InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
 
 			UpdateMenus();
 			UpdateRecentFiles();
 			StartRenderThread();
 
-			Icon = Properties.Resources.MesenIcon;
+			if(!DesignMode) {
+				Icon = Properties.Resources.MesenIcon;
+			}
 		}
 
 		void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
@@ -47,7 +51,10 @@ namespace Mesen.GUI.Forms
 		void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameLoaded) {
+				CheatInfo.ApplyCheats();
 				this.StartEmuThread();
+			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameStopped) {
+				CheatInfo.ClearCheats();
 			}
 			UpdateMenus();
 		}
@@ -356,7 +363,12 @@ namespace Mesen.GUI.Forms
 
 		private void mnuCheats_Click(object sender, EventArgs e)
 		{
-			new frmCheatList().Show(this);
+			frmCheatList frm = new frmCheatList();
+			frm.Show(this);
+			frm.FormClosed += (object a, FormClosedEventArgs b) => {
+				frm = null;
+				CheatInfo.ApplyCheats();
+			};
 		}
 	}
 }

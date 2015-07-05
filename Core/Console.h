@@ -23,8 +23,9 @@ class Console
 		static shared_ptr<Console> Instance;
 		static uint32_t Flags;
 		static uint32_t CurrentFPS;
-		static SimpleLock PauseLock;
-		static SimpleLock RunningLock;
+		SimpleLock _pauseLock;
+		SimpleLock _runLock;
+		SimpleLock _stopLock;
 
 		shared_ptr<CPU> _cpu;
 		shared_ptr<PPU> _ppu;
@@ -53,9 +54,6 @@ class Console
 
 		//Used to resume the emu loop after calling Pause()
 		static void Resume();
-
-		bool RunTest(uint8_t* expectedResult);
-		void SaveTestResult();
 
 		shared_ptr<Debugger> Console::GetDebugger();
 

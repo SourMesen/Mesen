@@ -144,6 +144,18 @@ class ROMLoader
 		{
 		}
 
+		~ROMLoader()
+		{
+			if(_prgRAM) {
+				delete[] _prgRAM;
+				_prgRAM = nullptr;
+			}
+			if(_chrRAM) {
+				delete[] _chrRAM;
+				_chrRAM = nullptr;
+			}
+		}
+
 		bool LoadFile(wstring filename) 
 		{
 			bool result = false;
@@ -169,26 +181,16 @@ class ROMLoader
 			return result;
 		}
 
-		void FreeMemory()
+		void GetPRGRam(uint8_t** buffer)
 		{
-			if(_prgRAM) {
-				delete[] _prgRAM;
-				_prgRAM = nullptr;
-			}
-			if(_chrRAM) {
-				delete[] _chrRAM;
-				_chrRAM = nullptr;
-			}
+			*buffer = new uint8_t[GetPRGSize()];
+			memcpy(*buffer, _prgRAM, GetPRGSize());
 		}
 
-		uint8_t* GetPRGRam()
+		void GetCHRRam(uint8_t** buffer)
 		{
-			return _prgRAM;
-		}
-
-		uint8_t* GetCHRRam()
-		{
-			return _chrRAM;
+			*buffer = new uint8_t[GetCHRSize()];
+			memcpy(*buffer, _chrRAM, GetCHRSize());
 		}
 
 		uint32_t GetPRGSize()
@@ -227,7 +229,6 @@ class ROMLoader
 			uint32_t crc = 0;
 			if(loader.LoadFile(filename)) {
 				crc = loader._crc32;
-				loader.FreeMemory();
 			}
 			return crc;
 		}

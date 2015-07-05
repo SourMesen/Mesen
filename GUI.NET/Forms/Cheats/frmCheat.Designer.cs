@@ -27,7 +27,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCheat));
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
@@ -111,7 +110,6 @@
 			this.txtCheatName.Name = "txtCheatName";
 			this.txtCheatName.Size = new System.Drawing.Size(304, 20);
 			this.txtCheatName.TabIndex = 2;
-			this.txtCheatName.TextChanged += new System.EventHandler(this.txtBox_TextChanged);
 			// 
 			// grpCode
 			// 
@@ -155,7 +153,6 @@
 			this.radCustom.TabIndex = 3;
 			this.radCustom.Text = "Custom:";
 			this.radCustom.UseVisualStyleBackColor = true;
-			this.radCustom.CheckedChanged += new System.EventHandler(this.radType_CheckedChanged);
 			// 
 			// txtProActionRocky
 			// 
@@ -164,7 +161,6 @@
 			this.txtProActionRocky.Name = "txtProActionRocky";
 			this.txtProActionRocky.Size = new System.Drawing.Size(71, 20);
 			this.txtProActionRocky.TabIndex = 1;
-			this.txtProActionRocky.TextChanged += new System.EventHandler(this.txtBox_TextChanged);
 			this.txtProActionRocky.Enter += new System.EventHandler(this.txtProActionRocky_Enter);
 			// 
 			// txtGameGenie
@@ -174,7 +170,6 @@
 			this.txtGameGenie.Name = "txtGameGenie";
 			this.txtGameGenie.Size = new System.Drawing.Size(71, 20);
 			this.txtGameGenie.TabIndex = 1;
-			this.txtGameGenie.TextChanged += new System.EventHandler(this.txtBox_TextChanged);
 			this.txtGameGenie.Enter += new System.EventHandler(this.txtGameGenie_Enter);
 			// 
 			// radGameGenie
@@ -188,7 +183,6 @@
 			this.radGameGenie.TabStop = true;
 			this.radGameGenie.Text = "Game Genie:";
 			this.radGameGenie.UseVisualStyleBackColor = true;
-			this.radGameGenie.CheckedChanged += new System.EventHandler(this.radType_CheckedChanged);
 			// 
 			// radProActionRocky
 			// 
@@ -199,7 +193,6 @@
 			this.radProActionRocky.TabIndex = 2;
 			this.radProActionRocky.Text = "Pro Action Rocky:";
 			this.radProActionRocky.UseVisualStyleBackColor = true;
-			this.radProActionRocky.CheckedChanged += new System.EventHandler(this.radType_CheckedChanged);
 			// 
 			// tlpCustom
 			// 
@@ -242,7 +235,6 @@
 			this.txtAddress.Name = "txtAddress";
 			this.txtAddress.Size = new System.Drawing.Size(69, 20);
 			this.txtAddress.TabIndex = 1;
-			this.txtAddress.TextChanged += new System.EventHandler(this.txtBox_TextChanged);
 			this.txtAddress.Enter += new System.EventHandler(this.customField_Enter);
 			// 
 			// lblNewValue
@@ -306,7 +298,6 @@
 			this.txtValue.Name = "txtValue";
 			this.txtValue.Size = new System.Drawing.Size(30, 20);
 			this.txtValue.TabIndex = 5;
-			this.txtValue.TextChanged += new System.EventHandler(this.txtBox_TextChanged);
 			this.txtValue.Enter += new System.EventHandler(this.customField_Enter);
 			// 
 			// txtCompare
@@ -316,7 +307,6 @@
 			this.txtCompare.Name = "txtCompare";
 			this.txtCompare.Size = new System.Drawing.Size(30, 20);
 			this.txtCompare.TabIndex = 6;
-			this.txtCompare.TextChanged += new System.EventHandler(this.txtBox_TextChanged);
 			// 
 			// flowLayoutPanel3
 			// 
@@ -328,10 +318,10 @@
 			this.flowLayoutPanel3.Size = new System.Drawing.Size(310, 26);
 			this.flowLayoutPanel3.TabIndex = 5;
 			// 
-			// txtGame
+			// txtGameName
 			// 
 			this.txtGameName.Location = new System.Drawing.Point(3, 3);
-			this.txtGameName.Name = "txtGame";
+			this.txtGameName.Name = "txtGameName";
 			this.txtGameName.ReadOnly = true;
 			this.txtGameName.Size = new System.Drawing.Size(223, 20);
 			this.txtGameName.TabIndex = 0;
@@ -363,7 +353,6 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(385, 294);
 			this.Controls.Add(this.tableLayoutPanel2);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximumSize = new System.Drawing.Size(401, 332);
 			this.MinimumSize = new System.Drawing.Size(401, 332);
 			this.Name = "frmCheat";

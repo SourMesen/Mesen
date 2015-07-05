@@ -6,14 +6,17 @@
 #include "ROMLoader.h"
 #include <assert.h>
 #include "../Utilities/FolderUtilities.h"
+#include "CheatManager.h"
+#include "MessageManager.h"
 
-class BaseMapper : public IMemoryHandler, public Snapshotable
+class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener
 {
 	protected:
 		const int ExpansionRAMSize = 0x2000;
 		const int SRAMSize = 0x2000;
 
 		uint8_t* _prgRAM;
+		uint8_t* _originalPrgRam;
 		uint8_t* _chrRAM;
 		uint32_t _prgSize;
 		uint32_t _chrSize;
@@ -110,6 +113,11 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 		{
 			return FolderUtilities::GetSaveFolder() + _romFilename + L".sav";
 		}
+		
+		void RestoreOriginalPrgRam()
+		{
+			memcpy(_prgRAM, _originalPrgRam, GetPRGSize());
+		}
 
 	protected:
 		virtual void StreamState(bool saving)
@@ -145,8 +153,9 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 		void Initialize(ROMLoader &romLoader)
 		{
 			_mirroringType = romLoader.GetMirroringType();
-			_prgRAM = romLoader.GetPRGRam();
-			_chrRAM = romLoader.GetCHRRam();
+			romLoader.GetPRGRam(&_prgRAM);
+			romLoader.GetPRGRam(&_originalPrgRam);
+			romLoader.GetCHRRam(&_chrRAM);
 			_prgSize = romLoader.GetPRGSize();
 			_chrSize = romLoader.GetCHRSize();
 			_hasBattery = romLoader.HasBattery();
@@ -190,6 +199,10 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 			_prgPageMask = GetPRGPageSize() - 1;
 
 			InitMapper();
+
+			MessageManager::RegisterNotificationListener(this);
+
+			ApplyCheats();
 		}
 
 		virtual ~BaseMapper()
@@ -199,11 +212,30 @@ class BaseMapper : public IMemoryHandler, public Snapshotable
 			}
 			delete[] _prgRAM;
 			delete[] _chrRAM;
+			delete[] _originalPrgRam;
 			delete[] _prgSlotPages;
 			delete[] _chrSlotPages;
 
 			delete[] _SRAM;
 			delete[] _expansionRAM;
+
+			MessageManager::UnregisterNotificationListener(this);
+		}
+
+		void ProcessNotification(ConsoleNotificationType type)
+		{
+			switch(type) {
+				case ConsoleNotificationType::CheatAdded:
+				case ConsoleNotificationType::CheatRemoved:
+					ApplyCheats();
+					break;
+			}
+		}
+
+		void ApplyCheats()
+		{
+			RestoreOriginalPrgRam();
+			CheatManager::ApplyPrgCodes(_prgRAM, GetPRGSize());
 		}
 
 		void GetMemoryRanges(MemoryRanges &ranges)

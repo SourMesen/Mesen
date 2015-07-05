@@ -94,6 +94,7 @@
     <ClInclude Include="AXROM.h" />
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="Breakpoint.h" />
+    <ClInclude Include="CheatManager.h" />
     <ClInclude Include="ClientConnectionData.h" />
     <ClInclude Include="CNROM.h" />
     <ClInclude Include="ColorDreams.h" />
@@ -155,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="APU.cpp" />
     <ClCompile Include="Breakpoint.cpp" />
+    <ClCompile Include="CheatManager.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="Debugger.cpp" />

@@ -21,17 +21,38 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private string _gameHash;
 
-		CheatInfo _originalCheat;
-
 		public frmCheat(CheatInfo cheat)
 		{
 			InitializeComponent();
 
-			_originalCheat = cheat;
-			if(cheat != null) {
-				UpdateUI(cheat);
-			}
+			Entity = cheat;
+
+			_gameHash = cheat.GameHash;
+			
+			radGameGenie.Tag = CheatType.GameGenie;
+			radProActionRocky.Tag = CheatType.ProActionRocky;
+			radCustom.Tag = CheatType.Custom;
+			radRelativeAddress.Tag = true;
+			radAbsoluteAddress.Tag = false;
+
+			AddBinding("Enabled", chkEnabled);
+			AddBinding("CheatName", txtCheatName);
+			AddBinding("GameName", txtGameName);
+			AddBinding("CheatType", radGameGenie.Parent);
+			AddBinding("GameGenieCode", txtGameGenie);
+			AddBinding("ProActionRockyCode", txtProActionRocky);
+			AddBinding("Address", txtAddress);
+			AddBinding("Value", txtValue);
+			AddBinding("CompareValue", txtCompare);
+			AddBinding("IsRelativeAddress", radRelativeAddress.Parent);
+
+			UpdateUI();
 			UpdateOKButton();
+		}
+
+		protected override Type BindedType
+		{
+			get { return typeof(CheatInfo); }
 		}
 
 		protected override bool ApplyChangesOnOK
@@ -41,30 +62,13 @@ namespace Mesen.GUI.Forms.Cheats
 
 		protected override void UpdateConfig()
 		{
-			if(ConfigManager.Config.Cheats.Contains(_originalCheat)) {
-				ConfigManager.Config.Cheats.Remove(_originalCheat);
-			}
-			ConfigManager.Config.Cheats.Add(GetCheatInfo());
+			UpdateObject();
+			((CheatInfo)Entity).GameHash = _gameHash;
 		}
 
 		private void UpdateOKButton()
 		{
-			btnOK.Enabled = this.IsValidInput();
-		}
-
-		private string GetMD5Hash(string filename)
-		{
-			var md5 = System.Security.Cryptography.MD5.Create();
-			if(filename.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
-				return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
-			} else if(filename.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) {
-				foreach(var entry in ZipFile.OpenRead(filename).Entries) {
-					if(entry.Name.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
-						return BitConverter.ToString(md5.ComputeHash(entry.Open())).Replace("-", "");
-					}
-				}
-			}
-			return null;
+			btnOK.Enabled = true; //this.IsValidInput();
 		}
 
 		private void btnBrowse_Click(object sender, EventArgs e)
@@ -72,7 +76,7 @@ namespace Mesen.GUI.Forms.Cheats
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Filter = "All supported formats (*.nes, *.zip)|*.NES;*.ZIP|NES Roms (*.nes)|*.NES|ZIP Archives (*.zip)|*.ZIP";
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				_gameHash = GetMD5Hash(ofd.FileName);
+				_gameHash = MD5Helper.GetMD5Hash(ofd.FileName);
 				if(_gameHash != null) {
 					txtGameName.Text = Path.GetFileNameWithoutExtension(ofd.FileName);
 					UpdateOKButton();
@@ -80,10 +84,39 @@ namespace Mesen.GUI.Forms.Cheats
 			}
 		}
 
-		public bool IsValidInput()
+		protected override bool ValidateInput()
 		{
-			if(radCustom.Checked) {
-				UInt32 val;
+			UInt32 val;
+			if(_gameHash == null) {
+				return false;
+			}
+
+			if(string.IsNullOrWhiteSpace(txtGameName.Text)) {
+				return false;
+			}
+
+			if(string.IsNullOrWhiteSpace(txtCheatName.Text)) {
+				return false;
+			}
+
+			if(radGameGenie.Checked) {
+				if(txtGameGenie.Text.Length != frmCheat.GGShortCodeLength && txtGameGenie.Text.Length != frmCheat.GGLongCodeLength) {
+					return false;
+				}
+				if(txtGameGenie.Text.Count(c => !"APZLGITYEOXUKSVN".Contains(c.ToString().ToUpper())) > 0) {
+					return false;
+				}
+			} else if(radProActionRocky.Checked) {
+				if(txtProActionRocky.Text.Length != frmCheat.PARCodeLength) {
+					return false;
+				}
+				if(!UInt32.TryParse(txtProActionRocky.Text, System.Globalization.NumberStyles.AllowHexSpecifier, null, out val)) {
+					return false;
+				}
+				if(txtProActionRocky.Text.Count(c => !"1234567890ABCDEF".Contains(c.ToString().ToUpper())) > 0) {
+					return false;
+				}
+			} else {
 				Byte byteVal;
 				if(!UInt32.TryParse(txtAddress.Text, System.Globalization.NumberStyles.AllowHexSpecifier, null, out val)) {
 					return false;
@@ -98,102 +131,22 @@ namespace Mesen.GUI.Forms.Cheats
 				}
 			}
 
-			CheatInfo cheat;
-			try {
-				cheat = this.GetCheatInfo();
-			} catch {
-				return false;
-			}
-
-			if(cheat.GameHash == null) {
-				return false;
-			}
-
-			if(string.IsNullOrWhiteSpace(cheat.CheatName)) {
-				return false;
-			}
-
-			if(cheat.CheatType == CheatType.GameGenie) {
-				if(cheat.Code.Length != frmCheat.GGShortCodeLength && cheat.Code.Length != frmCheat.GGLongCodeLength) {
-					return false;
-				}
-			} else if(cheat.CheatType == CheatType.ProActionRocky) {
-				if(cheat.Code.Length != frmCheat.PARCodeLength) {
-					return false;
-				}
-			}
-
 			return true;
-		}
-
-		public CheatInfo GetCheatInfo()
-		{
-			return new CheatInfo() {
-				Enabled = chkEnabled.Checked,
-				CheatName = txtCheatName.Text,
-				GameName = txtGameName.Text,
-				GameHash = _gameHash,
-				CheatType = radGameGenie.Checked ? CheatType.GameGenie : radProActionRocky.Checked ? CheatType.ProActionRocky : CheatType.Custom,
-				Code = (radGameGenie.Checked ? txtGameGenie.Text : txtProActionRocky.Text).ToUpper(),
-				Address = radCustom.Checked ? UInt32.Parse(txtAddress.Text, System.Globalization.NumberStyles.AllowHexSpecifier) : 0,
-				Value = radCustom.Checked ? Byte.Parse(txtValue.Text, System.Globalization.NumberStyles.AllowHexSpecifier) : (byte)0,
-				CompareValue = radCustom.Checked ? Byte.Parse(txtCompare.Text, System.Globalization.NumberStyles.AllowHexSpecifier) : (byte)0,
-				IsRelativeAddress = radRelativeAddress.Checked
-			};
-		}
-
-		private void UpdateUI(CheatInfo cheat)
-		{
-			chkEnabled.Checked = cheat.Enabled;
-			txtCheatName.Text = cheat.CheatName;
-			txtGameName.Text = cheat.GameName;
-			_gameHash = cheat.GameHash;
-			switch(cheat.CheatType) {
-				case CheatType.GameGenie: 
-					radGameGenie.Checked = true; 
-					txtGameGenie.Text = cheat.Code;
-					break;
-				case CheatType.ProActionRocky: 
-					radProActionRocky.Checked = true; 
-					txtProActionRocky.Text = cheat.Code;
-					break;
-				case CheatType.Custom: 
-					radCustom.Checked = true; 
-					txtAddress.Text = cheat.Address.ToString("X");
-					txtValue.Text = cheat.Value.ToString("X");
-					txtCompare.Text = cheat.CompareValue.ToString("X");
-					radAbsoluteAddress.Checked = !cheat.IsRelativeAddress;
-					radRelativeAddress.Checked = cheat.IsRelativeAddress;
-					break;
-			}
-		}
-
-		private void txtBox_TextChanged(object sender, EventArgs e)
-		{
-			UpdateOKButton();
 		}
 
 		private void txtGameGenie_Enter(object sender, EventArgs e)
 		{
 			radGameGenie.Checked = true;
-			UpdateOKButton();
 		}
 
 		private void txtProActionRocky_Enter(object sender, EventArgs e)
 		{
 			radProActionRocky.Checked = true;
-			UpdateOKButton();
 		}
 
 		private void customField_Enter(object sender, EventArgs e)
 		{
 			radCustom.Checked = true;
-			UpdateOKButton();
-		}
-
-		private void radType_CheckedChanged(object sender, EventArgs e)
-		{
-			UpdateOKButton();
 		}
 	}
 }

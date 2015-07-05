@@ -17,6 +17,7 @@ namespace Mesen.GUI.Config
 		public ServerInfo ServerInfo;
 		public List<string> RecentFiles;
 		public List<CheatInfo> Cheats;
+		public bool ShowOnlyCheatsForCurrentGame;
 
 		public Configuration()
 		{
