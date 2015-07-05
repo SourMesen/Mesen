@@ -31,7 +31,7 @@ namespace Mesen.GUI.Forms
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
-			InteropEmu.InitializeEmu(this.Handle, this.dxViewer.Handle);
+			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.dxViewer.Handle);
 			InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
 
 			UpdateMenus();

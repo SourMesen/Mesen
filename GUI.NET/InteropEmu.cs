@@ -12,7 +12,7 @@ namespace Mesen.GUI
 	public class InteropEmu
 	{
 		private const string DLLPath = "WinMesen.dll";
-		[DllImport(DLLPath)] public static extern void InitializeEmu(IntPtr windowHandle, IntPtr dxViewerHandle);
+		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.LPWStr)]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle);
 		[DllImport(DLLPath)] public static extern void Release();
 		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.LPWStr)]string filename);
 		[DllImport(DLLPath)] public static extern void Run();

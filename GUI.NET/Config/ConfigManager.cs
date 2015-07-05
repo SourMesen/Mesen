@@ -36,16 +36,23 @@ namespace Mesen.GUI.Config
 			_config.Serialize(ConfigFile);
 		}
 
+		public static string HomeFolder
+		{
+			get
+			{
+				return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create), "Mesen");
+			}
+		}
+
 		private static string ConfigFile
 		{
 			get
 			{
-				string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create), "Mesen");
-				if(!Directory.Exists(configPath)) {
-					Directory.CreateDirectory(configPath);
+				if(!Directory.Exists(HomeFolder)) {
+					Directory.CreateDirectory(HomeFolder);
 				}
 
-				return Path.Combine(configPath, "settings.xml");
+				return Path.Combine(HomeFolder, "settings.xml");
 			}
 		}
 

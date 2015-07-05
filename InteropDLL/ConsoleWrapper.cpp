@@ -37,8 +37,10 @@ namespace InteropEmu {
 	};
 
 	extern "C" {
-		DllExport void __stdcall InitializeEmu(HWND windowHandle, HWND dxViewerHandle)
+		DllExport void __stdcall InitializeEmu(wchar_t* homeFolder, HWND windowHandle, HWND dxViewerHandle)
 		{
+			FolderUtilities::SetHomeFolder(homeFolder);
+
 			_windowHandle = windowHandle;
 			_viewerHandle = dxViewerHandle;
 

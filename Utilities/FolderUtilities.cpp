@@ -3,45 +3,46 @@
 #include <shlobj.h>
 #include "FolderUtilities.h"
 
+wstring FolderUtilities::_homeFolder = L"";
+
+void FolderUtilities::SetHomeFolder(wstring homeFolder)
+{
+	_homeFolder = homeFolder;
+	CreateDirectory(homeFolder.c_str(), nullptr);
+}
+
 wstring FolderUtilities::GetHomeFolder()
 {
-	wstring folder;
-	PWSTR pathName;
-	SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathName);
-	folder = wstring((wchar_t*)pathName) + L"\\NesEMU\\";
-
-	//Make sure it exists
-	CreateDirectory(folder.c_str(), nullptr);
-
-	CoTaskMemFree(pathName);
-
-	return folder;
+	if(_homeFolder.size() == 0) {
+		throw std::exception("Home folder not specified");
+	}
+	return _homeFolder;
 }
 
 wstring FolderUtilities::GetSaveFolder()
 {
-	wstring folder = GetHomeFolder() + L"Saves\\";
+	wstring folder = CombinePath(GetHomeFolder(), L"Saves\\");
 	CreateDirectory(folder.c_str(), nullptr);
 	return folder;
 }
 
 wstring FolderUtilities::GetSaveStateFolder()
 {
-	wstring folder = GetHomeFolder() + L"SaveStates\\";
+	wstring folder = CombinePath(GetHomeFolder(), L"SaveStates\\");
 	CreateDirectory(folder.c_str(), nullptr);
 	return folder;
 }
 
 wstring FolderUtilities::GetMovieFolder()
 {
-	wstring folder = GetHomeFolder() + L"Movies\\";
+	wstring folder = CombinePath(GetHomeFolder(), + L"Movies\\");
 	CreateDirectory(folder.c_str(), nullptr);
 	return folder;
 }
 
 wstring FolderUtilities::GetScreenshotFolder()
 {
-	wstring folder = GetHomeFolder() + L"Screenshots\\";
+	wstring folder = CombinePath(GetHomeFolder(), L"Screenshots\\");
 	CreateDirectory(folder.c_str(), nullptr);
 	return folder;
 }
