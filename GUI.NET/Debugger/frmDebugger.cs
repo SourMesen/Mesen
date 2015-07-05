@@ -25,7 +25,9 @@ namespace Mesen.GUI.Debugger
 		{
  			base.OnLoad(e);
 
-			Icon = Properties.Resources.MesenIcon;
+			if(!DesignMode) {
+				Icon = Properties.Resources.MesenIcon;
+			}
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;

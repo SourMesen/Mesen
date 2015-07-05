@@ -37,7 +37,6 @@ namespace Mesen.GUI.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BaseConfigForm));
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnCancel = new System.Windows.Forms.Button();
@@ -95,7 +94,6 @@ namespace Mesen.GUI.Forms
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(284, 262);
 			this.Controls.Add(this.panel1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "BaseConfigForm";
 			this.panel1.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);

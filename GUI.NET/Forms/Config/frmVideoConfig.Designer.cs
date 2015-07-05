@@ -27,16 +27,12 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVideoConfig));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtPort = new System.Windows.Forms.TextBox();
 			this.lblHost = new System.Windows.Forms.Label();
 			this.lblPort = new System.Windows.Forms.Label();
 			this.txtHost = new System.Windows.Forms.TextBox();
 			this.chkSpectator = new System.Windows.Forms.CheckBox();
-			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-			this.btnCancel = new System.Windows.Forms.Button();
-			this.btnOK = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -59,11 +55,6 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(284, 175);
 			this.tableLayoutPanel1.TabIndex = 1;
-			this.tableLayoutPanel1.Controls.SetChildIndex(this.chkSpectator, 0);
-			this.tableLayoutPanel1.Controls.SetChildIndex(this.txtHost, 0);
-			this.tableLayoutPanel1.Controls.SetChildIndex(this.lblPort, 0);
-			this.tableLayoutPanel1.Controls.SetChildIndex(this.lblHost, 0);
-			this.tableLayoutPanel1.Controls.SetChildIndex(this.txtPort, 0);
 			// 
 			// txtPort
 			// 
@@ -121,7 +112,6 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(284, 262);
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "frmVideoConfig";
 			this.Text = "Video Options";
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);

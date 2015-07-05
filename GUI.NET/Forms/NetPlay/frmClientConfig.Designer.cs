@@ -27,7 +27,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmClientConfig));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtPort = new System.Windows.Forms.TextBox();
 			this.lblHost = new System.Windows.Forms.Label();
@@ -115,7 +114,6 @@
 			this.ClientSize = new System.Drawing.Size(290, 140);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MaximumSize = new System.Drawing.Size(306, 178);
 			this.MinimizeBox = false;
