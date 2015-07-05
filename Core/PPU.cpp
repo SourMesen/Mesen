@@ -459,7 +459,7 @@ void PPU::ProcessPrerenderScanline()
 {
 	ProcessPreVBlankScanline();
 
-	if(_cycle == 1) {
+	if(_cycle == 0) {
 		_statusFlags.SpriteOverflow = false;
 		_statusFlags.Sprite0Hit = false;
 		_statusFlags.VerticalBlank = false;
@@ -601,7 +601,7 @@ void PPU::CopyOAMData()
 
 void PPU::BeginVBlank()
 {
-	if(_cycle == 1) {
+	if(_cycle == 0) {
 		if(!_doNotSetVBFlag) {
 			_statusFlags.VerticalBlank = true;
 			if(_flags.VBlank) {

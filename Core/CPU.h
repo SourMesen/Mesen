@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "MemoryManager.h"
+#include "PPU.h"
 #include "Snapshotable.h"
 
 namespace PSFlags
@@ -74,18 +75,16 @@ private:
 	bool _runNMI = false;
 	bool _runIRQ = false;
 
+	void IncCycleCount();
+
 	uint8_t GetOPCode()
 	{
-		uint8_t value = _memoryManager->Read(_state.PC, true);
-		_cycleCount++;
-		_state.PC++;
-		return value;
+		return MemoryRead(_state.PC++, true);
 	}
 
 	void DummyRead()
 	{
-		_memoryManager->Read(_state.PC, false);
-		_cycleCount++;
+		MemoryRead(_state.PC);
 	}
 
 	uint8_t ReadByte()
@@ -139,19 +138,19 @@ private:
 	void MemoryWrite(uint16_t addr, uint8_t value)
 	{
 		_memoryManager->Write(addr, value);
-		_cycleCount++;
+		IncCycleCount();
 	}
 
-	uint8_t MemoryRead(uint16_t addr) {
+	uint8_t MemoryRead(uint16_t addr, bool forExecute = false) {
 		uint8_t value = _memoryManager->Read(addr);
-		_cycleCount++;
+		IncCycleCount();
 		return value;
 	}
 
 	uint16_t MemoryReadWord(uint16_t addr) {
-		uint16_t value = _memoryManager->ReadWord(addr);
-		_cycleCount+=2;
-		return value;
+		uint8_t lo = MemoryRead(addr);
+		uint8_t hi = MemoryRead(addr + 1);
+		return lo | hi << 8;
 	}
 
 	void SetRegister(uint8_t &reg, uint8_t value) {

@@ -48,7 +48,6 @@ class MemoryManager: public Snapshotable
 		uint8_t* GetInternalRAM();
 
 		uint8_t Read(uint16_t addr, bool forExecution = false);
-		uint16_t ReadWord(uint16_t addr);
 		void Write(uint16_t addr, uint8_t value);
 
 		uint8_t ReadVRAM(uint16_t addr);

@@ -118,24 +118,28 @@ void CPU::EndFrame()
 	_cycleCount = 0;
 }
 
+void CPU::IncCycleCount()
+{
+	PPU::ExecStatic();
+	_cycleCount++;
+}
+
 void CPU::RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue)
 {
 	//"the DMA procedure takes 513 CPU cycles (+1 on odd CPU cycles)"
 	if((CPU::GetRelativeCycleCount() + Instance->_cycleCount) % 2 != 0) {
-		Instance->_cycleCount++;
+		Instance->IncCycleCount();
 	}
-	Instance->_cycleCount++;
+	Instance->IncCycleCount();
 
 	//DMA transfer starts at SpriteRamAddr and wraps around
 	for(int i = 0; i < 0x100; i++) {
 		//Read value
-		uint8_t readValue = Instance->_memoryManager->Read(offsetValue*0x100 + i);		
-		Instance->_cycleCount++;
+		uint8_t readValue = Instance->MemoryRead(offsetValue * 0x100 + i);
 
 		//Write to ram
 		spriteRAM[(spriteRamAddr+i) & 0xFF] = readValue;
-		PPU::ExecStatic();
-		Instance->_cycleCount++;
+		Instance->IncCycleCount();
 	}
 }
 

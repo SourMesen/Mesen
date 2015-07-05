@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
 #include "BaseMapper.h"
-#include "PPU.h"
 #include "Debugger.h"
 
 MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
@@ -109,12 +108,12 @@ uint8_t MemoryManager::Read(uint16_t addr, bool forExecution)
 	Debugger::CheckBreakpoint(forExecution ? BreakpointType::Execute : BreakpointType::Read, addr);
 
 	uint8_t value;
-	PPU::ExecStatic();
 	if(addr <= 0x1FFF) {
 		value = _internalRAM[addr & 0x07FF];
 	} else {
 		value = ReadRegister(addr);
 	}
+
 	return value;
 }
 
@@ -122,19 +121,11 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 {
 	Debugger::CheckBreakpoint(BreakpointType::Write, addr);
 
-	PPU::ExecStatic();
 	if(addr <= 0x1FFF) {
 		_internalRAM[addr & 0x07FF] = value;
 	} else {
 		WriteRegister(addr, value);
 	}
-}
-
-uint16_t MemoryManager::ReadWord(uint16_t addr) 
-{
-	uint8_t lo = Read(addr);
-	uint8_t hi = Read(addr+1);
-	return lo | hi << 8;
 }
 
 uint8_t MemoryManager::ReadVRAM(uint16_t addr)
