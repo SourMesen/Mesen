@@ -142,7 +142,7 @@ private:
 	}
 
 	uint8_t MemoryRead(uint16_t addr, bool forExecute = false) {
-		uint8_t value = _memoryManager->Read(addr);
+		uint8_t value = _memoryManager->Read(addr, forExecute);
 		IncCycleCount();
 		return value;
 	}
