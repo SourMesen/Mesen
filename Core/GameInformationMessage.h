@@ -39,7 +39,7 @@ public:
 	{
 		wstring filename = _romFilename;
 		if(filename.size() > 0) {
-			if(AttemptLoadROM(filename, _crc32Hash)) {
+			if(Console::LoadROM(filename, _crc32Hash)) {
 				return true;
 			} else {
 				MessageManager::DisplayMessage(L"Net Play", L"Could not find matching game ROM.");
@@ -59,39 +59,4 @@ public:
 		return _paused;
 	}
 
-	bool AttemptLoadROM(wstring filename, uint32_t crc32Hash)
-	{
-		if(!Console::GetROMPath().empty()) {
-			if(ROMLoader::GetCRC32(Console::GetROMPath()) == crc32Hash) {
-				//Current game matches, no need to do anything
-				return true;
-			}
-		}
-
-		vector<wstring> romFiles = FolderUtilities::GetFilesInFolder(L"D:\\Users\\Saitoh Hajime\\Desktop\\CPPApp\\NES\\Games", L"*.nes", true);
-		for(wstring zipFile : FolderUtilities::GetFilesInFolder(L"D:\\Users\\Saitoh Hajime\\Desktop\\CPPApp\\NES\\Games", L"*.zip", true)) {
-			romFiles.push_back(zipFile);
-		}
-		for(wstring romFile : romFiles) {
-			//Quick search by filename
-			if(FolderUtilities::GetFilename(romFile, true).compare(filename) == 0) {
-				if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
-					//Matching ROM found
-					Console::LoadROM(romFile);
-					return true;
-				}
-			}
-		}
-
-		for(wstring romFile : romFiles) {
-			//Slower search by CRC value
-			if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
-				//Matching ROM found
-				Console::LoadROM(romFile);
-				return true;
-			}
-		}
-
-		return false;
-	}
 };

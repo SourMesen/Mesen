@@ -8,21 +8,17 @@
 #include "../Utilities/FolderUtilities.h"
 #include "../Core/MessageManager.h"
 
-shared_ptr<Console> Console::Instance = nullptr;
+shared_ptr<Console> Console::Instance(new Console());
 uint32_t Console::Flags = 0;
 uint32_t Console::CurrentFPS = 0;
 
-Console::Console(wstring filename)
+Console::Console()
 {
-	Initialize(filename);
 }
 
 Console::~Console()
 {
 	Movie::Stop();
-	if(Console::Instance.get() == this) {
-		Console::Instance.reset();
-	}
 }
 
 shared_ptr<Console> Console::GetInstance()
@@ -33,10 +29,6 @@ shared_ptr<Console> Console::GetInstance()
 void Console::Initialize(wstring filename)
 {
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
-	if(Console::Instance == nullptr) {
-		Console::Instance.reset(this);
-	}
-
 	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(filename);
 	if(mapper) {
 		_romFilepath = filename;
@@ -56,28 +48,56 @@ void Console::Initialize(wstring filename)
 
 		ResetComponents(false);
 
+		_initialized = true;
+	
+		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(filename));
 		MessageManager::DisplayMessage(L"Game loaded", FolderUtilities::GetFilename(filename, false));
 	} else {
 		MessageManager::DisplayMessage(L"Error", wstring(L"Could not load file: ") + FolderUtilities::GetFilename(filename, true));
 	}
-
 }
 
-void Console::LoadROM(wstring filename)
+void Console::LoadROM(wstring filepath)
 {
-	if(!Instance) {
-		new Console(filename);
-	} else {
-		Console::Pause();
-		Instance->Initialize(filename);
-		Console::Resume();
+	Console::Pause();
+	Instance->Initialize(filepath);
+	Console::Resume();
+}
+
+bool Console::LoadROM(wstring filename, uint32_t crc32Hash)
+{
+	wstring currentRomFilepath = Console::GetROMPath();
+	wstring currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
+	if(!currentRomFilepath.empty()) {
+		if(ROMLoader::GetCRC32(Console::GetROMPath()) == crc32Hash) {
+			//Current game matches, no need to do anything
+			return true;
+		}
+
+		//Try to find the game in the same folder as the current game's folder
+		wstring match = ROMLoader::FindMatchingRomInFolder(currentFolder, filename, crc32Hash);
+		if(!match.empty()) {
+			Console::LoadROM(match);
+			return true;
+		}
 	}
+
+	for(wstring folder : FolderUtilities::GetKnowGameFolders()) {
+		if(folder != currentFolder) {
+			wstring match = ROMLoader::FindMatchingRomInFolder(folder, filename, crc32Hash);
+			if(!match.empty()) {
+				Console::LoadROM(match);
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 wstring Console::GetROMPath()
 {
 	wstring filepath;
-	if(Instance) {
+	if(Instance->_initialized) {
 		filepath = Instance->_romFilepath;
 	}
 	return filepath;
@@ -86,7 +106,7 @@ wstring Console::GetROMPath()
 void Console::Reset(bool softReset)
 {
 	Movie::Stop();
-	if(Instance) {
+	if(Instance->_initialized) {
 		Console::Pause();
 		Instance->ResetComponents(softReset);
 		Console::Resume();
@@ -95,6 +115,8 @@ void Console::Reset(bool softReset)
 
 void Console::ResetComponents(bool softReset)
 {
+	Movie::Stop();
+
 	_ppu->Reset();
 	_apu->Reset();
 	_cpu->Reset(softReset);
@@ -117,19 +139,15 @@ void Console::Stop()
 
 void Console::Pause()
 {
-	if(Console::Instance) {
-		Console::Instance->_pauseLock.Acquire();
-		//Spin wait until emu pauses
-		Console::Instance->_runLock.Acquire();
-	}
+	Console::Instance->_pauseLock.Acquire();
+	//Spin wait until emu pauses
+	Console::Instance->_runLock.Acquire();
 }
 
 void Console::Resume()
 {
-	if(Console::Instance) {
-		Console::Instance->_runLock.Release();
-		Console::Instance->_pauseLock.Release();
-	}
+	Console::Instance->_runLock.Release();
+	Console::Instance->_pauseLock.Release();
 }
 
 void Console::SetFlags(int flags)
@@ -229,7 +247,7 @@ void Console::Run()
 
 void Console::SaveState(ostream &saveStream)
 {
-	if(Instance) {
+	if(Instance->_initialized) {
 		Instance->_cpu->SaveSnapshot(&saveStream);
 		Instance->_ppu->SaveSnapshot(&saveStream);
 		Instance->_memoryManager->SaveSnapshot(&saveStream);
@@ -241,7 +259,7 @@ void Console::SaveState(ostream &saveStream)
 
 void Console::LoadState(istream &loadStream)
 {
-	if(Instance) {
+	if(Instance->_initialized) {
 		Instance->_cpu->LoadSnapshot(&loadStream);
 		Instance->_ppu->LoadSnapshot(&loadStream);
 		Instance->_memoryManager->LoadSnapshot(&loadStream);

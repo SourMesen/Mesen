@@ -38,12 +38,14 @@ class Console
 
 		bool _stop = false;
 		bool _reset = false;
+		
+		bool _initialized = false;
 
 		void ResetComponents(bool softReset);
 		void Initialize(wstring filename);
 
 	public:
-		Console(wstring filename);
+		Console();
 		~Console();
 		void Run();
 		void Stop();
@@ -61,7 +63,9 @@ class Console
 		static void LoadState(istream &loadStream);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
-		static void LoadROM(wstring filename);		
+		static void LoadROM(wstring filepath);
+		static bool LoadROM(wstring romName, uint32_t crc32Hash);
+		static wstring FindMatchingRomInFolder(wstring folder, wstring romFilename, uint32_t crc32Hash);
 		static wstring GetROMPath();
 
 		static bool CheckFlag(int flag);

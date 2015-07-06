@@ -6,9 +6,15 @@ class FolderUtilities
 {
 private:
 	static wstring _homeFolder;
+	static vector<wstring> _gameFolders;
+
 public:
 	static void SetHomeFolder(wstring homeFolder);
 	static wstring GetHomeFolder();
+
+	static void AddKnowGameFolder(wstring gameFolder);
+	static vector<wstring> GetKnowGameFolders();
+
 	static wstring GetSaveFolder();
 	static wstring GetSaveStateFolder();
 	static wstring GetMovieFolder();

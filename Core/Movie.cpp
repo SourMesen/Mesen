@@ -3,6 +3,7 @@
 #include "Movie.h"
 #include "Console.h"
 #include "../Utilities/FolderUtilities.h"
+#include "ROMLoader.h"
 
 Movie* Movie::Instance = new Movie();
 
@@ -45,7 +46,7 @@ uint8_t Movie::GetState(uint8_t port)
 
 	if(_readPosition[port] >= _data.DataSize[port]) {
 		//End of movie file
-		MessageManager::DisplayMessage(L"Movie ended.");
+		MessageManager::DisplayMessage(L"Movies", L"Movie ended.");
 		_playing = false;
 	}
 
@@ -69,6 +70,7 @@ void Movie::Reset()
 
 void Movie::StartRecording(wstring filename, bool reset)
 {
+	_filename = filename;
 	_file = ofstream(filename, ios::out | ios::binary);
 
 	if(_file) {
@@ -86,7 +88,7 @@ void Movie::StartRecording(wstring filename, bool reset)
 
 		Console::Resume();
 
-		MessageManager::DisplayMessage(L"Recording...");
+		MessageManager::DisplayMessage(L"Movies", L"Recording to: " + FolderUtilities::GetFilename(filename, true));
 	}
 }
 
@@ -97,9 +99,12 @@ void Movie::StopAll()
 		for(int i = 0; i < 4; i++) {
 			PushState(i);
 		}
-		_data.Save(_file, _startState);
+		Save();
 	}
-	_playing = false;
+	if(_playing) {
+		MessageManager::DisplayMessage(L"Movies", L"Movie stopped.");
+		_playing = false;
+	}
 }
 
 void Movie::PlayMovie(wstring filename)
@@ -108,7 +113,7 @@ void Movie::PlayMovie(wstring filename)
 
 	Reset();
 	
-	if(_data.Load(filename, _startState)) {
+	if(Load(filename)) {
 		Console::Pause();
 		if(_startState.tellp() > 0) {
 			//Restore state if one was present in the movie
@@ -118,7 +123,7 @@ void Movie::PlayMovie(wstring filename)
 		}
 		_playing = true;
 		Console::Resume();
-		MessageManager::DisplayMessage(L"Playing movie: " + FolderUtilities::GetFilename(filename, true));
+		MessageManager::DisplayMessage(L"Movies", L"Playing movie: " + FolderUtilities::GetFilename(filename, true));
 	}
 }
 
@@ -145,4 +150,103 @@ bool Movie::Playing()
 bool Movie::Recording()
 {
 	return Instance->_recording;
+}
+
+bool Movie::Save()
+{
+	_file.write("MMO", 3);
+	_data.SaveStateSize = (uint32_t)_startState.tellp();
+		
+	wstring romFilepath = Console::GetROMPath();
+	wstring romFilename = FolderUtilities::GetFilename(romFilepath, true);
+
+	uint32_t romCrc32 = ROMLoader::GetCRC32(romFilepath);
+	_file.write((char*)&romCrc32, sizeof(romCrc32));
+
+	uint32_t romNameSize = romFilename.size();
+	_file.write((char*)&romNameSize, sizeof(uint32_t));
+	_file.write((char*)romFilename.c_str(), romNameSize * sizeof(wchar_t));
+
+	_file.write((char*)&_data.SaveStateSize, sizeof(uint32_t));
+		
+	if(_data.SaveStateSize > 0) {
+		_startState.seekg(0, ios::beg);
+		uint8_t *stateBuffer = new uint8_t[_data.SaveStateSize];
+		_startState.read((char*)stateBuffer, _data.SaveStateSize);
+		_file.write((char*)stateBuffer, _data.SaveStateSize);
+		delete[] stateBuffer;
+	}
+
+	for(int i = 0; i < 4; i++) {
+		_data.DataSize[i] = _data.PortData[i].size();
+		_file.write((char*)&_data.DataSize[i], sizeof(uint32_t));
+		if(_data.DataSize[i] > 0) {
+			_file.write((char*)&_data.PortData[i][0], _data.DataSize[i] * sizeof(uint16_t));
+		}
+	}
+
+	_file.close();
+
+	MessageManager::DisplayMessage(L"Movies", L"Movie saved to file: " + FolderUtilities::GetFilename(_filename, true));
+
+	return true;
+}
+
+bool Movie::Load(wstring filename)
+{
+	ifstream file(filename, ios::in | ios::binary);
+
+	if(file) {
+		char header[3];
+		file.read((char*)&header, 3);
+
+		if(memcmp((char*)&header, "MMO", 3) != 0) {
+			//Invalid movie file
+			return false;
+		}
+
+		uint32_t romCrc32;
+		file.read((char*)&romCrc32, sizeof(romCrc32));
+
+		uint32_t romNameSize;
+		file.read((char*)&romNameSize, sizeof(uint32_t));
+			
+		wchar_t* romFilename = new wchar_t[romNameSize + 1];
+		memset(romFilename, 0, (romNameSize+1)*sizeof(wchar_t));
+		file.read((char*)romFilename, romNameSize * sizeof(wchar_t));
+
+		wstring currentRom = Console::GetROMPath();
+		bool loadedGame = true;
+		if(currentRom.empty() || romCrc32 != ROMLoader::GetCRC32(currentRom)) {
+			//Loaded game isn't the same as the game used for the movie, attempt to load the correct game
+			loadedGame = Console::LoadROM(romFilename, romCrc32);
+		}
+
+		if(loadedGame) {
+			file.read((char*)&_data.SaveStateSize, sizeof(uint32_t));
+
+			if(_data.SaveStateSize > 0) {
+				uint8_t *stateBuffer = new uint8_t[_data.SaveStateSize];
+				file.read((char*)stateBuffer, _data.SaveStateSize);
+				_startState.write((char*)stateBuffer, _data.SaveStateSize);
+				delete[] stateBuffer;
+			}
+
+			for(int i = 0; i < 4; i++) {
+				file.read((char*)&_data.DataSize[i], sizeof(uint32_t));
+
+				uint16_t* readBuffer = new uint16_t[_data.DataSize[i]];
+				file.read((char*)readBuffer, _data.DataSize[i] * sizeof(uint16_t));
+				_data.PortData[i] = vector<uint16_t>(readBuffer, readBuffer + _data.DataSize[i]);
+				delete[] readBuffer;
+			}
+		} else {
+			MessageManager::DisplayMessage(L"Movies", L"Missing ROM required (" + wstring(romFilename) + L") to play movie.");
+		}
+		file.close();
+
+		return loadedGame;
+	}
+
+	return false;
 }

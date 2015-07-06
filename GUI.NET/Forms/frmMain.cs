@@ -31,8 +31,7 @@ namespace Mesen.GUI.Forms
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
-			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.dxViewer.Handle);
-			InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
+			InitializeEmu();
 
 			UpdateMenus();
 			UpdateRecentFiles();
@@ -41,6 +40,16 @@ namespace Mesen.GUI.Forms
 			if(!DesignMode) {
 				Icon = Properties.Resources.MesenIcon;
 			}
+		}
+
+		void InitializeEmu()
+		{
+			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.dxViewer.Handle);
+			foreach(string romPath in ConfigManager.Config.RecentFiles) {
+				InteropEmu.AddKnowGameFolder(System.IO.Path.GetDirectoryName(romPath).ToLowerInvariant());
+			}
+			InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
+
 		}
 
 		void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
@@ -73,7 +82,7 @@ namespace Mesen.GUI.Forms
 		private void LoadROM(string filename)
 		{
 			ConfigManager.Config.AddRecentFile(filename);
-			InteropEmu.LoadROM(filename);
+			InteropEmu.LoadROM(filename.ToLowerInvariant());
 			UpdateRecentFiles();
 		}
 
@@ -96,7 +105,7 @@ namespace Mesen.GUI.Forms
 
 					bool moviePlaying = InteropEmu.MoviePlaying();
 					bool movieRecording = InteropEmu.MovieRecording();
-					mnuPlayMovie.Enabled = _emuThread != null && !netPlay && !moviePlaying && !movieRecording;
+					mnuPlayMovie.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuStopMovie.Enabled = _emuThread != null && !netPlay && (moviePlaying || movieRecording);
 					mnuRecordFrom.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
 					mnuRecordFromStart.Enabled = _emuThread != null && !InteropEmu.IsConnected() && !moviePlaying && !movieRecording;

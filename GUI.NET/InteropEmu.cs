@@ -14,7 +14,10 @@ namespace Mesen.GUI
 		private const string DLLPath = "WinMesen.dll";
 		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.LPWStr)]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle);
 		[DllImport(DLLPath)] public static extern void Release();
+
 		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.LPWStr)]string filename);
+		[DllImport(DLLPath)] public static extern void AddKnowGameFolder([MarshalAs(UnmanagedType.LPWStr)]string folder);
+
 		[DllImport(DLLPath)] public static extern void Run();
 		[DllImport(DLLPath)] public static extern void Pause();
 		[DllImport(DLLPath)] public static extern void Resume();

@@ -54,6 +54,8 @@ namespace InteropEmu {
 
 		DllExport void __stdcall LoadROM(wchar_t* filename) { Console::LoadROM(filename); }
 
+		DllExport void __stdcall AddKnowGameFolder(wchar_t* folder) { FolderUtilities::AddKnowGameFolder(folder); }
+
 		DllExport void __stdcall Run()
 		{
 			if(Console::GetInstance()) {

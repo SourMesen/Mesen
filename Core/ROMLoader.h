@@ -232,5 +232,31 @@ class ROMLoader
 			}
 			return crc;
 		}
+
+		static wstring FindMatchingRomInFolder(wstring folder, wstring romFilename, uint32_t crc32Hash)
+		{
+			vector<wstring> romFiles = FolderUtilities::GetFilesInFolder(folder, L"*.nes", true);
+			for(wstring zipFile : FolderUtilities::GetFilesInFolder(folder, L"*.zip", true)) {
+				romFiles.push_back(zipFile);
+			}
+			for(wstring romFile : romFiles) {
+				//Quick search by filename
+				if(FolderUtilities::GetFilename(romFile, true).compare(romFilename) == 0) {
+					if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
+						return romFile;
+					}
+				}
+			}
+
+			for(wstring romFile : romFiles) {
+				//Slower search by CRC value
+				if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
+					//Matching ROM found
+					return romFile;
+				}
+			}
+
+			return L"";
+		}
 };
 

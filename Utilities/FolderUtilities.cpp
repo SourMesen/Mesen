@@ -4,6 +4,7 @@
 #include "FolderUtilities.h"
 
 wstring FolderUtilities::_homeFolder = L"";
+vector<wstring> FolderUtilities::_gameFolders = vector<wstring>();
 
 void FolderUtilities::SetHomeFolder(wstring homeFolder)
 {
@@ -17,6 +18,26 @@ wstring FolderUtilities::GetHomeFolder()
 		throw std::exception("Home folder not specified");
 	}
 	return _homeFolder;
+}
+
+void FolderUtilities::AddKnowGameFolder(wstring gameFolder)
+{
+	bool alreadyExists = false;
+	for(wstring folder : _gameFolders) {
+		if(folder.compare(gameFolder) == 0) {
+			alreadyExists = true;
+			break;
+		}
+	}
+
+	if(!alreadyExists) {
+		_gameFolders.push_back(gameFolder);
+	}
+}
+
+vector<wstring> FolderUtilities::GetKnowGameFolders()
+{
+	return _gameFolders;
 }
 
 wstring FolderUtilities::GetSaveFolder()
