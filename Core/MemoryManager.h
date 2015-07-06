@@ -41,6 +41,8 @@ class MemoryManager: public Snapshotable
 		MemoryManager(shared_ptr<BaseMapper> mapper);
 		~MemoryManager();
 
+		void Reset(bool softReset);
+
 		void InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses);
 		void RegisterIODevice(IMemoryHandler *handler);
 

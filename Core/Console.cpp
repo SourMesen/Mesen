@@ -98,6 +98,8 @@ void Console::ResetComponents(bool softReset)
 	_ppu->Reset();
 	_apu->Reset();
 	_cpu->Reset(softReset);
+	_memoryManager->Reset(softReset);
+
 	if(softReset) {
 		MessageManager::SendNotification(ConsoleNotificationType::GameReset);
 	} else {

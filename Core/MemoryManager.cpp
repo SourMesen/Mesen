@@ -41,6 +41,13 @@ MemoryManager::~MemoryManager()
 	delete[] _vramWriteHandlers;
 }
 
+void MemoryManager::Reset(bool softReset)
+{
+	if(!softReset) {
+		memset(_internalRAM, 0, InternalRAMSize);
+	}
+}
+
 uint8_t MemoryManager::ReadRegister(uint16_t addr)
 {
 	if(_ramReadHandlers[addr]) {
