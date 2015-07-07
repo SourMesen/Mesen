@@ -75,16 +75,16 @@ class CRC32
 private:
 	uint32_t _crc = 0xFFFFFFFF;
 
-	void AddData(const uint8_t* pData, const uint32_t length)
+	void AddData(const uint8_t* pData, const std::streamoff length)
 	{
 		uint8_t* pCur = (uint8_t*)pData;
-		for(uint32_t remaining = length; remaining--; ++pCur) {
+		for(std::streamoff remaining = length; remaining--; ++pCur) {
 			_crc = (_crc >> 8) ^ kCrc32Table[(_crc ^ *pCur) & 0xff];
 		}
 	}
 
 public:
-	static uint32_t GetCRC(uint8_t *buffer, uint32_t length)
+	static uint32_t GetCRC(uint8_t *buffer, std::streamoff length)
 	{
 		CRC32 crc;
 		crc.AddData(buffer, length);
@@ -99,9 +99,9 @@ public:
 
 		if(file) {
 			file.seekg(0, ios::end);
-			uint32_t fileSize = (uint32_t)file.tellg();
+			std::streamoff fileSize = file.tellg();
 			file.seekg(0, ios::beg);
-			uint8_t* buffer = new uint8_t[fileSize];
+			uint8_t* buffer = new uint8_t[(uint32_t)fileSize];
 
 			file.read((char*)buffer, fileSize);
 			file.close();

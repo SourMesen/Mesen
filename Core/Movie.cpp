@@ -163,7 +163,7 @@ bool Movie::Save()
 	uint32_t romCrc32 = ROMLoader::GetCRC32(romFilepath);
 	_file.write((char*)&romCrc32, sizeof(romCrc32));
 
-	uint32_t romNameSize = romFilename.size();
+	uint32_t romNameSize = (uint32_t)romFilename.size();
 	_file.write((char*)&romNameSize, sizeof(uint32_t));
 	_file.write((char*)romFilename.c_str(), romNameSize * sizeof(wchar_t));
 
@@ -178,7 +178,7 @@ bool Movie::Save()
 	}
 
 	for(int i = 0; i < 4; i++) {
-		_data.DataSize[i] = _data.PortData[i].size();
+		_data.DataSize[i] = (uint32_t)_data.PortData[i].size();
 		_file.write((char*)&_data.DataSize[i], sizeof(uint32_t));
 		if(_data.DataSize[i] > 0) {
 			_file.write((char*)&_data.PortData[i][0], _data.DataSize[i] * sizeof(uint16_t));

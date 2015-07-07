@@ -12,20 +12,44 @@
 #include <windows.h>
 #include <tchar.h>
 
-#ifdef _DEBUG
-	#pragma comment(lib, "../Debug/Core.lib")
-	#pragma comment(lib, "../Debug/Utilities.lib")
-	#pragma comment(lib, "../Debug/Windows.lib")
-	#pragma comment(lib, "../Windows/DirectXTK/DirectXTK.debug.lib")
-	#pragma comment(lib, "../Core/Nes_Apu/Nes_Apu.debug.lib")
-#else 
-	#pragma comment(lib, "../Release/Core.lib")
-	#pragma comment(lib, "../Release/Utilities.lib")
-	#pragma comment(lib, "../Release/Windows.lib")
-	#pragma comment(lib, "../Windows/DirectXTK/DirectXTK.lib")
-	#pragma comment(lib, "../Core/Nes_Apu/Nes_Apu.lib")
+#if _WIN32 || _WIN64
+	#if _WIN64
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
 #endif
 
-#define DllExport __declspec(dllexport)
+#if __GNUC__
+	#if __x86_64__ || __ppc64__
+		#define ENVIRONMENT64
+	#else
+		#define ENVIRONMENT32
+	#endif
+#endif
 
-// TODO: reference additional headers your program requires here
+#ifdef ENVIRONMENT32
+	#ifdef _DEBUG
+		#define MESEN_LIBRARY_PATH "../bin/x86/Debug/"
+		#define MESEN_LIBRARY_SUFFIX ".Debug.x86.lib"
+	#else 
+		#define MESEN_LIBRARY_PATH "../bin/x86/Release/"
+		#define MESEN_LIBRARY_SUFFIX ".Release.x86.lib"
+	#endif
+#else
+	#ifdef _DEBUG
+		#define MESEN_LIBRARY_PATH "../bin/x64/Debug/"
+		#define MESEN_LIBRARY_SUFFIX ".Debug.x64.lib"
+	#else 
+		#define MESEN_LIBRARY_PATH "../bin/x64/Release/"
+		#define MESEN_LIBRARY_SUFFIX ".Release.x64.lib"
+	#endif
+#endif
+
+#pragma comment(lib, MESEN_LIBRARY_PATH"Core.lib")
+#pragma comment(lib, MESEN_LIBRARY_PATH"Utilities.lib")
+#pragma comment(lib, MESEN_LIBRARY_PATH"Windows.lib")
+#pragma comment(lib, "../Dependencies/DirectXTK"MESEN_LIBRARY_SUFFIX)
+#pragma comment(lib, "../Dependencies/Nes_Apu"MESEN_LIBRARY_SUFFIX)
+
+#define DllExport __declspec(dllexport)

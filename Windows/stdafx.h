@@ -12,12 +12,6 @@
 #include <windows.h>
 #include <Commdlg.h>
 
-#ifdef _DEBUG
-	#pragma comment( lib, "../Core/Nes_Apu/Nes_Apu.debug.lib" )	
-#else 
-	#pragma comment( lib, "../Core/Nes_Apu/Nes_Apu.lib" )	
-#endif
-
 #pragma comment(lib, "dsound.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "winmm.lib")

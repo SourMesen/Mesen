@@ -89,7 +89,7 @@ public:
 	void Send(Socket &socket)
 	{
 		StreamState();
-		uint32_t messageLength = _buffer.size();
+		uint32_t messageLength = (uint32_t)_buffer.size();
 		socket.BufferedSend((char*)&messageLength, sizeof(messageLength));
 		socket.BufferedSend((char*)&_buffer[0], messageLength);
 		socket.SendBuffer();
@@ -97,7 +97,7 @@ public:
 
 	void CopyString(wchar_t** dest, uint32_t &length, wstring src)
 	{
-		length = (src.length() + 1)*sizeof(wchar_t);
+		length = (uint32_t)(src.length() + 1)*sizeof(wchar_t);
 		*dest = (wchar_t*)new uint8_t[length];
 		memcpy(*dest, src.c_str(), length);
 		_pointersToRelease.push_back(*dest);

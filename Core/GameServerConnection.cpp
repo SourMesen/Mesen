@@ -67,7 +67,7 @@ void GameServerConnection::SendMovieData(uint8_t state, uint8_t port)
 ButtonState GameServerConnection::GetButtonState()
 {
 	ButtonState state;
-	uint32_t inputBufferSize = _inputData.size();
+	size_t inputBufferSize = _inputData.size();
 	uint8_t stateData = 0;
 	if(inputBufferSize > 0) {
 		stateData = _inputData.front();

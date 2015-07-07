@@ -78,7 +78,7 @@ bool APU::Exec(uint32_t currentCPUCycle)
 		if(availableSampleCount >= APU::SamplesPerFrame) {
 			size_t sampleCount = _buf.read_samples(_outputBuffer, APU::SamplesPerFrame);
 			if(APU::AudioDevice) {
-				APU::AudioDevice->PlayBuffer(_outputBuffer, sampleCount * BitsPerSample / 8);
+				APU::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * BitsPerSample / 8));
 			}
 		}
 		return true;

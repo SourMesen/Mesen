@@ -28,7 +28,7 @@ CodeInfo CheatManager::GetGGCodeInfo(string ggCode)
 	string ggLetters = "APZLGITYEOXUKSVN";
 	
 	uint32_t rawCode = 0;
-	for(int i = 0, len = ggCode.size(); i < len; i++) {
+	for(size_t i = 0, len = ggCode.size(); i < len; i++) {
 		rawCode |= ggLetters.find(ggCode[i]) << (i * 4);
 	}
 

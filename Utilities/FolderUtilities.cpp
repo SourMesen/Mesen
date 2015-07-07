@@ -127,7 +127,7 @@ vector<wstring> FolderUtilities::GetFilesInFolder(wstring rootFolder, wstring ma
 
 wstring FolderUtilities::GetFilename(wstring filepath, bool includeExtension)
 {
-	int index = filepath.find_last_of(L"/\\");
+	size_t index = filepath.find_last_of(L"/\\");
 	wstring filename = (index == std::string::basic_string::npos) ? filepath : filepath.substr(index + 1);
 	if(!includeExtension) {
 		filename = filename.substr(0, filename.find_last_of(L"."));
@@ -137,7 +137,7 @@ wstring FolderUtilities::GetFilename(wstring filepath, bool includeExtension)
 
 wstring FolderUtilities::GetFolderName(wstring filepath)
 {
-	int index = filepath.find_last_of(L"/\\");
+	size_t index = filepath.find_last_of(L"/\\");
 	return filepath.substr(0, index);
 }
 

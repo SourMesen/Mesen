@@ -119,7 +119,7 @@ class ROMLoader
 			return buffer;
 		}
 
-		bool LoadFromMemory(uint8_t* buffer, uint32_t length)
+		bool LoadFromMemory(uint8_t* buffer, size_t length)
 		{
 			_crc32 = CRC32::GetCRC(buffer, length);
 			if(memcmp(buffer, "NES", 3) == 0) {

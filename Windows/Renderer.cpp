@@ -239,8 +239,8 @@ namespace NES
 		////////////////////////////////////////////////////////////////////////////
 		_spriteBatch.reset(new SpriteBatch(_pDeviceContext));
 
-		_smallFont.reset(new SpriteFont(_pd3dDevice, L"Roboto.9.spritefont"));
-		_font.reset(new SpriteFont(_pd3dDevice, L"Roboto.12.spritefont"));
+		_smallFont.reset(new SpriteFont(_pd3dDevice, L"Resources\\Roboto.9.spritefont"));
+		_font.reset(new SpriteFont(_pd3dDevice, L"Resources\\Roboto.12.spritefont"));
 
 		//Sample state
 		D3D11_SAMPLER_DESC samplerDesc;
@@ -258,7 +258,7 @@ namespace NES
 		
 		_pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
 
-		if(!FAILED(CreateDDSTextureFromFile(_pd3dDevice, L"Toast.dds", nullptr, &_toastTexture))) {
+		if(!FAILED(CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\Toast.dds", nullptr, &_toastTexture))) {
 			return 0;
 		}
 
@@ -330,7 +330,7 @@ namespace NES
 
 	void Renderer::DisplayMessage(wstring title, wstring message)
 	{
-		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, L"Icon.bmp"));
+		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, L"Resources\\MesenIcon.bmp"));
 		DisplayToast(toast);
 	}
 
@@ -476,7 +476,7 @@ namespace NES
 		wstring wrappedText;
 		list<wstring> words;
 		wstring currentWord;
-		for(int i = 0, len = text.length(); i < len; i++) {
+		for(size_t i = 0, len = text.length(); i < len; i++) {
 			if(text[i] == L' ' || text[i] == L'\n') {
 				if(currentWord.length() > 0) {
 					words.push_back(currentWord);

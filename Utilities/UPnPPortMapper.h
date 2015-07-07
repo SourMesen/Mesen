@@ -125,7 +125,7 @@ public:
 		if(GetAddrInfoW(hostName, nullptr, &hints, &result) == 0) {
 			wchar_t ipAddr[255];
 			DWORD ipSize = 255;
-			if(WSAAddressToString(result->ai_addr, result->ai_addrlen, nullptr, ipAddr, &ipSize) == 0) {
+			if(WSAAddressToString(result->ai_addr, (DWORD)result->ai_addrlen, nullptr, ipAddr, &ipSize) == 0) {
 				localIP = ipAddr;
 			}
 			FreeAddrInfoW(result);

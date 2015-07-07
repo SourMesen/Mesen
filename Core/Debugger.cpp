@@ -71,7 +71,7 @@ vector<uint32_t> Debugger::GetExecBreakpointAddresses()
 
 	vector<uint32_t> result;
 
-	for(int i = 0, len = _execBreakpoints.size(); i < len; i++) {
+	for(size_t i = 0, len = _execBreakpoints.size(); i < len; i++) {
 		shared_ptr<Breakpoint> breakpoint = _execBreakpoints[i];
 		int32_t addr = breakpoint->GetAddr();
 		if(breakpoint->IsAbsoluteAddr()) {
@@ -92,7 +92,7 @@ void Debugger::RemoveBreakpoint(shared_ptr<Breakpoint> breakpoint)
 {
 	_bpLock.Acquire();
 
-	for(int i = 0, len = _execBreakpoints.size(); i < len; i++) {
+	for(size_t i = 0, len = _execBreakpoints.size(); i < len; i++) {
 		if(_execBreakpoints[i] == breakpoint) {
 			_execBreakpoints.erase(_execBreakpoints.begin()+i);
 			break;
@@ -117,7 +117,7 @@ shared_ptr<Breakpoint> Debugger::GetMatchingBreakpoint(BreakpointType type, uint
 	}
 	
 	_bpLock.Acquire();
-	for(int i = 0, len = breakpoints->size(); i < len; i++) {
+	for(size_t i = 0, len = breakpoints->size(); i < len; i++) {
 		shared_ptr<Breakpoint> breakpoint = (*breakpoints)[i];
 		if(breakpoint->Matches(addr, absoluteAddr)) {
 			_bpLock.Release();
@@ -248,7 +248,7 @@ string Debugger::GenerateOutput()
 	//output << _disassembler->GetRAMCode();
 
 	uint16_t memoryAddr = 0x8000;
-	for(int i = 0, size = memoryRanges.size(); i < size; i += 2) {
+	for(size_t i = 0, size = memoryRanges.size(); i < size; i += 2) {
 		output << _disassembler->GetCode(memoryRanges[i], memoryRanges[i+1], memoryAddr);
 	}
 
