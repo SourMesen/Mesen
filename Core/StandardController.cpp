@@ -27,7 +27,7 @@ ButtonState StandardController::GetButtonState()
 {
 	ButtonState state;
 
-	for(int i = 0, len = _keyMappings.size(); i < len; i++) {
+	for(size_t i = 0, len = _keyMappings.size(); i < len; i++) {
 		KeyMapping keyMapping = _keyMappings[i];
 
 		state.A |= ControlManager::IsKeyPressed(keyMapping.A);

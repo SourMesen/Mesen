@@ -12,6 +12,7 @@
 
 using std::shared_ptr;
 using utf8::ifstream;
+using utf8::ofstream;
 using std::string;
 using std::vector;
 using std::atomic;

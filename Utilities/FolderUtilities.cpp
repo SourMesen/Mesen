@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include <commdlg.h>
 #include <shlobj.h>
 #include "FolderUtilities.h"
 #include "UTF8Util.h"

@@ -4,7 +4,7 @@
 class SimpleLock
 {
 private:
-	DWORD _holderThreadID;
+	uint32_t _holderThreadID;
 	uint32_t _lockCount;
 	atomic_flag _lock;
 

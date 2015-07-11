@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SimpleLock.h"
+#include <Windows.h>
 
 SimpleLock::SimpleLock()
 {

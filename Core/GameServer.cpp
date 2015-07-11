@@ -28,7 +28,7 @@ GameServer::~GameServer()
 void GameServer::AcceptConnections()
 {
 	while(true) {
-		shared_ptr<Socket> socket = _listener->Accept(NULL, NULL);
+		shared_ptr<Socket> socket = _listener->Accept();
 		if(!socket->ConnectionError()) {
 			_openConnections.push_back(shared_ptr<GameServerConnection>(new GameServerConnection(socket, 1, this)));
 			std::cout << "Client connected." << std::endl;

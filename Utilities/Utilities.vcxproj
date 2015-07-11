@@ -128,6 +128,7 @@
       <CallingConvention>Cdecl</CallingConvention>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <ShowIncludes>true</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -241,9 +242,12 @@
     <ClInclude Include="ZIPReader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CRC32.cpp" />
     <ClCompile Include="FolderUtilities.cpp" />
     <ClCompile Include="miniz.cpp" />
+    <ClCompile Include="PNGWriter.cpp" />
     <ClCompile Include="SimpleLock.cpp" />
+    <ClCompile Include="Socket.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -252,6 +256,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release x64|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release x64|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="UPnPPortMapper.cpp" />
+    <ClCompile Include="UTF8Util.cpp" />
     <ClCompile Include="ZIPReader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
