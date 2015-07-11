@@ -230,7 +230,7 @@ void Console::Run()
 		}
 		
 		if(fpsTimer.GetElapsedMS() > 1000) {
-			uint32_t frameCount = _ppu->GetFrameCount();
+			uint32_t frameCount = PPU::GetFrameCount();
 			if((int32_t)frameCount - (int32_t)lastFrameCount < 0) {
 				Console::CurrentFPS = 0;
 			} else {

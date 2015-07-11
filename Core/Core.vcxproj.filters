@@ -218,6 +218,12 @@
     <ClInclude Include="CheatManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IKeyManager.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPU.cpp">
@@ -284,6 +290,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CheatManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StandardController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

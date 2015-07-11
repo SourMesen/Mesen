@@ -7,19 +7,23 @@
 #include "IGameBroadcaster.h"
 #include "Snapshotable.h"
 #include "../Utilities/SimpleLock.h"
+#include "IKeyManager.h"
 
 class ControlManager : public Snapshotable, public IMemoryHandler
 {
 	private:
+		static unique_ptr<IKeyManager> _keyManager;
 		static IControlDevice* ControlDevices[4];
 		static IControlDevice* OriginalControlDevices[4];
 		static IGameBroadcaster* GameBroadcaster;
 		static SimpleLock ControllerLock[4];
 
 		bool _refreshState = false;
-		uint8_t _stateBuffer[4];
+		uint32_t _stateBuffer[2];
 
 		void RefreshAllPorts();
+		uint8_t GetControllerState(uint8_t port);
+		bool ControlManager::HasFourScoreAdapter();
 		void RefreshStateBuffer(uint8_t port);
 		uint8_t GetPortValue(uint8_t port);
 
@@ -31,6 +35,12 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 		static void RegisterBroadcaster(IGameBroadcaster* gameBroadcaster);
 		static void UnregisterBroadcaster(IGameBroadcaster* gameBroadcaster);
+
+		static void RegisterKeyManager(IKeyManager* keyManager);
+		static bool IsKeyPressed(uint32_t keyCode);
+		static uint32_t GetPressedKey();
+		static wchar_t* GetKeyName(uint32_t keyCode);
+		static uint32_t GetKeyCode(wchar_t* keyName);
 
 		static void BackupControlDevices();
 		static void RestoreControlDevices();

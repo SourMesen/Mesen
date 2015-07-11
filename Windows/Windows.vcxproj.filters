@@ -27,9 +27,6 @@
     <ClInclude Include="GamePad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,6 +78,9 @@
     <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h">
       <Filter>Header Files\DirectXTK</Filter>
     </ClInclude>
+    <ClInclude Include="WindowsKeyManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -89,13 +89,13 @@
     <ClCompile Include="GamePad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsKeyManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -275,11 +275,13 @@
     <ClInclude Include="IAudioDevice.h" />
     <ClInclude Include="IControlDevice.h" />
     <ClInclude Include="IGameBroadcaster.h" />
+    <ClInclude Include="IKeyManager.h" />
     <ClInclude Include="IMemoryHandler.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="IMessageManager.h" />
     <ClInclude Include="INotificationListener.h" />
     <ClInclude Include="InputDataMessage.h" />
+    <ClInclude Include="StandardController.h" />
     <ClInclude Include="MessageManager.h" />
     <ClInclude Include="MessageType.h" />
     <ClInclude Include="MMC2.h" />
@@ -330,6 +332,7 @@
     <ClCompile Include="GameConnection.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameServerConnection.cpp" />
+    <ClCompile Include="StandardController.cpp" />
     <ClCompile Include="MapperFactory.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="MessageManager.cpp" />

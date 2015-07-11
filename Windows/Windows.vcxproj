@@ -225,7 +225,7 @@
     <ClInclude Include="DirectXTK\WICTextureLoader.h" />
     <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h" />
     <ClInclude Include="GamePad.h" />
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="WindowsKeyManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -233,7 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GamePad.cpp" />
-    <ClCompile Include="InputManager.cpp">
+    <ClCompile Include="WindowsKeyManager.cpp">
       <DeploymentContent>false</DeploymentContent>
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />

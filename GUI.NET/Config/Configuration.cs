@@ -17,6 +17,7 @@ namespace Mesen.GUI.Config
 		public ServerInfo ServerInfo;
 		public List<string> RecentFiles;
 		public List<CheatInfo> Cheats;
+		public List<ControllerInfo> Controllers;
 		public bool ShowOnlyCheatsForCurrentGame;
 
 		public Configuration()
@@ -25,8 +26,18 @@ namespace Mesen.GUI.Config
 			ClientConnectionInfo = new ClientConnectionInfo();
 			ServerInfo = new ServerInfo();
 			RecentFiles = new List<string>();
+			Controllers = new List<ControllerInfo>();
 		}
 
+		private void InitializeDefaults()
+		{
+			while(Controllers.Count < 4) {
+				var controllerInfo = new ControllerInfo();
+				controllerInfo.ControllerType = Controllers.Count < 2 ? ControllerType.StandardController : ControllerType.None;
+				Controllers.Add(controllerInfo);
+			}
+		}
+		
 		public void AddRecentFile(string filepath)
 		{
 			if(RecentFiles.Contains(filepath)) {
@@ -41,10 +52,14 @@ namespace Mesen.GUI.Config
 
 		public static Configuration Deserialize(string configFile)
 		{
+			Configuration config;
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(Configuration));
 			using(TextReader textReader = new StreamReader(configFile)) {
-				return (Configuration)xmlSerializer.Deserialize(textReader);
+				config = (Configuration)xmlSerializer.Deserialize(textReader);
 			}
+
+			config.InitializeDefaults();
+			return config;
 		}
 
 		public void Serialize(string configFile)

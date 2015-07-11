@@ -3,34 +3,39 @@
 
 GamePad::GamePad()
 {
+	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
+		_gamePadStates.push_back(shared_ptr<XINPUT_STATE>(new XINPUT_STATE()));
+	}
 }
 
-bool GamePad::RefreshState()
+void GamePad::RefreshState()
 {
-	int controllerId = -1;
-
-	for(DWORD i = 0; i < XUSER_MAX_COUNT && controllerId == -1; i++) {
-		ZeroMemory(&_state, sizeof(XINPUT_STATE));
-
-		if(XInputGetState(i, &_state) == ERROR_SUCCESS) {
-			controllerId = i;
+	for(DWORD i = 0; i < XUSER_MAX_COUNT; i++) {
+		if(_gamePadStates[i] != nullptr) {
+			ZeroMemory(_gamePadStates[i].get(), sizeof(XINPUT_STATE));
+			if(XInputGetState(i, _gamePadStates[i].get()) != ERROR_SUCCESS) {
+				//XInputGetState is incredibly slow when no controller is plugged in
+				//TODO: Periodically detect if a controller has been plugged in to allow controllers to be plugged in after the emu is started
+				_gamePadStates[i] = nullptr;
+			}
 		}
 	}
-
-	return controllerId != -1;
 }
 
-bool GamePad::IsPressed(WORD button)
+bool GamePad::IsPressed(uint8_t gamepadPort, WORD button)
 {
-	RefreshState();
-	if(button == XINPUT_GAMEPAD_DPAD_LEFT && _state.Gamepad.sThumbLX < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-		_state.Gamepad.wButtons |= button;
-	} else if(button == XINPUT_GAMEPAD_DPAD_RIGHT && _state.Gamepad.sThumbLX > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-		_state.Gamepad.wButtons |= button;
-	} else if(button == XINPUT_GAMEPAD_DPAD_UP && _state.Gamepad.sThumbLY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-		_state.Gamepad.wButtons |= button;
-	} else if(button == XINPUT_GAMEPAD_DPAD_DOWN && _state.Gamepad.sThumbLY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-		_state.Gamepad.wButtons |= button;
+	if(_gamePadStates[gamepadPort] != nullptr) {
+		if(button == XINPUT_GAMEPAD_DPAD_LEFT && _gamePadStates[gamepadPort]->Gamepad.sThumbLX < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+			_gamePadStates[gamepadPort]->Gamepad.wButtons |= button;
+		} else if(button == XINPUT_GAMEPAD_DPAD_RIGHT && _gamePadStates[gamepadPort]->Gamepad.sThumbLX > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+			_gamePadStates[gamepadPort]->Gamepad.wButtons |= button;
+		} else if(button == XINPUT_GAMEPAD_DPAD_UP && _gamePadStates[gamepadPort]->Gamepad.sThumbLY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+			_gamePadStates[gamepadPort]->Gamepad.wButtons |= button;
+		} else if(button == XINPUT_GAMEPAD_DPAD_DOWN && _gamePadStates[gamepadPort]->Gamepad.sThumbLY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+			_gamePadStates[gamepadPort]->Gamepad.wButtons |= button;
+		}
+		return (_gamePadStates[gamepadPort]->Gamepad.wButtons & button) != 0;
+	} else {
+		return false;
 	}
-	return (_state.Gamepad.wButtons & button) != 0;
 }

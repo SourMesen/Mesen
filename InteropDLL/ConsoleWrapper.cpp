@@ -4,16 +4,17 @@
 #include "../Core/Console.h"
 #include "../Windows/Renderer.h"
 #include "../Windows/SoundManager.h"
-#include "../Windows/InputManager.h"
+#include "../Windows/WindowsKeyManager.h"
 #include "../Core/GameServer.h"
 #include "../Core/GameClient.h"
 #include "../Core/ClientConnectionData.h"
 #include "../Core/SaveStateManager.h"
 #include "../Core/CheatManager.h"
+#include "../Core/StandardController.h"
 
 static NES::Renderer *_renderer = nullptr;
 static SoundManager *_soundManager = nullptr;
-static InputManager *_inputManager = nullptr;
+static vector<shared_ptr<StandardController>> _inputDevices;
 static HWND _windowHandle = nullptr;
 static HWND _viewerHandle = nullptr;
 static wstring _romFilename;
@@ -49,12 +50,23 @@ namespace InteropEmu {
 			_renderer->SetFlags(NES::UIFlags::ShowFPS);
 
 			_soundManager = new SoundManager(_windowHandle);
-			_inputManager = new InputManager(_windowHandle, 0);
+
+			ControlManager::RegisterKeyManager(new WindowsKeyManager(_windowHandle));
+
+			for(int i = 0; i < 4; i++) {
+				_inputDevices.push_back(shared_ptr<StandardController>(new StandardController(i)));
+			}
 		}
 
 		DllExport void __stdcall LoadROM(wchar_t* filename) { Console::LoadROM(filename); }
-
 		DllExport void __stdcall AddKnowGameFolder(wchar_t* folder) { FolderUtilities::AddKnowGameFolder(folder); }
+
+		DllExport void __stdcall AddKeyMappings(uint32_t port, KeyMapping mapping) { _inputDevices[port]->AddKeyMappings(mapping); }
+		DllExport void __stdcall ClearKeyMappings(uint32_t port) { _inputDevices[port]->ClearKeyMappings(); }
+
+		DllExport uint32_t __stdcall GetPressedKey() { return ControlManager::GetPressedKey(); }
+		DllExport wchar_t* __stdcall GetKeyName(uint32_t keyCode) { return ControlManager::GetKeyName(keyCode); }
+		DllExport uint32_t __stdcall GetKeyCode(wchar_t* keyName) { return ControlManager::GetKeyCode(keyName); }
 
 		DllExport void __stdcall Run()
 		{
@@ -115,7 +127,6 @@ namespace InteropEmu {
 			MessageManager::RegisterMessageManager(nullptr);
 			delete _renderer;
 			delete _soundManager;
-			delete _inputManager;
 		}
 
 		DllExport void __stdcall Render() { _renderer->Render(); }

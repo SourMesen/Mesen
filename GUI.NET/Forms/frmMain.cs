@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Mesen.GUI.Debugger;
 using Mesen.GUI.Forms.Cheats;
+using Mesen.GUI.Forms.Config;
 using Mesen.GUI.Forms.NetPlay;
 
 namespace Mesen.GUI.Forms
@@ -48,8 +49,10 @@ namespace Mesen.GUI.Forms
 			foreach(string romPath in ConfigManager.Config.RecentFiles) {
 				InteropEmu.AddKnowGameFolder(System.IO.Path.GetDirectoryName(romPath).ToLowerInvariant());
 			}
-			InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
 
+			ControllerInfo.ApplyConfig();
+			
+			InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
 		}
 
 		void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
@@ -380,6 +383,12 @@ namespace Mesen.GUI.Forms
 				frm = null;
 				CheatInfo.ApplyCheats();
 			};
+		}
+
+		private void mnuInput_Click(object sender, EventArgs e)
+		{
+			frmInputConfig frm = new frmInputConfig();
+			frm.ShowDialog();
 		}
 	}
 }

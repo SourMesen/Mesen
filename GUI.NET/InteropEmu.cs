@@ -18,6 +18,12 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.LPWStr)]string filename);
 		[DllImport(DLLPath)] public static extern void AddKnowGameFolder([MarshalAs(UnmanagedType.LPWStr)]string folder);
 
+		[DllImport(DLLPath)] public static extern void AddKeyMappings(int port, KeyMapping mapping);
+		[DllImport(DLLPath)] public static extern void ClearKeyMappings(int port);
+		[DllImport(DLLPath)] public static extern UInt32 GetPressedKey();
+		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.LPWStr)]string keyName);
+		[DllImport(DLLPath, EntryPoint="GetKeyName")] private static extern IntPtr GetKeyNameWrapper(UInt32 key);
+		
 		[DllImport(DLLPath)] public static extern void Run();
 		[DllImport(DLLPath)] public static extern void Pause();
 		[DllImport(DLLPath)] public static extern void Resume();
@@ -73,6 +79,7 @@ namespace Mesen.GUI
 
 		
 		public static string GetROMPath() { return Marshal.PtrToStringAuto(InteropEmu.GetROMPathWrapper()); }
+		public static string GetKeyName(UInt32 key) { return Marshal.PtrToStringAuto(InteropEmu.GetKeyNameWrapper(key)); }
 
 
 		public enum ConsoleNotificationType
@@ -84,6 +91,23 @@ namespace Mesen.GUI
 			GameResumed = 4,
 			GameStopped = 5,
 			CodeBreak = 6,
+		}
+
+		public struct KeyMapping
+		{
+			public UInt32 A;
+			public UInt32 B;
+			public UInt32 Up;
+			public UInt32 Down;
+			public UInt32 Left;
+			public UInt32 Right;
+			public UInt32 Start;
+			public UInt32 Select;
+			public UInt32 TurboA;
+			public UInt32 TurboB;
+			public UInt32 TurboStart;
+			public UInt32 TurboSelect;
+			public UInt32 TurboSpeed;
 		}
 
 		public class NotificationEventArgs

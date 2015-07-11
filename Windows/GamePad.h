@@ -6,12 +6,11 @@
 class GamePad
 {
 	private:
-		XINPUT_STATE _state;
-
-		bool RefreshState();
+		vector<shared_ptr<XINPUT_STATE>> _gamePadStates;
 
 	public:
 		GamePad();
 
-		bool IsPressed(WORD button);
+		void RefreshState();
+		bool IsPressed(uint8_t gamepadPort, WORD button);
 };

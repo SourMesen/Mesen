@@ -204,9 +204,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 			return _outputBuffer;
 		}
 
-		uint32_t GetFrameCount()
+		static uint32_t GetFrameCount()
 		{
-			return _frameCount;
+			return PPU::Instance->_frameCount;
 		}
 
 		static uint32_t GetFrameCycle()

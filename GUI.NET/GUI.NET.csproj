@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\CheatInfo.cs" />
+    <Compile Include="Config\ControllerInfo.cs" />
     <Compile Include="Config\ClientConnection.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\ImageExtensions.cs" />
@@ -132,6 +133,30 @@
     <Compile Include="Forms\Cheats\frmCheat.Designer.cs">
       <DependentUpon>frmCheat.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Config\ctrlInputPortConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\ctrlInputPortConfig.Designer.cs">
+      <DependentUpon>ctrlInputPortConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\ctrlStandardController.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\ctrlStandardController.Designer.cs">
+      <DependentUpon>ctrlStandardController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\frmGetKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\frmGetKey.Designer.cs">
+      <DependentUpon>frmGetKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\frmInputConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\frmInputConfig.Designer.cs">
+      <DependentUpon>frmInputConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Config\frmVideoConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -188,6 +213,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Cheats\frmCheat.resx">
       <DependentUpon>frmCheat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\ctrlInputPortConfig.resx">
+      <DependentUpon>ctrlInputPortConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\ctrlStandardController.resx">
+      <DependentUpon>ctrlStandardController.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\frmGetKey.resx">
+      <DependentUpon>frmGetKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\frmInputConfig.resx">
+      <DependentUpon>frmInputConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmVideoConfig.resx">
       <DependentUpon>frmVideoConfig.cs</DependentUpon>
