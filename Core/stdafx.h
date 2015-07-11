@@ -1,9 +1,6 @@
 #pragma once
 
-#include <SDKDDKVer.h>
-
 #include <stdio.h>
-#include <tchar.h>
 
 #include <stdint.h>
 #include <memory>
@@ -20,17 +17,17 @@
 #include <list>
 #include <atomic>
 
+#include "../Utilities/UTF8Util.h"
+
 using std::vector;
 using std::shared_ptr;
 using std::unique_ptr;
 using std::ios;
-using std::ifstream;
 using std::istream;
 using std::ostream;
 using std::stringstream;
-using std::ofstream;
-using std::wstring;
-using std::exception;
+using utf8::ifstream;
+using utf8::ofstream;
 using std::list;
 using std::max;
 using std::string;

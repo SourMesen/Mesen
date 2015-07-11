@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "Renderer.h"
-#include "DirectXTK\SpriteBatch.h"
-#include "DirectXTK\SpriteFont.h"
-#include "DirectXTK\DDSTextureLoader.h"
-#include "DirectXTK\WICTextureLoader.h"
-#include "..\Core\PPU.h"
-#include "..\Core\Console.h"
-#include "..\Core\MessageManager.h"
+#include "DirectXTK/SpriteBatch.h"
+#include "DirectXTK/SpriteFont.h"
+#include "DirectXTK/DDSTextureLoader.h"
+#include "DirectXTK/WICTextureLoader.h"
+#include "../Core/PPU.h"
+#include "../Core/Console.h"
+#include "../Core/MessageManager.h"
+#include "../Utilities/UTF8Util.h"
 
 using namespace DirectX;
 
@@ -328,9 +329,9 @@ namespace NES
 		return shaderResourceView;
 	}
 
-	void Renderer::DisplayMessage(wstring title, wstring message)
+	void Renderer::DisplayMessage(string title, string message)
 	{
-		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, L"Resources\\MesenIcon.bmp"));
+		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, "Resources\\MesenIcon.bmp"));
 		DisplayToast(toast);
 	}
 
@@ -339,24 +340,25 @@ namespace NES
 		_toasts.push_front(toast);
 	}
 
-	void Renderer::DrawOutlinedString(wstring message, float x, float y, DirectX::FXMVECTOR color, float scale)
+	void Renderer::DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale)
 	{
 		SpriteBatch* spritebatch = _spriteBatch.get();
-		const wchar_t* msg = message.c_str();
+		std::wstring textStr = utf8::utf8::decode(message);
+		const wchar_t *text = textStr.c_str();
 
 		for(uint8_t offsetX = 2; offsetX > 0; offsetX--) {
 			for(uint8_t offsetY = 2; offsetY > 0; offsetY--) {
-				_font->DrawString(spritebatch, msg, XMFLOAT2(x + offsetX, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, msg, XMFLOAT2(x - offsetX, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, msg, XMFLOAT2(x + offsetX, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, msg, XMFLOAT2(x - offsetX, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, msg, XMFLOAT2(x + offsetX, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, msg, XMFLOAT2(x - offsetX, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, msg, XMFLOAT2(x, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, msg, XMFLOAT2(x, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
 			}
 		}
-		_font->DrawString(spritebatch, msg, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
+		_font->DrawString(spritebatch, text, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
 	}
 
 	void Renderer::DrawNESScreen()
@@ -411,7 +413,7 @@ namespace NES
 		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
 		shaderResourceView->Release();
 
-		DrawOutlinedString(L"PAUSED", (float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 47, Colors::AntiqueWhite, 4.5f);
+		DrawOutlinedString("PAUSED", (float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 47, Colors::AntiqueWhite, 4.5f);
 	}
 
 	void Renderer::Render()
@@ -437,7 +439,7 @@ namespace NES
 			} else {
 				//Draw FPS counter
 				if(CheckFlag(UIFlags::ShowFPS)) {
-					wstring fpsString = wstring(L"FPS: ") + std::to_wstring(Console::GetFPS());
+					string fpsString = string("FPS: ") + std::to_string(Console::GetFPS());
 					DrawOutlinedString(fpsString, 256 * 4 - 80, 13, Colors::AntiqueWhite, 1.0f);
 				}
 			}
@@ -471,8 +473,10 @@ namespace NES
 		}
 	}
 
-	wstring Renderer::WrapText(wstring text, SpriteFont* font, float maxLineWidth)
+	std::wstring Renderer::WrapText(string utf8Text, SpriteFont* font, float maxLineWidth)
 	{
+		using std::wstring;
+		wstring text = utf8::utf8::decode(utf8Text);
 		wstring wrappedText;
 		list<wstring> words;
 		wstring currentWord;
@@ -493,6 +497,11 @@ namespace NES
 		float spaceWidth = font->MeasureString(L" ").m128_f32[0];
 		float lineWidth = 0.0f;
 		for(wstring word : words) {
+			for(unsigned int i = 0; i < word.size(); i++) {
+				if(!font->ContainsCharacter(word[i])) {
+					word[i] = L'?';
+				}
+			}
 			float wordWidth = font->MeasureString(word.c_str()).m128_f32[0];
 
 			if(lineWidth + wordWidth < maxLineWidth) {
@@ -549,7 +558,7 @@ namespace NES
 		_frameLock.Release();
 	}
 
-	void Renderer::TakeScreenshot(wstring romFilename)
+	void Renderer::TakeScreenshot(string romFilename)
 	{
 		uint32_t* frameBuffer = new uint32_t[256 * 240];
 			
@@ -563,14 +572,14 @@ namespace NES
 		}
 
 		int counter = 0;
-		wstring baseFilename = FolderUtilities::GetScreenshotFolder() + FolderUtilities::GetFilename(romFilename, false);
-		wstring ssFilename;
+		string baseFilename = FolderUtilities::GetScreenshotFolder() + FolderUtilities::GetFilename(romFilename, false);
+		string ssFilename;
 		while(true) {
-			wstring counterStr = std::to_wstring(counter);
+			string counterStr = std::to_string(counter);
 			while(counterStr.length() < 3) {
-				counterStr = L"0" + counterStr;
+				counterStr = "0" + counterStr;
 			}
-			ssFilename = baseFilename + L"_" + counterStr + L".png";
+			ssFilename = baseFilename + "_" + counterStr + ".png";
 			ifstream file(ssFilename, ios::in);
 			if(file) {
 				file.close();
@@ -581,7 +590,7 @@ namespace NES
 		}
 
 		PNGWriter::WritePNG(ssFilename, (uint8_t*)frameBuffer, 256, 240);	
-		MessageManager::DisplayMessage(L"Screenshot saved", FolderUtilities::GetFilename(ssFilename, true));
+		MessageManager::DisplayMessage("Screenshot saved", FolderUtilities::GetFilename(ssFilename, true));
 	}
 
 }

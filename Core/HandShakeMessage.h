@@ -7,7 +7,7 @@ class HandShakeMessage : public NetMessage
 private:
 	const static int CurrentVersion = 1;
 	uint32_t _protocolVersion = CurrentVersion;
-	wchar_t *_playerName = nullptr;
+	char* _playerName = nullptr;
 	uint32_t _playerNameLength = 0;
 	void* _avatarData = nullptr;
 	uint32_t _avatarSize = 0;
@@ -22,7 +22,7 @@ protected:
 
 public:
 	HandShakeMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
-	HandShakeMessage(wstring playerName, uint8_t* avatarData, uint32_t avatarSize) : NetMessage(MessageType::HandShake)
+	HandShakeMessage(string playerName, uint8_t* avatarData, uint32_t avatarSize) : NetMessage(MessageType::HandShake)
 	{
 		_protocolVersion = 1;
 		CopyString(&_playerName, _playerNameLength, playerName);
@@ -30,9 +30,9 @@ public:
 		_avatarData = avatarData;
 	}
 	
-	wstring GetPlayerName()
+	string GetPlayerName()
 	{
-		return wstring(_playerName);
+		return string(_playerName);
 	}
 
 	uint8_t* GetAvatarData()

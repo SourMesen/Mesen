@@ -60,6 +60,6 @@ public:
 	virtual void GetMemoryRanges(MemoryRanges &ranges) = 0;
 	virtual uint8_t ReadRAM(uint16_t addr) = 0;
 	virtual void WriteRAM(uint16_t addr, uint8_t value) = 0;
-	virtual uint8_t ReadVRAM(uint16_t addr) { throw exception("Operation not implemented"); }
-	virtual void WriteVRAM(uint16_t addr, uint8_t value) { throw exception("Operation not implemented"); }
+	virtual uint8_t ReadVRAM(uint16_t addr) { throw std::runtime_error("Operation not implemented"); }
+	virtual void WriteVRAM(uint16_t addr, uint8_t value) { throw std::runtime_error("Operation not implemented"); }
 };

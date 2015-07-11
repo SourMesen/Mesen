@@ -34,14 +34,14 @@ public:
 		return _type;
 	}
 
-	wstring GetTypeText()
+	string GetTypeText()
 	{
 		switch(_type) {
-			case BreakpointType::Execute: return L"Exec";
-			case BreakpointType::Read: return L"Read";
-			case BreakpointType::Write: return L"Write";
+			case BreakpointType::Execute: return "Exec";
+			case BreakpointType::Read: return "Read";
+			case BreakpointType::Write: return "Write";
 		}
-		return L"";
+		return "";
 	}
 
 	bool IsEnabled()

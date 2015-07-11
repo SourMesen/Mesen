@@ -91,7 +91,7 @@ public:
 		return crc._crc;
 	}
 
-	static uint32_t GetCRC(wstring filename)
+	static uint32_t GetCRC(string filename)
 	{
 		uint32_t crc = 0;
 

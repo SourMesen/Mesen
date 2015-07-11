@@ -26,7 +26,7 @@ shared_ptr<Console> Console::GetInstance()
 	return Console::Instance;
 }
 
-void Console::Initialize(wstring filename)
+void Console::Initialize(string filename)
 {
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
 	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(filename);
@@ -51,23 +51,23 @@ void Console::Initialize(wstring filename)
 		_initialized = true;
 	
 		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(filename));
-		MessageManager::DisplayMessage(L"Game loaded", FolderUtilities::GetFilename(filename, false));
+		MessageManager::DisplayMessage("Game loaded", FolderUtilities::GetFilename(filename, false));
 	} else {
-		MessageManager::DisplayMessage(L"Error", wstring(L"Could not load file: ") + FolderUtilities::GetFilename(filename, true));
+		MessageManager::DisplayMessage("Error", string("Could not load file: ") + FolderUtilities::GetFilename(filename, true));
 	}
 }
 
-void Console::LoadROM(wstring filepath)
+void Console::LoadROM(string filepath)
 {
 	Console::Pause();
 	Instance->Initialize(filepath);
 	Console::Resume();
 }
 
-bool Console::LoadROM(wstring filename, uint32_t crc32Hash)
+bool Console::LoadROM(string filename, uint32_t crc32Hash)
 {
-	wstring currentRomFilepath = Console::GetROMPath();
-	wstring currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
+	string currentRomFilepath = Console::GetROMPath();
+	string currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
 	if(!currentRomFilepath.empty()) {
 		if(ROMLoader::GetCRC32(Console::GetROMPath()) == crc32Hash) {
 			//Current game matches, no need to do anything
@@ -75,16 +75,16 @@ bool Console::LoadROM(wstring filename, uint32_t crc32Hash)
 		}
 
 		//Try to find the game in the same folder as the current game's folder
-		wstring match = ROMLoader::FindMatchingRomInFolder(currentFolder, filename, crc32Hash);
+		string match = ROMLoader::FindMatchingRomInFolder(currentFolder, filename, crc32Hash);
 		if(!match.empty()) {
 			Console::LoadROM(match);
 			return true;
 		}
 	}
 
-	for(wstring folder : FolderUtilities::GetKnowGameFolders()) {
+	for(string folder : FolderUtilities::GetKnowGameFolders()) {
 		if(folder != currentFolder) {
-			wstring match = ROMLoader::FindMatchingRomInFolder(folder, filename, crc32Hash);
+			string match = ROMLoader::FindMatchingRomInFolder(folder, filename, crc32Hash);
 			if(!match.empty()) {
 				Console::LoadROM(match);
 				return true;
@@ -94,13 +94,9 @@ bool Console::LoadROM(wstring filename, uint32_t crc32Hash)
 	return false;
 }
 
-wstring Console::GetROMPath()
+string Console::GetROMPath()
 {
-	wstring filepath;
-	if(Instance->_initialized) {
-		filepath = Instance->_romFilepath;
-	}
-	return filepath;
+	return Instance->_romFilepath;
 }
 
 void Console::Reset(bool softReset)

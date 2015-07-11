@@ -8,11 +8,11 @@ public:
 	string Host;
 	uint16_t Port;
 
-	wstring PlayerName;
+	string PlayerName;
 	uint8_t* AvatarData;
 	uint32_t AvatarSize;
 
-	ClientConnectionData(string host, uint16_t port, wstring playerName, uint8_t* avatarData, uint32_t avatarSize) :
+	ClientConnectionData(string host, uint16_t port, string playerName, uint8_t* avatarData, uint32_t avatarSize) :
 		Host(host), Port(port), PlayerName(playerName), AvatarSize(avatarSize)
 	{
 		if(avatarSize > 0) {

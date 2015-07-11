@@ -41,7 +41,7 @@ ButtonState StandardController::GetButtonState()
 
 		//Turbo buttons - need to be applied for at least 2 reads in a row (some games require this)
 		uint8_t turboFreq = 1 << (4 - keyMapping.TurboSpeed);
-		bool turboOn = PPU::GetFrameCount() % turboFreq < turboFreq / 2;
+		bool turboOn = (uint8_t)(PPU::GetFrameCount() % turboFreq) < turboFreq / 2;
 		if(turboOn) {
 			state.A |= ControlManager::IsKeyPressed(keyMapping.TurboA);
 			state.B |= ControlManager::IsKeyPressed(keyMapping.TurboB);

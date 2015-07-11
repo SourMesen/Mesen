@@ -17,7 +17,7 @@ static SoundManager *_soundManager = nullptr;
 static vector<shared_ptr<StandardController>> _inputDevices;
 static HWND _windowHandle = nullptr;
 static HWND _viewerHandle = nullptr;
-static wstring _romFilename;
+static string _returnString;
 
 typedef void (__stdcall *NotificationListenerCallback)(int);
 
@@ -38,7 +38,7 @@ namespace InteropEmu {
 	};
 
 	extern "C" {
-		DllExport void __stdcall InitializeEmu(wchar_t* homeFolder, HWND windowHandle, HWND dxViewerHandle)
+		DllExport void __stdcall InitializeEmu(char* homeFolder, HWND windowHandle, HWND dxViewerHandle)
 		{
 			FolderUtilities::SetHomeFolder(homeFolder);
 
@@ -58,15 +58,19 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport void __stdcall LoadROM(wchar_t* filename) { Console::LoadROM(filename); }
-		DllExport void __stdcall AddKnowGameFolder(wchar_t* folder) { FolderUtilities::AddKnowGameFolder(folder); }
+		DllExport void __stdcall LoadROM(char* filename) { Console::LoadROM(filename); }
+		DllExport void __stdcall AddKnowGameFolder(char* folder) { FolderUtilities::AddKnowGameFolder(folder); }
 
 		DllExport void __stdcall AddKeyMappings(uint32_t port, KeyMapping mapping) { _inputDevices[port]->AddKeyMappings(mapping); }
 		DllExport void __stdcall ClearKeyMappings(uint32_t port) { _inputDevices[port]->ClearKeyMappings(); }
 
 		DllExport uint32_t __stdcall GetPressedKey() { return ControlManager::GetPressedKey(); }
-		DllExport wchar_t* __stdcall GetKeyName(uint32_t keyCode) { return ControlManager::GetKeyName(keyCode); }
-		DllExport uint32_t __stdcall GetKeyCode(wchar_t* keyName) { return ControlManager::GetKeyCode(keyName); }
+		DllExport const char* __stdcall GetKeyName(uint32_t keyCode) 
+		{
+			_returnString = ControlManager::GetKeyName(keyCode);
+			return _returnString.c_str();
+		}
+		DllExport uint32_t __stdcall GetKeyCode(char* keyName) { return ControlManager::GetKeyCode(keyName); }
 
 		DllExport void __stdcall Run()
 		{
@@ -83,10 +87,10 @@ namespace InteropEmu {
 				Console::GetInstance()->Stop();
 			}
 		}
-		DllExport const wchar_t* __stdcall GetROMPath() 
+		DllExport const char* __stdcall GetROMPath() 
 		{
-			_romFilename = Console::GetROMPath();
-			return _romFilename.c_str();
+			_returnString = Console::GetROMPath();
+			return _returnString.c_str();
 		}
 
 		DllExport void __stdcall Reset() { Console::Reset(); }
@@ -97,7 +101,7 @@ namespace InteropEmu {
 		DllExport void __stdcall StopServer() { GameServer::StopServer(); }
 		DllExport int __stdcall IsServerRunning() { return GameServer::Started(); }
 
-		DllExport void __stdcall Connect(char* host, uint16_t port, wchar_t* playerName, uint8_t* avatarData, uint32_t avatarSize)
+		DllExport void __stdcall Connect(char* host, uint16_t port, char* playerName, uint8_t* avatarData, uint32_t avatarSize)
 		{
 			shared_ptr<ClientConnectionData> connectionData(new ClientConnectionData(
 				host,
@@ -140,14 +144,14 @@ namespace InteropEmu {
 		}
 		DllExport void __stdcall UnregisterNotificationCallback(INotificationListener *listener) { MessageManager::UnregisterNotificationListener(listener); }
 
-		DllExport void __stdcall DisplayMessage(wchar_t* title, wchar_t* message) { MessageManager::DisplayMessage(title, message); }
+		DllExport void __stdcall DisplayMessage(char* title, char* message) { MessageManager::DisplayMessage(title, message); }
 
 		DllExport void __stdcall SaveState(uint32_t stateIndex) { SaveStateManager::SaveState(stateIndex); }
 		DllExport uint32_t __stdcall LoadState(uint32_t stateIndex) { return SaveStateManager::LoadState(stateIndex); }
 		DllExport int64_t  __stdcall GetStateInfo(uint32_t stateIndex) { return SaveStateManager::GetStateInfo(stateIndex); }
 
-		DllExport void __stdcall MoviePlay(wchar_t* filename) { Movie::Play(filename); }
-		DllExport void __stdcall MovieRecord(wchar_t* filename, int reset) { Movie::Record(filename, reset != 0); }
+		DllExport void __stdcall MoviePlay(char* filename) { Movie::Play(filename); }
+		DllExport void __stdcall MovieRecord(char* filename, int reset) { Movie::Record(filename, reset != 0); }
 		DllExport void __stdcall MovieStop() { Movie::Stop(); }
 		DllExport int __stdcall MoviePlaying() { return Movie::Playing(); }
 		DllExport int __stdcall MovieRecording() { return Movie::Recording(); }

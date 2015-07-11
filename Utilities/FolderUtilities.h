@@ -5,28 +5,30 @@
 class FolderUtilities
 {
 private:
-	static wstring _homeFolder;
-	static vector<wstring> _gameFolders;
+	static string _homeFolder;
+	static vector<string> _gameFolders;
 
 public:
-	static void SetHomeFolder(wstring homeFolder);
-	static wstring GetHomeFolder();
+	static void SetHomeFolder(string homeFolder);
+	static string GetHomeFolder();
 
-	static void AddKnowGameFolder(wstring gameFolder);
-	static vector<wstring> GetKnowGameFolders();
+	static void AddKnowGameFolder(string gameFolder);
+	static vector<string> GetKnowGameFolders();
 
-	static wstring GetSaveFolder();
-	static wstring GetSaveStateFolder();
-	static wstring GetMovieFolder();
-	static wstring GetScreenshotFolder();
+	static string GetSaveFolder();
+	static string GetSaveStateFolder();
+	static string GetMovieFolder();
+	static string GetScreenshotFolder();
 
-	static vector<wstring> GetFolders(wstring rootFolder);
-	static vector<wstring> GetFilesInFolder(wstring rootFolder, wstring mask, bool recursive);
+	static vector<string> GetFolders(string rootFolder);
+	static vector<string> GetFilesInFolder(string rootFolder, string mask, bool recursive);
 
-	static wstring GetFilename(wstring filepath, bool includeExtension);
-	static wstring GetFolderName(wstring filepath);
+	static string GetFilename(string filepath, bool includeExtension);
+	static string GetFolderName(string filepath);
 
-	static int64_t GetFileModificationTime(wstring filepath);
+	static void CreateFolder(string folder);
 
-	static wstring CombinePath(wstring folder, wstring filename);
+	static int64_t GetFileModificationTime(string filepath);
+
+	static string CombinePath(string folder, string filename);
 };

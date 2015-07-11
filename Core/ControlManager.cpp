@@ -34,7 +34,7 @@ uint32_t ControlManager::GetPressedKey()
 	return 0;
 }
 
-wchar_t* ControlManager::GetKeyName(uint32_t keyCode)
+string ControlManager::GetKeyName(uint32_t keyCode)
 {
 	if(_keyManager != nullptr) {
 		return _keyManager->GetKeyName(keyCode);
@@ -42,7 +42,7 @@ wchar_t* ControlManager::GetKeyName(uint32_t keyCode)
 	return 0;
 }
 
-uint32_t ControlManager::GetKeyCode(wchar_t* keyName)
+uint32_t ControlManager::GetKeyCode(string keyName)
 {
 	if(_keyManager != nullptr) {
 		return _keyManager->GetKeyCode(keyName);
@@ -146,7 +146,7 @@ bool ControlManager::HasFourScoreAdapter()
 void ControlManager::RefreshStateBuffer(uint8_t port)
 {
 	if(port >= 2) {
-		throw exception("Invalid port");
+		throw std::runtime_error("Invalid port");
 	}
 
 	//First 8 bits : Gamepad 1/2
@@ -170,7 +170,7 @@ void ControlManager::RefreshStateBuffer(uint8_t port)
 uint8_t ControlManager::GetPortValue(uint8_t port)
 {
 	if(port >= 2) {
-		throw exception("Invalid port");
+		throw std::runtime_error("Invalid port");
 	}
 
 	if(_refreshState) {

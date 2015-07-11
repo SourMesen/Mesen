@@ -33,13 +33,13 @@ namespace Mesen.GUI.Forms.NetPlay
 				}
 			}
 		}
-		/*
+		
 		protected override void UpdateConfig()
 		{
 			PlayerProfile profile = new PlayerProfile();
 			profile.PlayerName = this.txtPlayerName.Text;
 			profile.SetAvatar(this.picAvatar.Image);
 			ConfigManager.Config.Profile = profile;
-		}*/
+		}
 	}
 }

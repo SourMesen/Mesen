@@ -214,7 +214,7 @@ private:
 			case AddrMode::AbsY: return GetAbsYAddr(false);
 			case AddrMode::AbsYW: return GetAbsYAddr(true);
 		}
-		throw new exception();
+		throw std::runtime_error("invalid addressing mode");
 	}
 
 	uint16_t GetOperand()

@@ -34,7 +34,7 @@ class Console
 		unique_ptr<ControlManager> _controlManager;
 		shared_ptr<MemoryManager> _memoryManager;
 
-		wstring _romFilepath;
+		string _romFilepath;
 
 		bool _stop = false;
 		bool _reset = false;
@@ -42,7 +42,7 @@ class Console
 		bool _initialized = false;
 
 		void ResetComponents(bool softReset);
-		void Initialize(wstring filename);
+		void Initialize(string filename);
 
 	public:
 		Console();
@@ -63,10 +63,10 @@ class Console
 		static void LoadState(istream &loadStream);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
-		static void LoadROM(wstring filepath);
-		static bool LoadROM(wstring romName, uint32_t crc32Hash);
-		static wstring FindMatchingRomInFolder(wstring folder, wstring romFilename, uint32_t crc32Hash);
-		static wstring GetROMPath();
+		static void LoadROM(string filepath);
+		static bool LoadROM(string romName, uint32_t crc32Hash);
+		static string FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash);
+		static string GetROMPath();
 
 		static bool CheckFlag(int flag);
 		static void SetFlags(int flags);

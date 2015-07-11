@@ -39,8 +39,8 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		static void RegisterKeyManager(IKeyManager* keyManager);
 		static bool IsKeyPressed(uint32_t keyCode);
 		static uint32_t GetPressedKey();
-		static wchar_t* GetKeyName(uint32_t keyCode);
-		static uint32_t GetKeyCode(wchar_t* keyName);
+		static string GetKeyName(uint32_t keyCode);
+		static uint32_t GetKeyCode(string keyName);
 
 		static void BackupControlDevices();
 		static void RestoreControlDevices();

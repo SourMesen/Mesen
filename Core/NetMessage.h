@@ -95,10 +95,10 @@ public:
 		socket.SendBuffer();
 	}
 
-	void CopyString(wchar_t** dest, uint32_t &length, wstring src)
+	void CopyString(char** dest, uint32_t &length, string src)
 	{
-		length = (uint32_t)(src.length() + 1)*sizeof(wchar_t);
-		*dest = (wchar_t*)new uint8_t[length];
+		length = (uint32_t)(src.length() + 1);
+		*dest = new char[length];
 		memcpy(*dest, src.c_str(), length);
 		_pointersToRelease.push_back(*dest);
 	}

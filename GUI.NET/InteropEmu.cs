@@ -12,16 +12,16 @@ namespace Mesen.GUI
 	public class InteropEmu
 	{
 		private const string DLLPath = "WinMesen.dll";
-		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.LPWStr)]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle);
+		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle);
 		[DllImport(DLLPath)] public static extern void Release();
 
-		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.LPWStr)]string filename);
-		[DllImport(DLLPath)] public static extern void AddKnowGameFolder([MarshalAs(UnmanagedType.LPWStr)]string folder);
+		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath)] public static extern void AddKnowGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string folder);
 
 		[DllImport(DLLPath)] public static extern void AddKeyMappings(int port, KeyMapping mapping);
 		[DllImport(DLLPath)] public static extern void ClearKeyMappings(int port);
 		[DllImport(DLLPath)] public static extern UInt32 GetPressedKey();
-		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.LPWStr)]string keyName);
+		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string keyName);
 		[DllImport(DLLPath, EntryPoint="GetKeyName")] private static extern IntPtr GetKeyNameWrapper(UInt32 key);
 		
 		[DllImport(DLLPath)] public static extern void Run();
@@ -36,7 +36,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void StartServer(UInt16 port);
 		[DllImport(DLLPath)] public static extern void StopServer();
 		[DllImport(DLLPath)] public static extern bool IsServerRunning();
-		[DllImport(DLLPath)] public static extern void Connect(string host, UInt16 port, [MarshalAs(UnmanagedType.LPWStr)]string playerName, byte[] avatarData, UInt32 avatarSize);
+		[DllImport(DLLPath)] public static extern void Connect(string host, UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string playerName, byte[] avatarData, UInt32 avatarSize);
 		[DllImport(DLLPath)] public static extern void Disconnect();
 		[DllImport(DLLPath)] public static extern bool IsConnected();
 		
@@ -46,10 +46,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(NotificationListener.NotificationCallback callback);
 		[DllImport(DLLPath)] public static extern void UnregisterNotificationCallback(IntPtr notificationListener);
 
-		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.LPWStr)]string title, [MarshalAs(UnmanagedType.LPWStr)]string message);
+		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string title, [MarshalAs(UnmanagedType.LPWStr)]string message);
 
-		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.LPWStr)]string filename);
-		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.LPWStr)]string filename, bool reset);
+		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, bool reset);
 		[DllImport(DLLPath)] public static extern void MovieStop();
 		[DllImport(DLLPath)] public static extern bool MoviePlaying();
 		[DllImport(DLLPath)] public static extern bool MovieRecording();
@@ -77,10 +77,29 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);
 
-		
-		public static string GetROMPath() { return Marshal.PtrToStringAuto(InteropEmu.GetROMPathWrapper()); }
-		public static string GetKeyName(UInt32 key) { return Marshal.PtrToStringAuto(InteropEmu.GetKeyNameWrapper(key)); }
 
+		public static string GetROMPath() { return PtrToStringUtf8(InteropEmu.GetROMPathWrapper()); }
+		public static string GetKeyName(UInt32 key) { return PtrToStringUtf8(InteropEmu.GetKeyNameWrapper(key)); }
+
+		private static string PtrToStringUtf8(IntPtr ptr)
+		{
+			if(ptr == IntPtr.Zero) {
+				return "";
+			}
+			
+			int len = 0;
+			while(System.Runtime.InteropServices.Marshal.ReadByte(ptr, len) != 0) {
+				len++;
+			}
+
+			if(len == 0) {
+				return "";
+			}
+
+			byte[] array = new byte[len];
+			System.Runtime.InteropServices.Marshal.Copy(ptr, array, 0, len);
+			return System.Text.Encoding.UTF8.GetString(array);
+		}
 
 		public enum ConsoleNotificationType
 		{
@@ -250,6 +269,70 @@ namespace Mesen.GUI
 				}
 			}
 			return null;
+		}
+	}
+
+	public class UTF8Marshaler : ICustomMarshaler
+	{
+		static UTF8Marshaler _instance;
+
+		public IntPtr MarshalManagedToNative(object managedObj)
+		{
+			if(managedObj == null) {
+				return IntPtr.Zero;
+			}
+			if(!(managedObj is string)) {
+				throw new MarshalDirectiveException("UTF8Marshaler must be used on a string.");
+			}
+
+			// not null terminated
+			byte[] strbuf = Encoding.UTF8.GetBytes((string)managedObj);
+			IntPtr buffer = Marshal.AllocHGlobal(strbuf.Length + 1);
+			Marshal.Copy(strbuf, 0, buffer, strbuf.Length);
+
+			// write the terminating null
+			Marshal.WriteByte(buffer + strbuf.Length, 0);
+			return buffer;
+		}
+
+		public unsafe object MarshalNativeToManaged(IntPtr pNativeData)
+		{
+			byte* walk = (byte*)pNativeData;
+
+			// find the end of the string
+			while(*walk != 0) {
+				walk++;
+			}
+			int length = (int)(walk - (byte*)pNativeData);
+
+			// should not be null terminated
+			byte[] strbuf = new byte[length];
+			// skip the trailing null
+			Marshal.Copy((IntPtr)pNativeData, strbuf, 0, length);
+			string data = Encoding.UTF8.GetString(strbuf);
+			return data;
+		}
+
+		public void CleanUpNativeData(IntPtr pNativeData)
+		{
+			Marshal.FreeHGlobal(pNativeData);
+		}
+
+		public void CleanUpManagedData(object managedObj)
+		{
+		}
+
+		public int GetNativeDataSize()
+		{
+			return -1;
+		}
+
+		public static ICustomMarshaler GetInstance(string cookie)
+		{
+			if(_instance == null) {
+				return _instance = new UTF8Marshaler();
+			}
+			return _instance;
 		}
 	}
 }

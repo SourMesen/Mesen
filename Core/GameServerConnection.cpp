@@ -25,9 +25,9 @@ GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, int contro
 GameServerConnection::~GameServerConnection()
 {
 	if(_connectionData) {
-		MessageManager::DisplayToast(L"Net Play", _connectionData->PlayerName + L" (Player " + std::to_wstring(_controllerPort + 1) + L") disconnected.", _connectionData->AvatarData, _connectionData->AvatarSize);
+		MessageManager::DisplayToast("Net Play", _connectionData->PlayerName + " (Player " + std::to_string(_controllerPort + 1) + ") disconnected.", _connectionData->AvatarData, _connectionData->AvatarSize);
 	} else {
-		MessageManager::DisplayMessage(L"Net Play", L"Player " + std::to_wstring(_controllerPort + 1) + L" disconnected.");
+		MessageManager::DisplayMessage("Net Play", "Player " + std::to_string(_controllerPort + 1) + " disconnected.");
 	}
 
 	ControlManager::RestoreControlDevices();
@@ -88,7 +88,7 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 			if(((HandShakeMessage*)message)->IsValid()) {
 				_connectionData.reset(new ClientConnectionData("", 0, ((HandShakeMessage*)message)->GetPlayerName(), ((HandShakeMessage*)message)->GetAvatarData(), ((HandShakeMessage*)message)->GetAvatarSize()));
 
-				MessageManager::DisplayToast(L"Net Play", _connectionData->PlayerName + L" (Player " + std::to_wstring(_controllerPort + 1) + L") connected.", _connectionData->AvatarData, _connectionData->AvatarSize);
+				MessageManager::DisplayToast("Net Play", _connectionData->PlayerName + " (Player " + std::to_string(_controllerPort + 1) + ") connected.", _connectionData->AvatarData, _connectionData->AvatarSize);
 				SendGameInformation();
 				SendGameState();
 			}

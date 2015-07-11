@@ -5,6 +5,8 @@
 #include <natupnp.h>
 #include <ws2tcpip.h>
 
+using std::wstring;
+
 enum class IPProtocol
 {
 	TCP = 0,

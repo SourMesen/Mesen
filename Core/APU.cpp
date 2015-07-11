@@ -1,5 +1,3 @@
-#pragma once
-
 #include "stdafx.h"
 #include "APU.h"
 #include "CPU.h"

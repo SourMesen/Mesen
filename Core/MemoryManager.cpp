@@ -78,7 +78,7 @@ void MemoryManager::InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IM
 {
 	for(uint16_t address : *addresses) {
 		if(memoryHandlers[address] != nullptr) {
-			throw exception("Not supported");
+			throw std::runtime_error("Not supported");
 		}
 		memoryHandlers[address] = handler;
 	}
@@ -207,7 +207,7 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 				break;
 
 			default:
-				throw exception("Not implemented yet");
+				throw std::runtime_error("Not implemented yet");
 		}
 	}
 }

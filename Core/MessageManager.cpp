@@ -10,15 +10,14 @@ void MessageManager::RegisterMessageManager(IMessageManager* messageManager)
 	MessageManager::_messageManager = messageManager;
 }
 
-void MessageManager::DisplayMessage(wstring title, wstring message)
+void MessageManager::DisplayMessage(string title, string message)
 {
-	std::wcout << message << std::endl;
 	if(MessageManager::_messageManager) {
 		MessageManager::_messageManager->DisplayMessage(title, message);
 	}
 }
 
-void MessageManager::DisplayToast(wstring title, wstring message, uint8_t* iconData, uint32_t iconSize)
+void MessageManager::DisplayToast(string title, string message, uint8_t* iconData, uint32_t iconSize)
 {
 	if(MessageManager::_messageManager) {
 		MessageManager::_messageManager->DisplayToast(shared_ptr<ToastInfo>(new ToastInfo(title, message, 4000, iconData, iconSize)));

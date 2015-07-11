@@ -5,11 +5,11 @@
 class SaveStateManager
 {
 private:
-	static wstring SaveStateManager::GetStateFilepath(int stateIndex);
+	static string GetStateFilepath(int stateIndex);
 
 public:
-	static uint64_t SaveStateManager::GetStateInfo(int stateIndex);
-	static void SaveStateManager::SaveState(int stateIndex);
-	static bool SaveStateManager::LoadState(int stateIndex);
+	static uint64_t GetStateInfo(int stateIndex);
+	static void SaveState(int stateIndex);
+	static bool LoadState(int stateIndex);
 
 };

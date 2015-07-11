@@ -54,7 +54,7 @@ class ROMLoader
 {
 	private:
 		NESHeader _header;
-		wstring _filename;
+		string _filename;
 		uint8_t* _prgRAM = nullptr;
 		uint8_t* _chrRAM = nullptr;
 		uint32_t _crc32;
@@ -156,7 +156,7 @@ class ROMLoader
 			}
 		}
 
-		bool LoadFile(wstring filename) 
+		bool LoadFile(string filename) 
 		{
 			bool result = false;
 			ifstream file(filename, ios::in | ios::binary);
@@ -218,12 +218,12 @@ class ROMLoader
 			return _header.HasBattery();
 		}
 
-		wstring GetFilename()
+		string GetFilename()
 		{
 			return _filename;
 		}
 
-		static uint32_t GetCRC32(wstring filename)
+		static uint32_t GetCRC32(string filename)
 		{
 			ROMLoader loader;
 			uint32_t crc = 0;
@@ -233,13 +233,13 @@ class ROMLoader
 			return crc;
 		}
 
-		static wstring FindMatchingRomInFolder(wstring folder, wstring romFilename, uint32_t crc32Hash)
+		static string FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash)
 		{
-			vector<wstring> romFiles = FolderUtilities::GetFilesInFolder(folder, L"*.nes", true);
-			for(wstring zipFile : FolderUtilities::GetFilesInFolder(folder, L"*.zip", true)) {
+			vector<string> romFiles = FolderUtilities::GetFilesInFolder(folder, "*.nes", true);
+			for(string zipFile : FolderUtilities::GetFilesInFolder(folder, "*.zip", true)) {
 				romFiles.push_back(zipFile);
 			}
-			for(wstring romFile : romFiles) {
+			for(string romFile : romFiles) {
 				//Quick search by filename
 				if(FolderUtilities::GetFilename(romFile, true).compare(romFilename) == 0) {
 					if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
@@ -248,7 +248,7 @@ class ROMLoader
 				}
 			}
 
-			for(wstring romFile : romFiles) {
+			for(string romFile : romFiles) {
 				//Slower search by CRC value
 				if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
 					//Matching ROM found
@@ -256,7 +256,7 @@ class ROMLoader
 				}
 			}
 
-			return L"";
+			return "";
 		}
 };
 

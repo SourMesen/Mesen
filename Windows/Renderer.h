@@ -78,22 +78,20 @@ namespace NES {
 		void DrawNESScreen();
 		void DrawPauseScreen();
 
-		wstring WrapText(wstring text, SpriteFont* font, float maxLineWidth);
-		void DrawOutlinedString(wstring message, float x, float y, DirectX::FXMVECTOR color, float scale);
+		std::wstring WrapText(string text, SpriteFont* font, float maxLineWidth);
+		void DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale);
 
 		void DrawToasts();
 		void DrawToast(shared_ptr<ToastInfo> toast, int posIndex);
 		void RemoveOldToasts();
-
-		//HRESULT CompileShader(wstring filename, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
-
+		
 	public:
 		Renderer(HWND hWnd);
 		~Renderer();
 
 		void Render();
 
-		void DisplayMessage(wstring title, wstring message);
+		void DisplayMessage(string title, string message);
 		
 		void SetFlags(uint32_t flags)
 		{
@@ -113,6 +111,6 @@ namespace NES {
 		void UpdateFrame(uint8_t* frameBuffer);
 		void DisplayToast(shared_ptr<ToastInfo> toast);
 
-		void TakeScreenshot(wstring romFilename);
+		void TakeScreenshot(string romFilename);
 	};
 }

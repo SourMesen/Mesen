@@ -166,7 +166,7 @@ class VRC2_4 : public BaseMapper
 					A1 |= (addr >> 3) & 0x01;
 					break;
 				default:
-					throw exception("not supported");
+					throw std::runtime_error("not supported");
 					break;
 			}
 

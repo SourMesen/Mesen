@@ -8,21 +8,21 @@ class ToastInfo;
 class IMessageManager
 {
 public:
-	virtual void DisplayMessage(wstring title, wstring message) = 0;
+	virtual void DisplayMessage(string title, string message) = 0;
 	virtual void DisplayToast(shared_ptr<ToastInfo> toast) = 0;
 };
 
 class ToastInfo
 {
 private:
-	wstring _title;
-	wstring _message;
+	string _title;
+	string _message;
 	uint8_t* _icon;
 	uint32_t _iconSize;
 	uint64_t _endTime;
 	uint64_t _startTime;
 
-	uint8_t* ReadFile(wstring filename, uint32_t &fileSize)
+	uint8_t* ReadFile(string filename, uint32_t &fileSize)
 	{
 		ifstream file(filename, ios::in | ios::binary);
 		if(file) {
@@ -43,7 +43,7 @@ private:
 	}
 
 public:
-	ToastInfo(wstring title, wstring message, int displayDuration, wstring iconFile)
+	ToastInfo(string title, string message, int displayDuration, string iconFile)
 	{
 		_title = title;
 		_message = message;
@@ -54,7 +54,7 @@ public:
 		_endTime = _startTime + displayDuration;
 	}
 
-	ToastInfo(wstring title, wstring message, int displayDuration, uint8_t* iconData, uint32_t iconSize)
+	ToastInfo(string title, string message, int displayDuration, uint8_t* iconData, uint32_t iconSize)
 	{
 		_title = title;
 		_message = message;
@@ -74,12 +74,12 @@ public:
 		}
 	}
 
-	wstring GetToastTitle()
+	string GetToastTitle()
 	{
 		return _title;
 	}
 
-	wstring GetToastMessage() 
+	string GetToastMessage() 
 	{
 		return _message;
 	}

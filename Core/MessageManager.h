@@ -13,8 +13,8 @@ private:
 
 public:
 	static void RegisterMessageManager(IMessageManager* messageManager);
-	static void DisplayMessage(wstring title, wstring message = L"");
-	static void DisplayToast(wstring title, wstring message, uint8_t* iconData, uint32_t iconSize);
+	static void DisplayMessage(string title, string message = "");
+	static void DisplayToast(string title, string message, uint8_t* iconData, uint32_t iconSize);
 
 	static void RegisterNotificationListener(INotificationListener* notificationListener);
 	static void UnregisterNotificationListener(INotificationListener* notificationListener);

@@ -43,5 +43,4 @@
 using std::list;
 using std::vector;
 using std::shared_ptr;
-using std::wstring;
 using std::string;

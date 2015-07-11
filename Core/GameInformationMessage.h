@@ -9,7 +9,7 @@
 class GameInformationMessage : public NetMessage
 {
 private:
-	wchar_t *_romFilename = nullptr;
+	char* _romFilename = nullptr;
 	uint32_t _romFilenameLength = 0;
 	uint32_t _crc32Hash = 0;
 	uint8_t _controllerPort = 0;
@@ -27,7 +27,7 @@ protected:
 public:
 	GameInformationMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
 
-	GameInformationMessage(wstring filepath, uint8_t port, bool paused) : NetMessage(MessageType::GameInformation)
+	GameInformationMessage(string filepath, uint8_t port, bool paused) : NetMessage(MessageType::GameInformation)
 	{
 		CopyString(&_romFilename, _romFilenameLength, FolderUtilities::GetFilename(filepath, true));
 		_crc32Hash = ROMLoader::GetCRC32(filepath);
@@ -37,12 +37,12 @@ public:
 	
 	bool AttemptLoadGame()
 	{
-		wstring filename = _romFilename;
+		string filename = _romFilename;
 		if(filename.size() > 0) {
 			if(Console::LoadROM(filename, _crc32Hash)) {
 				return true;
 			} else {
-				MessageManager::DisplayMessage(L"Net Play", L"Could not find matching game ROM.");
+				MessageManager::DisplayMessage("Net Play", "Could not find matching game ROM.");
 				return false;
 			}
 		}

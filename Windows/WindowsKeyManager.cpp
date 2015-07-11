@@ -56,7 +56,7 @@ uint32_t WindowsKeyManager::GetPressedKey()
 	return 0;
 }
 
-wchar_t* WindowsKeyManager::GetKeyName(uint32_t key)
+string WindowsKeyManager::GetKeyName(uint32_t key)
 {
 	for(KeyDefinition keyDef : _keyDefinitions) {
 		if(keyDef.keyCode == key) {
@@ -66,11 +66,10 @@ wchar_t* WindowsKeyManager::GetKeyName(uint32_t key)
 	return nullptr;
 }
 
-uint32_t WindowsKeyManager::GetKeyCode(wchar_t* keyName)
+uint32_t WindowsKeyManager::GetKeyCode(string keyName)
 {
-	wstring name(keyName);
 	for(KeyDefinition keyDef : _keyDefinitions) {
-		if(name.compare(keyDef.description) == 0) {
+		if(keyName.compare(keyDef.description) == 0) {
 			return keyDef.keyCode;
 		}
 	}

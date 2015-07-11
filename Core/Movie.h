@@ -21,14 +21,14 @@ class Movie
 		uint8_t _lastState[4];
 		uint32_t _readPosition[4];
 		ofstream _file;
-		wstring _filename;
+		string _filename;
 		stringstream _startState;
 		MovieData _data;
 
 	private:
 		void PushState(uint8_t port);
-		void StartRecording(wstring filename, bool reset);
-		void PlayMovie(wstring filename);
+		void StartRecording(string filename, bool reset);
+		void PlayMovie(string filename);
 		void StopAll();
 		void Reset();
 
@@ -36,11 +36,11 @@ class Movie
 		uint8_t GetState(uint8_t port);
 
 		bool Save();
-		bool Load(wstring filename);
+		bool Load(string filename);
 		
 	public:
-		static void Record(wstring filename, bool reset);
-		static void Play(wstring filename);
+		static void Record(string filename, bool reset);
+		static void Play(string filename);
 		static void Stop();
 		static bool Playing();
 		static bool Recording();

@@ -37,13 +37,13 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 71: return new UNROM(); //TODO: "It's largely a clone of UNROM, and Camerica games were initially emulated under iNES Mapper 002 before 071 was assigned."
 		case 163: return new Nanjing();
 		case 189: return new MMC3_189();
-		default: MessageManager::DisplayMessage(L"Error", L"Unsupported mapper, cannot load game.");
+		default: MessageManager::DisplayMessage("Error", "Unsupported mapper, cannot load game.");
 	}
 
 	return nullptr;
 }
 
-shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(wstring filename)
+shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string filename)
 {
 	ROMLoader loader;
 

@@ -27,7 +27,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		
 		bool _hasCHRRAM;
 		bool _hasBattery;
-		wstring _romFilename;
+		string _romFilename;
 
 		MirroringType _mirroringType;
 
@@ -109,9 +109,9 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			return (addr >> _chrShift) & _chrSlotMaxIndex;
 		}
 
-		wstring GetBatteryFilename()
+		string GetBatteryFilename()
 		{
-			return FolderUtilities::GetSaveFolder() + _romFilename + L".sav";
+			return FolderUtilities::GetSaveFolder() + _romFilename + ".sav";
 		}
 		
 		void RestoreOriginalPrgRam()

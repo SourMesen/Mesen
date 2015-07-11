@@ -62,7 +62,7 @@ void GameServer::Exec()
 	_listener->Listen(10);
 	_stop = false;
 	_initialized = true;
-	MessageManager::DisplayMessage(L"Net Play" , L"Server started (Port: " + std::to_wstring(_port) + L")");
+	MessageManager::DisplayMessage("Net Play" , "Server started (Port: " + std::to_string(_port) + ")");
 
 	while(!_stop) {
 		AcceptConnections();
@@ -76,7 +76,7 @@ void GameServer::Stop()
 {
 	_initialized = false;
 	_listener.reset();
-	MessageManager::DisplayMessage(L"Net Play", L"Server stopped");
+	MessageManager::DisplayMessage("Net Play", "Server stopped");
 }
 
 void GameServer::StartServer(uint16_t port)

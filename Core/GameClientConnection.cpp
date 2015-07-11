@@ -16,7 +16,7 @@ GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr
 	_controlDevice = ControlManager::GetControlDevice(0);
 	ControlManager::BackupControlDevices();
 
-	MessageManager::DisplayMessage(L"Net Play", L"Connected to server.");
+	MessageManager::DisplayMessage("Net Play", "Connected to server.");
 
 	SendHandshake();
 }
@@ -25,7 +25,7 @@ GameClientConnection::~GameClientConnection()
 {
 	_virtualControllers.clear();
 	ControlManager::RestoreControlDevices();
-	MessageManager::DisplayMessage(L"Net Play", L"Connection to server lost.");
+	MessageManager::DisplayMessage("Net Play", "Connection to server lost.");
 }
 
 void GameClientConnection::SendHandshake()
@@ -77,7 +77,7 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 			gameInfo = (GameInformationMessage*)message;
 			if(gameInfo->GetPort() != _controllerPort) {
 				_controllerPort = gameInfo->GetPort();
-				MessageManager::DisplayMessage(wstring(L"Connected as player ") + std::to_wstring(_controllerPort + 1));
+				MessageManager::DisplayMessage(string("Connected as player ") + std::to_string(_controllerPort + 1));
 			}
 
 			DisposeVirtualControllers();

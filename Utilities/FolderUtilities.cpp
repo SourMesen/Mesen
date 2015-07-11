@@ -2,17 +2,18 @@
 #include <commdlg.h>
 #include <shlobj.h>
 #include "FolderUtilities.h"
+#include "UTF8Util.h"
 
-wstring FolderUtilities::_homeFolder = L"";
-vector<wstring> FolderUtilities::_gameFolders = vector<wstring>();
+string FolderUtilities::_homeFolder = "";
+vector<string> FolderUtilities::_gameFolders = vector<string>();
 
-void FolderUtilities::SetHomeFolder(wstring homeFolder)
+void FolderUtilities::SetHomeFolder(string homeFolder)
 {
 	_homeFolder = homeFolder;
-	CreateDirectory(homeFolder.c_str(), nullptr);
+	CreateFolder(homeFolder);
 }
 
-wstring FolderUtilities::GetHomeFolder()
+string FolderUtilities::GetHomeFolder()
 {
 	if(_homeFolder.size() == 0) {
 		throw std::exception("Home folder not specified");
@@ -20,10 +21,10 @@ wstring FolderUtilities::GetHomeFolder()
 	return _homeFolder;
 }
 
-void FolderUtilities::AddKnowGameFolder(wstring gameFolder)
+void FolderUtilities::AddKnowGameFolder(string gameFolder)
 {
 	bool alreadyExists = false;
-	for(wstring folder : _gameFolders) {
+	for(string folder : _gameFolders) {
 		if(folder.compare(gameFolder) == 0) {
 			alreadyExists = true;
 			break;
@@ -35,53 +36,59 @@ void FolderUtilities::AddKnowGameFolder(wstring gameFolder)
 	}
 }
 
-vector<wstring> FolderUtilities::GetKnowGameFolders()
+vector<string> FolderUtilities::GetKnowGameFolders()
 {
 	return _gameFolders;
 }
 
-wstring FolderUtilities::GetSaveFolder()
+string FolderUtilities::GetSaveFolder()
 {
-	wstring folder = CombinePath(GetHomeFolder(), L"Saves\\");
-	CreateDirectory(folder.c_str(), nullptr);
+	string folder = CombinePath(GetHomeFolder(), "Saves\\");
+	CreateFolder(folder);
 	return folder;
 }
 
-wstring FolderUtilities::GetSaveStateFolder()
+string FolderUtilities::GetSaveStateFolder()
 {
-	wstring folder = CombinePath(GetHomeFolder(), L"SaveStates\\");
-	CreateDirectory(folder.c_str(), nullptr);
+	string folder = CombinePath(GetHomeFolder(), "SaveStates\\");
+	CreateFolder(folder);
 	return folder;
 }
 
-wstring FolderUtilities::GetMovieFolder()
+string FolderUtilities::GetMovieFolder()
 {
-	wstring folder = CombinePath(GetHomeFolder(), + L"Movies\\");
-	CreateDirectory(folder.c_str(), nullptr);
+	string folder = CombinePath(GetHomeFolder(), + "Movies\\");
+	CreateFolder(folder);
 	return folder;
 }
 
-wstring FolderUtilities::GetScreenshotFolder()
+string FolderUtilities::GetScreenshotFolder()
 {
-	wstring folder = CombinePath(GetHomeFolder(), L"Screenshots\\");
-	CreateDirectory(folder.c_str(), nullptr);
+	string folder = CombinePath(GetHomeFolder(), "Screenshots\\");
+	CreateFolder(folder);
 	return folder;
 }
 
-vector<wstring> FolderUtilities::GetFolders(wstring rootFolder)
+void FolderUtilities::CreateFolder(string folder)
 {
+	CreateDirectory(utf8::utf8::decode(folder).c_str(), nullptr);
+}
+
+vector<string> FolderUtilities::GetFolders(string rootFolder)
+{
+	vector<string> folders;
+#ifdef _WIN32
 	HANDLE hFind;
 	WIN32_FIND_DATA data;
 
-	vector<wstring> folders;
-
-	hFind = FindFirstFile((rootFolder + L"*").c_str(), &data);
+	hFind = FindFirstFile(utf8::utf8::decode(rootFolder + "*").c_str(), &data);
 	if(hFind != INVALID_HANDLE_VALUE) {
 		do {
-			if(data.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY && wcscmp(data.cFileName, L".") != 0 && wcscmp(data.cFileName, L"..") != 0) {
-				wstring subfolder = rootFolder + data.cFileName + L"\\";
+			string filename = utf8::utf8::encode(data.cFileName);
+			if(data.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY && filename.compare(".") != 0 && filename.compare("..") != 0) {
+				string subfolder = rootFolder + filename + "\\";
 				folders.push_back(subfolder);
-				for(wstring folderName : GetFolders(subfolder.c_str())) {
+				for(string folderName : GetFolders(subfolder.c_str())) {
 					folders.push_back(folderName);
 				}
 			}
@@ -89,34 +96,34 @@ vector<wstring> FolderUtilities::GetFolders(wstring rootFolder)
 		while(FindNextFile(hFind, &data));
 		FindClose(hFind);
 	}
-
+#endif
 	return folders;
 }
 
-vector<wstring> FolderUtilities::GetFilesInFolder(wstring rootFolder, wstring mask, bool recursive)
+vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, string mask, bool recursive)
 {
 	HANDLE hFind;
 	WIN32_FIND_DATA data;
 
-	vector<wstring> folders;
-	vector<wstring> files;
+	vector<string> folders;
+	vector<string> files;
 	if(rootFolder[rootFolder.size() - 1] != '/' && rootFolder[rootFolder.size() - 1] != '\\') {
-		rootFolder += L"/";
+		rootFolder += "/";
 	}
 
 	folders.push_back(rootFolder);
 
 	if(recursive) {
-		for(wstring subFolder : GetFolders(rootFolder)) {
+		for(string subFolder : GetFolders(rootFolder)) {
 			folders.push_back(subFolder);
 		}
 	}
 
-	for(wstring folder : folders) {
-		hFind = FindFirstFile((folder + mask).c_str(), &data);
+	for(string folder : folders) {
+		hFind = FindFirstFile(utf8::utf8::decode(folder + mask).c_str(), &data);
 		if(hFind != INVALID_HANDLE_VALUE) {
 			do {
-				files.push_back(folder + data.cFileName);
+				files.push_back(folder + utf8::utf8::encode(data.cFileName));
 			} while(FindNextFile(hFind, &data));
 			FindClose(hFind);
 		}
@@ -125,28 +132,28 @@ vector<wstring> FolderUtilities::GetFilesInFolder(wstring rootFolder, wstring ma
 	return files;
 }
 
-wstring FolderUtilities::GetFilename(wstring filepath, bool includeExtension)
+string FolderUtilities::GetFilename(string filepath, bool includeExtension)
 {
-	size_t index = filepath.find_last_of(L"/\\");
-	wstring filename = (index == std::string::basic_string::npos) ? filepath : filepath.substr(index + 1);
+	size_t index = filepath.find_last_of("/\\");
+	string filename = (index == std::string::basic_string::npos) ? filepath : filepath.substr(index + 1);
 	if(!includeExtension) {
-		filename = filename.substr(0, filename.find_last_of(L"."));
+		filename = filename.substr(0, filename.find_last_of("."));
 	}
 	return filename;
 }
 
-wstring FolderUtilities::GetFolderName(wstring filepath)
+string FolderUtilities::GetFolderName(string filepath)
 {
-	size_t index = filepath.find_last_of(L"/\\");
+	size_t index = filepath.find_last_of("/\\");
 	return filepath.substr(0, index);
 }
 
-wstring FolderUtilities::CombinePath(wstring folder, wstring filename)
+string FolderUtilities::CombinePath(string folder, string filename)
 {
 #ifdef WIN32
-	wstring separator = L"\\";
+	string separator = "\\";
 #else 
-	wstring separator = L"/";
+	string separator = "/";
 #endif
 
 	if(folder.find_last_of(separator) != folder.length() - 1) {
@@ -156,9 +163,9 @@ wstring FolderUtilities::CombinePath(wstring folder, wstring filename)
 	return folder + filename;
 }
 
-int64_t FolderUtilities::GetFileModificationTime(wstring filepath)
+int64_t FolderUtilities::GetFileModificationTime(string filepath)
 {
 	WIN32_FILE_ATTRIBUTE_DATA fileAttrData = {0};
-	GetFileAttributesEx(filepath.c_str(), GetFileExInfoStandard, &fileAttrData);
+	GetFileAttributesEx(utf8::utf8::decode(filepath).c_str(), GetFileExInfoStandard, &fileAttrData);
 	return ((int64_t)fileAttrData.ftLastWriteTime.dwHighDateTime << 32) | (int64_t)fileAttrData.ftLastWriteTime.dwLowDateTime;
 }
