@@ -1,7 +1,12 @@
 #include "stdafx.h"
+#include "../BlipBuffer/Blip_Buffer.h"
 #include "APU.h"
 #include "CPU.h"
-#include "Nes_Apu\apu_snapshot.h"
+#include "SquareChannel.h"
+#include "TriangleChannel.h"
+#include "NoiseChannel.h"
+#include "DeltaModulationChannel.h"
+#include "ApuFrameCounter.h"
 
 APU* APU::Instance = nullptr;
 IAudioDevice* APU::AudioDevice = nullptr;
@@ -11,15 +16,31 @@ APU::APU(MemoryManager* memoryManager)
 	APU::Instance = this;
 
 	_memoryManager = memoryManager;
-
-	_buf.sample_rate(APU::SampleRate);
-	_buf.clock_rate(CPU::ClockRate);
-	_apu.output(&_buf);
-
-	_apu.dmc_reader(&APU::DMCRead);
-	//_apu.irq_notifier(&APU::IRQChanged);
+	_blipBuffer = new Blip_Buffer();
+	_blipBuffer->sample_rate(APU::SampleRate);
+	_blipBuffer->clock_rate(CPU::ClockRate);
 
 	_outputBuffer = new int16_t[APU::SamplesPerFrame];
+
+	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(true)));
+	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(false)));
+	_triangleChannel.reset(new TriangleChannel());
+	_noiseChannel.reset(new NoiseChannel());
+	_deltaModulationChannel.reset(new DeltaModulationChannel(_memoryManager));
+	_frameCounter.reset(new ApuFrameCounter(&APU::FrameCounterTick));
+
+	_squareChannel[0]->SetBuffer(_blipBuffer);
+	_squareChannel[1]->SetBuffer(_blipBuffer);
+	_triangleChannel->SetBuffer(_blipBuffer);
+	_noiseChannel->SetBuffer(_blipBuffer);
+	_deltaModulationChannel->SetBuffer(_blipBuffer);
+
+	_memoryManager->RegisterIODevice(_squareChannel[0].get());
+	_memoryManager->RegisterIODevice(_squareChannel[1].get());
+	_memoryManager->RegisterIODevice(_frameCounter.get());
+	_memoryManager->RegisterIODevice(_triangleChannel.get());
+	_memoryManager->RegisterIODevice(_noiseChannel.get());
+	_memoryManager->RegisterIODevice(_deltaModulationChannel.get());
 }
 
 APU::~APU()
@@ -29,52 +50,137 @@ APU::~APU()
 
 void APU::Reset()
 {
-	_apu.reset();
+	//_apu.reset();
 }
 
-int APU::DMCRead(void*, cpu_addr_t addr)
+void APU::FrameCounterTick(FrameType type)
 {
-	return APU::Instance->_memoryManager->Read(addr);
+	//Quarter & half frame clock envelope & linear counter
+	Instance->_squareChannel[0]->TickEnvelope();
+	Instance->_squareChannel[1]->TickEnvelope();
+	Instance->_triangleChannel->TickLinearCounter();
+	Instance->_noiseChannel->TickEnvelope();
+
+	if(type == FrameType::HalfFrame) {
+		//Half frames clock length counter & sweep
+		Instance->_squareChannel[0]->TickLengthCounter();
+		Instance->_squareChannel[1]->TickLengthCounter();
+		Instance->_triangleChannel->TickLengthCounter();
+		Instance->_noiseChannel->TickLengthCounter();
+
+		Instance->_squareChannel[0]->TickSweep();
+		Instance->_squareChannel[1]->TickSweep();
+	}
 }
 
 uint8_t APU::ReadRAM(uint16_t addr)
 {
-	switch(addr) {
-		case 0x4015:
-			CPU::ClearIRQSource(IRQSource::FrameCounter);
-			return _apu.read_status(_currentClock + 4);
-	}
+	//$4015 read
+	Run();
 
-	return 0;
+	uint8_t status = 0;
+	status |= _squareChannel[0]->GetStatus() ? 0x01 : 0x00;
+	status |= _squareChannel[1]->GetStatus() ? 0x02 : 0x00;
+	status |= _triangleChannel->GetStatus() ? 0x04 : 0x00;
+	status |= _noiseChannel->GetStatus() ? 0x08 : 0x00;
+	status |= _deltaModulationChannel->GetStatus() ? 0x10 : 0x00;
+	status |= CPU::HasIRQSource(IRQSource::FrameCounter) ? 0x40 : 0x00;
+	status |= CPU::HasIRQSource(IRQSource::DMC) ? 0x80 : 0x00;
+
+	//Reading $4015 clears the Frame Counter interrupt flag.
+	CPU::ClearIRQSource(IRQSource::FrameCounter);
+
+	return status;
 }
 
 void APU::WriteRAM(uint16_t addr, uint8_t value)
 {
-	_apu.write_register(_currentClock + 4, addr, value);
-	if(addr == 0x4017 && (value & 0x40) == 0x40) {
-		//Disable frame interrupts
-		CPU::ClearIRQSource(IRQSource::FrameCounter);
-	}
+	//$4015 write
+	Run();
+	_squareChannel[0]->SetEnabled((value & 0x01) == 0x01);
+	_squareChannel[1]->SetEnabled((value & 0x02) == 0x02);
+	_triangleChannel->SetEnabled((value & 0x04) == 0x04);
+	_noiseChannel->SetEnabled((value & 0x08) == 0x08);
+	_deltaModulationChannel->SetEnabled((value & 0x10) == 0x10);
+
+	//Writing to $4015 clears the DMC interrupt flag.
+	CPU::ClearIRQSource(IRQSource::DMC);
 }
 
-bool APU::Exec(uint32_t currentCPUCycle)
+void APU::GetMemoryRanges(MemoryRanges &ranges)
 {
-	_currentClock = currentCPUCycle;
+	ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4015);
+	ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4015);
+}
 
-	if(_currentClock >= 29780) {
-		_apu.end_frame(_currentClock);
-		_buf.end_frame(_currentClock);
+void APU::Run()
+{
+	//Update framecounter and all channels
+	//This is called:
+	//-At the end of a frame
+	//-Before APU registers are read/written to
+	//-When a DMC or FrameCounter interrupt needs to be fired
+	uint32_t targetCycle = CPU::GetCycleCount();
+	uint32_t currentCycle = _previousCycle;
+	uint32_t cyclesToRun = targetCycle - _previousCycle;
 
-		_currentClock = 0;
+	while(currentCycle < targetCycle) {
+		currentCycle += _frameCounter->Run(cyclesToRun);
 
-		if(APU::Instance->_apu.earliest_irq() == Nes_Apu::irq_waiting) {
-			CPU::SetIRQSource(IRQSource::FrameCounter);
-		}
+		_squareChannel[0]->Run(currentCycle);
+		_squareChannel[1]->Run(currentCycle);
+		_noiseChannel->Run(currentCycle);
+		_triangleChannel->Run(currentCycle);
+		_deltaModulationChannel->Run(currentCycle);
+	}
+
+	_previousCycle = targetCycle;
+}
+
+void APU::StaticRun()
+{
+	Instance->Run();
+}
+
+bool APU::IrqPending(uint32_t currentCycle)
+{
+	uint32_t cyclesToRun = currentCycle - _previousCycle;
+	if(_frameCounter->IrqPending(cyclesToRun)) {
+		return true;
+	} else if(_deltaModulationChannel->IrqPending(cyclesToRun)) {
+		return true;
+	}
+	return false;
+}
+
+void APU::ExecStatic(uint32_t currentCpuCycle)
+{
+	Instance->Exec(currentCpuCycle);
+}
+
+bool APU::Exec(uint32_t currentCpuCycle)
+{
+	if(IrqPending(currentCpuCycle)) {
+		Run();
+	}
+
+	if(currentCpuCycle >= 29780) {
+		Run();
+
+		_previousCycle = 0;
+
+		_squareChannel[0]->EndFrame();
+		_squareChannel[1]->EndFrame();
+		_triangleChannel->EndFrame();
+		_noiseChannel->EndFrame();
+		_deltaModulationChannel->EndFrame();
+
+		_blipBuffer->end_frame(currentCpuCycle);
 
 		// Read some samples out of Blip_Buffer if there are enough to fill our output buffer
-		uint32_t availableSampleCount = _buf.samples_avail();
+		uint32_t availableSampleCount = _blipBuffer->samples_avail();
 		if(availableSampleCount >= APU::SamplesPerFrame) {
-			size_t sampleCount = _buf.read_samples(_outputBuffer, APU::SamplesPerFrame);
+			size_t sampleCount = _blipBuffer->read_samples(_outputBuffer, APU::SamplesPerFrame);
 			if(APU::AudioDevice) {
 				APU::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * BitsPerSample / 8));
 			}
@@ -93,9 +199,9 @@ void APU::StopAudio()
 
 void APU::StreamState(bool saving)
 {
-	apu_snapshot_t snapshot;
+	/*apu_snapshot_t snapshot;
 	if(saving) {
-		_apu.save_snapshot(&snapshot);
+		//_apu.save_snapshot(&snapshot);
 	} 
 
 	Stream<uint32_t>(_currentClock);
@@ -145,6 +251,6 @@ void APU::StreamState(bool saving)
 	Stream<uint8_t>(snapshot.dmc.irq_flag);
 
 	if(!saving) {
-		_apu.load_snapshot(snapshot);
-	}
+		//_apu.load_snapshot(snapshot);
+	}*/
 }

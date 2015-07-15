@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\Nes_Apu">
-      <UniqueIdentifier>{c6dc2048-98f6-4551-89dc-830f12f1bb2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Interfaces">
       <UniqueIdentifier>{ca661408-b52a-4378-aef4-80fda1d64cd6}</UniqueIdentifier>
     </Filter>
@@ -29,6 +26,12 @@
     </Filter>
     <Filter Include="Debugger">
       <UniqueIdentifier>{ff3c6e48-3987-41d2-8916-b588a457ff30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\APU">
+      <UniqueIdentifier>{d9dec4ba-97e7-4a80-85e1-6b53f5ed7218}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\APU">
+      <UniqueIdentifier>{b99fc308-b28a-48b7-9ca8-6e8005bbc2bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,42 +55,6 @@
     </ClInclude>
     <ClInclude Include="ControlManager.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="APU.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\apu_snapshot.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\blargg_common.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\blargg_source.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\Blip_Buffer.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\Blip_Synth.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\Multi_Buffer.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\Nes_Apu.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\Nes_Namco.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\Nes_Oscs.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\Nes_Vrc6.h">
-      <Filter>Header Files\Nes_Apu</Filter>
-    </ClInclude>
-    <ClInclude Include="Nes_Apu\Nonlinear_Buffer.h">
-      <Filter>Header Files\Nes_Apu</Filter>
     </ClInclude>
     <ClInclude Include="IAudioDevice.h">
       <Filter>Header Files\Interfaces</Filter>
@@ -224,6 +191,33 @@
     <ClInclude Include="StandardController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SquareChannel.h">
+      <Filter>Header Files\APU</Filter>
+    </ClInclude>
+    <ClInclude Include="APU.h">
+      <Filter>Header Files\APU</Filter>
+    </ClInclude>
+    <ClInclude Include="ApuLengthCounter.h">
+      <Filter>Header Files\APU</Filter>
+    </ClInclude>
+    <ClInclude Include="ApuEnvelope.h">
+      <Filter>Header Files\APU</Filter>
+    </ClInclude>
+    <ClInclude Include="ApuFrameCounter.h">
+      <Filter>Header Files\APU</Filter>
+    </ClInclude>
+    <ClInclude Include="TriangleChannel.h">
+      <Filter>Header Files\APU</Filter>
+    </ClInclude>
+    <ClInclude Include="NoiseChannel.h">
+      <Filter>Header Files\APU</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseApuChannel.h">
+      <Filter>Header Files\APU</Filter>
+    </ClInclude>
+    <ClInclude Include="DeltaModulationChannel.h">
+      <Filter>Header Files\APU</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPU.cpp">
@@ -242,9 +236,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ControlManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="APU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Movie.cpp">
@@ -294,6 +285,9 @@
     </ClCompile>
     <ClCompile Include="StandardController.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="APU.cpp">
+      <Filter>Source Files\APU</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,28 +1,44 @@
 #pragma once
 
 #include "stdafx.h"
-#include "MemoryManager.h"
 #include "IMemoryHandler.h"
 #include "IAudioDevice.h"
 #include "Snapshotable.h"
-#include "Nes_Apu/Nes_Apu.h"
 
-class APU : public IMemoryHandler, public Snapshotable
+class MemoryManager;
+class SquareChannel;
+class TriangleChannel;
+class NoiseChannel;
+class DeltaModulationChannel;
+class ApuFrameCounter;
+class Blip_Buffer;
+enum class FrameType;
+
+class APU : public Snapshotable, public IMemoryHandler
 {
 	private:
 		static IAudioDevice* AudioDevice;
 		static APU* Instance;
 
 		uint32_t _currentClock = 0;
+		uint32_t _previousCycle = 0;
 
-		Nes_Apu _apu;
-		Blip_Buffer _buf;
+		vector<unique_ptr<SquareChannel>> _squareChannel;
+		unique_ptr<TriangleChannel> _triangleChannel;
+		unique_ptr<NoiseChannel> _noiseChannel;
+		unique_ptr<DeltaModulationChannel> _deltaModulationChannel;
+
+		unique_ptr<ApuFrameCounter> _frameCounter;
+
+		Blip_Buffer* _blipBuffer;
 		int16_t* _outputBuffer;
 		MemoryManager* _memoryManager;
 
 	private:
-		static int DMCRead(void*, cpu_addr_t addr);
-		static void IRQChanged(void* data);
+		bool IrqPending(uint32_t currentCycle);
+		void Run();
+
+		static void FrameCounterTick(FrameType type);
 
 	protected:
 		void StreamState(bool saving);
@@ -38,14 +54,6 @@ class APU : public IMemoryHandler, public Snapshotable
 
 		void Reset();
 		
-		void GetMemoryRanges(MemoryRanges &ranges)
-		{
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4015);
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4000, 0x4013);
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4015);
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4017);
-		}
-
 		static void RegisterAudioDevice(IAudioDevice *audioDevice)
 		{
 			APU::AudioDevice = audioDevice;
@@ -53,7 +61,11 @@ class APU : public IMemoryHandler, public Snapshotable
 
 		uint8_t ReadRAM(uint16_t addr);
 		void WriteRAM(uint16_t addr, uint8_t value);
+		void GetMemoryRanges(MemoryRanges &ranges);
 
-		bool Exec(uint32_t executedCycles);
+		bool Exec(uint32_t currentCpuCycle);
+		static void ExecStatic(uint32_t currentCpuCycle);
+
+		static void StaticRun();
 		static void StopAudio();
 };

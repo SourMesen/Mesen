@@ -1,0 +1,154 @@
+#pragma once
+#include "stdafx.h"
+#include "../BlipBuffer/Blip_Buffer.h"
+#include "APU.h"
+#include "IMemoryHandler.h"
+#include "ApuEnvelope.h"
+
+class SquareChannel : public ApuEnvelope
+{
+private:
+	const vector<const vector<uint8_t>> _dutySequences = { {
+		{ 0, 1, 0, 0, 0, 0, 0, 0 },
+		{ 0, 1, 1, 0, 0, 0, 0, 0 },
+		{ 0, 1, 1, 1, 1, 0, 0, 0 },
+		{ 1, 0, 0, 1, 1, 1, 1, 1 }
+	} };
+
+	bool _isChannel1 = false;
+
+	uint8_t _duty = 0;
+	uint8_t _dutyPos = 0;
+	
+	bool _sweepEnabled = false;
+	uint8_t _sweepPeriod = 0;
+	bool _sweepNegate = false;
+	uint8_t _sweepShift = 0;
+	bool _reloadSweep = false;
+	uint8_t _sweepDivider = 0;
+	uint32_t _sweepTargetPeriod = 0;
+	
+	bool IsMuted()
+	{
+		//A period of t < 8, either set explicitly or via a sweep period update, silences the corresponding pulse channel.
+		return _period < 8 || _sweepTargetPeriod > 0x7FF;
+	}
+
+public:
+	SquareChannel(bool isChannel1)
+	{
+		SetVolume(0.1128);
+		_isChannel1 = isChannel1;
+	}
+
+	void GetMemoryRanges(MemoryRanges &ranges)
+	{
+		if(_isChannel1) {
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4000, 0x4003);
+		} else {
+			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4004, 0x4007);
+		}
+	}
+
+	void WriteRAM(uint16_t addr, uint8_t value)
+	{
+		APU::StaticRun();
+		switch(addr & 0x03) {
+			case 0:		//4000 & 4004
+				InitializeLengthCounter((value & 0x20) == 0x20);
+				InitializeEnvelope(value);
+
+				_duty = (value & 0xC0) >> 6;
+				break;
+
+			case 1:		//4001 & 4005
+				InitializeSweep(value);
+				break;
+
+			case 2:		//4002 & 4006
+				_period &= ~0x00FF;
+				_period |= value;
+				break;
+
+			case 3:		//4003 & 4007
+				LoadLengthCounter(value >> 3);
+
+				_period &= ~0x0700;
+				_period |= (value & 0x07) << 8;
+
+				//The sequencer is restarted at the first value of the current sequence.
+				_timer = _period + 1;
+				_dutyPos = 0;
+
+				//The envelope is also restarted.
+				ResetEnvelope();
+				break;
+		}
+	}
+	
+	void InitializeSweep(uint8_t regValue)
+	{
+		_sweepEnabled = (regValue & 0x80) == 0x80;
+		_sweepNegate = (regValue & 0x08) == 0x08;
+
+		//The divider's period is set to P + 1 
+		_sweepPeriod = ((regValue & 0x70) >> 4) + 1;
+		_sweepShift = (regValue & 0x07);
+
+		//Side effects: Sets the reload flag 
+		_reloadSweep = true;
+	}
+
+	void UpdateTargetPeriod(bool setPeriod)
+	{
+		uint16_t shiftResult = (_period >> _sweepShift);
+		if(_sweepNegate) {
+			_sweepTargetPeriod = _period - shiftResult;
+			if(_isChannel1) {
+				// As a result, a negative sweep on pulse channel 1 will subtract the shifted period value minus 1
+				_sweepTargetPeriod++;
+			}
+		} else {
+			_sweepTargetPeriod = _period + shiftResult;
+		}
+		if(setPeriod && _sweepShift > 0 && _period >= 8 && _sweepTargetPeriod <= 0x7FF) {
+			_period = _sweepTargetPeriod;
+		}
+	}
+
+	void TickSweep()
+	{
+		if(_reloadSweep) {
+			if(_sweepDivider == 0 && _sweepEnabled) {
+				//If the divider's counter was zero before the reload and the sweep is enabled, the pulse's period is also adjusted
+				UpdateTargetPeriod(true);
+			}
+			_sweepDivider = _sweepPeriod;
+			_reloadSweep = false;
+		} else {
+			if(_sweepDivider > 0) {
+				_sweepDivider--;
+			} else if(_sweepEnabled) {
+				UpdateTargetPeriod(true);
+				_sweepDivider = _sweepPeriod;
+			}
+		}
+	}
+
+	void Run(uint32_t targetCycle)
+	{
+		UpdateTargetPeriod(false);
+		BaseApuChannel::Run(targetCycle);
+	}
+
+	void Clock()
+	{
+		_dutyPos = (_dutyPos - 1) & 0x07;
+
+		if(IsMuted()) {
+			AddOutput(0);
+		} else {
+			AddOutput(_dutySequences[_duty][_dutyPos] * GetVolume());
+		}
+	}
+};

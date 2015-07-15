@@ -667,6 +667,7 @@ public:
 	static void SetNMIFlag() { CPU::Instance->_state.NMIFlag = true; }
 	static void ClearNMIFlag() { CPU::Instance->_state.NMIFlag = false; }
 	static void SetIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag |= (int)source; }
+	static bool HasIRQSource(IRQSource source) { return (CPU::Instance->_state.IRQFlag & (int)source) != 0; }
 	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
 	static void RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue);
 

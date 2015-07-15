@@ -266,7 +266,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="APU.h" />
+    <ClInclude Include="DeltaModulationChannel.h" />
+    <ClInclude Include="ApuEnvelope.h" />
+    <ClInclude Include="ApuFrameCounter.h" />
+    <ClInclude Include="ApuLengthCounter.h" />
     <ClInclude Include="AXROM.h" />
+    <ClInclude Include="BaseApuChannel.h" />
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="Breakpoint.h" />
     <ClInclude Include="CheatManager.h" />
@@ -293,6 +298,8 @@
     <ClInclude Include="IMessageManager.h" />
     <ClInclude Include="INotificationListener.h" />
     <ClInclude Include="InputDataMessage.h" />
+    <ClInclude Include="NoiseChannel.h" />
+    <ClInclude Include="SquareChannel.h" />
     <ClInclude Include="StandardController.h" />
     <ClInclude Include="MessageManager.h" />
     <ClInclude Include="MessageType.h" />
@@ -309,23 +316,13 @@
     <ClInclude Include="MapperFactory.h" />
     <ClInclude Include="MMC1.h" />
     <ClInclude Include="MMC3.h" />
-    <ClInclude Include="Nes_Apu\apu_snapshot.h" />
-    <ClInclude Include="Nes_Apu\blargg_common.h" />
-    <ClInclude Include="Nes_Apu\blargg_source.h" />
-    <ClInclude Include="Nes_Apu\Blip_Buffer.h" />
-    <ClInclude Include="Nes_Apu\Blip_Synth.h" />
-    <ClInclude Include="Nes_Apu\Multi_Buffer.h" />
-    <ClInclude Include="Nes_Apu\Nes_Apu.h" />
-    <ClInclude Include="Nes_Apu\Nes_Namco.h" />
-    <ClInclude Include="Nes_Apu\Nes_Oscs.h" />
-    <ClInclude Include="Nes_Apu\Nes_Vrc6.h" />
-    <ClInclude Include="Nes_Apu\Nonlinear_Buffer.h" />
     <ClInclude Include="NROM.h" />
     <ClInclude Include="PPU.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="ROMLoader.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TriangleChannel.h" />
     <ClInclude Include="UNROM.h" />
     <ClInclude Include="VirtualController.h" />
     <ClInclude Include="VRC2_4.h" />

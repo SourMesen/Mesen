@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "Core\Core.vcxproj", "{78FEF1A1-6DF1-4CBB-A373-AE6FA7CE5CE0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B5330148-E8C7-46BA-B54E-69BE59EA337D} = {B5330148-E8C7-46BA-B54E-69BE59EA337D}
+		{CF35D78C-F710-41D2-968F-C46ACCFF6F07} = {CF35D78C-F710-41D2-968F-C46ACCFF6F07}
 		{7761E790-B42C-4179-8550-8365FF9EB23E} = {7761E790-B42C-4179-8550-8365FF9EB23E}
 	EndProjectSection
 EndProject
@@ -28,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PGOHelper", "PGOHelper\PGOH
 	ProjectSection(ProjectDependencies) = postProject
 		{37749BB2-FA78-4EC9-8990-5628FC0BBA19} = {37749BB2-FA78-4EC9-8990-5628FC0BBA19}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlipBuffer", "BlipBuffer\BlipBuffer.vcxproj", "{CF35D78C-F710-41D2-968F-C46ACCFF6F07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +88,13 @@ Global
 		{38D74EE1-5276-4D24-AABC-104B912A27D2}.Release|x64.Build.0 = Release|x64
 		{38D74EE1-5276-4D24-AABC-104B912A27D2}.Release|x86.ActiveCfg = Release|Win32
 		{38D74EE1-5276-4D24-AABC-104B912A27D2}.Release|x86.Build.0 = Release|Win32
+		{CF35D78C-F710-41D2-968F-C46ACCFF6F07}.Debug|x64.ActiveCfg = Debug|x64
+		{CF35D78C-F710-41D2-968F-C46ACCFF6F07}.Debug|x64.Build.0 = Debug|x64
+		{CF35D78C-F710-41D2-968F-C46ACCFF6F07}.Debug|x86.ActiveCfg = Debug|Win32
+		{CF35D78C-F710-41D2-968F-C46ACCFF6F07}.Debug|x86.Build.0 = Debug|Win32
+		{CF35D78C-F710-41D2-968F-C46ACCFF6F07}.Release|x64.ActiveCfg = Release|x64
+		{CF35D78C-F710-41D2-968F-C46ACCFF6F07}.Release|x86.ActiveCfg = Release|Win32
+		{CF35D78C-F710-41D2-968F-C46ACCFF6F07}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
