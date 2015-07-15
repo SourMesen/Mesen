@@ -22,7 +22,6 @@ class Console
 	private:
 		static shared_ptr<Console> Instance;
 		static uint32_t Flags;
-		static uint32_t CurrentFPS;
 		SimpleLock _pauseLock;
 		SimpleLock _runLock;
 		SimpleLock _stopLock;
@@ -71,7 +70,6 @@ class Console
 		static bool CheckFlag(int flag);
 		static void SetFlags(int flags);
 		static void ClearFlags(int flags);
-		static uint32_t GetFPS();
 
 		static shared_ptr<Console> GetInstance();
 };

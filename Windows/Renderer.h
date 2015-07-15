@@ -6,6 +6,7 @@
 #include "../Utilities/PNGWriter.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/SimpleLock.h"
+#include "../Utilities/Timer.h"
 
 using namespace DirectX;
 
@@ -46,6 +47,10 @@ namespace NES {
 		uint8_t*						_nextFrameBuffer = nullptr;
 		SimpleLock					_frameLock;
 
+		Timer _fpsTimer;
+		uint32_t _frameCount = 0;
+		uint32_t _lastFrameCount = 0;
+		uint32_t _currentFPS = 0;
 
 		unique_ptr<SpriteFont>	_font;
 		unique_ptr<SpriteFont>	_smallFont;
@@ -84,7 +89,7 @@ namespace NES {
 		void DrawToasts();
 		void DrawToast(shared_ptr<ToastInfo> toast, int posIndex);
 		void RemoveOldToasts();
-		
+	
 	public:
 		Renderer(HWND hWnd);
 		~Renderer();

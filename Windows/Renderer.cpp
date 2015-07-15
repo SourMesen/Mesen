@@ -439,7 +439,19 @@ namespace NES
 			} else {
 				//Draw FPS counter
 				if(CheckFlag(UIFlags::ShowFPS)) {
-					string fpsString = string("FPS: ") + std::to_string(Console::GetFPS());
+				
+					if(_fpsTimer.GetElapsedMS() > 1000) {
+						//Update fps every sec
+						if(_frameCount - _lastFrameCount < 0) {
+							_currentFPS = 0;
+						} else {
+							_currentFPS = (int)(std::round((double)(_frameCount - _lastFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
+						}
+						_lastFrameCount = _frameCount;
+						_fpsTimer.Reset();
+					}
+
+					string fpsString = string("FPS: ") + std::to_string(_currentFPS);
 					DrawOutlinedString(fpsString, 256 * 4 - 80, 13, Colors::AntiqueWhite, 1.0f);
 				}
 			}
@@ -556,6 +568,8 @@ namespace NES
 		_frameLock.Acquire();
 		memcpy(_nextFrameBuffer, frameBuffer, 256 * 240 * 4);
 		_frameLock.Release();
+
+		_frameCount++;
 	}
 
 	void Renderer::TakeScreenshot(string romFilename)

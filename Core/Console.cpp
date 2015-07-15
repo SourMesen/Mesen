@@ -10,7 +10,6 @@
 
 shared_ptr<Console> Console::Instance(new Console());
 uint32_t Console::Flags = 0;
-uint32_t Console::CurrentFPS = 0;
 
 Console::Console()
 {
@@ -161,19 +160,12 @@ bool Console::CheckFlag(int flag)
 	return (Console::Flags & flag) == flag;
 }
 
-uint32_t Console::GetFPS()
-{
-	return Console::CurrentFPS;
-}
-
 void Console::Run()
 {
 	Timer clockTimer;
-	Timer fpsTimer;
-	uint32_t lastFrameCount = 0;
 	double elapsedTime = 0;
 	double targetTime = 16.6666666666666666;
-	
+
 	_runLock.Acquire();
 	_stopLock.Acquire();
 
@@ -223,17 +215,6 @@ void Console::Run()
 				_stop = false;
 				break;
 			}
-		}
-		
-		if(fpsTimer.GetElapsedMS() > 1000) {
-			uint32_t frameCount = PPU::GetFrameCount();
-			if((int32_t)frameCount - (int32_t)lastFrameCount < 0) {
-				Console::CurrentFPS = 0;
-			} else {
-				Console::CurrentFPS = (int)(std::round((double)(frameCount - lastFrameCount) / (fpsTimer.GetElapsedMS() / 1000)));
-			}
-			lastFrameCount = frameCount;
-			fpsTimer.Reset();
 		}
 	}
 	_apu->StopAudio();
