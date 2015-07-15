@@ -1,11 +1,9 @@
-#include <tchar.h>
-
 extern "C" {
-	void __stdcall LoadROM(wchar_t* filename);
+	void __stdcall LoadROM(char* filename);
 	void __stdcall Run();
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	LoadROM(argv[1]);
 	Run();
