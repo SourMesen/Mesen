@@ -20,7 +20,6 @@ class APU : public Snapshotable, public IMemoryHandler
 		static IAudioDevice* AudioDevice;
 		static APU* Instance;
 
-		uint32_t _currentClock = 0;
 		uint32_t _previousCycle = 0;
 
 		vector<unique_ptr<SquareChannel>> _squareChannel;

@@ -27,12 +27,110 @@ private:
 	uint8_t _bitsRemaining = 0;
 	bool _silenceFlag = true;
 
+	void InitSample()
+	{
+		_currentAddr = _sampleAddr;
+		_bytesRemaining = _sampleLength;
+	}
+
+	void FillReadBuffer()
+	{
+		if(_bufferEmpty && _bytesRemaining > 0) {
+			_readBuffer = _memoryManager->Read(_currentAddr);
+			_bufferEmpty = false;
+
+			_currentAddr++;
+			_bytesRemaining--;
+
+			if(_bytesRemaining == 0) {
+				if(_loopFlag) {
+					//Looped sample should never set IRQ flag
+					InitSample();
+				} else if(_irqEnabled) {
+					CPU::SetIRQSource(IRQSource::DMC);
+				}
+			}
+		}
+	}
+	
+protected:
+	void Clock()
+	{
+		if(!_silenceFlag) {
+			if(_shiftRegister & 0x01) {
+				if(_outputLevel <= 125) {
+					_outputLevel += 2;
+				}
+			} else {
+				if(_outputLevel >= 2) {
+					_outputLevel -= 2;
+				}
+			}
+			_shiftRegister >>= 1;
+		}
+
+		_bitsRemaining--;
+		if(_bitsRemaining == 0) {
+			_bitsRemaining = 8;
+			if(_bufferEmpty) {
+				_silenceFlag = true;
+			} else {
+				_silenceFlag = false;
+				_shiftRegister = _readBuffer;
+				_bufferEmpty = true;
+				FillReadBuffer();
+			}
+		}
+
+		AddOutput(_outputLevel);
+	}
+
 public:
-	DeltaModulationChannel(MemoryManager* memoryManager)
+	DeltaModulationChannel(Blip_Buffer *buffer, MemoryManager* memoryManager) : BaseApuChannel(buffer)
 	{
 		_memoryManager = memoryManager;
 		_clockDivider = 1;
 		SetVolume(0.42545);
+	}
+
+	virtual void Reset()
+	{
+		BaseApuChannel::Reset();
+		
+		_sampleAddr = 0;
+		_sampleLength = 0;
+		_outputLevel = 0;
+		_irqEnabled = false;
+		_loopFlag = false;
+
+		_currentAddr = 0;
+		_bytesRemaining = 0;
+		_readBuffer = 0;
+		_bufferEmpty = true;
+
+		_shiftRegister = 0;
+		_bitsRemaining = 0;
+		_silenceFlag = true;
+	}
+
+	virtual void StreamState(bool saving)
+	{
+		BaseApuChannel::StreamState(saving);
+
+		Stream<uint16_t>(_sampleAddr);
+		Stream<uint16_t>(_sampleLength);
+		Stream<uint8_t>(_outputLevel);
+		Stream<bool>(_irqEnabled);
+		Stream<bool>(_loopFlag);
+
+		Stream<uint16_t>(_currentAddr);
+		Stream<uint16_t>(_bytesRemaining);
+		Stream<uint8_t>(_readBuffer);
+		Stream<bool>(_bufferEmpty);
+
+		Stream<uint8_t>(_shiftRegister);
+		Stream<uint8_t>(_bitsRemaining);
+		Stream<bool>(_silenceFlag);
 	}
 
 	bool IrqPending(uint32_t cyclesToRun)
@@ -93,62 +191,5 @@ public:
 			InitSample();
 			FillReadBuffer();
 		}
-	}
-
-	void InitSample()
-	{
-		_currentAddr = _sampleAddr;
-		_bytesRemaining = _sampleLength;
-	}
-
-	void FillReadBuffer()
-	{
-		if(_bufferEmpty && _bytesRemaining > 0) {
-			_readBuffer = _memoryManager->Read(_currentAddr);
-			_bufferEmpty = false;
-
-			_currentAddr++;
-			_bytesRemaining--;
-
-			if(_bytesRemaining == 0) {
-				if(_loopFlag) {
-					//Looped sample should never set IRQ flag
-					InitSample();
-				} else if(_irqEnabled) {
-					CPU::SetIRQSource(IRQSource::DMC);
-				}
-			}
-		}
-	}
-	
-	void Clock()
-	{
-		if(!_silenceFlag) {
-			if(_shiftRegister & 0x01) {
-				if(_outputLevel <= 125) {
-					_outputLevel += 2;
-				}
-			} else {
-				if(_outputLevel >= 2) {
-					_outputLevel -= 2;
-				}
-			}
-			_shiftRegister >>= 1;
-		}
-
-		_bitsRemaining--;
-		if(_bitsRemaining == 0) {
-			_bitsRemaining = 8;
-			if(_bufferEmpty) {
-				_silenceFlag = true;
-			} else {
-				_silenceFlag = false;
-				_shiftRegister = _readBuffer;
-				_bufferEmpty = true;
-				FillReadBuffer();
-			}
-		}
-
-		AddOutput(_outputLevel);
 	}
 };

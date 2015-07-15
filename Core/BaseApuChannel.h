@@ -4,7 +4,7 @@
 #include "../BlipBuffer/Blip_Buffer.h"
 
 template<int range>
-class BaseApuChannel : public IMemoryHandler
+class BaseApuChannel : public IMemoryHandler, public Snapshotable
 {
 private:
 	unique_ptr<Blip_Synth<blip_good_quality, range>> _synth;
@@ -21,14 +21,33 @@ public:
 	virtual void Clock() = 0;
 	virtual bool GetStatus() = 0;
 
-	BaseApuChannel()
-	{
-		_synth.reset(new Blip_Synth<blip_good_quality, range>());
-	}
-
-	void SetBuffer(Blip_Buffer *buffer)
+	BaseApuChannel(Blip_Buffer *buffer)
 	{
 		_buffer = buffer;
+		_synth.reset(new Blip_Synth<blip_good_quality, range>());
+		
+		Reset();
+	}
+
+	virtual void Reset()
+	{
+		_timer = 0;
+		_period = 0;
+		_lastOutput = 0;
+		_previousCycle = 0;
+		_buffer->clear();
+	}
+
+	virtual void StreamState(bool saving)
+	{
+		Stream<uint16_t>(_lastOutput);
+		Stream<uint32_t>(_previousCycle);
+		Stream<uint16_t>(_timer);
+		Stream<uint16_t>(_period);
+
+		if(!saving) {
+			_buffer->clear();
+		}
 	}
 
 	void SetVolume(double volume)

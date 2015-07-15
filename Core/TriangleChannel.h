@@ -17,11 +17,45 @@ private:
 
 	uint8_t _sequencePosition = 0;
 
+protected:
+	void Clock()
+	{
+		//The sequencer is clocked by the timer as long as both the linear counter and the length counter are nonzero. 
+		if(_lengthCounter > 0 && _linearCounter > 0) {
+			_sequencePosition = (_sequencePosition + 1) & 0x1F;
+
+			AddOutput(_sequence[_sequencePosition]);
+		}
+	}
+
 public:
-	TriangleChannel()
+	TriangleChannel(Blip_Buffer* buffer) : ApuLengthCounter(buffer)
 	{
 		_clockDivider = 1; //Triangle clocks at the same speed as the cpu
 		SetVolume(0.12765);
+	}
+
+	virtual void Reset()
+	{
+		ApuLengthCounter::Reset();
+		
+		_linearCounter = 0;
+		_linearCounterReload = 0;
+		_linearReloadFlag = false;
+		_linearControlFlag = false;
+
+		_sequencePosition = 0;
+	}
+
+	virtual void StreamState(bool saving)
+	{
+		ApuLengthCounter::StreamState(saving);
+
+		Stream<uint8_t>(_linearCounter);
+		Stream<uint8_t>(_linearCounterReload);
+		Stream<bool>(_linearReloadFlag);
+		Stream<bool>(_linearControlFlag);
+		Stream<uint8_t>(_sequencePosition);
 	}
 
 	void GetMemoryRanges(MemoryRanges &ranges)
@@ -54,16 +88,6 @@ public:
 				//Side effects 	Sets the linear counter reload flag 
 				_linearReloadFlag = true;
 				break;
-		}
-	}
-
-	void Clock()
-	{
-		//The sequencer is clocked by the timer as long as both the linear counter and the length counter are nonzero. 
-		if(_lengthCounter > 0 && _linearCounter > 0) {
-			_sequencePosition = (_sequencePosition + 1) & 0x1F;
-
-			AddOutput(_sequence[_sequencePosition]);
 		}
 	}
 

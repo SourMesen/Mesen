@@ -8,7 +8,6 @@ private:
 	bool _constantVolume = false;
 	uint8_t _volume = 0;
 
-	uint8_t _envelope = 0;
 	uint8_t _envelopeCounter = 0;
 
 	bool _start = false;
@@ -16,6 +15,10 @@ private:
 	uint8_t _counter = 0;
 
 protected:
+	ApuEnvelope(Blip_Buffer* buffer) : ApuLengthCounter(buffer)
+	{
+	}
+
 	void InitializeEnvelope(uint8_t regValue)
 	{
 		_constantVolume = (regValue & 0x10) == 0x10;
@@ -41,6 +44,30 @@ protected:
 	}
 
 public:
+	virtual void Reset()
+	{
+		ApuLengthCounter::Reset();
+
+		_constantVolume = false;
+		_volume = 0;
+		_envelopeCounter = 0;
+		_start = false;
+		_divider = 0;
+		_counter = 0;
+	}
+
+	virtual void StreamState(bool saving)
+	{
+		ApuLengthCounter::StreamState(saving);
+
+		Stream<bool>(_constantVolume);
+		Stream<uint8_t>(_volume);
+		Stream<uint8_t>(_envelopeCounter);
+		Stream<bool>(_start);
+		Stream<int8_t>(_divider);
+		Stream<uint8_t>(_counter);
+	}
+
 	void TickEnvelope()
 	{
 		if(!_start) {

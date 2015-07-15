@@ -12,6 +12,35 @@ class Snapshotable
 	protected:
 		virtual void StreamState(bool saving) = 0;
 
+		void Stream(Snapshotable* snapshotable)
+		{
+			stringstream stream;
+			if(_saving) {
+				snapshotable->SaveSnapshot(&stream);
+				uint32_t size = (uint32_t)stream.tellp();
+				stream.seekg(0, ios::beg);
+				stream.seekp(0, ios::beg);
+
+				uint8_t *buffer = new uint8_t[size];
+				stream.read((char*)buffer, size);
+				Stream<uint32_t>(size);
+				StreamArray<uint8_t>(buffer, size);
+				delete[] buffer;
+			} else {
+				uint32_t size = 0;
+				Stream<uint32_t>(size);
+				
+				uint8_t *buffer = new uint8_t[size];
+				StreamArray(buffer, size);
+
+				stream.write((char*)buffer, size);
+				stream.seekg(0, ios::beg);
+				stream.seekp(0, ios::beg);
+				snapshotable->LoadSnapshot(&stream);
+				delete[] buffer;
+			}
+		}
+
 		template<typename T>
 		void Stream(T &value)
 		{

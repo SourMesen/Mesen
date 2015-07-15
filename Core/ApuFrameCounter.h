@@ -10,28 +10,45 @@ enum class FrameType
 	HalfFrame = 2,
 };
 
-class ApuFrameCounter : public IMemoryHandler
+class ApuFrameCounter : public IMemoryHandler, public Snapshotable
 {
 private:
-	int32_t _nextIrqCycle = 29828;
-	uint32_t _previousCycle = 0;
-
 	const vector<vector<uint32_t>> _stepCycles = { { { 7457, 14913, 22371, 29828, 29829, 29830},
 																	 { 7457, 14913, 22371, 29829, 37281, 37282} } };
 	const vector<vector<FrameType>> _frameType = { { { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None },
 																	 { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None } } };
 
-	void (*_callback)(FrameType);
-
+	int32_t _nextIrqCycle = 29828;
+	uint32_t _previousCycle = 0;
 	uint32_t _currentStep = 0;
 	uint32_t _stepMode = 0; //0: 4-step mode, 1: 5-step mode
 	bool _inhibitIRQ = false;
+
+	void (*_callback)(FrameType);
 
 public:
 	ApuFrameCounter(void (*frameCounterTickCallback)(FrameType))
 	{
 		_callback = frameCounterTickCallback;
 	}
+
+	void Reset()
+	{
+		_nextIrqCycle = 29828;
+		_previousCycle = 0;
+		_currentStep = 0;
+		_stepMode = 0;
+		_inhibitIRQ = false;
+	}
+
+	void StreamState(bool saving)
+	{
+		Stream<int32_t>(_nextIrqCycle);
+		Stream<uint32_t>(_previousCycle);
+		Stream<uint32_t>(_currentStep);
+		Stream<uint32_t>(_stepMode);
+		Stream<bool>(_inhibitIRQ);
+	}	
 
 	uint32_t Run(uint32_t &cyclesToRun)
 	{

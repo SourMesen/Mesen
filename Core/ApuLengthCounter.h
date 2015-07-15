@@ -25,6 +25,28 @@ protected:
 	}
 
 public:
+	ApuLengthCounter(Blip_Buffer* buffer) : BaseApuChannel(buffer)
+	{
+	}
+
+	virtual void Reset()
+	{
+		BaseApuChannel::Reset();
+
+		_enabled = false;
+		_lengthCounterHalt = false;
+		_lengthCounter = 0;
+	}
+
+	virtual void StreamState(bool saving)
+	{
+		BaseApuChannel::StreamState(saving);
+
+		Stream<bool>(_enabled);
+		Stream<bool>(_lengthCounterHalt);
+		Stream<uint8_t>(_lengthCounter);
+	}
+
 	bool GetStatus()
 	{
 		return _lengthCounter > 0;

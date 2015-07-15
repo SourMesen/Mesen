@@ -20,10 +20,42 @@ private:
 		return (_shiftRegister & 0x01) == 0x01;
 	}
 
+protected:
+	void Clock()
+	{
+		uint32_t volume = GetVolume();
+		//Feedback is calculated as the exclusive-OR of bit 0 and one other bit: bit 6 if Mode flag is set, otherwise bit 1.
+		uint16_t feedback = (_shiftRegister & 0x01) ^ ((_shiftRegister >> (_modeFlag ? 6 : 1)) & 0x01);
+		_shiftRegister >>= 1;
+		_shiftRegister |= (feedback << 14);
+
+		if(IsMuted()) {
+			AddOutput(0);
+		} else {
+			AddOutput(GetVolume()); 
+		}
+	}
+
 public:
-	NoiseChannel()
+	NoiseChannel(Blip_Buffer* buffer) : ApuEnvelope(buffer)
 	{
 		SetVolume(0.0741);
+	}
+
+	virtual void Reset()
+	{
+		ApuEnvelope::Reset();
+		
+		_shiftRegister = 1;
+		_modeFlag = false;
+	}
+
+	virtual void StreamState(bool saving)
+	{
+		ApuEnvelope::StreamState(saving);
+
+		Stream<uint16_t>(_shiftRegister);
+		Stream<bool>(_modeFlag);
 	}
 
 	void GetMemoryRanges(MemoryRanges &ranges)
@@ -50,21 +82,6 @@ public:
 				//The envelope is also restarted.
 				ResetEnvelope();
 				break;
-		}
-	}
-	
-	void Clock()
-	{
-		uint32_t volume = GetVolume();
-		//Feedback is calculated as the exclusive-OR of bit 0 and one other bit: bit 6 if Mode flag is set, otherwise bit 1.
-		uint16_t feedback = (_shiftRegister & 0x01) ^ ((_shiftRegister >> (_modeFlag ? 6 : 1)) & 0x01);
-		_shiftRegister >>= 1;
-		_shiftRegister |= (feedback << 14);
-
-		if(IsMuted()) {
-			AddOutput(0);
-		} else {
-			AddOutput(GetVolume()); 
 		}
 	}
 };
