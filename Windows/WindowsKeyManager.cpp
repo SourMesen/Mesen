@@ -63,7 +63,7 @@ string WindowsKeyManager::GetKeyName(uint32_t key)
 			return keyDef.description;
 		}
 	}
-	return nullptr;
+	return "";
 }
 
 uint32_t WindowsKeyManager::GetKeyCode(string keyName)
