@@ -28,6 +28,11 @@ namespace Mesen.GUI.Forms
 		{
 			Application.ThreadException += Application_ThreadException;
 			InitializeComponent();
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
