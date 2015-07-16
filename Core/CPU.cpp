@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CPU.h"
 #include "PPU.h"
+#include "APU.h"
 
 CPU* CPU::Instance = nullptr;
 
@@ -121,6 +122,7 @@ void CPU::EndFrame()
 void CPU::IncCycleCount()
 {
 	PPU::ExecStatic();
+	APU::ExecStatic();
 	_cycleCount++;
 }
 

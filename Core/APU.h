@@ -21,6 +21,7 @@ class APU : public Snapshotable, public IMemoryHandler
 		static APU* Instance;
 
 		uint32_t _previousCycle = 0;
+		uint32_t _currentCycle = 0;
 
 		vector<unique_ptr<SquareChannel>> _squareChannel;
 		unique_ptr<TriangleChannel> _triangleChannel;
@@ -62,8 +63,8 @@ class APU : public Snapshotable, public IMemoryHandler
 		void WriteRAM(uint16_t addr, uint8_t value);
 		void GetMemoryRanges(MemoryRanges &ranges);
 
-		bool Exec(uint32_t currentCpuCycle);
-		static void ExecStatic(uint32_t currentCpuCycle);
+		void Exec();
+		static void ExecStatic();
 
 		static void StaticRun();
 		static void StopAudio();

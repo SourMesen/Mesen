@@ -109,21 +109,17 @@ void APU::Run()
 	//-At the end of a frame
 	//-Before APU registers are read/written to
 	//-When a DMC or FrameCounter interrupt needs to be fired
-	uint32_t targetCycle = CPU::GetCycleCount();
-	uint32_t currentCycle = _previousCycle;
-	uint32_t cyclesToRun = targetCycle - _previousCycle;
+	uint32_t cyclesToRun = _currentCycle - _previousCycle;
 
-	while(currentCycle < targetCycle) {
-		currentCycle += _frameCounter->Run(cyclesToRun);
+	while(_previousCycle < _currentCycle) {
+		_previousCycle += _frameCounter->Run(cyclesToRun);
 
-		_squareChannel[0]->Run(currentCycle);
-		_squareChannel[1]->Run(currentCycle);
-		_noiseChannel->Run(currentCycle);
-		_triangleChannel->Run(currentCycle);
-		_deltaModulationChannel->Run(currentCycle);
+		_squareChannel[0]->Run(_previousCycle);
+		_squareChannel[1]->Run(_previousCycle);
+		_noiseChannel->Run(_previousCycle);
+		_triangleChannel->Run(_previousCycle);
+		_deltaModulationChannel->Run(_previousCycle);
 	}
-
-	_previousCycle = targetCycle;
 }
 
 void APU::StaticRun()
@@ -142,21 +138,16 @@ bool APU::IrqPending(uint32_t currentCycle)
 	return false;
 }
 
-void APU::ExecStatic(uint32_t currentCpuCycle)
+void APU::ExecStatic()
 {
-	Instance->Exec(currentCpuCycle);
+	Instance->Exec();
 }
 
-bool APU::Exec(uint32_t currentCpuCycle)
+void APU::Exec()
 {
-	if(IrqPending(currentCpuCycle)) {
+	_currentCycle++;
+	if(_currentCycle == 20000) {
 		Run();
-	}
-
-	if(currentCpuCycle >= 29780) {
-		Run();
-
-		_previousCycle = 0;
 
 		_squareChannel[0]->EndFrame();
 		_squareChannel[1]->EndFrame();
@@ -164,19 +155,19 @@ bool APU::Exec(uint32_t currentCpuCycle)
 		_noiseChannel->EndFrame();
 		_deltaModulationChannel->EndFrame();
 
-		_blipBuffer->end_frame(currentCpuCycle);
+		_blipBuffer->end_frame(_currentCycle);
 
 		// Read some samples out of Blip_Buffer if there are enough to fill our output buffer
 		uint32_t availableSampleCount = _blipBuffer->samples_avail();
-		if(availableSampleCount >= APU::SamplesPerFrame) {
-			size_t sampleCount = _blipBuffer->read_samples(_outputBuffer, APU::SamplesPerFrame);
-			if(APU::AudioDevice) {
-				APU::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * BitsPerSample / 8));
-			}
+		size_t sampleCount = _blipBuffer->read_samples(_outputBuffer, APU::SamplesPerFrame);
+		if(APU::AudioDevice) {
+			APU::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * BitsPerSample / 8));
 		}
-		return true;
+		_currentCycle = 0;
+		_previousCycle = 0;
+	} else if(IrqPending(_currentCycle)) {
+		Run();
 	}
-	return false;
 }
 
 void APU::StopAudio()
@@ -189,6 +180,7 @@ void APU::StopAudio()
 
 void APU::Reset()
 {
+	_currentCycle = 0;
 	_previousCycle = 0;
 	_squareChannel[0]->Reset();
 	_squareChannel[1]->Reset();
@@ -200,6 +192,7 @@ void APU::Reset()
 
 void APU::StreamState(bool saving)
 {
+	Stream<uint32_t>(_currentCycle);
 	Stream<uint32_t>(_previousCycle);
 	Stream(_squareChannel[0].get());
 	Stream(_squareChannel[1].get());

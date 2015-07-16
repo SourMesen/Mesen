@@ -169,13 +169,15 @@ void Console::Run()
 	_runLock.Acquire();
 	_stopLock.Acquire();
 
+	uint32_t lastFrameNumber = -1;
 	while(true) { 
-		bool frameDone = _apu->Exec(_cpu->Exec());
-
-		if(frameDone) {
+		_cpu->Exec();
+		uint32_t currentFrameNumber = PPU::GetFrameCount();
+		if(currentFrameNumber != lastFrameNumber) {
+			lastFrameNumber = currentFrameNumber;
 			_cpu->EndFrame();
 
-			if(CheckFlag(EmulationFlags::LimitFPS) && frameDone) {
+			if(CheckFlag(EmulationFlags::LimitFPS)) {
 				elapsedTime = clockTimer.GetElapsedMS();
 				while(targetTime > elapsedTime) {
 					if(targetTime - elapsedTime > 2) {

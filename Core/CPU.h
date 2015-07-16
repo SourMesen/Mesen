@@ -662,7 +662,6 @@ public:
 	static const uint32_t ClockRate = 1789773;
 
 	CPU(MemoryManager *memoryManager);
-	static int32_t GetCycleCount() { return CPU::Instance->_cycleCount; }
 	static int32_t GetRelativeCycleCount() { return CPU::Instance->_relativeCycleCount + CPU::Instance->_cycleCount; }
 	static void SetNMIFlag() { CPU::Instance->_state.NMIFlag = true; }
 	static void ClearNMIFlag() { CPU::Instance->_state.NMIFlag = false; }
