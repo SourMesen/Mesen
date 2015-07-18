@@ -4,8 +4,9 @@
 
 enum EmulationFlags
 {
-	LimitFPS = 0x01,
-	Paused = 0x02,
+	Paused = 0x01,
+	LimitFPS = 0x02,
+	ShowFPS = 0x04,
 };
 
 enum class AudioChannel

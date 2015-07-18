@@ -257,6 +257,14 @@ namespace Mesen.GUI
 		Negative = 0x80
 	}
 
+	[Flags]
+	public enum EmulationFlags
+	{
+		Paused = 0x01,
+		LimitFPS = 0x02,
+		ShowFPS = 0x04,
+	}
+
 	public class MD5Helper
 	{
 		public static string GetMD5Hash(string filename)

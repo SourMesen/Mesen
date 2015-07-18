@@ -47,9 +47,6 @@ namespace InteropEmu {
 			_viewerHandle = dxViewerHandle;
 
 			_renderer = new NES::Renderer(_viewerHandle);
-			MessageManager::RegisterMessageManager(_renderer);
-			_renderer->SetFlags(NES::UIFlags::ShowFPS);
-
 			_soundManager = new SoundManager(_windowHandle);
 
 			ControlManager::RegisterKeyManager(new WindowsKeyManager(_windowHandle));

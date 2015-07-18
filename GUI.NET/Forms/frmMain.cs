@@ -37,6 +37,9 @@ namespace Mesen.GUI.Forms
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
+			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
+			mnuLimitFPS.Checked = ConfigManager.Config.VideoInfo.LimitFPS;
+
 			InitializeEmu();
 
 			UpdateMenus();
@@ -57,8 +60,17 @@ namespace Mesen.GUI.Forms
 
 			ControllerInfo.ApplyConfig();
 			AudioInfo.ApplyConfig();
-			
-			InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
+		
+			UpdateEmulationFlags();
+		}
+		
+		void UpdateEmulationFlags()
+		{
+			ConfigManager.Config.VideoInfo.LimitFPS = mnuLimitFPS.Checked;
+			ConfigManager.Config.VideoInfo.ShowFPS = mnuShowFPS.Checked;
+			ConfigManager.ApplyChanges();
+
+			VideoInfo.ApplyConfig();
 		}
 
 		void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
@@ -256,17 +268,12 @@ namespace Mesen.GUI.Forms
 
 		private void mnuLimitFPS_Click(object sender, EventArgs e)
 		{
-			if(mnuLimitFPS.Checked) {
-				InteropEmu.ClearFlags((int)EmulationFlags.LimitFPS);
-			} else {
-				InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
-			}
-			mnuLimitFPS.Checked = !mnuLimitFPS.Checked;
+			UpdateEmulationFlags();
 		}
 
 		private void mnuShowFPS_Click(object sender, EventArgs e)
 		{
-
+			UpdateEmulationFlags();
 		}
 
 		private void mnuStartServer_Click(object sender, EventArgs e)
@@ -342,12 +349,6 @@ namespace Mesen.GUI.Forms
 
 		#endregion
 		
-		private enum EmulationFlags
-		{
-			LimitFPS = 0x01,
-			Paused = 0x02,
-		}
-
 		private void RecordMovie(bool resetEmu)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();

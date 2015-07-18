@@ -210,8 +210,7 @@
 			// 
 			// mnuLimitFPS
 			// 
-			this.mnuLimitFPS.Checked = true;
-			this.mnuLimitFPS.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuLimitFPS.CheckOnClick = true;
 			this.mnuLimitFPS.Name = "mnuLimitFPS";
 			this.mnuLimitFPS.ShortcutKeys = System.Windows.Forms.Keys.F9;
 			this.mnuLimitFPS.Size = new System.Drawing.Size(152, 22);
@@ -220,6 +219,7 @@
 			// 
 			// mnuShowFPS
 			// 
+			this.mnuShowFPS.CheckOnClick = true;
 			this.mnuShowFPS.Name = "mnuShowFPS";
 			this.mnuShowFPS.ShortcutKeys = System.Windows.Forms.Keys.F10;
 			this.mnuShowFPS.Size = new System.Drawing.Size(152, 22);

@@ -16,11 +16,6 @@ namespace DirectX {
 }
 
 namespace NES {
-	enum UIFlags
-	{
-		ShowFPS = 1,
-	};
-
 	class Renderer : public IVideoDevice, public IMessageManager
 	{
 	private:

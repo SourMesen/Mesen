@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\VideoInfo.cs" />
     <Compile Include="Config\CheatInfo.cs" />
     <Compile Include="Config\ControllerInfo.cs" />
     <Compile Include="Config\ClientConnection.cs" />

@@ -23,6 +23,7 @@ namespace NES
 			CleanupDevice();
 		} else {
 			PPU::RegisterVideoDevice(this);
+			MessageManager::RegisterMessageManager(this);
 		}
 	}
 
@@ -443,8 +444,7 @@ namespace NES
 				DrawPauseScreen();
 			} else {
 				//Draw FPS counter
-				if(CheckFlag(UIFlags::ShowFPS)) {
-				
+				if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {				
 					if(_fpsTimer.GetElapsedMS() > 1000) {
 						//Update fps every sec
 						if(_frameCount - _lastFrameCount < 0) {
