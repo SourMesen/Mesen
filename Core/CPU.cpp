@@ -10,37 +10,37 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 	CPU::Instance = this;
 
 	Func opTable[] = { 
-	//	0				1				2				3				4				5				6						7				8				9				A						B				C						D						E						F
-		&CPU::BRK,	&CPU::ORA,	nullptr,		nullptr,		&CPU::NOP,	&CPU::ORA,	&CPU::ASL_Memory,	nullptr,		&CPU::PHP,	&CPU::ORA,	&CPU::ASL_Acc,		nullptr,		&CPU::NOP,			&CPU::ORA,	&CPU::ASL_Memory,		nullptr, //0
-		&CPU::BPL,	&CPU::ORA,	nullptr,		nullptr,		&CPU::NOP,	&CPU::ORA,	&CPU::ASL_Memory,	nullptr,		&CPU::CLC,	&CPU::ORA,	nullptr,				nullptr,		&CPU::NOP,			&CPU::ORA,	&CPU::ASL_Memory,		nullptr, //1
-		&CPU::JSR,	&CPU::AND,	nullptr,		nullptr,		&CPU::BIT,	&CPU::AND,	&CPU::ROL_Memory,	nullptr,		&CPU::PLP,	&CPU::AND,	&CPU::ROL_Acc,		nullptr,		&CPU::BIT,			&CPU::AND,	&CPU::ROL_Memory,		nullptr, //2
-		&CPU::BMI,	&CPU::AND,	nullptr,		nullptr,		&CPU::NOP,	&CPU::AND,	&CPU::ROL_Memory,	nullptr,		&CPU::SEC,	&CPU::AND,	nullptr,				nullptr,		&CPU::NOP,			&CPU::AND,	&CPU::ROL_Memory,		nullptr, //3
-		&CPU::RTI,	&CPU::EOR,	nullptr,		nullptr,		&CPU::NOP,	&CPU::EOR,	&CPU::LSR_Memory,	nullptr,		&CPU::PHA,	&CPU::EOR,	&CPU::LSR_Acc,		nullptr,		&CPU::JMP_Abs,		&CPU::EOR,	&CPU::LSR_Memory,		nullptr, //4
-		&CPU::BVC,	&CPU::EOR,	nullptr,		nullptr,		&CPU::NOP,	&CPU::EOR,	&CPU::LSR_Memory,	nullptr,		&CPU::CLI,	&CPU::EOR,	nullptr,				nullptr,		&CPU::NOP,			&CPU::EOR,	&CPU::LSR_Memory,		nullptr, //5
-		&CPU::RTS,	&CPU::ADC,	nullptr,		nullptr,		&CPU::NOP,	&CPU::ADC,	&CPU::ROR_Memory,	nullptr,		&CPU::PLA,	&CPU::ADC,	&CPU::ROR_Acc,		nullptr,		&CPU::JMP_Ind,		&CPU::ADC,	&CPU::ROR_Memory,		nullptr, //6
-		&CPU::BVS,	&CPU::ADC,	nullptr,		nullptr,		&CPU::NOP,	&CPU::ADC,	&CPU::ROR_Memory,	nullptr,		&CPU::SEI,	&CPU::ADC,	nullptr,				nullptr,		&CPU::NOP,			&CPU::ADC,	&CPU::ROR_Memory,		nullptr, //7
-		&CPU::NOP,	&CPU::STA,	&CPU::NOP,	nullptr,		&CPU::STY,	&CPU::STA,	&CPU::STX,			nullptr,		&CPU::DEY,	&CPU::NOP,	&CPU::TXA,			nullptr,		&CPU::STY,			&CPU::STA,	&CPU::STX,				nullptr, //8
-		&CPU::BCC,	&CPU::STA,	nullptr,		nullptr,		&CPU::STY,	&CPU::STA,	&CPU::STX,			nullptr,		&CPU::TYA,	&CPU::STA,	&CPU::TXS,			nullptr,		nullptr,				&CPU::STA,	nullptr,					nullptr, //9
-		&CPU::LDY,	&CPU::LDA,	&CPU::LDX,	nullptr,		&CPU::LDY,	&CPU::LDA,	&CPU::LDX,			nullptr,		&CPU::TAY,	&CPU::LDA,	&CPU::TAX,			nullptr,		&CPU::LDY,			&CPU::LDA,	&CPU::LDX,				nullptr, //A
-		&CPU::BCS,	&CPU::LDA,	nullptr,		nullptr,		&CPU::LDY,	&CPU::LDA,	&CPU::LDX,			nullptr,		&CPU::CLV,	&CPU::LDA,	&CPU::TSX,			nullptr,		&CPU::LDY,			&CPU::LDA,	&CPU::LDX,				nullptr, //B
-		&CPU::CPY,	&CPU::CPA,	&CPU::NOP,	nullptr,		&CPU::CPY,	&CPU::CPA,	&CPU::DEC,			nullptr,		&CPU::INY,	&CPU::CPA,	&CPU::DEX,			nullptr,		&CPU::CPY,			&CPU::CPA,	&CPU::DEC,				nullptr, //C
-		&CPU::BNE,	&CPU::CPA,	nullptr,		nullptr,		&CPU::NOP,	&CPU::CPA,	&CPU::DEC,			nullptr,		&CPU::CLD,	&CPU::CPA,	nullptr,				nullptr,		&CPU::NOP,			&CPU::CPA,	&CPU::DEC,				nullptr, //D
-		&CPU::CPX,	&CPU::SBC,	&CPU::NOP,	nullptr,		&CPU::CPX,	&CPU::SBC,	&CPU::INC,			nullptr,		&CPU::INX,	&CPU::SBC,	&CPU::NOP,			nullptr,		&CPU::CPX,			&CPU::SBC,	&CPU::INC,				nullptr, //E
-		&CPU::BEQ,	&CPU::SBC,	nullptr,		nullptr,		&CPU::NOP,	&CPU::SBC,	&CPU::INC,			nullptr,		&CPU::SED,	&CPU::SBC,	nullptr,				nullptr,		&CPU::NOP,			&CPU::SBC,	&CPU::INC,				nullptr  //F
+	//	0				1				2				3				4				5				6						7				8				9				A						B				C						D				E						F
+		&CPU::BRK,	&CPU::ORA,	&CPU::HLT,	&CPU::SLO,	&CPU::NOP,	&CPU::ORA,	&CPU::ASL_Memory,	&CPU::SLO,	&CPU::PHP,	&CPU::ORA,	&CPU::ASL_Acc,		&CPU::AAC,	&CPU::NOP,			&CPU::ORA,	&CPU::ASL_Memory,	&CPU::SLO, //0
+		&CPU::BPL,	&CPU::ORA,	&CPU::HLT,	&CPU::SLO,	&CPU::NOP,	&CPU::ORA,	&CPU::ASL_Memory,	&CPU::SLO,	&CPU::CLC,	&CPU::ORA,	&CPU::NOP,			&CPU::SLO,	&CPU::NOP,			&CPU::ORA,	&CPU::ASL_Memory,	&CPU::SLO, //1
+		&CPU::JSR,	&CPU::AND,	&CPU::HLT,	&CPU::RLA,	&CPU::BIT,	&CPU::AND,	&CPU::ROL_Memory,	&CPU::RLA,	&CPU::PLP,	&CPU::AND,	&CPU::ROL_Acc,		&CPU::AAC,	&CPU::BIT,			&CPU::AND,	&CPU::ROL_Memory,	&CPU::RLA, //2
+		&CPU::BMI,	&CPU::AND,	&CPU::HLT,	&CPU::RLA,	&CPU::NOP,	&CPU::AND,	&CPU::ROL_Memory,	&CPU::RLA,	&CPU::SEC,	&CPU::AND,	&CPU::NOP,			&CPU::RLA,	&CPU::NOP,			&CPU::AND,	&CPU::ROL_Memory,	&CPU::RLA, //3
+		&CPU::RTI,	&CPU::EOR,	&CPU::HLT,	&CPU::SRE,	&CPU::NOP,	&CPU::EOR,	&CPU::LSR_Memory,	&CPU::SRE,	&CPU::PHA,	&CPU::EOR,	&CPU::LSR_Acc,		&CPU::ASR,	&CPU::JMP_Abs,		&CPU::EOR,	&CPU::LSR_Memory,	&CPU::SRE, //4
+		&CPU::BVC,	&CPU::EOR,	&CPU::HLT,	&CPU::SRE,	&CPU::NOP,	&CPU::EOR,	&CPU::LSR_Memory,	&CPU::SRE,	&CPU::CLI,	&CPU::EOR,	&CPU::NOP,			&CPU::SRE,	&CPU::NOP,			&CPU::EOR,	&CPU::LSR_Memory,	&CPU::SRE, //5
+		&CPU::RTS,	&CPU::ADC,	&CPU::HLT,	&CPU::RRA,	&CPU::NOP,	&CPU::ADC,	&CPU::ROR_Memory,	&CPU::RRA,	&CPU::PLA,	&CPU::ADC,	&CPU::ROR_Acc,		&CPU::ARR,	&CPU::JMP_Ind,		&CPU::ADC,	&CPU::ROR_Memory,	&CPU::RRA, //6
+		&CPU::BVS,	&CPU::ADC,	&CPU::HLT,	&CPU::RRA,	&CPU::NOP,	&CPU::ADC,	&CPU::ROR_Memory,	&CPU::RRA,	&CPU::SEI,	&CPU::ADC,	&CPU::NOP,			&CPU::RRA,	&CPU::NOP,			&CPU::ADC,	&CPU::ROR_Memory,	&CPU::RRA, //7
+		&CPU::NOP,	&CPU::STA,	&CPU::NOP,	&CPU::SAX,	&CPU::STY,	&CPU::STA,	&CPU::STX,			&CPU::SAX,	&CPU::DEY,	&CPU::NOP,	&CPU::TXA,			&CPU::UNK,	&CPU::STY,			&CPU::STA,	&CPU::STX,			&CPU::SAX, //8
+		&CPU::BCC,	&CPU::STA,	&CPU::HLT,	&CPU::AXA,	&CPU::STY,	&CPU::STA,	&CPU::STX,			&CPU::SAX,	&CPU::TYA,	&CPU::STA,	&CPU::TXS,			&CPU::TAS,	&CPU::NOP,			&CPU::STA,	&CPU::NOP,			&CPU::AXA, //9
+		&CPU::LDY,	&CPU::LDA,	&CPU::LDX,	&CPU::LAX,	&CPU::LDY,	&CPU::LDA,	&CPU::LDX,			&CPU::LAX,	&CPU::TAY,	&CPU::LDA,	&CPU::TAX,			&CPU::ATX,	&CPU::LDY,			&CPU::LDA,	&CPU::LDX,			&CPU::LAX, //A
+		&CPU::BCS,	&CPU::LDA,	&CPU::HLT,	&CPU::LAX,	&CPU::LDY,	&CPU::LDA,	&CPU::LDX,			&CPU::LAX,	&CPU::CLV,	&CPU::LDA,	&CPU::TSX,			&CPU::LAS,	&CPU::LDY,			&CPU::LDA,	&CPU::LDX,			&CPU::LAX, //B
+		&CPU::CPY,	&CPU::CPA,	&CPU::NOP,	&CPU::DCP,	&CPU::CPY,	&CPU::CPA,	&CPU::DEC,			&CPU::DCP,	&CPU::INY,	&CPU::CPA,	&CPU::DEX,			&CPU::AXS,	&CPU::CPY,			&CPU::CPA,	&CPU::DEC,			&CPU::DCP, //C
+		&CPU::BNE,	&CPU::CPA,	&CPU::HLT,	&CPU::DCP,	&CPU::NOP,	&CPU::CPA,	&CPU::DEC,			&CPU::DCP,	&CPU::CLD,	&CPU::CPA,	&CPU::NOP,			&CPU::DCP,	&CPU::NOP,			&CPU::CPA,	&CPU::DEC,			&CPU::DCP, //D
+		&CPU::CPX,	&CPU::SBC,	&CPU::NOP,	&CPU::ISB,	&CPU::CPX,	&CPU::SBC,	&CPU::INC,			&CPU::ISB,	&CPU::INX,	&CPU::SBC,	&CPU::NOP,			&CPU::SBC,	&CPU::CPX,			&CPU::SBC,	&CPU::INC,			&CPU::ISB, //E
+		&CPU::BEQ,	&CPU::SBC,	&CPU::HLT,	&CPU::ISB,	&CPU::NOP,	&CPU::SBC,	&CPU::INC,			&CPU::ISB,	&CPU::SED,	&CPU::SBC,	&CPU::NOP,			&CPU::ISB,	&CPU::NOP,			&CPU::SBC,	&CPU::INC,			&CPU::ISB  //F
 	};
 
 	AddrMode addrMode[] = {
 	//	0		1		 2		 3		  4		5		 6		  7		8	  9		A	  B		C		 D		  E		F
 		Imp,  IndX,  None, IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,   //0
 		Rel,  IndY,  None, IndYW, ZeroX, ZeroX, ZeroX, ZeroX, Imp, AbsY,  Imp, AbsYW, AbsX,  AbsX,  AbsXW, AbsXW, //1
-		Abs, IndX,  None, IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,    //2
+		Abs,	IndX,  None, IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,   //2
 		Rel,  IndY,  None, IndYW, ZeroX, ZeroX, ZeroX, ZeroX, Imp, AbsY,  Imp, AbsYW, AbsX,  AbsX,  AbsXW, AbsXW, //3
 		Imp,  IndX,  None, IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,   //4
 		Rel,  IndY,  None, IndYW, ZeroX, ZeroX, ZeroX, ZeroX, Imp, AbsY,  Imp, AbsYW, AbsX,  AbsX,  AbsXW, AbsXW, //5
 		Imp,  IndX,  None, IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,   //6
 		Rel,  IndY,  None, IndYW, ZeroX, ZeroX, ZeroX, ZeroX, Imp, AbsY,  Imp, AbsYW, AbsX,  AbsX,  AbsXW, AbsXW, //7
 		Imm,  IndX,  Imm,  IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,   //8
-		Rel,  IndYW, None, IndY,  ZeroX, ZeroX, ZeroY, ZeroY, Imp, AbsYW, Imp, AbsY,  AbsXW, AbsXW, AbsYW, AbsY,  //9
+		Rel,  IndYW, None, IndYW, ZeroX, ZeroX, ZeroY, ZeroY, Imp, AbsYW, Imp, AbsYW, AbsXW, AbsXW, AbsYW, AbsYW, //9
 		Imm,  IndX,  Imm,  IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,   //A
 		Rel,  IndY,  None, IndY,  ZeroX, ZeroX, ZeroY, ZeroY, Imp, AbsY,  Imp, AbsY,  AbsX,  AbsX,  AbsY,  AbsY,  //B
 		Imm,  IndX,  Imm,  IndX,  Zero,  Zero,  Zero,  Zero,  Imp, Imm,   Imp, Imm,   Abs,   Abs,   Abs,   Abs,   //C

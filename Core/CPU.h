@@ -651,8 +651,187 @@ private:
 	}
 
 	void NOP() {
+		//Make sure the nop operation takes as many cycles as meant to
+		GetOperandValue();
 	}
+
+	#pragma endregion
+
+	#pragma region Unofficial OpCodes
+
+	void SLO()
+	{
+		//ASL & ORA
+		uint8_t value = GetOperandValue();
+		MemoryWrite(GetOperand(), value); //Dummy write
+		uint8_t shiftedValue = ASL(value);
+		SetA(A() | shiftedValue);
+		MemoryWrite(GetOperand(), shiftedValue);
+	}
+	
+	void SRE()
+	{
+		//ROL & AND
+		uint8_t value = GetOperandValue();
+		MemoryWrite(GetOperand(), value); //Dummy write
+		uint8_t shiftedValue = LSR(value);
+		SetA(A() ^ shiftedValue);
+		MemoryWrite(GetOperand(), shiftedValue);
+	}
+	
+	void RLA()
+	{
+		//LSR & EOR
+		uint8_t value = GetOperandValue();
+		MemoryWrite(GetOperand(), value); //Dummy write
+		uint8_t shiftedValue = ROL(value);
+		SetA(A() & shiftedValue);
+		MemoryWrite(GetOperand(), shiftedValue);
+	}
+
+	void RRA()
+	{
+		//ROR & ADC
+		uint8_t value = GetOperandValue();
+		MemoryWrite(GetOperand(), value); //Dummy write
+		uint8_t shiftedValue = ROR(value);
+		ADD(shiftedValue);
+		MemoryWrite(GetOperand(), shiftedValue);
+	}
+
+	void SAX()
+	{
+		//STA & STX
+		MemoryWrite(GetOperand(), A() & X());
+	}
+
+	void LAX()
+	{
+		//LDA & LDX
+		uint8_t value = GetOperandValue();
+		SetX(value);
+		SetA(value);
+	}
+
+	void DCP()
+	{
+		//DEC & CMP
+		uint8_t value = GetOperandValue();
+		MemoryWrite(GetOperand(), value); //Dummy write
+		value--;
+		CMP(A(), value);
+		MemoryWrite(GetOperand(), value);
+	}
+
+	void ISB()
+	{
+		//INC & SBC
+		uint8_t value = GetOperandValue();
+		MemoryWrite(GetOperand(), value); //Dummy write
+		value++;
+		ADD(value ^ 0xFF);
+		MemoryWrite(GetOperand(), value);
+	}
+
+	void AAC()
+	{
+		SetA(A() & GetOperandValue());
+
+		ClearFlags(PSFlags::Carry);
+		if(CheckFlag(PSFlags::Negative)) {
+			SetFlags(PSFlags::Carry);
+		}
+	}
+
+	void ASR()
+	{
+		ClearFlags(PSFlags::Carry);
+		SetA(A() & GetOperandValue());
+		if(A() & 0x01) {
+			SetFlags(PSFlags::Carry);
+		}
+		SetA(A() >> 1);
+	}
+
+	void ARR()
+	{
+		SetA(((A() & GetOperandValue()) >> 1) | (CheckFlag(PSFlags::Carry) ? 0x80 : 0x00));
+		ClearFlags(PSFlags::Carry | PSFlags::Overflow);
+		if(A() & 0x40) {
+			SetFlags(PSFlags::Carry);
+		}
+		if((CheckFlag(PSFlags::Carry) ? 0x01 : 0x00) ^ ((A() >> 5) & 0x01)) {
+			SetFlags(PSFlags::Overflow);
+		}
+	}
+
+	void ATX()
+	{
+		//LDA & TAX
+		uint8_t value = GetOperandValue();
+		SetA(value); //LDA
+		SetX(A()); //TAX
+		SetA(A()); //Update flags based on A
+	}
+
+	void AXS()
+	{
+		//CMP & DEX
+		uint8_t opValue = GetOperandValue();
+		uint8_t value = (A() & X()) - opValue;
 		
+		ClearFlags(PSFlags::Carry);
+		if((A() & X()) >= opValue) {
+			SetFlags(PSFlags::Carry);
+		}
+
+		SetX(value);
+	}
+
+	#pragma endregion
+
+	#pragma region Unimplemented/Incorrect Unofficial OP codes
+
+	void HLT()
+	{
+		//normally freezes the cpu, we can probably assume nothing will ever call this
+		GetOperandValue();
+	}
+
+	void UNK()
+	{
+		//Make sure we take the right amount of cycles (not reliable for operations that write to memory, etc.)
+		GetOperandValue();
+	}
+
+	void AXA()
+	{
+		uint16_t addr = GetOperand();
+		
+		//"This opcode stores the result of A AND X AND the high byte of the target address of the operand +1 in memory."	
+		//This may not be the actual behavior, but the read/write operations are needed for proper cycle counting
+		MemoryWrite(GetOperand(), ((addr >> 8) + 1) & A() & X());
+	}
+
+	void TAS()
+	{
+		//"AND X register with accumulator and store result in stack
+		//pointer, then AND stack pointer with the high byte of the
+		//target address of the argument + 1. Store result in memory."
+		uint16_t addr = GetOperand();
+		SetSP(X() & A());
+		MemoryWrite(addr, SP() & ((addr >> 8) + 1));
+	}
+
+	void LAS()
+	{
+		//"AND memory with stack pointer, transfer result to accumulator, X register and stack pointer."
+		uint8_t value = GetOperandValue();
+		SetA(value & SP());
+		SetX(A());
+		SetSP(A());
+	}
+
 	#pragma endregion
 
 protected:
