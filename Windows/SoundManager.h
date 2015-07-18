@@ -23,7 +23,7 @@ private:
 
 private:
 	uint16_t _lastWriteOffset = 0;
-	const uint16_t _latency = APU::SampleRate / (1000 / 150);  // == 150ms latency
+	uint16_t _previousLatency = 0;
 
 	IDirectSound8* _directSound;
 	IDirectSoundBuffer* _primaryBuffer;

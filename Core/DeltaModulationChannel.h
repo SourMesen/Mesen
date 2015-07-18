@@ -86,7 +86,7 @@ protected:
 	}
 
 public:
-	DeltaModulationChannel(Blip_Buffer *buffer, MemoryManager* memoryManager) : BaseApuChannel(buffer)
+	DeltaModulationChannel(AudioChannel channel, Blip_Buffer *buffer, MemoryManager* memoryManager) : BaseApuChannel(channel, buffer)
 	{
 		_memoryManager = memoryManager;
 		_clockDivider = 1;

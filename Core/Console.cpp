@@ -4,12 +4,12 @@
 #include "BaseMapper.h"
 #include "MapperFactory.h"
 #include "Debugger.h"
+#include "MessageManager.h"
+#include "EmulationSettings.h"
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
-#include "../Core/MessageManager.h"
 
 shared_ptr<Console> Console::Instance(new Console());
-uint32_t Console::Flags = 0;
 
 Console::Console()
 {
@@ -127,7 +127,7 @@ void Console::ResetComponents(bool softReset)
 void Console::Stop()
 {
 	_stop = true;
-	Console::ClearFlags(EmulationFlags::Paused);
+	EmulationSettings::ClearFlags(EmulationFlags::Paused);
 	_stopLock.Acquire();
 	_stopLock.Release();
 }
@@ -145,26 +145,11 @@ void Console::Resume()
 	Console::Instance->_pauseLock.Release();
 }
 
-void Console::SetFlags(int flags)
-{
-	Console::Flags |= flags;
-}
-
-void Console::ClearFlags(int flags)
-{
-	Console::Flags &= ~flags;
-}
-
-bool Console::CheckFlag(int flag)
-{
-	return (Console::Flags & flag) == flag;
-}
-
 void Console::Run()
 {
 	Timer clockTimer;
 	double elapsedTime = 0;
-	double targetTime = 16.6666666666666666;
+	double targetTime = 16.63926405550947; //~60.0988fps
 
 	_runLock.Acquire();
 	_stopLock.Acquire();
@@ -177,7 +162,7 @@ void Console::Run()
 			lastFrameNumber = currentFrameNumber;
 			_cpu->EndFrame();
 
-			if(CheckFlag(EmulationFlags::LimitFPS)) {
+			if(EmulationSettings::CheckFlag(EmulationFlags::LimitFPS)) {
 				elapsedTime = clockTimer.GetElapsedMS();
 				while(targetTime > elapsedTime) {
 					if(targetTime - elapsedTime > 2) {
@@ -197,14 +182,14 @@ void Console::Run()
 				_runLock.Acquire();
 			}
 
-			if(CheckFlag(EmulationFlags::Paused) && !_stop) {
+			if(EmulationSettings::CheckFlag(EmulationFlags::Paused) && !_stop) {
 				MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
 				_runLock.Release();
 				
 				//Prevent audio from looping endlessly while game is paused
 				_apu->StopAudio();
 
-				while(CheckFlag(EmulationFlags::Paused)) {
+				while(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
 				}

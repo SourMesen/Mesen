@@ -8,12 +8,6 @@
 #include "ControlManager.h"
 #include "../Utilities/SimpleLock.h"
 
-enum EmulationFlags
-{
-	LimitFPS = 0x01,
-	Paused = 0x02,
-};
-
 class Debugger;
 class BaseMapper;
 
@@ -21,7 +15,6 @@ class Console
 {
 	private:
 		static shared_ptr<Console> Instance;
-		static uint32_t Flags;
 		SimpleLock _pauseLock;
 		SimpleLock _runLock;
 		SimpleLock _stopLock;
@@ -66,10 +59,6 @@ class Console
 		static bool LoadROM(string romName, uint32_t crc32Hash);
 		static string FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash);
 		static string GetROMPath();
-
-		static bool CheckFlag(int flag);
-		static void SetFlags(int flags);
-		static void ClearFlags(int flags);
 
 		static shared_ptr<Console> GetInstance();
 };

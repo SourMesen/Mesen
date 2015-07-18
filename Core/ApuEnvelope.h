@@ -15,7 +15,7 @@ private:
 	uint8_t _counter = 0;
 
 protected:
-	ApuEnvelope(Blip_Buffer* buffer) : ApuLengthCounter(buffer)
+	ApuEnvelope(AudioChannel channel, Blip_Buffer* buffer) : ApuLengthCounter(channel, buffer)
 	{
 	}
 

@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "IMemoryHandler.h"
 #include "../BlipBuffer/Blip_Buffer.h"
+#include "EmulationSettings.h"
 
 template<int range>
 class BaseApuChannel : public IMemoryHandler, public Snapshotable
@@ -11,18 +12,32 @@ private:
 	uint16_t _lastOutput = 0;
 	uint32_t _previousCycle = 0;
 	Blip_Buffer *_buffer;
+	AudioChannel _channel;
+	double _baseVolume;
 
 protected:
 	uint16_t _timer = 0;
 	uint16_t _period = 0;
 	uint32_t _clockDivider = 2; //All channels except triangle clock overy other cpu clock
 
+	void SetVolume(double volume)
+	{
+		_baseVolume = volume;
+		UpdateSynthVolume();
+	}
+
+	void UpdateSynthVolume()
+	{
+		_synth->volume(_baseVolume * EmulationSettings::GetChannelVolume(_channel) * 2);
+	}
+
 public:
 	virtual void Clock() = 0;
 	virtual bool GetStatus() = 0;
 
-	BaseApuChannel(Blip_Buffer *buffer)
+	BaseApuChannel(AudioChannel channel, Blip_Buffer *buffer)
 	{
+		_channel = channel;
 		_buffer = buffer;
 		_synth.reset(new Blip_Synth<blip_good_quality, range>());
 		
@@ -48,11 +63,6 @@ public:
 		if(!saving) {
 			_buffer->clear();
 		}
-	}
-
-	void SetVolume(double volume)
-	{
-		_synth->volume(volume);
 	}
 
 	virtual void Run(uint32_t targetCycle)
@@ -91,5 +101,8 @@ public:
 	void EndFrame()
 	{
 		_previousCycle = 0;
+
+		//Update options at the end of the cycle
+		UpdateSynthVolume();
 	}
 };

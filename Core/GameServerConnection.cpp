@@ -10,6 +10,7 @@
 #include "Console.h"
 #include "ControlManager.h"
 #include "ClientConnectionData.h"
+#include "EmulationSettings.h"
 
 GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, int controllerPort, IGameBroadcaster* gameBroadcaster) : GameConnection(socket, nullptr)
 {
@@ -54,7 +55,7 @@ void GameServerConnection::SendGameState()
 
 void GameServerConnection::SendGameInformation()
 {
-	SendNetMessage(GameInformationMessage(Console::GetROMPath(), _controllerPort, Console::CheckFlag(EmulationFlags::Paused)));
+	SendNetMessage(GameInformationMessage(Console::GetROMPath(), _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused)));
 }
 
 void GameServerConnection::SendMovieData(uint8_t state, uint8_t port)

@@ -248,10 +248,10 @@
 			// 
 			// mnuAudioConfig
 			// 
-			this.mnuAudioConfig.Enabled = false;
 			this.mnuAudioConfig.Name = "mnuAudioConfig";
 			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
 			this.mnuAudioConfig.Text = "Audio";
+			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
 			// 
 			// mnuTools
 			// 

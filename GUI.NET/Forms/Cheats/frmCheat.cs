@@ -46,7 +46,6 @@ namespace Mesen.GUI.Forms.Cheats
 			AddBinding("CompareValue", txtCompare);
 			AddBinding("IsRelativeAddress", radRelativeAddress.Parent);
 
-			UpdateUI();
 			UpdateOKButton();
 		}
 

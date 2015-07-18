@@ -282,6 +282,7 @@
     <ClInclude Include="Debugger.h" />
     <ClInclude Include="Disassembler.h" />
     <ClInclude Include="DisassemblyInfo.h" />
+    <ClInclude Include="EmulationSettings.h" />
     <ClInclude Include="GameClient.h" />
     <ClInclude Include="GameClientConnection.h" />
     <ClInclude Include="GameConnection.h" />
@@ -336,6 +337,7 @@
     <ClCompile Include="Debugger.cpp" />
     <ClCompile Include="Disassembler.cpp" />
     <ClCompile Include="DisassemblyInfo.cpp" />
+    <ClCompile Include="EmulationSettings.cpp" />
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="GameClientConnection.cpp" />
     <ClCompile Include="GameConnection.cpp" />

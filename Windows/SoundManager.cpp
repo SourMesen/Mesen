@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SoundManager.h"
+#include "../Core/EmulationSettings.h"
 
 SoundManager::SoundManager(HWND hwnd)
 {
@@ -165,7 +166,11 @@ void SoundManager::Reset()
 
 void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize)
 {
-	static const int32_t byteLatency = _latency * (APU::BitsPerSample / 8);
+	int32_t byteLatency = (int32_t)((float)(APU::SampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * (APU::BitsPerSample / 8));
+	if(byteLatency != _previousLatency) {
+		Reset();
+		_previousLatency = byteLatency;
+	}
 	DWORD status;
 	_secondaryBuffer->GetStatus(&status);
 
@@ -180,7 +185,7 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize)
 		_secondaryBuffer->GetCurrentPosition(&currentPlayCursor, nullptr);
 		
 		int32_t playWriteByteLatency = (_lastWriteOffset - currentPlayCursor);
-		if(playWriteByteLatency < -byteLatency * 2) {
+		if(playWriteByteLatency < 0) {
 			playWriteByteLatency = 0xFFFF - currentPlayCursor + _lastWriteOffset;
 		}
 
@@ -189,10 +194,10 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize)
 			//Out of sync, move back to where we should be (start of the latency buffer)
 			_secondaryBuffer->SetFrequency(44100);
 			_secondaryBuffer->SetCurrentPosition(_lastWriteOffset - byteLatency);
-		} else if(latencyGap < -200) {
+		} else if(latencyGap < -byteLatency/35) {
 			//Playing too fast, slow down playing
 			_secondaryBuffer->SetFrequency(43900);
-		} else if(latencyGap > 200) {
+		} else if(latencyGap > byteLatency/35) {
 			//Playing too slow, speed up
 			_secondaryBuffer->SetFrequency(44300);
 		} else {

@@ -3,6 +3,7 @@
 #include "VirtualController.h"
 #include "ControlManager.h"
 #include "Console.h"
+#include "EmulationSettings.h"
 
 VirtualController::VirtualController(uint8_t port)
 {
@@ -44,9 +45,9 @@ ButtonState VirtualController::GetButtonState()
 	_queueSize--;
 
 	if(_queueSize.load() > _minimumBuffer) {
-		Console::ClearFlags(EmulationFlags::LimitFPS);
+		EmulationSettings::ClearFlags(EmulationFlags::LimitFPS);
 	} else {
-		Console::SetFlags(EmulationFlags::LimitFPS);
+		EmulationSettings::SetFlags(EmulationFlags::LimitFPS);
 	}
 
 	_writeLock.Release();

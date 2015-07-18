@@ -11,6 +11,7 @@
 #include "../Core/SaveStateManager.h"
 #include "../Core/CheatManager.h"
 #include "../Core/StandardController.h"
+#include "../Core/EmulationSettings.h"
 
 static NES::Renderer *_renderer = nullptr;
 static SoundManager *_soundManager = nullptr;
@@ -79,8 +80,8 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport void __stdcall Resume() { Console::ClearFlags(EmulationFlags::Paused); }
-		DllExport int __stdcall IsPaused() { return Console::CheckFlag(EmulationFlags::Paused); }
+		DllExport void __stdcall Resume() { EmulationSettings::ClearFlags(EmulationFlags::Paused); }
+		DllExport int __stdcall IsPaused() { return EmulationSettings::CheckFlag(EmulationFlags::Paused); }
 		DllExport void __stdcall Stop()
 		{
 			if(Console::GetInstance()) {
@@ -94,8 +95,6 @@ namespace InteropEmu {
 		}
 
 		DllExport void __stdcall Reset() { Console::Reset(); }
-		DllExport void __stdcall SetFlags(int flags) { Console::SetFlags(flags); }
-		DllExport void __stdcall ClearFlags(int flags) { Console::ClearFlags(flags); }
 
 		DllExport void __stdcall StartServer(uint16_t port) { GameServer::StartServer(port); }
 		DllExport void __stdcall StopServer() { GameServer::StopServer(); }
@@ -120,7 +119,7 @@ namespace InteropEmu {
 		DllExport void __stdcall Pause()
 		{
 			if(!IsConnected()) {
-				Console::SetFlags(EmulationFlags::Paused);
+				EmulationSettings::SetFlags(EmulationFlags::Paused);
 			}
 		}
 
@@ -160,5 +159,11 @@ namespace InteropEmu {
 		DllExport void __stdcall CheatAddGameGenie(char* code) { CheatManager::AddGameGenieCode(code); }
 		DllExport void __stdcall CheatAddProActionRocky(uint32_t code) { CheatManager::AddProActionRockyCode(code); }
 		DllExport void __stdcall CheatClear() { CheatManager::ClearCodes(); }
+
+		DllExport void __stdcall SetFlags(uint32_t flags) { EmulationSettings::SetFlags(flags); }
+		DllExport void __stdcall ClearFlags(uint32_t flags) { EmulationSettings::ClearFlags(flags); }
+		DllExport void __stdcall SetChannelVolume(uint32_t channel, double volume) { EmulationSettings::SetChannelVolume((AudioChannel)channel, volume); }
+		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { EmulationSettings::SetAudioLatency(msLatency); }
+
 	}
 }

@@ -30,7 +30,7 @@ class APU : public Snapshotable, public IMemoryHandler
 
 		unique_ptr<ApuFrameCounter> _frameCounter;
 
-		Blip_Buffer* _blipBuffer;
+		unique_ptr<Blip_Buffer> _blipBuffer;
 		int16_t* _outputBuffer;
 		MemoryManager* _memoryManager;
 

@@ -7,6 +7,7 @@
 #include "NoiseChannel.h"
 #include "DeltaModulationChannel.h"
 #include "ApuFrameCounter.h"
+#include "EmulationSettings.h"
 
 APU* APU::Instance = nullptr;
 IAudioDevice* APU::AudioDevice = nullptr;
@@ -16,17 +17,17 @@ APU::APU(MemoryManager* memoryManager)
 	APU::Instance = this;
 
 	_memoryManager = memoryManager;
-	_blipBuffer = new Blip_Buffer();
+	_blipBuffer.reset(new Blip_Buffer());
 	_blipBuffer->sample_rate(APU::SampleRate);
 	_blipBuffer->clock_rate(CPU::ClockRate);
 
 	_outputBuffer = new int16_t[APU::SamplesPerFrame];
 
-	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(_blipBuffer, true)));
-	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(_blipBuffer, false)));
-	_triangleChannel.reset(new TriangleChannel(_blipBuffer));
-	_noiseChannel.reset(new NoiseChannel(_blipBuffer));
-	_deltaModulationChannel.reset(new DeltaModulationChannel(_blipBuffer, _memoryManager));
+	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(AudioChannel::Square1, _blipBuffer.get(), true)));
+	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(AudioChannel::Square2, _blipBuffer.get(), false)));
+	_triangleChannel.reset(new TriangleChannel(AudioChannel::Triangle, _blipBuffer.get()));
+	_noiseChannel.reset(new NoiseChannel(AudioChannel::Noise, _blipBuffer.get()));
+	_deltaModulationChannel.reset(new DeltaModulationChannel(AudioChannel::DMC, _blipBuffer.get(), _memoryManager));
 	_frameCounter.reset(new ApuFrameCounter(&APU::FrameCounterTick));
 
 	_memoryManager->RegisterIODevice(_squareChannel[0].get());
@@ -146,7 +147,7 @@ void APU::ExecStatic()
 void APU::Exec()
 {
 	_currentCycle++;
-	if(_currentCycle == 20000) {
+	if(_currentCycle == 10000) {
 		Run();
 
 		_squareChannel[0]->EndFrame();
@@ -158,7 +159,6 @@ void APU::Exec()
 		_blipBuffer->end_frame(_currentCycle);
 
 		// Read some samples out of Blip_Buffer if there are enough to fill our output buffer
-		uint32_t availableSampleCount = _blipBuffer->samples_avail();
 		size_t sampleCount = _blipBuffer->read_samples(_outputBuffer, APU::SamplesPerFrame);
 		if(APU::AudioDevice) {
 			APU::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * BitsPerSample / 8));

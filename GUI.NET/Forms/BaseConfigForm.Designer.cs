@@ -37,39 +37,19 @@ namespace Mesen.GUI.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOK = new System.Windows.Forms.Button();
-			this.panel1.SuspendLayout();
+			this.baseConfigPanel = new System.Windows.Forms.Panel();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.baseConfigPanel.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// panel1
-			// 
-			this.panel1.Controls.Add(this.flowLayoutPanel1);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 232);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(284, 30);
-			this.panel1.TabIndex = 0;
-			// 
-			// flowLayoutPanel1
-			// 
-			this.flowLayoutPanel1.Controls.Add(this.btnCancel);
-			this.flowLayoutPanel1.Controls.Add(this.btnOK);
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(284, 30);
-			this.flowLayoutPanel1.TabIndex = 4;
-			// 
 			// btnCancel
 			// 
+			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(206, 3);
+			this.btnCancel.Location = new System.Drawing.Point(84, 3);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 0;
@@ -79,8 +59,9 @@ namespace Mesen.GUI.Forms
 			// 
 			// btnOK
 			// 
+			this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnOK.Location = new System.Drawing.Point(125, 3);
+			this.btnOK.Location = new System.Drawing.Point(3, 3);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(75, 23);
 			this.btnOK.TabIndex = 1;
@@ -88,14 +69,34 @@ namespace Mesen.GUI.Forms
 			this.btnOK.UseVisualStyleBackColor = true;
 			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
 			// 
+			// baseConfigPanel
+			// 
+			this.baseConfigPanel.Controls.Add(this.flowLayoutPanel1);
+			this.baseConfigPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 233);
+			this.baseConfigPanel.Name = "baseConfigPanel";
+			this.baseConfigPanel.Size = new System.Drawing.Size(327, 29);
+			this.baseConfigPanel.TabIndex = 1;
+			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.Controls.Add(this.btnOK);
+			this.flowLayoutPanel1.Controls.Add(this.btnCancel);
+			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(162, 0);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(165, 29);
+			this.flowLayoutPanel1.TabIndex = 2;
+			// 
 			// BaseConfigForm
 			// 
 			this.AcceptButton = this.btnOK;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(284, 262);
-			this.Controls.Add(this.panel1);
+			this.ClientSize = new System.Drawing.Size(327, 262);
+			this.Controls.Add(this.baseConfigPanel);
 			this.Name = "BaseConfigForm";
-			this.panel1.ResumeLayout(false);
+			this.baseConfigPanel.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -103,9 +104,9 @@ namespace Mesen.GUI.Forms
 
 		#endregion
 
-		private System.Windows.Forms.Panel panel1;
-		protected System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		protected Button btnCancel;
 		protected Button btnOK;
+		protected Panel baseConfigPanel;
+		private FlowLayoutPanel flowLayoutPanel1;
 	}
 }

@@ -25,7 +25,7 @@ protected:
 	}
 
 public:
-	ApuLengthCounter(Blip_Buffer* buffer) : BaseApuChannel(buffer)
+	ApuLengthCounter(AudioChannel channel, Blip_Buffer* buffer) : BaseApuChannel(channel, buffer)
 	{
 	}
 

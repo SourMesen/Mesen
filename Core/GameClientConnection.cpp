@@ -7,6 +7,7 @@
 #include "GameInformationMessage.h"
 #include "SaveStateMessage.h"
 #include "Console.h"
+#include "EmulationSettings.h"
 #include "ControlManager.h"
 #include "VirtualController.h"
 #include "ClientConnectionData.h"
@@ -84,9 +85,9 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 
 			_gameLoaded = gameInfo->AttemptLoadGame();
 			if(gameInfo->IsPaused()) {
-				Console::SetFlags(EmulationFlags::Paused);
+				EmulationSettings::SetFlags(EmulationFlags::Paused);
 			} else {
-				Console::ClearFlags(EmulationFlags::Paused);
+				EmulationSettings::ClearFlags(EmulationFlags::Paused);
 			}
 
 			break;

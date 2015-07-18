@@ -31,8 +31,6 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void Stop();
 		[DllImport(DLLPath, EntryPoint="GetROMPath")] private static extern IntPtr GetROMPathWrapper();
 		[DllImport(DLLPath)] public static extern void Reset();
-		[DllImport(DLLPath)] public static extern void SetFlags(int flags);
-		[DllImport(DLLPath)] public static extern void ClearFlags(int flags);
 		[DllImport(DLLPath)] public static extern void StartServer(UInt16 port);
 		[DllImport(DLLPath)] public static extern void StopServer();
 		[DllImport(DLLPath)] public static extern bool IsServerRunning();
@@ -62,6 +60,11 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void CheatAddGameGenie(string code);
 		[DllImport(DLLPath)] public static extern void CheatAddProActionRocky(UInt32 code);
 		[DllImport(DLLPath)] public static extern void CheatClear();
+
+		[DllImport(DLLPath)] public static extern void SetFlags(UInt32 flags);
+		[DllImport(DLLPath)] public static extern void ClearFlags(UInt32 flags);
+		[DllImport(DLLPath)] public static extern void SetChannelVolume(UInt32 channel, double volume);
+		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)]	public static extern void DebugRelease();

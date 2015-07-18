@@ -77,7 +77,7 @@ protected:
 	}
 
 public:
-	SquareChannel(Blip_Buffer *buffer, bool isChannel1) : ApuEnvelope(buffer)
+	SquareChannel(AudioChannel channel, Blip_Buffer *buffer, bool isChannel1) : ApuEnvelope(channel, buffer)
 	{
 		SetVolume(0.1128);
 		_isChannel1 = isChannel1;

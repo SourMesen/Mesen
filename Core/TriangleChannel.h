@@ -29,7 +29,7 @@ protected:
 	}
 
 public:
-	TriangleChannel(Blip_Buffer* buffer) : ApuLengthCounter(buffer)
+	TriangleChannel(AudioChannel channel, Blip_Buffer* buffer) : ApuLengthCounter(channel, buffer)
 	{
 		_clockDivider = 1; //Triangle clocks at the same speed as the cpu
 		SetVolume(0.12765);

@@ -56,6 +56,7 @@ namespace Mesen.GUI.Forms
 			}
 
 			ControllerInfo.ApplyConfig();
+			AudioInfo.ApplyConfig();
 			
 			InteropEmu.SetFlags((int)EmulationFlags.LimitFPS);
 		}
@@ -393,6 +394,12 @@ namespace Mesen.GUI.Forms
 		private void mnuInput_Click(object sender, EventArgs e)
 		{
 			frmInputConfig frm = new frmInputConfig();
+			frm.ShowDialog();
+		}
+
+		private void mnuAudioConfig_Click(object sender, EventArgs e)
+		{
+			frmAudioConfig frm = new frmAudioConfig();
 			frm.ShowDialog();
 		}
 	}

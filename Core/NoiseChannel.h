@@ -37,7 +37,7 @@ protected:
 	}
 
 public:
-	NoiseChannel(Blip_Buffer* buffer) : ApuEnvelope(buffer)
+	NoiseChannel(AudioChannel channel, Blip_Buffer* buffer) : ApuEnvelope(channel, buffer)
 	{
 		SetVolume(0.0741);
 	}

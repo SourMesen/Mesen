@@ -5,7 +5,7 @@
 #include "DirectXTK/DDSTextureLoader.h"
 #include "DirectXTK/WICTextureLoader.h"
 #include "../Core/PPU.h"
-#include "../Core/Console.h"
+#include "../Core/EmulationSettings.h"
 #include "../Core/MessageManager.h"
 #include "../Utilities/UTF8Util.h"
 
@@ -369,6 +369,11 @@ namespace NES
 		sourceRect.top = 8;
 		sourceRect.bottom = _screenHeight - 8;
 
+		RECT destRect;
+		destRect.left = 0;
+		destRect.top = 0;
+		destRect.right = _screenWidth * 4;
+		destRect.bottom = (_screenHeight - 16) * 4;
 		XMVECTOR position{ { 0, 0 } };
 
 		D3D11_MAPPED_SUBRESOURCE dd;
@@ -383,7 +388,7 @@ namespace NES
 		_pDeviceContext->Unmap(_pTexture, 0);
 
 		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
-		_spriteBatch->Draw(nesOutputBuffer, position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
+		_spriteBatch->Draw(nesOutputBuffer, destRect, &sourceRect);
 		nesOutputBuffer->Release();
 	}
 
@@ -418,7 +423,7 @@ namespace NES
 
 	void Renderer::Render()
 	{
-		if(_frameChanged || Console::CheckFlag(EmulationFlags::Paused) || !_toasts.empty()) {
+		if(_frameChanged || EmulationSettings::CheckFlag(EmulationFlags::Paused) || !_toasts.empty()) {
 			_frameChanged = false;
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
@@ -434,7 +439,7 @@ namespace NES
 
 			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);*/
 
-			if(Console::CheckFlag(EmulationFlags::Paused)) {
+			if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
 				DrawPauseScreen();
 			} else {
 				//Draw FPS counter

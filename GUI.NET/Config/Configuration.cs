@@ -15,6 +15,7 @@ namespace Mesen.GUI.Config
 		public PlayerProfile Profile;
 		public ClientConnectionInfo ClientConnectionInfo;
 		public ServerInfo ServerInfo;
+		public AudioInfo AudioInfo;
 		public List<string> RecentFiles;
 		public List<CheatInfo> Cheats;
 		public List<ControllerInfo> Controllers;
@@ -25,6 +26,7 @@ namespace Mesen.GUI.Config
 			Profile = new PlayerProfile();
 			ClientConnectionInfo = new ClientConnectionInfo();
 			ServerInfo = new ServerInfo();
+			AudioInfo = new AudioInfo();
 			RecentFiles = new List<string>();
 			Controllers = new List<ControllerInfo>();
 		}
