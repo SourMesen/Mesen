@@ -22,11 +22,8 @@ extern "C"
 
 	DllExport void __stdcall DebugGetState(DebugState *state) { _debugger->GetState(state); }
 
-	DllExport void DebugSetBreakpoints()
-	{
-
-	}
-
+	DllExport void DebugAddBreakpoint(uint32_t type, uint32_t address, int isAbsoluteAddr) { _debugger->AddBreakpoint((BreakpointType)type, address, isAbsoluteAddr == 1); }
+		
 	DllExport void __stdcall DebugRun() { _debugger->Run(); }
 	DllExport void __stdcall DebugStep(uint32_t count) { _debugger->Step(count); }
 	DllExport void __stdcall DebugStepCycles(uint32_t count) { _debugger->StepCycles(count); }

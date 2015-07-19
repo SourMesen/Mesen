@@ -190,7 +190,7 @@ namespace Mesen.GUI.Debugger
 		private UInt32 GetLineAddress(int lineIndex)
 		{
 			int lineStartIndex = txtCodeMargin.GetFirstCharIndexFromLine(lineIndex);
-			txtCodeMargin.SelectionStart = lineStartIndex + 3;
+			txtCodeMargin.SelectionStart = lineStartIndex;
 			txtCodeMargin.SelectionLength = 4;
 			return ParseHexAddress(txtCodeMargin.SelectedText);
 		}
@@ -210,6 +210,12 @@ namespace Mesen.GUI.Debugger
 			txtCode.SelectionBackColor = bgColor;
 			txtCode.SelectionColor = fgColor;
 			txtCode.SelectionLength = 0;
+		}
+
+		public void ToggleBreakpoint()
+		{
+			HighlightLine(GetCurrentLine(), Color.FromArgb(158, 84, 94), Color.White);
+			InteropEmu.DebugAddBreakpoint(BreakpointType.Execute, GetLineAddress(GetCurrentLine()), false);
 		}
 
 		#region Events

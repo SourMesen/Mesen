@@ -69,7 +69,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)]	public static extern void DebugRelease();
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
-		//[DllImport(DLLPath)] public static extern void DebugSetBreakpoints();
+		[DllImport(DLLPath)] public static extern void DebugAddBreakpoint(BreakpointType type, UInt32 address, bool isAbsoluteAddr);
 		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
@@ -264,6 +264,13 @@ namespace Mesen.GUI
 		LimitFPS = 0x02,
 		ShowFPS = 0x04,
 	}
+
+	public enum BreakpointType
+	{
+		Execute = 0,
+		Read = 1,
+		Write = 2
+	};
 
 	public class MD5Helper
 	{

@@ -79,9 +79,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ToggleBreakpoint()
 		{
-			this.ctrlDebuggerCode.HighlightLine(this.ctrlDebuggerCode.GetCurrentLine(), Color.FromArgb(158, 84, 94), Color.White);
-
-			//this.AddBreakpoint(this.GetLineAddress(lineIndex));
+			this.ctrlDebuggerCode.ToggleBreakpoint();
 		}
 
 		private void mnuContinue_Click(object sender, EventArgs e)
