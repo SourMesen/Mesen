@@ -79,7 +79,9 @@ private:
 
 	uint8_t GetOPCode()
 	{
-		return MemoryRead(_state.PC++, true);
+		uint8_t opCode = MemoryRead(_state.PC, true);
+		_state.PC++;
+		return opCode;
 	}
 
 	void DummyRead()
@@ -610,7 +612,6 @@ private:
 
 			SetPC(MemoryReadWord(CPU::NMIVector));
 		} else {
-
 			Push((uint8_t)flags);
 			SetFlags(PSFlags::Interrupt);
 
