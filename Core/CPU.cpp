@@ -60,7 +60,9 @@ void CPU::Reset(bool softReset)
 	_cycleCount = 0;
 	_relativeCycleCount = 0;
 
-	_state.PC = MemoryReadWord(CPU::ResetVector);
+	//Use _memoryManager->Read() directly to prevent clocking the PPU/APU when setting PC at reset
+	_state.PC = _memoryManager->Read(CPU::ResetVector) | _memoryManager->Read(CPU::ResetVector+1) << 8;
+
 	if(softReset) {
 		SetFlags(PSFlags::Interrupt);
 		_state.SP -= 0x03;
@@ -78,36 +80,24 @@ void CPU::Reset(bool softReset)
 
 uint32_t CPU::Exec()
 {
-	if(!_runNMI && !_runIRQ) {
-		uint8_t opCode = GetOPCode();
-		if(_state.NMIFlag) {
-			_runNMI = true;
-		} else if(opCode != 0x40 && _state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt)) {
-			_runIRQ = true;
-		}
+	uint8_t opCode = GetOPCode();
+	_instAddrMode = _addrMode[opCode];
+	_operand = FetchOperand();
 
-		_instAddrMode = _addrMode[opCode];
-		_operand = FetchOperand();
-
-		if(_opTable[opCode] != nullptr) {
-			(this->*_opTable[opCode])();
-		} else {
-			std::cout << "Invalid opcode: " << std::hex << (short)opCode;
-		}
-
-		if(!_runIRQ && opCode == 0x40 && _state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt)) {
-			//"If an IRQ is pending and an RTI is executed that clears the I flag, the CPU will invoke the IRQ handler immediately after RTI finishes executing."
-			_runIRQ = true;
-		}
+	if(_opTable[opCode] != nullptr) {
+		(this->*_opTable[opCode])();
 	} else {
-		if(_runNMI) {
-			NMI();
-			_runNMI = false;
-			_state.NMIFlag = false;
-		} else if(_runIRQ) {
-			IRQ();
-		}
-		_runIRQ = false;
+		std::cout << "Invalid opcode: " << std::hex << (short)opCode;
+	}
+	
+	_runNMI = _state.NMIFlag;
+	_runIRQ = _state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt);
+
+	if(_runNMI) {
+		NMI();
+		_state.NMIFlag = false;
+	} else if(_runIRQ) {
+		IRQ();
 	}
 
 	return _cycleCount;
