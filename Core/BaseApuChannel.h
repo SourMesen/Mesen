@@ -9,11 +9,13 @@ class BaseApuChannel : public IMemoryHandler, public Snapshotable
 {
 private:
 	unique_ptr<Blip_Synth<blip_good_quality, range>> _synth;
-	uint16_t _lastOutput = 0;
-	uint32_t _previousCycle = 0;
 	Blip_Buffer *_buffer;
+
+	uint16_t _lastOutput;
+	uint32_t _previousCycle;
 	AudioChannel _channel;
 	double _baseVolume;
+	bool _needToRun;
 
 protected:
 	uint16_t _timer = 0;
@@ -31,6 +33,16 @@ protected:
 		_synth->volume(_baseVolume * EmulationSettings::GetChannelVolume(_channel) * 2);
 	}
 
+	AudioChannel GetChannel()
+	{
+		return _channel;
+	}
+
+	void SetRunFlag()
+	{
+		_needToRun = true;
+	}
+
 public:
 	virtual void Clock() = 0;
 	virtual bool GetStatus() = 0;
@@ -41,15 +53,16 @@ public:
 		_buffer = buffer;
 		_synth.reset(new Blip_Synth<blip_good_quality, range>());
 		
-		Reset();
+		Reset(false);
 	}
 
-	virtual void Reset()
+	virtual void Reset(bool softReset)
 	{
 		_timer = 0;
 		_period = 0;
 		_lastOutput = 0;
 		_previousCycle = 0;
+		_needToRun = false;
 		_buffer->clear();
 	}
 
@@ -65,8 +78,14 @@ public:
 		}
 	}
 
+	bool NeedToRun()
+	{
+		return _needToRun;
+	}
+
 	virtual void Run(uint32_t targetCycle)
 	{
+		_needToRun = false;
 		while(_previousCycle < targetCycle) {
 			if(_timer == 0) {
 				Clock();

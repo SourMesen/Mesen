@@ -113,7 +113,7 @@ void Console::ResetComponents(bool softReset)
 	Movie::Stop();
 
 	_ppu->Reset();
-	_apu->Reset();
+	_apu->Reset(softReset);
 	_cpu->Reset(softReset);
 	_memoryManager->Reset(softReset);
 

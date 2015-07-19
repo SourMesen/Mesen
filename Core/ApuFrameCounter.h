@@ -13,16 +13,16 @@ enum class FrameType
 class ApuFrameCounter : public IMemoryHandler, public Snapshotable
 {
 private:
-	const vector<vector<uint32_t>> _stepCycles = { { { 7457, 14913, 22371, 29828, 29829, 29830},
+	const vector<vector<int32_t>> _stepCycles = { { { 7457, 14913, 22371, 29828, 29829, 29830},
 																	 { 7457, 14913, 22371, 29829, 37281, 37282} } };
 	const vector<vector<FrameType>> _frameType = { { { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None },
 																	 { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None } } };
 
-	int32_t _nextIrqCycle = 29828;
-	uint32_t _previousCycle = 0;
-	uint32_t _currentStep = 0;
-	uint32_t _stepMode = 0; //0: 4-step mode, 1: 5-step mode
-	bool _inhibitIRQ = false;
+	int32_t _nextIrqCycle;
+	int32_t _previousCycle;
+	uint32_t _currentStep;
+	uint32_t _stepMode; //0: 4-step mode, 1: 5-step mode
+	bool _inhibitIRQ;
 
 	void (*_callback)(FrameType);
 
@@ -30,27 +30,36 @@ public:
 	ApuFrameCounter(void (*frameCounterTickCallback)(FrameType))
 	{
 		_callback = frameCounterTickCallback;
+		Reset(false);
 	}
 
-	void Reset()
+	void Reset(bool softReset)
 	{
 		_nextIrqCycle = 29828;
-		_previousCycle = 0;
+
+		//"After reset or power-up, APU acts as if $4017 were written with $00 from 9 to 12 clocks before first instruction begins."
+		//Because of the 3-4 sequence reset delay, 9-12 clocks turns into 6-7
+		_previousCycle = 6;
+
+		//"After reset: APU mode in $4017 was unchanged", so we need to keep whatever value _stepMode has for soft resets
+		if(!softReset) {
+			_stepMode = 0;
+		}
+
 		_currentStep = 0;
-		_stepMode = 0;
 		_inhibitIRQ = false;
 	}
 
 	void StreamState(bool saving)
 	{
 		Stream<int32_t>(_nextIrqCycle);
-		Stream<uint32_t>(_previousCycle);
+		Stream<int32_t>(_previousCycle);
 		Stream<uint32_t>(_currentStep);
 		Stream<uint32_t>(_stepMode);
 		Stream<bool>(_inhibitIRQ);
 	}	
 
-	uint32_t Run(uint32_t &cyclesToRun)
+	uint32_t Run(int32_t &cyclesToRun)
 	{
 		uint32_t cyclesRan;
 
@@ -120,12 +129,18 @@ public:
 			_nextIrqCycle = 29828;
 		}
 
-		//Reset sequence when $4017 is written to
-		_previousCycle = 0;
+		//Reset sequence after $4017 is written to
+		if(CPU::GetRelativeCycleCount() & 0x01) {
+			//"If the write occurs during an APU cycle, the effects occur 3 CPU cycles after the $4017 write cycle"
+			_previousCycle = -3;
+		} else {
+			//"If the write occurs between APU cycles, the effects occur 4 CPU cycles after the write cycle. "
+			_previousCycle = -4;
+		}
 		_currentStep = 0;
 
 		if(_stepMode == 1) {
-			//Writing to $4017 with bit 7 set will immediately generate a clock for both the quarter frame and the half frame units, regardless of what the sequencer is doing.
+			//"Writing to $4017 with bit 7 set will immediately generate a clock for both the quarter frame and the half frame units, regardless of what the sequencer is doing."
 			_callback(FrameType::HalfFrame);
 		}
 	}

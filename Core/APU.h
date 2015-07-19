@@ -20,8 +20,8 @@ class APU : public Snapshotable, public IMemoryHandler
 		static IAudioDevice* AudioDevice;
 		static APU* Instance;
 
-		uint32_t _previousCycle = 0;
-		uint32_t _currentCycle = 0;
+		uint32_t _previousCycle;
+		uint32_t _currentCycle;
 
 		vector<unique_ptr<SquareChannel>> _squareChannel;
 		unique_ptr<TriangleChannel> _triangleChannel;
@@ -35,7 +35,7 @@ class APU : public Snapshotable, public IMemoryHandler
 		MemoryManager* _memoryManager;
 
 	private:
-		bool IrqPending(uint32_t currentCycle);
+		bool NeedToRun(uint32_t currentCycle);
 		void Run();
 
 		static void FrameCounterTick(FrameType type);
@@ -52,7 +52,7 @@ class APU : public Snapshotable, public IMemoryHandler
 		APU(MemoryManager* memoryManager);
 		~APU();
 
-		void Reset();
+		void Reset(bool softReset);
 		
 		static void RegisterAudioDevice(IAudioDevice *audioDevice)
 		{

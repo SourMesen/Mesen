@@ -44,9 +44,9 @@ protected:
 	}
 
 public:
-	virtual void Reset()
+	virtual void Reset(bool softReset)
 	{
-		ApuLengthCounter::Reset();
+		ApuLengthCounter::Reset(softReset);
 
 		_constantVolume = false;
 		_volume = 0;

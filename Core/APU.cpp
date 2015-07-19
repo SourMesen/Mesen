@@ -36,6 +36,8 @@ APU::APU(MemoryManager* memoryManager)
 	_memoryManager->RegisterIODevice(_triangleChannel.get());
 	_memoryManager->RegisterIODevice(_noiseChannel.get());
 	_memoryManager->RegisterIODevice(_deltaModulationChannel.get());
+
+	Reset(false);
 }
 
 APU::~APU()
@@ -87,14 +89,16 @@ void APU::WriteRAM(uint16_t addr, uint8_t value)
 {
 	//$4015 write
 	Run();
+
+	//Writing to $4015 clears the DMC interrupt flag.
+	//This needs to be done before setting the enabled flag for the DMC (because doing so can trigger an IRQ)
+	CPU::ClearIRQSource(IRQSource::DMC);
+
 	_squareChannel[0]->SetEnabled((value & 0x01) == 0x01);
 	_squareChannel[1]->SetEnabled((value & 0x02) == 0x02);
 	_triangleChannel->SetEnabled((value & 0x04) == 0x04);
 	_noiseChannel->SetEnabled((value & 0x08) == 0x08);
 	_deltaModulationChannel->SetEnabled((value & 0x10) == 0x10);
-
-	//Writing to $4015 clears the DMC interrupt flag.
-	CPU::ClearIRQSource(IRQSource::DMC);
 }
 
 void APU::GetMemoryRanges(MemoryRanges &ranges)
@@ -110,7 +114,7 @@ void APU::Run()
 	//-At the end of a frame
 	//-Before APU registers are read/written to
 	//-When a DMC or FrameCounter interrupt needs to be fired
-	uint32_t cyclesToRun = _currentCycle - _previousCycle;
+	int32_t cyclesToRun = _currentCycle - _previousCycle;
 
 	while(_previousCycle < _currentCycle) {
 		_previousCycle += _frameCounter->Run(cyclesToRun);
@@ -128,8 +132,12 @@ void APU::StaticRun()
 	Instance->Run();
 }
 
-bool APU::IrqPending(uint32_t currentCycle)
+bool APU::NeedToRun(uint32_t currentCycle)
 {
+	if(_squareChannel[0]->NeedToRun() || _squareChannel[1]->NeedToRun() || _triangleChannel->NeedToRun() || _noiseChannel->NeedToRun() || _deltaModulationChannel->NeedToRun()) {
+		return true;
+	}
+
 	uint32_t cyclesToRun = currentCycle - _previousCycle;
 	if(_frameCounter->IrqPending(cyclesToRun)) {
 		return true;
@@ -165,7 +173,7 @@ void APU::Exec()
 		}
 		_currentCycle = 0;
 		_previousCycle = 0;
-	} else if(IrqPending(_currentCycle)) {
+	} else if(NeedToRun(_currentCycle)) {
 		Run();
 	}
 }
@@ -178,16 +186,16 @@ void APU::StopAudio()
 }
 
 
-void APU::Reset()
+void APU::Reset(bool softReset)
 {
 	_currentCycle = 0;
 	_previousCycle = 0;
-	_squareChannel[0]->Reset();
-	_squareChannel[1]->Reset();
-	_triangleChannel->Reset();
-	_noiseChannel->Reset();
-	_deltaModulationChannel->Reset();
-	_frameCounter->Reset();
+	_squareChannel[0]->Reset(softReset);
+	_squareChannel[1]->Reset(softReset);
+	_triangleChannel->Reset(softReset);
+	_noiseChannel->Reset(softReset);
+	_deltaModulationChannel->Reset(softReset);
+	_frameCounter->Reset(softReset);
 }
 
 void APU::StreamState(bool saving)

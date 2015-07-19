@@ -35,9 +35,9 @@ public:
 		SetVolume(0.12765);
 	}
 
-	virtual void Reset()
+	virtual void Reset(bool softReset)
 	{
-		ApuLengthCounter::Reset();
+		ApuLengthCounter::Reset(softReset);
 		
 		_linearCounter = 0;
 		_linearCounterReload = 0;

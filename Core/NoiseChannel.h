@@ -42,9 +42,9 @@ public:
 		SetVolume(0.0741);
 	}
 
-	virtual void Reset()
+	virtual void Reset(bool softReset)
 	{
-		ApuEnvelope::Reset();
+		ApuEnvelope::Reset(softReset);
 		
 		_shiftRegister = 1;
 		_modeFlag = false;

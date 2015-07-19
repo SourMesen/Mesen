@@ -93,9 +93,9 @@ public:
 		SetVolume(0.42545);
 	}
 
-	virtual void Reset()
+	virtual void Reset(bool softReset)
 	{
-		BaseApuChannel::Reset();
+		BaseApuChannel::Reset(softReset);
 		
 		_sampleAddr = 0;
 		_sampleLength = 0;
@@ -161,7 +161,10 @@ public:
 			case 0:		//4010
 				_irqEnabled = (value & 0x80) == 0x80;
 				_loopFlag = (value & 0x40) == 0x40;
-				_period = _dmcPeriodLookupTable[value & 0x0F];
+
+				//"The rate determines for how many CPU cycles happen between changes in the output level during automatic delta-encoded sample playback."
+				//Because BaseApuChannel does not decrement when setting _timer, we need to actually set the value to 1 less than the lookup table
+				_period = _dmcPeriodLookupTable[value & 0x0F] - 1;
 
 				if(!_irqEnabled) {
 					CPU::ClearIRQSource(IRQSource::DMC);

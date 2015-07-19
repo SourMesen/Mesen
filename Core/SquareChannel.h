@@ -83,9 +83,9 @@ public:
 		_isChannel1 = isChannel1;
 	}
 
-	virtual void Reset()
+	virtual void Reset(bool softReset)
 	{
-		ApuEnvelope::Reset();
+		ApuEnvelope::Reset(softReset);
 		
 		_duty = 0;
 		_dutyPos = 0;
@@ -181,6 +181,6 @@ public:
 	void Run(uint32_t targetCycle)
 	{
 		UpdateTargetPeriod(false);
-		BaseApuChannel::Run(targetCycle);
+		ApuLengthCounter::Run(targetCycle);
 	}
 };
