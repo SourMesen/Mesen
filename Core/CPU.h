@@ -59,7 +59,6 @@ private:
 	typedef void(CPU::*Func)();
 
 	int32_t _cycleCount;
-	int32_t _relativeCycleCount;
 	uint16_t _operand;
 
 	Func _opTable[256];
@@ -72,8 +71,8 @@ private:
 	State _state;
 	MemoryManager *_memoryManager = nullptr;
 
-	bool _runNMI = false;
-	bool _runIRQ = false;
+	bool _prevRunIrq = false;
+	bool _runIrq = false;
 
 	void IncCycleCount();
 
@@ -619,15 +618,6 @@ private:
 		}
 	}
 
-	void NMI() {
-		DummyRead();  //fetch opcode (and discard it - $00 (BRK) is forced into the opcode register instead)
-		DummyRead();  //read next instruction byte (actually the same as above, since PC increment is suppressed. Also discarded.)
-		Push((uint16_t)(PC()));
-		Push((uint8_t)PS());
-		SetFlags(PSFlags::Interrupt);
-		SetPC(MemoryReadWord(CPU::NMIVector));
-	}
-
 	void IRQ() {
 		DummyRead();  //fetch opcode (and discard it - $00 (BRK) is forced into the opcode register instead)
 		DummyRead();  //read next instruction byte (actually the same as above, since PC increment is suppressed. Also discarded.)
@@ -638,6 +628,7 @@ private:
 			SetFlags(PSFlags::Interrupt);
 
 			SetPC(MemoryReadWord(CPU::NMIVector));
+			_state.NMIFlag = false;
 		} else {
 			Push((uint8_t)PS());
 			SetFlags(PSFlags::Interrupt);
@@ -842,7 +833,7 @@ public:
 	static const uint32_t ClockRate = 1789773;
 
 	CPU(MemoryManager *memoryManager);
-	static int32_t GetRelativeCycleCount() { return CPU::Instance->_relativeCycleCount + CPU::Instance->_cycleCount; }
+	static int32_t GetCycleCount() { return CPU::Instance->_cycleCount; }
 	static void SetNMIFlag() { CPU::Instance->_state.NMIFlag = true; }
 	static void ClearNMIFlag() { CPU::Instance->_state.NMIFlag = false; }
 	static void SetIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag |= (int)source; }
@@ -851,8 +842,7 @@ public:
 	static void RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue);
 
 	void Reset(bool softReset);
-	uint32_t Exec();
-	void EndFrame();
+	void Exec();
 
 	State GetState() { return _state; }
 };

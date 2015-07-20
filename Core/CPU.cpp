@@ -58,7 +58,6 @@ void CPU::Reset(bool softReset)
 	_state.NMIFlag = false;
 	_state.IRQFlag = 0;
 	_cycleCount = 0;
-	_relativeCycleCount = 0;
 
 	//Use _memoryManager->Read() directly to prevent clocking the PPU/APU when setting PC at reset
 	_state.PC = _memoryManager->Read(CPU::ResetVector) | _memoryManager->Read(CPU::ResetVector+1) << 8;
@@ -73,44 +72,29 @@ void CPU::Reset(bool softReset)
 		_state.Y = 0;
 		_state.PS = PSFlags::Reserved | PSFlags::Interrupt;
 
-		_runIRQ = false;
-		_runNMI = false;
+		_runIrq = false;
 	}
 }
 
-uint32_t CPU::Exec()
+void CPU::Exec()
 {
 	uint8_t opCode = GetOPCode();
 	_instAddrMode = _addrMode[opCode];
 	_operand = FetchOperand();
+	(this->*_opTable[opCode])();
 
-	if(_opTable[opCode] != nullptr) {
-		(this->*_opTable[opCode])();
-	} else {
-		std::cout << "Invalid opcode: " << std::hex << (short)opCode;
-	}
-	
-	_runNMI = _state.NMIFlag;
-	_runIRQ = _state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt);
-
-	if(_runNMI) {
-		NMI();
-		_state.NMIFlag = false;
-	} else if(_runIRQ) {
+	if(_prevRunIrq) {
 		IRQ();
 	}
-
-	return _cycleCount;
-}
-
-void CPU::EndFrame()
-{
-	_relativeCycleCount += _cycleCount;
-	_cycleCount = 0;
 }
 
 void CPU::IncCycleCount()
 {
+	//"it's really the status of the interrupt lines at the end of the second-to-last cycle that matters."
+	//Keep the irq lines values from the previous cycle.  The before-to-last cycle's values will be used
+	_prevRunIrq = _runIrq;
+	_runIrq = _state.NMIFlag || (_state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt));
+
 	PPU::ExecStatic();
 	APU::ExecStatic();
 	_cycleCount++;
@@ -119,7 +103,7 @@ void CPU::IncCycleCount()
 void CPU::RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue)
 {
 	//"the DMA procedure takes 513 CPU cycles (+1 on odd CPU cycles)"
-	if((CPU::GetRelativeCycleCount() + Instance->_cycleCount) % 2 != 0) {
+	if(Instance->_cycleCount % 2 != 0) {
 		Instance->IncCycleCount();
 	}
 	Instance->IncCycleCount();
@@ -148,9 +132,4 @@ void CPU::StreamState(bool saving)
 	Stream<int32_t>(_cycleCount);
 	Stream<bool>(_state.NMIFlag);
 	Stream<uint32_t>(_state.IRQFlag);
-
-	Stream<bool>(_runNMI);
-	Stream<bool>(_runIRQ);
-
-	Stream<int32_t>(_relativeCycleCount);
 }

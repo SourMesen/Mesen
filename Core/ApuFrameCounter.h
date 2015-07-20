@@ -130,7 +130,7 @@ public:
 		}
 
 		//Reset sequence after $4017 is written to
-		if(CPU::GetRelativeCycleCount() & 0x01) {
+		if(CPU::GetCycleCount() & 0x01) {
 			//"If the write occurs during an APU cycle, the effects occur 3 CPU cycles after the $4017 write cycle"
 			_previousCycle = -3;
 		} else {

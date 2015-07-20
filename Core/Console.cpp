@@ -160,7 +160,6 @@ void Console::Run()
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
 		if(currentFrameNumber != lastFrameNumber) {
 			lastFrameNumber = currentFrameNumber;
-			_cpu->EndFrame();
 
 			if(EmulationSettings::CheckFlag(EmulationFlags::LimitFPS)) {
 				elapsedTime = clockTimer.GetElapsedMS();

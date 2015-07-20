@@ -160,7 +160,7 @@ class MMC1 : public BaseMapper
 
 		void WriteRegister(uint16_t addr, uint8_t value)
 		{
-			int32_t currentCycle = CPU::GetRelativeCycleCount();
+			int32_t currentCycle = CPU::GetCycleCount();
 			
 			//Ignore write if within 2 cycles of another write (i.e the real write after a dummy write)
 			if(abs(currentCycle - _lastWriteCycle) >= 2) {

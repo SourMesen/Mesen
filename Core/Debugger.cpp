@@ -142,7 +142,7 @@ void Debugger::PrivateCheckBreakpoint(BreakpointType type, uint32_t addr)
 			Step(2);
 		} else if(_stepOverAddr != -1 && addr == _stepOverAddr) {
 			Step(1);
-		} else if(_stepCycleCount != -1 && abs(_cpu->GetRelativeCycleCount() - _stepCycleCount) < 100 && _cpu->GetRelativeCycleCount() >= _stepCycleCount) {
+		} else if(_stepCycleCount != -1 && abs(_cpu->GetCycleCount() - _stepCycleCount) < 100 && _cpu->GetCycleCount() >= _stepCycleCount) {
 			Step(1);
 		}
 		_disassembler->BuildCache(_mapper->ToAbsoluteAddress(addr), addr);
@@ -198,7 +198,7 @@ void Debugger::Step(uint32_t count)
 void Debugger::StepCycles(uint32_t count)
 {
 	//Run CPU for [count] CYCLES and before breaking again
-	_stepCycleCount = _cpu->GetRelativeCycleCount() + count;
+	_stepCycleCount = _cpu->GetCycleCount() + count;
 	Run();
 }
 
