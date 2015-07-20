@@ -3,6 +3,7 @@
 #include "IMemoryHandler.h"
 #include "../BlipBuffer/Blip_Buffer.h"
 #include "EmulationSettings.h"
+#include "Snapshotable.h"
 
 template<int range>
 class BaseApuChannel : public IMemoryHandler, public Snapshotable
@@ -15,7 +16,6 @@ private:
 	uint32_t _previousCycle;
 	AudioChannel _channel;
 	double _baseVolume;
-	bool _needToRun;
 
 protected:
 	uint16_t _timer = 0;
@@ -38,11 +38,6 @@ protected:
 		return _channel;
 	}
 
-	void SetRunFlag()
-	{
-		_needToRun = true;
-	}
-
 public:
 	virtual void Clock() = 0;
 	virtual bool GetStatus() = 0;
@@ -62,7 +57,6 @@ public:
 		_period = 0;
 		_lastOutput = 0;
 		_previousCycle = 0;
-		_needToRun = false;
 		_buffer->clear();
 	}
 
@@ -78,14 +72,8 @@ public:
 		}
 	}
 
-	bool NeedToRun()
-	{
-		return _needToRun;
-	}
-
 	virtual void Run(uint32_t targetCycle)
 	{
-		_needToRun = false;
 		while(_previousCycle < targetCycle) {
 			if(_timer == 0) {
 				Clock();

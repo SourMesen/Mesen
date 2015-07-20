@@ -8,6 +8,7 @@ private:
 	const vector<uint8_t> _lcLookupTable = { { 10, 254, 20, 2, 40, 4, 80, 6, 160, 8, 60, 10, 14, 12, 26, 14, 12, 16, 24, 18, 48, 20, 96, 22, 192, 24, 72, 26, 16, 28, 32, 30 } };
 	bool _enabled = false;
 	bool _newHaltValue;
+	static bool _needToRun;
 
 protected:
 	bool _lengthCounterHalt;
@@ -26,9 +27,19 @@ protected:
 		}
 	}
 
+	void SetRunFlag()
+	{
+		ApuLengthCounter::_needToRun = true;
+	}
+
 public:
 	ApuLengthCounter(AudioChannel channel, Blip_Buffer* buffer) : BaseApuChannel(channel, buffer)
 	{
+	}
+	
+	static bool NeedToRun()
+	{
+		return ApuLengthCounter::_needToRun;
 	}
 
 	virtual void Reset(bool softReset)
@@ -49,6 +60,8 @@ public:
 			_lengthCounter = 0;
 			_newHaltValue = false;
 		}
+
+		ApuLengthCounter::_needToRun = false;
 	}
 
 	virtual void StreamState(bool saving)
@@ -68,6 +81,7 @@ public:
 
 	virtual void Run(uint32_t targetCycle)
 	{
+		ApuLengthCounter::_needToRun = false;
 		_lengthCounterHalt = _newHaltValue;
 		BaseApuChannel::Run(targetCycle);
 	}

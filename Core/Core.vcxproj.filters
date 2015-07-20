@@ -295,5 +295,8 @@
     <ClCompile Include="EmulationSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ApuLengthCounter.cpp">
+      <Filter>Source Files\APU</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -134,7 +134,7 @@ void APU::StaticRun()
 
 bool APU::NeedToRun(uint32_t currentCycle)
 {
-	if(_squareChannel[0]->NeedToRun() || _squareChannel[1]->NeedToRun() || _triangleChannel->NeedToRun() || _noiseChannel->NeedToRun() || _deltaModulationChannel->NeedToRun()) {
+	if(ApuLengthCounter::NeedToRun()) {
 		return true;
 	}
 
