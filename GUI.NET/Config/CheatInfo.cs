@@ -25,15 +25,16 @@ namespace Mesen.GUI.Config
 		public UInt32 Address;
 		public Byte Value;
 		public Byte CompareValue;
+		public bool UseCompareValue;
 		public bool IsRelativeAddress;
 
 		public override string ToString()
 		{
 			switch(CheatType) {
 				case CheatType.Custom:
-					return (!IsRelativeAddress ? "!" : "") + string.Format("{0:X4}:{1:X2}:{2:X2}", Address, Value, CompareValue);
+					return (!IsRelativeAddress ? "#" : "") + string.Format("{0:X4}:{1:X2}" + (UseCompareValue ? ":{2:X2}" : ""), Address, Value, CompareValue);
 				case Config.CheatType.GameGenie:
-					return "GG: " + GameGenieCode;
+					return "GG: " + GameGenieCode.ToUpperInvariant();
 				case Config.CheatType.ProActionRocky:
 					return "PRA: " + ProActionRockyCode.ToString("X");
 			}
@@ -44,7 +45,7 @@ namespace Mesen.GUI.Config
 		{
 			switch(CheatType) {
 				case CheatType.Custom:
-					InteropEmu.CheatAddCustom(Address, Value, CompareValue, IsRelativeAddress);
+					InteropEmu.CheatAddCustom(Address, Value, UseCompareValue ? CompareValue : -1, IsRelativeAddress);
 					break;
 
 				case Config.CheatType.GameGenie:

@@ -43,10 +43,9 @@ namespace Mesen.GUI.Forms.Cheats
 			AddBinding("ProActionRockyCode", txtProActionRocky);
 			AddBinding("Address", txtAddress);
 			AddBinding("Value", txtValue);
+			AddBinding("UseCompareValue", chkCompareValue);
 			AddBinding("CompareValue", txtCompare);
 			AddBinding("IsRelativeAddress", radRelativeAddress.Parent);
-
-			UpdateOKButton();
 		}
 
 		protected override Type BindedType
@@ -65,11 +64,6 @@ namespace Mesen.GUI.Forms.Cheats
 			((CheatInfo)Entity).GameHash = _gameHash;
 		}
 
-		private void UpdateOKButton()
-		{
-			btnOK.Enabled = true; //this.IsValidInput();
-		}
-
 		private void btnBrowse_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
@@ -78,7 +72,6 @@ namespace Mesen.GUI.Forms.Cheats
 				_gameHash = MD5Helper.GetMD5Hash(ofd.FileName);
 				if(_gameHash != null) {
 					txtGameName.Text = Path.GetFileNameWithoutExtension(ofd.FileName);
-					UpdateOKButton();
 				}
 			}
 		}
@@ -146,6 +139,11 @@ namespace Mesen.GUI.Forms.Cheats
 		private void customField_Enter(object sender, EventArgs e)
 		{
 			radCustom.Checked = true;
+		}
+
+		private void chkCompareValue_CheckedChanged(object sender, EventArgs e)
+		{
+			txtCompare.Enabled = chkCompareValue.Checked;
 		}
 	}
 }
