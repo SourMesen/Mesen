@@ -61,4 +61,5 @@ class Console
 		static string GetROMPath();
 
 		static shared_ptr<Console> GetInstance();
+		static void Release();
 };

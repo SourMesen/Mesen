@@ -122,6 +122,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall Release()
 		{
+			Console::Release();
 			GameServer::StopServer();
 			GameClient::Disconnect();
 			MessageManager::RegisterMessageManager(nullptr);

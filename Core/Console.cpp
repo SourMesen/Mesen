@@ -25,6 +25,11 @@ shared_ptr<Console> Console::GetInstance()
 	return Console::Instance;
 }
 
+void Console::Release()
+{
+	Console::Instance.reset(new Console());
+}
+
 void Console::Initialize(string filename)
 {
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
