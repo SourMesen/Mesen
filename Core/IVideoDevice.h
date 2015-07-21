@@ -5,5 +5,5 @@
 class IVideoDevice
 {
 	public:
-		virtual void UpdateFrame(uint8_t *outputBuffer) = 0;
+		virtual void UpdateFrame(void *outputBuffer) = 0;
 };

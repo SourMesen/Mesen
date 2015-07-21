@@ -108,7 +108,7 @@ namespace NES {
 			return (_flags & flag) == flag;
 		}
 
-		void UpdateFrame(uint8_t* frameBuffer);
+		void UpdateFrame(void* frameBuffer);
 		void DisplayToast(shared_ptr<ToastInfo> toast);
 
 		void TakeScreenshot(string romFilename);

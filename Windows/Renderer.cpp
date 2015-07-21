@@ -566,7 +566,7 @@ namespace NES
 		_font->DrawString(_spriteBatch.get(), WrapText(toast->GetToastMessage(), _font.get(), 340 - 30 - textLeftMargin).c_str(), XMFLOAT2(dest.left + textLeftMargin - 2.0f, dest.top + 19.0f), color);
 	}
 
-	void Renderer::UpdateFrame(uint8_t* frameBuffer)
+	void Renderer::UpdateFrame(void* frameBuffer)
 	{
 		_frameChanged = true;
 

@@ -102,8 +102,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint8_t _spriteRAM[0x100];
 		uint8_t _secondarySpriteRAM[0x20];
 
-		uint8_t *_outputBuffer;
-		
+		uint32_t *_outputBuffer;
+
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;
 
@@ -193,15 +193,11 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void WriteRAM(uint16_t addr, uint8_t value);
 
 		void Exec();
+		static void ExecStatic();
 
 		static void RegisterVideoDevice(IVideoDevice *videoDevice)
 		{
 			PPU::VideoDevice = videoDevice;
-		}
-
-		uint8_t* GetFrameBuffer()
-		{
-			return _outputBuffer;
 		}
 
 		static uint32_t GetFrameCount()
@@ -223,6 +219,4 @@ class PPU : public IMemoryHandler, public Snapshotable
 		{
 			return PPU::Instance->_scanline;
 		}
-
-		static void ExecStatic();
 };

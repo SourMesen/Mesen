@@ -29,3 +29,10 @@ double Timer::GetElapsedMS()
 	QueryPerformanceCounter(&li);
 	return double(li.QuadPart - _start) / _frequency;
 }
+
+uint32_t Timer::GetElapsedTicks()
+{
+	LARGE_INTEGER li;
+	QueryPerformanceCounter(&li);
+	return uint32_t(li.QuadPart - _start);
+}

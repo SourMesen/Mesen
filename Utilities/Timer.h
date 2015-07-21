@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 
 class Timer
@@ -10,4 +11,5 @@ class Timer
 		Timer();
 		void Reset();
 		double GetElapsedMS();
+		uint32_t Timer::GetElapsedTicks();
 };
