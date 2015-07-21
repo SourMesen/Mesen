@@ -235,12 +235,14 @@ class ROMLoader
 
 		static string FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash)
 		{
+			std::transform(romFilename.begin(), romFilename.end(), romFilename.begin(), ::tolower);
 			vector<string> romFiles = FolderUtilities::GetFilesInFolder(folder, "*.nes", true);
 			for(string zipFile : FolderUtilities::GetFilesInFolder(folder, "*.zip", true)) {
 				romFiles.push_back(zipFile);
 			}
 			for(string romFile : romFiles) {
 				//Quick search by filename
+				std::transform(romFile.begin(), romFile.end(), romFile.begin(), ::tolower);
 				if(FolderUtilities::GetFilename(romFile, true).compare(romFilename) == 0) {
 					if(ROMLoader::GetCRC32(romFile) == crc32Hash) {
 						return romFile;

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <shlobj.h>
+#include <algorithm>
 #include "FolderUtilities.h"
 #include "UTF8Util.h"
 
@@ -24,6 +25,7 @@ void FolderUtilities::AddKnowGameFolder(string gameFolder)
 {
 	bool alreadyExists = false;
 	for(string folder : _gameFolders) {
+		std::transform(folder.begin(), folder.end(), folder.begin(), ::tolower);
 		if(folder.compare(gameFolder) == 0) {
 			alreadyExists = true;
 			break;

@@ -103,7 +103,7 @@ namespace Mesen.GUI.Forms
 		private void LoadROM(string filename)
 		{
 			ConfigManager.Config.AddRecentFile(filename);
-			InteropEmu.LoadROM(filename.ToLowerInvariant());
+			InteropEmu.LoadROM(filename);
 			UpdateRecentFiles();
 		}
 
