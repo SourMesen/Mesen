@@ -13,6 +13,7 @@ class DeltaModulationChannel;
 class ApuFrameCounter;
 class Blip_Buffer;
 enum class FrameType;
+enum class NesModel;
 
 class APU : public Snapshotable, public IMemoryHandler
 {
@@ -33,6 +34,8 @@ class APU : public Snapshotable, public IMemoryHandler
 		unique_ptr<Blip_Buffer> _blipBuffer;
 		int16_t* _outputBuffer;
 		MemoryManager* _memoryManager;
+
+		NesModel _nesModel;
 
 	private:
 		bool NeedToRun(uint32_t currentCycle);
@@ -58,6 +61,8 @@ class APU : public Snapshotable, public IMemoryHandler
 		{
 			APU::AudioDevice = audioDevice;
 		}
+
+		void SetNesModel(NesModel model, bool forceInit = false);
 
 		uint8_t ReadRAM(uint16_t addr);
 		void WriteRAM(uint16_t addr, uint8_t value);

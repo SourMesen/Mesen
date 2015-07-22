@@ -65,6 +65,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void ClearFlags(UInt32 flags);
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(UInt32 channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
+		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)]	public static extern void DebugRelease();
@@ -271,6 +272,13 @@ namespace Mesen.GUI
 		Read = 1,
 		Write = 2
 	};
+
+	public enum NesModel
+	{
+		Auto = 0,
+		NTSC = 1,
+		PAL = 2
+	}
 
 	public class MD5Helper
 	{

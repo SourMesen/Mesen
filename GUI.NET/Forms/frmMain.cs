@@ -58,8 +58,7 @@ namespace Mesen.GUI.Forms
 				InteropEmu.AddKnowGameFolder(System.IO.Path.GetDirectoryName(romPath).ToLowerInvariant());
 			}
 
-			ControllerInfo.ApplyConfig();
-			AudioInfo.ApplyConfig();
+			ConfigManager.Config.ApplyConfig();
 		
 			UpdateEmulationFlags();
 		}
@@ -135,6 +134,10 @@ namespace Mesen.GUI.Forms
 					mnuDebugger.Enabled = !netPlay && _emuThread != null;
 
 					mnuTakeScreenshot.Enabled = _emuThread != null;
+
+					mnuRegionAuto.Checked = ConfigManager.Config.Region == NesModel.Auto;
+					mnuRegionNtsc.Checked = ConfigManager.Config.Region == NesModel.NTSC;
+					mnuRegionPal.Checked = ConfigManager.Config.Region == NesModel.PAL;
 				}
 			} catch { }
 		}
@@ -402,6 +405,18 @@ namespace Mesen.GUI.Forms
 		{
 			frmAudioConfig frm = new frmAudioConfig();
 			frm.ShowDialog();
+		}
+
+		private void mnuRegion_Click(object sender, EventArgs e)
+		{
+			if(sender == mnuRegionAuto) {
+				ConfigManager.Config.Region = NesModel.Auto;
+			} else if(sender == mnuRegionNtsc) {
+				ConfigManager.Config.Region = NesModel.NTSC;
+			} else if(sender == mnuRegionPal) {
+				ConfigManager.Config.Region = NesModel.PAL;
+			}
+			ConfigManager.Config.ApplyConfig();
 		}
 	}
 }

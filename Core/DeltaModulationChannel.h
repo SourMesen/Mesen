@@ -8,7 +8,8 @@
 class DeltaModulationChannel : public BaseApuChannel<127>
 {
 private:	
-	const vector<uint16_t> _dmcPeriodLookupTable = { { 428, 380, 340, 320, 286, 254, 226, 214, 190, 160, 142, 128, 106,  84,  72,  54 } };
+	const vector<uint16_t> _dmcPeriodLookupTableNtsc = { { 428, 380, 340, 320, 286, 254, 226, 214, 190, 160, 142, 128, 106,  84,  72,  54 } };
+	const vector<uint16_t> _dmcPeriodLookupTablePal = { { 398, 354, 316, 298, 276, 236, 210, 198, 176, 148, 132, 118,  98,  78,  66,  50 } };
 
 	MemoryManager *_memoryManager = nullptr;
 
@@ -164,7 +165,7 @@ public:
 
 				//"The rate determines for how many CPU cycles happen between changes in the output level during automatic delta-encoded sample playback."
 				//Because BaseApuChannel does not decrement when setting _timer, we need to actually set the value to 1 less than the lookup table
-				_period = _dmcPeriodLookupTable[value & 0x0F] - 1;
+				_period = (GetNesModel() == NesModel::NTSC ? _dmcPeriodLookupTableNtsc : _dmcPeriodLookupTablePal)[value & 0x0F] - 1;
 
 				if(!_irqEnabled) {
 					CPU::ClearIRQSource(IRQSource::DMC);

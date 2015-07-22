@@ -18,12 +18,20 @@ enum class AudioChannel
 	DMC = 4
 };
 
+enum class NesModel
+{
+	Auto = 0,
+	NTSC = 1,
+	PAL = 2,
+};
+
 class EmulationSettings
 {
 private:
 	static uint32_t Flags;
 	static uint32_t AudioLatency;
 	static double ChannelVolume[5];
+	static NesModel Model;
 
 public:
 	static void SetFlags(uint32_t flags)
@@ -39,6 +47,16 @@ public:
 	static bool CheckFlag(uint32_t flag)
 	{
 		return (Flags & flag) == flag;
+	}
+
+	static void SetNesModel(NesModel model)
+	{
+		Model = model;
+	}
+
+	static NesModel GetNesModel()
+	{
+		return Model;
 	}
 
 	//0: Muted, 0.5: Default, 1.0: Max volume

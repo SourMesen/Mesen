@@ -40,6 +40,11 @@ struct NESHeader
 		return (Flags1 & 0x04) == 0x04;
 	}
 
+	bool IsPalRom()
+	{
+		return (CartType & 0x01) == 0x01;
+	}
+
 	MirroringType GetMirroringType()
 	{
 		if(Flags1 & 0x08) {
@@ -216,6 +221,11 @@ class ROMLoader
 		bool HasBattery()
 		{
 			return _header.HasBattery();
+		}
+
+		bool IsPalRom()
+		{
+			return _header.IsPalRom() || _filename.find("(e)") != string::npos || _filename.find("(E)") != string::npos;
 		}
 
 		string GetFilename()

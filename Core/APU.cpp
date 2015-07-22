@@ -19,7 +19,6 @@ APU::APU(MemoryManager* memoryManager)
 	_memoryManager = memoryManager;
 	_blipBuffer.reset(new Blip_Buffer());
 	_blipBuffer->sample_rate(APU::SampleRate);
-	_blipBuffer->clock_rate(CPU::ClockRate);
 
 	_outputBuffer = new int16_t[APU::SamplesPerFrame];
 
@@ -43,6 +42,23 @@ APU::APU(MemoryManager* memoryManager)
 APU::~APU()
 {
 	delete[] _outputBuffer;
+}
+
+void APU::SetNesModel(NesModel model, bool forceInit)
+{
+	if(_nesModel != model || forceInit) {
+		//Finish the current apu frame before switching model
+		Run();
+
+		_nesModel = model;
+		_blipBuffer->clock_rate(model == NesModel::NTSC ? CPU::ClockRateNtsc : CPU::ClockRatePal);
+		_squareChannel[0]->SetNesModel(model);
+		_squareChannel[1]->SetNesModel(model);
+		_triangleChannel->SetNesModel(model);
+		_noiseChannel->SetNesModel(model);
+		_deltaModulationChannel->SetNesModel(model);
+		_frameCounter->SetNesModel(model);
+	}
 }
 
 void APU::FrameCounterTick(FrameType type)
@@ -185,7 +201,6 @@ void APU::StopAudio()
 	}
 }
 
-
 void APU::Reset(bool softReset)
 {
 	_currentCycle = 0;
@@ -200,6 +215,7 @@ void APU::Reset(bool softReset)
 
 void APU::StreamState(bool saving)
 {
+	Stream<NesModel>(_nesModel);
 	Stream<uint32_t>(_currentCycle);
 	Stream<uint32_t>(_previousCycle);
 	Stream(_squareChannel[0].get());
@@ -208,4 +224,8 @@ void APU::StreamState(bool saving)
 	Stream(_noiseChannel.get());
 	Stream(_deltaModulationChannel.get());
 	Stream(_frameCounter.get());
+
+	if(!saving) {
+		SetNesModel(_nesModel, true);
+	}
 }

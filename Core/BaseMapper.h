@@ -27,6 +27,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		
 		bool _hasCHRRAM;
 		bool _hasBattery;
+		bool _isPalRom;
 		string _romFilename;
 
 		MirroringType _mirroringType;
@@ -159,6 +160,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			_prgSize = romLoader.GetPRGSize();
 			_chrSize = romLoader.GetCHRSize();
 			_hasBattery = romLoader.HasBattery();
+			_isPalRom = romLoader.IsPalRom();
 			_romFilename = romLoader.GetFilename();
 
 			_hasExpansionRAM = false;
@@ -250,6 +252,11 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		bool HasBattery()
 		{
 			return _hasBattery;
+		}
+
+		bool IsPalRom()
+		{
+			return _isPalRom;
 		}
 
 		MirroringType GetMirroringType()

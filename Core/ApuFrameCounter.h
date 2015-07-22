@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "IMemoryHandler.h"
 #include "CPU.h"
+#include "EmulationSettings.h"
 
 enum class FrameType
 {
@@ -13,11 +14,15 @@ enum class FrameType
 class ApuFrameCounter : public IMemoryHandler, public Snapshotable
 {
 private:
-	const vector<vector<int32_t>> _stepCycles = { { { 7457, 14913, 22371, 29828, 29829, 29830},
-																	 { 7457, 14913, 22371, 29829, 37281, 37282} } };
+	const vector<vector<int32_t>> _stepCyclesNtsc = { { { 7457, 14913, 22371, 29828, 29829, 29830},
+																		 { 7457, 14913, 22371, 29829, 37281, 37282} } };
+	const vector<vector<int32_t>> _stepCyclesPal =  { { { 8313, 16627, 24939, 33252, 33253, 33254},
+																		 { 8313, 16627, 24939, 33253, 41565, 41566} } };
 	const vector<vector<FrameType>> _frameType = { { { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None },
 																	 { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None } } };
 
+	vector<vector<int32_t>> _stepCycles;
+	NesModel _nesModel;
 	int32_t _nextIrqCycle;
 	int32_t _previousCycle;
 	uint32_t _currentStep;
@@ -57,7 +62,22 @@ public:
 		Stream<uint32_t>(_currentStep);
 		Stream<uint32_t>(_stepMode);
 		Stream<bool>(_inhibitIRQ);
-	}	
+		Stream<NesModel>(_nesModel);
+
+		if(!saving) {
+			SetNesModel(_nesModel);
+		}
+	}
+
+	void SetNesModel(NesModel model)
+	{
+		if(_nesModel != model || _stepCycles.size() == 0) {
+			_nesModel = model;
+			_stepCycles.clear();
+			_stepCycles.push_back(model == NesModel::NTSC ? _stepCyclesNtsc[0] : _stepCyclesPal[0]);
+			_stepCycles.push_back(model == NesModel::NTSC ? _stepCyclesNtsc[1] : _stepCyclesPal[1]);
+		}
+	}
 
 	uint32_t Run(int32_t &cyclesToRun)
 	{

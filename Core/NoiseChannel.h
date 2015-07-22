@@ -8,7 +8,8 @@
 class NoiseChannel : public ApuEnvelope
 {
 private:	
-	const vector<uint16_t> _noisePeriodLookupTable = { { 4, 8, 16, 32, 64, 96, 128, 160, 202, 254, 380, 508, 762, 1016, 2034, 4068 } };
+	const vector<uint16_t> _noisePeriodLookupTableNtsc = { { 4, 8, 16, 32, 64, 96, 128, 160, 202, 254, 380, 508, 762, 1016, 2034, 4068 } };
+	const vector<uint16_t> _noisePeriodLookupTablePal = { { 4, 8, 14, 30, 60, 88, 118, 148, 188, 236, 354, 472, 708,  944, 1890, 3778 } };
 
 	//On power-up, the shift register is loaded with the value 1.
 	uint16_t _shiftRegister = 1;
@@ -73,7 +74,7 @@ public:
 				break;
 
 			case 2:		//400E
-				_period = _noisePeriodLookupTable[value & 0x0F];
+				_period = (GetNesModel() == NesModel::NTSC ? _noisePeriodLookupTableNtsc : _noisePeriodLookupTablePal)[value & 0x0F];
 				break;
 
 			case 3:		//400F

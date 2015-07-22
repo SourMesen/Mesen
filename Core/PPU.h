@@ -5,6 +5,8 @@
 #include "MemoryManager.h"
 #include "IVideoDevice.h"
 
+enum class NesModel;
+
 enum PPURegisters
 {
 	Control = 0x00,
@@ -92,17 +94,20 @@ class PPU : public IMemoryHandler, public Snapshotable
 		MemoryManager *_memoryManager;
 
 		PPUState _state;
-		int32_t _scanline = 0;
-		uint32_t _cycle = 0;
-		uint32_t _frameCount = 0;
-		uint8_t _memoryReadBuffer = 0;
-		
+		int32_t _scanline;
+		uint32_t _cycle;
+		uint32_t _frameCount;
+		uint8_t _memoryReadBuffer;
+
 		uint8_t _paletteRAM[0x100];
 
 		uint8_t _spriteRAM[0x100];
 		uint8_t _secondarySpriteRAM[0x20];
 
 		uint32_t *_outputBuffer;
+
+		NesModel _nesModel;
+		uint16_t _vblankEnd;
 
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;
@@ -191,6 +196,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		uint8_t ReadRAM(uint16_t addr);
 		void WriteRAM(uint16_t addr, uint8_t value);
+
+		void SetNesModel(NesModel model);
 
 		void Exec();
 		static void ExecStatic();

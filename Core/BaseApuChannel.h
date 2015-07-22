@@ -16,6 +16,7 @@ private:
 	uint32_t _previousCycle;
 	AudioChannel _channel;
 	double _baseVolume;
+	NesModel _nesModel;
 
 protected:
 	uint16_t _timer = 0;
@@ -66,10 +67,21 @@ public:
 		Stream<uint32_t>(_previousCycle);
 		Stream<uint16_t>(_timer);
 		Stream<uint16_t>(_period);
+		Stream<NesModel>(_nesModel);
 
 		if(!saving) {
 			_buffer->clear();
 		}
+	}
+
+	void SetNesModel(NesModel model)
+	{
+		_nesModel = model;
+	}
+
+	NesModel GetNesModel()
+	{
+		return _nesModel;
 	}
 
 	virtual void Run(uint32_t targetCycle)

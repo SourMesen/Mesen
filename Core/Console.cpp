@@ -153,13 +153,15 @@ void Console::Resume()
 void Console::Run()
 {
 	Timer clockTimer;
+	double targetTime;
 	double elapsedTime = 0;
-	double targetTime = 16.63926405550947; //~60.0988fps
+	uint32_t lastFrameNumber = -1;
 
 	_runLock.Acquire();
 	_stopLock.Acquire();
 
-	uint32_t lastFrameNumber = -1;
+	UpdateNesModel(targetTime, true);
+
 	while(true) { 
 		_cpu->Exec();
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
@@ -200,6 +202,8 @@ void Console::Run()
 				_runLock.Acquire();
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
 			}
+
+			UpdateNesModel(targetTime, false);
 			clockTimer.Reset();
 			
 			if(_stop) {
@@ -211,6 +215,17 @@ void Console::Run()
 	_apu->StopAudio();
 	_stopLock.Release();
 	_runLock.Release();
+}
+
+void Console::UpdateNesModel(double &frameDelay, bool showMessage)
+{
+	NesModel model = EmulationSettings::GetNesModel();
+	if(model == NesModel::Auto) {
+		model = _mapper->IsPalRom() ? NesModel::PAL : NesModel::NTSC;
+	}
+	frameDelay = (model == NesModel::NTSC ? 16.63926405550947 : 19.99720920217466); //60.1fps (NTSC), 50.01fps (PAL)
+	_ppu->SetNesModel(model);
+	_apu->SetNesModel(model);
 }
 
 void Console::SaveState(ostream &saveStream)

@@ -78,6 +78,10 @@
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
+			this.mnuRegion = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRegionAuto = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRegionNtsc = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRegionPal = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -201,9 +205,10 @@
             this.mnuLimitFPS,
             this.mnuShowFPS,
             this.toolStripMenuItem1,
+            this.mnuAudioConfig,
             this.mnuInput,
-            this.mnuVideoConfig,
-            this.mnuAudioConfig});
+            this.mnuRegion,
+            this.mnuVideoConfig});
 			this.mnuOptions.Name = "mnuOptions";
 			this.mnuOptions.Size = new System.Drawing.Size(61, 20);
 			this.mnuOptions.Text = "Options";
@@ -439,6 +444,37 @@
 			this.dxViewer.Size = new System.Drawing.Size(1024, 896);
 			this.dxViewer.TabIndex = 1;
 			// 
+			// mnuRegion
+			// 
+			this.mnuRegion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuRegionAuto,
+            this.mnuRegionNtsc,
+            this.mnuRegionPal});
+			this.mnuRegion.Name = "mnuRegion";
+			this.mnuRegion.Size = new System.Drawing.Size(152, 22);
+			this.mnuRegion.Text = "Region";
+			// 
+			// mnuRegionAuto
+			// 
+			this.mnuRegionAuto.Name = "mnuRegionAuto";
+			this.mnuRegionAuto.Size = new System.Drawing.Size(152, 22);
+			this.mnuRegionAuto.Text = "Auto";
+			this.mnuRegionAuto.Click += new System.EventHandler(this.mnuRegion_Click);
+			// 
+			// mnuRegionNtsc
+			// 
+			this.mnuRegionNtsc.Name = "mnuRegionNtsc";
+			this.mnuRegionNtsc.Size = new System.Drawing.Size(152, 22);
+			this.mnuRegionNtsc.Text = "NTSC";
+			this.mnuRegionNtsc.Click += new System.EventHandler(this.mnuRegion_Click);
+			// 
+			// mnuRegionPal
+			// 
+			this.mnuRegionPal.Name = "mnuRegionPal";
+			this.mnuRegionPal.Size = new System.Drawing.Size(152, 22);
+			this.mnuRegionPal.Text = "PAL";
+			this.mnuRegionPal.Click += new System.EventHandler(this.mnuRegion_Click);
+			// 
 			// frmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -504,6 +540,10 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuLoadState;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
 		private System.Windows.Forms.ToolStripMenuItem mnuCheats;
+		private System.Windows.Forms.ToolStripMenuItem mnuRegion;
+		private System.Windows.Forms.ToolStripMenuItem mnuRegionAuto;
+		private System.Windows.Forms.ToolStripMenuItem mnuRegionNtsc;
+		private System.Windows.Forms.ToolStripMenuItem mnuRegionPal;
 	}
 }
 

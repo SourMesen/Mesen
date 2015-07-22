@@ -162,6 +162,7 @@ namespace InteropEmu {
 		DllExport void __stdcall ClearFlags(uint32_t flags) { EmulationSettings::ClearFlags(flags); }
 		DllExport void __stdcall SetChannelVolume(uint32_t channel, double volume) { EmulationSettings::SetChannelVolume((AudioChannel)channel, volume); }
 		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { EmulationSettings::SetAudioLatency(msLatency); }
+		DllExport void __stdcall SetNesModel(uint32_t model) { EmulationSettings::SetNesModel((NesModel)model); }
 
 	}
 }

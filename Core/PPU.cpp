@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PPU.h"
 #include "CPU.h"
+#include "EmulationSettings.h"
 
 PPU* PPU::Instance = nullptr;
 IVideoDevice *PPU::VideoDevice = nullptr;
@@ -48,6 +49,12 @@ void PPU::Reset()
 	_memoryReadBuffer = 0;
 
 	memset(_spriteRAM, 0xFF, 0x100);
+}
+
+void PPU::SetNesModel(NesModel model)
+{
+	_nesModel = model;
+	_vblankEnd = (model == NesModel::NTSC ? 260 : 311);
 }
 
 PPUDebugState PPU::GetState()
@@ -473,7 +480,8 @@ void PPU::ProcessPrerenderScanline()
 			//copy vertical scrolling value from t
 			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x7BE0) | (_state.TmpVideoRamAddr & 0x7BE0);
 		}
-	} else if(_cycle == 339 && IsRenderingEnabled() && (_frameCount & 0x01)) {
+	} else if(_nesModel == NesModel::NTSC && _cycle == 339 && IsRenderingEnabled() && (_frameCount & 0x01)) {
+		//This behavior is NTSC-specific - PAL frames are always the same number of cycles
 		//"With rendering enabled, each odd PPU frame is one PPU clock shorter than normal" (skip from 339 to 0, going over 340)
 		_cycle = -1;
 		_scanline = 0;
@@ -626,15 +634,14 @@ void PPU::Exec()
 		ProcessPrerenderScanline();
 	} else if(_scanline == 241) {
 		BeginVBlank();
-	} else if(_scanline == 260) {
+	} else if(_scanline == _vblankEnd) {
 		EndVBlank();
 	}
 
 	if(_cycle == 340) {
 		_cycle = -1;
-		_scanline++;
 
-		if(_scanline == 261) {
+		if(_scanline++ == _vblankEnd) {
 			_scanline = -1;
 		}
 	}
@@ -646,6 +653,10 @@ void PPU::ExecStatic()
 	PPU::Instance->Exec();
 	PPU::Instance->Exec();
 	PPU::Instance->Exec();
+	if(PPU::Instance->_nesModel == NesModel::PAL && CPU::GetCycleCount() % 5 == 0) {
+		//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
+		PPU::Instance->Exec();
+	}
 }
 
 void PPU::StreamState(bool saving)
@@ -717,4 +728,10 @@ void PPU::StreamState(bool saving)
 	Stream<bool>(_writeOAMData);
 	Stream<uint32_t>(_overflowCounter);
 	Stream<bool>(_sprite0Added);
+
+	Stream<NesModel>(_nesModel);
+
+	if(!saving) {
+		SetNesModel(_nesModel);
+	}
 }

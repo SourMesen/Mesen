@@ -35,6 +35,7 @@ class Console
 
 		void ResetComponents(bool softReset);
 		void Initialize(string filename);
+		void UpdateNesModel(double &frameDelay, bool showMessage);
 
 	public:
 		Console();

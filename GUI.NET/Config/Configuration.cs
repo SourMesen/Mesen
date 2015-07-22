@@ -21,6 +21,7 @@ namespace Mesen.GUI.Config
 		public List<CheatInfo> Cheats;
 		public List<ControllerInfo> Controllers;
 		public bool ShowOnlyCheatsForCurrentGame;
+		public NesModel Region;
 
 		public Configuration()
 		{
@@ -31,6 +32,15 @@ namespace Mesen.GUI.Config
 			VideoInfo = new VideoInfo();
 			RecentFiles = new List<string>();
 			Controllers = new List<ControllerInfo>();
+		}
+
+		public void ApplyConfig()
+		{
+			ControllerInfo.ApplyConfig();
+			VideoInfo.ApplyConfig();
+			AudioInfo.ApplyConfig();
+
+			InteropEmu.SetNesModel(Region);
 		}
 
 		private void InitializeDefaults()
