@@ -6,28 +6,12 @@
 PPU* PPU::Instance = nullptr;
 IVideoDevice *PPU::VideoDevice = nullptr;
 
-uint32_t PPU_PALETTE_RGB[] = {
-    0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E,
-    0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800,
-    0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000,
-    0xFF000000, 0xFFADADAD, 0xFF155FD9, 0xFF4240FF, 0xFF7527FE,
-    0xFFA01ACC, 0xFFB71E7B, 0xFFB53120, 0xFF994E00, 0xFF6B6D00,
-    0xFF388700, 0xFF0C9300, 0xFF008F32, 0xFF007C8D, 0xFF000000,
-    0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFF64B0FF, 0xFF9290FF,
-    0xFFC676FF, 0xFFF36AFF, 0xFFFE6ECC, 0xFFFE8170, 0xFFEA9E22,
-    0xFFBCBE00, 0xFF88D800, 0xFF5CE430, 0xFF45E082, 0xFF48CDDE,
-    0xFF4F4F4F, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFFC0DFFF,
-    0xFFD3D2FF, 0xFFE8C8FF, 0xFFFBC2FF, 0xFFFEC4EA, 0xFFFECCC5,
-    0xFFF7D8A5, 0xFFE4E594, 0xFFCFEF96, 0xFFBDF4AB, 0xFFB3F3CC,
-    0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000,
-};
-
 PPU::PPU(MemoryManager *memoryManager)
 {
 	PPU::Instance = this;
 
 	_memoryManager = memoryManager;
-	_outputBuffer = new uint32_t[256 * 240];
+	_outputBuffer = new uint16_t[256 * 240];
 
 	Reset();
 }
@@ -170,7 +154,7 @@ uint8_t PPU::ReadPaletteRAM(uint16_t addr)
 	if(addr == 0x10 || addr == 0x14 || addr == 0x18 || addr == 0x1C) {
 		addr &= ~0x10;
 	}
-	return _paletteRAM[addr];
+	return (_paletteRAM[addr] & _paletteRamMask);
 }
 
 void PPU::WritePaletteRAM(uint16_t addr, uint8_t value)
@@ -185,18 +169,18 @@ void PPU::WritePaletteRAM(uint16_t addr, uint8_t value)
 uint32_t PPU::GetBGPaletteEntry(uint32_t paletteOffset, uint32_t pixel)
 {
 	if(pixel == 0) {
-		return ReadPaletteRAM(0x3F00) & 0x3F;
+		return ReadPaletteRAM(0x3F00) | _intensifyColorBits;
 	} else {
-		return ReadPaletteRAM(0x3F00 + paletteOffset + pixel) & 0x3F;
+		return ReadPaletteRAM(0x3F00 + paletteOffset + pixel) | _intensifyColorBits;
 	}
 }
 
 uint32_t PPU::GetSpritePaletteEntry(uint32_t paletteOffset, uint32_t pixel)
 {
 	if(pixel == 0) {
-		return ReadPaletteRAM(0x3F00) & 0x3F;
+		return ReadPaletteRAM(0x3F00) | _intensifyColorBits;
 	} else {
-		return ReadPaletteRAM(0x3F10 + paletteOffset + pixel) & 0x3F;
+		return ReadPaletteRAM(0x3F10 + paletteOffset + pixel) | _intensifyColorBits;
 	}
 }
 
@@ -236,9 +220,21 @@ void PPU::SetMaskRegister(uint8_t value)
 	_flags.SpriteMask = (_state.Mask & 0x04) == 0x04;
 	_flags.BackgroundEnabled = (_state.Mask & 0x08) == 0x08;
 	_flags.SpritesEnabled = (_state.Mask & 0x10) == 0x10;
-	_flags.IntensifyRed = (_state.Mask & 0x20) == 0x20;
-	_flags.IntensifyGreen = (_state.Mask & 0x40) == 0x40;
 	_flags.IntensifyBlue = (_state.Mask & 0x80) == 0x80;
+	
+	 //"Bit 0 controls a greyscale mode, which causes the palette to use only the colors from the grey column: $00, $10, $20, $30. This is implemented as a bitwise AND with $30 on any value read from PPU $3F00-$3FFF"
+	_paletteRamMask = _flags.Grayscale ? 0x30 : 0x3F;
+
+	if(_nesModel == NesModel::NTSC) {
+		_flags.IntensifyRed = (_state.Mask & 0x20) == 0x20;
+		_flags.IntensifyGreen = (_state.Mask & 0x40) == 0x40;
+		_intensifyColorBits = (value & 0xE0) << 1;
+	} else {
+		//"Note that on the Dendy and PAL NES, the green and red bits swap meaning."
+		_flags.IntensifyRed = (_state.Mask & 0x40) == 0x40;
+		_flags.IntensifyGreen = (_state.Mask & 0x20) == 0x20;
+		_intensifyColorBits = (_flags.IntensifyRed ? 0x40 : 0x00) | (_flags.IntensifyGreen ? 0x80 : 0x00) | (_flags.IntensifyBlue ? 0x100 : 0x00);
+	}
 }
 
 void PPU::UpdateStatusFlag()
@@ -396,50 +392,55 @@ void PPU::ShiftTileRegisters()
 void PPU::DrawPixel()
 {
 	//This is called 3.7 million times per second - needs to be as fast as possible.
-	uint8_t offset = _state.XScroll;
+	uint16_t &pixel = _outputBuffer[(_scanline << 8) + _cycle - 1];
 
-	uint32_t backgroundColor = 0;
-	uint32_t &pixel = _outputBuffer[(_scanline << 8) + _cycle - 1];
+	if(IsRenderingEnabled() || ((_state.VideoRamAddr & 0x3F00) != 0x3F00)) {
+		uint8_t offset = _state.XScroll;
+		uint32_t backgroundColor = 0;
 
-	if((_cycle > 8 || _flags.BackgroundMask) && _flags.BackgroundEnabled) {
-		//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
-		backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
-	}
+		if((_cycle > 8 || _flags.BackgroundMask) && _flags.BackgroundEnabled) {
+			//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
+			backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+		}
 
-	if((_cycle > 8 || _flags.SpriteMask) && _flags.SpritesEnabled) {
-		//SpriteMask = true: Hide sprites in leftmost 8 pixels of screen
-		for(uint8_t i = 0; i < _spriteCount; i++) {
-			int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
-			if(shift >= 0 && shift < 8) {
-				uint32_t spriteColor;
-				if(_spriteTiles[i].HorizontalMirror) {
-					spriteColor = ((_spriteTiles[i].LowByte >> shift) & 0x01) | ((_spriteTiles[i].HighByte >> shift) & 0x01) << 1;
-				} else {
-					spriteColor = ((_spriteTiles[i].LowByte << shift) & 0x80) >> 7 | ((_spriteTiles[i].HighByte << shift) & 0x80) >> 6;
-				}
-
-				if(spriteColor != 0) {
-					//First sprite without a 00 color, use it.
-					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled) {
-						//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
-						//"Sprite zero hits do not register at x=255" (cycle 256)
-						//"... provided that background and sprite rendering are both enabled"
-						//"Should always miss when Y >= 239"
-						_statusFlags.Sprite0Hit = true;
+		if((_cycle > 8 || _flags.SpriteMask) && _flags.SpritesEnabled) {
+			//SpriteMask = true: Hide sprites in leftmost 8 pixels of screen
+			for(uint8_t i = 0; i < _spriteCount; i++) {
+				int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
+				if(shift >= 0 && shift < 8) {
+					uint32_t spriteColor;
+					if(_spriteTiles[i].HorizontalMirror) {
+						spriteColor = ((_spriteTiles[i].LowByte >> shift) & 0x01) | ((_spriteTiles[i].HighByte >> shift) & 0x01) << 1;
+					} else {
+						spriteColor = ((_spriteTiles[i].LowByte << shift) & 0x80) >> 7 | ((_spriteTiles[i].HighByte << shift) & 0x80) >> 6;
 					}
 
-					if(backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority) {
-						//Check sprite priority
-						pixel = PPU_PALETTE_RGB[GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor)];
-						return;
-					}
+					if(spriteColor != 0) {
+						//First sprite without a 00 color, use it.
+						if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled) {
+							//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
+							//"Sprite zero hits do not register at x=255" (cycle 256)
+							//"... provided that background and sprite rendering are both enabled"
+							//"Should always miss when Y >= 239"
+							_statusFlags.Sprite0Hit = true;
+						}
 
-					break;
+						if(backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority) {
+							//Check sprite priority
+							pixel = GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor);
+							return;
+						}
+
+						break;
+					}
 				}
 			}
 		}
+		pixel = GetBGPaletteEntry(offset + ((_cycle - 1) & 0x07) < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor);
+	} else {
+		//"If the current VRAM address points in the range $3F00-$3FFF during forced blanking, the color indicated by this palette location will be shown on screen instead of the backdrop color."
+		pixel = ReadPaletteRAM(_state.VideoRamAddr) | _intensifyColorBits;
 	}
-	pixel = PPU_PALETTE_RGB[GetBGPaletteEntry(offset + ((_cycle - 1) & 0x07) < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor)];
 }
 
 void PPU::ProcessPreVBlankScanline()
@@ -686,6 +687,8 @@ void PPU::StreamState(bool saving)
 	Stream<bool>(_flags.IntensifyRed);
 	Stream<bool>(_flags.IntensifyGreen);
 	Stream<bool>(_flags.IntensifyBlue);
+	Stream<uint8_t>(_paletteRamMask);
+	Stream<uint16_t>(_intensifyColorBits);
 
 	Stream<bool>(_statusFlags.SpriteOverflow);
 	Stream<bool>(_statusFlags.Sprite0Hit);

@@ -5,6 +5,7 @@
 #include "DirectXTK/DDSTextureLoader.h"
 #include "DirectXTK/WICTextureLoader.h"
 #include "../Core/PPU.h"
+#include "../Core/VideoDecoder.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/MessageManager.h"
 #include "../Utilities/UTF8Util.h"
@@ -76,6 +77,13 @@ namespace NES
 			_overlayBuffer = nullptr;
 		}
 
+		if(_ppuOutputBuffer) {
+			delete[] _ppuOutputBuffer;
+		}
+
+		if(_ppuOutputSecondaryBuffer) {
+			delete[] _ppuOutputSecondaryBuffer;
+		}
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -222,8 +230,12 @@ namespace NES
 
 		_videoRAM = new uint8_t[_screenBufferSize];
 		_nextFrameBuffer = new uint8_t[_screenBufferSize];
+		_ppuOutputBuffer = new uint16_t[_screenWidth * _screenHeight];
+		_ppuOutputSecondaryBuffer = new uint16_t[_screenWidth * _screenHeight];
 		memset(_videoRAM, 0x00, _screenBufferSize);
 		memset(_nextFrameBuffer, 0x00, _screenBufferSize);
+		memset(_ppuOutputBuffer, 0x00, _screenWidth * _screenHeight * sizeof(uint16_t));
+		memset(_ppuOutputSecondaryBuffer, 0x00, _screenWidth * _screenHeight * sizeof(uint16_t));
 
 		_pTexture = CreateTexture(_screenWidth, _screenHeight);
 		if(!_pTexture) {
@@ -364,6 +376,12 @@ namespace NES
 
 	void Renderer::DrawNESScreen()
 	{
+		_frameLock.Acquire();
+		memcpy(_ppuOutputSecondaryBuffer, _ppuOutputBuffer, 256 * 240 * sizeof(uint16_t));
+		_frameLock.Release();
+
+		VideoDecoder::DecodeFrame(_ppuOutputSecondaryBuffer, (uint32_t*)_nextFrameBuffer);
+
 		RECT sourceRect;
 		sourceRect.left = 0;
 		sourceRect.right = _screenWidth;
@@ -383,9 +401,7 @@ namespace NES
 		dd.DepthPitch = _screenBufferSize;
 
 		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		_frameLock.Acquire();
 		memcpy(dd.pData, _nextFrameBuffer, _screenBufferSize);
-		_frameLock.Release();
 		_pDeviceContext->Unmap(_pTexture, 0);
 
 		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
@@ -568,12 +584,11 @@ namespace NES
 
 	void Renderer::UpdateFrame(void* frameBuffer)
 	{
-		_frameChanged = true;
-
 		_frameLock.Acquire();
-		memcpy(_nextFrameBuffer, frameBuffer, 256 * 240 * 4);
+		memcpy(_ppuOutputBuffer, frameBuffer, 256 * 240 * 2);
 		_frameLock.Release();
 
+		_frameChanged = true;
 		_frameCount++;
 	}
 

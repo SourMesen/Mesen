@@ -104,13 +104,16 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint8_t _spriteRAM[0x100];
 		uint8_t _secondarySpriteRAM[0x20];
 
-		uint32_t *_outputBuffer;
+		uint16_t *_outputBuffer;
 
 		NesModel _nesModel;
 		uint16_t _vblankEnd;
 
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;
+
+		uint16_t _intensifyColorBits;
+		uint8_t _paletteRamMask;
 
 		bool _doNotSetVBFlag = false;
 

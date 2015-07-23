@@ -221,6 +221,9 @@
     <ClInclude Include="EmulationSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VideoDecoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPU.cpp">

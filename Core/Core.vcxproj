@@ -325,6 +325,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TriangleChannel.h" />
     <ClInclude Include="UNROM.h" />
+    <ClInclude Include="VideoDecoder.h" />
     <ClInclude Include="VirtualController.h" />
     <ClInclude Include="VRC2_4.h" />
   </ItemGroup>

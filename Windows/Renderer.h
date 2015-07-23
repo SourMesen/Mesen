@@ -40,6 +40,8 @@ namespace NES {
 
 		bool							_frameChanged = true;
 		uint8_t*						_nextFrameBuffer = nullptr;
+		uint16_t*					_ppuOutputBuffer = nullptr;
+		uint16_t*					_ppuOutputSecondaryBuffer = nullptr;
 		SimpleLock					_frameLock;
 
 		Timer _fpsTimer;
