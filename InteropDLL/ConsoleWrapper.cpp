@@ -12,6 +12,7 @@
 #include "../Core/CheatManager.h"
 #include "../Core/StandardController.h"
 #include "../Core/EmulationSettings.h"
+#include "../Core/VideoDecoder.h"
 
 static NES::Renderer *_renderer = nullptr;
 static SoundManager *_soundManager = nullptr;
@@ -131,7 +132,7 @@ namespace InteropEmu {
 		}
 
 		DllExport void __stdcall Render() { _renderer->Render(); }
-		DllExport void __stdcall TakeScreenshot() { _renderer->TakeScreenshot(Console::GetROMPath()); }
+		DllExport void __stdcall TakeScreenshot() { VideoDecoder::GetInstance()->TakeScreenshot(FolderUtilities::GetFilename(Console::GetROMPath(), false)); }
 
 		DllExport INotificationListener* __stdcall RegisterNotificationCallback(NotificationListenerCallback callback)
 		{
@@ -163,6 +164,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetChannelVolume(uint32_t channel, double volume) { EmulationSettings::SetChannelVolume((AudioChannel)channel, volume); }
 		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { EmulationSettings::SetAudioLatency(msLatency); }
 		DllExport void __stdcall SetNesModel(uint32_t model) { EmulationSettings::SetNesModel((NesModel)model); }
+		DllExport void __stdcall SetOverscanDimensions(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom) { EmulationSettings::SetOverscanDimensions(left, right, top, bottom); }
 
 	}
 }

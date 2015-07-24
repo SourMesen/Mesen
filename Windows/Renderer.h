@@ -36,10 +36,9 @@ namespace NES {
 		ID3D11SamplerState*		_samplerState = nullptr;
 		
 		ID3D11Texture2D*			_pTexture = nullptr;
-		byte*							_videoRAM = nullptr;
+		uint32_t*					_videoRAM = nullptr;
 
 		bool							_frameChanged = true;
-		uint8_t*						_nextFrameBuffer = nullptr;
 		uint16_t*					_ppuOutputBuffer = nullptr;
 		uint16_t*					_ppuOutputSecondaryBuffer = nullptr;
 		SimpleLock					_frameLock;
@@ -57,23 +56,18 @@ namespace NES {
 		unique_ptr<SpriteBatch> _spriteBatch;
 		//ID3D11PixelShader* _pixelShader = nullptr;
 
-		uint32_t _screenWidth;
-		uint32_t _screenHeight;
-		uint32_t _bytesPerPixel;
-		uint32_t _hdScreenWidth;
-		uint32_t _hdScreenHeight;
-		uint32_t _screenBufferSize;
-		uint32_t _hdScreenBufferSize;
-
-		uint32_t _flags = 0;
+		const uint32_t _bytesPerPixel = 4;
+		uint32_t _hdScreenWidth = 0;
+		uint32_t _hdScreenHeight = 0;
+		uint32_t _hdScreenBufferSize = 0;
 
 		list<shared_ptr<ToastInfo>> _toasts;
-		ID3D11ShaderResourceView* _toastTexture;
+		ID3D11ShaderResourceView* _toastTexture = nullptr;
 
 		HRESULT InitDevice();
 		void CleanupDevice();
 
-		void SetScreenSize(uint32_t screenWidth, uint32_t screenHeight);
+		void SetScreenSize();
 
 		ID3D11Texture2D* CreateTexture(uint32_t width, uint32_t height);
 		ID3D11ShaderResourceView* GetShaderResourceView(ID3D11Texture2D* texture);
@@ -92,27 +86,8 @@ namespace NES {
 		~Renderer();
 
 		void Render();
-
 		void DisplayMessage(string title, string message);
-		
-		void SetFlags(uint32_t flags)
-		{
-			_flags |= flags;
-		}
-
-		void ClearFlags(uint32_t flags)
-		{
-			_flags &= ~flags;
-		}
-
-		bool CheckFlag(uint32_t flag)
-		{
-			return (_flags & flag) == flag;
-		}
-
 		void UpdateFrame(void* frameBuffer);
 		void DisplayToast(shared_ptr<ToastInfo> toast);
-
-		void TakeScreenshot(string romFilename);
 	};
 }

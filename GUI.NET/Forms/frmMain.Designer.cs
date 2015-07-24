@@ -51,9 +51,13 @@
 			this.mnuLimitFPS = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowFPS = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuInput = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuVideoConfig = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAudioConfig = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuInput = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRegion = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRegionAuto = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRegionNtsc = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRegionPal = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuVideoConfig = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNetPlay = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStartServer = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,10 +82,6 @@
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
-			this.mnuRegion = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRegionAuto = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRegionNtsc = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRegionPal = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -218,7 +218,7 @@
 			this.mnuLimitFPS.CheckOnClick = true;
 			this.mnuLimitFPS.Name = "mnuLimitFPS";
 			this.mnuLimitFPS.ShortcutKeys = System.Windows.Forms.Keys.F9;
-			this.mnuLimitFPS.Size = new System.Drawing.Size(152, 22);
+			this.mnuLimitFPS.Size = new System.Drawing.Size(150, 22);
 			this.mnuLimitFPS.Text = "Limit FPS";
 			this.mnuLimitFPS.Click += new System.EventHandler(this.mnuLimitFPS_Click);
 			// 
@@ -227,36 +227,66 @@
 			this.mnuShowFPS.CheckOnClick = true;
 			this.mnuShowFPS.Name = "mnuShowFPS";
 			this.mnuShowFPS.ShortcutKeys = System.Windows.Forms.Keys.F10;
-			this.mnuShowFPS.Size = new System.Drawing.Size(152, 22);
+			this.mnuShowFPS.Size = new System.Drawing.Size(150, 22);
 			this.mnuShowFPS.Text = "Show FPS";
 			this.mnuShowFPS.Click += new System.EventHandler(this.mnuShowFPS_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
-			// 
-			// mnuInput
-			// 
-			this.mnuInput.Name = "mnuInput";
-			this.mnuInput.Size = new System.Drawing.Size(152, 22);
-			this.mnuInput.Text = "Input";
-			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
-			// 
-			// mnuVideoConfig
-			// 
-			this.mnuVideoConfig.Enabled = false;
-			this.mnuVideoConfig.Name = "mnuVideoConfig";
-			this.mnuVideoConfig.Size = new System.Drawing.Size(152, 22);
-			this.mnuVideoConfig.Text = "Video";
-			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(147, 6);
 			// 
 			// mnuAudioConfig
 			// 
 			this.mnuAudioConfig.Name = "mnuAudioConfig";
-			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuAudioConfig.Size = new System.Drawing.Size(150, 22);
 			this.mnuAudioConfig.Text = "Audio";
 			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
+			// 
+			// mnuInput
+			// 
+			this.mnuInput.Name = "mnuInput";
+			this.mnuInput.Size = new System.Drawing.Size(150, 22);
+			this.mnuInput.Text = "Input";
+			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
+			// 
+			// mnuRegion
+			// 
+			this.mnuRegion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuRegionAuto,
+            this.mnuRegionNtsc,
+            this.mnuRegionPal});
+			this.mnuRegion.Name = "mnuRegion";
+			this.mnuRegion.Size = new System.Drawing.Size(150, 22);
+			this.mnuRegion.Text = "Region";
+			// 
+			// mnuRegionAuto
+			// 
+			this.mnuRegionAuto.Name = "mnuRegionAuto";
+			this.mnuRegionAuto.Size = new System.Drawing.Size(104, 22);
+			this.mnuRegionAuto.Text = "Auto";
+			this.mnuRegionAuto.Click += new System.EventHandler(this.mnuRegion_Click);
+			// 
+			// mnuRegionNtsc
+			// 
+			this.mnuRegionNtsc.Name = "mnuRegionNtsc";
+			this.mnuRegionNtsc.Size = new System.Drawing.Size(104, 22);
+			this.mnuRegionNtsc.Text = "NTSC";
+			this.mnuRegionNtsc.Click += new System.EventHandler(this.mnuRegion_Click);
+			// 
+			// mnuRegionPal
+			// 
+			this.mnuRegionPal.Name = "mnuRegionPal";
+			this.mnuRegionPal.Size = new System.Drawing.Size(104, 22);
+			this.mnuRegionPal.Text = "PAL";
+			this.mnuRegionPal.Click += new System.EventHandler(this.mnuRegion_Click);
+			// 
+			// mnuVideoConfig
+			// 
+			this.mnuVideoConfig.Name = "mnuVideoConfig";
+			this.mnuVideoConfig.Size = new System.Drawing.Size(150, 22);
+			this.mnuVideoConfig.Text = "Video";
+			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
 			// 
 			// mnuTools
 			// 
@@ -441,45 +471,15 @@
 			this.dxViewer.Location = new System.Drawing.Point(0, 24);
 			this.dxViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.dxViewer.Name = "dxViewer";
-			this.dxViewer.Size = new System.Drawing.Size(1024, 896);
+			this.dxViewer.Size = new System.Drawing.Size(1024, 960);
 			this.dxViewer.TabIndex = 1;
-			// 
-			// mnuRegion
-			// 
-			this.mnuRegion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuRegionAuto,
-            this.mnuRegionNtsc,
-            this.mnuRegionPal});
-			this.mnuRegion.Name = "mnuRegion";
-			this.mnuRegion.Size = new System.Drawing.Size(152, 22);
-			this.mnuRegion.Text = "Region";
-			// 
-			// mnuRegionAuto
-			// 
-			this.mnuRegionAuto.Name = "mnuRegionAuto";
-			this.mnuRegionAuto.Size = new System.Drawing.Size(152, 22);
-			this.mnuRegionAuto.Text = "Auto";
-			this.mnuRegionAuto.Click += new System.EventHandler(this.mnuRegion_Click);
-			// 
-			// mnuRegionNtsc
-			// 
-			this.mnuRegionNtsc.Name = "mnuRegionNtsc";
-			this.mnuRegionNtsc.Size = new System.Drawing.Size(152, 22);
-			this.mnuRegionNtsc.Text = "NTSC";
-			this.mnuRegionNtsc.Click += new System.EventHandler(this.mnuRegion_Click);
-			// 
-			// mnuRegionPal
-			// 
-			this.mnuRegionPal.Name = "mnuRegionPal";
-			this.mnuRegionPal.Size = new System.Drawing.Size(152, 22);
-			this.mnuRegionPal.Text = "PAL";
-			this.mnuRegionPal.Click += new System.EventHandler(this.mnuRegion_Click);
 			// 
 			// frmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
+			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.ClientSize = new System.Drawing.Size(365, 272);
 			this.Controls.Add(this.dxViewer);
 			this.Controls.Add(this.menuStrip);

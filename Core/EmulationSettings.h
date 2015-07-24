@@ -25,6 +25,29 @@ enum class NesModel
 	PAL = 2,
 };
 
+struct OverscanDimensions
+{
+	uint32_t Left = 0;
+	uint32_t Right = 0;
+	uint32_t Top = 0;
+	uint32_t Bottom = 0;
+
+	uint32_t GetPixelCount()
+	{
+		return GetScreenWidth() * GetScreenHeight();
+	}
+
+	uint32_t GetScreenWidth()
+	{
+		return 256 - Left - Right;
+	}
+
+	uint32_t GetScreenHeight()
+	{
+		return 240 - Top - Bottom;
+	}
+};
+
 class EmulationSettings
 {
 private:
@@ -32,6 +55,7 @@ private:
 	static uint32_t AudioLatency;
 	static double ChannelVolume[5];
 	static NesModel Model;
+	static OverscanDimensions Overscan;
 
 public:
 	static void SetFlags(uint32_t flags)
@@ -68,6 +92,19 @@ public:
 	static void SetAudioLatency(uint32_t msLatency)
 	{
 		AudioLatency = msLatency;
+	}
+
+	static void SetOverscanDimensions(uint8_t left, uint8_t right, uint8_t top, uint8_t bottom)
+	{
+		Overscan.Left = left;
+		Overscan.Right = right;
+		Overscan.Top = top;
+		Overscan.Bottom = bottom;
+	}
+
+	static OverscanDimensions GetOverscanDimensions()
+	{
+		return Overscan;
 	}
 
 	static double GetChannelVolume(AudioChannel channel)

@@ -301,5 +301,8 @@
     <ClCompile Include="ApuLengthCounter.cpp">
       <Filter>Source Files\APU</Filter>
     </ClCompile>
+    <ClCompile Include="VideoDecoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

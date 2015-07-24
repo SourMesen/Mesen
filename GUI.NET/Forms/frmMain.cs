@@ -37,8 +37,7 @@ namespace Mesen.GUI.Forms
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
-			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
-			mnuLimitFPS.Checked = ConfigManager.Config.VideoInfo.LimitFPS;
+			UpdateVideoSettings();
 
 			InitializeEmu();
 
@@ -70,6 +69,13 @@ namespace Mesen.GUI.Forms
 			ConfigManager.ApplyChanges();
 
 			VideoInfo.ApplyConfig();
+		}
+
+		void UpdateVideoSettings()
+		{
+			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
+			mnuLimitFPS.Checked = ConfigManager.Config.VideoInfo.LimitFPS;
+			dxViewer.Size = VideoInfo.GetViewerSize();
 		}
 
 		void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
@@ -317,7 +323,8 @@ namespace Mesen.GUI.Forms
 		
 		private void mnuVideoConfig_Click(object sender, EventArgs e)
 		{
-
+			new frmVideoConfig().ShowDialog();
+			UpdateVideoSettings();
 		}
 		
 		private void mnuDebugger_Click(object sender, EventArgs e)
@@ -397,14 +404,12 @@ namespace Mesen.GUI.Forms
 
 		private void mnuInput_Click(object sender, EventArgs e)
 		{
-			frmInputConfig frm = new frmInputConfig();
-			frm.ShowDialog();
+			new frmInputConfig().ShowDialog();
 		}
 
 		private void mnuAudioConfig_Click(object sender, EventArgs e)
 		{
-			frmAudioConfig frm = new frmAudioConfig();
-			frm.ShowDialog();
+			new frmAudioConfig().ShowDialog();
 		}
 
 		private void mnuRegion_Click(object sender, EventArgs e)

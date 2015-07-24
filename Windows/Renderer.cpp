@@ -16,16 +16,12 @@ namespace NES
 {
 	Renderer::Renderer(HWND hWnd)
 	{
-		SetScreenSize(256, 240);
-
 		_hWnd = hWnd;
 
-		if(FAILED(InitDevice())) {
-			CleanupDevice();
-		} else {
-			PPU::RegisterVideoDevice(this);
-			MessageManager::RegisterMessageManager(this);
-		}
+		SetScreenSize();
+
+		PPU::RegisterVideoDevice(this);
+		MessageManager::RegisterMessageManager(this);
 	}
 
 	Renderer::~Renderer()
@@ -33,17 +29,25 @@ namespace NES
 		CleanupDevice();
 	}
 
-	void Renderer::SetScreenSize(uint32_t screenWidth, uint32_t screenHeight)
+	void Renderer::SetScreenSize()
 	{
-		_screenWidth = screenWidth;
-		_screenHeight = screenHeight;
-		_bytesPerPixel = 4;
+		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
 
-		_hdScreenWidth = _screenWidth * 4;
-		_hdScreenHeight = (_screenHeight - 16) * 4;
-		
-		_screenBufferSize = _screenWidth * _screenHeight * _bytesPerPixel;
-		_hdScreenBufferSize = _hdScreenWidth * _hdScreenHeight * _bytesPerPixel;
+		if(_hdScreenBufferSize == 0 || _hdScreenBufferSize != overscan.GetPixelCount() * 64) {
+			uint32_t screenWidth = overscan.GetScreenWidth();
+			uint32_t screenHeight = overscan.GetScreenHeight();
+
+			_hdScreenWidth = screenWidth * 4;
+			_hdScreenHeight = screenHeight * 4;
+			_hdScreenBufferSize = _hdScreenWidth * _hdScreenHeight * _bytesPerPixel;
+
+			_frameLock.Acquire();
+			CleanupDevice();
+			if(FAILED(InitDevice())) {
+				CleanupDevice();
+			}
+			_frameLock.Release();
+		}
 	}
 
 	void Renderer::CleanupDevice()
@@ -67,11 +71,6 @@ namespace NES
 			_videoRAM = nullptr;
 		}
 
-		if(_nextFrameBuffer) {
-			delete[] _nextFrameBuffer;
-			_nextFrameBuffer = nullptr;
-		}
-
 		if(_overlayBuffer) {
 			delete[] _overlayBuffer;
 			_overlayBuffer = nullptr;
@@ -79,10 +78,12 @@ namespace NES
 
 		if(_ppuOutputBuffer) {
 			delete[] _ppuOutputBuffer;
+			_ppuOutputBuffer = nullptr;
 		}
 
 		if(_ppuOutputSecondaryBuffer) {
 			delete[] _ppuOutputSecondaryBuffer;
+			_ppuOutputSecondaryBuffer = nullptr;
 		}
 	}
 
@@ -228,16 +229,14 @@ namespace NES
 		vp.TopLeftY = 0;
 		_pDeviceContext->RSSetViewports(1, &vp);
 
-		_videoRAM = new uint8_t[_screenBufferSize];
-		_nextFrameBuffer = new uint8_t[_screenBufferSize];
-		_ppuOutputBuffer = new uint16_t[_screenWidth * _screenHeight];
-		_ppuOutputSecondaryBuffer = new uint16_t[_screenWidth * _screenHeight];
-		memset(_videoRAM, 0x00, _screenBufferSize);
-		memset(_nextFrameBuffer, 0x00, _screenBufferSize);
-		memset(_ppuOutputBuffer, 0x00, _screenWidth * _screenHeight * sizeof(uint16_t));
-		memset(_ppuOutputSecondaryBuffer, 0x00, _screenWidth * _screenHeight * sizeof(uint16_t));
+		_videoRAM = new uint32_t[PPU::PixelCount];
+		_ppuOutputBuffer = new uint16_t[PPU::PixelCount];
+		_ppuOutputSecondaryBuffer = new uint16_t[PPU::PixelCount];
+		memset(_videoRAM, 0x00, PPU::PixelCount * sizeof(uint32_t));
+		memset(_ppuOutputBuffer, 0x00, PPU::OutputBufferSize);
+		memset(_ppuOutputSecondaryBuffer, 0x00, PPU::OutputBufferSize);
 
-		_pTexture = CreateTexture(_screenWidth, _screenHeight);
+		_pTexture = CreateTexture(_hdScreenWidth/4, _hdScreenHeight/4);
 		if(!_pTexture) {
 			return 0;
 		}
@@ -380,32 +379,31 @@ namespace NES
 		memcpy(_ppuOutputSecondaryBuffer, _ppuOutputBuffer, 256 * 240 * sizeof(uint16_t));
 		_frameLock.Release();
 
-		VideoDecoder::DecodeFrame(_ppuOutputSecondaryBuffer, (uint32_t*)_nextFrameBuffer);
+		uint32_t* outputBuffer = VideoDecoder::GetInstance()->DecodeFrame(_ppuOutputSecondaryBuffer);
 
-		RECT sourceRect;
-		sourceRect.left = 0;
-		sourceRect.right = _screenWidth;
-		sourceRect.top = 8;
-		sourceRect.bottom = _screenHeight - 8;
+		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
 
 		RECT destRect;
 		destRect.left = 0;
 		destRect.top = 0;
-		destRect.right = _screenWidth * 4;
-		destRect.bottom = (_screenHeight - 16) * 4;
+		destRect.right = overscan.GetScreenWidth() * 4;
+		destRect.bottom = overscan.GetScreenHeight() * 4;
 		XMVECTOR position{ { 0, 0 } };
 
 		D3D11_MAPPED_SUBRESOURCE dd;
 		dd.pData = (void *)_videoRAM;
-		dd.RowPitch = _screenWidth * _bytesPerPixel;
-		dd.DepthPitch = _screenBufferSize;
+		dd.RowPitch = overscan.GetScreenWidth() * _bytesPerPixel;
+		dd.DepthPitch = overscan.GetPixelCount() * _bytesPerPixel;
 
 		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		memcpy(dd.pData, _nextFrameBuffer, _screenBufferSize);
+		memset(dd.pData, 0, dd.DepthPitch);
+		for(uint32_t i = 0; i < overscan.GetScreenHeight(); i++) {
+			memcpy((uint8_t*)dd.pData+i*dd.RowPitch, outputBuffer+i*overscan.GetScreenWidth(), overscan.GetScreenWidth() * _bytesPerPixel);
+		}
 		_pDeviceContext->Unmap(_pTexture, 0);
 
 		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
-		_spriteBatch->Draw(nesOutputBuffer, destRect, &sourceRect);
+		_spriteBatch->Draw(nesOutputBuffer, destRect);
 		nesOutputBuffer->Release();
 	}
 
@@ -441,6 +439,8 @@ namespace NES
 	void Renderer::Render()
 	{
 		if(_frameChanged || EmulationSettings::CheckFlag(EmulationFlags::Paused) || !_toasts.empty()) {
+			SetScreenSize();
+
 			_frameChanged = false;
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
@@ -473,7 +473,7 @@ namespace NES
 					}
 
 					string fpsString = string("FPS: ") + std::to_string(_currentFPS);
-					DrawOutlinedString(fpsString, 256 * 4 - 80, 13, Colors::AntiqueWhite, 1.0f);
+					DrawOutlinedString(fpsString, (float)(_hdScreenWidth - 80), 13, Colors::AntiqueWhite, 1.0f);
 				}
 			}
 
@@ -591,40 +591,4 @@ namespace NES
 		_frameChanged = true;
 		_frameCount++;
 	}
-
-	void Renderer::TakeScreenshot(string romFilename)
-	{
-		uint32_t* frameBuffer = new uint32_t[256 * 240];
-			
-		_frameLock.Acquire();
-		memcpy(frameBuffer, _nextFrameBuffer, 256 * 240 * 4);
-		_frameLock.Release();
-
-		//ARGB -> ABGR
-		for(uint32_t i = 0; i < 256 * 240; i++) {
-			frameBuffer[i] = (frameBuffer[i] & 0xFF00FF00) | ((frameBuffer[i] & 0xFF0000) >> 16) | ((frameBuffer[i] & 0xFF) << 16);
-		}
-
-		int counter = 0;
-		string baseFilename = FolderUtilities::GetScreenshotFolder() + FolderUtilities::GetFilename(romFilename, false);
-		string ssFilename;
-		while(true) {
-			string counterStr = std::to_string(counter);
-			while(counterStr.length() < 3) {
-				counterStr = "0" + counterStr;
-			}
-			ssFilename = baseFilename + "_" + counterStr + ".png";
-			ifstream file(ssFilename, ios::in);
-			if(file) {
-				file.close();
-			} else {
-				break;
-			}
-			counter++;
-		}
-
-		PNGWriter::WritePNG(ssFilename, (uint8_t*)frameBuffer, 256, 240);	
-		MessageManager::DisplayMessage("Screenshot saved", FolderUtilities::GetFilename(ssFilename, true));
-	}
-
 }
