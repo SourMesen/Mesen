@@ -28,7 +28,7 @@ void PPU::Reset()
 	_statusFlags = {};
 
 	_scanline = 0;
-	_cycle = 0;
+	_cycle = -1;
 	_frameCount = 0;
 	_memoryReadBuffer = 0;
 
@@ -205,7 +205,7 @@ void PPU::SetControlRegister(uint8_t value)
 	bool originalVBlank = _flags.VBlank;
 	_flags.VBlank = (_state.Control & 0x80) == 0x80;
 	
-	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank) {
+	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank && (_scanline != -1 || _cycle != 0)) {
 		CPU::SetNMIFlag();
 	} else if(_scanline == 241 && _cycle < 3 && !_flags.VBlank) {
 		CPU::ClearNMIFlag();
@@ -246,9 +246,11 @@ void PPU::UpdateStatusFlag()
 
 	if(_scanline == 241) {
 		if(_cycle < 3) {
+			//"Reading on the same PPU clock or one later reads it as set, clears it, and suppresses the NMI for that frame."
 			CPU::ClearNMIFlag();
 
 			if(_cycle == 0) {
+				//"Reading one PPU clock before reads it as clear and never sets the flag or generates NMI for that frame. "
 				_doNotSetVBFlag = true;
 			}
 		}
@@ -468,7 +470,7 @@ void PPU::ProcessPrerenderScanline()
 {
 	ProcessPreVBlankScanline();
 
-	if(_cycle == 0) {
+	if(_cycle == 1) {
 		_statusFlags.SpriteOverflow = false;
 		_statusFlags.Sprite0Hit = false;
 		_statusFlags.VerticalBlank = false;
@@ -604,7 +606,7 @@ void PPU::CopyOAMData()
 
 void PPU::BeginVBlank()
 {
-	if(_cycle == 0) {
+	if(_cycle == 1) {
 		//Send frame to GUI once the last pixel has been output
 		if(PPU::VideoDevice) {
 			PPU::VideoDevice->UpdateFrame(_outputBuffer);
@@ -629,6 +631,15 @@ void PPU::EndVBlank()
 
 void PPU::Exec()
 {
+	if(_cycle == 340) {
+		_cycle = -1;
+
+		if(_scanline++ == _vblankEnd) {
+			_scanline = -1;
+		}
+	}
+	_cycle++;
+
 	if(_scanline != -1 && _scanline < 240) {
 		ProcessVisibleScanline();
 	} else if(_scanline == -1) {
@@ -638,15 +649,6 @@ void PPU::Exec()
 	} else if(_scanline == _vblankEnd) {
 		EndVBlank();
 	}
-
-	if(_cycle == 340) {
-		_cycle = -1;
-
-		if(_scanline++ == _vblankEnd) {
-			_scanline = -1;
-		}
-	}
-	_cycle++;
 }
 
 void PPU::ExecStatic()
