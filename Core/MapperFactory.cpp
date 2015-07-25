@@ -14,6 +14,7 @@
 #include "NROM.h"
 #include "UNROM.h"
 #include "VRC2_4.h"
+#include "BF909x.h"
 
 BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 {
@@ -34,7 +35,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 23: return new VRC2_4(VRCVariant::VRC2b);  //Conflicts: VRC4e
 		case 25: return new VRC2_4(VRCVariant::VRC4b);  //Conflicts: VRC2c, VRC4d
 		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
-		case 71: return new UNROM(); //TODO: "It's largely a clone of UNROM, and Camerica games were initially emulated under iNES Mapper 002 before 071 was assigned."
+		case 71: return new BF909x();
 		case 163: return new Nanjing();
 		case 189: return new MMC3_189();
 		default: MessageManager::DisplayMessage("Error", "Unsupported mapper, cannot load game.");

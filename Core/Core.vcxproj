@@ -266,6 +266,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="APU.h" />
+    <ClInclude Include="BF909x.h" />
     <ClInclude Include="DeltaModulationChannel.h" />
     <ClInclude Include="ApuEnvelope.h" />
     <ClInclude Include="ApuFrameCounter.h" />

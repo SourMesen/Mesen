@@ -224,6 +224,9 @@
     <ClInclude Include="VideoDecoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BF909x.h">
+      <Filter>Header Files\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPU.cpp">
