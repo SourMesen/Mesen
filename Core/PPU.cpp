@@ -109,8 +109,14 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			_state.SpriteRamAddr = value;
 			break;
 		case PPURegisters::SpriteData:
-			_spriteRAM[_state.SpriteRamAddr] = value;
-			_state.SpriteRamAddr = (_state.SpriteRamAddr + 1) & 0xFF;
+			if(_scanline >= 240 || !IsRenderingEnabled()) {
+				_spriteRAM[_state.SpriteRamAddr] = value;
+				_state.SpriteRamAddr = (_state.SpriteRamAddr + 1) & 0xFF;
+			} else {
+				//"Writes to OAMDATA during rendering (on the pre-render line and the visible lines 0-239, provided either sprite or background rendering is enabled) do not modify values in OAM, 
+				//but do perform a glitchy increment of OAMADDR, bumping only the high 6 bits"
+				_state.SpriteRamAddr += 4;
+			}
 			break;
 		case PPURegisters::ScrollOffsets:
 			if(_state.WriteToggle) {
