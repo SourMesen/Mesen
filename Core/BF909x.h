@@ -33,4 +33,9 @@ protected:
 			_mirroringType = (value & 0x10) ? MirroringType::ScreenAOnly : MirroringType::ScreenBOnly;
 		}
 	}
+
+	virtual void StreamState(bool saving)
+	{
+		Stream<bool>(_bf9097Mode);
+	}
 };
