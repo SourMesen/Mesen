@@ -154,6 +154,11 @@ bool APU::NeedToRun(uint32_t currentCycle)
 		return true;
 	}
 
+	if(_deltaModulationChannel->NeedToRun()) {
+		//Need to run every cycle when DMC is running to get accurate emulation (CPU stalling, interaction with sprite DMA, etc.)
+		return true;
+	}
+
 	uint32_t cyclesToRun = currentCycle - _previousCycle;
 	if(_frameCounter->IrqPending(cyclesToRun)) {
 		return true;

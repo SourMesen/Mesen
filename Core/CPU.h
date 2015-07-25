@@ -62,11 +62,12 @@ private:
 	uint16_t _operand;
 
 	Func _opTable[256];
-	uint8_t _cycles[256];
 	AddrMode _addrMode[256];
 	AddrMode _instAddrMode;
-	uint8_t _cyclesPageCrossed[256];
-	bool _pageCrossed = false;
+
+	int8_t _dmcCounter;
+	bool _dmcDmaRunning;
+	bool _dmaTransfer;
 
 	State _state;
 	MemoryManager *_memoryManager = nullptr;
@@ -126,14 +127,12 @@ private:
 
 	bool CheckPageCrossed(uint16_t valA, int8_t valB)
 	{
-		_pageCrossed = ((valA + valB) & 0xFF00) != (valA & 0xFF00);
-		return _pageCrossed;
+		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
 	}
 
 	bool CheckPageCrossed(uint16_t valA, uint8_t valB)
 	{
-		_pageCrossed = ((valA + valB) & 0xFF00) != (valA & 0xFF00);
-		return _pageCrossed;
+		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
 	}
 
 	void MemoryWrite(uint16_t addr, uint8_t value)
@@ -143,6 +142,16 @@ private:
 	}
 
 	uint8_t MemoryRead(uint16_t addr, bool forExecute = false) {
+		while(_dmcDmaRunning) {
+			//Stall CPU until we can process a DMC read
+			if((addr != 0x4016 && addr != 0x4017) || _dmcCounter == 1) {
+				//While the CPU is stalled, reads are performed on the current address
+				//This behavior causes the $4016/7 data corruption when a DMC is running.
+				//When reading $4016/7, only the last read counts (because this only occurs to low-to-high transitions, i.e once in this case)
+				_memoryManager->Read(addr, forExecute);
+			}
+			IncCycleCount();
+		}
 		uint8_t value = _memoryManager->Read(addr, forExecute);
 		IncCycleCount();
 		return value;
@@ -490,12 +499,6 @@ private:
 		}
 	}
 
-	bool IsPageCrossed() {
-		bool pageCrossed = _pageCrossed;
-		_pageCrossed = false;
-		return pageCrossed;
-	}
-
 	#pragma region OP Codes
 	void LDA() { SetA(GetOperandValue()); }
 	void LDX() { SetX(GetOperandValue()); }
@@ -841,6 +844,7 @@ public:
 	static bool HasIRQSource(IRQSource source) { return (CPU::Instance->_state.IRQFlag & (int)source) != 0; }
 	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
 	static void RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue);
+	static void StartDmcTransfer();
 
 	void Reset(bool softReset);
 	void Exec();

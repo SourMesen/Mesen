@@ -304,5 +304,8 @@
     <ClCompile Include="VideoDecoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DeltaModulationChannel.cpp">
+      <Filter>Source Files\APU</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

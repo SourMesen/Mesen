@@ -337,6 +337,7 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="Debugger.cpp" />
+    <ClCompile Include="DeltaModulationChannel.cpp" />
     <ClCompile Include="Disassembler.cpp" />
     <ClCompile Include="DisassemblyInfo.cpp" />
     <ClCompile Include="EmulationSettings.cpp" />

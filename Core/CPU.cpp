@@ -2,6 +2,7 @@
 #include "CPU.h"
 #include "PPU.h"
 #include "APU.h"
+#include "DeltaModulationChannel.h"
 
 CPU* CPU::Instance = nullptr;
 
@@ -57,7 +58,9 @@ void CPU::Reset(bool softReset)
 {
 	_state.NMIFlag = false;
 	_state.IRQFlag = 0;
-	_cycleCount = 0;
+	_cycleCount = -1;
+	_dmcCounter = -1;
+	_dmaTransfer = false;
 
 	//Use _memoryManager->Read() directly to prevent clocking the PPU/APU when setting PC at reset
 	_state.PC = _memoryManager->Read(CPU::ResetVector) | _memoryManager->Read(CPU::ResetVector+1) << 8;
@@ -90,10 +93,20 @@ void CPU::Exec()
 
 void CPU::IncCycleCount()
 {
-	//"it's really the status of the interrupt lines at the end of the second-to-last cycle that matters."
-	//Keep the irq lines values from the previous cycle.  The before-to-last cycle's values will be used
-	_prevRunIrq = _runIrq;
-	_runIrq = _state.NMIFlag || (_state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt));
+	if(_dmcDmaRunning) {
+		//CPU is being stalled by the DMC's DMA transfer
+		_dmcCounter--;
+		if(_dmcCounter == 0) {
+			//Update the DMC buffer when the stall period is completed
+			_dmcDmaRunning = false;
+			DeltaModulationChannel::SetReadBuffer();
+		}
+	} else {
+		//"it's really the status of the interrupt lines at the end of the second-to-last cycle that matters."
+		//Keep the irq lines values from the previous cycle.  The before-to-last cycle's values will be used
+		_prevRunIrq = _runIrq;
+		_runIrq = _state.NMIFlag || (_state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt));
+	}
 
 	PPU::ExecStatic();
 	APU::ExecStatic();
@@ -102,6 +115,7 @@ void CPU::IncCycleCount()
 
 void CPU::RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue)
 {
+	Instance->_dmaTransfer = true;
 	//"the DMA procedure takes 513 CPU cycles (+1 on odd CPU cycles)"
 	if(Instance->_cycleCount % 2 != 0) {
 		Instance->IncCycleCount();
@@ -116,9 +130,24 @@ void CPU::RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t of
 		//Write to ram
 		spriteRAM[(spriteRamAddr+i) & 0xFF] = readValue;
 		Instance->IncCycleCount();
+
+		if(i == 0xFE) {
+			////"DMC DMA adds [...] 3 if on the last DMA cycle.
+			Instance->_dmaTransfer = false;
+			if(Instance->_dmcCounter == 2) {
+				//"DMC DMA adds [...] 1 if on the next-to-next-to-last DMA cycle
+				Instance->_dmcCounter = 1;
+			}
+		}
 	}
 }
 
+void CPU::StartDmcTransfer()
+{
+	//"DMC DMA adds 4 cycles normally, 2 if it lands on the $4014 write or during OAM DMA"
+	Instance->_dmcDmaRunning = true;
+	Instance->_dmcCounter = Instance->_dmaTransfer ? 2 : 4;
+}
 
 void CPU::StreamState(bool saving)
 {
@@ -132,4 +161,8 @@ void CPU::StreamState(bool saving)
 	Stream<int32_t>(_cycleCount);
 	Stream<bool>(_state.NMIFlag);
 	Stream<uint32_t>(_state.IRQFlag);
+
+	Stream<int8_t>(_dmcCounter);
+	Stream<bool>(_dmcDmaRunning);
+	Stream<bool>(_dmaTransfer);
 }
