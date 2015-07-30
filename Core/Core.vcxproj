@@ -300,6 +300,7 @@
     <ClInclude Include="IMessageManager.h" />
     <ClInclude Include="INotificationListener.h" />
     <ClInclude Include="InputDataMessage.h" />
+    <ClInclude Include="MMC5.h" />
     <ClInclude Include="NoiseChannel.h" />
     <ClInclude Include="SquareChannel.h" />
     <ClInclude Include="StandardController.h" />

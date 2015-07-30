@@ -30,7 +30,7 @@ protected:
 		if(addr >= 0xC000 || !_bf9097Mode) {
 			SelectPRGPage(0, value);
 		} else if(addr < 0xC000) {
-			_mirroringType = (value & 0x10) ? MirroringType::ScreenAOnly : MirroringType::ScreenBOnly;
+			SetMirroringType((value & 0x10) ? MirroringType::ScreenAOnly : MirroringType::ScreenBOnly);
 		}
 	}
 

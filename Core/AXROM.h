@@ -18,6 +18,6 @@ class AXROM : public BaseMapper
 		{
 			SelectPRGPage(0, value & 0x07);
 
-			_mirroringType = ((value & 0x10) == 0x10) ? MirroringType::ScreenBOnly : MirroringType::ScreenAOnly;
+			SetMirroringType(((value & 0x10) == 0x10) ? MirroringType::ScreenBOnly : MirroringType::ScreenAOnly);
 		}
 };

@@ -196,10 +196,10 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		void GetMemoryRanges(MemoryRanges &ranges)
 		{
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x2000, 0x3FFF);
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4014);
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x2000, 0x3FFF);
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4014);
+			ranges.AddHandler(MemoryOperation::Read, 0x2000, 0x3FFF);
+			ranges.AddHandler(MemoryOperation::Read, 0x4014);
+			ranges.AddHandler(MemoryOperation::Write, 0x2000, 0x3FFF);
+			ranges.AddHandler(MemoryOperation::Write, 0x4014);
 		}
 
 		uint8_t ReadRAM(uint16_t addr);
@@ -223,6 +223,11 @@ class PPU : public IMemoryHandler, public Snapshotable
 		static uint32_t GetFrameCycle()
 		{
 			return ((PPU::Instance->_scanline + 1) * 341) + PPU::Instance->_cycle;
+		}
+
+		static PPUControlFlags GetControlFlags()
+		{
+			return PPU::Instance->_flags;
 		}
 
 		static uint32_t GetCurrentCycle()

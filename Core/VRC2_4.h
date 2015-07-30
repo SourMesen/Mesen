@@ -76,10 +76,10 @@ class VRC2_4 : public BaseMapper
 				_prgReg0 = value & 0x1F;
 			} else if(addr == 0x9000 || addr == 0x9002) {
 				switch(value & 0x03) {
-					case 0: _mirroringType = MirroringType::Vertical; break;
-					case 1: _mirroringType = MirroringType::Horizontal; break;
-					case 2: _mirroringType = MirroringType::ScreenAOnly; break;
-					case 3: _mirroringType = MirroringType::ScreenBOnly; break;
+					case 0: SetMirroringType(MirroringType::Vertical); break;
+					case 1: SetMirroringType(MirroringType::Horizontal); break;
+					case 2: SetMirroringType(MirroringType::ScreenAOnly); break;
+					case 3: SetMirroringType(MirroringType::ScreenBOnly); break;
 				}
 			} else if(addr == 0x9004 || addr == 0x9006) {
 				if(_variant >= VRCVariant::VRC4a) {
@@ -183,5 +183,7 @@ class VRC2_4 : public BaseMapper
 			StreamArray<uint8_t>(_hiCHRRegs, 8);
 
 			Stream<bool>(_hasIRQ);
+
+			BaseMapper::StreamState(saving);
 		}
 };

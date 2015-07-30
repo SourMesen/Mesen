@@ -160,7 +160,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &mem
 
 	uint32_t addr = startAddr;
 	uint32_t byteCount = 0;
-	while(addr < endAddr) {
+	while(addr <= endAddr) {
 		shared_ptr<DisassemblyInfo> info;
 		if(info = _disassembleCache[addr]) {
 			if(byteCount > 0) {

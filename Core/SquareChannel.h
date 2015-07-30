@@ -117,9 +117,9 @@ public:
 	void GetMemoryRanges(MemoryRanges &ranges)
 	{
 		if(_isChannel1) {
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4000, 0x4003);
+			ranges.AddHandler(MemoryOperation::Write, 0x4000, 0x4003);
 		} else {
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4004, 0x4007);
+			ranges.AddHandler(MemoryOperation::Write, 0x4004, 0x4007);
 		}
 	}
 

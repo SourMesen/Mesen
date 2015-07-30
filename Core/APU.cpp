@@ -119,8 +119,8 @@ void APU::WriteRAM(uint16_t addr, uint8_t value)
 
 void APU::GetMemoryRanges(MemoryRanges &ranges)
 {
-	ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4015);
-	ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4015);
+	ranges.AddHandler(MemoryOperation::Read, 0x4015);
+	ranges.AddHandler(MemoryOperation::Write, 0x4015);
 }
 
 void APU::Run()

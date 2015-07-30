@@ -61,7 +61,7 @@ public:
 
 	void GetMemoryRanges(MemoryRanges &ranges)
 	{
-		ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x400C, 0x400F);
+		ranges.AddHandler(MemoryOperation::Write, 0x400C, 0x400F);
 	}
 
 	void WriteRAM(uint16_t addr, uint8_t value)

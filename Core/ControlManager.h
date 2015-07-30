@@ -50,8 +50,8 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 		void GetMemoryRanges(MemoryRanges &ranges)
 		{
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4016, 0x4017);
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4016);
+			ranges.AddHandler(MemoryOperation::Read, 0x4016, 0x4017);
+			ranges.AddHandler(MemoryOperation::Write, 0x4016);
 		}
 		
 		uint8_t ReadRAM(uint16_t addr);

@@ -60,7 +60,7 @@ public:
 
 	void GetMemoryRanges(MemoryRanges &ranges)
 	{
-		ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4008, 0x400B);
+		ranges.AddHandler(MemoryOperation::Write, 0x4008, 0x400B);
 	}
 
 	void WriteRAM(uint16_t addr, uint8_t value)

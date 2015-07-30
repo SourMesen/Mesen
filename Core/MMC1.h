@@ -88,10 +88,10 @@ class MMC1 : public BaseMapper
 		void UpdateState()
 		{
 			switch(_state.Reg8000 & 0x03) {
-				case 0: _mirroringType = MirroringType::ScreenAOnly; break;
-				case 1: _mirroringType = MirroringType::ScreenBOnly; break;
-				case 2: _mirroringType = MirroringType::Vertical; break;
-				case 3: _mirroringType = MirroringType::Horizontal; break;
+				case 0: SetMirroringType(MirroringType::ScreenAOnly); break;
+				case 1: SetMirroringType(MirroringType::ScreenBOnly); break;
+				case 2: SetMirroringType(MirroringType::Vertical); break;
+				case 3: SetMirroringType(MirroringType::Horizontal); break;
 			}
 
 			_wramDisable = (_state.RegE000 & 0x10) == 0x10;

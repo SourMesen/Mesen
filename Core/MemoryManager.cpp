@@ -9,36 +9,30 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	_mapper = mapper;
 
 	_internalRAM = new uint8_t[InternalRAMSize];
-	for(int i = 0; i < 4; i++) {
+	for(int i = 0; i < 2; i++) {
 		_nametableRAM[i] = new uint8_t[NameTableScreenSize];
 		memset(_nametableRAM[i], 0, NameTableScreenSize);
 	}
 
+	_mapper->SetDefaultNametables(_nametableRAM[0], _nametableRAM[1]);
+
 	_ramReadHandlers = new IMemoryHandler*[RAMSize];
 	_ramWriteHandlers = new IMemoryHandler*[RAMSize];
-	_vramReadHandlers = new IMemoryHandler*[VRAMSize];
-	_vramWriteHandlers = new IMemoryHandler*[VRAMSize];
 	
 	memset(_internalRAM, 0, InternalRAMSize);
-
 	memset(_ramReadHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
 	memset(_ramWriteHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
-
-	memset(_vramReadHandlers, 0, VRAMSize * sizeof(IMemoryHandler*));
-	memset(_vramWriteHandlers, 0, VRAMSize * sizeof(IMemoryHandler*));
 }
 
 MemoryManager::~MemoryManager()
 {
 	delete[] _internalRAM;
-	for(int i = 0; i < 4; i++) {
+	for(int i = 0; i < 2; i++) {
 		delete[] _nametableRAM[i];
 	}
 
 	delete[] _ramReadHandlers;
 	delete[] _ramWriteHandlers;
-	delete[] _vramReadHandlers;
-	delete[] _vramWriteHandlers;
 }
 
 void MemoryManager::Reset(bool softReset)
@@ -64,16 +58,6 @@ void MemoryManager::WriteRegister(uint16_t addr, uint8_t value)
 	}
 }
 
-uint8_t MemoryManager::ReadMappedVRAM(uint16_t addr)
-{
-	return _mapper->ReadVRAM(addr);
-}
-
-void MemoryManager::WriteMappedVRAM(uint16_t addr, uint8_t value)
-{
-	return _mapper->WriteVRAM(addr, value);
-}
-
 void MemoryManager::InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses)
 {
 	for(uint16_t address : *addresses) {
@@ -91,8 +75,6 @@ void MemoryManager::RegisterIODevice(IMemoryHandler *handler)
 
 	InitializeMemoryHandlers(_ramReadHandlers, handler, ranges.GetRAMReadAddresses());
 	InitializeMemoryHandlers(_ramWriteHandlers, handler, ranges.GetRAMWriteAddresses());
-	InitializeMemoryHandlers(_vramReadHandlers, handler, ranges.GetVRAMReadAddresses());
-	InitializeMemoryHandlers(_vramWriteHandlers, handler, ranges.GetVRAMWriteAddresses());
 }
 
 uint8_t* MemoryManager::GetInternalRAM()
@@ -137,79 +119,27 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 	}
 }
 
+void MemoryManager::ProcessVramAccess(uint16_t &addr)
+{
+	addr &= 0x3FFF;
+	if(addr >= 0x3000) {
+		//Need to mirror 0x3000 writes to 0x2000, this appears to be how hardware behaves
+		//Required for proper MMC3 IRQ timing in Burai Fighter
+		addr -= 0x1000;
+	}
+	_mapper->NotifyVRAMAddressChange(addr);
+}
+
 uint8_t MemoryManager::ReadVRAM(uint16_t addr)
 {	
-	addr &= 0x3FFF;
-
-	if(addr <= 0x1FFF) {
-		_mapper->NotifyVRAMAddressChange(addr);
-		return ReadMappedVRAM(addr);
-	} else {
-		if(addr >= 0x3000) {
-			//Need to mirror 0x3000 writes to 0x2000, this appears to be how hardware behaves
-			//Required for proper MMC3 IRQ timing in Burai Fighter
-			addr -= 0x1000;
-		}
-		_mapper->NotifyVRAMAddressChange(addr);
-		switch(_mapper->GetMirroringType()) {
-			case MirroringType::Vertical:
-				return _nametableRAM[(addr&0x400)>>10][addr & 0x3FF];
-			
-			case MirroringType::Horizontal:
-				return _nametableRAM[(addr&0x800)>>11][addr & 0x3FF];
-
-			case MirroringType::FourScreens:
-			default:
-				return _nametableRAM[(addr&0xC00)>>10][addr & 0x3FF];
-
-			case MirroringType::ScreenAOnly:
-				return _nametableRAM[0][addr & 0x3FF];
-
-			case MirroringType::ScreenBOnly:
-				return _nametableRAM[1][addr & 0x3FF];
-		}
-	}
+	ProcessVramAccess(addr);
+	return _mapper->ReadVRAM(addr);
 }
 
 void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 {
-	addr &= 0x3FFF;
-
-	if(addr <= 0x1FFF) {
-		_mapper->NotifyVRAMAddressChange(addr);
-		WriteMappedVRAM(addr, value);
-	} else {
-		if(addr >= 0x3000) {
-			//Need to mirror 0x3000 writes to 0x2000, this appears to be how hardware behaves
-			//Required for proper MMC3 IRQ timing in Burai Fighter
-			addr -= 0x1000;
-		}
-		_mapper->NotifyVRAMAddressChange(addr);
-		switch(_mapper->GetMirroringType()) {
-			case MirroringType::Vertical:
-				_nametableRAM[(addr&0x400)>>10][addr & 0x3FF] = value;
-				break;
-
-			case MirroringType::Horizontal:
-				_nametableRAM[(addr&0x800)>>11][addr & 0x3FF] = value;
-				break;
-
-			case MirroringType::ScreenAOnly:  //Always write to 0x2000
-				_nametableRAM[0][addr & 0x3FF] = value;
-				break;
-
-			case MirroringType::ScreenBOnly:  //Always write to 0x2400
-				_nametableRAM[1][addr & 0x3FF] = value;
-				break;
-
-			case MirroringType::FourScreens:
-				_nametableRAM[(addr&0xC00)>>10][addr & 0x3FF] = value;
-				break;
-
-			default:
-				throw std::runtime_error("Not implemented yet");
-		}
-	}
+	ProcessVramAccess(addr);
+	_mapper->WriteVRAM(addr, value);
 }
 
 void MemoryManager::StreamState(bool saving)

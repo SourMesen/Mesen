@@ -70,8 +70,8 @@ class MMC3 : public BaseMapper
 			_chrMode = (_state.Reg8000 & 0x80) >> 7;
 			_prgMode = (_state.Reg8000 & 0x40) >> 6;
 
-			if(_mirroringType != MirroringType::FourScreens) {
-				_mirroringType = ((_state.RegA000 & 0x01) == 0x01) ? MirroringType::Horizontal : MirroringType::Vertical;
+			if(GetMirroringType() != MirroringType::FourScreens) {
+				SetMirroringType(((_state.RegA000 & 0x01) == 0x01) ? MirroringType::Horizontal : MirroringType::Vertical);
 			}
 
 			_wramEnabled = (_state.RegA001 & 0x80) == 0x80;

@@ -12,6 +12,7 @@ enum class MirroringType
 	ScreenAOnly,
 	ScreenBOnly,
 	FourScreens,
+	Custom
 };
 
 struct NESHeader

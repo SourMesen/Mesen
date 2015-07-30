@@ -9,76 +9,195 @@
 #include "CheatManager.h"
 #include "MessageManager.h"
 
+enum class PrgMemoryType
+{
+	PrgRom,
+	SaveRam,
+	WorkRam,
+};
+
+enum MemoryAccessType
+{
+	NoAccess = 0x00,
+	Read = 0x01,
+	Write = 0x02,
+	ReadWrite = 0x03
+};
+
 class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener
 {
-	protected:
-		const int ExpansionRAMSize = 0x2000;
-		const int SRAMSize = 0x2000;
+	private:
+		MirroringType _mirroringType;
 
-		uint8_t* _prgRAM;
-		uint8_t* _originalPrgRam;
-		uint8_t* _chrRAM;
+	protected:
+		uint8_t* _prgRom;
+		uint8_t* _originalPrgRom;
+		uint8_t* _chrRam;
 		uint32_t _prgSize;
 		uint32_t _chrSize;
 
-		uint8_t* _SRAM;
-		uint8_t* _expansionRAM;
-		bool _hasExpansionRAM;
-		
-		bool _hasCHRRAM;
+		uint8_t* _saveRam;
+		uint32_t _saveRamSize;
+		uint8_t* _workRam;
+
+		uint8_t *_nesNametableRam[2];
+		uint8_t *_cartNametableRam[2];
+
+		bool _hasChrRam;
 		bool _hasBattery;
 		bool _isPalRom;
 		string _romFilename;
-
-		MirroringType _mirroringType;
+		bool _allowRegisterRead;
+		uint16_t _registerStartAddress;
+		uint16_t _registerEndAddress;
 
 		vector<uint8_t*> _prgPages;
 		vector<uint8_t*> _chrPages;
+		vector<uint8_t> _prgPageAccessType;
+		vector<uint8_t> _chrPageAccessType;
 
-		uint32_t* _prgSlotPages;
-		uint32_t* _chrSlotPages;
+		uint32_t _prgPageNumbers[64];
+		uint32_t _chrPageNumbers[64];
 
-		uint32_t _chrShift = -1;
-		uint32_t _chrSlotMaxIndex = -1;
-		uint32_t _prgShift = -1;
-		uint32_t _prgSlotMaxIndex = -1;
-
-		uint32_t _chrPageMask = -1;
-		uint32_t _prgPageMask = -1;
-		
 		virtual void InitMapper() = 0;
-
-	public:
-		const static int PRGSize = 0x8000;
-		const static int CHRSize = 0x2000;
-		const static int PRGRAMSize = 0x2000;
 
 	protected:
 		virtual uint32_t GetPRGPageSize() = 0;
 		virtual uint32_t GetCHRPageSize() = 0;
+		
+		//Save ram is battery backed and saved to disk
+		virtual uint32_t GetSaveRamSize() { return 0x2000; }
+		virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
 
-		void SelectPRGPage(uint32_t slot, uint32_t page)
+		//Work ram is NOT saved - aka Expansion ram, etc.
+		virtual uint32_t GetWorkRamPageSize() { return 0; }
+		virtual uint32_t GetWorkRamSize() { return 0; }
+
+		virtual uint16_t RegisterStartAddress() { return 0x8000; }
+		virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
+		virtual bool AllowRegisterRead() { return false; }
+
+		virtual void WriteRegister(uint16_t addr, uint8_t value) { }
+		virtual uint8_t ReadRegister(uint16_t addr) { return 0;  }
+
+		void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint32_t pageNumber, PrgMemoryType type, int8_t accessType = -1)
 		{
-			//std::cout << std::dec << "PRG Slot " << (short)slot << ": " << (short)(page & (GetPRGPageCount() - 1)) << std::endl;
-			_prgPages[slot] = &_prgRAM[(page % GetPRGPageCount())  * GetPRGPageSize()];
-			_prgSlotPages[slot] = page;
+			#ifdef _DEBUG
+			if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
+				throw new std::runtime_error("Start/End address must be multiples of 256/0x100");
+			}
+			#endif
+
+			uint8_t* source = nullptr;
+			uint32_t pageCount;
+			uint32_t pageSize;
+			uint8_t defaultAccessType = MemoryAccessType::Read;
+			switch(type) {
+				case PrgMemoryType::PrgRom:
+					source = _prgRom;
+					pageCount = GetPRGPageCount();
+					pageSize = GetPRGPageSize();
+					break;
+				case PrgMemoryType::SaveRam:
+					source = _saveRam;
+					pageCount = _saveRamSize / GetSaveRamPageSize();
+					pageSize = GetSaveRamPageSize();
+					defaultAccessType |= MemoryAccessType::Write;
+					break;
+				case PrgMemoryType::WorkRam:
+					source = _workRam;
+					pageCount = GetWorkRamSize() / GetWorkRamPageSize();
+					pageSize = GetWorkRamPageSize();
+					defaultAccessType |= MemoryAccessType::Write;
+					break;
+			}
+
+			pageNumber = pageNumber % pageCount;
+			source = &source[pageNumber * pageSize];
+
+			startAddr >>= 8;
+			endAddr >>= 8;
+			for(uint16_t i = startAddr; i <= endAddr; i++) {
+				_prgPages[i] = source;
+				_prgPageAccessType[i] = accessType != -1 ? accessType : defaultAccessType;
+				source += 0x100;
+			}
+		}
+
+		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint32_t pageNumber)
+		{
+			pageNumber = pageNumber % GetCHRPageCount();
+			SetPpuMemoryMapping(startAddr, endAddr, &_chrRam[pageNumber * GetCHRPageSize()], pageNumber);
+		}
+
+		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t* sourceMemory, int16_t pageNumber = -1, int8_t accessType = -1)
+		{
+			#ifdef _DEBUG
+			if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
+				throw new std::runtime_error("Start/End address must be multiples of 256/0x100");
+			}
+			#endif
+
+			startAddr >>= 8;
+			endAddr >>= 8;
+			for(uint16_t i = startAddr; i <= endAddr; i++) {
+				_chrPages[i] = sourceMemory;
+				_chrPageAccessType[i] = accessType != -1 ? accessType : MemoryAccessType::ReadWrite;
+				sourceMemory += 0x100;
+			}
+		}
+
+		uint8_t InternalReadRam(uint16_t addr)
+		{
+			return _prgPages[addr >> 8] ? _prgPages[addr >> 8][addr & 0xFF] : 0;
+		}
+
+		void SelectPRGPage(uint32_t slot, uint32_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom)
+		{
+			_prgPageNumbers[slot] = page;
+
+			uint32_t startAddr = 0x8000 + slot * GetPRGPageSize();
+			uint32_t endAddr = startAddr + GetPRGPageSize() - 1;
+			SetCpuMemoryMapping(startAddr, endAddr, page, memoryType);
 		}
 
 		void SelectCHRPage(uint32_t slot, uint32_t page)
 		{
-			//std::cout << std::dec << "CHR Slot " << (short)slot << ": " << (short)page << std::endl;
-			_chrPages[slot] = &_chrRAM[(page % GetCHRPageCount()) * GetCHRPageSize()];
-			_chrSlotPages[slot] = page;
+			_chrPageNumbers[slot] = page;
+
+			uint32_t startAddr = slot * GetCHRPageSize();
+			uint32_t endAddr = startAddr + GetCHRPageSize() - 1;
+			SetPpuMemoryMapping(startAddr, endAddr, page);
+		}
+		
+		bool HasBattery()
+		{
+			return _hasBattery;
 		}
 
-		uint32_t GetPRGSlotCount()
+		void LoadBattery()
 		{
-			return BaseMapper::PRGSize / GetPRGPageSize();
+			ifstream batteryFile(GetBatteryFilename(), ios::in | ios::binary);
+
+			if(batteryFile) {
+				batteryFile.read((char*)_saveRam, _saveRamSize);
+
+				batteryFile.close();
+			}
+
+			//Set a default mapping for save ram (this is what most games/mappers use)
+			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, PrgMemoryType::SaveRam);
 		}
 
-		uint32_t GetCHRSlotCount()
+		void SaveBattery()
 		{
-			return BaseMapper::CHRSize / GetCHRPageSize();
+			ofstream batteryFile(GetBatteryFilename(), ios::out | ios::binary);
+
+			if(batteryFile) {
+				batteryFile.write((char*)_saveRam, _saveRamSize);
+
+				batteryFile.close();
+			}
 		}
 
 		uint32_t GetPRGPageCount()
@@ -91,25 +210,6 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			return _chrSize / GetCHRPageSize();
 		}
 
-		uint32_t log2(uint32_t value)
-		{
-			uint32_t counter = 0;
-			while(value >>= 1) {
-				counter++;
-			}
-			return counter;
-		}
-
-		uint32_t AddrToPRGSlot(uint16_t addr)
-		{
-			return (addr >> _prgShift) & _prgSlotMaxIndex;
-		}
-
-		uint32_t AddrToCHRSlot(uint16_t addr)
-		{
-			return (addr >> _chrShift) & _chrSlotMaxIndex;
-		}
-
 		string GetBatteryFilename()
 		{
 			return FolderUtilities::GetSaveFolder() + _romFilename + ".sav";
@@ -117,58 +217,77 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		
 		void RestoreOriginalPrgRam()
 		{
-			memcpy(_prgRAM, _originalPrgRam, GetPRGSize());
+			memcpy(_prgRom, _originalPrgRom, GetPRGSize());
 		}
 
-	protected:
 		virtual void StreamState(bool saving)
 		{
-			StreamArray<uint32_t>(_prgSlotPages, GetPRGSlotCount());
-			StreamArray<uint32_t>(_chrSlotPages, GetCHRSlotCount());
-			
-			Stream<bool>(_hasCHRRAM);
-			if(_hasCHRRAM) {
-				StreamArray<uint8_t>(_chrRAM, BaseMapper::CHRSize);
+			Stream<bool>(_hasChrRam);
+			if(_hasChrRam) {
+				StreamArray<uint8_t>(_chrRam, _chrSize);
 			}
 
 			Stream<MirroringType>(_mirroringType);
 
+			StreamArray<uint8_t>(_workRam, GetWorkRamSize());
+			StreamArray<uint8_t>(_saveRam, _saveRamSize);
+
+			StreamArray<uint32_t>(_prgPageNumbers, 64);
+			StreamArray<uint32_t>(_chrPageNumbers, 64);
 			if(!saving) {
-				for(int i = GetPRGSlotCount() - 1; i >= 0; i--) {
-					SelectPRGPage(i, _prgSlotPages[i]);
+				for(int i = 0; i < 64; i++) {
+					if(_prgPageNumbers[i] != 0xEEEEEEEE) {
+						SelectPRGPage(i, _prgPageNumbers[i]);
+					}
 				}
 
-				for(int i = GetCHRSlotCount() - 1; i >= 0; i--) {
-					SelectCHRPage(i, _chrSlotPages[i]);
+				for(int i = 0; i < 64; i++) {
+					if(_chrPageNumbers[i] != 0xEEEEEEEE) {
+						SelectCHRPage(i, _chrPageNumbers[i]);
+					}
+				}
+
+				if(_mirroringType != MirroringType::Custom) {
+					SetMirroringType(_mirroringType);
 				}
 			}
-
-			Stream<bool>(_hasExpansionRAM);
-			if(_hasExpansionRAM) {
-				StreamArray<uint8_t>(_expansionRAM, BaseMapper::ExpansionRAMSize);
-			}
-			StreamArray<uint8_t>(_SRAM, BaseMapper::SRAMSize);
 		}
 
 	public:
 		void Initialize(ROMLoader &romLoader)
 		{
+			_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
+
+			_allowRegisterRead = AllowRegisterRead();
+			_registerStartAddress = RegisterStartAddress();
+			_registerEndAddress = RegisterEndAddress();
+
 			_mirroringType = romLoader.GetMirroringType();
-			romLoader.GetPRGRam(&_prgRAM);
-			romLoader.GetPRGRam(&_originalPrgRam);
-			romLoader.GetCHRRam(&_chrRAM);
+			romLoader.GetPRGRam(&_prgRom);
+			romLoader.GetPRGRam(&_originalPrgRom);
+			romLoader.GetCHRRam(&_chrRam);
 			_prgSize = romLoader.GetPRGSize();
 			_chrSize = romLoader.GetCHRSize();
 			_hasBattery = romLoader.HasBattery();
 			_isPalRom = romLoader.IsPalRom();
 			_romFilename = romLoader.GetFilename();
 
-			_hasExpansionRAM = false;
-			_SRAM = new uint8_t[SRAMSize];
-			_expansionRAM = new uint8_t[ExpansionRAMSize];
+			_saveRam = new uint8_t[_saveRamSize];
+			_workRam = new uint8_t[GetWorkRamSize()];
 
-			memset(_SRAM, 0, SRAMSize);
-			memset(_expansionRAM, 0, ExpansionRAMSize);
+			memset(_saveRam, 0, _saveRamSize);
+			memset(_workRam, 0, GetWorkRamSize());
+
+			memset(_prgPageNumbers, 0xEE, sizeof(_prgPageNumbers));
+			memset(_chrPageNumbers, 0xEE, sizeof(_chrPageNumbers));
+
+			for(int i = 0; i <= 0xFF; i++) {
+				//Allow us to map a different page every 256 bytes
+				_prgPages.push_back(nullptr);
+				_prgPageAccessType.push_back(MemoryAccessType::NoAccess);
+				_chrPages.push_back(nullptr);
+				_chrPageAccessType.push_back(MemoryAccessType::NoAccess);
+			}
 
 			//Load battery data if present
 			if(HasBattery()) {
@@ -176,29 +295,10 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			}
 
 			if(_chrSize == 0) {
-				_hasCHRRAM = true;
-				_chrRAM = new uint8_t[BaseMapper::CHRSize];
-				_chrSize = BaseMapper::CHRSize;
+				_hasChrRam = true;
+				_chrRam = new uint8_t[0x2000];
+				_chrSize = 0x2000;
 			}
-
-			for(int i = GetPRGSlotCount(); i > 0; i--) {
-				_prgPages.push_back(nullptr);
-			}
-
-			for(int i = GetCHRSlotCount(); i > 0; i--) {
-				_chrPages.push_back(nullptr);
-			}
-
-			_prgSlotPages = new uint32_t[GetPRGSlotCount()];
-			_chrSlotPages = new uint32_t[GetCHRSlotCount()];
-
-			_prgShift = 15 - this->log2(GetPRGSlotCount());
-			_prgSlotMaxIndex = GetPRGSlotCount() - 1;
-			_chrShift = 13 - this->log2(GetCHRSlotCount());
-			_chrSlotMaxIndex = GetCHRSlotCount() - 1;
-
-			_chrPageMask = GetCHRPageSize() - 1;
-			_prgPageMask = GetPRGPageSize() - 1;
 
 			InitMapper();
 
@@ -212,14 +312,11 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			if(HasBattery()) {
 				SaveBattery();
 			}
-			delete[] _prgRAM;
-			delete[] _chrRAM;
-			delete[] _originalPrgRam;
-			delete[] _prgSlotPages;
-			delete[] _chrSlotPages;
-
-			delete[] _SRAM;
-			delete[] _expansionRAM;
+			delete[] _chrRam;
+			delete[] _prgRom;
+			delete[] _originalPrgRom;
+			delete[] _saveRam;
+			delete[] _workRam;
 
 			MessageManager::UnregisterNotificationListener(this);
 		}
@@ -237,21 +334,57 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		void ApplyCheats()
 		{
 			RestoreOriginalPrgRam();
-			CheatManager::ApplyPrgCodes(_prgRAM, GetPRGSize());
+			CheatManager::ApplyPrgCodes(_prgRom, GetPRGSize());
 		}
 
 		void GetMemoryRanges(MemoryRanges &ranges)
 		{
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Read, 0x4018, 0xFFFF);
-			ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4018, 0xFFFF);
-
-			ranges.AddHandler(MemoryType::VRAM, MemoryOperation::Read, 0x0000, 0x1FFF);
-			ranges.AddHandler(MemoryType::VRAM, MemoryOperation::Write, 0x0000, 0x1FFF);
+			ranges.AddHandler(MemoryOperation::Read, 0x4018, 0xFFFF);
+			ranges.AddHandler(MemoryOperation::Write, 0x4018, 0xFFFF);
 		}
 
-		bool HasBattery()
+		void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB)
 		{
-			return _hasBattery;
+			_nesNametableRam[0] = nametableA;
+			_nesNametableRam[1] = nametableB;
+			SetMirroringType(_mirroringType);
+		}
+
+		void SetMirroringType(MirroringType type)
+		{
+			switch(type) {
+				case MirroringType::Vertical:
+					SetMirroringType(_nesNametableRam[0], _nesNametableRam[1], _nesNametableRam[0], _nesNametableRam[1]);
+					break;
+
+				case MirroringType::Horizontal:
+					SetMirroringType(_nesNametableRam[0], _nesNametableRam[0], _nesNametableRam[1], _nesNametableRam[1]);
+					break;
+
+				case MirroringType::FourScreens:
+				default:
+					SetMirroringType(_nesNametableRam[0], _nesNametableRam[1], _cartNametableRam[0], _cartNametableRam[1]);
+					break;
+
+				case MirroringType::ScreenAOnly:
+					SetMirroringType(_nesNametableRam[0], _nesNametableRam[0], _nesNametableRam[0], _nesNametableRam[0]);
+					break;
+
+				case MirroringType::ScreenBOnly:
+					SetMirroringType(_nesNametableRam[1], _nesNametableRam[1], _nesNametableRam[1], _nesNametableRam[1]);
+					break;
+			}
+			_mirroringType = type;
+		}
+
+		void SetMirroringType(uint8_t *nt0, uint8_t *nt1, uint8_t *nt2, uint8_t *nt3)
+		{
+			_mirroringType = MirroringType::Custom;
+
+			SetPpuMemoryMapping(0x2000, 0x23FF, nt0);
+			SetPpuMemoryMapping(0x2400, 0x27FF, nt1);
+			SetPpuMemoryMapping(0x2800, 0x2BFF, nt2);
+			SetPpuMemoryMapping(0x2C00, 0x2FFF, nt3);
 		}
 
 		bool IsPalRom()
@@ -263,45 +396,53 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		{
 			return _mirroringType;
 		}
-
-		void LoadBattery()
+	
+		uint8_t ReadRAM(uint16_t addr)
 		{
-			ifstream batteryFile(GetBatteryFilename(), ios::in | ios::binary);
-
-			if(batteryFile) {
-				batteryFile.read((char*)_SRAM, BaseMapper::PRGRAMSize);
-
-				batteryFile.close();
-			}
-		}
-
-		void SaveBattery()
-		{
-			ofstream batteryFile(GetBatteryFilename(), ios::out | ios::binary);
-
-			if(batteryFile) {
-				batteryFile.write((char*)_SRAM, BaseMapper::PRGRAMSize);
-
-				batteryFile.close();
-			}
-		}
-
-		virtual uint8_t ReadRAM(uint16_t addr)
-		{
-			if(addr >= 0x8000) {
-				return _prgPages[AddrToPRGSlot(addr)][addr & _prgPageMask];
-			} else if(addr >= 0x6000) {
-				return _SRAM[addr & 0x1FFF];
-			} else if(addr >= 0x4000) {
-				return _expansionRAM[addr & 0x1FFF];
+			if(_allowRegisterRead && addr >= _registerStartAddress && addr <= _registerEndAddress) {
+				return ReadRegister(addr);
+			} else if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Read) {
+				return _prgPages[addr >> 8][addr & 0xFF];
 			}
 			return 0;
 		}
 
+		virtual void WriteRAM(uint16_t addr, uint8_t value)
+		{
+			if(addr >= _registerStartAddress && addr <= _registerEndAddress) {
+				WriteRegister(addr, value);
+			} else if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Write) {
+				_prgPages[addr >> 8][addr & 0xFF] = value;
+			}
+		}
+		
+		virtual uint8_t ReadVRAM(uint16_t addr)
+		{
+			if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Read) {
+				return _chrPages[addr >> 8][addr & 0xFF];
+			}
+			return 0;
+		}
+
+		void WriteVRAM(uint16_t addr, uint8_t value)
+		{
+			if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
+				_chrPages[addr >> 8][addr & 0xFF] = value;
+			}
+		}
+
+		virtual void NotifyVRAMAddressChange(uint16_t addr)
+		{
+			//This is called when the VRAM addr on the PPU memory bus changes
+			//Used by MMC3/MMC5/etc
+		}
+
+		#pragma region Debugger Helper Functions
+
 		uint8_t* GetPRGCopy()
 		{
 			uint8_t* prgCopy = new uint8_t[_prgSize];
-			memcpy(prgCopy, _prgRAM, _prgSize);
+			memcpy(prgCopy, _prgRom, _prgSize);
 			return prgCopy;
 		}
 
@@ -312,19 +453,23 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 		uint32_t ToAbsoluteAddress(uint16_t addr)
 		{
-			return GetPRGPageSize() * (_prgSlotPages[AddrToPRGSlot(addr)] % GetPRGPageCount()) + (addr & _prgPageMask);
+			uint8_t *prgAddr = _prgPages[addr >> 8] + (addr & 0xFF);
+			if(prgAddr >= _prgRom && prgAddr < _prgRom + _prgSize) {
+				return (uint32_t)(prgAddr - _prgRom);
+			}
+			return 0;
 		}
 
 		int32_t FromAbsoluteAddress(uint32_t addr)
 		{
-			uint32_t page = addr / GetPRGPageSize();
+			/*uint32_t page = addr / GetPRGPageSize();
 			for(int i = 0, len = GetPRGSlotCount(); i < len; i++) {
 				if((_prgSlotPages[i] % GetPRGPageCount()) == page) {
 					uint32_t offset = addr - (page * GetPRGPageSize());
 					return GetPRGPageSize() * i + offset + 0x8000;
 				}
 			}
-
+			*/
 			//Address is currently not mapped
 			return -1;
 		}
@@ -332,12 +477,10 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		vector<uint32_t> GetPRGRanges()
 		{
 			vector<uint32_t> memoryRanges;
-			uint32_t slotCount = GetPRGSlotCount();
 
-			for(uint32_t i = 0; i < slotCount; i++) {
-				uint32_t page = _prgSlotPages[i] % GetPRGPageCount();
-				uint32_t pageStart = page * GetPRGPageSize();
-				uint32_t pageEnd = (page + 1) * GetPRGPageSize();
+			for(uint32_t i = 0x8000; i <= 0xFFFF; i+=0x100) {
+				uint32_t pageStart = ToAbsoluteAddress(i);
+				uint32_t pageEnd = ToAbsoluteAddress(i+0xFF);
 				memoryRanges.push_back(pageStart);
 				memoryRanges.push_back(pageEnd);
 			}
@@ -345,38 +488,5 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			return memoryRanges;
 		}
 
-		virtual uint16_t RegisterStartAddress() { return 0x8000; }
-		virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
-		virtual void WriteRegister(uint16_t addr, uint8_t value) { }
-
-		virtual void WriteRAM(uint16_t addr, uint8_t value)
-		{
-			if(addr >= RegisterStartAddress() && addr <= RegisterEndAddress()) {
-				WriteRegister(addr, value);
-			} else if(addr >= 0x6000) {
-				_SRAM[addr & 0x1FFF] = value;
-			} else if(addr >= 0x4000) {
-				_hasExpansionRAM = true;
-				_expansionRAM[addr & 0x1FFF] = value;
-			}
-		}
-		
-		virtual uint8_t ReadVRAM(uint16_t addr)
-		{
-			return _chrPages[AddrToCHRSlot(addr)][addr & _chrPageMask];
-		}
-
-		virtual void WriteVRAM(uint16_t addr, uint8_t value)
-		{
-			if(_hasCHRRAM) {
-				_chrPages[AddrToCHRSlot(addr)][addr & _chrPageMask] = value;
-			} else {
-				//assert(false);
-			}
-		}
-
-		virtual void NotifyVRAMAddressChange(uint16_t addr)
-		{
-			//Used for MMC3 IRQ counter
-		}
+		#pragma endregion
 };

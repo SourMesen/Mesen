@@ -249,7 +249,16 @@ string Debugger::GenerateOutput()
 
 	uint16_t memoryAddr = 0x8000;
 	for(size_t i = 0, size = memoryRanges.size(); i < size; i += 2) {
-		output << _disassembler->GetCode(memoryRanges[i], memoryRanges[i+1], memoryAddr);
+		uint32_t startRange = memoryRanges[i];
+		//Merge all sequential ranges into 1 chunk
+		for(size_t j = i+1; j < size - 1; j+=2) {
+			if(memoryRanges[j] + 1 == memoryRanges[j + 1]) {
+				i+=2;
+			} else {
+				break;
+			}
+		}
+		output << _disassembler->GetCode(startRange, memoryRanges[i+1], memoryAddr);
 	}
 
 	return output.str();

@@ -128,7 +128,7 @@ public:
 
 	void GetMemoryRanges(MemoryRanges &ranges)
 	{
-		ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4017);
+		ranges.AddHandler(MemoryOperation::Write, 0x4017);
 	}
 
 	uint8_t ReadRAM(uint16_t addr)

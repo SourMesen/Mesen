@@ -139,7 +139,7 @@ bool DeltaModulationChannel::GetStatus()
 
 void DeltaModulationChannel::GetMemoryRanges(MemoryRanges &ranges)
 {
-	ranges.AddHandler(MemoryType::RAM, MemoryOperation::Write, 0x4010, 0x4013);
+	ranges.AddHandler(MemoryOperation::Write, 0x4010, 0x4013);
 }
 
 void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)

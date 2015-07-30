@@ -10,6 +10,7 @@
 #include "MMC2.h"
 #include "MMC3.h"
 #include "MMC3_189.h"
+#include "MMC5.h"
 #include "Nanjing.h"
 #include "NROM.h"
 #include "UNROM.h"
@@ -18,13 +19,17 @@
 
 BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 {
+#ifdef _DEBUG
+	MessageManager::DisplayMessage("Game Info", "Mapper: " + std::to_string(mapperID));
+#endif
+
 	switch(mapperID) {
 		case 0: return new NROM();
 		case 1: return new MMC1();
 		case 2: return new UNROM();
 		case 3: return new CNROM();
 		case 4: return new MMC3();
-		case 5: break; //11 games
+		case 5: return new MMC5();
 		case 7: return new AXROM();
 		case 9: return new MMC2();
 		case 11: return new ColorDreams();

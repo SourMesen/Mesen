@@ -78,7 +78,7 @@ class MMC2 : public BaseMapper
 					break;
 
 				case MMC2Registers::RegF000:
-					_mirroringType = ((value & 0x01) == 0x01) ? MirroringType::Horizontal : MirroringType::Vertical;
+					SetMirroringType(((value & 0x01) == 0x01) ? MirroringType::Horizontal : MirroringType::Vertical);
 					break;
 			}
 		}
