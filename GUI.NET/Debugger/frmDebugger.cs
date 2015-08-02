@@ -15,10 +15,13 @@ namespace Mesen.GUI.Debugger
 	public partial class frmDebugger : Form
 	{
 		InteropEmu.NotificationListener _notifListener;
+		ctrlDebuggerCode _lastCodeWindow;
 
 		public frmDebugger()
 		{
 			InitializeComponent();
+
+			_lastCodeWindow = ctrlDebuggerCode;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -70,22 +73,39 @@ namespace Mesen.GUI.Debugger
 
 			if(UpdateSplitView()) {
 				ctrlDebuggerCodeSplit.UpdateCode(true);
+			} else {
+				_lastCodeWindow = ctrlDebuggerCode;
 			}
 
-			ctrlDebuggerCode.SelectActiveAddress(state.CPU.PC);
+			ctrlDebuggerCode.SelectActiveAddress(state.CPU.DebugPC);
+			ctrlDebuggerCodeSplit.SetActiveAddress(state.CPU.DebugPC);
+			RefreshBreakpoints();
+
 			ctrlConsoleStatus.UpdateStatus(ref state);
 			ctrlWatch.UpdateWatch();
 		}
 
+		private void ClearActiveStatement()
+		{
+			ctrlDebuggerCode.ClearActiveAddress();
+			RefreshBreakpoints();
+		}
+
 		private void ToggleBreakpoint()
 		{
-			this.ctrlDebuggerCode.ToggleBreakpoint();
+			ctrlBreakpoints.ToggleBreakpoint(_lastCodeWindow.GetCurrentLine());
+		}
+		
+		private void RefreshBreakpoints()
+		{
+			ctrlDebuggerCodeSplit.HighlightBreakpoints(ctrlBreakpoints.GetBreakpoints());
+			ctrlDebuggerCode.HighlightBreakpoints(ctrlBreakpoints.GetBreakpoints());
 		}
 
 		private void mnuContinue_Click(object sender, EventArgs e)
 		{
+			ClearActiveStatement();
 			InteropEmu.DebugRun();
-			this.ctrlDebuggerCode.RemoveActiveHighlight();
 		}
 
 		private void frmDebugger_FormClosed(object sender, FormClosedEventArgs e)
@@ -136,6 +156,26 @@ namespace Mesen.GUI.Debugger
 		private void mnuSplitView_Click(object sender, EventArgs e)
 		{
 			UpdateDebugger();
+		}
+
+		private void mnuMemoryViewer_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void ctrlBreakpoints_BreakpointChanged(object sender, EventArgs e)
+		{
+			RefreshBreakpoints();
+		}
+
+		private void ctrlDebuggerCode_Enter(object sender, EventArgs e)
+		{
+			_lastCodeWindow = ctrlDebuggerCode;
+		}
+
+		private void ctrlDebuggerCodeSplit_Enter(object sender, EventArgs e)
+		{
+			_lastCodeWindow = ctrlDebuggerCodeSplit;
 		}
 	}
 }

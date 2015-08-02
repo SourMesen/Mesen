@@ -45,6 +45,9 @@ struct State
 	uint8_t PS = 0;
 	uint32_t IRQFlag = 0;
 	bool NMIFlag = false;
+
+	//Used by debugger
+	uint16_t DebugPC = 0;
 };
 
 class CPU : public Snapshotable
@@ -79,6 +82,7 @@ private:
 
 	uint8_t GetOPCode()
 	{
+		_state.DebugPC = _state.PC;
 		uint8_t opCode = MemoryRead(_state.PC, true);
 		_state.PC++;
 		return opCode;

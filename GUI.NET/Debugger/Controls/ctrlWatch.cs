@@ -31,7 +31,7 @@ namespace Mesen.GUI.Debugger
 			AdjustColumnWidth();
 		}
 
-		void lstWatch_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+		private void lstWatch_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
 		{
 			AdjustColumnWidth();
 		}

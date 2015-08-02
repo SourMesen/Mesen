@@ -34,23 +34,12 @@
 			this.components = new System.ComponentModel.Container();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
-			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
-			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
-			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpBreakpoints = new System.Windows.Forms.GroupBox();
-			this.lstBreakpoints = new System.Windows.Forms.ListView();
-			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.contextMenuBreakpoints = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.mnuRemoveBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDisableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpWatch = new System.Windows.Forms.GroupBox();
-			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +60,16 @@
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindPrev = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.nametableViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.cHRViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
+			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
+			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
+			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
+			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -79,7 +78,6 @@
 			this.contextMenuCode.SuspendLayout();
 			this.tableLayoutPanel10.SuspendLayout();
 			this.grpBreakpoints.SuspendLayout();
-			this.contextMenuBreakpoints.SuspendLayout();
 			this.grpWatch.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -122,17 +120,6 @@
 			this.tlpTop.Size = new System.Drawing.Size(984, 422);
 			this.tlpTop.TabIndex = 2;
 			// 
-			// ctrlDebuggerCode
-			// 
-			this.ctrlDebuggerCode.Code = null;
-			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
-			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
-			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(270, 416);
-			this.ctrlDebuggerCode.TabIndex = 2;
-			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchAddedEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			// 
 			// contextMenuCode
 			// 
 			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -157,24 +144,6 @@
 			this.mnuSetNextStatement.Size = new System.Drawing.Size(258, 22);
 			this.mnuSetNextStatement.Text = "Set Next Statement";
 			// 
-			// ctrlConsoleStatus
-			// 
-			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
-			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
-			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
-			this.ctrlConsoleStatus.TabIndex = 3;
-			// 
-			// ctrlDebuggerCodeSplit
-			// 
-			this.ctrlDebuggerCodeSplit.Code = null;
-			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(279, 3);
-			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
-			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(270, 416);
-			this.ctrlDebuggerCodeSplit.TabIndex = 4;
-			// 
 			// tableLayoutPanel10
 			// 
 			this.tableLayoutPanel10.ColumnCount = 2;
@@ -197,68 +166,13 @@
 			this.grpBreakpoints.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.grpBreakpoints.Controls.Add(this.lstBreakpoints);
+			this.grpBreakpoints.Controls.Add(this.ctrlBreakpoints);
 			this.grpBreakpoints.Location = new System.Drawing.Point(495, 3);
 			this.grpBreakpoints.Name = "grpBreakpoints";
 			this.grpBreakpoints.Size = new System.Drawing.Size(486, 156);
 			this.grpBreakpoints.TabIndex = 3;
 			this.grpBreakpoints.TabStop = false;
 			this.grpBreakpoints.Text = "Breakpoints";
-			// 
-			// lstBreakpoints
-			// 
-			this.lstBreakpoints.CheckBoxes = true;
-			this.lstBreakpoints.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader3,
-            this.columnHeader4});
-			this.lstBreakpoints.ContextMenuStrip = this.contextMenuBreakpoints;
-			this.lstBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lstBreakpoints.FullRowSelect = true;
-			this.lstBreakpoints.GridLines = true;
-			this.lstBreakpoints.LabelEdit = true;
-			this.lstBreakpoints.Location = new System.Drawing.Point(3, 16);
-			this.lstBreakpoints.Name = "lstBreakpoints";
-			this.lstBreakpoints.Size = new System.Drawing.Size(480, 137);
-			this.lstBreakpoints.TabIndex = 5;
-			this.lstBreakpoints.UseCompatibleStateImageBehavior = false;
-			this.lstBreakpoints.View = System.Windows.Forms.View.Details;
-			// 
-			// columnHeader3
-			// 
-			this.columnHeader3.Text = "Address";
-			this.columnHeader3.Width = 59;
-			// 
-			// columnHeader4
-			// 
-			this.columnHeader4.Text = "Breakpoint Type";
-			this.columnHeader4.Width = 100;
-			// 
-			// contextMenuBreakpoints
-			// 
-			this.contextMenuBreakpoints.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuRemoveBreakpoint,
-            this.mnuDisableBreakpoint,
-            this.mnuAddBreakpoint});
-			this.contextMenuBreakpoints.Name = "contextMenuWatch";
-			this.contextMenuBreakpoints.Size = new System.Drawing.Size(173, 70);
-			// 
-			// mnuRemoveBreakpoint
-			// 
-			this.mnuRemoveBreakpoint.Name = "mnuRemoveBreakpoint";
-			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(172, 22);
-			this.mnuRemoveBreakpoint.Text = "Remove";
-			// 
-			// mnuDisableBreakpoint
-			// 
-			this.mnuDisableBreakpoint.Name = "mnuDisableBreakpoint";
-			this.mnuDisableBreakpoint.Size = new System.Drawing.Size(172, 22);
-			this.mnuDisableBreakpoint.Text = "Disable Breakpoint";
-			// 
-			// mnuAddBreakpoint
-			// 
-			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
-			this.mnuAddBreakpoint.Size = new System.Drawing.Size(172, 22);
-			this.mnuAddBreakpoint.Text = "Add...";
 			// 
 			// grpWatch
 			// 
@@ -273,21 +187,14 @@
 			this.grpWatch.TabStop = false;
 			this.grpWatch.Text = "Watch";
 			// 
-			// ctrlWatch
-			// 
-			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
-			this.ctrlWatch.Name = "ctrlWatch";
-			this.ctrlWatch.Size = new System.Drawing.Size(480, 137);
-			this.ctrlWatch.TabIndex = 0;
-			// 
 			// menuStrip
 			// 
 			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.mnuView,
             this.debugToolStripMenuItem,
-            this.searchToolStripMenuItem});
+            this.searchToolStripMenuItem,
+            this.toolsToolStripMenuItem});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
 			this.menuStrip.Size = new System.Drawing.Size(984, 24);
@@ -448,6 +355,90 @@
 			this.mnuGoTo.Size = new System.Drawing.Size(196, 22);
 			this.mnuGoTo.Text = "Go to...";
 			// 
+			// toolsToolStripMenuItem
+			// 
+			this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nametableViewerToolStripMenuItem,
+            this.cHRViewerToolStripMenuItem,
+            this.toolStripMenuItem3,
+            this.mnuMemoryViewer});
+			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+			this.toolsToolStripMenuItem.Text = "Tools";
+			// 
+			// nametableViewerToolStripMenuItem
+			// 
+			this.nametableViewerToolStripMenuItem.Name = "nametableViewerToolStripMenuItem";
+			this.nametableViewerToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.nametableViewerToolStripMenuItem.Text = "Nametable Viewer";
+			// 
+			// cHRViewerToolStripMenuItem
+			// 
+			this.cHRViewerToolStripMenuItem.Name = "cHRViewerToolStripMenuItem";
+			this.cHRViewerToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.cHRViewerToolStripMenuItem.Text = "CHR Viewer";
+			// 
+			// toolStripMenuItem3
+			// 
+			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(167, 6);
+			// 
+			// mnuMemoryViewer
+			// 
+			this.mnuMemoryViewer.Name = "mnuMemoryViewer";
+			this.mnuMemoryViewer.Size = new System.Drawing.Size(170, 22);
+			this.mnuMemoryViewer.Text = "Memory Viewer";
+			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
+			// 
+			// ctrlDebuggerCode
+			// 
+			this.ctrlDebuggerCode.Code = null;
+			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
+			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
+			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(270, 416);
+			this.ctrlDebuggerCode.TabIndex = 2;
+			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchAddedEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
+			// 
+			// ctrlConsoleStatus
+			// 
+			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
+			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
+			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
+			this.ctrlConsoleStatus.TabIndex = 3;
+			// 
+			// ctrlDebuggerCodeSplit
+			// 
+			this.ctrlDebuggerCodeSplit.Code = null;
+			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(279, 3);
+			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
+			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(270, 416);
+			this.ctrlDebuggerCodeSplit.TabIndex = 4;
+			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchAddedEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
+			// 
+			// ctrlBreakpoints
+			// 
+			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
+			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
+			this.ctrlBreakpoints.Size = new System.Drawing.Size(480, 137);
+			this.ctrlBreakpoints.TabIndex = 0;
+			this.ctrlBreakpoints.BreakpointChanged += new System.EventHandler(this.ctrlBreakpoints_BreakpointChanged);
+			// 
+			// ctrlWatch
+			// 
+			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
+			this.ctrlWatch.Name = "ctrlWatch";
+			this.ctrlWatch.Size = new System.Drawing.Size(480, 137);
+			this.ctrlWatch.TabIndex = 0;
+			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -468,7 +459,6 @@
 			this.contextMenuCode.ResumeLayout(false);
 			this.tableLayoutPanel10.ResumeLayout(false);
 			this.grpBreakpoints.ResumeLayout(false);
-			this.contextMenuBreakpoints.ResumeLayout(false);
 			this.grpWatch.ResumeLayout(false);
 			this.menuStrip.ResumeLayout(false);
 			this.menuStrip.PerformLayout();
@@ -483,15 +473,10 @@
 		private System.Windows.Forms.TableLayoutPanel tlpTop;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
 		private System.Windows.Forms.GroupBox grpBreakpoints;
-		private System.Windows.Forms.ListView lstBreakpoints;
 		private System.Windows.Forms.GroupBox grpWatch;
 		private System.Windows.Forms.MenuStrip menuStrip;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
-		private System.Windows.Forms.ContextMenuStrip contextMenuBreakpoints;
-		private System.Windows.Forms.ToolStripMenuItem mnuRemoveBreakpoint;
-		private System.Windows.Forms.ToolStripMenuItem mnuDisableBreakpoint;
-		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
 		private System.Windows.Forms.ToolStripMenuItem mnuContinue;
 		private System.Windows.Forms.ToolStripMenuItem mnuBreak;
 		private System.Windows.Forms.ToolStripMenuItem mnuStepInto;
@@ -502,8 +487,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuFindNext;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindPrev;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoTo;
-		private System.Windows.Forms.ColumnHeader columnHeader3;
-		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuToggleBreakpoint;
 		private ctrlDebuggerCode ctrlDebuggerCode;
@@ -518,5 +501,11 @@
 		private ctrlDebuggerCode ctrlDebuggerCodeSplit;
 		private System.Windows.Forms.ToolStripMenuItem mnuView;
 		private System.Windows.Forms.ToolStripMenuItem mnuSplitView;
+		private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem nametableViewerToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem cHRViewerToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem mnuMemoryViewer;
+		private Controls.ctrlBreakpoints ctrlBreakpoints;
 	}
 }

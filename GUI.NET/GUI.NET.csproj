@@ -99,6 +99,13 @@
     <Compile Include="Controls\MyListView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Debugger\Breakpoint.cs" />
+    <Compile Include="Debugger\Controls\ctrlBreakpoints.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlBreakpoints.Designer.cs">
+      <DependentUpon>ctrlBreakpoints.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlConsoleStatus.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -111,8 +118,17 @@
     <Compile Include="Debugger\Controls\ctrlDebuggerCode.Designer.cs">
       <DependentUpon>ctrlDebuggerCode.cs</DependentUpon>
     </Compile>
-    <Compile Include="Debugger\Controls\ctrlSyncTextBox.cs">
+    <Compile Include="Debugger\Controls\ctrlScrollableTextbox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlScrollableTextbox.designer.cs">
+      <DependentUpon>ctrlScrollableTextbox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlTextbox.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlTextbox.Designer.cs">
+      <DependentUpon>ctrlTextbox.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\Controls\ctrlWatch.cs">
       <SubType>UserControl</SubType>
@@ -120,11 +136,23 @@
     <Compile Include="Debugger\Controls\ctrlWatch.Designer.cs">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmBreakpoint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmBreakpoint.Designer.cs">
+      <DependentUpon>frmBreakpoint.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmDebugger.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Debugger\frmDebugger.Designer.cs">
       <DependentUpon>frmDebugger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\frmMemoryViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmMemoryViewer.Designer.cs">
+      <DependentUpon>frmMemoryViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\BaseConfigForm.Designer.cs">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>
@@ -213,14 +241,23 @@
     <EmbeddedResource Include="Controls\ctrlTrackbar.resx">
       <DependentUpon>ctrlTrackbar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlBreakpoints.resx">
+      <DependentUpon>ctrlBreakpoints.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlConsoleStatus.resx">
       <DependentUpon>ctrlConsoleStatus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlDebuggerCode.resx">
       <DependentUpon>ctrlDebuggerCode.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlScrollableTextbox.resx">
+      <DependentUpon>ctrlScrollableTextbox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlWatch.resx">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmBreakpoint.resx">
+      <DependentUpon>frmBreakpoint.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmDebugger.resx">
       <DependentUpon>frmDebugger.cs</DependentUpon>

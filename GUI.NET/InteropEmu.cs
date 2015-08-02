@@ -47,7 +47,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string title, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string message);
 
 		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
-		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, bool reset);
+		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
 		[DllImport(DLLPath)] public static extern void MovieStop();
 		[DllImport(DLLPath)] public static extern bool MoviePlaying();
 		[DllImport(DLLPath)] public static extern bool MovieRecording();
@@ -56,7 +56,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void LoadState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern Int64 GetStateInfo(UInt32 stateIndex);
 
-		[DllImport(DLLPath)] public static extern void CheatAddCustom(UInt32 address, Byte value, Int32 compareValue, bool isRelativeAddress);
+		[DllImport(DLLPath)] public static extern void CheatAddCustom(UInt32 address, Byte value, Int32 compareValue, [MarshalAs(UnmanagedType.I1)]bool isRelativeAddress);
 		[DllImport(DLLPath)] public static extern void CheatAddGameGenie(string code);
 		[DllImport(DLLPath)] public static extern void CheatAddProActionRocky(UInt32 code);
 		[DllImport(DLLPath)] public static extern void CheatClear();
@@ -69,9 +69,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
-		[DllImport(DLLPath)]	public static extern void DebugRelease();
+		[DllImport(DLLPath)] public static extern void DebugRelease();
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
-		[DllImport(DLLPath)] public static extern void DebugAddBreakpoint(BreakpointType type, UInt32 address, bool isAbsoluteAddr);
+		[DllImport(DLLPath)] public static extern void DebugAddBreakpoint(BreakpointType type, UInt32 address, [MarshalAs(UnmanagedType.I1)]bool isAbsoluteAddr, [MarshalAs(UnmanagedType.I1)]bool enabled);
+		[DllImport(DLLPath)] public static extern void DebugRemoveBreakpoint(BreakpointType type, UInt32 address, [MarshalAs(UnmanagedType.I1)]bool isAbsoluteAddr);
 		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
@@ -235,7 +236,11 @@ namespace Mesen.GUI
 		public Byte Y;
 		public Byte PS;
 		public IRQSource IRQFlag;
+		
+		[MarshalAs(UnmanagedType.I1)]
 		public bool NMIFlag;
+
+		public UInt16 DebugPC;
 	};
 
 	[Flags]

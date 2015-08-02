@@ -110,7 +110,6 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel1.SetColumnSpan(this.lstCheats, 2);
 			this.lstCheats.ContextMenuStrip = this.contextMenuCheats;
 			this.lstCheats.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lstCheats.DoubleClickDoesCheck = false;
 			this.lstCheats.FullRowSelect = true;
 			this.lstCheats.GridLines = true;
 			this.lstCheats.Location = new System.Drawing.Point(3, 26);

@@ -36,7 +36,7 @@ Debugger::~Debugger()
 	Console::Resume();
 }
 
-void Debugger::AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr)
+void Debugger::AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr, bool enabled)
 {
 	_bpLock.Acquire();
 
@@ -45,6 +45,7 @@ void Debugger::AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsol
 	}
 
 	shared_ptr<Breakpoint> breakpoint(new Breakpoint(type, address, isAbsoluteAddr));
+	breakpoint->SetEnabled(enabled);
 	switch(type) {
 		case BreakpointType::Execute: _execBreakpoints.push_back(breakpoint); break;
 		case BreakpointType::Read: _readBreakpoints.push_back(breakpoint); break;
@@ -54,55 +55,26 @@ void Debugger::AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsol
 	_bpLock.Release();
 }
 
-vector<shared_ptr<Breakpoint>> Debugger::GetBreakpoints()
-{
-	vector<shared_ptr<Breakpoint>> breakpoints;
-	
-	breakpoints.insert(breakpoints.end(), _execBreakpoints.begin(), _execBreakpoints.end());
-	breakpoints.insert(breakpoints.end(), _readBreakpoints.begin(), _readBreakpoints.end());
-	breakpoints.insert(breakpoints.end(), _writeBreakpoints.begin(), _writeBreakpoints.end());
-
-	return breakpoints;
-}
-
-vector<uint32_t> Debugger::GetExecBreakpointAddresses()
+void Debugger::RemoveBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr)
 {
 	_bpLock.Acquire();
-
-	vector<uint32_t> result;
-
-	for(size_t i = 0, len = _execBreakpoints.size(); i < len; i++) {
-		shared_ptr<Breakpoint> breakpoint = _execBreakpoints[i];
-		int32_t addr = breakpoint->GetAddr();
-		if(breakpoint->IsAbsoluteAddr()) {
-			addr = _mapper->FromAbsoluteAddress(addr);
-		}
-
-		if(addr >= 0) {
-			result.push_back(addr);
-		}
+	
+	vector<shared_ptr<Breakpoint>> *breakpoints = nullptr;
+	switch(type) {
+		case BreakpointType::Execute: breakpoints = &_execBreakpoints; break;
+		case BreakpointType::Read: breakpoints = &_readBreakpoints; break;
+		case BreakpointType::Write: breakpoints = &_writeBreakpoints; break;
 	}
 
-	_bpLock.Release();
-
-	return result;
-}
-
-void Debugger::RemoveBreakpoint(shared_ptr<Breakpoint> breakpoint)
-{
-	_bpLock.Acquire();
-
-	for(size_t i = 0, len = _execBreakpoints.size(); i < len; i++) {
-		if(_execBreakpoints[i] == breakpoint) {
-			_execBreakpoints.erase(_execBreakpoints.begin()+i);
+	shared_ptr<Breakpoint> breakpoint = GetMatchingBreakpoint(type, address);
+	for(size_t i = 0, len = breakpoints->size(); i < len; i++) {
+		shared_ptr<Breakpoint> breakpoint = (*breakpoints)[i];
+		if(breakpoint->GetAddr() == address && breakpoint->IsAbsoluteAddr() == isAbsoluteAddr) {
+			breakpoints->erase(breakpoints->begin() + i);
 			break;
 		}
 	}
-
 	_bpLock.Release();
-
-	//_readBreakpoints.remove(breakpoint);
-	//_writeBreakpoints.remove(breakpoint);
 }
 
 shared_ptr<Breakpoint> Debugger::GetMatchingBreakpoint(BreakpointType type, uint32_t addr)

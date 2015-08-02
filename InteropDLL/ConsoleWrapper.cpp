@@ -149,12 +149,12 @@ namespace InteropEmu {
 		DllExport int64_t  __stdcall GetStateInfo(uint32_t stateIndex) { return SaveStateManager::GetStateInfo(stateIndex); }
 
 		DllExport void __stdcall MoviePlay(char* filename) { Movie::Play(filename); }
-		DllExport void __stdcall MovieRecord(char* filename, int reset) { Movie::Record(filename, reset != 0); }
+		DllExport void __stdcall MovieRecord(char* filename, bool reset) { Movie::Record(filename, reset); }
 		DllExport void __stdcall MovieStop() { Movie::Stop(); }
 		DllExport int __stdcall MoviePlaying() { return Movie::Playing(); }
 		DllExport int __stdcall MovieRecording() { return Movie::Recording(); }
 
-		DllExport void __stdcall CheatAddCustom(uint32_t address, uint8_t value, int32_t compareValue, int isRelativeAddress) { CheatManager::AddCustomCode(address, value, compareValue, isRelativeAddress != 0); }
+		DllExport void __stdcall CheatAddCustom(uint32_t address, uint8_t value, int32_t compareValue, bool isRelativeAddress) { CheatManager::AddCustomCode(address, value, compareValue, isRelativeAddress); }
 		DllExport void __stdcall CheatAddGameGenie(char* code) { CheatManager::AddGameGenieCode(code); }
 		DllExport void __stdcall CheatAddProActionRocky(uint32_t code) { CheatManager::AddProActionRockyCode(code); }
 		DllExport void __stdcall CheatClear() { CheatManager::ClearCodes(); }

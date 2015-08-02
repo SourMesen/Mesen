@@ -97,7 +97,7 @@ namespace Mesen.GUI.Forms
 			return true;
 		}
 
-		protected void AddBinding(string fieldName, Control bindedField, object enumValue = null)
+		protected void AddBinding(string fieldName, Control bindedField)
 		{
 			if(BindedType == null) {
 				throw new Exception("Need to override BindedType to use bindings");
@@ -108,7 +108,6 @@ namespace Mesen.GUI.Forms
 					_fieldInfo[info.Name] = info;
 				}
 			}
-			bindedField.Tag = enumValue;
 			_bindings[fieldName] = bindedField;
 		}
 

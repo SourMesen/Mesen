@@ -46,15 +46,15 @@ private:
 
 private:
 	void PrivateCheckBreakpoint(BreakpointType type, uint32_t addr);
+	shared_ptr<Breakpoint> GetMatchingBreakpoint(BreakpointType type, uint32_t addr);
 	bool SleepUntilResume();
 
 public:
 	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
 	~Debugger();
 
-	void AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr);
-	void RemoveBreakpoint(shared_ptr<Breakpoint> breakpoint);
-	shared_ptr<Breakpoint> GetMatchingBreakpoint(BreakpointType type, uint32_t addr);
+	void AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr, bool enabled);
+	void RemoveBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr);
 	vector<shared_ptr<Breakpoint>> GetBreakpoints();
 	vector<uint32_t> GetExecBreakpointAddresses();
 
