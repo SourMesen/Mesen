@@ -158,6 +158,7 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmBreakpoint";
+			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Breakpoint";
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);

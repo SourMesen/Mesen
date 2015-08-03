@@ -152,6 +152,22 @@ namespace Mesen.GUI.Debugger
 			return this.ctrlCodeViewer.CurrentLine;
 		}
 
+		public void GoToAddress()
+		{
+			GoToAddress address = new GoToAddress();
+			if(_currentActiveAddress.HasValue) {
+				address.Address = _currentActiveAddress.Value;
+			}
+
+			frmGoToLine frm = new frmGoToLine(address);
+			frm.StartPosition = FormStartPosition.Manual;
+			Point topLeft = this.PointToScreen(new Point(0, 0));
+			frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
+			if(frm.ShowDialog() == DialogResult.OK) {
+				ctrlCodeViewer.ScrollIntoView((int)address.Address);
+			}
+		}
+
 		#region Events
 		private Point _previousLocation;
 		private void ctrlCodeViewer_MouseMove(object sender, MouseEventArgs e)

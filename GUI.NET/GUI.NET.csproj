@@ -148,6 +148,12 @@
     <Compile Include="Debugger\frmDebugger.Designer.cs">
       <DependentUpon>frmDebugger.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmGoToLine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmGoToLine.Designer.cs">
+      <DependentUpon>frmGoToLine.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmMemoryViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -261,6 +267,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmDebugger.resx">
       <DependentUpon>frmDebugger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmGoToLine.resx">
+      <DependentUpon>frmGoToLine.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BaseConfigForm.resx">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>

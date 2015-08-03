@@ -110,7 +110,16 @@ namespace Mesen.GUI.Debugger
 
 		public int GetLineIndex(int lineNumber)
 		{
-			return _lineNumberIndex.ContainsKey(lineNumber) ? _lineNumberIndex[lineNumber] : -1;
+			if(_lineNumberIndex.ContainsKey(lineNumber)) {
+				return _lineNumberIndex[lineNumber];
+			} else {
+				foreach(int line in _lineNumbers) {
+					if(line > lineNumber) {
+						return Math.Max(0, GetLineIndex(line) - 1);
+					}
+				}
+			}
+			return -1;
 		}
 
 		public int GetLineNumber(int lineIndex)

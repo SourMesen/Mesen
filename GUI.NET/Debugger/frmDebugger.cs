@@ -36,7 +36,9 @@ namespace Mesen.GUI.Debugger
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
 			InteropEmu.DebugInitialize();
-			InteropEmu.DebugStep(1);
+			
+			//Pause a few frames later to give the debugger a chance to disassemble some code
+			InteropEmu.DebugStep(100000);
 		}
 
 		void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -176,6 +178,11 @@ namespace Mesen.GUI.Debugger
 		private void ctrlDebuggerCodeSplit_Enter(object sender, EventArgs e)
 		{
 			_lastCodeWindow = ctrlDebuggerCodeSplit;
+		}
+
+		private void mnuGoTo_Click(object sender, EventArgs e)
+		{
+			_lastCodeWindow.GoToAddress();
 		}
 	}
 }

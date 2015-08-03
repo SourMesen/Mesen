@@ -34,12 +34,17 @@
 			this.components = new System.ComponentModel.Container();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
+			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
+			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpBreakpoints = new System.Windows.Forms.GroupBox();
+			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
 			this.grpWatch = new System.Windows.Forms.GroupBox();
+			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,17 +64,12 @@
 			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindPrev = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.nametableViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.cHRViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
-			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
-			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
-			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
-			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
-			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
+			this.mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -120,6 +120,18 @@
 			this.tlpTop.Size = new System.Drawing.Size(984, 422);
 			this.tlpTop.TabIndex = 2;
 			// 
+			// ctrlDebuggerCode
+			// 
+			this.ctrlDebuggerCode.Code = null;
+			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
+			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
+			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(270, 416);
+			this.ctrlDebuggerCode.TabIndex = 2;
+			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchAddedEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
+			// 
 			// contextMenuCode
 			// 
 			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -143,6 +155,26 @@
             | System.Windows.Forms.Keys.F10)));
 			this.mnuSetNextStatement.Size = new System.Drawing.Size(258, 22);
 			this.mnuSetNextStatement.Text = "Set Next Statement";
+			// 
+			// ctrlConsoleStatus
+			// 
+			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
+			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
+			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
+			this.ctrlConsoleStatus.TabIndex = 3;
+			// 
+			// ctrlDebuggerCodeSplit
+			// 
+			this.ctrlDebuggerCodeSplit.Code = null;
+			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(279, 3);
+			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
+			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(270, 416);
+			this.ctrlDebuggerCodeSplit.TabIndex = 4;
+			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchAddedEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
 			// 
 			// tableLayoutPanel10
 			// 
@@ -174,6 +206,15 @@
 			this.grpBreakpoints.TabStop = false;
 			this.grpBreakpoints.Text = "Breakpoints";
 			// 
+			// ctrlBreakpoints
+			// 
+			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
+			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
+			this.ctrlBreakpoints.Size = new System.Drawing.Size(480, 137);
+			this.ctrlBreakpoints.TabIndex = 0;
+			this.ctrlBreakpoints.BreakpointChanged += new System.EventHandler(this.ctrlBreakpoints_BreakpointChanged);
+			// 
 			// grpWatch
 			// 
 			this.grpWatch.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -186,6 +227,14 @@
 			this.grpWatch.TabIndex = 2;
 			this.grpWatch.TabStop = false;
 			this.grpWatch.Text = "Watch";
+			// 
+			// ctrlWatch
+			// 
+			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
+			this.ctrlWatch.Name = "ctrlWatch";
+			this.ctrlWatch.Size = new System.Drawing.Size(480, 137);
+			this.ctrlWatch.TabIndex = 0;
 			// 
 			// menuStrip
 			// 
@@ -227,7 +276,7 @@
 			// 
 			this.mnuSplitView.CheckOnClick = true;
 			this.mnuSplitView.Name = "mnuSplitView";
-			this.mnuSplitView.Size = new System.Drawing.Size(125, 22);
+			this.mnuSplitView.Size = new System.Drawing.Size(152, 22);
 			this.mnuSplitView.Text = "Split View";
 			this.mnuSplitView.Click += new System.EventHandler(this.mnuSplitView_Click);
 			// 
@@ -348,13 +397,6 @@
 			this.mnuFindPrev.Size = new System.Drawing.Size(196, 22);
 			this.mnuFindPrev.Text = "Find Previous";
 			// 
-			// mnuGoTo
-			// 
-			this.mnuGoTo.Name = "mnuGoTo";
-			this.mnuGoTo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.mnuGoTo.Size = new System.Drawing.Size(196, 22);
-			this.mnuGoTo.Text = "Go to...";
-			// 
 			// toolsToolStripMenuItem
 			// 
 			this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -390,54 +432,13 @@
 			this.mnuMemoryViewer.Text = "Memory Viewer";
 			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
 			// 
-			// ctrlDebuggerCode
+			// mnuGoTo
 			// 
-			this.ctrlDebuggerCode.Code = null;
-			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
-			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
-			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(270, 416);
-			this.ctrlDebuggerCode.TabIndex = 2;
-			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchAddedEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
-			// 
-			// ctrlConsoleStatus
-			// 
-			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
-			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
-			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
-			this.ctrlConsoleStatus.TabIndex = 3;
-			// 
-			// ctrlDebuggerCodeSplit
-			// 
-			this.ctrlDebuggerCodeSplit.Code = null;
-			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(279, 3);
-			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
-			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(270, 416);
-			this.ctrlDebuggerCodeSplit.TabIndex = 4;
-			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchAddedEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
-			// 
-			// ctrlBreakpoints
-			// 
-			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
-			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
-			this.ctrlBreakpoints.Size = new System.Drawing.Size(480, 137);
-			this.ctrlBreakpoints.TabIndex = 0;
-			this.ctrlBreakpoints.BreakpointChanged += new System.EventHandler(this.ctrlBreakpoints_BreakpointChanged);
-			// 
-			// ctrlWatch
-			// 
-			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
-			this.ctrlWatch.Name = "ctrlWatch";
-			this.ctrlWatch.Size = new System.Drawing.Size(480, 137);
-			this.ctrlWatch.TabIndex = 0;
+			this.mnuGoTo.Name = "mnuGoTo";
+			this.mnuGoTo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+			this.mnuGoTo.Size = new System.Drawing.Size(196, 22);
+			this.mnuGoTo.Text = "Go to...";
+			this.mnuGoTo.Click += new System.EventHandler(this.mnuGoTo_Click);
 			// 
 			// frmDebugger
 			// 
@@ -486,7 +487,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuFind;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindNext;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindPrev;
-		private System.Windows.Forms.ToolStripMenuItem mnuGoTo;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuToggleBreakpoint;
 		private ctrlDebuggerCode ctrlDebuggerCode;
@@ -507,5 +507,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 		private System.Windows.Forms.ToolStripMenuItem mnuMemoryViewer;
 		private Controls.ctrlBreakpoints ctrlBreakpoints;
+		private System.Windows.Forms.ToolStripMenuItem mnuGoTo;
 	}
 }

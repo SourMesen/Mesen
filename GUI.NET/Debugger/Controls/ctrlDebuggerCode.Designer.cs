@@ -52,7 +52,7 @@
             this.mnuGoToLocation,
             this.mnuAddToWatch});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 126);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 148);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
 			// mnuShowNextStatement
@@ -108,6 +108,7 @@
 			// 
 			// ctrlCodeViewer
 			// 
+			this.ctrlCodeViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.ctrlCodeViewer.ContextMenuStrip = this.contextMenuCode;
 			this.ctrlCodeViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlCodeViewer.Location = new System.Drawing.Point(0, 0);
