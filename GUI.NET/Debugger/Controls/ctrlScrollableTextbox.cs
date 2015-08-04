@@ -38,6 +38,18 @@ namespace Mesen.GUI.Debugger
 			new ToolTip().SetToolTip(picSearchPrevious, "Find Previous (Shift-F3)");
 		}
 
+		public float FontSize
+		{
+			get { return this.ctrlTextbox.Font.SizeInPoints; }
+			set
+			{
+				if(value >= 6 && value <= 20) {
+					this.ctrlTextbox.Font = new Font("Consolas", value);
+					this.ctrlTextbox.Invalidate();
+				}
+			}
+		}
+
 		public string GetWordUnderLocation(Point position)
 		{
 			return this.ctrlTextbox.GetWordUnderLocation(position);

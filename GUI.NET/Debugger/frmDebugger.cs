@@ -52,6 +52,7 @@ namespace Mesen.GUI.Debugger
 		{
 			if(mnuSplitView.Checked) {
 				tlpTop.ColumnStyles[1].SizeType = SizeType.Percent;
+				tlpTop.ColumnStyles[0].Width = 50f;
 				tlpTop.ColumnStyles[1].Width = 50f;
 				this.MinimumSize = new Size(1250, 650);
 			} else {
@@ -194,6 +195,21 @@ namespace Mesen.GUI.Debugger
 		private void mnuGoTo_Click(object sender, EventArgs e)
 		{
 			_lastCodeWindow.GoToAddress();
+		}
+
+		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
+		{
+			_lastCodeWindow.FontSize++;
+		}
+
+		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
+		{
+			_lastCodeWindow.FontSize--;
+		}
+
+		private void mnuResetFontSize_Click(object sender, EventArgs e)
+		{
+			_lastCodeWindow.FontSize = 13;
 		}
 	}
 }

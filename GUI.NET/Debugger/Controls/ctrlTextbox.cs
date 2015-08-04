@@ -10,11 +10,13 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Debugger
 {
+	[Flags]
 	public enum LineSymbol
 	{
 		None = 0,
-		Circle,
-		CircleOutline,
+		Circle = 1,
+		CircleOutline = 2,
+		Arrow = 4,
 	}
 
 	public class LineProperties
@@ -29,7 +31,6 @@ namespace Mesen.GUI.Debugger
 	{
 		public event EventHandler ScrollPositionChanged;
 
-		//Dictionary<int, 
 		private string[] _contents = new string[0];
 		private int[] _lineNumbers = new int[0];
 		private Dictionary<int, int> _lineNumberIndex = new Dictionary<int,int>();
@@ -45,7 +46,6 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 			this.ResizeRedraw = true;
 			this.DoubleBuffered = true;
-			this.Font = new Font("Consolas", 13);
 		}
 		
 		public string[] TextLines
@@ -205,7 +205,7 @@ namespace Mesen.GUI.Debugger
 			using(Graphics g = Graphics.FromHwnd(this.Handle)) {
 				int marginLeft = this.GetMargin(g);
 				int positionX = position.X - marginLeft;
-				int lineOffset = position.Y / (this.Font.Height - 1);
+				int lineOffset = position.Y / this.LineHeight;
 				if(positionX >= 0 && this.ScrollPosition + lineOffset < _contents.Length) {
 					string text = _contents[this.ScrollPosition + lineOffset];
 					int charIndex = -1;
@@ -245,7 +245,7 @@ namespace Mesen.GUI.Debugger
 		private int GetNumberVisibleLines()
 		{
 			Rectangle rect = this.ClientRectangle;
-			return rect.Height / (this.Font.Height - 1);
+			return rect.Height / this.LineHeight;
 		}
 
 		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -296,6 +296,11 @@ namespace Mesen.GUI.Debugger
 			set { _showLineInHex = value; }
 		}
 
+		private int LineHeight
+		{
+			get { return this.Font.Height - 1; }
+		}
+
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			this.Focus();
@@ -305,7 +310,7 @@ namespace Mesen.GUI.Debugger
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
 			if(e.Button == System.Windows.Forms.MouseButtons.Left) {
-				int clickedLine = e.Y / (this.Font.Height - 1);
+				int clickedLine = e.Y / this.LineHeight;
 				this.CursorPosition = this.ScrollPosition + clickedLine;
 			}
 			base.OnMouseClick(e);
@@ -322,7 +327,7 @@ namespace Mesen.GUI.Debugger
 
 			if(currentLine == this.CursorPosition) {
 				//Highlight current line
-				g.FillRectangle(Brushes.AliceBlue, marginLeft, positionY, this.ClientRectangle.Width - marginLeft, this.Font.Height-1);
+				g.FillRectangle(Brushes.AliceBlue, marginLeft, positionY, this.ClientRectangle.Width - marginLeft, this.LineHeight);
 			}
 
 			Color textColor = Color.Black;
@@ -335,33 +340,41 @@ namespace Mesen.GUI.Debugger
 
 				if(lineProperties.BgColor.HasValue) {
 					using(Brush bgBrush = new SolidBrush(lineProperties.BgColor.Value)) {
-						g.FillRectangle(bgBrush, marginLeft + 1, positionY + 1, stringLength, this.Font.Height-2);
+						g.FillRectangle(bgBrush, marginLeft + 1, positionY + 1, stringLength, this.LineHeight-1);
 					}
 				}
 				if(lineProperties.OutlineColor.HasValue) {
 					using(Pen outlinePen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-						g.DrawRectangle(outlinePen, marginLeft + 1, positionY + 1, stringLength, this.Font.Height-2);
+						g.DrawRectangle(outlinePen, marginLeft + 1, positionY + 1, stringLength, this.LineHeight-1);
 					}
 				}
 
-				switch(lineProperties.Symbol) {
-					case LineSymbol.Circle:
-						using(Brush brush = new SolidBrush(lineProperties.OutlineColor.Value)) {
-							g.FillEllipse(brush, 2, positionY + 3, this.Font.Height - 7, this.Font.Height - 7);
-							if(lineProperties.OutlineColor.HasValue) {
-								using(Pen pen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-									g.DrawEllipse(pen, 2, positionY + 3, this.Font.Height - 7, this.Font.Height - 7);
-								}
-							}
-						}
-						break;
-					case LineSymbol.CircleOutline:
-						if(lineProperties.OutlineColor.HasValue) {
-							using(Pen pen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-								g.DrawEllipse(pen, 2, positionY + 3, this.Font.Height - 7, this.Font.Height - 7);
-							}
-						}
-						break;
+				if(lineProperties.Symbol.HasFlag(LineSymbol.Circle)) {
+					using(Brush brush = new SolidBrush(lineProperties.OutlineColor.Value)) {
+						g.FillEllipse(brush, 1, positionY + 2, this.LineHeight - 3, this.LineHeight - 3);
+					}
+				} 
+				if(lineProperties.Symbol.HasFlag(LineSymbol.CircleOutline) && lineProperties.OutlineColor.HasValue) {
+					using(Pen pen = new Pen(lineProperties.OutlineColor.Value, 1)) {
+						g.DrawEllipse(pen, 1, positionY + 2, this.LineHeight - 3, this.LineHeight - 3);
+					}
+				}
+				if(lineProperties.Symbol.HasFlag(LineSymbol.Arrow)) {
+					int arrowY = positionY + this.LineHeight / 2 + 1;
+					using(Pen pen = new Pen(Color.Black, this.LineHeight * 0.33f)) {
+						//Outline
+						g.DrawLine(pen, 3, arrowY, 3 + this.LineHeight * 0.25f, arrowY);
+						pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+						g.DrawLine(pen, 3 + this.LineHeight * 0.25f, arrowY, 3 + this.LineHeight * 0.75f, arrowY);
+
+						//Fill
+						pen.Width-=2f;
+						pen.Color = lineProperties.BgColor.Value;
+						pen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+						g.DrawLine(pen, 4, arrowY, 3 + this.LineHeight * 0.25f - 1, arrowY);
+						pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+						g.DrawLine(pen, 3 + this.LineHeight * 0.25f, arrowY, this.LineHeight * 0.75f + 1, arrowY);
+					}
 				}
 			}
 
@@ -376,7 +389,7 @@ namespace Mesen.GUI.Debugger
 
 					float offsetX = g.MeasureString(_contents[currentLine].Substring(0, searchIndex), this.Font, Int32.MaxValue, stringFormat).Width;
 					using(Brush selBrush = new SolidBrush(Color.White), selBgBrush = new SolidBrush(Color.CornflowerBlue)) {
-						g.FillRectangle(selBgBrush, marginLeft+offsetX+1, positionY, searchStringWidth+2, this.Font.Height - 1);
+						g.FillRectangle(selBgBrush, marginLeft+offsetX+1, positionY, searchStringWidth+2, this.LineHeight);
 						g.DrawString(searchString, this.Font, selBrush, marginLeft+offsetX, positionY);
 					}
 					offsetX += searchStringWidth;
@@ -406,7 +419,7 @@ namespace Mesen.GUI.Debugger
 					int positionY = 0;
 					while(positionY < rect.Bottom && currentLine < _contents.Length) {
 						this.DrawLine(pe.Graphics, currentLine, marginLeft, positionY);
-						positionY += this.Font.Height - 1;
+						positionY += this.LineHeight;
 						currentLine++;
 					}
 				}

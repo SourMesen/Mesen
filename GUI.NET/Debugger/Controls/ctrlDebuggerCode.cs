@@ -35,6 +35,13 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		[DefaultValue(13F)]
+		public float FontSize
+		{
+			get { return this.ctrlCodeViewer.FontSize; }
+			set { this.ctrlCodeViewer.FontSize = value; }
+		}
+
 		private UInt32? _currentActiveAddress = null;
 		public void SelectActiveAddress(UInt32 address)
 		{
@@ -46,7 +53,7 @@ namespace Mesen.GUI.Debugger
 		{
 			//Set line background to yellow
 			this.ctrlCodeViewer.ClearLineStyles();
-			this.ctrlCodeViewer.SetLineColor((int)address, Color.Black, Color.Yellow, null, LineSymbol.None);
+			this.ctrlCodeViewer.SetLineColor((int)address, Color.Black, Color.Yellow, null, LineSymbol.Arrow);
 			_currentActiveAddress = address;
 		}
 		
@@ -145,23 +152,27 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlCodeViewer.ClearLineStyles();
 			if(_currentActiveAddress.HasValue) {
-				this.ctrlCodeViewer.SetLineColor((int)_currentActiveAddress.Value, Color.Black, Color.Yellow, null, LineSymbol.None);
+				SetActiveAddress(_currentActiveAddress.Value);
 			}
 			foreach(Breakpoint breakpoint in breakpoints) {
 				Color? fgColor = Color.White;
 				Color? bgColor = null;
 				Color? outlineColor = Color.FromArgb(140, 40, 40);
+				LineSymbol symbol;
 				if(breakpoint.Enabled) {
 					bgColor = Color.FromArgb(140, 40, 40);
+					symbol = LineSymbol.Circle;
 				} else {
 					fgColor = Color.Black;
+					symbol = LineSymbol.CircleOutline;
 				}
 				if(breakpoint.Address == (UInt32)(_currentActiveAddress.HasValue ? (int)_currentActiveAddress.Value : -1)) {
 					fgColor = Color.Black;
 					bgColor = Color.Yellow;
+					symbol |= LineSymbol.Arrow;
 				}
 
-				ctrlCodeViewer.SetLineColor((int)breakpoint.Address, fgColor, bgColor, outlineColor, breakpoint.Enabled ? LineSymbol.Circle : LineSymbol.CircleOutline);
+				ctrlCodeViewer.SetLineColor((int)breakpoint.Address, fgColor, bgColor, outlineColor, symbol);
 			}
 		}
 
