@@ -39,7 +39,7 @@ namespace Mesen.GUI.Debugger
 		public void SelectActiveAddress(UInt32 address)
 		{
 			this.SetActiveAddress(address);
-			this.ctrlCodeViewer.ScrollIntoView((int)address);
+			this.ctrlCodeViewer.ScrollToLineNumber((int)address);
 		}
 
 		public void SetActiveAddress(UInt32 address)
@@ -59,10 +59,27 @@ namespace Mesen.GUI.Debugger
 		{
 			return this.ctrlCodeViewer.GetWordUnderLocation(position);
 		}
+
+		public void OpenSearchBox()
+		{
+			this.ctrlCodeViewer.OpenSearchBox();
+		}
+
+		public void FindNext()
+		{
+			this.ctrlCodeViewer.FindNext();
+		}
+
+		public void FindPrevious()
+		{
+			this.ctrlCodeViewer.FindPrevious();
+		}
 		
 		public bool UpdateCode(bool forceUpdate = false)
 		{
 			if(_codeChanged || forceUpdate) {
+				System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+				sw.Start();
 				this.ctrlCodeViewer.ClearLineStyles();
 
 				List<int> lineNumbers = new List<int>();
@@ -98,6 +115,7 @@ namespace Mesen.GUI.Debugger
 
 				ctrlCodeViewer.TextLines = codeLines.ToArray();
 				ctrlCodeViewer.LineNumbers = lineNumbers.ToArray();
+				sw.Stop();
 				_codeChanged = false;
 				return true;
 			}
@@ -164,7 +182,7 @@ namespace Mesen.GUI.Debugger
 			Point topLeft = this.PointToScreen(new Point(0, 0));
 			frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
 			if(frm.ShowDialog() == DialogResult.OK) {
-				ctrlCodeViewer.ScrollIntoView((int)address.Address);
+				ctrlCodeViewer.ScrollToLineNumber((int)address.Address);
 			}
 		}
 
@@ -212,7 +230,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuShowNextStatement_Click(object sender, EventArgs e)
 		{
-			this.ctrlCodeViewer.ScrollIntoView((int)_currentActiveAddress.Value);
+			this.ctrlCodeViewer.ScrollToLineNumber((int)_currentActiveAddress.Value);
 		}
 
 		private void mnuShowOnlyDisassembledCode_Click(object sender, EventArgs e)
@@ -225,7 +243,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuGoToLocation_Click(object sender, EventArgs e)
 		{
-			this.ctrlCodeViewer.ScrollIntoView((int)_lastClickedAddress);
+			this.ctrlCodeViewer.ScrollToLineNumber((int)_lastClickedAddress);
 		}
 
 		private void mnuAddToWatch_Click(object sender, EventArgs e)

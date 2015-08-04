@@ -38,6 +38,7 @@ namespace Mesen.GUI.Debugger
 		private bool _showLineInHex = false;
 		private int _cursorPosition = 0;
 		private int _scrollPosition = 0;
+		private string _searchString = null;
 
 		public ctrlTextbox()
 		{
@@ -85,6 +86,56 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public bool Search(string searchString, bool searchBackwards, bool isNewSearch)
+		{
+			if(string.IsNullOrWhiteSpace(searchString)) {
+				this._searchString = null;
+				this.Invalidate();
+				return true;
+			} else {
+				int startPosition;
+				int endPosition;
+
+				this._searchString = searchString.ToLowerInvariant();
+				int searchOffset = (searchBackwards ? -1 : 1);
+				if(isNewSearch) {
+					startPosition = this.CursorPosition;
+					endPosition = this.CursorPosition - searchOffset;
+					if(endPosition < 0) {
+						endPosition = _contents.Length - 1;
+					} else if(endPosition >= _contents.Length) {
+						endPosition = 0;
+					}
+
+				} else {
+					startPosition = this.CursorPosition + searchOffset;
+					endPosition = this.CursorPosition;
+					if(startPosition < 0) {
+						startPosition = _contents.Length - 1;
+					} else if(startPosition >= _contents.Length) {
+						startPosition = 0;
+					}
+				}
+
+				for(int i = startPosition; i != endPosition; i += searchOffset) {
+					string line = _contents[i].ToLowerInvariant();
+					if(line.Contains(searchString)) {
+						this.ScrollToLineIndex(i);
+						return true;
+					}
+
+					//Continue search from start/end of document
+					if(!searchBackwards && i == this._contents.Length - 1) {
+						i = 0;
+					} else if(searchBackwards && i == 0) {
+						i = this._contents.Length - 1;
+					}
+				}
+				this.Invalidate();
+				return _contents[_cursorPosition].ToLowerInvariant().Contains(this._searchString);
+			}
+		}
+
 		public void ClearLineStyles()
 		{
 			_lineProperties.Clear();
@@ -127,15 +178,20 @@ namespace Mesen.GUI.Debugger
 			return _lineNumbers[lineIndex];
 		}
 
-		public void ScrollIntoView(int lineNumber)
+		public void ScrollToLineIndex(int lineIndex)
+		{
+			if(lineIndex < this.ScrollPosition || lineIndex > this.GetLastVisibleLineIndex()) {
+				//Line isn't currently visible, scroll it to the middle of the viewport
+				this.ScrollPosition = lineIndex - this.GetNumberVisibleLines()/2;
+			}
+			this.CursorPosition = lineIndex;
+		}
+
+		public void ScrollToLineNumber(int lineNumber)
 		{
 			int lineIndex = this.GetLineIndex(lineNumber);
 			if(lineIndex >= 0) {
-				if(lineIndex < this.ScrollPosition || lineIndex > this.GetLastVisibleLineIndex()) {
-					//Line isn't currently visible, scroll it to the middle of the viewport
-					this.ScrollPosition = lineIndex - this.GetNumberVisibleLines()/2;
-				}
-				this.CursorPosition = lineIndex;
+				ScrollToLineIndex(lineIndex);
 			}
 		}
 
@@ -310,7 +366,25 @@ namespace Mesen.GUI.Debugger
 			}
 
 			using(Brush fgBrush = new SolidBrush(textColor)) {
-				g.DrawString(_contents[currentLine], this.Font, fgBrush, marginLeft, positionY);
+				int searchIndex;
+				if(!string.IsNullOrWhiteSpace(this._searchString) && (searchIndex = _contents[currentLine].ToLowerInvariant().IndexOf(this._searchString)) >= 0) {
+					//Draw colored search string
+					string searchString = _contents[currentLine].Substring(searchIndex, this._searchString.Length);
+					StringFormat stringFormat = new StringFormat(StringFormat.GenericTypographic) { FormatFlags = StringFormatFlags.MeasureTrailingSpaces };
+					float searchStringWidth = g.MeasureString(searchString, this.Font, Int32.MaxValue, stringFormat).Width;
+					g.DrawString(_contents[currentLine].Substring(0, searchIndex), this.Font, fgBrush, marginLeft, positionY);
+
+					float offsetX = g.MeasureString(_contents[currentLine].Substring(0, searchIndex), this.Font, Int32.MaxValue, stringFormat).Width;
+					using(Brush selBrush = new SolidBrush(Color.White), selBgBrush = new SolidBrush(Color.CornflowerBlue)) {
+						g.FillRectangle(selBgBrush, marginLeft+offsetX+1, positionY, searchStringWidth+2, this.Font.Height - 1);
+						g.DrawString(searchString, this.Font, selBrush, marginLeft+offsetX, positionY);
+					}
+					offsetX += searchStringWidth;
+
+					g.DrawString(_contents[currentLine].Substring(searchIndex+this._searchString.Length), this.Font, fgBrush, marginLeft+offsetX, positionY);
+				} else {
+					g.DrawString(_contents[currentLine], this.Font, fgBrush, marginLeft, positionY);
+				}
 			}
 		}
 

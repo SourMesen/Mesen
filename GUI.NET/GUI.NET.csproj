@@ -335,6 +335,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <None Include="Resources\Close.png" />
+    <None Include="Resources\PreviousArrow.png" />
+    <None Include="Resources\NextArrow.png" />
     <None Include="Resources\MesenIcon.ico" />
     <None Include="Resources\MesenLogo.bmp" />
   </ItemGroup>

@@ -61,6 +61,16 @@ namespace Mesen.GUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Close {
+            get {
+                object obj = ResourceManager.GetObject("Close", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon MesenIcon {
@@ -76,6 +86,26 @@ namespace Mesen.GUI.Properties {
         internal static System.Drawing.Bitmap MesenLogo {
             get {
                 object obj = ResourceManager.GetObject("MesenLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NextArrow {
+            get {
+                object obj = ResourceManager.GetObject("NextArrow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PreviousArrow {
+            get {
+                object obj = ResourceManager.GetObject("PreviousArrow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

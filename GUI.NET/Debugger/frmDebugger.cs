@@ -59,6 +59,7 @@ namespace Mesen.GUI.Debugger
 				tlpTop.ColumnStyles[1].Width = 0f;
 				this.MinimumSize = new Size(1000, 650);
 			}
+			ctrlDebuggerCodeSplit.Visible = mnuSplitView.Checked;
 			return mnuSplitView.Checked;
 		}
 
@@ -152,7 +153,17 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuFind_Click(object sender, EventArgs e)
 		{
+			_lastCodeWindow.OpenSearchBox();
+		}
+		
+		private void mnuFindNext_Click(object sender, EventArgs e)
+		{
+			_lastCodeWindow.FindNext();
+		}
 
+		private void mnuFindPrev_Click(object sender, EventArgs e)
+		{
+			_lastCodeWindow.FindPrevious();
 		}
 
 		private void mnuSplitView_Click(object sender, EventArgs e)
