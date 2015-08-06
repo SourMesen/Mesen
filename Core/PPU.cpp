@@ -712,7 +712,7 @@ void PPU::StreamState(bool saving)
 	Stream<uint32_t>(_frameCount);
 	Stream<uint8_t>(_memoryReadBuffer);
 	
-	StreamArray<uint8_t>(_paletteRAM, 0x100);
+	StreamArray<uint8_t>(_paletteRAM, 0x20);
 	StreamArray<uint8_t>(_spriteRAM, 0x100);
 	StreamArray<uint8_t>(_secondarySpriteRAM, 0x20);
 

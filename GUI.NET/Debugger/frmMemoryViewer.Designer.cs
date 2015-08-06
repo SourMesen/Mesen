@@ -88,6 +88,7 @@
 			this.cboMemoryType.Items.AddRange(new object[] {
             "CPU Memory",
             "PPU Memory",
+            "Palette Memory",
             "OAM Memory",
             "Secondary OAM Memory",
             "PRG ROM",

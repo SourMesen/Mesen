@@ -275,6 +275,12 @@ uint32_t Debugger::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 			}
 			return 0x4000;
 
+		case DebugMemoryType::PaletteMemory:
+			for(int i = 0; i <= 0x1F; i++) {
+				buffer[i] = _ppu->ReadPaletteRAM(i);
+			}
+			return 0x20;
+
 		case DebugMemoryType::SpriteMemory:
 			memcpy(buffer, _ppu->GetSpriteRam(), 0x100);
 			return 0x100;

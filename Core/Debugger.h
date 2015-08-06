@@ -23,10 +23,11 @@ enum class DebugMemoryType
 {
 	CpuMemory = 0,
 	PpuMemory = 1,
-	SpriteMemory = 2,
-	SecondarySpriteMemory = 3,
-	PrgRom = 4,
-	ChrRom = 5,
+	PaletteMemory = 2,
+	SpriteMemory = 3,
+	SecondarySpriteMemory = 4,
+	PrgRom = 5,
+	ChrRom = 6,
 };
 
 class Debugger

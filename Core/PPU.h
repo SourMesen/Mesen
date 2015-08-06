@@ -99,7 +99,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint32_t _frameCount;
 		uint8_t _memoryReadBuffer;
 
-		uint8_t _paletteRAM[0x100];
+		uint8_t _paletteRAM[0x20];
 
 		uint8_t _spriteRAM[0x100];
 		uint8_t _secondarySpriteRAM[0x20];
@@ -157,7 +157,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint32_t GetBGPaletteEntry(uint32_t paletteOffset, uint32_t pixel);
 		uint32_t GetSpritePaletteEntry(uint32_t paletteOffset, uint32_t pixel);
 
-		uint8_t ReadPaletteRAM(uint16_t addr);
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
 		void LoadTileInfo();
@@ -202,6 +201,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 			ranges.AddHandler(MemoryOperation::Write, 0x4014);
 		}
 
+		uint8_t ReadPaletteRAM(uint16_t addr);
+
 		uint8_t ReadRAM(uint16_t addr);
 		void WriteRAM(uint16_t addr, uint8_t value);
 
@@ -239,7 +240,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		{
 			return PPU::Instance->_scanline;
 		}
-
+		
 		uint8_t* GetSpriteRam()
 		{
 			return _spriteRAM;
