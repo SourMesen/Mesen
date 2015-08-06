@@ -22,6 +22,7 @@ namespace Mesen.GUI.Forms
 		private InteropEmu.NotificationListener _notifListener;
 		private Thread _emuThread;
 		private Thread _renderThread;
+		private frmDebugger _debugger;
 		private bool _stop = false;
 		
 		public frmMain()
@@ -329,7 +330,15 @@ namespace Mesen.GUI.Forms
 		
 		private void mnuDebugger_Click(object sender, EventArgs e)
 		{
-			new frmDebugger().Show();
+			if(_debugger == null) {
+				_debugger = new frmDebugger();
+				_debugger.FormClosed += (obj, args) => {
+					_debugger = null;
+				};
+				_debugger.Show();
+			} else {
+				_debugger.Focus();
+			}
 		}
 
 		private void mnuSaveState1_Click(object sender, EventArgs e)

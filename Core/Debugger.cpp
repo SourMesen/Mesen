@@ -19,7 +19,9 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_memoryManager = memoryManager;
 	_mapper = mapper;
 
-	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPRGCopy(), mapper->GetPRGSize()));
+	uint8_t *prgBuffer;
+	mapper->GetPrgCopy(&prgBuffer);
+	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), prgBuffer, mapper->GetPrgSize()));
 
 	_stepCount = -1;
 		
@@ -256,4 +258,44 @@ void Debugger::CheckBreakpoint(BreakpointType type, uint32_t addr)
 	if(Debugger::Instance) {
 		Debugger::Instance->PrivateCheckBreakpoint(type, addr);
 	}
+}
+
+uint32_t Debugger::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
+{
+	switch(type) {
+		case DebugMemoryType::CpuMemory:
+			for(int i = 0; i <= 0xFFFF; i++) {
+				buffer[i] = _memoryManager->DebugRead(i);
+			}
+			return 0x10000;
+
+		case DebugMemoryType::PpuMemory:
+			for(int i = 0; i <= 0x3FFF; i++) {
+				buffer[i] = _memoryManager->DebugReadVRAM(i);
+			}
+			return 0x4000;
+
+		case DebugMemoryType::SpriteMemory:
+			memcpy(buffer, _ppu->GetSpriteRam(), 0x100);
+			return 0x100;
+
+		case DebugMemoryType::SecondarySpriteMemory:
+			memcpy(buffer, _ppu->GetSecondarySpriteRam(), 0x20);
+			return 0x20;
+
+		case DebugMemoryType::PrgRom:
+			uint8_t *prgRom;
+			_mapper->GetPrgCopy(&prgRom);
+			memcpy(buffer, prgRom, _mapper->GetPrgSize());
+			delete[] prgRom;
+			return _mapper->GetPrgSize();
+
+		case DebugMemoryType::ChrRom:
+			uint8_t *chrRom;
+			_mapper->GetChrCopy(&chrRom);
+			memcpy(buffer, chrRom, _mapper->GetChrSize());
+			delete[] chrRom;
+			return _mapper->GetChrSize();
+	}
+	return 0;
 }

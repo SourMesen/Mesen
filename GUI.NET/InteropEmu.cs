@@ -82,7 +82,20 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern IntPtr DebugGetCode();
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);
+		[DllImport(DLLPath, EntryPoint="DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
 
+		public static byte[] DebugGetMemoryState(DebugMemoryType type)
+		{
+			byte[] buffer = new byte[10485760]; //10mb buffer
+			GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+			try {
+				UInt32 memorySize = InteropEmu.DebugGetMemoryStateWrapper(type, handle.AddrOfPinnedObject());
+				Array.Resize(ref buffer, (int)memorySize);
+			} finally {
+				handle.Free();
+			}
+			return buffer;
+		}
 
 		public static string GetROMPath() { return PtrToStringUtf8(InteropEmu.GetROMPathWrapper()); }
 		public static string GetKeyName(UInt32 key) { return PtrToStringUtf8(InteropEmu.GetKeyNameWrapper(key)); }
@@ -284,6 +297,16 @@ namespace Mesen.GUI
 		Auto = 0,
 		NTSC = 1,
 		PAL = 2
+	}
+
+	public enum DebugMemoryType
+	{
+		CpuMemory = 0,
+		PpuMemory = 1,
+		SpriteMemory = 2,
+		SecondarySpriteMemory = 3,
+		PrgRom = 4,
+		ChrRom = 5,
 	}
 
 	public class MD5Helper

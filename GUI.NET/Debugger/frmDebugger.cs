@@ -14,8 +14,9 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class frmDebugger : Form
 	{
-		InteropEmu.NotificationListener _notifListener;
-		ctrlDebuggerCode _lastCodeWindow;
+		private List<frmMemoryViewer> _memoryViewers = new List<frmMemoryViewer>();
+		private InteropEmu.NotificationListener _notifListener;
+		private ctrlDebuggerCode _lastCodeWindow;
 
 		public frmDebugger()
 		{
@@ -174,7 +175,12 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuMemoryViewer_Click(object sender, EventArgs e)
 		{
-
+			frmMemoryViewer frm = new frmMemoryViewer();
+			this._memoryViewers.Add(frm);
+			frm.FormClosed += (obj, args) => {
+				this._memoryViewers.Remove((frmMemoryViewer)obj);
+			};
+			frm.Show();
 		}
 
 		private void ctrlBreakpoints_BreakpointChanged(object sender, EventArgs e)
@@ -210,6 +216,19 @@ namespace Mesen.GUI.Debugger
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
 			_lastCodeWindow.FontSize = 13;
+		}
+
+		private void mnuClose_Click(object sender, EventArgs e)
+		{
+			this.Close();
+		}
+
+		protected override void OnFormClosed(FormClosedEventArgs e)
+		{
+			foreach(frmMemoryViewer frm in this._memoryViewers.ToArray()) {
+				frm.Close();
+			}
+			base.OnFormClosed(e);
 		}
 	}
 }

@@ -84,13 +84,15 @@ uint8_t* MemoryManager::GetInternalRAM()
 
 uint8_t MemoryManager::DebugRead(uint16_t addr)
 {
+	uint8_t value = 0x00;
 	if(addr <= 0x1FFF) {
-		return _internalRAM[addr & 0x07FF];
+		value = _internalRAM[addr & 0x07FF];
 	} else if(addr > 0x4017) {
-		return ReadRegister(addr);
+		value = ReadRegister(addr);
 	}
 
-	return 0;
+	CheatManager::ApplyRamCodes(addr, value);
+	return value;
 }
 
 uint8_t MemoryManager::Read(uint16_t addr, bool forExecution)
@@ -128,6 +130,15 @@ void MemoryManager::ProcessVramAccess(uint16_t &addr)
 		addr -= 0x1000;
 	}
 	_mapper->NotifyVRAMAddressChange(addr);
+}
+
+uint8_t MemoryManager::DebugReadVRAM(uint16_t addr)
+{
+	addr &= 0x3FFF;
+	if(addr >= 0x3000) {
+		addr -= 0x1000;
+	}
+	return _mapper->ReadVRAM(addr);
 }
 
 uint8_t MemoryManager::ReadVRAM(uint16_t addr)

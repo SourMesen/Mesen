@@ -217,7 +217,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		
 		void RestoreOriginalPrgRam()
 		{
-			memcpy(_prgRom, _originalPrgRom, GetPRGSize());
+			memcpy(_prgRom, _originalPrgRom, GetPrgSize());
 		}
 
 		virtual void StreamState(bool saving)
@@ -334,7 +334,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		void ApplyCheats()
 		{
 			RestoreOriginalPrgRam();
-			CheatManager::ApplyPrgCodes(_prgRom, GetPRGSize());
+			CheatManager::ApplyPrgCodes(_prgRom, GetPrgSize());
 		}
 
 		void GetMemoryRanges(MemoryRanges &ranges)
@@ -439,16 +439,26 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 		#pragma region Debugger Helper Functions
 
-		uint8_t* GetPRGCopy()
+		void GetPrgCopy(uint8_t **buffer)
 		{
-			uint8_t* prgCopy = new uint8_t[_prgSize];
-			memcpy(prgCopy, _prgRom, _prgSize);
-			return prgCopy;
+			*buffer = new uint8_t[_prgSize];
+			memcpy(*buffer, _prgRom, _prgSize);
 		}
 
-		uint32_t GetPRGSize()
+		uint32_t GetPrgSize()
 		{
 			return _prgSize;
+		}
+
+		void GetChrCopy(uint8_t **buffer)
+		{
+			*buffer = new uint8_t[_chrSize];
+			memcpy(*buffer, _chrRam, _chrSize);
+		}
+
+		uint32_t GetChrSize()
+		{
+			return _chrSize;
 		}
 
 		uint32_t ToAbsoluteAddress(uint16_t addr)

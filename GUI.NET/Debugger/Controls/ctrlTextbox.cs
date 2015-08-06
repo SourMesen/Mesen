@@ -40,6 +40,7 @@ namespace Mesen.GUI.Debugger
 		private int _cursorPosition = 0;
 		private int _scrollPosition = 0;
 		private string _searchString = null;
+		private string _header = null;
 
 		public ctrlTextbox()
 		{
@@ -82,6 +83,15 @@ namespace Mesen.GUI.Debugger
 					_lineNumberIndex[line] = i;
 					i++;
 				}
+				this.Invalidate();
+			}
+		}
+
+		public string Header
+		{
+			set
+			{
+				this._header = value;
 				this.Invalidate();
 			}
 		}
@@ -205,7 +215,7 @@ namespace Mesen.GUI.Debugger
 			using(Graphics g = Graphics.FromHwnd(this.Handle)) {
 				int marginLeft = this.GetMargin(g);
 				int positionX = position.X - marginLeft;
-				int lineOffset = position.Y / this.LineHeight;
+				int lineOffset = this.GetLineAtPosition(position.Y);
 				if(positionX >= 0 && this.ScrollPosition + lineOffset < _contents.Length) {
 					string text = _contents[this.ScrollPosition + lineOffset];
 					int charIndex = -1;
@@ -237,18 +247,27 @@ namespace Mesen.GUI.Debugger
 			return string.Empty;
 		}
 
+		private int GetLineAtPosition(int yPos)
+		{
+			if(!string.IsNullOrWhiteSpace(this._header)) {
+				yPos -= this.LineHeight;
+			}
+			return Math.Max(0, yPos / this.LineHeight);
+		}
+
 		private int GetLastVisibleLineIndex()
 		{
 			return this.ScrollPosition + this.GetNumberVisibleLines() - 1;
 		}
 
-		private int GetNumberVisibleLines()
+		public int GetNumberVisibleLines()
 		{
 			Rectangle rect = this.ClientRectangle;
-			return rect.Height / this.LineHeight;
+			return this.GetLineAtPosition(rect.Height);
 		}
 
-		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int CursorPosition
 		{
 			get { return _cursorPosition; }
@@ -269,7 +288,8 @@ namespace Mesen.GUI.Debugger
 			get { return _lineNumbers[_cursorPosition]; }
 		}
 
-		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int ScrollPosition
 		{
 			get { return _scrollPosition; }
@@ -310,7 +330,7 @@ namespace Mesen.GUI.Debugger
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
 			if(e.Button == System.Windows.Forms.MouseButtons.Left) {
-				int clickedLine = e.Y / this.LineHeight;
+				int clickedLine = this.GetLineAtPosition(e.Y);
 				this.CursorPosition = this.ScrollPosition + clickedLine;
 			}
 			base.OnMouseClick(e);
@@ -417,6 +437,13 @@ namespace Mesen.GUI.Debugger
 
 					int currentLine = this.ScrollPosition;
 					int positionY = 0;
+
+					if(!string.IsNullOrWhiteSpace(this._header)) {
+						pe.Graphics.FillRectangle(lightGrayBrush, marginLeft, 0, rect.Right, this.LineHeight);
+						pe.Graphics.DrawString(_header, this.Font, Brushes.Gray, marginLeft, positionY);
+						positionY += this.LineHeight;
+					}
+
 					while(positionY < rect.Bottom && currentLine < _contents.Length) {
 						this.DrawLine(pe.Graphics, currentLine, marginLeft, positionY);
 						positionY += this.LineHeight;

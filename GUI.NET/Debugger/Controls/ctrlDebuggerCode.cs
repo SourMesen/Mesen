@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Debugger.Controls;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class ctrlDebuggerCode : UserControl
+	public partial class ctrlDebuggerCode : BaseScrollableTextboxUserControl
 	{
 		public delegate void WatchAddedEventHandler(WatchAddedEventArgs args);
 		public event WatchAddedEventHandler OnWatchAdded;
@@ -18,6 +19,11 @@ namespace Mesen.GUI.Debugger
 		public ctrlDebuggerCode()
 		{
 			InitializeComponent();
+		}
+
+		protected override ctrlScrollableTextbox ScrollableTextbox
+		{
+			get { return this.ctrlCodeViewer; }
 		}
 
 		private string _code;
@@ -33,13 +39,6 @@ namespace Mesen.GUI.Debugger
 					UpdateCode();
 				}
 			}
-		}
-
-		[DefaultValue(13F)]
-		public float FontSize
-		{
-			get { return this.ctrlCodeViewer.FontSize; }
-			set { this.ctrlCodeViewer.FontSize = value; }
 		}
 
 		private UInt32? _currentActiveAddress = null;
@@ -61,27 +60,7 @@ namespace Mesen.GUI.Debugger
 		{
 			_currentActiveAddress = null;
 		}
-		
-		public string GetWordUnderLocation(Point position)
-		{
-			return this.ctrlCodeViewer.GetWordUnderLocation(position);
-		}
 
-		public void OpenSearchBox()
-		{
-			this.ctrlCodeViewer.OpenSearchBox();
-		}
-
-		public void FindNext()
-		{
-			this.ctrlCodeViewer.FindNext();
-		}
-
-		public void FindPrevious()
-		{
-			this.ctrlCodeViewer.FindPrevious();
-		}
-		
 		public bool UpdateCode(bool forceUpdate = false)
 		{
 			if(_codeChanged || forceUpdate) {
@@ -129,20 +108,6 @@ namespace Mesen.GUI.Debugger
 			return false;
 		}
 
-		private int GetAddressLine(UInt32 address)
-		{
-			int attempts = 8;
-			do {
-				int lineIndex = this.ctrlCodeViewer.GetLineIndex((int)address);
-				if(lineIndex >= 0) {
-					return lineIndex;
-				}
-				address--;
-				attempts--;
-			} while(attempts > 0);
-			return -1;
-		}
-
 		private UInt32 ParseHexAddress(string hexAddress)
 		{
 			return UInt32.Parse(hexAddress, System.Globalization.NumberStyles.AllowHexSpecifier);
@@ -173,27 +138,6 @@ namespace Mesen.GUI.Debugger
 				}
 
 				ctrlCodeViewer.SetLineColor((int)breakpoint.Address, fgColor, bgColor, outlineColor, symbol);
-			}
-		}
-
-		public int GetCurrentLine()
-		{
-			return this.ctrlCodeViewer.CurrentLine;
-		}
-
-		public void GoToAddress()
-		{
-			GoToAddress address = new GoToAddress();
-			if(_currentActiveAddress.HasValue) {
-				address.Address = _currentActiveAddress.Value;
-			}
-
-			frmGoToLine frm = new frmGoToLine(address);
-			frm.StartPosition = FormStartPosition.Manual;
-			Point topLeft = this.PointToScreen(new Point(0, 0));
-			frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
-			if(frm.ShowDialog() == DialogResult.OK) {
-				ctrlCodeViewer.ScrollToLineNumber((int)address.Address);
 			}
 		}
 

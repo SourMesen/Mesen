@@ -19,6 +19,16 @@ struct DebugState
 	PPUDebugState PPU;
 };
 
+enum class DebugMemoryType
+{
+	CpuMemory = 0,
+	PpuMemory = 1,
+	SpriteMemory = 2,
+	SecondarySpriteMemory = 3,
+	PrgRom = 4,
+	ChrRom = 5,
+};
+
 class Debugger
 {
 private:
@@ -57,6 +67,8 @@ public:
 	void RemoveBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr);
 	vector<shared_ptr<Breakpoint>> GetBreakpoints();
 	vector<uint32_t> GetExecBreakpointAddresses();
+
+	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
 
 	void GetState(DebugState *state);
 

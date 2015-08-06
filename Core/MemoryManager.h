@@ -38,6 +38,8 @@ class MemoryManager: public Snapshotable
 		void RegisterIODevice(IMemoryHandler *handler);
 
 		uint8_t DebugRead(uint16_t addr);
+		uint8_t DebugReadVRAM(uint16_t addr);
+
 		uint8_t* GetInternalRAM();
 
 		uint8_t Read(uint16_t addr, bool forExecution = false);

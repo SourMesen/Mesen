@@ -134,12 +134,10 @@
 			// 
 			// ctrlTextbox
 			// 
-			this.ctrlTextbox.CursorPosition = -1;
 			this.ctrlTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlTextbox.Font = new System.Drawing.Font("Consolas", 13F);
 			this.ctrlTextbox.Location = new System.Drawing.Point(0, 0);
 			this.ctrlTextbox.Name = "ctrlTextbox";
-			this.ctrlTextbox.ScrollPosition = 0;
 			this.ctrlTextbox.ShowLineInHex = false;
 			this.ctrlTextbox.ShowLineNumbers = true;
 			this.ctrlTextbox.Size = new System.Drawing.Size(305, 174);

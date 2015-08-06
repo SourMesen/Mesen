@@ -100,6 +100,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Debugger\Breakpoint.cs" />
+    <Compile Include="Debugger\Controls\BaseScrollableTextboxUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlBreakpoints.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -117,6 +120,12 @@
     </Compile>
     <Compile Include="Debugger\Controls\ctrlDebuggerCode.Designer.cs">
       <DependentUpon>ctrlDebuggerCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlHexViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlHexViewer.Designer.cs">
+      <DependentUpon>ctrlHexViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\Controls\ctrlScrollableTextbox.cs">
       <SubType>UserControl</SubType>
@@ -256,6 +265,9 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlDebuggerCode.resx">
       <DependentUpon>ctrlDebuggerCode.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlHexViewer.resx">
+      <DependentUpon>ctrlHexViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlScrollableTextbox.resx">
       <DependentUpon>ctrlScrollableTextbox.cs</DependentUpon>
     </EmbeddedResource>
@@ -270,6 +282,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmGoToLine.resx">
       <DependentUpon>frmGoToLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmMemoryViewer.resx">
+      <DependentUpon>frmMemoryViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BaseConfigForm.resx">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>

@@ -80,6 +80,11 @@ namespace Mesen.GUI.Debugger
 			return this.ctrlTextbox.GetLineNumber(lineIndex);
 		}
 
+		public void ScrollToLineIndex(int lineIndex)
+		{
+			this.ctrlTextbox.ScrollToLineIndex(lineIndex);
+		}
+
 		public void ScrollToLineNumber(int lineNumber)
 		{
 			this.ctrlTextbox.ScrollToLineNumber(lineNumber);
@@ -131,6 +136,18 @@ namespace Mesen.GUI.Debugger
 				case Keys.Escape:
 					this.CloseSearchBox();
 					return true;
+
+				case Keys.Control | Keys.Oemplus:
+					this.FontSize++;
+					return true;
+
+				case Keys.Control | Keys.OemMinus:
+					this.FontSize--;
+					return true;
+
+				case Keys.Control | Keys.D0:
+					this.FontSize = 13;
+					return true;
 			}
 
 			return base.ProcessCmdKey(ref msg, keyData);
@@ -146,7 +163,7 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				this.ctrlTextbox.TextLines = value;
-				this.vScrollBar.Maximum = this.ctrlTextbox.LineCount;
+				this.vScrollBar.Maximum = this.ctrlTextbox.LineCount + this.vScrollBar.LargeChange;
 			}
 		}
 		
@@ -155,6 +172,14 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				this.ctrlTextbox.CustomLineNumbers = value;
+			}
+		}
+
+		public string Header
+		{
+			set
+			{
+				this.ctrlTextbox.Header = value;
 			}
 		}
 
@@ -222,6 +247,20 @@ namespace Mesen.GUI.Debugger
 
 				e.Handled = true;
 				e.SuppressKeyPress = true;
+			}
+		}
+
+		public void GoToAddress()
+		{
+			GoToAddress address = new GoToAddress();
+			address.Address = (UInt32)this.CurrentLine;
+
+			frmGoToLine frm = new frmGoToLine(address);
+			frm.StartPosition = FormStartPosition.Manual;
+			Point topLeft = this.PointToScreen(new Point(0, 0));
+			frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
+			if(frm.ShowDialog() == DialogResult.OK) {
+				this.ctrlTextbox.ScrollToLineNumber((int)address.Address);
 			}
 		}
 	}

@@ -239,4 +239,14 @@ class PPU : public IMemoryHandler, public Snapshotable
 		{
 			return PPU::Instance->_scanline;
 		}
+
+		uint8_t* GetSpriteRam()
+		{
+			return _spriteRAM;
+		}
+
+		uint8_t* GetSecondarySpriteRam()
+		{
+			return _secondarySpriteRAM;
+		}
 };
