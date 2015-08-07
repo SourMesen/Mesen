@@ -270,7 +270,7 @@ namespace Mesen.GUI.Debugger
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int CursorPosition
 		{
-			get { return _cursorPosition; }
+			get { return Math.Min(this._contents.Length - 1, Math.Max(0, _cursorPosition)); }
 			set
 			{ 
 				_cursorPosition = Math.Min(this._contents.Length - 1, Math.Max(0, value));
