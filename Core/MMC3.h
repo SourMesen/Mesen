@@ -111,6 +111,7 @@ class MMC3 : public BaseMapper
 				SelectCHRPage(7, _registers[1] | 0x01);
 			}
 
+			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
 		}
 
 		virtual void StreamState(bool saving)

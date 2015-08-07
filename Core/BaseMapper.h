@@ -70,8 +70,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
 
 		//Work ram is NOT saved - aka Expansion ram, etc.
-		virtual uint32_t GetWorkRamPageSize() { return 0; }
-		virtual uint32_t GetWorkRamSize() { return 0; }
+		virtual uint32_t GetWorkRamPageSize() { return 0x2000; }
+		virtual uint32_t GetWorkRamSize() { return 0x2000; }
 
 		virtual uint16_t RegisterStartAddress() { return 0x8000; }
 		virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
