@@ -27,11 +27,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.ctrlDataViewer = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblNumberOfColumns = new System.Windows.Forms.Label();
 			this.cboNumberColumns = new System.Windows.Forms.ComboBox();
-			this.ctrlDataViewer = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -51,6 +53,17 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(191, 109);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
+			// ctrlDataViewer
+			// 
+			this.ctrlDataViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.ctrlDataViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDataViewer.FontSize = 13F;
+			this.ctrlDataViewer.Location = new System.Drawing.Point(3, 30);
+			this.ctrlDataViewer.Name = "ctrlDataViewer";
+			this.ctrlDataViewer.Size = new System.Drawing.Size(185, 76);
+			this.ctrlDataViewer.TabIndex = 0;
+			this.ctrlDataViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlDataViewer_MouseMove);
+			// 
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -58,7 +71,7 @@
 			this.flowLayoutPanel1.Controls.Add(this.lblNumberOfColumns);
 			this.flowLayoutPanel1.Controls.Add(this.cboNumberColumns);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(27, 0);
-			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(164, 27);
 			this.flowLayoutPanel1.TabIndex = 1;
@@ -89,16 +102,6 @@
 			this.cboNumberColumns.TabIndex = 1;
 			this.cboNumberColumns.SelectedIndexChanged += new System.EventHandler(this.cboNumberColumns_SelectedIndexChanged);
 			// 
-			// ctrlDataViewer
-			// 
-			this.ctrlDataViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.ctrlDataViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDataViewer.FontSize = 13F;
-			this.ctrlDataViewer.Location = new System.Drawing.Point(3, 30);
-			this.ctrlDataViewer.Name = "ctrlDataViewer";
-			this.ctrlDataViewer.Size = new System.Drawing.Size(185, 76);
-			this.ctrlDataViewer.TabIndex = 0;
-			// 
 			// ctrlHexViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -121,5 +124,6 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Label lblNumberOfColumns;
 		private System.Windows.Forms.ComboBox cboNumberColumns;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }

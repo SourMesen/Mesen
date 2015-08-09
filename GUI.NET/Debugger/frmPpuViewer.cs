@@ -16,6 +16,7 @@ namespace Mesen.GUI.Debugger
 	public partial class frmPpuViewer : BaseForm
 	{
 		private InteropEmu.NotificationListener _notifListener;
+		private int _autoRefreshCounter = 0;
 
 		public frmPpuViewer()
 		{
@@ -61,9 +62,10 @@ namespace Mesen.GUI.Debugger
 
 		private void AutoRefresh()
 		{
-			if(mnuAutoRefresh.Checked) {
+			if(_autoRefreshCounter % 4 == 0 && this.mnuAutoRefresh.Checked) {
 				this.RefreshViewers();
 			}
+			_autoRefreshCounter++;
 		}
 		
 		private void mnuRefresh_Click(object sender, EventArgs e)

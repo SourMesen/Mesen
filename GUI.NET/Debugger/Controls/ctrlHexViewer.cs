@@ -14,6 +14,8 @@ namespace Mesen.GUI.Debugger.Controls
 	{
 		public event EventHandler ColumnCountChanged;
 
+		private string[] _previousHexContent = null;
+		private int _currentColumnCount;
 		private byte[] _data;
 
 		public ctrlHexViewer()
@@ -36,11 +38,19 @@ namespace Mesen.GUI.Debugger.Controls
 			set 
 			{
 				if(value != null) {
+					if(_currentColumnCount != this.ColumnCount) {
+						this._previousHexContent = null;
+						_currentColumnCount = this.ColumnCount;
+					}
+
 					this._data = value;
 					string[] hexContent;
 					int[] lineNumbers;
 					this.ArrayToHex(value, out hexContent, out lineNumbers);
+					this.ctrlDataViewer.CompareLines = _previousHexContent;
 					this.ctrlDataViewer.TextLines = hexContent;
+					_previousHexContent = hexContent;
+
 					this.ctrlDataViewer.LineNumbers = lineNumbers;
 					if(this.ColumnCount == 16) {
 						this.ctrlDataViewer.Header = "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F";
@@ -130,6 +140,22 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			this.Data = _data;
 			this.ctrlDataViewer.Focus();
+		}
+
+		Point _previousLocation;
+		private void ctrlDataViewer_MouseMove(object sender, MouseEventArgs e)
+		{
+			if(_previousLocation != e.Location) {
+				string currentWord = this.GetWordUnderLocation(e.Location, false);
+				string originalWord = this.GetWordUnderLocation(e.Location, true);
+
+				if(currentWord != originalWord) {
+					this.toolTip.Show("Previous Value: $" + originalWord + Environment.NewLine + "Current Value: $" + currentWord, this.ctrlDataViewer, e.Location.X + 5, e.Location.Y - 40, 3000);
+				} else {
+					this.toolTip.Hide(this.ctrlDataViewer);
+				}
+				_previousLocation = e.Location;
+			}
 		}
 	}
 }

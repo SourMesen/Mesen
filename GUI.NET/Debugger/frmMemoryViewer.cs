@@ -14,10 +14,16 @@ namespace Mesen.GUI.Debugger
 	public partial class frmMemoryViewer : BaseForm
 	{
 		private InteropEmu.NotificationListener _notifListener;
+		private int _autoRefreshCounter = 0;
 
 		public frmMemoryViewer()
 		{
 			InitializeComponent();
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
 
 			this.cboMemoryType.SelectedIndex = 0;
 			this.Size = new Size(this.ctrlHexViewer.IdealWidth, this.Height);
@@ -30,6 +36,13 @@ namespace Mesen.GUI.Debugger
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshData()));
+			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuFrameDone) {
+				this.BeginInvoke((MethodInvoker)(() => {
+					if(_autoRefreshCounter % 4 == 0 && this.mnuAutoRefresh.Checked) {
+						this.RefreshData();
+					}
+					_autoRefreshCounter++;
+				}));
 			}
 		}
 		

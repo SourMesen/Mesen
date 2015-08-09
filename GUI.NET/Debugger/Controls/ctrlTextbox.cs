@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace Mesen.GUI.Debugger
 		public event EventHandler ScrollPositionChanged;
 
 		private string[] _contents = new string[0];
+		private string[] _compareContents = null;
 		private int[] _lineNumbers = new int[0];
 		private Dictionary<int, int> _lineNumberIndex = new Dictionary<int,int>();
 		private Dictionary<int, LineProperties> _lineProperties = new Dictionary<int,LineProperties>();
@@ -61,6 +63,14 @@ namespace Mesen.GUI.Debugger
 					_lineNumberIndex[i] = i;
 				}
 				this.Invalidate();
+			}
+		}
+
+		public string[] CompareLines
+		{
+			set
+			{
+				_compareContents = value;
 			}
 		}
 
@@ -209,39 +219,46 @@ namespace Mesen.GUI.Debugger
 		{
 			return this.ShowLineNumbers ? (int)(g.MeasureString("W", this.Font).Width * 6) : 0;
 		}
-		
-		public string GetWordUnderLocation(Point position)
+
+		private bool GetCharIndex(Point position, out int charIndex, out int lineIndex)
 		{
+			charIndex = -1;
 			using(Graphics g = Graphics.FromHwnd(this.Handle)) {
 				int marginLeft = this.GetMargin(g);
 				int positionX = position.X - marginLeft;
-				int lineOffset = this.GetLineAtPosition(position.Y);
-				if(positionX >= 0 && this.ScrollPosition + lineOffset < _contents.Length) {
-					string text = _contents[this.ScrollPosition + lineOffset];
-					int charIndex = -1;
+				lineIndex = this.ScrollPosition + this.GetLineAtPosition(position.Y);
+				if(positionX >= 0 && lineIndex < _contents.Length) {
+					string text = _contents[lineIndex];
 					int previousWidth = 0;
 					for(int i = 0, len = text.Length; i < len; i++) {
 						int width = (int)g.MeasureString(text.Substring(0, i+1), this.Font).Width;
 						if(width >= positionX && previousWidth <= positionX) {
 							charIndex = i;
-							break;
+							return true;
 						}
 						previousWidth = width;
 					}
+				}
+			}
+			return false;
+		}
 
-					if(charIndex >= 0) {
-						List<char> wordDelimiters = new List<char>(new char[] { ' ', ',' });
-						if(wordDelimiters.Contains(text[charIndex])) {
-							return string.Empty;
-						} else {
-							int endIndex = text.IndexOfAny(wordDelimiters.ToArray(), charIndex);
-							if(endIndex == -1) {
-								endIndex = text.Length;
-							}
-							int startIndex = text.LastIndexOfAny(wordDelimiters.ToArray(), charIndex);
-							return text.Substring(startIndex + 1, endIndex - startIndex - 1);
-						}
+		public string GetWordUnderLocation(Point position, bool useCompareText = false)
+		{
+			int charIndex; 
+			int lineIndex;
+			if(this.GetCharIndex(position, out charIndex, out lineIndex)) {
+				string text = (useCompareText && _compareContents != null) ? _compareContents[lineIndex] : _contents[lineIndex];
+				List<char> wordDelimiters = new List<char>(new char[] { ' ', ',' });
+				if(wordDelimiters.Contains(text[charIndex])) {
+					return string.Empty;
+				} else {
+					int endIndex = text.IndexOfAny(wordDelimiters.ToArray(), charIndex);
+					if(endIndex == -1) {
+						endIndex = text.Length;
 					}
+					int startIndex = text.LastIndexOfAny(wordDelimiters.ToArray(), charIndex);
+					return text.Substring(startIndex + 1, endIndex - startIndex - 1);
 				}
 			}
 			return string.Empty;
@@ -401,29 +418,58 @@ namespace Mesen.GUI.Debugger
 			string lineText = _contents[currentLine];
 			using(Brush fgBrush = new SolidBrush(textColor)) {
 				g.DrawString(lineText, this.Font, fgBrush, marginLeft, positionY);
+				this.DrawHighlightedSearchString(g, lineText, marginLeft, positionY);
+				this.DrawHighlightedCompareString(g, lineText, currentLine, marginLeft, positionY);
+			}
+		}
 
-				int searchIndex;
-				if(!string.IsNullOrWhiteSpace(this._searchString) && (searchIndex = lineText.ToLowerInvariant().IndexOf(this._searchString)) >= 0) {
-					//Draw colored search string
-					int previousSearchIndex = -this._searchString.Length;
+		private void DrawHighlightedCompareString(Graphics g, string lineText, int currentLine, int marginLeft, int positionY)
+		{
+			if(_compareContents != null && _compareContents.Length > currentLine) {
+				string compareText = _compareContents[currentLine];
+
+				if(compareText != lineText) {
 					StringBuilder sb = new StringBuilder();
-					do {
-						sb.Append(string.Empty.PadLeft(searchIndex - previousSearchIndex - this._searchString.Length));
-						sb.Append(lineText.Substring(searchIndex, this._searchString.Length));
-
-						previousSearchIndex = searchIndex;
-						searchIndex = lineText.ToLowerInvariant().IndexOf(this._searchString, searchIndex + this._searchString.Length);
-					} while(searchIndex >= 0);
-
-					string drawSearchString = sb.ToString();
-					using(Brush selBrush = new SolidBrush(Color.White), selBgBrush = new SolidBrush(Color.CornflowerBlue)) {
-						for(int i = -2; i <= 2; i++) {
-							for(int j = -2; j <= 2; j++) {
-								g.DrawString(drawSearchString, this.Font, selBgBrush, marginLeft + i, positionY + j);
-							}
+					for(int i = 0, len = lineText.Length; i < len; i++) {
+						if(lineText[i] == compareText[i]) {
+							sb.Append(" ");
+						} else {
+							sb.Append(lineText[i]);
 						}
-						g.DrawString(drawSearchString, this.Font, selBrush, marginLeft, positionY);
 					}
+
+					g.DrawString(sb.ToString(), new Font(this.Font, FontStyle.Bold), Brushes.Red, marginLeft, positionY);
+				}
+			}
+		}
+
+		private void DrawHighlightedSearchString(Graphics g, string lineText, int marginLeft, int positionY)
+		{
+			int searchIndex;
+			if(!string.IsNullOrWhiteSpace(this._searchString) && (searchIndex = lineText.ToLowerInvariant().IndexOf(this._searchString)) >= 0) {
+				//Draw colored search string
+				int previousSearchIndex = -this._searchString.Length;
+				string lowerCaseText = lineText.ToLowerInvariant();
+				StringBuilder sb = new StringBuilder();
+				StringBuilder sbBackground = new StringBuilder();
+				do {
+					sb.Append(string.Empty.PadLeft(searchIndex - previousSearchIndex - this._searchString.Length));
+					sbBackground.Append(string.Empty.PadLeft(searchIndex - previousSearchIndex - this._searchString.Length));
+					
+					sb.Append(lineText.Substring(searchIndex, this._searchString.Length));
+					sbBackground.Append(string.Empty.PadLeft(this._searchString.Length, '█'));
+
+					previousSearchIndex = searchIndex;
+					searchIndex = lowerCaseText.IndexOf(this._searchString, searchIndex + this._searchString.Length);
+				} while(searchIndex >= 0);
+
+				string drawSearchString = sb.ToString();
+				string drawSearchStringBg = sbBackground.ToString();
+
+				using(Brush selBrush = new SolidBrush(Color.White), selBgBrush = new SolidBrush(Color.CornflowerBlue)) {
+					g.DrawString(drawSearchStringBg, this.Font, selBgBrush, marginLeft-1, positionY);
+					g.DrawString(drawSearchStringBg, this.Font, selBgBrush, marginLeft+1, positionY);
+					g.DrawString(drawSearchString, this.Font, selBrush, marginLeft, positionY);
 				}
 			}
 		}

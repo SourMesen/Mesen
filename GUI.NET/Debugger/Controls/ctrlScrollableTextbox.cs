@@ -50,9 +50,9 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public string GetWordUnderLocation(Point position)
+		public string GetWordUnderLocation(Point position, bool useCompareText = false)
 		{
-			return this.ctrlTextbox.GetWordUnderLocation(position);
+			return this.ctrlTextbox.GetWordUnderLocation(position, useCompareText);
 		}
 
 		private void ctrlTextbox_ScrollPositionChanged(object sender, EventArgs e)
@@ -168,6 +168,14 @@ namespace Mesen.GUI.Debugger
 			{
 				this.ctrlTextbox.TextLines = value;
 				this.vScrollBar.Maximum = this.ctrlTextbox.LineCount + this.vScrollBar.LargeChange;
+			}
+		}
+
+		public string[] CompareLines
+		{
+			set
+			{
+				this.ctrlTextbox.CompareLines = value;
 			}
 		}
 		

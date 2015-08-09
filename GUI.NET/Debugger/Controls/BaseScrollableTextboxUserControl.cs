@@ -9,14 +9,19 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public abstract class BaseScrollableTextboxUserControl : UserControl
+	public class BaseScrollableTextboxUserControl : UserControl
 	{
-		protected abstract ctrlScrollableTextbox ScrollableTextbox
+		virtual protected ctrlScrollableTextbox ScrollableTextbox
 		{
-			get;
+			get
+			{
+				return null;
+			}
 		}
 
 		[DefaultValue(13F)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public float FontSize
 		{
 			get { return this.ScrollableTextbox.FontSize; }
@@ -57,10 +62,10 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			this.ScrollableTextbox.ScrollToLineNumber(0);
 		}
-		
-		public string GetWordUnderLocation(Point position)
+
+		public string GetWordUnderLocation(Point position, bool useCompareText = false)
 		{
-			return this.ScrollableTextbox.GetWordUnderLocation(position);
+			return this.ScrollableTextbox.GetWordUnderLocation(position, useCompareText);
 		}
 	}
 }
