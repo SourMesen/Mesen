@@ -155,6 +155,8 @@ class MMC1 : public BaseMapper
 			_state.RegC000 = 0x00;
 			_state.RegE000 = 0x10; //WRAM Disable: assume it's enabled at startup
 
+			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
+
 			UpdateState();
 		}
 
