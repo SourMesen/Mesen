@@ -482,7 +482,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			for(int i = 0; i < 256; i++) {
 				uint8_t* pageAddress = _prgPages[i];
 				if(pageAddress != nullptr && ptrAddress >= pageAddress && ptrAddress <= pageAddress + 0xFF) {
-					return (i << 8) + (ptrAddress - pageAddress);
+					return (i << 8) + (uint32_t)(ptrAddress - pageAddress);
 				}
 			}
 			
