@@ -302,6 +302,9 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 				_chrSize = 0x2000;
 			}
 
+			//Setup a default work/save ram in 0x6000-0x7FFF space
+			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
+
 			InitMapper();
 
 			MessageManager::RegisterNotificationListener(this);
