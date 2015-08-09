@@ -129,7 +129,7 @@ namespace Mesen.GUI.Debugger
 
 				for(int i = startPosition; i != endPosition; i += searchOffset) {
 					string line = _contents[i].ToLowerInvariant();
-					if(line.Contains(searchString)) {
+					if(line.Contains(this._searchString)) {
 						this.ScrollToLineIndex(i);
 						return true;
 					}
@@ -398,25 +398,32 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
+			string lineText = _contents[currentLine];
 			using(Brush fgBrush = new SolidBrush(textColor)) {
+				g.DrawString(lineText, this.Font, fgBrush, marginLeft, positionY);
+
 				int searchIndex;
-				if(!string.IsNullOrWhiteSpace(this._searchString) && (searchIndex = _contents[currentLine].ToLowerInvariant().IndexOf(this._searchString)) >= 0) {
+				if(!string.IsNullOrWhiteSpace(this._searchString) && (searchIndex = lineText.ToLowerInvariant().IndexOf(this._searchString)) >= 0) {
 					//Draw colored search string
-					string searchString = _contents[currentLine].Substring(searchIndex, this._searchString.Length);
-					StringFormat stringFormat = new StringFormat(StringFormat.GenericTypographic) { FormatFlags = StringFormatFlags.MeasureTrailingSpaces };
-					float searchStringWidth = g.MeasureString(searchString, this.Font, Int32.MaxValue, stringFormat).Width;
-					g.DrawString(_contents[currentLine].Substring(0, searchIndex), this.Font, fgBrush, marginLeft, positionY);
+					int previousSearchIndex = -this._searchString.Length;
+					StringBuilder sb = new StringBuilder();
+					do {
+						sb.Append(string.Empty.PadLeft(searchIndex - previousSearchIndex - this._searchString.Length));
+						sb.Append(lineText.Substring(searchIndex, this._searchString.Length));
 
-					float offsetX = g.MeasureString(_contents[currentLine].Substring(0, searchIndex), this.Font, Int32.MaxValue, stringFormat).Width;
+						previousSearchIndex = searchIndex;
+						searchIndex = lineText.ToLowerInvariant().IndexOf(this._searchString, searchIndex + this._searchString.Length);
+					} while(searchIndex >= 0);
+
+					string drawSearchString = sb.ToString();
 					using(Brush selBrush = new SolidBrush(Color.White), selBgBrush = new SolidBrush(Color.CornflowerBlue)) {
-						g.FillRectangle(selBgBrush, marginLeft+offsetX+1, positionY, searchStringWidth+2, this.LineHeight);
-						g.DrawString(searchString, this.Font, selBrush, marginLeft+offsetX, positionY);
+						for(int i = -2; i <= 2; i++) {
+							for(int j = -2; j <= 2; j++) {
+								g.DrawString(drawSearchString, this.Font, selBgBrush, marginLeft + i, positionY + j);
+							}
+						}
+						g.DrawString(drawSearchString, this.Font, selBrush, marginLeft, positionY);
 					}
-					offsetX += searchStringWidth;
-
-					g.DrawString(_contents[currentLine].Substring(searchIndex+this._searchString.Length), this.Font, fgBrush, marginLeft+offsetX, positionY);
-				} else {
-					g.DrawString(_contents[currentLine], this.Font, fgBrush, marginLeft, positionY);
 				}
 			}
 		}
