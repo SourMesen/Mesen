@@ -91,6 +91,7 @@ namespace Mesen.GUI.Debugger
 
 			ctrlConsoleStatus.UpdateStatus(ref state);
 			ctrlWatch.UpdateWatch();
+			ctrlCallstack.UpdateCallstack();
 		}
 
 		private void ClearActiveStatement()
@@ -241,6 +242,11 @@ namespace Mesen.GUI.Debugger
 		private void mnuNametableViewer_Click(object sender, EventArgs e)
 		{
 			OpenChildForm(new frmPpuViewer());
+		}
+
+		private void ctrlCallstack_FunctionSelected(object sender, EventArgs e)
+		{
+			_lastCodeWindow.ScrollToLineNumber((int)sender);
 		}
 	}
 }

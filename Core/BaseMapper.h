@@ -474,14 +474,15 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 		int32_t FromAbsoluteAddress(uint32_t addr)
 		{
-			/*uint32_t page = addr / GetPRGPageSize();
-			for(int i = 0, len = GetPRGSlotCount(); i < len; i++) {
-				if((_prgSlotPages[i] % GetPRGPageCount()) == page) {
-					uint32_t offset = addr - (page * GetPRGPageSize());
-					return GetPRGPageSize() * i + offset + 0x8000;
+			uint8_t* ptrAddress = _prgRom + addr;
+
+			for(int i = 0; i < 256; i++) {
+				uint8_t* pageAddress = _prgPages[i];
+				if(pageAddress != nullptr && ptrAddress >= pageAddress && ptrAddress <= pageAddress + 0xFF) {
+					return (i << 8) + (ptrAddress - pageAddress);
 				}
 			}
-			*/
+			
 			//Address is currently not mapped
 			return -1;
 		}

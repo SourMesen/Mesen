@@ -109,6 +109,12 @@
     <Compile Include="Debugger\Controls\ctrlBreakpoints.Designer.cs">
       <DependentUpon>ctrlBreakpoints.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlCallstack.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlCallstack.Designer.cs">
+      <DependentUpon>ctrlCallstack.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlPaletteViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -288,6 +294,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlBreakpoints.resx">
       <DependentUpon>ctrlBreakpoints.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlCallstack.resx">
+      <DependentUpon>ctrlCallstack.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlPaletteViewer.resx">
       <DependentUpon>ctrlPaletteViewer.cs</DependentUpon>

@@ -112,6 +112,24 @@ void Debugger::PrivateCheckBreakpoint(BreakpointType type, uint32_t addr)
 	bool breakDone = false;
 	if(type == BreakpointType::Execute) {
 		_lastInstruction = _memoryManager->DebugRead(addr);
+		
+		//Update callstack
+		if(_lastInstruction == 0x60 && !_callstackRelative.empty()) {
+			//RTS
+			_callstackRelative.pop_back();
+			_callstackRelative.pop_back();
+			_callstackAbsolute.pop_back();
+			_callstackAbsolute.pop_back();
+		} else if(_lastInstruction == 0x20 && _callstackRelative.size() < 1022) {
+			//JSR
+			uint16_t targetAddr = _memoryManager->DebugRead(addr + 1) | (_memoryManager->DebugRead(addr + 2) << 8);
+			_callstackRelative.push_back(addr);
+			_callstackRelative.push_back(targetAddr);
+
+			_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(addr));
+			_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(targetAddr));
+		}
+
 		if(_stepOut && _lastInstruction == 0x60) {
 			//RTS found, set StepCount to 2 to break on the following instruction
 			Step(2);
@@ -435,4 +453,20 @@ void Debugger::GetPalette(uint32_t* frameBuffer)
 	}
 	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 4*8);
 	delete[] screenBuffer;
+}
+
+void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative)
+{
+	for(size_t i = 0, len = _callstackRelative.size(); i < len; i++) {
+		callstackAbsolute[i] = _callstackAbsolute[i];
+		
+		int32_t relativeAddr = _callstackRelative[i];
+		if(_mapper->FromAbsoluteAddress(_callstackAbsolute[i]) == -1) {
+			//Mark address as an unmapped memory addr
+			relativeAddr |= 0x10000;
+		}
+		callstackRelative[i] = relativeAddr;
+	}
+	callstackAbsolute[_callstackRelative.size()] = -2;
+	callstackRelative[_callstackRelative.size()] = -2;
 }

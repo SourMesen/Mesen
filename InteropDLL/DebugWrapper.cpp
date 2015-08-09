@@ -39,6 +39,8 @@ extern "C"
 	DllExport void __stdcall DebugGetSprites(uint32_t *frameBuffer) { _debugger->GetSprites(frameBuffer); }
 	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { _debugger->GetPalette(frameBuffer); }
 	
+	DllExport void __stdcall DebugGetCallstack(int32_t *callstackAbsolute, int32_t *callstackRelative) { _debugger->GetCallstack(callstackAbsolute, callstackRelative); }
+	
 	DllExport uint8_t __stdcall DebugGetMemoryValue(uint32_t addr) { return _debugger->GetMemoryValue(addr); }
 	DllExport uint32_t __stdcall DebugGetRelativeAddress(uint32_t addr) { return _debugger->GetRelativeAddress(addr); }
 };

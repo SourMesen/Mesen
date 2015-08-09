@@ -2,7 +2,9 @@
 
 #include "stdafx.h"
 #include <atomic>
+#include <deque>
 using std::atomic;
+using std::deque;
 
 #include "CPU.h"
 #include "PPU.h"
@@ -44,6 +46,8 @@ private:
 	vector<shared_ptr<Breakpoint>> _readBreakpoints;
 	vector<shared_ptr<Breakpoint>> _writeBreakpoints;
 	vector<shared_ptr<Breakpoint>> _execBreakpoints;
+	deque<uint32_t> _callstackAbsolute;
+	deque<uint32_t> _callstackRelative;
 
 	SimpleLock _bpLock;
 	SimpleLock _breakLock;
@@ -74,6 +78,8 @@ public:
 	void GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette);
 	void GetSprites(uint32_t* frameBuffer);
 	void GetPalette(uint32_t* frameBuffer);
+
+	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
 
 	void GetState(DebugState *state);
 

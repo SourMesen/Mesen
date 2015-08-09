@@ -43,6 +43,11 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ScrollableTextbox.GoToAddress();
 		}
 
+		public void ScrollToLineNumber(int lineNumber)
+		{
+			this.ScrollableTextbox.ScrollToLineNumber(lineNumber);
+		}
+
 		public int GetCurrentLine()
 		{
 			return this.ScrollableTextbox.CurrentLine;

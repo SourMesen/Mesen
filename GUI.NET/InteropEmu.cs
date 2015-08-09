@@ -82,12 +82,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern IntPtr DebugGetCode();
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);
-		[DllImport(DLLPath, EntryPoint="DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
-		[DllImport(DLLPath, EntryPoint="DebugGetNametable")] private static extern void DebugGetNametableWrapper(UInt32 nametableIndex, IntPtr frameBuffer, IntPtr tileData, IntPtr attributeData);
-		[DllImport(DLLPath, EntryPoint="DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette);
-		[DllImport(DLLPath, EntryPoint="DebugGetSprites")] private static extern void DebugGetSpritesWrapper(IntPtr frameBuffer);
-		[DllImport(DLLPath, EntryPoint="DebugGetPalette")] private static extern void DebugGetPaletteWrapper(IntPtr frameBuffer);
 
+		[DllImport(DLLPath, EntryPoint="DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
 		public static byte[] DebugGetMemoryState(DebugMemoryType type)
 		{
 			byte[] buffer = new byte[10485760]; //10mb buffer
@@ -101,6 +97,7 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
+		[DllImport(DLLPath, EntryPoint="DebugGetNametable")] private static extern void DebugGetNametableWrapper(UInt32 nametableIndex, IntPtr frameBuffer, IntPtr tileData, IntPtr attributeData);
 		public static void DebugGetNametable(int nametableIndex, out byte[] frameData, out byte[] tileData, out byte[] attributeData)
 		{
 			frameData = new byte[256*240*4];
@@ -119,6 +116,7 @@ namespace Mesen.GUI
 			}
 		}
 
+		[DllImport(DLLPath, EntryPoint="DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette);
 		public static byte[] DebugGetChrBank(int bankIndex, int palette)
 		{
 			byte[] frameData = new byte[128*128*4];
@@ -133,6 +131,7 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
+		[DllImport(DLLPath, EntryPoint="DebugGetSprites")] private static extern void DebugGetSpritesWrapper(IntPtr frameBuffer);
 		public static byte[] DebugGetSprites()
 		{
 			byte[] frameData = new byte[64*128*4];
@@ -147,6 +146,7 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
+		[DllImport(DLLPath, EntryPoint="DebugGetPalette")] private static extern void DebugGetPaletteWrapper(IntPtr frameBuffer);
 		public static byte[] DebugGetPalette()
 		{
 			byte[] frameData = new byte[4*8*4];
@@ -159,6 +159,22 @@ namespace Mesen.GUI
 			}
 
 			return frameData;
+		}
+
+		[DllImport(DLLPath, EntryPoint="DebugGetCallstack")] private static extern void DebugGetCallstackWrapper(IntPtr callstackAbsolute, IntPtr callstackRelative);
+		public static void DebugGetCallstack(out Int32[] callstackAbsolute, out Int32[] callstackRelative)
+		{
+			callstackAbsolute = new Int32[1024];
+			callstackRelative = new Int32[1024];
+
+			GCHandle hAbsolute = GCHandle.Alloc(callstackAbsolute, GCHandleType.Pinned);
+			GCHandle hRelative = GCHandle.Alloc(callstackRelative, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetCallstackWrapper(hAbsolute.AddrOfPinnedObject(), hRelative.AddrOfPinnedObject());
+			} finally {
+				hAbsolute.Free();
+				hRelative.Free();
+			}
 		}
 
 		public static string GetROMPath() { return PtrToStringUtf8(InteropEmu.GetROMPathWrapper()); }
