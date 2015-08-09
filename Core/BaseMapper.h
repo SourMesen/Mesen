@@ -28,6 +28,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 {
 	private:
 		MirroringType _mirroringType;
+		string _batteryFilename;
 
 	protected:
 		uint8_t* _prgRom;
@@ -177,7 +178,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 		void LoadBattery()
 		{
-			ifstream batteryFile(GetBatteryFilename(), ios::in | ios::binary);
+			ifstream batteryFile(_batteryFilename, ios::in | ios::binary);
 
 			if(batteryFile) {
 				batteryFile.read((char*)_saveRam, _saveRamSize);
@@ -191,7 +192,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 		void SaveBattery()
 		{
-			ofstream batteryFile(GetBatteryFilename(), ios::out | ios::binary);
+			ofstream batteryFile(_batteryFilename, ios::out | ios::binary);
 
 			if(batteryFile) {
 				batteryFile.write((char*)_saveRam, _saveRamSize);
@@ -256,6 +257,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 	public:
 		void Initialize(ROMLoader &romLoader)
 		{
+			_romFilename = romLoader.GetFilename();
+			_batteryFilename = GetBatteryFilename();
 			_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
 
 			_allowRegisterRead = AllowRegisterRead();
@@ -270,7 +273,6 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			_chrSize = romLoader.GetCHRSize();
 			_hasBattery = romLoader.HasBattery();
 			_isPalRom = romLoader.IsPalRom();
-			_romFilename = romLoader.GetFilename();
 
 			_saveRam = new uint8_t[_saveRamSize];
 			_workRam = new uint8_t[GetWorkRamSize()];
