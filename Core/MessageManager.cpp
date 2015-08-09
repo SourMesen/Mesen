@@ -3,7 +3,7 @@
 #include "MessageManager.h"
 
 IMessageManager* MessageManager::_messageManager = nullptr;
-list<INotificationListener*> MessageManager::_notificationListeners;
+vector<INotificationListener*> MessageManager::_notificationListeners;
 
 void MessageManager::RegisterMessageManager(IMessageManager* messageManager)
 {
@@ -26,20 +26,32 @@ void MessageManager::DisplayToast(string title, string message, uint8_t* iconDat
 void MessageManager::RegisterNotificationListener(INotificationListener* notificationListener)
 {
 	MessageManager::_notificationListeners.push_back(notificationListener);
-	MessageManager::_notificationListeners.unique();
 }
 
 void MessageManager::UnregisterNotificationListener(INotificationListener* notificationListener)
 {
-	MessageManager::_notificationListeners.remove(notificationListener);
+	MessageManager::_notificationListeners.erase(std::remove(MessageManager::_notificationListeners.begin(), MessageManager::_notificationListeners.end(), notificationListener), MessageManager::_notificationListeners.end());
 }
 
 void MessageManager::SendNotification(ConsoleNotificationType type)
 {
-	list<INotificationListener*> listeners = MessageManager::_notificationListeners;
-	
 	//Iterate on a copy to prevent issues if a notification causes a listener to unregister itself
-	for(INotificationListener* notificationListener : listeners) {
-		notificationListener->ProcessNotification(type);
+	vector<INotificationListener*> listeners = MessageManager::_notificationListeners;
+	vector<INotificationListener*> processedListeners;
+
+	for(size_t i = 0, len = listeners.size(); i < len; i++) {
+		INotificationListener* notificationListener = listeners[i];
+		if(std::find(processedListeners.begin(), processedListeners.end(), notificationListener) == processedListeners.end()) {
+			//Only send notification if it hasn't been processed already
+			notificationListener->ProcessNotification(type);
+		}
+		processedListeners.push_back(notificationListener);
+
+		if(len != MessageManager::_notificationListeners.size()) {
+			//Vector changed, start from the beginning again (can occur when sending a notification caused listeners to unregister themselves)
+			i = 0;
+			len = MessageManager::_notificationListeners.size();
+			listeners = MessageManager::_notificationListeners;
+		}
 	}
 }

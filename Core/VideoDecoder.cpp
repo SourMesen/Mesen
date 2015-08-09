@@ -90,6 +90,8 @@ void VideoDecoder::UpdateBufferSize()
 
 uint32_t* VideoDecoder::DecodeFrame(uint16_t* inputBuffer)
 {
+	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone);
+
 	_frameLock.Acquire();
 	UpdateBufferSize();
 	uint32_t* outputBuffer = _frameBuffer;
@@ -100,8 +102,15 @@ uint32_t* VideoDecoder::DecodeFrame(uint16_t* inputBuffer)
 		}
 	}
 	_frameLock.Release();
-
+	
 	return _frameBuffer;
+}
+
+void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length)
+{
+	for(uint32_t i = 0; i < length; i++) {
+		outputBuffer[i] = PPU_PALETTE_ARGB[inputBuffer[i] & 0x3F];
+	}
 }
 
 void VideoDecoder::TakeScreenshot(string romFilename)

@@ -11,7 +11,8 @@ enum class ConsoleNotificationType
 	GameStopped = 5,
 	CodeBreak = 6,
 	CheatAdded = 7,
-	CheatRemoved = 8
+	CheatRemoved = 8,
+	PpuFrameDone = 9
 };
 
 class INotificationListener

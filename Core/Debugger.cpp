@@ -7,6 +7,7 @@
 #include "Console.h"
 #include "BaseMapper.h"
 #include "Disassembler.h"
+#include "VideoDecoder.h"
 #include "APU.h"
 
 Debugger* Debugger::Instance = nullptr;
@@ -304,4 +305,134 @@ uint32_t Debugger::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 			return _mapper->GetChrSize();
 	}
 	return 0;
+}
+
+void Debugger::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
+{
+	uint16_t *screenBuffer = new uint16_t[256 * 240];
+	uint16_t bgAddr = _ppu->GetState().ControlFlags.BackgroundPatternAddr;
+	uint16_t baseAddr = 0x2000 + nametableIndex * 0x400;
+	uint16_t baseAttributeAddr = baseAddr + 960;
+	for(int y = 0; y < 30; y++) {
+		for(int x = 0; x < 32; x++) {
+			uint8_t tileIndex = _mapper->ReadVRAM(baseAddr + (y << 5) + x);
+			uint8_t attribute = _mapper->ReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
+			tileData[y * 30 + x] = tileIndex;
+			paletteData[y * 30 + x] = attribute;
+			uint8_t shift = (x & 0x02) | ((y & 0x02) << 1);
+
+			uint8_t paletteBaseAddr = ((attribute >> shift) & 0x03) << 2;
+			uint16_t tileAddr = bgAddr + (tileIndex << 4);
+			for(int i = 0; i < 8; i++) {
+				uint8_t lowByte = _mapper->ReadVRAM(tileAddr + i);
+				uint8_t highByte = _mapper->ReadVRAM(tileAddr + i + 8);
+				for(int j = 0; j < 8; j++) {
+					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
+					screenBuffer[(y<<11)+(x<<3)+(i<<8)+j] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color);
+				}
+			}
+		}
+	}
+	
+	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 256*240);
+
+	delete[] screenBuffer;
+}
+
+void Debugger::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette)
+{
+	uint16_t *screenBuffer = new uint16_t[128 * 128];
+	uint16_t bgAddr = bankIndex == 0 ? 0x0000 : 0x1000;
+	for(int y = 0; y < 16; y++) {
+		for(int x = 0; x < 16; x++) {
+			uint8_t tileIndex = y * 16 + x;
+			uint8_t paletteBaseAddr = palette << 2;
+			uint16_t tileAddr = bgAddr + (tileIndex << 4);
+			for(int i = 0; i < 8; i++) {
+				uint8_t lowByte = _mapper->ReadVRAM(tileAddr + i);
+				uint8_t highByte = _mapper->ReadVRAM(tileAddr + i + 8);
+				for(int j = 0; j < 8; j++) {
+					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
+					screenBuffer[(y<<10)+(x<<3)+(i<<7)+j] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color);
+				}
+			}
+		}
+	}
+	
+	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 128*128);
+
+	delete[] screenBuffer;
+}
+
+void Debugger::GetSprites(uint32_t* frameBuffer)
+{
+	uint16_t *screenBuffer = new uint16_t[64 * 128];
+	memset(screenBuffer, 0, 64*128*sizeof(uint16_t));
+	uint8_t *spriteRam = _ppu->GetSpriteRam();
+
+	uint16_t spriteAddr = _ppu->GetState().ControlFlags.SpritePatternAddr;
+	bool largeSprites = _ppu->GetState().ControlFlags.LargeSprites;
+
+	for(int y = 0; y < 8; y++) {
+		for(int x = 0; x < 8; x++) {
+			uint8_t ramAddr = ((y << 3) + x) << 2;
+			uint8_t spriteY = spriteRam[ramAddr];
+			uint8_t tileIndex = spriteRam[ramAddr + 1];
+			uint8_t attributes = spriteRam[ramAddr + 2];
+			uint8_t spriteX = spriteRam[ramAddr + 3];
+
+			bool verticalMirror = (attributes & 0x80) == 0x80;
+			bool horizontalMirror = (attributes & 0x40) == 0x40;
+
+			uint16_t tileAddr;
+			if(largeSprites) {
+				tileAddr = (tileIndex & 0x01 ? 0x1000 : 0x0000) + ((tileIndex & 0xFE) << 4);
+			} else {
+				tileAddr = spriteAddr + (tileIndex << 4);
+			}
+
+			uint8_t palette = 0x10 + ((attributes & 0x03) << 2);
+
+			for(int i = 0, iMax = largeSprites ? 16 : 8; i < iMax; i++) {
+				if(i == 8) {
+					//Move to next tile for 2nd tile of 8x16 sprites
+					tileAddr += 8;
+				}
+
+				uint8_t lowByte = _mapper->ReadVRAM(tileAddr + i);
+				uint8_t highByte = _mapper->ReadVRAM(tileAddr + i + 8);
+				for(int j = 0; j < 8; j++) {
+					uint8_t color;
+					if(horizontalMirror) {
+						color	= ((lowByte >> j) & 0x01) | (((highByte >> j) & 0x01) << 1);
+					} else {
+						color	= ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
+					}
+
+					uint16_t destAddr;
+					if(verticalMirror) {
+						destAddr = (y << 10) + (x << 3) + (((largeSprites ? 15 : 7) - i) << 6) + j;
+					} else {
+						destAddr = (y << 10) + (x << 3) + (i << 6) + j;
+					}
+
+					screenBuffer[destAddr] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(palette + color);
+				}
+			}
+		}
+	}
+	
+	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 64*128);
+
+	delete[] screenBuffer;
+}
+
+void Debugger::GetPalette(uint32_t* frameBuffer)
+{
+	uint16_t *screenBuffer = new uint16_t[4*8];
+	for(int i = 0; i < 32; i++) {
+		screenBuffer[i] = _ppu->ReadPaletteRAM(i);
+	}
+	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 4*8);
+	delete[] screenBuffer;
 }

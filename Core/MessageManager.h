@@ -9,7 +9,7 @@ class MessageManager
 {
 private:
 	static IMessageManager* _messageManager;
-	static list<INotificationListener*> _notificationListeners;
+	static vector<INotificationListener*> _notificationListeners;
 
 public:
 	static void RegisterMessageManager(IMessageManager* messageManager);

@@ -83,6 +83,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);
 		[DllImport(DLLPath, EntryPoint="DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
+		[DllImport(DLLPath, EntryPoint="DebugGetNametable")] private static extern void DebugGetNametableWrapper(UInt32 nametableIndex, IntPtr frameBuffer, IntPtr tileData, IntPtr attributeData);
+		[DllImport(DLLPath, EntryPoint="DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette);
+		[DllImport(DLLPath, EntryPoint="DebugGetSprites")] private static extern void DebugGetSpritesWrapper(IntPtr frameBuffer);
+		[DllImport(DLLPath, EntryPoint="DebugGetPalette")] private static extern void DebugGetPaletteWrapper(IntPtr frameBuffer);
 
 		public static byte[] DebugGetMemoryState(DebugMemoryType type)
 		{
@@ -95,6 +99,66 @@ namespace Mesen.GUI
 				handle.Free();
 			}
 			return buffer;
+		}
+
+		public static void DebugGetNametable(int nametableIndex, out byte[] frameData, out byte[] tileData, out byte[] attributeData)
+		{
+			frameData = new byte[256*240*4];
+			tileData = new byte[32*30];
+			attributeData = new byte[32*30];
+
+			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
+			GCHandle hTileData = GCHandle.Alloc(tileData, GCHandleType.Pinned);
+			GCHandle hAttributeData = GCHandle.Alloc(attributeData, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetNametableWrapper((UInt32)nametableIndex, hFrameData.AddrOfPinnedObject(), hTileData.AddrOfPinnedObject(), hAttributeData.AddrOfPinnedObject());
+			} finally {
+				hFrameData.Free();
+				hTileData.Free();
+				hAttributeData.Free();
+			}
+		}
+
+		public static byte[] DebugGetChrBank(int bankIndex, int palette)
+		{
+			byte[] frameData = new byte[128*128*4];
+
+			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetChrBankWrapper((UInt32)bankIndex, hFrameData.AddrOfPinnedObject(), (Byte)palette);
+			} finally {
+				hFrameData.Free();
+			}
+
+			return frameData;
+		}
+
+		public static byte[] DebugGetSprites()
+		{
+			byte[] frameData = new byte[64*128*4];
+
+			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetSpritesWrapper(hFrameData.AddrOfPinnedObject());
+			} finally {
+				hFrameData.Free();
+			}
+
+			return frameData;
+		}
+
+		public static byte[] DebugGetPalette()
+		{
+			byte[] frameData = new byte[4*8*4];
+
+			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetPaletteWrapper(hFrameData.AddrOfPinnedObject());
+			} finally {
+				hFrameData.Free();
+			}
+
+			return frameData;
 		}
 
 		public static string GetROMPath() { return PtrToStringUtf8(InteropEmu.GetROMPathWrapper()); }
@@ -129,6 +193,9 @@ namespace Mesen.GUI
 			GameResumed = 4,
 			GameStopped = 5,
 			CodeBreak = 6,
+			CheatAdded = 7,
+			CheatRemoved = 8,
+			PpuFrameDone = 9,
 		}
 
 		public struct KeyMapping

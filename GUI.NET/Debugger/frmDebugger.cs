@@ -14,7 +14,7 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class frmDebugger : Form
 	{
-		private List<frmMemoryViewer> _memoryViewers = new List<frmMemoryViewer>();
+		private List<Form> _childForms = new List<Form>();
 		private InteropEmu.NotificationListener _notifListener;
 		private ctrlDebuggerCode _lastCodeWindow;
 
@@ -42,10 +42,13 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugStep(100000);
 		}
 
-		void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
+		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
 				this.BeginInvoke((MethodInvoker)(() => UpdateDebugger()));
+			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameLoaded) {
+				InteropEmu.DebugRelease();
+				InteropEmu.DebugInitialize();
 			}
 		}
 
@@ -105,6 +108,15 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlDebuggerCodeSplit.HighlightBreakpoints(ctrlBreakpoints.GetBreakpoints());
 			ctrlDebuggerCode.HighlightBreakpoints(ctrlBreakpoints.GetBreakpoints());
+		}
+
+		private void OpenChildForm(Form frm)
+		{
+			this._childForms.Add(frm);
+			frm.FormClosed += (obj, args) => {
+				this._childForms.Remove((Form)obj);
+			};
+			frm.Show();
 		}
 
 		private void mnuContinue_Click(object sender, EventArgs e)
@@ -175,12 +187,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuMemoryViewer_Click(object sender, EventArgs e)
 		{
-			frmMemoryViewer frm = new frmMemoryViewer();
-			this._memoryViewers.Add(frm);
-			frm.FormClosed += (obj, args) => {
-				this._memoryViewers.Remove((frmMemoryViewer)obj);
-			};
-			frm.Show();
+			OpenChildForm(new frmMemoryViewer());
 		}
 
 		private void ctrlBreakpoints_BreakpointChanged(object sender, EventArgs e)
@@ -225,10 +232,15 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
-			foreach(frmMemoryViewer frm in this._memoryViewers.ToArray()) {
+			foreach(Form frm in this._childForms.ToArray()) {
 				frm.Close();
 			}
 			base.OnFormClosed(e);
+		}
+
+		private void mnuNametableViewer_Click(object sender, EventArgs e)
+		{
+			OpenChildForm(new frmPpuViewer());
 		}
 	}
 }

@@ -20,6 +20,9 @@
 				_notifListener.Dispose();
 				_notifListener = null;
 			}
+			if(_debugger != null) {
+				_debugger.Close();
+			}
 			StopEmu();
 			InteropEmu.Release();
 			base.Dispose(disposing);

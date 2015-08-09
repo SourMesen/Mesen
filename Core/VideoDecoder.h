@@ -21,4 +21,6 @@ public:
 
 	uint32_t* DecodeFrame(uint16_t* inputBuffer);
 	void TakeScreenshot(string romFilename);
+
+	void DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length);
 };

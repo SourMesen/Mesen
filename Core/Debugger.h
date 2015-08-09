@@ -70,6 +70,10 @@ public:
 	vector<uint32_t> GetExecBreakpointAddresses();
 
 	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
+	void GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData);
+	void GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette);
+	void GetSprites(uint32_t* frameBuffer);
+	void GetPalette(uint32_t* frameBuffer);
 
 	void GetState(DebugState *state);
 
