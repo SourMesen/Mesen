@@ -103,24 +103,28 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
+			if(!this.cboSearch.Focused) {
+				switch(keyData) {
+					case Keys.Down:
+					case Keys.Right:
+						this.ctrlTextbox.CursorPosition++;
+						return true;
+					case Keys.Up:
+					case Keys.Left:
+						this.ctrlTextbox.CursorPosition--;
+						return true;
+
+					case Keys.Home:
+						this.ctrlTextbox.CursorPosition = 0;
+						return true;
+
+					case Keys.End:
+						this.ctrlTextbox.CursorPosition = this.ctrlTextbox.LineCount - 1;
+						return true;
+				}
+			}
+
 			switch(keyData) {
-				case Keys.Down:
-				case Keys.Right:
-					this.ctrlTextbox.CursorPosition++;
-					return true;
-				case Keys.Up:
-				case Keys.Left:
-					this.ctrlTextbox.CursorPosition--;
-					return true;
-
-				case Keys.Home:
-					this.ctrlTextbox.CursorPosition = 0;
-					return true;
-
-				case Keys.End:
-					this.ctrlTextbox.CursorPosition = this.ctrlTextbox.LineCount - 1;
-					return true;
-
 				case Keys.PageUp:
 					this.ctrlTextbox.CursorPosition-=20;
 					return true;
@@ -130,7 +134,7 @@ namespace Mesen.GUI.Debugger
 					return true;
 
 				case Keys.Control | Keys.F:
-					this.OpenSearchBox();
+					this.OpenSearchBox(true);
 					return true;
 
 				case Keys.Escape:
@@ -183,11 +187,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void OpenSearchBox()
+		public void OpenSearchBox(bool forceFocus = false)
 		{
 			bool focus = !this.panelSearch.Visible;
 			this.panelSearch.Visible = true;
-			if(focus) {
+			if(focus || forceFocus) {
 				this.cboSearch.Focus();
 				this.cboSearch.SelectAll();
 			}
