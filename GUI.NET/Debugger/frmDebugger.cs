@@ -97,6 +97,7 @@ namespace Mesen.GUI.Debugger
 		private void ClearActiveStatement()
 		{
 			ctrlDebuggerCode.ClearActiveAddress();
+			ctrlDebuggerCodeSplit.ClearActiveAddress();
 			RefreshBreakpoints();
 		}
 
