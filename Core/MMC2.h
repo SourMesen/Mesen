@@ -20,8 +20,8 @@ class MMC2 : public BaseMapper
 		uint8_t _rightChrPage[2];
 
 	protected:
-		virtual uint32_t GetPRGPageSize() { return 0x2000; }
-		virtual uint32_t GetCHRPageSize() {	return 0x1000; }
+		virtual uint16_t GetPRGPageSize() { return 0x2000; }
+		virtual uint16_t GetCHRPageSize() {	return 0x1000; }
 
 		void InitMapper() 
 		{

@@ -9,10 +9,10 @@ class BaseMapper;
 class MemoryManager: public Snapshotable
 {
 	private:
-		const int RAMSize = 0x10000;
-		const int InternalRAMSize = 0x800;
-		const int VRAMSize = 0x4000;
-		const int NameTableScreenSize = 0x400;
+		static const int RAMSize = 0x10000;
+		static const int InternalRAMSize = 0x800;
+		static const int VRAMSize = 0x4000;
+		static const int NameTableScreenSize = 0x400;
 
 		shared_ptr<BaseMapper> _mapper;
 

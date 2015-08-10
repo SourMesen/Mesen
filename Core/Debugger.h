@@ -53,7 +53,7 @@ private:
 	SimpleLock _breakLock;
 
 	string _outputCache;
-	atomic<uint32_t> _stepCount;
+	atomic<int32_t> _stepCount;
 	atomic<int32_t> _stepCycleCount;
 	atomic<uint8_t> _lastInstruction;
 	atomic<bool> _stepOut;

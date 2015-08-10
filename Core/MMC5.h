@@ -244,8 +244,8 @@ private:
 	}
 
 protected:
-	virtual uint32_t GetPRGPageSize() { return 0x2000; }
-	virtual uint32_t GetCHRPageSize() {	return 0x400; }
+	virtual uint16_t GetPRGPageSize() { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() {	return 0x400; }
 	virtual uint16_t RegisterStartAddress() { return 0x5100; }
 	virtual uint16_t RegisterEndAddress() { return 0x5206; }
 	virtual uint32_t GetSaveRamSize() { return 0x10000; } //Emulate as if a single 64k block of saved ram existed

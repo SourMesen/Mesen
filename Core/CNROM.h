@@ -5,8 +5,8 @@
 class CNROM : public BaseMapper
 {
 	protected:
-		virtual uint32_t GetPRGPageSize() { return 0x8000; }
-		virtual uint32_t GetCHRPageSize() {	return 0x2000; }
+		virtual uint16_t GetPRGPageSize() { return 0x8000; }
+		virtual uint16_t GetCHRPageSize() {	return 0x2000; }
 
 		void InitMapper() 
 		{

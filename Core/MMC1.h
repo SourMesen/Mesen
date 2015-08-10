@@ -145,8 +145,8 @@ class MMC1 : public BaseMapper
 			BaseMapper::StreamState(saving);
 		}
 
-		virtual uint32_t GetPRGPageSize() { return 0x4000; }
-		virtual uint32_t GetCHRPageSize() {	return 0x1000; }
+		virtual uint16_t GetPRGPageSize() { return 0x4000; }
+		virtual uint16_t GetCHRPageSize() {	return 0x1000; }
 
 		void InitMapper()
 		{

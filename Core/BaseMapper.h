@@ -63,8 +63,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		virtual void InitMapper() = 0;
 
 	protected:
-		virtual uint32_t GetPRGPageSize() = 0;
-		virtual uint32_t GetCHRPageSize() = 0;
+		virtual uint16_t GetPRGPageSize() = 0;
+		virtual uint16_t GetCHRPageSize() = 0;
 		
 		//Save ram is battery backed and saved to disk
 		virtual uint32_t GetSaveRamSize() { return 0x2000; }
@@ -81,7 +81,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		virtual void WriteRegister(uint16_t addr, uint8_t value) { }
 		virtual uint8_t ReadRegister(uint16_t addr) { return 0;  }
 
-		void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint32_t pageNumber, PrgMemoryType type, int8_t accessType = -1)
+		void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, PrgMemoryType type, int8_t accessType = -1)
 		{
 			#ifdef _DEBUG
 			if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
@@ -111,6 +111,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 					pageSize = GetWorkRamPageSize();
 					defaultAccessType |= MemoryAccessType::Write;
 					break;
+				default:
+					throw new std::runtime_error("Invalid parameter");
 			}
 
 			pageNumber = pageNumber % pageCount;
@@ -125,13 +127,13 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			}
 		}
 
-		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint32_t pageNumber)
+		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber)
 		{
 			pageNumber = pageNumber % GetCHRPageCount();
-			SetPpuMemoryMapping(startAddr, endAddr, &_chrRam[pageNumber * GetCHRPageSize()], pageNumber);
+			SetPpuMemoryMapping(startAddr, endAddr, &_chrRam[pageNumber * GetCHRPageSize()]);
 		}
 
-		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t* sourceMemory, int16_t pageNumber = -1, int8_t accessType = -1)
+		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t* sourceMemory, int8_t accessType = -1)
 		{
 			#ifdef _DEBUG
 			if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
@@ -153,21 +155,21 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			return _prgPages[addr >> 8] ? _prgPages[addr >> 8][addr & 0xFF] : 0;
 		}
 
-		void SelectPRGPage(uint32_t slot, uint32_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom)
+		void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom)
 		{
 			_prgPageNumbers[slot] = page;
 
-			uint32_t startAddr = 0x8000 + slot * GetPRGPageSize();
-			uint32_t endAddr = startAddr + GetPRGPageSize() - 1;
+			uint16_t startAddr = 0x8000 + slot * GetPRGPageSize();
+			uint16_t endAddr = startAddr + GetPRGPageSize() - 1;
 			SetCpuMemoryMapping(startAddr, endAddr, page, memoryType);
 		}
 
-		void SelectCHRPage(uint32_t slot, uint32_t page)
+		void SelectCHRPage(uint16_t slot, uint16_t page)
 		{
 			_chrPageNumbers[slot] = page;
 
-			uint32_t startAddr = slot * GetCHRPageSize();
-			uint32_t endAddr = startAddr + GetCHRPageSize() - 1;
+			uint16_t startAddr = slot * GetCHRPageSize();
+			uint16_t endAddr = startAddr + GetCHRPageSize() - 1;
 			SetPpuMemoryMapping(startAddr, endAddr, page);
 		}
 		
@@ -236,15 +238,15 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			StreamArray<uint32_t>(_prgPageNumbers, 64);
 			StreamArray<uint32_t>(_chrPageNumbers, 64);
 			if(!saving) {
-				for(int i = 0; i < 64; i++) {
+				for(uint16_t i = 0; i < 64; i++) {
 					if(_prgPageNumbers[i] != 0xEEEEEEEE) {
-						SelectPRGPage(i, _prgPageNumbers[i]);
+						SelectPRGPage(i, (uint16_t)_prgPageNumbers[i]);
 					}
 				}
 
-				for(int i = 0; i < 64; i++) {
+				for(uint16_t i = 0; i < 64; i++) {
 					if(_chrPageNumbers[i] != 0xEEEEEEEE) {
-						SelectCHRPage(i, _chrPageNumbers[i]);
+						SelectCHRPage(i, (uint16_t)_chrPageNumbers[i]);
 					}
 				}
 
@@ -495,8 +497,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			vector<uint32_t> memoryRanges;
 
 			for(uint32_t i = 0x8000; i <= 0xFFFF; i+=0x100) {
-				uint32_t pageStart = ToAbsoluteAddress(i);
-				uint32_t pageEnd = ToAbsoluteAddress(i+0xFF);
+				uint32_t pageStart = ToAbsoluteAddress((uint16_t)i);
+				uint32_t pageEnd = ToAbsoluteAddress((uint16_t)i+0xFF);
 				memoryRanges.push_back(pageStart);
 				memoryRanges.push_back(pageEnd);
 			}

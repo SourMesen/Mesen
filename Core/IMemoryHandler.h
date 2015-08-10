@@ -31,8 +31,8 @@ class MemoryRanges
 				addresses = &_ramWriteAddresses;
 			}
 
-			for(int i = start; i <= end; i++) {
-				addresses->push_back(i);
+			for(uint32_t i = start; i <= end; i++) {
+				addresses->push_back((uint16_t)i);
 			}
 		}
 };
