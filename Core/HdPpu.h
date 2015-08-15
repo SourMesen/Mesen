@@ -42,6 +42,7 @@ protected:
 				}
 
 				paletteOffset = ((_state.XScroll + ((_cycle - 1) & 0x07) < 8) ? _previousTile.PaletteOffset : _currentTile.PaletteOffset);
+				tileInfo.Sprite.BgColorIndex = backgroundColor;
 				if(backgroundColor == 0) {
 					tileInfo.Sprite.BgColor = ReadPaletteRAM(0);
 				} else {
@@ -54,6 +55,7 @@ protected:
 			tileInfo.Tile.TileIndex = _memoryManager->ToAbsoluteChrAddress(lastTile->TileAddr) / 16;
 			tileInfo.Tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 1) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 3) << 16);
 			tileInfo.Tile.OffsetY = lastTile->OffsetY;
+			tileInfo.Tile.BackgroundPriority = false;
 
 			tileInfo.Tile.OffsetX = (_state.XScroll + ((_cycle - 1) & 0x07)) & 0x07;
 			tileInfo.Tile.HorizontalMirroring = false;

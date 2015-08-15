@@ -20,6 +20,7 @@ struct HdPpuTileInfo
 	bool HorizontalMirroring;
 	bool VerticalMirroring;
 	bool BackgroundPriority;
+	uint8_t BgColorIndex;
 	uint8_t BgColor;
 
 	uint64_t GetKey(bool defaultKey)
@@ -186,10 +187,12 @@ public:
 				if(drawBackground) {
 					*outputBuffer = PPU_PALETTE_ARGB[tileInfo.BgColor];
 				}
-				if((bitmapData[bitmapOffset] & 0xFF000000) == 0xFF000000) {
-					*outputBuffer = bitmapData[bitmapOffset];
-				} else if((bitmapData[bitmapOffset] & 0xFF000000) != 0) {
-					BlendColors((uint8_t*)outputBuffer, (uint8_t*)&bitmapData[bitmapOffset]);
+				if(!tileInfo.BackgroundPriority || tileInfo.BgColorIndex == 0) {
+					if((bitmapData[bitmapOffset] & 0xFF000000) == 0xFF000000) {
+						*outputBuffer = bitmapData[bitmapOffset];
+					} else if((bitmapData[bitmapOffset] & 0xFF000000) != 0) {
+						BlendColors((uint8_t*)outputBuffer, (uint8_t*)&bitmapData[bitmapOffset]);
+					}
 				}
 				outputBuffer++;
 				bitmapOffset += bitmapSmallInc;
