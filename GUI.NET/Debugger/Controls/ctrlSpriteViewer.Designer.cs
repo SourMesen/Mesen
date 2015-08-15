@@ -37,12 +37,13 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.lblTile = new System.Windows.Forms.Label();
 			this.txtTileIndex = new System.Windows.Forms.TextBox();
+			this.picTile = new System.Windows.Forms.PictureBox();
 			this.chkVerticalMirroring = new System.Windows.Forms.CheckBox();
 			this.chkHorizontalMirroring = new System.Windows.Forms.CheckBox();
 			this.lblPaletteAddr = new System.Windows.Forms.Label();
 			this.lblPosition = new System.Windows.Forms.Label();
-			this.picTile = new System.Windows.Forms.PictureBox();
 			this.picSprites = new System.Windows.Forms.PictureBox();
+			this.chkBackgroundPriority = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpSpriteInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -87,17 +88,19 @@
 			this.tableLayoutPanel4.Controls.Add(this.txtTileAddress, 1, 1);
 			this.tableLayoutPanel4.Controls.Add(this.label1, 0, 0);
 			this.tableLayoutPanel4.Controls.Add(this.label2, 0, 1);
-			this.tableLayoutPanel4.Controls.Add(this.lblTile, 0, 6);
+			this.tableLayoutPanel4.Controls.Add(this.lblTile, 0, 7);
 			this.tableLayoutPanel4.Controls.Add(this.txtTileIndex, 1, 0);
-			this.tableLayoutPanel4.Controls.Add(this.picTile, 1, 6);
+			this.tableLayoutPanel4.Controls.Add(this.picTile, 1, 7);
 			this.tableLayoutPanel4.Controls.Add(this.chkVerticalMirroring, 0, 5);
 			this.tableLayoutPanel4.Controls.Add(this.chkHorizontalMirroring, 0, 4);
 			this.tableLayoutPanel4.Controls.Add(this.lblPaletteAddr, 0, 2);
 			this.tableLayoutPanel4.Controls.Add(this.lblPosition, 0, 3);
+			this.tableLayoutPanel4.Controls.Add(this.chkBackgroundPriority, 0, 6);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-			this.tableLayoutPanel4.RowCount = 8;
+			this.tableLayoutPanel4.RowCount = 9;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -114,7 +117,7 @@
 			this.txtPosition.Location = new System.Drawing.Point(93, 81);
 			this.txtPosition.Name = "txtPosition";
 			this.txtPosition.ReadOnly = true;
-			this.txtPosition.Size = new System.Drawing.Size(42, 20);
+			this.txtPosition.Size = new System.Drawing.Size(66, 20);
 			this.txtPosition.TabIndex = 18;
 			// 
 			// txtPaletteAddress
@@ -156,7 +159,7 @@
 			// lblTile
 			// 
 			this.lblTile.AutoSize = true;
-			this.lblTile.Location = new System.Drawing.Point(3, 155);
+			this.lblTile.Location = new System.Drawing.Point(3, 178);
 			this.lblTile.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
 			this.lblTile.Name = "lblTile";
 			this.lblTile.Size = new System.Drawing.Size(27, 13);
@@ -170,6 +173,16 @@
 			this.txtTileIndex.ReadOnly = true;
 			this.txtTileIndex.Size = new System.Drawing.Size(26, 20);
 			this.txtTileIndex.TabIndex = 7;
+			// 
+			// picTile
+			// 
+			this.picTile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.picTile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picTile.Location = new System.Drawing.Point(93, 176);
+			this.picTile.Name = "picTile";
+			this.picTile.Size = new System.Drawing.Size(66, 130);
+			this.picTile.TabIndex = 12;
+			this.picTile.TabStop = false;
 			// 
 			// chkVerticalMirroring
 			// 
@@ -213,16 +226,6 @@
 			this.lblPosition.TabIndex = 16;
 			this.lblPosition.Text = "Position (X,Y)";
 			// 
-			// picTile
-			// 
-			this.picTile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.picTile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picTile.Location = new System.Drawing.Point(93, 153);
-			this.picTile.Name = "picTile";
-			this.picTile.Size = new System.Drawing.Size(66, 130);
-			this.picTile.TabIndex = 12;
-			this.picTile.TabStop = false;
-			// 
 			// picSprites
 			// 
 			this.picSprites.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -233,6 +236,17 @@
 			this.picSprites.TabIndex = 0;
 			this.picSprites.TabStop = false;
 			this.picSprites.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picSprites_MouseMove);
+			// 
+			// chkBackgroundPriority
+			// 
+			this.chkBackgroundPriority.AutoSize = true;
+			this.tableLayoutPanel4.SetColumnSpan(this.chkBackgroundPriority, 2);
+			this.chkBackgroundPriority.Location = new System.Drawing.Point(3, 153);
+			this.chkBackgroundPriority.Name = "chkBackgroundPriority";
+			this.chkBackgroundPriority.Size = new System.Drawing.Size(118, 17);
+			this.chkBackgroundPriority.TabIndex = 19;
+			this.chkBackgroundPriority.Text = "Background Priority";
+			this.chkBackgroundPriority.UseVisualStyleBackColor = true;
 			// 
 			// ctrlSpriteViewer
 			// 
@@ -269,5 +283,6 @@
 		private System.Windows.Forms.CheckBox chkHorizontalMirroring;
 		private System.Windows.Forms.Label lblPaletteAddr;
 		private System.Windows.Forms.Label lblPosition;
+		private System.Windows.Forms.CheckBox chkBackgroundPriority;
 	}
 }

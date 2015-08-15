@@ -71,6 +71,7 @@ namespace Mesen.GUI.Debugger.Controls
 			int paletteAddr = 0x3F10 + ((attributes & 0x03) << 2);
 			bool verticalMirror = (attributes & 0x80) == 0x80;
 			bool horizontalMirror = (attributes & 0x40) == 0x40;
+			bool backgroundPriority = (attributes & 0x20) == 0x20;
 
 			this.txtTileIndex.Text = tileIndex.ToString("X2");
 			this.txtTileAddress.Text = tileAddr.ToString("X4");
@@ -78,6 +79,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.txtPaletteAddress.Text = paletteAddr.ToString("X4");
 			this.chkVerticalMirroring.Checked = verticalMirror;
 			this.chkHorizontalMirroring.Checked = horizontalMirror;
+			this.chkBackgroundPriority.Checked = backgroundPriority;
 
 			Bitmap tile = new Bitmap(64, 128);
 			using(Graphics g = Graphics.FromImage(tile)) {
