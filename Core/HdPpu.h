@@ -32,6 +32,7 @@ protected:
 
 				tileInfo.Sprite.OffsetX = _cycle - _lastSprite->SpriteX - 1;
 				tileInfo.Sprite.HorizontalMirroring = _lastSprite->HorizontalMirror;
+				tileInfo.Sprite.VerticalMirroring = _lastSprite->VerticalMirror;
 				tileInfo.Sprite.BackgroundPriority = _lastSprite->BackgroundPriority;
 
 				uint32_t backgroundColor = 0;
@@ -56,6 +57,7 @@ protected:
 
 			tileInfo.Tile.OffsetX = (_state.XScroll + ((_cycle - 1) & 0x07)) & 0x07;
 			tileInfo.Tile.HorizontalMirroring = false;
+			tileInfo.Tile.VerticalMirroring = false;
 			tileInfo.Tile.BgColor = ReadPaletteRAM(0);
 		} else {
 			//"If the current VRAM address points in the range $3F00-$3FFF during forced blanking, the color indicated by this palette location will be shown on screen instead of the backdrop color."

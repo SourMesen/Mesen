@@ -75,6 +75,8 @@ struct SpriteInfo : TileInfo
 	bool HorizontalMirror;
 	bool BackgroundPriority;
 	uint8_t SpriteX;
+
+	bool VerticalMirror; //used by HD ppu
 };
 
 struct PPUDebugState

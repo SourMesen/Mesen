@@ -342,6 +342,7 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		if(spriteIndex < _spriteCount && spriteY < 240) {
 			_spriteTiles[spriteIndex].BackgroundPriority = backgroundPriority;
 			_spriteTiles[spriteIndex].HorizontalMirror = horizontalMirror;
+			_spriteTiles[spriteIndex].VerticalMirror = verticalMirror;
 			_spriteTiles[spriteIndex].PaletteOffset = ((attributes & 0x03) << 2) | 0x10;
 			_spriteTiles[spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
 			_spriteTiles[spriteIndex].HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
