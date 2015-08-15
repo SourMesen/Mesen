@@ -231,7 +231,7 @@
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
     <ClInclude Include="miniz.h" />
-    <ClInclude Include="PNGWriter.h" />
+    <ClInclude Include="PNGHelper.h" />
     <ClInclude Include="UPnPPortMapper.h" />
     <ClInclude Include="SimpleLock.h" />
     <ClInclude Include="Socket.h" />
@@ -245,7 +245,7 @@
     <ClCompile Include="CRC32.cpp" />
     <ClCompile Include="FolderUtilities.cpp" />
     <ClCompile Include="miniz.cpp" />
-    <ClCompile Include="PNGWriter.cpp" />
+    <ClCompile Include="PNGHelper.cpp" />
     <ClCompile Include="SimpleLock.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="stdafx.cpp">

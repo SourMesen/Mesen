@@ -8,6 +8,7 @@
 #include "EmulationSettings.h"
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
+#include "HdPpu.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -40,7 +41,11 @@ void Console::Initialize(string filename)
 		_mapper = mapper;
 		_memoryManager.reset(new MemoryManager(_mapper));
 		_cpu.reset(new CPU(_memoryManager.get()));
-		_ppu.reset(new PPU(_memoryManager.get()));
+		if(HdNesPack::HasHdPack(_romFilepath)) {
+			_ppu.reset(new HdPpu(_memoryManager.get()));
+		} else {
+			_ppu.reset(new PPU(_memoryManager.get()));
+		}
 		_apu.reset(new APU(_memoryManager.get()));
 
 		_controlManager.reset(new ControlManager());
@@ -171,7 +176,7 @@ void Console::Run()
 			if(EmulationSettings::CheckFlag(EmulationFlags::LimitFPS)) {
 				elapsedTime = clockTimer.GetElapsedMS();
 				while(targetTime > elapsedTime) {
-					if(targetTime - elapsedTime > 2) {
+					if(targetTime - elapsedTime > 1) {
 						std::this_thread::sleep_for(std::chrono::duration<int, std::milli>((int)(targetTime - elapsedTime - 1)));
 					}
 					elapsedTime = clockTimer.GetElapsedMS();

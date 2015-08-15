@@ -49,6 +49,13 @@ string FolderUtilities::GetSaveFolder()
 	return folder;
 }
 
+string FolderUtilities::GetHdPackFolder()
+{
+	string folder = CombinePath(GetHomeFolder(), "HdPacks\\");
+	CreateFolder(folder);
+	return folder;
+}
+
 string FolderUtilities::GetSaveStateFolder()
 {
 	string folder = CombinePath(GetHomeFolder(), "SaveStates\\");

@@ -33,6 +33,9 @@
     <Filter Include="Source Files\APU">
       <UniqueIdentifier>{b99fc308-b28a-48b7-9ca8-6e8005bbc2bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\HD">
+      <UniqueIdentifier>{a6994cb5-f9d2-416c-84ab-c1abe4975eb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -229,6 +232,12 @@
     </ClInclude>
     <ClInclude Include="MMC5.h">
       <Filter>Header Files\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="HdNesPack.h">
+      <Filter>Header Files\HD</Filter>
+    </ClInclude>
+    <ClInclude Include="HdPpu.h">
+      <Filter>Header Files\HD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -181,18 +181,19 @@ namespace Mesen.GUI.Forms
 		private void StartRenderThread()
 		{
 			_renderThread = new Thread(() => {
-				int count = 0;
+				System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+				sw.Start();
 				while(true) {
-					InteropEmu.Render();
-					count++;
-					if(count == 20) {
-						count = 0;
+					if(sw.ElapsedMilliseconds > 100) {
+						sw.Restart();
 						UpdateMenus();
+						System.Threading.Thread.MemoryBarrier();
+						if(_stop) {
+							break;
+						}
 					}
-					System.Threading.Thread.Sleep(5);
-					System.Threading.Thread.MemoryBarrier();
-					if(_stop) {
-						break;
+					if(!InteropEmu.Render()) {
+						System.Threading.Thread.Sleep(5);
 					}
 				}
 			});

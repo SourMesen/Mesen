@@ -3,7 +3,7 @@
 #include "VideoDecoder.h"
 #include "EmulationSettings.h"
 #include "MessageManager.h"
-#include "../Utilities/PNGWriter.h"
+#include "../Utilities/PNGHelper.h"
 #include "../Utilities/FolderUtilities.h"
 
 const uint32_t PPU_PALETTE_ARGB[] = {
@@ -68,23 +68,24 @@ uint32_t VideoDecoder::ProcessIntensifyBits(uint16_t ppuPixel)
 	}
 
 	uint8_t r, g, b;
-	r = (uint8_t)fmin(redChannel, 255);
-	g = (uint8_t)fmin(greenChannel, 255);
-	b = (uint8_t)fmin(blueChannel, 255);
+	r = (uint8_t)(redChannel > 255 ? 255 : redChannel);
+	g = (uint8_t)(greenChannel > 255 ? 255 : greenChannel);
+	b = (uint8_t)(blueChannel > 255 ? 255 : blueChannel);
 
 	return 0xFF000000 | (r << 16) | (g << 8) | b;
 }
 
-void VideoDecoder::UpdateBufferSize()
+void VideoDecoder::UpdateBufferSize(uint8_t hdScale = 1)
 {
 	OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
 
-	if(!_frameBuffer || _overscan.GetPixelCount() != overscan.GetPixelCount()) {
+	if(!_frameBuffer || _hdScale != hdScale || _overscan.GetPixelCount() != overscan.GetPixelCount()) {
+		_hdScale = hdScale;
 		_overscan = overscan;
 		if(_frameBuffer) {
 			delete[] _frameBuffer;
 		}
-		_frameBuffer = new uint32_t[_overscan.GetPixelCount()];
+		_frameBuffer = new uint32_t[_overscan.GetPixelCount()*hdScale*hdScale];
 	}
 }
 
@@ -104,6 +105,41 @@ uint32_t* VideoDecoder::DecodeFrame(uint16_t* inputBuffer)
 	_frameLock.Release();
 	
 	return _frameBuffer;
+}
+
+uint32_t* VideoDecoder::DecodeHdFrame(uint16_t* inputBuffer, HdPpuPixelInfo *screenTiles)
+{
+	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone);
+
+	if(_hdNesPack == nullptr) {
+		_hdNesPack = new HdNesPack();
+	}
+
+	_frameLock.Acquire();
+	uint8_t hdScale = GetScale();
+	UpdateBufferSize(hdScale);
+	uint32_t* outputBuffer = _frameBuffer;
+	uint32_t screenWidth = _overscan.GetScreenWidth() * hdScale;
+	memset(outputBuffer, 0, _overscan.GetPixelCount()*_hdScale*_hdScale*4);
+	for(uint32_t i = _overscan.Top, iMax = 240 - _overscan.Bottom; i < iMax; i++) {
+		for(uint32_t j = _overscan.Left, jMax = 256 - _overscan.Right; j < jMax; j++) {
+			uint32_t sdPixel = PPU_PALETTE_ARGB[inputBuffer[i * 256 + j] & 0x3F]; //ProcessIntensifyBits(inputBuffer[i * 256 + j]);
+			uint32_t bufferIndex = (i - _overscan.Top) * screenWidth * hdScale + (j - _overscan.Left) * hdScale;
+			_hdNesPack->GetPixels(screenTiles[i * 256 + j], sdPixel, outputBuffer+bufferIndex, screenWidth);
+		}
+	}
+	_frameLock.Release();
+	
+	return _frameBuffer;
+}
+
+uint32_t VideoDecoder::GetScale()
+{
+	if(_hdNesPack) {
+		return _hdNesPack->GetScale();
+	} else {
+		return 1;
+	}
 }
 
 void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length)
@@ -145,7 +181,7 @@ void VideoDecoder::TakeScreenshot(string romFilename)
 		counter++;
 	}
 
-	PNGWriter::WritePNG(ssFilename, (uint8_t*)frameBuffer, _overscan.GetScreenWidth(), _overscan.GetScreenHeight());
+	PNGHelper::WritePNG(ssFilename, (uint8_t*)frameBuffer, _overscan.GetScreenWidth(), _overscan.GetScreenHeight());
 	delete[] frameBuffer;
 
 	MessageManager::DisplayMessage("Screenshot saved", FolderUtilities::GetFilename(ssFilename, true));

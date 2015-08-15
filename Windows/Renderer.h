@@ -3,7 +3,6 @@
 #include "stdafx.h"
 #include "../Core/IVideoDevice.h"
 #include "../Core/IMessageManager.h"
-#include "../Utilities/PNGWriter.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/SimpleLock.h"
 #include "../Utilities/Timer.h"
@@ -43,10 +42,15 @@ namespace NES {
 		uint16_t*					_ppuOutputSecondaryBuffer = nullptr;
 		SimpleLock					_frameLock;
 
+		bool _isHD = false;
+
 		Timer _fpsTimer;
 		uint32_t _frameCount = 0;
 		uint32_t _lastFrameCount = 0;
+		uint32_t _renderedFrameCount = 0;
+		uint32_t _lastRenderedFrameCount = 0;
 		uint32_t _currentFPS = 0;
+		uint32_t _currentRenderedFPS = 0;
 
 		unique_ptr<SpriteFont>	_font;
 		unique_ptr<SpriteFont>	_smallFont;
@@ -60,6 +64,8 @@ namespace NES {
 		uint32_t _hdScreenWidth = 0;
 		uint32_t _hdScreenHeight = 0;
 		uint32_t _hdScreenBufferSize = 0;
+		HdPpuPixelInfo *_hdScreenTiles = nullptr;
+		HdPpuPixelInfo *_secondaryHdScreenTiles = nullptr;
 
 		list<shared_ptr<ToastInfo>> _toasts;
 		ID3D11ShaderResourceView* _toastTexture = nullptr;
@@ -85,9 +91,10 @@ namespace NES {
 		Renderer(HWND hWnd);
 		~Renderer();
 
-		void Render();
+		bool Render();
 		void DisplayMessage(string title, string message);
 		void UpdateFrame(void* frameBuffer);
+		void UpdateHdFrame(void *frameBuffer, HdPpuPixelInfo *screenTiles);
 		void DisplayToast(shared_ptr<ToastInfo> toast);
 	};
 }

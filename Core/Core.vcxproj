@@ -200,7 +200,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -291,6 +291,8 @@
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="GameServerConnection.h" />
     <ClInclude Include="HandShakeMessage.h" />
+    <ClInclude Include="HdNesPack.h" />
+    <ClInclude Include="HdPpu.h" />
     <ClInclude Include="IAudioDevice.h" />
     <ClInclude Include="IControlDevice.h" />
     <ClInclude Include="IGameBroadcaster.h" />

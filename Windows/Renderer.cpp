@@ -9,6 +9,7 @@
 #include "../Core/EmulationSettings.h"
 #include "../Core/MessageManager.h"
 #include "../Utilities/UTF8Util.h"
+#include "../Core/HdNesPack.h"
 
 using namespace DirectX;
 
@@ -85,6 +86,16 @@ namespace NES
 			delete[] _ppuOutputSecondaryBuffer;
 			_ppuOutputSecondaryBuffer = nullptr;
 		}
+
+		if(_hdScreenTiles) {
+			delete[] _hdScreenTiles;
+			_hdScreenTiles = nullptr;
+		}
+
+		if(_secondaryHdScreenTiles) {
+			delete[] _secondaryHdScreenTiles;
+			_secondaryHdScreenTiles = nullptr;
+		}
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -92,6 +103,11 @@ namespace NES
 	//--------------------------------------------------------------------------------------
 	HRESULT Renderer::InitDevice()
 	{
+		_hdScreenTiles = new HdPpuPixelInfo[256 * 240];
+		_secondaryHdScreenTiles = new HdPpuPixelInfo[256 * 240];
+		memset(_hdScreenTiles, 0, 256 * 240 * sizeof(HdPpuPixelInfo));
+		memset(_secondaryHdScreenTiles, 0, 256 * 240 * sizeof(HdPpuPixelInfo));
+
 		HRESULT hr = S_OK;
 
 		UINT createDeviceFlags = 0;
@@ -229,14 +245,14 @@ namespace NES
 		vp.TopLeftY = 0;
 		_pDeviceContext->RSSetViewports(1, &vp);
 
-		_videoRAM = new uint32_t[PPU::PixelCount];
+		_videoRAM = new uint32_t[PPU::PixelCount*4*4];
 		_ppuOutputBuffer = new uint16_t[PPU::PixelCount];
 		_ppuOutputSecondaryBuffer = new uint16_t[PPU::PixelCount];
-		memset(_videoRAM, 0x00, PPU::PixelCount * sizeof(uint32_t));
+		memset(_videoRAM, 0x00, PPU::PixelCount * sizeof(uint32_t) * 4 * 4);
 		memset(_ppuOutputBuffer, 0x00, PPU::OutputBufferSize);
 		memset(_ppuOutputSecondaryBuffer, 0x00, PPU::OutputBufferSize);
 
-		_pTexture = CreateTexture(_hdScreenWidth/4, _hdScreenHeight/4);
+		_pTexture = CreateTexture(_hdScreenWidth, _hdScreenHeight);
 		if(!_pTexture) {
 			return 0;
 		}
@@ -377,33 +393,52 @@ namespace NES
 	{
 		_frameLock.Acquire();
 		memcpy(_ppuOutputSecondaryBuffer, _ppuOutputBuffer, 256 * 240 * sizeof(uint16_t));
+		if(_isHD) {
+			memcpy(_secondaryHdScreenTiles, _hdScreenTiles, 256 * 240 * sizeof(HdPpuPixelInfo));
+		}
 		_frameLock.Release();
 
-		uint32_t* outputBuffer = VideoDecoder::GetInstance()->DecodeFrame(_ppuOutputSecondaryBuffer);
-
+		uint8_t* outputBuffer;
+		uint8_t hdScale = 1;
+		if(_isHD) {
+			outputBuffer = (uint8_t*)VideoDecoder::GetInstance()->DecodeHdFrame(_ppuOutputSecondaryBuffer, _secondaryHdScreenTiles);
+			hdScale = VideoDecoder::GetInstance()->GetScale();
+		} else {
+			outputBuffer = (uint8_t*)VideoDecoder::GetInstance()->DecodeFrame(_ppuOutputSecondaryBuffer);
+		}
 		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+
+		D3D11_MAPPED_SUBRESOURCE dd;
+		dd.pData = (void *)_videoRAM;
+		dd.RowPitch = overscan.GetScreenWidth() * _bytesPerPixel * hdScale;
+		dd.DepthPitch = overscan.GetPixelCount() * _bytesPerPixel * hdScale * hdScale;
+
+		uint32_t rowPitch = overscan.GetScreenWidth() * hdScale * _bytesPerPixel;
+		
+		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
+		uint8_t* surfacePointer = (uint8_t*)dd.pData;
+		for(uint32_t i = 0, iMax = overscan.GetScreenHeight()*hdScale; i < iMax; i++) {
+			memcpy(surfacePointer, outputBuffer, rowPitch);
+			outputBuffer += rowPitch;
+			surfacePointer += dd.RowPitch;
+		}
+		_pDeviceContext->Unmap(_pTexture, 0);
+
+		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
 
 		RECT destRect;
 		destRect.left = 0;
 		destRect.top = 0;
 		destRect.right = overscan.GetScreenWidth() * 4;
 		destRect.bottom = overscan.GetScreenHeight() * 4;
-		XMVECTOR position{ { 0, 0 } };
 
-		D3D11_MAPPED_SUBRESOURCE dd;
-		dd.pData = (void *)_videoRAM;
-		dd.RowPitch = overscan.GetScreenWidth() * _bytesPerPixel;
-		dd.DepthPitch = overscan.GetPixelCount() * _bytesPerPixel;
+		RECT sourceRect;
+		sourceRect.left = 0;
+		sourceRect.top = 0;
+		sourceRect.right = overscan.GetScreenWidth() * hdScale;
+		sourceRect.bottom = overscan.GetScreenHeight() * hdScale;
 
-		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		memset(dd.pData, 0, dd.DepthPitch);
-		for(uint32_t i = 0; i < overscan.GetScreenHeight(); i++) {
-			memcpy((uint8_t*)dd.pData+i*dd.RowPitch, outputBuffer+i*overscan.GetScreenWidth(), overscan.GetScreenWidth() * _bytesPerPixel);
-		}
-		_pDeviceContext->Unmap(_pTexture, 0);
-
-		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
-		_spriteBatch->Draw(nesOutputBuffer, destRect);
+		_spriteBatch->Draw(nesOutputBuffer, destRect, &sourceRect);
 		nesOutputBuffer->Release();
 	}
 
@@ -436,12 +471,16 @@ namespace NES
 		DrawOutlinedString("PAUSED", (float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 47, Colors::AntiqueWhite, 4.5f);
 	}
 
-	void Renderer::Render()
+	bool Renderer::Render()
 	{
+		bool newFrame = _frameChanged;
 		if(_frameChanged || EmulationSettings::CheckFlag(EmulationFlags::Paused) || !_toasts.empty()) {
 			SetScreenSize();
 
-			_frameChanged = false;
+			if(_frameChanged) {
+				_frameChanged = false;
+				_renderedFrameCount++;
+			}
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
 
@@ -467,13 +506,15 @@ namespace NES
 							_currentFPS = 0;
 						} else {
 							_currentFPS = (int)(std::round((double)(_frameCount - _lastFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
+							_currentRenderedFPS = (int)(std::round((double)(_renderedFrameCount - _lastRenderedFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
 						}
 						_lastFrameCount = _frameCount;
+						_lastRenderedFrameCount = _renderedFrameCount;
 						_fpsTimer.Reset();
 					}
 
-					string fpsString = string("FPS: ") + std::to_string(_currentFPS);
-					DrawOutlinedString(fpsString, (float)(_hdScreenWidth - 80), 13, Colors::AntiqueWhite, 1.0f);
+					string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
+					DrawOutlinedString(fpsString, (float)(_hdScreenWidth - 120), 13, Colors::AntiqueWhite, 1.0f);
 				}
 			}
 
@@ -484,6 +525,7 @@ namespace NES
 			// Present the information rendered to the back buffer to the front buffer (the screen)
 			_pSwapChain->Present(0, 0);
 		}
+		return newFrame;
 	}
 
 	void Renderer::RemoveOldToasts()
@@ -589,6 +631,19 @@ namespace NES
 		_frameLock.Release();
 
 		_frameChanged = true;
+		_isHD = false;
+		_frameCount++;
+	}
+
+	void Renderer::UpdateHdFrame(void *frameBuffer, HdPpuPixelInfo *screenTiles)
+	{
+		_frameLock.Acquire();
+		memcpy(_ppuOutputBuffer, frameBuffer, 256 * 240 * 2);
+		memcpy(_hdScreenTiles, screenTiles, 256 * 240 * sizeof(HdPpuPixelInfo));
+		_frameLock.Release();
+
+		_frameChanged = true;		
+		_isHD = true;
 		_frameCount++;
 	}
 }

@@ -41,10 +41,10 @@
     <ClInclude Include="miniz.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PNGWriter.h">
+    <ClInclude Include="UTF8Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UTF8Util.h">
+    <ClInclude Include="PNGHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -76,10 +76,10 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PNGWriter.cpp">
+    <ClCompile Include="CRC32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CRC32.cpp">
+    <ClCompile Include="PNGHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

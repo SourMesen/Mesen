@@ -48,5 +48,7 @@ class MemoryManager: public Snapshotable
 		void ProcessVramAccess(uint16_t &addr);
 		uint8_t ReadVRAM(uint16_t addr);
 		void WriteVRAM(uint16_t addr, uint8_t value);
+
+		uint32_t ToAbsoluteChrAddress(uint16_t vramAddr);
 };
 

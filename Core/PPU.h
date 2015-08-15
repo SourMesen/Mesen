@@ -65,15 +65,16 @@ struct TileInfo
 	uint8_t LowByte;
 	uint8_t HighByte;
 	uint32_t PaletteOffset;
+
+	uint16_t TileAddr; //used by HD ppu
+	uint8_t OffsetY; //used by HD ppu
 };
 
-struct SpriteInfo
+struct SpriteInfo : TileInfo
 {
-	uint8_t LowByte;
-	uint8_t HighByte;
-	uint32_t PaletteOffset;
 	bool HorizontalMirror;
 	bool BackgroundPriority;
+	uint8_t SpriteX;
 };
 
 struct PPUDebugState
@@ -87,7 +88,7 @@ struct PPUDebugState
 
 class PPU : public IMemoryHandler, public Snapshotable
 {
-	private:
+	protected:
 		static PPU* Instance;
 		static IVideoDevice *VideoDevice;
 
@@ -117,11 +118,12 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		bool _doNotSetVBFlag = false;
 
+		SpriteInfo *_lastSprite; //used by HD ppu
+
 		TileInfo _currentTile;
 		TileInfo _nextTile;
 		TileInfo _previousTile;
 
-		int32_t _spriteX[8];
 		SpriteInfo _spriteTiles[8];
 		uint32_t _spriteCount = 0;
 		uint32_t _secondaryOAMAddr = 0;
@@ -164,9 +166,10 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void ShiftTileRegisters();
 		void InitializeShiftRegisters();
 		void LoadNextTile();
-		void DrawPixel();
 
-		void CopyFrame();
+		uint32_t GetPixelColor(uint32_t &paletteOffset);
+		virtual void DrawPixel();
+		virtual void SendFrame();
 
 		PPURegisters GetRegisterID(uint16_t addr)
 		{
@@ -177,7 +180,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 			}
 		}
 
-	protected:
 		void StreamState(bool saving);
 
 	public:
@@ -187,7 +189,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		static const uint32_t OutputBufferSize = 256*240*2;
 
 		PPU(MemoryManager *memoryManager);
-		~PPU();
+		virtual ~PPU();
 
 		void Reset();
 

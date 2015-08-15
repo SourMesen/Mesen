@@ -172,24 +172,6 @@ void PPU::WritePaletteRAM(uint16_t addr, uint8_t value)
 	_paletteRAM[addr] = value;
 }
 
-uint32_t PPU::GetBGPaletteEntry(uint32_t paletteOffset, uint32_t pixel)
-{
-	if(pixel == 0) {
-		return ReadPaletteRAM(0x3F00) | _intensifyColorBits;
-	} else {
-		return ReadPaletteRAM(0x3F00 + paletteOffset + pixel) | _intensifyColorBits;
-	}
-}
-
-uint32_t PPU::GetSpritePaletteEntry(uint32_t paletteOffset, uint32_t pixel)
-{
-	if(pixel == 0) {
-		return ReadPaletteRAM(0x3F00) | _intensifyColorBits;
-	} else {
-		return ReadPaletteRAM(0x3F10 + paletteOffset + pixel) | _intensifyColorBits;
-	}
-}
-
 bool PPU::IsRenderingEnabled()
 {
 	return _flags.BackgroundEnabled || _flags.SpritesEnabled;
@@ -322,11 +304,12 @@ void PPU::LoadTileInfo()
 
 		uint16_t tileIndex = _memoryManager->ReadVRAM(GetNameTableAddr());
 		uint16_t tileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
-
 		uint16_t shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
 		_nextTile.PaletteOffset = ((_memoryManager->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
 		_nextTile.LowByte = _memoryManager->ReadVRAM(tileAddr);
 		_nextTile.HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
+		_nextTile.TileAddr = tileAddr;
+		_nextTile.OffsetY = _state.VideoRamAddr >> 12;
 	}
 }
 
@@ -357,12 +340,14 @@ void PPU::LoadSpriteTileInfo(uint8_t spriteIndex)
 		}
 
 		if(spriteIndex < _spriteCount && spriteY < 240) {
-			_spriteX[spriteIndex] = spriteX;
 			_spriteTiles[spriteIndex].BackgroundPriority = backgroundPriority;
 			_spriteTiles[spriteIndex].HorizontalMirror = horizontalMirror;
-			_spriteTiles[spriteIndex].PaletteOffset = (attributes & 0x03) << 2;
+			_spriteTiles[spriteIndex].PaletteOffset = ((attributes & 0x03) << 2) | 0x10;
 			_spriteTiles[spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
 			_spriteTiles[spriteIndex].HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
+			_spriteTiles[spriteIndex].TileAddr = tileAddr;
+			_spriteTiles[spriteIndex].OffsetY = lineOffset;
+			_spriteTiles[spriteIndex].SpriteX = spriteX;
 		} else {
 			//Fetches to sprite 0xFF for remaining sprites/hidden - used by MMC3 IRQ counter
 			lineOffset = 0;
@@ -397,54 +382,66 @@ void PPU::ShiftTileRegisters()
 	_state.HighBitShift <<= 1;
 }
 
+uint32_t PPU::GetPixelColor(uint32_t &paletteOffset)
+{
+	uint8_t offset = _state.XScroll;
+	uint32_t backgroundColor = 0;
+	
+	if((_cycle > 8 || _flags.BackgroundMask) && _flags.BackgroundEnabled) {
+		//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
+		backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+	}
+
+	if((_cycle > 8 || _flags.SpriteMask) && _flags.SpritesEnabled) {
+		//SpriteMask = true: Hide sprites in leftmost 8 pixels of screen
+		for(uint8_t i = 0; i < _spriteCount; i++) {
+			int32_t shift = -((int32_t)_spriteTiles[i].SpriteX - (int32_t)_cycle + 1);
+			if(shift >= 0 && shift < 8) {
+				_lastSprite = &_spriteTiles[i];
+				uint32_t spriteColor;
+				if(_spriteTiles[i].HorizontalMirror) {
+					spriteColor = ((_lastSprite->LowByte >> shift) & 0x01) | ((_lastSprite->HighByte >> shift) & 0x01) << 1;
+				} else {
+					spriteColor = ((_lastSprite->LowByte << shift) & 0x80) >> 7 | ((_lastSprite->HighByte << shift) & 0x80) >> 6;
+				}
+				
+				if(spriteColor != 0) {
+					//First sprite without a 00 color, use it.
+					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled) {
+						//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
+						//"Sprite zero hits do not register at x=255" (cycle 256)
+						//"... provided that background and sprite rendering are both enabled"
+						//"Should always miss when Y >= 239"
+						_statusFlags.Sprite0Hit = true;
+					}
+
+					if(backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority) {
+						//Check sprite priority
+						paletteOffset = _lastSprite->PaletteOffset;
+						return spriteColor;
+					}
+					break;
+				}
+			}
+		}
+	} 
+	paletteOffset = ((offset + ((_cycle - 1) & 0x07) < 8) ? _previousTile : _currentTile).PaletteOffset;
+	return backgroundColor;
+}
+
 void PPU::DrawPixel()
 {
 	//This is called 3.7 million times per second - needs to be as fast as possible.
 	uint16_t &pixel = _outputBuffer[(_scanline << 8) + _cycle - 1];
 
 	if(IsRenderingEnabled() || ((_state.VideoRamAddr & 0x3F00) != 0x3F00)) {
-		uint8_t offset = _state.XScroll;
-		uint32_t backgroundColor = 0;
-
-		if((_cycle > 8 || _flags.BackgroundMask) && _flags.BackgroundEnabled) {
-			//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
-			backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+		uint32_t paletteOffset;
+		uint32_t color = GetPixelColor(paletteOffset);
+		if(color == 0) {
+			pixel = ReadPaletteRAM(0x3F00) | _intensifyColorBits;
+		} else {
+			pixel = ReadPaletteRAM(0x3F00 + paletteOffset + color) | _intensifyColorBits;
 		}
-
-		if((_cycle > 8 || _flags.SpriteMask) && _flags.SpritesEnabled) {
-			//SpriteMask = true: Hide sprites in leftmost 8 pixels of screen
-			for(uint8_t i = 0; i < _spriteCount; i++) {
-				int32_t shift = -((int32_t)_spriteX[i] - (int32_t)_cycle + 1);
-				if(shift >= 0 && shift < 8) {
-					uint32_t spriteColor;
-					if(_spriteTiles[i].HorizontalMirror) {
-						spriteColor = ((_spriteTiles[i].LowByte >> shift) & 0x01) | ((_spriteTiles[i].HighByte >> shift) & 0x01) << 1;
-					} else {
-						spriteColor = ((_spriteTiles[i].LowByte << shift) & 0x80) >> 7 | ((_spriteTiles[i].HighByte << shift) & 0x80) >> 6;
-					}
-
-					if(spriteColor != 0) {
-						//First sprite without a 00 color, use it.
-						if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled) {
-							//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
-							//"Sprite zero hits do not register at x=255" (cycle 256)
-							//"... provided that background and sprite rendering are both enabled"
-							//"Should always miss when Y >= 239"
-							_statusFlags.Sprite0Hit = true;
-						}
-
-						if(backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority) {
-							//Check sprite priority
-							pixel = GetSpritePaletteEntry(_spriteTiles[i].PaletteOffset, spriteColor);
-							return;
-						}
-
-						break;
-					}
-				}
-			}
-		}
-		pixel = GetBGPaletteEntry(offset + ((_cycle - 1) & 0x07) < 8 ? _previousTile.PaletteOffset : _currentTile.PaletteOffset, backgroundColor);
 	} else {
 		//"If the current VRAM address points in the range $3F00-$3FFF during forced blanking, the color indicated by this palette location will be shown on screen instead of the backdrop color."
 		pixel = ReadPaletteRAM(_state.VideoRamAddr) | _intensifyColorBits;
@@ -615,14 +612,18 @@ void PPU::CopyOAMData()
 	}
 }
 
+void PPU::SendFrame()
+{
+	//Send frame to GUI once the last pixel has been output
+	if(PPU::VideoDevice) {
+		PPU::VideoDevice->UpdateFrame(_outputBuffer);
+	}
+}
+
 void PPU::BeginVBlank()
 {
 	if(_cycle == 1) {
-		//Send frame to GUI once the last pixel has been output
-		if(PPU::VideoDevice) {
-			PPU::VideoDevice->UpdateFrame(_outputBuffer);
-		}
-
+		SendFrame();
 		if(!_doNotSetVBFlag) {
 			_statusFlags.VerticalBlank = true;
 			if(_flags.VBlank) {
@@ -728,8 +729,8 @@ void PPU::StreamState(bool saving)
 	Stream<uint8_t>(_previousTile.HighByte);
 	Stream<uint32_t>(_previousTile.PaletteOffset);
 
-	StreamArray<int32_t>(_spriteX, 0x8);
 	for(int i = 0; i < 8; i++) {
+		Stream<uint8_t>(_spriteTiles[i].SpriteX);
 		Stream<uint8_t>(_spriteTiles[i].LowByte);
 		Stream<uint8_t>(_spriteTiles[i].HighByte);
 		Stream<uint32_t>(_spriteTiles[i].PaletteOffset);

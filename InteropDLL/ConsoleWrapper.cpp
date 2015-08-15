@@ -131,7 +131,7 @@ namespace InteropEmu {
 			delete _soundManager;
 		}
 
-		DllExport void __stdcall Render() { _renderer->Render(); }
+		DllExport bool __stdcall Render() { return _renderer->Render(); }
 		DllExport void __stdcall TakeScreenshot() { VideoDecoder::GetInstance()->TakeScreenshot(FolderUtilities::GetFilename(Console::GetROMPath(), false)); }
 
 		DllExport INotificationListener* __stdcall RegisterNotificationCallback(NotificationListenerCallback callback)

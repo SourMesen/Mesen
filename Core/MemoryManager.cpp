@@ -153,6 +153,11 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 	_mapper->WriteVRAM(addr, value);
 }
 
+uint32_t MemoryManager::ToAbsoluteChrAddress(uint16_t vramAddr)
+{
+	return _mapper->ToAbsoluteChrAddress(vramAddr);
+}
+
 void MemoryManager::StreamState(bool saving)
 {
 	StreamArray<uint8_t>(_internalRAM, MemoryManager::InternalRAMSize);

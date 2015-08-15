@@ -477,6 +477,15 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			return 0;
 		}
 
+		uint32_t ToAbsoluteChrAddress(uint16_t addr)
+		{
+			uint8_t *chrAddr = _chrPages[addr >> 8] + (addr & 0xFF);
+			if(chrAddr >= _chrRam && chrAddr < _chrRam + _chrSize) {
+				return (uint32_t)(chrAddr - _chrRam);
+			}
+			return 0;
+		}
+
 		int32_t FromAbsoluteAddress(uint32_t addr)
 		{
 			uint8_t* ptrAddress = _prgRom + addr;
