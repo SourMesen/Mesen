@@ -81,7 +81,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 			return _spriteRAM[_state.SpriteRamAddr];
 		case PPURegisters::VideoMemoryData:
 			returnValue = _memoryReadBuffer;
-			_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr);
+			_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
 
 			if(_state.VideoRamAddr >= 0x3F00) {
 				returnValue = ReadPaletteRAM(_state.VideoRamAddr);

@@ -10,6 +10,7 @@ using std::deque;
 #include "PPU.h"
 #include "Breakpoint.h"
 #include "../Utilities/SimpleLock.h"
+#include "CodeDataLogger.h"
 
 class MemoryManager;
 class Console;
@@ -38,6 +39,7 @@ private:
 	static Debugger* Instance;
 
 	unique_ptr<Disassembler> _disassembler;
+	unique_ptr<CodeDataLogger> _codeDataLogger;
 	shared_ptr<Console> _console;
 	shared_ptr<CPU> _cpu;
 	shared_ptr<PPU> _ppu;
@@ -52,6 +54,7 @@ private:
 	SimpleLock _bpLock;
 	SimpleLock _breakLock;
 
+	string _romFilepath;
 	string _outputCache;
 	atomic<int32_t> _stepCount;
 	atomic<int32_t> _stepCycleCount;
@@ -60,8 +63,12 @@ private:
 	atomic<int32_t> _stepOverAddr;
 
 private:
-	void PrivateCheckBreakpoint(BreakpointType type, uint32_t addr);
+	void PrivateProcessRamOperation(MemoryOperationType type, uint32_t addr);
+	void PrivateProcessVramOperation(MemoryOperationType type, uint32_t addr);
 	shared_ptr<Breakpoint> GetMatchingBreakpoint(BreakpointType type, uint32_t addr);
+	void UpdateCallstack(uint32_t addr);
+	void ProcessStepConditions(uint32_t addr);
+	void BreakOnBreakpoint(MemoryOperationType type, uint32_t addr);
 	bool SleepUntilResume();
 
 public:
@@ -89,6 +96,11 @@ public:
 	void StepOut();
 	void Run();
 
+	bool LoadCdlFile(string cdlFilepath);
+	bool SaveCdlFile(string cdlFilepath);
+	CdlRatios GetCdlRatios();
+	void ResetCdlLog();
+
 	bool IsCodeChanged();
 	string GenerateOutput();
 	string* GetCode();
@@ -96,5 +108,6 @@ public:
 	uint8_t GetMemoryValue(uint32_t addr);
 	uint32_t GetRelativeAddress(uint32_t addr);
 	
-	static void CheckBreakpoint(BreakpointType type, uint32_t addr);
+	static void ProcessRamOperation(MemoryOperationType type, uint32_t addr);
+	static void ProcessVramOperation(MemoryOperationType type, uint32_t addr);
 };

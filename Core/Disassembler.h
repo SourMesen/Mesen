@@ -16,7 +16,7 @@ public:
 	Disassembler(uint8_t* internalRAM, uint8_t* prgROM, uint32_t prgSize);
 	~Disassembler();
 	
-	void BuildCache(uint32_t absoluteAddr, uint16_t memoryAddr);
+	uint32_t BuildCache(uint32_t absoluteAddr, uint16_t memoryAddr);
 	string GetRAMCode();
 	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &memoryAddr);
 };

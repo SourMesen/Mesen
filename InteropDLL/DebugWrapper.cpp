@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "../Core/Console.h"
 #include "../Core/Debugger.h"
+#include "../Core/CodeDataLogger.h"
 
 static shared_ptr<Debugger> _debugger = nullptr;
 
@@ -15,7 +16,6 @@ extern "C"
 	DllExport void __stdcall DebugRelease()
 	{
 		if(_debugger != nullptr) {
-			_debugger->Run();
 			_debugger.reset();
 		}
 	}
@@ -43,4 +43,9 @@ extern "C"
 	
 	DllExport uint8_t __stdcall DebugGetMemoryValue(uint32_t addr) { return _debugger->GetMemoryValue(addr); }
 	DllExport uint32_t __stdcall DebugGetRelativeAddress(uint32_t addr) { return _debugger->GetRelativeAddress(addr); }
+
+	DllExport bool __stdcall DebugLoadCdlFile(char* cdlFilepath) { return _debugger->LoadCdlFile(cdlFilepath); }
+	DllExport bool __stdcall DebugSaveCdlFile(char* cdlFilepath) { return _debugger->SaveCdlFile(cdlFilepath); }
+	DllExport void __stdcall DebugGetCdlRatios(CdlRatios* cdlRatios) { *cdlRatios = _debugger->GetCdlRatios(); }
+	DllExport void __stdcall DebugResetCdlLog() { _debugger->ResetCdlLog(); }
 };

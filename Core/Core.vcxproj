@@ -267,6 +267,7 @@
   <ItemGroup>
     <ClInclude Include="APU.h" />
     <ClInclude Include="BF909x.h" />
+    <ClInclude Include="CodeDataLogger.h" />
     <ClInclude Include="DeltaModulationChannel.h" />
     <ClInclude Include="ApuEnvelope.h" />
     <ClInclude Include="ApuFrameCounter.h" />
@@ -338,6 +339,7 @@
     <ClCompile Include="ApuLengthCounter.cpp" />
     <ClCompile Include="Breakpoint.cpp" />
     <ClCompile Include="CheatManager.cpp" />
+    <ClCompile Include="CodeDataLogger.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="Debugger.cpp" />

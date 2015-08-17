@@ -93,29 +93,30 @@ Disassembler::~Disassembler()
 	}
 }
 
-void Disassembler::BuildCache(uint32_t absoluteAddr, uint16_t memoryAddr)
+uint32_t Disassembler::BuildCache(uint32_t absoluteAddr, uint16_t memoryAddr)
 {
 	if(memoryAddr < 0x2000) {
 		memoryAddr = memoryAddr & 0x7FF;
 		if(!_disassembleMemoryCache[memoryAddr]) {
 			shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&_internalRAM[memoryAddr]));
 			_disassembleMemoryCache[memoryAddr] = disInfo;
+			memoryAddr += disInfo->GetSize();
 		}
+		return memoryAddr;
 	} else {
 		while(!_disassembleCache[absoluteAddr]) {
 			shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&_prgROM[absoluteAddr]));
 			_disassembleCache[absoluteAddr] = disInfo;
 
 			uint8_t opCode = _prgROM[absoluteAddr];
-
 			if(opCode == 0x10 || opCode == 0x20 || opCode == 0x30 || opCode == 0x40 || opCode == 0x50 || opCode == 0x60 || opCode == 0x70 || opCode == 0x90 || opCode == 0xB0 || opCode == 0xD0 || opCode == 0xF0 || opCode == 0x4C || opCode == 0x6C) {
 				//Hit a jump/return instruction, can't assume that what follows is actual code, stop disassembling
 				break;
 			}
-
 			absoluteAddr += disInfo->GetSize();
-			memoryAddr += disInfo->GetSize();
 		}
+		absoluteAddr += _disassembleCache[absoluteAddr]->GetSize();
+		return absoluteAddr;
 	}
 }
 

@@ -463,27 +463,31 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			memcpy(*buffer, _chrRam, _chrSize);
 		}
 
-		uint32_t GetChrSize()
+		uint32_t GetChrSize(bool includeChrRam = true)
 		{
-			return _chrSize;
+			if(includeChrRam || !_hasChrRam) {
+				return _chrSize;
+			} else {
+				return 0;
+			}
 		}
 
-		uint32_t ToAbsoluteAddress(uint16_t addr)
+		int32_t ToAbsoluteAddress(uint16_t addr)
 		{
 			uint8_t *prgAddr = _prgPages[addr >> 8] + (addr & 0xFF);
 			if(prgAddr >= _prgRom && prgAddr < _prgRom + _prgSize) {
 				return (uint32_t)(prgAddr - _prgRom);
 			}
-			return 0;
+			return -1;
 		}
 
-		uint32_t ToAbsoluteChrAddress(uint16_t addr)
+		int32_t ToAbsoluteChrAddress(uint16_t addr)
 		{
 			uint8_t *chrAddr = _chrPages[addr >> 8] + (addr & 0xFF);
 			if(chrAddr >= _chrRam && chrAddr < _chrRam + _chrSize) {
 				return (uint32_t)(chrAddr - _chrRam);
 			}
-			return 0;
+			return -1;
 		}
 
 		int32_t FromAbsoluteAddress(uint32_t addr)

@@ -239,6 +239,9 @@
     <ClInclude Include="HdPpu.h">
       <Filter>Header Files\HD</Filter>
     </ClInclude>
+    <ClInclude Include="CodeDataLogger.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPU.cpp">
@@ -321,6 +324,9 @@
     </ClCompile>
     <ClCompile Include="DeltaModulationChannel.cpp">
       <Filter>Source Files\APU</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeDataLogger.cpp">
+      <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

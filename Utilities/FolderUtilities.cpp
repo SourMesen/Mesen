@@ -56,6 +56,13 @@ string FolderUtilities::GetHdPackFolder()
 	return folder;
 }
 
+string FolderUtilities::GetDebuggerFolder()
+{
+	string folder = CombinePath(GetHomeFolder(), "Debugger\\");
+	CreateFolder(folder);
+	return folder;
+}
+
 string FolderUtilities::GetSaveStateFolder()
 {
 	string folder = CombinePath(GetHomeFolder(), "SaveStates\\");

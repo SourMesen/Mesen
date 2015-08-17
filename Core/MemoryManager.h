@@ -6,6 +6,15 @@
 
 class BaseMapper;
 
+enum class MemoryOperationType
+{
+	Read = 0,
+	Write = 1,
+	ExecOpCode = 2,
+	ExecOperand = 3,
+	PpuRenderingRead = 4,
+};
+
 class MemoryManager: public Snapshotable
 {
 	private:
@@ -42,11 +51,11 @@ class MemoryManager: public Snapshotable
 
 		uint8_t* GetInternalRAM();
 
-		uint8_t Read(uint16_t addr, bool forExecution = false);
+		uint8_t Read(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read);
 		void Write(uint16_t addr, uint8_t value);
 
 		void ProcessVramAccess(uint16_t &addr);
-		uint8_t ReadVRAM(uint16_t addr);
+		uint8_t ReadVRAM(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::PpuRenderingRead);
 		void WriteVRAM(uint16_t addr, uint8_t value);
 
 		uint32_t ToAbsoluteChrAddress(uint16_t vramAddr);

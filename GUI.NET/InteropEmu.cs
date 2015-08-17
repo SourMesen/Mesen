@@ -82,6 +82,11 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern IntPtr DebugGetCode();
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);
+		
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugLoadCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugSaveCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
+		[DllImport(DLLPath)] public static extern void DebugGetCdlRatios(ref CdlRatios ratios);
+		[DllImport(DLLPath)] public static extern void DebugResetCdlLog();
 
 		[DllImport(DLLPath, EntryPoint="DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
 		public static byte[] DebugGetMemoryState(DebugMemoryType type)
@@ -266,6 +271,17 @@ namespace Mesen.GUI
 				}
 			}
 		}
+	}
+
+	public struct CdlRatios
+	{
+		public float CodeRatio;
+		public float DataRatio;
+		public float PrgRatio;
+		
+		public float ChrRatio;
+		public float ChrReadRatio;
+		public float ChrDrawnRatio;
 	}
 
 	public struct DebugState

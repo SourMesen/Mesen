@@ -9,11 +9,13 @@
 #include "Disassembler.h"
 #include "VideoDecoder.h"
 #include "APU.h"
+#include "CodeDataLogger.h"
 
 Debugger* Debugger::Instance = nullptr;
 
 Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
 {
+	_romFilepath = Console::GetROMPath();
 	_console = console;
 	_cpu = cpu;
 	_ppu = ppu;
@@ -23,20 +25,55 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	uint8_t *prgBuffer;
 	mapper->GetPrgCopy(&prgBuffer);
 	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), prgBuffer, mapper->GetPrgSize()));
+	_codeDataLogger.reset(new CodeDataLogger(mapper->GetPrgSize(), mapper->GetChrSize(false)));
 
 	_stepCount = -1;
+
+	LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romFilepath, false) + ".cdl"));
 		
 	Debugger::Instance = this;
 }
 
 Debugger::~Debugger()
 {
+	SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romFilepath, false) + ".cdl"));
+
+	Run();	
+
 	Console::Pause();
 	Debugger::Instance = nullptr;
 	Run();
 	_breakLock.Acquire();
 	_breakLock.Release();
 	Console::Resume();
+}
+
+bool Debugger::LoadCdlFile(string cdlFilepath)
+{
+	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {
+		for(int i = 0, len = _mapper->GetPrgSize(); i < len; i++) {
+			if(_codeDataLogger->IsCode(i)) {
+				i = _disassembler->BuildCache(i, 0xFFFF) - 1;
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
+bool Debugger::SaveCdlFile(string cdlFilepath)
+{
+	return _codeDataLogger->SaveCdlFile(cdlFilepath);
+}
+
+void Debugger::ResetCdlLog()
+{
+	_codeDataLogger->Reset();
+}
+
+CdlRatios Debugger::GetCdlRatios()
+{
+	return _codeDataLogger->GetRatios();
 }
 
 void Debugger::AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr, bool enabled)
@@ -104,48 +141,78 @@ shared_ptr<Breakpoint> Debugger::GetMatchingBreakpoint(BreakpointType type, uint
 	return shared_ptr<Breakpoint>();
 }
 
-void Debugger::PrivateCheckBreakpoint(BreakpointType type, uint32_t addr)
+void Debugger::UpdateCallstack(uint32_t addr)
+{
+	if(_lastInstruction == 0x60 && !_callstackRelative.empty()) {
+		//RTS
+		_callstackRelative.pop_back();
+		_callstackRelative.pop_back();
+		_callstackAbsolute.pop_back();
+		_callstackAbsolute.pop_back();
+	} else if(_lastInstruction == 0x20 && _callstackRelative.size() < 1022) {
+		//JSR
+		uint16_t targetAddr = _memoryManager->DebugRead(addr + 1) | (_memoryManager->DebugRead(addr + 2) << 8);
+		_callstackRelative.push_back(addr);
+		_callstackRelative.push_back(targetAddr);
+
+		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(addr));
+		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(targetAddr));
+	}
+}
+
+void Debugger::ProcessStepConditions(uint32_t addr)
+{
+	if(_stepOut && _lastInstruction == 0x60) {
+		//RTS found, set StepCount to 2 to break on the following instruction
+		Step(2);
+	} else if(_stepOverAddr != -1 && addr == _stepOverAddr) {
+		Step(1);
+	} else if(_stepCycleCount != -1 && abs(_cpu->GetCycleCount() - _stepCycleCount) < 100 && _cpu->GetCycleCount() >= _stepCycleCount) {
+		Step(1);
+	}
+}
+
+void Debugger::BreakOnBreakpoint(MemoryOperationType type, uint32_t addr)
+{
+	BreakpointType breakpointType;
+	switch(type) {
+		case MemoryOperationType::Read: breakpointType = BreakpointType::Read; break;
+		case MemoryOperationType::Write: breakpointType = BreakpointType::Write; break;
+		case MemoryOperationType::ExecOpCode:
+		case MemoryOperationType::ExecOperand: breakpointType = BreakpointType::Execute; break;
+	}
+
+	if(GetMatchingBreakpoint(breakpointType, addr)) {
+		//Found a matching breakpoint, stop execution
+		Step(1);
+		SleepUntilResume();
+	}
+}
+
+void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint32_t addr)
 {
 	_breakLock.Acquire();
 
 	//Check if a breakpoint has been hit and freeze execution if one has
 	bool breakDone = false;
-	if(type == BreakpointType::Execute) {
+	int32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
+	if(type == MemoryOperationType::ExecOpCode) {
+		_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
+		_disassembler->BuildCache(absoluteAddr, addr);
 		_lastInstruction = _memoryManager->DebugRead(addr);
 		
-		//Update callstack
-		if(_lastInstruction == 0x60 && !_callstackRelative.empty()) {
-			//RTS
-			_callstackRelative.pop_back();
-			_callstackRelative.pop_back();
-			_callstackAbsolute.pop_back();
-			_callstackAbsolute.pop_back();
-		} else if(_lastInstruction == 0x20 && _callstackRelative.size() < 1022) {
-			//JSR
-			uint16_t targetAddr = _memoryManager->DebugRead(addr + 1) | (_memoryManager->DebugRead(addr + 2) << 8);
-			_callstackRelative.push_back(addr);
-			_callstackRelative.push_back(targetAddr);
+		UpdateCallstack(addr);
+		ProcessStepConditions(addr);
 
-			_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(addr));
-			_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(targetAddr));
-		}
-
-		if(_stepOut && _lastInstruction == 0x60) {
-			//RTS found, set StepCount to 2 to break on the following instruction
-			Step(2);
-		} else if(_stepOverAddr != -1 && addr == _stepOverAddr) {
-			Step(1);
-		} else if(_stepCycleCount != -1 && abs(_cpu->GetCycleCount() - _stepCycleCount) < 100 && _cpu->GetCycleCount() >= _stepCycleCount) {
-			Step(1);
-		}
-		_disassembler->BuildCache(_mapper->ToAbsoluteAddress(addr), addr);
 		breakDone = SleepUntilResume();
+	} else if(type == MemoryOperationType::ExecOperand) {
+		_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
+	} else {
+		_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Data);
 	}
 
-	if(!breakDone && GetMatchingBreakpoint(type, addr)) {
-		//Found a matching breakpoint, stop execution
-		Step(1);
-		SleepUntilResume();
+	if(!breakDone) {
+		BreakOnBreakpoint(type, addr);
 	}
 
 	_breakLock.Release();
@@ -171,6 +238,12 @@ bool Debugger::SleepUntilResume()
 		return true;
 	}
 	return false;
+}
+
+void Debugger::PrivateProcessVramOperation(MemoryOperationType type, uint32_t addr)
+{
+	int32_t absoluteAddr = _mapper->ToAbsoluteChrAddress(addr);
+	_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
 }
 
 void Debugger::GetState(DebugState *state)
@@ -272,10 +345,17 @@ uint32_t Debugger::GetRelativeAddress(uint32_t addr)
 	return _mapper->FromAbsoluteAddress(addr);
 }
 
-void Debugger::CheckBreakpoint(BreakpointType type, uint32_t addr)
+void Debugger::ProcessRamOperation(MemoryOperationType type, uint32_t addr)
 {
 	if(Debugger::Instance) {
-		Debugger::Instance->PrivateCheckBreakpoint(type, addr);
+		Debugger::Instance->PrivateProcessRamOperation(type, addr);
+	}
+}
+
+void Debugger::ProcessVramOperation(MemoryOperationType type, uint32_t addr)
+{
+	if(Debugger::Instance) {
+		Debugger::Instance->PrivateProcessVramOperation(type, addr);
 	}
 }
 

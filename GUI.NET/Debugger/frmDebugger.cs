@@ -40,6 +40,22 @@ namespace Mesen.GUI.Debugger
 			
 			//Pause a few frames later to give the debugger a chance to disassemble some code
 			InteropEmu.DebugStep(100000);
+
+			UpdateCdlRatios();
+			tmrCdlRatios.Start();
+		}
+
+		private void UpdateCdlRatios()
+		{
+			CdlRatios ratios = new CdlRatios();
+			InteropEmu.DebugGetCdlRatios(ref ratios);
+
+			lblPrgAnalysisResult.Text = string.Format("{0:0.00}% (Code: {1:0.00}%, Data: {2:0.00}%, Unknown: {3:0.00}%)", ratios.PrgRatio * 100, ratios.CodeRatio * 100, ratios.DataRatio * 100, (1 - ratios.PrgRatio) * 100);
+			if(ratios.ChrRatio >= 0) {
+				lblChrAnalysisResult.Text = string.Format("{0:0.00}% (Drawn: {1:0.00}%, Read: {2:0.00}%, Unknown: {3:0.00}%)", ratios.ChrRatio * 100, ratios.ChrDrawnRatio * 100, ratios.ChrReadRatio * 100, (1 - ratios.ChrRatio) * 100);
+			} else {
+				lblChrAnalysisResult.Text = "N/A (CHR RAM)";
+			}
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -248,6 +264,39 @@ namespace Mesen.GUI.Debugger
 		private void ctrlCallstack_FunctionSelected(object sender, EventArgs e)
 		{
 			_lastCodeWindow.ScrollToLineNumber((int)sender);
+		}
+
+		private void tmrCdlRatios_Tick(object sender, EventArgs e)
+		{
+			this.UpdateCdlRatios();
+		}
+
+		private void mnuLoadCdlFile_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Filter = "CDL files (*.cdl)|*.cdl";
+			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(!InteropEmu.DebugLoadCdlFile(ofd.FileName)) {
+					MessageBox.Show("Could not load CDL file.  The file selected file is invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+		}
+
+		private void mnuSaveAsCdlFile_Click(object sender, EventArgs e)
+		{
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Filter = "CDL files (*.cdl)|*.cdl";
+			sfd.AddExtension = true;
+			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(!InteropEmu.DebugSaveCdlFile(sfd.FileName)) {
+					MessageBox.Show("Error while trying to save CDL file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+		}
+
+		private void mnuResetCdlLog_Click(object sender, EventArgs e)
+		{
+			InteropEmu.DebugResetCdlLog();
 		}
 	}
 }

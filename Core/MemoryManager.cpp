@@ -95,9 +95,9 @@ uint8_t MemoryManager::DebugRead(uint16_t addr)
 	return value;
 }
 
-uint8_t MemoryManager::Read(uint16_t addr, bool forExecution)
+uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 {
-	Debugger::CheckBreakpoint(forExecution ? BreakpointType::Execute : BreakpointType::Read, addr);
+	Debugger::ProcessRamOperation(operationType, addr);
 
 	uint8_t value;
 	if(addr <= 0x1FFF) {
@@ -112,7 +112,7 @@ uint8_t MemoryManager::Read(uint16_t addr, bool forExecution)
 
 void MemoryManager::Write(uint16_t addr, uint8_t value)
 {
-	Debugger::CheckBreakpoint(BreakpointType::Write, addr);
+	Debugger::ProcessRamOperation(MemoryOperationType::Write, addr);
 
 	if(addr <= 0x1FFF) {
 		_internalRAM[addr & 0x07FF] = value;
@@ -141,14 +141,16 @@ uint8_t MemoryManager::DebugReadVRAM(uint16_t addr)
 	return _mapper->ReadVRAM(addr);
 }
 
-uint8_t MemoryManager::ReadVRAM(uint16_t addr)
+uint8_t MemoryManager::ReadVRAM(uint16_t addr, MemoryOperationType operationType)
 {	
+	Debugger::ProcessVramOperation(operationType, addr);
 	ProcessVramAccess(addr);
 	return _mapper->ReadVRAM(addr);
 }
 
 void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 {
+	Debugger::ProcessVramOperation(MemoryOperationType::Write, addr);
 	ProcessVramAccess(addr);
 	_mapper->WriteVRAM(addr, value);
 }

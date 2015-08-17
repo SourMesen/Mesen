@@ -20,6 +20,7 @@ public:
 	static string GetMovieFolder();
 	static string GetScreenshotFolder();
 	static string GetHdPackFolder();
+	static string GetDebuggerFolder();
 
 	static vector<string> GetFolders(string rootFolder);
 	static vector<string> GetFilesInFolder(string rootFolder, string mask, bool recursive);

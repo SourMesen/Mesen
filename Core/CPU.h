@@ -83,24 +83,24 @@ private:
 	uint8_t GetOPCode()
 	{
 		_state.DebugPC = _state.PC;
-		uint8_t opCode = MemoryRead(_state.PC, true);
+		uint8_t opCode = MemoryRead(_state.PC, MemoryOperationType::ExecOpCode);
 		_state.PC++;
 		return opCode;
 	}
 
 	void DummyRead()
 	{
-		MemoryRead(_state.PC);
+		MemoryRead(_state.PC, MemoryOperationType::ExecOperand);
 	}
 
 	uint8_t ReadByte()
 	{
-		return MemoryRead(_state.PC++);
+		return MemoryRead(_state.PC++, MemoryOperationType::ExecOperand);
 	}
 
 	uint16_t ReadWord()
 	{
-		uint16_t value = MemoryReadWord(PC());
+		uint16_t value = MemoryReadWord(_state.PC, MemoryOperationType::ExecOperand);
 		_state.PC += 2;
 		return value;
 	}
@@ -145,25 +145,25 @@ private:
 		IncCycleCount();
 	}
 
-	uint8_t MemoryRead(uint16_t addr, bool forExecute = false) {
+	uint8_t MemoryRead(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
 		while(_dmcDmaRunning) {
 			//Stall CPU until we can process a DMC read
 			if((addr != 0x4016 && addr != 0x4017) || _dmcCounter == 1) {
 				//While the CPU is stalled, reads are performed on the current address
 				//This behavior causes the $4016/7 data corruption when a DMC is running.
 				//When reading $4016/7, only the last read counts (because this only occurs to low-to-high transitions, i.e once in this case)
-				_memoryManager->Read(addr, forExecute);
+				_memoryManager->Read(addr);
 			}
 			IncCycleCount();
 		}
-		uint8_t value = _memoryManager->Read(addr, forExecute);
+		uint8_t value = _memoryManager->Read(addr, operationType);
 		IncCycleCount();
 		return value;
 	}
 
-	uint16_t MemoryReadWord(uint16_t addr) {
-		uint8_t lo = MemoryRead(addr);
-		uint8_t hi = MemoryRead(addr + 1);
+	uint16_t MemoryReadWord(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
+		uint8_t lo = MemoryRead(addr, operationType);
+		uint8_t hi = MemoryRead(addr + 1, operationType);
 		return lo | hi << 8;
 	}
 
