@@ -82,6 +82,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern IntPtr DebugGetCode();
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);
+		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
+
 		
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugLoadCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugSaveCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);

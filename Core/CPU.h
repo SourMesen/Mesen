@@ -849,6 +849,9 @@ public:
 	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
 	static void RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue);
 	static void StartDmcTransfer();
+	
+	//Used by debugger for "Set Next Statement"
+	void SetDebugPC(uint16_t value) { SetPC(value); _state.DebugPC = value; }
 
 	void Reset(bool softReset);
 	void Exec();

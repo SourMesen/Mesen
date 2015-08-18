@@ -33,6 +33,8 @@ extern "C"
 	DllExport int __stdcall DebugIsCodeChanged() { return _debugger->IsCodeChanged(); }
 	DllExport const char* __stdcall DebugGetCode() { return _debugger->GetCode()->c_str(); }
 
+	DllExport void __stdcall DebugSetNextStatement(uint16_t addr) { _debugger->SetNextStatement(addr); }
+
 	DllExport uint32_t __stdcall DebugGetMemoryState(uint32_t type, uint8_t *buffer) { return _debugger->GetMemoryState((DebugMemoryType)type, buffer); }
 	DllExport void __stdcall DebugGetNametable(uint32_t nametableIndex, uint32_t *frameBuffer, uint8_t *tileData, uint8_t *attributeData) { _debugger->GetNametable(nametableIndex, frameBuffer, tileData, attributeData); }
 	DllExport void __stdcall DebugGetChrBank(uint32_t bankIndex, uint32_t *frameBuffer, uint8_t palette) { _debugger->GetChrBank(bankIndex, frameBuffer, palette); }

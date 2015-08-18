@@ -54,6 +54,8 @@ private:
 	SimpleLock _bpLock;
 	SimpleLock _breakLock;
 
+	uint16_t *_currentReadAddr; //Used to alter the executing address via "Set Next Statement"
+
 	string _romFilepath;
 	string _outputCache;
 	atomic<int32_t> _stepCount;
@@ -63,8 +65,8 @@ private:
 	atomic<int32_t> _stepOverAddr;
 
 private:
-	void PrivateProcessRamOperation(MemoryOperationType type, uint32_t addr);
-	void PrivateProcessVramOperation(MemoryOperationType type, uint32_t addr);
+	void PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr);
+	void PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr);
 	shared_ptr<Breakpoint> GetMatchingBreakpoint(BreakpointType type, uint32_t addr);
 	void UpdateCallstack(uint32_t addr);
 	void ProcessStepConditions(uint32_t addr);
@@ -101,6 +103,8 @@ public:
 	CdlRatios GetCdlRatios();
 	void ResetCdlLog();
 
+	void SetNextStatement(uint16_t addr);
+
 	bool IsCodeChanged();
 	string GenerateOutput();
 	string* GetCode();
@@ -108,6 +112,6 @@ public:
 	uint8_t GetMemoryValue(uint32_t addr);
 	uint32_t GetRelativeAddress(uint32_t addr);
 	
-	static void ProcessRamOperation(MemoryOperationType type, uint32_t addr);
-	static void ProcessVramOperation(MemoryOperationType type, uint32_t addr);
+	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr);
+	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr);
 };

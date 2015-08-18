@@ -71,6 +71,7 @@
             | System.Windows.Forms.Keys.F10)));
 			this.mnuSetNextStatement.Size = new System.Drawing.Size(258, 22);
 			this.mnuSetNextStatement.Text = "Set Next Statement";
+			this.mnuSetNextStatement.Click += new System.EventHandler(this.mnuSetNextStatement_Click);
 			// 
 			// toolStripMenuItem1
 			// 
@@ -111,6 +112,7 @@
 			this.ctrlCodeViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.ctrlCodeViewer.ContextMenuStrip = this.contextMenuCode;
 			this.ctrlCodeViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlCodeViewer.FontSize = 13F;
 			this.ctrlCodeViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlCodeViewer.Name = "ctrlCodeViewer";
 			this.ctrlCodeViewer.Size = new System.Drawing.Size(379, 218);

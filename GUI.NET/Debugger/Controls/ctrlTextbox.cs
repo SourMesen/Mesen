@@ -341,16 +341,9 @@ namespace Mesen.GUI.Debugger
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			this.Focus();
+			int clickedLine = this.GetLineAtPosition(e.Y);
+			this.CursorPosition = this.ScrollPosition + clickedLine;
 			base.OnMouseDown(e);
-		}
-
-		protected override void OnMouseClick(MouseEventArgs e)
-		{
-			if(e.Button == System.Windows.Forms.MouseButtons.Left) {
-				int clickedLine = this.GetLineAtPosition(e.Y);
-				this.CursorPosition = this.ScrollPosition + clickedLine;
-			}
-			base.OnMouseClick(e);
 		}
 
 		private void DrawLine(Graphics g, int currentLine, int marginLeft, int positionY)

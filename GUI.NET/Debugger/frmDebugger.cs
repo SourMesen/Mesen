@@ -178,9 +178,16 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugStepCycles(29780);
 		}
 
-		private void ctrlDebuggerCode_OnWatchAdded(WatchAddedEventArgs args)
+		private void ctrlDebuggerCode_OnWatchAdded(AddressEventArgs args)
 		{
 			this.ctrlWatch.AddWatch(args.Address);
+		}
+
+		private void ctrlDebuggerCode_OnSetNextStatement(AddressEventArgs args)
+		{
+			UInt16 addr = (UInt16)args.Address;
+			InteropEmu.DebugSetNextStatement(addr);
+			this.UpdateDebugger();
 		}
 
 		private void mnuFind_Click(object sender, EventArgs e)

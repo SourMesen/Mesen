@@ -13,8 +13,9 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class ctrlDebuggerCode : BaseScrollableTextboxUserControl
 	{
-		public delegate void WatchAddedEventHandler(WatchAddedEventArgs args);
-		public event WatchAddedEventHandler OnWatchAdded;
+		public delegate void AddressEventHandler(AddressEventArgs args);
+		public event AddressEventHandler OnWatchAdded;
+		public event AddressEventHandler OnSetNextStatement;
 
 		public ctrlDebuggerCode()
 		{
@@ -182,7 +183,7 @@ namespace Mesen.GUI.Debugger
 		private void contextMenuCode_Opening(object sender, CancelEventArgs e)
 		{
 			mnuShowNextStatement.Enabled = _currentActiveAddress.HasValue;
-			mnuSetNextStatement.Enabled = false;
+			mnuSetNextStatement.Enabled = _currentActiveAddress.HasValue;
 		}
 
 		private void mnuShowNextStatement_Click(object sender, EventArgs e)
@@ -206,15 +207,23 @@ namespace Mesen.GUI.Debugger
 		private void mnuAddToWatch_Click(object sender, EventArgs e)
 		{
 			if(this.OnWatchAdded != null) {
-				this.OnWatchAdded(new WatchAddedEventArgs() { Address = _lastClickedAddress});
+				this.OnWatchAdded(new AddressEventArgs() { Address = _lastClickedAddress});
 			}
 		}
+
+		private void mnuSetNextStatement_Click(object sender, EventArgs e)
+		{
+			if(this.OnSetNextStatement != null) {
+				this.OnSetNextStatement(new AddressEventArgs() { Address = (UInt32)this.ctrlCodeViewer.CurrentLine });
+			}
+		}
+
 		#endregion
 
 		#endregion
 	}
 
-	public class WatchAddedEventArgs : EventArgs
+	public class AddressEventArgs : EventArgs
 	{
 		public UInt32 Address { get; set; }
 	}

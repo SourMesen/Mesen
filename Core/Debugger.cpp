@@ -189,31 +189,37 @@ void Debugger::BreakOnBreakpoint(MemoryOperationType type, uint32_t addr)
 	}
 }
 
-void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint32_t addr)
+void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr)
 {
 	_breakLock.Acquire();
+
+	_currentReadAddr = &addr;
 
 	//Check if a breakpoint has been hit and freeze execution if one has
 	bool breakDone = false;
 	int32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
-	if(type == MemoryOperationType::ExecOpCode) {
-		_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
-		_disassembler->BuildCache(absoluteAddr, addr);
-		_lastInstruction = _memoryManager->DebugRead(addr);
-		
-		UpdateCallstack(addr);
-		ProcessStepConditions(addr);
+	if(absoluteAddr >= 0) {
+		if(type == MemoryOperationType::ExecOpCode) {
+			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
+			_disassembler->BuildCache(absoluteAddr, addr);
+			_lastInstruction = _memoryManager->DebugRead(addr);
 
-		breakDone = SleepUntilResume();
-	} else if(type == MemoryOperationType::ExecOperand) {
-		_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
-	} else {
-		_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Data);
+			UpdateCallstack(addr);
+			ProcessStepConditions(addr);
+
+			breakDone = SleepUntilResume();
+		} else if(type == MemoryOperationType::ExecOperand) {
+			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
+		} else {
+			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Data);
+		}
 	}
 
 	if(!breakDone) {
 		BreakOnBreakpoint(type, addr);
 	}
+
+	_currentReadAddr = nullptr;
 
 	_breakLock.Release();
 }
@@ -240,7 +246,7 @@ bool Debugger::SleepUntilResume()
 	return false;
 }
 
-void Debugger::PrivateProcessVramOperation(MemoryOperationType type, uint32_t addr)
+void Debugger::PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr)
 {
 	int32_t absoluteAddr = _mapper->ToAbsoluteChrAddress(addr);
 	_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
@@ -345,14 +351,22 @@ uint32_t Debugger::GetRelativeAddress(uint32_t addr)
 	return _mapper->FromAbsoluteAddress(addr);
 }
 
-void Debugger::ProcessRamOperation(MemoryOperationType type, uint32_t addr)
+void Debugger::SetNextStatement(uint16_t addr)
+{
+	if(_currentReadAddr) {
+		_cpu->SetDebugPC(addr);
+		*_currentReadAddr = addr;
+	}
+}
+
+void Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr)
 {
 	if(Debugger::Instance) {
 		Debugger::Instance->PrivateProcessRamOperation(type, addr);
 	}
 }
 
-void Debugger::ProcessVramOperation(MemoryOperationType type, uint32_t addr)
+void Debugger::ProcessVramOperation(MemoryOperationType type, uint16_t addr)
 {
 	if(Debugger::Instance) {
 		Debugger::Instance->PrivateProcessVramOperation(type, addr);
