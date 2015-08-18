@@ -64,8 +64,8 @@ private:
 		if((((bankNumber & 0x80) == 0x00) && reg != 0x04) || reg == 0x00) {
 			bankNumber &= 0x07;
 			memoryType = PrgMemoryType::SaveRam;
-			uint8_t accessType = MemoryAccessType::Read;
-			if(_prgRamProtect1 == 0x10 && _prgRamProtect2 == 0x01) {
+			accessType = MemoryAccessType::Read;
+			if(_prgRamProtect1 == 0x02 && _prgRamProtect2 == 0x01) {
 				accessType |= MemoryAccessType::Write;
 			}
 		} else {
@@ -246,7 +246,7 @@ private:
 protected:
 	virtual uint16_t GetPRGPageSize() { return 0x2000; }
 	virtual uint16_t GetCHRPageSize() {	return 0x400; }
-	virtual uint16_t RegisterStartAddress() { return 0x5100; }
+	virtual uint16_t RegisterStartAddress() { return 0x5000; }
 	virtual uint16_t RegisterEndAddress() { return 0x5206; }
 	virtual uint32_t GetSaveRamSize() { return 0x10000; } //Emulate as if a single 64k block of saved ram existed
 	virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
@@ -312,9 +312,13 @@ protected:
 
 	virtual void WriteRAM(uint16_t addr, uint8_t value)
 	{
-		if(_ppuInFrame && addr >= 0x5C00 && addr <= 0x5FFF && _extendedRamMode <= 1) {
-			//Mode 0/1 - Not readable (returns open bus), can only be written while the PPU is rendering (otherwise, 0 is written)
-			value = 0;
+		if(addr >= 0x5C00 && addr <= 0x5FFF && _extendedRamMode <= 1) {
+			PPUControlFlags flags = PPU::GetControlFlags();
+			if(!flags.BackgroundEnabled && !flags.SpritesEnabled) {
+				//Expansion RAM ($5C00-$5FFF, read/write)
+				//Mode 0/1 - Not readable (returns open bus), can only be written while the PPU is rendering (otherwise, 0 is written)
+				value = 0;
+			}
 		}
 		BaseMapper::WriteRAM(addr, value);
 	}

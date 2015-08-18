@@ -410,6 +410,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 				return ReadRegister(addr);
 			} else if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Read) {
 				return _prgPages[addr >> 8][addr & 0xFF];
+			} else {
+				//assert(false);
 			}
 			return 0;
 		}
@@ -420,6 +422,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 				WriteRegister(addr, value);
 			} else if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Write) {
 				_prgPages[addr >> 8][addr & 0xFF] = value;
+			} else {
+				//assert(false);
 			}
 		}
 		
@@ -427,6 +431,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		{
 			if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Read) {
 				return _chrPages[addr >> 8][addr & 0xFF];
+			} else {
+				//assert(false);
 			}
 			return 0;
 		}
@@ -435,6 +441,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		{
 			if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
 				_chrPages[addr >> 8][addr & 0xFF] = value;
+			} else {
+				//assert(false);
 			}
 		}
 
