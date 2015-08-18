@@ -77,7 +77,7 @@ bool CodeDataLogger::SaveCdlFile(string cdlFilepath)
 
 void CodeDataLogger::SetFlag(int32_t absoluteAddr, CdlPrgFlags flag)
 {
-	if(absoluteAddr >= 0 && absoluteAddr < _prgSize) {
+	if(absoluteAddr >= 0 && absoluteAddr < (int32_t)_prgSize) {
 		if((_cdlData[absoluteAddr] & (uint8_t)flag) != (uint8_t)flag) {
 			if(flag == CdlPrgFlags::Code) {
 				if(IsData(absoluteAddr)) {
@@ -101,7 +101,7 @@ void CodeDataLogger::SetFlag(int32_t absoluteAddr, CdlPrgFlags flag)
 
 void CodeDataLogger::SetFlag(int32_t chrAbsoluteAddr, CdlChrFlags flag)
 {
-	if(chrAbsoluteAddr >= 0 && chrAbsoluteAddr < _chrSize) {
+	if(chrAbsoluteAddr >= 0 && chrAbsoluteAddr < (int32_t)_chrSize) {
 		if((_cdlData[_prgSize + chrAbsoluteAddr] & (uint8_t)flag) != (uint8_t)flag) {
 			_usedChrSize++;
 			if(flag == CdlChrFlags::Read) {

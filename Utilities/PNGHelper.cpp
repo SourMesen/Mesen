@@ -30,7 +30,7 @@ void PNGHelper::ReadPNG(string filename, vector<uint8_t> &pngData, uint32_t &png
 	ifstream pngFile(filename, std::ios::in | std::ios::binary);
 	if(pngFile) {
 		pngFile.seekg(0, std::ios::end);
-		size_t fileSize = pngFile.tellg();
+		size_t fileSize = (size_t)pngFile.tellg();
 		pngFile.seekg(0, std::ios::beg);
 
 		uint8_t* buffer = new uint8_t[fileSize];
