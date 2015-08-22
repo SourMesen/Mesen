@@ -168,7 +168,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &mem
 				output << "\n";
 				byteCount = 0;
 			}
-			output << std::hex << std::uppercase << memoryAddr << ":" << info->ToString(memoryAddr) << "\n";
+			output << std::hex << std::uppercase << memoryAddr << ":" << addr << ":" << info->ToString(memoryAddr) << "\n";
 			addr += info->GetSize();
 			memoryAddr += info->GetSize();
 		} else {
@@ -177,7 +177,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &mem
 				byteCount = 0;
 			}
 			if(byteCount == 0) {
-				output << std::hex << std::uppercase << memoryAddr << ":" << ".db";
+				output << std::hex << std::uppercase << memoryAddr << ":" << addr << "::" << ".db";
 			}
 			output << std::hex << " $" << std::setfill('0') << std::setw(2) << (short)_prgROM[addr];
 
@@ -186,7 +186,6 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &mem
 			memoryAddr++;
 		}
 	}
-	
 	output << "\n";
 		
 	return output.str();

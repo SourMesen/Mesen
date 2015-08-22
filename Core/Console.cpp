@@ -122,6 +122,13 @@ void Console::ResetComponents(bool softReset)
 {
 	Movie::Stop();
 
+	if(_debugger) {
+		//Reset debugger and break on first instruction
+		StopDebugger();
+		GetDebugger();
+		_debugger->Step(1);
+	}
+
 	_ppu->Reset();
 	_apu->Reset(softReset);
 	_cpu->Reset(softReset);
@@ -138,12 +145,19 @@ void Console::Stop()
 {
 	_stop = true;
 	EmulationSettings::ClearFlags(EmulationFlags::Paused);
+	if(_debugger) {
+		_debugger->Run();
+	}
 	_stopLock.Acquire();
 	_stopLock.Release();
 }
 
 void Console::Pause()
 {
+	if(Console::Instance->_debugger) {
+		//Make sure debugger resumes if we try to pause the emu, otherwise we will get deadlocked.
+		Console::Instance->_debugger->Run();
+	}
 	Console::Instance->_pauseLock.Acquire();
 	//Spin wait until emu pauses
 	Console::Instance->_runLock.Acquire();
@@ -267,7 +281,15 @@ void Console::LoadState(uint8_t *buffer, uint32_t bufferSize)
 	LoadState(stream);
 }
 
-shared_ptr<Debugger> Console::GetDebugger()
+std::weak_ptr<Debugger> Console::GetDebugger()
 {
-	return shared_ptr<Debugger>(new Debugger(Console::Instance, _cpu, _ppu, _memoryManager, _mapper));
+	if(!_debugger) {
+		_debugger.reset(new Debugger(Console::Instance, _cpu, _ppu, _memoryManager, _mapper));
+	}
+	return _debugger;
+}
+
+void Console::StopDebugger()
+{
+	_debugger.reset();
 }

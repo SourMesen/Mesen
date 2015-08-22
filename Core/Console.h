@@ -22,6 +22,7 @@ class Console
 		shared_ptr<CPU> _cpu;
 		shared_ptr<PPU> _ppu;
 		unique_ptr<APU> _apu;
+		shared_ptr<Debugger> _debugger;
 		shared_ptr<BaseMapper> _mapper;
 		unique_ptr<ControlManager> _controlManager;
 		shared_ptr<MemoryManager> _memoryManager;
@@ -50,7 +51,8 @@ class Console
 		//Used to resume the emu loop after calling Pause()
 		static void Resume();
 
-		shared_ptr<Debugger> Console::GetDebugger();
+		std::weak_ptr<Debugger> GetDebugger();
+		void StopDebugger();
 
 		static void SaveState(ostream &saveStream);
 		static void LoadState(istream &loadStream);

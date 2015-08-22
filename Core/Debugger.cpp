@@ -27,7 +27,10 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), prgBuffer, mapper->GetPrgSize()));
 	_codeDataLogger.reset(new CodeDataLogger(mapper->GetPrgSize(), mapper->GetChrSize(false)));
 
+	_stepOut = false;
 	_stepCount = -1;
+	_stepOverAddr = -1;
+	_stepCycleCount = -1;
 
 	LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romFilepath, false) + ".cdl"));
 		
@@ -226,7 +229,7 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 
 bool Debugger::SleepUntilResume()
 {
-	uint32_t stepCount = _stepCount.load();
+	int32_t stepCount = _stepCount.load();
 	if(stepCount > 0) {
 		_stepCount--;
 		stepCount = _stepCount.load();
@@ -314,14 +317,14 @@ bool Debugger::IsCodeChanged()
 string Debugger::GenerateOutput()
 {
 	std::ostringstream output;
-	vector<uint32_t> memoryRanges = _mapper->GetPRGRanges();
+	vector<int32_t> memoryRanges = _mapper->GetPRGRanges();
 
 	//RAM code viewer doesn't work well yet
 	//output << _disassembler->GetRAMCode();
 
 	uint16_t memoryAddr = 0x8000;
 	for(size_t i = 0, size = memoryRanges.size(); i < size; i += 2) {
-		uint32_t startRange = memoryRanges[i];
+		int32_t startRange = memoryRanges[i];
 		//Merge all sequential ranges into 1 chunk
 		for(size_t j = i+1; j < size - 1; j+=2) {
 			if(memoryRanges[j] + 1 == memoryRanges[j + 1]) {
@@ -330,7 +333,11 @@ string Debugger::GenerateOutput()
 				break;
 			}
 		}
-		output << _disassembler->GetCode(startRange, memoryRanges[i+1], memoryAddr);
+		if(startRange != -1) {
+			output << _disassembler->GetCode(startRange, memoryRanges[i+1], memoryAddr);
+		} else {
+			memoryAddr += 0x100;
+		}
 	}
 
 	return output.str();

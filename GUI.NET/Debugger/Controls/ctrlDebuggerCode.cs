@@ -70,38 +70,60 @@ namespace Mesen.GUI.Debugger
 				this.ctrlCodeViewer.ClearLineStyles();
 
 				List<int> lineNumbers = new List<int>();
+				List<string> lineNumberNotes = new List<string>();
+				List<string> codeNotes = new List<string>();
 				List<string> codeLines = new List<string>();
 				bool diassembledCodeOnly = mnuShowOnlyDisassembledCode.Checked;
 				bool skippingCode = false;
-				foreach(string line in _code.Split('\n')) {
+				string[] lines = _code.Split('\n');
+				for(int i = 0, len = lines.Length - 1; i < len; i++) {
+					string line = lines[i];
 					string[] lineParts = line.Split(':');
-					if(skippingCode && (lineParts.Length != 2 || lineParts[1][0] != '.')) {
+					if(skippingCode && (i == len - 1 || lineParts[3][0] != '.')) {
 						lineNumbers.Add(-1);
+						lineNumberNotes.Add("");
 						codeLines.Add("[code not disassembled]");
+						codeNotes.Add("");
 
-						int previousAddress = lineParts[0].Length > 0 ? (int)ParseHexAddress(lineParts[0])-1 : 0xFFFF;
-						lineNumbers.Add(previousAddress);
+						int address = (int)ParseHexAddress(lineParts[0]);
+						if(i != len - 1 || lineParts[3][0] != '.') {
+							address--;
+						} else if(i == len - 1 && lineParts[3][0] == '.' && address >= 0xFFF8) {
+							address = 0xFFFF;
+						}
+						lineNumbers.Add(address);
+						lineNumberNotes.Add(lineParts[1]);
 						codeLines.Add("[code not disassembled]");
+						codeNotes.Add("");
 
 						skippingCode = false;
+						if(i == len - 1 && lineParts[3][0] == '.') {
+							break;
+						}
 					}
 
-					if(lineParts.Length == 2) {
-						if(diassembledCodeOnly && lineParts[1][0] == '.') {
+					if(lineParts.Length >= 4) {
+						if(diassembledCodeOnly && lineParts[3][0] == '.') {
 							if(!skippingCode) {
 								lineNumbers.Add((int)ParseHexAddress(lineParts[0]));
+								lineNumberNotes.Add(lineParts[1]);
 								codeLines.Add("[code not disassembled]");
+								codeNotes.Add("");
 								skippingCode = true;
 							}
 						} else {
 							lineNumbers.Add((int)ParseHexAddress(lineParts[0]));
-							codeLines.Add(lineParts[1]);
+							lineNumberNotes.Add(lineParts[1]);
+							codeLines.Add(lineParts[3]);
+							codeNotes.Add(lineParts[2]);
 						}
 					}
 				}
 
 				ctrlCodeViewer.TextLines = codeLines.ToArray();
 				ctrlCodeViewer.LineNumbers = lineNumbers.ToArray();
+				ctrlCodeViewer.TextLineNotes = codeNotes.ToArray();
+				ctrlCodeViewer.LineNumberNotes = lineNumberNotes.ToArray();
 				sw.Stop();
 				_codeChanged = false;
 				return true;
@@ -198,7 +220,17 @@ namespace Mesen.GUI.Debugger
 				SelectActiveAddress(_currentActiveAddress.Value);
 			}
 		}
+		
+		private void mnuShowLineNotes_Click(object sender, EventArgs e)
+		{
+			this.ctrlCodeViewer.ShowLineNumberNotes = this.mnuShowLineNotes.Checked;
+		}
 
+		private void mnuShowCodeNotes_Click(object sender, EventArgs e)
+		{
+			this.ctrlCodeViewer.ShowContentNotes = this.mnuShowCodeNotes.Checked;
+		}
+		
 		private void mnuGoToLocation_Click(object sender, EventArgs e)
 		{
 			this.ctrlCodeViewer.ScrollToLineNumber((int)_lastClickedAddress);

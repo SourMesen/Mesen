@@ -62,9 +62,6 @@ namespace Mesen.GUI.Debugger
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
 				this.BeginInvoke((MethodInvoker)(() => UpdateDebugger()));
-			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameLoaded) {
-				InteropEmu.DebugRelease();
-				InteropEmu.DebugInitialize();
 			}
 		}
 
@@ -108,6 +105,8 @@ namespace Mesen.GUI.Debugger
 			ctrlConsoleStatus.UpdateStatus(ref state);
 			ctrlWatch.UpdateWatch();
 			ctrlCallstack.UpdateCallstack();
+
+			this.BringToFront();
 		}
 
 		private void ClearActiveStatement()

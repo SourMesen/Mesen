@@ -33,16 +33,21 @@ namespace Mesen.GUI.Debugger
 		public event EventHandler ScrollPositionChanged;
 
 		private string[] _contents = new string[0];
+		private string[] _contentNotes = new string[0];
 		private string[] _compareContents = null;
 		private int[] _lineNumbers = new int[0];
+		private string[] _lineNumberNotes = new string[0];
 		private Dictionary<int, int> _lineNumberIndex = new Dictionary<int,int>();
 		private Dictionary<int, LineProperties> _lineProperties = new Dictionary<int,LineProperties>();
 		private bool _showLineNumbers = false;
 		private bool _showLineInHex = false;
+		private bool _showLineNumberNotes = false;
+		private bool _showContentNotes = false;
 		private int _cursorPosition = 0;
 		private int _scrollPosition = 0;
 		private string _searchString = null;
 		private string _header = null;
+		private Font _noteFont = null;
 
 		public ctrlTextbox()
 		{
@@ -66,6 +71,45 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public override Font Font
+		{
+			get { return base.Font; }
+			set
+			{
+				base.Font = value;
+				_noteFont = new Font(value.FontFamily, value.Size * 0.75f);
+			}
+		}
+
+		public bool ShowContentNotes
+		{
+			get { return _showContentNotes; }
+			set 
+			{
+				_showContentNotes = value;
+				this.Invalidate();
+			}
+		}
+
+		public bool ShowLineNumberNotes
+		{
+			get { return this._showLineNumberNotes; }
+			set 
+			{ 
+				this._showLineNumberNotes = value;
+				this.Invalidate();
+			}
+		}
+
+		public string[] TextLineNotes
+		{
+			set
+			{
+				this._contentNotes = value;
+				this.Invalidate();
+			}
+		}
+
 		public string[] CompareLines
 		{
 			set
@@ -82,7 +126,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public int[] CustomLineNumbers
+		public int[] LineNumbers
 		{
 			set
 			{
@@ -93,6 +137,15 @@ namespace Mesen.GUI.Debugger
 					_lineNumberIndex[line] = i;
 					i++;
 				}
+				this.Invalidate();
+			}
+		}
+
+		public string[] LineNumberNotes
+		{
+			set
+			{
+				_lineNumberNotes = value;
 				this.Invalidate();
 			}
 		}
@@ -335,7 +388,14 @@ namespace Mesen.GUI.Debugger
 
 		private int LineHeight
 		{
-			get { return this.Font.Height - 1; }
+			get 
+			{
+				if(this.ShowLineNumberNotes || this.ShowContentNotes) {
+					return (int)(this.Font.Height * 1.60);
+				} else {
+					return this.Font.Height - 1;
+				}
+			}
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -353,6 +413,10 @@ namespace Mesen.GUI.Debugger
 				string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
 				float width = g.MeasureString(lineNumber, this.Font).Width;
 				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY);
+				if(this.ShowLineNumberNotes) {
+					width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont).Width;
+					g.DrawString(_lineNumberNotes[currentLine], _noteFont, Brushes.Gray, marginLeft - width, positionY+this.Font.Size+3);
+				}
 			}
 
 			if(currentLine == this.CursorPosition) {
@@ -411,6 +475,9 @@ namespace Mesen.GUI.Debugger
 			string lineText = _contents[currentLine];
 			using(Brush fgBrush = new SolidBrush(textColor)) {
 				g.DrawString(lineText, this.Font, fgBrush, marginLeft, positionY);
+				if(this.ShowContentNotes) {
+					g.DrawString(_contentNotes[currentLine], _noteFont, Brushes.Gray, marginLeft, positionY + this.Font.Size+3);
+				}
 				this.DrawHighlightedSearchString(g, lineText, marginLeft, positionY);
 				this.DrawHighlightedCompareString(g, lineText, currentLine, marginLeft, positionY);
 			}

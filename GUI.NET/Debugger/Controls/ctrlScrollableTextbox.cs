@@ -171,6 +171,14 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public string[] TextLineNotes
+		{
+			set
+			{
+				this.ctrlTextbox.TextLineNotes = value;
+			}
+		}
+
 		public string[] CompareLines
 		{
 			set
@@ -183,8 +191,28 @@ namespace Mesen.GUI.Debugger
 		{
 			set
 			{
-				this.ctrlTextbox.CustomLineNumbers = value;
+				this.ctrlTextbox.LineNumbers = value;
 			}
+		}
+
+		public string[] LineNumberNotes
+		{
+			set
+			{
+				this.ctrlTextbox.LineNumberNotes = value;
+			}
+		}
+
+		public bool ShowContentNotes
+		{
+			get { return this.ctrlTextbox.ShowContentNotes; }
+			set { this.ctrlTextbox.ShowContentNotes = value; }
+		}
+
+		public bool ShowLineNumberNotes
+		{
+			get { return this.ctrlTextbox.ShowLineNumberNotes; }
+			set { this.ctrlTextbox.ShowLineNumberNotes = value; }
 		}
 
 		public string Header

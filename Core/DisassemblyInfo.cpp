@@ -15,6 +15,16 @@ void DisassemblyInfo::Initialize(uint32_t memoryAddr)
 	_opSize = DisassemblyInfo::OPSize[opCode];
 	_opMode = DisassemblyInfo::OPMode[opCode];
 
+	//Output raw byte code
+	for(uint32_t i = 0; i < 3; i++) {
+		if(i < _opSize) {
+			output << "$" << std::hex << std::uppercase << std::setfill('0') << std::setw(2) << (short)*(_opPointer+i) << " ";
+		} else {
+			output << "    ";
+		}
+	}
+	output << ":";
+
 	output << DisassemblyInfo::OPName[opCode];
 	if(opCode == 0x40 || opCode == 0x60) {
 		//Make end of function/interrupt routines more obvious

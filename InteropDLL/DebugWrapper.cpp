@@ -3,7 +3,15 @@
 #include "../Core/Debugger.h"
 #include "../Core/CodeDataLogger.h"
 
-static shared_ptr<Debugger> _debugger = nullptr;
+static std::weak_ptr<Debugger> _debugger;
+
+shared_ptr<Debugger> GetDebugger()
+{
+	if(_debugger.expired()) {
+		_debugger = Console::GetInstance()->GetDebugger();
+	}
+	return _debugger.lock();
+}
 
 extern "C"
 {
@@ -15,39 +23,37 @@ extern "C"
 
 	DllExport void __stdcall DebugRelease()
 	{
-		if(_debugger != nullptr) {
-			_debugger.reset();
-		}
+		Console::GetInstance()->StopDebugger();
 	}
 
-	DllExport void __stdcall DebugGetState(DebugState *state) { _debugger->GetState(state); }
+	DllExport void __stdcall DebugGetState(DebugState *state) { GetDebugger()->GetState(state); }
 
-	DllExport void __stdcall DebugAddBreakpoint(uint32_t type, uint32_t address, bool isAbsoluteAddr, bool enabled) { _debugger->AddBreakpoint((BreakpointType)type, address, isAbsoluteAddr, enabled); }
-	DllExport void __stdcall DebugRemoveBreakpoint(uint32_t type, uint32_t address, bool isAbsoluteAddr) { _debugger->RemoveBreakpoint((BreakpointType)type, address, isAbsoluteAddr); }
+	DllExport void __stdcall DebugAddBreakpoint(uint32_t type, uint32_t address, bool isAbsoluteAddr, bool enabled) { GetDebugger()->AddBreakpoint((BreakpointType)type, address, isAbsoluteAddr, enabled); }
+	DllExport void __stdcall DebugRemoveBreakpoint(uint32_t type, uint32_t address, bool isAbsoluteAddr) { GetDebugger()->RemoveBreakpoint((BreakpointType)type, address, isAbsoluteAddr); }
 		
-	DllExport void __stdcall DebugRun() { _debugger->Run(); }
-	DllExport void __stdcall DebugStep(uint32_t count) { _debugger->Step(count); }
-	DllExport void __stdcall DebugStepCycles(uint32_t count) { _debugger->StepCycles(count); }
-	DllExport void __stdcall DebugStepOver() { _debugger->StepOver(); }
-	DllExport void __stdcall DebugStepOut() { _debugger->StepOut(); }
-	DllExport int __stdcall DebugIsCodeChanged() { return _debugger->IsCodeChanged(); }
-	DllExport const char* __stdcall DebugGetCode() { return _debugger->GetCode()->c_str(); }
+	DllExport void __stdcall DebugRun() { GetDebugger()->Run(); }
+	DllExport void __stdcall DebugStep(uint32_t count) { GetDebugger()->Step(count); }
+	DllExport void __stdcall DebugStepCycles(uint32_t count) { GetDebugger()->StepCycles(count); }
+	DllExport void __stdcall DebugStepOver() { GetDebugger()->StepOver(); }
+	DllExport void __stdcall DebugStepOut() { GetDebugger()->StepOut(); }
+	DllExport int __stdcall DebugIsCodeChanged() { return GetDebugger()->IsCodeChanged(); }
+	DllExport const char* __stdcall DebugGetCode() { return GetDebugger()->GetCode()->c_str(); }
 
-	DllExport void __stdcall DebugSetNextStatement(uint16_t addr) { _debugger->SetNextStatement(addr); }
+	DllExport void __stdcall DebugSetNextStatement(uint16_t addr) { GetDebugger()->SetNextStatement(addr); }
 
-	DllExport uint32_t __stdcall DebugGetMemoryState(uint32_t type, uint8_t *buffer) { return _debugger->GetMemoryState((DebugMemoryType)type, buffer); }
-	DllExport void __stdcall DebugGetNametable(uint32_t nametableIndex, uint32_t *frameBuffer, uint8_t *tileData, uint8_t *attributeData) { _debugger->GetNametable(nametableIndex, frameBuffer, tileData, attributeData); }
-	DllExport void __stdcall DebugGetChrBank(uint32_t bankIndex, uint32_t *frameBuffer, uint8_t palette) { _debugger->GetChrBank(bankIndex, frameBuffer, palette); }
-	DllExport void __stdcall DebugGetSprites(uint32_t *frameBuffer) { _debugger->GetSprites(frameBuffer); }
-	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { _debugger->GetPalette(frameBuffer); }
+	DllExport uint32_t __stdcall DebugGetMemoryState(uint32_t type, uint8_t *buffer) { return GetDebugger()->GetMemoryState((DebugMemoryType)type, buffer); }
+	DllExport void __stdcall DebugGetNametable(uint32_t nametableIndex, uint32_t *frameBuffer, uint8_t *tileData, uint8_t *attributeData) { GetDebugger()->GetNametable(nametableIndex, frameBuffer, tileData, attributeData); }
+	DllExport void __stdcall DebugGetChrBank(uint32_t bankIndex, uint32_t *frameBuffer, uint8_t palette) { GetDebugger()->GetChrBank(bankIndex, frameBuffer, palette); }
+	DllExport void __stdcall DebugGetSprites(uint32_t *frameBuffer) { GetDebugger()->GetSprites(frameBuffer); }
+	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { GetDebugger()->GetPalette(frameBuffer); }
 	
-	DllExport void __stdcall DebugGetCallstack(int32_t *callstackAbsolute, int32_t *callstackRelative) { _debugger->GetCallstack(callstackAbsolute, callstackRelative); }
+	DllExport void __stdcall DebugGetCallstack(int32_t *callstackAbsolute, int32_t *callstackRelative) { GetDebugger()->GetCallstack(callstackAbsolute, callstackRelative); }
 	
-	DllExport uint8_t __stdcall DebugGetMemoryValue(uint32_t addr) { return _debugger->GetMemoryValue(addr); }
-	DllExport uint32_t __stdcall DebugGetRelativeAddress(uint32_t addr) { return _debugger->GetRelativeAddress(addr); }
+	DllExport uint8_t __stdcall DebugGetMemoryValue(uint32_t addr) { return GetDebugger()->GetMemoryValue(addr); }
+	DllExport uint32_t __stdcall DebugGetRelativeAddress(uint32_t addr) { return GetDebugger()->GetRelativeAddress(addr); }
 
-	DllExport bool __stdcall DebugLoadCdlFile(char* cdlFilepath) { return _debugger->LoadCdlFile(cdlFilepath); }
-	DllExport bool __stdcall DebugSaveCdlFile(char* cdlFilepath) { return _debugger->SaveCdlFile(cdlFilepath); }
-	DllExport void __stdcall DebugGetCdlRatios(CdlRatios* cdlRatios) { *cdlRatios = _debugger->GetCdlRatios(); }
-	DllExport void __stdcall DebugResetCdlLog() { _debugger->ResetCdlLog(); }
+	DllExport bool __stdcall DebugLoadCdlFile(char* cdlFilepath) { return GetDebugger()->LoadCdlFile(cdlFilepath); }
+	DllExport bool __stdcall DebugSaveCdlFile(char* cdlFilepath) { return GetDebugger()->SaveCdlFile(cdlFilepath); }
+	DllExport void __stdcall DebugGetCdlRatios(CdlRatios* cdlRatios) { *cdlRatios = GetDebugger()->GetCdlRatios(); }
+	DllExport void __stdcall DebugResetCdlLog() { GetDebugger()->ResetCdlLog(); }
 };

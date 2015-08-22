@@ -513,13 +513,13 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			return -1;
 		}
 
-		vector<uint32_t> GetPRGRanges()
+		vector<int32_t> GetPRGRanges()
 		{
-			vector<uint32_t> memoryRanges;
+			vector<int32_t> memoryRanges;
 
 			for(uint32_t i = 0x8000; i <= 0xFFFF; i+=0x100) {
-				uint32_t pageStart = ToAbsoluteAddress((uint16_t)i);
-				uint32_t pageEnd = ToAbsoluteAddress((uint16_t)i+0xFF);
+				int32_t pageStart = ToAbsoluteAddress((uint16_t)i);
+				int32_t pageEnd = ToAbsoluteAddress((uint16_t)i+0xFF);
 				memoryRanges.push_back(pageStart);
 				memoryRanges.push_back(pageEnd);
 			}
