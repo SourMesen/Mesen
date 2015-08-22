@@ -90,7 +90,7 @@ private:
 
 	void DummyRead()
 	{
-		MemoryRead(_state.PC, MemoryOperationType::ExecOperand);
+		MemoryRead(_state.PC, MemoryOperationType::Read);
 	}
 
 	uint8_t ReadByte()
