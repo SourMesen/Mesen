@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	InitializeEmu("C:\\Windows\\Temp\\Mesen", nullptr, nullptr);
 	LoadROM(testRoms[0]);
 	thread testThread([testRoms] {
-		for(int i = 1; i < testRoms.size(); i++) {
+		for(size_t i = 1; i < testRoms.size(); i++) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
 			LoadROM(testRoms[i]);
 		}
