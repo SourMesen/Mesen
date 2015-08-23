@@ -44,16 +44,18 @@ namespace InteropEmu {
 		{
 			FolderUtilities::SetHomeFolder(homeFolder);
 
-			_windowHandle = windowHandle;
-			_viewerHandle = dxViewerHandle;
+			if(windowHandle != nullptr && dxViewerHandle != nullptr) {
+				_windowHandle = windowHandle;
+				_viewerHandle = dxViewerHandle;
 
-			_renderer = new NES::Renderer(_viewerHandle);
-			_soundManager = new SoundManager(_windowHandle);
+				_renderer = new NES::Renderer(_viewerHandle);
+				_soundManager = new SoundManager(_windowHandle);
 
-			ControlManager::RegisterKeyManager(new WindowsKeyManager(_windowHandle));
+				ControlManager::RegisterKeyManager(new WindowsKeyManager(_windowHandle));
 
-			for(int i = 0; i < 4; i++) {
-				_inputDevices.push_back(shared_ptr<StandardController>(new StandardController(i)));
+				for(int i = 0; i < 4; i++) {
+					_inputDevices.push_back(shared_ptr<StandardController>(new StandardController(i)));
+				}
 			}
 		}
 
