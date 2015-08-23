@@ -87,6 +87,7 @@ namespace Mesen.GUI.Forms
 		void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameLoaded) {
+				this.Text = "Mesen - " + System.IO.Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath());
 				CheatInfo.ApplyCheats();
 				InitializeStateMenu(mnuSaveState, true);
 				InitializeStateMenu(mnuLoadState, false);
