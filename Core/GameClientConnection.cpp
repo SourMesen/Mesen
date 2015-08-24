@@ -96,9 +96,11 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 	
 void GameClientConnection::SendInput()
 {
-	uint8_t inputState = _controlDevice->GetButtonState().ToByte();
-	if(_lastInputSent != inputState) {
-		SendNetMessage(InputDataMessage(inputState));
-		_lastInputSent = inputState;
+	if(_gameLoaded) {
+		uint8_t inputState = _controlDevice->GetButtonState().ToByte();
+		if(_lastInputSent != inputState) {
+			SendNetMessage(InputDataMessage(inputState));
+			_lastInputSent = inputState;
+		}
 	}
 }

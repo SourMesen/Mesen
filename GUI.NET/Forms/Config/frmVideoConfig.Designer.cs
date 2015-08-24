@@ -33,30 +33,33 @@
 			this.picOverscan = new System.Windows.Forms.PictureBox();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblLeft = new System.Windows.Forms.Label();
+			this.nudOverscanLeft = new System.Windows.Forms.NumericUpDown();
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblTop = new System.Windows.Forms.Label();
+			this.nudOverscanTop = new System.Windows.Forms.NumericUpDown();
 			this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblBottom = new System.Windows.Forms.Label();
+			this.nudOverscanBottom = new System.Windows.Forms.NumericUpDown();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblRight = new System.Windows.Forms.Label();
-			this.chkLimitFps = new System.Windows.Forms.CheckBox();
-			this.chkShowFps = new System.Windows.Forms.CheckBox();
 			this.nudOverscanRight = new System.Windows.Forms.NumericUpDown();
-			this.nudOverscanBottom = new System.Windows.Forms.NumericUpDown();
-			this.nudOverscanLeft = new System.Windows.Forms.NumericUpDown();
-			this.nudOverscanTop = new System.Windows.Forms.NumericUpDown();
+			this.chkShowFps = new System.Windows.Forms.CheckBox();
+			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblFpsLimit = new System.Windows.Forms.Label();
+			this.cboFpsLimit = new System.Windows.Forms.ComboBox();
 			this.tlpMain.SuspendLayout();
 			this.grpCropping.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picOverscan)).BeginInit();
 			this.flowLayoutPanel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudOverscanLeft)).BeginInit();
 			this.flowLayoutPanel4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudOverscanTop)).BeginInit();
 			this.flowLayoutPanel5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudOverscanBottom)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudOverscanBottom)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudOverscanLeft)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudOverscanTop)).BeginInit();
+			this.flowLayoutPanel6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -69,8 +72,8 @@
 			this.tlpMain.ColumnCount = 1;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpMain.Controls.Add(this.grpCropping, 0, 2);
-			this.tlpMain.Controls.Add(this.chkLimitFps, 0, 0);
 			this.tlpMain.Controls.Add(this.chkShowFps, 0, 1);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 0, 0);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(0, 0);
 			this.tlpMain.Name = "tlpMain";
@@ -78,7 +81,6 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpMain.Size = new System.Drawing.Size(362, 308);
 			this.tlpMain.TabIndex = 1;
 			// 
@@ -86,9 +88,9 @@
 			// 
 			this.grpCropping.Controls.Add(this.tableLayoutPanel1);
 			this.grpCropping.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpCropping.Location = new System.Drawing.Point(3, 49);
+			this.grpCropping.Location = new System.Drawing.Point(3, 53);
 			this.grpCropping.Name = "grpCropping";
-			this.grpCropping.Size = new System.Drawing.Size(356, 256);
+			this.grpCropping.Size = new System.Drawing.Size(356, 252);
 			this.grpCropping.TabIndex = 7;
 			this.grpCropping.TabStop = false;
 			this.grpCropping.Text = "Video Cropping";
@@ -145,6 +147,13 @@
 			this.lblLeft.Text = "Left";
 			this.lblLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
+			// nudOverscanLeft
+			// 
+			this.nudOverscanLeft.Location = new System.Drawing.Point(3, 16);
+			this.nudOverscanLeft.Name = "nudOverscanLeft";
+			this.nudOverscanLeft.Size = new System.Drawing.Size(50, 20);
+			this.nudOverscanLeft.TabIndex = 2;
+			// 
 			// flowLayoutPanel4
 			// 
 			this.flowLayoutPanel4.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -167,6 +176,13 @@
 			this.lblTop.TabIndex = 0;
 			this.lblTop.Text = "Top";
 			this.lblTop.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// nudOverscanTop
+			// 
+			this.nudOverscanTop.Location = new System.Drawing.Point(3, 16);
+			this.nudOverscanTop.Name = "nudOverscanTop";
+			this.nudOverscanTop.Size = new System.Drawing.Size(50, 20);
+			this.nudOverscanTop.TabIndex = 2;
 			// 
 			// flowLayoutPanel5
 			// 
@@ -191,6 +207,13 @@
 			this.lblBottom.Text = "Bottom";
 			this.lblBottom.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
+			// nudOverscanBottom
+			// 
+			this.nudOverscanBottom.Location = new System.Drawing.Point(3, 16);
+			this.nudOverscanBottom.Name = "nudOverscanBottom";
+			this.nudOverscanBottom.Size = new System.Drawing.Size(50, 20);
+			this.nudOverscanBottom.TabIndex = 2;
+			// 
 			// flowLayoutPanel2
 			// 
 			this.flowLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -214,53 +237,62 @@
 			this.lblRight.Text = "Right";
 			this.lblRight.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// chkLimitFps
+			// nudOverscanRight
 			// 
-			this.chkLimitFps.AutoSize = true;
-			this.chkLimitFps.Location = new System.Drawing.Point(3, 3);
-			this.chkLimitFps.Name = "chkLimitFps";
-			this.chkLimitFps.Size = new System.Drawing.Size(70, 17);
-			this.chkLimitFps.TabIndex = 8;
-			this.chkLimitFps.Text = "Limit FPS";
-			this.chkLimitFps.UseVisualStyleBackColor = true;
+			this.nudOverscanRight.Location = new System.Drawing.Point(3, 16);
+			this.nudOverscanRight.Name = "nudOverscanRight";
+			this.nudOverscanRight.Size = new System.Drawing.Size(50, 20);
+			this.nudOverscanRight.TabIndex = 1;
 			// 
 			// chkShowFps
 			// 
 			this.chkShowFps.AutoSize = true;
-			this.chkShowFps.Location = new System.Drawing.Point(3, 26);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 30);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
 			this.chkShowFps.Text = "Show FPS";
 			this.chkShowFps.UseVisualStyleBackColor = true;
 			// 
-			// nudRight
+			// flowLayoutPanel6
 			// 
-			this.nudOverscanRight.Location = new System.Drawing.Point(3, 16);
-			this.nudOverscanRight.Name = "nudRight";
-			this.nudOverscanRight.Size = new System.Drawing.Size(50, 20);
-			this.nudOverscanRight.TabIndex = 1;
+			this.flowLayoutPanel6.AutoSize = true;
+			this.flowLayoutPanel6.Controls.Add(this.lblFpsLimit);
+			this.flowLayoutPanel6.Controls.Add(this.cboFpsLimit);
+			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(362, 27);
+			this.flowLayoutPanel6.TabIndex = 10;
 			// 
-			// nudBottom
+			// lblFpsLimit
 			// 
-			this.nudOverscanBottom.Location = new System.Drawing.Point(3, 16);
-			this.nudOverscanBottom.Name = "nudBottom";
-			this.nudOverscanBottom.Size = new System.Drawing.Size(50, 20);
-			this.nudOverscanBottom.TabIndex = 2;
+			this.lblFpsLimit.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblFpsLimit.AutoSize = true;
+			this.lblFpsLimit.Location = new System.Drawing.Point(3, 7);
+			this.lblFpsLimit.Name = "lblFpsLimit";
+			this.lblFpsLimit.Size = new System.Drawing.Size(54, 13);
+			this.lblFpsLimit.TabIndex = 0;
+			this.lblFpsLimit.Text = "FPS Limit:";
 			// 
-			// nudLeft
+			// cboFpsLimit
 			// 
-			this.nudOverscanLeft.Location = new System.Drawing.Point(3, 16);
-			this.nudOverscanLeft.Name = "nudLeft";
-			this.nudOverscanLeft.Size = new System.Drawing.Size(50, 20);
-			this.nudOverscanLeft.TabIndex = 2;
-			// 
-			// nudTop
-			// 
-			this.nudOverscanTop.Location = new System.Drawing.Point(3, 16);
-			this.nudOverscanTop.Name = "nudTop";
-			this.nudOverscanTop.Size = new System.Drawing.Size(50, 20);
-			this.nudOverscanTop.TabIndex = 2;
+			this.cboFpsLimit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboFpsLimit.FormattingEnabled = true;
+			this.cboFpsLimit.Items.AddRange(new object[] {
+            "Auto",
+            "No Limit",
+            "60",
+            "50",
+            "30",
+            "25",
+            "15",
+            "12"});
+			this.cboFpsLimit.Location = new System.Drawing.Point(63, 3);
+			this.cboFpsLimit.Name = "cboFpsLimit";
+			this.cboFpsLimit.Size = new System.Drawing.Size(89, 21);
+			this.cboFpsLimit.TabIndex = 1;
 			// 
 			// frmVideoConfig
 			// 
@@ -269,6 +301,7 @@
 			this.ClientSize = new System.Drawing.Size(362, 337);
 			this.Controls.Add(this.tlpMain);
 			this.Name = "frmVideoConfig";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Video Options";
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
 			this.Controls.SetChildIndex(this.tlpMain, 0);
@@ -279,16 +312,18 @@
 			((System.ComponentModel.ISupportInitialize)(this.picOverscan)).EndInit();
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudOverscanLeft)).EndInit();
 			this.flowLayoutPanel4.ResumeLayout(false);
 			this.flowLayoutPanel4.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudOverscanTop)).EndInit();
 			this.flowLayoutPanel5.ResumeLayout(false);
 			this.flowLayoutPanel5.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudOverscanBottom)).EndInit();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudOverscanBottom)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudOverscanLeft)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudOverscanTop)).EndInit();
+			this.flowLayoutPanel6.ResumeLayout(false);
+			this.flowLayoutPanel6.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -297,7 +332,6 @@
 
 		private System.Windows.Forms.TableLayoutPanel tlpMain;
 		private System.Windows.Forms.GroupBox grpCropping;
-		private System.Windows.Forms.CheckBox chkLimitFps;
 		private System.Windows.Forms.CheckBox chkShowFps;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
@@ -313,5 +347,8 @@
 		private System.Windows.Forms.NumericUpDown nudOverscanTop;
 		private System.Windows.Forms.NumericUpDown nudOverscanBottom;
 		private System.Windows.Forms.NumericUpDown nudOverscanRight;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
+		private System.Windows.Forms.Label lblFpsLimit;
+		private System.Windows.Forms.ComboBox cboFpsLimit;
 	}
 }

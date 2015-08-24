@@ -187,7 +187,7 @@ void Console::Run()
 		if(currentFrameNumber != lastFrameNumber) {
 			lastFrameNumber = currentFrameNumber;
 
-			if(EmulationSettings::CheckFlag(EmulationFlags::LimitFPS)) {
+			if(targetTime > 0) {
 				elapsedTime = clockTimer.GetElapsedMS();
 				while(targetTime > elapsedTime) {
 					if(targetTime - elapsedTime > 1) {
@@ -239,10 +239,22 @@ void Console::Run()
 void Console::UpdateNesModel(double &frameDelay, bool showMessage)
 {
 	NesModel model = EmulationSettings::GetNesModel();
+	int32_t fpsLimit = EmulationSettings::GetFpsLimit();
 	if(model == NesModel::Auto) {
 		model = _mapper->IsPalRom() ? NesModel::PAL : NesModel::NTSC;
 	}
-	frameDelay = (model == NesModel::NTSC ? 16.63926405550947 : 19.99720920217466); //60.1fps (NTSC), 50.01fps (PAL)
+	
+	if(fpsLimit == -1) {
+		frameDelay = (model == NesModel::NTSC ? 16.63926405550947 : 19.99720920217466); //60.1fps (NTSC), 50.01fps (PAL)
+	} else if(fpsLimit == 50) {
+		frameDelay = 19.99720920217466;
+	} else if(fpsLimit == 60) {
+		frameDelay = 16.63926405550947;
+	} else if(fpsLimit == 0) {
+		frameDelay = 0;
+	} else {
+		frameDelay = 1000.0 / fpsLimit;
+	}
 	_ppu->SetNesModel(model);
 	_apu->SetNesModel(model);
 }

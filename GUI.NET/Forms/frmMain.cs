@@ -24,6 +24,7 @@ namespace Mesen.GUI.Forms
 		private Thread _renderThread;
 		private frmDebugger _debugger;
 		private bool _stop = false;
+		private List<ToolStripMenuItem> _fpsLimitOptions = new List<ToolStripMenuItem>();
 		
 		public frmMain()
 		{
@@ -41,6 +42,7 @@ namespace Mesen.GUI.Forms
 			UpdateVideoSettings();
 
 			InitializeEmu();
+			InitializeFpsLimitMenu();
 
 			UpdateMenus();
 			UpdateRecentFiles();
@@ -62,10 +64,51 @@ namespace Mesen.GUI.Forms
 		
 			UpdateEmulationFlags();
 		}
+
+		void InitializeFpsLimitMenu()
+		{
+			int[] fpsValues = new int[] { 120, 100, 60, 50 , 30, 25, 15, 12 };
+			mnuFpsLimitDefault.Tag = -1;
+			mnuFpsLimitNoLimit.Tag = 0;
+			_fpsLimitOptions.Add(mnuFpsLimitDefault);
+			_fpsLimitOptions.Add(mnuFpsLimitNoLimit);
+			foreach(int fpsValue in fpsValues) {
+				ToolStripMenuItem item = (ToolStripMenuItem)mnuFpsLimit.DropDownItems.Add(fpsValue.ToString());
+				item.Tag = fpsValue;
+				_fpsLimitOptions.Add(item);
+			}
+
+			foreach(ToolStripMenuItem item in _fpsLimitOptions) {
+				item.Click += mnuFpsLimitValue_Click;
+			}
+
+			UpdateFpsLimitMenu();
+		}
+
+		void UpdateFpsLimitMenu()
+		{
+			foreach(ToolStripMenuItem item in _fpsLimitOptions) {
+				item.Checked = ((int)item.Tag == ConfigManager.Config.VideoInfo.FpsLimit);
+			}
+		}
+
+		private void mnuFpsLimitValue_Click(object sender, EventArgs e)
+		{
+			int fpsLimit;
+			if(sender == mnuFpsLimitNoLimit) {
+				fpsLimit = mnuFpsLimitNoLimit.Checked ? -1 : 0;
+			} else {
+				fpsLimit = (int)((ToolStripItem)sender).Tag;
+			}
+			ConfigManager.Config.VideoInfo.FpsLimit = fpsLimit;
+			ConfigManager.ApplyChanges();
+			UpdateFpsLimitMenu();
+
+			VideoInfo.ApplyConfig();
+		}
 		
 		void UpdateEmulationFlags()
 		{
-			ConfigManager.Config.VideoInfo.LimitFPS = mnuLimitFPS.Checked;
 			ConfigManager.Config.VideoInfo.ShowFPS = mnuShowFPS.Checked;
 			ConfigManager.ApplyChanges();
 
@@ -75,7 +118,7 @@ namespace Mesen.GUI.Forms
 		void UpdateVideoSettings()
 		{
 			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
-			mnuLimitFPS.Checked = ConfigManager.Config.VideoInfo.LimitFPS;
+			UpdateFpsLimitMenu();
 			dxViewer.Size = VideoInfo.GetViewerSize();
 		}
 
@@ -87,7 +130,6 @@ namespace Mesen.GUI.Forms
 		void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameLoaded) {
-				this.Text = "Mesen - " + System.IO.Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath());
 				CheatInfo.ApplyCheats();
 				InitializeStateMenu(mnuSaveState, true);
 				InitializeStateMenu(mnuLoadState, false);
@@ -120,6 +162,13 @@ namespace Mesen.GUI.Forms
 				if(this.InvokeRequired) {
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
+					string romFilename = System.IO.Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath());
+					if(string.IsNullOrWhiteSpace(romFilename)) {
+						this.Text = "Mesen";
+					} else {
+						this.Text = "Mesen - " + romFilename;
+					}
+
 					mnuSaveState.Enabled = mnuLoadState.Enabled = mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !InteropEmu.IsConnected());
 					mnuPause.Text = InteropEmu.IsPaused() ? "Resume" : "Pause";
 
@@ -130,6 +179,8 @@ namespace Mesen.GUI.Forms
 
 					mnuConnect.Enabled = !netPlay;
 					mnuDisconnect.Enabled = !mnuConnect.Enabled && !InteropEmu.IsServerRunning();
+
+					mnuFpsLimit.Enabled = !InteropEmu.IsConnected();
 
 					bool moviePlaying = InteropEmu.MoviePlaying();
 					bool movieRecording = InteropEmu.MovieRecording();
@@ -234,29 +285,33 @@ namespace Mesen.GUI.Forms
 		const int NumberOfSaveSlots = 5;
 		private void InitializeStateMenu(ToolStripMenuItem menu, bool forSave)
 		{
-			menu.DropDownItems.Clear();
-			for(uint i = 1; i <= frmMain.NumberOfSaveSlots; i++) {
-				Int64 fileTime = InteropEmu.GetStateInfo(i);
-				string label;
-				if(fileTime == 0) {
-					label = i.ToString() + ". <empty>";
-				} else {
-					DateTime dateTime = DateTime.FromFileTime(fileTime);
-					label = i.ToString() + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
-				}
-
-				ToolStripMenuItem item = (ToolStripMenuItem)menu.DropDownItems.Add(label);
-				uint stateIndex = i;
-				item.Click += (object sender, EventArgs e) => {
-					if(forSave) {
-						InteropEmu.SaveState(stateIndex);
+			if(this.InvokeRequired) {
+				this.BeginInvoke((MethodInvoker)(() => this.InitializeStateMenu(menu, forSave)));
+			} else {
+				menu.DropDownItems.Clear();
+				for(uint i = 1; i <= frmMain.NumberOfSaveSlots; i++) {
+					Int64 fileTime = InteropEmu.GetStateInfo(i);
+					string label;
+					if(fileTime == 0) {
+						label = i.ToString() + ". <empty>";
 					} else {
-						InteropEmu.LoadState(stateIndex);
+						DateTime dateTime = DateTime.FromFileTime(fileTime);
+						label = i.ToString() + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
 					}
-				};
-				item.ShortcutKeys = (Keys)((int)Keys.F1 + i - 1);
-				if(forSave) {
-					item.ShortcutKeys |= Keys.Shift;
+
+					ToolStripMenuItem item = (ToolStripMenuItem)menu.DropDownItems.Add(label);
+					uint stateIndex = i;
+					item.Click += (object sender, EventArgs e) => {
+						if(forSave) {
+							InteropEmu.SaveState(stateIndex);
+						} else {
+							InteropEmu.LoadState(stateIndex);
+						}
+					};
+					item.ShortcutKeys = (Keys)((int)Keys.F1 + i - 1);
+					if(forSave) {
+						item.ShortcutKeys |= Keys.Shift;
+					}
 				}
 			}
 		}
@@ -276,11 +331,6 @@ namespace Mesen.GUI.Forms
 		private void mnuStop_Click(object sender, EventArgs e)
 		{
 			InteropEmu.Stop();
-		}
-
-		private void mnuLimitFPS_Click(object sender, EventArgs e)
-		{
-			UpdateEmulationFlags();
 		}
 
 		private void mnuShowFPS_Click(object sender, EventArgs e)

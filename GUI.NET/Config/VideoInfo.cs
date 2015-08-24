@@ -11,7 +11,7 @@ namespace Mesen.GUI.Config
 {
 	public class VideoInfo
 	{
-		public bool LimitFPS = true;
+		public Int32 FpsLimit = -1;
 		public bool ShowFPS = false;
 		public UInt32 OverscanLeft = 0;
 		public UInt32 OverscanRight = 0;
@@ -25,11 +25,8 @@ namespace Mesen.GUI.Config
 		static public void ApplyConfig()
 		{
 			VideoInfo videoInfo = ConfigManager.Config.VideoInfo;
-			if(ConfigManager.Config.VideoInfo.LimitFPS) {
-				InteropEmu.SetFlags((UInt32)EmulationFlags.LimitFPS);
-			} else {
-				InteropEmu.ClearFlags((UInt32)EmulationFlags.LimitFPS);
-			}
+			
+			InteropEmu.SetFpsLimit(videoInfo.FpsLimit);
 
 			if(ConfigManager.Config.VideoInfo.ShowFPS) {
 				InteropEmu.SetFlags((UInt32)EmulationFlags.ShowFPS);

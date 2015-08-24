@@ -51,7 +51,10 @@
 			this.mnuReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStop = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuLimitFPS = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFpsLimit = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFpsLimitDefault = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFpsLimitNoLimit = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowFPS = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAudioConfig = new System.Windows.Forms.ToolStripMenuItem();
@@ -205,7 +208,7 @@
 			// mnuOptions
 			// 
 			this.mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuLimitFPS,
+            this.mnuFpsLimit,
             this.mnuShowFPS,
             this.toolStripMenuItem1,
             this.mnuAudioConfig,
@@ -216,40 +219,60 @@
 			this.mnuOptions.Size = new System.Drawing.Size(61, 20);
 			this.mnuOptions.Text = "Options";
 			// 
-			// mnuLimitFPS
+			// mnuFpsLimit
 			// 
-			this.mnuLimitFPS.CheckOnClick = true;
-			this.mnuLimitFPS.Name = "mnuLimitFPS";
-			this.mnuLimitFPS.ShortcutKeys = System.Windows.Forms.Keys.F9;
-			this.mnuLimitFPS.Size = new System.Drawing.Size(150, 22);
-			this.mnuLimitFPS.Text = "Limit FPS";
-			this.mnuLimitFPS.Click += new System.EventHandler(this.mnuLimitFPS_Click);
+			this.mnuFpsLimit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuFpsLimitNoLimit,
+            this.toolStripMenuItem8,
+            this.mnuFpsLimitDefault});
+			this.mnuFpsLimit.Name = "mnuFpsLimit";
+			this.mnuFpsLimit.Size = new System.Drawing.Size(152, 22);
+			this.mnuFpsLimit.Text = "FPS Limit";
+			// 
+			// mnuFpsLimitDefault
+			// 
+			this.mnuFpsLimitDefault.Name = "mnuFpsLimitDefault";
+			this.mnuFpsLimitDefault.Size = new System.Drawing.Size(152, 22);
+			this.mnuFpsLimitDefault.Tag = "";
+			this.mnuFpsLimitDefault.Text = "Auto";
+			// 
+			// mnuFpsLimitNoLimit
+			// 
+			this.mnuFpsLimitNoLimit.Name = "mnuFpsLimitNoLimit";
+			this.mnuFpsLimitNoLimit.ShortcutKeys = System.Windows.Forms.Keys.F9;
+			this.mnuFpsLimitNoLimit.Size = new System.Drawing.Size(152, 22);
+			this.mnuFpsLimitNoLimit.Text = "No Limit";
+			// 
+			// toolStripMenuItem8
+			// 
+			this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+			this.toolStripMenuItem8.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuShowFPS
 			// 
 			this.mnuShowFPS.CheckOnClick = true;
 			this.mnuShowFPS.Name = "mnuShowFPS";
 			this.mnuShowFPS.ShortcutKeys = System.Windows.Forms.Keys.F10;
-			this.mnuShowFPS.Size = new System.Drawing.Size(150, 22);
+			this.mnuShowFPS.Size = new System.Drawing.Size(152, 22);
 			this.mnuShowFPS.Text = "Show FPS";
 			this.mnuShowFPS.Click += new System.EventHandler(this.mnuShowFPS_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(147, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuAudioConfig
 			// 
 			this.mnuAudioConfig.Name = "mnuAudioConfig";
-			this.mnuAudioConfig.Size = new System.Drawing.Size(150, 22);
+			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
 			this.mnuAudioConfig.Text = "Audio";
 			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
 			// 
 			// mnuInput
 			// 
 			this.mnuInput.Name = "mnuInput";
-			this.mnuInput.Size = new System.Drawing.Size(150, 22);
+			this.mnuInput.Size = new System.Drawing.Size(152, 22);
 			this.mnuInput.Text = "Input";
 			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
 			// 
@@ -260,7 +283,7 @@
             this.mnuRegionNtsc,
             this.mnuRegionPal});
 			this.mnuRegion.Name = "mnuRegion";
-			this.mnuRegion.Size = new System.Drawing.Size(150, 22);
+			this.mnuRegion.Size = new System.Drawing.Size(152, 22);
 			this.mnuRegion.Text = "Region";
 			// 
 			// mnuRegionAuto
@@ -287,7 +310,7 @@
 			// mnuVideoConfig
 			// 
 			this.mnuVideoConfig.Name = "mnuVideoConfig";
-			this.mnuVideoConfig.Size = new System.Drawing.Size(150, 22);
+			this.mnuVideoConfig.Size = new System.Drawing.Size(152, 22);
 			this.mnuVideoConfig.Text = "Video";
 			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
 			// 
@@ -507,7 +530,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuReset;
 		private System.Windows.Forms.ToolStripMenuItem mnuStop;
 		private System.Windows.Forms.ToolStripMenuItem mnuOptions;
-		private System.Windows.Forms.ToolStripMenuItem mnuLimitFPS;
+		private System.Windows.Forms.ToolStripMenuItem mnuFpsLimit;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowFPS;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuInput;
@@ -547,6 +570,9 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuRegionAuto;
 		private System.Windows.Forms.ToolStripMenuItem mnuRegionNtsc;
 		private System.Windows.Forms.ToolStripMenuItem mnuRegionPal;
+		private System.Windows.Forms.ToolStripMenuItem mnuFpsLimitDefault;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
+		private System.Windows.Forms.ToolStripMenuItem mnuFpsLimitNoLimit;
 	}
 }
 

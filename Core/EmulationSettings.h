@@ -5,8 +5,7 @@
 enum EmulationFlags
 {
 	Paused = 0x01,
-	LimitFPS = 0x02,
-	ShowFPS = 0x04,
+	ShowFPS = 0x02,
 };
 
 enum class AudioChannel
@@ -55,6 +54,7 @@ private:
 	static uint32_t AudioLatency;
 	static double ChannelVolume[5];
 	static NesModel Model;
+	static int32_t FpsLimit;
 	static OverscanDimensions Overscan;
 
 public:
@@ -92,6 +92,17 @@ public:
 	static void SetAudioLatency(uint32_t msLatency)
 	{
 		AudioLatency = msLatency;
+	}
+
+	//-1: Auto, 0: No limit, Number: Specific FPS
+	static void SetFpsLimit(int32_t fpsLimit)
+	{
+		FpsLimit = fpsLimit;
+	}
+
+	static int32_t GetFpsLimit()
+	{
+		return FpsLimit;
 	}
 
 	static void SetOverscanDimensions(uint8_t left, uint8_t right, uint8_t top, uint8_t bottom)
