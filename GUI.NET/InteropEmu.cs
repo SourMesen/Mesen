@@ -66,7 +66,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(UInt32 channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
-		[DllImport(DLLPath)] public static extern void SetFpsLimit(Int32 fpsLimit);
+		[DllImport(DLLPath)] public static extern void SetEmulationSpeed(UInt32 emulationSpeed);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();

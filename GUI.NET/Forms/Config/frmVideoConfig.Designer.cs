@@ -45,8 +45,9 @@
 			this.nudOverscanRight = new System.Windows.Forms.NumericUpDown();
 			this.chkShowFps = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-			this.lblFpsLimit = new System.Windows.Forms.Label();
-			this.cboFpsLimit = new System.Windows.Forms.ComboBox();
+			this.lblEmulationSpeed = new System.Windows.Forms.Label();
+			this.nudEmulationSpeed = new System.Windows.Forms.NumericUpDown();
+			this.lblEmuSpeedHint = new System.Windows.Forms.Label();
 			this.tlpMain.SuspendLayout();
 			this.grpCropping.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -60,6 +61,7 @@
 			this.flowLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).BeginInit();
 			this.flowLayoutPanel6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -88,9 +90,9 @@
 			// 
 			this.grpCropping.Controls.Add(this.tableLayoutPanel1);
 			this.grpCropping.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpCropping.Location = new System.Drawing.Point(3, 53);
+			this.grpCropping.Location = new System.Drawing.Point(3, 52);
 			this.grpCropping.Name = "grpCropping";
-			this.grpCropping.Size = new System.Drawing.Size(356, 252);
+			this.grpCropping.Size = new System.Drawing.Size(356, 253);
 			this.grpCropping.TabIndex = 7;
 			this.grpCropping.TabStop = false;
 			this.grpCropping.Text = "Video Cropping";
@@ -247,7 +249,7 @@
 			// chkShowFps
 			// 
 			this.chkShowFps.AutoSize = true;
-			this.chkShowFps.Location = new System.Drawing.Point(3, 30);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 29);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
@@ -257,42 +259,47 @@
 			// flowLayoutPanel6
 			// 
 			this.flowLayoutPanel6.AutoSize = true;
-			this.flowLayoutPanel6.Controls.Add(this.lblFpsLimit);
-			this.flowLayoutPanel6.Controls.Add(this.cboFpsLimit);
+			this.flowLayoutPanel6.Controls.Add(this.lblEmulationSpeed);
+			this.flowLayoutPanel6.Controls.Add(this.nudEmulationSpeed);
+			this.flowLayoutPanel6.Controls.Add(this.lblEmuSpeedHint);
 			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(362, 27);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(362, 26);
 			this.flowLayoutPanel6.TabIndex = 10;
 			// 
-			// lblFpsLimit
+			// lblEmulationSpeed
 			// 
-			this.lblFpsLimit.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblFpsLimit.AutoSize = true;
-			this.lblFpsLimit.Location = new System.Drawing.Point(3, 7);
-			this.lblFpsLimit.Name = "lblFpsLimit";
-			this.lblFpsLimit.Size = new System.Drawing.Size(54, 13);
-			this.lblFpsLimit.TabIndex = 0;
-			this.lblFpsLimit.Text = "FPS Limit:";
+			this.lblEmulationSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblEmulationSpeed.AutoSize = true;
+			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 6);
+			this.lblEmulationSpeed.Name = "lblEmulationSpeed";
+			this.lblEmulationSpeed.Size = new System.Drawing.Size(90, 13);
+			this.lblEmulationSpeed.TabIndex = 0;
+			this.lblEmulationSpeed.Text = "Emulation Speed:";
 			// 
-			// cboFpsLimit
+			// nudEmulationSpeed
 			// 
-			this.cboFpsLimit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboFpsLimit.FormattingEnabled = true;
-			this.cboFpsLimit.Items.AddRange(new object[] {
-            "Auto",
-            "No Limit",
-            "60",
-            "50",
-            "30",
-            "25",
-            "15",
-            "12"});
-			this.cboFpsLimit.Location = new System.Drawing.Point(63, 3);
-			this.cboFpsLimit.Name = "cboFpsLimit";
-			this.cboFpsLimit.Size = new System.Drawing.Size(89, 21);
-			this.cboFpsLimit.TabIndex = 1;
+			this.nudEmulationSpeed.Location = new System.Drawing.Point(99, 3);
+			this.nudEmulationSpeed.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+			this.nudEmulationSpeed.Name = "nudEmulationSpeed";
+			this.nudEmulationSpeed.Size = new System.Drawing.Size(48, 20);
+			this.nudEmulationSpeed.TabIndex = 1;
+			// 
+			// lblEmuSpeedHint
+			// 
+			this.lblEmuSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblEmuSpeedHint.AutoSize = true;
+			this.lblEmuSpeedHint.Location = new System.Drawing.Point(153, 6);
+			this.lblEmuSpeedHint.Name = "lblEmuSpeedHint";
+			this.lblEmuSpeedHint.Size = new System.Drawing.Size(107, 13);
+			this.lblEmuSpeedHint.TabIndex = 2;
+			this.lblEmuSpeedHint.Text = "(0 = Maximum speed)";
 			// 
 			// frmVideoConfig
 			// 
@@ -324,6 +331,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).EndInit();
 			this.flowLayoutPanel6.ResumeLayout(false);
 			this.flowLayoutPanel6.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -348,7 +356,8 @@
 		private System.Windows.Forms.NumericUpDown nudOverscanBottom;
 		private System.Windows.Forms.NumericUpDown nudOverscanRight;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
-		private System.Windows.Forms.Label lblFpsLimit;
-		private System.Windows.Forms.ComboBox cboFpsLimit;
+		private System.Windows.Forms.Label lblEmulationSpeed;
+		private System.Windows.Forms.NumericUpDown nudEmulationSpeed;
+		private System.Windows.Forms.Label lblEmuSpeedHint;
 	}
 }

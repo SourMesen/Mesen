@@ -153,22 +153,22 @@ void SoundManager::Pause()
 	_secondaryBuffer->Stop();
 }
 
-void SoundManager::Play()
-{
-	_secondaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
-}
-
-void SoundManager::Reset()
+void SoundManager::Stop()
 {
 	_secondaryBuffer->Stop();
 	ClearSecondaryBuffer();
+}
+
+void SoundManager::Play()
+{
+	_secondaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
 }
 
 void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize)
 {
 	int32_t byteLatency = (int32_t)((float)(APU::SampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * (APU::BitsPerSample / 8));
 	if(byteLatency != _previousLatency) {
-		Reset();
+		Stop();
 		_previousLatency = byteLatency;
 	}
 	DWORD status;

@@ -45,9 +45,9 @@ ButtonState VirtualController::GetButtonState()
 	_queueSize--;
 
 	if(_queueSize.load() > _minimumBuffer) {
-		EmulationSettings::SetFpsLimit(0);
+		EmulationSettings::SetEmulationSpeed(0);
 	} else {
-		EmulationSettings::SetFpsLimit(-1);
+		EmulationSettings::SetEmulationSpeed(100);
 	}
 
 	_writeLock.Release();

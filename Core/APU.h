@@ -72,5 +72,5 @@ class APU : public Snapshotable, public IMemoryHandler
 		static void ExecStatic();
 
 		static void StaticRun();
-		static void StopAudio();
+		static void StopAudio(bool clearBuffer = false);
 };

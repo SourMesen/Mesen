@@ -51,10 +51,16 @@
 			this.mnuReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStop = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuFpsLimit = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuFpsLimitDefault = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuFpsLimitNoLimit = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEmulationSpeed = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEmuSpeedNormal = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuIncreaseSpeed = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDecreaseSpeed = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuEmuSpeedTriple = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEmuSpeedDouble = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEmuSpeedHalf = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEmuSpeedQuarter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowFPS = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAudioConfig = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,6 +94,7 @@
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
+			this.mnuEmuSpeedMaximumSpeed = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -208,7 +215,7 @@
 			// mnuOptions
 			// 
 			this.mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuFpsLimit,
+            this.mnuEmulationSpeed,
             this.mnuShowFPS,
             this.toolStripMenuItem1,
             this.mnuAudioConfig,
@@ -219,60 +226,110 @@
 			this.mnuOptions.Size = new System.Drawing.Size(61, 20);
 			this.mnuOptions.Text = "Options";
 			// 
-			// mnuFpsLimit
+			// mnuEmulationSpeed
 			// 
-			this.mnuFpsLimit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuFpsLimitNoLimit,
+			this.mnuEmulationSpeed.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuEmuSpeedNormal,
             this.toolStripMenuItem8,
-            this.mnuFpsLimitDefault});
-			this.mnuFpsLimit.Name = "mnuFpsLimit";
-			this.mnuFpsLimit.Size = new System.Drawing.Size(152, 22);
-			this.mnuFpsLimit.Text = "FPS Limit";
+            this.mnuIncreaseSpeed,
+            this.mnuDecreaseSpeed,
+            this.mnuEmuSpeedMaximumSpeed,
+            this.toolStripMenuItem9,
+            this.mnuEmuSpeedTriple,
+            this.mnuEmuSpeedDouble,
+            this.mnuEmuSpeedHalf,
+            this.mnuEmuSpeedQuarter});
+			this.mnuEmulationSpeed.Name = "mnuEmulationSpeed";
+			this.mnuEmulationSpeed.Size = new System.Drawing.Size(163, 22);
+			this.mnuEmulationSpeed.Text = "Emulation Speed";
 			// 
-			// mnuFpsLimitDefault
+			// mnuEmuSpeedNormal
 			// 
-			this.mnuFpsLimitDefault.Name = "mnuFpsLimitDefault";
-			this.mnuFpsLimitDefault.Size = new System.Drawing.Size(152, 22);
-			this.mnuFpsLimitDefault.Tag = "";
-			this.mnuFpsLimitDefault.Text = "Auto";
-			// 
-			// mnuFpsLimitNoLimit
-			// 
-			this.mnuFpsLimitNoLimit.Name = "mnuFpsLimitNoLimit";
-			this.mnuFpsLimitNoLimit.ShortcutKeys = System.Windows.Forms.Keys.F9;
-			this.mnuFpsLimitNoLimit.Size = new System.Drawing.Size(152, 22);
-			this.mnuFpsLimitNoLimit.Text = "No Limit";
+			this.mnuEmuSpeedNormal.Name = "mnuEmuSpeedNormal";
+			this.mnuEmuSpeedNormal.Size = new System.Drawing.Size(182, 22);
+			this.mnuEmuSpeedNormal.Text = "Normal (100%)";
+			this.mnuEmuSpeedNormal.Click += new System.EventHandler(this.mnuEmulationSpeedOption_Click);
 			// 
 			// toolStripMenuItem8
 			// 
 			this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-			this.toolStripMenuItem8.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem8.Size = new System.Drawing.Size(179, 6);
+			// 
+			// mnuIncreaseSpeed
+			// 
+			this.mnuIncreaseSpeed.Name = "mnuIncreaseSpeed";
+			this.mnuIncreaseSpeed.ShortcutKeyDisplayString = "=";
+			this.mnuIncreaseSpeed.Size = new System.Drawing.Size(182, 22);
+			this.mnuIncreaseSpeed.Text = "Increase Speed";
+			this.mnuIncreaseSpeed.Click += new System.EventHandler(this.mnuIncreaseSpeed_Click);
+			// 
+			// mnuDecreaseSpeed
+			// 
+			this.mnuDecreaseSpeed.Name = "mnuDecreaseSpeed";
+			this.mnuDecreaseSpeed.ShortcutKeyDisplayString = "-";
+			this.mnuDecreaseSpeed.Size = new System.Drawing.Size(182, 22);
+			this.mnuDecreaseSpeed.Text = "Decrease Speed";
+			this.mnuDecreaseSpeed.Click += new System.EventHandler(this.mnuDecreaseSpeed_Click);
+			// 
+			// toolStripMenuItem9
+			// 
+			this.toolStripMenuItem9.Name = "toolStripMenuItem9";
+			this.toolStripMenuItem9.Size = new System.Drawing.Size(179, 6);
+			// 
+			// mnuEmuSpeedTriple
+			// 
+			this.mnuEmuSpeedTriple.Name = "mnuEmuSpeedTriple";
+			this.mnuEmuSpeedTriple.Size = new System.Drawing.Size(182, 22);
+			this.mnuEmuSpeedTriple.Tag = "";
+			this.mnuEmuSpeedTriple.Text = "Triple (300%)";
+			this.mnuEmuSpeedTriple.Click += new System.EventHandler(this.mnuEmulationSpeedOption_Click);
+			// 
+			// mnuEmuSpeedDouble
+			// 
+			this.mnuEmuSpeedDouble.Name = "mnuEmuSpeedDouble";
+			this.mnuEmuSpeedDouble.Size = new System.Drawing.Size(182, 22);
+			this.mnuEmuSpeedDouble.Text = "Double (200%)";
+			this.mnuEmuSpeedDouble.Click += new System.EventHandler(this.mnuEmulationSpeedOption_Click);
+			// 
+			// mnuEmuSpeedHalf
+			// 
+			this.mnuEmuSpeedHalf.Name = "mnuEmuSpeedHalf";
+			this.mnuEmuSpeedHalf.Size = new System.Drawing.Size(182, 22);
+			this.mnuEmuSpeedHalf.Text = "Half (50%)";
+			this.mnuEmuSpeedHalf.Click += new System.EventHandler(this.mnuEmulationSpeedOption_Click);
+			// 
+			// mnuEmuSpeedQuarter
+			// 
+			this.mnuEmuSpeedQuarter.Name = "mnuEmuSpeedQuarter";
+			this.mnuEmuSpeedQuarter.Size = new System.Drawing.Size(182, 22);
+			this.mnuEmuSpeedQuarter.Text = "Quarter (25%)";
+			this.mnuEmuSpeedQuarter.Click += new System.EventHandler(this.mnuEmulationSpeedOption_Click);
 			// 
 			// mnuShowFPS
 			// 
 			this.mnuShowFPS.CheckOnClick = true;
 			this.mnuShowFPS.Name = "mnuShowFPS";
 			this.mnuShowFPS.ShortcutKeys = System.Windows.Forms.Keys.F10;
-			this.mnuShowFPS.Size = new System.Drawing.Size(152, 22);
+			this.mnuShowFPS.Size = new System.Drawing.Size(163, 22);
 			this.mnuShowFPS.Text = "Show FPS";
 			this.mnuShowFPS.Click += new System.EventHandler(this.mnuShowFPS_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(160, 6);
 			// 
 			// mnuAudioConfig
 			// 
 			this.mnuAudioConfig.Name = "mnuAudioConfig";
-			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuAudioConfig.Size = new System.Drawing.Size(163, 22);
 			this.mnuAudioConfig.Text = "Audio";
 			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
 			// 
 			// mnuInput
 			// 
 			this.mnuInput.Name = "mnuInput";
-			this.mnuInput.Size = new System.Drawing.Size(152, 22);
+			this.mnuInput.Size = new System.Drawing.Size(163, 22);
 			this.mnuInput.Text = "Input";
 			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
 			// 
@@ -283,7 +340,7 @@
             this.mnuRegionNtsc,
             this.mnuRegionPal});
 			this.mnuRegion.Name = "mnuRegion";
-			this.mnuRegion.Size = new System.Drawing.Size(152, 22);
+			this.mnuRegion.Size = new System.Drawing.Size(163, 22);
 			this.mnuRegion.Text = "Region";
 			// 
 			// mnuRegionAuto
@@ -310,7 +367,7 @@
 			// mnuVideoConfig
 			// 
 			this.mnuVideoConfig.Name = "mnuVideoConfig";
-			this.mnuVideoConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoConfig.Size = new System.Drawing.Size(163, 22);
 			this.mnuVideoConfig.Text = "Video";
 			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
 			// 
@@ -500,6 +557,14 @@
 			this.dxViewer.Size = new System.Drawing.Size(1024, 960);
 			this.dxViewer.TabIndex = 1;
 			// 
+			// mnuEmuSpeedMaximumSpeed
+			// 
+			this.mnuEmuSpeedMaximumSpeed.Name = "mnuEmuSpeedMaximumSpeed";
+			this.mnuEmuSpeedMaximumSpeed.ShortcutKeys = System.Windows.Forms.Keys.F9;
+			this.mnuEmuSpeedMaximumSpeed.Size = new System.Drawing.Size(182, 22);
+			this.mnuEmuSpeedMaximumSpeed.Text = "Maximum Speed";
+			this.mnuEmuSpeedMaximumSpeed.Click += new System.EventHandler(this.mnuEmuSpeedMaximumSpeed_Click);
+			// 
 			// frmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -530,7 +595,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuReset;
 		private System.Windows.Forms.ToolStripMenuItem mnuStop;
 		private System.Windows.Forms.ToolStripMenuItem mnuOptions;
-		private System.Windows.Forms.ToolStripMenuItem mnuFpsLimit;
+		private System.Windows.Forms.ToolStripMenuItem mnuEmulationSpeed;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowFPS;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuInput;
@@ -570,9 +635,16 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuRegionAuto;
 		private System.Windows.Forms.ToolStripMenuItem mnuRegionNtsc;
 		private System.Windows.Forms.ToolStripMenuItem mnuRegionPal;
-		private System.Windows.Forms.ToolStripMenuItem mnuFpsLimitDefault;
+		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedTriple;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
-		private System.Windows.Forms.ToolStripMenuItem mnuFpsLimitNoLimit;
+		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedNormal;
+		private System.Windows.Forms.ToolStripMenuItem mnuIncreaseSpeed;
+		private System.Windows.Forms.ToolStripMenuItem mnuDecreaseSpeed;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem9;
+		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedDouble;
+		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedHalf;
+		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedQuarter;
+		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedMaximumSpeed;
 	}
 }
 

@@ -11,7 +11,7 @@ namespace Mesen.GUI.Config
 {
 	public class VideoInfo
 	{
-		public Int32 FpsLimit = -1;
+		public UInt32 EmulationSpeed = 100;
 		public bool ShowFPS = false;
 		public UInt32 OverscanLeft = 0;
 		public UInt32 OverscanRight = 0;
@@ -25,8 +25,8 @@ namespace Mesen.GUI.Config
 		static public void ApplyConfig()
 		{
 			VideoInfo videoInfo = ConfigManager.Config.VideoInfo;
-			
-			InteropEmu.SetFpsLimit(videoInfo.FpsLimit);
+
+			InteropEmu.SetEmulationSpeed(videoInfo.EmulationSpeed);
 
 			if(ConfigManager.Config.VideoInfo.ShowFPS) {
 				InteropEmu.SetFlags((UInt32)EmulationFlags.ShowFPS);

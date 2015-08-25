@@ -54,7 +54,7 @@ private:
 	static uint32_t AudioLatency;
 	static double ChannelVolume[5];
 	static NesModel Model;
-	static int32_t FpsLimit;
+	static uint32_t EmulationSpeed;
 	static OverscanDimensions Overscan;
 
 public:
@@ -94,15 +94,15 @@ public:
 		AudioLatency = msLatency;
 	}
 
-	//-1: Auto, 0: No limit, Number: Specific FPS
-	static void SetFpsLimit(int32_t fpsLimit)
+	//0: No limit, Number: % of default speed (50/60fps)
+	static void SetEmulationSpeed(uint32_t emulationSpeed)
 	{
-		FpsLimit = fpsLimit;
+		EmulationSpeed = emulationSpeed;
 	}
 
-	static int32_t GetFpsLimit()
+	static uint32_t GetEmulationSpeed()
 	{
-		return FpsLimit;
+		return EmulationSpeed;
 	}
 
 	static void SetOverscanDimensions(uint8_t left, uint8_t right, uint8_t top, uint8_t bottom)

@@ -199,10 +199,14 @@ void APU::Exec()
 	}
 }
 
-void APU::StopAudio()
+void APU::StopAudio(bool clearBuffer)
 {
 	if(APU::AudioDevice) {
-		APU::AudioDevice->Pause();
+		if(clearBuffer) {
+			APU::AudioDevice->Stop();
+		} else {
+			APU::AudioDevice->Pause();
+		}
 	}
 }
 

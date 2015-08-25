@@ -13,7 +13,7 @@ public:
 	void PlayBuffer(int16_t *soundBuffer, uint32_t bufferSize);
 	void Play();	
 	void Pause();
-	void Reset();
+	void Stop();
 
 private:
 	bool InitializeDirectSound(HWND);

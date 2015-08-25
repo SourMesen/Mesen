@@ -134,6 +134,8 @@ void Console::ResetComponents(bool softReset)
 	_cpu->Reset(softReset);
 	_memoryManager->Reset(softReset);
 
+	_apu->StopAudio(true);
+
 	if(softReset) {
 		MessageManager::SendNotification(ConsoleNotificationType::GameReset);
 	} else {
@@ -231,7 +233,7 @@ void Console::Run()
 			}
 		}
 	}
-	_apu->StopAudio();
+	_apu->StopAudio(true);
 	_stopLock.Release();
 	_runLock.Release();
 }
@@ -239,22 +241,18 @@ void Console::Run()
 void Console::UpdateNesModel(double &frameDelay, bool showMessage)
 {
 	NesModel model = EmulationSettings::GetNesModel();
-	int32_t fpsLimit = EmulationSettings::GetFpsLimit();
+	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
 	if(model == NesModel::Auto) {
 		model = _mapper->IsPalRom() ? NesModel::PAL : NesModel::NTSC;
 	}
 	
-	if(fpsLimit == -1) {
-		frameDelay = (model == NesModel::NTSC ? 16.63926405550947 : 19.99720920217466); //60.1fps (NTSC), 50.01fps (PAL)
-	} else if(fpsLimit == 50) {
-		frameDelay = 19.99720920217466;
-	} else if(fpsLimit == 60) {
-		frameDelay = 16.63926405550947;
-	} else if(fpsLimit == 0) {
+	if(emulationSpeed == 0) {
 		frameDelay = 0;
 	} else {
-		frameDelay = 1000.0 / fpsLimit;
+		frameDelay = (model == NesModel::NTSC ? 16.63926405550947 : 19.99720920217466); //60.1fps (NTSC), 50.01fps (PAL)
+		frameDelay /= (double)emulationSpeed / 100.0;
 	}
+
 	_ppu->SetNesModel(model);
 	_apu->SetNesModel(model);
 }

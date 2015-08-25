@@ -24,7 +24,6 @@ namespace Mesen.GUI.Forms
 		private Thread _renderThread;
 		private frmDebugger _debugger;
 		private bool _stop = false;
-		private List<ToolStripMenuItem> _fpsLimitOptions = new List<ToolStripMenuItem>();
 		
 		public frmMain()
 		{
@@ -39,10 +38,10 @@ namespace Mesen.GUI.Forms
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
+			InitializeEmulationSpeedMenu();
+			
 			UpdateVideoSettings();
-
 			InitializeEmu();
-			InitializeFpsLimitMenu();
 
 			UpdateMenus();
 			UpdateRecentFiles();
@@ -65,46 +64,76 @@ namespace Mesen.GUI.Forms
 			UpdateEmulationFlags();
 		}
 
-		void InitializeFpsLimitMenu()
+		private void InitializeEmulationSpeedMenu()
 		{
-			int[] fpsValues = new int[] { 120, 100, 60, 50 , 30, 25, 15, 12 };
-			mnuFpsLimitDefault.Tag = -1;
-			mnuFpsLimitNoLimit.Tag = 0;
-			_fpsLimitOptions.Add(mnuFpsLimitDefault);
-			_fpsLimitOptions.Add(mnuFpsLimitNoLimit);
-			foreach(int fpsValue in fpsValues) {
-				ToolStripMenuItem item = (ToolStripMenuItem)mnuFpsLimit.DropDownItems.Add(fpsValue.ToString());
-				item.Tag = fpsValue;
-				_fpsLimitOptions.Add(item);
-			}
+			mnuEmuSpeedNormal.Tag = 100;
+			mnuEmuSpeedTriple.Tag = 300;
+			mnuEmuSpeedDouble.Tag = 200;
+			mnuEmuSpeedHalf.Tag = 50;
+			mnuEmuSpeedQuarter.Tag = 25;
+			mnuEmuSpeedMaximumSpeed.Tag = 0;
 
-			foreach(ToolStripMenuItem item in _fpsLimitOptions) {
-				item.Click += mnuFpsLimitValue_Click;
-			}
-
-			UpdateFpsLimitMenu();
+			UpdateEmulationSpeedMenu();
 		}
 
-		void UpdateFpsLimitMenu()
+		private void UpdateEmulationSpeedMenu()
 		{
-			foreach(ToolStripMenuItem item in _fpsLimitOptions) {
-				item.Checked = ((int)item.Tag == ConfigManager.Config.VideoInfo.FpsLimit);
+			foreach(ToolStripMenuItem item in new ToolStripMenuItem[] { mnuEmuSpeedDouble, mnuEmuSpeedHalf, mnuEmuSpeedNormal, mnuEmuSpeedQuarter, mnuEmuSpeedTriple, mnuEmuSpeedMaximumSpeed }) {
+				item.Checked = ((int)item.Tag == ConfigManager.Config.VideoInfo.EmulationSpeed);
 			}
 		}
 
-		private void mnuFpsLimitValue_Click(object sender, EventArgs e)
+		private void SetEmulationSpeed(uint emulationSpeed)
 		{
-			int fpsLimit;
-			if(sender == mnuFpsLimitNoLimit) {
-				fpsLimit = mnuFpsLimitNoLimit.Checked ? -1 : 0;
+			if(emulationSpeed == 0) {
+				InteropEmu.DisplayMessage("Emulation Speed", "Maximum speed");
 			} else {
-				fpsLimit = (int)((ToolStripItem)sender).Tag;
+				InteropEmu.DisplayMessage("Emulation Speed", emulationSpeed + "%");
 			}
-			ConfigManager.Config.VideoInfo.FpsLimit = fpsLimit;
+			ConfigManager.Config.VideoInfo.EmulationSpeed = emulationSpeed;
 			ConfigManager.ApplyChanges();
-			UpdateFpsLimitMenu();
-
+			UpdateEmulationSpeedMenu();
 			VideoInfo.ApplyConfig();
+		}
+
+		private void mnuIncreaseSpeed_Click(object sender, EventArgs e)
+		{
+			if(ConfigManager.Config.VideoInfo.EmulationSpeed > 0) {
+				if(ConfigManager.Config.VideoInfo.EmulationSpeed < 100) {
+					SetEmulationSpeed(ConfigManager.Config.VideoInfo.EmulationSpeed + 25);
+				} else if(ConfigManager.Config.VideoInfo.EmulationSpeed < 450) {
+					SetEmulationSpeed(ConfigManager.Config.VideoInfo.EmulationSpeed + 50);
+				} else {
+					SetEmulationSpeed(0);
+				}
+			}
+		}
+
+		private void mnuDecreaseSpeed_Click(object sender, EventArgs e)
+		{
+			if(ConfigManager.Config.VideoInfo.EmulationSpeed == 0) {
+				SetEmulationSpeed(450);
+			} else if(ConfigManager.Config.VideoInfo.EmulationSpeed <= 100) {
+				if(ConfigManager.Config.VideoInfo.EmulationSpeed > 25) {
+					SetEmulationSpeed(ConfigManager.Config.VideoInfo.EmulationSpeed - 25);
+				}
+			} else {
+				SetEmulationSpeed(ConfigManager.Config.VideoInfo.EmulationSpeed - 50);
+			}
+		}
+
+		private void mnuEmuSpeedMaximumSpeed_Click(object sender, EventArgs e)
+		{
+			if(ConfigManager.Config.VideoInfo.EmulationSpeed == 0) {
+				SetEmulationSpeed(100);
+			} else {
+				SetEmulationSpeed(0);
+			}
+		}
+
+		private void mnuEmulationSpeedOption_Click(object sender, EventArgs e)
+		{
+			SetEmulationSpeed((uint)((ToolStripItem)sender).Tag);
 		}
 		
 		void UpdateEmulationFlags()
@@ -118,7 +147,7 @@ namespace Mesen.GUI.Forms
 		void UpdateVideoSettings()
 		{
 			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
-			UpdateFpsLimitMenu();
+			UpdateEmulationSpeedMenu();
 			dxViewer.Size = VideoInfo.GetViewerSize();
 		}
 
@@ -180,7 +209,7 @@ namespace Mesen.GUI.Forms
 					mnuConnect.Enabled = !netPlay;
 					mnuDisconnect.Enabled = !mnuConnect.Enabled && !InteropEmu.IsServerRunning();
 
-					mnuFpsLimit.Enabled = !InteropEmu.IsConnected();
+					mnuEmulationSpeed.Enabled = !InteropEmu.IsConnected();
 
 					bool moviePlaying = InteropEmu.MoviePlaying();
 					bool movieRecording = InteropEmu.MovieRecording();
@@ -277,6 +306,12 @@ namespace Mesen.GUI.Forms
 		{
 			if(keyData == Keys.Escape && _emuThread != null && mnuPause.Enabled) {
 				PauseEmu();
+				return true;
+			} else if(keyData == Keys.Oemplus) {
+				mnuIncreaseSpeed.PerformClick();
+				return true;
+			} else if(keyData == Keys.OemMinus) {
+				mnuDecreaseSpeed.PerformClick();
 				return true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
