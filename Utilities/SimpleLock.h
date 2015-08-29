@@ -8,6 +8,8 @@ private:
 	uint32_t _lockCount;
 	atomic_flag _lock;
 
+	uint32_t GetThreadId();
+
 public:
 	SimpleLock();
 	~SimpleLock();

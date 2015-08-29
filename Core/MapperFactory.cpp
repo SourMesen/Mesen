@@ -1,4 +1,3 @@
-#pragma once
 #include "stdafx.h"
 #include "MessageManager.h"
 #include "MapperFactory.h"

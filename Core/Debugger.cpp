@@ -1,5 +1,3 @@
-#pragma once
-
 #include "stdafx.h"
 #include <thread>
 #include "MessageManager.h"
@@ -168,7 +166,7 @@ void Debugger::ProcessStepConditions(uint32_t addr)
 	if(_stepOut && _lastInstruction == 0x60) {
 		//RTS found, set StepCount to 2 to break on the following instruction
 		Step(2);
-	} else if(_stepOverAddr != -1 && addr == _stepOverAddr) {
+	} else if(_stepOverAddr != -1 && addr == (uint32_t)_stepOverAddr) {
 		Step(1);
 	} else if(_stepCycleCount != -1 && abs(_cpu->GetCycleCount() - _stepCycleCount) < 100 && _cpu->GetCycleCount() >= _stepCycleCount) {
 		Step(1);
@@ -181,6 +179,8 @@ void Debugger::BreakOnBreakpoint(MemoryOperationType type, uint32_t addr)
 	switch(type) {
 		case MemoryOperationType::Read: breakpointType = BreakpointType::Read; break;
 		case MemoryOperationType::Write: breakpointType = BreakpointType::Write; break;
+		
+		default:
 		case MemoryOperationType::ExecOpCode:
 		case MemoryOperationType::ExecOperand: breakpointType = BreakpointType::Execute; break;
 	}

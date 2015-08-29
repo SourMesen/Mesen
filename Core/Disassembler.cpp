@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Disassembler.h"
 #include "DisassemblyInfo.h"
-#include "CPU.h"
 
 Disassembler::Disassembler(uint8_t* internalRAM, uint8_t* prgROM, uint32_t prgSize)
 {

@@ -3,6 +3,12 @@
 
 // Blip_Buffer 0.4.0
 
+#if defined(_MSC_VER)
+    #define EXPORT __declspec(dllexport)
+#else
+    #define EXPORT 
+#endif 
+
 #ifndef BLIP_BUFFER_H
 #define BLIP_BUFFER_H
 
@@ -13,7 +19,7 @@ typedef long blip_time_t;
 typedef short blip_sample_t;
 enum { blip_sample_max = 32767 };
 
-class __declspec(dllexport) Blip_Buffer {
+class EXPORT Blip_Buffer {
 public:
 	typedef const char* blargg_err_t;
 	
@@ -133,7 +139,7 @@ private:
 	int const blip_res = 1 << BLIP_PHASE_BITS;
 	class blip_eq_t;
 	
-	class __declspec(dllexport) Blip_Synth_ {
+	class EXPORT Blip_Synth_ {
 		double volume_unit_;
 		short* const impulses;
 		int const width;
@@ -159,7 +165,7 @@ const int blip_high_quality = 16;
 // by finding the difference between the maximum and minimum expected
 // amplitudes (max - min).
 template<int quality,int range>
-class __declspec(dllexport) Blip_Synth {
+class EXPORT Blip_Synth {
 public:
 	// Set overall volume of waveform
 	void volume( double v ) { impl.volume_unit( v * (1.0 / (range < 0 ? -range : range)) ); }

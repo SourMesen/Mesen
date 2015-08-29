@@ -14,7 +14,7 @@ public:
 	Breakpoint(BreakpointType type, uint32_t addr, bool isAbsoluteAddr);
 	~Breakpoint();
 
-	bool Breakpoint::Matches(uint32_t memoryAddr, uint32_t absoluteAddr)
+	bool Matches(uint32_t memoryAddr, uint32_t absoluteAddr)
 	{
 		return _enabled && ((memoryAddr == _addr && !_isAbsoluteAddr) || (absoluteAddr == _addr && _isAbsoluteAddr));
 	}

@@ -1,11 +1,12 @@
 #include "stdafx.h"
+#include "UPnPPortMapper.h"
+#include "Socket.h"
 
+#ifdef WIN32
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <Windows.h>
-#include "UPnPPortMapper.h"
-#include "Socket.h"
 
 Socket::Socket()
 {
@@ -221,3 +222,83 @@ int Socket::Recv(char *buf, int len, int flags)
 
 	return returnVal;
 }
+
+#else
+
+Socket::Socket()
+{
+	
+}
+
+Socket::Socket(uintptr_t socket) 
+{
+	
+}
+
+Socket::~Socket()
+{
+	
+}
+
+void Socket::SetSocketOptions()
+{
+	
+}
+
+void Socket::SetConnectionErrorFlag()
+{
+	
+}
+
+void Socket::Close()
+{
+	
+}
+
+bool Socket::ConnectionError()
+{
+	return true;
+}
+
+void Socket::Bind(uint16_t port)
+{
+
+}
+
+bool Socket::Connect(const char* hostname, uint16_t port)
+{
+	return false;
+}
+
+void Socket::Listen(int backlog)
+{
+
+}
+
+shared_ptr<Socket> Socket::Accept()
+{
+	return shared_ptr<Socket>(new Socket());
+}
+
+int Socket::Send(char *buf, int len, int flags)
+{
+	return len;
+}
+
+void Socket::BufferedSend(char *buf, int len)
+{
+
+}
+
+void Socket::SendBuffer()
+{
+
+}
+
+int Socket::Recv(char *buf, int len, int flags)
+{
+	return len;
+}
+
+
+#endif

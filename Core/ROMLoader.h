@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include <algorithm>
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/ZIPReader.h"
 #include "../Utilities/CRC32.h"

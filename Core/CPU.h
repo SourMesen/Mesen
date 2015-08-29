@@ -227,6 +227,7 @@ private:
 			case AddrMode::AbsXW: return GetAbsXAddr(true);
 			case AddrMode::AbsY: return GetAbsYAddr(false);
 			case AddrMode::AbsYW: return GetAbsYAddr(true);
+			default: break;
 		}
 		throw std::runtime_error("invalid addressing mode");
 	}
@@ -503,7 +504,7 @@ private:
 		}
 	}
 
-	#pragma region OP Codes
+	//OP Codes
 	void LDA() { SetA(GetOperandValue()); }
 	void LDX() { SetX(GetOperandValue()); }
 	void LDY() { SetY(GetOperandValue()); }
@@ -654,10 +655,8 @@ private:
 		GetOperandValue();
 	}
 
-	#pragma endregion
-
-	#pragma region Unofficial OpCodes
-
+	
+	//Unofficial OpCodes
 	void SLO()
 	{
 		//ASL & ORA
@@ -787,10 +786,8 @@ private:
 		SetX(value);
 	}
 
-	#pragma endregion
-
-	#pragma region Unimplemented/Incorrect Unofficial OP codes
-
+	
+	//Unimplemented/Incorrect Unofficial OP codes
 	void HLT()
 	{
 		//normally freezes the cpu, we can probably assume nothing will ever call this
@@ -830,8 +827,6 @@ private:
 		SetX(A());
 		SetSP(A());
 	}
-
-	#pragma endregion
 
 protected:
 	void StreamState(bool saving);

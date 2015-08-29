@@ -1,4 +1,3 @@
-#pragma once
 #include "stdafx.h"
 #include "MessageManager.h"
 #include "GameServerConnection.h"
@@ -49,19 +48,22 @@ void GameServerConnection::SendGameState()
 		
 	char* buffer = new char[size];
 	state.read(buffer, size);
-	SendNetMessage(SaveStateMessage(buffer, size, true));
+	SaveStateMessage message(buffer, size, true);
+	SendNetMessage(message);
 	delete[] buffer;
 }
 
 void GameServerConnection::SendGameInformation()
 {
-	SendNetMessage(GameInformationMessage(Console::GetROMPath(), _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused)));
+	GameInformationMessage message(Console::GetROMPath(), _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
+	SendNetMessage(message);
 }
 
 void GameServerConnection::SendMovieData(uint8_t state, uint8_t port)
 {
 	if(_handshakeCompleted) {
-		SendNetMessage(MovieDataMessage(state, port));
+		MovieDataMessage message(state, port);
+		SendNetMessage(message);
 	}
 }
 
@@ -95,10 +97,14 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 			}
 			break;
 		case MessageType::InputData:
+		{
 			uint8_t state = ((InputDataMessage*)message)->GetInputState();
 			if(_inputData.size() == 0 || state != _inputData.back()) {
 				_inputData.push_back(state);
 			}
+			break;
+		}
+		default:
 			break;
 	}
 }
@@ -114,6 +120,8 @@ void GameServerConnection::ProcessNotification(ConsoleNotificationType type)
 		case ConsoleNotificationType::GameReset:
 			SendGameInformation();
 			SendGameState();
+			break;
+		default:
 			break;
 	}
 }

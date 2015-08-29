@@ -1,7 +1,14 @@
 #include "stdafx.h"
 
-#include <Windows.h>
+#ifdef WIN32
+	#include <Windows.h>
+#else 
+	#include <time.h>
+#endif
+
 #include "Timer.h"
+
+#ifdef WIN32
 
 Timer::Timer() 
 {
@@ -30,9 +37,29 @@ double Timer::GetElapsedMS()
 	return double(li.QuadPart - _start) / _frequency;
 }
 
-uint32_t Timer::GetElapsedTicks()
+#else
+
+Timer::Timer() 
 {
-	LARGE_INTEGER li;
-	QueryPerformanceCounter(&li);
-	return uint32_t(li.QuadPart - _start);
+	Reset();
 }
+
+void Timer::Reset()
+{
+	timespec start;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+
+	_start = start.tv_sec * 1000000000 + start.tv_nsec;
+}
+
+double Timer::GetElapsedMS()
+{
+	timespec end;
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+	uint64_t currentTime = end.tv_sec * 1000000000 + end.tv_nsec;
+	
+	return (double)(currentTime - _start) / 1000000.0;
+}
+
+#endif

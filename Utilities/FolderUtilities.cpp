@@ -1,5 +1,8 @@
 #include "stdafx.h"
-#include <shlobj.h>
+#ifdef WIN32
+	#include <shlobj.h>
+#endif
+
 #include <algorithm>
 #include "FolderUtilities.h"
 #include "UTF8Util.h"
@@ -16,7 +19,7 @@ void FolderUtilities::SetHomeFolder(string homeFolder)
 string FolderUtilities::GetHomeFolder()
 {
 	if(_homeFolder.size() == 0) {
-		throw std::exception("Home folder not specified");
+		throw std::runtime_error("Home folder not specified");
 	}
 	return _homeFolder;
 }
@@ -86,13 +89,15 @@ string FolderUtilities::GetScreenshotFolder()
 
 void FolderUtilities::CreateFolder(string folder)
 {
+#ifdef WIN32
 	CreateDirectory(utf8::utf8::decode(folder).c_str(), nullptr);
+#endif
 }
 
 vector<string> FolderUtilities::GetFolders(string rootFolder)
 {
 	vector<string> folders;
-#ifdef _WIN32
+#ifdef WIN32
 	HANDLE hFind;
 	WIN32_FIND_DATA data;
 
@@ -117,11 +122,13 @@ vector<string> FolderUtilities::GetFolders(string rootFolder)
 
 vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, string mask, bool recursive)
 {
+	vector<string> files;
+
+#ifdef WIN32
 	HANDLE hFind;
 	WIN32_FIND_DATA data;
 
 	vector<string> folders;
-	vector<string> files;
 	if(rootFolder[rootFolder.size() - 1] != '/' && rootFolder[rootFolder.size() - 1] != '\\') {
 		rootFolder += "/";
 	}
@@ -143,6 +150,7 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, string mask,
 			FindClose(hFind);
 		}
 	}
+#endif
 
 	return files;
 }
@@ -180,7 +188,10 @@ string FolderUtilities::CombinePath(string folder, string filename)
 
 int64_t FolderUtilities::GetFileModificationTime(string filepath)
 {
+#ifdef WIN32
 	WIN32_FILE_ATTRIBUTE_DATA fileAttrData = {0};
 	GetFileAttributesEx(utf8::utf8::decode(filepath).c_str(), GetFileExInfoStandard, &fileAttrData);
 	return ((int64_t)fileAttrData.ftLastWriteTime.dwHighDateTime << 32) | (int64_t)fileAttrData.ftLastWriteTime.dwLowDateTime;
+#endif
+	return 0;
 }

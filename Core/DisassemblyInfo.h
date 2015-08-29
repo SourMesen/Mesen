@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
-
-extern enum AddrMode;
+#include "CPU.h"
 
 class DisassemblyInfo
 {

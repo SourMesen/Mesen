@@ -1,4 +1,3 @@
-#pragma once
 #include "stdafx.h"
 #include "VirtualController.h"
 #include "ControlManager.h"

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <algorithm>
 #include "MessageManager.h"
 
 IMessageManager* MessageManager::_messageManager = nullptr;

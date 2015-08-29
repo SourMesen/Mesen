@@ -335,6 +335,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 				case ConsoleNotificationType::CheatRemoved:
 					ApplyCheats();
 					break;
+				default:
+					break;
 			}
 		}
 
@@ -452,8 +454,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			//Used by MMC3/MMC5/etc
 		}
 
-		#pragma region Debugger Helper Functions
-
+		//Debugger Helper Functions
 		void GetPrgCopy(uint8_t **buffer)
 		{
 			*buffer = new uint8_t[_prgSize];
@@ -526,6 +527,4 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 			return memoryRanges;
 		}
-
-		#pragma endregion
 };

@@ -1,8 +1,10 @@
 #include "stdafx.h"
+#include "UPnPPortMapper.h"
+
+#ifdef WIN32
 #include <winsock2.h>
 #include <natupnp.h>
 #include <ws2tcpip.h>
-#include "UPnPPortMapper.h"
 
 bool UPnPPortMapper::AddNATPortMapping(uint16_t internalPort, uint16_t externalPort, IPProtocol protocol) 
 {
@@ -34,7 +36,7 @@ bool UPnPPortMapper::AddNATPortMapping(uint16_t internalPort, uint16_t externalP
 				std::cout << "Attempting to automatically forward port via UPnP..." << std::endl;
 
 				wstring localIP = GetLocalIP();
-				BSTR desc = SysAllocString(L"NESEmu for NetPlay");
+				BSTR desc = SysAllocString(L"Mesen NetPlay");
 				BSTR clientStr = SysAllocString(localIP.c_str());
 				hResult = spmc->Add(externalPort, proto, internalPort, clientStr, true, desc, &spm);
 				SysFreeString(clientStr);
@@ -123,4 +125,21 @@ wstring UPnPPortMapper::GetLocalIP()
 	return localIP;
 }
 
+#else
 	
+bool UPnPPortMapper::AddNATPortMapping(uint16_t internalPort, uint16_t externalPort, IPProtocol protocol) 
+{
+	return false;
+}
+
+bool UPnPPortMapper::RemoveNATPortMapping(uint16_t externalPort, IPProtocol protocol) 
+{
+	return false;
+}
+
+wstring UPnPPortMapper::GetLocalIP()
+{
+	return L"";
+}	
+	
+#endif

@@ -1,6 +1,9 @@
 #include "stdafx.h"
+#include <assert.h>
 #include "SimpleLock.h"
-#include <Windows.h>
+#ifdef WIN32
+	#include <Windows.h>
+#endif
 
 SimpleLock::SimpleLock()
 {
@@ -13,11 +16,20 @@ SimpleLock::~SimpleLock()
 {
 }
 
+uint32_t SimpleLock::GetThreadId()
+{
+#ifdef WIN32
+	return GetCurrentThreadId();
+#elif
+	return std::thread::id;
+#endif
+}
+
 void SimpleLock::Acquire()
 {
-	if(_lockCount == 0 || _holderThreadID != GetCurrentThreadId()) {
+	if(_lockCount == 0 || _holderThreadID != GetThreadId()) {
 		while(_lock.test_and_set());
-		_holderThreadID = GetCurrentThreadId();
+		_holderThreadID = GetThreadId();
 		_lockCount = 1;
 	} else {
 		//Same thread can acquire the same lock multiple times
@@ -43,7 +55,7 @@ void SimpleLock::WaitForRelease()
 
 void SimpleLock::Release()
 {
-	if(_lockCount > 0 && _holderThreadID == GetCurrentThreadId()) {
+	if(_lockCount > 0 && _holderThreadID == GetThreadId()) {
 		_lockCount--;
 		if(_lockCount == 0) {
 			_holderThreadID = ~0;

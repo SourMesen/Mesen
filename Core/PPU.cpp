@@ -151,6 +151,8 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 		case PPURegisters::SpriteDMA:
 			CPU::RunDMATransfer(_spriteRAM, _state.SpriteRamAddr, value);
 			break;
+		default:
+			break;
 	}
 }
 

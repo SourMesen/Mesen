@@ -12,7 +12,7 @@ private:
 
 	void UpdateState()
 	{
-		uint8_t prgPage = _registers[0] & 0x0F | ((_registers[2] & 0x0F) << 4);
+		uint8_t prgPage = (_registers[0] & 0x0F) | ((_registers[2] & 0x0F) << 4);
 
 		_autoSwitchCHR = (_registers[0] & 0x80) == 0x80;
 

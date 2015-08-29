@@ -19,7 +19,7 @@ protected:
 private:
 	void ReadSocket();
 
-	bool ExtractMessage(char *buffer, uint32_t &messageLength);
+	bool ExtractMessage(void *buffer, uint32_t &messageLength);
 	NetMessage* ReadMessage();
 
 	virtual void ProcessMessage(NetMessage* message) = 0;

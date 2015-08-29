@@ -97,12 +97,14 @@ void CheatManager::AddCode(CodeInfo &code)
 
 void CheatManager::AddGameGenieCode(string code)
 {
-	Instance->AddCode(Instance->GetGGCodeInfo(code));
+	CodeInfo info = Instance->GetGGCodeInfo(code);
+	Instance->AddCode(info);
 }
 
 void CheatManager::AddProActionRockyCode(uint32_t code)
 {
-	Instance->AddCode(Instance->GetPARCodeInfo(code));
+	CodeInfo info = Instance->GetPARCodeInfo(code);
+	Instance->AddCode(info);
 }
 
 void CheatManager::AddCustomCode(uint32_t address, uint8_t value, int32_t compareValue, bool isRelativeAddress)

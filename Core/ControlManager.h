@@ -23,7 +23,7 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 		void RefreshAllPorts();
 		uint8_t GetControllerState(uint8_t port);
-		bool ControlManager::HasFourScoreAdapter();
+		bool HasFourScoreAdapter();
 		void RefreshStateBuffer(uint8_t port);
 		uint8_t GetPortValue(uint8_t port);
 

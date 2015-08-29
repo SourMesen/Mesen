@@ -1,4 +1,3 @@
-#pragma once
 #include "stdafx.h"
 #include "GameClientConnection.h"
 #include "HandShakeMessage.h"
@@ -31,7 +30,8 @@ GameClientConnection::~GameClientConnection()
 
 void GameClientConnection::SendHandshake()
 {
-	SendNetMessage(HandShakeMessage(_connectionData->PlayerName, _connectionData->AvatarData, _connectionData->AvatarSize));
+	HandShakeMessage message(_connectionData->PlayerName, _connectionData->AvatarData, _connectionData->AvatarSize);
+	SendNetMessage(message);
 }
 
 void GameClientConnection::InitializeVirtualControllers()
@@ -78,7 +78,7 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 			gameInfo = (GameInformationMessage*)message;
 			if(gameInfo->GetPort() != _controllerPort) {
 				_controllerPort = gameInfo->GetPort();
-				MessageManager::DisplayMessage(string("Connected as player ") + std::to_string(_controllerPort + 1));
+				MessageManager::DisplayMessage("Net Play", string("Connected as player ") + std::to_string(_controllerPort + 1));
 			}
 
 			DisposeVirtualControllers();
@@ -91,6 +91,8 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 			}
 
 			break;
+		default:
+			break;
 	}
 }
 	
@@ -99,7 +101,8 @@ void GameClientConnection::SendInput()
 	if(_gameLoaded) {
 		uint8_t inputState = _controlDevice->GetButtonState().ToByte();
 		if(_lastInputSent != inputState) {
-			SendNetMessage(InputDataMessage(inputState));
+			InputDataMessage message(inputState);
+			SendNetMessage(message);
 			_lastInputSent = inputState;
 		}
 	}

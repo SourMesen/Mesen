@@ -1,4 +1,3 @@
-#pragma once
 #include "stdafx.h"
 #include "GameConnection.h"
 #include "HandShakeMessage.h"
@@ -22,9 +21,9 @@ void GameConnection::ReadSocket()
 	}
 }
 
-bool GameConnection::ExtractMessage(char *buffer, uint32_t &messageLength)
+bool GameConnection::ExtractMessage(void *buffer, uint32_t &messageLength)
 {
-	messageLength = *(uint32_t*)_readBuffer;
+	messageLength = _readBuffer[0] | (_readBuffer[1] << 8) | (_readBuffer[2] << 16) | (_readBuffer[3] << 24);
 
 	if(messageLength > 100000) {
 		std::cout << "Invalid data received, closing connection" << std::endl;
@@ -75,7 +74,7 @@ bool GameConnection::ConnectionError()
 void GameConnection::ProcessMessages()
 {
 	NetMessage* message;
-	while(message = ReadMessage()) {
+	while((message = ReadMessage()) != nullptr) {
 		//Loop until all messages have been processed
 		message->Initialize();
 		ProcessMessage(message);

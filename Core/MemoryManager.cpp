@@ -163,7 +163,7 @@ uint32_t MemoryManager::ToAbsoluteChrAddress(uint16_t vramAddr)
 void MemoryManager::StreamState(bool saving)
 {
 	StreamArray<uint8_t>(_internalRAM, MemoryManager::InternalRAMSize);
-	for(int i = 0; i < 4; i++) {
+	for(int i = 0; i < 2; i++) {
 		StreamArray<uint8_t>(_nametableRAM[i], MemoryManager::NameTableScreenSize);
 	}
 }
