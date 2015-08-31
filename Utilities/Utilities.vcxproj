@@ -231,6 +231,7 @@
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
     <ClInclude Include="miniz.h" />
+    <ClInclude Include="AutoResetEvent.h" />
     <ClInclude Include="PNGHelper.h" />
     <ClInclude Include="UPnPPortMapper.h" />
     <ClInclude Include="SimpleLock.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="FolderUtilities.cpp" />
     <ClCompile Include="miniz.cpp" />
     <ClCompile Include="PNGHelper.cpp" />
+    <ClCompile Include="AutoResetEvent.cpp" />
     <ClCompile Include="SimpleLock.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="stdafx.cpp">

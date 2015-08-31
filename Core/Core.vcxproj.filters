@@ -68,9 +68,6 @@
     <ClInclude Include="IMemoryHandler.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="IVideoDevice.h">
-      <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="BaseMapper.h">
       <Filter>Header Files\Mappers</Filter>
     </ClInclude>
@@ -241,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="CodeDataLogger.h">
       <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderingDevice.h">
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

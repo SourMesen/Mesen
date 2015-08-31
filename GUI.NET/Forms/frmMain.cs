@@ -21,9 +21,7 @@ namespace Mesen.GUI.Forms
 	{
 		private InteropEmu.NotificationListener _notifListener;
 		private Thread _emuThread;
-		private Thread _renderThread;
 		private frmDebugger _debugger;
-		private bool _stop = false;
 		
 		public frmMain()
 		{
@@ -38,6 +36,8 @@ namespace Mesen.GUI.Forms
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
+			menuTimer.Start();
+
 			InitializeEmulationSpeedMenu();
 			
 			UpdateVideoSettings();
@@ -45,11 +45,15 @@ namespace Mesen.GUI.Forms
 
 			UpdateMenus();
 			UpdateRecentFiles();
-			StartRenderThread();
 
 			if(!DesignMode) {
 				Icon = Properties.Resources.MesenIcon;
 			}
+		}
+		
+		private void menuTimer_Tick(object sender, EventArgs e)
+		{
+			this.UpdateMenus();
 		}
 
 		void InitializeEmu()
@@ -133,7 +137,7 @@ namespace Mesen.GUI.Forms
 
 		private void mnuEmulationSpeedOption_Click(object sender, EventArgs e)
 		{
-			SetEmulationSpeed((uint)((ToolStripItem)sender).Tag);
+			SetEmulationSpeed((uint)(int)((ToolStripItem)sender).Tag);
 		}
 		
 		void UpdateEmulationFlags()
@@ -258,34 +262,10 @@ namespace Mesen.GUI.Forms
 			}
 			UpdateMenus();
 		}
-
-		private void StartRenderThread()
-		{
-			_renderThread = new Thread(() => {
-				System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-				sw.Start();
-				while(true) {
-					if(sw.ElapsedMilliseconds > 100) {
-						sw.Restart();
-						UpdateMenus();
-						System.Threading.Thread.MemoryBarrier();
-						if(_stop) {
-							break;
-						}
-					}
-					if(!InteropEmu.Render()) {
-						System.Threading.Thread.Sleep(5);
-					}
-				}
-			});
-			_renderThread.Start();
-		}
-		
+				
 		private void StopEmu()
 		{
 			InteropEmu.Stop();
-			_stop = true;
-			_renderThread.Join();
 		}
 
 		private void PauseEmu()

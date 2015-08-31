@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "../Core/IVideoDevice.h"
+#include "../Core/IRenderingDevice.h"
 #include "../Core/IMessageManager.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/SimpleLock.h"
@@ -15,7 +15,7 @@ namespace DirectX {
 }
 
 namespace NES {
-	class Renderer : public IVideoDevice, public IMessageManager
+	class Renderer : public IRenderingDevice, public IMessageManager
 	{
 	private:
 		HWND                    _hWnd = nullptr;
@@ -38,14 +38,9 @@ namespace NES {
 		uint32_t*					_videoRAM = nullptr;
 
 		bool							_frameChanged = true;
-		uint16_t*					_ppuOutputBuffer = nullptr;
-		uint16_t*					_ppuOutputSecondaryBuffer = nullptr;
 		SimpleLock					_frameLock;
 
-		bool _isHD = false;
-
 		Timer _fpsTimer;
-		uint32_t _frameCount = 0;
 		uint32_t _lastFrameCount = 0;
 		uint32_t _renderedFrameCount = 0;
 		uint32_t _lastRenderedFrameCount = 0;
@@ -64,8 +59,6 @@ namespace NES {
 		uint32_t _hdScreenWidth = 0;
 		uint32_t _hdScreenHeight = 0;
 		uint32_t _hdScreenBufferSize = 0;
-		HdPpuPixelInfo *_hdScreenTiles = nullptr;
-		HdPpuPixelInfo *_secondaryHdScreenTiles = nullptr;
 
 		list<shared_ptr<ToastInfo>> _toasts;
 		ID3D11ShaderResourceView* _toastTexture = nullptr;
@@ -91,10 +84,10 @@ namespace NES {
 		Renderer(HWND hWnd);
 		~Renderer();
 
-		bool Render();
+		void Render();
 		void DisplayMessage(string title, string message);
-		void UpdateFrame(void* frameBuffer);
-		void UpdateHdFrame(void *frameBuffer, HdPpuPixelInfo *screenTiles);
 		void DisplayToast(shared_ptr<ToastInfo> toast);
+
+		void UpdateFrame(void *frameBuffer);
 	};
 }

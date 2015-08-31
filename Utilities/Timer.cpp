@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <thread>
 
 #ifdef WIN32
 	#include <Windows.h>
@@ -47,7 +48,7 @@ Timer::Timer()
 void Timer::Reset()
 {
 	timespec start;
-    clock_gettime(CLOCK_MONOTONIC, &start);
+	clock_gettime(CLOCK_MONOTONIC, &start);
 
 	_start = start.tv_sec * 1000000000 + start.tv_nsec;
 }
@@ -55,7 +56,7 @@ void Timer::Reset()
 double Timer::GetElapsedMS()
 {
 	timespec end;
-    clock_gettime(CLOCK_MONOTONIC, &end);
+	clock_gettime(CLOCK_MONOTONIC, &end);
 
 	uint64_t currentTime = end.tv_sec * 1000000000 + end.tv_nsec;
 	
@@ -63,3 +64,13 @@ double Timer::GetElapsedMS()
 }
 
 #endif
+
+void Timer::WaitUntil(double targetMillisecond) 
+{
+	if(targetMillisecond > 0) {
+		double elapsedTime = GetElapsedMS();
+		if(targetMillisecond - elapsedTime > 1) {
+			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>((int)(targetMillisecond - elapsedTime)));
+		}
+	}
+}

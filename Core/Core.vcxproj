@@ -318,7 +318,7 @@
     <ClInclude Include="SaveStateManager.h" />
     <ClInclude Include="SaveStateMessage.h" />
     <ClInclude Include="Snapshotable.h" />
-    <ClInclude Include="IVideoDevice.h" />
+    <ClInclude Include="IRenderingDevice.h" />
     <ClInclude Include="MapperFactory.h" />
     <ClInclude Include="MMC1.h" />
     <ClInclude Include="MMC3.h" />

@@ -5,7 +5,6 @@
 #include "MessageManager.h"
 #include "EmulationSettings.h"
 #include "../Utilities/FolderUtilities.h"
-#include "../Core/IVideoDevice.h"
 #include "../Utilities/PNGHelper.h"
 
 extern const uint32_t PPU_PALETTE_ARGB[];

@@ -38,7 +38,6 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void Disconnect();
 		[DllImport(DLLPath)] public static extern bool IsConnected();
 		
-		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool Render();
 		[DllImport(DLLPath)] public static extern void TakeScreenshot();
 
 		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(NotificationListener.NotificationCallback callback);

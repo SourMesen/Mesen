@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "IRenderingDevice.h"
 #include "VideoDecoder.h"
 #include "EmulationSettings.h"
 #include "MessageManager.h"
@@ -31,15 +32,22 @@ VideoDecoder* VideoDecoder::GetInstance()
 	return Instance.get();
 }
 
+VideoDecoder::VideoDecoder()
+{
+}
+
 VideoDecoder::~VideoDecoder()
 {
+	StopThread();
 	if(_frameBuffer) {
 		delete[] _frameBuffer;
+		_frameBuffer = nullptr;
 	}
 }
 
 uint32_t VideoDecoder::ProcessIntensifyBits(uint16_t ppuPixel)
 {
+	return PPU_PALETTE_ARGB[ppuPixel & 0x3F];
 	uint32_t pixelOutput = PPU_PALETTE_ARGB[ppuPixel & 0x3F];
 
 	//Incorrect emphasis bit implementation, but will do for now.
@@ -74,9 +82,10 @@ uint32_t VideoDecoder::ProcessIntensifyBits(uint16_t ppuPixel)
 	return 0xFF000000 | (r << 16) | (g << 8) | b;
 }
 
-void VideoDecoder::UpdateBufferSize(uint8_t hdScale = 1)
+void VideoDecoder::UpdateBufferSize()
 {
 	OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+	uint8_t hdScale = GetScale();
 
 	if(!_frameBuffer || _hdScale != hdScale || _overscan.GetPixelCount() != overscan.GetPixelCount()) {
 		_hdScale = hdScale;
@@ -88,53 +97,45 @@ void VideoDecoder::UpdateBufferSize(uint8_t hdScale = 1)
 	}
 }
 
-uint32_t* VideoDecoder::DecodeFrame(uint16_t* inputBuffer)
+void VideoDecoder::DecodeFrame()
 {
 	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone);
 
-	_frameLock.Acquire();
+	if(_isHD && _hdNesPack == nullptr) {
+		_hdNesPack.reset(new HdNesPack());
+	}
+
+	//Update the current output buffer based on overscan settings & HD packs
 	UpdateBufferSize();
 	uint32_t* outputBuffer = _frameBuffer;
-	for(uint32_t i = _overscan.Top, iMax = 240 - _overscan.Bottom; i < iMax; i++) {
-		for(uint32_t j = _overscan.Left, jMax = 256 - _overscan.Right; j < jMax; j++) {
-			*outputBuffer = ProcessIntensifyBits(inputBuffer[i*256+j]);
-			outputBuffer++;
+
+	_screenshotLock.Acquire();
+	if(_isHD) {
+		uint32_t screenWidth = _overscan.GetScreenWidth() * _hdScale;
+		for(uint32_t i = _overscan.Top, iMax = 240 - _overscan.Bottom; i < iMax; i++) {
+			for(uint32_t j = _overscan.Left, jMax = 256 - _overscan.Right; j < jMax; j++) {
+				uint32_t sdPixel = PPU_PALETTE_ARGB[_ppuOutputBuffer[i * 256 + j] & 0x3F]; //ProcessIntensifyBits(inputBuffer[i * 256 + j]);
+				uint32_t bufferIndex = (i - _overscan.Top) * screenWidth * _hdScale + (j - _overscan.Left) * _hdScale;
+				_hdNesPack->GetPixels(_hdScreenTiles[i * 256 + j], sdPixel, outputBuffer + bufferIndex, screenWidth);
+			}
+		}
+	} else {
+		//Regular SD code
+		uint32_t* outputBuffer = _frameBuffer;
+		for(uint32_t i = _overscan.Top, iMax = 240 - _overscan.Bottom; i < iMax; i++) {
+			for(uint32_t j = _overscan.Left, jMax = 256 - _overscan.Right; j < jMax; j++) {
+				*outputBuffer = ProcessIntensifyBits(_ppuOutputBuffer[i * 256 + j]);
+				outputBuffer++;
+			}
 		}
 	}
-	_frameLock.Release();
-	
-	return _frameBuffer;
-}
-
-uint32_t* VideoDecoder::DecodeHdFrame(uint16_t* inputBuffer, HdPpuPixelInfo *screenTiles)
-{
-	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone);
-
-	if(_hdNesPack == nullptr) {
-		_hdNesPack = new HdNesPack();
-	}
-
-	_frameLock.Acquire();
-	uint8_t hdScale = GetScale();
-	UpdateBufferSize(hdScale);
-	uint32_t* outputBuffer = _frameBuffer;
-	uint32_t screenWidth = _overscan.GetScreenWidth() * hdScale;
-	memset(outputBuffer, 0, _overscan.GetPixelCount()*_hdScale*_hdScale*4);
-	for(uint32_t i = _overscan.Top, iMax = 240 - _overscan.Bottom; i < iMax; i++) {
-		for(uint32_t j = _overscan.Left, jMax = 256 - _overscan.Right; j < jMax; j++) {
-			uint32_t sdPixel = PPU_PALETTE_ARGB[inputBuffer[i * 256 + j] & 0x3F]; //ProcessIntensifyBits(inputBuffer[i * 256 + j]);
-			uint32_t bufferIndex = (i - _overscan.Top) * screenWidth * hdScale + (j - _overscan.Left) * hdScale;
-			_hdNesPack->GetPixels(screenTiles[i * 256 + j], sdPixel, outputBuffer+bufferIndex, screenWidth);
-		}
-	}
-	_frameLock.Release();
-	
-	return _frameBuffer;
+	_frameChanged = false;
+	_screenshotLock.Release();
 }
 
 uint32_t VideoDecoder::GetScale()
 {
-	if(_hdNesPack) {
+	if(_isHD && _hdNesPack) {
 		return _hdNesPack->GetScale();
 	} else {
 		return 1;
@@ -153,9 +154,9 @@ void VideoDecoder::TakeScreenshot(string romFilename)
 	uint32_t bufferSize = _overscan.GetPixelCount() * 4;
 	uint32_t* frameBuffer = new uint32_t[bufferSize];
 
-	_frameLock.Acquire();
+	_screenshotLock.Acquire();
 	memcpy(frameBuffer, _frameBuffer, bufferSize);
-	_frameLock.Release();
+	_screenshotLock.Release();
 
 	//ARGB -> ABGR
 	for(uint32_t i = 0; i < bufferSize; i++) {
@@ -184,4 +185,87 @@ void VideoDecoder::TakeScreenshot(string romFilename)
 	delete[] frameBuffer;
 
 	MessageManager::DisplayMessage("Screenshot saved", FolderUtilities::GetFilename(ssFilename, true));
+}
+
+void VideoDecoder::DecodeThread()
+{
+	//This thread will decode the PPU's output (color ID to RGB, intensify r/g/b and produce a HD version of the frame if needed)
+	while(!_stopFlag.load()) {
+		//DecodeFrame returns the final ARGB frame we want to display in the emulator window
+		if(!_frameChanged) {
+			_waitForFrame.Wait();
+			if(_stopFlag.load()) {
+				break;
+			}
+		}
+
+		DecodeFrame();
+		_renderer->UpdateFrame(_frameBuffer);
+
+		_waitForRender.Signal();
+	}
+}
+
+uint32_t VideoDecoder::GetFrameCount()
+{
+	return _frameCount;
+}
+
+bool VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInfo)
+{
+	bool readyForNewFrame = _frameChanged.load() == false ? true : false;
+
+	if(readyForNewFrame) {
+		//The PPU sends us a new frame via this function when a full frame is done drawing
+		bool isHD = (hdPixelInfo != nullptr);
+		_isHD = isHD;
+		_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
+		_hdScreenTiles = hdPixelInfo;
+		_frameChanged = true;
+		_waitForFrame.Signal();
+	}
+	_frameCount++;
+
+	return readyForNewFrame;
+}
+
+void VideoDecoder::StartThread()
+{
+	if(!Instance->_decodeThread) {	
+		_stopFlag = false;
+		Instance->_decodeThread.reset(new thread(&VideoDecoder::DecodeThread, Instance.get()));
+		Instance->_renderThread.reset(new thread(&VideoDecoder::RenderThread, Instance.get()));
+	}
+}
+
+void VideoDecoder::StopThread()
+{
+	_stopFlag = true;
+	if(_decodeThread) {
+		_waitForFrame.Signal();
+		_decodeThread->join();
+	}
+	if(_renderThread) {
+		_waitForRender.Signal();
+		_renderThread->join();
+	}
+
+	_decodeThread.release();
+	_renderThread.release();
+}
+
+void VideoDecoder::RenderThread()
+{
+	while(!_stopFlag.load()) {
+		//Wait until a frame is ready, or until 16ms have passed (to allow UI to run at a minimum of 60fps)
+		_waitForRender.Wait(16);
+		if(_renderer) {
+			_renderer->Render();
+		}
+	}
+}
+
+void VideoDecoder::RegisterRenderingDevice(IRenderingDevice *renderer)
+{
+	_renderer = renderer;
 }

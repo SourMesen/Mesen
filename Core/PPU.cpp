@@ -2,23 +2,27 @@
 #include "PPU.h"
 #include "CPU.h"
 #include "EmulationSettings.h"
+#include "VideoDecoder.h"
 
 PPU* PPU::Instance = nullptr;
-IVideoDevice *PPU::VideoDevice = nullptr;
 
 PPU::PPU(MemoryManager *memoryManager)
 {
 	PPU::Instance = this;
 
 	_memoryManager = memoryManager;
-	_outputBuffer = new uint16_t[256 * 240];
+	_outputBuffers[0] = new uint16_t[256 * 240];
+	_outputBuffers[1] = new uint16_t[256 * 240];
+
+	_currentOutputBuffer = _outputBuffers[0];
 
 	Reset();
 }
 
 PPU::~PPU() 
 {
-	delete[] _outputBuffer;
+	delete[] _outputBuffers[0];
+	delete[] _outputBuffers[1];
 }
 
 void PPU::Reset()
@@ -435,7 +439,7 @@ uint32_t PPU::GetPixelColor(uint32_t &paletteOffset)
 void PPU::DrawPixel()
 {
 	//This is called 3.7 million times per second - needs to be as fast as possible.
-	uint16_t &pixel = _outputBuffer[(_scanline << 8) + _cycle - 1];
+	uint16_t &pixel = _currentOutputBuffer[(_scanline << 8) + _cycle - 1];
 
 	if(IsRenderingEnabled() || ((_state.VideoRamAddr & 0x3F00) != 0x3F00)) {
 		uint32_t paletteOffset;
@@ -617,9 +621,8 @@ void PPU::CopyOAMData()
 
 void PPU::SendFrame()
 {
-	//Send frame to GUI once the last pixel has been output
-	if(PPU::VideoDevice) {
-		PPU::VideoDevice->UpdateFrame(_outputBuffer);
+	if(VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer)) {
+		_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
 	}
 }
 

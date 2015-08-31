@@ -2,17 +2,19 @@
 #include "stdafx.h"
 #include "PPU.h"
 #include "HdNesPack.h"
+#include "VideoDecoder.h"
 
 class HdPpu : public PPU
 {
 private:
+	HdPpuPixelInfo* _screenTileBuffers[2];
 	HdPpuPixelInfo* _screenTiles;
 
 protected:
 	void DrawPixel()
 	{
 		uint16_t bufferOffset = (_scanline << 8) + _cycle - 1;
-		uint16_t &pixel = _outputBuffer[bufferOffset];
+		uint16_t &pixel = _currentOutputBuffer[bufferOffset];
 		_lastSprite = nullptr;
 
 		if(IsRenderingEnabled() || ((_state.VideoRamAddr & 0x3F00) != 0x3F00)) {
@@ -72,18 +74,22 @@ protected:
 public:
 	HdPpu(MemoryManager* memoryManager) : PPU(memoryManager)
 	{
-		_screenTiles = new HdPpuPixelInfo[256 * 240];
+		_screenTileBuffers[0] = new HdPpuPixelInfo[256 * 240];
+		_screenTileBuffers[1] = new HdPpuPixelInfo[256 * 240];
+		_screenTiles = _screenTileBuffers[0];
 	}
 
 	~HdPpu()
 	{
-		delete[] _screenTiles;
+		delete[] _screenTileBuffers[0];
+		delete[] _screenTileBuffers[1];
 	}
 
 	void SendFrame()
 	{
-		if(VideoDevice) {
-			VideoDevice->UpdateHdFrame(_outputBuffer, _screenTiles);
+		if(VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer, _screenTiles)) {
+			_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
+			_screenTiles = (_screenTiles == _screenTileBuffers[0]) ? _screenTileBuffers[1] : _screenTileBuffers[0];
 		}
 	}
 };

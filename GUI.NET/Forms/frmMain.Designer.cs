@@ -36,6 +36,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,6 +57,7 @@
 			this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuIncreaseSpeed = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDecreaseSpeed = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEmuSpeedMaximumSpeed = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEmuSpeedTriple = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEmuSpeedDouble = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,7 +96,7 @@
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
-			this.mnuEmuSpeedMaximumSpeed = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -270,6 +272,14 @@
 			this.mnuDecreaseSpeed.Size = new System.Drawing.Size(182, 22);
 			this.mnuDecreaseSpeed.Text = "Decrease Speed";
 			this.mnuDecreaseSpeed.Click += new System.EventHandler(this.mnuDecreaseSpeed_Click);
+			// 
+			// mnuEmuSpeedMaximumSpeed
+			// 
+			this.mnuEmuSpeedMaximumSpeed.Name = "mnuEmuSpeedMaximumSpeed";
+			this.mnuEmuSpeedMaximumSpeed.ShortcutKeys = System.Windows.Forms.Keys.F9;
+			this.mnuEmuSpeedMaximumSpeed.Size = new System.Drawing.Size(182, 22);
+			this.mnuEmuSpeedMaximumSpeed.Text = "Maximum Speed";
+			this.mnuEmuSpeedMaximumSpeed.Click += new System.EventHandler(this.mnuEmuSpeedMaximumSpeed_Click);
 			// 
 			// toolStripMenuItem9
 			// 
@@ -557,13 +567,9 @@
 			this.dxViewer.Size = new System.Drawing.Size(1024, 960);
 			this.dxViewer.TabIndex = 1;
 			// 
-			// mnuEmuSpeedMaximumSpeed
+			// menuTimer
 			// 
-			this.mnuEmuSpeedMaximumSpeed.Name = "mnuEmuSpeedMaximumSpeed";
-			this.mnuEmuSpeedMaximumSpeed.ShortcutKeys = System.Windows.Forms.Keys.F9;
-			this.mnuEmuSpeedMaximumSpeed.Size = new System.Drawing.Size(182, 22);
-			this.mnuEmuSpeedMaximumSpeed.Text = "Maximum Speed";
-			this.mnuEmuSpeedMaximumSpeed.Click += new System.EventHandler(this.mnuEmuSpeedMaximumSpeed_Click);
+			this.menuTimer.Tick += new System.EventHandler(this.menuTimer_Tick);
 			// 
 			// frmMain
 			// 
@@ -645,6 +651,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedHalf;
 		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedQuarter;
 		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedMaximumSpeed;
+		private System.Windows.Forms.Timer menuTimer;
 	}
 }
 

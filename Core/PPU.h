@@ -3,7 +3,6 @@
 #include "stdafx.h"
 #include "Snapshotable.h"
 #include "MemoryManager.h"
-#include "IVideoDevice.h"
 
 enum class NesModel;
 
@@ -92,7 +91,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 {
 	protected:
 		static PPU* Instance;
-		static IVideoDevice *VideoDevice;
 
 		MemoryManager *_memoryManager;
 
@@ -107,7 +105,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint8_t _spriteRAM[0x100];
 		uint8_t _secondarySpriteRAM[0x20];
 
-		uint16_t *_outputBuffer;
+		uint16_t *_currentOutputBuffer;
+		uint16_t *_outputBuffers[2];
 
 		NesModel _nesModel;
 		uint16_t _vblankEnd;
@@ -214,11 +213,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		void Exec();
 		static void ExecStatic();
-
-		static void RegisterVideoDevice(IVideoDevice *videoDevice)
-		{
-			PPU::VideoDevice = videoDevice;
-		}
 
 		static uint32_t GetFrameCount()
 		{

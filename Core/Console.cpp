@@ -37,6 +37,8 @@ void Console::Initialize(string filename)
 	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(filename);
 	if(mapper) {
 		_romFilepath = filename;
+				
+		VideoDecoder::GetInstance()->StopThread();
 
 		_mapper = mapper;
 		_memoryManager.reset(new MemoryManager(_mapper));
@@ -58,6 +60,8 @@ void Console::Initialize(string filename)
 		ResetComponents(false);
 
 		_initialized = true;
+
+		VideoDecoder::GetInstance()->StartThread();
 	
 		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(filename));
 		MessageManager::DisplayMessage("Game loaded", FolderUtilities::GetFilename(filename, false));
@@ -183,22 +187,17 @@ void Console::Run()
 
 	UpdateNesModel(targetTime, true);
 
+	VideoDecoder::GetInstance()->StartThread();
+		
 	while(true) { 
 		_cpu->Exec();
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
 		if(currentFrameNumber != lastFrameNumber) {
 			lastFrameNumber = currentFrameNumber;
 
-			if(targetTime > 0) {
-				elapsedTime = clockTimer.GetElapsedMS();
-				while(targetTime > elapsedTime) {
-					if(targetTime - elapsedTime > 1) {
-						std::this_thread::sleep_for(std::chrono::duration<int, std::milli>((int)(targetTime - elapsedTime - 1)));
-					}
-					elapsedTime = clockTimer.GetElapsedMS();
-				}
-			}
-			
+			//Sleep until we're ready to start the next frame
+			clockTimer.WaitUntil(targetTime);
+
 			if(!_pauseLock.IsFree()) {
 				//Need to temporarely pause the emu (to save/load a state, etc.)
 				_runLock.Release();
@@ -224,8 +223,14 @@ void Console::Run()
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
 			}
 
+			//Get next target time, and adjust based on whether we are ahead or behind
+			double timeLag = EmulationSettings::GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
 			UpdateNesModel(targetTime, false);
 			clockTimer.Reset();
+			targetTime -= timeLag;
+			if(targetTime < 0) {
+				targetTime = 0;
+			}
 			
 			if(_stop) {
 				_stop = false;
@@ -234,6 +239,9 @@ void Console::Run()
 		}
 	}
 	_apu->StopAudio(true);
+
+	VideoDecoder::GetInstance()->StopThread();
+
 	_stopLock.Release();
 	_runLock.Release();
 }

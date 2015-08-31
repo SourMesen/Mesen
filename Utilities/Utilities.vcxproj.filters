@@ -47,6 +47,9 @@
     <ClInclude Include="PNGHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AutoResetEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -80,6 +83,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PNGHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoResetEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,4 +11,5 @@ class Timer
 		Timer();
 		void Reset();
 		double GetElapsedMS();
+		void WaitUntil(double targetMillisecond);
 };
