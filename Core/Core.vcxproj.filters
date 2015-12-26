@@ -242,6 +242,9 @@
     <ClInclude Include="IRenderingDevice.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="AutoRomTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPU.cpp">
@@ -327,6 +330,9 @@
     </ClCompile>
     <ClCompile Include="CodeDataLogger.cpp">
       <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoRomTest.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -107,23 +107,27 @@ void Movie::StopAll()
 	}
 }
 
-void Movie::PlayMovie(string filename)
+void Movie::PlayMovie(stringstream &filestream, bool autoLoadRom, string filename)
 {
 	StopAll();
 
 	Reset();
 	
-	if(Load(filename)) {
+	if(Load(filestream, autoLoadRom)) {
 		Console::Pause();
 		if(_startState.tellp() > 0) {
 			//Restore state if one was present in the movie
 			Console::LoadState(_startState);
-		} else {
+		} else if(autoLoadRom) {
+			//When autoLoadRom = false, assume the emulation has already been reset (used by AutoTestRom)
 			Console::Reset(false);
 		}
 		_playing = true;
 		Console::Resume();
-		MessageManager::DisplayMessage("Movies", "Playing movie: " + FolderUtilities::GetFilename(filename, true));
+
+		if(!filename.empty()) {
+			MessageManager::DisplayMessage("Movies", "Playing movie: " + FolderUtilities::GetFilename(filename, true));
+		}
 	}
 }
 
@@ -134,7 +138,20 @@ void Movie::Record(string filename, bool reset)
 
 void Movie::Play(string filename)
 {
-	Instance->PlayMovie(filename);
+	ifstream file(filename, ios::in | ios::binary);
+	std::stringstream ss;
+
+	if(file) {
+		ss << file.rdbuf();
+		file.close();
+		
+		Instance->PlayMovie(ss, true, filename);
+	}
+}
+
+void Movie::Play(std::stringstream &filestream)
+{
+	Instance->PlayMovie(filestream, false);
 }
 
 void Movie::Stop()
@@ -192,61 +209,55 @@ bool Movie::Save()
 	return true;
 }
 
-bool Movie::Load(string filename)
+bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 {
-	ifstream file(filename, ios::in | ios::binary);
+	char header[3];
+	file.read((char*)&header, 3);
 
-	if(file) {
-		char header[3];
-		file.read((char*)&header, 3);
+	if(memcmp((char*)&header, "MMO", 3) != 0) {
+		//Invalid movie file
+		return false;
+	}
 
-		if(memcmp((char*)&header, "MMO", 3) != 0) {
-			//Invalid movie file
-			return false;
-		}
+	uint32_t romCrc32;
+	file.read((char*)&romCrc32, sizeof(romCrc32));
 
-		uint32_t romCrc32;
-		file.read((char*)&romCrc32, sizeof(romCrc32));
+	uint32_t romNameSize;
+	file.read((char*)&romNameSize, sizeof(uint32_t));
 
-		uint32_t romNameSize;
-		file.read((char*)&romNameSize, sizeof(uint32_t));
-			
-		char* romFilename = new char[romNameSize + 1];
-		memset(romFilename, 0, (romNameSize+1));
-		file.read((char*)romFilename, romNameSize);
-
+	char* romFilename = new char[romNameSize + 1];
+	memset(romFilename, 0, (romNameSize + 1));
+	file.read((char*)romFilename, romNameSize);
+	
+	bool loadedGame = true;
+	if(autoLoadRom) {
 		string currentRom = Console::GetROMPath();
-		bool loadedGame = true;
 		if(currentRom.empty() || romCrc32 != ROMLoader::GetCRC32(currentRom)) {
 			//Loaded game isn't the same as the game used for the movie, attempt to load the correct game
 			loadedGame = Console::LoadROM(romFilename, romCrc32);
 		}
-
-		if(loadedGame) {
-			file.read((char*)&_data.SaveStateSize, sizeof(uint32_t));
-
-			if(_data.SaveStateSize > 0) {
-				uint8_t *stateBuffer = new uint8_t[_data.SaveStateSize];
-				file.read((char*)stateBuffer, _data.SaveStateSize);
-				_startState.write((char*)stateBuffer, _data.SaveStateSize);
-				delete[] stateBuffer;
-			}
-
-			for(int i = 0; i < 4; i++) {
-				file.read((char*)&_data.DataSize[i], sizeof(uint32_t));
-
-				uint16_t* readBuffer = new uint16_t[_data.DataSize[i]];
-				file.read((char*)readBuffer, _data.DataSize[i] * sizeof(uint16_t));
-				_data.PortData[i] = vector<uint16_t>(readBuffer, readBuffer + _data.DataSize[i]);
-				delete[] readBuffer;
-			}
-		} else {
-			MessageManager::DisplayMessage("Movies", "Missing ROM required (" + string(romFilename) + ") to play movie.");
-		}
-		file.close();
-
-		return loadedGame;
 	}
 
-	return false;
+	if(loadedGame) {
+		file.read((char*)&_data.SaveStateSize, sizeof(uint32_t));
+
+		if(_data.SaveStateSize > 0) {
+			uint8_t *stateBuffer = new uint8_t[_data.SaveStateSize];
+			file.read((char*)stateBuffer, _data.SaveStateSize);
+			_startState.write((char*)stateBuffer, _data.SaveStateSize);
+			delete[] stateBuffer;
+		}
+
+		for(int i = 0; i < 4; i++) {
+			file.read((char*)&_data.DataSize[i], sizeof(uint32_t));
+
+			uint16_t* readBuffer = new uint16_t[_data.DataSize[i]];
+			file.read((char*)readBuffer, _data.DataSize[i] * sizeof(uint16_t));
+			_data.PortData[i] = vector<uint16_t>(readBuffer, readBuffer + _data.DataSize[i]);
+			delete[] readBuffer;
+		}
+	} else {
+		MessageManager::DisplayMessage("Movies", "Missing ROM required (" + string(romFilename) + ") to play movie.");
+	}
+	return loadedGame;
 }

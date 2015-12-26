@@ -31,10 +31,11 @@ void Console::Release()
 	Console::Instance.reset(new Console());
 }
 
-void Console::Initialize(string filename)
+void Console::Initialize(string filename, stringstream *filestream)
 {
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
-	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(filename);
+	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(filename, filestream);
+
 	if(mapper) {
 		_romFilepath = filename;
 				
@@ -70,10 +71,10 @@ void Console::Initialize(string filename)
 	}
 }
 
-void Console::LoadROM(string filepath)
+void Console::LoadROM(string filepath, stringstream *filestream)
 {
 	Console::Pause();
-	Instance->Initialize(filepath);
+	Instance->Initialize(filepath, filestream);
 	Console::Resume();
 }
 
@@ -117,7 +118,12 @@ void Console::Reset(bool softReset)
 	Movie::Stop();
 	if(Instance->_initialized) {
 		Console::Pause();
-		Instance->ResetComponents(softReset);
+		if(softReset) {
+			Instance->ResetComponents(softReset);
+		} else {
+			//Full reset of all objects to ensure the emulator always starts in the exact same state
+			Instance->Initialize(Instance->_romFilepath);
+		}
 		Console::Resume();
 	}
 }
@@ -239,6 +245,7 @@ void Console::Run()
 		}
 	}
 	_apu->StopAudio(true);
+	Movie::Stop();
 
 	VideoDecoder::GetInstance()->StopThread();
 

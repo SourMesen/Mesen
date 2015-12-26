@@ -1,27 +1,35 @@
 #include "stdafx.h"
 #include <string.h>
-#include "ZIPReader.h"
+#include <sstream>
+#include "ZipReader.h"
 
-ZIPReader::ZIPReader()
+ZipReader::ZipReader()
 {
 	memset(&_zipArchive, 0, sizeof(mz_zip_archive));
 }
 
-ZIPReader::~ZIPReader()
+ZipReader::~ZipReader()
 {
 	if(_initialized) {
 		mz_zip_reader_end(&_zipArchive);
 	}
 }
 
-void ZIPReader::LoadZIPArchive(void* buffer, size_t size)
+void ZipReader::LoadZipArchive(void* buffer, size_t size)
 {
 	if(mz_zip_reader_init_mem(&_zipArchive, buffer, size, 0)) {
 		_initialized = true;
 	}
 }
 
-vector<string> ZIPReader::GetFileList()
+void ZipReader::LoadZipArchive(string filepath)
+{
+	if(mz_zip_reader_init_file(&_zipArchive, filepath.c_str(), 0)) {
+		_initialized = true;
+	}
+}
+
+vector<string> ZipReader::GetFileList()
 {
 	vector<string> fileList;
 	if(_initialized) {
@@ -37,7 +45,7 @@ vector<string> ZIPReader::GetFileList()
 	return fileList;
 }
 
-void ZIPReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSize)
+void ZipReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSize)
 {
 	if(_initialized) {
 		size_t uncompSize;
@@ -54,4 +62,20 @@ void ZIPReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileS
 
 		fileSize = uncompSize;
 	}
+}
+
+std::stringstream ZipReader::ExtractFile(string filename)
+{
+	std::stringstream ss;
+	if(_initialized) {
+		uint8_t* buffer = nullptr;
+		size_t size = 0;
+
+		ExtractFile(filename, &buffer, size);		
+		ss.write((char*)buffer, size);
+
+		delete[] buffer;
+	}
+
+	return ss;
 }

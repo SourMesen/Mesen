@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include <algorithm>
 #include "../Utilities/FolderUtilities.h"
-#include "../Utilities/ZIPReader.h"
+#include "../Utilities/ZipReader.h"
 #include "../Utilities/CRC32.h"
 
 enum class MirroringType
@@ -66,15 +66,15 @@ class ROMLoader
 		uint8_t* _chrRAM = nullptr;
 		uint32_t _crc32;
 
-		bool LoadFromZIP(ifstream &zipFile)
+		bool LoadFromZip(stringstream &zipFile)
 		{
 			bool result = false;
 
 			uint32_t fileSize;
 			uint8_t* buffer = ReadFile(zipFile, fileSize);
 
-			ZIPReader reader;
-			reader.LoadZIPArchive(buffer, fileSize);
+			ZipReader reader;
+			reader.LoadZipArchive(buffer, fileSize);
 			
 			vector<string> fileList = reader.GetFileList();
 			for(string filename : fileList) {
@@ -98,7 +98,7 @@ class ROMLoader
 			return result;
 		}
 
-		bool LoadFromFile(ifstream &romFile)
+		bool LoadFromFile(stringstream &romFile)
 		{
 			uint32_t fileSize;
 			uint8_t* buffer = ReadFile(romFile, fileSize);
@@ -108,7 +108,7 @@ class ROMLoader
 			return result;
 		}
 
-		uint32_t GetFileSize(ifstream &file)
+		uint32_t GetFileSize(stringstream &file)
 		{
 			file.seekg(0, ios::end);
 			uint32_t fileSize = (uint32_t)file.tellg();
@@ -117,7 +117,7 @@ class ROMLoader
 			return fileSize;
 		}
 
-		uint8_t* ReadFile(ifstream &file, uint32_t &fileSize)
+		uint8_t* ReadFile(stringstream &file, uint32_t &fileSize)
 		{
 			fileSize = GetFileSize(file);
 			
@@ -162,28 +162,32 @@ class ROMLoader
 				_chrRAM = nullptr;
 			}
 		}
-
-		bool LoadFile(string filename) 
+		
+		bool LoadFile(string filename, stringstream *filestream = nullptr) 
 		{
-			bool result = false;
-			ifstream file(filename, ios::in | ios::binary);
-			if(file) {
-				char header[3];
-				file.read(header, 3);
-				if(memcmp(header, "NES", 3) == 0) {
-					_filename = FolderUtilities::GetFilename(filename, false);
-					file.seekg(0, ios::beg);
-					result = LoadFromFile(file);
+			stringstream ss;
+			if(!filestream) {
+				ifstream file(filename, ios::in | ios::binary);
+				if(file) {
+					ss << file.rdbuf();
 					file.close();
-				} else if(memcmp(header, "PK", 2) == 0) {
-					_filename = FolderUtilities::GetFilename(filename, false);
-					file.seekg(0, ios::beg);
-					result = LoadFromZIP(file);
-				} else {
-					//Unsupported file format
-					file.close();
+					filestream = &ss;
 				}
-				file.close();
+			}
+
+			filestream->seekg(0, ios::beg);
+
+			bool result = false;
+			char header[3];
+			filestream->read(header, 3);
+			if(memcmp(header, "NES", 3) == 0) {
+				_filename = FolderUtilities::GetFilename(filename, false);
+				filestream->seekg(0, ios::beg);
+				result = LoadFromFile(*filestream);
+			} else if(memcmp(header, "PK", 2) == 0) {
+				_filename = FolderUtilities::GetFilename(filename, false);
+				filestream->seekg(0, ios::beg);
+				result = LoadFromZip(*filestream);
 			}
 			return result;
 		}

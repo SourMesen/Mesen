@@ -99,8 +99,6 @@ void VideoDecoder::UpdateBufferSize()
 
 void VideoDecoder::DecodeFrame()
 {
-	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone);
-
 	if(_isHD && _hdNesPack == nullptr) {
 		_hdNesPack.reset(new HdNesPack());
 	}
@@ -233,6 +231,8 @@ void VideoDecoder::StartThread()
 {
 	if(!Instance->_decodeThread) {	
 		_stopFlag = false;
+		_frameChanged = false;
+		_frameCount = 0;
 		Instance->_decodeThread.reset(new thread(&VideoDecoder::DecodeThread, Instance.get()));
 		Instance->_renderThread.reset(new thread(&VideoDecoder::RenderThread, Instance.get()));
 	}
@@ -252,6 +252,14 @@ void VideoDecoder::StopThread()
 
 	_decodeThread.release();
 	_renderThread.release();
+
+	if(_renderer && _ppuOutputBuffer != nullptr) {
+		//Set screen to black
+		memset(_ppuOutputBuffer, 13, PPU::PixelCount * sizeof(uint16_t));
+		DecodeFrame();
+		_renderer->UpdateFrame(_frameBuffer);
+		_renderer->Render();
+	}
 }
 
 void VideoDecoder::RenderThread()
@@ -268,4 +276,11 @@ void VideoDecoder::RenderThread()
 void VideoDecoder::RegisterRenderingDevice(IRenderingDevice *renderer)
 {
 	_renderer = renderer;
+}
+
+void VideoDecoder::UnregisterRenderingDevice(IRenderingDevice *renderer)
+{
+	if(_renderer == renderer) {
+		_renderer = nullptr;
+	}
 }

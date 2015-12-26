@@ -328,7 +328,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			MessageManager::UnregisterNotificationListener(this);
 		}
 
-		void ProcessNotification(ConsoleNotificationType type)
+		void ProcessNotification(ConsoleNotificationType type, void* parameter)
 		{
 			switch(type) {
 				case ConsoleNotificationType::CheatAdded:

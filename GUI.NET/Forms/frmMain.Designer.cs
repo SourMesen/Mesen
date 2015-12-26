@@ -89,6 +89,12 @@
 			this.mnuRecordFromStart = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRecordFromNow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStopMovie = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTests = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTestRun = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTestRecordFrom = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTestRecordStart = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTestRecordNow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTestStopRecording = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebugger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTakeScreenshot = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -387,6 +393,7 @@
             this.mnuNetPlay,
             this.mnuCheats,
             this.mnuMovies,
+            this.mnuTests,
             this.mnuDebugger,
             this.mnuTakeScreenshot});
 			this.mnuTools.Name = "mnuTools";
@@ -513,6 +520,55 @@
 			this.mnuStopMovie.Size = new System.Drawing.Size(149, 22);
 			this.mnuStopMovie.Text = "Stop";
 			this.mnuStopMovie.Click += new System.EventHandler(this.mnuStopMovie_Click);
+			// 
+			// mnuTests
+			// 
+			this.mnuTests.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuTestRun,
+            this.mnuTestRecordFrom,
+            this.mnuTestStopRecording});
+			this.mnuTests.Name = "mnuTests";
+			this.mnuTests.Size = new System.Drawing.Size(185, 22);
+			this.mnuTests.Text = "Tests";
+			// 
+			// mnuTestRun
+			// 
+			this.mnuTestRun.Name = "mnuTestRun";
+			this.mnuTestRun.Size = new System.Drawing.Size(193, 22);
+			this.mnuTestRun.Text = "Run...";
+			this.mnuTestRun.Click += new System.EventHandler(this.mnuTestRun_Click);
+			// 
+			// mnuTestRecordFrom
+			// 
+			this.mnuTestRecordFrom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuTestRecordStart,
+            this.mnuTestRecordNow});
+			this.mnuTestRecordFrom.Name = "mnuTestRecordFrom";
+			this.mnuTestRecordFrom.Size = new System.Drawing.Size(193, 22);
+			this.mnuTestRecordFrom.Text = "Record from...";
+			// 
+			// mnuTestRecordStart
+			// 
+			this.mnuTestRecordStart.Name = "mnuTestRecordStart";
+			this.mnuTestRecordStart.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+			this.mnuTestRecordStart.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordStart.Text = "Start";
+			this.mnuTestRecordStart.Click += new System.EventHandler(this.mnuTestRecordStart_Click);
+			// 
+			// mnuTestRecordNow
+			// 
+			this.mnuTestRecordNow.Name = "mnuTestRecordNow";
+			this.mnuTestRecordNow.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordNow.Text = "Now";
+			this.mnuTestRecordNow.Click += new System.EventHandler(this.mnuTestRecordNow_Click);
+			// 
+			// mnuTestStopRecording
+			// 
+			this.mnuTestStopRecording.Name = "mnuTestStopRecording";
+			this.mnuTestStopRecording.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+			this.mnuTestStopRecording.Size = new System.Drawing.Size(193, 22);
+			this.mnuTestStopRecording.Text = "Stop recording";
+			this.mnuTestStopRecording.Click += new System.EventHandler(this.mnuTestStopRecording_Click);
 			// 
 			// mnuDebugger
 			// 
@@ -652,6 +708,12 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedQuarter;
 		private System.Windows.Forms.ToolStripMenuItem mnuEmuSpeedMaximumSpeed;
 		private System.Windows.Forms.Timer menuTimer;
+		private System.Windows.Forms.ToolStripMenuItem mnuTests;
+		private System.Windows.Forms.ToolStripMenuItem mnuTestRun;
+		private System.Windows.Forms.ToolStripMenuItem mnuTestRecordFrom;
+		private System.Windows.Forms.ToolStripMenuItem mnuTestRecordStart;
+		private System.Windows.Forms.ToolStripMenuItem mnuTestRecordNow;
+		private System.Windows.Forms.ToolStripMenuItem mnuTestStopRecording;
 	}
 }
 

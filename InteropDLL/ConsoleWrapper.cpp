@@ -13,13 +13,15 @@
 #include "../Core/StandardController.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/VideoDecoder.h"
+#include "../Core/AutoRomTest.h"
 
-static NES::Renderer *_renderer = nullptr;
-static SoundManager *_soundManager = nullptr;
-static vector<shared_ptr<StandardController>> _inputDevices;
-static HWND _windowHandle = nullptr;
-static HWND _viewerHandle = nullptr;
-static string _returnString;
+NES::Renderer *_renderer = nullptr;
+SoundManager *_soundManager = nullptr;
+vector<shared_ptr<StandardController>> _inputDevices;
+HWND _windowHandle = nullptr;
+HWND _viewerHandle = nullptr;
+string _returnString;
+AutoRomTest *_autoRomTest = nullptr;
 
 typedef void (__stdcall *NotificationListenerCallback)(int);
 
@@ -33,7 +35,7 @@ namespace InteropEmu {
 			_callback = callback;
 		}
 
-		void ProcessNotification(ConsoleNotificationType type)
+		void ProcessNotification(ConsoleNotificationType type, void* parameter)
 		{
 			_callback((int)type);
 		}
@@ -154,6 +156,32 @@ namespace InteropEmu {
 		DllExport void __stdcall MovieStop() { Movie::Stop(); }
 		DllExport int __stdcall MoviePlaying() { return Movie::Playing(); }
 		DllExport int __stdcall MovieRecording() { return Movie::Recording(); }
+
+		DllExport int __stdcall RomTestRun(char* filename)
+		{
+			AutoRomTest romTest; 
+			return romTest.Run(filename);
+		}
+
+		DllExport void __stdcall RomTestRecord(char* filename, bool reset) 
+		{
+			if(_autoRomTest) {
+				delete _autoRomTest;
+			}
+			_autoRomTest = new AutoRomTest();
+			_autoRomTest->Record(filename, reset); 
+		}
+
+		DllExport void __stdcall RomTestStop() 
+		{
+			if(_autoRomTest) {
+				_autoRomTest->Stop();
+				delete _autoRomTest;
+				_autoRomTest = nullptr;
+			}
+		}
+
+		DllExport int __stdcall RomTestRecording() { return _autoRomTest != nullptr; }
 
 		DllExport void __stdcall CheatAddCustom(uint32_t address, uint8_t value, int32_t compareValue, bool isRelativeAddress) { CheatManager::AddCustomCode(address, value, compareValue, isRelativeAddress); }
 		DllExport void __stdcall CheatAddGameGenie(char* code) { CheatManager::AddGameGenieCode(code); }

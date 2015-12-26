@@ -34,7 +34,7 @@ void MessageManager::UnregisterNotificationListener(INotificationListener* notif
 	MessageManager::_notificationListeners.erase(std::remove(MessageManager::_notificationListeners.begin(), MessageManager::_notificationListeners.end(), notificationListener), MessageManager::_notificationListeners.end());
 }
 
-void MessageManager::SendNotification(ConsoleNotificationType type)
+void MessageManager::SendNotification(ConsoleNotificationType type, void* parameter)
 {
 	//Iterate on a copy to prevent issues if a notification causes a listener to unregister itself
 	vector<INotificationListener*> listeners = MessageManager::_notificationListeners;
@@ -44,7 +44,7 @@ void MessageManager::SendNotification(ConsoleNotificationType type)
 		INotificationListener* notificationListener = listeners[i];
 		if(std::find(processedListeners.begin(), processedListeners.end(), notificationListener) == processedListeners.end()) {
 			//Only send notification if it hasn't been processed already
-			notificationListener->ProcessNotification(type);
+			notificationListener->ProcessNotification(type, parameter);
 		}
 		processedListeners.push_back(notificationListener);
 

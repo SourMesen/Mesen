@@ -177,6 +177,7 @@ namespace Mesen.GUI.Forms
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Filter = "All supported formats (*.nes, *.zip)|*.NES;*.ZIP|NES Roms (*.nes)|*.NES|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*";
+			ofd.InitialDirectory = System.IO.Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				LoadROM(ofd.FileName);
 			}
@@ -222,6 +223,13 @@ namespace Mesen.GUI.Forms
 					mnuRecordFrom.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
 					mnuRecordFromStart.Enabled = _emuThread != null && !InteropEmu.IsConnected() && !moviePlaying && !movieRecording;
 					mnuRecordFromNow.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
+
+					bool testRecording = InteropEmu.RomTestRecording();
+					mnuTestRun.Enabled = !netPlay && !moviePlaying && !movieRecording;
+					mnuTestStopRecording.Enabled = _emuThread != null && testRecording;
+					mnuTestRecordFrom.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
+					mnuTestRecordStart.Enabled = _emuThread != null && !InteropEmu.IsConnected() && !moviePlaying && !movieRecording;
+					mnuTestRecordNow.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
 
 					mnuDebugger.Enabled = !netPlay && _emuThread != null;
 
@@ -407,17 +415,7 @@ namespace Mesen.GUI.Forms
 				_debugger.Focus();
 			}
 		}
-
-		private void mnuSaveState1_Click(object sender, EventArgs e)
-		{
-			InteropEmu.SaveState(1);
-		}
-
-		private void mnuLoadState1_Click(object sender, EventArgs e)
-		{
-			InteropEmu.LoadState(1);
-		}
-
+		
 		private void mnuSaveState_DropDownOpening(object sender, EventArgs e)
 		{
 			InitializeStateMenu(mnuSaveState, true);
@@ -439,6 +437,8 @@ namespace Mesen.GUI.Forms
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = "Movie files (*.mmo)|*.mmo|All (*.*)|*.*";
+			sfd.InitialDirectory = ConfigManager.MovieFolder;
+			sfd.FileName = System.IO.Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mmo";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.MovieRecord(sfd.FileName, resetEmu);
 			}
@@ -448,6 +448,7 @@ namespace Mesen.GUI.Forms
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Filter = "Movie files (*.mmo)|*.mmo|All (*.*)|*.*";
+			ofd.InitialDirectory = ConfigManager.MovieFolder;
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.MoviePlay(ofd.FileName);
 			}
@@ -466,6 +467,84 @@ namespace Mesen.GUI.Forms
 		private void mnuRecordFromNow_Click(object sender, EventArgs e)
 		{
 			RecordMovie(false);
+		}
+
+		private void RecordTest(bool resetEmu)
+		{
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
+			sfd.InitialDirectory = ConfigManager.TestFolder;
+			sfd.FileName = System.IO.Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mtp";
+			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				InteropEmu.RomTestRecord(sfd.FileName, resetEmu);
+			}
+		}
+
+		private void mnuTestRun_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
+			ofd.InitialDirectory = ConfigManager.TestFolder;
+			ofd.Multiselect = true;
+			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				List<string> passedTests = new List<string>();
+				List<string> failedTests = new List<string>();
+
+				this.menuStrip.Enabled = false;
+
+				foreach(string filename in ofd.FileNames) {
+					bool result = false;
+					Task testTask = Task.Run(() => {
+						result = InteropEmu.RomTestRun(filename);
+					});
+
+					while(!testTask.IsCompleted) {
+						System.Threading.Thread.Sleep(100);
+						Application.DoEvents();
+					}
+
+					if(result) {
+						passedTests.Add(System.IO.Path.GetFileNameWithoutExtension(filename));
+					} else {
+						failedTests.Add(System.IO.Path.GetFileNameWithoutExtension(filename));
+					}
+				}
+
+				if(failedTests.Count == 0) {
+					MessageBox.Show("All tests passed.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				} else if(passedTests.Count == 0) {
+					MessageBox.Show("All tests failed.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				} else {
+					StringBuilder message = new StringBuilder();
+					message.AppendLine("Passed tests:");
+					foreach(string test in passedTests) {
+						message.AppendLine("  -" + test);
+					}
+					message.AppendLine("");
+					message.AppendLine("Failed tests:");
+					foreach(string test in failedTests) {
+						message.AppendLine("  -" + test);
+					}
+					MessageBox.Show(message.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+
+				this.menuStrip.Enabled = true;
+			}
+		}
+
+		private void mnuTestRecordStart_Click(object sender, EventArgs e)
+		{
+			RecordTest(true);
+		}
+
+		private void mnuTestRecordNow_Click(object sender, EventArgs e)
+		{
+			RecordTest(false);
+		}
+
+		private void mnuTestStopRecording_Click(object sender, EventArgs e)
+		{
+			InteropEmu.RomTestStop();
 		}
 
 		private void mnuCheats_Click(object sender, EventArgs e)

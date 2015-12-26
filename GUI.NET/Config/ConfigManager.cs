@@ -44,6 +44,30 @@ namespace Mesen.GUI.Config
 			}
 		}
 
+		public static string MovieFolder
+		{
+			get
+			{
+				string movieFolder = Path.Combine(ConfigManager.HomeFolder, "Movies");
+				if(!Directory.Exists(movieFolder)) {
+					Directory.CreateDirectory(movieFolder);
+				}
+				return movieFolder;
+			}
+		}
+
+		public static string TestFolder
+		{
+			get
+			{
+				string testFolder = Path.Combine(ConfigManager.HomeFolder, "Tests");
+				if(!Directory.Exists(testFolder)) {
+					Directory.CreateDirectory(testFolder);
+				}
+				return testFolder;
+			}
+		}
+
 		private static string ConfigFile
 		{
 			get

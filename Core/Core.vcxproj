@@ -266,6 +266,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="APU.h" />
+    <ClInclude Include="AutoRomTest.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="CodeDataLogger.h" />
     <ClInclude Include="DeltaModulationChannel.h" />
@@ -337,6 +338,7 @@
   <ItemGroup>
     <ClCompile Include="APU.cpp" />
     <ClCompile Include="ApuLengthCounter.cpp" />
+    <ClCompile Include="AutoRomTest.cpp" />
     <ClCompile Include="Breakpoint.cpp" />
     <ClCompile Include="CheatManager.cpp" />
     <ClCompile Include="CodeDataLogger.cpp" />

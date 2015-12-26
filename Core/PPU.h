@@ -210,7 +210,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void WriteRAM(uint16_t addr, uint8_t value);
 
 		void SetNesModel(NesModel model);
-
+		
 		void Exec();
 		static void ExecStatic();
 

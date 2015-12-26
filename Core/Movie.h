@@ -28,7 +28,8 @@ class Movie
 	private:
 		void PushState(uint8_t port);
 		void StartRecording(string filename, bool reset);
-		void PlayMovie(string filename);
+		
+		void PlayMovie(stringstream &filestream, bool autoLoadRom, string filename = "");
 		void StopAll();
 		void Reset();
 
@@ -36,11 +37,12 @@ class Movie
 		uint8_t GetState(uint8_t port);
 
 		bool Save();
-		bool Load(string filename);
+		bool Load(std::stringstream &file, bool autoLoadRom);
 		
 	public:
 		static void Record(string filename, bool reset);
 		static void Play(string filename);
+		static void Play(std::stringstream &filestream);
 		static void Stop();
 		static bool Playing();
 		static bool Recording();

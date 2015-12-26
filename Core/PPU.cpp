@@ -621,6 +621,7 @@ void PPU::CopyOAMData()
 
 void PPU::SendFrame()
 {
+	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);	
 	if(VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer)) {
 		_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
 	}

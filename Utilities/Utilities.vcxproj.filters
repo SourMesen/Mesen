@@ -35,9 +35,6 @@
     <ClInclude Include="CRC32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ZIPReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="miniz.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -50,15 +47,21 @@
     <ClInclude Include="AutoResetEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="md5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZipWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZipReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FolderUtilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ZIPReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="miniz.cpp">
@@ -86,6 +89,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AutoResetEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="md5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZipWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZipReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

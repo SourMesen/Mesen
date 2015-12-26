@@ -63,4 +63,5 @@ public:
 	void StopThread();
 
 	void RegisterRenderingDevice(IRenderingDevice *renderer);
+	void UnregisterRenderingDevice(IRenderingDevice *renderer);
 };

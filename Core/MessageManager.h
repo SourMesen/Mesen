@@ -18,5 +18,5 @@ public:
 
 	static void RegisterNotificationListener(INotificationListener* notificationListener);
 	static void UnregisterNotificationListener(INotificationListener* notificationListener);
-	static void SendNotification(ConsoleNotificationType type);
+	static void SendNotification(ConsoleNotificationType type, void* parameter = nullptr);
 };

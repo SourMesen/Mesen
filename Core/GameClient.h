@@ -30,5 +30,5 @@ public:
 	static void Connect(shared_ptr<ClientConnectionData> connectionData);
 	static void Disconnect();
 
-	void ProcessNotification(ConsoleNotificationType type);
+	void ProcessNotification(ConsoleNotificationType type, void* parameter);
 };

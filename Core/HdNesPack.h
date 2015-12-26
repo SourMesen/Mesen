@@ -256,7 +256,7 @@ public:
 		_loadLock.Release();
 	}
 
-	void ProcessNotification(ConsoleNotificationType type)
+	void ProcessNotification(ConsoleNotificationType type, void* parameter)
 	{
 		if(type == ConsoleNotificationType::GameLoaded) {
 			LoadHdNesPack();

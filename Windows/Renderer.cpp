@@ -27,6 +27,7 @@ namespace NES
 
 	Renderer::~Renderer()
 	{
+		VideoDecoder::GetInstance()->UnregisterRenderingDevice(this);
 		CleanupDevice();
 	}
 

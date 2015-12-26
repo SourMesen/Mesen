@@ -109,7 +109,7 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 	}
 }
 
-void GameServerConnection::ProcessNotification(ConsoleNotificationType type)
+void GameServerConnection::ProcessNotification(ConsoleNotificationType type, void* parameter)
 {
 	switch(type) {
 		case ConsoleNotificationType::GamePaused:

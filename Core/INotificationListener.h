@@ -18,5 +18,5 @@ enum class ConsoleNotificationType
 class INotificationListener
 {
 public:
-	virtual void ProcessNotification(ConsoleNotificationType type) = 0;
+	virtual void ProcessNotification(ConsoleNotificationType type, void* parameter) = 0;
 };

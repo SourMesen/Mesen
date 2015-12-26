@@ -230,6 +230,7 @@
   <ItemGroup>
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
+    <ClInclude Include="md5.h" />
     <ClInclude Include="miniz.h" />
     <ClInclude Include="AutoResetEvent.h" />
     <ClInclude Include="PNGHelper.h" />
@@ -240,11 +241,13 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UTF8Util.h" />
-    <ClInclude Include="ZIPReader.h" />
+    <ClInclude Include="ZipReader.h" />
+    <ClInclude Include="ZipWriter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRC32.cpp" />
     <ClCompile Include="FolderUtilities.cpp" />
+    <ClCompile Include="md5.cpp" />
     <ClCompile Include="miniz.cpp" />
     <ClCompile Include="PNGHelper.cpp" />
     <ClCompile Include="AutoResetEvent.cpp" />
@@ -261,7 +264,8 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UPnPPortMapper.cpp" />
     <ClCompile Include="UTF8Util.cpp" />
-    <ClCompile Include="ZIPReader.cpp" />
+    <ClCompile Include="ZipReader.cpp" />
+    <ClCompile Include="ZipWriter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -51,6 +51,11 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern bool MoviePlaying();
 		[DllImport(DLLPath)] public static extern bool MovieRecording();
 
+		[DllImport(DLLPath)] public static extern bool RomTestRun([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath)] public static extern void RomTestRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
+		[DllImport(DLLPath)] public static extern void RomTestStop();
+		[DllImport(DLLPath)] public static extern bool RomTestRecording();
+
 		[DllImport(DLLPath)] public static extern void SaveState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern void LoadState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern Int64 GetStateInfo(UInt32 stateIndex);

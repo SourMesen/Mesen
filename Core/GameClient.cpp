@@ -84,7 +84,7 @@ void GameClient::Exec()
 	}
 }
 
-void GameClient::ProcessNotification(ConsoleNotificationType type)
+void GameClient::ProcessNotification(ConsoleNotificationType type, void* parameter)
 {
 	if(type == ConsoleNotificationType::GameLoaded && std::this_thread::get_id() != _clientThread->get_id()) {
 		GameClient::Disconnect();		

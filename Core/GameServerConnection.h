@@ -26,5 +26,5 @@ public:
 
 	ButtonState GetButtonState();
 
-	virtual void ProcessNotification(ConsoleNotificationType type);
+	virtual void ProcessNotification(ConsoleNotificationType type, void* parameter);
 };
