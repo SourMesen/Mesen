@@ -31,13 +31,13 @@ void Console::Release()
 	Console::Instance.reset(new Console());
 }
 
-void Console::Initialize(string filename, stringstream *filestream)
+void Console::Initialize(string romFilename, stringstream *filestream, string ipsFilename)
 {
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
-	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(filename, filestream);
+	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, filestream, ipsFilename);
 
 	if(mapper) {
-		_romFilepath = filename;
+		_romFilepath = romFilename;
 				
 		VideoDecoder::GetInstance()->StopThread();
 
@@ -64,11 +64,18 @@ void Console::Initialize(string filename, stringstream *filestream)
 
 		VideoDecoder::GetInstance()->StartThread();
 	
-		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(filename));
-		MessageManager::DisplayMessage("Game loaded", FolderUtilities::GetFilename(filename, false));
+		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(romFilename));
+		MessageManager::DisplayMessage("Game loaded", FolderUtilities::GetFilename(romFilename, false));
 	} else {
-		MessageManager::DisplayMessage("Error", string("Could not load file: ") + FolderUtilities::GetFilename(filename, true));
+		MessageManager::DisplayMessage("Error", string("Could not load file: ") + FolderUtilities::GetFilename(romFilename, true));
 	}
+}
+
+void Console::ApplyIpsPatch(string ipsFilename)
+{
+	Console::Pause();
+	Instance->Initialize(GetROMPath(), nullptr, ipsFilename);
+	Console::Resume();
 }
 
 void Console::LoadROM(string filepath, stringstream *filestream)

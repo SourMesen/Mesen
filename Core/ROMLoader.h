@@ -5,6 +5,7 @@
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/ZipReader.h"
 #include "../Utilities/CRC32.h"
+#include "../Utilities/IpsPatcher.h"
 
 enum class MirroringType
 {
@@ -65,6 +66,7 @@ class ROMLoader
 		uint8_t* _prgRAM = nullptr;
 		uint8_t* _chrRAM = nullptr;
 		uint32_t _crc32;
+		string _ipsFilename;
 
 		bool LoadFromZip(stringstream &zipFile)
 		{
@@ -128,6 +130,16 @@ class ROMLoader
 
 		bool LoadFromMemory(uint8_t* buffer, size_t length)
 		{
+			if(!_ipsFilename.empty()) {
+				//Apply IPS patch
+				uint8_t* patchedFile = nullptr;
+				size_t patchedSize = 0;
+				if(IpsPatcher::PatchBuffer(_ipsFilename, buffer, length, &patchedFile, patchedSize)) {
+					buffer = patchedFile;
+					length = patchedSize;
+				}
+			}
+
 			_crc32 = CRC32::GetCRC(buffer, length);
 			if(memcmp(buffer, "NES", 3) == 0) {
 				memcpy((char*)&_header, buffer, sizeof(NESHeader));
@@ -163,8 +175,10 @@ class ROMLoader
 			}
 		}
 		
-		bool LoadFile(string filename, stringstream *filestream = nullptr) 
+		bool LoadFile(string filename, stringstream *filestream = nullptr, string ipsFilename = "") 
 		{
+			_ipsFilename = ipsFilename;
+
 			stringstream ss;
 			if(!filestream) {
 				ifstream file(filename, ios::in | ios::binary);

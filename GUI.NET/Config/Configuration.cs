@@ -21,6 +21,7 @@ namespace Mesen.GUI.Config
 		public List<CheatInfo> Cheats;
 		public List<ControllerInfo> Controllers;
 		public bool ShowOnlyCheatsForCurrentGame;
+		public bool AutoLoadIpsPatches;
 		public NesModel Region;
 
 		public Configuration()

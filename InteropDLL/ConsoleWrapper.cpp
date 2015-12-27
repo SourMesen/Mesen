@@ -62,6 +62,7 @@ namespace InteropEmu {
 		}
 
 		DllExport void __stdcall LoadROM(char* filename) { Console::LoadROM(filename); }
+		DllExport void __stdcall ApplyIpsPatch(char* filename) { Console::ApplyIpsPatch(filename); }
 		DllExport void __stdcall AddKnowGameFolder(char* folder) { FolderUtilities::AddKnowGameFolder(folder); }
 
 		DllExport void __stdcall AddKeyMappings(uint32_t port, KeyMapping mapping) { _inputDevices[port]->AddKeyMappings(mapping); }

@@ -48,11 +48,11 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 	return nullptr;
 }
 
-shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string filename, stringstream *filestream)
+shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string romFilename, stringstream *filestream, string ipsFilename)
 {
 	ROMLoader loader;
 
-	if(loader.LoadFile(filename, filestream)) {
+	if(loader.LoadFile(romFilename, filestream, ipsFilename)) {
 		uint8_t mapperID = loader.GetMapperID();
 
 		shared_ptr<BaseMapper> mapper(GetMapperFromID(mapperID));

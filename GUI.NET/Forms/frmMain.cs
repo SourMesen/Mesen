@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -41,6 +42,8 @@ namespace Mesen.GUI.Forms
 			InitializeEmulationSpeedMenu();
 			
 			UpdateVideoSettings();
+			this.mnuAutoLoadIpsPatches.Checked = ConfigManager.Config.AutoLoadIpsPatches;
+
 			InitializeEmu();
 
 			UpdateMenus();
@@ -60,7 +63,7 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.dxViewer.Handle);
 			foreach(string romPath in ConfigManager.Config.RecentFiles) {
-				InteropEmu.AddKnowGameFolder(System.IO.Path.GetDirectoryName(romPath).ToLowerInvariant());
+				InteropEmu.AddKnowGameFolder(Path.GetDirectoryName(romPath).ToLowerInvariant());
 			}
 
 			ConfigManager.Config.ApplyConfig();
@@ -139,8 +142,8 @@ namespace Mesen.GUI.Forms
 		{
 			SetEmulationSpeed((uint)(int)((ToolStripItem)sender).Tag);
 		}
-		
-		void UpdateEmulationFlags()
+
+		private void UpdateEmulationFlags()
 		{
 			ConfigManager.Config.VideoInfo.ShowFPS = mnuShowFPS.Checked;
 			ConfigManager.ApplyChanges();
@@ -148,19 +151,25 @@ namespace Mesen.GUI.Forms
 			VideoInfo.ApplyConfig();
 		}
 
-		void UpdateVideoSettings()
+		private void UpdateVideoSettings()
 		{
 			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
 			UpdateEmulationSpeedMenu();
 			dxViewer.Size = VideoInfo.GetViewerSize();
 		}
 
-		void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+		private void UpdateConfig()
+		{
+			ConfigManager.Config.AutoLoadIpsPatches = this.mnuAutoLoadIpsPatches.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
 			MessageBox.Show(e.Exception.ToString(), "Unexpected Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
-		void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
+		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameLoaded) {
 				CheatInfo.ApplyCheats();
@@ -176,10 +185,43 @@ namespace Mesen.GUI.Forms
 		private void mnuOpen_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "All supported formats (*.nes, *.zip)|*.NES;*.ZIP|NES Roms (*.nes)|*.NES|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*";
-			ofd.InitialDirectory = System.IO.Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
+			ofd.Filter = "All supported formats (*.nes, *.zip, *.ips)|*.NES;*.ZIP;*.IPS|NES Roms (*.nes)|*.NES|ZIP Archives (*.zip)|*.ZIP|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*";
+			if(ConfigManager.Config.RecentFiles.Count > 0) {
+				ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
+			}			
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				LoadROM(ofd.FileName);
+				if(Path.GetExtension(ofd.FileName).ToLowerInvariant() == ".ips") {
+					string ipsFile = ofd.FileName;
+					string romFile = Path.Combine(Path.GetDirectoryName(ofd.FileName), Path.GetFileNameWithoutExtension(ofd.FileName));
+
+					if(File.Exists(romFile+".nes") || File.Exists(romFile+".zip")) {
+						LoadROM(romFile + (File.Exists(romFile+".nes") ? ".nes" : ".zip"));
+						InteropEmu.ApplyIpsPatch(ipsFile);
+					} else {
+						if(_emuThread == null) {
+							if(MessageBox.Show("Please select a ROM matching the IPS patch file.", string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
+								ofd.Filter = "All supported formats (*.nes, *.zip)|*.NES;*.ZIP|NES Roms (*.nes)|*.NES|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*";
+								if(ConfigManager.Config.RecentFiles.Count > 0) {
+								ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
+									}
+								if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+									LoadROM(ofd.FileName);
+								}
+								InteropEmu.ApplyIpsPatch(ipsFile);
+							}
+						} else if(MessageBox.Show("Patch and reset the current game?", string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
+							InteropEmu.ApplyIpsPatch(ipsFile);
+						}
+					}
+				} else {
+					LoadROM(ofd.FileName);
+					if(this.mnuAutoLoadIpsPatches.Checked) {
+						string ipsFile = Path.Combine(Path.GetDirectoryName(ofd.FileName), Path.GetFileNameWithoutExtension(ofd.FileName)) + ".ips";
+						if(File.Exists(ipsFile)) {
+							InteropEmu.ApplyIpsPatch(ipsFile);
+						}
+					}
+				}
 			}
 		}
 
@@ -196,7 +238,7 @@ namespace Mesen.GUI.Forms
 				if(this.InvokeRequired) {
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
-					string romFilename = System.IO.Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath());
+					string romFilename = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath());
 					if(string.IsNullOrWhiteSpace(romFilename)) {
 						this.Text = "Mesen";
 					} else {
@@ -249,7 +291,7 @@ namespace Mesen.GUI.Forms
 			mnuRecentFiles.DropDownItems.Clear();
 			foreach(string filepath in ConfigManager.Config.RecentFiles) {
 				ToolStripMenuItem tsmi = new ToolStripMenuItem();
-				tsmi.Text = System.IO.Path.GetFileName(filepath);
+				tsmi.Text = Path.GetFileName(filepath);
 				tsmi.Click += (object sender, EventArgs args) => {
 					LoadROM(filepath);
 				};
@@ -445,7 +487,7 @@ namespace Mesen.GUI.Forms
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = "Movie files (*.mmo)|*.mmo|All (*.*)|*.*";
 			sfd.InitialDirectory = ConfigManager.MovieFolder;
-			sfd.FileName = System.IO.Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mmo";
+			sfd.FileName = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mmo";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.MovieRecord(sfd.FileName, resetEmu);
 			}
@@ -493,9 +535,9 @@ namespace Mesen.GUI.Forms
 						bool result = InteropEmu.RomTestRun(filename);
 
 						if(result) {
-							passedTests.Add(System.IO.Path.GetFileNameWithoutExtension(filename));
+							passedTests.Add(Path.GetFileNameWithoutExtension(filename));
 						} else {
-							failedTests.Add(System.IO.Path.GetFileNameWithoutExtension(filename));
+							failedTests.Add(Path.GetFileNameWithoutExtension(filename));
 						}
 					}
 
@@ -539,7 +581,7 @@ namespace Mesen.GUI.Forms
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
 			sfd.InitialDirectory = ConfigManager.TestFolder;
-			sfd.FileName = System.IO.Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mtp";
+			sfd.FileName = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mtp";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.RomTestRecord(sfd.FileName, resetEmu);
 			}
@@ -554,7 +596,7 @@ namespace Mesen.GUI.Forms
 				SaveFileDialog sfd = new SaveFileDialog();
 				sfd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
 				sfd.InitialDirectory = ConfigManager.TestFolder;
-				sfd.FileName = System.IO.Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
+				sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
 				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 					InteropEmu.RomTestRecordFromMovie(sfd.FileName, ofd.FileName);
 				}
@@ -571,7 +613,7 @@ namespace Mesen.GUI.Forms
 				SaveFileDialog sfd = new SaveFileDialog();
 				sfd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
 				sfd.InitialDirectory = ConfigManager.TestFolder;
-				sfd.FileName = System.IO.Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
+				sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
 				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 					InteropEmu.RomTestRecordFromTest(sfd.FileName, ofd.FileName);
 				}
