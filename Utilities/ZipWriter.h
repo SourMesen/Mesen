@@ -13,4 +13,5 @@ public:
 	~ZipWriter();
 
 	void AddFile(string filepath, string zipFilename);
+	void AddFile(std::stringstream &filestream, string zipFilename);
 };

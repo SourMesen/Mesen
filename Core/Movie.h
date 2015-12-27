@@ -42,7 +42,7 @@ class Movie
 	public:
 		static void Record(string filename, bool reset);
 		static void Play(string filename);
-		static void Play(std::stringstream &filestream);
+		static void Play(std::stringstream &filestream, bool autoLoadRom);
 		static void Stop();
 		static bool Playing();
 		static bool Recording();

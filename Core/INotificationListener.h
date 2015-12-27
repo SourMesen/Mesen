@@ -12,7 +12,8 @@ enum class ConsoleNotificationType
 	CodeBreak = 6,
 	CheatAdded = 7,
 	CheatRemoved = 8,
-	PpuFrameDone = 9
+	PpuFrameDone = 9,
+	MovieEnded = 10,
 };
 
 class INotificationListener

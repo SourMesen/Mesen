@@ -172,6 +172,18 @@ namespace InteropEmu {
 			_autoRomTest->Record(filename, reset); 
 		}
 
+		DllExport void __stdcall RomTestRecordFromMovie(char* testFilename, char* movieFilename) 
+		{
+			_autoRomTest = new AutoRomTest();
+			_autoRomTest->RecordFromMovie(testFilename, movieFilename);
+		}
+
+		DllExport void __stdcall RomTestRecordFromTest(char* newTestFilename, char* existingTestFilename) 
+		{
+			_autoRomTest = new AutoRomTest();
+			_autoRomTest->RecordFromTest(newTestFilename, existingTestFilename);
+		}
+
 		DllExport void __stdcall RomTestStop() 
 		{
 			if(_autoRomTest) {

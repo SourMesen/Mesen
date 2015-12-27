@@ -47,6 +47,7 @@ uint8_t Movie::GetState(uint8_t port)
 	if(_readPosition[port] >= _data.DataSize[port]) {
 		//End of movie file
 		MessageManager::DisplayMessage("Movies", "Movie ended.");
+		MessageManager::SendNotification(ConsoleNotificationType::MovieEnded);
 		_playing = false;
 	}
 
@@ -149,9 +150,9 @@ void Movie::Play(string filename)
 	}
 }
 
-void Movie::Play(std::stringstream &filestream)
+void Movie::Play(std::stringstream &filestream, bool autoLoadRom)
 {
-	Instance->PlayMovie(filestream, false);
+	Instance->PlayMovie(filestream, autoLoadRom);
 }
 
 void Movie::Stop()

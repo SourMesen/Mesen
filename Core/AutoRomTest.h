@@ -11,11 +11,16 @@ private:
 	bool _recording;
 	bool _runningTest;
 	bool _testResult;
+	bool _recordingFromMovie;
 
 	uint8_t _previousHash[16];
 	std::deque<uint8_t*> _screenshotHashes;
 	std::deque<uint8_t> _repetitionCount;
 	uint8_t _currentCount;
+	
+	//Used when make a test out of an existing movie/test
+	stringstream _movieStream;
+	stringstream _romStream;
 
 	string _filename;
 	ofstream _file;
@@ -27,6 +32,7 @@ private:
 	void ValidateFrame(uint16_t* ppuFrameBuffer);
 	void SaveFrame(uint16_t* ppuFrameBuffer);
 	void Save();
+	void RecordFromMovie(string testFilename, stringstream &movieStream, bool autoLoadRom);
 
 public:
 	AutoRomTest();
@@ -34,6 +40,8 @@ public:
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter);
 	void Record(string filename, bool reset);
+	void RecordFromMovie(string testFilename, string movieFilename);
+	void RecordFromTest(string newTestFilename, string existingTestFilename);
 	bool Run(string filename);
 	void Stop();
 };

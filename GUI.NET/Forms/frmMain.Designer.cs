@@ -101,8 +101,10 @@
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
+			this.mnuTestRecordMovie = new System.Windows.Forms.ToolStripMenuItem();
+			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
+			this.mnuTestRecordTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -542,7 +544,9 @@
 			// 
 			this.mnuTestRecordFrom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuTestRecordStart,
-            this.mnuTestRecordNow});
+            this.mnuTestRecordNow,
+            this.mnuTestRecordMovie,
+            this.mnuTestRecordTest});
 			this.mnuTestRecordFrom.Name = "mnuTestRecordFrom";
 			this.mnuTestRecordFrom.Size = new System.Drawing.Size(193, 22);
 			this.mnuTestRecordFrom.Text = "Record from...";
@@ -614,6 +618,17 @@
 			this.mnuAbout.Size = new System.Drawing.Size(170, 22);
 			this.mnuAbout.Text = "About";
 			// 
+			// menuTimer
+			// 
+			this.menuTimer.Tick += new System.EventHandler(this.menuTimer_Tick);
+			// 
+			// mnuTestRecordMovie
+			// 
+			this.mnuTestRecordMovie.Name = "mnuTestRecordMovie";
+			this.mnuTestRecordMovie.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordMovie.Text = "Movie";
+			this.mnuTestRecordMovie.Click += new System.EventHandler(this.mnuTestRecordMovie_Click);
+			// 
 			// dxViewer
 			// 
 			this.dxViewer.BackColor = System.Drawing.Color.Black;
@@ -623,9 +638,12 @@
 			this.dxViewer.Size = new System.Drawing.Size(1024, 960);
 			this.dxViewer.TabIndex = 1;
 			// 
-			// menuTimer
+			// mnuTestRecordTest
 			// 
-			this.menuTimer.Tick += new System.EventHandler(this.menuTimer_Tick);
+			this.mnuTestRecordTest.Name = "mnuTestRecordTest";
+			this.mnuTestRecordTest.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordTest.Text = "Test";
+			this.mnuTestRecordTest.Click += new System.EventHandler(this.mnuTestRecordTest_Click);
 			// 
 			// frmMain
 			// 
@@ -714,6 +732,8 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuTestRecordStart;
 		private System.Windows.Forms.ToolStripMenuItem mnuTestRecordNow;
 		private System.Windows.Forms.ToolStripMenuItem mnuTestStopRecording;
+		private System.Windows.Forms.ToolStripMenuItem mnuTestRecordMovie;
+		private System.Windows.Forms.ToolStripMenuItem mnuTestRecordTest;
 	}
 }
 
