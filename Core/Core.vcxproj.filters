@@ -245,6 +245,9 @@
     <ClInclude Include="AutoRomTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MMC4.h">
+      <Filter>Header Files\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPU.cpp">

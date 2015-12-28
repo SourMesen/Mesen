@@ -9,6 +9,7 @@
 #include "MMC2.h"
 #include "MMC3.h"
 #include "MMC3_189.h"
+#include "MMC4.h"
 #include "MMC5.h"
 #include "Nanjing.h"
 #include "NROM.h"
@@ -31,6 +32,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 5: return new MMC5();
 		case 7: return new AXROM();
 		case 9: return new MMC2();
+		case 10: return new MMC4();
 		case 11: return new ColorDreams();
 		case 16: break; //18 games
 		case 19: break; //16 games
