@@ -4,6 +4,7 @@
 #include "ROMLoader.h"
 #include "AXROM.h"
 #include "CNROM.h"
+#include "CpRom.h"
 #include "ColorDreams.h"
 #include "MMC1.h"
 #include "MMC2.h"
@@ -34,6 +35,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 9: return new MMC2();
 		case 10: return new MMC4();
 		case 11: return new ColorDreams();
+		case 13: return new CpRom();
 		case 16: break; //18 games
 		case 19: break; //16 games
 		case 21: return new VRC2_4(VRCVariant::VRC4a);  //Conflicts: VRC4c

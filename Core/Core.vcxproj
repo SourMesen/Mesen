@@ -269,6 +269,7 @@
     <ClInclude Include="AutoRomTest.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="CodeDataLogger.h" />
+    <ClInclude Include="CpRom.h" />
     <ClInclude Include="DeltaModulationChannel.h" />
     <ClInclude Include="ApuEnvelope.h" />
     <ClInclude Include="ApuFrameCounter.h" />

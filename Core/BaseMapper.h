@@ -70,6 +70,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		virtual uint32_t GetSaveRamSize() { return 0x2000; }
 		virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
 
+		virtual uint32_t GetChrRamSize() { return 0x2000; }
+
 		//Work ram is NOT saved - aka Expansion ram, etc.
 		virtual uint32_t GetWorkRamPageSize() { return 0x2000; }
 		virtual uint32_t GetWorkRamSize() { return 0x2000; }
@@ -300,8 +302,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 			if(_chrSize == 0) {
 				_hasChrRam = true;
-				_chrRam = new uint8_t[0x2000];
-				_chrSize = 0x2000;
+				_chrRam = new uint8_t[GetChrRamSize()];
+				_chrSize = GetChrRamSize();
 			}
 
 			//Setup a default work/save ram in 0x6000-0x7FFF space
