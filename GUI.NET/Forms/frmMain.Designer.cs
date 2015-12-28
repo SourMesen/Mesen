@@ -23,7 +23,6 @@
 			if(_debugger != null) {
 				_debugger.Close();
 			}
-			UpdateConfig();
 			StopEmu();
 			InteropEmu.Release();
 			base.Dispose(disposing);
@@ -65,7 +64,7 @@
 			this.mnuEmuSpeedHalf = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEmuSpeedQuarter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowFPS = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAudioConfig = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuInput = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRegion = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,6 +72,8 @@
 			this.mnuRegionNtsc = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRegionPal = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuVideoConfig = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuPreferences = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNetPlay = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStartServer = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,6 +96,8 @@
 			this.mnuTestRecordFrom = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTestRecordStart = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTestRecordNow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTestRecordMovie = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTestRecordTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTestStopRecording = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebugger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTakeScreenshot = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,11 +106,7 @@
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
-			this.mnuTestRecordMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
-			this.mnuTestRecordTest = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuAutoLoadIpsPatches = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -144,49 +143,49 @@
 			// 
 			this.mnuOpen.Name = "mnuOpen";
 			this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.mnuOpen.Size = new System.Drawing.Size(152, 22);
+			this.mnuOpen.Size = new System.Drawing.Size(146, 22);
 			this.mnuOpen.Text = "Open";
 			this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(143, 6);
 			// 
 			// mnuSaveState
 			// 
 			this.mnuSaveState.Name = "mnuSaveState";
-			this.mnuSaveState.Size = new System.Drawing.Size(152, 22);
+			this.mnuSaveState.Size = new System.Drawing.Size(146, 22);
 			this.mnuSaveState.Text = "Save State";
 			this.mnuSaveState.DropDownOpening += new System.EventHandler(this.mnuSaveState_DropDownOpening);
 			// 
 			// mnuLoadState
 			// 
 			this.mnuLoadState.Name = "mnuLoadState";
-			this.mnuLoadState.Size = new System.Drawing.Size(152, 22);
+			this.mnuLoadState.Size = new System.Drawing.Size(146, 22);
 			this.mnuLoadState.Text = "Load State";
 			this.mnuLoadState.DropDownOpening += new System.EventHandler(this.mnuLoadState_DropDownOpening);
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(143, 6);
 			// 
 			// mnuRecentFiles
 			// 
 			this.mnuRecentFiles.Name = "mnuRecentFiles";
-			this.mnuRecentFiles.Size = new System.Drawing.Size(152, 22);
+			this.mnuRecentFiles.Size = new System.Drawing.Size(146, 22);
 			this.mnuRecentFiles.Text = "Recent Files";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(143, 6);
 			// 
 			// mnuExit
 			// 
 			this.mnuExit.Name = "mnuExit";
-			this.mnuExit.Size = new System.Drawing.Size(152, 22);
+			this.mnuExit.Size = new System.Drawing.Size(146, 22);
 			this.mnuExit.Text = "Exit";
 			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
@@ -205,7 +204,7 @@
 			this.mnuPause.Enabled = false;
 			this.mnuPause.Name = "mnuPause";
 			this.mnuPause.ShortcutKeyDisplayString = "Esc";
-			this.mnuPause.Size = new System.Drawing.Size(152, 22);
+			this.mnuPause.Size = new System.Drawing.Size(129, 22);
 			this.mnuPause.Text = "Pause";
 			this.mnuPause.Click += new System.EventHandler(this.mnuPause_Click);
 			// 
@@ -213,7 +212,7 @@
 			// 
 			this.mnuReset.Enabled = false;
 			this.mnuReset.Name = "mnuReset";
-			this.mnuReset.Size = new System.Drawing.Size(152, 22);
+			this.mnuReset.Size = new System.Drawing.Size(129, 22);
 			this.mnuReset.Text = "Reset";
 			this.mnuReset.Click += new System.EventHandler(this.mnuReset_Click);
 			// 
@@ -221,7 +220,7 @@
 			// 
 			this.mnuStop.Enabled = false;
 			this.mnuStop.Name = "mnuStop";
-			this.mnuStop.Size = new System.Drawing.Size(152, 22);
+			this.mnuStop.Size = new System.Drawing.Size(129, 22);
 			this.mnuStop.Text = "Stop";
 			this.mnuStop.Click += new System.EventHandler(this.mnuStop_Click);
 			// 
@@ -231,12 +230,12 @@
             this.mnuEmulationSpeed,
             this.mnuShowFPS,
             this.toolStripMenuItem10,
-            this.mnuAutoLoadIpsPatches,
-            this.toolStripMenuItem1,
             this.mnuAudioConfig,
             this.mnuInput,
             this.mnuRegion,
-            this.mnuVideoConfig});
+            this.mnuVideoConfig,
+            this.toolStripMenuItem11,
+            this.mnuPreferences});
 			this.mnuOptions.Name = "mnuOptions";
 			this.mnuOptions.Size = new System.Drawing.Size(61, 20);
 			this.mnuOptions.Text = "Options";
@@ -255,7 +254,7 @@
             this.mnuEmuSpeedHalf,
             this.mnuEmuSpeedQuarter});
 			this.mnuEmulationSpeed.Name = "mnuEmulationSpeed";
-			this.mnuEmulationSpeed.Size = new System.Drawing.Size(191, 22);
+			this.mnuEmulationSpeed.Size = new System.Drawing.Size(163, 22);
 			this.mnuEmulationSpeed.Text = "Emulation Speed";
 			// 
 			// mnuEmuSpeedNormal
@@ -333,26 +332,26 @@
 			this.mnuShowFPS.CheckOnClick = true;
 			this.mnuShowFPS.Name = "mnuShowFPS";
 			this.mnuShowFPS.ShortcutKeys = System.Windows.Forms.Keys.F10;
-			this.mnuShowFPS.Size = new System.Drawing.Size(191, 22);
+			this.mnuShowFPS.Size = new System.Drawing.Size(163, 22);
 			this.mnuShowFPS.Text = "Show FPS";
 			this.mnuShowFPS.Click += new System.EventHandler(this.mnuShowFPS_Click);
 			// 
-			// toolStripMenuItem1
+			// toolStripMenuItem10
 			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(188, 6);
+			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(160, 6);
 			// 
 			// mnuAudioConfig
 			// 
 			this.mnuAudioConfig.Name = "mnuAudioConfig";
-			this.mnuAudioConfig.Size = new System.Drawing.Size(191, 22);
+			this.mnuAudioConfig.Size = new System.Drawing.Size(163, 22);
 			this.mnuAudioConfig.Text = "Audio";
 			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
 			// 
 			// mnuInput
 			// 
 			this.mnuInput.Name = "mnuInput";
-			this.mnuInput.Size = new System.Drawing.Size(191, 22);
+			this.mnuInput.Size = new System.Drawing.Size(163, 22);
 			this.mnuInput.Text = "Input";
 			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
 			// 
@@ -363,7 +362,7 @@
             this.mnuRegionNtsc,
             this.mnuRegionPal});
 			this.mnuRegion.Name = "mnuRegion";
-			this.mnuRegion.Size = new System.Drawing.Size(191, 22);
+			this.mnuRegion.Size = new System.Drawing.Size(163, 22);
 			this.mnuRegion.Text = "Region";
 			// 
 			// mnuRegionAuto
@@ -390,9 +389,21 @@
 			// mnuVideoConfig
 			// 
 			this.mnuVideoConfig.Name = "mnuVideoConfig";
-			this.mnuVideoConfig.Size = new System.Drawing.Size(191, 22);
+			this.mnuVideoConfig.Size = new System.Drawing.Size(163, 22);
 			this.mnuVideoConfig.Text = "Video";
 			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
+			// 
+			// toolStripMenuItem11
+			// 
+			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+			this.toolStripMenuItem11.Size = new System.Drawing.Size(160, 6);
+			// 
+			// mnuPreferences
+			// 
+			this.mnuPreferences.Name = "mnuPreferences";
+			this.mnuPreferences.Size = new System.Drawing.Size(163, 22);
+			this.mnuPreferences.Text = "Preferences";
+			this.mnuPreferences.Click += new System.EventHandler(this.mnuPreferences_Click);
 			// 
 			// mnuTools
 			// 
@@ -560,16 +571,30 @@
 			// 
 			this.mnuTestRecordStart.Name = "mnuTestRecordStart";
 			this.mnuTestRecordStart.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-			this.mnuTestRecordStart.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordStart.Size = new System.Drawing.Size(138, 22);
 			this.mnuTestRecordStart.Text = "Start";
 			this.mnuTestRecordStart.Click += new System.EventHandler(this.mnuTestRecordStart_Click);
 			// 
 			// mnuTestRecordNow
 			// 
 			this.mnuTestRecordNow.Name = "mnuTestRecordNow";
-			this.mnuTestRecordNow.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordNow.Size = new System.Drawing.Size(138, 22);
 			this.mnuTestRecordNow.Text = "Now";
 			this.mnuTestRecordNow.Click += new System.EventHandler(this.mnuTestRecordNow_Click);
+			// 
+			// mnuTestRecordMovie
+			// 
+			this.mnuTestRecordMovie.Name = "mnuTestRecordMovie";
+			this.mnuTestRecordMovie.Size = new System.Drawing.Size(138, 22);
+			this.mnuTestRecordMovie.Text = "Movie";
+			this.mnuTestRecordMovie.Click += new System.EventHandler(this.mnuTestRecordMovie_Click);
+			// 
+			// mnuTestRecordTest
+			// 
+			this.mnuTestRecordTest.Name = "mnuTestRecordTest";
+			this.mnuTestRecordTest.Size = new System.Drawing.Size(138, 22);
+			this.mnuTestRecordTest.Text = "Test";
+			this.mnuTestRecordTest.Click += new System.EventHandler(this.mnuTestRecordTest_Click);
 			// 
 			// mnuTestStopRecording
 			// 
@@ -627,13 +652,6 @@
 			// 
 			this.menuTimer.Tick += new System.EventHandler(this.menuTimer_Tick);
 			// 
-			// mnuTestRecordMovie
-			// 
-			this.mnuTestRecordMovie.Name = "mnuTestRecordMovie";
-			this.mnuTestRecordMovie.Size = new System.Drawing.Size(152, 22);
-			this.mnuTestRecordMovie.Text = "Movie";
-			this.mnuTestRecordMovie.Click += new System.EventHandler(this.mnuTestRecordMovie_Click);
-			// 
 			// dxViewer
 			// 
 			this.dxViewer.BackColor = System.Drawing.Color.Black;
@@ -642,25 +660,6 @@
 			this.dxViewer.Name = "dxViewer";
 			this.dxViewer.Size = new System.Drawing.Size(1024, 960);
 			this.dxViewer.TabIndex = 1;
-			// 
-			// mnuTestRecordTest
-			// 
-			this.mnuTestRecordTest.Name = "mnuTestRecordTest";
-			this.mnuTestRecordTest.Size = new System.Drawing.Size(152, 22);
-			this.mnuTestRecordTest.Text = "Test";
-			this.mnuTestRecordTest.Click += new System.EventHandler(this.mnuTestRecordTest_Click);
-			// 
-			// mnuAutoLoadIpsPatches
-			// 
-			this.mnuAutoLoadIpsPatches.CheckOnClick = true;
-			this.mnuAutoLoadIpsPatches.Name = "mnuAutoLoadIpsPatches";
-			this.mnuAutoLoadIpsPatches.Size = new System.Drawing.Size(191, 22);
-			this.mnuAutoLoadIpsPatches.Text = "Auto-load IPS patches";
-			// 
-			// toolStripMenuItem10
-			// 
-			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-			this.toolStripMenuItem10.Size = new System.Drawing.Size(188, 6);
 			// 
 			// frmMain
 			// 
@@ -694,7 +693,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuOptions;
 		private System.Windows.Forms.ToolStripMenuItem mnuEmulationSpeed;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowFPS;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuInput;
 		private System.Windows.Forms.ToolStripMenuItem mnuVideoConfig;
 		private System.Windows.Forms.ToolStripMenuItem mnuAudioConfig;
@@ -752,7 +750,8 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuTestRecordMovie;
 		private System.Windows.Forms.ToolStripMenuItem mnuTestRecordTest;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
-		private System.Windows.Forms.ToolStripMenuItem mnuAutoLoadIpsPatches;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
+		private System.Windows.Forms.ToolStripMenuItem mnuPreferences;
 	}
 }
 

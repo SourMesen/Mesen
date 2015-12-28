@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\PreferenceInfo.cs" />
     <Compile Include="Config\VideoInfo.cs" />
     <Compile Include="Config\CheatInfo.cs" />
     <Compile Include="Config\ControllerInfo.cs" />
@@ -250,6 +251,12 @@
     <Compile Include="Forms\Config\frmAudioConfig.Designer.cs">
       <DependentUpon>frmAudioConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Config\frmPreferences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\frmPreferences.Designer.cs">
+      <DependentUpon>frmPreferences.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Config\frmVideoConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -289,6 +296,7 @@
     <Compile Include="InteropEmu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SingleInstance.cs" />
     <EmbeddedResource Include="Controls\ctrlTrackbar.resx">
       <DependentUpon>ctrlTrackbar.cs</DependentUpon>
     </EmbeddedResource>
@@ -360,6 +368,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmAudioConfig.resx">
       <DependentUpon>frmAudioConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\frmPreferences.resx">
+      <DependentUpon>frmPreferences.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmVideoConfig.resx">
       <DependentUpon>frmVideoConfig.cs</DependentUpon>

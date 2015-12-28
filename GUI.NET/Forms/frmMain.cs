@@ -23,11 +23,24 @@ namespace Mesen.GUI.Forms
 		private InteropEmu.NotificationListener _notifListener;
 		private Thread _emuThread;
 		private frmDebugger _debugger;
+		private string _romToLoad = null;
 		
-		public frmMain()
+		public frmMain(string[] args)
 		{
+			if(args.Length > 0 && File.Exists(args[0])) {
+				_romToLoad = args[0];
+			}
+
 			Application.ThreadException += Application_ThreadException;
+			Directory.SetCurrentDirectory(Path.GetDirectoryName(Application.ExecutablePath));
 			InitializeComponent();
+		}
+
+		public void ProcessCommandLineArguments(string[] args)
+		{
+			if(args.Length > 0 && File.Exists(args[0])) {
+				this.LoadROM(args[0]);
+			}
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -42,7 +55,6 @@ namespace Mesen.GUI.Forms
 			InitializeEmulationSpeedMenu();
 			
 			UpdateVideoSettings();
-			this.mnuAutoLoadIpsPatches.Checked = ConfigManager.Config.AutoLoadIpsPatches;
 
 			InitializeEmu();
 
@@ -51,6 +63,10 @@ namespace Mesen.GUI.Forms
 
 			if(!DesignMode) {
 				Icon = Properties.Resources.MesenIcon;
+			}
+
+			if(_romToLoad != null) {
+				LoadROM(this._romToLoad);
 			}
 		}
 		
@@ -158,12 +174,6 @@ namespace Mesen.GUI.Forms
 			dxViewer.Size = VideoInfo.GetViewerSize();
 		}
 
-		private void UpdateConfig()
-		{
-			ConfigManager.Config.AutoLoadIpsPatches = this.mnuAutoLoadIpsPatches.Checked;
-			ConfigManager.ApplyChanges();
-		}
-
 		private void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
 			MessageBox.Show(e.Exception.ToString(), "Unexpected Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -215,7 +225,7 @@ namespace Mesen.GUI.Forms
 					}
 				} else {
 					LoadROM(ofd.FileName);
-					if(this.mnuAutoLoadIpsPatches.Checked) {
+					if(ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches) {
 						string ipsFile = Path.Combine(Path.GetDirectoryName(ofd.FileName), Path.GetFileNameWithoutExtension(ofd.FileName)) + ".ips";
 						if(File.Exists(ipsFile)) {
 							InteropEmu.ApplyIpsPatch(ipsFile);
@@ -643,6 +653,11 @@ namespace Mesen.GUI.Forms
 		private void mnuAudioConfig_Click(object sender, EventArgs e)
 		{
 			new frmAudioConfig().ShowDialog();
+		}
+
+		private void mnuPreferences_Click(object sender, EventArgs e)
+		{
+			new frmPreferences().ShowDialog();
 		}
 
 		private void mnuRegion_Click(object sender, EventArgs e)

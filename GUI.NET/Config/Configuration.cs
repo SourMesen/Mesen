@@ -17,6 +17,7 @@ namespace Mesen.GUI.Config
 		public ServerInfo ServerInfo;
 		public AudioInfo AudioInfo;
 		public VideoInfo VideoInfo;
+		public PreferenceInfo PreferenceInfo;
 		public List<string> RecentFiles;
 		public List<CheatInfo> Cheats;
 		public List<ControllerInfo> Controllers;
@@ -31,6 +32,7 @@ namespace Mesen.GUI.Config
 			ServerInfo = new ServerInfo();
 			AudioInfo = new AudioInfo();
 			VideoInfo = new VideoInfo();
+			PreferenceInfo = new PreferenceInfo();
 			RecentFiles = new List<string>();
 			Controllers = new List<ControllerInfo>();
 		}
@@ -40,6 +42,7 @@ namespace Mesen.GUI.Config
 			ControllerInfo.ApplyConfig();
 			VideoInfo.ApplyConfig();
 			AudioInfo.ApplyConfig();
+			PreferenceInfo.ApplyConfig();
 
 			InteropEmu.SetNesModel(Region);
 		}
