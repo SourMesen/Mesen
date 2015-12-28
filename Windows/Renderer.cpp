@@ -487,6 +487,13 @@ namespace NES
 						_fpsTimer.Reset();
 					}
 
+					if(_currentFPS > 5000) {
+						_currentFPS = 0;
+					}
+					if(_currentRenderedFPS > 5000) {
+						_currentRenderedFPS = 0;
+					}
+
 					string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
 					DrawOutlinedString(fpsString, (float)(_hdScreenWidth - 120), 13, Colors::AntiqueWhite, 1.0f);
 				}
