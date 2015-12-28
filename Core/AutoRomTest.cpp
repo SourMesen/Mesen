@@ -192,6 +192,8 @@ bool AutoRomTest::Run(string filename)
 		}
 
 		EmulationSettings::SetEmulationSpeed(0);
+		EmulationSettings::SetAudioState(false);
+		
 		Console::Pause();
 		
 		Reset();
@@ -227,6 +229,7 @@ bool AutoRomTest::Run(string filename)
 		_runningTest = false;
 
 		EmulationSettings::SetEmulationSpeed(100);
+		EmulationSettings::SetAudioState(true);
 
 		return _testResult;
 	}
