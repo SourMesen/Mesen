@@ -198,7 +198,9 @@ void VideoDecoder::DecodeThread()
 		}
 
 		DecodeFrame();
-		_renderer->UpdateFrame(_frameBuffer);
+		if(_renderer) {
+			_renderer->UpdateFrame(_frameBuffer);
+		}
 
 		_waitForRender.Signal();
 	}

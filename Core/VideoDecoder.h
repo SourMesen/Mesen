@@ -16,7 +16,7 @@ class VideoDecoder
 private:
 	static unique_ptr<VideoDecoder> Instance;
 	
-	IRenderingDevice* _renderer;
+	IRenderingDevice* _renderer = nullptr;
 
 	uint16_t *_ppuOutputBuffer = nullptr;
 	HdPpuPixelInfo *_hdScreenTiles = nullptr;
