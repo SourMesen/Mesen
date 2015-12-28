@@ -56,6 +56,21 @@ struct NESHeader
 			return Flags1 & 0x01 ? MirroringType::Vertical : MirroringType::Horizontal;
 		}
 	}
+
+	void SanitizeHeader(size_t romLength)
+	{
+		size_t calculatedLength = sizeof(NESHeader) + 0x4000 * ROMCount;
+		while(calculatedLength > romLength) {
+			ROMCount--;
+			calculatedLength = sizeof(NESHeader) + 0x4000 * ROMCount;
+		}
+
+		calculatedLength = sizeof(NESHeader) + 0x4000 * ROMCount + 0x2000 * VROMCount;
+		while(calculatedLength > romLength) {
+			VROMCount--;
+			calculatedLength = sizeof(NESHeader) + 0x4000 * ROMCount + 0x2000 * VROMCount;
+		}
+	}
 };
 
 class ROMLoader
@@ -141,16 +156,18 @@ class ROMLoader
 			}
 
 			_crc32 = CRC32::GetCRC(buffer, length);
-			if(memcmp(buffer, "NES", 3) == 0) {
+			if(memcmp(buffer, "NES", 3) == 0 && length >= sizeof(NESHeader)) {
 				memcpy((char*)&_header, buffer, sizeof(NESHeader));
+				buffer += sizeof(NESHeader);
+
+				_header.SanitizeHeader(length);
 
 				_prgRAM = new uint8_t[0x4000 * _header.ROMCount];
 				_chrRAM = new uint8_t[0x2000 * _header.VROMCount];
 
-				buffer += sizeof(NESHeader);
 				memcpy(_prgRAM, buffer, 0x4000 * _header.ROMCount);
-
 				buffer += 0x4000 * _header.ROMCount;
+
 				memcpy(_chrRAM, buffer, 0x2000 * _header.VROMCount);
 
 				return true;
