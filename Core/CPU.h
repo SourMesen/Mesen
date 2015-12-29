@@ -842,7 +842,7 @@ public:
 	static void SetIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag |= (int)source; }
 	static bool HasIRQSource(IRQSource source) { return (CPU::Instance->_state.IRQFlag & (int)source) != 0; }
 	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
-	static void RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue);
+	static void RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue);
 	static void StartDmcTransfer();
 	
 	//Used by debugger for "Set Next Statement"

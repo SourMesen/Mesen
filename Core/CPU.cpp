@@ -113,26 +113,27 @@ void CPU::IncCycleCount()
 	_cycleCount++;
 }
 
-void CPU::RunDMATransfer(uint8_t* spriteRAM, uint32_t &spriteRamAddr, uint8_t offsetValue)
+void CPU::RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue)
 {
 	Instance->_dmaTransfer = true;
-	//"the DMA procedure takes 513 CPU cycles (+1 on odd CPU cycles)"
+	
+	//"The CPU is suspended during the transfer, which will take 513 or 514 cycles after the $4014 write tick."
+	//"(1 dummy read cycle while waiting for writes to complete, +1 if on an odd CPU cycle, then 256 alternating read/write cycles.)"
 	if(Instance->_cycleCount % 2 != 0) {
-		Instance->IncCycleCount();
+		Instance->DummyRead();
 	}
-	Instance->IncCycleCount();
+	Instance->DummyRead();
 
 	//DMA transfer starts at SpriteRamAddr and wraps around
 	for(int i = 0; i < 0x100; i++) {
 		//Read value
 		uint8_t readValue = Instance->MemoryRead(offsetValue * 0x100 + i);
 
-		//Write to ram
-		spriteRAM[(spriteRamAddr+i) & 0xFF] = readValue;
-		Instance->IncCycleCount();
+		//Write to sprite ram via $2004 ("DMA is implemented in the 2A03/7 chip and works by repeatedly writing to OAMDATA")
+		Instance->MemoryWrite(0x2004, readValue);
 
 		if(i == 0xFE) {
-			////"DMC DMA adds [...] 3 if on the last DMA cycle.
+			//"DMC DMA adds [...] 3 if on the last DMA cycle.
 			Instance->_dmaTransfer = false;
 			if(Instance->_dmcCounter == 2) {
 				//"DMC DMA adds [...] 1 if on the next-to-next-to-last DMA cycle

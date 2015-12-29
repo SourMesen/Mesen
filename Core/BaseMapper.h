@@ -129,10 +129,10 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			}
 		}
 
-		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber)
+		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, int8_t accessType = -1)
 		{
 			pageNumber = pageNumber % GetCHRPageCount();
-			SetPpuMemoryMapping(startAddr, endAddr, &_chrRam[pageNumber * GetCHRPageSize()]);
+			SetPpuMemoryMapping(startAddr, endAddr, &_chrRam[pageNumber * GetCHRPageSize()], accessType);
 		}
 
 		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t* sourceMemory, int8_t accessType = -1)
@@ -172,7 +172,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 			uint16_t startAddr = slot * GetCHRPageSize();
 			uint16_t endAddr = startAddr + GetCHRPageSize() - 1;
-			SetPpuMemoryMapping(startAddr, endAddr, page);
+			SetPpuMemoryMapping(startAddr, endAddr, page, _hasChrRam ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
 		}
 		
 		bool HasBattery()
@@ -329,6 +329,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 			MessageManager::UnregisterNotificationListener(this);
 		}
+
+		virtual void ProcessCpuClock() { }
 
 		void ProcessNotification(ConsoleNotificationType type, void* parameter)
 		{

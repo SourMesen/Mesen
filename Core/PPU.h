@@ -130,6 +130,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint32_t _secondaryOAMAddr = 0;
 		bool _sprite0Visible = false;
 
+		uint16_t _spriteDmaCounter = 0;
+		uint16_t _spriteDmaAddr = 0;
+
 		uint8_t _oamCopybuffer;
 		bool _writeOAMData;
 		uint32_t _overflowCounter;

@@ -113,13 +113,19 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			_state.SpriteRamAddr = value;
 			break;
 		case PPURegisters::SpriteData:
-			if(_scanline >= 240 || !IsRenderingEnabled()) {
-				_spriteRAM[_state.SpriteRamAddr] = value;
-				_state.SpriteRamAddr = (_state.SpriteRamAddr + 1) & 0xFF;
+			if(_spriteDmaCounter > 0) {
+				_spriteRAM[_spriteDmaAddr] = value;
+				_spriteDmaAddr++;
+				_spriteDmaCounter--;
 			} else {
-				//"Writes to OAMDATA during rendering (on the pre-render line and the visible lines 0-239, provided either sprite or background rendering is enabled) do not modify values in OAM, 
-				//but do perform a glitchy increment of OAMADDR, bumping only the high 6 bits"
-				_state.SpriteRamAddr += 4;
+				if(_scanline >= 240 || !IsRenderingEnabled()) {
+					_spriteRAM[_state.SpriteRamAddr] = value;
+					_state.SpriteRamAddr = (_state.SpriteRamAddr + 1) & 0xFF;
+				} else {
+					//"Writes to OAMDATA during rendering (on the pre-render line and the visible lines 0-239, provided either sprite or background rendering is enabled) do not modify values in OAM, 
+					//but do perform a glitchy increment of OAMADDR, bumping only the high 6 bits"
+					_state.SpriteRamAddr += 4;
+				}
 			}
 			break;
 		case PPURegisters::ScrollOffsets:
@@ -153,7 +159,11 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			UpdateVideoRamAddr();
 			break;
 		case PPURegisters::SpriteDMA:
-			CPU::RunDMATransfer(_spriteRAM, _state.SpriteRamAddr, value);
+			//_spriteDmaAddr & _spriteDmaCounter are probably not the correct solution for this
+			//Missing something else in the PPU/CPU DMA logic maybe?
+			_spriteDmaCounter = 0x100;
+			_spriteDmaAddr = _state.SpriteRamAddr;
+			CPU::RunDMATransfer(_spriteRAM, value);
 			break;
 		default:
 			break;
@@ -754,6 +764,9 @@ void PPU::StreamState(bool saving)
 	Stream<bool>(_sprite0Added);
 
 	Stream<NesModel>(_nesModel);
+
+	Stream<uint16_t>(_spriteDmaAddr);
+	Stream<uint16_t>(_spriteDmaCounter);
 
 	if(!saving) {
 		SetNesModel(_nesModel);

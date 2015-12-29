@@ -6,6 +6,7 @@
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
+#include "JalecoSs88006.h"
 #include "MMC1.h"
 #include "MMC2.h"
 #include "MMC3.h"
@@ -37,6 +38,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 11: return new ColorDreams();
 		case 13: return new CpRom();
 		case 16: break; //18 games
+		case 18: return new JalecoSs88006();
 		case 19: break; //16 games
 		case 21: return new VRC2_4(VRCVariant::VRC4a);  //Conflicts: VRC4c
 		case 22: return new VRC2_4(VRCVariant::VRC2a);
