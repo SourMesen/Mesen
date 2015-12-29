@@ -114,7 +114,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			break;
 		case PPURegisters::SpriteData:
 			if(_spriteDmaCounter > 0) {
-				_spriteRAM[_spriteDmaAddr] = value;
+				_spriteRAM[_spriteDmaAddr & 0xFF] = value;
 				_spriteDmaAddr++;
 				_spriteDmaCounter--;
 			} else {
