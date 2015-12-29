@@ -130,6 +130,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint32_t _secondaryOAMAddr = 0;
 		bool _sprite0Visible = false;
 
+		uint32_t _spriteIndex = 0;
+
 		uint16_t _spriteDmaCounter = 0;
 		uint16_t _spriteDmaAddr = 0;
 
@@ -166,7 +168,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
 		void LoadTileInfo();
-		void LoadSpriteTileInfo(uint8_t spriteIndex);
+		void LoadSpriteTileInfo();
 		void ShiftTileRegisters();
 		void InitializeShiftRegisters();
 		void LoadNextTile();
