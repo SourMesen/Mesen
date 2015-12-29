@@ -333,6 +333,7 @@
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="ROMLoader.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TaitoTc0190.h" />
     <ClInclude Include="TriangleChannel.h" />
     <ClInclude Include="UNROM.h" />
     <ClInclude Include="VideoDecoder.h" />
