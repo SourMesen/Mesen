@@ -305,6 +305,7 @@
     <ClInclude Include="IMessageManager.h" />
     <ClInclude Include="INotificationListener.h" />
     <ClInclude Include="InputDataMessage.h" />
+    <ClInclude Include="IremG101.h" />
     <ClInclude Include="JalecoSs88006.h" />
     <ClInclude Include="MMC4.h" />
     <ClInclude Include="MMC5.h" />

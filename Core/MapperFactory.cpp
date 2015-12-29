@@ -6,6 +6,7 @@
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
+#include "IremG101.h"
 #include "JalecoSs88006.h"
 #include "MMC1.h"
 #include "MMC2.h"
@@ -45,6 +46,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 23: return new VRC2_4(VRCVariant::VRC2b);  //Conflicts: VRC4e
 		case 25: return new VRC2_4(VRCVariant::VRC4b);  //Conflicts: VRC2c, VRC4d
 		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
+		case 32: return new IremG101();
 		case 71: return new BF909x();
 		case 163: return new Nanjing();
 		case 189: return new MMC3_189();
