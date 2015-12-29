@@ -22,6 +22,8 @@ class IremG101 : public BaseMapper
 
 		virtual void StreamState(bool saving)
 		{
+			BaseMapper::StreamState(saving);
+
 			StreamArray<uint8_t>(_prgRegs, 2);
 			Stream<uint8_t>(_prgMode);
 		}

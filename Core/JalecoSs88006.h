@@ -32,6 +32,8 @@ class JalecoSs88006 : public BaseMapper
 
 		virtual void StreamState(bool saving)
 		{
+			BaseMapper::StreamState(saving);
+
 			StreamArray<uint8_t>(_prgBanks, 3);
 			StreamArray<uint8_t>(_chrBanks, 8);
 			StreamArray<uint8_t>(_irqReloadValue, 4);
