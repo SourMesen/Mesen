@@ -59,9 +59,11 @@ void AutoRomTest::ValidateFrame(uint16_t* ppuFrameBuffer)
 
 	if(memcmp(_screenshotHashes.front(), md5Hash, 16) != 0) {
 		_testResult = false;
+		_runningTest = false;
 		_signal.Signal();
 	} else if (_currentCount == 0 && _repetitionCount.empty()) {
 		//End of test
+		_runningTest = false;
 		_signal.Signal();
 	}
 }
