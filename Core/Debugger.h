@@ -114,4 +114,6 @@ public:
 	
 	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr);
 	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr);
+
+	static void BreakIfDebugging();
 };

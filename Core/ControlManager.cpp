@@ -119,7 +119,9 @@ uint8_t ControlManager::GetControllerState(uint8_t controllerID)
 		state = Movie::Instance->GetState(controllerID);
 	} else {
 		if(controlDevice) {
-			_keyManager->RefreshState();
+			if(_keyManager) {
+				_keyManager->RefreshState();
+			}
 			state = controlDevice->GetButtonState().ToByte();
 		} else {
 			state = 0x00;
@@ -140,7 +142,8 @@ uint8_t ControlManager::GetControllerState(uint8_t controllerID)
 
 bool ControlManager::HasFourScoreAdapter()
 {
-	return ControlManager::ControlDevices[2] != nullptr || ControlManager::ControlDevices[3] != nullptr;
+	//When a movie is playing, always assume 4 controllers are plugged in (TODO: Change this so movies know how many controllers were plugged when recording)
+	return ControlManager::ControlDevices[2] != nullptr || ControlManager::ControlDevices[3] != nullptr || Movie::Playing();
 }
 
 void ControlManager::RefreshStateBuffer(uint8_t port)

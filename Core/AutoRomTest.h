@@ -10,7 +10,7 @@ class AutoRomTest : public INotificationListener
 private:
 	bool _recording;
 	bool _runningTest;
-	bool _testResult;
+	int _badFrameCount;
 	bool _recordingFromMovie;
 
 	uint8_t _previousHash[16];
@@ -42,6 +42,6 @@ public:
 	void Record(string filename, bool reset);
 	void RecordFromMovie(string testFilename, string movieFilename);
 	void RecordFromTest(string newTestFilename, string existingTestFilename);
-	bool Run(string filename);
+	int Run(string filename);
 	void Stop();
 };

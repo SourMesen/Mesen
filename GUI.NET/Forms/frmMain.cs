@@ -537,35 +537,37 @@ namespace Mesen.GUI.Forms
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				List<string> passedTests = new List<string>();
 				List<string> failedTests = new List<string>();
+				List<int> failedFrameCount = new List<int>();
 
 				this.menuStrip.Enabled = false;
 
 				Task.Run(() => {
 					foreach(string filename in ofd.FileNames) {
-						bool result = InteropEmu.RomTestRun(filename);
+						int result = InteropEmu.RomTestRun(filename);
 
-						if(result) {
+						if(result == 0) {
 							passedTests.Add(Path.GetFileNameWithoutExtension(filename));
 						} else {
 							failedTests.Add(Path.GetFileNameWithoutExtension(filename));
+							failedFrameCount.Add(result);
 						}
 					}
 
 					this.BeginInvoke((MethodInvoker)(() => {
 						if(failedTests.Count == 0) {
 							MessageBox.Show("All tests passed.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-						} else if(passedTests.Count == 0) {
-							MessageBox.Show("All tests failed.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						} else {
 							StringBuilder message = new StringBuilder();
-							message.AppendLine("Passed tests:");
-							foreach(string test in passedTests) {
-								message.AppendLine("  -" + test);
+							if(passedTests.Count > 0) {
+								message.AppendLine("Passed tests:");
+								foreach(string test in passedTests) {
+									message.AppendLine("  -" + test);
+								}
+								message.AppendLine("");
 							}
-							message.AppendLine("");
 							message.AppendLine("Failed tests:");
-							foreach(string test in failedTests) {
-								message.AppendLine("  -" + test);
+							for(int i = 0, len = failedTests.Count; i < len; i++) {
+								message.AppendLine("  -" + failedTests[i] + " (" + failedFrameCount[i] + ")");
 							}
 							MessageBox.Show(message.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						}

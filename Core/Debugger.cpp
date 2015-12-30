@@ -49,6 +49,13 @@ Debugger::~Debugger()
 	Console::Resume();
 }
 
+void Debugger::BreakIfDebugging()
+{
+	if(Debugger::Instance != nullptr) {
+		Debugger::Instance->Step(1);
+	}
+}
+
 bool Debugger::LoadCdlFile(string cdlFilepath)
 {
 	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {

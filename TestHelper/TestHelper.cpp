@@ -32,6 +32,8 @@
 #include "../Utilities/Timer.h"
 #include "../Core/MessageManager.h"
 
+using namespace std;
+
 typedef void (__stdcall *NotificationListenerCallback)(ConsoleNotificationType);
 
 class InteropNotificationListener : public INotificationListener
@@ -50,7 +52,7 @@ public:
 };
 
 extern "C" {
-	void __stdcall InitializeEmu(char* homeFolder, void*, void*);
+	void __stdcall InitializeEmu(const char* homeFolder, void*, void*);
 	int __stdcall RomTestRun(char* filename);
 	void __stdcall LoadROM(char* filename);
 	void __stdcall Run();
@@ -65,7 +67,7 @@ vector<string> failedTests;
 SimpleLock lock;
 Timer timer;
 
-void OnNotificationReceived(ConsoleNotificationType type)
+void _stdcall OnNotificationReceived(ConsoleNotificationType type)
 {
 	if(type == ConsoleNotificationType::GameLoaded) {
 		runThread = new std::thread(Run);
@@ -81,7 +83,7 @@ void RunTest()
 {
 	while(true) {
 		lock.Acquire();
-		int index = testIndex++;
+		size_t index = testIndex++;
 		lock.Release();
 
 		if(index < testFilenames.size()) {
@@ -93,11 +95,12 @@ void RunTest()
 			std::cout << std::to_string(index) << ") " << filename << std::endl;
 			lock.Release();
 
-			if(std::system(command.c_str()) != 1) {
+			int failedFrames = std::system(command.c_str());
+			if(failedFrames != 0) {
 				//Test failed
 				lock.Acquire();
 				failedTests.push_back(filename);
-				std::cout << "  ****  " << std::to_string(index) << ") " << filename << " failed" << std::endl;
+				std::cout << "  ****  " << std::to_string(index) << ") " << filename << " failed (" << failedFrames << ")" << std::endl;
 				lock.Release();
 			}
 		} else {
@@ -108,13 +111,14 @@ void RunTest()
 
 int main(int argc, char* argv[])
 {
-	using namespace std;
+	wchar_t path[MAX_PATH];
+	SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, path);
+	string mesenFolder = FolderUtilities::CombinePath(utf8::utf8::encode(path), "Mesen");
+
 	if(argc <= 2) {
 		string testFolder;
 		if(argc == 1) {
-			wchar_t path[MAX_PATH];
-			SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, path);
-			testFolder = utf8::utf8::encode(path) + "\\Mesen\\Tests";
+			testFolder = FolderUtilities::CombinePath(mesenFolder, "Tests");
 		} else {
 			testFolder = argv[1];
 		}
@@ -135,12 +139,16 @@ int main(int argc, char* argv[])
 			delete testThreads[i];
 		}
 
-		std::cout << std::endl << std::endl;
-		std::cout << "------------" << std::endl;
-		std::cout << "Failed tests" << std::endl;
-		std::cout << "------------" << std::endl;
-		for(string failedTest : failedTests) {
-			std::cout << failedTest << std::endl;
+		if(!failedTests.empty()) {
+			std::cout << std::endl << std::endl;
+			std::cout << "------------" << std::endl;
+			std::cout << "Failed tests" << std::endl;
+			std::cout << "------------" << std::endl;
+			for(string failedTest : failedTests) {
+				std::cout << failedTest << std::endl;
+			}
+		} else {
+			std::cout << std::endl << std::endl << "All tests passed.";
 		}
 		std::cout << std::endl << std::endl << "Elapsed time: " << (timer.GetElapsedMS() / 1000) << " seconds";
 
@@ -148,7 +156,9 @@ int main(int argc, char* argv[])
 	} else if(argc == 3) {
 		char* testFilename = argv[2];
 		RegisterNotificationCallback((NotificationListenerCallback)OnNotificationReceived);
-		InitializeEmu("C:\\Windows\\Temp\\Mesen", nullptr, nullptr);
+
+		InitializeEmu(mesenFolder.c_str(), nullptr, nullptr);
+
 		int result = RomTestRun(testFilename);
 		if(runThread != nullptr) {
 			runThread->join();

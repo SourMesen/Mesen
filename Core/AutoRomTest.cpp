@@ -4,6 +4,7 @@
 #include "Console.h"
 #include "EmulationSettings.h"
 #include "MessageManager.h"
+#include "Debugger.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/md5.h"
 #include "../Utilities/ZipWriter.h"
@@ -58,10 +59,11 @@ void AutoRomTest::ValidateFrame(uint16_t* ppuFrameBuffer)
 	_currentCount--;
 
 	if(memcmp(_screenshotHashes.front(), md5Hash, 16) != 0) {
-		_testResult = false;
-		_runningTest = false;
-		_signal.Signal();
-	} else if (_currentCount == 0 && _repetitionCount.empty()) {
+		_badFrameCount++;
+		Debugger::BreakIfDebugging();
+	} 
+	
+	if (_currentCount == 0 && _repetitionCount.empty()) {
 		//End of test
 		_runningTest = false;
 		_signal.Signal();
@@ -100,7 +102,7 @@ void AutoRomTest::Reset()
 
 	_runningTest = false;
 	_recording = false;
-	_testResult = true;
+	_badFrameCount = 0;
 	_recordingFromMovie = false;
 }
 
@@ -177,7 +179,7 @@ void AutoRomTest::RecordFromTest(string newTestFilename, string existingTestFile
 	}
 }
 
-bool AutoRomTest::Run(string filename)
+int AutoRomTest::Run(string filename)
 {
 	ZipReader zipReader;
 	zipReader.LoadZipArchive(filename);
@@ -225,18 +227,18 @@ bool AutoRomTest::Run(string filename)
 		Console::Resume();
 
 		_signal.Wait();
+		_runningTest = false;
 
 		Console::GetInstance()->Stop();
 
-		_runningTest = false;
 
 		EmulationSettings::SetEmulationSpeed(100);
 		EmulationSettings::SetAudioState(true);
 
-		return _testResult;
+		return _badFrameCount;
 	}
 
-	return false;
+	return -1;
 }
 
 void AutoRomTest::Stop()

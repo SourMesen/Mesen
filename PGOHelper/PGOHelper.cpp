@@ -5,7 +5,7 @@
 
 extern "C" {
 	void __stdcall InitializeEmu(char* homeFolder, void*, void*);
-	void __stdcall LoadROM(char* filename);
+	void __stdcall LoadROM(const char* filename);
 	void __stdcall Run();
 	void __stdcall Stop();
 }
