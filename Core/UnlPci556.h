@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 
-class GxRom : public BaseMapper
+class UnlPci556 : public BaseMapper
 {
 	protected:
 		virtual uint16_t GetPRGPageSize() { return 0x8000; }
@@ -16,7 +16,7 @@ class GxRom : public BaseMapper
 
 		void WriteRegister(uint16_t addr, uint8_t value)
 		{
-			SelectPRGPage(0, (value >> 4) & 0x03);
-			SelectCHRPage(0, value & 0x03);
+			SelectPRGPage(0, value & 0x03);
+			SelectCHRPage(0, (value >> 2) & 0x03);
 		}
 };

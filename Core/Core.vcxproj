@@ -336,6 +336,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TaitoTc0190.h" />
     <ClInclude Include="TriangleChannel.h" />
+    <ClInclude Include="UnlPci556.h" />
     <ClInclude Include="UNROM.h" />
     <ClInclude Include="VideoDecoder.h" />
     <ClInclude Include="VirtualController.h" />
