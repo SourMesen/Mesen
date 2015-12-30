@@ -47,7 +47,6 @@ VideoDecoder::~VideoDecoder()
 
 uint32_t VideoDecoder::ProcessIntensifyBits(uint16_t ppuPixel)
 {
-	return PPU_PALETTE_ARGB[ppuPixel & 0x3F];
 	uint32_t pixelOutput = PPU_PALETTE_ARGB[ppuPixel & 0x3F];
 
 	//Incorrect emphasis bit implementation, but will do for now.
