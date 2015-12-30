@@ -21,6 +21,7 @@
 #include "Nina03_06.h"
 #include "NROM.h"
 #include "TaitoTc0190.h"
+#include "TaitoX1005.h"
 #include "UnlPci556.h"
 #include "UNROM.h"
 #include "VRC2_4.h"
@@ -61,6 +62,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
 		case 79: return new Nina03_06();
+		case 80: return new TaitoX1005();
 		case 87: return new JalecoJfxx(false);
 		case 101: return new JalecoJfxx(true);
 		case 152: return new Bandai74161_7432(true);

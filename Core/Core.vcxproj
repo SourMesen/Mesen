@@ -338,6 +338,7 @@
     <ClInclude Include="ROMLoader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TaitoTc0190.h" />
+    <ClInclude Include="TaitoX1005.h" />
     <ClInclude Include="TriangleChannel.h" />
     <ClInclude Include="UnlPci556.h" />
     <ClInclude Include="UNROM.h" />
