@@ -3,11 +3,13 @@
 #include "MapperFactory.h"
 #include "ROMLoader.h"
 #include "AXROM.h"
+#include "Bandai74161_7432.h"
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
 #include "GxRom.h"
 #include "IremG101.h"
+#include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
 #include "MMC1.h"
 #include "MMC2.h"
@@ -56,9 +58,12 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 37: break;
 		case 38: return new UnlPci556();
 		case 66: return new GxRom();
+		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
 		case 79: return new Nina03_06();
-		//case 87: return new JalecoJf05();
+		case 87: return new JalecoJfxx(false);
+		case 101: return new JalecoJfxx(true);
+		case 152: return new Bandai74161_7432(true);
 		case 163: return new Nanjing();
 		case 189: return new MMC3_189();
 	}
