@@ -6,6 +6,7 @@
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
+#include "GxRom.h"
 #include "IremG101.h"
 #include "JalecoSs88006.h"
 #include "MMC1.h"
@@ -17,6 +18,7 @@
 #include "Nanjing.h"
 #include "NROM.h"
 #include "TaitoTc0190.h"
+#include "UnlPci556.h"
 #include "UNROM.h"
 #include "VRC2_4.h"
 #include "BF909x.h"
@@ -49,12 +51,16 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();
+		case 34: break;
+		case 37: break;
+		case 38: return new UnlPci556();
+		case 66: return new GxRom();
 		case 71: return new BF909x();
 		case 163: return new Nanjing();
 		case 189: return new MMC3_189();
-		default: MessageManager::DisplayMessage("Error", "Unsupported mapper, cannot load game.");
 	}
 
+	MessageManager::DisplayMessage("Error", "Unsupported mapper, cannot load game.");
 	return nullptr;
 }
 

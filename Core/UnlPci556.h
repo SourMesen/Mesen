@@ -7,6 +7,8 @@ class UnlPci556 : public BaseMapper
 	protected:
 		virtual uint16_t GetPRGPageSize() { return 0x8000; }
 		virtual uint16_t GetCHRPageSize() {	return 0x2000; }
+		virtual uint16_t RegisterStartAddress() { return 0x7000; }
+		virtual uint16_t RegisterEndAddress() { return 0x7FFF; }
 
 		void InitMapper() 
 		{
