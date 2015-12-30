@@ -293,6 +293,7 @@
     <ClInclude Include="GameInformationMessage.h" />
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="GameServerConnection.h" />
+    <ClInclude Include="GxRom.h" />
     <ClInclude Include="HandShakeMessage.h" />
     <ClInclude Include="HdNesPack.h" />
     <ClInclude Include="HdPpu.h" />
