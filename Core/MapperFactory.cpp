@@ -16,6 +16,7 @@
 #include "MMC4.h"
 #include "MMC5.h"
 #include "Nanjing.h"
+#include "Nina03_06.h"
 #include "NROM.h"
 #include "TaitoTc0190.h"
 #include "UnlPci556.h"
@@ -56,6 +57,8 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 38: return new UnlPci556();
 		case 66: return new GxRom();
 		case 71: return new BF909x();
+		case 79: return new Nina03_06();
+		//case 87: return new JalecoJf05();
 		case 163: return new Nanjing();
 		case 189: return new MMC3_189();
 	}

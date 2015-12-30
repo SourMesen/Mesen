@@ -27,8 +27,25 @@ enum MemoryAccessType
 class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener
 {
 	private:
+		const uint16_t PrgAddressRangeSize = 0x8000;
+		const uint16_t ChrAddressRangeSize = 0x2000;
+
 		MirroringType _mirroringType;
 		string _batteryFilename;
+		
+		uint16_t InternalGetPrgPageSize()
+		{
+			//Make sure the page size is no bigger than the size of the ROM itself
+			//Otherwise we will end up reading from unallocated memory
+			return std::min((uint32_t)GetPRGPageSize(), _prgSize);
+		}
+
+		uint16_t InternalGetChrPageSize()
+		{
+			//Make sure the page size is no bigger than the size of the ROM itself
+			//Otherwise we will end up reading from unallocated memory
+			return std::min((uint32_t)GetCHRPageSize(), _chrSize);
+		}
 
 	protected:
 		uint8_t* _prgRom;
@@ -99,7 +116,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 				case PrgMemoryType::PrgRom:
 					source = _prgRom;
 					pageCount = GetPRGPageCount();
-					pageSize = GetPRGPageSize();
+					pageSize = InternalGetPrgPageSize();
 					break;
 				case PrgMemoryType::SaveRam:
 					source = _saveRam;
@@ -132,7 +149,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, int8_t accessType = -1)
 		{
 			pageNumber = pageNumber % GetCHRPageCount();
-			SetPpuMemoryMapping(startAddr, endAddr, &_chrRam[pageNumber * GetCHRPageSize()], accessType);
+			SetPpuMemoryMapping(startAddr, endAddr, &_chrRam[pageNumber * InternalGetChrPageSize()], accessType);
 		}
 
 		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t* sourceMemory, int8_t accessType = -1)
@@ -161,18 +178,47 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		{
 			_prgPageNumbers[slot] = page;
 
-			uint16_t startAddr = 0x8000 + slot * GetPRGPageSize();
-			uint16_t endAddr = startAddr + GetPRGPageSize() - 1;
-			SetCpuMemoryMapping(startAddr, endAddr, page, memoryType);
+			if(_prgSize < PrgAddressRangeSize) {
+				//Total PRG size is smaller than available memory range, map the entire PRG to all slots
+				//i.e same logic as NROM (mapper 0) when PRG is 16kb
+				//Needed by "Pyramid" (mapper 79)
+				#ifdef _DEBUG
+					MessageManager::DisplayMessage("Debug", "PRG size is smaller than 32kb");
+				#endif
+
+				for(slot = 0; slot < PrgAddressRangeSize / _prgSize; slot++) {
+					uint16_t startAddr = 0x8000 + slot * _prgSize;
+					uint16_t endAddr = startAddr + _prgSize - 1;
+					SetCpuMemoryMapping(startAddr, endAddr, 0, memoryType);
+				}
+			} else {
+				uint16_t startAddr = 0x8000 + slot * InternalGetPrgPageSize();
+				uint16_t endAddr = startAddr + InternalGetPrgPageSize() - 1;
+				SetCpuMemoryMapping(startAddr, endAddr, page, memoryType);
+			}
 		}
 
 		void SelectCHRPage(uint16_t slot, uint16_t page)
 		{
 			_chrPageNumbers[slot] = page;
 
-			uint16_t startAddr = slot * GetCHRPageSize();
-			uint16_t endAddr = startAddr + GetCHRPageSize() - 1;
-			SetPpuMemoryMapping(startAddr, endAddr, page, _hasChrRam ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
+			if(_chrSize < ChrAddressRangeSize) {
+				//Total CHR size is smaller than available memory range, map the entire CHR to all slots
+				//Unsure if any game needs this, but assuming same behavior as PRG in similar situations
+				#ifdef _DEBUG
+					MessageManager::DisplayMessage("Debug", "CHR size is smaller than 8kb");
+				#endif
+
+				for(slot = 0; slot < ChrAddressRangeSize / _chrSize; slot++) {
+					uint16_t startAddr = slot * _chrSize;
+					uint16_t endAddr = startAddr + _chrSize - 1;
+					SetPpuMemoryMapping(startAddr, endAddr, (uint16_t)0, _hasChrRam ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
+				}
+			} else {
+				uint16_t startAddr = slot * InternalGetChrPageSize();
+				uint16_t endAddr = startAddr + InternalGetChrPageSize() - 1;
+				SetPpuMemoryMapping(startAddr, endAddr, page, _hasChrRam ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
+			}
 		}
 		
 		bool HasBattery()
@@ -207,12 +253,12 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 		uint32_t GetPRGPageCount()
 		{
-			return _prgSize / GetPRGPageSize();
+			return _prgSize / InternalGetPrgPageSize();
 		}
 
 		uint32_t GetCHRPageCount()
 		{
-			return _chrSize / GetCHRPageSize();
+			return _chrSize / InternalGetChrPageSize();
 		}
 
 		string GetBatteryFilename()

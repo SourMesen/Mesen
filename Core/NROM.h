@@ -10,13 +10,8 @@ class NROM : public BaseMapper
 
 		virtual void InitMapper()
 		{
-			if(_prgSize == 0x4000) {
-				SelectPRGPage(0, 0);
-				SelectPRGPage(1, 0);
-			} else {
-				SelectPRGPage(0, 0);
-				SelectPRGPage(1, 1);
-			}
+			SelectPRGPage(0, 0);
+			SelectPRGPage(1, 1);
 
 			SelectCHRPage(0, 0);
 		}
