@@ -27,6 +27,7 @@
 #include "TaitoX1005.h"
 #include "UnlPci556.h"
 #include "UNROM.h"
+#include "VRC1.h"
 #include "VRC2_4.h"
 #include "BF909x.h"
 
@@ -64,6 +65,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 66: return new GxRom();
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
+		case 75: return new VRC1();
 		case 79: return new Nina03_06();
 		case 80: return new TaitoX1005();
 		case 87: return new JalecoJfxx(false);

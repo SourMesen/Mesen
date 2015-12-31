@@ -376,5 +376,8 @@
     <ClCompile Include="AutoRomTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VRC1.h">
+      <Filter>Header Files\Mappers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
