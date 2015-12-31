@@ -269,6 +269,7 @@
     <ClInclude Include="AutoRomTest.h" />
     <ClInclude Include="Bandai74161_7432.h" />
     <ClInclude Include="BF909x.h" />
+    <ClInclude Include="BnRom.h" />
     <ClInclude Include="CodeDataLogger.h" />
     <ClInclude Include="CpRom.h" />
     <ClInclude Include="DeltaModulationChannel.h" />
@@ -312,6 +313,7 @@
     <ClInclude Include="JalecoSs88006.h" />
     <ClInclude Include="MMC4.h" />
     <ClInclude Include="MMC5.h" />
+    <ClInclude Include="Nina01.h" />
     <ClInclude Include="Nina03_06.h" />
     <ClInclude Include="NoiseChannel.h" />
     <ClInclude Include="SquareChannel.h" />

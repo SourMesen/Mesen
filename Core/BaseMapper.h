@@ -483,10 +483,15 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		{
 			if(addr >= _registerStartAddress && addr <= _registerEndAddress) {
 				WriteRegister(addr, value);
-			} else if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Write) {
-				_prgPages[addr >> 8][addr & 0xFF] = value;
 			} else {
-				//assert(false);
+				WritePrgRam(addr, value);
+			}
+		}
+
+		void WritePrgRam(uint16_t addr, uint8_t value)
+		{
+			if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Write) {
+				_prgPages[addr >> 8][addr & 0xFF] = value;
 			}
 		}
 		

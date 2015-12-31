@@ -4,6 +4,7 @@
 #include "ROMLoader.h"
 #include "AXROM.h"
 #include "Bandai74161_7432.h"
+#include "BnRom.h"
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
@@ -18,6 +19,7 @@
 #include "MMC4.h"
 #include "MMC5.h"
 #include "Nanjing.h"
+#include "Nina01.h"
 #include "Nina03_06.h"
 #include "NROM.h"
 #include "Sunsoft89.h"
@@ -31,13 +33,13 @@
 #include "VRC2_4.h"
 #include "BF909x.h"
 
-BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
+BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 {
 #ifdef _DEBUG
-	MessageManager::DisplayMessage("Game Info", "Mapper: " + std::to_string(mapperID));
+	MessageManager::DisplayMessage("Game Info", "Mapper: " + std::to_string(romLoader.GetMapperID()));
 #endif
 
-	switch(mapperID) {
+	switch(romLoader.GetMapperID()) {
 		case 0: return new NROM();
 		case 1: return new MMC1();
 		case 2: return new UNROM();
@@ -59,7 +61,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();
-		case 34: break;
+		case 34: return (romLoader.GetCHRSize() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
 		case 37: break;
 		case 38: return new UnlPci556();
 		case 66: return new GxRom();
@@ -89,9 +91,7 @@ shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string romFilename, str
 	ROMLoader loader;
 
 	if(loader.LoadFile(romFilename, filestream, ipsFilename)) {
-		uint8_t mapperID = loader.GetMapperID();
-
-		shared_ptr<BaseMapper> mapper(GetMapperFromID(mapperID));
+		shared_ptr<BaseMapper> mapper(GetMapperFromID(loader));
 
 		if(mapper) {
 			mapper->Initialize(loader);

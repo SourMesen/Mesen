@@ -4,7 +4,7 @@
 class MapperFactory
 {
 	private:
-		static BaseMapper* GetMapperFromID(uint8_t mapperID);
+		static BaseMapper* GetMapperFromID(ROMLoader &romLoader);
 
 	public:
 		static shared_ptr<BaseMapper> InitializeFromFile(string romFilename, stringstream *filestream, string ipsFilename);
