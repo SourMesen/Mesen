@@ -20,6 +20,9 @@
 #include "Nanjing.h"
 #include "Nina03_06.h"
 #include "NROM.h"
+#include "Sunsoft89.h"
+#include "Sunsoft93.h"
+#include "Sunsoft184.h"
 #include "TaitoTc0190.h"
 #include "TaitoX1005.h"
 #include "UnlPci556.h"
@@ -64,9 +67,12 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 79: return new Nina03_06();
 		case 80: return new TaitoX1005();
 		case 87: return new JalecoJfxx(false);
+		case 89: return new Sunsoft89();
+		case 93: return new Sunsoft93();
 		case 101: return new JalecoJfxx(true);
 		case 152: return new Bandai74161_7432(true);
 		case 163: return new Nanjing();
+		case 184: return new Sunsoft184();
 		case 185: return new CNROM(true);
 		case 189: return new MMC3_189();
 	}

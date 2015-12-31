@@ -337,6 +337,9 @@
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="ROMLoader.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Sunsoft184.h" />
+    <ClInclude Include="Sunsoft89.h" />
+    <ClInclude Include="Sunsoft93.h" />
     <ClInclude Include="TaitoTc0190.h" />
     <ClInclude Include="TaitoX1005.h" />
     <ClInclude Include="TriangleChannel.h" />
