@@ -143,6 +143,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			for(uint16_t i = startAddr; i <= endAddr; i++) {
 				_prgPages[i] = source;
 				_prgPageAccessType[i] = accessType != -1 ? accessType : defaultAccessType;
+
 				source += 0x100;
 			}
 		}
@@ -166,8 +167,17 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			for(uint16_t i = startAddr; i <= endAddr; i++) {
 				_chrPages[i] = sourceMemory;
 				_chrPageAccessType[i] = accessType != -1 ? accessType : MemoryAccessType::ReadWrite;
-				sourceMemory += 0x100;
+
+				if(sourceMemory != nullptr) {
+					sourceMemory += 0x100;
+				}
 			}
+		}
+
+		void RemovePpuMemoryMapping(uint16_t startAddr, uint16_t endAddr)
+		{
+			//Unmap this section of memory (causing open bus behavior)
+			SetPpuMemoryMapping(startAddr, endAddr, nullptr, MemoryAccessType::NoAccess);
 		}
 
 		uint8_t InternalReadRam(uint16_t addr)

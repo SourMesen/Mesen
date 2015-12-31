@@ -37,7 +37,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 0: return new NROM();
 		case 1: return new MMC1();
 		case 2: return new UNROM();
-		case 3: return new CNROM();
+		case 3: return new CNROM(false);
 		case 4: return new MMC3();
 		case 5: return new MMC5();
 		case 7: return new AXROM();
@@ -67,6 +67,7 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 101: return new JalecoJfxx(true);
 		case 152: return new Bandai74161_7432(true);
 		case 163: return new Nanjing();
+		case 185: return new CNROM(true);
 		case 189: return new MMC3_189();
 	}
 
