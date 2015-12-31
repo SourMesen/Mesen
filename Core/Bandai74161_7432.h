@@ -48,6 +48,6 @@ protected:
 public:
 	Bandai74161_7432(bool enableMirroringControl) : _enableMirroringControl(enableMirroringControl)
 	{
-		//According to NesDev Wiki, Mapper 70 is meant to have mirroring forced (by the board) and Mapper 152
+		//According to NesDev Wiki, Mapper 70 is meant to have mirroring forced (by the board) and Mapper 152 allows the code to specify the mirroring type
 	}
 };
