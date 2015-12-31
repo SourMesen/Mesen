@@ -25,7 +25,7 @@ protected:
 			if(_multicartMode) {
 				//Mapper 113
 				SelectPRGPage(0, (value >> 3) & 0x07);
-				SelectCHRPage(0, (value & 0x07) | ((value >> 6) & 0x01));
+				SelectCHRPage(0, (value & 0x07) | ((value >> 3) & 0x08));
 				SetMirroringType((value & 0x80) == 0x80 ? MirroringType::Vertical : MirroringType::Horizontal);
 			} else {
 				SelectPRGPage(0, (value >> 3) & 0x01);
