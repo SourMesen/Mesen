@@ -24,6 +24,8 @@
 #include "NROM.h"
 #include "Sachen_145.h"
 #include "Sachen_147.h"
+#include "Sachen_148.h"
+#include "Sachen_149.h"
 #include "Sunsoft89.h"
 #include "Sunsoft93.h"
 #include "Sunsoft184.h"
@@ -80,6 +82,8 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 145: return new Sachen_145();
 		case 146: return new Nina03_06(false);
 		case 147: return new Sachen_147();
+		case 148: return new Sachen_148();
+		case 149: return new Sachen_149();
 		case 152: return new Bandai74161_7432(true);
 		case 163: return new Nanjing();
 		case 184: return new Sunsoft184();

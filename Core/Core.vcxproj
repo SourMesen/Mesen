@@ -318,6 +318,8 @@
     <ClInclude Include="Nina03_06.h" />
     <ClInclude Include="NoiseChannel.h" />
     <ClInclude Include="Sachen_147.h" />
+    <ClInclude Include="Sachen_148.h" />
+    <ClInclude Include="Sachen_149.h" />
     <ClInclude Include="SquareChannel.h" />
     <ClInclude Include="StandardController.h" />
     <ClInclude Include="MessageManager.h" />
