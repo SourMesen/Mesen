@@ -22,6 +22,8 @@
 #include "Nina01.h"
 #include "Nina03_06.h"
 #include "NROM.h"
+#include "Sachen_145.h"
+#include "Sachen_147.h"
 #include "Sunsoft89.h"
 #include "Sunsoft93.h"
 #include "Sunsoft184.h"
@@ -75,6 +77,9 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 93: return new Sunsoft93();
 		case 101: return new JalecoJfxx(true);
 		case 113: return new Nina03_06(true);
+		case 145: return new Sachen_145();
+		case 146: return new Nina03_06(false);
+		case 147: return new Sachen_147();
 		case 152: return new Bandai74161_7432(true);
 		case 163: return new Nanjing();
 		case 184: return new Sunsoft184();
