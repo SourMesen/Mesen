@@ -66,12 +66,13 @@ BaseMapper* MapperFactory::GetMapperFromID(uint8_t mapperID)
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
 		case 75: return new VRC1();
-		case 79: return new Nina03_06();
+		case 79: return new Nina03_06(false);
 		case 80: return new TaitoX1005();
 		case 87: return new JalecoJfxx(false);
 		case 89: return new Sunsoft89();
 		case 93: return new Sunsoft93();
 		case 101: return new JalecoJfxx(true);
+		case 113: return new Nina03_06(true);
 		case 152: return new Bandai74161_7432(true);
 		case 163: return new Nanjing();
 		case 184: return new Sunsoft184();
