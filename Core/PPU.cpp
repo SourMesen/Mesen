@@ -16,6 +16,10 @@ PPU::PPU(MemoryManager *memoryManager)
 
 	_currentOutputBuffer = _outputBuffers[0];
 
+	memset(_paletteRAM, 0x0F, 0x20);
+	memset(_spriteRAM, 0xFF, 0x100);	
+	memset(_secondarySpriteRAM, 0xFF, 0x20);
+
 	Reset();
 }
 
@@ -35,8 +39,6 @@ void PPU::Reset()
 	_cycle = -1;
 	_frameCount = 0;
 	_memoryReadBuffer = 0;
-
-	memset(_spriteRAM, 0xFF, 0x100);
 }
 
 void PPU::SetNesModel(NesModel model)
