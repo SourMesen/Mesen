@@ -48,26 +48,26 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		}
 
 	protected:
-		uint8_t* _prgRom;
-		uint8_t* _originalPrgRom;
-		uint8_t* _chrRam;
-		uint32_t _prgSize;
-		uint32_t _chrSize;
+		uint8_t* _prgRom = nullptr;
+		uint8_t* _originalPrgRom = nullptr;
+		uint8_t* _chrRam = nullptr;
+		uint32_t _prgSize = 0;
+		uint32_t _chrSize = 0;
 
-		uint8_t* _saveRam;
-		uint32_t _saveRamSize;
-		uint8_t* _workRam;
+		uint8_t* _saveRam = nullptr;
+		uint32_t _saveRamSize = 0;
+		uint8_t* _workRam = nullptr;
 
 		uint8_t *_nesNametableRam[2];
 		uint8_t *_cartNametableRam[2];
 
-		bool _hasChrRam;
-		bool _hasBattery;
-		bool _isPalRom;
+		bool _hasChrRam = false;
+		bool _hasBattery= false;
+		bool _isPalRom = false;
 		string _romFilename;
-		bool _allowRegisterRead;
-		uint16_t _registerStartAddress;
-		uint16_t _registerEndAddress;
+		bool _allowRegisterRead = false;
+		uint16_t _registerStartAddress = 0;
+		uint16_t _registerEndAddress = 0;
 
 		vector<uint8_t*> _prgPages;
 		vector<uint8_t*> _chrPages;
@@ -318,6 +318,9 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 	public:
 		void Initialize(ROMLoader &romLoader)
 		{
+			_cartNametableRam[0] = nullptr;
+			_cartNametableRam[1] = nullptr;
+
 			_romFilename = romLoader.GetFilename();
 			_batteryFilename = GetBatteryFilename();
 			_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
@@ -360,6 +363,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			if(_chrSize == 0) {
 				_hasChrRam = true;
 				_chrRam = new uint8_t[GetChrRamSize()];
+				memset(_chrRam, 0, GetChrRamSize());
 				_chrSize = GetChrRamSize();
 			}
 
@@ -383,6 +387,14 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			delete[] _originalPrgRom;
 			delete[] _saveRam;
 			delete[] _workRam;
+
+			if(_cartNametableRam[0]) {
+				delete[] _cartNametableRam[0];
+			}
+
+			if(_cartNametableRam[1]) {
+				delete[] _cartNametableRam[1];
+			}
 
 			MessageManager::UnregisterNotificationListener(this);
 		}
@@ -433,6 +445,12 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 				case MirroringType::FourScreens:
 				default:
+					if(_cartNametableRam[0] == nullptr) {
+						_cartNametableRam[0] = new uint8_t[0x400];
+					} 
+					if(_cartNametableRam[1] == nullptr) {
+						_cartNametableRam[1] = new uint8_t[0x400];
+					}
 					SetMirroringType(_nesNametableRam[0], _nesNametableRam[1], _cartNametableRam[0], _cartNametableRam[1]);
 					break;
 
