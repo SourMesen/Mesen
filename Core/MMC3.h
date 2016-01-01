@@ -21,7 +21,6 @@ class MMC3 : public BaseMapper
 		};
 
 		uint8_t _currentRegister;
-		uint8_t _registers[8];
 		uint8_t _chrMode;
 		uint8_t _prgMode;
 
@@ -64,31 +63,17 @@ class MMC3 : public BaseMapper
 		}
 
 	protected:
-		virtual void UpdateState()
-		{
-			_currentRegister = _state.Reg8000 & 0x07;
-			_chrMode = (_state.Reg8000 & 0x80) >> 7;
-			_prgMode = (_state.Reg8000 & 0x40) >> 6;
+		uint8_t _registers[8];
 
+		virtual void UpdateMirroring()
+		{
 			if(GetMirroringType() != MirroringType::FourScreens) {
 				SetMirroringType(((_state.RegA000 & 0x01) == 0x01) ? MirroringType::Horizontal : MirroringType::Vertical);
 			}
+		}
 
-			_wramEnabled = (_state.RegA001 & 0x80) == 0x80;
-			_wramWriteProtected = (_state.RegA001 & 0x40) == 0x40;
-
-			if(_prgMode == 0) {
-				SelectPRGPage(0, _registers[6]);
-				SelectPRGPage(1, _registers[7]);
-				SelectPRGPage(2, -2);
-				SelectPRGPage(3, -1);
-			} else if(_prgMode == 1) {
-				SelectPRGPage(0, -2);
-				SelectPRGPage(1, _registers[7]);
-				SelectPRGPage(2, _registers[6]);
-				SelectPRGPage(3, -1);
-			}
-
+		virtual void UpdateChrMapping()
+		{
 			if(_chrMode == 0) {
 				SelectCHRPage(0, _registers[0] & 0xFE);
 				SelectCHRPage(1, _registers[0] | 0x01);
@@ -110,6 +95,32 @@ class MMC3 : public BaseMapper
 				SelectCHRPage(6, _registers[1] & 0xFE);
 				SelectCHRPage(7, _registers[1] | 0x01);
 			}
+		}
+
+		virtual void UpdateState()
+		{
+			_currentRegister = _state.Reg8000 & 0x07;
+			_chrMode = (_state.Reg8000 & 0x80) >> 7;
+			_prgMode = (_state.Reg8000 & 0x40) >> 6;
+
+			UpdateMirroring();
+
+			_wramEnabled = (_state.RegA001 & 0x80) == 0x80;
+			_wramWriteProtected = (_state.RegA001 & 0x40) == 0x40;
+
+			if(_prgMode == 0) {
+				SelectPRGPage(0, _registers[6]);
+				SelectPRGPage(1, _registers[7]);
+				SelectPRGPage(2, -2);
+				SelectPRGPage(3, -1);
+			} else if(_prgMode == 1) {
+				SelectPRGPage(0, -2);
+				SelectPRGPage(1, _registers[7]);
+				SelectPRGPage(2, _registers[6]);
+				SelectPRGPage(3, -1);
+			}
+
+			UpdateChrMapping();
 
 			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
 		}
@@ -149,7 +160,7 @@ class MMC3 : public BaseMapper
 			UpdateState();
 		}
 
-		void WriteRegister(uint16_t addr, uint8_t value)
+		virtual void WriteRegister(uint16_t addr, uint8_t value)
 		{
 			switch((MMC3Registers)(addr & 0xE001)) {
 				case MMC3Registers::Reg8000:

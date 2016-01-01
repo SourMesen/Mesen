@@ -18,6 +18,11 @@
 #include "MMC3_189.h"
 #include "MMC4.h"
 #include "MMC5.h"
+#include "Namco108.h"
+#include "Namco108_76.h"
+#include "Namco108_88.h"
+#include "Namco108_95.h"
+#include "Namco108_154.h"
 #include "Nanjing.h"
 #include "Nina01.h"
 #include "Nina03_06.h"
@@ -72,11 +77,14 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
 		case 75: return new VRC1();
+		case 76: return new Namco108_76();
 		case 79: return new Nina03_06(false);
 		case 80: return new TaitoX1005();
 		case 87: return new JalecoJfxx(false);
+		case 88: return new Namco108_88();
 		case 89: return new Sunsoft89();
 		case 93: return new Sunsoft93();
+		case 95: return new Namco108_95();
 		case 101: return new JalecoJfxx(true);
 		case 113: return new Nina03_06(true);
 		case 145: return new Sachen_145();
@@ -85,10 +93,12 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 148: return new Sachen_148();
 		case 149: return new Sachen_149();
 		case 152: return new Bandai74161_7432(true);
+		case 154: return new Namco108_154();
 		case 163: return new Nanjing();
 		case 184: return new Sunsoft184();
 		case 185: return new CNROM(true);
 		case 189: return new MMC3_189();
+		case 206: return new Namco108();
 	}
 
 	MessageManager::DisplayMessage("Error", "Unsupported mapper, cannot load game.");

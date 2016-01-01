@@ -270,6 +270,11 @@
     <ClInclude Include="Bandai74161_7432.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="BnRom.h" />
+    <ClInclude Include="Namco108.h" />
+    <ClInclude Include="Namco108_154.h" />
+    <ClInclude Include="Namco108_76.h" />
+    <ClInclude Include="Namco108_88.h" />
+    <ClInclude Include="Namco108_95.h" />
     <ClInclude Include="Sachen_145.h" />
     <ClInclude Include="CodeDataLogger.h" />
     <ClInclude Include="CpRom.h" />
