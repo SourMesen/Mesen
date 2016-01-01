@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -237,9 +238,13 @@ namespace Mesen.GUI.Forms
 
 		private void LoadROM(string filename)
 		{
-			ConfigManager.Config.AddRecentFile(filename);
-			InteropEmu.LoadROM(filename);
-			UpdateRecentFiles();
+			if(File.Exists(filename)) {
+				ConfigManager.Config.AddRecentFile(filename);
+				InteropEmu.LoadROM(filename);
+				UpdateRecentFiles();
+			} else {
+				MessageBox.Show("File not found.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 		}
 
 		private void UpdateMenus()
@@ -672,6 +677,11 @@ namespace Mesen.GUI.Forms
 				ConfigManager.Config.Region = NesModel.PAL;
 			}
 			ConfigManager.Config.ApplyConfig();
+		}
+
+		private void mnuRunAllTests_Click(object sender, EventArgs e)
+		{
+			Process.Start("TestHelper.exe");
 		}
 	}
 }

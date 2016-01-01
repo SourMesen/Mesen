@@ -107,6 +107,7 @@
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
+			this.mnuRunAllTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -544,7 +545,8 @@
 			this.mnuTests.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuTestRun,
             this.mnuTestRecordFrom,
-            this.mnuTestStopRecording});
+            this.mnuTestStopRecording,
+            this.mnuRunAllTests});
 			this.mnuTests.Name = "mnuTests";
 			this.mnuTests.Size = new System.Drawing.Size(185, 22);
 			this.mnuTests.Text = "Tests";
@@ -661,6 +663,13 @@
 			this.dxViewer.Size = new System.Drawing.Size(1024, 960);
 			this.dxViewer.TabIndex = 1;
 			// 
+			// mnuRunAllTests
+			// 
+			this.mnuRunAllTests.Name = "mnuRunAllTests";
+			this.mnuRunAllTests.Size = new System.Drawing.Size(193, 22);
+			this.mnuRunAllTests.Text = "Run all tests";
+			this.mnuRunAllTests.Click += new System.EventHandler(this.mnuRunAllTests_Click);
+			// 
 			// frmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -752,6 +761,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
 		private System.Windows.Forms.ToolStripMenuItem mnuPreferences;
+		private System.Windows.Forms.ToolStripMenuItem mnuRunAllTests;
 	}
 }
 
