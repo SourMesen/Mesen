@@ -13,7 +13,9 @@ private:
 protected:
 	bool _lengthCounterHalt;
 	uint8_t _lengthCounter;
-	
+	uint8_t _lengthCounterReloadValue;
+	uint8_t _lengthCounterPreviousValue;
+
 	void InitializeLengthCounter(bool haltFlag)
 	{
 		SetRunFlag();
@@ -23,7 +25,9 @@ protected:
 	void LoadLengthCounter(uint8_t value)
 	{
 		if(_enabled) {
-			_lengthCounter = _lcLookupTable[value];
+			_lengthCounterReloadValue = _lcLookupTable[value];
+			_lengthCounterPreviousValue = _lengthCounter;
+			SetRunFlag();
 		}
 	}
 
@@ -84,6 +88,16 @@ public:
 		ApuLengthCounter::_needToRun = false;
 		_lengthCounterHalt = _newHaltValue;
 		BaseApuChannel::Run(targetCycle);
+	}
+
+	void ReloadCounter()
+	{
+		if(_lengthCounterReloadValue) {
+			if(_lengthCounter == _lengthCounterPreviousValue) {
+				_lengthCounter = _lengthCounterReloadValue;
+			}
+			_lengthCounterReloadValue = 0;
+		}
 	}
 
 	void TickLengthCounter()

@@ -135,6 +135,13 @@ void APU::Run()
 	while(_previousCycle < _currentCycle) {
 		_previousCycle += _frameCounter->Run(cyclesToRun);
 
+		//Reload counters set by writes to 4003/4008/400B/400F after running the frame counter to allow the length counter to be clocked first
+		//This fixes the test "len_reload_timing" (tests 4 & 5)
+		_squareChannel[0]->ReloadCounter();
+		_squareChannel[1]->ReloadCounter();
+		_noiseChannel->ReloadCounter();
+		_triangleChannel->ReloadCounter();
+
 		_squareChannel[0]->Run(_previousCycle);
 		_squareChannel[1]->Run(_previousCycle);
 		_noiseChannel->Run(_previousCycle);
