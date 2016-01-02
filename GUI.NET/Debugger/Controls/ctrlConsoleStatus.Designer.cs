@@ -34,12 +34,12 @@
 			this.lblVRAMAddr = new System.Windows.Forms.Label();
 			this.lblCycle = new System.Windows.Forms.Label();
 			this.txtCycle = new System.Windows.Forms.TextBox();
-			this.lblScanline = new System.Windows.Forms.Label();
-			this.txtScanline = new System.Windows.Forms.TextBox();
 			this.txtVRAMAddr = new System.Windows.Forms.TextBox();
 			this.chkVerticalBlank = new System.Windows.Forms.CheckBox();
 			this.chkSprite0Hit = new System.Windows.Forms.CheckBox();
 			this.chkSpriteOverflow = new System.Windows.Forms.CheckBox();
+			this.lblScanline = new System.Windows.Forms.Label();
+			this.txtScanline = new System.Windows.Forms.TextBox();
 			this.grpControlMask = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkDrawLeftSpr = new System.Windows.Forms.CheckBox();
@@ -100,6 +100,8 @@
 			this.txtY = new System.Windows.Forms.TextBox();
 			this.lblPC = new System.Windows.Forms.Label();
 			this.txtPC = new System.Windows.Forms.TextBox();
+			this.lblCycleCount = new System.Windows.Forms.Label();
+			this.txtCycleCount = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -228,25 +230,6 @@
 			this.txtCycle.Size = new System.Drawing.Size(58, 20);
 			this.txtCycle.TabIndex = 2;
 			// 
-			// lblScanline
-			// 
-			this.lblScanline.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblScanline.AutoSize = true;
-			this.lblScanline.Location = new System.Drawing.Point(0, 32);
-			this.lblScanline.Margin = new System.Windows.Forms.Padding(0);
-			this.lblScanline.Name = "lblScanline";
-			this.lblScanline.Size = new System.Drawing.Size(51, 13);
-			this.lblScanline.TabIndex = 3;
-			this.lblScanline.Text = "Scanline:";
-			this.lblScanline.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// txtScanline
-			// 
-			this.txtScanline.Location = new System.Drawing.Point(69, 29);
-			this.txtScanline.Name = "txtScanline";
-			this.txtScanline.Size = new System.Drawing.Size(58, 20);
-			this.txtScanline.TabIndex = 4;
-			// 
 			// txtVRAMAddr
 			// 
 			this.txtVRAMAddr.Location = new System.Drawing.Point(69, 55);
@@ -289,6 +272,25 @@
 			this.chkSpriteOverflow.TabIndex = 8;
 			this.chkSpriteOverflow.Text = "Sprite Overflow";
 			this.chkSpriteOverflow.UseVisualStyleBackColor = true;
+			// 
+			// lblScanline
+			// 
+			this.lblScanline.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblScanline.AutoSize = true;
+			this.lblScanline.Location = new System.Drawing.Point(0, 32);
+			this.lblScanline.Margin = new System.Windows.Forms.Padding(0);
+			this.lblScanline.Name = "lblScanline";
+			this.lblScanline.Size = new System.Drawing.Size(51, 13);
+			this.lblScanline.TabIndex = 3;
+			this.lblScanline.Text = "Scanline:";
+			this.lblScanline.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// txtScanline
+			// 
+			this.txtScanline.Location = new System.Drawing.Point(69, 29);
+			this.txtScanline.Name = "txtScanline";
+			this.txtScanline.Size = new System.Drawing.Size(58, 20);
+			this.txtScanline.TabIndex = 4;
 			// 
 			// grpControlMask
 			// 
@@ -912,6 +914,8 @@
 			this.flowLayoutPanel1.Controls.Add(this.txtY);
 			this.flowLayoutPanel1.Controls.Add(this.lblPC);
 			this.flowLayoutPanel1.Controls.Add(this.txtPC);
+			this.flowLayoutPanel1.Controls.Add(this.lblCycleCount);
+			this.flowLayoutPanel1.Controls.Add(this.txtCycleCount);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -997,6 +1001,26 @@
 			this.txtPC.Name = "txtPC";
 			this.txtPC.Size = new System.Drawing.Size(42, 20);
 			this.txtPC.TabIndex = 7;
+			// 
+			// lblCycleCount
+			// 
+			this.lblCycleCount.AutoSize = true;
+			this.lblCycleCount.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblCycleCount.Location = new System.Drawing.Point(198, 0);
+			this.lblCycleCount.Margin = new System.Windows.Forms.Padding(0);
+			this.lblCycleCount.Name = "lblCycleCount";
+			this.lblCycleCount.Size = new System.Drawing.Size(36, 20);
+			this.lblCycleCount.TabIndex = 8;
+			this.lblCycleCount.Text = "Cycle:";
+			this.lblCycleCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// txtCycleCount
+			// 
+			this.txtCycleCount.Location = new System.Drawing.Point(234, 0);
+			this.txtCycleCount.Margin = new System.Windows.Forms.Padding(0);
+			this.txtCycleCount.Name = "txtCycleCount";
+			this.txtCycleCount.Size = new System.Drawing.Size(77, 20);
+			this.txtCycleCount.TabIndex = 9;
 			// 
 			// ctrlConsoleStatus
 			// 
@@ -1115,5 +1139,7 @@
 		private System.Windows.Forms.Label lblPC;
 		private System.Windows.Forms.TextBox txtPC;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.Label lblCycleCount;
+		private System.Windows.Forms.TextBox txtCycleCount;
 	}
 }

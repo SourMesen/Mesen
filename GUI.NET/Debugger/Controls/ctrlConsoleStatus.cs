@@ -26,6 +26,7 @@ namespace Mesen.GUI.Debugger
 			txtPC.Text = state.CPU.PC.ToString("X");
 			txtSP.Text = state.CPU.SP.ToString("X");
 			txtStatus.Text = state.CPU.PS.ToString("X");
+			txtCycleCount.Text = state.CPU.CycleCount.ToString();
 
 			PSFlags flags = (PSFlags)state.CPU.PS;
 			chkBreak.Checked = flags.HasFlag(PSFlags.Break);

@@ -358,6 +358,7 @@ namespace Mesen.GUI
 		public Byte Y;
 		public Byte PS;
 		public IRQSource IRQFlag;
+		public Int32 CycleCount;
 		
 		[MarshalAs(UnmanagedType.I1)]
 		public bool NMIFlag;

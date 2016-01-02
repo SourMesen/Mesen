@@ -44,6 +44,7 @@ struct State
 	uint8_t Y = 0;
 	uint8_t PS = 0;
 	uint32_t IRQFlag = 0;
+	int32_t CycleCount;
 	bool NMIFlag = false;
 
 	//Used by debugger
@@ -68,9 +69,13 @@ private:
 	AddrMode _addrMode[256];
 	AddrMode _instAddrMode;
 
+	uint16_t _spriteDmaCounter;
+	bool _spriteDmaTransfer;
+
 	int8_t _dmcCounter;
 	bool _dmcDmaRunning;
-	bool _dmaTransfer;
+	bool _cpuWrite = false;
+	uint16_t _writeAddr = 0;
 
 	State _state;
 	MemoryManager *_memoryManager = nullptr;
@@ -141,8 +146,19 @@ private:
 
 	void MemoryWrite(uint16_t addr, uint8_t value)
 	{
-		_memoryManager->Write(addr, value);
+		if(_dmcCounter == 4) {
+			_dmcCounter = 3;
+		}
+
+		while(_dmcDmaRunning) {
+			IncCycleCount();
+		}
+
+		_cpuWrite = true;;
+		_writeAddr = addr;
 		IncCycleCount();
+		_memoryManager->Write(addr, value);
+		_cpuWrite = false;
 	}
 
 	uint8_t MemoryRead(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
@@ -156,8 +172,8 @@ private:
 			}
 			IncCycleCount();
 		}
-		uint8_t value = _memoryManager->Read(addr, operationType);
 		IncCycleCount();
+		uint8_t value = _memoryManager->Read(addr, operationType);
 		return value;
 	}
 
@@ -481,10 +497,18 @@ private:
 	void BranchRelative(bool branch) {
 		int8_t offset = (int8_t)GetOperand();
 		if(branch) {
+			//"a taken non-page-crossing branch ignores IRQ/NMI during its last clock, so that next instruction executes before the IRQ"
+			//Fixes "branch_delays_irq" test
+			bool skipIrq = false;
+			if(_runIrq && !_prevRunIrq) {
+
+				_runIrq = true;
+			}
+			DummyRead();
+
 			if(CheckPageCrossed(PC(), offset)) {
 				DummyRead();
 			}
-			DummyRead();
 
 			SetPC(PC() + offset);
 		}
@@ -624,6 +648,9 @@ private:
 
 			SetPC(MemoryReadWord(CPU::IRQVector));
 		}
+
+		//Since we just set the flag to prevent interrupts, do not run one right away after this (fixes nmi_and_brk & nmi_and_irq tests)
+		_prevRunIrq = false;
 	}
 
 	void IRQ() {
@@ -851,5 +878,10 @@ public:
 	void Reset(bool softReset);
 	void Exec();
 
-	State GetState() { return _state; }
+	State GetState() 
+	{ 
+		State cpuState(_state);
+		cpuState.CycleCount = _cycleCount;
+		return cpuState; 
+	}
 };

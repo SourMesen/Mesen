@@ -97,7 +97,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		PPUState _state;
 		int32_t _scanline;
 		uint32_t _cycle;
-		uint32_t _frameCount;
+		int32_t _frameCount;
 		uint8_t _memoryReadBuffer;
 
 		uint8_t _paletteRAM[0x20];
@@ -116,8 +116,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		uint16_t _intensifyColorBits;
 		uint8_t _paletteRamMask;
-
-		bool _doNotSetVBFlag = false;
 
 		SpriteInfo *_lastSprite; //used by HD ppu
 

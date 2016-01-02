@@ -36,8 +36,8 @@ void PPU::Reset()
 	_statusFlags = {};
 
 	_scanline = 0;
-	_cycle = -1;
-	_frameCount = 0;
+	_cycle = 0;
+	_frameCount = -1;
 	_memoryReadBuffer = 0;
 }
 
@@ -228,7 +228,8 @@ void PPU::SetControlRegister(uint8_t value)
 	
 	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank && (_scanline != -1 || _cycle != 0)) {
 		CPU::SetNMIFlag();
-	} else if(_scanline == 241 && _cycle < 3 && !_flags.VBlank) {
+	}
+	if(_scanline == 241 && _cycle < 3 && !_flags.VBlank) {
 		CPU::ClearNMIFlag();
 	}
 }
@@ -265,15 +266,14 @@ void PPU::UpdateStatusFlag()
 						 ((uint8_t)_statusFlags.VerticalBlank << 7);
 	_statusFlags.VerticalBlank = false;
 
-	if(_scanline == 241) {
-		if(_cycle < 3) {
-			//"Reading on the same PPU clock or one later reads it as set, clears it, and suppresses the NMI for that frame."
-			CPU::ClearNMIFlag();
+	if(_scanline == 241 && _cycle < 3) {
+		//"Reading on the same PPU clock or one later reads it as set, clears it, and suppresses the NMI for that frame."
+		_statusFlags.VerticalBlank = false;		
+		CPU::ClearNMIFlag();
 
-			if(_cycle == 0) {
-				//"Reading one PPU clock before reads it as clear and never sets the flag or generates NMI for that frame. "
-				_doNotSetVBFlag = true;
-			}
+		if(_cycle == 0) {
+			//"Reading one PPU clock before reads it as clear and never sets the flag or generates NMI for that frame. "
+			_state.Status = ((uint8_t)_statusFlags.SpriteOverflow << 5) | ((uint8_t)_statusFlags.Sprite0Hit << 6);
 		}
 	}
 }
@@ -658,15 +658,12 @@ void PPU::SendFrame()
 
 void PPU::BeginVBlank()
 {
-	if(_cycle == 1) {
+	if(_cycle == 0) {
 		SendFrame();
-		if(!_doNotSetVBFlag) {
-			_statusFlags.VerticalBlank = true;
-			if(_flags.VBlank) {
-				CPU::SetNMIFlag();
-			}
+		_statusFlags.VerticalBlank = true;
+		if(_flags.VBlank) {
+			CPU::SetNMIFlag();
 		}
-		_doNotSetVBFlag = false;
 	}
 }
 
@@ -746,7 +743,7 @@ void PPU::StreamState(bool saving)
 
 	Stream<int32_t>(_scanline);
 	Stream<uint32_t>(_cycle);
-	Stream<uint32_t>(_frameCount);
+	Stream<int32_t>(_frameCount);
 	Stream<uint8_t>(_memoryReadBuffer);
 	
 	StreamArray<uint8_t>(_paletteRAM, 0x20);

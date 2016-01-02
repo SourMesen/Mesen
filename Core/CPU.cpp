@@ -58,9 +58,13 @@ void CPU::Reset(bool softReset)
 {
 	_state.NMIFlag = false;
 	_state.IRQFlag = 0;
-	_cycleCount = -1;
+	_cycleCount = 0;
+
+	_spriteDmaTransfer = false;
+	_spriteDmaCounter = 0;
+
 	_dmcCounter = -1;
-	_dmaTransfer = false;
+	_dmcDmaRunning = false;
 
 	//Use _memoryManager->Read() directly to prevent clocking the PPU/APU when setting PC at reset
 	_state.PC = _memoryManager->Read(CPU::ResetVector) | _memoryManager->Read(CPU::ResetVector+1) << 8;
@@ -85,7 +89,7 @@ void CPU::Exec()
 	_instAddrMode = _addrMode[opCode];
 	_operand = FetchOperand();
 	(this->*_opTable[opCode])();
-
+	
 	if(_prevRunIrq) {
 		IRQ();
 	}
@@ -101,21 +105,26 @@ void CPU::IncCycleCount()
 			_dmcDmaRunning = false;
 			DeltaModulationChannel::SetReadBuffer();
 		}
-	} else {
+	}
+
+	PPU::ExecStatic();
+	APU::ExecStatic();
+	
+	if(!_spriteDmaTransfer) {
+		//IRQ flags are ignored during Sprite DMA - fixes irq_and_dma
+
 		//"it's really the status of the interrupt lines at the end of the second-to-last cycle that matters."
 		//Keep the irq lines values from the previous cycle.  The before-to-last cycle's values will be used
 		_prevRunIrq = _runIrq;
 		_runIrq = _state.NMIFlag || (_state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt));
 	}
 
-	PPU::ExecStatic();
-	APU::ExecStatic();
 	_cycleCount++;
 }
 
 void CPU::RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue)
 {
-	Instance->_dmaTransfer = true;
+	Instance->_spriteDmaTransfer = true;
 	
 	//"The CPU is suspended during the transfer, which will take 513 or 514 cycles after the $4014 write tick."
 	//"(1 dummy read cycle while waiting for writes to complete, +1 if on an odd CPU cycle, then 256 alternating read/write cycles.)"
@@ -124,30 +133,46 @@ void CPU::RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue)
 	}
 	Instance->DummyRead();
 
+	Instance->_spriteDmaCounter = 256;
+
 	//DMA transfer starts at SpriteRamAddr and wraps around
 	for(int i = 0; i < 0x100; i++) {
 		//Read value
 		uint8_t readValue = Instance->MemoryRead(offsetValue * 0x100 + i);
-
+		
 		//Write to sprite ram via $2004 ("DMA is implemented in the 2A03/7 chip and works by repeatedly writing to OAMDATA")
 		Instance->MemoryWrite(0x2004, readValue);
 
-		if(i == 0xFE) {
-			//"DMC DMA adds [...] 3 if on the last DMA cycle.
-			Instance->_dmaTransfer = false;
-			if(Instance->_dmcCounter == 2) {
-				//"DMC DMA adds [...] 1 if on the next-to-next-to-last DMA cycle
-				Instance->_dmcCounter = 1;
-			}
-		}
+		Instance->_spriteDmaCounter--;
 	}
+	
+	Instance->_spriteDmaTransfer = false;
 }
 
 void CPU::StartDmcTransfer()
 {
 	//"DMC DMA adds 4 cycles normally, 2 if it lands on the $4014 write or during OAM DMA"
+	//3 cycles if it lands on the last write cycle of any instruction
 	Instance->_dmcDmaRunning = true;
-	Instance->_dmcCounter = Instance->_dmaTransfer ? 2 : 4;
+	if(Instance->_spriteDmaTransfer) {
+		if(Instance->_spriteDmaCounter == 2) {
+			Instance->_dmcCounter = 1;
+		} else if(Instance->_spriteDmaCounter == 1) {
+			Instance->_dmcCounter = 3;
+		} else {
+			Instance->_dmcCounter = 2;
+		}
+	} else {
+		if(Instance->_cpuWrite) {
+			if(Instance->_writeAddr == 0x4014) {
+				Instance->_dmcCounter = 2;
+			} else {
+				Instance->_dmcCounter = 3;
+			}
+		} else {
+			Instance->_dmcCounter = 4;
+		}
+	}
 }
 
 void CPU::StreamState(bool saving)
@@ -165,5 +190,7 @@ void CPU::StreamState(bool saving)
 
 	Stream<int8_t>(_dmcCounter);
 	Stream<bool>(_dmcDmaRunning);
-	Stream<bool>(_dmaTransfer);
+
+	Stream<uint16_t>(_spriteDmaCounter);
+	Stream<bool>(_spriteDmaTransfer);
 }
