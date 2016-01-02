@@ -110,6 +110,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		NesModel _nesModel;
 		uint16_t _vblankEnd;
+		bool _skipTick;
 
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;

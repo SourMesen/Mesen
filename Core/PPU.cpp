@@ -31,6 +31,8 @@ PPU::~PPU()
 
 void PPU::Reset()
 {
+	_skipTick = false;
+
 	_state = {};
 	_flags = {};
 	_statusFlags = {};
@@ -536,11 +538,16 @@ void PPU::ProcessPrerenderScanline()
 			//copy vertical scrolling value from t
 			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x7BE0) | (_state.TmpVideoRamAddr & 0x7BE0);
 		}
-	} else if(_nesModel == NesModel::NTSC && _cycle == 339 && IsRenderingEnabled() && (_frameCount & 0x01)) {
+	} else if(_nesModel == NesModel::NTSC && _cycle == 338 && IsRenderingEnabled() && (_frameCount & 0x01)) {
+		//Check for the cycle skip in the else if block below
+		//If, at cycle 338 in the prerender scanline, rendering is enabled, we skip a tick (cycle 340) on the current frame
+		_skipTick = true;
+	} else if(_cycle == 339 && _skipTick) {
 		//This behavior is NTSC-specific - PAL frames are always the same number of cycles
 		//"With rendering enabled, each odd PPU frame is one PPU clock shorter than normal" (skip from 339 to 0, going over 340)
 		_cycle = -1;
 		_scanline = 0;
+		_skipTick = false;
 	} else if(_cycle == 321 || _cycle == 329) {
 		LoadTileInfo();
 		if(_cycle == 329) {
@@ -784,6 +791,8 @@ void PPU::StreamState(bool saving)
 
 	Stream<uint16_t>(_spriteDmaAddr);
 	Stream<uint16_t>(_spriteDmaCounter);
+
+	Stream<bool>(_skipTick);
 
 	if(!saving) {
 		SetNesModel(_nesModel);
