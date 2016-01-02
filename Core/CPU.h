@@ -501,8 +501,7 @@ private:
 			//Fixes "branch_delays_irq" test
 			bool skipIrq = false;
 			if(_runIrq && !_prevRunIrq) {
-
-				_runIrq = true;
+				_runIrq = false;
 			}
 			DummyRead();
 
