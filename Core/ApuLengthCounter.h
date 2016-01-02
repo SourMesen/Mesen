@@ -76,6 +76,8 @@ public:
 		Stream<bool>(_lengthCounterHalt);
 		Stream<bool>(_newHaltValue);
 		Stream<uint8_t>(_lengthCounter);
+		Stream<uint8_t>(_lengthCounterPreviousValue);
+		Stream<uint8_t>(_lengthCounterReloadValue);
 	}
 
 	bool GetStatus()
