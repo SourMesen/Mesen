@@ -32,6 +32,10 @@ void DeltaModulationChannel::Reset(bool softReset)
 	_bitsRemaining = 8;
 	_silenceFlag = true;
 	_needToRun = false;
+
+	//Not sure if this is accurate, but it seems to make things better rather than worse (for dpcmletterbox)
+	//"On the real thing, I think the power-on value is 428 (or the equivalent at least - it uses a linear feedback shift register), though only the even/oddness should matter for this test."
+	_period = (GetNesModel() == NesModel::NTSC ? _dmcPeriodLookupTableNtsc : _dmcPeriodLookupTablePal)[0] - 1;
 }
 
 void DeltaModulationChannel::InitSample()

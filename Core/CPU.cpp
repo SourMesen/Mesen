@@ -58,7 +58,7 @@ void CPU::Reset(bool softReset)
 {
 	_state.NMIFlag = false;
 	_state.IRQFlag = 0;
-	_cycleCount = 0;
+	_cycleCount = -1;
 
 	_spriteDmaTransfer = false;
 	_spriteDmaCounter = 0;
@@ -110,7 +110,7 @@ void CPU::IncCycleCount()
 	PPU::ExecStatic();
 	APU::ExecStatic();
 	
-	if(!_spriteDmaTransfer) {
+	if(!_spriteDmaTransfer && !_dmcDmaRunning) {
 		//IRQ flags are ignored during Sprite DMA - fixes irq_and_dma
 
 		//"it's really the status of the interrupt lines at the end of the second-to-last cycle that matters."
