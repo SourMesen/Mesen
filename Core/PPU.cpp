@@ -31,6 +31,7 @@ PPU::~PPU()
 
 void PPU::Reset()
 {
+	_ignoreVramRead = 0;
 	_openBus = 0;
 	memset(_openBusDecayStamp, 0, sizeof(_openBusDecayStamp));
 
@@ -146,17 +147,24 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 			break;
 
 		case PPURegisters::VideoMemoryData:
-			returnValue = _memoryReadBuffer;
-			_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
-
-			if(_state.VideoRamAddr >= 0x3F00) {
-				returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
-				openBusMask = 0xC0;
+			if(_ignoreVramRead) {
+				//2 reads to $2007 in quick succession (2 consecutive CPU cycles) causes the 2nd read to be ignored (normally depends on PPU/CPU timing, but this is the simplest solution)
+				//Return open bus in this case? (which will match the last value read)
+				openBusMask = 0xFF;
 			} else {
-				openBusMask = 0x00;
-			}
+				returnValue = _memoryReadBuffer;
+				_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
 
-			UpdateVideoRamAddr();
+				if(_state.VideoRamAddr >= 0x3F00) {
+					returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
+					openBusMask = 0xC0;
+				} else {
+					openBusMask = 0x00;
+				}
+
+				UpdateVideoRamAddr();
+				_ignoreVramRead = 2;
+			}				
 			break;
 
 		default:
@@ -782,6 +790,9 @@ void PPU::ExecStatic()
 	PPU::Instance->Exec();
 	PPU::Instance->Exec();
 	PPU::Instance->Exec();
+	if(PPU::Instance->_ignoreVramRead) {
+		PPU::Instance->_ignoreVramRead--;
+	}
 	if(PPU::Instance->_nesModel == NesModel::PAL && CPU::GetCycleCount() % 5 == 0) {
 		//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
 		PPU::Instance->Exec();
@@ -872,6 +883,8 @@ void PPU::StreamState(bool saving)
 
 	Stream<uint8_t>(_openBus);
 	StreamArray<int32_t>(_openBusDecayStamp, 8);
+
+	Stream<uint32_t>(_ignoreVramRead);
 
 	if(!saving) {
 		SetNesModel(_nesModel);

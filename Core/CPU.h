@@ -164,8 +164,9 @@ private:
 	uint8_t MemoryRead(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
 		while(_dmcDmaRunning) {
 			//Stall CPU until we can process a DMC read
-			if((addr != 0x4016 && addr != 0x4017) || _dmcCounter == 1) {
+			if((addr != 0x4016 && addr != 0x4017 && (_cycleCount & 0x01)) || _dmcCounter == 1) {
 				//While the CPU is stalled, reads are performed on the current address
+				//Reads are only performed every other cycle? This fixes "dma_2007_read" test
 				//This behavior causes the $4016/7 data corruption when a DMC is running.
 				//When reading $4016/7, only the last read counts (because this only occurs to low-to-high transitions, i.e once in this case)
 				_memoryManager->Read(addr);

@@ -133,6 +133,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		uint8_t _openBus = 0;
 		int32_t _openBusDecayStamp[8];
+		uint32_t _ignoreVramRead = 0;
 
 		uint16_t _spriteDmaCounter = 0;
 		uint16_t _spriteDmaAddr = 0;
