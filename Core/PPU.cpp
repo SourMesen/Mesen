@@ -385,12 +385,13 @@ uint16_t PPU::GetAttributeAddr()
 	return 0x23C0 | (_state.VideoRamAddr & 0x0C00) | ((_state.VideoRamAddr >> 4) & 0x38) | ((_state.VideoRamAddr >> 2) & 0x07);
 }
 
-void PPU::LoadTileInfo()
+void PPU::LoadTileInfo(bool updatePreviousCurrent)
 {
 	if(IsRenderingEnabled()) {
-		_previousTile = _currentTile;
-		_currentTile = _nextTile;
-
+		if(updatePreviousCurrent) {
+			_previousTile = _currentTile;
+			_currentTile = _nextTile;
+		}
 		uint16_t tileIndex = _memoryManager->ReadVRAM(GetNameTableAddr());
 		uint16_t tileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
 		uint16_t shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
@@ -558,8 +559,8 @@ void PPU::ProcessPreVBlankScanline()
 			//"OAMADDR is set to 0 during each of ticks 257-320 (the sprite tile loading interval) of the pre-render and visible scanlines." (When rendering)
 			_state.SpriteRamAddr = 0;
 
-			if((_cycle - 261) % 8 == 0) {
-				//Cycle 261, 269, etc.  This is an approximation (each tile is actually loaded in 8 steps (e.g from 257 to 264))
+			if((_cycle - 260) % 8 == 0) {
+				//Cycle 260, 268, etc.  This is an approximation (each tile is actually loaded in 8 steps (e.g from 257 to 264))
 				LoadSpriteTileInfo();
 			} else if(_cycle == 257) {
 				_spriteIndex = 0;
@@ -585,8 +586,8 @@ void PPU::ProcessPrerenderScanline()
 		_statusFlags.VerticalBlank = false;
 	}
 	
-	if(((_cycle - 1) & 0x07) == 0 && _cycle < 250) {
-		LoadTileInfo();
+	if(((_cycle - 4) & 0x07) == 0 && _cycle < 254) {
+		LoadTileInfo(true);
 	} else if(_cycle >= 280 && _cycle <= 304) {
 		if(IsRenderingEnabled()) {
 			//copy vertical scrolling value from t
@@ -602,11 +603,11 @@ void PPU::ProcessPrerenderScanline()
 		_cycle = -1;
 		_scanline = 0;
 		_skipTick = false;
-	} else if(_cycle == 321 || _cycle == 329) {
-		LoadTileInfo();
-		if(_cycle == 329) {
-			InitializeShiftRegisters();
-		}
+	} else if(_cycle == 324) {
+		LoadTileInfo(true);
+	} else if(_cycle == 332) {
+		LoadTileInfo(true);
+		InitializeShiftRegisters();
 	}
 }
 
@@ -614,12 +615,17 @@ void PPU::ProcessVisibleScanline()
 {
 	if(_cycle > 0 && _cycle <= 256) {
 		if(((_cycle - 1) & 0x07) == 0) {
-			//Cycle 1, 9, 17, etc.
+			_previousTile = _currentTile;
+			_currentTile = _nextTile;
 			if(_cycle != 1) {
 				LoadNextTile();
 			}
-			LoadTileInfo();
-		} 
+		}
+
+		if(((_cycle - 4) & 0x07) == 0) {
+			//Cycle 4, 12, 20, etc.
+			LoadTileInfo(false);
+		}
 
 		DrawPixel();
 		ShiftTileRegisters();
@@ -627,11 +633,11 @@ void PPU::ProcessVisibleScanline()
 		if(IsRenderingEnabled()) {
 			CopyOAMData();
 		}
-	} else if(_cycle == 321 || _cycle == 329) {
-		LoadTileInfo();
-		if(_cycle == 329) {
-			InitializeShiftRegisters();
-		}
+	} else if(_cycle == 324) {
+		LoadTileInfo(true);
+	} else if(_cycle == 332) {
+		LoadTileInfo(true);
+		InitializeShiftRegisters();
 	}
 
 	ProcessPreVBlankScanline();
