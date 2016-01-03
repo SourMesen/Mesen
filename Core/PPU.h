@@ -138,10 +138,12 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint16_t _spriteDmaAddr = 0;
 
 		uint8_t _oamCopybuffer;
-		bool _writeOAMData;
-		uint32_t _overflowCounter;
+		bool _spriteInRange;
 		bool _sprite0Added;
-
+		uint8_t _spriteAddrH;
+		uint8_t _spriteAddrL;
+		bool _oamCopyDone;
+		
 		void UpdateStatusFlag();
 
 		void SetControlRegister(uint8_t value);

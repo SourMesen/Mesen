@@ -645,10 +645,13 @@ void PPU::CopyOAMData()
 		_secondarySpriteRAM[_cycle >> 1] = _oamCopybuffer;		
 	} else {
 		if(_cycle == 65) {
-			_overflowCounter = 0;
 			_sprite0Added = false;
-			_writeOAMData = false;
+			_spriteInRange = false;
 			_secondaryOAMAddr = 0;
+
+			_oamCopyDone = false;
+			_spriteAddrH = (_state.SpriteRamAddr >> 2) & 0x3F;
+			_spriteAddrL = _state.SpriteRamAddr & 0x03;
 		} else if(_cycle == 256) {
 			_sprite0Visible = _sprite0Added;
 			_spriteCount = (_secondaryOAMAddr >> 2);
@@ -656,52 +659,63 @@ void PPU::CopyOAMData()
 
 		if(_cycle & 0x01) {
 			//Read a byte from the primary OAM on odd cycles
-			_oamCopybuffer = _spriteRAM[_state.SpriteRamAddr & 0xFF];
-			_state.SpriteRamAddr++;
+			_oamCopybuffer = _spriteRAM[(_spriteAddrH << 2) + _spriteAddrL];
 		} else {
-			if(!_writeOAMData && _scanline >= _oamCopybuffer && _scanline < _oamCopybuffer + (_flags.LargeSprites ? 16 : 8) && _state.SpriteRamAddr < 0x100) {
-				_writeOAMData = true;
-			}
-
-			if(_secondaryOAMAddr < 0x20) {
-				//Copy 1 byte to secondary OAM
-				_secondarySpriteRAM[_secondaryOAMAddr] = _oamCopybuffer;
-
-				if(_writeOAMData) {
-					_secondaryOAMAddr++;
-
-					if(_state.SpriteRamAddr == 0x01) {
-						_sprite0Added = true;
-					}
-
-					if((_secondaryOAMAddr & 0x03) == 0) {
-						//Done copying
-						_writeOAMData = false;
-					}
-				} else {
-					_state.SpriteRamAddr += 3;
-				}
+			if(_oamCopyDone) {
+				_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
 			} else {
-				//8 sprites have been found, check next sprite for overflow + emulate PPU bug
-				//Based on: http://forums.nesdev.com/viewtopic.php?p=85431#p85431
-				//Behavior matches: http://forums.nesdev.com/viewtopic.php?p=1387#p1387
-				if(!_statusFlags.SpriteOverflow) {
-					if(_writeOAMData) {
-						//Sprite is visible, consider this to be an overflow
-						_statusFlags.SpriteOverflow = true;
-						_overflowCounter = 3;
-					} else if((_state.SpriteRamAddr & 0x3) != 0) {
-						//Sprite isn't on this scanline, trigger sprite evaluation bug
-						_state.SpriteRamAddr += 4;
-					}
-				} else {
-					if(_overflowCounter != 0) {
-						_overflowCounter--;
-						if(_overflowCounter == 0) {
-							_state.SpriteRamAddr = (_state.SpriteRamAddr + 3) & 0x0FFC;
+				if(!_spriteInRange && _scanline >= _oamCopybuffer && _scanline < _oamCopybuffer + (_flags.LargeSprites ? 16 : 8)) {
+					_spriteInRange = true;
+				}
+
+				if(_secondaryOAMAddr < 0x20) {
+					//Copy 1 byte to secondary OAM
+					_secondarySpriteRAM[_secondaryOAMAddr] = _oamCopybuffer;
+
+					if(_spriteInRange) {
+						_spriteAddrL++;
+						_secondaryOAMAddr++;
+
+						if(_spriteAddrH == 0) {
+							_sprite0Added = true;
+						}
+
+						if(_spriteAddrL == 4) {
+							//Done copying all 4 bytes
+							_spriteInRange = false;
+							_spriteAddrL = 0;
+							_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
+							if(_spriteAddrH == 0) {
+								_oamCopyDone = true;
+							}
 						}
 					} else {
-						_state.SpriteRamAddr = (_state.SpriteRamAddr + 4) & 0x0FFC;
+						//Nothing to copy, skip to next sprite
+						_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
+						if(_spriteAddrH == 0) {
+							_oamCopyDone = true;
+						}
+					}
+				} else {
+					//8 sprites have been found, check next sprite for overflow + emulate PPU bug
+					if(_spriteInRange) {
+						//Sprite is visible, consider this to be an overflow
+						_statusFlags.SpriteOverflow = true;
+						_spriteAddrL = (_spriteAddrL + 1) & 0x03;
+						if(_spriteAddrL == 4) {
+							_spriteInRange = false;
+							_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
+							_oamCopyDone = true;
+							_spriteAddrL = 0;
+						}
+					} else {
+						//Sprite isn't on this scanline, trigger sprite evaluation bug - increment both H & L at the same time
+						_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
+						_spriteAddrL = (_spriteAddrL + 1) & 0x03;
+
+						if(_spriteAddrH == 0) {
+							_oamCopyDone = true;
+						}
 					}
 				}
 			}
@@ -837,9 +851,11 @@ void PPU::StreamState(bool saving)
 	Stream<bool>(_sprite0Visible);
 
 	Stream<uint8_t>(_oamCopybuffer);
-	Stream<bool>(_writeOAMData);
-	Stream<uint32_t>(_overflowCounter);
+	Stream<bool>(_spriteInRange);
 	Stream<bool>(_sprite0Added);
+	Stream<uint8_t>(_spriteAddrH);
+	Stream<uint8_t>(_spriteAddrL);
+	Stream<bool>(_oamCopyDone);
 
 	Stream<NesModel>(_nesModel);
 
