@@ -494,7 +494,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			} else {
 				//assert(false);
 			}
-			return 0;
+			return (addr & 0xFF00) >> 8;
 		}
 
 		virtual void WriteRAM(uint16_t addr, uint8_t value)

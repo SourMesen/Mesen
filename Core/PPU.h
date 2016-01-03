@@ -97,7 +97,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		PPUState _state;
 		int32_t _scanline;
 		uint32_t _cycle;
-		int32_t _frameCount;
+		uint32_t _frameCount;
 		uint8_t _memoryReadBuffer;
 
 		uint8_t _paletteRAM[0x20];
@@ -131,6 +131,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		uint32_t _spriteIndex = 0;
 
+		uint8_t _openBus = 0;
+		int32_t _openBusDecayStamp[8];
+
 		uint16_t _spriteDmaCounter = 0;
 		uint16_t _spriteDmaAddr = 0;
 
@@ -145,6 +148,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void SetMaskRegister(uint8_t value);
 
 		bool IsRenderingEnabled();
+
+		void SetOpenBus(uint8_t mask, uint8_t value);
+		uint8_t ApplyOpenBus(uint8_t mask, uint8_t value);
 
 		void UpdateVideoRamAddr();
 		void IncVerticalScrolling();
@@ -203,7 +209,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void GetMemoryRanges(MemoryRanges &ranges)
 		{
 			ranges.AddHandler(MemoryOperation::Read, 0x2000, 0x3FFF);
-			ranges.AddHandler(MemoryOperation::Read, 0x4014);
 			ranges.AddHandler(MemoryOperation::Write, 0x2000, 0x3FFF);
 			ranges.AddHandler(MemoryOperation::Write, 0x4014);
 		}

@@ -47,7 +47,7 @@ uint8_t MemoryManager::ReadRegister(uint16_t addr)
 	if(_ramReadHandlers[addr]) {
 		return _ramReadHandlers[addr]->ReadRAM(addr);
 	} else {
-		return 0;
+		return (addr & 0xFF00) >> 8;
 	}
 }
 

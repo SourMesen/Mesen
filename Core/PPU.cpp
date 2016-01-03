@@ -31,6 +31,9 @@ PPU::~PPU()
 
 void PPU::Reset()
 {
+	_openBus = 0;
+	memset(_openBusDecayStamp, 0, sizeof(_openBusDecayStamp));
+
 	_skipTick = false;
 
 	_state = {};
@@ -39,7 +42,7 @@ void PPU::Reset()
 
 	_scanline = 0;
 	_cycle = 0;
-	_frameCount = -1;
+	_frameCount = 1;
 	_memoryReadBuffer = 0;
 }
 
@@ -76,15 +79,56 @@ void PPU::UpdateVideoRamAddr()
 	}
 }
 
+void PPU::SetOpenBus(uint8_t mask, uint8_t value)
+{
+	//Decay expired bits, set new bits and update stamps on each individual bit
+	if(mask == 0xFF) {
+		//Shortcut when mask is 0xFF - all bits are set to the value and stamps updated
+		_openBus = value;
+		for(int i = 0; i < 8; i++) {
+			_openBusDecayStamp[i] = _frameCount;
+		}
+	} else {
+		uint16_t openBus = (_openBus << 8);
+		for(int i = 0; i < 8; i++) {
+			openBus >>= 1;
+			if(mask & 0x01) {
+				if(value & 0x01) {
+					openBus |= 0x80;
+				} else {
+					openBus &= 0xFF7F;
+				}
+				_openBusDecayStamp[i] = _frameCount;
+			} else if(_frameCount - _openBusDecayStamp[i] > 30) {
+				openBus &= 0xFF7F;
+			}
+			value >>= 1;
+			mask >>= 1;
+		}
+
+		_openBus = openBus & 0xFF;
+	}
+}
+
+uint8_t PPU::ApplyOpenBus(uint8_t mask, uint8_t value)
+{
+	SetOpenBus(~mask, value);
+	return value | (_openBus & mask);
+}
+
 uint8_t PPU::ReadRAM(uint16_t addr)
 {
-	uint8_t returnValue;
+	uint8_t openBusMask = 0xFF;
+	uint8_t returnValue = 0;
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Status:
 			_state.WriteToggle = false;
 			_flags.IntensifyBlue = false;
 			UpdateStatusFlag();
-			return _state.Status;
+			returnValue = _state.Status;
+			openBusMask = 0x1F;
+			break;
+
 		case PPURegisters::SpriteData:
 			if(_scanline <= 240 && IsRenderingEnabled() && (_cycle >= 257 || _cycle <= 64)) {
 				if(_cycle >= 257 && _cycle <= 320) {
@@ -94,29 +138,39 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 					_secondaryOAMAddr = (_cycle - 257) / 8 * 4 + step;
 					_oamCopybuffer = _secondarySpriteRAM[_secondaryOAMAddr];
 				}
-				return _oamCopybuffer;
+				returnValue = _oamCopybuffer;
 			} else {
-				return _spriteRAM[_state.SpriteRamAddr];
+				returnValue = _spriteRAM[_state.SpriteRamAddr];
 			}
+			openBusMask = 0x00;
+			break;
+
 		case PPURegisters::VideoMemoryData:
 			returnValue = _memoryReadBuffer;
 			_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
 
 			if(_state.VideoRamAddr >= 0x3F00) {
-				returnValue = ReadPaletteRAM(_state.VideoRamAddr);
+				returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
+				openBusMask = 0xC0;
+			} else {
+				openBusMask = 0x00;
 			}
 
 			UpdateVideoRamAddr();
-			return returnValue;
+			break;
+
 		default:
-			//other registers are meant to be read-only
 			break;
 	}
-	return 0;
+	return ApplyOpenBus(openBusMask, returnValue);
 }
 
 void PPU::WriteRAM(uint16_t addr, uint8_t value)
 {
+	if(addr != 0x4014) {
+		SetOpenBus(0xFF, value);
+	}
+
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Control:
 			SetControlRegister(value);
@@ -750,7 +804,7 @@ void PPU::StreamState(bool saving)
 
 	Stream<int32_t>(_scanline);
 	Stream<uint32_t>(_cycle);
-	Stream<int32_t>(_frameCount);
+	Stream<uint32_t>(_frameCount);
 	Stream<uint8_t>(_memoryReadBuffer);
 	
 	StreamArray<uint8_t>(_paletteRAM, 0x20);
@@ -793,6 +847,9 @@ void PPU::StreamState(bool saving)
 	Stream<uint16_t>(_spriteDmaCounter);
 
 	Stream<bool>(_skipTick);
+
+	Stream<uint8_t>(_openBus);
+	StreamArray<int32_t>(_openBusDecayStamp, 8);
 
 	if(!saving) {
 		SetNesModel(_nesModel);
