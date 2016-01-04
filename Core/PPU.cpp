@@ -393,21 +393,40 @@ uint16_t PPU::GetAttributeAddr()
 	return 0x23C0 | (_state.VideoRamAddr & 0x0C00) | ((_state.VideoRamAddr >> 4) & 0x38) | ((_state.VideoRamAddr >> 2) & 0x07);
 }
 
-void PPU::LoadTileInfo(bool updatePreviousCurrent)
+void PPU::LoadTileInfo()
 {
 	if(IsRenderingEnabled()) {
-		if(updatePreviousCurrent) {
-			_previousTile = _currentTile;
-			_currentTile = _nextTile;
-		}
-		uint16_t tileIndex = _memoryManager->ReadVRAM(GetNameTableAddr());
-		uint16_t tileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
-		uint16_t shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
-		_nextTile.PaletteOffset = ((_memoryManager->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
-		_nextTile.LowByte = _memoryManager->ReadVRAM(tileAddr);
-		_nextTile.HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
-		_nextTile.TileAddr = tileAddr;
-		_nextTile.OffsetY = _state.VideoRamAddr >> 12;
+		uint16_t tileIndex, shift;
+		switch((_cycle - 1) & 0x07) {
+			case 0:
+				_previousTile = _currentTile;
+				_currentTile = _nextTile;
+
+				if(_cycle > 1 && _cycle < 256) {
+					LoadNextTile();
+				}
+
+				tileIndex = _memoryManager->ReadVRAM(GetNameTableAddr());
+				_nextTile.TileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
+				_nextTile.OffsetY = _state.VideoRamAddr >> 12;
+				break;
+
+			case 2:
+				shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
+				_nextTile.PaletteOffset = ((_memoryManager->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
+				break;
+
+			case 3:
+				_nextTile.LowByte = _memoryManager->ReadVRAM(_nextTile.TileAddr);
+				break;
+
+			case 5:
+				_nextTile.HighByte = _memoryManager->ReadVRAM(_nextTile.TileAddr + 8);
+				if(_cycle == 334) {
+					InitializeShiftRegisters();
+				}
+				break;
+		}		
 	}
 }
 
@@ -594,8 +613,8 @@ void PPU::ProcessPrerenderScanline()
 		_statusFlags.VerticalBlank = false;
 	}
 	
-	if(((_cycle - 4) & 0x07) == 0 && _cycle < 254) {
-		LoadTileInfo(true);
+	if(_cycle >= 1 && _cycle <= 256) {
+		LoadTileInfo();
 	} else if(_cycle >= 280 && _cycle <= 304) {
 		if(IsRenderingEnabled()) {
 			//copy vertical scrolling value from t
@@ -611,29 +630,16 @@ void PPU::ProcessPrerenderScanline()
 		_cycle = -1;
 		_scanline = 0;
 		_skipTick = false;
-	} else if(_cycle == 324) {
-		LoadTileInfo(true);
-	} else if(_cycle == 332) {
-		LoadTileInfo(true);
-		InitializeShiftRegisters();
+	} else if(_cycle >= 321 && _cycle <= 336) {
+		LoadTileInfo();
 	}
 }
 
 void PPU::ProcessVisibleScanline()
 {
 	if(_cycle > 0 && _cycle <= 256) {
-		if(((_cycle - 1) & 0x07) == 0) {
-			_previousTile = _currentTile;
-			_currentTile = _nextTile;
-			if(_cycle != 1) {
-				LoadNextTile();
-			}
-		}
+		LoadTileInfo();
 
-		if(((_cycle - 4) & 0x07) == 0) {
-			//Cycle 4, 12, 20, etc.
-			LoadTileInfo(false);
-		}
 
 		DrawPixel();
 		ShiftTileRegisters();
@@ -641,11 +647,9 @@ void PPU::ProcessVisibleScanline()
 		if(IsRenderingEnabled()) {
 			CopyOAMData();
 		}
-	} else if(_cycle == 324) {
-		LoadTileInfo(true);
-	} else if(_cycle == 332) {
-		LoadTileInfo(true);
-		InitializeShiftRegisters();
+	} else if(_cycle >= 321 && _cycle <= 336) {
+		LoadTileInfo();
+		
 	}
 
 	ProcessPreVBlankScanline();
@@ -849,6 +853,7 @@ void PPU::StreamState(bool saving)
 	Stream<uint8_t>(_nextTile.LowByte);
 	Stream<uint8_t>(_nextTile.HighByte);
 	Stream<uint32_t>(_nextTile.PaletteOffset);
+	Stream<uint16_t>(_nextTile.TileAddr);
 
 	Stream<uint8_t>(_previousTile.LowByte);
 	Stream<uint8_t>(_previousTile.HighByte);

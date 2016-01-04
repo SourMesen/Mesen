@@ -175,7 +175,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
-		void LoadTileInfo(bool updatePreviousCurrent);
+		void LoadTileInfo();
 		void LoadSpriteTileInfo();
 		void ShiftTileRegisters();
 		void InitializeShiftRegisters();
