@@ -19,7 +19,7 @@ namespace NES
 	{
 		_hWnd = hWnd;
 
-		SetScreenSize();
+		SetScreenSize(256, 240);
 
 		VideoDecoder::GetInstance()->RegisterRenderingDevice(this);
 		MessageManager::RegisterMessageManager(this);
@@ -31,18 +31,19 @@ namespace NES
 		CleanupDevice();
 	}
 
-	void Renderer::SetScreenSize()
+	void Renderer::SetScreenSize(uint32_t width, uint32_t height)
 	{
-		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+		uint32_t scale = EmulationSettings::GetVideoScale();
 
-		if(_hdScreenBufferSize == 0 || _hdScreenBufferSize != overscan.GetPixelCount() * 64) {
-			uint32_t screenWidth = overscan.GetScreenWidth();
-			uint32_t screenHeight = overscan.GetScreenHeight();
+		if(_screenHeight != height*scale || _screenWidth != width*scale) {			
+			_nesFrameHeight = height;
+			_nesFrameWidth = width;
+			_newFrameBufferSize = width*height;
 
-			_hdScreenWidth = screenWidth * 4;
-			_hdScreenHeight = screenHeight * 4;
-			_hdScreenBufferSize = _hdScreenWidth * _hdScreenHeight * _bytesPerPixel;
-
+			_screenHeight = height * scale;
+			_screenWidth = width * scale;
+			_screenBufferSize = _screenHeight*_screenWidth;
+		
 			_frameLock.Acquire();
 			CleanupDevice();
 			if(FAILED(InitDevice())) {
@@ -56,12 +57,12 @@ namespace NES
 	{
 		if(_pTexture) _pTexture->Release();
 		if(_overlayTexture) _overlayTexture->Release();
-		if(_toastTexture) { _toastTexture->Release(); }
+		if(_toastTexture) _toastTexture->Release();
 
 		if(_samplerState) _samplerState->Release();
 		if(_pRenderTargetView) _pRenderTargetView->Release();
 		if(_pSwapChain) _pSwapChain->Release();
-		if(_pDeviceContext) _pDeviceContext->ClearState();
+		if(_pDeviceContext) _pDeviceContext->Release();
 		if(_pDeviceContext1) _pDeviceContext1->Release();
 		if(_pd3dDevice1) _pd3dDevice1->Release();
 		if(_pd3dDevice) _pd3dDevice->Release();
@@ -111,8 +112,8 @@ namespace NES
 		DXGI_SWAP_CHAIN_DESC sd;
 		ZeroMemory(&sd, sizeof(sd));
 		sd.BufferCount = 1;
-		sd.BufferDesc.Width = _hdScreenWidth;
-		sd.BufferDesc.Height = _hdScreenHeight;
+		sd.BufferDesc.Width = _screenWidth;
+		sd.BufferDesc.Height = _screenHeight;
 		sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		sd.BufferDesc.RefreshRate.Numerator = 60;
 		sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -213,26 +214,26 @@ namespace NES
 
 		// Setup the viewport
 		D3D11_VIEWPORT vp;
-		vp.Width = (FLOAT)_hdScreenWidth;
-		vp.Height = (FLOAT)_hdScreenHeight;
+		vp.Width = (FLOAT)_screenWidth;
+		vp.Height = (FLOAT)_screenHeight;
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 		_pDeviceContext->RSSetViewports(1, &vp);
 
-		_videoRAM = new uint32_t[PPU::PixelCount*4*4];
-		memset(_videoRAM, 0x00, PPU::PixelCount * sizeof(uint32_t) * 4 * 4);
+		_videoRAM = new uint32_t[_nesFrameWidth*_nesFrameHeight];
+		memset(_videoRAM, 0x00, _nesFrameWidth * _nesFrameHeight * 4);
 
-		_pTexture = CreateTexture(_hdScreenWidth, _hdScreenHeight);
+		_pTexture = CreateTexture(_nesFrameWidth, _nesFrameHeight);
 		if(!_pTexture) {
 			return 0;
 		}
 
-		_overlayBuffer = new uint8_t[_hdScreenBufferSize];  //High res overlay for UI elements (4x res)
-		memset(_overlayBuffer, 0x00, _hdScreenBufferSize);
+		_overlayBuffer = new uint8_t[8*8*4];  //High res overlay for UI elements (4x res)
+		memset(_overlayBuffer, 0x00, 8*8*4);
 
-		_overlayTexture = CreateTexture(_hdScreenWidth, _hdScreenHeight);
+		_overlayTexture = CreateTexture(8, 8);
 		if(!_overlayTexture) {
 			return 0;
 		}
@@ -262,23 +263,6 @@ namespace NES
 		if(!FAILED(CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\Toast.dds", nullptr, &_toastTexture))) {
 			return 0;
 		}
-
-		/*
-		ID3DBlob* vertexShaderBlob = nullptr;
-		ID3D11VertexShader* vertexShader = nullptr;
-		CompileShader(L"PixelShader.hlsl", "VS", "vs_4_0", &vertexShaderBlob);
-		if(vertexShaderBlob) {
-			_pd3dDevice->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &vertexShader);
-			_pDeviceContext->VSSetShader(vertexShader, nullptr, 0);
-			//vertexShaderBlob->Release();
-		}
-		
-		ID3DBlob* pixelShaderBlob = nullptr;		
-		CompileShader(L"PixelShader.hlsl", "PShader", "ps_4_0", &pixelShaderBlob);
-		if(pixelShaderBlob) {
-			_pd3dDevice->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &_pixelShader);
-			//pixelShaderBlob->Release();
-		}*/
 
 		return S_OK;
 	}
@@ -331,7 +315,7 @@ namespace NES
 
 	void Renderer::DisplayMessage(string title, string message)
 	{
-		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, "Resources\\MesenIcon.bmp"));
+		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 2500, "Resources\\MesenIcon.bmp"));
 		DisplayToast(toast);
 	}
 
@@ -361,25 +345,24 @@ namespace NES
 		_font->DrawString(spritebatch, text, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
 	}
 
-	void Renderer::UpdateFrame(void *frameBuffer)
+	void Renderer::UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height)
 	{
-		uint8_t hdScale = VideoDecoder::GetInstance()->GetScale();
-		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+		SetScreenSize(width, height);
 
+		uint32_t bpp = 4;
 		uint8_t* outputBuffer = (uint8_t*)frameBuffer;
 
 		_frameLock.Acquire();
 
+		uint32_t rowPitch = width * bpp;
 		D3D11_MAPPED_SUBRESOURCE dd;
 		dd.pData = (void *)_videoRAM;
-		dd.RowPitch = overscan.GetScreenWidth() * _bytesPerPixel * hdScale;
-		dd.DepthPitch = overscan.GetPixelCount() * _bytesPerPixel * hdScale * hdScale;
+		dd.RowPitch = rowPitch;
+		dd.DepthPitch = height * width * bpp;
 
-		uint32_t rowPitch = overscan.GetScreenWidth() * hdScale * _bytesPerPixel;
-		
 		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
 		uint8_t* surfacePointer = (uint8_t*)dd.pData;
-		for(uint32_t i = 0, iMax = overscan.GetScreenHeight()*hdScale; i < iMax; i++) {
+		for(uint32_t i = 0, iMax = height; i < iMax; i++) {
 			memcpy(surfacePointer, outputBuffer, rowPitch);
 			outputBuffer += rowPitch;
 			surfacePointer += dd.RowPitch;
@@ -393,24 +376,15 @@ namespace NES
 
 	void Renderer::DrawNESScreen()
 	{
-		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
-		uint8_t hdScale = VideoDecoder::GetInstance()->GetScale();
-
 		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
 
 		RECT destRect;
 		destRect.left = 0;
 		destRect.top = 0;
-		destRect.right = overscan.GetScreenWidth() * 4;
-		destRect.bottom = overscan.GetScreenHeight() * 4;
+		destRect.right = _screenWidth;
+		destRect.bottom = _screenHeight;
 
-		RECT sourceRect;
-		sourceRect.left = 0;
-		sourceRect.top = 0;
-		sourceRect.right = overscan.GetScreenWidth() * hdScale;
-		sourceRect.bottom = overscan.GetScreenHeight() * hdScale;
-
-		_spriteBatch->Draw(nesOutputBuffer, destRect, &sourceRect);
+		_spriteBatch->Draw(nesOutputBuffer, destRect);
 		nesOutputBuffer->Release();
 	}
 
@@ -418,19 +392,19 @@ namespace NES
 	{
 		RECT destRect;
 		destRect.left = 0;
-		destRect.right = _hdScreenWidth;
-		destRect.bottom = _hdScreenHeight;
+		destRect.right = _screenWidth;
+		destRect.bottom = _screenHeight;
 		destRect.top = 0;
 
 		XMVECTOR position{ { 0, 0 } };
 
 		D3D11_MAPPED_SUBRESOURCE dd;
 		dd.pData = (void *)_overlayBuffer;
-		dd.RowPitch = _hdScreenWidth * _bytesPerPixel;
-		dd.DepthPitch = _hdScreenBufferSize;
+		dd.RowPitch = 8 * _bytesPerPixel;
+		dd.DepthPitch = 8 * 8 * _bytesPerPixel;
 
 		_pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		for(uint32_t i = 0, len = _hdScreenHeight*_hdScreenWidth; i < len; i++) {
+		for(uint32_t i = 0, len = 8*8; i < len; i++) {
 			//Gray transparent overlay
 			((uint32_t*)dd.pData)[i] = 0x99222222;
 		}
@@ -440,15 +414,13 @@ namespace NES
 		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
 		shaderResourceView->Release();
 
-		DrawOutlinedString("PAUSED", (float)_hdScreenWidth / 2 - 145, (float)_hdScreenHeight / 2 - 47, Colors::AntiqueWhite, 4.5f);
+		DrawOutlinedString("PAUSED", (float)_screenWidth / 2 - 145, (float)_screenHeight / 2 - 47, Colors::AntiqueWhite, 4.5f);
 	}
 
 	void Renderer::Render()
 	{
 		if(_frameChanged || EmulationSettings::CheckFlag(EmulationFlags::Paused) || !_toasts.empty()) {
 			_frameLock.Acquire();
-
-			SetScreenSize();
 
 			if(_frameChanged) {
 				_frameChanged = false;
@@ -495,7 +467,7 @@ namespace NES
 					}
 
 					string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
-					DrawOutlinedString(fpsString, (float)(_hdScreenWidth - 120), 13, Colors::AntiqueWhite, 1.0f);
+					DrawOutlinedString(fpsString, (float)(_screenWidth - 120), 13, Colors::AntiqueWhite, 1.0f);
 				}
 			}
 
@@ -576,8 +548,8 @@ namespace NES
 	void Renderer::DrawToast(shared_ptr<ToastInfo> toast, int posIndex)
 	{
 		RECT dest;
-		dest.top = _hdScreenHeight - (100 * (posIndex + 1)) - 50;
-		dest.left = (_hdScreenWidth - 340) / 2;
+		dest.top = _screenHeight - (100 * (posIndex + 1)) - 50;
+		dest.left = (_screenWidth - 340) / 2;
 		dest.bottom = dest.top + 70;
 		dest.right = dest.left + 340;
 

@@ -8,8 +8,14 @@ using std::thread;
 #include "EmulationSettings.h"
 #include "HdNesPack.h"
 
-
+class BaseVideoFilter;
 class IRenderingDevice;
+
+struct ScreenSize
+{
+	int32_t Width;
+	int32_t Height;
+};
 
 class VideoDecoder
 {
@@ -24,22 +30,17 @@ private:
 	unique_ptr<thread> _decodeThread;
 	unique_ptr<thread> _renderThread;
 
-	OverscanDimensions _overscan;
-	uint32_t* _frameBuffer = nullptr;
-	SimpleLock _screenshotLock;
 	AutoResetEvent _waitForFrame;
 	AutoResetEvent _waitForRender;
-
-	bool _isHD = false;
+	
 	atomic<bool> _frameChanged = false;
 	atomic<bool> _stopFlag = false;
 	uint32_t _frameCount = 0;
 
-	unique_ptr<HdNesPack> _hdNesPack = nullptr;
-	uint32_t _hdScale = 1;
+	VideoFilterType _videoFilterType = VideoFilterType::None;
+	unique_ptr<BaseVideoFilter> _videoFilter = nullptr;
 
-	uint32_t ProcessIntensifyBits(uint16_t ppuPixel);
-	void UpdateBufferSize();
+	void UpdateVideoFilter();
 
 	void DecodeThread();
 	void RenderThread();
@@ -54,6 +55,8 @@ public:
 
 	uint32_t GetScale();
 	uint32_t GetFrameCount();
+
+	void GetScreenSize(ScreenSize &size);
 
 	void DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length);
 

@@ -5,6 +5,6 @@
 class IRenderingDevice
 {
 	public:
-		virtual void UpdateFrame(void *frameBuffer) = 0;
+		virtual void UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height) = 0;
 		virtual void Render() = 0;
 };

@@ -172,7 +172,8 @@ namespace Mesen.GUI.Forms
 		{
 			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
 			UpdateEmulationSpeedMenu();
-			dxViewer.Size = VideoInfo.GetViewerSize();
+			UpdateScaleMenu(ConfigManager.Config.VideoInfo.VideoScale);
+			UpdateFilterMenu(ConfigManager.Config.VideoInfo.VideoFilter);
 		}
 
 		private void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
@@ -189,6 +190,11 @@ namespace Mesen.GUI.Forms
 				this.StartEmuThread();
 			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameStopped) {
 				CheatInfo.ClearCheats();
+			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.ResolutionChanged) {
+				this.BeginInvoke((MethodInvoker)(() => {
+					InteropEmu.ScreenSize size = InteropEmu.GetScreenSize();
+					dxViewer.Size = new Size(size.Width, size.Height);
+				}));
 			}
 			UpdateMenus();
 		}
@@ -682,6 +688,46 @@ namespace Mesen.GUI.Forms
 		private void mnuRunAllTests_Click(object sender, EventArgs e)
 		{
 			Process.Start("TestHelper.exe");
+		}
+
+		private void UpdateScaleMenu(UInt32 scale)
+		{
+			mnuScale1x.Checked = (scale == 1);
+			mnuScale2x.Checked = (scale == 2);
+			mnuScale3x.Checked = (scale == 3);
+			mnuScale4x.Checked = (scale == 4);
+
+			ConfigManager.Config.VideoInfo.VideoScale = scale;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void UpdateFilterMenu(VideoFilterType filterType)
+		{
+			mnuNoneFilter.Checked = (filterType == VideoFilterType.None);
+			mnuNtscFilter.Checked = (filterType == VideoFilterType.NTSC);
+
+			ConfigManager.Config.VideoInfo.VideoFilter = filterType;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuScale_Click(object sender, EventArgs e)
+		{
+			UInt32 scale = UInt32.Parse((string)((ToolStripMenuItem)sender).Tag);
+			InteropEmu.SetVideoScale(scale);
+
+			UpdateScaleMenu(scale);
+		}
+
+		private void mnuNoneFilter_Click(object sender, EventArgs e)
+		{
+			InteropEmu.SetVideoFilter(VideoFilterType.None);
+			UpdateFilterMenu(VideoFilterType.None);
+		}
+
+		private void mnuNtscFilter_Click(object sender, EventArgs e)
+		{
+			InteropEmu.SetVideoFilter(VideoFilterType.NTSC);
+			UpdateFilterMenu(VideoFilterType.NTSC);
 		}
 	}
 }

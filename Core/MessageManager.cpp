@@ -21,7 +21,7 @@ void MessageManager::DisplayMessage(string title, string message)
 void MessageManager::DisplayToast(string title, string message, uint8_t* iconData, uint32_t iconSize)
 {
 	if(MessageManager::_messageManager) {
-		MessageManager::_messageManager->DisplayToast(shared_ptr<ToastInfo>(new ToastInfo(title, message, 4000, iconData, iconSize)));
+		MessageManager::_messageManager->DisplayToast(shared_ptr<ToastInfo>(new ToastInfo(title, message, 2500, iconData, iconSize)));
 	}
 }
 void MessageManager::RegisterNotificationListener(INotificationListener* notificationListener)

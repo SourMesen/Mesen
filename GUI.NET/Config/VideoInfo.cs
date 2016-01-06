@@ -17,6 +17,8 @@ namespace Mesen.GUI.Config
 		public UInt32 OverscanRight = 0;
 		public UInt32 OverscanTop = 8;
 		public UInt32 OverscanBottom = 8;
+		public UInt32 VideoScale = 2;
+		public VideoFilterType VideoFilter = VideoFilterType.None;
 
 		public VideoInfo()
 		{
@@ -35,12 +37,9 @@ namespace Mesen.GUI.Config
 			}
 
 			InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);
-		}
 
-		static public Size GetViewerSize()
-		{
-			VideoInfo videoInfo = ConfigManager.Config.VideoInfo;
-			return new Size((int)(256-videoInfo.OverscanLeft-videoInfo.OverscanRight)*4, (int)(240-videoInfo.OverscanTop-videoInfo.OverscanBottom)*4);
+			InteropEmu.SetVideoFilter(videoInfo.VideoFilter);
+			InteropEmu.SetVideoScale(videoInfo.VideoScale);
 		}
 	}
 }

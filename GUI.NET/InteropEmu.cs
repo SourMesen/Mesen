@@ -75,6 +75,9 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
 		[DllImport(DLLPath)] public static extern void SetEmulationSpeed(UInt32 emulationSpeed);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
+		[DllImport(DLLPath)] public static extern void SetVideoScale(UInt32 scale);
+		[DllImport(DLLPath)] public static extern void SetVideoFilter(VideoFilterType filter);
+		[DllImport(DLLPath, EntryPoint="GetScreenSize")] private static extern void GetScreenSizeWrapper(out ScreenSize size);
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)] public static extern void DebugRelease();
@@ -192,6 +195,13 @@ namespace Mesen.GUI
 			}
 		}
 
+		public static ScreenSize GetScreenSize()
+		{
+			ScreenSize size;
+			GetScreenSizeWrapper(out size);
+			return size;
+		}
+
 		public static string GetROMPath() { return PtrToStringUtf8(InteropEmu.GetROMPathWrapper()); }
 		public static string GetKeyName(UInt32 key) { return PtrToStringUtf8(InteropEmu.GetKeyNameWrapper(key)); }
 
@@ -227,6 +237,8 @@ namespace Mesen.GUI
 			CheatAdded = 7,
 			CheatRemoved = 8,
 			PpuFrameDone = 9,
+			MovieEnded = 10,
+			ResolutionChanged = 11,
 		}
 
 		public struct KeyMapping
@@ -244,6 +256,12 @@ namespace Mesen.GUI
 			public UInt32 TurboStart;
 			public UInt32 TurboSelect;
 			public UInt32 TurboSpeed;
+		}
+
+		public struct ScreenSize
+		{
+			public Int32 Width;
+			public Int32 Height;
 		}
 
 		public class NotificationEventArgs
@@ -406,6 +424,12 @@ namespace Mesen.GUI
 		Auto = 0,
 		NTSC = 1,
 		PAL = 2
+	}
+
+	public enum VideoFilterType
+	{
+		None = 0,
+		NTSC = 1,
 	}
 
 	public enum DebugMemoryType

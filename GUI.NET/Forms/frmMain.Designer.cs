@@ -63,6 +63,14 @@
 			this.mnuEmuSpeedDouble = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEmuSpeedHalf = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEmuSpeedQuarter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuVideoScale = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuScale1x = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuScale2x = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuScale3x = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuScale4x = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuVideoFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNoneFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNtscFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowFPS = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAudioConfig = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,6 +107,7 @@
 			this.mnuTestRecordMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTestRecordTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTestStopRecording = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRunAllTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebugger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTakeScreenshot = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,7 +116,6 @@
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
-			this.mnuRunAllTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -229,6 +237,8 @@
 			// 
 			this.mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuEmulationSpeed,
+            this.mnuVideoScale,
+            this.mnuVideoFilter,
             this.mnuShowFPS,
             this.toolStripMenuItem10,
             this.mnuAudioConfig,
@@ -327,6 +337,72 @@
 			this.mnuEmuSpeedQuarter.Size = new System.Drawing.Size(182, 22);
 			this.mnuEmuSpeedQuarter.Text = "Quarter (25%)";
 			this.mnuEmuSpeedQuarter.Click += new System.EventHandler(this.mnuEmulationSpeedOption_Click);
+			// 
+			// mnuVideoScale
+			// 
+			this.mnuVideoScale.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuScale1x,
+            this.mnuScale2x,
+            this.mnuScale3x,
+            this.mnuScale4x});
+			this.mnuVideoScale.Name = "mnuVideoScale";
+			this.mnuVideoScale.Size = new System.Drawing.Size(163, 22);
+			this.mnuVideoScale.Text = "Video Scale";
+			// 
+			// mnuScale1x
+			// 
+			this.mnuScale1x.Name = "mnuScale1x";
+			this.mnuScale1x.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale1x.Tag = "1";
+			this.mnuScale1x.Text = "1x";
+			this.mnuScale1x.Click += new System.EventHandler(this.mnuScale_Click);
+			// 
+			// mnuScale2x
+			// 
+			this.mnuScale2x.Name = "mnuScale2x";
+			this.mnuScale2x.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale2x.Tag = "2";
+			this.mnuScale2x.Text = "2x";
+			this.mnuScale2x.Click += new System.EventHandler(this.mnuScale_Click);
+			// 
+			// mnuScale3x
+			// 
+			this.mnuScale3x.Name = "mnuScale3x";
+			this.mnuScale3x.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale3x.Tag = "3";
+			this.mnuScale3x.Text = "3x";
+			this.mnuScale3x.Click += new System.EventHandler(this.mnuScale_Click);
+			// 
+			// mnuScale4x
+			// 
+			this.mnuScale4x.Name = "mnuScale4x";
+			this.mnuScale4x.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale4x.Tag = "4";
+			this.mnuScale4x.Text = "4x";
+			this.mnuScale4x.Click += new System.EventHandler(this.mnuScale_Click);
+			// 
+			// mnuVideoFilter
+			// 
+			this.mnuVideoFilter.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuNoneFilter,
+            this.mnuNtscFilter});
+			this.mnuVideoFilter.Name = "mnuVideoFilter";
+			this.mnuVideoFilter.Size = new System.Drawing.Size(163, 22);
+			this.mnuVideoFilter.Text = "Video Filter";
+			// 
+			// mnuNoneFilter
+			// 
+			this.mnuNoneFilter.Name = "mnuNoneFilter";
+			this.mnuNoneFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuNoneFilter.Text = "None";
+			this.mnuNoneFilter.Click += new System.EventHandler(this.mnuNoneFilter_Click);
+			// 
+			// mnuNtscFilter
+			// 
+			this.mnuNtscFilter.Name = "mnuNtscFilter";
+			this.mnuNtscFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuNtscFilter.Text = "NTSC";
+			this.mnuNtscFilter.Click += new System.EventHandler(this.mnuNtscFilter_Click);
 			// 
 			// mnuShowFPS
 			// 
@@ -606,6 +682,13 @@
 			this.mnuTestStopRecording.Text = "Stop recording";
 			this.mnuTestStopRecording.Click += new System.EventHandler(this.mnuTestStopRecording_Click);
 			// 
+			// mnuRunAllTests
+			// 
+			this.mnuRunAllTests.Name = "mnuRunAllTests";
+			this.mnuRunAllTests.Size = new System.Drawing.Size(193, 22);
+			this.mnuRunAllTests.Text = "Run all tests";
+			this.mnuRunAllTests.Click += new System.EventHandler(this.mnuRunAllTests_Click);
+			// 
 			// mnuDebugger
 			// 
 			this.mnuDebugger.Name = "mnuDebugger";
@@ -662,13 +745,6 @@
 			this.dxViewer.Name = "dxViewer";
 			this.dxViewer.Size = new System.Drawing.Size(1024, 960);
 			this.dxViewer.TabIndex = 1;
-			// 
-			// mnuRunAllTests
-			// 
-			this.mnuRunAllTests.Name = "mnuRunAllTests";
-			this.mnuRunAllTests.Size = new System.Drawing.Size(193, 22);
-			this.mnuRunAllTests.Text = "Run all tests";
-			this.mnuRunAllTests.Click += new System.EventHandler(this.mnuRunAllTests_Click);
 			// 
 			// frmMain
 			// 
@@ -762,6 +838,14 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
 		private System.Windows.Forms.ToolStripMenuItem mnuPreferences;
 		private System.Windows.Forms.ToolStripMenuItem mnuRunAllTests;
+		private System.Windows.Forms.ToolStripMenuItem mnuVideoScale;
+		private System.Windows.Forms.ToolStripMenuItem mnuScale1x;
+		private System.Windows.Forms.ToolStripMenuItem mnuScale2x;
+		private System.Windows.Forms.ToolStripMenuItem mnuScale3x;
+		private System.Windows.Forms.ToolStripMenuItem mnuScale4x;
+		private System.Windows.Forms.ToolStripMenuItem mnuVideoFilter;
+		private System.Windows.Forms.ToolStripMenuItem mnuNoneFilter;
+		private System.Windows.Forms.ToolStripMenuItem mnuNtscFilter;
 	}
 }
 

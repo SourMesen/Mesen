@@ -270,11 +270,14 @@
     <ClInclude Include="Bandai74161_7432.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="BnRom.h" />
+    <ClInclude Include="DefaultVideoFilter.h" />
+    <ClInclude Include="HdVideoFilter.h" />
     <ClInclude Include="Namco108.h" />
     <ClInclude Include="Namco108_154.h" />
     <ClInclude Include="Namco108_76.h" />
     <ClInclude Include="Namco108_88.h" />
     <ClInclude Include="Namco108_95.h" />
+    <ClInclude Include="NtscFilter.h" />
     <ClInclude Include="Sachen_145.h" />
     <ClInclude Include="CodeDataLogger.h" />
     <ClInclude Include="CpRom.h" />
@@ -357,6 +360,7 @@
     <ClInclude Include="UnlPci556.h" />
     <ClInclude Include="UNROM.h" />
     <ClInclude Include="VideoDecoder.h" />
+    <ClInclude Include="BaseVideoFilter.h" />
     <ClInclude Include="VirtualController.h" />
     <ClInclude Include="VRC2_4.h" />
   </ItemGroup>
@@ -370,6 +374,7 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="Debugger.cpp" />
+    <ClCompile Include="DefaultVideoFilter.cpp" />
     <ClCompile Include="DeltaModulationChannel.cpp" />
     <ClCompile Include="Disassembler.cpp" />
     <ClCompile Include="DisassemblyInfo.cpp" />
@@ -379,6 +384,8 @@
     <ClCompile Include="GameConnection.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameServerConnection.cpp" />
+    <ClCompile Include="HdVideoFilter.cpp" />
+    <ClCompile Include="NtscFilter.cpp" />
     <ClCompile Include="StandardController.cpp" />
     <ClCompile Include="MapperFactory.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
@@ -396,6 +403,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release x64|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="VideoDecoder.cpp" />
+    <ClCompile Include="BaseVideoFilter.cpp" />
     <ClCompile Include="VirtualController.cpp" />
     <ClCompile Include="VRC1.h" />
   </ItemGroup>

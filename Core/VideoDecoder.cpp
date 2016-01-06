@@ -2,11 +2,11 @@
 #include "IRenderingDevice.h"
 #include "VideoDecoder.h"
 #include "EmulationSettings.h"
-#include "MessageManager.h"
-#include "../Utilities/PNGHelper.h"
-#include "../Utilities/FolderUtilities.h"
+#include "DefaultVideoFilter.h"
+#include "NtscFilter.h"
+#include "HdVideoFilter.h"
 
-const uint32_t PPU_PALETTE_ARGB[] = {
+const uint32_t PPU_PALETTE_ARGB[64] = {
 	0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E,
 	0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800,
 	0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000,
@@ -34,108 +34,53 @@ VideoDecoder* VideoDecoder::GetInstance()
 
 VideoDecoder::VideoDecoder()
 {
+	UpdateVideoFilter();
 }
 
 VideoDecoder::~VideoDecoder()
 {
 	StopThread();
-	if(_frameBuffer) {
-		delete[] _frameBuffer;
-		_frameBuffer = nullptr;
+}
+
+void VideoDecoder::GetScreenSize(ScreenSize &size)
+{
+	if(_videoFilter) {
+		size.Width = _videoFilter->GetFrameInfo().Width * EmulationSettings::GetVideoScale();
+		size.Height = _videoFilter->GetFrameInfo().Height * EmulationSettings::GetVideoScale();
 	}
 }
 
-uint32_t VideoDecoder::ProcessIntensifyBits(uint16_t ppuPixel)
+void VideoDecoder::UpdateVideoFilter()
 {
-	uint32_t pixelOutput = PPU_PALETTE_ARGB[ppuPixel & 0x3F];
-
-	//Incorrect emphasis bit implementation, but will do for now.
-	float redChannel = (float)((pixelOutput & 0xFF0000) >> 16);
-	float greenChannel = (float)((pixelOutput & 0xFF00) >> 8);
-	float blueChannel = (float)(pixelOutput & 0xFF);
-
-	if(ppuPixel & 0x40) {
-		//Intensify red
-		redChannel *= 1.1f;
-		greenChannel *= 0.9f;
-		blueChannel *= 0.9f;
-	}
-	if(ppuPixel & 0x80) {
-		//Intensify green
-		greenChannel *= 1.1f;
-		redChannel *= 0.9f;
-		blueChannel *= 0.9f;
-	}
-	if(ppuPixel & 0x100) {
-		//Intensify blue
-		blueChannel *= 1.1f;
-		redChannel *= 0.9f;
-		greenChannel *= 0.9f;
+	VideoFilterType newFilter = EmulationSettings::GetVideoFilterType();
+	if(_hdScreenTiles) {
+		newFilter = VideoFilterType::HdPack;
 	}
 
-	uint8_t r, g, b;
-	r = (uint8_t)(redChannel > 255 ? 255 : redChannel);
-	g = (uint8_t)(greenChannel > 255 ? 255 : greenChannel);
-	b = (uint8_t)(blueChannel > 255 ? 255 : blueChannel);
+	if(_videoFilterType != newFilter || _videoFilter == nullptr) {
+		_videoFilterType = newFilter;
 
-	return 0xFF000000 | (r << 16) | (g << 8) | b;
-}
-
-void VideoDecoder::UpdateBufferSize()
-{
-	OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
-	uint8_t hdScale = GetScale();
-
-	if(!_frameBuffer || _hdScale != hdScale || _overscan.GetPixelCount() != overscan.GetPixelCount()) {
-		_hdScale = hdScale;
-		_overscan = overscan;
-		if(_frameBuffer) {
-			delete[] _frameBuffer;
+		switch(_videoFilterType) {
+			case VideoFilterType::None: _videoFilter.reset(new DefaultVideoFilter()); break;
+			case VideoFilterType::NTSC: _videoFilter.reset(new NtscFilter()); break;
+			case VideoFilterType::HdPack: _videoFilter.reset(new HdVideoFilter()); break;
 		}
-		_frameBuffer = new uint32_t[_overscan.GetPixelCount()*hdScale*hdScale];
 	}
 }
 
 void VideoDecoder::DecodeFrame()
 {
-	if(_isHD && _hdNesPack == nullptr) {
-		_hdNesPack.reset(new HdNesPack());
-	}
+	UpdateVideoFilter();
 
-	//Update the current output buffer based on overscan settings & HD packs
-	UpdateBufferSize();
-	uint32_t* outputBuffer = _frameBuffer;
-
-	_screenshotLock.Acquire();
-	if(_isHD) {
-		uint32_t screenWidth = _overscan.GetScreenWidth() * _hdScale;
-		for(uint32_t i = _overscan.Top, iMax = 240 - _overscan.Bottom; i < iMax; i++) {
-			for(uint32_t j = _overscan.Left, jMax = 256 - _overscan.Right; j < jMax; j++) {
-				uint32_t sdPixel = PPU_PALETTE_ARGB[_ppuOutputBuffer[i * 256 + j] & 0x3F]; //ProcessIntensifyBits(inputBuffer[i * 256 + j]);
-				uint32_t bufferIndex = (i - _overscan.Top) * screenWidth * _hdScale + (j - _overscan.Left) * _hdScale;
-				_hdNesPack->GetPixels(_hdScreenTiles[i * 256 + j], sdPixel, outputBuffer + bufferIndex, screenWidth);
-			}
-		}
-	} else {
-		//Regular SD code
-		uint32_t* outputBuffer = _frameBuffer;
-		for(uint32_t i = _overscan.Top, iMax = 240 - _overscan.Bottom; i < iMax; i++) {
-			for(uint32_t j = _overscan.Left, jMax = 256 - _overscan.Right; j < jMax; j++) {
-				*outputBuffer = ProcessIntensifyBits(_ppuOutputBuffer[i * 256 + j]);
-				outputBuffer++;
-			}
-		}
+	if(_videoFilterType == VideoFilterType::HdPack) {
+		((HdVideoFilter*)_videoFilter.get())->SetHdScreenTiles(_hdScreenTiles);
 	}
+	_videoFilter->SendFrame(_ppuOutputBuffer);
+
 	_frameChanged = false;
-	_screenshotLock.Release();
-}
 
-uint32_t VideoDecoder::GetScale()
-{
-	if(_isHD && _hdNesPack) {
-		return _hdNesPack->GetScale();
-	} else {
-		return 1;
+	if(_renderer) {
+		_renderer->UpdateFrame(_videoFilter->GetOutputBuffer(), _videoFilter->GetFrameInfo().Width, _videoFilter->GetFrameInfo().Height);
 	}
 }
 
@@ -144,44 +89,6 @@ void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffe
 	for(uint32_t i = 0; i < length; i++) {
 		outputBuffer[i] = PPU_PALETTE_ARGB[inputBuffer[i] & 0x3F];
 	}
-}
-
-void VideoDecoder::TakeScreenshot(string romFilename)
-{
-	uint32_t bufferSize = _overscan.GetPixelCount() * 4;
-	uint32_t* frameBuffer = new uint32_t[bufferSize];
-
-	_screenshotLock.Acquire();
-	memcpy(frameBuffer, _frameBuffer, bufferSize);
-	_screenshotLock.Release();
-
-	//ARGB -> ABGR
-	for(uint32_t i = 0; i < bufferSize; i++) {
-		frameBuffer[i] = (frameBuffer[i] & 0xFF00FF00) | ((frameBuffer[i] & 0xFF0000) >> 16) | ((frameBuffer[i] & 0xFF) << 16);
-	}
-
-	int counter = 0;
-	string baseFilename = FolderUtilities::GetScreenshotFolder() + romFilename;
-	string ssFilename;
-	while(true) {
-		string counterStr = std::to_string(counter);
-		while(counterStr.length() < 3) {
-			counterStr = "0" + counterStr;
-		}
-		ssFilename = baseFilename + "_" + counterStr + ".png";
-		ifstream file(ssFilename, ios::in);
-		if(file) {
-			file.close();
-		} else {
-			break;
-		}
-		counter++;
-	}
-
-	PNGHelper::WritePNG(ssFilename, (uint8_t*)frameBuffer, _overscan.GetScreenWidth(), _overscan.GetScreenHeight());
-	delete[] frameBuffer;
-
-	MessageManager::DisplayMessage("Screenshot saved", FolderUtilities::GetFilename(ssFilename, true));
 }
 
 void VideoDecoder::DecodeThread()
@@ -197,10 +104,6 @@ void VideoDecoder::DecodeThread()
 		}
 
 		DecodeFrame();
-		if(_renderer) {
-			_renderer->UpdateFrame(_frameBuffer);
-		}
-
 		_waitForRender.Signal();
 	}
 }
@@ -216,10 +119,8 @@ bool VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInf
 
 	if(readyForNewFrame) {
 		//The PPU sends us a new frame via this function when a full frame is done drawing
-		bool isHD = (hdPixelInfo != nullptr);
-		_isHD = isHD;
-		_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 		_hdScreenTiles = hdPixelInfo;
+		_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 		_frameChanged = true;
 		_waitForFrame.Signal();
 	}
@@ -255,10 +156,8 @@ void VideoDecoder::StopThread()
 	_renderThread.release();
 
 	if(_renderer && _ppuOutputBuffer != nullptr) {
-		//Set screen to black
-		memset(_ppuOutputBuffer, 13, PPU::PixelCount * sizeof(uint16_t));
+		memset(_ppuOutputBuffer, 0, PPU::PixelCount * sizeof(uint16_t));
 		DecodeFrame();
-		_renderer->UpdateFrame(_frameBuffer);
 		_renderer->Render();
 	}
 }
@@ -283,5 +182,12 @@ void VideoDecoder::UnregisterRenderingDevice(IRenderingDevice *renderer)
 {
 	if(_renderer == renderer) {
 		_renderer = nullptr;
+	}
+}
+
+void VideoDecoder::TakeScreenshot(string romFilename)
+{
+	if(_videoFilter) {
+		_videoFilter->TakeScreenshot(romFilename);
 	}
 }

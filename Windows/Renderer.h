@@ -53,12 +53,15 @@ namespace NES {
 		byte*							_overlayBuffer = nullptr;
 		
 		unique_ptr<SpriteBatch> _spriteBatch;
-		//ID3D11PixelShader* _pixelShader = nullptr;
 
 		const uint32_t _bytesPerPixel = 4;
-		uint32_t _hdScreenWidth = 0;
-		uint32_t _hdScreenHeight = 0;
-		uint32_t _hdScreenBufferSize = 0;
+		uint32_t _screenWidth = 0;
+		uint32_t _screenHeight = 0;
+		uint32_t _screenBufferSize = 0;
+
+		uint32_t _nesFrameHeight = 0;
+		uint32_t _nesFrameWidth = 0;
+		uint32_t _newFrameBufferSize = 0;
 
 		list<shared_ptr<ToastInfo>> _toasts;
 		ID3D11ShaderResourceView* _toastTexture = nullptr;
@@ -66,7 +69,7 @@ namespace NES {
 		HRESULT InitDevice();
 		void CleanupDevice();
 
-		void SetScreenSize();
+		void SetScreenSize(uint32_t width, uint32_t height);
 
 		ID3D11Texture2D* CreateTexture(uint32_t width, uint32_t height);
 		ID3D11ShaderResourceView* GetShaderResourceView(ID3D11Texture2D* texture);
@@ -88,6 +91,6 @@ namespace NES {
 		void DisplayMessage(string title, string message);
 		void DisplayToast(shared_ptr<ToastInfo> toast);
 
-		void UpdateFrame(void *frameBuffer);
+		void UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height);
 	};
 }
