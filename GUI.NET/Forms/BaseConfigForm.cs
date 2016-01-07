@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
@@ -101,14 +102,28 @@ namespace Mesen.GUI.Forms
 		{
 			if(BindedType == null) {
 				throw new Exception("Need to override BindedType to use bindings");
-			} else {
+			}
+
+			if(_fieldInfo == null) {
 				_fieldInfo = new Dictionary<string,FieldInfo>();
 				FieldInfo[] members = BindedType.GetFields();
 				foreach(FieldInfo info in members) {
 					_fieldInfo[info.Name] = info;
 				}
 			}
-			_bindings[fieldName] = bindedField;
+
+			if(_fieldInfo.ContainsKey(fieldName)) {
+				Type fieldType = _fieldInfo[fieldName].FieldType;
+				if(fieldType.IsSubclassOf(typeof(Enum)) && bindedField is ComboBox) {
+					ComboBox combo = ((ComboBox)bindedField);
+					combo.DropDownStyle = ComboBoxStyle.DropDownList;
+					combo.Items.Clear();
+					combo.Items.AddRange(Enum.GetNames(fieldType));
+				}
+				_bindings[fieldName] = bindedField;
+			} else {
+				throw new Exception("Invalid field name");
+			}
 		}
 
 		protected void UpdateUI()
@@ -144,6 +159,22 @@ namespace Mesen.GUI.Forms
 						decimal val = (decimal)(uint)value;
 						val = Math.Min(Math.Max(val, nud.Minimum), nud.Maximum);
 						nud.Value = val;
+					} else if(kvp.Value is ComboBox) {
+						ComboBox combo = kvp.Value as ComboBox;
+						if(value is Enum) {
+							combo.SelectedItem = value.ToString();
+						} else if(field.FieldType == typeof(UInt32)) {
+							for(int i = 0, len = combo.Items.Count; i < len; i++) {
+								UInt32 numericValue;
+								string item = Regex.Replace(combo.Items[i].ToString(), "[^0-9]", "");
+								if(UInt32.TryParse(item, out numericValue)) {
+									if(numericValue == (UInt32)value) {
+										combo.SelectedIndex = i;
+										break;
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -156,23 +187,37 @@ namespace Mesen.GUI.Forms
 				if(!_fieldInfo.ContainsKey(kvp.Key)) {
 					throw new Exception("Invalid binding key");
 				} else {
-					FieldInfo field = _fieldInfo[kvp.Key];
-					if(kvp.Value is TextBox) {
-						object value = kvp.Value.Text;
-						if(field.FieldType == typeof(UInt32)) {
-							value = (object)UInt32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
-						} else if(field.FieldType == typeof(Byte)) {
-							value = (object)Byte.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+					try {
+						FieldInfo field = _fieldInfo[kvp.Key];
+						if(kvp.Value is TextBox) {
+							object value = kvp.Value.Text;
+							if(field.FieldType == typeof(UInt32)) {
+								value = (object)UInt32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+							} else if(field.FieldType == typeof(Byte)) {
+								value = (object)Byte.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+							}
+							field.SetValue(Entity, value);
+						} else if(kvp.Value is CheckBox) {
+							field.SetValue(Entity, ((CheckBox)kvp.Value).Checked);
+						} else if(kvp.Value is Panel) {
+							field.SetValue(Entity, kvp.Value.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag);
+						} else if(kvp.Value is ctrlTrackbar) {
+							field.SetValue(Entity, (UInt32)((ctrlTrackbar)kvp.Value).Value);
+						} else if(kvp.Value is NumericUpDown) {
+							field.SetValue(Entity, (UInt32)((NumericUpDown)kvp.Value).Value);
+						} else if(kvp.Value is ComboBox) {
+							if(field.FieldType.IsSubclassOf(typeof(Enum))) {
+								field.SetValue(Entity, Enum.Parse(field.FieldType, ((ComboBox)kvp.Value).SelectedItem.ToString()));
+							} else if(field.FieldType == typeof(UInt32)) {
+								UInt32 numericValue;
+								string item = Regex.Replace(((ComboBox)kvp.Value).SelectedItem.ToString(), "[^0-9]", "");
+								if(UInt32.TryParse(item, out numericValue)) {
+									field.SetValue(Entity, numericValue);
+								}
+							}
 						}
-						field.SetValue(Entity, value);
-					} else if(kvp.Value is CheckBox) {
-						field.SetValue(Entity, ((CheckBox)kvp.Value).Checked);
-					} else if(kvp.Value is Panel) {
-						field.SetValue(Entity, kvp.Value.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag);
-					} else if(kvp.Value is ctrlTrackbar) {
-						field.SetValue(Entity, (UInt32)((ctrlTrackbar)kvp.Value).Value);
-					} else if(kvp.Value is NumericUpDown) {
-						field.SetValue(Entity, (UInt32)((NumericUpDown)kvp.Value).Value);
+					} catch {
+						//Ignore exceptions caused by bad user input
 					}
 				}
 			}
