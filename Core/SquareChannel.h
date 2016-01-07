@@ -53,8 +53,10 @@ private:
 		if(_sweepNegate) {
 			_sweepTargetPeriod = _period - shiftResult;
 			if(_isChannel1) {
-				// As a result, a negative sweep on pulse channel 1 will subtract the shifted period value minus 1
-				_sweepTargetPeriod++;
+				//"As a result, a negative sweep on pulse channel 1 will subtract the shifted period value minus 1"
+				//Turns out this line is a bit confusing - channel 1 is meant to do "_period - (shiftResult + 1)", so we need to subtract 1 in this case
+				//This fixes sound in at least 1 game (Little Red Hood)
+				_sweepTargetPeriod--;
 			}
 		} else {
 			_sweepTargetPeriod = _period + shiftResult;
