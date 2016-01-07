@@ -68,8 +68,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void CheatAddProActionRocky(UInt32 code);
 		[DllImport(DLLPath)] public static extern void CheatClear();
 
-		[DllImport(DLLPath)] public static extern void SetFlags(EmulationFlags flags);
-		[DllImport(DLLPath)] public static extern void ClearFlags(EmulationFlags flags);
+		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
+		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(UInt32 channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
@@ -201,6 +201,15 @@ namespace Mesen.GUI
 			ScreenSize size;
 			GetScreenSizeWrapper(out size);
 			return size;
+		}
+
+		public static void SetFlag(EmulationFlags flag, bool value)
+		{
+			if(value) {
+				InteropEmu.SetFlags(flag);
+			} else {
+				InteropEmu.ClearFlags(flag);
+			}
 		}
 
 		public static string GetROMPath() { return PtrToStringUtf8(InteropEmu.GetROMPathWrapper()); }
@@ -412,6 +421,8 @@ namespace Mesen.GUI
 		Paused = 0x01,
 		ShowFPS = 0x02,
 		VerticalSync = 0x04,
+		
+		Mmc3IrqAltBehavior = 0x8000,
 	}
 
 	public enum BreakpointType

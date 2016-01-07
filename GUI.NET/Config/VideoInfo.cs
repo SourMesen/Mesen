@@ -33,17 +33,8 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetEmulationSpeed(videoInfo.EmulationSpeed);
 
-			if(videoInfo.ShowFPS) {
-				InteropEmu.SetFlags(EmulationFlags.ShowFPS);
-			} else {
-				InteropEmu.ClearFlags(EmulationFlags.ShowFPS);
-			}
-
-			if(videoInfo.VerticalSync) {
-				InteropEmu.SetFlags(EmulationFlags.VerticalSync);
-			} else {
-				InteropEmu.ClearFlags(EmulationFlags.VerticalSync);
-			}
+			InteropEmu.SetFlag(EmulationFlags.ShowFPS, videoInfo.ShowFPS);
+			InteropEmu.SetFlag(EmulationFlags.VerticalSync, videoInfo.VerticalSync);
 
 			InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);
 

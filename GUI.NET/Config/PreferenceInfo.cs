@@ -17,6 +17,8 @@ namespace Mesen.GUI.Config
 		public bool AutoLoadIpsPatches = true;
 		public bool AssociateNesFiles = false;
 
+		public bool UseAlternativeMmc3Irq = false;
+
 		public PreferenceInfo()
 		{
 		}
@@ -34,6 +36,8 @@ namespace Mesen.GUI.Config
 					Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\.nes", null, "");
 				}
 			}
+
+			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, preferenceInfo.UseAlternativeMmc3Irq);
 		}
 	}
 }

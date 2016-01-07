@@ -4,6 +4,7 @@
 #include "BaseMapper.h"
 #include "CPU.h"
 #include "PPU.h"
+#include "EmulationSettings.h"
 
 class MMC3 : public BaseMapper
 {
@@ -236,8 +237,14 @@ class MMC3 : public BaseMapper
 					}
 
 					//MMC3 Revision A behavior
-					if((count > 0 || _irqReload) && _irqCounter == 0 && _irqEnabled) {
-						CPU::SetIRQSource(IRQSource::External);
+					if(EmulationSettings::CheckFlag(EmulationFlags::Mmc3IrqAltBehavior)) {
+						if((count > 0 || _irqReload) && _irqCounter == 0 && _irqEnabled) {
+							CPU::SetIRQSource(IRQSource::External);
+						}
+					} else {
+						if(_irqCounter == 0 && _irqEnabled) {
+							CPU::SetIRQSource(IRQSource::External);
+						}
 					}
 					_irqReload = false;
 				}
