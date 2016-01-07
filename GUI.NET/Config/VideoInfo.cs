@@ -19,6 +19,9 @@ namespace Mesen.GUI.Config
 		public UInt32 OverscanBottom = 8;
 		public UInt32 VideoScale = 2;
 		public VideoFilterType VideoFilter = VideoFilterType.None;
+		public VideoAspectRatio AspectRatio = VideoAspectRatio.Auto;
+		public bool VerticalSync = true;
+		public bool FullscreenMode = false;
 
 		public VideoInfo()
 		{
@@ -30,10 +33,16 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetEmulationSpeed(videoInfo.EmulationSpeed);
 
-			if(ConfigManager.Config.VideoInfo.ShowFPS) {
-				InteropEmu.SetFlags((UInt32)EmulationFlags.ShowFPS);
+			if(videoInfo.ShowFPS) {
+				InteropEmu.SetFlags(EmulationFlags.ShowFPS);
 			} else {
-				InteropEmu.ClearFlags((UInt32)EmulationFlags.ShowFPS);
+				InteropEmu.ClearFlags(EmulationFlags.ShowFPS);
+			}
+
+			if(videoInfo.VerticalSync) {
+				InteropEmu.SetFlags(EmulationFlags.VerticalSync);
+			} else {
+				InteropEmu.ClearFlags(EmulationFlags.VerticalSync);
 			}
 
 			InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);

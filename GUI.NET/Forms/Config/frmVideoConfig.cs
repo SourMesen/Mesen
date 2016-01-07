@@ -21,6 +21,13 @@ namespace Mesen.GUI.Forms.Config
 			
 			AddBinding("EmulationSpeed", nudEmulationSpeed);
 			AddBinding("ShowFPS", chkShowFps);
+			AddBinding("VerticalSync", chkVerticalSync);
+			AddBinding("FullscreenMode", chkFullscreenMode);
+			
+			AddBinding("VideoScale", cboScale);
+			AddBinding("AspectRatio", cboAspectRatio);
+			AddBinding("VideoFilter", cboFilter);
+
 			AddBinding("OverscanLeft", nudOverscanLeft);
 			AddBinding("OverscanRight", nudOverscanRight);
 			AddBinding("OverscanTop", nudOverscanTop);

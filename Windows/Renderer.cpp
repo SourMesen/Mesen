@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <Dwmapi.h>
 #include "Renderer.h"
 #include "DirectXTK/SpriteBatch.h"
 #include "DirectXTK/SpriteFont.h"
@@ -476,7 +477,7 @@ namespace NES
 			_spriteBatch->End();
 
 			// Present the information rendered to the back buffer to the front buffer (the screen)
-			_pSwapChain->Present(0, 0);
+			_pSwapChain->Present(EmulationSettings::CheckFlag(EmulationFlags::VerticalSync) ? 1 : 0, 0);
 		
 			_frameLock.Release();
 		}

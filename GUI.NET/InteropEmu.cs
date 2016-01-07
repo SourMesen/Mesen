@@ -68,8 +68,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void CheatAddProActionRocky(UInt32 code);
 		[DllImport(DLLPath)] public static extern void CheatClear();
 
-		[DllImport(DLLPath)] public static extern void SetFlags(UInt32 flags);
-		[DllImport(DLLPath)] public static extern void ClearFlags(UInt32 flags);
+		[DllImport(DLLPath)] public static extern void SetFlags(EmulationFlags flags);
+		[DllImport(DLLPath)] public static extern void ClearFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(UInt32 channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
@@ -77,6 +77,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
 		[DllImport(DLLPath)] public static extern void SetVideoScale(UInt32 scale);
 		[DllImport(DLLPath)] public static extern void SetVideoFilter(VideoFilterType filter);
+
 		[DllImport(DLLPath, EntryPoint="GetScreenSize")] private static extern void GetScreenSizeWrapper(out ScreenSize size);
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
@@ -410,6 +411,7 @@ namespace Mesen.GUI
 	{
 		Paused = 0x01,
 		ShowFPS = 0x02,
+		VerticalSync = 0x04,
 	}
 
 	public enum BreakpointType
@@ -430,6 +432,15 @@ namespace Mesen.GUI
 	{
 		None = 0,
 		NTSC = 1,
+	}
+
+	public enum VideoAspectRatio
+	{
+		Auto = 0,
+		NTSC = 1,
+		PAL = 2,
+		Standard = 3,
+		Widescreen = 4
 	}
 
 	public enum DebugMemoryType

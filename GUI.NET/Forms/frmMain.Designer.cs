@@ -393,14 +393,14 @@
 			// mnuNoneFilter
 			// 
 			this.mnuNoneFilter.Name = "mnuNoneFilter";
-			this.mnuNoneFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuNoneFilter.Size = new System.Drawing.Size(104, 22);
 			this.mnuNoneFilter.Text = "None";
 			this.mnuNoneFilter.Click += new System.EventHandler(this.mnuNoneFilter_Click);
 			// 
 			// mnuNtscFilter
 			// 
 			this.mnuNtscFilter.Name = "mnuNtscFilter";
-			this.mnuNtscFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuNtscFilter.Size = new System.Drawing.Size(104, 22);
 			this.mnuNtscFilter.Text = "NTSC";
 			this.mnuNtscFilter.Click += new System.EventHandler(this.mnuNtscFilter_Click);
 			// 
@@ -743,7 +743,7 @@
 			this.dxViewer.Location = new System.Drawing.Point(0, 24);
 			this.dxViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.dxViewer.Name = "dxViewer";
-			this.dxViewer.Size = new System.Drawing.Size(1024, 960);
+			this.dxViewer.Size = new System.Drawing.Size(263, 176);
 			this.dxViewer.TabIndex = 1;
 			// 
 			// frmMain
@@ -752,6 +752,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.BackColor = System.Drawing.Color.Black;
 			this.ClientSize = new System.Drawing.Size(365, 272);
 			this.Controls.Add(this.dxViewer);
 			this.Controls.Add(this.menuStrip);

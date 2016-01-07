@@ -174,6 +174,20 @@ namespace Mesen.GUI.Forms
 			UpdateEmulationSpeedMenu();
 			UpdateScaleMenu(ConfigManager.Config.VideoInfo.VideoScale);
 			UpdateFilterMenu(ConfigManager.Config.VideoInfo.VideoFilter);
+
+			UpdateViewerSize();	
+		}
+
+		private void UpdateViewerSize()
+		{
+			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize();
+			switch(ConfigManager.Config.VideoInfo.AspectRatio) {
+				case VideoAspectRatio.NTSC: size.Width = (int)(size.Height * 8 / 7.0); break;
+				case VideoAspectRatio.PAL: size.Width = (int)(size.Height * 18 / 13.0); break;
+				case VideoAspectRatio.Standard: size.Width = (int)(size.Height * 4 / 3.0); break;
+				case VideoAspectRatio.Widescreen: size.Width = (int)(size.Height * 16 / 9.0); break;
+			}
+			dxViewer.Size = new Size(size.Width, size.Height);
 		}
 
 		private void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
@@ -192,8 +206,7 @@ namespace Mesen.GUI.Forms
 				CheatInfo.ClearCheats();
 			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.ResolutionChanged) {
 				this.BeginInvoke((MethodInvoker)(() => {
-					InteropEmu.ScreenSize size = InteropEmu.GetScreenSize();
-					dxViewer.Size = new Size(size.Width, size.Height);
+					UpdateVideoSettings();
 				}));
 			}
 			UpdateMenus();

@@ -7,6 +7,7 @@ enum EmulationFlags
 {
 	Paused = 0x01,
 	ShowFPS = 0x02,
+	VerticalSync = 0x04,
 };
 
 enum class AudioChannel
@@ -59,6 +60,7 @@ class EmulationSettings
 {
 private:
 	static uint32_t _flags;
+
 	static bool _audioEnabled;
 	static uint32_t _audioLatency;
 	static double _channelVolume[5];
@@ -72,12 +74,12 @@ private:
 	static uint32_t _videoScale;
 
 public:
-	static void SetFlags(uint32_t flags)
+	static void SetFlags(EmulationFlags flags)
 	{
 		_flags |= flags;
 	}
 
-	static void ClearFlags(uint32_t flags)
+	static void ClearFlags(EmulationFlags flags)
 	{
 		_flags &= ~flags;
 	}
