@@ -25,6 +25,12 @@ void AutoResetEvent::Wait(int timeoutDelay)
 	_signaled = false;
 }
 
+void AutoResetEvent::Reset()
+{
+	std::unique_lock<std::mutex> lock(_mutex);
+	_signaled = false;
+}
+
 void AutoResetEvent::Signal()
 {
 	std::unique_lock<std::mutex> lock(_mutex);

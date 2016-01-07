@@ -135,6 +135,8 @@ void VideoDecoder::StartThread()
 		_stopFlag = false;
 		_frameChanged = false;
 		_frameCount = 0;
+		_waitForFrame.Reset();
+		_waitForRender.Reset();
 		Instance->_decodeThread.reset(new thread(&VideoDecoder::DecodeThread, Instance.get()));
 		Instance->_renderThread.reset(new thread(&VideoDecoder::RenderThread, Instance.get()));
 	}
