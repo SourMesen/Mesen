@@ -102,6 +102,7 @@
 			this.trkDmcVol.Size = new System.Drawing.Size(63, 160);
 			this.trkDmcVol.TabIndex = 16;
 			this.trkDmcVol.Value = 50;
+			this.trkDmcVol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
 			// 
 			// trkNoiseVol
 			// 
@@ -115,6 +116,7 @@
 			this.trkNoiseVol.Size = new System.Drawing.Size(63, 160);
 			this.trkNoiseVol.TabIndex = 15;
 			this.trkNoiseVol.Value = 50;
+			this.trkNoiseVol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
 			// 
 			// trkTriangleVol
 			// 
@@ -128,6 +130,7 @@
 			this.trkTriangleVol.Size = new System.Drawing.Size(63, 160);
 			this.trkTriangleVol.TabIndex = 14;
 			this.trkTriangleVol.Value = 50;
+			this.trkTriangleVol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
 			// 
 			// trkSquare2Vol
 			// 
@@ -141,6 +144,7 @@
 			this.trkSquare2Vol.Size = new System.Drawing.Size(63, 160);
 			this.trkSquare2Vol.TabIndex = 13;
 			this.trkSquare2Vol.Value = 50;
+			this.trkSquare2Vol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
 			// 
 			// trkSquare1Vol
 			// 
@@ -154,6 +158,7 @@
 			this.trkSquare1Vol.Size = new System.Drawing.Size(63, 160);
 			this.trkSquare1Vol.TabIndex = 12;
 			this.trkSquare1Vol.Value = 50;
+			this.trkSquare1Vol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
 			// 
 			// trkMaster
 			// 
@@ -167,6 +172,7 @@
 			this.trkMaster.Size = new System.Drawing.Size(63, 160);
 			this.trkMaster.TabIndex = 11;
 			this.trkMaster.Value = 50;
+			this.trkMaster.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
 			// 
 			// tableLayoutPanel2
 			// 
