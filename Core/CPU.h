@@ -813,6 +813,25 @@ private:
 		SetX(value);
 	}
 
+	void SYA()
+	{
+		uint8_t addrHigh = GetOperand() >> 8;
+		uint8_t addrLow = GetOperand() & 0xFF;
+		uint8_t value = Y() & (addrHigh + 1);
+		
+		//From here: http://forums.nesdev.com/viewtopic.php?f=3&t=3831&start=30
+		//Unsure if this is accurate or not
+		//"the target address for e.g. SYA becomes ((y & (addr_high + 1)) << 8) | addr_low instead of the normal ((addr_high + 1) << 8) | addr_low"
+		MemoryWrite(((Y() & (addrHigh + 1)) << 8) | addrLow, value);
+	}
+
+	void SXA()
+	{
+		uint8_t addrHigh = GetOperand() >> 8;
+		uint8_t addrLow = GetOperand() & 0xFF;
+		uint8_t value = X() & (addrHigh + 1);
+		MemoryWrite(((X() & (addrHigh + 1)) << 8) | addrLow, value);
+	}
 	
 	//Unimplemented/Incorrect Unofficial OP codes
 	void HLT()
