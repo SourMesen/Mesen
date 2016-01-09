@@ -1,8 +1,6 @@
 #pragma once
 
 #include "stdafx.h"
-#include <unordered_set>
-using std::unordered_set;
 
 struct CodeInfo
 {
