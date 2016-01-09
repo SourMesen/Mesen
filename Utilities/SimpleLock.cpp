@@ -25,6 +25,11 @@ uint32_t SimpleLock::GetThreadId()
 #endif
 }
 
+LockHandler SimpleLock::AcquireSafe()
+{
+	return LockHandler(this);
+}
+
 void SimpleLock::Acquire()
 {
 	if(_lockCount == 0 || _holderThreadID != GetThreadId()) {
@@ -64,4 +69,16 @@ void SimpleLock::Release()
 	} else {
 		assert(false);
 	}
+}
+
+
+LockHandler::LockHandler(SimpleLock *lock)
+{
+	_lock = lock;
+	_lock->Acquire();
+}
+
+LockHandler::~LockHandler()
+{
+	_lock->Release();
 }

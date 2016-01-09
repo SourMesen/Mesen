@@ -3,6 +3,7 @@
 #include "CPU.h"
 #include "EmulationSettings.h"
 #include "VideoDecoder.h"
+#include "Debugger.h"
 
 PPU* PPU::Instance = nullptr;
 
@@ -777,6 +778,8 @@ void PPU::Exec()
 		}
 	}
 	_cycle++;
+
+	Debugger::ProcessPpuCycle();
 
 	if(_scanline != -1 && _scanline < 240) {
 		ProcessVisibleScanline();

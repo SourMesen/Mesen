@@ -1,70 +1,31 @@
 #pragma once
 #include "stdafx.h"
+#include "ExpressionEvaluator.h"
 
-enum class BreakpointType
+enum BreakpointType
 {
-	Execute = 0,
-	Read = 1,
-	Write = 2
+	Global = 0,
+	Execute = 1,
+	ReadRam = 2,
+	WriteRam = 4,
+	ReadVram = 8,
+	WriteVram = 16,
 };
 
 class Breakpoint
 {
 public:
-	Breakpoint(BreakpointType type, uint32_t addr, bool isAbsoluteAddr);
+	Breakpoint();
 	~Breakpoint();
 
-	bool Matches(uint32_t memoryAddr, uint32_t absoluteAddr)
-	{
-		return _enabled && ((memoryAddr == _addr && !_isAbsoluteAddr) || (absoluteAddr == _addr && _isAbsoluteAddr));
-	}
-
-	uint32_t GetAddr()
-	{
-		return _addr;
-	}
-
-	bool IsAbsoluteAddr()
-	{
-		return _isAbsoluteAddr;
-	}
-
-	BreakpointType GetType()
-	{
-		return _type;
-	}
-
-	string GetTypeText()
-	{
-		switch(_type) {
-			case BreakpointType::Execute: return "Exec";
-			case BreakpointType::Read: return "Read";
-			case BreakpointType::Write: return "Write";
-		}
-		return "";
-	}
-
-	bool IsEnabled()
-	{
-		return _enabled;
-	}
-
-	void SetEnabled(bool enabled)
-	{
-		_enabled = enabled;
-	}
-
-	void UpdateBreakpoint(BreakpointType type, uint32_t addr, bool isAbsoluteAddr, bool enabled)
-	{
-		_type = type;
-		_addr = addr;
-		_isAbsoluteAddr = isAbsoluteAddr;
-		_enabled = enabled;
-	}
+	bool Matches(uint32_t memoryAddr, uint32_t absoluteAddr);
+	BreakpointType GetType();
+	string GetCondition();
+	void ClearCondition();
 	
 private:
 	BreakpointType _type;
-	uint32_t _addr;
+	int32_t _addr;
 	bool _isAbsoluteAddr;
-	bool _enabled;
+	char _condition[1000];
 };

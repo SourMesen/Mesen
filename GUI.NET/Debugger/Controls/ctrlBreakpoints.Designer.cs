@@ -32,10 +32,11 @@
 			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRemoveBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstBreakpoints = new Mesen.GUI.Controls.MyListView();
+			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuBreakpoints.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -70,6 +71,7 @@
             this.columnHeader3,
             this.columnHeader1,
             this.columnHeader2,
+            this.columnHeader4,
             this.colLastColumn});
 			this.lstBreakpoints.ContextMenuStrip = this.contextMenuBreakpoints;
 			this.lstBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -86,6 +88,11 @@
 			this.lstBreakpoints.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstBreakpoints_ColumnWidthChanging);
 			this.lstBreakpoints.DoubleClick += new System.EventHandler(this.lstBreakpoints_DoubleClick);
 			// 
+			// columnHeader3
+			// 
+			this.columnHeader3.Text = "";
+			this.columnHeader3.Width = 21;
+			// 
 			// columnHeader1
 			// 
 			this.columnHeader1.Text = "Type";
@@ -94,15 +101,16 @@
 			// columnHeader2
 			// 
 			this.columnHeader2.Text = "Address";
-			this.columnHeader2.Width = 100;
+			this.columnHeader2.Width = 70;
+			// 
+			// columnHeader4
+			// 
+			this.columnHeader4.Text = "Condition";
+			this.columnHeader4.Width = 100;
 			// 
 			// colLastColumn
 			// 
 			this.colLastColumn.Text = "";
-			// 
-			// columnHeader3
-			// 
-			this.columnHeader3.Text = "Enabled";
 			// 
 			// ctrlBreakpoints
 			// 
@@ -126,5 +134,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
 		private System.Windows.Forms.ToolStripMenuItem mnuRemoveBreakpoint;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
+		private System.Windows.Forms.ColumnHeader columnHeader4;
 	}
 }

@@ -332,6 +332,9 @@
     <ClInclude Include="HdVideoFilter.h">
       <Filter>VideoDecoder\HD</Filter>
     </ClInclude>
+    <ClInclude Include="ExpressionEvaluator.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -435,6 +438,9 @@
     </ClCompile>
     <ClCompile Include="HdVideoFilter.cpp">
       <Filter>VideoDecoder\HD</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpressionEvaluator.cpp">
+      <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

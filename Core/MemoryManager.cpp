@@ -97,8 +97,6 @@ uint8_t MemoryManager::DebugRead(uint16_t addr)
 
 uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 {
-	Debugger::ProcessRamOperation(operationType, addr);
-
 	uint8_t value;
 	if(addr <= 0x1FFF) {
 		value = _internalRAM[addr & 0x07FF];
@@ -109,12 +107,15 @@ uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 	_mapper->ProcessCpuClock();
 
 	CheatManager::ApplyRamCodes(addr, value);
+
+	Debugger::ProcessRamOperation(operationType, addr, value);
+
 	return value;
 }
 
 void MemoryManager::Write(uint16_t addr, uint8_t value)
 {
-	Debugger::ProcessRamOperation(MemoryOperationType::Write, addr);
+	Debugger::ProcessRamOperation(MemoryOperationType::Write, addr, value);
 
 	if(addr <= 0x1FFF) {
 		_internalRAM[addr & 0x07FF] = value;
@@ -147,14 +148,15 @@ uint8_t MemoryManager::DebugReadVRAM(uint16_t addr)
 
 uint8_t MemoryManager::ReadVRAM(uint16_t addr, MemoryOperationType operationType)
 {	
-	Debugger::ProcessVramOperation(operationType, addr);
 	ProcessVramAccess(addr);
-	return _mapper->ReadVRAM(addr);
+	uint8_t value = _mapper->ReadVRAM(addr);
+	Debugger::ProcessVramOperation(operationType, addr, value);
+	return value;
 }
 
 void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 {
-	Debugger::ProcessVramOperation(MemoryOperationType::Write, addr);
+	Debugger::ProcessVramOperation(MemoryOperationType::Write, addr, value);	
 	ProcessVramAccess(addr);
 	_mapper->WriteVRAM(addr, value);
 }

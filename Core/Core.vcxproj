@@ -271,6 +271,7 @@
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="BnRom.h" />
     <ClInclude Include="DefaultVideoFilter.h" />
+    <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="HdVideoFilter.h" />
     <ClInclude Include="Namco108.h" />
     <ClInclude Include="Namco108_154.h" />
@@ -379,6 +380,7 @@
     <ClCompile Include="Disassembler.cpp" />
     <ClCompile Include="DisassemblyInfo.cpp" />
     <ClCompile Include="EmulationSettings.cpp" />
+    <ClCompile Include="ExpressionEvaluator.cpp" />
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="GameClientConnection.cpp" />
     <ClCompile Include="GameConnection.cpp" />

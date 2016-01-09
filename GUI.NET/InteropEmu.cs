@@ -83,8 +83,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)] public static extern void DebugRelease();
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
-		[DllImport(DLLPath)] public static extern void DebugAddBreakpoint(BreakpointType type, UInt32 address, [MarshalAs(UnmanagedType.I1)]bool isAbsoluteAddr, [MarshalAs(UnmanagedType.I1)]bool enabled);
-		[DllImport(DLLPath)] public static extern void DebugRemoveBreakpoint(BreakpointType type, UInt32 address, [MarshalAs(UnmanagedType.I1)]bool isAbsoluteAddr);
+		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex=1)]InteropBreakpoint[] breakpoints, UInt32 length);
 		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
@@ -424,12 +423,28 @@ namespace Mesen.GUI
 		
 		Mmc3IrqAltBehavior = 0x8000,
 	}
+	
+	public struct InteropBreakpoint
+	{
+		public BreakpointType Type;
+		public Int32 Address;
+		
+		[MarshalAs(UnmanagedType.I1)]
+		public bool IsAbsoluteAddress;
 
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
+		public byte[] Condition;
+	}
+
+	[Flags]
 	public enum BreakpointType
 	{
-		Execute = 0,
-		Read = 1,
-		Write = 2
+		Global = 0,
+		Execute = 1,
+		Read = 2,
+		Write = 4,
+		ReadVram = 8,
+		WriteVram = 16
 	};
 
 	public enum NesModel

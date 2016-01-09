@@ -415,6 +415,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <None Include="Resources\help.png" />
     <None Include="Resources\Close.png" />
     <None Include="Resources\PreviousArrow.png" />
     <None Include="Resources\NextArrow.png" />

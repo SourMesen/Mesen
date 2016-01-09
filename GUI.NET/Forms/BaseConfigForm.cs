@@ -98,6 +98,12 @@ namespace Mesen.GUI.Forms
 			return true;
 		}
 
+		protected void AddBinding(string fieldName, RadioButton trueRadio, RadioButton falseRadio)
+		{
+			falseRadio.Checked = true;
+			AddBinding(fieldName, trueRadio);
+		}
+
 		protected void AddBinding(string fieldName, Control bindedField)
 		{
 			if(BindedType == null) {
@@ -145,6 +151,8 @@ namespace Mesen.GUI.Forms
 						}
 					} else if(kvp.Value is CheckBox) {
 						((CheckBox)kvp.Value).Checked = (bool)value;
+					} else if(kvp.Value is RadioButton) {
+						((RadioButton)kvp.Value).Checked = (bool)value;
 					} else if(kvp.Value is Panel) {
 						RadioButton radio = kvp.Value.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Tag.Equals(value));
 						if(radio != null) {
@@ -192,6 +200,7 @@ namespace Mesen.GUI.Forms
 						if(kvp.Value is TextBox) {
 							object value = kvp.Value.Text;
 							if(field.FieldType == typeof(UInt32)) {
+								value = ((string)value).Trim().Replace("$", "").Replace("0x", "");
 								value = (object)UInt32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
 							} else if(field.FieldType == typeof(Byte)) {
 								value = (object)Byte.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
@@ -199,6 +208,8 @@ namespace Mesen.GUI.Forms
 							field.SetValue(Entity, value);
 						} else if(kvp.Value is CheckBox) {
 							field.SetValue(Entity, ((CheckBox)kvp.Value).Checked);
+						} else if(kvp.Value is RadioButton) {
+							field.SetValue(Entity, ((RadioButton)kvp.Value).Checked);
 						} else if(kvp.Value is Panel) {
 							field.SetValue(Entity, kvp.Value.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag);
 						} else if(kvp.Value is ctrlTrackbar) {

@@ -34,13 +34,19 @@
 			this.components = new System.ComponentModel.Container();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
+			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
+			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpWatch = new System.Windows.Forms.GroupBox();
+			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
 			this.grpBreakpoints = new System.Windows.Forms.GroupBox();
+			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
 			this.grpCallstack = new System.Windows.Forms.GroupBox();
+			this.ctrlCallstack = new Mesen.GUI.Debugger.Controls.ctrlCallstack();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
@@ -70,26 +76,21 @@
 			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCodeDataLogger = new System.Windows.Forms.ToolStripMenuItem();
+			this.autoLoadsaveCDLFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuLoadCdlFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSaveAsCdlFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuResetCdlLog = new System.Windows.Forms.ToolStripMenuItem();
+			this.generateROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveStrippedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveUnusedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.lblPrgAnalysis = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblPrgAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblChrAnalysis = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tmrCdlRatios = new System.Windows.Forms.Timer(this.components);
-			this.mnuResetCdlLog = new System.Windows.Forms.ToolStripMenuItem();
-			this.autoLoadsaveCDLFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.generateROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.saveStrippedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.saveUnusedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuSaveAsCdlFile = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuLoadCdlFile = new System.Windows.Forms.ToolStripMenuItem();
-			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
-			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
-			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
-			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
-			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
-			this.ctrlCallstack = new Mesen.GUI.Debugger.Controls.ctrlCallstack();
+			this.mnuDisableEnableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -142,6 +143,19 @@
 			this.tlpTop.Size = new System.Drawing.Size(984, 412);
 			this.tlpTop.TabIndex = 2;
 			// 
+			// ctrlDebuggerCode
+			// 
+			this.ctrlDebuggerCode.Code = null;
+			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
+			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
+			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(546, 406);
+			this.ctrlDebuggerCode.TabIndex = 2;
+			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
+			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
+			// 
 			// contextMenuCode
 			// 
 			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -165,6 +179,28 @@
             | System.Windows.Forms.Keys.F10)));
 			this.mnuSetNextStatement.Size = new System.Drawing.Size(258, 22);
 			this.mnuSetNextStatement.Text = "Set Next Statement";
+			// 
+			// ctrlConsoleStatus
+			// 
+			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
+			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
+			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
+			this.ctrlConsoleStatus.TabIndex = 3;
+			// 
+			// ctrlDebuggerCodeSplit
+			// 
+			this.ctrlDebuggerCodeSplit.Code = null;
+			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(555, 3);
+			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
+			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 406);
+			this.ctrlDebuggerCodeSplit.TabIndex = 4;
+			this.ctrlDebuggerCodeSplit.Visible = false;
+			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCodeSplit.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
+			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
 			// 
 			// tableLayoutPanel10
 			// 
@@ -194,6 +230,14 @@
 			this.grpWatch.TabStop = false;
 			this.grpWatch.Text = "Watch";
 			// 
+			// ctrlWatch
+			// 
+			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
+			this.ctrlWatch.Name = "ctrlWatch";
+			this.ctrlWatch.Size = new System.Drawing.Size(316, 123);
+			this.ctrlWatch.TabIndex = 0;
+			// 
 			// grpBreakpoints
 			// 
 			this.grpBreakpoints.Controls.Add(this.ctrlBreakpoints);
@@ -205,6 +249,15 @@
 			this.grpBreakpoints.TabStop = false;
 			this.grpBreakpoints.Text = "Breakpoints";
 			// 
+			// ctrlBreakpoints
+			// 
+			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
+			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
+			this.ctrlBreakpoints.Size = new System.Drawing.Size(316, 123);
+			this.ctrlBreakpoints.TabIndex = 0;
+			this.ctrlBreakpoints.BreakpointChanged += new System.EventHandler(this.ctrlBreakpoints_BreakpointChanged);
+			// 
 			// grpCallstack
 			// 
 			this.grpCallstack.Controls.Add(this.ctrlCallstack);
@@ -215,6 +268,15 @@
 			this.grpCallstack.TabIndex = 4;
 			this.grpCallstack.TabStop = false;
 			this.grpCallstack.Text = "Callstack";
+			// 
+			// ctrlCallstack
+			// 
+			this.ctrlCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlCallstack.Location = new System.Drawing.Point(3, 16);
+			this.ctrlCallstack.Name = "ctrlCallstack";
+			this.ctrlCallstack.Size = new System.Drawing.Size(316, 123);
+			this.ctrlCallstack.TabIndex = 0;
+			this.ctrlCallstack.FunctionSelected += new System.EventHandler(this.ctrlCallstack_FunctionSelected);
 			// 
 			// menuStrip
 			// 
@@ -315,6 +377,7 @@
             this.mnuStepOut,
             this.toolStripMenuItem1,
             this.mnuToggleBreakpoint,
+            this.mnuDisableEnableBreakpoint,
             this.toolStripMenuItem2,
             this.mnuRunOneFrame});
 			this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
@@ -325,7 +388,7 @@
 			// 
 			this.mnuContinue.Name = "mnuContinue";
 			this.mnuContinue.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuContinue.Size = new System.Drawing.Size(190, 22);
+			this.mnuContinue.Size = new System.Drawing.Size(258, 22);
 			this.mnuContinue.Text = "Continue";
 			this.mnuContinue.Click += new System.EventHandler(this.mnuContinue_Click);
 			// 
@@ -335,7 +398,7 @@
 			this.mnuBreak.ShortcutKeyDisplayString = "Ctrl+Alt+Break";
 			this.mnuBreak.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Cancel)));
-			this.mnuBreak.Size = new System.Drawing.Size(190, 22);
+			this.mnuBreak.Size = new System.Drawing.Size(258, 22);
 			this.mnuBreak.Text = "Break";
 			this.mnuBreak.Click += new System.EventHandler(this.mnuBreak_Click);
 			// 
@@ -343,7 +406,7 @@
 			// 
 			this.mnuStepInto.Name = "mnuStepInto";
 			this.mnuStepInto.ShortcutKeys = System.Windows.Forms.Keys.F11;
-			this.mnuStepInto.Size = new System.Drawing.Size(190, 22);
+			this.mnuStepInto.Size = new System.Drawing.Size(258, 22);
 			this.mnuStepInto.Text = "Step Into";
 			this.mnuStepInto.Click += new System.EventHandler(this.mnuStepInto_Click);
 			// 
@@ -351,7 +414,7 @@
 			// 
 			this.mnuStepOver.Name = "mnuStepOver";
 			this.mnuStepOver.ShortcutKeys = System.Windows.Forms.Keys.F10;
-			this.mnuStepOver.Size = new System.Drawing.Size(190, 22);
+			this.mnuStepOver.Size = new System.Drawing.Size(258, 22);
 			this.mnuStepOver.Text = "Step Over";
 			this.mnuStepOver.Click += new System.EventHandler(this.mnuStepOver_Click);
 			// 
@@ -359,33 +422,33 @@
 			// 
 			this.mnuStepOut.Name = "mnuStepOut";
 			this.mnuStepOut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F11)));
-			this.mnuStepOut.Size = new System.Drawing.Size(190, 22);
+			this.mnuStepOut.Size = new System.Drawing.Size(258, 22);
 			this.mnuStepOut.Text = "Step Out";
 			this.mnuStepOut.Click += new System.EventHandler(this.mnuStepOut_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(187, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(255, 6);
 			// 
 			// mnuToggleBreakpoint
 			// 
 			this.mnuToggleBreakpoint.Name = "mnuToggleBreakpoint";
 			this.mnuToggleBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.F9;
-			this.mnuToggleBreakpoint.Size = new System.Drawing.Size(190, 22);
+			this.mnuToggleBreakpoint.Size = new System.Drawing.Size(258, 22);
 			this.mnuToggleBreakpoint.Text = "Toggle Breakpoint";
 			this.mnuToggleBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(187, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
 			// 
 			// mnuRunOneFrame
 			// 
 			this.mnuRunOneFrame.Name = "mnuRunOneFrame";
 			this.mnuRunOneFrame.ShortcutKeys = System.Windows.Forms.Keys.F12;
-			this.mnuRunOneFrame.Size = new System.Drawing.Size(190, 22);
+			this.mnuRunOneFrame.Size = new System.Drawing.Size(258, 22);
 			this.mnuRunOneFrame.Text = "Run one frame";
 			this.mnuRunOneFrame.Click += new System.EventHandler(this.mnuRunOneFrame_Click);
 			// 
@@ -469,6 +532,63 @@
 			this.mnuCodeDataLogger.Size = new System.Drawing.Size(171, 22);
 			this.mnuCodeDataLogger.Text = "Code/Data Logger";
 			// 
+			// autoLoadsaveCDLFileToolStripMenuItem
+			// 
+			this.autoLoadsaveCDLFileToolStripMenuItem.Checked = true;
+			this.autoLoadsaveCDLFileToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.autoLoadsaveCDLFileToolStripMenuItem.Enabled = false;
+			this.autoLoadsaveCDLFileToolStripMenuItem.Name = "autoLoadsaveCDLFileToolStripMenuItem";
+			this.autoLoadsaveCDLFileToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.autoLoadsaveCDLFileToolStripMenuItem.Text = "Auto load/save log file";
+			// 
+			// toolStripMenuItem4
+			// 
+			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(190, 6);
+			// 
+			// mnuLoadCdlFile
+			// 
+			this.mnuLoadCdlFile.Name = "mnuLoadCdlFile";
+			this.mnuLoadCdlFile.Size = new System.Drawing.Size(193, 22);
+			this.mnuLoadCdlFile.Text = "Load CDL file...";
+			this.mnuLoadCdlFile.Click += new System.EventHandler(this.mnuLoadCdlFile_Click);
+			// 
+			// mnuSaveAsCdlFile
+			// 
+			this.mnuSaveAsCdlFile.Name = "mnuSaveAsCdlFile";
+			this.mnuSaveAsCdlFile.Size = new System.Drawing.Size(193, 22);
+			this.mnuSaveAsCdlFile.Text = "Save as CDL file...";
+			this.mnuSaveAsCdlFile.Click += new System.EventHandler(this.mnuSaveAsCdlFile_Click);
+			// 
+			// mnuResetCdlLog
+			// 
+			this.mnuResetCdlLog.Name = "mnuResetCdlLog";
+			this.mnuResetCdlLog.Size = new System.Drawing.Size(193, 22);
+			this.mnuResetCdlLog.Text = "Reset log";
+			this.mnuResetCdlLog.Click += new System.EventHandler(this.mnuResetCdlLog_Click);
+			// 
+			// generateROMToolStripMenuItem
+			// 
+			this.generateROMToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveStrippedDataToolStripMenuItem,
+            this.saveUnusedDataToolStripMenuItem});
+			this.generateROMToolStripMenuItem.Enabled = false;
+			this.generateROMToolStripMenuItem.Name = "generateROMToolStripMenuItem";
+			this.generateROMToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.generateROMToolStripMenuItem.Text = "Generate ROM";
+			// 
+			// saveStrippedDataToolStripMenuItem
+			// 
+			this.saveStrippedDataToolStripMenuItem.Name = "saveStrippedDataToolStripMenuItem";
+			this.saveStrippedDataToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.saveStrippedDataToolStripMenuItem.Text = "Save stripped data";
+			// 
+			// saveUnusedDataToolStripMenuItem
+			// 
+			this.saveUnusedDataToolStripMenuItem.Name = "saveUnusedDataToolStripMenuItem";
+			this.saveUnusedDataToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.saveUnusedDataToolStripMenuItem.Text = "Save unused data";
+			// 
 			// statusStrip
 			// 
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -514,123 +634,13 @@
 			this.tmrCdlRatios.Interval = 300;
 			this.tmrCdlRatios.Tick += new System.EventHandler(this.tmrCdlRatios_Tick);
 			// 
-			// mnuResetCdlLog
+			// mnuDisableEnableBreakpoint
 			// 
-			this.mnuResetCdlLog.Name = "mnuResetCdlLog";
-			this.mnuResetCdlLog.Size = new System.Drawing.Size(193, 22);
-			this.mnuResetCdlLog.Text = "Reset log";
-			this.mnuResetCdlLog.Click += new System.EventHandler(this.mnuResetCdlLog_Click);
-			// 
-			// autoLoadsaveCDLFileToolStripMenuItem
-			// 
-			this.autoLoadsaveCDLFileToolStripMenuItem.Checked = true;
-			this.autoLoadsaveCDLFileToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.autoLoadsaveCDLFileToolStripMenuItem.Enabled = false;
-			this.autoLoadsaveCDLFileToolStripMenuItem.Name = "autoLoadsaveCDLFileToolStripMenuItem";
-			this.autoLoadsaveCDLFileToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-			this.autoLoadsaveCDLFileToolStripMenuItem.Text = "Auto load/save log file";
-			// 
-			// generateROMToolStripMenuItem
-			// 
-			this.generateROMToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveStrippedDataToolStripMenuItem,
-            this.saveUnusedDataToolStripMenuItem});
-			this.generateROMToolStripMenuItem.Enabled = false;
-			this.generateROMToolStripMenuItem.Name = "generateROMToolStripMenuItem";
-			this.generateROMToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-			this.generateROMToolStripMenuItem.Text = "Generate ROM";
-			// 
-			// saveStrippedDataToolStripMenuItem
-			// 
-			this.saveStrippedDataToolStripMenuItem.Name = "saveStrippedDataToolStripMenuItem";
-			this.saveStrippedDataToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-			this.saveStrippedDataToolStripMenuItem.Text = "Save stripped data";
-			// 
-			// saveUnusedDataToolStripMenuItem
-			// 
-			this.saveUnusedDataToolStripMenuItem.Name = "saveUnusedDataToolStripMenuItem";
-			this.saveUnusedDataToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-			this.saveUnusedDataToolStripMenuItem.Text = "Save unused data";
-			// 
-			// toolStripMenuItem4
-			// 
-			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(190, 6);
-			// 
-			// mnuSaveAsCdlFile
-			// 
-			this.mnuSaveAsCdlFile.Name = "mnuSaveAsCdlFile";
-			this.mnuSaveAsCdlFile.Size = new System.Drawing.Size(193, 22);
-			this.mnuSaveAsCdlFile.Text = "Save as CDL file...";
-			this.mnuSaveAsCdlFile.Click += new System.EventHandler(this.mnuSaveAsCdlFile_Click);
-			// 
-			// mnuLoadCdlFile
-			// 
-			this.mnuLoadCdlFile.Name = "mnuLoadCdlFile";
-			this.mnuLoadCdlFile.Size = new System.Drawing.Size(193, 22);
-			this.mnuLoadCdlFile.Text = "Load CDL file...";
-			this.mnuLoadCdlFile.Click += new System.EventHandler(this.mnuLoadCdlFile_Click);
-			// 
-			// ctrlDebuggerCode
-			// 
-			this.ctrlDebuggerCode.Code = null;
-			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
-			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
-			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(546, 406);
-			this.ctrlDebuggerCode.TabIndex = 2;
-			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
-			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
-			// 
-			// ctrlConsoleStatus
-			// 
-			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
-			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
-			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
-			this.ctrlConsoleStatus.TabIndex = 3;
-			// 
-			// ctrlDebuggerCodeSplit
-			// 
-			this.ctrlDebuggerCodeSplit.Code = null;
-			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(555, 3);
-			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
-			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 406);
-			this.ctrlDebuggerCodeSplit.TabIndex = 4;
-			this.ctrlDebuggerCodeSplit.Visible = false;
-			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			this.ctrlDebuggerCodeSplit.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
-			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
-			// 
-			// ctrlWatch
-			// 
-			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
-			this.ctrlWatch.Name = "ctrlWatch";
-			this.ctrlWatch.Size = new System.Drawing.Size(316, 123);
-			this.ctrlWatch.TabIndex = 0;
-			// 
-			// ctrlBreakpoints
-			// 
-			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
-			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
-			this.ctrlBreakpoints.Size = new System.Drawing.Size(316, 123);
-			this.ctrlBreakpoints.TabIndex = 0;
-			this.ctrlBreakpoints.BreakpointChanged += new System.EventHandler(this.ctrlBreakpoints_BreakpointChanged);
-			// 
-			// ctrlCallstack
-			// 
-			this.ctrlCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlCallstack.Location = new System.Drawing.Point(3, 16);
-			this.ctrlCallstack.Name = "ctrlCallstack";
-			this.ctrlCallstack.Size = new System.Drawing.Size(316, 123);
-			this.ctrlCallstack.TabIndex = 0;
-			this.ctrlCallstack.FunctionSelected += new System.EventHandler(this.ctrlCallstack_FunctionSelected);
+			this.mnuDisableEnableBreakpoint.Name = "mnuDisableEnableBreakpoint";
+			this.mnuDisableEnableBreakpoint.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F9)));
+			this.mnuDisableEnableBreakpoint.Size = new System.Drawing.Size(258, 22);
+			this.mnuDisableEnableBreakpoint.Text = "Disable/Enable Breakpoint";
+			this.mnuDisableEnableBreakpoint.Click += new System.EventHandler(this.mnuDisableEnableBreakpoint_Click);
 			// 
 			// frmDebugger
 			// 
@@ -724,5 +734,6 @@
 		private System.Windows.Forms.ToolStripMenuItem generateROMToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem saveStrippedDataToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem saveUnusedDataToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuDisableEnableBreakpoint;
 	}
 }

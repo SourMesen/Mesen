@@ -34,12 +34,12 @@
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowOnlyDisassembledCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowLineNotes = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowCodeNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.ctrlCodeViewer = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
-			this.mnuShowCodeNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuCode.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -56,7 +56,7 @@
             this.mnuGoToLocation,
             this.mnuAddToWatch});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 192);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 170);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
 			// mnuShowNextStatement
@@ -100,6 +100,14 @@
 			this.mnuShowLineNotes.Text = "Show PRG Addresses";
 			this.mnuShowLineNotes.Click += new System.EventHandler(this.mnuShowLineNotes_Click);
 			// 
+			// mnuShowCodeNotes
+			// 
+			this.mnuShowCodeNotes.CheckOnClick = true;
+			this.mnuShowCodeNotes.Name = "mnuShowCodeNotes";
+			this.mnuShowCodeNotes.Size = new System.Drawing.Size(258, 22);
+			this.mnuShowCodeNotes.Text = "Show Byte Code";
+			this.mnuShowCodeNotes.Click += new System.EventHandler(this.mnuShowCodeNotes_Click);
+			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
@@ -127,18 +135,12 @@
 			this.ctrlCodeViewer.FontSize = 13F;
 			this.ctrlCodeViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlCodeViewer.Name = "ctrlCodeViewer";
+			this.ctrlCodeViewer.ShowContentNotes = false;
+			this.ctrlCodeViewer.ShowLineNumberNotes = false;
 			this.ctrlCodeViewer.Size = new System.Drawing.Size(379, 218);
 			this.ctrlCodeViewer.TabIndex = 1;
 			this.ctrlCodeViewer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseUp);
 			this.ctrlCodeViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseMove);
-			// 
-			// mnuShowCodeNotes
-			// 
-			this.mnuShowCodeNotes.CheckOnClick = true;
-			this.mnuShowCodeNotes.Name = "mnuShowCodeNotes";
-			this.mnuShowCodeNotes.Size = new System.Drawing.Size(258, 22);
-			this.mnuShowCodeNotes.Text = "Show Byte Code";
-			this.mnuShowCodeNotes.Click += new System.EventHandler(this.mnuShowCodeNotes_Click);
 			// 
 			// ctrlDebuggerCode
 			// 

@@ -28,8 +28,7 @@ extern "C"
 
 	DllExport void __stdcall DebugGetState(DebugState *state) { GetDebugger()->GetState(state); }
 
-	DllExport void __stdcall DebugAddBreakpoint(uint32_t type, uint32_t address, bool isAbsoluteAddr, bool enabled) { GetDebugger()->AddBreakpoint((BreakpointType)type, address, isAbsoluteAddr, enabled); }
-	DllExport void __stdcall DebugRemoveBreakpoint(uint32_t type, uint32_t address, bool isAbsoluteAddr) { GetDebugger()->RemoveBreakpoint((BreakpointType)type, address, isAbsoluteAddr); }
+	DllExport void __stdcall DebugSetBreakpoints(Breakpoint breakpoints[], uint32_t length) { GetDebugger()->SetBreakpoints(breakpoints, length); }
 		
 	DllExport void __stdcall DebugRun() { GetDebugger()->Run(); }
 	DllExport void __stdcall DebugStep(uint32_t count) { GetDebugger()->Step(count); }

@@ -1,6 +1,17 @@
 #pragma once 
 #include "stdafx.h"
 
+class SimpleLock;
+
+class LockHandler
+{
+private:
+	SimpleLock *_lock;
+public:
+	LockHandler(SimpleLock *lock);
+	~LockHandler();
+};
+
 class SimpleLock
 {
 private:
@@ -13,6 +24,9 @@ private:
 public:
 	SimpleLock();
 	~SimpleLock();
+
+	LockHandler AcquireSafe();
+
 	void Acquire();
 	bool IsFree();
 	void WaitForRelease();

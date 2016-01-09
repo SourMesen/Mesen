@@ -116,9 +116,9 @@ namespace Mesen.GUI.Debugger
 			RefreshBreakpoints();
 		}
 
-		private void ToggleBreakpoint()
+		private void ToggleBreakpoint(bool toggleEnabled)
 		{
-			ctrlBreakpoints.ToggleBreakpoint(_lastCodeWindow.GetCurrentLine());
+			ctrlBreakpoints.ToggleBreakpoint(_lastCodeWindow.GetCurrentLine(), toggleEnabled);
 		}
 		
 		private void RefreshBreakpoints()
@@ -149,7 +149,12 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuToggleBreakpoint_Click(object sender, EventArgs e)
 		{
-			ToggleBreakpoint();
+			ToggleBreakpoint(false);
+		}
+
+		private void mnuDisableEnableBreakpoint_Click(object sender, EventArgs e)
+		{
+			ToggleBreakpoint(true);
 		}
 
 		private void mnuBreak_Click(object sender, EventArgs e)

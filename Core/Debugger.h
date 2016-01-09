@@ -45,9 +45,14 @@ private:
 	shared_ptr<PPU> _ppu;
 	shared_ptr<MemoryManager> _memoryManager;
 	shared_ptr<BaseMapper> _mapper;
-	vector<shared_ptr<Breakpoint>> _readBreakpoints;
-	vector<shared_ptr<Breakpoint>> _writeBreakpoints;
-	vector<shared_ptr<Breakpoint>> _execBreakpoints;
+	
+	vector<Breakpoint> _readBreakpoints;
+	vector<Breakpoint> _writeBreakpoints;
+	vector<Breakpoint> _execBreakpoints;
+	vector<Breakpoint> _globalBreakpoints;
+	vector<Breakpoint> _readVramBreakpoints;
+	vector<Breakpoint> _writeVramBreakpoints;
+
 	deque<uint32_t> _callstackAbsolute;
 	deque<uint32_t> _callstackRelative;
 
@@ -65,22 +70,20 @@ private:
 	atomic<int32_t> _stepOverAddr;
 
 private:
-	void PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr);
-	void PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr);
-	shared_ptr<Breakpoint> GetMatchingBreakpoint(BreakpointType type, uint32_t addr);
+	void PrivateProcessPpuCycle();
+	void PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value);
+	void PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
+	bool HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value);
 	void UpdateCallstack(uint32_t addr);
 	void ProcessStepConditions(uint32_t addr);
-	void BreakOnBreakpoint(MemoryOperationType type, uint32_t addr);
+	void BreakOnBreakpoint(MemoryOperationType type, uint32_t addr, uint8_t value);
 	bool SleepUntilResume();
 
 public:
 	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
 	~Debugger();
 
-	void AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr, bool enabled);
-	void RemoveBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr);
-	vector<shared_ptr<Breakpoint>> GetBreakpoints();
-	vector<uint32_t> GetExecBreakpointAddresses();
+	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
 
 	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
 	void GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData);
@@ -112,8 +115,9 @@ public:
 	uint8_t GetMemoryValue(uint32_t addr);
 	uint32_t GetRelativeAddress(uint32_t addr);
 	
-	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr);
-	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr);
+	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value);
+	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
+	static void ProcessPpuCycle();
 
 	static void BreakIfDebugging();
 };

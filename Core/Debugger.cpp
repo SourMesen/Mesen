@@ -8,6 +8,7 @@
 #include "VideoDecoder.h"
 #include "APU.h"
 #include "CodeDataLogger.h"
+#include "ExpressionEvaluator.h"
 
 Debugger* Debugger::Instance = nullptr;
 
@@ -84,69 +85,82 @@ CdlRatios Debugger::GetCdlRatios()
 	return _codeDataLogger->GetRatios();
 }
 
-void Debugger::AddBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr, bool enabled)
+void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 {
-	_bpLock.Acquire();
+	_bpLock.AcquireSafe();
 
-	if(isAbsoluteAddr) {
-		address = _mapper->ToAbsoluteAddress(address);
-	}
+	_globalBreakpoints.clear();
+	_execBreakpoints.clear();
+	_readBreakpoints.clear();
+	_writeBreakpoints.clear();
+	_readVramBreakpoints.clear();
+	_writeVramBreakpoints.clear();
 
-	shared_ptr<Breakpoint> breakpoint(new Breakpoint(type, address, isAbsoluteAddr));
-	breakpoint->SetEnabled(enabled);
-	switch(type) {
-		case BreakpointType::Execute: _execBreakpoints.push_back(breakpoint); break;
-		case BreakpointType::Read: _readBreakpoints.push_back(breakpoint); break;
-		case BreakpointType::Write: _writeBreakpoints.push_back(breakpoint); break;
-	}
+	ExpressionEvaluator expEval;
+	for(uint32_t i = 0; i < length; i++) {
+		Breakpoint& bp = breakpoints[i];
 
-	_bpLock.Release();
-}
+		if(!expEval.Validate(bp.GetCondition())) {
+			//Remove any invalid condition (syntax-wise)
+			bp.ClearCondition();
+		}
 
-void Debugger::RemoveBreakpoint(BreakpointType type, uint32_t address, bool isAbsoluteAddr)
-{
-	_bpLock.Acquire();
-	
-	vector<shared_ptr<Breakpoint>> *breakpoints = nullptr;
-	switch(type) {
-		case BreakpointType::Execute: breakpoints = &_execBreakpoints; break;
-		case BreakpointType::Read: breakpoints = &_readBreakpoints; break;
-		case BreakpointType::Write: breakpoints = &_writeBreakpoints; break;
-	}
-
-	shared_ptr<Breakpoint> breakpoint = GetMatchingBreakpoint(type, address);
-	for(size_t i = 0, len = breakpoints->size(); i < len; i++) {
-		shared_ptr<Breakpoint> breakpoint = (*breakpoints)[i];
-		if(breakpoint->GetAddr() == address && breakpoint->IsAbsoluteAddr() == isAbsoluteAddr) {
-			breakpoints->erase(breakpoints->begin() + i);
-			break;
+		BreakpointType type = bp.GetType();
+		if(type & BreakpointType::Execute) {
+			_execBreakpoints.push_back(bp);
+		}
+		if(type & BreakpointType::ReadRam) {
+			_readBreakpoints.push_back(bp);
+		}
+		if(type & BreakpointType::ReadVram) {
+			_readVramBreakpoints.push_back(bp);
+		}
+		if(type & BreakpointType::WriteRam) {
+			_writeBreakpoints.push_back(bp);
+		}
+		if(type & BreakpointType::WriteVram) {
+			_writeVramBreakpoints.push_back(bp);
+		}
+		if(type == BreakpointType::Global) {
+			_globalBreakpoints.push_back(bp);
 		}
 	}
-	_bpLock.Release();
 }
 
-shared_ptr<Breakpoint> Debugger::GetMatchingBreakpoint(BreakpointType type, uint32_t addr)
+bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value)
 {
 	uint32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
-	vector<shared_ptr<Breakpoint>> *breakpoints = nullptr;
+	vector<Breakpoint> *breakpoints = nullptr;
 
 	switch(type) {
+		case BreakpointType::Global: breakpoints = &_globalBreakpoints; break;
 		case BreakpointType::Execute: breakpoints = &_execBreakpoints; break;
-		case BreakpointType::Read: breakpoints = &_readBreakpoints; break;
-		case BreakpointType::Write: breakpoints = &_writeBreakpoints; break;
+		case BreakpointType::ReadRam: breakpoints = &_readBreakpoints; break;
+		case BreakpointType::WriteRam: breakpoints = &_writeBreakpoints; break;
+		case BreakpointType::ReadVram: breakpoints = &_readVramBreakpoints; break;
+		case BreakpointType::WriteVram: breakpoints = &_writeVramBreakpoints; break;
 	}
+
+	DebugState state;
+	GetState(&state);
 	
-	_bpLock.Acquire();
+	_bpLock.AcquireSafe();
 	for(size_t i = 0, len = breakpoints->size(); i < len; i++) {
-		shared_ptr<Breakpoint> breakpoint = (*breakpoints)[i];
-		if(breakpoint->Matches(addr, absoluteAddr)) {
-			_bpLock.Release();
-			return breakpoint;
+		Breakpoint &breakpoint = (*breakpoints)[i];
+		if(type == BreakpointType::Global || breakpoint.Matches(addr, absoluteAddr)) {
+			string condition = breakpoint.GetCondition();
+			if(condition.empty()) {
+				return true;
+			} else {
+				ExpressionEvaluator expEval;
+				if(expEval.Evaluate(condition, state, value)) {
+					return true;
+				}
+			}
 		}
 	}
 
-	_bpLock.Release();
-	return shared_ptr<Breakpoint>();
+	return false;
 }
 
 void Debugger::UpdateCallstack(uint32_t addr)
@@ -180,28 +194,20 @@ void Debugger::ProcessStepConditions(uint32_t addr)
 	}
 }
 
-void Debugger::BreakOnBreakpoint(MemoryOperationType type, uint32_t addr)
+void Debugger::PrivateProcessPpuCycle()
 {
-	BreakpointType breakpointType;
-	switch(type) {
-		case MemoryOperationType::Read: breakpointType = BreakpointType::Read; break;
-		case MemoryOperationType::Write: breakpointType = BreakpointType::Write; break;
-		
-		default:
-		case MemoryOperationType::ExecOpCode:
-		case MemoryOperationType::ExecOperand: breakpointType = BreakpointType::Execute; break;
-	}
+	_breakLock.AcquireSafe();
 
-	if(GetMatchingBreakpoint(breakpointType, addr)) {
+	if(HasMatchingBreakpoint(BreakpointType::Global, 0, -1)) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
 		SleepUntilResume();
 	}
 }
 
-void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr)
+void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value)
 {
-	_breakLock.Acquire();
+	_breakLock.AcquireSafe();
 
 	_currentReadAddr = &addr;
 
@@ -226,12 +232,29 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	}
 
 	if(!breakDone) {
-		BreakOnBreakpoint(type, addr);
+		BreakOnBreakpoint(type, addr, value);
 	}
 
 	_currentReadAddr = nullptr;
+}
 
-	_breakLock.Release();
+void Debugger::BreakOnBreakpoint(MemoryOperationType type, uint32_t addr, uint8_t value)
+{
+	BreakpointType breakpointType;
+	switch(type) {
+		case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
+		case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
+		
+		default:
+		case MemoryOperationType::ExecOpCode:
+		case MemoryOperationType::ExecOperand: breakpointType = BreakpointType::Execute; break;
+	}
+
+	if(HasMatchingBreakpoint(breakpointType, addr, (type == MemoryOperationType::ExecOperand) ? -1 : value)) {
+		//Found a matching breakpoint, stop execution
+		Step(1);
+		SleepUntilResume();
+	}
 }
 
 bool Debugger::SleepUntilResume()
@@ -256,10 +279,18 @@ bool Debugger::SleepUntilResume()
 	return false;
 }
 
-void Debugger::PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr)
+void Debugger::PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value)
 {
-	int32_t absoluteAddr = _mapper->ToAbsoluteChrAddress(addr);
-	_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
+	if(type != MemoryOperationType::Write) {
+		int32_t absoluteAddr = _mapper->ToAbsoluteChrAddress(addr);
+		_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
+	}
+
+	if(HasMatchingBreakpoint(type == MemoryOperationType::Write ? BreakpointType::WriteVram : BreakpointType::ReadVram, addr, value)) {
+		//Found a matching breakpoint, stop execution
+		Step(1);
+		SleepUntilResume();
+	}
 }
 
 void Debugger::GetState(DebugState *state)
@@ -373,17 +404,24 @@ void Debugger::SetNextStatement(uint16_t addr)
 	}
 }
 
-void Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr)
+void Debugger::ProcessPpuCycle()
 {
 	if(Debugger::Instance) {
-		Debugger::Instance->PrivateProcessRamOperation(type, addr);
+		Debugger::Instance->PrivateProcessPpuCycle();
 	}
 }
 
-void Debugger::ProcessVramOperation(MemoryOperationType type, uint16_t addr)
+void Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value)
 {
 	if(Debugger::Instance) {
-		Debugger::Instance->PrivateProcessVramOperation(type, addr);
+		Debugger::Instance->PrivateProcessRamOperation(type, addr, value);
+	}
+}
+
+void Debugger::ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value)
+{
+	if(Debugger::Instance) {
+		Debugger::Instance->PrivateProcessVramOperation(type, addr, value);
 	}
 }
 

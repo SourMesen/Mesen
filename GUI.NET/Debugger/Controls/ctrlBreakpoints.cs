@@ -26,22 +26,24 @@ namespace Mesen.GUI.Debugger.Controls
 			AdjustColumnWidth();
 		}
 
-		public void ToggleBreakpoint(int address)
+		public void ToggleBreakpoint(int address, bool toggleEnabled)
 		{
 			if(address >= 0) {
 				Breakpoint breakpoint = GetMatchingBreakpoint(address);
 				if(breakpoint != null) {
-					_breakpoints.Remove(breakpoint);
-					breakpoint.Remove();
+					if(toggleEnabled) {
+						breakpoint.Enabled = !breakpoint.Enabled;
+					} else {
+						_breakpoints.Remove(breakpoint);
+					}
 				} else {
 					breakpoint = new Breakpoint() {
-						Type = BreakpointType.Execute,
+						BreakOnExec = true,
 						Address = (UInt32)address,
 						IsAbsoluteAddress = false,
 						Enabled = true
 					};
 					_breakpoints.Add(breakpoint);
-					breakpoint.Add();
 				}
 				RefreshList();
 				OnBreakpointChanged();
@@ -63,19 +65,38 @@ namespace Mesen.GUI.Debugger.Controls
 			return _breakpoints;
 		}
 
+		public void SetBreakpoints()
+		{
+			List<InteropBreakpoint> breakpoints = new List<InteropBreakpoint>();
+			foreach(Breakpoint bp in GetBreakpoints()) {
+				if(bp.Enabled) {
+					breakpoints.Add(bp.ToInteropBreakpoint());
+				}
+			}
+			InteropEmu.DebugSetBreakpoints(breakpoints.ToArray(), (UInt32)breakpoints.Count);
+		}
+
 		private void RefreshList()
 		{
 			lstBreakpoints.ItemChecked -= new System.Windows.Forms.ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
 			lstBreakpoints.Items.Clear();
 			foreach(Breakpoint breakpoint in _breakpoints) {
+				string address = "$" + breakpoint.Address.ToString("X");
+				if(breakpoint.IsAbsoluteAddress) {
+					address = "[" + address + "]";
+				}
+
 				ListViewItem item = new ListViewItem();
 				item.Tag = breakpoint;
 				item.Checked = breakpoint.Enabled;
 				item.SubItems.Add(breakpoint.Type.ToString());
-				item.SubItems.Add("$" + breakpoint.Address.ToString("X"));
+				item.SubItems.Add(breakpoint.SpecificAddress ? address : "<any>");
+				item.SubItems.Add(breakpoint.Condition);
 				lstBreakpoints.Items.Add(item);
 			}
 			lstBreakpoints.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
+
+			SetBreakpoints();
 		}
 
 		private void lstBreakpoints_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
@@ -97,7 +118,7 @@ namespace Mesen.GUI.Debugger.Controls
 			lstBreakpoints.ColumnWidthChanged -= lstBreakpoints_ColumnWidthChanged;
 
 			//Force watch values to take the full width of the list
-			int totalWidth = lstBreakpoints.Columns[0].Width + lstBreakpoints.Columns[1].Width + lstBreakpoints.Columns[2].Width;
+			int totalWidth = lstBreakpoints.Columns[0].Width + lstBreakpoints.Columns[1].Width + lstBreakpoints.Columns[2].Width + lstBreakpoints.Columns[3].Width;
 			colLastColumn.Width = lstBreakpoints.ClientSize.Width - totalWidth;
 
 			lstBreakpoints.ColumnWidthChanging += lstBreakpoints_ColumnWidthChanging;
@@ -106,6 +127,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void OnBreakpointChanged()
 		{
+			SetBreakpoints();
 			if(BreakpointChanged != null) {
 				BreakpointChanged(this, null);
 			}
@@ -131,7 +153,6 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuRemoveBreakpoint_Click(object sender, EventArgs e)
 		{
 			foreach(ListViewItem item in lstBreakpoints.SelectedItems) {
-				((Breakpoint)item.Tag).Remove();
 				_breakpoints.Remove((Breakpoint)item.Tag);
 			}
 			RefreshList();
