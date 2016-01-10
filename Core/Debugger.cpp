@@ -153,7 +153,7 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 				return true;
 			} else {
 				ExpressionEvaluator expEval;
-				if(expEval.Evaluate(condition, state, value)) {
+				if(expEval.Evaluate(condition, state, value) != 0) {
 					return true;
 				}
 			}
@@ -161,6 +161,16 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 	}
 
 	return false;
+}
+
+int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultType)
+{
+	ExpressionEvaluator expEval;
+
+	DebugState state;
+	GetState(&state);
+
+	return expEval.Evaluate(expression, state, resultType);
 }
 
 void Debugger::UpdateCallstack(uint32_t addr)

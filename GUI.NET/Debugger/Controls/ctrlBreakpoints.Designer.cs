@@ -31,13 +31,13 @@
 			this.contextMenuBreakpoints = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRemoveBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstBreakpoints = new Mesen.GUI.Controls.MyListView();
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuBreakpoints.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -54,6 +54,7 @@
 			// mnuAddBreakpoint
 			// 
 			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
+			this.mnuAddBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Insert;
 			this.mnuAddBreakpoint.Size = new System.Drawing.Size(152, 22);
 			this.mnuAddBreakpoint.Text = "Add...";
 			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
@@ -65,6 +66,13 @@
 			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(152, 22);
 			this.mnuRemoveBreakpoint.Text = "Remove";
 			this.mnuRemoveBreakpoint.Click += new System.EventHandler(this.mnuRemoveBreakpoint_Click);
+			// 
+			// mnuGoToLocation
+			// 
+			this.mnuGoToLocation.Name = "mnuGoToLocation";
+			this.mnuGoToLocation.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToLocation.Text = "Go to location";
+			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
 			// 
 			// lstBreakpoints
 			// 
@@ -113,13 +121,6 @@
 			// colLastColumn
 			// 
 			this.colLastColumn.Text = "";
-			// 
-			// mnuGoToLocation
-			// 
-			this.mnuGoToLocation.Name = "mnuGoToLocation";
-			this.mnuGoToLocation.Size = new System.Drawing.Size(152, 22);
-			this.mnuGoToLocation.Text = "Go to location";
-			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
 			// 
 			// ctrlBreakpoints
 			// 

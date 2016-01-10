@@ -51,6 +51,15 @@ enum EvalValues
 	Nmi = 2000000107,
 	Irq = 2000000108,
 	Value = 2000000109,
+
+	MemoryAddress = 2000100000
+};
+
+enum EvalResultType
+{
+	Numeric = 0,
+	Boolean = 1,
+	Invalid = 2
 };
 
 class StringHasher
@@ -80,12 +89,13 @@ private:
 	bool CheckSpecialTokens(string expression, size_t &pos, string &output);
 	string GetNextToken(string expression, size_t &pos);	
 	void ToRpn(string expression, vector<int> &outputQueue);
-	bool EvaluateExpression(vector<int> *outputQueue, DebugState &state, int16_t memoryValue);
-	bool PrivateEvaluate(string expression, DebugState &state, int16_t memoryValue);
+	int32_t EvaluateExpression(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue);
+	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue);
 
 public:
 	ExpressionEvaluator();
 
-	bool Evaluate(string expression, DebugState &state, int16_t memoryValue = 0);
+	int32_t Evaluate(string expression, DebugState &state, int16_t memoryValue = 0);
+	int32_t Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue = 0);
 	bool Validate(string expression);
 };

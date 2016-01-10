@@ -111,9 +111,11 @@ public:
 	bool IsCodeChanged();
 	string GenerateOutput();
 	string* GetCode();
-
+	
 	uint8_t GetMemoryValue(uint32_t addr);
 	uint32_t GetRelativeAddress(uint32_t addr);
+
+	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
 	
 	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value);
 	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);

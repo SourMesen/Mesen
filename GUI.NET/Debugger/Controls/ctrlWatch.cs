@@ -49,7 +49,7 @@ namespace Mesen.GUI.Debugger
 			lstWatch.ColumnWidthChanged += lstWatch_ColumnWidthChanged;
 		}
 
-		public void UpdateWatch()
+		public void UpdateWatch(int currentSelection = -1)
 		{
 			lstWatch.SelectedIndices.Clear();
 
@@ -70,20 +70,38 @@ namespace Mesen.GUI.Debugger
 						previousValue = item.SubItems[1].Text;
 						item.SubItems.RemoveAt(1);
 					}
-					item.SubItems[0].Text = item.SubItems[0].Text.ToUpper();
 
-					string newValue;
-					Byte memoryValue = InteropEmu.DebugGetMemoryValue((UInt32)item.Tag);
-					if(mnuHexDisplay.Checked) {
-						newValue = "$" + memoryValue.ToString("X");
-					} else {
-						newValue = memoryValue.ToString();
+					string newValue = "";
+					EvalResultType resultType;
+					Int32 result = InteropEmu.DebugEvaluateExpression(item.Text, out resultType);
+
+					switch(resultType) {
+						case EvalResultType.Numeric:
+							if(mnuHexDisplay.Checked) {
+								newValue = "$" + result.ToString("X");
+							} else {
+								newValue = result.ToString();
+							}
+							break;
+						case EvalResultType.Boolean:
+							newValue = result == 0 ? "false" : "true";
+							break;
+
+						case EvalResultType.Invalid:
+							newValue = "<invalid expression>";
+							break;
 					}
+
 					item.SubItems.Add(newValue);
 					item.SubItems[1].ForeColor = newValue != previousValue ? Color.Red : Color.Black;
 				}
 			}
 			AdjustColumnWidth();
+
+			if(currentSelection >= 0 && lstWatch.Items.Count > currentSelection) {
+				lstWatch.FocusedItem = lstWatch.Items[currentSelection];
+				lstWatch.Items[currentSelection].Selected = true;
+			}
 		}
 
 		public void AddWatch(UInt32 address)
@@ -95,39 +113,7 @@ namespace Mesen.GUI.Debugger
 
 		private void lstWatch_AfterLabelEdit(object sender, LabelEditEventArgs e)
 		{
-			e.CancelEdit = true;
-
-			if(e.Label != null) {
-				ListViewItem item = lstWatch.Items[e.Item];
-				item.Text = e.Label;
-				if(!string.IsNullOrWhiteSpace(item.Text)) {
-					if(!item.Text.StartsWith("$")) {
-						item.Text = "$" + item.Text;
-					}
-
-					UInt32 address;
-					if(UInt32.TryParse(item.Text.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier, null, out address)) {
-						lstWatch.Items[e.Item].Tag = address;
-					} else {
-						item.Text = string.Empty;
-					}
-				}
-				UpdateWatch();
-			}
-		}
-
-		private void mnuRemoveWatch_Click(object sender, EventArgs e)
-		{
-			if(lstWatch.SelectedItems.Count >= 1) {
-				var itemsToRemove = new List<ListViewItem>();
-				foreach(ListViewItem item in lstWatch.SelectedItems) {
-					itemsToRemove.Add(item);
-				}
-				foreach(ListViewItem item in itemsToRemove) {
-					lstWatch.Items.Remove(item);
-				}
-				UpdateWatch();
-			}
+			this.BeginInvoke((MethodInvoker)(() => { this.UpdateWatch(e.Item); }));
 		}
 
 		private void mnuHexDisplay_Click(object sender, EventArgs e)
@@ -138,6 +124,20 @@ namespace Mesen.GUI.Debugger
 		private void lstWatch_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			mnuRemoveWatch.Enabled = lstWatch.SelectedItems.Count >= 1;
+		}
+
+		private void lstWatch_Click(object sender, EventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count == 1 && string.IsNullOrWhiteSpace(lstWatch.SelectedItems[0].Text)) {
+				lstWatch.SelectedItems[0].BeginEdit();
+			}
+		}
+
+		private void lstWatch_DoubleClick(object sender, EventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count == 1) {
+				lstWatch.SelectedItems[0].BeginEdit();
+			}
 		}
 	}
 }

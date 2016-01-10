@@ -35,7 +35,7 @@ extern "C"
 	DllExport void __stdcall DebugStepCycles(uint32_t count) { GetDebugger()->StepCycles(count); }
 	DllExport void __stdcall DebugStepOver() { GetDebugger()->StepOver(); }
 	DllExport void __stdcall DebugStepOut() { GetDebugger()->StepOut(); }
-	DllExport int __stdcall DebugIsCodeChanged() { return GetDebugger()->IsCodeChanged(); }
+	DllExport uint32_t __stdcall DebugIsCodeChanged() { return GetDebugger()->IsCodeChanged(); }
 	DllExport const char* __stdcall DebugGetCode() { return GetDebugger()->GetCode()->c_str(); }
 
 	DllExport void __stdcall DebugSetNextStatement(uint16_t addr) { GetDebugger()->SetNextStatement(addr); }
@@ -55,4 +55,6 @@ extern "C"
 	DllExport bool __stdcall DebugSaveCdlFile(char* cdlFilepath) { return GetDebugger()->SaveCdlFile(cdlFilepath); }
 	DllExport void __stdcall DebugGetCdlRatios(CdlRatios* cdlRatios) { *cdlRatios = GetDebugger()->GetCdlRatios(); }
 	DllExport void __stdcall DebugResetCdlLog() { GetDebugger()->ResetCdlLog(); }
+
+	DllExport int32_t __stdcall DebugEvaluateExpression(char* expression, EvalResultType *resultType) { return GetDebugger()->EvaluateExpression(expression, *resultType); }
 };

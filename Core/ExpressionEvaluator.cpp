@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <climits>
 #include "ExpressionEvaluator.h"
 #include "Console.h"
 #include "Debugger.h"
@@ -51,7 +52,7 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 	do {
 		char c = std::tolower(expression[pos]);
 		if(c >= 'a' && c <= 'z') {
-			token += expression[pos];
+			token += c;
 			pos++;
 		} else {
 			break;
@@ -91,22 +92,37 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 	bool isOperator = false;
 	bool isNumber = false;
 	bool isHex = false;
+	bool isMemoryAddress = false;
+	bool validMemoryAddress = false;
 	size_t initialPos = pos;
 	for(size_t len = expression.size(); pos < len; pos++) {
 		char c = std::tolower(expression[pos]);
 
-		if(c == '$' && pos == initialPos) {
-			isHex = true;
+		if((c == '$' || c == '[') && pos == initialPos) {
+			if(c == '$') {
+				isHex = true;
+			} else if(c == '[') {
+				isMemoryAddress = true;
+
+				//Pretend the token starts after this
+				initialPos++;
+			}
 		} else if((c >= '0' && c <= '9') || (isHex && c >= 'a' && c <= 'f')) {
 			if(isNumber || output.empty()) {
 				output += c;
 				isNumber = true;
 			} else {
-				//Done reading number
+				//Just hit the start of a number, done reading current token
 				break;
 			}
 		} else if(isNumber) {
 			//First non-numeric character, done
+			if(c == ']') {
+				if(isMemoryAddress) {
+					validMemoryAddress = true;
+				}
+				pos++;
+			}
 			break;
 		} else if(c == '(' || c == ')' || c == '-' || c == '+' || c == '~') {
 			if(output.empty()) {
@@ -118,10 +134,11 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 			//Figure out if it's ! or !=
 			if(pos < len - 1) {
 				if(expression[pos + 1] == '=') {
-					pos++;
 					output += "!=";
+					pos+=2;
 				} else {
 					output += "!";
+					pos++;
 				}
 			}
 			break;
@@ -153,6 +170,12 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 		ss << std::hex << output;
 		ss >> x;
 		output = std::to_string(x);
+	}
+
+	if(isMemoryAddress && validMemoryAddress) {
+		uint32_t address = std::stoi(output) % 0xFFFF;
+		address += EvalValues::MemoryAddress;
+		output = std::to_string(address);
 	}
 
 	return output;
@@ -209,12 +232,14 @@ void ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 	}
 }
 
-bool ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugState &state, int16_t memoryValue)
+int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue)
 {
 	int pos = 0;
 	int right = 0;
 	int left = 0;
 	int operandStack[1000];
+	resultType = EvalResultType::Numeric;
+	shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger().lock();
 
 	for(size_t i = 0, len = outputQueue->size(); i < len; i++) {
 		int token = (*outputQueue)[i];
@@ -233,12 +258,18 @@ bool ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugStat
 				case EvalValues::PpuScanline: token = state.PPU.Scanline; break;
 				case EvalValues::Value: token = memoryValue; break;
 			}
+
+			if(token >= EvalValues::MemoryAddress) {
+				uint16_t memoryAddress = token - EvalValues::MemoryAddress;
+				token = debugger->GetMemoryValue(memoryAddress);
+			}
 		} else if(token >= EvalOperators::Multiplication) {
 			right = operandStack[--pos];
 			if(pos > 0) {
 				left = operandStack[--pos];
 			}
 
+			resultType = EvalResultType::Numeric;
 			switch(token) {
 				case EvalOperators::Multiplication: token = left * right; break;
 				case EvalOperators::Division: token = left / right; break;
@@ -247,17 +278,17 @@ bool ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugStat
 				case EvalOperators::Substration: token = left - right; break;
 				case EvalOperators::ShiftLeft: token = left << right; break;
 				case EvalOperators::ShiftRight: token = left >> right; break;
-				case EvalOperators::SmallerThan: token = left < right; break;
-				case EvalOperators::SmallerOrEqual: token = left <= right; break;
-				case EvalOperators::GreaterThan: token = left > right; break;
-				case EvalOperators::GreaterOrEqual: token = left >= right; break;
-				case EvalOperators::Equal: token = left == right; break;
-				case EvalOperators::NotEqual: token = left != right; break;
+				case EvalOperators::SmallerThan: token = left < right; resultType = EvalResultType::Boolean; break;
+				case EvalOperators::SmallerOrEqual: token = left <= right; resultType = EvalResultType::Boolean; break;
+				case EvalOperators::GreaterThan: token = left > right; resultType = EvalResultType::Boolean; break;
+				case EvalOperators::GreaterOrEqual: token = left >= right; resultType = EvalResultType::Boolean; break;
+				case EvalOperators::Equal: token = left == right; resultType = EvalResultType::Boolean; break;
+				case EvalOperators::NotEqual: token = left != right; resultType = EvalResultType::Boolean; break;
 				case EvalOperators::BinaryAnd: token = left & right; break;
 				case EvalOperators::BinaryXor: token = left | right; break;
 				case EvalOperators::BinaryOr: token = left ^ right; break;
-				case EvalOperators::LogicalAnd: token = left && right; break;
-				case EvalOperators::LogicalOr: token = left || right; break;
+				case EvalOperators::LogicalAnd: token = left && right; resultType = EvalResultType::Boolean; break;
+				case EvalOperators::LogicalOr: token = left || right; resultType = EvalResultType::Boolean; break;
 
 				//Unary operators
 				case EvalOperators::Plus: token = right; break;
@@ -269,14 +300,14 @@ bool ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugStat
 		}
 		operandStack[pos++] = token;
 	}
-	return operandStack[0] != 0;
+	return operandStack[0];
 }
 
 ExpressionEvaluator::ExpressionEvaluator()
 {
 }
 
-bool ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, int16_t memoryValue)
+int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue)
 {
 	vector<int> *outputQueue = nullptr;
 
@@ -301,15 +332,22 @@ bool ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, 
 		outputQueue = &_outputCache[expression];
 	}
 
-	return EvaluateExpression(outputQueue, state, memoryValue);
+	return EvaluateExpression(outputQueue, state, resultType, memoryValue);
 }
 
-bool ExpressionEvaluator::Evaluate(string expression, DebugState &state, int16_t memoryValue)
+int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, int16_t memoryValue)
+{
+	EvalResultType resultType;
+	return Evaluate(expression, state, resultType, memoryValue);
+}
+
+int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue)
 {
 	try {
-		return PrivateEvaluate(expression, state, memoryValue);
+		return PrivateEvaluate(expression, state, resultType, memoryValue);
 	} catch(std::exception) {
-		return false;
+		resultType = EvalResultType::Invalid;
+		return 0;
 	}
 }
 
@@ -317,7 +355,8 @@ bool ExpressionEvaluator::Validate(string expression)
 {
 	try {
 		DebugState state;
-		PrivateEvaluate(expression, state, 0);
+		EvalResultType type;
+		PrivateEvaluate(expression, state, type, 0);
 		return true;
 	} catch(std::exception e) {
 		return false;

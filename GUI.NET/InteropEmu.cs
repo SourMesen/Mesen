@@ -35,7 +35,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void StartServer(UInt16 port);
 		[DllImport(DLLPath)] public static extern void StopServer();
 		[DllImport(DLLPath)] public static extern bool IsServerRunning();
-		[DllImport(DLLPath)] public static extern void Connect(string host, UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string playerName, byte[] avatarData, UInt32 avatarSize);
+		[DllImport(DLLPath)] public static extern void Connect([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string host, UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string playerName, byte[] avatarData, UInt32 avatarSize);
 		[DllImport(DLLPath)] public static extern void Disconnect();
 		[DllImport(DLLPath)] public static extern bool IsConnected();
 		
@@ -64,7 +64,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Int64 GetStateInfo(UInt32 stateIndex);
 
 		[DllImport(DLLPath)] public static extern void CheatAddCustom(UInt32 address, Byte value, Int32 compareValue, [MarshalAs(UnmanagedType.I1)]bool isRelativeAddress);
-		[DllImport(DLLPath)] public static extern void CheatAddGameGenie(string code);
+		[DllImport(DLLPath)] public static extern void CheatAddGameGenie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string code);
 		[DllImport(DLLPath)] public static extern void CheatAddProActionRocky(UInt32 code);
 		[DllImport(DLLPath)] public static extern void CheatClear();
 
@@ -94,6 +94,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);
 		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
+		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
 
 		
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugLoadCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
@@ -445,7 +446,14 @@ namespace Mesen.GUI
 		Write = 4,
 		ReadVram = 8,
 		WriteVram = 16
-	};
+	}
+
+	public enum EvalResultType
+	{
+		Numeric = 0,
+		Boolean = 1,
+		Invalid = 2
+	}
 
 	public enum NesModel
 	{
