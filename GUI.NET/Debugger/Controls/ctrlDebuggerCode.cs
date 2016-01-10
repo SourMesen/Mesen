@@ -136,13 +136,13 @@ namespace Mesen.GUI.Debugger
 			return UInt32.Parse(hexAddress, System.Globalization.NumberStyles.AllowHexSpecifier);
 		}
 
-		public void HighlightBreakpoints(List<Breakpoint> breakpoints)
+		public void HighlightBreakpoints()
 		{
 			ctrlCodeViewer.ClearLineStyles();
 			if(_currentActiveAddress.HasValue) {
 				SetActiveAddress(_currentActiveAddress.Value);
 			}
-			foreach(Breakpoint breakpoint in breakpoints) {
+			foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
 				Color? fgColor = Color.White;
 				Color? bgColor = null;
 				Color? outlineColor = Color.FromArgb(140, 40, 40);
@@ -168,6 +168,12 @@ namespace Mesen.GUI.Debugger
 		private Point _previousLocation;
 		private void ctrlCodeViewer_MouseMove(object sender, MouseEventArgs e)
 		{
+			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 5) {
+				this.ContextMenuStrip = contextMenuMargin;
+			} else {
+				this.ContextMenuStrip = contextMenuCode;
+			}
+
 			if(_previousLocation != e.Location) {
 				string word = GetWordUnderLocation(e.Location);
 				if(word.StartsWith("$")) {
@@ -201,7 +207,52 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		Breakpoint _lineBreakpoint = null;
+		private void ctrlCodeViewer_MouseDown(object sender, MouseEventArgs e)
+		{
+			int address = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
+			_lineBreakpoint = BreakpointManager.GetMatchingBreakpoint(address);
+
+			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 5) {
+				if(e.Button == System.Windows.Forms.MouseButtons.Left) {
+					if(_lineBreakpoint == null) {
+						Breakpoint bp = new Breakpoint();
+						bp.Address = (UInt32)address;
+						bp.BreakOnExec = true;
+						BreakpointManager.AddBreakpoint(bp);
+					} else {
+						BreakpointManager.RemoveBreakpoint(_lineBreakpoint);
+					}
+				}
+			}
+		}
+
 		#region Context Menu
+
+		private void contextMenuMargin_Opening(object sender, CancelEventArgs e)
+		{
+			if(_lineBreakpoint == null) {
+				e.Cancel = true;
+			} else {
+				mnuDisableBreakpoint.Text = _lineBreakpoint.Enabled ? "Disable breakpoint" : "Enable breakpoint";
+			}
+		}
+
+		private void mnuRemoveBreakpoint_Click(object sender, EventArgs e)
+		{
+			BreakpointManager.RemoveBreakpoint(_lineBreakpoint);
+		}
+
+		private void mnuEditBreakpoint_Click(object sender, EventArgs e)
+		{
+			BreakpointManager.EditBreakpoint(_lineBreakpoint);
+		}
+
+		private void mnuDisableBreakpoint_Click(object sender, EventArgs e)
+		{
+			_lineBreakpoint.SetEnabled(!_lineBreakpoint.Enabled);
+		}
+
 		private void contextMenuCode_Opening(object sender, CancelEventArgs e)
 		{
 			mnuShowNextStatement.Enabled = _currentActiveAddress.HasValue;

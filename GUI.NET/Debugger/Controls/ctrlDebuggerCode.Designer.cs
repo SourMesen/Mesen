@@ -40,7 +40,12 @@
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.ctrlCodeViewer = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
+			this.contextMenuMargin = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuRemoveBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEditBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDisableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuCode.SuspendLayout();
+			this.contextMenuMargin.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// contextMenuCode
@@ -130,7 +135,6 @@
 			// ctrlCodeViewer
 			// 
 			this.ctrlCodeViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.ctrlCodeViewer.ContextMenuStrip = this.contextMenuCode;
 			this.ctrlCodeViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlCodeViewer.FontSize = 13F;
 			this.ctrlCodeViewer.Location = new System.Drawing.Point(0, 0);
@@ -141,6 +145,38 @@
 			this.ctrlCodeViewer.TabIndex = 1;
 			this.ctrlCodeViewer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseUp);
 			this.ctrlCodeViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseMove);
+			this.ctrlCodeViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDown);
+			// 
+			// contextMenuMargin
+			// 
+			this.contextMenuMargin.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuDisableBreakpoint,
+            this.mnuRemoveBreakpoint,
+            this.mnuEditBreakpoint});
+			this.contextMenuMargin.Name = "contextMenuMargin";
+			this.contextMenuMargin.Size = new System.Drawing.Size(178, 92);
+			this.contextMenuMargin.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuMargin_Opening);
+			// 
+			// mnuRemoveBreakpoint
+			// 
+			this.mnuRemoveBreakpoint.Name = "mnuRemoveBreakpoint";
+			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(177, 22);
+			this.mnuRemoveBreakpoint.Text = "Remove breakpoint";
+			this.mnuRemoveBreakpoint.Click += new System.EventHandler(this.mnuRemoveBreakpoint_Click);
+			// 
+			// mnuEditBreakpoint
+			// 
+			this.mnuEditBreakpoint.Name = "mnuEditBreakpoint";
+			this.mnuEditBreakpoint.Size = new System.Drawing.Size(177, 22);
+			this.mnuEditBreakpoint.Text = "Edit breakpoint";
+			this.mnuEditBreakpoint.Click += new System.EventHandler(this.mnuEditBreakpoint_Click);
+			// 
+			// mnuDisableBreakpoint
+			// 
+			this.mnuDisableBreakpoint.Name = "mnuDisableBreakpoint";
+			this.mnuDisableBreakpoint.Size = new System.Drawing.Size(177, 22);
+			this.mnuDisableBreakpoint.Text = "Disable breakpoint";
+			this.mnuDisableBreakpoint.Click += new System.EventHandler(this.mnuDisableBreakpoint_Click);
 			// 
 			// ctrlDebuggerCode
 			// 
@@ -150,6 +186,7 @@
 			this.Name = "ctrlDebuggerCode";
 			this.Size = new System.Drawing.Size(379, 218);
 			this.contextMenuCode.ResumeLayout(false);
+			this.contextMenuMargin.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -168,5 +205,9 @@
 		private Mesen.GUI.Debugger.ctrlScrollableTextbox ctrlCodeViewer;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowLineNotes;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowCodeNotes;
+		private System.Windows.Forms.ContextMenuStrip contextMenuMargin;
+		private System.Windows.Forms.ToolStripMenuItem mnuRemoveBreakpoint;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditBreakpoint;
+		private System.Windows.Forms.ToolStripMenuItem mnuDisableBreakpoint;
 	}
 }

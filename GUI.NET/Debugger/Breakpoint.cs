@@ -9,6 +9,7 @@ namespace Mesen.GUI.Debugger
 {
 	public class Breakpoint
 	{
+
 		public bool BreakOnRead = false;
 		public bool BreakOnWrite = false;
 		public bool BreakOnReadVram = false;
@@ -24,6 +25,7 @@ namespace Mesen.GUI.Debugger
 		public void SetEnabled(bool enabled)
 		{
 			Enabled = enabled;
+			BreakpointManager.RefreshBreakpoints(this);
 		}
 
 		public BreakpointType Type

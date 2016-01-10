@@ -34,19 +34,13 @@
 			this.components = new System.ComponentModel.Container();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
-			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
-			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
-			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpWatch = new System.Windows.Forms.GroupBox();
-			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
 			this.grpBreakpoints = new System.Windows.Forms.GroupBox();
-			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
 			this.grpCallstack = new System.Windows.Forms.GroupBox();
-			this.ctrlCallstack = new Mesen.GUI.Debugger.Controls.ctrlCallstack();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
@@ -65,6 +59,7 @@
 			this.mnuStepOut = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDisableEnableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRunOneFrame = new System.Windows.Forms.ToolStripMenuItem();
 			this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,7 +85,12 @@
 			this.lblChrAnalysis = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tmrCdlRatios = new System.Windows.Forms.Timer(this.components);
-			this.mnuDisableEnableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
+			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
+			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
+			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
+			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
+			this.ctrlCallstack = new Mesen.GUI.Debugger.Controls.ctrlCallstack();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -143,19 +143,6 @@
 			this.tlpTop.Size = new System.Drawing.Size(984, 412);
 			this.tlpTop.TabIndex = 2;
 			// 
-			// ctrlDebuggerCode
-			// 
-			this.ctrlDebuggerCode.Code = null;
-			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
-			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
-			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(546, 406);
-			this.ctrlDebuggerCode.TabIndex = 2;
-			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
-			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
-			// 
 			// contextMenuCode
 			// 
 			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -179,28 +166,6 @@
             | System.Windows.Forms.Keys.F10)));
 			this.mnuSetNextStatement.Size = new System.Drawing.Size(258, 22);
 			this.mnuSetNextStatement.Text = "Set Next Statement";
-			// 
-			// ctrlConsoleStatus
-			// 
-			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
-			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
-			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
-			this.ctrlConsoleStatus.TabIndex = 3;
-			// 
-			// ctrlDebuggerCodeSplit
-			// 
-			this.ctrlDebuggerCodeSplit.Code = null;
-			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(555, 3);
-			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
-			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 406);
-			this.ctrlDebuggerCodeSplit.TabIndex = 4;
-			this.ctrlDebuggerCodeSplit.Visible = false;
-			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			this.ctrlDebuggerCodeSplit.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
-			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
 			// 
 			// tableLayoutPanel10
 			// 
@@ -230,14 +195,6 @@
 			this.grpWatch.TabStop = false;
 			this.grpWatch.Text = "Watch";
 			// 
-			// ctrlWatch
-			// 
-			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
-			this.ctrlWatch.Name = "ctrlWatch";
-			this.ctrlWatch.Size = new System.Drawing.Size(316, 123);
-			this.ctrlWatch.TabIndex = 0;
-			// 
 			// grpBreakpoints
 			// 
 			this.grpBreakpoints.Controls.Add(this.ctrlBreakpoints);
@@ -249,15 +206,6 @@
 			this.grpBreakpoints.TabStop = false;
 			this.grpBreakpoints.Text = "Breakpoints";
 			// 
-			// ctrlBreakpoints
-			// 
-			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
-			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
-			this.ctrlBreakpoints.Size = new System.Drawing.Size(316, 123);
-			this.ctrlBreakpoints.TabIndex = 0;
-			this.ctrlBreakpoints.BreakpointChanged += new System.EventHandler(this.ctrlBreakpoints_BreakpointChanged);
-			// 
 			// grpCallstack
 			// 
 			this.grpCallstack.Controls.Add(this.ctrlCallstack);
@@ -268,15 +216,6 @@
 			this.grpCallstack.TabIndex = 4;
 			this.grpCallstack.TabStop = false;
 			this.grpCallstack.Text = "Callstack";
-			// 
-			// ctrlCallstack
-			// 
-			this.ctrlCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlCallstack.Location = new System.Drawing.Point(3, 16);
-			this.ctrlCallstack.Name = "ctrlCallstack";
-			this.ctrlCallstack.Size = new System.Drawing.Size(316, 123);
-			this.ctrlCallstack.TabIndex = 0;
-			this.ctrlCallstack.FunctionSelected += new System.EventHandler(this.ctrlCallstack_FunctionSelected);
 			// 
 			// menuStrip
 			// 
@@ -438,6 +377,14 @@
 			this.mnuToggleBreakpoint.Size = new System.Drawing.Size(258, 22);
 			this.mnuToggleBreakpoint.Text = "Toggle Breakpoint";
 			this.mnuToggleBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
+			// 
+			// mnuDisableEnableBreakpoint
+			// 
+			this.mnuDisableEnableBreakpoint.Name = "mnuDisableEnableBreakpoint";
+			this.mnuDisableEnableBreakpoint.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F9)));
+			this.mnuDisableEnableBreakpoint.Size = new System.Drawing.Size(258, 22);
+			this.mnuDisableEnableBreakpoint.Text = "Disable/Enable Breakpoint";
+			this.mnuDisableEnableBreakpoint.Click += new System.EventHandler(this.mnuDisableEnableBreakpoint_Click);
 			// 
 			// toolStripMenuItem2
 			// 
@@ -634,13 +581,66 @@
 			this.tmrCdlRatios.Interval = 300;
 			this.tmrCdlRatios.Tick += new System.EventHandler(this.tmrCdlRatios_Tick);
 			// 
-			// mnuDisableEnableBreakpoint
+			// ctrlDebuggerCode
 			// 
-			this.mnuDisableEnableBreakpoint.Name = "mnuDisableEnableBreakpoint";
-			this.mnuDisableEnableBreakpoint.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F9)));
-			this.mnuDisableEnableBreakpoint.Size = new System.Drawing.Size(258, 22);
-			this.mnuDisableEnableBreakpoint.Text = "Disable/Enable Breakpoint";
-			this.mnuDisableEnableBreakpoint.Click += new System.EventHandler(this.mnuDisableEnableBreakpoint_Click);
+			this.ctrlDebuggerCode.Code = null;
+			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
+			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
+			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(546, 406);
+			this.ctrlDebuggerCode.TabIndex = 2;
+			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
+			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
+			// 
+			// ctrlConsoleStatus
+			// 
+			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
+			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
+			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
+			this.ctrlConsoleStatus.TabIndex = 3;
+			// 
+			// ctrlDebuggerCodeSplit
+			// 
+			this.ctrlDebuggerCodeSplit.Code = null;
+			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(555, 3);
+			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
+			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 406);
+			this.ctrlDebuggerCodeSplit.TabIndex = 4;
+			this.ctrlDebuggerCodeSplit.Visible = false;
+			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCodeSplit.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
+			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
+			// 
+			// ctrlWatch
+			// 
+			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
+			this.ctrlWatch.Name = "ctrlWatch";
+			this.ctrlWatch.Size = new System.Drawing.Size(316, 123);
+			this.ctrlWatch.TabIndex = 0;
+			// 
+			// ctrlBreakpoints
+			// 
+			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
+			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
+			this.ctrlBreakpoints.Size = new System.Drawing.Size(316, 123);
+			this.ctrlBreakpoints.TabIndex = 0;
+			this.ctrlBreakpoints.BreakpointNavigation += new System.EventHandler(this.ctrlBreakpoints_BreakpointNavigation);
+			// 
+			// ctrlCallstack
+			// 
+			this.ctrlCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlCallstack.Location = new System.Drawing.Point(3, 16);
+			this.ctrlCallstack.Name = "ctrlCallstack";
+			this.ctrlCallstack.Size = new System.Drawing.Size(316, 123);
+			this.ctrlCallstack.TabIndex = 0;
+			this.ctrlCallstack.FunctionSelected += new System.EventHandler(this.ctrlCallstack_FunctionSelected);
 			// 
 			// frmDebugger
 			// 

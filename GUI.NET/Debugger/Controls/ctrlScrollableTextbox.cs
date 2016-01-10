@@ -24,6 +24,12 @@ namespace Mesen.GUI.Debugger
 			remove { this.ctrlTextbox.MouseMove -= value; }
 		}
 
+		public new event MouseEventHandler MouseDown
+		{
+			add { this.ctrlTextbox.MouseDown += value; }
+			remove { this.ctrlTextbox.MouseDown -= value; }
+		}
+
 		public ctrlScrollableTextbox()
 		{
 			InitializeComponent();
@@ -75,9 +81,19 @@ namespace Mesen.GUI.Debugger
 			return this.ctrlTextbox.GetLineIndex(lineNumber);
 		}
 
+		public int GetLineIndexAtPosition(int yPos)
+		{
+			return this.ctrlTextbox.GetLineIndexAtPosition(yPos);
+		}
+
 		public int GetLineNumber(int lineIndex)
 		{
 			return this.ctrlTextbox.GetLineNumber(lineIndex);
+		}
+
+		public int GetLineNumberAtPosition(int yPos)
+		{
+			return this.GetLineNumber(this.GetLineIndexAtPosition(yPos));
 		}
 
 		public void ScrollToLineIndex(int lineIndex)
@@ -93,6 +109,11 @@ namespace Mesen.GUI.Debugger
 		public int CurrentLine
 		{
 			get { return this.ctrlTextbox.CurrentLine; }
+		}
+
+		public int CodeMargin
+		{
+			get { return this.ctrlTextbox.CodeMargin; }
 		}
 
 		protected override void OnMouseWheel(MouseEventArgs e)

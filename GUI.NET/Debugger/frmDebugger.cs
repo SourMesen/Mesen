@@ -23,6 +23,9 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 
 			_lastCodeWindow = ctrlDebuggerCode;
+
+			BreakpointManager.Breakpoints.Clear();
+			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -118,13 +121,13 @@ namespace Mesen.GUI.Debugger
 
 		private void ToggleBreakpoint(bool toggleEnabled)
 		{
-			ctrlBreakpoints.ToggleBreakpoint(_lastCodeWindow.GetCurrentLine(), toggleEnabled);
+			BreakpointManager.ToggleBreakpoint(_lastCodeWindow.GetCurrentLine(), toggleEnabled);
 		}
 		
 		private void RefreshBreakpoints()
 		{
-			ctrlDebuggerCodeSplit.HighlightBreakpoints(ctrlBreakpoints.GetBreakpoints());
-			ctrlDebuggerCode.HighlightBreakpoints(ctrlBreakpoints.GetBreakpoints());
+			ctrlDebuggerCodeSplit.HighlightBreakpoints();
+			ctrlDebuggerCode.HighlightBreakpoints();
 		}
 
 		private void OpenChildForm(Form frm)
@@ -219,7 +222,7 @@ namespace Mesen.GUI.Debugger
 			OpenChildForm(new frmMemoryViewer());
 		}
 
-		private void ctrlBreakpoints_BreakpointChanged(object sender, EventArgs e)
+		private void BreakpointManager_BreakpointsChanged(object sender, EventArgs e)
 		{
 			RefreshBreakpoints();
 		}
@@ -308,6 +311,11 @@ namespace Mesen.GUI.Debugger
 		private void mnuResetCdlLog_Click(object sender, EventArgs e)
 		{
 			InteropEmu.DebugResetCdlLog();
+		}
+
+		private void ctrlBreakpoints_BreakpointNavigation(object sender, EventArgs e)
+		{
+			_lastCodeWindow.ScrollToLineNumber((int)((Breakpoint)sender).Address);
 		}
 	}
 }

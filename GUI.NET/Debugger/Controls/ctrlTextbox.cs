@@ -248,7 +248,11 @@ namespace Mesen.GUI.Debugger
 
 		public int GetLineNumber(int lineIndex)
 		{
-			return _lineNumbers[lineIndex];
+			if(_lineNumbers.Length <= lineIndex) {
+				return 0;
+			} else {
+				return _lineNumbers[lineIndex];
+			}
 		}
 
 		public void ScrollToLineIndex(int lineIndex)
@@ -268,9 +272,27 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public int CodeMargin
+		{
+			get
+			{
+				using(Graphics g = Graphics.FromHwnd(this.Handle)) {
+					return this.GetMargin(g);
+				}
+			}
+		}
+
 		private int GetMargin(Graphics g)
 		{
 			return this.ShowLineNumbers ? (int)(g.MeasureString("W", this.Font).Width * 6) : 0;
+		}
+
+		public int GetLineIndexAtPosition(int yPos)
+		{
+			int charIndex;
+			int lineIndex;
+			GetCharIndex(new Point(0, yPos), out charIndex, out lineIndex);
+			return lineIndex;
 		}
 
 		private bool GetCharIndex(Point position, out int charIndex, out int lineIndex)

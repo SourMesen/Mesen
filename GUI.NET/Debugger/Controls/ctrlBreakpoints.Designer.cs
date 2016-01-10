@@ -37,6 +37,7 @@
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuBreakpoints.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -44,15 +45,16 @@
 			// 
 			this.contextMenuBreakpoints.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAddBreakpoint,
-            this.mnuRemoveBreakpoint});
+            this.mnuRemoveBreakpoint,
+            this.mnuGoToLocation});
 			this.contextMenuBreakpoints.Name = "contextMenuWatch";
-			this.contextMenuBreakpoints.Size = new System.Drawing.Size(142, 48);
+			this.contextMenuBreakpoints.Size = new System.Drawing.Size(153, 92);
 			this.contextMenuBreakpoints.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuBreakpoints_Opening);
 			// 
 			// mnuAddBreakpoint
 			// 
 			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
-			this.mnuAddBreakpoint.Size = new System.Drawing.Size(141, 22);
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(152, 22);
 			this.mnuAddBreakpoint.Text = "Add...";
 			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
 			// 
@@ -60,7 +62,7 @@
 			// 
 			this.mnuRemoveBreakpoint.Name = "mnuRemoveBreakpoint";
 			this.mnuRemoveBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(141, 22);
+			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(152, 22);
 			this.mnuRemoveBreakpoint.Text = "Remove";
 			this.mnuRemoveBreakpoint.Click += new System.EventHandler(this.mnuRemoveBreakpoint_Click);
 			// 
@@ -112,6 +114,13 @@
 			// 
 			this.colLastColumn.Text = "";
 			// 
+			// mnuGoToLocation
+			// 
+			this.mnuGoToLocation.Name = "mnuGoToLocation";
+			this.mnuGoToLocation.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToLocation.Text = "Go to location";
+			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
+			// 
 			// ctrlBreakpoints
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -135,5 +144,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuRemoveBreakpoint;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ColumnHeader columnHeader4;
+		private System.Windows.Forms.ToolStripMenuItem mnuGoToLocation;
 	}
 }

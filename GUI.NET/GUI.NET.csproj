@@ -101,6 +101,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Debugger\Breakpoint.cs" />
+    <Compile Include="Debugger\BreakpointManager.cs" />
     <Compile Include="Debugger\Controls\BaseScrollableTextboxUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
