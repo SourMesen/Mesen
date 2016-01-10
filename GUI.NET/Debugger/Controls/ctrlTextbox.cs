@@ -377,7 +377,7 @@ namespace Mesen.GUI.Debugger
 
 		public int CurrentLine
 		{
-			get { return _lineNumbers[_cursorPosition]; }
+			get { return _lineNumbers.Length > _cursorPosition ? _lineNumbers[_cursorPosition] : 0; }
 		}
 
 		[Browsable(false)]

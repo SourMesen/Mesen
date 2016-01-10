@@ -237,9 +237,27 @@ namespace Mesen.GUI.Debugger
 			_lastCodeWindow = ctrlDebuggerCodeSplit;
 		}
 
-		private void mnuGoTo_Click(object sender, EventArgs e)
+		private void mnuGoToAddress_Click(object sender, EventArgs e)
 		{
 			_lastCodeWindow.GoToAddress();
+		}
+
+		private void mnuGoToIrqHandler_Click(object sender, EventArgs e)
+		{
+			int address = (InteropEmu.DebugGetMemoryValue(0xFFFF) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFE);
+			_lastCodeWindow.ScrollToLineNumber(address);
+		}
+
+		private void mnuGoToNmiHandler_Click(object sender, EventArgs e)
+		{
+			int address = (InteropEmu.DebugGetMemoryValue(0xFFFD) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFC);
+			_lastCodeWindow.ScrollToLineNumber(address);
+		}
+
+		private void mnuGoToResetHandler_Click(object sender, EventArgs e)
+		{
+			int address = (InteropEmu.DebugGetMemoryValue(0xFFFB) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFA);
+			_lastCodeWindow.ScrollToLineNumber(address);
 		}
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
