@@ -612,7 +612,8 @@ void PPU::ProcessPrerenderScanline()
 {
 	ProcessPreVBlankScanline();
 
-	if(_cycle == 0 && _state.SpriteRamAddr >= 0x08) {
+	if(IsRenderingEnabled() && _cycle == 0 && _state.SpriteRamAddr >= 0x08) {
+		//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)
 		//"If OAMADDR is not less than eight when rendering starts, the eight bytes starting at OAMADDR & 0xF8 are copied to the first eight bytes of OAM"
 		memcpy(_spriteRAM, _spriteRAM + (_state.SpriteRamAddr & 0xF8), 8);
 	}
