@@ -247,13 +247,13 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuGoToNmiHandler_Click(object sender, EventArgs e)
 		{
-			int address = (InteropEmu.DebugGetMemoryValue(0xFFFD) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFC);
+			int address = (InteropEmu.DebugGetMemoryValue(0xFFFB) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFA);
 			_lastCodeWindow.ScrollToLineNumber(address);
 		}
 
 		private void mnuGoToResetHandler_Click(object sender, EventArgs e)
 		{
-			int address = (InteropEmu.DebugGetMemoryValue(0xFFFB) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFA);
+			int address = (InteropEmu.DebugGetMemoryValue(0xFFFD) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFC);
 			_lastCodeWindow.ScrollToLineNumber(address);
 		}
 
