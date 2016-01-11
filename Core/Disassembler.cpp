@@ -192,3 +192,8 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &mem
 		
 	return output.str();
 }
+
+shared_ptr<DisassemblyInfo> Disassembler::GetDisassemblyInfo(uint32_t address)
+{
+	return _disassembleCache[address];
+}

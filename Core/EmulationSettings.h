@@ -8,6 +8,7 @@ enum EmulationFlags
 	Paused = 0x01,
 	ShowFPS = 0x02,
 	VerticalSync = 0x04,
+	LowLatency = 0x08,
 
 	Mmc3IrqAltBehavior = 0x8000,
 };

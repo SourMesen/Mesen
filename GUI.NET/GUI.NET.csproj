@@ -207,6 +207,12 @@
     <Compile Include="Debugger\frmPpuViewer.Designer.cs">
       <DependentUpon>frmPpuViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmTraceLogger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmTraceLogger.Designer.cs">
+      <DependentUpon>frmTraceLogger.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BaseConfigForm.Designer.cs">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>
     </Compile>
@@ -348,6 +354,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmPpuViewer.resx">
       <DependentUpon>frmPpuViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmTraceLogger.resx">
+      <DependentUpon>frmTraceLogger.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BaseConfigForm.resx">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>

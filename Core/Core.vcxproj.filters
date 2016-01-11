@@ -335,6 +335,12 @@
     <ClInclude Include="ExpressionEvaluator.h">
       <Filter>Debugger</Filter>
     </ClInclude>
+    <ClInclude Include="TraceLogger.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugState.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -440,6 +446,9 @@
       <Filter>VideoDecoder\HD</Filter>
     </ClCompile>
     <ClCompile Include="ExpressionEvaluator.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="TraceLogger.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>

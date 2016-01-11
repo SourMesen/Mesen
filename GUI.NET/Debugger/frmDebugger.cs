@@ -9,10 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class frmDebugger : Form
+	public partial class frmDebugger : BaseForm
 	{
 		private List<Form> _childForms = new List<Form>();
 		private InteropEmu.NotificationListener _notifListener;
@@ -31,10 +32,6 @@ namespace Mesen.GUI.Debugger
 		protected override void OnLoad(EventArgs e)
 		{
  			base.OnLoad(e);
-
-			if(!DesignMode) {
-				Icon = Properties.Resources.MesenIcon;
-			}
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
@@ -334,6 +331,11 @@ namespace Mesen.GUI.Debugger
 		private void ctrlBreakpoints_BreakpointNavigation(object sender, EventArgs e)
 		{
 			_lastCodeWindow.ScrollToLineNumber((int)((Breakpoint)sender).Address);
+		}
+
+		private void mnuTraceLogger_Click(object sender, EventArgs e)
+		{
+			new frmTraceLogger().Show();
 		}
 	}
 }

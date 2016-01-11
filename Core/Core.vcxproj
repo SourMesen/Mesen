@@ -270,6 +270,7 @@
     <ClInclude Include="Bandai74161_7432.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="BnRom.h" />
+    <ClInclude Include="DebugState.h" />
     <ClInclude Include="DefaultVideoFilter.h" />
     <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="HdVideoFilter.h" />
@@ -357,6 +358,7 @@
     <ClInclude Include="Sunsoft93.h" />
     <ClInclude Include="TaitoTc0190.h" />
     <ClInclude Include="TaitoX1005.h" />
+    <ClInclude Include="TraceLogger.h" />
     <ClInclude Include="TriangleChannel.h" />
     <ClInclude Include="UnlPci556.h" />
     <ClInclude Include="UNROM.h" />
@@ -404,6 +406,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release x64|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release x64|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TraceLogger.cpp" />
     <ClCompile Include="VideoDecoder.cpp" />
     <ClCompile Include="BaseVideoFilter.cpp" />
     <ClCompile Include="VirtualController.cpp" />

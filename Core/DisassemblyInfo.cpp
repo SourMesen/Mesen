@@ -18,9 +18,12 @@ void DisassemblyInfo::Initialize(uint32_t memoryAddr)
 	//Output raw byte code
 	for(uint32_t i = 0; i < 3; i++) {
 		if(i < _opSize) {
-			output << "$" << std::hex << std::uppercase << std::setfill('0') << std::setw(2) << (short)*(_opPointer+i) << " ";
+			output << "$" << std::hex << std::uppercase << std::setfill('0') << std::setw(2) << (short)*(_opPointer + i);
 		} else {
-			output << "    ";
+			output << "   ";
+		}
+		if(i != 2) {
+			output << " ";
 		}
 	}
 	output << ":";

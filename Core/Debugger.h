@@ -8,19 +8,15 @@ using std::deque;
 
 #include "CPU.h"
 #include "PPU.h"
+#include "DebugState.h"
 #include "Breakpoint.h"
+#include "TraceLogger.h"
 #include "../Utilities/SimpleLock.h"
 #include "CodeDataLogger.h"
 
 class MemoryManager;
 class Console;
 class Disassembler;
-
-struct DebugState
-{
-	State CPU;
-	PPUDebugState PPU;
-};
 
 enum class DebugMemoryType
 {
@@ -58,6 +54,8 @@ private:
 
 	SimpleLock _bpLock;
 	SimpleLock _breakLock;
+
+	unique_ptr<TraceLogger> _traceLogger;
 
 	uint16_t *_currentReadAddr; //Used to alter the executing address via "Set Next Statement"
 
@@ -114,6 +112,9 @@ public:
 	
 	uint8_t GetMemoryValue(uint32_t addr);
 	uint32_t GetRelativeAddress(uint32_t addr);
+
+	void StartTraceLogger(TraceLoggerOptions options);
+	void StopTraceLogger();
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
 	

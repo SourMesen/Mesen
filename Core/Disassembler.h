@@ -20,4 +20,6 @@ public:
 	uint32_t BuildCache(uint32_t absoluteAddr, uint16_t memoryAddr);
 	string GetRAMCode();
 	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &memoryAddr);
+
+	shared_ptr<DisassemblyInfo> GetDisassemblyInfo(uint32_t address);
 };

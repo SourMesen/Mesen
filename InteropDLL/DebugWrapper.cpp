@@ -57,4 +57,7 @@ extern "C"
 	DllExport void __stdcall DebugResetCdlLog() { GetDebugger()->ResetCdlLog(); }
 
 	DllExport int32_t __stdcall DebugEvaluateExpression(char* expression, EvalResultType *resultType) { return GetDebugger()->EvaluateExpression(expression, *resultType); }
+
+	DllExport void __stdcall DebugStartTraceLogger(TraceLoggerOptions options) { GetDebugger()->StartTraceLogger(options); }
+	DllExport void __stdcall DebugStopTraceLogger() { GetDebugger()->StopTraceLogger(); }
 };

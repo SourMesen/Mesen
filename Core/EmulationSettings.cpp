@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EmulationSettings.h"
 
-uint32_t EmulationSettings::_flags = 0;
+uint32_t EmulationSettings::_flags = EmulationFlags::LowLatency;
 
 bool EmulationSettings::_audioEnabled = true;
 uint32_t EmulationSettings::_audioLatency = 20000;

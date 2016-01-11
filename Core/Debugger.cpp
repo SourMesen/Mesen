@@ -230,6 +230,12 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			_disassembler->BuildCache(absoluteAddr, addr);
 			_lastInstruction = _memoryManager->DebugRead(addr);
 
+			if(_traceLogger) {
+				DebugState state;
+				GetState(&state);
+				_traceLogger->Log(state, _disassembler->GetDisassemblyInfo(absoluteAddr));
+			}
+
 			UpdateCallstack(addr);
 			ProcessStepConditions(addr);
 
@@ -412,6 +418,17 @@ void Debugger::SetNextStatement(uint16_t addr)
 		_cpu->SetDebugPC(addr);
 		*_currentReadAddr = addr;
 	}
+}
+
+void Debugger::StartTraceLogger(TraceLoggerOptions options)
+{
+	string traceFilepath = FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), "Trace.txt");
+	_traceLogger.reset(new TraceLogger(traceFilepath, options));
+}
+
+void Debugger::StopTraceLogger()
+{
+	_traceLogger.release();
 }
 
 void Debugger::ProcessPpuCycle()
