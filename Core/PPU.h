@@ -110,7 +110,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		NesModel _nesModel;
 		uint16_t _vblankEnd;
-		bool _skipTick;
 
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;
@@ -141,9 +140,12 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint8_t _oamCopybuffer;
 		bool _spriteInRange;
 		bool _sprite0Added;
+		int32_t _sprite0HitCycle;
 		uint8_t _spriteAddrH;
 		uint8_t _spriteAddrL;
 		bool _oamCopyDone;
+
+		bool _renderingEnabled;
 		
 		void UpdateStatusFlag();
 

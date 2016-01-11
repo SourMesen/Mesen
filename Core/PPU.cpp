@@ -32,11 +32,12 @@ PPU::~PPU()
 
 void PPU::Reset()
 {
+	_sprite0HitCycle = -1;
+	_renderingEnabled = false;
+
 	_ignoreVramRead = 0;
 	_openBus = 0;
 	memset(_openBusDecayStamp, 0, sizeof(_openBusDecayStamp));
-
-	_skipTick = false;
 
 	_state = {};
 	_flags = {};
@@ -272,7 +273,7 @@ void PPU::WritePaletteRAM(uint16_t addr, uint8_t value)
 
 bool PPU::IsRenderingEnabled()
 {
-	return _flags.BackgroundEnabled || _flags.SpritesEnabled;
+	return _renderingEnabled;
 }
 
 void PPU::SetControlRegister(uint8_t value)
@@ -326,6 +327,11 @@ void PPU::SetMaskRegister(uint8_t value)
 
 void PPU::UpdateStatusFlag()
 {
+	if(_sprite0HitCycle >= 0 && _sprite0HitCycle < (int32_t)_cycle) {
+		_statusFlags.Sprite0Hit = true;
+		_sprite0HitCycle = -1;
+	}
+
 	_state.Status = ((uint8_t)_statusFlags.SpriteOverflow << 5) |
 						 ((uint8_t)_statusFlags.Sprite0Hit << 6) |
 						 ((uint8_t)_statusFlags.VerticalBlank << 7);
@@ -526,12 +532,15 @@ uint32_t PPU::GetPixelColor(uint32_t &paletteOffset)
 				
 				if(spriteColor != 0) {
 					//First sprite without a 00 color, use it.
-					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled) {
+					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && !_statusFlags.Sprite0Hit && _sprite0HitCycle == -1) {
 						//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
 						//"Sprite zero hits do not register at x=255" (cycle 256)
 						//"... provided that background and sprite rendering are both enabled"
 						//"Should always miss when Y >= 239"
-						_statusFlags.Sprite0Hit = true;
+
+						//"Sprite zero hits act as if the image starts at cycle 2 (which is the same cycle that the shifters shift for the first time), so the sprite zero flag will be raised at this point at the earliest."
+						//Need to set the sprite 0 flag on the next PPU clock						
+						_sprite0HitCycle = (int32_t)_cycle;
 					}
 
 					if(backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority) {
@@ -621,16 +630,11 @@ void PPU::ProcessPrerenderScanline()
 			//copy vertical scrolling value from t
 			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x7BE0) | (_state.TmpVideoRamAddr & 0x7BE0);
 		}
-	} else if(_nesModel == NesModel::NTSC && _cycle == 338 && IsRenderingEnabled() && (_frameCount & 0x01)) {
-		//Check for the cycle skip in the else if block below
-		//If, at cycle 338 in the prerender scanline, rendering is enabled, we skip a tick (cycle 340) on the current frame
-		_skipTick = true;
-	} else if(_cycle == 339 && _skipTick) {
+	} else if(_nesModel == NesModel::NTSC && _cycle == 339 && IsRenderingEnabled() && (_frameCount & 0x01)) {
 		//This behavior is NTSC-specific - PAL frames are always the same number of cycles
 		//"With rendering enabled, each odd PPU frame is one PPU clock shorter than normal" (skip from 339 to 0, going over 340)
 		_cycle = -1;
 		_scanline = 0;
-		_skipTick = false;
 	} else if(_cycle >= 321 && _cycle <= 336) {
 		LoadTileInfo();
 	}
@@ -641,16 +645,19 @@ void PPU::ProcessVisibleScanline()
 	if(_cycle > 0 && _cycle <= 256) {
 		LoadTileInfo();
 
-
 		DrawPixel();
 		ShiftTileRegisters();
-		
+	
 		if(IsRenderingEnabled()) {
 			CopyOAMData();
 		}
 	} else if(_cycle >= 321 && _cycle <= 336) {
 		LoadTileInfo();
-		
+	} else if(_cycle == 340 && _sprite0HitCycle >= 0) {
+		//Set sprite 0 hit flag at the end of the scanline if the cycle count was set.
+		//This is just a way of not checking & setting the flag every cycle since the flag needs to be set with a 1 cycle delay
+		_statusFlags.Sprite0Hit = true;
+		_sprite0HitCycle = -1;
 	}
 
 	ProcessPreVBlankScanline();
@@ -790,6 +797,9 @@ void PPU::Exec()
 	} else if(_scanline == _vblankEnd) {
 		EndVBlank();
 	}
+
+	//Rendering enabled flag is apparently set with a 1 cycle delay (i.e setting it at cycle 5 will render cycle 6 like cycle 5 and then take the new settings for cycle 7)
+	_renderingEnabled = _flags.BackgroundEnabled || _flags.SpritesEnabled;
 }
 
 void PPU::ExecStatic()
@@ -878,6 +888,7 @@ void PPU::StreamState(bool saving)
 	Stream<uint8_t>(_oamCopybuffer);
 	Stream<bool>(_spriteInRange);
 	Stream<bool>(_sprite0Added);
+	Stream<int32_t>(_sprite0HitCycle);
 	Stream<uint8_t>(_spriteAddrH);
 	Stream<uint8_t>(_spriteAddrL);
 	Stream<bool>(_oamCopyDone);
@@ -887,8 +898,7 @@ void PPU::StreamState(bool saving)
 	Stream<uint16_t>(_spriteDmaAddr);
 	Stream<uint16_t>(_spriteDmaCounter);
 
-	Stream<bool>(_skipTick);
-
+	Stream<bool>(_renderingEnabled);
 	Stream<uint8_t>(_openBus);
 	StreamArray<int32_t>(_openBusDecayStamp, 8);
 
