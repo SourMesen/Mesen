@@ -21,7 +21,7 @@ private:
 protected:
 	uint16_t _timer = 0;
 	uint16_t _period = 0;
-	uint32_t _clockDivider = 2; //All channels except triangle clock overy other cpu clock
+	uint16_t _periodMultiplier = 1;
 
 	void SetVolume(double volume)
 	{
@@ -89,13 +89,13 @@ public:
 		while(_previousCycle < targetCycle) {
 			if(_timer == 0) {
 				Clock();
-				_timer = _period;
-				_previousCycle += _clockDivider;
+				_timer = _period * _periodMultiplier;
+				_previousCycle++;
 			} else {
-				uint32_t cyclesToRun = (targetCycle - _previousCycle) / _clockDivider;
+				uint32_t cyclesToRun = targetCycle - _previousCycle;
 				uint16_t skipCount = _timer > cyclesToRun ? cyclesToRun : _timer;
 				_timer -= skipCount;
-				_previousCycle += skipCount * _clockDivider;
+				_previousCycle += skipCount;
 
 				if(cyclesToRun == 0) {
 					break;

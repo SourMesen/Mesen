@@ -31,7 +31,7 @@ private:
 	bool IsMuted()
 	{
 		//A period of t < 8, either set explicitly or via a sweep period update, silences the corresponding pulse channel.
-		return _period < 8 || _sweepTargetPeriod > 0x7FF;
+		return _period < 8 || (!_sweepNegate && _sweepTargetPeriod > 0x7FF);
 	}
 
 	void InitializeSweep(uint8_t regValue)
@@ -54,7 +54,7 @@ private:
 			_sweepTargetPeriod = _period - shiftResult;
 			if(_isChannel1) {
 				// As a result, a negative sweep on pulse channel 1 will subtract the shifted period value minus 1
-				_sweepTargetPeriod++;
+				_sweepTargetPeriod--;
 			}
 		} else {
 			_sweepTargetPeriod = _period + shiftResult;
@@ -81,6 +81,7 @@ public:
 	{
 		SetVolume(0.1128);
 		_isChannel1 = isChannel1;
+		_periodMultiplier = 2;
 	}
 
 	virtual void Reset(bool softReset)
@@ -150,7 +151,7 @@ public:
 				_period |= (value & 0x07) << 8;
 
 				//The sequencer is restarted at the first value of the current sequence.
-				_timer = _period + 1;
+				_timer = _period * 2;
 				_dutyPos = 0;
 
 				//The envelope is also restarted.

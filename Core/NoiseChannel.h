@@ -73,7 +73,7 @@ public:
 				break;
 
 			case 2:		//400E
-				_period = (GetNesModel() == NesModel::NTSC ? _noisePeriodLookupTableNtsc : _noisePeriodLookupTablePal)[value & 0x0F];
+				_period = (GetNesModel() == NesModel::NTSC ? _noisePeriodLookupTableNtsc : _noisePeriodLookupTablePal)[value & 0x0F] - 1;
 				_modeFlag = (value & 0x80) == 0x80;
 				break;
 

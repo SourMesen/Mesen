@@ -9,7 +9,6 @@ DeltaModulationChannel::DeltaModulationChannel(AudioChannel channel, Blip_Buffer
 {
 	Instance = this;
 	_memoryManager = memoryManager;
-	_clockDivider = 1;
 	SetVolume(0.42545);
 }
 
