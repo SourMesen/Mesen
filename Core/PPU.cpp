@@ -755,9 +755,12 @@ void PPU::CopyOAMData()
 void PPU::SendFrame()
 {
 	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);	
-	if(VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer)) {
-		_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
-	}
+	
+	VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
+	
+	//Switch output buffer.  VideoDecoder will decode the last frame while we build the new one.
+	//If VideoDecoder isn't fast enough, UpdateFrame will block until it is ready to accept a new frame.
+	_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
 }
 
 void PPU::BeginVBlank()

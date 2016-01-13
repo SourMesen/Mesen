@@ -64,21 +64,9 @@ namespace NES
 		if(_pRenderTargetView) _pRenderTargetView->Release();
 		if(_pSwapChain) _pSwapChain->Release();
 		if(_pDeviceContext) _pDeviceContext->Release();
-		if(_pDeviceContext1) _pDeviceContext1->Release();
-		if(_pd3dDevice1) _pd3dDevice1->Release();
 		if(_pd3dDevice) _pd3dDevice->Release();
 		if(_pAlphaEnableBlendingState) _pAlphaEnableBlendingState->Release();
 		if(_pDepthDisabledStencilState) _pDepthDisabledStencilState->Release();
-
-		if(_videoRAM) {
-			delete[] _videoRAM;
-			_videoRAM = nullptr;
-		}
-
-		if(_overlayBuffer) {
-			delete[] _overlayBuffer;
-			_overlayBuffer = nullptr;
-		}
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -141,12 +129,6 @@ namespace NES
 		}
 		if(FAILED(hr)) {
 			return hr;
-		}
-
-		// Obtain the Direct3D 11.1 versions if available
-		hr = _pd3dDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&_pd3dDevice1));
-		if(SUCCEEDED(hr)) {
-			(void)_pDeviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&_pDeviceContext1));
 		}
 
 		// Create a render target view
@@ -223,16 +205,10 @@ namespace NES
 		vp.TopLeftY = 0;
 		_pDeviceContext->RSSetViewports(1, &vp);
 
-		_videoRAM = new uint32_t[_nesFrameWidth*_nesFrameHeight];
-		memset(_videoRAM, 0x00, _nesFrameWidth * _nesFrameHeight * 4);
-
 		_pTexture = CreateTexture(_nesFrameWidth, _nesFrameHeight);
 		if(!_pTexture) {
 			return 0;
 		}
-
-		_overlayBuffer = new uint8_t[8*8*4];  //High res overlay for UI elements (4x res)
-		memset(_overlayBuffer, 0x00, 8*8*4);
 
 		_overlayTexture = CreateTexture(8, 8);
 		if(!_overlayTexture) {
@@ -357,10 +333,6 @@ namespace NES
 
 		uint32_t rowPitch = width * bpp;
 		D3D11_MAPPED_SUBRESOURCE dd;
-		dd.pData = (void *)_videoRAM;
-		dd.RowPitch = rowPitch;
-		dd.DepthPitch = height * width * bpp;
-
 		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
 		uint8_t* surfacePointer = (uint8_t*)dd.pData;
 		for(uint32_t i = 0, iMax = height; i < iMax; i++) {
@@ -400,10 +372,6 @@ namespace NES
 		XMVECTOR position{ { 0, 0 } };
 
 		D3D11_MAPPED_SUBRESOURCE dd;
-		dd.pData = (void *)_overlayBuffer;
-		dd.RowPitch = 8 * _bytesPerPixel;
-		dd.DepthPitch = 8 * 8 * _bytesPerPixel;
-
 		_pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
 		for(uint32_t i = 0, len = 8*8; i < len; i++) {
 			//Gray transparent overlay
@@ -476,10 +444,10 @@ namespace NES
 
 			_spriteBatch->End();
 
+			_frameLock.Release();
+
 			// Present the information rendered to the back buffer to the front buffer (the screen)
 			_pSwapChain->Present(EmulationSettings::CheckFlag(EmulationFlags::VerticalSync) ? 1 : 0, 0);
-		
-			_frameLock.Release();
 		}
 	}
 

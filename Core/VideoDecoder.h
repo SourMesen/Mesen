@@ -60,7 +60,7 @@ public:
 
 	void DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length);
 
-	bool UpdateFrame(void* frameBuffer, HdPpuPixelInfo *screenTiles = nullptr);
+	void UpdateFrame(void* frameBuffer, HdPpuPixelInfo *screenTiles = nullptr);
 
 	void StartThread();
 	void StopThread();

@@ -99,7 +99,7 @@ void VideoDecoder::DecodeThread()
 		if(!_frameChanged) {
 			_waitForFrame.Wait();
 			if(_stopFlag.load()) {
-				break;
+				return;
 			}
 		}
 
@@ -113,20 +113,22 @@ uint32_t VideoDecoder::GetFrameCount()
 	return _frameCount;
 }
 
-bool VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInfo)
+void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInfo)
 {
-	bool readyForNewFrame = _frameChanged.load() == false ? true : false;
-
-	if(readyForNewFrame) {
-		//The PPU sends us a new frame via this function when a full frame is done drawing
-		_hdScreenTiles = hdPixelInfo;
-		_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
-		_frameChanged = true;
-		_waitForFrame.Signal();
+	if(_frameChanged) {
+		//Last frame isn't done decoding yet - sometimes Signal() introduces a 25-30ms delay
+		while(_frameChanged) { 
+			//Spin until decode is done
+		}
+		//At this point, we are sure that the decode thread is no longer busy
 	}
-	_frameCount++;
 
-	return readyForNewFrame;
+	_hdScreenTiles = hdPixelInfo;
+	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
+	_frameChanged = true;
+	_waitForFrame.Signal();
+
+	_frameCount++;
 }
 
 void VideoDecoder::StartThread()
