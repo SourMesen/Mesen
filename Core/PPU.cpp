@@ -159,7 +159,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 				returnValue = _memoryReadBuffer;
 				_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
 
-				if(_state.VideoRamAddr >= 0x3F00) {
+				if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00) {
 					returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
 					openBusMask = 0xC0;
 				} else {
@@ -209,7 +209,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				} else {
 					//"Writes to OAMDATA during rendering (on the pre-render line and the visible lines 0-239, provided either sprite or background rendering is enabled) do not modify values in OAM, 
 					//but do perform a glitchy increment of OAMADDR, bumping only the high 6 bits"
-					_state.SpriteRamAddr += 4;
+					_state.SpriteRamAddr = (_state.SpriteRamAddr + 4) & 0xFF;
 				}
 			}
 			break;
@@ -236,7 +236,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
 		case PPURegisters::VideoMemoryData:
-			if(_state.VideoRamAddr >= 0x3F00) {
+			if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00) {
 				WritePaletteRAM(_state.VideoRamAddr, value);
 			} else {
 				_memoryManager->WriteVRAM(_state.VideoRamAddr, value);
