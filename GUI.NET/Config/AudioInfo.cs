@@ -37,7 +37,7 @@ namespace Mesen.GUI.Config
 		{
 			AudioInfo audioInfo = ConfigManager.Config.AudioInfo;
 			InteropEmu.SetAudioLatency(audioInfo.AudioLatency);
-			InteropEmu.SetMasterVolume(ConvertVolume(audioInfo.MasterVolume));
+			InteropEmu.SetMasterVolume(audioInfo.MasterVolume / 10d);
 			InteropEmu.SetChannelVolume(0, ConvertVolume(audioInfo.Square1Volume));
 			InteropEmu.SetChannelVolume(1, ConvertVolume(audioInfo.Square2Volume));
 			InteropEmu.SetChannelVolume(2, ConvertVolume(audioInfo.TriangleVolume));
