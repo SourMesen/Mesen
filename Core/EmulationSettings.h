@@ -64,9 +64,9 @@ class EmulationSettings
 private:
 	static uint32_t _flags;
 
-	static bool _audioEnabled;
 	static uint32_t _audioLatency;
 	static double _channelVolume[5];
+	static double _masterVolume;
 	
 	static NesModel _model;
 
@@ -102,15 +102,15 @@ public:
 		return _model;
 	}
 
-	static void SetAudioState(bool enabled)
-	{
-		_audioEnabled = enabled;
-	}
-
 	//0: Muted, 0.5: Default, 1.0: Max volume
 	static void SetChannelVolume(AudioChannel channel, double volume)
 	{
 		_channelVolume[(int)channel] = volume;
+	}
+
+	static void SetMasterVolume(double volume)
+	{
+		_masterVolume = volume;
 	}
 
 	static void SetAudioLatency(uint32_t msLatency)
@@ -144,7 +144,12 @@ public:
 
 	static double GetChannelVolume(AudioChannel channel)
 	{
-		return _audioEnabled ? _channelVolume[(int)channel] : 0;
+		return _channelVolume[(int)channel];
+	}
+
+	static double GetMasterVolume()
+	{
+		return _masterVolume;
 	}
 
 	static uint32_t GetAudioLatency()

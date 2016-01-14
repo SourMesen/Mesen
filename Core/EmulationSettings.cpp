@@ -3,9 +3,9 @@
 
 uint32_t EmulationSettings::_flags = EmulationFlags::LowLatency;
 
-bool EmulationSettings::_audioEnabled = true;
 uint32_t EmulationSettings::_audioLatency = 20000;
 double EmulationSettings::_channelVolume[5] = { 0.5f, 0.5f, 0.5f, 0.5f, 0.5f };
+double EmulationSettings::_masterVolume = 1.0;
 
 NesModel EmulationSettings::_model = NesModel::Auto;
 

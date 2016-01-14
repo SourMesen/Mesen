@@ -274,6 +274,7 @@
     <ClInclude Include="DefaultVideoFilter.h" />
     <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="HdVideoFilter.h" />
+    <ClInclude Include="SoundMixer.h" />
     <ClInclude Include="Namco108.h" />
     <ClInclude Include="Namco108_154.h" />
     <ClInclude Include="Namco108_76.h" />
@@ -390,6 +391,7 @@
     <ClCompile Include="GameServerConnection.cpp" />
     <ClCompile Include="HdVideoFilter.cpp" />
     <ClCompile Include="NtscFilter.cpp" />
+    <ClCompile Include="SoundMixer.cpp" />
     <ClCompile Include="StandardController.cpp" />
     <ClCompile Include="MapperFactory.cpp" />
     <ClCompile Include="MemoryManager.cpp" />

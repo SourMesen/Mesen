@@ -147,10 +147,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Blip_Buffer.cpp" />
+    <ClCompile Include="blip_buf.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Blip_Buffer.h" />
+    <ClInclude Include="blip_buf.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

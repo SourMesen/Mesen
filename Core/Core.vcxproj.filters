@@ -341,6 +341,9 @@
     <ClInclude Include="DebugState.h">
       <Filter>Debugger</Filter>
     </ClInclude>
+    <ClInclude Include="SoundMixer.h">
+      <Filter>Nes\APU</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -450,6 +453,9 @@
     </ClCompile>
     <ClCompile Include="TraceLogger.cpp">
       <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMixer.cpp">
+      <Filter>Nes\APU</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

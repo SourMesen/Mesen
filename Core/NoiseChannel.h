@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "../BlipBuffer/Blip_Buffer.h"
 #include "APU.h"
 #include "IMemoryHandler.h"
 #include "ApuEnvelope.h"
@@ -37,9 +36,8 @@ protected:
 	}
 
 public:
-	NoiseChannel(AudioChannel channel, Blip_Buffer* buffer) : ApuEnvelope(channel, buffer)
+	NoiseChannel(AudioChannel channel, SoundMixer* mixer) : ApuEnvelope(channel, mixer)
 	{
-		SetVolume(0.0741);
 	}
 
 	virtual void Reset(bool softReset)

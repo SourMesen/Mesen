@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "../BlipBuffer/Blip_Buffer.h"
 #include "IMemoryHandler.h"
 #include "BaseApuChannel.h"
 
@@ -37,7 +36,7 @@ private:
 	void Clock();
 
 public:
-	DeltaModulationChannel(AudioChannel channel, Blip_Buffer *buffer, MemoryManager* memoryManager);
+	DeltaModulationChannel(AudioChannel channel, SoundMixer* mixer, MemoryManager* memoryManager);
 
 	virtual void Reset(bool softReset);
 	virtual void StreamState(bool saving);

@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "../BlipBuffer/Blip_Buffer.h"
 #include "APU.h"
 #include "IMemoryHandler.h"
 #include "ApuEnvelope.h"
@@ -27,11 +26,12 @@ private:
 	bool _reloadSweep = false;
 	uint8_t _sweepDivider = 0;
 	uint32_t _sweepTargetPeriod = 0;
+	uint16_t _realPeriod = 0;
 	
 	bool IsMuted()
 	{
 		//A period of t < 8, either set explicitly or via a sweep period update, silences the corresponding pulse channel.
-		return _period < 8 || (!_sweepNegate && _sweepTargetPeriod > 0x7FF);
+		return _realPeriod < 8 || (!_sweepNegate && _sweepTargetPeriod > 0x7FF);
 	}
 
 	void InitializeSweep(uint8_t regValue)
@@ -49,39 +49,38 @@ private:
 
 	void UpdateTargetPeriod(bool setPeriod)
 	{
-		uint16_t shiftResult = (_period >> _sweepShift);
+		uint16_t shiftResult = (_realPeriod >> _sweepShift);
 		if(_sweepNegate) {
-			_sweepTargetPeriod = _period - shiftResult;
+			_sweepTargetPeriod = _realPeriod - shiftResult;
 			if(_isChannel1) {
 				// As a result, a negative sweep on pulse channel 1 will subtract the shifted period value minus 1
 				_sweepTargetPeriod--;
 			}
 		} else {
-			_sweepTargetPeriod = _period + shiftResult;
+			_sweepTargetPeriod = _realPeriod + shiftResult;
 		}
-		if(setPeriod && _sweepShift > 0 && _period >= 8 && _sweepTargetPeriod <= 0x7FF) {
-			_period = _sweepTargetPeriod;
+		if(setPeriod && _sweepShift > 0 && _realPeriod >= 8 && _sweepTargetPeriod <= 0x7FF) {
+			_realPeriod = _sweepTargetPeriod;
+			_period = (_realPeriod * 2) + 1;
 		}
 	}
 
 protected:
 	void Clock()
 	{
-		_dutyPos = (_dutyPos - 1) & 0x07;
-
 		if(IsMuted()) {
 			AddOutput(0);
 		} else {
 			AddOutput(_dutySequences[_duty][_dutyPos] * GetVolume());
 		}
+
+		_dutyPos = (_dutyPos + 1) & 0x07;
 	}
 
 public:
-	SquareChannel(AudioChannel channel, Blip_Buffer *buffer, bool isChannel1) : ApuEnvelope(channel, buffer)
+	SquareChannel(AudioChannel channel, SoundMixer *mixer, bool isChannel1) : ApuEnvelope(channel, mixer)
 	{
-		SetVolume(0.1128);
 		_isChannel1 = isChannel1;
-		_periodMultiplier = 2;
 	}
 
 	virtual void Reset(bool softReset)
@@ -90,6 +89,8 @@ public:
 		
 		_duty = 0;
 		_dutyPos = 0;
+
+		_realPeriod = 0;
 	
 		_sweepEnabled = false;
 		_sweepPeriod = 0;
@@ -104,6 +105,7 @@ public:
 	{
 		ApuEnvelope::StreamState(saving);
 
+		Stream<uint16_t>(_realPeriod);
 		Stream<uint8_t>(_duty);
 		Stream<uint8_t>(_dutyPos);
 		Stream<bool>(_sweepEnabled);
@@ -140,18 +142,20 @@ public:
 				break;
 
 			case 2:		//4002 & 4006
-				_period &= ~0x00FF;
-				_period |= value;
+				_realPeriod &= ~0x00FF;
+				_realPeriod |= value;
+				_period = (_realPeriod * 2) + 1;
 				break;
 
 			case 3:		//4003 & 4007
 				LoadLengthCounter(value >> 3);
 
-				_period &= ~0x0700;
-				_period |= (value & 0x07) << 8;
+				_realPeriod &= ~0x0700;
+				_realPeriod |= (value & 0x07) << 8;
+				_period = (_realPeriod * 2) + 1;
 
 				//The sequencer is restarted at the first value of the current sequence.
-				_timer = _period * 2;
+				_timer = 0;
 				_dutyPos = 0;
 
 				//The envelope is also restarted.

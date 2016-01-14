@@ -1,38 +1,23 @@
 #pragma once
 #include "stdafx.h"
 #include "IMemoryHandler.h"
-#include "../BlipBuffer/Blip_Buffer.h"
 #include "EmulationSettings.h"
 #include "Snapshotable.h"
+#include "SoundMixer.h"
 
 template<int range>
 class BaseApuChannel : public IMemoryHandler, public Snapshotable
 {
 private:
-	unique_ptr<Blip_Synth<blip_good_quality, range>> _synth;
-	Blip_Buffer *_buffer;
-
-	uint16_t _lastOutput;
+	SoundMixer *_mixer;
+	int8_t _lastOutput;
 	uint32_t _previousCycle;
 	AudioChannel _channel;
-	double _baseVolume;
 	NesModel _nesModel;
 
 protected:
 	uint16_t _timer = 0;
 	uint16_t _period = 0;
-	uint16_t _periodMultiplier = 1;
-
-	void SetVolume(double volume)
-	{
-		_baseVolume = volume;
-		UpdateSynthVolume();
-	}
-
-	void UpdateSynthVolume()
-	{
-		_synth->volume(_baseVolume * EmulationSettings::GetChannelVolume(_channel) * 2);
-	}
 
 	AudioChannel GetChannel()
 	{
@@ -43,11 +28,10 @@ public:
 	virtual void Clock() = 0;
 	virtual bool GetStatus() = 0;
 
-	BaseApuChannel(AudioChannel channel, Blip_Buffer *buffer)
+	BaseApuChannel(AudioChannel channel, SoundMixer *mixer)
 	{
 		_channel = channel;
-		_buffer = buffer;
-		_synth.reset(new Blip_Synth<blip_good_quality, range>());
+		_mixer = mixer;
 		
 		Reset(false);
 	}
@@ -58,19 +42,19 @@ public:
 		_period = 0;
 		_lastOutput = 0;
 		_previousCycle = 0;
-		_buffer->clear();
+		_mixer->Reset();
 	}
 
 	virtual void StreamState(bool saving)
 	{
-		Stream<uint16_t>(_lastOutput);
+		Stream<int8_t>(_lastOutput);
 		Stream<uint32_t>(_previousCycle);
 		Stream<uint16_t>(_timer);
 		Stream<uint16_t>(_period);
 		Stream<NesModel>(_nesModel);
 
 		if(!saving) {
-			_buffer->clear();
+			_mixer->Reset();
 		}
 	}
 
@@ -89,7 +73,7 @@ public:
 		while(_previousCycle < targetCycle) {
 			if(_timer == 0) {
 				Clock();
-				_timer = _period * _periodMultiplier;
+				_timer = _period;
 				_previousCycle++;
 			} else {
 				uint32_t cyclesToRun = targetCycle - _previousCycle;
@@ -109,19 +93,16 @@ public:
 		return 0;
 	}
 
-	void AddOutput(uint16_t output)
+	void AddOutput(int8_t output)
 	{
 		if(output != _lastOutput) {
-			_synth->offset_inline(_previousCycle, output - _lastOutput, _buffer);
+			_mixer->AddDelta(_channel, _previousCycle, output - _lastOutput);
+			_lastOutput = output;
 		}
-		_lastOutput = output;
 	}
 
 	void EndFrame()
 	{
 		_previousCycle = 0;
-
-		//Update options at the end of the cycle
-		UpdateSynthVolume();
 	}
 };

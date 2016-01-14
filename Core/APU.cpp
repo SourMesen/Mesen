@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "../BlipBuffer/Blip_Buffer.h"
 #include "APU.h"
 #include "CPU.h"
 #include "SquareChannel.h"
@@ -8,6 +7,7 @@
 #include "DeltaModulationChannel.h"
 #include "ApuFrameCounter.h"
 #include "EmulationSettings.h"
+#include "SoundMixer.h"
 
 APU* APU::Instance = nullptr;
 IAudioDevice* APU::AudioDevice = nullptr;
@@ -17,16 +17,14 @@ APU::APU(MemoryManager* memoryManager)
 	APU::Instance = this;
 
 	_memoryManager = memoryManager;
-	_blipBuffer.reset(new Blip_Buffer());
-	_blipBuffer->sample_rate(APU::SampleRate);
 
-	_outputBuffer = new int16_t[APU::SamplesPerFrame];
+	_mixer.reset(new SoundMixer());
 
-	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(AudioChannel::Square1, _blipBuffer.get(), true)));
-	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(AudioChannel::Square2, _blipBuffer.get(), false)));
-	_triangleChannel.reset(new TriangleChannel(AudioChannel::Triangle, _blipBuffer.get()));
-	_noiseChannel.reset(new NoiseChannel(AudioChannel::Noise, _blipBuffer.get()));
-	_deltaModulationChannel.reset(new DeltaModulationChannel(AudioChannel::DMC, _blipBuffer.get(), _memoryManager));
+	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(AudioChannel::Square1, _mixer.get(), true)));
+	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(AudioChannel::Square2, _mixer.get(), false)));
+	_triangleChannel.reset(new TriangleChannel(AudioChannel::Triangle, _mixer.get()));
+	_noiseChannel.reset(new NoiseChannel(AudioChannel::Noise, _mixer.get()));
+	_deltaModulationChannel.reset(new DeltaModulationChannel(AudioChannel::DMC, _mixer.get(), _memoryManager));
 	_frameCounter.reset(new ApuFrameCounter(&APU::FrameCounterTick));
 
 	_memoryManager->RegisterIODevice(_squareChannel[0].get());
@@ -41,7 +39,6 @@ APU::APU(MemoryManager* memoryManager)
 
 APU::~APU()
 {
-	delete[] _outputBuffer;
 }
 
 void APU::SetNesModel(NesModel model, bool forceInit)
@@ -51,13 +48,14 @@ void APU::SetNesModel(NesModel model, bool forceInit)
 		Run();
 
 		_nesModel = model;
-		_blipBuffer->clock_rate(model == NesModel::NTSC ? CPU::ClockRateNtsc : CPU::ClockRatePal);
 		_squareChannel[0]->SetNesModel(model);
 		_squareChannel[1]->SetNesModel(model);
 		_triangleChannel->SetNesModel(model);
 		_noiseChannel->SetNesModel(model);
 		_deltaModulationChannel->SetNesModel(model);
 		_frameCounter->SetNesModel(model);
+
+		_mixer->SetNesModel(model);
 	}
 }
 
@@ -191,14 +189,9 @@ void APU::Exec()
 		_triangleChannel->EndFrame();
 		_noiseChannel->EndFrame();
 		_deltaModulationChannel->EndFrame();
+		
+		_mixer->PlayAudioBuffer(_currentCycle);
 
-		_blipBuffer->end_frame(_currentCycle);
-
-		// Read some samples out of Blip_Buffer if there are enough to fill our output buffer
-		size_t sampleCount = _blipBuffer->read_samples(_outputBuffer, APU::SamplesPerFrame);
-		if(APU::AudioDevice) {
-			APU::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * BitsPerSample / 8));
-		}
 		_currentCycle = 0;
 		_previousCycle = 0;
 	} else if(NeedToRun(_currentCycle)) {
@@ -244,4 +237,9 @@ void APU::StreamState(bool saving)
 	if(!saving) {
 		SetNesModel(_nesModel, true);
 	}
+}
+
+IAudioDevice* APU::GetAudioDevice()
+{
+	return APU::AudioDevice;
 }

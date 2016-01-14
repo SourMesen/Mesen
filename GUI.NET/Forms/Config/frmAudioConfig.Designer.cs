@@ -166,6 +166,7 @@
 			this.trkMaster.Caption = "Master";
 			this.trkMaster.Location = new System.Drawing.Point(6, 0);
 			this.trkMaster.Margin = new System.Windows.Forms.Padding(0);
+			this.trkMaster.Maximum = 300;
 			this.trkMaster.MaximumSize = new System.Drawing.Size(63, 160);
 			this.trkMaster.MinimumSize = new System.Drawing.Size(63, 160);
 			this.trkMaster.Name = "trkMaster";

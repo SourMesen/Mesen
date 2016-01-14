@@ -11,7 +11,7 @@ class TriangleChannel;
 class NoiseChannel;
 class DeltaModulationChannel;
 class ApuFrameCounter;
-class Blip_Buffer;
+class SoundMixer;
 enum class FrameType;
 enum class NesModel;
 
@@ -31,9 +31,9 @@ class APU : public Snapshotable, public IMemoryHandler
 
 		unique_ptr<ApuFrameCounter> _frameCounter;
 
-		unique_ptr<Blip_Buffer> _blipBuffer;
-		int16_t* _outputBuffer;
 		MemoryManager* _memoryManager;
+
+		shared_ptr<SoundMixer> _mixer;
 
 		NesModel _nesModel;
 
@@ -71,6 +71,7 @@ class APU : public Snapshotable, public IMemoryHandler
 		void Exec();
 		static void ExecStatic();
 
+		static IAudioDevice* GetAudioDevice();
 		static void StaticRun();
 		static void StopAudio(bool clearBuffer = false);
 };

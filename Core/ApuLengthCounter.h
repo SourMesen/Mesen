@@ -37,7 +37,7 @@ protected:
 	}
 
 public:
-	ApuLengthCounter(AudioChannel channel, Blip_Buffer* buffer) : BaseApuChannel(channel, buffer)
+	ApuLengthCounter(AudioChannel channel, SoundMixer* mixer) : BaseApuChannel(channel, mixer)
 	{
 	}
 	

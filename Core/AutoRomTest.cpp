@@ -196,7 +196,7 @@ int AutoRomTest::Run(string filename)
 		}
 
 		EmulationSettings::SetEmulationSpeed(0);
-		EmulationSettings::SetAudioState(false);
+		EmulationSettings::SetMasterVolume(0);
 		
 		Console::Pause();
 		
@@ -233,7 +233,7 @@ int AutoRomTest::Run(string filename)
 
 
 		EmulationSettings::SetEmulationSpeed(100);
-		EmulationSettings::SetAudioState(true);
+		EmulationSettings::SetMasterVolume(1.0);
 
 		return _badFrameCount;
 	}

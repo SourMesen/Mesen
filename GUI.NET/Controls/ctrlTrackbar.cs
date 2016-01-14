@@ -23,6 +23,12 @@ namespace Mesen.GUI.Controls
 			InitializeComponent();
 		}
 
+		public int Maximum
+		{
+			get { return trackBar.Maximum; }
+			set { trackBar.Maximum = value; }
+		}
+
 		public string Caption
 		{
 			get { return lblText.Text; }

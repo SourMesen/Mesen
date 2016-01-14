@@ -5,11 +5,10 @@
 
 DeltaModulationChannel *DeltaModulationChannel::Instance = nullptr;
 
-DeltaModulationChannel::DeltaModulationChannel(AudioChannel channel, Blip_Buffer *buffer, MemoryManager* memoryManager) : BaseApuChannel(channel, buffer)
+DeltaModulationChannel::DeltaModulationChannel(AudioChannel channel, SoundMixer *mixer, MemoryManager* memoryManager) : BaseApuChannel(channel, mixer)
 {
 	Instance = this;
 	_memoryManager = memoryManager;
-	SetVolume(0.42545);
 }
 
 void DeltaModulationChannel::Reset(bool softReset)
@@ -165,6 +164,9 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 		case 1:		//4011
 			_outputLevel = value & 0x7F;
 			_shiftRegister = value & 0x7F;
+
+			//4011 applies new output right away, not on the timer's reload.  This fixes bad DMC sound when playing through 4011.
+			AddOutput(_outputLevel);
 			break;
 
 		case 2:		//4012
