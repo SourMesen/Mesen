@@ -48,12 +48,12 @@ namespace Mesen.GUI.Forms.Config
 			AudioInfo config = Entity as AudioInfo;
 			config.EnableAudio = true;
 			config.AudioLatency = 100;
-			config.MasterVolume = 50;
-			config.Square2Volume = 50;
-			config.Square1Volume = 50;
-			config.TriangleVolume = 50;
-			config.NoiseVolume = 50;
-			config.DmcVolume = 50;
+			config.MasterVolume = 100;
+			config.Square2Volume = 100;
+			config.Square1Volume = 100;
+			config.TriangleVolume = 100;
+			config.NoiseVolume = 100;
+			config.DmcVolume = 100;
 			UpdateUI();
 			AudioInfo.ApplyConfig();
 		}

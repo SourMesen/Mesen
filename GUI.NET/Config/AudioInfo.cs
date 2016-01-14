@@ -12,13 +12,13 @@ namespace Mesen.GUI.Config
 	public class AudioInfo
 	{
 		public bool EnableAudio = true;
-		public UInt32 AudioLatency = 150;
+		public UInt32 AudioLatency = 100;
 		public UInt32 MasterVolume = 100;
-		public UInt32 Square1Volume = 50;
-		public UInt32 Square2Volume = 50;
-		public UInt32 TriangleVolume = 50;
-		public UInt32 NoiseVolume = 50;
-		public UInt32 DmcVolume = 50;
+		public UInt32 Square1Volume = 100;
+		public UInt32 Square2Volume = 100;
+		public UInt32 TriangleVolume = 100;
+		public UInt32 NoiseVolume = 100;
+		public UInt32 DmcVolume = 100;
 
 		public AudioInfo()
 		{
