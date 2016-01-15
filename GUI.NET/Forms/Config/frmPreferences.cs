@@ -25,6 +25,7 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("UseAlternativeMmc3Irq", chkUseAlternativeMmc3Irq);
 			AddBinding("AllowInvalidInput", chkAllowInvalidInput);
+			AddBinding("RemoveSpriteLimit", chkRemoveSpriteLimit);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)

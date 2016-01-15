@@ -123,11 +123,12 @@ class PPU : public IMemoryHandler, public Snapshotable
 		TileInfo _nextTile;
 		TileInfo _previousTile;
 
-		SpriteInfo _spriteTiles[8];
+		SpriteInfo _spriteTiles[64];
 		uint32_t _spriteCount = 0;
 		uint32_t _secondaryOAMAddr = 0;
 		bool _sprite0Visible = false;
 
+		uint32_t _overflowSpriteAddr = 0;
 		uint32_t _spriteIndex = 0;
 
 		uint8_t _openBus = 0;
@@ -178,7 +179,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
 		void LoadTileInfo();
+		void LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uint8_t spriteX, bool extraSprite);
 		void LoadSpriteTileInfo();
+		void LoadExtraSprites();
 		void ShiftTileRegisters();
 		void InitializeShiftRegisters();
 		void LoadNextTile();

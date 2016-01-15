@@ -47,6 +47,7 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkUseAlternativeMmc3Irq = new System.Windows.Forms.CheckBox();
 			this.chkAllowInvalidInput = new System.Windows.Forms.CheckBox();
+			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -273,10 +274,13 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 2);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowCount = 4;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(380, 207);
@@ -301,6 +305,16 @@
 			this.chkAllowInvalidInput.TabIndex = 1;
 			this.chkAllowInvalidInput.Text = "Allow invalid input (e.g Down + Up or Left + Right at the same time)";
 			this.chkAllowInvalidInput.UseVisualStyleBackColor = true;
+			// 
+			// chkRemoveSpriteLimit
+			// 
+			this.chkRemoveSpriteLimit.AutoSize = true;
+			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 49);
+			this.chkRemoveSpriteLimit.Name = "chkRemoveSpriteLimit";
+			this.chkRemoveSpriteLimit.Size = new System.Drawing.Size(205, 17);
+			this.chkRemoveSpriteLimit.TabIndex = 2;
+			this.chkRemoveSpriteLimit.Text = "Remove sprite limit (Reduces flashing)";
+			this.chkRemoveSpriteLimit.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
 			// 
@@ -352,5 +366,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.CheckBox chkUseAlternativeMmc3Irq;
 		private System.Windows.Forms.CheckBox chkAllowInvalidInput;
+		private System.Windows.Forms.CheckBox chkRemoveSpriteLimit;
 	}
 }

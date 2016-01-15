@@ -9,6 +9,7 @@ enum EmulationFlags
 	ShowFPS = 0x02,
 	VerticalSync = 0x04,
 	AllowInvalidInput = 0x08,
+	RemoveSpriteLimit = 0x10,
 
 	Mmc3IrqAltBehavior = 0x8000,
 };
