@@ -27,6 +27,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("NoiseVolume", trkNoiseVol);
 			AddBinding("DmcVolume", trkDmcVol);
 			AddBinding("AudioLatency", nudLatency);
+			AddBinding("SampleRate", cboSampleRate);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)

@@ -9,6 +9,7 @@
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
 #include "HdPpu.h"
+#include "SoundMixer.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -151,7 +152,7 @@ void Console::ResetComponents(bool softReset)
 	_cpu->Reset(softReset);
 	_memoryManager->Reset(softReset);
 
-	_apu->StopAudio(true);
+	SoundMixer::StopAudio(true);
 
 	if(softReset) {
 		MessageManager::SendNotification(ConsoleNotificationType::GameReset);
@@ -226,7 +227,7 @@ void Console::Run()
 				_runLock.Release();
 				
 				//Prevent audio from looping endlessly while game is paused
-				_apu->StopAudio();
+				SoundMixer::StopAudio();
 
 				while(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
 					//Sleep until emulation is resumed
@@ -251,7 +252,7 @@ void Console::Run()
 			}
 		}
 	}
-	_apu->StopAudio(true);
+	SoundMixer::StopAudio();
 	Movie::Stop();
 
 	VideoDecoder::GetInstance()->StopThread();

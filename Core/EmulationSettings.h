@@ -67,6 +67,8 @@ private:
 	static uint32_t _audioLatency;
 	static double _channelVolume[5];
 	static double _masterVolume;
+
+	static uint32_t _sampleRate;
 	
 	static NesModel _model;
 
@@ -111,6 +113,16 @@ public:
 	static void SetMasterVolume(double volume)
 	{
 		_masterVolume = volume;
+	}
+
+	static void SetSampleRate(uint32_t sampleRate)
+	{
+		_sampleRate = sampleRate;
+	}
+
+	static uint32_t GetSampleRate()
+	{
+		return _sampleRate;
 	}
 
 	static void SetAudioLatency(uint32_t msLatency)

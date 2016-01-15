@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "SoundManager.h"
 #include "../Core/EmulationSettings.h"
+#include "../Core/SoundMixer.h"
 
 SoundManager::SoundManager(HWND hwnd)
 {
-	APU::RegisterAudioDevice(this);
+	SoundMixer::RegisterAudioDevice(this);
 
+	_hWnd = hwnd;
 	_directSound = 0;
 	_primaryBuffer = 0;
 	_secondaryBuffer = 0;
-
-	InitializeDirectSound(hwnd);
 }
 
 SoundManager::~SoundManager()
@@ -18,13 +18,12 @@ SoundManager::~SoundManager()
 	Release();
 }
 
-bool SoundManager::InitializeDirectSound(HWND hwnd)
+bool SoundManager::InitializeDirectSound(uint32_t sampleRate)
 {
 	HRESULT result;
 	DSBUFFERDESC bufferDesc;
 	WAVEFORMATEX waveFormat;
-
-
+	
 	// Initialize the direct sound interface pointer for the default sound device.
 	result = DirectSoundCreate8(NULL, &_directSound, NULL);
 	if(FAILED(result)) {
@@ -32,7 +31,7 @@ bool SoundManager::InitializeDirectSound(HWND hwnd)
 	}
 
 	// Set the cooperative level to priority so the format of the primary sound buffer can be modified.
-	result = _directSound->SetCooperativeLevel(hwnd, DSSCL_PRIORITY);
+	result = _directSound->SetCooperativeLevel(_hWnd, DSSCL_PRIORITY);
 	if(FAILED(result)) {
 		return false;
 	}
@@ -52,8 +51,10 @@ bool SoundManager::InitializeDirectSound(HWND hwnd)
 	}
 
 	// Setup the format of the primary sound bufffer.
+	_sampleRate = sampleRate;
+
 	waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-	waveFormat.nSamplesPerSec = 44100;
+	waveFormat.nSamplesPerSec = _sampleRate;
 	waveFormat.wBitsPerSample = 16;
 	waveFormat.nChannels = 1;
 	waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
@@ -102,6 +103,8 @@ bool SoundManager::InitializeDirectSound(HWND hwnd)
 
 void SoundManager::Release()
 {
+	_lastWriteOffset = 0;
+
 	if(_secondaryBuffer) {
 		_secondaryBuffer->Release();
 		_secondaryBuffer = nullptr;
@@ -164,9 +167,14 @@ void SoundManager::Play()
 	_secondaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
 }
 
-void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize)
+void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize, uint32_t sampleRate)
 {
-	int32_t byteLatency = (int32_t)((float)(APU::SampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * (APU::BitsPerSample / 8));
+	if(_sampleRate != sampleRate) {
+		Release();
+		InitializeDirectSound(sampleRate);
+	}
+
+	int32_t byteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * (SoundMixer::BitsPerSample / 8));
 	if(byteLatency != _previousLatency) {
 		Stop();
 		_previousLatency = byteLatency;
@@ -190,19 +198,20 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize)
 		}
 
 		int32_t latencyGap = playWriteByteLatency - byteLatency;
-		if(abs(latencyGap) > 3000) {
+		int32_t tolerance = byteLatency / 35;
+		if(abs(latencyGap) > byteLatency / 2) {
 			//Out of sync, move back to where we should be (start of the latency buffer)
-			_secondaryBuffer->SetFrequency(44100);
+			_secondaryBuffer->SetFrequency(sampleRate);
 			_secondaryBuffer->SetCurrentPosition(_lastWriteOffset - byteLatency);
-		} else if(latencyGap < -byteLatency/35) {
+		} else if(latencyGap < -tolerance) {
 			//Playing too fast, slow down playing
-			_secondaryBuffer->SetFrequency(43900);
-		} else if(latencyGap > byteLatency/35) {
+			_secondaryBuffer->SetFrequency((DWORD)(sampleRate * 0.9975));
+		} else if(latencyGap > tolerance) {
 			//Playing too slow, speed up
-			_secondaryBuffer->SetFrequency(44300);
+			_secondaryBuffer->SetFrequency((DWORD)(sampleRate * 1.0025));
 		} else {
 			//Normal playback
-			_secondaryBuffer->SetFrequency(44100);
+			_secondaryBuffer->SetFrequency(sampleRate);
 		}
 	}
 }

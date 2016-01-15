@@ -18,7 +18,6 @@ enum class NesModel;
 class APU : public Snapshotable, public IMemoryHandler
 {
 	private:
-		static IAudioDevice* AudioDevice;
 		static APU* Instance;
 
 		uint32_t _previousCycle;
@@ -47,21 +46,10 @@ class APU : public Snapshotable, public IMemoryHandler
 		void StreamState(bool saving);
 
 	public:
-		static const uint32_t SampleRate = 44100;
-		static const uint32_t SamplesPerFrame = 44100 / 60;
-		static const uint32_t BitsPerSample = 16;
-
-	public:
 		APU(MemoryManager* memoryManager);
 		~APU();
 
 		void Reset(bool softReset);
-		
-		static void RegisterAudioDevice(IAudioDevice *audioDevice)
-		{
-			APU::AudioDevice = audioDevice;
-		}
-
 		void SetNesModel(NesModel model, bool forceInit = false);
 
 		uint8_t ReadRAM(uint16_t addr);
@@ -71,7 +59,5 @@ class APU : public Snapshotable, public IMemoryHandler
 		void Exec();
 		static void ExecStatic();
 
-		static IAudioDevice* GetAudioDevice();
 		static void StaticRun();
-		static void StopAudio(bool clearBuffer = false);
 };

@@ -3,11 +3,13 @@
 #include "APU.h"
 #include "CPU.h"
 
+IAudioDevice* SoundMixer::AudioDevice = nullptr;
+
 SoundMixer::SoundMixer()
 {
-	_outputBuffer = new int16_t[APU::SamplesPerFrame];
-	_blipBuf = blip_new(APU::SamplesPerFrame);
-	
+	_outputBuffer = new int16_t[SoundMixer::MaxSamplesPerFrame];
+	_blipBuf = blip_new(SoundMixer::MaxSamplesPerFrame);
+	_sampleRate = EmulationSettings::GetSampleRate();
 	InitializeLookupTables();
 
 	Reset();
@@ -19,6 +21,22 @@ SoundMixer::~SoundMixer()
 	_outputBuffer = nullptr;
 
 	blip_delete(_blipBuf);
+}
+
+void SoundMixer::RegisterAudioDevice(IAudioDevice *audioDevice)
+{
+	SoundMixer::AudioDevice = audioDevice;
+}
+
+void SoundMixer::StopAudio(bool clearBuffer)
+{
+	if(SoundMixer::AudioDevice) {
+		if(clearBuffer) {
+			SoundMixer::AudioDevice->Stop();
+		} else {
+			SoundMixer::AudioDevice->Pause();
+		}
+	}
 }
 
 void SoundMixer::Reset()
@@ -36,16 +54,27 @@ void SoundMixer::Reset()
 void SoundMixer::PlayAudioBuffer(uint32_t time)
 {
 	EndFrame(time);
-	size_t sampleCount = blip_read_samples(_blipBuf, _outputBuffer, APU::SamplesPerFrame, 0);
-	IAudioDevice *audioDevice = APU::GetAudioDevice();	
-	if(audioDevice) {
-		audioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * APU::BitsPerSample / 8));
+	size_t sampleCount = blip_read_samples(_blipBuf, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 0);
+	if(SoundMixer::AudioDevice) {
+		SoundMixer::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * SoundMixer::BitsPerSample / 8), _sampleRate);
+	}
+	
+	if(EmulationSettings::GetSampleRate() != _sampleRate) {
+		//Update sample rate for next frame if setting changed
+		_sampleRate = EmulationSettings::GetSampleRate();
+		UpdateRates();
 	}
 }
 
 void SoundMixer::SetNesModel(NesModel model)
 {
-	blip_set_rates(_blipBuf, model == NesModel::NTSC ? CPU::ClockRateNtsc : CPU::ClockRatePal, APU::SampleRate);
+	_clockRate = model == NesModel::NTSC ? CPU::ClockRateNtsc : CPU::ClockRatePal;
+	UpdateRates();
+}
+
+void SoundMixer::UpdateRates()
+{
+	blip_set_rates(_blipBuf, _clockRate, _sampleRate);
 }
 
 void SoundMixer::InitializeLookupTables()
@@ -89,7 +118,7 @@ void SoundMixer::EndFrame(uint32_t time)
 		_currentOutput[4] += _channelOutput[4][time];
 
 		int16_t currentOutput = GetOutputVolume();
-		blip_add_delta(_blipBuf, time, (currentOutput - _previousOutput) * masterVolume);
+		blip_add_delta(_blipBuf, time, (int)((currentOutput - _previousOutput) * masterVolume));
 		_previousOutput = currentOutput;
 	}
 	blip_end_frame(_blipBuf, time);

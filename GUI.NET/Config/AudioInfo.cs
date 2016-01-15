@@ -19,6 +19,7 @@ namespace Mesen.GUI.Config
 		public UInt32 TriangleVolume = 100;
 		public UInt32 NoiseVolume = 100;
 		public UInt32 DmcVolume = 100;
+		public UInt32 SampleRate = 44100;
 
 		public AudioInfo()
 		{
@@ -43,6 +44,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetChannelVolume(2, ConvertVolume(audioInfo.TriangleVolume));
 			InteropEmu.SetChannelVolume(3, ConvertVolume(audioInfo.NoiseVolume));
 			InteropEmu.SetChannelVolume(4, ConvertVolume(audioInfo.DmcVolume));
+			InteropEmu.SetSampleRate(audioInfo.SampleRate);
 		}
 	}
 }

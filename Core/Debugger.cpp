@@ -7,6 +7,7 @@
 #include "Disassembler.h"
 #include "VideoDecoder.h"
 #include "APU.h"
+#include "SoundMixer.h"
 #include "CodeDataLogger.h"
 #include "ExpressionEvaluator.h"
 
@@ -283,7 +284,7 @@ bool Debugger::SleepUntilResume()
 
 	if(stepCount == 0) {
 		//Break
-		APU::StopAudio();
+		SoundMixer::StopAudio();
 		MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
 		_stepOverAddr = -1;
 		while(stepCount == 0) {

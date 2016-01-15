@@ -10,7 +10,6 @@
 #include "SoundMixer.h"
 
 APU* APU::Instance = nullptr;
-IAudioDevice* APU::AudioDevice = nullptr;
 
 APU::APU(MemoryManager* memoryManager)
 {
@@ -199,17 +198,6 @@ void APU::Exec()
 	}
 }
 
-void APU::StopAudio(bool clearBuffer)
-{
-	if(APU::AudioDevice) {
-		if(clearBuffer) {
-			APU::AudioDevice->Stop();
-		} else {
-			APU::AudioDevice->Pause();
-		}
-	}
-}
-
 void APU::Reset(bool softReset)
 {
 	_currentCycle = 0;
@@ -237,9 +225,4 @@ void APU::StreamState(bool saving)
 	if(!saving) {
 		SetNesModel(_nesModel, true);
 	}
-}
-
-IAudioDevice* APU::GetAudioDevice()
-{
-	return APU::AudioDevice;
 }
