@@ -28,12 +28,14 @@
 		private void InitializeComponent()
 		{
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.chkAutoLoadIps = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
+			this.chkDisableScreensaver = new System.Windows.Forms.CheckBox();
+			this.chkMuteSoundInBackground = new System.Windows.Forms.CheckBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
-			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tpgFileAssociations = new System.Windows.Forms.TabPage();
 			this.grpFileAssociations = new System.Windows.Forms.GroupBox();
 			this.tlpFileFormat = new System.Windows.Forms.TableLayoutPanel();
@@ -41,19 +43,18 @@
 			this.chkFdsFormat = new System.Windows.Forms.CheckBox();
 			this.chkMmoFormat = new System.Windows.Forms.CheckBox();
 			this.chkMstFormat = new System.Windows.Forms.CheckBox();
+			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkUseAlternativeMmc3Irq = new System.Windows.Forms.CheckBox();
-			this.chkDisableScreensaver = new System.Windows.Forms.CheckBox();
-			this.chkMuteSoundInBackground = new System.Windows.Forms.CheckBox();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.chkAllowInvalidInput = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
-			this.tpgAdvanced.SuspendLayout();
 			this.tpgFileAssociations.SuspendLayout();
 			this.grpFileAssociations.SuspendLayout();
 			this.tlpFileFormat.SuspendLayout();
+			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -82,6 +83,17 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.Size = new System.Drawing.Size(380, 207);
 			this.tlpMain.TabIndex = 1;
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Enabled = false;
+			this.checkBox1.Location = new System.Drawing.Point(3, 95);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(204, 17);
+			this.checkBox1.TabIndex = 13;
+			this.checkBox1.Text = "Pause emulation when in background";
+			this.checkBox1.UseVisualStyleBackColor = true;
 			// 
 			// chkAutoLoadIps
 			// 
@@ -114,6 +126,28 @@
 			this.chkSingleInstance.Text = "Only allow one instance of Mesen at a time";
 			this.chkSingleInstance.UseVisualStyleBackColor = true;
 			// 
+			// chkDisableScreensaver
+			// 
+			this.chkDisableScreensaver.AutoSize = true;
+			this.chkDisableScreensaver.Enabled = false;
+			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 49);
+			this.chkDisableScreensaver.Name = "chkDisableScreensaver";
+			this.chkDisableScreensaver.Size = new System.Drawing.Size(245, 17);
+			this.chkDisableScreensaver.TabIndex = 11;
+			this.chkDisableScreensaver.Text = "Disable screensaver while emulation is running";
+			this.chkDisableScreensaver.UseVisualStyleBackColor = true;
+			// 
+			// chkMuteSoundInBackground
+			// 
+			this.chkMuteSoundInBackground.AutoSize = true;
+			this.chkMuteSoundInBackground.Enabled = false;
+			this.chkMuteSoundInBackground.Location = new System.Drawing.Point(3, 72);
+			this.chkMuteSoundInBackground.Name = "chkMuteSoundInBackground";
+			this.chkMuteSoundInBackground.Size = new System.Drawing.Size(182, 17);
+			this.chkMuteSoundInBackground.TabIndex = 12;
+			this.chkMuteSoundInBackground.Text = "Mute sound when in background";
+			this.chkMuteSoundInBackground.UseVisualStyleBackColor = true;
+			// 
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
@@ -136,17 +170,6 @@
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
-			// 
-			// tpgAdvanced
-			// 
-			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel1);
-			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
-			this.tpgAdvanced.Name = "tpgAdvanced";
-			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(386, 213);
-			this.tpgAdvanced.TabIndex = 1;
-			this.tpgAdvanced.Text = "Advanced";
-			this.tpgAdvanced.UseVisualStyleBackColor = true;
 			// 
 			// tpgFileAssociations
 			// 
@@ -233,11 +256,23 @@
 			this.chkMstFormat.Text = ".MST (Mesen Savestate)";
 			this.chkMstFormat.UseVisualStyleBackColor = true;
 			// 
+			// tpgAdvanced
+			// 
+			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel1);
+			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
+			this.tpgAdvanced.Name = "tpgAdvanced";
+			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgAdvanced.Size = new System.Drawing.Size(386, 213);
+			this.tpgAdvanced.TabIndex = 1;
+			this.tpgAdvanced.Text = "Advanced";
+			this.tpgAdvanced.UseVisualStyleBackColor = true;
+			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -257,38 +292,15 @@
 			this.chkUseAlternativeMmc3Irq.Text = "Use alternative MMC3 IRQ behavior";
 			this.chkUseAlternativeMmc3Irq.UseVisualStyleBackColor = true;
 			// 
-			// chkDisableScreensaver
+			// chkAllowInvalidInput
 			// 
-			this.chkDisableScreensaver.AutoSize = true;
-			this.chkDisableScreensaver.Enabled = false;
-			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 49);
-			this.chkDisableScreensaver.Name = "chkDisableScreensaver";
-			this.chkDisableScreensaver.Size = new System.Drawing.Size(245, 17);
-			this.chkDisableScreensaver.TabIndex = 11;
-			this.chkDisableScreensaver.Text = "Disable screensaver while emulation is running";
-			this.chkDisableScreensaver.UseVisualStyleBackColor = true;
-			// 
-			// chkMuteSoundInBackground
-			// 
-			this.chkMuteSoundInBackground.AutoSize = true;
-			this.chkMuteSoundInBackground.Enabled = false;
-			this.chkMuteSoundInBackground.Location = new System.Drawing.Point(3, 72);
-			this.chkMuteSoundInBackground.Name = "chkMuteSoundInBackground";
-			this.chkMuteSoundInBackground.Size = new System.Drawing.Size(182, 17);
-			this.chkMuteSoundInBackground.TabIndex = 12;
-			this.chkMuteSoundInBackground.Text = "Mute sound when in background";
-			this.chkMuteSoundInBackground.UseVisualStyleBackColor = true;
-			// 
-			// checkBox1
-			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Enabled = false;
-			this.checkBox1.Location = new System.Drawing.Point(3, 95);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(204, 17);
-			this.checkBox1.TabIndex = 13;
-			this.checkBox1.Text = "Pause emulation when in background";
-			this.checkBox1.UseVisualStyleBackColor = true;
+			this.chkAllowInvalidInput.AutoSize = true;
+			this.chkAllowInvalidInput.Location = new System.Drawing.Point(3, 26);
+			this.chkAllowInvalidInput.Name = "chkAllowInvalidInput";
+			this.chkAllowInvalidInput.Size = new System.Drawing.Size(341, 17);
+			this.chkAllowInvalidInput.TabIndex = 1;
+			this.chkAllowInvalidInput.Text = "Allow invalid input (e.g Down + Up or Left + Right at the same time)";
+			this.chkAllowInvalidInput.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
 			// 
@@ -307,11 +319,11 @@
 			this.flowLayoutPanel6.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
-			this.tpgAdvanced.ResumeLayout(false);
 			this.tpgFileAssociations.ResumeLayout(false);
 			this.grpFileAssociations.ResumeLayout(false);
 			this.tlpFileFormat.ResumeLayout(false);
 			this.tlpFileFormat.PerformLayout();
+			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
@@ -339,5 +351,6 @@
 		private System.Windows.Forms.TabPage tpgAdvanced;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.CheckBox chkUseAlternativeMmc3Irq;
+		private System.Windows.Forms.CheckBox chkAllowInvalidInput;
 	}
 }

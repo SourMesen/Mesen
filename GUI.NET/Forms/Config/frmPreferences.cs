@@ -24,6 +24,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AssociateNesFiles", chkNesFormat);
 
 			AddBinding("UseAlternativeMmc3Irq", chkUseAlternativeMmc3Irq);
+			AddBinding("AllowInvalidInput", chkAllowInvalidInput);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)

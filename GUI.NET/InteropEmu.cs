@@ -431,6 +431,7 @@ namespace Mesen.GUI
 		Paused = 0x01,
 		ShowFPS = 0x02,
 		VerticalSync = 0x04,
+		AllowInvalidInput = 0x08,
 		
 		Mmc3IrqAltBehavior = 0x8000,
 	}

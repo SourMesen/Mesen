@@ -2,6 +2,7 @@
 #include "StandardController.h"
 #include "ControlManager.h"
 #include "PPU.h"
+#include "EmulationSettings.h"
 
 StandardController::StandardController(uint8_t port)
 {
@@ -50,5 +51,13 @@ ButtonState StandardController::GetButtonState()
 		}
 	}
 
+	if(!EmulationSettings::CheckFlag(EmulationFlags::AllowInvalidInput)) {
+		if(state.Up && state.Down) {
+			state.Down = false;
+		}
+		if(state.Left && state.Right) {
+			state.Right = false;
+		}
+	}
 	return state;
 }
