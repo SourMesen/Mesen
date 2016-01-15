@@ -153,18 +153,24 @@ void SoundManager::CopyToSecondaryBuffer(uint8_t *data, uint32_t size)
 
 void SoundManager::Pause()
 {
-	_secondaryBuffer->Stop();
+	if(_secondaryBuffer) {
+		_secondaryBuffer->Stop();
+	}
 }
 
 void SoundManager::Stop()
 {
-	_secondaryBuffer->Stop();
-	ClearSecondaryBuffer();
+	if(_secondaryBuffer) {
+		_secondaryBuffer->Stop();
+		ClearSecondaryBuffer();
+	}
 }
 
 void SoundManager::Play()
 {
-	_secondaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
+	if(_secondaryBuffer) {
+		_secondaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
+	}
 }
 
 void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize, uint32_t sampleRate)
