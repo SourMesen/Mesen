@@ -5,6 +5,7 @@
 class SaveStateManager
 {
 private:
+	static const uint32_t FileFormatVersion = 1;
 	static string GetStateFilepath(int stateIndex);
 
 public:

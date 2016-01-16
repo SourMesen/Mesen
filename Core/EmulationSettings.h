@@ -80,6 +80,16 @@ private:
 	static uint32_t _videoScale;
 
 public:
+	static uint32_t GetMesenVersion()
+	{
+		//Version 0.1.0
+		uint16_t major = 0;
+		uint8_t minor = 1;
+		uint8_t revision = 0;
+
+		return (major << 16) | (minor << 8) | revision;
+	}
+
 	static void SetFlags(EmulationFlags flags)
 	{
 		_flags |= flags;
