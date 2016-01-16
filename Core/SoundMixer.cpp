@@ -44,6 +44,8 @@ void SoundMixer::Reset()
 	_previousOutput = 0;
 	blip_clear(_blipBuf);
 
+	_timestamps.clear();
+
 	for(int i = 0; i < 5; i++) {
 		_volumes[0] = 0;
 	}

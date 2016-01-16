@@ -55,6 +55,7 @@ void APU::SetNesModel(NesModel model, bool forceInit)
 		_frameCounter->SetNesModel(model);
 
 		_mixer->SetNesModel(model);
+		_mixer->Reset();
 	}
 }
 
@@ -213,8 +214,6 @@ void APU::Reset(bool softReset)
 void APU::StreamState(bool saving)
 {
 	Stream<NesModel>(_nesModel);
-	Stream<uint32_t>(_currentCycle);
-	Stream<uint32_t>(_previousCycle);
 	Stream(_squareChannel[0].get());
 	Stream(_squareChannel[1].get());
 	Stream(_triangleChannel.get());
@@ -223,6 +222,8 @@ void APU::StreamState(bool saving)
 	Stream(_frameCounter.get());
 
 	if(!saving) {
+		_currentCycle = 0;
+		_previousCycle = 0;
 		SetNesModel(_nesModel, true);
 	}
 }

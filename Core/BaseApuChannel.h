@@ -47,15 +47,14 @@ public:
 
 	virtual void StreamState(bool saving)
 	{
-		Stream<int8_t>(_lastOutput);
-		Stream<uint32_t>(_previousCycle);
+		if(!saving) {
+			_lastOutput = 0;
+			_previousCycle = 0;
+		}
+
 		Stream<uint16_t>(_timer);
 		Stream<uint16_t>(_period);
 		Stream<NesModel>(_nesModel);
-
-		if(!saving) {
-			_mixer->Reset();
-		}
 	}
 
 	void SetNesModel(NesModel model)
