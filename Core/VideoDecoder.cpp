@@ -133,14 +133,15 @@ void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInf
 
 void VideoDecoder::StartThread()
 {
-	if(!Instance->_decodeThread) {	
+	if(!_decodeThread) {	
 		_stopFlag = false;
 		_frameChanged = false;
 		_frameCount = 0;
 		_waitForFrame.Reset();
 		_waitForRender.Reset();
-		Instance->_decodeThread.reset(new thread(&VideoDecoder::DecodeThread, Instance.get()));
-		Instance->_renderThread.reset(new thread(&VideoDecoder::RenderThread, Instance.get()));
+
+		_decodeThread.reset(new thread(&VideoDecoder::DecodeThread, this));
+		_renderThread.reset(new thread(&VideoDecoder::RenderThread, this));
 	}
 }
 
@@ -168,6 +169,7 @@ void VideoDecoder::StopThread()
 
 void VideoDecoder::RenderThread()
 {
+	_renderer->Reset();
 	while(!_stopFlag.load()) {
 		//Wait until a frame is ready, or until 16ms have passed (to allow UI to run at a minimum of 60fps)
 		_waitForRender.Wait(16);

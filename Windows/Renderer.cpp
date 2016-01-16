@@ -14,7 +14,7 @@
 
 using namespace DirectX;
 
-namespace NES 
+namespace NES
 {
 	Renderer::Renderer(HWND hWnd)
 	{
@@ -36,7 +36,7 @@ namespace NES
 	{
 		uint32_t scale = EmulationSettings::GetVideoScale();
 
-		if(_screenHeight != height*scale || _screenWidth != width*scale) {			
+		if(_screenHeight != height*scale || _screenWidth != width*scale) {
 			_nesFrameHeight = height;
 			_nesFrameWidth = width;
 			_newFrameBufferSize = width*height;
@@ -44,14 +44,19 @@ namespace NES
 			_screenHeight = height * scale;
 			_screenWidth = width * scale;
 			_screenBufferSize = _screenHeight*_screenWidth;
-		
-			_frameLock.Acquire();
-			CleanupDevice();
-			if(FAILED(InitDevice())) {
-				CleanupDevice();
-			}
-			_frameLock.Release();
+
+			Reset();
 		}
+	}
+
+	void Renderer::Reset()
+	{
+		_frameLock.Acquire();
+		CleanupDevice();
+		if(FAILED(InitDevice())) {
+			CleanupDevice();
+		}
+		_frameLock.Release();
 	}
 
 	void Renderer::CleanupDevice()

@@ -82,6 +82,7 @@ namespace NES {
 		Renderer(HWND hWnd);
 		~Renderer();
 
+		void Reset();
 		void Render();
 		void DisplayMessage(string title, string message);
 		void DisplayToast(shared_ptr<ToastInfo> toast);

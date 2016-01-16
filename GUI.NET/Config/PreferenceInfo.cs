@@ -34,7 +34,8 @@ namespace Mesen.GUI.Config
 				Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\.nes", null, "Mesen");
 			} else {
 				//Unregister Mesen if Mesen was registered for .nes files
-				if(Registry.GetValue(@"HKEY_CURRENT_USER\Software\Classes\.nes", null, "").Equals("Mesen")) {
+				object regKey = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Classes\.nes", null, "");
+				if(regKey != null && regKey.Equals("Mesen")) {
 					Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\.nes", null, "");
 				}
 			}
