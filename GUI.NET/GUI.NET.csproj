@@ -361,6 +361,9 @@
     <EmbeddedResource Include="Forms\BaseConfigForm.resx">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BaseForm.resx">
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Cheats\frmCheat.resx">
       <DependentUpon>frmCheat.cs</DependentUpon>
     </EmbeddedResource>

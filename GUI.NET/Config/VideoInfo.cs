@@ -22,6 +22,7 @@ namespace Mesen.GUI.Config
 		public VideoAspectRatio AspectRatio = VideoAspectRatio.Auto;
 		public bool VerticalSync = true;
 		public bool FullscreenMode = false;
+		public bool UseHdPacks = false;
 
 		public VideoInfo()
 		{
@@ -35,6 +36,7 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetFlag(EmulationFlags.ShowFPS, videoInfo.ShowFPS);
 			InteropEmu.SetFlag(EmulationFlags.VerticalSync, videoInfo.VerticalSync);
+			InteropEmu.SetFlag(EmulationFlags.UseHdPacks, videoInfo.UseHdPacks);
 
 			InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);
 

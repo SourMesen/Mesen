@@ -433,6 +433,7 @@ namespace Mesen.GUI
 		VerticalSync = 0x04,
 		AllowInvalidInput = 0x08,
 		RemoveSpriteLimit = 0x10,
+		UseHdPacks = 0x20,
 		
 		Mmc3IrqAltBehavior = 0x8000,
 	}

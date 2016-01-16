@@ -351,14 +351,6 @@
 			this.chkExec.UseVisualStyleBackColor = true;
 			this.chkExec.Enter += new System.EventHandler(this.chkRead_Enter);
 			// 
-			// toolTip
-			// 
-			this.toolTip.AutomaticDelay = 0;
-			this.toolTip.AutoPopDelay = 32700;
-			this.toolTip.InitialDelay = 10;
-			this.toolTip.ReshowDelay = 10;
-			this.toolTip.UseFading = false;
-			// 
 			// frmBreakpoint
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -401,7 +393,6 @@
 		private System.Windows.Forms.Label lblCondition;
 		private System.Windows.Forms.PictureBox picHelp;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.CheckBox chkExec;
 		private System.Windows.Forms.CheckBox chkRead;
 		private System.Windows.Forms.CheckBox chkWrite;

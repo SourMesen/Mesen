@@ -269,7 +269,7 @@ public:
 		string hdPackDefinitionFile = FolderUtilities::CombinePath(hdPackFolder, "hires.txt");
 
 		if(ifstream(hdPackDefinitionFile)) {
-			return true;
+			return EmulationSettings::CheckFlag(EmulationFlags::UseHdPacks);
 		} else {
 			return false;
 		}

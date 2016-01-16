@@ -28,15 +28,19 @@
 		private void InitializeComponent()
 		{
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-			this.chkShowFps = new System.Windows.Forms.CheckBox();
-			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-			this.lblEmulationSpeed = new System.Windows.Forms.Label();
-			this.nudEmulationSpeed = new System.Windows.Forms.NumericUpDown();
-			this.lblEmuSpeedHint = new System.Windows.Forms.Label();
+			this.chkFullscreenMode = new System.Windows.Forms.CheckBox();
 			this.lblVideoScale = new System.Windows.Forms.Label();
 			this.lblVideoFilter = new System.Windows.Forms.Label();
 			this.cboScale = new System.Windows.Forms.ComboBox();
 			this.cboFilter = new System.Windows.Forms.ComboBox();
+			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
+			this.cboAspectRatio = new System.Windows.Forms.ComboBox();
+			this.lblDisplayRatio = new System.Windows.Forms.Label();
+			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+			this.nudEmulationSpeed = new System.Windows.Forms.NumericUpDown();
+			this.lblEmuSpeedHint = new System.Windows.Forms.Label();
+			this.lblEmulationSpeed = new System.Windows.Forms.Label();
+			this.chkShowFps = new System.Windows.Forms.CheckBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgOverscan = new System.Windows.Forms.TabPage();
@@ -55,11 +59,10 @@
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblRight = new System.Windows.Forms.Label();
 			this.nudOverscanRight = new System.Windows.Forms.NumericUpDown();
-			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
-			this.cboAspectRatio = new System.Windows.Forms.ComboBox();
-			this.lblDisplayRatio = new System.Windows.Forms.Label();
 			this.tpgPalette = new System.Windows.Forms.TabPage();
-			this.chkFullscreenMode = new System.Windows.Forms.CheckBox();
+			this.chkUseHdPacks = new System.Windows.Forms.CheckBox();
+			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
+			this.picHdNesTooltip = new System.Windows.Forms.PictureBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
@@ -77,6 +80,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanBottom)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).BeginInit();
+			this.flowLayoutPanel7.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -89,22 +94,24 @@
 			this.tlpMain.ColumnCount = 2;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.Controls.Add(this.chkFullscreenMode, 0, 4);
+			this.tlpMain.Controls.Add(this.chkFullscreenMode, 0, 5);
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.lblVideoFilter, 0, 1);
 			this.tlpMain.Controls.Add(this.cboScale, 1, 0);
 			this.tlpMain.Controls.Add(this.cboFilter, 1, 1);
-			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 3);
+			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 4);
 			this.tlpMain.Controls.Add(this.cboAspectRatio, 1, 2);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 2);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 6);
-			this.tlpMain.Controls.Add(this.lblEmulationSpeed, 0, 6);
-			this.tlpMain.Controls.Add(this.chkShowFps, 0, 5);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 7);
+			this.tlpMain.Controls.Add(this.lblEmulationSpeed, 0, 7);
+			this.tlpMain.Controls.Add(this.chkShowFps, 0, 6);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 3);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
-			this.tlpMain.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 8;
+			this.tlpMain.RowCount = 9;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -116,61 +123,17 @@
 			this.tlpMain.Size = new System.Drawing.Size(348, 276);
 			this.tlpMain.TabIndex = 1;
 			// 
-			// chkShowFps
+			// chkFullscreenMode
 			// 
-			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkShowFps.AutoSize = true;
-			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 130);
-			this.chkShowFps.Name = "chkShowFps";
-			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
-			this.chkShowFps.TabIndex = 9;
-			this.chkShowFps.Text = "Show FPS";
-			this.chkShowFps.UseVisualStyleBackColor = true;
-			// 
-			// flowLayoutPanel6
-			// 
-			this.flowLayoutPanel6.AutoSize = true;
-			this.flowLayoutPanel6.Controls.Add(this.nudEmulationSpeed);
-			this.flowLayoutPanel6.Controls.Add(this.lblEmuSpeedHint);
-			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 150);
-			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(252, 26);
-			this.flowLayoutPanel6.TabIndex = 10;
-			// 
-			// lblEmulationSpeed
-			// 
-			this.lblEmulationSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblEmulationSpeed.AutoSize = true;
-			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 156);
-			this.lblEmulationSpeed.Name = "lblEmulationSpeed";
-			this.lblEmulationSpeed.Size = new System.Drawing.Size(90, 13);
-			this.lblEmulationSpeed.TabIndex = 0;
-			this.lblEmulationSpeed.Text = "Emulation Speed:";
-			// 
-			// nudEmulationSpeed
-			// 
-			this.nudEmulationSpeed.Location = new System.Drawing.Point(3, 3);
-			this.nudEmulationSpeed.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-			this.nudEmulationSpeed.Name = "nudEmulationSpeed";
-			this.nudEmulationSpeed.Size = new System.Drawing.Size(48, 20);
-			this.nudEmulationSpeed.TabIndex = 1;
-			// 
-			// lblEmuSpeedHint
-			// 
-			this.lblEmuSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblEmuSpeedHint.AutoSize = true;
-			this.lblEmuSpeedHint.Location = new System.Drawing.Point(57, 6);
-			this.lblEmuSpeedHint.Name = "lblEmuSpeedHint";
-			this.lblEmuSpeedHint.Size = new System.Drawing.Size(107, 13);
-			this.lblEmuSpeedHint.TabIndex = 2;
-			this.lblEmuSpeedHint.Text = "(0 = Maximum speed)";
+			this.chkFullscreenMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkFullscreenMode.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkFullscreenMode, 2);
+			this.chkFullscreenMode.Location = new System.Drawing.Point(3, 130);
+			this.chkFullscreenMode.Name = "chkFullscreenMode";
+			this.chkFullscreenMode.Size = new System.Drawing.Size(113, 17);
+			this.chkFullscreenMode.TabIndex = 18;
+			this.chkFullscreenMode.Text = "Fullscreen window";
+			this.chkFullscreenMode.UseVisualStyleBackColor = true;
 			// 
 			// lblVideoScale
 			// 
@@ -217,6 +180,99 @@
 			this.cboFilter.Name = "cboFilter";
 			this.cboFilter.Size = new System.Drawing.Size(76, 21);
 			this.cboFilter.TabIndex = 14;
+			// 
+			// chkVerticalSync
+			// 
+			this.chkVerticalSync.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkVerticalSync.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkVerticalSync, 2);
+			this.chkVerticalSync.Location = new System.Drawing.Point(3, 107);
+			this.chkVerticalSync.Name = "chkVerticalSync";
+			this.chkVerticalSync.Size = new System.Drawing.Size(121, 17);
+			this.chkVerticalSync.TabIndex = 15;
+			this.chkVerticalSync.Text = "Enable vertical sync";
+			this.chkVerticalSync.UseVisualStyleBackColor = true;
+			// 
+			// cboAspectRatio
+			// 
+			this.cboAspectRatio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboAspectRatio.FormattingEnabled = true;
+			this.cboAspectRatio.Items.AddRange(new object[] {
+            "Auto",
+            "NTSC (8:7)",
+            "PAL (18:13)",
+            "Standard (4:3)",
+            "Widescreen (16:9)"});
+			this.cboAspectRatio.Location = new System.Drawing.Point(99, 57);
+			this.cboAspectRatio.Name = "cboAspectRatio";
+			this.cboAspectRatio.Size = new System.Drawing.Size(121, 21);
+			this.cboAspectRatio.TabIndex = 16;
+			// 
+			// lblDisplayRatio
+			// 
+			this.lblDisplayRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblDisplayRatio.AutoSize = true;
+			this.lblDisplayRatio.Location = new System.Drawing.Point(3, 61);
+			this.lblDisplayRatio.Name = "lblDisplayRatio";
+			this.lblDisplayRatio.Size = new System.Drawing.Size(71, 13);
+			this.lblDisplayRatio.TabIndex = 17;
+			this.lblDisplayRatio.Text = "Aspect Ratio:";
+			// 
+			// flowLayoutPanel6
+			// 
+			this.flowLayoutPanel6.AutoSize = true;
+			this.flowLayoutPanel6.Controls.Add(this.nudEmulationSpeed);
+			this.flowLayoutPanel6.Controls.Add(this.lblEmuSpeedHint);
+			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 173);
+			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(252, 26);
+			this.flowLayoutPanel6.TabIndex = 10;
+			// 
+			// nudEmulationSpeed
+			// 
+			this.nudEmulationSpeed.Location = new System.Drawing.Point(3, 3);
+			this.nudEmulationSpeed.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+			this.nudEmulationSpeed.Name = "nudEmulationSpeed";
+			this.nudEmulationSpeed.Size = new System.Drawing.Size(48, 20);
+			this.nudEmulationSpeed.TabIndex = 1;
+			// 
+			// lblEmuSpeedHint
+			// 
+			this.lblEmuSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblEmuSpeedHint.AutoSize = true;
+			this.lblEmuSpeedHint.Location = new System.Drawing.Point(57, 6);
+			this.lblEmuSpeedHint.Name = "lblEmuSpeedHint";
+			this.lblEmuSpeedHint.Size = new System.Drawing.Size(107, 13);
+			this.lblEmuSpeedHint.TabIndex = 2;
+			this.lblEmuSpeedHint.Text = "(0 = Maximum speed)";
+			// 
+			// lblEmulationSpeed
+			// 
+			this.lblEmulationSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblEmulationSpeed.AutoSize = true;
+			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 179);
+			this.lblEmulationSpeed.Name = "lblEmulationSpeed";
+			this.lblEmulationSpeed.Size = new System.Drawing.Size(90, 13);
+			this.lblEmulationSpeed.TabIndex = 0;
+			this.lblEmulationSpeed.Text = "Emulation Speed:";
+			// 
+			// chkShowFps
+			// 
+			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkShowFps.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 153);
+			this.chkShowFps.Name = "chkShowFps";
+			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
+			this.chkShowFps.TabIndex = 9;
+			this.chkShowFps.Text = "Show FPS";
+			this.chkShowFps.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
@@ -412,43 +468,6 @@
 			this.nudOverscanRight.Size = new System.Drawing.Size(50, 20);
 			this.nudOverscanRight.TabIndex = 1;
 			// 
-			// chkVerticalSync
-			// 
-			this.chkVerticalSync.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkVerticalSync.AutoSize = true;
-			this.tlpMain.SetColumnSpan(this.chkVerticalSync, 2);
-			this.chkVerticalSync.Location = new System.Drawing.Point(3, 84);
-			this.chkVerticalSync.Name = "chkVerticalSync";
-			this.chkVerticalSync.Size = new System.Drawing.Size(121, 17);
-			this.chkVerticalSync.TabIndex = 15;
-			this.chkVerticalSync.Text = "Enable vertical sync";
-			this.chkVerticalSync.UseVisualStyleBackColor = true;
-			// 
-			// cboAspectRatio
-			// 
-			this.cboAspectRatio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboAspectRatio.FormattingEnabled = true;
-			this.cboAspectRatio.Items.AddRange(new object[] {
-            "Auto",
-            "NTSC (8:7)",
-            "PAL (18:13)",
-            "Standard (4:3)",
-            "Widescreen (16:9)"});
-			this.cboAspectRatio.Location = new System.Drawing.Point(99, 57);
-			this.cboAspectRatio.Name = "cboAspectRatio";
-			this.cboAspectRatio.Size = new System.Drawing.Size(121, 21);
-			this.cboAspectRatio.TabIndex = 16;
-			// 
-			// lblDisplayRatio
-			// 
-			this.lblDisplayRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblDisplayRatio.AutoSize = true;
-			this.lblDisplayRatio.Location = new System.Drawing.Point(3, 61);
-			this.lblDisplayRatio.Name = "lblDisplayRatio";
-			this.lblDisplayRatio.Size = new System.Drawing.Size(71, 13);
-			this.lblDisplayRatio.TabIndex = 17;
-			this.lblDisplayRatio.Text = "Aspect Ratio:";
-			// 
 			// tpgPalette
 			// 
 			this.tpgPalette.Location = new System.Drawing.Point(4, 22);
@@ -459,17 +478,36 @@
 			this.tpgPalette.Text = "Palette";
 			this.tpgPalette.UseVisualStyleBackColor = true;
 			// 
-			// chkFullscreenMode
+			// chkUseHdPacks
 			// 
-			this.chkFullscreenMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkFullscreenMode.AutoSize = true;
-			this.tlpMain.SetColumnSpan(this.chkFullscreenMode, 2);
-			this.chkFullscreenMode.Location = new System.Drawing.Point(3, 107);
-			this.chkFullscreenMode.Name = "chkFullscreenMode";
-			this.chkFullscreenMode.Size = new System.Drawing.Size(113, 17);
-			this.chkFullscreenMode.TabIndex = 18;
-			this.chkFullscreenMode.Text = "Fullscreen window";
-			this.chkFullscreenMode.UseVisualStyleBackColor = true;
+			this.chkUseHdPacks.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkUseHdPacks.AutoSize = true;
+			this.chkUseHdPacks.Location = new System.Drawing.Point(3, 3);
+			this.chkUseHdPacks.Name = "chkUseHdPacks";
+			this.chkUseHdPacks.Size = new System.Drawing.Size(134, 17);
+			this.chkUseHdPacks.TabIndex = 19;
+			this.chkUseHdPacks.Text = "Use HDNes HD packs";
+			this.chkUseHdPacks.UseVisualStyleBackColor = true;
+			// 
+			// flowLayoutPanel7
+			// 
+			this.tlpMain.SetColumnSpan(this.flowLayoutPanel7, 2);
+			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
+			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 81);
+			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
+			this.flowLayoutPanel7.Size = new System.Drawing.Size(166, 23);
+			this.flowLayoutPanel7.TabIndex = 20;
+			// 
+			// picHdNesTooltip
+			// 
+			this.picHdNesTooltip.Image = global::Mesen.GUI.Properties.Resources.help;
+			this.picHdNesTooltip.Location = new System.Drawing.Point(143, 3);
+			this.picHdNesTooltip.Name = "picHdNesTooltip";
+			this.picHdNesTooltip.Size = new System.Drawing.Size(17, 17);
+			this.picHdNesTooltip.TabIndex = 21;
+			this.picHdNesTooltip.TabStop = false;
 			// 
 			// frmVideoConfig
 			// 
@@ -505,6 +543,9 @@
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).EndInit();
+			this.flowLayoutPanel7.ResumeLayout(false);
+			this.flowLayoutPanel7.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -544,5 +585,8 @@
 		private System.Windows.Forms.NumericUpDown nudOverscanRight;
 		private System.Windows.Forms.CheckBox chkFullscreenMode;
 		private System.Windows.Forms.TabPage tpgPalette;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
+		private System.Windows.Forms.CheckBox chkUseHdPacks;
+		private System.Windows.Forms.PictureBox picHdNesTooltip;
 	}
 }
