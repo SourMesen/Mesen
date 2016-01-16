@@ -30,14 +30,18 @@ class Snapshotable
 				uint32_t size = 0;
 				Stream<uint32_t>(size);
 				
-				uint8_t *buffer = new uint8_t[size];
-				StreamArray(buffer, size);
+				if(_position + size <= _streamSize) {
+					uint8_t *buffer = new uint8_t[size];
+					StreamArray(buffer, size);
 
-				stream.write((char*)buffer, size);
-				stream.seekg(0, ios::beg);
-				stream.seekp(0, ios::beg);
-				snapshotable->LoadSnapshot(&stream);
-				delete[] buffer;
+					stream.write((char*)buffer, size);
+					stream.seekg(0, ios::beg);
+					stream.seekp(0, ios::beg);
+					snapshotable->LoadSnapshot(&stream);
+					delete[] buffer;
+				} else {
+					_position = _streamSize;
+				}
 			}
 		}
 
@@ -51,8 +55,12 @@ class Snapshotable
 					_stream[_position++] = bytes[i];
 				}
 			} else {
-				value = *((T*)(_stream + _position));
-				_position += sizeof(T);
+				if(_position + sizeof(T) <= _streamSize) {
+					value = *((T*)(_stream + _position));
+					_position += sizeof(T);
+				} else {
+					_position = _streamSize;
+				}
 			}
 		}
 
@@ -67,8 +75,13 @@ class Snapshotable
 				}
 			} else {
 				for(uint32_t i = 0, len = length*typeSize; i < len;  i++) {
-					((uint8_t*)value)[i] = _stream[_position];
-					_position++;
+					if(_position < _streamSize) {
+						((uint8_t*)value)[i] = _stream[_position];
+						_position++;
+					} else {
+						((uint8_t*)value)[i] = 0;
+						_position = _streamSize;
+					}
 				}
 			}
 		}
