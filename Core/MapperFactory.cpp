@@ -70,7 +70,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();
-		case 34: return (romLoader.GetCHRSize() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
+		case 34: return (romLoader.GetChrSize() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
 		case 37: break;
 		case 38: return new UnlPci556();
 		case 66: return new GxRom();

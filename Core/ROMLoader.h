@@ -17,58 +17,150 @@ enum class MirroringType
 	Custom
 };
 
+enum class RomHeaderVersion
+{
+	iNes = 0,
+	Nes2_0 = 1,
+	OldiNes = 2
+};
+
 struct NESHeader
 {
+/*
+	Thing 	Archaic			 	iNES 									NES 2.0
+	Byte 6	Mapper low nibble, Mirroring, Battery/Trainer flags
+	Byte 7 	Unused 				Mapper high nibble, Vs. 		Mapper high nibble, NES 2.0 signature, PlayChoice, Vs.
+	Byte 8 	Unused 				Total PRG RAM size (linear) 	Mapper highest nibble, mapper variant
+	Byte 9 	Unused 				TV system 							Upper bits of ROM size
+	Byte 10 	Unused 				Unused 								PRG RAM size (logarithmic; battery and non-battery)
+	Byte 11 	Unused 				Unused 								VRAM size (logarithmic; battery and non-battery)
+	Byte 12 	Unused 				Unused 								TV system
+	Byte 13 	Unused 				Unused 								Vs. PPU variant
+*/
 	char NES[4];
-	uint8_t ROMCount;
-	uint8_t VROMCount;
-	uint8_t Flags1;
-	uint8_t Flags2;
-	uint8_t RAMCount;
-	uint8_t CartType;
-	uint8_t Reserved[6];
+	uint8_t PrgCount;
+	uint8_t ChrCount;
+	uint8_t Byte6;
+	uint8_t Byte7;
+	uint8_t Byte8;
+	uint8_t Byte9;
+	uint8_t Byte10;
+	uint8_t Byte11;
+	uint8_t Byte12;
+	uint8_t Byte13;
+	uint8_t Reserved[2];
 
-	uint8_t GetMapperID()
+	uint16_t GetMapperID()
 	{
-		return (Flags2 & 0xF0) | (Flags1 >> 4);
+		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
+			return (Byte8 & 0x0F << 4) | (Byte7 & 0xF0) | (Byte6 >> 4);
+		} else {
+			return (Byte7 & 0xF0) | (Byte6 >> 4);
+		}
 	}
 
 	bool HasBattery()
 	{
-		return (Flags1 & 0x02) == 0x02;
+		return (Byte6 & 0x02) == 0x02;
 	}
 
 	bool HasTrainer()
 	{
-		return (Flags1 & 0x04) == 0x04;
+		return (Byte6 & 0x04) == 0x04;
 	}
 
 	bool IsPalRom()
 	{
-		return (CartType & 0x01) == 0x01;
+		switch(GetRomHeaderVersion()) {
+			case RomHeaderVersion::Nes2_0: return (Byte12 & 0x01) == 0x01;
+			case RomHeaderVersion::iNes: return (Byte9 & 0x01) == 0x01;
+			default: return false;
+		}
+	}
+
+	RomHeaderVersion GetRomHeaderVersion()
+	{
+		if((Byte7 & 0x0C) == 0x08) {
+			return RomHeaderVersion::Nes2_0;
+		} else if((Byte7 & 0x0C) == 0x00) {
+			return RomHeaderVersion::iNes;
+		} else {
+			return RomHeaderVersion::OldiNes;
+		}
+	}
+
+	uint32_t GetPrgSize()
+	{
+		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
+			return (((Byte9 & 0x0F) << 4) | PrgCount) * 0x4000;
+		} else {
+			return PrgCount * 0x4000;
+		}
+	}
+
+	uint32_t GetChrSize()
+	{
+		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
+			return (((Byte9 & 0xF0) << 4) | ChrCount) * 0x2000;
+		} else {
+			return ChrCount * 0x2000;
+		}
+	}
+
+	uint32_t GetWorkRamSize()
+	{
+		uint8_t value = Byte10 & 0x0F;
+		return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+	}
+
+	uint32_t GetSaveRamSize()
+	{
+		uint8_t value = (Byte10 & 0xF0) >> 4;
+		return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+	}
+
+	uint32_t GetChrRamSize()
+	{
+		uint8_t value = Byte11 & 0x0F;
+		return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+	}
+
+	uint32_t GetSavedChrRamSize()
+	{
+		uint8_t value = (Byte10 & 0xF0) >> 4;
+		return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+	}
+
+	uint8_t GetSubMapper()
+	{
+		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
+			return (Byte8 & 0xF0) >> 4;
+		} else {
+			return 0;
+		}
 	}
 
 	MirroringType GetMirroringType()
 	{
-		if(Flags1 & 0x08) {
+		if(Byte6 & 0x08) {
 			return MirroringType::FourScreens;
 		} else {
-			return Flags1 & 0x01 ? MirroringType::Vertical : MirroringType::Horizontal;
+			return Byte6 & 0x01 ? MirroringType::Vertical : MirroringType::Horizontal;
 		}
 	}
 
 	void SanitizeHeader(size_t romLength)
 	{
-		size_t calculatedLength = sizeof(NESHeader) + 0x4000 * ROMCount;
+		size_t calculatedLength = sizeof(NESHeader) + 0x4000 * PrgCount;
 		while(calculatedLength > romLength) {
-			ROMCount--;
-			calculatedLength = sizeof(NESHeader) + 0x4000 * ROMCount;
+			PrgCount--;
+			calculatedLength = sizeof(NESHeader) + 0x4000 * PrgCount;
 		}
 
-		calculatedLength = sizeof(NESHeader) + 0x4000 * ROMCount + 0x2000 * VROMCount;
+		calculatedLength = sizeof(NESHeader) + 0x4000 * PrgCount + 0x2000 * ChrCount;
 		while(calculatedLength > romLength) {
-			VROMCount--;
-			calculatedLength = sizeof(NESHeader) + 0x4000 * ROMCount + 0x2000 * VROMCount;
+			ChrCount--;
+			calculatedLength = sizeof(NESHeader) + 0x4000 * PrgCount + 0x2000 * ChrCount;
 		}
 	}
 };
@@ -162,13 +254,13 @@ class ROMLoader
 
 				_header.SanitizeHeader(length);
 
-				_prgRAM = new uint8_t[0x4000 * _header.ROMCount];
-				_chrRAM = new uint8_t[0x2000 * _header.VROMCount];
+				_prgRAM = new uint8_t[_header.GetPrgSize()];
+				_chrRAM = new uint8_t[_header.GetChrSize()];
 
-				memcpy(_prgRAM, buffer, 0x4000 * _header.ROMCount);
-				buffer += 0x4000 * _header.ROMCount;
+				memcpy(_prgRAM, buffer, _header.GetPrgSize());
+				buffer += _header.GetPrgSize();
 
-				memcpy(_chrRAM, buffer, 0x2000 * _header.VROMCount);
+				memcpy(_chrRAM, buffer, _header.GetChrSize());
 
 				return true;
 			}
@@ -225,24 +317,24 @@ class ROMLoader
 
 		void GetPRGRam(uint8_t** buffer)
 		{
-			*buffer = new uint8_t[GetPRGSize()];
-			memcpy(*buffer, _prgRAM, GetPRGSize());
+			*buffer = new uint8_t[GetPrgSize()];
+			memcpy(*buffer, _prgRAM, GetPrgSize());
 		}
 
 		void GetCHRRam(uint8_t** buffer)
 		{
-			*buffer = new uint8_t[GetCHRSize()];
-			memcpy(*buffer, _chrRAM, GetCHRSize());
+			*buffer = new uint8_t[GetChrSize()];
+			memcpy(*buffer, _chrRAM, GetChrSize());
 		}
 
-		uint32_t GetPRGSize()
+		uint32_t GetPrgSize()
 		{
-			return _header.ROMCount * 0x4000;
+			return _header.GetPrgSize();
 		}
 
-		uint32_t GetCHRSize()
+		uint32_t GetChrSize()
 		{
-			return _header.VROMCount * 0x2000;
+			return _header.GetChrSize();
 		}
 
 		MirroringType GetMirroringType()
@@ -250,7 +342,7 @@ class ROMLoader
 			return _header.GetMirroringType();
 		}
 
-		uint8_t GetMapperID()
+		uint16_t GetMapperID()
 		{
 			return _header.GetMapperID();
 		}

@@ -333,8 +333,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			romLoader.GetPRGRam(&_prgRom);
 			romLoader.GetPRGRam(&_originalPrgRom);
 			romLoader.GetCHRRam(&_chrRam);
-			_prgSize = romLoader.GetPRGSize();
-			_chrSize = romLoader.GetCHRSize();
+			_prgSize = romLoader.GetPrgSize();
+			_chrSize = romLoader.GetChrSize();
 			_hasBattery = romLoader.HasBattery() || ForceBattery();
 			_isPalRom = romLoader.IsPalRom();
 
