@@ -309,6 +309,7 @@
     <Compile Include="InteropEmu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <EmbeddedResource Include="Controls\ctrlTrackbar.resx">
@@ -423,6 +424,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="..\Windows\Resources\Roboto.12.spritefont">
+      <Link>Dependencies\Roboto.12.spritefont</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Windows\Resources\Roboto.9.spritefont">
+      <Link>Dependencies\Roboto.9.spritefont</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Windows\Resources\Toast.dds">
+      <Link>Dependencies\Toast.dds</Link>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -437,6 +447,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="$(OutputPath)\BlipBuffer.dll">
+      <Link>Dependencies\BlipBuffer.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(OutputPath)\NesNtsc.dll">
+      <Link>Dependencies\NesNtsc.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(OutputPath)\WinMesen.dll">
+      <Link>Dependencies\WinMesen.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Windows\Resources\MesenIcon.bmp">
+      <Link>Dependencies\MesenIcon.bmp</Link>
+    </EmbeddedResource>
     <Content Include="Icon.ico" />
     <None Include="Resources\help.png" />
     <None Include="Resources\Close.png" />

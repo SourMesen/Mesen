@@ -19,7 +19,7 @@ using Mesen.GUI.Forms.NetPlay;
 
 namespace Mesen.GUI.Forms
 {
-	public partial class frmMain : Form
+	public partial class frmMain : BaseForm
 	{
 		private InteropEmu.NotificationListener _notifListener;
 		private Thread _emuThread;
@@ -32,8 +32,6 @@ namespace Mesen.GUI.Forms
 				_romToLoad = args[0];
 			}
 
-			Application.ThreadException += Application_ThreadException;
-			Directory.SetCurrentDirectory(Path.GetDirectoryName(Application.ExecutablePath));
 			InitializeComponent();
 		}
 
@@ -61,10 +59,6 @@ namespace Mesen.GUI.Forms
 
 			UpdateMenus();
 			UpdateRecentFiles();
-
-			if(!DesignMode) {
-				Icon = Properties.Resources.MesenIcon;
-			}
 
 			if(_romToLoad != null) {
 				LoadROM(this._romToLoad);
@@ -188,11 +182,6 @@ namespace Mesen.GUI.Forms
 				case VideoAspectRatio.Widescreen: size.Width = (int)(size.Height * 16 / 9.0); break;
 			}
 			dxViewer.Size = new Size(size.Width, size.Height);
-		}
-
-		private void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
-		{
-			MessageBox.Show(e.Exception.ToString(), "Unexpected Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)

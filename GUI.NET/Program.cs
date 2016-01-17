@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI
 {
@@ -15,12 +17,22 @@ namespace Mesen.GUI
 		[return: MarshalAs(UnmanagedType.Bool)]
 		private static extern bool SetForegroundWindow(IntPtr hWnd);
 
+		private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+		{
+			MessageBox.Show(e.Exception.ToString(), "Unexpected Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
+			Application.ThreadException += Application_ThreadException;
+
+			Directory.SetCurrentDirectory(ConfigManager.HomeFolder);
+			ResourceManager.ExtractResources();
+
 			if(!RuntimeChecker.TestDll()) {
 				return;
 			}
