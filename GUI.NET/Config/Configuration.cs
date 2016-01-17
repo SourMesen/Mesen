@@ -12,18 +12,18 @@ namespace Mesen.GUI.Config
 	{
 		private const int MaxRecentFiles = 10;
 
-		public PlayerProfile Profile;
-		public ClientConnectionInfo ClientConnectionInfo;
-		public ServerInfo ServerInfo;
+		public PreferenceInfo PreferenceInfo;
 		public AudioInfo AudioInfo;
 		public VideoInfo VideoInfo;
-		public PreferenceInfo PreferenceInfo;
 		public List<string> RecentFiles;
 		public List<CheatInfo> Cheats;
 		public List<ControllerInfo> Controllers;
 		public bool ShowOnlyCheatsForCurrentGame;
 		public bool AutoLoadIpsPatches;
 		public NesModel Region;
+		public ClientConnectionInfo ClientConnectionInfo;
+		public ServerInfo ServerInfo;
+		public PlayerProfile Profile;
 
 		public Configuration()
 		{

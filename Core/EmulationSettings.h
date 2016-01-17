@@ -64,6 +64,7 @@ struct OverscanDimensions
 class EmulationSettings
 {
 private:
+	static uint32_t PpuPaletteArgb[64];
 	static uint32_t _flags;
 
 	static uint32_t _audioLatency;
@@ -200,5 +201,20 @@ public:
 	static uint32_t GetVideoScale()
 	{
 		return _videoScale;
+	}
+	
+	static uint32_t* GetRgbPalette()
+	{
+		return PpuPaletteArgb;
+	}
+
+	static void GetRgbPalette(uint32_t* paletteBuffer)
+	{
+		memcpy(paletteBuffer, PpuPaletteArgb, sizeof(PpuPaletteArgb));
+	}
+
+	static void SetRgbPalette(uint32_t* paletteBuffer)
+	{
+		memcpy(PpuPaletteArgb, paletteBuffer, sizeof(PpuPaletteArgb));
 	}
 };

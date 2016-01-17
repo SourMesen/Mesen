@@ -82,7 +82,9 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
 		[DllImport(DLLPath)] public static extern void SetVideoScale(UInt32 scale);
 		[DllImport(DLLPath)] public static extern void SetVideoFilter(VideoFilterType filter);
-
+		[DllImport(DLLPath)] public static extern void SetRgbPalette(Int32[] palette);
+		[DllImport(DLLPath, EntryPoint="GetRgbPalette")] private static extern void GetRgbPaletteWrapper(IntPtr paletteBuffer);
+		
 		[DllImport(DLLPath, EntryPoint="GetScreenSize")] private static extern void GetScreenSizeWrapper(out ScreenSize size);
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
@@ -217,6 +219,20 @@ namespace Mesen.GUI
 			} else {
 				InteropEmu.ClearFlags(flag);
 			}
+		}
+
+		public static Int32[] GetRgbPalette()
+		{
+			Int32[] paleteData = new Int32[64];
+
+			GCHandle hPaletteData = GCHandle.Alloc(paleteData, GCHandleType.Pinned);
+			try {
+				InteropEmu.GetRgbPaletteWrapper(hPaletteData.AddrOfPinnedObject());
+			} finally {
+				hPaletteData.Free();
+			}
+
+			return paleteData;
 		}
 
 		public static string GetROMPath() { return PtrToStringUtf8(InteropEmu.GetROMPathWrapper()); }

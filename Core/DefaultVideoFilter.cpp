@@ -2,8 +2,6 @@
 #include "DefaultVideoFilter.h"
 #include "EmulationSettings.h"
 
-extern const uint32_t PPU_PALETTE_ARGB[];
-
 FrameInfo DefaultVideoFilter::GetFrameInfo()
 {
 	OverscanDimensions overscan = GetOverscan();
@@ -25,7 +23,7 @@ void DefaultVideoFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 
 uint32_t DefaultVideoFilter::ProcessIntensifyBits(uint16_t ppuPixel)
 {
-	uint32_t pixelOutput = PPU_PALETTE_ARGB[ppuPixel & 0x3F];
+	uint32_t pixelOutput = EmulationSettings::GetRgbPalette()[ppuPixel & 0x3F];
 
 	//Incorrect emphasis bit implementation, but will do for now.
 	float redChannel = (float)((pixelOutput & 0xFF0000) >> 16);

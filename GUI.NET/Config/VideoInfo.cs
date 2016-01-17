@@ -23,6 +23,7 @@ namespace Mesen.GUI.Config
 		public bool VerticalSync = true;
 		public bool FullscreenMode = false;
 		public bool UseHdPacks = false;
+		public Int32[] Palette = new Int32[0];
 
 		public VideoInfo()
 		{
@@ -42,6 +43,10 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetVideoFilter(videoInfo.VideoFilter);
 			InteropEmu.SetVideoScale(videoInfo.VideoScale);
+
+			if(videoInfo.Palette.Length == 64) {
+				InteropEmu.SetRgbPalette(videoInfo.Palette);
+			}
 		}
 	}
 }

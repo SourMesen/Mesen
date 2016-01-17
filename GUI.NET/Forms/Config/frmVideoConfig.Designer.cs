@@ -41,6 +41,9 @@
 			this.lblEmuSpeedHint = new System.Windows.Forms.Label();
 			this.lblEmulationSpeed = new System.Windows.Forms.Label();
 			this.chkShowFps = new System.Windows.Forms.CheckBox();
+			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkUseHdPacks = new System.Windows.Forms.CheckBox();
+			this.picHdNesTooltip = new System.Windows.Forms.PictureBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgOverscan = new System.Windows.Forms.TabPage();
@@ -60,12 +63,17 @@
 			this.lblRight = new System.Windows.Forms.Label();
 			this.nudOverscanRight = new System.Windows.Forms.NumericUpDown();
 			this.tpgPalette = new System.Windows.Forms.TabPage();
-			this.chkUseHdPacks = new System.Windows.Forms.CheckBox();
-			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
-			this.picHdNesTooltip = new System.Windows.Forms.PictureBox();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.picPalette = new System.Windows.Forms.PictureBox();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.btnResetPalette = new System.Windows.Forms.Button();
+			this.btnLoadPalFile = new System.Windows.Forms.Button();
+			this.colorDialog = new System.Windows.Forms.ColorDialog();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
+			this.flowLayoutPanel7.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgOverscan.SuspendLayout();
@@ -80,14 +88,16 @@
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanBottom)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).BeginInit();
-			this.flowLayoutPanel7.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
+			this.tpgPalette.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picPalette)).BeginInit();
+			this.tableLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 308);
-			this.baseConfigPanel.Size = new System.Drawing.Size(362, 29);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 288);
+			this.baseConfigPanel.Size = new System.Drawing.Size(515, 29);
 			// 
 			// tlpMain
 			// 
@@ -120,7 +130,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(348, 276);
+			this.tlpMain.Size = new System.Drawing.Size(501, 256);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// chkFullscreenMode
@@ -227,7 +237,7 @@
 			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 173);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(252, 26);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(405, 26);
 			this.flowLayoutPanel6.TabIndex = 10;
 			// 
 			// nudEmulationSpeed
@@ -274,6 +284,37 @@
 			this.chkShowFps.Text = "Show FPS";
 			this.chkShowFps.UseVisualStyleBackColor = true;
 			// 
+			// flowLayoutPanel7
+			// 
+			this.tlpMain.SetColumnSpan(this.flowLayoutPanel7, 2);
+			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
+			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 81);
+			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
+			this.flowLayoutPanel7.Size = new System.Drawing.Size(166, 23);
+			this.flowLayoutPanel7.TabIndex = 20;
+			// 
+			// chkUseHdPacks
+			// 
+			this.chkUseHdPacks.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkUseHdPacks.AutoSize = true;
+			this.chkUseHdPacks.Location = new System.Drawing.Point(3, 3);
+			this.chkUseHdPacks.Name = "chkUseHdPacks";
+			this.chkUseHdPacks.Size = new System.Drawing.Size(134, 17);
+			this.chkUseHdPacks.TabIndex = 19;
+			this.chkUseHdPacks.Text = "Use HDNes HD packs";
+			this.chkUseHdPacks.UseVisualStyleBackColor = true;
+			// 
+			// picHdNesTooltip
+			// 
+			this.picHdNesTooltip.Image = global::Mesen.GUI.Properties.Resources.help;
+			this.picHdNesTooltip.Location = new System.Drawing.Point(143, 3);
+			this.picHdNesTooltip.Name = "picHdNesTooltip";
+			this.picHdNesTooltip.Size = new System.Drawing.Size(17, 17);
+			this.picHdNesTooltip.TabIndex = 21;
+			this.picHdNesTooltip.TabStop = false;
+			// 
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
@@ -283,7 +324,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(362, 308);
+			this.tabMain.Size = new System.Drawing.Size(515, 288);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -292,7 +333,7 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(354, 282);
+			this.tpgGeneral.Size = new System.Drawing.Size(507, 262);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -303,7 +344,7 @@
 			this.tpgOverscan.Location = new System.Drawing.Point(4, 22);
 			this.tpgOverscan.Name = "tpgOverscan";
 			this.tpgOverscan.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgOverscan.Size = new System.Drawing.Size(354, 282);
+			this.tpgOverscan.Size = new System.Drawing.Size(507, 262);
 			this.tpgOverscan.TabIndex = 1;
 			this.tpgOverscan.Text = "Overscan";
 			this.tpgOverscan.UseVisualStyleBackColor = true;
@@ -314,7 +355,7 @@
 			this.grpCropping.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCropping.Location = new System.Drawing.Point(3, 3);
 			this.grpCropping.Name = "grpCropping";
-			this.grpCropping.Size = new System.Drawing.Size(348, 276);
+			this.grpCropping.Size = new System.Drawing.Size(501, 256);
 			this.grpCropping.TabIndex = 8;
 			this.grpCropping.TabStop = false;
 			this.grpCropping.Text = "Video Cropping";
@@ -470,50 +511,88 @@
 			// 
 			// tpgPalette
 			// 
+			this.tpgPalette.Controls.Add(this.tableLayoutPanel3);
 			this.tpgPalette.Location = new System.Drawing.Point(4, 22);
 			this.tpgPalette.Name = "tpgPalette";
 			this.tpgPalette.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPalette.Size = new System.Drawing.Size(354, 282);
+			this.tpgPalette.Size = new System.Drawing.Size(507, 262);
 			this.tpgPalette.TabIndex = 2;
 			this.tpgPalette.Text = "Palette";
 			this.tpgPalette.UseVisualStyleBackColor = true;
 			// 
-			// chkUseHdPacks
+			// tableLayoutPanel3
 			// 
-			this.chkUseHdPacks.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkUseHdPacks.AutoSize = true;
-			this.chkUseHdPacks.Location = new System.Drawing.Point(3, 3);
-			this.chkUseHdPacks.Name = "chkUseHdPacks";
-			this.chkUseHdPacks.Size = new System.Drawing.Size(134, 17);
-			this.chkUseHdPacks.TabIndex = 19;
-			this.chkUseHdPacks.Text = "Use HDNes HD packs";
-			this.chkUseHdPacks.UseVisualStyleBackColor = true;
+			this.tableLayoutPanel3.ColumnCount = 2;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel3.Controls.Add(this.picPalette, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel2, 1, 1);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 2;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(501, 256);
+			this.tableLayoutPanel3.TabIndex = 4;
 			// 
-			// flowLayoutPanel7
+			// picPalette
 			// 
-			this.tlpMain.SetColumnSpan(this.flowLayoutPanel7, 2);
-			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
-			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 81);
-			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
-			this.flowLayoutPanel7.Size = new System.Drawing.Size(166, 23);
-			this.flowLayoutPanel7.TabIndex = 20;
+			this.picPalette.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picPalette.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picPalette.Location = new System.Drawing.Point(1, 1);
+			this.picPalette.Margin = new System.Windows.Forms.Padding(1);
+			this.picPalette.Name = "picPalette";
+			this.picPalette.Size = new System.Drawing.Size(386, 98);
+			this.picPalette.TabIndex = 0;
+			this.picPalette.TabStop = false;
+			this.picPalette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
 			// 
-			// picHdNesTooltip
+			// tableLayoutPanel2
 			// 
-			this.picHdNesTooltip.Image = global::Mesen.GUI.Properties.Resources.help;
-			this.picHdNesTooltip.Location = new System.Drawing.Point(143, 3);
-			this.picHdNesTooltip.Name = "picHdNesTooltip";
-			this.picHdNesTooltip.Size = new System.Drawing.Size(17, 17);
-			this.picHdNesTooltip.TabIndex = 21;
-			this.picHdNesTooltip.TabStop = false;
+			this.tableLayoutPanel2.ColumnCount = 1;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Controls.Add(this.btnResetPalette, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.btnLoadPalFile, 0, 0);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(388, 0);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(113, 73);
+			this.tableLayoutPanel2.TabIndex = 1;
+			// 
+			// btnResetPalette
+			// 
+			this.btnResetPalette.Location = new System.Drawing.Point(3, 31);
+			this.btnResetPalette.Name = "btnResetPalette";
+			this.btnResetPalette.Size = new System.Drawing.Size(106, 22);
+			this.btnResetPalette.TabIndex = 1;
+			this.btnResetPalette.Text = "Reset to Defaults";
+			this.btnResetPalette.UseVisualStyleBackColor = true;
+			this.btnResetPalette.Click += new System.EventHandler(this.btnResetPalette_Click);
+			// 
+			// btnLoadPalFile
+			// 
+			this.btnLoadPalFile.Location = new System.Drawing.Point(3, 3);
+			this.btnLoadPalFile.Name = "btnLoadPalFile";
+			this.btnLoadPalFile.Size = new System.Drawing.Size(106, 22);
+			this.btnLoadPalFile.TabIndex = 0;
+			this.btnLoadPalFile.Text = "Load Palette File";
+			this.btnLoadPalFile.UseVisualStyleBackColor = true;
+			this.btnLoadPalFile.Click += new System.EventHandler(this.btnLoadPalFile_Click);
 			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(362, 337);
+			this.ClientSize = new System.Drawing.Size(515, 317);
 			this.Controls.Add(this.tabMain);
 			this.Name = "frmVideoConfig";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -525,6 +604,9 @@
 			this.flowLayoutPanel6.ResumeLayout(false);
 			this.flowLayoutPanel6.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).EndInit();
+			this.flowLayoutPanel7.ResumeLayout(false);
+			this.flowLayoutPanel7.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).EndInit();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgOverscan.ResumeLayout(false);
@@ -543,9 +625,10 @@
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).EndInit();
-			this.flowLayoutPanel7.ResumeLayout(false);
-			this.flowLayoutPanel7.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).EndInit();
+			this.tpgPalette.ResumeLayout(false);
+			this.tableLayoutPanel3.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
+			this.tableLayoutPanel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -588,5 +671,11 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
 		private System.Windows.Forms.CheckBox chkUseHdPacks;
 		private System.Windows.Forms.PictureBox picHdNesTooltip;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+		private System.Windows.Forms.PictureBox picPalette;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.Button btnResetPalette;
+		private System.Windows.Forms.Button btnLoadPalFile;
+		private System.Windows.Forms.ColorDialog colorDialog;
 	}
 }

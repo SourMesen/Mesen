@@ -7,8 +7,6 @@
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/PNGHelper.h"
 
-extern const uint32_t PPU_PALETTE_ARGB[];
-
 struct HdPpuTileInfo
 {
 	static const uint32_t NoTile = -1;
@@ -184,7 +182,7 @@ public:
 		for(uint32_t y = 0; y < _hdScale; y++) {
 			for(uint32_t x = 0; x < _hdScale; x++) {
 				if(drawBackground) {
-					*outputBuffer = PPU_PALETTE_ARGB[tileInfo.BgColor];
+					*outputBuffer = EmulationSettings::GetRgbPalette()[tileInfo.BgColor];
 				}
 				if(!tileInfo.BackgroundPriority || tileInfo.BgColorIndex == 0) {
 					if((bitmapData[bitmapOffset] & 0xFF000000) == 0xFF000000) {

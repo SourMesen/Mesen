@@ -217,7 +217,9 @@ namespace InteropEmu {
 		DllExport void __stdcall SetEmulationSpeed(uint32_t emulationSpeed) { EmulationSettings::SetEmulationSpeed(emulationSpeed); }
 		DllExport void __stdcall SetVideoScale(uint32_t scale) { EmulationSettings::SetVideoScale(scale); }
 		DllExport void __stdcall SetVideoFilter(VideoFilterType filter) { EmulationSettings::SetVideoFilterType(filter); }
-		DllExport void __stdcall GetScreenSize(ScreenSize &size) { VideoDecoder::GetInstance()->GetScreenSize(size); }
+		DllExport void __stdcall GetRgbPalette(uint32_t *paletteBuffer) { EmulationSettings::GetRgbPalette(paletteBuffer); }
+		DllExport void __stdcall SetRgbPalette(uint32_t *paletteBuffer) { EmulationSettings::SetRgbPalette(paletteBuffer); }
 
+		DllExport void __stdcall GetScreenSize(ScreenSize &size) { VideoDecoder::GetInstance()->GetScreenSize(size); }
 	}
 }
