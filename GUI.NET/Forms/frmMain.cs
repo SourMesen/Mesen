@@ -320,6 +320,8 @@ namespace Mesen.GUI.Forms
 				};
 				mnuRecentFiles.DropDownItems.Add(tsmi);
 			}
+
+			mnuRecentFiles.Enabled = mnuRecentFiles.DropDownItems.Count > 0;
 		}
 
 		private void StartEmuThread()
