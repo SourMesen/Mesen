@@ -22,7 +22,6 @@ namespace NES
 
 		SetScreenSize(256, 240);
 
-		VideoDecoder::GetInstance()->RegisterRenderingDevice(this);
 		MessageManager::RegisterMessageManager(this);
 	}
 
@@ -55,6 +54,8 @@ namespace NES
 		CleanupDevice();
 		if(FAILED(InitDevice())) {
 			CleanupDevice();
+		} else {
+			VideoDecoder::GetInstance()->RegisterRenderingDevice(this);
 		}
 		_frameLock.Release();
 	}
@@ -117,15 +118,17 @@ namespace NES
 		sd.SampleDesc.Quality = 0;
 		sd.Windowed = TRUE;
 
+		D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
+		D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_1;
 		for(UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++) {
-			_driverType = driverTypes[driverTypeIndex];
-			hr = D3D11CreateDeviceAndSwapChain(nullptr, _driverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
-				D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &_featureLevel, &_pDeviceContext);
+			driverType = driverTypes[driverTypeIndex];
+			featureLevel = D3D_FEATURE_LEVEL_11_1;
+			hr = D3D11CreateDeviceAndSwapChain(nullptr, driverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &featureLevel, &_pDeviceContext);
 
 			if(hr == E_INVALIDARG) {
 				// DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1 so we need to retry without it
-				hr = D3D11CreateDeviceAndSwapChain(nullptr, _driverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1,
-					D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &_featureLevel, &_pDeviceContext);
+				featureLevel = D3D_FEATURE_LEVEL_11_0;
+				hr = D3D11CreateDeviceAndSwapChain(nullptr, driverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1, D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &featureLevel, &_pDeviceContext);
 			}
 
 			if(SUCCEEDED(hr)) {
@@ -168,7 +171,7 @@ namespace NES
 
 		// Create the state using the device.
 		if(FAILED(_pd3dDevice->CreateDepthStencilState(&depthDisabledStencilDesc, &_pDepthDisabledStencilState))) {
-			return false;
+			return S_FALSE;
 		}
 
 		// Clear the blend state description.
@@ -187,7 +190,7 @@ namespace NES
 
 		// Create the blend state using the description.
 		if(FAILED(_pd3dDevice->CreateBlendState(&blendStateDescription, &_pAlphaEnableBlendingState))) {
-			return false;
+			return S_FALSE;
 		}
 
 		float blendFactor[4];
@@ -212,12 +215,12 @@ namespace NES
 
 		_pTexture = CreateTexture(_nesFrameWidth, _nesFrameHeight);
 		if(!_pTexture) {
-			return 0;
+			return S_FALSE;
 		}
 
 		_overlayTexture = CreateTexture(8, 8);
 		if(!_overlayTexture) {
-			return 0;
+			return S_FALSE;
 		}
 
 		////////////////////////////////////////////////////////////////////////////
@@ -243,7 +246,7 @@ namespace NES
 		_pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
 
 		if(!FAILED(CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\Toast.dds", nullptr, &_toastTexture))) {
-			return 0;
+			return S_FALSE;
 		}
 
 		return S_OK;
@@ -252,9 +255,6 @@ namespace NES
 	ID3D11Texture2D* Renderer::CreateTexture(uint32_t width, uint32_t height)
 	{
 		ID3D11Texture2D* texture;
-
-		UINT fred;
-		_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM, 16, &fred);
 
 		D3D11_TEXTURE2D_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
@@ -265,13 +265,14 @@ namespace NES
 		desc.MipLevels = 1;
 		desc.MiscFlags = 0;
 		desc.SampleDesc.Count = 1;
-		desc.SampleDesc.Quality = fred;
+		desc.SampleDesc.Quality = 0;
 		desc.Usage = D3D11_USAGE_DYNAMIC;
 		desc.Width = width;
 		desc.Height = height;
 		desc.MiscFlags = 0;
 
-		if(FAILED(_pd3dDevice->CreateTexture2D(&desc, nullptr, &texture))) {
+		HRESULT hr = _pd3dDevice->CreateTexture2D(&desc, nullptr, &texture);
+		if(FAILED(hr)) {
 			return nullptr;
 		}
 		return texture;

@@ -6,12 +6,15 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mesen.GUI
 {
 	public class InteropEmu
 	{
 		private const string DLLPath = "WinMesen.dll";
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool TestDll();
+
 		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle);
 		[DllImport(DLLPath)] public static extern void Release();
 
@@ -28,16 +31,16 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void Run();
 		[DllImport(DLLPath)] public static extern void Pause();
 		[DllImport(DLLPath)] public static extern void Resume();
-		[DllImport(DLLPath)] public static extern bool IsPaused();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsPaused();
 		[DllImport(DLLPath)] public static extern void Stop();
 		[DllImport(DLLPath, EntryPoint="GetROMPath")] private static extern IntPtr GetROMPathWrapper();
 		[DllImport(DLLPath)] public static extern void Reset();
 		[DllImport(DLLPath)] public static extern void StartServer(UInt16 port);
 		[DllImport(DLLPath)] public static extern void StopServer();
-		[DllImport(DLLPath)] public static extern bool IsServerRunning();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsServerRunning();
 		[DllImport(DLLPath)] public static extern void Connect([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string host, UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string playerName, byte[] avatarData, UInt32 avatarSize);
 		[DllImport(DLLPath)] public static extern void Disconnect();
-		[DllImport(DLLPath)] public static extern bool IsConnected();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsConnected();
 		
 		[DllImport(DLLPath)] public static extern void TakeScreenshot();
 
@@ -49,15 +52,15 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
 		[DllImport(DLLPath)] public static extern void MovieStop();
-		[DllImport(DLLPath)] public static extern bool MoviePlaying();
-		[DllImport(DLLPath)] public static extern bool MovieRecording();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MoviePlaying();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MovieRecording();
 
 		[DllImport(DLLPath)] public static extern Int32 RomTestRun([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void RomTestRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
 		[DllImport(DLLPath)] public static extern void RomTestRecordFromMovie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string testFilename, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string movieFilename);
 		[DllImport(DLLPath)] public static extern void RomTestRecordFromTest([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string newTestFilename, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string existingTestFilename);
 		[DllImport(DLLPath)] public static extern void RomTestStop();
-		[DllImport(DLLPath)] public static extern bool RomTestRecording();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool RomTestRecording();
 
 		[DllImport(DLLPath)] public static extern void SaveState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern void LoadState(UInt32 stateIndex);
@@ -91,7 +94,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
 		[DllImport(DLLPath)] public static extern void DebugStepOver();
 		[DllImport(DLLPath)] public static extern void DebugRun();
-		[DllImport(DLLPath)] public static extern bool DebugIsCodeChanged();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsCodeChanged();
 		[DllImport(DLLPath)] public static extern IntPtr DebugGetCode();
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);

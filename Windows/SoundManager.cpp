@@ -5,12 +5,16 @@
 
 SoundManager::SoundManager(HWND hwnd)
 {
-	SoundMixer::RegisterAudioDevice(this);
-
 	_hWnd = hwnd;
 	_directSound = 0;
 	_primaryBuffer = 0;
 	_secondaryBuffer = 0;
+
+	if(InitializeDirectSound(44100)) {
+		SoundMixer::RegisterAudioDevice(this);
+	} else {
+		MessageManager::DisplayMessage("Error", "Could not initialize audio system");
+	}
 }
 
 SoundManager::~SoundManager()

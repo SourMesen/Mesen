@@ -42,6 +42,6 @@ public:
 	void Record(string filename, bool reset);
 	void RecordFromMovie(string testFilename, string movieFilename);
 	void RecordFromTest(string newTestFilename, string existingTestFilename);
-	int Run(string filename);
+	int32_t Run(string filename);
 	void Stop();
 };

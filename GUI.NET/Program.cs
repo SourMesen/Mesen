@@ -21,6 +21,10 @@ namespace Mesen.GUI
 		[STAThread]
 		static void Main(string[] args)
 		{
+			if(!RuntimeChecker.TestDll()) {
+				return;
+			}
+
 			Guid guid = new Guid("{A46606B7-2D1C-4CC5-A52F-43BCAF094AED}");
 			using(SingleInstance singleInstance = new SingleInstance(guid)) {
 				if(singleInstance.FirstInstance || !Config.ConfigManager.Config.PreferenceInfo.SingleInstance) {

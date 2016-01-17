@@ -35,6 +35,7 @@ namespace Mesen.GUI.Config
 			PreferenceInfo = new PreferenceInfo();
 			RecentFiles = new List<string>();
 			Controllers = new List<ControllerInfo>();
+			Cheats = new List<CheatInfo>();
 		}
 
 		public void ApplyConfig()
@@ -47,7 +48,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetNesModel(Region);
 		}
 
-		private void InitializeDefaults()
+		public void InitializeDefaults()
 		{
 			while(Controllers.Count < 4) {
 				var controllerInfo = new ControllerInfo();

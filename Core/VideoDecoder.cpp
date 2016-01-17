@@ -169,7 +169,9 @@ void VideoDecoder::StopThread()
 
 void VideoDecoder::RenderThread()
 {
-	_renderer->Reset();
+	if(_renderer) {
+		_renderer->Reset();
+	}
 	while(!_stopFlag.load()) {
 		//Wait until a frame is ready, or until 16ms have passed (to allow UI to run at a minimum of 60fps)
 		_waitForRender.Wait(16);

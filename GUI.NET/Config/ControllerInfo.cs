@@ -15,7 +15,7 @@ namespace Mesen.GUI.Config
 	public class KeyMappings
 	{
 		public string A = "A";
-		public string B = "B";
+		public string B = "S";
 		public string Select = "W";
 		public string Start = "Q";
 		public string Up = "Up Arrow";

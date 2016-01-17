@@ -179,7 +179,7 @@ void AutoRomTest::RecordFromTest(string newTestFilename, string existingTestFile
 	}
 }
 
-int AutoRomTest::Run(string filename)
+int32_t AutoRomTest::Run(string filename)
 {
 	ZipReader zipReader;
 	zipReader.LoadZipArchive(filename);

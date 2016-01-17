@@ -42,6 +42,11 @@ namespace InteropEmu {
 	};
 
 	extern "C" {
+		DllExport bool __stdcall TestDll()
+		{
+			return true;
+		}
+
 		DllExport void __stdcall InitializeEmu(const char* homeFolder, HWND windowHandle, HWND dxViewerHandle)
 		{
 			FolderUtilities::SetHomeFolder(homeFolder);
@@ -84,7 +89,7 @@ namespace InteropEmu {
 		}
 
 		DllExport void __stdcall Resume() { EmulationSettings::ClearFlags(EmulationFlags::Paused); }
-		DllExport int __stdcall IsPaused() { return EmulationSettings::CheckFlag(EmulationFlags::Paused); }
+		DllExport bool __stdcall IsPaused() { return EmulationSettings::CheckFlag(EmulationFlags::Paused); }
 		DllExport void __stdcall Stop()
 		{
 			if(Console::GetInstance()) {
@@ -101,7 +106,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall StartServer(uint16_t port) { GameServer::StartServer(port); }
 		DllExport void __stdcall StopServer() { GameServer::StopServer(); }
-		DllExport int __stdcall IsServerRunning() { return GameServer::Started(); }
+		DllExport bool __stdcall IsServerRunning() { return GameServer::Started(); }
 
 		DllExport void __stdcall Connect(char* host, uint16_t port, char* playerName, uint8_t* avatarData, uint32_t avatarSize)
 		{
@@ -117,7 +122,7 @@ namespace InteropEmu {
 		}
 
 		DllExport void __stdcall Disconnect() { GameClient::Disconnect(); }
-		DllExport int __stdcall IsConnected() { return GameClient::Connected(); }
+		DllExport bool __stdcall IsConnected() { return GameClient::Connected(); }
 
 		DllExport void __stdcall Pause()
 		{
@@ -155,10 +160,10 @@ namespace InteropEmu {
 		DllExport void __stdcall MoviePlay(char* filename) { Movie::Play(filename); }
 		DllExport void __stdcall MovieRecord(char* filename, bool reset) { Movie::Record(filename, reset); }
 		DllExport void __stdcall MovieStop() { Movie::Stop(); }
-		DllExport int __stdcall MoviePlaying() { return Movie::Playing(); }
-		DllExport int __stdcall MovieRecording() { return Movie::Recording(); }
+		DllExport bool __stdcall MoviePlaying() { return Movie::Playing(); }
+		DllExport bool __stdcall MovieRecording() { return Movie::Recording(); }
 
-		DllExport int __stdcall RomTestRun(char* filename)
+		DllExport int32_t __stdcall RomTestRun(char* filename)
 		{
 			AutoRomTest romTest; 
 			return romTest.Run(filename);
@@ -194,7 +199,7 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport int __stdcall RomTestRecording() { return _autoRomTest != nullptr; }
+		DllExport bool __stdcall RomTestRecording() { return _autoRomTest != nullptr; }
 
 		DllExport void __stdcall CheatAddCustom(uint32_t address, uint8_t value, int32_t compareValue, bool isRelativeAddress) { CheatManager::AddCustomCode(address, value, compareValue, isRelativeAddress); }
 		DllExport void __stdcall CheatAddGameGenie(char* code) { CheatManager::AddGameGenieCode(code); }

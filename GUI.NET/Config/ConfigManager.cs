@@ -26,6 +26,8 @@ namespace Mesen.GUI.Config
 					//Create new config file and save it to disk
 					_config = new Configuration();
 					_dirtyConfig = new Configuration();
+					_config.InitializeDefaults();
+					_dirtyConfig.InitializeDefaults();
 					SaveConfig();
 				}
 			}
