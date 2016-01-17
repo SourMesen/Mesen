@@ -22,7 +22,7 @@ namespace Mesen.GUI
 			if(!File.Exists("WinMesen.dll")) {
 				MessageBox.Show("Mesen was unable to start due to missing files." + Environment.NewLine + Environment.NewLine + "Error: WinMesen.dll is missing.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			} else {
-				if(MessageBox.Show("Mesen was unable to start due to missing dependencies."  + Environment.NewLine + Environment.NewLine + "Mesen requires the the Visual Studio 2013 runtime.  Would you like to download the runtime from Microsoft's website and install it?", "Mesen", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+				if(MessageBox.Show("Mesen was unable to start due to missing dependencies."  + Environment.NewLine + Environment.NewLine + "Mesen requires the Visual Studio 2013 runtime.  Would you like to download the runtime from Microsoft's website and install it?", "Mesen", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
 					if(!RuntimeChecker.DownloadRuntime()) {
 						MessageBox.Show("The Visual Studio Runtime could not be installed properly.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					} else {

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Mesen")]
+[assembly: AssemblyTitle("DependencyPacker")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mesen")]
-[assembly: AssemblyProduct("Mesen")]
-[assembly: AssemblyCopyright("Copyright © 2015")]
+[assembly: AssemblyProduct("DependencyPacker")]
+[assembly: AssemblyCopyright("Copyright © Mesen 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c8d4fadf-6247-47bc-8cd5-4c2e29812c3c")]
+[assembly: Guid("2cbd9a92-f7b8-4d71-bec3-2fd8810871f5")]
 
 // Version information for an assembly consists of the following four values:
 //

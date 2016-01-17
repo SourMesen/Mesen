@@ -59,6 +59,27 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\Any CPU\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>..\bin\Any CPU\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -444,17 +465,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(OutputPath)\BlipBuffer.dll">
-      <Link>Dependencies\BlipBuffer.dll</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(OutputPath)\NesNtsc.dll">
-      <Link>Dependencies\NesNtsc.dll</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(OutputPath)\WinMesen.dll">
-      <Link>Dependencies\WinMesen.dll</Link>
+    <EmbeddedResource Include="$(OutputPath)Dependencies.zip">
+      <Link>Dependencies\Dependencies.zip</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Windows\Resources\MesenIcon.bmp">
       <Link>Dependencies\MesenIcon.bmp</Link>
@@ -469,6 +481,18 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>mkdir "Dependencies"
+copy "$(SolutionDir)bin\x86\$(ConfigurationName)\WinMesen.dll" "Dependencies\WinMesen.x86.dll"
+copy "$(SolutionDir)bin\x86\$(ConfigurationName)\BlipBuffer.dll" "Dependencies\BlipBuffer.x86.dll"
+copy "$(SolutionDir)bin\x86\$(ConfigurationName)\NesNtsc.dll" "Dependencies\NesNtsc.x86.dll"
+
+copy "$(SolutionDir)bin\x64\$(ConfigurationName)\WinMesen.dll" "Dependencies\WinMesen.x64.dll"
+copy "$(SolutionDir)bin\x64\$(ConfigurationName)\BlipBuffer.dll" "Dependencies\BlipBuffer.x64.dll"
+copy "$(SolutionDir)bin\x64\$(ConfigurationName)\NesNtsc.dll" "Dependencies\NesNtsc.x64.dll"
+
+call DependencyPacker.exe "$(OutDir)"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
