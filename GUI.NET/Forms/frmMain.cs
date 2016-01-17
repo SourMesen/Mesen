@@ -691,7 +691,11 @@ namespace Mesen.GUI.Forms
 
 		private void mnuRunAllTests_Click(object sender, EventArgs e)
 		{
-			Process.Start("TestHelper.exe");
+			string workingDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+			ProcessStartInfo startInfo = new ProcessStartInfo();
+			startInfo.FileName = "TestHelper.exe";
+			startInfo.WorkingDirectory = workingDirectory;
+			Process.Start(startInfo);
 		}
 
 		private void UpdateScaleMenu(UInt32 scale)
