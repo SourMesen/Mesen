@@ -545,15 +545,16 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
-		public unsafe object MarshalNativeToManaged(IntPtr pNativeData)
+		public object MarshalNativeToManaged(IntPtr pNativeData)
 		{
-			byte* walk = (byte*)pNativeData;
+			int offset = 0;
+			byte b = 0;
+			do {
+				b = Marshal.ReadByte(pNativeData, offset);
+				offset++;
+			} while(b != 0);
 
-			// find the end of the string
-			while(*walk != 0) {
-				walk++;
-			}
-			int length = (int)(walk - (byte*)pNativeData);
+			int length = offset - 1;
 
 			// should not be null terminated
 			byte[] strbuf = new byte[length];
