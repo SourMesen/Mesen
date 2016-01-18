@@ -87,6 +87,9 @@ namespace Mesen.GUI
 		
 		[DllImport(DLLPath, EntryPoint="GetScreenSize")] private static extern void GetScreenSizeWrapper(out ScreenSize size);
 
+		[DllImport(DLLPath, EntryPoint= "GetAudioDevices")] private static extern IntPtr GetAudioDevicesWrapper();
+		[DllImport(DLLPath)] public static extern void SetAudioDevice(string audioDevice);
+
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)] public static extern void DebugRelease();
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
@@ -237,6 +240,10 @@ namespace Mesen.GUI
 
 		public static string GetROMPath() { return PtrToStringUtf8(InteropEmu.GetROMPathWrapper()); }
 		public static string GetKeyName(UInt32 key) { return PtrToStringUtf8(InteropEmu.GetKeyNameWrapper(key)); }
+		public static List<string> GetAudioDevices()
+		{
+			return new List<string>(PtrToStringUtf8(InteropEmu.GetAudioDevicesWrapper()).Split(new string[1] { "||" }, StringSplitOptions.RemoveEmptyEntries ));
+		}
 
 		private static string PtrToStringUtf8(IntPtr ptr)
 		{

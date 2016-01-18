@@ -182,6 +182,11 @@ namespace Mesen.GUI.Forms
 									}
 								}
 							}
+						} else if(field.FieldType == typeof(string)) {
+							combo.SelectedItem = value;
+							if(combo.SelectedIndex < 0) {
+								combo.SelectedIndex = 0;
+							}
 						}
 					}
 				}
@@ -225,6 +230,8 @@ namespace Mesen.GUI.Forms
 								if(UInt32.TryParse(item, out numericValue)) {
 									field.SetValue(Entity, numericValue);
 								}
+							} else if(field.FieldType == typeof(string)) {
+								field.SetValue(Entity, ((ComboBox)kvp.Value).SelectedItem);
 							}
 						}
 					} catch {

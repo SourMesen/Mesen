@@ -11,6 +11,7 @@ namespace Mesen.GUI.Config
 {
 	public class AudioInfo
 	{
+		public string AudioDevice = "";
 		public bool EnableAudio = true;
 		public UInt32 AudioLatency = 100;
 		public UInt32 MasterVolume = 100;
@@ -37,6 +38,7 @@ namespace Mesen.GUI.Config
 		static public void ApplyConfig()
 		{
 			AudioInfo audioInfo = ConfigManager.Config.AudioInfo;
+			InteropEmu.SetAudioDevice(audioInfo.AudioDevice);
 			InteropEmu.SetAudioLatency(audioInfo.AudioLatency);
 			InteropEmu.SetMasterVolume(audioInfo.MasterVolume / 10d);
 			InteropEmu.SetChannelVolume(0, ConvertVolume(audioInfo.Square1Volume));

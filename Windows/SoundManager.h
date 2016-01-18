@@ -3,6 +3,12 @@
 #include "stdafx.h"
 #include "../Core/IAudioDevice.h"
 
+struct SoundDeviceInfo
+{
+	string description;
+	GUID guid;
+};
+
 class SoundManager : public IAudioDevice
 {
 public:
@@ -15,7 +21,12 @@ public:
 	void Pause();
 	void Stop();
 
+	string GetAvailableDevices();
+	void SetAudioDevice(string deviceName);
+
 private:
+	vector<SoundDeviceInfo> GetAvailableDeviceInfo();
+	static bool CALLBACK DirectSoundEnumProc(LPGUID lpGUID, LPCSTR lpszDesc, LPCSTR lpszDrvName, LPVOID lpContext);
 	bool InitializeDirectSound(uint32_t sampleRate);
 	void ShutdownDirectSound();
 	void ClearSecondaryBuffer();
@@ -23,6 +34,8 @@ private:
 
 private:
 	HWND _hWnd;
+	GUID _audioDeviceID;
+	bool _needReset = false;
 
 	uint16_t _lastWriteOffset = 0;
 	uint16_t _previousLatency = 0;

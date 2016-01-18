@@ -220,6 +220,14 @@ namespace InteropEmu {
 		DllExport void __stdcall GetRgbPalette(uint32_t *paletteBuffer) { EmulationSettings::GetRgbPalette(paletteBuffer); }
 		DllExport void __stdcall SetRgbPalette(uint32_t *paletteBuffer) { EmulationSettings::SetRgbPalette(paletteBuffer); }
 
+		DllExport const char* __stdcall GetAudioDevices() 
+		{ 
+			_returnString = _soundManager->GetAvailableDevices();
+			return _returnString.c_str();
+		}
+
+		DllExport void __stdcall SetAudioDevice(char* audioDevice) { _soundManager->SetAudioDevice(audioDevice); }
+
 		DllExport void __stdcall GetScreenSize(ScreenSize &size) { VideoDecoder::GetInstance()->GetScreenSize(size); }
 	}
 }

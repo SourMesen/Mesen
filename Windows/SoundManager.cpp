@@ -10,6 +10,8 @@ SoundManager::SoundManager(HWND hwnd)
 	_primaryBuffer = 0;
 	_secondaryBuffer = 0;
 
+	memset(&_audioDeviceID, 0, sizeof(_audioDeviceID));
+
 	if(InitializeDirectSound(44100)) {
 		SoundMixer::RegisterAudioDevice(this);
 	} else {
@@ -22,6 +24,52 @@ SoundManager::~SoundManager()
 	Release();
 }
 
+bool CALLBACK SoundManager::DirectSoundEnumProc(LPGUID lpGUID, LPCSTR lpszDesc, LPCSTR lpszDrvName, LPVOID lpContext)
+{
+	vector<SoundDeviceInfo> *devices = (vector<SoundDeviceInfo>*)lpContext;
+
+	SoundDeviceInfo deviceInfo;
+	deviceInfo.description = lpszDesc;
+	if(lpGUID != nullptr) {
+		memcpy((void*)&deviceInfo.guid, lpGUID, 16);
+	} else {
+		memset((void*)&deviceInfo.guid, 0, 16);
+	}
+	devices->push_back(deviceInfo);
+
+	return true;
+}
+
+vector<SoundDeviceInfo> SoundManager::GetAvailableDeviceInfo()
+{
+	vector<SoundDeviceInfo> devices;
+	DirectSoundEnumerate((LPDSENUMCALLBACKA)SoundManager::DirectSoundEnumProc, &devices);
+	return devices;
+}
+
+string SoundManager::GetAvailableDevices()
+{
+	string deviceString;
+	for(SoundDeviceInfo device : GetAvailableDeviceInfo()) {
+		deviceString += device.description + "||"s;
+	}
+	return deviceString;
+}
+
+void SoundManager::SetAudioDevice(string deviceName)
+{
+	memset(&_audioDeviceID, 0, sizeof(_audioDeviceID));
+
+	for(SoundDeviceInfo device : GetAvailableDeviceInfo()) {
+		if(device.description.compare(deviceName) == 0) {
+			memcpy((void*)&_audioDeviceID, (void*)&device.guid, 16);
+			break;
+		}
+	}
+
+	_needReset = true;
+}
+
 bool SoundManager::InitializeDirectSound(uint32_t sampleRate)
 {
 	HRESULT result;
@@ -29,7 +77,7 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate)
 	WAVEFORMATEX waveFormat;
 	
 	// Initialize the direct sound interface pointer for the default sound device.
-	result = DirectSoundCreate8(NULL, &_directSound, NULL);
+	result = DirectSoundCreate8(&_audioDeviceID, &_directSound, NULL);
 	if(FAILED(result)) {
 		return false;
 	}
@@ -107,6 +155,7 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate)
 
 void SoundManager::Release()
 {
+	_needReset = false;
 	_lastWriteOffset = 0;
 
 	if(_secondaryBuffer) {
@@ -179,7 +228,7 @@ void SoundManager::Play()
 
 void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize, uint32_t sampleRate)
 {
-	if(_sampleRate != sampleRate) {
+	if(_sampleRate != sampleRate || _needReset) {
 		Release();
 		InitializeDirectSound(sampleRate);
 	}

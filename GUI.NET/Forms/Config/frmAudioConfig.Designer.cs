@@ -43,6 +43,8 @@
 			this.lblLatencyMs = new System.Windows.Forms.Label();
 			this.lblAudioLatency = new System.Windows.Forms.Label();
 			this.cboSampleRate = new System.Windows.Forms.ComboBox();
+			this.lblAudioDevice = new System.Windows.Forms.Label();
+			this.cboAudioDevice = new System.Windows.Forms.ComboBox();
 			this.btnReset = new System.Windows.Forms.Button();
 			this.baseConfigPanel.SuspendLayout();
 			this.grpVolume.SuspendLayout();
@@ -55,7 +57,7 @@
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Controls.Add(this.btnReset);
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 267);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 295);
 			this.baseConfigPanel.Size = new System.Drawing.Size(470, 29);
 			this.baseConfigPanel.Controls.SetChildIndex(this.btnReset, 0);
 			// 
@@ -63,7 +65,7 @@
 			// 
 			this.tableLayoutPanel2.SetColumnSpan(this.grpVolume, 2);
 			this.grpVolume.Controls.Add(this.tableLayoutPanel1);
-			this.grpVolume.Location = new System.Drawing.Point(3, 80);
+			this.grpVolume.Location = new System.Drawing.Point(3, 107);
 			this.grpVolume.Name = "grpVolume";
 			this.grpVolume.Size = new System.Drawing.Size(462, 185);
 			this.grpVolume.TabIndex = 2;
@@ -189,21 +191,23 @@
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.Controls.Add(this.chkEnableAudio, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.lblSampleRate, 0, 1);
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel2, 1, 2);
-			this.tableLayoutPanel2.Controls.Add(this.lblAudioLatency, 0, 2);
-			this.tableLayoutPanel2.Controls.Add(this.cboSampleRate, 1, 1);
-			this.tableLayoutPanel2.Controls.Add(this.grpVolume, 0, 3);
+			this.tableLayoutPanel2.Controls.Add(this.lblSampleRate, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel2, 1, 3);
+			this.tableLayoutPanel2.Controls.Add(this.lblAudioLatency, 0, 3);
+			this.tableLayoutPanel2.Controls.Add(this.cboSampleRate, 1, 2);
+			this.tableLayoutPanel2.Controls.Add(this.grpVolume, 0, 4);
+			this.tableLayoutPanel2.Controls.Add(this.lblAudioDevice, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.cboAudioDevice, 1, 1);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 4;
+			this.tableLayoutPanel2.RowCount = 5;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(470, 296);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(470, 324);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
 			// chkEnableAudio
@@ -223,7 +227,7 @@
 			// 
 			this.lblSampleRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblSampleRate.AutoSize = true;
-			this.lblSampleRate.Location = new System.Drawing.Point(3, 33);
+			this.lblSampleRate.Location = new System.Drawing.Point(3, 60);
 			this.lblSampleRate.Name = "lblSampleRate";
 			this.lblSampleRate.Size = new System.Drawing.Size(71, 13);
 			this.lblSampleRate.TabIndex = 0;
@@ -233,7 +237,7 @@
 			// 
 			this.flowLayoutPanel2.Controls.Add(this.nudLatency);
 			this.flowLayoutPanel2.Controls.Add(this.lblLatencyMs);
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(77, 53);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(77, 80);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(78, 24);
@@ -275,7 +279,7 @@
 			// 
 			this.lblAudioLatency.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblAudioLatency.AutoSize = true;
-			this.lblAudioLatency.Location = new System.Drawing.Point(3, 58);
+			this.lblAudioLatency.Location = new System.Drawing.Point(3, 85);
 			this.lblAudioLatency.Name = "lblAudioLatency";
 			this.lblAudioLatency.Size = new System.Drawing.Size(48, 13);
 			this.lblAudioLatency.TabIndex = 0;
@@ -290,10 +294,29 @@
             "22,050 Hz",
             "44,100 Hz",
             "48,000 Hz"});
-			this.cboSampleRate.Location = new System.Drawing.Point(80, 29);
+			this.cboSampleRate.Location = new System.Drawing.Point(80, 56);
 			this.cboSampleRate.Name = "cboSampleRate";
 			this.cboSampleRate.Size = new System.Drawing.Size(75, 21);
 			this.cboSampleRate.TabIndex = 5;
+			// 
+			// lblAudioDevice
+			// 
+			this.lblAudioDevice.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblAudioDevice.AutoSize = true;
+			this.lblAudioDevice.Location = new System.Drawing.Point(3, 33);
+			this.lblAudioDevice.Name = "lblAudioDevice";
+			this.lblAudioDevice.Size = new System.Drawing.Size(44, 13);
+			this.lblAudioDevice.TabIndex = 6;
+			this.lblAudioDevice.Text = "Device:";
+			// 
+			// cboAudioDevice
+			// 
+			this.cboAudioDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboAudioDevice.FormattingEnabled = true;
+			this.cboAudioDevice.Location = new System.Drawing.Point(80, 29);
+			this.cboAudioDevice.Name = "cboAudioDevice";
+			this.cboAudioDevice.Size = new System.Drawing.Size(209, 21);
+			this.cboAudioDevice.TabIndex = 7;
 			// 
 			// btnReset
 			// 
@@ -310,7 +333,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(470, 296);
+			this.ClientSize = new System.Drawing.Size(470, 324);
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -352,6 +375,7 @@
 		private System.Windows.Forms.Label lblSampleRate;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.ComboBox cboSampleRate;
-
+		private System.Windows.Forms.Label lblAudioDevice;
+		private System.Windows.Forms.ComboBox cboAudioDevice;
 	}
 }

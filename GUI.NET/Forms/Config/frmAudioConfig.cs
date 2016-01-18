@@ -19,6 +19,8 @@ namespace Mesen.GUI.Forms.Config
 
 			Entity = ConfigManager.Config.AudioInfo;
 
+			cboAudioDevice.Items.AddRange(InteropEmu.GetAudioDevices().ToArray());
+
 			AddBinding("EnableAudio", chkEnableAudio);
 			AddBinding("MasterVolume", trkMaster);
 			AddBinding("Square1Volume", trkSquare1Vol);
@@ -28,6 +30,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DmcVolume", trkDmcVol);
 			AddBinding("AudioLatency", nudLatency);
 			AddBinding("SampleRate", cboSampleRate);
+			AddBinding("AudioDevice", cboAudioDevice);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
