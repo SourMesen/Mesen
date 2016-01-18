@@ -39,6 +39,7 @@
 #include "TaitoX1005.h"
 #include "UnlPci556.h"
 #include "UNROM.h"
+#include "UnRom_94.h"
 #include "UnRom_180.h"
 #include "VRC1.h"
 #include "VRC2_4.h"
@@ -86,6 +87,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 88: return new Namco108_88();
 		case 89: return new Sunsoft89();
 		case 93: return new Sunsoft93();
+		case 94: return new UnRom_94();
 		case 95: return new Namco108_95();
 		case 97: return new IremTamS1();
 		case 101: return new JalecoJfxx(true);
