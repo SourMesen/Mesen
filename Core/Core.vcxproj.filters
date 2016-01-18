@@ -344,6 +344,9 @@
     <ClInclude Include="SoundMixer.h">
       <Filter>Nes\APU</Filter>
     </ClInclude>
+    <ClInclude Include="UnRom_180.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

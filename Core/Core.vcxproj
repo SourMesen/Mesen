@@ -285,6 +285,7 @@
     <ClInclude Include="TriangleChannel.h" />
     <ClInclude Include="UnlPci556.h" />
     <ClInclude Include="UNROM.h" />
+    <ClInclude Include="UnRom_180.h" />
     <ClInclude Include="VideoDecoder.h" />
     <ClInclude Include="BaseVideoFilter.h" />
     <ClInclude Include="VirtualController.h" />

@@ -38,6 +38,7 @@
 #include "TaitoX1005.h"
 #include "UnlPci556.h"
 #include "UNROM.h"
+#include "UnRom_180.h"
 #include "VRC1.h"
 #include "VRC2_4.h"
 #include "BF909x.h"
@@ -95,6 +96,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 152: return new Bandai74161_7432(true);
 		case 154: return new Namco108_154();
 		case 163: return new Nanjing();
+		case 180: return new UnRom_180();
 		case 184: return new Sunsoft184();
 		case 185: return new CNROM(true);
 		case 189: return new MMC3_189();
