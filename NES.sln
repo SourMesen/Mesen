@@ -46,6 +46,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NesNtsc", "NesNtsc\NesNtsc.vcxproj", "{65DB72B1-A45A-4475-90C1-60596B3ABEB3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyPacker", "DependencyPacker\DependencyPacker.csproj", "{AABB5225-3A49-47FF-8A48-031673CADCE9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37749BB2-FA78-4EC9-8990-5628FC0BBA19} = {37749BB2-FA78-4EC9-8990-5628FC0BBA19}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F237C270-07EA-4B15-BFC9-C124D09F9C59}"
 	ProjectSection(SolutionItems) = preProject
