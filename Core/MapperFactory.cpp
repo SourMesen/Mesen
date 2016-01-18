@@ -10,6 +10,7 @@
 #include "ColorDreams.h"
 #include "GxRom.h"
 #include "IremG101.h"
+#include "IremTamS1.h"
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
 #include "MMC1.h"
@@ -86,6 +87,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 89: return new Sunsoft89();
 		case 93: return new Sunsoft93();
 		case 95: return new Namco108_95();
+		case 97: return new IremTamS1();
 		case 101: return new JalecoJfxx(true);
 		case 113: return new Nina03_06(true);
 		case 145: return new Sachen_145();
