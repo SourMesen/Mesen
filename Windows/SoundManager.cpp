@@ -58,16 +58,15 @@ string SoundManager::GetAvailableDevices()
 
 void SoundManager::SetAudioDevice(string deviceName)
 {
-	memset(&_audioDeviceID, 0, sizeof(_audioDeviceID));
-
 	for(SoundDeviceInfo device : GetAvailableDeviceInfo()) {
 		if(device.description.compare(deviceName) == 0) {
-			memcpy((void*)&_audioDeviceID, (void*)&device.guid, 16);
+			if(memcmp(&_audioDeviceID, &device.guid, 16) != 0) {
+				memcpy(&_audioDeviceID, &device.guid, 16);
+				_needReset = true;
+			}
 			break;
 		}
 	}
-
-	_needReset = true;
 }
 
 bool SoundManager::InitializeDirectSound(uint32_t sampleRate)
