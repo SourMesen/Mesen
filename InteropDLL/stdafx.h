@@ -44,6 +44,6 @@
 #pragma comment(lib, MESEN_LIBRARY_PATH"Core.lib")
 #pragma comment(lib, MESEN_LIBRARY_PATH"Utilities.lib")
 #pragma comment(lib, MESEN_LIBRARY_PATH"Windows.lib")
-#pragma comment(lib, "../Dependencies/DirectXTK"MESEN_LIBRARY_SUFFIX)
+#pragma comment(lib, "../Dependencies/DirectXTK" MESEN_LIBRARY_SUFFIX)
 
 #define DllExport __declspec(dllexport)

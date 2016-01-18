@@ -22,7 +22,7 @@ namespace Mesen.GUI
 			if(!File.Exists("WinMesen.dll")) {
 				MessageBox.Show("Mesen was unable to start due to missing files." + Environment.NewLine + Environment.NewLine + "Error: WinMesen.dll is missing.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			} else {
-				if(MessageBox.Show("Mesen was unable to start due to missing dependencies."  + Environment.NewLine + Environment.NewLine + "Mesen requires the Visual Studio 2013 runtime.  Would you like to download the runtime from Microsoft's website and install it?", "Mesen", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+				if(MessageBox.Show("Mesen was unable to start due to missing dependencies."  + Environment.NewLine + Environment.NewLine + "Mesen requires the Visual Studio 2015 runtime.  Would you like to download the runtime from Microsoft's website and install it?", "Mesen", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
 					if(!RuntimeChecker.DownloadRuntime()) {
 						MessageBox.Show("The Visual Studio Runtime could not be installed properly.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					} else {
@@ -38,13 +38,13 @@ namespace Mesen.GUI
 			string link = string.Empty;
 			if(IntPtr.Size == 4) {
 				//x86
-				link = "https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe";
+				link = "http://download.microsoft.com/download/C/E/5/CE514EAE-78A8-4381-86E8-29108D78DBD4/VC_redist.x86.exe";
 			} else {
 				//x64
-				link = "https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe";
+				link = "http://download.microsoft.com/download/C/E/5/CE514EAE-78A8-4381-86E8-29108D78DBD4/VC_redist.x64.exe";
 			}
 
-			string tempFilename = Path.GetTempPath() + "Mesen_VsRuntime2013.exe";
+			string tempFilename = Path.GetTempPath() + "Mesen_VsRuntime2015.exe";
 
 			try {
 				frmDownloadProgress frm = new frmDownloadProgress(link, tempFilename);

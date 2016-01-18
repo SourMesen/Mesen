@@ -15,6 +15,17 @@
 
 #include "SpriteBatch.h"
 
+// VS 2010/2012 do not support =default =delete
+#ifndef DIRECTX_CTOR_DEFAULT
+#if defined(_MSC_VER) && (_MSC_VER < 1800)
+#define DIRECTX_CTOR_DEFAULT {}
+#define DIRECTX_CTOR_DELETE ;
+#else
+#define DIRECTX_CTOR_DEFAULT =default;
+#define DIRECTX_CTOR_DELETE =delete;
+#endif
+#endif
+
 
 namespace DirectX
 {
@@ -31,21 +42,26 @@ namespace DirectX
         SpriteFont& operator= (SpriteFont&& moveFrom);
         virtual ~SpriteFont();
 
-        void XM_CALLCONV DrawString(_In_ SpriteBatch* spriteBatch, _In_z_ wchar_t const* text, XMFLOAT2 const& position, FXMVECTOR color = Colors::White, float rotation = 0, XMFLOAT2 const& origin = Float2Zero, float scale = 1, SpriteEffects effects = SpriteEffects_None, float layerDepth = 0);
-        void XM_CALLCONV DrawString(_In_ SpriteBatch* spriteBatch, _In_z_ wchar_t const* text, XMFLOAT2 const& position, FXMVECTOR color, float rotation, XMFLOAT2 const& origin, XMFLOAT2 const& scale, SpriteEffects effects = SpriteEffects_None, float layerDepth = 0);
-        void XM_CALLCONV DrawString(_In_ SpriteBatch* spriteBatch, _In_z_ wchar_t const* text, FXMVECTOR position, FXMVECTOR color = Colors::White, float rotation = 0, FXMVECTOR origin = g_XMZero, float scale = 1, SpriteEffects effects = SpriteEffects_None, float layerDepth = 0);
-        void XM_CALLCONV DrawString(_In_ SpriteBatch* spriteBatch, _In_z_ wchar_t const* text, FXMVECTOR position, FXMVECTOR color, float rotation, FXMVECTOR origin, GXMVECTOR scale, SpriteEffects effects = SpriteEffects_None, float layerDepth = 0);
+        void XM_CALLCONV DrawString(_In_ SpriteBatch* spriteBatch, _In_z_ wchar_t const* text, XMFLOAT2 const& position, FXMVECTOR color = Colors::White, float rotation = 0, XMFLOAT2 const& origin = Float2Zero, float scale = 1, SpriteEffects effects = SpriteEffects_None, float layerDepth = 0) const;
+        void XM_CALLCONV DrawString(_In_ SpriteBatch* spriteBatch, _In_z_ wchar_t const* text, XMFLOAT2 const& position, FXMVECTOR color, float rotation, XMFLOAT2 const& origin, XMFLOAT2 const& scale, SpriteEffects effects = SpriteEffects_None, float layerDepth = 0) const;
+        void XM_CALLCONV DrawString(_In_ SpriteBatch* spriteBatch, _In_z_ wchar_t const* text, FXMVECTOR position, FXMVECTOR color = Colors::White, float rotation = 0, FXMVECTOR origin = g_XMZero, float scale = 1, SpriteEffects effects = SpriteEffects_None, float layerDepth = 0) const;
+        void XM_CALLCONV DrawString(_In_ SpriteBatch* spriteBatch, _In_z_ wchar_t const* text, FXMVECTOR position, FXMVECTOR color, float rotation, FXMVECTOR origin, GXMVECTOR scale, SpriteEffects effects = SpriteEffects_None, float layerDepth = 0) const;
 
-        XMVECTOR MeasureString(_In_z_ wchar_t const* text) const;
+        XMVECTOR XM_CALLCONV MeasureString(_In_z_ wchar_t const* text) const;
 
-        float GetLineSpacing() const;
-        void SetLineSpacing(float spacing);
+        // Spacing properties
+        float __cdecl GetLineSpacing() const;
+        void __cdecl SetLineSpacing(float spacing);
 
-        wchar_t GetDefaultCharacter() const;
-        void SetDefaultCharacter(wchar_t character);
+        // Font properties
+        wchar_t __cdecl GetDefaultCharacter() const;
+        void __cdecl SetDefaultCharacter(wchar_t character);
 
-        bool ContainsCharacter(wchar_t character) const;
+        bool __cdecl ContainsCharacter(wchar_t character) const;
 
+        // Custom layout/rendering
+        Glyph const* __cdecl FindGlyph(wchar_t character) const;
+        void GetSpriteSheet( ID3D11ShaderResourceView** texture ) const;
 
         // Describes a single character glyph.
         struct Glyph
@@ -67,7 +83,7 @@ namespace DirectX
         static const XMFLOAT2 Float2Zero;
 
         // Prevent copying.
-        SpriteFont(SpriteFont const&);
-        SpriteFont& operator= (SpriteFont const&);
+        SpriteFont(SpriteFont const&) DIRECTX_CTOR_DELETE
+        SpriteFont& operator= (SpriteFont const&) DIRECTX_CTOR_DELETE
     };
 }

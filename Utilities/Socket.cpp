@@ -6,6 +6,7 @@
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
+#include <Ws2tcpip.h>
 #include <Windows.h>
 
 Socket::Socket()
@@ -114,33 +115,37 @@ void Socket::Bind(uint16_t port)
 bool Socket::Connect(const char* hostname, uint16_t port)
 {
 	// Resolve IP address for hostname
-	struct hostent *host;
-	if((host = gethostbyname(hostname)) == NULL) {
+	bool result = false;
+	addrinfo hint;
+	memset((void*)&hint, 0, sizeof(hint));
+	hint.ai_family = AF_INET;
+	hint.ai_protocol = IPPROTO_TCP;
+	hint.ai_socktype = SOCK_STREAM;
+	addrinfo *addrInfo;
+
+	if(getaddrinfo(hostname, std::to_string(port).c_str(), &hint, &addrInfo) != 0) {
 		std::cout << "Failed to resolve hostname." << std::endl;
 		SetConnectionErrorFlag();
 	} else {
 		// Setup our socket address structure
-		SOCKADDR_IN SockAddr;
-		SockAddr.sin_port = htons(port);
-		SockAddr.sin_family = AF_INET;
-		SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr);
-
 		u_long iMode = 0;
 		ioctlsocket(_socket, FIONBIO, &iMode);
 
 		// Attempt to connect to server
-		if(connect(_socket, (SOCKADDR*)(&SockAddr), sizeof(SockAddr)) == SOCKET_ERROR) {
+		if(connect(_socket, addrInfo->ai_addr, (int)addrInfo->ai_addrlen) == SOCKET_ERROR) {
 			std::cout << "Failed to establish connection with server." << std::endl;
 			SetConnectionErrorFlag();
 		} else {
 			iMode = 1;
 			ioctlsocket(_socket, FIONBIO, &iMode);
 
-			return true;
+			result = true;
 		}
+		
+		freeaddrinfo(addrInfo);
 	}
 
-	return false;
+	return result;
 }
 
 void Socket::Listen(int backlog)

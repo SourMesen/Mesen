@@ -23,7 +23,9 @@ namespace Mesen.GUI
 			using(Stream s = a.GetManifestResourceStream(resourceName)) {
 				byte[] buffer = new byte[s.Length];
 				s.Read(buffer, 0, (int)s.Length);
-				File.WriteAllBytes(Path.Combine(ConfigManager.HomeFolder, filename), buffer);
+				try {
+					File.WriteAllBytes(Path.Combine(ConfigManager.HomeFolder, filename), buffer);
+				} catch { }
 			}
 		}
 
@@ -44,7 +46,9 @@ namespace Mesen.GUI
 							File.Delete(outputFilename);
 						} catch { }
 					}
-					entry.ExtractToFile(outputFilename);
+					try {
+						entry.ExtractToFile(outputFilename);
+					} catch { }
 				}
 			}
 
