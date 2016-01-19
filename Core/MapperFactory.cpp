@@ -36,6 +36,7 @@
 #include "Nina01.h"
 #include "Nina03_06.h"
 #include "NROM.h"
+#include "NtdecTc112.h"
 #include "Sachen_145.h"
 #include "Sachen_147.h"
 #include "Sachen_148.h"
@@ -112,6 +113,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 184: return new Sunsoft184();
 		case 185: return new CNROM(true);
 		case 189: return new MMC3_189();
+		case 193: return new NtdecTc112();
 		case 200: return new Mapper200();
 		case 206: return new Namco108();
 		case 231: return new Mapper231();
