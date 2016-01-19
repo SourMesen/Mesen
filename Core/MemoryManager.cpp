@@ -40,6 +40,8 @@ void MemoryManager::Reset(bool softReset)
 	if(!softReset) {
 		memset(_internalRAM, 0, InternalRAMSize);
 	}
+
+	_mapper->Reset(softReset);
 }
 
 uint8_t MemoryManager::ReadRegister(uint16_t addr)

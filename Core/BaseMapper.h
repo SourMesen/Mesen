@@ -413,6 +413,10 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			}
 		}
 
+		virtual void Reset(bool softReset)
+		{
+		}
+
 		void ApplyCheats()
 		{
 			RestoreOriginalPrgRam();
