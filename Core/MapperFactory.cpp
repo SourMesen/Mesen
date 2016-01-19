@@ -17,6 +17,7 @@
 #include "JalecoSs88006.h"
 #include "Mapper240.h"
 #include "Mapper242.h"
+#include "Mapper246.h"
 #include "MMC1.h"
 #include "MMC2.h"
 #include "MMC3.h"
@@ -113,6 +114,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 232: return new BF9096();
 		case 240: return new Mapper240();
 		case 242: return new Mapper242();
+		case 246: return new Mapper246();
 	}
 
 	MessageManager::DisplayMessage("Error", "Unsupported mapper, cannot load game.");
