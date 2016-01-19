@@ -5,6 +5,8 @@
 #include "AXROM.h"
 #include "Bandai74161_7432.h"
 #include "BnRom.h"
+#include "BF909x.h"
+#include "BF9096.h"
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
@@ -44,7 +46,6 @@
 #include "UnRom_180.h"
 #include "VRC1.h"
 #include "VRC2_4.h"
-#include "BF909x.h"
 
 BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 {
@@ -107,6 +108,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 185: return new CNROM(true);
 		case 189: return new MMC3_189();
 		case 206: return new Namco108();
+		case 232: return new BF9096();
 	}
 
 	MessageManager::DisplayMessage("Error", "Unsupported mapper, cannot load game.");
