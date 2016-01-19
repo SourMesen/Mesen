@@ -209,7 +209,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			}
 		}
 
-		void SelectCHRPage(uint16_t slot, uint16_t page)
+		virtual void SelectCHRPage(uint16_t slot, uint16_t page)
 		{
 			_chrPageNumbers[slot] = page;
 

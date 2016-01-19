@@ -16,6 +16,7 @@
 #include "MMC1.h"
 #include "MMC2.h"
 #include "MMC3.h"
+#include "MMC3_115.h"
 #include "MMC3_189.h"
 #include "MMC4.h"
 #include "MMC5.h"
@@ -92,6 +93,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 97: return new IremTamS1();
 		case 101: return new JalecoJfxx(true);
 		case 113: return new Nina03_06(true);
+		case 115: return new MMC3_115();
 		case 145: return new Sachen_145();
 		case 146: return new Nina03_06(false);
 		case 147: return new Sachen_147();
