@@ -15,6 +15,7 @@
 #include "IremTamS1.h"
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
+#include "Mapper200.h"
 #include "Mapper231.h"
 #include "Mapper240.h"
 #include "Mapper242.h"
@@ -111,6 +112,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 184: return new Sunsoft184();
 		case 185: return new CNROM(true);
 		case 189: return new MMC3_189();
+		case 200: return new Mapper200();
 		case 206: return new Namco108();
 		case 231: return new Mapper231();
 		case 232: return new BF9096();
