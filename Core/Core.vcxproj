@@ -198,6 +198,7 @@
     <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="HdVideoFilter.h" />
     <ClInclude Include="IremTamS1.h" />
+    <ClInclude Include="Mapper240.h" />
     <ClInclude Include="Mapper242.h" />
     <ClInclude Include="MMC3_115.h" />
     <ClInclude Include="SoundMixer.h" />

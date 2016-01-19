@@ -15,6 +15,7 @@
 #include "IremTamS1.h"
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
+#include "Mapper240.h"
 #include "Mapper242.h"
 #include "MMC1.h"
 #include "MMC2.h"
@@ -110,6 +111,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 189: return new MMC3_189();
 		case 206: return new Namco108();
 		case 232: return new BF9096();
+		case 240: return new Mapper240();
 		case 242: return new Mapper242();
 	}
 
