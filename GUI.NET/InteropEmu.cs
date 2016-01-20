@@ -525,6 +525,7 @@ namespace Mesen.GUI
 		SecondarySpriteMemory = 4,
 		PrgRom = 5,
 		ChrRom = 6,
+		ChrRam = 7,
 	}
 
 	public class MD5Helper

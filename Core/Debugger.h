@@ -27,6 +27,7 @@ enum class DebugMemoryType
 	SecondarySpriteMemory = 4,
 	PrgRom = 5,
 	ChrRom = 6,
+	ChrRam = 7,
 };
 
 class Debugger

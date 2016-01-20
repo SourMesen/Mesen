@@ -315,13 +315,13 @@ class ROMLoader
 			return result;
 		}
 
-		void GetPRGRam(uint8_t** buffer)
+		void GetPrgRom(uint8_t** buffer)
 		{
 			*buffer = new uint8_t[GetPrgSize()];
 			memcpy(*buffer, _prgRAM, GetPrgSize());
 		}
 
-		void GetCHRRam(uint8_t** buffer)
+		void GetChrRom(uint8_t** buffer)
 		{
 			*buffer = new uint8_t[GetChrSize()];
 			memcpy(*buffer, _chrRAM, GetChrSize());

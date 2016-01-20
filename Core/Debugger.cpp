@@ -25,7 +25,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	uint8_t *prgBuffer;
 	mapper->GetPrgCopy(&prgBuffer);
 	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), prgBuffer, mapper->GetPrgSize()));
-	_codeDataLogger.reset(new CodeDataLogger(mapper->GetPrgSize(), mapper->GetChrSize(false)));
+	_codeDataLogger.reset(new CodeDataLogger(mapper->GetPrgSize(), mapper->GetChrSize()));
 
 	_stepOut = false;
 	_stepCount = -1;
@@ -491,10 +491,17 @@ uint32_t Debugger::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 
 		case DebugMemoryType::ChrRom:
 			uint8_t *chrRom;
-			_mapper->GetChrCopy(&chrRom);
+			_mapper->GetChrRomCopy(&chrRom);
 			memcpy(buffer, chrRom, _mapper->GetChrSize());
 			delete[] chrRom;
 			return _mapper->GetChrSize();
+
+		case DebugMemoryType::ChrRam:
+			uint8_t *chrRam;
+			_mapper->GetChrRamCopy(&chrRam);
+			memcpy(buffer, chrRam, _mapper->GetChrSize(true));
+			delete[] chrRam;
+			return _mapper->GetChrSize(true);
 	}
 	return 0;
 }

@@ -346,7 +346,7 @@ protected:
 						uint8_t value = InternalReadRam(0x5C00 + _exAttributeLastNametableFetch);
 
 						//"The pattern fetches ignore the standard CHR banking bits, and instead use the top two bits of $5130 and the bottom 6 bits from Expansion RAM to choose a 4KB bank to select the tile from."
-						_exAttrSelectedChrBank = ((value & 0x3F) | (_chrUpperBits << 6)) % (_chrSize / 0x1000);
+						_exAttrSelectedChrBank = ((value & 0x3F) | (_chrUpperBits << 6)) % (_chrRomSize / 0x1000);
 
 						//Return a byte containing the same palette 4 times - this allows the PPU to select the right palette no matter the shift value
 						uint8_t palette = (value & 0xC0) >> 6;

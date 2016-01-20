@@ -94,7 +94,8 @@
             "OAM Memory",
             "Secondary OAM Memory",
             "PRG ROM",
-            "CHR ROM"});
+            "CHR ROM",
+            "CHR RAM"});
 			this.cboMemoryType.Location = new System.Drawing.Point(42, 3);
 			this.cboMemoryType.Name = "cboMemoryType";
 			this.cboMemoryType.Size = new System.Drawing.Size(121, 21);
@@ -143,7 +144,7 @@
 			// 
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
@@ -154,7 +155,7 @@
             this.mnuDecreaseFontSize,
             this.mnuResetFontSize});
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
-			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
 			this.fontSizeToolStripMenuItem.Text = "Text Size";
 			// 
 			// mnuIncreaseFontSize
@@ -187,7 +188,7 @@
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(138, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -195,7 +196,7 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			// 
 			// toolStripMenuItem1

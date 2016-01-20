@@ -25,6 +25,7 @@
 #include "MMC3.h"
 #include "MMC3_115.h"
 #include "MMC3_189.h"
+#include "MMC3_ChrRam.h"
 #include "MMC4.h"
 #include "MMC5.h"
 #include "Namco108.h"
@@ -87,6 +88,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 66: return new GxRom();
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
+		case 74: return new MMC3_ChrRam(0x08, 0x09, 2);
 		case 75: return new VRC1();
 		case 76: return new Namco108_76();
 		case 79: return new Nina03_06(false);
@@ -101,6 +103,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 101: return new JalecoJfxx(true);
 		case 113: return new Nina03_06(true);
 		case 115: return new MMC3_115();
+		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);
 		case 145: return new Sachen_145();
 		case 146: return new Nina03_06(false);
 		case 147: return new Sachen_147();
@@ -113,7 +116,11 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 184: return new Sunsoft184();
 		case 185: return new CNROM(true);
 		case 189: return new MMC3_189();
+		case 191: return new MMC3_ChrRam(0x80, 0xFF, 2);
+		case 192: return new MMC3_ChrRam(0x08, 0x0B, 4);
 		case 193: return new NtdecTc112();
+		case 194: return new MMC3_ChrRam(0x00, 0x01, 2);
+		case 195: return new MMC3_ChrRam(0x00, 0x03, 4);
 		case 200: return new Mapper200();
 		case 206: return new Namco108();
 		case 231: return new Mapper231();

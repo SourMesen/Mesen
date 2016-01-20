@@ -16,8 +16,16 @@ enum class PrgMemoryType
 	WorkRam,
 };
 
+enum class ChrMemoryType
+{
+	Default,
+	ChrRom,
+	ChrRam
+};
+
 enum MemoryAccessType
 {
+	Unspecified = -1,
 	NoAccess = 0x00,
 	Read = 0x01,
 	Write = 0x02,
@@ -44,15 +52,17 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		{
 			//Make sure the page size is no bigger than the size of the ROM itself
 			//Otherwise we will end up reading from unallocated memory
-			return std::min((uint32_t)GetCHRPageSize(), _chrSize);
+			return std::min((uint32_t)GetCHRPageSize(), _chrRomSize);
 		}
 
 	protected:
 		uint8_t* _prgRom = nullptr;
 		uint8_t* _originalPrgRom = nullptr;
+		uint8_t* _chrRom = nullptr;
 		uint8_t* _chrRam = nullptr;
 		uint32_t _prgSize = 0;
-		uint32_t _chrSize = 0;
+		uint32_t _chrRomSize = 0;
+		uint32_t _chrRamSize = 0;
 
 		uint8_t* _saveRam = nullptr;
 		uint32_t _saveRamSize = 0;
@@ -61,7 +71,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		uint8_t *_nesNametableRam[2];
 		uint8_t *_cartNametableRam[2];
 
-		bool _hasChrRam = false;
+		bool _onlyChrRam = false;
 		bool _hasBattery= false;
 		bool _isPalRom = false;
 		string _romFilename;
@@ -83,6 +93,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		virtual uint16_t GetPRGPageSize() = 0;
 		virtual uint16_t GetCHRPageSize() = 0;
 		
+		virtual uint16_t GetChrRamPageSize() { return 0x2000; }
+
 		//Save ram is battery backed and saved to disk
 		virtual uint32_t GetSaveRamSize() { return 0x2000; }
 		virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
@@ -101,7 +113,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		virtual void WriteRegister(uint16_t addr, uint8_t value) { }
 		virtual uint8_t ReadRegister(uint16_t addr) { return 0;  }
 
-		void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, PrgMemoryType type, int8_t accessType = -1)
+		void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16_t pageNumber, PrgMemoryType type, int8_t accessType = -1)
 		{
 			#ifdef _DEBUG
 			if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
@@ -135,7 +147,12 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 					throw new std::runtime_error("Invalid parameter");
 			}
 
-			pageNumber = pageNumber % pageCount;
+			if(pageNumber < 0) {
+				//Can't use modulo for negative number because pageCount is sometimes not a power of 2.  (Fixes some Mapper 191 games)
+				pageNumber = pageCount + pageNumber;
+			} else {
+				pageNumber = pageNumber % pageCount;
+			}
 			source = &source[pageNumber * pageSize];
 
 			startAddr >>= 8;
@@ -148,10 +165,37 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			}
 		}
 
-		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, int8_t accessType = -1)
+		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, ChrMemoryType type = ChrMemoryType::Default, int8_t accessType = -1)
 		{
-			pageNumber = pageNumber % GetCHRPageCount();
-			SetPpuMemoryMapping(startAddr, endAddr, &_chrRam[pageNumber * InternalGetChrPageSize()], accessType);
+			uint32_t pageCount;
+			uint32_t pageSize;
+			uint8_t* sourceMemory = nullptr;
+			uint8_t defaultAccessType = MemoryAccessType::Read;
+			switch(type) {
+				case ChrMemoryType::Default:
+					pageCount = GetCHRPageCount();
+					pageSize = InternalGetChrPageSize();
+					sourceMemory = _onlyChrRam ? _chrRam : _chrRom;
+					if(_onlyChrRam) {
+						defaultAccessType |= MemoryAccessType::Write;
+					}
+					break;
+
+				case ChrMemoryType::ChrRom: 
+					pageCount = GetCHRPageCount();
+					pageSize = InternalGetChrPageSize();
+					sourceMemory = _chrRom;
+					break;
+
+				case ChrMemoryType::ChrRam: 
+					pageSize = GetChrRamPageSize();
+					pageCount = _chrRamSize / pageSize;
+					sourceMemory = _chrRam;
+					defaultAccessType |= MemoryAccessType::Write;
+					break;
+			}
+
+			SetPpuMemoryMapping(startAddr, endAddr, sourceMemory + (pageNumber % pageCount) * pageSize, accessType == -1 ? defaultAccessType : accessType);
 		}
 
 		void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t* sourceMemory, int8_t accessType = -1)
@@ -209,27 +253,13 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			}
 		}
 
-		virtual void SelectCHRPage(uint16_t slot, uint16_t page)
+		virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
 		{
 			_chrPageNumbers[slot] = page;
 
-			if(_chrSize < ChrAddressRangeSize) {
-				//Total CHR size is smaller than available memory range, map the entire CHR to all slots
-				//Unsure if any game needs this, but assuming same behavior as PRG in similar situations
-				#ifdef _DEBUG
-					MessageManager::DisplayMessage("Debug", "CHR size is smaller than 8kb");
-				#endif
-
-				for(slot = 0; slot < ChrAddressRangeSize / _chrSize; slot++) {
-					uint16_t startAddr = slot * _chrSize;
-					uint16_t endAddr = startAddr + _chrSize - 1;
-					SetPpuMemoryMapping(startAddr, endAddr, (uint16_t)0, _hasChrRam ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
-				}
-			} else {
-				uint16_t startAddr = slot * InternalGetChrPageSize();
-				uint16_t endAddr = startAddr + InternalGetChrPageSize() - 1;
-				SetPpuMemoryMapping(startAddr, endAddr, page, _hasChrRam ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
-			}
+			uint16_t startAddr = slot * InternalGetChrPageSize();
+			uint16_t endAddr = startAddr + InternalGetChrPageSize() - 1;
+			SetPpuMemoryMapping(startAddr, endAddr, page, memoryType);
 		}
 		
 		bool HasBattery()
@@ -269,7 +299,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 		uint32_t GetCHRPageCount()
 		{
-			return _chrSize / InternalGetChrPageSize();
+			return _chrRomSize / InternalGetChrPageSize();
 		}
 
 		string GetBatteryFilename()
@@ -282,11 +312,18 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			memcpy(_prgRom, _originalPrgRom, GetPrgSize());
 		}
 
+		void InitializeChrRam()
+		{
+			_chrRam = new uint8_t[GetChrRamSize()];
+			memset(_chrRam, 0, GetChrRamSize());
+			_chrRamSize = GetChrRamSize();
+		}
+
 		virtual void StreamState(bool saving)
 		{
-			Stream<bool>(_hasChrRam);
-			if(_hasChrRam) {
-				StreamArray<uint8_t>(_chrRam, _chrSize);
+			Stream<bool>(_onlyChrRam);
+			if(_chrRam) {
+				StreamArray<uint8_t>(_chrRam, _chrRamSize);
 			}
 
 			Stream<MirroringType>(_mirroringType);
@@ -330,11 +367,11 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			_registerEndAddress = RegisterEndAddress();
 
 			_mirroringType = romLoader.GetMirroringType();
-			romLoader.GetPRGRam(&_prgRom);
-			romLoader.GetPRGRam(&_originalPrgRom);
-			romLoader.GetCHRRam(&_chrRam);
+			romLoader.GetPrgRom(&_prgRom);
+			romLoader.GetPrgRom(&_originalPrgRom);
+			romLoader.GetChrRom(&_chrRom);
 			_prgSize = romLoader.GetPrgSize();
-			_chrSize = romLoader.GetChrSize();
+			_chrRomSize = romLoader.GetChrSize();
 			_hasBattery = romLoader.HasBattery() || ForceBattery();
 			_isPalRom = romLoader.IsPalRom();
 
@@ -360,11 +397,11 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 				LoadBattery();
 			}
 
-			if(_chrSize == 0) {
-				_hasChrRam = true;
-				_chrRam = new uint8_t[GetChrRamSize()];
-				memset(_chrRam, 0, GetChrRamSize());
-				_chrSize = GetChrRamSize();
+			if(_chrRomSize == 0) {
+				//Assume there is CHR RAM if no CHR ROM exists
+				_onlyChrRam = true;
+				InitializeChrRam();
+				_chrRomSize = _chrRamSize;
 			}
 
 			//Setup a default work/save ram in 0x6000-0x7FFF space
@@ -383,6 +420,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 				SaveBattery();
 			}
 			delete[] _chrRam;
+			delete[] _chrRom;
 			delete[] _prgRom;
 			delete[] _originalPrgRom;
 			delete[] _saveRam;
@@ -554,19 +592,21 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			return _prgSize;
 		}
 
-		void GetChrCopy(uint8_t **buffer)
+		void GetChrRomCopy(uint8_t **buffer)
 		{
-			*buffer = new uint8_t[_chrSize];
-			memcpy(*buffer, _chrRam, _chrSize);
+			*buffer = new uint8_t[_chrRomSize];
+			memcpy(*buffer, _chrRom, _chrRomSize);
 		}
 
-		uint32_t GetChrSize(bool includeChrRam = true)
+		uint32_t GetChrSize(bool getRamSize = false)
 		{
-			if(includeChrRam || !_hasChrRam) {
-				return _chrSize;
-			} else {
-				return 0;
-			}
+			return getRamSize ? _chrRamSize : _chrRomSize;
+		}
+
+		void GetChrRamCopy(uint8_t **buffer)
+		{
+			*buffer = new uint8_t[_chrRamSize];
+			memcpy(*buffer, _chrRam, _chrRamSize);
 		}
 
 		int32_t ToAbsoluteAddress(uint16_t addr)
@@ -581,8 +621,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		int32_t ToAbsoluteChrAddress(uint16_t addr)
 		{
 			uint8_t *chrAddr = _chrPages[addr >> 8] + (addr & 0xFF);
-			if(chrAddr >= _chrRam && chrAddr < _chrRam + _chrSize) {
-				return (uint32_t)(chrAddr - _chrRam);
+			if(chrAddr >= _chrRom && chrAddr < _chrRom + _chrRomSize) {
+				return (uint32_t)(chrAddr - _chrRom);
 			}
 			return -1;
 		}
