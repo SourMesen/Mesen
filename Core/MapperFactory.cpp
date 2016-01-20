@@ -13,6 +13,7 @@
 #include "GxRom.h"
 #include "IremG101.h"
 #include "IremTamS1.h"
+#include "JalecoJf17_19.h"
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
 #include "Mapper58.h"
@@ -91,6 +92,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 66: return new GxRom();
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
+		case 72: return new JalecoJf17_19(false);
 		case 74: return new MMC3_ChrRam(0x08, 0x09, 2);
 		case 75: return new VRC1();
 		case 76: return new Namco108_76();
@@ -99,6 +101,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 87: return new JalecoJfxx(false);
 		case 88: return new Namco108_88();
 		case 89: return new Sunsoft89();
+		case 92: return new JalecoJf17_19(true);
 		case 93: return new Sunsoft93();
 		case 94: return new UnRom_94();
 		case 95: return new Namco108_95();

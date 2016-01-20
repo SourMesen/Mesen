@@ -386,6 +386,9 @@
     <ClInclude Include="Mapper107.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="JalecoJf17_19.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

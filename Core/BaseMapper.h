@@ -74,6 +74,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		bool _onlyChrRam = false;
 		bool _hasBattery= false;
 		bool _isPalRom = false;
+		bool _hasBusConflicts = false;
 		string _romFilename;
 		bool _allowRegisterRead = false;
 		uint16_t _registerStartAddress = 0;
@@ -109,6 +110,8 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		virtual uint16_t RegisterStartAddress() { return 0x8000; }
 		virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
 		virtual bool AllowRegisterRead() { return false; }
+
+		virtual bool HasBusConflicts() { return false; }
 
 		virtual void WriteRegister(uint16_t addr, uint8_t value) { }
 		virtual uint8_t ReadRegister(uint16_t addr) { return 0;  }
@@ -374,6 +377,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			_chrRomSize = romLoader.GetChrSize();
 			_hasBattery = romLoader.HasBattery() || ForceBattery();
 			_isPalRom = romLoader.IsPalRom();
+			_hasBusConflicts = HasBusConflicts();
 
 			_saveRam = new uint8_t[_saveRamSize];
 			_workRam = new uint8_t[GetWorkRamSize()];
@@ -542,6 +546,9 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		virtual void WriteRAM(uint16_t addr, uint8_t value)
 		{
 			if(addr >= _registerStartAddress && addr <= _registerEndAddress) {
+				if(_hasBusConflicts) {
+					value &= _prgPages[addr >> 8][addr & 0xFF];
+				}
 				WriteRegister(addr, value);
 			} else {
 				WritePrgRam(addr, value);
