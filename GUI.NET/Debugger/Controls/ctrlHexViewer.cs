@@ -14,7 +14,6 @@ namespace Mesen.GUI.Debugger.Controls
 	{
 		public event EventHandler ColumnCountChanged;
 
-		private string[] _previousHexContent = null;
 		private int _currentColumnCount;
 		private byte[] _data;
 
@@ -39,18 +38,19 @@ namespace Mesen.GUI.Debugger.Controls
 			{
 				if(value != null) {
 					if(_currentColumnCount != this.ColumnCount) {
-						this._previousHexContent = null;
 						_currentColumnCount = this.ColumnCount;
 					}
 
-					this._data = value;
-					string[] hexContent;
-					int[] lineNumbers;
+					string[] hexContent, previousHexContent = null;
+					int[] lineNumbers, previousLineNumbers;
+					if(this._data != null && this._data.Length == value.Length) {
+						this.ArrayToHex(this._data, out previousHexContent, out previousLineNumbers);
+					}
 					this.ArrayToHex(value, out hexContent, out lineNumbers);
-					this.ctrlDataViewer.CompareLines = _previousHexContent;
+					this.ctrlDataViewer.CompareLines = previousHexContent;
 					this.ctrlDataViewer.TextLines = hexContent;
-					_previousHexContent = hexContent;
 
+					this._data = value;
 					this.ctrlDataViewer.LineNumbers = lineNumbers;
 					if(this.ColumnCount == 16) {
 						this.ctrlDataViewer.Header = "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F";

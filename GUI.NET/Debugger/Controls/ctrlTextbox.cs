@@ -302,6 +302,10 @@ namespace Mesen.GUI.Debugger
 				int marginLeft = this.GetMargin(g);
 				int positionX = position.X - marginLeft;
 				lineIndex = this.ScrollPosition + this.GetLineAtPosition(position.Y);
+				if(lineIndex > _contents.Length && _contents.Length != 0) {
+					lineIndex = _contents.Length - 1;
+				}
+
 				if(positionX >= 0 && lineIndex < _contents.Length) {
 					string text = _contents[lineIndex];
 					int previousWidth = 0;
