@@ -16,6 +16,7 @@
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
 #include "Mapper58.h"
+#include "Mapper107.h"
 #include "Mapper200.h"
 #include "Mapper231.h"
 #include "Mapper240.h"
@@ -103,6 +104,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 95: return new Namco108_95();
 		case 97: return new IremTamS1();
 		case 101: return new JalecoJfxx(true);
+		case 107: return new Mapper107();
 		case 113: return new Nina03_06(true);
 		case 115: return new MMC3_115();
 		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);
