@@ -366,6 +366,7 @@
     <ClInclude Include="DefaultVideoFilter.h" />
     <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="HdVideoFilter.h" />
+    <ClInclude Include="IremLrog017.h" />
     <ClInclude Include="IremTamS1.h" />
     <ClInclude Include="JalecoJf16.h" />
     <ClInclude Include="JalecoJf17_19.h" />

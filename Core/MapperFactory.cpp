@@ -12,6 +12,7 @@
 #include "ColorDreams.h"
 #include "GxRom.h"
 #include "IremG101.h"
+#include "IremLrog017.h"
 #include "IremTamS1.h"
 #include "JalecoJf16.h"
 #include "JalecoJf17_19.h"
@@ -97,6 +98,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 74: return new MMC3_ChrRam(0x08, 0x09, 2);
 		case 75: return new VRC1();
 		case 76: return new Namco108_76();
+		case 77: return new IremLrog017();
 		case 78: return new JalecoJf16(romLoader.GetSubMapper() == 3);
 		case 79: return new Nina03_06(false);
 		case 80: return new TaitoX1005();
