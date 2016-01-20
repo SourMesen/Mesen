@@ -15,6 +15,7 @@
 #include "IremTamS1.h"
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
+#include "Mapper58.h"
 #include "Mapper200.h"
 #include "Mapper231.h"
 #include "Mapper240.h"
@@ -85,6 +86,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 34: return (romLoader.GetChrSize() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
 		case 37: break;
 		case 38: return new UnlPci556();
+		case 58: return new Mapper58();
 		case 66: return new GxRom();
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
