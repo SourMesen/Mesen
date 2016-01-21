@@ -31,6 +31,7 @@
 #include "MMC1.h"
 #include "MMC2.h"
 #include "MMC3.h"
+#include "MMC3_37.h"
 #include "MMC3_115.h"
 #include "MMC3_189.h"
 #include "MMC3_205.h"
@@ -92,7 +93,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();
 		case 34: return (romLoader.GetChrSize() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
-		case 37: break;
+		case 37: return new MMC3_37();
 		case 38: return new UnlPci556();
 		case 58: return new Mapper58();
 		case 66: return new GxRom();

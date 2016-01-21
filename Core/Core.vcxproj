@@ -382,6 +382,7 @@
     <ClInclude Include="Mapper246.h" />
     <ClInclude Include="Mapper58.h" />
     <ClInclude Include="MMC3_115.h" />
+    <ClInclude Include="MMC3_37.h" />
     <ClInclude Include="MMC3_ChrRam.h" />
     <ClInclude Include="NtdecTc112.h" />
     <ClInclude Include="SoundMixer.h" />
