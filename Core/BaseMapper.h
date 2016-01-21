@@ -76,9 +76,9 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 		bool _isPalRom = false;
 		bool _hasBusConflicts = false;
 		string _romFilename;
+		
 		bool _allowRegisterRead = false;
-		uint16_t _registerStartAddress = 0;
-		uint16_t _registerEndAddress = 0;
+		uint8_t _isRegisterAddr[0x10000];
 
 		vector<uint8_t*> _prgPages;
 		vector<uint8_t*> _chrPages;
@@ -322,6 +322,13 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			_chrRamSize = GetChrRamSize();
 		}
 
+		void AddRegisterRange(uint16_t startAddr, uint16_t endAddr)
+		{
+			for(int i = startAddr; i <= endAddr; i++) {
+				_isRegisterAddr[i] = true;
+			}
+		}
+
 		virtual void StreamState(bool saving)
 		{
 			Stream<bool>(_onlyChrRam);
@@ -366,8 +373,9 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
 
 			_allowRegisterRead = AllowRegisterRead();
-			_registerStartAddress = RegisterStartAddress();
-			_registerEndAddress = RegisterEndAddress();
+
+			memset(_isRegisterAddr, 0, sizeof(_isRegisterAddr));
+			AddRegisterRange(RegisterStartAddress(), RegisterEndAddress());
 
 			_mirroringType = romLoader.GetMirroringType();
 			romLoader.GetPrgRom(&_prgRom);
@@ -533,7 +541,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 	
 		uint8_t ReadRAM(uint16_t addr)
 		{
-			if(_allowRegisterRead && addr >= _registerStartAddress && addr <= _registerEndAddress) {
+			if(_allowRegisterRead && _isRegisterAddr[addr]) {
 				return ReadRegister(addr);
 			} else if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Read) {
 				return _prgPages[addr >> 8][addr & 0xFF];
@@ -545,7 +553,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 
 		virtual void WriteRAM(uint16_t addr, uint8_t value)
 		{
-			if(addr >= _registerStartAddress && addr <= _registerEndAddress) {
+			if(_isRegisterAddr[addr]) {
 				if(_hasBusConflicts) {
 					value &= _prgPages[addr >> 8][addr & 0xFF];
 				}

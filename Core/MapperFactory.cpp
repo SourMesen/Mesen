@@ -31,6 +31,7 @@
 #include "MMC1.h"
 #include "MMC2.h"
 #include "MMC3.h"
+#include "MMC3_12.h"
 #include "MMC3_37.h"
 #include "MMC3_115.h"
 #include "MMC3_189.h"
@@ -81,6 +82,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 9: return new MMC2();
 		case 10: return new MMC4();
 		case 11: return new ColorDreams();
+		case 12: return new MMC3_12();
 		case 13: return new CpRom();
 		case 16: break; //18 games
 		case 18: return new JalecoSs88006();

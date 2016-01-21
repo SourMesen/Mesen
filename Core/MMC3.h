@@ -64,6 +64,7 @@ class MMC3 : public BaseMapper
 		}
 
 	protected:
+		virtual bool ForceMmc3RevAIrqs() { return false; }
 		uint8_t _registers[8];
 
 		virtual void UpdateMirroring()
@@ -160,7 +161,7 @@ class MMC3 : public BaseMapper
 		virtual uint16_t GetPRGPageSize() { return 0x2000; }
 		virtual uint16_t GetCHRPageSize() {	return 0x0400; }
 
-		void InitMapper() 
+		virtual void InitMapper() 
 		{
 			Reset();
 			UpdateState();
@@ -241,8 +242,8 @@ class MMC3 : public BaseMapper
 						_irqCounter--;
 					}
 
-					//MMC3 Revision A behavior
-					if(EmulationSettings::CheckFlag(EmulationFlags::Mmc3IrqAltBehavior)) {
+					if(ForceMmc3RevAIrqs() || EmulationSettings::CheckFlag(EmulationFlags::Mmc3IrqAltBehavior)) {
+						//MMC3 Revision A behavior
 						if((count > 0 || _irqReload) && _irqCounter == 0 && _irqEnabled) {
 							CPU::SetIRQSource(IRQSource::External);
 						}
