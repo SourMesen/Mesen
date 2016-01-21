@@ -33,6 +33,7 @@
 #include "MMC3.h"
 #include "MMC3_12.h"
 #include "MMC3_37.h"
+#include "MMC3_47.h"
 #include "MMC3_115.h"
 #include "MMC3_189.h"
 #include "MMC3_205.h"
@@ -97,6 +98,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 34: return (romLoader.GetChrSize() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
 		case 37: return new MMC3_37();
 		case 38: return new UnlPci556();
+		case 47: return new MMC3_47();
 		case 58: return new Mapper58();
 		case 66: return new GxRom();
 		case 70: return new Bandai74161_7432(false);
