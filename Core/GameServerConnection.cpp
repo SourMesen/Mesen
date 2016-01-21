@@ -118,6 +118,7 @@ void GameServerConnection::ProcessNotification(ConsoleNotificationType type, voi
 		case ConsoleNotificationType::GameLoaded:
 		case ConsoleNotificationType::GameResumed:
 		case ConsoleNotificationType::GameReset:
+		case ConsoleNotificationType::StateLoaded:
 			SendGameInformation();
 			SendGameState();
 			break;
