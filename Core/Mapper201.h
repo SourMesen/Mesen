@@ -1,0 +1,22 @@
+#pragma once
+#include "stdafx.h"
+#include "BaseMapper.h"
+
+class Mapper201 : public BaseMapper
+{
+protected:
+	virtual uint16_t GetPRGPageSize() { return 0x8000; }
+	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+
+	void InitMapper()
+	{
+		SelectPRGPage(0, 0);
+		SelectCHRPage(0, 0);
+	}
+
+	void WriteRegister(uint16_t addr, uint8_t value)
+	{
+		SelectCHRPage(0, addr & 0xFF);
+		SelectPRGPage(0, addr & 0xFF);
+	}
+};
