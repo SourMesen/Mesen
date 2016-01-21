@@ -17,6 +17,12 @@ protected:
 		MMC3::StreamState(saving);
 	}
 
+	virtual void Reset(bool softReset)
+	{
+		_selectedBlock = 0;
+		UpdateState();
+	}
+
 	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
 	{
 		if(_selectedBlock >= 4) {
@@ -47,8 +53,10 @@ protected:
 	void WriteRegister(uint16_t addr, uint8_t value)
 	{
 		if(addr < 0x8000) {
-			_selectedBlock = value & 0x07;
-			UpdateState();
+			if(CanWriteToWorkRam()) {
+				_selectedBlock = value & 0x07;
+				UpdateState();
+			}
 		} else {
 			MMC3::WriteRegister(addr, value);
 		}

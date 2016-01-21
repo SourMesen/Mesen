@@ -147,10 +147,10 @@ void Console::ResetComponents(bool softReset)
 		_debugger->Step(1);
 	}
 
+	_memoryManager->Reset(softReset);
 	_ppu->Reset();
 	_apu->Reset(softReset);
 	_cpu->Reset(softReset);
-	_memoryManager->Reset(softReset);
 
 	SoundMixer::StopAudio(true);
 

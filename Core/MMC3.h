@@ -98,6 +98,11 @@ class MMC3 : public BaseMapper
 			}
 		}
 
+		bool CanWriteToWorkRam()
+		{
+			return _wramEnabled && !_wramWriteProtected;
+		}
+
 		virtual void UpdateState()
 		{
 			_currentRegister = _state.Reg8000 & 0x07;
