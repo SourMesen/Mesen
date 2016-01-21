@@ -39,6 +39,7 @@ class APU : public Snapshotable, public IMemoryHandler
 	private:
 		bool NeedToRun(uint32_t currentCycle);
 		void Run();
+		void EndFrame();
 
 		static void FrameCounterTick(FrameType type);
 

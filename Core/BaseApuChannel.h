@@ -48,10 +48,10 @@ public:
 	virtual void StreamState(bool saving)
 	{
 		if(!saving) {
-			_lastOutput = 0;
 			_previousCycle = 0;
 		}
 
+		Stream<int8_t>(_lastOutput);
 		Stream<uint16_t>(_timer);
 		Stream<uint16_t>(_period);
 		Stream<NesModel>(_nesModel);

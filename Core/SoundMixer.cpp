@@ -23,6 +23,20 @@ SoundMixer::~SoundMixer()
 	blip_delete(_blipBuf);
 }
 
+void SoundMixer::StreamState(bool saving)
+{
+	if(!saving) {
+		Reset();
+	}
+
+	Stream<uint32_t>(_clockRate);
+	Stream<uint32_t>(_sampleRate);
+	UpdateRates();
+
+	Stream<int16_t>(_previousOutput);
+	StreamArray<int8_t>(_currentOutput, 5);
+}
+
 void SoundMixer::RegisterAudioDevice(IAudioDevice *audioDevice)
 {
 	SoundMixer::AudioDevice = audioDevice;

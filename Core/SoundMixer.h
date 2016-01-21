@@ -3,8 +3,9 @@
 #include "EmulationSettings.h"
 #include "../BlipBuffer/blip_buf.h"
 #include "IAudioDevice.h"
+#include "Snapshotable.h"
 
-class SoundMixer
+class SoundMixer : public Snapshotable
 {
 private:
 	static IAudioDevice* AudioDevice;
@@ -33,6 +34,9 @@ private:
 
 	void UpdateRates();
 
+protected:
+	virtual void StreamState(bool saving);
+
 public:
 	static const uint32_t BitsPerSample = 16;
 
@@ -44,7 +48,7 @@ public:
 	
 	void PlayAudioBuffer(uint32_t cycle);
 	void AddDelta(AudioChannel channel, uint32_t time, int8_t output);
-
+	
 	static void StopAudio(bool clearBuffer = false);
 	static void RegisterAudioDevice(IAudioDevice *audioDevice);
 };

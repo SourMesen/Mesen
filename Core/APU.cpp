@@ -55,7 +55,6 @@ void APU::SetNesModel(NesModel model, bool forceInit)
 		_frameCounter->SetNesModel(model);
 
 		_mixer->SetNesModel(model);
-		_mixer->Reset();
 	}
 }
 
@@ -182,21 +181,25 @@ void APU::Exec()
 {
 	_currentCycle++;
 	if(_currentCycle == 10000) {
-		Run();
-
-		_squareChannel[0]->EndFrame();
-		_squareChannel[1]->EndFrame();
-		_triangleChannel->EndFrame();
-		_noiseChannel->EndFrame();
-		_deltaModulationChannel->EndFrame();
-		
-		_mixer->PlayAudioBuffer(_currentCycle);
-
-		_currentCycle = 0;
-		_previousCycle = 0;
+		EndFrame();
 	} else if(NeedToRun(_currentCycle)) {
 		Run();
 	}
+}
+
+void APU::EndFrame()
+{
+	Run();
+	_squareChannel[0]->EndFrame();
+	_squareChannel[1]->EndFrame();
+	_triangleChannel->EndFrame();
+	_noiseChannel->EndFrame();
+	_deltaModulationChannel->EndFrame();
+
+	_mixer->PlayAudioBuffer(_currentCycle);
+
+	_currentCycle = 0;
+	_previousCycle = 0;
 }
 
 void APU::Reset(bool softReset)
@@ -213,6 +216,14 @@ void APU::Reset(bool softReset)
 
 void APU::StreamState(bool saving)
 {
+	if(saving) {
+		//End the APU frame - makes it simpler to restore sound after a state reload
+		EndFrame();
+	} else {
+		_previousCycle = 0;
+		_currentCycle = 0;
+	}
+
 	Stream<NesModel>(_nesModel);
 	Stream(_squareChannel[0].get());
 	Stream(_squareChannel[1].get());
@@ -220,10 +231,5 @@ void APU::StreamState(bool saving)
 	Stream(_noiseChannel.get());
 	Stream(_deltaModulationChannel.get());
 	Stream(_frameCounter.get());
-
-	if(!saving) {
-		_currentCycle = 0;
-		_previousCycle = 0;
-		SetNesModel(_nesModel, true);
-	}
+	Stream(_mixer.get());
 }
