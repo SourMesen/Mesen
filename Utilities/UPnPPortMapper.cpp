@@ -35,24 +35,27 @@ bool UPnPPortMapper::AddNATPortMapping(uint16_t internalPort, uint16_t externalP
 			if(!SUCCEEDED(hResult) || spm == nullptr) {
 				std::cout << "Attempting to automatically forward port via UPnP..." << std::endl;
 
-				wstring localIP = GetLocalIP();
+				vector<wstring> localIPs = GetLocalIPs();
 				BSTR desc = SysAllocString(L"Mesen NetPlay");
-				BSTR clientStr = SysAllocString(localIP.c_str());
-				hResult = spmc->Add(externalPort, proto, internalPort, clientStr, true, desc, &spm);
-				SysFreeString(clientStr);
-				SysFreeString(desc);
-					
-				if(SUCCEEDED(hResult) && spm) {
-					//Successfully added a new port mapping
-					std::cout << std::dec << "Forwarded port " << externalPort << " to IP ";
-					std::wcout << localIP.c_str() << std::endl;
-					spm->Release();
-					result = true;
-				} else {
-					std::cout << "Unable to add UPnP port mapping.  ";
-					std::cout << "IP: ";
-					std::wcout << localIP.c_str();
-					std::cout << " HRESULT: 0x" << std::hex << hResult << std::endl;
+				spm = nullptr;
+
+				for(size_t i = 0, len = localIPs.size(); i < len; i++) {
+					BSTR clientStr = SysAllocString(localIPs[i].c_str());
+					hResult = spmc->Add(externalPort, proto, internalPort, clientStr, true, desc, &spm);
+					SysFreeString(clientStr);
+					SysFreeString(desc);
+
+					if(SUCCEEDED(hResult) && spm) {
+						//Successfully added a new port mapping
+						std::cout << std::dec << "Forwarded port " << externalPort << " to IP " << utf8::utf8::encode(localIPs[i]) << std::endl;
+						result = true;
+					} else {
+						std::cout << "Unable to add UPnP port mapping. IP: " << utf8::utf8::encode(localIPs[i]) << " HRESULT: 0x" << std::hex << hResult << std::endl;
+					}
+
+					if(spm) {
+						spm->Release();
+					}
 				}
 			} else {
 				std::cout << "Unable to add UPnP port mapping." << std::endl;
@@ -98,11 +101,11 @@ bool UPnPPortMapper::RemoveNATPortMapping(uint16_t externalPort, IPProtocol prot
 	return result;
 }
 
-wstring UPnPPortMapper::GetLocalIP()
+vector<wstring> UPnPPortMapper::GetLocalIPs()
 {
-	wstring localIP;
-
+	vector<wstring> localIPs;
 	ADDRINFOW *result = nullptr;
+	ADDRINFOW *current = nullptr;
 	ADDRINFOW hints;
 
 	ZeroMemory(&hints, sizeof(hints));
@@ -115,14 +118,22 @@ wstring UPnPPortMapper::GetLocalIP()
 	GetComputerName(hostName, &hostSize);
 
 	if(GetAddrInfoW(hostName, nullptr, &hints, &result) == 0) {
-		wchar_t ipAddr[255];
-		DWORD ipSize = 255;
-		if(WSAAddressToString(result->ai_addr, (DWORD)result->ai_addrlen, nullptr, ipAddr, &ipSize) == 0) {
-			localIP = ipAddr;
+		current = result;
+		while(current != nullptr) {
+			wchar_t ipAddr[255];
+			DWORD ipSize = 255;
+
+			if(WSAAddressToString(current->ai_addr, (DWORD)current->ai_addrlen, nullptr, ipAddr, &ipSize) == 0) {
+				if(std::find(localIPs.begin(), localIPs.end(), ipAddr) == localIPs.end()) {
+					localIPs.push_back(ipAddr);
+				}
+			}
+			current = current->ai_next;
 		}
 		FreeAddrInfoW(result);
 	}
-	return localIP;
+
+	return localIPs;
 }
 
 #else

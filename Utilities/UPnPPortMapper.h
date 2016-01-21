@@ -13,7 +13,7 @@ enum class IPProtocol
 class UPnPPortMapper
 {
 private:
-	static wstring GetLocalIP();
+	static vector<wstring> GetLocalIPs();
 
 public:
 	static bool AddNATPortMapping(uint16_t internalPort, uint16_t externalPort, IPProtocol protocol);
