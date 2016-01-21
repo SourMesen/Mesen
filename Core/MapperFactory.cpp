@@ -33,6 +33,7 @@
 #include "MMC3.h"
 #include "MMC3_115.h"
 #include "MMC3_189.h"
+#include "MMC3_205.h"
 #include "MMC3_ChrRam.h"
 #include "MMC4.h"
 #include "MMC5.h"
@@ -139,6 +140,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 201: return new Mapper201();
 		case 202: return new Mapper202();
 		case 203: return new Mapper203();
+		case 205: return new MMC3_205();
 		case 206: return new Namco108();
 		case 231: return new Mapper231();
 		case 232: return new BF9096();

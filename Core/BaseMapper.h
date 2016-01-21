@@ -232,7 +232,7 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			return _prgPages[addr >> 8] ? _prgPages[addr >> 8][addr & 0xFF] : 0;
 		}
 
-		void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom)
+		virtual void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom)
 		{
 			_prgPageNumbers[slot] = page;
 
