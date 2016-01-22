@@ -10,7 +10,8 @@ protected:
 	bool _sending;
 	vector<uint8_t> _buffer;
 	uint32_t _position = 0;
-	vector<void*> _pointersToRelease;
+	vector<uint8_t*> _arraysToRelease;
+	vector<char*> _stringsToRelease;
 
 	template<typename T>
 	void Stream(T &value)
@@ -40,7 +41,7 @@ protected:
 			Stream<uint32_t>(length);
 			if(*value == nullptr) {
 				*value = (void*)new uint8_t[length];
-				_pointersToRelease.push_back(*value);
+				_arraysToRelease.push_back((uint8_t*)*value);
 			}
 			uint8_t* bytes = (uint8_t*)(*value);
 			for(uint32_t i = 0, len = length; i < len; i++) {
@@ -71,8 +72,11 @@ protected:
 public:
 	virtual ~NetMessage() 
 	{	
-		for(void *pointer : _pointersToRelease) {
-			delete[] pointer;
+		for(uint8_t *arrayPtr: _arraysToRelease) {
+			delete[] arrayPtr;
+		}
+		for(char *stringPtr: _stringsToRelease) {
+			delete[] stringPtr;
 		}
 	}
 
@@ -100,7 +104,7 @@ public:
 		length = (uint32_t)(src.length() + 1);
 		*dest = new char[length];
 		memcpy(*dest, src.c_str(), length);
-		_pointersToRelease.push_back(*dest);
+		_stringsToRelease.push_back(*dest);
 	}
 
 protected:

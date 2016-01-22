@@ -157,3 +157,29 @@ void CheatManager::ApplyPrgCodes(uint8_t *prgRam, uint32_t prgSize)
 	}
 	Console::Resume();
 }
+
+vector<CodeInfo> CheatManager::GetCheats()
+{
+	//Used by NetPlay
+	vector<CodeInfo> cheats;
+	for(unique_ptr<vector<CodeInfo>> &codes : Instance->_relativeCheatCodes) {
+		if(codes) {
+			std::copy(codes.get()->begin(), codes.get()->end(), std::back_inserter(cheats));
+		}
+	}
+	std::copy(Instance->_absoluteCheatCodes.begin(), Instance->_absoluteCheatCodes.end(), std::back_inserter(cheats));
+	return cheats;
+}
+
+void CheatManager::SetCheats(vector<CodeInfo> &cheats)
+{
+	//Used by NetPlay
+	Instance->ClearCodes();
+
+	if(cheats.size() > 0) {
+		MessageManager::DisplayMessage("NetPlay", std::to_string(cheats.size()) + " cheats applied.");
+		for(CodeInfo &cheat : cheats) {
+			Instance->AddCode(cheat);
+		}
+	}
+}

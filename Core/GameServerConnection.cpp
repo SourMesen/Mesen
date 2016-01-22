@@ -37,20 +37,8 @@ GameServerConnection::~GameServerConnection()
 
 void GameServerConnection::SendGameState()
 {
-	Console::Pause();
-	stringstream state;
-	Console::SaveState(state);
-	_handshakeCompleted = true;
-	ControlManager::RegisterControlDevice(this, _controllerPort);
-	Console::Resume();
-
-	uint32_t size = (uint32_t)state.tellp();
-		
-	char* buffer = new char[size];
-	state.read(buffer, size);
-	SaveStateMessage message(buffer, size, true);
+	SaveStateMessage message;
 	SendNetMessage(message);
-	delete[] buffer;
 }
 
 void GameServerConnection::SendGameInformation()
@@ -89,11 +77,17 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 		case MessageType::HandShake:
 			//Send the game's current state to the client and register the controller
 			if(((HandShakeMessage*)message)->IsValid()) {
+				Console::Pause();
 				_connectionData.reset(new ClientConnectionData("", 0, ((HandShakeMessage*)message)->GetPlayerName(), ((HandShakeMessage*)message)->GetAvatarData(), ((HandShakeMessage*)message)->GetAvatarSize()));
 
 				MessageManager::DisplayToast("Net Play", _connectionData->PlayerName + " (Player " + std::to_string(_controllerPort + 1) + ") connected.", _connectionData->AvatarData, _connectionData->AvatarSize);
+				
 				SendGameInformation();
 				SendGameState();
+
+				_handshakeCompleted = true;
+				ControlManager::RegisterControlDevice(this, _controllerPort);
+				Console::Resume();
 			}
 			break;
 		case MessageType::InputData:

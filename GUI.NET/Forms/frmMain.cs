@@ -279,6 +279,7 @@ namespace Mesen.GUI.Forms
 					mnuConnect.Enabled = !netPlay;
 					mnuDisconnect.Enabled = !mnuConnect.Enabled && !InteropEmu.IsServerRunning();
 
+					mnuCheats.Enabled = !InteropEmu.IsConnected();
 					mnuEmulationSpeed.Enabled = !InteropEmu.IsConnected();
 
 					bool moviePlaying = InteropEmu.MoviePlaying();

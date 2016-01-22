@@ -29,6 +29,8 @@ public:
 	static void AddProActionRockyCode(uint32_t code);
 	static void AddCustomCode(uint32_t address, uint8_t value, int32_t compareValue = -1, bool isRelativeAddress = true);
 	static void ClearCodes();
+	static vector<CodeInfo> GetCheats();
+	static void SetCheats(vector<CodeInfo> &cheats);
 
 	static void ApplyRamCodes(uint16_t addr, uint8_t &value);
 	static void ApplyPrgCodes(uint8_t *prgRam, uint32_t prgSize);
