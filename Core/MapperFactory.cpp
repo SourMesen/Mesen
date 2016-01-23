@@ -12,6 +12,7 @@
 #include "ColorDreams.h"
 #include "GxRom.h"
 #include "IremG101.h"
+#include "IremH3001.h"
 #include "IremLrog017.h"
 #include "IremTamS1.h"
 #include "JalecoJf11_14.h"
@@ -120,6 +121,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 58: return new Mapper58();
 		case 61: return new Mapper61();
 		case 62: return new Mapper62();
+		case 65: return new IremH3001();
 		case 66: return new GxRom();
 		case 67: return new SunSoft3();
 		case 68: return new SunSoft4();  //incomplete support

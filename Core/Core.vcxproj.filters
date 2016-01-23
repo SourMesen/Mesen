@@ -458,6 +458,9 @@
     <ClInclude Include="Mapper91.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="IremH3001.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
