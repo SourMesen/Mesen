@@ -489,6 +489,7 @@
     <ClInclude Include="BaseVideoFilter.h" />
     <ClInclude Include="VirtualController.h" />
     <ClInclude Include="VRC2_4.h" />
+    <ClInclude Include="VRC3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APU.cpp" />

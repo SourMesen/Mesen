@@ -72,6 +72,7 @@
 #include "UnRom_180.h"
 #include "VRC1.h"
 #include "VRC2_4.h"
+#include "VRC3.h"
 
 BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 {
@@ -118,6 +119,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
 		case 72: return new JalecoJf17_19(false);
+		case 73: return new VRC3();
 		case 74: return new MMC3_ChrRam(0x08, 0x09, 2);
 		case 75: return new VRC1();
 		case 76: return new Namco108_76();
