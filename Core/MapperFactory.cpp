@@ -28,6 +28,7 @@
 #include "Mapper201.h"
 #include "Mapper202.h"
 #include "Mapper203.h"
+#include "Mapper225.h"
 #include "Mapper231.h"
 #include "Mapper240.h"
 #include "Mapper242.h"
@@ -167,6 +168,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 203: return new Mapper203();
 		case 205: return new MMC3_205();
 		case 206: return new Namco108();
+		case 225: return new Mapper225();
 		case 231: return new Mapper231();
 		case 232: return new BF9096();
 		case 240: return new Mapper240();
