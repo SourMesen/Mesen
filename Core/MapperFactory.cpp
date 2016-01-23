@@ -60,6 +60,7 @@
 #include "Sachen_147.h"
 #include "Sachen_148.h"
 #include "Sachen_149.h"
+#include "Sunsoft3.h"
 #include "Sunsoft89.h"
 #include "Sunsoft93.h"
 #include "Sunsoft184.h"
@@ -113,6 +114,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 61: return new Mapper61();
 		case 62: return new Mapper62();
 		case 66: return new GxRom();
+		case 67: return new SunSoft3();
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
 		case 72: return new JalecoJf17_19(false);
