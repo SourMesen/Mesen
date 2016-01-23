@@ -14,6 +14,7 @@
 #include "IremG101.h"
 #include "IremLrog017.h"
 #include "IremTamS1.h"
+#include "JalecoJf11_14.h"
 #include "JalecoJf16.h"
 #include "JalecoJf17_19.h"
 #include "JalecoJfxx.h"
@@ -146,6 +147,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 113: return new Nina03_06(true);
 		case 115: return new MMC3_115();
 		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);
+		case 140: return new JalecoJf11_14();
 		case 145: return new Sachen_145();
 		case 146: return new Nina03_06(false);
 		case 147: return new Sachen_147();
