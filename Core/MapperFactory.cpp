@@ -23,6 +23,7 @@
 #include "Mapper58.h"
 #include "Mapper61.h"
 #include "Mapper62.h"
+#include "Mapper91.h"
 #include "Mapper107.h"
 #include "Mapper112.h"
 #include "Mapper200.h"
@@ -136,6 +137,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 87: return new JalecoJfxx(false);
 		case 88: return new Namco108_88();
 		case 89: return new Sunsoft89();
+		case 91: return new Mapper91();
 		case 92: return new JalecoJf17_19(true);
 		case 93: return new Sunsoft93();
 		case 94: return new UnRom_94();
