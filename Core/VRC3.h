@@ -77,4 +77,3 @@ protected:
 		}
 	}
 };
-#pragma once
