@@ -52,10 +52,13 @@ struct NESHeader
 
 	uint16_t GetMapperID()
 	{
-		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
-			return (Byte8 & 0x0F << 4) | (Byte7 & 0xF0) | (Byte6 >> 4);
-		} else {
-			return (Byte7 & 0xF0) | (Byte6 >> 4);
+		switch(GetRomHeaderVersion()) {
+			case RomHeaderVersion::Nes2_0:
+				return (Byte8 & 0x0F << 4) | (Byte7 & 0xF0) | (Byte6 >> 4);
+			case RomHeaderVersion::iNes:
+				return (Byte7 & 0xF0) | (Byte6 >> 4);
+			case RomHeaderVersion::OldiNes:
+				return (Byte6 >> 4);
 		}
 	}
 
