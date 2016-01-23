@@ -18,6 +18,7 @@
 #include "JalecoJf17_19.h"
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
+#include "Mapper57.h"
 #include "Mapper58.h"
 #include "Mapper107.h"
 #include "Mapper200.h"
@@ -105,6 +106,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 47: return new MMC3_47();
 		case 49: return new MMC3_49();
 		case 52: return new MMC3_52();
+		case 57: return new Mapper57();
 		case 58: return new Mapper58();
 		case 66: return new GxRom();
 		case 70: return new Bandai74161_7432(false);
