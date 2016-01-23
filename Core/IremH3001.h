@@ -22,6 +22,14 @@ protected:
 		SelectPRGPage(3, -1);
 	}
 	
+	void StreamState(bool saving)
+	{
+		BaseMapper::StreamState(saving);
+		Stream<bool>(_irqEnabled);
+		Stream<uint16_t>(_irqCounter);
+		Stream<uint16_t>(_irqReloadValue);
+	}
+
 	virtual void ProcessCpuClock()
 	{
 		if(_irqEnabled) {
