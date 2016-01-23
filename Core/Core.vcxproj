@@ -475,6 +475,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Sunsoft184.h" />
     <ClInclude Include="SunSoft3.h" />
+    <ClInclude Include="SunSoft4.h" />
     <ClInclude Include="Sunsoft89.h" />
     <ClInclude Include="Sunsoft93.h" />
     <ClInclude Include="TaitoTc0190.h" />

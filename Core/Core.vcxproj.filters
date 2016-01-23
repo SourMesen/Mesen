@@ -440,6 +440,9 @@
     <ClInclude Include="VRC3.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="SunSoft4.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
