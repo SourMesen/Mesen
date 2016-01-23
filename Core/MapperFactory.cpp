@@ -21,6 +21,7 @@
 #include "Mapper57.h"
 #include "Mapper58.h"
 #include "Mapper61.h"
+#include "Mapper62.h"
 #include "Mapper107.h"
 #include "Mapper200.h"
 #include "Mapper201.h"
@@ -110,6 +111,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 57: return new Mapper57();
 		case 58: return new Mapper58();
 		case 61: return new Mapper61();
+		case 62: return new Mapper62();
 		case 66: return new GxRom();
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
