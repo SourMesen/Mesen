@@ -59,10 +59,12 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		_memoryManager->RegisterIODevice(_apu.get());
 		_memoryManager->RegisterIODevice(_controlManager.get());
 
+		UpdateNesModel();
+
 		ResetComponents(false);
 
 		_initialized = true;
-
+		
 		VideoDecoder::GetInstance()->StartThread();
 	
 		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(romFilename));
@@ -199,7 +201,7 @@ void Console::Run()
 	_runLock.Acquire();
 	_stopLock.Acquire();
 
-	UpdateNesModel(targetTime, true);
+	targetTime = UpdateNesModel();
 
 	VideoDecoder::GetInstance()->StartThread();
 		
@@ -239,7 +241,7 @@ void Console::Run()
 
 			//Get next target time, and adjust based on whether we are ahead or behind
 			double timeLag = EmulationSettings::GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
-			UpdateNesModel(targetTime, false);
+			targetTime = UpdateNesModel();
 			clockTimer.Reset();
 			targetTime -= timeLag;
 			if(targetTime < 0) {
@@ -261,7 +263,7 @@ void Console::Run()
 	_runLock.Release();
 }
 
-void Console::UpdateNesModel(double &frameDelay, bool showMessage)
+double Console::UpdateNesModel()
 {
 	NesModel model = EmulationSettings::GetNesModel();
 	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
@@ -269,6 +271,7 @@ void Console::UpdateNesModel(double &frameDelay, bool showMessage)
 		model = _mapper->IsPalRom() ? NesModel::PAL : NesModel::NTSC;
 	}
 	
+	double frameDelay;
 	if(emulationSpeed == 0) {
 		frameDelay = 0;
 	} else {
@@ -278,6 +281,8 @@ void Console::UpdateNesModel(double &frameDelay, bool showMessage)
 
 	_ppu->SetNesModel(model);
 	_apu->SetNesModel(model);
+
+	return frameDelay;
 }
 
 void Console::SaveState(ostream &saveStream)

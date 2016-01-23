@@ -35,16 +35,14 @@ GameServerConnection::~GameServerConnection()
 	MessageManager::UnregisterNotificationListener(this);
 }
 
-void GameServerConnection::SendGameState()
-{
-	SaveStateMessage message;
-	SendNetMessage(message);
-}
-
 void GameServerConnection::SendGameInformation()
 {
-	GameInformationMessage message(Console::GetROMPath(), _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
-	SendNetMessage(message);
+	Console::Pause();
+	GameInformationMessage gameInfo(Console::GetROMPath(), _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
+	SendNetMessage(gameInfo);
+	SaveStateMessage saveState;
+	SendNetMessage(saveState);
+	Console::Resume();
 }
 
 void GameServerConnection::SendMovieData(uint8_t state, uint8_t port)
@@ -83,7 +81,6 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 				MessageManager::DisplayToast("Net Play", _connectionData->PlayerName + " (Player " + std::to_string(_controllerPort + 1) + ") connected.", _connectionData->AvatarData, _connectionData->AvatarSize);
 				
 				SendGameInformation();
-				SendGameState();
 
 				_handshakeCompleted = true;
 				ControlManager::RegisterControlDevice(this, _controllerPort);
@@ -107,14 +104,12 @@ void GameServerConnection::ProcessNotification(ConsoleNotificationType type, voi
 {
 	switch(type) {
 		case ConsoleNotificationType::GamePaused:
-			SendGameInformation();
-			break;
 		case ConsoleNotificationType::GameLoaded:
 		case ConsoleNotificationType::GameResumed:
 		case ConsoleNotificationType::GameReset:
 		case ConsoleNotificationType::StateLoaded:
+		case ConsoleNotificationType::CheatAdded:
 			SendGameInformation();
-			SendGameState();
 			break;
 		default:
 			break;

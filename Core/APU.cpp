@@ -17,6 +17,8 @@ APU::APU(MemoryManager* memoryManager)
 
 	_memoryManager = memoryManager;
 
+	_nesModel = NesModel::Auto;
+
 	_mixer.reset(new SoundMixer());
 
 	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(AudioChannel::Square1, _mixer.get(), true)));

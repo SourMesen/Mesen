@@ -20,7 +20,6 @@ public:
 	GameServerConnection(shared_ptr<Socket> socket, int controllerPort, IGameBroadcaster* gameBroadcaster);
 	~GameServerConnection();
 
-	void SendGameState();
 	void SendGameInformation();
 	void SendMovieData(uint8_t state, uint8_t port);
 

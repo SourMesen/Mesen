@@ -22,7 +22,7 @@ protected:
 
 		if(_sending) {
 			cheats = CheatManager::GetCheats();
-			_cheats = &cheats[0];
+			_cheats = cheats.size() > 0 ? &cheats[0] : nullptr;
 			_cheatArraySize = (uint32_t)cheats.size() * sizeof(CodeInfo);
 			StreamArray((void**)&_cheats, _cheatArraySize);
 			delete[] _stateData;

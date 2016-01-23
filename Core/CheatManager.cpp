@@ -84,6 +84,7 @@ CodeInfo CheatManager::GetPARCodeInfo(uint32_t parCode)
 
 void CheatManager::AddCode(CodeInfo &code)
 {
+	Console::Pause();
 	if(code.IsRelativeAddress) {
 		if(_relativeCheatCodes[code.Address] == nullptr) {
 			_relativeCheatCodes[code.Address].reset(new vector<CodeInfo>());
@@ -91,8 +92,9 @@ void CheatManager::AddCode(CodeInfo &code)
 		_relativeCheatCodes[code.Address]->push_back(code);
 	} else {
 		_absoluteCheatCodes.push_back(code);
-		MessageManager::SendNotification(ConsoleNotificationType::CheatAdded);
 	}
+	MessageManager::SendNotification(ConsoleNotificationType::CheatAdded);
+	Console::Resume();
 }
 
 void CheatManager::AddGameGenieCode(string code)
@@ -120,15 +122,24 @@ void CheatManager::AddCustomCode(uint32_t address, uint8_t value, int32_t compar
 
 void CheatManager::ClearCodes()
 {
+	bool cheatRemoved = false;
+	Console::Pause();
+
 	for(int i = 0; i <= 0xFFFF; i++) {
+		if(!Instance->_relativeCheatCodes[i]) {
+			cheatRemoved = true;
+		}
 		Instance->_relativeCheatCodes[i] = nullptr;
 	}
 
-	bool sendNotification = Instance->_absoluteCheatCodes.size() > 0;
+	cheatRemoved |= Instance->_absoluteCheatCodes.size() > 0;
 	Instance->_absoluteCheatCodes.clear();
-	if(sendNotification) {
+	
+	if(cheatRemoved) {
 		MessageManager::SendNotification(ConsoleNotificationType::CheatRemoved);
 	}
+
+	Console::Resume();
 }
 
 void CheatManager::ApplyRamCodes(uint16_t addr, uint8_t &value)

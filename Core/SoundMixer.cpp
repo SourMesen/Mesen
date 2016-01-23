@@ -25,13 +25,13 @@ SoundMixer::~SoundMixer()
 
 void SoundMixer::StreamState(bool saving)
 {
-	if(!saving) {
-		Reset();
-	}
-
 	Stream<uint32_t>(_clockRate);
 	Stream<uint32_t>(_sampleRate);
-	UpdateRates();
+	
+	if(!saving) {
+		Reset();
+		UpdateRates();
+	}
 
 	Stream<int16_t>(_previousOutput);
 	StreamArray<int8_t>(_currentOutput, 5);
