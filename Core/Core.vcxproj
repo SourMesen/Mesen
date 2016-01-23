@@ -371,6 +371,7 @@
     <ClInclude Include="JalecoJf16.h" />
     <ClInclude Include="JalecoJf17_19.h" />
     <ClInclude Include="Mapper107.h" />
+    <ClInclude Include="Mapper112.h" />
     <ClInclude Include="Mapper200.h" />
     <ClInclude Include="Mapper201.h" />
     <ClInclude Include="Mapper202.h" />
