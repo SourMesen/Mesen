@@ -387,6 +387,7 @@
     <ClInclude Include="MMC3_44.h" />
     <ClInclude Include="MMC3_47.h" />
     <ClInclude Include="MMC3_49.h" />
+    <ClInclude Include="MMC3_52.h" />
     <ClInclude Include="MMC3_ChrRam.h" />
     <ClInclude Include="NtdecTc112.h" />
     <ClInclude Include="SoundMixer.h" />
