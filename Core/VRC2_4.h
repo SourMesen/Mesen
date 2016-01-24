@@ -137,6 +137,11 @@ class VRC2_4 : public BaseMapper
 					A1 = (addr & 0x01);
 					break;
 
+				case VRCVariant::VRC4_27:
+					A0 = addr & 0x01;
+					A1 = (addr >> 1) & 0x01;
+					break;
+
 				case VRCVariant::VRC2c:
 				case VRCVariant::VRC4b:
 				case VRCVariant::VRC4d:
