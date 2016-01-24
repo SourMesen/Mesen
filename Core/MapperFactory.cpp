@@ -62,6 +62,7 @@
 #include "Nina03_06.h"
 #include "NROM.h"
 #include "NtdecTc112.h"
+#include "Rambo1.h"
 #include "Sachen_145.h"
 #include "Sachen_147.h"
 #include "Sachen_148.h"
@@ -121,6 +122,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 58: return new Mapper58();
 		case 61: return new Mapper61();
 		case 62: return new Mapper62();
+		case 64: return new Rambo1();
 		case 65: return new IremH3001();
 		case 66: return new GxRom();
 		case 67: return new SunSoft3();
