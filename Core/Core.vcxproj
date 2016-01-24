@@ -503,6 +503,7 @@
     <ClInclude Include="VRC2_4.h" />
     <ClInclude Include="VRC3.h" />
     <ClInclude Include="VRC6.h" />
+    <ClInclude Include="VRC7.h" />
     <ClInclude Include="VrcIrq.h" />
   </ItemGroup>
   <ItemGroup>

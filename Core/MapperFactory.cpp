@@ -85,6 +85,7 @@
 #include "VRC2_4.h"
 #include "VRC3.h"
 #include "VRC6.h"
+#include "VRC7.h"
 
 BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 {
@@ -145,6 +146,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 78: return new JalecoJf16(romLoader.GetSubMapper() == 3);
 		case 79: return new Nina03_06(false);
 		case 80: return new TaitoX1005(false);
+		case 85: return new VRC7();
 		case 87: return new JalecoJfxx(false);
 		case 88: return new Namco108_88();
 		case 89: return new Sunsoft89();
