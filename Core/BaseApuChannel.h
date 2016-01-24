@@ -5,7 +5,6 @@
 #include "Snapshotable.h"
 #include "SoundMixer.h"
 
-template<int range>
 class BaseApuChannel : public IMemoryHandler, public Snapshotable
 {
 private:

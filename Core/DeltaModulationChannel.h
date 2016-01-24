@@ -5,7 +5,7 @@
 
 class MemoryManager;
 
-class DeltaModulationChannel : public BaseApuChannel<127>
+class DeltaModulationChannel : public BaseApuChannel
 {
 private:	
 	const vector<uint16_t> _dmcPeriodLookupTableNtsc = { { 428, 380, 340, 320, 286, 254, 226, 214, 190, 160, 142, 128, 106,  84,  72,  54 } };
