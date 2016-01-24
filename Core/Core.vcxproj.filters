@@ -464,6 +464,9 @@
     <ClInclude Include="Rambo1.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="Mapper226.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
