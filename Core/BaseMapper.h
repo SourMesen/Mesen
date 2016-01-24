@@ -329,6 +329,13 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			}
 		}
 
+		void RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr)
+		{
+			for(int i = startAddr; i <= endAddr; i++) {
+				_isRegisterAddr[i] = false;
+			}
+		}
+
 		virtual void StreamState(bool saving)
 		{
 			Stream<bool>(_onlyChrRam);

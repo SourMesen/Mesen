@@ -381,6 +381,7 @@
     <ClInclude Include="Mapper225.h" />
     <ClInclude Include="Mapper226.h" />
     <ClInclude Include="Mapper230.h" />
+    <ClInclude Include="MMC3_45.h" />
     <ClInclude Include="Mapper57.h" />
     <ClInclude Include="Mapper61.h" />
     <ClInclude Include="Mapper62.h" />
@@ -522,7 +523,7 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameServerConnection.cpp" />
     <ClCompile Include="HdVideoFilter.cpp" />
-    <ClCompile Include="TxSRom.h" />
+    <ClInclude Include="TxSRom.h" />
     <ClCompile Include="NtscFilter.cpp" />
     <ClCompile Include="SoundMixer.cpp" />
     <ClCompile Include="StandardController.cpp" />

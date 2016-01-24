@@ -44,6 +44,7 @@
 #include "MMC3_12.h"
 #include "MMC3_37.h"
 #include "MMC3_44.h"
+#include "MMC3_45.h"
 #include "MMC3_47.h"
 #include "MMC3_49.h"
 #include "MMC3_52.h"
@@ -117,6 +118,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 37: return new MMC3_37();
 		case 38: return new UnlPci556();
 		case 44: return new MMC3_44();
+		case 45: return new MMC3_45();
 		case 47: return new MMC3_47();
 		case 49: return new MMC3_49();
 		case 52: return new MMC3_52();
