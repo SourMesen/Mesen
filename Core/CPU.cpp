@@ -97,6 +97,8 @@ void CPU::Exec()
 
 void CPU::IncCycleCount()
 {
+	_memoryManager->ProcessCpuClock();
+
 	if(_dmcDmaRunning) {
 		//CPU is being stalled by the DMC's DMA transfer
 		_dmcCounter--;

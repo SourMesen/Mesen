@@ -51,6 +51,8 @@ class MemoryManager: public Snapshotable
 
 		uint8_t* GetInternalRAM();
 
+		void ProcessCpuClock();
+
 		uint8_t Read(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read);
 		void Write(uint16_t addr, uint8_t value);
 

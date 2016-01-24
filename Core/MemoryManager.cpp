@@ -97,6 +97,11 @@ uint8_t MemoryManager::DebugRead(uint16_t addr)
 	return value;
 }
 
+void MemoryManager::ProcessCpuClock()
+{
+	_mapper->ProcessCpuClock();
+}
+
 uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 {
 	uint8_t value;
@@ -105,8 +110,6 @@ uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 	} else {
 		value = ReadRegister(addr);
 	}
-
-	_mapper->ProcessCpuClock();
 
 	CheatManager::ApplyRamCodes(addr, value);
 
@@ -124,8 +127,6 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 	} else {
 		WriteRegister(addr, value);
 	}
-
-	_mapper->ProcessCpuClock();
 }
 
 void MemoryManager::ProcessVramAccess(uint16_t &addr)
