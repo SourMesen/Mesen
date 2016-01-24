@@ -5,6 +5,7 @@
 class TaitoX1005 : public BaseMapper
 {
 private:
+	bool _alternateMirroring;
 	uint8_t _ramPermission;
 
 	void UpdateRamAccess()
@@ -44,10 +45,18 @@ protected:
 			case 0x7EF0:
 				SelectCHRPage(0, value);
 				SelectCHRPage(1, value  + 1);
+				if(_alternateMirroring) {
+					SetPpuMemoryMapping(0x2000, 0x23FF, GetNametable(value >> 7));
+					SetPpuMemoryMapping(0x2400, 0x27FF, GetNametable(value >> 7));
+				}
 				break;
 			case 0x7EF1:
 				SelectCHRPage(2, value );
 				SelectCHRPage(3, value + 1);
+				if(_alternateMirroring) {
+					SetPpuMemoryMapping(0x2800, 0x2BFF, GetNametable(value >> 7));
+					SetPpuMemoryMapping(0x2C00, 0x2FFF, GetNametable(value >> 7));
+				}
 				break;
 
 			case 0x7EF2: SelectCHRPage(4, value); break;
@@ -56,7 +65,9 @@ protected:
 			case 0x7EF5: SelectCHRPage(7, value); break;
 
 			case 0x7EF6: case 0x7EF7:
-				SetMirroringType((value & 0x01) == 0x01 ? MirroringType::Vertical : MirroringType::Horizontal);
+				if(!_alternateMirroring) {
+					SetMirroringType((value & 0x01) == 0x01 ? MirroringType::Vertical : MirroringType::Horizontal);
+				}
 				break;
 
 			case 0x7EF8: case 0x7EF9:
@@ -86,5 +97,11 @@ protected:
 		if(!saving) {
 			UpdateRamAccess();
 		}
+	}
+
+public:
+	TaitoX1005(bool alternateMirroring) : _alternateMirroring(alternateMirroring)
+	{
+
 	}
 };

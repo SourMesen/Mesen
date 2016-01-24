@@ -138,7 +138,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 77: return new IremLrog017();
 		case 78: return new JalecoJf16(romLoader.GetSubMapper() == 3);
 		case 79: return new Nina03_06(false);
-		case 80: return new TaitoX1005();
+		case 80: return new TaitoX1005(false);
 		case 87: return new JalecoJfxx(false);
 		case 88: return new Namco108_88();
 		case 89: return new Sunsoft89();
@@ -179,6 +179,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 203: return new Mapper203();
 		case 205: return new MMC3_205();
 		case 206: return new Namco108();
+		case 207: return new TaitoX1005(true);
 		case 225: return new Mapper225();
 		case 230: return new Mapper230();
 		case 231: return new Mapper231();
