@@ -521,6 +521,7 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameServerConnection.cpp" />
     <ClCompile Include="HdVideoFilter.cpp" />
+    <ClCompile Include="TxSRom.h" />
     <ClCompile Include="NtscFilter.cpp" />
     <ClCompile Include="SoundMixer.cpp" />
     <ClCompile Include="StandardController.cpp" />

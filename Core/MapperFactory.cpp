@@ -74,6 +74,7 @@
 #include "Sunsoft184.h"
 #include "TaitoTc0190.h"
 #include "TaitoX1005.h"
+#include "TxSRom.h"
 #include "UnlPci556.h"
 #include "UNROM.h"
 #include "UnRom_94.h"
@@ -152,6 +153,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 112: return new Mapper112();
 		case 113: return new Nina03_06(true);
 		case 115: return new MMC3_115();
+		case 118: return new TxSRom();
 		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);
 		case 140: return new JalecoJf11_14();
 		case 145: return new Sachen_145();

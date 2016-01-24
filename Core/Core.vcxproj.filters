@@ -577,5 +577,8 @@
     <ClCompile Include="SoundMixer.cpp">
       <Filter>Nes\APU</Filter>
     </ClCompile>
+    <ClCompile Include="TxSRom.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

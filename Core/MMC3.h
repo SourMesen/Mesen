@@ -64,6 +64,16 @@ class MMC3 : public BaseMapper
 		}
 
 	protected:
+		uint8_t GetCurrentRegister() 
+		{
+			return _currentRegister;
+		}
+
+		uint8_t GetChrMode()
+		{
+			return _chrMode;
+		}
+
 		virtual bool ForceMmc3RevAIrqs() { return false; }
 		uint8_t _registers[8];
 

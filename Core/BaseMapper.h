@@ -486,6 +486,15 @@ class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificat
 			SetMirroringType(_mirroringType);
 		}
 
+		uint8_t* GetNametable(uint8_t index)
+		{
+			if(index <= 1) {
+				return _nesNametableRam[index];
+			} else {
+				return _cartNametableRam[index - 2];
+			}
+		}
+
 		void SetMirroringType(MirroringType type)
 		{
 			switch(type) {
