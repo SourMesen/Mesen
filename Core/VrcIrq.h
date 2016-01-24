@@ -75,6 +75,8 @@ public:
 			_irqCounter = _irqReloadValue;
 			_irqPrescalerCounter = 341;
 		}
+
+		CPU::ClearIRQSource(IRQSource::External);
 	}
 
 	void AcknowledgeIrq()
