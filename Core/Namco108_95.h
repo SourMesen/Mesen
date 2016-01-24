@@ -14,7 +14,7 @@ protected:
 			uint8_t nameTable1 = (_registers[0] >> 5) & 0x01;
 			uint8_t nameTable2 = (_registers[1] >> 5) & 0x01;
 
-			SetMirroringType(_nesNametableRam[nameTable1], _nesNametableRam[nameTable1], _nesNametableRam[nameTable2], _nesNametableRam[nameTable2]);
+			SetNametables(nameTable1, nameTable1, nameTable2, nameTable2);
 		}
 	}
 };

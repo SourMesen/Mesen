@@ -13,8 +13,7 @@ enum class MirroringType
 	Vertical,
 	ScreenAOnly,
 	ScreenBOnly,
-	FourScreens,
-	Custom
+	FourScreens
 };
 
 enum class RomHeaderVersion

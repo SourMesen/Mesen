@@ -50,9 +50,6 @@
     <ClInclude Include="IMemoryHandler.h">
       <Filter>Nes\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="BaseMapper.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
     <ClInclude Include="MapperFactory.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
@@ -468,6 +465,12 @@
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="MMC3_45.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMapper.cpp">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMapper.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
   </ItemGroup>

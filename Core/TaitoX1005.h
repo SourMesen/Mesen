@@ -46,16 +46,16 @@ protected:
 				SelectCHRPage(0, value);
 				SelectCHRPage(1, value  + 1);
 				if(_alternateMirroring) {
-					SetPpuMemoryMapping(0x2000, 0x23FF, GetNametable(value >> 7));
-					SetPpuMemoryMapping(0x2400, 0x27FF, GetNametable(value >> 7));
+					SetNametable(0, value >> 7);
+					SetNametable(1, value >> 7);
 				}
 				break;
 			case 0x7EF1:
 				SelectCHRPage(2, value );
 				SelectCHRPage(3, value + 1);
 				if(_alternateMirroring) {
-					SetPpuMemoryMapping(0x2800, 0x2BFF, GetNametable(value >> 7));
-					SetPpuMemoryMapping(0x2C00, 0x2FFF, GetNametable(value >> 7));
+					SetNametable(2, value >> 7);
+					SetNametable(3, value >> 7);
 				}
 				break;
 

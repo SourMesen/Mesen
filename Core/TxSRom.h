@@ -19,26 +19,26 @@ protected:
 	void WriteRegister(uint16_t addr, uint8_t value)
 	{
 		if((addr & 0xE001) == 0x8001) {
-			uint8_t* nametable = GetNametable(value >> 7);
+			uint8_t nametable = value >> 7;
 				
 			if(GetChrMode() == 0) {
 				switch(GetCurrentRegister()) {
 					case 0:
-						SetPpuMemoryMapping(0x2000, 0x23FF, nametable);
-						SetPpuMemoryMapping(0x2400, 0x27FF, nametable);
+						SetNametable(0, nametable);
+						SetNametable(1, nametable);
 						break;
 
 					case 1:
-						SetPpuMemoryMapping(0x2800, 0x2BFF, nametable);
-						SetPpuMemoryMapping(0x2C00, 0x2FFF, nametable);
+						SetNametable(2, nametable);
+						SetNametable(3, nametable);
 						break;
 				}
 			} else {
 				switch(GetCurrentRegister()) {
-					case 2: SetPpuMemoryMapping(0x2000, 0x23FF, nametable); break;
-					case 3: SetPpuMemoryMapping(0x2400, 0x27FF, nametable); break;
-					case 4: SetPpuMemoryMapping(0x2800, 0x2BFF, nametable); break;
-					case 5: SetPpuMemoryMapping(0x2C00, 0x2FFF, nametable); break;
+					case 2: SetNametable(0, nametable); break;
+					case 3: SetNametable(1, nametable); break;
+					case 4: SetNametable(2, nametable); break;
+					case 5: SetNametable(3, nametable); break;
 				}
 			}
 		}

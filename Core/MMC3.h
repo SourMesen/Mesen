@@ -138,8 +138,6 @@ class MMC3 : public BaseMapper
 			}
 
 			UpdateChrMapping();
-
-			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
 		}
 
 		virtual void StreamState(bool saving)
@@ -174,6 +172,7 @@ class MMC3 : public BaseMapper
 		virtual void InitMapper() 
 		{
 			Reset();
+			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
 			UpdateState();
 		}
 

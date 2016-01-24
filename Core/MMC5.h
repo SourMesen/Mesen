@@ -6,6 +6,10 @@
 class MMC5 : public BaseMapper
 {
 private:
+	const uint8_t NtWorkRamIndex = 4;
+	const uint8_t NtEmptyIndex = 5;
+	const uint8_t NtFillModeIndex = 6;
+
 	uint8_t _prgRamProtect1;
 	uint8_t _prgRamProtect2;
 
@@ -136,24 +140,24 @@ private:
 
 		bool chrA = forceA || (_largeSprites && _spriteFetch) || (!_largeSprites && _lastChrReg <= 0x5127);
 		if(_chrMode == 0) {
-			SetPpuMemoryMapping(0x0000, 0x1FFF, _chrBanks[chrA ? 0x07 : 0x0B] << 3);
+			SelectChrPage8x(0, _chrBanks[chrA ? 0x07 : 0x0B] << 3);
 		} else if(_chrMode == 1) {
-			SetPpuMemoryMapping(0x0000, 0x0FFF, _chrBanks[chrA ? 0x03 : 0x0B] << 2);
-			SetPpuMemoryMapping(0x1000, 0x1FFF, _chrBanks[chrA ? 0x07 : 0x0B] << 2);
+			SelectChrPage4x(0, _chrBanks[chrA ? 0x03 : 0x0B] << 2);
+			SelectChrPage4x(1, _chrBanks[chrA ? 0x07 : 0x0B] << 2);
 		} else if(_chrMode == 2) {
-			SetPpuMemoryMapping(0x0000, 0x07FF, _chrBanks[chrA ? 0x01 : 0x09] << 1);
-			SetPpuMemoryMapping(0x0800, 0x0FFF, _chrBanks[chrA ? 0x03 : 0x0B] << 1);
-			SetPpuMemoryMapping(0x1000, 0x17FF, _chrBanks[chrA ? 0x05 : 0x09] << 1);
-			SetPpuMemoryMapping(0x1800, 0x1FFF, _chrBanks[chrA ? 0x07 : 0x0B] << 1);
+			SelectChrPage2x(0, _chrBanks[chrA ? 0x01 : 0x09] << 1);
+			SelectChrPage2x(1, _chrBanks[chrA ? 0x03 : 0x0B] << 1);
+			SelectChrPage2x(2, _chrBanks[chrA ? 0x05 : 0x09] << 1);
+			SelectChrPage2x(3, _chrBanks[chrA ? 0x07 : 0x0B] << 1);
 		} else if(_chrMode == 3) {
-			SetPpuMemoryMapping(0x0000, 0x03FF, _chrBanks[chrA ? 0x00 : 0x08]);
-			SetPpuMemoryMapping(0x0400, 0x07FF, _chrBanks[chrA ? 0x01 : 0x09]);
-			SetPpuMemoryMapping(0x0800, 0x0BFF, _chrBanks[chrA ? 0x02 : 0x0A]);
-			SetPpuMemoryMapping(0x0C00, 0x0FFF, _chrBanks[chrA ? 0x03 : 0x0B]);
-			SetPpuMemoryMapping(0x1000, 0x13FF, _chrBanks[chrA ? 0x04 : 0x08]);
-			SetPpuMemoryMapping(0x1400, 0x17FF, _chrBanks[chrA ? 0x05 : 0x09]);
-			SetPpuMemoryMapping(0x1800, 0x1BFF, _chrBanks[chrA ? 0x06 : 0x0A]);
-			SetPpuMemoryMapping(0x1C00, 0x1FFF, _chrBanks[chrA ? 0x07 : 0x0B]);
+			SelectCHRPage(0, _chrBanks[chrA ? 0x00 : 0x08]);
+			SelectCHRPage(1, _chrBanks[chrA ? 0x01 : 0x09]);
+			SelectCHRPage(2, _chrBanks[chrA ? 0x02 : 0x0A]);
+			SelectCHRPage(3, _chrBanks[chrA ? 0x03 : 0x0B]);
+			SelectCHRPage(4, _chrBanks[chrA ? 0x04 : 0x08]);
+			SelectCHRPage(5, _chrBanks[chrA ? 0x05 : 0x09]);
+			SelectCHRPage(6, _chrBanks[chrA ? 0x06 : 0x0A]);
+			SelectCHRPage(7, _chrBanks[chrA ? 0x07 : 0x0B]);
 		}
 	}
 
@@ -197,14 +201,14 @@ private:
 	{
 		_nametableMapping = value;
 
-		uint8_t* nametables[4] = { 
-			_nesNametableRam[0],  //"0 - On-board VRAM page 0"
-			_nesNametableRam[1],  //"1 - On-board VRAM page 1"
-			_extendedRamMode <= 1 ? _workRam : _emptyNametable, //"2 - Internal Expansion RAM, only if the Extended RAM mode allows it ($5104 is 00/01); otherwise, the nametable will read as all zeros,"
-			_fillModeNametable //"3 - Fill-mode data"
+		uint8_t nametables[4] = { 
+			0,  //"0 - On-board VRAM page 0"
+			1,  //"1 - On-board VRAM page 1"
+			_extendedRamMode <= 1 ? NtWorkRamIndex : NtEmptyIndex, //"2 - Internal Expansion RAM, only if the Extended RAM mode allows it ($5104 is 00/01); otherwise, the nametable will read as all zeros,"
+			NtFillModeIndex //"3 - Fill-mode data"
 		};
 
-		SetMirroringType(nametables[value & 0x03], nametables[(value >> 2) & 0x03], nametables[(value >> 4) & 0x03], nametables[(value >> 6) & 0x03]);
+		SetNametables(nametables[value & 0x03], nametables[(value >> 2) & 0x03], nametables[(value >> 4) & 0x03], nametables[(value >> 6) & 0x03]);
 	}
 
 	void SetExtendedRamMode(uint8_t mode)
@@ -291,6 +295,10 @@ protected:
 		//"Expansion RAM ($5C00-$5FFF, read/write)"
 		SetCpuMemoryMapping(0x5C00, 0x5FFF, 0, PrgMemoryType::WorkRam);
 
+		AddNametable(NtWorkRamIndex, _workRam);
+		AddNametable(NtEmptyIndex, _emptyNametable);
+		AddNametable(NtFillModeIndex, _fillModeNametable);
+
 		//"Additionally, Romance of the 3 Kingdoms 2 seems to expect it to be in 8k PRG mode ($5100 = $03)."
 		WriteRegister(0x5100, 0x03);
 
@@ -356,7 +364,7 @@ protected:
 					case 1:
 					case 0:
 						//PPU tile data fetch (high byte & low byte)
-						return _chrRam[_exAttrSelectedChrBank * 0x1000 + (addr & 0xFFF)];
+						return _chrRom[_exAttrSelectedChrBank * 0x1000 + (addr & 0xFFF)];
 				}
 			}
 		}
