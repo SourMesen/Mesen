@@ -467,10 +467,19 @@
     <ClInclude Include="MMC3_45.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
-    <ClInclude Include="BaseMapper.cpp">
+    <ClInclude Include="BaseMapper.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
-    <ClInclude Include="BaseMapper.h">
+    <ClInclude Include="TxSRom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VRC6.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="VRC1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VrcIrq.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -507,9 +516,6 @@
     </ClCompile>
     <ClCompile Include="AutoRomTest.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VRC1.h">
-      <Filter>Nes\Mappers</Filter>
     </ClCompile>
     <ClCompile Include="BaseVideoFilter.cpp">
       <Filter>VideoDecoder</Filter>
@@ -586,8 +592,8 @@
     <ClCompile Include="SoundMixer.cpp">
       <Filter>Nes\APU</Filter>
     </ClCompile>
-    <ClCompile Include="TxSRom.h">
-      <Filter>Nes\Mappers</Filter>
+    <ClCompile Include="BaseMapper.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

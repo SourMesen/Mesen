@@ -134,6 +134,18 @@ uint8_t BaseMapper::InternalReadRam(uint16_t addr)
 	return _prgPages[addr >> 8] ? _prgPages[addr >> 8][addr & 0xFF] : 0;
 }
 
+void BaseMapper::SelectPrgPage4x(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
+{
+	SelectPrgPage2x(slot*2, page, memoryType);
+	SelectPrgPage2x(slot*2+1, page+2, memoryType);
+}
+
+void BaseMapper::SelectPrgPage2x(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
+{
+	SelectPRGPage(slot*2, page, memoryType);
+	SelectPRGPage(slot*2+1, page+1, memoryType);
+}
+
 void BaseMapper::SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
 {
 	_prgPageNumbers[slot] = page;

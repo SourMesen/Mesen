@@ -84,6 +84,7 @@
 #include "VRC1.h"
 #include "VRC2_4.h"
 #include "VRC3.h"
+#include "VRC6.h"
 
 BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 {
@@ -110,7 +111,9 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 21: return new VRC2_4(VRCVariant::VRC4a);  //Conflicts: VRC4c
 		case 22: return new VRC2_4(VRCVariant::VRC2a);
 		case 23: return new VRC2_4(VRCVariant::VRC2b);  //Conflicts: VRC4e
+		case 24: return new VRC6(VRCVariant::VRC6a);
 		case 25: return new VRC2_4(VRCVariant::VRC4b);  //Conflicts: VRC2c, VRC4d
+		case 26: return new VRC6(VRCVariant::VRC6b);
 		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();

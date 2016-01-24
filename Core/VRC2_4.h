@@ -13,6 +13,8 @@ enum class VRCVariant
 	VRC4d,	//25
 	VRC4e,	//23
 	VRC4_27, //27
+	VRC6a,
+	VRC6b
 };
 
 class VRC2_4 : public BaseMapper

@@ -491,7 +491,7 @@
     <ClInclude Include="TaitoX1005.h" />
     <ClInclude Include="TraceLogger.h" />
     <ClInclude Include="TriangleChannel.h" />
-	<ClInclude Include="TxSRom.h" />
+    <ClInclude Include="TxSRom.h" />
     <ClInclude Include="UnlPci556.h" />
     <ClInclude Include="UNROM.h" />
     <ClInclude Include="UnRom_180.h" />
@@ -499,14 +499,17 @@
     <ClInclude Include="VideoDecoder.h" />
     <ClInclude Include="BaseVideoFilter.h" />
     <ClInclude Include="VirtualController.h" />
+    <ClInclude Include="VRC1.h" />
     <ClInclude Include="VRC2_4.h" />
     <ClInclude Include="VRC3.h" />
+    <ClInclude Include="VRC6.h" />
+    <ClInclude Include="VrcIrq.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APU.cpp" />
     <ClCompile Include="ApuLengthCounter.cpp" />
     <ClCompile Include="AutoRomTest.cpp" />
-    <ClCompile Include="BaseMapper.cpp" />	
+    <ClCompile Include="BaseMapper.cpp" />
     <ClCompile Include="Breakpoint.cpp" />
     <ClCompile Include="CheatManager.cpp" />
     <ClCompile Include="CodeDataLogger.cpp" />
@@ -549,7 +552,6 @@
     <ClCompile Include="VideoDecoder.cpp" />
     <ClCompile Include="BaseVideoFilter.cpp" />
     <ClCompile Include="VirtualController.cpp" />
-    <ClCompile Include="VRC1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
