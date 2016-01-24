@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseMapper.h"
+#include "VrcIrq.h"
 
 enum class VRCVariant
 {
@@ -20,6 +21,7 @@ enum class VRCVariant
 class VRC2_4 : public BaseMapper
 {
 	private:
+		VrcIrq _irq;
 		VRCVariant _variant;
 
 		uint8_t _prgReg0;
@@ -40,11 +42,16 @@ class VRC2_4 : public BaseMapper
 			_prgMode = 0;
 			_prgReg0 = 0;
 			_prgReg1 = 0;
-			_hasIRQ = 0;
+			_hasIRQ = false;
 			memset(_loCHRRegs, 0, sizeof(_loCHRRegs));
 			memset(_hiCHRRegs, 0, sizeof(_hiCHRRegs));
 
 			UpdateState();
+		}
+
+		void ProcessCpuClock()
+		{
+			_irq.ProcessCpuClock();
 		}
 
 		void UpdateState()
@@ -99,15 +106,14 @@ class VRC2_4 : public BaseMapper
 					//One reg contains the high 5 bits 
 					_hiCHRRegs[regNumber] = value & 0x1F;
 				}
-			} else if(addr == 0xF000 || addr == 0xF001) {
-				//IRQ Reload Value
-				_hasIRQ = true;
+			} else if(addr == 0xF000) {
+				_irq.SetReloadValueNibble(value, false);
+			} else if(addr == 0xF001) {
+				_irq.SetReloadValueNibble(value, true);
 			} else if(addr == 0xF002) {
-				//IRQ Control
-				_hasIRQ = true;
+				_irq.SetControlValue(value);
 			} else if(addr == 0xF003) {
-				//IRQ Acknowledge
-				_hasIRQ = true;
+				_irq.AcknowledgeIrq();
 			}
 
 			UpdateState();
@@ -185,6 +191,8 @@ class VRC2_4 : public BaseMapper
 			StreamArray<uint8_t>(_hiCHRRegs, 8);
 
 			Stream<bool>(_hasIRQ);
+
+			Stream(_irq);
 
 			BaseMapper::StreamState(saving);
 		}

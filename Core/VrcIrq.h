@@ -56,6 +56,15 @@ public:
 		_irqReloadValue = value;
 	}
 
+	void SetReloadValueNibble(uint8_t value, bool highBits)
+	{
+		if(highBits) {
+			_irqReloadValue = (_irqReloadValue & 0x0F) | ((value & 0x0F) << 4);
+		} else {
+			_irqReloadValue = (_irqReloadValue & 0xF0) | (value & 0x0F);
+		}
+	}
+
 	void SetControlValue(uint8_t value)
 	{
 		_irqEnabledAfterAck = (value & 0x01) == 0x01;
