@@ -251,7 +251,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 			return PPU::Instance->_cycle;
 		}
 
-		static uint32_t GetCurrentScanline()
+		static int32_t GetCurrentScanline()
 		{
 			return PPU::Instance->_scanline;
 		}
