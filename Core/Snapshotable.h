@@ -89,8 +89,8 @@ class Snapshotable
 	public:
 		void SaveSnapshot(ostream* file)
 		{
-			_stream = new uint8_t[0xFFFF];
-			memset((char*)_stream, 0, 0xFFFF);
+			_stream = new uint8_t[0xFFFFF];
+			memset((char*)_stream, 0, 0xFFFFF);
 			_position = 0;
 			_saving = true;
 
@@ -103,8 +103,8 @@ class Snapshotable
 
 		void LoadSnapshot(istream* file)
 		{
-			_stream = new uint8_t[0xFFFF];
-			memset((char*)_stream, 0, 0xFFFF);
+			_stream = new uint8_t[0xFFFFF];
+			memset((char*)_stream, 0, 0xFFFFF);
 			_position = 0;
 			_saving = false;
 			

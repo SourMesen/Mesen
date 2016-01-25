@@ -317,8 +317,50 @@ protected:
 
 	void StreamState(bool saving)
 	{
-		//TODO
+		Stream<uint8_t>(_prgRamProtect1);
+		Stream<uint8_t>(_prgRamProtect2);
+
+		Stream<uint8_t>(_fillModeTile);
+		Stream<uint8_t>(_fillModeColor);
+
+		Stream<bool>(_verticalSplitEnabled);
+		Stream<bool>(_verticalSplitRightSide);
+		Stream<uint8_t>(_verticalSplitDelimiterTile);
+		Stream<uint8_t>(_verticalSplitScroll);
+		Stream<uint8_t>(_verticalSplitBank);
+
+		Stream<uint8_t>(_multiplierValue1);
+		Stream<uint8_t>(_multiplierValue2);
+
+		Stream<uint8_t>(_nametableMapping);
+		Stream<uint8_t>(_extendedRamMode);
+
+		Stream<uint16_t>(_exAttributeLastNametableFetch);
+		Stream<int8_t>(_exAttrLastFetchCounter);
+		Stream<uint8_t>(_exAttrSelectedChrBank);
+
+		Stream<uint8_t>(_prgMode);
+		StreamArray<uint8_t>(_prgBanks, 5);
+
+		Stream<uint8_t>(_chrMode);
+		Stream<uint8_t>(_chrUpperBits);
+		StreamArray<uint16_t>(_chrBanks, 12);
+		Stream<uint16_t>(_lastChrReg);
+		Stream<bool>(_spriteFetch);
+		Stream<bool>(_largeSprites);
+
+		Stream<uint8_t>(_irqCounterTarget);
+		Stream<bool>(_irqEnabled);
+		Stream<int16_t>(_previousScanline);
+		Stream<uint8_t>(_irqCounter);
+		Stream<bool>(_irqPending);
+		Stream<bool>(_ppuInFrame);
+
 		BaseMapper::StreamState(saving);
+
+		if(!saving) {
+			UpdatePrgBanks();
+		}
 	}
 
 	virtual void WriteRAM(uint16_t addr, uint8_t value)
