@@ -161,6 +161,13 @@ private:
 		}
 	}
 
+	void ProcessCpuClock()
+	{
+		if(!PPU::GetControlFlags().BackgroundEnabled && !PPU::GetControlFlags().SpritesEnabled) {
+			_ppuInFrame = false;
+		}
+	}
+
 	virtual void NotifyVRAMAddressChange(uint16_t addr)
 	{
 		if(_spriteFetch != IsSpriteFetch() || _largeSprites != PPU::GetControlFlags().LargeSprites) {
@@ -171,10 +178,6 @@ private:
 
 		int16_t currentScanline = PPU::GetCurrentScanline();
 		if(currentScanline != _previousScanline) {
-			if(currentScanline < _previousScanline) {
-				_ppuInFrame = false;
-			}
-
 			if(currentScanline >= 239 || currentScanline < 0) {
 				_ppuInFrame = false;
 			} else {
