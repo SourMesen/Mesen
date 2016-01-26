@@ -1,5 +1,6 @@
 #pragma once 
 #include "stdafx.h"
+#include <thread>
 
 class SimpleLock;
 
@@ -15,11 +16,11 @@ public:
 class SimpleLock
 {
 private:
-	uint32_t _holderThreadID;
+	thread_local static std::thread::id _threadID;
+
+	std::thread::id _holderThreadID;
 	uint32_t _lockCount;
 	atomic_flag _lock;
-
-	uint32_t GetThreadId();
 
 public:
 	SimpleLock();

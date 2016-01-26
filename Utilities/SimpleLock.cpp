@@ -1,28 +1,18 @@
 #include "stdafx.h"
 #include <assert.h>
 #include "SimpleLock.h"
-#ifdef WIN32
-	#include <Windows.h>
-#endif
+
+thread_local std::thread::id SimpleLock::_threadID = std::this_thread::get_id();
 
 SimpleLock::SimpleLock()
 {
 	_lock.clear();
 	_lockCount = 0;
-	_holderThreadID = ~0;
+	_holderThreadID = std::thread::id();
 }
 
 SimpleLock::~SimpleLock()
 {
-}
-
-uint32_t SimpleLock::GetThreadId()
-{
-#ifdef WIN32
-	return GetCurrentThreadId();
-#elif
-	return std::thread::id;
-#endif
 }
 
 LockHandler SimpleLock::AcquireSafe()
@@ -32,9 +22,9 @@ LockHandler SimpleLock::AcquireSafe()
 
 void SimpleLock::Acquire()
 {
-	if(_lockCount == 0 || _holderThreadID != GetThreadId()) {
+	if(_lockCount == 0 || _holderThreadID != _threadID) {
 		while(_lock.test_and_set());
-		_holderThreadID = GetThreadId();
+		_holderThreadID = _threadID;
 		_lockCount = 1;
 	} else {
 		//Same thread can acquire the same lock multiple times
@@ -60,10 +50,10 @@ void SimpleLock::WaitForRelease()
 
 void SimpleLock::Release()
 {
-	if(_lockCount > 0 && _holderThreadID == GetThreadId()) {
+	if(_lockCount > 0 && _holderThreadID == _threadID) {
 		_lockCount--;
 		if(_lockCount == 0) {
-			_holderThreadID = ~0;
+			_holderThreadID = std::thread::id();
 			_lock.clear();
 		}
 	} else {
