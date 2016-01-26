@@ -26,27 +26,27 @@ uint32_t DefaultVideoFilter::ProcessIntensifyBits(uint16_t ppuPixel)
 	uint32_t pixelOutput = EmulationSettings::GetRgbPalette()[ppuPixel & 0x3F];
 
 	//Incorrect emphasis bit implementation, but will do for now.
-	float redChannel = (float)((pixelOutput & 0xFF0000) >> 16);
-	float greenChannel = (float)((pixelOutput & 0xFF00) >> 8);
-	float blueChannel = (float)(pixelOutput & 0xFF);
+	double redChannel = (double)((pixelOutput & 0xFF0000) >> 16);
+	double greenChannel = (double)((pixelOutput & 0xFF00) >> 8);
+	double blueChannel = (double)(pixelOutput & 0xFF);
 
 	if(ppuPixel & 0x40) {
 		//Intensify red
-		redChannel *= 1.1f;
-		greenChannel *= 0.9f;
-		blueChannel *= 0.9f;
+		redChannel *= 1.1;
+		greenChannel *= 0.9;
+		blueChannel *= 0.9;
 	}
 	if(ppuPixel & 0x80) {
 		//Intensify green
-		greenChannel *= 1.1f;
-		redChannel *= 0.9f;
-		blueChannel *= 0.9f;
+		greenChannel *= 1.1;
+		redChannel *= 0.9;
+		blueChannel *= 0.9;
 	}
 	if(ppuPixel & 0x100) {
 		//Intensify blue
-		blueChannel *= 1.1f;
-		redChannel *= 0.9f;
-		greenChannel *= 0.9f;
+		blueChannel *= 1.1;
+		redChannel *= 0.9;
+		greenChannel *= 0.9;
 	}
 
 	uint8_t r, g, b;
