@@ -39,7 +39,7 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugInitialize();
 			
 			//Pause a few frames later to give the debugger a chance to disassemble some code
-			InteropEmu.DebugStep(100000);
+			InteropEmu.DebugStep(30000);
 
 			UpdateCdlRatios();
 			tmrCdlRatios.Start();

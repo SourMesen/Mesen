@@ -32,6 +32,10 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 
+	_hasBreakpoint = false;
+	_bpUpdateNeeded = false;
+	_executionStopped = false;
+
 	LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romFilepath, false) + ".cdl"));
 		
 	Debugger::Instance = this;
@@ -88,48 +92,63 @@ CdlRatios Debugger::GetCdlRatios()
 
 void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 {
-	_bpLock.AcquireSafe();
+	_hasBreakpoint = length > 0;
+	
+	while(_bpUpdateNeeded) { }
+	_newBreakpoints.clear();
+	_newBreakpoints.insert(_newBreakpoints.end(), breakpoints, breakpoints + length);	
+	_bpUpdateNeeded = true;
+	if(_executionStopped) {
+		UpdateBreakpoints();
+	}
+}
 
-	_globalBreakpoints.clear();
-	_execBreakpoints.clear();
-	_readBreakpoints.clear();
-	_writeBreakpoints.clear();
-	_readVramBreakpoints.clear();
-	_writeVramBreakpoints.clear();
+void Debugger::UpdateBreakpoints()
+{
+	if(_bpUpdateNeeded) {
+		_globalBreakpoints.clear();
+		_execBreakpoints.clear();
+		_readBreakpoints.clear();
+		_writeBreakpoints.clear();
+		_readVramBreakpoints.clear();
+		_writeVramBreakpoints.clear();
 
-	ExpressionEvaluator expEval;
-	for(uint32_t i = 0; i < length; i++) {
-		Breakpoint& bp = breakpoints[i];
+		ExpressionEvaluator expEval;
+		for(Breakpoint &bp : _newBreakpoints) {
+			if(!expEval.Validate(bp.GetCondition())) {
+				//Remove any invalid condition (syntax-wise)
+				bp.ClearCondition();
+			}
 
-		if(!expEval.Validate(bp.GetCondition())) {
-			//Remove any invalid condition (syntax-wise)
-			bp.ClearCondition();
+			BreakpointType type = bp.GetType();
+			if(type & BreakpointType::Execute) {
+				_execBreakpoints.push_back(bp);
+			}
+			if(type & BreakpointType::ReadRam) {
+				_readBreakpoints.push_back(bp);
+			}
+			if(type & BreakpointType::ReadVram) {
+				_readVramBreakpoints.push_back(bp);
+			}
+			if(type & BreakpointType::WriteRam) {
+				_writeBreakpoints.push_back(bp);
+			}
+			if(type & BreakpointType::WriteVram) {
+				_writeVramBreakpoints.push_back(bp);
+			}
+			if(type == BreakpointType::Global) {
+				_globalBreakpoints.push_back(bp);
+			}
 		}
 
-		BreakpointType type = bp.GetType();
-		if(type & BreakpointType::Execute) {
-			_execBreakpoints.push_back(bp);
-		}
-		if(type & BreakpointType::ReadRam) {
-			_readBreakpoints.push_back(bp);
-		}
-		if(type & BreakpointType::ReadVram) {
-			_readVramBreakpoints.push_back(bp);
-		}
-		if(type & BreakpointType::WriteRam) {
-			_writeBreakpoints.push_back(bp);
-		}
-		if(type & BreakpointType::WriteVram) {
-			_writeVramBreakpoints.push_back(bp);
-		}
-		if(type == BreakpointType::Global) {
-			_globalBreakpoints.push_back(bp);
-		}
+		_bpUpdateNeeded = false;
 	}
 }
 
 bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value)
 {
+	UpdateBreakpoints();
+
 	uint32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
 	vector<Breakpoint> *breakpoints = nullptr;
 
@@ -142,10 +161,7 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 		case BreakpointType::WriteVram: breakpoints = &_writeVramBreakpoints; break;
 	}
 
-	DebugState state;
-	GetState(&state);
-	
-	_bpLock.AcquireSafe();
+	bool needState = true;
 	for(size_t i = 0, len = breakpoints->size(); i < len; i++) {
 		Breakpoint &breakpoint = (*breakpoints)[i];
 		if(type == BreakpointType::Global || breakpoint.Matches(addr, absoluteAddr)) {
@@ -154,7 +170,11 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 				return true;
 			} else {
 				ExpressionEvaluator expEval;
-				if(expEval.Evaluate(condition, state, value) != 0) {
+				if(needState) {
+					GetState(&_debugState);
+					needState = false;
+				}
+				if(expEval.Evaluate(condition, _debugState, value) != 0) {
 					return true;
 				}
 			}
@@ -207,9 +227,7 @@ void Debugger::ProcessStepConditions(uint32_t addr)
 
 void Debugger::PrivateProcessPpuCycle()
 {
-	_breakLock.AcquireSafe();
-
-	if(HasMatchingBreakpoint(BreakpointType::Global, 0, -1)) {
+	if(_hasBreakpoint && HasMatchingBreakpoint(BreakpointType::Global, 0, -1)) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
 		SleepUntilResume();
@@ -218,8 +236,6 @@ void Debugger::PrivateProcessPpuCycle()
 
 void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value)
 {
-	_breakLock.AcquireSafe();
-
 	_currentReadAddr = &addr;
 
 	//Check if a breakpoint has been hit and freeze execution if one has
@@ -248,7 +264,7 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		}
 	}
 
-	if(!breakDone) {
+	if(!breakDone && _hasBreakpoint) {
 		BreakOnBreakpoint(type, addr, value);
 	}
 
@@ -257,20 +273,22 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 
 void Debugger::BreakOnBreakpoint(MemoryOperationType type, uint32_t addr, uint8_t value)
 {
-	BreakpointType breakpointType;
-	switch(type) {
-		case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
-		case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
-		
-		default:
-		case MemoryOperationType::ExecOpCode:
-		case MemoryOperationType::ExecOperand: breakpointType = BreakpointType::Execute; break;
-	}
+	if(_hasBreakpoint) {
+		BreakpointType breakpointType;
+		switch(type) {
+			case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
+			case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
 
-	if(HasMatchingBreakpoint(breakpointType, addr, (type == MemoryOperationType::ExecOperand) ? -1 : value)) {
-		//Found a matching breakpoint, stop execution
-		Step(1);
-		SleepUntilResume();
+			default:
+			case MemoryOperationType::ExecOpCode:
+			case MemoryOperationType::ExecOperand: breakpointType = BreakpointType::Execute; break;
+		}
+
+		if(HasMatchingBreakpoint(breakpointType, addr, (type == MemoryOperationType::ExecOperand) ? -1 : value)) {
+			//Found a matching breakpoint, stop execution
+			Step(1);
+			SleepUntilResume();
+		}
 	}
 }
 
@@ -284,6 +302,8 @@ bool Debugger::SleepUntilResume()
 
 	if(stepCount == 0) {
 		//Break
+		_breakLock.AcquireSafe();
+		_executionStopped = true;
 		SoundMixer::StopAudio();
 		MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
 		_stepOverAddr = -1;
@@ -291,6 +311,7 @@ bool Debugger::SleepUntilResume()
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();
 		}
+		_executionStopped = false;
 		return true;
 	}
 	return false;
@@ -303,7 +324,7 @@ void Debugger::PrivateProcessVramOperation(MemoryOperationType type, uint16_t ad
 		_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
 	}
 
-	if(HasMatchingBreakpoint(type == MemoryOperationType::Write ? BreakpointType::WriteVram : BreakpointType::ReadVram, addr, value)) {
+	if(_hasBreakpoint && HasMatchingBreakpoint(type == MemoryOperationType::Write ? BreakpointType::WriteVram : BreakpointType::ReadVram, addr, value)) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
 		SleepUntilResume();
@@ -381,14 +402,14 @@ string Debugger::GenerateOutput()
 	for(size_t i = 0, size = memoryRanges.size(); i < size; i += 2) {
 		int32_t startRange = memoryRanges[i];
 		//Merge all sequential ranges into 1 chunk
-		for(size_t j = i+1; j < size - 1; j+=2) {
-			if(memoryRanges[j] + 1 == memoryRanges[j + 1]) {
-				i+=2;
-			} else {
-				break;
-			}
-		}
 		if(startRange != -1) {
+			for(size_t j = i+1; j < size - 1; j+=2) {
+				if(memoryRanges[j] + 1 == memoryRanges[j + 1]) {
+					i+=2;
+				} else {
+					break;
+				}
+			}
 			output << _disassembler->GetCode(startRange, memoryRanges[i+1], memoryAddr);
 		} else {
 			memoryAddr += 0x100;

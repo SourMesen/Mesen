@@ -43,17 +43,22 @@ private:
 	shared_ptr<MemoryManager> _memoryManager;
 	shared_ptr<BaseMapper> _mapper;
 	
+	atomic<bool> _bpUpdateNeeded;
+	atomic<bool> _executionStopped;
+	vector<Breakpoint> _newBreakpoints;
 	vector<Breakpoint> _readBreakpoints;
 	vector<Breakpoint> _writeBreakpoints;
 	vector<Breakpoint> _execBreakpoints;
 	vector<Breakpoint> _globalBreakpoints;
 	vector<Breakpoint> _readVramBreakpoints;
 	vector<Breakpoint> _writeVramBreakpoints;
+	atomic<bool> _hasBreakpoint;
 
 	deque<uint32_t> _callstackAbsolute;
 	deque<uint32_t> _callstackRelative;
 
-	SimpleLock _bpLock;
+	DebugState _debugState;
+
 	SimpleLock _breakLock;
 
 	unique_ptr<TraceLogger> _traceLogger;
@@ -69,6 +74,8 @@ private:
 	atomic<int32_t> _stepOverAddr;
 
 private:
+	void UpdateBreakpoints();
+
 	void PrivateProcessPpuCycle();
 	void PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value);
 	void PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
