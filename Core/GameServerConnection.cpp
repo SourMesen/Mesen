@@ -80,7 +80,9 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 
 				MessageManager::DisplayToast("Net Play", _connectionData->PlayerName + " (Player " + std::to_string(_controllerPort + 1) + ") connected.", _connectionData->AvatarData, _connectionData->AvatarSize);
 				
-				SendGameInformation();
+				if(Console::GetROMPath().size() > 0) {
+					SendGameInformation();
+				}
 
 				_handshakeCompleted = true;
 				ControlManager::RegisterControlDevice(this, _controllerPort);

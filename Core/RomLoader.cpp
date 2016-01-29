@@ -144,10 +144,11 @@ string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uin
 
 	for(string romFile : romFiles) {
 		//Quick search by filename
+		string originalFilename = romFile;
 		std::transform(romFile.begin(), romFile.end(), romFile.begin(), ::tolower);
 		if(FolderUtilities::GetFilename(romFile, true).compare(romFilename) == 0) {
 			if(RomLoader::GetCRC32(romFile) == crc32Hash) {
-				return romFile;
+				return originalFilename;
 			}
 		}
 	}

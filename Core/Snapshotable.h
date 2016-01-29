@@ -67,7 +67,7 @@ class Snapshotable
 		template<typename T>
 		void StreamArray(T* value, uint32_t length)
 		{
-			uint32_t typeSize = sizeof(*value);
+			uint32_t typeSize = sizeof(T);
 			if(_saving) {
 				uint8_t* bytes = (uint8_t*)value;
 				for(uint32_t i = 0, len = length*typeSize; i < len; i++) {

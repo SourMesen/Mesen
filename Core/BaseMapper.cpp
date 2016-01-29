@@ -249,9 +249,11 @@ void BaseMapper::RestoreOriginalPrgRam()
 
 void BaseMapper::InitializeChrRam()
 {
-	_chrRam = new uint8_t[GetChrRamSize()];
-	memset(_chrRam, 0, GetChrRamSize());
 	_chrRamSize = GetChrRamSize();
+	if(_chrRamSize > 0) {
+		_chrRam = new uint8_t[_chrRamSize];
+		memset(_chrRam, 0, _chrRamSize);
+	}
 }
 
 void BaseMapper::AddRegisterRange(uint16_t startAddr, uint16_t endAddr)
@@ -270,10 +272,7 @@ void BaseMapper::RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr)
 
 void BaseMapper::StreamState(bool saving)
 {
-	Stream<bool>(_onlyChrRam);
-	if(_chrRam) {
-		StreamArray<uint8_t>(_chrRam, _chrRamSize);
-	}
+	StreamArray<uint8_t>(_chrRam, _chrRamSize);
 
 	Stream<MirroringType>(_mirroringType);
 

@@ -25,6 +25,7 @@ namespace Mesen.GUI.Forms
 		private Thread _emuThread;
 		private frmDebugger _debugger;
 		private string _romToLoad = null;
+		private string _currentGame = null;
 		
 		public frmMain(string[] args)
 		{
@@ -189,6 +190,7 @@ namespace Mesen.GUI.Forms
 		{
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
+					_currentGame = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath());
 					InitializeFdsDiskMenu();
 					CheatInfo.ApplyCheats();
 					InitializeStateMenu(mnuSaveState, true);
@@ -279,11 +281,10 @@ namespace Mesen.GUI.Forms
 				if(this.InvokeRequired) {
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
-					string romFilename = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath());
-					if(string.IsNullOrWhiteSpace(romFilename)) {
+					if(string.IsNullOrWhiteSpace(_currentGame)) {
 						this.Text = "Mesen";
 					} else {
-						this.Text = "Mesen - " + romFilename;
+						this.Text = "Mesen - " + _currentGame;
 					}
 
 					mnuSaveState.Enabled = mnuLoadState.Enabled = mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !InteropEmu.IsConnected());

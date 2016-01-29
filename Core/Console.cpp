@@ -62,9 +62,9 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 
 		UpdateNesModel();
 
-		ResetComponents(false);
-
 		_initialized = true;
+
+		ResetComponents(false);
 		
 		VideoDecoder::GetInstance()->StartThread();
 	
@@ -264,6 +264,8 @@ void Console::Run()
 	Movie::Stop();
 
 	VideoDecoder::GetInstance()->StopThread();
+
+	_romFilepath = "";
 
 	_stopLock.Release();
 	_runLock.Release();
