@@ -15,7 +15,7 @@ GameConnection::GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConne
 
 void GameConnection::ReadSocket()
 {
-	int bytesReceived = _socket->Recv(_readBuffer + _readPosition, 0x40000 - _readPosition, 0);
+	int bytesReceived = _socket->Recv((char*)_readBuffer + _readPosition, 0x40000 - _readPosition, 0);
 	if(bytesReceived > 0) {
 		_readPosition += bytesReceived;
 	}
@@ -25,7 +25,7 @@ bool GameConnection::ExtractMessage(void *buffer, uint32_t &messageLength)
 {
 	messageLength = _readBuffer[0] | (_readBuffer[1] << 8) | (_readBuffer[2] << 16) | (_readBuffer[3] << 24);
 
-	if(messageLength > 100000) {
+	if(messageLength > 1000000) {
 		std::cout << "Invalid data received, closing connection" << std::endl;
 		_socket->Close();
 		return false;
