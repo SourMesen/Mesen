@@ -38,7 +38,7 @@ GameServerConnection::~GameServerConnection()
 void GameServerConnection::SendGameInformation()
 {
 	Console::Pause();
-	GameInformationMessage gameInfo(Console::GetROMPath(), _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
+	GameInformationMessage gameInfo(Console::GetROMPath(), Console::GetCrc32(), _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
 	SendNetMessage(gameInfo);
 	SaveStateMessage saveState;
 	SendNetMessage(saveState);
@@ -109,6 +109,7 @@ void GameServerConnection::ProcessNotification(ConsoleNotificationType type, voi
 		case ConsoleNotificationType::GameReset:
 		case ConsoleNotificationType::StateLoaded:
 		case ConsoleNotificationType::CheatAdded:
+		case ConsoleNotificationType::FdsDiskChanged:
 			SendGameInformation();
 			break;
 		default:

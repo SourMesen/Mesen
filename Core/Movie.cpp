@@ -3,7 +3,7 @@
 #include "Movie.h"
 #include "Console.h"
 #include "../Utilities/FolderUtilities.h"
-#include "ROMLoader.h"
+#include "RomLoader.h"
 
 Movie* Movie::Instance = new Movie();
 
@@ -178,7 +178,7 @@ bool Movie::Save()
 	string romFilepath = Console::GetROMPath();
 	string romFilename = FolderUtilities::GetFilename(romFilepath, true);
 
-	uint32_t romCrc32 = ROMLoader::GetCRC32(romFilepath);
+	uint32_t romCrc32 = RomLoader::GetCRC32(romFilepath);
 	_file.write((char*)&romCrc32, sizeof(romCrc32));
 
 	uint32_t romNameSize = (uint32_t)romFilename.size();
@@ -233,7 +233,7 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	bool loadedGame = true;
 	if(autoLoadRom) {
 		string currentRom = Console::GetROMPath();
-		if(currentRom.empty() || romCrc32 != ROMLoader::GetCRC32(currentRom)) {
+		if(currentRom.empty() || romCrc32 != RomLoader::GetCRC32(currentRom)) {
 			//Loaded game isn't the same as the game used for the movie, attempt to load the correct game
 			loadedGame = Console::LoadROM(romFilename, romCrc32);
 		}

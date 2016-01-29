@@ -18,6 +18,8 @@ namespace Mesen.GUI.Config
 		public bool AssociateNesFiles = false;
 		public bool AllowInvalidInput = false;
 		public bool RemoveSpriteLimit = false;
+		public bool FdsAutoLoadDisk = true;
+		public bool FdsFastForwardOnLoad = false;
 
 		public bool UseAlternativeMmc3Irq = false;
 
@@ -43,6 +45,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, preferenceInfo.UseAlternativeMmc3Irq);
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, preferenceInfo.AllowInvalidInput);
 			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, preferenceInfo.RemoveSpriteLimit);
+			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);
+			InteropEmu.SetFlag(EmulationFlags.FdsFastForwardOnLoad, preferenceInfo.FdsFastForwardOnLoad);
 		}
 	}
 }

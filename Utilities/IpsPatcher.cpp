@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <assert.h>
 #include "IpsPatcher.h"
 
 class IpsRecord
@@ -6,7 +7,7 @@ class IpsRecord
 public:
 	uint32_t Address = 0;
 	uint16_t Length = 0;
-	uint8_t* Replacement = nullptr;
+	vector<uint8_t> Replacement;
 
 	//For RLE records (when length == 0)
 	uint16_t RepeatCount = 0;
@@ -32,22 +33,33 @@ public:
 				RepeatCount = buffer[1] | (buffer[0] << 8);
 				Value = buffer[2];
 			} else {
-				Replacement = new uint8_t[Length];
-				ipsFile.read((char*)Replacement, Length);
+				Replacement.resize(Length);
+				ipsFile.read((char*)Replacement.data(), Length);
 			}
 			return true;
 		}
 	}
 
-	~IpsRecord()
+	void WriteRecord(vector<uint8_t> &output)
 	{
-		if(Replacement != nullptr) {
-			delete[] Replacement;
+		output.push_back((Address >> 16) & 0xFF);
+		output.push_back((Address >> 8) & 0xFF);
+		output.push_back(Address & 0xFF);
+
+		output.push_back((Length >> 8) & 0xFF);
+		output.push_back(Length & 0xFF);
+
+		if(Length == 0) {
+			output.push_back((RepeatCount >> 8) & 0xFF);
+			output.push_back(RepeatCount & 0xFF);
+			output.push_back(Value);
+		} else {
+			output.insert(output.end(), Replacement.data(), Replacement.data() + Replacement.size());
 		}
 	}
 };
 
-bool IpsPatcher::PatchBuffer(string ipsFilepath, uint8_t* inputBuffer, size_t inputBufferSize, uint8_t** outputBuffer, size_t &outputBufferSize)
+vector<uint8_t> IpsPatcher::PatchBuffer(string ipsFilepath, vector<uint8_t> input)
 {
 	ifstream ipsFile(ipsFilepath, std::ios::in | std::ios::binary);
 
@@ -56,17 +68,17 @@ bool IpsPatcher::PatchBuffer(string ipsFilepath, uint8_t* inputBuffer, size_t in
 		ipsFile.read((char*)&header, 5);
 		if(memcmp((char*)&header, "PATCH", 5) != 0) {
 			//Invalid ips file
-			return false;
+			return input;
 		}
 
-		vector<IpsRecord*> records;
+		vector<IpsRecord> records;
 		int32_t truncateOffset = -1;
-		size_t maxOutputSize = inputBufferSize;
+		size_t maxOutputSize = input.size();
 		while(!ipsFile.eof()) {
-			IpsRecord *record = new IpsRecord();
-			if(record->ReadRecord(ipsFile)) {
-				if(record->Address + record->Length + record->RepeatCount > maxOutputSize) {
-					maxOutputSize = record->Address + record->Length + record->RepeatCount;
+			IpsRecord record;
+			if(record.ReadRecord(ipsFile)) {
+				if(record.Address + record.Length + record.RepeatCount > maxOutputSize) {
+					maxOutputSize = record.Address + record.Length + record.RepeatCount;
 				}
 				records.push_back(record);
 			} else {
@@ -80,34 +92,87 @@ bool IpsPatcher::PatchBuffer(string ipsFilepath, uint8_t* inputBuffer, size_t in
 			}
 		}
 
-		outputBufferSize = maxOutputSize;
-		uint8_t *output = new uint8_t[outputBufferSize];
-		memset(output, 0, outputBufferSize);
-		memcpy(output, inputBuffer, inputBufferSize);
+		vector<uint8_t> output;
+		output.resize(maxOutputSize);
+		std::copy(input.begin(), input.end(), output.begin());
 
-		for(IpsRecord *record : records) {
-			if(record->Length == 0) {
-				memset(output+record->Address, record->Value, record->RepeatCount);
+		for(IpsRecord record : records) {
+			if(record.Length == 0) {
+				std::fill(&output[record.Address], &output[record.Address]+record.RepeatCount, record.Value);
 			} else {
-				memcpy(output+record->Address, record->Replacement, record->Length);
+				std::copy(record.Replacement.begin(), record.Replacement.end(), output.begin()+record.Address);
 			}
-
-			delete record;
 		}
 
-		if(truncateOffset != -1 && (int32_t)outputBufferSize > truncateOffset) {
-			uint8_t* truncatedOutput = new uint8_t[truncateOffset];
-			memcpy(truncatedOutput, output, truncateOffset);
-			delete[] output;
-			*outputBuffer = truncatedOutput;
-		} else {
-			*outputBuffer = output;
+		if(truncateOffset != -1 && (int32_t)output.size() > truncateOffset) {
+			output.resize(truncateOffset);
 		}
 
 		ipsFile.close();
 
-		return true;
+		return output;
+	}
+	return input;
+}
+
+vector<uint8_t> IpsPatcher::CreatePatch(vector<uint8_t> originalData, vector<uint8_t> newData)
+{
+	assert(originalData.size() == newData.size());
+
+	vector<uint8_t> patchFile;
+	uint8_t header[5] = { 'P', 'A', 'T', 'C', 'H' };
+	patchFile.insert(patchFile.end(), header, header + sizeof(header));
+
+	size_t i = 0, len = originalData.size();
+	while(i < len) {
+		while(i < len && originalData[i] == newData[i]) {
+			i++;
+		}
+		if(i < len) {
+			IpsRecord patchRecord;
+			uint8_t rleByte = newData[i];
+			uint8_t rleCount = 0;
+			bool createRleRecord = false;
+			patchRecord.Address = (uint32_t)i;
+			patchRecord.Length = 0;
+			while(i < len && patchRecord.Length < 65535 && originalData[i] != newData[i]) {
+				if(newData[i] == rleByte) {
+					rleCount++;
+				} else if(createRleRecord) {
+					break;
+				} else {
+					rleByte = newData[i];
+					rleCount = 1;
+				}
+
+				patchRecord.Length++;
+				i++;
+
+				if((patchRecord.Length == rleCount && rleCount > 3) || rleCount > 13) {
+					//Making a RLE entry would probably save space, so write the current entry and create a RLE entry after it
+					if(patchRecord.Length == rleCount) {
+						//Same character since the start of this entry, make the RLE entry now
+						createRleRecord = true;
+					} else {
+						patchRecord.Length -= rleCount;
+						i -= rleCount;
+						break;
+					}
+				}
+			}
+			if(createRleRecord) {
+				patchRecord.Length = 0;
+				patchRecord.RepeatCount = rleCount;
+				patchRecord.Value = rleByte;
+			} else {
+				patchRecord.Replacement = vector<uint8_t>(&newData[patchRecord.Address], &newData[patchRecord.Address + patchRecord.Length]);
+			}
+			patchRecord.WriteRecord(patchFile);
+		}
 	}
 
-	return false;
+	uint8_t endOfFile[3] = { 'E', 'O', 'F' };
+	patchFile.insert(patchFile.end(), endOfFile, endOfFile + sizeof(endOfFile));
+
+	return patchFile;
 }

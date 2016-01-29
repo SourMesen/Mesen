@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MessageManager.h"
 #include "MapperFactory.h"
-#include "ROMLoader.h"
+#include "RomLoader.h"
 #include "AXROM.h"
 #include "Bandai74161_7432.h"
 #include "BnRom.h"
@@ -10,6 +10,7 @@
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
+#include "FDS.h"
 #include "GxRom.h"
 #include "IremG101.h"
 #include "IremH3001.h"
@@ -87,13 +88,13 @@
 #include "VRC6.h"
 #include "VRC7.h"
 
-BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
+BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
 #ifdef _DEBUG
-	MessageManager::DisplayMessage("Game Info", "Mapper: " + std::to_string(romLoader.GetMapperID()));
+	MessageManager::DisplayMessage("Game Info", "Mapper: " + std::to_string(romData.MapperID));
 #endif
 
-	switch(romLoader.GetMapperID()) {
+	switch(romData.MapperID) {
 		case 0: return new NROM();
 		case 1: return new MMC1();
 		case 2: return new UNROM();
@@ -118,7 +119,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();
-		case 34: return (romLoader.GetChrSize() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
+		case 34: return (romData.ChrRom.size() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
 		case 37: return new MMC3_37();
 		case 38: return new UnlPci556();
 		case 44: return new MMC3_44();
@@ -143,7 +144,7 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 75: return new VRC1();
 		case 76: return new Namco108_76();
 		case 77: return new IremLrog017();
-		case 78: return new JalecoJf16(romLoader.GetSubMapper() == 3);
+		case 78: return new JalecoJf16(romData.SubMapperID == 3);
 		case 79: return new Nina03_06(false);
 		case 80: return new TaitoX1005(false);
 		case 85: return new VRC7();
@@ -196,6 +197,8 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 		case 240: return new Mapper240();
 		case 242: return new Mapper242();
 		case 246: return new Mapper246();
+
+		case MapperFactory::FdsMapperID: return new FDS();
 	}
 
 	MessageManager::DisplayMessage("Error", "Unsupported mapper, cannot load game.");
@@ -204,13 +207,14 @@ BaseMapper* MapperFactory::GetMapperFromID(ROMLoader &romLoader)
 
 shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string romFilename, stringstream *filestream, string ipsFilename)
 {
-	ROMLoader loader;
+	RomLoader loader;
 
 	if(loader.LoadFile(romFilename, filestream, ipsFilename)) {
-		shared_ptr<BaseMapper> mapper(GetMapperFromID(loader));
+		RomData romData = loader.GetRomData();
+		shared_ptr<BaseMapper> mapper(GetMapperFromID(romData));
 
 		if(mapper) {
-			mapper->Initialize(loader);
+			mapper->Initialize(romData);
 			return mapper;
 		}
 	}

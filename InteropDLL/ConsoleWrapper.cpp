@@ -14,6 +14,7 @@
 #include "../Core/EmulationSettings.h"
 #include "../Core/VideoDecoder.h"
 #include "../Core/AutoRomTest.h"
+#include "../Core/FDS.h"
 
 NES::Renderer *_renderer = nullptr;
 SoundManager *_soundManager = nullptr;
@@ -229,5 +230,11 @@ namespace InteropEmu {
 		DllExport void __stdcall SetAudioDevice(char* audioDevice) { _soundManager->SetAudioDevice(audioDevice); }
 
 		DllExport void __stdcall GetScreenSize(ScreenSize &size) { VideoDecoder::GetInstance()->GetScreenSize(size); }
+		
+		//FDS functions
+		DllExport uint32_t __stdcall FdsGetSideCount() { return FDS::GetSideCount(); }
+		DllExport void __stdcall FdsEjectDisk() { FDS::EjectDisk(); }
+		DllExport void __stdcall FdsInsertDisk(uint32_t diskNumber) { FDS::InsertDisk(diskNumber); }
+		DllExport void __stdcall FdsSwitchDiskSide() { FDS::SwitchDiskSide(); }
 	}
 }

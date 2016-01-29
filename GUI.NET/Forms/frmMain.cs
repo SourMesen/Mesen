@@ -51,6 +51,7 @@ namespace Mesen.GUI.Forms
 
 			menuTimer.Start();
 
+			InitializeFdsDiskMenu();
 			InitializeEmulationSpeedMenu();
 			
 			UpdateVideoSettings();
@@ -186,17 +187,30 @@ namespace Mesen.GUI.Forms
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
-			if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameLoaded) {
-				CheatInfo.ApplyCheats();
-				InitializeStateMenu(mnuSaveState, true);
-				InitializeStateMenu(mnuLoadState, false);
-				this.StartEmuThread();
-			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameStopped) {
-				CheatInfo.ClearCheats();
-			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.ResolutionChanged) {
-				this.BeginInvoke((MethodInvoker)(() => {
-					UpdateVideoSettings();
-				}));
+			switch(e.NotificationType) {
+				case InteropEmu.ConsoleNotificationType.GameLoaded:
+					InitializeFdsDiskMenu();
+					CheatInfo.ApplyCheats();
+					InitializeStateMenu(mnuSaveState, true);
+					InitializeStateMenu(mnuLoadState, false);
+					this.StartEmuThread();
+					break;
+
+				case InteropEmu.ConsoleNotificationType.GameStopped:
+					CheatInfo.ClearCheats();
+					break;
+
+				case InteropEmu.ConsoleNotificationType.ResolutionChanged:
+					this.BeginInvoke((MethodInvoker)(() => {
+						UpdateVideoSettings();
+					}));
+					break;
+
+				case InteropEmu.ConsoleNotificationType.FdsBiosNotFound:
+					this.BeginInvoke((MethodInvoker)(() => {
+						SelectFdsBiosPrompt();
+					}));
+					break;
 			}
 			UpdateMenus();
 		}
@@ -204,7 +218,7 @@ namespace Mesen.GUI.Forms
 		private void mnuOpen_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "All supported formats (*.nes, *.zip, *.ips)|*.NES;*.ZIP;*.IPS|NES Roms (*.nes)|*.NES|ZIP Archives (*.zip)|*.ZIP|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*";
+			ofd.Filter = "All supported formats (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*";
 			if(ConfigManager.Config.RecentFiles.Count > 0) {
 				ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
 			}			
@@ -213,13 +227,17 @@ namespace Mesen.GUI.Forms
 					string ipsFile = ofd.FileName;
 					string romFile = Path.Combine(Path.GetDirectoryName(ofd.FileName), Path.GetFileNameWithoutExtension(ofd.FileName));
 
-					if(File.Exists(romFile+".nes") || File.Exists(romFile+".zip")) {
-						LoadROM(romFile + (File.Exists(romFile+".nes") ? ".nes" : ".zip"));
+					if(File.Exists(romFile+".nes") || File.Exists(romFile+".zip") || File.Exists(romFile+".fds")) {
+						string ext = string.Empty;
+						if(File.Exists(romFile+".nes")) ext = ".nes";
+						if(File.Exists(romFile+".zip")) ext = ".zip";
+						if(File.Exists(romFile+".fds")) ext = ".fds";
+						LoadROM(romFile + ext);
 						InteropEmu.ApplyIpsPatch(ipsFile);
 					} else {
 						if(_emuThread == null) {
 							if(MessageBox.Show("Please select a ROM matching the IPS patch file.", string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-								ofd.Filter = "All supported formats (*.nes, *.zip)|*.NES;*.ZIP|NES Roms (*.nes)|*.NES|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*";
+								ofd.Filter = "All supported formats (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*";
 								if(ConfigManager.Config.RecentFiles.Count > 0) {
 								ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
 									}
@@ -233,23 +251,23 @@ namespace Mesen.GUI.Forms
 						}
 					}
 				} else {
-					LoadROM(ofd.FileName);
-					if(ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches) {
-						string ipsFile = Path.Combine(Path.GetDirectoryName(ofd.FileName), Path.GetFileNameWithoutExtension(ofd.FileName)) + ".ips";
-						if(File.Exists(ipsFile)) {
-							InteropEmu.ApplyIpsPatch(ipsFile);
-						}
-					}
+					LoadROM(ofd.FileName, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
 				}
 			}
 		}
 
-		private void LoadROM(string filename)
+		private void LoadROM(string filename, bool autoLoadIps = false)
 		{
+			_romToLoad = filename;
 			if(File.Exists(filename)) {
 				ConfigManager.Config.AddRecentFile(filename);
 				InteropEmu.LoadROM(filename);
 				UpdateRecentFiles();
+
+				string ipsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
+				if(File.Exists(ipsFile)) {
+					InteropEmu.ApplyIpsPatch(ipsFile);
+				}
 			} else {
 				MessageBox.Show("File not found.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -737,6 +755,62 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.SetVideoFilter(VideoFilterType.NTSC);
 			UpdateFilterMenu(VideoFilterType.NTSC);
+		}
+
+		private void InitializeFdsDiskMenu()
+		{
+			if(this.InvokeRequired) {
+				this.BeginInvoke((MethodInvoker)(() => this.InitializeFdsDiskMenu()));
+			} else {
+				UInt32 sideCount = InteropEmu.FdsGetSideCount();
+
+				mnuSelectDisk.DropDownItems.Clear();
+
+				if(sideCount > 0) {
+					for(UInt32 i = 0; i < sideCount; i++) {
+						UInt32 diskNumber = i;
+						ToolStripItem item = mnuSelectDisk.DropDownItems.Add("Disk " + (diskNumber/2+1) + " Side " + (diskNumber % 2 == 0 ? "A" : "B"));
+						item.Click += (object sender, EventArgs args) => {
+							InteropEmu.FdsInsertDisk(diskNumber);
+						};
+					}
+					sepFdsDisk.Visible = true;
+					mnuSelectDisk.Visible = true;
+					mnuEjectDisk.Visible = true;
+					mnuSwitchDiskSide.Visible = sideCount > 1;
+				} else {
+					sepFdsDisk.Visible = false;
+					mnuSelectDisk.Visible = false;
+					mnuEjectDisk.Visible = false;
+					mnuSwitchDiskSide.Visible = false;
+				}
+			}
+		}
+
+		private void mnuEjectDisk_Click(object sender, EventArgs e)
+		{
+			InteropEmu.FdsEjectDisk();
+		}
+
+		private void mnuSwitchDiskSide_Click(object sender, EventArgs e)
+		{
+			InteropEmu.FdsSwitchDiskSide();
+		}
+
+		private void SelectFdsBiosPrompt()
+		{
+			if(MessageBox.Show("FDS bios not found. The bios is required to run FDS games." + Environment.NewLine + Environment.NewLine + "Select bios file now?", "Mesen", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+				OpenFileDialog ofd = new OpenFileDialog();
+				ofd.Filter = "All Files (*.*)|*.*";
+				if(ofd.ShowDialog() == DialogResult.OK) {
+					if(MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant() == "ca30b50f880eb660a320674ed365ef7a") {
+						File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));
+						LoadROM(_romToLoad);
+					} else {
+						MessageBox.Show("The selected bios file is invalid.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+			}
 		}
 	}
 }

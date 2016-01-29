@@ -5,6 +5,7 @@
 #include "MapperFactory.h"
 #include "Debugger.h"
 #include "MessageManager.h"
+#include "RomLoader.h"
 #include "EmulationSettings.h"
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
@@ -93,13 +94,13 @@ bool Console::LoadROM(string filename, uint32_t crc32Hash)
 	string currentRomFilepath = Console::GetROMPath();
 	string currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
 	if(!currentRomFilepath.empty()) {
-		if(ROMLoader::GetCRC32(Console::GetROMPath()) == crc32Hash) {
+		if(RomLoader::GetCRC32(Console::GetROMPath()) == crc32Hash) {
 			//Current game matches, no need to do anything
 			return true;
 		}
 
 		//Try to find the game in the same folder as the current game's folder
-		string match = ROMLoader::FindMatchingRomInFolder(currentFolder, filename, crc32Hash);
+		string match = RomLoader::FindMatchingRomInFolder(currentFolder, filename, crc32Hash);
 		if(!match.empty()) {
 			Console::LoadROM(match);
 			return true;
@@ -108,7 +109,7 @@ bool Console::LoadROM(string filename, uint32_t crc32Hash)
 
 	for(string folder : FolderUtilities::GetKnowGameFolders()) {
 		if(folder != currentFolder) {
-			string match = ROMLoader::FindMatchingRomInFolder(folder, filename, crc32Hash);
+			string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash);
 			if(!match.empty()) {
 				Console::LoadROM(match);
 				return true;
@@ -121,6 +122,11 @@ bool Console::LoadROM(string filename, uint32_t crc32Hash)
 string Console::GetROMPath()
 {
 	return Instance->_romFilepath;
+}
+
+uint32_t Console::GetCrc32()
+{
+	return Instance->_mapper->GetCrc32();
 }
 
 void Console::Reset(bool softReset)

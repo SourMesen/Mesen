@@ -4,7 +4,7 @@
 #include "Snapshotable.h"
 #include "IMemoryHandler.h"
 #include "MessageManager.h"
-#include "ROMLoader.h"
+#include "RomLoader.h"
 
 enum class PrgMemoryType
 {
@@ -60,8 +60,10 @@ private:
 
 	uint32_t _prgPageNumbers[64];
 	uint32_t _chrPageNumbers[64];
-	
-	uint8_t* _originalPrgRom = nullptr;
+
+	uint32_t _crc32 = 0;
+
+	vector<uint8_t> _originalPrgRom;
 
 protected:
 	uint8_t* _prgRom = nullptr;
@@ -77,6 +79,7 @@ protected:
 	bool _hasBattery = false;
 
 	virtual void InitMapper() = 0;
+	virtual void InitMapper(RomData &romData) { }
 	virtual uint16_t GetPRGPageSize() = 0;
 	virtual uint16_t GetCHRPageSize() = 0;
 
@@ -141,7 +144,7 @@ protected:
 	MirroringType GetMirroringType();
 
 public:
-	void Initialize(ROMLoader &romLoader);
+	void Initialize(RomData &romData);
 	virtual ~BaseMapper();
 	virtual void Reset(bool softReset) { }
 
@@ -155,6 +158,7 @@ public:
 	void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
 	bool IsPalRom();
+	uint32_t GetCrc32();
 
 	uint8_t ReadRAM(uint16_t addr);
 	virtual void WriteRAM(uint16_t addr, uint8_t value);

@@ -48,6 +48,8 @@
 			this.chkUseAlternativeMmc3Irq = new System.Windows.Forms.CheckBox();
 			this.chkAllowInvalidInput = new System.Windows.Forms.CheckBox();
 			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
+			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
+			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -275,10 +277,14 @@
 			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 4);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 4;
+			this.tableLayoutPanel1.RowCount = 6;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -315,6 +321,26 @@
 			this.chkRemoveSpriteLimit.TabIndex = 2;
 			this.chkRemoveSpriteLimit.Text = "Remove sprite limit (Reduces flashing)";
 			this.chkRemoveSpriteLimit.UseVisualStyleBackColor = true;
+			// 
+			// chkFdsAutoLoadDisk
+			// 
+			this.chkFdsAutoLoadDisk.AutoSize = true;
+			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(3, 72);
+			this.chkFdsAutoLoadDisk.Name = "chkFdsAutoLoadDisk";
+			this.chkFdsAutoLoadDisk.Size = new System.Drawing.Size(303, 17);
+			this.chkFdsAutoLoadDisk.TabIndex = 3;
+			this.chkFdsAutoLoadDisk.Text = "Automatically insert disk 1 side A when starting FDS games";
+			this.chkFdsAutoLoadDisk.UseVisualStyleBackColor = true;
+			// 
+			// chkFdsFastForwardOnLoad
+			// 
+			this.chkFdsFastForwardOnLoad.AutoSize = true;
+			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(3, 95);
+			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
+			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(302, 17);
+			this.chkFdsFastForwardOnLoad.TabIndex = 4;
+			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk is loading";
+			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
 			// 
@@ -367,5 +393,7 @@
 		private System.Windows.Forms.CheckBox chkUseAlternativeMmc3Irq;
 		private System.Windows.Forms.CheckBox chkAllowInvalidInput;
 		private System.Windows.Forms.CheckBox chkRemoveSpriteLimit;
+		private System.Windows.Forms.CheckBox chkFdsAutoLoadDisk;
+		private System.Windows.Forms.CheckBox chkFdsFastForwardOnLoad;
 	}
 }

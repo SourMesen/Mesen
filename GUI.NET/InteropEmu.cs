@@ -66,6 +66,11 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void LoadState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern Int64 GetStateInfo(UInt32 stateIndex);
 
+		[DllImport(DLLPath)] public static extern UInt32 FdsGetSideCount();
+		[DllImport(DLLPath)] public static extern void FdsEjectDisk();
+		[DllImport(DLLPath)] public static extern void FdsInsertDisk(UInt32 diskNumber);
+		[DllImport(DLLPath)] public static extern void FdsSwitchDiskSide();
+
 		[DllImport(DLLPath)] public static extern void CheatAddCustom(UInt32 address, Byte value, Int32 compareValue, [MarshalAs(UnmanagedType.I1)]bool isRelativeAddress);
 		[DllImport(DLLPath)] public static extern void CheatAddGameGenie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string code);
 		[DllImport(DLLPath)] public static extern void CheatAddProActionRocky(UInt32 code);
@@ -279,6 +284,8 @@ namespace Mesen.GUI
 			PpuFrameDone = 9,
 			MovieEnded = 10,
 			ResolutionChanged = 11,
+			FdsDiskChanged = 12,
+			FdsBiosNotFound = 13,
 		}
 
 		public struct KeyMapping
@@ -460,7 +467,9 @@ namespace Mesen.GUI
 		AllowInvalidInput = 0x08,
 		RemoveSpriteLimit = 0x10,
 		UseHdPacks = 0x20,
-		
+
+		FdsFastForwardOnLoad = 0x2000,
+		FdsAutoLoadDisk = 0x4000,
 		Mmc3IrqAltBehavior = 0x8000,
 	}
 	
@@ -541,6 +550,8 @@ namespace Mesen.GUI
 						return BitConverter.ToString(md5.ComputeHash(entry.Open())).Replace("-", "");
 					}
 				}
+			} else {
+				return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
 			}
 			return null;
 		}

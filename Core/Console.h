@@ -61,8 +61,8 @@ class Console
 		static void LoadROM(string filepath, stringstream *filestream = nullptr);
 		static bool LoadROM(string romName, uint32_t crc32Hash);
 		static void ApplyIpsPatch(string ipsFilename);
-		static string FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash);
 		static string GetROMPath();
+		static uint32_t GetCrc32();
 
 		static shared_ptr<Console> GetInstance();
 		static void Release();

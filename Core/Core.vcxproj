@@ -366,7 +366,10 @@
     <ClInclude Include="DebugState.h" />
     <ClInclude Include="DefaultVideoFilter.h" />
     <ClInclude Include="ExpressionEvaluator.h" />
+    <ClInclude Include="FDS.h" />
+    <ClInclude Include="FdsLoader.h" />
     <ClInclude Include="HdVideoFilter.h" />
+    <ClInclude Include="iNesLoader.h" />
     <ClInclude Include="IremH3001.h" />
     <ClInclude Include="IremLrog017.h" />
     <ClInclude Include="IremTamS1.h" />
@@ -401,6 +404,7 @@
     <ClInclude Include="MMC3_49.h" />
     <ClInclude Include="MMC3_52.h" />
     <ClInclude Include="MMC3_ChrRam.h" />
+    <ClInclude Include="RomData.h" />
     <ClInclude Include="NtdecTc112.h" />
     <ClInclude Include="Rambo1.h" />
     <ClInclude Include="SoundMixer.h" />
@@ -480,7 +484,7 @@
     <ClInclude Include="PPU.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="MemoryManager.h" />
-    <ClInclude Include="ROMLoader.h" />
+    <ClInclude Include="RomLoader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Sunsoft184.h" />
     <ClInclude Include="SunSoft3.h" />
@@ -523,6 +527,7 @@
     <ClCompile Include="DisassemblyInfo.cpp" />
     <ClCompile Include="EmulationSettings.cpp" />
     <ClCompile Include="ExpressionEvaluator.cpp" />
+    <ClCompile Include="FDS.cpp" />
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="GameClientConnection.cpp" />
     <ClCompile Include="GameConnection.cpp" />
@@ -530,6 +535,7 @@
     <ClCompile Include="GameServerConnection.cpp" />
     <ClCompile Include="HdVideoFilter.cpp" />
     <ClCompile Include="NtscFilter.cpp" />
+    <ClCompile Include="RomLoader.cpp" />
     <ClCompile Include="SoundMixer.cpp" />
     <ClCompile Include="StandardController.cpp" />
     <ClCompile Include="MapperFactory.cpp" />

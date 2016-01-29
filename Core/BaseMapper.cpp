@@ -239,12 +239,12 @@ uint32_t BaseMapper::GetCHRPageCount()
 
 string BaseMapper::GetBatteryFilename()
 {
-	return FolderUtilities::GetSaveFolder() + _romFilename + ".sav";
+	return FolderUtilities::GetSaveFolder() + FolderUtilities::GetFilename(_romFilename, false) + ".sav";
 }
 		
 void BaseMapper::RestoreOriginalPrgRam()
 {
-	memcpy(_prgRom, _originalPrgRom, GetPrgSize());
+	memcpy(_prgRom, _originalPrgRom.data(), _originalPrgRom.size());
 }
 
 void BaseMapper::InitializeChrRam()
@@ -303,9 +303,9 @@ void BaseMapper::StreamState(bool saving)
 	}
 }
 
-void BaseMapper::Initialize(ROMLoader &romLoader)
+void BaseMapper::Initialize(RomData &romData)
 {
-	_romFilename = romLoader.GetFilename();
+	_romFilename = romData.Filename;
 	_batteryFilename = GetBatteryFilename();
 	_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
 
@@ -314,14 +314,22 @@ void BaseMapper::Initialize(ROMLoader &romLoader)
 	memset(_isRegisterAddr, 0, sizeof(_isRegisterAddr));
 	AddRegisterRange(RegisterStartAddress(), RegisterEndAddress());
 
-	_mirroringType = romLoader.GetMirroringType();
-	romLoader.GetPrgRom(&_prgRom);
-	romLoader.GetPrgRom(&_originalPrgRom);
-	romLoader.GetChrRom(&_chrRom);
-	_prgSize = romLoader.GetPrgSize();
-	_chrRomSize = romLoader.GetChrSize();
-	_hasBattery = romLoader.HasBattery() || ForceBattery();
-	_isPalRom = romLoader.IsPalRom();
+	_mirroringType = romData.MirroringType;
+
+	_prgSize = (uint32_t)romData.PrgRom.size();
+	_chrRomSize = (uint32_t)romData.ChrRom.size();
+	_originalPrgRom = romData.PrgRom;
+
+	_prgRom = new uint8_t[_prgSize];
+	_chrRom = new uint8_t[_chrRomSize];
+	memcpy(_prgRom, romData.PrgRom.data(), _prgSize);
+	if(_chrRomSize > 0) {
+		memcpy(_chrRom, romData.ChrRom.data(), _chrRomSize);
+	}
+
+	_hasBattery = romData.HasBattery || ForceBattery();
+	_isPalRom = romData.IsPalRom;
+	_crc32 = romData.Crc32;
 	_hasBusConflicts = HasBusConflicts();
 
 	_saveRam = new uint8_t[_saveRamSize];
@@ -360,6 +368,7 @@ void BaseMapper::Initialize(ROMLoader &romLoader)
 	SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
 
 	InitMapper();
+	InitMapper(romData);
 
 	MessageManager::RegisterNotificationListener(this);
 
@@ -374,7 +383,6 @@ BaseMapper::~BaseMapper()
 	delete[] _chrRam;
 	delete[] _chrRom;
 	delete[] _prgRom;
-	delete[] _originalPrgRom;
 	delete[] _saveRam;
 	delete[] _workRam;
 
@@ -473,6 +481,11 @@ void BaseMapper::SetMirroringType(MirroringType type)
 bool BaseMapper::IsPalRom()
 {
 	return _isPalRom;
+}
+
+uint32_t BaseMapper::GetCrc32()
+{
+	return _crc32;
 }
 
 MirroringType BaseMapper::GetMirroringType()

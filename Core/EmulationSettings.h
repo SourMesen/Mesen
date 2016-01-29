@@ -12,6 +12,8 @@ enum EmulationFlags
 	RemoveSpriteLimit = 0x10,
 	UseHdPacks = 0x20,
 
+	FdsFastForwardOnLoad = 0x2000,
+	FdsAutoLoadDisk = 0x4000,
 	Mmc3IrqAltBehavior = 0x8000,
 };
 

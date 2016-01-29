@@ -15,6 +15,8 @@ enum class ConsoleNotificationType
 	PpuFrameDone = 9,
 	MovieEnded = 10,
 	ResolutionChanged = 11,
+	FdsDiskChanged = 12,
+	FdsBiosNotFound = 13,
 };
 
 class INotificationListener

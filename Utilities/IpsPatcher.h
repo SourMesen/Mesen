@@ -5,5 +5,6 @@
 class IpsPatcher
 {
 public:
-	static bool PatchBuffer(string ipsFilepath, uint8_t* inputBuffer, size_t inputBufferSize, uint8_t** outputBuffer, size_t &outputBufferSize);
+	static vector<uint8_t> PatchBuffer(string ipsFilepath, vector<uint8_t> input);
+	static vector<uint8_t> CreatePatch(vector<uint8_t> originalData, vector<uint8_t> newData);
 };

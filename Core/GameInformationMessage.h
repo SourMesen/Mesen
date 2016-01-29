@@ -3,7 +3,7 @@
 #include "MessageManager.h"
 #include "NetMessage.h"
 #include "Console.h"
-#include "ROMLoader.h"
+#include "RomLoader.h"
 #include "../Utilities/FolderUtilities.h"
 
 class GameInformationMessage : public NetMessage
@@ -27,10 +27,10 @@ protected:
 public:
 	GameInformationMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
 
-	GameInformationMessage(string filepath, uint8_t port, bool paused) : NetMessage(MessageType::GameInformation)
+	GameInformationMessage(string filepath, uint32_t crc32Hash, uint8_t port, bool paused) : NetMessage(MessageType::GameInformation)
 	{
 		CopyString(&_romFilename, _romFilenameLength, FolderUtilities::GetFilename(filepath, true));
-		_crc32Hash = ROMLoader::GetCRC32(filepath);
+		_crc32Hash = crc32Hash;
 		_controllerPort = port;
 		_paused = paused;
 	}

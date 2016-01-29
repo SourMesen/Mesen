@@ -33,6 +33,7 @@ enum class IRQSource
 	External = 1,
 	FrameCounter = 2,
 	DMC = 4,
+	FdsDisk = 8,
 };
 
 struct State

@@ -51,6 +51,9 @@
 			this.mnuPause = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStop = new System.Windows.Forms.ToolStripMenuItem();
+			this.sepFdsDisk = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSelectDisk = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEjectDisk = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEmulationSpeed = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEmuSpeedNormal = new System.Windows.Forms.ToolStripMenuItem();
@@ -116,6 +119,7 @@
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
+			this.mnuSwitchDiskSide = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -203,7 +207,11 @@
 			this.mnuGame.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuPause,
             this.mnuReset,
-            this.mnuStop});
+            this.mnuStop,
+            this.sepFdsDisk,
+            this.mnuSwitchDiskSide,
+            this.mnuSelectDisk,
+            this.mnuEjectDisk});
 			this.mnuGame.Name = "mnuGame";
 			this.mnuGame.Size = new System.Drawing.Size(50, 20);
 			this.mnuGame.Text = "Game";
@@ -213,7 +221,7 @@
 			this.mnuPause.Enabled = false;
 			this.mnuPause.Name = "mnuPause";
 			this.mnuPause.ShortcutKeyDisplayString = "Esc";
-			this.mnuPause.Size = new System.Drawing.Size(129, 22);
+			this.mnuPause.Size = new System.Drawing.Size(200, 22);
 			this.mnuPause.Text = "Pause";
 			this.mnuPause.Click += new System.EventHandler(this.mnuPause_Click);
 			// 
@@ -221,7 +229,7 @@
 			// 
 			this.mnuReset.Enabled = false;
 			this.mnuReset.Name = "mnuReset";
-			this.mnuReset.Size = new System.Drawing.Size(129, 22);
+			this.mnuReset.Size = new System.Drawing.Size(200, 22);
 			this.mnuReset.Text = "Reset";
 			this.mnuReset.Click += new System.EventHandler(this.mnuReset_Click);
 			// 
@@ -229,9 +237,27 @@
 			// 
 			this.mnuStop.Enabled = false;
 			this.mnuStop.Name = "mnuStop";
-			this.mnuStop.Size = new System.Drawing.Size(129, 22);
+			this.mnuStop.Size = new System.Drawing.Size(200, 22);
 			this.mnuStop.Text = "Stop";
 			this.mnuStop.Click += new System.EventHandler(this.mnuStop_Click);
+			// 
+			// sepFdsDisk
+			// 
+			this.sepFdsDisk.Name = "sepFdsDisk";
+			this.sepFdsDisk.Size = new System.Drawing.Size(197, 6);
+			// 
+			// mnuSelectDisk
+			// 
+			this.mnuSelectDisk.Name = "mnuSelectDisk";
+			this.mnuSelectDisk.Size = new System.Drawing.Size(200, 22);
+			this.mnuSelectDisk.Text = "Select Disk";
+			// 
+			// mnuEjectDisk
+			// 
+			this.mnuEjectDisk.Name = "mnuEjectDisk";
+			this.mnuEjectDisk.Size = new System.Drawing.Size(200, 22);
+			this.mnuEjectDisk.Text = "Eject Disk";
+			this.mnuEjectDisk.Click += new System.EventHandler(this.mnuEjectDisk_Click);
 			// 
 			// mnuOptions
 			// 
@@ -352,7 +378,7 @@
 			// mnuScale1x
 			// 
 			this.mnuScale1x.Name = "mnuScale1x";
-			this.mnuScale1x.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale1x.Size = new System.Drawing.Size(85, 22);
 			this.mnuScale1x.Tag = "1";
 			this.mnuScale1x.Text = "1x";
 			this.mnuScale1x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -360,7 +386,7 @@
 			// mnuScale2x
 			// 
 			this.mnuScale2x.Name = "mnuScale2x";
-			this.mnuScale2x.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale2x.Size = new System.Drawing.Size(85, 22);
 			this.mnuScale2x.Tag = "2";
 			this.mnuScale2x.Text = "2x";
 			this.mnuScale2x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -368,7 +394,7 @@
 			// mnuScale3x
 			// 
 			this.mnuScale3x.Name = "mnuScale3x";
-			this.mnuScale3x.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale3x.Size = new System.Drawing.Size(85, 22);
 			this.mnuScale3x.Tag = "3";
 			this.mnuScale3x.Text = "3x";
 			this.mnuScale3x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -376,7 +402,7 @@
 			// mnuScale4x
 			// 
 			this.mnuScale4x.Name = "mnuScale4x";
-			this.mnuScale4x.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale4x.Size = new System.Drawing.Size(85, 22);
 			this.mnuScale4x.Tag = "4";
 			this.mnuScale4x.Text = "4x";
 			this.mnuScale4x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -746,6 +772,14 @@
 			this.dxViewer.Size = new System.Drawing.Size(263, 176);
 			this.dxViewer.TabIndex = 1;
 			// 
+			// mnuSwitchDiskSide
+			// 
+			this.mnuSwitchDiskSide.Name = "mnuSwitchDiskSide";
+			this.mnuSwitchDiskSide.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
+			this.mnuSwitchDiskSide.Size = new System.Drawing.Size(200, 22);
+			this.mnuSwitchDiskSide.Text = "Switch Disk Side";
+			this.mnuSwitchDiskSide.Click += new System.EventHandler(this.mnuSwitchDiskSide_Click);
+			// 
 			// frmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -847,6 +881,10 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuVideoFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuNoneFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuNtscFilter;
+		private System.Windows.Forms.ToolStripSeparator sepFdsDisk;
+		private System.Windows.Forms.ToolStripMenuItem mnuSelectDisk;
+		private System.Windows.Forms.ToolStripMenuItem mnuEjectDisk;
+		private System.Windows.Forms.ToolStripMenuItem mnuSwitchDiskSide;
 	}
 }
 
