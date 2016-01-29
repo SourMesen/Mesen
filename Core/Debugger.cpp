@@ -537,8 +537,8 @@ void Debugger::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* 
 		for(uint8_t x = 0; x < 32; x++) {
 			uint8_t tileIndex = _mapper->ReadVRAM(baseAddr + (y << 5) + x);
 			uint8_t attribute = _mapper->ReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
-			tileData[y * 30 + x] = tileIndex;
-			paletteData[y * 30 + x] = attribute;
+			tileData[y * 32 + x] = tileIndex;
+			paletteData[y * 32 + x] = attribute;
 			uint8_t shift = (x & 0x02) | ((y & 0x02) << 1);
 
 			uint8_t paletteBaseAddr = ((attribute >> shift) & 0x03) << 2;
