@@ -351,7 +351,7 @@ namespace Mesen.GUI.Forms
 						InteropEmu.Run();
 						_emuThread = null;
 					} catch(Exception ex) {
-						MessageBox.Show(ex.Message);
+						MessageBox.Show(ex.ToString(), "Unexpected Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				});
 				_emuThread.Start();
