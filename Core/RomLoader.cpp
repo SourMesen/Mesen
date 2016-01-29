@@ -4,7 +4,7 @@
 #include "iNesLoader.h"
 #include "FdsLoader.h"
 
-bool RomLoader::LoadFromZip(stringstream &zipFile)
+bool RomLoader::LoadFromZip(istream &zipFile)
 {
 	bool result = false;
 
@@ -36,7 +36,7 @@ bool RomLoader::LoadFromZip(stringstream &zipFile)
 	return result;
 }
 
-bool RomLoader::LoadFromStream(stringstream &romFile)
+bool RomLoader::LoadFromStream(istream &romFile)
 {
 	uint32_t fileSize;
 	uint8_t* buffer = ReadFile(romFile, fileSize);
@@ -46,7 +46,7 @@ bool RomLoader::LoadFromStream(stringstream &romFile)
 	return result;
 }
 
-uint32_t RomLoader::GetFileSize(stringstream &file)
+uint32_t RomLoader::GetFileSize(istream &file)
 {
 	file.seekg(0, ios::end);
 	uint32_t fileSize = (uint32_t)file.tellg();
@@ -55,7 +55,7 @@ uint32_t RomLoader::GetFileSize(stringstream &file)
 	return fileSize;
 }
 
-uint8_t* RomLoader::ReadFile(stringstream &file, uint32_t &fileSize)
+uint8_t* RomLoader::ReadFile(istream &file, uint32_t &fileSize)
 {
 	fileSize = GetFileSize(file);
 
@@ -79,6 +79,8 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length)
 	} else if(memcmp(buffer, "FDS\x1a", 4) == 0 || memcmp(buffer, "\x1*NINTENDO-HVC*", 15) == 0) {
 		FdsLoader loader;
 		_romData = loader.LoadRom(fileData, _filename);
+	} else {
+		_romData.Error = true;
 	}
 
 	_romData.RawData = fileData;
@@ -87,31 +89,34 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length)
 	return !_romData.Error;
 }
 
-bool RomLoader::LoadFile(string filename, stringstream *filestream, string ipsFilename)
+bool RomLoader::LoadFile(string filename, istream *filestream, string ipsFilename)
 {
 	_filename = filename;
 	_ipsFilename = ipsFilename;
 
-	stringstream ss;
+	ifstream file;
+	istream* input = nullptr;
 	if(!filestream) {
-		ifstream file(filename, ios::in | ios::binary);
+		file.open(filename, ios::in | ios::binary);
 		if(file) {
-			ss << file.rdbuf();
-			file.close();
-			filestream = &ss;
+			input = &file;
 		}
+	} else {
+		input = filestream;
 	}
+	
 
-	char header[2];
-	filestream->seekg(0, ios::beg);
-	filestream->read(header, 2);
-	filestream->seekg(0, ios::beg);
+	char header[15];
+	input->seekg(0, ios::beg);
+	input->read(header, 15);
+	input->seekg(0, ios::beg);
 
 	if(memcmp(header, "PK", 2) == 0) {
-		return LoadFromZip(*filestream);
-	} else {
-		return LoadFromStream(*filestream);
+		return LoadFromZip(*input);
+	} else if(memcmp(header, "NES\x1a", 4) == 0 || memcmp(header, "FDS\x1a", 4) == 0 || memcmp(header, "\x1*NINTENDO-HVC*", 15) == 0) {
+		return LoadFromStream(*input);
 	}
+	return false;
 }
 
 RomData RomLoader::GetRomData()

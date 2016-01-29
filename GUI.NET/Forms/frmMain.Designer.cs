@@ -52,6 +52,7 @@
 			this.mnuReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStop = new System.Windows.Forms.ToolStripMenuItem();
 			this.sepFdsDisk = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSwitchDiskSide = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSelectDisk = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEjectDisk = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
@@ -119,7 +120,6 @@
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
-			this.mnuSwitchDiskSide = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -245,6 +245,14 @@
 			// 
 			this.sepFdsDisk.Name = "sepFdsDisk";
 			this.sepFdsDisk.Size = new System.Drawing.Size(197, 6);
+			// 
+			// mnuSwitchDiskSide
+			// 
+			this.mnuSwitchDiskSide.Name = "mnuSwitchDiskSide";
+			this.mnuSwitchDiskSide.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
+			this.mnuSwitchDiskSide.Size = new System.Drawing.Size(200, 22);
+			this.mnuSwitchDiskSide.Text = "Switch Disk Side";
+			this.mnuSwitchDiskSide.Click += new System.EventHandler(this.mnuSwitchDiskSide_Click);
 			// 
 			// mnuSelectDisk
 			// 
@@ -772,16 +780,9 @@
 			this.dxViewer.Size = new System.Drawing.Size(263, 176);
 			this.dxViewer.TabIndex = 1;
 			// 
-			// mnuSwitchDiskSide
-			// 
-			this.mnuSwitchDiskSide.Name = "mnuSwitchDiskSide";
-			this.mnuSwitchDiskSide.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
-			this.mnuSwitchDiskSide.Size = new System.Drawing.Size(200, 22);
-			this.mnuSwitchDiskSide.Text = "Switch Disk Side";
-			this.mnuSwitchDiskSide.Click += new System.EventHandler(this.mnuSwitchDiskSide_Click);
-			// 
 			// frmMain
 			// 
+			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
@@ -793,6 +794,8 @@
 			this.MainMenuStrip = this.menuStrip;
 			this.Name = "frmMain";
 			this.Text = "Mesen";
+			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
+			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmMain_DragEnter);
 			this.menuStrip.ResumeLayout(false);
 			this.menuStrip.PerformLayout();
 			this.ResumeLayout(false);

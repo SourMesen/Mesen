@@ -225,35 +225,49 @@ namespace Mesen.GUI.Forms
 				ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
 			}			
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				if(Path.GetExtension(ofd.FileName).ToLowerInvariant() == ".ips") {
-					string ipsFile = ofd.FileName;
-					string romFile = Path.Combine(Path.GetDirectoryName(ofd.FileName), Path.GetFileNameWithoutExtension(ofd.FileName));
+				LoadFile(ofd.FileName);
+			}
+		}
 
-					if(File.Exists(romFile+".nes") || File.Exists(romFile+".zip") || File.Exists(romFile+".fds")) {
-						string ext = string.Empty;
-						if(File.Exists(romFile+".nes")) ext = ".nes";
-						if(File.Exists(romFile+".zip")) ext = ".zip";
-						if(File.Exists(romFile+".fds")) ext = ".fds";
-						LoadROM(romFile + ext);
-						InteropEmu.ApplyIpsPatch(ipsFile);
-					} else {
-						if(_emuThread == null) {
-							if(MessageBox.Show("Please select a ROM matching the IPS patch file.", string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-								ofd.Filter = "All supported formats (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*";
-								if(ConfigManager.Config.RecentFiles.Count > 0) {
-								ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
-									}
-								if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-									LoadROM(ofd.FileName);
-								}
-								InteropEmu.ApplyIpsPatch(ipsFile);
-							}
-						} else if(MessageBox.Show("Patch and reset the current game?", string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-							InteropEmu.ApplyIpsPatch(ipsFile);
+		private void LoadFile(string filename)
+		{
+			if(Path.GetExtension(filename).ToLowerInvariant() == ".ips") {
+				LoadIpsFile(filename);
+			} else {
+				LoadROM(filename, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
+			}
+		}
+
+		private void LoadIpsFile(string filename)
+		{
+			string ipsFile = filename;
+			string romFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
+
+			if(File.Exists(romFile+".nes") || File.Exists(romFile+".zip") || File.Exists(romFile+".fds")) {
+				string ext = string.Empty;
+				if(File.Exists(romFile+".nes"))
+					ext = ".nes";
+				if(File.Exists(romFile+".zip"))
+					ext = ".zip";
+				if(File.Exists(romFile+".fds"))
+					ext = ".fds";
+				LoadROM(romFile + ext);
+				InteropEmu.ApplyIpsPatch(ipsFile);
+			} else {
+				if(_emuThread == null) {
+					if(MessageBox.Show("Please select a ROM matching the IPS patch file.", string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
+						OpenFileDialog ofd = new OpenFileDialog();
+						ofd.Filter = "All supported formats (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*";
+						if(ConfigManager.Config.RecentFiles.Count > 0) {
+							ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
 						}
+						if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+							LoadROM(ofd.FileName);
+						}
+						InteropEmu.ApplyIpsPatch(ipsFile);
 					}
-				} else {
-					LoadROM(ofd.FileName, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
+				} else if(MessageBox.Show("Patch and reset the current game?", string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
+					InteropEmu.ApplyIpsPatch(ipsFile);
 				}
 			}
 		}
@@ -811,6 +825,21 @@ namespace Mesen.GUI.Forms
 						MessageBox.Show("The selected bios file is invalid.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
+			}
+		}
+
+		private void frmMain_DragDrop(object sender, DragEventArgs e)
+		{
+			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+			if(File.Exists(files[0])) {
+				LoadFile(files[0]);
+			}
+		}
+
+		private void frmMain_DragEnter(object sender, DragEventArgs e)
+		{
+			if(e.Data.GetDataPresent(DataFormats.FileDrop)) {
+				e.Effect = DragDropEffects.Copy;
 			}
 		}
 	}
