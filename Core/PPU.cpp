@@ -648,6 +648,7 @@ void PPU::ProcessPrerenderScanline()
 	
 	if(_cycle >= 1 && _cycle <= 256) {
 		LoadTileInfo();
+		CopyOAMData();
 	} else if(_cycle >= 280 && _cycle <= 304) {
 		if(IsRenderingEnabled()) {
 			//copy vertical scrolling value from t
