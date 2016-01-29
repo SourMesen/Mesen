@@ -541,17 +541,19 @@ namespace Mesen.GUI
 	{
 		public static string GetMD5Hash(string filename)
 		{
-			var md5 = System.Security.Cryptography.MD5.Create();
-			if(filename.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
-				return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
-			} else if(filename.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) {
-				foreach(var entry in ZipFile.OpenRead(filename).Entries) {
-					if(entry.Name.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
-						return BitConverter.ToString(md5.ComputeHash(entry.Open())).Replace("-", "");
+			if(File.Exists(filename)) {
+				var md5 = System.Security.Cryptography.MD5.Create();
+				if(filename.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
+					return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
+				} else if(filename.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) {
+					foreach(var entry in ZipFile.OpenRead(filename).Entries) {
+						if(entry.Name.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
+							return BitConverter.ToString(md5.ComputeHash(entry.Open())).Replace("-", "");
+						}
 					}
+				} else {
+					return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
 				}
-			} else {
-				return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
 			}
 			return null;
 		}
