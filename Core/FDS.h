@@ -66,6 +66,10 @@ private:
 	vector<vector<uint8_t>> _fdsDiskSides;
 	string _romFilepath;
 
+	uint8_t _gameStarted = 0;
+	uint32_t _previousSpeed = 0;
+	bool _fastForwarding = false;
+
 protected:
 	virtual uint16_t GetPRGPageSize() { return 0x2000; }
 	virtual uint16_t GetCHRPageSize() { return 0x2000; }
@@ -91,6 +95,8 @@ protected:
 
 	void WriteRegister(uint16_t addr, uint8_t value);
 	uint8_t ReadRegister(uint16_t addr);
+
+	uint8_t ReadRAM(uint16_t addr);
 
 	void StreamState(bool saving);
 

@@ -69,14 +69,31 @@ void FDS::ClockIrq()
 	}
 }
 
+uint8_t FDS::ReadRAM(uint16_t addr)
+{
+	if(addr == 0xDFFC && _gameStarted < 2) {
+		//The BIOS reads $DFFC twice before starting the game
+		//The 2nd read occurs right at the end of the copyright screen
+		//We can fast forward until _gameStarted == 2
+		_gameStarted++;
+	}
+
+	return BaseMapper::ReadRAM(addr);
+}
+
 void FDS::ProcessCpuClock()
 {
+	if(EmulationSettings::CheckFlag(EmulationFlags::FdsFastForwardOnLoad)) {
+		bool enableFastforward = (_scanningDisk || _gameStarted < 2);
+		if(EmulationSettings::GetEmulationSpeed() > 0 || !_fastForwarding) {
+			_previousSpeed = EmulationSettings::GetEmulationSpeed();
+		}
+		EmulationSettings::SetEmulationSpeed(enableFastforward ? 0 : _previousSpeed);
+		_fastForwarding = enableFastforward;
+	}
+
 	ClockIrq();
 	_audio->Clock();
-
-	if(EmulationSettings::CheckFlag(EmulationFlags::FdsFastForwardOnLoad)) {
-		EmulationSettings::SetEmulationSpeed(_scanningDisk ? 0 : 100);
-	}
 
 	if(_newDiskInsertDelay > 0) {
 		//Insert new disk after delay expires, to allow games to notice the disk was ejected

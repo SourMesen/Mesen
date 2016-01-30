@@ -339,7 +339,7 @@
 			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
 			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(302, 17);
 			this.chkFdsFastForwardOnLoad.TabIndex = 4;
-			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk is loading";
+			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
 			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
