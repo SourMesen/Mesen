@@ -23,7 +23,13 @@ enum class AudioChannel
 	Square2 = 1,
 	Triangle = 2,
 	Noise = 3,
-	DMC = 4
+	DMC = 4,
+	FDS = 5,
+	MMC5 = 6,
+	VRC6 = 7,
+	VRC7 = 8,
+	Namco163 = 9,
+	Sunsoft5B = 10
 };
 
 enum class NesModel
@@ -70,7 +76,7 @@ private:
 	static uint32_t _flags;
 
 	static uint32_t _audioLatency;
-	static double _channelVolume[5];
+	static double _channelVolume[11];
 	static double _masterVolume;
 
 	static uint32_t _sampleRate;

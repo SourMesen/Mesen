@@ -35,6 +35,12 @@
 			this.trkSquare2Vol = new Mesen.GUI.Controls.ctrlTrackbar();
 			this.trkSquare1Vol = new Mesen.GUI.Controls.ctrlTrackbar();
 			this.trkMaster = new Mesen.GUI.Controls.ctrlTrackbar();
+			this.trkFdsVol = new Mesen.GUI.Controls.ctrlTrackbar();
+			this.trkMmc5Vol = new Mesen.GUI.Controls.ctrlTrackbar();
+			this.trkVrc6Vol = new Mesen.GUI.Controls.ctrlTrackbar();
+			this.trkVrc7Vol = new Mesen.GUI.Controls.ctrlTrackbar();
+			this.trkNamco163Vol = new Mesen.GUI.Controls.ctrlTrackbar();
+			this.trkSunsoft5b = new Mesen.GUI.Controls.ctrlTrackbar();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkEnableAudio = new System.Windows.Forms.CheckBox();
 			this.lblSampleRate = new System.Windows.Forms.Label();
@@ -57,8 +63,8 @@
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Controls.Add(this.btnReset);
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 295);
-			this.baseConfigPanel.Size = new System.Drawing.Size(470, 29);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 457);
+			this.baseConfigPanel.Size = new System.Drawing.Size(464, 29);
 			this.baseConfigPanel.Controls.SetChildIndex(this.btnReset, 0);
 			// 
 			// grpVolume
@@ -67,7 +73,7 @@
 			this.grpVolume.Controls.Add(this.tableLayoutPanel1);
 			this.grpVolume.Location = new System.Drawing.Point(3, 107);
 			this.grpVolume.Name = "grpVolume";
-			this.grpVolume.Size = new System.Drawing.Size(462, 185);
+			this.grpVolume.Size = new System.Drawing.Size(462, 351);
 			this.grpVolume.TabIndex = 2;
 			this.grpVolume.TabStop = false;
 			this.grpVolume.Text = "Volume";
@@ -87,19 +93,27 @@
 			this.tableLayoutPanel1.Controls.Add(this.trkSquare2Vol, 2, 0);
 			this.tableLayoutPanel1.Controls.Add(this.trkSquare1Vol, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.trkMaster, 0, 0);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 19);
+			this.tableLayoutPanel1.Controls.Add(this.trkFdsVol, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.trkMmc5Vol, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.trkVrc6Vol, 2, 1);
+			this.tableLayoutPanel1.Controls.Add(this.trkVrc7Vol, 3, 1);
+			this.tableLayoutPanel1.Controls.Add(this.trkNamco163Vol, 4, 1);
+			this.tableLayoutPanel1.Controls.Add(this.trkSunsoft5b, 5, 1);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 1;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 160F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(451, 160);
+			this.tableLayoutPanel1.RowCount = 3;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(456, 332);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// trkDmcVol
 			// 
 			this.trkDmcVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.trkDmcVol.Caption = "DMC";
-			this.trkDmcVol.Location = new System.Drawing.Point(381, 0);
+			this.trkDmcVol.Location = new System.Drawing.Point(384, 0);
 			this.trkDmcVol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkDmcVol.Maximum = 100;
 			this.trkDmcVol.MaximumSize = new System.Drawing.Size(63, 160);
@@ -185,6 +199,101 @@
 			this.trkMaster.Value = 50;
 			this.trkMaster.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
 			// 
+			// trkFdsVol
+			// 
+			this.trkFdsVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkFdsVol.Caption = "FDS";
+			this.trkFdsVol.Location = new System.Drawing.Point(6, 160);
+			this.trkFdsVol.Margin = new System.Windows.Forms.Padding(0);
+			this.trkFdsVol.Maximum = 100;
+			this.trkFdsVol.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkFdsVol.MinimumSize = new System.Drawing.Size(63, 160);
+			this.trkFdsVol.Name = "trkFdsVol";
+			this.trkFdsVol.Size = new System.Drawing.Size(63, 160);
+			this.trkFdsVol.TabIndex = 17;
+			this.trkFdsVol.Value = 50;
+			this.trkFdsVol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
+			// 
+			// trkMmc5Vol
+			// 
+			this.trkMmc5Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkMmc5Vol.Caption = "MMC5";
+			this.trkMmc5Vol.Enabled = false;
+			this.trkMmc5Vol.Location = new System.Drawing.Point(81, 160);
+			this.trkMmc5Vol.Margin = new System.Windows.Forms.Padding(0);
+			this.trkMmc5Vol.Maximum = 100;
+			this.trkMmc5Vol.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkMmc5Vol.MinimumSize = new System.Drawing.Size(63, 160);
+			this.trkMmc5Vol.Name = "trkMmc5Vol";
+			this.trkMmc5Vol.Size = new System.Drawing.Size(63, 160);
+			this.trkMmc5Vol.TabIndex = 18;
+			this.trkMmc5Vol.Value = 50;
+			this.trkMmc5Vol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
+			// 
+			// trkVrc6Vol
+			// 
+			this.trkVrc6Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkVrc6Vol.Caption = "VRC6";
+			this.trkVrc6Vol.Enabled = false;
+			this.trkVrc6Vol.Location = new System.Drawing.Point(156, 160);
+			this.trkVrc6Vol.Margin = new System.Windows.Forms.Padding(0);
+			this.trkVrc6Vol.Maximum = 100;
+			this.trkVrc6Vol.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkVrc6Vol.MinimumSize = new System.Drawing.Size(63, 160);
+			this.trkVrc6Vol.Name = "trkVrc6Vol";
+			this.trkVrc6Vol.Size = new System.Drawing.Size(63, 160);
+			this.trkVrc6Vol.TabIndex = 19;
+			this.trkVrc6Vol.Value = 50;
+			this.trkVrc6Vol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
+			// 
+			// trkVrc7Vol
+			// 
+			this.trkVrc7Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkVrc7Vol.Caption = "VRC7";
+			this.trkVrc7Vol.Enabled = false;
+			this.trkVrc7Vol.Location = new System.Drawing.Point(231, 160);
+			this.trkVrc7Vol.Margin = new System.Windows.Forms.Padding(0);
+			this.trkVrc7Vol.Maximum = 100;
+			this.trkVrc7Vol.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkVrc7Vol.MinimumSize = new System.Drawing.Size(63, 160);
+			this.trkVrc7Vol.Name = "trkVrc7Vol";
+			this.trkVrc7Vol.Size = new System.Drawing.Size(63, 160);
+			this.trkVrc7Vol.TabIndex = 20;
+			this.trkVrc7Vol.Value = 50;
+			this.trkVrc7Vol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
+			// 
+			// trkNamco163Vol
+			// 
+			this.trkNamco163Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkNamco163Vol.Caption = "Namco";
+			this.trkNamco163Vol.Enabled = false;
+			this.trkNamco163Vol.Location = new System.Drawing.Point(306, 160);
+			this.trkNamco163Vol.Margin = new System.Windows.Forms.Padding(0);
+			this.trkNamco163Vol.Maximum = 100;
+			this.trkNamco163Vol.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkNamco163Vol.MinimumSize = new System.Drawing.Size(63, 160);
+			this.trkNamco163Vol.Name = "trkNamco163Vol";
+			this.trkNamco163Vol.Size = new System.Drawing.Size(63, 160);
+			this.trkNamco163Vol.TabIndex = 21;
+			this.trkNamco163Vol.Value = 50;
+			this.trkNamco163Vol.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
+			// 
+			// trkSunsoft5b
+			// 
+			this.trkSunsoft5b.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkSunsoft5b.Caption = "Sunsoft";
+			this.trkSunsoft5b.Enabled = false;
+			this.trkSunsoft5b.Location = new System.Drawing.Point(384, 160);
+			this.trkSunsoft5b.Margin = new System.Windows.Forms.Padding(0);
+			this.trkSunsoft5b.Maximum = 100;
+			this.trkSunsoft5b.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkSunsoft5b.MinimumSize = new System.Drawing.Size(63, 160);
+			this.trkSunsoft5b.Name = "trkSunsoft5b";
+			this.trkSunsoft5b.Size = new System.Drawing.Size(63, 160);
+			this.trkSunsoft5b.TabIndex = 22;
+			this.trkSunsoft5b.Value = 50;
+			this.trkSunsoft5b.ValueChanged += new System.EventHandler(this.AudioConfig_ValueChanged);
+			// 
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 2;
@@ -195,9 +304,9 @@
 			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel2, 1, 3);
 			this.tableLayoutPanel2.Controls.Add(this.lblAudioLatency, 0, 3);
 			this.tableLayoutPanel2.Controls.Add(this.cboSampleRate, 1, 2);
-			this.tableLayoutPanel2.Controls.Add(this.grpVolume, 0, 4);
 			this.tableLayoutPanel2.Controls.Add(this.lblAudioDevice, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.cboAudioDevice, 1, 1);
+			this.tableLayoutPanel2.Controls.Add(this.grpVolume, 0, 4);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -207,7 +316,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(470, 324);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(464, 486);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
 			// chkEnableAudio
@@ -333,7 +442,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(470, 324);
+			this.ClientSize = new System.Drawing.Size(464, 486);
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -359,23 +468,29 @@
 		#endregion
 
 		private System.Windows.Forms.GroupBox grpVolume;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.CheckBox chkEnableAudio;
 		private System.Windows.Forms.Label lblAudioLatency;
 		private System.Windows.Forms.NumericUpDown nudLatency;
 		private System.Windows.Forms.Label lblLatencyMs;
 		private System.Windows.Forms.Button btnReset;
-		private Controls.ctrlTrackbar trkMaster;
-		private Controls.ctrlTrackbar trkDmcVol;
-		private Controls.ctrlTrackbar trkNoiseVol;
-		private Controls.ctrlTrackbar trkTriangleVol;
-		private Controls.ctrlTrackbar trkSquare2Vol;
-		private Controls.ctrlTrackbar trkSquare1Vol;
 		private System.Windows.Forms.Label lblSampleRate;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.ComboBox cboSampleRate;
 		private System.Windows.Forms.Label lblAudioDevice;
 		private System.Windows.Forms.ComboBox cboAudioDevice;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private Controls.ctrlTrackbar trkDmcVol;
+		private Controls.ctrlTrackbar trkNoiseVol;
+		private Controls.ctrlTrackbar trkTriangleVol;
+		private Controls.ctrlTrackbar trkSquare2Vol;
+		private Controls.ctrlTrackbar trkSquare1Vol;
+		private Controls.ctrlTrackbar trkMaster;
+		private Controls.ctrlTrackbar trkFdsVol;
+		private Controls.ctrlTrackbar trkMmc5Vol;
+		private Controls.ctrlTrackbar trkVrc6Vol;
+		private Controls.ctrlTrackbar trkVrc7Vol;
+		private Controls.ctrlTrackbar trkNamco163Vol;
+		private Controls.ctrlTrackbar trkSunsoft5b;
 	}
 }

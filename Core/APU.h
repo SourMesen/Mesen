@@ -4,6 +4,7 @@
 #include "IMemoryHandler.h"
 #include "IAudioDevice.h"
 #include "Snapshotable.h"
+#include "EmulationSettings.h"
 
 class MemoryManager;
 class SquareChannel;
@@ -61,4 +62,6 @@ class APU : public Snapshotable, public IMemoryHandler
 		static void ExecStatic();
 
 		static void StaticRun();
+
+		static void AddExpansionAudioDelta(AudioChannel channel, int8_t delta);
 };

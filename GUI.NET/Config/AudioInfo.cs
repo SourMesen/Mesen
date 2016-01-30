@@ -20,6 +20,12 @@ namespace Mesen.GUI.Config
 		public UInt32 TriangleVolume = 100;
 		public UInt32 NoiseVolume = 100;
 		public UInt32 DmcVolume = 100;
+		public UInt32 FdsVolume = 100;
+		public UInt32 Mmc5Volume = 100;
+		public UInt32 Vrc6Volume = 100;
+		public UInt32 Vrc7Volume = 100;
+		public UInt32 Namco163Volume = 100;
+		public UInt32 Sunsoft5bVolume = 100;
 		public UInt32 SampleRate = 44100;
 
 		public AudioInfo()
@@ -41,11 +47,17 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetAudioDevice(audioInfo.AudioDevice);
 			InteropEmu.SetAudioLatency(audioInfo.AudioLatency);
 			InteropEmu.SetMasterVolume(audioInfo.MasterVolume / 10d);
-			InteropEmu.SetChannelVolume(0, ConvertVolume(audioInfo.Square1Volume));
-			InteropEmu.SetChannelVolume(1, ConvertVolume(audioInfo.Square2Volume));
-			InteropEmu.SetChannelVolume(2, ConvertVolume(audioInfo.TriangleVolume));
-			InteropEmu.SetChannelVolume(3, ConvertVolume(audioInfo.NoiseVolume));
-			InteropEmu.SetChannelVolume(4, ConvertVolume(audioInfo.DmcVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.Square1, ConvertVolume(audioInfo.Square1Volume));
+			InteropEmu.SetChannelVolume(AudioChannel.Square2, ConvertVolume(audioInfo.Square2Volume));
+			InteropEmu.SetChannelVolume(AudioChannel.Triangle, ConvertVolume(audioInfo.TriangleVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.Noise, ConvertVolume(audioInfo.NoiseVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.DMC, ConvertVolume(audioInfo.DmcVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.FDS, ConvertVolume(audioInfo.FdsVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.MMC5, ConvertVolume(audioInfo.FdsVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.VRC6, ConvertVolume(audioInfo.FdsVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.VRC7, ConvertVolume(audioInfo.FdsVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.Namco163, ConvertVolume(audioInfo.FdsVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.Sunsoft5B, ConvertVolume(audioInfo.FdsVolume));
 			InteropEmu.SetSampleRate(audioInfo.SampleRate);
 		}
 	}

@@ -182,7 +182,7 @@ void APU::ExecStatic()
 void APU::Exec()
 {
 	_currentCycle++;
-	if(_currentCycle == 10000) {
+	if(_currentCycle == SoundMixer::CycleLength - 1) {
 		EndFrame();
 	} else if(NeedToRun(_currentCycle)) {
 		Run();
@@ -234,4 +234,10 @@ void APU::StreamState(bool saving)
 	Stream(_deltaModulationChannel.get());
 	Stream(_frameCounter.get());
 	Stream(_mixer.get());
+}
+
+void APU::AddExpansionAudioDelta(AudioChannel channel, int8_t delta)
+{
+	Instance->_mixer->SetExpansionAudioType(channel);
+	Instance->_mixer->AddExpansionAudioDelta(Instance->_currentCycle, delta);
 }

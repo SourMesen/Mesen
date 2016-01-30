@@ -359,6 +359,7 @@
     <ClInclude Include="APU.h" />
     <ClInclude Include="AutoRomTest.h" />
     <ClInclude Include="Bandai74161_7432.h" />
+    <ClInclude Include="BaseFdsChannel.h" />
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="BF9096.h" />
     <ClInclude Include="BF909x.h" />
@@ -367,6 +368,7 @@
     <ClInclude Include="DefaultVideoFilter.h" />
     <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="FDS.h" />
+    <ClInclude Include="FdsAudio.h" />
     <ClInclude Include="FdsLoader.h" />
     <ClInclude Include="HdVideoFilter.h" />
     <ClInclude Include="iNesLoader.h" />
@@ -404,6 +406,7 @@
     <ClInclude Include="MMC3_49.h" />
     <ClInclude Include="MMC3_52.h" />
     <ClInclude Include="MMC3_ChrRam.h" />
+    <ClInclude Include="ModChannel.h" />
     <ClInclude Include="RomData.h" />
     <ClInclude Include="NtdecTc112.h" />
     <ClInclude Include="Rambo1.h" />

@@ -20,7 +20,7 @@ uint32_t EmulationSettings::PpuPaletteArgb[64] = {
 uint32_t EmulationSettings::_flags = 0;
 
 uint32_t EmulationSettings::_audioLatency = 20000;
-double EmulationSettings::_channelVolume[5] = { 0.5f, 0.5f, 0.5f, 0.5f, 0.5f };
+double EmulationSettings::_channelVolume[11] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 double EmulationSettings::_masterVolume = 1.0;
 uint32_t EmulationSettings::_sampleRate = 44100;
 

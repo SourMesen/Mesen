@@ -28,6 +28,13 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("TriangleVolume", trkTriangleVol);
 			AddBinding("NoiseVolume", trkNoiseVol);
 			AddBinding("DmcVolume", trkDmcVol);
+			AddBinding("FdsVolume", trkFdsVol);
+			AddBinding("Mmc5Volume", trkMmc5Vol);
+			AddBinding("Vrc6Volume", trkVrc6Vol);
+			AddBinding("Vrc7Volume", trkVrc7Vol);
+			AddBinding("Namco163Volume", trkNamco163Vol);
+			AddBinding("Sunsoft5bVolume", trkSunsoft5b);
+
 			AddBinding("AudioLatency", nudLatency);
 			AddBinding("SampleRate", cboSampleRate);
 			AddBinding("AudioDevice", cboAudioDevice);

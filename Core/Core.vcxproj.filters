@@ -524,6 +524,15 @@
     <ClInclude Include="FDS.h">
       <Filter>Nes\Mappers\FDS</Filter>
     </ClInclude>
+    <ClInclude Include="FdsAudio.h">
+      <Filter>Nes\Mappers\FDS</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseFdsChannel.h">
+      <Filter>Nes\Mappers\FDS</Filter>
+    </ClInclude>
+    <ClInclude Include="ModChannel.h">
+      <Filter>Nes\Mappers\FDS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

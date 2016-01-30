@@ -27,6 +27,7 @@ void SoundMixer::StreamState(bool saving)
 {
 	Stream<uint32_t>(_clockRate);
 	Stream<uint32_t>(_sampleRate);
+	Stream<AudioChannel>(_expansionAudioType);
 	
 	if(!saving) {
 		Reset();
@@ -34,7 +35,7 @@ void SoundMixer::StreamState(bool saving)
 	}
 
 	Stream<int16_t>(_previousOutput);
-	StreamArray<int8_t>(_currentOutput, 5);
+	StreamArray<int8_t>(_currentOutput, MaxChannelCount);
 }
 
 void SoundMixer::RegisterAudioDevice(IAudioDevice *audioDevice)
@@ -60,7 +61,7 @@ void SoundMixer::Reset()
 
 	_timestamps.clear();
 
-	for(int i = 0; i < 5; i++) {
+	for(int i = 0; i < MaxChannelCount; i++) {
 		_volumes[0] = 0;
 	}
 	memset(_channelOutput, 0, sizeof(_channelOutput));
@@ -110,13 +111,32 @@ int16_t SoundMixer::GetOutputVolume()
 {
 	int16_t squareOutput = _lupSquare[(int)(_currentOutput[(int)AudioChannel::Square1] * _volumes[(int)AudioChannel::Square1] + _currentOutput[(int)AudioChannel::Square2] * _volumes[(int)AudioChannel::Square2])];
 	int16_t tndOutput = _lupTnd[(int)(3 * _currentOutput[(int)AudioChannel::Triangle] * _volumes[(int)AudioChannel::Triangle] + 2 * _currentOutput[(int)AudioChannel::Noise] * _volumes[(int)AudioChannel::Noise] + _currentOutput[(int)AudioChannel::DMC] * _volumes[(int)AudioChannel::DMC])];
-	return squareOutput + tndOutput;
+	int16_t expansionOutput = 0;
+	switch(_expansionAudioType) {
+		case AudioChannel::FDS: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
+	}
+	return squareOutput + tndOutput + expansionOutput;
 }
 
 void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int8_t delta)
 {
-	_timestamps.push_back(time);
-	_channelOutput[(int)channel][time] += delta;
+	if(delta != 0) {
+		_timestamps.push_back(time);
+		_channelOutput[(int)channel][time] += delta;
+	}
+}
+
+void SoundMixer::AddExpansionAudioDelta(uint32_t time, int8_t delta)
+{
+	if(delta != 0) {
+		_timestamps.push_back(time);
+		_channelOutput[ExpansionAudioIndex][time] += delta;
+	}
+}
+
+void SoundMixer::SetExpansionAudioType(AudioChannel channel)
+{
+	_expansionAudioType = channel;
 }
 
 void SoundMixer::EndFrame(uint32_t time)
@@ -127,11 +147,9 @@ void SoundMixer::EndFrame(uint32_t time)
 
 	for(size_t i = 0, len = _timestamps.size(); i < len; i++) {
 		uint32_t time = _timestamps[i];
-		_currentOutput[0] += _channelOutput[0][time];
-		_currentOutput[1] += _channelOutput[1][time];
-		_currentOutput[2] += _channelOutput[2][time];
-		_currentOutput[3] += _channelOutput[3][time];
-		_currentOutput[4] += _channelOutput[4][time];
+		for(int j = 0; j < MaxChannelCount; j++) {
+			_currentOutput[j] += _channelOutput[j][time];
+		}
 
 		int16_t currentOutput = GetOutputVolume();
 		blip_add_delta(_blipBuf, time, (int)((currentOutput - _previousOutput) * masterVolume));
@@ -140,8 +158,8 @@ void SoundMixer::EndFrame(uint32_t time)
 	blip_end_frame(_blipBuf, time);
 
 	//Reset everything
-	for(int i = 0; i < 5; i++) {
-		_volumes[i] = EmulationSettings::GetChannelVolume((AudioChannel)i);
+	for(int i = 0; i < MaxChannelCount; i++) {
+		_volumes[i] = EmulationSettings::GetChannelVolume(i < 5 ? (AudioChannel)i : _expansionAudioType);
 	}
 
 	_timestamps.clear();

@@ -79,7 +79,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] public static extern void SetMasterVolume(double volume);
-		[DllImport(DLLPath)] public static extern void SetChannelVolume(UInt32 channel, double volume);
+		[DllImport(DLLPath)] public static extern void SetChannelVolume(AudioChannel channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetSampleRate(UInt32 sampleRate);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
@@ -508,6 +508,21 @@ namespace Mesen.GUI
 		Auto = 0,
 		NTSC = 1,
 		PAL = 2
+	}
+
+	public enum AudioChannel
+	{
+		Square1 = 0,
+		Square2 = 1,
+		Triangle = 2,
+		Noise = 3,
+		DMC = 4,
+		FDS = 5,
+		MMC5 = 6,
+		VRC6 = 7,
+		VRC7 = 8,
+		Namco163 = 9,
+		Sunsoft5B = 10
 	}
 
 	public enum VideoFilterType
