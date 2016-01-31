@@ -28,6 +28,7 @@
 		private void InitializeComponent()
 		{
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+			this.chkPauseOnMovieEnd = new System.Windows.Forms.CheckBox();
 			this.chkAllowBackgroundInput = new System.Windows.Forms.CheckBox();
 			this.chkPauseWhenInBackground = new System.Windows.Forms.CheckBox();
 			this.chkAutoLoadIps = new System.Windows.Forms.CheckBox();
@@ -70,15 +71,17 @@
 			// 
 			this.tlpMain.ColumnCount = 1;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpMain.Controls.Add(this.chkPauseOnMovieEnd, 0, 4);
 			this.tlpMain.Controls.Add(this.chkAllowBackgroundInput, 0, 3);
 			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 2);
 			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 1);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 0, 0);
-			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 4);
+			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 5);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 5;
+			this.tlpMain.RowCount = 6;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -86,6 +89,16 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.Size = new System.Drawing.Size(380, 207);
 			this.tlpMain.TabIndex = 1;
+			// 
+			// chkPauseOnMovieEnd
+			// 
+			this.chkPauseOnMovieEnd.AutoSize = true;
+			this.chkPauseOnMovieEnd.Location = new System.Drawing.Point(3, 95);
+			this.chkPauseOnMovieEnd.Name = "chkPauseOnMovieEnd";
+			this.chkPauseOnMovieEnd.Size = new System.Drawing.Size(199, 17);
+			this.chkPauseOnMovieEnd.TabIndex = 15;
+			this.chkPauseOnMovieEnd.Text = "Pause when a movie finishes playing";
+			this.chkPauseOnMovieEnd.UseVisualStyleBackColor = true;
 			// 
 			// chkAllowBackgroundInput
 			// 
@@ -143,7 +156,7 @@
 			// 
 			this.chkDisableScreensaver.AutoSize = true;
 			this.chkDisableScreensaver.Enabled = false;
-			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 95);
+			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 118);
 			this.chkDisableScreensaver.Name = "chkDisableScreensaver";
 			this.chkDisableScreensaver.Size = new System.Drawing.Size(245, 17);
 			this.chkDisableScreensaver.TabIndex = 11;
@@ -392,5 +405,6 @@
 		private System.Windows.Forms.CheckBox chkFdsAutoLoadDisk;
 		private System.Windows.Forms.CheckBox chkFdsFastForwardOnLoad;
 		private System.Windows.Forms.CheckBox chkAllowBackgroundInput;
+		private System.Windows.Forms.CheckBox chkPauseOnMovieEnd;
 	}
 }

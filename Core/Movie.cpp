@@ -48,6 +48,9 @@ uint8_t Movie::GetState(uint8_t port)
 		//End of movie file
 		MessageManager::DisplayMessage("Movies", "Movie ended.");
 		MessageManager::SendNotification(ConsoleNotificationType::MovieEnded);
+		if(EmulationSettings::CheckFlag(EmulationFlags::PauseOnMovieEnd)) {
+			EmulationSettings::SetFlags(EmulationFlags::Paused);
+		}
 		_playing = false;
 	}
 

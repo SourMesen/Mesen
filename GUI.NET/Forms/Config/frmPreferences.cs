@@ -35,6 +35,8 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("PauseWhenInBackground", chkPauseWhenInBackground);
 			AddBinding("AllowBackgroundInput", chkAllowBackgroundInput);
+
+			AddBinding("PauseOnMovieEnd", chkPauseOnMovieEnd);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)

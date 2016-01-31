@@ -28,6 +28,8 @@ namespace Mesen.GUI.Config
 		public bool AssociateMmoFiles = false;
 		public bool AssociateMstFiles = false;
 
+		public bool PauseOnMovieEnd = true;
+
 		public bool UseAlternativeMmc3Irq = false;
 
 		public PreferenceInfo()
@@ -63,7 +65,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, preferenceInfo.RemoveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);
 			InteropEmu.SetFlag(EmulationFlags.FdsFastForwardOnLoad, preferenceInfo.FdsFastForwardOnLoad);
-
+			InteropEmu.SetFlag(EmulationFlags.PauseOnMovieEnd, preferenceInfo.PauseOnMovieEnd);
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
 			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground);
 		}
