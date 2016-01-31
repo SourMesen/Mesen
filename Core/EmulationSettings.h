@@ -37,6 +37,7 @@ enum class NesModel
 	Auto = 0,
 	NTSC = 1,
 	PAL = 2,
+	Dendy = 3,
 };
 
 enum class VideoFilterType

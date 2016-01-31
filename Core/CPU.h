@@ -881,6 +881,7 @@ protected:
 public:
 	static const uint32_t ClockRateNtsc = 1789773;
 	static const uint32_t ClockRatePal = 1662607;
+	static const uint32_t ClockRateDendy = 1773448;
 
 	CPU(MemoryManager *memoryManager);
 	static int32_t GetCycleCount() { return CPU::Instance->_cycleCount; }

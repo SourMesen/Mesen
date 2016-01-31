@@ -63,7 +63,12 @@ public:
 
 	NesModel GetNesModel()
 	{
-		return _nesModel;
+		if(_nesModel == NesModel::NTSC || _nesModel == NesModel::Dendy) {
+			//Dendy APU works with NTSC timings
+			return NesModel::NTSC;
+		} else {
+			return _nesModel;
+		}
 	}
 
 	virtual void Run(uint32_t targetCycle)

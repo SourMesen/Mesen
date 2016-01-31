@@ -507,7 +507,8 @@ namespace Mesen.GUI
 	{
 		Auto = 0,
 		NTSC = 1,
-		PAL = 2
+		PAL = 2,
+		Dendy = 3,
 	}
 
 	public enum AudioChannel

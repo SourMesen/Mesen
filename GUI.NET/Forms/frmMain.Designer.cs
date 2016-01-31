@@ -120,6 +120,7 @@
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
+			this.mnuRegionDendy = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -386,7 +387,7 @@
 			// mnuScale1x
 			// 
 			this.mnuScale1x.Name = "mnuScale1x";
-			this.mnuScale1x.Size = new System.Drawing.Size(85, 22);
+			this.mnuScale1x.Size = new System.Drawing.Size(152, 22);
 			this.mnuScale1x.Tag = "1";
 			this.mnuScale1x.Text = "1x";
 			this.mnuScale1x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -394,7 +395,7 @@
 			// mnuScale2x
 			// 
 			this.mnuScale2x.Name = "mnuScale2x";
-			this.mnuScale2x.Size = new System.Drawing.Size(85, 22);
+			this.mnuScale2x.Size = new System.Drawing.Size(152, 22);
 			this.mnuScale2x.Tag = "2";
 			this.mnuScale2x.Text = "2x";
 			this.mnuScale2x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -402,7 +403,7 @@
 			// mnuScale3x
 			// 
 			this.mnuScale3x.Name = "mnuScale3x";
-			this.mnuScale3x.Size = new System.Drawing.Size(85, 22);
+			this.mnuScale3x.Size = new System.Drawing.Size(152, 22);
 			this.mnuScale3x.Tag = "3";
 			this.mnuScale3x.Text = "3x";
 			this.mnuScale3x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -410,7 +411,7 @@
 			// mnuScale4x
 			// 
 			this.mnuScale4x.Name = "mnuScale4x";
-			this.mnuScale4x.Size = new System.Drawing.Size(85, 22);
+			this.mnuScale4x.Size = new System.Drawing.Size(152, 22);
 			this.mnuScale4x.Tag = "4";
 			this.mnuScale4x.Text = "4x";
 			this.mnuScale4x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -471,7 +472,8 @@
 			this.mnuRegion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuRegionAuto,
             this.mnuRegionNtsc,
-            this.mnuRegionPal});
+            this.mnuRegionPal,
+            this.mnuRegionDendy});
 			this.mnuRegion.Name = "mnuRegion";
 			this.mnuRegion.Size = new System.Drawing.Size(163, 22);
 			this.mnuRegion.Text = "Region";
@@ -479,21 +481,21 @@
 			// mnuRegionAuto
 			// 
 			this.mnuRegionAuto.Name = "mnuRegionAuto";
-			this.mnuRegionAuto.Size = new System.Drawing.Size(104, 22);
+			this.mnuRegionAuto.Size = new System.Drawing.Size(152, 22);
 			this.mnuRegionAuto.Text = "Auto";
 			this.mnuRegionAuto.Click += new System.EventHandler(this.mnuRegion_Click);
 			// 
 			// mnuRegionNtsc
 			// 
 			this.mnuRegionNtsc.Name = "mnuRegionNtsc";
-			this.mnuRegionNtsc.Size = new System.Drawing.Size(104, 22);
+			this.mnuRegionNtsc.Size = new System.Drawing.Size(152, 22);
 			this.mnuRegionNtsc.Text = "NTSC";
 			this.mnuRegionNtsc.Click += new System.EventHandler(this.mnuRegion_Click);
 			// 
 			// mnuRegionPal
 			// 
 			this.mnuRegionPal.Name = "mnuRegionPal";
-			this.mnuRegionPal.Size = new System.Drawing.Size(104, 22);
+			this.mnuRegionPal.Size = new System.Drawing.Size(152, 22);
 			this.mnuRegionPal.Text = "PAL";
 			this.mnuRegionPal.Click += new System.EventHandler(this.mnuRegion_Click);
 			// 
@@ -780,6 +782,13 @@
 			this.dxViewer.Size = new System.Drawing.Size(263, 176);
 			this.dxViewer.TabIndex = 1;
 			// 
+			// mnuRegionDendy
+			// 
+			this.mnuRegionDendy.Name = "mnuRegionDendy";
+			this.mnuRegionDendy.Size = new System.Drawing.Size(152, 22);
+			this.mnuRegionDendy.Text = "Dendy";
+			this.mnuRegionDendy.Click += new System.EventHandler(this.mnuRegion_Click);
+			// 
 			// frmMain
 			// 
 			this.AllowDrop = true;
@@ -888,6 +897,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuSelectDisk;
 		private System.Windows.Forms.ToolStripMenuItem mnuEjectDisk;
 		private System.Windows.Forms.ToolStripMenuItem mnuSwitchDiskSide;
+		private System.Windows.Forms.ToolStripMenuItem mnuRegionDendy;
 	}
 }
 

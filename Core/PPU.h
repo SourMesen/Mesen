@@ -171,6 +171,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void CopyOAMData();
 
 		void BeginVBlank();
+		void TriggerNmi();
 		void EndVBlank();
 
 		uint32_t GetBGPaletteEntry(uint32_t paletteOffset, uint32_t pixel);

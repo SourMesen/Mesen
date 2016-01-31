@@ -283,7 +283,12 @@ double Console::UpdateNesModel()
 	if(emulationSpeed == 0) {
 		frameDelay = 0;
 	} else {
-		frameDelay = (model == NesModel::NTSC ? 16.63926405550947 : 19.99720920217466); //60.1fps (NTSC), 50.01fps (PAL)
+		//60.1fps (NTSC), 50.01fps (PAL/Dendy)
+		switch(model) {
+			case NesModel::NTSC: frameDelay = 16.63926405550947; break;
+			case NesModel::PAL:
+			case NesModel::Dendy: frameDelay = 19.99720920217466; break;
+		}
 		frameDelay /= (double)emulationSpeed / 100.0;
 	}
 

@@ -74,8 +74,18 @@ public:
 		if(_nesModel != model || _stepCycles.size() == 0) {
 			_nesModel = model;
 			_stepCycles.clear();
-			_stepCycles.push_back(model == NesModel::NTSC ? _stepCyclesNtsc[0] : _stepCyclesPal[0]);
-			_stepCycles.push_back(model == NesModel::NTSC ? _stepCyclesNtsc[1] : _stepCyclesPal[1]);
+			switch(model) {
+				case NesModel::NTSC:
+				case NesModel::Dendy:
+					_stepCycles.push_back(_stepCyclesNtsc[0]);
+					_stepCycles.push_back(_stepCyclesNtsc[1]);
+					break;
+				
+				case NesModel::PAL:
+					_stepCycles.push_back(_stepCyclesPal[0]);
+					_stepCycles.push_back(_stepCyclesPal[1]);
+					break;
+			}
 		}
 	}
 

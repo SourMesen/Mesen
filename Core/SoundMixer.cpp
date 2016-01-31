@@ -85,7 +85,12 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 
 void SoundMixer::SetNesModel(NesModel model)
 {
-	_clockRate = model == NesModel::NTSC ? CPU::ClockRateNtsc : CPU::ClockRatePal;
+	switch(model) {
+		case NesModel::NTSC: _clockRate = CPU::ClockRateNtsc; break;
+		case NesModel::PAL: _clockRate = CPU::ClockRatePal; break;
+		case NesModel::Dendy: _clockRate = CPU::ClockRateDendy; break;
+	}
+
 	UpdateRates();
 }
 

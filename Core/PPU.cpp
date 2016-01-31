@@ -54,7 +54,11 @@ void PPU::Reset()
 void PPU::SetNesModel(NesModel model)
 {
 	_nesModel = model;
-	_vblankEnd = (model == NesModel::NTSC ? 260 : 311);
+	switch(model) {
+		case NesModel::NTSC: _vblankEnd = 260; break;
+		case NesModel::PAL:
+		case NesModel::Dendy: _vblankEnd = 311; break;
+	}
 }
 
 PPUDebugState PPU::GetState()
@@ -319,7 +323,7 @@ void PPU::SetMaskRegister(uint8_t value)
 		_flags.IntensifyRed = (_state.Mask & 0x20) == 0x20;
 		_flags.IntensifyGreen = (_state.Mask & 0x40) == 0x40;
 		_intensifyColorBits = (value & 0xE0) << 1;
-	} else {
+	} else if(_nesModel == NesModel::PAL || _nesModel == NesModel::Dendy) {
 		//"Note that on the Dendy and PAL NES, the green and red bits swap meaning."
 		_flags.IntensifyRed = (_state.Mask & 0x40) == 0x40;
 		_flags.IntensifyGreen = (_state.Mask & 0x20) == 0x20;
@@ -797,9 +801,17 @@ void PPU::BeginVBlank()
 	if(_cycle == 0) {
 		SendFrame();
 		_statusFlags.VerticalBlank = true;
-		if(_flags.VBlank) {
-			CPU::SetNMIFlag();
+
+		if(_nesModel == NesModel::NTSC || _nesModel == NesModel::PAL) {
+			TriggerNmi();
 		}
+	}
+}
+
+void PPU::TriggerNmi()
+{
+	if(_flags.VBlank) {
+		CPU::SetNMIFlag();
 	}
 }
 
@@ -815,7 +827,7 @@ void PPU::Exec()
 	if(_cycle == 340) {
 		_cycle = -1;
 
-		if(_scanline++ == _vblankEnd) {
+		if(++_scanline > _vblankEnd) {
 			_scanline = -1;
 		}
 	}
@@ -829,6 +841,8 @@ void PPU::Exec()
 		ProcessPrerenderScanline();
 	} else if(_scanline == 241) {
 		BeginVBlank();
+	} else if(_scanline == 291 && _cycle == 0 && _nesModel == NesModel::Dendy) {
+		TriggerNmi();
 	} else if(_scanline == _vblankEnd) {
 		EndVBlank();
 	}

@@ -339,6 +339,7 @@ namespace Mesen.GUI.Forms
 					mnuRegionAuto.Checked = ConfigManager.Config.Region == NesModel.Auto;
 					mnuRegionNtsc.Checked = ConfigManager.Config.Region == NesModel.NTSC;
 					mnuRegionPal.Checked = ConfigManager.Config.Region == NesModel.PAL;
+					mnuRegionDendy.Checked = ConfigManager.Config.Region == NesModel.Dendy;
 				}
 			} catch { }
 		}
@@ -719,6 +720,8 @@ namespace Mesen.GUI.Forms
 				ConfigManager.Config.Region = NesModel.NTSC;
 			} else if(sender == mnuRegionPal) {
 				ConfigManager.Config.Region = NesModel.PAL;
+			} else if(sender == mnuRegionDendy) {
+				ConfigManager.Config.Region = NesModel.Dendy;
 			}
 			ConfigManager.Config.ApplyConfig();
 		}
