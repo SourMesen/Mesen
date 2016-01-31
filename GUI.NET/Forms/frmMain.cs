@@ -63,7 +63,7 @@ namespace Mesen.GUI.Forms
 			UpdateRecentFiles();
 
 			if(_romToLoad != null) {
-				LoadROM(this._romToLoad);
+				LoadFile(this._romToLoad);
 			}
 		}
 		
