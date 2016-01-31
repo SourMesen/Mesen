@@ -499,6 +499,7 @@
     <ClInclude Include="TraceLogger.h" />
     <ClInclude Include="TriangleChannel.h" />
     <ClInclude Include="TxSRom.h" />
+    <ClInclude Include="VideoRenderer.h" />
     <ClInclude Include="UnlPci556.h" />
     <ClInclude Include="UNROM.h" />
     <ClInclude Include="UnRom_180.h" />
@@ -559,6 +560,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='PGO Optimize|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TraceLogger.cpp" />
+    <ClCompile Include="VideoRenderer.cpp" />
     <ClCompile Include="VideoDecoder.cpp" />
     <ClCompile Include="BaseVideoFilter.cpp" />
     <ClCompile Include="VirtualController.cpp" />

@@ -533,6 +533,9 @@
     <ClInclude Include="ModChannel.h">
       <Filter>Nes\Mappers\FDS</Filter>
     </ClInclude>
+    <ClInclude Include="VideoRenderer.h">
+      <Filter>VideoDecoder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -651,6 +654,9 @@
     </ClCompile>
     <ClCompile Include="FDS.cpp">
       <Filter>Nes\Mappers\FDS</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoRenderer.cpp">
+      <Filter>VideoDecoder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

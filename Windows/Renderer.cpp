@@ -6,6 +6,7 @@
 #include "DirectXTK/DDSTextureLoader.h"
 #include "DirectXTK/WICTextureLoader.h"
 #include "../Core/PPU.h"
+#include "../Core/VideoRenderer.h"
 #include "../Core/VideoDecoder.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/MessageManager.h"
@@ -27,7 +28,7 @@ namespace NES
 
 	Renderer::~Renderer()
 	{
-		VideoDecoder::GetInstance()->UnregisterRenderingDevice(this);
+		VideoRenderer::GetInstance()->UnregisterRenderingDevice(this);
 		CleanupDevice();
 	}
 
@@ -55,7 +56,7 @@ namespace NES
 		if(FAILED(InitDevice())) {
 			CleanupDevice();
 		} else {
-			VideoDecoder::GetInstance()->RegisterRenderingDevice(this);
+			VideoRenderer::GetInstance()->RegisterRenderingDevice(this);
 		}
 		_frameLock.Release();
 	}
@@ -394,8 +395,10 @@ namespace NES
 
 	void Renderer::Render()
 	{
-		if(_frameChanged || EmulationSettings::CheckFlag(EmulationFlags::Paused) || !_toasts.empty()) {
+		if(_noUpdateCount > 10 || _frameChanged || EmulationSettings::CheckFlag(EmulationFlags::Paused) || !_toasts.empty()) {
 			_frameLock.Acquire();
+
+			_noUpdateCount = 0;
 
 			if(_frameChanged) {
 				_frameChanged = false;
@@ -417,7 +420,7 @@ namespace NES
 
 			if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
 				DrawPauseScreen();
-			} else {
+			} else if(VideoDecoder::GetInstance()->IsRunning()) {
 				//Draw FPS counter
 				if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {				
 					if(_fpsTimer.GetElapsedMS() > 1000) {
@@ -454,6 +457,8 @@ namespace NES
 
 			// Present the information rendered to the back buffer to the front buffer (the screen)
 			_pSwapChain->Present(EmulationSettings::CheckFlag(EmulationFlags::VerticalSync) ? 1 : 0, 0);
+		} else {
+			_noUpdateCount++;
 		}
 	}
 

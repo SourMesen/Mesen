@@ -21,17 +21,13 @@ class VideoDecoder
 {
 private:
 	static unique_ptr<VideoDecoder> Instance;
-	
-	IRenderingDevice* _renderer = nullptr;
 
 	uint16_t *_ppuOutputBuffer = nullptr;
 	HdPpuPixelInfo *_hdScreenTiles = nullptr;
 
 	unique_ptr<thread> _decodeThread;
-	unique_ptr<thread> _renderThread;
 
 	AutoResetEvent _waitForFrame;
-	AutoResetEvent _waitForRender;
 	
 	atomic<bool> _frameChanged = false;
 	atomic<bool> _stopFlag = false;
@@ -43,7 +39,6 @@ private:
 	void UpdateVideoFilter();
 
 	void DecodeThread();
-	void RenderThread();
 
 public:
 	static VideoDecoder* GetInstance();
@@ -53,7 +48,6 @@ public:
 	void DecodeFrame();
 	void TakeScreenshot(string romFilename);
 
-	uint32_t GetScale();
 	uint32_t GetFrameCount();
 
 	void GetScreenSize(ScreenSize &size);
@@ -62,9 +56,7 @@ public:
 
 	void UpdateFrame(void* frameBuffer, HdPpuPixelInfo *screenTiles = nullptr);
 
+	bool IsRunning();
 	void StartThread();
 	void StopThread();
-
-	void RegisterRenderingDevice(IRenderingDevice *renderer);
-	void UnregisterRenderingDevice(IRenderingDevice *renderer);
 };

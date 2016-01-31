@@ -435,10 +435,12 @@ namespace Mesen.GUI.Forms
 					ToolStripMenuItem item = (ToolStripMenuItem)menu.DropDownItems.Add(label);
 					uint stateIndex = i;
 					item.Click += (object sender, EventArgs e) => {
-						if(forSave) {
-							InteropEmu.SaveState(stateIndex);
-						} else {
-							InteropEmu.LoadState(stateIndex);
+						if(_emuThread != null) {
+							if(forSave) {
+								InteropEmu.SaveState(stateIndex);
+							} else {
+								InteropEmu.LoadState(stateIndex);
+							}
 						}
 					};
 					item.ShortcutKeys = (Keys)((int)Keys.F1 + i - 1);

@@ -265,6 +265,7 @@ void Console::Run()
 
 	VideoDecoder::GetInstance()->StopThread();
 
+	_initialized = false;
 	_romFilepath = "";
 
 	_stopLock.Release();

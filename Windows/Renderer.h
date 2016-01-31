@@ -56,6 +56,8 @@ namespace NES {
 		uint32_t _nesFrameWidth = 0;
 		uint32_t _newFrameBufferSize = 0;
 
+		uint32_t _noUpdateCount = 0;
+
 		list<shared_ptr<ToastInfo>> _toasts;
 		ID3D11ShaderResourceView* _toastTexture = nullptr;
 

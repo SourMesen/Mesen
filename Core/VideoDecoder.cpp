@@ -5,6 +5,7 @@
 #include "DefaultVideoFilter.h"
 #include "NtscFilter.h"
 #include "HdVideoFilter.h"
+#include "VideoRenderer.h"
 
 unique_ptr<VideoDecoder> VideoDecoder::Instance;
 
@@ -63,9 +64,7 @@ void VideoDecoder::DecodeFrame()
 
 	_frameChanged = false;
 
-	if(_renderer) {
-		_renderer->UpdateFrame(_videoFilter->GetOutputBuffer(), _videoFilter->GetFrameInfo().Width, _videoFilter->GetFrameInfo().Height);
-	}
+	VideoRenderer::GetInstance()->UpdateFrame(_videoFilter->GetOutputBuffer(), _videoFilter->GetFrameInfo().Width, _videoFilter->GetFrameInfo().Height);
 }
 
 void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length)
@@ -88,7 +87,6 @@ void VideoDecoder::DecodeThread()
 		}
 
 		DecodeFrame();
-		_waitForRender.Signal();
 	}
 }
 
@@ -122,10 +120,8 @@ void VideoDecoder::StartThread()
 		_frameChanged = false;
 		_frameCount = 0;
 		_waitForFrame.Reset();
-		_waitForRender.Reset();
 
 		_decodeThread.reset(new thread(&VideoDecoder::DecodeThread, this));
-		_renderThread.reset(new thread(&VideoDecoder::RenderThread, this));
 	}
 }
 
@@ -135,46 +131,22 @@ void VideoDecoder::StopThread()
 	if(_decodeThread) {
 		_waitForFrame.Signal();
 		_decodeThread->join();
-	}
-	if(_renderThread) {
-		_waitForRender.Signal();
-		_renderThread->join();
-	}
 
-	_decodeThread.release();
-	_renderThread.release();
+		_decodeThread.release();
 
-	if(_renderer && _ppuOutputBuffer != nullptr) {
-		memset(_ppuOutputBuffer, 0, PPU::PixelCount * sizeof(uint16_t));
-		DecodeFrame();
-		_renderer->Render();
-	}
-}
-
-void VideoDecoder::RenderThread()
-{
-	if(_renderer) {
-		_renderer->Reset();
-	}
-	while(!_stopFlag.load()) {
-		//Wait until a frame is ready, or until 16ms have passed (to allow UI to run at a minimum of 60fps)
-		_waitForRender.Wait(16);
-		if(_renderer) {
-			_renderer->Render();
+		if(_ppuOutputBuffer != nullptr) {
+			//Clear whole screen
+			for(int i = 0; i < PPU::PixelCount; i++) {
+				_ppuOutputBuffer[i] = 14; //Black
+			}
+			DecodeFrame();
 		}
 	}
 }
 
-void VideoDecoder::RegisterRenderingDevice(IRenderingDevice *renderer)
+bool VideoDecoder::IsRunning()
 {
-	_renderer = renderer;
-}
-
-void VideoDecoder::UnregisterRenderingDevice(IRenderingDevice *renderer)
-{
-	if(_renderer == renderer) {
-		_renderer = nullptr;
-	}
+	return _decodeThread != nullptr;
 }
 
 void VideoDecoder::TakeScreenshot(string romFilename)
