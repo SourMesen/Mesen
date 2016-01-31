@@ -303,6 +303,7 @@ namespace Mesen.GUI.Forms
 
 					mnuSaveState.Enabled = mnuLoadState.Enabled = mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !InteropEmu.IsConnected());
 					mnuPause.Text = InteropEmu.IsPaused() ? "Resume" : "Pause";
+					mnuPause.Image = InteropEmu.IsPaused() ? Mesen.GUI.Properties.Resources.control_play : Mesen.GUI.Properties.Resources.control_pause;
 
 					bool netPlay = InteropEmu.IsServerRunning() || InteropEmu.IsConnected();
 

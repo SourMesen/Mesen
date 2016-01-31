@@ -526,6 +526,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\globe_network.png" />
+    <None Include="Resources\speedometer.png" />
+    <None Include="Resources\camera.png" />
+    <None Include="Resources\cog.png" />
+    <None Include="Resources\slideshow_full_screen.png" />
+    <None Include="Resources\folder.png" />
+    <None Include="Resources\control_stop.png" />
+    <None Include="Resources\control_play.png" />
+    <None Include="Resources\control_pause.png" />
+    <None Include="Resources\movies.png" />
+    <None Include="Resources\debugging.png" />
+    <None Include="Resources\globe_place.png" />
+    <None Include="Resources\music.png" />
+    <None Include="Resources\lcd_tv_image.png" />
+    <None Include="Resources\diskette.png" />
+    <None Include="Resources\control_eject.png" />
+    <None Include="Resources\controller.png" />
     <EmbeddedResource Include="$(OutputPath)Dependencies.zip">
       <Link>Dependencies\Dependencies.zip</Link>
     </EmbeddedResource>
