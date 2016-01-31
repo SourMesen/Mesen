@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "../Core/IAudioDevice.h"
+#include "../Utilities/LowPassFilter.h"
 
 struct SoundDeviceInfo
 {
@@ -31,11 +32,14 @@ private:
 	void ShutdownDirectSound();
 	void ClearSecondaryBuffer();
 	void CopyToSecondaryBuffer(uint8_t *data, uint32_t size);
+	bool WindowHasFocus();
 
 private:
 	HWND _hWnd;
 	GUID _audioDeviceID;
 	bool _needReset = false;
+	
+	LowPassFilter _lowPassFilter;
 
 	uint16_t _lastWriteOffset = 0;
 	uint16_t _previousLatency = 0;

@@ -225,8 +225,21 @@ void SoundManager::Play()
 	}
 }
 
+bool SoundManager::WindowHasFocus()
+{
+	return GetForegroundWindow() == _hWnd;
+}
+
 void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize, uint32_t sampleRate)
 {
+	if(!WindowHasFocus()) {
+		if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {
+			_lowPassFilter.ApplyFilter(soundBuffer, soundBufferSize / (SoundMixer::BitsPerSample / 8), 0, 0);
+		} else if(EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
+			_lowPassFilter.ApplyFilter(soundBuffer, soundBufferSize / (SoundMixer::BitsPerSample / 8), 6, 0.75);
+		}
+	}
+
 	if(_sampleRate != sampleRate || _needReset) {
 		Release();
 		InitializeDirectSound(sampleRate);

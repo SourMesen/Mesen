@@ -33,7 +33,6 @@
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
 			this.chkDisableScreensaver = new System.Windows.Forms.CheckBox();
-			this.chkMuteSoundInBackground = new System.Windows.Forms.CheckBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgFileAssociations = new System.Windows.Forms.TabPage();
@@ -70,20 +69,19 @@
 			// 
 			this.tlpMain.ColumnCount = 1;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpMain.Controls.Add(this.checkBox1, 0, 4);
+			this.tlpMain.Controls.Add(this.checkBox1, 0, 3);
 			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 1);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 0, 0);
 			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 2);
-			this.tlpMain.Controls.Add(this.chkMuteSoundInBackground, 0, 3);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 5;
+			this.tlpMain.RowCount = 4;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpMain.Size = new System.Drawing.Size(380, 207);
 			this.tlpMain.TabIndex = 1;
 			// 
@@ -91,7 +89,7 @@
 			// 
 			this.checkBox1.AutoSize = true;
 			this.checkBox1.Enabled = false;
-			this.checkBox1.Location = new System.Drawing.Point(3, 95);
+			this.checkBox1.Location = new System.Drawing.Point(3, 72);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(204, 17);
 			this.checkBox1.TabIndex = 13;
@@ -139,17 +137,6 @@
 			this.chkDisableScreensaver.TabIndex = 11;
 			this.chkDisableScreensaver.Text = "Disable screensaver while emulation is running";
 			this.chkDisableScreensaver.UseVisualStyleBackColor = true;
-			// 
-			// chkMuteSoundInBackground
-			// 
-			this.chkMuteSoundInBackground.AutoSize = true;
-			this.chkMuteSoundInBackground.Enabled = false;
-			this.chkMuteSoundInBackground.Location = new System.Drawing.Point(3, 72);
-			this.chkMuteSoundInBackground.Name = "chkMuteSoundInBackground";
-			this.chkMuteSoundInBackground.Size = new System.Drawing.Size(182, 17);
-			this.chkMuteSoundInBackground.TabIndex = 12;
-			this.chkMuteSoundInBackground.Text = "Mute sound when in background";
-			this.chkMuteSoundInBackground.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
@@ -337,7 +324,7 @@
 			this.chkFdsFastForwardOnLoad.AutoSize = true;
 			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(3, 95);
 			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
-			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(302, 17);
+			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(342, 17);
 			this.chkFdsFastForwardOnLoad.TabIndex = 4;
 			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
 			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
@@ -378,7 +365,6 @@
 		private System.Windows.Forms.CheckBox chkSingleInstance;
 		private System.Windows.Forms.CheckBox checkBox1;
 		private System.Windows.Forms.CheckBox chkDisableScreensaver;
-		private System.Windows.Forms.CheckBox chkMuteSoundInBackground;
 		private System.Windows.Forms.TabControl tabMain;
 		private System.Windows.Forms.TabPage tpgGeneral;
 		private System.Windows.Forms.TabPage tpgFileAssociations;

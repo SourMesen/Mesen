@@ -14,7 +14,7 @@ namespace Mesen.GUI.Config
 		public string AudioDevice = "";
 		public bool EnableAudio = true;
 		public UInt32 AudioLatency = 100;
-		public UInt32 MasterVolume = 100;
+		public UInt32 MasterVolume = 25;
 		public UInt32 Square1Volume = 100;
 		public UInt32 Square2Volume = 100;
 		public UInt32 TriangleVolume = 100;
@@ -27,6 +27,8 @@ namespace Mesen.GUI.Config
 		public UInt32 Namco163Volume = 100;
 		public UInt32 Sunsoft5bVolume = 100;
 		public UInt32 SampleRate = 44100;
+		public bool ReduceSoundInBackground = true;
+		public bool MuteSoundInBackground = false;
 
 		public AudioInfo()
 		{
@@ -59,6 +61,9 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetChannelVolume(AudioChannel.Namco163, ConvertVolume(audioInfo.FdsVolume));
 			InteropEmu.SetChannelVolume(AudioChannel.Sunsoft5B, ConvertVolume(audioInfo.FdsVolume));
 			InteropEmu.SetSampleRate(audioInfo.SampleRate);
+
+			InteropEmu.SetFlag(EmulationFlags.MuteSoundInBackground, audioInfo.MuteSoundInBackground);
+			InteropEmu.SetFlag(EmulationFlags.ReduceSoundInBackground, audioInfo.ReduceSoundInBackground);
 		}
 	}
 }

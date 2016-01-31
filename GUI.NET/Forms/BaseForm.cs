@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +12,36 @@ namespace Mesen.GUI.Forms
 	{
 		protected ToolTip toolTip;
 		private System.ComponentModel.IContainer components;
+		private bool _iconSet = false;
 
 		public BaseForm()
 		{
 			InitializeComponent();
+		}
+
+		public void Show(object sender, IWin32Window owner = null)
+		{
+			if(sender is ToolStripMenuItem) {
+				ToolStripItem menuItem = (ToolStripMenuItem)sender;
+				if(menuItem.Image == null) {
+					menuItem = menuItem.OwnerItem;
+				}
+				this.Icon = menuItem.Image;
+			}
+
+			base.Show(owner);
+		}
+
+		public DialogResult ShowDialog(object sender, IWin32Window owner = null)
+		{
+			if(sender is ToolStripMenuItem) {
+				ToolStripItem menuItem = (ToolStripMenuItem)sender;
+				if(menuItem.Image == null) {
+					menuItem = menuItem.OwnerItem;
+				}
+				this.Icon = menuItem.Image;
+			}
+			return base.ShowDialog(owner);
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -22,8 +49,25 @@ namespace Mesen.GUI.Forms
 			base.OnLoad(e);
 
 			if(!DesignMode) {
-				Icon = Properties.Resources.MesenIcon;
+				if(!_iconSet) {
+					base.Icon = Properties.Resources.MesenIcon;
+				}
 			}
+		}
+
+		public new Image Icon
+		{
+			set
+			{
+				if(value != null) {
+					Bitmap b = new Bitmap(value);
+					Icon i = System.Drawing.Icon.FromHandle(b.GetHicon());
+					base.Icon = i;
+					i.Dispose();
+
+					_iconSet = true;
+				}
+			}				
 		}
 
 		private void InitializeComponent()

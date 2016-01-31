@@ -476,7 +476,7 @@ namespace Mesen.GUI.Forms
 		private void mnuStartServer_Click(object sender, EventArgs e)
 		{
 			frmServerConfig frm = new frmServerConfig();
-			if(frm.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+			if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port);
 			}
 		}
@@ -484,14 +484,14 @@ namespace Mesen.GUI.Forms
 		private void mnuConnect_Click(object sender, EventArgs e)
 		{
 			frmClientConfig frm = new frmClientConfig();
-			if(frm.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+			if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.Profile.PlayerAvatar, (UInt16)ConfigManager.Config.Profile.PlayerAvatar.Length);
 			}
 		}
 
 		private void mnuProfile_Click(object sender, EventArgs e)
 		{
-			new frmPlayerProfile().ShowDialog();
+			new frmPlayerProfile().ShowDialog(sender);
 		}
 
 		private void mnuStopServer_Click(object sender, EventArgs e)
@@ -511,7 +511,7 @@ namespace Mesen.GUI.Forms
 		
 		private void mnuVideoConfig_Click(object sender, EventArgs e)
 		{
-			new frmVideoConfig().ShowDialog();
+			new frmVideoConfig().ShowDialog(sender);
 			UpdateVideoSettings();
 		}
 		
@@ -522,7 +522,7 @@ namespace Mesen.GUI.Forms
 				_debugger.FormClosed += (obj, args) => {
 					_debugger = null;
 				};
-				_debugger.Show();
+				_debugger.Show(sender);
 			} else {
 				_debugger.Focus();
 			}
@@ -702,17 +702,17 @@ namespace Mesen.GUI.Forms
 
 		private void mnuInput_Click(object sender, EventArgs e)
 		{
-			new frmInputConfig().ShowDialog();
+			new frmInputConfig().ShowDialog(sender);
 		}
 
 		private void mnuAudioConfig_Click(object sender, EventArgs e)
 		{
-			new frmAudioConfig().ShowDialog();
+			new frmAudioConfig().ShowDialog(sender);
 		}
 
 		private void mnuPreferences_Click(object sender, EventArgs e)
 		{
-			new frmPreferences().ShowDialog();
+			new frmPreferences().ShowDialog(sender);
 		}
 
 		private void mnuRegion_Click(object sender, EventArgs e)

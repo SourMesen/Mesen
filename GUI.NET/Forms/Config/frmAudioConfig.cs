@@ -17,6 +17,7 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InitializeComponent();
 
+			Icon = Properties.Resources.music;
 			Entity = ConfigManager.Config.AudioInfo;
 
 			cboAudioDevice.Items.AddRange(InteropEmu.GetAudioDevices().ToArray());
@@ -38,6 +39,9 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AudioLatency", nudLatency);
 			AddBinding("SampleRate", cboSampleRate);
 			AddBinding("AudioDevice", cboAudioDevice);
+
+			AddBinding("ReduceSoundInBackground", chkReduceSoundInBackground);
+			AddBinding("MuteSoundInBackground", chkMuteSoundInBackground);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
@@ -46,27 +50,25 @@ namespace Mesen.GUI.Forms.Config
 			AudioInfo.ApplyConfig();
 		}
 
-		private void AudioConfig_ValueChanged(object sender, EventArgs e)
+		protected override bool ValidateInput()
 		{
-			if(!this.Updating) {
-				UpdateObject();
-				AudioInfo.ApplyConfig();
-			}
+			UpdateObject();
+			AudioInfo.ApplyConfig();
+
+			return true;
 		}
 
 		private void btnReset_Click(object sender, EventArgs e)
 		{
-			AudioInfo config = Entity as AudioInfo;
-			config.EnableAudio = true;
-			config.AudioLatency = 100;
-			config.MasterVolume = 50;
-			config.Square2Volume = 100;
-			config.Square1Volume = 100;
-			config.TriangleVolume = 100;
-			config.NoiseVolume = 100;
-			config.DmcVolume = 100;
+			ConfigManager.Config.AudioInfo = new AudioInfo();
+			Entity = ConfigManager.Config.AudioInfo;
 			UpdateUI();
 			AudioInfo.ApplyConfig();
+		}
+
+		private void chkMuteWhenInBackground_CheckedChanged(object sender, EventArgs e)
+		{
+			chkReduceSoundInBackground.Enabled = !chkMuteSoundInBackground.Checked;
 		}
 	}
 }
