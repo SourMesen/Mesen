@@ -239,7 +239,7 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize, ui
 			_lowPassFilter.ApplyFilter(soundBuffer, soundBufferSize / (SoundMixer::BitsPerSample / 8), 6, 0.75);
 		}
 	}
-
+	
 	if(_sampleRate != sampleRate || _needReset) {
 		Release();
 		InitializeDirectSound(sampleRate);
@@ -270,19 +270,20 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize, ui
 
 		int32_t latencyGap = playWriteByteLatency - byteLatency;
 		int32_t tolerance = byteLatency / 35;
+		uint32_t targetRate = sampleRate;
+		if(EmulationSettings::GetEmulationSpeed() > 0 && EmulationSettings::GetEmulationSpeed() < 100) {
+			targetRate = (uint32_t)(targetRate * ((double)EmulationSettings::GetEmulationSpeed() / 100.0));
+		}
 		if(abs(latencyGap) > byteLatency / 2) {
 			//Out of sync, move back to where we should be (start of the latency buffer)
-			_secondaryBuffer->SetFrequency(sampleRate);
 			_secondaryBuffer->SetCurrentPosition(_lastWriteOffset - byteLatency);
 		} else if(latencyGap < -tolerance) {
 			//Playing too fast, slow down playing
-			_secondaryBuffer->SetFrequency((DWORD)(sampleRate * 0.9975));
+			targetRate = (uint32_t)(targetRate * 0.9975);
 		} else if(latencyGap > tolerance) {
 			//Playing too slow, speed up
-			_secondaryBuffer->SetFrequency((DWORD)(sampleRate * 1.0025));
-		} else {
-			//Normal playback
-			_secondaryBuffer->SetFrequency(sampleRate);
+			targetRate = (uint32_t)(targetRate * 1.0025);
 		}
+		_secondaryBuffer->SetFrequency((DWORD)targetRate);
 	}
 }
