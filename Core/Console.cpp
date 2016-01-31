@@ -230,16 +230,18 @@ void Console::Run()
 				_runLock.Acquire();
 			}
 
-			if(EmulationSettings::CheckFlag(EmulationFlags::Paused) && !_stop) {
+			bool paused = EmulationSettings::CheckFlag(EmulationFlags::Paused) || (EmulationSettings::CheckFlag(EmulationFlags::InBackground) && EmulationSettings::CheckFlag(EmulationFlags::PauseWhenInBackground));
+			if(paused && !_stop) {
 				MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
 				_runLock.Release();
 				
 				//Prevent audio from looping endlessly while game is paused
 				SoundMixer::StopAudio();
 
-				while(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
+				while(paused) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
+					paused = EmulationSettings::CheckFlag(EmulationFlags::Paused) || (EmulationSettings::CheckFlag(EmulationFlags::InBackground) && EmulationSettings::CheckFlag(EmulationFlags::PauseWhenInBackground));
 				}
 				_runLock.Acquire();
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);

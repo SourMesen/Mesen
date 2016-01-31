@@ -73,6 +73,15 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	EndFrame(time);
 	size_t sampleCount = blip_read_samples(_blipBuf, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 0);
 	if(SoundMixer::AudioDevice) {
+		//Apply low pass filter/volume reduction when in background (based on options)
+		if(EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
+			if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {
+				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
+			} else if(EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
+				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 6, 0.75);
+			}
+		}
+
 		SoundMixer::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * SoundMixer::BitsPerSample / 8), _sampleRate);
 	}
 	

@@ -395,7 +395,8 @@ namespace NES
 
 	void Renderer::Render()
 	{
-		if(_noUpdateCount > 10 || _frameChanged || EmulationSettings::CheckFlag(EmulationFlags::Paused) || !_toasts.empty()) {
+		bool paused = EmulationSettings::CheckFlag(EmulationFlags::Paused) || (EmulationSettings::CheckFlag(EmulationFlags::InBackground) && EmulationSettings::CheckFlag(EmulationFlags::PauseWhenInBackground));
+		if(_noUpdateCount > 10 || _frameChanged || paused || !_toasts.empty()) {
 			_frameLock.Acquire();
 
 			_noUpdateCount = 0;
@@ -418,7 +419,7 @@ namespace NES
 
 			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);*/
 
-			if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
+			if(paused) {
 				DrawPauseScreen();
 			} else if(VideoDecoder::GetInstance()->IsRunning()) {
 				//Draw FPS counter

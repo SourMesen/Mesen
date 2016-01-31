@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "EmulationSettings.h"
+#include "../Utilities/LowPassFilter.h"
 #include "../BlipBuffer/blip_buf.h"
 #include "IAudioDevice.h"
 #include "Snapshotable.h"
@@ -19,6 +20,7 @@ private:
 	static const uint32_t ExpansionAudioIndex = MaxChannelCount - 1;
 
 	AudioChannel _expansionAudioType;
+	LowPassFilter _lowPassFilter;
 
 	int16_t _previousOutput = 0;
 

@@ -11,11 +11,6 @@ WindowsKeyManager::~WindowsKeyManager()
 {
 }
 
-bool WindowsKeyManager::WindowHasFocus()
-{
-	return GetForegroundWindow() == _hWnd;
-}
-
 void WindowsKeyManager::RefreshState()
 {
 	_gamePad.RefreshState();
@@ -23,15 +18,13 @@ void WindowsKeyManager::RefreshState()
 
 bool WindowsKeyManager::IsKeyPressed(uint32_t key)
 {
-	if(WindowHasFocus()) {
-		if(key >= 0x10000) {
-			//XInput key
-			uint8_t gamepadPort = (key - 0xFFFF) / 0x100;
-			uint8_t gamepadButton = (key - 0xFFFF) % 0x100;
-			return _gamePad.IsPressed(gamepadPort, 1 << (gamepadButton - 1));
-		} else {
-			return (GetAsyncKeyState(key) & 0x8000) == 0x8000;
-		}
+	if(key >= 0x10000) {
+		//XInput key
+		uint8_t gamepadPort = (key - 0xFFFF) / 0x100;
+		uint8_t gamepadButton = (key - 0xFFFF) % 0x100;
+		return _gamePad.IsPressed(gamepadPort, 1 << (gamepadButton - 1));
+	} else {
+		return (GetAsyncKeyState(key) & 0x8000) == 0x8000;
 	}
 	return false;
 }

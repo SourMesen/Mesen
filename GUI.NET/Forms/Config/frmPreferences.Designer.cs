@@ -28,7 +28,8 @@
 		private void InitializeComponent()
 		{
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.chkAllowBackgroundInput = new System.Windows.Forms.CheckBox();
+			this.chkPauseWhenInBackground = new System.Windows.Forms.CheckBox();
 			this.chkAutoLoadIps = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
@@ -69,32 +70,43 @@
 			// 
 			this.tlpMain.ColumnCount = 1;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpMain.Controls.Add(this.checkBox1, 0, 3);
+			this.tlpMain.Controls.Add(this.chkAllowBackgroundInput, 0, 3);
+			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 2);
 			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 1);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 0, 0);
-			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 2);
+			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 4);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 4;
+			this.tlpMain.RowCount = 5;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.Size = new System.Drawing.Size(380, 207);
 			this.tlpMain.TabIndex = 1;
 			// 
-			// checkBox1
+			// chkAllowBackgroundInput
 			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Enabled = false;
-			this.checkBox1.Location = new System.Drawing.Point(3, 72);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(204, 17);
-			this.checkBox1.TabIndex = 13;
-			this.checkBox1.Text = "Pause emulation when in background";
-			this.checkBox1.UseVisualStyleBackColor = true;
+			this.chkAllowBackgroundInput.AutoSize = true;
+			this.chkAllowBackgroundInput.Location = new System.Drawing.Point(3, 72);
+			this.chkAllowBackgroundInput.Name = "chkAllowBackgroundInput";
+			this.chkAllowBackgroundInput.Size = new System.Drawing.Size(177, 17);
+			this.chkAllowBackgroundInput.TabIndex = 14;
+			this.chkAllowBackgroundInput.Text = "Allow input when in background";
+			this.chkAllowBackgroundInput.UseVisualStyleBackColor = true;
+			// 
+			// chkPauseWhenInBackground
+			// 
+			this.chkPauseWhenInBackground.AutoSize = true;
+			this.chkPauseWhenInBackground.Location = new System.Drawing.Point(3, 49);
+			this.chkPauseWhenInBackground.Name = "chkPauseWhenInBackground";
+			this.chkPauseWhenInBackground.Size = new System.Drawing.Size(204, 17);
+			this.chkPauseWhenInBackground.TabIndex = 13;
+			this.chkPauseWhenInBackground.Text = "Pause emulation when in background";
+			this.chkPauseWhenInBackground.UseVisualStyleBackColor = true;
+			this.chkPauseWhenInBackground.CheckedChanged += new System.EventHandler(this.chkPauseWhenInBackground_CheckedChanged);
 			// 
 			// chkAutoLoadIps
 			// 
@@ -131,7 +143,7 @@
 			// 
 			this.chkDisableScreensaver.AutoSize = true;
 			this.chkDisableScreensaver.Enabled = false;
-			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 49);
+			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 95);
 			this.chkDisableScreensaver.Name = "chkDisableScreensaver";
 			this.chkDisableScreensaver.Size = new System.Drawing.Size(245, 17);
 			this.chkDisableScreensaver.TabIndex = 11;
@@ -363,7 +375,7 @@
 		private System.Windows.Forms.CheckBox chkAutoLoadIps;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
 		private System.Windows.Forms.CheckBox chkSingleInstance;
-		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.CheckBox chkPauseWhenInBackground;
 		private System.Windows.Forms.CheckBox chkDisableScreensaver;
 		private System.Windows.Forms.TabControl tabMain;
 		private System.Windows.Forms.TabPage tpgGeneral;
@@ -381,5 +393,6 @@
 		private System.Windows.Forms.CheckBox chkRemoveSpriteLimit;
 		private System.Windows.Forms.CheckBox chkFdsAutoLoadDisk;
 		private System.Windows.Forms.CheckBox chkFdsFastForwardOnLoad;
+		private System.Windows.Forms.CheckBox chkAllowBackgroundInput;
 	}
 }

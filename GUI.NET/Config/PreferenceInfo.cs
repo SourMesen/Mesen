@@ -14,6 +14,8 @@ namespace Mesen.GUI.Config
 	public class PreferenceInfo
 	{
 		public bool SingleInstance = true;
+		public bool PauseWhenInBackground = false;
+		public bool AllowBackgroundInput = false;
 		public bool AutoLoadIpsPatches = true;
 		public bool AssociateNesFiles = false;
 		public bool AllowInvalidInput = false;
@@ -47,6 +49,9 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, preferenceInfo.RemoveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);
 			InteropEmu.SetFlag(EmulationFlags.FdsFastForwardOnLoad, preferenceInfo.FdsFastForwardOnLoad);
+
+			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
+			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground);
 		}
 	}
 }

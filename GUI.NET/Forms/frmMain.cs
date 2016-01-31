@@ -289,12 +289,27 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
+		private void UpdateFocusFlag()
+		{
+			bool hasFocus = false;
+			foreach(Form form in Application.OpenForms) {
+				if(form.ContainsFocus) {
+					hasFocus = true;
+					break;
+				}
+			}
+
+			InteropEmu.SetFlag(EmulationFlags.InBackground, !hasFocus);
+		}
+
 		private void UpdateMenus()
 		{
 			try {
 				if(this.InvokeRequired) {
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
+					UpdateFocusFlag();
+
 					if(string.IsNullOrWhiteSpace(_currentGame)) {
 						this.Text = "Mesen";
 					} else {

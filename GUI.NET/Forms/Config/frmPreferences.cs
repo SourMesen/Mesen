@@ -29,12 +29,23 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("FdsAutoLoadDisk", chkFdsAutoLoadDisk);
 			AddBinding("FdsFastForwardOnLoad", chkFdsFastForwardOnLoad);
+
+			AddBinding("PauseWhenInBackground", chkPauseWhenInBackground);
+			AddBinding("AllowBackgroundInput", chkAllowBackgroundInput);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
 			base.OnFormClosed(e);
 			PreferenceInfo.ApplyConfig();
+		}
+
+		private void chkPauseWhenInBackground_CheckedChanged(object sender, EventArgs e)
+		{
+			chkAllowBackgroundInput.Enabled = !chkPauseWhenInBackground.Checked;
+			if(!chkAllowBackgroundInput.Enabled) {
+				chkAllowBackgroundInput.Checked = false;
+			}
 		}
 	}
 }

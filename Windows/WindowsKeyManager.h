@@ -229,8 +229,6 @@ class WindowsKeyManager : public IKeyManager
 		GamePad _gamePad;
 		HWND _hWnd;
 
-		bool WindowHasFocus();
-
 	public:
 		WindowsKeyManager(HWND hWnd);
 		~WindowsKeyManager();

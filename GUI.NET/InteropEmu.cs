@@ -468,11 +468,16 @@ namespace Mesen.GUI
 		RemoveSpriteLimit = 0x10,
 		UseHdPacks = 0x20,
 
+		PauseWhenInBackground = 0x0200,
+		AllowBackgroundInput = 0x0400,
 		ReduceSoundInBackground = 0x0800,
 		MuteSoundInBackground = 0x1000,
+
 		FdsFastForwardOnLoad = 0x2000,
 		FdsAutoLoadDisk = 0x4000,
 		Mmc3IrqAltBehavior = 0x8000,
+
+		InBackground = 0x40000000,
 	}
 	
 	public struct InteropBreakpoint
