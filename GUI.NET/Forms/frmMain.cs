@@ -39,7 +39,7 @@ namespace Mesen.GUI.Forms
 		public void ProcessCommandLineArguments(string[] args)
 		{
 			if(args.Length > 0 && File.Exists(args[0])) {
-				this.LoadROM(args[0]);
+				this.LoadFile(args[0]);
 			}
 		}
 
@@ -231,10 +231,14 @@ namespace Mesen.GUI.Forms
 
 		private void LoadFile(string filename)
 		{
-			if(Path.GetExtension(filename).ToLowerInvariant() == ".ips") {
-				LoadIpsFile(filename);
-			} else {
-				LoadROM(filename, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
+			if(File.Exists(filename)) {
+				if(Path.GetExtension(filename).ToLowerInvariant() == ".ips") {
+					LoadIpsFile(filename);
+				} else if(Path.GetExtension(filename).ToLowerInvariant() == ".mmo") {
+					InteropEmu.MoviePlay(filename);
+				} else {
+					LoadROM(filename, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
+				}
 			}
 		}
 

@@ -17,11 +17,16 @@ namespace Mesen.GUI.Config
 		public bool PauseWhenInBackground = false;
 		public bool AllowBackgroundInput = false;
 		public bool AutoLoadIpsPatches = true;
-		public bool AssociateNesFiles = false;
 		public bool AllowInvalidInput = false;
 		public bool RemoveSpriteLimit = false;
+
 		public bool FdsAutoLoadDisk = true;
 		public bool FdsFastForwardOnLoad = false;
+
+		public bool AssociateNesFiles = false;
+		public bool AssociateFdsFiles = false;
+		public bool AssociateMmoFiles = false;
+		public bool AssociateMstFiles = false;
 
 		public bool UseAlternativeMmc3Irq = false;
 
@@ -29,20 +34,29 @@ namespace Mesen.GUI.Config
 		{
 		}
 
+		static private void UpdateFileAssociation(string extension, bool associate)
+		{
+			string key = @"HKEY_CURRENT_USER\Software\Classes\." + extension;
+			if(associate) {
+				Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\Mesen\shell\open\command", null, Application.ExecutablePath + " \"%1\"");
+				Registry.SetValue(key, null, "Mesen");
+			} else {
+				//Unregister Mesen if Mesen was registered for .nes files
+				object regKey = Registry.GetValue(key, null, "");
+				if(regKey != null && regKey.Equals("Mesen")) {
+					Registry.SetValue(key, null, "");
+				}
+			}
+		}
+
 		static public void ApplyConfig()
 		{
 			PreferenceInfo preferenceInfo = ConfigManager.Config.PreferenceInfo;
-
-			if(preferenceInfo.AssociateNesFiles) {
-				Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\Mesen\shell\open\command", null, Application.ExecutablePath + " \"%1\"");
-				Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\.nes", null, "Mesen");
-			} else {
-				//Unregister Mesen if Mesen was registered for .nes files
-				object regKey = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Classes\.nes", null, "");
-				if(regKey != null && regKey.Equals("Mesen")) {
-					Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\.nes", null, "");
-				}
-			}
+			
+			UpdateFileAssociation("nes", preferenceInfo.AssociateNesFiles);
+			UpdateFileAssociation("fds", preferenceInfo.AssociateFdsFiles);
+			UpdateFileAssociation("mmo", preferenceInfo.AssociateMmoFiles);
+			UpdateFileAssociation("mst", preferenceInfo.AssociateMstFiles);
 
 			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, preferenceInfo.UseAlternativeMmc3Irq);
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, preferenceInfo.AllowInvalidInput);

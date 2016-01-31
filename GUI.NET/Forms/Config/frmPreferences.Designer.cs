@@ -228,7 +228,6 @@
 			// chkFdsFormat
 			// 
 			this.chkFdsFormat.AutoSize = true;
-			this.chkFdsFormat.Enabled = false;
 			this.chkFdsFormat.Location = new System.Drawing.Point(3, 26);
 			this.chkFdsFormat.Name = "chkFdsFormat";
 			this.chkFdsFormat.Size = new System.Drawing.Size(162, 17);
@@ -239,7 +238,6 @@
 			// chkMmoFormat
 			// 
 			this.chkMmoFormat.AutoSize = true;
-			this.chkMmoFormat.Enabled = false;
 			this.chkMmoFormat.Location = new System.Drawing.Point(190, 3);
 			this.chkMmoFormat.Name = "chkMmoFormat";
 			this.chkMmoFormat.Size = new System.Drawing.Size(133, 17);
