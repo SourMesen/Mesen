@@ -10,7 +10,6 @@
 #include "../Core/ClientConnectionData.h"
 #include "../Core/SaveStateManager.h"
 #include "../Core/CheatManager.h"
-#include "../Core/StandardController.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/VideoDecoder.h"
 #include "../Core/AutoRomTest.h"
@@ -18,7 +17,6 @@
 
 NES::Renderer *_renderer = nullptr;
 SoundManager *_soundManager = nullptr;
-vector<shared_ptr<StandardController>> _inputDevices;
 HWND _windowHandle = nullptr;
 HWND _viewerHandle = nullptr;
 string _returnString;
@@ -60,10 +58,6 @@ namespace InteropEmu {
 				_soundManager = new SoundManager(_windowHandle);
 
 				ControlManager::RegisterKeyManager(new WindowsKeyManager(_windowHandle));
-
-				for(int i = 0; i < 4; i++) {
-					_inputDevices.push_back(shared_ptr<StandardController>(new StandardController(i)));
-				}
 			}
 		}
 
@@ -71,8 +65,14 @@ namespace InteropEmu {
 		DllExport void __stdcall ApplyIpsPatch(char* filename) { Console::ApplyIpsPatch(filename); }
 		DllExport void __stdcall AddKnowGameFolder(char* folder) { FolderUtilities::AddKnowGameFolder(folder); }
 
-		DllExport void __stdcall AddKeyMappings(uint32_t port, KeyMapping mapping) { _inputDevices[port]->AddKeyMappings(mapping); }
-		DllExport void __stdcall ClearKeyMappings(uint32_t port) { _inputDevices[port]->ClearKeyMappings(); }
+		DllExport void __stdcall SetControllerType(uint32_t port, ControllerType type) { EmulationSettings::SetControllerType(port, type); }
+		DllExport void __stdcall SetControllerKeys(uint32_t port, KeyMappingSet mappings) { EmulationSettings::SetControllerKeys(port, mappings); }
+		DllExport void __stdcall SetExpansionDevice(ExpansionPortDevice device) { EmulationSettings::SetExpansionDevice(device); }
+		DllExport void __stdcall SetConsoleType(ConsoleType type) { EmulationSettings::SetConsoleType(type); }
+		
+		DllExport bool __stdcall HasZapper() { return ControlManager::HasZapper(); }
+		DllExport void __stdcall ZapperSetTriggerState(int32_t port, bool pulled) { ControlManager::ZapperSetTriggerState(port, pulled); }
+		DllExport void __stdcall ZapperSetPosition(int32_t port, int32_t x, int32_t y) { ControlManager::ZapperSetPosition(port, x, y); }
 
 		DllExport uint32_t __stdcall GetPressedKey() { return ControlManager::GetPressedKey(); }
 		DllExport const char* __stdcall GetKeyName(uint32_t keyCode) 
@@ -80,7 +80,13 @@ namespace InteropEmu {
 			_returnString = ControlManager::GetKeyName(keyCode);
 			return _returnString.c_str();
 		}
-		DllExport uint32_t __stdcall GetKeyCode(char* keyName) { return ControlManager::GetKeyCode(keyName); }
+		DllExport uint32_t __stdcall GetKeyCode(char* keyName) { 
+			if(keyName) {
+				return ControlManager::GetKeyCode(keyName);
+			} else {
+				return 0;
+			}
+		}
 
 		DllExport void __stdcall Run()
 		{

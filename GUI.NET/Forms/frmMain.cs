@@ -74,7 +74,7 @@ namespace Mesen.GUI.Forms
 
 		void InitializeEmu()
 		{
-			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.dxViewer.Handle);
+			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.ctrlRenderer.Handle);
 			foreach(string romPath in ConfigManager.Config.RecentFiles) {
 				InteropEmu.AddKnowGameFolder(Path.GetDirectoryName(romPath).ToLowerInvariant());
 			}
@@ -183,7 +183,7 @@ namespace Mesen.GUI.Forms
 				case VideoAspectRatio.Standard: size.Width = (int)(size.Height * 4 / 3.0); break;
 				case VideoAspectRatio.Widescreen: size.Width = (int)(size.Height * 16 / 9.0); break;
 			}
-			dxViewer.Size = new Size(size.Width, size.Height);
+			ctrlRenderer.Size = new Size(size.Width, size.Height);
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -196,6 +196,10 @@ namespace Mesen.GUI.Forms
 					InitializeStateMenu(mnuSaveState, true);
 					InitializeStateMenu(mnuLoadState, false);
 					this.StartEmuThread();
+					break;
+
+				case InteropEmu.ConsoleNotificationType.DisconnectedFromServer:
+					ConfigManager.Config.ApplyConfig();
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameStopped:
@@ -320,33 +324,40 @@ namespace Mesen.GUI.Forms
 						this.Text = "Mesen - " + _currentGame;
 					}
 
-					mnuSaveState.Enabled = mnuLoadState.Enabled = mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !InteropEmu.IsConnected());
+					bool isNetPlayClient = InteropEmu.IsConnected();
+
+					mnuSaveState.Enabled = mnuLoadState.Enabled = mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !isNetPlayClient);
 					mnuPause.Text = InteropEmu.IsPaused() ? "Resume" : "Pause";
 					mnuPause.Image = InteropEmu.IsPaused() ? Mesen.GUI.Properties.Resources.control_play : Mesen.GUI.Properties.Resources.control_pause;
 
-					bool netPlay = InteropEmu.IsServerRunning() || InteropEmu.IsConnected();
+					bool netPlay = InteropEmu.IsServerRunning() || isNetPlayClient;
 
-					mnuStartServer.Enabled = !netPlay;
-					mnuStopServer.Enabled = !mnuStartServer.Enabled && !InteropEmu.IsConnected();
+					mnuStartServer.Enabled = !isNetPlayClient;
+					mnuConnect.Enabled = !InteropEmu.IsServerRunning();
 
-					mnuConnect.Enabled = !netPlay;
-					mnuDisconnect.Enabled = !mnuConnect.Enabled && !InteropEmu.IsServerRunning();
+					mnuStartServer.Text = InteropEmu.IsServerRunning() ? "Stop Server" : "Start Server";
+					mnuConnect.Text = isNetPlayClient ? "Disconnect" : "Connect to Server";
 
-					mnuCheats.Enabled = !InteropEmu.IsConnected();
-					mnuEmulationSpeed.Enabled = !InteropEmu.IsConnected();
+					mnuCheats.Enabled = !isNetPlayClient;
+					mnuEmulationSpeed.Enabled = !isNetPlayClient;
+					mnuIncreaseSpeed.Enabled = !isNetPlayClient;
+					mnuDecreaseSpeed.Enabled = !isNetPlayClient;
+					mnuEmuSpeedMaximumSpeed.Enabled = !isNetPlayClient;
+					mnuInput.Enabled = !isNetPlayClient;
+					mnuRegion.Enabled = !isNetPlayClient;
 
 					bool moviePlaying = InteropEmu.MoviePlaying();
 					bool movieRecording = InteropEmu.MovieRecording();
 					mnuPlayMovie.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuStopMovie.Enabled = _emuThread != null && !netPlay && (moviePlaying || movieRecording);
 					mnuRecordFrom.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
-					mnuRecordFromStart.Enabled = _emuThread != null && !InteropEmu.IsConnected() && !moviePlaying && !movieRecording;
+					mnuRecordFromStart.Enabled = _emuThread != null && !isNetPlayClient && !moviePlaying && !movieRecording;
 					mnuRecordFromNow.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
 
 					bool testRecording = InteropEmu.RomTestRecording();
 					mnuTestRun.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuTestStopRecording.Enabled = _emuThread != null && testRecording;
-					mnuTestRecordStart.Enabled = _emuThread != null && !InteropEmu.IsConnected() && !moviePlaying && !movieRecording;
+					mnuTestRecordStart.Enabled = _emuThread != null && !isNetPlayClient && !moviePlaying && !movieRecording;
 					mnuTestRecordNow.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
 					mnuTestRecordMovie.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuTestRecordTest.Enabled = !netPlay && !moviePlaying && !movieRecording;
@@ -494,33 +505,31 @@ namespace Mesen.GUI.Forms
 
 		private void mnuStartServer_Click(object sender, EventArgs e)
 		{
-			frmServerConfig frm = new frmServerConfig();
-			if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
-				InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port);
+			if(InteropEmu.IsServerRunning()) {
+				Task.Run(() => InteropEmu.StopServer());
+			} else {
+				frmServerConfig frm = new frmServerConfig();
+				if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
+					InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port);
+				}
 			}
 		}
 
 		private void mnuConnect_Click(object sender, EventArgs e)
 		{
-			frmClientConfig frm = new frmClientConfig();
-			if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
-				InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.Profile.PlayerAvatar, (UInt16)ConfigManager.Config.Profile.PlayerAvatar.Length);
+			if(InteropEmu.IsConnected()) {
+				Task.Run(() => InteropEmu.Disconnect());
+			} else {
+				frmClientConfig frm = new frmClientConfig();
+				if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
+					InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.Profile.PlayerAvatar, (UInt16)ConfigManager.Config.Profile.PlayerAvatar.Length);
+				}
 			}
 		}
 
 		private void mnuProfile_Click(object sender, EventArgs e)
 		{
 			new frmPlayerProfile().ShowDialog(sender);
-		}
-
-		private void mnuStopServer_Click(object sender, EventArgs e)
-		{
-			Task.Run(() => InteropEmu.StopServer());
-		}
-
-		private void mnuDisconnect_Click(object sender, EventArgs e)
-		{
-			Task.Run(() => InteropEmu.Disconnect());
 		}
 		
 		private void mnuExit_Click(object sender, EventArgs e)
@@ -712,7 +721,7 @@ namespace Mesen.GUI.Forms
 		private void mnuCheats_Click(object sender, EventArgs e)
 		{
 			frmCheatList frm = new frmCheatList();
-			frm.Show(this);
+			frm.Show(sender, this);
 			frm.FormClosed += (object a, FormClosedEventArgs b) => {
 				frm = null;
 				CheatInfo.ApplyCheats();

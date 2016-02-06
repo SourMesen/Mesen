@@ -27,6 +27,8 @@ class Console
 		unique_ptr<ControlManager> _controlManager;
 		shared_ptr<MemoryManager> _memoryManager;
 
+		NesModel _model;
+
 		string _romFilepath;
 
 		bool _stop = false;
@@ -54,6 +56,7 @@ class Console
 		std::weak_ptr<Debugger> GetDebugger();
 		void StopDebugger();
 
+		static NesModel GetNesModel();
 		static void SaveState(ostream &saveStream);
 		static void LoadState(istream &loadStream);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);

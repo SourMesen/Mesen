@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "ControlManager.h"
+#include "StandardController.h"
+#include "Zapper.h"
+#include "EmulationSettings.h"
+#include "Console.h"
+#include "GameServerConnection.h"
 
 unique_ptr<IKeyManager> ControlManager::_keyManager = nullptr;
-
-IControlDevice* ControlManager::ControlDevices[] = { nullptr, nullptr, nullptr, nullptr };
-IControlDevice* ControlManager::OriginalControlDevices[] = { nullptr, nullptr, nullptr, nullptr };
-IGameBroadcaster* ControlManager::GameBroadcaster = nullptr;
-SimpleLock ControlManager::ControllerLock[4];
+shared_ptr<BaseControlDevice> ControlManager::_controlDevices[2];
+IGameBroadcaster* ControlManager::_gameBroadcaster = nullptr;
 
 ControlManager::ControlManager()
 {
@@ -52,154 +54,110 @@ uint32_t ControlManager::GetKeyCode(string keyName)
 
 void ControlManager::RegisterBroadcaster(IGameBroadcaster* gameBroadcaster)
 {
-	ControlManager::GameBroadcaster = gameBroadcaster;
+	ControlManager::_gameBroadcaster = gameBroadcaster;
 }
 
 void ControlManager::UnregisterBroadcaster(IGameBroadcaster* gameBroadcaster)
 {
-	if(ControlManager::GameBroadcaster == gameBroadcaster) {
-		ControlManager::GameBroadcaster = nullptr;
+	if(ControlManager::_gameBroadcaster == gameBroadcaster) {
+		ControlManager::_gameBroadcaster = nullptr;
 	}
 }
 
-void ControlManager::BackupControlDevices()
+void ControlManager::BroadcastInput(uint8_t port, uint8_t state)
 {
-	for(int i = 0; i < 4; i++) {
-		OriginalControlDevices[i] = ControlDevices[i];
+	if(ControlManager::_gameBroadcaster) {
+		//Used when acting as a game server
+		ControlManager::_gameBroadcaster->BroadcastInput(state, port);
 	}
 }
 
-void ControlManager::RestoreControlDevices()
+shared_ptr<BaseControlDevice> ControlManager::GetControlDevice(uint8_t port)
 {
-	for(int i = 0; i < 4; i++) {
-		ControlManager::ControllerLock[i].Acquire();
-		ControlDevices[i] = OriginalControlDevices[i];
-		ControlManager::ControllerLock[i].Release();
-	}	
+	return ControlManager::_controlDevices[port];
 }
 
-IControlDevice* ControlManager::GetControlDevice(uint8_t port)
+void ControlManager::RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice, uint8_t port)
 {
-	return ControlManager::ControlDevices[port];
+	ControlManager::_controlDevices[port] = controlDevice;
 }
 
-void ControlManager::RegisterControlDevice(IControlDevice* controlDevice, uint8_t port)
+void ControlManager::UnregisterControlDevice(uint8_t port)
 {
-	ControlManager::ControllerLock[port].Acquire();
-	ControlManager::ControlDevices[port] = controlDevice;
-	ControlManager::ControllerLock[port].Release();
-}
-
-void ControlManager::UnregisterControlDevice(IControlDevice* controlDevice)
-{
-	for(int i = 0; i < 4; i++) {
-		if(ControlManager::ControlDevices[i] == controlDevice) {
-			ControlManager::ControllerLock[i].Acquire();
-			ControlManager::ControlDevices[i] = nullptr;
-			ControlManager::ControllerLock[i].Release();
-			break;
-		}
-	}
-
+	ControlManager::_controlDevices[port].reset();
 }
 
 void ControlManager::RefreshAllPorts()
 {
-	RefreshStateBuffer(0);
-	RefreshStateBuffer(1);
-}
+	if(_refreshState) {
+		if(_keyManager) {
+			_keyManager->RefreshState();
+		}
 
-uint8_t ControlManager::GetControllerState(uint8_t controllerID)
-{
-	ControlManager::ControllerLock[controllerID].Acquire();
-	IControlDevice* controlDevice = ControlManager::ControlDevices[controllerID];
-
-	uint8_t state;
-	if(Movie::Playing()) {
-		state = Movie::Instance->GetState(controllerID);
-	} else {
-		if(controlDevice) {
-			if(_keyManager) {
-				_keyManager->RefreshState();
+		for(int i = 0; i < 2; i++) {
+			if(ControlManager::_controlDevices[i]) {
+				ControlManager::_controlDevices[i]->RefreshStateBuffer();
 			}
-			state = controlDevice->GetButtonState().ToByte();
-		} else {
-			state = 0x00;
 		}
 	}
-	ControlManager::ControllerLock[controllerID].Release();
-
-	//Used when recording movies
-	Movie::Instance->RecordState(controllerID, state);
-
-	if(ControlManager::GameBroadcaster) {
-		//Used when acting as a game server
-		ControlManager::GameBroadcaster->BroadcastInput(state, controllerID);
-	}
-
-	return state;
 }
 
-bool ControlManager::HasFourScoreAdapter()
+void ControlManager::UpdateControlDevices()
 {
-	//When a movie is playing, always assume 4 controllers are plugged in (TODO: Change this so movies know how many controllers were plugged when recording)
-	return ControlManager::ControlDevices[2] != nullptr || ControlManager::ControlDevices[3] != nullptr || Movie::Playing();
-}
-
-void ControlManager::RefreshStateBuffer(uint8_t port)
-{
-	if(port >= 2) {
-		throw std::runtime_error("Invalid port");
+	bool fourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
+	if(EmulationSettings::GetConsoleType() == ConsoleType::Famicom && EmulationSettings::GetExpansionDevice() != ExpansionPortDevice::FourPlayerAdapter) {
+		fourScore = false;
 	}
 
-	//First 8 bits : Gamepad 1/2
-	uint32_t state = GetControllerState(port);
-	if(HasFourScoreAdapter()) {
-		//Next 8 bits = Gamepad 3/4
-		state |= GetControllerState(port + 2) << 8;
+	for(int i = 0; i < 2; i++) {
+		shared_ptr<BaseControlDevice> device;
+		if(fourScore) {
+			//Need to set standard controller in all slots if four score (to allow emulation to work correctly)
+			device.reset(new StandardController(i));
+		} else {
+			switch(EmulationSettings::GetControllerType(i)) {
+				case ControllerType::StandardController: device.reset(new StandardController(i)); break;
+				case ControllerType::Zapper: device.reset(new Zapper(i)); break;
+			}
+		}
 
-		//Last 8 bits = signature
-		//Signature for port 0 = 0x10, reversed bit order => 0x08
-		//Signature for port 1 = 0x20, reversed bit order => 0x04
-		state |= (port == 0 ? 0x08 : 0x04) << 16;
-	} else {
-		//"All subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers."
-		state |= 0xFFFF00;
+		if(device) {
+			ControlManager::RegisterControlDevice(device, i);
+
+			if(fourScore) {
+				std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<StandardController>(new StandardController(i + 2)));
+			} else if(i == 1 && EmulationSettings::GetConsoleType() == ConsoleType::Famicom && EmulationSettings::GetExpansionDevice() == ExpansionPortDevice::Zapper) {
+				std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<Zapper>(new Zapper(2)));
+			}
+		} else {
+			//Remove current device if it's no longer in use
+			ControlManager::UnregisterControlDevice(i);
+		}
 	}
-	
-	_stateBuffer[port] = state;
 }
 
 uint8_t ControlManager::GetPortValue(uint8_t port)
 {
-	if(port >= 2) {
-		throw std::runtime_error("Invalid port");
-	}
-
 	if(_refreshState) {
-		RefreshStateBuffer(port);
+		RefreshAllPorts();
 	}
-
-	uint8_t returnValue = _stateBuffer[port] & 0x01;
-	_stateBuffer[port] >>= 1;
-
-	//"All subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers."
-	_stateBuffer[port] |= 0x800000;
 
 	//"In the NES and Famicom, the top three (or five) bits are not driven, and so retain the bits of the previous byte on the bus. 
 	//Usually this is the most significant byte of the address of the controller port - 0x40.
 	//Paperboy relies on this behavior and requires that reads from the controller ports return exactly $40 or $41 as appropriate."
-	return 0x40 | returnValue;
+	shared_ptr<BaseControlDevice> device = GetControlDevice(port);
+	if(device) {
+		return 0x40 | device->GetPortOutput();
+	} else {
+		return 0x40;
+	}
 }
 
 uint8_t ControlManager::ReadRAM(uint16_t addr)
 {
 	switch(addr) {
-		case 0x4016:
-			return GetPortValue(0);
-
-		case 0x4017:
-			return GetPortValue(1);
+		case 0x4016: return GetPortValue(0);
+		case 0x4017: return GetPortValue(1);
 	}
 
 	return 0;
@@ -207,19 +165,90 @@ uint8_t ControlManager::ReadRAM(uint16_t addr)
 
 void ControlManager::WriteRAM(uint16_t addr, uint8_t value)
 {
-	switch(addr) {
-		case 0x4016:
-			_refreshState = (value & 0x01) == 0x01;
-			if(_refreshState) {
-				RefreshAllPorts();
-			}
-			break;
+	//$4016 writes
+	_refreshState = (value & 0x01) == 0x01;
+	if(_refreshState) {
+		RefreshAllPorts();
 	}
-
 }
 
 void ControlManager::StreamState(bool saving)
 {
-	StreamArray<uint32_t>(_stateBuffer, 2);
 	Stream<bool>(_refreshState);
+	
+	//Restore controllers that were being used at the time the snapshot was made
+	//This is particularely important to ensure proper sync during NetPlay
+	ControllerType controllerTypes[4];
+	NesModel nesModel;
+	ExpansionPortDevice expansionDevice;
+	ConsoleType consoleType;
+	if(saving) {
+		nesModel = Console::GetNesModel();
+		expansionDevice = EmulationSettings::GetExpansionDevice();
+		consoleType = EmulationSettings::GetConsoleType();
+		for(int i = 0; i < 4; i++) {
+			controllerTypes[i] = EmulationSettings::GetControllerType(i);
+		}
+	}
+
+	Stream<NesModel>(nesModel);
+	Stream<ExpansionPortDevice>(expansionDevice);
+	Stream<ConsoleType>(consoleType);
+	for(int i = 0; i < 4; i++) {
+		Stream<ControllerType>(controllerTypes[i]);
+	}
+
+	if(!saving) {
+		EmulationSettings::SetNesModel(nesModel);
+		EmulationSettings::SetExpansionDevice(expansionDevice);
+		EmulationSettings::SetConsoleType(consoleType);
+		for(int i = 0; i < 4; i++) {
+			EmulationSettings::SetControllerType(i, controllerTypes[i]);
+		}
+
+		UpdateControlDevices();
+
+		if(GetControlDevice(0)) {
+			Stream(GetControlDevice(0));
+		}
+		if(GetControlDevice(1)) {
+			Stream(GetControlDevice(1));
+		}
+	}
+}
+
+shared_ptr<Zapper> ControlManager::GetZapper(uint8_t port)
+{
+	shared_ptr<Zapper> zapper = std::dynamic_pointer_cast<Zapper>(GetControlDevice(port));
+	if(zapper) {
+		return zapper;
+	} else {
+		shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(GetControlDevice(port));
+		if(controller) {
+			return controller->GetZapper();
+		}
+	}
+
+	return nullptr;
+}
+
+bool ControlManager::HasZapper()
+{
+	return GetZapper(0) != nullptr || GetZapper(1) != nullptr;
+}
+
+void ControlManager::ZapperSetPosition(uint8_t port, int32_t x, int32_t y)
+{
+	shared_ptr<Zapper> zapper = GetZapper(port);
+	if(zapper) {
+		zapper->SetPosition(x, y);
+	}
+}
+
+void ControlManager::ZapperSetTriggerState(uint8_t port, bool pulled)
+{
+	shared_ptr<Zapper> zapper = GetZapper(port);
+	if(zapper) {
+		zapper->SetTriggerState(pulled);
+	}
 }

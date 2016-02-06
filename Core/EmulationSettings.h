@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "MessageManager.h"
+#include "GameClient.h"
 
 enum EmulationFlags
 {
@@ -11,6 +12,7 @@ enum EmulationFlags
 	AllowInvalidInput = 0x08,
 	RemoveSpriteLimit = 0x10,
 	UseHdPacks = 0x20,
+	HasFourScore = 0x40,
 
 	PauseOnMovieEnd = 0x0100,
 	PauseWhenInBackground = 0x0200,
@@ -78,6 +80,57 @@ struct OverscanDimensions
 	}
 };
 
+enum class ConsoleType
+{
+	Nes = 0,
+	Famicom = 1,
+	VsSystem = 2,
+};
+
+enum class ControllerType
+{
+	None = 0,
+	StandardController = 1,
+	Zapper = 2,
+};
+
+enum class ExpansionPortDevice
+{
+	None = 0,
+	Zapper = 1,
+	FourPlayerAdapter = 2,
+};
+
+struct KeyMapping
+{
+	uint32_t A = 0;
+	uint32_t B = 0;
+	uint32_t Up = 0;
+	uint32_t Down = 0;
+	uint32_t Left = 0;
+	uint32_t Right = 0;
+	uint32_t Start = 0;
+	uint32_t Select = 0;
+	uint32_t TurboA = 0;
+	uint32_t TurboB = 0;
+	uint32_t TurboStart = 0;
+	uint32_t TurboSelect = 0;
+
+	bool HasKeySet()
+	{
+		return A || B || Up || Down || Left || Right || Start || Select || TurboA || TurboB || TurboStart || TurboSelect;
+	}
+};
+
+struct KeyMappingSet
+{
+	KeyMapping Mapping1;
+	KeyMapping Mapping2;
+	KeyMapping Mapping3;
+	KeyMapping Mapping4;
+	uint32_t TurboSpeed;
+};
+
 class EmulationSettings
 {
 private:
@@ -97,6 +150,12 @@ private:
 	static OverscanDimensions _overscan;
 	static VideoFilterType _videoFilterType;
 	static uint32_t _videoScale;
+
+	static ConsoleType _consoleType;
+	static ExpansionPortDevice _expansionDevice;
+	static ControllerType _controllerTypes[4];
+	static KeyMappingSet _controllerKeys[4];
+	static bool _needControllerUpdate;
 
 public:
 	static uint32_t GetMesenVersion()
@@ -122,6 +181,11 @@ public:
 	static bool CheckFlag(uint32_t flag)
 	{
 		return (_flags & flag) == flag;
+	}
+
+	static bool IsPaused()
+	{
+		return CheckFlag(EmulationFlags::Paused) || (CheckFlag(EmulationFlags::InBackground) && CheckFlag(EmulationFlags::PauseWhenInBackground) && !GameClient::Connected());
 	}
 
 	static void SetNesModel(NesModel model)
@@ -233,5 +297,59 @@ public:
 	static void SetRgbPalette(uint32_t* paletteBuffer)
 	{
 		memcpy(PpuPaletteArgb, paletteBuffer, sizeof(PpuPaletteArgb));
+	}
+
+	static void SetExpansionDevice(ExpansionPortDevice expansionDevice)
+	{
+		_expansionDevice = expansionDevice;
+		_needControllerUpdate = true;
+	}
+	
+	static ExpansionPortDevice GetExpansionDevice()
+	{
+		return _expansionDevice;
+	}
+
+	static void SetConsoleType(ConsoleType type)
+	{
+		_consoleType = type;
+		_needControllerUpdate = true;
+	}
+
+	static ConsoleType GetConsoleType()
+	{
+		return _consoleType;
+	}
+
+	static void SetControllerType(uint8_t port, ControllerType type)
+	{
+		_controllerTypes[port] = type;
+		_needControllerUpdate = true;
+	}
+
+	static ControllerType GetControllerType(uint8_t port)
+	{
+		return _controllerTypes[port];
+	}
+
+	static void SetControllerKeys(uint8_t port, KeyMappingSet keyMappings)
+	{
+		_controllerKeys[port] = keyMappings;
+		_needControllerUpdate = true;
+	}
+
+	static KeyMappingSet GetControllerKeys(uint8_t port)
+	{
+		return _controllerKeys[port];
+	}
+
+	static bool NeedControllerUpdate()
+	{
+		if(_needControllerUpdate) {
+			_needControllerUpdate = false;
+			return true;
+		} else {
+			return false;
+		}
 	}
 };

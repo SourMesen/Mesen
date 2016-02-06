@@ -31,3 +31,9 @@ uint32_t EmulationSettings::_emulationSpeed = 100;
 OverscanDimensions EmulationSettings::_overscan;
 VideoFilterType EmulationSettings::_videoFilterType = VideoFilterType::None;
 uint32_t EmulationSettings::_videoScale = 1;
+
+ConsoleType EmulationSettings::_consoleType = ConsoleType::Nes;
+ExpansionPortDevice EmulationSettings::_expansionDevice = ExpansionPortDevice::None;
+ControllerType EmulationSettings::_controllerTypes[4] = { ControllerType::None, ControllerType::None, ControllerType::None, ControllerType::None };
+KeyMappingSet EmulationSettings::_controllerKeys[4] = { KeyMappingSet(), KeyMappingSet(), KeyMappingSet(), KeyMappingSet() };
+bool EmulationSettings::_needControllerUpdate = false;

@@ -26,6 +26,16 @@ namespace Mesen.GUI.Forms
 			_validateTimer.Interval = 50;
 			_validateTimer.Tick += OnValidateInput;
 			_validateTimer.Start();
+
+			this.ShowInTaskbar = false;
+		}
+
+		public new bool ShowInTaskbar
+		{
+			set
+			{
+				base.ShowInTaskbar = false;
+			}
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -135,6 +145,7 @@ namespace Mesen.GUI.Forms
 		protected void UpdateUI()
 		{
 			this.Updating = true;
+
 			foreach(KeyValuePair<string, Control> kvp in _bindings) {
 				if(!_fieldInfo.ContainsKey(kvp.Key)) {
 					throw new Exception("Invalid binding key");
@@ -162,6 +173,8 @@ namespace Mesen.GUI.Forms
 						}
 					} else if(kvp.Value is ctrlTrackbar) {
 						((ctrlTrackbar)kvp.Value).Value = (int)(uint)value;
+					} else if(kvp.Value is TrackBar) {
+						((TrackBar)kvp.Value).Value = (int)(uint)value;
 					} else if(kvp.Value is NumericUpDown) {
 						NumericUpDown nud = kvp.Value as NumericUpDown;
 						decimal val = (decimal)(uint)value;
@@ -191,7 +204,14 @@ namespace Mesen.GUI.Forms
 					}
 				}
 			}
+
 			this.Updating = false;
+
+			this.AfterUpdateUI();
+		}
+
+		virtual protected void AfterUpdateUI()
+		{
 		}
 
 		protected void UpdateObject()
@@ -219,11 +239,14 @@ namespace Mesen.GUI.Forms
 							field.SetValue(Entity, kvp.Value.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag);
 						} else if(kvp.Value is ctrlTrackbar) {
 							field.SetValue(Entity, (UInt32)((ctrlTrackbar)kvp.Value).Value);
+						} else if(kvp.Value is TrackBar) {
+							field.SetValue(Entity, (UInt32)((TrackBar)kvp.Value).Value);
 						} else if(kvp.Value is NumericUpDown) {
 							field.SetValue(Entity, (UInt32)((NumericUpDown)kvp.Value).Value);
 						} else if(kvp.Value is ComboBox) {
 							if(field.FieldType.IsSubclassOf(typeof(Enum))) {
-								field.SetValue(Entity, Enum.Parse(field.FieldType, ((ComboBox)kvp.Value).SelectedItem.ToString()));
+								object selectedItem = ((ComboBox)kvp.Value).SelectedItem;
+								field.SetValue(Entity, selectedItem == null ? 0 : Enum.Parse(field.FieldType, selectedItem.ToString()));
 							} else if(field.FieldType == typeof(UInt32)) {
 								UInt32 numericValue;
 								string item = Regex.Replace(((ComboBox)kvp.Value).SelectedItem.ToString(), "[^0-9]", "");

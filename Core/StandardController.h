@@ -1,37 +1,29 @@
 #pragma once
-
 #include "stdafx.h"
+#include "BaseControlDevice.h"
+#include "Zapper.h"
 
-#include "IControlDevice.h"
-
-struct KeyMapping
-{
-	uint32_t A;
-	uint32_t B;
-	uint32_t Up;
-	uint32_t Down;
-	uint32_t Left;
-	uint32_t Right;
-	uint32_t Start;
-	uint32_t Select;
-	uint32_t TurboA;
-	uint32_t TurboB;
-	uint32_t TurboStart;
-	uint32_t TurboSelect;
-	uint32_t TurboSpeed;
-};
-
-class StandardController : public IControlDevice
+class StandardController : public BaseControlDevice
 {
 private:
-	vector<KeyMapping> _keyMappings;
+	uint32_t _stateBuffer;
+	uint32_t _stateBufferFamicom;
+
+	bool _hasZapper;
+	shared_ptr<BaseControlDevice> _additionalController;
+
+protected:
+	uint8_t RefreshState();
+	virtual void StreamState(bool saving);
 
 public:
-	StandardController(uint8_t port);
-	~StandardController();
+	using BaseControlDevice::BaseControlDevice;
 
-	void AddKeyMappings(KeyMapping keyMapping);
-	void ClearKeyMappings();
+	virtual uint8_t GetButtonState();
+	uint8_t GetPortOutput();
+	void RefreshStateBuffer();
 
-	ButtonState GetButtonState();
+	shared_ptr<Zapper> GetZapper();
+
+	void AddAdditionalController(shared_ptr<BaseControlDevice> controller);
 };

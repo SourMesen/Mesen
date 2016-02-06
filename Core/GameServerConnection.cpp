@@ -10,15 +10,14 @@
 #include "ControlManager.h"
 #include "ClientConnectionData.h"
 #include "EmulationSettings.h"
+#include "StandardController.h"
 
-GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, int controllerPort, IGameBroadcaster* gameBroadcaster) : GameConnection(socket, nullptr)
+GameServerConnection* GameServerConnection::_netPlayDevices[4] = { nullptr,nullptr,nullptr, nullptr };
+
+GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, int controllerPort) : GameConnection(socket, nullptr)
 {
 	//Server-side connection
-	_gameBroadcaster = gameBroadcaster;
 	_controllerPort = controllerPort;
-		
-	ControlManager::BackupControlDevices();
-
 	MessageManager::RegisterNotificationListener(this);
 }
 
@@ -30,8 +29,7 @@ GameServerConnection::~GameServerConnection()
 		MessageManager::DisplayMessage("Net Play", "Player " + std::to_string(_controllerPort + 1) + " disconnected.");
 	}
 
-	ControlManager::RestoreControlDevices();
-
+	UnregisterNetPlayDevice(this);
 	MessageManager::UnregisterNotificationListener(this);
 }
 
@@ -53,11 +51,17 @@ void GameServerConnection::SendMovieData(uint8_t state, uint8_t port)
 	}
 }
 
-ButtonState GameServerConnection::GetButtonState()
+void GameServerConnection::PushState(uint32_t state)
 {
-	ButtonState state;
+	if(_inputData.size() == 0 || state != _inputData.back()) {
+		_inputData.push_back(state);
+	}
+}
+
+uint32_t GameServerConnection::GetState()
+{
 	size_t inputBufferSize = _inputData.size();
-	uint8_t stateData = 0;
+	uint32_t stateData = 0;
 	if(inputBufferSize > 0) {
 		stateData = _inputData.front();
 		if(inputBufferSize > 1) {
@@ -65,8 +69,7 @@ ButtonState GameServerConnection::GetButtonState()
 			_inputData.pop_front();
 		}
 	}
-	state.FromByte(stateData);
-	return state;
+	return stateData;
 }
 
 void GameServerConnection::ProcessMessage(NetMessage* message)
@@ -85,18 +88,13 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 				}
 
 				_handshakeCompleted = true;
-				ControlManager::RegisterControlDevice(this, _controllerPort);
+				RegisterNetPlayDevice(this, _controllerPort);
 				Console::Resume();
 			}
 			break;
 		case MessageType::InputData:
-		{
-			uint8_t state = ((InputDataMessage*)message)->GetInputState();
-			if(_inputData.size() == 0 || state != _inputData.back()) {
-				_inputData.push_back(state);
-			}
+			PushState(((InputDataMessage*)message)->GetInputState());
 			break;
-		}
 		default:
 			break;
 	}
@@ -112,9 +110,32 @@ void GameServerConnection::ProcessNotification(ConsoleNotificationType type, voi
 		case ConsoleNotificationType::StateLoaded:
 		case ConsoleNotificationType::CheatAdded:
 		case ConsoleNotificationType::FdsDiskChanged:
+		case ConsoleNotificationType::ConfigChanged:
 			SendGameInformation();
 			break;
 		default:
 			break;
 	}
+}
+
+void GameServerConnection::RegisterNetPlayDevice(GameServerConnection* device, uint8_t port)
+{
+	GameServerConnection::_netPlayDevices[port] = device;
+}
+
+void GameServerConnection::UnregisterNetPlayDevice(GameServerConnection* device)
+{
+	if(device != nullptr) {
+		for(int i = 0; i < 4; i++) {
+			if(GameServerConnection::_netPlayDevices[i] == device) {
+				GameServerConnection::_netPlayDevices[i] = nullptr;
+				break;
+			}
+		}
+	}
+}
+
+GameServerConnection* GameServerConnection::GetNetPlayDevice(uint8_t port)
+{
+	return GameServerConnection::_netPlayDevices[port];
 }

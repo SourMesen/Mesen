@@ -15,9 +15,9 @@ namespace Mesen.GUI.Config
 		public PreferenceInfo PreferenceInfo;
 		public AudioInfo AudioInfo;
 		public VideoInfo VideoInfo;
+		public InputInfo InputInfo;
 		public List<string> RecentFiles;
 		public List<CheatInfo> Cheats;
-		public List<ControllerInfo> Controllers;
 		public bool ShowOnlyCheatsForCurrentGame;
 		public bool AutoLoadIpsPatches;
 		public NesModel Region;
@@ -34,13 +34,13 @@ namespace Mesen.GUI.Config
 			VideoInfo = new VideoInfo();
 			PreferenceInfo = new PreferenceInfo();
 			RecentFiles = new List<string>();
-			Controllers = new List<ControllerInfo>();
+			InputInfo = new InputInfo();
 			Cheats = new List<CheatInfo>();
 		}
 
 		public void ApplyConfig()
 		{
-			ControllerInfo.ApplyConfig();
+			InputInfo.ApplyConfig();
 			VideoInfo.ApplyConfig();
 			AudioInfo.ApplyConfig();
 			PreferenceInfo.ApplyConfig();
@@ -50,11 +50,7 @@ namespace Mesen.GUI.Config
 
 		public void InitializeDefaults()
 		{
-			while(Controllers.Count < 4) {
-				var controllerInfo = new ControllerInfo();
-				controllerInfo.ControllerType = Controllers.Count < 2 ? ControllerType.StandardController : ControllerType.None;
-				Controllers.Add(controllerInfo);
-			}
+			InputInfo.InitializeDefaults();
 		}
 		
 		public void AddRecentFile(string filepath)

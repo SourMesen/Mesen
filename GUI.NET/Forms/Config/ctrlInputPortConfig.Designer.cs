@@ -28,9 +28,9 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.lblControllerType = new System.Windows.Forms.Label();
-			this.cboControllerType = new System.Windows.Forms.ComboBox();
 			this.ctrlStandardController = new Mesen.GUI.Forms.Config.ctrlStandardController();
+			this.cboControllerType = new System.Windows.Forms.ComboBox();
+			this.lblControllerType = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -51,6 +51,29 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(618, 353);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
+			// ctrlStandardController
+			// 
+			this.tableLayoutPanel1.SetColumnSpan(this.ctrlStandardController, 2);
+			this.ctrlStandardController.Location = new System.Drawing.Point(3, 30);
+			this.ctrlStandardController.Name = "ctrlStandardController";
+			this.ctrlStandardController.Size = new System.Drawing.Size(611, 320);
+			this.ctrlStandardController.TabIndex = 3;
+			// 
+			// cboControllerType
+			// 
+			this.cboControllerType.Dock = System.Windows.Forms.DockStyle.Top;
+			this.cboControllerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboControllerType.FormattingEnabled = true;
+			this.cboControllerType.Items.AddRange(new object[] {
+            "None",
+            "Standard NES Controller",
+            "Zapper"});
+			this.cboControllerType.Location = new System.Drawing.Point(90, 3);
+			this.cboControllerType.Name = "cboControllerType";
+			this.cboControllerType.Size = new System.Drawing.Size(525, 21);
+			this.cboControllerType.TabIndex = 2;
+			this.cboControllerType.SelectedIndexChanged += new System.EventHandler(this.cboControllerType_SelectedIndexChanged);
+			// 
 			// lblControllerType
 			// 
 			this.lblControllerType.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -60,28 +83,6 @@
 			this.lblControllerType.Size = new System.Drawing.Size(81, 13);
 			this.lblControllerType.TabIndex = 1;
 			this.lblControllerType.Text = "Controller Type:";
-			// 
-			// cboControllerType
-			// 
-			this.cboControllerType.Dock = System.Windows.Forms.DockStyle.Top;
-			this.cboControllerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboControllerType.FormattingEnabled = true;
-			this.cboControllerType.Items.AddRange(new object[] {
-            "None",
-            "Standard NES Controller"});
-			this.cboControllerType.Location = new System.Drawing.Point(90, 3);
-			this.cboControllerType.Name = "cboControllerType";
-			this.cboControllerType.Size = new System.Drawing.Size(525, 21);
-			this.cboControllerType.TabIndex = 2;
-			this.cboControllerType.SelectedIndexChanged += new System.EventHandler(this.cboControllerType_SelectedIndexChanged);
-			// 
-			// ctrlStandardController
-			// 
-			this.tableLayoutPanel1.SetColumnSpan(this.ctrlStandardController, 2);
-			this.ctrlStandardController.Location = new System.Drawing.Point(3, 30);
-			this.ctrlStandardController.Name = "ctrlStandardController";
-			this.ctrlStandardController.Size = new System.Drawing.Size(611, 320);
-			this.ctrlStandardController.TabIndex = 3;
 			// 
 			// ctrlInputPortConfig
 			// 
@@ -99,8 +100,8 @@
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private ctrlStandardController ctrlStandardController;
 		private System.Windows.Forms.Label lblControllerType;
 		private System.Windows.Forms.ComboBox cboControllerType;
-		private ctrlStandardController ctrlStandardController;
 	}
 }

@@ -1,11 +1,11 @@
 #pragma once
-
 #include "stdafx.h"
-#include "GameClientConnection.h"
+#include <thread>
 #include "INotificationListener.h"
-
+using std::thread;
+class Socket;
+class GameClientConnection;
 class ClientConnectionData;
-class thread;
 
 class GameClient : public INotificationListener
 {
@@ -20,7 +20,6 @@ private:
 
 	void PrivateConnect(shared_ptr<ClientConnectionData> connectionData);
 	void Exec();
-	void PrivateDisconnect();
 
 public:
 	GameClient();
@@ -29,6 +28,8 @@ public:
 	static bool Connected();
 	static void Connect(shared_ptr<ClientConnectionData> connectionData);
 	static void Disconnect();
+
+	static uint8_t GetControllerState(uint8_t port);
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter);
 };

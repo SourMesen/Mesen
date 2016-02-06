@@ -395,7 +395,7 @@ namespace NES
 
 	void Renderer::Render()
 	{
-		bool paused = EmulationSettings::CheckFlag(EmulationFlags::Paused) || (EmulationSettings::CheckFlag(EmulationFlags::InBackground) && EmulationSettings::CheckFlag(EmulationFlags::PauseWhenInBackground));
+		bool paused = EmulationSettings::IsPaused();
 		if(_noUpdateCount > 10 || _frameChanged || paused || !_toasts.empty()) {
 			_frameLock.Acquire();
 

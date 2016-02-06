@@ -5,22 +5,23 @@
 class InputDataMessage : public NetMessage
 {
 private:
-	uint8_t _inputState;
+	uint32_t _inputState;
+
 protected:	
 	virtual void ProtectedStreamState()
 	{
-		Stream<uint8_t>(_inputState);
+		Stream<uint32_t>(_inputState);
 	}
 
 public:
 	InputDataMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
 
-	InputDataMessage(uint8_t inputState) : NetMessage(MessageType::InputData)
+	InputDataMessage(uint32_t inputState) : NetMessage(MessageType::InputData)
 	{
 		_inputState = inputState;
 	}
 
-	uint8_t GetInputState()
+	uint32_t GetInputState()
 	{
 		return _inputState;
 	}

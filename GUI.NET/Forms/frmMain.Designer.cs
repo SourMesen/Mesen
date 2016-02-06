@@ -90,12 +90,9 @@
 			this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNetPlay = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStartServer = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuStopServer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuFindServer = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDisconnect = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuProfile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCheats = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMovies = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,6 +101,7 @@
 			this.mnuRecordFromStart = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRecordFromNow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStopMovie = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTestRun = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTestRecordFrom = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,15 +112,14 @@
 			this.mnuTestStopRecording = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunAllTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebugger = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuTakeScreenshot = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
-			this.dxViewer = new Mesen.GUI.Controls.DXViewer();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
+			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -160,49 +157,49 @@
 			this.mnuOpen.Image = global::Mesen.GUI.Properties.Resources.folder;
 			this.mnuOpen.Name = "mnuOpen";
 			this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.mnuOpen.Size = new System.Drawing.Size(152, 22);
+			this.mnuOpen.Size = new System.Drawing.Size(146, 22);
 			this.mnuOpen.Text = "Open";
 			this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(143, 6);
 			// 
 			// mnuSaveState
 			// 
 			this.mnuSaveState.Name = "mnuSaveState";
-			this.mnuSaveState.Size = new System.Drawing.Size(152, 22);
+			this.mnuSaveState.Size = new System.Drawing.Size(146, 22);
 			this.mnuSaveState.Text = "Save State";
 			this.mnuSaveState.DropDownOpening += new System.EventHandler(this.mnuSaveState_DropDownOpening);
 			// 
 			// mnuLoadState
 			// 
 			this.mnuLoadState.Name = "mnuLoadState";
-			this.mnuLoadState.Size = new System.Drawing.Size(152, 22);
+			this.mnuLoadState.Size = new System.Drawing.Size(146, 22);
 			this.mnuLoadState.Text = "Load State";
 			this.mnuLoadState.DropDownOpening += new System.EventHandler(this.mnuLoadState_DropDownOpening);
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(143, 6);
 			// 
 			// mnuRecentFiles
 			// 
 			this.mnuRecentFiles.Name = "mnuRecentFiles";
-			this.mnuRecentFiles.Size = new System.Drawing.Size(152, 22);
+			this.mnuRecentFiles.Size = new System.Drawing.Size(146, 22);
 			this.mnuRecentFiles.Text = "Recent Files";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(143, 6);
 			// 
 			// mnuExit
 			// 
 			this.mnuExit.Name = "mnuExit";
-			this.mnuExit.Size = new System.Drawing.Size(152, 22);
+			this.mnuExit.Size = new System.Drawing.Size(146, 22);
 			this.mnuExit.Text = "Exit";
 			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
@@ -558,12 +555,9 @@
 			// 
 			this.mnuNetPlay.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuStartServer,
-            this.mnuStopServer,
+            this.mnuConnect,
             this.toolStripMenuItem2,
             this.mnuFindServer,
-            this.mnuConnect,
-            this.mnuDisconnect,
-            this.toolStripMenuItem3,
             this.mnuProfile});
 			this.mnuNetPlay.Image = global::Mesen.GUI.Properties.Resources.globe_network;
 			this.mnuNetPlay.Name = "mnuNetPlay";
@@ -577,12 +571,12 @@
 			this.mnuStartServer.Text = "Start Server";
 			this.mnuStartServer.Click += new System.EventHandler(this.mnuStartServer_Click);
 			// 
-			// mnuStopServer
+			// mnuConnect
 			// 
-			this.mnuStopServer.Name = "mnuStopServer";
-			this.mnuStopServer.Size = new System.Drawing.Size(177, 22);
-			this.mnuStopServer.Text = "Stop Server";
-			this.mnuStopServer.Click += new System.EventHandler(this.mnuStopServer_Click);
+			this.mnuConnect.Name = "mnuConnect";
+			this.mnuConnect.Size = new System.Drawing.Size(177, 22);
+			this.mnuConnect.Text = "Connect to Server";
+			this.mnuConnect.Click += new System.EventHandler(this.mnuConnect_Click);
 			// 
 			// toolStripMenuItem2
 			// 
@@ -595,25 +589,7 @@
 			this.mnuFindServer.Name = "mnuFindServer";
 			this.mnuFindServer.Size = new System.Drawing.Size(177, 22);
 			this.mnuFindServer.Text = "Find Public Server...";
-			// 
-			// mnuConnect
-			// 
-			this.mnuConnect.Name = "mnuConnect";
-			this.mnuConnect.Size = new System.Drawing.Size(177, 22);
-			this.mnuConnect.Text = "Connect...";
-			this.mnuConnect.Click += new System.EventHandler(this.mnuConnect_Click);
-			// 
-			// mnuDisconnect
-			// 
-			this.mnuDisconnect.Name = "mnuDisconnect";
-			this.mnuDisconnect.Size = new System.Drawing.Size(177, 22);
-			this.mnuDisconnect.Text = "Disconnect";
-			this.mnuDisconnect.Click += new System.EventHandler(this.mnuDisconnect_Click);
-			// 
-			// toolStripMenuItem3
-			// 
-			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(174, 6);
+			this.mnuFindServer.Visible = false;
 			// 
 			// mnuProfile
 			// 
@@ -676,6 +652,11 @@
 			this.mnuStopMovie.Size = new System.Drawing.Size(149, 22);
 			this.mnuStopMovie.Text = "Stop";
 			this.mnuStopMovie.Click += new System.EventHandler(this.mnuStopMovie_Click);
+			// 
+			// toolStripMenuItem12
+			// 
+			this.toolStripMenuItem12.Name = "toolStripMenuItem12";
+			this.toolStripMenuItem12.Size = new System.Drawing.Size(182, 6);
 			// 
 			// mnuTests
 			// 
@@ -758,6 +739,11 @@
 			this.mnuDebugger.Text = "Debugger";
 			this.mnuDebugger.Click += new System.EventHandler(this.mnuDebugger_Click);
 			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 6);
+			// 
 			// mnuTakeScreenshot
 			// 
 			this.mnuTakeScreenshot.Image = global::Mesen.GUI.Properties.Resources.camera;
@@ -801,24 +787,14 @@
 			// 
 			this.menuTimer.Tick += new System.EventHandler(this.menuTimer_Tick);
 			// 
-			// dxViewer
+			// ctrlRenderer
 			// 
-			this.dxViewer.BackColor = System.Drawing.Color.Black;
-			this.dxViewer.Location = new System.Drawing.Point(0, 24);
-			this.dxViewer.Margin = new System.Windows.Forms.Padding(0);
-			this.dxViewer.Name = "dxViewer";
-			this.dxViewer.Size = new System.Drawing.Size(263, 176);
-			this.dxViewer.TabIndex = 1;
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 6);
-			// 
-			// toolStripMenuItem12
-			// 
-			this.toolStripMenuItem12.Name = "toolStripMenuItem12";
-			this.toolStripMenuItem12.Size = new System.Drawing.Size(182, 6);
+			this.ctrlRenderer.BackColor = System.Drawing.Color.Black;
+			this.ctrlRenderer.Location = new System.Drawing.Point(0, 24);
+			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlRenderer.Name = "ctrlRenderer";
+			this.ctrlRenderer.Size = new System.Drawing.Size(263, 176);
+			this.ctrlRenderer.TabIndex = 1;
 			// 
 			// frmMain
 			// 
@@ -829,7 +805,7 @@
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.BackColor = System.Drawing.Color.Black;
 			this.ClientSize = new System.Drawing.Size(365, 272);
-			this.Controls.Add(this.dxViewer);
+			this.Controls.Add(this.ctrlRenderer);
 			this.Controls.Add(this.menuStrip);
 			this.MainMenuStrip = this.menuStrip;
 			this.Name = "frmMain";
@@ -849,7 +825,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuFile;
 		private System.Windows.Forms.ToolStripMenuItem mnuOpen;
 		private System.Windows.Forms.ToolStripMenuItem mnuGame;
-		private Mesen.GUI.Controls.DXViewer dxViewer;
+		private Mesen.GUI.Controls.ctrlRenderer ctrlRenderer;
 		private System.Windows.Forms.ToolStripMenuItem mnuPause;
 		private System.Windows.Forms.ToolStripMenuItem mnuReset;
 		private System.Windows.Forms.ToolStripMenuItem mnuStop;
@@ -862,11 +838,8 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuTools;
 		private System.Windows.Forms.ToolStripMenuItem mnuNetPlay;
 		private System.Windows.Forms.ToolStripMenuItem mnuStartServer;
-		private System.Windows.Forms.ToolStripMenuItem mnuStopServer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuConnect;
-		private System.Windows.Forms.ToolStripMenuItem mnuDisconnect;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 		private System.Windows.Forms.ToolStripMenuItem mnuProfile;
 		private System.Windows.Forms.ToolStripMenuItem mnuMovies;
 		private System.Windows.Forms.ToolStripMenuItem mnuPlayMovie;

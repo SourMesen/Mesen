@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "IControlDevice.h"
+#include "BaseControlDevice.h"
 #include "IMemoryHandler.h"
 #include "Movie.h"
 #include "IGameBroadcaster.h"
@@ -9,23 +9,24 @@
 #include "../Utilities/SimpleLock.h"
 #include "IKeyManager.h"
 
+class BaseControlDevice;
+class Zapper;
+
 class ControlManager : public Snapshotable, public IMemoryHandler
 {
 	private:
 		static unique_ptr<IKeyManager> _keyManager;
-		static IControlDevice* ControlDevices[4];
-		static IControlDevice* OriginalControlDevices[4];
-		static IGameBroadcaster* GameBroadcaster;
-		static SimpleLock ControllerLock[4];
+		static shared_ptr<BaseControlDevice> _controlDevices[2];
+		static IGameBroadcaster* _gameBroadcaster;
 
 		bool _refreshState = false;
-		uint32_t _stateBuffer[2];
 
 		void RefreshAllPorts();
-		uint8_t GetControllerState(uint8_t port);
-		bool HasFourScoreAdapter();
-		void RefreshStateBuffer(uint8_t port);
 		uint8_t GetPortValue(uint8_t port);
+
+		static shared_ptr<Zapper> GetZapper(uint8_t port);
+		static void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice, uint8_t port);
+		void UnregisterControlDevice(uint8_t port);
 
 	protected:
 		virtual void StreamState(bool saving);
@@ -33,6 +34,8 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 	public:
 		ControlManager();
 
+		void UpdateControlDevices();
+		
 		static void RegisterBroadcaster(IGameBroadcaster* gameBroadcaster);
 		static void UnregisterBroadcaster(IGameBroadcaster* gameBroadcaster);
 
@@ -41,12 +44,14 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		static uint32_t GetPressedKey();
 		static string GetKeyName(uint32_t keyCode);
 		static uint32_t GetKeyCode(string keyName);
+		
+		static shared_ptr<BaseControlDevice> GetControlDevice(uint8_t port);
 
-		static void BackupControlDevices();
-		static void RestoreControlDevices();
-		static IControlDevice* GetControlDevice(uint8_t port);
-		static void RegisterControlDevice(IControlDevice* controlDevice, uint8_t port);
-		static void UnregisterControlDevice(IControlDevice* controlDevice);
+		static bool HasZapper();
+		static void ZapperSetPosition(uint8_t port, int32_t x, int32_t y);
+		static void ZapperSetTriggerState(uint8_t port, bool pulled);
+
+		static void BroadcastInput(uint8_t port, uint8_t state);
 
 		void GetMemoryRanges(MemoryRanges &ranges)
 		{

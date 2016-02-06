@@ -447,7 +447,7 @@
     <ClInclude Include="HdNesPack.h" />
     <ClInclude Include="HdPpu.h" />
     <ClInclude Include="IAudioDevice.h" />
-    <ClInclude Include="IControlDevice.h" />
+    <ClInclude Include="BaseControlDevice.h" />
     <ClInclude Include="IGameBroadcaster.h" />
     <ClInclude Include="IKeyManager.h" />
     <ClInclude Include="IMemoryHandler.h" />
@@ -506,18 +506,19 @@
     <ClInclude Include="UnRom_94.h" />
     <ClInclude Include="VideoDecoder.h" />
     <ClInclude Include="BaseVideoFilter.h" />
-    <ClInclude Include="VirtualController.h" />
     <ClInclude Include="VRC1.h" />
     <ClInclude Include="VRC2_4.h" />
     <ClInclude Include="VRC3.h" />
     <ClInclude Include="VRC6.h" />
     <ClInclude Include="VRC7.h" />
     <ClInclude Include="VrcIrq.h" />
+    <ClInclude Include="Zapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APU.cpp" />
     <ClCompile Include="ApuLengthCounter.cpp" />
     <ClCompile Include="AutoRomTest.cpp" />
+    <ClCompile Include="BaseControlDevice.cpp" />
     <ClCompile Include="BaseMapper.cpp" />
     <ClCompile Include="Breakpoint.cpp" />
     <ClCompile Include="CheatManager.cpp" />
@@ -563,7 +564,7 @@
     <ClCompile Include="VideoRenderer.cpp" />
     <ClCompile Include="VideoDecoder.cpp" />
     <ClCompile Include="BaseVideoFilter.cpp" />
-    <ClCompile Include="VirtualController.cpp" />
+    <ClCompile Include="Zapper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

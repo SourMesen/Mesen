@@ -22,11 +22,19 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void ApplyIpsPatch([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void AddKnowGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string folder);
 
-		[DllImport(DLLPath)] public static extern void AddKeyMappings(int port, KeyMapping mapping);
-		[DllImport(DLLPath)] public static extern void ClearKeyMappings(int port);
+		[DllImport(DLLPath)] public static extern void ZapperSetTriggerState(Int32 port, [MarshalAs(UnmanagedType.I1)]bool pulled);
+		[DllImport(DLLPath)] public static extern void ZapperSetPosition(Int32 port, Int32 x, Int32 y);
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasZapper();
+
+		[DllImport(DLLPath)] public static extern void SetControllerType(int port, ControllerType type);
+		[DllImport(DLLPath)] public static extern void SetControllerKeys(int port, KeyMappingSet mapping);
+		[DllImport(DLLPath)] public static extern void SetExpansionDevice(ExpansionPortDevice device);
+		[DllImport(DLLPath)] public static extern void SetConsoleType(ConsoleType type);
+
 		[DllImport(DLLPath)] public static extern UInt32 GetPressedKey();
 		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string keyName);
 		[DllImport(DLLPath, EntryPoint="GetKeyName")] private static extern IntPtr GetKeyNameWrapper(UInt32 key);
+
 		
 		[DllImport(DLLPath)] public static extern void Run();
 		[DllImport(DLLPath)] public static extern void Pause();
@@ -286,6 +294,24 @@ namespace Mesen.GUI
 			ResolutionChanged = 11,
 			FdsDiskChanged = 12,
 			FdsBiosNotFound = 13,
+			ConfigChanged = 14,
+			DisconnectedFromServer = 15
+		}
+
+		public enum ControllerType
+		{
+			None = 0,
+			StandardController = 1,
+			Zapper = 2,
+		}
+
+		public struct KeyMappingSet
+		{
+			public KeyMapping Mapping1;
+			public KeyMapping Mapping2;
+			public KeyMapping Mapping3;
+			public KeyMapping Mapping4;
+			public UInt32 TurboSpeed;
 		}
 
 		public struct KeyMapping
@@ -302,7 +328,13 @@ namespace Mesen.GUI
 			public UInt32 TurboB;
 			public UInt32 TurboStart;
 			public UInt32 TurboSelect;
-			public UInt32 TurboSpeed;
+		}
+
+		public enum ExpansionPortDevice
+		{
+			None = 0,
+			Zapper = 1,
+			FourPlayerAdapter = 2,
 		}
 
 		public struct ScreenSize
@@ -467,6 +499,7 @@ namespace Mesen.GUI
 		AllowInvalidInput = 0x08,
 		RemoveSpriteLimit = 0x10,
 		UseHdPacks = 0x20,
+		HasFourScore = 0x40,
 
 		PauseOnMovieEnd = 0x0100,
 		PauseWhenInBackground = 0x0200,
@@ -517,6 +550,13 @@ namespace Mesen.GUI
 		NTSC = 1,
 		PAL = 2,
 		Dendy = 3,
+	}
+
+	public enum ConsoleType
+	{
+		Nes = 0,
+		Famicom = 1,
+		//VsSystem = 2,
 	}
 
 	public enum AudioChannel

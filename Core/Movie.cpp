@@ -5,7 +5,17 @@
 #include "../Utilities/FolderUtilities.h"
 #include "RomLoader.h"
 
-Movie* Movie::Instance = new Movie();
+shared_ptr<Movie> Movie::_instance(new Movie());
+
+Movie::~Movie()
+{
+	_instance = nullptr;
+}
+
+shared_ptr<Movie> Movie::GetInstance()
+{
+	return _instance;
+}
 
 void Movie::PushState(uint8_t port)
 {
@@ -137,57 +147,101 @@ void Movie::PlayMovie(stringstream &filestream, bool autoLoadRom, string filenam
 
 void Movie::Record(string filename, bool reset)
 {
-	Instance->StartRecording(filename, reset);
+	if(_instance) {
+		_instance->StartRecording(filename, reset);
+	}
 }
 
 void Movie::Play(string filename)
 {
-	ifstream file(filename, ios::in | ios::binary);
-	std::stringstream ss;
+	if(_instance) {
+		ifstream file(filename, ios::in | ios::binary);
+		std::stringstream ss;
 
-	if(file) {
-		ss << file.rdbuf();
-		file.close();
-		
-		Instance->PlayMovie(ss, true, filename);
+		if(file) {
+			ss << file.rdbuf();
+			file.close();
+
+			_instance->PlayMovie(ss, true, filename);
+		}
 	}
 }
 
 void Movie::Play(std::stringstream &filestream, bool autoLoadRom)
 {
-	Instance->PlayMovie(filestream, autoLoadRom);
+	if(_instance) {
+		_instance->PlayMovie(filestream, autoLoadRom);
+	}
 }
 
 void Movie::Stop()
 {
-	Instance->StopAll();
+	if(_instance) {
+		_instance->StopAll();
+	}
 }
 
 bool Movie::Playing()
 {
-	return Instance->_playing;
+	if(_instance) {
+		return _instance->_playing;
+	} else {
+		return false;
+	}
 }
 
 bool Movie::Recording()
 {
-	return Instance->_recording;
+	if(_instance) {
+		return _instance->_recording;
+	} else {
+		return false;
+	}
 }
+
+struct MovieHeader
+{
+	char Header[3] = { 'M', 'M', 'O' };
+	uint32_t MesenVersion;
+	uint32_t MovieFormatVersion;
+	uint32_t RomCrc32;
+	uint32_t Region;
+	uint32_t ConsoleType;
+	uint8_t ControllerTypes[4];
+	uint32_t ExpansionDevice;
+	uint32_t FilenameLength;
+};
 
 bool Movie::Save()
 {
-	_file.write("MMO", 3);
-	_data.SaveStateSize = (uint32_t)_startState.tellp();
-		
 	string romFilepath = Console::GetROMPath();
 	string romFilename = FolderUtilities::GetFilename(romFilepath, true);
 
-	uint32_t romCrc32 = RomLoader::GetCRC32(romFilepath);
-	_file.write((char*)&romCrc32, sizeof(romCrc32));
+	MovieHeader header = {};
+	header.MesenVersion = EmulationSettings::GetMesenVersion();
+	header.MovieFormatVersion = 1;
+	header.RomCrc32 = RomLoader::GetCRC32(romFilepath);
+	header.Region = (uint32_t)Console::GetNesModel();
+	header.ConsoleType = (uint32_t)EmulationSettings::GetConsoleType();
+	header.ExpansionDevice = (uint32_t)EmulationSettings::GetExpansionDevice();
+	for(int port = 0; port < 4; port++) {
+		header.ControllerTypes[port] = (uint32_t)EmulationSettings::GetControllerType(port);
+	}
+	header.FilenameLength = (uint32_t)romFilename.size();
 
-	uint32_t romNameSize = (uint32_t)romFilename.size();
-	_file.write((char*)&romNameSize, sizeof(uint32_t));
-	_file.write((char*)romFilename.c_str(), romNameSize);
+	_file.write((char*)header.Header, sizeof(header.Header));
+	_file.write((char*)&header.MesenVersion, sizeof(header.MesenVersion));
+	_file.write((char*)&header.MovieFormatVersion, sizeof(header.MovieFormatVersion));
+	_file.write((char*)&header.RomCrc32, sizeof(header.RomCrc32));
+	_file.write((char*)&header.Region, sizeof(header.Region));
+	_file.write((char*)&header.ConsoleType, sizeof(header.ConsoleType));
+	_file.write((char*)&header.ControllerTypes, sizeof(header.ControllerTypes));
+	_file.write((char*)&header.ExpansionDevice, sizeof(header.ExpansionDevice));
+	_file.write((char*)&header.FilenameLength, sizeof(header.FilenameLength));
 
+	_file.write((char*)romFilename.c_str(), header.FilenameLength);
+
+	_data.SaveStateSize = (uint32_t)_startState.tellp();
 	_file.write((char*)&_data.SaveStateSize, sizeof(uint32_t));
 		
 	if(_data.SaveStateSize > 0) {
@@ -215,30 +269,39 @@ bool Movie::Save()
 
 bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 {
-	char header[3];
-	file.read((char*)&header, 3);
+	MovieHeader header = {};
+	file.read((char*)header.Header, sizeof(header.Header));
 
-	if(memcmp((char*)&header, "MMO", 3) != 0) {
+	if(memcmp(header.Header, "MMO", 3) != 0) {
 		//Invalid movie file
 		return false;
 	}
 
-	uint32_t romCrc32;
-	file.read((char*)&romCrc32, sizeof(romCrc32));
+	file.read((char*)&header.MesenVersion, sizeof(header.MesenVersion));
+	file.read((char*)&header.MovieFormatVersion, sizeof(header.MovieFormatVersion));
+	file.read((char*)&header.RomCrc32, sizeof(header.RomCrc32));
+	file.read((char*)&header.Region, sizeof(header.Region));
+	file.read((char*)&header.ConsoleType, sizeof(header.ConsoleType));
+	file.read((char*)&header.ControllerTypes, sizeof(header.ControllerTypes));
+	file.read((char*)&header.ExpansionDevice, sizeof(header.ExpansionDevice));
+	file.read((char*)&header.FilenameLength, sizeof(header.FilenameLength));
 
-	uint32_t romNameSize;
-	file.read((char*)&romNameSize, sizeof(uint32_t));
+	EmulationSettings::SetConsoleType((ConsoleType)header.ConsoleType);
+	EmulationSettings::SetExpansionDevice((ExpansionPortDevice)header.ExpansionDevice);
+	for(int port = 0; port < 4; port++) {
+		EmulationSettings::SetControllerType(port, (ControllerType)header.ControllerTypes[port]);
+	}
 
-	char* romFilename = new char[romNameSize + 1];
-	memset(romFilename, 0, (romNameSize + 1));
-	file.read((char*)romFilename, romNameSize);
+	char* romFilename = new char[header.FilenameLength + 1];
+	memset(romFilename, 0, header.FilenameLength + 1);
+	file.read((char*)romFilename, header.FilenameLength);
 	
 	bool loadedGame = true;
 	if(autoLoadRom) {
 		string currentRom = Console::GetROMPath();
-		if(currentRom.empty() || romCrc32 != RomLoader::GetCRC32(currentRom)) {
+		if(currentRom.empty() || header.RomCrc32 != RomLoader::GetCRC32(currentRom)) {
 			//Loaded game isn't the same as the game used for the movie, attempt to load the correct game
-			loadedGame = Console::LoadROM(romFilename, romCrc32);
+			loadedGame = Console::LoadROM(romFilename, header.RomCrc32);
 		}
 	}
 

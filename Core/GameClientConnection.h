@@ -1,24 +1,34 @@
 #pragma once
 #include "stdafx.h"
+#include <deque>
 #include "GameConnection.h"
-#include "IControlDevice.h"
+#include "../Utilities/AutoResetEvent.h"
+#include "../Utilities/SimpleLock.h"
+#include "StandardController.h"
 
 class ClientConnectionData;
-class VirtualController;
 
 class GameClientConnection : public GameConnection
 {
 private:
-	vector<unique_ptr<VirtualController>> _virtualControllers;
-	IControlDevice* _controlDevice;
-	uint8_t _lastInputSent = 0x00;
+	std::deque<uint8_t> _inputData[4];
+	atomic<uint32_t> _inputSize[4];
+	AutoResetEvent _waitForInput[4];
+	SimpleLock _writeLock;
+	atomic<bool> _shutdown;
+	atomic<bool> _enableControllers = false;
+	atomic<uint32_t> _minimumQueueSize = 3;
+
+	shared_ptr<BaseControlDevice> _controlDevice;
+	uint32_t _lastInputSent = 0x00;
 	bool _gameLoaded = false;
 	uint8_t _controllerPort = 255;
 
 private:
 	void SendHandshake();
-	void InitializeVirtualControllers();
-	void DisposeVirtualControllers();
+	void ClearInputData();
+	void PushControllerState(uint8_t port, uint8_t state);
+	void DisableControllers();
 
 protected:
 	void ProcessMessage(NetMessage* message);
@@ -26,6 +36,7 @@ protected:
 public:
 	GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData);
 	~GameClientConnection();
-	
+
+	uint8_t GetControllerState(uint8_t port);
 	void SendInput();
 };

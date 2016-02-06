@@ -230,7 +230,7 @@ void Console::Run()
 				_runLock.Acquire();
 			}
 
-			bool paused = EmulationSettings::CheckFlag(EmulationFlags::Paused) || (EmulationSettings::CheckFlag(EmulationFlags::InBackground) && EmulationSettings::CheckFlag(EmulationFlags::PauseWhenInBackground));
+			bool paused = EmulationSettings::IsPaused();
 			if(paused && !_stop) {
 				MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
 				_runLock.Release();
@@ -241,7 +241,7 @@ void Console::Run()
 				while(paused) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
-					paused = EmulationSettings::CheckFlag(EmulationFlags::Paused) || (EmulationSettings::CheckFlag(EmulationFlags::InBackground) && EmulationSettings::CheckFlag(EmulationFlags::PauseWhenInBackground));
+					paused = EmulationSettings::IsPaused();
 				}
 				_runLock.Acquire();
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
@@ -276,10 +276,20 @@ void Console::Run()
 
 double Console::UpdateNesModel()
 {
+	bool configChanged = false;
+	if(EmulationSettings::NeedControllerUpdate()) {
+		_controlManager->UpdateControlDevices();
+		configChanged = true;
+	}
+
 	NesModel model = EmulationSettings::GetNesModel();
 	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
 	if(model == NesModel::Auto) {
 		model = _mapper->IsPalRom() ? NesModel::PAL : NesModel::NTSC;
+	}
+	if(_model != model) {
+		_model = model;
+		configChanged = true;
 	}
 	
 	double frameDelay;
@@ -297,6 +307,10 @@ double Console::UpdateNesModel()
 
 	_ppu->SetNesModel(model);
 	_apu->SetNesModel(model);
+
+	if(configChanged) {
+		MessageManager::SendNotification(ConsoleNotificationType::ConfigChanged);
+	}
 
 	return frameDelay;
 }
@@ -346,4 +360,9 @@ std::weak_ptr<Debugger> Console::GetDebugger()
 void Console::StopDebugger()
 {
 	_debugger.reset();
+}
+
+NesModel Console::GetNesModel()
+{
+	return Instance->_model;
 }

@@ -11,10 +11,8 @@ struct MovieData
 
 class Movie
 {
-	friend class ControlManager;
-
 	private:
-		static Movie* Instance;
+		static shared_ptr<Movie> _instance;
 		bool _recording = false;
 		bool _playing = false;
 		uint8_t _counter[4];
@@ -33,13 +31,16 @@ class Movie
 		void StopAll();
 		void Reset();
 
-		void RecordState(uint8_t port, uint8_t state);
-		uint8_t GetState(uint8_t port);
-
 		bool Save();
 		bool Load(std::stringstream &file, bool autoLoadRom);
 		
 	public:
+		~Movie();
+
+		void RecordState(uint8_t port, uint8_t state);
+		uint8_t GetState(uint8_t port);
+
+		static shared_ptr<Movie> GetInstance();
 		static void Record(string filename, bool reset);
 		static void Play(string filename);
 		static void Play(std::stringstream &filestream, bool autoLoadRom);

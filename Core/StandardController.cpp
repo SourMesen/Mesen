@@ -4,27 +4,18 @@
 #include "PPU.h"
 #include "EmulationSettings.h"
 
-StandardController::StandardController(uint8_t port)
+void StandardController::StreamState(bool saving)
 {
-	ControlManager::RegisterControlDevice(this, port);
+	BaseControlDevice::StreamState(saving);
+	Stream<uint32_t>(_stateBuffer);
+	Stream<uint32_t>(_stateBufferFamicom);
+
+	if(_additionalController) {
+		Stream(_additionalController);
+	}
 }
 
-StandardController::~StandardController()
-{
-	ControlManager::UnregisterControlDevice(this);
-}
-
-void StandardController::AddKeyMappings(KeyMapping keyMapping)
-{
-	_keyMappings.push_back(keyMapping);
-}
-
-void StandardController::ClearKeyMappings()
-{
-	_keyMappings.clear();
-}
-
-ButtonState StandardController::GetButtonState()
+uint8_t StandardController::GetButtonState()
 {
 	ButtonState state;
 
@@ -42,7 +33,7 @@ ButtonState StandardController::GetButtonState()
 			state.Right |= ControlManager::IsKeyPressed(keyMapping.Right);
 
 			//Turbo buttons - need to be applied for at least 2 reads in a row (some games require this)
-			uint8_t turboFreq = 1 << (4 - keyMapping.TurboSpeed);
+			uint8_t turboFreq = 1 << (4 - _turboSpeed);
 			bool turboOn = (uint8_t)(PPU::GetFrameCount() % turboFreq) < turboFreq / 2;
 			if(turboOn) {
 				state.A |= ControlManager::IsKeyPressed(keyMapping.TurboA);
@@ -62,5 +53,72 @@ ButtonState StandardController::GetButtonState()
 		}
 	}
 
-	return state;
+	return state.ToByte();
+}
+
+uint8_t StandardController::GetPortOutput()
+{
+	uint8_t returnValue = _stateBuffer & 0x01;
+	_stateBuffer >>= 1;
+
+	if(_famiconDevice && _additionalController) {
+		if(_hasZapper) {
+			returnValue |= _additionalController->GetPortOutput();
+		} else {
+			returnValue |= (_stateBufferFamicom & 0x01) << 1;
+			_stateBufferFamicom >>= 1;
+			_stateBuffer |= 0x800000;
+		}
+	}
+
+	//"All subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers."
+	_stateBuffer |= 0x800000;
+
+	return returnValue;
+}
+
+void StandardController::RefreshStateBuffer()
+{
+	_stateBuffer = GetControlState();
+	if(_additionalController) {
+		//Next 8 bits = Gamepad 3/4
+		if(_famiconDevice) {
+			//Four player adapter (Famicom)
+			_stateBufferFamicom = _additionalController->GetControlState();
+			_stateBufferFamicom |= 0xFFFF00;
+		} else {
+			//Four-score adapter (NES)
+			_stateBuffer |= _additionalController->GetControlState() << 8;
+
+			//Last 8 bits = signature
+			//Signature for port 0 = 0x10, reversed bit order => 0x08
+			//Signature for port 1 = 0x20, reversed bit order => 0x04
+			_stateBuffer |= (GetPort() == 0 ? 0x08 : 0x04) << 16;
+		}
+	} else {
+		//"All subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers."
+		_stateBuffer |= 0xFFFF00;
+	}
+}
+
+uint8_t StandardController::RefreshState()
+{
+	return GetButtonState();
+}
+
+void StandardController::AddAdditionalController(shared_ptr<BaseControlDevice> controller)
+{
+	if(std::dynamic_pointer_cast<Zapper>(controller)) {
+		_hasZapper = true;
+	}
+	_additionalController = controller;
+}
+
+shared_ptr<Zapper> StandardController::GetZapper()
+{
+	if(_hasZapper) {
+		return std::dynamic_pointer_cast<Zapper>(_additionalController);
+	} else {
+		return nullptr;
+	}
 }

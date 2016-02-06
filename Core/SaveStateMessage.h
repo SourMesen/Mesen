@@ -16,11 +16,10 @@ private:
 protected:
 	virtual void ProtectedStreamState()
 	{
-		vector<CodeInfo> cheats;
-
 		StreamArray((void**)&_stateData, _dataSize);
 
 		if(_sending) {
+			vector<CodeInfo> cheats;
 			cheats = CheatManager::GetCheats();
 			_cheats = cheats.size() > 0 ? &cheats[0] : nullptr;
 			_cheatArraySize = (uint32_t)cheats.size() * sizeof(CodeInfo);
@@ -28,11 +27,6 @@ protected:
 			delete[] _stateData;
 		} else {
 			StreamArray((void**)&_cheats, _cheatArraySize);
-			for(uint32_t i = 0; i < _cheatArraySize / sizeof(CodeInfo); i++) {
-				cheats.push_back(((CodeInfo*)_cheats)[i]);
-			}
-
-			CheatManager::SetCheats(cheats);
 		}
 	}
 
@@ -55,5 +49,11 @@ public:
 	void LoadState()
 	{
 		Console::LoadState((uint8_t*)_stateData, _dataSize);
+
+		vector<CodeInfo> cheats;
+		for(uint32_t i = 0; i < _cheatArraySize / sizeof(CodeInfo); i++) {
+			cheats.push_back(((CodeInfo*)_cheats)[i]);
+		}
+		CheatManager::SetCheats(cheats);
 	}
 };

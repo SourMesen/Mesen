@@ -161,7 +161,7 @@
     <Compile Include="Config\PreferenceInfo.cs" />
     <Compile Include="Config\VideoInfo.cs" />
     <Compile Include="Config\CheatInfo.cs" />
-    <Compile Include="Config\ControllerInfo.cs" />
+    <Compile Include="Config\InputInfo.cs" />
     <Compile Include="Config\ClientConnection.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\ImageExtensions.cs" />
@@ -175,11 +175,11 @@
     <Compile Include="Controls\ctrlTrackbar.Designer.cs">
       <DependentUpon>ctrlTrackbar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DXViewer.cs">
+    <Compile Include="Controls\ctrlRenderer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\DXViewer.Designer.cs">
-      <DependentUpon>DXViewer.cs</DependentUpon>
+    <Compile Include="Controls\ctrlRenderer.Designer.cs">
+      <DependentUpon>ctrlRenderer.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\MyListView.cs">
       <SubType>Component</SubType>
@@ -322,6 +322,12 @@
     <Compile Include="Forms\Config\ctrlStandardController.Designer.cs">
       <DependentUpon>ctrlStandardController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Config\frmControllerConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\frmControllerConfig.Designer.cs">
+      <DependentUpon>frmControllerConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Config\frmGetKey.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -397,6 +403,9 @@
     <EmbeddedResource Include="Controls\ctrlTrackbar.resx">
       <DependentUpon>ctrlTrackbar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ctrlRenderer.resx">
+      <DependentUpon>ctrlRenderer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlBreakpoints.resx">
       <DependentUpon>ctrlBreakpoints.cs</DependentUpon>
     </EmbeddedResource>
@@ -462,6 +471,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlStandardController.resx">
       <DependentUpon>ctrlStandardController.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\frmControllerConfig.resx">
+      <DependentUpon>frmControllerConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmGetKey.resx">
       <DependentUpon>frmGetKey.cs</DependentUpon>

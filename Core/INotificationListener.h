@@ -17,6 +17,8 @@ enum class ConsoleNotificationType
 	ResolutionChanged = 11,
 	FdsDiskChanged = 12,
 	FdsBiosNotFound = 13,
+	ConfigChanged = 14,
+	DisconnectedFromServer = 15
 };
 
 class INotificationListener

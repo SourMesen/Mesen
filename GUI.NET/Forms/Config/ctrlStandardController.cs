@@ -30,9 +30,20 @@ namespace Mesen.GUI.Forms.Config
 			btnRight.Text = mappings.Right;
 			btnTurboA.Text = mappings.TurboA;
 			btnTurboB.Text = mappings.TurboB;
-			
-			trkTurboSpeed.Value = (Int32)mappings.TurboSpeed;
-			trkTurboSpeed.BackColor = Color.FromArgb(255, trkTurboSpeed.Parent.BackColor);
+		}
+
+		public void ClearKeys()
+		{
+			btnA.Text = "";
+			btnB.Text = "";
+			btnStart.Text = "";
+			btnSelect.Text = "";
+			btnUp.Text = "";
+			btnDown.Text = "";
+			btnLeft.Text = "";
+			btnRight.Text = "";
+			btnTurboA.Text = "";
+			btnTurboB.Text = "";
 		}
 
 		private void btnMapping_Click(object sender, EventArgs e)
@@ -57,7 +68,6 @@ namespace Mesen.GUI.Forms.Config
 				TurboB = btnTurboB.Text,
 				TurboSelect = string.Empty,
 				TurboStart = string.Empty,
-				TurboSpeed = (UInt32)trkTurboSpeed.Value
 			};
 			return mappings;
 		}

@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "Snapshotable.h"
 #include "MemoryManager.h"
+#include "EmulationSettings.h"
 
 enum class NesModel;
 
@@ -265,5 +266,13 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint8_t* GetSecondarySpriteRam()
 		{
 			return _secondarySpriteRAM;
+		}
+
+		static uint32_t GetPixelBrightness(uint8_t x, uint8_t y)
+		{
+			//Used by Zapper, gives a rough approximation of the brightness level of the specific pixel
+			uint16_t pixelData = PPU::Instance->_currentOutputBuffer[y << 8 | x];
+			uint32_t argbColor = EmulationSettings::GetRgbPalette()[pixelData & 0x3F];
+			return (argbColor & 0xFF) + ((argbColor >> 8) & 0xFF) + ((argbColor >> 16) & 0xFF);
 		}
 };

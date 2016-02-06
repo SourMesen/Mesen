@@ -7,6 +7,7 @@ using std::thread;
 #include "Console.h"
 #include "../Utilities/Socket.h"
 #include "ClientConnectionData.h"
+#include "GameClientConnection.h"
 
 unique_ptr<GameClient> GameClient::Instance;
 
@@ -57,15 +58,6 @@ void GameClient::PrivateConnect(shared_ptr<ClientConnectionData> connectionData)
 	}
 }
 
-void GameClient::PrivateDisconnect()
-{
-	if(_connected) {
-		_connected = false;
-		_socket.reset();
-		_connection.reset();
-	}
-}
-
 void GameClient::Exec()
 {
 	if(_connected) {
@@ -89,4 +81,9 @@ void GameClient::ProcessNotification(ConsoleNotificationType type, void* paramet
 	if(type == ConsoleNotificationType::GameLoaded && std::this_thread::get_id() != _clientThread->get_id()) {
 		GameClient::Disconnect();		
 	}
+}
+
+uint8_t GameClient::GetControllerState(uint8_t port)
+{
+	return Instance->_connection->GetControllerState(port);
 }

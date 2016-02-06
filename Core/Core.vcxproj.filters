@@ -63,15 +63,15 @@
     <Filter Include="Nes\Mappers\FDS">
       <UniqueIdentifier>{4a7af167-f6cb-4173-b7ca-04ed7c5858b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\Controllers">
+      <UniqueIdentifier>{acd315c2-48ad-4243-a997-bb9a970c24bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IAudioDevice.h">
-      <Filter>Nes\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="IControlDevice.h">
       <Filter>Nes\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="IMemoryHandler.h">
@@ -263,9 +263,6 @@
     <ClInclude Include="IGameBroadcaster.h">
       <Filter>NetPlay</Filter>
     </ClInclude>
-    <ClInclude Include="VirtualController.h">
-      <Filter>NetPlay</Filter>
-    </ClInclude>
     <ClInclude Include="Console.h">
       <Filter>Nes</Filter>
     </ClInclude>
@@ -279,9 +276,6 @@
       <Filter>Nes</Filter>
     </ClInclude>
     <ClInclude Include="PPU.h">
-      <Filter>Nes</Filter>
-    </ClInclude>
-    <ClInclude Include="StandardController.h">
       <Filter>Nes</Filter>
     </ClInclude>
     <ClInclude Include="CPU.h">
@@ -536,6 +530,15 @@
     <ClInclude Include="VideoRenderer.h">
       <Filter>VideoDecoder</Filter>
     </ClInclude>
+    <ClInclude Include="StandardController.h">
+      <Filter>Nes\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Zapper.h">
+      <Filter>Nes\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseControlDevice.h">
+      <Filter>Nes\Controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -598,9 +601,6 @@
     <ClCompile Include="GameServerConnection.cpp">
       <Filter>NetPlay</Filter>
     </ClCompile>
-    <ClCompile Include="VirtualController.cpp">
-      <Filter>NetPlay</Filter>
-    </ClCompile>
     <ClCompile Include="Console.cpp">
       <Filter>Nes</Filter>
     </ClCompile>
@@ -617,9 +617,6 @@
       <Filter>Nes</Filter>
     </ClCompile>
     <ClCompile Include="PPU.cpp">
-      <Filter>Nes</Filter>
-    </ClCompile>
-    <ClCompile Include="StandardController.cpp">
       <Filter>Nes</Filter>
     </ClCompile>
     <ClCompile Include="CheatManager.cpp">
@@ -657,6 +654,15 @@
     </ClCompile>
     <ClCompile Include="VideoRenderer.cpp">
       <Filter>VideoDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="StandardController.cpp">
+      <Filter>Nes\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Zapper.cpp">
+      <Filter>Nes\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseControlDevice.cpp">
+      <Filter>Nes\Controllers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
