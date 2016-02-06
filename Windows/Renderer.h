@@ -71,11 +71,12 @@ namespace NES {
 		void DrawNESScreen();
 		void DrawPauseScreen();
 
-		std::wstring WrapText(string text, SpriteFont* font, float maxLineWidth);
-		void DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale);
+		std::wstring WrapText(string text, SpriteFont* font, float maxLineWidth, uint32_t &lineCount);
+		void DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor = Colors::Black);
+		void DrawOutlinedString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor = Colors::Black);
 
 		void DrawToasts();
-		void DrawToast(shared_ptr<ToastInfo> toast, int posIndex);
+		void DrawToast(shared_ptr<ToastInfo> toast, int &lastHeight);
 		void RemoveOldToasts();
 	
 	public:

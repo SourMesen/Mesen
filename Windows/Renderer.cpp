@@ -299,7 +299,7 @@ namespace NES
 
 	void Renderer::DisplayMessage(string title, string message)
 	{
-		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 2500, "Resources\\MesenIcon.bmp"));
+		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, "Resources\\MesenIcon.bmp"));
 		DisplayToast(toast);
 	}
 
@@ -308,22 +308,27 @@ namespace NES
 		_toasts.push_front(toast);
 	}
 
-	void Renderer::DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale)
+	void Renderer::DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor)
+	{
+		std::wstring textStr = utf8::utf8::decode(message);
+		DrawOutlinedString(textStr, x, y, color, scale, outlineColor);
+	}
+
+	void Renderer::DrawOutlinedString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor)
 	{
 		SpriteBatch* spritebatch = _spriteBatch.get();
-		std::wstring textStr = utf8::utf8::decode(message);
-		const wchar_t *text = textStr.c_str();
+		const wchar_t *text = message.c_str();
 
 		for(uint8_t offsetX = 2; offsetX > 0; offsetX--) {
 			for(uint8_t offsetY = 2; offsetY > 0; offsetY--) {
-				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x, y + offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x, y - offsetY), Colors::Black, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				_font->DrawString(spritebatch, text, XMFLOAT2(x, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
 			}
 		}
 		_font->DrawString(spritebatch, text, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
@@ -390,7 +395,7 @@ namespace NES
 		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
 		shaderResourceView->Release();
 
-		DrawOutlinedString("PAUSED", (float)_screenWidth / 2 - 145, (float)_screenHeight / 2 - 47, Colors::AntiqueWhite, 4.5f);
+		DrawOutlinedString("PAUSED", (float)_screenWidth / 2 - 60, (float)_screenHeight / 2 - 20, Colors::AntiqueWhite, 2.0f);
 	}
 
 	void Renderer::Render()
@@ -473,9 +478,10 @@ namespace NES
 		RemoveOldToasts();
 
 		int counter = 0;
+		int lastHeight = 5;
 		for(shared_ptr<ToastInfo> toast : _toasts) {
-			if(counter < 3) {
-				DrawToast(toast, counter);
+			if(counter < 6) {
+				DrawToast(toast, lastHeight);
 			} else {
 				break;
 			}
@@ -483,7 +489,7 @@ namespace NES
 		}
 	}
 
-	std::wstring Renderer::WrapText(string utf8Text, SpriteFont* font, float maxLineWidth)
+	std::wstring Renderer::WrapText(string utf8Text, SpriteFont* font, float maxLineWidth, uint32_t &lineCount)
 	{
 		using std::wstring;
 		wstring text = utf8::utf8::decode(utf8Text);
@@ -504,6 +510,7 @@ namespace NES
 			words.push_back(currentWord);
 		}
 
+		lineCount = 1;
 		float spaceWidth = font->MeasureString(L" ").m128_f32[0];
 		float lineWidth = 0.0f;
 		for(wstring word : words) {
@@ -520,15 +527,16 @@ namespace NES
 			} else {
 				wrappedText += L"\n" + word + L" ";
 				lineWidth = wordWidth + spaceWidth;
+				lineCount++;
 			}
 		}
 
 		return wrappedText;
 	}
 
-	void Renderer::DrawToast(shared_ptr<ToastInfo> toast, int posIndex)
+	void Renderer::DrawToast(shared_ptr<ToastInfo> toast, int &lastHeight)
 	{
-		RECT dest;
+		/*RECT dest;
 		dest.top = _screenHeight - (100 * (posIndex + 1)) - 50;
 		dest.left = (_screenWidth - 340) / 2;
 		dest.bottom = dest.top + 70;
@@ -556,6 +564,17 @@ namespace NES
 		}
 
 		_smallFont->DrawString(_spriteBatch.get(), WrapText(toast->GetToastTitle(), _smallFont.get(), 340 - 30 - textLeftMargin).c_str(), XMFLOAT2(dest.left + textLeftMargin - 5.0f, dest.top + 5.0f), color);
-		_font->DrawString(_spriteBatch.get(), WrapText(toast->GetToastMessage(), _font.get(), 340 - 30 - textLeftMargin).c_str(), XMFLOAT2(dest.left + textLeftMargin - 2.0f, dest.top + 19.0f), color);
+		_font->DrawString(_spriteBatch.get(), WrapText(toast->GetToastMessage(), _font.get(), 340 - 30 - textLeftMargin).c_str(), XMFLOAT2(dest.left + textLeftMargin - 2.0f, dest.top + 19.0f), color);*/
+
+		//Get opacity for fade in/out effect
+		float opacity = toast->GetOpacity();
+		XMVECTORF32 color = { opacity, opacity, opacity, opacity };
+		float textLeftMargin = 4.0f;
+
+		string text = toast->GetToastTitle() + ": " + toast->GetToastMessage();
+		uint32_t lineCount = 0;
+		std::wstring wrappedText = WrapText(text, _font.get(), _screenWidth - textLeftMargin * 2 - 20, lineCount);
+		lastHeight += lineCount * 20;
+		DrawOutlinedString(wrappedText, textLeftMargin, (float)(_screenHeight - lastHeight), color, 1, { 0.0f,0.0f,0.0f, opacity });
 	}
 }

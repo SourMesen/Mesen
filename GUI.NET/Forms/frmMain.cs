@@ -52,6 +52,7 @@ namespace Mesen.GUI.Forms
 
 			menuTimer.Start();
 
+			VideoInfo.ApplyConfig();
 			InitializeFdsDiskMenu();
 			InitializeEmulationSpeedMenu();
 			
