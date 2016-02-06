@@ -14,7 +14,7 @@ public:
 	{
 		assert(strength <= 10);
 
-		for(int i = 0; i < sampleCount; i++) {
+		for(size_t i = 0; i < sampleCount; i++) {
 			if(strength > 0) {
 				int32_t sum = std::accumulate(&_prevSamples[0], &_prevSamples[strength], 0);
 				buffer[i] = (int16_t)((sum + buffer[i]) / (strength + 1) * volume);
