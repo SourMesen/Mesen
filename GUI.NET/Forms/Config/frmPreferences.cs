@@ -52,5 +52,10 @@ namespace Mesen.GUI.Forms.Config
 				chkAllowBackgroundInput.Checked = false;
 			}
 		}
+
+		private void btnOpenMesenFolder_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start(ConfigManager.HomeFolder);
+		}
 	}
 }
