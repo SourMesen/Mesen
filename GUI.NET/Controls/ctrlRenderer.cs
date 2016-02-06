@@ -42,9 +42,10 @@ namespace Mesen.GUI.Controls
 				InteropEmu.ZapperSetPosition(0, -1, -1);
 				InteropEmu.ZapperSetPosition(1, -1, -1);
 			} else {
-				//TODO
-				InteropEmu.ZapperSetPosition(0, e.X/4, e.Y/4);
-				InteropEmu.ZapperSetPosition(1, e.X/4, e.Y/4);
+				double xPos = (double)e.X / this.Width;
+				double yPos = (double)e.Y / this.Height;
+				InteropEmu.ZapperSetPosition(0, xPos, yPos);
+				InteropEmu.ZapperSetPosition(1, xPos, yPos);
 			}
 		}
 

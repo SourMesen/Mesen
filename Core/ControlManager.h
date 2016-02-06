@@ -48,7 +48,7 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		static shared_ptr<BaseControlDevice> GetControlDevice(uint8_t port);
 
 		static bool HasZapper();
-		static void ZapperSetPosition(uint8_t port, int32_t x, int32_t y);
+		static void ZapperSetPosition(uint8_t port, double x, double y);
 		static void ZapperSetTriggerState(uint8_t port, bool pulled);
 
 		static void BroadcastInput(uint8_t port, uint8_t state);

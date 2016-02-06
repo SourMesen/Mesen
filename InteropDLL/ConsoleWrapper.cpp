@@ -72,7 +72,7 @@ namespace InteropEmu {
 		
 		DllExport bool __stdcall HasZapper() { return ControlManager::HasZapper(); }
 		DllExport void __stdcall ZapperSetTriggerState(int32_t port, bool pulled) { ControlManager::ZapperSetTriggerState(port, pulled); }
-		DllExport void __stdcall ZapperSetPosition(int32_t port, int32_t x, int32_t y) { ControlManager::ZapperSetPosition(port, x, y); }
+		DllExport void __stdcall ZapperSetPosition(int32_t port, double x, double y) { ControlManager::ZapperSetPosition(port, x, y); }
 
 		DllExport uint32_t __stdcall GetPressedKey() { return ControlManager::GetPressedKey(); }
 		DllExport const char* __stdcall GetKeyName(uint32_t keyCode) 

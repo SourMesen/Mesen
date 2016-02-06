@@ -20,6 +20,6 @@ public:
 	uint8_t GetPortOutput();
 
 	uint32_t GetZapperState();
-	void SetPosition(int32_t x, int32_t y);
+	void SetPosition(double x, double y);
 	void SetTriggerState(bool pulled);
 };

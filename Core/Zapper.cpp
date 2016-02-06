@@ -22,10 +22,17 @@ void Zapper::StreamState(bool saving)
 	Stream<bool>(_pulled);
 }
 
-void Zapper::SetPosition(int32_t x, int32_t y)
+void Zapper::SetPosition(double x, double y)
 {
-	_xPosition = x;
-	_yPosition = y;
+	uint32_t scale = EmulationSettings::GetVideoScale();
+	OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+	if(x < 0 || y < 0) {
+		_xPosition = -1;
+		_yPosition = -1;
+	} else {
+		_xPosition = (int32_t)(x * (PPU::ScreenWidth - overscan.Left - overscan.Right) + overscan.Left);
+		_yPosition = (int32_t)(y * (PPU::ScreenHeight - overscan.Top - overscan.Bottom) + overscan.Top);
+	}
 }
 
 void Zapper::SetTriggerState(bool pulled)

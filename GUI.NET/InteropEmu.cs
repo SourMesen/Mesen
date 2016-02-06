@@ -23,7 +23,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void AddKnowGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string folder);
 
 		[DllImport(DLLPath)] public static extern void ZapperSetTriggerState(Int32 port, [MarshalAs(UnmanagedType.I1)]bool pulled);
-		[DllImport(DLLPath)] public static extern void ZapperSetPosition(Int32 port, Int32 x, Int32 y);
+		[DllImport(DLLPath)] public static extern void ZapperSetPosition(Int32 port, double x, double y);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasZapper();
 
 		[DllImport(DLLPath)] public static extern void SetControllerType(int port, ControllerType type);

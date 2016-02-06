@@ -237,7 +237,7 @@ bool ControlManager::HasZapper()
 	return GetZapper(0) != nullptr || GetZapper(1) != nullptr;
 }
 
-void ControlManager::ZapperSetPosition(uint8_t port, int32_t x, int32_t y)
+void ControlManager::ZapperSetPosition(uint8_t port, double x, double y)
 {
 	shared_ptr<Zapper> zapper = GetZapper(port);
 	if(zapper) {
