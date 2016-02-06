@@ -22,7 +22,7 @@ bool WindowsKeyManager::IsKeyPressed(uint32_t key)
 		//XInput key
 		uint8_t gamepadPort = (key - 0xFFFF) / 0x100;
 		uint8_t gamepadButton = (key - 0xFFFF) % 0x100;
-		return _gamePad.IsPressed(gamepadPort, 1 << (gamepadButton - 1));
+		return _gamePad.IsPressed(gamepadPort, gamepadButton);
 	} else {
 		return (GetAsyncKeyState(key) & 0x8000) == 0x8000;
 	}
@@ -34,8 +34,8 @@ uint32_t WindowsKeyManager::GetPressedKey()
 	_gamePad.RefreshState();
 
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
-		for(int j = 1; j <= 16; j++) {
-			if(_gamePad.IsPressed(i, 1 << (j - 1))) {
+		for(int j = 1; j <= 22; j++) {
+			if(_gamePad.IsPressed(i, j)) {
 				return 0xFFFF + i * 0x100 + j;
 			}
 		}

@@ -12,5 +12,5 @@ class GamePad
 		GamePad();
 
 		void RefreshState();
-		bool IsPressed(uint8_t gamepadPort, WORD button);
+		bool IsPressed(uint8_t gamepadPort, uint8_t button);
 };

@@ -22,20 +22,33 @@ void GamePad::RefreshState()
 	}
 }
 
-bool GamePad::IsPressed(uint8_t gamepadPort, WORD button)
+bool GamePad::IsPressed(uint8_t gamepadPort, uint8_t button)
 {
 	if(_gamePadStates[gamepadPort] != nullptr) {
-		if(button == XINPUT_GAMEPAD_DPAD_LEFT && _gamePadStates[gamepadPort]->Gamepad.sThumbLX < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-			_gamePadStates[gamepadPort]->Gamepad.wButtons |= button;
-		} else if(button == XINPUT_GAMEPAD_DPAD_RIGHT && _gamePadStates[gamepadPort]->Gamepad.sThumbLX > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-			_gamePadStates[gamepadPort]->Gamepad.wButtons |= button;
-		} else if(button == XINPUT_GAMEPAD_DPAD_UP && _gamePadStates[gamepadPort]->Gamepad.sThumbLY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-			_gamePadStates[gamepadPort]->Gamepad.wButtons |= button;
-		} else if(button == XINPUT_GAMEPAD_DPAD_DOWN && _gamePadStates[gamepadPort]->Gamepad.sThumbLY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
-			_gamePadStates[gamepadPort]->Gamepad.wButtons |= button;
+		XINPUT_GAMEPAD &gamepad = _gamePadStates[gamepadPort]->Gamepad;
+		if(button <= 16) {
+			WORD xinputButton = 1 << (button - 1);
+			if(xinputButton == XINPUT_GAMEPAD_DPAD_LEFT && gamepad.sThumbLX < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+				gamepad.wButtons |= xinputButton;
+			} else if(xinputButton == XINPUT_GAMEPAD_DPAD_RIGHT && gamepad.sThumbLX > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+				gamepad.wButtons |= xinputButton;
+			} else if(xinputButton == XINPUT_GAMEPAD_DPAD_UP && gamepad.sThumbLY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+				gamepad.wButtons |= xinputButton;
+			} else if(xinputButton == XINPUT_GAMEPAD_DPAD_DOWN && gamepad.sThumbLY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+				gamepad.wButtons |= xinputButton;
+			}
+
+			return (_gamePadStates[gamepadPort]->Gamepad.wButtons & xinputButton) != 0;
+		} else {
+			switch(button) {
+				case 17: return gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
+				case 18: return gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
+				case 19: return gamepad.sThumbRY > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+				case 20: return gamepad.sThumbRY < -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+				case 21: return gamepad.sThumbRX < -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+				case 22: return gamepad.sThumbRX > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+			}
 		}
-		return (_gamePadStates[gamepadPort]->Gamepad.wButtons & button) != 0;
-	} else {
-		return false;
 	}
+	return false;
 }
