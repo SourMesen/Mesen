@@ -6,6 +6,13 @@ class Socket;
 class NetMessage;
 class ClientConnectionData;
 
+struct PlayerInfo
+{
+	string Name;
+	uint8_t ControllerPort;
+	bool IsHost;
+};
+
 class GameConnection
 {
 protected:
@@ -24,14 +31,11 @@ private:
 
 	virtual void ProcessMessage(NetMessage* message) = 0;
 
-protected:
-	void SendNetMessage(NetMessage &message);
-
 public:
+	static const uint8_t SpectatorPort = 0xFF;
 	GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData);
 
 	bool ConnectionError();
-
 	void ProcessMessages();
-
+	void SendNetMessage(NetMessage &message);
 };

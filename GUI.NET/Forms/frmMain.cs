@@ -334,6 +334,27 @@ namespace Mesen.GUI.Forms
 
 					mnuStartServer.Enabled = !isNetPlayClient;
 					mnuConnect.Enabled = !InteropEmu.IsServerRunning();
+					mnuNetPlaySelectController.Enabled = isNetPlayClient || InteropEmu.IsServerRunning();
+					if(mnuNetPlaySelectController.Enabled) {
+						int availableControllers = InteropEmu.NetPlayGetAvailableControllers();
+						int currentControllerPort = InteropEmu.NetPlayGetControllerPort();
+						mnuNetPlayPlayer1.Enabled = (availableControllers & 0x01) == 0x01;
+						mnuNetPlayPlayer2.Enabled = (availableControllers & 0x02) == 0x02;
+						mnuNetPlayPlayer3.Enabled = (availableControllers & 0x04) == 0x04;
+						mnuNetPlayPlayer4.Enabled = (availableControllers & 0x08) == 0x08;
+						mnuNetPlayPlayer1.Text = "Player 1 (" + InteropEmu.NetPlayGetControllerType(0).ToString() + ")";
+						mnuNetPlayPlayer2.Text = "Player 2 (" + InteropEmu.NetPlayGetControllerType(1).ToString() + ")";
+						mnuNetPlayPlayer3.Text = "Player 3 (" + InteropEmu.NetPlayGetControllerType(2).ToString() + ")";
+						mnuNetPlayPlayer4.Text = "Player 4 (" + InteropEmu.NetPlayGetControllerType(3).ToString() + ")";
+
+						mnuNetPlayPlayer1.Checked = (currentControllerPort == 0);
+						mnuNetPlayPlayer2.Checked = (currentControllerPort == 1);
+						mnuNetPlayPlayer3.Checked = (currentControllerPort == 2);
+						mnuNetPlayPlayer4.Checked = (currentControllerPort == 3);
+						mnuNetPlaySpectator.Checked = (currentControllerPort == 0xFF);
+
+						mnuNetPlaySpectator.Enabled = true;
+					}
 
 					mnuStartServer.Text = InteropEmu.IsServerRunning() ? "Stop Server" : "Start Server";
 					mnuConnect.Text = isNetPlayClient ? "Disconnect" : "Connect to Server";
@@ -510,7 +531,7 @@ namespace Mesen.GUI.Forms
 			} else {
 				frmServerConfig frm = new frmServerConfig();
 				if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
-					InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port);
+					InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port, ConfigManager.Config.Profile.PlayerName);
 				}
 			}
 		}
@@ -522,7 +543,7 @@ namespace Mesen.GUI.Forms
 			} else {
 				frmClientConfig frm = new frmClientConfig();
 				if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
-					InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.Profile.PlayerAvatar, (UInt16)ConfigManager.Config.Profile.PlayerAvatar.Length);
+					InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.Profile.PlayerAvatar, (UInt16)ConfigManager.Config.Profile.PlayerAvatar.Length, ConfigManager.Config.ClientConnectionInfo.Spectator);
 				}
 			}
 		}
@@ -875,6 +896,31 @@ namespace Mesen.GUI.Forms
 			if(e.Data.GetDataPresent(DataFormats.FileDrop)) {
 				e.Effect = DragDropEffects.Copy;
 			}
+		}
+
+		private void mnuNetPlayPlayer1_Click(object sender, EventArgs e)
+		{
+			InteropEmu.NetPlaySelectController(0);
+		}
+
+		private void mnuNetPlayPlayer2_Click(object sender, EventArgs e)
+		{
+			InteropEmu.NetPlaySelectController(1);
+		}
+
+		private void mnuNetPlayPlayer3_Click(object sender, EventArgs e)
+		{
+			InteropEmu.NetPlaySelectController(2);
+		}
+
+		private void mnuNetPlayPlayer4_Click(object sender, EventArgs e)
+		{
+			InteropEmu.NetPlaySelectController(3);
+		}
+
+		private void mnuNetPlaySpectator_Click(object sender, EventArgs e)
+		{
+			InteropEmu.NetPlaySelectController(0xFF);
 		}
 	}
 }

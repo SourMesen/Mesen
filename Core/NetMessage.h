@@ -28,6 +28,13 @@ protected:
 		}
 	}
 
+	void StreamArray(void* value, uint32_t length)
+	{
+		void* pointer = value;
+		uint32_t len = length;
+		StreamArray(&pointer, len);
+	}
+
 	void StreamArray(void** value, uint32_t &length)
 	{
 		if(_sending) {

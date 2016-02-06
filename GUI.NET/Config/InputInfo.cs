@@ -135,9 +135,10 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetConsoleType(inputInfo.ConsoleType);
 			InteropEmu.SetExpansionDevice(inputInfo.ExpansionPortDevice);
-			InteropEmu.SetFlag(EmulationFlags.HasFourScore, (inputInfo.ConsoleType == ConsoleType.Nes && inputInfo.UseFourScore) || (inputInfo.ConsoleType == ConsoleType.Famicom && expansionDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter));
+			bool hasFourScore = (inputInfo.ConsoleType == ConsoleType.Nes && inputInfo.UseFourScore) || (inputInfo.ConsoleType == ConsoleType.Famicom && expansionDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter);
+			InteropEmu.SetFlag(EmulationFlags.HasFourScore, hasFourScore);
 			for(int i = 0; i < 4; i++) {
-				InteropEmu.SetControllerType(i, inputInfo.Controllers[i].ControllerType);
+				InteropEmu.SetControllerType(i, i < 2 || hasFourScore ? inputInfo.Controllers[i].ControllerType : InteropEmu.ControllerType.None);
 				InteropEmu.SetControllerKeys(i, inputInfo.Controllers[i].GetKeyMappingSet());
 			}
 		}

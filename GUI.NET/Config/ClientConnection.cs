@@ -10,5 +10,6 @@ namespace Mesen.GUI.Config
 	{
 		public string Host = "localhost";
 		public UInt16 Port = 8888;
+		public bool Spectator = false;
 	}
 }

@@ -12,8 +12,10 @@ public:
 	uint8_t* AvatarData;
 	uint32_t AvatarSize;
 
-	ClientConnectionData(string host, uint16_t port, string playerName, uint8_t* avatarData, uint32_t avatarSize) :
-		Host(host), Port(port), PlayerName(playerName), AvatarSize(avatarSize)
+	bool Spectator;
+
+	ClientConnectionData(string host, uint16_t port, string playerName, uint8_t* avatarData, uint32_t avatarSize, bool spectator) :
+		Host(host), Port(port), PlayerName(playerName), AvatarSize(avatarSize), Spectator(spectator)
 	{
 		if(avatarSize > 0) {
 			AvatarData = new uint8_t[avatarSize];

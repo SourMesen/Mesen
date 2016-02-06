@@ -10,6 +10,8 @@
 #include "ControlManager.h"
 #include "ClientConnectionData.h"
 #include "StandardController.h"
+#include "SelectControllerMessage.h"
+#include "PlayerListMessage.h"
 
 GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData) : GameConnection(socket, connectionData)
 {
@@ -28,7 +30,13 @@ GameClientConnection::~GameClientConnection()
 
 void GameClientConnection::SendHandshake()
 {
-	HandShakeMessage message(_connectionData->PlayerName, _connectionData->AvatarData, _connectionData->AvatarSize);
+	HandShakeMessage message(_connectionData->PlayerName, _connectionData->AvatarData, _connectionData->AvatarSize, _connectionData->Spectator);
+	SendNetMessage(message);
+}
+
+void GameClientConnection::SendControllerSelection(uint8_t port)
+{
+	SelectControllerMessage message(port);
 	SendNetMessage(message);
 }
 
@@ -57,21 +65,31 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 					case ControllerType::Zapper: _controlDevice = ControlManager::GetControlDevice(_controllerPort); break;
 				}
 				Console::Resume();
-
 			}
 			break;
+
 		case MessageType::MovieData:
 			if(_gameLoaded) {
 				PushControllerState(((MovieDataMessage*)message)->GetPortNumber(), ((MovieDataMessage*)message)->GetInputState());
 			}
 			break;
+
+		case MessageType::PlayerList:
+			_playerList = ((PlayerListMessage*)message)->GetPlayerList();
+			break;
+
 		case MessageType::GameInformation:
 			DisableControllers();
 			Console::Pause();
 			gameInfo = (GameInformationMessage*)message;
 			if(gameInfo->GetPort() != _controllerPort) {
 				_controllerPort = gameInfo->GetPort();
-				MessageManager::DisplayMessage("Net Play", string("Connected as player ") + std::to_string(_controllerPort + 1));
+
+				if(_controllerPort == GameConnection::SpectatorPort) {
+					MessageManager::DisplayMessage("Net Play", "Connected as spectator");
+				} else {
+					MessageManager::DisplayMessage("Net Play", string("Connected as player ") + std::to_string(_controllerPort + 1));
+				}
 			}
 
 			ClearInputData();
@@ -160,4 +178,25 @@ void GameClientConnection::SendInput()
 			_lastInputSent = inputState;
 		}
 	}
+}
+
+void GameClientConnection::SelectController(uint8_t port)
+{
+	SendControllerSelection(port);
+}
+
+uint8_t GameClientConnection::GetAvailableControllers()
+{
+	uint8_t availablePorts = 0x0F;
+	for(PlayerInfo &playerInfo : _playerList) {
+		if(playerInfo.ControllerPort < 4) {
+			availablePorts &= ~(1 << playerInfo.ControllerPort);
+		}
+	}
+	return availablePorts;
+}
+
+uint8_t GameClientConnection::GetControllerPort()
+{
+	return _controllerPort;
 }

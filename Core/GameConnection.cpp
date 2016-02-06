@@ -5,6 +5,8 @@
 #include "MovieDataMessage.h"
 #include "GameInformationMessage.h"
 #include "SaveStateMessage.h"
+#include "PlayerListMessage.h"
+#include "SelectControllerMessage.h"
 #include "ClientConnectionData.h"
 
 GameConnection::GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData)
@@ -54,6 +56,8 @@ NetMessage* GameConnection::ReadMessage()
 			case MessageType::InputData: return new InputDataMessage(_messageBuffer, messageLength);
 			case MessageType::MovieData: return new MovieDataMessage(_messageBuffer, messageLength);
 			case MessageType::GameInformation: return new GameInformationMessage(_messageBuffer, messageLength);
+			case MessageType::PlayerList: return new PlayerListMessage(_messageBuffer, messageLength);
+			case MessageType::SelectController: return new SelectControllerMessage(_messageBuffer, messageLength);
 		}
 	}
 	return nullptr;

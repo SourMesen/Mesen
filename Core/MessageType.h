@@ -8,4 +8,6 @@ enum class MessageType : uint8_t
 	InputData = 2,
 	MovieData = 3,
 	GameInformation = 4,
+	PlayerList = 5,
+	SelectController = 6,
 };

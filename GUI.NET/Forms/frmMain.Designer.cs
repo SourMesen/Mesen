@@ -91,6 +91,13 @@
 			this.mnuNetPlay = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStartServer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNetPlaySelectController = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNetPlayPlayer1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNetPlayPlayer2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNetPlayPlayer3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNetPlayPlayer4 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuNetPlaySpectator = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuFindServer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuProfile = new System.Windows.Forms.ToolStripMenuItem();
@@ -556,6 +563,7 @@
 			this.mnuNetPlay.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuStartServer,
             this.mnuConnect,
+            this.mnuNetPlaySelectController,
             this.toolStripMenuItem2,
             this.mnuFindServer,
             this.mnuProfile});
@@ -577,6 +585,59 @@
 			this.mnuConnect.Size = new System.Drawing.Size(177, 22);
 			this.mnuConnect.Text = "Connect to Server";
 			this.mnuConnect.Click += new System.EventHandler(this.mnuConnect_Click);
+			// 
+			// mnuNetPlaySelectController
+			// 
+			this.mnuNetPlaySelectController.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuNetPlayPlayer1,
+            this.mnuNetPlayPlayer2,
+            this.mnuNetPlayPlayer3,
+            this.mnuNetPlayPlayer4,
+            this.toolStripMenuItem3,
+            this.mnuNetPlaySpectator});
+			this.mnuNetPlaySelectController.Name = "mnuNetPlaySelectController";
+			this.mnuNetPlaySelectController.Size = new System.Drawing.Size(177, 22);
+			this.mnuNetPlaySelectController.Text = "Select Controller";
+			// 
+			// mnuNetPlayPlayer1
+			// 
+			this.mnuNetPlayPlayer1.Name = "mnuNetPlayPlayer1";
+			this.mnuNetPlayPlayer1.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlayPlayer1.Text = "Player 1";
+			this.mnuNetPlayPlayer1.Click += new System.EventHandler(this.mnuNetPlayPlayer1_Click);
+			// 
+			// mnuNetPlayPlayer2
+			// 
+			this.mnuNetPlayPlayer2.Name = "mnuNetPlayPlayer2";
+			this.mnuNetPlayPlayer2.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlayPlayer2.Text = "Player 2";
+			this.mnuNetPlayPlayer2.Click += new System.EventHandler(this.mnuNetPlayPlayer2_Click);
+			// 
+			// mnuNetPlayPlayer3
+			// 
+			this.mnuNetPlayPlayer3.Name = "mnuNetPlayPlayer3";
+			this.mnuNetPlayPlayer3.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlayPlayer3.Text = "Player 3";
+			this.mnuNetPlayPlayer3.Click += new System.EventHandler(this.mnuNetPlayPlayer3_Click);
+			// 
+			// mnuNetPlayPlayer4
+			// 
+			this.mnuNetPlayPlayer4.Name = "mnuNetPlayPlayer4";
+			this.mnuNetPlayPlayer4.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlayPlayer4.Text = "Player 4";
+			this.mnuNetPlayPlayer4.Click += new System.EventHandler(this.mnuNetPlayPlayer4_Click);
+			// 
+			// toolStripMenuItem3
+			// 
+			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+			// 
+			// mnuNetPlaySpectator
+			// 
+			this.mnuNetPlaySpectator.Name = "mnuNetPlaySpectator";
+			this.mnuNetPlaySpectator.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlaySpectator.Text = "Spectator";
+			this.mnuNetPlaySpectator.Click += new System.EventHandler(this.mnuNetPlaySpectator_Click);
 			// 
 			// toolStripMenuItem2
 			// 
@@ -904,6 +965,13 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuRegionDendy;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuNetPlaySelectController;
+		private System.Windows.Forms.ToolStripMenuItem mnuNetPlayPlayer1;
+		private System.Windows.Forms.ToolStripMenuItem mnuNetPlayPlayer2;
+		private System.Windows.Forms.ToolStripMenuItem mnuNetPlayPlayer3;
+		private System.Windows.Forms.ToolStripMenuItem mnuNetPlayPlayer4;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem mnuNetPlaySpectator;
 	}
 }
 

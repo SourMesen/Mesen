@@ -111,25 +111,54 @@ namespace InteropEmu {
 
 		DllExport void __stdcall Reset() { Console::Reset(); }
 
-		DllExport void __stdcall StartServer(uint16_t port) { GameServer::StartServer(port); }
+		DllExport void __stdcall StartServer(uint16_t port, char* hostPlayerName) { GameServer::StartServer(port, hostPlayerName); }
 		DllExport void __stdcall StopServer() { GameServer::StopServer(); }
 		DllExport bool __stdcall IsServerRunning() { return GameServer::Started(); }
 
-		DllExport void __stdcall Connect(char* host, uint16_t port, char* playerName, uint8_t* avatarData, uint32_t avatarSize)
+		DllExport void __stdcall Connect(char* host, uint16_t port, char* playerName, uint8_t* avatarData, uint32_t avatarSize, bool spectator)
 		{
 			shared_ptr<ClientConnectionData> connectionData(new ClientConnectionData(
 				host,
 				port,
 				playerName,
 				avatarData,
-				avatarSize
-				));
+				avatarSize,
+				spectator
+			));
 
 			GameClient::Connect(connectionData);
 		}
 
 		DllExport void __stdcall Disconnect() { GameClient::Disconnect(); }
 		DllExport bool __stdcall IsConnected() { return GameClient::Connected(); }
+		DllExport ControllerType __stdcall NetPlayGetControllerType(int32_t port) { return EmulationSettings::GetControllerType(port); }
+
+		DllExport int32_t __stdcall NetPlayGetAvailableControllers() 
+		{ 
+			if(GameServer::Started()) {
+				return GameServer::GetAvailableControllers();
+			} else {
+				return GameClient::GetAvailableControllers();
+			}		
+		}
+
+		DllExport void __stdcall NetPlaySelectController(int32_t port)
+		{
+			if(GameServer::Started()) {
+				return GameServer::SetHostControllerPort(port);
+			} else {
+				return GameClient::SelectController(port);
+			}
+		}
+
+		DllExport int32_t __stdcall NetPlayGetControllerPort() 
+		{
+			if(GameServer::Started()) {
+				return GameServer::GetHostControllerPort();
+			} else {
+				return GameClient::GetControllerPort();
+			}
+		}
 
 		DllExport void __stdcall Pause()
 		{

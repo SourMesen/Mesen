@@ -29,6 +29,10 @@ public:
 	static void Connect(shared_ptr<ClientConnectionData> connectionData);
 	static void Disconnect();
 
+	static void SelectController(uint8_t port);
+	static uint8_t GetControllerPort();
+	static uint8_t GetAvailableControllers();
+
 	static uint8_t GetControllerState(uint8_t port);
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter);

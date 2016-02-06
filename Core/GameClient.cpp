@@ -85,5 +85,34 @@ void GameClient::ProcessNotification(ConsoleNotificationType type, void* paramet
 
 uint8_t GameClient::GetControllerState(uint8_t port)
 {
-	return Instance->_connection->GetControllerState(port);
+	if(Instance && Instance->_connection) {
+		return Instance->_connection->GetControllerState(port);
+	}
+
+	return 0;
+}
+
+void GameClient::SelectController(uint8_t port)
+{
+	if(Instance && Instance->_connection) {
+		Instance->_connection->SelectController(port);
+	}
+}
+
+uint8_t GameClient::GetAvailableControllers()
+{
+	if(Instance && Instance->_connection) {
+		return Instance->_connection->GetAvailableControllers();
+	}
+
+	return 0;
+}
+
+uint8_t GameClient::GetControllerPort()
+{
+	if(Instance && Instance->_connection) {
+		return Instance->_connection->GetControllerPort();
+	}
+
+	return GameConnection::SpectatorPort;
 }

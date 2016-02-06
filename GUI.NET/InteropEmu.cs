@@ -43,13 +43,18 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void Stop();
 		[DllImport(DLLPath, EntryPoint="GetROMPath")] private static extern IntPtr GetROMPathWrapper();
 		[DllImport(DLLPath)] public static extern void Reset();
-		[DllImport(DLLPath)] public static extern void StartServer(UInt16 port);
+		[DllImport(DLLPath)] public static extern void StartServer(UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string hostPlayerName);
 		[DllImport(DLLPath)] public static extern void StopServer();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsServerRunning();
-		[DllImport(DLLPath)] public static extern void Connect([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string host, UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string playerName, byte[] avatarData, UInt32 avatarSize);
+		[DllImport(DLLPath)] public static extern void Connect([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string host, UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string playerName, byte[] avatarData, UInt32 avatarSize, [MarshalAs(UnmanagedType.I1)]bool spectator);
 		[DllImport(DLLPath)] public static extern void Disconnect();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsConnected();
-		
+
+		[DllImport(DLLPath)] public static extern Int32 NetPlayGetAvailableControllers();
+		[DllImport(DLLPath)] public static extern void NetPlaySelectController(Int32 controllerPort);
+		[DllImport(DLLPath)] public static extern ControllerType NetPlayGetControllerType(Int32 controllerPort);
+		[DllImport(DLLPath)] public static extern Int32 NetPlayGetControllerPort();
+
 		[DllImport(DLLPath)] public static extern void TakeScreenshot();
 
 		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(NotificationListener.NotificationCallback callback);

@@ -18,6 +18,9 @@ private:
 	list<shared_ptr<GameServerConnection>> _openConnections;
 	bool _initialized = false;
 
+	string _hostPlayerName;
+	uint8_t _hostControllerPort;
+
 	void AcceptConnections();
 	void UpdateConnections();
 
@@ -25,12 +28,21 @@ private:
 	void Stop();
 
 public:
-	GameServer();
+	GameServer(uint16_t port, string hostPlayerName);
 	~GameServer();
 
-	static void StartServer(uint16_t port);
+	static void StartServer(uint16_t port, string hostPlayerName);
 	static void StopServer();
 	static bool Started();
+
+	static string GetHostPlayerName();
+	static uint8_t GetHostControllerPort();
+	static void SetHostControllerPort(uint8_t port);
+	static uint8_t GetAvailableControllers();
+	static vector<PlayerInfo> GetPlayerList();
+	static void SendPlayerList();
+
+	static list<shared_ptr<GameServerConnection>> GetConnectionList();
 
 	virtual void BroadcastInput(uint8_t inputData, uint8_t port);
 };

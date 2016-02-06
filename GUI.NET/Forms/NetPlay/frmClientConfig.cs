@@ -18,13 +18,16 @@ namespace Mesen.GUI.Forms.NetPlay
 		{
 			InitializeComponent();
 
-			this.txtHost.Text = ConfigManager.Config.ClientConnectionInfo.Host;
+			Entity = ConfigManager.Config.ClientConnectionInfo;
+
+			AddBinding("Host", this.txtHost);
+			AddBinding("Spectator", chkSpectator);
 			this.txtPort.Text = ConfigManager.Config.ClientConnectionInfo.Port.ToString();
 		}
 
 		protected override void UpdateConfig()
 		{
-			ConfigManager.Config.ClientConnectionInfo = new ClientConnectionInfo() { Host = this.txtHost.Text, Port = Convert.ToUInt16(this.txtPort.Text) };
+			((ClientConnectionInfo)Entity).Port = Convert.ToUInt16(this.txtPort.Text);
 		}
 
 		private void Field_TextChanged(object sender, EventArgs e)

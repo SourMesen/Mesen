@@ -11,6 +11,7 @@ private:
 	uint32_t _playerNameLength = 0;
 	void* _avatarData = nullptr;
 	uint32_t _avatarSize = 0;
+	bool _spectator = false;
 	
 protected:
 	virtual void ProtectedStreamState()
@@ -18,16 +19,18 @@ protected:
 		Stream<uint32_t>(_protocolVersion);
 		StreamArray((void**)&_playerName, _playerNameLength);
 		StreamArray(&_avatarData, _avatarSize);
+		Stream<bool>(_spectator);
 	}
 
 public:
 	HandShakeMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
-	HandShakeMessage(string playerName, uint8_t* avatarData, uint32_t avatarSize) : NetMessage(MessageType::HandShake)
+	HandShakeMessage(string playerName, uint8_t* avatarData, uint32_t avatarSize, bool spectator) : NetMessage(MessageType::HandShake)
 	{
 		_protocolVersion = 1;
 		CopyString(&_playerName, _playerNameLength, playerName);
 		_avatarSize = avatarSize;
 		_avatarData = avatarData;
+		_spectator = spectator;
 	}
 	
 	string GetPlayerName()
@@ -48,5 +51,10 @@ public:
 	bool IsValid()
 	{
 		return _protocolVersion == CurrentVersion;
+	}
+
+	bool IsSpectator()
+	{
+		return _spectator;
 	}
 };

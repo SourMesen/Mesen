@@ -36,6 +36,11 @@
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
+			// baseConfigPanel
+			// 
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 111);
+			this.baseConfigPanel.Size = new System.Drawing.Size(290, 29);
+			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
@@ -54,7 +59,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(290, 110);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(290, 111);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// txtPort
@@ -99,7 +104,6 @@
 			// 
 			this.chkSpectator.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.chkSpectator, 2);
-			this.chkSpectator.Enabled = false;
 			this.chkSpectator.Location = new System.Drawing.Point(3, 55);
 			this.chkSpectator.Name = "chkSpectator";
 			this.chkSpectator.Size = new System.Drawing.Size(106, 17);
@@ -119,9 +123,9 @@
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(306, 178);
 			this.Name = "frmClientConfig";
-			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Connect...";
+			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();

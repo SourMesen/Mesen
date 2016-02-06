@@ -19,13 +19,16 @@ private:
 	atomic<bool> _enableControllers = false;
 	atomic<uint32_t> _minimumQueueSize = 3;
 
+	vector<PlayerInfo> _playerList;
+
 	shared_ptr<BaseControlDevice> _controlDevice;
 	uint32_t _lastInputSent = 0x00;
 	bool _gameLoaded = false;
-	uint8_t _controllerPort = 255;
+	uint8_t _controllerPort = GameConnection::SpectatorPort;
 
 private:
 	void SendHandshake();
+	void SendControllerSelection(uint8_t port);
 	void ClearInputData();
 	void PushControllerState(uint8_t port, uint8_t state);
 	void DisableControllers();
@@ -39,4 +42,8 @@ public:
 
 	uint8_t GetControllerState(uint8_t port);
 	void SendInput();
+
+	void SelectController(uint8_t port);
+	uint8_t GetAvailableControllers();
+	uint8_t GetControllerPort();
 };

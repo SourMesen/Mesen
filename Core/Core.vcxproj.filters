@@ -539,6 +539,12 @@
     <ClInclude Include="BaseControlDevice.h">
       <Filter>Nes\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerListMessage.h">
+      <Filter>NetPlay\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectControllerMessage.h">
+      <Filter>NetPlay\Messages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
