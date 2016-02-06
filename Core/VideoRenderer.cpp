@@ -19,6 +19,7 @@ VideoRenderer::VideoRenderer()
 
 VideoRenderer::~VideoRenderer()
 {
+	_stopFlag = true;
 	StopThread();
 }
 
@@ -36,11 +37,9 @@ void VideoRenderer::StopThread()
 {
 	_stopFlag = true;
 	if(_renderThread) {
-		_waitForRender.Signal();
 		_renderThread->join();
+		_renderThread.release();
 	}
-
-	_renderThread.release();
 }
 
 void VideoRenderer::RenderThread()
