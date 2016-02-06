@@ -27,7 +27,14 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
+			this.tmrMouse = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
+			// 
+			// tmrMouse
+			// 
+			this.tmrMouse.Interval = 3000;
+			this.tmrMouse.Tick += new System.EventHandler(this.tmrMouse_Tick);
 			// 
 			// ctrlRenderer
 			// 
@@ -35,6 +42,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Name = "ctrlRenderer";
 			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseDown);
+			this.MouseLeave += new System.EventHandler(this.ctrlRenderer_MouseLeave);
 			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseUp);
 			this.ResumeLayout(false);
@@ -42,5 +50,7 @@
 		}
 
 		#endregion
+
+		private System.Windows.Forms.Timer tmrMouse;
 	}
 }

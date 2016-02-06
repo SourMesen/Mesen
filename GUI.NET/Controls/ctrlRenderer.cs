@@ -14,6 +14,7 @@ namespace Mesen.GUI.Controls
 	public partial class ctrlRenderer : UserControl
 	{
 		private bool _rightButtonDown = false;
+		private bool _cursorHidden = false;
 
 		public ctrlRenderer()
 		{
@@ -32,10 +33,19 @@ namespace Mesen.GUI.Controls
 
 		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
 		{
+			if(_cursorHidden) {
+				Cursor.Show();
+				_cursorHidden = false;
+			}
+			tmrMouse.Stop();
+
 			if(InteropEmu.HasZapper()) {
 				this.Cursor = Cursors.Cross;
 			} else {
 				this.Cursor = Cursors.Default;
+
+				//Only hide mouse if no zapper (otherwise this could be pretty annoying)
+				tmrMouse.Start();
 			}
 
 			if(_rightButtonDown) {
@@ -56,6 +66,21 @@ namespace Mesen.GUI.Controls
 				InteropEmu.ZapperSetTriggerState(1, false);
 			} else if(e.Button == MouseButtons.Right) {
 				_rightButtonDown = false;
+			}
+		}
+
+		private void tmrMouse_Tick(object sender, EventArgs e)
+		{
+			_cursorHidden = true;
+			Cursor.Hide();
+		}
+
+		private void ctrlRenderer_MouseLeave(object sender, EventArgs e)
+		{
+			tmrMouse.Stop();
+			if(_cursorHidden) {
+				_cursorHidden = false;
+				Cursor.Show();
 			}
 		}
 	}
