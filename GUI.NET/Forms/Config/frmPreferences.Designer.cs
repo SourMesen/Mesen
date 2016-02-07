@@ -35,6 +35,7 @@
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
 			this.chkDisableScreensaver = new System.Windows.Forms.CheckBox();
+			this.btnOpenMesenFolder = new System.Windows.Forms.Button();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgFileAssociations = new System.Windows.Forms.TabPage();
@@ -51,7 +52,6 @@
 			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
-			this.btnOpenMesenFolder = new System.Windows.Forms.Button();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -166,6 +166,16 @@
 			this.chkDisableScreensaver.TabIndex = 11;
 			this.chkDisableScreensaver.Text = "Disable screensaver while emulation is running";
 			this.chkDisableScreensaver.UseVisualStyleBackColor = true;
+			// 
+			// btnOpenMesenFolder
+			// 
+			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 181);
+			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
+			this.btnOpenMesenFolder.Size = new System.Drawing.Size(117, 23);
+			this.btnOpenMesenFolder.TabIndex = 16;
+			this.btnOpenMesenFolder.Text = "Open Mesen Folder";
+			this.btnOpenMesenFolder.UseVisualStyleBackColor = true;
+			this.btnOpenMesenFolder.Click += new System.EventHandler(this.btnOpenMesenFolder_Click);
 			// 
 			// tabMain
 			// 
@@ -356,22 +366,15 @@
 			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
 			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
 			// 
-			// btnOpenMesenFolder
-			// 
-			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 181);
-			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
-			this.btnOpenMesenFolder.Size = new System.Drawing.Size(117, 23);
-			this.btnOpenMesenFolder.TabIndex = 16;
-			this.btnOpenMesenFolder.Text = "Open Mesen Folder";
-			this.btnOpenMesenFolder.UseVisualStyleBackColor = true;
-			this.btnOpenMesenFolder.Click += new System.EventHandler(this.btnOpenMesenFolder_Click);
-			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(394, 268);
 			this.Controls.Add(this.tabMain);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "frmPreferences";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Preferences";

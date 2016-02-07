@@ -248,7 +248,7 @@
 			this.lblNesType.TabIndex = 13;
 			this.lblNesType.Text = "Console Type:";
 			// 
-			// cboNesType
+			// cboConsoleType
 			// 
 			this.cboConsoleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboConsoleType.FormattingEnabled = true;
@@ -256,7 +256,7 @@
             "NES",
             "Famicom"});
 			this.cboConsoleType.Location = new System.Drawing.Point(90, 3);
-			this.cboConsoleType.Name = "cboNesType";
+			this.cboConsoleType.Name = "cboConsoleType";
 			this.cboConsoleType.Size = new System.Drawing.Size(109, 21);
 			this.cboConsoleType.TabIndex = 14;
 			this.cboConsoleType.SelectedIndexChanged += new System.EventHandler(this.cboNesType_SelectedIndexChanged);
@@ -310,6 +310,8 @@
 			this.ClientSize = new System.Drawing.Size(348, 253);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "frmInputConfig";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Input Settings";
