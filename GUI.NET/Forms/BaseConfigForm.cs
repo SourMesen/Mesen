@@ -177,7 +177,12 @@ namespace Mesen.GUI.Forms
 						((TrackBar)kvp.Value).Value = (int)(uint)value;
 					} else if(kvp.Value is NumericUpDown) {
 						NumericUpDown nud = kvp.Value as NumericUpDown;
-						decimal val = (decimal)(uint)value;
+						decimal val;
+						if(field.FieldType == typeof(UInt32)) {
+							val = (uint)value;
+						} else {
+							val = (decimal)(double)value;
+						}
 						val = Math.Min(Math.Max(val, nud.Minimum), nud.Maximum);
 						nud.Value = val;
 					} else if(kvp.Value is ComboBox) {
@@ -242,7 +247,11 @@ namespace Mesen.GUI.Forms
 						} else if(kvp.Value is TrackBar) {
 							field.SetValue(Entity, (UInt32)((TrackBar)kvp.Value).Value);
 						} else if(kvp.Value is NumericUpDown) {
-							field.SetValue(Entity, (UInt32)((NumericUpDown)kvp.Value).Value);
+							if(field.FieldType == typeof(UInt32)) {
+								field.SetValue(Entity, (UInt32)((NumericUpDown)kvp.Value).Value);
+							} else {
+								field.SetValue(Entity, (double)((NumericUpDown)kvp.Value).Value);
+							}
 						} else if(kvp.Value is ComboBox) {
 							if(field.FieldType.IsSubclassOf(typeof(Enum))) {
 								object selectedItem = ((ComboBox)kvp.Value).SelectedItem;

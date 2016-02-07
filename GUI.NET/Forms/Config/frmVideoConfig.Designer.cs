@@ -30,7 +30,6 @@
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.lblVideoScale = new System.Windows.Forms.Label();
 			this.lblVideoFilter = new System.Windows.Forms.Label();
-			this.cboScale = new System.Windows.Forms.ComboBox();
 			this.cboFilter = new System.Windows.Forms.ComboBox();
 			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
 			this.cboAspectRatio = new System.Windows.Forms.ComboBox();
@@ -68,6 +67,7 @@
 			this.btnResetPalette = new System.Windows.Forms.Button();
 			this.btnLoadPalFile = new System.Windows.Forms.Button();
 			this.colorDialog = new System.Windows.Forms.ColorDialog();
+			this.nudScale = new System.Windows.Forms.NumericUpDown();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
@@ -91,6 +91,7 @@
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudScale)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -105,8 +106,6 @@
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.lblVideoFilter, 0, 1);
-			this.tlpMain.Controls.Add(this.cboScale, 1, 0);
-			this.tlpMain.Controls.Add(this.cboFilter, 1, 1);
 			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 4);
 			this.tlpMain.Controls.Add(this.cboAspectRatio, 1, 2);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 2);
@@ -114,6 +113,8 @@
 			this.tlpMain.Controls.Add(this.lblEmulationSpeed, 0, 6);
 			this.tlpMain.Controls.Add(this.chkShowFps, 0, 5);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 3);
+			this.tlpMain.Controls.Add(this.nudScale, 1, 0);
+			this.tlpMain.Controls.Add(this.cboFilter, 1, 1);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
@@ -135,7 +136,7 @@
 			// 
 			this.lblVideoScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblVideoScale.AutoSize = true;
-			this.lblVideoScale.Location = new System.Drawing.Point(3, 7);
+			this.lblVideoScale.Location = new System.Drawing.Point(3, 6);
 			this.lblVideoScale.Name = "lblVideoScale";
 			this.lblVideoScale.Size = new System.Drawing.Size(37, 13);
 			this.lblVideoScale.TabIndex = 11;
@@ -145,25 +146,11 @@
 			// 
 			this.lblVideoFilter.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblVideoFilter.AutoSize = true;
-			this.lblVideoFilter.Location = new System.Drawing.Point(3, 34);
+			this.lblVideoFilter.Location = new System.Drawing.Point(3, 33);
 			this.lblVideoFilter.Name = "lblVideoFilter";
 			this.lblVideoFilter.Size = new System.Drawing.Size(32, 13);
 			this.lblVideoFilter.TabIndex = 12;
 			this.lblVideoFilter.Text = "Filter:";
-			// 
-			// cboScale
-			// 
-			this.cboScale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboScale.FormattingEnabled = true;
-			this.cboScale.Items.AddRange(new object[] {
-            "1x",
-            "2x",
-            "3x",
-            "4x"});
-			this.cboScale.Location = new System.Drawing.Point(99, 3);
-			this.cboScale.Name = "cboScale";
-			this.cboScale.Size = new System.Drawing.Size(48, 21);
-			this.cboScale.TabIndex = 13;
 			// 
 			// cboFilter
 			// 
@@ -172,7 +159,7 @@
 			this.cboFilter.Items.AddRange(new object[] {
             "None",
             "NTSC"});
-			this.cboFilter.Location = new System.Drawing.Point(99, 30);
+			this.cboFilter.Location = new System.Drawing.Point(99, 29);
 			this.cboFilter.Name = "cboFilter";
 			this.cboFilter.Size = new System.Drawing.Size(76, 21);
 			this.cboFilter.TabIndex = 14;
@@ -182,7 +169,7 @@
 			this.chkVerticalSync.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkVerticalSync.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkVerticalSync, 2);
-			this.chkVerticalSync.Location = new System.Drawing.Point(3, 107);
+			this.chkVerticalSync.Location = new System.Drawing.Point(3, 106);
 			this.chkVerticalSync.Name = "chkVerticalSync";
 			this.chkVerticalSync.Size = new System.Drawing.Size(121, 17);
 			this.chkVerticalSync.TabIndex = 15;
@@ -199,7 +186,7 @@
             "PAL (18:13)",
             "Standard (4:3)",
             "Widescreen (16:9)"});
-			this.cboAspectRatio.Location = new System.Drawing.Point(99, 57);
+			this.cboAspectRatio.Location = new System.Drawing.Point(99, 56);
 			this.cboAspectRatio.Name = "cboAspectRatio";
 			this.cboAspectRatio.Size = new System.Drawing.Size(121, 21);
 			this.cboAspectRatio.TabIndex = 16;
@@ -208,7 +195,7 @@
 			// 
 			this.lblDisplayRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblDisplayRatio.AutoSize = true;
-			this.lblDisplayRatio.Location = new System.Drawing.Point(3, 61);
+			this.lblDisplayRatio.Location = new System.Drawing.Point(3, 60);
 			this.lblDisplayRatio.Name = "lblDisplayRatio";
 			this.lblDisplayRatio.Size = new System.Drawing.Size(71, 13);
 			this.lblDisplayRatio.TabIndex = 17;
@@ -220,7 +207,7 @@
 			this.flowLayoutPanel6.Controls.Add(this.nudEmulationSpeed);
 			this.flowLayoutPanel6.Controls.Add(this.lblEmuSpeedHint);
 			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 150);
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 149);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
 			this.flowLayoutPanel6.Size = new System.Drawing.Size(405, 26);
@@ -252,7 +239,7 @@
 			// 
 			this.lblEmulationSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblEmulationSpeed.AutoSize = true;
-			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 156);
+			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 155);
 			this.lblEmulationSpeed.Name = "lblEmulationSpeed";
 			this.lblEmulationSpeed.Size = new System.Drawing.Size(90, 13);
 			this.lblEmulationSpeed.TabIndex = 0;
@@ -263,7 +250,7 @@
 			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFps.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 130);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 129);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
@@ -275,7 +262,7 @@
 			this.tlpMain.SetColumnSpan(this.flowLayoutPanel7, 2);
 			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
 			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 81);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 80);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
 			this.flowLayoutPanel7.Size = new System.Drawing.Size(166, 23);
@@ -574,6 +561,19 @@
 			this.btnLoadPalFile.UseVisualStyleBackColor = true;
 			this.btnLoadPalFile.Click += new System.EventHandler(this.btnLoadPalFile_Click);
 			// 
+			// nudScale
+			// 
+			this.nudScale.DecimalPlaces = 2;
+			this.nudScale.Location = new System.Drawing.Point(99, 3);
+			this.nudScale.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.nudScale.Name = "nudScale";
+			this.nudScale.Size = new System.Drawing.Size(48, 20);
+			this.nudScale.TabIndex = 21;
+			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -618,6 +618,7 @@
 			this.tableLayoutPanel3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.nudScale)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -632,7 +633,6 @@
 		private System.Windows.Forms.Label lblEmuSpeedHint;
 		private System.Windows.Forms.Label lblVideoScale;
 		private System.Windows.Forms.Label lblVideoFilter;
-		private System.Windows.Forms.ComboBox cboScale;
 		private System.Windows.Forms.ComboBox cboFilter;
 		private System.Windows.Forms.CheckBox chkVerticalSync;
 		private System.Windows.Forms.ComboBox cboAspectRatio;
@@ -665,5 +665,6 @@
 		private System.Windows.Forms.Button btnResetPalette;
 		private System.Windows.Forms.Button btnLoadPalFile;
 		private System.Windows.Forms.ColorDialog colorDialog;
+		private System.Windows.Forms.NumericUpDown nudScale;
 	}
 }

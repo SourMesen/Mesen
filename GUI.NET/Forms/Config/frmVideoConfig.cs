@@ -28,7 +28,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("VerticalSync", chkVerticalSync);
 			AddBinding("UseHdPacks", chkUseHdPacks);
 			
-			AddBinding("VideoScale", cboScale);
+			AddBinding("VideoScale", nudScale);
 			AddBinding("AspectRatio", cboAspectRatio);
 			AddBinding("VideoFilter", cboFilter);
 
