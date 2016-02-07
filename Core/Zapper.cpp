@@ -24,7 +24,6 @@ void Zapper::StreamState(bool saving)
 
 void Zapper::SetPosition(double x, double y)
 {
-	uint32_t scale = EmulationSettings::GetVideoScale();
 	OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
 	if(x < 0 || y < 0) {
 		_xPosition = -1;
