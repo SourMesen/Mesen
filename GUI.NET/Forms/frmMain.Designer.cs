@@ -43,6 +43,9 @@ namespace Mesen.GUI.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			this.menuTimer = new System.Windows.Forms.Timer(this.components);
+			this.panelRenderer = new System.Windows.Forms.Panel();
+			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -134,12 +137,34 @@ namespace Mesen.GUI.Forms
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuTimer = new System.Windows.Forms.Timer(this.components);
-			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
-			this.panelRenderer = new System.Windows.Forms.Panel();
-			this.menuStrip.SuspendLayout();
 			this.panelRenderer.SuspendLayout();
+			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// menuTimer
+			// 
+			this.menuTimer.Tick += new System.EventHandler(this.menuTimer_Tick);
+			// 
+			// panelRenderer
+			// 
+			this.panelRenderer.BackColor = System.Drawing.Color.Black;
+			this.panelRenderer.Controls.Add(this.ctrlRenderer);
+			this.panelRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panelRenderer.Location = new System.Drawing.Point(0, 24);
+			this.panelRenderer.Name = "panelRenderer";
+			this.panelRenderer.Size = new System.Drawing.Size(304, 218);
+			this.panelRenderer.TabIndex = 2;
+			this.panelRenderer.Click += new System.EventHandler(this.panelRenderer_Click);
+			// 
+			// ctrlRenderer
+			// 
+			this.ctrlRenderer.BackColor = System.Drawing.Color.Black;
+			this.ctrlRenderer.Location = new System.Drawing.Point(0, 0);
+			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlRenderer.Name = "ctrlRenderer";
+			this.ctrlRenderer.Size = new System.Drawing.Size(263, 176);
+			this.ctrlRenderer.TabIndex = 1;
+			this.ctrlRenderer.Enter += new System.EventHandler(this.ctrlRenderer_Enter);
 			// 
 			// menuStrip
 			// 
@@ -873,36 +898,11 @@ namespace Mesen.GUI.Forms
 			// 
 			// mnuAbout
 			// 
-			this.mnuAbout.Enabled = false;
 			this.mnuAbout.Image = global::Mesen.GUI.Properties.Resources.help;
 			this.mnuAbout.Name = "mnuAbout";
 			this.mnuAbout.Size = new System.Drawing.Size(170, 22);
 			this.mnuAbout.Text = "About";
-			// 
-			// menuTimer
-			// 
-			this.menuTimer.Tick += new System.EventHandler(this.menuTimer_Tick);
-			// 
-			// ctrlRenderer
-			// 
-			this.ctrlRenderer.BackColor = System.Drawing.Color.Black;
-			this.ctrlRenderer.Location = new System.Drawing.Point(0, 0);
-			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlRenderer.Name = "ctrlRenderer";
-			this.ctrlRenderer.Size = new System.Drawing.Size(263, 176);
-			this.ctrlRenderer.TabIndex = 1;
-			this.ctrlRenderer.Enter += new System.EventHandler(this.ctrlRenderer_Enter);
-			// 
-			// panelRenderer
-			// 
-			this.panelRenderer.BackColor = System.Drawing.Color.Black;
-			this.panelRenderer.Controls.Add(this.ctrlRenderer);
-			this.panelRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panelRenderer.Location = new System.Drawing.Point(0, 24);
-			this.panelRenderer.Name = "panelRenderer";
-			this.panelRenderer.Size = new System.Drawing.Size(304, 218);
-			this.panelRenderer.TabIndex = 2;
-			this.panelRenderer.Click += new System.EventHandler(this.panelRenderer_Click);
+			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
 			// frmMain
 			// 
@@ -920,9 +920,9 @@ namespace Mesen.GUI.Forms
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmMain_DragEnter);
 			this.Resize += new System.EventHandler(this.frmMain_Resize);
+			this.panelRenderer.ResumeLayout(false);
 			this.menuStrip.ResumeLayout(false);
 			this.menuStrip.PerformLayout();
-			this.panelRenderer.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

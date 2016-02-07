@@ -1012,5 +1012,10 @@ namespace Mesen.GUI.Forms
 				}
 			}));
 		}
+
+		private void mnuAbout_Click(object sender, EventArgs e)
+		{
+			new frmAbout().ShowDialog();
+		}
 	}
 }
