@@ -188,7 +188,7 @@ void CheatManager::SetCheats(vector<CodeInfo> &cheats)
 	Instance->ClearCodes();
 
 	if(cheats.size() > 0) {
-		MessageManager::DisplayMessage("NetPlay", std::to_string(cheats.size()) + " cheats applied.");
+		MessageManager::DisplayMessage("Cheats", std::to_string(cheats.size()) + " cheats applied.");
 		for(CodeInfo &cheat : cheats) {
 			Instance->AddCode(cheat);
 		}

@@ -4,6 +4,7 @@
 #include "Console.h"
 #include "../Utilities/FolderUtilities.h"
 #include "RomLoader.h"
+#include "CheatManager.h"
 
 shared_ptr<Movie> Movie::_instance(new Movie());
 
@@ -126,23 +127,22 @@ void Movie::PlayMovie(stringstream &filestream, bool autoLoadRom, string filenam
 	StopAll();
 
 	Reset();
-	
+
+	Console::Pause();
 	if(Load(filestream, autoLoadRom)) {
-		Console::Pause();
 		if(_startState.tellp() > 0) {
 			//Restore state if one was present in the movie
 			Console::LoadState(_startState);
-		} else if(autoLoadRom) {
-			//When autoLoadRom = false, assume the emulation has already been reset (used by AutoTestRom)
-			Console::Reset(false);
 		}
+
+		CheatManager::SetCheats(_cheatList);
 		_playing = true;
-		Console::Resume();
 
 		if(!filename.empty()) {
 			MessageManager::DisplayMessage("Movies", "Playing movie: " + FolderUtilities::GetFilename(filename, true));
 		}
 	}
+	Console::Resume();
 }
 
 void Movie::Record(string filename, bool reset)
@@ -209,6 +209,7 @@ struct MovieHeader
 	uint32_t ConsoleType;
 	uint8_t ControllerTypes[4];
 	uint32_t ExpansionDevice;
+	uint32_t CheatCount;
 	uint32_t FilenameLength;
 };
 
@@ -228,6 +229,9 @@ bool Movie::Save()
 		header.ControllerTypes[port] = (uint32_t)EmulationSettings::GetControllerType(port);
 	}
 	header.FilenameLength = (uint32_t)romFilename.size();
+	
+	vector<CodeInfo> cheatList = CheatManager::GetCheats();
+	header.CheatCount = (uint32_t)cheatList.size();
 
 	_file.write((char*)header.Header, sizeof(header.Header));
 	_file.write((char*)&header.MesenVersion, sizeof(header.MesenVersion));
@@ -237,9 +241,17 @@ bool Movie::Save()
 	_file.write((char*)&header.ConsoleType, sizeof(header.ConsoleType));
 	_file.write((char*)&header.ControllerTypes, sizeof(header.ControllerTypes));
 	_file.write((char*)&header.ExpansionDevice, sizeof(header.ExpansionDevice));
+	_file.write((char*)&header.CheatCount, sizeof(header.CheatCount));
 	_file.write((char*)&header.FilenameLength, sizeof(header.FilenameLength));
 
 	_file.write((char*)romFilename.c_str(), header.FilenameLength);
+
+	for(CodeInfo cheatCode : cheatList) {
+		_file.write((char*)&cheatCode.Address, sizeof(cheatCode.Address));
+		_file.write((char*)&cheatCode.Value, sizeof(cheatCode.Value));
+		_file.write((char*)&cheatCode.CompareValue, sizeof(cheatCode.CompareValue));
+		_file.write((char*)&cheatCode.IsRelativeAddress, sizeof(cheatCode.IsRelativeAddress));
+	}
 
 	_data.SaveStateSize = (uint32_t)_startState.tellp();
 	_file.write((char*)&_data.SaveStateSize, sizeof(uint32_t));
@@ -284,6 +296,7 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	file.read((char*)&header.ConsoleType, sizeof(header.ConsoleType));
 	file.read((char*)&header.ControllerTypes, sizeof(header.ControllerTypes));
 	file.read((char*)&header.ExpansionDevice, sizeof(header.ExpansionDevice));
+	file.read((char*)&header.CheatCount, sizeof(header.CheatCount));
 	file.read((char*)&header.FilenameLength, sizeof(header.FilenameLength));
 
 	EmulationSettings::SetConsoleType((ConsoleType)header.ConsoleType);
@@ -302,10 +315,22 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 		if(currentRom.empty() || header.RomCrc32 != RomLoader::GetCRC32(currentRom)) {
 			//Loaded game isn't the same as the game used for the movie, attempt to load the correct game
 			loadedGame = Console::LoadROM(romFilename, header.RomCrc32);
+		} else {
+			Console::Reset(false);
 		}
 	}
 
 	if(loadedGame) {
+		_cheatList.clear();
+		CodeInfo cheatCode;
+		for(uint32_t i = 0; i < header.CheatCount; i++) {
+			file.read((char*)&cheatCode.Address, sizeof(cheatCode.Address));
+			file.read((char*)&cheatCode.Value, sizeof(cheatCode.Value));
+			file.read((char*)&cheatCode.CompareValue, sizeof(cheatCode.CompareValue));
+			file.read((char*)&cheatCode.IsRelativeAddress, sizeof(cheatCode.IsRelativeAddress));
+			_cheatList.push_back(cheatCode);
+		}
+
 		file.read((char*)&_data.SaveStateSize, sizeof(uint32_t));
 
 		if(_data.SaveStateSize > 0) {

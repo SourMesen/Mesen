@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "CheatManager.h"
 
 struct MovieData
 {
@@ -22,6 +23,7 @@ class Movie
 		string _filename;
 		stringstream _startState;
 		MovieData _data;
+		vector<CodeInfo> _cheatList;
 
 	private:
 		void PushState(uint8_t port);
