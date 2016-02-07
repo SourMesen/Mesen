@@ -40,7 +40,6 @@ namespace Mesen.GUI.Forms.Cheats
 			this.contextMenuCheats = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuAddCheat = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDeleteCheat = new System.Windows.Forms.ToolStripMenuItem();
-			this.tabCheatFindTool = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.tabMain.SuspendLayout();
 			this.tabCheats.SuspendLayout();
@@ -49,16 +48,20 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
+			// baseConfigPanel
+			// 
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 226);
+			this.baseConfigPanel.Size = new System.Drawing.Size(443, 29);
+			// 
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tabCheats);
-			this.tabMain.Controls.Add(this.tabCheatFindTool);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(443, 225);
+			this.tabMain.Size = new System.Drawing.Size(443, 226);
 			this.tabMain.TabIndex = 0;
 			// 
 			// tabCheats
@@ -67,7 +70,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tabCheats.Location = new System.Drawing.Point(4, 22);
 			this.tabCheats.Name = "tabCheats";
 			this.tabCheats.Padding = new System.Windows.Forms.Padding(3);
-			this.tabCheats.Size = new System.Drawing.Size(435, 199);
+			this.tabCheats.Size = new System.Drawing.Size(435, 200);
 			this.tabCheats.TabIndex = 0;
 			this.tabCheats.Text = "Cheats";
 			this.tabCheats.UseVisualStyleBackColor = true;
@@ -85,7 +88,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(429, 193);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(429, 194);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// chkCurrentGameOnly
@@ -111,10 +114,9 @@ namespace Mesen.GUI.Forms.Cheats
 			this.lstCheats.ContextMenuStrip = this.contextMenuCheats;
 			this.lstCheats.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstCheats.FullRowSelect = true;
-			this.lstCheats.GridLines = true;
 			this.lstCheats.Location = new System.Drawing.Point(3, 26);
 			this.lstCheats.Name = "lstCheats";
-			this.lstCheats.Size = new System.Drawing.Size(423, 164);
+			this.lstCheats.Size = new System.Drawing.Size(423, 165);
 			this.lstCheats.TabIndex = 1;
 			this.lstCheats.UseCompatibleStateImageBehavior = false;
 			this.lstCheats.View = System.Windows.Forms.View.Details;
@@ -159,16 +161,6 @@ namespace Mesen.GUI.Forms.Cheats
 			this.mnuDeleteCheat.Size = new System.Drawing.Size(159, 22);
 			this.mnuDeleteCheat.Text = "Delete";
 			// 
-			// tabCheatFindTool
-			// 
-			this.tabCheatFindTool.Location = new System.Drawing.Point(4, 22);
-			this.tabCheatFindTool.Name = "tabCheatFindTool";
-			this.tabCheatFindTool.Padding = new System.Windows.Forms.Padding(3);
-			this.tabCheatFindTool.Size = new System.Drawing.Size(435, 199);
-			this.tabCheatFindTool.TabIndex = 1;
-			this.tabCheatFindTool.Text = "Cheat Finder";
-			this.tabCheatFindTool.UseVisualStyleBackColor = true;
-			// 
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 1;
@@ -180,7 +172,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(443, 225);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(443, 226);
 			this.tableLayoutPanel2.TabIndex = 2;
 			// 
 			// frmCheatList
@@ -192,6 +184,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.Name = "frmCheatList";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Cheats";
+			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
 			this.Controls.SetChildIndex(this.tableLayoutPanel2, 0);
 			this.tabMain.ResumeLayout(false);
 			this.tabCheats.ResumeLayout(false);
@@ -207,7 +200,6 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private System.Windows.Forms.TabControl tabMain;
 		private System.Windows.Forms.TabPage tabCheats;
-		private System.Windows.Forms.TabPage tabCheatFindTool;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.CheckBox chkCurrentGameOnly;
 		private MyListView lstCheats;

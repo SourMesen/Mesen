@@ -82,12 +82,15 @@
 			// txtValue
 			// 
 			this.txtValue.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.txtValue.BackColor = System.Drawing.Color.White;
 			this.txtValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtValue.Location = new System.Drawing.Point(15, 127);
 			this.txtValue.Multiline = true;
 			this.txtValue.Name = "txtValue";
+			this.txtValue.ReadOnly = true;
 			this.txtValue.Size = new System.Drawing.Size(31, 17);
 			this.txtValue.TabIndex = 15;
+			this.txtValue.TabStop = false;
 			this.txtValue.Text = "100";
 			this.txtValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
