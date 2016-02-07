@@ -575,7 +575,7 @@ namespace NES
 		XMVECTORF32 color = { opacity, opacity, opacity, opacity };
 		float textLeftMargin = 4.0f;
 
-		string text = toast->GetToastTitle() + ": " + toast->GetToastMessage();
+		string text = "[" + toast->GetToastTitle() + "] " + toast->GetToastMessage();
 		uint32_t lineCount = 0;
 		std::wstring wrappedText = WrapText(text, _font.get(), _screenWidth - textLeftMargin * 2 - 20, lineCount);
 		lastHeight += lineCount * 20;
