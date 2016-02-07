@@ -27,7 +27,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblBreakOn = new System.Windows.Forms.Label();
 			this.lblAddress = new System.Windows.Forms.Label();
@@ -51,7 +50,6 @@
 			this.chkRead = new System.Windows.Forms.CheckBox();
 			this.chkWrite = new System.Windows.Forms.CheckBox();
 			this.chkExec = new System.Windows.Forms.CheckBox();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
@@ -359,7 +357,6 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmBreakpoint";
-			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Breakpoint";
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);

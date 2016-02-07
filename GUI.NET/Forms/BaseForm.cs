@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,42 @@ namespace Mesen.GUI.Forms
 			if(!DesignMode) {
 				if(!_iconSet) {
 					base.Icon = Properties.Resources.MesenIcon;
+				}
+			}
+
+			int tabIndex = 0;
+			InitializeTabIndexes(this, ref tabIndex);
+		}
+
+		private void InitializeTabIndexes(TableLayoutPanel tlp, ref int tabIndex)
+		{
+			tlp.TabIndex = tabIndex;
+			tabIndex++;
+
+			for(int i = 0; i < tlp.RowCount; i++) {
+				for(int j = 0; j < tlp.ColumnCount; j++) {
+					Control ctrl = tlp.GetControlFromPosition(j, i);
+					if(ctrl != null) {
+						if(ctrl is TableLayoutPanel) {
+							InitializeTabIndexes(((TableLayoutPanel)ctrl), ref tabIndex);
+						} else {
+							InitializeTabIndexes(ctrl, ref tabIndex);
+						}
+					}
+				}
+			}
+		}
+
+		private void InitializeTabIndexes(Control container, ref int tabIndex)
+		{
+			container.TabIndex = tabIndex;
+			tabIndex++;
+
+			foreach(Control ctrl in container.Controls) {
+				if(ctrl is TableLayoutPanel) {
+					InitializeTabIndexes(((TableLayoutPanel)ctrl), ref tabIndex);
+				} else {
+					InitializeTabIndexes(ctrl, ref tabIndex);
 				}
 			}
 		}

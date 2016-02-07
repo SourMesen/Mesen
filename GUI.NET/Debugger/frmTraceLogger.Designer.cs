@@ -35,22 +35,24 @@
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Controls.Add(this.btnStopLogging, 1, 0);
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Controls.Add(this.btnStartLogging, 0, 0);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(57, 46);
+			this.tableLayoutPanel1.Controls.Add(this.btnStopLogging, 0, 1);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(278, 144);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(133, 59);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// btnStartLogging
 			// 
-			this.btnStartLogging.Location = new System.Drawing.Point(3, 3);
+			this.btnStartLogging.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.btnStartLogging.Location = new System.Drawing.Point(19, 3);
 			this.btnStartLogging.Name = "btnStartLogging";
 			this.btnStartLogging.Size = new System.Drawing.Size(95, 23);
 			this.btnStartLogging.TabIndex = 0;
@@ -60,7 +62,8 @@
 			// 
 			// btnStopLogging
 			// 
-			this.btnStopLogging.Location = new System.Drawing.Point(142, 3);
+			this.btnStopLogging.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.btnStopLogging.Location = new System.Drawing.Point(19, 32);
 			this.btnStopLogging.Name = "btnStopLogging";
 			this.btnStopLogging.Size = new System.Drawing.Size(95, 23);
 			this.btnStopLogging.TabIndex = 1;
@@ -72,9 +75,13 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(546, 233);
+			this.ClientSize = new System.Drawing.Size(133, 59);
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "frmTraceLogger";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Trace Logger";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);

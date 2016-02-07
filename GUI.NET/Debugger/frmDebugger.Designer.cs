@@ -90,7 +90,6 @@
 			this.saveStrippedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveUnusedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.lblPrgAnalysis = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblPrgAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
@@ -638,17 +637,10 @@
 			// 
 			// mnuTraceLogger
 			// 
-			this.mnuTraceLogger.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem5});
 			this.mnuTraceLogger.Name = "mnuTraceLogger";
 			this.mnuTraceLogger.Size = new System.Drawing.Size(171, 22);
 			this.mnuTraceLogger.Text = "Trace Logger";
 			this.mnuTraceLogger.Click += new System.EventHandler(this.mnuTraceLogger_Click);
-			// 
-			// toolStripMenuItem5
-			// 
-			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
 			// 
 			// statusStrip
 			// 
@@ -793,6 +785,5 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToNmiHandler;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToResetHandler;
 		private System.Windows.Forms.ToolStripMenuItem mnuTraceLogger;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
 	}
 }

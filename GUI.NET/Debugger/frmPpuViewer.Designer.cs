@@ -36,6 +36,7 @@
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgNametableViewer = new System.Windows.Forms.TabPage();
@@ -46,7 +47,6 @@
 			this.ctrlSpriteViewer = new Mesen.GUI.Debugger.Controls.ctrlSpriteViewer();
 			this.tpgPaletteViewer = new System.Windows.Forms.TabPage();
 			this.ctrlPaletteViewer = new Mesen.GUI.Debugger.Controls.ctrlPaletteViewer();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgNametableViewer.SuspendLayout();
@@ -95,9 +95,14 @@
 			// 
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(138, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -105,7 +110,7 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			// 
 			// tabMain
@@ -118,7 +123,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 24);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(709, 545);
+			this.tabMain.Size = new System.Drawing.Size(709, 554);
 			this.tabMain.TabIndex = 3;
 			// 
 			// tpgNametableViewer
@@ -127,7 +132,7 @@
 			this.tpgNametableViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgNametableViewer.Name = "tpgNametableViewer";
 			this.tpgNametableViewer.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgNametableViewer.Size = new System.Drawing.Size(701, 519);
+			this.tpgNametableViewer.Size = new System.Drawing.Size(701, 528);
 			this.tpgNametableViewer.TabIndex = 0;
 			this.tpgNametableViewer.Text = "Nametable Viewer";
 			this.tpgNametableViewer.UseVisualStyleBackColor = true;
@@ -137,7 +142,7 @@
 			this.ctrlNametableViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlNametableViewer.Location = new System.Drawing.Point(3, 3);
 			this.ctrlNametableViewer.Name = "ctrlNametableViewer";
-			this.ctrlNametableViewer.Size = new System.Drawing.Size(695, 513);
+			this.ctrlNametableViewer.Size = new System.Drawing.Size(695, 522);
 			this.ctrlNametableViewer.TabIndex = 0;
 			// 
 			// tpgChrViewer
@@ -146,7 +151,7 @@
 			this.tpgChrViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgChrViewer.Name = "tpgChrViewer";
 			this.tpgChrViewer.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgChrViewer.Size = new System.Drawing.Size(701, 519);
+			this.tpgChrViewer.Size = new System.Drawing.Size(701, 528);
 			this.tpgChrViewer.TabIndex = 1;
 			this.tpgChrViewer.Text = "CHR Viewer";
 			this.tpgChrViewer.UseVisualStyleBackColor = true;
@@ -156,7 +161,7 @@
 			this.ctrlChrViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlChrViewer.Location = new System.Drawing.Point(3, 3);
 			this.ctrlChrViewer.Name = "ctrlChrViewer";
-			this.ctrlChrViewer.Size = new System.Drawing.Size(695, 513);
+			this.ctrlChrViewer.Size = new System.Drawing.Size(695, 522);
 			this.ctrlChrViewer.TabIndex = 2;
 			// 
 			// tpgSpriteViewer
@@ -164,7 +169,7 @@
 			this.tpgSpriteViewer.Controls.Add(this.ctrlSpriteViewer);
 			this.tpgSpriteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgSpriteViewer.Name = "tpgSpriteViewer";
-			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 519);
+			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 528);
 			this.tpgSpriteViewer.TabIndex = 2;
 			this.tpgSpriteViewer.Text = "Sprite Viewer";
 			this.tpgSpriteViewer.UseVisualStyleBackColor = true;
@@ -174,7 +179,7 @@
 			this.ctrlSpriteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlSpriteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlSpriteViewer.Name = "ctrlSpriteViewer";
-			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 519);
+			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 528);
 			this.ctrlSpriteViewer.TabIndex = 0;
 			// 
 			// tpgPaletteViewer
@@ -182,7 +187,7 @@
 			this.tpgPaletteViewer.Controls.Add(this.ctrlPaletteViewer);
 			this.tpgPaletteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgPaletteViewer.Name = "tpgPaletteViewer";
-			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 519);
+			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 528);
 			this.tpgPaletteViewer.TabIndex = 3;
 			this.tpgPaletteViewer.Text = "Palette Viewer";
 			this.tpgPaletteViewer.UseVisualStyleBackColor = true;
@@ -192,22 +197,20 @@
 			this.ctrlPaletteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlPaletteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlPaletteViewer.Name = "ctrlPaletteViewer";
-			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 519);
+			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 528);
 			this.ctrlPaletteViewer.TabIndex = 0;
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// frmPpuViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(709, 569);
+			this.ClientSize = new System.Drawing.Size(709, 578);
 			this.Controls.Add(this.tabMain);
 			this.Controls.Add(this.menuStrip1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MainMenuStrip = this.menuStrip1;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(725, 607);
 			this.Name = "frmPpuViewer";
 			this.Text = "PPU Viewer";
