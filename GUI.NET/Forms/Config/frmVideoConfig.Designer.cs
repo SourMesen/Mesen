@@ -30,7 +30,6 @@
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.lblVideoScale = new System.Windows.Forms.Label();
 			this.lblVideoFilter = new System.Windows.Forms.Label();
-			this.cboFilter = new System.Windows.Forms.ComboBox();
 			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
 			this.cboAspectRatio = new System.Windows.Forms.ComboBox();
 			this.lblDisplayRatio = new System.Windows.Forms.Label();
@@ -42,6 +41,8 @@
 			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkUseHdPacks = new System.Windows.Forms.CheckBox();
 			this.picHdNesTooltip = new System.Windows.Forms.PictureBox();
+			this.nudScale = new System.Windows.Forms.NumericUpDown();
+			this.cboFilter = new System.Windows.Forms.ComboBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgOverscan = new System.Windows.Forms.TabPage();
@@ -67,12 +68,12 @@
 			this.btnResetPalette = new System.Windows.Forms.Button();
 			this.btnLoadPalFile = new System.Windows.Forms.Button();
 			this.colorDialog = new System.Windows.Forms.ColorDialog();
-			this.nudScale = new System.Windows.Forms.NumericUpDown();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudScale)).BeginInit();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgOverscan.SuspendLayout();
@@ -91,12 +92,11 @@
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudScale)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 288);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 368);
 			this.baseConfigPanel.Size = new System.Drawing.Size(515, 29);
 			// 
 			// tlpMain
@@ -129,7 +129,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpMain.Size = new System.Drawing.Size(501, 256);
+			this.tlpMain.Size = new System.Drawing.Size(501, 336);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// lblVideoScale
@@ -151,18 +151,6 @@
 			this.lblVideoFilter.Size = new System.Drawing.Size(32, 13);
 			this.lblVideoFilter.TabIndex = 12;
 			this.lblVideoFilter.Text = "Filter:";
-			// 
-			// cboFilter
-			// 
-			this.cboFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboFilter.FormattingEnabled = true;
-			this.cboFilter.Items.AddRange(new object[] {
-            "None",
-            "NTSC"});
-			this.cboFilter.Location = new System.Drawing.Point(99, 29);
-			this.cboFilter.Name = "cboFilter";
-			this.cboFilter.Size = new System.Drawing.Size(76, 21);
-			this.cboFilter.TabIndex = 14;
 			// 
 			// chkVerticalSync
 			// 
@@ -288,6 +276,31 @@
 			this.picHdNesTooltip.TabIndex = 21;
 			this.picHdNesTooltip.TabStop = false;
 			// 
+			// nudScale
+			// 
+			this.nudScale.DecimalPlaces = 2;
+			this.nudScale.Location = new System.Drawing.Point(99, 3);
+			this.nudScale.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.nudScale.Name = "nudScale";
+			this.nudScale.Size = new System.Drawing.Size(48, 20);
+			this.nudScale.TabIndex = 21;
+			// 
+			// cboFilter
+			// 
+			this.cboFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboFilter.FormattingEnabled = true;
+			this.cboFilter.Items.AddRange(new object[] {
+            "None",
+            "NTSC"});
+			this.cboFilter.Location = new System.Drawing.Point(99, 29);
+			this.cboFilter.Name = "cboFilter";
+			this.cboFilter.Size = new System.Drawing.Size(76, 21);
+			this.cboFilter.TabIndex = 14;
+			// 
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
@@ -297,7 +310,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(515, 288);
+			this.tabMain.Size = new System.Drawing.Size(515, 368);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -306,7 +319,7 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(507, 262);
+			this.tpgGeneral.Size = new System.Drawing.Size(507, 342);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -317,7 +330,7 @@
 			this.tpgOverscan.Location = new System.Drawing.Point(4, 22);
 			this.tpgOverscan.Name = "tpgOverscan";
 			this.tpgOverscan.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgOverscan.Size = new System.Drawing.Size(507, 262);
+			this.tpgOverscan.Size = new System.Drawing.Size(507, 342);
 			this.tpgOverscan.TabIndex = 1;
 			this.tpgOverscan.Text = "Overscan";
 			this.tpgOverscan.UseVisualStyleBackColor = true;
@@ -328,13 +341,14 @@
 			this.grpCropping.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCropping.Location = new System.Drawing.Point(3, 3);
 			this.grpCropping.Name = "grpCropping";
-			this.grpCropping.Size = new System.Drawing.Size(501, 256);
+			this.grpCropping.Size = new System.Drawing.Size(501, 336);
 			this.grpCropping.TabIndex = 8;
 			this.grpCropping.TabStop = false;
 			this.grpCropping.Text = "Video Cropping";
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -344,21 +358,22 @@
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel4, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel5, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 2, 1);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(9, 19);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(65, 8);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(277, 234);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(369, 327);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// picOverscan
 			// 
+			this.picOverscan.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picOverscan.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.picOverscan.Location = new System.Drawing.Point(56, 43);
 			this.picOverscan.Name = "picOverscan";
-			this.picOverscan.Size = new System.Drawing.Size(165, 148);
+			this.picOverscan.Size = new System.Drawing.Size(257, 241);
 			this.picOverscan.TabIndex = 1;
 			this.picOverscan.TabStop = false;
 			// 
@@ -368,7 +383,7 @@
 			this.flowLayoutPanel3.Controls.Add(this.lblLeft);
 			this.flowLayoutPanel3.Controls.Add(this.nudOverscanLeft);
 			this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 97);
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 143);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
 			this.flowLayoutPanel3.Size = new System.Drawing.Size(53, 40);
@@ -391,6 +406,7 @@
 			this.nudOverscanLeft.Name = "nudOverscanLeft";
 			this.nudOverscanLeft.Size = new System.Drawing.Size(50, 20);
 			this.nudOverscanLeft.TabIndex = 2;
+			this.nudOverscanLeft.ValueChanged += new System.EventHandler(this.nudOverscan_ValueChanged);
 			// 
 			// flowLayoutPanel4
 			// 
@@ -398,7 +414,7 @@
 			this.flowLayoutPanel4.Controls.Add(this.lblTop);
 			this.flowLayoutPanel4.Controls.Add(this.nudOverscanTop);
 			this.flowLayoutPanel4.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel4.Location = new System.Drawing.Point(112, 0);
+			this.flowLayoutPanel4.Location = new System.Drawing.Point(158, 0);
 			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
 			this.flowLayoutPanel4.Size = new System.Drawing.Size(53, 40);
@@ -421,6 +437,7 @@
 			this.nudOverscanTop.Name = "nudOverscanTop";
 			this.nudOverscanTop.Size = new System.Drawing.Size(50, 20);
 			this.nudOverscanTop.TabIndex = 2;
+			this.nudOverscanTop.ValueChanged += new System.EventHandler(this.nudOverscan_ValueChanged);
 			// 
 			// flowLayoutPanel5
 			// 
@@ -428,7 +445,7 @@
 			this.flowLayoutPanel5.Controls.Add(this.lblBottom);
 			this.flowLayoutPanel5.Controls.Add(this.nudOverscanBottom);
 			this.flowLayoutPanel5.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel5.Location = new System.Drawing.Point(112, 194);
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(158, 287);
 			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
 			this.flowLayoutPanel5.Size = new System.Drawing.Size(53, 40);
@@ -451,6 +468,7 @@
 			this.nudOverscanBottom.Name = "nudOverscanBottom";
 			this.nudOverscanBottom.Size = new System.Drawing.Size(50, 20);
 			this.nudOverscanBottom.TabIndex = 2;
+			this.nudOverscanBottom.ValueChanged += new System.EventHandler(this.nudOverscan_ValueChanged);
 			// 
 			// flowLayoutPanel2
 			// 
@@ -458,7 +476,7 @@
 			this.flowLayoutPanel2.Controls.Add(this.lblRight);
 			this.flowLayoutPanel2.Controls.Add(this.nudOverscanRight);
 			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(224, 97);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(316, 143);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(53, 40);
@@ -481,6 +499,7 @@
 			this.nudOverscanRight.Name = "nudOverscanRight";
 			this.nudOverscanRight.Size = new System.Drawing.Size(50, 20);
 			this.nudOverscanRight.TabIndex = 1;
+			this.nudOverscanRight.ValueChanged += new System.EventHandler(this.nudOverscan_ValueChanged);
 			// 
 			// tpgPalette
 			// 
@@ -488,7 +507,7 @@
 			this.tpgPalette.Location = new System.Drawing.Point(4, 22);
 			this.tpgPalette.Name = "tpgPalette";
 			this.tpgPalette.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPalette.Size = new System.Drawing.Size(507, 262);
+			this.tpgPalette.Size = new System.Drawing.Size(507, 342);
 			this.tpgPalette.TabIndex = 2;
 			this.tpgPalette.Text = "Palette";
 			this.tpgPalette.UseVisualStyleBackColor = true;
@@ -507,7 +526,7 @@
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(501, 256);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(501, 336);
 			this.tableLayoutPanel3.TabIndex = 4;
 			// 
 			// picPalette
@@ -561,24 +580,11 @@
 			this.btnLoadPalFile.UseVisualStyleBackColor = true;
 			this.btnLoadPalFile.Click += new System.EventHandler(this.btnLoadPalFile_Click);
 			// 
-			// nudScale
-			// 
-			this.nudScale.DecimalPlaces = 2;
-			this.nudScale.Location = new System.Drawing.Point(99, 3);
-			this.nudScale.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-			this.nudScale.Name = "nudScale";
-			this.nudScale.Size = new System.Drawing.Size(48, 20);
-			this.nudScale.TabIndex = 21;
-			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(515, 317);
+			this.ClientSize = new System.Drawing.Size(515, 397);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -596,6 +602,7 @@
 			this.flowLayoutPanel7.ResumeLayout(false);
 			this.flowLayoutPanel7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudScale)).EndInit();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgOverscan.ResumeLayout(false);
@@ -618,7 +625,6 @@
 			this.tableLayoutPanel3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.nudScale)).EndInit();
 			this.ResumeLayout(false);
 
 		}

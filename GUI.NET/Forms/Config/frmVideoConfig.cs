@@ -41,6 +41,8 @@ namespace Mesen.GUI.Forms.Config
 			RefreshPalette();
 
 			toolTip.SetToolTip(picHdNesTooltip, "This option allows Mesen to load HDNes-format HD packs if they are found." + Environment.NewLine + Environment.NewLine + "HD Packs should be placed in the \"HdPacks\" folder in a subfolder matching the name of the ROM." + Environment.NewLine + "e.g: MyRom.nes should have their HD Pack in \"HdPacks\\MyRom\\hires.txt\"." + Environment.NewLine + Environment.NewLine + "Note: Support for HD Packs is a work in progress and some limitations remain.");
+
+			UpdateOverscanImage();
 		}
 		
 		protected override void OnFormClosed(FormClosedEventArgs e)
@@ -124,6 +126,25 @@ namespace Mesen.GUI.Forms.Config
 					paletteFile.Close();
 				}
 			}
+		}
+
+		private void UpdateOverscanImage()
+		{
+			Bitmap overscan = new Bitmap(256, 240);
+
+			using(Graphics g = Graphics.FromImage(overscan)) {
+				Rectangle bg = new Rectangle(0, 0, 256, 240);
+				g.FillRectangle(Brushes.DarkGray, bg);
+
+				Rectangle fg = new Rectangle((int)nudOverscanLeft.Value, (int)nudOverscanTop.Value, 256 - (int)nudOverscanLeft.Value - (int)nudOverscanRight.Value, 240 - (int)nudOverscanTop.Value - (int)nudOverscanBottom.Value);
+				g.FillRectangle(Brushes.LightCyan, fg);
+			}
+			picOverscan.Image = overscan;
+		}
+
+		private void nudOverscan_ValueChanged(object sender, EventArgs e)
+		{
+			UpdateOverscanImage();
 		}
 	}
 }
