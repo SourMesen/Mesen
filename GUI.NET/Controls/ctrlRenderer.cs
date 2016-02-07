@@ -71,8 +71,10 @@ namespace Mesen.GUI.Controls
 
 		private void tmrMouse_Tick(object sender, EventArgs e)
 		{
-			_cursorHidden = true;
-			Cursor.Hide();
+			if(!_cursorHidden) {
+				_cursorHidden = true;
+				Cursor.Hide();
+			}
 		}
 
 		private void ctrlRenderer_MouseLeave(object sender, EventArgs e)
