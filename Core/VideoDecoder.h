@@ -50,7 +50,7 @@ public:
 
 	uint32_t GetFrameCount();
 
-	void GetScreenSize(ScreenSize &size);
+	void GetScreenSize(ScreenSize &size, bool ignoreScale);
 
 	void DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length);
 

@@ -30,7 +30,8 @@ uint32_t EmulationSettings::_emulationSpeed = 100;
 
 OverscanDimensions EmulationSettings::_overscan;
 VideoFilterType EmulationSettings::_videoFilterType = VideoFilterType::None;
-uint32_t EmulationSettings::_videoScale = 1;
+double EmulationSettings::_videoScale = 1;
+VideoAspectRatio EmulationSettings::_aspectRatio = VideoAspectRatio::Auto;
 
 ConsoleType EmulationSettings::_consoleType = ConsoleType::Nes;
 ExpansionPortDevice EmulationSettings::_expansionDevice = ExpansionPortDevice::None;

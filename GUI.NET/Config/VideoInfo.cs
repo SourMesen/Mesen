@@ -17,11 +17,10 @@ namespace Mesen.GUI.Config
 		public UInt32 OverscanRight = 0;
 		public UInt32 OverscanTop = 8;
 		public UInt32 OverscanBottom = 8;
-		public UInt32 VideoScale = 2;
+		public double VideoScale = 2;
 		public VideoFilterType VideoFilter = VideoFilterType.None;
 		public VideoAspectRatio AspectRatio = VideoAspectRatio.Auto;
 		public bool VerticalSync = true;
-		public bool FullscreenMode = false;
 		public bool UseHdPacks = false;
 		public Int32[] Palette = new Int32[0];
 
@@ -43,6 +42,7 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetVideoFilter(videoInfo.VideoFilter);
 			InteropEmu.SetVideoScale(videoInfo.VideoScale);
+			InteropEmu.SetVideoAspectRatio(videoInfo.AspectRatio);
 
 			if(videoInfo.Palette.Length == 64) {
 				InteropEmu.SetRgbPalette(videoInfo.Palette);

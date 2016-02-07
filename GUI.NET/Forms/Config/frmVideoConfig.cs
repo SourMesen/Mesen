@@ -26,7 +26,6 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("EmulationSpeed", nudEmulationSpeed);
 			AddBinding("ShowFPS", chkShowFps);
 			AddBinding("VerticalSync", chkVerticalSync);
-			AddBinding("FullscreenMode", chkFullscreenMode);
 			AddBinding("UseHdPacks", chkUseHdPacks);
 			
 			AddBinding("VideoScale", cboScale);

@@ -6,6 +6,7 @@
 
 BaseVideoFilter::BaseVideoFilter()
 {
+	_overscan = EmulationSettings::GetOverscanDimensions();
 }
 
 BaseVideoFilter::~BaseVideoFilter()

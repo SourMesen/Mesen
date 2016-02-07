@@ -57,6 +57,15 @@ enum class VideoFilterType
 	HdPack = 999
 };
 
+enum class VideoAspectRatio
+{
+	Auto = 0,
+	NTSC = 1,
+	PAL = 2,
+	Standard = 3,
+	Widescreen = 4
+};
+
 struct OverscanDimensions
 {
 	uint32_t Left = 0;
@@ -149,7 +158,8 @@ private:
 
 	static OverscanDimensions _overscan;
 	static VideoFilterType _videoFilterType;
-	static uint32_t _videoScale;
+	static double _videoScale;
+	static VideoAspectRatio _aspectRatio;
 
 	static ConsoleType _consoleType;
 	static ExpansionPortDevice _expansionDevice;
@@ -237,10 +247,13 @@ public:
 
 	static void SetOverscanDimensions(uint8_t left, uint8_t right, uint8_t top, uint8_t bottom)
 	{
-		_overscan.Left = left;
-		_overscan.Right = right;
-		_overscan.Top = top;
-		_overscan.Bottom = bottom;
+		if(_overscan.Left != left || _overscan.Right != right || _overscan.Top != top || _overscan.Bottom != bottom) {
+			_overscan.Left = left;
+			_overscan.Right = right;
+			_overscan.Top = top;
+			_overscan.Bottom = bottom;
+			MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
+		}
 	}
 
 	static OverscanDimensions GetOverscanDimensions()
@@ -273,13 +286,39 @@ public:
 		return _videoFilterType;
 	}
 
-	static void SetVideoScale(uint32_t scale)
+	static void SetVideoAspectRatio(VideoAspectRatio aspectRatio)
 	{
-		_videoScale = scale;
-		MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
+		if(_aspectRatio != aspectRatio) {
+			_aspectRatio = aspectRatio;
+			MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
+		}
 	}
 
-	static uint32_t GetVideoScale()
+	static VideoAspectRatio GetVideoAspectRatio()
+	{
+		return _aspectRatio;
+	}
+
+	static double GetAspectRatio()
+	{
+		switch(_aspectRatio) {
+			case VideoAspectRatio::NTSC: return 8.0 / 7.0;
+			case VideoAspectRatio::PAL: return 18.0 / 13.0;
+			case VideoAspectRatio::Standard: return 4.0 / 3.0;
+			case VideoAspectRatio::Widescreen: return 16.0 / 9.0;
+		}
+		return 0.0;
+	}
+
+	static void SetVideoScale(double scale)
+	{
+		if(_videoScale != scale) {
+			_videoScale = scale;
+			MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
+		}
+	}
+
+	static double GetVideoScale()
 	{
 		return _videoScale;
 	}

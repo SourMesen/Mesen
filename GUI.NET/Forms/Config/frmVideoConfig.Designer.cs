@@ -28,7 +28,6 @@
 		private void InitializeComponent()
 		{
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-			this.chkFullscreenMode = new System.Windows.Forms.CheckBox();
 			this.lblVideoScale = new System.Windows.Forms.Label();
 			this.lblVideoFilter = new System.Windows.Forms.Label();
 			this.cboScale = new System.Windows.Forms.ComboBox();
@@ -104,7 +103,6 @@
 			this.tlpMain.ColumnCount = 2;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.Controls.Add(this.chkFullscreenMode, 0, 5);
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.lblVideoFilter, 0, 1);
 			this.tlpMain.Controls.Add(this.cboScale, 1, 0);
@@ -112,15 +110,15 @@
 			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 4);
 			this.tlpMain.Controls.Add(this.cboAspectRatio, 1, 2);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 2);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 7);
-			this.tlpMain.Controls.Add(this.lblEmulationSpeed, 0, 7);
-			this.tlpMain.Controls.Add(this.chkShowFps, 0, 6);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 6);
+			this.tlpMain.Controls.Add(this.lblEmulationSpeed, 0, 6);
+			this.tlpMain.Controls.Add(this.chkShowFps, 0, 5);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 3);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 9;
+			this.tlpMain.RowCount = 8;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -129,21 +127,9 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpMain.Size = new System.Drawing.Size(501, 256);
 			this.tlpMain.TabIndex = 1;
-			// 
-			// chkFullscreenMode
-			// 
-			this.chkFullscreenMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkFullscreenMode.AutoSize = true;
-			this.tlpMain.SetColumnSpan(this.chkFullscreenMode, 2);
-			this.chkFullscreenMode.Location = new System.Drawing.Point(3, 130);
-			this.chkFullscreenMode.Name = "chkFullscreenMode";
-			this.chkFullscreenMode.Size = new System.Drawing.Size(113, 17);
-			this.chkFullscreenMode.TabIndex = 18;
-			this.chkFullscreenMode.Text = "Fullscreen window";
-			this.chkFullscreenMode.UseVisualStyleBackColor = true;
 			// 
 			// lblVideoScale
 			// 
@@ -234,7 +220,7 @@
 			this.flowLayoutPanel6.Controls.Add(this.nudEmulationSpeed);
 			this.flowLayoutPanel6.Controls.Add(this.lblEmuSpeedHint);
 			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 173);
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 150);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
 			this.flowLayoutPanel6.Size = new System.Drawing.Size(405, 26);
@@ -266,7 +252,7 @@
 			// 
 			this.lblEmulationSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblEmulationSpeed.AutoSize = true;
-			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 179);
+			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 156);
 			this.lblEmulationSpeed.Name = "lblEmulationSpeed";
 			this.lblEmulationSpeed.Size = new System.Drawing.Size(90, 13);
 			this.lblEmulationSpeed.TabIndex = 0;
@@ -277,7 +263,7 @@
 			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFps.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 153);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 130);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
@@ -669,7 +655,6 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.Label lblRight;
 		private System.Windows.Forms.NumericUpDown nudOverscanRight;
-		private System.Windows.Forms.CheckBox chkFullscreenMode;
 		private System.Windows.Forms.TabPage tpgPalette;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
 		private System.Windows.Forms.CheckBox chkUseHdPacks;

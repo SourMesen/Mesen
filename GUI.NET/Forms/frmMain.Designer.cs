@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Forms
+﻿using Mesen.GUI.Config;
+
+namespace Mesen.GUI.Forms
 {
 	partial class frmMain
 	{
@@ -23,6 +25,10 @@
 			if(_debugger != null) {
 				_debugger.Close();
 			}
+
+			ConfigManager.Config.VideoInfo.VideoScale = _regularScale;
+			ConfigManager.ApplyChanges();
+
 			StopEmu();
 			InteropEmu.Release();
 			base.Dispose(disposing);
@@ -72,10 +78,13 @@
 			this.mnuScale2x = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScale3x = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScale4x = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuScaleCustom = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuVideoFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNoneFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNtscFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowFPS = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFullscreen = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAudioConfig = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuInput = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,7 +136,9 @@
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
+			this.panelRenderer = new System.Windows.Forms.Panel();
 			this.menuStrip.SuspendLayout();
+			this.panelRenderer.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuStrip
@@ -140,9 +151,10 @@
             this.mnuHelp});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
-			this.menuStrip.Size = new System.Drawing.Size(365, 24);
+			this.menuStrip.Size = new System.Drawing.Size(304, 24);
 			this.menuStrip.TabIndex = 0;
 			this.menuStrip.Text = "menuStrip1";
+			this.menuStrip.VisibleChanged += new System.EventHandler(this.menuStrip_VisibleChanged);
 			// 
 			// mnuFile
 			// 
@@ -286,6 +298,7 @@
             this.mnuVideoScale,
             this.mnuVideoFilter,
             this.mnuShowFPS,
+            this.mnuFullscreen,
             this.toolStripMenuItem10,
             this.mnuAudioConfig,
             this.mnuInput,
@@ -391,7 +404,9 @@
             this.mnuScale1x,
             this.mnuScale2x,
             this.mnuScale3x,
-            this.mnuScale4x});
+            this.mnuScale4x,
+            this.toolStripMenuItem13,
+            this.mnuScaleCustom});
 			this.mnuVideoScale.Image = global::Mesen.GUI.Properties.Resources.slideshow_full_screen;
 			this.mnuVideoScale.Name = "mnuVideoScale";
 			this.mnuVideoScale.Size = new System.Drawing.Size(163, 22);
@@ -400,7 +415,7 @@
 			// mnuScale1x
 			// 
 			this.mnuScale1x.Name = "mnuScale1x";
-			this.mnuScale1x.Size = new System.Drawing.Size(85, 22);
+			this.mnuScale1x.Size = new System.Drawing.Size(116, 22);
 			this.mnuScale1x.Tag = "1";
 			this.mnuScale1x.Text = "1x";
 			this.mnuScale1x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -408,7 +423,7 @@
 			// mnuScale2x
 			// 
 			this.mnuScale2x.Name = "mnuScale2x";
-			this.mnuScale2x.Size = new System.Drawing.Size(85, 22);
+			this.mnuScale2x.Size = new System.Drawing.Size(116, 22);
 			this.mnuScale2x.Tag = "2";
 			this.mnuScale2x.Text = "2x";
 			this.mnuScale2x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -416,7 +431,7 @@
 			// mnuScale3x
 			// 
 			this.mnuScale3x.Name = "mnuScale3x";
-			this.mnuScale3x.Size = new System.Drawing.Size(85, 22);
+			this.mnuScale3x.Size = new System.Drawing.Size(116, 22);
 			this.mnuScale3x.Tag = "3";
 			this.mnuScale3x.Text = "3x";
 			this.mnuScale3x.Click += new System.EventHandler(this.mnuScale_Click);
@@ -424,10 +439,22 @@
 			// mnuScale4x
 			// 
 			this.mnuScale4x.Name = "mnuScale4x";
-			this.mnuScale4x.Size = new System.Drawing.Size(85, 22);
+			this.mnuScale4x.Size = new System.Drawing.Size(116, 22);
 			this.mnuScale4x.Tag = "4";
 			this.mnuScale4x.Text = "4x";
 			this.mnuScale4x.Click += new System.EventHandler(this.mnuScale_Click);
+			// 
+			// toolStripMenuItem13
+			// 
+			this.toolStripMenuItem13.Name = "toolStripMenuItem13";
+			this.toolStripMenuItem13.Size = new System.Drawing.Size(113, 6);
+			// 
+			// mnuScaleCustom
+			// 
+			this.mnuScaleCustom.Name = "mnuScaleCustom";
+			this.mnuScaleCustom.Size = new System.Drawing.Size(116, 22);
+			this.mnuScaleCustom.Text = "Custom";
+			this.mnuScaleCustom.Click += new System.EventHandler(this.mnuScaleCustom_Click);
 			// 
 			// mnuVideoFilter
 			// 
@@ -460,6 +487,14 @@
 			this.mnuShowFPS.Size = new System.Drawing.Size(163, 22);
 			this.mnuShowFPS.Text = "Show FPS";
 			this.mnuShowFPS.Click += new System.EventHandler(this.mnuShowFPS_Click);
+			// 
+			// mnuFullscreen
+			// 
+			this.mnuFullscreen.Name = "mnuFullscreen";
+			this.mnuFullscreen.ShortcutKeys = System.Windows.Forms.Keys.F11;
+			this.mnuFullscreen.Size = new System.Drawing.Size(163, 22);
+			this.mnuFullscreen.Text = "Fullscreen";
+			this.mnuFullscreen.Click += new System.EventHandler(this.mnuFullscreen_Click);
 			// 
 			// toolStripMenuItem10
 			// 
@@ -602,40 +637,40 @@
 			// mnuNetPlayPlayer1
 			// 
 			this.mnuNetPlayPlayer1.Name = "mnuNetPlayPlayer1";
-			this.mnuNetPlayPlayer1.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlayPlayer1.Size = new System.Drawing.Size(124, 22);
 			this.mnuNetPlayPlayer1.Text = "Player 1";
 			this.mnuNetPlayPlayer1.Click += new System.EventHandler(this.mnuNetPlayPlayer1_Click);
 			// 
 			// mnuNetPlayPlayer2
 			// 
 			this.mnuNetPlayPlayer2.Name = "mnuNetPlayPlayer2";
-			this.mnuNetPlayPlayer2.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlayPlayer2.Size = new System.Drawing.Size(124, 22);
 			this.mnuNetPlayPlayer2.Text = "Player 2";
 			this.mnuNetPlayPlayer2.Click += new System.EventHandler(this.mnuNetPlayPlayer2_Click);
 			// 
 			// mnuNetPlayPlayer3
 			// 
 			this.mnuNetPlayPlayer3.Name = "mnuNetPlayPlayer3";
-			this.mnuNetPlayPlayer3.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlayPlayer3.Size = new System.Drawing.Size(124, 22);
 			this.mnuNetPlayPlayer3.Text = "Player 3";
 			this.mnuNetPlayPlayer3.Click += new System.EventHandler(this.mnuNetPlayPlayer3_Click);
 			// 
 			// mnuNetPlayPlayer4
 			// 
 			this.mnuNetPlayPlayer4.Name = "mnuNetPlayPlayer4";
-			this.mnuNetPlayPlayer4.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlayPlayer4.Size = new System.Drawing.Size(124, 22);
 			this.mnuNetPlayPlayer4.Text = "Player 4";
 			this.mnuNetPlayPlayer4.Click += new System.EventHandler(this.mnuNetPlayPlayer4_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(121, 6);
 			// 
 			// mnuNetPlaySpectator
 			// 
 			this.mnuNetPlaySpectator.Name = "mnuNetPlaySpectator";
-			this.mnuNetPlaySpectator.Size = new System.Drawing.Size(152, 22);
+			this.mnuNetPlaySpectator.Size = new System.Drawing.Size(124, 22);
 			this.mnuNetPlaySpectator.Text = "Spectator";
 			this.mnuNetPlaySpectator.Click += new System.EventHandler(this.mnuNetPlaySpectator_Click);
 			// 
@@ -851,30 +886,43 @@
 			// ctrlRenderer
 			// 
 			this.ctrlRenderer.BackColor = System.Drawing.Color.Black;
-			this.ctrlRenderer.Location = new System.Drawing.Point(0, 24);
+			this.ctrlRenderer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlRenderer.Name = "ctrlRenderer";
 			this.ctrlRenderer.Size = new System.Drawing.Size(263, 176);
 			this.ctrlRenderer.TabIndex = 1;
+			this.ctrlRenderer.Enter += new System.EventHandler(this.ctrlRenderer_Enter);
+			// 
+			// panelRenderer
+			// 
+			this.panelRenderer.BackColor = System.Drawing.Color.Black;
+			this.panelRenderer.Controls.Add(this.ctrlRenderer);
+			this.panelRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panelRenderer.Location = new System.Drawing.Point(0, 24);
+			this.panelRenderer.Name = "panelRenderer";
+			this.panelRenderer.Size = new System.Drawing.Size(304, 218);
+			this.panelRenderer.TabIndex = 2;
+			this.panelRenderer.Click += new System.EventHandler(this.panelRenderer_Click);
 			// 
 			// frmMain
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.AutoSize = true;
-			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.BackColor = System.Drawing.Color.Black;
-			this.ClientSize = new System.Drawing.Size(365, 272);
-			this.Controls.Add(this.ctrlRenderer);
+			this.BackColor = System.Drawing.Color.Maroon;
+			this.ClientSize = new System.Drawing.Size(304, 242);
+			this.Controls.Add(this.panelRenderer);
 			this.Controls.Add(this.menuStrip);
 			this.MainMenuStrip = this.menuStrip;
+			this.MinimumSize = new System.Drawing.Size(320, 280);
 			this.Name = "frmMain";
 			this.Text = "Mesen";
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmMain_DragEnter);
+			this.Resize += new System.EventHandler(this.frmMain_Resize);
 			this.menuStrip.ResumeLayout(false);
 			this.menuStrip.PerformLayout();
+			this.panelRenderer.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -972,6 +1020,10 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuNetPlayPlayer4;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 		private System.Windows.Forms.ToolStripMenuItem mnuNetPlaySpectator;
+		private System.Windows.Forms.Panel panelRenderer;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem13;
+		private System.Windows.Forms.ToolStripMenuItem mnuScaleCustom;
+		private System.Windows.Forms.ToolStripMenuItem mnuFullscreen;
 	}
 }
 

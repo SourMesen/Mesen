@@ -251,7 +251,8 @@ namespace InteropEmu {
 		DllExport void __stdcall SetNesModel(uint32_t model) { EmulationSettings::SetNesModel((NesModel)model); }
 		DllExport void __stdcall SetOverscanDimensions(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom) { EmulationSettings::SetOverscanDimensions(left, right, top, bottom); }
 		DllExport void __stdcall SetEmulationSpeed(uint32_t emulationSpeed) { EmulationSettings::SetEmulationSpeed(emulationSpeed); }
-		DllExport void __stdcall SetVideoScale(uint32_t scale) { EmulationSettings::SetVideoScale(scale); }
+		DllExport void __stdcall SetVideoScale(double scale) { EmulationSettings::SetVideoScale(scale); }
+		DllExport void __stdcall SetVideoAspectRatio(VideoAspectRatio aspectRatio) { EmulationSettings::SetVideoAspectRatio(aspectRatio); }
 		DllExport void __stdcall SetVideoFilter(VideoFilterType filter) { EmulationSettings::SetVideoFilterType(filter); }
 		DllExport void __stdcall GetRgbPalette(uint32_t *paletteBuffer) { EmulationSettings::GetRgbPalette(paletteBuffer); }
 		DllExport void __stdcall SetRgbPalette(uint32_t *paletteBuffer) { EmulationSettings::SetRgbPalette(paletteBuffer); }
@@ -264,7 +265,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetAudioDevice(char* audioDevice) { _soundManager->SetAudioDevice(audioDevice); }
 
-		DllExport void __stdcall GetScreenSize(ScreenSize &size) { VideoDecoder::GetInstance()->GetScreenSize(size); }
+		DllExport void __stdcall GetScreenSize(ScreenSize &size, bool ignoreScale) { VideoDecoder::GetInstance()->GetScreenSize(size, ignoreScale); }
 		
 		//FDS functions
 		DllExport uint32_t __stdcall FdsGetSideCount() { return FDS::GetSideCount(); }

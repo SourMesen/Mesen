@@ -34,15 +34,19 @@ namespace NES
 
 	void Renderer::SetScreenSize(uint32_t width, uint32_t height)
 	{
-		uint32_t scale = EmulationSettings::GetVideoScale();
+		double scale = EmulationSettings::GetVideoScale();
 
-		if(_screenHeight != height*scale || _screenWidth != width*scale) {
+		ScreenSize screenSize;
+		VideoDecoder::GetInstance()->GetScreenSize(screenSize, false);
+
+		if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width) {
 			_nesFrameHeight = height;
 			_nesFrameWidth = width;
 			_newFrameBufferSize = width*height;
 
-			_screenHeight = height * scale;
-			_screenWidth = width * scale;
+			_screenHeight = screenSize.Height;
+			_screenWidth = screenSize.Width;
+
 			_screenBufferSize = _screenHeight*_screenWidth;
 
 			Reset();

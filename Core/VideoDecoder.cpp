@@ -27,11 +27,15 @@ VideoDecoder::~VideoDecoder()
 	StopThread();
 }
 
-void VideoDecoder::GetScreenSize(ScreenSize &size)
+void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
 {
 	if(_videoFilter) {
-		size.Width = _videoFilter->GetFrameInfo().Width * EmulationSettings::GetVideoScale();
-		size.Height = _videoFilter->GetFrameInfo().Height * EmulationSettings::GetVideoScale();
+		double aspectRatio = EmulationSettings::GetAspectRatio();
+		size.Width = (int32_t)(_videoFilter->GetFrameInfo().Width * (ignoreScale ? 1 : EmulationSettings::GetVideoScale()));
+		size.Height = (int32_t)(_videoFilter->GetFrameInfo().Height * (ignoreScale ? 1 : EmulationSettings::GetVideoScale()));
+		if(aspectRatio != 0.0) {
+			size.Width = (uint32_t)(size.Height * aspectRatio);
+		}
 	}
 }
 

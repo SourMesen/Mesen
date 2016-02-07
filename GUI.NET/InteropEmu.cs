@@ -98,12 +98,13 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
 		[DllImport(DLLPath)] public static extern void SetEmulationSpeed(UInt32 emulationSpeed);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
-		[DllImport(DLLPath)] public static extern void SetVideoScale(UInt32 scale);
+		[DllImport(DLLPath)] public static extern void SetVideoScale(double scale);
+		[DllImport(DLLPath)] public static extern void SetVideoAspectRatio(VideoAspectRatio aspectRatio);
 		[DllImport(DLLPath)] public static extern void SetVideoFilter(VideoFilterType filter);
 		[DllImport(DLLPath)] public static extern void SetRgbPalette(Int32[] palette);
 		[DllImport(DLLPath, EntryPoint="GetRgbPalette")] private static extern void GetRgbPaletteWrapper(IntPtr paletteBuffer);
 		
-		[DllImport(DLLPath, EntryPoint="GetScreenSize")] private static extern void GetScreenSizeWrapper(out ScreenSize size);
+		[DllImport(DLLPath, EntryPoint="GetScreenSize")] private static extern void GetScreenSizeWrapper(out ScreenSize size, [MarshalAs(UnmanagedType.I1)]bool ignoreScale);
 
 		[DllImport(DLLPath, EntryPoint= "GetAudioDevices")] private static extern IntPtr GetAudioDevicesWrapper();
 		[DllImport(DLLPath)] public static extern void SetAudioDevice(string audioDevice);
@@ -226,10 +227,10 @@ namespace Mesen.GUI
 			}
 		}
 
-		public static ScreenSize GetScreenSize()
+		public static ScreenSize GetScreenSize(bool ignoreScale)
 		{
 			ScreenSize size;
-			GetScreenSizeWrapper(out size);
+			GetScreenSizeWrapper(out size, ignoreScale);
 			return size;
 		}
 

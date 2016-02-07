@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +22,10 @@ namespace Mesen.GUI.Forms
 		private frmDebugger _debugger;
 		private string _romToLoad = null;
 		private string _currentGame = null;
-		
+		private bool _customSize = false;
+		private bool _fullscreenMode = false;
+		private double _regularScale = ConfigManager.Config.VideoInfo.VideoScale;
+
 		public frmMain(string[] args)
 		{
 			if(args.Length > 0 && File.Exists(args[0])) {
@@ -62,6 +61,8 @@ namespace Mesen.GUI.Forms
 
 			UpdateMenus();
 			UpdateRecentFiles();
+
+			UpdateViewerSize();
 
 			if(_romToLoad != null) {
 				LoadFile(this._romToLoad);
@@ -172,19 +173,61 @@ namespace Mesen.GUI.Forms
 			UpdateScaleMenu(ConfigManager.Config.VideoInfo.VideoScale);
 			UpdateFilterMenu(ConfigManager.Config.VideoInfo.VideoFilter);
 
-			UpdateViewerSize();	
+			UpdateViewerSize();
 		}
 
 		private void UpdateViewerSize()
 		{
-			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize();
-			switch(ConfigManager.Config.VideoInfo.AspectRatio) {
-				case VideoAspectRatio.NTSC: size.Width = (int)(size.Height * 8 / 7.0); break;
-				case VideoAspectRatio.PAL: size.Width = (int)(size.Height * 18 / 13.0); break;
-				case VideoAspectRatio.Standard: size.Width = (int)(size.Height * 4 / 3.0); break;
-				case VideoAspectRatio.Widescreen: size.Width = (int)(size.Height * 16 / 9.0); break;
+			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(false);
+
+			if(!_customSize && this.WindowState != FormWindowState.Maximized) {
+				this.Resize -= frmMain_Resize;
+				this.ClientSize = new Size(size.Width, size.Height + menuStrip.Height);
+				this.Resize += frmMain_Resize;
 			}
+
 			ctrlRenderer.Size = new Size(size.Width, size.Height);
+			ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
+			ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
+		}
+
+		private void frmMain_Resize(object sender, EventArgs e)
+		{
+			if(this.WindowState != FormWindowState.Minimized) {
+				SetScaleBasedOnWindowSize();
+			}
+		}
+
+		private void SetScaleBasedOnWindowSize()
+		{
+			_customSize = true;
+			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(true);
+			double verticalScale = (double)panelRenderer.ClientSize.Height / size.Height;
+			double horizontalScale = (double)panelRenderer.ClientSize.Width / size.Width;
+			double scale = Math.Min(verticalScale, horizontalScale);
+			UpdateScaleMenu(scale);
+			VideoInfo.ApplyConfig();
+		}
+
+		private void SetFullscreenState(bool enabled)
+		{
+			this.Resize -= frmMain_Resize;
+			if(enabled) {
+				this.menuStrip.Visible = false;
+				this.WindowState = FormWindowState.Normal;
+				this.FormBorderStyle = FormBorderStyle.None;
+				this.WindowState = FormWindowState.Maximized;
+				SetScaleBasedOnWindowSize();
+			} else {
+				this.menuStrip.Visible = true;
+				this.WindowState = FormWindowState.Normal;
+				this.FormBorderStyle = FormBorderStyle.Sizable;
+				this.UpdateScaleMenu(_regularScale);
+				VideoInfo.ApplyConfig();
+			}
+			this.Resize += frmMain_Resize;
+
+			_fullscreenMode = enabled;
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -446,12 +489,21 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.Reset();
 		}
-		
+
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if(!this.menuStrip.Enabled) {
 				//Make sure we disable all shortcut keys while the bar is disabled (i.e when running tests)
 				return false;
+			}
+
+			if(_fullscreenMode && (keyData & Keys.Alt) == Keys.Alt) {
+				if(this.menuStrip.Visible && !this.menuStrip.ContainsFocus) {
+					this.menuStrip.Visible = false;
+				} else {
+					this.menuStrip.Visible = true;
+					this.menuStrip.Focus();
+				}
 			}
 
 			if(keyData == Keys.Escape && _emuThread != null && mnuPause.Enabled) {
@@ -788,12 +840,13 @@ namespace Mesen.GUI.Forms
 			Process.Start(startInfo);
 		}
 
-		private void UpdateScaleMenu(UInt32 scale)
+		private void UpdateScaleMenu(double scale)
 		{
-			mnuScale1x.Checked = (scale == 1);
-			mnuScale2x.Checked = (scale == 2);
-			mnuScale3x.Checked = (scale == 3);
-			mnuScale4x.Checked = (scale == 4);
+			mnuScale1x.Checked = (scale == 1.0) && !_customSize;
+			mnuScale2x.Checked = (scale == 2.0) && !_customSize;
+			mnuScale3x.Checked = (scale == 3.0) && !_customSize;
+			mnuScale4x.Checked = (scale == 4.0) && !_customSize;
+			mnuScaleCustom.Checked = _customSize || !mnuScale1x.Checked && !mnuScale2x.Checked && !mnuScale3x.Checked && !mnuScale4x.Checked;
 
 			ConfigManager.Config.VideoInfo.VideoScale = scale;
 			ConfigManager.ApplyChanges();
@@ -811,8 +864,9 @@ namespace Mesen.GUI.Forms
 		private void mnuScale_Click(object sender, EventArgs e)
 		{
 			UInt32 scale = UInt32.Parse((string)((ToolStripMenuItem)sender).Tag);
+			_customSize = false;
+			_regularScale = scale;
 			InteropEmu.SetVideoScale(scale);
-
 			UpdateScaleMenu(scale);
 		}
 
@@ -820,12 +874,14 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.SetVideoFilter(VideoFilterType.None);
 			UpdateFilterMenu(VideoFilterType.None);
+			_customSize = false;
 		}
 
 		private void mnuNtscFilter_Click(object sender, EventArgs e)
 		{
 			InteropEmu.SetVideoFilter(VideoFilterType.NTSC);
 			UpdateFilterMenu(VideoFilterType.NTSC);
+			_customSize = false;
 		}
 
 		private void InitializeFdsDiskMenu()
@@ -922,6 +978,39 @@ namespace Mesen.GUI.Forms
 		private void mnuNetPlaySpectator_Click(object sender, EventArgs e)
 		{
 			InteropEmu.NetPlaySelectController(0xFF);
+		}
+
+		private void mnuFullscreen_Click(object sender, EventArgs e)
+		{
+			SetFullscreenState(!_fullscreenMode);
+			mnuFullscreen.Checked = _fullscreenMode;
+		}
+
+		private void mnuScaleCustom_Click(object sender, EventArgs e)
+		{
+			SetScaleBasedOnWindowSize();
+		}
+
+		private void panelRenderer_Click(object sender, EventArgs e)
+		{
+			ctrlRenderer.Focus();
+		}
+
+		private void ctrlRenderer_Enter(object sender, EventArgs e)
+		{
+			if(_fullscreenMode) {
+				this.menuStrip.Visible = false;
+			}
+		}
+
+		private void menuStrip_VisibleChanged(object sender, EventArgs e)
+		{
+			IntPtr handle = this.Handle;
+			this.BeginInvoke((MethodInvoker)(() => {
+				if(_fullscreenMode && _customSize) {
+					SetScaleBasedOnWindowSize();
+				}
+			}));
 		}
 	}
 }
