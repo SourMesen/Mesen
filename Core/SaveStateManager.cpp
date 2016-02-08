@@ -41,7 +41,7 @@ void SaveStateManager::SaveState(int stateIndex)
 		Console::SaveState(file);
 		Console::Resume();
 		file.close();		
-		MessageManager::DisplayMessage("Game States", "State #" + std::to_string(stateIndex) + " saved.");
+		MessageManager::DisplayMessage("Save States", "State #" + std::to_string(stateIndex) + " saved.");
 	}
 }
 
@@ -59,23 +59,30 @@ bool SaveStateManager::LoadState(int stateIndex)
 
 			uint32_t emuVersion, fileFormatVersion;
 			file.read((char*)&emuVersion, sizeof(emuVersion));
+
+			if(emuVersion > EmulationSettings::GetMesenVersion()) {
+				MessageManager::DisplayMessage("Save States", "Cannot load save states created by a more recent version of Mesen.Please download the latest version.");
+			}
+
 			file.read((char*)&fileFormatVersion, sizeof(fileFormatVersion));
 
 			if(emuVersion != EmulationSettings::GetMesenVersion() || fileFormatVersion != SaveStateManager::FileFormatVersion) {
-				MessageManager::DisplayMessage("Game States", "State #" + std::to_string(stateIndex) + " does not match emulator version.");
+				MessageManager::DisplayMessage("Save States", "State #" + std::to_string(stateIndex) + " does not match emulator version.");
 			}
 
 			Console::LoadState(file);
 			Console::Resume();
 
-			MessageManager::DisplayMessage("Game States", "State #" + std::to_string(stateIndex) + " loaded.");
+			MessageManager::DisplayMessage("Save States", "State #" + std::to_string(stateIndex) + " loaded.");
 			result = true;
+		} else {
+			MessageManager::DisplayMessage("Save States", "Invalid save state file.");
 		}
 		file.close();
 	} 
 	
 	if(!result) {
-		MessageManager::DisplayMessage("Game States", "Slot is empty.");
+		MessageManager::DisplayMessage("Save States", "Slot is empty.");
 	}
 
 	return result;

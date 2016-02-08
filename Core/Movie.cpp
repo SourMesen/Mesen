@@ -286,10 +286,17 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 
 	if(memcmp(header.Header, "MMO", 3) != 0) {
 		//Invalid movie file
+		MessageManager::DisplayMessage("Movies", "Invalid movie file.");
 		return false;
 	}
 
 	file.read((char*)&header.MesenVersion, sizeof(header.MesenVersion));
+
+	if(header.MesenVersion > EmulationSettings::GetMesenVersion()) {
+		MessageManager::DisplayMessage("Movies", "Cannot load movies created by a more recent version of Mesen. Please download the latest version.");
+		return false;
+	}
+
 	file.read((char*)&header.MovieFormatVersion, sizeof(header.MovieFormatVersion));
 	file.read((char*)&header.RomCrc32, sizeof(header.RomCrc32));
 	file.read((char*)&header.Region, sizeof(header.Region));
