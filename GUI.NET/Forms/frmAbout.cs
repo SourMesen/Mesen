@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Forms
 {
-	partial class frmAbout : Form
+	partial class frmAbout : BaseForm
 	{
 		public frmAbout()
 		{

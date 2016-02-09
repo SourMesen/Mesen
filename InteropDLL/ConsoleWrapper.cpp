@@ -46,6 +46,8 @@ namespace InteropEmu {
 			return true;
 		}
 
+		DllExport uint32_t __stdcall GetMesenVersion() { return EmulationSettings::GetMesenVersion(); }
+
 		DllExport void __stdcall InitializeEmu(const char* homeFolder, HWND windowHandle, HWND dxViewerHandle)
 		{
 			FolderUtilities::SetHomeFolder(homeFolder);

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using Mesen.GUI.Config;
 using Mesen.GUI.Debugger;
 using Mesen.GUI.Forms.Cheats;
@@ -67,8 +69,30 @@ namespace Mesen.GUI.Forms
 			if(_romToLoad != null) {
 				LoadFile(this._romToLoad);
 			}
+
+			if(ConfigManager.Config.PreferenceInfo.AutomaticallyCheckForUpdates) {
+				CheckForUpdates(false);
+			}
 		}
-		
+
+		protected override void OnShown(EventArgs e)
+		{
+			base.OnShown(e);
+
+			PerformUpgrade();
+		}
+
+		void PerformUpgrade()
+		{
+			if(new Version(ConfigManager.Config.MesenVersion) < new Version(InteropEmu.GetMesenVersion())) {
+				//Upgrade
+				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();
+				ConfigManager.ApplyChanges();
+
+				MessageBox.Show("Upgrade completed successfully.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
+		}
+
 		private void menuTimer_Tick(object sender, EventArgs e)
 		{
 			this.UpdateMenus();
@@ -1016,6 +1040,38 @@ namespace Mesen.GUI.Forms
 		private void mnuAbout_Click(object sender, EventArgs e)
 		{
 			new frmAbout().ShowDialog();
+		}
+
+		private void CheckForUpdates(bool displayResult)
+		{
+			Task.Run(() => {
+				try {
+					using(var client = new WebClient()) {
+						XmlDocument xmlDoc = new XmlDocument();
+						xmlDoc.LoadXml(client.DownloadString("http://www.mesen.ca/Services/GetLatestVersion.php?v=" + InteropEmu.GetMesenVersion() + "&p=win"));
+						Version currentVersion = new Version(InteropEmu.GetMesenVersion());
+						Version latestVersion = new Version(xmlDoc.SelectSingleNode("VersionInfo/LatestVersion").InnerText);
+						string changeLog = xmlDoc.SelectSingleNode("VersionInfo/ChangeLog").InnerText;
+						if(latestVersion > currentVersion) {
+							this.BeginInvoke((MethodInvoker)(() => {
+								frmUpdatePrompt frmUpdate = new frmUpdatePrompt(currentVersion, latestVersion, changeLog);
+								frmUpdate.ShowDialog(null, this);
+							}));
+						} else if(displayResult) {
+							MessageBox.Show("You are running the latest version of Mesen.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+						}
+					}
+				} catch(Exception ex) {
+					if(displayResult) {
+						MessageBox.Show("An error has occurred while trying to check for updates." + Environment.NewLine + Environment.NewLine + "Error details:" + Environment.NewLine + ex.ToString(), "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+			});
+		}
+
+		private void mnuCheckForUpdates_Click(object sender, EventArgs e)
+		{
+			CheckForUpdates(true);
 		}
 	}
 }

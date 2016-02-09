@@ -45,7 +45,6 @@ namespace Mesen.GUI.Forms
 			this.components = new System.ComponentModel.Container();
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.panelRenderer = new System.Windows.Forms.Panel();
-			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -137,6 +136,7 @@ namespace Mesen.GUI.Forms
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
 			this.panelRenderer.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -155,16 +155,6 @@ namespace Mesen.GUI.Forms
 			this.panelRenderer.Size = new System.Drawing.Size(304, 218);
 			this.panelRenderer.TabIndex = 2;
 			this.panelRenderer.Click += new System.EventHandler(this.panelRenderer_Click);
-			// 
-			// ctrlRenderer
-			// 
-			this.ctrlRenderer.BackColor = System.Drawing.Color.Black;
-			this.ctrlRenderer.Location = new System.Drawing.Point(0, 0);
-			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlRenderer.Name = "ctrlRenderer";
-			this.ctrlRenderer.Size = new System.Drawing.Size(263, 176);
-			this.ctrlRenderer.TabIndex = 1;
-			this.ctrlRenderer.Enter += new System.EventHandler(this.ctrlRenderer_Enter);
 			// 
 			// menuStrip
 			// 
@@ -886,10 +876,10 @@ namespace Mesen.GUI.Forms
 			// 
 			// mnuCheckForUpdates
 			// 
-			this.mnuCheckForUpdates.Enabled = false;
 			this.mnuCheckForUpdates.Name = "mnuCheckForUpdates";
 			this.mnuCheckForUpdates.Size = new System.Drawing.Size(170, 22);
 			this.mnuCheckForUpdates.Text = "Check for updates";
+			this.mnuCheckForUpdates.Click += new System.EventHandler(this.mnuCheckForUpdates_Click);
 			// 
 			// toolStripMenuItem5
 			// 
@@ -903,6 +893,16 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(170, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
+			// 
+			// ctrlRenderer
+			// 
+			this.ctrlRenderer.BackColor = System.Drawing.Color.Black;
+			this.ctrlRenderer.Location = new System.Drawing.Point(0, 0);
+			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlRenderer.Name = "ctrlRenderer";
+			this.ctrlRenderer.Size = new System.Drawing.Size(263, 176);
+			this.ctrlRenderer.TabIndex = 1;
+			this.ctrlRenderer.Enter += new System.EventHandler(this.ctrlRenderer_Enter);
 			// 
 			// frmMain
 			// 

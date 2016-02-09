@@ -29,6 +29,18 @@ namespace Mesen.GUI
 			}
 		}
 
+		private static void ExtractFile(ZipArchiveEntry entry, string outputFilename)
+		{
+			if(File.Exists(outputFilename)) {
+				try {
+					File.Delete(outputFilename);
+				} catch { }
+			}
+			try {
+				entry.ExtractToFile(outputFilename);
+			} catch { }
+		}
+
 		public static void ExtractResources()
 		{
 			Directory.CreateDirectory(Path.Combine(ConfigManager.HomeFolder, "Resources"));
@@ -38,17 +50,9 @@ namespace Mesen.GUI
 			//Extract all needed files
 			string suffix = IntPtr.Size == 4 ? ".x86" : ".x64";
 			foreach(ZipArchiveEntry entry in zip.Entries) {
-				if(entry.Name.Contains(suffix)) {
+				if(entry.Name.Contains(suffix) || entry.Name == "MesenUpdater.exe") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
-
-					if(File.Exists(outputFilename)) {
-						try {
-							File.Delete(outputFilename);
-						} catch { }
-					}
-					try {
-						entry.ExtractToFile(outputFilename);
-					} catch { }
+					ExtractFile(entry, outputFilename);
 				}
 			}
 

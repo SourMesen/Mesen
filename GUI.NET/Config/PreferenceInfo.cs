@@ -29,6 +29,7 @@ namespace Mesen.GUI.Config
 		public bool AssociateMstFiles = false;
 
 		public bool PauseOnMovieEnd = true;
+		public bool AutomaticallyCheckForUpdates = true;
 
 		public bool UseAlternativeMmc3Irq = false;
 

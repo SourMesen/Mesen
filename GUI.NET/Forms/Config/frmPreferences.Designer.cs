@@ -52,8 +52,8 @@
 			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
+			this.chkAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
-			this.flowLayoutPanel6.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgFileAssociations.SuspendLayout();
@@ -72,17 +72,20 @@
 			// 
 			this.tlpMain.ColumnCount = 1;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpMain.Controls.Add(this.chkPauseOnMovieEnd, 0, 4);
-			this.tlpMain.Controls.Add(this.chkAllowBackgroundInput, 0, 3);
-			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 2);
-			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 1);
+			this.tlpMain.Controls.Add(this.chkSingleInstance, 0, 1);
+			this.tlpMain.Controls.Add(this.chkAutomaticallyCheckForUpdates, 0, 0);
+			this.tlpMain.Controls.Add(this.chkPauseOnMovieEnd, 0, 5);
+			this.tlpMain.Controls.Add(this.chkAllowBackgroundInput, 0, 4);
+			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 3);
+			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 2);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 0, 0);
-			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 5);
-			this.tlpMain.Controls.Add(this.btnOpenMesenFolder, 0, 7);
+			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 6);
+			this.tlpMain.Controls.Add(this.btnOpenMesenFolder, 0, 8);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 8;
+			this.tlpMain.RowCount = 9;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -97,7 +100,7 @@
 			// chkPauseOnMovieEnd
 			// 
 			this.chkPauseOnMovieEnd.AutoSize = true;
-			this.chkPauseOnMovieEnd.Location = new System.Drawing.Point(3, 95);
+			this.chkPauseOnMovieEnd.Location = new System.Drawing.Point(3, 118);
 			this.chkPauseOnMovieEnd.Name = "chkPauseOnMovieEnd";
 			this.chkPauseOnMovieEnd.Size = new System.Drawing.Size(199, 17);
 			this.chkPauseOnMovieEnd.TabIndex = 15;
@@ -107,7 +110,7 @@
 			// chkAllowBackgroundInput
 			// 
 			this.chkAllowBackgroundInput.AutoSize = true;
-			this.chkAllowBackgroundInput.Location = new System.Drawing.Point(3, 72);
+			this.chkAllowBackgroundInput.Location = new System.Drawing.Point(3, 95);
 			this.chkAllowBackgroundInput.Name = "chkAllowBackgroundInput";
 			this.chkAllowBackgroundInput.Size = new System.Drawing.Size(177, 17);
 			this.chkAllowBackgroundInput.TabIndex = 14;
@@ -117,7 +120,7 @@
 			// chkPauseWhenInBackground
 			// 
 			this.chkPauseWhenInBackground.AutoSize = true;
-			this.chkPauseWhenInBackground.Location = new System.Drawing.Point(3, 49);
+			this.chkPauseWhenInBackground.Location = new System.Drawing.Point(3, 72);
 			this.chkPauseWhenInBackground.Name = "chkPauseWhenInBackground";
 			this.chkPauseWhenInBackground.Size = new System.Drawing.Size(204, 17);
 			this.chkPauseWhenInBackground.TabIndex = 13;
@@ -128,7 +131,7 @@
 			// chkAutoLoadIps
 			// 
 			this.chkAutoLoadIps.AutoSize = true;
-			this.chkAutoLoadIps.Location = new System.Drawing.Point(3, 26);
+			this.chkAutoLoadIps.Location = new System.Drawing.Point(3, 49);
 			this.chkAutoLoadIps.Name = "chkAutoLoadIps";
 			this.chkAutoLoadIps.Size = new System.Drawing.Size(132, 17);
 			this.chkAutoLoadIps.TabIndex = 9;
@@ -138,18 +141,17 @@
 			// flowLayoutPanel6
 			// 
 			this.flowLayoutPanel6.AutoSize = true;
-			this.flowLayoutPanel6.Controls.Add(this.chkSingleInstance);
 			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(380, 23);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(380, 1);
 			this.flowLayoutPanel6.TabIndex = 10;
 			// 
 			// chkSingleInstance
 			// 
 			this.chkSingleInstance.AutoSize = true;
-			this.chkSingleInstance.Location = new System.Drawing.Point(3, 3);
+			this.chkSingleInstance.Location = new System.Drawing.Point(3, 26);
 			this.chkSingleInstance.Name = "chkSingleInstance";
 			this.chkSingleInstance.Size = new System.Drawing.Size(228, 17);
 			this.chkSingleInstance.TabIndex = 11;
@@ -160,7 +162,7 @@
 			// 
 			this.chkDisableScreensaver.AutoSize = true;
 			this.chkDisableScreensaver.Enabled = false;
-			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 118);
+			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 141);
 			this.chkDisableScreensaver.Name = "chkDisableScreensaver";
 			this.chkDisableScreensaver.Size = new System.Drawing.Size(245, 17);
 			this.chkDisableScreensaver.TabIndex = 11;
@@ -366,6 +368,16 @@
 			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
 			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
 			// 
+			// chkAutomaticallyCheckForUpdates
+			// 
+			this.chkAutomaticallyCheckForUpdates.AutoSize = true;
+			this.chkAutomaticallyCheckForUpdates.Location = new System.Drawing.Point(3, 3);
+			this.chkAutomaticallyCheckForUpdates.Name = "chkAutomaticallyCheckForUpdates";
+			this.chkAutomaticallyCheckForUpdates.Size = new System.Drawing.Size(177, 17);
+			this.chkAutomaticallyCheckForUpdates.TabIndex = 17;
+			this.chkAutomaticallyCheckForUpdates.Text = "Automatically check for updates";
+			this.chkAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
+			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -382,8 +394,6 @@
 			this.Controls.SetChildIndex(this.tabMain, 0);
 			this.tlpMain.ResumeLayout(false);
 			this.tlpMain.PerformLayout();
-			this.flowLayoutPanel6.ResumeLayout(false);
-			this.flowLayoutPanel6.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgFileAssociations.ResumeLayout(false);
@@ -424,5 +434,6 @@
 		private System.Windows.Forms.CheckBox chkAllowBackgroundInput;
 		private System.Windows.Forms.CheckBox chkPauseOnMovieEnd;
 		private System.Windows.Forms.Button btnOpenMesenFolder;
+		private System.Windows.Forms.CheckBox chkAutomaticallyCheckForUpdates;
 	}
 }

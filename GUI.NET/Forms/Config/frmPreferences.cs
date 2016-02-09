@@ -19,6 +19,7 @@ namespace Mesen.GUI.Forms.Config
 
 			Entity = ConfigManager.Config.PreferenceInfo;
 
+			AddBinding("AutomaticallyCheckForUpdates", chkAutomaticallyCheckForUpdates);
 			AddBinding("SingleInstance", chkSingleInstance);
 			AddBinding("AutoLoadIpsPatches", chkAutoLoadIps);
 			AddBinding("AssociateNesFiles", chkNesFormat);

@@ -15,6 +15,8 @@ namespace Mesen.GUI
 		private const string DLLPath = "WinMesen.dll";
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool TestDll();
 
+		[DllImport(DLLPath, EntryPoint = "GetMesenVersion")] private static extern UInt32 GetMesenVersionWrapper();
+
 		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle);
 		[DllImport(DLLPath)] public static extern void Release();
 
@@ -241,6 +243,15 @@ namespace Mesen.GUI
 			} else {
 				InteropEmu.ClearFlags(flag);
 			}
+		}
+
+		public static string GetMesenVersion()
+		{
+			UInt32 version = GetMesenVersionWrapper();
+			UInt32 revision = version & 0xFF;
+			UInt32 minor = (version >> 8) & 0xFF;
+			UInt32 major = (version >> 16) & 0xFFFF;
+			return string.Format("{0}.{1}.{2}", major.ToString(), minor.ToString(), revision.ToString());
 		}
 
 		public static Int32[] GetRgbPalette()
