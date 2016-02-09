@@ -98,24 +98,25 @@ bool Console::LoadROM(string filename, uint32_t crc32Hash)
 			//Current game matches, no need to do anything
 			return true;
 		}
+	}
 
-		//Try to find the game in the same folder as the current game's folder
-		string match = RomLoader::FindMatchingRomInFolder(currentFolder, filename, crc32Hash);
+	for(string folder : FolderUtilities::GetKnowGameFolders()) {
+		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, true);
 		if(!match.empty()) {
 			Console::LoadROM(match);
 			return true;
 		}
 	}
 
+	//Perform slow CRC32 search for ROM
 	for(string folder : FolderUtilities::GetKnowGameFolders()) {
-		if(folder != currentFolder) {
-			string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash);
-			if(!match.empty()) {
-				Console::LoadROM(match);
-				return true;
-			}
+		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, false);
+		if(!match.empty()) {
+			Console::LoadROM(match);
+			return true;
 		}
 	}
+
 	return false;
 }
 

@@ -135,7 +135,7 @@ uint32_t RomLoader::GetCRC32(string filename)
 	return crc;
 }
 
-string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash)
+string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash, bool useFastSearch)
 {
 	std::transform(romFilename.begin(), romFilename.end(), romFilename.begin(), ::tolower);
 	vector<string> validExtensions = { { "*.nes", "*.zip", "*.fds" } };
@@ -147,22 +147,24 @@ string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uin
 		}
 	}
 
-	for(string romFile : romFiles) {
-		//Quick search by filename
-		string originalFilename = romFile;
-		std::transform(romFile.begin(), romFile.end(), romFile.begin(), ::tolower);
-		if(FolderUtilities::GetFilename(romFile, true).compare(romFilename) == 0) {
-			if(RomLoader::GetCRC32(romFile) == crc32Hash) {
-				return originalFilename;
+	if(useFastSearch) {
+		for(string romFile : romFiles) {
+			//Quick search by filename
+			string originalFilename = romFile;
+			std::transform(romFile.begin(), romFile.end(), romFile.begin(), ::tolower);
+			if(FolderUtilities::GetFilename(romFile, true).compare(romFilename) == 0) {
+				if(RomLoader::GetCRC32(romFile) == crc32Hash) {
+					return originalFilename;
+				}
 			}
 		}
-	}
-
-	for(string romFile : romFiles) {
-		//Slower search by CRC value
-		if(RomLoader::GetCRC32(romFile) == crc32Hash) {
-			//Matching ROM found
-			return romFile;
+	} else {
+		for(string romFile : romFiles) {
+			//Slower search by CRC value
+			if(RomLoader::GetCRC32(romFile) == crc32Hash) {
+				//Matching ROM found
+				return romFile;
+			}
 		}
 	}
 

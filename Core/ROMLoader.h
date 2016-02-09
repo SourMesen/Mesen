@@ -26,5 +26,5 @@ class RomLoader
 		bool LoadFile(string filename, istream *filestream = nullptr, string ipsFilename = "");
 		RomData GetRomData();
 		static uint32_t GetCRC32(string filename);
-		static string FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash);
+		static string FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash, bool useFastSearch);
 };
