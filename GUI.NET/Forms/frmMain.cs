@@ -1052,10 +1052,14 @@ namespace Mesen.GUI.Forms
 						Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 						Version latestVersion = new Version(xmlDoc.SelectSingleNode("VersionInfo/LatestVersion").InnerText);
 						string changeLog = xmlDoc.SelectSingleNode("VersionInfo/ChangeLog").InnerText;
+						string fileHash = xmlDoc.SelectSingleNode("VersionInfo/Sha1Hash").InnerText;
+
 						if(latestVersion > currentVersion) {
 							this.BeginInvoke((MethodInvoker)(() => {
-								frmUpdatePrompt frmUpdate = new frmUpdatePrompt(currentVersion, latestVersion, changeLog);
-								frmUpdate.ShowDialog(null, this);
+								frmUpdatePrompt frmUpdate = new frmUpdatePrompt(currentVersion, latestVersion, changeLog, fileHash);
+								if(frmUpdate.ShowDialog(null, this) == DialogResult.OK) {
+									Application.Exit();
+								}
 							}));
 						} else if(displayResult) {
 							MessageBox.Show("You are running the latest version of Mesen.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
