@@ -182,10 +182,12 @@ void ControlManager::StreamState(bool saving)
 	NesModel nesModel;
 	ExpansionPortDevice expansionDevice;
 	ConsoleType consoleType;
+	bool hasFourScore;
 	if(saving) {
 		nesModel = Console::GetNesModel();
 		expansionDevice = EmulationSettings::GetExpansionDevice();
 		consoleType = EmulationSettings::GetConsoleType();
+		hasFourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
 		for(int i = 0; i < 4; i++) {
 			controllerTypes[i] = EmulationSettings::GetControllerType(i);
 		}
@@ -197,6 +199,7 @@ void ControlManager::StreamState(bool saving)
 	for(int i = 0; i < 4; i++) {
 		Stream<ControllerType>(controllerTypes[i]);
 	}
+	Stream<bool>(hasFourScore);
 
 	if(!saving) {
 		EmulationSettings::SetNesModel(nesModel);
@@ -204,6 +207,12 @@ void ControlManager::StreamState(bool saving)
 		EmulationSettings::SetConsoleType(consoleType);
 		for(int i = 0; i < 4; i++) {
 			EmulationSettings::SetControllerType(i, controllerTypes[i]);
+		}
+
+		if(hasFourScore) {
+			EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
+		} else {
+			EmulationSettings::ClearFlags(EmulationFlags::HasFourScore);
 		}
 
 		UpdateControlDevices();
