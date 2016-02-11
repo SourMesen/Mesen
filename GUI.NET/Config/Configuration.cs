@@ -12,6 +12,7 @@ namespace Mesen.GUI.Config
 	{
 		private const int MaxRecentFiles = 10;
 
+		public string MesenVersion;
 		public PreferenceInfo PreferenceInfo;
 		public AudioInfo AudioInfo;
 		public VideoInfo VideoInfo;
@@ -19,7 +20,6 @@ namespace Mesen.GUI.Config
 		public List<string> RecentFiles;
 		public List<CheatInfo> Cheats;
 		public bool ShowOnlyCheatsForCurrentGame;
-		public bool AutoLoadIpsPatches;
 		public NesModel Region;
 		public ClientConnectionInfo ClientConnectionInfo;
 		public ServerInfo ServerInfo;
@@ -27,6 +27,7 @@ namespace Mesen.GUI.Config
 
 		public Configuration()
 		{
+			MesenVersion = InteropEmu.GetMesenVersion();
 			Profile = new PlayerProfile();
 			ClientConnectionInfo = new ClientConnectionInfo();
 			ServerInfo = new ServerInfo();
@@ -68,9 +69,14 @@ namespace Mesen.GUI.Config
 		public static Configuration Deserialize(string configFile)
 		{
 			Configuration config;
-			XmlSerializer xmlSerializer = new XmlSerializer(typeof(Configuration));
-			using(TextReader textReader = new StreamReader(configFile)) {
-				config = (Configuration)xmlSerializer.Deserialize(textReader);
+
+			try {
+				XmlSerializer xmlSerializer = new XmlSerializer(typeof(Configuration));
+				using(TextReader textReader = new StreamReader(configFile)) {
+					config = (Configuration)xmlSerializer.Deserialize(textReader);
+				}
+			} catch {
+				config = new Configuration();
 			}
 
 			config.InitializeDefaults();
