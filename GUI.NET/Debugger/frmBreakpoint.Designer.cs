@@ -148,7 +148,7 @@
 			// 
 			// picHelp
 			// 
-			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.help;
+			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
 			this.picHelp.Location = new System.Drawing.Point(297, 5);
 			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picHelp.Name = "picHelp";

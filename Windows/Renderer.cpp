@@ -69,7 +69,7 @@ namespace NES
 	{
 		if(_pTexture) _pTexture->Release();
 		if(_overlayTexture) _overlayTexture->Release();
-		if(_toastTexture) _toastTexture->Release();
+		//if(_toastTexture) _toastTexture->Release();
 
 		if(_samplerState) _samplerState->Release();
 		if(_pRenderTargetView) _pRenderTargetView->Release();
@@ -231,7 +231,7 @@ namespace NES
 		////////////////////////////////////////////////////////////////////////////
 		_spriteBatch.reset(new SpriteBatch(_pDeviceContext));
 
-		_smallFont.reset(new SpriteFont(_pd3dDevice, L"Resources\\Roboto.9.spritefont"));
+		_largeFont.reset(new SpriteFont(_pd3dDevice, L"Resources\\Roboto.32.spritefont"));
 		_font.reset(new SpriteFont(_pd3dDevice, L"Resources\\Roboto.12.spritefont"));
 
 		//Sample state
@@ -250,9 +250,9 @@ namespace NES
 		
 		_pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
 
-		if(!FAILED(CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\Toast.dds", nullptr, &_toastTexture))) {
+		/*if(!FAILED(CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\Toast.dds", nullptr, &_toastTexture))) {
 			return S_FALSE;
-		}
+		}*/
 
 		return S_OK;
 	}
@@ -303,7 +303,7 @@ namespace NES
 
 	void Renderer::DisplayMessage(string title, string message)
 	{
-		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, "Resources\\MesenIcon.bmp"));
+		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, ""));
 		DisplayToast(toast);
 	}
 
@@ -312,30 +312,34 @@ namespace NES
 		_toasts.push_front(toast);
 	}
 
-	void Renderer::DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor)
+	void Renderer::DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor, SpriteFont* font)
 	{
 		std::wstring textStr = utf8::utf8::decode(message);
-		DrawOutlinedString(textStr, x, y, color, scale, outlineColor);
+		DrawOutlinedString(textStr, x, y, color, scale, outlineColor, font);
 	}
 
-	void Renderer::DrawOutlinedString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor)
+	void Renderer::DrawOutlinedString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor, SpriteFont* font)
 	{
 		SpriteBatch* spritebatch = _spriteBatch.get();
 		const wchar_t *text = message.c_str();
 
+		if(font == nullptr) {
+			font = _font.get();
+		}
+
 		for(uint8_t offsetX = 2; offsetX > 0; offsetX--) {
 			for(uint8_t offsetY = 2; offsetY > 0; offsetY--) {
-				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				_font->DrawString(spritebatch, text, XMFLOAT2(x, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				font->DrawString(spritebatch, text, XMFLOAT2(x, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
+				font->DrawString(spritebatch, text, XMFLOAT2(x, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
 			}
 		}
-		_font->DrawString(spritebatch, text, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
+		font->DrawString(spritebatch, text, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
 	}
 
 	void Renderer::UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height)
@@ -399,7 +403,9 @@ namespace NES
 		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
 		shaderResourceView->Release();
 
-		DrawOutlinedString("PAUSED", (float)_screenWidth / 2 - 60, (float)_screenHeight / 2 - 20, Colors::AntiqueWhite, 2.0f);
+		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSED");
+
+		DrawOutlinedString("PAUSED", (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2, (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2, Colors::AntiqueWhite, 1.0f, Colors::Black, _largeFont.get());
 	}
 
 	void Renderer::Render()

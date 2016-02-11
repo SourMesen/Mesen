@@ -36,6 +36,11 @@
 			((System.ComponentModel.ISupportInitialize)(this.picAvatar)).BeginInit();
 			this.SuspendLayout();
 			// 
+			// baseConfigPanel
+			// 
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 59);
+			this.baseConfigPanel.Size = new System.Drawing.Size(302, 29);
+			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
@@ -53,7 +58,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(302, 106);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(302, 59);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// lblName
@@ -75,6 +80,7 @@
 			this.lblAvatar.Size = new System.Drawing.Size(41, 13);
 			this.lblAvatar.TabIndex = 4;
 			this.lblAvatar.Text = "Avatar:";
+			this.lblAvatar.Visible = false;
 			// 
 			// txtPlayerName
 			// 
@@ -93,13 +99,14 @@
 			this.picAvatar.Size = new System.Drawing.Size(66, 66);
 			this.picAvatar.TabIndex = 8;
 			this.picAvatar.TabStop = false;
+			this.picAvatar.Visible = false;
 			this.picAvatar.Click += new System.EventHandler(this.picAvatar_Click);
 			// 
 			// frmPlayerProfile
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(302, 136);
+			this.ClientSize = new System.Drawing.Size(302, 88);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -107,6 +114,7 @@
 			this.Name = "frmPlayerProfile";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Profile";
+			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();

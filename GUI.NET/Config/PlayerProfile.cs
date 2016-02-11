@@ -12,11 +12,13 @@ namespace Mesen.GUI.Config
 	public class PlayerProfile
 	{
 		public string PlayerName = "NewPlayer";
+
+		[NonSerialized]
 		public byte[] PlayerAvatar;
 
 		public PlayerProfile()
 		{
-			SetAvatar(Properties.Resources.MesenLogo);
+			//SetAvatar(Properties.Resources.MesenLogo);
 		}
 
 

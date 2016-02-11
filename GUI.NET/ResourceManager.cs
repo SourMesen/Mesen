@@ -53,13 +53,11 @@ namespace Mesen.GUI
 				if(entry.Name.Contains(suffix) || entry.Name == "MesenUpdater.exe") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
+				} else if(entry.Name == "Roboto.12.spritefont" || entry.Name == "Roboto.32.spritefont") {
+					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "Resources", entry.Name.Replace(suffix, ""));
+					ExtractFile(entry, outputFilename);
 				}
 			}
-
-			ExtractResource("Mesen.GUI.Dependencies.MesenIcon.bmp", Path.Combine("Resources", "MesenIcon.bmp"));
-			ExtractResource("Mesen.GUI.Dependencies.Roboto.12.spritefont", Path.Combine("Resources", "Roboto.12.spritefont"));
-			ExtractResource("Mesen.GUI.Dependencies.Roboto.9.spritefont", Path.Combine("Resources", "Roboto.9.spritefont"));
-			ExtractResource("Mesen.GUI.Dependencies.Toast.dds", Path.Combine("Resources", "Toast.dds"));
 		}
 	}
 }

@@ -17,7 +17,7 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InitializeComponent();
 
-			Icon = Properties.Resources.music;
+			Icon = Properties.Resources.Audio;
 			Entity = ConfigManager.Config.AudioInfo;
 
 			cboAudioDevice.Items.AddRange(InteropEmu.GetAudioDevices().ToArray());

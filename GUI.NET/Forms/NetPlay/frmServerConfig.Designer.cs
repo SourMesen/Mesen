@@ -42,6 +42,11 @@
 			((System.ComponentModel.ISupportInitialize)(this.nudNbPlayers)).BeginInit();
 			this.SuspendLayout();
 			// 
+			// baseConfigPanel
+			// 
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 161);
+			this.baseConfigPanel.Size = new System.Drawing.Size(302, 29);
+			// 
 			// tlpMain
 			// 
 			this.tlpMain.ColumnCount = 2;
@@ -68,7 +73,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(302, 160);
+			this.tlpMain.Size = new System.Drawing.Size(302, 161);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// txtPort
@@ -158,6 +163,7 @@
 			// txtPassword
 			// 
 			this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtPassword.Enabled = false;
 			this.txtPassword.Location = new System.Drawing.Point(128, 55);
 			this.txtPassword.Name = "txtPassword";
 			this.txtPassword.Size = new System.Drawing.Size(171, 20);
@@ -167,6 +173,7 @@
 			// 
 			// nudNbPlayers
 			// 
+			this.nudNbPlayers.Enabled = false;
 			this.nudNbPlayers.Location = new System.Drawing.Point(128, 81);
 			this.nudNbPlayers.Maximum = new decimal(new int[] {
             4,
@@ -200,6 +207,7 @@
 			this.Name = "frmServerConfig";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Server Configuration";
+			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
 			this.Controls.SetChildIndex(this.tlpMain, 0);
 			this.tlpMain.ResumeLayout(false);
 			this.tlpMain.PerformLayout();

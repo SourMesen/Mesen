@@ -103,19 +103,11 @@
     <None Include="DirectXTK\SimpleMath.inl">
       <Filter>Header Files\DirectXTK</Filter>
     </None>
-    <None Include="Resources\Roboto.9.spritefont">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Resources\Roboto.12.spritefont">
       <Filter>Resource Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\Toast.dds">
+    <None Include="Resources\Roboto.32.spritefont">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Resources\MesenIcon.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
+    </None>
   </ItemGroup>
 </Project>

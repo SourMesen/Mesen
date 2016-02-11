@@ -539,15 +539,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="..\Windows\Resources\Roboto.12.spritefont">
+    <None Include="..\Windows\Resources\Roboto.12.spritefont">
       <Link>Dependencies\Roboto.12.spritefont</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Windows\Resources\Roboto.9.spritefont">
-      <Link>Dependencies\Roboto.9.spritefont</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Windows\Resources\Toast.dds">
-      <Link>Dependencies\Toast.dds</Link>
-    </EmbeddedResource>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Windows\Resources\Roboto.32.spritefont">
+      <Link>Dependencies\Roboto.32.spritefont</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -559,36 +558,35 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\globe_network.png" />
-    <None Include="Resources\speedometer.png" />
-    <None Include="Resources\camera.png" />
-    <None Include="Resources\cog.png" />
-    <None Include="Resources\slideshow_full_screen.png" />
-    <None Include="Resources\folder.png" />
-    <None Include="Resources\control_stop.png" />
-    <None Include="Resources\control_play.png" />
-    <None Include="Resources\control_pause.png" />
-    <None Include="Resources\movies.png" />
-    <None Include="Resources\debugging.png" />
-    <None Include="Resources\globe_place.png" />
-    <None Include="Resources\music.png" />
-    <None Include="Resources\lcd_tv_image.png" />
-    <None Include="Resources\diskette.png" />
-    <None Include="Resources\control_eject.png" />
-    <None Include="Resources\controller.png" />
+    <None Include="Resources\MesenIcon.png" />
+    <None Include="Resources\system-software-update.png" />
+    <None Include="Resources\view-refresh.png" />
+    <None Include="Resources\appointment-new.png" />
+    <None Include="Resources\view-fullscreen.png" />
+    <None Include="Resources\network-workgroup.png" />
+    <None Include="Resources\folder-open.png" />
+    <None Include="Resources\image-x-generic.png" />
+    <None Include="Resources\system-log-out.png" />
+    <None Include="Resources\media-playback-stop.png" />
+    <None Include="Resources\media-playback-start.png" />
+    <None Include="Resources\media-playback-pause.png" />
+    <None Include="Resources\media-eject.png" />
+    <None Include="Resources\audio-x-generic.png" />
+    <None Include="Resources\emblem-system.png" />
+    <None Include="Resources\camera-photo.png" />
+    <None Include="Resources\media-floppy.png" />
+    <None Include="Resources\input-gaming.png" />
+    <None Include="Resources\applications-multimedia.png" />
+    <None Include="Resources\internet-web-browser.png" />
+    <None Include="Resources\help-browser.png" />
     <EmbeddedResource Include="$(OutputPath)Dependencies.zip">
       <Link>Dependencies\Dependencies.zip</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Windows\Resources\MesenIcon.bmp">
-      <Link>Dependencies\MesenIcon.bmp</Link>
-    </EmbeddedResource>
     <Content Include="Icon.ico" />
-    <None Include="Resources\help.png" />
     <None Include="Resources\Close.png" />
     <None Include="Resources\PreviousArrow.png" />
     <None Include="Resources\NextArrow.png" />
     <None Include="Resources\MesenIcon.ico" />
-    <None Include="Resources\MesenLogo.bmp" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -393,17 +393,7 @@
     <None Include="Resources\Roboto.12.spritefont">
       <DeploymentContent>false</DeploymentContent>
     </None>
-    <None Include="Resources\Roboto.9.spritefont">
-      <DeploymentContent>false</DeploymentContent>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\MesenIcon.bmp">
-      <DeploymentContent>false</DeploymentContent>
-    </Image>
-    <Image Include="Resources\Toast.dds">
-      <DeploymentContent>false</DeploymentContent>
-    </Image>
+    <None Include="Resources\Roboto.32.spritefont" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

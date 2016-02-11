@@ -269,7 +269,7 @@
 			// 
 			// picHdNesTooltip
 			// 
-			this.picHdNesTooltip.Image = global::Mesen.GUI.Properties.Resources.help;
+			this.picHdNesTooltip.Image = global::Mesen.GUI.Properties.Resources.Help;
 			this.picHdNesTooltip.Location = new System.Drawing.Point(143, 3);
 			this.picHdNesTooltip.Name = "picHdNesTooltip";
 			this.picHdNesTooltip.Size = new System.Drawing.Size(17, 17);

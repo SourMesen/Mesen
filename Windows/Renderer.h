@@ -43,7 +43,7 @@ namespace NES {
 		uint32_t _currentRenderedFPS = 0;
 
 		unique_ptr<SpriteFont>	_font;
-		unique_ptr<SpriteFont>	_smallFont;
+		unique_ptr<SpriteFont>	_largeFont;
 		
 		unique_ptr<SpriteBatch> _spriteBatch;
 
@@ -59,7 +59,7 @@ namespace NES {
 		uint32_t _noUpdateCount = 0;
 
 		list<shared_ptr<ToastInfo>> _toasts;
-		ID3D11ShaderResourceView* _toastTexture = nullptr;
+		//ID3D11ShaderResourceView* _toastTexture = nullptr;
 
 		HRESULT InitDevice();
 		void CleanupDevice();
@@ -72,8 +72,8 @@ namespace NES {
 		void DrawPauseScreen();
 
 		std::wstring WrapText(string text, SpriteFont* font, float maxLineWidth, uint32_t &lineCount);
-		void DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor = Colors::Black);
-		void DrawOutlinedString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor = Colors::Black);
+		void DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor = Colors::Black, SpriteFont* font = nullptr);
+		void DrawOutlinedString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor = Colors::Black, SpriteFont* font = nullptr);
 
 		void DrawToasts();
 		void DrawToast(shared_ptr<ToastInfo> toast, int &lastHeight);
