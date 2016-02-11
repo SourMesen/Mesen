@@ -8,7 +8,7 @@
 
 class ClientConnectionData;
 
-class GameClientConnection : public GameConnection
+class GameClientConnection : public GameConnection, public INotificationListener
 {
 private:
 	std::deque<uint8_t> _inputData[4];
@@ -22,6 +22,7 @@ private:
 	vector<PlayerInfo> _playerList;
 
 	shared_ptr<BaseControlDevice> _controlDevice;
+	shared_ptr<BaseControlDevice> _newControlDevice;
 	uint32_t _lastInputSent = 0x00;
 	bool _gameLoaded = false;
 	uint8_t _controllerPort = GameConnection::SpectatorPort;
@@ -39,6 +40,8 @@ protected:
 public:
 	GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData);
 	~GameClientConnection();
+
+	void ProcessNotification(ConsoleNotificationType type, void* parameter);
 
 	uint8_t GetControllerState(uint8_t port);
 	void SendInput();

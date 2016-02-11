@@ -15,6 +15,7 @@
 
 GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData) : GameConnection(socket, connectionData)
 {
+	MessageManager::RegisterNotificationListener(this);
 	MessageManager::DisplayMessage("Net Play", "Connected to server.");
 	SendHandshake();
 }
@@ -26,6 +27,7 @@ GameClientConnection::~GameClientConnection()
 
 	MessageManager::SendNotification(ConsoleNotificationType::DisconnectedFromServer);
 	MessageManager::DisplayMessage("Net Play", "Connection to server lost.");
+	MessageManager::UnregisterNotificationListener(this);
 }
 
 void GameClientConnection::SendHandshake()
@@ -160,9 +162,24 @@ uint8_t GameClientConnection::GetControllerState(uint8_t port)
 	return 0;
 }
 	
+void GameClientConnection::ProcessNotification(ConsoleNotificationType type, void* parameter)
+{
+	if(type == ConsoleNotificationType::ConfigChanged) {
+		switch(EmulationSettings::GetControllerType(_controllerPort)) {
+			case ControllerType::StandardController: _newControlDevice.reset(new StandardController(0)); break;
+			case ControllerType::Zapper: _newControlDevice = ControlManager::GetControlDevice(_controllerPort); break;
+		}
+	}
+}
+
 void GameClientConnection::SendInput()
 {
 	if(_gameLoaded) {
+		if(_newControlDevice) {
+			_controlDevice = _newControlDevice;
+			_newControlDevice.reset();
+		}
+
 		uint32_t inputState = 0;
 		if(std::dynamic_pointer_cast<Zapper>(_controlDevice)) {
 			shared_ptr<Zapper> zapper = std::dynamic_pointer_cast<Zapper>(_controlDevice);
