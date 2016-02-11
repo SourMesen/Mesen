@@ -60,7 +60,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		_memoryManager->RegisterIODevice(_apu.get());
 		_memoryManager->RegisterIODevice(_controlManager.get());
 
-		UpdateNesModel();
+		UpdateNesModel(false);
 
 		_initialized = true;
 
@@ -208,7 +208,9 @@ void Console::Run()
 	_runLock.Acquire();
 	_stopLock.Acquire();
 
-	targetTime = UpdateNesModel();
+	_model = NesModel::Auto;
+
+	targetTime = UpdateNesModel(false);
 
 	VideoDecoder::GetInstance()->StartThread();
 		
@@ -250,7 +252,7 @@ void Console::Run()
 
 			//Get next target time, and adjust based on whether we are ahead or behind
 			double timeLag = EmulationSettings::GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
-			targetTime = UpdateNesModel();
+			targetTime = UpdateNesModel(true);
 			clockTimer.Reset();
 			targetTime -= timeLag;
 			if(targetTime < 0) {
@@ -275,7 +277,7 @@ void Console::Run()
 	_runLock.Release();
 }
 
-double Console::UpdateNesModel()
+double Console::UpdateNesModel(bool sendNotification)
 {
 	bool configChanged = false;
 	if(EmulationSettings::NeedControllerUpdate()) {
@@ -309,7 +311,7 @@ double Console::UpdateNesModel()
 	_ppu->SetNesModel(model);
 	_apu->SetNesModel(model);
 
-	if(configChanged) {
+	if(configChanged && sendNotification) {
 		MessageManager::SendNotification(ConsoleNotificationType::ConfigChanged);
 	}
 

@@ -174,8 +174,6 @@ void ControlManager::WriteRAM(uint16_t addr, uint8_t value)
 
 void ControlManager::StreamState(bool saving)
 {
-	Stream<bool>(_refreshState);
-	
 	//Restore controllers that were being used at the time the snapshot was made
 	//This is particularely important to ensure proper sync during NetPlay
 	ControllerType controllerTypes[4];
@@ -193,6 +191,7 @@ void ControlManager::StreamState(bool saving)
 		}
 	}
 
+	Stream<bool>(_refreshState);
 	Stream<NesModel>(nesModel);
 	Stream<ExpansionPortDevice>(expansionDevice);
 	Stream<ConsoleType>(consoleType);
@@ -216,13 +215,13 @@ void ControlManager::StreamState(bool saving)
 		}
 
 		UpdateControlDevices();
+	}
 
-		if(GetControlDevice(0)) {
-			Stream(GetControlDevice(0));
-		}
-		if(GetControlDevice(1)) {
-			Stream(GetControlDevice(1));
-		}
+	if(GetControlDevice(0)) {
+		Stream(GetControlDevice(0).get());
+	}
+	if(GetControlDevice(1)) {
+		Stream(GetControlDevice(1).get());
 	}
 }
 

@@ -38,7 +38,7 @@ class Console
 
 		void ResetComponents(bool softReset);
 		void Initialize(string filename, stringstream *filestream = nullptr, string ipsFilename = "");
-		double UpdateNesModel();
+		double UpdateNesModel(bool sendNotification);
 
 	public:
 		Console();
