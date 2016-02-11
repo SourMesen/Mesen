@@ -143,6 +143,11 @@ struct KeyMappingSet
 class EmulationSettings
 {
 private:
+	//Version 0.1.0
+	static uint16_t _versionMajor;
+	static uint8_t _versionMinor;
+	static uint8_t _versionRevision;
+
 	static uint32_t PpuPaletteArgb[64];
 	static uint32_t _flags;
 
@@ -170,12 +175,12 @@ private:
 public:
 	static uint32_t GetMesenVersion()
 	{
-		//Version 0.1.0
-		uint16_t major = 0;
-		uint8_t minor = 1;
-		uint8_t revision = 0;
+		return (_versionMajor << 16) | (_versionMinor << 8) | _versionRevision;
+	}
 
-		return (major << 16) | (minor << 8) | revision;
+	static string GetMesenVersionString()
+	{
+		return std::to_string(_versionMajor) + "." + std::to_string(_versionMinor) + "." + std::to_string(_versionRevision);
 	}
 
 	static void SetFlags(EmulationFlags flags)

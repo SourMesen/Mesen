@@ -20,6 +20,8 @@ private:
 	void SendGameInformation();
 	void SelectControllerPort(uint8_t port);
 
+	void SendForceDisconnectMessage(string disconnectMessage);
+
 	void ProcessHandshakeResponse(HandShakeMessage* message);
 
 	static void RegisterNetPlayDevice(GameServerConnection* connection, uint8_t port);

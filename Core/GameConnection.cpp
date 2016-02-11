@@ -8,6 +8,7 @@
 #include "PlayerListMessage.h"
 #include "SelectControllerMessage.h"
 #include "ClientConnectionData.h"
+#include "ForceDisconnectMessage.h"
 
 GameConnection::GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData)
 {
@@ -58,6 +59,7 @@ NetMessage* GameConnection::ReadMessage()
 			case MessageType::GameInformation: return new GameInformationMessage(_messageBuffer, messageLength);
 			case MessageType::PlayerList: return new PlayerListMessage(_messageBuffer, messageLength);
 			case MessageType::SelectController: return new SelectControllerMessage(_messageBuffer, messageLength);
+			case MessageType::ForceDisconnect: return new ForceDisconnectMessage(_messageBuffer, messageLength);
 		}
 	}
 	return nullptr;
@@ -68,6 +70,11 @@ void GameConnection::SendNetMessage(NetMessage &message)
 	_socketLock.Acquire();
 	message.Send(*_socket.get());
 	_socketLock.Release();
+}
+
+void GameConnection::Disconnect()
+{
+	_socket->Close();
 }
 
 bool GameConnection::ConnectionError()

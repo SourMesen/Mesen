@@ -545,6 +545,9 @@
     <ClInclude Include="SelectControllerMessage.h">
       <Filter>NetPlay\Messages</Filter>
     </ClInclude>
+    <ClInclude Include="ForceDisconnectMessage.h">
+      <Filter>NetPlay\Messages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

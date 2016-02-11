@@ -12,6 +12,7 @@
 #include "StandardController.h"
 #include "SelectControllerMessage.h"
 #include "PlayerListMessage.h"
+#include "ForceDisconnectMessage.h"
 
 GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData) : GameConnection(socket, connectionData)
 {
@@ -74,6 +75,10 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 			if(_gameLoaded) {
 				PushControllerState(((MovieDataMessage*)message)->GetPortNumber(), ((MovieDataMessage*)message)->GetInputState());
 			}
+			break;
+
+		case MessageType::ForceDisconnect:
+			MessageManager::DisplayMessage("Net Play", ((ForceDisconnectMessage*)message)->GetMessage());
 			break;
 
 		case MessageType::PlayerList:

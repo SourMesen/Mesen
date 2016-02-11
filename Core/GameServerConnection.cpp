@@ -14,6 +14,7 @@
 #include "SelectControllerMessage.h"
 #include "PlayerListMessage.h"
 #include "GameServer.h"
+#include "ForceDisconnectMessage.h"
 
 GameServerConnection* GameServerConnection::_netPlayDevices[4] = { nullptr,nullptr,nullptr,nullptr };
 
@@ -28,8 +29,6 @@ GameServerConnection::~GameServerConnection()
 {
 	if(_connectionData) {
 		MessageManager::DisplayToast("Net Play", _connectionData->PlayerName + " (Player " + std::to_string(_controllerPort + 1) + ") disconnected.", _connectionData->AvatarData, _connectionData->AvatarSize);
-	} else {
-		MessageManager::DisplayMessage("Net Play", "Player " + std::to_string(_controllerPort + 1) + " disconnected.");
 	}
 
 	UnregisterNetPlayDevice(this);
@@ -52,6 +51,13 @@ void GameServerConnection::SendMovieData(uint8_t state, uint8_t port)
 		MovieDataMessage message(state, port);
 		SendNetMessage(message);
 	}
+}
+
+void GameServerConnection::SendForceDisconnectMessage(string disconnectMessage)
+{
+	ForceDisconnectMessage message(disconnectMessage);
+	SendNetMessage(message);
+	Disconnect();
 }
 
 void GameServerConnection::PushState(uint32_t state)
@@ -96,6 +102,9 @@ void GameServerConnection::ProcessHandshakeResponse(HandShakeMessage* message)
 		RegisterNetPlayDevice(this, _controllerPort);
 		GameServer::SendPlayerList();
 		Console::Resume();
+	} else {
+		SendForceDisconnectMessage("Server is using a different version of Mesen (" + EmulationSettings::GetMesenVersionString() + ") - you have been disconnected.");
+		MessageManager::DisplayMessage("Net Play", message->GetPlayerName() + " is not running the same version of Mesen and has been disconnected");
 	}
 }
 

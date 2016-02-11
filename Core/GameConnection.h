@@ -31,6 +31,9 @@ private:
 
 	virtual void ProcessMessage(NetMessage* message) = 0;
 
+protected:
+	void Disconnect();
+
 public:
 	static const uint8_t SpectatorPort = 0xFF;
 	GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData);

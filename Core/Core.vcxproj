@@ -370,6 +370,7 @@
     <ClInclude Include="FDS.h" />
     <ClInclude Include="FdsAudio.h" />
     <ClInclude Include="FdsLoader.h" />
+    <ClInclude Include="ForceDisconnectMessage.h" />
     <ClInclude Include="HdVideoFilter.h" />
     <ClInclude Include="iNesLoader.h" />
     <ClInclude Include="IremH3001.h" />
