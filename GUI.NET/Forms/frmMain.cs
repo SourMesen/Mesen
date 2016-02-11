@@ -620,7 +620,9 @@ namespace Mesen.GUI.Forms
 			} else {
 				frmClientConfig frm = new frmClientConfig();
 				if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
-					InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.Profile.PlayerAvatar, (UInt16)ConfigManager.Config.Profile.PlayerAvatar.Length, ConfigManager.Config.ClientConnectionInfo.Spectator);
+					Task.Run(() => {
+						InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.Profile.PlayerAvatar, (UInt16)ConfigManager.Config.Profile.PlayerAvatar.Length, ConfigManager.Config.ClientConnectionInfo.Spectator);
+					});
 				}
 			}
 		}

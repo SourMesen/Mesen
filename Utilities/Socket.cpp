@@ -127,20 +127,29 @@ bool Socket::Connect(const char* hostname, uint16_t port)
 		std::cout << "Failed to resolve hostname." << std::endl;
 		SetConnectionErrorFlag();
 	} else {
-		// Setup our socket address structure
-		u_long iMode = 0;
+		//Set socket in non-blocking mode
+		u_long iMode = 1;
 		ioctlsocket(_socket, FIONBIO, &iMode);
 
 		// Attempt to connect to server
-		if(connect(_socket, addrInfo->ai_addr, (int)addrInfo->ai_addrlen) == SOCKET_ERROR) {
-			std::cout << "Failed to establish connection with server." << std::endl;
-			SetConnectionErrorFlag();
-		} else {
-			iMode = 1;
-			ioctlsocket(_socket, FIONBIO, &iMode);
+		connect(_socket, addrInfo->ai_addr, (int)addrInfo->ai_addrlen);
 
+		fd_set writeSockets;
+		writeSockets.fd_count = 1;
+		writeSockets.fd_array[0] = _socket;
+
+		//Timeout after 3 seconds
+		TIMEVAL timeout;
+		timeout.tv_sec = 3;
+		timeout.tv_usec = 0;
+
+		// check if the socket is ready
+		if(select(0, nullptr, &writeSockets, nullptr, &timeout)) {
 			result = true;
-		}
+		} else {
+			//Could not connect
+			SetConnectionErrorFlag();
+		}			
 		
 		freeaddrinfo(addrInfo);
 	}
