@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Automation;
 using System.Windows.Forms;
 using System.Xml;
 using Mesen.GUI.Config;
@@ -971,6 +972,10 @@ namespace Mesen.GUI.Forms
 			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 			if(File.Exists(files[0])) {
 				LoadFile(files[0]);
+				AutomationElement element = AutomationElement.FromHandle(System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle);
+				if(element != null) {
+					element.SetFocus();
+				}
 			}
 		}
 
