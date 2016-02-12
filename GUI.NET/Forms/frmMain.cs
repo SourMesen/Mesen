@@ -49,6 +49,10 @@ namespace Mesen.GUI.Forms
 		{
 			base.OnLoad(e);
 
+			#if HIDETESTMENU
+			mnuTests.Visible = false;
+			#endif
+
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
