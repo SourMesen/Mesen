@@ -215,7 +215,13 @@ void Console::Run()
 	VideoDecoder::GetInstance()->StartThread();
 		
 	while(true) { 
-		_cpu->Exec();
+		try {
+			_cpu->Exec();
+		} catch(const std::runtime_error &ex) {
+			MessageManager::DisplayMessage("Error", string("Game has crashed. (") + ex.what() + ")");
+			break;
+		}
+
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
 		if(currentFrameNumber != lastFrameNumber) {
 			lastFrameNumber = currentFrameNumber;

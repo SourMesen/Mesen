@@ -247,7 +247,7 @@ private:
 			case AddrMode::AbsYW: return GetAbsYAddr(true);
 			default: break;
 		}
-		throw std::runtime_error("invalid addressing mode");
+		throw std::runtime_error("Invalid OP code - CPU crashed");
 	}
 
 	uint16_t GetOperand()
