@@ -89,15 +89,13 @@ void ControlManager::UnregisterControlDevice(uint8_t port)
 
 void ControlManager::RefreshAllPorts()
 {
-	if(_refreshState) {
-		if(_keyManager) {
-			_keyManager->RefreshState();
-		}
+	if(_keyManager) {
+		_keyManager->RefreshState();
+	}
 
-		for(int i = 0; i < 2; i++) {
-			if(ControlManager::_controlDevices[i]) {
-				ControlManager::_controlDevices[i]->RefreshStateBuffer();
-			}
+	for(int i = 0; i < 2; i++) {
+		if(ControlManager::_controlDevices[i]) {
+			ControlManager::_controlDevices[i]->RefreshStateBuffer();
 		}
 	}
 }
@@ -139,18 +137,21 @@ void ControlManager::UpdateControlDevices()
 uint8_t ControlManager::GetPortValue(uint8_t port)
 {
 	if(_refreshState) {
+		//Reload until strobe bit is set to off
 		RefreshAllPorts();
 	}
+
+	shared_ptr<BaseControlDevice> device = GetControlDevice(port);
 
 	//"In the NES and Famicom, the top three (or five) bits are not driven, and so retain the bits of the previous byte on the bus. 
 	//Usually this is the most significant byte of the address of the controller port - 0x40.
 	//Paperboy relies on this behavior and requires that reads from the controller ports return exactly $40 or $41 as appropriate."
-	shared_ptr<BaseControlDevice> device = GetControlDevice(port);
+	uint8_t value = 0x40;
 	if(device) {
-		return 0x40 | device->GetPortOutput();
-	} else {
-		return 0x40;
+		value |= device->GetPortOutput();
 	}
+
+	return value;
 }
 
 uint8_t ControlManager::ReadRAM(uint16_t addr)
@@ -166,8 +167,11 @@ uint8_t ControlManager::ReadRAM(uint16_t addr)
 void ControlManager::WriteRAM(uint16_t addr, uint8_t value)
 {
 	//$4016 writes
+	bool previousState = _refreshState;
 	_refreshState = (value & 0x01) == 0x01;
-	if(_refreshState) {
+	
+	if(previousState && !_refreshState) {
+		//Refresh controller once strobe bit is disabled
 		RefreshAllPorts();
 	}
 }
