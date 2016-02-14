@@ -549,15 +549,25 @@ void BaseMapper::NotifyVRAMAddressChange(uint16_t addr)
 }
 
 //Debugger Helper Functions
+uint8_t* BaseMapper::GetPrgRom()
+{
+	return _prgRom;
+}
+
+uint8_t* BaseMapper::GetWorkRam()
+{
+	return _workRam;
+}
+
 void BaseMapper::GetPrgCopy(uint8_t **buffer)
 {
 	*buffer = new uint8_t[_prgSize];
 	memcpy(*buffer, _prgRom, _prgSize);
 }
 
-uint32_t BaseMapper::GetPrgSize()
+uint32_t BaseMapper::GetPrgSize(bool getWorkRamSize)
 {
-	return _prgSize;
+	return getWorkRamSize ? GetWorkRamSize() : _prgSize;
 }
 
 void BaseMapper::GetChrRomCopy(uint8_t **buffer)
@@ -586,6 +596,15 @@ int32_t BaseMapper::ToAbsoluteAddress(uint16_t addr)
 	return -1;
 }
 
+int32_t BaseMapper::ToAbsoluteRamAddress(uint16_t addr)
+{
+	uint8_t *prgRamAddr = _prgPages[addr >> 8] + (addr & 0xFF);
+	if(prgRamAddr >= _workRam && prgRamAddr < _workRam + GetWorkRamSize()) {
+		return (uint32_t)(prgRamAddr - _workRam);
+	}
+	return -1;
+}
+
 int32_t BaseMapper::ToAbsoluteChrAddress(uint16_t addr)
 {
 	uint8_t *chrAddr = _chrPages[addr >> 8] + (addr & 0xFF);
@@ -608,18 +627,4 @@ int32_t BaseMapper::FromAbsoluteAddress(uint32_t addr)
 			
 	//Address is currently not mapped
 	return -1;
-}
-
-vector<int32_t> BaseMapper::GetPRGRanges()
-{
-	vector<int32_t> memoryRanges;
-
-	for(uint32_t i = 0x8000; i <= 0xFFFF; i += 0x100) {
-		int32_t pageStart = ToAbsoluteAddress((uint16_t)i);
-		int32_t pageEnd = ToAbsoluteAddress((uint16_t)i + 0xFF);
-		memoryRanges.push_back(pageStart);
-		memoryRanges.push_back(pageEnd);
-	}
-
-	return memoryRanges;
 }

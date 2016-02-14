@@ -31,7 +31,7 @@ void DisassemblyInfo::Initialize(uint32_t memoryAddr)
 	output << DisassemblyInfo::OPName[opCode];
 	if(opCode == 0x40 || opCode == 0x60) {
 		//Make end of function/interrupt routines more obvious
-		output << " ---------------------------";
+		output << " ---->";
 	}
 
 	if(DisassemblyInfo::OPName[opCode].empty()) {
@@ -103,14 +103,27 @@ void DisassemblyInfo::Initialize(uint32_t memoryAddr)
 			break;
 	}
 
+	if(_isSubEntryPoint) {
+		output << " <----";
+	}
+
 	_disassembly = output.str();
 }
 
-DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer)
+DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
 {
 	_opPointer = opPointer;
+	_isSubEntryPoint = isSubEntryPoint;
 
 	Initialize();
+}
+
+void DisassemblyInfo::SetSubEntryPoint()
+{
+	if(!_isSubEntryPoint) {
+		_isSubEntryPoint = true;
+		Initialize();
+	}
 }
 		
 string DisassemblyInfo::ToString(uint32_t memoryAddr)

@@ -22,9 +22,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_memoryManager = memoryManager;
 	_mapper = mapper;
 
-	uint8_t *prgBuffer;
-	mapper->GetPrgCopy(&prgBuffer);
-	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), prgBuffer, mapper->GetPrgSize()));
+	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPrgRom(), mapper->GetPrgSize(), mapper->GetWorkRam(), mapper->GetPrgSize(true)));
 	_codeDataLogger.reset(new CodeDataLogger(mapper->GetPrgSize(), mapper->GetChrSize()));
 
 	_stepOut = false;
@@ -67,7 +65,7 @@ bool Debugger::LoadCdlFile(string cdlFilepath)
 	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {
 		for(int i = 0, len = _mapper->GetPrgSize(); i < len; i++) {
 			if(_codeDataLogger->IsCode(i)) {
-				i = _disassembler->BuildCache(i, 0xFFFF) - 1;
+				i = _disassembler->BuildCache(i, -1, 0xFFFF, false) - 1;
 			}
 		}
 		return true;
@@ -241,27 +239,38 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	//Check if a breakpoint has been hit and freeze execution if one has
 	bool breakDone = false;
 	int32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
+	int32_t absoluteRamAddr = _mapper->ToAbsoluteRamAddress(addr);
+
 	if(absoluteAddr >= 0) {
-		if(type == MemoryOperationType::ExecOpCode) {
-			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
-			_disassembler->BuildCache(absoluteAddr, addr);
-			_lastInstruction = _memoryManager->DebugRead(addr);
-
-			if(_traceLogger) {
-				DebugState state;
-				GetState(&state);
-				_traceLogger->Log(state, _disassembler->GetDisassemblyInfo(absoluteAddr));
-			}
-
-			UpdateCallstack(addr);
-			ProcessStepConditions(addr);
-
-			breakDone = SleepUntilResume();
-		} else if(type == MemoryOperationType::ExecOperand) {
+		if(type == MemoryOperationType::ExecOperand) {
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
 		} else {
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Data);
 		}
+	} else if(addr < 0x2000 || absoluteRamAddr >= 0) {
+		if(type == MemoryOperationType::Write) {
+			_disassembler->InvalidateCache(addr, absoluteRamAddr);
+		}
+	}
+
+	if(type == MemoryOperationType::ExecOpCode) {
+		if(absoluteAddr >= 0) {
+			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
+		}
+		
+		bool isSubEntryPoint = _lastInstruction == 0x20; //Previous instruction was a JSR
+		_disassembler->BuildCache(absoluteAddr, absoluteRamAddr, addr, isSubEntryPoint);
+		_lastInstruction = _memoryManager->DebugRead(addr);
+
+		UpdateCallstack(addr);
+		ProcessStepConditions(addr);
+
+		if(_traceLogger) {
+			DebugState state;
+			GetState(&state);
+			_traceLogger->Log(state, _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr));
+		}
+		breakDone = SleepUntilResume();
 	}
 
 	if(!breakDone && _hasBreakpoint) {
@@ -393,26 +402,36 @@ bool Debugger::IsCodeChanged()
 string Debugger::GenerateOutput()
 {
 	std::ostringstream output;
-	vector<int32_t> memoryRanges = _mapper->GetPRGRanges();
 
-	//RAM code viewer doesn't work well yet
-	//output << _disassembler->GetRAMCode();
+	//Get code in internal RAM
+	output << _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom);
+	output << "2000:::--END OF INTERNAL RAM--\n";
 
-	uint16_t memoryAddr = 0x8000;
-	for(size_t i = 0, size = memoryRanges.size(); i < size; i += 2) {
-		int32_t startRange = memoryRanges[i];
+	for(uint32_t i = 0x4100; i < 0x10000; i += 0x100) {
 		//Merge all sequential ranges into 1 chunk
-		if(startRange != -1) {
-			for(size_t j = i+1; j < size - 1; j+=2) {
-				if(memoryRanges[j] + 1 == memoryRanges[j + 1]) {
-					i+=2;
-				} else {
-					break;
-				}
+		int32_t romAddr = _mapper->ToAbsoluteAddress(i);
+		int32_t ramAddr = _mapper->ToAbsoluteRamAddress(i);
+		uint32_t startMemoryAddr = i;
+		int32_t startAddr, endAddr;
+
+		if(romAddr >= 0) {
+			startAddr = romAddr;
+			endAddr = startAddr + 0xFF;
+			while(romAddr + 0x100 == _mapper->ToAbsoluteAddress(i + 0x100) && i < 0x10000) {
+				endAddr += 0x100;
+				romAddr += 0x100;
+				i+=0x100;
 			}
-			output << _disassembler->GetCode(startRange, memoryRanges[i+1], memoryAddr);
-		} else {
-			memoryAddr += 0x100;
+			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::PrgRom);
+		} else if(ramAddr >= 0) {
+			startAddr = ramAddr;
+			endAddr = startAddr + 0xFF;
+			while(ramAddr + 0x100 == _mapper->ToAbsoluteRamAddress(i + 0x100) && i < 0x10000) {
+				endAddr += 0x100;
+				ramAddr += 0x100;
+				i += 0x100;
+			}
+			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::WorkRam);
 		}
 	}
 

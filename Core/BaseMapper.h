@@ -168,13 +168,15 @@ public:
 	void WriteVRAM(uint16_t addr, uint8_t value);
 
 	//Debugger Helper Functions
+	uint8_t* GetPrgRom();
+	uint8_t* GetWorkRam();
 	void GetPrgCopy(uint8_t **buffer);
-	uint32_t GetPrgSize();
+	uint32_t GetPrgSize(bool getWorkRamSize = false);
 	void GetChrRomCopy(uint8_t **buffer);
 	uint32_t GetChrSize(bool getRamSize = false);
 	void GetChrRamCopy(uint8_t **buffer);
 	int32_t ToAbsoluteAddress(uint16_t addr);
+	int32_t ToAbsoluteRamAddress(uint16_t addr);
 	int32_t ToAbsoluteChrAddress(uint16_t addr);
 	int32_t FromAbsoluteAddress(uint32_t addr);
-	vector<int32_t> GetPRGRanges();
 };

@@ -1,7 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "DebugState.h"
-#include "DisassemblyInfo.h"
+
+class DisassemblyInfo;
+struct DebugState;
 
 struct TraceLoggerOptions
 {
@@ -11,6 +12,7 @@ struct TraceLoggerOptions
 class TraceLogger
 {
 private:
+	static TraceLogger *_instance;
 	TraceLoggerOptions _options;
 	string _outputFilepath;
 	ofstream _outputFile;
@@ -20,4 +22,6 @@ public:
 	~TraceLogger();
 
 	void Log(DebugState &state, shared_ptr<DisassemblyInfo> disassemblyInfo);
+
+	static void LogStatic(string log);
 };

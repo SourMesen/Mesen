@@ -4,6 +4,7 @@
 #include "MemoryManager.h"
 #include "PPU.h"
 #include "Snapshotable.h"
+#include "TraceLogger.h"
 
 namespace PSFlags
 {
@@ -643,11 +644,15 @@ private:
 			SetFlags(PSFlags::Interrupt);
 
 			SetPC(MemoryReadWord(CPU::NMIVector));
+			
+			TraceLogger::LogStatic("NMI");
 		} else {
 			Push((uint8_t)flags);
 			SetFlags(PSFlags::Interrupt);
 
 			SetPC(MemoryReadWord(CPU::IRQVector));
+
+			TraceLogger::LogStatic("IRQ");
 		}
 
 		//Since we just set the flag to prevent interrupts, do not run one right away after this (fixes nmi_and_brk & nmi_and_irq tests)
@@ -665,10 +670,14 @@ private:
 
 			SetPC(MemoryReadWord(CPU::NMIVector));
 			_state.NMIFlag = false;
+
+			TraceLogger::LogStatic("NMI");
 		} else {
 			Push((uint8_t)PS());
 			SetFlags(PSFlags::Interrupt);
 			SetPC(MemoryReadWord(CPU::IRQVector));
+
+			TraceLogger::LogStatic("IRQ");
 		}
 	}
 	

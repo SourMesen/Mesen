@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "CPU.h"
+#include "BaseMapper.h"
 
 class DisassemblyInfo;
 
@@ -8,18 +8,21 @@ class Disassembler
 {
 private:
 	vector<shared_ptr<DisassemblyInfo>> _disassembleCache;
+	vector<shared_ptr<DisassemblyInfo>> _disassembleRamCache;
 	vector<shared_ptr<DisassemblyInfo>> _disassembleMemoryCache;
-	uint8_t* _internalRAM;
-	uint8_t* _prgROM;
+	uint8_t* _internalRam;
+	uint8_t* _prgRom;
+	uint8_t* _prgRam;
 	uint32_t _prgSize;
 
 public:
-	Disassembler(uint8_t* internalRAM, uint8_t* prgROM, uint32_t prgSize);
+	Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize);
 	~Disassembler();
 	
-	uint32_t BuildCache(uint32_t absoluteAddr, uint16_t memoryAddr);
-	string GetRAMCode();
-	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t &memoryAddr);
+	uint32_t BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr, uint16_t memoryAddr, bool isSubEntryPoint);
+	void InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr);
 
-	shared_ptr<DisassemblyInfo> GetDisassemblyInfo(uint32_t address);
+	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType);
+
+	shared_ptr<DisassemblyInfo> GetDisassemblyInfo(int32_t absoluteAddress, int32_t absoluteRamAddress, uint16_t memoryAddress);
 };

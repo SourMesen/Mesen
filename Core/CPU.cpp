@@ -3,6 +3,7 @@
 #include "PPU.h"
 #include "APU.h"
 #include "DeltaModulationChannel.h"
+#include "TraceLogger.h"
 
 CPU* CPU::Instance = nullptr;
 
@@ -106,6 +107,7 @@ void CPU::IncCycleCount()
 			//Update the DMC buffer when the stall period is completed
 			_dmcDmaRunning = false;
 			DeltaModulationChannel::SetReadBuffer();
+			TraceLogger::LogStatic("DMC DMA End");
 		}
 	}
 
@@ -126,6 +128,7 @@ void CPU::IncCycleCount()
 
 void CPU::RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue)
 {
+	TraceLogger::LogStatic("Sprite DMA Start");
 	Instance->_spriteDmaTransfer = true;
 	
 	//"The CPU is suspended during the transfer, which will take 513 or 514 cycles after the $4014 write tick."
@@ -149,12 +152,15 @@ void CPU::RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue)
 	}
 	
 	Instance->_spriteDmaTransfer = false;
+
+	TraceLogger::LogStatic("Sprite DMA End");
 }
 
 void CPU::StartDmcTransfer()
 {
 	//"DMC DMA adds 4 cycles normally, 2 if it lands on the $4014 write or during OAM DMA"
 	//3 cycles if it lands on the last write cycle of any instruction
+	TraceLogger::LogStatic("DMC DMA Start");
 	Instance->_dmcDmaRunning = true;
 	if(Instance->_spriteDmaTransfer) {
 		if(Instance->_spriteDmaCounter == 2) {

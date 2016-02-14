@@ -12,6 +12,7 @@ public:
 private:
 	string _disassembly;
 	uint8_t *_opPointer = nullptr;
+	bool _isSubEntryPoint = false;
 	uint32_t _opSize = 0;
 	AddrMode _opMode;
 	uint32_t _lastAddr = 0;
@@ -20,8 +21,9 @@ private:
 	void Initialize(uint32_t memoryAddr = 0);
 
 public:
-	DisassemblyInfo(uint8_t* opPointer);
+	DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint);
 
+	void SetSubEntryPoint();
 	string ToString(uint32_t memoryAddr);
 	uint32_t GetSize();
 };

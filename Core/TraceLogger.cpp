@@ -3,16 +3,30 @@
 #include "DisassemblyInfo.h"
 #include "DebugState.h"
 
+TraceLogger *TraceLogger::_instance = nullptr;
+
 TraceLogger::TraceLogger(string outputFilepath, TraceLoggerOptions options)
 {
 	_outputFile.open(outputFilepath, ios::out | ios::binary);
 	_options = options;
+	_instance = this;
 }
 
 TraceLogger::~TraceLogger()
 {
 	if(_outputFile) {
 		_outputFile.close();
+	}
+
+	if(_instance == this) {
+		_instance = nullptr;
+	}
+}
+
+void TraceLogger::LogStatic(string log)
+{
+	if(_instance) {
+		_instance->_outputFile << "--- " << log << " ---" << std::endl;
 	}
 }
 
