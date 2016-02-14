@@ -1,24 +1,4 @@
-#if _WIN64 || __x86_64__ || __ppc64__
-	#define ENVIRONMENT64
-#else
-	#define ENVIRONMENT32
-#endif
-
-#ifdef ENVIRONMENT32
-	#ifdef _DEBUG
-		#define MESEN_LIBRARY_PATH "../bin/x86/Debug/"
-	#else 
-		#define MESEN_LIBRARY_PATH "../bin/x86/Release/"
-	#endif
-#else
-	#ifdef _DEBUG
-		#define MESEN_LIBRARY_PATH "../bin/x64/Debug/"
-	#else 
-		#define MESEN_LIBRARY_PATH "../bin/x64/Release/"
-	#endif
-#endif
-
-#pragma comment(lib, MESEN_LIBRARY_PATH"Utilities.lib")
+#pragma comment(lib, "Utilities.lib")
 
 #include <Windows.h>
 #include <Shlobj.h>

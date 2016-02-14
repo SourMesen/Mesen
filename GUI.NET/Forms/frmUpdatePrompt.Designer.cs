@@ -75,7 +75,7 @@
 			this.lblLatestVersionString.Name = "lblLatestVersionString";
 			this.lblLatestVersionString.Size = new System.Drawing.Size(31, 13);
 			this.lblLatestVersionString.TabIndex = 7;
-			this.lblLatestVersionString.Text = "0.1.1";
+			this.lblLatestVersionString.Text = "x.x.x";
 			// 
 			// lblLatestVersion
 			// 
@@ -127,7 +127,7 @@
 			this.lblCurrentVersionString.Name = "lblCurrentVersionString";
 			this.lblCurrentVersionString.Size = new System.Drawing.Size(31, 13);
 			this.lblCurrentVersionString.TabIndex = 6;
-			this.lblCurrentVersionString.Text = "0.1.0";
+			this.lblCurrentVersionString.Text = "x.x.x";
 			// 
 			// flowLayoutPanel1
 			// 

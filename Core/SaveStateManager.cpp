@@ -55,21 +55,21 @@ bool SaveStateManager::LoadState(int stateIndex)
 		char header[3];
 		file.read(header, 3);
 		if(memcmp(header, "MST", 3) == 0) {
-			Console::Pause();
-
 			uint32_t emuVersion, fileFormatVersion;
-			file.read((char*)&emuVersion, sizeof(emuVersion));
 
+			file.read((char*)&emuVersion, sizeof(emuVersion));
 			if(emuVersion > EmulationSettings::GetMesenVersion()) {
-				MessageManager::DisplayMessage("Save States", "Cannot load save states created by a more recent version of Mesen.Please download the latest version.");
+				MessageManager::DisplayMessage("Save States", "Cannot load save states created by a more recent version of Mesen. Please download the latest version.");
+				return false;
 			}
 
 			file.read((char*)&fileFormatVersion, sizeof(fileFormatVersion));
-
-			if(emuVersion != EmulationSettings::GetMesenVersion() || fileFormatVersion != SaveStateManager::FileFormatVersion) {
-				MessageManager::DisplayMessage("Save States", "State #" + std::to_string(stateIndex) + " does not match emulator version.");
+			if(fileFormatVersion != SaveStateManager::FileFormatVersion) {
+				MessageManager::DisplayMessage("Save States", "State #" + std::to_string(stateIndex) + " is incompatible with this version of Mesen.");
+				return false;
 			}
 
+			Console::Pause();
 			Console::LoadState(file);
 			Console::Resume();
 

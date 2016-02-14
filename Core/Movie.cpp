@@ -5,6 +5,7 @@
 #include "../Utilities/FolderUtilities.h"
 #include "RomLoader.h"
 #include "CheatManager.h"
+#include "SaveStateManager.h"
 
 shared_ptr<Movie> Movie::_instance(new Movie());
 
@@ -204,6 +205,7 @@ struct MovieHeader
 	char Header[3] = { 'M', 'M', 'O' };
 	uint32_t MesenVersion;
 	uint32_t MovieFormatVersion;
+	uint32_t SaveStateFormatVersion;
 	uint32_t RomCrc32;
 	uint32_t Region;
 	uint32_t ConsoleType;
@@ -220,7 +222,8 @@ bool Movie::Save()
 
 	MovieHeader header = {};
 	header.MesenVersion = EmulationSettings::GetMesenVersion();
-	header.MovieFormatVersion = 1;
+	header.MovieFormatVersion = Movie::MovieFormatVersion;
+	header.SaveStateFormatVersion = SaveStateManager::FileFormatVersion;
 	header.RomCrc32 = RomLoader::GetCRC32(romFilepath);
 	header.Region = (uint32_t)Console::GetNesModel();
 	header.ConsoleType = (uint32_t)EmulationSettings::GetConsoleType();
@@ -236,6 +239,7 @@ bool Movie::Save()
 	_file.write((char*)header.Header, sizeof(header.Header));
 	_file.write((char*)&header.MesenVersion, sizeof(header.MesenVersion));
 	_file.write((char*)&header.MovieFormatVersion, sizeof(header.MovieFormatVersion));
+	_file.write((char*)&header.SaveStateFormatVersion, sizeof(header.SaveStateFormatVersion));
 	_file.write((char*)&header.RomCrc32, sizeof(header.RomCrc32));
 	_file.write((char*)&header.Region, sizeof(header.Region));
 	_file.write((char*)&header.ConsoleType, sizeof(header.ConsoleType));
@@ -298,6 +302,12 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	}
 
 	file.read((char*)&header.MovieFormatVersion, sizeof(header.MovieFormatVersion));
+	if(header.MovieFormatVersion != Movie::MovieFormatVersion) {
+		MessageManager::DisplayMessage("Movies", "This movie is incompatible with this version of Mesen.");
+		return false;
+	}
+
+	file.read((char*)&header.SaveStateFormatVersion, sizeof(header.SaveStateFormatVersion));
 	file.read((char*)&header.RomCrc32, sizeof(header.RomCrc32));
 	file.read((char*)&header.Region, sizeof(header.Region));
 	file.read((char*)&header.ConsoleType, sizeof(header.ConsoleType));
@@ -316,6 +326,25 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	memset(romFilename, 0, header.FilenameLength + 1);
 	file.read((char*)romFilename, header.FilenameLength);
 	
+	_cheatList.clear();
+	CodeInfo cheatCode;
+	for(uint32_t i = 0; i < header.CheatCount; i++) {
+		file.read((char*)&cheatCode.Address, sizeof(cheatCode.Address));
+		file.read((char*)&cheatCode.Value, sizeof(cheatCode.Value));
+		file.read((char*)&cheatCode.CompareValue, sizeof(cheatCode.CompareValue));
+		file.read((char*)&cheatCode.IsRelativeAddress, sizeof(cheatCode.IsRelativeAddress));
+		_cheatList.push_back(cheatCode);
+	}
+
+	file.read((char*)&_data.SaveStateSize, sizeof(uint32_t));
+
+	if(_data.SaveStateSize > 0) {
+		if(header.SaveStateFormatVersion != SaveStateManager::FileFormatVersion) {
+			MessageManager::DisplayMessage("Movies", "This movie is incompatible with this version of Mesen.");
+			return false;
+		}
+	}
+
 	bool loadedGame = true;
 	if(autoLoadRom) {
 		string currentRom = Console::GetROMPath();
@@ -328,18 +357,6 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	}
 
 	if(loadedGame) {
-		_cheatList.clear();
-		CodeInfo cheatCode;
-		for(uint32_t i = 0; i < header.CheatCount; i++) {
-			file.read((char*)&cheatCode.Address, sizeof(cheatCode.Address));
-			file.read((char*)&cheatCode.Value, sizeof(cheatCode.Value));
-			file.read((char*)&cheatCode.CompareValue, sizeof(cheatCode.CompareValue));
-			file.read((char*)&cheatCode.IsRelativeAddress, sizeof(cheatCode.IsRelativeAddress));
-			_cheatList.push_back(cheatCode);
-		}
-
-		file.read((char*)&_data.SaveStateSize, sizeof(uint32_t));
-
 		if(_data.SaveStateSize > 0) {
 			uint8_t *stateBuffer = new uint8_t[_data.SaveStateSize];
 			file.read((char*)stateBuffer, _data.SaveStateSize);

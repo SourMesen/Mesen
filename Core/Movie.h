@@ -14,6 +14,7 @@ class Movie
 {
 	private:
 		static shared_ptr<Movie> _instance;
+		const uint32_t MovieFormatVersion = 2;
 		bool _recording = false;
 		bool _playing = false;
 		uint8_t _counter[4];

@@ -35,9 +35,13 @@
 			this.lblLink = new System.Windows.Forms.Label();
 			this.labelVersion = new System.Windows.Forms.Label();
 			this.okButton = new System.Windows.Forms.Button();
+			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblDonate = new System.Windows.Forms.Label();
+			this.lnkDonate = new System.Windows.Forms.Label();
 			this.tableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel
@@ -51,6 +55,7 @@
 			this.tableLayoutPanel.Controls.Add(this.flowLayoutPanel1, 1, 3);
 			this.tableLayoutPanel.Controls.Add(this.labelVersion, 1, 1);
 			this.tableLayoutPanel.Controls.Add(this.okButton, 1, 5);
+			this.tableLayoutPanel.Controls.Add(this.flowLayoutPanel2, 0, 4);
 			this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel.Location = new System.Drawing.Point(5, 5);
 			this.tableLayoutPanel.Name = "tableLayoutPanel";
@@ -61,7 +66,7 @@
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel.Size = new System.Drawing.Size(347, 99);
+			this.tableLayoutPanel.Size = new System.Drawing.Size(337, 102);
 			this.tableLayoutPanel.TabIndex = 0;
 			// 
 			// logoPictureBox
@@ -70,7 +75,7 @@
 			this.logoPictureBox.Location = new System.Drawing.Point(3, 3);
 			this.logoPictureBox.Name = "logoPictureBox";
 			this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 4);
-			this.logoPictureBox.Size = new System.Drawing.Size(64, 64);
+			this.logoPictureBox.Size = new System.Drawing.Size(64, 65);
 			this.logoPictureBox.TabIndex = 12;
 			this.logoPictureBox.TabStop = false;
 			// 
@@ -81,7 +86,7 @@
 			this.labelProductName.Location = new System.Drawing.Point(76, 0);
 			this.labelProductName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
 			this.labelProductName.Name = "labelProductName";
-			this.labelProductName.Size = new System.Drawing.Size(268, 17);
+			this.labelProductName.Size = new System.Drawing.Size(258, 17);
 			this.labelProductName.TabIndex = 19;
 			this.labelProductName.Text = "Mesen";
 			this.labelProductName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -93,9 +98,9 @@
 			this.labelCopyright.Location = new System.Drawing.Point(76, 34);
 			this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
 			this.labelCopyright.Name = "labelCopyright";
-			this.labelCopyright.Size = new System.Drawing.Size(268, 17);
+			this.labelCopyright.Size = new System.Drawing.Size(258, 17);
 			this.labelCopyright.TabIndex = 21;
-			this.labelCopyright.Text = "© 2016 M. Bibaud";
+			this.labelCopyright.Text = "© 2016 M. Bibaud (aka Sour)";
 			this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// flowLayoutPanel1
@@ -140,18 +145,58 @@
 			this.labelVersion.Name = "labelVersion";
 			this.labelVersion.Size = new System.Drawing.Size(146, 17);
 			this.labelVersion.TabIndex = 0;
-			this.labelVersion.Text = "Version: 0.1.0 (Beta)";
+			this.labelVersion.Text = "Version: 0.1.1 (Beta)";
 			this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// okButton
 			// 
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.okButton.Location = new System.Drawing.Point(269, 73);
+			this.okButton.Location = new System.Drawing.Point(259, 76);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(75, 23);
 			this.okButton.TabIndex = 24;
 			this.okButton.Text = "&OK";
+			// 
+			// flowLayoutPanel2
+			// 
+			this.tableLayoutPanel.SetColumnSpan(this.flowLayoutPanel2, 2);
+			this.flowLayoutPanel2.Controls.Add(this.lblDonate);
+			this.flowLayoutPanel2.Controls.Add(this.lnkDonate);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 81);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(337, 1);
+			this.flowLayoutPanel2.TabIndex = 27;
+			// 
+			// lblDonate
+			// 
+			this.lblDonate.AutoSize = true;
+			this.lblDonate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblDonate.Location = new System.Drawing.Point(6, 0);
+			this.lblDonate.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+			this.lblDonate.Name = "lblDonate";
+			this.lblDonate.Size = new System.Drawing.Size(330, 48);
+			this.lblDonate.TabIndex = 25;
+			this.lblDonate.Text = "Mesen is free.  However, if you would like to show your support, click on the lin" +
+    "k below for more information on how you can donate.  Thank you!";
+			this.lblDonate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblDonate.Visible = false;
+			// 
+			// lnkDonate
+			// 
+			this.lnkDonate.AutoSize = true;
+			this.lnkDonate.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lnkDonate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lnkDonate.ForeColor = System.Drawing.Color.Blue;
+			this.lnkDonate.Location = new System.Drawing.Point(20, 50);
+			this.lnkDonate.Margin = new System.Windows.Forms.Padding(20, 2, 3, 0);
+			this.lnkDonate.Name = "lnkDonate";
+			this.lnkDonate.Size = new System.Drawing.Size(157, 13);
+			this.lnkDonate.TabIndex = 26;
+			this.lnkDonate.Text = "For more information, click here.";
+			this.lnkDonate.Visible = false;
+			this.lnkDonate.Click += new System.EventHandler(this.lnkDonate_Click);
 			// 
 			// frmAbout
 			// 
@@ -159,7 +204,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.okButton;
-			this.ClientSize = new System.Drawing.Size(357, 109);
+			this.ClientSize = new System.Drawing.Size(347, 112);
 			this.Controls.Add(this.tableLayoutPanel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -173,6 +218,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -188,5 +235,8 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Label lblWebsite;
 		private System.Windows.Forms.Label lblLink;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+		private System.Windows.Forms.Label lblDonate;
+		private System.Windows.Forms.Label lnkDonate;
 	}
 }

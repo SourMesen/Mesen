@@ -23,27 +23,21 @@
 	#endif
 #endif
 
-#ifdef ENVIRONMENT32
-	#ifdef _DEBUG
-		#define MESEN_LIBRARY_PATH "../bin/x86/Debug/"
-		#define MESEN_LIBRARY_SUFFIX ".Debug.x86.lib"
-	#else 
-		#define MESEN_LIBRARY_PATH "../bin/x86/Release/"
-		#define MESEN_LIBRARY_SUFFIX ".Release.x86.lib"
-	#endif
-#else
-	#ifdef _DEBUG
-		#define MESEN_LIBRARY_PATH "../bin/x64/Debug/"
-		#define MESEN_LIBRARY_SUFFIX ".Debug.x64.lib"
-	#else 
-		#define MESEN_LIBRARY_PATH "../bin/x64/Release/"
-		#define MESEN_LIBRARY_SUFFIX ".Release.x64.lib"
-	#endif
+#ifdef _DEBUG
+	#define MESEN_LIBRARY_DEBUG_SUFFIX "Debug"
+#else 
+	#define MESEN_LIBRARY_DEBUG_SUFFIX "Release"
 #endif
 
-#pragma comment(lib, MESEN_LIBRARY_PATH"Core.lib")
-#pragma comment(lib, MESEN_LIBRARY_PATH"Utilities.lib")
-#pragma comment(lib, MESEN_LIBRARY_PATH"Windows.lib")
-#pragma comment(lib, "../Dependencies/DirectXTK" MESEN_LIBRARY_SUFFIX)
+#ifdef ENVIRONMENT32
+	#define MESEN_LIBRARY_SUFFIX "x86.lib"
+#else 
+	#define MESEN_LIBRARY_SUFFIX "x64.lib"
+#endif
+
+#pragma comment(lib, "Core.lib")
+#pragma comment(lib, "Utilities.lib")
+#pragma comment(lib, "Windows.lib")
+#pragma comment(lib, "../Dependencies/DirectXTK." MESEN_LIBRARY_DEBUG_SUFFIX "." MESEN_LIBRARY_SUFFIX)
 
 #define DllExport __declspec(dllexport)

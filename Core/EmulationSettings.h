@@ -145,7 +145,6 @@ struct KeyMappingSet
 class EmulationSettings
 {
 private:
-	//Version 0.1.0
 	static uint16_t _versionMajor;
 	static uint8_t _versionMinor;
 	static uint8_t _versionRevision;

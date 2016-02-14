@@ -20,5 +20,10 @@ namespace Mesen.GUI.Forms
 		{
 			System.Diagnostics.Process.Start("http://www.mesen.ca");
 		}
+
+		private void lnkDonate_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("http://www.mesen.ca/index.php#Donate");
+		}
 	}
 }

@@ -17,9 +17,10 @@ uint32_t EmulationSettings::PpuPaletteArgb[64] = {
 	0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000,
 };
 
+//Version 0.1.1
 uint16_t EmulationSettings::_versionMajor = 0;
 uint8_t EmulationSettings::_versionMinor = 1;
-uint8_t EmulationSettings::_versionRevision = 0;
+uint8_t EmulationSettings::_versionRevision = 1;
 
 uint32_t EmulationSettings::_flags = 0;
 
