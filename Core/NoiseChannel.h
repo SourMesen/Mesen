@@ -44,6 +44,7 @@ public:
 	{
 		ApuEnvelope::Reset(softReset);
 		
+		_period = (GetNesModel() == NesModel::NTSC ? _noisePeriodLookupTableNtsc : _noisePeriodLookupTablePal)[0] - 1;
 		_shiftRegister = 1;
 		_modeFlag = false;
 	}
