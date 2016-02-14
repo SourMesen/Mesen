@@ -59,6 +59,7 @@
 			this.lstWatch.TabIndex = 6;
 			this.lstWatch.UseCompatibleStateImageBehavior = false;
 			this.lstWatch.View = System.Windows.Forms.View.Details;
+			this.lstWatch.BeforeLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.lstWatch_BeforeLabelEdit);
 			this.lstWatch.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.lstWatch_AfterLabelEdit);
 			this.lstWatch.SelectedIndexChanged += new System.EventHandler(this.lstWatch_SelectedIndexChanged);
 			this.lstWatch.Click += new System.EventHandler(this.lstWatch_Click);
@@ -89,9 +90,10 @@
 			// mnuRemoveWatch
 			// 
 			this.mnuRemoveWatch.Name = "mnuRemoveWatch";
-			this.mnuRemoveWatch.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+			this.mnuRemoveWatch.ShortcutKeyDisplayString = "Del";
 			this.mnuRemoveWatch.Size = new System.Drawing.Size(183, 22);
 			this.mnuRemoveWatch.Text = "Remove";
+			this.mnuRemoveWatch.Click += new System.EventHandler(this.mnuRemoveWatch_Click);
 			// 
 			// mnuHexDisplay
 			// 

@@ -13,7 +13,7 @@ namespace Mesen.GUI.Controls
 	{
 		private bool _preventCheck = false;
 		private int _editItemIndex = -1;
-		private string _originalText;
+		private string _originalText = null;
 
 		public bool IsEditing
 		{
@@ -41,6 +41,9 @@ namespace Mesen.GUI.Controls
 
 		protected override void OnBeforeLabelEdit(LabelEditEventArgs e)
 		{
+			if(_originalText == null) {
+				_originalText = this.Items[e.Item].Text;
+			}
 			_editItemIndex = e.Item;		
 			base.OnBeforeLabelEdit(e);
 		}
@@ -48,6 +51,7 @@ namespace Mesen.GUI.Controls
 		protected override void OnAfterLabelEdit(LabelEditEventArgs e)
 		{
 			base.OnAfterLabelEdit(e);
+			_originalText = null;
 			_editItemIndex = -1;
 		}
 

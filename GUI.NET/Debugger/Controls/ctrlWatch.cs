@@ -106,9 +106,13 @@ namespace Mesen.GUI.Debugger
 
 		public void AddWatch(UInt32 address)
 		{
-			ListViewItem item = lstWatch.Items.Insert(lstWatch.Items.Count - 1, "$" + address.ToString("x"));
+			ListViewItem item = lstWatch.Items.Insert(lstWatch.Items.Count - 1, "[$" + address.ToString("X") + "]");
 			item.Tag = address;
 			UpdateWatch();
+		}
+
+		private void lstWatch_BeforeLabelEdit(object sender, LabelEditEventArgs e)
+		{
 		}
 
 		private void lstWatch_AfterLabelEdit(object sender, LabelEditEventArgs e)
@@ -137,6 +141,20 @@ namespace Mesen.GUI.Debugger
 		{
 			if(lstWatch.SelectedItems.Count == 1) {
 				lstWatch.SelectedItems[0].BeginEdit();
+			}
+		}
+
+		private void mnuRemoveWatch_Click(object sender, EventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count >= 1) {
+				var itemsToRemove = new List<ListViewItem>();
+				foreach(ListViewItem item in lstWatch.SelectedItems) {
+					itemsToRemove.Add(item);
+				}
+				foreach(ListViewItem item in itemsToRemove) {
+					lstWatch.Items.Remove(item);
+				}
+				UpdateWatch();
 			}
 		}
 	}
