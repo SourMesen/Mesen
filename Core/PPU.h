@@ -148,6 +148,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		bool _oamCopyDone;
 
 		bool _renderingEnabled;
+		bool _prevRenderingEnabled;
 		
 		void UpdateStatusFlag();
 

@@ -35,6 +35,7 @@ PPU::~PPU()
 void PPU::Reset()
 {
 	_sprite0HitCycle = -1;
+	_prevRenderingEnabled = false;
 	_renderingEnabled = false;
 
 	_ignoreVramRead = 0;
@@ -605,7 +606,12 @@ void PPU::DrawPixel()
 void PPU::ProcessPreVBlankScanline()
 {
 	//For pre-render scanline & all visible scanlines
-	if(IsRenderingEnabled()) {
+	if(_prevRenderingEnabled) {
+		//Use _prevRenderingEnabled to drive vert/horiz scrolling increments.
+		//This delays the flag by an extra cycle.  So if rendering is disabled at cycle 254,
+		//the vertical scrolling increment will not be performed.
+		//This appears to fix freezes in Battletoads (Level 2), but may be incorrect.
+
 		//Update video ram address according to scrolling logic
 		if((_cycle > 0 && _cycle < 256 && (_cycle & 0x07) == 0) || _cycle == 328 || _cycle == 336) {
 			IncHorizontalScrolling();
@@ -848,6 +854,7 @@ void PPU::Exec()
 	}
 
 	//Rendering enabled flag is apparently set with a 1 cycle delay (i.e setting it at cycle 5 will render cycle 6 like cycle 5 and then take the new settings for cycle 7)
+	_prevRenderingEnabled = _renderingEnabled;
 	_renderingEnabled = _flags.BackgroundEnabled || _flags.SpritesEnabled;
 }
 
@@ -947,6 +954,7 @@ void PPU::StreamState(bool saving)
 	Stream<uint16_t>(_spriteDmaAddr);
 	Stream<uint16_t>(_spriteDmaCounter);
 
+	Stream<bool>(_prevRenderingEnabled);
 	Stream<bool>(_renderingEnabled);
 	Stream<uint8_t>(_openBus);
 	StreamArray<int32_t>(_openBusDecayStamp, 8);
