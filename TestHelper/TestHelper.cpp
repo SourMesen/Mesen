@@ -31,6 +31,7 @@
 #include "../Utilities/SimpleLock.h"
 #include "../Utilities/Timer.h"
 #include "../Core/MessageManager.h"
+#include "../Core/ControlManager.h"
 
 using namespace std;
 
@@ -53,6 +54,7 @@ public:
 
 extern "C" {
 	void __stdcall InitializeEmu(const char* homeFolder, void*, void*);
+	void __stdcall SetControllerType(uint32_t port, ControllerType type);
 	int __stdcall RomTestRun(char* filename);
 	void __stdcall LoadROM(char* filename);
 	void __stdcall Run();
@@ -129,12 +131,13 @@ int main(int argc, char* argv[])
 
 		timer.Reset();
 
-		for(int i = 0; i < 4; i++) {
+		int numberOfThreads = 4;
+		for(int i = 0; i < numberOfThreads; i++) {
 			std::thread *testThread = new std::thread(RunTest);
 			testThreads.push_back(testThread);
 		}
 
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < numberOfThreads; i++) {
 			testThreads[i]->join();
 			delete testThreads[i];
 		}
@@ -158,6 +161,8 @@ int main(int argc, char* argv[])
 		RegisterNotificationCallback((NotificationListenerCallback)OnNotificationReceived);
 
 		InitializeEmu(mesenFolder.c_str(), nullptr, nullptr);
+		SetControllerType(0, ControllerType::StandardController);
+		SetControllerType(1, ControllerType::StandardController);
 
 		int result = RomTestRun(testFilename);
 		if(runThread != nullptr) {
