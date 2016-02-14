@@ -145,6 +145,7 @@ void VideoDecoder::StopThread()
 			}
 			DecodeFrame();
 		}
+		_ppuOutputBuffer = nullptr;
 	}
 }
 
