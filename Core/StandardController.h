@@ -10,7 +10,9 @@ private:
 	uint32_t _stateBufferFamicom;
 
 	bool _hasZapper;
+	bool _hasArkanoidController;
 	shared_ptr<BaseControlDevice> _additionalController;
+	uint8_t GetButtonState();
 
 protected:
 	uint8_t RefreshState();
@@ -19,11 +21,10 @@ protected:
 public:
 	using BaseControlDevice::BaseControlDevice;
 
-	virtual uint8_t GetButtonState();
+	uint32_t GetNetPlayState();
+
 	uint8_t GetPortOutput();
 	void RefreshStateBuffer();
-
-	shared_ptr<Zapper> GetZapper();
 
 	void AddAdditionalController(shared_ptr<BaseControlDevice> controller);
 };

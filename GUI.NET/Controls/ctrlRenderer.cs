@@ -13,7 +13,6 @@ namespace Mesen.GUI.Controls
 {
 	public partial class ctrlRenderer : UserControl
 	{
-		private bool _rightButtonDown = false;
 		private bool _cursorHidden = false;
 
 		public ctrlRenderer()
@@ -21,22 +20,30 @@ namespace Mesen.GUI.Controls
 			InitializeComponent();
 		}
 
-		private void ctrlRenderer_MouseDown(object sender, MouseEventArgs e)
-		{
-			if(e.Button == MouseButtons.Left) {
-				InteropEmu.ZapperSetTriggerState(0, true);
-				InteropEmu.ZapperSetTriggerState(1, true);
-			} else if(e.Button == MouseButtons.Right) {
-				_rightButtonDown = true;
-			}
-		}
-
-		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
+		private void ShowMouse()
 		{
 			if(_cursorHidden) {
 				Cursor.Show();
 				_cursorHidden = false;
 			}
+		}
+
+		private void HideMouse()
+		{
+			if(!_cursorHidden) {
+				Cursor.Hide();
+				_cursorHidden = true;
+			}
+		}
+
+		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
+		{
+			if(!InteropEmu.IsRunning() || InteropEmu.IsPaused() || !InteropEmu.HasArkanoidPaddle()) {
+				ShowMouse();
+			} else if(InteropEmu.HasArkanoidPaddle() && !InteropEmu.HasZapper()) {
+				HideMouse();
+			}
+
 			tmrMouse.Stop();
 
 			if(InteropEmu.HasZapper()) {
@@ -48,42 +55,24 @@ namespace Mesen.GUI.Controls
 				tmrMouse.Start();
 			}
 
-			if(_rightButtonDown) {
-				InteropEmu.ZapperSetPosition(0, -1, -1);
-				InteropEmu.ZapperSetPosition(1, -1, -1);
-			} else {
-				double xPos = (double)e.X / this.Width;
-				double yPos = (double)e.Y / this.Height;
-				InteropEmu.ZapperSetPosition(0, xPos, yPos);
-				InteropEmu.ZapperSetPosition(1, xPos, yPos);
-			}
-		}
+			double xPos = (double)e.X / this.Width;
+			double yPos = (double)e.Y / this.Height;
 
-		private void ctrlRenderer_MouseUp(object sender, MouseEventArgs e)
-		{
-			if(e.Button == MouseButtons.Left) {
-				InteropEmu.ZapperSetTriggerState(0, false);
-				InteropEmu.ZapperSetTriggerState(1, false);
-			} else if(e.Button == MouseButtons.Right) {
-				_rightButtonDown = false;
-			}
-		}
+			xPos = Math.Max(0.0, Math.Min(1.0, xPos));
+			yPos = Math.Max(0.0, Math.Min(1.0, yPos));
 
+			InteropEmu.SetMousePosition(xPos, yPos);
+		}
+		
 		private void tmrMouse_Tick(object sender, EventArgs e)
 		{
-			if(!_cursorHidden) {
-				_cursorHidden = true;
-				Cursor.Hide();
-			}
+			HideMouse();
 		}
 
 		private void ctrlRenderer_MouseLeave(object sender, EventArgs e)
 		{
 			tmrMouse.Stop();
-			if(_cursorHidden) {
-				_cursorHidden = false;
-				Cursor.Show();
-			}
+			ShowMouse();
 		}
 	}
 }

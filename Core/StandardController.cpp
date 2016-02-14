@@ -3,6 +3,7 @@
 #include "ControlManager.h"
 #include "PPU.h"
 #include "EmulationSettings.h"
+#include "ArkanoidController.h"
 
 void StandardController::StreamState(bool saving)
 {
@@ -11,7 +12,7 @@ void StandardController::StreamState(bool saving)
 	Stream<uint32_t>(_stateBufferFamicom);
 
 	if(_additionalController) {
-		Stream(_additionalController);
+		Stream(_additionalController.get());
 	}
 }
 
@@ -56,6 +57,11 @@ uint8_t StandardController::GetButtonState()
 	return state.ToByte();
 }
 
+uint32_t StandardController::GetNetPlayState()
+{
+	return GetButtonState();
+}
+
 uint8_t StandardController::GetPortOutput()
 {
 	uint8_t returnValue = _stateBuffer & 0x01;
@@ -64,6 +70,8 @@ uint8_t StandardController::GetPortOutput()
 	if(_famiconDevice && _additionalController) {
 		if(_hasZapper) {
 			returnValue |= _additionalController->GetPortOutput();
+		} else if(_hasArkanoidController) {
+			returnValue |= std::dynamic_pointer_cast<ArkanoidController>(_additionalController)->GetExpansionPortOutput(_port);
 		} else {
 			returnValue |= (_stateBufferFamicom & 0x01) << 1;
 			_stateBufferFamicom >>= 1;
@@ -80,12 +88,16 @@ uint8_t StandardController::GetPortOutput()
 void StandardController::RefreshStateBuffer()
 {
 	_stateBuffer = GetControlState();
-	if(_additionalController) {
+	if(_additionalController && !_hasZapper) {
 		//Next 8 bits = Gamepad 3/4
 		if(_famiconDevice) {
 			//Four player adapter (Famicom)
-			_stateBufferFamicom = _additionalController->GetControlState();
-			_stateBufferFamicom |= 0xFFFF00;
+			if(_hasArkanoidController) {
+				_additionalController->RefreshStateBuffer();
+			} else {
+				_stateBufferFamicom = _additionalController->GetControlState();
+				_stateBufferFamicom |= 0xFFFF00;
+			}
 		} else {
 			//Four-score adapter (NES)
 			_stateBuffer |= _additionalController->GetControlState() << 8;
@@ -108,17 +120,13 @@ uint8_t StandardController::RefreshState()
 
 void StandardController::AddAdditionalController(shared_ptr<BaseControlDevice> controller)
 {
+	_hasZapper = false;
+	_hasArkanoidController = false;
+
 	if(std::dynamic_pointer_cast<Zapper>(controller)) {
 		_hasZapper = true;
+	} else if(std::dynamic_pointer_cast<ArkanoidController>(controller)) {
+		_hasArkanoidController = true;
 	}
 	_additionalController = controller;
-}
-
-shared_ptr<Zapper> StandardController::GetZapper()
-{
-	if(_hasZapper) {
-		return std::dynamic_pointer_cast<Zapper>(_additionalController);
-	} else {
-		return nullptr;
-	}
 }

@@ -48,6 +48,7 @@ namespace Mesen.GUI.Forms.Config
 
 			if(isNes && !chkFourScore.Checked) {
 				controllerTypes.Add(InteropEmu.ControllerType.Zapper);
+				controllerTypes.Add(InteropEmu.ControllerType.ArkanoidController);
 			}
 			SetAvailableControllerTypes(cboPlayer1, controllerTypes.ToArray());
 			SetAvailableControllerTypes(cboPlayer2, controllerTypes.ToArray());

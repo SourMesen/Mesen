@@ -2,6 +2,8 @@
 #include "Zapper.h"
 #include "CPU.h"
 #include "PPU.h"
+#include "ControlManager.h"
+#include "GameServerConnection.h"
 
 struct ZapperButtonState
 {
@@ -22,24 +24,7 @@ void Zapper::StreamState(bool saving)
 	Stream<bool>(_pulled);
 }
 
-void Zapper::SetPosition(double x, double y)
-{
-	OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
-	if(x < 0 || y < 0) {
-		_xPosition = -1;
-		_yPosition = -1;
-	} else {
-		_xPosition = (int32_t)(x * (PPU::ScreenWidth - overscan.Left - overscan.Right) + overscan.Left);
-		_yPosition = (int32_t)(y * (PPU::ScreenHeight - overscan.Top - overscan.Bottom) + overscan.Top);
-	}
-}
-
-void Zapper::SetTriggerState(bool pulled)
-{
-	_pulled = pulled;
-}
-
-uint32_t Zapper::GetZapperState()
+uint32_t Zapper::GetNetPlayState()
 {
 	//Used by netplay
 	uint32_t state;
@@ -72,6 +57,23 @@ uint8_t Zapper::ProcessNetPlayState(uint32_t netplayState)
 
 uint8_t Zapper::RefreshState()
 {
+	if(!GameServerConnection::GetNetPlayDevice(_port)) {
+		if(ControlManager::IsMouseButtonPressed(MouseButton::RightButton)) {
+			_xPosition = -1;
+			_yPosition = -1;
+		} else {
+			MousePosition position = ControlManager::GetMousePosition();
+			_xPosition = position.X;
+			_yPosition = position.Y;
+		}
+
+		if(!EmulationSettings::CheckFlag(EmulationFlags::InBackground) || EmulationSettings::CheckFlag(EmulationFlags::AllowBackgroundInput)) {
+			_pulled = ControlManager::IsMouseButtonPressed(MouseButton::LeftButton);
+		} else {
+			_pulled = false;
+		}
+	}
+
 	ZapperButtonState state;
 	state.TriggerPressed = _pulled;
 

@@ -101,6 +101,7 @@ enum class ControllerType
 	None = 0,
 	StandardController = 1,
 	Zapper = 2,
+	ArkanoidController = 3,
 };
 
 enum class ExpansionPortDevice
@@ -108,6 +109,7 @@ enum class ExpansionPortDevice
 	None = 0,
 	Zapper = 1,
 	FourPlayerAdapter = 2,
+	ArkanoidController = 3,
 };
 
 struct KeyMapping
@@ -395,5 +397,15 @@ public:
 		} else {
 			return false;
 		}
+	}
+
+	static bool HasZapper()
+	{
+		return _controllerTypes[0] == ControllerType::Zapper || _controllerTypes[1] == ControllerType::Zapper || (_consoleType == ConsoleType::Famicom && _expansionDevice == ExpansionPortDevice::Zapper);
+	}
+
+	static bool HasArkanoidPaddle()
+	{
+		return _controllerTypes[0] == ControllerType::ArkanoidController || _controllerTypes[1] == ControllerType::ArkanoidController || (_consoleType == ConsoleType::Famicom && _expansionDevice == ExpansionPortDevice::ArkanoidController);
 	}
 };

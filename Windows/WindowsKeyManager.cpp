@@ -29,6 +29,18 @@ bool WindowsKeyManager::IsKeyPressed(uint32_t key)
 	return false;
 }
 
+bool WindowsKeyManager::IsMouseButtonPressed(MouseButton button)
+{
+	uint32_t key = 0;
+	switch(button) {
+		case MouseButton::LeftButton: key = VK_LBUTTON; break;
+		case MouseButton::RightButton: key = VK_RBUTTON; break;
+		case MouseButton::MiddleButton: key = VK_MBUTTON; break;
+	}
+
+	return (GetAsyncKeyState(key) & 0x8000) == 0x8000;
+}
+
 uint32_t WindowsKeyManager::GetPressedKey()
 {
 	_gamePad.RefreshState();

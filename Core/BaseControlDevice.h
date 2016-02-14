@@ -53,6 +53,8 @@ public:
 	//Called when reading $4016/7
 	virtual uint8_t GetPortOutput() = 0;
 
+	virtual uint32_t GetNetPlayState() = 0;
+
 	//Used by standard controllers when $4017.1 is set
 	virtual void RefreshStateBuffer();
 };

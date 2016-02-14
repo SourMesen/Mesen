@@ -2,13 +2,15 @@
 #include "ControlManager.h"
 #include "StandardController.h"
 #include "Zapper.h"
+#include "ArkanoidController.h"
 #include "EmulationSettings.h"
 #include "Console.h"
 #include "GameServerConnection.h"
 
 unique_ptr<IKeyManager> ControlManager::_keyManager = nullptr;
-shared_ptr<BaseControlDevice> ControlManager::_controlDevices[2];
+shared_ptr<BaseControlDevice> ControlManager::_controlDevices[2] = { nullptr, nullptr };
 IGameBroadcaster* ControlManager::_gameBroadcaster = nullptr;
+MousePosition ControlManager::_mousePosition = { 0, 0 };
 
 ControlManager::ControlManager()
 {
@@ -24,6 +26,14 @@ bool ControlManager::IsKeyPressed(uint32_t keyCode)
 {
 	if(_keyManager != nullptr) {
 		return _keyManager->IsKeyPressed(keyCode);
+	}
+	return false;
+}
+
+bool ControlManager::IsMouseButtonPressed(MouseButton button)
+{
+	if(_keyManager != nullptr) {
+		return _keyManager->IsMouseButtonPressed(button);
 	}
 	return false;
 }
@@ -103,19 +113,28 @@ void ControlManager::RefreshAllPorts()
 void ControlManager::UpdateControlDevices()
 {
 	bool fourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
-	if(EmulationSettings::GetConsoleType() == ConsoleType::Famicom && EmulationSettings::GetExpansionDevice() != ExpansionPortDevice::FourPlayerAdapter) {
+	ExpansionPortDevice expansionDevice = EmulationSettings::GetExpansionDevice();
+	
+	shared_ptr<BaseControlDevice> arkanoidController;
+	if(EmulationSettings::GetConsoleType() != ConsoleType::Famicom) {
+		expansionDevice = ExpansionPortDevice::None;
+	} else if(expansionDevice != ExpansionPortDevice::FourPlayerAdapter) {
 		fourScore = false;
+		if(expansionDevice == ExpansionPortDevice::ArkanoidController) {
+			arkanoidController.reset(new ArkanoidController(2));
+		}
 	}
 
 	for(int i = 0; i < 2; i++) {
 		shared_ptr<BaseControlDevice> device;
-		if(fourScore) {
+		if(fourScore || expansionDevice == ExpansionPortDevice::ArkanoidController || i == 1 && expansionDevice == ExpansionPortDevice::Zapper) {
 			//Need to set standard controller in all slots if four score (to allow emulation to work correctly)
 			device.reset(new StandardController(i));
 		} else {
 			switch(EmulationSettings::GetControllerType(i)) {
 				case ControllerType::StandardController: device.reset(new StandardController(i)); break;
 				case ControllerType::Zapper: device.reset(new Zapper(i)); break;
+				case ControllerType::ArkanoidController: device.reset(new ArkanoidController(i)); break;
 			}
 		}
 
@@ -124,9 +143,12 @@ void ControlManager::UpdateControlDevices()
 
 			if(fourScore) {
 				std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<StandardController>(new StandardController(i + 2)));
-			} else if(i == 1 && EmulationSettings::GetConsoleType() == ConsoleType::Famicom && EmulationSettings::GetExpansionDevice() == ExpansionPortDevice::Zapper) {
+			} else if(i == 1 && expansionDevice == ExpansionPortDevice::Zapper) {
 				std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<Zapper>(new Zapper(2)));
+			} else if(expansionDevice == ExpansionPortDevice::ArkanoidController) {
+				std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(arkanoidController);
 			}
+
 		} else {
 			//Remove current device if it's no longer in use
 			ControlManager::UnregisterControlDevice(i);
@@ -196,6 +218,8 @@ void ControlManager::StreamState(bool saving)
 	}
 
 	Stream<bool>(_refreshState);
+	Stream<int32_t>(_mousePosition.X);
+	Stream<int32_t>(_mousePosition.Y);
 	Stream<NesModel>(nesModel);
 	Stream<ExpansionPortDevice>(expansionDevice);
 	Stream<ConsoleType>(consoleType);
@@ -229,38 +253,14 @@ void ControlManager::StreamState(bool saving)
 	}
 }
 
-shared_ptr<Zapper> ControlManager::GetZapper(uint8_t port)
+void ControlManager::SetMousePosition(double x, double y)
 {
-	shared_ptr<Zapper> zapper = std::dynamic_pointer_cast<Zapper>(GetControlDevice(port));
-	if(zapper) {
-		return zapper;
-	} else {
-		shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(GetControlDevice(port));
-		if(controller) {
-			return controller->GetZapper();
-		}
-	}
-
-	return nullptr;
+	OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+	_mousePosition.X = (int32_t)(x * (PPU::ScreenWidth - overscan.Left - overscan.Right) + overscan.Left);
+	_mousePosition.Y = (int32_t)(y * (PPU::ScreenHeight - overscan.Top - overscan.Bottom) + overscan.Top);
 }
 
-bool ControlManager::HasZapper()
+MousePosition ControlManager::GetMousePosition()
 {
-	return GetZapper(0) != nullptr || GetZapper(1) != nullptr;
-}
-
-void ControlManager::ZapperSetPosition(uint8_t port, double x, double y)
-{
-	shared_ptr<Zapper> zapper = GetZapper(port);
-	if(zapper) {
-		zapper->SetPosition(x, y);
-	}
-}
-
-void ControlManager::ZapperSetTriggerState(uint8_t port, bool pulled)
-{
-	shared_ptr<Zapper> zapper = GetZapper(port);
-	if(zapper) {
-		zapper->SetTriggerState(pulled);
-	}
+	return _mousePosition;
 }

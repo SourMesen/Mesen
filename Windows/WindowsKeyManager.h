@@ -304,6 +304,7 @@ class WindowsKeyManager : public IKeyManager
 
 		void RefreshState();
 		bool IsKeyPressed(uint32_t key);
+		bool IsMouseButtonPressed(MouseButton button);
 		uint32_t GetPressedKey();
 		string GetKeyName(uint32_t key);
 		uint32_t GetKeyCode(string keyName);

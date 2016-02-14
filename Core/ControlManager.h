@@ -12,19 +12,25 @@
 class BaseControlDevice;
 class Zapper;
 
+struct MousePosition
+{
+	int32_t X;
+	int32_t Y;
+};
+
 class ControlManager : public Snapshotable, public IMemoryHandler
 {
 	private:
 		static unique_ptr<IKeyManager> _keyManager;
 		static shared_ptr<BaseControlDevice> _controlDevices[2];
 		static IGameBroadcaster* _gameBroadcaster;
+		static MousePosition _mousePosition;
 
 		bool _refreshState = false;
 
 		void RefreshAllPorts();
 		uint8_t GetPortValue(uint8_t port);
 
-		static shared_ptr<Zapper> GetZapper(uint8_t port);
 		static void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice, uint8_t port);
 		void UnregisterControlDevice(uint8_t port);
 
@@ -41,15 +47,15 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 		static void RegisterKeyManager(IKeyManager* keyManager);
 		static bool IsKeyPressed(uint32_t keyCode);
+		static bool IsMouseButtonPressed(MouseButton button);
 		static uint32_t GetPressedKey();
 		static string GetKeyName(uint32_t keyCode);
 		static uint32_t GetKeyCode(string keyName);
 		
 		static shared_ptr<BaseControlDevice> GetControlDevice(uint8_t port);
 
-		static bool HasZapper();
-		static void ZapperSetPosition(uint8_t port, double x, double y);
-		static void ZapperSetTriggerState(uint8_t port, bool pulled);
+		static void SetMousePosition(double x, double y);
+		static MousePosition GetMousePosition();
 
 		static void BroadcastInput(uint8_t port, uint8_t state);
 

@@ -28,6 +28,7 @@ namespace Mesen.GUI.Forms
 		private bool _customSize = false;
 		private bool _fullscreenMode = false;
 		private double _regularScale = ConfigManager.Config.VideoInfo.VideoScale;
+		private bool _menuOpened = false;
 
 		public frmMain(string[] args)
 		{
@@ -373,11 +374,14 @@ namespace Mesen.GUI.Forms
 		private void UpdateFocusFlag()
 		{
 			bool hasFocus = false;
-			foreach(Form form in Application.OpenForms) {
-				if(form.ContainsFocus) {
+			if(Application.OpenForms.Count > 0) {
+				if(Application.OpenForms[0].ContainsFocus) {
 					hasFocus = true;
-					break;
 				}
+			}
+
+			if(_menuOpened) {
+				hasFocus = false;
 			}
 
 			InteropEmu.SetFlag(EmulationFlags.InBackground, !hasFocus);
@@ -626,7 +630,7 @@ namespace Mesen.GUI.Forms
 				frmClientConfig frm = new frmClientConfig();
 				if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
 					Task.Run(() => {
-						InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.Profile.PlayerAvatar, (UInt16)ConfigManager.Config.Profile.PlayerAvatar.Length, ConfigManager.Config.ClientConnectionInfo.Spectator);
+						InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, null, 0, ConfigManager.Config.ClientConnectionInfo.Spectator);
 					});
 				}
 			}
@@ -1087,6 +1091,16 @@ namespace Mesen.GUI.Forms
 		private void mnuCheckForUpdates_Click(object sender, EventArgs e)
 		{
 			CheckForUpdates(true);
+		}
+
+		private void menuStrip_MenuActivate(object sender, EventArgs e)
+		{
+			_menuOpened = true;
+		}
+
+		private void menuStrip_MenuDeactivate(object sender, EventArgs e)
+		{
+			_menuOpened = false;
 		}
 	}
 }

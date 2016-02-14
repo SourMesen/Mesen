@@ -283,6 +283,11 @@ void Console::Run()
 	_runLock.Release();
 }
 
+bool Console::IsRunning()
+{
+	return !Instance->_stopLock.IsFree();
+}
+
 double Console::UpdateNesModel(bool sendNotification)
 {
 	bool configChanged = false;

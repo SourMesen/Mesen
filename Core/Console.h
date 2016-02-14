@@ -67,6 +67,8 @@ class Console
 		static string GetROMPath();
 		static uint32_t GetCrc32();
 
+		static bool IsRunning();
+
 		static shared_ptr<Console> GetInstance();
 		static void Release();
 };

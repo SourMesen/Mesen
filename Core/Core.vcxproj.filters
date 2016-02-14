@@ -548,6 +548,9 @@
     <ClInclude Include="ForceDisconnectMessage.h">
       <Filter>NetPlay\Messages</Filter>
     </ClInclude>
+    <ClInclude Include="ArkanoidController.h">
+      <Filter>Nes\Controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -671,6 +674,9 @@
       <Filter>Nes\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="BaseControlDevice.cpp">
+      <Filter>Nes\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ArkanoidController.cpp">
       <Filter>Nes\Controllers</Filter>
     </ClCompile>
   </ItemGroup>

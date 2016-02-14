@@ -63,6 +63,8 @@ namespace InteropEmu {
 			}
 		}
 
+		DllExport bool __stdcall IsRunning() { return Console::IsRunning(); }
+
 		DllExport void __stdcall LoadROM(char* filename) { Console::LoadROM(filename); }
 		DllExport void __stdcall ApplyIpsPatch(char* filename) { Console::ApplyIpsPatch(filename); }
 		DllExport void __stdcall AddKnowGameFolder(char* folder) { FolderUtilities::AddKnowGameFolder(folder); }
@@ -72,9 +74,10 @@ namespace InteropEmu {
 		DllExport void __stdcall SetExpansionDevice(ExpansionPortDevice device) { EmulationSettings::SetExpansionDevice(device); }
 		DllExport void __stdcall SetConsoleType(ConsoleType type) { EmulationSettings::SetConsoleType(type); }
 		
-		DllExport bool __stdcall HasZapper() { return ControlManager::HasZapper(); }
-		DllExport void __stdcall ZapperSetTriggerState(int32_t port, bool pulled) { ControlManager::ZapperSetTriggerState(port, pulled); }
-		DllExport void __stdcall ZapperSetPosition(int32_t port, double x, double y) { ControlManager::ZapperSetPosition(port, x, y); }
+		DllExport bool __stdcall HasZapper() { return EmulationSettings::HasZapper(); }
+		DllExport bool __stdcall HasArkanoidPaddle() { return EmulationSettings::HasArkanoidPaddle(); }
+
+		DllExport void __stdcall SetMousePosition(double x, double y) { ControlManager::SetMousePosition(x, y); }
 
 		DllExport uint32_t __stdcall GetPressedKey() { return ControlManager::GetPressedKey(); }
 		DllExport const char* __stdcall GetKeyName(uint32_t keyCode) 

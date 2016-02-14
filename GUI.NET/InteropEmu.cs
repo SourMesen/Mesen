@@ -20,13 +20,15 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle);
 		[DllImport(DLLPath)] public static extern void Release();
 
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRunning();
+
 		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void ApplyIpsPatch([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void AddKnowGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string folder);
 
-		[DllImport(DLLPath)] public static extern void ZapperSetTriggerState(Int32 port, [MarshalAs(UnmanagedType.I1)]bool pulled);
-		[DllImport(DLLPath)] public static extern void ZapperSetPosition(Int32 port, double x, double y);
+		[DllImport(DLLPath)] public static extern void SetMousePosition(double x, double y);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasZapper();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasArkanoidPaddle();
 
 		[DllImport(DLLPath)] public static extern void SetControllerType(int port, ControllerType type);
 		[DllImport(DLLPath)] public static extern void SetControllerKeys(int port, KeyMappingSet mapping);
@@ -320,6 +322,15 @@ namespace Mesen.GUI
 			None = 0,
 			StandardController = 1,
 			Zapper = 2,
+			ArkanoidController = 3,
+		}
+
+		public enum ExpansionPortDevice
+		{
+			None = 0,
+			Zapper = 1,
+			FourPlayerAdapter = 2,
+			ArkanoidController = 3,
 		}
 
 		public struct KeyMappingSet
@@ -345,13 +356,6 @@ namespace Mesen.GUI
 			public UInt32 TurboB;
 			public UInt32 TurboStart;
 			public UInt32 TurboSelect;
-		}
-
-		public enum ExpansionPortDevice
-		{
-			None = 0,
-			Zapper = 1,
-			FourPlayerAdapter = 2,
 		}
 
 		public struct ScreenSize

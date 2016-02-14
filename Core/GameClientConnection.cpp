@@ -65,7 +65,11 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 				_enableControllers = true;
 				switch(EmulationSettings::GetControllerType(_controllerPort)) {
 					case ControllerType::StandardController: _controlDevice.reset(new StandardController(0)); break;
-					case ControllerType::Zapper: _controlDevice = ControlManager::GetControlDevice(_controllerPort); break;
+					
+					case ControllerType::Zapper:
+					case ControllerType::ArkanoidController: 
+						_controlDevice = ControlManager::GetControlDevice(_controllerPort); 
+						break;
 				}
 				Console::Resume();
 			}
@@ -186,14 +190,10 @@ void GameClientConnection::SendInput()
 		}
 
 		uint32_t inputState = 0;
-		if(std::dynamic_pointer_cast<Zapper>(_controlDevice)) {
-			shared_ptr<Zapper> zapper = std::dynamic_pointer_cast<Zapper>(_controlDevice);
-			inputState = zapper->GetZapperState();
-		} else if(std::dynamic_pointer_cast<StandardController>(_controlDevice)) {
-			shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(_controlDevice);
-			inputState = controller->GetButtonState();
+		if(_controlDevice) {
+			inputState = _controlDevice->GetNetPlayState();
 		}
-
+		
 		if(_lastInputSent != inputState) {
 			InputDataMessage message(inputState);
 			SendNetMessage(message);

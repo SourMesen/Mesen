@@ -19,7 +19,5 @@ public:
 
 	uint8_t GetPortOutput();
 
-	uint32_t GetZapperState();
-	void SetPosition(double x, double y);
-	void SetTriggerState(bool pulled);
+	virtual uint32_t GetNetPlayState();
 };
