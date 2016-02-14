@@ -19,7 +19,17 @@ int main(int argc, char* argv[])
 		"..\\..\\Games\\Mega Man 2 (USA).nes",
 		"..\\..\\Games\\Mega Man 3 (USA).nes",
 		"..\\..\\Games\\Mega Man 4 (USA).nes",
-		"..\\..\\Games\\MMC5\\Just Breed (J) [!].nes"
+		"..\\..\\Games\\Mega Man 5 (USA).nes",
+		"..\\..\\Games\\Mega Man 6 (USA).nes",
+		"..\\..\\Games\\MMC5\\Just Breed (J) [!].nes",
+		"..\\..\\Games\\MMC5\\Castlevania III - Dracula's Curse (U) [!].nes",
+		"..\\..\\Games\\Blades of Steel (USA).nes",
+		"..\\..\\Games\\Kirby's Adventure (USA).nes",
+		"..\\..\\Games\\Legend of Zelda, The (USA).nes",
+		"..\\..\\Games\\Super Mario Bros. 3 (USA).nes",
+		"..\\..\\Games\\Teenage Mutant Ninja Turtles II - The Arcade Game (USA).nes",		
+		"..\\..\\Games\\Dragon Warrior III (USA).nes",
+		"..\\..\\Games\\Dragon Warrior IV (USA).nes"
 	};
 
 	InitializeEmu("C:\\Windows\\Temp\\Mesen", nullptr, nullptr);
