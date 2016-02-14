@@ -578,7 +578,7 @@ void BaseMapper::GetChrRomCopy(uint8_t **buffer)
 
 uint32_t BaseMapper::GetChrSize(bool getRamSize)
 {
-	return getRamSize ? _chrRamSize : _chrRomSize;
+	return getRamSize ? _chrRamSize : (_onlyChrRam ? 0 : _chrRomSize);
 }
 
 void BaseMapper::GetChrRamCopy(uint8_t **buffer)
