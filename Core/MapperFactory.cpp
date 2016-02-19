@@ -91,7 +91,7 @@
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
 #ifdef _DEBUG
-	MessageManager::DisplayMessage("Game Info", "Mapper: " + std::to_string(romData.MapperID));
+	MessageManager::DisplayMessage("GameInfo", "Mapper", std::to_string(romData.MapperID));
 #endif
 
 	switch(romData.MapperID) {
@@ -201,7 +201,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::FdsMapperID: return new FDS();
 	}
 
-	MessageManager::DisplayMessage("Error", "Unsupported mapper, cannot load game.");
+	MessageManager::DisplayMessage("Error", "UnsupportedMapper");
 	return nullptr;
 }
 

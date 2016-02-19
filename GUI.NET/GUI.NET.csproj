@@ -13,7 +13,8 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -386,6 +387,7 @@
     <Compile Include="Forms\frmUpdatePrompt.Designer.cs">
       <DependentUpon>frmUpdatePrompt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MesenMsgBox.cs" />
     <Compile Include="Forms\NetPlay\frmClientConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -410,6 +412,7 @@
     <Compile Include="Forms\NetPlay\frmServerConfig.Designer.cs">
       <DependentUpon>frmServerConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ResourceHelper.cs" />
     <Compile Include="InteropEmu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -540,12 +543,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="..\Windows\Resources\Roboto.12.spritefont">
-      <Link>Dependencies\Roboto.12.spritefont</Link>
+    <None Include="Dependencies\Font.24.spritefont">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Windows\Resources\Roboto.32.spritefont">
-      <Link>Dependencies\Roboto.32.spritefont</Link>
+    <None Include="Dependencies\Font.64.spritefont">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">
@@ -559,6 +560,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dependencies\LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\resources.en.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\resources.fr.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\resources.ja.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Resources\MesenIcon.png" />
     <None Include="Resources\system-software-update.png" />
     <None Include="Resources\view-refresh.png" />
@@ -583,7 +597,7 @@
     <EmbeddedResource Include="$(OutputPath)Dependencies.zip">
       <Link>Dependencies\Dependencies.zip</Link>
     </EmbeddedResource>
-    <Content Include="Icon.ico" />
+    <Content Include="D:\Users\Saitoh Hajime\Desktop\Mesen Website\favicon.ico" />
     <None Include="Resources\Close.png" />
     <None Include="Resources\PreviousArrow.png" />
     <None Include="Resources\NextArrow.png" />

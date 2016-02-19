@@ -188,7 +188,7 @@ void CheatManager::SetCheats(vector<CodeInfo> &cheats)
 	Instance->ClearCodes();
 
 	if(cheats.size() > 0) {
-		MessageManager::DisplayMessage("Cheats", std::to_string(cheats.size()) + " cheats applied.");
+		MessageManager::DisplayMessage("Cheats", cheats.size() > 1 ? "CheatsApplied" : "CheatApplied", std::to_string(cheats.size()));
 		for(CodeInfo &cheat : cheats) {
 			Instance->AddCode(cheat);
 		}

@@ -24,12 +24,12 @@ SoundManager::~SoundManager()
 	Release();
 }
 
-bool CALLBACK SoundManager::DirectSoundEnumProc(LPGUID lpGUID, LPCSTR lpszDesc, LPCSTR lpszDrvName, LPVOID lpContext)
+bool CALLBACK SoundManager::DirectSoundEnumProc(LPGUID lpGUID, LPCWSTR lpszDesc, LPCSTR lpszDrvName, LPVOID lpContext)
 {
 	vector<SoundDeviceInfo> *devices = (vector<SoundDeviceInfo>*)lpContext;
 
 	SoundDeviceInfo deviceInfo;
-	deviceInfo.description = lpszDesc;
+	deviceInfo.description = utf8::utf8::encode(lpszDesc);
 	if(lpGUID != nullptr) {
 		memcpy((void*)&deviceInfo.guid, lpGUID, 16);
 	} else {
@@ -43,7 +43,7 @@ bool CALLBACK SoundManager::DirectSoundEnumProc(LPGUID lpGUID, LPCSTR lpszDesc, 
 vector<SoundDeviceInfo> SoundManager::GetAvailableDeviceInfo()
 {
 	vector<SoundDeviceInfo> devices;
-	DirectSoundEnumerate((LPDSENUMCALLBACKA)SoundManager::DirectSoundEnumProc, &devices);
+	DirectSoundEnumerateW((LPDSENUMCALLBACKW)SoundManager::DirectSoundEnumProc, &devices);
 	return devices;
 }
 

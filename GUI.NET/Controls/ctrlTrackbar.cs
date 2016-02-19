@@ -29,7 +29,7 @@ namespace Mesen.GUI.Controls
 			set { trackBar.Maximum = value; }
 		}
 
-		public string Caption
+		public override string Text
 		{
 			get { return lblText.Text; }
 			set { lblText.Text = value; }

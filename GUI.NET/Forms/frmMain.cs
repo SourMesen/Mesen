@@ -36,6 +36,8 @@ namespace Mesen.GUI.Forms
 				_romToLoad = args[0];
 			}
 
+			ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
+
 			InitializeComponent();
 		}
 
@@ -95,7 +97,7 @@ namespace Mesen.GUI.Forms
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();
 				ConfigManager.ApplyChanges();
 
-				MessageBox.Show("Upgrade completed successfully.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MesenMsgBox.Show("UpgradeSuccess", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 		}
 
@@ -138,9 +140,9 @@ namespace Mesen.GUI.Forms
 		private void SetEmulationSpeed(uint emulationSpeed)
 		{
 			if(emulationSpeed == 0) {
-				InteropEmu.DisplayMessage("Emulation Speed", "Maximum speed");
+				InteropEmu.DisplayMessage("EmulationSpeed", "EmulationMaximumSpeed");
 			} else {
-				InteropEmu.DisplayMessage("Emulation Speed", emulationSpeed + "%");
+				InteropEmu.DisplayMessage("EmulationSpeed", "EmulationSpeedPercent", emulationSpeed.ToString());
 			}
 			ConfigManager.Config.VideoInfo.EmulationSpeed = emulationSpeed;
 			ConfigManager.ApplyChanges();
@@ -298,7 +300,7 @@ namespace Mesen.GUI.Forms
 		private void mnuOpen_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "All supported formats (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*";
+			ofd.Filter = ResourceHelper.GetMessage("FilterRomIps");
 			if(ConfigManager.Config.RecentFiles.Count > 0) {
 				ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
 			}			
@@ -337,9 +339,9 @@ namespace Mesen.GUI.Forms
 				InteropEmu.ApplyIpsPatch(ipsFile);
 			} else {
 				if(_emuThread == null) {
-					if(MessageBox.Show("Please select a ROM matching the IPS patch file.", string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
+					if(MesenMsgBox.Show("SelectRomIps", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
 						OpenFileDialog ofd = new OpenFileDialog();
-						ofd.Filter = "All supported formats (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*";
+						ofd.Filter = ResourceHelper.GetMessage("FilterRom");
 						if(ConfigManager.Config.RecentFiles.Count > 0) {
 							ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
 						}
@@ -348,7 +350,7 @@ namespace Mesen.GUI.Forms
 						}
 						InteropEmu.ApplyIpsPatch(ipsFile);
 					}
-				} else if(MessageBox.Show("Patch and reset the current game?", string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
+				} else if(MesenMsgBox.Show("PatchAndReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
 					InteropEmu.ApplyIpsPatch(ipsFile);
 				}
 			}
@@ -367,7 +369,7 @@ namespace Mesen.GUI.Forms
 					InteropEmu.ApplyIpsPatch(ipsFile);
 				}
 			} else {
-				MessageBox.Show("File not found.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MesenMsgBox.Show("FileNotFound", MessageBoxButtons.OK, MessageBoxIcon.Error, filename);
 			}
 		}
 
@@ -404,7 +406,7 @@ namespace Mesen.GUI.Forms
 					bool isNetPlayClient = InteropEmu.IsConnected();
 
 					mnuSaveState.Enabled = mnuLoadState.Enabled = mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !isNetPlayClient);
-					mnuPause.Text = InteropEmu.IsPaused() ? "Resume" : "Pause";
+					mnuPause.Text = InteropEmu.IsPaused() ? ResourceHelper.GetMessage("Resume") : ResourceHelper.GetMessage("Pause");
 					mnuPause.Image = InteropEmu.IsPaused() ? Mesen.GUI.Properties.Resources.Play : Mesen.GUI.Properties.Resources.Pause;
 
 					bool netPlay = InteropEmu.IsServerRunning() || isNetPlayClient;
@@ -419,10 +421,10 @@ namespace Mesen.GUI.Forms
 						mnuNetPlayPlayer2.Enabled = (availableControllers & 0x02) == 0x02;
 						mnuNetPlayPlayer3.Enabled = (availableControllers & 0x04) == 0x04;
 						mnuNetPlayPlayer4.Enabled = (availableControllers & 0x08) == 0x08;
-						mnuNetPlayPlayer1.Text = "Player 1 (" + InteropEmu.NetPlayGetControllerType(0).ToString() + ")";
-						mnuNetPlayPlayer2.Text = "Player 2 (" + InteropEmu.NetPlayGetControllerType(1).ToString() + ")";
-						mnuNetPlayPlayer3.Text = "Player 3 (" + InteropEmu.NetPlayGetControllerType(2).ToString() + ")";
-						mnuNetPlayPlayer4.Text = "Player 4 (" + InteropEmu.NetPlayGetControllerType(3).ToString() + ")";
+						mnuNetPlayPlayer1.Text = ResourceHelper.GetMessage("PlayerNumber", "1") + " (" + ResourceHelper.GetEnumText(InteropEmu.NetPlayGetControllerType(0)) + ")";
+						mnuNetPlayPlayer2.Text = ResourceHelper.GetMessage("PlayerNumber", "2") + " (" + ResourceHelper.GetEnumText(InteropEmu.NetPlayGetControllerType(1)) + ")";
+						mnuNetPlayPlayer3.Text = ResourceHelper.GetMessage("PlayerNumber", "3") + " (" + ResourceHelper.GetEnumText(InteropEmu.NetPlayGetControllerType(2)) + ")";
+						mnuNetPlayPlayer4.Text = ResourceHelper.GetMessage("PlayerNumber", "4") + " (" + ResourceHelper.GetEnumText(InteropEmu.NetPlayGetControllerType(3)) + ")";
 
 						mnuNetPlayPlayer1.Checked = (currentControllerPort == 0);
 						mnuNetPlayPlayer2.Checked = (currentControllerPort == 1);
@@ -433,8 +435,8 @@ namespace Mesen.GUI.Forms
 						mnuNetPlaySpectator.Enabled = true;
 					}
 
-					mnuStartServer.Text = InteropEmu.IsServerRunning() ? "Stop Server" : "Start Server";
-					mnuConnect.Text = isNetPlayClient ? "Disconnect" : "Connect to Server";
+					mnuStartServer.Text = InteropEmu.IsServerRunning() ? ResourceHelper.GetMessage("StopServer") : ResourceHelper.GetMessage("StartServer");
+					mnuConnect.Text = isNetPlayClient ? ResourceHelper.GetMessage("Disconnect") : ResourceHelper.GetMessage("ConnectToServer");
 
 					mnuCheats.Enabled = !isNetPlayClient;
 					mnuEmulationSpeed.Enabled = !isNetPlayClient;
@@ -496,7 +498,7 @@ namespace Mesen.GUI.Forms
 						InteropEmu.Run();
 						_emuThread = null;
 					} catch(Exception ex) {
-						MessageBox.Show(ex.ToString(), "Unexpected Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
 					}
 				});
 				_emuThread.Start();
@@ -563,7 +565,7 @@ namespace Mesen.GUI.Forms
 					Int64 fileTime = InteropEmu.GetStateInfo(i);
 					string label;
 					if(fileTime == 0) {
-						label = i.ToString() + ". <empty>";
+						label = i.ToString() + ". " + ResourceHelper.GetMessage("EmptyState");
 					} else {
 						DateTime dateTime = DateTime.FromFileTime(fileTime);
 						label = i.ToString() + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
@@ -685,7 +687,7 @@ namespace Mesen.GUI.Forms
 		private void RecordMovie(bool resetEmu)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "Movie files (*.mmo)|*.mmo|All (*.*)|*.*";
+			sfd.Filter = ResourceHelper.GetMessage("FilterMovie");
 			sfd.InitialDirectory = ConfigManager.MovieFolder;
 			sfd.FileName = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mmo";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -696,7 +698,7 @@ namespace Mesen.GUI.Forms
 		private void mnuPlayMovie_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "Movie files (*.mmo)|*.mmo|All (*.*)|*.*";
+			ofd.Filter = ResourceHelper.GetMessage("FilterMovie");
 			ofd.InitialDirectory = ConfigManager.MovieFolder;
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.MoviePlay(ofd.FileName);
@@ -721,7 +723,7 @@ namespace Mesen.GUI.Forms
 		private void mnuTestRun_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
+			ofd.Filter = ResourceHelper.GetMessage("FilterTest");
 			ofd.InitialDirectory = ConfigManager.TestFolder;
 			ofd.Multiselect = true;
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -781,7 +783,7 @@ namespace Mesen.GUI.Forms
 		private void RecordTest(bool resetEmu)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
+			sfd.Filter = ResourceHelper.GetMessage("FilterTest");
 			sfd.InitialDirectory = ConfigManager.TestFolder;
 			sfd.FileName = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mtp";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -792,11 +794,11 @@ namespace Mesen.GUI.Forms
 		private void mnuTestRecordMovie_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "Movie files (*.mmo)|*.mmo|All (*.*)|*.*";
+			ofd.Filter = ResourceHelper.GetMessage("FilterMovie");
 			ofd.InitialDirectory = ConfigManager.MovieFolder;
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
+				sfd.Filter = ResourceHelper.GetMessage("FilterTest");
 				sfd.InitialDirectory = ConfigManager.TestFolder;
 				sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
 				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -808,12 +810,12 @@ namespace Mesen.GUI.Forms
 		private void mnuTestRecordTest_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
+			ofd.Filter = ResourceHelper.GetMessage("FilterTest");
 			ofd.InitialDirectory = ConfigManager.TestFolder;
 
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.Filter = "Test files (*.mtp)|*.mtp|All (*.*)|*.*";
+				sfd.Filter = ResourceHelper.GetMessage("FilterTest");
 				sfd.InitialDirectory = ConfigManager.TestFolder;
 				sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
 				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -850,6 +852,10 @@ namespace Mesen.GUI.Forms
 		private void mnuPreferences_Click(object sender, EventArgs e)
 		{
 			new frmPreferences().ShowDialog(sender);
+			ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
+			ResourceHelper.ApplyResources(this);
+			UpdateMenus();
+			InitializeFdsDiskMenu();
 		}
 
 		private void mnuRegion_Click(object sender, EventArgs e)
@@ -931,7 +937,7 @@ namespace Mesen.GUI.Forms
 				if(sideCount > 0) {
 					for(UInt32 i = 0; i < sideCount; i++) {
 						UInt32 diskNumber = i;
-						ToolStripItem item = mnuSelectDisk.DropDownItems.Add("Disk " + (diskNumber/2+1) + " Side " + (diskNumber % 2 == 0 ? "A" : "B"));
+						ToolStripItem item = mnuSelectDisk.DropDownItems.Add(ResourceHelper.GetMessage("FdsDiskSide", (diskNumber/2+1).ToString(), (diskNumber % 2 == 0 ? "A" : "B")));
 						item.Click += (object sender, EventArgs args) => {
 							InteropEmu.FdsInsertDisk(diskNumber);
 						};
@@ -961,15 +967,15 @@ namespace Mesen.GUI.Forms
 
 		private void SelectFdsBiosPrompt()
 		{
-			if(MessageBox.Show("FDS bios not found. The bios is required to run FDS games." + Environment.NewLine + Environment.NewLine + "Select bios file now?", "Mesen", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+			if(MesenMsgBox.Show("FdsBiosNotFound", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
 				OpenFileDialog ofd = new OpenFileDialog();
-				ofd.Filter = "All Files (*.*)|*.*";
+				ofd.Filter = ResourceHelper.GetMessage("FilterAll");
 				if(ofd.ShowDialog() == DialogResult.OK) {
 					if(MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant() == "ca30b50f880eb660a320674ed365ef7a") {
 						File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));
 						LoadROM(_romToLoad);
 					} else {
-						MessageBox.Show("The selected bios file is invalid.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MesenMsgBox.Show("InvalidFdsBios", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
 			}
@@ -1077,12 +1083,12 @@ namespace Mesen.GUI.Forms
 								}
 							}));
 						} else if(displayResult) {
-							MessageBox.Show("You are running the latest version of Mesen.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+							MesenMsgBox.Show("MesenUpToDate", MessageBoxButtons.OK, MessageBoxIcon.Information);
 						}
 					}
 				} catch(Exception ex) {
 					if(displayResult) {
-						MessageBox.Show("An error has occurred while trying to check for updates." + Environment.NewLine + Environment.NewLine + "Error details:" + Environment.NewLine + ex.ToString(), "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MesenMsgBox.Show("ErrorWhileCheckingUpdates", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
 					}
 				}
 			});

@@ -40,7 +40,7 @@ namespace Mesen.GUI.Forms.Config
 			_paletteData = InteropEmu.GetRgbPalette();
 			RefreshPalette();
 
-			toolTip.SetToolTip(picHdNesTooltip, "This option allows Mesen to load HDNes-format HD packs if they are found." + Environment.NewLine + Environment.NewLine + "HD Packs should be placed in the \"HdPacks\" folder in a subfolder matching the name of the ROM." + Environment.NewLine + "e.g: MyRom.nes should have their HD Pack in \"HdPacks\\MyRom\\hires.txt\"." + Environment.NewLine + Environment.NewLine + "Note: Support for HD Packs is a work in progress and some limitations remain.");
+			toolTip.SetToolTip(picHdNesTooltip, ResourceHelper.GetMessage("HDNesTooltip"));
 
 			UpdateOverscanImage();
 		}

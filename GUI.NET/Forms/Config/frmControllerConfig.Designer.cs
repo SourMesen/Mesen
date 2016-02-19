@@ -156,6 +156,7 @@
 			// 
 			// btnClear
 			// 
+			this.btnClear.AutoSize = true;
 			this.btnClear.Location = new System.Drawing.Point(118, 3);
 			this.btnClear.Name = "btnClear";
 			this.btnClear.Size = new System.Drawing.Size(109, 23);
@@ -166,6 +167,7 @@
 			// 
 			// btnReset
 			// 
+			this.btnReset.AutoSize = true;
 			this.btnReset.Location = new System.Drawing.Point(3, 3);
 			this.btnReset.Name = "btnReset";
 			this.btnReset.Size = new System.Drawing.Size(109, 23);
@@ -238,12 +240,13 @@
 			// 
 			// lblTurboFast
 			// 
-			this.lblTurboFast.AutoSize = true;
-			this.lblTurboFast.Location = new System.Drawing.Point(90, 0);
+			this.lblTurboFast.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblTurboFast.Location = new System.Drawing.Point(70, 0);
 			this.lblTurboFast.Name = "lblTurboFast";
-			this.lblTurboFast.Size = new System.Drawing.Size(27, 13);
+			this.lblTurboFast.Size = new System.Drawing.Size(47, 15);
 			this.lblTurboFast.TabIndex = 1;
 			this.lblTurboFast.Text = "Fast";
+			this.lblTurboFast.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// lblSlow
 			// 
@@ -272,6 +275,7 @@
 			this.tpgSet3.ResumeLayout(false);
 			this.tpgSet4.ResumeLayout(false);
 			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkTurboSpeed)).EndInit();

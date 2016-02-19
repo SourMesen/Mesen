@@ -31,10 +31,10 @@ namespace Mesen.GUI.Forms.Config
 			this.UpdateInterface();
 
 			InputInfo inputInfo = (InputInfo)Entity;
-			cboPlayer1.SelectedItem = inputInfo.Controllers[0].ControllerType.ToString();
-			cboPlayer2.SelectedItem = inputInfo.Controllers[1].ControllerType.ToString();
-			cboPlayer3.SelectedItem = inputInfo.Controllers[2].ControllerType.ToString();
-			cboPlayer4.SelectedItem = inputInfo.Controllers[3].ControllerType.ToString();
+			cboPlayer1.SelectedItem = ResourceHelper.GetEnumText(inputInfo.Controllers[0].ControllerType);
+			cboPlayer2.SelectedItem = ResourceHelper.GetEnumText(inputInfo.Controllers[1].ControllerType);
+			cboPlayer3.SelectedItem = ResourceHelper.GetEnumText(inputInfo.Controllers[2].ControllerType);
+			cboPlayer4.SelectedItem = ResourceHelper.GetEnumText(inputInfo.Controllers[3].ControllerType);
 		}
 
 		private void UpdateAvailableControllerTypes()
@@ -58,9 +58,9 @@ namespace Mesen.GUI.Forms.Config
 		{
 			object currentSelection = comboBox.SelectedItem;
 			comboBox.Items.Clear();
-			comboBox.Items.Add(InteropEmu.ControllerType.None.ToString());
+			comboBox.Items.Add(ResourceHelper.GetEnumText(InteropEmu.ControllerType.None));
 			foreach(InteropEmu.ControllerType type in controllerTypes) {
-				comboBox.Items.Add(type.ToString());
+				comboBox.Items.Add(ResourceHelper.GetEnumText(type));
 			}
 
 			comboBox.SelectedItem = currentSelection;
@@ -125,7 +125,7 @@ namespace Mesen.GUI.Forms.Config
 
 		private void cboPlayerController_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			bool enableButton = (((ComboBox)sender).SelectedItem.Equals(InteropEmu.ControllerType.StandardController.ToString()));
+			bool enableButton = (((ComboBox)sender).SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController)));
 			if(sender == cboPlayer1) {
 				btnSetupP1.Enabled = enableButton;
 			} else if(sender == cboPlayer2) {

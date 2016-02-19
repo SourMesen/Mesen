@@ -250,10 +250,11 @@
 			this.tlpMain.SetColumnSpan(this.flowLayoutPanel7, 2);
 			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
 			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
+			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 80);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
-			this.flowLayoutPanel7.Size = new System.Drawing.Size(166, 23);
+			this.flowLayoutPanel7.Size = new System.Drawing.Size(501, 23);
 			this.flowLayoutPanel7.TabIndex = 20;
 			// 
 			// chkUseHdPacks
@@ -562,7 +563,7 @@
 			// 
 			// btnResetPalette
 			// 
-			this.btnResetPalette.Location = new System.Drawing.Point(3, 31);
+			this.btnResetPalette.Location = new System.Drawing.Point(3, 32);
 			this.btnResetPalette.Name = "btnResetPalette";
 			this.btnResetPalette.Size = new System.Drawing.Size(106, 22);
 			this.btnResetPalette.TabIndex = 1;
@@ -572,9 +573,10 @@
 			// 
 			// btnLoadPalFile
 			// 
+			this.btnLoadPalFile.AutoSize = true;
 			this.btnLoadPalFile.Location = new System.Drawing.Point(3, 3);
 			this.btnLoadPalFile.Name = "btnLoadPalFile";
-			this.btnLoadPalFile.Size = new System.Drawing.Size(106, 22);
+			this.btnLoadPalFile.Size = new System.Drawing.Size(106, 23);
 			this.btnLoadPalFile.TabIndex = 0;
 			this.btnLoadPalFile.Text = "Load Palette File";
 			this.btnLoadPalFile.UseVisualStyleBackColor = true;
@@ -625,6 +627,7 @@
 			this.tableLayoutPanel3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tableLayoutPanel2.PerformLayout();
 			this.ResumeLayout(false);
 
 		}

@@ -119,7 +119,7 @@
 			// trkDmcVol
 			// 
 			this.trkDmcVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkDmcVol.Caption = "DMC";
+			this.trkDmcVol.Text = "DMC";
 			this.trkDmcVol.Location = new System.Drawing.Point(384, 0);
 			this.trkDmcVol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkDmcVol.Maximum = 100;
@@ -133,7 +133,7 @@
 			// trkNoiseVol
 			// 
 			this.trkNoiseVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkNoiseVol.Caption = "Noise";
+			this.trkNoiseVol.Text = "Noise";
 			this.trkNoiseVol.Location = new System.Drawing.Point(306, 0);
 			this.trkNoiseVol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkNoiseVol.Maximum = 100;
@@ -147,7 +147,7 @@
 			// trkTriangleVol
 			// 
 			this.trkTriangleVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkTriangleVol.Caption = "Triangle";
+			this.trkTriangleVol.Text = "Triangle";
 			this.trkTriangleVol.Location = new System.Drawing.Point(231, 0);
 			this.trkTriangleVol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkTriangleVol.Maximum = 100;
@@ -161,7 +161,7 @@
 			// trkSquare2Vol
 			// 
 			this.trkSquare2Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkSquare2Vol.Caption = "Square 2";
+			this.trkSquare2Vol.Text = "Square 2";
 			this.trkSquare2Vol.Location = new System.Drawing.Point(156, 0);
 			this.trkSquare2Vol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkSquare2Vol.Maximum = 100;
@@ -175,7 +175,7 @@
 			// trkSquare1Vol
 			// 
 			this.trkSquare1Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkSquare1Vol.Caption = "Square 1";
+			this.trkSquare1Vol.Text = "Square 1";
 			this.trkSquare1Vol.Location = new System.Drawing.Point(81, 0);
 			this.trkSquare1Vol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkSquare1Vol.Maximum = 100;
@@ -189,7 +189,7 @@
 			// trkMaster
 			// 
 			this.trkMaster.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkMaster.Caption = "Master";
+			this.trkMaster.Text = "Master";
 			this.trkMaster.Location = new System.Drawing.Point(6, 0);
 			this.trkMaster.Margin = new System.Windows.Forms.Padding(0);
 			this.trkMaster.Maximum = 100;
@@ -203,7 +203,7 @@
 			// trkFdsVol
 			// 
 			this.trkFdsVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkFdsVol.Caption = "FDS";
+			this.trkFdsVol.Text = "FDS";
 			this.trkFdsVol.Location = new System.Drawing.Point(6, 160);
 			this.trkFdsVol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkFdsVol.Maximum = 100;
@@ -217,7 +217,7 @@
 			// trkMmc5Vol
 			// 
 			this.trkMmc5Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkMmc5Vol.Caption = "MMC5";
+			this.trkMmc5Vol.Text = "MMC5";
 			this.trkMmc5Vol.Enabled = false;
 			this.trkMmc5Vol.Location = new System.Drawing.Point(81, 160);
 			this.trkMmc5Vol.Margin = new System.Windows.Forms.Padding(0);
@@ -232,7 +232,7 @@
 			// trkVrc6Vol
 			// 
 			this.trkVrc6Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkVrc6Vol.Caption = "VRC6";
+			this.trkVrc6Vol.Text = "VRC6";
 			this.trkVrc6Vol.Enabled = false;
 			this.trkVrc6Vol.Location = new System.Drawing.Point(156, 160);
 			this.trkVrc6Vol.Margin = new System.Windows.Forms.Padding(0);
@@ -247,7 +247,7 @@
 			// trkVrc7Vol
 			// 
 			this.trkVrc7Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkVrc7Vol.Caption = "VRC7";
+			this.trkVrc7Vol.Text = "VRC7";
 			this.trkVrc7Vol.Enabled = false;
 			this.trkVrc7Vol.Location = new System.Drawing.Point(231, 160);
 			this.trkVrc7Vol.Margin = new System.Windows.Forms.Padding(0);
@@ -262,7 +262,7 @@
 			// trkNamco163Vol
 			// 
 			this.trkNamco163Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkNamco163Vol.Caption = "Namco";
+			this.trkNamco163Vol.Text = "Namco";
 			this.trkNamco163Vol.Enabled = false;
 			this.trkNamco163Vol.Location = new System.Drawing.Point(306, 160);
 			this.trkNamco163Vol.Margin = new System.Windows.Forms.Padding(0);
@@ -277,7 +277,7 @@
 			// trkSunsoft5b
 			// 
 			this.trkSunsoft5b.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkSunsoft5b.Caption = "Sunsoft";
+			this.trkSunsoft5b.Text = "Sunsoft";
 			this.trkSunsoft5b.Enabled = false;
 			this.trkSunsoft5b.Location = new System.Drawing.Point(384, 160);
 			this.trkSunsoft5b.Margin = new System.Windows.Forms.Padding(0);

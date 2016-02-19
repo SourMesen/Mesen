@@ -104,7 +104,7 @@ void GameServerConnection::ProcessHandshakeResponse(HandShakeMessage* message)
 		Console::Resume();
 	} else {
 		SendForceDisconnectMessage("Server is using a different version of Mesen (" + EmulationSettings::GetMesenVersionString() + ") - you have been disconnected.");
-		MessageManager::DisplayMessage("Net Play", message->GetPlayerName() + " is not running the same version of Mesen and has been disconnected");
+		MessageManager::DisplayMessage("NetPlay", + "NetplayVersionMismatch", message->GetPlayerName());
 	}
 }
 

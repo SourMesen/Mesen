@@ -77,10 +77,8 @@ namespace Mesen.GUI.Config
 				}
 			}
 
-			if(cheatCount == 1) {
-				InteropEmu.DisplayMessage("Cheats", "1 cheat applied.");
-			} else if(cheatCount > 1) {
-				InteropEmu.DisplayMessage("Cheats", cheatCount.ToString() + " cheats applied.");
+			if(cheatCount > 0) {
+				InteropEmu.DisplayMessage("Cheats", cheatCount > 1 ? "CheatsApplied" : "CheatApplied", cheatCount.ToString());
 			}
 		}
 	}

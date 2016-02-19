@@ -41,7 +41,7 @@ void SaveStateManager::SaveState(int stateIndex)
 		Console::SaveState(file);
 		Console::Resume();
 		file.close();		
-		MessageManager::DisplayMessage("Save States", "State #" + std::to_string(stateIndex) + " saved.");
+		MessageManager::DisplayMessage("SaveStates", "SaveStateSaved" , std::to_string(stateIndex));
 	}
 }
 
@@ -59,13 +59,13 @@ bool SaveStateManager::LoadState(int stateIndex)
 
 			file.read((char*)&emuVersion, sizeof(emuVersion));
 			if(emuVersion > EmulationSettings::GetMesenVersion()) {
-				MessageManager::DisplayMessage("Save States", "Cannot load save states created by a more recent version of Mesen. Please download the latest version.");
+				MessageManager::DisplayMessage("Save States", "SaveStateNewerVersion");
 				return false;
 			}
 
 			file.read((char*)&fileFormatVersion, sizeof(fileFormatVersion));
 			if(fileFormatVersion != SaveStateManager::FileFormatVersion) {
-				MessageManager::DisplayMessage("Save States", "State #" + std::to_string(stateIndex) + " is incompatible with this version of Mesen.");
+				MessageManager::DisplayMessage("Save States", "SaveStateIncompatibleVersion", std::to_string(stateIndex));
 				return false;
 			}
 
@@ -73,16 +73,16 @@ bool SaveStateManager::LoadState(int stateIndex)
 			Console::LoadState(file);
 			Console::Resume();
 
-			MessageManager::DisplayMessage("Save States", "State #" + std::to_string(stateIndex) + " loaded.");
+			MessageManager::DisplayMessage("Save States", "SaveStateLoaded", std::to_string(stateIndex));
 			result = true;
 		} else {
-			MessageManager::DisplayMessage("Save States", "Invalid save state file.");
+			MessageManager::DisplayMessage("Save States", "SaveStateInvalidFile");
 		}
 		file.close();
 	} 
 	
 	if(!result) {
-		MessageManager::DisplayMessage("Save States", "Slot is empty.");
+		MessageManager::DisplayMessage("Save States", "SaveStateEmpty");
 	}
 
 	return result;

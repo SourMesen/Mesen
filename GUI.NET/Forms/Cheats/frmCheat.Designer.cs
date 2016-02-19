@@ -29,6 +29,7 @@
 		{
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.label2 = new System.Windows.Forms.Label();
+			this.btnBrowse = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtCheatName = new System.Windows.Forms.TextBox();
 			this.grpCode = new System.Windows.Forms.GroupBox();
@@ -48,16 +49,13 @@
 			this.txtValue = new System.Windows.Forms.TextBox();
 			this.txtCompare = new System.Windows.Forms.TextBox();
 			this.chkCompareValue = new System.Windows.Forms.CheckBox();
-			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-			this.txtGameName = new System.Windows.Forms.TextBox();
-			this.btnBrowse = new System.Windows.Forms.Button();
 			this.chkEnabled = new System.Windows.Forms.CheckBox();
+			this.txtGameName = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpCode.SuspendLayout();
 			this.tlpAdd.SuspendLayout();
 			this.tlpCustom.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
-			this.flowLayoutPanel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -67,15 +65,17 @@
 			// 
 			// tableLayoutPanel2
 			// 
-			this.tableLayoutPanel2.ColumnCount = 2;
+			this.tableLayoutPanel2.ColumnCount = 3;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.Controls.Add(this.label2, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.btnBrowse, 2, 0);
 			this.tableLayoutPanel2.Controls.Add(this.label1, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.txtCheatName, 1, 1);
 			this.tableLayoutPanel2.Controls.Add(this.grpCode, 0, 3);
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel3, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkEnabled, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.txtGameName, 1, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -91,17 +91,28 @@
 			// 
 			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(3, 6);
+			this.label2.Location = new System.Drawing.Point(3, 8);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(38, 13);
 			this.label2.TabIndex = 4;
 			this.label2.Text = "Game:";
 			// 
+			// btnBrowse
+			// 
+			this.btnBrowse.AutoSize = true;
+			this.btnBrowse.Location = new System.Drawing.Point(321, 3);
+			this.btnBrowse.Name = "btnBrowse";
+			this.btnBrowse.Size = new System.Drawing.Size(61, 23);
+			this.btnBrowse.TabIndex = 1;
+			this.btnBrowse.Text = "Browse...";
+			this.btnBrowse.UseVisualStyleBackColor = true;
+			this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+			// 
 			// label1
 			// 
 			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(3, 32);
+			this.label1.Location = new System.Drawing.Point(3, 35);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(69, 13);
 			this.label1.TabIndex = 1;
@@ -109,8 +120,9 @@
 			// 
 			// txtCheatName
 			// 
+			this.tableLayoutPanel2.SetColumnSpan(this.txtCheatName, 2);
 			this.txtCheatName.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtCheatName.Location = new System.Drawing.Point(78, 29);
+			this.txtCheatName.Location = new System.Drawing.Point(78, 32);
 			this.txtCheatName.MaxLength = 255;
 			this.txtCheatName.Name = "txtCheatName";
 			this.txtCheatName.Size = new System.Drawing.Size(304, 20);
@@ -118,12 +130,12 @@
 			// 
 			// grpCode
 			// 
-			this.tableLayoutPanel2.SetColumnSpan(this.grpCode, 2);
+			this.tableLayoutPanel2.SetColumnSpan(this.grpCode, 3);
 			this.grpCode.Controls.Add(this.tlpAdd);
 			this.grpCode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpCode.Location = new System.Drawing.Point(3, 78);
+			this.grpCode.Location = new System.Drawing.Point(3, 81);
 			this.grpCode.Name = "grpCode";
-			this.grpCode.Size = new System.Drawing.Size(379, 184);
+			this.grpCode.Size = new System.Drawing.Size(379, 181);
 			this.grpCode.TabIndex = 3;
 			this.grpCode.TabStop = false;
 			this.grpCode.Text = "Code";
@@ -146,7 +158,7 @@
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpAdd.Size = new System.Drawing.Size(373, 165);
+			this.tlpAdd.Size = new System.Drawing.Size(373, 162);
 			this.tlpAdd.TabIndex = 0;
 			// 
 			// radCustom
@@ -220,7 +232,7 @@
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpCustom.Size = new System.Drawing.Size(250, 107);
+			this.tlpCustom.Size = new System.Drawing.Size(250, 104);
 			this.tlpCustom.TabIndex = 4;
 			// 
 			// lblAddress
@@ -309,53 +321,34 @@
 			// 
 			this.chkCompareValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkCompareValue.AutoSize = true;
-			this.chkCompareValue.Location = new System.Drawing.Point(3, 86);
+			this.chkCompareValue.Location = new System.Drawing.Point(3, 85);
 			this.chkCompareValue.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
 			this.chkCompareValue.Name = "chkCompareValue";
-			this.chkCompareValue.Size = new System.Drawing.Size(98, 17);
+			this.chkCompareValue.Size = new System.Drawing.Size(98, 16);
 			this.chkCompareValue.TabIndex = 7;
 			this.chkCompareValue.Text = "Compare Value";
 			this.chkCompareValue.UseVisualStyleBackColor = true;
 			this.chkCompareValue.CheckedChanged += new System.EventHandler(this.chkCompareValue_CheckedChanged);
 			// 
-			// flowLayoutPanel3
-			// 
-			this.flowLayoutPanel3.Controls.Add(this.txtGameName);
-			this.flowLayoutPanel3.Controls.Add(this.btnBrowse);
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(75, 0);
-			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(310, 26);
-			this.flowLayoutPanel3.TabIndex = 5;
-			// 
-			// txtGameName
-			// 
-			this.txtGameName.Location = new System.Drawing.Point(3, 3);
-			this.txtGameName.Name = "txtGameName";
-			this.txtGameName.ReadOnly = true;
-			this.txtGameName.Size = new System.Drawing.Size(223, 20);
-			this.txtGameName.TabIndex = 0;
-			// 
-			// btnBrowse
-			// 
-			this.btnBrowse.Location = new System.Drawing.Point(232, 3);
-			this.btnBrowse.Name = "btnBrowse";
-			this.btnBrowse.Size = new System.Drawing.Size(75, 23);
-			this.btnBrowse.TabIndex = 1;
-			this.btnBrowse.Text = "Browse...";
-			this.btnBrowse.UseVisualStyleBackColor = true;
-			this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
-			// 
 			// chkEnabled
 			// 
 			this.chkEnabled.AutoSize = true;
 			this.tableLayoutPanel2.SetColumnSpan(this.chkEnabled, 2);
-			this.chkEnabled.Location = new System.Drawing.Point(3, 55);
+			this.chkEnabled.Location = new System.Drawing.Point(3, 58);
 			this.chkEnabled.Name = "chkEnabled";
 			this.chkEnabled.Size = new System.Drawing.Size(96, 17);
 			this.chkEnabled.TabIndex = 6;
 			this.chkEnabled.Text = "Cheat Enabled";
 			this.chkEnabled.UseVisualStyleBackColor = true;
+			// 
+			// txtGameName
+			// 
+			this.txtGameName.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtGameName.Location = new System.Drawing.Point(78, 3);
+			this.txtGameName.Name = "txtGameName";
+			this.txtGameName.ReadOnly = true;
+			this.txtGameName.Size = new System.Drawing.Size(237, 20);
+			this.txtGameName.TabIndex = 0;
 			// 
 			// frmCheat
 			// 
@@ -363,7 +356,10 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(385, 294);
 			this.Controls.Add(this.tableLayoutPanel2);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
 			this.MaximumSize = new System.Drawing.Size(401, 332);
+			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(401, 332);
 			this.Name = "frmCheat";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -379,8 +375,6 @@
 			this.tlpCustom.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
-			this.flowLayoutPanel3.ResumeLayout(false);
-			this.flowLayoutPanel3.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -407,7 +401,6 @@
 		private System.Windows.Forms.RadioButton radAbsoluteAddress;
 		private System.Windows.Forms.TextBox txtValue;
 		private System.Windows.Forms.TextBox txtCompare;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
 		private System.Windows.Forms.TextBox txtGameName;
 		private System.Windows.Forms.Button btnBrowse;
 		private System.Windows.Forms.CheckBox chkEnabled;

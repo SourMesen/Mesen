@@ -34,17 +34,21 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkCurrentGameOnly = new System.Windows.Forms.CheckBox();
 			this.lstCheats = new Mesen.GUI.Controls.MyListView();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colGameName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colCheatName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuCheats = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuAddCheat = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDeleteCheat = new System.Windows.Forms.ToolStripMenuItem();
+			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+			this.btnAddCheat = new System.Windows.Forms.Button();
+			this.btnDeleteCheat = new System.Windows.Forms.Button();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.tabMain.SuspendLayout();
 			this.tabCheats.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.contextMenuCheats.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -81,11 +85,13 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.Controls.Add(this.chkCurrentGameOnly, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.lstCheats, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.lstCheats, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowCount = 3;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(429, 194);
@@ -107,36 +113,40 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			this.lstCheats.CheckBoxes = true;
 			this.lstCheats.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
+            this.colGameName,
+            this.colCheatName,
+            this.colCode});
 			this.tableLayoutPanel1.SetColumnSpan(this.lstCheats, 2);
 			this.lstCheats.ContextMenuStrip = this.contextMenuCheats;
 			this.lstCheats.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstCheats.FullRowSelect = true;
-			this.lstCheats.Location = new System.Drawing.Point(3, 26);
+			this.lstCheats.Location = new System.Drawing.Point(3, 55);
 			this.lstCheats.Name = "lstCheats";
-			this.lstCheats.Size = new System.Drawing.Size(423, 165);
+			this.lstCheats.Size = new System.Drawing.Size(423, 136);
 			this.lstCheats.TabIndex = 1;
 			this.lstCheats.UseCompatibleStateImageBehavior = false;
 			this.lstCheats.View = System.Windows.Forms.View.Details;
 			this.lstCheats.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lstCheats_ItemChecked);
+			this.lstCheats.SelectedIndexChanged += new System.EventHandler(this.lstCheats_SelectedIndexChanged);
 			this.lstCheats.DoubleClick += new System.EventHandler(this.lstCheats_DoubleClick);
 			// 
-			// columnHeader1
+			// colGameName
 			// 
-			this.columnHeader1.Text = "Game";
-			this.columnHeader1.Width = 98;
+			this.colGameName.Name = "colGameName";
+			this.colGameName.Text = "Game";
+			this.colGameName.Width = 98;
 			// 
-			// columnHeader2
+			// colCheatName
 			// 
-			this.columnHeader2.Text = "Cheat Name";
-			this.columnHeader2.Width = 110;
+			this.colCheatName.Name = "colCheatName";
+			this.colCheatName.Text = "Cheat Name";
+			this.colCheatName.Width = 110;
 			// 
-			// columnHeader3
+			// colCode
 			// 
-			this.columnHeader3.Text = "Code";
-			this.columnHeader3.Width = 142;
+			this.colCode.Name = "colCode";
+			this.colCode.Text = "Code";
+			this.colCode.Width = 142;
 			// 
 			// contextMenuCheats
 			// 
@@ -156,10 +166,45 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			// mnuDeleteCheat
 			// 
+			this.mnuDeleteCheat.Enabled = false;
 			this.mnuDeleteCheat.Name = "mnuDeleteCheat";
 			this.mnuDeleteCheat.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.mnuDeleteCheat.Size = new System.Drawing.Size(159, 22);
 			this.mnuDeleteCheat.Text = "Delete";
+			// 
+			// flowLayoutPanel2
+			// 
+			this.tableLayoutPanel1.SetColumnSpan(this.flowLayoutPanel2, 2);
+			this.flowLayoutPanel2.Controls.Add(this.btnAddCheat);
+			this.flowLayoutPanel2.Controls.Add(this.btnDeleteCheat);
+			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 23);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(429, 29);
+			this.flowLayoutPanel2.TabIndex = 3;
+			// 
+			// btnAddCheat
+			// 
+			this.btnAddCheat.AutoSize = true;
+			this.btnAddCheat.Location = new System.Drawing.Point(3, 3);
+			this.btnAddCheat.Name = "btnAddCheat";
+			this.btnAddCheat.Size = new System.Drawing.Size(75, 23);
+			this.btnAddCheat.TabIndex = 2;
+			this.btnAddCheat.Text = "Add Cheat";
+			this.btnAddCheat.UseVisualStyleBackColor = true;
+			this.btnAddCheat.Click += new System.EventHandler(this.mnuAddCheat_Click);
+			// 
+			// btnDeleteCheat
+			// 
+			this.btnDeleteCheat.AutoSize = true;
+			this.btnDeleteCheat.Enabled = false;
+			this.btnDeleteCheat.Location = new System.Drawing.Point(84, 3);
+			this.btnDeleteCheat.Name = "btnDeleteCheat";
+			this.btnDeleteCheat.Size = new System.Drawing.Size(129, 23);
+			this.btnDeleteCheat.TabIndex = 3;
+			this.btnDeleteCheat.Text = "Delete Selected Cheats";
+			this.btnDeleteCheat.UseVisualStyleBackColor = true;
 			// 
 			// tableLayoutPanel2
 			// 
@@ -191,6 +236,8 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.contextMenuCheats.ResumeLayout(false);
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -203,12 +250,15 @@ namespace Mesen.GUI.Forms.Cheats
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.CheckBox chkCurrentGameOnly;
 		private MyListView lstCheats;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.ColumnHeader columnHeader2;
-		private System.Windows.Forms.ColumnHeader columnHeader3;
+		private System.Windows.Forms.ColumnHeader colGameName;
+		private System.Windows.Forms.ColumnHeader colCheatName;
+		private System.Windows.Forms.ColumnHeader colCode;
 		private System.Windows.Forms.ContextMenuStrip contextMenuCheats;
 		private System.Windows.Forms.ToolStripMenuItem mnuAddCheat;
 		private System.Windows.Forms.ToolStripMenuItem mnuDeleteCheat;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+		private System.Windows.Forms.Button btnAddCheat;
+		private System.Windows.Forms.Button btnDeleteCheat;
 	}
 }

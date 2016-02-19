@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI
 {
@@ -20,12 +21,12 @@ namespace Mesen.GUI
 
 		private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
-			MessageBox.Show(e.Exception.ToString(), "Unexpected Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, e.Exception.ToString());
 		}
 		
 		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			MessageBox.Show(e.ExceptionObject.ToString(), "Unexpected Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, e.ExceptionObject.ToString());
 		}
 
 		/// <summary>
@@ -83,7 +84,7 @@ namespace Mesen.GUI
 					}
 				}
 			} catch(Exception e) {
-				MessageBox.Show(e.ToString(), "Unexpected Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, e.ToString());
 			}
 		}
 	}

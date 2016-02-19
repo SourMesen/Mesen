@@ -51,7 +51,7 @@ namespace Mesen.GUI.Forms
 						Process.Start(updateHelper, string.Format("\"{0}\" \"{1}\" \"{2}\"", srcFilePath, destFilePath, backupFilePath));
 					} else {
 						//Download failed, mismatching hashes
-						MessageBox.Show("Download failed - the file appears to be corrupted. Please visit the Mesen website to download the latest version manually.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MesenMsgBox.Show("UpdateDownloadFailed", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						DialogResult = DialogResult.Cancel;
 					}
 				}

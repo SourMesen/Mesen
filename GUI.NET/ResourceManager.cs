@@ -41,6 +41,17 @@ namespace Mesen.GUI
 			} catch { }
 		}
 
+		public static Stream GetZippedResource(string filename)
+		{
+			ZipArchive zip = new ZipArchive(Assembly.GetExecutingAssembly().GetManifestResourceStream("Mesen.GUI.Dependencies.Dependencies.zip"));
+			foreach(ZipArchiveEntry entry in zip.Entries) {
+				if(entry.Name == filename) {
+					return entry.Open();
+				}
+			}
+			return null;
+		}
+
 		public static void ExtractResources()
 		{
 			Directory.CreateDirectory(Path.Combine(ConfigManager.HomeFolder, "Resources"));
@@ -53,7 +64,7 @@ namespace Mesen.GUI
 				if(entry.Name.Contains(suffix) || entry.Name == "MesenUpdater.exe") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
-				} else if(entry.Name == "Roboto.12.spritefont" || entry.Name == "Roboto.32.spritefont") {
+				} else if(entry.Name == "Font.24.spritefont" || entry.Name == "Font.64.spritefont" || entry.Name == "LICENSE.txt") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "Resources", entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
 				}

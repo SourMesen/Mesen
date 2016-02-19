@@ -84,6 +84,6 @@ void BaseVideoFilter::TakeScreenshot(string romFilename)
 	PNGHelper::WritePNG(ssFilename, (uint8_t*)frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
 	delete[] frameBuffer;
 
-	MessageManager::DisplayMessage("Screenshot saved", FolderUtilities::GetFilename(ssFilename, true));
+	MessageManager::DisplayMessage("ScreenshotSaved", FolderUtilities::GetFilename(ssFilename, true));
 }
 

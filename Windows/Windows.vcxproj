@@ -390,10 +390,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectXTK\SimpleMath.inl" />
-    <None Include="Resources\Roboto.12.spritefont">
-      <DeploymentContent>false</DeploymentContent>
-    </None>
-    <None Include="Resources\Roboto.32.spritefont" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

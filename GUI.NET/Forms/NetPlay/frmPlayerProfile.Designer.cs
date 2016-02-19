@@ -100,7 +100,6 @@
 			this.picAvatar.TabIndex = 8;
 			this.picAvatar.TabStop = false;
 			this.picAvatar.Visible = false;
-			this.picAvatar.Click += new System.EventHandler(this.picAvatar_Click);
 			// 
 			// frmPlayerProfile
 			// 

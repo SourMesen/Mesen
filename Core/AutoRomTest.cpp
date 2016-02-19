@@ -289,5 +289,5 @@ void AutoRomTest::Save()
 	}
 
 
-	MessageManager::DisplayMessage("Test", "Test file saved to: " + FolderUtilities::GetFilename(_filename, true));
+	MessageManager::DisplayMessage("Test", "TestFileSavedTo", FolderUtilities::GetFilename(_filename, true));
 }

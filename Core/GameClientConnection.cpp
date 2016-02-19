@@ -17,7 +17,7 @@
 GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData) : GameConnection(socket, connectionData)
 {
 	MessageManager::RegisterNotificationListener(this);
-	MessageManager::DisplayMessage("Net Play", "Connected to server.");
+	MessageManager::DisplayMessage("NetPlay", "ConnectedToServer");
 	SendHandshake();
 }
 
@@ -27,7 +27,7 @@ GameClientConnection::~GameClientConnection()
 	DisableControllers();
 
 	MessageManager::SendNotification(ConsoleNotificationType::DisconnectedFromServer);
-	MessageManager::DisplayMessage("Net Play", "Connection to server lost.");
+	MessageManager::DisplayMessage("NetPlay", "ConnectionLost");
 	MessageManager::UnregisterNotificationListener(this);
 }
 
@@ -82,7 +82,7 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 			break;
 
 		case MessageType::ForceDisconnect:
-			MessageManager::DisplayMessage("Net Play", ((ForceDisconnectMessage*)message)->GetMessage());
+			MessageManager::DisplayMessage("NetPlay", ((ForceDisconnectMessage*)message)->GetMessage());
 			break;
 
 		case MessageType::PlayerList:
@@ -97,9 +97,9 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 				_controllerPort = gameInfo->GetPort();
 
 				if(_controllerPort == GameConnection::SpectatorPort) {
-					MessageManager::DisplayMessage("Net Play", "Connected as spectator");
+					MessageManager::DisplayMessage("NetPlay", "ConnectedAsSpectator");
 				} else {
-					MessageManager::DisplayMessage("Net Play", string("Connected as player ") + std::to_string(_controllerPort + 1));
+					MessageManager::DisplayMessage("NetPlay", "ConnectedAsPlayer", std::to_string(_controllerPort + 1));
 				}
 			}
 

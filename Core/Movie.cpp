@@ -58,7 +58,7 @@ uint8_t Movie::GetState(uint8_t port)
 
 	if(_readPosition[port] >= _data.DataSize[port]) {
 		//End of movie file
-		MessageManager::DisplayMessage("Movies", "Movie ended.");
+		MessageManager::DisplayMessage("Movies", "MovieEnded");
 		MessageManager::SendNotification(ConsoleNotificationType::MovieEnded);
 		if(EmulationSettings::CheckFlag(EmulationFlags::PauseOnMovieEnd)) {
 			EmulationSettings::SetFlags(EmulationFlags::Paused);
@@ -104,7 +104,7 @@ void Movie::StartRecording(string filename, bool reset)
 
 		Console::Resume();
 
-		MessageManager::DisplayMessage("Movies", "Recording to: " + FolderUtilities::GetFilename(filename, true));
+		MessageManager::DisplayMessage("Movies", "MovieRecordingTo", FolderUtilities::GetFilename(filename, true));
 	}
 }
 
@@ -118,7 +118,7 @@ void Movie::StopAll()
 		Save();
 	}
 	if(_playing) {
-		MessageManager::DisplayMessage("Movies", "Movie stopped.");
+		MessageManager::DisplayMessage("Movies", "MovieStopped");
 		_playing = false;
 	}
 }
@@ -140,7 +140,7 @@ void Movie::PlayMovie(stringstream &filestream, bool autoLoadRom, string filenam
 		_playing = true;
 
 		if(!filename.empty()) {
-			MessageManager::DisplayMessage("Movies", "Playing movie: " + FolderUtilities::GetFilename(filename, true));
+			MessageManager::DisplayMessage("Movies", "MoviePlaying", FolderUtilities::GetFilename(filename, true));
 		}
 	}
 	Console::Resume();
@@ -278,7 +278,7 @@ bool Movie::Save()
 
 	_file.close();
 
-	MessageManager::DisplayMessage("Movies", "Movie saved to file: " + FolderUtilities::GetFilename(_filename, true));
+	MessageManager::DisplayMessage("Movies", "MovieSaved", FolderUtilities::GetFilename(_filename, true));
 
 	return true;
 }
@@ -290,20 +290,20 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 
 	if(memcmp(header.Header, "MMO", 3) != 0) {
 		//Invalid movie file
-		MessageManager::DisplayMessage("Movies", "Invalid movie file.");
+		MessageManager::DisplayMessage("Movies", "MovieInvalid");
 		return false;
 	}
 
 	file.read((char*)&header.MesenVersion, sizeof(header.MesenVersion));
 
 	if(header.MesenVersion > EmulationSettings::GetMesenVersion()) {
-		MessageManager::DisplayMessage("Movies", "Cannot load movies created by a more recent version of Mesen. Please download the latest version.");
+		MessageManager::DisplayMessage("Movies", "MovieNewerVersion");
 		return false;
 	}
 
 	file.read((char*)&header.MovieFormatVersion, sizeof(header.MovieFormatVersion));
 	if(header.MovieFormatVersion != Movie::MovieFormatVersion) {
-		MessageManager::DisplayMessage("Movies", "This movie is incompatible with this version of Mesen.");
+		MessageManager::DisplayMessage("Movies", "MovieIncompatibleVersion");
 		return false;
 	}
 
@@ -340,7 +340,7 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 
 	if(_data.SaveStateSize > 0) {
 		if(header.SaveStateFormatVersion != SaveStateManager::FileFormatVersion) {
-			MessageManager::DisplayMessage("Movies", "This movie is incompatible with this version of Mesen.");
+			MessageManager::DisplayMessage("Movies", "MovieIncompatibleVersion");
 			return false;
 		}
 	}
@@ -373,7 +373,7 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 			delete[] readBuffer;
 		}
 	} else {
-		MessageManager::DisplayMessage("Movies", "Missing ROM required (" + string(romFilename) + ") to play movie.");
+		MessageManager::DisplayMessage("Movies", "MovieMissingRom", romFilename);
 	}
 	return loadedGame;
 }

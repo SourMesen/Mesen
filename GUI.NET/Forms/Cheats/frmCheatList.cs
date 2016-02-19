@@ -80,5 +80,12 @@ namespace Mesen.GUI.Forms.Cheats
 		{
 			UpdateCheatList();
 		}
+
+		private void lstCheats_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			bool enableDelete = lstCheats.SelectedItems.Count > 0;
+			mnuDeleteCheat.Enabled = enableDelete;
+			btnDeleteCheat.Enabled = enableDelete;
+		}
 	}
 }

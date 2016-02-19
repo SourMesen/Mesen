@@ -54,7 +54,7 @@ namespace Mesen.GUI.Forms
 					if(!args.Cancelled && args.Error == null && File.Exists(_filename)) {
 						result = System.Windows.Forms.DialogResult.OK;
 					} else if(args.Error != null) {
-						MessageBox.Show("Unable to download file. Check your internet connection and try again." + Environment.NewLine + Environment.NewLine + "Details:" + Environment.NewLine + args.Error.Message, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MesenMsgBox.Show("UnableToDownload", MessageBoxButtons.OK, MessageBoxIcon.Error, args.Error.ToString());
 						result = System.Windows.Forms.DialogResult.Cancel;
 					}
 				};
@@ -63,7 +63,7 @@ namespace Mesen.GUI.Forms
 				try {
 					downloadTask = client.DownloadFileTaskAsync(_link, _filename);
 				} catch(Exception ex) {
-					MessageBox.Show("Unable to download file. Check your internet connection and try again." + Environment.NewLine + Environment.NewLine + "Details:" + Environment.NewLine + ex.Message, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MesenMsgBox.Show("UnableToDownload", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
 					result = System.Windows.Forms.DialogResult.Cancel;
 				}
 

@@ -28,14 +28,18 @@
 		private void InitializeComponent()
 		{
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
+			this.chkAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
 			this.chkPauseOnMovieEnd = new System.Windows.Forms.CheckBox();
 			this.chkAllowBackgroundInput = new System.Windows.Forms.CheckBox();
 			this.chkPauseWhenInBackground = new System.Windows.Forms.CheckBox();
 			this.chkAutoLoadIps = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
 			this.chkDisableScreensaver = new System.Windows.Forms.CheckBox();
 			this.btnOpenMesenFolder = new System.Windows.Forms.Button();
+			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblDisplayLanguage = new System.Windows.Forms.Label();
+			this.cboDisplayLanguage = new System.Windows.Forms.ComboBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgFileAssociations = new System.Windows.Forms.TabPage();
@@ -52,8 +56,8 @@
 			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
-			this.chkAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgFileAssociations.SuspendLayout();
@@ -65,26 +69,28 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 239);
-			this.baseConfigPanel.Size = new System.Drawing.Size(394, 29);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 270);
+			this.baseConfigPanel.Size = new System.Drawing.Size(458, 29);
 			// 
 			// tlpMain
 			// 
 			this.tlpMain.ColumnCount = 1;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpMain.Controls.Add(this.chkSingleInstance, 0, 1);
-			this.tlpMain.Controls.Add(this.chkAutomaticallyCheckForUpdates, 0, 0);
-			this.tlpMain.Controls.Add(this.chkPauseOnMovieEnd, 0, 5);
-			this.tlpMain.Controls.Add(this.chkAllowBackgroundInput, 0, 4);
-			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 3);
-			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 2);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 0, 0);
-			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 6);
-			this.tlpMain.Controls.Add(this.btnOpenMesenFolder, 0, 8);
+			this.tlpMain.Controls.Add(this.chkSingleInstance, 0, 2);
+			this.tlpMain.Controls.Add(this.chkAutomaticallyCheckForUpdates, 0, 1);
+			this.tlpMain.Controls.Add(this.chkPauseOnMovieEnd, 0, 6);
+			this.tlpMain.Controls.Add(this.chkAllowBackgroundInput, 0, 5);
+			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 4);
+			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 3);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 0, 1);
+			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 7);
+			this.tlpMain.Controls.Add(this.btnOpenMesenFolder, 0, 9);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel2, 0, 0);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 9;
+			this.tlpMain.RowCount = 10;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -94,13 +100,33 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(380, 207);
+			this.tlpMain.Size = new System.Drawing.Size(444, 238);
 			this.tlpMain.TabIndex = 1;
+			// 
+			// chkSingleInstance
+			// 
+			this.chkSingleInstance.AutoSize = true;
+			this.chkSingleInstance.Location = new System.Drawing.Point(3, 52);
+			this.chkSingleInstance.Name = "chkSingleInstance";
+			this.chkSingleInstance.Size = new System.Drawing.Size(228, 17);
+			this.chkSingleInstance.TabIndex = 11;
+			this.chkSingleInstance.Text = "Only allow one instance of Mesen at a time";
+			this.chkSingleInstance.UseVisualStyleBackColor = true;
+			// 
+			// chkAutomaticallyCheckForUpdates
+			// 
+			this.chkAutomaticallyCheckForUpdates.AutoSize = true;
+			this.chkAutomaticallyCheckForUpdates.Location = new System.Drawing.Point(3, 29);
+			this.chkAutomaticallyCheckForUpdates.Name = "chkAutomaticallyCheckForUpdates";
+			this.chkAutomaticallyCheckForUpdates.Size = new System.Drawing.Size(177, 17);
+			this.chkAutomaticallyCheckForUpdates.TabIndex = 17;
+			this.chkAutomaticallyCheckForUpdates.Text = "Automatically check for updates";
+			this.chkAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
 			// 
 			// chkPauseOnMovieEnd
 			// 
 			this.chkPauseOnMovieEnd.AutoSize = true;
-			this.chkPauseOnMovieEnd.Location = new System.Drawing.Point(3, 118);
+			this.chkPauseOnMovieEnd.Location = new System.Drawing.Point(3, 144);
 			this.chkPauseOnMovieEnd.Name = "chkPauseOnMovieEnd";
 			this.chkPauseOnMovieEnd.Size = new System.Drawing.Size(199, 17);
 			this.chkPauseOnMovieEnd.TabIndex = 15;
@@ -110,7 +136,7 @@
 			// chkAllowBackgroundInput
 			// 
 			this.chkAllowBackgroundInput.AutoSize = true;
-			this.chkAllowBackgroundInput.Location = new System.Drawing.Point(3, 95);
+			this.chkAllowBackgroundInput.Location = new System.Drawing.Point(3, 121);
 			this.chkAllowBackgroundInput.Name = "chkAllowBackgroundInput";
 			this.chkAllowBackgroundInput.Size = new System.Drawing.Size(177, 17);
 			this.chkAllowBackgroundInput.TabIndex = 14;
@@ -120,7 +146,7 @@
 			// chkPauseWhenInBackground
 			// 
 			this.chkPauseWhenInBackground.AutoSize = true;
-			this.chkPauseWhenInBackground.Location = new System.Drawing.Point(3, 72);
+			this.chkPauseWhenInBackground.Location = new System.Drawing.Point(3, 98);
 			this.chkPauseWhenInBackground.Name = "chkPauseWhenInBackground";
 			this.chkPauseWhenInBackground.Size = new System.Drawing.Size(204, 17);
 			this.chkPauseWhenInBackground.TabIndex = 13;
@@ -131,7 +157,7 @@
 			// chkAutoLoadIps
 			// 
 			this.chkAutoLoadIps.AutoSize = true;
-			this.chkAutoLoadIps.Location = new System.Drawing.Point(3, 49);
+			this.chkAutoLoadIps.Location = new System.Drawing.Point(3, 75);
 			this.chkAutoLoadIps.Name = "chkAutoLoadIps";
 			this.chkAutoLoadIps.Size = new System.Drawing.Size(132, 17);
 			this.chkAutoLoadIps.TabIndex = 9;
@@ -142,27 +168,17 @@
 			// 
 			this.flowLayoutPanel6.AutoSize = true;
 			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 26);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(380, 1);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(444, 1);
 			this.flowLayoutPanel6.TabIndex = 10;
-			// 
-			// chkSingleInstance
-			// 
-			this.chkSingleInstance.AutoSize = true;
-			this.chkSingleInstance.Location = new System.Drawing.Point(3, 26);
-			this.chkSingleInstance.Name = "chkSingleInstance";
-			this.chkSingleInstance.Size = new System.Drawing.Size(228, 17);
-			this.chkSingleInstance.TabIndex = 11;
-			this.chkSingleInstance.Text = "Only allow one instance of Mesen at a time";
-			this.chkSingleInstance.UseVisualStyleBackColor = true;
 			// 
 			// chkDisableScreensaver
 			// 
 			this.chkDisableScreensaver.AutoSize = true;
 			this.chkDisableScreensaver.Enabled = false;
-			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 141);
+			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 167);
 			this.chkDisableScreensaver.Name = "chkDisableScreensaver";
 			this.chkDisableScreensaver.Size = new System.Drawing.Size(245, 17);
 			this.chkDisableScreensaver.TabIndex = 11;
@@ -171,13 +187,43 @@
 			// 
 			// btnOpenMesenFolder
 			// 
-			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 181);
+			this.btnOpenMesenFolder.AutoSize = true;
+			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 212);
 			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
 			this.btnOpenMesenFolder.Size = new System.Drawing.Size(117, 23);
 			this.btnOpenMesenFolder.TabIndex = 16;
 			this.btnOpenMesenFolder.Text = "Open Mesen Folder";
 			this.btnOpenMesenFolder.UseVisualStyleBackColor = true;
 			this.btnOpenMesenFolder.Click += new System.EventHandler(this.btnOpenMesenFolder_Click);
+			// 
+			// flowLayoutPanel2
+			// 
+			this.flowLayoutPanel2.Controls.Add(this.lblDisplayLanguage);
+			this.flowLayoutPanel2.Controls.Add(this.cboDisplayLanguage);
+			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(444, 26);
+			this.flowLayoutPanel2.TabIndex = 18;
+			// 
+			// lblDisplayLanguage
+			// 
+			this.lblDisplayLanguage.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblDisplayLanguage.AutoSize = true;
+			this.lblDisplayLanguage.Location = new System.Drawing.Point(3, 7);
+			this.lblDisplayLanguage.Name = "lblDisplayLanguage";
+			this.lblDisplayLanguage.Size = new System.Drawing.Size(95, 13);
+			this.lblDisplayLanguage.TabIndex = 0;
+			this.lblDisplayLanguage.Text = "Display Language:";
+			// 
+			// cboDisplayLanguage
+			// 
+			this.cboDisplayLanguage.FormattingEnabled = true;
+			this.cboDisplayLanguage.Location = new System.Drawing.Point(104, 3);
+			this.cboDisplayLanguage.Name = "cboDisplayLanguage";
+			this.cboDisplayLanguage.Size = new System.Drawing.Size(206, 21);
+			this.cboDisplayLanguage.TabIndex = 1;
 			// 
 			// tabMain
 			// 
@@ -188,7 +234,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(394, 239);
+			this.tabMain.Size = new System.Drawing.Size(458, 270);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -197,7 +243,7 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(386, 213);
+			this.tpgGeneral.Size = new System.Drawing.Size(450, 244);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -208,7 +254,7 @@
 			this.tpgFileAssociations.Location = new System.Drawing.Point(4, 22);
 			this.tpgFileAssociations.Name = "tpgFileAssociations";
 			this.tpgFileAssociations.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgFileAssociations.Size = new System.Drawing.Size(386, 213);
+			this.tpgFileAssociations.Size = new System.Drawing.Size(450, 244);
 			this.tpgFileAssociations.TabIndex = 2;
 			this.tpgFileAssociations.Text = "File Associations";
 			this.tpgFileAssociations.UseVisualStyleBackColor = true;
@@ -219,7 +265,7 @@
 			this.grpFileAssociations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFileAssociations.Location = new System.Drawing.Point(3, 3);
 			this.grpFileAssociations.Name = "grpFileAssociations";
-			this.grpFileAssociations.Size = new System.Drawing.Size(380, 207);
+			this.grpFileAssociations.Size = new System.Drawing.Size(444, 238);
 			this.grpFileAssociations.TabIndex = 12;
 			this.grpFileAssociations.TabStop = false;
 			this.grpFileAssociations.Text = "File Associations";
@@ -241,7 +287,7 @@
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpFileFormat.Size = new System.Drawing.Size(374, 188);
+			this.tlpFileFormat.Size = new System.Drawing.Size(438, 219);
 			this.tlpFileFormat.TabIndex = 0;
 			// 
 			// chkNesFormat
@@ -267,7 +313,7 @@
 			// chkMmoFormat
 			// 
 			this.chkMmoFormat.AutoSize = true;
-			this.chkMmoFormat.Location = new System.Drawing.Point(190, 3);
+			this.chkMmoFormat.Location = new System.Drawing.Point(222, 3);
 			this.chkMmoFormat.Name = "chkMmoFormat";
 			this.chkMmoFormat.Size = new System.Drawing.Size(133, 17);
 			this.chkMmoFormat.TabIndex = 11;
@@ -278,7 +324,7 @@
 			// 
 			this.chkMstFormat.AutoSize = true;
 			this.chkMstFormat.Enabled = false;
-			this.chkMstFormat.Location = new System.Drawing.Point(190, 26);
+			this.chkMstFormat.Location = new System.Drawing.Point(222, 26);
 			this.chkMstFormat.Name = "chkMstFormat";
 			this.chkMstFormat.Size = new System.Drawing.Size(144, 17);
 			this.chkMstFormat.TabIndex = 13;
@@ -291,7 +337,7 @@
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(386, 213);
+			this.tpgAdvanced.Size = new System.Drawing.Size(450, 244);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -315,7 +361,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(380, 207);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 238);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// chkUseAlternativeMmc3Irq
@@ -368,21 +414,11 @@
 			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
 			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
 			// 
-			// chkAutomaticallyCheckForUpdates
-			// 
-			this.chkAutomaticallyCheckForUpdates.AutoSize = true;
-			this.chkAutomaticallyCheckForUpdates.Location = new System.Drawing.Point(3, 3);
-			this.chkAutomaticallyCheckForUpdates.Name = "chkAutomaticallyCheckForUpdates";
-			this.chkAutomaticallyCheckForUpdates.Size = new System.Drawing.Size(177, 17);
-			this.chkAutomaticallyCheckForUpdates.TabIndex = 17;
-			this.chkAutomaticallyCheckForUpdates.Text = "Automatically check for updates";
-			this.chkAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
-			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(394, 268);
+			this.ClientSize = new System.Drawing.Size(458, 299);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -394,6 +430,8 @@
 			this.Controls.SetChildIndex(this.tabMain, 0);
 			this.tlpMain.ResumeLayout(false);
 			this.tlpMain.PerformLayout();
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgFileAssociations.ResumeLayout(false);
@@ -435,5 +473,8 @@
 		private System.Windows.Forms.CheckBox chkPauseOnMovieEnd;
 		private System.Windows.Forms.Button btnOpenMesenFolder;
 		private System.Windows.Forms.CheckBox chkAutomaticallyCheckForUpdates;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+		private System.Windows.Forms.Label lblDisplayLanguage;
+		private System.Windows.Forms.ComboBox cboDisplayLanguage;
 	}
 }

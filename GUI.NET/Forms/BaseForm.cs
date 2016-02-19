@@ -15,6 +15,7 @@ namespace Mesen.GUI.Forms
 		private System.ComponentModel.IContainer components;
 		private bool _iconSet = false;
 
+
 		public BaseForm()
 		{
 			InitializeComponent();
@@ -57,6 +58,7 @@ namespace Mesen.GUI.Forms
 
 			int tabIndex = 0;
 			InitializeTabIndexes(this, ref tabIndex);
+			ResourceHelper.ApplyResources(this);
 		}
 
 		private void InitializeTabIndexes(TableLayoutPanel tlp, ref int tabIndex)

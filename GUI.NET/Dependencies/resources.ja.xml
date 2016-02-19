@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Resources>
+  <Forms>
+    <Form ID="frmMain" Title="Mesen">
+      <Control ID="mnuFile">ファイル</Control>
+      <Control ID="mnuOpen">開く</Control>
+      <Control ID="mnuSaveState">クイックセーブ</Control>
+      <Control ID="mnuLoadState">クイックロード</Control>
+      <Control ID="mnuRecentFiles">最近開いたファイル</Control>
+      <Control ID="mnuExit">終わる</Control>
+      <Control ID="mnuGame">ゲーム</Control>
+      <Control ID="mnuPause">ポーズ</Control>
+      <Control ID="mnuReset">リセット</Control>
+      <Control ID="mnuStop">停止</Control>
+      <Control ID="mnuSwitchDiskSide">A面B面切り替え</Control>
+      <Control ID="mnuSelectDisk">ディスク選択</Control>
+      <Control ID="mnuEjectDisk">ディスクを取り出す</Control>
+      <Control ID="mnuOptions">設定</Control>
+      <Control ID="mnuEmulationSpeed">速度</Control>
+      <Control ID="mnuEmuSpeedNormal">通常　(100%)</Control>
+      <Control ID="mnuIncreaseSpeed">速度を上げる</Control>
+      <Control ID="mnuDecreaseSpeed">速度を下げる</Control>
+      <Control ID="mnuEmuSpeedMaximumSpeed">最高速度</Control>
+      <Control ID="mnuEmuSpeedTriple">300%</Control>
+      <Control ID="mnuEmuSpeedDouble">200%</Control>
+      <Control ID="mnuEmuSpeedHalf">50%</Control>
+      <Control ID="mnuEmuSpeedQuarter">25%</Control>
+      <Control ID="mnuShowFPS">フレームレート表示</Control>
+      <Control ID="mnuVideoScale">映像サイズ</Control>
+      <Control ID="mnuScale1x">１倍</Control>
+      <Control ID="mnuScale2x">２倍</Control>
+      <Control ID="mnuScale3x">３倍</Control>
+      <Control ID="mnuScale4x">４倍</Control>
+      <Control ID="mnuScaleCustom">カスタム</Control>
+      <Control ID="mnuFullscreen">全画面表示</Control>
+      <Control ID="mnuVideoFilter">画面エフェクト</Control>
+      <Control ID="mnuNoneFilter">なし</Control>
+      <Control ID="mnuNtscFilter">NTSC</Control>
+      <Control ID="mnuAudioConfig">音声</Control>
+      <Control ID="mnuInput">コントローラ</Control>
+      <Control ID="mnuRegion">地域</Control>
+      <Control ID="mnuRegionAuto">Auto</Control>
+      <Control ID="mnuRegionNtsc">NTSC</Control>
+      <Control ID="mnuRegionPal">PAL</Control>
+      <Control ID="mnuRegionDendy">Dendy</Control>
+      <Control ID="mnuVideoConfig">映像</Control>
+      <Control ID="mnuPreferences">設定</Control>
+      <Control ID="mnuTools">ツール</Control>
+      <Control ID="mnuNetPlay">ネットプレイ</Control>
+      <Control ID="mnuStartServer">サーバを起動する</Control>
+      <Control ID="mnuConnect">サーバに接続</Control>
+      <Control ID="mnuNetPlaySelectController">コントローラを選ぶ</Control>
+      <Control ID="mnuNetPlayPlayer1">プレーヤー　1</Control>
+      <Control ID="mnuNetPlayPlayer2">プレーヤー　2</Control>
+      <Control ID="mnuNetPlayPlayer3">プレーヤー　3</Control>
+      <Control ID="mnuNetPlayPlayer4">プレーヤー　4</Control>
+      <Control ID="mnuNetPlaySpectator">観客</Control>
+      <Control ID="mnuFindServer">公開セーバリストを見る</Control>
+      <Control ID="mnuProfile">プロファイル設定</Control>
+      <Control ID="mnuMovies">動画</Control>
+      <Control ID="mnuPlayMovie">再生</Control>
+      <Control ID="mnuRecordFrom">録画</Control>
+      <Control ID="mnuRecordFromStart">最初から</Control>
+      <Control ID="mnuRecordFromNow">この時点から</Control>
+      <Control ID="mnuStopMovie">停止</Control>
+      <Control ID="mnuCheats">チートコード</Control>
+      <Control ID="mnuTests">テスト</Control>
+      <Control ID="mnuTestRun">Run...</Control>
+      <Control ID="mnuTestRecordFrom">Record from...</Control>
+      <Control ID="mnuTestRecordStart">Start</Control>
+      <Control ID="mnuTestRecordNow">Now</Control>
+      <Control ID="mnuTestRecordMovie">Movie</Control>
+      <Control ID="mnuTestRecordTest">Test</Control>
+      <Control ID="mnuTestStopRecording">Stop recording</Control>
+      <Control ID="mnuRunAllTests">Run all tests</Control>
+      <Control ID="mnuDebugger">デバッガ</Control>
+      <Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
+      <Control ID="mnuHelp">ヘルプ</Control>
+      <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
+      <Control ID="mnuAbout">Mesenとは</Control>
+    </Form>
+    <Form ID="frmAudioConfig" Title="音声設定">
+      <Control ID="tpgGeneral">全般</Control>
+      <Control ID="chkMuteSoundInBackground">Mesenが最前面ではない時、音声をミュートにする</Control>
+      <Control ID="chkReduceSoundInBackground">Mesenが最前面ではない時、音声を低くする</Control>
+      <Control ID="chkEnableAudio">音声オン</Control>
+      <Control ID="lblSampleRate">サンプルレート:</Control>
+      <Control ID="lblLatencyMs">ミリ秒</Control>
+      <Control ID="lblAudioLatency">レイテンシ:</Control>
+      <Control ID="lblAudioDevice">デバイス:</Control>
+      <Control ID="tpgVolume">音量ミキサー</Control>
+      <Control ID="grpVolume">音量ミキサー</Control>
+      <Control ID="btnReset">リセット</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+      <Control ID="trkDmcVol">DMC</Control>
+      <Control ID="trkNoiseVol">Noise</Control>
+      <Control ID="trkTriangleVol">Triangle</Control>
+      <Control ID="trkSquare2Vol">Square 2</Control>
+      <Control ID="trkSquare1Vol">Square 1</Control>
+      <Control ID="trkMaster">マスター</Control>
+      <Control ID="trkFdsVol">FDS</Control>
+      <Control ID="trkMmc5Vol">MMC5</Control>
+      <Control ID="trkVrc6Vol">VRC6</Control>
+      <Control ID="trkVrc7Vol">VRC7</Control>
+      <Control ID="trkNamco163Vol">Namco</Control>
+      <Control ID="trkSunsoft5b">Sunsoft</Control>
+    </Form>
+    <Form ID="frmInputConfig" Title="コントローラ設定">
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+      <Control ID="tpgControllers">コントローラ</Control>
+      <Control ID="btnSetupP4">設定</Control>
+      <Control ID="btnSetupP3">設定</Control>
+      <Control ID="lblPlayer1">プレーヤー 1:</Control>
+      <Control ID="lblPlayer2">プレーヤー 2:</Control>
+      <Control ID="lblPlayer4">プレーヤー 4:</Control>
+      <Control ID="lblPlayer3">プレーヤー 3:</Control>
+      <Control ID="btnSetupP1">設定</Control>
+      <Control ID="btnSetupP2">設定</Control>
+      <Control ID="lblNesType">ゲーム機:</Control>
+      <Control ID="lblExpansionPort">拡張ポート:</Control>
+      <Control ID="chkFourScore">Four Scoreを使う</Control>
+      <Control ID="tpgEmulatorKeys">ショートカットキー</Control>
+    </Form>
+    <Form ID="frmControllerConfig" Title="コントローラ設定">
+      <Control ID="lblTurboSpeed">ターボの速度:</Control>
+      <Control ID="lblTurboFast">速い</Control>
+      <Control ID="lblSlow">遅い</Control>
+      <Control ID="tpgSet1">キーセット 1</Control>
+      <Control ID="tpgSet2">キーセット 2</Control>
+      <Control ID="tpgSet3">キーセット 3</Control>
+      <Control ID="tpgSet4">キーセット 4</Control>
+      <Control ID="btnReset">リセット</Control>
+      <Control ID="btnClear">キーセットを削除</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
+    <Form ID="frmVideoConfig" Title="映像設定">
+      <Control ID="tpgGeneral">全般</Control>
+      <Control ID="lblVideoScale">映像サイズ:</Control>
+      <Control ID="lblVideoFilter">画面エフェクト:</Control>
+      <Control ID="chkVerticalSync">垂直同期を有効する</Control>
+      <Control ID="lblDisplayRatio">画面アスペクト:</Control>
+      <Control ID="lblEmuSpeedHint">(0 = 最高速度)</Control>
+      <Control ID="lblEmulationSpeed">エミュレーションの速度:</Control>
+      <Control ID="chkShowFps">フレームレート表示</Control>
+      <Control ID="chkUseHdPacks">HDNesのHDパックを使う</Control>
+      <Control ID="tpgOverscan">オーバースキャン</Control>
+      <Control ID="grpCropping">オーバースキャン</Control>
+      <Control ID="lblLeft">左</Control>
+      <Control ID="lblTop">上</Control>
+      <Control ID="lblBottom">下</Control>
+      <Control ID="lblRight">右</Control>
+      <Control ID="tpgPalette">パレット</Control>
+      <Control ID="btnResetPalette">リセット</Control>
+      <Control ID="btnLoadPalFile">.palファイルをロードする</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
+    <Form ID="frmPreferences" Title="設定">
+      <Control ID="tpgGeneral">全般</Control>
+      <Control ID="lblDisplayLanguage">言語:</Control>
+      <Control ID="chkSingleInstance">Mesenを単一インスタンスモードにする</Control>
+      <Control ID="chkAutomaticallyCheckForUpdates">自動的にアップデートを確認</Control>
+      <Control ID="chkPauseOnMovieEnd">動画が終わると自動的にポーズする</Control>
+      <Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時、コントローラは反応しない</Control>
+      <Control ID="chkPauseWhenInBackground">Mesenが最前面ではない時、自動的にポーズする</Control>
+      <Control ID="chkAutoLoadIps">自動的にIPSファイルをロードする</Control>
+      <Control ID="chkDisableScreensaver">ゲーム中にスクリーンセーバーを無効にする</Control>
+      <Control ID="btnOpenMesenFolder">Mesenのフォルダを開く</Control>
+      <Control ID="tpgFileAssociations">ファイルの関連付け</Control>
+      <Control ID="grpFileAssociations">ファイルの関連付け</Control>
+      <Control ID="chkNesFormat">.NES (ファミコン)</Control>
+      <Control ID="chkFdsFormat">.FDS (ファミコンディスクシステム)</Control>
+      <Control ID="chkMmoFormat">.MMO (Mesenの動画)</Control>
+      <Control ID="chkMstFormat">.MST (Mesenのクイックセーブ)</Control>
+      <Control ID="tpgAdvanced">詳細設定</Control>
+      <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
+      <Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
+      <Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
+      <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
+      <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
+    <Form ID="frmServerConfig" Title="サーバを起動する">
+      <Control ID="lblPort">ポート:</Control>
+      <Control ID="chkPublicServer">公開サーバ</Control>
+      <Control ID="lblServerName">サーバ名:</Control>
+      <Control ID="chkSpectator">観客として接続するのは可能にする</Control>
+      <Control ID="lblMaxPlayers">プレーヤーの最大数:</Control>
+      <Control ID="lblPassword">パスワード:</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
+    <Form ID="frmClientConfig" Title="サーバに接続">
+      <Control ID="lblHost">ホスト:</Control>
+      <Control ID="lblPort">ポート:</Control>
+      <Control ID="chkSpectator">観客として接続する</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
+    <Form ID="frmCheatList" Title="チートコード">
+      <Control ID="tabCheats">チートコード</Control>
+      <Control ID="chkCurrentGameOnly">プレイ中のゲームのコードのみ表示する</Control>
+      <Control ID="btnAddCheat">コード追加</Control>
+      <Control ID="btnDeleteCheat">選択中のコードを削除</Control>
+      <Control ID="mnuAddCheat">コード追加</Control>
+      <Control ID="mnuDeleteCheat">削除</Control>
+      <Control ID="colGameName">ゲーム</Control>
+      <Control ID="colCheatName">コード名</Control>
+      <Control ID="colCode">コード</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
+    <Form ID="frmCheat" Title="コード">
+      <Control ID="label2">ゲーム:</Control>
+      <Control ID="label1">コード名:</Control>
+      <Control ID="grpCode">コード</Control>
+      <Control ID="radCustom">カスタム:</Control>
+      <Control ID="radGameGenie">Game Genie:</Control>
+      <Control ID="radProActionRocky">Pro Action Rocky:</Control>
+      <Control ID="lblAddress">メモリアドレス:</Control>
+      <Control ID="lblNewValue">バイト値:</Control>
+      <Control ID="radRelativeAddress">メモリ</Control>
+      <Control ID="radAbsoluteAddress">ゲームのコード</Control>
+      <Control ID="chkCompareValue">比較値</Control>
+      <Control ID="btnBrowse">参照...</Control>
+      <Control ID="chkEnabled">コードを有効にする</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
+    <Form ID="frmAbout" Title="Mesenとは">
+      <Control ID="labelProductName">Mesen</Control>
+      <Control ID="labelCopyright">© 2016 M. Bibaud (aka Sour)</Control>
+      <Control ID="lblWebsite">サイト:</Control>
+      <Control ID="lblLink">www.mesen.ca</Control>
+      <Control ID="labelVersion">バージョン: 0.1.1 (Beta)</Control>
+      <Control ID="okButton">&amp;OK</Control>
+      <Control ID="lblDonate">Mesen est gratuit.  Par contre, si vous voulez supporter son dévelopement, cliquez sur le lien ci-dessous pour plus d'information.  Thank you!</Control>
+      <Control ID="lnkDonate">Pour plus d'information, cliquez ici.</Control>
+    </Form>
+  </Forms>
+  <Messages>
+    <Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterMovie">動画 (*.mmo)|*.mmo|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
+
+    <Message ID="Resume">再開</Message>
+    <Message ID="Pause">ポーズ</Message>
+    <Message ID="StartServer">サーバを起動する</Message>
+    <Message ID="StopServer">サーバを停止する</Message>
+    <Message ID="ConnectToServer">サーバに接続する</Message>
+    <Message ID="Disconnect">切断</Message>
+    <Message ID="PlayerNumber">プレーヤー {0}</Message>
+
+    <Message ID="CouldNotInstallRuntime">Microsoft Visual Studio 2015のVisual C++再頒布可能パッケージはインストールできませんでした。</Message>
+    <Message ID="EmptyState">&lt;なし&gt;</Message>
+    <Message ID="ErrorWhileCheckingUpdates">アップデートを確認する時にエラーが発生しました。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
+    <Message ID="FdsBiosNotFound">ファミコンディスクシステム(FDS)のゲームをロードするためにFDSのBIOSファイルは必要です。&#xA;&#xA;FDSのBIOSファイルを選びますか？</Message>
+    <Message ID="FdsDiskSide">ディスク{0} {1}面</Message>
+    <Message ID="FileNotFound">ファイルが見つかりません: {0}</Message>
+    <Message ID="InvalidFdsBios">選んだBIOSファイルは使えません。</Message>
+    <Message ID="HDNesTooltip">このオプションを有効にすれば、MesenはHDNesのようにHDパックをロード出来るようになります。&#xA;&#xA;HDパックはMesenのフォルダの中にある「HdPacks」のフォルダにゲームと同じ名前のサブフォルダに置くと自動的にロードされます。&#xA;例）ゲームファイルは「MyRom.nes」なら、「HdPacks\MyRom」にHDパックを置くとロードされます。&#xA;&#xA;この機能はまだ開発中で、不完全なところがあります、ご了承ください。</Message>
+    <Message ID="MesenUpToDate">既にMesenの最新のバージョンを使っています。</Message>
+    <Message ID="PatchAndReset">IPSパッチを当てて、ゲームをリセットしますか？</Message>
+    <Message ID="SelectRomIps">IPSファイルに合うゲームファイルを選んでください。</Message>
+    <Message ID="UnableToDownload">ファイルをダウンロードできませんでした。ネット接続を確認してから、再試行してください。&#xA;&#xA;エラーの詳細:</Message>
+    <Message ID="UnableToStartMissingDependencies">MesenはMicrosoft Visual Studio 2015のVisual C++再頒布可能パッケージなしではゲームをロードできません。　パッケージを自動的にMicrosoftのサーバからダウンロードして、インストールしますか？</Message>
+    <Message ID="UnableToStartMissingFiles">必要なファイルはロード出来なかったため、Mesenは起動できません。&#xA;&#xA;エラー: WinMesen.dllはロードできません。</Message>
+    <Message ID="UnexpectedError">予期しないエラーが発生しました。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
+    <Message ID="UpdateDownloadFailed">ダウンロードは失敗しました。　Mesenのサイトに行って、新しいバージョンをダウンロードしてください。</Message>
+    <Message ID="UpgradeSuccess">アップデートは完了しました。</Message>
+  </Messages>
+  <Enums>
+    <Enum ID="ControllerType">
+      <Value ID="None">なし</Value>
+      <Value ID="StandardController">ファミコンコントローラ</Value>
+      <Value ID="Zapper">ガン</Value>
+      <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
+    </Enum>
+    <Enum ID="VideoAspectRatio">
+      <Value ID="Auto">オート</Value>
+      <Value ID="NTSC">NTSC (8:7)</Value>
+      <Value ID="PAL">PAL (11:8)</Value>
+      <Value ID="Standard">ノーマル (4:3)</Value>
+      <Value ID="Widescreen">ワイド (16:9)</Value>
+    </Enum>
+    <Enum ID="VideoFilterType">
+      <Value ID="None">なし</Value>
+      <Value ID="NTSC">NTSC</Value>
+    </Enum>
+    <Enum ID="ConsoleType">
+      <Value ID="Nes">NES</Value>
+      <Value ID="Famicom">ファミコン</Value>
+    </Enum>
+    <Enum ID="ExpansionPortDevice">
+      <Value ID="None">なし</Value>
+      <Value ID="Zapper">ガン</Value>
+      <Value ID="FourPlayerAdapter">4-Player Adapter</Value>
+      <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
+    </Enum>
+    <Enum ID="Language">
+      <Value ID="SystemDefault">ユーザーアカウントのデフォルト</Value>
+      <Value ID="English">English</Value>
+      <Value ID="French">Français</Value>
+      <Value ID="Japanese">日本語</Value>
+    </Enum>
+  </Enums>
+</Resources>

@@ -52,7 +52,7 @@ void GameClient::PrivateConnect(shared_ptr<ClientConnectionData> connectionData)
 		_connection.reset(new GameClientConnection(_socket, connectionData));
 		_connected = true;
 	} else {
-		MessageManager::DisplayMessage("Net Play", "Could not connect to server.");
+		MessageManager::DisplayMessage("NetPlay", "CouldNotConnect");
 		_connected = false;
 		_socket.reset();
 	}

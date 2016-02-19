@@ -67,7 +67,7 @@ namespace Mesen.GUI.Forms.Cheats
 		private void btnBrowse_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "All supported formats (*.nes, *.zip)|*.NES;*.ZIP|NES Roms (*.nes)|*.NES|ZIP Archives (*.zip)|*.ZIP";
+			ofd.Filter = ResourceHelper.GetMessage("FilterRom");
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				_gameHash = MD5Helper.GetMD5Hash(ofd.FileName);
 				if(_gameHash != null) {

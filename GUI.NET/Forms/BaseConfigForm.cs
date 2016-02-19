@@ -134,7 +134,9 @@ namespace Mesen.GUI.Forms
 					ComboBox combo = ((ComboBox)bindedField);
 					combo.DropDownStyle = ComboBoxStyle.DropDownList;
 					combo.Items.Clear();
-					combo.Items.AddRange(Enum.GetNames(fieldType));
+					foreach(Enum value in Enum.GetValues(fieldType)) {
+						combo.Items.Add(ResourceHelper.GetEnumText(value));
+					}
 				}
 				_bindings[fieldName] = bindedField;
 			} else {
@@ -188,7 +190,7 @@ namespace Mesen.GUI.Forms
 					} else if(kvp.Value is ComboBox) {
 						ComboBox combo = kvp.Value as ComboBox;
 						if(value is Enum) {
-							combo.SelectedItem = value.ToString();
+							combo.SelectedItem = ResourceHelper.GetEnumText((Enum)value);
 						} else if(field.FieldType == typeof(UInt32)) {
 							for(int i = 0, len = combo.Items.Count; i < len; i++) {
 								UInt32 numericValue;
@@ -255,7 +257,13 @@ namespace Mesen.GUI.Forms
 						} else if(kvp.Value is ComboBox) {
 							if(field.FieldType.IsSubclassOf(typeof(Enum))) {
 								object selectedItem = ((ComboBox)kvp.Value).SelectedItem;
-								field.SetValue(Entity, selectedItem == null ? 0 : Enum.Parse(field.FieldType, selectedItem.ToString()));
+
+								foreach(Enum value in Enum.GetValues(field.FieldType)) {
+									if(ResourceHelper.GetEnumText(value) == selectedItem.ToString()) {
+										field.SetValue(Entity, value);
+										break;
+									}
+								}
 							} else if(field.FieldType == typeof(UInt32)) {
 								UInt32 numericValue;
 								string item = Regex.Replace(((ComboBox)kvp.Value).SelectedItem.ToString(), "[^0-9]", "");

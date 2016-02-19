@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Resources>
+  <Messages>
+    <Message ID="FilterAll">All Files (*.*)|*.*</Message>
+    <Message ID="FilterMovie">Movie files (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
+    <Message ID="FilterPalette">Palette Files (*.pal)|*.pal|All Files (*.*)|*.*</Message>
+    <Message ID="FilterRom">All supported formats (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">All supported formats (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*</Message>
+    <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
+
+    <Message ID="Resume">Resume</Message>
+    <Message ID="Pause">Pause</Message>
+    <Message ID="StartServer">Start Server</Message>
+    <Message ID="StopServer">Stop Server</Message>
+    <Message ID="ConnectToServer">Connect to Server</Message>
+    <Message ID="Disconnect">Disconnect</Message>
+    <Message ID="PlayerNumber">Player {0}</Message>
+
+    <Message ID="CouldNotInstallRuntime">The Visual Studio Runtime could not be installed properly.</Message>
+    <Message ID="EmptyState">&lt;empty&gt;</Message>
+    <Message ID="ErrorWhileCheckingUpdates">An error has occurred while trying to check for updates.&#xA;&#xA;Error details:&#xA;{0}</Message>
+    <Message ID="FdsBiosNotFound">FDS bios not found. The bios is required to run FDS games.&#xA;&#xA;Select bios file now?</Message>
+    <Message ID="FdsDiskSide">Disk {0} Side {1}</Message>
+    <Message ID="FileNotFound">File not found: {0}</Message>
+    <Message ID="InvalidFdsBios">The selected bios file is invalid.</Message>
+    <Message ID="HDNesTooltip">This option allows Mesen to load HDNes-format HD packs if they are found.&#xA;&#xA;HD Packs should be placed in the "HdPacks" folder in a subfolder matching the name of the ROM.&#xA;e.g: MyRom.nes should have their HD Pack in "HdPacks\MyRom\hires.txt".&#xA;&#xA;Note: Support for HD Packs is a work in progress and some limitations remain.</Message>
+    <Message ID="MesenUpToDate">You are running the latest version of Mesen</Message>
+    <Message ID="PatchAndReset">Patch and reset the current game?</Message>
+    <Message ID="SelectRomIps">Please select a ROM matching the IPS patch file.</Message>
+    <Message ID="UnableToDownload">Unable to download file. Check your internet connection and try again.&#xA;&#xA;Details:</Message>
+    <Message ID="UnableToStartMissingDependencies">Mesen must download and install the Microsoft Visual Studio 2015 runtime to continue. Would you like to automatically download the runtime from Microsoft's website and install it now?"</Message>
+    <Message ID="UnableToStartMissingFiles">Mesen was unable to start due to missing files.&#xA;&#xA;Error: WinMesen.dll is missing.</Message>
+    <Message ID="UnexpectedError">An unexpected error has occurred.&#xA;&#xA;Error details:&#xA;{0}</Message>
+    <Message ID="UpdateDownloadFailed">Download failed - the file appears to be corrupted. Please visit the Mesen website to download the latest version manually.</Message>
+    <Message ID="UpgradeSuccess">Upgrade completed successfully.</Message>
+  </Messages>
+  <Enums>
+    <Enum ID="ControllerType">
+      <Value ID="None">None</Value>
+      <Value ID="StandardController">Standard Controller</Value>
+      <Value ID="Zapper">Zapper</Value>
+      <Value ID="ArkanoidController">Arkanoid Controller</Value>
+    </Enum>
+    <Enum ID="VideoAspectRatio">
+      <Value ID="Auto">Auto</Value>
+      <Value ID="NTSC">NTSC (8:7)</Value>
+      <Value ID="PAL">PAL (11:8)</Value>
+      <Value ID="Standard">Standard (4:3)</Value>
+      <Value ID="Widescreen">Widescreen (16:9)</Value>
+    </Enum>
+    <Enum ID="VideoFilterType">
+      <Value ID="None">None</Value>
+      <Value ID="NTSC">NTSC</Value>
+    </Enum>
+    <Enum ID="ConsoleType">
+      <Value ID="Nes">NES</Value>
+      <Value ID="Famicom">Famicom</Value>
+    </Enum>
+    <Enum ID="ExpansionPortDevice">
+      <Value ID="None">None</Value>
+      <Value ID="Zapper">Zapper</Value>
+      <Value ID="FourPlayerAdapter">Four Player Adapter</Value>
+      <Value ID="ArkanoidController">Arkanoid Controller</Value>
+    </Enum>
+    <Enum ID="Language">
+      <Value ID="SystemDefault">User Account Default</Value>
+      <Value ID="English">English</Value>
+      <Value ID="French">Français</Value>
+      <Value ID="Japanese">日本語</Value>
+    </Enum>
+  </Enums>
+</Resources>

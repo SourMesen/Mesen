@@ -155,7 +155,7 @@ void BaseMapper::SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memor
 		//i.e same logic as NROM (mapper 0) when PRG is 16kb
 		//Needed by "Pyramid" (mapper 79)
 		#ifdef _DEBUG
-			MessageManager::DisplayMessage("Debug", "PRG size is smaller than 32kb");
+			MessageManager::DisplayMessage("Debug", "PrgSizeWarning");
 		#endif
 
 		for(slot = 0; slot < PrgAddressRangeSize / _prgSize; slot++) {

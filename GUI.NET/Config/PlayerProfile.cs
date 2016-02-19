@@ -20,7 +20,7 @@ namespace Mesen.GUI.Config
 		{
 			//SetAvatar(Properties.Resources.MesenLogo);
 		}
-
+		/*
 
 		public void SetAvatar(Image image)
 		{
@@ -35,6 +35,6 @@ namespace Mesen.GUI.Config
 		public Image GetAvatarImage()
 		{
 			return Image.FromStream(new MemoryStream(PlayerAvatar));
-		}
+		}*/
 	}
 }

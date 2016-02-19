@@ -69,9 +69,9 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		VideoDecoder::GetInstance()->StartThread();
 	
 		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(romFilename));
-		MessageManager::DisplayMessage("Game loaded", FolderUtilities::GetFilename(romFilename, false));
+		MessageManager::DisplayMessage("GameLoaded", FolderUtilities::GetFilename(romFilename, false));
 	} else {
-		MessageManager::DisplayMessage("Error", string("Could not load file: ") + FolderUtilities::GetFilename(romFilename, true));
+		MessageManager::DisplayMessage("Error", "CouldNotLoadFile", FolderUtilities::GetFilename(romFilename, true));
 	}
 }
 
@@ -218,7 +218,7 @@ void Console::Run()
 		try {
 			_cpu->Exec();
 		} catch(const std::runtime_error &ex) {
-			MessageManager::DisplayMessage("Error", string("Game has crashed. (") + ex.what() + ")");
+			MessageManager::DisplayMessage("Error", "GameCrash", ex.what());
 			break;
 		}
 

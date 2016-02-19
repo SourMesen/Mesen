@@ -7,12 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Forms;
 using Microsoft.Win32;
 
 namespace Mesen.GUI.Config
 {
 	public class PreferenceInfo
 	{
+		public Language DisplayLanguage = Language.SystemDefault;
+
 		public bool SingleInstance = true;
 		public bool PauseWhenInBackground = false;
 		public bool AllowBackgroundInput = false;

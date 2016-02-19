@@ -19,6 +19,8 @@ namespace Mesen.GUI.Forms.Config
 
 			Entity = ConfigManager.Config.PreferenceInfo;
 
+			AddBinding("DisplayLanguage", cboDisplayLanguage);
+
 			AddBinding("AutomaticallyCheckForUpdates", chkAutomaticallyCheckForUpdates);
 			AddBinding("SingleInstance", chkSingleInstance);
 			AddBinding("AutoLoadIpsPatches", chkAutoLoadIps);

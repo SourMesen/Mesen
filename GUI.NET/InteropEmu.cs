@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI
 {
@@ -19,6 +20,8 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle);
 		[DllImport(DLLPath)] public static extern void Release();
+
+		[DllImport(DLLPath)] public static extern void SetDisplayLanguage(Language lang);
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRunning();
 
@@ -64,7 +67,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(NotificationListener.NotificationCallback callback);
 		[DllImport(DLLPath)] public static extern void UnregisterNotificationCallback(IntPtr notificationListener);
 
-		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string title, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string message);
+		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string title, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string message, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string param1 = null);
 
 		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
@@ -628,11 +631,11 @@ namespace Mesen.GUI
 		{
 			if(File.Exists(filename)) {
 				var md5 = System.Security.Cryptography.MD5.Create();
-				if(filename.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
+				if(filename.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase) || filename.EndsWith(".fds", StringComparison.InvariantCultureIgnoreCase)) {
 					return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
 				} else if(filename.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) {
 					foreach(var entry in ZipFile.OpenRead(filename).Entries) {
-						if(entry.Name.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase)) {
+						if(entry.Name.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase) || entry.Name.EndsWith(".fds", StringComparison.InvariantCultureIgnoreCase)) {
 							return BitConverter.ToString(md5.ComputeHash(entry.Open())).Replace("-", "");
 						}
 					}

@@ -142,6 +142,14 @@ struct KeyMappingSet
 	uint32_t TurboSpeed;
 };
 
+enum class Language
+{
+	SystemDefault = 0,
+	English = 1,
+	French = 2,
+	Japanese = 3
+};
+
 class EmulationSettings
 {
 private:
@@ -151,6 +159,8 @@ private:
 
 	static uint32_t PpuPaletteArgb[64];
 	static uint32_t _flags;
+
+	static Language _displayLanguage;
 
 	static uint32_t _audioLatency;
 	static double _channelVolume[11];
@@ -197,6 +207,16 @@ public:
 	static bool CheckFlag(uint32_t flag)
 	{
 		return (_flags & flag) == flag;
+	}
+
+	static void SetDisplayLanguage(Language lang)
+	{
+		_displayLanguage = lang;
+	}
+
+	static Language GetDisplayLanguage()
+	{
+		return _displayLanguage;
 	}
 
 	static bool IsPaused()

@@ -42,7 +42,7 @@ public:
 			if(Console::LoadROM(filename, _crc32Hash)) {
 				return true;
 			} else {
-				MessageManager::DisplayMessage("Net Play", "Could not find matching game ROM.");
+				MessageManager::DisplayMessage("NetPlay", "CouldNotFindRom");
 				return false;
 			}
 		}

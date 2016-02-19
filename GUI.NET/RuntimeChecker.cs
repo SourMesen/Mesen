@@ -20,11 +20,11 @@ namespace Mesen.GUI
 			} catch { }
 
 			if(!File.Exists("WinMesen.dll")) {
-				MessageBox.Show("Mesen was unable to start due to missing files." + Environment.NewLine + Environment.NewLine + "Error: WinMesen.dll is missing.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MesenMsgBox.Show("UnableToStartMissingFiles", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			} else {
-				if(MessageBox.Show("Mesen was unable to start due to missing dependencies."  + Environment.NewLine + Environment.NewLine + "Mesen requires the Visual Studio 2015 runtime.  Would you like to download the runtime from Microsoft's website and install it?", "Mesen", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+				if(MesenMsgBox.Show("UnableToStartMissingDependencies", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
 					if(!RuntimeChecker.DownloadRuntime()) {
-						MessageBox.Show("The Visual Studio Runtime could not be installed properly.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MesenMsgBox.Show("CouldNotInstallRuntime", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					} else {
 						Process.Start(Process.GetCurrentProcess().MainModule.FileName);
 					}
@@ -53,7 +53,7 @@ namespace Mesen.GUI
 					Process installer = Process.Start(tempFilename, "/passive /norestart");
 					installer.WaitForExit();
 					if(installer.ExitCode != 0) {
-						MessageBox.Show("Unexpected error: " + installer.ExitCode, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, installer.ExitCode.ToString());
 						return false;
 					} else {
 						//Runtime should now be installed, try to launch Mesen again
@@ -61,7 +61,7 @@ namespace Mesen.GUI
 					}
 				}
 			} catch(Exception e) {
-				MessageBox.Show("Unexpected error: " + Environment.NewLine + e.Message, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, e.ToString());
 			} finally {
 				try {
 					File.Delete(tempFilename);

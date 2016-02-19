@@ -26,7 +26,7 @@ public:
 
 private:
 	vector<SoundDeviceInfo> GetAvailableDeviceInfo();
-	static bool CALLBACK DirectSoundEnumProc(LPGUID lpGUID, LPCSTR lpszDesc, LPCSTR lpszDrvName, LPVOID lpContext);
+	static bool CALLBACK DirectSoundEnumProc(LPGUID lpGUID, LPCWSTR lpszDesc, LPCSTR lpszDrvName, LPVOID lpContext);
 	bool InitializeDirectSound(uint32_t sampleRate);
 	void ShutdownDirectSound();
 	void ClearSecondaryBuffer();

@@ -231,8 +231,8 @@ namespace NES
 		////////////////////////////////////////////////////////////////////////////
 		_spriteBatch.reset(new SpriteBatch(_pDeviceContext));
 
-		_largeFont.reset(new SpriteFont(_pd3dDevice, L"Resources\\Roboto.32.spritefont"));
-		_font.reset(new SpriteFont(_pd3dDevice, L"Resources\\Roboto.12.spritefont"));
+		_largeFont.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.64.spritefont"));
+		_font.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.24.spritefont"));
 
 		//Sample state
 		D3D11_SAMPLER_DESC samplerDesc;
@@ -312,34 +312,20 @@ namespace NES
 		_toasts.push_front(toast);
 	}
 
-	void Renderer::DrawOutlinedString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor, SpriteFont* font)
+	void Renderer::DrawString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, SpriteFont* font)
 	{
 		std::wstring textStr = utf8::utf8::decode(message);
-		DrawOutlinedString(textStr, x, y, color, scale, outlineColor, font);
+		DrawString(textStr, x, y, color, scale, font);
 	}
 
-	void Renderer::DrawOutlinedString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, DirectX::FXMVECTOR outlineColor, SpriteFont* font)
+	void Renderer::DrawString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, SpriteFont* font)
 	{
-		SpriteBatch* spritebatch = _spriteBatch.get();
 		const wchar_t *text = message.c_str();
-
 		if(font == nullptr) {
 			font = _font.get();
 		}
 
-		for(uint8_t offsetX = 2; offsetX > 0; offsetX--) {
-			for(uint8_t offsetY = 2; offsetY > 0; offsetY--) {
-				font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				font->DrawString(spritebatch, text, XMFLOAT2(x + offsetX, y), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				font->DrawString(spritebatch, text, XMFLOAT2(x - offsetX, y), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				font->DrawString(spritebatch, text, XMFLOAT2(x, y + offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-				font->DrawString(spritebatch, text, XMFLOAT2(x, y - offsetY), outlineColor, 0.0f, XMFLOAT2(0, 0), scale);
-			}
-		}
-		font->DrawString(spritebatch, text, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
+		font->DrawString(_spriteBatch.get(), text, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
 	}
 
 	void Renderer::UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height)
@@ -395,7 +381,7 @@ namespace NES
 		_pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
 		for(uint32_t i = 0, len = 8*8; i < len; i++) {
 			//Gray transparent overlay
-			((uint32_t*)dd.pData)[i] = 0x99222222;
+			((uint32_t*)dd.pData)[i] = 0xAA222222;
 		}
 		_pDeviceContext->Unmap(_overlayTexture, 0);
 		
@@ -403,9 +389,8 @@ namespace NES
 		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
 		shaderResourceView->Release();
 
-		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSED");
-
-		DrawOutlinedString("PAUSED", (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2, (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2, Colors::AntiqueWhite, 1.0f, Colors::Black, _largeFont.get());
+		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
+		DrawString("PAUSE", (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2, (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8, Colors::AntiqueWhite, 1.0f, _largeFont.get());
 	}
 
 	void Renderer::Render()
@@ -461,7 +446,7 @@ namespace NES
 					}
 
 					string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
-					DrawOutlinedString(fpsString, (float)(_screenWidth - 120), 13, Colors::AntiqueWhite, 1.0f);
+					DrawString(fpsString, (float)(_screenWidth - 120), 13, Colors::AntiqueWhite, 1.0f);
 				}
 			}
 
@@ -581,10 +566,11 @@ namespace NES
 		XMVECTORF32 color = { opacity, opacity, opacity, opacity };
 		float textLeftMargin = 4.0f;
 
+		int lineHeight = 25;
 		string text = "[" + toast->GetToastTitle() + "] " + toast->GetToastMessage();
 		uint32_t lineCount = 0;
 		std::wstring wrappedText = WrapText(text, _font.get(), _screenWidth - textLeftMargin * 2 - 20, lineCount);
-		lastHeight += lineCount * 20;
-		DrawOutlinedString(wrappedText, textLeftMargin, (float)(_screenHeight - lastHeight), color, 1, { 0.0f,0.0f,0.0f, opacity });
+		lastHeight += lineCount * lineHeight;
+		DrawString(wrappedText, textLeftMargin, (float)(_screenHeight - lastHeight), color, 1);
 	}
 }
