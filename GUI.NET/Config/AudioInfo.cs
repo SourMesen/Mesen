@@ -29,6 +29,7 @@ namespace Mesen.GUI.Config
 		public UInt32 SampleRate = 44100;
 		public bool ReduceSoundInBackground = true;
 		public bool MuteSoundInBackground = false;
+		public bool SwapDutyCycles = false;
 
 		public AudioInfo()
 		{
@@ -64,6 +65,8 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetFlag(EmulationFlags.MuteSoundInBackground, audioInfo.MuteSoundInBackground);
 			InteropEmu.SetFlag(EmulationFlags.ReduceSoundInBackground, audioInfo.ReduceSoundInBackground);
+
+			InteropEmu.SetFlag(EmulationFlags.SwapDutyCycles, audioInfo.SwapDutyCycles);
 		}
 	}
 }

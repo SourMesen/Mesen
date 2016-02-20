@@ -29,6 +29,11 @@ namespace Mesen.GUI.Controls
 			set { trackBar.Maximum = value; }
 		}
 
+
+		[Bindable(true)]
+		[Browsable(true)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+		[EditorBrowsable(EditorBrowsableState.Always)]
 		public override string Text
 		{
 			get { return lblText.Text; }

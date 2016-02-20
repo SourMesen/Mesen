@@ -81,6 +81,8 @@
     </Form>
     <Form ID="frmAudioConfig" Title="音声設定">
       <Control ID="tpgGeneral">全般</Control>
+      <Control ID="tpgAdvanced">詳細設定</Control>
+      <Control ID="chkSwapDutyCycles">Squareチャンネルのデューティサイクルをスワップする</Control>
       <Control ID="chkMuteSoundInBackground">Mesenが最前面ではない時、音声をミュートにする</Control>
       <Control ID="chkReduceSoundInBackground">Mesenが最前面ではない時、音声を低くする</Control>
       <Control ID="chkEnableAudio">音声オン</Control>

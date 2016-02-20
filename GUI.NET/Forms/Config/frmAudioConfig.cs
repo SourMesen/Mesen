@@ -42,6 +42,8 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("ReduceSoundInBackground", chkReduceSoundInBackground);
 			AddBinding("MuteSoundInBackground", chkMuteSoundInBackground);
+
+			AddBinding("SwapDutyCycles", chkSwapDutyCycles);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)

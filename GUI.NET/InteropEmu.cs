@@ -535,6 +535,8 @@ namespace Mesen.GUI
 		FdsAutoLoadDisk = 0x4000,
 		Mmc3IrqAltBehavior = 0x8000,
 
+		SwapDutyCycles = 0x10000,
+
 		InBackground = 0x40000000,
 	}
 	

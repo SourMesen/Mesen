@@ -81,6 +81,8 @@
     </Form>
     <Form ID="frmAudioConfig" Title="Options audio">
       <Control ID="tpgGeneral">Général</Control>
+      <Control ID="tpgAdvanced">Avancé</Control>
+      <Control ID="chkSwapDutyCycles">Inverser le rapport cyclique des canaux Square 1 et Square 2</Control>
       <Control ID="chkMuteSoundInBackground">Fermer le son lorsque Mesen est en arrière-plan</Control>
       <Control ID="chkReduceSoundInBackground">Réduire le volume lorsque Mesen est en arrière-plan</Control>
       <Control ID="chkEnableAudio">Activer le son</Control>

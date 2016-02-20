@@ -57,6 +57,9 @@
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgVolume = new System.Windows.Forms.TabPage();
+			this.tpgAdvanced = new System.Windows.Forms.TabPage();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkSwapDutyCycles = new System.Windows.Forms.CheckBox();
 			this.baseConfigPanel.SuspendLayout();
 			this.grpVolume.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -66,6 +69,8 @@
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgVolume.SuspendLayout();
+			this.tpgAdvanced.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -463,6 +468,7 @@
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
 			this.tabMain.Controls.Add(this.tpgVolume);
+			this.tabMain.Controls.Add(this.tpgAdvanced);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
@@ -492,6 +498,41 @@
 			this.tpgVolume.Text = "Volume";
 			this.tpgVolume.UseVisualStyleBackColor = true;
 			// 
+			// tpgAdvanced
+			// 
+			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel3);
+			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
+			this.tpgAdvanced.Name = "tpgAdvanced";
+			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgAdvanced.Size = new System.Drawing.Size(469, 349);
+			this.tpgAdvanced.TabIndex = 2;
+			this.tpgAdvanced.Text = "Advanced";
+			this.tpgAdvanced.UseVisualStyleBackColor = true;
+			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 1;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.chkSwapDutyCycles, 0, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 2;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(463, 343);
+			this.tableLayoutPanel3.TabIndex = 1;
+			// 
+			// chkSwapDutyCycles
+			// 
+			this.chkSwapDutyCycles.AutoSize = true;
+			this.chkSwapDutyCycles.Location = new System.Drawing.Point(3, 3);
+			this.chkSwapDutyCycles.Name = "chkSwapDutyCycles";
+			this.chkSwapDutyCycles.Size = new System.Drawing.Size(282, 17);
+			this.chkSwapDutyCycles.TabIndex = 0;
+			this.chkSwapDutyCycles.Text = "Swap square channels duty cycles (Mimics old clones)";
+			this.chkSwapDutyCycles.UseVisualStyleBackColor = true;
+			// 
 			// frmAudioConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -518,6 +559,9 @@
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgVolume.ResumeLayout(false);
+			this.tpgAdvanced.ResumeLayout(false);
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -554,5 +598,8 @@
 		private System.Windows.Forms.TabPage tpgVolume;
 		private System.Windows.Forms.CheckBox chkMuteSoundInBackground;
 		private System.Windows.Forms.CheckBox chkReduceSoundInBackground;
+		private System.Windows.Forms.TabPage tpgAdvanced;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+		private System.Windows.Forms.CheckBox chkSwapDutyCycles;
 	}
 }
