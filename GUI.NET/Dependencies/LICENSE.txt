@@ -1,3 +1,10 @@
+-----------------------------------------------------------------------
+IMPORTANT NOTE:
+THIS LICENSE APPLIES TO Font.24.spritefont AND Font.64.spritefont ONLY.
+Those files are derived works of SIL fonts and as such are distributed 
+under the same license.
+-----------------------------------------------------------------------
+
 This Font Software is licensed under the SIL Open Font License,
 Version 1.1.
 
