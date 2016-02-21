@@ -5,6 +5,9 @@
 #include "../BlipBuffer/blip_buf.h"
 #include "IAudioDevice.h"
 #include "Snapshotable.h"
+#include "StereoPanningFilter.h"
+#include "StereoDelayFilter.h"
+#include "ReverbFilter.h"
 
 class SoundMixer : public Snapshotable
 {
@@ -21,6 +24,9 @@ private:
 
 	AudioChannel _expansionAudioType;
 	LowPassFilter _lowPassFilter;
+	StereoPanningFilter _stereoPanning;
+	StereoDelayFilter _stereoDelay;
+	ReverbFilter _reverbFilter;
 
 	int16_t _previousOutput = 0;
 

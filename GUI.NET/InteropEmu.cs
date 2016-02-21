@@ -102,6 +102,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(AudioChannel channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetSampleRate(UInt32 sampleRate);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
+		[DllImport(DLLPath)] public static extern void SetStereoFilter(StereoFilter stereoFilter);
+		[DllImport(DLLPath)] public static extern void SetStereoDelay(Int32 delay);
+		[DllImport(DLLPath)] public static extern void SetStereoPanningAngle(double angle);
+		[DllImport(DLLPath)] public static extern void SetReverbParameters(double strength, double delay);
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
 		[DllImport(DLLPath)] public static extern void SetEmulationSpeed(UInt32 emulationSpeed);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
@@ -359,6 +363,13 @@ namespace Mesen.GUI
 			public UInt32 TurboB;
 			public UInt32 TurboStart;
 			public UInt32 TurboSelect;
+		}
+
+		public enum StereoFilter
+		{
+			None = 0,
+			Delay = 1,
+			Panning = 2,
 		}
 
 		public struct ScreenSize

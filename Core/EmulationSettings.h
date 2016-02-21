@@ -152,6 +152,13 @@ enum class Language
 	Japanese = 3
 };
 
+enum class StereoFilter
+{
+	None = 0,
+	Delay = 1,
+	Panning = 2,
+};
+
 class EmulationSettings
 {
 private:
@@ -167,9 +174,13 @@ private:
 	static uint32_t _audioLatency;
 	static double _channelVolume[11];
 	static double _masterVolume;
-
 	static uint32_t _sampleRate;
-	
+	static StereoFilter _stereoFilter;
+	static int32_t _stereoDelay;
+	static double _stereoAngle;
+	static double _reverbStrength;
+	static double _reverbDelay;
+		
 	static NesModel _model;
 
 	static uint32_t _emulationSpeed;
@@ -260,6 +271,52 @@ public:
 	static void SetAudioLatency(uint32_t msLatency)
 	{
 		_audioLatency = msLatency;
+	}
+
+	static void SetStereoFilter(StereoFilter stereoFilter)
+	{
+		_stereoFilter = stereoFilter;
+	}
+
+	static void SetStereoDelay(int32_t delay)
+	{
+		_stereoDelay = delay;
+	}
+
+	static void SetStereoPanningAngle(double angle)
+	{
+		_stereoAngle = angle;
+	}
+
+	static void SetReverbParameters(double strength, double delay)
+	{
+		_reverbStrength = strength;
+		_reverbDelay = delay;
+	}
+
+	static StereoFilter GetStereoFilter()
+	{
+		return _stereoFilter;
+	}
+
+	static int32_t GetStereoDelay()
+	{
+		return _stereoDelay;
+	}
+
+	static double GetStereoPanningAngle()
+	{
+		return _stereoAngle;
+	}
+
+	static double GetReverbStrength()
+	{
+		return _reverbStrength;
+	}
+
+	static double GetReverbDelay()
+	{
+		return _reverbDelay;
 	}
 
 	//0: No limit, Number: % of default speed (50/60fps)

@@ -181,7 +181,9 @@ namespace Mesen.GUI.Forms
 						NumericUpDown nud = kvp.Value as NumericUpDown;
 						decimal val;
 						if(field.FieldType == typeof(UInt32)) {
-							val = (uint)value;
+							val = (UInt32)value;
+						} else if(field.FieldType == typeof(Int32)) {
+							val = (Int32)value;
 						} else {
 							val = (decimal)(double)value;
 						}
@@ -251,6 +253,8 @@ namespace Mesen.GUI.Forms
 						} else if(kvp.Value is NumericUpDown) {
 							if(field.FieldType == typeof(UInt32)) {
 								field.SetValue(Entity, (UInt32)((NumericUpDown)kvp.Value).Value);
+							} else if(field.FieldType == typeof(Int32)) {
+								field.SetValue(Entity, (Int32)((NumericUpDown)kvp.Value).Value);
 							} else {
 								field.SetValue(Entity, (double)((NumericUpDown)kvp.Value).Value);
 							}

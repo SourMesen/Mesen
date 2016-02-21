@@ -30,6 +30,12 @@ namespace Mesen.GUI.Config
 		public bool ReduceSoundInBackground = true;
 		public bool MuteSoundInBackground = false;
 		public bool SwapDutyCycles = false;
+		public InteropEmu.StereoFilter StereoFilter;
+		public Int32 StereoDelay = 15;
+		public Int32 StereoPanningAngle = 15;
+		public bool ReverbEnabled = false;
+		public UInt32 ReverbStrength = 5;
+		public UInt32 ReverbDelay = 10;
 
 		public AudioInfo()
 		{
@@ -67,6 +73,16 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.ReduceSoundInBackground, audioInfo.ReduceSoundInBackground);
 
 			InteropEmu.SetFlag(EmulationFlags.SwapDutyCycles, audioInfo.SwapDutyCycles);
+
+			InteropEmu.SetStereoFilter(audioInfo.StereoFilter);
+			InteropEmu.SetStereoPanningAngle((double)audioInfo.StereoPanningAngle/180*Math.PI);
+			InteropEmu.SetStereoDelay(audioInfo.StereoDelay);
+
+			if(audioInfo.ReverbEnabled) {
+				InteropEmu.SetReverbParameters(audioInfo.ReverbStrength/10.0, audioInfo.ReverbDelay/10.0);
+			} else {
+				InteropEmu.SetReverbParameters(0, 0);
+			}
 		}
 	}
 }

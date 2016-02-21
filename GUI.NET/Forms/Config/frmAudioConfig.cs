@@ -44,6 +44,18 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("MuteSoundInBackground", chkMuteSoundInBackground);
 
 			AddBinding("SwapDutyCycles", chkSwapDutyCycles);
+				
+			radStereoDisabled.Tag = InteropEmu.StereoFilter.None;
+			radStereoDelay.Tag = InteropEmu.StereoFilter.Delay;
+			radStereoPanning.Tag = InteropEmu.StereoFilter.Panning;
+
+			AddBinding("StereoFilter", tlpStereoFilter);
+			AddBinding("StereoDelay", nudStereoDelay);
+			AddBinding("StereoPanningAngle", nudStereoPanning);
+
+			AddBinding("ReverbEnabled", chkReverbEnabled);
+			AddBinding("ReverbDelay", trkReverbDelay);
+			AddBinding("ReverbStrength", trkReverbStrength);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)

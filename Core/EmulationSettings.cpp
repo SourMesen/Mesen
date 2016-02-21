@@ -30,6 +30,11 @@ uint32_t EmulationSettings::_audioLatency = 20000;
 double EmulationSettings::_channelVolume[11] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 double EmulationSettings::_masterVolume = 1.0;
 uint32_t EmulationSettings::_sampleRate = 44100;
+StereoFilter EmulationSettings::_stereoFilter = StereoFilter::None;
+int32_t EmulationSettings::_stereoDelay = 0;
+double EmulationSettings::_stereoAngle = 0;
+double EmulationSettings::_reverbStrength = 0;
+double EmulationSettings::_reverbDelay = 0;
 
 NesModel EmulationSettings::_model = NesModel::Auto;
 

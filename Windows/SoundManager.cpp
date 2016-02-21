@@ -12,7 +12,7 @@ SoundManager::SoundManager(HWND hwnd)
 
 	memset(&_audioDeviceID, 0, sizeof(_audioDeviceID));
 
-	if(InitializeDirectSound(44100)) {
+	if(InitializeDirectSound(44100, false)) {
 		SoundMixer::RegisterAudioDevice(this);
 	} else {
 		MessageManager::DisplayMessage("Error", "Could not initialize audio system");
@@ -69,7 +69,7 @@ void SoundManager::SetAudioDevice(string deviceName)
 	}
 }
 
-bool SoundManager::InitializeDirectSound(uint32_t sampleRate)
+bool SoundManager::InitializeDirectSound(uint32_t sampleRate, bool isStereo)
 {
 	HRESULT result;
 	DSBUFFERDESC bufferDesc;
@@ -103,11 +103,12 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate)
 
 	// Setup the format of the primary sound bufffer.
 	_sampleRate = sampleRate;
+	_isStereo = isStereo;
 
 	waveFormat.wFormatTag = WAVE_FORMAT_PCM;
 	waveFormat.nSamplesPerSec = _sampleRate;
 	waveFormat.wBitsPerSample = 16;
-	waveFormat.nChannels = 1;
+	waveFormat.nChannels = isStereo ? 2 : 1;
 	waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
 	waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
 	waveFormat.cbSize = 0;
@@ -225,14 +226,21 @@ void SoundManager::Play()
 	}
 }
 
-void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t soundBufferSize, uint32_t sampleRate)
+void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo)
 {
-	if(_sampleRate != sampleRate || _needReset) {
+	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8);
+	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset) {
 		Release();
-		InitializeDirectSound(sampleRate);
+		InitializeDirectSound(sampleRate, isStereo);
 	}
 
-	int32_t byteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * (SoundMixer::BitsPerSample / 8));
+	if(isStereo) {
+		bytesPerSample *= 2;
+	}
+
+	uint32_t soundBufferSize = sampleCount * bytesPerSample;
+
+	int32_t byteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * bytesPerSample);
 	if(byteLatency != _previousLatency) {
 		Stop();
 		_previousLatency = byteLatency;

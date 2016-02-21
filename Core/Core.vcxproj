@@ -362,6 +362,7 @@
     <ClInclude Include="Bandai74161_7432.h" />
     <ClInclude Include="BaseFdsChannel.h" />
     <ClInclude Include="BaseMapper.h" />
+    <ClInclude Include="BaseSoundFilter.h" />
     <ClInclude Include="BF9096.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="BnRom.h" />
@@ -410,6 +411,7 @@
     <ClInclude Include="MMC3_ChrRam.h" />
     <ClInclude Include="ModChannel.h" />
     <ClInclude Include="PlayerListMessage.h" />
+    <ClInclude Include="ReverbFilter.h" />
     <ClInclude Include="RomData.h" />
     <ClInclude Include="NtdecTc112.h" />
     <ClInclude Include="Rambo1.h" />
@@ -493,6 +495,8 @@
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="RomLoader.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StereoDelayFilter.h" />
+    <ClInclude Include="StereoPanningFilter.h" />
     <ClInclude Include="Sunsoft184.h" />
     <ClInclude Include="SunSoft3.h" />
     <ClInclude Include="SunSoft4.h" />
@@ -525,6 +529,7 @@
     <ClCompile Include="AutoRomTest.cpp" />
     <ClCompile Include="BaseControlDevice.cpp" />
     <ClCompile Include="BaseMapper.cpp" />
+    <ClCompile Include="BaseSoundFilter.cpp" />
     <ClCompile Include="Breakpoint.cpp" />
     <ClCompile Include="CheatManager.cpp" />
     <ClCompile Include="CodeDataLogger.cpp" />
@@ -545,6 +550,7 @@
     <ClCompile Include="GameServerConnection.cpp" />
     <ClCompile Include="HdVideoFilter.cpp" />
     <ClCompile Include="NtscFilter.cpp" />
+    <ClCompile Include="ReverbFilter.cpp" />
     <ClCompile Include="RomLoader.cpp" />
     <ClCompile Include="SoundMixer.cpp" />
     <ClCompile Include="StandardController.cpp" />
@@ -565,6 +571,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='PGO Profile|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='PGO Optimize|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="StereoDelayFilter.cpp" />
+    <ClCompile Include="StereoPanningFilter.cpp" />
     <ClCompile Include="TraceLogger.cpp" />
     <ClCompile Include="VideoRenderer.cpp" />
     <ClCompile Include="VideoDecoder.cpp" />

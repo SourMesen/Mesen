@@ -66,6 +66,9 @@
     <Filter Include="Nes\Controllers">
       <UniqueIdentifier>{acd315c2-48ad-4243-a997-bb9a970c24bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\APU\Filters">
+      <UniqueIdentifier>{783f3638-4293-480f-b525-2485c4209ff5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -551,6 +554,18 @@
     <ClInclude Include="ArkanoidController.h">
       <Filter>Nes\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="StereoPanningFilter.h">
+      <Filter>Nes\APU\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="StereoDelayFilter.h">
+      <Filter>Nes\APU\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="ReverbFilter.h">
+      <Filter>Nes\APU\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseSoundFilter.h">
+      <Filter>Nes\APU\Filters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -678,6 +693,18 @@
     </ClCompile>
     <ClCompile Include="ArkanoidController.cpp">
       <Filter>Nes\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="StereoPanningFilter.cpp">
+      <Filter>Nes\APU\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="StereoDelayFilter.cpp">
+      <Filter>Nes\APU\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseSoundFilter.cpp">
+      <Filter>Nes\APU\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="ReverbFilter.cpp">
+      <Filter>Nes\APU\Filters</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

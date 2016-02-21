@@ -82,9 +82,29 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 			}
 		}
 
-		SoundMixer::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)(sampleCount * SoundMixer::BitsPerSample / 8), _sampleRate);
+		int16_t* soundBuffer = _outputBuffer;
+		if(EmulationSettings::GetReverbStrength() > 0) {
+			soundBuffer = _reverbFilter.ApplyFilter(soundBuffer, sampleCount, _sampleRate, EmulationSettings::GetReverbStrength(), EmulationSettings::GetReverbDelay());
+		} else {
+			_reverbFilter.ResetFilter();
+		}
+
+		bool isStereo = false;
+		switch(EmulationSettings::GetStereoFilter()) {
+			case StereoFilter::Delay:
+				soundBuffer = _stereoDelay.ApplyFilter(soundBuffer, sampleCount, _sampleRate);
+				isStereo = true;
+				break;
+
+			case StereoFilter::Panning:
+				soundBuffer = _stereoPanning.ApplyFilter(soundBuffer, sampleCount);
+				isStereo = true;
+				break;
+		}
+
+		SoundMixer::AudioDevice->PlayBuffer(soundBuffer, (uint32_t)sampleCount, _sampleRate, isStereo);
 	}
-	
+
 	if(EmulationSettings::GetSampleRate() != _sampleRate) {
 		//Update sample rate for next frame if setting changed
 		_sampleRate = EmulationSettings::GetSampleRate();

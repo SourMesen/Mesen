@@ -57,6 +57,26 @@
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgVolume = new System.Windows.Forms.TabPage();
+			this.tpgEffects = new System.Windows.Forms.TabPage();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.grpStereo = new System.Windows.Forms.GroupBox();
+			this.tlpStereoFilter = new System.Windows.Forms.TableLayoutPanel();
+			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+			this.nudStereoDelay = new System.Windows.Forms.NumericUpDown();
+			this.lblStereoDelayMs = new System.Windows.Forms.Label();
+			this.radStereoDisabled = new System.Windows.Forms.RadioButton();
+			this.radStereoDelay = new System.Windows.Forms.RadioButton();
+			this.radStereoPanning = new System.Windows.Forms.RadioButton();
+			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+			this.nudStereoPanning = new System.Windows.Forms.NumericUpDown();
+			this.lblStereoPanningAngle = new System.Windows.Forms.Label();
+			this.grpReverb = new System.Windows.Forms.GroupBox();
+			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkReverbEnabled = new System.Windows.Forms.CheckBox();
+			this.lblReverbStrength = new System.Windows.Forms.Label();
+			this.lblReverbDelay = new System.Windows.Forms.Label();
+			this.trkReverbDelay = new System.Windows.Forms.TrackBar();
+			this.trkReverbStrength = new System.Windows.Forms.TrackBar();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkSwapDutyCycles = new System.Windows.Forms.CheckBox();
@@ -69,6 +89,18 @@
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgVolume.SuspendLayout();
+			this.tpgEffects.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
+			this.grpStereo.SuspendLayout();
+			this.tlpStereoFilter.SuspendLayout();
+			this.flowLayoutPanel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudStereoDelay)).BeginInit();
+			this.flowLayoutPanel4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudStereoPanning)).BeginInit();
+			this.grpReverb.SuspendLayout();
+			this.tableLayoutPanel5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.trkReverbDelay)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.trkReverbStrength)).BeginInit();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.SuspendLayout();
@@ -124,7 +156,6 @@
 			// trkDmcVol
 			// 
 			this.trkDmcVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkDmcVol.Text = "DMC";
 			this.trkDmcVol.Location = new System.Drawing.Point(384, 0);
 			this.trkDmcVol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkDmcVol.Maximum = 100;
@@ -133,12 +164,12 @@
 			this.trkDmcVol.Name = "trkDmcVol";
 			this.trkDmcVol.Size = new System.Drawing.Size(63, 160);
 			this.trkDmcVol.TabIndex = 16;
+			this.trkDmcVol.Text = "DMC";
 			this.trkDmcVol.Value = 50;
 			// 
 			// trkNoiseVol
 			// 
 			this.trkNoiseVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkNoiseVol.Text = "Noise";
 			this.trkNoiseVol.Location = new System.Drawing.Point(306, 0);
 			this.trkNoiseVol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkNoiseVol.Maximum = 100;
@@ -147,12 +178,12 @@
 			this.trkNoiseVol.Name = "trkNoiseVol";
 			this.trkNoiseVol.Size = new System.Drawing.Size(63, 160);
 			this.trkNoiseVol.TabIndex = 15;
+			this.trkNoiseVol.Text = "Noise";
 			this.trkNoiseVol.Value = 50;
 			// 
 			// trkTriangleVol
 			// 
 			this.trkTriangleVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkTriangleVol.Text = "Triangle";
 			this.trkTriangleVol.Location = new System.Drawing.Point(231, 0);
 			this.trkTriangleVol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkTriangleVol.Maximum = 100;
@@ -161,12 +192,12 @@
 			this.trkTriangleVol.Name = "trkTriangleVol";
 			this.trkTriangleVol.Size = new System.Drawing.Size(63, 160);
 			this.trkTriangleVol.TabIndex = 14;
+			this.trkTriangleVol.Text = "Triangle";
 			this.trkTriangleVol.Value = 50;
 			// 
 			// trkSquare2Vol
 			// 
 			this.trkSquare2Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkSquare2Vol.Text = "Square 2";
 			this.trkSquare2Vol.Location = new System.Drawing.Point(156, 0);
 			this.trkSquare2Vol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkSquare2Vol.Maximum = 100;
@@ -175,12 +206,12 @@
 			this.trkSquare2Vol.Name = "trkSquare2Vol";
 			this.trkSquare2Vol.Size = new System.Drawing.Size(63, 160);
 			this.trkSquare2Vol.TabIndex = 13;
+			this.trkSquare2Vol.Text = "Square 2";
 			this.trkSquare2Vol.Value = 50;
 			// 
 			// trkSquare1Vol
 			// 
 			this.trkSquare1Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkSquare1Vol.Text = "Square 1";
 			this.trkSquare1Vol.Location = new System.Drawing.Point(81, 0);
 			this.trkSquare1Vol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkSquare1Vol.Maximum = 100;
@@ -189,12 +220,12 @@
 			this.trkSquare1Vol.Name = "trkSquare1Vol";
 			this.trkSquare1Vol.Size = new System.Drawing.Size(63, 160);
 			this.trkSquare1Vol.TabIndex = 12;
+			this.trkSquare1Vol.Text = "Square 1";
 			this.trkSquare1Vol.Value = 50;
 			// 
 			// trkMaster
 			// 
 			this.trkMaster.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkMaster.Text = "Master";
 			this.trkMaster.Location = new System.Drawing.Point(6, 0);
 			this.trkMaster.Margin = new System.Windows.Forms.Padding(0);
 			this.trkMaster.Maximum = 100;
@@ -203,12 +234,12 @@
 			this.trkMaster.Name = "trkMaster";
 			this.trkMaster.Size = new System.Drawing.Size(63, 160);
 			this.trkMaster.TabIndex = 11;
+			this.trkMaster.Text = "Master";
 			this.trkMaster.Value = 50;
 			// 
 			// trkFdsVol
 			// 
 			this.trkFdsVol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkFdsVol.Text = "FDS";
 			this.trkFdsVol.Location = new System.Drawing.Point(6, 160);
 			this.trkFdsVol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkFdsVol.Maximum = 100;
@@ -217,12 +248,12 @@
 			this.trkFdsVol.Name = "trkFdsVol";
 			this.trkFdsVol.Size = new System.Drawing.Size(63, 160);
 			this.trkFdsVol.TabIndex = 17;
+			this.trkFdsVol.Text = "FDS";
 			this.trkFdsVol.Value = 50;
 			// 
 			// trkMmc5Vol
 			// 
 			this.trkMmc5Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkMmc5Vol.Text = "MMC5";
 			this.trkMmc5Vol.Enabled = false;
 			this.trkMmc5Vol.Location = new System.Drawing.Point(81, 160);
 			this.trkMmc5Vol.Margin = new System.Windows.Forms.Padding(0);
@@ -232,12 +263,12 @@
 			this.trkMmc5Vol.Name = "trkMmc5Vol";
 			this.trkMmc5Vol.Size = new System.Drawing.Size(63, 160);
 			this.trkMmc5Vol.TabIndex = 18;
+			this.trkMmc5Vol.Text = "MMC5";
 			this.trkMmc5Vol.Value = 50;
 			// 
 			// trkVrc6Vol
 			// 
 			this.trkVrc6Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkVrc6Vol.Text = "VRC6";
 			this.trkVrc6Vol.Enabled = false;
 			this.trkVrc6Vol.Location = new System.Drawing.Point(156, 160);
 			this.trkVrc6Vol.Margin = new System.Windows.Forms.Padding(0);
@@ -247,12 +278,12 @@
 			this.trkVrc6Vol.Name = "trkVrc6Vol";
 			this.trkVrc6Vol.Size = new System.Drawing.Size(63, 160);
 			this.trkVrc6Vol.TabIndex = 19;
+			this.trkVrc6Vol.Text = "VRC6";
 			this.trkVrc6Vol.Value = 50;
 			// 
 			// trkVrc7Vol
 			// 
 			this.trkVrc7Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkVrc7Vol.Text = "VRC7";
 			this.trkVrc7Vol.Enabled = false;
 			this.trkVrc7Vol.Location = new System.Drawing.Point(231, 160);
 			this.trkVrc7Vol.Margin = new System.Windows.Forms.Padding(0);
@@ -262,12 +293,12 @@
 			this.trkVrc7Vol.Name = "trkVrc7Vol";
 			this.trkVrc7Vol.Size = new System.Drawing.Size(63, 160);
 			this.trkVrc7Vol.TabIndex = 20;
+			this.trkVrc7Vol.Text = "VRC7";
 			this.trkVrc7Vol.Value = 50;
 			// 
 			// trkNamco163Vol
 			// 
 			this.trkNamco163Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkNamco163Vol.Text = "Namco";
 			this.trkNamco163Vol.Enabled = false;
 			this.trkNamco163Vol.Location = new System.Drawing.Point(306, 160);
 			this.trkNamco163Vol.Margin = new System.Windows.Forms.Padding(0);
@@ -277,12 +308,12 @@
 			this.trkNamco163Vol.Name = "trkNamco163Vol";
 			this.trkNamco163Vol.Size = new System.Drawing.Size(63, 160);
 			this.trkNamco163Vol.TabIndex = 21;
+			this.trkNamco163Vol.Text = "Namco";
 			this.trkNamco163Vol.Value = 50;
 			// 
 			// trkSunsoft5b
 			// 
 			this.trkSunsoft5b.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkSunsoft5b.Text = "Sunsoft";
 			this.trkSunsoft5b.Enabled = false;
 			this.trkSunsoft5b.Location = new System.Drawing.Point(384, 160);
 			this.trkSunsoft5b.Margin = new System.Windows.Forms.Padding(0);
@@ -292,6 +323,7 @@
 			this.trkSunsoft5b.Name = "trkSunsoft5b";
 			this.trkSunsoft5b.Size = new System.Drawing.Size(63, 160);
 			this.trkSunsoft5b.TabIndex = 22;
+			this.trkSunsoft5b.Text = "Sunsoft";
 			this.trkSunsoft5b.Value = 50;
 			// 
 			// tableLayoutPanel2
@@ -468,6 +500,7 @@
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
 			this.tabMain.Controls.Add(this.tpgVolume);
+			this.tabMain.Controls.Add(this.tpgEffects);
 			this.tabMain.Controls.Add(this.tpgAdvanced);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
@@ -497,6 +530,252 @@
 			this.tpgVolume.TabIndex = 1;
 			this.tpgVolume.Text = "Volume";
 			this.tpgVolume.UseVisualStyleBackColor = true;
+			// 
+			// tpgEffects
+			// 
+			this.tpgEffects.Controls.Add(this.tableLayoutPanel4);
+			this.tpgEffects.Location = new System.Drawing.Point(4, 22);
+			this.tpgEffects.Name = "tpgEffects";
+			this.tpgEffects.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgEffects.Size = new System.Drawing.Size(469, 349);
+			this.tpgEffects.TabIndex = 3;
+			this.tpgEffects.Text = "Effects";
+			this.tpgEffects.UseVisualStyleBackColor = true;
+			// 
+			// tableLayoutPanel4
+			// 
+			this.tableLayoutPanel4.ColumnCount = 1;
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Controls.Add(this.grpStereo, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.grpReverb, 0, 1);
+			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+			this.tableLayoutPanel4.RowCount = 3;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(463, 343);
+			this.tableLayoutPanel4.TabIndex = 0;
+			// 
+			// grpStereo
+			// 
+			this.grpStereo.Controls.Add(this.tlpStereoFilter);
+			this.grpStereo.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpStereo.Location = new System.Drawing.Point(3, 3);
+			this.grpStereo.Name = "grpStereo";
+			this.grpStereo.Size = new System.Drawing.Size(457, 95);
+			this.grpStereo.TabIndex = 0;
+			this.grpStereo.TabStop = false;
+			this.grpStereo.Text = "Stereo";
+			// 
+			// tlpStereoFilter
+			// 
+			this.tlpStereoFilter.ColumnCount = 2;
+			this.tlpStereoFilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpStereoFilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpStereoFilter.Controls.Add(this.flowLayoutPanel3, 1, 1);
+			this.tlpStereoFilter.Controls.Add(this.radStereoDisabled, 0, 0);
+			this.tlpStereoFilter.Controls.Add(this.radStereoDelay, 0, 1);
+			this.tlpStereoFilter.Controls.Add(this.radStereoPanning, 0, 2);
+			this.tlpStereoFilter.Controls.Add(this.flowLayoutPanel4, 1, 2);
+			this.tlpStereoFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpStereoFilter.Location = new System.Drawing.Point(3, 16);
+			this.tlpStereoFilter.Name = "tlpStereoFilter";
+			this.tlpStereoFilter.RowCount = 4;
+			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpStereoFilter.Size = new System.Drawing.Size(451, 76);
+			this.tlpStereoFilter.TabIndex = 0;
+			// 
+			// flowLayoutPanel3
+			// 
+			this.flowLayoutPanel3.Controls.Add(this.nudStereoDelay);
+			this.flowLayoutPanel3.Controls.Add(this.lblStereoDelayMs);
+			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(72, 23);
+			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(379, 26);
+			this.flowLayoutPanel3.TabIndex = 1;
+			// 
+			// nudStereoDelay
+			// 
+			this.nudStereoDelay.Location = new System.Drawing.Point(3, 3);
+			this.nudStereoDelay.Name = "nudStereoDelay";
+			this.nudStereoDelay.Size = new System.Drawing.Size(45, 20);
+			this.nudStereoDelay.TabIndex = 1;
+			// 
+			// lblStereoDelayMs
+			// 
+			this.lblStereoDelayMs.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblStereoDelayMs.AutoSize = true;
+			this.lblStereoDelayMs.Location = new System.Drawing.Point(54, 6);
+			this.lblStereoDelayMs.Name = "lblStereoDelayMs";
+			this.lblStereoDelayMs.Size = new System.Drawing.Size(20, 13);
+			this.lblStereoDelayMs.TabIndex = 1;
+			this.lblStereoDelayMs.Text = "ms";
+			// 
+			// radStereoDisabled
+			// 
+			this.radStereoDisabled.AutoSize = true;
+			this.radStereoDisabled.Location = new System.Drawing.Point(3, 3);
+			this.radStereoDisabled.Name = "radStereoDisabled";
+			this.radStereoDisabled.Size = new System.Drawing.Size(66, 17);
+			this.radStereoDisabled.TabIndex = 1;
+			this.radStereoDisabled.TabStop = true;
+			this.radStereoDisabled.Tag = "None";
+			this.radStereoDisabled.Text = "Disabled";
+			this.radStereoDisabled.UseVisualStyleBackColor = true;
+			// 
+			// radStereoDelay
+			// 
+			this.radStereoDelay.AutoSize = true;
+			this.radStereoDelay.Location = new System.Drawing.Point(3, 26);
+			this.radStereoDelay.Name = "radStereoDelay";
+			this.radStereoDelay.Size = new System.Drawing.Size(52, 17);
+			this.radStereoDelay.TabIndex = 2;
+			this.radStereoDelay.TabStop = true;
+			this.radStereoDelay.Tag = "Delay";
+			this.radStereoDelay.Text = "Delay";
+			this.radStereoDelay.UseVisualStyleBackColor = true;
+			// 
+			// radStereoPanning
+			// 
+			this.radStereoPanning.AutoSize = true;
+			this.radStereoPanning.Location = new System.Drawing.Point(3, 52);
+			this.radStereoPanning.Name = "radStereoPanning";
+			this.radStereoPanning.Size = new System.Drawing.Size(64, 17);
+			this.radStereoPanning.TabIndex = 3;
+			this.radStereoPanning.TabStop = true;
+			this.radStereoPanning.Tag = "Panning";
+			this.radStereoPanning.Text = "Panning";
+			this.radStereoPanning.UseVisualStyleBackColor = true;
+			// 
+			// flowLayoutPanel4
+			// 
+			this.flowLayoutPanel4.Controls.Add(this.nudStereoPanning);
+			this.flowLayoutPanel4.Controls.Add(this.lblStereoPanningAngle);
+			this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel4.Location = new System.Drawing.Point(72, 49);
+			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
+			this.flowLayoutPanel4.Size = new System.Drawing.Size(379, 26);
+			this.flowLayoutPanel4.TabIndex = 4;
+			// 
+			// nudStereoPanning
+			// 
+			this.nudStereoPanning.Location = new System.Drawing.Point(3, 3);
+			this.nudStereoPanning.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+			this.nudStereoPanning.Minimum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            -2147483648});
+			this.nudStereoPanning.Name = "nudStereoPanning";
+			this.nudStereoPanning.Size = new System.Drawing.Size(45, 20);
+			this.nudStereoPanning.TabIndex = 1;
+			// 
+			// lblStereoPanningAngle
+			// 
+			this.lblStereoPanningAngle.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblStereoPanningAngle.AutoSize = true;
+			this.lblStereoPanningAngle.Location = new System.Drawing.Point(54, 6);
+			this.lblStereoPanningAngle.Name = "lblStereoPanningAngle";
+			this.lblStereoPanningAngle.Size = new System.Drawing.Size(92, 13);
+			this.lblStereoPanningAngle.TabIndex = 1;
+			this.lblStereoPanningAngle.Text = "(Angle in degrees)";
+			// 
+			// grpReverb
+			// 
+			this.grpReverb.Controls.Add(this.tableLayoutPanel5);
+			this.grpReverb.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpReverb.Location = new System.Drawing.Point(3, 104);
+			this.grpReverb.Name = "grpReverb";
+			this.grpReverb.Size = new System.Drawing.Size(457, 109);
+			this.grpReverb.TabIndex = 1;
+			this.grpReverb.TabStop = false;
+			this.grpReverb.Text = "Reverb";
+			// 
+			// tableLayoutPanel5
+			// 
+			this.tableLayoutPanel5.ColumnCount = 2;
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.Controls.Add(this.chkReverbEnabled, 0, 0);
+			this.tableLayoutPanel5.Controls.Add(this.lblReverbStrength, 0, 1);
+			this.tableLayoutPanel5.Controls.Add(this.lblReverbDelay, 0, 2);
+			this.tableLayoutPanel5.Controls.Add(this.trkReverbDelay, 1, 2);
+			this.tableLayoutPanel5.Controls.Add(this.trkReverbStrength, 1, 1);
+			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 16);
+			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+			this.tableLayoutPanel5.RowCount = 4;
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(451, 90);
+			this.tableLayoutPanel5.TabIndex = 0;
+			// 
+			// chkReverbEnabled
+			// 
+			this.chkReverbEnabled.AutoSize = true;
+			this.tableLayoutPanel5.SetColumnSpan(this.chkReverbEnabled, 2);
+			this.chkReverbEnabled.Location = new System.Drawing.Point(3, 3);
+			this.chkReverbEnabled.Name = "chkReverbEnabled";
+			this.chkReverbEnabled.Size = new System.Drawing.Size(97, 17);
+			this.chkReverbEnabled.TabIndex = 0;
+			this.chkReverbEnabled.Text = "Enable Reverb";
+			this.chkReverbEnabled.UseVisualStyleBackColor = true;
+			// 
+			// lblReverbStrength
+			// 
+			this.lblReverbStrength.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblReverbStrength.AutoSize = true;
+			this.lblReverbStrength.Location = new System.Drawing.Point(3, 32);
+			this.lblReverbStrength.Name = "lblReverbStrength";
+			this.lblReverbStrength.Size = new System.Drawing.Size(50, 13);
+			this.lblReverbStrength.TabIndex = 2;
+			this.lblReverbStrength.Text = "Strength:";
+			// 
+			// lblReverbDelay
+			// 
+			this.lblReverbDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblReverbDelay.AutoSize = true;
+			this.lblReverbDelay.Location = new System.Drawing.Point(3, 64);
+			this.lblReverbDelay.Name = "lblReverbDelay";
+			this.lblReverbDelay.Size = new System.Drawing.Size(37, 13);
+			this.lblReverbDelay.TabIndex = 3;
+			this.lblReverbDelay.Text = "Delay:";
+			// 
+			// trkReverbDelay
+			// 
+			this.trkReverbDelay.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.trkReverbDelay.Location = new System.Drawing.Point(59, 58);
+			this.trkReverbDelay.Maximum = 30;
+			this.trkReverbDelay.Minimum = 1;
+			this.trkReverbDelay.Name = "trkReverbDelay";
+			this.trkReverbDelay.Size = new System.Drawing.Size(104, 26);
+			this.trkReverbDelay.TabIndex = 4;
+			this.trkReverbDelay.TickFrequency = 3;
+			this.trkReverbDelay.Value = 1;
+			// 
+			// trkReverbStrength
+			// 
+			this.trkReverbStrength.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.trkReverbStrength.Location = new System.Drawing.Point(59, 26);
+			this.trkReverbStrength.Minimum = 1;
+			this.trkReverbStrength.Name = "trkReverbStrength";
+			this.trkReverbStrength.Size = new System.Drawing.Size(104, 26);
+			this.trkReverbStrength.TabIndex = 1;
+			this.trkReverbStrength.Value = 1;
 			// 
 			// tpgAdvanced
 			// 
@@ -559,6 +838,22 @@
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgVolume.ResumeLayout(false);
+			this.tpgEffects.ResumeLayout(false);
+			this.tableLayoutPanel4.ResumeLayout(false);
+			this.grpStereo.ResumeLayout(false);
+			this.tlpStereoFilter.ResumeLayout(false);
+			this.tlpStereoFilter.PerformLayout();
+			this.flowLayoutPanel3.ResumeLayout(false);
+			this.flowLayoutPanel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudStereoDelay)).EndInit();
+			this.flowLayoutPanel4.ResumeLayout(false);
+			this.flowLayoutPanel4.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudStereoPanning)).EndInit();
+			this.grpReverb.ResumeLayout(false);
+			this.tableLayoutPanel5.ResumeLayout(false);
+			this.tableLayoutPanel5.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.trkReverbDelay)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.trkReverbStrength)).EndInit();
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
@@ -601,5 +896,25 @@
 		private System.Windows.Forms.TabPage tpgAdvanced;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.CheckBox chkSwapDutyCycles;
+		private System.Windows.Forms.TabPage tpgEffects;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.GroupBox grpStereo;
+		private System.Windows.Forms.TableLayoutPanel tlpStereoFilter;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+		private System.Windows.Forms.NumericUpDown nudStereoDelay;
+		private System.Windows.Forms.Label lblStereoDelayMs;
+		private System.Windows.Forms.RadioButton radStereoDisabled;
+		private System.Windows.Forms.RadioButton radStereoDelay;
+		private System.Windows.Forms.RadioButton radStereoPanning;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
+		private System.Windows.Forms.NumericUpDown nudStereoPanning;
+		private System.Windows.Forms.Label lblStereoPanningAngle;
+		private System.Windows.Forms.GroupBox grpReverb;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+		private System.Windows.Forms.CheckBox chkReverbEnabled;
+		private System.Windows.Forms.Label lblReverbStrength;
+		private System.Windows.Forms.Label lblReverbDelay;
+		private System.Windows.Forms.TrackBar trkReverbDelay;
+		private System.Windows.Forms.TrackBar trkReverbStrength;
 	}
 }

@@ -83,6 +83,17 @@
       <Control ID="tpgGeneral">Général</Control>
       <Control ID="tpgAdvanced">Avancé</Control>
       <Control ID="chkSwapDutyCycles">Inverser le rapport cyclique des canaux Square 1 et Square 2</Control>
+      <Control ID="tpgEffects">Effets</Control>
+      <Control ID="grpStereo">Stéréo</Control>
+      <Control ID="radStereoDisabled">Désactivé</Control>
+      <Control ID="radStereoDelay">Délai</Control>
+      <Control ID="radStereoPanning">Panoramique</Control>
+      <Control ID="lblStereoDelayMs">ms</Control>
+      <Control ID="lblStereoPanningAngle">(angle en degrés)</Control>
+      <Control ID="grpReverb">Réverbération</Control>
+      <Control ID="chkReverbEnabled">Activer la réverbération</Control>
+      <Control ID="lblReverbDelay">Délai :</Control>
+      <Control ID="lblReverbStrength">Force :</Control>
       <Control ID="chkMuteSoundInBackground">Fermer le son lorsque Mesen est en arrière-plan</Control>
       <Control ID="chkReduceSoundInBackground">Réduire le volume lorsque Mesen est en arrière-plan</Control>
       <Control ID="chkEnableAudio">Activer le son</Control>
