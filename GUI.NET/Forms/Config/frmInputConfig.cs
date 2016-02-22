@@ -22,6 +22,11 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("ExpansionPortDevice", cboExpansionPort);
 			AddBinding("ConsoleType", cboConsoleType);
 			AddBinding("UseFourScore", chkFourScore);
+
+			AddBinding("ControllerType1", cboPlayer1);
+			AddBinding("ControllerType2", cboPlayer2);
+			AddBinding("ControllerType3", cboPlayer3);
+			AddBinding("ControllerType4", cboPlayer4);
 		}
 
 		protected override void AfterUpdateUI()
@@ -29,12 +34,6 @@ namespace Mesen.GUI.Forms.Config
 			base.AfterUpdateUI();
 
 			this.UpdateInterface();
-
-			InputInfo inputInfo = (InputInfo)Entity;
-			cboPlayer1.SelectedItem = ResourceHelper.GetEnumText(inputInfo.Controllers[0].ControllerType);
-			cboPlayer2.SelectedItem = ResourceHelper.GetEnumText(inputInfo.Controllers[1].ControllerType);
-			cboPlayer3.SelectedItem = ResourceHelper.GetEnumText(inputInfo.Controllers[2].ControllerType);
-			cboPlayer4.SelectedItem = ResourceHelper.GetEnumText(inputInfo.Controllers[3].ControllerType);
 		}
 
 		private void UpdateAvailableControllerTypes()
@@ -73,10 +72,10 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InputInfo inputInfo = (InputInfo)Entity;
 
-			inputInfo.Controllers[0].ControllerType = (InteropEmu.ControllerType)Enum.Parse(typeof(InteropEmu.ControllerType), cboPlayer1.SelectedItem.ToString());
-			inputInfo.Controllers[1].ControllerType = (InteropEmu.ControllerType)Enum.Parse(typeof(InteropEmu.ControllerType), cboPlayer2.SelectedItem.ToString());
-			inputInfo.Controllers[2].ControllerType = (InteropEmu.ControllerType)Enum.Parse(typeof(InteropEmu.ControllerType), cboPlayer3.SelectedItem.ToString());
-			inputInfo.Controllers[3].ControllerType = (InteropEmu.ControllerType)Enum.Parse(typeof(InteropEmu.ControllerType), cboPlayer4.SelectedItem.ToString());
+			inputInfo.Controllers[0].ControllerType = inputInfo.ControllerType1;
+			inputInfo.Controllers[1].ControllerType = inputInfo.ControllerType2;
+			inputInfo.Controllers[2].ControllerType = inputInfo.ControllerType3;
+			inputInfo.Controllers[3].ControllerType = inputInfo.ControllerType4;
 
 			InputInfo.ApplyConfig();
 		}
