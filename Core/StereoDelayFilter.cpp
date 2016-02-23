@@ -11,13 +11,13 @@ int16_t* StereoDelayFilter::ApplyFilter(int16_t* monoBuffer, size_t sampleCount,
 	}
 	_lastDelay = delay;
 
-	int32_t delaySampleCount = (int32_t)((double)delay / 1000 * sampleRate);
+	size_t delaySampleCount = (int32_t)((double)delay / 1000 * sampleRate);
 
 	for(size_t i = 0; i < sampleCount; i++) {
 		_delayedSamples.push_back(monoBuffer[i]);
 	}
 
-	for(int i = 0; i < sampleCount; i++) {
+	for(size_t i = 0; i < sampleCount; i++) {
 		_filterBuffer[i * 2] = monoBuffer[i];
 		_filterBuffer[i * 2 + 1] = 0;
 	}
