@@ -572,6 +572,9 @@
     <ClInclude Include="TaitoX1017.h">
       <Filter>Nes\Mappers\Taito</Filter>
     </ClInclude>
+    <ClInclude Include="Mapper241.h">
+      <Filter>Nes\Mappers\Unnamed</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
