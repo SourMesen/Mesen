@@ -77,6 +77,7 @@
 #include "Sunsoft184.h"
 #include "TaitoTc0190.h"
 #include "TaitoX1005.h"
+#include "TaitoX1017.h"
 #include "TxSRom.h"
 #include "UnlPci556.h"
 #include "UNROM.h"
@@ -147,6 +148,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 78: return new JalecoJf16(romData.SubMapperID == 3);
 		case 79: return new Nina03_06(false);
 		case 80: return new TaitoX1005(false);
+		case 82: return new TaitoX1017();
 		case 85: return new VRC7();
 		case 87: return new JalecoJfxx(false);
 		case 88: return new Namco108_88();

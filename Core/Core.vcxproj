@@ -504,6 +504,7 @@
     <ClInclude Include="Sunsoft93.h" />
     <ClInclude Include="TaitoTc0190.h" />
     <ClInclude Include="TaitoX1005.h" />
+    <ClInclude Include="TaitoX1017.h" />
     <ClInclude Include="TraceLogger.h" />
     <ClInclude Include="TriangleChannel.h" />
     <ClInclude Include="TxSRom.h" />

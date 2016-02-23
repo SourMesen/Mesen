@@ -69,6 +69,9 @@
     <Filter Include="Nes\APU\Filters">
       <UniqueIdentifier>{783f3638-4293-480f-b525-2485c4209ff5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\Mappers\Taito">
+      <UniqueIdentifier>{1d706c9e-639f-4da0-a7ce-50d04b2b6a7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -209,9 +212,6 @@
     <ClInclude Include="CpRom.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
-    <ClInclude Include="TaitoTc0190.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
     <ClInclude Include="GxRom.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
@@ -222,9 +222,6 @@
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="Bandai74161_7432.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="TaitoX1005.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="BnRom.h">
@@ -565,6 +562,15 @@
     </ClInclude>
     <ClInclude Include="BaseSoundFilter.h">
       <Filter>Nes\APU\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="TaitoX1005.h">
+      <Filter>Nes\Mappers\Taito</Filter>
+    </ClInclude>
+    <ClInclude Include="TaitoTc0190.h">
+      <Filter>Nes\Mappers\Taito</Filter>
+    </ClInclude>
+    <ClInclude Include="TaitoX1017.h">
+      <Filter>Nes\Mappers\Taito</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
