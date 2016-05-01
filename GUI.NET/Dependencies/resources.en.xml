@@ -33,6 +33,7 @@
     <Message ID="UnexpectedError">An unexpected error has occurred.&#xA;&#xA;Error details:&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">Download failed - the file appears to be corrupted. Please visit the Mesen website to download the latest version manually.</Message>
     <Message ID="UpgradeSuccess">Upgrade completed successfully.</Message>
+    <Message ID="UpdaterNotFound">The update process could not be started due to missing files.</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

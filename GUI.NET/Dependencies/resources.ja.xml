@@ -290,6 +290,7 @@
     <Message ID="UnableToStartMissingFiles">必要なファイルはロード出来なかったため、Mesenは起動できません。&#xA;&#xA;エラー: WinMesen.dllはロードできません。</Message>
     <Message ID="UnexpectedError">予期しないエラーが発生しました。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">ダウンロードは失敗しました。　Mesenのサイトに行って、新しいバージョンをダウンロードしてください。</Message>
+    <Message ID="UpdaterNotFound">必要不可欠なファイルがないため、アップデートは出来なかった。</Message>
     <Message ID="UpgradeSuccess">アップデートは完了しました。</Message>
   </Messages>
   <Enums>

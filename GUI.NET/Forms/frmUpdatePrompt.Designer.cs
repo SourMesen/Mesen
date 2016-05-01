@@ -65,7 +65,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(395, 222);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(689, 354);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// lblLatestVersionString
@@ -73,7 +73,7 @@
 			this.lblLatestVersionString.AutoSize = true;
 			this.lblLatestVersionString.Location = new System.Drawing.Point(91, 10);
 			this.lblLatestVersionString.Name = "lblLatestVersionString";
-			this.lblLatestVersionString.Size = new System.Drawing.Size(31, 13);
+			this.lblLatestVersionString.Size = new System.Drawing.Size(28, 13);
 			this.lblLatestVersionString.TabIndex = 7;
 			this.lblLatestVersionString.Text = "x.x.x";
 			// 
@@ -105,7 +105,7 @@
 			this.txtChangelog.Name = "txtChangelog";
 			this.txtChangelog.ReadOnly = true;
 			this.txtChangelog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtChangelog.Size = new System.Drawing.Size(379, 141);
+			this.txtChangelog.Size = new System.Drawing.Size(673, 273);
 			this.txtChangelog.TabIndex = 4;
 			this.txtChangelog.TabStop = false;
 			// 
@@ -125,7 +125,7 @@
 			this.lblCurrentVersionString.AutoSize = true;
 			this.lblCurrentVersionString.Location = new System.Drawing.Point(279, 10);
 			this.lblCurrentVersionString.Name = "lblCurrentVersionString";
-			this.lblCurrentVersionString.Size = new System.Drawing.Size(31, 13);
+			this.lblCurrentVersionString.Size = new System.Drawing.Size(28, 13);
 			this.lblCurrentVersionString.TabIndex = 6;
 			this.lblCurrentVersionString.Text = "x.x.x";
 			// 
@@ -136,16 +136,16 @@
 			this.flowLayoutPanel1.Controls.Add(this.btnUpdate);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 193);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 325);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(385, 29);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(679, 29);
 			this.flowLayoutPanel1.TabIndex = 8;
 			// 
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(311, 3);
+			this.btnCancel.Location = new System.Drawing.Point(605, 3);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(71, 23);
 			this.btnCancel.TabIndex = 1;
@@ -155,7 +155,7 @@
 			// btnUpdate
 			// 
 			this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnUpdate.Location = new System.Drawing.Point(230, 3);
+			this.btnUpdate.Location = new System.Drawing.Point(524, 3);
 			this.btnUpdate.Name = "btnUpdate";
 			this.btnUpdate.Size = new System.Drawing.Size(75, 23);
 			this.btnUpdate.TabIndex = 0;
@@ -169,7 +169,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(395, 222);
+			this.ClientSize = new System.Drawing.Size(689, 354);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;

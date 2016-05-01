@@ -1072,7 +1072,13 @@ namespace Mesen.GUI.Forms
 				try {
 					using(var client = new WebClient()) {
 						XmlDocument xmlDoc = new XmlDocument();
-						xmlDoc.LoadXml(client.DownloadString("http://www.mesen.ca/Services/GetLatestVersion.php?v=" + InteropEmu.GetMesenVersion() + "&p=win"));
+						string langCode = "";
+						switch(ResourceHelper.GetCurrentLanguage()) {
+							case Language.English: langCode = "en"; break;
+							case Language.French: langCode = "fr"; break;
+							case Language.Japanese: langCode = "ja"; break;
+						}
+						xmlDoc.LoadXml(client.DownloadString("http://www.mesen.ca/Services/GetLatestVersion.php?v=" + InteropEmu.GetMesenVersion() + "&p=win&l=" + langCode));
 						Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 						Version latestVersion = new Version(xmlDoc.SelectSingleNode("VersionInfo/LatestVersion").InnerText);
 						string changeLog = xmlDoc.SelectSingleNode("VersionInfo/ChangeLog").InnerText;

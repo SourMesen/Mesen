@@ -43,8 +43,11 @@ namespace Mesen.GUI.Forms
 			string backupFilePath = Path.Combine(ConfigManager.BackupFolder, "Mesen." + lblCurrentVersionString.Text + ".exe");
 			string updateHelper = Path.Combine(ConfigManager.HomeFolder, "MesenUpdater.exe");
 
-			if(!string.IsNullOrWhiteSpace(srcFilePath)) {
-				frmDownloadProgress frmDownload = new frmDownloadProgress("http://www.mesen.ca/Services/GetLatestVersion.php?a=download&&p=win", srcFilePath);
+			if(!File.Exists(updateHelper)) {
+				MesenMsgBox.Show("UpdaterNotFound", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				DialogResult = DialogResult.Cancel;
+			} else if(!string.IsNullOrWhiteSpace(srcFilePath)) {
+				frmDownloadProgress frmDownload = new frmDownloadProgress("http://www.mesen.ca/Services/GetLatestVersion.php?a=download&p=win", srcFilePath);
 				if(frmDownload.ShowDialog() == DialogResult.OK) {
 					FileInfo fileInfo = new FileInfo(srcFilePath);
 					if(fileInfo.Length > 0 && GetSha1Hash(srcFilePath) == _fileHash) {

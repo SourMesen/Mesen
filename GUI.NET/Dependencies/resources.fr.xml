@@ -298,6 +298,7 @@
     <Message ID="UnexpectedError">Une erreur inattendue s'est produite.&#xA;&#xA;Détails de l'erreur :&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">Le téléchargement a échoué - le fichier semble être corrompu. Veuillez visiter le site de Mesen pour télécharger manuellement la version la plus récente.</Message>
     <Message ID="UpgradeSuccess">La mise-à-jour s'est faite avec succès.</Message>
+    <Message ID="UpdaterNotFound">Le processus de mise-à-jour ne peut être démarré puisque certains fichiers sont manquants.</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

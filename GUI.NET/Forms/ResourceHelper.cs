@@ -28,6 +28,11 @@ namespace Mesen.GUI.Forms
 		private static XmlDocument _resources = new XmlDocument();
 		private static XmlDocument _originalEnglishResources = null;
 
+		public static Language GetCurrentLanguage()
+		{
+			return _language;
+		}
+
 		public static void LoadResources(Language language)
 		{
 			if(language == Language.SystemDefault) {
