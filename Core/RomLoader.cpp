@@ -122,6 +122,10 @@ bool RomLoader::LoadFile(string filename, istream *filestream, string ipsFilenam
 RomData RomLoader::GetRomData()
 {
 	_romData.Filename = _filename;
+
+	//Use filename to detect PAL/VS system games
+	_romData.IsPalRom |= _filename.find("(e)") != string::npos || _filename.find("(E)") != string::npos;
+	_romData.IsVsSystem |= _filename.find("(VS)") != string::npos || _filename.find("(vs)") != string::npos || _filename.find("(Vs)") != string::npos || _filename.find("(vS)") != string::npos;
 	return _romData;
 }
 

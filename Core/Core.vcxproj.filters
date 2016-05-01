@@ -575,6 +575,12 @@
     <ClInclude Include="Mapper241.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
+    <ClInclude Include="VsSystem.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="VsControlManager.h">
+      <Filter>Nes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -646,9 +652,6 @@
     <ClCompile Include="ControlManager.cpp">
       <Filter>Nes</Filter>
     </ClCompile>
-    <ClCompile Include="MapperFactory.cpp">
-      <Filter>Nes</Filter>
-    </ClCompile>
     <ClCompile Include="MemoryManager.cpp">
       <Filter>Nes</Filter>
     </ClCompile>
@@ -714,6 +717,12 @@
     </ClCompile>
     <ClCompile Include="ReverbFilter.cpp">
       <Filter>Nes\APU\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="MapperFactory.cpp">
+      <Filter>Nes\Mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="VsControlManager.cpp">
+      <Filter>Nes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

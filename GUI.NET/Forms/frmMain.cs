@@ -62,6 +62,7 @@ namespace Mesen.GUI.Forms
 			menuTimer.Start();
 
 			VideoInfo.ApplyConfig();
+			InitializeVsSystemMenu();
 			InitializeFdsDiskMenu();
 			InitializeEmulationSpeedMenu();
 			
@@ -268,7 +269,9 @@ namespace Mesen.GUI.Forms
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					_currentGame = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath());
 					InitializeFdsDiskMenu();
+					InitializeVsSystemMenu();
 					CheatInfo.ApplyCheats();
+					VsConfigInfo.ApplyConfig();
 					InitializeStateMenu(mnuSaveState, true);
 					InitializeStateMenu(mnuLoadState, false);
 					this.StartEmuThread();
@@ -1107,6 +1110,32 @@ namespace Mesen.GUI.Forms
 		private void menuStrip_MenuDeactivate(object sender, EventArgs e)
 		{
 			_menuOpened = false;
+		}
+
+		private void InitializeVsSystemMenu()
+		{
+			sepVsSystem.Visible = InteropEmu.IsVsSystem();
+			mnuInsertCoin1.Visible = InteropEmu.IsVsSystem();
+			mnuInsertCoin2.Visible = InteropEmu.IsVsSystem();
+			mnuVsGameConfig.Visible = InteropEmu.IsVsSystem();
+		}
+
+		private void mnuInsertCoin1_Click(object sender, EventArgs e)
+		{
+			InteropEmu.VsInsertCoin(0);
+		}
+
+		private void mnuInsertCoin2_Click(object sender, EventArgs e)
+		{
+			InteropEmu.VsInsertCoin(1);
+		}
+
+		private void mnuVsGameConfig_Click(object sender, EventArgs e)
+		{
+			VsConfigInfo configInfo = VsConfigInfo.GetCurrentGameConfig(true);
+			if(new frmVsGameConfig(configInfo).ShowDialog(sender, this) == DialogResult.OK) {
+				VsConfigInfo.ApplyConfig();
+			}
 		}
 	}
 }

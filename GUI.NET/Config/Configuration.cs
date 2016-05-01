@@ -18,6 +18,7 @@ namespace Mesen.GUI.Config
 		public VideoInfo VideoInfo;
 		public InputInfo InputInfo;
 		public List<string> RecentFiles;
+		public List<VsConfigInfo> VsConfig;
 		public List<CheatInfo> Cheats;
 		public bool ShowOnlyCheatsForCurrentGame;
 		public NesModel Region;

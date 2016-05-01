@@ -15,6 +15,9 @@
       <Control ID="mnuSwitchDiskSide">A面B面切り替え</Control>
       <Control ID="mnuSelectDisk">ディスク選択</Control>
       <Control ID="mnuEjectDisk">ディスクを取り出す</Control>
+      <Control ID="mnuVsGameConfig">VSゲームの設定</Control>
+      <Control ID="mnuInsertCoin1">インサートコイン 1</Control>
+      <Control ID="mnuInsertCoin2">インサートコイン 2</Control>
       <Control ID="mnuOptions">設定</Control>
       <Control ID="mnuEmulationSpeed">速度</Control>
       <Control ID="mnuEmuSpeedNormal">通常　(100%)</Control>
@@ -316,6 +319,18 @@
       <Value ID="Zapper">ガン</Value>
       <Value ID="FourPlayerAdapter">4-Player Adapter</Value>
       <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
+    </Enum>
+    <Enum ID="PpuModel">
+      <Value ID="Ppu2C03">RP2C03</Value>
+      <Value ID="Ppu2C04A">RP2C04-0001</Value>
+      <Value ID="Ppu2C04B">RP2C04-0002</Value>
+      <Value ID="Ppu2C04C">RP2C04-0003</Value>
+      <Value ID="Ppu2C04D">RP2C04-0004</Value>
+      <Value ID="Ppu2C05A">RP2C05-01</Value>
+      <Value ID="Ppu2C05B">RP2C05-02</Value>
+      <Value ID="Ppu2C05C">RP2C05-03</Value>
+      <Value ID="Ppu2C05D">RP2C05-04</Value>
+      <Value ID="Ppu2C05E">RP2C05-05</Value>
     </Enum>
     <Enum ID="Language">
       <Value ID="SystemDefault">ユーザーアカウントのデフォルト</Value>

@@ -89,6 +89,7 @@
 #include "VRC3.h"
 #include "VRC6.h"
 #include "VRC7.h"
+#include "VsSystem.h"
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
@@ -160,6 +161,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 94: return new UnRom_94();
 		case 95: return new Namco108_95();
 		case 97: return new IremTamS1();
+		case 99: return new VsSystem();
 		case 101: return new JalecoJfxx(true);
 		case 107: return new Mapper107();
 		case 112: return new Mapper112();

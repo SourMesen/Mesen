@@ -173,6 +173,7 @@
     <Compile Include="Config\PlayerProfile.cs" />
     <Compile Include="Config\ConfigManager.cs" />
     <Compile Include="Config\ServerInfo.cs" />
+    <Compile Include="Config\VsConfigInfo.cs" />
     <Compile Include="Controls\ctrlTrackbar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -314,6 +315,12 @@
     <Compile Include="Forms\Cheats\frmCheat.Designer.cs">
       <DependentUpon>frmCheat.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Config\ctrlDipSwitch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\ctrlDipSwitch.Designer.cs">
+      <DependentUpon>ctrlDipSwitch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Config\ctrlInputPortConfig.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -367,6 +374,12 @@
     </Compile>
     <Compile Include="Forms\Cheats\frmCheatList.Designer.cs">
       <DependentUpon>frmCheatList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\frmVsGameConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\frmVsGameConfig.Designer.cs">
+      <DependentUpon>frmVsGameConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmAbout.cs">
       <SubType>Form</SubType>
@@ -484,6 +497,9 @@
     <EmbeddedResource Include="Forms\Cheats\frmCheat.resx">
       <DependentUpon>frmCheat.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\ctrlDipSwitch.resx">
+      <DependentUpon>ctrlDipSwitch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlInputPortConfig.resx">
       <DependentUpon>ctrlInputPortConfig.cs</DependentUpon>
     </EmbeddedResource>
@@ -510,6 +526,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Cheats\frmCheatList.resx">
       <DependentUpon>frmCheatList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\frmVsGameConfig.resx">
+      <DependentUpon>frmVsGameConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
@@ -564,6 +583,7 @@
     </Content>
     <Content Include="Dependencies\resources.en.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Dependencies\resources.fr.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -573,7 +593,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Dependencies\VsSystem.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Icon.ico" />
+    <Content Include="Resources\coins.png" />
+    <None Include="Resources\DipSwitches.png" />
     <None Include="Resources\MesenIcon.png" />
     <None Include="Resources\system-software-update.png" />
     <None Include="Resources\view-refresh.png" />

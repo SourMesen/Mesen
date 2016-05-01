@@ -522,6 +522,8 @@
     <ClInclude Include="VRC6.h" />
     <ClInclude Include="VRC7.h" />
     <ClInclude Include="VrcIrq.h" />
+    <ClInclude Include="VsControlManager.h" />
+    <ClInclude Include="VsSystem.h" />
     <ClInclude Include="Zapper.h" />
   </ItemGroup>
   <ItemGroup>
@@ -579,6 +581,7 @@
     <ClCompile Include="VideoRenderer.cpp" />
     <ClCompile Include="VideoDecoder.cpp" />
     <ClCompile Include="BaseVideoFilter.cpp" />
+    <ClCompile Include="VsControlManager.cpp" />
     <ClCompile Include="Zapper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

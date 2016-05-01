@@ -29,12 +29,12 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		bool _refreshState = false;
 
 		void RefreshAllPorts();
-		uint8_t GetPortValue(uint8_t port);
 
 		static void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice, uint8_t port);
 		void UnregisterControlDevice(uint8_t port);
 
 	protected:
+		uint8_t GetPortValue(uint8_t port);
 		virtual void StreamState(bool saving);
 
 	public:
@@ -59,12 +59,12 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 		static void BroadcastInput(uint8_t port, uint8_t state);
 
-		void GetMemoryRanges(MemoryRanges &ranges)
+		virtual void GetMemoryRanges(MemoryRanges &ranges)
 		{
 			ranges.AddHandler(MemoryOperation::Read, 0x4016, 0x4017);
 			ranges.AddHandler(MemoryOperation::Write, 0x4016);
 		}
 		
-		uint8_t ReadRAM(uint16_t addr);
-		void WriteRAM(uint16_t addr, uint8_t value);
+		virtual uint8_t ReadRAM(uint16_t addr);
+		virtual void WriteRAM(uint16_t addr, uint8_t value);
 };

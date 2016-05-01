@@ -22,9 +22,11 @@ struct RomData
 	string Filename;
 
 	uint16_t MapperID;
-	uint8_t SubMapperID;
-	bool HasBattery;
-	bool IsPalRom;
+	uint8_t SubMapperID = 0;
+	bool HasBattery = false;
+	bool IsPalRom = false;
+	bool IsVsSystem = false;
+	bool IsPlayChoice = false;
 	MirroringType MirroringType;
 
 	vector<uint8_t> PrgRom;
@@ -91,6 +93,24 @@ struct NESHeader
 		switch(GetRomHeaderVersion()) {
 			case RomHeaderVersion::Nes2_0: return (Byte12 & 0x01) == 0x01;
 			case RomHeaderVersion::iNes: return (Byte9 & 0x01) == 0x01;
+			default: return false;
+		}
+	}
+
+	bool IsPlaychoice()
+	{
+		switch(GetRomHeaderVersion()) {
+			case RomHeaderVersion::Nes2_0:
+			case RomHeaderVersion::iNes: return (Byte7 & 0x02) == 0x02;
+			default: return false;
+		}
+	}
+
+	bool IsVsSystem()
+	{
+		switch(GetRomHeaderVersion()) {
+			case RomHeaderVersion::Nes2_0: 
+			case RomHeaderVersion::iNes: return (Byte7 & 0x01) == 0x01;
 			default: return false;
 		}
 	}

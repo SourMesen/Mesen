@@ -159,6 +159,21 @@ enum class StereoFilter
 	Panning = 2,
 };
 
+enum class PpuModel
+{
+	Ppu2C02 = 0,
+	Ppu2C03 = 1,
+	Ppu2C04A = 2,
+	Ppu2C04B = 3,
+	Ppu2C04C = 4,
+	Ppu2C04D = 5,
+	Ppu2C05A = 6,
+	Ppu2C05B = 7,
+	Ppu2C05C = 8,
+	Ppu2C05D = 9,
+	Ppu2C05E = 10
+};
+
 class EmulationSettings
 {
 private:
@@ -166,7 +181,7 @@ private:
 	static uint8_t _versionMinor;
 	static uint8_t _versionRevision;
 
-	static uint32_t PpuPaletteArgb[64];
+	static uint32_t _ppuPaletteArgb[11][64];
 	static uint32_t _flags;
 
 	static Language _displayLanguage;
@@ -182,6 +197,7 @@ private:
 	static double _reverbDelay;
 		
 	static NesModel _model;
+	static PpuModel _ppuModel;
 
 	static uint32_t _emulationSpeed;
 
@@ -245,6 +261,16 @@ public:
 	static NesModel GetNesModel()
 	{
 		return _model;
+	}
+
+	static void SetPpuModel(PpuModel ppuModel)
+	{
+		_ppuModel = ppuModel;
+	}
+
+	static PpuModel GetPpuModel()
+	{
+		return _ppuModel;
 	}
 
 	//0: Muted, 0.5: Default, 1.0: Max volume
@@ -410,17 +436,17 @@ public:
 	
 	static uint32_t* GetRgbPalette()
 	{
-		return PpuPaletteArgb;
+		return _ppuPaletteArgb[(int)_ppuModel];
 	}
 
 	static void GetRgbPalette(uint32_t* paletteBuffer)
 	{
-		memcpy(paletteBuffer, PpuPaletteArgb, sizeof(PpuPaletteArgb));
+		memcpy(paletteBuffer, _ppuPaletteArgb[0], sizeof(_ppuPaletteArgb[0]));
 	}
 
 	static void SetRgbPalette(uint32_t* paletteBuffer)
 	{
-		memcpy(PpuPaletteArgb, paletteBuffer, sizeof(PpuPaletteArgb));
+		memcpy(_ppuPaletteArgb[0], paletteBuffer, sizeof(_ppuPaletteArgb[0]));
 	}
 
 	static void SetExpansionDevice(ExpansionPortDevice expansionDevice)

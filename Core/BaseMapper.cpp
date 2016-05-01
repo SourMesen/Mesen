@@ -328,6 +328,7 @@ void BaseMapper::Initialize(RomData &romData)
 
 	_hasBattery = romData.HasBattery || ForceBattery();
 	_isPalRom = romData.IsPalRom;
+	_isVsSystem = romData.IsVsSystem;
 	_crc32 = romData.Crc32;
 	_hasBusConflicts = HasBusConflicts();
 
@@ -417,8 +418,13 @@ void BaseMapper::ApplyCheats()
 
 void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
 {
-	ranges.AddHandler(MemoryOperation::Read, 0x4018, 0xFFFF);
-	ranges.AddHandler(MemoryOperation::Write, 0x4018, 0xFFFF);
+	if(IsVsSystem()) {
+		ranges.AddHandler(MemoryOperation::Read, 0x6000, 0xFFFF);
+		ranges.AddHandler(MemoryOperation::Write, 0x6000, 0xFFFF);
+	} else {
+		ranges.AddHandler(MemoryOperation::Read, 0x4018, 0xFFFF);
+		ranges.AddHandler(MemoryOperation::Write, 0x4018, 0xFFFF);
+	}
 }
 
 void BaseMapper::SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB)
@@ -480,6 +486,11 @@ void BaseMapper::SetMirroringType(MirroringType type)
 bool BaseMapper::IsPalRom()
 {
 	return _isPalRom;
+}
+
+bool BaseMapper::IsVsSystem()
+{
+	return _isVsSystem;
 }
 
 uint32_t BaseMapper::GetCrc32()

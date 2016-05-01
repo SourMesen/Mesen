@@ -154,10 +154,7 @@ public:
 		RomData romData;
 
 		romData.MapperID = MapperFactory::FdsMapperID;
-		romData.SubMapperID = 0;
 		romData.MirroringType = MirroringType::Vertical;
-		romData.HasBattery = false;
-		romData.IsPalRom = false;
 		romData.PrgRom = LoadBios();
 
 		if(romData.PrgRom.size() != 0x2000) {

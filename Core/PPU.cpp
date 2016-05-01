@@ -11,6 +11,8 @@ PPU::PPU(MemoryManager *memoryManager)
 {
 	PPU::Instance = this;
 
+	EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
+
 	_memoryManager = memoryManager;
 	_outputBuffers[0] = new uint16_t[256 * 240];
 	_outputBuffers[1] = new uint16_t[256 * 240];
@@ -20,7 +22,7 @@ PPU::PPU(MemoryManager *memoryManager)
 	uint8_t paletteRamBootValues[0x20] { 0x09, 0x01, 0x00, 0x01, 0x00, 0x02, 0x02, 0x0D, 0x08, 0x10, 0x08, 0x24, 0x00, 0x00, 0x04, 0x2C,
 												0x09, 0x01, 0x34, 0x03, 0x00, 0x04, 0x00, 0x14, 0x08, 0x3A, 0x00, 0x02, 0x00, 0x20, 0x2C, 0x08 };
 	memcpy(_paletteRAM, paletteRamBootValues, sizeof(_paletteRAM));
-	memset(_spriteRAM, 0xFF, 0x100);	
+	memset(_spriteRAM, 0xFF, 0x100);
 	memset(_secondarySpriteRAM, 0xFF, 0x20);
 
 	Reset();
@@ -137,6 +139,14 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 			UpdateStatusFlag();
 			returnValue = _state.Status;
 			openBusMask = 0x1F;
+
+			switch(EmulationSettings::GetPpuModel()) {
+				case PpuModel::Ppu2C05A: openBusMask = 0x00; returnValue |= 0x1B; break;
+				case PpuModel::Ppu2C05B: openBusMask = 0x00; returnValue |= 0x3D; break;
+				case PpuModel::Ppu2C05C: openBusMask = 0x00; returnValue |= 0x1C; break;
+				case PpuModel::Ppu2C05D: openBusMask = 0x00; returnValue |= 0x1B; break;
+				case PpuModel::Ppu2C05E: openBusMask = 0x00; break;
+			}
 			break;
 
 		case PPURegisters::SpriteData:
@@ -190,10 +200,18 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Control:
-			SetControlRegister(value);
+			if(EmulationSettings::GetPpuModel() >= PpuModel::Ppu2C05A && EmulationSettings::GetPpuModel() <= PpuModel::Ppu2C05E) {
+				SetMaskRegister(value);
+			} else {
+				SetControlRegister(value);				
+			}
 			break;
 		case PPURegisters::Mask:
-			SetMaskRegister(value);
+			if(EmulationSettings::GetPpuModel() >= PpuModel::Ppu2C05A && EmulationSettings::GetPpuModel() <= PpuModel::Ppu2C05E) {
+				SetControlRegister(value);
+			} else {				
+				SetMaskRegister(value);
+			}
 			break;
 		case PPURegisters::SpriteAddr:
 			_state.SpriteRamAddr = value;

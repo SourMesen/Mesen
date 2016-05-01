@@ -2,6 +2,8 @@
 #include <thread>
 #include "Console.h"
 #include "BaseMapper.h"
+#include "ControlManager.h"
+#include "VsControlManager.h"
 #include "MapperFactory.h"
 #include "Debugger.h"
 #include "MessageManager.h"
@@ -53,7 +55,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		}
 		_apu.reset(new APU(_memoryManager.get()));
 
-		_controlManager.reset(new ControlManager());
+		_controlManager.reset(_mapper->IsVsSystem() ? new VsControlManager() : new ControlManager());
 
 		_memoryManager->RegisterIODevice(_mapper.get());
 		_memoryManager->RegisterIODevice(_ppu.get());

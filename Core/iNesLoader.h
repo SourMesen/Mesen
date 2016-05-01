@@ -20,6 +20,8 @@ public:
 		romData.MirroringType = header.GetMirroringType();
 		romData.HasBattery = header.HasBattery();
 		romData.IsPalRom = header.IsPalRom();
+		romData.IsVsSystem = header.IsVsSystem();
+		romData.IsPlayChoice = header.IsPlaychoice();
 
 		romData.PrgRom.insert(romData.PrgRom.end(), buffer, buffer + header.GetPrgSize());
 		buffer += header.GetPrgSize();

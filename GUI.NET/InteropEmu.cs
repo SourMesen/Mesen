@@ -91,6 +91,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void FdsInsertDisk(UInt32 diskNumber);
 		[DllImport(DLLPath)] public static extern void FdsSwitchDiskSide();
 
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsVsSystem();
+		[DllImport(DLLPath)] public static extern void VsInsertCoin(UInt32 port);
+		[DllImport(DLLPath)] public static extern void VsSetGameConfig(PpuModel model, byte dipSwitches);
+
 		[DllImport(DLLPath)] public static extern void CheatAddCustom(UInt32 address, Byte value, Int32 compareValue, [MarshalAs(UnmanagedType.I1)]bool isRelativeAddress);
 		[DllImport(DLLPath)] public static extern void CheatAddGameGenie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string code);
 		[DllImport(DLLPath)] public static extern void CheatAddProActionRocky(UInt32 code);
@@ -338,6 +342,21 @@ namespace Mesen.GUI
 			Zapper = 1,
 			FourPlayerAdapter = 2,
 			ArkanoidController = 3,
+		}
+
+		public enum PpuModel
+		{
+			Ppu2C02 = 0,
+			Ppu2C03 = 1,
+			Ppu2C04A = 2,
+			Ppu2C04B = 3,
+			Ppu2C04C = 4,
+			Ppu2C04D = 5,
+			Ppu2C05A = 6,
+			Ppu2C05B = 7,
+			Ppu2C05C = 8,
+			Ppu2C05D = 9,
+			Ppu2C05E = 10,
 		}
 
 		public struct KeyMappingSet

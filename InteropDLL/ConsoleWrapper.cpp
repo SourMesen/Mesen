@@ -14,6 +14,7 @@
 #include "../Core/VideoDecoder.h"
 #include "../Core/AutoRomTest.h"
 #include "../Core/FDS.h"
+#include "../Core/VsControlManager.h"
 
 NES::Renderer *_renderer = nullptr;
 SoundManager *_soundManager = nullptr;
@@ -283,5 +284,24 @@ namespace InteropEmu {
 		DllExport void __stdcall FdsEjectDisk() { FDS::EjectDisk(); }
 		DllExport void __stdcall FdsInsertDisk(uint32_t diskNumber) { FDS::InsertDisk(diskNumber); }
 		DllExport void __stdcall FdsSwitchDiskSide() { FDS::SwitchDiskSide(); }
+
+		//VS System functions
+		DllExport bool __stdcall IsVsSystem() { return VsControlManager::GetInstance() != nullptr; }
+		DllExport void __stdcall VsInsertCoin(uint32_t port) 
+		{ 
+			VsControlManager* vs = VsControlManager::GetInstance();
+			if(vs) {
+				vs->InsertCoin(port);
+			}
+		}
+
+		DllExport void __stdcall VsSetGameConfig(PpuModel model, uint8_t dipSwitches)
+		{
+			VsControlManager* vs = VsControlManager::GetInstance();
+			if(vs) {
+				EmulationSettings::SetPpuModel(model);
+				vs->SetDipSwitches(dipSwitches);
+			}
+		}
 	}
 }

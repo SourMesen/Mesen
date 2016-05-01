@@ -47,6 +47,7 @@ private:
 
 	bool _onlyChrRam = false;
 	bool _isPalRom = false;
+	bool _isVsSystem = false;
 	bool _hasBusConflicts = false;
 	string _romFilename;
 
@@ -158,6 +159,7 @@ public:
 	void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
 	bool IsPalRom();
+	bool IsVsSystem();
 	uint32_t GetCrc32();
 
 	uint8_t ReadRAM(uint16_t addr);
