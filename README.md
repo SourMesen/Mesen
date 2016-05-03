@@ -4,7 +4,7 @@ Mesen is a NES/Famicom emulator for Windows built in C++ and C#.
 
 ### LICENSE ###
 
-Mesen is released under the GPL V3 - http://www.gnu.org/licenses/gpl-3.0.en.html
+Mesen is available under the GPL V3 license.  Full text here: http://www.gnu.org/licenses/gpl-3.0.en.html
 
   Copyright (C) 2016 M. Bibaud
 
