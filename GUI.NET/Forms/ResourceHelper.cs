@@ -33,6 +33,11 @@ namespace Mesen.GUI.Forms
 			return _language;
 		}
 
+		public static void UpdateEmuLanguage()
+		{
+			InteropEmu.SetDisplayLanguage(_language);
+		}
+
 		public static void LoadResources(Language language)
 		{
 			if(language == Language.SystemDefault) {
@@ -53,7 +58,6 @@ namespace Mesen.GUI.Forms
 			}
 
 			_language = language;
-			InteropEmu.SetDisplayLanguage(language);
 
 			using(Stream stream = ResourceManager.GetZippedResource(filename)) {
 				_resources.Load(stream);

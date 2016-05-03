@@ -36,8 +36,6 @@
 			this.labelVersion = new System.Windows.Forms.Label();
 			this.okButton = new System.Windows.Forms.Button();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-			this.lblDonate = new System.Windows.Forms.Label();
-			this.lnkDonate = new System.Windows.Forms.Label();
 			this.tableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
@@ -145,7 +143,7 @@
 			this.labelVersion.Name = "labelVersion";
 			this.labelVersion.Size = new System.Drawing.Size(146, 17);
 			this.labelVersion.TabIndex = 0;
-			this.labelVersion.Text = "Version: 0.1.2 (Beta)";
+			this.labelVersion.Text = "Version: 0.1.3 (Beta)";
 			this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// okButton
@@ -157,46 +155,6 @@
 			this.okButton.Size = new System.Drawing.Size(75, 23);
 			this.okButton.TabIndex = 24;
 			this.okButton.Text = "&OK";
-			// 
-			// flowLayoutPanel2
-			// 
-			this.tableLayoutPanel.SetColumnSpan(this.flowLayoutPanel2, 2);
-			this.flowLayoutPanel2.Controls.Add(this.lblDonate);
-			this.flowLayoutPanel2.Controls.Add(this.lnkDonate);
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 81);
-			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
-			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(337, 1);
-			this.flowLayoutPanel2.TabIndex = 27;
-			// 
-			// lblDonate
-			// 
-			this.lblDonate.AutoSize = true;
-			this.lblDonate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblDonate.Location = new System.Drawing.Point(6, 0);
-			this.lblDonate.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this.lblDonate.Name = "lblDonate";
-			this.lblDonate.Size = new System.Drawing.Size(330, 48);
-			this.lblDonate.TabIndex = 25;
-			this.lblDonate.Text = "Mesen is free.  However, if you would like to show your support, click on the lin" +
-    "k below for more information on how you can donate.  Thank you!";
-			this.lblDonate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.lblDonate.Visible = false;
-			// 
-			// lnkDonate
-			// 
-			this.lnkDonate.AutoSize = true;
-			this.lnkDonate.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lnkDonate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lnkDonate.ForeColor = System.Drawing.Color.Blue;
-			this.lnkDonate.Location = new System.Drawing.Point(20, 50);
-			this.lnkDonate.Margin = new System.Windows.Forms.Padding(20, 2, 3, 0);
-			this.lnkDonate.Name = "lnkDonate";
-			this.lnkDonate.Size = new System.Drawing.Size(157, 13);
-			this.lnkDonate.TabIndex = 26;
-			this.lnkDonate.Text = "For more information, click here.";
-			this.lnkDonate.Visible = false;
-			this.lnkDonate.Click += new System.EventHandler(this.lnkDonate_Click);
 			// 
 			// frmAbout
 			// 
@@ -236,7 +194,5 @@
 		private System.Windows.Forms.Label lblWebsite;
 		private System.Windows.Forms.Label lblLink;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
-		private System.Windows.Forms.Label lblDonate;
-		private System.Windows.Forms.Label lnkDonate;
 	}
 }

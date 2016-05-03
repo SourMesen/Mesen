@@ -55,13 +55,24 @@ namespace Mesen.GUI
 		public static void ExtractResources()
 		{
 			Directory.CreateDirectory(Path.Combine(ConfigManager.HomeFolder, "Resources"));
+			Directory.CreateDirectory(Path.Combine(ConfigManager.HomeFolder, "WinMesen"));
 
 			ZipArchive zip = new ZipArchive(Assembly.GetExecutingAssembly().GetManifestResourceStream("Mesen.GUI.Dependencies.Dependencies.zip"));
 						
 			//Extract all needed files
 			string suffix = IntPtr.Size == 4 ? ".x86" : ".x64";
 			foreach(ZipArchiveEntry entry in zip.Entries) {
-				if(entry.Name.Contains(suffix) || entry.Name == "MesenUpdater.exe") {
+				if(entry.Name == "MSVCx64.zip" && IntPtr.Size == 8 || entry.Name == "MSVCx86.zip" && IntPtr.Size == 4) {
+					using(Stream stream = entry.Open()) {
+						ZipArchive msvcZip = new ZipArchive(stream);
+						foreach(ZipArchiveEntry msvcEntry in msvcZip.Entries) {
+							ExtractFile(msvcEntry, Path.Combine(ConfigManager.HomeFolder, "WinMesen", msvcEntry.Name));
+						}
+					}
+				} else if(entry.Name.Contains(suffix)) {
+					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "WinMesen", entry.Name.Replace(suffix, ""));
+					ExtractFile(entry, outputFilename);
+				} else if(entry.Name == "MesenUpdater.exe") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name == "Font.24.spritefont" || entry.Name == "Font.64.spritefont" || entry.Name == "LICENSE.txt") {

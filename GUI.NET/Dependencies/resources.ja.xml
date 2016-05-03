@@ -252,10 +252,8 @@
       <Control ID="labelCopyright">© 2016 M. Bibaud (aka Sour)</Control>
       <Control ID="lblWebsite">サイト:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">バージョン: 0.1.2 (Beta)</Control>
+      <Control ID="labelVersion">バージョン: 0.1.3 (Beta)</Control>
       <Control ID="okButton">&amp;OK</Control>
-      <Control ID="lblDonate">Mesen est gratuit.  Par contre, si vous voulez supporter son dévelopement, cliquez sur le lien ci-dessous pour plus d'information.  Thank you!</Control>
-      <Control ID="lnkDonate">Pour plus d'information, cliquez ici.</Control>
     </Form>
   </Forms>
   <Messages>
@@ -292,6 +290,8 @@
     <Message ID="UpdateDownloadFailed">ダウンロードは失敗しました。　Mesenのサイトに行って、新しいバージョンをダウンロードしてください。</Message>
     <Message ID="UpdaterNotFound">必要不可欠なファイルがないため、アップデートは出来なかった。</Message>
     <Message ID="UpgradeSuccess">アップデートは完了しました。</Message>
+
+    <Message ID="Net45NotFound">Microsoft .NET Framework 4.5はインストールされていないため、Mesenは起動できません。Microsoft .NET Frameworkの最新版をMicrosoftのサイトからダウンロードして、インストールしてください。</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

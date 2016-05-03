@@ -254,10 +254,8 @@
       <Control ID="labelCopyright">© 2016 M. Bibaud (aka Sour)</Control>
       <Control ID="lblWebsite">Site web:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Version: 0.1.2 (Beta)</Control>
+      <Control ID="labelVersion">Version: 0.1.3 (Beta)</Control>
       <Control ID="okButton">&amp;OK</Control>
-      <Control ID="lblDonate">Mesen est gratuit.  Par contre, si vous voulez supporter son dévelopement, cliquez sur le lien ci-dessous pour plus d'information.  Thank you!</Control>
-      <Control ID="lnkDonate">Pour plus d'information, cliquez ici.</Control>
     </Form>
     <Form ID="frmVsGameConfig" Title="Configuration du jeu VS">
       <Control ID="lblGame">Jeu</Control>
@@ -299,6 +297,8 @@
     <Message ID="UpdateDownloadFailed">Le téléchargement a échoué - le fichier semble être corrompu. Veuillez visiter le site de Mesen pour télécharger manuellement la version la plus récente.</Message>
     <Message ID="UpgradeSuccess">La mise-à-jour s'est faite avec succès.</Message>
     <Message ID="UpdaterNotFound">Le processus de mise-à-jour ne peut être démarré puisque certains fichiers sont manquants.</Message>
+
+    <Message ID="Net45NotFound">Le .NET Framework 4.5 de Microsoft n'a pas été trouvé. Veuillez télécharger la plus récente version du .NET Framework à partir du site de Microsoft et essayer à nouveau.</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

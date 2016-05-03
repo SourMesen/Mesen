@@ -43,11 +43,19 @@ namespace Mesen.GUI
 
 				Directory.CreateDirectory(ConfigManager.HomeFolder);
 				Directory.SetCurrentDirectory(ConfigManager.HomeFolder);
-				ResourceManager.ExtractResources();
+				ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
+				try {
+					ResourceManager.ExtractResources();
+				} catch {
+					MesenMsgBox.Show("Net45NotFound", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
 
 				if(!RuntimeChecker.TestDll()) {
 					return;
 				}
+
+				ResourceHelper.UpdateEmuLanguage();
 
 				Guid guid = new Guid("{A46606B7-2D1C-4CC5-A52F-43BCAF094AED}");
 				using(SingleInstance singleInstance = new SingleInstance(guid)) {

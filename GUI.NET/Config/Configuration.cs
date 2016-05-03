@@ -12,7 +12,7 @@ namespace Mesen.GUI.Config
 	{
 		private const int MaxRecentFiles = 10;
 
-		public string MesenVersion;
+		public string MesenVersion = "0.1.3";
 		public PreferenceInfo PreferenceInfo;
 		public AudioInfo AudioInfo;
 		public VideoInfo VideoInfo;
@@ -28,7 +28,6 @@ namespace Mesen.GUI.Config
 
 		public Configuration()
 		{
-			MesenVersion = InteropEmu.GetMesenVersion();
 			Profile = new PlayerProfile();
 			ClientConnectionInfo = new ClientConnectionInfo();
 			ServerInfo = new ServerInfo();
@@ -38,6 +37,7 @@ namespace Mesen.GUI.Config
 			RecentFiles = new List<string>();
 			InputInfo = new InputInfo();
 			Cheats = new List<CheatInfo>();
+			VsConfig = new List<VsConfigInfo>();
 		}
 
 		public void ApplyConfig()

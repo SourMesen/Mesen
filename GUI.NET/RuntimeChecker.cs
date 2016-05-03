@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI
@@ -16,8 +17,12 @@ namespace Mesen.GUI
 		public static bool TestDll()
 		{
 			try {
+				Directory.SetCurrentDirectory(Path.Combine(ConfigManager.HomeFolder, "WinMesen"));
 				return InteropEmu.TestDll();
-			} catch { }
+			} catch {
+			} finally {
+				Directory.SetCurrentDirectory(Path.Combine(ConfigManager.HomeFolder));
+			}
 
 			if(!File.Exists("WinMesen.dll")) {
 				MesenMsgBox.Show("UnableToStartMissingFiles", MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -36,8 +36,6 @@ namespace Mesen.GUI.Forms
 				_romToLoad = args[0];
 			}
 
-			ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
-
 			InitializeComponent();
 		}
 
@@ -856,6 +854,7 @@ namespace Mesen.GUI.Forms
 		{
 			new frmPreferences().ShowDialog(sender);
 			ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
+			ResourceHelper.UpdateEmuLanguage();
 			ResourceHelper.ApplyResources(this);
 			UpdateMenus();
 			InitializeFdsDiskMenu();

@@ -11,7 +11,13 @@ namespace Mesen.GUI.Forms
 	{
 		public static DialogResult Show(string text, MessageBoxButtons buttons, MessageBoxIcon icon, params string[] args)
 		{
-			return MessageBox.Show(ResourceHelper.GetMessage(text, args), "Mesen", buttons, icon);
+			string resourceText = ResourceHelper.GetMessage(text, args);
+
+			if(resourceText.StartsWith("[[")) {
+				return MessageBox.Show(string.Format("Critical error (" + text + ") {0}", args), "Mesen", buttons, icon);
+			} else {
+				return MessageBox.Show(ResourceHelper.GetMessage(text, args), "Mesen", buttons, icon);
+			}
 		}
 	}
 }

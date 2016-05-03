@@ -34,6 +34,7 @@
     <Message ID="UpdateDownloadFailed">Download failed - the file appears to be corrupted. Please visit the Mesen website to download the latest version manually.</Message>
     <Message ID="UpgradeSuccess">Upgrade completed successfully.</Message>
     <Message ID="UpdaterNotFound">The update process could not be started due to missing files.</Message>
+    <Message ID="Net45NotFound">The Microsoft .NET Framework 4.5 could not be found. Please download and install the latest version of the .NET Framework from Microsoft's website and try again.</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
