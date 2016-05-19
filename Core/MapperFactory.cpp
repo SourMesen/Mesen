@@ -21,6 +21,7 @@
 #include "JalecoJf17_19.h"
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
+#include "Mapper15.h"
 #include "Mapper57.h"
 #include "Mapper58.h"
 #include "Mapper61.h"
@@ -110,6 +111,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 11: return new ColorDreams();
 		case 12: return new MMC3_12();
 		case 13: return new CpRom();
+		case 15: return new Mapper15();
 		case 16: break; //18 games
 		case 18: return new JalecoSs88006();
 		case 19: break; //16 games
