@@ -46,7 +46,14 @@ class Snapshotable
 		}
 
 		template<typename T>
-		void Stream(T &value)
+		void Stream()
+		{
+			//Used to skip old values
+			_position += sizeof(T);
+		}
+
+		template<typename T>
+		void Stream(T &value, T defaultValue = T())
 		{
 			if(_saving) {
 				uint8_t* bytes = (uint8_t*)&value;
@@ -59,6 +66,7 @@ class Snapshotable
 					value = *((T*)(_stream + _position));
 					_position += sizeof(T);
 				} else {
+					value = defaultValue;
 					_position = _streamSize;
 				}
 			}

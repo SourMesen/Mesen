@@ -28,6 +28,9 @@ private:
 	uint32_t _currentStep;
 	uint32_t _stepMode; //0: 4-step mode, 1: 5-step mode
 	bool _inhibitIRQ;
+	uint8_t _blockFrameCounterTick;
+	int16_t _newValue;
+	int8_t _writeDelayCounter;
 
 	void (*_callback)(FrameType);
 
@@ -53,6 +56,10 @@ public:
 
 		_currentStep = 0;
 		_inhibitIRQ = false;
+
+		_blockFrameCounterTick = 0;
+		_newValue = -1;
+		_writeDelayCounter = -1;
 	}
 
 	void StreamState(bool saving)
@@ -63,6 +70,9 @@ public:
 		Stream<uint32_t>(_stepMode);
 		Stream<bool>(_inhibitIRQ);
 		Stream<NesModel>(_nesModel);
+		Stream<uint8_t>(_blockFrameCounterTick, 0);
+		Stream<int8_t>(_writeDelayCounter, -1);
+		Stream<int16_t>(_newValue, -1);
 
 		if(!saving) {
 			SetNesModel(_nesModel);
@@ -92,7 +102,7 @@ public:
 	uint32_t Run(int32_t &cyclesToRun)
 	{
 		uint32_t cyclesRan;
-
+		
 		if(_previousCycle + cyclesToRun >= _stepCycles[_stepMode][_currentStep]) {
 			if(!_inhibitIRQ && _stepMode == 0 && _currentStep >= 3) {
 				//Set irq on the last 3 cycles for 4-step mode
@@ -101,8 +111,11 @@ public:
 			}
 
 			FrameType type = _frameType[_stepMode][_currentStep];
-			if(type != FrameType::None) {
+			if(type != FrameType::None && !_blockFrameCounterTick) {
 				_callback(type);
+				
+				//Do not allow writes to 4017 to clock the frame counter for the next cycle (i.e this odd cycle + the following even cycle)
+				_blockFrameCounterTick = 2;
 			}
 
 			cyclesRan = _stepCycles[_stepMode][_currentStep] - _previousCycle;
@@ -123,11 +136,49 @@ public:
 			cyclesToRun = 0;
 			_previousCycle += cyclesRan;
 		}
+
+		if(_newValue >= 0) {
+			_writeDelayCounter--;
+			if(_writeDelayCounter == 0) {
+				//Apply new value after the appropriate number of cycles has elapsed
+				_stepMode = ((_newValue & 0x80) == 0x80) ? 1 : 0;
+
+				if(!_inhibitIRQ && _stepMode == 0) {
+					_nextIrqCycle = 29828;
+				} else {
+					_nextIrqCycle = -1;
+				}
+
+				_writeDelayCounter = -1;
+				_currentStep = 0;
+				_previousCycle = 0;
+				_newValue = -1;
+
+				if(_stepMode && !_blockFrameCounterTick) {
+					//"Writing to $4017 with bit 7 set will immediately generate a clock for both the quarter frame and the half frame units, regardless of what the sequencer is doing."
+					_callback(FrameType::HalfFrame);
+					_blockFrameCounterTick = 2;
+				}
+			}
+		}
+		
+		if(_blockFrameCounterTick > 0) {
+			_blockFrameCounterTick--;
+		}
+
 		return cyclesRan;
 	}
 
 	bool IrqPending(uint32_t cyclesToRun)
 	{
+		if(_newValue >= 0 || _blockFrameCounterTick > 0) {
+			return true;
+		}
+
+		if(_previousCycle + (int32_t)cyclesToRun >= _stepCycles[_stepMode][_currentStep]) {
+			return true;
+		}
+
 		if(_nextIrqCycle != -1) {
 			if(_previousCycle + cyclesToRun >= (uint32_t)_nextIrqCycle) {
 				return true;
@@ -149,29 +200,20 @@ public:
 	void WriteRAM(uint16_t addr, uint8_t value)
 	{
 		APU::StaticRun();
-		_stepMode = ((value & 0x80) == 0x80) ? 1 : 0;
-		_inhibitIRQ = (value & 0x40) == 0x40;
-		_nextIrqCycle = -1;
-
-		if(_inhibitIRQ) {
-			CPU::ClearIRQSource(IRQSource::FrameCounter);
-		} else if(_stepMode == 0) {
-			_nextIrqCycle = 29828;
-		}
+		_newValue = value;
 
 		//Reset sequence after $4017 is written to
 		if(CPU::GetCycleCount() & 0x01) {
 			//"If the write occurs during an APU cycle, the effects occur 3 CPU cycles after the $4017 write cycle"
-			_previousCycle = -3;
+			_writeDelayCounter = 3;
 		} else {
 			//"If the write occurs between APU cycles, the effects occur 4 CPU cycles after the write cycle. "
-			_previousCycle = -4;
+			_writeDelayCounter = 4;
 		}
-		_currentStep = 0;
 
-		if(_stepMode == 1) {
-			//"Writing to $4017 with bit 7 set will immediately generate a clock for both the quarter frame and the half frame units, regardless of what the sequencer is doing."
-			_callback(FrameType::HalfFrame);
+		_inhibitIRQ = (value & 0x40) == 0x40;
+		if(_inhibitIRQ) {
+			CPU::ClearIRQSource(IRQSource::FrameCounter);
 		}
 	}
 };
