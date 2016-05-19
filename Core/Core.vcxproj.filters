@@ -581,6 +581,12 @@
     <ClInclude Include="VsControlManager.h">
       <Filter>Nes</Filter>
     </ClInclude>
+    <ClInclude Include="Mapper15.h">
+      <Filter>Nes\Mappers\Unnamed</Filter>
+    </ClInclude>
+    <ClInclude Include="Mapper60.h">
+      <Filter>Nes\Mappers\Unnamed</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -682,9 +688,6 @@
     <ClCompile Include="SoundMixer.cpp">
       <Filter>Nes\APU</Filter>
     </ClCompile>
-    <ClCompile Include="BaseMapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RomLoader.cpp">
       <Filter>Nes\RomLoader</Filter>
     </ClCompile>
@@ -723,6 +726,9 @@
     </ClCompile>
     <ClCompile Include="VsControlManager.cpp">
       <Filter>Nes</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMapper.cpp">
+      <Filter>Nes\Mappers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

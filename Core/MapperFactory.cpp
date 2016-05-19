@@ -24,6 +24,7 @@
 #include "Mapper15.h"
 #include "Mapper57.h"
 #include "Mapper58.h"
+#include "Mapper60.h"
 #include "Mapper61.h"
 #include "Mapper62.h"
 #include "Mapper91.h"
@@ -134,6 +135,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 52: return new MMC3_52();
 		case 57: return new Mapper57();
 		case 58: return new Mapper58();
+		case 60: return new Mapper60();  //Partial support?
 		case 61: return new Mapper61();
 		case 62: return new Mapper62();
 		case 64: return new Rambo1();
