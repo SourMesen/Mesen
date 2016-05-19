@@ -34,6 +34,9 @@ void DeltaModulationChannel::Reset(bool softReset)
 	//Not sure if this is accurate, but it seems to make things better rather than worse (for dpcmletterbox)
 	//"On the real thing, I think the power-on value is 428 (or the equivalent at least - it uses a linear feedback shift register), though only the even/oddness should matter for this test."
 	_period = (GetNesModel() == NesModel::NTSC ? _dmcPeriodLookupTableNtsc : _dmcPeriodLookupTablePal)[0] - 1;
+	
+	//Make sure the DMC doesn't tick on the first cycle - this is part of what keeps Sprite/DMC DMA tests working while fixing dmc_pitch.
+	_timer = _period;
 }
 
 void DeltaModulationChannel::InitSample()
@@ -163,7 +166,6 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 
 		case 1:		//4011
 			_outputLevel = value & 0x7F;
-			_shiftRegister = value & 0x7F;
 
 			//4011 applies new output right away, not on the timer's reload.  This fixes bad DMC sound when playing through 4011.
 			AddOutput(_outputLevel);

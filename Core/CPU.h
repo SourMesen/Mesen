@@ -148,22 +148,24 @@ private:
 
 	void MemoryWrite(uint16_t addr, uint8_t value)
 	{
-		if(_dmcCounter == 4) {
-			_dmcCounter = 3;
-		}
-
-		while(_dmcDmaRunning) {
-			IncCycleCount();
-		}
-
 		_cpuWrite = true;;
 		_writeAddr = addr;
 		IncCycleCount();
+		while(_dmcDmaRunning) {
+			IncCycleCount();
+		}
 		_memoryManager->Write(addr, value);
+
+		//DMA DMC might have started after a write to $4015, stall CPU if needed
+		while (_dmcDmaRunning) {
+			IncCycleCount();
+		}
 		_cpuWrite = false;
+
 	}
 
 	uint8_t MemoryRead(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
+		IncCycleCount();
 		while(_dmcDmaRunning) {
 			//Stall CPU until we can process a DMC read
 			if((addr != 0x4016 && addr != 0x4017 && (_cycleCount & 0x01)) || _dmcCounter == 1) {
@@ -175,7 +177,6 @@ private:
 			}
 			IncCycleCount();
 		}
-		IncCycleCount();
 		uint8_t value = _memoryManager->Read(addr, operationType);
 		return value;
 	}

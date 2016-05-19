@@ -131,7 +131,7 @@ void APU::Run()
 	//-When a DMC or FrameCounter interrupt needs to be fired
 	int32_t cyclesToRun = _currentCycle - _previousCycle;
 
-	while(_previousCycle < _currentCycle) {
+	while(cyclesToRun > 0) {
 		_previousCycle += _frameCounter->Run(cyclesToRun);
 
 		//Reload counters set by writes to 4003/4008/400B/400F after running the frame counter to allow the length counter to be clocked first
