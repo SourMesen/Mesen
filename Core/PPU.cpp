@@ -36,7 +36,6 @@ PPU::~PPU()
 
 void PPU::Reset()
 {
-	_sprite0HitCycle = -1;
 	_prevRenderingEnabled = false;
 	_renderingEnabled = false;
 
@@ -267,8 +266,6 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			UpdateVideoRamAddr();
 			break;
 		case PPURegisters::SpriteDMA:
-			//_spriteDmaAddr & _spriteDmaCounter are probably not the correct solution for this
-			//Missing something else in the PPU/CPU DMA logic maybe?
 			_spriteDmaCounter = 0x100;
 			_spriteDmaAddr = _state.SpriteRamAddr;
 			CPU::RunDMATransfer(_spriteRAM, value);
@@ -352,11 +349,6 @@ void PPU::SetMaskRegister(uint8_t value)
 
 void PPU::UpdateStatusFlag()
 {
-	if(_sprite0HitCycle >= 0 && _sprite0HitCycle < (int32_t)_cycle) {
-		_statusFlags.Sprite0Hit = true;
-		_sprite0HitCycle = -1;
-	}
-
 	_state.Status = ((uint8_t)_statusFlags.SpriteOverflow << 5) |
 						 ((uint8_t)_statusFlags.Sprite0Hit << 6) |
 						 ((uint8_t)_statusFlags.VerticalBlank << 7);
@@ -577,15 +569,12 @@ uint32_t PPU::GetPixelColor(uint32_t &paletteOffset)
 				
 				if(spriteColor != 0) {
 					//First sprite without a 00 color, use it.
-					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && !_statusFlags.Sprite0Hit && _sprite0HitCycle == -1) {
+					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && !_statusFlags.Sprite0Hit) {
 						//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
 						//"Sprite zero hits do not register at x=255" (cycle 256)
 						//"... provided that background and sprite rendering are both enabled"
 						//"Should always miss when Y >= 239"
-
-						//"Sprite zero hits act as if the image starts at cycle 2 (which is the same cycle that the shifters shift for the first time), so the sprite zero flag will be raised at this point at the earliest."
-						//Need to set the sprite 0 flag on the next PPU clock						
-						_sprite0HitCycle = (int32_t)_cycle;
+						_statusFlags.Sprite0Hit = true;
 					}
 
 					if(backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority) {
@@ -668,9 +657,10 @@ void PPU::ProcessPrerenderScanline()
 		memcpy(_spriteRAM, _spriteRAM + (_state.SpriteRamAddr & 0xF8), 8);
 	}
 
-	if(_cycle == 1) {
+	if(_cycle == 0) {
 		_statusFlags.SpriteOverflow = false;
 		_statusFlags.Sprite0Hit = false;
+	} else if(_cycle == 1) {
 		_statusFlags.VerticalBlank = false;
 	}
 	
@@ -705,11 +695,6 @@ void PPU::ProcessVisibleScanline()
 		}
 	} else if(_cycle >= 321 && _cycle <= 336) {
 		LoadTileInfo();
-	} else if(_cycle == 340 && _sprite0HitCycle >= 0) {
-		//Set sprite 0 hit flag at the end of the scanline if the cycle count was set.
-		//This is just a way of not checking & setting the flag every cycle since the flag needs to be set with a 1 cycle delay
-		_statusFlags.Sprite0Hit = true;
-		_sprite0HitCycle = -1;
 	}
 
 	ProcessPreVBlankScanline();
@@ -962,7 +947,7 @@ void PPU::StreamState(bool saving)
 	Stream<uint8_t>(_oamCopybuffer);
 	Stream<bool>(_spriteInRange);
 	Stream<bool>(_sprite0Added);
-	Stream<int32_t>(_sprite0HitCycle);
+	Stream<int32_t>();
 	Stream<uint8_t>(_spriteAddrH);
 	Stream<uint8_t>(_spriteAddrL);
 	Stream<bool>(_oamCopyDone);
