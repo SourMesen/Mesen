@@ -337,6 +337,9 @@ void BaseMapper::Initialize(RomData &romData)
 
 	memset(_saveRam, 0, _saveRamSize);
 	memset(_workRam, 0, GetWorkRamSize());
+	if(romData.HasTrainer && GetWorkRamSize() >= 0x2000) {
+		memcpy(_workRam + 0x1000, romData.TrainerData.data(), 512);
+	}
 
 	memset(_prgPageNumbers, 0xEE, sizeof(_prgPageNumbers));
 	memset(_chrPageNumbers, 0xEE, sizeof(_chrPageNumbers));

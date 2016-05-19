@@ -27,10 +27,12 @@ struct RomData
 	bool IsPalRom = false;
 	bool IsVsSystem = false;
 	bool IsPlayChoice = false;
+	bool HasTrainer = false;
 	MirroringType MirroringType;
 
 	vector<uint8_t> PrgRom;
 	vector<uint8_t> ChrRom;
+	vector<uint8_t> TrainerData;
 	vector<vector<uint8_t>> FdsDiskData;
 
 	vector<uint8_t> RawData;
