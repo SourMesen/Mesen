@@ -20,7 +20,7 @@ namespace Mesen.GUI.Config
 		public double VideoScale = 2;
 		public VideoFilterType VideoFilter = VideoFilterType.None;
 		public VideoAspectRatio AspectRatio = VideoAspectRatio.Auto;
-		public bool VerticalSync = true;
+		public bool VerticalSync = false;
 		public bool UseHdPacks = false;
 		public Int32[] Palette = new Int32[0];
 
