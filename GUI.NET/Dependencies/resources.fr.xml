@@ -254,7 +254,7 @@
       <Control ID="labelCopyright">© 2016 M. Bibaud (aka Sour)</Control>
       <Control ID="lblWebsite">Site web:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Version: 0.1.3 (Beta)</Control>
+      <Control ID="labelVersion">Version: 0.1.4 (Beta)</Control>
       <Control ID="okButton">&amp;OK</Control>
     </Form>
     <Form ID="frmVsGameConfig" Title="Configuration du jeu VS">
