@@ -30,7 +30,6 @@ namespace Mesen.GUI.Forms
 		private bool _customSize = false;
 		private bool _fullscreenMode = false;
 		private double _regularScale = ConfigManager.Config.VideoInfo.VideoScale;
-		private bool _menuOpened = false;
 
 		public frmMain(string[] args)
 		{
@@ -413,8 +412,11 @@ namespace Mesen.GUI.Forms
 				}
 			}
 
-			if(_menuOpened) {
-				hasFocus = false;
+			foreach(ToolStripItem item in menuStrip.Items) {
+				if(item.Pressed || item.Selected) {
+					hasFocus = false;
+					break;
+				}
 			}
 
 			InteropEmu.SetFlag(EmulationFlags.InBackground, !hasFocus);
@@ -1135,16 +1137,6 @@ namespace Mesen.GUI.Forms
 		private void mnuCheckForUpdates_Click(object sender, EventArgs e)
 		{
 			CheckForUpdates(true);
-		}
-
-		private void menuStrip_MenuActivate(object sender, EventArgs e)
-		{
-			_menuOpened = true;
-		}
-
-		private void menuStrip_MenuDeactivate(object sender, EventArgs e)
-		{
-			_menuOpened = false;
 		}
 
 		private void InitializeVsSystemMenu()

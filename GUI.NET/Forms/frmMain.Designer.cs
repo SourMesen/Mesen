@@ -172,8 +172,6 @@ namespace Mesen.GUI.Forms
 			this.menuStrip.Size = new System.Drawing.Size(304, 26);
 			this.menuStrip.TabIndex = 0;
 			this.menuStrip.Text = "menuStrip1";
-			this.menuStrip.MenuActivate += new System.EventHandler(this.menuStrip_MenuActivate);
-			this.menuStrip.MenuDeactivate += new System.EventHandler(this.menuStrip_MenuDeactivate);
 			this.menuStrip.VisibleChanged += new System.EventHandler(this.menuStrip_VisibleChanged);
 			// 
 			// mnuFile
