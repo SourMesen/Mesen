@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseVideoFilter.h"
-#include "../NesNtsc/nes_ntsc.h"
+#include "../Utilities/nes_ntsc.h"
 
 class NtscFilter : public BaseVideoFilter
 {

@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "EmulationSettings.h"
 #include "../Utilities/LowPassFilter.h"
-#include "../BlipBuffer/blip_buf.h"
+#include "../Utilities/blip_buf.h"
 #include "IAudioDevice.h"
 #include "Snapshotable.h"
 #include "StereoPanningFilter.h"

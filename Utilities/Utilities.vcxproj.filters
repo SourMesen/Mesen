@@ -62,6 +62,18 @@
     <ClInclude Include="LowPassFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="blip_buf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nes_ntsc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nes_ntsc_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nes_ntsc_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -107,6 +119,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IpsPatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="blip_buf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nes_ntsc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

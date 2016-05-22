@@ -182,6 +182,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -207,6 +208,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -232,6 +234,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -255,6 +258,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -278,6 +282,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -301,6 +306,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -324,6 +330,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -347,6 +354,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <StructMemberAlignment>Default</StructMemberAlignment>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
