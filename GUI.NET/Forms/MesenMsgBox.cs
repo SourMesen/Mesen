@@ -14,7 +14,11 @@ namespace Mesen.GUI.Forms
 			string resourceText = ResourceHelper.GetMessage(text, args);
 
 			if(resourceText.StartsWith("[[")) {
-				return MessageBox.Show(string.Format("Critical error (" + text + ") {0}", args), "Mesen", buttons, icon);
+				if(args != null && args.Length > 0) {
+					return MessageBox.Show(string.Format("Critical error (" + text + ") {0}", args), "Mesen", buttons, icon);
+				} else {
+					return MessageBox.Show(string.Format("Critical error (" + text + ")"), "Mesen", buttons, icon);
+				}
 			} else {
 				return MessageBox.Show(ResourceHelper.GetMessage(text, args), "Mesen", buttons, icon);
 			}

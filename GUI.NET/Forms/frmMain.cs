@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -15,6 +16,7 @@ using Mesen.GUI.Debugger;
 using Mesen.GUI.Forms.Cheats;
 using Mesen.GUI.Forms.Config;
 using Mesen.GUI.Forms.NetPlay;
+using Mesen.GUI.GoogleDriveIntegration;
 
 namespace Mesen.GUI.Forms
 {
@@ -73,6 +75,10 @@ namespace Mesen.GUI.Forms
 
 			UpdateViewerSize();
 
+			if(ConfigManager.Config.PreferenceInfo.CloudSaveIntegration) {
+				Task.Run(() => CloudSyncHelper.Sync());
+			}
+
 			if(_romToLoad != null) {
 				LoadFile(this._romToLoad);
 			}
@@ -87,6 +93,30 @@ namespace Mesen.GUI.Forms
 			base.OnShown(e);
 
 			PerformUpgrade();
+		}
+
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			if(_notifListener != null) {
+				_notifListener.Dispose();
+				_notifListener = null;
+			}
+			if(_debugger != null) {
+				_debugger.Close();
+			}
+
+			ConfigManager.Config.VideoInfo.VideoScale = _regularScale;
+			ConfigManager.ApplyChanges();
+
+			StopEmu();
+
+			if(ConfigManager.Config.PreferenceInfo.CloudSaveIntegration) {
+				CloudSyncHelper.Sync();
+			}
+
+			InteropEmu.Release();
+
+			base.OnClosing(e);
 		}
 
 		void PerformUpgrade()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -29,6 +30,26 @@ namespace Mesen.GUI
 			MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, e.ExceptionObject.ToString());
 		}
 
+		[DebuggerNonUserCode]
+		private static Assembly LoadAssemblies(object sender, ResolveEventArgs e)
+		{
+			//Allow assemblies to be loaded from subfolders in the home folder (used for Google Drive API dlls)
+			string assemblyFile = e.Name.Contains(',') ? e.Name.Substring(0, e.Name.IndexOf(',')) : e.Name;
+			assemblyFile += ".dll";
+
+			string absoluteFolder = new FileInfo((new System.Uri(Assembly.GetExecutingAssembly().CodeBase)).LocalPath).Directory.FullName;
+			string targetPath = Path.Combine(ConfigManager.HomeFolder, "GoogleDrive", assemblyFile);
+
+			try {
+				if(File.Exists(targetPath)) {
+					return Assembly.LoadFile(targetPath);
+				}
+			} catch(Exception) {
+				return null;
+			}
+			return null;
+		}
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
@@ -37,6 +58,7 @@ namespace Mesen.GUI
 		private static void Main(string[] args)
 		{
 			try {
+				AppDomain.CurrentDomain.AssemblyResolve += LoadAssemblies;
 				Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 				Application.ThreadException += Application_ThreadException;
 				AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;

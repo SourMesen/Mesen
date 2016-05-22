@@ -197,6 +197,15 @@
       <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
       <Control ID="chkFdsAutoLoadDisk">Insérer le côté A du disque 1 lors du chargement d'un jeu de FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Augmenter la vitesse d'émulation pendant le chargement des jeux FDS</Control>
+
+      <Control ID="tpgCloudSave">Sauvegarde en ligne</Control>
+      <Control ID="lblGoogleDriveIntegration">Mesen peut utiliser Google Drive pour mettre vos sauvegardes dans votre compte Google Drive.  Lorsque l'intégration est activée, toutes les données de sauvegarde de vos jeux (fichiers .sav et sauvegardes rapides) sont facilement accessibles à partir de n'importe quel ordinateur.</Control>
+      <Control ID="lblIntegrationOK">L'intégration avec Google Drive est active.</Control>
+      <Control ID="btnDisableIntegration">Désactiver l'intégration Google Drive</Control>
+      <Control ID="btnEnableIntegration">Activer l'intégration Google Drive</Control>
+      <Control ID="lblLastSync">Dernière synchronisation : </Control>
+      <Control ID="btnResync">Resynchroniser</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
@@ -297,8 +306,9 @@
     <Message ID="UpdateDownloadFailed">Le téléchargement a échoué - le fichier semble être corrompu. Veuillez visiter le site de Mesen pour télécharger manuellement la version la plus récente.</Message>
     <Message ID="UpgradeSuccess">La mise-à-jour s'est faite avec succès.</Message>
     <Message ID="UpdaterNotFound">Le processus de mise-à-jour ne peut être démarré puisque certains fichiers sont manquants.</Message>
-
     <Message ID="Net45NotFound">Le .NET Framework 4.5 de Microsoft n'a pas été trouvé. Veuillez télécharger la plus récente version du .NET Framework à partir du site de Microsoft et essayer à nouveau.</Message>
+    
+    <Message ID="GoogleDriveIntegrationError">Mesen n'a pas été en mesure de se connecter à votre compte Google Drive, veuillez essayer à nouveau.</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

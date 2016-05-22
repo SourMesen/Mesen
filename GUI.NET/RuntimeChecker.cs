@@ -17,11 +17,8 @@ namespace Mesen.GUI
 		public static bool TestDll()
 		{
 			try {
-				Directory.SetCurrentDirectory(Path.Combine(ConfigManager.HomeFolder, "WinMesen"));
 				return InteropEmu.TestDll();
 			} catch {
-			} finally {
-				Directory.SetCurrentDirectory(Path.Combine(ConfigManager.HomeFolder));
 			}
 
 			if(!File.Exists("WinMesen.dll")) {

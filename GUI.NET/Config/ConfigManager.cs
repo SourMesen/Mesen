@@ -58,6 +58,30 @@ namespace Mesen.GUI.Config
 			}
 		}
 
+		public static string SaveFolder
+		{
+			get
+			{
+				string movieFolder = Path.Combine(ConfigManager.HomeFolder, "Saves");
+				if(!Directory.Exists(movieFolder)) {
+					Directory.CreateDirectory(movieFolder);
+				}
+				return movieFolder;
+			}
+		}
+
+		public static string SaveStateFolder
+		{
+			get
+			{
+				string movieFolder = Path.Combine(ConfigManager.HomeFolder, "SaveStates");
+				if(!Directory.Exists(movieFolder)) {
+					Directory.CreateDirectory(movieFolder);
+				}
+				return movieFolder;
+			}
+		}
+
 		public static string DownloadFolder
 		{
 			get

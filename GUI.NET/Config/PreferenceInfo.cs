@@ -36,6 +36,9 @@ namespace Mesen.GUI.Config
 
 		public bool UseAlternativeMmc3Irq = false;
 
+		public bool CloudSaveIntegration = false;
+		public DateTime CloudLastSync = DateTime.MinValue;
+
 		public PreferenceInfo()
 		{
 		}

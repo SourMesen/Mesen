@@ -27,6 +27,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPreferences));
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
 			this.chkAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
@@ -42,6 +44,20 @@
 			this.cboDisplayLanguage = new System.Windows.Forms.ComboBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
+			this.tpgCloudSave = new System.Windows.Forms.TabPage();
+			this.tlpCloudSaves = new System.Windows.Forms.TableLayoutPanel();
+			this.tlpCloudSaveDesc = new System.Windows.Forms.TableLayoutPanel();
+			this.lblGoogleDriveIntegration = new System.Windows.Forms.Label();
+			this.btnEnableIntegration = new System.Windows.Forms.Button();
+			this.tlpCloudSaveEnabled = new System.Windows.Forms.TableLayoutPanel();
+			this.btnDisableIntegration = new System.Windows.Forms.Button();
+			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+			this.picOK = new System.Windows.Forms.PictureBox();
+			this.lblIntegrationOK = new System.Windows.Forms.Label();
+			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblLastSync = new System.Windows.Forms.Label();
+			this.lblLastSyncDateTime = new System.Windows.Forms.Label();
+			this.btnResync = new System.Windows.Forms.Button();
 			this.tpgFileAssociations = new System.Windows.Forms.TabPage();
 			this.grpFileAssociations = new System.Windows.Forms.GroupBox();
 			this.tlpFileFormat = new System.Windows.Forms.TableLayoutPanel();
@@ -56,10 +72,18 @@
 			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
+			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
+			this.tpgCloudSave.SuspendLayout();
+			this.tlpCloudSaves.SuspendLayout();
+			this.tlpCloudSaveDesc.SuspendLayout();
+			this.tlpCloudSaveEnabled.SuspendLayout();
+			this.flowLayoutPanel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picOK)).BeginInit();
+			this.flowLayoutPanel4.SuspendLayout();
 			this.tpgFileAssociations.SuspendLayout();
 			this.grpFileAssociations.SuspendLayout();
 			this.tlpFileFormat.SuspendLayout();
@@ -69,7 +93,7 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 270);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 255);
 			this.baseConfigPanel.Size = new System.Drawing.Size(458, 29);
 			// 
 			// tlpMain
@@ -100,7 +124,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(444, 238);
+			this.tlpMain.Size = new System.Drawing.Size(444, 223);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// chkSingleInstance
@@ -188,7 +212,7 @@
 			// btnOpenMesenFolder
 			// 
 			this.btnOpenMesenFolder.AutoSize = true;
-			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 212);
+			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 197);
 			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
 			this.btnOpenMesenFolder.Size = new System.Drawing.Size(117, 23);
 			this.btnOpenMesenFolder.TabIndex = 16;
@@ -228,13 +252,14 @@
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
+			this.tabMain.Controls.Add(this.tpgCloudSave);
 			this.tabMain.Controls.Add(this.tpgFileAssociations);
 			this.tabMain.Controls.Add(this.tpgAdvanced);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(458, 270);
+			this.tabMain.Size = new System.Drawing.Size(458, 255);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -243,10 +268,178 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(450, 244);
+			this.tpgGeneral.Size = new System.Drawing.Size(450, 229);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
+			// 
+			// tpgCloudSave
+			// 
+			this.tpgCloudSave.Controls.Add(this.tlpCloudSaves);
+			this.tpgCloudSave.Location = new System.Drawing.Point(4, 22);
+			this.tpgCloudSave.Name = "tpgCloudSave";
+			this.tpgCloudSave.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgCloudSave.Size = new System.Drawing.Size(450, 229);
+			this.tpgCloudSave.TabIndex = 3;
+			this.tpgCloudSave.Text = "Cloud Saves";
+			this.tpgCloudSave.UseVisualStyleBackColor = true;
+			// 
+			// tlpCloudSaves
+			// 
+			this.tlpCloudSaves.ColumnCount = 1;
+			this.tlpCloudSaves.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpCloudSaves.Controls.Add(this.tlpCloudSaveDesc, 0, 0);
+			this.tlpCloudSaves.Controls.Add(this.tlpCloudSaveEnabled, 0, 1);
+			this.tlpCloudSaves.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpCloudSaves.Location = new System.Drawing.Point(3, 3);
+			this.tlpCloudSaves.Name = "tlpCloudSaves";
+			this.tlpCloudSaves.RowCount = 2;
+			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpCloudSaves.Size = new System.Drawing.Size(444, 223);
+			this.tlpCloudSaves.TabIndex = 0;
+			// 
+			// tlpCloudSaveDesc
+			// 
+			this.tlpCloudSaveDesc.ColumnCount = 1;
+			this.tlpCloudSaveDesc.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpCloudSaveDesc.Controls.Add(this.lblGoogleDriveIntegration, 0, 0);
+			this.tlpCloudSaveDesc.Controls.Add(this.btnEnableIntegration, 0, 1);
+			this.tlpCloudSaveDesc.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpCloudSaveDesc.Location = new System.Drawing.Point(0, 0);
+			this.tlpCloudSaveDesc.Margin = new System.Windows.Forms.Padding(0);
+			this.tlpCloudSaveDesc.Name = "tlpCloudSaveDesc";
+			this.tlpCloudSaveDesc.RowCount = 2;
+			this.tlpCloudSaveDesc.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpCloudSaveDesc.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpCloudSaveDesc.Size = new System.Drawing.Size(444, 100);
+			this.tlpCloudSaveDesc.TabIndex = 0;
+			// 
+			// lblGoogleDriveIntegration
+			// 
+			this.lblGoogleDriveIntegration.AutoSize = true;
+			this.lblGoogleDriveIntegration.Location = new System.Drawing.Point(3, 0);
+			this.lblGoogleDriveIntegration.Name = "lblGoogleDriveIntegration";
+			this.lblGoogleDriveIntegration.Size = new System.Drawing.Size(436, 52);
+			this.lblGoogleDriveIntegration.TabIndex = 0;
+			this.lblGoogleDriveIntegration.Text = resources.GetString("lblGoogleDriveIntegration.Text");
+			this.lblGoogleDriveIntegration.UseWaitCursor = true;
+			// 
+			// btnEnableIntegration
+			// 
+			this.btnEnableIntegration.Location = new System.Drawing.Point(3, 55);
+			this.btnEnableIntegration.Name = "btnEnableIntegration";
+			this.btnEnableIntegration.Size = new System.Drawing.Size(172, 23);
+			this.btnEnableIntegration.TabIndex = 1;
+			this.btnEnableIntegration.Text = "Enable Google Drive Integration";
+			this.btnEnableIntegration.UseVisualStyleBackColor = true;
+			this.btnEnableIntegration.Click += new System.EventHandler(this.btnEnableIntegration_Click);
+			// 
+			// tlpCloudSaveEnabled
+			// 
+			this.tlpCloudSaveEnabled.ColumnCount = 1;
+			this.tlpCloudSaveEnabled.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpCloudSaveEnabled.Controls.Add(this.btnDisableIntegration, 0, 2);
+			this.tlpCloudSaveEnabled.Controls.Add(this.flowLayoutPanel3, 0, 0);
+			this.tlpCloudSaveEnabled.Controls.Add(this.flowLayoutPanel4, 0, 1);
+			this.tlpCloudSaveEnabled.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpCloudSaveEnabled.Location = new System.Drawing.Point(0, 100);
+			this.tlpCloudSaveEnabled.Margin = new System.Windows.Forms.Padding(0);
+			this.tlpCloudSaveEnabled.Name = "tlpCloudSaveEnabled";
+			this.tlpCloudSaveEnabled.RowCount = 4;
+			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpCloudSaveEnabled.Size = new System.Drawing.Size(444, 123);
+			this.tlpCloudSaveEnabled.TabIndex = 1;
+			// 
+			// btnDisableIntegration
+			// 
+			this.btnDisableIntegration.Location = new System.Drawing.Point(3, 53);
+			this.btnDisableIntegration.Name = "btnDisableIntegration";
+			this.btnDisableIntegration.Size = new System.Drawing.Size(172, 23);
+			this.btnDisableIntegration.TabIndex = 2;
+			this.btnDisableIntegration.Text = "Disable Google Drive Integration";
+			this.btnDisableIntegration.UseVisualStyleBackColor = true;
+			this.btnDisableIntegration.Click += new System.EventHandler(this.btnDisableIntegration_Click);
+			// 
+			// flowLayoutPanel3
+			// 
+			this.flowLayoutPanel3.Controls.Add(this.picOK);
+			this.flowLayoutPanel3.Controls.Add(this.lblIntegrationOK);
+			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(444, 22);
+			this.flowLayoutPanel3.TabIndex = 1;
+			// 
+			// picOK
+			// 
+			this.picOK.Image = global::Mesen.GUI.Properties.Resources.Accept;
+			this.picOK.Location = new System.Drawing.Point(3, 3);
+			this.picOK.Name = "picOK";
+			this.picOK.Size = new System.Drawing.Size(16, 16);
+			this.picOK.TabIndex = 0;
+			this.picOK.TabStop = false;
+			// 
+			// lblIntegrationOK
+			// 
+			this.lblIntegrationOK.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblIntegrationOK.AutoSize = true;
+			this.lblIntegrationOK.Location = new System.Drawing.Point(25, 4);
+			this.lblIntegrationOK.Name = "lblIntegrationOK";
+			this.lblIntegrationOK.Size = new System.Drawing.Size(166, 13);
+			this.lblIntegrationOK.TabIndex = 1;
+			this.lblIntegrationOK.Text = "Google Drive integration is active.";
+			// 
+			// flowLayoutPanel4
+			// 
+			this.flowLayoutPanel4.Controls.Add(this.lblLastSync);
+			this.flowLayoutPanel4.Controls.Add(this.lblLastSyncDateTime);
+			this.flowLayoutPanel4.Controls.Add(this.btnResync);
+			this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 22);
+			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
+			this.flowLayoutPanel4.Size = new System.Drawing.Size(444, 28);
+			this.flowLayoutPanel4.TabIndex = 3;
+			// 
+			// lblLastSync
+			// 
+			this.lblLastSync.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLastSync.AutoSize = true;
+			this.lblLastSync.Location = new System.Drawing.Point(3, 9);
+			this.lblLastSync.Name = "lblLastSync";
+			this.lblLastSync.Size = new System.Drawing.Size(57, 13);
+			this.lblLastSync.TabIndex = 0;
+			this.lblLastSync.Text = "Last Sync:";
+			// 
+			// lblLastSyncDateTime
+			// 
+			this.lblLastSyncDateTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLastSyncDateTime.AutoSize = true;
+			this.lblLastSyncDateTime.Location = new System.Drawing.Point(66, 9);
+			this.lblLastSyncDateTime.Name = "lblLastSyncDateTime";
+			this.lblLastSyncDateTime.Size = new System.Drawing.Size(114, 13);
+			this.lblLastSyncDateTime.TabIndex = 1;
+			this.lblLastSyncDateTime.Text = "9999/01/01 12:00 PM";
+			// 
+			// btnResync
+			// 
+			this.btnResync.AutoSize = true;
+			this.btnResync.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.btnResync.Image = global::Mesen.GUI.Properties.Resources.Reset;
+			this.btnResync.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.btnResync.Location = new System.Drawing.Point(186, 3);
+			this.btnResync.MinimumSize = new System.Drawing.Size(0, 25);
+			this.btnResync.Name = "btnResync";
+			this.btnResync.Size = new System.Drawing.Size(69, 25);
+			this.btnResync.TabIndex = 4;
+			this.btnResync.Text = "Resync";
+			this.btnResync.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnResync.UseVisualStyleBackColor = true;
+			this.btnResync.Click += new System.EventHandler(this.btnResync_Click);
 			// 
 			// tpgFileAssociations
 			// 
@@ -254,7 +447,7 @@
 			this.tpgFileAssociations.Location = new System.Drawing.Point(4, 22);
 			this.tpgFileAssociations.Name = "tpgFileAssociations";
 			this.tpgFileAssociations.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgFileAssociations.Size = new System.Drawing.Size(450, 244);
+			this.tpgFileAssociations.Size = new System.Drawing.Size(450, 229);
 			this.tpgFileAssociations.TabIndex = 2;
 			this.tpgFileAssociations.Text = "File Associations";
 			this.tpgFileAssociations.UseVisualStyleBackColor = true;
@@ -265,7 +458,7 @@
 			this.grpFileAssociations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFileAssociations.Location = new System.Drawing.Point(3, 3);
 			this.grpFileAssociations.Name = "grpFileAssociations";
-			this.grpFileAssociations.Size = new System.Drawing.Size(444, 238);
+			this.grpFileAssociations.Size = new System.Drawing.Size(444, 223);
 			this.grpFileAssociations.TabIndex = 12;
 			this.grpFileAssociations.TabStop = false;
 			this.grpFileAssociations.Text = "File Associations";
@@ -287,7 +480,7 @@
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpFileFormat.Size = new System.Drawing.Size(438, 219);
+			this.tlpFileFormat.Size = new System.Drawing.Size(438, 204);
 			this.tlpFileFormat.TabIndex = 0;
 			// 
 			// chkNesFormat
@@ -337,7 +530,7 @@
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(450, 244);
+			this.tpgAdvanced.Size = new System.Drawing.Size(450, 229);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -361,7 +554,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 238);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 223);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// chkUseAlternativeMmc3Irq
@@ -414,15 +607,21 @@
 			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
 			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
 			// 
+			// tmrSyncDateTime
+			// 
+			this.tmrSyncDateTime.Enabled = true;
+			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
+			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(458, 299);
+			this.ClientSize = new System.Drawing.Size(458, 284);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(474, 322);
 			this.Name = "frmPreferences";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Preferences";
@@ -434,6 +633,16 @@
 			this.flowLayoutPanel2.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
+			this.tpgCloudSave.ResumeLayout(false);
+			this.tlpCloudSaves.ResumeLayout(false);
+			this.tlpCloudSaveDesc.ResumeLayout(false);
+			this.tlpCloudSaveDesc.PerformLayout();
+			this.tlpCloudSaveEnabled.ResumeLayout(false);
+			this.flowLayoutPanel3.ResumeLayout(false);
+			this.flowLayoutPanel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picOK)).EndInit();
+			this.flowLayoutPanel4.ResumeLayout(false);
+			this.flowLayoutPanel4.PerformLayout();
 			this.tpgFileAssociations.ResumeLayout(false);
 			this.grpFileAssociations.ResumeLayout(false);
 			this.tlpFileFormat.ResumeLayout(false);
@@ -476,5 +685,20 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.Label lblDisplayLanguage;
 		private System.Windows.Forms.ComboBox cboDisplayLanguage;
+		private System.Windows.Forms.TabPage tpgCloudSave;
+		private System.Windows.Forms.TableLayoutPanel tlpCloudSaves;
+		private System.Windows.Forms.TableLayoutPanel tlpCloudSaveDesc;
+		private System.Windows.Forms.Label lblGoogleDriveIntegration;
+		private System.Windows.Forms.Button btnEnableIntegration;
+		private System.Windows.Forms.TableLayoutPanel tlpCloudSaveEnabled;
+		private System.Windows.Forms.Button btnDisableIntegration;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+		private System.Windows.Forms.PictureBox picOK;
+		private System.Windows.Forms.Label lblIntegrationOK;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
+		private System.Windows.Forms.Label lblLastSync;
+		private System.Windows.Forms.Label lblLastSyncDateTime;
+		private System.Windows.Forms.Timer tmrSyncDateTime;
+		private System.Windows.Forms.Button btnResync;
 	}
 }

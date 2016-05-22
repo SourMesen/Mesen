@@ -147,6 +147,46 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\BouncyCastle.Crypto.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.Apis, Version=1.13.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Google.Apis.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.13.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Google.Apis.Auth.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.13.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Google.Apis.Auth.PlatformServices.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Core, Version=1.13.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Google.Apis.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Drive.v3, Version=1.13.0.483, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Google.Apis.Drive.v3.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices, Version=1.13.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Google.Apis.PlatformServices.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
@@ -160,6 +200,11 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationClient" />
+    <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Zlib.Portable.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\PreferenceInfo.cs" />
@@ -425,6 +470,9 @@
       <DependentUpon>frmServerConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ResourceHelper.cs" />
+    <Compile Include="GoogleDriveIntegration\CloudSyncHelper.cs" />
+    <Compile Include="GoogleDriveIntegration\GoogleDriveAccessor.cs" />
+    <Compile Include="GoogleDriveIntegration\MesenCodeReceiver.cs" />
     <Compile Include="InteropEmu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -520,6 +568,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmPreferences.resx">
       <DependentUpon>frmPreferences.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmVideoConfig.resx">
       <DependentUpon>frmVideoConfig.cs</DependentUpon>
@@ -567,12 +616,6 @@
     <None Include="Dependencies\Font.64.spritefont">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dependencies\MSVCx64.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Dependencies\MSVCx86.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -584,7 +627,31 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dependencies\BouncyCastle.Crypto.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\Google.Apis.Auth.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\Google.Apis.Auth.PlatformServices.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\Google.Apis.Core.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\Google.Apis.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\Google.Apis.Drive.v3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\Google.Apis.PlatformServices.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Dependencies\LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\Newtonsoft.Json.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Dependencies\resources.en.xml">
@@ -603,7 +670,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Dependencies\Zlib.Portable.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\accept.png" />
     <Content Include="Resources\coins.png" />
     <None Include="Resources\DipSwitches.png" />
     <None Include="Resources\MesenIcon.png" />
@@ -647,21 +718,13 @@ if "x64" == "$(PlatformName)" copy "C:\Program Files (x86)\Microsoft Visual Stud
 
 if "PGO Optimize" == "$(ConfigurationName)" (
 copy "$(SolutionDir)bin\x86\PGO Profile\WinMesen.dll" "Dependencies\WinMesen.x86.dll"
-copy "$(SolutionDir)bin\x86\PGO Profile\BlipBuffer.dll" "Dependencies\BlipBuffer.x86.dll"
-copy "$(SolutionDir)bin\x86\PGO Profile\NesNtsc.dll" "Dependencies\NesNtsc.x86.dll"
 
 copy "$(SolutionDir)bin\x64\PGO Profile\WinMesen.dll" "Dependencies\WinMesen.x64.dll"
-copy "$(SolutionDir)bin\x64\PGO Profile\BlipBuffer.dll" "Dependencies\BlipBuffer.x64.dll"
-copy "$(SolutionDir)bin\x64\PGO Profile\NesNtsc.dll" "Dependencies\NesNtsc.x64.dll"
 )
 if NOT "PGO Optimize" == "$(ConfigurationName)" (
 copy "$(SolutionDir)bin\x86\$(ConfigurationName)\WinMesen.dll" "Dependencies\WinMesen.x86.dll"
-copy "$(SolutionDir)bin\x86\$(ConfigurationName)\BlipBuffer.dll" "Dependencies\BlipBuffer.x86.dll"
-copy "$(SolutionDir)bin\x86\$(ConfigurationName)\NesNtsc.dll" "Dependencies\NesNtsc.x86.dll"
 
 copy "$(SolutionDir)bin\x64\$(ConfigurationName)\WinMesen.dll" "Dependencies\WinMesen.x64.dll"
-copy "$(SolutionDir)bin\x64\$(ConfigurationName)\BlipBuffer.dll" "Dependencies\BlipBuffer.x64.dll"
-copy "$(SolutionDir)bin\x64\$(ConfigurationName)\NesNtsc.dll" "Dependencies\NesNtsc.x64.dll"
 )
 copy "MesenUpdater.exe" "Dependencies\MesenUpdater.exe"
 call DependencyPacker.exe

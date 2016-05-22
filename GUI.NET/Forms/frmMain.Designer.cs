@@ -18,19 +18,7 @@ namespace Mesen.GUI.Forms
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
-			if(_notifListener != null) {
-				_notifListener.Dispose();
-				_notifListener = null;
-			}
-			if(_debugger != null) {
-				_debugger.Close();
-			}
 
-			ConfigManager.Config.VideoInfo.VideoScale = _regularScale;
-			ConfigManager.ApplyChanges();
-
-			StopEmu();
-			InteropEmu.Release();
 			base.Dispose(disposing);
 		}
 

@@ -197,6 +197,15 @@
       <Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
       <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
+
+      <Control ID="tpgCloudSave">クラウドバックアップ</Control>
+      <Control ID="lblGoogleDriveIntegration">MesenはGoogle Driveを利用することでクラウドバックアップが出来ます。　Google Drive同期を有効にすれば、ゲームのセーブデータはGoogle Driveにバックアップされ、どんなパソコンからのアクセスが可能になります。</Control>
+      <Control ID="lblIntegrationOK">Google Drive同期は有効です。</Control>
+      <Control ID="btnDisableIntegration">Google Drive同期を無効にする</Control>
+      <Control ID="btnEnableIntegration">Google Drive同期を有効にする</Control>
+      <Control ID="btnResync">同期</Control>
+      <Control ID="lblLastSync">最終同期： </Control>
+      
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
@@ -290,8 +299,9 @@
     <Message ID="UpdateDownloadFailed">ダウンロードは失敗しました。　Mesenのサイトに行って、新しいバージョンをダウンロードしてください。</Message>
     <Message ID="UpdaterNotFound">必要不可欠なファイルがないため、アップデートは出来なかった。</Message>
     <Message ID="UpgradeSuccess">アップデートは完了しました。</Message>
-
     <Message ID="Net45NotFound">Microsoft .NET Framework 4.5はインストールされていないため、Mesenは起動できません。Microsoft .NET Frameworkの最新版をMicrosoftのサイトからダウンロードして、インストールしてください。</Message>
+    
+    <Message ID="GoogleDriveIntegrationError">MesenはGoogle Driveにアクセス出来ませんでした。</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

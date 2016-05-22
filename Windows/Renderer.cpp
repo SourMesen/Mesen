@@ -382,6 +382,8 @@ namespace NES
 		}
 		_pDeviceContext->Unmap(_pTexture[0], 0);
 
+		_needFlip = true;
+
 		_frameLock.Release();
 
 		_frameChanged = true;
@@ -390,9 +392,12 @@ namespace NES
 	void Renderer::DrawNESScreen()
 	{
 		//Swap buffers - emulator always writes to texture 0, screen always draws texture 1 (allows us to release a lock earlier while avoiding crashes)
-		ID3D11Texture2D *texture = _pTexture[0];
-		_pTexture[0] = _pTexture[1];
-		_pTexture[1] = texture;
+		if(_needFlip) {
+			ID3D11Texture2D *texture = _pTexture[0];
+			_pTexture[0] = _pTexture[1];
+			_pTexture[1] = texture;
+			_needFlip = false;
+		}
 
 		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture[1]);
 
