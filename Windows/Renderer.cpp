@@ -40,6 +40,7 @@ namespace NES
 		VideoDecoder::GetInstance()->GetScreenSize(screenSize, false);
 
 		if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width) {
+			_frameLock.Acquire();
 			_nesFrameHeight = height;
 			_nesFrameWidth = width;
 			_newFrameBufferSize = width*height;
@@ -50,34 +51,63 @@ namespace NES
 			_screenBufferSize = _screenHeight*_screenWidth;
 
 			Reset();
+			_frameLock.Release();
 		}
 	}
 
 	void Renderer::Reset()
 	{
-		_frameLock.Acquire();
 		CleanupDevice();
 		if(FAILED(InitDevice())) {
 			CleanupDevice();
 		} else {
 			VideoRenderer::GetInstance()->RegisterRenderingDevice(this);
 		}
-		_frameLock.Release();
 	}
 
 	void Renderer::CleanupDevice()
 	{
-		if(_pTexture) _pTexture->Release();
-		if(_overlayTexture) _overlayTexture->Release();
-		//if(_toastTexture) _toastTexture->Release();
+		if(_pTexture[0]) {
+			_pTexture[0]->Release();
+			_pTexture[0] = nullptr;
+		}
+		if(_pTexture[1]) {
+			_pTexture[1]->Release();
+			_pTexture[1] = nullptr;
+		}
+		if(_overlayTexture) {
+			_overlayTexture->Release();
+			_overlayTexture = nullptr;
+		}
 
-		if(_samplerState) _samplerState->Release();
-		if(_pRenderTargetView) _pRenderTargetView->Release();
-		if(_pSwapChain) _pSwapChain->Release();
-		if(_pDeviceContext) _pDeviceContext->Release();
-		if(_pd3dDevice) _pd3dDevice->Release();
-		if(_pAlphaEnableBlendingState) _pAlphaEnableBlendingState->Release();
-		if(_pDepthDisabledStencilState) _pDepthDisabledStencilState->Release();
+		if(_samplerState) {
+			_samplerState->Release();
+			_samplerState = nullptr;
+		}
+		if(_pRenderTargetView) {
+			_pRenderTargetView->Release();
+			_pRenderTargetView = nullptr;
+		}
+		if(_pSwapChain) {
+			_pSwapChain->Release();
+			_pSwapChain = nullptr;
+		}
+		if(_pDeviceContext) {
+			_pDeviceContext->Release();
+			_pDeviceContext = nullptr;
+		}
+		if(_pd3dDevice) {
+			_pd3dDevice->Release();
+			_pd3dDevice = nullptr;
+		}
+		if(_pAlphaEnableBlendingState) {
+			_pAlphaEnableBlendingState->Release();
+			_pAlphaEnableBlendingState = nullptr;
+		}
+		if(_pDepthDisabledStencilState) {
+			_pDepthDisabledStencilState->Release();
+			_pDepthDisabledStencilState = nullptr;
+		}
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -218,8 +248,12 @@ namespace NES
 		vp.TopLeftY = 0;
 		_pDeviceContext->RSSetViewports(1, &vp);
 
-		_pTexture = CreateTexture(_nesFrameWidth, _nesFrameHeight);
-		if(!_pTexture) {
+		_pTexture[0] = CreateTexture(_nesFrameWidth, _nesFrameHeight);
+		if(!_pTexture[0]) {
+			return S_FALSE;
+		}
+		_pTexture[1] = CreateTexture(_nesFrameWidth, _nesFrameHeight);
+		if(!_pTexture[1]) {
 			return S_FALSE;
 		}
 
@@ -339,14 +373,14 @@ namespace NES
 
 		uint32_t rowPitch = width * bpp;
 		D3D11_MAPPED_SUBRESOURCE dd;
-		_pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
+		_pDeviceContext->Map(_pTexture[0], 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
 		uint8_t* surfacePointer = (uint8_t*)dd.pData;
 		for(uint32_t i = 0, iMax = height; i < iMax; i++) {
 			memcpy(surfacePointer, outputBuffer, rowPitch);
 			outputBuffer += rowPitch;
 			surfacePointer += dd.RowPitch;
 		}
-		_pDeviceContext->Unmap(_pTexture, 0);
+		_pDeviceContext->Unmap(_pTexture[0], 0);
 
 		_frameLock.Release();
 
@@ -355,7 +389,12 @@ namespace NES
 
 	void Renderer::DrawNESScreen()
 	{
-		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture);
+		//Swap buffers - emulator always writes to texture 0, screen always draws texture 1 (allows us to release a lock earlier while avoiding crashes)
+		ID3D11Texture2D *texture = _pTexture[0];
+		_pTexture[0] = _pTexture[1];
+		_pTexture[1] = texture;
+
+		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture[1]);
 
 		RECT destRect;
 		destRect.left = 0;
@@ -375,18 +414,21 @@ namespace NES
 		destRect.bottom = _screenHeight;
 		destRect.top = 0;
 
-		XMVECTOR position{ { 0, 0 } };
-
 		D3D11_MAPPED_SUBRESOURCE dd;
 		_pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		for(uint32_t i = 0, len = 8*8; i < len; i++) {
+		
+		uint8_t* surfacePointer = (uint8_t*)dd.pData;
+		for(uint32_t i = 0, len = 8; i < len; i++) {
 			//Gray transparent overlay
-			((uint32_t*)dd.pData)[i] = 0xAA222222;
+			for(int j = 0; j < 8; j++) {
+				((uint32_t*)surfacePointer)[j] = 0xAA222222;
+			}
+			surfacePointer += dd.RowPitch;
 		}
 		_pDeviceContext->Unmap(_overlayTexture, 0);
 		
 		ID3D11ShaderResourceView *shaderResourceView = GetShaderResourceView(_overlayTexture);
-		_spriteBatch->Draw(shaderResourceView, destRect); // , position, &sourceRect, Colors::White, 0.0f, position, 4.0f);
+		_spriteBatch->Draw(shaderResourceView, destRect);
 		shaderResourceView->Release();
 
 		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
@@ -398,7 +440,6 @@ namespace NES
 		bool paused = EmulationSettings::IsPaused();
 		if(_noUpdateCount > 10 || _frameChanged || paused || !_toasts.empty()) {
 			_frameLock.Acquire();
-
 			_noUpdateCount = 0;
 
 			if(_frameChanged) {
@@ -408,16 +449,10 @@ namespace NES
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
 
-			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState, nullptr, nullptr, [=] {
-				//_pDeviceContext->PSSetShader(_pixelShader, 0, 0);
-			});
+			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);
 
 			//Draw nes screen
 			DrawNESScreen();
-
-			/*_spriteBatch->End();
-
-			_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, _samplerState);*/
 
 			if(paused) {
 				DrawPauseScreen();
@@ -531,36 +566,6 @@ namespace NES
 
 	void Renderer::DrawToast(shared_ptr<ToastInfo> toast, int &lastHeight)
 	{
-		/*RECT dest;
-		dest.top = _screenHeight - (100 * (posIndex + 1)) - 50;
-		dest.left = (_screenWidth - 340) / 2;
-		dest.bottom = dest.top + 70;
-		dest.right = dest.left + 340;
-
-		//Get opacity for fade in/out effect
-		float opacity = toast->GetOpacity();
-		XMVECTORF32 color = { opacity, opacity, opacity, opacity };
-
-		_spriteBatch->Draw(_toastTexture, dest, color);
-
-		float textLeftMargin = 10.0f;
-		if(toast->HasIcon()) {
-			ID3D11ShaderResourceView* icon;
-			if(!FAILED(CreateWICTextureFromMemory(_pd3dDevice, toast->GetToastIcon(), toast->GetIconSize(), nullptr, &icon))) {
-				RECT iconRect;
-				iconRect.top = dest.top + 3;
-				iconRect.bottom = dest.bottom - 3;
-				iconRect.left = dest.left + 3;
-				iconRect.right = iconRect.left + 64;
-				_spriteBatch->Draw(icon, iconRect, color);
-				textLeftMargin = 75.0f;
-				icon->Release();
-			}
-		}
-
-		_smallFont->DrawString(_spriteBatch.get(), WrapText(toast->GetToastTitle(), _smallFont.get(), 340 - 30 - textLeftMargin).c_str(), XMFLOAT2(dest.left + textLeftMargin - 5.0f, dest.top + 5.0f), color);
-		_font->DrawString(_spriteBatch.get(), WrapText(toast->GetToastMessage(), _font.get(), 340 - 30 - textLeftMargin).c_str(), XMFLOAT2(dest.left + textLeftMargin - 2.0f, dest.top + 19.0f), color);*/
-
 		//Get opacity for fade in/out effect
 		float opacity = toast->GetOpacity();
 		XMVECTORF32 color = { opacity, opacity, opacity, opacity };

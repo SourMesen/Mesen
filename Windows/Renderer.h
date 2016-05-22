@@ -29,7 +29,7 @@ namespace NES {
 
 		ID3D11SamplerState*		_samplerState = nullptr;
 		
-		ID3D11Texture2D*			_pTexture = nullptr;
+		ID3D11Texture2D*			_pTexture[2] = { nullptr,nullptr };
 		ID3D11Texture2D*			_overlayTexture = nullptr;
 
 		bool							_frameChanged = true;
