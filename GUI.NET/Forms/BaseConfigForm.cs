@@ -260,13 +260,9 @@ namespace Mesen.GUI.Forms
 							}
 						} else if(kvp.Value is ComboBox) {
 							if(field.FieldType.IsSubclassOf(typeof(Enum))) {
-								object selectedItem = ((ComboBox)kvp.Value).SelectedItem;
-
-								foreach(Enum value in Enum.GetValues(field.FieldType)) {
-									if(ResourceHelper.GetEnumText(value) == selectedItem.ToString()) {
-										field.SetValue(Entity, value);
-										break;
-									}
+								Enum enumValue = ((ComboBox)kvp.Value).GetEnumValue(field.FieldType);
+								if(enumValue != null) {
+									field.SetValue(Entity, enumValue);
 								}
 							} else if(field.FieldType == typeof(UInt32)) {
 								UInt32 numericValue;
@@ -293,6 +289,31 @@ namespace Mesen.GUI.Forms
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
 			this.Close();
+		}
+	}
+
+	public static class ComboBoxExtensions
+	{
+		public static Enum GetEnumValue(this ComboBox cbo, Type enumType)
+		{
+			foreach(Enum value in Enum.GetValues(enumType)) {
+				if(ResourceHelper.GetEnumText(value) == cbo.SelectedItem.ToString()) {
+					return value;
+				}
+			}
+
+			return null;
+		}
+
+		public static T GetEnumValue<T>(this ComboBox cbo)
+		{
+			foreach(Enum value in Enum.GetValues(typeof(T))) {
+				if(ResourceHelper.GetEnumText(value) == cbo.SelectedItem.ToString()) {
+					return (T)(object)value;
+				}
+			}
+
+			return default(T);
 		}
 	}
 }

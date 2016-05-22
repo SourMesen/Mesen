@@ -106,12 +106,6 @@ namespace Mesen.GUI.Config
 		public InteropEmu.ExpansionPortDevice ExpansionPortDevice = InteropEmu.ExpansionPortDevice.None;
 		public bool UseFourScore = false;
 
-		[NonSerialized]
-		public InteropEmu.ControllerType ControllerType1;
-		public InteropEmu.ControllerType ControllerType2;
-		public InteropEmu.ControllerType ControllerType3;
-		public InteropEmu.ControllerType ControllerType4;
-
 		public List<ControllerInfo> Controllers = new List<ControllerInfo>();
 
 		public void InitializeDefaults()

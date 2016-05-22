@@ -22,11 +22,6 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("ExpansionPortDevice", cboExpansionPort);
 			AddBinding("ConsoleType", cboConsoleType);
 			AddBinding("UseFourScore", chkFourScore);
-
-			AddBinding("ControllerType1", cboPlayer1);
-			AddBinding("ControllerType2", cboPlayer2);
-			AddBinding("ControllerType3", cboPlayer3);
-			AddBinding("ControllerType4", cboPlayer4);
 		}
 
 		protected override void AfterUpdateUI()
@@ -72,10 +67,10 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InputInfo inputInfo = (InputInfo)Entity;
 
-			inputInfo.Controllers[0].ControllerType = inputInfo.ControllerType1;
-			inputInfo.Controllers[1].ControllerType = inputInfo.ControllerType2;
-			inputInfo.Controllers[2].ControllerType = inputInfo.ControllerType3;
-			inputInfo.Controllers[3].ControllerType = inputInfo.ControllerType4;
+			inputInfo.Controllers[0].ControllerType = cboPlayer1.GetEnumValue<InteropEmu.ControllerType>();
+			inputInfo.Controllers[1].ControllerType = cboPlayer2.GetEnumValue<InteropEmu.ControllerType>();
+			inputInfo.Controllers[2].ControllerType = cboPlayer3.GetEnumValue<InteropEmu.ControllerType>();
+			inputInfo.Controllers[3].ControllerType = cboPlayer4.GetEnumValue<InteropEmu.ControllerType>();
 
 			InputInfo.ApplyConfig();
 		}
@@ -91,6 +86,11 @@ namespace Mesen.GUI.Forms.Config
 
 				UpdatePlayer3And4Visibility();
 				UpdateAvailableControllerTypes();
+
+				cboPlayer1.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[0].ControllerType);
+				cboPlayer2.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[1].ControllerType);
+				cboPlayer3.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[2].ControllerType);
+				cboPlayer4.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[3].ControllerType);
 			}
 		}
 
