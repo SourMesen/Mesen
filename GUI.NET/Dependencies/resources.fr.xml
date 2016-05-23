@@ -271,6 +271,13 @@
       <Control ID="lblPpuModel">Modèle du PPU</Control>
       <Control ID="grpDipSwitches">Commutateurs DIP</Control>
     </Form>
+    <Form ID="frmUpdatePrompt" Title="Mesen - Mise à jour disponible">
+      <Control ID="lblLatestVersion">Dernière version : </Control>
+      <Control ID="lblCurrentVersion">Version courante : </Control>
+      <Control ID="lblChangeLog">Changelog</Control>
+      <Control ID="btnUpdate">Mettre à jour</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Tous les fichiers (*.*)|*.*</Message>
