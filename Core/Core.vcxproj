@@ -534,6 +534,7 @@
     <ClInclude Include="VrcIrq.h" />
     <ClInclude Include="VsControlManager.h" />
     <ClInclude Include="VsSystem.h" />
+    <ClInclude Include="ScaleFilter.h" />
     <ClInclude Include="Zapper.h" />
   </ItemGroup>
   <ItemGroup>
@@ -592,6 +593,7 @@
     <ClCompile Include="VideoDecoder.cpp" />
     <ClCompile Include="BaseVideoFilter.cpp" />
     <ClCompile Include="VsControlManager.cpp" />
+    <ClCompile Include="ScaleFilter.cpp" />
     <ClCompile Include="Zapper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

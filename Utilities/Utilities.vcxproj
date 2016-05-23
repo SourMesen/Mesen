@@ -388,7 +388,10 @@
     <ClInclude Include="blip_buf.h" />
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
+    <ClInclude Include="HQX\common.h" />
+    <ClInclude Include="HQX\hqx.h" />
     <ClInclude Include="IpsPatcher.h" />
+    <ClInclude Include="KreedSaiEagle\SaiEagle.h" />
     <ClInclude Include="LowPassFilter.h" />
     <ClInclude Include="md5.h" />
     <ClInclude Include="miniz.h" />
@@ -397,6 +400,9 @@
     <ClInclude Include="nes_ntsc_config.h" />
     <ClInclude Include="nes_ntsc_impl.h" />
     <ClInclude Include="PNGHelper.h" />
+    <ClInclude Include="Scale2x\scale2x.h" />
+    <ClInclude Include="Scale2x\scale3x.h" />
+    <ClInclude Include="Scale2x\scalebit.h" />
     <ClInclude Include="UPnPPortMapper.h" />
     <ClInclude Include="SimpleLock.h" />
     <ClInclude Include="Socket.h" />
@@ -404,6 +410,8 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UTF8Util.h" />
+    <ClInclude Include="xBRZ\config.h" />
+    <ClInclude Include="xBRZ\xbrz.h" />
     <ClInclude Include="ZipReader.h" />
     <ClInclude Include="ZipWriter.h" />
   </ItemGroup>
@@ -411,12 +419,22 @@
     <ClCompile Include="blip_buf.cpp" />
     <ClCompile Include="CRC32.cpp" />
     <ClCompile Include="FolderUtilities.cpp" />
+    <ClCompile Include="HQX\hq2x.cpp" />
+    <ClCompile Include="HQX\hq3x.cpp" />
+    <ClCompile Include="HQX\hq4x.cpp" />
+    <ClCompile Include="HQX\init.cpp" />
     <ClCompile Include="IpsPatcher.cpp" />
+    <ClCompile Include="KreedSaiEagle\2xSai.cpp" />
+    <ClCompile Include="KreedSaiEagle\Super2xSai.cpp" />
+    <ClCompile Include="KreedSaiEagle\SuperEagle.cpp" />
     <ClCompile Include="md5.cpp" />
     <ClCompile Include="miniz.cpp" />
     <ClCompile Include="nes_ntsc.cpp" />
     <ClCompile Include="PNGHelper.cpp" />
     <ClCompile Include="AutoResetEvent.cpp" />
+    <ClCompile Include="Scale2x\scale2x.cpp" />
+    <ClCompile Include="Scale2x\scale3x.cpp" />
+    <ClCompile Include="Scale2x\scalebit.cpp" />
     <ClCompile Include="SimpleLock.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -434,6 +452,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UPnPPortMapper.cpp" />
     <ClCompile Include="UTF8Util.cpp" />
+    <ClCompile Include="xBRZ\xbrz.cpp" />
     <ClCompile Include="ZipReader.cpp" />
     <ClCompile Include="ZipWriter.cpp" />
   </ItemGroup>

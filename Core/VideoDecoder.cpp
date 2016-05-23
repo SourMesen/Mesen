@@ -5,6 +5,7 @@
 #include "DefaultVideoFilter.h"
 #include "NtscFilter.h"
 #include "HdVideoFilter.h"
+#include "ScaleFilter.h"
 #include "VideoRenderer.h"
 
 unique_ptr<VideoDecoder> VideoDecoder::Instance;
@@ -52,6 +53,21 @@ void VideoDecoder::UpdateVideoFilter()
 		switch(_videoFilterType) {
 			case VideoFilterType::None: _videoFilter.reset(new DefaultVideoFilter()); break;
 			case VideoFilterType::NTSC: _videoFilter.reset(new NtscFilter()); break;
+			case VideoFilterType::xBRZ2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 2)); break;
+			case VideoFilterType::xBRZ3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 3)); break;
+			case VideoFilterType::xBRZ4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 4)); break;
+			case VideoFilterType::xBRZ5x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 5)); break;
+			case VideoFilterType::xBRZ6x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 6)); break;
+			case VideoFilterType::HQ2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 2)); break;
+			case VideoFilterType::HQ3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 3)); break;
+			case VideoFilterType::HQ4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 4)); break;
+			case VideoFilterType::Scale2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 2)); break;
+			case VideoFilterType::Scale3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 3)); break;
+			case VideoFilterType::Scale4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 4)); break;
+			case VideoFilterType::_2xSai: _videoFilter.reset(new ScaleFilter(ScaleFilterType::_2xSai, 2)); break;
+			case VideoFilterType::Super2xSai: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Super2xSai, 2)); break;
+			case VideoFilterType::SuperEagle: _videoFilter.reset(new ScaleFilter(ScaleFilterType::SuperEagle, 2)); break;
+
 			case VideoFilterType::HdPack: _videoFilter.reset(new HdVideoFilter()); break;
 		}
 	}

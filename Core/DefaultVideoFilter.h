@@ -5,7 +5,7 @@
 
 class DefaultVideoFilter : public BaseVideoFilter
 {
-private:
+protected:
 	uint32_t ProcessIntensifyBits(uint16_t ppuPixel);
 
 public:

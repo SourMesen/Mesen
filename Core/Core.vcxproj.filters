@@ -587,6 +587,9 @@
     <ClInclude Include="Mapper60.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
+    <ClInclude Include="ScaleFilter.h">
+      <Filter>VideoDecoder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -729,6 +732,9 @@
     </ClCompile>
     <ClCompile Include="BaseMapper.cpp">
       <Filter>Nes\Mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="ScaleFilter.cpp">
+      <Filter>VideoDecoder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

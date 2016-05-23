@@ -634,6 +634,20 @@ namespace Mesen.GUI
 	{
 		None = 0,
 		NTSC = 1,
+		xBRZ2x = 2,
+		xBRZ3x = 3,
+		xBRZ4x = 4,
+		xBRZ5x = 5,
+		xBRZ6x = 6,
+		HQ2x = 7,
+		HQ3x = 8,
+		HQ4x = 9,
+		Scale2x = 10,
+		Scale3x = 11,
+		Scale4x = 12,
+		_2xSai = 13,
+		Super2xSai = 14,
+		SuperEagle = 15
 	}
 
 	public enum VideoAspectRatio

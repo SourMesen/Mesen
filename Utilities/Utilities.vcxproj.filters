@@ -9,6 +9,18 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="xBRZ">
+      <UniqueIdentifier>{34df7dd9-5f1b-4aec-9212-1b70f1fada59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HQX">
+      <UniqueIdentifier>{c29925fd-7698-4db8-a328-73ef7f8993a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scale2x">
+      <UniqueIdentifier>{87329bd1-28ac-4ced-a4c2-b51777018d16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KreedSaiEagle">
+      <UniqueIdentifier>{8e159744-fb91-4e16-aa82-8d8703ba2762}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -74,6 +86,30 @@
     <ClInclude Include="nes_ntsc_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="xBRZ\config.h">
+      <Filter>xBRZ</Filter>
+    </ClInclude>
+    <ClInclude Include="xBRZ\xbrz.h">
+      <Filter>xBRZ</Filter>
+    </ClInclude>
+    <ClInclude Include="HQX\hqx.h">
+      <Filter>HQX</Filter>
+    </ClInclude>
+    <ClInclude Include="HQX\common.h">
+      <Filter>HQX</Filter>
+    </ClInclude>
+    <ClInclude Include="Scale2x\scale2x.h">
+      <Filter>Scale2x</Filter>
+    </ClInclude>
+    <ClInclude Include="Scale2x\scale3x.h">
+      <Filter>Scale2x</Filter>
+    </ClInclude>
+    <ClInclude Include="Scale2x\scalebit.h">
+      <Filter>Scale2x</Filter>
+    </ClInclude>
+    <ClInclude Include="KreedSaiEagle\SaiEagle.h">
+      <Filter>KreedSaiEagle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -126,6 +162,39 @@
     </ClCompile>
     <ClCompile Include="nes_ntsc.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xBRZ\xbrz.cpp">
+      <Filter>xBRZ</Filter>
+    </ClCompile>
+    <ClCompile Include="HQX\hq2x.cpp">
+      <Filter>HQX</Filter>
+    </ClCompile>
+    <ClCompile Include="HQX\hq3x.cpp">
+      <Filter>HQX</Filter>
+    </ClCompile>
+    <ClCompile Include="HQX\hq4x.cpp">
+      <Filter>HQX</Filter>
+    </ClCompile>
+    <ClCompile Include="HQX\init.cpp">
+      <Filter>HQX</Filter>
+    </ClCompile>
+    <ClCompile Include="Scale2x\scale2x.cpp">
+      <Filter>Scale2x</Filter>
+    </ClCompile>
+    <ClCompile Include="Scale2x\scale3x.cpp">
+      <Filter>Scale2x</Filter>
+    </ClCompile>
+    <ClCompile Include="Scale2x\scalebit.cpp">
+      <Filter>Scale2x</Filter>
+    </ClCompile>
+    <ClCompile Include="KreedSaiEagle\SuperEagle.cpp">
+      <Filter>KreedSaiEagle</Filter>
+    </ClCompile>
+    <ClCompile Include="KreedSaiEagle\Super2xSai.cpp">
+      <Filter>KreedSaiEagle</Filter>
+    </ClCompile>
+    <ClCompile Include="KreedSaiEagle\2xSai.cpp">
+      <Filter>KreedSaiEagle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

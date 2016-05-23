@@ -931,6 +931,20 @@ namespace Mesen.GUI.Forms
 		{
 			mnuNoneFilter.Checked = (filterType == VideoFilterType.None);
 			mnuNtscFilter.Checked = (filterType == VideoFilterType.NTSC);
+			mnuXBRZ2xFilter.Checked = (filterType == VideoFilterType.xBRZ2x);
+			mnuXBRZ3xFilter.Checked = (filterType == VideoFilterType.xBRZ3x);
+			mnuXBRZ4xFilter.Checked = (filterType == VideoFilterType.xBRZ4x);
+			mnuXBRZ5xFilter.Checked = (filterType == VideoFilterType.xBRZ5x);
+			mnuXBRZ6xFilter.Checked = (filterType == VideoFilterType.xBRZ6x);
+			mnuHQ2xFilter.Checked = (filterType == VideoFilterType.HQ2x);
+			mnuHQ3xFilter.Checked = (filterType == VideoFilterType.HQ3x);
+			mnuHQ4xFilter.Checked = (filterType == VideoFilterType.HQ4x);
+			mnuScale2xFilter.Checked = (filterType == VideoFilterType.Scale2x);
+			mnuScale3xFilter.Checked = (filterType == VideoFilterType.Scale3x);
+			mnuScale4xFilter.Checked = (filterType == VideoFilterType.Scale4x);
+			mnu2xSaiFilter.Checked = (filterType == VideoFilterType._2xSai);
+			mnuSuper2xSaiFilter.Checked = (filterType == VideoFilterType.Super2xSai);
+			mnuSuperEagleFilter.Checked = (filterType == VideoFilterType.SuperEagle);
 
 			ConfigManager.Config.VideoInfo.VideoFilter = filterType;
 			ConfigManager.ApplyChanges();
@@ -945,18 +959,91 @@ namespace Mesen.GUI.Forms
 			UpdateScaleMenu(scale);
 		}
 
+		private void SetVideoFilter(VideoFilterType type)
+		{
+			InteropEmu.SetVideoFilter(type);
+			UpdateFilterMenu(type);
+			_customSize = false;
+		}
+
 		private void mnuNoneFilter_Click(object sender, EventArgs e)
 		{
-			InteropEmu.SetVideoFilter(VideoFilterType.None);
-			UpdateFilterMenu(VideoFilterType.None);
-			_customSize = false;
+			SetVideoFilter(VideoFilterType.None);
 		}
 
 		private void mnuNtscFilter_Click(object sender, EventArgs e)
 		{
-			InteropEmu.SetVideoFilter(VideoFilterType.NTSC);
-			UpdateFilterMenu(VideoFilterType.NTSC);
-			_customSize = false;
+			SetVideoFilter(VideoFilterType.NTSC);
+		}
+
+		private void mnuXBRZ2xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.xBRZ2x);
+		}
+		
+		private void mnuXBRZ3xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.xBRZ3x);
+		}
+
+		private void mnuXBRZ4xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.xBRZ4x);
+		}
+
+		private void mnuXBRZ5xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.xBRZ5x);
+		}
+
+		private void mnuXBRZ6xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.xBRZ6x);
+		}
+
+		private void mnuHQ2xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.HQ2x);
+		}
+
+		private void mnuHQ3xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.HQ3x);
+		}
+
+		private void mnuHQ4xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.HQ4x);
+		}
+
+		private void mnuScale2xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Scale2x);
+		}
+
+		private void mnuScale3xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Scale3x);
+		}
+
+		private void mnuScale4xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Scale4x);
+		}
+
+		private void mnu2xSaiFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType._2xSai);
+		}
+
+		private void mnuSuper2xSaiFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Super2xSai);
+		}
+
+		private void mnuSuperEagleFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.SuperEagle);
 		}
 
 		private void InitializeFdsDiskMenu()

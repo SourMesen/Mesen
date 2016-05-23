@@ -320,6 +320,20 @@
     <Enum ID="VideoFilterType">
       <Value ID="None">なし</Value>
       <Value ID="NTSC">NTSC</Value>
+      <Value ID="xBRZ2x">xBRZ 2x</Value>
+      <Value ID="xBRZ3x">xBRZ 3x</Value>
+      <Value ID="xBRZ4x">xBRZ 4x</Value>
+      <Value ID="xBRZ5x">xBRZ 5x</Value>
+      <Value ID="xBRZ6x">xBRZ 6x</Value>
+      <Value ID="HQ2x">HQ 2x</Value>
+      <Value ID="HQ3x">HQ 3x</Value>
+      <Value ID="HQ4x">HQ 4x</Value>
+      <Value ID="Scale2x">Scale 2x</Value>
+      <Value ID="Scale3x">Scale 3x</Value>
+      <Value ID="Scale4x">Scale 4x</Value>
+      <Value ID="_2xSai">2xSai</Value>
+      <Value ID="Super2xSai">Super2xSai</Value>
+      <Value ID="SuperEagle">SuperEagle</Value>
     </Enum>
     <Enum ID="ConsoleType">
       <Value ID="Nes">NES</Value>
