@@ -199,7 +199,7 @@
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
 
       <Control ID="tpgCloudSave">クラウドバックアップ</Control>
-      <Control ID="lblGoogleDriveIntegration">MesenはGoogle Driveを利用することでクラウドバックアップが出来ます。　Google Drive同期を有効にすれば、ゲームのセーブデータはGoogle Driveにバックアップされ、どんなパソコンからのアクセスが可能になります。</Control>
+      <Control ID="lblGoogleDriveIntegration">MesenはGoogle Driveを利用することでクラウドバックアップが出来ます。　Google Drive同期を有効にすれば、ゲームのセーブデータはGoogle Driveにバックアップされ、どんなパソコンからでもアクセスが可能になります。</Control>
       <Control ID="lblIntegrationOK">Google Drive同期は有効です。</Control>
       <Control ID="btnDisableIntegration">Google Drive同期を無効にする</Control>
       <Control ID="btnEnableIntegration">Google Drive同期を有効にする</Control>

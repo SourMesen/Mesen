@@ -161,7 +161,7 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "UnsupportedMapper", u8"このMapperを使うゲームはロードできません。" },
 
 	{ "GoogleDrive", u8"Google Drive" },
-	{ "SynchronizationStarted", u8"同期しています。" },
+	{ "SynchronizationStarted", u8"同期中。" },
 	{ "SynchronizationFailed", u8"同期は失敗しました。" },
 	{ "SynchronizationCompleted", u8"同期完了。" },
 };
