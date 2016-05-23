@@ -16,7 +16,7 @@ std::unordered_map<string, string> MessageManager::_enResources = {
 	{ "SaveStates", u8"Save States" },
 	{ "ScreenshotSaved", u8"Screenshot Saved" },
 	{ "Test", u8"Test" },
-	
+
 	{ "CheatApplied", u8"1 cheat applied." },
 	{ "CheatsApplied", u8"%1 cheats applied." },
 	{ "ConnectedToServer", u8"Connected to server." },
@@ -51,6 +51,11 @@ std::unordered_map<string, string> MessageManager::_enResources = {
 	{ "ServerStopped", u8"Server stopped" },
 	{ "TestFileSavedTo", u8"Test file saved to: %1" },
 	{ "UnsupportedMapper", u8"Unsupported mapper, cannot load game." },
+
+	{ "GoogleDrive", u8"Google Drive" },
+	{ "SynchronizationStarted", u8"Synchronization started." },
+	{ "SynchronizationFailed", u8"Synchronization failed." },
+	{ "SynchronizationCompleted", u8"Synchronization completed." },
 };
 
 std::unordered_map<string, string> MessageManager::_frResources = {
@@ -100,6 +105,11 @@ std::unordered_map<string, string> MessageManager::_frResources = {
 	{ "ServerStopped", u8"Le serveur a été arrêté" },
 	{ "TestFileSavedTo", u8"Test sauvegardé: %1" },
 	{ "UnsupportedMapper", u8"Ce mapper n'est pas encore supporté - le jeu ne peut pas être démarré." },
+
+	{ "GoogleDrive", u8"Google Drive" },
+	{ "SynchronizationStarted", u8"Synchronisation en cours." },
+	{ "SynchronizationFailed", u8"La synchronisation a échoué." },
+	{ "SynchronizationCompleted", u8"Synchronisation terminée." },
 };
 
 std::unordered_map<string, string> MessageManager::_jaResources = {
@@ -149,6 +159,11 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "ServerStopped", u8"サーバは停止しました。" },
 	{ "TestFileSavedTo", u8"Test file saved to: %1" },
 	{ "UnsupportedMapper", u8"このMapperを使うゲームはロードできません。" },
+
+	{ "GoogleDrive", u8"Google Drive" },
+	{ "SynchronizationStarted", u8"同期しています。" },
+	{ "SynchronizationFailed", u8"同期は失敗しました。" },
+	{ "SynchronizationCompleted", u8"同期完了。" },
 };
 
 IMessageManager* MessageManager::_messageManager = nullptr;

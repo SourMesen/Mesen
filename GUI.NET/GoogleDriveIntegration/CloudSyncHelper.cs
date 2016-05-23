@@ -36,17 +36,15 @@ namespace Mesen.GUI.GoogleDriveIntegration
 				}
 			} else {
 				try {
-					InteropEmu.DisplayMessage("Google Drive", "Synchronization started.");
+					InteropEmu.DisplayMessage("GoogleDrive", "SynchronizationStarted");
 					using(_accessor = new GoogleDriveAccessor()) {
 						if(!CloudSyncHelper.DownloadData()) {
-							InteropEmu.DisplayMessage("Google Drive", "Synchronization failed.");
-							ConfigManager.Config.PreferenceInfo.CloudLastSync = DateTime.Now;
-							ConfigManager.ApplyChanges();
+							InteropEmu.DisplayMessage("GoogleDrive", "SynchronizationFailed");
 							return false;
 						}
 
 						CloudSyncHelper.UploadData();
-						InteropEmu.DisplayMessage("Google Drive", "Synchronization completed.");
+						InteropEmu.DisplayMessage("GoogleDrive", "SynchronizationCompleted");
 						ConfigManager.Config.PreferenceInfo.CloudLastSync = DateTime.Now;
 						ConfigManager.ApplyChanges();
 
@@ -63,7 +61,6 @@ namespace Mesen.GUI.GoogleDriveIntegration
 			using(_accessor = new GoogleDriveAccessor()) {
 				bool result = _accessor.AcquireToken();
 				if(result) {
-					ConfigManager.RejectChanges();
 					ConfigManager.Config.PreferenceInfo.CloudSaveIntegration = true;
 					ConfigManager.ApplyChanges();
 				}
@@ -77,7 +74,6 @@ namespace Mesen.GUI.GoogleDriveIntegration
 				_accessor.RevokeToken();
 			}
 
-			ConfigManager.RejectChanges();
 			ConfigManager.Config.PreferenceInfo.CloudSaveIntegration = false;
 			ConfigManager.ApplyChanges();
 		}

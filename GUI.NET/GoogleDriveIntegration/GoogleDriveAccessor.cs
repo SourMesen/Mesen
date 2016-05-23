@@ -32,7 +32,7 @@ namespace Mesen.GUI.GoogleDriveIntegration
 				if(_connected) {
 					this.UploadFileAsync(fileStream, filename).GetAwaiter().GetResult();
 				}
-			} catch(TokenResponseException ex) {
+			} catch(TokenResponseException) {
 				_revoked = true;
 				_connected = false;
 				_credentials = null;
@@ -54,7 +54,7 @@ namespace Mesen.GUI.GoogleDriveIntegration
 				if(_connected) {
 					this.DownloadFileAsync(fileStream, filename).GetAwaiter().GetResult();
 				}
-			} catch(TokenResponseException ex) {
+			} catch(TokenResponseException) {
 				_revoked = true;
 				_connected = false;
 				_credentials = null;
