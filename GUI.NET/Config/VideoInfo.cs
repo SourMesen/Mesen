@@ -19,6 +19,7 @@ namespace Mesen.GUI.Config
 		public UInt32 OverscanBottom = 8;
 		public double VideoScale = 2;
 		public VideoFilterType VideoFilter = VideoFilterType.None;
+		public bool UseBilinearInterpolation = false;
 		public VideoAspectRatio AspectRatio = VideoAspectRatio.Auto;
 		public bool VerticalSync = false;
 		public bool UseHdPacks = false;
@@ -41,6 +42,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);
 
 			InteropEmu.SetVideoFilter(videoInfo.VideoFilter);
+			InteropEmu.SetVideoResizeFilter(videoInfo.UseBilinearInterpolation ? VideoResizeFilter.Bilinear : VideoResizeFilter.NearestNeighbor);
 			InteropEmu.SetVideoScale(videoInfo.VideoScale);
 			InteropEmu.SetVideoAspectRatio(videoInfo.AspectRatio);
 

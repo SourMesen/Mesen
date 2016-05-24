@@ -39,6 +39,7 @@
       <Control ID="mnuVideoFilter">画面エフェクト</Control>
       <Control ID="mnuNoneFilter">なし</Control>
       <Control ID="mnuNtscFilter">NTSC</Control>
+      <Control ID="mnuBilinearInterpolation">バイリニア補間</Control>
       <Control ID="mnuAudioConfig">音声</Control>
       <Control ID="mnuInput">コントローラ</Control>
       <Control ID="mnuRegion">地域</Control>
@@ -156,7 +157,8 @@
       <Control ID="tpgGeneral">全般</Control>
       <Control ID="lblVideoScale">映像サイズ:</Control>
       <Control ID="lblVideoFilter">画面エフェクト:</Control>
-      <Control ID="chkVerticalSync">垂直同期を有効する</Control>
+      <Control ID="chkBilinearInterpolation">バイリニア補間を有効にする</Control>
+      <Control ID="chkVerticalSync">垂直同期を有効にする</Control>
       <Control ID="lblDisplayRatio">画面アスペクト:</Control>
       <Control ID="lblEmuSpeedHint">(0 = 最高速度)</Control>
       <Control ID="lblEmulationSpeed">エミュレーションの速度:</Control>

@@ -39,7 +39,7 @@ namespace NES
 		ScreenSize screenSize;
 		VideoDecoder::GetInstance()->GetScreenSize(screenSize, false);
 
-		if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width) {
+		if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter()) {
 			_frameLock.Acquire();
 			_nesFrameHeight = height;
 			_nesFrameWidth = width;
@@ -268,10 +268,12 @@ namespace NES
 		_largeFont.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.64.spritefont"));
 		_font.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.24.spritefont"));
 
+		_resizeFilter = EmulationSettings::GetVideoResizeFilter();
+
 		//Sample state
 		D3D11_SAMPLER_DESC samplerDesc;
 		ZeroMemory(&samplerDesc, sizeof(samplerDesc));
-		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+		samplerDesc.Filter = _resizeFilter == VideoResizeFilter::Bilinear ? D3D11_FILTER_MIN_MAG_MIP_LINEAR : D3D11_FILTER_MIN_MAG_MIP_POINT;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -283,10 +285,6 @@ namespace NES
 		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 		
 		_pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
-
-		/*if(!FAILED(CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\Toast.dds", nullptr, &_toastTexture))) {
-			return S_FALSE;
-		}*/
 
 		return S_OK;
 	}

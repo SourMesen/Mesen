@@ -25,6 +25,7 @@ namespace Mesen.GUI.Forms.Config
 			
 			AddBinding("EmulationSpeed", nudEmulationSpeed);
 			AddBinding("ShowFPS", chkShowFps);
+			AddBinding("UseBilinearInterpolation", chkBilinearInterpolation);
 			AddBinding("VerticalSync", chkVerticalSync);
 			AddBinding("UseHdPacks", chkUseHdPacks);
 			

@@ -39,6 +39,7 @@
       <Control ID="mnuVideoFilter">Filtre vidéo</Control>
       <Control ID="mnuNoneFilter">Aucun</Control>
       <Control ID="mnuNtscFilter">NTSC</Control>
+      <Control ID="mnuBilinearInterpolation">Utiliser l'interpolation bilinéaire</Control>
       <Control ID="mnuAudioConfig">Audio</Control>
       <Control ID="mnuInput">Manettes</Control>
       <Control ID="mnuRegion">Région</Control>
@@ -160,6 +161,7 @@
       <Control ID="lblDisplayRatio">Format d'image :</Control>
       <Control ID="lblEmuSpeedHint">(0 = Vitesse maximale)</Control>
       <Control ID="lblEmulationSpeed">Vitesse d'émulation :</Control>
+      <Control ID="chkBilinearInterpolation">Utiliser l'interpolation bilinéaire lors du redimensionnement de l'image</Control>
       <Control ID="chkShowFps">Afficher le FPS</Control>
       <Control ID="chkUseHdPacks">Utiliser les packs haute-définition de HDNes</Control>
       <Control ID="tpgOverscan">Overscan</Control>

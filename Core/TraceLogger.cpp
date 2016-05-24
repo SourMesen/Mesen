@@ -26,7 +26,7 @@ TraceLogger::~TraceLogger()
 void TraceLogger::LogStatic(string log)
 {
 	if(_instance) {
-		_instance->_outputFile << "--- " << log << " ---" << std::endl;
+		_instance->_outputFile << "--- " << log << " --- Cycle: " << std::to_string(CPU::GetCycleCount()) << std::endl;
 	}
 }
 
@@ -43,5 +43,5 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 	_outputFile << std::uppercase << std::hex << (short)cpuState.DebugPC << ":  " << disassembly << "  " 
 					<< "A:" << (short)cpuState.A << " X:" << (short)cpuState.X << " Y:" << (short)cpuState.Y << " P:" << (short)cpuState.PS << " SP:" << (short)cpuState.SP 
 					<< std::dec 
-					<< " CYC:" << (short)ppuState.Cycle << " SL:" << (short)ppuState.Scanline << std::endl;
+					<< " CYC:" << (short)ppuState.Cycle << " SL:" << (short)ppuState.Scanline << " CPU Cycle:" << cpuState.CycleCount << std::endl;
 }

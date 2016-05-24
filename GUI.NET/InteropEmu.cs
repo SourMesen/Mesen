@@ -116,6 +116,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetVideoScale(double scale);
 		[DllImport(DLLPath)] public static extern void SetVideoAspectRatio(VideoAspectRatio aspectRatio);
 		[DllImport(DLLPath)] public static extern void SetVideoFilter(VideoFilterType filter);
+		[DllImport(DLLPath)] public static extern void SetVideoResizeFilter(VideoResizeFilter filter);
 		[DllImport(DLLPath)] public static extern void SetRgbPalette(Int32[] palette);
 		[DllImport(DLLPath, EntryPoint="GetRgbPalette")] private static extern void GetRgbPaletteWrapper(IntPtr paletteBuffer);
 		
@@ -648,6 +649,12 @@ namespace Mesen.GUI
 		_2xSai = 13,
 		Super2xSai = 14,
 		SuperEagle = 15
+	}
+
+	public enum VideoResizeFilter
+	{
+		NearestNeighbor = 0,
+		Bilinear = 1
 	}
 
 	public enum VideoAspectRatio

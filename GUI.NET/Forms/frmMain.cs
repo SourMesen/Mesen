@@ -241,6 +241,7 @@ namespace Mesen.GUI.Forms
 			}
 
 			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
+			mnuBilinearInterpolation.Checked = ConfigManager.Config.VideoInfo.UseBilinearInterpolation;
 			UpdateEmulationSpeedMenu();
 			UpdateScaleMenu(ConfigManager.Config.VideoInfo.VideoScale);
 			UpdateFilterMenu(ConfigManager.Config.VideoInfo.VideoFilter);
@@ -1294,6 +1295,13 @@ namespace Mesen.GUI.Forms
 			if(new frmVsGameConfig(configInfo).ShowDialog(sender, this) == DialogResult.OK) {
 				VsConfigInfo.ApplyConfig();
 			}
+		}
+
+		private void mnuBilinearInterpolation_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.VideoInfo.UseBilinearInterpolation = mnuBilinearInterpolation.Checked;
+			ConfigManager.Config.ApplyConfig();
+			ConfigManager.ApplyChanges();
 		}
 	}
 }

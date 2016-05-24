@@ -68,6 +68,7 @@
 			this.btnResetPalette = new System.Windows.Forms.Button();
 			this.btnLoadPalFile = new System.Windows.Forms.Button();
 			this.colorDialog = new System.Windows.Forms.ColorDialog();
+			this.chkBilinearInterpolation = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
@@ -106,20 +107,21 @@
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.lblVideoFilter, 0, 1);
-			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 4);
+			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 5);
 			this.tlpMain.Controls.Add(this.cboAspectRatio, 1, 2);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 2);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 6);
-			this.tlpMain.Controls.Add(this.lblEmulationSpeed, 0, 6);
-			this.tlpMain.Controls.Add(this.chkShowFps, 0, 5);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 3);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 7);
+			this.tlpMain.Controls.Add(this.lblEmulationSpeed, 0, 7);
+			this.tlpMain.Controls.Add(this.chkShowFps, 0, 6);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 4);
 			this.tlpMain.Controls.Add(this.nudScale, 1, 0);
 			this.tlpMain.Controls.Add(this.cboFilter, 1, 1);
+			this.tlpMain.Controls.Add(this.chkBilinearInterpolation, 0, 3);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 8;
+			this.tlpMain.RowCount = 9;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -128,7 +130,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.Size = new System.Drawing.Size(501, 336);
 			this.tlpMain.TabIndex = 1;
 			// 
@@ -157,7 +159,7 @@
 			this.chkVerticalSync.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkVerticalSync.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkVerticalSync, 2);
-			this.chkVerticalSync.Location = new System.Drawing.Point(3, 106);
+			this.chkVerticalSync.Location = new System.Drawing.Point(3, 129);
 			this.chkVerticalSync.Name = "chkVerticalSync";
 			this.chkVerticalSync.Size = new System.Drawing.Size(121, 17);
 			this.chkVerticalSync.TabIndex = 15;
@@ -195,7 +197,7 @@
 			this.flowLayoutPanel6.Controls.Add(this.nudEmulationSpeed);
 			this.flowLayoutPanel6.Controls.Add(this.lblEmuSpeedHint);
 			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 149);
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 172);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
 			this.flowLayoutPanel6.Size = new System.Drawing.Size(405, 26);
@@ -227,7 +229,7 @@
 			// 
 			this.lblEmulationSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblEmulationSpeed.AutoSize = true;
-			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 155);
+			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 178);
 			this.lblEmulationSpeed.Name = "lblEmulationSpeed";
 			this.lblEmulationSpeed.Size = new System.Drawing.Size(90, 13);
 			this.lblEmulationSpeed.TabIndex = 0;
@@ -238,7 +240,7 @@
 			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFps.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 129);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 152);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
@@ -251,7 +253,7 @@
 			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
 			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
 			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 80);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 103);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
 			this.flowLayoutPanel7.Size = new System.Drawing.Size(501, 23);
@@ -582,6 +584,18 @@
 			this.btnLoadPalFile.UseVisualStyleBackColor = true;
 			this.btnLoadPalFile.Click += new System.EventHandler(this.btnLoadPalFile_Click);
 			// 
+			// chkBilinearInterpolation
+			// 
+			this.chkBilinearInterpolation.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkBilinearInterpolation.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkBilinearInterpolation, 2);
+			this.chkBilinearInterpolation.Location = new System.Drawing.Point(3, 83);
+			this.chkBilinearInterpolation.Name = "chkBilinearInterpolation";
+			this.chkBilinearInterpolation.Size = new System.Drawing.Size(206, 17);
+			this.chkBilinearInterpolation.TabIndex = 22;
+			this.chkBilinearInterpolation.Text = "Use bilinear interpolation when scaling";
+			this.chkBilinearInterpolation.UseVisualStyleBackColor = true;
+			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -675,5 +689,6 @@
 		private System.Windows.Forms.Button btnLoadPalFile;
 		private System.Windows.Forms.ColorDialog colorDialog;
 		private System.Windows.Forms.NumericUpDown nudScale;
+		private System.Windows.Forms.CheckBox chkBilinearInterpolation;
 	}
 }

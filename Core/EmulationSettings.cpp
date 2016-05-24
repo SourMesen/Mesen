@@ -28,6 +28,7 @@ uint32_t EmulationSettings::_emulationSpeed = 100;
 
 OverscanDimensions EmulationSettings::_overscan;
 VideoFilterType EmulationSettings::_videoFilterType = VideoFilterType::None;
+VideoResizeFilter EmulationSettings::_resizeFilter = VideoResizeFilter::NearestNeighbor;
 double EmulationSettings::_videoScale = 1;
 VideoAspectRatio EmulationSettings::_aspectRatio = VideoAspectRatio::Auto;
 

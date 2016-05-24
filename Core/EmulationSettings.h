@@ -73,6 +73,12 @@ enum class VideoFilterType
 	HdPack = 999
 };
 
+enum class VideoResizeFilter
+{
+	NearestNeighbor = 0,
+	Bilinear = 1
+};
+
 enum class VideoAspectRatio
 {
 	Auto = 0,
@@ -219,6 +225,7 @@ private:
 	static VideoFilterType _videoFilterType;
 	static double _videoScale;
 	static VideoAspectRatio _aspectRatio;
+	static VideoResizeFilter _resizeFilter;
 
 	static ConsoleType _consoleType;
 	static ExpansionPortDevice _expansionDevice;
@@ -409,6 +416,16 @@ public:
 	static VideoFilterType GetVideoFilterType()
 	{
 		return _videoFilterType;
+	}
+
+	static void SetVideoResizeFilter(VideoResizeFilter videoResizeFilter)
+	{
+		_resizeFilter = videoResizeFilter;
+	}
+
+	static VideoResizeFilter GetVideoResizeFilter()
+	{
+		return _resizeFilter;
 	}
 
 	static void SetVideoAspectRatio(VideoAspectRatio aspectRatio)

@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "../Core/IRenderingDevice.h"
 #include "../Core/IMessageManager.h"
+#include "../Core/EmulationSettings.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/SimpleLock.h"
 #include "../Utilities/Timer.h"
@@ -35,6 +36,8 @@ namespace NES {
 
 		bool							_frameChanged = true;
 		SimpleLock					_frameLock;
+
+		VideoResizeFilter _resizeFilter = VideoResizeFilter::NearestNeighbor;
 
 		Timer _fpsTimer;
 		uint32_t _lastFrameCount = 0;
