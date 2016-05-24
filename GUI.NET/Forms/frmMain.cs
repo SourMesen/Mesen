@@ -28,8 +28,10 @@ namespace Mesen.GUI.Forms
 		private string _romToLoad = null;
 		private string _currentGame = null;
 		private bool _customSize = false;
+		private FormWindowState _originalWindowState;
 		private bool _fullscreenMode = false;
 		private double _regularScale = ConfigManager.Config.VideoInfo.VideoScale;
+		private bool _needScaleUpdate = false;
 
 		public frmMain(string[] args)
 		{
@@ -228,6 +230,16 @@ namespace Mesen.GUI.Forms
 
 		private void UpdateVideoSettings()
 		{
+			if(_needScaleUpdate) {
+				//Reset scale to 1 when filter is changed
+				if(this.WindowState == FormWindowState.Maximized || mnuNoneFilter.Checked) {
+					SetScaleBasedOnWindowSize();
+				} else {
+					SetScale(1);
+				}
+				_needScaleUpdate = false;
+			}
+
 			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
 			UpdateEmulationSpeedMenu();
 			UpdateScaleMenu(ConfigManager.Config.VideoInfo.VideoScale);
@@ -274,20 +286,36 @@ namespace Mesen.GUI.Forms
 			this.Resize -= frmMain_Resize;
 			if(enabled) {
 				this.menuStrip.Visible = false;
+				_originalWindowState = this.WindowState;
 				this.WindowState = FormWindowState.Normal;
 				this.FormBorderStyle = FormBorderStyle.None;
 				this.WindowState = FormWindowState.Maximized;
 				SetScaleBasedOnWindowSize();
 			} else {
 				this.menuStrip.Visible = true;
-				this.WindowState = FormWindowState.Normal;
+				this.WindowState = _originalWindowState;
 				this.FormBorderStyle = FormBorderStyle.Sizable;
 				this.UpdateScaleMenu(_regularScale);
 				VideoInfo.ApplyConfig();
+				SetScaleBasedOnWindowSize();
 			}
 			this.Resize += frmMain_Resize;
 
 			_fullscreenMode = enabled;
+		}
+
+		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
+		{
+			if(_fullscreenMode && !this.menuStrip.ContainsFocus) {
+				this.menuStrip.Visible = e.Y < 30;
+			}
+		}
+
+		private void ctrlRenderer_MouseClick(object sender, MouseEventArgs e)
+		{
+			if(_fullscreenMode) {
+				this.menuStrip.Visible = false;
+			}
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -953,6 +981,11 @@ namespace Mesen.GUI.Forms
 		private void mnuScale_Click(object sender, EventArgs e)
 		{
 			UInt32 scale = UInt32.Parse((string)((ToolStripMenuItem)sender).Tag);
+			SetScale(scale);
+		}
+
+		private void SetScale(double scale)
+		{
 			_customSize = false;
 			_regularScale = scale;
 			InteropEmu.SetVideoScale(scale);
@@ -963,7 +996,8 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.SetVideoFilter(type);
 			UpdateFilterMenu(type);
-			_customSize = false;
+
+			_needScaleUpdate = true;
 		}
 
 		private void mnuNoneFilter_Click(object sender, EventArgs e)
@@ -1152,6 +1186,12 @@ namespace Mesen.GUI.Forms
 			mnuFullscreen.Checked = _fullscreenMode;
 		}
 
+		private void ctrlRenderer_DoubleClick(object sender, EventArgs e)
+		{
+			SetFullscreenState(!_fullscreenMode);
+			mnuFullscreen.Checked = _fullscreenMode;
+		}
+
 		private void mnuScaleCustom_Click(object sender, EventArgs e)
 		{
 			SetScaleBasedOnWindowSize();
@@ -1159,6 +1199,10 @@ namespace Mesen.GUI.Forms
 
 		private void panelRenderer_Click(object sender, EventArgs e)
 		{
+			if(_fullscreenMode) {
+				this.menuStrip.Visible = false;
+			}
+
 			ctrlRenderer.Focus();
 		}
 

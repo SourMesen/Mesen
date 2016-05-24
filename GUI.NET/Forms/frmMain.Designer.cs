@@ -95,6 +95,10 @@ namespace Mesen.GUI.Forms
 			this.mnuScale2xFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScale3xFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScale4xFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnu2xSaiFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSuper2xSaiFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSuperEagleFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAudioConfig = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuInput = new System.Windows.Forms.ToolStripMenuItem();
@@ -144,10 +148,6 @@ namespace Mesen.GUI.Forms
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnu2xSaiFilter = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSuper2xSaiFilter = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSuperEagleFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -166,6 +166,8 @@ namespace Mesen.GUI.Forms
 			this.panelRenderer.Size = new System.Drawing.Size(304, 218);
 			this.panelRenderer.TabIndex = 2;
 			this.panelRenderer.Click += new System.EventHandler(this.panelRenderer_Click);
+			this.panelRenderer.DoubleClick += new System.EventHandler(this.ctrlRenderer_DoubleClick);
+			this.panelRenderer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
 			// 
 			// ctrlRenderer
 			// 
@@ -175,7 +177,10 @@ namespace Mesen.GUI.Forms
 			this.ctrlRenderer.Name = "ctrlRenderer";
 			this.ctrlRenderer.Size = new System.Drawing.Size(263, 176);
 			this.ctrlRenderer.TabIndex = 1;
+			this.ctrlRenderer.DoubleClick += new System.EventHandler(this.ctrlRenderer_DoubleClick);
 			this.ctrlRenderer.Enter += new System.EventHandler(this.ctrlRenderer_Enter);
+			this.ctrlRenderer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseClick);
+			this.ctrlRenderer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
 			// 
 			// menuStrip
 			// 
@@ -400,7 +405,7 @@ namespace Mesen.GUI.Forms
             this.mnuShowFPS});
 			this.mnuEmulationSpeed.Image = global::Mesen.GUI.Properties.Resources.Speed;
 			this.mnuEmulationSpeed.Name = "mnuEmulationSpeed";
-			this.mnuEmulationSpeed.Size = new System.Drawing.Size(152, 22);
+			this.mnuEmulationSpeed.Size = new System.Drawing.Size(135, 22);
 			this.mnuEmulationSpeed.Text = "Speed";
 			// 
 			// mnuEmuSpeedNormal
@@ -499,7 +504,7 @@ namespace Mesen.GUI.Forms
             this.mnuFullscreen});
 			this.mnuVideoScale.Image = global::Mesen.GUI.Properties.Resources.Fullscreen;
 			this.mnuVideoScale.Name = "mnuVideoScale";
-			this.mnuVideoScale.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoScale.Size = new System.Drawing.Size(135, 22);
 			this.mnuVideoScale.Text = "Video Size";
 			// 
 			// mnuScale1x
@@ -578,125 +583,151 @@ namespace Mesen.GUI.Forms
             this.mnuSuper2xSaiFilter,
             this.mnuSuperEagleFilter});
 			this.mnuVideoFilter.Name = "mnuVideoFilter";
-			this.mnuVideoFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoFilter.Size = new System.Drawing.Size(135, 22);
 			this.mnuVideoFilter.Text = "Video Filter";
 			// 
 			// mnuNoneFilter
 			// 
 			this.mnuNoneFilter.Name = "mnuNoneFilter";
-			this.mnuNoneFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuNoneFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuNoneFilter.Text = "None";
 			this.mnuNoneFilter.Click += new System.EventHandler(this.mnuNoneFilter_Click);
 			// 
 			// mnuNtscFilter
 			// 
 			this.mnuNtscFilter.Name = "mnuNtscFilter";
-			this.mnuNtscFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuNtscFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuNtscFilter.Text = "NTSC";
 			this.mnuNtscFilter.Click += new System.EventHandler(this.mnuNtscFilter_Click);
 			// 
 			// toolStripMenuItem15
 			// 
 			this.toolStripMenuItem15.Name = "toolStripMenuItem15";
-			this.toolStripMenuItem15.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem15.Size = new System.Drawing.Size(129, 6);
 			// 
 			// mnuXBRZ2xFilter
 			// 
 			this.mnuXBRZ2xFilter.Name = "mnuXBRZ2xFilter";
-			this.mnuXBRZ2xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuXBRZ2xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuXBRZ2xFilter.Text = "xBRZ 2x";
 			this.mnuXBRZ2xFilter.Click += new System.EventHandler(this.mnuXBRZ2xFilter_Click);
 			// 
 			// mnuXBRZ3xFilter
 			// 
 			this.mnuXBRZ3xFilter.Name = "mnuXBRZ3xFilter";
-			this.mnuXBRZ3xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuXBRZ3xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuXBRZ3xFilter.Text = "xBRZ 3x";
 			this.mnuXBRZ3xFilter.Click += new System.EventHandler(this.mnuXBRZ3xFilter_Click);
 			// 
 			// mnuXBRZ4xFilter
 			// 
 			this.mnuXBRZ4xFilter.Name = "mnuXBRZ4xFilter";
-			this.mnuXBRZ4xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuXBRZ4xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuXBRZ4xFilter.Text = "xBRZ 4x";
 			this.mnuXBRZ4xFilter.Click += new System.EventHandler(this.mnuXBRZ4xFilter_Click);
 			// 
 			// mnuXBRZ5xFilter
 			// 
 			this.mnuXBRZ5xFilter.Name = "mnuXBRZ5xFilter";
-			this.mnuXBRZ5xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuXBRZ5xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuXBRZ5xFilter.Text = "xBRZ 5x";
 			this.mnuXBRZ5xFilter.Click += new System.EventHandler(this.mnuXBRZ5xFilter_Click);
 			// 
 			// mnuXBRZ6xFilter
 			// 
 			this.mnuXBRZ6xFilter.Name = "mnuXBRZ6xFilter";
-			this.mnuXBRZ6xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuXBRZ6xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuXBRZ6xFilter.Text = "xBRZ 6x";
 			this.mnuXBRZ6xFilter.Click += new System.EventHandler(this.mnuXBRZ6xFilter_Click);
 			// 
 			// toolStripMenuItem16
 			// 
 			this.toolStripMenuItem16.Name = "toolStripMenuItem16";
-			this.toolStripMenuItem16.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem16.Size = new System.Drawing.Size(129, 6);
 			// 
 			// mnuHQ2xFilter
 			// 
 			this.mnuHQ2xFilter.Name = "mnuHQ2xFilter";
-			this.mnuHQ2xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuHQ2xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuHQ2xFilter.Text = "HQ 2x";
 			this.mnuHQ2xFilter.Click += new System.EventHandler(this.mnuHQ2xFilter_Click);
 			// 
 			// mnuHQ3xFilter
 			// 
 			this.mnuHQ3xFilter.Name = "mnuHQ3xFilter";
-			this.mnuHQ3xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuHQ3xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuHQ3xFilter.Text = "HQ 3x";
 			this.mnuHQ3xFilter.Click += new System.EventHandler(this.mnuHQ3xFilter_Click);
 			// 
 			// mnuHQ4xFilter
 			// 
 			this.mnuHQ4xFilter.Name = "mnuHQ4xFilter";
-			this.mnuHQ4xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuHQ4xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuHQ4xFilter.Text = "HQ 4x";
 			this.mnuHQ4xFilter.Click += new System.EventHandler(this.mnuHQ4xFilter_Click);
 			// 
 			// toolStripMenuItem17
 			// 
 			this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-			this.toolStripMenuItem17.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem17.Size = new System.Drawing.Size(129, 6);
 			// 
 			// mnuScale2xFilter
 			// 
 			this.mnuScale2xFilter.Name = "mnuScale2xFilter";
-			this.mnuScale2xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale2xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuScale2xFilter.Text = "Scale2x";
 			this.mnuScale2xFilter.Click += new System.EventHandler(this.mnuScale2xFilter_Click);
 			// 
 			// mnuScale3xFilter
 			// 
 			this.mnuScale3xFilter.Name = "mnuScale3xFilter";
-			this.mnuScale3xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale3xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuScale3xFilter.Text = "Scale3x";
 			this.mnuScale3xFilter.Click += new System.EventHandler(this.mnuScale3xFilter_Click);
 			// 
 			// mnuScale4xFilter
 			// 
 			this.mnuScale4xFilter.Name = "mnuScale4xFilter";
-			this.mnuScale4xFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuScale4xFilter.Size = new System.Drawing.Size(132, 22);
 			this.mnuScale4xFilter.Text = "Scale4x";
 			this.mnuScale4xFilter.Click += new System.EventHandler(this.mnuScale4xFilter_Click);
+			// 
+			// toolStripMenuItem18
+			// 
+			this.toolStripMenuItem18.Name = "toolStripMenuItem18";
+			this.toolStripMenuItem18.Size = new System.Drawing.Size(129, 6);
+			// 
+			// mnu2xSaiFilter
+			// 
+			this.mnu2xSaiFilter.Name = "mnu2xSaiFilter";
+			this.mnu2xSaiFilter.Size = new System.Drawing.Size(132, 22);
+			this.mnu2xSaiFilter.Text = "2xSai";
+			this.mnu2xSaiFilter.Click += new System.EventHandler(this.mnu2xSaiFilter_Click);
+			// 
+			// mnuSuper2xSaiFilter
+			// 
+			this.mnuSuper2xSaiFilter.Name = "mnuSuper2xSaiFilter";
+			this.mnuSuper2xSaiFilter.Size = new System.Drawing.Size(132, 22);
+			this.mnuSuper2xSaiFilter.Text = "Super2xSai";
+			this.mnuSuper2xSaiFilter.Click += new System.EventHandler(this.mnuSuper2xSaiFilter_Click);
+			// 
+			// mnuSuperEagleFilter
+			// 
+			this.mnuSuperEagleFilter.Name = "mnuSuperEagleFilter";
+			this.mnuSuperEagleFilter.Size = new System.Drawing.Size(132, 22);
+			this.mnuSuperEagleFilter.Text = "SuperEagle";
+			this.mnuSuperEagleFilter.Click += new System.EventHandler(this.mnuSuperEagleFilter_Click);
 			// 
 			// toolStripMenuItem10
 			// 
 			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-			this.toolStripMenuItem10.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(132, 6);
 			// 
 			// mnuAudioConfig
 			// 
 			this.mnuAudioConfig.Image = global::Mesen.GUI.Properties.Resources.Audio;
 			this.mnuAudioConfig.Name = "mnuAudioConfig";
-			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuAudioConfig.Size = new System.Drawing.Size(135, 22);
 			this.mnuAudioConfig.Text = "Audio";
 			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
 			// 
@@ -704,7 +735,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuInput.Image = global::Mesen.GUI.Properties.Resources.Controller;
 			this.mnuInput.Name = "mnuInput";
-			this.mnuInput.Size = new System.Drawing.Size(152, 22);
+			this.mnuInput.Size = new System.Drawing.Size(135, 22);
 			this.mnuInput.Text = "Input";
 			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
 			// 
@@ -717,7 +748,7 @@ namespace Mesen.GUI.Forms
             this.mnuRegionDendy});
 			this.mnuRegion.Image = global::Mesen.GUI.Properties.Resources.Globe;
 			this.mnuRegion.Name = "mnuRegion";
-			this.mnuRegion.Size = new System.Drawing.Size(152, 22);
+			this.mnuRegion.Size = new System.Drawing.Size(135, 22);
 			this.mnuRegion.Text = "Region";
 			// 
 			// mnuRegionAuto
@@ -752,20 +783,20 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuVideoConfig.Image = global::Mesen.GUI.Properties.Resources.Video;
 			this.mnuVideoConfig.Name = "mnuVideoConfig";
-			this.mnuVideoConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoConfig.Size = new System.Drawing.Size(135, 22);
 			this.mnuVideoConfig.Text = "Video";
 			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
 			// 
 			// toolStripMenuItem11
 			// 
 			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-			this.toolStripMenuItem11.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem11.Size = new System.Drawing.Size(132, 6);
 			// 
 			// mnuPreferences
 			// 
 			this.mnuPreferences.Image = global::Mesen.GUI.Properties.Resources.Cog;
 			this.mnuPreferences.Name = "mnuPreferences";
-			this.mnuPreferences.Size = new System.Drawing.Size(152, 22);
+			this.mnuPreferences.Size = new System.Drawing.Size(135, 22);
 			this.mnuPreferences.Text = "Preferences";
 			this.mnuPreferences.Click += new System.EventHandler(this.mnuPreferences_Click);
 			// 
@@ -1069,32 +1100,6 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(170, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
-			// 
-			// toolStripMenuItem18
-			// 
-			this.toolStripMenuItem18.Name = "toolStripMenuItem18";
-			this.toolStripMenuItem18.Size = new System.Drawing.Size(149, 6);
-			// 
-			// mnu2xSaiFilter
-			// 
-			this.mnu2xSaiFilter.Name = "mnu2xSaiFilter";
-			this.mnu2xSaiFilter.Size = new System.Drawing.Size(152, 22);
-			this.mnu2xSaiFilter.Text = "2xSai";
-			this.mnu2xSaiFilter.Click += new System.EventHandler(this.mnu2xSaiFilter_Click);
-			// 
-			// mnuSuper2xSaiFilter
-			// 
-			this.mnuSuper2xSaiFilter.Name = "mnuSuper2xSaiFilter";
-			this.mnuSuper2xSaiFilter.Size = new System.Drawing.Size(152, 22);
-			this.mnuSuper2xSaiFilter.Text = "Super2xSai";
-			this.mnuSuper2xSaiFilter.Click += new System.EventHandler(this.mnuSuper2xSaiFilter_Click);
-			// 
-			// mnuSuperEagleFilter
-			// 
-			this.mnuSuperEagleFilter.Name = "mnuSuperEagleFilter";
-			this.mnuSuperEagleFilter.Size = new System.Drawing.Size(152, 22);
-			this.mnuSuperEagleFilter.Text = "SuperEagle";
-			this.mnuSuperEagleFilter.Click += new System.EventHandler(this.mnuSuperEagleFilter_Click);
 			// 
 			// frmMain
 			// 
