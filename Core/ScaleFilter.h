@@ -16,6 +16,7 @@ enum class ScaleFilterType
 class ScaleFilter : public DefaultVideoFilter
 {
 private:
+	static bool _hqxInitDone;
 	uint32_t *_decodedPpuBuffer;
 	uint32_t _filterScale;
 	ScaleFilterType _scaleFilterType;

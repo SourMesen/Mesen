@@ -6,14 +6,17 @@
 #include "../Utilities/Scale2x/scalebit.h"
 #include "../Utilities/KreedSaiEagle/SaiEagle.h"
 
+bool ScaleFilter::_hqxInitDone = false;
+
 ScaleFilter::ScaleFilter(ScaleFilterType scaleFilterType, uint32_t scale)
 {
 	_scaleFilterType = scaleFilterType;
 	_filterScale = scale;
 	_decodedPpuBuffer = new uint32_t[PPU::PixelCount];
 
-	if(_scaleFilterType == ScaleFilterType::HQX) {
+	if(!_hqxInitDone && _scaleFilterType == ScaleFilterType::HQX) {
 		hqxInit();
+		_hqxInitDone = true;
 	}
 }
 
