@@ -103,6 +103,15 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
+		public static void ApplyResources(Form form, ContextMenuStrip contextMenu)
+		{
+			XmlNode baseNode = _resources.SelectSingleNode("/Resources/Forms/Form[@ID='" + form.Name + "']");
+
+			if(baseNode != null) {
+				ApplyResources(baseNode, contextMenu.Items);
+			}
+		}
+
 		private static void ApplyResources(XmlNode baseNode, IEnumerable container)
 		{
 			foreach(object ctrl in container) {

@@ -171,9 +171,12 @@
       <Control ID="lblBottom">下</Control>
       <Control ID="lblRight">右</Control>
       <Control ID="tpgPalette">パレット</Control>
-      <Control ID="btnResetPalette">リセット</Control>
+      <Control ID="mnuDefaultPalette">デフォルト (NTSC)</Control>
+      <Control ID="btnSelectPalette">プリセットを選ぶ...</Control>
+      <Control ID="btnExportPalette">.palファイルにエクスポートする</Control>
       <Control ID="btnLoadPalFile">.palファイルをロードする</Control>
       <Control ID="tpgPicture">画像</Control>
+      <Control ID="btnSelectPreset">プリセットを選ぶ...</Control>
       <Control ID="grpCommon">共通設定</Control>
       <Control ID="trkBrightness">明るさ</Control>
       <Control ID="trkContrast">コントラスト</Control>
@@ -190,6 +193,10 @@
       <Control ID="grpScanlines">走査線</Control>
       <Control ID="trkScanlines">走査線</Control>
       <Control ID="btnResetPictureSettings">リセット</Control>
+      <Control ID="mnuPresetComposite">コンポジット</Control>
+      <Control ID="mnuPresetSVideo">S端子</Control>
+      <Control ID="menuPresetRgb">RGB</Control>
+      <Control ID="mnuPresetMonochrome">モノクロ</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>

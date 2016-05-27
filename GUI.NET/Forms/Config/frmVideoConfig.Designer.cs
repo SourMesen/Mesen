@@ -50,9 +50,6 @@
 			this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
 			this.btnSelectPreset = new System.Windows.Forms.Button();
 			this.btnResetPictureSettings = new System.Windows.Forms.Button();
-			this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
-			this.lblVideoFilter = new System.Windows.Forms.Label();
-			this.cboFilter = new System.Windows.Forms.ComboBox();
 			this.grpNtscFilter = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.trkArtifacts = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
@@ -71,6 +68,9 @@
 			this.trkSaturation = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.grpScanlines = new System.Windows.Forms.GroupBox();
 			this.trkScanlines = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+			this.cboFilter = new System.Windows.Forms.ComboBox();
+			this.lblVideoFilter = new System.Windows.Forms.Label();
 			this.tpgOverscan = new System.Windows.Forms.TabPage();
 			this.grpCropping = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -91,14 +91,21 @@
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.picPalette = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.btnResetPalette = new System.Windows.Forms.Button();
+			this.btnExportPalette = new System.Windows.Forms.Button();
+			this.btnSelectPalette = new System.Windows.Forms.Button();
 			this.btnLoadPalFile = new System.Windows.Forms.Button();
 			this.contextPicturePresets = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuPresetComposite = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPresetSVideo = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuPresetRgb = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPresetRgb = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPresetMonochrome = new System.Windows.Forms.ToolStripMenuItem();
 			this.colorDialog = new System.Windows.Forms.ColorDialog();
+			this.contextPaletteList = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuDefaultPalette = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
@@ -110,12 +117,12 @@
 			this.tpgPicture.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			this.tableLayoutPanel7.SuspendLayout();
-			this.flowLayoutPanel8.SuspendLayout();
 			this.grpNtscFilter.SuspendLayout();
 			this.tableLayoutPanel6.SuspendLayout();
 			this.grpCommon.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.grpScanlines.SuspendLayout();
+			this.tableLayoutPanel8.SuspendLayout();
 			this.tpgOverscan.SuspendLayout();
 			this.grpCropping.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -133,12 +140,13 @@
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.contextPicturePresets.SuspendLayout();
+			this.contextPaletteList.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Location = new System.Drawing.Point(0, 402);
-			this.baseConfigPanel.Size = new System.Drawing.Size(515, 29);
+			this.baseConfigPanel.Size = new System.Drawing.Size(535, 29);
 			// 
 			// tlpMain
 			// 
@@ -167,7 +175,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpMain.Size = new System.Drawing.Size(501, 370);
+			this.tlpMain.Size = new System.Drawing.Size(521, 370);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// lblVideoScale
@@ -226,7 +234,7 @@
 			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 122);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(405, 26);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(425, 26);
 			this.flowLayoutPanel6.TabIndex = 10;
 			// 
 			// nudEmulationSpeed
@@ -282,7 +290,7 @@
 			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 53);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
-			this.flowLayoutPanel7.Size = new System.Drawing.Size(501, 23);
+			this.flowLayoutPanel7.Size = new System.Drawing.Size(521, 23);
 			this.flowLayoutPanel7.TabIndex = 20;
 			// 
 			// chkUseHdPacks
@@ -328,7 +336,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(515, 402);
+			this.tabMain.Size = new System.Drawing.Size(535, 402);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -337,7 +345,7 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(507, 376);
+			this.tpgGeneral.Size = new System.Drawing.Size(527, 376);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -348,7 +356,7 @@
 			this.tpgPicture.Location = new System.Drawing.Point(4, 22);
 			this.tpgPicture.Name = "tpgPicture";
 			this.tpgPicture.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPicture.Size = new System.Drawing.Size(507, 376);
+			this.tpgPicture.Size = new System.Drawing.Size(527, 376);
 			this.tpgPicture.TabIndex = 3;
 			this.tpgPicture.Text = "Picture";
 			this.tpgPicture.UseVisualStyleBackColor = true;
@@ -359,10 +367,10 @@
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel7, 0, 3);
-			this.tableLayoutPanel5.Controls.Add(this.flowLayoutPanel8, 0, 0);
 			this.tableLayoutPanel5.Controls.Add(this.grpNtscFilter, 1, 1);
 			this.tableLayoutPanel5.Controls.Add(this.grpCommon, 0, 1);
 			this.tableLayoutPanel5.Controls.Add(this.grpScanlines, 0, 2);
+			this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel8, 0, 0);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
@@ -372,23 +380,23 @@
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(501, 370);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(521, 370);
 			this.tableLayoutPanel5.TabIndex = 5;
 			// 
 			// tableLayoutPanel7
 			// 
 			this.tableLayoutPanel7.ColumnCount = 2;
-			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.92308F));
+			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.07692F));
 			this.tableLayoutPanel7.Controls.Add(this.btnSelectPreset, 1, 0);
 			this.tableLayoutPanel7.Controls.Add(this.btnResetPictureSettings, 0, 0);
 			this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 336);
+			this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 337);
 			this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel7.Name = "tableLayoutPanel7";
 			this.tableLayoutPanel7.RowCount = 1;
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel7.Size = new System.Drawing.Size(250, 34);
+			this.tableLayoutPanel7.Size = new System.Drawing.Size(260, 33);
 			this.tableLayoutPanel7.TabIndex = 3;
 			// 
 			// btnSelectPreset
@@ -397,20 +405,20 @@
 			this.btnSelectPreset.AutoSize = true;
 			this.btnSelectPreset.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectPreset.Image")));
 			this.btnSelectPreset.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnSelectPreset.Location = new System.Drawing.Point(151, 8);
+			this.btnSelectPreset.Location = new System.Drawing.Point(161, 7);
 			this.btnSelectPreset.Name = "btnSelectPreset";
 			this.btnSelectPreset.Size = new System.Drawing.Size(96, 23);
 			this.btnSelectPreset.TabIndex = 3;
 			this.btnSelectPreset.Text = "Select Preset...";
 			this.btnSelectPreset.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this.btnSelectPreset.UseVisualStyleBackColor = true;
-			this.btnSelectPreset.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnSelectPreset_MouseClick);
+			this.btnSelectPreset.Click += new System.EventHandler(this.btnSelectPreset_Click);
 			// 
 			// btnResetPictureSettings
 			// 
 			this.btnResetPictureSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnResetPictureSettings.AutoSize = true;
-			this.btnResetPictureSettings.Location = new System.Drawing.Point(3, 8);
+			this.btnResetPictureSettings.Location = new System.Drawing.Point(3, 7);
 			this.btnResetPictureSettings.Name = "btnResetPictureSettings";
 			this.btnResetPictureSettings.Size = new System.Drawing.Size(75, 23);
 			this.btnResetPictureSettings.TabIndex = 3;
@@ -418,48 +426,15 @@
 			this.btnResetPictureSettings.UseVisualStyleBackColor = true;
 			this.btnResetPictureSettings.Click += new System.EventHandler(this.btnResetPictureSettings_Click);
 			// 
-			// flowLayoutPanel8
-			// 
-			this.tableLayoutPanel5.SetColumnSpan(this.flowLayoutPanel8, 2);
-			this.flowLayoutPanel8.Controls.Add(this.lblVideoFilter);
-			this.flowLayoutPanel8.Controls.Add(this.cboFilter);
-			this.flowLayoutPanel8.Location = new System.Drawing.Point(0, 0);
-			this.flowLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel8.Name = "flowLayoutPanel8";
-			this.flowLayoutPanel8.Size = new System.Drawing.Size(501, 26);
-			this.flowLayoutPanel8.TabIndex = 6;
-			// 
-			// lblVideoFilter
-			// 
-			this.lblVideoFilter.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblVideoFilter.AutoSize = true;
-			this.lblVideoFilter.Location = new System.Drawing.Point(3, 7);
-			this.lblVideoFilter.Name = "lblVideoFilter";
-			this.lblVideoFilter.Size = new System.Drawing.Size(32, 13);
-			this.lblVideoFilter.TabIndex = 13;
-			this.lblVideoFilter.Text = "Filter:";
-			// 
-			// cboFilter
-			// 
-			this.cboFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboFilter.FormattingEnabled = true;
-			this.cboFilter.Items.AddRange(new object[] {
-            "None",
-            "NTSC"});
-			this.cboFilter.Location = new System.Drawing.Point(41, 3);
-			this.cboFilter.Name = "cboFilter";
-			this.cboFilter.Size = new System.Drawing.Size(457, 21);
-			this.cboFilter.TabIndex = 15;
-			// 
 			// grpNtscFilter
 			// 
 			this.grpNtscFilter.Controls.Add(this.tableLayoutPanel6);
 			this.grpNtscFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpNtscFilter.Location = new System.Drawing.Point(252, 26);
+			this.grpNtscFilter.Location = new System.Drawing.Point(262, 27);
 			this.grpNtscFilter.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this.grpNtscFilter.Name = "grpNtscFilter";
 			this.tableLayoutPanel5.SetRowSpan(this.grpNtscFilter, 3);
-			this.grpNtscFilter.Size = new System.Drawing.Size(249, 344);
+			this.grpNtscFilter.Size = new System.Drawing.Size(259, 343);
 			this.grpNtscFilter.TabIndex = 4;
 			this.grpNtscFilter.TabStop = false;
 			this.grpNtscFilter.Text = "NTSC Filter";
@@ -487,7 +462,7 @@
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(243, 325);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(253, 324);
 			this.tableLayoutPanel6.TabIndex = 5;
 			// 
 			// trkArtifacts
@@ -500,7 +475,7 @@
 			this.trkArtifacts.Minimum = -100;
 			this.trkArtifacts.MinimumSize = new System.Drawing.Size(206, 50);
 			this.trkArtifacts.Name = "trkArtifacts";
-			this.trkArtifacts.Size = new System.Drawing.Size(243, 50);
+			this.trkArtifacts.Size = new System.Drawing.Size(253, 50);
 			this.trkArtifacts.TabIndex = 24;
 			this.trkArtifacts.Text = "Artifacts";
 			this.trkArtifacts.Value = 0;
@@ -515,7 +490,7 @@
 			this.trkBleed.Minimum = -100;
 			this.trkBleed.MinimumSize = new System.Drawing.Size(206, 50);
 			this.trkBleed.Name = "trkBleed";
-			this.trkBleed.Size = new System.Drawing.Size(243, 50);
+			this.trkBleed.Size = new System.Drawing.Size(253, 50);
 			this.trkBleed.TabIndex = 25;
 			this.trkBleed.Text = "Bleed";
 			this.trkBleed.Value = 0;
@@ -530,7 +505,7 @@
 			this.trkFringing.Minimum = -100;
 			this.trkFringing.MinimumSize = new System.Drawing.Size(206, 50);
 			this.trkFringing.Name = "trkFringing";
-			this.trkFringing.Size = new System.Drawing.Size(243, 50);
+			this.trkFringing.Size = new System.Drawing.Size(253, 50);
 			this.trkFringing.TabIndex = 26;
 			this.trkFringing.Text = "Fringing";
 			this.trkFringing.Value = 0;
@@ -545,7 +520,7 @@
 			this.trkGamma.Minimum = -100;
 			this.trkGamma.MinimumSize = new System.Drawing.Size(206, 50);
 			this.trkGamma.Name = "trkGamma";
-			this.trkGamma.Size = new System.Drawing.Size(243, 50);
+			this.trkGamma.Size = new System.Drawing.Size(253, 50);
 			this.trkGamma.TabIndex = 27;
 			this.trkGamma.Text = "Gamma";
 			this.trkGamma.Value = 0;
@@ -560,7 +535,7 @@
 			this.trkResolution.Minimum = -100;
 			this.trkResolution.MinimumSize = new System.Drawing.Size(206, 50);
 			this.trkResolution.Name = "trkResolution";
-			this.trkResolution.Size = new System.Drawing.Size(243, 50);
+			this.trkResolution.Size = new System.Drawing.Size(253, 50);
 			this.trkResolution.TabIndex = 28;
 			this.trkResolution.Text = "Resolution";
 			this.trkResolution.Value = 0;
@@ -575,7 +550,7 @@
 			this.trkSharpness.Minimum = -100;
 			this.trkSharpness.MinimumSize = new System.Drawing.Size(206, 50);
 			this.trkSharpness.Name = "trkSharpness";
-			this.trkSharpness.Size = new System.Drawing.Size(243, 50);
+			this.trkSharpness.Size = new System.Drawing.Size(253, 50);
 			this.trkSharpness.TabIndex = 29;
 			this.trkSharpness.Text = "Sharpness";
 			this.trkSharpness.Value = 0;
@@ -593,7 +568,7 @@
 			// grpCommon
 			// 
 			this.grpCommon.Controls.Add(this.tableLayoutPanel4);
-			this.grpCommon.Location = new System.Drawing.Point(0, 26);
+			this.grpCommon.Location = new System.Drawing.Point(0, 27);
 			this.grpCommon.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
 			this.grpCommon.Name = "grpCommon";
 			this.grpCommon.Size = new System.Drawing.Size(248, 238);
@@ -698,10 +673,10 @@
 			// 
 			this.grpScanlines.Controls.Add(this.trkScanlines);
 			this.grpScanlines.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpScanlines.Location = new System.Drawing.Point(0, 264);
-			this.grpScanlines.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.grpScanlines.Location = new System.Drawing.Point(0, 265);
+			this.grpScanlines.Margin = new System.Windows.Forms.Padding(0);
 			this.grpScanlines.Name = "grpScanlines";
-			this.grpScanlines.Size = new System.Drawing.Size(250, 72);
+			this.grpScanlines.Size = new System.Drawing.Size(260, 72);
 			this.grpScanlines.TabIndex = 5;
 			this.grpScanlines.TabStop = false;
 			this.grpScanlines.Text = "Scanlines";
@@ -716,10 +691,51 @@
 			this.trkScanlines.Minimum = 0;
 			this.trkScanlines.MinimumSize = new System.Drawing.Size(206, 50);
 			this.trkScanlines.Name = "trkScanlines";
-			this.trkScanlines.Size = new System.Drawing.Size(244, 50);
+			this.trkScanlines.Size = new System.Drawing.Size(254, 50);
 			this.trkScanlines.TabIndex = 28;
 			this.trkScanlines.Text = "Scanlines";
 			this.trkScanlines.Value = 0;
+			// 
+			// tableLayoutPanel8
+			// 
+			this.tableLayoutPanel8.ColumnCount = 2;
+			this.tableLayoutPanel5.SetColumnSpan(this.tableLayoutPanel8, 2);
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel8.Controls.Add(this.cboFilter, 1, 0);
+			this.tableLayoutPanel8.Controls.Add(this.lblVideoFilter, 0, 0);
+			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+			this.tableLayoutPanel8.RowCount = 1;
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+			this.tableLayoutPanel8.Size = new System.Drawing.Size(521, 27);
+			this.tableLayoutPanel8.TabIndex = 6;
+			// 
+			// cboFilter
+			// 
+			this.cboFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.cboFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboFilter.FormattingEnabled = true;
+			this.cboFilter.Items.AddRange(new object[] {
+            "None",
+            "NTSC"});
+			this.cboFilter.Location = new System.Drawing.Point(41, 3);
+			this.cboFilter.Name = "cboFilter";
+			this.cboFilter.Size = new System.Drawing.Size(477, 21);
+			this.cboFilter.TabIndex = 15;
+			// 
+			// lblVideoFilter
+			// 
+			this.lblVideoFilter.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblVideoFilter.AutoSize = true;
+			this.lblVideoFilter.Location = new System.Drawing.Point(3, 7);
+			this.lblVideoFilter.Name = "lblVideoFilter";
+			this.lblVideoFilter.Size = new System.Drawing.Size(32, 13);
+			this.lblVideoFilter.TabIndex = 13;
+			this.lblVideoFilter.Text = "Filter:";
 			// 
 			// tpgOverscan
 			// 
@@ -727,7 +743,7 @@
 			this.tpgOverscan.Location = new System.Drawing.Point(4, 22);
 			this.tpgOverscan.Name = "tpgOverscan";
 			this.tpgOverscan.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgOverscan.Size = new System.Drawing.Size(507, 376);
+			this.tpgOverscan.Size = new System.Drawing.Size(527, 376);
 			this.tpgOverscan.TabIndex = 1;
 			this.tpgOverscan.Text = "Overscan";
 			this.tpgOverscan.UseVisualStyleBackColor = true;
@@ -738,7 +754,7 @@
 			this.grpCropping.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCropping.Location = new System.Drawing.Point(3, 3);
 			this.grpCropping.Name = "grpCropping";
-			this.grpCropping.Size = new System.Drawing.Size(501, 370);
+			this.grpCropping.Size = new System.Drawing.Size(521, 370);
 			this.grpCropping.TabIndex = 8;
 			this.grpCropping.TabStop = false;
 			this.grpCropping.Text = "Video Cropping";
@@ -755,7 +771,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel4, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel5, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 2, 1);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(65, 25);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(75, 25);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -904,7 +920,7 @@
 			this.tpgPalette.Location = new System.Drawing.Point(4, 22);
 			this.tpgPalette.Name = "tpgPalette";
 			this.tpgPalette.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPalette.Size = new System.Drawing.Size(507, 376);
+			this.tpgPalette.Size = new System.Drawing.Size(527, 376);
 			this.tpgPalette.TabIndex = 2;
 			this.tpgPalette.Text = "Palette";
 			this.tpgPalette.UseVisualStyleBackColor = true;
@@ -923,7 +939,7 @@
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(501, 370);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(521, 370);
 			this.tableLayoutPanel3.TabIndex = 4;
 			// 
 			// picPalette
@@ -942,37 +958,53 @@
 			// 
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.btnResetPalette, 0, 1);
-			this.tableLayoutPanel2.Controls.Add(this.btnLoadPalFile, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.btnExportPalette, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.btnSelectPalette, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.btnLoadPalFile, 0, 1);
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(388, 0);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowCount = 4;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(113, 73);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(133, 122);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
-			// btnResetPalette
+			// btnExportPalette
 			// 
-			this.btnResetPalette.Location = new System.Drawing.Point(3, 32);
-			this.btnResetPalette.Name = "btnResetPalette";
-			this.btnResetPalette.Size = new System.Drawing.Size(106, 22);
-			this.btnResetPalette.TabIndex = 1;
-			this.btnResetPalette.Text = "Reset to Defaults";
-			this.btnResetPalette.UseVisualStyleBackColor = true;
-			this.btnResetPalette.Click += new System.EventHandler(this.btnResetPalette_Click);
+			this.btnExportPalette.AutoSize = true;
+			this.btnExportPalette.Dock = System.Windows.Forms.DockStyle.Top;
+			this.btnExportPalette.Location = new System.Drawing.Point(3, 61);
+			this.btnExportPalette.Name = "btnExportPalette";
+			this.btnExportPalette.Size = new System.Drawing.Size(127, 23);
+			this.btnExportPalette.TabIndex = 3;
+			this.btnExportPalette.Text = "Export Palette";
+			this.btnExportPalette.UseVisualStyleBackColor = true;
+			this.btnExportPalette.Click += new System.EventHandler(this.btnExportPalette_Click);
+			// 
+			// btnSelectPalette
+			// 
+			this.btnSelectPalette.AutoSize = true;
+			this.btnSelectPalette.Dock = System.Windows.Forms.DockStyle.Top;
+			this.btnSelectPalette.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectPalette.Image")));
+			this.btnSelectPalette.Location = new System.Drawing.Point(3, 3);
+			this.btnSelectPalette.Name = "btnSelectPalette";
+			this.btnSelectPalette.Size = new System.Drawing.Size(127, 23);
+			this.btnSelectPalette.TabIndex = 2;
+			this.btnSelectPalette.Text = "Load Preset Palette...";
+			this.btnSelectPalette.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.btnSelectPalette.UseVisualStyleBackColor = true;
+			this.btnSelectPalette.Click += new System.EventHandler(this.btnSelectPalette_Click);
 			// 
 			// btnLoadPalFile
 			// 
 			this.btnLoadPalFile.AutoSize = true;
-			this.btnLoadPalFile.Location = new System.Drawing.Point(3, 3);
+			this.btnLoadPalFile.Dock = System.Windows.Forms.DockStyle.Top;
+			this.btnLoadPalFile.Location = new System.Drawing.Point(3, 32);
 			this.btnLoadPalFile.Name = "btnLoadPalFile";
-			this.btnLoadPalFile.Size = new System.Drawing.Size(106, 23);
+			this.btnLoadPalFile.Size = new System.Drawing.Size(127, 23);
 			this.btnLoadPalFile.TabIndex = 0;
 			this.btnLoadPalFile.Text = "Load Palette File";
 			this.btnLoadPalFile.UseVisualStyleBackColor = true;
@@ -983,7 +1015,7 @@
 			this.contextPicturePresets.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuPresetComposite,
             this.mnuPresetSVideo,
-            this.menuPresetRgb,
+            this.mnuPresetRgb,
             this.mnuPresetMonochrome});
 			this.contextPicturePresets.Name = "contextPicturePresets";
 			this.contextPicturePresets.Size = new System.Drawing.Size(148, 92);
@@ -991,36 +1023,81 @@
 			// mnuPresetComposite
 			// 
 			this.mnuPresetComposite.Name = "mnuPresetComposite";
-			this.mnuPresetComposite.Size = new System.Drawing.Size(147, 22);
+			this.mnuPresetComposite.Size = new System.Drawing.Size(152, 22);
 			this.mnuPresetComposite.Text = "Composite";
 			this.mnuPresetComposite.Click += new System.EventHandler(this.mnuPresetComposite_Click);
 			// 
 			// mnuPresetSVideo
 			// 
 			this.mnuPresetSVideo.Name = "mnuPresetSVideo";
-			this.mnuPresetSVideo.Size = new System.Drawing.Size(147, 22);
+			this.mnuPresetSVideo.Size = new System.Drawing.Size(152, 22);
 			this.mnuPresetSVideo.Text = "S-Video";
 			this.mnuPresetSVideo.Click += new System.EventHandler(this.mnuPresetSVideo_Click);
 			// 
-			// menuPresetRgb
+			// mnuPresetRgb
 			// 
-			this.menuPresetRgb.Name = "menuPresetRgb";
-			this.menuPresetRgb.Size = new System.Drawing.Size(147, 22);
-			this.menuPresetRgb.Text = "RGB";
-			this.menuPresetRgb.Click += new System.EventHandler(this.menuPresetRgb_Click);
+			this.mnuPresetRgb.Name = "mnuPresetRgb";
+			this.mnuPresetRgb.Size = new System.Drawing.Size(147, 22);
+			this.mnuPresetRgb.Text = "RGB";
+			this.mnuPresetRgb.Click += new System.EventHandler(this.mnuPresetRgb_Click);
 			// 
 			// mnuPresetMonochrome
 			// 
 			this.mnuPresetMonochrome.Name = "mnuPresetMonochrome";
-			this.mnuPresetMonochrome.Size = new System.Drawing.Size(147, 22);
+			this.mnuPresetMonochrome.Size = new System.Drawing.Size(152, 22);
 			this.mnuPresetMonochrome.Text = "Monochrome";
 			this.mnuPresetMonochrome.Click += new System.EventHandler(this.mnuPresetMonochrome_Click);
+			// 
+			// contextPaletteList
+			// 
+			this.contextPaletteList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuDefaultPalette,
+            this.toolStripMenuItem1,
+            this.mnuPaletteUnsaturated,
+            this.mnuPaletteYuv,
+            this.mnuPaletteNestopiaRgb});
+			this.contextPaletteList.Name = "contextPicturePresets";
+			this.contextPaletteList.Size = new System.Drawing.Size(236, 98);
+			this.contextPaletteList.Opening += new System.ComponentModel.CancelEventHandler(this.contextPaletteList_Opening);
+			// 
+			// mnuDefaultPalette
+			// 
+			this.mnuDefaultPalette.Name = "mnuDefaultPalette";
+			this.mnuDefaultPalette.Size = new System.Drawing.Size(235, 22);
+			this.mnuDefaultPalette.Text = "Default (NTSC)";
+			this.mnuDefaultPalette.Click += new System.EventHandler(this.mnuDefaultPalette_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(232, 6);
+			// 
+			// mnuPaletteUnsaturated
+			// 
+			this.mnuPaletteUnsaturated.Name = "mnuPaletteUnsaturated";
+			this.mnuPaletteUnsaturated.Size = new System.Drawing.Size(235, 22);
+			this.mnuPaletteUnsaturated.Text = "Unsaturated v5 (by Firebrandx)";
+			this.mnuPaletteUnsaturated.Click += new System.EventHandler(this.mnuPaletteUnsaturated_Click);
+			// 
+			// mnuPaletteYuv
+			// 
+			this.mnuPaletteYuv.Name = "mnuPaletteYuv";
+			this.mnuPaletteYuv.Size = new System.Drawing.Size(235, 22);
+			this.mnuPaletteYuv.Text = "YUV v3 (by Firebrandx)";
+			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
+			// 
+			// mnuPaletteNestopiaRgb
+			// 
+			this.mnuPaletteNestopiaRgb.Name = "mnuPaletteNestopiaRgb";
+			this.mnuPaletteNestopiaRgb.Size = new System.Drawing.Size(235, 22);
+			this.mnuPaletteNestopiaRgb.Text = "Nestopia (RGB)";
+			this.mnuPaletteNestopiaRgb.Click += new System.EventHandler(this.mnuPaletteNestopiaRgb_Click);
 			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(515, 431);
+			this.ClientSize = new System.Drawing.Size(535, 431);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -1045,8 +1122,6 @@
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel7.ResumeLayout(false);
 			this.tableLayoutPanel7.PerformLayout();
-			this.flowLayoutPanel8.ResumeLayout(false);
-			this.flowLayoutPanel8.PerformLayout();
 			this.grpNtscFilter.ResumeLayout(false);
 			this.tableLayoutPanel6.ResumeLayout(false);
 			this.tableLayoutPanel6.PerformLayout();
@@ -1054,6 +1129,8 @@
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			this.grpScanlines.ResumeLayout(false);
+			this.tableLayoutPanel8.ResumeLayout(false);
+			this.tableLayoutPanel8.PerformLayout();
 			this.tpgOverscan.ResumeLayout(false);
 			this.grpCropping.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
@@ -1076,6 +1153,7 @@
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			this.contextPicturePresets.ResumeLayout(false);
+			this.contextPaletteList.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1117,7 +1195,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.PictureBox picPalette;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.Button btnResetPalette;
 		private System.Windows.Forms.Button btnLoadPalFile;
 		private System.Windows.Forms.ColorDialog colorDialog;
 		private System.Windows.Forms.NumericUpDown nudScale;
@@ -1146,11 +1223,19 @@
 		private System.Windows.Forms.ContextMenuStrip contextPicturePresets;
 		private System.Windows.Forms.ToolStripMenuItem mnuPresetComposite;
 		private System.Windows.Forms.ToolStripMenuItem mnuPresetSVideo;
-		private System.Windows.Forms.ToolStripMenuItem menuPresetRgb;
+		private System.Windows.Forms.ToolStripMenuItem mnuPresetRgb;
 		private System.Windows.Forms.ToolStripMenuItem mnuPresetMonochrome;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel8;
+		private System.Windows.Forms.CheckBox chkBilinearInterpolation;
+		private System.Windows.Forms.Button btnSelectPalette;
+		private System.Windows.Forms.ContextMenuStrip contextPaletteList;
+		private System.Windows.Forms.ToolStripMenuItem mnuDefaultPalette;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuPaletteUnsaturated;
+		private System.Windows.Forms.ToolStripMenuItem mnuPaletteYuv;
+		private System.Windows.Forms.ToolStripMenuItem mnuPaletteNestopiaRgb;
+		private System.Windows.Forms.Button btnExportPalette;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
 		private System.Windows.Forms.Label lblVideoFilter;
 		private System.Windows.Forms.ComboBox cboFilter;
-		private System.Windows.Forms.CheckBox chkBilinearInterpolation;
 	}
 }

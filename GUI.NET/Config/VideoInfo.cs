@@ -23,7 +23,7 @@ namespace Mesen.GUI.Config
 		public VideoAspectRatio AspectRatio = VideoAspectRatio.Auto;
 		public bool VerticalSync = false;
 		public bool UseHdPacks = false;
-		public Int32[] Palette = new Int32[0];
+		public string PaletteData;
 
 		public Int32 Brightness = 0;
 		public Int32 Contrast = 0;
@@ -38,6 +38,8 @@ namespace Mesen.GUI.Config
 		public Int32 NtscResolution = 0;
 		public Int32 NtscSharpness = 0;
 		public bool NtscMergeFields = false;
+
+		public List<PaletteInfo> SavedPalettes = new List<PaletteInfo>();
 
 		public VideoInfo()
 		{
@@ -63,9 +65,57 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetPictureSettings(videoInfo.Brightness / 100.0, videoInfo.Contrast / 100.0, videoInfo.Saturation / 100.0, videoInfo.Hue / 100.0, videoInfo.ScanlineIntensity / 100.0);
 			InteropEmu.SetNtscFilterSettings(videoInfo.NtscArtifacts / 100.0, videoInfo.NtscBleed / 100.0, videoInfo.NtscFringing / 100.0, videoInfo.NtscGamma / 100.0, videoInfo.NtscResolution / 100.0, videoInfo.NtscSharpness / 100.0, videoInfo.NtscMergeFields);
 
-			if(videoInfo.Palette.Length == 64) {
-				InteropEmu.SetRgbPalette(videoInfo.Palette);
+			if(!string.IsNullOrWhiteSpace(videoInfo.PaletteData)) {
+				try {
+					byte[] palette = System.Convert.FromBase64String(videoInfo.PaletteData);
+					if(palette.Length == 64*4) {
+						InteropEmu.SetRgbPalette(palette);
+					}
+				} catch { }
 			}
 		}
+
+		public void AddPalette(string paletteName, byte[] paletteData)
+		{
+			string base64Data = System.Convert.ToBase64String(paletteData);
+			foreach(PaletteInfo existingPalette in this.SavedPalettes) {
+				if(existingPalette.Name == paletteName) {
+					//Update existing palette
+					existingPalette.Palette = base64Data;
+					return;
+				}
+			}
+
+			if(this.SavedPalettes.Count >= 5) {
+				//Remove oldest palette
+				this.SavedPalettes.RemoveAt(0);
+			}
+
+			PaletteInfo palette = new PaletteInfo();
+			palette.Name = paletteName;
+			palette.Palette = base64Data;
+			this.SavedPalettes.Add(palette);
+		}
+
+		public Int32[] GetPalette(string paletteName)
+		{
+			foreach(PaletteInfo existingPalette in this.SavedPalettes) {
+				if(existingPalette.Name == paletteName) {
+					byte[] paletteData = System.Convert.FromBase64String(existingPalette.Palette);
+
+					int[] result = new int[paletteData.Length / sizeof(int)];
+					Buffer.BlockCopy(paletteData, 0, result, 0, paletteData.Length);
+					return result;
+				}
+			}
+
+			return null;
+		}
+	}
+
+	public class PaletteInfo
+	{
+		public string Name;
+		public string Palette; //Base64
 	}
 }

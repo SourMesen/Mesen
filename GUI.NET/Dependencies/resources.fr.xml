@@ -161,7 +161,7 @@
       <Control ID="lblDisplayRatio">Format d'image :</Control>
       <Control ID="lblEmuSpeedHint">(0 = Vitesse maximale)</Control>
       <Control ID="lblEmulationSpeed">Vitesse d'émulation :</Control>
-      <Control ID="chkBilinearInterpolation">Utiliser l'interpolation bilinéaire lors du redimensionnement de l'image</Control>
+      <Control ID="chkBilinearInterpolation">Utiliser l'interpolation bilinéaire</Control>
       <Control ID="chkShowFps">Afficher le FPS</Control>
       <Control ID="chkUseHdPacks">Utiliser les packs haute-définition de HDNes</Control>
       <Control ID="tpgOverscan">Overscan</Control>
@@ -171,9 +171,12 @@
       <Control ID="lblBottom">Bas</Control>
       <Control ID="lblRight">Droite</Control>
       <Control ID="tpgPalette">Palette</Control>
-      <Control ID="btnResetPalette">Réinitialiser</Control>
+      <Control ID="mnuDefaultPalette">Défaut (NTSC)</Control>
+      <Control ID="btnSelectPalette">Choisir une palette...</Control>
+      <Control ID="btnExportPalette">Exporter fichier .pal</Control>
       <Control ID="btnLoadPalFile">Charger fichier .pal</Control>
       <Control ID="tpgPicture">Image</Control>
+      <Control ID="btnSelectPreset">Choisir filtre prédéfini...</Control>
       <Control ID="grpCommon">Paramètres communs</Control>
       <Control ID="trkBrightness">Luminosité</Control>
       <Control ID="trkContrast">Contraste</Control>
@@ -190,6 +193,10 @@
       <Control ID="grpScanlines">Lignes de balayage</Control>
       <Control ID="trkScanlines">Lignes de balayage</Control>
       <Control ID="btnResetPictureSettings">Réinitialiser</Control>
+      <Control ID="mnuPresetComposite">Composite</Control>
+      <Control ID="mnuPresetSVideo">S-Vidéo</Control>
+      <Control ID="menuPresetRgb">RGB</Control>
+      <Control ID="mnuPresetMonochrome">Monochrome</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
