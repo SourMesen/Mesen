@@ -171,6 +171,7 @@ namespace Mesen.GUI.Forms.Config
 
 		private void btnResetPictureSettings_Click(object sender, EventArgs e)
 		{
+			cboFilter.SelectedIndex = 0;
 			trkBrightness.Value = 0;
 			trkContrast.Value = 0;
 			trkHue.Value = 0;
@@ -185,6 +186,83 @@ namespace Mesen.GUI.Forms.Config
 			trkResolution.Value = 0;
 			trkSharpness.Value = 0;
 			chkMergeFields.Checked = false;
+		}
+
+		private void btnSelectPreset_MouseClick(object sender, MouseEventArgs e)
+		{
+			contextPicturePresets.Show(btnSelectPreset.PointToScreen(new Point(0, btnSelectPreset.Height-1)));
+		}
+
+		private void mnuPresetComposite_Click(object sender, EventArgs e)
+		{
+			cboFilter.SelectedIndex = 1;
+			trkHue.Value = 0;
+			trkSaturation.Value = 0;
+			trkContrast.Value = 0;
+			trkBrightness.Value = 0;
+			trkSharpness.Value = 0;
+			trkGamma.Value = 0;
+			trkResolution.Value = 0;
+			trkArtifacts.Value = 0;
+			trkFringing.Value = 0;
+			trkBleed.Value = 0;
+			chkMergeFields.Checked = false;
+
+			trkScanlines.Value = 15;
+		}
+
+		private void mnuPresetSVideo_Click(object sender, EventArgs e)
+		{
+			cboFilter.SelectedIndex = 1;
+			trkHue.Value = 0;
+			trkSaturation.Value = 0;
+			trkContrast.Value = 0;
+			trkBrightness.Value = 0;
+			trkSharpness.Value = 20;
+			trkGamma.Value = 0;
+			trkResolution.Value = 20;
+			trkArtifacts.Value = -100;
+			trkFringing.Value = -100;
+			trkBleed.Value = 0;
+			chkMergeFields.Checked = false;
+
+			trkScanlines.Value = 15;
+		}
+
+		private void menuPresetRgb_Click(object sender, EventArgs e)
+		{
+			cboFilter.SelectedIndex = 1;
+			trkHue.Value = 0;
+			trkSaturation.Value = 0;
+			trkContrast.Value = 0;
+			trkBrightness.Value = 0;
+			trkSharpness.Value = 20;
+			trkGamma.Value = 0;
+			trkResolution.Value = 70;
+			trkArtifacts.Value = -100;
+			trkFringing.Value = -100;
+			trkBleed.Value = -100;
+			chkMergeFields.Checked = false;
+
+			trkScanlines.Value = 15;
+		}
+
+		private void mnuPresetMonochrome_Click(object sender, EventArgs e)
+		{
+			cboFilter.SelectedIndex = 1;
+			trkHue.Value = 0;
+			trkSaturation.Value = -100;
+			trkContrast.Value = 0;
+			trkBrightness.Value = 0;
+			trkSharpness.Value = 20;
+			trkGamma.Value = 0;
+			trkResolution.Value = 70;
+			trkArtifacts.Value = -20;
+			trkFringing.Value = -20;
+			trkBleed.Value = -10;
+			chkMergeFields.Checked = false;
+
+			trkScanlines.Value = 15;
 		}
 	}
 }
