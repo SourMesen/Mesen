@@ -175,8 +175,14 @@ namespace Mesen.GUI.Forms
 						}
 					} else if(kvp.Value is ctrlTrackbar) {
 						((ctrlTrackbar)kvp.Value).Value = (int)(uint)value;
+					} else if(kvp.Value is ctrlHorizontalTrackbar) {
+						((ctrlHorizontalTrackbar)kvp.Value).Value = (int)value;
 					} else if(kvp.Value is TrackBar) {
-						((TrackBar)kvp.Value).Value = (int)(uint)value;
+						if(field.FieldType == typeof(Int32)) {
+							((TrackBar)kvp.Value).Value = (int)value;
+						} else {
+							((TrackBar)kvp.Value).Value = (int)(uint)value;
+						}
 					} else if(kvp.Value is NumericUpDown) {
 						NumericUpDown nud = kvp.Value as NumericUpDown;
 						decimal val;
@@ -248,8 +254,14 @@ namespace Mesen.GUI.Forms
 							field.SetValue(Entity, kvp.Value.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag);
 						} else if(kvp.Value is ctrlTrackbar) {
 							field.SetValue(Entity, (UInt32)((ctrlTrackbar)kvp.Value).Value);
+						} else if(kvp.Value is ctrlHorizontalTrackbar) {
+							field.SetValue(Entity, (Int32)((ctrlHorizontalTrackbar)kvp.Value).Value);
 						} else if(kvp.Value is TrackBar) {
-							field.SetValue(Entity, (UInt32)((TrackBar)kvp.Value).Value);
+							if(field.FieldType == typeof(Int32)) {
+								field.SetValue(Entity, ((TrackBar)kvp.Value).Value);
+							} else {
+								field.SetValue(Entity, (UInt32)((TrackBar)kvp.Value).Value);
+							}
 						} else if(kvp.Value is NumericUpDown) {
 							if(field.FieldType == typeof(UInt32)) {
 								field.SetValue(Entity, (UInt32)((NumericUpDown)kvp.Value).Value);

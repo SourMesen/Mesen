@@ -31,6 +31,8 @@ VideoFilterType EmulationSettings::_videoFilterType = VideoFilterType::None;
 VideoResizeFilter EmulationSettings::_resizeFilter = VideoResizeFilter::NearestNeighbor;
 double EmulationSettings::_videoScale = 1;
 VideoAspectRatio EmulationSettings::_aspectRatio = VideoAspectRatio::Auto;
+PictureSettings EmulationSettings::_pictureSettings;
+NtscFilterSettings EmulationSettings::_ntscFilterSettings;
 
 ConsoleType EmulationSettings::_consoleType = ConsoleType::Nes;
 ExpansionPortDevice EmulationSettings::_expansionDevice = ExpansionPortDevice::None;

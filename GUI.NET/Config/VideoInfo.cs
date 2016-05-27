@@ -25,6 +25,20 @@ namespace Mesen.GUI.Config
 		public bool UseHdPacks = false;
 		public Int32[] Palette = new Int32[0];
 
+		public Int32 Brightness = 0;
+		public Int32 Contrast = 0;
+		public Int32 Hue = 0;
+		public Int32 Saturation = 0;
+		public Int32 ScanlineIntensity = 0;
+
+		public Int32 NtscArtifacts = 0;
+		public Int32 NtscBleed = 0;
+		public Int32 NtscFringing = 0;
+		public Int32 NtscGamma = 0;
+		public Int32 NtscResolution = 0;
+		public Int32 NtscSharpness = 0;
+		public bool NtscMergeFields = false;
+
 		public VideoInfo()
 		{
 		}
@@ -45,6 +59,9 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetVideoResizeFilter(videoInfo.UseBilinearInterpolation ? VideoResizeFilter.Bilinear : VideoResizeFilter.NearestNeighbor);
 			InteropEmu.SetVideoScale(videoInfo.VideoScale);
 			InteropEmu.SetVideoAspectRatio(videoInfo.AspectRatio);
+
+			InteropEmu.SetPictureSettings(videoInfo.Brightness / 100.0, videoInfo.Contrast / 100.0, videoInfo.Saturation / 100.0, videoInfo.Hue / 100.0, videoInfo.ScanlineIntensity / 100.0);
+			InteropEmu.SetNtscFilterSettings(videoInfo.NtscArtifacts / 100.0, videoInfo.NtscBleed / 100.0, videoInfo.NtscFringing / 100.0, videoInfo.NtscGamma / 100.0, videoInfo.NtscResolution / 100.0, videoInfo.NtscSharpness / 100.0, videoInfo.NtscMergeFields);
 
 			if(videoInfo.Palette.Length == 64) {
 				InteropEmu.SetRgbPalette(videoInfo.Palette);

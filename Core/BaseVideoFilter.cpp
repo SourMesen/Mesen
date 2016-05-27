@@ -36,11 +36,16 @@ OverscanDimensions BaseVideoFilter::GetOverscan()
 	return _overscan;
 }
 
+void BaseVideoFilter::OnBeforeApplyFilter()
+{
+}
+
 void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer)
 {
 	_frameLock.Acquire();
 	_overscan = EmulationSettings::GetOverscanDimensions();
 	UpdateBufferSize();
+	OnBeforeApplyFilter();
 	ApplyFilter(ppuOutputBuffer);
 	_frameLock.Release();
 }

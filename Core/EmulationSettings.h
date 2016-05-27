@@ -111,6 +111,26 @@ struct OverscanDimensions
 	}
 };
 
+struct PictureSettings
+{
+	double Brightness = 0;
+	double Contrast = 0;
+	double Saturation = 0;
+	double Hue = 0;
+	double ScanlineIntensity = 0;
+};
+
+struct NtscFilterSettings
+{
+	double Sharpness = 0;
+	double Gamma = 0;
+	double Resolution = 0;
+	double Artifacts = 0;
+	double Fringing = 0;
+	double Bleed = 0;
+	bool MergeFields = false;
+};
+
 enum class ConsoleType
 {
 	Nes = 0,
@@ -226,6 +246,8 @@ private:
 	static double _videoScale;
 	static VideoAspectRatio _aspectRatio;
 	static VideoResizeFilter _resizeFilter;
+	static PictureSettings _pictureSettings;
+	static NtscFilterSettings _ntscFilterSettings;
 
 	static ConsoleType _consoleType;
 	static ExpansionPortDevice _expansionDevice;
@@ -439,6 +461,37 @@ public:
 	static VideoAspectRatio GetVideoAspectRatio()
 	{
 		return _aspectRatio;
+	}
+
+	static void SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity)
+	{
+		_pictureSettings.Brightness = brightness;
+		_pictureSettings.Contrast = contrast;
+		_pictureSettings.Saturation = saturation;
+		_pictureSettings.Hue = hue;
+		_pictureSettings.ScanlineIntensity = scanlineIntensity;
+	}
+
+	static PictureSettings GetPictureSettings()
+	{
+		return _pictureSettings;
+	}
+
+	static void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, bool mergeFields)
+	{
+		_ntscFilterSettings.Artifacts = artifacts;
+		_ntscFilterSettings.Bleed = bleed;
+		_ntscFilterSettings.Fringing = fringing;
+		_ntscFilterSettings.Gamma = gamma;
+		_ntscFilterSettings.Resolution = resolution;
+		_ntscFilterSettings.Sharpness = sharpness;
+
+		_ntscFilterSettings.MergeFields = mergeFields;
+	}
+
+	static NtscFilterSettings GetNtscFilterSettings()
+	{
+		return _ntscFilterSettings;
 	}
 
 	static double GetAspectRatio()

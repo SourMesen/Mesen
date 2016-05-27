@@ -173,6 +173,23 @@
       <Control ID="tpgPalette">パレット</Control>
       <Control ID="btnResetPalette">リセット</Control>
       <Control ID="btnLoadPalFile">.palファイルをロードする</Control>
+      <Control ID="tpgPicture">画像</Control>
+      <Control ID="grpCommon">共通設定</Control>
+      <Control ID="trkBrightness">明るさ</Control>
+      <Control ID="trkContrast">コントラスト</Control>
+      <Control ID="trkHue">色相</Control>
+      <Control ID="trkSaturation">彩度</Control>
+      <Control ID="grpNtscFilter">NTSCエフェクトの設定</Control>
+      <Control ID="trkArtifacts">アーティファクト</Control>
+      <Control ID="trkBleed">色にじみ</Control>
+      <Control ID="trkFringing">フリンジ</Control>
+      <Control ID="trkGamma">ガンマ</Control>
+      <Control ID="trkResolution">解像度</Control>
+      <Control ID="trkSharpness">シャープネス</Control>
+      <Control ID="chkMergeFields">画像をマージする</Control>
+      <Control ID="grpScanlines">走査線</Control>
+      <Control ID="trkScanlines">走査線</Control>
+      <Control ID="btnResetPictureSettings">リセット</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>

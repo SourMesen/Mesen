@@ -38,6 +38,20 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("OverscanTop", nudOverscanTop);
 			AddBinding("OverscanBottom", nudOverscanBottom);
 
+			AddBinding("Brightness", trkBrightness);
+			AddBinding("Contrast", trkContrast);
+			AddBinding("Hue", trkHue);
+			AddBinding("Saturation", trkSaturation);
+			AddBinding("ScanlineIntensity", trkScanlines);
+
+			AddBinding("NtscArtifacts", trkArtifacts);
+			AddBinding("NtscBleed", trkBleed);
+			AddBinding("NtscFringing", trkFringing);
+			AddBinding("NtscGamma", trkGamma);
+			AddBinding("NtscResolution", trkResolution);
+			AddBinding("NtscSharpness", trkSharpness);
+			AddBinding("NtscMergeFields", chkMergeFields);
+
 			_paletteData = InteropEmu.GetRgbPalette();
 			RefreshPalette();
 
@@ -45,7 +59,14 @@ namespace Mesen.GUI.Forms.Config
 
 			UpdateOverscanImage();
 		}
-		
+
+		protected override bool ValidateInput()
+		{
+			UpdateObject();
+			VideoInfo.ApplyConfig();
+			return true;
+		}
+
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
 			if(DialogResult == System.Windows.Forms.DialogResult.OK) {
@@ -146,6 +167,24 @@ namespace Mesen.GUI.Forms.Config
 		private void nudOverscan_ValueChanged(object sender, EventArgs e)
 		{
 			UpdateOverscanImage();
+		}
+
+		private void btnResetPictureSettings_Click(object sender, EventArgs e)
+		{
+			trkBrightness.Value = 0;
+			trkContrast.Value = 0;
+			trkHue.Value = 0;
+			trkSaturation.Value = 0;
+
+			trkScanlines.Value = 0;
+
+			trkArtifacts.Value = 0;
+			trkBleed.Value = 0;
+			trkFringing.Value = 0;
+			trkGamma.Value = 0;
+			trkResolution.Value = 0;
+			trkSharpness.Value = 0;
+			chkMergeFields.Checked = false;
 		}
 	}
 }

@@ -11,6 +11,9 @@ private:
 
 	void DoubleOutputHeight(uint32_t *outputBuffer);
 
+protected:
+	void OnBeforeApplyFilter();
+
 public:
 	NtscFilter();
 	virtual ~NtscFilter();

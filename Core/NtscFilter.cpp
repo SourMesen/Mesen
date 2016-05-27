@@ -18,6 +18,32 @@ FrameInfo NtscFilter::GetFrameInfo()
 	return { NES_NTSC_OUT_WIDTH(PPU::ScreenWidth) - overscanLeft - overscanRight, (PPU::ScreenHeight - overscan.Top - overscan.Bottom) * 2, 4 };
 }
 
+void NtscFilter::OnBeforeApplyFilter()
+{
+	PictureSettings pictureSettings = EmulationSettings::GetPictureSettings();
+	NtscFilterSettings ntscSettings = EmulationSettings::GetNtscFilterSettings();
+	if(_ntscSetup.hue != pictureSettings.Hue || _ntscSetup.saturation != pictureSettings.Saturation || _ntscSetup.brightness != pictureSettings.Brightness || _ntscSetup.contrast != pictureSettings.Contrast ||
+		_ntscSetup.artifacts != ntscSettings.Artifacts || _ntscSetup.bleed != ntscSettings.Bleed || _ntscSetup.fringing != ntscSettings.Fringing || _ntscSetup.gamma != ntscSettings.Gamma ||
+		(_ntscSetup.merge_fields == 1) != ntscSettings.MergeFields || _ntscSetup.resolution != ntscSettings.Resolution || _ntscSetup.sharpness != ntscSettings.Sharpness) {
+		
+		_ntscData = new nes_ntsc_t();
+		_ntscSetup.hue = pictureSettings.Hue;
+		_ntscSetup.saturation = pictureSettings.Saturation;
+		_ntscSetup.brightness = pictureSettings.Brightness;
+		_ntscSetup.contrast = pictureSettings.Contrast;
+
+		_ntscSetup.artifacts = ntscSettings.Artifacts;
+		_ntscSetup.bleed = ntscSettings.Bleed;
+		_ntscSetup.fringing = ntscSettings.Fringing;
+		_ntscSetup.gamma = ntscSettings.Gamma;
+		_ntscSetup.merge_fields = (int)ntscSettings.MergeFields;
+		_ntscSetup.resolution = ntscSettings.Resolution;
+		_ntscSetup.sharpness = ntscSettings.Sharpness;
+
+		nes_ntsc_init(_ntscData, &_ntscSetup);
+	}
+}
+
 void NtscFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 {
 	static bool oddFrame = false;
@@ -38,6 +64,8 @@ void NtscFilter::DoubleOutputHeight(uint32_t *ntscBuffer)
 	int rowWidth = NES_NTSC_OUT_WIDTH(PPU::ScreenWidth);
 	int rowWidthOverscan = rowWidth - overscanLeft - overscanRight;
 
+	double scanlineIntensity = 1.0 - EmulationSettings::GetPictureSettings().ScanlineIntensity;
+
 	for(int y = PPU::ScreenHeight - 1 - overscan.Bottom; y >= (int)overscan.Top; y--) {
 		uint32_t const* in = ntscBuffer + y * rowWidth;
 		uint32_t* out = outputBuffer + (y - overscan.Top) * 2 * rowWidthOverscan;
@@ -46,11 +74,20 @@ void NtscFilter::DoubleOutputHeight(uint32_t *ntscBuffer)
 			uint32_t prev = in[overscanLeft];
 			uint32_t next = y < 239 ? in[overscanLeft + rowWidth] : 0;
 			
-			/* mix 24-bit rgb without losing low bits */
-			uint64_t mixed = prev + next + ((prev ^ next) & 0x030303);
-			/* darken color */
 			*out = prev;
-			*(out + rowWidthOverscan) = (uint32_t)((mixed >> 1) - (mixed >> 4 & 0x0F0F0F));
+
+			/* mix 24-bit rgb without losing low bits */
+			uint32_t mixed = (prev + next + ((prev ^ next) & 0x030303)) >> 1;
+
+			if(scanlineIntensity < 1.0) {
+				uint8_t r = (mixed >> 16) & 0xFF, g = (mixed >> 8) & 0xFF, b = mixed & 0xFF;
+				r = (uint8_t)(r * scanlineIntensity);
+				g = (uint8_t)(g * scanlineIntensity);
+				b = (uint8_t)(b * scanlineIntensity);
+				*(out + rowWidthOverscan) = (r << 16) | (g << 8) | b;
+			} else {
+				*(out + rowWidthOverscan) = mixed;
+			}
 			in++;
 			out++;
 		}

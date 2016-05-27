@@ -219,6 +219,12 @@
     <Compile Include="Config\ConfigManager.cs" />
     <Compile Include="Config\ServerInfo.cs" />
     <Compile Include="Config\VsConfigInfo.cs" />
+    <Compile Include="Controls\ctrlHorizontalTrackbar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ctrlHorizontalTrackbar.Designer.cs">
+      <DependentUpon>ctrlHorizontalTrackbar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ctrlTrackbar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -479,6 +485,9 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <EmbeddedResource Include="Controls\ctrlHorizontalTrackbar.resx">
+      <DependentUpon>ctrlHorizontalTrackbar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ctrlTrackbar.resx">
       <DependentUpon>ctrlTrackbar.cs</DependentUpon>
     </EmbeddedResource>

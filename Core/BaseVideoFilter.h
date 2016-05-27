@@ -23,6 +23,7 @@ private:
 protected:
 	OverscanDimensions GetOverscan();
 	virtual void ApplyFilter(uint16_t *ppuOutputBuffer) = 0;
+	virtual void OnBeforeApplyFilter();
 
 public:
 	BaseVideoFilter();

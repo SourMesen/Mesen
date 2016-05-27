@@ -173,6 +173,23 @@
       <Control ID="tpgPalette">Palette</Control>
       <Control ID="btnResetPalette">Réinitialiser</Control>
       <Control ID="btnLoadPalFile">Charger fichier .pal</Control>
+      <Control ID="tpgPicture">Image</Control>
+      <Control ID="grpCommon">Paramètres communs</Control>
+      <Control ID="trkBrightness">Luminosité</Control>
+      <Control ID="trkContrast">Contraste</Control>
+      <Control ID="trkHue">Teinte</Control>
+      <Control ID="trkSaturation">Saturation</Control>
+      <Control ID="grpNtscFilter">Paramètres du filtre NTSC</Control>
+      <Control ID="trkArtifacts">Artefact</Control>
+      <Control ID="trkBleed">Dispersion des couleurs</Control>
+      <Control ID="trkFringing">Franges de distorsion</Control>
+      <Control ID="trkGamma">Gamma</Control>
+      <Control ID="trkResolution">Résolution</Control>
+      <Control ID="trkSharpness">Piqué</Control>
+      <Control ID="chkMergeFields">Combiner les images alternées</Control>
+      <Control ID="grpScanlines">Lignes de balayage</Control>
+      <Control ID="trkScanlines">Lignes de balayage</Control>
+      <Control ID="btnResetPictureSettings">Réinitialiser</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
