@@ -5,9 +5,9 @@
 
 NtscFilter::NtscFilter()
 {
+	memset(_basePalette, 0, 64 * 3);
 	_ntscData = new nes_ntsc_t();
 	_ntscSetup = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	nes_ntsc_init(_ntscData, &_ntscSetup);
 }
 
 FrameInfo NtscFilter::GetFrameInfo()
@@ -20,9 +20,25 @@ FrameInfo NtscFilter::GetFrameInfo()
 
 void NtscFilter::OnBeforeApplyFilter()
 {
+	bool paletteChanged = false;
+	uint32_t* palette = EmulationSettings::GetRgbPalette();
+	for(int i = 0; i < 64; i++) {
+		uint8_t r = (palette[i] >> 16) & 0xFF;
+		uint8_t g = (palette[i] >> 8) & 0xFF;
+		uint8_t b = palette[i] & 0xFF;
+
+		if(_basePalette[i * 3] != r || _basePalette[i * 3 + 1] != g || _basePalette[i * 3 + 2] != b) {
+			paletteChanged = true;
+
+			_basePalette[i * 3] = (palette[i] >> 16) & 0xFF;
+			_basePalette[i * 3 + 1] = (palette[i] >> 8) & 0xFF;
+			_basePalette[i * 3 + 2] = palette[i] & 0xFF;
+		}
+	}
+
 	PictureSettings pictureSettings = EmulationSettings::GetPictureSettings();
 	NtscFilterSettings ntscSettings = EmulationSettings::GetNtscFilterSettings();
-	if(_ntscSetup.hue != pictureSettings.Hue || _ntscSetup.saturation != pictureSettings.Saturation || _ntscSetup.brightness != pictureSettings.Brightness || _ntscSetup.contrast != pictureSettings.Contrast ||
+	if(paletteChanged || _ntscSetup.hue != pictureSettings.Hue || _ntscSetup.saturation != pictureSettings.Saturation || _ntscSetup.brightness != pictureSettings.Brightness || _ntscSetup.contrast != pictureSettings.Contrast ||
 		_ntscSetup.artifacts != ntscSettings.Artifacts || _ntscSetup.bleed != ntscSettings.Bleed || _ntscSetup.fringing != ntscSettings.Fringing || _ntscSetup.gamma != ntscSettings.Gamma ||
 		(_ntscSetup.merge_fields == 1) != ntscSettings.MergeFields || _ntscSetup.resolution != ntscSettings.Resolution || _ntscSetup.sharpness != ntscSettings.Sharpness) {
 		
@@ -39,6 +55,8 @@ void NtscFilter::OnBeforeApplyFilter()
 		_ntscSetup.merge_fields = (int)ntscSettings.MergeFields;
 		_ntscSetup.resolution = ntscSettings.Resolution;
 		_ntscSetup.sharpness = ntscSettings.Sharpness;
+
+		_ntscSetup.base_palette = EmulationSettings::IsDefaultPalette() ? nullptr : _basePalette;
 
 		nes_ntsc_init(_ntscData, &_ntscSetup);
 	}

@@ -8,6 +8,7 @@ class NtscFilter : public BaseVideoFilter
 private:
 	nes_ntsc_setup_t _ntscSetup;
 	nes_ntsc_t* _ntscData;
+	uint8_t _basePalette[64 * 3];
 
 	void DoubleOutputHeight(uint32_t *outputBuffer);
 

@@ -222,6 +222,7 @@ private:
 	static uint8_t _versionRevision;
 
 	static uint32_t _ppuPaletteArgb[11][64];
+	static uint32_t _defaultPpuPalette[64];
 	static uint32_t _flags;
 
 	static Language _displayLanguage;
@@ -531,6 +532,11 @@ public:
 	static void SetRgbPalette(uint32_t* paletteBuffer)
 	{
 		memcpy(_ppuPaletteArgb[0], paletteBuffer, sizeof(_ppuPaletteArgb[0]));
+	}
+
+	static bool IsDefaultPalette()
+	{
+		return memcmp(_defaultPpuPalette, GetRgbPalette(), sizeof(_defaultPpuPalette)) == 0;
 	}
 
 	static void SetExpansionDevice(ExpansionPortDevice expansionDevice)
