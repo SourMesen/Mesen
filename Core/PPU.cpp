@@ -38,6 +38,7 @@ void PPU::Reset()
 {
 	_prevRenderingEnabled = false;
 	_renderingEnabled = false;
+	_skipScrollingIncrement = true;
 
 	_ignoreVramRead = 0;
 	_openBus = 0;
@@ -252,6 +253,10 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
 				//"4) Should be clocked when A12 changes to 1 via $2006 write"
 				_memoryManager->ReadVRAM(_state.VideoRamAddr);
+
+				if(_cycle == 255) {
+					_skipScrollingIncrement = true;
+				}
 			} else {
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0xFF00) | ((value & 0x3F) << 8);
 			}
@@ -622,13 +627,14 @@ void PPU::ProcessPreVBlankScanline()
 		//Update video ram address according to scrolling logic
 		if((_cycle > 0 && _cycle < 256 && (_cycle & 0x07) == 0) || _cycle == 328 || _cycle == 336) {
 			IncHorizontalScrolling();
-		} else if(_cycle == 256) {
+		} else if(_cycle == 256 && !_skipScrollingIncrement) {
 			IncVerticalScrolling();
 		} else if(_cycle == 257) {
 			//copy horizontal scrolling value from t
 			_state.VideoRamAddr = (_state.VideoRamAddr & ~0x041F) | (_state.TmpVideoRamAddr & 0x041F);
 		}
 	}
+	_skipScrollingIncrement = false;
 
 	if(_cycle >= 257 && _cycle <= 320) {
 		if(IsRenderingEnabled()) {
@@ -963,6 +969,8 @@ void PPU::StreamState(bool saving)
 	StreamArray<int32_t>(_openBusDecayStamp, 8);
 
 	Stream<uint32_t>(_ignoreVramRead);
+
+	Stream<bool>(_skipScrollingIncrement);
 
 	if(!saving) {
 		SetNesModel(_nesModel);

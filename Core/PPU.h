@@ -148,6 +148,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		bool _renderingEnabled;
 		bool _prevRenderingEnabled;
+
+		//Used to resolve a race condition when the 2nd write to $2006 occurs at cycle 255 (i.e approx. the same time as the PPU tries to increase Y scrolling)
+		bool _skipScrollingIncrement;
 		
 		void UpdateStatusFlag();
 
