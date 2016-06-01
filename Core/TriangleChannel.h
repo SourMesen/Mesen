@@ -80,7 +80,7 @@ public:
 				LoadLengthCounter(value >> 3);
 
 				_period &= ~0xFF00;
-				_period |= (value & 0x03) << 8;
+				_period |= (value & 0x07) << 8;
 
 				//Side effects 	Sets the linear counter reload flag 
 				_linearReloadFlag = true;
