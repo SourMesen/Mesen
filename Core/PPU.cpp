@@ -60,7 +60,7 @@ void PPU::SetNesModel(NesModel model)
 	switch(model) {
 		case NesModel::NTSC: _vblankEnd = 260; break;
 		case NesModel::PAL:
-		case NesModel::Dendy: _vblankEnd = 311; break;
+		case NesModel::Dendy: _vblankEnd = 310; break;
 	}
 }
 
@@ -856,7 +856,7 @@ void PPU::Exec()
 		ProcessPrerenderScanline();
 	} else if(_scanline == 241) {
 		BeginVBlank();
-	} else if(_scanline == 292 && _cycle == 0 && _nesModel == NesModel::Dendy) {
+	} else if(_scanline == 291 && _cycle == 0 && _nesModel == NesModel::Dendy) {
 		TriggerNmi();
 	} else if(_scanline == _vblankEnd) {
 		EndVBlank();
