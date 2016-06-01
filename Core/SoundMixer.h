@@ -34,9 +34,6 @@ private:
 	int8_t _channelOutput[MaxChannelCount][CycleLength];
 	int8_t _currentOutput[MaxChannelCount];
 
-	int16_t _lupSquare[31];
-	int16_t _lupTnd[203];
-
 	blip_t* _blipBuf;
 	int16_t *_outputBuffer;
 	double _volumes[MaxChannelCount];
@@ -44,7 +41,7 @@ private:
 	uint32_t _sampleRate;
 	uint32_t _clockRate;
 
-	void InitializeLookupTables();
+	double GetChannelOutput(AudioChannel channel);
 	int16_t GetOutputVolume();
 	void EndFrame(uint32_t time);
 

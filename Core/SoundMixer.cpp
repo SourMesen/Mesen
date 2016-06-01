@@ -10,7 +10,6 @@ SoundMixer::SoundMixer()
 	_outputBuffer = new int16_t[SoundMixer::MaxSamplesPerFrame];
 	_blipBuf = blip_new(SoundMixer::MaxSamplesPerFrame);
 	_sampleRate = EmulationSettings::GetSampleRate();
-	InitializeLookupTables();
 
 	Reset();
 }
@@ -128,28 +127,24 @@ void SoundMixer::UpdateRates()
 	blip_set_rates(_blipBuf, _clockRate, _sampleRate);
 }
 
-void SoundMixer::InitializeLookupTables()
+double SoundMixer::GetChannelOutput(AudioChannel channel)
 {
-	for(int i = 0; i < 31; i++) {
-		double volume = 95.52 / (8128.0 / (double)i + 100.0);
-		_lupSquare[i] = (int16_t)(volume * 5000);
-	}
-
-	for(int i = 0; i < 203; i++) {
-		double volume = 163.67 / (24329.0 / (double)i + 100.0);
-		_lupTnd[i] = (int16_t)(volume * 5000);
-	}
+	return _currentOutput[(int)channel] * _volumes[(int)channel];
 }
 
 int16_t SoundMixer::GetOutputVolume()
 {
-	int16_t squareOutput = _lupSquare[(int)(_currentOutput[(int)AudioChannel::Square1] * _volumes[(int)AudioChannel::Square1] + _currentOutput[(int)AudioChannel::Square2] * _volumes[(int)AudioChannel::Square2])];
-	int16_t tndOutput = _lupTnd[(int)(3 * _currentOutput[(int)AudioChannel::Triangle] * _volumes[(int)AudioChannel::Triangle] + 2 * _currentOutput[(int)AudioChannel::Noise] * _volumes[(int)AudioChannel::Noise] + _currentOutput[(int)AudioChannel::DMC] * _volumes[(int)AudioChannel::DMC])];
+	double squareOutput = GetChannelOutput(AudioChannel::Square1) + GetChannelOutput(AudioChannel::Square2);
+	double tndOutput = 3 * GetChannelOutput(AudioChannel::Triangle) + 2 * GetChannelOutput(AudioChannel::Noise) + GetChannelOutput(AudioChannel::DMC);
+
+	uint16_t squareVolume = (uint16_t)(95.52 / (8128.0 / squareOutput + 100.0) * 5000);
+	uint16_t tndVolume = (uint16_t)(163.67 / (24329.0 / tndOutput + 100.0) * 5000);
+	
 	int16_t expansionOutput = 0;
 	switch(_expansionAudioType) {
 		case AudioChannel::FDS: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
 	}
-	return squareOutput + tndOutput + expansionOutput;
+	return squareVolume + tndVolume + expansionOutput;
 }
 
 void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int8_t delta)
