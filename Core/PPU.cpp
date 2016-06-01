@@ -815,8 +815,7 @@ void PPU::BeginVBlank()
 {
 	if(_cycle == 0) {
 		SendFrame();
-		_statusFlags.VerticalBlank = true;
-
+		
 		if(_nesModel == NesModel::NTSC || _nesModel == NesModel::PAL) {
 			TriggerNmi();
 		}
@@ -825,6 +824,7 @@ void PPU::BeginVBlank()
 
 void PPU::TriggerNmi()
 {
+	_statusFlags.VerticalBlank = true;
 	if(_flags.VBlank) {
 		CPU::SetNMIFlag();
 	}
