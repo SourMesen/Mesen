@@ -6,7 +6,7 @@
 class Rambo1 : public BaseMapper
 {
 private:	
-	const uint8_t PpuIrqDelay = 3;
+	const uint8_t PpuIrqDelay = 2;
 	const uint8_t CpuIrqDelay = 1;
 	bool _irqEnabled = false;
 	bool _irqCycleMode = false;
@@ -20,6 +20,7 @@ private:
 	uint8_t _currentRegister = 0;
 	uint8_t _registers[16];
 	uint8_t _needIrqDelay = 0;
+	bool _forceClock = false;
 
 protected:
 	virtual uint16_t GetPRGPageSize() { return 0x2000; }
@@ -46,6 +47,8 @@ protected:
 
 		Stream<uint8_t>(_currentRegister);
 		StreamArray<uint8_t>(_registers, 16);
+
+		Stream<bool>(_forceClock);
 	}
 
 	virtual void ProcessCpuClock()
@@ -56,10 +59,12 @@ protected:
 				CPU::SetIRQSource(IRQSource::External);
 			}
 		}
-		if(_irqCycleMode) {
+
+		if(_irqCycleMode || _forceClock) {
 			_cpuClockCounter = (_cpuClockCounter + 1) & 0x03;
 			if(_cpuClockCounter == 0) {
 				ClockIrqCounter(Rambo1::CpuIrqDelay);
+				_forceClock = false;
 			}
 		}
 	}
@@ -67,17 +72,23 @@ protected:
 	void ClockIrqCounter(const uint8_t delay)
 	{
 		if(_needReload) {
-			_irqCounter = _irqReloadValue + 1;
+			//Fixes Hard Drivin'
+			if(_irqReloadValue <= 1) {
+				_irqCounter = _irqReloadValue + 1;
+			} else {
+				_irqCounter = _irqReloadValue + 2;
+			}
+
 			_cpuClockCounter = 0;
 			_needReload = false;
 		} else if(_irqCounter == 0) {
-			_irqCounter = _irqReloadValue;
+			_irqCounter = _irqReloadValue + 1;
 			_cpuClockCounter = 0;
-		} else {
-			_irqCounter--;
-			if(_irqCounter == 0 && _irqEnabled) {
-				_needIrqDelay = delay;
-			}
+		}
+
+		_irqCounter--;
+		if(_irqCounter == 0 && _irqEnabled) {
+			_needIrqDelay = delay;
 		}
 	}
 
@@ -94,9 +105,6 @@ protected:
 		}
 
 		uint8_t a12Inversion = _currentRegister & 0x80 ? 0x04 : 0x00;
-		if(a12Inversion) {
-			std::cout << "test";
-		}
 		SelectCHRPage(0 ^ a12Inversion, _registers[0]);
 		SelectCHRPage(2 ^ a12Inversion, _registers[1]);
 		SelectCHRPage(4 ^ a12Inversion, _registers[2]);
@@ -134,6 +142,11 @@ protected:
 				break;
 
 			case 0xC001:
+				if(_irqCycleMode && ((value & 0x01) == 0x00)) {
+					//"To be clear, after the write in the reg $C001, are needed more than four CPU clock cycles before the switch takes place, allowing another clock of irq running the reload." -FHorse
+					//Fixes Skull & Crossbones
+					_forceClock = true;
+				}
 				_irqCycleMode = (value & 0x01) == 0x01;
 				_needReload = true;
 				break;
@@ -152,25 +165,27 @@ protected:
 public:
 	virtual void NotifyVRAMAddressChange(uint16_t addr)
 	{
-		uint32_t cycle = PPU::GetFrameCycle();
+		if(!_irqCycleMode) {
+			uint32_t cycle = PPU::GetFrameCycle();
 
-		if((addr & 0x1000) == 0) {
-			if(_cyclesDown == 0) {
-				_cyclesDown = 1;
-			} else {
-				if(_lastCycle > cycle) {
-					//We changed frames
-					_cyclesDown += (89342 - _lastCycle) + cycle;
+			if((addr & 0x1000) == 0) {
+				if(_cyclesDown == 0) {
+					_cyclesDown = 1;
 				} else {
-					_cyclesDown += (cycle - _lastCycle);
+					if(_lastCycle > cycle) {
+						//We changed frames
+						_cyclesDown += (89342 - _lastCycle) + cycle;
+					} else {
+						_cyclesDown += (cycle - _lastCycle);
+					}
 				}
+			} else if(addr & 0x1000) {
+				if(_cyclesDown > 8) {
+					ClockIrqCounter(Rambo1::PpuIrqDelay);
+				}
+				_cyclesDown = 0;
 			}
-		} else if(addr & 0x1000) {
-			if(_cyclesDown > 8) {
-				ClockIrqCounter(Rambo1::PpuIrqDelay);
-			}
-			_cyclesDown = 0;
+			_lastCycle = cycle;
 		}
-		_lastCycle = cycle;
 	}
 };
