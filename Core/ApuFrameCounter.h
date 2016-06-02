@@ -118,7 +118,13 @@ public:
 				_blockFrameCounterTick = 2;
 			}
 
-			cyclesRan = _stepCycles[_stepMode][_currentStep] - _previousCycle;
+			if(_stepCycles[_stepMode][_currentStep] < _previousCycle) {
+				//This can happen when switching from PAL to NTSC, which can cause a freeze (endless loop in APU)
+				cyclesRan = 0;
+			} else {
+				cyclesRan = _stepCycles[_stepMode][_currentStep] - _previousCycle;
+			}
+			
 			cyclesToRun -= cyclesRan;
 
 			_currentStep++;
