@@ -62,7 +62,7 @@ void DisassemblyInfo::Initialize(uint32_t memoryAddr)
 			break;
 
 		case AddrMode::Imm:
-			output << " #" << nextByte.str();
+			output << " #$" << nextByte.str();
 			break;
 
 		case AddrMode::Ind:

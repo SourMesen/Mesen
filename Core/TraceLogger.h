@@ -16,6 +16,7 @@ private:
 	TraceLoggerOptions _options;
 	string _outputFilepath;
 	ofstream _outputFile;
+	bool _firstLine;
 
 public:
 	TraceLogger(string outputFilepath, TraceLoggerOptions options);

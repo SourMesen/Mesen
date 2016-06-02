@@ -98,6 +98,8 @@ void CPU::Exec()
 
 void CPU::IncCycleCount()
 {
+	_cycleCount++;
+
 	_memoryManager->ProcessCpuClock();
 
 	if(_dmcDmaRunning) {
@@ -122,8 +124,6 @@ void CPU::IncCycleCount()
 		_prevRunIrq = _runIrq;
 		_runIrq = _state.NMIFlag || (_state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt));
 	}
-
-	_cycleCount++;
 }
 
 void CPU::RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue)
