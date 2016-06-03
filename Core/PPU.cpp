@@ -644,8 +644,12 @@ void PPU::ProcessPreVBlankScanline()
 			if((_cycle - 260) % 8 == 0) {
 				//Cycle 260, 268, etc.  This is an approximation (each tile is actually loaded in 8 steps (e.g from 257 to 264))
 				LoadSpriteTileInfo();
-			} else if(_cycle == 257) {
-				_spriteIndex = 0;
+			} else if((_cycle - 257) % 8 == 0) {
+				//Garbage NT sprite fetch (257, 265, 273, etc.) - Required for proper MC-ACC IRQs (MMC3 clone)
+				_memoryManager->ReadVRAM(GetNameTableAddr());
+				if(_cycle == 257) {
+					_spriteIndex = 0;
+				}
 			}
 		}
 	} else if(_cycle == 321 && IsRenderingEnabled()) {

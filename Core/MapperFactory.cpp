@@ -104,7 +104,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 1: return new MMC1();
 		case 2: return new UNROM();
 		case 3: return new CNROM(false);
-		case 4: return new MMC3();
+		case 4: return new MMC3(romData.SubMapperID);
 		case 5: return new MMC5();
 		case 7: return new AXROM();
 		case 9: return new MMC2();
