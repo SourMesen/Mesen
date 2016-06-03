@@ -21,8 +21,6 @@ class MMC3 : public BaseMapper
 			RegE001 = 0xE001
 		};
 
-		uint8_t _subMapperID;
-
 		uint8_t _currentRegister;
 		uint8_t _chrMode;
 		uint8_t _prgMode;
@@ -67,6 +65,11 @@ class MMC3 : public BaseMapper
 			_wramWriteProtected = false;
 
 			_needIrq = false;
+		}
+
+		bool IsMcAcc()
+		{
+			return _mapperID == 4 && _subMapperID == 3;
 		}
 
 	protected:
@@ -217,35 +220,25 @@ class MMC3 : public BaseMapper
 
 		void TriggerIrq()
 		{
-			if(_subMapperID != 3) {
-				CPU::SetIRQSource(IRQSource::External);
-			} else {
-				//MM-ACC (Acclaim copy of the MMC3)
+			if(IsMcAcc()) {
+				//MC-ACC (Acclaim copy of the MMC3)
 				//IRQ will be triggered on the next falling edge of A12 instead of on the rising edge like normal MMC3 behavior
 				//This adds a 4 ppu cycle delay (until the PPU fetches the next garbage NT tile between sprites)
 				_needIrq = true;
+			} else {
+				CPU::SetIRQSource(IRQSource::External);
 			}
 		}
 
 
 	public:
-		MMC3(uint8_t subMapperID)
-		{
-			_subMapperID = subMapperID;
-		}
-
-		MMC3()
-		{
-			_subMapperID = 0;
-		}
-
 		virtual void NotifyVRAMAddressChange(uint16_t addr)
 		{
 			uint32_t cycle = PPU::GetFrameCycle();
 
 			if((addr & 0x1000) == 0) {
 				if(_needIrq) {
-					//Used by MM-ACC (Acclaim copy of the MMC3), see TriggerIrq above
+					//Used by MC-ACC (Acclaim copy of the MMC3), see TriggerIrq above
 					CPU::SetIRQSource(IRQSource::External);
 					_needIrq = false;
 				}
@@ -269,8 +262,8 @@ class MMC3 : public BaseMapper
 						_irqCounter--;
 					}
 
-					//SubMapper 2 = MM-ACC (Acclaim MMC3 clone)
-					if(_subMapperID != 2 && (ForceMmc3RevAIrqs() || EmulationSettings::CheckFlag(EmulationFlags::Mmc3IrqAltBehavior))) {
+					//SubMapper 2 = MC-ACC (Acclaim MMC3 clone)
+					if(!IsMcAcc() && (ForceMmc3RevAIrqs() || EmulationSettings::CheckFlag(EmulationFlags::Mmc3IrqAltBehavior))) {
 						//MMC3 Revision A behavior
 						if((count > 0 || _irqReload) && _irqCounter == 0 && _irqEnabled) {
 							TriggerIrq();

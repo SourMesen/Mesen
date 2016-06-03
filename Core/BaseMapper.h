@@ -67,6 +67,9 @@ private:
 	vector<uint8_t> _originalPrgRom;
 
 protected:
+	uint8_t _mapperID;
+	uint8_t _subMapperID;
+
 	uint8_t* _prgRom = nullptr;
 	uint8_t* _chrRom = nullptr;
 	uint8_t* _chrRam = nullptr;

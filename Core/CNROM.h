@@ -16,6 +16,8 @@ protected:
 		SelectPRGPage(0, 0);
 		SelectCHRPage(0, 0);
 	}
+	
+	bool HasBusConflicts() { return _mapperID == 3 && _subMapperID == 2; }
 
 	void WriteRegister(uint16_t addr, uint8_t value)
 	{

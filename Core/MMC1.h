@@ -104,21 +104,27 @@ class MMC1 : public BaseMapper
 			_chrReg1 = _state.RegC000 & 0x1F;
 			_prgReg = _state.RegE000 & 0x0F;
 
-			//This is used for SUROM (Dragon Warrior 3/4, Dragon Quest 4)
-			uint8_t prgPageAdjust = (_state.RegA000 & 0x10);
+			if(_subMapperID == 5) {
+				//SubMapper 5
+				//"001: 5 Fixed PRG    SEROM, SHROM, SH1ROM use a fixed 32k PRG ROM with no banking support.
+				SelectPrgPage2x(0, 0);
+			} else {
+				//This is used for SUROM (Dragon Warrior 3/4, Dragon Quest 4)
+				uint8_t prgPageAdjust = (_state.RegA000 & 0x10);
 
-			if(_prgMode == PrgMode::_32k) {
-				SelectPRGPage(0, _prgReg + prgPageAdjust);
-				SelectPRGPage(1, _prgReg + prgPageAdjust + 1);
-			} else if(_prgMode == PrgMode::_16k) {
-				if(_slotSelect == SlotSelect::x8000) {
+				if(_prgMode == PrgMode::_32k) {
 					SelectPRGPage(0, _prgReg + prgPageAdjust);
-					SelectPRGPage(1, 0xF + prgPageAdjust);
-				} else if(_slotSelect == SlotSelect::xC000) {
-					SelectPRGPage(0, prgPageAdjust);
-					SelectPRGPage(1, _prgReg + prgPageAdjust);
+					SelectPRGPage(1, _prgReg + prgPageAdjust + 1);
+				} else if(_prgMode == PrgMode::_16k) {
+					if(_slotSelect == SlotSelect::x8000) {
+						SelectPRGPage(0, _prgReg + prgPageAdjust);
+						SelectPRGPage(1, 0xF + prgPageAdjust);
+					} else if(_slotSelect == SlotSelect::xC000) {
+						SelectPRGPage(0, prgPageAdjust);
+						SelectPRGPage(1, _prgReg + prgPageAdjust);
+					}
 				}
-			}
+			} 
 
 			if(_chrMode == ChrMode::_8k) {
 				SelectCHRPage(0, _chrReg0 & 0x1E);

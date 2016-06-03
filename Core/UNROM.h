@@ -17,6 +17,8 @@ class UNROM : public BaseMapper
 			SelectCHRPage(0, 0);
 		}
 
+		bool HasBusConflicts() { return _subMapperID == 2; }
+
 		void WriteRegister(uint16_t addr, uint8_t value)
 		{
 			SelectPRGPage(0, value);

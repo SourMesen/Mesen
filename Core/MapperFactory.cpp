@@ -104,7 +104,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 1: return new MMC1();
 		case 2: return new UNROM();
 		case 3: return new CNROM(false);
-		case 4: return new MMC3(romData.SubMapperID);
+		case 4: return new MMC3();
 		case 5: return new MMC5();
 		case 7: return new AXROM();
 		case 9: return new MMC2();
@@ -125,7 +125,12 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();
-		case 34: return (romData.ChrRom.size() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
+		case 34: 
+			switch(romData.SubMapperID) {
+				case 0: return (romData.ChrRom.size() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
+				case 1: return new Nina01();
+				case 2: return new BnRom();
+			}
 		case 37: return new MMC3_37();
 		case 38: return new UnlPci556();
 		case 44: return new MMC3_44();
@@ -151,7 +156,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 75: return new VRC1();
 		case 76: return new Namco108_76();
 		case 77: return new IremLrog017();
-		case 78: return new JalecoJf16(romData.SubMapperID == 3);
+		case 78: return new JalecoJf16();
 		case 79: return new Nina03_06(false);
 		case 80: return new TaitoX1005(false);
 		case 82: return new TaitoX1017();

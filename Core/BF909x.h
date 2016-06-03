@@ -13,6 +13,10 @@ protected:
 
 	void InitMapper() 
 	{
+		if(_subMapperID == 1) {
+			_bf9097Mode = true;
+		}
+
 		//First and last PRG page
 		SelectPRGPage(0, 0);
 		SelectPRGPage(1, -1);

@@ -4,9 +4,6 @@
 
 class JalecoJf16 : public BaseMapper
 {
-private:
-	bool _isIremHolyDiver;
-
 protected:
 	virtual uint16_t GetPRGPageSize() { return 0x4000; }
 	virtual uint16_t GetCHRPageSize() { return 0x2000; }
@@ -24,15 +21,11 @@ protected:
 	{
 		SelectPRGPage(0, value & 0x07);
 		SelectCHRPage(0, (value >> 4) & 0x0F);
-		if(_isIremHolyDiver) {
+		if(_subMapperID == 3) {
+			//078: 3 Holy Diver
 			SetMirroringType(value & 0x08 ? MirroringType::Vertical : MirroringType::Horizontal);
 		} else {
 			SetMirroringType(value & 0x08 ? MirroringType::ScreenBOnly : MirroringType::ScreenAOnly);
 		}
-	}
-
-public:
-	JalecoJf16(bool isIremHolyDiver) : _isIremHolyDiver(isIremHolyDiver)
-	{
 	}
 };

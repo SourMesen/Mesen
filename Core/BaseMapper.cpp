@@ -306,6 +306,9 @@ void BaseMapper::StreamState(bool saving)
 
 void BaseMapper::Initialize(RomData &romData)
 {
+	_mapperID = romData.MapperID;
+	_subMapperID = romData.SubMapperID;
+
 	_romFilename = romData.Filename;
 	_batteryFilename = GetBatteryFilename();
 	_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
