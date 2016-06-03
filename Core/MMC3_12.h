@@ -18,8 +18,8 @@ protected:
 
 	virtual void StreamState(bool saving)
 	{
-		Stream<uint8_t>(_chrSelection);
 		MMC3::StreamState(saving);
+		Stream(_chrSelection);
 	}
 
 	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)

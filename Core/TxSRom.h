@@ -6,11 +6,6 @@
 class TxSRom : public MMC3
 {
 protected:
-	virtual void StreamState(bool saving)
-	{
-		MMC3::StreamState(saving);
-	}
-
 	void UpdateMirroring()
 	{
 		//This is disabled, 8001 writes are used to setup mirroring instead

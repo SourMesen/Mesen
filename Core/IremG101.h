@@ -24,8 +24,7 @@ class IremG101 : public BaseMapper
 		{
 			BaseMapper::StreamState(saving);
 
-			StreamArray<uint8_t>(_prgRegs, 2);
-			Stream<uint8_t>(_prgMode);
+			Stream(_prgMode, _prgRegs[0], _prgRegs[1]);
 		}
 
 		void UpdatePrgMode()

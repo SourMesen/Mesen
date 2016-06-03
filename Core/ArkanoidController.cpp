@@ -7,9 +7,7 @@
 void ArkanoidController::StreamState(bool saving)
 {
 	BaseControlDevice::StreamState(saving);
-	Stream<uint32_t>(_stateBuffer);
-	Stream<bool>(_buttonPressed);
-	Stream<int32_t>(_xPosition);
+	Stream(_stateBuffer, _buttonPressed, _xPosition);
 }
 
 uint8_t ArkanoidController::GetPortOutput()

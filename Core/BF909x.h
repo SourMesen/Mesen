@@ -37,6 +37,6 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream<bool>(_bf9097Mode);		
+		Stream(_bf9097Mode);		
 	}
 };

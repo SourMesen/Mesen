@@ -22,7 +22,7 @@ protected:
 	void StreamState(bool saving)
 	{
 		MMC3::StreamState(saving);
-		Stream<uint8_t>(_currentReg);
+		Stream(_currentReg);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

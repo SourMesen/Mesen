@@ -110,9 +110,7 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		StreamArray<uint8_t>(_ramPermission, 3);
-		StreamArray<uint8_t>(_chrRegs, 6);
-		Stream<uint8_t>(_chrMode);
+		Stream(ArrayInfo<uint8_t>{_ramPermission, 3}, ArrayInfo<uint8_t>{_chrRegs, 6}, _chrMode);
 
 		if(!saving) {
 			UpdateRamAccess();

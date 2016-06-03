@@ -25,10 +25,8 @@ protected:
 
 	virtual void StreamState(bool saving)
 	{
-		Stream<uint16_t>(_firstRamBank);
-		Stream<uint16_t>(_lastRamBank);
-		Stream<uint16_t>(_chrRamSize);
 		MMC3::StreamState(saving);
+		Stream(_firstRamBank, _lastRamBank, _chrRamSize);
 	}
 
 public:

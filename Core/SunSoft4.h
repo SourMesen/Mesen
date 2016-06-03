@@ -14,11 +14,6 @@ protected:
 		SelectPRGPage(1, -1);
 	}
 
-	virtual void StreamState(bool saving)
-	{
-		BaseMapper::StreamState(saving);
-	}
-
 	void WriteRegister(uint16_t addr, uint8_t value)
 	{
 		switch(addr & 0xF000) {

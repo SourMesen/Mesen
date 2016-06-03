@@ -48,11 +48,7 @@ public:
 	{
 		ApuLengthCounter::StreamState(saving);
 
-		Stream<uint8_t>(_linearCounter);
-		Stream<uint8_t>(_linearCounterReload);
-		Stream<bool>(_linearReloadFlag);
-		Stream<bool>(_linearControlFlag);
-		Stream<uint8_t>(_sequencePosition);
+		Stream(_linearCounter, _linearCounterReload, _linearReloadFlag, _linearControlFlag, _sequencePosition);
 	}
 
 	void GetMemoryRanges(MemoryRanges &ranges)

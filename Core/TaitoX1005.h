@@ -92,7 +92,7 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream<uint8_t>(_ramPermission);
+		Stream(_ramPermission);
 		
 		if(!saving) {
 			UpdateRamAccess();

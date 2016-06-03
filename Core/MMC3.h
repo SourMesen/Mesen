@@ -142,29 +142,11 @@ class MMC3 : public BaseMapper
 
 		virtual void StreamState(bool saving)
 		{
-			Stream<uint8_t>(_state.Reg8000);
-			Stream<uint8_t>(_state.RegA000);
-			Stream<uint8_t>(_state.RegA001);
-
-			Stream<uint8_t>(_currentRegister);
-			StreamArray<uint8_t>(_registers, 8);
-			Stream<uint8_t>(_chrMode);
-			Stream<uint8_t>(_prgMode);
-
-			Stream<uint8_t>(_irqReloadValue);
-			Stream<uint8_t>(_irqCounter);
-			Stream<bool>(_irqReload);
-
-			Stream<bool>(_irqEnabled);
-			Stream<uint32_t>(_lastCycle);
-			Stream<uint32_t>(_cyclesDown);
-
-			Stream<bool>(_wramEnabled);
-			Stream<bool>(_wramWriteProtected);
-
 			BaseMapper::StreamState(saving);
+			Stream(_state.Reg8000, _state.RegA000, _state.RegA001, _currentRegister, _chrMode, _prgMode,
+				_irqReloadValue, _irqCounter, _irqReload, _irqEnabled, _lastCycle, _cyclesDown,
+				_wramEnabled, _wramWriteProtected, ArrayInfo<uint8_t>{_registers, 8});
 		}
-
 
 		virtual uint16_t GetPRGPageSize() { return 0x2000; }
 		virtual uint16_t GetCHRPageSize() {	return 0x0400; }

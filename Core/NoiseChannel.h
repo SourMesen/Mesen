@@ -53,8 +53,7 @@ public:
 	{
 		ApuEnvelope::StreamState(saving);
 
-		Stream<uint16_t>(_shiftRegister);
-		Stream<bool>(_modeFlag);
+		Stream(_shiftRegister, _modeFlag);
 	}
 
 	void GetMemoryRanges(MemoryRanges &ranges)

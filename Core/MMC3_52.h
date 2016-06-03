@@ -13,8 +13,8 @@ protected:
 
 	virtual void StreamState(bool saving)
 	{
-		Stream<uint8_t>(_extraReg);
 		MMC3::StreamState(saving);
+		Stream(_extraReg);
 	}
 
 	virtual void Reset(bool softReset)

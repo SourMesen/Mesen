@@ -19,9 +19,7 @@ struct ZapperButtonState
 void Zapper::StreamState(bool saving)
 {
 	BaseControlDevice::StreamState(saving);
-	Stream<int32_t>(_xPosition);
-	Stream<int32_t>(_yPosition);
-	Stream<bool>(_pulled);
+	Stream(_xPosition, _yPosition, _pulled);
 }
 
 uint32_t Zapper::GetNetPlayState()

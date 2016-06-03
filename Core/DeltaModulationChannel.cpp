@@ -108,22 +108,7 @@ void DeltaModulationChannel::Clock()
 void DeltaModulationChannel::StreamState(bool saving)
 {
 	BaseApuChannel::StreamState(saving);
-
-	Stream<uint16_t>(_sampleAddr);
-	Stream<uint16_t>(_sampleLength);
-	Stream<uint8_t>(_outputLevel);
-	Stream<bool>(_irqEnabled);
-	Stream<bool>(_loopFlag);
-
-	Stream<uint16_t>(_currentAddr);
-	Stream<uint16_t>(_bytesRemaining);
-	Stream<uint8_t>(_readBuffer);
-	Stream<bool>(_bufferEmpty);
-
-	Stream<uint8_t>(_shiftRegister);
-	Stream<uint8_t>(_bitsRemaining);
-	Stream<bool>(_silenceFlag);
-	Stream<bool>(_needToRun);
+	Stream(_sampleAddr, _sampleLength, _outputLevel, _irqEnabled, _loopFlag, _currentAddr, _bytesRemaining, _readBuffer, _bufferEmpty, _shiftRegister, _bitsRemaining, _silenceFlag, _needToRun);
 }
 
 bool DeltaModulationChannel::IrqPending(uint32_t cyclesToRun)

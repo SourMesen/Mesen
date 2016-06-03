@@ -883,94 +883,22 @@ void PPU::ExecStatic()
 
 void PPU::StreamState(bool saving)
 {
-	Stream<uint8_t>(_state.Control);
-	Stream<uint8_t>(_state.Mask);
-	Stream<uint8_t>(_state.Status);
-	Stream<uint32_t>(_state.SpriteRamAddr);
-	Stream<uint16_t>(_state.VideoRamAddr);
-	Stream<uint8_t>(_state.XScroll);
-	Stream<uint16_t>(_state.TmpVideoRamAddr);
-	Stream<bool>(_state.WriteToggle);
-	Stream<uint16_t>(_state.HighBitShift);
-	Stream<uint16_t>(_state.LowBitShift);
-
-	Stream<bool>(_flags.VerticalWrite);
-	Stream<uint16_t>(_flags.SpritePatternAddr);
-	Stream<uint16_t>(_flags.BackgroundPatternAddr);
-	Stream<bool>(_flags.LargeSprites);
-	Stream<bool>(_flags.VBlank);
-	
-	Stream<bool>(_flags.Grayscale);
-	Stream<bool>(_flags.BackgroundMask);
-	Stream<bool>(_flags.SpriteMask);
-	Stream<bool>(_flags.BackgroundEnabled);
-	Stream<bool>(_flags.SpritesEnabled);
-	Stream<bool>(_flags.IntensifyRed);
-	Stream<bool>(_flags.IntensifyGreen);
-	Stream<bool>(_flags.IntensifyBlue);
-	Stream<uint8_t>(_paletteRamMask);
-	Stream<uint16_t>(_intensifyColorBits);
-
-	Stream<bool>(_statusFlags.SpriteOverflow);
-	Stream<bool>(_statusFlags.Sprite0Hit);
-	Stream<bool>(_statusFlags.VerticalBlank);
-
-	Stream<int32_t>(_scanline);
-	Stream<uint32_t>(_cycle);
-	Stream<uint32_t>(_frameCount);
-	Stream<uint8_t>(_memoryReadBuffer);
-	
-	StreamArray<uint8_t>(_paletteRAM, 0x20);
-	StreamArray<uint8_t>(_spriteRAM, 0x100);
-	StreamArray<uint8_t>(_secondarySpriteRAM, 0x20);
-
-	Stream<uint8_t>(_currentTile.LowByte);
-	Stream<uint8_t>(_currentTile.HighByte);
-	Stream<uint32_t>(_currentTile.PaletteOffset);
-
-	Stream<uint8_t>(_nextTile.LowByte);
-	Stream<uint8_t>(_nextTile.HighByte);
-	Stream<uint32_t>(_nextTile.PaletteOffset);
-	Stream<uint16_t>(_nextTile.TileAddr);
-
-	Stream<uint8_t>(_previousTile.LowByte);
-	Stream<uint8_t>(_previousTile.HighByte);
-	Stream<uint32_t>(_previousTile.PaletteOffset);
+	Stream(_state.Control, _state.Mask, _state.Status, _state.SpriteRamAddr, _state.VideoRamAddr, _state.XScroll, _state.TmpVideoRamAddr, _state.WriteToggle,
+		_state.HighBitShift, _state.LowBitShift, _flags.VerticalWrite, _flags.SpritePatternAddr, _flags.BackgroundPatternAddr, _flags.LargeSprites, _flags.VBlank,
+		_flags.Grayscale, _flags.BackgroundMask, _flags.SpriteMask, _flags.BackgroundEnabled, _flags.SpritesEnabled, _flags.IntensifyRed, _flags.IntensifyGreen,
+		_flags.IntensifyBlue, _paletteRamMask, _intensifyColorBits, _statusFlags.SpriteOverflow, _statusFlags.Sprite0Hit, _statusFlags.VerticalBlank, _scanline,
+		_cycle, _frameCount, _memoryReadBuffer, _currentTile.LowByte, _currentTile.HighByte, _currentTile.PaletteOffset, _nextTile.LowByte, _nextTile.HighByte,
+		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
+		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, _spriteDmaAddr,
+		_spriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, _skipScrollingIncrement,
+		ArrayInfo<uint8_t>{_paletteRAM, 0x20},
+		ArrayInfo<uint8_t>{_spriteRAM, 0x100},
+		ArrayInfo<uint8_t>{_secondarySpriteRAM, 0x20},
+		ArrayInfo<int32_t>{_openBusDecayStamp, 8});
 
 	for(int i = 0; i < 64; i++) {
-		Stream<uint8_t>(_spriteTiles[i].SpriteX);
-		Stream<uint8_t>(_spriteTiles[i].LowByte);
-		Stream<uint8_t>(_spriteTiles[i].HighByte);
-		Stream<uint32_t>(_spriteTiles[i].PaletteOffset);
-		Stream<bool>(_spriteTiles[i].HorizontalMirror);
-		Stream<bool>(_spriteTiles[i].BackgroundPriority);
+		Stream(_spriteTiles[i].SpriteX, _spriteTiles[i].LowByte, _spriteTiles[i].HighByte, _spriteTiles[i].PaletteOffset, _spriteTiles[i].HorizontalMirror, _spriteTiles[i].BackgroundPriority);
 	}
-	Stream<uint32_t>(_spriteIndex);
-	Stream<uint32_t>(_spriteCount);
-	Stream<uint32_t>(_secondaryOAMAddr);
-	Stream<bool>(_sprite0Visible);
-
-	Stream<uint8_t>(_oamCopybuffer);
-	Stream<bool>(_spriteInRange);
-	Stream<bool>(_sprite0Added);
-	Stream<int32_t>();
-	Stream<uint8_t>(_spriteAddrH);
-	Stream<uint8_t>(_spriteAddrL);
-	Stream<bool>(_oamCopyDone);
-
-	Stream<NesModel>(_nesModel);
-
-	Stream<uint16_t>(_spriteDmaAddr);
-	Stream<uint16_t>(_spriteDmaCounter);
-
-	Stream<bool>(_prevRenderingEnabled);
-	Stream<bool>(_renderingEnabled);
-	Stream<uint8_t>(_openBus);
-	StreamArray<int32_t>(_openBusDecayStamp, 8);
-
-	Stream<uint32_t>(_ignoreVramRead);
-
-	Stream<bool>(_skipScrollingIncrement);
 
 	if(!saving) {
 		SetNesModel(_nesModel);

@@ -21,7 +21,7 @@ BaseControlDevice::~BaseControlDevice()
 
 void BaseControlDevice::StreamState(bool saving)
 {
-	Stream<uint8_t>(_currentState);
+	Stream(_currentState);
 }
 
 uint8_t BaseControlDevice::GetPort()

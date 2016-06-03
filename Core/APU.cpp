@@ -226,7 +226,7 @@ void APU::StreamState(bool saving)
 		_currentCycle = 0;
 	}
 
-	Stream<NesModel>(_nesModel);
+	Stream(_nesModel);
 	Stream(_squareChannel[0].get());
 	Stream(_squareChannel[1].get());
 	Stream(_triangleChannel.get());

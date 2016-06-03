@@ -185,20 +185,6 @@ void CPU::StartDmcTransfer()
 
 void CPU::StreamState(bool saving)
 {
-	Stream<uint16_t>(_state.PC);
-	Stream<uint8_t>(_state.SP);
-	Stream<uint8_t>(_state.PS);
-	Stream<uint8_t>(_state.A);
-	Stream<uint8_t>(_state.X);
-	Stream<uint8_t>(_state.Y);
-		
-	Stream<int32_t>(_cycleCount);
-	Stream<bool>(_state.NMIFlag);
-	Stream<uint32_t>(_state.IRQFlag);
-
-	Stream<int8_t>(_dmcCounter);
-	Stream<bool>(_dmcDmaRunning);
-
-	Stream<uint16_t>(_spriteDmaCounter);
-	Stream<bool>(_spriteDmaTransfer);
+	Stream(_state.PC, _state.SP, _state.PS, _state.A, _state.X, _state.Y, _cycleCount, _state.NMIFlag, 
+			_state.IRQFlag, _dmcCounter, _dmcDmaRunning, _spriteDmaCounter, _spriteDmaTransfer);
 }

@@ -17,15 +17,7 @@ protected:
 
 	void StreamState(bool saving)
 	{
-		Stream<uint8_t>(_speed);
-		Stream<uint8_t>(_gain);
-		Stream<bool>(_envelopeOff);
-		Stream<bool>(_volumeIncrease);
-		Stream<uint16_t>(_frequency);
-
-		Stream<uint32_t>(_timer);
-
-		Stream<uint8_t>(_masterSpeed);
+		Stream(_speed, _gain, _envelopeOff, _volumeIncrease, _frequency, _timer, _masterSpeed);
 	}
 
 public:

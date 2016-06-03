@@ -45,7 +45,6 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		MMC3::StreamState(saving);
-		Stream<uint8_t>(_prgReg);
-		Stream<uint8_t>(_chrReg);
+		Stream(_prgReg, _chrReg);
 	}
 };

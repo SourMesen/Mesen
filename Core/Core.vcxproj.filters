@@ -95,9 +95,6 @@
     <ClInclude Include="UNROM.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
-    <ClInclude Include="Snapshotable.h">
-      <Filter>Nes\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="AXROM.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
@@ -590,6 +587,9 @@
     <ClInclude Include="ScaleFilter.h">
       <Filter>VideoDecoder</Filter>
     </ClInclude>
+    <ClInclude Include="Snapshotable.h">
+      <Filter>Nes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -735,6 +735,9 @@
     </ClCompile>
     <ClCompile Include="ScaleFilter.cpp">
       <Filter>VideoDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="Snapshotable.cpp">
+      <Filter>Nes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

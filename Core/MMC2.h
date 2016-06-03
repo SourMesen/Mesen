@@ -45,13 +45,8 @@ class MMC2 : public BaseMapper
 
 		void StreamState(bool saving)
 		{
-			Stream<uint8_t>(_leftLatch);
-			Stream<uint8_t>(_rightLatch);
-			Stream<bool>(_needChrUpdate);
-			StreamArray<uint8_t>(_leftChrPage, 2);
-			StreamArray<uint8_t>(_rightChrPage, 2);
-
 			BaseMapper::StreamState(saving);
+			Stream(_leftLatch, _rightLatch, _needChrUpdate, _leftChrPage[0], _leftChrPage[1], _rightChrPage[0], _rightChrPage[1]);			
 		}
 
 		void WriteRegister(uint16_t addr, uint8_t value)

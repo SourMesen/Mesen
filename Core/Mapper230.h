@@ -20,7 +20,7 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream<bool>(_contraMode);
+		Stream(_contraMode);
 	}
 
 	virtual void Reset(bool softReset)

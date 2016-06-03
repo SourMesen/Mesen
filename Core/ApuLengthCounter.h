@@ -72,12 +72,7 @@ public:
 	{
 		BaseApuChannel::StreamState(saving);
 
-		Stream<bool>(_enabled);
-		Stream<bool>(_lengthCounterHalt);
-		Stream<bool>(_newHaltValue);
-		Stream<uint8_t>(_lengthCounter);
-		Stream<uint8_t>(_lengthCounterPreviousValue);
-		Stream<uint8_t>(_lengthCounterReloadValue);
+		Stream(_enabled, _lengthCounterHalt, _newHaltValue, _lengthCounter, _lengthCounterPreviousValue, _lengthCounterReloadValue);
 	}
 
 	bool GetStatus()

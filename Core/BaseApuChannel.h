@@ -50,10 +50,7 @@ public:
 			_previousCycle = 0;
 		}
 
-		Stream<int8_t>(_lastOutput);
-		Stream<uint16_t>(_timer);
-		Stream<uint16_t>(_period);
-		Stream<NesModel>(_nesModel);
+		Stream(_lastOutput, _timer, _period, _nesModel);
 	}
 
 	void SetNesModel(NesModel model)

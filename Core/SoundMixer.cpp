@@ -24,17 +24,14 @@ SoundMixer::~SoundMixer()
 
 void SoundMixer::StreamState(bool saving)
 {
-	Stream<uint32_t>(_clockRate);
-	Stream<uint32_t>(_sampleRate);
-	Stream<AudioChannel>(_expansionAudioType);
+	Stream(_clockRate, _sampleRate, _expansionAudioType);
 	
 	if(!saving) {
 		Reset();
 		UpdateRates();
 	}
 
-	Stream<int16_t>(_previousOutput);
-	StreamArray<int8_t>(_currentOutput, MaxChannelCount);
+	Stream(_previousOutput, ArrayInfo<int8_t>{_currentOutput, MaxChannelCount});
 }
 
 void SoundMixer::RegisterAudioDevice(IAudioDevice *audioDevice)

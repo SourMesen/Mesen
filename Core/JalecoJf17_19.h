@@ -26,9 +26,7 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-
-		Stream<bool>(_prgFlag);
-		Stream<bool>(_chrFlag);
+		Stream(_prgFlag, _chrFlag);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

@@ -60,12 +60,7 @@ public:
 	{
 		ApuLengthCounter::StreamState(saving);
 
-		Stream<bool>(_constantVolume);
-		Stream<uint8_t>(_volume);
-		Stream<uint8_t>(_envelopeCounter);
-		Stream<bool>(_start);
-		Stream<int8_t>(_divider);
-		Stream<uint8_t>(_counter);
+		Stream(_constantVolume, _volume, _envelopeCounter, _start, _divider, _counter);
 	}
 
 	void TickEnvelope()

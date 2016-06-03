@@ -15,10 +15,8 @@ protected:
 
 	virtual void StreamState(bool saving)
 	{
-		Stream<uint8_t>(_selectedBlock);
-		Stream<uint8_t>(_prgReg);
-		Stream<uint8_t>(_prgMode);
 		MMC3::StreamState(saving);
+		Stream(_selectedBlock, _prgReg, _prgMode);
 	}
 
 	virtual void Reset(bool softReset)

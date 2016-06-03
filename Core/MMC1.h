@@ -132,17 +132,8 @@ class MMC1 : public BaseMapper
 	protected:
 		void StreamState(bool saving)
 		{
-			Stream<uint8_t>(_state.Reg8000);
-			Stream<uint8_t>(_state.RegA000);
-			Stream<uint8_t>(_state.RegC000);
-			Stream<uint8_t>(_state.RegE000);
-
-			Stream<uint8_t>(_writeBuffer);
-			Stream<uint8_t>(_shiftCount);
-
-			Stream<int32_t>(_lastWriteCycle);
-
 			BaseMapper::StreamState(saving);
+			Stream(_state.Reg8000, _state.RegA000, _state.RegC000, _state.RegE000, _writeBuffer, _shiftCount, _lastWriteCycle);			
 		}
 
 		virtual uint16_t GetPRGPageSize() { return 0x4000; }

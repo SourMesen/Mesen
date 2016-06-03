@@ -33,6 +33,6 @@ protected:
 	void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream<uint8_t>(_resetCounter);
+		Stream(_resetCounter);
 	}
 };

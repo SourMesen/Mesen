@@ -40,7 +40,6 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream<uint8_t>(_prgBlock);
-		Stream<uint8_t>(_prgPage);
+		Stream(_prgBlock, _prgPage);
 	}
 };

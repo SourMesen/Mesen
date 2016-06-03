@@ -26,10 +26,7 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-
-		StreamArray<uint8_t>(_registers, 5);
-		Stream<bool>(_toggle);
-		Stream<bool>(_autoSwitchCHR);
+		Stream(ArrayInfo<uint8_t>{_registers, 5}, _toggle, _autoSwitchCHR);
 	}
 
 	void InitMapper() 

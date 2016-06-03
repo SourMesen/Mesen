@@ -272,17 +272,14 @@ void BaseMapper::RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr)
 
 void BaseMapper::StreamState(bool saving)
 {
-	StreamArray<uint8_t>(_chrRam, _chrRamSize);
+	Stream(_mirroringType,
+		ArrayInfo<uint8_t>{_chrRam, _chrRamSize},
+		ArrayInfo<uint8_t>{_workRam, GetWorkRamSize()},
+		ArrayInfo<uint8_t>{_saveRam, _saveRamSize},
+		ArrayInfo<uint32_t>{_prgPageNumbers, 64},
+		ArrayInfo<uint32_t>{_chrPageNumbers, 64},
+		ArrayInfo<uint8_t>{_nametableIndexes, 4});
 
-	Stream<MirroringType>(_mirroringType);
-
-	StreamArray<uint8_t>(_workRam, GetWorkRamSize());
-	StreamArray<uint8_t>(_saveRam, _saveRamSize);
-
-	StreamArray<uint32_t>(_prgPageNumbers, 64);
-	StreamArray<uint32_t>(_chrPageNumbers, 64);
-
-	StreamArray<uint8_t>(_nametableIndexes, 4);
 	if(!saving) {
 		for(uint16_t i = 0; i < 64; i++) {
 			if(_prgPageNumbers[i] != 0xEEEEEEEE) {

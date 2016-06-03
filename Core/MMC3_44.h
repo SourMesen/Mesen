@@ -10,8 +10,8 @@ private:
 protected:
 	virtual void StreamState(bool saving)
 	{
-		Stream<uint8_t>(_selectedBlock);
 		MMC3::StreamState(saving);
+		Stream(_selectedBlock);
 	}
 
 	virtual void Reset(bool softReset)

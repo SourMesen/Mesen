@@ -64,15 +64,7 @@ public:
 
 	void StreamState(bool saving)
 	{
-		Stream<int32_t>(_nextIrqCycle);
-		Stream<int32_t>(_previousCycle);
-		Stream<uint32_t>(_currentStep);
-		Stream<uint32_t>(_stepMode);
-		Stream<bool>(_inhibitIRQ);
-		Stream<NesModel>(_nesModel);
-		Stream<uint8_t>(_blockFrameCounterTick, 0);
-		Stream<int8_t>(_writeDelayCounter, -1);
-		Stream<int16_t>(_newValue, -1);
+		Stream(_nextIrqCycle, _previousCycle, _currentStep, _stepMode, _inhibitIRQ, _nesModel, _blockFrameCounterTick, _writeDelayCounter, _newValue);
 
 		if(!saving) {
 			SetNesModel(_nesModel);

@@ -37,20 +37,8 @@ protected:
 		Stream(&_volume);
 		Stream(&_mod);
 
-		StreamArray<uint8_t>(_waveTable, 64);
-		Stream<bool>(_waveWriteEnabled);
-
-		Stream<bool>(_disableEnvelopes);
-		Stream<bool>(_haltWaveform);
-
-		Stream<uint8_t>(_masterVolume);
-
-		//Internal values
-		Stream<uint16_t>(_waveOverflowCounter);
-		Stream<int32_t>(_wavePitch);
-		Stream<uint8_t>(_wavePosition);
-
-		Stream<uint8_t>(_lastOutput);
+		Stream(_waveWriteEnabled, _disableEnvelopes, _haltWaveform, _masterVolume, _waveOverflowCounter, _wavePitch, _wavePosition, _lastOutput,
+				ArrayInfo<uint8_t>{_waveTable, 64});
 	}
 
 public:

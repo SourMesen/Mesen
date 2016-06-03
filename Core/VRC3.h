@@ -25,11 +25,7 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream<bool>(_irqEnableOnAck);
-		Stream<bool>(_smallCounter);
-		Stream<bool>(_irqEnabled);
-		Stream<uint16_t>(_irqCounter);
-		Stream<uint16_t>(_irqReload);
+		Stream(_irqEnableOnAck, _smallCounter, _irqEnabled, _irqCounter, _irqReload);
 	}
 
 	virtual void ProcessCpuClock()

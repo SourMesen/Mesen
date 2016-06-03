@@ -36,6 +36,6 @@ private:
 	virtual void StreamState(bool saving)
 	{
 		MMC3::StreamState(saving);
-		Stream<uint8_t>(_prgReg);
+		Stream(_prgReg);
 	}
 };

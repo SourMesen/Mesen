@@ -32,8 +32,7 @@ protected:
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_irq);
-		Stream<uint8_t>(_controlFlags);
-		StreamArray<uint8_t>(_chrRegisters, 8);
+		Stream(_controlFlags, ArrayInfo<uint8_t>{_chrRegisters, 8});
 
 		if(!saving) {
 			UpdatePrgRamAccess();

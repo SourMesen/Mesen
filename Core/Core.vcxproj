@@ -567,6 +567,7 @@
     <ClCompile Include="NtscFilter.cpp" />
     <ClCompile Include="ReverbFilter.cpp" />
     <ClCompile Include="RomLoader.cpp" />
+    <ClCompile Include="Snapshotable.cpp" />
     <ClCompile Include="SoundMixer.cpp" />
     <ClCompile Include="StandardController.cpp" />
     <ClCompile Include="MapperFactory.cpp" />

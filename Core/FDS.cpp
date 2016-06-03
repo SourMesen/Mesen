@@ -315,44 +315,12 @@ void FDS::StreamState(bool saving)
 {
 	BaseMapper::StreamState(saving);
 
-	Stream<uint16_t>(_irqReloadValue);
-	Stream<uint16_t>(_irqCounter);
-	Stream<bool>(_irqEnabled);
-	Stream<bool>(_irqReloadEnabled);
+	Stream(_irqReloadValue, _irqCounter, _irqEnabled, _irqReloadEnabled, _diskRegEnabled, _soundRegEnabled, _writeDataReg, _motorOn, _resetTransfer,
+		_readMode, _crcControl, _diskReady, _diskIrqEnabled, _extConWriteReg, _badCrc, _endOfHead, _readWriteEnabled, _readDataReg, _diskWriteProtected,
+		_diskNumber, _newDiskNumber, _newDiskInsertDelay, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, _needIrq,
+		_transferComplete, _isDirty);
 
-	Stream<bool>(_diskRegEnabled);
-	Stream<bool>(_soundRegEnabled);
-
-	Stream<uint8_t>(_writeDataReg);
-
-	Stream<bool>(_motorOn);
-	Stream<bool>(_resetTransfer);
-	Stream<bool>(_readMode);
-	Stream<bool>(_crcControl);
-	Stream<bool>(_diskReady);
-	Stream<bool>(_diskIrqEnabled);
-
-	Stream<uint8_t>(_extConWriteReg);
-
-	Stream<bool>(_badCrc);
-	Stream<bool>(_endOfHead);
-	Stream<bool>(_readWriteEnabled);
-
-	Stream<uint8_t>(_readDataReg);
-
-	Stream<bool>(_diskWriteProtected);
-
-	Stream<uint32_t>(_diskNumber);
-	Stream<uint32_t>(_newDiskNumber);
-	Stream<uint32_t>(_newDiskInsertDelay);
-	Stream<uint32_t>(_diskPosition);
-	Stream<uint32_t>(_delay);
-	Stream<bool>(_previousCrcControlFlag);
-	Stream<bool>(_gapEnded);
-	Stream<bool>(_scanningDisk);
-	Stream<bool>(_needIrq);
-	Stream<bool>(_transferComplete);
-	Stream<bool>(_isDirty);
+	Stream(_audio.get());
 }
 
 FDS::FDS()

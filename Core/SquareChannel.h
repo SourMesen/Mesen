@@ -105,16 +105,7 @@ public:
 	{
 		ApuEnvelope::StreamState(saving);
 
-		Stream<uint16_t>(_realPeriod);
-		Stream<uint8_t>(_duty);
-		Stream<uint8_t>(_dutyPos);
-		Stream<bool>(_sweepEnabled);
-		Stream<uint8_t>(_sweepPeriod);
-		Stream<bool>(_sweepNegate);
-		Stream<uint8_t>(_sweepShift);
-		Stream<bool>(_reloadSweep);
-		Stream<uint8_t>(_sweepDivider);
-		Stream<uint32_t>(_sweepTargetPeriod);
+		Stream(_realPeriod, _duty, _dutyPos, _sweepEnabled, _sweepPeriod, _sweepNegate, _sweepShift, _reloadSweep, _sweepDivider, _sweepTargetPeriod);
 	}
 
 	void GetMemoryRanges(MemoryRanges &ranges)

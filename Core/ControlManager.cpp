@@ -217,16 +217,7 @@ void ControlManager::StreamState(bool saving)
 		}
 	}
 
-	Stream<bool>(_refreshState);
-	Stream<int32_t>(_mousePosition.X);
-	Stream<int32_t>(_mousePosition.Y);
-	Stream<NesModel>(nesModel);
-	Stream<ExpansionPortDevice>(expansionDevice);
-	Stream<ConsoleType>(consoleType);
-	for(int i = 0; i < 4; i++) {
-		Stream<ControllerType>(controllerTypes[i]);
-	}
-	Stream<bool>(hasFourScore);
+	Stream(_refreshState, _mousePosition.X, _mousePosition.Y, nesModel, expansionDevice, consoleType, ArrayInfo<ControllerType>{controllerTypes, 4}, hasFourScore);
 
 	if(!saving) {
 		EmulationSettings::SetNesModel(nesModel);

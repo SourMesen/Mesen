@@ -21,7 +21,7 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream<bool>(_prgMode1);
+		Stream(_prgMode1);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

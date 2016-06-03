@@ -32,14 +32,12 @@ class JalecoSs88006 : public BaseMapper
 
 		virtual void StreamState(bool saving)
 		{
-			BaseMapper::StreamState(saving);
 
-			StreamArray<uint8_t>(_prgBanks, 3);
-			StreamArray<uint8_t>(_chrBanks, 8);
-			StreamArray<uint8_t>(_irqReloadValue, 4);
-			Stream<uint16_t>(_irqCounter);
-			Stream<uint8_t>(_irqCounterSize);
-			Stream<bool>(_irqEnabled);
+			BaseMapper::StreamState(saving);
+			Stream(_irqCounter, _irqCounterSize, _irqEnabled, 
+					ArrayInfo<uint8_t>{_prgBanks, 3},
+					ArrayInfo<uint8_t>{_chrBanks, 8},
+					ArrayInfo<uint8_t>{_irqReloadValue, 4});
 		}
 
 		void SetMirroring(uint8_t value)

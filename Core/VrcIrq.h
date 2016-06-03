@@ -15,12 +15,7 @@ private:
 protected:
 	void StreamState(bool saving)
 	{
-		Stream<uint8_t>(_irqReloadValue);
-		Stream<uint8_t>(_irqCounter);
-		Stream<int16_t>(_irqPrescalerCounter);
-		Stream<bool>(_irqEnabled);
-		Stream<bool>(_irqEnabledAfterAck);
-		Stream<bool>(_irqCycleMode);
+		Stream(_irqReloadValue, _irqCounter, _irqPrescalerCounter, _irqEnabled, _irqEnabledAfterAck, _irqCycleMode);
 	}
 
 public:

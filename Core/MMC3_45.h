@@ -14,13 +14,12 @@ protected:
 
 	virtual void StreamState(bool saving)
 	{
-		StreamArray<uint8_t>(_reg, 4);
-		Stream<uint8_t>(_regIndex);
+		MMC3::StreamState(saving);
+		Stream(_regIndex, ArrayInfo<uint8_t>{_reg, 4});
 
 		if(_reg[3] & 0x40) {
 			RemoveRegisterRange(0x6000, 0x7FFF);
 		}
-		MMC3::StreamState(saving);
 	}
 
 	virtual void Reset(bool softReset)

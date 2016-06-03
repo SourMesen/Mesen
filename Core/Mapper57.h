@@ -22,7 +22,7 @@ protected:
 	void StreamState(bool saving)
 	{		
 		BaseMapper::StreamState(saving);
-		StreamArray<uint8_t>(_registers, 2);
+		Stream(_registers[0], _registers[1]);
 	}
 
 	void UpdateState()

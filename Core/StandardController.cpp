@@ -8,8 +8,7 @@
 void StandardController::StreamState(bool saving)
 {
 	BaseControlDevice::StreamState(saving);
-	Stream<uint32_t>(_stateBuffer);
-	Stream<uint32_t>(_stateBufferFamicom);
+	Stream(_stateBuffer, _stateBufferFamicom);
 
 	if(_additionalController) {
 		Stream(_additionalController.get());
