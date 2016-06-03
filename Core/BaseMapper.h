@@ -80,7 +80,7 @@ protected:
 	bool _hasBattery = false;
 
 	virtual void InitMapper() = 0;
-	virtual void InitMapper(RomData &romData) { }
+	virtual void InitMapper(RomData &romData);
 	virtual uint16_t GetPRGPageSize() = 0;
 	virtual uint16_t GetCHRPageSize() = 0;
 
@@ -105,8 +105,8 @@ protected:
 
 	uint8_t InternalReadRam(uint16_t addr);
 
-	virtual void WriteRegister(uint16_t addr, uint8_t value) { }
-	virtual uint8_t ReadRegister(uint16_t addr) { return 0; }
+	virtual void WriteRegister(uint16_t addr, uint8_t value);
+	virtual uint8_t ReadRegister(uint16_t addr);
 
 	void SelectPrgPage4x(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom);
 	void SelectPrgPage2x(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom);
@@ -147,7 +147,7 @@ protected:
 public:
 	void Initialize(RomData &romData);
 	virtual ~BaseMapper();
-	virtual void Reset(bool softReset) { }
+	virtual void Reset(bool softReset);
 
 	virtual void ProcessCpuClock() { }
 	virtual void NotifyVRAMAddressChange(uint16_t addr);

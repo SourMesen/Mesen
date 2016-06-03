@@ -6,6 +6,8 @@
 #include "../Utilities/FolderUtilities.h"
 #include "EmulationSettings.h"
 
+const uint32_t SaveStateManager::FileFormatVersion;
+
 string SaveStateManager::GetStateFilepath(int stateIndex)
 {
 	string folder = FolderUtilities::GetSaveStateFolder();

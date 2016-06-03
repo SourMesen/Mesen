@@ -31,7 +31,8 @@ void SoundMixer::StreamState(bool saving)
 		UpdateRates();
 	}
 
-	Stream(_previousOutput, ArrayInfo<int8_t>{_currentOutput, MaxChannelCount});
+	ArrayInfo<int8_t> currentOutput = { _currentOutput, MaxChannelCount };
+	Stream(_previousOutput, currentOutput);
 }
 
 void SoundMixer::RegisterAudioDevice(IAudioDevice *audioDevice)
@@ -172,13 +173,13 @@ void SoundMixer::EndFrame(uint32_t time)
 	_timestamps.erase(std::unique(_timestamps.begin(), _timestamps.end()), _timestamps.end());
 
 	for(size_t i = 0, len = _timestamps.size(); i < len; i++) {
-		uint32_t time = _timestamps[i];
+		uint32_t stamp = _timestamps[i];
 		for(int j = 0; j < MaxChannelCount; j++) {
-			_currentOutput[j] += _channelOutput[j][time];
+			_currentOutput[j] += _channelOutput[j][stamp];
 		}
 
 		int16_t currentOutput = GetOutputVolume();
-		blip_add_delta(_blipBuf, time, (int)((currentOutput - _previousOutput) * masterVolume));
+		blip_add_delta(_blipBuf, stamp, (int)((currentOutput - _previousOutput) * masterVolume));
 		_previousOutput = currentOutput;
 	}
 	blip_end_frame(_blipBuf, time);

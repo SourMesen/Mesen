@@ -319,10 +319,12 @@ protected:
 	{
 		BaseMapper::StreamState(saving);
 
+		ArrayInfo<uint8_t> prgBanks = { _prgBanks, 5 };
+		ArrayInfo<uint16_t> chrBanks = { _chrBanks, 12 };
 		Stream(_prgRamProtect1, _prgRamProtect2, _fillModeTile, _fillModeColor, _verticalSplitEnabled, _verticalSplitRightSide,
 				_verticalSplitDelimiterTile, _verticalSplitScroll, _verticalSplitBank, _multiplierValue1, _multiplierValue2,
 				_nametableMapping, _extendedRamMode, _exAttributeLastNametableFetch, _exAttrLastFetchCounter, _exAttrSelectedChrBank, 
-				_prgMode, ArrayInfo<uint8_t>{_prgBanks, 5}, _chrMode, _chrUpperBits, ArrayInfo<uint16_t>{_chrBanks, 12}, _lastChrReg, 
+				_prgMode, prgBanks, _chrMode, _chrUpperBits, chrBanks, _lastChrReg, 
 				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame);
 
 		if(!saving) {

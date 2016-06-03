@@ -4,6 +4,11 @@
 #include "../Utilities/FolderUtilities.h"
 #include "CheatManager.h"
 
+void BaseMapper::WriteRegister(uint16_t addr, uint8_t value) { }
+uint8_t BaseMapper::ReadRegister(uint16_t addr) { return 0; }
+void BaseMapper::InitMapper(RomData &romData) { }
+void BaseMapper::Reset(bool softReset) { }
+
 uint16_t BaseMapper::InternalGetPrgPageSize()
 {
 	//Make sure the page size is no bigger than the size of the ROM itself
@@ -72,8 +77,8 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 
 void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, ChrMemoryType type, int8_t accessType)
 {
-	uint32_t pageCount;
-	uint32_t pageSize;
+	uint32_t pageCount = 0;
+	uint32_t pageSize = 0;
 	uint8_t* sourceMemory = nullptr;
 	uint8_t defaultAccessType = MemoryAccessType::Read;
 	switch(type) {
@@ -272,13 +277,13 @@ void BaseMapper::RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr)
 
 void BaseMapper::StreamState(bool saving)
 {
-	Stream(_mirroringType,
-		ArrayInfo<uint8_t>{_chrRam, _chrRamSize},
-		ArrayInfo<uint8_t>{_workRam, GetWorkRamSize()},
-		ArrayInfo<uint8_t>{_saveRam, _saveRamSize},
-		ArrayInfo<uint32_t>{_prgPageNumbers, 64},
-		ArrayInfo<uint32_t>{_chrPageNumbers, 64},
-		ArrayInfo<uint8_t>{_nametableIndexes, 4});
+	ArrayInfo<uint8_t> chrRam = { _chrRam, _chrRamSize };
+	ArrayInfo<uint8_t> workRam = { _workRam, GetWorkRamSize() };
+	ArrayInfo<uint8_t> saveRam = { _saveRam, _saveRamSize };
+	ArrayInfo<uint32_t> prgPageNumbers = { _prgPageNumbers, 64 };
+	ArrayInfo<uint32_t> chrPageNumbers = { _chrPageNumbers, 64 };
+	ArrayInfo<uint8_t> nametableIndexes = { _nametableIndexes, 4 };
+	Stream(_mirroringType, chrRam, workRam, saveRam, prgPageNumbers, chrPageNumbers, nametableIndexes);
 
 	if(!saving) {
 		for(uint16_t i = 0; i < 64; i++) {

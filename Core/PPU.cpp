@@ -887,6 +887,12 @@ void PPU::ExecStatic()
 
 void PPU::StreamState(bool saving)
 {
+	ArrayInfo<uint8_t> paletteRam = { _paletteRAM, 0x20 };
+	ArrayInfo<uint8_t> spriteRam = { _spriteRAM, 0x100 };
+	ArrayInfo<uint8_t> secondarySpriteRam = { _secondarySpriteRAM, 0x20 };
+	ArrayInfo<int32_t> openBusDecayStamp = { _openBusDecayStamp, 8 };
+
+
 	Stream(_state.Control, _state.Mask, _state.Status, _state.SpriteRamAddr, _state.VideoRamAddr, _state.XScroll, _state.TmpVideoRamAddr, _state.WriteToggle,
 		_state.HighBitShift, _state.LowBitShift, _flags.VerticalWrite, _flags.SpritePatternAddr, _flags.BackgroundPatternAddr, _flags.LargeSprites, _flags.VBlank,
 		_flags.Grayscale, _flags.BackgroundMask, _flags.SpriteMask, _flags.BackgroundEnabled, _flags.SpritesEnabled, _flags.IntensifyRed, _flags.IntensifyGreen,
@@ -894,11 +900,7 @@ void PPU::StreamState(bool saving)
 		_cycle, _frameCount, _memoryReadBuffer, _currentTile.LowByte, _currentTile.HighByte, _currentTile.PaletteOffset, _nextTile.LowByte, _nextTile.HighByte,
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
 		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, _spriteDmaAddr,
-		_spriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, _skipScrollingIncrement,
-		ArrayInfo<uint8_t>{_paletteRAM, 0x20},
-		ArrayInfo<uint8_t>{_spriteRAM, 0x100},
-		ArrayInfo<uint8_t>{_secondarySpriteRAM, 0x20},
-		ArrayInfo<int32_t>{_openBusDecayStamp, 8});
+		_spriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, _skipScrollingIncrement, paletteRam, spriteRam, secondarySpriteRam, openBusDecayStamp);
 
 	for(int i = 0; i < 64; i++) {
 		Stream(_spriteTiles[i].SpriteX, _spriteTiles[i].LowByte, _spriteTiles[i].HighByte, _spriteTiles[i].PaletteOffset, _spriteTiles[i].HorizontalMirror, _spriteTiles[i].BackgroundPriority);

@@ -37,8 +37,9 @@ protected:
 		Stream(&_volume);
 		Stream(&_mod);
 
-		Stream(_waveWriteEnabled, _disableEnvelopes, _haltWaveform, _masterVolume, _waveOverflowCounter, _wavePitch, _wavePosition, _lastOutput,
-				ArrayInfo<uint8_t>{_waveTable, 64});
+		ArrayInfo<uint8_t> waveTable = { _waveTable, 64 };
+
+		Stream(_waveWriteEnabled, _disableEnvelopes, _haltWaveform, _masterVolume, _waveOverflowCounter, _wavePitch, _wavePosition, _lastOutput, waveTable);
 	}
 
 public:

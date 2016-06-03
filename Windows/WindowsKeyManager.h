@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "..\Core\IKeyManager.h"
+#include "../Core/IKeyManager.h"
 #include "GamePad.h"
 
 struct KeyDefinition {

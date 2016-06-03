@@ -15,7 +15,8 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		MMC3::StreamState(saving);
-		Stream(_regIndex, ArrayInfo<uint8_t>{_reg, 4});
+		ArrayInfo<uint8_t> reg = { _reg, 4 };
+		Stream(_regIndex, reg);
 
 		if(_reg[3] & 0x40) {
 			RemoveRegisterRange(0x6000, 0x7FFF);

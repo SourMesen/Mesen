@@ -171,7 +171,8 @@ uint32_t MemoryManager::ToAbsoluteChrAddress(uint16_t vramAddr)
 
 void MemoryManager::StreamState(bool saving)
 {
-	Stream(ArrayInfo<uint8_t>{_internalRAM, MemoryManager::InternalRAMSize},
-		ArrayInfo<uint8_t>{_nametableRAM[0], MemoryManager::NameTableScreenSize},
-		ArrayInfo<uint8_t>{_nametableRAM[1], MemoryManager::NameTableScreenSize});
+	ArrayInfo<uint8_t> internalRam = { _internalRAM, MemoryManager::InternalRAMSize };
+	ArrayInfo<uint8_t> nameTable0Ram = { _nametableRAM[0], MemoryManager::NameTableScreenSize };
+	ArrayInfo<uint8_t> nameTable1Ram = { _nametableRAM[1], MemoryManager::NameTableScreenSize };
+	Stream(internalRam, nameTable0Ram, nameTable1Ram);
 }

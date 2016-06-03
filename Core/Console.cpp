@@ -204,7 +204,6 @@ void Console::Run()
 {
 	Timer clockTimer;
 	double targetTime;
-	double elapsedTime = 0;
 	uint32_t lastFrameNumber = -1;
 
 	_runLock.Acquire();
@@ -314,6 +313,7 @@ double Console::UpdateNesModel(bool sendNotification)
 	} else {
 		//60.1fps (NTSC), 50.01fps (PAL/Dendy)
 		switch(model) {
+			default:
 			case NesModel::NTSC: frameDelay = 16.63926405550947; break;
 			case NesModel::PAL:
 			case NesModel::Dendy: frameDelay = 19.99720920217466; break;

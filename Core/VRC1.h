@@ -25,7 +25,9 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream(ArrayInfo<uint8_t>{ _chrBanks, 2 });
+		
+		ArrayInfo<uint8_t> chrBanks = { _chrBanks, 2 };
+		Stream(chrBanks);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

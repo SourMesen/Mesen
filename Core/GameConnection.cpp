@@ -10,6 +10,8 @@
 #include "ClientConnectionData.h"
 #include "ForceDisconnectMessage.h"
 
+const uint32_t PlayerListMessage::PlayerNameMaxLength;
+
 GameConnection::GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData)
 {
 	_connectionData = connectionData;

@@ -217,7 +217,8 @@ void ControlManager::StreamState(bool saving)
 		}
 	}
 
-	Stream(_refreshState, _mousePosition.X, _mousePosition.Y, nesModel, expansionDevice, consoleType, ArrayInfo<ControllerType>{controllerTypes, 4}, hasFourScore);
+	ArrayInfo<ControllerType> types = { controllerTypes, 4 };
+	Stream(_refreshState, _mousePosition.X, _mousePosition.Y, nesModel, expansionDevice, consoleType, types, hasFourScore);
 
 	if(!saving) {
 		EmulationSettings::SetNesModel(nesModel);

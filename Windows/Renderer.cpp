@@ -34,8 +34,6 @@ namespace NES
 
 	void Renderer::SetScreenSize(uint32_t width, uint32_t height)
 	{
-		double scale = EmulationSettings::GetVideoScale();
-
 		ScreenSize screenSize;
 		VideoDecoder::GetInstance()->GetScreenSize(screenSize, false);
 

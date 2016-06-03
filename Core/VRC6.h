@@ -34,7 +34,8 @@ protected:
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_irq);
-		Stream(_bankingMode, ArrayInfo<uint8_t>{_chrRegisters, 8});
+		ArrayInfo<uint8_t> chrRegisters = { _chrRegisters, 8 };
+		Stream(_bankingMode, chrRegisters);
 
 		if(!saving) {
 			UpdatePrgRamAccess();

@@ -503,7 +503,6 @@ private:
 		if(branch) {
 			//"a taken non-page-crossing branch ignores IRQ/NMI during its last clock, so that next instruction executes before the IRQ"
 			//Fixes "branch_delays_irq" test
-			bool skipIrq = false;
 			if(_runIrq && !_prevRunIrq) {
 				_runIrq = false;
 			}

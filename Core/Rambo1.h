@@ -35,8 +35,9 @@ protected:
 	void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
+		ArrayInfo<uint8_t> registers = { _registers, 16 };
 		Stream(_irqEnabled, _irqCycleMode, _needReload, _needIrqDelay, _irqCounter, _irqReloadValue, _lastCycle,
-				_cyclesDown, _cpuClockCounter, _currentRegister, ArrayInfo<uint8_t>{_registers, 16}, _forceClock);
+				_cyclesDown, _cpuClockCounter, _currentRegister, registers, _forceClock);
 	}
 
 	virtual void ProcessCpuClock()

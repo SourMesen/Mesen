@@ -216,7 +216,7 @@ public:
 		}
 
 		if(pixelInfo.Sprite.TileIndex != HdPpuTileInfo::NoTile) {
-			auto hdTile = _tileInfoByKey.find(pixelInfo.Sprite.GetKey(false));
+			hdTile = _tileInfoByKey.find(pixelInfo.Sprite.GetKey(false));
 			if(hdTile != _tileInfoByKey.end()) {
 				hdPackSpriteInfo = hdTile->second;
 			} else {

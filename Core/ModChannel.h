@@ -19,7 +19,9 @@ protected:
 	void StreamState(bool saving)
 	{
 		BaseFdsChannel::StreamState(saving);
-		Stream(_counter, _modulationDisabled, _modTablePosition, _overflowCounter, ArrayInfo<uint8_t>{_modTable, 64});
+		
+		ArrayInfo<uint8_t> modTable = { _modTable, 64 };
+		Stream(_counter, _modulationDisabled, _modTablePosition, _overflowCounter, modTable);
 	}
 
 public:

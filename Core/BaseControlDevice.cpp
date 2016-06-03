@@ -58,12 +58,12 @@ uint8_t BaseControlDevice::ProcessNetPlayState(uint32_t netplayState)
 
 uint8_t BaseControlDevice::GetControlState()
 {
-	GameServerConnection* netPlayDevice = nullptr;
+	GameServerConnection* netPlayDevice = GameServerConnection::GetNetPlayDevice(_port);
 	if(Movie::Playing()) {
 		_currentState = Movie::GetInstance()->GetState(_port);
 	} else if(GameClient::Connected()) {
 		_currentState = GameClient::GetControllerState(_port);
-	} else if(netPlayDevice = GameServerConnection::GetNetPlayDevice(_port)) {
+	} else if(netPlayDevice) {
 		_currentState = ProcessNetPlayState(netPlayDevice->GetState());
 	} else {
 		_currentState = RefreshState();

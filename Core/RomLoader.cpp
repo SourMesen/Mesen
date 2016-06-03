@@ -20,10 +20,10 @@ bool RomLoader::LoadFromZip(istream &zipFile)
 		if(filename.length() > 4) {
 			if(filename.substr(filename.length() - 4, 4).compare(".nes") == 0 || filename.substr(filename.length() - 4, 4).compare(".fds") == 0) {
 				uint8_t* fileBuffer = nullptr;
-				size_t fileSize = 0;
-				reader.ExtractFile(filename, &fileBuffer, fileSize);
+				size_t size = 0;
+				reader.ExtractFile(filename, &fileBuffer, size);
 				if(fileBuffer) {
-					result = LoadFromMemory(fileBuffer, fileSize);
+					result = LoadFromMemory(fileBuffer, size);
 					delete[] fileBuffer;
 					break;
 				}

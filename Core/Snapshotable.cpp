@@ -13,7 +13,8 @@ void Snapshotable::StreamStartBlock()
 	_blockBuffer = new uint8_t[0xFFFFF];
 	if(!_saving) {
 		InternalStream(_blockSize);
-		InternalStream(ArrayInfo<uint8_t>{_blockBuffer, std::min((uint32_t)0xFFFFF, _blockSize)});
+		ArrayInfo<uint8_t> arrayInfo = { _blockBuffer, std::min((uint32_t)0xFFFFF, _blockSize) };
+		InternalStream(arrayInfo);
 	}
 	_blockPosition = 0;
 	_inBlock = true;
@@ -24,7 +25,8 @@ void Snapshotable::StreamEndBlock()
 	_inBlock = false;
 	if(_saving) {
 		InternalStream(_blockPosition);
-		InternalStream(ArrayInfo<uint8_t>{_blockBuffer, _blockPosition});
+		ArrayInfo<uint8_t> arrayInfo = { _blockBuffer, _blockPosition };
+		InternalStream(arrayInfo);
 	}
 
 	delete[] _blockBuffer;
@@ -43,7 +45,8 @@ void Snapshotable::Stream(Snapshotable* snapshotable)
 		uint8_t *buffer = new uint8_t[size];
 		stream.read((char*)buffer, size);
 		InternalStream(size);
-		InternalStream(ArrayInfo<uint8_t>{buffer, size});
+		ArrayInfo<uint8_t> arrayInfo = { buffer, size };
+		InternalStream(arrayInfo);
 		delete[] buffer;
 	} else {
 		uint32_t size = 0;
@@ -51,7 +54,8 @@ void Snapshotable::Stream(Snapshotable* snapshotable)
 
 		if(_position + size <= _streamSize) {
 			uint8_t *buffer = new uint8_t[size];
-			InternalStream(ArrayInfo<uint8_t>{buffer, size});
+			ArrayInfo<uint8_t> arrayInfo = { buffer, size };
+			InternalStream(arrayInfo);
 
 			stream.write((char*)buffer, size);
 			stream.seekg(0, ios::beg);
