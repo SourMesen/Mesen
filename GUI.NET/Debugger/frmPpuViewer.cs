@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
@@ -21,6 +22,8 @@ namespace Mesen.GUI.Debugger
 		public frmPpuViewer()
 		{
 			InitializeComponent();
+
+			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefresh;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -76,6 +79,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuClose_Click(object sender, EventArgs e)
 		{
 			this.Close();
+		}
+
+		private void mnuAutoRefresh_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.PpuAutoRefresh = this.mnuAutoRefresh.Checked;
+			ConfigManager.ApplyChanges();
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Mesen.GUI.Debugger.Controls
 		[DefaultValue(13F)]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public float FontSize
+		virtual public float FontSize
 		{
 			get { return this.ScrollableTextbox.FontSize; }
 			set { this.ScrollableTextbox.FontSize = value; }

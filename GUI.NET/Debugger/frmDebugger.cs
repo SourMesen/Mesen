@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
@@ -23,10 +24,18 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
+			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
+
 			_lastCodeWindow = ctrlDebuggerCode;
 
+			this.ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+			this.ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
+
 			BreakpointManager.Breakpoints.Clear();
+			BreakpointManager.Breakpoints.AddRange(ConfigManager.Config.DebugInfo.Breakpoints);
 			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
+			this.ctrlBreakpoints.RefreshList();
+			RefreshBreakpoints();
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -132,6 +141,9 @@ namespace Mesen.GUI.Debugger
 		
 		private void RefreshBreakpoints()
 		{
+			ConfigManager.Config.DebugInfo.Breakpoints = new List<Breakpoint>(BreakpointManager.Breakpoints);
+			ConfigManager.ApplyChanges();
+
 			ctrlDebuggerCodeSplit.HighlightBreakpoints();
 			ctrlDebuggerCode.HighlightBreakpoints();
 		}
@@ -220,6 +232,9 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuSplitView_Click(object sender, EventArgs e)
 		{
+			ConfigManager.Config.DebugInfo.SplitView = this.mnuSplitView.Checked;
+			ConfigManager.ApplyChanges();
+
 			UpdateDebugger();
 		}
 

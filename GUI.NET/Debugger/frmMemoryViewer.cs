@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
@@ -19,6 +20,9 @@ namespace Mesen.GUI.Debugger
 		public frmMemoryViewer()
 		{
 			InitializeComponent();
+
+			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
+			this.ctrlHexViewer.FontSize = ConfigManager.Config.DebugInfo.RamFontSize;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -90,21 +94,36 @@ namespace Mesen.GUI.Debugger
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
 			this.ctrlHexViewer.FontSize++;
+			this.UpdateConfig();
 		}
 
 		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
 		{
 			this.ctrlHexViewer.FontSize--;
+			this.UpdateConfig();
 		}
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
 			this.ctrlHexViewer.FontSize = 13;
+			this.UpdateConfig();
 		}
 
 		private void mnuClose_Click(object sender, EventArgs e)
 		{
 			this.Close();
+		}
+
+		private void UpdateConfig()
+		{
+			ConfigManager.Config.DebugInfo.RamAutoRefresh = this.mnuAutoRefresh.Checked;
+			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlHexViewer.FontSize;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuAutoRefresh_Click(object sender, EventArgs e)
+		{
+			this.UpdateConfig();
 		}
 	}
 }

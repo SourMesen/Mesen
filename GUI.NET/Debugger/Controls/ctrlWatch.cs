@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger
 {
@@ -15,6 +16,13 @@ namespace Mesen.GUI.Debugger
 		public ctrlWatch()
 		{
 			InitializeComponent();
+
+			this.mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.HexDisplay;
+
+			foreach(string watchValue in ConfigManager.Config.DebugInfo.WatchValues) {
+				lstWatch.Items.Add(watchValue);
+			}
+			UpdateWatch();
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -102,6 +110,13 @@ namespace Mesen.GUI.Debugger
 				lstWatch.FocusedItem = lstWatch.Items[currentSelection];
 				lstWatch.Items[currentSelection].Selected = true;
 			}
+
+			ConfigManager.Config.DebugInfo.WatchValues.Clear();
+			foreach(ListViewItem item in lstWatch.Items) {
+				if(!string.IsNullOrWhiteSpace(item.Text)) {
+					ConfigManager.Config.DebugInfo.WatchValues.Add(item.Text);
+				}
+			}
 		}
 
 		public void AddWatch(UInt32 address)
@@ -122,6 +137,8 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuHexDisplay_Click(object sender, EventArgs e)
 		{
+			ConfigManager.Config.DebugInfo.HexDisplay = this.mnuHexDisplay.Checked;
+			ConfigManager.ApplyChanges();
 			UpdateWatch();
 		}
 

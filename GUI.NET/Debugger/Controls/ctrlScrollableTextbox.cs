@@ -30,6 +30,8 @@ namespace Mesen.GUI.Debugger
 			remove { this.ctrlTextbox.MouseDown -= value; }
 		}
 
+		public event EventHandler FontSizeChanged;
+
 		public ctrlScrollableTextbox()
 		{
 			InitializeComponent();
@@ -52,6 +54,10 @@ namespace Mesen.GUI.Debugger
 				if(value >= 6 && value <= 20) {
 					this.ctrlTextbox.Font = new Font("Consolas", value);
 					this.ctrlTextbox.Invalidate();
+
+					if(this.FontSizeChanged != null) {
+						this.FontSizeChanged(this, null);
+					}
 				}
 			}
 		}

@@ -60,9 +60,12 @@
 			this.ctrlDataViewer.FontSize = 13F;
 			this.ctrlDataViewer.Location = new System.Drawing.Point(3, 30);
 			this.ctrlDataViewer.Name = "ctrlDataViewer";
+			this.ctrlDataViewer.ShowContentNotes = false;
+			this.ctrlDataViewer.ShowLineNumberNotes = false;
 			this.ctrlDataViewer.Size = new System.Drawing.Size(185, 76);
 			this.ctrlDataViewer.TabIndex = 0;
 			this.ctrlDataViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlDataViewer_MouseMove);
+			this.ctrlDataViewer.FontSizeChanged += new System.EventHandler(this.ctrlDataViewer_FontSizeChanged);
 			// 
 			// flowLayoutPanel1
 			// 

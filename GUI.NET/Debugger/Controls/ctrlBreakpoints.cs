@@ -32,7 +32,7 @@ namespace Mesen.GUI.Debugger.Controls
 			AdjustColumnWidth();
 		}
 
-		private void RefreshList()
+		public void RefreshList()
 		{
 			lstBreakpoints.ItemChecked -= new System.Windows.Forms.ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
 			lstBreakpoints.Items.Clear();

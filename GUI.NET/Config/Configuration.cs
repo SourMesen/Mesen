@@ -25,6 +25,7 @@ namespace Mesen.GUI.Config
 		public ClientConnectionInfo ClientConnectionInfo;
 		public ServerInfo ServerInfo;
 		public PlayerProfile Profile;
+		public DebugInfo DebugInfo;
 
 		public Configuration()
 		{
@@ -38,6 +39,7 @@ namespace Mesen.GUI.Config
 			InputInfo = new InputInfo();
 			Cheats = new List<CheatInfo>();
 			VsConfig = new List<VsConfigInfo>();
+			DebugInfo = new DebugInfo();
 		}
 
 		public void ApplyConfig()

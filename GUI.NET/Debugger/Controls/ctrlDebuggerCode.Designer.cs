@@ -41,9 +41,9 @@
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.ctrlCodeViewer = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.contextMenuMargin = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuDisableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRemoveBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDisableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuCode.SuspendLayout();
 			this.contextMenuMargin.SuspendLayout();
 			this.SuspendLayout();
@@ -146,6 +146,7 @@
 			this.ctrlCodeViewer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseUp);
 			this.ctrlCodeViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseMove);
 			this.ctrlCodeViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDown);
+			this.ctrlCodeViewer.FontSizeChanged += new System.EventHandler(this.ctrlCodeViewer_FontSizeChanged);
 			// 
 			// contextMenuMargin
 			// 
@@ -154,8 +155,15 @@
             this.mnuRemoveBreakpoint,
             this.mnuEditBreakpoint});
 			this.contextMenuMargin.Name = "contextMenuMargin";
-			this.contextMenuMargin.Size = new System.Drawing.Size(178, 92);
+			this.contextMenuMargin.Size = new System.Drawing.Size(178, 70);
 			this.contextMenuMargin.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuMargin_Opening);
+			// 
+			// mnuDisableBreakpoint
+			// 
+			this.mnuDisableBreakpoint.Name = "mnuDisableBreakpoint";
+			this.mnuDisableBreakpoint.Size = new System.Drawing.Size(177, 22);
+			this.mnuDisableBreakpoint.Text = "Disable breakpoint";
+			this.mnuDisableBreakpoint.Click += new System.EventHandler(this.mnuDisableBreakpoint_Click);
 			// 
 			// mnuRemoveBreakpoint
 			// 
@@ -170,13 +178,6 @@
 			this.mnuEditBreakpoint.Size = new System.Drawing.Size(177, 22);
 			this.mnuEditBreakpoint.Text = "Edit breakpoint";
 			this.mnuEditBreakpoint.Click += new System.EventHandler(this.mnuEditBreakpoint_Click);
-			// 
-			// mnuDisableBreakpoint
-			// 
-			this.mnuDisableBreakpoint.Name = "mnuDisableBreakpoint";
-			this.mnuDisableBreakpoint.Size = new System.Drawing.Size(177, 22);
-			this.mnuDisableBreakpoint.Text = "Disable breakpoint";
-			this.mnuDisableBreakpoint.Click += new System.EventHandler(this.mnuDisableBreakpoint_Click);
 			// 
 			// ctrlDebuggerCode
 			// 

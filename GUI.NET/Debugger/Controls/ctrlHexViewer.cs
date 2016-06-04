@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -21,7 +22,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 
-			this.cboNumberColumns.SelectedIndex = 2; // 16 columns by default
+			this.cboNumberColumns.SelectedIndex = ConfigManager.Config.DebugInfo.RamColumnCount;
 		}
 
 		protected override ctrlScrollableTextbox ScrollableTextbox
@@ -140,6 +141,9 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			this.Data = _data;
 			this.ctrlDataViewer.Focus();
+
+			ConfigManager.Config.DebugInfo.RamColumnCount = this.cboNumberColumns.SelectedIndex;
+			ConfigManager.ApplyChanges();
 		}
 
 		Point _previousLocation;
@@ -156,6 +160,12 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 				_previousLocation = e.Location;
 			}
+		}
+
+		private void ctrlDataViewer_FontSizeChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlDataViewer.FontSize;
+			ConfigManager.ApplyChanges();
 		}
 	}
 }

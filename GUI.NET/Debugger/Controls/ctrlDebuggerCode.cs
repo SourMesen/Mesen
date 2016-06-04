@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Debugger.Controls;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger
 {
@@ -16,10 +17,38 @@ namespace Mesen.GUI.Debugger
 		public delegate void AddressEventHandler(AddressEventArgs args);
 		public event AddressEventHandler OnWatchAdded;
 		public event AddressEventHandler OnSetNextStatement;
+		private DebugViewInfo _config;
 
 		public ctrlDebuggerCode()
 		{
 			InitializeComponent();
+		}
+
+		public void SetConfig(DebugViewInfo config)
+		{
+			_config = config;
+			this.mnuShowOnlyDisassembledCode.Checked = config.ShowOnlyDiassembledCode;
+			this.mnuShowLineNotes.Checked = config.ShowPrgAddresses;
+			this.mnuShowCodeNotes.Checked = config.ShowByteCode;
+			this.FontSize = config.FontSize;
+
+			this.ctrlCodeViewer.ShowLineNumberNotes = this.mnuShowLineNotes.Checked;
+			this.ctrlCodeViewer.ShowContentNotes = this.mnuShowCodeNotes.Checked;
+		}
+
+		private void UpdateConfig()
+		{
+			_config.ShowOnlyDiassembledCode = this.mnuShowOnlyDisassembledCode.Checked;
+			_config.ShowPrgAddresses = this.mnuShowLineNotes.Checked;
+			_config.ShowByteCode = this.mnuShowCodeNotes.Checked;
+			_config.FontSize = this.FontSize;
+			ConfigManager.ApplyChanges();
+		}
+
+		public override float FontSize
+		{
+			get { return base.FontSize; }
+			set { base.FontSize=value; UpdateConfig(); }
 		}
 
 		protected override ctrlScrollableTextbox ScrollableTextbox
@@ -270,16 +299,19 @@ namespace Mesen.GUI.Debugger
 			if(_currentActiveAddress.HasValue) {
 				SelectActiveAddress(_currentActiveAddress.Value);
 			}
+			this.UpdateConfig();
 		}
 		
 		private void mnuShowLineNotes_Click(object sender, EventArgs e)
 		{
 			this.ctrlCodeViewer.ShowLineNumberNotes = this.mnuShowLineNotes.Checked;
+			this.UpdateConfig();
 		}
 
 		private void mnuShowCodeNotes_Click(object sender, EventArgs e)
 		{
 			this.ctrlCodeViewer.ShowContentNotes = this.mnuShowCodeNotes.Checked;
+			this.UpdateConfig();
 		}
 		
 		private void mnuGoToLocation_Click(object sender, EventArgs e)
@@ -299,6 +331,11 @@ namespace Mesen.GUI.Debugger
 			if(this.OnSetNextStatement != null) {
 				this.OnSetNextStatement(new AddressEventArgs() { Address = (UInt32)this.ctrlCodeViewer.CurrentLine });
 			}
+		}
+
+		private void ctrlCodeViewer_FontSizeChanged(object sender, EventArgs e)
+		{
+			UpdateConfig();
 		}
 
 		#endregion
