@@ -201,7 +201,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			if(byteCount == 0) {
 				output << std::hex << std::uppercase << memoryAddr << ":" << addr << "::" << ".db";
 			}
-			output << std::hex << " $" << std::setfill('0') << std::setw(2) << (short)source[addr];
+			output << std::hex << " $" << std::setfill('0') << std::setw(2) << (short)source[addr&mask];
 
 			byteCount++;
 			addr++;
