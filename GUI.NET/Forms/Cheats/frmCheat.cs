@@ -28,7 +28,11 @@ namespace Mesen.GUI.Forms.Cheats
 			Entity = cheat;
 
 			_gameHash = cheat.GameHash;
-			
+
+			if(string.IsNullOrWhiteSpace(cheat.GameName)) {
+				LoadGame(InteropEmu.GetROMPath());
+			}
+
 			radGameGenie.Tag = CheatType.GameGenie;
 			radProActionRocky.Tag = CheatType.ProActionRocky;
 			radCustom.Tag = CheatType.Custom;
@@ -64,15 +68,21 @@ namespace Mesen.GUI.Forms.Cheats
 			((CheatInfo)Entity).GameHash = _gameHash;
 		}
 
+		private void LoadGame(string romPath)
+		{
+			_gameHash = MD5Helper.GetMD5Hash(romPath);
+			if(_gameHash != null) {
+				((CheatInfo)Entity).GameName = Path.GetFileNameWithoutExtension(romPath);
+				txtGameName.Text = ((CheatInfo)Entity).GameName;
+			}
+		}
+
 		private void btnBrowse_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Filter = ResourceHelper.GetMessage("FilterRom");
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				_gameHash = MD5Helper.GetMD5Hash(ofd.FileName);
-				if(_gameHash != null) {
-					txtGameName.Text = Path.GetFileNameWithoutExtension(ofd.FileName);
-				}
+				LoadGame(ofd.FileName);
 			}
 		}
 
