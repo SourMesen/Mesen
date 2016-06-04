@@ -17,12 +17,15 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
-			this.mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.HexDisplay;
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				this.mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.HexDisplay;
 
-			foreach(string watchValue in ConfigManager.Config.DebugInfo.WatchValues) {
-				lstWatch.Items.Add(watchValue);
+				foreach(string watchValue in ConfigManager.Config.DebugInfo.WatchValues) {
+					lstWatch.Items.Add(watchValue);
+				}
+				UpdateWatch();
 			}
-			UpdateWatch();
 		}
 
 		protected override void OnLoad(EventArgs e)

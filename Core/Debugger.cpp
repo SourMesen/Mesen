@@ -245,6 +245,12 @@ void Debugger::PrivateProcessPpuCycle()
 		//Found a matching breakpoint, stop execution
 		Step(1);
 		SleepUntilResume();
+	} else if(_ppuStepCount > 0) {
+		_ppuStepCount--;
+		if(_ppuStepCount == 0) {
+			Step(1);
+			SleepUntilResume();
+		}
 	}
 }
 
@@ -363,18 +369,27 @@ void Debugger::GetState(DebugState *state)
 	state->PPU = _ppu->GetState();
 }
 
-void Debugger::Step(uint32_t count)
+void Debugger::PpuStep(uint32_t count)
 {
-	//Run CPU for [count] INSTRUCTIONS and before breaking again
-	_stepOut = false;
-	_stepCount = count;
+	_stepCount = -1;
+	_ppuStepCount = count;
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 }
 
+void Debugger::Step(uint32_t count)
+{
+	//Run CPU for [count] INSTRUCTIONS before breaking again
+	_stepOut = false;
+	_stepCount = count;
+	_stepOverAddr = -1;
+	_stepCycleCount = -1;
+	_ppuStepCount = -1;
+}
+
 void Debugger::StepCycles(uint32_t count)
 {
-	//Run CPU for [count] CYCLES and before breaking again
+	//Run CPU for [count] CYCLES before breaking again
 	_stepCycleCount = _cpu->GetCycleCount() + count;
 	Run();
 }
@@ -403,6 +418,7 @@ void Debugger::Run()
 {
 	//Resume execution after a breakpoint has been hit
 	_stepCount = -1;
+	_ppuStepCount = -1;
 }
 
 bool Debugger::IsCodeChanged()

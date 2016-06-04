@@ -96,6 +96,7 @@
 			this.lblChrAnalysis = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tmrCdlRatios = new System.Windows.Forms.Timer(this.components);
+			this.mnuRunPpuCycle = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -384,7 +385,8 @@
             this.mnuToggleBreakpoint,
             this.mnuDisableEnableBreakpoint,
             this.toolStripMenuItem2,
-            this.mnuRunOneFrame});
+            this.mnuRunOneFrame,
+            this.mnuRunPpuCycle});
 			this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
 			this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
 			this.debugToolStripMenuItem.Text = "Debug";
@@ -687,6 +689,14 @@
 			this.tmrCdlRatios.Interval = 300;
 			this.tmrCdlRatios.Tick += new System.EventHandler(this.tmrCdlRatios_Tick);
 			// 
+			// mnuRunPpuCycle
+			// 
+			this.mnuRunPpuCycle.Name = "mnuRunPpuCycle";
+			this.mnuRunPpuCycle.ShortcutKeys = System.Windows.Forms.Keys.F6;
+			this.mnuRunPpuCycle.Size = new System.Drawing.Size(258, 22);
+			this.mnuRunPpuCycle.Text = "Run one PPU cycle";
+			this.mnuRunPpuCycle.Click += new System.EventHandler(this.mnuRunPpuCycle_Click);
+			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -785,5 +795,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToNmiHandler;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToResetHandler;
 		private System.Windows.Forms.ToolStripMenuItem mnuTraceLogger;
+		private System.Windows.Forms.ToolStripMenuItem mnuRunPpuCycle;
 	}
 }

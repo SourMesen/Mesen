@@ -133,6 +133,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex=1)]InteropBreakpoint[] breakpoints, UInt32 length);
 		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
+		[DllImport(DLLPath)] public static extern void DebugPpuStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
 		[DllImport(DLLPath)] public static extern void DebugStepOver();

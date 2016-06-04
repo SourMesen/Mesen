@@ -30,6 +30,7 @@ extern "C"
 	DllExport void __stdcall DebugStepCycles(uint32_t count) { GetDebugger()->StepCycles(count); }
 	DllExport void __stdcall DebugStepOver() { GetDebugger()->StepOver(); }
 	DllExport void __stdcall DebugStepOut() { GetDebugger()->StepOut(); }
+	DllExport void __stdcall DebugPpuStep(uint32_t count) { GetDebugger()->PpuStep(count); }
 	DllExport bool __stdcall DebugIsCodeChanged() { return GetDebugger()->IsCodeChanged(); }
 	DllExport const char* __stdcall DebugGetCode() { return GetDebugger()->GetCode()->c_str(); }
 

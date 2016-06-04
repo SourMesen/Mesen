@@ -24,18 +24,20 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
-			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
+			if(!this.DesignMode) {
+				this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 
-			_lastCodeWindow = ctrlDebuggerCode;
+				_lastCodeWindow = ctrlDebuggerCode;
 
-			this.ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
-			this.ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
+				this.ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+				this.ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
 
-			BreakpointManager.Breakpoints.Clear();
-			BreakpointManager.Breakpoints.AddRange(ConfigManager.Config.DebugInfo.Breakpoints);
-			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
-			this.ctrlBreakpoints.RefreshList();
-			RefreshBreakpoints();
+				BreakpointManager.Breakpoints.Clear();
+				BreakpointManager.Breakpoints.AddRange(ConfigManager.Config.DebugInfo.Breakpoints);
+				BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
+				this.ctrlBreakpoints.RefreshList();
+				RefreshBreakpoints();
+			}
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -360,6 +362,11 @@ namespace Mesen.GUI.Debugger
 		private void mnuTraceLogger_Click(object sender, EventArgs e)
 		{
 			new frmTraceLogger().Show();
+		}
+
+		private void mnuRunPpuCycle_Click(object sender, EventArgs e)
+		{
+			InteropEmu.DebugPpuStep(1);
 		}
 	}
 }

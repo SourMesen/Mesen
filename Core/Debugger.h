@@ -71,6 +71,7 @@ private:
 	string _romFilepath;
 	string _outputCache;
 	atomic<int32_t> _stepCount;
+	atomic<int32_t> _ppuStepCount;
 	atomic<int32_t> _stepCycleCount;
 	atomic<uint8_t> _lastInstruction;
 	atomic<bool> _stepOut;
@@ -107,6 +108,7 @@ public:
 	void Suspend();
 	void Resume();
 
+	void PpuStep(uint32_t count = 1);
 	void Step(uint32_t count = 1);
 	void StepCycles(uint32_t cycleCount = 1);
 	void StepOver();
