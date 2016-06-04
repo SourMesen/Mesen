@@ -44,7 +44,10 @@ private:
 	shared_ptr<BaseMapper> _mapper;
 	
 	atomic<bool> _bpUpdateNeeded;
+	atomic<bool> _updatingBreakpoints;
+	atomic<bool> _stopFlag;
 	atomic<bool> _executionStopped;
+	atomic<int32_t> _suspendCount;
 	vector<Breakpoint> _newBreakpoints;
 	vector<Breakpoint> _readBreakpoints;
 	vector<Breakpoint> _writeBreakpoints;
@@ -100,6 +103,9 @@ public:
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
 
 	void GetState(DebugState *state);
+
+	void Suspend();
+	void Resume();
 
 	void Step(uint32_t count = 1);
 	void StepCycles(uint32_t cycleCount = 1);

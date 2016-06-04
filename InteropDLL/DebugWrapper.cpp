@@ -3,14 +3,9 @@
 #include "../Core/Debugger.h"
 #include "../Core/CodeDataLogger.h"
 
-static std::weak_ptr<Debugger> _debugger;
-
 shared_ptr<Debugger> GetDebugger()
 {
-	if(_debugger.expired()) {
-		_debugger = Console::GetInstance()->GetDebugger();
-	}
-	return _debugger.lock();
+	return Console::GetInstance()->GetDebugger();
 }
 
 extern "C"
@@ -18,7 +13,7 @@ extern "C"
 	//Debugger wrapper
 	DllExport void __stdcall DebugInitialize()
 	{
-		_debugger = Console::GetInstance()->GetDebugger();
+		Console::GetInstance()->GetDebugger();
 	}
 
 	DllExport void __stdcall DebugRelease()

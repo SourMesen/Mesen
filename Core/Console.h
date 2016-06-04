@@ -53,7 +53,7 @@ class Console
 		//Used to resume the emu loop after calling Pause()
 		static void Resume();
 
-		std::weak_ptr<Debugger> GetDebugger();
+		std::shared_ptr<Debugger> GetDebugger();
 		void StopDebugger();
 
 		static NesModel GetNesModel();

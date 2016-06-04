@@ -60,8 +60,17 @@ namespace Mesen.GUI.Debugger
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
-			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
-				this.BeginInvoke((MethodInvoker)(() => UpdateDebugger()));
+			switch(e.NotificationType) {
+				case InteropEmu.ConsoleNotificationType.CodeBreak:
+					this.BeginInvoke((MethodInvoker)(() => UpdateDebugger()));
+					BreakpointManager.SetBreakpoints();
+					break;
+
+				case InteropEmu.ConsoleNotificationType.GameReset:
+				case InteropEmu.ConsoleNotificationType.GameLoaded:
+					BreakpointManager.SetBreakpoints();
+					InteropEmu.DebugStep(1);
+					break;
 			}
 		}
 

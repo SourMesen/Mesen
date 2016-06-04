@@ -239,7 +239,7 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 	int left = 0;
 	int operandStack[1000];
 	resultType = EvalResultType::Numeric;
-	shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger().lock();
+	shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger();
 
 	for(size_t i = 0, len = outputQueue->size(); i < len; i++) {
 		int token = (*outputQueue)[i];

@@ -43,14 +43,27 @@ Debugger::~Debugger()
 {
 	SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romFilepath, false) + ".cdl"));
 
-	Run();	
+	_stopFlag = true;
 
 	Console::Pause();
 	Debugger::Instance = nullptr;
-	Run();
 	_breakLock.Acquire();
 	_breakLock.Release();
 	Console::Resume();
+}
+
+void Debugger::Suspend()
+{
+	_suspendCount++;
+	while(_executionStopped) {}
+}
+
+void Debugger::Resume()
+{
+	_suspendCount--;
+	if(_suspendCount < 0) {
+		_suspendCount = 0;
+	}
 }
 
 void Debugger::BreakIfDebugging()
@@ -92,7 +105,7 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 {
 	_hasBreakpoint = length > 0;
 	
-	while(_bpUpdateNeeded) { }
+	while(_updatingBreakpoints) { }
 	_newBreakpoints.clear();
 	_newBreakpoints.insert(_newBreakpoints.end(), breakpoints, breakpoints + length);	
 	_bpUpdateNeeded = true;
@@ -103,6 +116,7 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 
 void Debugger::UpdateBreakpoints()
 {
+	_updatingBreakpoints = true;
 	if(_bpUpdateNeeded) {
 		_globalBreakpoints.clear();
 		_execBreakpoints.clear();
@@ -141,6 +155,8 @@ void Debugger::UpdateBreakpoints()
 
 		_bpUpdateNeeded = false;
 	}
+
+	_updatingBreakpoints = false;
 }
 
 bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value)
@@ -265,12 +281,13 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		UpdateCallstack(addr);
 		ProcessStepConditions(addr);
 
+		breakDone = SleepUntilResume();
+
 		if(_traceLogger) {
 			DebugState state;
 			GetState(&state);
 			_traceLogger->Log(state, _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr));
 		}
-		breakDone = SleepUntilResume();
 	}
 
 	if(!breakDone && _hasBreakpoint) {
@@ -309,14 +326,14 @@ bool Debugger::SleepUntilResume()
 		stepCount = _stepCount.load();
 	}
 
-	if(stepCount == 0) {
+	if(stepCount == 0 && !_stopFlag && _suspendCount == 0) {
 		//Break
 		_breakLock.AcquireSafe();
 		_executionStopped = true;
 		SoundMixer::StopAudio();
 		MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
 		_stepOverAddr = -1;
-		while(stepCount == 0) {
+		while(stepCount == 0 && !_stopFlag && _suspendCount == 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();
 		}
