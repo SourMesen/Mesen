@@ -58,6 +58,18 @@ namespace Mesen.GUI.Config
 			}
 		}
 
+		public static string WaveFolder
+		{
+			get
+			{
+				string waveFoler = Path.Combine(ConfigManager.HomeFolder, "Wave");
+				if(!Directory.Exists(waveFoler)) {
+					Directory.CreateDirectory(waveFoler);
+				}
+				return waveFoler;
+			}
+		}
+
 		public static string SaveFolder
 		{
 			get

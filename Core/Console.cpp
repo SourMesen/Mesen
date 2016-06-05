@@ -23,6 +23,7 @@ Console::Console()
 Console::~Console()
 {
 	Movie::Stop();
+	SoundMixer::StopRecording();
 }
 
 shared_ptr<Console> Console::GetInstance()
@@ -140,6 +141,8 @@ uint32_t Console::GetCrc32()
 void Console::Reset(bool softReset)
 {
 	Movie::Stop();
+	SoundMixer::StopRecording();
+
 	if(Instance->_initialized) {
 		Console::Pause();
 		if(softReset) {
@@ -155,6 +158,7 @@ void Console::Reset(bool softReset)
 void Console::ResetComponents(bool softReset)
 {
 	Movie::Stop();
+	SoundMixer::StopRecording();
 
 	_memoryManager->Reset(softReset);
 	_ppu->Reset();
@@ -277,6 +281,7 @@ void Console::Run()
 	}
 	SoundMixer::StopAudio();
 	Movie::Stop();
+	SoundMixer::StopRecording();
 
 	VideoDecoder::GetInstance()->StopThread();
 

@@ -4,6 +4,8 @@
 #include "CPU.h"
 
 IAudioDevice* SoundMixer::AudioDevice = nullptr;
+unique_ptr<WaveRecorder> SoundMixer::_waveRecorder;
+SimpleLock SoundMixer::_waveRecorderLock;
 
 SoundMixer::SoundMixer()
 {
@@ -71,7 +73,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	size_t sampleCount = blip_read_samples(_blipBuf, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 0);
 	if(SoundMixer::AudioDevice) {
 		//Apply low pass filter/volume reduction when in background (based on options)
-		if(EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
+		if(!_waveRecorder && EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
 			if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {
 				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
 			} else if(EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
@@ -100,6 +102,14 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		}
 
 		SoundMixer::AudioDevice->PlayBuffer(soundBuffer, (uint32_t)sampleCount, _sampleRate, isStereo);
+		if(_waveRecorder) {
+			_waveRecorderLock.AcquireSafe();
+			if(_waveRecorder) {
+				if(!_waveRecorder->WriteSamples(soundBuffer, (uint32_t)sampleCount, _sampleRate, isStereo)) {
+					_waveRecorder.reset();
+				}
+			}
+		}
 	}
 
 	if(EmulationSettings::GetSampleRate() != _sampleRate) {
@@ -191,4 +201,21 @@ void SoundMixer::EndFrame(uint32_t time)
 
 	_timestamps.clear();
 	memset(_channelOutput, 0, sizeof(_channelOutput));
+}
+
+void SoundMixer::StartRecording(string filepath)
+{
+	_waveRecorderLock.AcquireSafe();
+	_waveRecorder.reset(new WaveRecorder(filepath, EmulationSettings::GetSampleRate(), EmulationSettings::GetStereoFilter() != StereoFilter::None));
+}
+
+void SoundMixer::StopRecording()
+{
+	_waveRecorderLock.AcquireSafe();
+	_waveRecorder.reset();
+}
+
+bool SoundMixer::IsRecording()
+{
+	return _waveRecorder.get() != nullptr;
 }

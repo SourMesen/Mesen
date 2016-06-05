@@ -684,6 +684,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\Record.png" />
+    <None Include="Resources\microphone.png" />
     <None Include="Resources\DownArrow.png" />
     <None Include="Resources\accept.png" />
     <Content Include="Resources\coins.png" />

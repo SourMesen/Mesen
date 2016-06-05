@@ -3,6 +3,7 @@
   <Messages>
     <Message ID="FilterAll">All Files (*.*)|*.*</Message>
     <Message ID="FilterMovie">Movie files (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
+    <Message ID="FilterWave">Wave files (*.wav)|*.wav|All Files (*.*)|*.*</Message>
     <Message ID="FilterPalette">Palette Files (*.pal)|*.pal|All Files (*.*)|*.*</Message>
     <Message ID="FilterRom">All supported formats (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|All (*.*)|*.*</Message>
     <Message ID="FilterRomIps">All supported formats (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*</Message>

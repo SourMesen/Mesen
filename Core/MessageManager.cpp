@@ -15,6 +15,7 @@ std::unordered_map<string, string> MessageManager::_enResources = {
 	{ "NetPlay", u8"Net Play" },
 	{ "SaveStates", u8"Save States" },
 	{ "ScreenshotSaved", u8"Screenshot Saved" },
+	{ "SoundRecorder", u8"Sound Recorder" },
 	{ "Test", u8"Test" },
 
 	{ "CheatApplied", u8"1 cheat applied." },
@@ -49,6 +50,8 @@ std::unordered_map<string, string> MessageManager::_enResources = {
 	{ "SaveStateSaved", u8"State #%1 saved." },
 	{ "ServerStarted", u8"Server started (Port: %1)" },
 	{ "ServerStopped", u8"Server stopped" },
+	{ "SoundRecorderStarted", u8"Recording to: %1" },
+	{ "SoundRecorderStopped", u8"Recording saved to: %1" },
 	{ "TestFileSavedTo", u8"Test file saved to: %1" },
 	{ "UnsupportedMapper", u8"Unsupported mapper, cannot load game." },
 
@@ -69,6 +72,7 @@ std::unordered_map<string, string> MessageManager::_frResources = {
 	{ "NetPlay", u8"Jeu en ligne" },
 	{ "SaveStates", u8"Sauvegardes" },
 	{ "ScreenshotSaved", u8"Capture d'écran" },
+	{ "SoundRecorder", u8"Enregistreur audio" },
 	{ "Test", u8"Test" },
 
 	{ "CheatApplied", u8"%1 code activé." },
@@ -90,7 +94,7 @@ std::unordered_map<string, string> MessageManager::_frResources = {
 	{ "MovieMissingRom", u8"Le rom (%1) correspondant au film sélectionné est introuvable." },
 	{ "MovieNewerVersion", u8"Impossible de charger un film qui a été créé avec une version plus récente de Mesen. Veuillez mettre à jour Mesen pour jouer ce film." },
 	{ "MovieIncompatibleVersion", u8"Ce film est incompatible avec votre version de Mesen." },
-	{ "MoviePlaying", u8"Film démarré: %1" },
+	{ "MoviePlaying", u8"Film démarré : %1" },
 	{ "MovieRecordingTo", u8"En cours d'enregistrement : %1" },
 	{ "MovieSaved", u8"Film sauvegardé : %1" },
 	{ "NetplayVersionMismatch", u8"%1 ne roule pas la même version de Mesen que vous et a été déconnecté automatiquement." },
@@ -101,9 +105,11 @@ std::unordered_map<string, string> MessageManager::_frResources = {
 	{ "SaveStateLoaded", u8"Sauvegarde #%1 chargée." },
 	{ "SaveStateNewerVersion", u8"Impossible de charger une sauvegarde qui a été créée avec une version plus récente de Mesen. Veuillez mettre à jour Mesen." },
 	{ "SaveStateSaved", u8"Sauvegarde #%1 sauvegardée." },
-	{ "ServerStarted", u8"Le serveur a été démarré (Port: %1)" },
+	{ "ServerStarted", u8"Le serveur a été démarré (Port : %1)" },
 	{ "ServerStopped", u8"Le serveur a été arrêté" },
-	{ "TestFileSavedTo", u8"Test sauvegardé: %1" },
+	{ "SoundRecorderStarted", u8"En cours d'enregistrement : %1" },
+	{ "SoundRecorderStopped", u8"Enregistrement audio sauvegardé : %1" },
+	{ "TestFileSavedTo", u8"Test sauvegardé : %1" },
 	{ "UnsupportedMapper", u8"Ce mapper n'est pas encore supporté - le jeu ne peut pas être démarré." },
 
 	{ "GoogleDrive", u8"Google Drive" },
@@ -123,6 +129,7 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "NetPlay", u8"ネットプレー" },
 	{ "SaveStates", u8"クイックセーブ" },
 	{ "ScreenshotSaved", u8"スクリーンショット" },
+	{ "SoundRecorder", u8"サウンドレコーダー" },
 	{ "Test", u8"テスト" },
 
 	{ "CheatApplied", u8"チートコード%1個を有効にしました。" },
@@ -157,6 +164,8 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "SaveStateSaved", u8"クイックセーブ%1をセーブしました。" },
 	{ "ServerStarted", u8"サーバは起動しました (ポート: %1)" },
 	{ "ServerStopped", u8"サーバは停止しました。" },
+	{ "SoundRecorderStarted", u8"%1に録音しています。" },
+	{ "SoundRecorderStopped", u8"録音を終了しました: %1" },
 	{ "TestFileSavedTo", u8"Test file saved to: %1" },
 	{ "UnsupportedMapper", u8"このMapperを使うゲームはロードできません。" },
 

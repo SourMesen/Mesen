@@ -185,6 +185,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -213,6 +214,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -551,6 +553,7 @@
     <ClInclude Include="VsControlManager.h" />
     <ClInclude Include="VsSystem.h" />
     <ClInclude Include="ScaleFilter.h" />
+    <ClInclude Include="WaveRecorder.h" />
     <ClInclude Include="Zapper.h" />
   </ItemGroup>
   <ItemGroup>
@@ -611,6 +614,7 @@
     <ClCompile Include="BaseVideoFilter.cpp" />
     <ClCompile Include="VsControlManager.cpp" />
     <ClCompile Include="ScaleFilter.cpp" />
+    <ClCompile Include="WaveRecorder.cpp" />
     <ClCompile Include="Zapper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -67,6 +67,9 @@
       <Control ID="mnuRecordFromStart">最初から</Control>
       <Control ID="mnuRecordFromNow">この時点から</Control>
       <Control ID="mnuStopMovie">停止</Control>
+      <Control ID="mnuSoundRecorder">サウンドレコーダー</Control>
+      <Control ID="mnuWaveRecord">録音</Control>
+      <Control ID="mnuWaveStop">停止</Control>
       <Control ID="mnuCheats">チートコード</Control>
       <Control ID="mnuTests">テスト</Control>
       <Control ID="mnuTestRun">Run...</Control>
@@ -301,6 +304,7 @@
   <Messages>
     <Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterMovie">動画 (*.mmo)|*.mmo|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterWave">WAVファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>

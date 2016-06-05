@@ -243,6 +243,16 @@ namespace Mesen.GUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Microphone {
+            get {
+                object obj = ResourceManager.GetObject("Microphone", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Movie {
             get {
                 object obj = ResourceManager.GetObject("Movie", resourceCulture);
@@ -296,6 +306,16 @@ namespace Mesen.GUI.Properties {
         internal static System.Drawing.Bitmap PreviousArrow {
             get {
                 object obj = ResourceManager.GetObject("PreviousArrow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Record {
+            get {
+                object obj = ResourceManager.GetObject("Record", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

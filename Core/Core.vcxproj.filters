@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Debugger">
       <UniqueIdentifier>{ff3c6e48-3987-41d2-8916-b588a457ff30}</UniqueIdentifier>
     </Filter>
@@ -72,11 +64,12 @@
     <Filter Include="Nes\Mappers\Taito">
       <UniqueIdentifier>{1d706c9e-639f-4da0-a7ce-50d04b2b6a7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IAudioDevice.h">
       <Filter>Nes\Interfaces</Filter>
     </ClInclude>
@@ -100,9 +93,6 @@
     </ClInclude>
     <ClInclude Include="ColorDreams.h">
       <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="Movie.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IMessageManager.h">
       <Filter>Nes\Interfaces</Filter>
@@ -149,12 +139,6 @@
     <ClInclude Include="Breakpoint.h">
       <Filter>Debugger</Filter>
     </ClInclude>
-    <ClInclude Include="SaveStateManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MessageManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IKeyManager.h">
       <Filter>Nes\Interfaces</Filter>
     </ClInclude>
@@ -185,9 +169,6 @@
     <ClInclude Include="DeltaModulationChannel.h">
       <Filter>Nes\APU</Filter>
     </ClInclude>
-    <ClInclude Include="EmulationSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BF909x.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
@@ -202,9 +183,6 @@
     </ClInclude>
     <ClInclude Include="IRenderingDevice.h">
       <Filter>Nes\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="AutoRomTest.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CpRom.h">
       <Filter>Nes\Mappers</Filter>
@@ -314,14 +292,8 @@
     <ClInclude Include="BaseMapper.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
-    <ClInclude Include="TxSRom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="VRC6.h">
       <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="VRC1.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VrcIrq.h">
       <Filter>Nes\Mappers</Filter>
@@ -590,13 +562,40 @@
     <ClInclude Include="Snapshotable.h">
       <Filter>Nes</Filter>
     </ClInclude>
+    <ClInclude Include="AutoRomTest.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="EmulationSettings.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageManager.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Movie.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveStateManager.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="VRC1.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="TxSRom.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveRecorder.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="Movie.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="Debugger.cpp">
       <Filter>Debugger</Filter>
@@ -611,19 +610,19 @@
       <Filter>Debugger</Filter>
     </ClCompile>
     <ClCompile Include="SaveStateManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="MessageManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="EmulationSettings.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="CodeDataLogger.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
     <ClCompile Include="AutoRomTest.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="BaseVideoFilter.cpp">
       <Filter>VideoDecoder</Filter>
@@ -738,6 +737,9 @@
     </ClCompile>
     <ClCompile Include="Snapshotable.cpp">
       <Filter>Nes</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveRecorder.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -516,6 +516,10 @@ namespace Mesen.GUI.Forms
 					mnuRecordFromStart.Enabled = _emuThread != null && !isNetPlayClient && !moviePlaying && !movieRecording;
 					mnuRecordFromNow.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
 
+					bool waveRecording = InteropEmu.WaveIsRecording();
+					mnuWaveRecord.Enabled = _emuThread != null && !waveRecording;
+					mnuWaveStop.Enabled = _emuThread != null && waveRecording;
+
 					bool testRecording = InteropEmu.RomTestRecording();
 					mnuTestRun.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuTestStopRecording.Enabled = _emuThread != null && testRecording;
@@ -780,6 +784,23 @@ namespace Mesen.GUI.Forms
 		private void mnuRecordFromNow_Click(object sender, EventArgs e)
 		{
 			RecordMovie(false);
+		}
+
+
+		private void mnuWaveRecord_Click(object sender, EventArgs e)
+		{
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Filter = ResourceHelper.GetMessage("FilterWave");
+			sfd.InitialDirectory = ConfigManager.WaveFolder;
+			sfd.FileName = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".wav";
+			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				InteropEmu.WaveRecord(sfd.FileName);
+			}
+		}
+
+		private void mnuWaveStop_Click(object sender, EventArgs e)
+		{
+			InteropEmu.WaveStop();
 		}
 
 		private void mnuTestRun_Click(object sender, EventArgs e)

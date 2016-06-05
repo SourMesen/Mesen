@@ -15,6 +15,7 @@
 #include "../Core/AutoRomTest.h"
 #include "../Core/FDS.h"
 #include "../Core/VsControlManager.h"
+#include "../Core/SoundMixer.h"
 
 NES::Renderer *_renderer = nullptr;
 SoundManager *_soundManager = nullptr;
@@ -204,6 +205,10 @@ namespace InteropEmu {
 		DllExport void __stdcall MovieStop() { Movie::Stop(); }
 		DllExport bool __stdcall MoviePlaying() { return Movie::Playing(); }
 		DllExport bool __stdcall MovieRecording() { return Movie::Recording(); }
+
+		DllExport void __stdcall WaveRecord(char* filename) { SoundMixer::StartRecording(filename); }
+		DllExport void __stdcall WaveStop() { SoundMixer::StopRecording(); }
+		DllExport bool __stdcall WaveIsRecording() { return SoundMixer::IsRecording(); }
 
 		DllExport int32_t __stdcall RomTestRun(char* filename)
 		{

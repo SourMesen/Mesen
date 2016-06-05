@@ -3,11 +3,13 @@
 #include "EmulationSettings.h"
 #include "../Utilities/LowPassFilter.h"
 #include "../Utilities/blip_buf.h"
+#include "../Utilities/SimpleLock.h"
 #include "IAudioDevice.h"
 #include "Snapshotable.h"
 #include "StereoPanningFilter.h"
 #include "StereoDelayFilter.h"
 #include "ReverbFilter.h"
+#include "WaveRecorder.h"
 
 class SoundMixer : public Snapshotable
 {
@@ -16,12 +18,15 @@ public:
 	static const uint32_t BitsPerSample = 16;
 
 private:
+	static unique_ptr<WaveRecorder> _waveRecorder;
+	static SimpleLock _waveRecorderLock;
+
 	static IAudioDevice* AudioDevice;
 	static const uint32_t MaxSampleRate = 48000;
 	static const uint32_t MaxSamplesPerFrame = MaxSampleRate / 60;
 	static const uint32_t MaxChannelCount = 6;
 	static const uint32_t ExpansionAudioIndex = MaxChannelCount - 1;
-
+	
 	AudioChannel _expansionAudioType;
 	LowPassFilter _lowPassFilter;
 	StereoPanningFilter _stereoPanning;
@@ -63,6 +68,10 @@ public:
 	void SetExpansionAudioType(AudioChannel channel);
 	void AddExpansionAudioDelta(uint32_t time, int8_t delta);
 	
+	static void StartRecording(string filepath);
+	static void StopRecording();
+	static bool IsRecording();
+
 	static void StopAudio(bool clearBuffer = false);
 	static void RegisterAudioDevice(IAudioDevice *audioDevice);
 };

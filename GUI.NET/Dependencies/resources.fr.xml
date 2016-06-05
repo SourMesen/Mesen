@@ -67,6 +67,9 @@
       <Control ID="mnuRecordFromStart">Du début du jeu</Control>
       <Control ID="mnuRecordFromNow">De maintenant</Control>
       <Control ID="mnuStopMovie">Arrêter</Control>
+      <Control ID="mnuSoundRecorder">Enregistreur audio</Control>
+      <Control ID="mnuWaveRecord">Enregistrer...</Control>
+      <Control ID="mnuWaveStop">Arrêter</Control>
       <Control ID="mnuCheats">Codes</Control>
       <Control ID="mnuTests">Tests</Control>
       <Control ID="mnuTestRun">Run...</Control>
@@ -307,11 +310,12 @@
   </Forms>
   <Messages>
     <Message ID="FilterAll">Tous les fichiers (*.*)|*.*</Message>
-    <Message ID="FilterMovie">Films (*.mmo)|*.mmo|All (*.*)|*.*</Message>
-    <Message ID="FilterPalette">Fichier de palette (*.pal)|*.pal|All Files (*.*)|*.*</Message>
-    <Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|Roms de NES (*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|All (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|Roms de NES(*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|Fichiers IPS (*.ips)|*.IPS|All (*.*)|*.*</Message>
-    <Message ID="FilterTest">Fichiers de test (*.mtp)|*.mtp|All (*.*)|*.*</Message>
+    <Message ID="FilterMovie">Films (*.mmo)|*.mmo|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterWave">Fichiers wave (*.wav)|*.wav|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterPalette">Fichier de palette (*.pal)|*.pal|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|Roms de NES (*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|Roms de NES(*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|Fichiers IPS (*.ips)|*.IPS|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterTest">Fichiers de test (*.mtp)|*.mtp|Tous les fichiers (*.*)|*.*</Message>
 
     <Message ID="Resume">Continuer</Message>
     <Message ID="Pause">Pause</Message>
