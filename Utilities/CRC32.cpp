@@ -14,7 +14,7 @@ uint32_t CRC32::GetCRC(uint8_t *buffer, std::streamoff length)
 {
 	CRC32 crc;
 	crc.AddData(buffer, length);
-	return crc._crc;
+	return ~(crc._crc);
 }
 
 uint32_t CRC32::GetCRC(string filename)
@@ -36,5 +36,5 @@ uint32_t CRC32::GetCRC(string filename)
 
 		delete[] buffer;
 	}
-	return crc;
+	return ~crc;
 }
