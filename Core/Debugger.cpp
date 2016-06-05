@@ -205,7 +205,7 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 					GetState(&_debugState);
 					needState = false;
 				}
-				if(expEval.Evaluate(condition, _debugState, value) != 0) {
+				if(expEval.Evaluate(condition, _debugState, value, absoluteAddr) != 0) {
 					return true;
 				}
 			}

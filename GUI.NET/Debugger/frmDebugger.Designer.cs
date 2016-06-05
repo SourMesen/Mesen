@@ -61,8 +61,9 @@
 			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDisableEnableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuRunOneFrame = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunPpuCycle = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRunScanline = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRunOneFrame = new System.Windows.Forms.ToolStripMenuItem();
 			this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,7 +100,7 @@
 			this.lblChrAnalysis = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tmrCdlRatios = new System.Windows.Forms.Timer(this.components);
-			this.mnuRunScanline = new System.Windows.Forms.ToolStripMenuItem();
+			this.picWatchHelp = new System.Windows.Forms.PictureBox();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -112,6 +113,7 @@
 			this.grpCallstack.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.statusStrip.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picWatchHelp)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// splitContainer
@@ -230,6 +232,7 @@
 			// 
 			// grpWatch
 			// 
+			this.grpWatch.Controls.Add(this.picWatchHelp);
 			this.grpWatch.Controls.Add(this.ctrlWatch);
 			this.grpWatch.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpWatch.Location = new System.Drawing.Point(3, 3);
@@ -409,14 +412,6 @@
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
 			this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
 			// 
-			// mnuRunOneFrame
-			// 
-			this.mnuRunOneFrame.Name = "mnuRunOneFrame";
-			this.mnuRunOneFrame.ShortcutKeys = System.Windows.Forms.Keys.F8;
-			this.mnuRunOneFrame.Size = new System.Drawing.Size(258, 22);
-			this.mnuRunOneFrame.Text = "Run one frame";
-			this.mnuRunOneFrame.Click += new System.EventHandler(this.mnuRunOneFrame_Click);
-			// 
 			// mnuRunPpuCycle
 			// 
 			this.mnuRunPpuCycle.Name = "mnuRunPpuCycle";
@@ -424,6 +419,22 @@
 			this.mnuRunPpuCycle.Size = new System.Drawing.Size(258, 22);
 			this.mnuRunPpuCycle.Text = "Run one PPU cycle";
 			this.mnuRunPpuCycle.Click += new System.EventHandler(this.mnuRunPpuCycle_Click);
+			// 
+			// mnuRunScanline
+			// 
+			this.mnuRunScanline.Name = "mnuRunScanline";
+			this.mnuRunScanline.ShortcutKeys = System.Windows.Forms.Keys.F7;
+			this.mnuRunScanline.Size = new System.Drawing.Size(258, 22);
+			this.mnuRunScanline.Text = "Run one scanline";
+			this.mnuRunScanline.Click += new System.EventHandler(this.mnuRunScanline_Click);
+			// 
+			// mnuRunOneFrame
+			// 
+			this.mnuRunOneFrame.Name = "mnuRunOneFrame";
+			this.mnuRunOneFrame.ShortcutKeys = System.Windows.Forms.Keys.F8;
+			this.mnuRunOneFrame.Size = new System.Drawing.Size(258, 22);
+			this.mnuRunOneFrame.Text = "Run one frame";
+			this.mnuRunOneFrame.Click += new System.EventHandler(this.mnuRunOneFrame_Click);
 			// 
 			// searchToolStripMenuItem
 			// 
@@ -716,13 +727,15 @@
 			this.tmrCdlRatios.Interval = 300;
 			this.tmrCdlRatios.Tick += new System.EventHandler(this.tmrCdlRatios_Tick);
 			// 
-			// mnuRunScanline
+			// picWatchHelp
 			// 
-			this.mnuRunScanline.Name = "mnuRunScanline";
-			this.mnuRunScanline.ShortcutKeys = System.Windows.Forms.Keys.F7;
-			this.mnuRunScanline.Size = new System.Drawing.Size(258, 22);
-			this.mnuRunScanline.Text = "Run one scanline";
-			this.mnuRunScanline.Click += new System.EventHandler(this.mnuRunScanline_Click);
+			this.picWatchHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picWatchHelp.Location = new System.Drawing.Point(43, 0);
+			this.picWatchHelp.Name = "picWatchHelp";
+			this.picWatchHelp.Size = new System.Drawing.Size(14, 14);
+			this.picWatchHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.picWatchHelp.TabIndex = 1;
+			this.picWatchHelp.TabStop = false;
 			// 
 			// frmDebugger
 			// 
@@ -751,6 +764,7 @@
 			this.menuStrip.PerformLayout();
 			this.statusStrip.ResumeLayout(false);
 			this.statusStrip.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picWatchHelp)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -826,5 +840,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
 		private System.Windows.Forms.ToolStripMenuItem mnuPpuPartialDraw;
 		private System.Windows.Forms.ToolStripMenuItem mnuRunScanline;
+		private System.Windows.Forms.PictureBox picWatchHelp;
 	}
 }

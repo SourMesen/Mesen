@@ -35,8 +35,11 @@ enum EvalOperators
 	BinaryNot = 2000000052,
 	LogicalNot = 2000000053,
 
+	//Used to read ram address
+	Bracket = 2000000054,
+
 	//Special value, not used as an operator
-	Parenthesis = 2000000100
+	Parenthesis = 2000000100,
 };
 
 enum EvalValues
@@ -51,8 +54,8 @@ enum EvalValues
 	Nmi = 2000000107,
 	Irq = 2000000108,
 	Value = 2000000109,
-
-	MemoryAddress = 2000100000
+	Address = 2000000110,
+	AbsoluteAddress = 2000000111,
 };
 
 enum EvalResultType
@@ -89,13 +92,13 @@ private:
 	bool CheckSpecialTokens(string expression, size_t &pos, string &output);
 	string GetNextToken(string expression, size_t &pos);	
 	void ToRpn(string expression, vector<int> &outputQueue);
-	int32_t EvaluateExpression(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue);
-	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue);
+	int32_t EvaluateExpression(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr);
+	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr);
 
 public:
 	ExpressionEvaluator();
 
-	int32_t Evaluate(string expression, DebugState &state, int16_t memoryValue = 0);
-	int32_t Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue = 0);
+	int32_t Evaluate(string expression, DebugState &state, int16_t memoryValue = 0, uint32_t memoryAddr = 0);
+	int32_t Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue = 0, uint32_t memoryAddr = 0);
 	bool Validate(string expression);
 };

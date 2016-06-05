@@ -38,6 +38,22 @@ namespace Mesen.GUI.Debugger
 				BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
 				this.ctrlBreakpoints.RefreshList();
 				RefreshBreakpoints();
+
+				this.toolTip.SetToolTip(this.picWatchHelp, 
+					"Most expressions/operators are accepted (C++ syntax)." + Environment.NewLine + 
+					"Note: Use the $ prefix to denote hexadecimal values." + Environment.NewLine + Environment.NewLine + 
+					"A/X/Y/PS/SP: Value of registers" + Environment.NewLine +
+					"Irq/Nmi: True if the Irq/Nmi flags are set" + Environment.NewLine + 
+					"Cycle/Scanline: Current cycle (0-340)/scanline(-1 to 260) of the PPU" + Environment.NewLine + 
+					"Value: Current value being read/written from/to memory" + Environment.NewLine +
+					"[<address>]: Value at address (CPU)" + Environment.NewLine + Environment.NewLine + 
+					
+					"Examples:" + Environment.NewLine + 
+					"a == 10 || x == $23" + Environment.NewLine + 
+					"scanline == 10 && (cycle >= 55 && cycle <= 100)" + Environment.NewLine + 
+					"x == [$150] || y == [10]" + Environment.NewLine + 
+					"[[$15] + y]   -> Reads the value at address $15, adds Y to it and reads the value at the resulting address."
+				);
 			}
 		}
 
