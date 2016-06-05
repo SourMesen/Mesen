@@ -202,9 +202,20 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugStepOver();
 		}
 
+
+		private void mnuRunPpuCycle_Click(object sender, EventArgs e)
+		{
+			InteropEmu.DebugPpuStep(1);
+		}
+
+		private void mnuRunScanline_Click(object sender, EventArgs e)
+		{
+			InteropEmu.DebugPpuStep(341);
+		}
+
 		private void mnuRunOneFrame_Click(object sender, EventArgs e)
 		{
-			InteropEmu.DebugStepCycles(29780);
+			InteropEmu.DebugPpuStep(89341);
 		}
 
 		private void ctrlDebuggerCode_OnWatchAdded(AddressEventArgs args)
@@ -364,11 +375,6 @@ namespace Mesen.GUI.Debugger
 		private void mnuTraceLogger_Click(object sender, EventArgs e)
 		{
 			new frmTraceLogger().Show();
-		}
-
-		private void mnuRunPpuCycle_Click(object sender, EventArgs e)
-		{
-			InteropEmu.DebugPpuStep(1);
 		}
 
 		private void mnuPpuPartialDraw_Click(object sender, EventArgs e)
