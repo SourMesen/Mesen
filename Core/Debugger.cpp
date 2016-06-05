@@ -30,6 +30,8 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 
+	_flags = 0;
+
 	_hasBreakpoint = false;
 	_bpUpdateNeeded = false;
 	_executionStopped = false;
@@ -64,6 +66,21 @@ void Debugger::Resume()
 	if(_suspendCount < 0) {
 		_suspendCount = 0;
 	}
+}
+
+void Debugger::SetFlags(uint32_t flags)
+{
+	_flags = flags;
+}
+
+bool Debugger::CheckFlag(DebuggerFlags flag)
+{
+	return (_flags & (uint32_t)flag) == (uint32_t)flag;
+}
+
+bool Debugger::IsEnabled()
+{
+	return Debugger::Instance != nullptr;
 }
 
 void Debugger::BreakIfDebugging()
@@ -339,6 +356,9 @@ bool Debugger::SleepUntilResume()
 		SoundMixer::StopAudio();
 		MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
 		_stepOverAddr = -1;
+		if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
+			_ppu->DebugSendFrame();
+		}
 		while(stepCount == 0 && !_stopFlag && _suspendCount == 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();

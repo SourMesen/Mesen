@@ -26,6 +26,7 @@ namespace Mesen.GUI.Config
 		public bool HexDisplay = true;
 
 		public bool PpuAutoRefresh = true;
+		public bool PpuPartialDraw = false;
 
 		public bool RamAutoRefresh = true;
 		public int RamColumnCount = 2;

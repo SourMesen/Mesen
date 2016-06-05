@@ -30,6 +30,11 @@ enum class DebugMemoryType
 	ChrRam = 7,
 };
 
+enum class DebuggerFlags
+{
+	PpuPartialDraw = 1
+};
+
 class Debugger
 {
 private:
@@ -68,6 +73,8 @@ private:
 
 	uint16_t *_currentReadAddr; //Used to alter the executing address via "Set Next Statement"
 
+	uint32_t _flags;
+
 	string _romFilepath;
 	string _outputCache;
 	atomic<int32_t> _stepCount;
@@ -93,6 +100,9 @@ public:
 	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
 	~Debugger();
 
+	void SetFlags(uint32_t flags);
+	bool CheckFlag(DebuggerFlags flag);
+	
 	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
 
 	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
@@ -138,5 +148,6 @@ public:
 	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
 	static void ProcessPpuCycle();
 
+	static bool IsEnabled();
 	static void BreakIfDebugging();
 };

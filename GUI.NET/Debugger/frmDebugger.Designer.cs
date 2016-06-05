@@ -51,12 +51,6 @@
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuView = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSplitView = new System.Windows.Forms.ToolStripMenuItem();
-			this.fontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuContinue = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreak = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,6 +62,7 @@
 			this.mnuDisableEnableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRunOneFrame = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRunPpuCycle = new System.Windows.Forms.ToolStripMenuItem();
 			this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +72,14 @@
 			this.mnuGoToIrqHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToNmiHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToResetHandler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSplitView = new System.Windows.Forms.ToolStripMenuItem();
+			this.fontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuPpuPartialDraw = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,7 +99,6 @@
 			this.lblChrAnalysis = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tmrCdlRatios = new System.Windows.Forms.Timer(this.components);
-			this.mnuRunPpuCycle = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -288,9 +290,9 @@
 			// 
 			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.mnuView,
             this.debugToolStripMenuItem,
             this.searchToolStripMenuItem,
+            this.mnuOptions,
             this.toolsToolStripMenuItem});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
@@ -318,60 +320,6 @@
 			this.mnuClose.Size = new System.Drawing.Size(103, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
-			// 
-			// mnuView
-			// 
-			this.mnuView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuSplitView,
-            this.fontSizeToolStripMenuItem});
-			this.mnuView.Name = "mnuView";
-			this.mnuView.Size = new System.Drawing.Size(44, 20);
-			this.mnuView.Text = "View";
-			// 
-			// mnuSplitView
-			// 
-			this.mnuSplitView.CheckOnClick = true;
-			this.mnuSplitView.Name = "mnuSplitView";
-			this.mnuSplitView.Size = new System.Drawing.Size(125, 22);
-			this.mnuSplitView.Text = "Split View";
-			this.mnuSplitView.Click += new System.EventHandler(this.mnuSplitView_Click);
-			// 
-			// fontSizeToolStripMenuItem
-			// 
-			this.fontSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuIncreaseFontSize,
-            this.mnuDecreaseFontSize,
-            this.mnuResetFontSize});
-			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
-			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
-			this.fontSizeToolStripMenuItem.Text = "Text Size";
-			// 
-			// mnuIncreaseFontSize
-			// 
-			this.mnuIncreaseFontSize.Name = "mnuIncreaseFontSize";
-			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "Ctrl++";
-			this.mnuIncreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemplus)));
-			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(197, 22);
-			this.mnuIncreaseFontSize.Text = "Increase";
-			this.mnuIncreaseFontSize.Click += new System.EventHandler(this.mnuIncreaseFontSize_Click);
-			// 
-			// mnuDecreaseFontSize
-			// 
-			this.mnuDecreaseFontSize.Name = "mnuDecreaseFontSize";
-			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "Ctrl+-";
-			this.mnuDecreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemMinus)));
-			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(197, 22);
-			this.mnuDecreaseFontSize.Text = "Decrease";
-			this.mnuDecreaseFontSize.Click += new System.EventHandler(this.mnuDecreaseFontSize_Click);
-			// 
-			// mnuResetFontSize
-			// 
-			this.mnuResetFontSize.Name = "mnuResetFontSize";
-			this.mnuResetFontSize.ShortcutKeyDisplayString = "Ctrl+0";
-			this.mnuResetFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
-			this.mnuResetFontSize.Size = new System.Drawing.Size(197, 22);
-			this.mnuResetFontSize.Text = "Reset to Default";
-			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
 			// 
 			// debugToolStripMenuItem
 			// 
@@ -467,6 +415,14 @@
 			this.mnuRunOneFrame.Text = "Run one frame";
 			this.mnuRunOneFrame.Click += new System.EventHandler(this.mnuRunOneFrame_Click);
 			// 
+			// mnuRunPpuCycle
+			// 
+			this.mnuRunPpuCycle.Name = "mnuRunPpuCycle";
+			this.mnuRunPpuCycle.ShortcutKeys = System.Windows.Forms.Keys.F6;
+			this.mnuRunPpuCycle.Size = new System.Drawing.Size(258, 22);
+			this.mnuRunPpuCycle.Text = "Run one PPU cycle";
+			this.mnuRunPpuCycle.Click += new System.EventHandler(this.mnuRunPpuCycle_Click);
+			// 
 			// searchToolStripMenuItem
 			// 
 			this.searchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -541,6 +497,75 @@
 			this.mnuGoToResetHandler.Size = new System.Drawing.Size(158, 22);
 			this.mnuGoToResetHandler.Text = "Reset Handler";
 			this.mnuGoToResetHandler.Click += new System.EventHandler(this.mnuGoToResetHandler_Click);
+			// 
+			// mnuOptions
+			// 
+			this.mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuSplitView,
+            this.fontSizeToolStripMenuItem,
+            this.toolStripMenuItem5,
+            this.mnuPpuPartialDraw});
+			this.mnuOptions.Name = "mnuOptions";
+			this.mnuOptions.Size = new System.Drawing.Size(61, 20);
+			this.mnuOptions.Text = "Options";
+			// 
+			// mnuSplitView
+			// 
+			this.mnuSplitView.CheckOnClick = true;
+			this.mnuSplitView.Name = "mnuSplitView";
+			this.mnuSplitView.Size = new System.Drawing.Size(171, 22);
+			this.mnuSplitView.Text = "Split View";
+			this.mnuSplitView.Click += new System.EventHandler(this.mnuSplitView_Click);
+			// 
+			// fontSizeToolStripMenuItem
+			// 
+			this.fontSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuIncreaseFontSize,
+            this.mnuDecreaseFontSize,
+            this.mnuResetFontSize});
+			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+			this.fontSizeToolStripMenuItem.Text = "Text Size";
+			// 
+			// mnuIncreaseFontSize
+			// 
+			this.mnuIncreaseFontSize.Name = "mnuIncreaseFontSize";
+			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "Ctrl++";
+			this.mnuIncreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemplus)));
+			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuIncreaseFontSize.Text = "Increase";
+			this.mnuIncreaseFontSize.Click += new System.EventHandler(this.mnuIncreaseFontSize_Click);
+			// 
+			// mnuDecreaseFontSize
+			// 
+			this.mnuDecreaseFontSize.Name = "mnuDecreaseFontSize";
+			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "Ctrl+-";
+			this.mnuDecreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemMinus)));
+			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuDecreaseFontSize.Text = "Decrease";
+			this.mnuDecreaseFontSize.Click += new System.EventHandler(this.mnuDecreaseFontSize_Click);
+			// 
+			// mnuResetFontSize
+			// 
+			this.mnuResetFontSize.Name = "mnuResetFontSize";
+			this.mnuResetFontSize.ShortcutKeyDisplayString = "Ctrl+0";
+			this.mnuResetFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
+			this.mnuResetFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuResetFontSize.Text = "Reset to Default";
+			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
+			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(168, 6);
+			// 
+			// mnuPpuPartialDraw
+			// 
+			this.mnuPpuPartialDraw.CheckOnClick = true;
+			this.mnuPpuPartialDraw.Name = "mnuPpuPartialDraw";
+			this.mnuPpuPartialDraw.Size = new System.Drawing.Size(171, 22);
+			this.mnuPpuPartialDraw.Text = "Draw partial frame";
+			this.mnuPpuPartialDraw.Click += new System.EventHandler(this.mnuPpuPartialDraw_Click);
 			// 
 			// toolsToolStripMenuItem
 			// 
@@ -689,14 +714,6 @@
 			this.tmrCdlRatios.Interval = 300;
 			this.tmrCdlRatios.Tick += new System.EventHandler(this.tmrCdlRatios_Tick);
 			// 
-			// mnuRunPpuCycle
-			// 
-			this.mnuRunPpuCycle.Name = "mnuRunPpuCycle";
-			this.mnuRunPpuCycle.ShortcutKeys = System.Windows.Forms.Keys.F6;
-			this.mnuRunPpuCycle.Size = new System.Drawing.Size(258, 22);
-			this.mnuRunPpuCycle.Text = "Run one PPU cycle";
-			this.mnuRunPpuCycle.Click += new System.EventHandler(this.mnuRunPpuCycle_Click);
-			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -760,7 +777,7 @@
 		private ctrlConsoleStatus ctrlConsoleStatus;
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;
 		private ctrlDebuggerCode ctrlDebuggerCodeSplit;
-		private System.Windows.Forms.ToolStripMenuItem mnuView;
+		private System.Windows.Forms.ToolStripMenuItem mnuOptions;
 		private System.Windows.Forms.ToolStripMenuItem mnuSplitView;
 		private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuPpuViewer;
@@ -796,5 +813,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToResetHandler;
 		private System.Windows.Forms.ToolStripMenuItem mnuTraceLogger;
 		private System.Windows.Forms.ToolStripMenuItem mnuRunPpuCycle;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+		private System.Windows.Forms.ToolStripMenuItem mnuPpuPartialDraw;
 	}
 }

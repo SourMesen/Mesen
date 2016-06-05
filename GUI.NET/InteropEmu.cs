@@ -130,6 +130,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)] public static extern void DebugRelease();
+		[DllImport(DLLPath)] public static extern void DebugSetFlags(DebuggerFlags flags);
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex=1)]InteropBreakpoint[] breakpoints, UInt32 length);
 		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
@@ -574,7 +575,14 @@ namespace Mesen.GUI
 
 		InBackground = 0x40000000,
 	}
-	
+
+	[Flags]
+	public enum DebuggerFlags
+	{
+		None = 0,
+		PpuPartialDraw = 1
+	}
+
 	public struct InteropBreakpoint
 	{
 		public BreakpointType Type;

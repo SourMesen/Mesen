@@ -21,6 +21,8 @@ extern "C"
 		Console::GetInstance()->StopDebugger();
 	}
 
+	DllExport void __stdcall DebugSetFlags(uint32_t flags) { GetDebugger()->SetFlags(flags); }
+
 	DllExport void __stdcall DebugGetState(DebugState *state) { GetDebugger()->GetState(state); }
 
 	DllExport void __stdcall DebugSetBreakpoints(Breakpoint breakpoints[], uint32_t length) { GetDebugger()->SetBreakpoints(breakpoints, length); }

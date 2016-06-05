@@ -26,6 +26,7 @@ namespace Mesen.GUI.Debugger
 
 			if(!this.DesignMode) {
 				this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
+				this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
 
 				_lastCodeWindow = ctrlDebuggerCode;
 
@@ -75,6 +76,7 @@ namespace Mesen.GUI.Debugger
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
 					this.BeginInvoke((MethodInvoker)(() => UpdateDebugger()));
 					BreakpointManager.SetBreakpoints();
+					InteropEmu.DebugSetFlags(mnuPpuPartialDraw.Checked ? DebuggerFlags.PpuPartialDraw : DebuggerFlags.None);
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameReset:
@@ -367,6 +369,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuRunPpuCycle_Click(object sender, EventArgs e)
 		{
 			InteropEmu.DebugPpuStep(1);
+		}
+
+		private void mnuPpuPartialDraw_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.PpuPartialDraw = mnuPpuPartialDraw.Checked;
+			ConfigManager.ApplyChanges();
 		}
 	}
 }
