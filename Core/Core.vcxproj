@@ -583,6 +583,7 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameServerConnection.cpp" />
     <ClCompile Include="HdVideoFilter.cpp" />
+    <ClCompile Include="iNesLoader.cpp" />
     <ClCompile Include="NtscFilter.cpp" />
     <ClCompile Include="ReverbFilter.cpp" />
     <ClCompile Include="RomLoader.cpp" />

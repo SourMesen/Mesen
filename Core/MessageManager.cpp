@@ -31,7 +31,7 @@ std::unordered_map<string, string> MessageManager::_enResources = {
 	{ "EmulationMaximumSpeed", u8"Maximum speed" },
 	{ "EmulationSpeedPercent", u8"%1%" },
 	{ "GameCrash", u8"Game has crashed (%1)" },
-	{ "Mapper", u8"Mapper: %1" },
+	{ "Mapper", u8"Mapper: %1, SubMapper: %2" },
 	{ "MovieEnded", u8"Movie ended." },
 	{ "MovieInvalid", u8"Invalid movie file." },
 	{ "MovieMissingRom", u8"Missing ROM required (%1) to play movie." },
@@ -88,7 +88,7 @@ std::unordered_map<string, string> MessageManager::_frResources = {
 	{ "EmulationMaximumSpeed", u8"Vitesse maximale" },
 	{ "EmulationSpeedPercent", u8"%1%" },
 	{ "GameCrash", u8"Le jeu a planté (%1)" },
-	{ "Mapper", u8"Mapper : %1" },
+	{ "Mapper", u8"Mapper : %1, SubMapper : %2" },
 	{ "MovieEnded", u8"Fin du film." },
 	{ "MovieInvalid", u8"Fichier de film invalide." },
 	{ "MovieMissingRom", u8"Le rom (%1) correspondant au film sélectionné est introuvable." },
@@ -145,7 +145,7 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "EmulationMaximumSpeed", u8"最高速度" },
 	{ "EmulationSpeedPercent", u8"%1%" },
 	{ "GameCrash", u8"ゲームは停止しました (%1)" },
-	{ "Mapper", u8"Mapper: %1" },
+	{ "Mapper", u8"Mapper: %1, SubMapper: %2" },
 	{ "MovieEnded", u8"動画の再生が終了しました。" },
 	{ "MovieInvalid", u8"動画データの読み込みに失敗しました。" },
 	{ "MovieMissingRom", u8"動画に必要なゲームファイルを見つかりませんでした。(%1)" },
@@ -200,7 +200,7 @@ string MessageManager::Localize(string key)
 	return "";
 }
 
-void MessageManager::DisplayMessage(string title, string message, string param1)
+void MessageManager::DisplayMessage(string title, string message, string param1, string param2)
 {
 	if(MessageManager::_messageManager) {
 		std::unordered_map<string, string> *resources = nullptr;
@@ -219,6 +219,11 @@ void MessageManager::DisplayMessage(string title, string message, string param1)
 				size_t startPos = message.find(u8"%1");
 				if(startPos != std::string::npos) {
 					message.replace(startPos, 2, param1);
+				}
+
+				startPos = message.find(u8"%2");
+				if(startPos != std::string::npos) {
+					message.replace(startPos, 2, param2);
 				}
 			}
 		}

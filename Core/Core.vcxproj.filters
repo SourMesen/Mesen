@@ -741,5 +741,8 @@
     <ClCompile Include="WaveRecorder.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
+    <ClCompile Include="iNesLoader.cpp">
+      <Filter>Nes\RomLoader</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

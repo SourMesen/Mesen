@@ -19,7 +19,7 @@ public:
 	static string Localize(string key);
 
 	static void RegisterMessageManager(IMessageManager* messageManager);
-	static void DisplayMessage(string title, string message, string param1 = "");
+	static void DisplayMessage(string title, string message, string param1 = "", string param2 = "");
 	static void DisplayToast(string title, string message, uint8_t* iconData, uint32_t iconSize);
 
 	static void RegisterNotificationListener(INotificationListener* notificationListener);

@@ -96,7 +96,7 @@
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
 #ifdef _DEBUG
-	MessageManager::DisplayMessage("GameInfo", "Mapper", std::to_string(romData.MapperID));
+	MessageManager::DisplayMessage("GameInfo", "Mapper", std::to_string(romData.MapperID), std::to_string(romData.SubMapperID));
 #endif
 
 	switch(romData.MapperID) {
