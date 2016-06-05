@@ -28,16 +28,22 @@
 		private void InitializeComponent()
 		{
 			this.lstCallstack = new System.Windows.Forms.ListView();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colFunctionAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colStackAddr = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colRomOffset = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.SuspendLayout();
 			// 
 			// lstCallstack
 			// 
 			this.lstCallstack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
+            this.colFunctionAddress,
+            this.colStackAddr,
+            this.colRomOffset});
 			this.lstCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lstCallstack.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lstCallstack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.lstCallstack.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lstCallstack.FullRowSelect = true;
+			this.lstCallstack.GridLines = true;
+			this.lstCallstack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.lstCallstack.Location = new System.Drawing.Point(0, 0);
 			this.lstCallstack.MultiSelect = false;
 			this.lstCallstack.Name = "lstCallstack";
@@ -47,9 +53,20 @@
 			this.lstCallstack.View = System.Windows.Forms.View.Details;
 			this.lstCallstack.DoubleClick += new System.EventHandler(this.lstCallstack_DoubleClick);
 			// 
-			// columnHeader1
+			// colFunctionAddress
 			// 
-			this.columnHeader1.Width = 256;
+			this.colFunctionAddress.Text = "Subroutine Addr";
+			this.colFunctionAddress.Width = 100;
+			// 
+			// colStackAddr
+			// 
+			this.colStackAddr.Text = "PC Addr";
+			this.colStackAddr.Width = 79;
+			// 
+			// colRomOffset
+			// 
+			this.colRomOffset.Text = "ROM Addr.";
+			this.colRomOffset.Width = 110;
 			// 
 			// ctrlCallstack
 			// 
@@ -65,7 +82,8 @@
 		#endregion
 
 		private System.Windows.Forms.ListView lstCallstack;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
-
+		private System.Windows.Forms.ColumnHeader colFunctionAddress;
+		private System.Windows.Forms.ColumnHeader colStackAddr;
+		private System.Windows.Forms.ColumnHeader colRomOffset;
 	}
 }

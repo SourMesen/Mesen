@@ -32,6 +32,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 			this.lstCallstack.Items.Clear();
 			int subStartAddr = -1;
+			ListViewItem item;
 			for(int i = 0, len = _relativeCallstack.Length; i < len; i+=2) {
 				int jsrAddr = _relativeCallstack[i];
 				bool unmappedAddress = false;
@@ -43,18 +44,22 @@ namespace Mesen.GUI.Debugger.Controls
 					}
 				}
 
-				string startAddr = subStartAddr >= 0 ? subStartAddr.ToString("X4") : "----";
+				string startAddr = subStartAddr >= 0 ? subStartAddr.ToString("X4") : "--------";
 				if(_relativeCallstack[i] == -2) {
 					break;
 				}
 				subStartAddr = _relativeCallstack[i+1];
-				ListViewItem item = this.lstCallstack.Items.Insert(0, "$" + startAddr + " @ $" + jsrAddr.ToString("X4") + "  [$" + _absoluteCallstack[i].ToString("X4") + "]");
+				item = this.lstCallstack.Items.Insert(0, "$" + startAddr);
+				item.SubItems.Add("@ $" + jsrAddr.ToString("X4"));
+				item.SubItems.Add("[$" + _absoluteCallstack[i].ToString("X4") + "]");
+
 				if(unmappedAddress) {
 					item.ForeColor = Color.Gray;
 					item.Font = new Font(item.Font, FontStyle.Italic);
 				}
 			}
-			this.lstCallstack.Items.Insert(0, "$" + subStartAddr.ToString("X4") + " @ $" + _programCounter.ToString("X4"));
+			item = this.lstCallstack.Items.Insert(0, "$" + (subStartAddr >= 0 ? subStartAddr.ToString("X4") : "--------"));
+			item.SubItems.Add("@ $" + _programCounter.ToString("X4"));
 		}
 
 		private void lstCallstack_DoubleClick(object sender, EventArgs e)
