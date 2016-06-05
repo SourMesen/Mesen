@@ -96,8 +96,6 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 	bool isOperator = false;
 	bool isNumber = false;
 	bool isHex = false;
-	bool isMemoryAddress = false;
-	bool validMemoryAddress = false;
 	size_t initialPos = pos;
 	for(size_t len = expression.size(); pos < len; pos++) {
 		char c = std::tolower(expression[pos]);
