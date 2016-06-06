@@ -17,7 +17,16 @@ std::unordered_map<uint32_t, uint8_t> iNesLoader::_submapperByCrc = {
 	{ 0x7E57FBEC, 3 }, //T&C Surf Designs 2: Thrilla's Surfari
 	{ 0xEA27B477, 3 }, //T2: Terminator 2: Judgment Day
 	{ 0x7B4ED0BB, 3 }, //WWF King of the Ring
-	{ 0xD4611B79, 3 }  //WWF WrestleMania: Steel Cage Challenge
+	{ 0xD4611B79, 3 }, //WWF WrestleMania: Steel Cage Challenge
+
+	//IREM-G101 - Mapper 32, SubMapper 1
+	{ 0x243A8735, 1 }, //Major League
+
+	//IREM Holy Diver - Mapper 78, SubMapper 1
+	{ 0xBA51AC6F, 3 }, //Holy Diver
+
+	//CAMERICA-BF9097 - Mapper 71, SubMapper 1
+	{ 0x1BC686A8, 1 }, //Fire Hawk
 };
 
 RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
@@ -52,7 +61,9 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 		auto crcCheckResult = _submapperByCrc.find(romCrc);
 		if(crcCheckResult != _submapperByCrc.end()) {
 			romData.SubMapperID = crcCheckResult->second;
+			#ifdef _DEBUG
 			MessageManager::DisplayMessage("GameInfo", "Header information corrected.");
+			#endif
 		}
 	}
 
