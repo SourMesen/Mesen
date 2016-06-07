@@ -168,18 +168,15 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint16_t GetNameTableAddr();
 		uint16_t GetAttributeAddr();
 
-		void ProcessPreVBlankScanline();
+		__forceinline void ProcessPreVBlankScanline();
 		void ProcessPrerenderScanline();
-		void ProcessVisibleScanline();
+		__forceinline void ProcessVisibleScanline();
 
-		void CopyOAMData();
+		__forceinline void CopyOAMData();
 
 		void BeginVBlank();
 		void TriggerNmi();
 		void EndVBlank();
-
-		uint32_t GetBGPaletteEntry(uint32_t paletteOffset, uint32_t pixel);
-		uint32_t GetSpritePaletteEntry(uint32_t paletteOffset, uint32_t pixel);
 
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
@@ -191,8 +188,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void InitializeShiftRegisters();
 		void LoadNextTile();
 
-		uint32_t GetPixelColor(uint32_t &paletteOffset);
-		virtual void DrawPixel();
+		__forceinline uint32_t GetPixelColor(uint32_t &paletteOffset);
+		__forceinline virtual void DrawPixel();
 		virtual void SendFrame();
 
 		PPURegisters GetRegisterID(uint16_t addr)

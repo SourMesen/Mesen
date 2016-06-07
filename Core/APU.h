@@ -38,7 +38,7 @@ class APU : public Snapshotable, public IMemoryHandler
 		NesModel _nesModel;
 
 	private:
-		bool NeedToRun(uint32_t currentCycle);
+		__forceinline bool NeedToRun(uint32_t currentCycle);
 		void Run();
 		void EndFrame();
 
