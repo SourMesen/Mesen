@@ -151,6 +151,7 @@ int16_t SoundMixer::GetOutputVolume()
 	int16_t expansionOutput = 0;
 	switch(_expansionAudioType) {
 		case AudioChannel::FDS: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
+		case AudioChannel::VRC6: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 75); break;
 	}
 	return squareVolume + tndVolume + expansionOutput;
 }

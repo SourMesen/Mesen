@@ -2,7 +2,7 @@
 #include "Snapshotable.h"
 #include "CPU.h"
 
-class VrcIrq : Snapshotable
+class VrcIrq : public Snapshotable
 {
 private:
 	uint8_t _irqReloadValue;

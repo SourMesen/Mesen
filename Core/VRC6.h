@@ -2,6 +2,9 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "VrcIrq.h"
+#include "Vrc6Pulse.h"
+#include "Vrc6Saw.h"
+
 enum class VRCVariant;
 
 //incomplete - missing audio and more
@@ -9,9 +12,16 @@ class VRC6 : public BaseMapper
 {
 private:
 	VrcIrq _irq;
+	Vrc6Pulse _pulse1;
+	Vrc6Pulse _pulse2;
+	Vrc6Saw _saw;
+
 	VRCVariant _model;
 	uint8_t _bankingMode;
 	uint8_t _chrRegisters[8];
+	int32_t _lastOutput;
+
+	bool _haltAudio;
 
 	void UpdatePrgRamAccess()
 	{
@@ -25,7 +35,9 @@ protected:
 	void InitMapper()
 	{
 		_irq.Reset();
+		_lastOutput = 0;
 		_bankingMode = 0;
+		_haltAudio = false;
 		memset(_chrRegisters, 0, sizeof(_chrRegisters));
 		SelectPRGPage(3, -1);
 	}
@@ -33,9 +45,13 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_irq);
 		ArrayInfo<uint8_t> chrRegisters = { _chrRegisters, 8 };
-		Stream(_bankingMode, chrRegisters);
+		Stream(_bankingMode, chrRegisters, _lastOutput, _haltAudio);
+		
+		Stream(&_irq);
+		Stream(&_pulse1);
+		Stream(&_pulse2);
+		Stream(&_saw);
 
 		if(!saving) {
 			UpdatePrgRamAccess();
@@ -45,6 +61,15 @@ protected:
 	void ProcessCpuClock()
 	{
 		_irq.ProcessCpuClock();
+		if(!_haltAudio) {
+			_pulse1.Clock();
+			_pulse2.Clock();
+			_saw.Clock();
+		}
+
+		int32_t outputLevel = _pulse1.GetVolume() + _pulse2.GetVolume() + _saw.GetVolume();
+		APU::AddExpansionAudioDelta(AudioChannel::VRC6, outputLevel - _lastOutput);
+		_lastOutput = outputLevel;
 	}
 
 	void UpdatePpuBanking()
@@ -100,11 +125,32 @@ protected:
 				SelectPrgPage2x(0, (value & 0x0F) << 1); 
 				break;
 
+			case 0x9000: case 0x9001: case 0x9002:
+				_pulse1.WriteReg(addr, value);
+				break;
+
+			case 0x9003: {
+				_haltAudio = (value & 0x01) == 0x01;
+				uint8_t frequencyShift = (value & 0x04) == 0x04 ? 8 : ((value & 0x02) == 0x02 ? 4 : 0);
+				_pulse1.SetFrequencyShift(frequencyShift);
+				_pulse2.SetFrequencyShift(frequencyShift);
+				_saw.SetFrequencyShift(frequencyShift);
+				break;
+			}
+
+			case 0xA000: case 0xA001: case 0xA002:
+				_pulse2.WriteReg(addr, value);
+				break;
+
+			case 0xB000: case 0xB001: case 0xB002:
+				_saw.WriteReg(addr, value);
+				break;
+
 			case 0xB003:
 				_bankingMode = value;
 				UpdatePpuBanking();
 				break;
-
+				
 			case 0xC000: case 0xC001: case 0xC002: case 0xC003:
 				SelectPRGPage(2, value & 0x1F);
 				break;

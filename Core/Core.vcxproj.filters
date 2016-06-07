@@ -68,6 +68,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Nes\Mappers\VRC">
+      <UniqueIdentifier>{0de6642c-1ea6-4872-b21f-2c3009eee9ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -96,9 +99,6 @@
     </ClInclude>
     <ClInclude Include="IMessageManager.h">
       <Filter>Nes\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="VRC2_4.h">
-      <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="NetMessage.h">
       <Filter>NetPlay\Messages</Filter>
@@ -283,22 +283,10 @@
     <ClInclude Include="NtdecTc112.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
-    <ClInclude Include="VRC3.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
     <ClInclude Include="Rambo1.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="BaseMapper.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="VRC6.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="VrcIrq.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="VRC7.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="FdsLoader.h">
@@ -580,14 +568,35 @@
     <ClInclude Include="stdafx.h">
       <Filter>Misc</Filter>
     </ClInclude>
-    <ClInclude Include="VRC1.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
     <ClInclude Include="TxSRom.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="WaveRecorder.h">
       <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="VrcIrq.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="VRC1.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="VRC2_4.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="VRC3.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="VRC6.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="VRC7.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="Vrc6Pulse.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="Vrc6Saw.h">
+      <Filter>Nes\Mappers\VRC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

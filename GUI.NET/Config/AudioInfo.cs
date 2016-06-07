@@ -62,11 +62,11 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetChannelVolume(AudioChannel.Noise, ConvertVolume(audioInfo.NoiseVolume));
 			InteropEmu.SetChannelVolume(AudioChannel.DMC, ConvertVolume(audioInfo.DmcVolume));
 			InteropEmu.SetChannelVolume(AudioChannel.FDS, ConvertVolume(audioInfo.FdsVolume));
-			InteropEmu.SetChannelVolume(AudioChannel.MMC5, ConvertVolume(audioInfo.FdsVolume));
-			InteropEmu.SetChannelVolume(AudioChannel.VRC6, ConvertVolume(audioInfo.FdsVolume));
-			InteropEmu.SetChannelVolume(AudioChannel.VRC7, ConvertVolume(audioInfo.FdsVolume));
-			InteropEmu.SetChannelVolume(AudioChannel.Namco163, ConvertVolume(audioInfo.FdsVolume));
-			InteropEmu.SetChannelVolume(AudioChannel.Sunsoft5B, ConvertVolume(audioInfo.FdsVolume));
+			InteropEmu.SetChannelVolume(AudioChannel.MMC5, ConvertVolume(audioInfo.Mmc5Volume));
+			InteropEmu.SetChannelVolume(AudioChannel.VRC6, ConvertVolume(audioInfo.Vrc6Volume));
+			InteropEmu.SetChannelVolume(AudioChannel.VRC7, ConvertVolume(audioInfo.Vrc7Volume));
+			InteropEmu.SetChannelVolume(AudioChannel.Namco163, ConvertVolume(audioInfo.Namco163Volume));
+			InteropEmu.SetChannelVolume(AudioChannel.Sunsoft5B, ConvertVolume(audioInfo.Sunsoft5bVolume));
 			InteropEmu.SetSampleRate(audioInfo.SampleRate);
 
 			InteropEmu.SetFlag(EmulationFlags.MuteSoundInBackground, audioInfo.MuteSoundInBackground);
