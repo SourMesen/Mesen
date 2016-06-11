@@ -8,11 +8,9 @@
 void StandardController::StreamState(bool saving)
 {
 	BaseControlDevice::StreamState(saving);
-	Stream(_stateBuffer, _stateBufferFamicom);
-
-	if(_additionalController) {
-		Stream(_additionalController.get());
-	}
+	
+	SnapshotInfo additionalController{ _additionalController.get() };
+	Stream(_stateBuffer, _stateBufferFamicom, additionalController);
 }
 
 uint8_t StandardController::GetButtonState()

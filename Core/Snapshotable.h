@@ -113,7 +113,9 @@ private:
 	template<>
 	void InternalStream(SnapshotInfo &info)
 	{
-		Stream(info.Entity);
+		if(info.Entity != nullptr) {
+			Stream(info.Entity);
+		}
 	}
 
 	void RecursiveStream()

@@ -31,9 +31,9 @@ protected:
 	virtual void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_irq);
+		SnapshotInfo irq{ &_irq };
 		ArrayInfo<uint8_t> chrRegisters = { _chrRegisters, 8 };
-		Stream(_controlFlags, chrRegisters);
+		Stream(_controlFlags, chrRegisters, irq);
 
 		if(!saving) {
 			UpdatePrgRamAccess();

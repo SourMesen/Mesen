@@ -315,12 +315,11 @@ void FDS::StreamState(bool saving)
 {
 	BaseMapper::StreamState(saving);
 
+	SnapshotInfo audio{ _audio.get() };
 	Stream(_irqReloadValue, _irqCounter, _irqEnabled, _irqReloadEnabled, _diskRegEnabled, _soundRegEnabled, _writeDataReg, _motorOn, _resetTransfer,
 		_readMode, _crcControl, _diskReady, _diskIrqEnabled, _extConWriteReg, _badCrc, _endOfHead, _readWriteEnabled, _readDataReg, _diskWriteProtected,
 		_diskNumber, _newDiskNumber, _newDiskInsertDelay, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, _needIrq,
-		_transferComplete, _isDirty);
-
-	Stream(_audio.get());
+		_transferComplete, _isDirty, audio);
 }
 
 FDS::FDS()

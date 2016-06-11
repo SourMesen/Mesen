@@ -226,14 +226,14 @@ void APU::StreamState(bool saving)
 		_currentCycle = 0;
 	}
 
-	Stream(_nesModel);
-	Stream(_squareChannel[0].get());
-	Stream(_squareChannel[1].get());
-	Stream(_triangleChannel.get());
-	Stream(_noiseChannel.get());
-	Stream(_deltaModulationChannel.get());
-	Stream(_frameCounter.get());
-	Stream(_mixer.get());
+	SnapshotInfo squareChannel0{ _squareChannel[0].get() };
+	SnapshotInfo squareChannel1{ _squareChannel[1].get() };
+	SnapshotInfo triangleChannel{ _triangleChannel.get() };
+	SnapshotInfo noiseChannel{ _noiseChannel.get() };
+	SnapshotInfo deltaModulationChannel{ _deltaModulationChannel.get() };
+	SnapshotInfo frameCounter{ _frameCounter.get() };
+	SnapshotInfo mixer{ _mixer.get() };
+	Stream(_nesModel, squareChannel0, squareChannel1, triangleChannel, noiseChannel, deltaModulationChannel, frameCounter, mixer);
 }
 
 void APU::AddExpansionAudioDelta(AudioChannel channel, int8_t delta)

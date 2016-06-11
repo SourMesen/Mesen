@@ -52,19 +52,15 @@ void Snapshotable::Stream(Snapshotable* snapshotable)
 		uint32_t size = 0;
 		InternalStream(size);
 
-		if(_position + size <= _streamSize) {
-			uint8_t *buffer = new uint8_t[size];
-			ArrayInfo<uint8_t> arrayInfo = { buffer, size };
-			InternalStream(arrayInfo);
+		uint8_t *buffer = new uint8_t[size];
+		ArrayInfo<uint8_t> arrayInfo = { buffer, size };
+		InternalStream(arrayInfo);
 
-			stream.write((char*)buffer, size);
-			stream.seekg(0, ios::beg);
-			stream.seekp(0, ios::beg);
-			snapshotable->LoadSnapshot(&stream);
-			delete[] buffer;
-		} else {
-			_position = _streamSize;
-		}
+		stream.write((char*)buffer, size);
+		stream.seekg(0, ios::beg);
+		stream.seekp(0, ios::beg);
+		snapshotable->LoadSnapshot(&stream);
+		delete[] buffer;
 	}
 }
 

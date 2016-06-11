@@ -191,6 +191,7 @@ class VRC2_4 : public BaseMapper
 			BaseMapper::StreamState(saving);
 			ArrayInfo<uint8_t> loChrRegs = { _loCHRRegs, 8 };
 			ArrayInfo<uint8_t> hiChrRegs = { _hiCHRRegs, 8 };
-			Stream(_prgReg0, _prgReg1, _prgMode, loChrRegs, hiChrRegs, _hasIRQ, _irq);
+			SnapshotInfo irq{ &_irq };
+			Stream(_prgReg0, _prgReg1, _prgMode, loChrRegs, hiChrRegs, _hasIRQ, irq);
 		}
 };

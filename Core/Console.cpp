@@ -345,9 +345,9 @@ void Console::SaveState(ostream &saveStream)
 		Instance->_cpu->SaveSnapshot(&saveStream);
 		Instance->_ppu->SaveSnapshot(&saveStream);
 		Instance->_memoryManager->SaveSnapshot(&saveStream);
-		Instance->_mapper->SaveSnapshot(&saveStream);
 		Instance->_apu->SaveSnapshot(&saveStream);
 		Instance->_controlManager->SaveSnapshot(&saveStream);
+		Instance->_mapper->SaveSnapshot(&saveStream);
 	}
 }
 
@@ -357,9 +357,9 @@ void Console::LoadState(istream &loadStream)
 		Instance->_cpu->LoadSnapshot(&loadStream);
 		Instance->_ppu->LoadSnapshot(&loadStream);
 		Instance->_memoryManager->LoadSnapshot(&loadStream);
-		Instance->_mapper->LoadSnapshot(&loadStream);
 		Instance->_apu->LoadSnapshot(&loadStream);
 		Instance->_controlManager->LoadSnapshot(&loadStream);
+		Instance->_mapper->LoadSnapshot(&loadStream);
 		
 		MessageManager::SendNotification(ConsoleNotificationType::StateLoaded);
 	}

@@ -34,12 +34,11 @@ private:
 protected:
 	void StreamState(bool saving)
 	{
-		Stream(&_volume);
-		Stream(&_mod);
-
 		ArrayInfo<uint8_t> waveTable = { _waveTable, 64 };
+		SnapshotInfo volume{ &_volume };
+		SnapshotInfo mod{ &_mod };
 
-		Stream(_waveWriteEnabled, _disableEnvelopes, _haltWaveform, _masterVolume, _waveOverflowCounter, _wavePitch, _wavePosition, _lastOutput, waveTable);
+		Stream(volume, mod, _waveWriteEnabled, _disableEnvelopes, _haltWaveform, _masterVolume, _waveOverflowCounter, _wavePitch, _wavePosition, _lastOutput, waveTable);
 	}
 
 public:

@@ -237,12 +237,9 @@ void ControlManager::StreamState(bool saving)
 		UpdateControlDevices();
 	}
 
-	if(GetControlDevice(0)) {
-		Stream(GetControlDevice(0).get());
-	}
-	if(GetControlDevice(1)) {
-		Stream(GetControlDevice(1).get());
-	}
+	SnapshotInfo device0{ GetControlDevice(0).get() };
+	SnapshotInfo device1{ GetControlDevice(1).get() };
+	Stream(device0, device1);
 }
 
 void ControlManager::SetMousePosition(double x, double y)

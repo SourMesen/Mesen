@@ -46,12 +46,12 @@ protected:
 	{
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> chrRegisters = { _chrRegisters, 8 };
-		Stream(_bankingMode, chrRegisters, _lastOutput, _haltAudio);
-		
-		Stream(&_irq);
-		Stream(&_pulse1);
-		Stream(&_pulse2);
-		Stream(&_saw);
+		SnapshotInfo irq{ &_irq };
+		SnapshotInfo pulse1{ &_pulse1 };
+		SnapshotInfo pulse2{ &_pulse2 };
+		SnapshotInfo saw{ &_saw };
+
+		Stream(_bankingMode, chrRegisters, _lastOutput, _haltAudio, irq, pulse1, pulse2, saw);
 
 		if(!saving) {
 			UpdatePrgRamAccess();
