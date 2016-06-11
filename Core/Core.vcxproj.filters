@@ -598,6 +598,12 @@
     <ClInclude Include="Vrc6Saw.h">
       <Filter>Nes\Mappers\VRC</Filter>
     </ClInclude>
+    <ClInclude Include="Namco163.h">
+      <Filter>Nes\Mappers\Namco</Filter>
+    </ClInclude>
+    <ClInclude Include="Namco163Audio.h">
+      <Filter>Nes\Mappers\Namco</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

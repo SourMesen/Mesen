@@ -4,8 +4,9 @@
 
 enum class MemoryOperation
 {
-	Read = 0,
-	Write = 1,
+	Read = 1,
+	Write = 2,
+	Any = 3
 };
 
 class MemoryRanges

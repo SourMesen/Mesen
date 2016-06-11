@@ -29,6 +29,12 @@ enum MemoryAccessType
 	ReadWrite = 0x03
 };
 
+enum ChrSpecialPage
+{
+	NametableA = 0x7000,
+	NametableB = 0x7001
+};
+
 class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener
 {
 private:
@@ -52,7 +58,8 @@ private:
 	string _romFilename;
 
 	bool _allowRegisterRead = false;
-	uint8_t _isRegisterAddr[0x10000];
+	uint8_t _isReadRegisterAddr[0x10000];
+	uint8_t _isWriteRegisterAddr[0x10000];
 
 	vector<uint8_t*> _prgPages;
 	vector<uint8_t*> _chrPages;
@@ -67,7 +74,7 @@ private:
 	vector<uint8_t> _originalPrgRom;
 
 protected:
-	uint8_t _mapperID;
+	uint16_t _mapperID;
 	uint8_t _subMapperID;
 
 	uint8_t* _prgRom = nullptr;
@@ -135,8 +142,8 @@ protected:
 	void RestoreOriginalPrgRam();
 	void InitializeChrRam();
 
-	void AddRegisterRange(uint16_t startAddr, uint16_t endAddr);
-	void RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr);
+	void AddRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation = MemoryOperation::Any);
+	void RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation = MemoryOperation::Any);
 
 	virtual void StreamState(bool saving);
 

@@ -63,6 +63,7 @@
 #include "Namco108_88.h"
 #include "Namco108_95.h"
 #include "Namco108_154.h"
+#include "Namco163.h"
 #include "Nanjing.h"
 #include "Nina01.h"
 #include "Nina03_06.h"
@@ -115,7 +116,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 15: return new Mapper15();
 		case 16: break; //18 games
 		case 18: return new JalecoSs88006();
-		case 19: break; //16 games
+		case 19: return new Namco163();
 		case 21: return new VRC2_4(VRCVariant::VRC4a);  //Conflicts: VRC4c
 		case 22: return new VRC2_4(VRCVariant::VRC2a);
 		case 23: return new VRC2_4(VRCVariant::VRC2b);  //Conflicts: VRC4e
@@ -203,6 +204,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 205: return new MMC3_205();
 		case 206: return new Namco108();
 		case 207: return new TaitoX1005(true);
+		case 210: return new Namco163();
 		case 225: return new Mapper225();
 		case 226: return new Mapper226();
 		case 230: return new Mapper230();

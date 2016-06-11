@@ -439,6 +439,8 @@
     <ClInclude Include="MMC3_52.h" />
     <ClInclude Include="MMC3_ChrRam.h" />
     <ClInclude Include="ModChannel.h" />
+    <ClInclude Include="Namco163.h" />
+    <ClInclude Include="Namco163Audio.h" />
     <ClInclude Include="PlayerListMessage.h" />
     <ClInclude Include="ReverbFilter.h" />
     <ClInclude Include="RomData.h" />

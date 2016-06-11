@@ -3,6 +3,24 @@
 #include "../Utilities/CRC32.h"
 #include "MessageManager.h"
 
+std::unordered_map<uint32_t, uint8_t> iNesLoader::_mapperByCrc = {
+	//Namco 175 games that are marked as mapper 19 but should be 210, submapper 1
+	{ 0x0C47946D, 210 }, //Chibi Maruko-chan: Uki Uki Shopping
+	{ 0x808606F0, 210 }, //Famista 91'
+	{ 0x81B7F1A8, 210 }, //Heisei Tensai Bakabon
+	{ 0x46FD7843, 210 }, //Splatterhouse: Wanpaku Graffiti
+	{ 0x1DC0F740, 210 }, //Wagyan Land 2
+
+	//Namco 340 games that are marked as mapper 19 but should be 210, submapper 2
+	{ 0xBD523011, 210 }, //Dream Master
+	{ 0xC247CC80, 210 }, //Family Circuit '91
+	{ 0x6EC51DE5, 210 }, //Famista '92
+	{ 0xADFFD64F, 210 }, //Famista '93
+	{ 0x429103C9, 210 }, //Famista '94
+	{ 0x2447E03B, 210 }, //Top Striker
+	{ 0xD323B806, 210 }, //Wagnyan Land 3
+};
+
 std::unordered_map<uint32_t, uint8_t> iNesLoader::_submapperByCrc = {
 	//MC-ACC Games (MMC3 variant) - Mapper 4, SubMapper 3
 	{ 0xC527C297, 3 }, //Alien 3
@@ -27,6 +45,22 @@ std::unordered_map<uint32_t, uint8_t> iNesLoader::_submapperByCrc = {
 
 	//CAMERICA-BF9097 - Mapper 71, SubMapper 1
 	{ 0x1BC686A8, 1 }, //Fire Hawk
+
+	//Namco 175 games that are marked as mapper 19 but should be 210, submapper 1
+	{ 0x0C47946D, 1 }, //Chibi Maruko-chan: Uki Uki Shopping
+	{ 0x808606F0, 1 }, //Famista 91'
+	{ 0x81B7F1A8, 1 }, //Heisei Tensai Bakabon
+	{ 0x46FD7843, 1 }, //Splatterhouse: Wanpaku Graffiti
+	{ 0x1DC0F740, 1 }, //Wagyan Land 2
+
+	//Namco 340 games that are marked as mapper 19 but should be 210, submapper 2
+	{ 0xBD523011, 2 }, //Dream Master
+	{ 0xC247CC80, 2 }, //Family Circuit '91
+	{ 0x6EC51DE5, 2 }, //Famista '92
+	{ 0xADFFD64F, 2 }, //Famista '93
+	{ 0x429103C9, 2 }, //Famista '94
+	{ 0x2447E03B, 2 }, //Top Striker
+	{ 0xD323B806, 2 }, //Wagnyan Land 3
 };
 
 RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
@@ -58,11 +92,19 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 	if(header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0) {
 		//Check rom CRC to set submapper as needed
 		uint32_t romCrc = CRC32::GetCRC(buffer, header.GetPrgSize() + header.GetChrSize());
-		auto crcCheckResult = _submapperByCrc.find(romCrc);
+		auto crcCheckResult = _mapperByCrc.find(romCrc);
+		if(crcCheckResult != _mapperByCrc.end()) {
+			romData.MapperID = crcCheckResult->second;
+			#ifdef _DEBUG
+			MessageManager::DisplayMessage("GameInfo", "Mapper number corrected.");
+			#endif
+		}
+
+		crcCheckResult = _submapperByCrc.find(romCrc);
 		if(crcCheckResult != _submapperByCrc.end()) {
 			romData.SubMapperID = crcCheckResult->second;
 			#ifdef _DEBUG
-			MessageManager::DisplayMessage("GameInfo", "Header information corrected.");
+			MessageManager::DisplayMessage("GameInfo", "Submapper number corrected.");
 			#endif
 		}
 	}

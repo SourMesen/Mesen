@@ -298,7 +298,6 @@
 			// trkNamco163Vol
 			// 
 			this.trkNamco163Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkNamco163Vol.Enabled = false;
 			this.trkNamco163Vol.Location = new System.Drawing.Point(306, 160);
 			this.trkNamco163Vol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkNamco163Vol.Maximum = 100;

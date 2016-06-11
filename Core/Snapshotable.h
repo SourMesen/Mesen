@@ -2,6 +2,8 @@
 
 #include "stdafx.h"
 
+class Snapshotable;
+
 template<typename T>
 struct ArrayInfo
 {
@@ -14,6 +16,11 @@ struct ValueInfo
 {
 	T* Value;
 	T DefaultValue;
+};
+
+struct SnapshotInfo
+{
+	Snapshotable* Entity;
 };
 
 template<typename T>
@@ -101,6 +108,12 @@ private:
 	void InternalStream(T &value)
 	{
 		StreamElement<T>(value);
+	}
+
+	template<>
+	void InternalStream(SnapshotInfo &info)
+	{
+		Stream(info.Entity);
 	}
 
 	void RecursiveStream()

@@ -199,7 +199,13 @@ void BaseMapper::SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memor
 
 	uint16_t startAddr = slot * InternalGetChrPageSize();
 	uint16_t endAddr = startAddr + InternalGetChrPageSize() - 1;
-	SetPpuMemoryMapping(startAddr, endAddr, page, memoryType);
+	if(page == ChrSpecialPage::NametableA) {
+		SetPpuMemoryMapping(startAddr, endAddr, GetNametable(0));
+	} else if(page == ChrSpecialPage::NametableB) {
+		SetPpuMemoryMapping(startAddr, endAddr, GetNametable(1));
+	} else {
+		SetPpuMemoryMapping(startAddr, endAddr, page, memoryType);
+	}
 }
 		
 bool BaseMapper::HasBattery()
@@ -261,17 +267,27 @@ void BaseMapper::InitializeChrRam()
 	}
 }
 
-void BaseMapper::AddRegisterRange(uint16_t startAddr, uint16_t endAddr)
+void BaseMapper::AddRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation)
 {
 	for(int i = startAddr; i <= endAddr; i++) {
-		_isRegisterAddr[i] = true;
+		if((int)operation & (int)MemoryOperation::Read) {
+			_isReadRegisterAddr[i] = true;
+		}
+		if((int)operation & (int)MemoryOperation::Write) {
+			_isWriteRegisterAddr[i] = true;
+		}
 	}
 }
 
-void BaseMapper::RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr)
+void BaseMapper::RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation)
 {
 	for(int i = startAddr; i <= endAddr; i++) {
-		_isRegisterAddr[i] = false;
+		if((int)operation & (int)MemoryOperation::Read) {
+			_isReadRegisterAddr[i] = false;
+		}
+		if((int)operation & (int)MemoryOperation::Write) {
+			_isWriteRegisterAddr[i] = false;
+		}
 	}
 }
 
@@ -315,8 +331,9 @@ void BaseMapper::Initialize(RomData &romData)
 
 	_allowRegisterRead = AllowRegisterRead();
 
-	memset(_isRegisterAddr, 0, sizeof(_isRegisterAddr));
-	AddRegisterRange(RegisterStartAddress(), RegisterEndAddress());
+	memset(_isReadRegisterAddr, 0, sizeof(_isReadRegisterAddr));
+	memset(_isWriteRegisterAddr, 0, sizeof(_isWriteRegisterAddr));
+	AddRegisterRange(RegisterStartAddress(), RegisterEndAddress(), MemoryOperation::Any);
 
 	_mirroringType = romData.MirroringType;
 
@@ -513,7 +530,7 @@ MirroringType BaseMapper::GetMirroringType()
 	
 uint8_t BaseMapper::ReadRAM(uint16_t addr)
 {
-	if(_allowRegisterRead && _isRegisterAddr[addr]) {
+	if(_allowRegisterRead && _isReadRegisterAddr[addr]) {
 		return ReadRegister(addr);
 	} else if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Read) {
 		return _prgPages[addr >> 8][addr & 0xFF];
@@ -525,7 +542,7 @@ uint8_t BaseMapper::ReadRAM(uint16_t addr)
 
 void BaseMapper::WriteRAM(uint16_t addr, uint8_t value)
 {
-	if(_isRegisterAddr[addr]) {
+	if(_isWriteRegisterAddr[addr]) {
 		if(_hasBusConflicts) {
 			value &= _prgPages[addr >> 8][addr & 0xFF];
 		}
