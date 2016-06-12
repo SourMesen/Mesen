@@ -3,7 +3,7 @@
 #include "BaseMapper.h"
 #include "CPU.h"
 
-class SunSoft4 : public BaseMapper
+class Sunsoft4 : public BaseMapper
 {
 protected:
 	virtual uint16_t GetPRGPageSize() { return 0x4000; }

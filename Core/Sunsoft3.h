@@ -3,7 +3,7 @@
 #include "BaseMapper.h"
 #include "CPU.h"
 
-class SunSoft3 : public BaseMapper
+class Sunsoft3 : public BaseMapper
 {
 private:
 	bool _irqLatch = false;

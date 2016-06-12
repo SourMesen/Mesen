@@ -312,7 +312,6 @@
 			// trkSunsoft5b
 			// 
 			this.trkSunsoft5b.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkSunsoft5b.Enabled = false;
 			this.trkSunsoft5b.Location = new System.Drawing.Point(384, 160);
 			this.trkSunsoft5b.Margin = new System.Windows.Forms.Padding(0);
 			this.trkSunsoft5b.Maximum = 100;

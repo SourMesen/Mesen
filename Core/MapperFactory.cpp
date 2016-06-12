@@ -79,6 +79,7 @@
 #include "Sunsoft89.h"
 #include "Sunsoft93.h"
 #include "Sunsoft184.h"
+#include "SunsoftFme7.h"
 #include "TaitoTc0190.h"
 #include "TaitoX1005.h"
 #include "TaitoX1017.h"
@@ -147,8 +148,9 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 64: return new Rambo1();
 		case 65: return new IremH3001();
 		case 66: return new GxRom();
-		case 67: return new SunSoft3();
-		case 68: return new SunSoft4();  //incomplete support
+		case 67: return new Sunsoft3();
+		case 68: return new Sunsoft4();  //incomplete support
+		case 69: return new SunsoftFme7();
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
 		case 72: return new JalecoJf17_19(false);

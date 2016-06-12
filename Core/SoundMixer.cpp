@@ -153,6 +153,7 @@ int16_t SoundMixer::GetOutputVolume()
 		case AudioChannel::FDS: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
 		case AudioChannel::VRC6: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 75); break;
 		case AudioChannel::Namco163: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
+		case AudioChannel::Sunsoft5B: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
 	}
 	return squareVolume + tndVolume + expansionOutput;
 }

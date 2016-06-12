@@ -403,12 +403,6 @@
     <ClInclude Include="Mapper246.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
-    <ClInclude Include="SunSoft3.h">
-      <Filter>Nes\Mappers\Sunsoft</Filter>
-    </ClInclude>
-    <ClInclude Include="SunSoft4.h">
-      <Filter>Nes\Mappers\Sunsoft</Filter>
-    </ClInclude>
     <ClInclude Include="Sunsoft89.h">
       <Filter>Nes\Mappers\Sunsoft</Filter>
     </ClInclude>
@@ -603,6 +597,18 @@
     </ClInclude>
     <ClInclude Include="Namco163Audio.h">
       <Filter>Nes\Mappers\Namco</Filter>
+    </ClInclude>
+    <ClInclude Include="SunsoftFme7.h">
+      <Filter>Nes\Mappers\Sunsoft</Filter>
+    </ClInclude>
+    <ClInclude Include="Sunsoft5bAudio.h">
+      <Filter>Nes\Mappers\Sunsoft</Filter>
+    </ClInclude>
+    <ClInclude Include="Sunsoft3.h">
+      <Filter>Nes\Mappers\Sunsoft</Filter>
+    </ClInclude>
+    <ClInclude Include="Sunsoft4.h">
+      <Filter>Nes\Mappers\Sunsoft</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

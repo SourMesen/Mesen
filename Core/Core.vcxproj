@@ -529,10 +529,12 @@
     <ClInclude Include="StereoDelayFilter.h" />
     <ClInclude Include="StereoPanningFilter.h" />
     <ClInclude Include="Sunsoft184.h" />
-    <ClInclude Include="SunSoft3.h" />
-    <ClInclude Include="SunSoft4.h" />
+    <ClInclude Include="Sunsoft3.h" />
+    <ClInclude Include="Sunsoft4.h" />
+    <ClInclude Include="Sunsoft5bAudio.h" />
     <ClInclude Include="Sunsoft89.h" />
     <ClInclude Include="Sunsoft93.h" />
+    <ClInclude Include="SunsoftFme7.h" />
     <ClInclude Include="TaitoTc0190.h" />
     <ClInclude Include="TaitoX1005.h" />
     <ClInclude Include="TaitoX1017.h" />
