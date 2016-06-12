@@ -258,9 +258,9 @@ void BaseMapper::RestoreOriginalPrgRam()
 	memcpy(_prgRom, _originalPrgRom.data(), _originalPrgRom.size());
 }
 
-void BaseMapper::InitializeChrRam()
+void BaseMapper::InitializeChrRam(int32_t chrRamSize)
 {
-	_chrRamSize = GetChrRamSize();
+	_chrRamSize = chrRamSize >= 0 ? chrRamSize : GetChrRamSize();
 	if(_chrRamSize > 0) {
 		_chrRam = new uint8_t[_chrRamSize];
 		memset(_chrRam, 0, _chrRamSize);
@@ -385,8 +385,10 @@ void BaseMapper::Initialize(RomData &romData)
 	if(_chrRomSize == 0) {
 		//Assume there is CHR RAM if no CHR ROM exists
 		_onlyChrRam = true;
-		InitializeChrRam();
+		InitializeChrRam(romData.ChrRamSize);
 		_chrRomSize = _chrRamSize;
+	} else if(romData.ChrRamSize >= 0) {
+		InitializeChrRam(romData.ChrRamSize);
 	}
 
 	//Setup a default work/save ram in 0x6000-0x7FFF space

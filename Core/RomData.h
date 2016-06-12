@@ -29,6 +29,7 @@ struct RomData
 	bool IsPlayChoice = false;
 	bool HasTrainer = false;
 	MirroringType MirroringType;
+	int32_t ChrRamSize = -1;
 
 	vector<uint8_t> PrgRom;
 	vector<uint8_t> ChrRom;
@@ -158,10 +159,14 @@ struct NESHeader
 		return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
 	}
 
-	uint32_t GetChrRamSize()
+	int32_t GetChrRamSize()
 	{
-		uint8_t value = Byte11 & 0x0F;
-		return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
+			uint8_t value = Byte11 & 0x0F;
+			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+		} else {
+			return -1;
+		}
 	}
 
 	uint32_t GetSavedChrRamSize()

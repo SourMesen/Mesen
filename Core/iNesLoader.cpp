@@ -82,6 +82,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 	romData.IsVsSystem = header.IsVsSystem();
 	romData.IsPlayChoice = header.IsPlaychoice();
 	romData.HasTrainer = header.HasTrainer();
+	romData.ChrRamSize = header.GetChrRamSize();
 
 	if(romData.HasTrainer) {
 		//512-byte trainer at $7000-$71FF (stored before PRG data)
