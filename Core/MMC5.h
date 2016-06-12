@@ -326,12 +326,13 @@ protected:
 
 		ArrayInfo<uint8_t> prgBanks = { _prgBanks, 5 };
 		ArrayInfo<uint16_t> chrBanks = { _chrBanks, 12 };
+		ArrayInfo<uint8_t> fillModeNametable = { _fillModeNametable, 0x400 };
 		SnapshotInfo audio{ &_audio };
 		Stream(_prgRamProtect1, _prgRamProtect2, _fillModeTile, _fillModeColor, _verticalSplitEnabled, _verticalSplitRightSide,
 				_verticalSplitDelimiterTile, _verticalSplitScroll, _verticalSplitBank, _multiplierValue1, _multiplierValue2,
 				_nametableMapping, _extendedRamMode, _exAttributeLastNametableFetch, _exAttrLastFetchCounter, _exAttrSelectedChrBank, 
 				_prgMode, prgBanks, _chrMode, _chrUpperBits, chrBanks, _lastChrReg, 
-				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame, audio);
+				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame, audio, fillModeNametable);
 
 		if(!saving) {
 			UpdatePrgBanks();
