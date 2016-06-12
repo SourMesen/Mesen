@@ -18,7 +18,7 @@ class AXROM : public BaseMapper
 
 		void WriteRegister(uint16_t addr, uint8_t value)
 		{
-			SelectPRGPage(0, value & 0x07);
+			SelectPRGPage(0, value & 0x0F);
 
 			SetMirroringType(((value & 0x10) == 0x10) ? MirroringType::ScreenBOnly : MirroringType::ScreenAOnly);
 		}
