@@ -12,6 +12,7 @@ SoundMixer::SoundMixer()
 	_outputBuffer = new int16_t[SoundMixer::MaxSamplesPerFrame];
 	_blipBuf = blip_new(SoundMixer::MaxSamplesPerFrame);
 	_sampleRate = EmulationSettings::GetSampleRate();
+	_model = NesModel::NTSC;
 
 	Reset();
 }
@@ -30,7 +31,7 @@ void SoundMixer::StreamState(bool saving)
 	
 	if(!saving) {
 		Reset();
-		UpdateRates();
+		UpdateRates(true);
 	}
 
 	ArrayInfo<int16_t> currentOutput = { _currentOutput, MaxChannelCount };
@@ -115,24 +116,24 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	if(EmulationSettings::GetSampleRate() != _sampleRate) {
 		//Update sample rate for next frame if setting changed
 		_sampleRate = EmulationSettings::GetSampleRate();
-		UpdateRates();
+		UpdateRates(true);
 	}
+	UpdateRates(false);
 }
 
 void SoundMixer::SetNesModel(NesModel model)
 {
-	switch(model) {
-		case NesModel::NTSC: _clockRate = CPU::ClockRateNtsc; break;
-		case NesModel::PAL: _clockRate = CPU::ClockRatePal; break;
-		case NesModel::Dendy: _clockRate = CPU::ClockRateDendy; break;
-	}
-
-	UpdateRates();
+	_model = model;
+	UpdateRates(true);
 }
 
-void SoundMixer::UpdateRates()
+void SoundMixer::UpdateRates(bool forceUpdate)
 {
-	blip_set_rates(_blipBuf, _clockRate, _sampleRate);
+	uint32_t newRate = CPU::GetClockRate(_model, !EmulationSettings::GetOverclockAdjustApu());
+	if(_clockRate != newRate || forceUpdate) {
+		_clockRate = newRate;
+		blip_set_rates(_blipBuf, _clockRate, _sampleRate);
+	}
 }
 
 double SoundMixer::GetChannelOutput(AudioChannel channel)

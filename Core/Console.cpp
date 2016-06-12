@@ -78,6 +78,9 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 	
 		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(romFilename));
 		MessageManager::DisplayMessage("GameLoaded", FolderUtilities::GetFilename(romFilename, false));
+		if(EmulationSettings::GetOverclockRate() != 100) {
+			MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
+		}
 	} else {
 		MessageManager::DisplayMessage("Error", "CouldNotLoadFile", FolderUtilities::GetFilename(romFilename, true));
 	}

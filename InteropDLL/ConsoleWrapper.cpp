@@ -268,6 +268,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetNesModel(uint32_t model) { EmulationSettings::SetNesModel((NesModel)model); }
 		DllExport void __stdcall SetOverscanDimensions(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom) { EmulationSettings::SetOverscanDimensions(left, right, top, bottom); }
 		DllExport void __stdcall SetEmulationSpeed(uint32_t emulationSpeed) { EmulationSettings::SetEmulationSpeed(emulationSpeed); }
+		DllExport void __stdcall SetOverclockRate(uint32_t overclockRate, bool adjustApu) { EmulationSettings::SetOverclockRate(overclockRate, adjustApu); }
 		DllExport void __stdcall SetVideoScale(double scale) { EmulationSettings::SetVideoScale(scale); }
 		DllExport void __stdcall SetVideoAspectRatio(VideoAspectRatio aspectRatio) { EmulationSettings::SetVideoAspectRatio(aspectRatio); }
 		DllExport void __stdcall SetVideoFilter(VideoFilterType filter) { EmulationSettings::SetVideoFilterType(filter); }

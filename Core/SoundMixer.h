@@ -23,7 +23,7 @@ private:
 
 	static IAudioDevice* AudioDevice;
 	static const uint32_t MaxSampleRate = 48000;
-	static const uint32_t MaxSamplesPerFrame = MaxSampleRate / 60;
+	static const uint32_t MaxSamplesPerFrame = MaxSampleRate / 60 * 4; //x4 to allow CPU overclocking up to 10x
 	static const uint32_t MaxChannelCount = 6;
 	static const uint32_t ExpansionAudioIndex = MaxChannelCount - 1;
 	
@@ -43,6 +43,7 @@ private:
 	int16_t *_outputBuffer;
 	double _volumes[MaxChannelCount];
 
+	NesModel _model;
 	uint32_t _sampleRate;
 	uint32_t _clockRate;
 
@@ -50,7 +51,7 @@ private:
 	int16_t GetOutputVolume();
 	void EndFrame(uint32_t time);
 
-	void UpdateRates();
+	void UpdateRates(bool forceUpdate);
 
 protected:
 	virtual void StreamState(bool saving);

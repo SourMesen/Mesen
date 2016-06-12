@@ -42,6 +42,9 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("PauseOnMovieEnd", chkPauseOnMovieEnd);
 
+			AddBinding("OverclockRate", nudOverclockRate);
+			AddBinding("OverclockAdjustApu", chkOverclockAdjustApu);
+
 			UpdateCloudDisplay();
 		}
 

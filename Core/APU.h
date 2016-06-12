@@ -37,6 +37,8 @@ class APU : public Snapshotable, public IMemoryHandler
 
 		NesModel _nesModel;
 
+		double _cyclesNeeded;
+
 	private:
 		__forceinline bool NeedToRun(uint32_t currentCycle);
 		void Run();
@@ -59,7 +61,19 @@ class APU : public Snapshotable, public IMemoryHandler
 		void GetMemoryRanges(MemoryRanges &ranges);
 
 		void Exec();
-		static void ExecStatic();
+
+		__forceinline static void ExecStatic()
+		{
+			if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
+				Instance->Exec();
+			} else {
+				Instance->_cyclesNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
+				while(Instance->_cyclesNeeded >= 1.0) {
+					Instance->Exec();
+					Instance->_cyclesNeeded--;
+				}
+			}
+		}
 
 		static void StaticRun();
 

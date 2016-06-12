@@ -211,6 +211,8 @@ struct MovieHeader
 	uint32_t ConsoleType;
 	uint8_t ControllerTypes[4];
 	uint32_t ExpansionDevice;
+	uint32_t OverclockRate;
+	bool OverclockAdjustApu;
 	uint32_t CheatCount;
 	uint32_t FilenameLength;
 };
@@ -228,6 +230,8 @@ bool Movie::Save()
 	header.Region = (uint32_t)Console::GetNesModel();
 	header.ConsoleType = (uint32_t)EmulationSettings::GetConsoleType();
 	header.ExpansionDevice = (uint32_t)EmulationSettings::GetExpansionDevice();
+	header.OverclockRate = EmulationSettings::GetOverclockRate();
+	header.OverclockAdjustApu = EmulationSettings::GetOverclockAdjustApu();
 	for(int port = 0; port < 4; port++) {
 		header.ControllerTypes[port] = (uint32_t)EmulationSettings::GetControllerType(port);
 	}
@@ -245,6 +249,8 @@ bool Movie::Save()
 	_file.write((char*)&header.ConsoleType, sizeof(header.ConsoleType));
 	_file.write((char*)&header.ControllerTypes, sizeof(header.ControllerTypes));
 	_file.write((char*)&header.ExpansionDevice, sizeof(header.ExpansionDevice));
+	_file.write((char*)&header.OverclockRate, sizeof(header.OverclockRate));
+	_file.write((char*)&header.OverclockAdjustApu, sizeof(header.OverclockAdjustApu));
 	_file.write((char*)&header.CheatCount, sizeof(header.CheatCount));
 	_file.write((char*)&header.FilenameLength, sizeof(header.FilenameLength));
 
@@ -302,7 +308,8 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	}
 
 	file.read((char*)&header.MovieFormatVersion, sizeof(header.MovieFormatVersion));
-	if(header.MovieFormatVersion != Movie::MovieFormatVersion) {
+	if(header.MovieFormatVersion < 2 || header.MovieFormatVersion > Movie::MovieFormatVersion) {
+		//Currently compatible with version 2 & 3
 		MessageManager::DisplayMessage("Movies", "MovieIncompatibleVersion");
 		return false;
 	}
@@ -313,6 +320,12 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	file.read((char*)&header.ConsoleType, sizeof(header.ConsoleType));
 	file.read((char*)&header.ControllerTypes, sizeof(header.ControllerTypes));
 	file.read((char*)&header.ExpansionDevice, sizeof(header.ExpansionDevice));
+	if(header.MovieFormatVersion >= 3) {
+		//New fields in version 3
+		file.read((char*)&header.OverclockRate, sizeof(header.OverclockRate));
+		file.read((char*)&header.OverclockAdjustApu, sizeof(header.OverclockAdjustApu));
+		EmulationSettings::SetOverclockRate(header.OverclockRate, header.OverclockAdjustApu);
+	}
 	file.read((char*)&header.CheatCount, sizeof(header.CheatCount));
 	file.read((char*)&header.FilenameLength, sizeof(header.FilenameLength));
 

@@ -235,6 +235,12 @@
       <Control ID="lblLastSync">Dernière synchronisation : </Control>
       <Control ID="btnResync">Resynchroniser</Control>
 
+      <Control ID="grpOverclocking">Overclocking</Control>
+      <Control ID="lblOverclockWarning">ATTENTION: L'overclocking affecte la stabilité de l'émulation et peut faire planter certains jeux!</Control>
+      <Control ID="lblClockRate">Fréquence d'horloge : </Control>
+      <Control ID="lblClockRatePercent">% (Recommandé: 100%)</Control>
+      <Control ID="chkOverclockAdjustApu">Ne pas overclocker l'APU (Empêche le changement de tonalité causé par l'overclocking)</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>

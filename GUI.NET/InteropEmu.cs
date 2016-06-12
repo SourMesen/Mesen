@@ -116,6 +116,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetReverbParameters(double strength, double delay);
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
 		[DllImport(DLLPath)] public static extern void SetEmulationSpeed(UInt32 emulationSpeed);
+		[DllImport(DLLPath)] public static extern void SetOverclockRate(UInt32 overclockRate, [MarshalAs(UnmanagedType.I1)]bool adjustApu);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
 		[DllImport(DLLPath)] public static extern void SetVideoScale(double scale);
 		[DllImport(DLLPath)] public static extern void SetVideoAspectRatio(VideoAspectRatio aspectRatio);

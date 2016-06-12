@@ -234,7 +234,13 @@
       <Control ID="btnEnableIntegration">Google Drive同期を有効にする</Control>
       <Control ID="btnResync">同期</Control>
       <Control ID="lblLastSync">最終同期： </Control>
-      
+
+      <Control ID="grpOverclocking">オーバークロック</Control>
+      <Control ID="lblOverclockWarning">警告: オーバークロックをすることでエミュレーションの精度は下がる。　ゲームがバグる可能性は高い。</Control>
+      <Control ID="lblClockRate">クロックレート： </Control>
+      <Control ID="lblClockRatePercent">% (デフォルト： 100%)</Control>
+      <Control ID="chkOverclockAdjustApu">APUのオーバークロックを無効にする (オーバークロックによる音声のピッチ変化を中和)</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>

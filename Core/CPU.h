@@ -2,9 +2,9 @@
 
 #include "stdafx.h"
 #include "MemoryManager.h"
-#include "PPU.h"
 #include "Snapshotable.h"
 #include "TraceLogger.h"
+#include "EmulationSettings.h"
 
 namespace PSFlags
 {
@@ -900,7 +900,9 @@ public:
 	static bool HasIRQSource(IRQSource source) { return (CPU::Instance->_state.IRQFlag & (int)source) != 0; }
 	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
 	static void RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue);
-	static void StartDmcTransfer();
+	static void StartDmcTransfer();	
+	static uint32_t GetClockRate(NesModel model, bool includeOverclock = true);
+
 	
 	//Used by debugger for "Set Next Statement"
 	void SetDebugPC(uint16_t value) { SetPC(value); _state.DebugPC = value; }

@@ -77,13 +77,7 @@ public:
 		_square2.Run();
 		if(_audioCounter <= 0) {
 			//~240hz envelope/length counter
-			switch(EmulationSettings::GetNesModel()) {
-				default:
-				case NesModel::NTSC: _audioCounter = CPU::ClockRateNtsc / 240; break;
-				case NesModel::PAL: _audioCounter = CPU::ClockRatePal / 240; break;
-				case NesModel::Dendy: _audioCounter = CPU::ClockRateDendy / 240; break;
-			}
-
+			_audioCounter = CPU::GetClockRate(EmulationSettings::GetNesModel()) / 240;
 			_square1.TickLengthCounter();
 			_square1.TickEnvelope();
 			_square2.TickLengthCounter();

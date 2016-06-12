@@ -124,6 +124,6 @@
     <value>Mesen can integrate with Google Drive to keep your save data in the cloud.  When Google Drive integration is enabled, your save data is easily accessible from any computer and is synced between computers.  Additionally, save data stored on Google Drive can be restored in the event it is erased from your computer.</value>
   </data>
   <metadata name="tmrSyncDateTime.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>110, 17</value>
+    <value>107, 17</value>
   </metadata>
 </root>

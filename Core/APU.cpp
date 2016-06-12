@@ -174,11 +174,6 @@ bool APU::NeedToRun(uint32_t currentCycle)
 	return false;
 }
 
-void APU::ExecStatic()
-{
-	Instance->Exec();
-}
-
 void APU::Exec()
 {
 	_currentCycle++;
@@ -206,6 +201,7 @@ void APU::EndFrame()
 
 void APU::Reset(bool softReset)
 {
+	_cyclesNeeded = 0;
 	_currentCycle = 0;
 	_previousCycle = 0;
 	_squareChannel[0]->Reset(softReset);
@@ -233,7 +229,7 @@ void APU::StreamState(bool saving)
 	SnapshotInfo deltaModulationChannel{ _deltaModulationChannel.get() };
 	SnapshotInfo frameCounter{ _frameCounter.get() };
 	SnapshotInfo mixer{ _mixer.get() };
-	Stream(_nesModel, squareChannel0, squareChannel1, triangleChannel, noiseChannel, deltaModulationChannel, frameCounter, mixer);
+	Stream(_nesModel, squareChannel0, squareChannel1, triangleChannel, noiseChannel, deltaModulationChannel, frameCounter, mixer, _cyclesNeeded);
 }
 
 void APU::AddExpansionAudioDelta(AudioChannel channel, int16_t delta)

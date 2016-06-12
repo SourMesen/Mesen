@@ -241,6 +241,8 @@ private:
 	static PpuModel _ppuModel;
 
 	static uint32_t _emulationSpeed;
+	static uint32_t _overclockRate;
+	static bool _overclockAdjustApu;
 
 	static OverscanDimensions _overscan;
 	static VideoFilterType _videoFilterType;
@@ -398,6 +400,27 @@ public:
 	static uint32_t GetEmulationSpeed()
 	{
 		return _emulationSpeed;
+	}
+
+	static uint32_t GetOverclockRate()
+	{
+		return _overclockRate;
+	}
+
+	static bool GetOverclockAdjustApu()
+	{
+		return _overclockAdjustApu;
+	}
+
+	static void SetOverclockRate(uint32_t overclockRate, bool adjustApu)
+	{
+		if(_overclockRate != overclockRate || _overclockAdjustApu != adjustApu) {
+			_overclockRate = overclockRate;
+			_overclockAdjustApu = adjustApu;
+			MessageManager::SendNotification(ConsoleNotificationType::ConfigChanged);
+
+			MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
+		}
 	}
 
 	static void SetOverscanDimensions(uint8_t left, uint8_t right, uint8_t top, uint8_t bottom)

@@ -25,6 +25,8 @@ NesModel EmulationSettings::_model = NesModel::Auto;
 PpuModel EmulationSettings::_ppuModel = PpuModel::Ppu2C03;
 
 uint32_t EmulationSettings::_emulationSpeed = 100;
+uint32_t EmulationSettings::_overclockRate = 100;
+bool EmulationSettings::_overclockAdjustApu = true;
 
 OverscanDimensions EmulationSettings::_overscan;
 VideoFilterType EmulationSettings::_videoFilterType = VideoFilterType::None;

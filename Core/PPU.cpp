@@ -36,6 +36,8 @@ PPU::~PPU()
 
 void PPU::Reset()
 {
+	_cyclesNeeded = 0;
+
 	_prevRenderingEnabled = false;
 	_renderingEnabled = false;
 	_skipScrollingIncrement = true;
@@ -881,15 +883,30 @@ void PPU::Exec()
 
 void PPU::ExecStatic()
 {
-	PPU::Instance->Exec();
-	PPU::Instance->Exec();
-	PPU::Instance->Exec();
+	if(EmulationSettings::GetOverclockRate() == 100) {
+		PPU::Instance->Exec();
+		PPU::Instance->Exec();
+		PPU::Instance->Exec();
+		if(PPU::Instance->_nesModel == NesModel::PAL && CPU::GetCycleCount() % 5 == 0) {
+			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
+			PPU::Instance->Exec();
+		}
+	} else {
+		if(PPU::Instance->_nesModel == NesModel::PAL) {
+			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
+			Instance->_cyclesNeeded += 3.2 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
+		} else {
+			Instance->_cyclesNeeded += 3.0 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
+		}
+
+		while(Instance->_cyclesNeeded >= 1.0) {
+			PPU::Instance->Exec();
+			Instance->_cyclesNeeded--;
+		}
+	}
+
 	if(PPU::Instance->_ignoreVramRead) {
 		PPU::Instance->_ignoreVramRead--;
-	}
-	if(PPU::Instance->_nesModel == NesModel::PAL && CPU::GetCycleCount() % 5 == 0) {
-		//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
-		PPU::Instance->Exec();
 	}
 }
 
@@ -899,8 +916,7 @@ void PPU::StreamState(bool saving)
 	ArrayInfo<uint8_t> spriteRam = { _spriteRAM, 0x100 };
 	ArrayInfo<uint8_t> secondarySpriteRam = { _secondarySpriteRAM, 0x20 };
 	ArrayInfo<int32_t> openBusDecayStamp = { _openBusDecayStamp, 8 };
-
-
+	
 	Stream(_state.Control, _state.Mask, _state.Status, _state.SpriteRamAddr, _state.VideoRamAddr, _state.XScroll, _state.TmpVideoRamAddr, _state.WriteToggle,
 		_state.HighBitShift, _state.LowBitShift, _flags.VerticalWrite, _flags.SpritePatternAddr, _flags.BackgroundPatternAddr, _flags.LargeSprites, _flags.VBlank,
 		_flags.Grayscale, _flags.BackgroundMask, _flags.SpriteMask, _flags.BackgroundEnabled, _flags.SpritesEnabled, _flags.IntensifyRed, _flags.IntensifyGreen,
@@ -908,7 +924,8 @@ void PPU::StreamState(bool saving)
 		_cycle, _frameCount, _memoryReadBuffer, _currentTile.LowByte, _currentTile.HighByte, _currentTile.PaletteOffset, _nextTile.LowByte, _nextTile.HighByte,
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
 		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, _spriteDmaAddr,
-		_spriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, _skipScrollingIncrement, paletteRam, spriteRam, secondarySpriteRam, openBusDecayStamp);
+		_spriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, _skipScrollingIncrement, paletteRam, spriteRam, secondarySpriteRam, 
+		openBusDecayStamp, _cyclesNeeded);
 
 	for(int i = 0; i < 64; i++) {
 		Stream(_spriteTiles[i].SpriteX, _spriteTiles[i].LowByte, _spriteTiles[i].HighByte, _spriteTiles[i].PaletteOffset, _spriteTiles[i].HorizontalMirror, _spriteTiles[i].BackgroundPriority);
