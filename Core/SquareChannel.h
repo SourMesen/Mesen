@@ -28,13 +28,13 @@ private:
 	uint32_t _sweepTargetPeriod = 0;
 	uint16_t _realPeriod = 0;
 	
-	bool IsMuted()
+	virtual bool IsMuted()
 	{
 		//A period of t < 8, either set explicitly or via a sweep period update, silences the corresponding pulse channel.
 		return _realPeriod < 8 || (!_sweepNegate && _sweepTargetPeriod > 0x7FF);
 	}
 
-	void InitializeSweep(uint8_t regValue)
+	virtual void InitializeSweep(uint8_t regValue)
 	{
 		_sweepEnabled = (regValue & 0x80) == 0x80;
 		_sweepNegate = (regValue & 0x08) == 0x08;

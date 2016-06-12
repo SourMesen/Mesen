@@ -236,7 +236,7 @@ void APU::StreamState(bool saving)
 	Stream(_nesModel, squareChannel0, squareChannel1, triangleChannel, noiseChannel, deltaModulationChannel, frameCounter, mixer);
 }
 
-void APU::AddExpansionAudioDelta(AudioChannel channel, int8_t delta)
+void APU::AddExpansionAudioDelta(AudioChannel channel, int16_t delta)
 {
 	Instance->_mixer->SetExpansionAudioType(channel);
 	Instance->_mixer->AddExpansionAudioDelta(Instance->_currentCycle, delta);

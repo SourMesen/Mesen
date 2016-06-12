@@ -254,7 +254,6 @@
 			// trkMmc5Vol
 			// 
 			this.trkMmc5Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkMmc5Vol.Enabled = false;
 			this.trkMmc5Vol.Location = new System.Drawing.Point(81, 160);
 			this.trkMmc5Vol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkMmc5Vol.Maximum = 100;

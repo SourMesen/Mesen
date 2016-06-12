@@ -63,5 +63,5 @@ class APU : public Snapshotable, public IMemoryHandler
 
 		static void StaticRun();
 
-		static void AddExpansionAudioDelta(AudioChannel channel, int8_t delta);
+		static void AddExpansionAudioDelta(AudioChannel channel, int16_t delta);
 };

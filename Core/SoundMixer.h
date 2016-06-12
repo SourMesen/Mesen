@@ -36,8 +36,8 @@ private:
 	int16_t _previousOutput = 0;
 
 	vector<uint32_t> _timestamps;
-	int8_t _channelOutput[MaxChannelCount][CycleLength];
-	int8_t _currentOutput[MaxChannelCount];
+	int16_t _channelOutput[MaxChannelCount][CycleLength];
+	int16_t _currentOutput[MaxChannelCount];
 
 	blip_t* _blipBuf;
 	int16_t *_outputBuffer;
@@ -63,10 +63,10 @@ public:
 	void Reset();
 	
 	void PlayAudioBuffer(uint32_t cycle);
-	void AddDelta(AudioChannel channel, uint32_t time, int8_t delta);
+	void AddDelta(AudioChannel channel, uint32_t time, int16_t delta);
 
 	void SetExpansionAudioType(AudioChannel channel);
-	void AddExpansionAudioDelta(uint32_t time, int8_t delta);
+	void AddExpansionAudioDelta(uint32_t time, int16_t delta);
 	
 	static void StartRecording(string filepath);
 	static void StopRecording();

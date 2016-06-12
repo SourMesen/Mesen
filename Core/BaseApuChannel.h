@@ -41,7 +41,10 @@ public:
 		_period = 0;
 		_lastOutput = 0;
 		_previousCycle = 0;
-		_mixer->Reset();
+		if(_mixer) {
+			//_mixer is null/not needed for MMC5 square channels
+			_mixer->Reset();
+		}
 	}
 
 	virtual void StreamState(bool saving)
@@ -93,7 +96,7 @@ public:
 		return 0;
 	}
 
-	void AddOutput(int8_t output)
+	virtual void AddOutput(int8_t output)
 	{
 		if(output != _lastOutput) {
 			_mixer->AddDelta(_channel, _previousCycle, output - _lastOutput);

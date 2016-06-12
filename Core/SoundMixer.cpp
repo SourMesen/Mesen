@@ -33,7 +33,7 @@ void SoundMixer::StreamState(bool saving)
 		UpdateRates();
 	}
 
-	ArrayInfo<int8_t> currentOutput = { _currentOutput, MaxChannelCount };
+	ArrayInfo<int16_t> currentOutput = { _currentOutput, MaxChannelCount };
 	Stream(_previousOutput, currentOutput);
 }
 
@@ -151,14 +151,15 @@ int16_t SoundMixer::GetOutputVolume()
 	int16_t expansionOutput = 0;
 	switch(_expansionAudioType) {
 		case AudioChannel::FDS: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
-		case AudioChannel::VRC6: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 75); break;
+		case AudioChannel::MMC5: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 40); break;
 		case AudioChannel::Namco163: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
 		case AudioChannel::Sunsoft5B: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
+		case AudioChannel::VRC6: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 75); break;
 	}
 	return squareVolume + tndVolume + expansionOutput;
 }
 
-void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int8_t delta)
+void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int16_t delta)
 {
 	if(delta != 0) {
 		_timestamps.push_back(time);
@@ -166,7 +167,7 @@ void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int8_t delta)
 	}
 }
 
-void SoundMixer::AddExpansionAudioDelta(uint32_t time, int8_t delta)
+void SoundMixer::AddExpansionAudioDelta(uint32_t time, int16_t delta)
 {
 	if(delta != 0) {
 		_timestamps.push_back(time);

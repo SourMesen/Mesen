@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "PPU.h"
+#include "MMC5Audio.h"
 
 class MMC5 : public BaseMapper
 {
@@ -9,6 +10,8 @@ private:
 	const uint8_t NtWorkRamIndex = 4;
 	const uint8_t NtEmptyIndex = 5;
 	const uint8_t NtFillModeIndex = 6;
+
+	MMC5Audio _audio;
 
 	uint8_t _prgRamProtect1;
 	uint8_t _prgRamProtect2;
@@ -166,6 +169,8 @@ private:
 		if(!PPU::GetControlFlags().BackgroundEnabled && !PPU::GetControlFlags().SpritesEnabled) {
 			_ppuInFrame = false;
 		}
+
+		_audio.ProcessCpuClock();
 	}
 
 	virtual void NotifyVRAMAddressChange(uint16_t addr)
@@ -321,11 +326,12 @@ protected:
 
 		ArrayInfo<uint8_t> prgBanks = { _prgBanks, 5 };
 		ArrayInfo<uint16_t> chrBanks = { _chrBanks, 12 };
+		SnapshotInfo audio{ &_audio };
 		Stream(_prgRamProtect1, _prgRamProtect2, _fillModeTile, _fillModeColor, _verticalSplitEnabled, _verticalSplitRightSide,
 				_verticalSplitDelimiterTile, _verticalSplitScroll, _verticalSplitBank, _multiplierValue1, _multiplierValue2,
 				_nametableMapping, _extendedRamMode, _exAttributeLastNametableFetch, _exAttrLastFetchCounter, _exAttrSelectedChrBank, 
 				_prgMode, prgBanks, _chrMode, _chrUpperBits, chrBanks, _lastChrReg, 
-				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame);
+				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame, audio);
 
 		if(!saving) {
 			UpdatePrgBanks();
@@ -393,6 +399,10 @@ protected:
 			SwitchChrBank(addr, value);
 		} else {
 			switch(addr) {
+				case 0x5000: case 0x5001: case 0x5002: case 0x5003: case 0x5004: case 0x5005: case 0x5006: case 0x5007: case 0x5010: case 0x5011: case 0x5015:
+					_audio.WriteRegister(addr, value);
+					break;
+
 				case 0x5100: _prgMode = value & 0x03; UpdatePrgBanks(); break;
 				case 0x5101: _chrMode = value & 0x03; UpdateChrBanks(); break;
 				case 0x5102: _prgRamProtect1 = value & 0x03; UpdatePrgBanks(); break;
@@ -430,6 +440,9 @@ protected:
 	uint8_t ReadRegister(uint16_t addr)
 	{
 		switch(addr) {
+			case 0x5010: case 0x5015: 
+				return _audio.ReadRegister(addr);
+
 			case 0x5204:
 			{
 				uint8_t value = (_ppuInFrame ? 0x40 : 0x00) | (_irqPending ? 0x80 : 0x00);
@@ -441,6 +454,8 @@ protected:
 			case 0x5205: return (_multiplierValue1*_multiplierValue2) & 0xFF;
 			case 0x5206: return (_multiplierValue1*_multiplierValue2) >> 8;
 		}
-		return 0;
+
+		//Open bus
+		return (addr >> 8);
 	}
 };
