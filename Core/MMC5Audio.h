@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "SquareChannel.h"
+#include "BaseExpansionAudio.h"
 
 class MMC5Square : public SquareChannel
 {
@@ -40,7 +41,7 @@ public:
 	}
 };
 
-class MMC5Audio : public Snapshotable
+class MMC5Audio : public BaseExpansionAudio
 {
 private:
 	MMC5Square _square1;
@@ -55,29 +56,21 @@ private:
 protected:
 	void StreamState(bool saving)
 	{
+		BaseExpansionAudio::StreamState(saving);
+
 		SnapshotInfo square1{ &_square1 };
 		SnapshotInfo square2{ &_square2 };
 		Stream(square1, square2, _audioCounter, _lastOutput, _pcmReadMode, _pcmIrqEnabled, _pcmOutput);
 	}
 
-public:
-	MMC5Audio()
-	{
-		_audioCounter = 0;
-		_lastOutput = 0;
-		_pcmReadMode = false;
-		_pcmIrqEnabled = false;
-		_pcmOutput = 0;
-	}
-
-	void ProcessCpuClock()
+	void ClockAudio()
 	{
 		_audioCounter--;
 		_square1.Run();
 		_square2.Run();
 		if(_audioCounter <= 0) {
 			//~240hz envelope/length counter
-			_audioCounter = CPU::GetClockRate(EmulationSettings::GetNesModel()) / 240;
+			_audioCounter = CPU::GetClockRate(EmulationSettings::GetNesModel(), false) / 240;
 			_square1.TickLengthCounter();
 			_square1.TickEnvelope();
 			_square2.TickLengthCounter();
@@ -90,6 +83,16 @@ public:
 
 		_square1.ReloadCounter();
 		_square2.ReloadCounter();
+	}
+
+public:
+	MMC5Audio()
+	{
+		_audioCounter = 0;
+		_lastOutput = 0;
+		_pcmReadMode = false;
+		_pcmIrqEnabled = false;
+		_pcmOutput = 0;
 	}
 
 	uint8_t ReadRegister(uint16_t addr)

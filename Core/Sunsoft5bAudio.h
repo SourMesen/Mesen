@@ -2,8 +2,9 @@
 #include "stdafx.h"
 #include "Snapshotable.h"
 #include "APU.h"
+#include "BaseExpansionAudio.h"
 
-class Sunsoft5bAudio : public Snapshotable
+class Sunsoft5bAudio : public BaseExpansionAudio
 {
 private:
 	uint8_t _volumeLut[0x10];
@@ -74,10 +75,23 @@ private:
 protected:
 	void StreamState(bool saving)
 	{
+		BaseExpansionAudio::StreamState(saving);
+
 		ArrayInfo<uint16_t> timer{ _timer, 3 };
 		ArrayInfo<uint8_t> registers{ _registers, 0x10 };
 		ArrayInfo<uint8_t> toneStep{ _toneStep, 3 };
 		Stream(timer, registers, toneStep, _currentRegister, _lastOutput, _processTick);
+	}
+
+	void ClockAudio()
+	{
+		if(_processTick) {
+			for(int i = 0; i < 3; i++) {
+				UpdateChannel(i);
+			}
+			UpdateOutputLevel();
+		}
+		_processTick = !_processTick;
 	}
 
 public:
@@ -99,17 +113,6 @@ public:
 
 			_volumeLut[i] = (uint8_t)output;
 		}
-	}
-
-	void ProcessCpuClock()
-	{
-		if(_processTick) {
-			for(int i = 0; i < 3; i++) {
-				UpdateChannel(i);
-			}
-			UpdateOutputLevel();
-		}
-		_processTick = !_processTick;
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

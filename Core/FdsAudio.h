@@ -6,8 +6,9 @@
 #include "BaseFdsChannel.h"
 #include "ModChannel.h"
 #include <algorithm>
+#include "BaseExpansionAudio.h"
 
-class FdsAudio : public Snapshotable
+class FdsAudio : public BaseExpansionAudio
 {
 private:
 	const uint32_t WaveVolumeTable[4] = { 36, 24, 17, 14 };
@@ -34,6 +35,8 @@ private:
 protected:
 	void StreamState(bool saving)
 	{
+		BaseExpansionAudio::StreamState(saving);
+
 		ArrayInfo<uint8_t> waveTable = { _waveTable, 64 };
 		SnapshotInfo volume{ &_volume };
 		SnapshotInfo mod{ &_mod };
@@ -41,8 +44,7 @@ protected:
 		Stream(volume, mod, _waveWriteEnabled, _disableEnvelopes, _haltWaveform, _masterVolume, _waveOverflowCounter, _wavePitch, _wavePosition, _lastOutput, waveTable);
 	}
 
-public:
-	void Clock()
+	void ClockAudio()
 	{
 		//"The envelopes are not ticked while the waveform is halted."
 		_volume.TickEnvelope(_disableEnvelopes || _haltWaveform);
@@ -79,6 +81,7 @@ public:
 		}
 	}
 
+public:
 	uint8_t ReadRegister(uint16_t addr)
 	{
 		if(addr <= 0x407F) {

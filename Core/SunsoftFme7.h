@@ -55,7 +55,7 @@ protected:
 			}
 		}
 
-		_audio.ProcessCpuClock();
+		_audio.Clock();
 	}
 
 	void UpdateWorkRam()

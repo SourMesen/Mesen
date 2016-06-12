@@ -613,6 +613,12 @@
     <ClInclude Include="MMC5Audio.h">
       <Filter>Nes\Mappers\MMC</Filter>
     </ClInclude>
+    <ClInclude Include="BaseExpansionAudio.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vrc6Audio.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

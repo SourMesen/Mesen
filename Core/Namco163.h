@@ -103,7 +103,7 @@ protected:
 		}
 
 		if(_variant == NamcoVariant::Namco163) {
-			_audio.ProcessCpuClock();
+			_audio.Clock();
 		}
 	}
 

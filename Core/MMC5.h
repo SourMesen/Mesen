@@ -170,7 +170,7 @@ private:
 			_ppuInFrame = false;
 		}
 
-		_audio.ProcessCpuClock();
+		_audio.Clock();
 	}
 
 	virtual void NotifyVRAMAddressChange(uint16_t addr)

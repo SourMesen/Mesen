@@ -386,6 +386,7 @@
     <ClInclude Include="ArkanoidController.h" />
     <ClInclude Include="AutoRomTest.h" />
     <ClInclude Include="Bandai74161_7432.h" />
+    <ClInclude Include="BaseExpansionAudio.h" />
     <ClInclude Include="BaseFdsChannel.h" />
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="BaseSoundFilter.h" />
@@ -553,6 +554,7 @@
     <ClInclude Include="VRC2_4.h" />
     <ClInclude Include="VRC3.h" />
     <ClInclude Include="VRC6.h" />
+    <ClInclude Include="Vrc6Audio.h" />
     <ClInclude Include="Vrc6Pulse.h" />
     <ClInclude Include="Vrc6Saw.h" />
     <ClInclude Include="VRC7.h" />

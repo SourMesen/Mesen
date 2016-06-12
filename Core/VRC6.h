@@ -2,8 +2,7 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "VrcIrq.h"
-#include "Vrc6Pulse.h"
-#include "Vrc6Saw.h"
+#include "Vrc6Audio.h"
 
 enum class VRCVariant;
 
@@ -12,17 +11,12 @@ class VRC6 : public BaseMapper
 {
 private:
 	VrcIrq _irq;
-	Vrc6Pulse _pulse1;
-	Vrc6Pulse _pulse2;
-	Vrc6Saw _saw;
+	Vrc6Audio _audio;
 
 	VRCVariant _model;
 	uint8_t _bankingMode;
 	uint8_t _chrRegisters[8];
-	int32_t _lastOutput;
-
-	bool _haltAudio;
-
+	
 	void UpdatePrgRamAccess()
 	{
 		SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, (_bankingMode & 0x80) ? MemoryAccessType::ReadWrite : MemoryAccessType::NoAccess);
@@ -35,9 +29,7 @@ protected:
 	void InitMapper()
 	{
 		_irq.Reset();
-		_lastOutput = 0;
-		_bankingMode = 0;
-		_haltAudio = false;
+		_audio.Reset();
 		memset(_chrRegisters, 0, sizeof(_chrRegisters));
 		SelectPRGPage(3, -1);
 	}
@@ -47,11 +39,9 @@ protected:
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> chrRegisters = { _chrRegisters, 8 };
 		SnapshotInfo irq{ &_irq };
-		SnapshotInfo pulse1{ &_pulse1 };
-		SnapshotInfo pulse2{ &_pulse2 };
-		SnapshotInfo saw{ &_saw };
+		SnapshotInfo audio{ &_audio };
 
-		Stream(_bankingMode, chrRegisters, _lastOutput, _haltAudio, irq, pulse1, pulse2, saw);
+		Stream(_bankingMode, chrRegisters, irq, audio);
 
 		if(!saving) {
 			UpdatePrgRamAccess();
@@ -61,15 +51,7 @@ protected:
 	void ProcessCpuClock()
 	{
 		_irq.ProcessCpuClock();
-		if(!_haltAudio) {
-			_pulse1.Clock();
-			_pulse2.Clock();
-			_saw.Clock();
-		}
-
-		int32_t outputLevel = _pulse1.GetVolume() + _pulse2.GetVolume() + _saw.GetVolume();
-		APU::AddExpansionAudioDelta(AudioChannel::VRC6, outputLevel - _lastOutput);
-		_lastOutput = outputLevel;
+		_audio.Clock();
 	}
 
 	void UpdatePpuBanking()
@@ -126,24 +108,10 @@ protected:
 				break;
 
 			case 0x9000: case 0x9001: case 0x9002:
-				_pulse1.WriteReg(addr, value);
-				break;
-
-			case 0x9003: {
-				_haltAudio = (value & 0x01) == 0x01;
-				uint8_t frequencyShift = (value & 0x04) == 0x04 ? 8 : ((value & 0x02) == 0x02 ? 4 : 0);
-				_pulse1.SetFrequencyShift(frequencyShift);
-				_pulse2.SetFrequencyShift(frequencyShift);
-				_saw.SetFrequencyShift(frequencyShift);
-				break;
-			}
-
+			case 0x9003:
 			case 0xA000: case 0xA001: case 0xA002:
-				_pulse2.WriteReg(addr, value);
-				break;
-
 			case 0xB000: case 0xB001: case 0xB002:
-				_saw.WriteReg(addr, value);
+				_audio.WriteRegister(addr, value);
 				break;
 
 			case 0xB003:

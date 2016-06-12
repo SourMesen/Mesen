@@ -2,8 +2,9 @@
 #include "stdafx.h"
 #include "Snapshotable.h"
 #include "APU.h"
+#include "BaseExpansionAudio.h"
 
-class Namco163Audio : public Snapshotable
+class Namco163Audio : public BaseExpansionAudio
 {
 private:
 	uint8_t _internalRam[0x80];
@@ -113,25 +114,14 @@ private:
 protected:
 	void StreamState(bool saving)
 	{
+		BaseExpansionAudio::StreamState(saving);
+
 		ArrayInfo<uint8_t> internalRam{ _internalRam, 0x80 };
 		ArrayInfo<int16_t> channelOutput{ _channelOutput, 8 };
 		Stream(internalRam, channelOutput, _ramPosition, _autoIncrement, _updateCounter, _currentChannel, _lastOutput);
 	}
 
-public:
-	Namco163Audio()
-	{
-		memset(_internalRam, 0, sizeof(_internalRam));
-		memset(_channelOutput, 0, sizeof(_channelOutput));
-		_ramPosition = 0;
-		_autoIncrement = false;
-		_updateCounter = 0;
-		_currentChannel = 7;
-		_lastOutput = 0;
-		_disableSound = false;
-	}
-
-	void ProcessCpuClock()
+	void ClockAudio()
 	{
 		if(!_disableSound && GetNumberOfChannels()) {
 			_updateCounter++;
@@ -145,6 +135,19 @@ public:
 				}
 			}
 		}
+	}
+
+public:
+	Namco163Audio()
+	{
+		memset(_internalRam, 0, sizeof(_internalRam));
+		memset(_channelOutput, 0, sizeof(_channelOutput));
+		_ramPosition = 0;
+		_autoIncrement = false;
+		_updateCounter = 0;
+		_currentChannel = 7;
+		_lastOutput = 0;
+		_disableSound = false;
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)
