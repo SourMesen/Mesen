@@ -358,33 +358,36 @@ protected:
 			//"Each byte of Expansion RAM is used to enhance the tile at the corresponding address in every nametable"
 
 			//When fetching NT data, we set a flag and then alter the VRAM values read by the PPU on the following 3 cycles (palette, tile low/high byte)
-			if(addr >= 0x2000 && (addr & 0x3FF) < 0x3C0) {
-				//Nametable fetches
-				_exAttributeLastNametableFetch = addr & 0x03FF;
-				_exAttrLastFetchCounter = 3;
-			} else if(_exAttrLastFetchCounter > 0) {
-				//Attribute fetches
-				_exAttrLastFetchCounter--;
-				switch(_exAttrLastFetchCounter) {
-					case 2:
-					{
-						//PPU palette fetch
-						//Check work ram (expansion ram) to see which tile/palette to use
-						//Use InternalReadRam to bypass the fact that the ram is supposed to be write-only in mode 0/1
-						uint8_t value = InternalReadRam(0x5C00 + _exAttributeLastNametableFetch);
+			uint32_t cycle = PPU::GetCurrentCycle();
+			if(cycle < 257 || cycle > 320) {
+				if(addr >= 0x2000 && (addr & 0x3FF) < 0x3C0) {
+					//Nametable fetches
+					_exAttributeLastNametableFetch = addr & 0x03FF;
+					_exAttrLastFetchCounter = 3;
+				} else if(_exAttrLastFetchCounter > 0) {
+					//Attribute fetches
+					_exAttrLastFetchCounter--;
+					switch(_exAttrLastFetchCounter) {
+						case 2:
+						{
+							//PPU palette fetch
+							//Check work ram (expansion ram) to see which tile/palette to use
+							//Use InternalReadRam to bypass the fact that the ram is supposed to be write-only in mode 0/1
+							uint8_t value = InternalReadRam(0x5C00 + _exAttributeLastNametableFetch);
 
-						//"The pattern fetches ignore the standard CHR banking bits, and instead use the top two bits of $5130 and the bottom 6 bits from Expansion RAM to choose a 4KB bank to select the tile from."
-						_exAttrSelectedChrBank = ((value & 0x3F) | (_chrUpperBits << 6)) % (_chrRomSize / 0x1000);
+							//"The pattern fetches ignore the standard CHR banking bits, and instead use the top two bits of $5130 and the bottom 6 bits from Expansion RAM to choose a 4KB bank to select the tile from."
+							_exAttrSelectedChrBank = ((value & 0x3F) | (_chrUpperBits << 6)) % (_chrRomSize / 0x1000);
 
-						//Return a byte containing the same palette 4 times - this allows the PPU to select the right palette no matter the shift value
-						uint8_t palette = (value & 0xC0) >> 6;
-						return palette | palette << 2 | palette << 4 | palette << 6;
+							//Return a byte containing the same palette 4 times - this allows the PPU to select the right palette no matter the shift value
+							uint8_t palette = (value & 0xC0) >> 6;
+							return palette | palette << 2 | palette << 4 | palette << 6;
+						}
+
+						case 1:
+						case 0:
+							//PPU tile data fetch (high byte & low byte)
+							return _chrRom[_exAttrSelectedChrBank * 0x1000 + (addr & 0xFFF)];
 					}
-
-					case 1:
-					case 0:
-						//PPU tile data fetch (high byte & low byte)
-						return _chrRom[_exAttrSelectedChrBank * 0x1000 + (addr & 0xFFF)];
 				}
 			}
 		}
