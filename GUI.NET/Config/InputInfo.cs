@@ -32,8 +32,8 @@ namespace Mesen.GUI.Config
 				if(keySetIndex == 0) {
 					A = "A";
 					B = "S";
-					Select = "W";
-					Start = "Q";
+					Select = "Q";
+					Start = "W";
 					Up = "Up Arrow";
 					Down = "Down Arrow";
 					Left = "Left Arrow";
@@ -53,6 +53,32 @@ namespace Mesen.GUI.Config
 
 					TurboA = "Pad1 B";
 					TurboB = "Pad1 Y";
+				}
+			} else if(controllerIndex == 1) {
+				if(keySetIndex == 0) {
+					A = "G";
+					B = "H";
+					Select = "T";
+					Start = "Y";
+					Up = "I";
+					Down = "K";
+					Left = "J";
+					Right = "L";
+
+					TurboA = "B";
+					TurboB = "N";
+				} else if(keySetIndex == 1) {
+					A = "Pad2 A";
+					B = "Pad2 X";
+					Select = "Pad2 Back";
+					Start = "Pad2 Start";
+					Up = "Pad2 Up";
+					Down = "Pad2 Down";
+					Left = "Pad2 Left";
+					Right = "Pad2 Right";
+
+					TurboA = "Pad2 B";
+					TurboB = "Pad2 Y";
 				}
 			}
 		}
@@ -112,11 +138,11 @@ namespace Mesen.GUI.Config
 		{
 			while(Controllers.Count < 4) {
 				var controllerInfo = new ControllerInfo();
-				controllerInfo.ControllerType = Controllers.Count == 0 ? InteropEmu.ControllerType.StandardController : InteropEmu.ControllerType.None;
+				controllerInfo.ControllerType = Controllers.Count <= 1 ? InteropEmu.ControllerType.StandardController : InteropEmu.ControllerType.None;
 
-				if(Controllers.Count == 0) {
-					controllerInfo.Keys.Add(new KeyMappings(0, 0));
-					controllerInfo.Keys.Add(new KeyMappings(0, 1));
+				if(Controllers.Count <= 1) {
+					controllerInfo.Keys.Add(new KeyMappings(Controllers.Count, 0));
+					controllerInfo.Keys.Add(new KeyMappings(Controllers.Count, 1));
 				}
 				Controllers.Add(controllerInfo);
 			}
