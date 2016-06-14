@@ -625,6 +625,9 @@
     <ClInclude Include="BandaiFcg.h">
       <Filter>Nes\Mappers\Bandai</Filter>
     </ClInclude>
+    <ClInclude Include="FrontFareast.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

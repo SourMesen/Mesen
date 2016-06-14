@@ -12,6 +12,7 @@
 #include "CpRom.h"
 #include "ColorDreams.h"
 #include "FDS.h"
+#include "FrontFareast.h"
 #include "GxRom.h"
 #include "IremG101.h"
 #include "IremH3001.h"
@@ -109,7 +110,9 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 3: return new CNROM(false);
 		case 4: return new MMC3();
 		case 5: return new MMC5();
+		case 6: return new FrontFareast();
 		case 7: return new AXROM();
+		case 8: return new FrontFareast();
 		case 9: return new MMC2();
 		case 10: return new MMC4();
 		case 11: return new ColorDreams();
@@ -117,6 +120,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 13: return new CpRom();
 		case 15: return new Mapper15();
 		case 16: return new BandaiFcg();
+		case 17: return new FrontFareast();
 		case 18: return new JalecoSs88006();
 		case 19: return new Namco163();
 		case 21: return new VRC2_4(VRCVariant::VRC4a);  //Conflicts: VRC4c
