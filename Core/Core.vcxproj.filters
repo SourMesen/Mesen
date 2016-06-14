@@ -71,6 +71,9 @@
     <Filter Include="Nes\Mappers\VRC">
       <UniqueIdentifier>{0de6642c-1ea6-4872-b21f-2c3009eee9ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\Mappers\Bandai">
+      <UniqueIdentifier>{2d5cebc1-c803-457f-bdeb-3c9dfba704ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -194,9 +197,6 @@
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="Nina03_06.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="Bandai74161_7432.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="BnRom.h">
@@ -618,6 +618,12 @@
     </ClInclude>
     <ClInclude Include="Vrc6Audio.h">
       <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="Bandai74161_7432.h">
+      <Filter>Nes\Mappers\Bandai</Filter>
+    </ClInclude>
+    <ClInclude Include="BandaiFcg.h">
+      <Filter>Nes\Mappers\Bandai</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

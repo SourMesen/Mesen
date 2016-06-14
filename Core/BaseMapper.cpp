@@ -267,6 +267,11 @@ void BaseMapper::InitializeChrRam(int32_t chrRamSize)
 	}
 }
 
+bool BaseMapper::HasChrRam()
+{
+	return _chrRamSize > 0;
+}
+
 void BaseMapper::AddRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation)
 {
 	for(int i = startAddr; i <= endAddr; i++) {
@@ -386,6 +391,9 @@ void BaseMapper::Initialize(RomData &romData)
 		//Assume there is CHR RAM if no CHR ROM exists
 		_onlyChrRam = true;
 		InitializeChrRam(romData.ChrRamSize);
+
+		//Map CHR RAM to 0x0000-0x1FFF by default when no CHR ROM exists
+		SetPpuMemoryMapping(0x0000, 0x1FFF, 0, ChrMemoryType::ChrRam);
 		_chrRomSize = _chrRamSize;
 	} else if(romData.ChrRamSize >= 0) {
 		InitializeChrRam(romData.ChrRamSize);

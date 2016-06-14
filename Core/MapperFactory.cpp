@@ -4,6 +4,7 @@
 #include "RomLoader.h"
 #include "AXROM.h"
 #include "Bandai74161_7432.h"
+#include "BandaiFcg.h"
 #include "BnRom.h"
 #include "BF909x.h"
 #include "BF9096.h"
@@ -115,7 +116,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 12: return new MMC3_12();
 		case 13: return new CpRom();
 		case 15: return new Mapper15();
-		case 16: break; //18 games
+		case 16: return new BandaiFcg();
 		case 18: return new JalecoSs88006();
 		case 19: return new Namco163();
 		case 21: return new VRC2_4(VRCVariant::VRC4a);  //Conflicts: VRC4c
@@ -188,7 +189,10 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 148: return new Sachen_148();
 		case 149: return new Sachen_149();
 		case 152: return new Bandai74161_7432(true);
+		case 153: return new BandaiFcg();
 		case 154: return new Namco108_154();
+		case 157: return new BandaiFcg();
+		case 159: return new BandaiFcg();
 		case 163: return new Nanjing();
 		case 180: return new UnRom_180();
 		case 184: return new Sunsoft184();
