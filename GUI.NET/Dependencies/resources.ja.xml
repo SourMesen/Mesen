@@ -241,6 +241,8 @@
       <Control ID="lblClockRatePercent">% (デフォルト： 100%)</Control>
       <Control ID="chkOverclockAdjustApu">APUのオーバークロックを無効にする (オーバークロックによる音声のピッチ変化を中和)</Control>
 
+      <Control ID="chkDisableGameDatabase">ゲームデータベースを無効にする</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>

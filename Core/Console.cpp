@@ -56,7 +56,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		}
 		_apu.reset(new APU(_memoryManager.get()));
 
-		_controlManager.reset(_mapper->IsVsSystem() ? new VsControlManager() : new ControlManager());
+		_controlManager.reset(_mapper->GetGameSystem() == GameSystem::VsUniSystem ? new VsControlManager() : new ControlManager());
 
 		_memoryManager->RegisterIODevice(_mapper.get());
 		_memoryManager->RegisterIODevice(_ppu.get());
@@ -311,7 +311,11 @@ double Console::UpdateNesModel(bool sendNotification)
 	NesModel model = EmulationSettings::GetNesModel();
 	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
 	if(model == NesModel::Auto) {
-		model = _mapper->IsPalRom() ? NesModel::PAL : NesModel::NTSC;
+		switch(_mapper->GetGameSystem()) {
+			case GameSystem::NesPal: model = NesModel::PAL; break;
+			case GameSystem::Dendy: model = NesModel::Dendy; break;
+			default: model = NesModel::NTSC; break;
+		}
 	}
 	if(_model != model) {
 		_model = model;

@@ -86,7 +86,7 @@ namespace Mesen.GUI
 				if(entry.Name.Contains(suffix)) {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
-				} else if(entry.Name == "MesenUpdater.exe") {
+				} else if(entry.Name == "MesenUpdater.exe" || entry.Name == "MesenDB.txt") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name.StartsWith("Google.Apis") || entry.Name == "BouncyCastle.Crypto.dll" || entry.Name == "Zlib.Portable.dll" || entry.Name == "Newtonsoft.Json.dll") {

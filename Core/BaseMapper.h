@@ -52,8 +52,7 @@ private:
 	uint8_t _nametableIndexes[4];
 
 	bool _onlyChrRam = false;
-	bool _isPalRom = false;
-	bool _isVsSystem = false;
+	GameSystem _gameSystem;
 	bool _hasBusConflicts = false;
 	string _romFilename;
 
@@ -169,8 +168,7 @@ public:
 
 	void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
-	bool IsPalRom();
-	bool IsVsSystem();
+	GameSystem GetGameSystem();
 	uint32_t GetCrc32();
 
 	uint8_t ReadRAM(uint16_t addr);

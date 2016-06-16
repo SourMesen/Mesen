@@ -578,6 +578,8 @@ namespace Mesen.GUI
 
 		SwapDutyCycles = 0x10000,
 
+		DisableGameDatabase = 0x20000,
+
 		InBackground = 0x40000000,
 	}
 

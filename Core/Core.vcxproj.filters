@@ -628,6 +628,9 @@
     <ClInclude Include="FrontFareast.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="GameDatabase.h">
+      <Filter>Nes\RomLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -781,6 +784,9 @@
       <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="iNesLoader.cpp">
+      <Filter>Nes\RomLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDatabase.cpp">
       <Filter>Nes\RomLoader</Filter>
     </ClCompile>
   </ItemGroup>

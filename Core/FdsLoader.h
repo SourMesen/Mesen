@@ -156,6 +156,7 @@ public:
 		romData.MapperID = MapperFactory::FdsMapperID;
 		romData.MirroringType = MirroringType::Vertical;
 		romData.PrgRom = LoadBios();
+		romData.System = GameSystem::FDS;
 
 		if(romData.PrgRom.size() != 0x2000) {
 			romData.Error = true;

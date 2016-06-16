@@ -241,6 +241,8 @@
       <Control ID="lblClockRatePercent">% (Recommandé: 100%)</Control>
       <Control ID="chkOverclockAdjustApu">Ne pas overclocker l'APU (Empêche le changement de tonalité causé par l'overclocking)</Control>
 
+      <Control ID="chkDisableGameDatabase">Désactiver la base de données des jeux</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>

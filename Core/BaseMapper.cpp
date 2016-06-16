@@ -354,8 +354,7 @@ void BaseMapper::Initialize(RomData &romData)
 	}
 
 	_hasBattery = romData.HasBattery || ForceBattery();
-	_isPalRom = romData.IsPalRom;
-	_isVsSystem = romData.IsVsSystem;
+	_gameSystem = romData.System;
 	_crc32 = romData.Crc32;
 	_hasBusConflicts = HasBusConflicts();
 
@@ -453,7 +452,7 @@ void BaseMapper::ApplyCheats()
 
 void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
 {
-	if(IsVsSystem()) {
+	if(_gameSystem == GameSystem::VsUniSystem) {
 		ranges.AddHandler(MemoryOperation::Read, 0x6000, 0xFFFF);
 		ranges.AddHandler(MemoryOperation::Write, 0x6000, 0xFFFF);
 	} else {
@@ -518,14 +517,9 @@ void BaseMapper::SetMirroringType(MirroringType type)
 	}
 }
 
-bool BaseMapper::IsPalRom()
+GameSystem BaseMapper::GetGameSystem()
 {
-	return _isPalRom;
-}
-
-bool BaseMapper::IsVsSystem()
-{
-	return _isVsSystem;
+	return _gameSystem;
 }
 
 uint32_t BaseMapper::GetCrc32()

@@ -81,6 +81,7 @@
 			this.nudOverclockRate = new System.Windows.Forms.NumericUpDown();
 			this.lblClockRatePercent = new System.Windows.Forms.Label();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.chkDisableGameDatabase = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -105,7 +106,7 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 255);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 282);
 			this.baseConfigPanel.Size = new System.Drawing.Size(487, 29);
 			// 
 			// tlpMain
@@ -136,7 +137,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(473, 223);
+			this.tlpMain.Size = new System.Drawing.Size(473, 250);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// chkSingleInstance
@@ -220,11 +221,12 @@
 			this.chkDisableScreensaver.TabIndex = 11;
 			this.chkDisableScreensaver.Text = "Disable screensaver while emulation is running";
 			this.chkDisableScreensaver.UseVisualStyleBackColor = true;
+			this.chkDisableScreensaver.Visible = false;
 			// 
 			// btnOpenMesenFolder
 			// 
 			this.btnOpenMesenFolder.AutoSize = true;
-			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 197);
+			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 224);
 			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
 			this.btnOpenMesenFolder.Size = new System.Drawing.Size(117, 23);
 			this.btnOpenMesenFolder.TabIndex = 16;
@@ -271,7 +273,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(487, 255);
+			this.tabMain.Size = new System.Drawing.Size(487, 282);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -280,7 +282,7 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(479, 229);
+			this.tpgGeneral.Size = new System.Drawing.Size(479, 256);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -542,7 +544,7 @@
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(479, 229);
+			this.tpgAdvanced.Size = new System.Drawing.Size(479, 256);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -551,29 +553,31 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 4);
-			this.tableLayoutPanel1.Controls.Add(this.grpOverclocking, 0, 5);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameDatabase, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 4);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 5);
+			this.tableLayoutPanel1.Controls.Add(this.grpOverclocking, 0, 6);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 6;
+			this.tableLayoutPanel1.RowCount = 7;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 223);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 250);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// chkUseAlternativeMmc3Irq
 			// 
 			this.chkUseAlternativeMmc3Irq.AutoSize = true;
-			this.chkUseAlternativeMmc3Irq.Location = new System.Drawing.Point(3, 3);
+			this.chkUseAlternativeMmc3Irq.Location = new System.Drawing.Point(3, 26);
 			this.chkUseAlternativeMmc3Irq.Name = "chkUseAlternativeMmc3Irq";
 			this.chkUseAlternativeMmc3Irq.Size = new System.Drawing.Size(197, 17);
 			this.chkUseAlternativeMmc3Irq.TabIndex = 0;
@@ -583,7 +587,7 @@
 			// chkAllowInvalidInput
 			// 
 			this.chkAllowInvalidInput.AutoSize = true;
-			this.chkAllowInvalidInput.Location = new System.Drawing.Point(3, 26);
+			this.chkAllowInvalidInput.Location = new System.Drawing.Point(3, 49);
 			this.chkAllowInvalidInput.Name = "chkAllowInvalidInput";
 			this.chkAllowInvalidInput.Size = new System.Drawing.Size(341, 17);
 			this.chkAllowInvalidInput.TabIndex = 1;
@@ -593,7 +597,7 @@
 			// chkRemoveSpriteLimit
 			// 
 			this.chkRemoveSpriteLimit.AutoSize = true;
-			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 49);
+			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 72);
 			this.chkRemoveSpriteLimit.Name = "chkRemoveSpriteLimit";
 			this.chkRemoveSpriteLimit.Size = new System.Drawing.Size(205, 17);
 			this.chkRemoveSpriteLimit.TabIndex = 2;
@@ -603,7 +607,7 @@
 			// chkFdsAutoLoadDisk
 			// 
 			this.chkFdsAutoLoadDisk.AutoSize = true;
-			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(3, 72);
+			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(3, 95);
 			this.chkFdsAutoLoadDisk.Name = "chkFdsAutoLoadDisk";
 			this.chkFdsAutoLoadDisk.Size = new System.Drawing.Size(303, 17);
 			this.chkFdsAutoLoadDisk.TabIndex = 3;
@@ -613,7 +617,7 @@
 			// chkFdsFastForwardOnLoad
 			// 
 			this.chkFdsFastForwardOnLoad.AutoSize = true;
-			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(3, 95);
+			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(3, 118);
 			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
 			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(342, 17);
 			this.chkFdsFastForwardOnLoad.TabIndex = 4;
@@ -624,9 +628,9 @@
 			// 
 			this.grpOverclocking.Controls.Add(this.tableLayoutPanel2);
 			this.grpOverclocking.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpOverclocking.Location = new System.Drawing.Point(3, 118);
+			this.grpOverclocking.Location = new System.Drawing.Point(3, 141);
 			this.grpOverclocking.Name = "grpOverclocking";
-			this.grpOverclocking.Size = new System.Drawing.Size(467, 102);
+			this.grpOverclocking.Size = new System.Drawing.Size(467, 106);
 			this.grpOverclocking.TabIndex = 5;
 			this.grpOverclocking.TabStop = false;
 			this.grpOverclocking.Text = "Overclocking";
@@ -647,7 +651,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(461, 83);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(461, 87);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// lblOverclockWarning
@@ -734,11 +738,21 @@
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
+			// chkDisableGameDatabase
+			// 
+			this.chkDisableGameDatabase.AutoSize = true;
+			this.chkDisableGameDatabase.Location = new System.Drawing.Point(3, 3);
+			this.chkDisableGameDatabase.Name = "chkDisableGameDatabase";
+			this.chkDisableGameDatabase.Size = new System.Drawing.Size(170, 17);
+			this.chkDisableGameDatabase.TabIndex = 6;
+			this.chkDisableGameDatabase.Text = "Disable built-in game database";
+			this.chkDisableGameDatabase.UseVisualStyleBackColor = true;
+			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(487, 284);
+			this.ClientSize = new System.Drawing.Size(487, 311);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -836,5 +850,6 @@
 		private System.Windows.Forms.Label lblClockRate;
 		private System.Windows.Forms.NumericUpDown nudOverclockRate;
 		private System.Windows.Forms.Label lblClockRatePercent;
+		private System.Windows.Forms.CheckBox chkDisableGameDatabase;
 	}
 }

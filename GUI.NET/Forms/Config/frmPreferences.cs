@@ -45,6 +45,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("OverclockRate", nudOverclockRate);
 			AddBinding("OverclockAdjustApu", chkOverclockAdjustApu);
 
+			AddBinding("DisableGameDatabase", chkDisableGameDatabase);
+
 			UpdateCloudDisplay();
 		}
 

@@ -17,19 +17,31 @@ enum class RomHeaderVersion
 	OldiNes = 2
 };
 
+enum class GameSystem
+{
+	NesNtsc,
+	NesPal,
+	Famicom,
+	Dendy,
+	VsUniSystem,
+	Playchoice,
+	FDS,
+	Unknown,
+};
+
 struct RomData
 {
 	string Filename;
 
 	uint16_t MapperID;
 	uint8_t SubMapperID = 0;
+	GameSystem System = GameSystem::Unknown;
 	bool HasBattery = false;
-	bool IsPalRom = false;
-	bool IsVsSystem = false;
-	bool IsPlayChoice = false;
 	bool HasTrainer = false;
 	MirroringType MirroringType;
 	int32_t ChrRamSize = -1;
+
+	bool IsNes20Header = false;
 
 	vector<uint8_t> PrgRom;
 	vector<uint8_t> ChrRom;

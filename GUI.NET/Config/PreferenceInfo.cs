@@ -42,6 +42,8 @@ namespace Mesen.GUI.Config
 		public UInt32 OverclockRate = 100;
 		public bool OverclockAdjustApu = true;
 
+		public bool DisableGameDatabase = false;
+
 		public PreferenceInfo()
 		{
 		}
@@ -78,6 +80,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.PauseOnMovieEnd, preferenceInfo.PauseOnMovieEnd);
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
 			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground);
+			InteropEmu.SetFlag(EmulationFlags.DisableGameDatabase, preferenceInfo.DisableGameDatabase);
 
 			InteropEmu.SetOverclockRate(preferenceInfo.OverclockRate, preferenceInfo.OverclockAdjustApu);
 		}
