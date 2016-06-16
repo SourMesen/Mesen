@@ -23,6 +23,7 @@ class VRC2_4 : public BaseMapper
 	private:
 		VrcIrq _irq;
 		VRCVariant _variant;
+		bool _useHeuristics;
 
 		uint8_t _prgReg0;
 		uint8_t _prgReg1;
@@ -33,12 +34,57 @@ class VRC2_4 : public BaseMapper
 
 		bool _hasIRQ;
 
+		void DetectVariant()
+		{
+			switch(_mapperID) {
+				default:
+				case 21:
+					//Conflicts: VRC4c
+					switch(_subMapperID) {
+						default:
+						case 0: _variant = VRCVariant::VRC4a; break;
+						case 1: _variant = VRCVariant::VRC4a; break;
+						case 2: _variant = VRCVariant::VRC4c; break;
+					}
+					break;
+
+				case 22: _variant = VRCVariant::VRC2a; break;
+
+				case 23:
+					//Conflicts: VRC4e
+					switch(_subMapperID) {
+						default:
+						case 0: _variant = VRCVariant::VRC2b; break;
+						case 2: _variant = VRCVariant::VRC4e; break;
+						case 3: _variant = VRCVariant::VRC2b; break;
+					}
+					break;
+
+				case 25:
+					//Conflicts: VRC2c, VRC4d
+					switch(_subMapperID) {
+						default:
+						case 0: _variant = VRCVariant::VRC4b; break;
+						case 1: _variant = VRCVariant::VRC4b; break;
+						case 2: _variant = VRCVariant::VRC4d; break;
+						case 3: _variant = VRCVariant::VRC2c; break;
+					}
+					break;
+
+				case 27: _variant = VRCVariant::VRC4_27; break; //Untested
+			}
+
+			_useHeuristics = (_subMapperID == 0) && _mapperID != 22 && _mapperID != 27;
+		}
+
 	protected:
 		virtual uint16_t GetPRGPageSize() { return 0x2000; }
 		virtual uint16_t GetCHRPageSize() {	return 0x0400; }
 
 		void InitMapper() 
 		{
+			DetectVariant();
+
 			_prgMode = 0;
 			_prgReg0 = 0;
 			_prgReg1 = 0;
@@ -80,11 +126,17 @@ class VRC2_4 : public BaseMapper
 
 		void WriteRegister(uint16_t addr, uint8_t value)
 		{
-			addr = TranslateAddress(addr);
+			addr = TranslateAddress(addr) & 0xF00F;
+
 			if(addr >= 0x8000 && addr <= 0x8006) {
 				_prgReg0 = value & 0x1F;
 			} else if(addr == 0x9000 || addr == 0x9002) {
-				switch(value & 0x03) {
+				uint8_t mask = 0x03;
+				if(_variant == VRCVariant::VRC2a || _variant == VRCVariant::VRC2b) {
+					mask = 0x01;
+				}
+
+				switch(value & mask) {
 					case 0: SetMirroringType(MirroringType::Vertical); break;
 					case 1: SetMirroringType(MirroringType::Horizontal); break;
 					case 2: SetMirroringType(MirroringType::ScreenAOnly); break;
@@ -120,67 +172,108 @@ class VRC2_4 : public BaseMapper
 		}
 
 	public:		
-		VRC2_4(VRCVariant variant)
-		{
-			_variant = variant;
-		}
-
 		uint16_t TranslateAddress(uint16_t addr)
 		{
-			uint32_t A0 = addr & 0x01;
-			uint32_t A1 = (addr >> 1) & 0x01;
+			uint32_t A0, A1;
 
-			switch(_variant) {
-				case VRCVariant::VRC2a:
-					//Mapper 22
-					A0 = (addr >> 1) & 0x01;
-					A1 = (addr & 0x01);
-					break;
+			if(_useHeuristics) {
+				switch(_variant) {
+					case VRCVariant::VRC2c:
+					case VRCVariant::VRC4b:
+					case VRCVariant::VRC4d:
+						//Mapper 25
+						//ORing both values should make most games work.
+						//VRC2c & VRC4b (Both uses the same bits)
+						A0 = (addr >> 1) & 0x01;
+						A1 = (addr & 0x01);
 
-				case VRCVariant::VRC4_27:
-					A0 = addr & 0x01;
-					A1 = (addr >> 1) & 0x01;
-					break;
+						//VRC4d
+						A0 |= (addr >> 3) & 0x01;
+						A1 |= (addr >> 2) & 0x01;
+						break;
+					case VRCVariant::VRC4a:
+					case VRCVariant::VRC4c:
+						//Mapper 21
+						//VRC4a
+						A0 = (addr >> 1) & 0x01;
+						A1 = (addr >> 2) & 0x01;
 
-				case VRCVariant::VRC2c:
-				case VRCVariant::VRC4b:
-				case VRCVariant::VRC4d:
-					//Mapper 25
-					//ORing both values should make most games work.
-					//VRC2c & VRC4b (Both uses the same bits)
-					A0 = (addr >> 1) & 0x01;
-					A1 = (addr & 0x01);
-					
-					//VRC4d
-					A0 |= (addr >> 3) & 0x01;
-					A1 |= (addr >> 2) & 0x01;
-					break;
-				case VRCVariant::VRC4a:  
-				case VRCVariant::VRC4c: 
-					//Mapper 21
-					//VRC4a
-					A0 = (addr >> 1) & 0x01;
-					A1 = (addr >> 2) & 0x01;
+						//VRC4c
+						A0 |= (addr >> 6) & 0x01;
+						A1 |= (addr >> 7) & 0x01;
+						break;
 
-					//VRC4c
-					A0 |= (addr >> 6) & 0x01;
-					A1 |= (addr >> 7) & 0x01;
-					break;
-				
-				case VRCVariant::VRC2b:
-				case VRCVariant::VRC4e:
-					//Mapper 23
-					//VRC2b
-					A0 = addr & 0x01;
-					A1 = (addr >> 1) & 0x01;
+					case VRCVariant::VRC2b:
+					case VRCVariant::VRC4e:
+						//Mapper 23
+						//VRC2b
+						A0 = addr & 0x01;
+						A1 = (addr >> 1) & 0x01;
 
-					//VRC4e
-					A0 |= (addr >> 2) & 0x01;
-					A1 |= (addr >> 3) & 0x01;
-					break;
-				default:
-					throw std::runtime_error("not supported");
-					break;
+						//VRC4e
+						A0 |= (addr >> 2) & 0x01;
+						A1 |= (addr >> 3) & 0x01;
+						break;
+					default:
+						throw std::runtime_error("not supported");
+						break;
+				}
+			} else {
+				switch(_variant) {
+					case VRCVariant::VRC2a:
+						//Mapper 22
+						A0 = (addr >> 1) & 0x01;
+						A1 = (addr & 0x01);
+						break;
+
+					case VRCVariant::VRC4_27:
+						//Mapper 27
+						A0 = addr & 0x01;
+						A1 = (addr >> 1) & 0x01;
+						break;
+
+					case VRCVariant::VRC2c:
+					case VRCVariant::VRC4b:
+						//Mapper 25
+						A0 = (addr >> 1) & 0x01;
+						A1 = (addr & 0x01);
+						break;
+
+					case VRCVariant::VRC4d:
+						//Mapper 25
+						A0 = (addr >> 3) & 0x01;
+						A1 = (addr >> 2) & 0x01;
+						break;
+
+					case VRCVariant::VRC4a:
+						//Mapper 21
+						A0 = (addr >> 1) & 0x01;
+						A1 = (addr >> 2) & 0x01;
+						break;
+
+					case VRCVariant::VRC4c:
+						//Mapper 21
+						A0 = (addr >> 6) & 0x01;
+						A1 = (addr >> 7) & 0x01;
+						break;
+
+					case VRCVariant::VRC2b:
+						//Mapper 23
+						A0 = addr & 0x01;
+						A1 = (addr >> 1) & 0x01;
+						break;
+
+					case VRCVariant::VRC4e:
+						//Mapper 23
+						A0 = (addr >> 2) & 0x01;
+						A1 = (addr >> 3) & 0x01;
+						break;
+
+					default:
+						throw std::runtime_error("not supported");
+						break;
+				}
+
 			}
 
 			return (addr & 0xFF00) | (A1 << 1) | A0;

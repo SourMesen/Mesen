@@ -123,13 +123,13 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 17: return new FrontFareast();
 		case 18: return new JalecoSs88006();
 		case 19: return new Namco163();
-		case 21: return new VRC2_4(VRCVariant::VRC4a);  //Conflicts: VRC4c
-		case 22: return new VRC2_4(VRCVariant::VRC2a);
-		case 23: return new VRC2_4(VRCVariant::VRC2b);  //Conflicts: VRC4e
+		case 21: return new VRC2_4();
+		case 22: return new VRC2_4();
+		case 23: return new VRC2_4();
 		case 24: return new VRC6(VRCVariant::VRC6a);
-		case 25: return new VRC2_4(VRCVariant::VRC4b);  //Conflicts: VRC2c, VRC4d
+		case 25: return new VRC2_4();
 		case 26: return new VRC6(VRCVariant::VRC6b);
-		case 27: return new VRC2_4(VRCVariant::VRC4_27);  //Untested
+		case 27: return new VRC2_4();
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();
 		case 34: 
