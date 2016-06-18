@@ -179,9 +179,11 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 93: return new Sunsoft93();
 		case 94: return new UnRom_94();
 		case 95: return new Namco108_95();
+		case 96: break;  //Bandai - Oeka Tablet
 		case 97: return new IremTamS1();
 		case 99: return new VsSystem();
 		case 101: return new JalecoJfxx(true);
+		case 105: break; //NES World Champ - has dip switches
 		case 107: return new Mapper107();
 		case 112: return new Mapper112();
 		case 113: return new Nina03_06(true);
@@ -189,6 +191,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 118: return new TxSRom();
 		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);
 		case 140: return new JalecoJf11_14();
+		case 144: return new ColorDreams();
 		case 145: return new Sachen_145();
 		case 146: return new Nina03_06(false);
 		case 147: return new Sachen_147();
