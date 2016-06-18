@@ -631,6 +631,9 @@
     <ClInclude Include="GameDatabase.h">
       <Filter>Nes\RomLoader</Filter>
     </ClInclude>
+    <ClInclude Include="JalecoJf13.h">
+      <Filter>Nes\Mappers\Jaleco</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

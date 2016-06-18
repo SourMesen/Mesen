@@ -19,6 +19,7 @@
 #include "IremLrog017.h"
 #include "IremTamS1.h"
 #include "JalecoJf11_14.h"
+#include "JalecoJf13.h"
 #include "JalecoJf16.h"
 #include "JalecoJf17_19.h"
 #include "JalecoJfxx.h"
@@ -169,6 +170,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 80: return new TaitoX1005(false);
 		case 82: return new TaitoX1017();
 		case 85: return new VRC7();
+		case 86: return new JalecoJf13();
 		case 87: return new JalecoJfxx(false);
 		case 88: return new Namco108_88();
 		case 89: return new Sunsoft89();
