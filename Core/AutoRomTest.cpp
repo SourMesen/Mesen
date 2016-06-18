@@ -164,9 +164,9 @@ void AutoRomTest::RecordFromMovie(string testFilename, string movieFilename)
 void AutoRomTest::RecordFromTest(string newTestFilename, string existingTestFilename)
 {
 	ZipReader zipReader;
-	zipReader.LoadZipArchive(existingTestFilename);
-	std::stringstream testMovie = zipReader.ExtractFile("TestMovie.mmo");
-	std::stringstream testRom = zipReader.ExtractFile("TestRom.nes");
+	zipReader.LoadArchive(existingTestFilename);
+	std::stringstream testMovie = zipReader.GetStream("TestMovie.mmo");
+	std::stringstream testRom = zipReader.GetStream("TestRom.nes");
 
 	if(testMovie && testRom) {
 		Console::Pause();
@@ -182,10 +182,10 @@ void AutoRomTest::RecordFromTest(string newTestFilename, string existingTestFile
 int32_t AutoRomTest::Run(string filename)
 {
 	ZipReader zipReader;
-	zipReader.LoadZipArchive(filename);
-	std::stringstream testData = zipReader.ExtractFile("TestData.mrt");
-	std::stringstream testMovie = zipReader.ExtractFile("TestMovie.mmo");
-	std::stringstream testRom = zipReader.ExtractFile("TestRom.nes");
+	zipReader.LoadArchive(filename);
+	std::stringstream testData = zipReader.GetStream("TestData.mrt");
+	std::stringstream testMovie = zipReader.GetStream("TestMovie.mmo");
+	std::stringstream testRom = zipReader.GetStream("TestRom.nes");
 
 	if(testData) {
 		char header[3];

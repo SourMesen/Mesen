@@ -323,7 +323,7 @@ namespace Mesen.GUI.Forms
 		{
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
-					_currentGame = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath());
+					_currentGame = InteropEmu.GetRomInfo().GetRomName();
 					InitializeFdsDiskMenu();
 					InitializeVsSystemMenu();
 					CheatInfo.ApplyCheats();
@@ -420,12 +420,16 @@ namespace Mesen.GUI.Forms
 			_romToLoad = filename;
 			if(File.Exists(filename)) {
 				ConfigManager.Config.AddRecentFile(filename);
-				InteropEmu.LoadROM(filename);
-				UpdateRecentFiles();
 
-				string ipsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
-				if(File.Exists(ipsFile)) {
-					InteropEmu.ApplyIpsPatch(ipsFile);
+				int archiveFileIndex;
+				if(frmSelectRom.SelectRom(filename, out archiveFileIndex)) {
+					InteropEmu.LoadROM(filename, archiveFileIndex);
+					UpdateRecentFiles();
+
+					string ipsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
+					if(File.Exists(ipsFile)) {
+						InteropEmu.ApplyIpsPatch(ipsFile);
+					}
 				}
 			} else {
 				MesenMsgBox.Show("FileNotFound", MessageBoxButtons.OK, MessageBoxIcon.Error, filename);
@@ -755,7 +759,7 @@ namespace Mesen.GUI.Forms
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = ResourceHelper.GetMessage("FilterMovie");
 			sfd.InitialDirectory = ConfigManager.MovieFolder;
-			sfd.FileName = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mmo";
+			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.MovieRecord(sfd.FileName, resetEmu);
 			}
@@ -792,7 +796,7 @@ namespace Mesen.GUI.Forms
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = ResourceHelper.GetMessage("FilterWave");
 			sfd.InitialDirectory = ConfigManager.WaveFolder;
-			sfd.FileName = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".wav";
+			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".wav";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.WaveRecord(sfd.FileName);
 			}
@@ -868,7 +872,7 @@ namespace Mesen.GUI.Forms
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = ResourceHelper.GetMessage("FilterTest");
 			sfd.InitialDirectory = ConfigManager.TestFolder;
-			sfd.FileName = Path.GetFileNameWithoutExtension(InteropEmu.GetROMPath()) + ".mtp";
+			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mtp";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.RomTestRecord(sfd.FileName, resetEmu);
 			}

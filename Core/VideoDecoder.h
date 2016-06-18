@@ -46,7 +46,7 @@ public:
 	~VideoDecoder();
 
 	void DecodeFrame();
-	void TakeScreenshot(string romFilename);
+	void TakeScreenshot();
 
 	uint32_t GetFrameCount();
 

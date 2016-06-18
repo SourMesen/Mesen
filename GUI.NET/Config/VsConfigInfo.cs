@@ -10,22 +10,22 @@ namespace Mesen.GUI.Config
 	public class VsConfigInfo
 	{
 		public string GameID;
-		public string GameHash;
+		public string GameCrc;
 		public InteropEmu.PpuModel PpuModel;
 		public byte DipSwitches;
 
 		public static VsConfigInfo GetCurrentGameConfig(bool createNew)
 		{
-			string hash = MD5Helper.GetMD5Hash(InteropEmu.GetROMPath());
+			string crc = InteropEmu.GetRomInfo().GetCrcString();
 			foreach(VsConfigInfo config in ConfigManager.Config.VsConfig) {
-				if(config.GameHash == hash) {
+				if(config.GameCrc == crc) {
 					return config;
 				}
 			}
 
 			if(createNew) {
 				VsConfigInfo newConfig = new VsConfigInfo();
-				newConfig.GameHash = hash;
+				newConfig.GameCrc = crc;
 				ConfigManager.Config.VsConfig.Add(newConfig);
 				return newConfig;
 			} else {

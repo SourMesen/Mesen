@@ -15,21 +15,12 @@ ZipReader::~ZipReader()
 	}
 }
 
-void ZipReader::LoadZipArchive(void* buffer, size_t size)
+bool ZipReader::InternalLoadArchive(void* buffer, size_t size)
 {
-	if(mz_zip_reader_init_mem(&_zipArchive, buffer, size, 0)) {
-		_initialized = true;
-	}
+	return mz_zip_reader_init_mem(&_zipArchive, buffer, size, 0) != 0;
 }
 
-void ZipReader::LoadZipArchive(string filepath)
-{
-	if(mz_zip_reader_init_file(&_zipArchive, filepath.c_str(), 0)) {
-		_initialized = true;
-	}
-}
-
-vector<string> ZipReader::GetFileList()
+vector<string> ZipReader::InternalGetFileList()
 {
 	vector<string> fileList;
 	if(_initialized) {
@@ -62,20 +53,4 @@ void ZipReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileS
 
 		fileSize = uncompSize;
 	}
-}
-
-std::stringstream ZipReader::ExtractFile(string filename)
-{
-	std::stringstream ss;
-	if(_initialized) {
-		uint8_t* buffer = nullptr;
-		size_t size = 0;
-
-		ExtractFile(filename, &buffer, size);		
-		ss.write((char*)buffer, size);
-
-		delete[] buffer;
-	}
-
-	return ss;
 }

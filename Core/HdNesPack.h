@@ -79,7 +79,7 @@ private:
 		_hdNesTiles.clear();
 		_tileInfoByKey.clear();
 
-		string hdPackFolder = FolderUtilities::CombinePath(FolderUtilities::GetHdPackFolder(), FolderUtilities::GetFilename(Console::GetROMPath(), false));
+		string hdPackFolder = FolderUtilities::CombinePath(FolderUtilities::GetHdPackFolder(), FolderUtilities::GetFilename(Console::GetRomName(), false));
 		string hdPackDefinitionFile = FolderUtilities::CombinePath(hdPackFolder, "hires.txt");
 		ifstream packDefinition(hdPackDefinitionFile, ios::in | ios::binary);
 		while(packDefinition.good()) {

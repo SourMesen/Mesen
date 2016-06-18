@@ -170,9 +170,9 @@ bool VideoDecoder::IsRunning()
 	return _decodeThread != nullptr;
 }
 
-void VideoDecoder::TakeScreenshot(string romFilename)
+void VideoDecoder::TakeScreenshot()
 {
 	if(_videoFilter) {
-		_videoFilter->TakeScreenshot(romFilename);
+		_videoFilter->TakeScreenshot();
 	}
 }

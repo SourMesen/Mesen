@@ -250,7 +250,7 @@ uint32_t BaseMapper::GetCHRPageCount()
 
 string BaseMapper::GetBatteryFilename()
 {
-	return FolderUtilities::GetSaveFolder() + FolderUtilities::GetFilename(_romFilename, false) + ".sav";
+	return FolderUtilities::GetSaveFolder() + FolderUtilities::GetFilename(_romName, false) + ".sav";
 }
 		
 void BaseMapper::RestoreOriginalPrgRam()
@@ -330,6 +330,7 @@ void BaseMapper::Initialize(RomData &romData)
 	_mapperID = romData.MapperID;
 	_subMapperID = romData.SubMapperID;
 
+	_romName = romData.RomName;
 	_romFilename = romData.Filename;
 	_batteryFilename = GetBatteryFilename();
 	_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
@@ -520,6 +521,11 @@ void BaseMapper::SetMirroringType(MirroringType type)
 GameSystem BaseMapper::GetGameSystem()
 {
 	return _gameSystem;
+}
+
+string BaseMapper::GetRomName()
+{
+	return _romName;
 }
 
 uint32_t BaseMapper::GetCrc32()

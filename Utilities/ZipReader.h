@@ -1,21 +1,20 @@
 #pragma once
 #include "stdafx.h"
 #include "miniz.h"
+#include "ArchiveReader.h"
 
-class ZipReader
+class ZipReader : public ArchiveReader
 {
 private:
 	mz_zip_archive _zipArchive;
-	bool _initialized = false;
+
+protected:
+	bool InternalLoadArchive(void* buffer, size_t size);
+	vector<string> InternalGetFileList();
 
 public:
 	ZipReader();
-	~ZipReader();
+	virtual ~ZipReader();
 
-	void LoadZipArchive(void* buffer, size_t size);
-	void LoadZipArchive(string filepath);
-
-	vector<string> GetFileList();
 	void ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSize);
-	std::stringstream ExtractFile(string filename);
 };

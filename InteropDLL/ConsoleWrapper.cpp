@@ -16,6 +16,7 @@
 #include "../Core/FDS.h"
 #include "../Core/VsControlManager.h"
 #include "../Core/SoundMixer.h"
+#include "../Core/RomLoader.h"
 
 NES::Renderer *_renderer = nullptr;
 SoundManager *_soundManager = nullptr;
@@ -40,6 +41,12 @@ namespace InteropEmu {
 		{
 			_callback((int)type);
 		}
+	};
+
+	struct RomInfo
+	{
+		const char* RomName;
+		uint32_t Crc32;
 	};
 
 	extern "C" {
@@ -67,9 +74,18 @@ namespace InteropEmu {
 
 		DllExport bool __stdcall IsRunning() { return Console::IsRunning(); }
 
-		DllExport void __stdcall LoadROM(char* filename) { Console::LoadROM(filename); }
+		DllExport void __stdcall LoadROM(char* filename, int32_t archiveFileIndex) { Console::LoadROM(filename, nullptr, archiveFileIndex); }
 		DllExport void __stdcall ApplyIpsPatch(char* filename) { Console::ApplyIpsPatch(filename); }
 		DllExport void __stdcall AddKnowGameFolder(char* folder) { FolderUtilities::AddKnowGameFolder(folder); }
+
+		DllExport const char* __stdcall GetArchiveRomList(char* filename) { 
+			std::ostringstream out;
+			for(string romName : RomLoader::GetArchiveRomList(filename)) {
+				out << romName << "/";
+			}
+			_returnString = out.str();
+			return _returnString.c_str();
+		}
 
 		DllExport void __stdcall SetControllerType(uint32_t port, ControllerType type) { EmulationSettings::SetControllerType(port, type); }
 		DllExport void __stdcall SetControllerKeys(uint32_t port, KeyMappingSet mappings) { EmulationSettings::SetControllerKeys(port, mappings); }
@@ -110,10 +126,24 @@ namespace InteropEmu {
 				Console::GetInstance()->Stop();
 			}
 		}
-		DllExport const char* __stdcall GetROMPath() 
+
+		DllExport const void __stdcall GetRomInfo(RomInfo &romInfo, char* filename, int32_t archiveFileIndex) 
 		{
-			_returnString = Console::GetROMPath();
-			return _returnString.c_str();
+			string romPath = filename;
+			if(romPath.empty()) {
+				_returnString = Console::GetRomName();
+				romInfo.RomName = _returnString.c_str();
+				romInfo.Crc32 = Console::GetCrc32();
+			} else {
+				RomLoader romLoader;
+				if(romLoader.LoadFile(filename, nullptr, "", archiveFileIndex)) {
+					RomData romData = romLoader.GetRomData();
+
+					_returnString = romData.RomName;
+					romInfo.RomName = _returnString.c_str();
+					romInfo.Crc32 = romData.Crc32;
+				}
+			}
 		}
 
 		DllExport void __stdcall Reset() { Console::Reset(); }
@@ -184,7 +214,7 @@ namespace InteropEmu {
 			delete _soundManager;
 		}
 
-		DllExport void __stdcall TakeScreenshot() { VideoDecoder::GetInstance()->TakeScreenshot(FolderUtilities::GetFilename(Console::GetROMPath(), false)); }
+		DllExport void __stdcall TakeScreenshot() { VideoDecoder::GetInstance()->TakeScreenshot(); }
 
 		DllExport INotificationListener* __stdcall RegisterNotificationCallback(NotificationListenerCallback callback)
 		{

@@ -110,6 +110,12 @@
     <ClInclude Include="KreedSaiEagle\SaiEagle.h">
       <Filter>KreedSaiEagle</Filter>
     </ClInclude>
+    <ClInclude Include="SZReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArchiveReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -195,6 +201,12 @@
     </ClCompile>
     <ClCompile Include="KreedSaiEagle\2xSai.cpp">
       <Filter>KreedSaiEagle</Filter>
+    </ClCompile>
+    <ClCompile Include="SZReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArchiveReader.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

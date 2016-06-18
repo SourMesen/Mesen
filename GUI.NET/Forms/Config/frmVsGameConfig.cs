@@ -20,7 +20,7 @@ namespace Mesen.GUI.Forms.Config
 			Entity = configInfo;
 
 			if(string.IsNullOrWhiteSpace(configInfo.GameID)) {
-				configInfo.GameID = VsGameConfig.GetGameID(InteropEmu.GetROMPath());
+				configInfo.GameID = VsGameConfig.GetGameID(InteropEmu.GetRomInfo().GetRomName());
 			}
 
 			AddBinding("PpuModel", cboPpuModel);

@@ -18,7 +18,7 @@ namespace Mesen.GUI.Config
 		public bool Enabled = true;
 		public string CheatName;
 		public string GameName;
-		public string GameHash;
+		public string GameCrc;
 		public CheatType CheatType;
 		public string GameGenieCode;
 		public UInt32 ProActionRockyCode;
@@ -67,10 +67,9 @@ namespace Mesen.GUI.Config
 		{
 			InteropEmu.CheatClear();
 
-			string romPath = InteropEmu.GetROMPath();
-			string md5Hash = MD5Helper.GetMD5Hash(romPath);
+			string crc = InteropEmu.GetRomInfo().GetCrcString();
 			int cheatCount = 0;
-			foreach(CheatInfo cheat in ConfigManager.Config.Cheats.Where(c => c.GameHash == md5Hash)) {
+			foreach(CheatInfo cheat in ConfigManager.Config.Cheats.Where(c => c.GameCrc == crc)) {
 				if(cheat.Enabled) {
 					cheat.ApplyCheat();
 					cheatCount++;

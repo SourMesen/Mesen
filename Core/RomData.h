@@ -31,6 +31,7 @@ enum class GameSystem
 
 struct RomData
 {
+	string RomName;
 	string Filename;
 
 	uint16_t MapperID;

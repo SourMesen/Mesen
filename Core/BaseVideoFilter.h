@@ -31,7 +31,7 @@ public:
 
 	uint8_t* GetOutputBuffer();
 	void SendFrame(uint16_t *ppuOutputBuffer);
-	void TakeScreenshot(string romFilename);
+	void TakeScreenshot();
 
 	virtual FrameInfo GetFrameInfo() = 0;
 };

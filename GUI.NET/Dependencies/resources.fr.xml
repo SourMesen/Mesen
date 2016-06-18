@@ -315,14 +315,16 @@
       <Control ID="btnUpdate">Mettre à jour</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
+    <Form ID="frmSelectRom" Title="Sélection du jeu...">
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterMovie">Films (*.mmo)|*.mmo|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterWave">Fichiers wave (*.wav)|*.wav|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterPalette">Fichier de palette (*.pal)|*.pal|Tous les fichiers (*.*)|*.*</Message>
-    <Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|Roms de NES (*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|Tous les fichiers (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|Roms de NES(*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|Fichiers IPS (*.ips)|*.IPS|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds)|*.NES;*.ZIP;*.7z;*.FDS|Roms de NES (*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS|Roms de NES(*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Fichiers IPS (*.ips)|*.IPS|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterTest">Fichiers de test (*.mtp)|*.mtp|Tous les fichiers (*.*)|*.*</Message>
 
     <Message ID="Resume">Continuer</Message>
@@ -332,6 +334,8 @@
     <Message ID="ConnectToServer">Connexion à un serveur</Message>
     <Message ID="Disconnect">Deconnexion</Message>
     <Message ID="PlayerNumber">Joueur {0}</Message>
+
+    <Message ID="RomsFound">{0} roms trouvés</Message>
 
     <Message ID="CouldNotInstallRuntime">Le package Redistribuable Visual C++ pour Visual Studio 2015 n'a pas été installé correctement.</Message>
     <Message ID="EmptyState">&lt;aucune sauvegarde&gt;</Message>

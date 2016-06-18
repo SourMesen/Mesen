@@ -15,7 +15,7 @@ Debugger* Debugger::Instance = nullptr;
 
 Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
 {
-	_romFilepath = Console::GetROMPath();
+	_romName = Console::GetRomName();
 	_console = console;
 	_cpu = cpu;
 	_ppu = ppu;
@@ -36,14 +36,14 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_bpUpdateNeeded = false;
 	_executionStopped = false;
 
-	LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romFilepath, false) + ".cdl"));
+	LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
 		
 	Debugger::Instance = this;
 }
 
 Debugger::~Debugger()
 {
-	SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romFilepath, false) + ".cdl"));
+	SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
 
 	_stopFlag = true;
 

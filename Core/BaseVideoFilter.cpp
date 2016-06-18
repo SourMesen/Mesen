@@ -3,6 +3,7 @@
 #include "MessageManager.h"
 #include "../Utilities/PNGHelper.h"
 #include "../Utilities/FolderUtilities.h"
+#include "Console.h"
 
 BaseVideoFilter::BaseVideoFilter()
 {
@@ -55,8 +56,9 @@ uint8_t* BaseVideoFilter::GetOutputBuffer()
 	return _outputBuffer;
 }
 
-void BaseVideoFilter::TakeScreenshot(string romFilename)
+void BaseVideoFilter::TakeScreenshot()
 {
+	string romFilename = FolderUtilities::GetFilename(Console::GetRomName(), false);
 	uint32_t* frameBuffer = (uint32_t*)new uint8_t[_bufferSize];
 
 	_frameLock.Acquire();

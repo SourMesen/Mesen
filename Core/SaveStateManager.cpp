@@ -11,7 +11,7 @@ const uint32_t SaveStateManager::FileFormatVersion;
 string SaveStateManager::GetStateFilepath(int stateIndex)
 {
 	string folder = FolderUtilities::GetSaveStateFolder();
-	string filename = FolderUtilities::GetFilename(Console::GetROMPath(), false) + "_" + std::to_string(stateIndex) + ".mst";	
+	string filename = FolderUtilities::GetFilename(Console::GetRomName(), false) + "_" + std::to_string(stateIndex) + ".mst";	
 	return FolderUtilities::CombinePath(folder, filename);
 }
 

@@ -25,9 +25,12 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRunning();
 
-		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, Int32 archiveFileIndex = -1);
 		[DllImport(DLLPath)] public static extern void ApplyIpsPatch([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void AddKnowGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string folder);
+
+		[DllImport(DLLPath, EntryPoint = "GetArchiveRomList")] private static extern IntPtr GetArchiveRomListWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
+		public static List<string> GetArchiveRomList(string filename) { return new List<string>(PtrToStringUtf8(InteropEmu.GetArchiveRomListWrapper(filename)).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)); }
 
 		[DllImport(DLLPath)] public static extern void SetMousePosition(double x, double y);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasZapper();
@@ -48,7 +51,9 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void Resume();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsPaused();
 		[DllImport(DLLPath)] public static extern void Stop();
-		[DllImport(DLLPath, EntryPoint="GetROMPath")] private static extern IntPtr GetROMPathWrapper();
+
+		[DllImport(DLLPath, EntryPoint = "GetRomInfo")] private static extern UInt32 GetRomInfoWrapper(ref InteropRomInfo romInfo, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename = "", Int32 archiveFileIndex = -1);
+
 		[DllImport(DLLPath)] public static extern void Reset();
 		[DllImport(DLLPath)] public static extern void StartServer(UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string hostPlayerName);
 		[DllImport(DLLPath)] public static extern void StopServer();
@@ -253,6 +258,13 @@ namespace Mesen.GUI
 			}
 		}
 
+		public static RomInfo GetRomInfo(string filename = "", Int32 archiveFileIndex = -1)
+		{
+			InteropRomInfo romInfo = new InteropRomInfo();
+			InteropEmu.GetRomInfoWrapper(ref romInfo, filename, archiveFileIndex);
+			return new RomInfo(romInfo);
+		}
+
 		public static ScreenSize GetScreenSize(bool ignoreScale)
 		{
 			ScreenSize size;
@@ -292,7 +304,6 @@ namespace Mesen.GUI
 			return paleteData;
 		}
 
-		public static string GetROMPath() { return PtrToStringUtf8(InteropEmu.GetROMPathWrapper()); }
 		public static string GetKeyName(UInt32 key) { return PtrToStringUtf8(InteropEmu.GetKeyNameWrapper(key)); }
 		public static List<string> GetAudioDevices()
 		{
@@ -590,6 +601,34 @@ namespace Mesen.GUI
 		PpuPartialDraw = 1
 	}
 
+	public struct InteropRomInfo
+	{
+		public IntPtr RomNamePointer;
+		public UInt32 Crc32;
+	}
+
+	public class RomInfo
+	{
+		public string RomName;
+		public UInt32 Crc32;
+
+		public RomInfo(InteropRomInfo romInfo)
+		{
+			this.RomName = UTF8Marshaler.GetStringFromIntPtr(romInfo.RomNamePointer);
+			this.Crc32 = romInfo.Crc32;
+		}
+
+		public string GetRomName()
+		{
+			return Path.GetFileNameWithoutExtension(this.RomName);
+		}
+
+		public string GetCrcString()
+		{
+			return this.Crc32.ToString("X8");
+		}
+	};
+
 	public struct InteropBreakpoint
 	{
 		public BreakpointType Type;
@@ -703,17 +742,7 @@ namespace Mesen.GUI
 		{
 			if(File.Exists(filename)) {
 				var md5 = System.Security.Cryptography.MD5.Create();
-				if(filename.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase) || filename.EndsWith(".fds", StringComparison.InvariantCultureIgnoreCase)) {
-					return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
-				} else if(filename.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) {
-					foreach(var entry in ZipFile.OpenRead(filename).Entries) {
-						if(entry.Name.EndsWith(".nes", StringComparison.InvariantCultureIgnoreCase) || entry.Name.EndsWith(".fds", StringComparison.InvariantCultureIgnoreCase)) {
-							return BitConverter.ToString(md5.ComputeHash(entry.Open())).Replace("-", "");
-						}
-					}
-				} else {
-					return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
-				}
+				return BitConverter.ToString(md5.ComputeHash(File.ReadAllBytes(filename))).Replace("-", "");
 			}
 			return null;
 		}
@@ -744,21 +773,7 @@ namespace Mesen.GUI
 
 		public object MarshalNativeToManaged(IntPtr pNativeData)
 		{
-			int offset = 0;
-			byte b = 0;
-			do {
-				b = Marshal.ReadByte(pNativeData, offset);
-				offset++;
-			} while(b != 0);
-
-			int length = offset - 1;
-
-			// should not be null terminated
-			byte[] strbuf = new byte[length];
-			// skip the trailing null
-			Marshal.Copy((IntPtr)pNativeData, strbuf, 0, length);
-			string data = Encoding.UTF8.GetString(strbuf);
-			return data;
+			return GetStringFromIntPtr(pNativeData);
 		}
 
 		public void CleanUpNativeData(IntPtr pNativeData)
@@ -781,6 +796,25 @@ namespace Mesen.GUI
 				return _instance = new UTF8Marshaler();
 			}
 			return _instance;
+		}
+
+		public static string GetStringFromIntPtr(IntPtr pNativeData)
+		{
+			int offset = 0;
+			byte b = 0;
+			do {
+				b = Marshal.ReadByte(pNativeData, offset);
+				offset++;
+			} while(b != 0);
+
+			int length = offset - 1;
+
+			// should not be null terminated
+			byte[] strbuf = new byte[length];
+			// skip the trailing null
+			Marshal.Copy((IntPtr)pNativeData, strbuf, 0, length);
+			string data = Encoding.UTF8.GetString(strbuf);
+			return data;
 		}
 	}
 }

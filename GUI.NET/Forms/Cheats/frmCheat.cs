@@ -19,7 +19,7 @@ namespace Mesen.GUI.Forms.Cheats
 		const int GGLongCodeLength = 8;
 		const int PARCodeLength = 8;
 
-		private string _gameHash;
+		private string _gameCrc;
 
 		public frmCheat(CheatInfo cheat)
 		{
@@ -27,10 +27,13 @@ namespace Mesen.GUI.Forms.Cheats
 
 			Entity = cheat;
 
-			_gameHash = cheat.GameHash;
+			_gameCrc = cheat.GameCrc;
 
 			if(string.IsNullOrWhiteSpace(cheat.GameName)) {
-				LoadGame(InteropEmu.GetROMPath());
+				RomInfo romInfo = InteropEmu.GetRomInfo();
+				_gameCrc = romInfo.GetCrcString();
+				((CheatInfo)Entity).GameName = romInfo.GetRomName();
+				txtGameName.Text = ((CheatInfo)Entity).GameName;
 			}
 
 			radGameGenie.Tag = CheatType.GameGenie;
@@ -65,15 +68,19 @@ namespace Mesen.GUI.Forms.Cheats
 		protected override void UpdateConfig()
 		{
 			UpdateObject();
-			((CheatInfo)Entity).GameHash = _gameHash;
+			((CheatInfo)Entity).GameCrc = _gameCrc;
 		}
 
 		private void LoadGame(string romPath)
 		{
-			_gameHash = MD5Helper.GetMD5Hash(romPath);
-			if(_gameHash != null) {
-				((CheatInfo)Entity).GameName = Path.GetFileNameWithoutExtension(romPath);
-				txtGameName.Text = ((CheatInfo)Entity).GameName;
+			int archiveFileIndex;
+			if(frmSelectRom.SelectRom(romPath, out archiveFileIndex)) {
+				RomInfo romInfo = InteropEmu.GetRomInfo(romPath, archiveFileIndex);
+				_gameCrc = romInfo.GetCrcString();
+				if(_gameCrc != null) {
+					((CheatInfo)Entity).GameName = Path.GetFileNameWithoutExtension(romInfo.RomName);
+					txtGameName.Text = ((CheatInfo)Entity).GameName;
+				}
 			}
 		}
 
@@ -89,7 +96,7 @@ namespace Mesen.GUI.Forms.Cheats
 		protected override bool ValidateInput()
 		{
 			UInt32 val;
-			if(_gameHash == null) {
+			if(_gameCrc == null) {
 				return false;
 			}
 

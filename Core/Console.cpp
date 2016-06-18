@@ -36,10 +36,10 @@ void Console::Release()
 	Console::Instance.reset(new Console());
 }
 
-void Console::Initialize(string romFilename, stringstream *filestream, string ipsFilename)
+void Console::Initialize(string romFilename, stringstream *filestream, string ipsFilename, int32_t archiveFileIndex)
 {
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
-	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, filestream, ipsFilename);
+	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, filestream, ipsFilename, archiveFileIndex);
 
 	if(mapper) {
 		_romFilepath = romFilename;
@@ -77,7 +77,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		VideoDecoder::GetInstance()->StartThread();
 	
 		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(romFilename));
-		MessageManager::DisplayMessage("GameLoaded", FolderUtilities::GetFilename(romFilename, false));
+		MessageManager::DisplayMessage("GameLoaded", FolderUtilities::GetFilename(_mapper->GetRomName(), false));
 		if(EmulationSettings::GetOverclockRate() != 100) {
 			MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
 		}
@@ -93,10 +93,10 @@ void Console::ApplyIpsPatch(string ipsFilename)
 	Console::Resume();
 }
 
-void Console::LoadROM(string filepath, stringstream *filestream)
+void Console::LoadROM(string filepath, stringstream *filestream, int32_t archiveFileIndex)
 {
 	Console::Pause();
-	Instance->Initialize(filepath, filestream);
+	Instance->Initialize(filepath, filestream, "", archiveFileIndex);
 	Console::Resume();
 }
 
@@ -105,25 +105,26 @@ bool Console::LoadROM(string filename, uint32_t crc32Hash)
 	string currentRomFilepath = Console::GetROMPath();
 	string currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
 	if(!currentRomFilepath.empty()) {
-		if(RomLoader::GetCRC32(Console::GetROMPath()) == crc32Hash) {
+		if(Console::GetCrc32() == crc32Hash) {
 			//Current game matches, no need to do anything
 			return true;
 		}
 	}
 
+	int32_t archiveFileIndex = -1;
 	for(string folder : FolderUtilities::GetKnowGameFolders()) {
-		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, true);
+		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, true, archiveFileIndex);
 		if(!match.empty()) {
-			Console::LoadROM(match);
+			Console::LoadROM(match, nullptr, archiveFileIndex);
 			return true;
 		}
 	}
 
 	//Perform slow CRC32 search for ROM
 	for(string folder : FolderUtilities::GetKnowGameFolders()) {
-		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, false);
+		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, false, archiveFileIndex);
 		if(!match.empty()) {
-			Console::LoadROM(match);
+			Console::LoadROM(match, nullptr, archiveFileIndex);
 			return true;
 		}
 	}
@@ -136,9 +137,22 @@ string Console::GetROMPath()
 	return Instance->_romFilepath;
 }
 
+string Console::GetRomName()
+{
+	if(Instance->_mapper) {
+		return Instance->_mapper->GetRomName();
+	} else {
+		return "";
+	}
+}
+
 uint32_t Console::GetCrc32()
 {
-	return Instance->_mapper->GetCrc32();
+	if(Instance->_mapper) {
+		return Instance->_mapper->GetCrc32();
+	} else {
+		return 0;
+	}
 }
 
 void Console::Reset(bool softReset)

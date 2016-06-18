@@ -1,46 +1,70 @@
 #pragma once
 #include "stdafx.h"
+#include "../Utilities/ZipReader.h"
+#include "../Utilities/SZReader.h"
 #include "RomLoader.h"
 #include "iNesLoader.h"
 #include "FdsLoader.h"
 
-bool RomLoader::LoadFromZip(istream &zipFile)
+vector<string> RomLoader::GetArchiveRomList(string filename)
+{
+	ifstream in(filename, ios::in | ios::binary);
+	if(in) {
+		uint8_t header[2];
+		in.read((char*)header, 2);
+		in.close();
+
+		if(memcmp(header, "PK", 2) == 0) {
+			ZipReader reader;
+			reader.LoadArchive(filename);
+			return reader.GetFileList({ ".nes", ".fds" });
+		} else if(memcmp(header, "7z", 2) == 0) {
+			SZReader reader;
+			reader.LoadArchive(filename);
+			return reader.GetFileList({ ".nes", ".fds" });
+		}
+	}
+	return{};
+}
+
+bool RomLoader::LoadFromArchive(istream &zipFile, ArchiveReader& reader, int32_t archiveFileIndex)
 {
 	bool result = false;
 
 	uint32_t fileSize;
 	uint8_t* buffer = ReadFile(zipFile, fileSize);
 
-	ZipReader reader;
-	reader.LoadZipArchive(buffer, fileSize);
+	reader.LoadArchive(buffer, fileSize);
 
-	vector<string> fileList = reader.GetFileList();
+	vector<string> fileList = reader.GetFileList({ ".nes", ".fds" });
+	int32_t currentIndex = 0;
+	if(archiveFileIndex > (int32_t)fileList.size()) {
+		return false;
+	}
+
 	for(string filename : fileList) {
-		std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
-		if(filename.length() > 4) {
-			if(filename.substr(filename.length() - 4, 4).compare(".nes") == 0 || filename.substr(filename.length() - 4, 4).compare(".fds") == 0) {
-				uint8_t* fileBuffer = nullptr;
-				size_t size = 0;
-				reader.ExtractFile(filename, &fileBuffer, size);
-				if(fileBuffer) {
-					result = LoadFromMemory(fileBuffer, size);
-					delete[] fileBuffer;
-					break;
-				}
+		if(archiveFileIndex == -1 || archiveFileIndex == currentIndex) {
+			uint8_t* fileBuffer = nullptr;
+			size_t size = 0;
+			reader.ExtractFile(filename, &fileBuffer, size);
+			if(fileBuffer) {
+				result = LoadFromMemory(fileBuffer, size, FolderUtilities::GetFilename(filename, true));
+				delete[] fileBuffer;
+				break;
 			}
 		}
-
+		currentIndex++;
 	}
 
 	delete[] buffer;
 	return result;
 }
 
-bool RomLoader::LoadFromStream(istream &romFile)
+bool RomLoader::LoadFromStream(istream &romFile, string romName)
 {
 	uint32_t fileSize;
 	uint8_t* buffer = ReadFile(romFile, fileSize);
-	bool result = LoadFromMemory(buffer, fileSize);
+	bool result = LoadFromMemory(buffer, fileSize, romName);
 	delete[] buffer;
 
 	return result;
@@ -64,7 +88,7 @@ uint8_t* RomLoader::ReadFile(istream &file, uint32_t &fileSize)
 	return buffer;
 }
 
-bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length)
+bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 {
 	vector<uint8_t> fileData(buffer, buffer + length);
 
@@ -85,11 +109,22 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length)
 
 	_romData.RawData = fileData;
 	_romData.Crc32 = CRC32::GetCRC(buffer, length);
+	_romData.RomName = romName;
+	_romData.Filename = _filename;
+
+	if(_romData.System == GameSystem::Unknown) {
+		//Use filename to detect PAL/VS system games
+		if(_filename.find("(e)") != string::npos || _filename.find("(E)") != string::npos) {
+			_romData.System = GameSystem::NesPal;
+		} else if(_filename.find("(VS)") != string::npos || _filename.find("(vs)") != string::npos || _filename.find("(Vs)") != string::npos || _filename.find("(vS)") != string::npos) {
+			_romData.System = GameSystem::VsUniSystem;
+		}
+	}
 
 	return !_romData.Error;
 }
 
-bool RomLoader::LoadFile(string filename, istream *filestream, string ipsFilename)
+bool RomLoader::LoadFile(string filename, istream *filestream, string ipsFilename, int32_t archiveFileIndex)
 {
 	_filename = filename;
 	_ipsFilename = ipsFilename;
@@ -110,45 +145,44 @@ bool RomLoader::LoadFile(string filename, istream *filestream, string ipsFilenam
 	input->seekg(0, ios::beg);
 	input->read(header, 15);
 	input->seekg(0, ios::beg);
-
 	if(memcmp(header, "PK", 2) == 0) {
-		return LoadFromZip(*input);
+		ZipReader reader;
+		return LoadFromArchive(*input, reader, archiveFileIndex);
+	} else if(memcmp(header, "7z", 2) == 0) {
+		SZReader reader;
+		return LoadFromArchive(*input, reader, archiveFileIndex);
 	} else if(memcmp(header, "NES\x1a", 4) == 0 || memcmp(header, "FDS\x1a", 4) == 0 || memcmp(header, "\x1*NINTENDO-HVC*", 15) == 0) {
-		return LoadFromStream(*input);
+		if(archiveFileIndex > 0) {
+			return false;
+		}
+
+		return LoadFromStream(*input, FolderUtilities::GetFilename(filename, true));
 	}
 	return false;
 }
 
 RomData RomLoader::GetRomData()
 {
-	_romData.Filename = _filename;
-
-	if(_romData.System == GameSystem::Unknown) {
-		//Use filename to detect PAL/VS system games
-		if(_filename.find("(e)") != string::npos || _filename.find("(E)") != string::npos) {
-			_romData.System = GameSystem::NesPal;
-		} else if(_filename.find("(VS)") != string::npos || _filename.find("(vs)") != string::npos || _filename.find("(Vs)") != string::npos || _filename.find("(vS)") != string::npos) {
-			_romData.System = GameSystem::VsUniSystem;
-		}
-	}
-
 	return _romData;
 }
 
-uint32_t RomLoader::GetCRC32(string filename)
+int32_t RomLoader::FindMatchingRomInFile(string filename, uint32_t crc32Hash)
 {
 	RomLoader loader;
-	uint32_t crc = 0;
-	if(loader.LoadFile(filename)) {
-		crc = loader._romData.Crc32;
+	int32_t fileIndex = 0;
+	while(loader.LoadFile(filename, nullptr, "", fileIndex)) {
+		if(crc32Hash == loader._romData.Crc32) {
+			return fileIndex;
+		}
+		fileIndex++;
 	}
-	return crc;
+	return -1;
 }
 
-string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash, bool useFastSearch)
+string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash, bool useFastSearch, int32_t &archiveFileIndex)
 {
 	std::transform(romFilename.begin(), romFilename.end(), romFilename.begin(), ::tolower);
-	vector<string> validExtensions = { { "*.nes", "*.zip", "*.fds" } };
+	vector<string> validExtensions = { { "*.nes", "*.zip", "*.7z", "*.fds" } };
 	vector<string> romFiles;
 
 	for(string extension : validExtensions) {
@@ -163,7 +197,8 @@ string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uin
 			string originalFilename = romFile;
 			std::transform(romFile.begin(), romFile.end(), romFile.begin(), ::tolower);
 			if(FolderUtilities::GetFilename(romFile, true).compare(romFilename) == 0) {
-				if(RomLoader::GetCRC32(romFile) == crc32Hash) {
+				archiveFileIndex = RomLoader::FindMatchingRomInFile(romFile, crc32Hash);
+				if(archiveFileIndex >= 0) {
 					return originalFilename;
 				}
 			}
@@ -171,12 +206,13 @@ string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uin
 	} else {
 		for(string romFile : romFiles) {
 			//Slower search by CRC value
-			if(RomLoader::GetCRC32(romFile) == crc32Hash) {
-				//Matching ROM found
+			archiveFileIndex = RomLoader::FindMatchingRomInFile(romFile, crc32Hash);
+			if(archiveFileIndex >= 0) {
 				return romFile;
 			}
 		}
 	}
 
+	archiveFileIndex = -1;
 	return "";
 }

@@ -37,10 +37,10 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private void UpdateCheatList()
 		{
-			string md5hash = MD5Helper.GetMD5Hash(InteropEmu.GetROMPath());
+			string crc32 = InteropEmu.GetRomInfo().GetCrcString();
 			lstCheats.Items.Clear();
 			foreach(CheatInfo cheat in ConfigManager.Config.Cheats) {
-				if(!chkCurrentGameOnly.Checked || cheat.GameHash == md5hash) {
+				if(!chkCurrentGameOnly.Checked || cheat.GameCrc == crc32) {
 					ListViewItem item = lstCheats.Items.Add(cheat.GameName);
 					item.SubItems.AddRange(new string[] { cheat.CheatName, cheat.ToString() });
 					item.Tag = cheat;

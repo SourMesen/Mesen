@@ -445,6 +445,12 @@
     <Compile Include="Forms\frmDownloadProgress.Designer.cs">
       <DependentUpon>frmDownloadProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmSelectRom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmSelectRom.Designer.cs">
+      <DependentUpon>frmSelectRom.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmUpdatePrompt.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -597,6 +603,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSelectRom.resx">
+      <DependentUpon>frmSelectRom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmUpdatePrompt.resx">
       <DependentUpon>frmUpdatePrompt.cs</DependentUpon>

@@ -6,14 +6,14 @@
 using std::atomic;
 using std::deque;
 
-#include "CPU.h"
-#include "PPU.h"
 #include "DebugState.h"
 #include "Breakpoint.h"
 #include "TraceLogger.h"
 #include "../Utilities/SimpleLock.h"
 #include "CodeDataLogger.h"
 
+class CPU;
+class PPU;
 class MemoryManager;
 class Console;
 class Disassembler;
@@ -75,7 +75,7 @@ private:
 
 	uint32_t _flags;
 
-	string _romFilepath;
+	string _romName;
 	string _outputCache;
 	atomic<int32_t> _stepCount;
 	atomic<int32_t> _ppuStepCount;

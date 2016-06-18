@@ -232,11 +232,11 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 	return nullptr;
 }
 
-shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string romFilename, stringstream *filestream, string ipsFilename)
+shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string romFilename, stringstream *filestream, string ipsFilename, int32_t archiveFileIndex)
 {
 	RomLoader loader;
 
-	if(loader.LoadFile(romFilename, filestream, ipsFilename)) {
+	if(loader.LoadFile(romFilename, filestream, ipsFilename, archiveFileIndex)) {
 		RomData romData = loader.GetRomData();
 		shared_ptr<BaseMapper> mapper(GetMapperFromID(romData));
 

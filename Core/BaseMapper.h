@@ -54,7 +54,9 @@ private:
 	bool _onlyChrRam = false;
 	GameSystem _gameSystem;
 	bool _hasBusConflicts = false;
+	
 	string _romFilename;
+	string _romName;
 
 	bool _allowRegisterRead = false;
 	uint8_t _isReadRegisterAddr[0x10000];
@@ -170,6 +172,7 @@ public:
 
 	GameSystem GetGameSystem();
 	uint32_t GetCrc32();
+	string GetRomName();
 
 	uint8_t ReadRAM(uint16_t addr);
 	virtual void WriteRAM(uint16_t addr, uint8_t value);

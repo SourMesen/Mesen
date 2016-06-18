@@ -10,5 +10,5 @@ class MapperFactory
 
 	public:
 		static const uint16_t FdsMapperID = 65535;
-		static shared_ptr<BaseMapper> InitializeFromFile(string romFilename, stringstream *filestream, string ipsFilename);
+		static shared_ptr<BaseMapper> InitializeFromFile(string romFilename, stringstream *filestream, string ipsFilename, int32_t archiveFileIndex);
 };

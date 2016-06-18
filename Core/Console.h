@@ -37,7 +37,7 @@ class Console
 		bool _initialized = false;
 
 		void ResetComponents(bool softReset);
-		void Initialize(string filename, stringstream *filestream = nullptr, string ipsFilename = "");
+		void Initialize(string filename, stringstream *filestream = nullptr, string ipsFilename = "", int32_t archiveFileIndex = -1);
 		double UpdateNesModel(bool sendNotification);
 
 	public:
@@ -61,10 +61,11 @@ class Console
 		static void LoadState(istream &loadStream);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
-		static void LoadROM(string filepath, stringstream *filestream = nullptr);
+		static void LoadROM(string filepath, stringstream *filestream = nullptr, int32_t archiveFileIndex = -1);
 		static bool LoadROM(string romName, uint32_t crc32Hash);
 		static void ApplyIpsPatch(string ipsFilename);
 		static string GetROMPath();
+		static string GetRomName();
 		static uint32_t GetCrc32();
 
 		static bool IsRunning();

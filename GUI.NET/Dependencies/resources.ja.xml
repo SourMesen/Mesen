@@ -308,14 +308,16 @@
       <Control ID="btnUpdate">更新</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
+    <Form ID="frmSelectRom" Title="ゲーム選択">
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterMovie">動画 (*.mmo)|*.mmo|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterWave">WAVファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.fds)|*.NES;*.ZIP;*.FDS|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.fds, *.ips)|*.NES;*.ZIP;*.IPS;*.FDS|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds)|*.NES;*.ZIP;*.FDS;*.7z|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
 
     <Message ID="Resume">再開</Message>
@@ -325,6 +327,8 @@
     <Message ID="ConnectToServer">サーバに接続する</Message>
     <Message ID="Disconnect">切断</Message>
     <Message ID="PlayerNumber">プレーヤー {0}</Message>
+
+    <Message ID="RomsFound">{0}個</Message>
 
     <Message ID="CouldNotInstallRuntime">Microsoft Visual Studio 2015のVisual C++再頒布可能パッケージはインストールできませんでした。</Message>
     <Message ID="EmptyState">&lt;なし&gt;</Message>
