@@ -87,6 +87,7 @@ void Debugger::BreakIfDebugging()
 {
 	if(Debugger::Instance != nullptr) {
 		Debugger::Instance->Step(1);
+		Debugger::Instance->SleepUntilResume();
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "APU.h"
 #include "DeltaModulationChannel.h"
 #include "TraceLogger.h"
+#include "Debugger.h"
 
 CPU* CPU::Instance = nullptr;
 
@@ -94,6 +95,31 @@ void CPU::Exec()
 	if(_prevRunIrq) {
 		IRQ();
 	}
+}
+
+uint16_t CPU::FetchOperand()
+{
+	switch(_instAddrMode) {
+		case AddrMode::Acc:
+		case AddrMode::Imp: DummyRead(); return 0;
+		case AddrMode::Imm:
+		case AddrMode::Rel: return GetImmediate();
+		case AddrMode::Zero: return GetZeroAddr();
+		case AddrMode::ZeroX: return GetZeroXAddr();
+		case AddrMode::ZeroY: return GetZeroYAddr();
+		case AddrMode::Ind: return GetIndAddr();
+		case AddrMode::IndX: return GetIndXAddr();
+		case AddrMode::IndY: return GetIndYAddr(false);
+		case AddrMode::IndYW: return GetIndYAddr(true);
+		case AddrMode::Abs: return GetAbsAddr();
+		case AddrMode::AbsX: return GetAbsXAddr(false);
+		case AddrMode::AbsXW: return GetAbsXAddr(true);
+		case AddrMode::AbsY: return GetAbsYAddr(false);
+		case AddrMode::AbsYW: return GetAbsYAddr(true);
+		default: break;
+	}
+	Debugger::BreakIfDebugging();
+	throw std::runtime_error("Invalid OP code - CPU crashed");
 }
 
 void CPU::IncCycleCount()
