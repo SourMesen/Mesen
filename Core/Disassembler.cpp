@@ -112,7 +112,7 @@ uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr,
 			absoluteAddr = absoluteRamAddr;
 		}
 
-		if(absoluteAddr >= 0 && absoluteAddr <= 0xFFFF) {
+		if(absoluteAddr >= 0) {
 			if(!cache[absoluteAddr]) {
 				while(absoluteAddr < (int32_t)_prgSize && !cache[absoluteAddr]) {
 					shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&source[absoluteAddr], isSubEntryPoint));
