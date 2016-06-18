@@ -11,6 +11,7 @@
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
+#include "DaouInfosys.h"
 #include "FDS.h"
 #include "FrontFareast.h"
 #include "GxRom.h"
@@ -201,6 +202,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 152: return new Bandai74161_7432(true);
 		case 153: return new BandaiFcg();
 		case 154: return new Namco108_154();
+		case 156: return new DaouInfosys();
 		case 157: return new BandaiFcg();
 		case 159: return new BandaiFcg();
 		case 163: return new Nanjing();

@@ -394,6 +394,7 @@
     <ClInclude Include="BF9096.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="BnRom.h" />
+    <ClInclude Include="DaouInfosys.h" />
     <ClInclude Include="DebugState.h" />
     <ClInclude Include="DefaultVideoFilter.h" />
     <ClInclude Include="ExpressionEvaluator.h" />

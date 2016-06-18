@@ -634,6 +634,9 @@
     <ClInclude Include="JalecoJf13.h">
       <Filter>Nes\Mappers\Jaleco</Filter>
     </ClInclude>
+    <ClInclude Include="DaouInfosys.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
