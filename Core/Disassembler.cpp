@@ -112,24 +112,26 @@ uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr,
 			absoluteAddr = absoluteRamAddr;
 		}
 
-		if(!cache[absoluteAddr]) {
-			while(absoluteAddr < (int32_t)_prgSize && !cache[absoluteAddr]) {
-				shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&source[absoluteAddr], isSubEntryPoint));
-				isSubEntryPoint = false;
-				cache[absoluteAddr] = disInfo;
+		if(absoluteAddr >= 0 && absoluteAddr <= 0xFFFF) {
+			if(!cache[absoluteAddr]) {
+				while(absoluteAddr < (int32_t)_prgSize && !cache[absoluteAddr]) {
+					shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&source[absoluteAddr], isSubEntryPoint));
+					isSubEntryPoint = false;
+					cache[absoluteAddr] = disInfo;
 
-				uint8_t opCode = source[absoluteAddr];
-				absoluteAddr += disInfo->GetSize();
-				if(opCode == 0x10 || opCode == 0x20 || opCode == 0x30 || opCode == 0x40 || opCode == 0x50 || opCode == 0x60 || opCode == 0x70 || opCode == 0x90 || opCode == 0xB0 || opCode == 0xD0 || opCode == 0xF0 || opCode == 0x4C || opCode == 0x6C) {
-					//Hit a jump/return instruction, can't assume that what follows is actual code, stop disassembling
-					break;
+					uint8_t opCode = source[absoluteAddr];
+					absoluteAddr += disInfo->GetSize();
+					if(opCode == 0x10 || opCode == 0x20 || opCode == 0x30 || opCode == 0x40 || opCode == 0x50 || opCode == 0x60 || opCode == 0x70 || opCode == 0x90 || opCode == 0xB0 || opCode == 0xD0 || opCode == 0xF0 || opCode == 0x4C || opCode == 0x6C) {
+						//Hit a jump/return instruction, can't assume that what follows is actual code, stop disassembling
+						break;
+					}
 				}
+			} else {
+				if(isSubEntryPoint) {
+					cache[absoluteAddr]->SetSubEntryPoint();
+				}
+				absoluteAddr += cache[absoluteAddr]->GetSize();
 			}
-		} else {
-			if(isSubEntryPoint) {
-				cache[absoluteAddr]->SetSubEntryPoint();
-			}
-			absoluteAddr += cache[absoluteAddr]->GetSize();
 		}
 		return absoluteAddr;
 	}
