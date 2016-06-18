@@ -522,7 +522,7 @@ void Debugger::StartTraceLogger(TraceLoggerOptions options)
 
 void Debugger::StopTraceLogger()
 {
-	_traceLogger.release();
+	_traceLogger.reset();
 }
 
 void Debugger::ProcessPpuCycle()

@@ -152,7 +152,7 @@ void VideoDecoder::StopThread()
 		_waitForFrame.Signal();
 		_decodeThread->join();
 
-		_decodeThread.release();
+		_decodeThread.reset();
 
 		if(_ppuOutputBuffer != nullptr) {
 			//Clear whole screen

@@ -38,7 +38,7 @@ void VideoRenderer::StopThread()
 	_stopFlag = true;
 	if(_renderThread) {
 		_renderThread->join();
-		_renderThread.release();
+		_renderThread.reset();
 	}
 }
 
