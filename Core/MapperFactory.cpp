@@ -192,6 +192,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 147: return new Sachen_147();
 		case 148: return new Sachen_148();
 		case 149: return new Sachen_149();
+		case 151: return new VRC1();
 		case 152: return new Bandai74161_7432(true);
 		case 153: return new BandaiFcg();
 		case 154: return new Namco108_154();
