@@ -29,32 +29,6 @@ enum class GameSystem
 	Unknown,
 };
 
-struct RomData
-{
-	string RomName;
-	string Filename;
-
-	uint16_t MapperID;
-	uint8_t SubMapperID = 0;
-	GameSystem System = GameSystem::Unknown;
-	bool HasBattery = false;
-	bool HasTrainer = false;
-	MirroringType MirroringType;
-	int32_t ChrRamSize = -1;
-
-	bool IsNes20Header = false;
-
-	vector<uint8_t> PrgRom;
-	vector<uint8_t> ChrRom;
-	vector<uint8_t> TrainerData;
-	vector<vector<uint8_t>> FdsDiskData;
-
-	vector<uint8_t> RawData;
-	uint32_t Crc32;
-
-	bool Error = false;
-};
-
 struct NESHeader
 {
 	/*
@@ -220,4 +194,32 @@ struct NESHeader
 			calculatedLength = sizeof(NESHeader) + 0x4000 * PrgCount + 0x2000 * ChrCount;
 		}
 	}
+};
+
+struct RomData
+{
+	string RomName;
+	string Filename;
+
+	uint16_t MapperID;
+	uint8_t SubMapperID = 0;
+	GameSystem System = GameSystem::Unknown;
+	bool HasBattery = false;
+	bool HasTrainer = false;
+	MirroringType MirroringType;
+	int32_t ChrRamSize = -1;
+
+	bool IsNes20Header = false;
+
+	vector<uint8_t> PrgRom;
+	vector<uint8_t> ChrRom;
+	vector<uint8_t> TrainerData;
+	vector<vector<uint8_t>> FdsDiskData;
+
+	vector<uint8_t> RawData;
+	uint32_t Crc32;
+
+	bool Error = false;
+
+	NESHeader NesHeader;
 };

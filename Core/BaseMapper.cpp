@@ -341,6 +341,8 @@ void BaseMapper::Initialize(RomData &romData)
 	memset(_isWriteRegisterAddr, 0, sizeof(_isWriteRegisterAddr));
 	AddRegisterRange(RegisterStartAddress(), RegisterEndAddress(), MemoryOperation::Any);
 
+	_nesHeader = romData.NesHeader;
+
 	_mirroringType = romData.MirroringType;
 
 	_prgSize = (uint32_t)romData.PrgRom.size();

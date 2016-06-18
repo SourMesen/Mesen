@@ -75,6 +75,7 @@ private:
 	vector<uint8_t> _originalPrgRom;
 
 protected:
+	NESHeader _nesHeader;
 	uint16_t _mapperID;
 	uint8_t _subMapperID;
 
@@ -168,7 +169,7 @@ public:
 	
 	void ApplyCheats();
 
-	void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
+	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
 	GameSystem GetGameSystem();
 	uint32_t GetCrc32();
