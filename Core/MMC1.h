@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 #include "CPU.h"
 #include "BaseMapper.h"
@@ -44,13 +45,6 @@ class MMC1 : public BaseMapper
 		uint8_t _prgReg;
 
 		int32_t _lastWriteCycle = -1;
-
-		struct {
-			uint8_t Reg8000; 
-			uint8_t RegA000;
-			uint8_t RegC000;
-			uint8_t RegE000;
-		} _state;
 		
 	private:
 		bool HasResetFlag(uint8_t value)
@@ -85,7 +79,16 @@ class MMC1 : public BaseMapper
 			}
 		}
 
-		void UpdateState()
+	protected:
+		struct
+		{
+			uint8_t Reg8000;
+			uint8_t RegA000;
+			uint8_t RegC000;
+			uint8_t RegE000;
+		} _state;
+
+		virtual void UpdateState()
 		{
 			switch(_state.Reg8000 & 0x03) {
 				case 0: SetMirroringType(MirroringType::ScreenAOnly); break;
@@ -135,7 +138,6 @@ class MMC1 : public BaseMapper
 			}
 		}
 
-	protected:
 		void StreamState(bool saving)
 		{
 			BaseMapper::StreamState(saving);

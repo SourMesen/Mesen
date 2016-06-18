@@ -47,6 +47,7 @@
 #include "Mapper242.h"
 #include "Mapper246.h"
 #include "MMC1.h"
+#include "MMC1_155.h"
 #include "MMC2.h"
 #include "MMC3.h"
 #include "MMC3_12.h"
@@ -202,6 +203,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 152: return new Bandai74161_7432(true);
 		case 153: return new BandaiFcg();
 		case 154: return new Namco108_154();
+		case 155: return new MMC1_155();
 		case 156: return new DaouInfosys();
 		case 157: return new BandaiFcg();
 		case 159: return new BandaiFcg();
