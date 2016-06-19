@@ -23,12 +23,21 @@ protected:
 	uint16_t GetCHRPageSize() { return _variant == Sachen8259Variant::Sachen8259D ? 0x400 : 0x800; }
 	uint16_t RegisterStartAddress() { return 0x4100; }
 	uint16_t RegisterEndAddress() { return 0x7FFF; }
+	
 	void InitMapper()
 	{
 		_currentReg = 0;
 		memset(_regs, 0, sizeof(_regs));
 
 		SelectPRGPage(0, 0);
+	}
+
+	void StreamState(bool saving)
+	{
+		BaseMapper::StreamState(saving);
+
+		ArrayInfo<uint8_t> regs{ _regs,8 };
+		Stream(_currentReg, regs);
 	}
 
 	void UpdateState()
