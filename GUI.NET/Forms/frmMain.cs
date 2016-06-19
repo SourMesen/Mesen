@@ -975,7 +975,9 @@ namespace Mesen.GUI.Forms
 			mnuScale2x.Checked = (scale == 2.0) && !_customSize;
 			mnuScale3x.Checked = (scale == 3.0) && !_customSize;
 			mnuScale4x.Checked = (scale == 4.0) && !_customSize;
-			mnuScaleCustom.Checked = _customSize || !mnuScale1x.Checked && !mnuScale2x.Checked && !mnuScale3x.Checked && !mnuScale4x.Checked;
+			mnuScale5x.Checked = (scale == 5.0) && !_customSize;
+			mnuScale6x.Checked = (scale == 6.0) && !_customSize;
+			mnuScaleCustom.Checked = _customSize || !mnuScale1x.Checked && !mnuScale2x.Checked && !mnuScale3x.Checked && !mnuScale4x.Checked && !mnuScale5x.Checked && !mnuScale6x.Checked;
 
 			ConfigManager.Config.VideoInfo.VideoScale = scale;
 			ConfigManager.ApplyChanges();
