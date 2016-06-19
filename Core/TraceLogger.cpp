@@ -61,8 +61,8 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 					<< std::setfill('0') << std::setw(4) << (short)cpuState.DebugPC << "  "
 					<< std::setfill(' ') << std::setw(10) << std::left << byteCode 
 					<< std::setfill(' ') << std::setw(32) << std::left << assemblyCode
-					<< std::setfill('0')
-					<< "A:" << std::setw(2) << (short)cpuState.A
+					<< std::setfill('0') 
+					<< "A:" << std::right << std::setw(2) << (short)cpuState.A
 					<< " X:" << std::setw(2) << (short)cpuState.X
 					<< " Y:" << std::setw(2) << (short)cpuState.Y
 					<< " P:" << std::setw(2) << (short)cpuState.PS
