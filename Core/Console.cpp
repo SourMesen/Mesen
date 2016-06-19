@@ -38,6 +38,8 @@ void Console::Release()
 
 void Console::Initialize(string romFilename, stringstream *filestream, string ipsFilename, int32_t archiveFileIndex)
 {
+	SoundMixer::StopAudio();
+
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
 	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, filestream, ipsFilename, archiveFileIndex);
 
