@@ -42,6 +42,7 @@
 #include "Mapper218.h"
 #include "Mapper225.h"
 #include "Mapper226.h"
+#include "Mapper227.h"
 #include "Mapper230.h"
 #include "Mapper231.h"
 #include "Mapper240.h"
@@ -242,6 +243,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 218: return new Mapper218();
 		case 225: return new Mapper225();
 		case 226: return new Mapper226();
+		case 227: return new Mapper227();
 		case 228: return new ActionEnterprises();
 		case 230: return new Mapper230();
 		case 231: return new Mapper231();
