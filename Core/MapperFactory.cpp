@@ -80,6 +80,7 @@
 #include "Sachen_147.h"
 #include "Sachen_148.h"
 #include "Sachen_149.h"
+#include "Sachen8259.h"
 #include "Sunsoft3.h"
 #include "Sunsoft4.h"
 #include "Sunsoft89.h"
@@ -193,7 +194,11 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 115: return new MMC3_115();
 		case 118: return new TxSRom();
 		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);
+		case 137: return new Sachen8259(Sachen8259Variant::Sachen8259D);
+		case 138: return new Sachen8259(Sachen8259Variant::Sachen8259B);
+		case 139: return new Sachen8259(Sachen8259Variant::Sachen8259C);
 		case 140: return new JalecoJf11_14();
+		case 141: return new Sachen8259(Sachen8259Variant::Sachen8259A);
 		case 144: return new ColorDreams();
 		case 145: return new Sachen_145();
 		case 146: return new Nina03_06(false);
