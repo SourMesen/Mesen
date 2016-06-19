@@ -35,6 +35,14 @@ namespace Mesen.GUI.Controls
 				_cursorHidden = true;
 			}
 		}
+		
+		protected override void OnDoubleClick(EventArgs e)
+		{
+			if(!InteropEmu.HasZapper()) {
+				//Disable double clicking (used to switch to fullscreen mode) when using zapper
+				base.OnDoubleClick(e);
+			}
+		}
 
 		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
 		{
