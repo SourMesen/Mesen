@@ -2,6 +2,7 @@
 #include "MessageManager.h"
 #include "MapperFactory.h"
 #include "RomLoader.h"
+#include "ActionEnterprises.h"
 #include "AXROM.h"
 #include "Bandai74161_7432.h"
 #include "BandaiFcg.h"
@@ -236,6 +237,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 218: return new Mapper218();
 		case 225: return new Mapper225();
 		case 226: return new Mapper226();
+		case 228: return new ActionEnterprises();
 		case 230: return new Mapper230();
 		case 231: return new Mapper231();
 		case 232: return new BF9096();

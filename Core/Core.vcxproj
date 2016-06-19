@@ -382,6 +382,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ActionEnterprises.h" />
     <ClInclude Include="APU.h" />
     <ClInclude Include="ArkanoidController.h" />
     <ClInclude Include="AutoRomTest.h" />
