@@ -76,6 +76,7 @@
 #include "NROM.h"
 #include "NtdecTc112.h"
 #include "Rambo1.h"
+#include "Sachen_143.h"
 #include "Sachen_145.h"
 #include "Sachen_147.h"
 #include "Sachen_148.h"
@@ -199,6 +200,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 139: return new Sachen8259(Sachen8259Variant::Sachen8259C);
 		case 140: return new JalecoJf11_14();
 		case 141: return new Sachen8259(Sachen8259Variant::Sachen8259A);
+		case 143: return new Sachen_143();
 		case 144: return new ColorDreams();
 		case 145: return new Sachen_145();
 		case 146: return new Nina03_06(false);
