@@ -22,6 +22,12 @@ protected:
 		SelectPRGPage(3, (GetPRGPageCount() - 1) & 0x3F);
 	}
 
+	void StreamState(bool saving)
+	{
+		BaseMapper::StreamState(saving);
+		Stream(_registersEnabled);
+	}
+
 	void WriteRegister(uint16_t addr, uint8_t value)
 	{
 		switch(addr) {
