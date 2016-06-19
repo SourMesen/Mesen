@@ -25,6 +25,7 @@ namespace Mesen.GUI.Forms
 		private InteropEmu.NotificationListener _notifListener;
 		private Thread _emuThread;
 		private frmDebugger _debugger;
+		private frmLogWindow _logWindow;
 		private string _romToLoad = null;
 		private string _currentGame = null;
 		private bool _customSize = false;
@@ -1329,6 +1330,22 @@ namespace Mesen.GUI.Forms
 			ConfigManager.Config.VideoInfo.UseBilinearInterpolation = mnuBilinearInterpolation.Checked;
 			ConfigManager.Config.ApplyConfig();
 			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuLogWindow_Click(object sender, EventArgs e)
+		{
+			if(_logWindow == null) {
+				_logWindow = new frmLogWindow();
+				_logWindow.StartPosition = FormStartPosition.Manual;
+				_logWindow.Left = this.Left + (this.Width - _logWindow.Width) / 2;
+				_logWindow.Top = this.Top + (this.Height - _logWindow.Height) / 2;
+				_logWindow.Show();
+				_logWindow.FormClosed += (object a, FormClosedEventArgs b) => {
+					_logWindow = null;
+				};
+			} else {
+				_logWindow.Focus();
+			}
 		}
 	}
 }

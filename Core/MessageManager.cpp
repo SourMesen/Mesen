@@ -178,6 +178,8 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "SynchronizationCompleted", u8"同期完了。" },
 };
 
+std::list<string> MessageManager::_log;
+SimpleLock MessageManager::_logLock;
 IMessageManager* MessageManager::_messageManager = nullptr;
 vector<INotificationListener*> MessageManager::_notificationListeners;
 
@@ -240,6 +242,29 @@ void MessageManager::DisplayToast(string title, string message, uint8_t* iconDat
 		MessageManager::_messageManager->DisplayToast(shared_ptr<ToastInfo>(new ToastInfo(title, message, 4000, iconData, iconSize)));
 	}
 }
+
+void MessageManager::Log(string message)
+{
+	_logLock.AcquireSafe();
+	if(message.empty()) {
+		message = "------------------------------------------------------";
+	}
+	if(_log.size() >= 1000) {
+		_log.pop_front();
+	}
+	_log.push_back(message);
+}
+
+string MessageManager::GetLog()
+{
+	_logLock.AcquireSafe();
+	stringstream ss;
+	for(string &msg : _log) {
+		ss << msg << "\n";
+	}
+	return ss.str();
+}
+
 void MessageManager::RegisterNotificationListener(INotificationListener* notificationListener)
 {
 	MessageManager::_notificationListeners.push_back(notificationListener);

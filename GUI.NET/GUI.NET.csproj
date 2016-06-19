@@ -445,6 +445,12 @@
     <Compile Include="Forms\frmDownloadProgress.Designer.cs">
       <DependentUpon>frmDownloadProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmLogWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmLogWindow.Designer.cs">
+      <DependentUpon>frmLogWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmSelectRom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -600,6 +606,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmDownloadProgress.resx">
       <DependentUpon>frmDownloadProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmLogWindow.resx">
+      <DependentUpon>frmLogWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>

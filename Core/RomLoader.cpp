@@ -97,6 +97,8 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 		fileData = IpsPatcher::PatchBuffer(_ipsFilename, fileData);
 	}
 
+	MessageManager::Log("");
+	MessageManager::Log("Loading rom: " + romName);
 	if(memcmp(buffer, "NES\x1a", 4) == 0) {
 		iNesLoader loader;
 		_romData = loader.LoadRom(fileData);
@@ -104,6 +106,7 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 		FdsLoader loader;
 		_romData = loader.LoadRom(fileData, _filename);
 	} else {
+		MessageManager::Log("Invalid rom file.");
 		_romData.Error = true;
 	}
 

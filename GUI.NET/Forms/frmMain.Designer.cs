@@ -155,6 +155,7 @@ namespace Mesen.GUI.Forms
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuLogWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -857,6 +858,7 @@ namespace Mesen.GUI.Forms
             this.toolStripMenuItem12,
             this.mnuTests,
             this.mnuDebugger,
+            this.mnuLogWindow,
             this.toolStripMenuItem1,
             this.mnuTakeScreenshot});
 			this.mnuTools.Name = "mnuTools";
@@ -1178,6 +1180,13 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
+			// mnuLogWindow
+			// 
+			this.mnuLogWindow.Name = "mnuLogWindow";
+			this.mnuLogWindow.Size = new System.Drawing.Size(185, 22);
+			this.mnuLogWindow.Text = "Log Window";
+			this.mnuLogWindow.Click += new System.EventHandler(this.mnuLogWindow_Click);
+			// 
 			// frmMain
 			// 
 			this.AllowDrop = true;
@@ -1328,6 +1337,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuWaveStop;
 		private System.Windows.Forms.ToolStripMenuItem mnuScale5x;
 		private System.Windows.Forms.ToolStripMenuItem mnuScale6x;
+		private System.Windows.Forms.ToolStripMenuItem mnuLogWindow;
 	}
 }
 

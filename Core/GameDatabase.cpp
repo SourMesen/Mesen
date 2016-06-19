@@ -56,6 +56,9 @@ void GameDatabase::InitDatabase()
 				_gameDatabase[gameInfo.Crc] = gameInfo;
 			}
 		}
+
+		MessageManager::Log();
+		MessageManager::Log("[DB] Initialized - " + std::to_string(_gameDatabase.size()) + " games in DB");		
 	}
 }
 
@@ -145,7 +148,9 @@ void GameDatabase::UpdateRomData(uint32_t romCrc, RomData &romData)
 	InitDatabase();
 
 	auto result = _gameDatabase.find(romCrc);
+
 	if(result != _gameDatabase.end()) {
+		MessageManager::Log("[DB] Game found in database");
 		GameInfo info = result->second;
 
 		romData.MapperID = info.MapperID;
@@ -159,6 +164,18 @@ void GameDatabase::UpdateRomData(uint32_t romCrc, RomData &romData)
 		if(!info.Mirroring.empty()) {
 			romData.MirroringType = info.Mirroring.compare("h") == 0 ? MirroringType::Horizontal : MirroringType::Vertical;
 		}
+
+		MessageManager::Log("[DB] Mapper: " + std::to_string(romData.MapperID) + "  Sub: " + std::to_string(romData.SubMapperID));
+		MessageManager::Log("[DB] System : " + info.System);
+		if(!info.Mirroring.empty()) {
+			MessageManager::Log("[DB] Mirroring: " + string(info.Mirroring.compare("h") == 0 ? "Horizontal" : "Vertical"));
+		}
+		MessageManager::Log("[DB] PRG ROM: " + std::to_string(info.PrgRomSize) + " KB");
+		MessageManager::Log("[DB] CHR ROM: " + std::to_string(info.ChrRomSize) + " KB");
+		if(info.ChrRamSize > 0) {
+			MessageManager::Log("[DB] CHR RAM: " + std::to_string(info.ChrRamSize) + " KB");
+		}
+		MessageManager::Log("[DB] Battery: " + string(info.HasBattery ? "Yes" : "No"));
 
 		#ifdef _DEBUG
 		MessageManager::DisplayMessage("DB", "Mapper: " + std::to_string(romData.MapperID) + "  Sub: " + std::to_string(romData.SubMapperID) + "  System: " + info.System);

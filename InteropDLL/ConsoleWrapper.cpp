@@ -23,6 +23,7 @@ SoundManager *_soundManager = nullptr;
 HWND _windowHandle = nullptr;
 HWND _viewerHandle = nullptr;
 string _returnString;
+string _logString;
 AutoRomTest *_autoRomTest = nullptr;
 
 typedef void (__stdcall *NotificationListenerCallback)(int);
@@ -225,6 +226,11 @@ namespace InteropEmu {
 		DllExport void __stdcall UnregisterNotificationCallback(INotificationListener *listener) { MessageManager::UnregisterNotificationListener(listener); }
 
 		DllExport void __stdcall DisplayMessage(char* title, char* message, char* param1) { MessageManager::DisplayMessage(title, message, param1 ? param1 : ""); }
+		DllExport const char* __stdcall GetLog()
+		{
+			_logString = MessageManager::GetLog();
+			return _logString.c_str();
+		}
 
 		DllExport void __stdcall SaveState(uint32_t stateIndex) { SaveStateManager::SaveState(stateIndex); }
 		DllExport uint32_t __stdcall LoadState(uint32_t stateIndex) { return SaveStateManager::LoadState(stateIndex); }
