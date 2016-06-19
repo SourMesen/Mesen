@@ -664,6 +664,9 @@
     <ClInclude Include="Mapper227.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
+    <ClInclude Include="Waixing164.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -106,6 +106,7 @@
 #include "VRC6.h"
 #include "VRC7.h"
 #include "VsSystem.h"
+#include "Waixing164.h"
 #include "Waixing176.h"
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
@@ -222,6 +223,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 157: return new BandaiFcg();
 		case 159: return new BandaiFcg();
 		case 163: return new Nanjing();
+		case 164: return new Waixing164();
 		case 176: return new Waixing176();
 		case 180: return new UnRom_180();
 		case 184: return new Sunsoft184();
