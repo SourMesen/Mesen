@@ -82,6 +82,8 @@
 #include "Sachen_147.h"
 #include "Sachen_148.h"
 #include "Sachen_149.h"
+#include "Sachen74LS374N.h"
+#include "Sachen74LS374NB.h"
 #include "Sachen8259.h"
 #include "Sunsoft3.h"
 #include "Sunsoft4.h"
@@ -208,6 +210,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 147: return new Sachen_147();
 		case 148: return new Sachen_148();
 		case 149: return new Sachen_149();
+		case 150: return new Sachen74LS374NB();
 		case 151: return new VRC1();
 		case 152: return new Bandai74161_7432(true);
 		case 153: return new BandaiFcg();
@@ -244,6 +247,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 240: return new Mapper240();
 		case 241: return new Mapper241();
 		case 242: return new Mapper242();
+		case 243: return new Sachen74LS374N();
 		case 246: return new Mapper246();
 
 		case MapperFactory::FdsMapperID: return new FDS();

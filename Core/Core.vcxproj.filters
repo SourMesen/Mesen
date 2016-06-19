@@ -652,6 +652,12 @@
     <ClInclude Include="ActionEnterprises.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="Sachen74LS374N.h">
+      <Filter>Nes\Mappers\Sachen</Filter>
+    </ClInclude>
+    <ClInclude Include="Sachen74LS374NB.h">
+      <Filter>Nes\Mappers\Sachen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

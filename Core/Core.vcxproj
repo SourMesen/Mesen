@@ -456,6 +456,8 @@
     <ClInclude Include="RomData.h" />
     <ClInclude Include="NtdecTc112.h" />
     <ClInclude Include="Rambo1.h" />
+    <ClInclude Include="Sachen74LS374N.h" />
+    <ClInclude Include="Sachen74LS374NB.h" />
     <ClInclude Include="Sachen8259.h" />
     <ClInclude Include="Sachen_143.h" />
     <ClInclude Include="SelectControllerMessage.h" />
