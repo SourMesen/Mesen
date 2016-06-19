@@ -574,6 +574,7 @@
     <ClInclude Include="VsControlManager.h" />
     <ClInclude Include="VsSystem.h" />
     <ClInclude Include="ScaleFilter.h" />
+    <ClInclude Include="Waixing176.h" />
     <ClInclude Include="WaveRecorder.h" />
     <ClInclude Include="Zapper.h" />
   </ItemGroup>
