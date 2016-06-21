@@ -715,6 +715,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\LogWindow.png" />
+    <None Include="Resources\format-justify-fill.png" />
     <None Include="Resources\Record.png" />
     <None Include="Resources\microphone.png" />
     <None Include="Resources\DownArrow.png" />

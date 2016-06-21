@@ -1338,7 +1338,7 @@ namespace Mesen.GUI.Forms
 				_logWindow.StartPosition = FormStartPosition.Manual;
 				_logWindow.Left = this.Left + (this.Width - _logWindow.Width) / 2;
 				_logWindow.Top = this.Top + (this.Height - _logWindow.Height) / 2;
-				_logWindow.Show();
+				_logWindow.Show(sender, null);
 				_logWindow.FormClosed += (object a, FormClosedEventArgs b) => {
 					_logWindow = null;
 				};

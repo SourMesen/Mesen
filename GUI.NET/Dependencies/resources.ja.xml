@@ -82,10 +82,14 @@
       <Control ID="mnuTestStopRecording">Stop recording</Control>
       <Control ID="mnuRunAllTests">Run all tests</Control>
       <Control ID="mnuDebugger">デバッガ</Control>
+      <Control ID="mnuLogWindow">ログウィンドウ</Control>      
       <Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
       <Control ID="mnuHelp">ヘルプ</Control>
       <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
       <Control ID="mnuAbout">Mesenとは</Control>
+    </Form>
+    <Form ID="frmLogWindow" Title="ログウィンドウ">
+      <Control ID="btnClose">閉じる</Control>
     </Form>
     <Form ID="frmAudioConfig" Title="音声設定">
       <Control ID="tpgGeneral">全般</Control>

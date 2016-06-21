@@ -82,10 +82,14 @@
       <Control ID="mnuTestStopRecording">Stop recording</Control>
       <Control ID="mnuRunAllTests">Run all tests</Control>
       <Control ID="mnuDebugger">Débogueur</Control>
+      <Control ID="mnuLogWindow">Fenêtre de log</Control>
       <Control ID="mnuTakeScreenshot">Capture d'écran</Control>
       <Control ID="mnuHelp">Aide</Control>
       <Control ID="mnuCheckForUpdates">Recherche de mises-à-jour</Control>
       <Control ID="mnuAbout">À propos de...</Control>
+    </Form>
+    <Form ID="frmLogWindow" Title="Fenêtre de log">
+      <Control ID="btnClose">Fermer</Control>
     </Form>
     <Form ID="frmAudioConfig" Title="Options audio">
       <Control ID="tpgGeneral">Général</Control>
