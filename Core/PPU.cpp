@@ -59,11 +59,27 @@ void PPU::Reset()
 void PPU::SetNesModel(NesModel model)
 {
 	_nesModel = model;
-	switch(model) {
-		case NesModel::NTSC: _vblankEnd = 260; break;
+
+	switch(_nesModel) {
+		case NesModel::NTSC:
+			_nmiScanline = 241;
+			_vblankEnd = 260;
+			EmulationSettings::SetPpuScanlineCount(262);
+			break;
 		case NesModel::PAL:
-		case NesModel::Dendy: _vblankEnd = 310; break;
+			_nmiScanline = 241;
+			_vblankEnd = 310;
+			EmulationSettings::SetPpuScanlineCount(312);
+			break;
+		case NesModel::Dendy:
+			_nmiScanline = 291;
+			_vblankEnd = 310;
+			EmulationSettings::SetPpuScanlineCount(312);
+			break;
 	}
+
+	_nmiScanline += EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
+	_vblankEnd += EmulationSettings::GetPpuExtraScanlinesAfterNmi() + EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
 }
 
 PPUDebugState PPU::GetState()
@@ -829,10 +845,7 @@ void PPU::BeginVBlank()
 {
 	if(_cycle == 0) {
 		SendFrame();
-		
-		if(_nesModel == NesModel::NTSC || _nesModel == NesModel::PAL) {
-			TriggerNmi();
-		}
+		TriggerNmi();
 	}
 }
 
@@ -868,10 +881,8 @@ void PPU::Exec()
 		ProcessVisibleScanline();
 	} else if(_scanline == -1) {
 		ProcessPrerenderScanline();
-	} else if(_scanline == 241) {
+	} else if(_scanline == _nmiScanline) {
 		BeginVBlank();
-	} else if(_scanline == 291 && _cycle == 0 && _nesModel == NesModel::Dendy) {
-		TriggerNmi();
 	} else if(_scanline == _vblankEnd) {
 		EndVBlank();
 	}
@@ -883,7 +894,8 @@ void PPU::Exec()
 
 void PPU::ExecStatic()
 {
-	if(EmulationSettings::GetOverclockRate() == 100) {
+	double overclockRate = EmulationSettings::GetOverclockRate();
+	if(overclockRate == 100) {
 		PPU::Instance->Exec();
 		PPU::Instance->Exec();
 		PPU::Instance->Exec();
@@ -894,9 +906,9 @@ void PPU::ExecStatic()
 	} else {
 		if(PPU::Instance->_nesModel == NesModel::PAL) {
 			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
-			Instance->_cyclesNeeded += 3.2 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
+			Instance->_cyclesNeeded += 3.2 / (overclockRate / 100.0);
 		} else {
-			Instance->_cyclesNeeded += 3.0 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
+			Instance->_cyclesNeeded += 3.0 / (overclockRate / 100.0);
 		}
 
 		while(Instance->_cyclesNeeded >= 1.0) {

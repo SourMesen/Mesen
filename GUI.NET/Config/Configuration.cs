@@ -17,6 +17,7 @@ namespace Mesen.GUI.Config
 		public AudioInfo AudioInfo;
 		public VideoInfo VideoInfo;
 		public InputInfo InputInfo;
+		public EmulationInfo EmulationInfo;
 		public List<string> RecentFiles;
 		public List<VsConfigInfo> VsConfig;
 		public List<CheatInfo> Cheats;
@@ -35,6 +36,7 @@ namespace Mesen.GUI.Config
 			AudioInfo = new AudioInfo();
 			VideoInfo = new VideoInfo();
 			PreferenceInfo = new PreferenceInfo();
+			EmulationInfo = new EmulationInfo();
 			RecentFiles = new List<string>();
 			InputInfo = new InputInfo();
 			Cheats = new List<CheatInfo>();
@@ -48,6 +50,7 @@ namespace Mesen.GUI.Config
 			VideoInfo.ApplyConfig();
 			AudioInfo.ApplyConfig();
 			PreferenceInfo.ApplyConfig();
+			EmulationInfo.ApplyConfig();
 
 			InteropEmu.SetNesModel(Region);
 		}

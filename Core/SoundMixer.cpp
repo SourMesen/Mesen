@@ -129,7 +129,11 @@ void SoundMixer::SetNesModel(NesModel model)
 
 void SoundMixer::UpdateRates(bool forceUpdate)
 {
-	uint32_t newRate = CPU::GetClockRate(_model, !EmulationSettings::GetOverclockAdjustApu());
+	uint32_t newRate = CPU::GetClockRate(_model);
+	if(!EmulationSettings::GetOverclockAdjustApu()) {
+		newRate *= (double)EmulationSettings::GetOverclockRate(false, true) / 100;
+	}
+
 	if(_clockRate != newRate || forceUpdate) {
 		_clockRate = newRate;
 		blip_set_rates(_blipBuf, _clockRate, _sampleRate);

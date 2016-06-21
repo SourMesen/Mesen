@@ -34,10 +34,6 @@
 			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
 			this.cboAspectRatio = new System.Windows.Forms.ComboBox();
 			this.lblDisplayRatio = new System.Windows.Forms.Label();
-			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-			this.nudEmulationSpeed = new System.Windows.Forms.NumericUpDown();
-			this.lblEmuSpeedHint = new System.Windows.Forms.Label();
-			this.lblEmulationSpeed = new System.Windows.Forms.Label();
 			this.chkShowFps = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkUseHdPacks = new System.Windows.Forms.CheckBox();
@@ -107,8 +103,6 @@
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
 			this.tlpMain.SuspendLayout();
-			this.flowLayoutPanel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudScale)).BeginInit();
@@ -157,8 +151,6 @@
 			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 3);
 			this.tlpMain.Controls.Add(this.cboAspectRatio, 1, 1);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 1);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 5);
-			this.tlpMain.Controls.Add(this.lblEmulationSpeed, 0, 5);
 			this.tlpMain.Controls.Add(this.chkShowFps, 0, 4);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 2);
 			this.tlpMain.Controls.Add(this.nudScale, 1, 0);
@@ -166,8 +158,7 @@
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 7;
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.RowCount = 6;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -210,7 +201,7 @@
             "PAL (18:13)",
             "Standard (4:3)",
             "Widescreen (16:9)"});
-			this.cboAspectRatio.Location = new System.Drawing.Point(99, 29);
+			this.cboAspectRatio.Location = new System.Drawing.Point(80, 29);
 			this.cboAspectRatio.Name = "cboAspectRatio";
 			this.cboAspectRatio.Size = new System.Drawing.Size(121, 21);
 			this.cboAspectRatio.TabIndex = 16;
@@ -224,50 +215,6 @@
 			this.lblDisplayRatio.Size = new System.Drawing.Size(71, 13);
 			this.lblDisplayRatio.TabIndex = 17;
 			this.lblDisplayRatio.Text = "Aspect Ratio:";
-			// 
-			// flowLayoutPanel6
-			// 
-			this.flowLayoutPanel6.AutoSize = true;
-			this.flowLayoutPanel6.Controls.Add(this.nudEmulationSpeed);
-			this.flowLayoutPanel6.Controls.Add(this.lblEmuSpeedHint);
-			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 122);
-			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(425, 26);
-			this.flowLayoutPanel6.TabIndex = 10;
-			// 
-			// nudEmulationSpeed
-			// 
-			this.nudEmulationSpeed.Location = new System.Drawing.Point(3, 3);
-			this.nudEmulationSpeed.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-			this.nudEmulationSpeed.Name = "nudEmulationSpeed";
-			this.nudEmulationSpeed.Size = new System.Drawing.Size(48, 20);
-			this.nudEmulationSpeed.TabIndex = 1;
-			// 
-			// lblEmuSpeedHint
-			// 
-			this.lblEmuSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblEmuSpeedHint.AutoSize = true;
-			this.lblEmuSpeedHint.Location = new System.Drawing.Point(57, 6);
-			this.lblEmuSpeedHint.Name = "lblEmuSpeedHint";
-			this.lblEmuSpeedHint.Size = new System.Drawing.Size(107, 13);
-			this.lblEmuSpeedHint.TabIndex = 2;
-			this.lblEmuSpeedHint.Text = "(0 = Maximum speed)";
-			// 
-			// lblEmulationSpeed
-			// 
-			this.lblEmulationSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblEmulationSpeed.AutoSize = true;
-			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 128);
-			this.lblEmulationSpeed.Name = "lblEmulationSpeed";
-			this.lblEmulationSpeed.Size = new System.Drawing.Size(90, 13);
-			this.lblEmulationSpeed.TabIndex = 0;
-			this.lblEmulationSpeed.Text = "Emulation Speed:";
 			// 
 			// chkShowFps
 			// 
@@ -316,7 +263,7 @@
 			// nudScale
 			// 
 			this.nudScale.DecimalPlaces = 2;
-			this.nudScale.Location = new System.Drawing.Point(99, 3);
+			this.nudScale.Location = new System.Drawing.Point(80, 3);
 			this.nudScale.Maximum = new decimal(new int[] {
             10,
             0,
@@ -1023,14 +970,14 @@
 			// mnuPresetComposite
 			// 
 			this.mnuPresetComposite.Name = "mnuPresetComposite";
-			this.mnuPresetComposite.Size = new System.Drawing.Size(152, 22);
+			this.mnuPresetComposite.Size = new System.Drawing.Size(147, 22);
 			this.mnuPresetComposite.Text = "Composite";
 			this.mnuPresetComposite.Click += new System.EventHandler(this.mnuPresetComposite_Click);
 			// 
 			// mnuPresetSVideo
 			// 
 			this.mnuPresetSVideo.Name = "mnuPresetSVideo";
-			this.mnuPresetSVideo.Size = new System.Drawing.Size(152, 22);
+			this.mnuPresetSVideo.Size = new System.Drawing.Size(147, 22);
 			this.mnuPresetSVideo.Text = "S-Video";
 			this.mnuPresetSVideo.Click += new System.EventHandler(this.mnuPresetSVideo_Click);
 			// 
@@ -1044,7 +991,7 @@
 			// mnuPresetMonochrome
 			// 
 			this.mnuPresetMonochrome.Name = "mnuPresetMonochrome";
-			this.mnuPresetMonochrome.Size = new System.Drawing.Size(152, 22);
+			this.mnuPresetMonochrome.Size = new System.Drawing.Size(147, 22);
 			this.mnuPresetMonochrome.Text = "Monochrome";
 			this.mnuPresetMonochrome.Click += new System.EventHandler(this.mnuPresetMonochrome_Click);
 			// 
@@ -1109,9 +1056,6 @@
 			this.Controls.SetChildIndex(this.tabMain, 0);
 			this.tlpMain.ResumeLayout(false);
 			this.tlpMain.PerformLayout();
-			this.flowLayoutPanel6.ResumeLayout(false);
-			this.flowLayoutPanel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).EndInit();
 			this.flowLayoutPanel7.ResumeLayout(false);
 			this.flowLayoutPanel7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).EndInit();
@@ -1162,10 +1106,6 @@
 
 		private System.Windows.Forms.TableLayoutPanel tlpMain;
 		private System.Windows.Forms.CheckBox chkShowFps;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
-		private System.Windows.Forms.Label lblEmulationSpeed;
-		private System.Windows.Forms.NumericUpDown nudEmulationSpeed;
-		private System.Windows.Forms.Label lblEmuSpeedHint;
 		private System.Windows.Forms.Label lblVideoScale;
 		private System.Windows.Forms.CheckBox chkVerticalSync;
 		private System.Windows.Forms.ComboBox cboAspectRatio;

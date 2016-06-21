@@ -111,6 +111,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		NesModel _nesModel;
 		uint16_t _vblankEnd;
+		uint16_t _nmiScanline;
 
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;

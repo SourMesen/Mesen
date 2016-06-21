@@ -19,10 +19,10 @@ protected:
 public:
 	void Clock()
 	{
-		if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
+		if(EmulationSettings::GetOverclockRate(true) == 100) {
 			ClockAudio();
 		} else {
-			_clocksNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100);
+			_clocksNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate(true) / 100);
 			while(_clocksNeeded >= 1.0) {
 				ClockAudio();
 				_clocksNeeded--;

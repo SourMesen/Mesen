@@ -103,15 +103,16 @@ namespace Mesen.GUI.Forms
 			this.mnuSuperEagleFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem19 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuBilinearInterpolation = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuAudioConfig = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuInput = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRegion = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRegionAuto = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRegionNtsc = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRegionPal = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRegionDendy = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuAudioConfig = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuInput = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuVideoConfig = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEmulationConfig = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuPreferences = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
@@ -149,13 +150,13 @@ namespace Mesen.GUI.Forms
 			this.mnuTestStopRecording = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunAllTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebugger = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuLogWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuTakeScreenshot = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuLogWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -385,11 +386,12 @@ namespace Mesen.GUI.Forms
             this.mnuEmulationSpeed,
             this.mnuVideoScale,
             this.mnuVideoFilter,
+            this.mnuRegion,
             this.toolStripMenuItem10,
             this.mnuAudioConfig,
             this.mnuInput,
-            this.mnuRegion,
             this.mnuVideoConfig,
+            this.mnuEmulationConfig,
             this.toolStripMenuItem11,
             this.mnuPreferences});
 			this.mnuOptions.Name = "mnuOptions";
@@ -766,27 +768,6 @@ namespace Mesen.GUI.Forms
 			this.mnuBilinearInterpolation.Text = "Use Bilinear Interpolation";
 			this.mnuBilinearInterpolation.Click += new System.EventHandler(this.mnuBilinearInterpolation_Click);
 			// 
-			// toolStripMenuItem10
-			// 
-			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-			this.toolStripMenuItem10.Size = new System.Drawing.Size(149, 6);
-			// 
-			// mnuAudioConfig
-			// 
-			this.mnuAudioConfig.Image = global::Mesen.GUI.Properties.Resources.Audio;
-			this.mnuAudioConfig.Name = "mnuAudioConfig";
-			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
-			this.mnuAudioConfig.Text = "Audio";
-			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
-			// 
-			// mnuInput
-			// 
-			this.mnuInput.Image = global::Mesen.GUI.Properties.Resources.Controller;
-			this.mnuInput.Name = "mnuInput";
-			this.mnuInput.Size = new System.Drawing.Size(152, 22);
-			this.mnuInput.Text = "Input";
-			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
-			// 
 			// mnuRegion
 			// 
 			this.mnuRegion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -827,6 +808,27 @@ namespace Mesen.GUI.Forms
 			this.mnuRegionDendy.Text = "Dendy";
 			this.mnuRegionDendy.Click += new System.EventHandler(this.mnuRegion_Click);
 			// 
+			// toolStripMenuItem10
+			// 
+			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(149, 6);
+			// 
+			// mnuAudioConfig
+			// 
+			this.mnuAudioConfig.Image = global::Mesen.GUI.Properties.Resources.Audio;
+			this.mnuAudioConfig.Name = "mnuAudioConfig";
+			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuAudioConfig.Text = "Audio";
+			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
+			// 
+			// mnuInput
+			// 
+			this.mnuInput.Image = global::Mesen.GUI.Properties.Resources.Controller;
+			this.mnuInput.Name = "mnuInput";
+			this.mnuInput.Size = new System.Drawing.Size(152, 22);
+			this.mnuInput.Text = "Input";
+			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
+			// 
 			// mnuVideoConfig
 			// 
 			this.mnuVideoConfig.Image = global::Mesen.GUI.Properties.Resources.Video;
@@ -834,6 +836,14 @@ namespace Mesen.GUI.Forms
 			this.mnuVideoConfig.Size = new System.Drawing.Size(152, 22);
 			this.mnuVideoConfig.Text = "Video";
 			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
+			// 
+			// mnuEmulationConfig
+			// 
+			this.mnuEmulationConfig.Image = global::Mesen.GUI.Properties.Resources.DipSwitches;
+			this.mnuEmulationConfig.Name = "mnuEmulationConfig";
+			this.mnuEmulationConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuEmulationConfig.Text = "Emulation";
+			this.mnuEmulationConfig.Click += new System.EventHandler(this.mnuEmulationConfig_Click);
 			// 
 			// toolStripMenuItem11
 			// 
@@ -1135,6 +1145,13 @@ namespace Mesen.GUI.Forms
 			this.mnuDebugger.Text = "Debugger";
 			this.mnuDebugger.Click += new System.EventHandler(this.mnuDebugger_Click);
 			// 
+			// mnuLogWindow
+			// 
+			this.mnuLogWindow.Name = "mnuLogWindow";
+			this.mnuLogWindow.Size = new System.Drawing.Size(185, 22);
+			this.mnuLogWindow.Text = "Log Window";
+			this.mnuLogWindow.Click += new System.EventHandler(this.mnuLogWindow_Click);
+			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
@@ -1179,13 +1196,6 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(170, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
-			// 
-			// mnuLogWindow
-			// 
-			this.mnuLogWindow.Name = "mnuLogWindow";
-			this.mnuLogWindow.Size = new System.Drawing.Size(185, 22);
-			this.mnuLogWindow.Text = "Log Window";
-			this.mnuLogWindow.Click += new System.EventHandler(this.mnuLogWindow_Click);
 			// 
 			// frmMain
 			// 
@@ -1338,6 +1348,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuScale5x;
 		private System.Windows.Forms.ToolStripMenuItem mnuScale6x;
 		private System.Windows.Forms.ToolStripMenuItem mnuLogWindow;
+		private System.Windows.Forms.ToolStripMenuItem mnuEmulationConfig;
 	}
 }
 

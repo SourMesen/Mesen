@@ -245,6 +245,12 @@ private:
 	static uint32_t _emulationSpeed;
 	static uint32_t _overclockRate;
 	static bool _overclockAdjustApu;
+	static bool _disableOverclocking;
+	static uint32_t _extraScanlinesBeforeNmi;
+	static uint32_t _extraScanlinesAfterNmi;
+	static uint32_t _ppuScanlineCount;
+	static double _effectiveOverclockRate;
+	static double _effectiveOverclockRateSound;
 
 	static OverscanDimensions _overscan;
 	static VideoFilterType _videoFilterType;
@@ -404,9 +410,43 @@ public:
 		return _emulationSpeed;
 	}
 
-	static uint32_t GetOverclockRate()
+	static void UpdateEffectiveOverclockRate()
+	{
+		if(_disableOverclocking) {
+			_effectiveOverclockRateSound = 100;
+			_effectiveOverclockRate = 100;
+		} else {
+			_effectiveOverclockRateSound = _overclockRate * (double)(1 + (double)(_extraScanlinesBeforeNmi + _extraScanlinesAfterNmi) / _ppuScanlineCount);
+			_effectiveOverclockRate = _overclockRate;
+		}
+	}
+
+	static void SetPpuScanlineCount(uint32_t scanlineCount)
+	{
+		_ppuScanlineCount = scanlineCount;		
+		UpdateEffectiveOverclockRate();
+	}
+
+	static void DisableOverclocking(bool disabled)
+	{
+		_disableOverclocking = disabled;
+		UpdateEffectiveOverclockRate();
+	}
+
+	static uint32_t GetOverclockRateSetting()
 	{
 		return _overclockRate;
+	}
+
+	static double GetOverclockRate(bool forApu = false, bool forSoundMixer = false)
+	{
+		if(forApu && _overclockAdjustApu || forSoundMixer) {
+			return _effectiveOverclockRateSound;
+		} else if(!forApu) {
+			return _effectiveOverclockRate;
+		} else {
+			return 100;
+		}
 	}
 
 	static bool GetOverclockAdjustApu()
@@ -419,9 +459,36 @@ public:
 		if(_overclockRate != overclockRate || _overclockAdjustApu != adjustApu) {
 			_overclockRate = overclockRate;
 			_overclockAdjustApu = adjustApu;
+
+			UpdateEffectiveOverclockRate();
+
 			MessageManager::SendNotification(ConsoleNotificationType::ConfigChanged);
 
-			MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
+			MessageManager::DisplayMessage("ClockRate", std::to_string((uint32_t)EmulationSettings::GetOverclockRate()) + "%");
+		}
+	}
+
+	static uint32_t GetPpuExtraScanlinesBeforeNmi()
+	{
+		return _disableOverclocking ? 0 : _extraScanlinesBeforeNmi;
+	}
+
+	static uint32_t GetPpuExtraScanlinesAfterNmi()
+	{
+		return _disableOverclocking ? 0 : _extraScanlinesAfterNmi;
+	}
+
+	static void SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi)
+	{
+		if(_extraScanlinesBeforeNmi != extraScanlinesBeforeNmi || _extraScanlinesAfterNmi != extraScanlinesAfterNmi) {
+			if(extraScanlinesBeforeNmi > 0 || extraScanlinesAfterNmi > 0) {
+				MessageManager::DisplayMessage("PPU", "ScanlineTimingWarning");
+			}
+
+			_extraScanlinesBeforeNmi = extraScanlinesBeforeNmi;
+			_extraScanlinesAfterNmi = extraScanlinesAfterNmi;
+
+			UpdateEffectiveOverclockRate();
 		}
 	}
 

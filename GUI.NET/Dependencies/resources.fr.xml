@@ -48,6 +48,7 @@
       <Control ID="mnuRegionPal">PAL</Control>
       <Control ID="mnuRegionDendy">Dendy</Control>
       <Control ID="mnuVideoConfig">Vidéo</Control>
+      <Control ID="mnuEmulationConfig">Émulation</Control>
       <Control ID="mnuPreferences">Préférences</Control>
       <Control ID="mnuTools">Outils</Control>
       <Control ID="mnuNetPlay">Jeu en ligne</Control>
@@ -162,8 +163,6 @@
       <Control ID="lblVideoFilter">Filtre :</Control>
       <Control ID="chkVerticalSync">Activer la synchronisation verticale</Control>
       <Control ID="lblDisplayRatio">Format d'image :</Control>
-      <Control ID="lblEmuSpeedHint">(0 = Vitesse maximale)</Control>
-      <Control ID="lblEmulationSpeed">Vitesse d'émulation :</Control>
       <Control ID="chkBilinearInterpolation">Utiliser l'interpolation bilinéaire</Control>
       <Control ID="chkShowFps">Afficher le FPS</Control>
       <Control ID="chkUseHdPacks">Utiliser les packs haute-définition de HDNes</Control>
@@ -203,6 +202,33 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
+    <Form ID="frmEmulationConfig" Title="Paramètres de l'émulation">
+      <Control ID="tpgGeneral">Général</Control>
+      <Control ID="lblEmuSpeedHint">%  (0 = Vitesse maximale)</Control>
+      <Control ID="lblEmulationSpeed">Vitesse d'émulation :</Control>
+
+      <Control ID="tpgAdvanced">Avancé</Control>      
+      <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
+      <Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
+      <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
+
+      <Control ID="tpgOverclocking">Overclocking</Control>
+      <Control ID="grpOverclocking">Overclocking du CPU</Control>
+      <Control ID="lblOverclockWarning">ATTENTION: L'overclocking affecte la stabilité de l'émulation et peut faire planter certains jeux!</Control>
+      <Control ID="lblClockRate">Multiplicateur de la fréquence d'horloge : </Control>
+      <Control ID="lblClockRatePercent">% (Recommandé: 100%)</Control>
+
+      <Control ID="grpPpuTiming">Timing du PPU</Control>
+      <Control ID="lblExtraScanlinesBeforeNmi">Nombre de lignes additionnelles avant le NMI : </Control>
+      <Control ID="lblExtraScanlinesAfterNmi">Nombre de lignes additionnelles après le NMI : </Control>
+      <Control ID="lblEffectiveClockRate">Fréquence d'horloge (NTSC) : </Control>
+      <Control ID="lblEffectiveClockRatePal">Fréquence d'horloge (PAL) : </Control>
+      
+      <Control ID="chkOverclockAdjustApu">Ne pas overclocker l'APU (Empêche le changement de tonalité causé par l'overclocking)</Control>
+
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
     <Form ID="frmPreferences" Title="Préférences">
       <Control ID="tpgGeneral">Général</Control>
       <Control ID="lblDisplayLanguage">Langue d'affichage :</Control>
@@ -221,9 +247,6 @@
       <Control ID="chkMmoFormat">.MMO (Films Mesen)</Control>
       <Control ID="chkMstFormat">.MST (Savestate Mesen)</Control>
       <Control ID="tpgAdvanced">Avancé</Control>
-      <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
-      <Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
-      <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
       <Control ID="chkFdsAutoLoadDisk">Insérer le côté A du disque 1 lors du chargement d'un jeu de FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Augmenter la vitesse d'émulation pendant le chargement des jeux FDS</Control>
 
@@ -234,12 +257,6 @@
       <Control ID="btnEnableIntegration">Activer l'intégration Google Drive</Control>
       <Control ID="lblLastSync">Dernière synchronisation : </Control>
       <Control ID="btnResync">Resynchroniser</Control>
-
-      <Control ID="grpOverclocking">Overclocking</Control>
-      <Control ID="lblOverclockWarning">ATTENTION: L'overclocking affecte la stabilité de l'émulation et peut faire planter certains jeux!</Control>
-      <Control ID="lblClockRate">Fréquence d'horloge : </Control>
-      <Control ID="lblClockRatePercent">% (Recommandé: 100%)</Control>
-      <Control ID="chkOverclockAdjustApu">Ne pas overclocker l'APU (Empêche le changement de tonalité causé par l'overclocking)</Control>
 
       <Control ID="chkDisableGameDatabase">Désactiver la base de données des jeux</Control>
 

@@ -23,7 +23,6 @@ namespace Mesen.GUI.Forms.Config
 
 			Entity = ConfigManager.Config.VideoInfo;
 			
-			AddBinding("EmulationSpeed", nudEmulationSpeed);
 			AddBinding("ShowFPS", chkShowFps);
 			AddBinding("UseBilinearInterpolation", chkBilinearInterpolation);
 			AddBinding("VerticalSync", chkVerticalSync);

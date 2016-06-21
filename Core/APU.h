@@ -64,10 +64,10 @@ class APU : public Snapshotable, public IMemoryHandler
 
 		__forceinline static void ExecStatic()
 		{
-			if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
+			if(EmulationSettings::GetOverclockRate(true) == 100) {
 				Instance->Exec();
 			} else {
-				Instance->_cyclesNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
+				Instance->_cyclesNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate(true) / 100.0);
 				while(Instance->_cyclesNeeded >= 1.0) {
 					Instance->Exec();
 					Instance->_cyclesNeeded--;

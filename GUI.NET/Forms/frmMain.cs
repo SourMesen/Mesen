@@ -164,7 +164,7 @@ namespace Mesen.GUI.Forms
 		private void UpdateEmulationSpeedMenu()
 		{
 			foreach(ToolStripMenuItem item in new ToolStripMenuItem[] { mnuEmuSpeedDouble, mnuEmuSpeedHalf, mnuEmuSpeedNormal, mnuEmuSpeedQuarter, mnuEmuSpeedTriple, mnuEmuSpeedMaximumSpeed }) {
-				item.Checked = ((int)item.Tag == ConfigManager.Config.VideoInfo.EmulationSpeed);
+				item.Checked = ((int)item.Tag == ConfigManager.Config.EmulationInfo.EmulationSpeed);
 			}
 		}
 
@@ -175,19 +175,19 @@ namespace Mesen.GUI.Forms
 			} else {
 				InteropEmu.DisplayMessage("EmulationSpeed", "EmulationSpeedPercent", emulationSpeed.ToString());
 			}
-			ConfigManager.Config.VideoInfo.EmulationSpeed = emulationSpeed;
+			ConfigManager.Config.EmulationInfo.EmulationSpeed = emulationSpeed;
 			ConfigManager.ApplyChanges();
 			UpdateEmulationSpeedMenu();
-			VideoInfo.ApplyConfig();
+			EmulationInfo.ApplyConfig();
 		}
 
 		private void mnuIncreaseSpeed_Click(object sender, EventArgs e)
 		{
-			if(ConfigManager.Config.VideoInfo.EmulationSpeed > 0) {
-				if(ConfigManager.Config.VideoInfo.EmulationSpeed < 100) {
-					SetEmulationSpeed(ConfigManager.Config.VideoInfo.EmulationSpeed + 25);
-				} else if(ConfigManager.Config.VideoInfo.EmulationSpeed < 450) {
-					SetEmulationSpeed(ConfigManager.Config.VideoInfo.EmulationSpeed + 50);
+			if(ConfigManager.Config.EmulationInfo.EmulationSpeed > 0) {
+				if(ConfigManager.Config.EmulationInfo.EmulationSpeed < 100) {
+					SetEmulationSpeed(ConfigManager.Config.EmulationInfo.EmulationSpeed + 25);
+				} else if(ConfigManager.Config.EmulationInfo.EmulationSpeed < 450) {
+					SetEmulationSpeed(ConfigManager.Config.EmulationInfo.EmulationSpeed + 50);
 				} else {
 					SetEmulationSpeed(0);
 				}
@@ -196,20 +196,20 @@ namespace Mesen.GUI.Forms
 
 		private void mnuDecreaseSpeed_Click(object sender, EventArgs e)
 		{
-			if(ConfigManager.Config.VideoInfo.EmulationSpeed == 0) {
+			if(ConfigManager.Config.EmulationInfo.EmulationSpeed == 0) {
 				SetEmulationSpeed(450);
-			} else if(ConfigManager.Config.VideoInfo.EmulationSpeed <= 100) {
-				if(ConfigManager.Config.VideoInfo.EmulationSpeed > 25) {
-					SetEmulationSpeed(ConfigManager.Config.VideoInfo.EmulationSpeed - 25);
+			} else if(ConfigManager.Config.EmulationInfo.EmulationSpeed <= 100) {
+				if(ConfigManager.Config.EmulationInfo.EmulationSpeed > 25) {
+					SetEmulationSpeed(ConfigManager.Config.EmulationInfo.EmulationSpeed - 25);
 				}
 			} else {
-				SetEmulationSpeed(ConfigManager.Config.VideoInfo.EmulationSpeed - 50);
+				SetEmulationSpeed(ConfigManager.Config.EmulationInfo.EmulationSpeed - 50);
 			}
 		}
 
 		private void mnuEmuSpeedMaximumSpeed_Click(object sender, EventArgs e)
 		{
-			if(ConfigManager.Config.VideoInfo.EmulationSpeed == 0) {
+			if(ConfigManager.Config.EmulationInfo.EmulationSpeed == 0) {
 				SetEmulationSpeed(100);
 			} else {
 				SetEmulationSpeed(0);
@@ -243,7 +243,6 @@ namespace Mesen.GUI.Forms
 
 			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
 			mnuBilinearInterpolation.Checked = ConfigManager.Config.VideoInfo.UseBilinearInterpolation;
-			UpdateEmulationSpeedMenu();
 			UpdateScaleMenu(ConfigManager.Config.VideoInfo.VideoScale);
 			UpdateFilterMenu(ConfigManager.Config.VideoInfo.VideoFilter);
 
@@ -1346,6 +1345,12 @@ namespace Mesen.GUI.Forms
 			} else {
 				_logWindow.Focus();
 			}
+		}
+
+		private void mnuEmulationConfig_Click(object sender, EventArgs e)
+		{
+			new frmEmulationConfig().ShowDialog(sender);
+			UpdateEmulationSpeedMenu();
 		}
 	}
 }

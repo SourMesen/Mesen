@@ -67,21 +67,10 @@
 			this.chkMstFormat = new System.Windows.Forms.CheckBox();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkUseAlternativeMmc3Irq = new System.Windows.Forms.CheckBox();
-			this.chkAllowInvalidInput = new System.Windows.Forms.CheckBox();
-			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
+			this.chkDisableGameDatabase = new System.Windows.Forms.CheckBox();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
-			this.grpOverclocking = new System.Windows.Forms.GroupBox();
-			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.lblOverclockWarning = new System.Windows.Forms.Label();
-			this.chkOverclockAdjustApu = new System.Windows.Forms.CheckBox();
-			this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
-			this.lblClockRate = new System.Windows.Forms.Label();
-			this.nudOverclockRate = new System.Windows.Forms.NumericUpDown();
-			this.lblClockRatePercent = new System.Windows.Forms.Label();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.chkDisableGameDatabase = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -98,10 +87,6 @@
 			this.tlpFileFormat.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.grpOverclocking.SuspendLayout();
-			this.tableLayoutPanel2.SuspendLayout();
-			this.flowLayoutPanel5.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudOverclockRate)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -293,7 +278,7 @@
 			this.tpgCloudSave.Location = new System.Drawing.Point(4, 22);
 			this.tpgCloudSave.Name = "tpgCloudSave";
 			this.tpgCloudSave.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgCloudSave.Size = new System.Drawing.Size(479, 229);
+			this.tpgCloudSave.Size = new System.Drawing.Size(479, 256);
 			this.tpgCloudSave.TabIndex = 3;
 			this.tpgCloudSave.Text = "Cloud Saves";
 			this.tpgCloudSave.UseVisualStyleBackColor = true;
@@ -310,7 +295,7 @@
 			this.tlpCloudSaves.RowCount = 2;
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpCloudSaves.Size = new System.Drawing.Size(473, 223);
+			this.tlpCloudSaves.Size = new System.Drawing.Size(473, 250);
 			this.tlpCloudSaves.TabIndex = 0;
 			// 
 			// tlpCloudSaveDesc
@@ -365,7 +350,7 @@
 			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpCloudSaveEnabled.Size = new System.Drawing.Size(473, 123);
+			this.tlpCloudSaveEnabled.Size = new System.Drawing.Size(473, 150);
 			this.tlpCloudSaveEnabled.TabIndex = 1;
 			// 
 			// btnDisableIntegration
@@ -461,7 +446,7 @@
 			this.tpgFileAssociations.Location = new System.Drawing.Point(4, 22);
 			this.tpgFileAssociations.Name = "tpgFileAssociations";
 			this.tpgFileAssociations.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgFileAssociations.Size = new System.Drawing.Size(479, 229);
+			this.tpgFileAssociations.Size = new System.Drawing.Size(479, 256);
 			this.tpgFileAssociations.TabIndex = 2;
 			this.tpgFileAssociations.Text = "File Associations";
 			this.tpgFileAssociations.UseVisualStyleBackColor = true;
@@ -472,7 +457,7 @@
 			this.grpFileAssociations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFileAssociations.Location = new System.Drawing.Point(3, 3);
 			this.grpFileAssociations.Name = "grpFileAssociations";
-			this.grpFileAssociations.Size = new System.Drawing.Size(473, 223);
+			this.grpFileAssociations.Size = new System.Drawing.Size(473, 250);
 			this.grpFileAssociations.TabIndex = 12;
 			this.grpFileAssociations.TabStop = false;
 			this.grpFileAssociations.Text = "File Associations";
@@ -494,7 +479,7 @@
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpFileFormat.Size = new System.Drawing.Size(467, 204);
+			this.tlpFileFormat.Size = new System.Drawing.Size(467, 231);
 			this.tlpFileFormat.TabIndex = 0;
 			// 
 			// chkNesFormat
@@ -554,189 +539,21 @@
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameDatabase, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 4);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 5);
-			this.tableLayoutPanel1.Controls.Add(this.grpOverclocking, 0, 6);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 2);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 7;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowCount = 4;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 250);
 			this.tableLayoutPanel1.TabIndex = 0;
-			// 
-			// chkUseAlternativeMmc3Irq
-			// 
-			this.chkUseAlternativeMmc3Irq.AutoSize = true;
-			this.chkUseAlternativeMmc3Irq.Location = new System.Drawing.Point(3, 26);
-			this.chkUseAlternativeMmc3Irq.Name = "chkUseAlternativeMmc3Irq";
-			this.chkUseAlternativeMmc3Irq.Size = new System.Drawing.Size(197, 17);
-			this.chkUseAlternativeMmc3Irq.TabIndex = 0;
-			this.chkUseAlternativeMmc3Irq.Text = "Use alternative MMC3 IRQ behavior";
-			this.chkUseAlternativeMmc3Irq.UseVisualStyleBackColor = true;
-			// 
-			// chkAllowInvalidInput
-			// 
-			this.chkAllowInvalidInput.AutoSize = true;
-			this.chkAllowInvalidInput.Location = new System.Drawing.Point(3, 49);
-			this.chkAllowInvalidInput.Name = "chkAllowInvalidInput";
-			this.chkAllowInvalidInput.Size = new System.Drawing.Size(341, 17);
-			this.chkAllowInvalidInput.TabIndex = 1;
-			this.chkAllowInvalidInput.Text = "Allow invalid input (e.g Down + Up or Left + Right at the same time)";
-			this.chkAllowInvalidInput.UseVisualStyleBackColor = true;
-			// 
-			// chkRemoveSpriteLimit
-			// 
-			this.chkRemoveSpriteLimit.AutoSize = true;
-			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 72);
-			this.chkRemoveSpriteLimit.Name = "chkRemoveSpriteLimit";
-			this.chkRemoveSpriteLimit.Size = new System.Drawing.Size(205, 17);
-			this.chkRemoveSpriteLimit.TabIndex = 2;
-			this.chkRemoveSpriteLimit.Text = "Remove sprite limit (Reduces flashing)";
-			this.chkRemoveSpriteLimit.UseVisualStyleBackColor = true;
-			// 
-			// chkFdsAutoLoadDisk
-			// 
-			this.chkFdsAutoLoadDisk.AutoSize = true;
-			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(3, 95);
-			this.chkFdsAutoLoadDisk.Name = "chkFdsAutoLoadDisk";
-			this.chkFdsAutoLoadDisk.Size = new System.Drawing.Size(303, 17);
-			this.chkFdsAutoLoadDisk.TabIndex = 3;
-			this.chkFdsAutoLoadDisk.Text = "Automatically insert disk 1 side A when starting FDS games";
-			this.chkFdsAutoLoadDisk.UseVisualStyleBackColor = true;
-			// 
-			// chkFdsFastForwardOnLoad
-			// 
-			this.chkFdsFastForwardOnLoad.AutoSize = true;
-			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(3, 118);
-			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
-			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(342, 17);
-			this.chkFdsFastForwardOnLoad.TabIndex = 4;
-			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
-			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
-			// 
-			// grpOverclocking
-			// 
-			this.grpOverclocking.Controls.Add(this.tableLayoutPanel2);
-			this.grpOverclocking.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpOverclocking.Location = new System.Drawing.Point(3, 141);
-			this.grpOverclocking.Name = "grpOverclocking";
-			this.grpOverclocking.Size = new System.Drawing.Size(467, 106);
-			this.grpOverclocking.TabIndex = 5;
-			this.grpOverclocking.TabStop = false;
-			this.grpOverclocking.Text = "Overclocking";
-			// 
-			// tableLayoutPanel2
-			// 
-			this.tableLayoutPanel2.ColumnCount = 1;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.lblOverclockWarning, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.chkOverclockAdjustApu, 0, 2);
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel5, 0, 1);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
-			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 4;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(461, 87);
-			this.tableLayoutPanel2.TabIndex = 0;
-			// 
-			// lblOverclockWarning
-			// 
-			this.lblOverclockWarning.AutoSize = true;
-			this.lblOverclockWarning.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lblOverclockWarning.ForeColor = System.Drawing.Color.Red;
-			this.lblOverclockWarning.Location = new System.Drawing.Point(3, 5);
-			this.lblOverclockWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-			this.lblOverclockWarning.Name = "lblOverclockWarning";
-			this.lblOverclockWarning.Size = new System.Drawing.Size(455, 13);
-			this.lblOverclockWarning.TabIndex = 2;
-			this.lblOverclockWarning.Text = "WARNING: Overclocking will cause stability issues and may crash some games!";
-			// 
-			// chkOverclockAdjustApu
-			// 
-			this.chkOverclockAdjustApu.AutoSize = true;
-			this.chkOverclockAdjustApu.Location = new System.Drawing.Point(3, 51);
-			this.chkOverclockAdjustApu.Name = "chkOverclockAdjustApu";
-			this.chkOverclockAdjustApu.Size = new System.Drawing.Size(401, 17);
-			this.chkOverclockAdjustApu.TabIndex = 1;
-			this.chkOverclockAdjustApu.Text = "Do not overclock APU (prevents sound pitch changes caused by overclocking)";
-			this.chkOverclockAdjustApu.UseVisualStyleBackColor = true;
-			// 
-			// flowLayoutPanel5
-			// 
-			this.flowLayoutPanel5.Controls.Add(this.lblClockRate);
-			this.flowLayoutPanel5.Controls.Add(this.nudOverclockRate);
-			this.flowLayoutPanel5.Controls.Add(this.lblClockRatePercent);
-			this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 23);
-			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-			this.flowLayoutPanel5.Size = new System.Drawing.Size(461, 25);
-			this.flowLayoutPanel5.TabIndex = 1;
-			// 
-			// lblClockRate
-			// 
-			this.lblClockRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblClockRate.AutoSize = true;
-			this.lblClockRate.Location = new System.Drawing.Point(3, 6);
-			this.lblClockRate.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-			this.lblClockRate.Name = "lblClockRate";
-			this.lblClockRate.Size = new System.Drawing.Size(63, 13);
-			this.lblClockRate.TabIndex = 1;
-			this.lblClockRate.Text = "Clock Rate:";
-			// 
-			// nudOverclockRate
-			// 
-			this.nudOverclockRate.Location = new System.Drawing.Point(66, 3);
-			this.nudOverclockRate.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.nudOverclockRate.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-			this.nudOverclockRate.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.nudOverclockRate.Name = "nudOverclockRate";
-			this.nudOverclockRate.Size = new System.Drawing.Size(46, 20);
-			this.nudOverclockRate.TabIndex = 1;
-			this.nudOverclockRate.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-			// 
-			// lblClockRatePercent
-			// 
-			this.lblClockRatePercent.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblClockRatePercent.AutoSize = true;
-			this.lblClockRatePercent.Location = new System.Drawing.Point(112, 6);
-			this.lblClockRatePercent.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.lblClockRatePercent.Name = "lblClockRatePercent";
-			this.lblClockRatePercent.Size = new System.Drawing.Size(15, 13);
-			this.lblClockRatePercent.TabIndex = 1;
-			this.lblClockRatePercent.Text = "%";
-			// 
-			// tmrSyncDateTime
-			// 
-			this.tmrSyncDateTime.Enabled = true;
-			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
 			// chkDisableGameDatabase
 			// 
@@ -747,6 +564,31 @@
 			this.chkDisableGameDatabase.TabIndex = 6;
 			this.chkDisableGameDatabase.Text = "Disable built-in game database";
 			this.chkDisableGameDatabase.UseVisualStyleBackColor = true;
+			// 
+			// chkFdsAutoLoadDisk
+			// 
+			this.chkFdsAutoLoadDisk.AutoSize = true;
+			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(3, 26);
+			this.chkFdsAutoLoadDisk.Name = "chkFdsAutoLoadDisk";
+			this.chkFdsAutoLoadDisk.Size = new System.Drawing.Size(303, 17);
+			this.chkFdsAutoLoadDisk.TabIndex = 3;
+			this.chkFdsAutoLoadDisk.Text = "Automatically insert disk 1 side A when starting FDS games";
+			this.chkFdsAutoLoadDisk.UseVisualStyleBackColor = true;
+			// 
+			// chkFdsFastForwardOnLoad
+			// 
+			this.chkFdsFastForwardOnLoad.AutoSize = true;
+			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(3, 49);
+			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
+			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(342, 17);
+			this.chkFdsFastForwardOnLoad.TabIndex = 4;
+			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
+			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
+			// 
+			// tmrSyncDateTime
+			// 
+			this.tmrSyncDateTime.Enabled = true;
+			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
 			// frmPreferences
 			// 
@@ -786,12 +628,6 @@
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			this.grpOverclocking.ResumeLayout(false);
-			this.tableLayoutPanel2.ResumeLayout(false);
-			this.tableLayoutPanel2.PerformLayout();
-			this.flowLayoutPanel5.ResumeLayout(false);
-			this.flowLayoutPanel5.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudOverclockRate)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -815,9 +651,6 @@
 		private System.Windows.Forms.CheckBox chkMstFormat;
 		private System.Windows.Forms.TabPage tpgAdvanced;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.CheckBox chkUseAlternativeMmc3Irq;
-		private System.Windows.Forms.CheckBox chkAllowInvalidInput;
-		private System.Windows.Forms.CheckBox chkRemoveSpriteLimit;
 		private System.Windows.Forms.CheckBox chkFdsAutoLoadDisk;
 		private System.Windows.Forms.CheckBox chkFdsFastForwardOnLoad;
 		private System.Windows.Forms.CheckBox chkAllowBackgroundInput;
@@ -842,14 +675,6 @@
 		private System.Windows.Forms.Label lblLastSyncDateTime;
 		private System.Windows.Forms.Timer tmrSyncDateTime;
 		private System.Windows.Forms.Button btnResync;
-		private System.Windows.Forms.GroupBox grpOverclocking;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.Label lblOverclockWarning;
-		private System.Windows.Forms.CheckBox chkOverclockAdjustApu;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
-		private System.Windows.Forms.Label lblClockRate;
-		private System.Windows.Forms.NumericUpDown nudOverclockRate;
-		private System.Windows.Forms.Label lblClockRatePercent;
 		private System.Windows.Forms.CheckBox chkDisableGameDatabase;
 	}
 }

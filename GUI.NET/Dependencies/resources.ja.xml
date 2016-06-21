@@ -48,6 +48,7 @@
       <Control ID="mnuRegionPal">PAL</Control>
       <Control ID="mnuRegionDendy">Dendy</Control>
       <Control ID="mnuVideoConfig">映像</Control>
+      <Control ID="mnuEmulationConfig">エミュレーション</Control>
       <Control ID="mnuPreferences">設定</Control>
       <Control ID="mnuTools">ツール</Control>
       <Control ID="mnuNetPlay">ネットプレイ</Control>
@@ -163,8 +164,6 @@
       <Control ID="chkBilinearInterpolation">バイリニア補間を有効にする</Control>
       <Control ID="chkVerticalSync">垂直同期を有効にする</Control>
       <Control ID="lblDisplayRatio">画面アスペクト:</Control>
-      <Control ID="lblEmuSpeedHint">(0 = 最高速度)</Control>
-      <Control ID="lblEmulationSpeed">エミュレーションの速度:</Control>
       <Control ID="chkShowFps">フレームレート表示</Control>
       <Control ID="chkUseHdPacks">HDNesのHDパックを使う</Control>
       <Control ID="tpgOverscan">オーバースキャン</Control>
@@ -203,6 +202,32 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
+    <Form ID="frmEmulationConfig" Title="エミュレーション設定">
+      <Control ID="tpgGeneral">全般</Control>
+      <Control ID="lblEmuSpeedHint">%  (0 = 最高速度)</Control>
+      <Control ID="lblEmulationSpeed">エミュレーションの速度:</Control>
+
+      <Control ID="tpgAdvanced">詳細設定</Control>
+      <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
+      <Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
+      <Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
+
+      <Control ID="tpgOverclocking">オーバークロック</Control>
+      <Control ID="grpOverclocking">オーバークロック</Control>
+      <Control ID="lblOverclockWarning">警告: オーバークロックをすることでエミュレーションの精度は下がる。　ゲームがバグる可能性は高い。</Control>
+      <Control ID="lblClockRate">クロックレートの倍率： </Control>
+      <Control ID="lblClockRatePercent">% (デフォルト： 100%)</Control>
+      <Control ID="chkOverclockAdjustApu">APUのオーバークロックを無効にする (オーバークロックによる音声のピッチ変化を中和)</Control>
+
+      <Control ID="grpPpuTiming">PPUタイミング</Control>
+      <Control ID="lblExtraScanlinesBeforeNmi">NMIの前の追加走査線数: </Control>
+      <Control ID="lblExtraScanlinesAfterNmi">NMIの後の追加走査線数: </Control>
+      <Control ID="lblEffectiveClockRate">クロックレート (NTSC) : </Control>
+      <Control ID="lblEffectiveClockRatePal">クロックレート (PAL) : </Control>
+
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
     <Form ID="frmPreferences" Title="設定">
       <Control ID="tpgGeneral">全般</Control>
       <Control ID="lblDisplayLanguage">言語:</Control>
@@ -221,9 +246,6 @@
       <Control ID="chkMmoFormat">.MMO (Mesenの動画)</Control>
       <Control ID="chkMstFormat">.MST (Mesenのクイックセーブ)</Control>
       <Control ID="tpgAdvanced">詳細設定</Control>
-      <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
-      <Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
-      <Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
       <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
 
@@ -234,12 +256,6 @@
       <Control ID="btnEnableIntegration">Google Drive同期を有効にする</Control>
       <Control ID="btnResync">同期</Control>
       <Control ID="lblLastSync">最終同期： </Control>
-
-      <Control ID="grpOverclocking">オーバークロック</Control>
-      <Control ID="lblOverclockWarning">警告: オーバークロックをすることでエミュレーションの精度は下がる。　ゲームがバグる可能性は高い。</Control>
-      <Control ID="lblClockRate">クロックレート： </Control>
-      <Control ID="lblClockRatePercent">% (デフォルト： 100%)</Control>
-      <Control ID="chkOverclockAdjustApu">APUのオーバークロックを無効にする (オーバークロックによる音声のピッチ変化を中和)</Control>
 
       <Control ID="chkDisableGameDatabase">ゲームデータベースを無効にする</Control>
 

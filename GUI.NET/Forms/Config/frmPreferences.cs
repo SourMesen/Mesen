@@ -30,10 +30,6 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AssociateMmoFiles", chkMmoFormat);
 			AddBinding("AssociateMstFiles", chkMstFormat);
 
-			AddBinding("UseAlternativeMmc3Irq", chkUseAlternativeMmc3Irq);
-			AddBinding("AllowInvalidInput", chkAllowInvalidInput);
-			AddBinding("RemoveSpriteLimit", chkRemoveSpriteLimit);
-
 			AddBinding("FdsAutoLoadDisk", chkFdsAutoLoadDisk);
 			AddBinding("FdsFastForwardOnLoad", chkFdsFastForwardOnLoad);
 
@@ -41,9 +37,6 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AllowBackgroundInput", chkAllowBackgroundInput);
 
 			AddBinding("PauseOnMovieEnd", chkPauseOnMovieEnd);
-
-			AddBinding("OverclockRate", nudOverclockRate);
-			AddBinding("OverclockAdjustApu", chkOverclockAdjustApu);
 
 			AddBinding("DisableGameDatabase", chkDisableGameDatabase);
 

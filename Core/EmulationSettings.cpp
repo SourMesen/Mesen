@@ -26,7 +26,13 @@ PpuModel EmulationSettings::_ppuModel = PpuModel::Ppu2C03;
 
 uint32_t EmulationSettings::_emulationSpeed = 100;
 uint32_t EmulationSettings::_overclockRate = 100;
+uint32_t EmulationSettings::_extraScanlinesBeforeNmi = 0;
+uint32_t EmulationSettings::_extraScanlinesAfterNmi = 0;
+uint32_t EmulationSettings::_ppuScanlineCount = 262;
+double EmulationSettings::_effectiveOverclockRate = 100;
+double EmulationSettings::_effectiveOverclockRateSound = 100;
 bool EmulationSettings::_overclockAdjustApu = true;
+bool EmulationSettings::_disableOverclocking = false;
 
 OverscanDimensions EmulationSettings::_overscan;
 VideoFilterType EmulationSettings::_videoFilterType = VideoFilterType::None;

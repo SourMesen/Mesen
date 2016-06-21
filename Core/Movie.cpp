@@ -213,6 +213,8 @@ struct MovieHeader
 	uint32_t ExpansionDevice;
 	uint32_t OverclockRate;
 	bool OverclockAdjustApu;
+	uint32_t ExtraScanlinesBeforeNmi;
+	uint32_t ExtraScanlinesAfterNmi;
 	uint32_t CheatCount;
 	uint32_t FilenameLength;
 };
@@ -250,6 +252,8 @@ bool Movie::Save()
 	_file.write((char*)&header.ExpansionDevice, sizeof(header.ExpansionDevice));
 	_file.write((char*)&header.OverclockRate, sizeof(header.OverclockRate));
 	_file.write((char*)&header.OverclockAdjustApu, sizeof(header.OverclockAdjustApu));
+	_file.write((char*)&header.ExtraScanlinesBeforeNmi, sizeof(header.ExtraScanlinesBeforeNmi));
+	_file.write((char*)&header.ExtraScanlinesAfterNmi, sizeof(header.ExtraScanlinesAfterNmi));
 	_file.write((char*)&header.CheatCount, sizeof(header.CheatCount));
 	_file.write((char*)&header.FilenameLength, sizeof(header.FilenameLength));
 
@@ -324,6 +328,12 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 		file.read((char*)&header.OverclockRate, sizeof(header.OverclockRate));
 		file.read((char*)&header.OverclockAdjustApu, sizeof(header.OverclockAdjustApu));
 		EmulationSettings::SetOverclockRate(header.OverclockRate, header.OverclockAdjustApu);
+
+		if(header.MovieFormatVersion >= 4) {
+			file.read((char*)&header.ExtraScanlinesBeforeNmi, sizeof(header.ExtraScanlinesBeforeNmi));
+			file.read((char*)&header.ExtraScanlinesAfterNmi, sizeof(header.ExtraScanlinesAfterNmi));
+			EmulationSettings::SetPpuNmiConfig(header.ExtraScanlinesBeforeNmi, header.ExtraScanlinesAfterNmi);
+		}
 	}
 	file.read((char*)&header.CheatCount, sizeof(header.CheatCount));
 	file.read((char*)&header.FilenameLength, sizeof(header.FilenameLength));

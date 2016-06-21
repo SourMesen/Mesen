@@ -209,31 +209,29 @@ void CPU::StartDmcTransfer()
 	}
 }
 
-uint32_t CPU::GetClockRate(NesModel model, bool includeOverclock)
+uint32_t CPU::GetClockRate(NesModel model)
 {
-	uint32_t baseClock;
 	switch(model) {
 		default:
-		case NesModel::NTSC: baseClock = CPU::ClockRateNtsc; break;
-		case NesModel::PAL: baseClock = CPU::ClockRatePal; break;
-		case NesModel::Dendy: baseClock = CPU::ClockRateDendy; break;
-	}
-	if(includeOverclock) {
-		return baseClock * EmulationSettings::GetOverclockRate() / 100;
-	} else {
-		return baseClock;
+		case NesModel::NTSC: return CPU::ClockRateNtsc; break;
+		case NesModel::PAL: return CPU::ClockRatePal; break;
+		case NesModel::Dendy: return CPU::ClockRateDendy; break;
 	}
 }
 
 void CPU::StreamState(bool saving)
 {
-	uint32_t overclockRate = EmulationSettings::GetOverclockRate();
+	uint32_t overclockRate = EmulationSettings::GetOverclockRateSetting();
 	bool overclockAdjustApu = EmulationSettings::GetOverclockAdjustApu();
+	uint32_t extraScanlinesBeforeNmi = EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
+	uint32_t extraScanlinesAfterNmi = EmulationSettings::GetPpuExtraScanlinesAfterNmi();
 
 	Stream(_state.PC, _state.SP, _state.PS, _state.A, _state.X, _state.Y, _cycleCount, _state.NMIFlag, 
-			_state.IRQFlag, _dmcCounter, _dmcDmaRunning, _spriteDmaCounter, _spriteDmaTransfer, overclockRate, overclockAdjustApu);
+			_state.IRQFlag, _dmcCounter, _dmcDmaRunning, _spriteDmaCounter, _spriteDmaTransfer, 
+			overclockRate, overclockAdjustApu, extraScanlinesBeforeNmi, extraScanlinesBeforeNmi);
 
 	if(!saving) {
 		EmulationSettings::SetOverclockRate(overclockRate, overclockAdjustApu);
+		EmulationSettings::SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi);
 	}
 }

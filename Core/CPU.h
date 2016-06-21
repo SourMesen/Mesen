@@ -878,7 +878,7 @@ public:
 	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
 	static void RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue);
 	static void StartDmcTransfer();	
-	static uint32_t GetClockRate(NesModel model, bool includeOverclock = true);
+	static uint32_t GetClockRate(NesModel model);
 
 	
 	//Used by debugger for "Set Next Statement"
