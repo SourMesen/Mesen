@@ -2,6 +2,17 @@
 #include "stdafx.h"
 #include "BaseControlDevice.h"
 
+struct ZapperButtonState
+{
+	bool TriggerPressed = false;
+	bool LightNotDetected = false;
+
+	uint8_t ToByte()
+	{
+		return (LightNotDetected ? 0x08 : 0x00) | (TriggerPressed ? 0x10 : 0x00);
+	}
+};
+
 class Zapper : public BaseControlDevice
 {
 private:
@@ -10,14 +21,15 @@ private:
 	int32_t _yPosition;
 
 protected:
-	uint8_t RefreshState();
+	virtual uint8_t RefreshState();
 	uint8_t ProcessNetPlayState(uint32_t netplayState);
 	void StreamState(bool saving);
+	ZapperButtonState GetZapperState();
 
 public:
 	using BaseControlDevice::BaseControlDevice;
 
-	uint8_t GetPortOutput();
+	virtual uint8_t GetPortOutput();
 
 	virtual uint32_t GetNetPlayState();
 };

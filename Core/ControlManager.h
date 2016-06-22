@@ -30,6 +30,8 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 		void RefreshAllPorts();
 
+		virtual shared_ptr<BaseControlDevice> GetZapper(uint8_t port);
+
 		static void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice, uint8_t port);
 		void UnregisterControlDevice(uint8_t port);
 

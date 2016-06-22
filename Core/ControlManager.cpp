@@ -110,6 +110,11 @@ void ControlManager::RefreshAllPorts()
 	}
 }
 
+shared_ptr<BaseControlDevice> ControlManager::GetZapper(uint8_t port)
+{
+	return shared_ptr<BaseControlDevice>(new Zapper(port));
+}
+
 void ControlManager::UpdateControlDevices()
 {
 	bool fourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
@@ -133,7 +138,7 @@ void ControlManager::UpdateControlDevices()
 		} else {
 			switch(EmulationSettings::GetControllerType(i)) {
 				case ControllerType::StandardController: device.reset(new StandardController(i)); break;
-				case ControllerType::Zapper: device.reset(new Zapper(i)); break;
+				case ControllerType::Zapper: device = GetZapper(i); break;
 				case ControllerType::ArkanoidController: device.reset(new ArkanoidController(i)); break;
 			}
 		}

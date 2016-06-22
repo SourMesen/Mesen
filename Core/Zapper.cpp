@@ -5,17 +5,6 @@
 #include "ControlManager.h"
 #include "GameServerConnection.h"
 
-struct ZapperButtonState
-{
-	bool TriggerPressed = false;
-	bool LightNotDetected = false;
-
-	uint8_t ToByte()
-	{
-		return (LightNotDetected ? 0x08 : 0x00) | (TriggerPressed ? 0x10 : 0x00);
-	}
-};
-
 void Zapper::StreamState(bool saving)
 {
 	BaseControlDevice::StreamState(saving);
@@ -53,6 +42,21 @@ uint8_t Zapper::ProcessNetPlayState(uint32_t netplayState)
 	return RefreshState();
 }
 
+ZapperButtonState Zapper::GetZapperState()
+{
+	ZapperButtonState state;
+	state.TriggerPressed = _pulled;
+
+	int32_t scanline = PPU::GetCurrentScanline();
+	int32_t cycle = PPU::GetCurrentCycle();
+	if(_xPosition == -1 || _yPosition == -1 || scanline > 240 || scanline < _yPosition || (scanline == _yPosition && cycle < _xPosition) || PPU::GetPixelBrightness(_xPosition, _yPosition) < 50) {
+		//Light cannot be detected if the Y/X position is further ahead than the PPU, or if the PPU drew a dark color
+		state.LightNotDetected = true;
+	}
+
+	return state;
+}
+
 uint8_t Zapper::RefreshState()
 {
 	if(!GameServerConnection::GetNetPlayDevice(_port)) {
@@ -72,17 +76,7 @@ uint8_t Zapper::RefreshState()
 		}
 	}
 
-	ZapperButtonState state;
-	state.TriggerPressed = _pulled;
-
-	int32_t scanline = PPU::GetCurrentScanline();
-	int32_t cycle = PPU::GetCurrentCycle();
-	if(_xPosition == -1 || _yPosition == -1 || scanline > 240 || scanline < _yPosition || (scanline == _yPosition && cycle < _xPosition) || PPU::GetPixelBrightness(_xPosition, _yPosition) < 50) {
-		//Light cannot be detected if the Y/X position is further ahead than the PPU, or if the PPU drew a dark color
-		state.LightNotDetected = true;
-	}
-
-	return state.ToByte();
+	return GetZapperState().ToByte();
 }
 
 uint8_t Zapper::GetPortOutput()

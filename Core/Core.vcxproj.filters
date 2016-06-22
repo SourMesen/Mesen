@@ -667,6 +667,9 @@
     <ClInclude Include="Waixing164.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="VsZapper.h">
+      <Filter>Nes\Controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -824,6 +827,9 @@
     </ClCompile>
     <ClCompile Include="GameDatabase.cpp">
       <Filter>Nes\RomLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="VsZapper.cpp">
+      <Filter>Nes\Controllers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

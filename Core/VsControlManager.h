@@ -3,6 +3,7 @@
 #include "ControlManager.h"
 #include "CPU.h"
 #include "Console.h"
+#include "VsZapper.h"
 #include <assert.h>
 
 class VsControlManager : public ControlManager
@@ -59,6 +60,11 @@ public:
 		if(_instance == this) {
 			_instance = nullptr;
 		}
+	}
+
+	shared_ptr<BaseControlDevice> GetZapper(uint8_t port)
+	{
+		return shared_ptr<BaseControlDevice>(new VsZapper(port));
 	}
 
 	void Reset(bool softReset)

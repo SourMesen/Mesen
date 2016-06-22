@@ -59,6 +59,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		_apu.reset(new APU(_memoryManager.get()));
 
 		_controlManager.reset(_mapper->GetGameSystem() == GameSystem::VsUniSystem ? new VsControlManager() : new ControlManager());
+		_controlManager->UpdateControlDevices();
 
 		_memoryManager->RegisterIODevice(_mapper.get());
 		_memoryManager->RegisterIODevice(_ppu.get());
