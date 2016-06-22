@@ -198,6 +198,10 @@ void ControlManager::WriteRAM(uint16_t addr, uint8_t value)
 	}
 }
 
+void ControlManager::Reset(bool softReset)
+{
+}
+
 void ControlManager::StreamState(bool saving)
 {
 	//Restore controllers that were being used at the time the snapshot was made

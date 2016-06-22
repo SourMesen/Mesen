@@ -24,6 +24,13 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
+	void StreamState(bool saving)
+	{
+		BaseMapper::StreamState(saving);
+
+		Stream(_prgChrSelectBit);
+	}
+
 	uint8_t ReadVRAM(uint16_t addr)
 	{
 		if(_prgChrSelectBit != VsControlManager::GetInstance()->GetPrgChrSelectBit()) {

@@ -41,6 +41,8 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		ControlManager();
 
 		void UpdateControlDevices();
+
+		virtual void Reset(bool softReset);
 		
 		static void RegisterBroadcaster(IGameBroadcaster* gameBroadcaster);
 		static void UnregisterBroadcaster(IGameBroadcaster* gameBroadcaster);

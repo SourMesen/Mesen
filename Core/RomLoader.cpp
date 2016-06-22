@@ -97,8 +97,13 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 		fileData = IpsPatcher::PatchBuffer(_ipsFilename, fileData);
 	}
 
+	uint32_t crc = CRC32::GetCRC(buffer, length);
 	MessageManager::Log("");
 	MessageManager::Log("Loading rom: " + romName);
+	stringstream crcHex;
+	crcHex << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << crc;
+	MessageManager::Log("File CRC32: 0x" + crcHex.str());
+
 	if(memcmp(buffer, "NES\x1a", 4) == 0) {
 		iNesLoader loader;
 		_romData = loader.LoadRom(fileData);
@@ -110,8 +115,8 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 		_romData.Error = true;
 	}
 
+	_romData.Crc32 = crc;
 	_romData.RawData = fileData;
-	_romData.Crc32 = CRC32::GetCRC(buffer, length);
 	_romData.RomName = romName;
 	_romData.Filename = _filename;
 

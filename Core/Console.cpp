@@ -183,6 +183,7 @@ void Console::ResetComponents(bool softReset)
 	_ppu->Reset();
 	_apu->Reset(softReset);
 	_cpu->Reset(softReset);
+	_controlManager->Reset(softReset);
 
 	SoundMixer::StopAudio(true);
 

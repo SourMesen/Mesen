@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "ControlManager.h"
 #include "CPU.h"
+#include "Console.h"
 #include <assert.h>
 
 class VsControlManager : public ControlManager
@@ -13,6 +14,28 @@ private:
 	bool _serviceButton = false;
 	bool _coinInserted[2] = { };
 	int32_t _coinInsertCycle[2] = { };
+	
+	uint32_t _protectionCounter = 0;
+	uint32_t _protectionData[3][32] = { 
+		{
+			0xFF, 0xBF, 0xB7, 0x97, 0x97, 0x17, 0x57, 0x4F,
+			0x6F, 0x6B, 0xEB, 0xA9, 0xB1, 0x90, 0x94, 0x14,
+			0x56, 0x4E, 0x6F, 0x6B, 0xEB, 0xA9, 0xB1, 0x90,
+			0xD4, 0x5C, 0x3E, 0x26, 0x87, 0x83, 0x13, 0x00
+		},
+		{
+			0x00, 0x00, 0x00, 0x00, 0xB4, 0x00, 0x00, 0x00,
+			0x00, 0x6F, 0x00, 0x00, 0x00, 0x00, 0x94, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+		},
+		{
+			0x05, 0x01, 0x89, 0x37, 0x05, 0x00, 0xD1, 0x3E,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+		}
+	};
 
 private:
 	void UpdateCoinInsertedFlags()
@@ -38,9 +61,20 @@ public:
 		}
 	}
 
+	void Reset(bool softReset)
+	{
+		_protectionCounter = 0;
+	}
+
 	static VsControlManager* GetInstance()
 	{
 		return _instance;
+	}
+
+	void StreamState(bool saving)
+	{
+		ControlManager::StreamState(saving);
+		Stream(_prgChrSelectBit, _protectionCounter);
 	}
 
 	void InsertCoin(uint8_t port)
@@ -78,33 +112,57 @@ public:
 		UpdateCoinInsertedFlags();
 
 		uint8_t value = 0;
+		
+		uint32_t crc = Console::GetCrc32();
+		
 		switch(addr) {
-			case 0x4016: value = GetPortValue(1); break;
-			case 0x4017: value = GetPortValue(0); break;
-		}
+			case 0x4016:
+				value = GetPortValue(1) & 0x01;
+				if(_coinInserted[0]) {
+					value |= 0x20;
+				}
+				if(_coinInserted[1]) {
+					value |= 0x40;
+				}
+				if(_serviceButton) {
+					value |= 0x04;
+				}
 
-		value &= 0x01;
+				value |= ((_dipSwitches & 0x01) ? 0x08 : 0x00);
+				value |= ((_dipSwitches & 0x02) ? 0x10 : 0x00);
+				break;
+			
+			case 0x4017:
+				value = GetPortValue(0) & 0x01;
 
-		if(addr == 0x4016) {
-			if(_coinInserted[0]) {
-				value |= 0x20;
-			}
-			if(_coinInserted[1]) {
-				value |= 0x40;
-			}
-			if(_serviceButton) {
-				value |= 0x04;
-			}
+				value |= ((_dipSwitches & 0x04) ? 0x04 : 0x00);
+				value |= ((_dipSwitches & 0x08) ? 0x08 : 0x00);
+				value |= ((_dipSwitches & 0x10) ? 0x10 : 0x00);
+				value |= ((_dipSwitches & 0x20) ? 0x20 : 0x00);
+				value |= ((_dipSwitches & 0x40) ? 0x40 : 0x00);
+				value |= ((_dipSwitches & 0x80) ? 0x80 : 0x00);
+				break;
 
-			value |= ((_dipSwitches & 0x01) ? 0x08 : 0x00);
-			value |= ((_dipSwitches & 0x02) ? 0x10 : 0x00);
-		} else if(addr == 0x4017) {
-			value |= ((_dipSwitches & 0x04) ? 0x04 : 0x00);
-			value |= ((_dipSwitches & 0x08) ? 0x08 : 0x00);
-			value |= ((_dipSwitches & 0x10) ? 0x10 : 0x00);
-			value |= ((_dipSwitches & 0x20) ? 0x20 : 0x00);
-			value |= ((_dipSwitches & 0x40) ? 0x40 : 0x00);
-			value |= ((_dipSwitches & 0x80) ? 0x80 : 0x00);
+			case 0x5E00:
+				_protectionCounter = 0;
+				break;
+
+			case 0x5E01:
+				if(crc == 0x4A5FEE2B) {
+					//TKO Boxing
+					value = _protectionData[0][_protectionCounter++ & 0x1F];
+				} else if(crc == 0x90584067) {
+					//RBI Baseball
+					value = _protectionData[1][_protectionCounter++ & 0x1F];
+				}
+				break;
+
+			default:
+				if(crc == 0x5B0433F3 && addr >= 0x5400 && addr <= 0x57FF) {
+					//Super devious
+					return _protectionData[2][_protectionCounter++ & 0x1F];
+				}
+				break;
 		}
 
 		return value;

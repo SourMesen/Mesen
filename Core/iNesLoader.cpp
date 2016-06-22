@@ -42,6 +42,10 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 	buffer += header.GetPrgSize();
 	romData.ChrRom.insert(romData.ChrRom.end(), buffer, buffer + header.GetChrSize());
 
+	stringstream crcHex;
+	crcHex << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << romCrc;
+	MessageManager::Log("PRG+CHR CRC32: 0x" + crcHex.str());
+
 	if(romData.IsNes20Header) {
 		MessageManager::Log("[iNes] NES 2.0 file: Yes");
 	}
