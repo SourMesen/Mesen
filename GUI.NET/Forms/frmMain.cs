@@ -330,7 +330,7 @@ namespace Mesen.GUI.Forms
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					_currentGame = InteropEmu.GetRomInfo().GetRomName();
-					InitializeNsfMode();
+					InitializeNsfMode(false, true);
 					InitializeFdsDiskMenu();
 					InitializeVsSystemMenu();
 					CheatInfo.ApplyCheats();
@@ -1404,12 +1404,17 @@ namespace Mesen.GUI.Forms
 			UpdateEmulationSpeedMenu();
 		}
 
-		private void InitializeNsfMode(bool updateTextOnly = false)
+		private void InitializeNsfMode(bool updateTextOnly = false, bool gameLoaded = false)
 		{
 			if(this.InvokeRequired) {
-				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode(updateTextOnly)));
+				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode(updateTextOnly, gameLoaded)));
 			} else {
 				if(InteropEmu.IsNsf()) {
+					if(gameLoaded) {
+						//Force emulation speed to 100 when loading a NSF
+						SetEmulationSpeed(100);
+					}
+
 					if(!this._isNsfPlayerMode) {
 						this.Size = new Size(380, 320);
 						this.MinimumSize = new Size(380, 320);
