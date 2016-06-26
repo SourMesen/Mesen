@@ -5,7 +5,7 @@
 
 extern "C" {
 	void __stdcall InitializeEmu(char* homeFolder, void*, void*);
-	void __stdcall LoadROM(const char* filename);
+	void __stdcall LoadROM(const char* filename, int32_t archiveFileIndex);
 	void __stdcall Run();
 	void __stdcall Stop();
 }
@@ -33,13 +33,13 @@ int main(int argc, char* argv[])
 	};
 
 	InitializeEmu("C:\\Windows\\Temp\\Mesen", nullptr, nullptr);
-	LoadROM(testRoms[0]);
+	LoadROM(testRoms[0], -1);
 	std::cout << "Running: " << testRoms[0] << std::endl;
 	thread testThread([testRoms] {
 		for(size_t i = 1; i < testRoms.size(); i++) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
 			std::cout << "Running: " << testRoms[i] << std::endl;
-			LoadROM(testRoms[i]);
+			LoadROM(testRoms[i], -1);
 		}
 		Stop();
 	});

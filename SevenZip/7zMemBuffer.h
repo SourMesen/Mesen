@@ -9,8 +9,8 @@ EXTERN_C_BEGIN
 typedef struct
 {
 	void* buffer;
-	size_t size;
-	size_t pos;
+	Int64 size;
+	Int64 pos;
 } CSzMemBuffer;
 
 /* reads max(*size, remain file's size) bytes */

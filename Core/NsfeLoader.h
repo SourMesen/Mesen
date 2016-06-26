@@ -53,7 +53,7 @@ private:
 		}
 
 		//truncate all strings to 255 characters + null
-		for(int i = 0; i < strings.size(); i++) {
+		for(size_t i = 0; i < strings.size(); i++) {
 			strings[i] = strings[i].substr(0, std::min((int)strings[i].size(), 255));
 		}
 

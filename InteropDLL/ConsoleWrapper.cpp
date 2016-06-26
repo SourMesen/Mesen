@@ -337,7 +337,7 @@ namespace InteropEmu {
 				NsfMapper::GetInstance()->SelectTrack(trackNumber);
 			}
 		}
-		DllExport int32_t __stdcall NsfGetCurrentTrack(uint8_t trackNumber) {
+		DllExport int32_t __stdcall NsfGetCurrentTrack() {
 			if(NsfMapper::GetInstance()) {
 				return NsfMapper::GetInstance()->GetCurrentTrack();
 			}

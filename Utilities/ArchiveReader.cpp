@@ -61,7 +61,7 @@ bool ArchiveReader::LoadArchive(string filename)
 	ifstream in(filename, std::ios::binary | std::ios::in);
 	if(in) {
 		in.seekg(0, std::ios::end);
-		size_t filesize = in.tellg();
+		std::streampos filesize = in.tellg();
 		in.seekg(0, std::ios::beg);
 
 		if(_buffer) {
@@ -69,9 +69,9 @@ bool ArchiveReader::LoadArchive(string filename)
 			_buffer = nullptr;
 		}
 
-		_buffer = new uint8_t[filesize];
+		_buffer = new uint8_t[(uint32_t)filesize];
 		in.read((char*)_buffer, filesize);
-		bool result = LoadArchive(_buffer, filesize);
+		bool result = LoadArchive(_buffer, (size_t)filesize);
 		return result;
 	}
 	return false;

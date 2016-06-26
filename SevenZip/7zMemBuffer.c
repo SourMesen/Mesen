@@ -8,7 +8,7 @@ WRes MemBuffer_Read(CSzMemBuffer *p, void *data, size_t *size)
 	if(originalSize == 0)
 		return 0;
 
-	size_t length = p->pos + *size > p->size ? p->size - p->pos - 1 : *size;
+	size_t length = (size_t)(p->pos + *size > p->size ? p->size - p->pos - 1 : *size);
 	memcpy(data, (char*)(p->buffer) + p->pos, length);
 	p->pos += length;
 	return 0;
