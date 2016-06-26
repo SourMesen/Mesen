@@ -18,6 +18,7 @@ namespace Mesen.GUI.Controls
 		private int _frameCount = 0;
 		private bool _fastForwarding = false;
 		private UInt32 _originalSpeed = 100;
+		private bool _disableShortcutKeys = false;
 
 		public ctrlNsfPlayer()
 		{
@@ -189,32 +190,25 @@ namespace Mesen.GUI.Controls
 			AudioInfo.ApplyConfig();
 		}
 
-		private void cboTrack_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			int currentTrack = InteropEmu.NsfGetCurrentTrack();
-			if(currentTrack != cboTrack.SelectedIndex) {
-				InteropEmu.NsfSelectTrack((byte)cboTrack.SelectedIndex);
-				_frameCount = 0;
-			}
-		}
-
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if(keyData == Keys.Left) {
-				btnPrevious_Click(null, null);
-				return true;
-			} else if(keyData == Keys.Right) {
-				btnNext_Click(null, null);
-				return true;
-			} else if(keyData == Keys.Up) {
-				trkVolume.Value = Math.Min(trkVolume.Value+5, 100);
-				return true;
-			} else if(keyData == Keys.Down) {
-				trkVolume.Value = Math.Max(trkVolume.Value-5, 0);
-				return true;
-			} else if(keyData == Keys.Space) {
-				btnPause_Click(null, null);
-				return true;
+			if(!_disableShortcutKeys) {
+				if(keyData == Keys.Left) {
+					btnPrevious_Click(null, null);
+					return true;
+				} else if(keyData == Keys.Right) {
+					btnNext_Click(null, null);
+					return true;
+				} else if(keyData == Keys.Up) {
+					trkVolume.Value = Math.Min(trkVolume.Value+5, 100);
+					return true;
+				} else if(keyData == Keys.Down) {
+					trkVolume.Value = Math.Max(trkVolume.Value-5, 0);
+					return true;
+				} else if(keyData == Keys.Space) {
+					btnPause_Click(null, null);
+					return true;
+				}
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
@@ -254,6 +248,7 @@ namespace Mesen.GUI.Controls
 
 		private void cboTrack_DropDown(object sender, EventArgs e)
 		{
+			_disableShortcutKeys = true;
 			cboTrack.DisplayMember = "Description";
 			int scrollBarWidth = (cboTrack.Items.Count>cboTrack.MaxDropDownItems) ? SystemInformation.VerticalScrollBarWidth : 0;
 
@@ -272,6 +267,16 @@ namespace Mesen.GUI.Controls
 			cboTrack.DisplayMember = "Value";
 			cboTrack.SelectedIndex = index;
 			btnPause.Focus();
+			_disableShortcutKeys = false;
+		}
+
+		private void cboTrack_SelectionChangeCommitted(object sender, EventArgs e)
+		{
+			int currentTrack = InteropEmu.NsfGetCurrentTrack();
+			if(currentTrack != cboTrack.SelectedIndex) {
+				InteropEmu.NsfSelectTrack((byte)cboTrack.SelectedIndex);
+				_frameCount = 0;
+			}
 		}
 	}
 
