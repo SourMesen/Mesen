@@ -989,7 +989,7 @@ namespace Mesen.GUI.Forms
 				ResourceHelper.ApplyResources(this);
 				UpdateMenus();
 				InitializeFdsDiskMenu();
-				InitializeNsfMode();
+				InitializeNsfMode(true);
 			}
 		}
 
@@ -1404,11 +1404,10 @@ namespace Mesen.GUI.Forms
 			UpdateEmulationSpeedMenu();
 		}
 
-
-		private void InitializeNsfMode()
+		private void InitializeNsfMode(bool updateTextOnly = false)
 		{
 			if(this.InvokeRequired) {
-				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode()));
+				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode(updateTextOnly)));
 			} else {
 				if(InteropEmu.IsNsf()) {
 					if(!this._isNsfPlayerMode) {
@@ -1417,10 +1416,12 @@ namespace Mesen.GUI.Forms
 					}
 					this._isNsfPlayerMode = true;
 					this.ctrlNsfPlayer.UpdateText();
-					this.ctrlNsfPlayer.ResetCount();
+					if(!updateTextOnly) {
+						this.ctrlNsfPlayer.ResetCount();
+					}
 					this.ctrlNsfPlayer.Visible = true;
 					this.ctrlNsfPlayer.Focus();
-
+					
 					_currentGame = InteropEmu.NsfGetHeader().GetSongName();
 				} else {
 					this.MinimumSize = new Size(335, 320);
