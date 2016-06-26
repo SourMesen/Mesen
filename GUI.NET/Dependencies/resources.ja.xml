@@ -88,6 +88,9 @@
       <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
       <Control ID="mnuAbout">Mesenとは</Control>
 
+      <!-- Archive Load Message -->
+      <Control ID="lblExtractingFile">ファイルを抽出中です。しばらく待ってください。</Control>
+
       <!-- NSF Player -->
       <Control ID="lblTitle">タイトル</Control>
       <Control ID="lblArtist">作者</Control>

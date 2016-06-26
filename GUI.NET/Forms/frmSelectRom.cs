@@ -72,18 +72,34 @@ namespace Mesen.GUI.Forms
 			txtSearch.Focus();
 		}
 
-		public static bool SelectRom(string filename, out int archiveFileIndex)
+		public static bool SelectRom(string filename, ref int archiveFileIndex)
 		{
-			archiveFileIndex = -1;
+			string romName;
+			return SelectRom(filename, ref archiveFileIndex, out romName);
+		}
+
+		public static bool SelectRom(string filename, ref int archiveFileIndex, out string romName)
+		{
+			romName = "";
 
 			List<string> archiveRomList = InteropEmu.GetArchiveRomList(filename);
 			if(archiveRomList.Count > 1) {
-				frmSelectRom frm = new frmSelectRom(archiveRomList);
-				if(frm.ShowDialog(null, Application.OpenForms[0]) == DialogResult.OK) {
-					archiveFileIndex = frm.SelectedIndex;
+				if(archiveFileIndex >= 0 && archiveFileIndex < archiveRomList.Count) {
+					romName = System.IO.Path.GetFileName(archiveRomList[archiveFileIndex]);
+					return true;
 				} else {
-					return false;
+					frmSelectRom frm = new frmSelectRom(archiveRomList);
+					if(frm.ShowDialog(null, Application.OpenForms[0]) == DialogResult.OK) {
+						archiveFileIndex = frm.SelectedIndex;
+						romName = System.IO.Path.GetFileName(frm.lstRoms.SelectedItem.ToString());
+					} else {
+						return false;
+					}
 				}
+			} else if(archiveRomList.Count == 1) {
+				romName = System.IO.Path.GetFileName(archiveRomList[0]);
+			} else {
+				romName = System.IO.Path.GetFileName(filename);
 			}
 
 			return true;

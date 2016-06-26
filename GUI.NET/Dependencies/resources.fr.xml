@@ -88,6 +88,9 @@
       <Control ID="mnuCheckForUpdates">Recherche de mises-à-jour</Control>
       <Control ID="mnuAbout">À propos de...</Control>
 
+      <!-- Archive Load Message -->
+      <Control ID="lblExtractingFile">Extraction en cours, veuillez patienter...</Control>
+
       <!-- NSF Player -->
       <Control ID="lblTitle">Titre</Control>
       <Control ID="lblArtist">Artiste</Control>

@@ -34,6 +34,8 @@ namespace Mesen.GUI.Forms
 		private double _regularScale = ConfigManager.Config.VideoInfo.VideoScale;
 		private bool _needScaleUpdate = false;
 		private bool _isNsfPlayerMode = false;
+		private object _loadRomLock = new object();
+		private int _romLoadCounter = 0;
 
 		public frmMain(string[] args)
 		{
@@ -141,8 +143,8 @@ namespace Mesen.GUI.Forms
 		void InitializeEmu()
 		{
 			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.ctrlRenderer.Handle);
-			foreach(string romPath in ConfigManager.Config.RecentFiles) {
-				InteropEmu.AddKnowGameFolder(Path.GetDirectoryName(romPath).ToLowerInvariant());
+			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
+				InteropEmu.AddKnowGameFolder(Path.GetDirectoryName(recentItem.Path).ToLowerInvariant());
 			}
 
 			ConfigManager.Config.ApplyConfig();
@@ -379,7 +381,7 @@ namespace Mesen.GUI.Forms
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Filter = ResourceHelper.GetMessage("FilterRomIps");
 			if(ConfigManager.Config.RecentFiles.Count > 0) {
-				ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
+				ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
 			}			
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				LoadFile(ofd.FileName);
@@ -420,7 +422,7 @@ namespace Mesen.GUI.Forms
 						OpenFileDialog ofd = new OpenFileDialog();
 						ofd.Filter = ResourceHelper.GetMessage("FilterRom");
 						if(ConfigManager.Config.RecentFiles.Count > 0) {
-							ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0]);
+							ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
 						}
 						if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 							LoadROM(ofd.FileName);
@@ -433,21 +435,41 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void LoadROM(string filename, bool autoLoadIps = false)
+		private void LoadROM(string filename, bool autoLoadIps = false, int archiveFileIndex = -1)
 		{
 			_romToLoad = filename;
 			if(File.Exists(filename)) {
-				ConfigManager.Config.AddRecentFile(filename);
-
-				int archiveFileIndex;
-				if(frmSelectRom.SelectRom(filename, out archiveFileIndex)) {
-					InteropEmu.LoadROM(filename, archiveFileIndex);
-					UpdateRecentFiles();
-
-					string ipsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
-					if(File.Exists(ipsFile)) {
-						InteropEmu.ApplyIpsPatch(ipsFile);
+				string romName;
+				if(frmSelectRom.SelectRom(filename, ref archiveFileIndex, out romName)) {
+					if(archiveFileIndex >= 0) {
+						Interlocked.Increment(ref _romLoadCounter);
+						ctrlNsfPlayer.Visible = false;
+						ctrlLoading.Visible = true;
 					}
+
+					Task loadRomTask = new Task(() => {
+						lock(_loadRomLock) {
+							InteropEmu.LoadROM(filename, archiveFileIndex);
+						}
+					});
+
+					loadRomTask.ContinueWith((Task prevTask) => {
+						this.BeginInvoke((MethodInvoker)(() => {
+							if(archiveFileIndex >= 0) {
+								Interlocked.Decrement(ref _romLoadCounter);
+							}
+
+							string ipsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
+							if(File.Exists(ipsFile)) {
+								InteropEmu.ApplyIpsPatch(ipsFile);
+							}
+
+							ConfigManager.Config.AddRecentFile(filename, romName, archiveFileIndex);
+							UpdateRecentFiles();
+						}));
+					});
+
+					loadRomTask.Start();
 				}
 			} else {
 				MesenMsgBox.Show("FileNotFound", MessageBoxButtons.OK, MessageBoxIcon.Error, filename);
@@ -479,6 +501,8 @@ namespace Mesen.GUI.Forms
 				if(this.InvokeRequired) {
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
+					ctrlLoading.Visible = (_romLoadCounter > 0);
+
 					UpdateFocusFlag();
 
 					if(string.IsNullOrWhiteSpace(_currentGame)) {
@@ -571,11 +595,11 @@ namespace Mesen.GUI.Forms
 		private void UpdateRecentFiles()
 		{
 			mnuRecentFiles.DropDownItems.Clear();
-			foreach(string filepath in ConfigManager.Config.RecentFiles) {
+			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
 				ToolStripMenuItem tsmi = new ToolStripMenuItem();
-				tsmi.Text = Path.GetFileName(filepath);
+				tsmi.Text = recentItem.RomName;
 				tsmi.Click += (object sender, EventArgs args) => {
-					LoadROM(filepath);
+					LoadROM(recentItem.Path, false, recentItem.ArchiveFileIndex);
 				};
 				mnuRecentFiles.DropDownItems.Add(tsmi);
 			}

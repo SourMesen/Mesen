@@ -18,7 +18,7 @@ namespace Mesen.GUI.Config
 		public VideoInfo VideoInfo;
 		public InputInfo InputInfo;
 		public EmulationInfo EmulationInfo;
-		public List<string> RecentFiles;
+		public List<RecentItem> RecentFiles;
 		public List<VsConfigInfo> VsConfig;
 		public List<CheatInfo> Cheats;
 		public bool ShowOnlyCheatsForCurrentGame;
@@ -37,7 +37,7 @@ namespace Mesen.GUI.Config
 			VideoInfo = new VideoInfo();
 			PreferenceInfo = new PreferenceInfo();
 			EmulationInfo = new EmulationInfo();
-			RecentFiles = new List<string>();
+			RecentFiles = new List<RecentItem>();
 			InputInfo = new InputInfo();
 			Cheats = new List<CheatInfo>();
 			VsConfig = new List<VsConfigInfo>();
@@ -60,12 +60,15 @@ namespace Mesen.GUI.Config
 			InputInfo.InitializeDefaults();
 		}
 		
-		public void AddRecentFile(string filepath)
+		public void AddRecentFile(string filepath, string romName, int archiveFileIndex)
 		{
-			if(RecentFiles.Contains(filepath)) {
-				RecentFiles.Remove(filepath);
+			RecentItem existingItem = RecentFiles.Where((item)  => item.Path == filepath && item.ArchiveFileIndex == archiveFileIndex).FirstOrDefault();
+			if(existingItem != null) {
+				RecentFiles.Remove(existingItem);
 			}
-			RecentFiles.Insert(0, filepath);
+			RecentItem recentItem = new RecentItem { RomName = romName, Path = filepath, ArchiveFileIndex = archiveFileIndex };
+
+			RecentFiles.Insert(0, recentItem);
 			if(RecentFiles.Count > Configuration.MaxRecentFiles) {
 				RecentFiles.RemoveAt(Configuration.MaxRecentFiles);
 			}
@@ -108,4 +111,10 @@ namespace Mesen.GUI.Config
 		}
 	}
 
+	public class RecentItem
+	{
+		public string Path;
+		public string RomName;
+		public int ArchiveFileIndex;
+	}
 }

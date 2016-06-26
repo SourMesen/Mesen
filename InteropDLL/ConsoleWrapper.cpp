@@ -144,6 +144,10 @@ namespace InteropEmu {
 					_returnString = romData.RomName;
 					romInfo.RomName = _returnString.c_str();
 					romInfo.Crc32 = romData.Crc32;
+				} else {
+					_returnString = "";
+					romInfo.RomName = _returnString.c_str();
+					romInfo.Crc32 = 0;
 				}
 			}
 		}

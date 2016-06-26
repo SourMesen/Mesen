@@ -73,8 +73,8 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private void LoadGame(string romPath)
 		{
-			int archiveFileIndex;
-			if(frmSelectRom.SelectRom(romPath, out archiveFileIndex)) {
+			int archiveFileIndex = -1;
+			if(frmSelectRom.SelectRom(romPath, ref archiveFileIndex)) {
 				RomInfo romInfo = InteropEmu.GetRomInfo(romPath, archiveFileIndex);
 				_gameCrc = romInfo.GetCrcString();
 				if(_gameCrc != null) {
