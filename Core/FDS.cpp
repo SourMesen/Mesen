@@ -332,7 +332,9 @@ FDS::FDS()
 FDS::~FDS()
 {
 	//Restore emulation speed to normal when closing
-	EmulationSettings::SetEmulationSpeed(_previousSpeed);
+	if(_previousSpeed >= 0) {
+		EmulationSettings::SetEmulationSpeed(_previousSpeed);
+	}
 
 	if(_isDirty) {
 		FdsLoader loader;
