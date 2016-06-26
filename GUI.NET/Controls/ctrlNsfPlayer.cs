@@ -23,6 +23,17 @@ namespace Mesen.GUI.Controls
 		public ctrlNsfPlayer()
 		{
 			InitializeComponent();
+
+			this.btnNext.KeyUp += Child_KeyUp;
+			this.btnPause.KeyUp += Child_KeyUp;
+			this.btnPrevious.KeyUp += Child_KeyUp;
+			this.cboTrack.KeyUp += Child_KeyUp;
+			this.trkVolume.KeyUp += Child_KeyUp;
+		}
+
+		private void Child_KeyUp(object sender, KeyEventArgs e)
+		{
+			StopFastForward();
 		}
 
 		public void ResetCount()
@@ -193,11 +204,22 @@ namespace Mesen.GUI.Controls
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if(!_disableShortcutKeys) {
+				if(keyData >= Keys.D0 && keyData <= Keys.D9) {
+					if(keyData == Keys.D0) {
+						InteropEmu.NsfSelectTrack(9);
+					} else {
+						InteropEmu.NsfSelectTrack((byte)((int)keyData - (int)Keys.D1));
+					}
+				}
+
 				if(keyData == Keys.Left) {
 					btnPrevious_Click(null, null);
 					return true;
 				} else if(keyData == Keys.Right) {
 					btnNext_Click(null, null);
+					return true;
+				} else if(keyData == (Keys.Control | Keys.Right)) {
+					StartFastForward();
 					return true;
 				} else if(keyData == Keys.Up) {
 					trkVolume.Value = Math.Min(trkVolume.Value+5, 100);
@@ -221,28 +243,48 @@ namespace Mesen.GUI.Controls
 		private void btnNext_MouseDown(object sender, MouseEventArgs e)
 		{
 			if(e.Button == MouseButtons.Left) {
+				tmrFastForward.Interval = 500;
 				tmrFastForward.Start();
 				_originalSpeed = ConfigManager.Config.EmulationInfo.EmulationSpeed;
+			}
+		}
+		
+		private void btnNext_MouseUp(object sender, MouseEventArgs e)
+		{
+			if(e.Button == MouseButtons.Left) {
+				tmrFastForward.Interval = 500;
+				tmrFastForward.Stop();
+				StopFastForward();
+			}
+		}
+
+		private void StopFastForward()
+		{
+			tmrFastForward.Interval = 500;
+			tmrFastForward.Stop();
+			ConfigManager.Config.EmulationInfo.EmulationSpeed = _originalSpeed;
+			ConfigManager.ApplyChanges();
+			EmulationInfo.ApplyConfig();
+			_fastForwarding = false;
+		}
+
+		private void StartFastForward()
+		{
+			if(!_fastForwarding) {
+				tmrFastForward.Interval = 50;
+				_fastForwarding = true;
+				ConfigManager.Config.EmulationInfo.EmulationSpeed = 0;
+				ConfigManager.ApplyChanges();
+				EmulationInfo.ApplyConfig();
 			}
 		}
 
 		private void tmrFastForward_Tick(object sender, EventArgs e)
 		{
 			if(Control.MouseButtons.HasFlag(MouseButtons.Left)) {
-				if(!_fastForwarding) {
-					tmrFastForward.Interval = 50;
-					_fastForwarding = true;
-					ConfigManager.Config.EmulationInfo.EmulationSpeed = 0;
-					ConfigManager.ApplyChanges();
-					EmulationInfo.ApplyConfig();
-				}
+				StartFastForward();
 			} else {
-				tmrFastForward.Interval = 500;
-				tmrFastForward.Stop();
-				ConfigManager.Config.EmulationInfo.EmulationSpeed = _originalSpeed;
-				ConfigManager.ApplyChanges();
-				EmulationInfo.ApplyConfig();
-				_fastForwarding = false;
+				StopFastForward();
 			}
 		}
 
