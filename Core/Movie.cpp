@@ -231,7 +231,7 @@ bool Movie::Save()
 	header.Region = (uint32_t)Console::GetNesModel();
 	header.ConsoleType = (uint32_t)EmulationSettings::GetConsoleType();
 	header.ExpansionDevice = (uint32_t)EmulationSettings::GetExpansionDevice();
-	header.OverclockRate = EmulationSettings::GetOverclockRate();
+	header.OverclockRate = (uint32_t)EmulationSettings::GetOverclockRate();
 	header.OverclockAdjustApu = EmulationSettings::GetOverclockAdjustApu();
 	for(int port = 0; port < 4; port++) {
 		header.ControllerTypes[port] = (uint32_t)EmulationSettings::GetControllerType(port);

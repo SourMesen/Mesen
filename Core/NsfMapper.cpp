@@ -58,8 +58,8 @@ void NsfMapper::InitMapper(RomData& romData)
 	}
 
 	_songNumber = _nsfHeader.StartingSong - 1;
-	_ntscSpeed = _nsfHeader.PlaySpeedNtsc * (CPU::ClockRateNtsc / 1000000.0);
-	_palSpeed = _nsfHeader.PlaySpeedPal * (CPU::ClockRatePal / 1000000.0);
+	_ntscSpeed = (uint16_t)(_nsfHeader.PlaySpeedNtsc * (CPU::ClockRateNtsc / 1000000.0));
+	_palSpeed = (uint16_t)(_nsfHeader.PlaySpeedPal * (CPU::ClockRatePal / 1000000.0));
 
 	if(_nsfHeader.SoundChips & NsfSoundChips::MMC5) {
 		AddRegisterRange(0x5000, 0x5015, MemoryOperation::Write); //Registers
@@ -346,7 +346,7 @@ void NsfMapper::InternalSelectTrack(uint8_t trackNumber, bool requestReset)
 
 		//Set track length/fade counters (NSFe)
 		if(_nsfHeader.TrackLength[trackNumber] >= 0) {
-			_trackEndCounter = (double)_nsfHeader.TrackLength[trackNumber] / 1000.0 * GetClockRate();
+			_trackEndCounter = (int32_t)((double)_nsfHeader.TrackLength[trackNumber] / 1000.0 * GetClockRate());
 			_allowSilenceDetection = false;
 		} else if(_nsfHeader.TotalSongs > 1) {
 			//Only apply a maximum duration to multi-track NSFs
@@ -356,13 +356,13 @@ void NsfMapper::InternalSelectTrack(uint8_t trackNumber, bool requestReset)
 			_allowSilenceDetection = true;
 		}
 		if(_nsfHeader.TrackFade[trackNumber] >= 0) {
-			_trackFadeCounter = (double)_nsfHeader.TrackFade[trackNumber] / 1000.0 * GetClockRate();
+			_trackFadeCounter = (int32_t)((double)_nsfHeader.TrackFade[trackNumber] / 1000.0 * GetClockRate());
 		} else {
 			//Default to 1 sec fade if none is specified (negative number)
 			_trackFadeCounter = GetClockRate();
 		}
 
-		_silenceDetectDelay = (double)EmulationSettings::GetNsfAutoDetectSilenceDelay() / 1000.0 * GetClockRate();
+		_silenceDetectDelay = (uint32_t)((double)EmulationSettings::GetNsfAutoDetectSilenceDelay() / 1000.0 * GetClockRate());
 
 		_fadeLength = _trackFadeCounter;
 		TriggerIrq(NsfIrqType::Init);
