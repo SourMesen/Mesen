@@ -293,6 +293,26 @@ namespace Mesen.GUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap NextTrack {
+            get {
+                object obj = ResourceManager.GetObject("NextTrack", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NsfBackground {
+            get {
+                object obj = ResourceManager.GetObject("NsfBackground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Pause {
             get {
                 object obj = ResourceManager.GetObject("Pause", resourceCulture);
@@ -316,6 +336,16 @@ namespace Mesen.GUI.Properties {
         internal static System.Drawing.Bitmap PreviousArrow {
             get {
                 object obj = ResourceManager.GetObject("PreviousArrow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PrevTrack {
+            get {
+                object obj = ResourceManager.GetObject("PrevTrack", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

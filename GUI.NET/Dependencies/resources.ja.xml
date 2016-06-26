@@ -87,6 +87,12 @@
       <Control ID="mnuHelp">ヘルプ</Control>
       <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
       <Control ID="mnuAbout">Mesenとは</Control>
+
+      <!-- NSF Player -->
+      <Control ID="lblTitle">タイトル</Control>
+      <Control ID="lblArtist">作者</Control>
+      <Control ID="lblCopyright">コピーライト</Control>
+      <Control ID="lblSoundChips">音源チップ</Control>
     </Form>
     <Form ID="frmLogWindow" Title="ログウィンドウ">
       <Control ID="btnClose">閉じる</Control>
@@ -263,6 +269,13 @@
 
       <Control ID="chkDisableGameDatabase">ゲームデータベースを無効にする</Control>
 
+      <Control ID="tpgNsf">NSF / NSFe</Control>
+      <Control ID="chkNsfAutoDetectSilence">無音検出：</Control>
+      <Control ID="lblNsfMillisecondsOfSilence">ミリ秒間で無音の場合、次の曲を再生</Control>
+      <Control ID="chkNsfMoveToNextTrackAfterTime">曲の最大長さを</Control>
+      <Control ID="lblNsfSeconds">秒に固定する</Control>
+      <Control ID="chkNsfDisableApuIrqs">APUのIRQを無効にする</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
@@ -336,8 +349,8 @@
     <Message ID="FilterMovie">動画 (*.mmo)|*.mmo|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterWave">WAVファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds)|*.NES;*.ZIP;*.FDS;*.7z|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
 
     <Message ID="Resume">再開</Message>
@@ -349,6 +362,10 @@
     <Message ID="PlayerNumber">プレーヤー {0}</Message>
 
     <Message ID="RomsFound">{0}個</Message>
+
+    <Message ID="NsfNextTrack">次の曲　(長押しで早送り)</Message>
+    <Message ID="NsfUnnamedTrack">[名無し]</Message>
+    <Message ID="NsfUnknownField">[不明]</Message>
 
     <Message ID="CouldNotInstallRuntime">Microsoft Visual Studio 2015のVisual C++再頒布可能パッケージはインストールできませんでした。</Message>
     <Message ID="EmptyState">&lt;なし&gt;</Message>

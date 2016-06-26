@@ -33,6 +33,8 @@ class Console
 
 		bool _stop = false;
 		bool _reset = false;
+
+		atomic<bool> _resetRequested = false;
 		
 		bool _initialized = false;
 
@@ -45,6 +47,7 @@ class Console
 		~Console();
 		void Run();
 		void Stop();
+		static void RequestReset();
 		static void Reset(bool softReset = true);
 
 		//Used to pause the emu loop to perform thread-safe operations

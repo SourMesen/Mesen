@@ -5,6 +5,7 @@
 #include "DeltaModulationChannel.h"
 #include "TraceLogger.h"
 #include "Debugger.h"
+#include "NsfMapper.h"
 
 CPU* CPU::Instance = nullptr;
 
@@ -68,6 +69,9 @@ void CPU::Reset(bool softReset)
 	_dmcCounter = -1;
 	_dmcDmaRunning = false;
 
+	//Used by NSF code to disable Frame Counter & DMC interrupts
+	_irqMask = 0xFF;
+
 	//Use _memoryManager->Read() directly to prevent clocking the PPU/APU when setting PC at reset
 	_state.PC = _memoryManager->Read(CPU::ResetVector) | _memoryManager->Read(CPU::ResetVector+1) << 8;
 
@@ -118,8 +122,16 @@ uint16_t CPU::FetchOperand()
 		case AddrMode::AbsYW: return GetAbsYAddr(true);
 		default: break;
 	}
+	
 	Debugger::BreakIfDebugging();
-	throw std::runtime_error("Invalid OP code - CPU crashed");
+	
+	if(NsfMapper::GetInstance()) {
+		//Don't stop emulation on CPU crash when playing NSFs, reset cpu instead
+		Reset(false);
+		return 0;
+	} else {
+		throw std::runtime_error("Invalid OP code - CPU crashed");
+	}
 }
 
 void CPU::IncCycleCount()
@@ -148,7 +160,7 @@ void CPU::IncCycleCount()
 		//"it's really the status of the interrupt lines at the end of the second-to-last cycle that matters."
 		//Keep the irq lines values from the previous cycle.  The before-to-last cycle's values will be used
 		_prevRunIrq = _runIrq;
-		_runIrq = _state.NMIFlag || (_state.IRQFlag > 0 && !CheckFlag(PSFlags::Interrupt));
+		_runIrq = _state.NMIFlag || ((_state.IRQFlag & _irqMask) > 0 && !CheckFlag(PSFlags::Interrupt));
 	}
 }
 

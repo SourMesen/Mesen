@@ -29,6 +29,14 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AssociateFdsFiles", chkFdsFormat);
 			AddBinding("AssociateMmoFiles", chkMmoFormat);
 			AddBinding("AssociateMstFiles", chkMstFormat);
+			AddBinding("AssociateNsfFiles", chkNsfFormat);
+			AddBinding("AssociateNsfeFiles", chkNsfeFormat);
+
+			AddBinding("NsfAutoDetectSilence", chkNsfAutoDetectSilence);
+			AddBinding("NsfMoveToNextTrackAfterTime", chkNsfMoveToNextTrackAfterTime);
+			AddBinding("NsfMoveToNextTrackTime", nudNsfMoveToNextTrackTime);
+			AddBinding("NsfAutoDetectSilenceDelay", nudNsfAutoDetectSilenceDelay);
+			AddBinding("NsfDisableApuIrqs", chkNsfDisableApuIrqs);
 
 			AddBinding("FdsAutoLoadDisk", chkFdsAutoLoadDisk);
 			AddBinding("FdsFastForwardOnLoad", chkFdsFastForwardOnLoad);

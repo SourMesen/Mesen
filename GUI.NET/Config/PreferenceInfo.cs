@@ -30,6 +30,14 @@ namespace Mesen.GUI.Config
 		public bool AssociateFdsFiles = false;
 		public bool AssociateMmoFiles = false;
 		public bool AssociateMstFiles = false;
+		public bool AssociateNsfFiles = false;
+		public bool AssociateNsfeFiles = false;
+
+		public bool NsfDisableApuIrqs = true;
+		public bool NsfMoveToNextTrackAfterTime = true;
+		public Int32 NsfMoveToNextTrackTime = 120;
+		public bool NsfAutoDetectSilence = true;
+		public Int32 NsfAutoDetectSilenceDelay = 3000;
 
 		public bool PauseOnMovieEnd = true;
 		public bool AutomaticallyCheckForUpdates = true;
@@ -68,6 +76,8 @@ namespace Mesen.GUI.Config
 			UpdateFileAssociation("fds", preferenceInfo.AssociateFdsFiles);
 			UpdateFileAssociation("mmo", preferenceInfo.AssociateMmoFiles);
 			UpdateFileAssociation("mst", preferenceInfo.AssociateMstFiles);
+			UpdateFileAssociation("nsf", preferenceInfo.AssociateNsfFiles);
+			UpdateFileAssociation("nsfe", preferenceInfo.AssociateNsfeFiles);
 
 			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, preferenceInfo.UseAlternativeMmc3Irq);
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, preferenceInfo.AllowInvalidInput);
@@ -78,6 +88,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
 			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground);
 			InteropEmu.SetFlag(EmulationFlags.DisableGameDatabase, preferenceInfo.DisableGameDatabase);
+
+			InteropEmu.NsfSetNsfConfig(preferenceInfo.NsfAutoDetectSilence ? preferenceInfo.NsfAutoDetectSilenceDelay : 0, preferenceInfo.NsfMoveToNextTrackAfterTime ? preferenceInfo.NsfMoveToNextTrackTime : -1, preferenceInfo.NsfDisableApuIrqs);
 		}
 	}
 }

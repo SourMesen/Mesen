@@ -58,19 +58,32 @@
 			this.lblLastSync = new System.Windows.Forms.Label();
 			this.lblLastSyncDateTime = new System.Windows.Forms.Label();
 			this.btnResync = new System.Windows.Forms.Button();
+			this.tpgNsf = new System.Windows.Forms.TabPage();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkNsfAutoDetectSilence = new System.Windows.Forms.CheckBox();
+			this.nudNsfAutoDetectSilenceDelay = new System.Windows.Forms.NumericUpDown();
+			this.lblNsfMillisecondsOfSilence = new System.Windows.Forms.Label();
+			this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkNsfMoveToNextTrackAfterTime = new System.Windows.Forms.CheckBox();
+			this.nudNsfMoveToNextTrackTime = new System.Windows.Forms.NumericUpDown();
+			this.lblNsfSeconds = new System.Windows.Forms.Label();
+			this.chkNsfDisableApuIrqs = new System.Windows.Forms.CheckBox();
 			this.tpgFileAssociations = new System.Windows.Forms.TabPage();
 			this.grpFileAssociations = new System.Windows.Forms.GroupBox();
 			this.tlpFileFormat = new System.Windows.Forms.TableLayoutPanel();
+			this.chkNsfeFormat = new System.Windows.Forms.CheckBox();
 			this.chkNesFormat = new System.Windows.Forms.CheckBox();
 			this.chkFdsFormat = new System.Windows.Forms.CheckBox();
 			this.chkMmoFormat = new System.Windows.Forms.CheckBox();
 			this.chkMstFormat = new System.Windows.Forms.CheckBox();
+			this.chkNsfFormat = new System.Windows.Forms.CheckBox();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkDisableGameDatabase = new System.Windows.Forms.CheckBox();
-			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
-			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
+			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
+			this.chkDisableGameDatabase = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -82,11 +95,16 @@
 			this.flowLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picOK)).BeginInit();
 			this.flowLayoutPanel4.SuspendLayout();
+			this.tpgNsf.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
+			this.flowLayoutPanel7.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudNsfAutoDetectSilenceDelay)).BeginInit();
+			this.flowLayoutPanel5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudNsfMoveToNextTrackTime)).BeginInit();
 			this.tpgFileAssociations.SuspendLayout();
 			this.grpFileAssociations.SuspendLayout();
 			this.tlpFileFormat.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -252,6 +270,7 @@
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
 			this.tabMain.Controls.Add(this.tpgCloudSave);
+			this.tabMain.Controls.Add(this.tpgNsf);
 			this.tabMain.Controls.Add(this.tpgFileAssociations);
 			this.tabMain.Controls.Add(this.tpgAdvanced);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -440,6 +459,149 @@
 			this.btnResync.UseVisualStyleBackColor = true;
 			this.btnResync.Click += new System.EventHandler(this.btnResync_Click);
 			// 
+			// tpgNsf
+			// 
+			this.tpgNsf.Controls.Add(this.tableLayoutPanel2);
+			this.tpgNsf.Location = new System.Drawing.Point(4, 22);
+			this.tpgNsf.Name = "tpgNsf";
+			this.tpgNsf.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgNsf.Size = new System.Drawing.Size(479, 256);
+			this.tpgNsf.TabIndex = 4;
+			this.tpgNsf.Text = "NSF / NSFe";
+			this.tpgNsf.UseVisualStyleBackColor = true;
+			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 1;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel7, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel5, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.chkNsfDisableApuIrqs, 0, 2);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(473, 250);
+			this.tableLayoutPanel2.TabIndex = 0;
+			// 
+			// flowLayoutPanel7
+			// 
+			this.flowLayoutPanel7.Controls.Add(this.chkNsfAutoDetectSilence);
+			this.flowLayoutPanel7.Controls.Add(this.nudNsfAutoDetectSilenceDelay);
+			this.flowLayoutPanel7.Controls.Add(this.lblNsfMillisecondsOfSilence);
+			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
+			this.flowLayoutPanel7.Size = new System.Drawing.Size(473, 24);
+			this.flowLayoutPanel7.TabIndex = 5;
+			// 
+			// chkNsfAutoDetectSilence
+			// 
+			this.chkNsfAutoDetectSilence.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkNsfAutoDetectSilence.AutoSize = true;
+			this.chkNsfAutoDetectSilence.Location = new System.Drawing.Point(3, 4);
+			this.chkNsfAutoDetectSilence.Name = "chkNsfAutoDetectSilence";
+			this.chkNsfAutoDetectSilence.Size = new System.Drawing.Size(139, 17);
+			this.chkNsfAutoDetectSilence.TabIndex = 1;
+			this.chkNsfAutoDetectSilence.Text = "Move to next track after";
+			this.chkNsfAutoDetectSilence.UseVisualStyleBackColor = true;
+			// 
+			// nudNsfAutoDetectSilenceDelay
+			// 
+			this.nudNsfAutoDetectSilenceDelay.Location = new System.Drawing.Point(145, 3);
+			this.nudNsfAutoDetectSilenceDelay.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.nudNsfAutoDetectSilenceDelay.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+			this.nudNsfAutoDetectSilenceDelay.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+			this.nudNsfAutoDetectSilenceDelay.Name = "nudNsfAutoDetectSilenceDelay";
+			this.nudNsfAutoDetectSilenceDelay.Size = new System.Drawing.Size(57, 20);
+			this.nudNsfAutoDetectSilenceDelay.TabIndex = 3;
+			this.nudNsfAutoDetectSilenceDelay.Value = new decimal(new int[] {
+            3000,
+            0,
+            0,
+            0});
+			// 
+			// lblNsfMillisecondsOfSilence
+			// 
+			this.lblNsfMillisecondsOfSilence.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblNsfMillisecondsOfSilence.AutoSize = true;
+			this.lblNsfMillisecondsOfSilence.Location = new System.Drawing.Point(205, 6);
+			this.lblNsfMillisecondsOfSilence.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblNsfMillisecondsOfSilence.Name = "lblNsfMillisecondsOfSilence";
+			this.lblNsfMillisecondsOfSilence.Size = new System.Drawing.Size(111, 13);
+			this.lblNsfMillisecondsOfSilence.TabIndex = 4;
+			this.lblNsfMillisecondsOfSilence.Text = "milliseconds of silence";
+			// 
+			// flowLayoutPanel5
+			// 
+			this.flowLayoutPanel5.Controls.Add(this.chkNsfMoveToNextTrackAfterTime);
+			this.flowLayoutPanel5.Controls.Add(this.nudNsfMoveToNextTrackTime);
+			this.flowLayoutPanel5.Controls.Add(this.lblNsfSeconds);
+			this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 24);
+			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
+			this.flowLayoutPanel5.Size = new System.Drawing.Size(473, 24);
+			this.flowLayoutPanel5.TabIndex = 4;
+			// 
+			// chkNsfMoveToNextTrackAfterTime
+			// 
+			this.chkNsfMoveToNextTrackAfterTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkNsfMoveToNextTrackAfterTime.AutoSize = true;
+			this.chkNsfMoveToNextTrackAfterTime.Location = new System.Drawing.Point(3, 4);
+			this.chkNsfMoveToNextTrackAfterTime.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+			this.chkNsfMoveToNextTrackAfterTime.Name = "chkNsfMoveToNextTrackAfterTime";
+			this.chkNsfMoveToNextTrackAfterTime.Size = new System.Drawing.Size(126, 17);
+			this.chkNsfMoveToNextTrackAfterTime.TabIndex = 2;
+			this.chkNsfMoveToNextTrackAfterTime.Text = "Limit track run time to";
+			this.chkNsfMoveToNextTrackAfterTime.UseVisualStyleBackColor = true;
+			// 
+			// nudNsfMoveToNextTrackTime
+			// 
+			this.nudNsfMoveToNextTrackTime.Location = new System.Drawing.Point(129, 3);
+			this.nudNsfMoveToNextTrackTime.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.nudNsfMoveToNextTrackTime.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+			this.nudNsfMoveToNextTrackTime.Name = "nudNsfMoveToNextTrackTime";
+			this.nudNsfMoveToNextTrackTime.Size = new System.Drawing.Size(44, 20);
+			this.nudNsfMoveToNextTrackTime.TabIndex = 3;
+			// 
+			// lblNsfSeconds
+			// 
+			this.lblNsfSeconds.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblNsfSeconds.AutoSize = true;
+			this.lblNsfSeconds.Location = new System.Drawing.Point(176, 6);
+			this.lblNsfSeconds.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblNsfSeconds.Name = "lblNsfSeconds";
+			this.lblNsfSeconds.Size = new System.Drawing.Size(47, 13);
+			this.lblNsfSeconds.TabIndex = 4;
+			this.lblNsfSeconds.Text = "seconds";
+			// 
+			// chkNsfDisableApuIrqs
+			// 
+			this.chkNsfDisableApuIrqs.AutoSize = true;
+			this.chkNsfDisableApuIrqs.Location = new System.Drawing.Point(3, 51);
+			this.chkNsfDisableApuIrqs.Name = "chkNsfDisableApuIrqs";
+			this.chkNsfDisableApuIrqs.Size = new System.Drawing.Size(113, 17);
+			this.chkNsfDisableApuIrqs.TabIndex = 6;
+			this.chkNsfDisableApuIrqs.Text = "Disable APU IRQs";
+			this.chkNsfDisableApuIrqs.UseVisualStyleBackColor = true;
+			// 
 			// tpgFileAssociations
 			// 
 			this.tpgFileAssociations.Controls.Add(this.grpFileAssociations);
@@ -467,20 +629,32 @@
 			this.tlpFileFormat.ColumnCount = 2;
 			this.tlpFileFormat.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tlpFileFormat.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpFileFormat.Controls.Add(this.chkNsfeFormat, 0, 3);
 			this.tlpFileFormat.Controls.Add(this.chkNesFormat, 0, 0);
 			this.tlpFileFormat.Controls.Add(this.chkFdsFormat, 0, 1);
 			this.tlpFileFormat.Controls.Add(this.chkMmoFormat, 1, 0);
 			this.tlpFileFormat.Controls.Add(this.chkMstFormat, 1, 1);
+			this.tlpFileFormat.Controls.Add(this.chkNsfFormat, 0, 2);
 			this.tlpFileFormat.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpFileFormat.Location = new System.Drawing.Point(3, 16);
 			this.tlpFileFormat.Name = "tlpFileFormat";
 			this.tlpFileFormat.RowCount = 4;
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.Size = new System.Drawing.Size(467, 231);
 			this.tlpFileFormat.TabIndex = 0;
+			// 
+			// chkNsfeFormat
+			// 
+			this.chkNsfeFormat.AutoSize = true;
+			this.chkNsfeFormat.Location = new System.Drawing.Point(3, 72);
+			this.chkNsfeFormat.Name = "chkNsfeFormat";
+			this.chkNsfeFormat.Size = new System.Drawing.Size(226, 17);
+			this.chkNsfeFormat.TabIndex = 15;
+			this.chkNsfeFormat.Text = ".NSFE (Nintendo Sound Format Extended)";
+			this.chkNsfeFormat.UseVisualStyleBackColor = true;
 			// 
 			// chkNesFormat
 			// 
@@ -523,6 +697,16 @@
 			this.chkMstFormat.Text = ".MST (Mesen Savestate)";
 			this.chkMstFormat.UseVisualStyleBackColor = true;
 			// 
+			// chkNsfFormat
+			// 
+			this.chkNsfFormat.AutoSize = true;
+			this.chkNsfFormat.Location = new System.Drawing.Point(3, 49);
+			this.chkNsfFormat.Name = "chkNsfFormat";
+			this.chkNsfFormat.Size = new System.Drawing.Size(171, 17);
+			this.chkNsfFormat.TabIndex = 14;
+			this.chkNsfFormat.Text = ".NSF (Nintendo Sound Format)";
+			this.chkNsfFormat.UseVisualStyleBackColor = true;
+			// 
 			// tpgAdvanced
 			// 
 			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel1);
@@ -538,9 +722,6 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameDatabase, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 2);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -555,25 +736,10 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 250);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
-			// chkDisableGameDatabase
+			// tmrSyncDateTime
 			// 
-			this.chkDisableGameDatabase.AutoSize = true;
-			this.chkDisableGameDatabase.Location = new System.Drawing.Point(3, 3);
-			this.chkDisableGameDatabase.Name = "chkDisableGameDatabase";
-			this.chkDisableGameDatabase.Size = new System.Drawing.Size(170, 17);
-			this.chkDisableGameDatabase.TabIndex = 6;
-			this.chkDisableGameDatabase.Text = "Disable built-in game database";
-			this.chkDisableGameDatabase.UseVisualStyleBackColor = true;
-			// 
-			// chkFdsAutoLoadDisk
-			// 
-			this.chkFdsAutoLoadDisk.AutoSize = true;
-			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(3, 26);
-			this.chkFdsAutoLoadDisk.Name = "chkFdsAutoLoadDisk";
-			this.chkFdsAutoLoadDisk.Size = new System.Drawing.Size(303, 17);
-			this.chkFdsAutoLoadDisk.TabIndex = 3;
-			this.chkFdsAutoLoadDisk.Text = "Automatically insert disk 1 side A when starting FDS games";
-			this.chkFdsAutoLoadDisk.UseVisualStyleBackColor = true;
+			this.tmrSyncDateTime.Enabled = true;
+			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
 			// chkFdsFastForwardOnLoad
 			// 
@@ -585,10 +751,25 @@
 			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
 			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
 			// 
-			// tmrSyncDateTime
+			// chkFdsAutoLoadDisk
 			// 
-			this.tmrSyncDateTime.Enabled = true;
-			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
+			this.chkFdsAutoLoadDisk.AutoSize = true;
+			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(3, 26);
+			this.chkFdsAutoLoadDisk.Name = "chkFdsAutoLoadDisk";
+			this.chkFdsAutoLoadDisk.Size = new System.Drawing.Size(303, 17);
+			this.chkFdsAutoLoadDisk.TabIndex = 3;
+			this.chkFdsAutoLoadDisk.Text = "Automatically insert disk 1 side A when starting FDS games";
+			this.chkFdsAutoLoadDisk.UseVisualStyleBackColor = true;
+			// 
+			// chkDisableGameDatabase
+			// 
+			this.chkDisableGameDatabase.AutoSize = true;
+			this.chkDisableGameDatabase.Location = new System.Drawing.Point(3, 3);
+			this.chkDisableGameDatabase.Name = "chkDisableGameDatabase";
+			this.chkDisableGameDatabase.Size = new System.Drawing.Size(170, 17);
+			this.chkDisableGameDatabase.TabIndex = 6;
+			this.chkDisableGameDatabase.Text = "Disable built-in game database";
+			this.chkDisableGameDatabase.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
 			// 
@@ -621,13 +802,20 @@
 			((System.ComponentModel.ISupportInitialize)(this.picOK)).EndInit();
 			this.flowLayoutPanel4.ResumeLayout(false);
 			this.flowLayoutPanel4.PerformLayout();
+			this.tpgNsf.ResumeLayout(false);
+			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tableLayoutPanel2.PerformLayout();
+			this.flowLayoutPanel7.ResumeLayout(false);
+			this.flowLayoutPanel7.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudNsfAutoDetectSilenceDelay)).EndInit();
+			this.flowLayoutPanel5.ResumeLayout(false);
+			this.flowLayoutPanel5.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudNsfMoveToNextTrackTime)).EndInit();
 			this.tpgFileAssociations.ResumeLayout(false);
 			this.grpFileAssociations.ResumeLayout(false);
 			this.tlpFileFormat.ResumeLayout(false);
 			this.tlpFileFormat.PerformLayout();
 			this.tpgAdvanced.ResumeLayout(false);
-			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -649,10 +837,6 @@
 		private System.Windows.Forms.CheckBox chkFdsFormat;
 		private System.Windows.Forms.CheckBox chkMmoFormat;
 		private System.Windows.Forms.CheckBox chkMstFormat;
-		private System.Windows.Forms.TabPage tpgAdvanced;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.CheckBox chkFdsAutoLoadDisk;
-		private System.Windows.Forms.CheckBox chkFdsFastForwardOnLoad;
 		private System.Windows.Forms.CheckBox chkAllowBackgroundInput;
 		private System.Windows.Forms.CheckBox chkPauseOnMovieEnd;
 		private System.Windows.Forms.Button btnOpenMesenFolder;
@@ -675,6 +859,23 @@
 		private System.Windows.Forms.Label lblLastSyncDateTime;
 		private System.Windows.Forms.Timer tmrSyncDateTime;
 		private System.Windows.Forms.Button btnResync;
+		private System.Windows.Forms.CheckBox chkNsfeFormat;
+		private System.Windows.Forms.CheckBox chkNsfFormat;
+		private System.Windows.Forms.TabPage tpgAdvanced;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TabPage tpgNsf;
+		private System.Windows.Forms.CheckBox chkFdsFastForwardOnLoad;
+		private System.Windows.Forms.CheckBox chkFdsAutoLoadDisk;
 		private System.Windows.Forms.CheckBox chkDisableGameDatabase;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
+		private System.Windows.Forms.CheckBox chkNsfMoveToNextTrackAfterTime;
+		private System.Windows.Forms.NumericUpDown nudNsfMoveToNextTrackTime;
+		private System.Windows.Forms.Label lblNsfSeconds;
+		private System.Windows.Forms.CheckBox chkNsfAutoDetectSilence;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
+		private System.Windows.Forms.NumericUpDown nudNsfAutoDetectSilenceDelay;
+		private System.Windows.Forms.Label lblNsfMillisecondsOfSilence;
+		private System.Windows.Forms.CheckBox chkNsfDisableApuIrqs;
 	}
 }

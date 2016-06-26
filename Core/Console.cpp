@@ -12,7 +12,9 @@
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
 #include "HdPpu.h"
+#include "NsfPpu.h"
 #include "SoundMixer.h"
+#include "NsfMapper.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -53,6 +55,9 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		_cpu.reset(new CPU(_memoryManager.get()));
 		if(HdNesPack::HasHdPack(_romFilepath)) {
 			_ppu.reset(new HdPpu(_memoryManager.get()));
+		} else if(NsfMapper::GetInstance()) {
+			//Disable most of the PPU for NSFs
+			_ppu.reset(new NsfPpu(_memoryManager.get()));
 		} else {
 			_ppu.reset(new PPU(_memoryManager.get()));
 		}
@@ -61,10 +66,10 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		_controlManager.reset(_mapper->GetGameSystem() == GameSystem::VsUniSystem ? new VsControlManager() : new ControlManager());
 		_controlManager->UpdateControlDevices();
 
-		_memoryManager->RegisterIODevice(_mapper.get());
 		_memoryManager->RegisterIODevice(_ppu.get());
 		_memoryManager->RegisterIODevice(_apu.get());
 		_memoryManager->RegisterIODevice(_controlManager.get());
+		_memoryManager->RegisterIODevice(_mapper.get());
 
 		UpdateNesModel(false);
 
@@ -180,12 +185,12 @@ void Console::ResetComponents(bool softReset)
 	Movie::Stop();
 	SoundMixer::StopRecording();
 
-	_memoryManager->Reset(softReset);
 	_ppu->Reset();
 	_apu->Reset(softReset);
 	_cpu->Reset(softReset);
 	_controlManager->Reset(softReset);
-
+	_memoryManager->Reset(softReset);
+	
 	SoundMixer::StopAudio(true);
 
 	if(softReset) {
@@ -257,6 +262,12 @@ void Console::Run()
 
 			//Sleep until we're ready to start the next frame
 			clockTimer.WaitUntil(targetTime);
+			
+			if(_resetRequested) {
+				//Used by NSF player to reset console after changing track
+				ResetComponents(true);
+				_resetRequested = false;
+			}
 
 			if(!_pauseLock.IsFree()) {
 				//Need to temporarely pause the emu (to save/load a state, etc.)
@@ -409,6 +420,11 @@ std::shared_ptr<Debugger> Console::GetDebugger()
 void Console::StopDebugger()
 {
 	_debugger.reset();
+}
+
+void Console::RequestReset()
+{
+	Instance->_resetRequested = true;
 }
 
 NesModel Console::GetNesModel()

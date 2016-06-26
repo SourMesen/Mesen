@@ -34,6 +34,10 @@ double EmulationSettings::_effectiveOverclockRateSound = 100;
 bool EmulationSettings::_overclockAdjustApu = true;
 bool EmulationSettings::_disableOverclocking = false;
 
+int32_t EmulationSettings::_nsfAutoDetectSilenceDelay = 3000;
+int32_t EmulationSettings::_nsfMoveToNextTrackTime = 120;
+bool EmulationSettings::_nsfDisableApuIrqs = true;
+
 OverscanDimensions EmulationSettings::_overscan;
 VideoFilterType EmulationSettings::_videoFilterType = VideoFilterType::None;
 VideoResizeFilter EmulationSettings::_resizeFilter = VideoResizeFilter::NearestNeighbor;

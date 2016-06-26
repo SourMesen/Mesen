@@ -13,7 +13,8 @@ protected:
 
 	uint32_t _timer = 0;
 
-	uint8_t _masterSpeed = 0;
+	//"Few FDS NSFs write to this register. The BIOS initializes this to $FF."
+	uint8_t _masterSpeed = 0xFF;
 
 	void StreamState(bool saving)
 	{

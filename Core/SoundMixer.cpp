@@ -6,6 +6,8 @@
 IAudioDevice* SoundMixer::AudioDevice = nullptr;
 unique_ptr<WaveRecorder> SoundMixer::_waveRecorder;
 SimpleLock SoundMixer::_waveRecorderLock;
+double SoundMixer::_fadeRatio;
+uint32_t SoundMixer::_muteFrameCount;
 
 SoundMixer::SoundMixer()
 {
@@ -27,7 +29,7 @@ SoundMixer::~SoundMixer()
 
 void SoundMixer::StreamState(bool saving)
 {
-	Stream(_clockRate, _sampleRate, _expansionAudioType);
+	Stream(_clockRate, _sampleRate);
 	
 	if(!saving) {
 		Reset();
@@ -56,6 +58,9 @@ void SoundMixer::StopAudio(bool clearBuffer)
 
 void SoundMixer::Reset()
 {
+	_fadeRatio = 1.0;
+	_muteFrameCount = 0;
+
 	_previousOutput = 0;
 	blip_clear(_blipBuf);
 
@@ -153,15 +158,12 @@ int16_t SoundMixer::GetOutputVolume()
 	uint16_t squareVolume = (uint16_t)(95.52 / (8128.0 / squareOutput + 100.0) * 5000);
 	uint16_t tndVolume = (uint16_t)(163.67 / (24329.0 / tndOutput + 100.0) * 5000);
 	
-	int16_t expansionOutput = 0;
-	switch(_expansionAudioType) {
-		case AudioChannel::FDS: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
-		case AudioChannel::MMC5: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 40); break;
-		case AudioChannel::Namco163: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
-		case AudioChannel::Sunsoft5B: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 20); break;
-		case AudioChannel::VRC6: expansionOutput = (int16_t)(_currentOutput[ExpansionAudioIndex] * _volumes[ExpansionAudioIndex] * 75); break;
-	}
-	return squareVolume + tndVolume + expansionOutput;
+	return (int16_t)(squareVolume + tndVolume +
+		GetChannelOutput(AudioChannel::FDS) * 20 +
+		GetChannelOutput(AudioChannel::MMC5) * 40 +
+		GetChannelOutput(AudioChannel::Namco163) * 20 +
+		GetChannelOutput(AudioChannel::Sunsoft5B) * 15 +
+		GetChannelOutput(AudioChannel::VRC6) * 75);
 }
 
 void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int16_t delta)
@@ -172,25 +174,14 @@ void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int16_t delta)
 	}
 }
 
-void SoundMixer::AddExpansionAudioDelta(uint32_t time, int16_t delta)
-{
-	if(delta != 0) {
-		_timestamps.push_back(time);
-		_channelOutput[ExpansionAudioIndex][time] += delta;
-	}
-}
-
-void SoundMixer::SetExpansionAudioType(AudioChannel channel)
-{
-	_expansionAudioType = channel;
-}
-
 void SoundMixer::EndFrame(uint32_t time)
 {
 	double masterVolume = EmulationSettings::GetMasterVolume();
 	sort(_timestamps.begin(), _timestamps.end());
 	_timestamps.erase(std::unique(_timestamps.begin(), _timestamps.end()), _timestamps.end());
 
+	bool muteFrame = true;
+	int16_t originalOutput = _previousOutput;
 	for(size_t i = 0, len = _timestamps.size(); i < len; i++) {
 		uint32_t stamp = _timestamps[i];
 		for(int j = 0; j < MaxChannelCount; j++) {
@@ -198,14 +189,32 @@ void SoundMixer::EndFrame(uint32_t time)
 		}
 
 		int16_t currentOutput = GetOutputVolume();
-		blip_add_delta(_blipBuf, stamp, (int)((currentOutput - _previousOutput) * masterVolume));
-		_previousOutput = currentOutput;
+		blip_add_delta(_blipBuf, stamp, (int)((currentOutput - _previousOutput) * masterVolume * _fadeRatio));
+
+		if(currentOutput != _previousOutput) {
+			if(std::abs(currentOutput - _previousOutput) > 100) {
+				muteFrame = false;
+			}
+			_previousOutput = currentOutput;
+		}
 	}
+
+	if(std::abs(originalOutput - _previousOutput) > 1500) {
+		//Count mute frames (10000 cycles each) - used by NSF player
+		muteFrame = false;
+	}
+
 	blip_end_frame(_blipBuf, time);
+
+	if(muteFrame) {
+		_muteFrameCount++;
+	} else {
+		_muteFrameCount = 0;
+	}
 
 	//Reset everything
 	for(int i = 0; i < MaxChannelCount; i++) {
-		_volumes[i] = EmulationSettings::GetChannelVolume(i < 5 ? (AudioChannel)i : _expansionAudioType);
+		_volumes[i] = EmulationSettings::GetChannelVolume((AudioChannel)i);
 	}
 
 	_timestamps.clear();
@@ -227,4 +236,19 @@ void SoundMixer::StopRecording()
 bool SoundMixer::IsRecording()
 {
 	return _waveRecorder.get() != nullptr;
+}
+
+void SoundMixer::SetFadeRatio(double fadeRatio)
+{
+	_fadeRatio = fadeRatio;
+}
+
+uint32_t SoundMixer::GetMuteFrameCount()
+{
+	return _muteFrameCount;
+}
+
+void SoundMixer::ResetMuteFrameCount()
+{
+	_muteFrameCount = 0;
 }

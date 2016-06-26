@@ -34,6 +34,7 @@ namespace Mesen.GUI.Forms
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.panelRenderer = new System.Windows.Forms.Panel();
 			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
+			this.ctrlNsfPlayer = new Mesen.GUI.Controls.ctrlNsfPlayer();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -168,6 +169,7 @@ namespace Mesen.GUI.Forms
 			// panelRenderer
 			// 
 			this.panelRenderer.BackColor = System.Drawing.Color.Black;
+			this.panelRenderer.Controls.Add(this.ctrlNsfPlayer);
 			this.panelRenderer.Controls.Add(this.ctrlRenderer);
 			this.panelRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelRenderer.Location = new System.Drawing.Point(0, 24);
@@ -190,6 +192,15 @@ namespace Mesen.GUI.Forms
 			this.ctrlRenderer.Enter += new System.EventHandler(this.ctrlRenderer_Enter);
 			this.ctrlRenderer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseClick);
 			this.ctrlRenderer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
+			// 
+			// ctrlNsfPlayer
+			// 
+			this.ctrlNsfPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlNsfPlayer.Location = new System.Drawing.Point(0, 0);
+			this.ctrlNsfPlayer.Name = "ctrlNsfPlayer";
+			this.ctrlNsfPlayer.Size = new System.Drawing.Size(304, 218);
+			this.ctrlNsfPlayer.TabIndex = 2;
+			this.ctrlNsfPlayer.Visible = false;
 			// 
 			// menuStrip
 			// 
@@ -1350,6 +1361,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuScale6x;
 		private System.Windows.Forms.ToolStripMenuItem mnuLogWindow;
 		private System.Windows.Forms.ToolStripMenuItem mnuEmulationConfig;
+		private Controls.ctrlNsfPlayer ctrlNsfPlayer;
 	}
 }
 

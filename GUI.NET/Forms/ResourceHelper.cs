@@ -64,7 +64,7 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		public static string GetMessage(string id, params string[] args)
+		public static string GetMessage(string id, params object[] args)
 		{
 			var baseNode = _resources.SelectSingleNode("/Resources/Messages/Message[@ID='" + id + "']");
 			if(baseNode != null) {

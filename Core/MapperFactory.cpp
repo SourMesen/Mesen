@@ -76,6 +76,7 @@
 #include "Nina01.h"
 #include "Nina03_06.h"
 #include "NROM.h"
+#include "NsfMapper.h"
 #include "NtdecTc112.h"
 #include "Rambo1.h"
 #include "Sachen_143.h"
@@ -108,6 +109,9 @@
 #include "VsSystem.h"
 #include "Waixing164.h"
 #include "Waixing176.h"
+
+const uint16_t MapperFactory::FdsMapperID;
+const uint16_t MapperFactory::NsfMapperID;
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
@@ -256,6 +260,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 243: return new Sachen74LS374N();
 		case 246: return new Mapper246();
 
+		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();
 	}
 

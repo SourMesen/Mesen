@@ -33,6 +33,7 @@ class MemoryManager: public Snapshotable
 			
 		uint8_t ReadRegister(uint16_t addr);
 		void WriteRegister(uint16_t addr, uint8_t value);
+		void InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses, bool allowOverride);
 
 	protected:
 		void StreamState(bool saving);
@@ -42,8 +43,6 @@ class MemoryManager: public Snapshotable
 		~MemoryManager();
 
 		void Reset(bool softReset);
-
-		void InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses);
 		void RegisterIODevice(IMemoryHandler *handler);
 
 		uint8_t DebugRead(uint16_t addr);

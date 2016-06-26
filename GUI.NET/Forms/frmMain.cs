@@ -33,6 +33,7 @@ namespace Mesen.GUI.Forms
 		private bool _fullscreenMode = false;
 		private double _regularScale = ConfigManager.Config.VideoInfo.VideoScale;
 		private bool _needScaleUpdate = false;
+		private bool _isNsfPlayerMode = false;
 
 		public frmMain(string[] args)
 		{
@@ -254,8 +255,9 @@ namespace Mesen.GUI.Forms
 			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(false);
 
 			if(!_customSize && this.WindowState != FormWindowState.Maximized) {
+				Size sizeGap = this.Size - this.ClientSize;
 				this.Resize -= frmMain_Resize;
-				this.ClientSize = new Size(size.Width, size.Height + menuStrip.Height);
+				this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + menuStrip.Height));
 				this.Resize += frmMain_Resize;
 			}
 
@@ -268,6 +270,8 @@ namespace Mesen.GUI.Forms
 		{
 			if(this.WindowState != FormWindowState.Minimized) {
 				SetScaleBasedOnWindowSize();
+				ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
+				ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
 			}
 		}
 
@@ -324,6 +328,7 @@ namespace Mesen.GUI.Forms
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					_currentGame = InteropEmu.GetRomInfo().GetRomName();
+					InitializeNsfMode();
 					InitializeFdsDiskMenu();
 					InitializeVsSystemMenu();
 					CheatInfo.ApplyCheats();
@@ -331,6 +336,16 @@ namespace Mesen.GUI.Forms
 					InitializeStateMenu(mnuSaveState, true);
 					InitializeStateMenu(mnuLoadState, false);
 					this.StartEmuThread();
+					break;
+
+				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
+					if(InteropEmu.IsNsf()) {
+						this.ctrlNsfPlayer.CountFrame();
+					}
+					break;
+
+				case InteropEmu.ConsoleNotificationType.GameReset:
+					InitializeNsfMode();
 					break;
 
 				case InteropEmu.ConsoleNotificationType.DisconnectedFromServer:
@@ -353,7 +368,10 @@ namespace Mesen.GUI.Forms
 					}));
 					break;
 			}
-			UpdateMenus();
+
+			if(e.NotificationType != InteropEmu.ConsoleNotificationType.PpuFrameDone) {
+				UpdateMenus();
+			}
 		}
 
 		private void mnuOpen_Click(object sender, EventArgs e)
@@ -475,6 +493,11 @@ namespace Mesen.GUI.Forms
 					mnuPause.Text = InteropEmu.IsPaused() ? ResourceHelper.GetMessage("Resume") : ResourceHelper.GetMessage("Pause");
 					mnuPause.Image = InteropEmu.IsPaused() ? Mesen.GUI.Properties.Resources.Play : Mesen.GUI.Properties.Resources.Pause;
 
+					if(InteropEmu.IsNsf()) {
+						mnuSaveState.Enabled = false;
+						mnuLoadState.Enabled = false;
+					}
+
 					bool netPlay = InteropEmu.IsServerRunning() || isNetPlayClient;
 
 					mnuStartServer.Enabled = !isNetPlayClient;
@@ -588,6 +611,8 @@ namespace Mesen.GUI.Forms
 			} else {
 				InteropEmu.Pause();
 			}
+
+			ctrlNsfPlayer.UpdateText();
 		}
 
 		private void ResetEmu()
@@ -644,7 +669,7 @@ namespace Mesen.GUI.Forms
 					ToolStripMenuItem item = (ToolStripMenuItem)menu.DropDownItems.Add(label);
 					uint stateIndex = i;
 					item.Click += (object sender, EventArgs e) => {
-						if(_emuThread != null) {
+						if(_emuThread != null && !InteropEmu.IsNsf()) {
 							if(forSave) {
 								InteropEmu.SaveState(stateIndex);
 							} else {
@@ -938,12 +963,14 @@ namespace Mesen.GUI.Forms
 
 		private void mnuPreferences_Click(object sender, EventArgs e)
 		{
-			new frmPreferences().ShowDialog(sender);
-			ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
-			ResourceHelper.UpdateEmuLanguage();
-			ResourceHelper.ApplyResources(this);
-			UpdateMenus();
-			InitializeFdsDiskMenu();
+			if(new frmPreferences().ShowDialog(sender) == DialogResult.OK) {
+				ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
+				ResourceHelper.UpdateEmuLanguage();
+				ResourceHelper.ApplyResources(this);
+				UpdateMenus();
+				InitializeFdsDiskMenu();
+				InitializeNsfMode();
+			}
 		}
 
 		private void mnuRegion_Click(object sender, EventArgs e)
@@ -1300,10 +1327,14 @@ namespace Mesen.GUI.Forms
 
 		private void InitializeVsSystemMenu()
 		{
-			sepVsSystem.Visible = InteropEmu.IsVsSystem();
-			mnuInsertCoin1.Visible = InteropEmu.IsVsSystem();
-			mnuInsertCoin2.Visible = InteropEmu.IsVsSystem();
-			mnuVsGameConfig.Visible = InteropEmu.IsVsSystem();
+			if(this.InvokeRequired) {
+				this.BeginInvoke((MethodInvoker)(() => InitializeVsSystemMenu()));
+			} else {
+				sepVsSystem.Visible = InteropEmu.IsVsSystem();
+				mnuInsertCoin1.Visible = InteropEmu.IsVsSystem();
+				mnuInsertCoin2.Visible = InteropEmu.IsVsSystem();
+				mnuVsGameConfig.Visible = InteropEmu.IsVsSystem();
+			}
 		}
 
 		private void mnuInsertCoin1_Click(object sender, EventArgs e)
@@ -1351,6 +1382,33 @@ namespace Mesen.GUI.Forms
 		{
 			new frmEmulationConfig().ShowDialog(sender);
 			UpdateEmulationSpeedMenu();
+		}
+
+
+		private void InitializeNsfMode()
+		{
+			if(this.InvokeRequired) {
+				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode()));
+			} else {
+				if(InteropEmu.IsNsf()) {
+					if(!this._isNsfPlayerMode) {
+						this.Size = new Size(380, 320);
+						this.MinimumSize = new Size(380, 320);
+					}
+					this._isNsfPlayerMode = true;
+					this.ctrlNsfPlayer.UpdateText();
+					this.ctrlNsfPlayer.ResetCount();
+					this.ctrlNsfPlayer.Visible = true;
+					this.ctrlNsfPlayer.Focus();
+
+					_currentGame = InteropEmu.NsfGetHeader().GetSongName();
+				} else {
+					this.MinimumSize = new Size(335, 320);
+					this.SetScale(_regularScale);
+					this._isNsfPlayerMode = false;
+					this.ctrlNsfPlayer.Visible = false;
+				}
+			}
 		}
 	}
 }

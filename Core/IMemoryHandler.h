@@ -14,10 +14,21 @@ class MemoryRanges
 	private:
 		vector<uint16_t> _ramReadAddresses;
 		vector<uint16_t> _ramWriteAddresses;
+		bool _allowOverride = false;
 
 	public:
 		vector<uint16_t>* GetRAMReadAddresses() { return &_ramReadAddresses;	}
 		vector<uint16_t>* GetRAMWriteAddresses() { return &_ramWriteAddresses;	}
+
+		bool GetAllowOverride()
+		{
+			return _allowOverride;
+		}
+
+		void SetAllowOverride()
+		{
+			_allowOverride = true;
+		}
 
 		void AddHandler(MemoryOperation operation, uint16_t start, uint16_t end = 0)
 		{

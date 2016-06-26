@@ -266,6 +266,10 @@ private:
 	static KeyMappingSet _controllerKeys[4];
 	static bool _needControllerUpdate;
 
+	static int32_t _nsfAutoDetectSilenceDelay;
+	static int32_t _nsfMoveToNextTrackTime;
+	static bool _nsfDisableApuIrqs;
+
 public:
 	static uint32_t GetMesenVersion()
 	{
@@ -693,5 +697,27 @@ public:
 	static bool HasArkanoidPaddle()
 	{
 		return _controllerTypes[0] == ControllerType::ArkanoidController || _controllerTypes[1] == ControllerType::ArkanoidController || (_consoleType == ConsoleType::Famicom && _expansionDevice == ExpansionPortDevice::ArkanoidController);
+	}
+
+	static void SetNsfConfig(int32_t autoDetectSilence, int32_t moveToNextTrackTime, bool disableApuIrqs)
+	{
+		_nsfAutoDetectSilenceDelay = autoDetectSilence;
+		_nsfMoveToNextTrackTime = moveToNextTrackTime;
+		_nsfDisableApuIrqs = disableApuIrqs;
+	}
+
+	static int32_t GetNsfAutoDetectSilenceDelay()
+	{
+		return _nsfAutoDetectSilenceDelay;
+	}
+
+	static int32_t GetNsfMoveToNextTrackTime()
+	{
+		return _nsfMoveToNextTrackTime;
+	}
+
+	static bool GetNsfDisableApuIrqs()
+	{
+		return _nsfDisableApuIrqs;
 	}
 };

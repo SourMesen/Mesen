@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "SquareChannel.h"
 #include "BaseExpansionAudio.h"
+#include "CPU.h"
 
 class MMC5Square : public SquareChannel
 {

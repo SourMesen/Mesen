@@ -87,6 +87,12 @@
       <Control ID="mnuHelp">Aide</Control>
       <Control ID="mnuCheckForUpdates">Recherche de mises-à-jour</Control>
       <Control ID="mnuAbout">À propos de...</Control>
+
+      <!-- NSF Player -->
+      <Control ID="lblTitle">Titre</Control>
+      <Control ID="lblArtist">Artiste</Control>
+      <Control ID="lblCopyright">Copyright</Control>
+      <Control ID="lblSoundChips">Puces audio</Control>
     </Form>
     <Form ID="frmLogWindow" Title="Fenêtre de log">
       <Control ID="btnClose">Fermer</Control>
@@ -263,7 +269,14 @@
       <Control ID="btnResync">Resynchroniser</Control>
 
       <Control ID="chkDisableGameDatabase">Désactiver la base de données des jeux</Control>
-
+      
+      <Control ID="tpgNsf">NSF / NSFe</Control>
+      <Control ID="chkNsfAutoDetectSilence">Jouer la piste suivante après</Control>
+      <Control ID="lblNsfMillisecondsOfSilence">millisecondes de silence</Control>
+      <Control ID="chkNsfMoveToNextTrackAfterTime">Limiter la durée des pistes à</Control>      
+      <Control ID="lblNsfSeconds">secondes</Control>
+      <Control ID="chkNsfDisableApuIrqs">Désactiver les IRQs du APU</Control>
+      
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
@@ -344,8 +357,8 @@
     <Message ID="FilterMovie">Films (*.mmo)|*.mmo|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterWave">Fichiers wave (*.wav)|*.wav|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterPalette">Fichier de palette (*.pal)|*.pal|Tous les fichiers (*.*)|*.*</Message>
-    <Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds)|*.NES;*.ZIP;*.7z;*.FDS|Roms de NES (*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Tous les fichiers (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS|Roms de NES(*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Fichiers IPS (*.ips)|*.IPS|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE|Roms de NES (*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE|Roms de NES(*.nes)|*.NES|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Fichiers IPS (*.ips)|*.IPS|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterTest">Fichiers de test (*.mtp)|*.mtp|Tous les fichiers (*.*)|*.*</Message>
 
     <Message ID="Resume">Continuer</Message>
@@ -358,6 +371,10 @@
 
     <Message ID="RomsFound">{0} roms trouvés</Message>
 
+    <Message ID="NsfNextTrack">Piste Suivante (Garder enfoncé pour jouer plus rapidement)</Message>
+    <Message ID="NsfUnnamedTrack">[sans nom]</Message>
+    <Message ID="NsfUnknownField">[inconnu]</Message>
+    
     <Message ID="CouldNotInstallRuntime">Le package Redistribuable Visual C++ pour Visual Studio 2015 n'a pas été installé correctement.</Message>
     <Message ID="EmptyState">&lt;aucune sauvegarde&gt;</Message>
     <Message ID="ErrorWhileCheckingUpdates">Une erreur s'est produite lors de la recherche de mises-à-jour.&#xA;&#xA;Détails de l'erreur :&#xA;{0}</Message>

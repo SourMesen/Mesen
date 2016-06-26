@@ -124,6 +124,7 @@ protected:
 	void SelectPrgPage2x(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom);
 	virtual void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom);
 	void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16_t pageNumber, PrgMemoryType type, int8_t accessType = -1);
+	void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t *source, int8_t accessType = -1);
 
 	virtual void SelectChrPage8x(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default);
 	virtual void SelectChrPage4x(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default);
@@ -165,7 +166,7 @@ public:
 	virtual void ProcessCpuClock() { }
 	virtual void NotifyVRAMAddressChange(uint16_t addr);
 	void ProcessNotification(ConsoleNotificationType type, void* parameter);
-	void GetMemoryRanges(MemoryRanges &ranges);
+	virtual void GetMemoryRanges(MemoryRanges &ranges);
 	
 	void ApplyCheats();
 

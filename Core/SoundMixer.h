@@ -20,14 +20,14 @@ public:
 private:
 	static unique_ptr<WaveRecorder> _waveRecorder;
 	static SimpleLock _waveRecorderLock;
+	static double _fadeRatio;
+	static uint32_t _muteFrameCount;
 
 	static IAudioDevice* AudioDevice;
 	static const uint32_t MaxSampleRate = 48000;
 	static const uint32_t MaxSamplesPerFrame = MaxSampleRate / 60 * 4; //x4 to allow CPU overclocking up to 10x
-	static const uint32_t MaxChannelCount = 6;
-	static const uint32_t ExpansionAudioIndex = MaxChannelCount - 1;
+	static const uint32_t MaxChannelCount = 11;
 	
-	AudioChannel _expansionAudioType;
 	LowPassFilter _lowPassFilter;
 	StereoPanningFilter _stereoPanning;
 	StereoDelayFilter _stereoDelay;
@@ -72,6 +72,11 @@ public:
 	static void StartRecording(string filepath);
 	static void StopRecording();
 	static bool IsRecording();
+
+	//For NSF/NSFe
+	static uint32_t GetMuteFrameCount();
+	static void ResetMuteFrameCount();
+	static void SetFadeRatio(double fadeRatio);
 
 	static void StopAudio(bool clearBuffer = false);
 	static void RegisterAudioDevice(IAudioDevice *audioDevice);

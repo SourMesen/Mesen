@@ -2,9 +2,6 @@
 
 #include "../Core/MessageManager.h"
 #include "../Core/Console.h"
-#include "../Windows/Renderer.h"
-#include "../Windows/SoundManager.h"
-#include "../Windows/WindowsKeyManager.h"
 #include "../Core/GameServer.h"
 #include "../Core/GameClient.h"
 #include "../Core/ClientConnectionData.h"
@@ -17,6 +14,10 @@
 #include "../Core/VsControlManager.h"
 #include "../Core/SoundMixer.h"
 #include "../Core/RomLoader.h"
+#include "../Core/NsfMapper.h"
+#include "../Windows/Renderer.h"
+#include "../Windows/SoundManager.h"
+#include "../Windows/WindowsKeyManager.h"
 
 NES::Renderer *_renderer = nullptr;
 SoundManager *_soundManager = nullptr;
@@ -82,7 +83,7 @@ namespace InteropEmu {
 		DllExport const char* __stdcall GetArchiveRomList(char* filename) { 
 			std::ostringstream out;
 			for(string romName : RomLoader::GetArchiveRomList(filename)) {
-				out << romName << "/";
+				out << romName << "[!|!]";
 			}
 			_returnString = out.str();
 			return _returnString.c_str();
@@ -325,6 +326,28 @@ namespace InteropEmu {
 
 		DllExport void __stdcall GetScreenSize(ScreenSize &size, bool ignoreScale) { VideoDecoder::GetInstance()->GetScreenSize(size, ignoreScale); }
 		
+		//NSF functions
+		DllExport bool __stdcall IsNsf() { return NsfMapper::GetInstance() != nullptr; }
+		DllExport void __stdcall NsfSelectTrack(uint8_t trackNumber) { 
+			if(NsfMapper::GetInstance()) {
+				NsfMapper::GetInstance()->SelectTrack(trackNumber);
+			}
+		}
+		DllExport int32_t __stdcall NsfGetCurrentTrack(uint8_t trackNumber) {
+			if(NsfMapper::GetInstance()) {
+				return NsfMapper::GetInstance()->GetCurrentTrack();
+			}
+			return -1;
+		}
+		DllExport void __stdcall NsfGetHeader(NsfHeader* header) { 
+			if(NsfMapper::GetInstance()) {
+				*header = NsfMapper::GetInstance()->GetNsfHeader();
+			}
+		}
+		DllExport void __stdcall NsfSetNsfConfig(int32_t autoDetectSilenceDelay, int32_t moveToNextTrackTime, bool disableApuIrqs) {
+			EmulationSettings::SetNsfConfig(autoDetectSilenceDelay, moveToNextTrackTime, disableApuIrqs);
+		}
+
 		//FDS functions
 		DllExport uint32_t __stdcall FdsGetSideCount() { return FDS::GetSideCount(); }
 		DllExport void __stdcall FdsEjectDisk() { FDS::EjectDisk(); }

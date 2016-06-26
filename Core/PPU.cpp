@@ -25,6 +25,8 @@ PPU::PPU(MemoryManager *memoryManager)
 	memset(_spriteRAM, 0xFF, 0x100);
 	memset(_secondarySpriteRAM, 0xFF, 0x20);
 
+	_simpleMode = false;
+
 	Reset();
 }
 
@@ -877,14 +879,23 @@ void PPU::Exec()
 
 	Debugger::ProcessPpuCycle();
 
-	if(_scanline != -1 && _scanline < 240) {
-		ProcessVisibleScanline();
-	} else if(_scanline == -1) {
-		ProcessPrerenderScanline();
-	} else if(_scanline == _nmiScanline) {
-		BeginVBlank();
-	} else if(_scanline == _vblankEnd) {
-		EndVBlank();
+	if(!_simpleMode) {
+		if(_scanline != -1 && _scanline < 240) {
+			ProcessVisibleScanline();
+		} else if(_scanline == -1) {
+			ProcessPrerenderScanline();
+		} else if(_scanline == _nmiScanline) {
+			BeginVBlank();
+		} else if(_scanline == _vblankEnd) {
+			EndVBlank();
+		}
+	} else {
+		//Used by NSF player to speed things up
+		if(_scanline == _nmiScanline) {
+			BeginVBlank();
+		} else if(_scanline == _vblankEnd) {
+			EndVBlank();
+		}
 	}
 
 	//Rendering enabled flag is apparently set with a 1 cycle delay (i.e setting it at cycle 5 will render cycle 6 like cycle 5 and then take the new settings for cycle 7)

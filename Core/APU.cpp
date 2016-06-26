@@ -234,6 +234,5 @@ void APU::StreamState(bool saving)
 
 void APU::AddExpansionAudioDelta(AudioChannel channel, int16_t delta)
 {
-	Instance->_mixer->SetExpansionAudioType(channel);
-	Instance->_mixer->AddExpansionAudioDelta(Instance->_currentCycle, delta);
+	Instance->_mixer->AddDelta(channel, Instance->_currentCycle, delta);
 }

@@ -30,7 +30,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void AddKnowGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string folder);
 
 		[DllImport(DLLPath, EntryPoint = "GetArchiveRomList")] private static extern IntPtr GetArchiveRomListWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
-		public static List<string> GetArchiveRomList(string filename) { return new List<string>(PtrToStringUtf8(InteropEmu.GetArchiveRomListWrapper(filename)).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)); }
+		public static List<string> GetArchiveRomList(string filename) { return new List<string>(PtrToStringUtf8(InteropEmu.GetArchiveRomListWrapper(filename)).Split(new string[] { "[!|!]" }, StringSplitOptions.RemoveEmptyEntries)); }
 
 		[DllImport(DLLPath)] public static extern void SetMousePosition(double x, double y);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasZapper();
@@ -95,6 +95,12 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SaveState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern void LoadState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern Int64 GetStateInfo(UInt32 stateIndex);
+
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsNsf();
+		[DllImport(DLLPath)] public static extern void NsfSelectTrack(Byte trackNumber);
+		[DllImport(DLLPath)] public static extern Int32 NsfGetCurrentTrack();
+		[DllImport(DLLPath, EntryPoint = "NsfGetHeader")] private static extern void NsfGetHeaderWrapper(out NsfHeader header);
+		[DllImport(DLLPath)] public static extern void NsfSetNsfConfig(Int32 autoDetectSilenceDelay, Int32 moveToNextTrackTime, [MarshalAs(UnmanagedType.I1)]bool disableApuIrqs);
 
 		[DllImport(DLLPath)] public static extern UInt32 FdsGetSideCount();
 		[DllImport(DLLPath)] public static extern void FdsEjectDisk();
@@ -258,6 +264,13 @@ namespace Mesen.GUI
 				hAbsolute.Free();
 				hRelative.Free();
 			}
+		}
+
+		public static NsfHeader NsfGetHeader()
+		{
+			NsfHeader header = new NsfHeader();
+			NsfGetHeaderWrapper(out header);
+			return header;
 		}
 
 		public static RomInfo GetRomInfo(string filename = "", Int32 archiveFileIndex = -1)
@@ -642,6 +655,93 @@ namespace Mesen.GUI
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
 		public byte[] Condition;
+	}
+
+	public struct NsfHeader
+	{
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 5)]
+		public Byte[] Header;
+
+		public Byte Version;
+		public Byte TotalSongs;
+		public Byte StartingSong;
+		public UInt16 LoadAddress;
+		public UInt16 InitAddress;
+		public UInt16 PlayAddress;
+
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 256)]
+		public Byte[] SongName;
+
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 256)]
+		public Byte[] ArtistName;
+
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 256)]
+		public Byte[] CopyrightHolder;
+
+		public UInt16 PlaySpeedNtsc;
+
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 8)]
+		public Byte[] BankSetup;
+
+		public UInt16 PlaySpeedPal;
+		public Byte Flags;
+		public Byte SoundChips;
+
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 4)]
+		public Byte[] Padding;
+
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 256)]
+		public Byte[] RipperName;
+
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 20000)]
+		public Byte[] TrackName;
+
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 256)]
+		public Int32[] TrackLength;
+
+		[MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 256)]
+		public Int32[] TrackFade;
+
+		private string ConvertString(Byte[] input)
+		{
+			string output = Encoding.UTF8.GetString(input, 0, Array.IndexOf(input, (Byte)0));
+			if(output[0] == 0xFFFD) {
+				//Patch to convert an invalid character at index 0 to a copyright sign
+				//This is usually the case for NSFe files (not sure what the encoding for NSF/NSFe is meant to be.  Is it properly defined?)
+				return "©" + output.Substring(1);
+			}
+
+			if(output == "<?>") {
+				return ResourceHelper.GetMessage("NsfUnknownField");
+			}
+
+			return output;
+		}
+
+		public string GetSongName()
+		{
+			return ConvertString(this.SongName);
+		}
+
+		public string GetArtistName()
+		{
+			return ConvertString(this.ArtistName);
+		}
+
+		public string GetCopyrightHolder()
+		{
+			return ConvertString(this.CopyrightHolder);
+		}
+
+		public string GetRipperName()
+		{
+			return ConvertString(this.RipperName);
+		}
+
+		public string[] GetTrackNames()
+		{
+			return Encoding.UTF8.GetString(this.TrackName, 0, Array.IndexOf(this.TrackName, (Byte)0)).Split(new string[] { "[!|!]" }, StringSplitOptions.None);
+		}
 	}
 
 	[Flags]

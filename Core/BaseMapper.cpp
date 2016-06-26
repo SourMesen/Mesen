@@ -65,11 +65,23 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 	}
 	source = &source[pageNumber * pageSize];
 
+	accessType = accessType != -1 ? accessType : defaultAccessType;
+	SetCpuMemoryMapping(startAddr, endAddr, source, accessType);
+}
+
+void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t *source, int8_t accessType)
+{
+	#ifdef _DEBUG
+	if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
+		throw new std::runtime_error("Start/End address must be multiples of 256/0x100");
+	}
+	#endif
+
 	startAddr >>= 8;
 	endAddr >>= 8;
 	for(uint16_t i = startAddr; i <= endAddr; i++) {
 		_prgPages[i] = source;
-		_prgPageAccessType[i] = accessType != -1 ? accessType : defaultAccessType;
+		_prgPageAccessType[i] = accessType != -1 ? accessType : MemoryAccessType::Read;
 
 		source += 0x100;
 	}

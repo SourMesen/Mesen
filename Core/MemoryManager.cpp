@@ -60,10 +60,10 @@ void MemoryManager::WriteRegister(uint16_t addr, uint8_t value)
 	}
 }
 
-void MemoryManager::InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses)
+void MemoryManager::InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses, bool allowOverride)
 {
 	for(uint16_t address : *addresses) {
-		if(memoryHandlers[address] != nullptr) {
+		if(!allowOverride && memoryHandlers[address] != nullptr) {
 			throw std::runtime_error("Not supported");
 		}
 		memoryHandlers[address] = handler;
@@ -75,8 +75,8 @@ void MemoryManager::RegisterIODevice(IMemoryHandler *handler)
 	MemoryRanges ranges;
 	handler->GetMemoryRanges(ranges);
 
-	InitializeMemoryHandlers(_ramReadHandlers, handler, ranges.GetRAMReadAddresses());
-	InitializeMemoryHandlers(_ramWriteHandlers, handler, ranges.GetRAMWriteAddresses());
+	InitializeMemoryHandlers(_ramReadHandlers, handler, ranges.GetRAMReadAddresses(), ranges.GetAllowOverride());
+	InitializeMemoryHandlers(_ramWriteHandlers, handler, ranges.GetRAMWriteAddresses(), ranges.GetAllowOverride());
 }
 
 uint8_t* MemoryManager::GetInternalRAM()

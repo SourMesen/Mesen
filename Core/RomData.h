@@ -196,17 +196,43 @@ struct NESHeader
 	}
 };
 
+struct NsfHeader
+{
+	char Header[5];
+	uint8_t Version;
+	uint8_t TotalSongs;
+	uint8_t StartingSong;
+	uint16_t LoadAddress;
+	uint16_t InitAddress;
+	uint16_t PlayAddress;
+	char SongName[256];
+	char ArtistName[256];
+	char CopyrightHolder[256];
+	uint16_t PlaySpeedNtsc;
+	uint8_t BankSetup[8];
+	uint16_t PlaySpeedPal;
+	uint8_t Flags;
+	uint8_t SoundChips;
+	uint8_t Padding[4];
+
+	//NSFe extensions
+	char RipperName[256];
+	char TrackName[20000];
+	int32_t TrackLength[256];
+	int32_t TrackFade[256];
+};
+
 struct RomData
 {
 	string RomName;
 	string Filename;
 
-	uint16_t MapperID;
+	uint16_t MapperID = 0;
 	uint8_t SubMapperID = 0;
 	GameSystem System = GameSystem::Unknown;
 	bool HasBattery = false;
 	bool HasTrainer = false;
-	MirroringType MirroringType;
+	MirroringType MirroringType = MirroringType::Horizontal;
 	int32_t ChrRamSize = -1;
 
 	bool IsNes20Header = false;
@@ -217,9 +243,10 @@ struct RomData
 	vector<vector<uint8_t>> FdsDiskData;
 
 	vector<uint8_t> RawData;
-	uint32_t Crc32;
+	uint32_t Crc32 = 0;
 
 	bool Error = false;
 
 	NESHeader NesHeader;
+	NsfHeader NsfHeader;
 };

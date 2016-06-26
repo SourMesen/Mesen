@@ -5,8 +5,8 @@
     <Message ID="FilterMovie">Movie files (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
     <Message ID="FilterWave">Wave files (*.wav)|*.wav|All Files (*.*)|*.*</Message>
     <Message ID="FilterPalette">Palette Files (*.pal)|*.pal|All Files (*.*)|*.*</Message>
-    <Message ID="FilterRom">All supported formats (*.nes, *.zip, *.7z, *.fds)|*.NES;*.ZIP;*.7z;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">All supported formats (*.nes, *.zip, *.7z, *.fds, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*</Message>
+    <Message ID="FilterRom">All supported formats (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">All supported formats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE|NES Roms (*.nes)|*.NES|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*</Message>
     <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
 
     <Message ID="Resume">Resume</Message>
@@ -18,6 +18,10 @@
     <Message ID="PlayerNumber">Player {0}</Message>
 
     <Message ID="RomsFound">{0} roms found</Message>
+
+    <Message ID="NsfNextTrack">Next Track (Hold to fast forward)</Message>
+    <Message ID="NsfUnnamedTrack">&lt;no name&gt;</Message>
+    <Message ID="NsfUnknownField">&lt;unknown&gt;</Message>
 
     <Message ID="CouldNotInstallRuntime">The Visual Studio Runtime could not be installed properly.</Message>
     <Message ID="EmptyState">&lt;empty&gt;</Message>

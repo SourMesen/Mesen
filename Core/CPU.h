@@ -79,6 +79,8 @@ private:
 	bool _cpuWrite = false;
 	uint16_t _writeAddr = 0;
 
+	uint8_t _irqMask;
+
 	State _state;
 	MemoryManager *_memoryManager = nullptr;
 
@@ -873,6 +875,7 @@ public:
 	static int32_t GetCycleCount() { return CPU::Instance->_cycleCount; }
 	static void SetNMIFlag() { CPU::Instance->_state.NMIFlag = true; }
 	static void ClearNMIFlag() { CPU::Instance->_state.NMIFlag = false; }
+	static void SetIRQMask(uint8_t mask) { CPU::Instance->_irqMask = mask; }
 	static void SetIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag |= (int)source; }
 	static bool HasIRQSource(IRQSource source) { return (CPU::Instance->_state.IRQFlag & (int)source) != 0; }
 	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }

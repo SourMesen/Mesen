@@ -670,6 +670,18 @@
     <ClInclude Include="VsZapper.h">
       <Filter>Nes\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="NsfLoader.h">
+      <Filter>Nes\RomLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="NsfMapper.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="NsfeLoader.h">
+      <Filter>Nes\RomLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="NsfPpu.h">
+      <Filter>Nes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -830,6 +842,9 @@
     </ClCompile>
     <ClCompile Include="VsZapper.cpp">
       <Filter>Nes\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="NsfMapper.cpp">
+      <Filter>Nes\Mappers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
