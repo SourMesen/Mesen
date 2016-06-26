@@ -461,7 +461,7 @@ string Debugger::GenerateOutput()
 	output << _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom);
 	output << "2000:::--END OF INTERNAL RAM--\n";
 
-	for(uint32_t i = 0x4100; i < 0x10000; i += 0x100) {
+	for(uint32_t i = 0x2000; i < 0x10000; i += 0x100) {
 		//Merge all sequential ranges into 1 chunk
 		int32_t romAddr = _mapper->ToAbsoluteAddress(i);
 		int32_t ramAddr = _mapper->ToAbsoluteRamAddress(i);
