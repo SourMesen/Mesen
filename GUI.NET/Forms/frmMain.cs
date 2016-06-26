@@ -513,14 +513,10 @@ namespace Mesen.GUI.Forms
 
 					bool isNetPlayClient = InteropEmu.IsConnected();
 
-					mnuSaveState.Enabled = mnuLoadState.Enabled = mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !isNetPlayClient);
+					mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !isNetPlayClient);
+					mnuSaveState.Enabled = mnuLoadState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf());
 					mnuPause.Text = InteropEmu.IsPaused() ? ResourceHelper.GetMessage("Resume") : ResourceHelper.GetMessage("Pause");
 					mnuPause.Image = InteropEmu.IsPaused() ? Mesen.GUI.Properties.Resources.Play : Mesen.GUI.Properties.Resources.Pause;
-
-					if(InteropEmu.IsNsf()) {
-						mnuSaveState.Enabled = false;
-						mnuLoadState.Enabled = false;
-					}
 
 					bool netPlay = InteropEmu.IsServerRunning() || isNetPlayClient;
 
