@@ -117,28 +117,30 @@ namespace Mesen.GUI.Controls
 			if(this.InvokeRequired) {
 				this.BeginInvoke((MethodInvoker)(() => UpdateText()));
 			} else {
-				UpdateTrackDisplay();
+				if(InteropEmu.IsNsf()) {
+					UpdateTrackDisplay();
 
-				toolTip.SetToolTip(btnNext, ResourceHelper.GetMessage("NsfNextTrack"));
+					toolTip.SetToolTip(btnNext, ResourceHelper.GetMessage("NsfNextTrack"));
 
-				NsfHeader header = InteropEmu.NsfGetHeader();
-				trkVolume.Value = (int)ConfigManager.Config.AudioInfo.MasterVolume;
+					NsfHeader header = InteropEmu.NsfGetHeader();
+					trkVolume.Value = (int)ConfigManager.Config.AudioInfo.MasterVolume;
 
-				lblTitleValue.Text = header.GetSongName();
-				lblArtistValue.Text = header.GetArtistName();
-				lblCopyrightValue.Text = header.GetCopyrightHolder();
+					lblTitleValue.Text = header.GetSongName();
+					lblArtistValue.Text = header.GetArtistName();
+					lblCopyrightValue.Text = header.GetCopyrightHolder();
 
-				lblVrc6.ForeColor = (header.SoundChips & 0x01) == 0x01 ? Color.White : Color.Gray;
-				lblVrc7.ForeColor = (header.SoundChips & 0x02) == 0x02 ? Color.White : Color.Gray;
-				lblFds.ForeColor = (header.SoundChips & 0x04) == 0x04 ? Color.White : Color.Gray;
-				lblMmc5.ForeColor = (header.SoundChips & 0x08) == 0x08 ? Color.White : Color.Gray;
-				lblNamco.ForeColor = (header.SoundChips & 0x10) == 0x10 ? Color.White : Color.Gray;
-				lblSunsoft.ForeColor = (header.SoundChips & 0x20) == 0x20 ? Color.White : Color.Gray;
+					lblVrc6.ForeColor = (header.SoundChips & 0x01) == 0x01 ? Color.White : Color.Gray;
+					lblVrc7.ForeColor = (header.SoundChips & 0x02) == 0x02 ? Color.White : Color.Gray;
+					lblFds.ForeColor = (header.SoundChips & 0x04) == 0x04 ? Color.White : Color.Gray;
+					lblMmc5.ForeColor = (header.SoundChips & 0x08) == 0x08 ? Color.White : Color.Gray;
+					lblNamco.ForeColor = (header.SoundChips & 0x10) == 0x10 ? Color.White : Color.Gray;
+					lblSunsoft.ForeColor = (header.SoundChips & 0x20) == 0x20 ? Color.White : Color.Gray;
 
-				if(InteropEmu.IsPaused()) {
-					btnPause.Image = Properties.Resources.Play;
-				} else {
-					btnPause.Image = Properties.Resources.Pause;
+					if(InteropEmu.IsPaused()) {
+						btnPause.Image = Properties.Resources.Play;
+					} else {
+						btnPause.Image = Properties.Resources.Pause;
+					}
 				}
 			}
 		}
