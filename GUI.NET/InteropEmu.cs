@@ -705,14 +705,14 @@ namespace Mesen.GUI
 		private string ConvertString(Byte[] input)
 		{
 			string output = Encoding.UTF8.GetString(input, 0, Array.IndexOf(input, (Byte)0));
+			if(output.Length == 0 || output == "<?>") {
+				return ResourceHelper.GetMessage("NsfUnknownField");
+			}
+
 			if(output[0] == 0xFFFD) {
 				//Patch to convert an invalid character at index 0 to a copyright sign
 				//This is usually the case for NSFe files (not sure what the encoding for NSF/NSFe is meant to be.  Is it properly defined?)
 				return "©" + output.Substring(1);
-			}
-
-			if(output == "<?>") {
-				return ResourceHelper.GetMessage("NsfUnknownField");
 			}
 
 			return output;
