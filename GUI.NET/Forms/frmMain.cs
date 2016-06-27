@@ -126,8 +126,16 @@ namespace Mesen.GUI.Forms
 
 		void PerformUpgrade()
 		{
-			if(new Version(ConfigManager.Config.MesenVersion) < new Version(InteropEmu.GetMesenVersion())) {
+			Version newVersion = new Version(InteropEmu.GetMesenVersion());
+			Version oldVersion = new Version(ConfigManager.Config.MesenVersion);
+			if(oldVersion < newVersion) {
 				//Upgrade
+				if(oldVersion.Major == 0 && oldVersion.Minor <= 2) {
+					//Version 0.3.0+
+					//Remove all old cheats (Game matching/CRC logic has been changed and no longer compatible)
+					ConfigManager.Config.Cheats = new List<CheatInfo>();
+				}
+
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();
 				ConfigManager.ApplyChanges();
 
