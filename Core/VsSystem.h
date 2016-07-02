@@ -31,13 +31,13 @@ protected:
 		Stream(_prgChrSelectBit);
 	}
 
-	uint8_t ReadVRAM(uint16_t addr)
+	uint8_t ReadVRAM(uint16_t addr, MemoryOperationType memoryOperationType)
 	{
 		if(_prgChrSelectBit != VsControlManager::GetInstance()->GetPrgChrSelectBit()) {
 			_prgChrSelectBit = VsControlManager::GetInstance()->GetPrgChrSelectBit();
 			SelectCHRPage(0, _prgChrSelectBit);
 		}
 
-		return BaseMapper::ReadVRAM(addr);
+		return BaseMapper::ReadVRAM(addr, memoryOperationType);
 	}
 };

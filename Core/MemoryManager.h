@@ -6,15 +6,6 @@
 
 class BaseMapper;
 
-enum class MemoryOperationType
-{
-	Read = 0,
-	Write = 1,
-	ExecOpCode = 2,
-	ExecOperand = 3,
-	PpuRenderingRead = 4,
-};
-
 class MemoryManager: public Snapshotable
 {
 	private:

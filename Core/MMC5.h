@@ -28,6 +28,11 @@ private:
 	uint8_t _verticalSplitScroll;
 	uint8_t _verticalSplitBank;
 
+	bool _splitInSplitRegion;
+	uint32_t _splitVerticalScroll;
+	uint32_t _splitTile;
+	int32_t _splitTileNumber;
+
 	uint8_t _multiplierValue1;
 	uint8_t _multiplierValue2;
 
@@ -296,6 +301,11 @@ protected:
 		_previousScanline = -1;
 		_ppuInFrame = false;
 
+		_splitInSplitRegion = false;
+		_splitVerticalScroll = 0;
+		_splitTile = 0;
+		_splitTileNumber = -1;
+
 		_fillModeNametable = new uint8_t[0x400];
 		_emptyNametable = new uint8_t[0x400];
 		memset(_emptyNametable, 0, 0x400);
@@ -332,7 +342,8 @@ protected:
 				_verticalSplitDelimiterTile, _verticalSplitScroll, _verticalSplitBank, _multiplierValue1, _multiplierValue2,
 				_nametableMapping, _extendedRamMode, _exAttributeLastNametableFetch, _exAttrLastFetchCounter, _exAttrSelectedChrBank, 
 				_prgMode, prgBanks, _chrMode, _chrUpperBits, chrBanks, _lastChrReg, 
-				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame, audio, fillModeNametable);
+				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame, audio, fillModeNametable,
+				_splitInSplitRegion, _splitVerticalScroll, _splitTile, _splitTileNumber);
 
 		if(!saving) {
 			UpdatePrgBanks();
@@ -352,8 +363,48 @@ protected:
 		BaseMapper::WriteRAM(addr, value);
 	}
 
-	virtual uint8_t ReadVRAM(uint16_t addr)
+	virtual uint8_t ReadVRAM(uint16_t addr, MemoryOperationType memoryOperationType)
 	{
+		if(_extendedRamMode <= 1 && _verticalSplitEnabled && memoryOperationType == MemoryOperationType::PpuRenderingRead) {
+			uint32_t cycle = PPU::GetCurrentCycle();
+			int32_t scanline = PPU::GetCurrentScanline();
+			if(cycle == 321) {
+				_splitTileNumber = -1;
+				if(scanline == -1) {
+					_splitVerticalScroll = _verticalSplitScroll;
+				} else if(scanline < 240) {
+					_splitVerticalScroll++;
+				}
+				if(_splitVerticalScroll >= 240) {
+					_splitVerticalScroll -= 240;
+				}
+			}
+
+			if((cycle - 1) % 8 == 0 && cycle != 337) {
+				_splitTileNumber++;
+			}
+
+			if(cycle < 256 || cycle >= 321) {
+				if(addr >= 0x2000) {
+					if((addr & 0x3FF) < 0x3C0) {
+						if((_verticalSplitRightSide && _splitTileNumber >= _verticalSplitDelimiterTile) || (!_verticalSplitRightSide && _splitTileNumber < _verticalSplitDelimiterTile)) {
+							//Split region
+							_splitInSplitRegion = true;
+							_splitTile = ((_splitVerticalScroll & 0xF8) << 2) | _splitTileNumber;
+							return InternalReadRam(0x5C00 + _splitTile);
+						} else {
+							//Regular data, result can get modified by ex ram mode code below
+							_splitInSplitRegion = false;
+						}
+					} else if(_splitInSplitRegion) {
+						return InternalReadRam(0x5FC0 + ((_splitTile >> 4) & ~0x07) + ((_splitTile & 0x3F) >> 2));
+					}
+				} else if(_splitInSplitRegion) {
+					return _chrRom[(_verticalSplitBank % (GetCHRPageCount() / 4)) * 0x1000 + (((addr & ~0x07) | (_splitVerticalScroll & 0x07)) & 0xFFF)];
+				}
+			}
+		}
+
 		if(_extendedRamMode == 1) {
 			//"In Mode 1, nametable fetches are processed normally, and can come from CIRAM nametables, fill mode, or even Expansion RAM, but attribute fetches are replaced by data from Expansion RAM."
 			//"Each byte of Expansion RAM is used to enhance the tile at the corresponding address in every nametable"
@@ -392,7 +443,7 @@ protected:
 				}
 			}
 		}
-		return BaseMapper::ReadVRAM(addr);
+		return BaseMapper::ReadVRAM(addr, memoryOperationType);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

@@ -102,7 +102,7 @@ void PPU::UpdateVideoRamAddr()
 		
 		//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
 		//"Should be clocked when A12 changes to 1 via $2007 read/write"
-		_memoryManager->ReadVRAM(_state.VideoRamAddr);
+		_memoryManager->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
 	} else {
 		//"During rendering (on the pre-render line and the visible lines 0-239, provided either background or sprite rendering is enabled), "
 		//it will update v in an odd way, triggering a coarse X increment and a Y increment simultaneously"
@@ -272,7 +272,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				
 				//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
 				//"4) Should be clocked when A12 changes to 1 via $2006 write"
-				_memoryManager->ReadVRAM(_state.VideoRamAddr);
+				_memoryManager->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
 
 				if(_cycle == 255) {
 					_skipScrollingIncrement = true;

@@ -583,7 +583,7 @@ void BaseMapper::WritePrgRam(uint16_t addr, uint8_t value)
 	}
 }
 		
-uint8_t BaseMapper::ReadVRAM(uint16_t addr)
+uint8_t BaseMapper::ReadVRAM(uint16_t addr, MemoryOperationType operationType)
 {
 	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Read) {
 		return _chrPages[addr >> 8][addr & 0xFF];

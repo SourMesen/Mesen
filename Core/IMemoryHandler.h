@@ -9,6 +9,15 @@ enum class MemoryOperation
 	Any = 3
 };
 
+enum class MemoryOperationType
+{
+	Read = 0,
+	Write = 1,
+	ExecOpCode = 2,
+	ExecOperand = 3,
+	PpuRenderingRead = 4,
+};
+
 class MemoryRanges
 {
 	private:
