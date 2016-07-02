@@ -72,6 +72,11 @@ void NsfMapper::InitMapper(RomData& romData)
 		AddRegisterRange(0xA000, 0xA002, MemoryOperation::Write);
 		AddRegisterRange(0xB000, 0xB002, MemoryOperation::Write);
 	}
+	
+	if(_nsfHeader.SoundChips & NsfSoundChips::VRC7) {
+		AddRegisterRange(0x9010, 0x9010, MemoryOperation::Write);
+		AddRegisterRange(0x9030, 0x9030, MemoryOperation::Write);
+	}
 
 	if(_nsfHeader.SoundChips & NsfSoundChips::Namco) {
 		AddRegisterRange(0x4800, 0x4FFF, MemoryOperation::Any);
@@ -208,6 +213,9 @@ void NsfMapper::ProcessCpuClock()
 	if(_nsfHeader.SoundChips & NsfSoundChips::VRC6) {
 		_vrc6Audio.Clock();
 	}
+	if(_nsfHeader.SoundChips & NsfSoundChips::VRC7) {
+		_vrc7Audio.Clock();
+	}
 	if(_nsfHeader.SoundChips & NsfSoundChips::Namco) {
 		_namcoAudio.Clock();
 	}
@@ -323,6 +331,11 @@ void NsfMapper::WriteRegister(uint16_t addr, uint8_t value)
 			case 0x9000: case 0x9001: case 0x9002: case 0x9003: case 0xA000: case 0xA001: case 0xA002: case 0xB000: case 0xB001: case 0xB002:
 				_vrc6Audio.WriteRegister(addr, value);
 				break;
+
+			case 0x9010: case 0x9030:
+				_vrc7Audio.WriteReg(addr, value);
+				break;
+
 		}
 	}
 }

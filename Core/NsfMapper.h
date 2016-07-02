@@ -2,6 +2,7 @@
 #include "BaseMapper.h"
 #include "MMC5Audio.h"
 #include "Vrc6Audio.h"
+#include "Vrc7Audio.h"
 #include "FdsAudio.h"
 #include "Namco163Audio.h"
 #include "Sunsoft5bAudio.h"
@@ -32,6 +33,7 @@ private:
 	NsfHeader _nsfHeader;
 	MMC5Audio _mmc5Audio;
 	Vrc6Audio _vrc6Audio;
+	Vrc7Audio _vrc7Audio;
 	FdsAudio _fdsAudio;
 	Namco163Audio _namcoAudio;
 	Sunsoft5bAudio _sunsoftAudio;

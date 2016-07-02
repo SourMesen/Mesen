@@ -682,6 +682,18 @@
     <ClInclude Include="NsfPpu.h">
       <Filter>Nes</Filter>
     </ClInclude>
+    <ClInclude Include="Vrc7Audio.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="OpllEmulator.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="OpllTables.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
+    <ClInclude Include="OpllChannel.h">
+      <Filter>Nes\Mappers\VRC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

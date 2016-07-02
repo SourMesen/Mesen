@@ -163,7 +163,8 @@ int16_t SoundMixer::GetOutputVolume()
 		GetChannelOutput(AudioChannel::MMC5) * 40 +
 		GetChannelOutput(AudioChannel::Namco163) * 20 +
 		GetChannelOutput(AudioChannel::Sunsoft5B) * 15 +
-		GetChannelOutput(AudioChannel::VRC6) * 75);
+		GetChannelOutput(AudioChannel::VRC6) * 75 + 
+		GetChannelOutput(AudioChannel::VRC7));
 }
 
 void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int16_t delta)

@@ -591,6 +591,10 @@
     <ClInclude Include="Vrc6Pulse.h" />
     <ClInclude Include="Vrc6Saw.h" />
     <ClInclude Include="VRC7.h" />
+    <ClInclude Include="Vrc7Audio.h" />
+    <ClInclude Include="OpllTables.h" />
+    <ClInclude Include="OpllEmulator.h" />
+    <ClInclude Include="OpllChannel.h" />
     <ClInclude Include="VrcIrq.h" />
     <ClInclude Include="VsControlManager.h" />
     <ClInclude Include="VsSystem.h" />

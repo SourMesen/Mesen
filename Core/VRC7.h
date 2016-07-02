@@ -2,11 +2,13 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "VrcIrq.h"
+#include "Vrc7Audio.h"
 
 //incomplete - missing audio
 class VRC7 : public BaseMapper
 {
 private:
+	Vrc7Audio _audio;
 	VrcIrq _irq;
 	uint8_t _controlFlags;
 	uint8_t _chrRegisters[8];
@@ -32,8 +34,10 @@ protected:
 	{
 		BaseMapper::StreamState(saving);
 		SnapshotInfo irq{ &_irq };
+		SnapshotInfo audio{ &_audio };
 		ArrayInfo<uint8_t> chrRegisters = { _chrRegisters, 8 };
-		Stream(_controlFlags, chrRegisters, irq);
+
+		Stream(_controlFlags, chrRegisters, irq, audio);
 
 		if(!saving) {
 			UpdatePrgRamAccess();
@@ -43,6 +47,7 @@ protected:
 	void ProcessCpuClock()
 	{
 		_irq.ProcessCpuClock();
+		_audio.Clock();
 	}
 
 	void UpdateState()
@@ -61,16 +66,16 @@ protected:
 	{
 		if(addr & 0x10 && (addr & 0xF010) != 0x9010) {
 			addr |= 0x08;
+			addr &= ~0x10;
 		}
 
-		switch(addr & 0xF008) {
+		switch(addr & 0xF038) {
 			case 0x8000: SelectPRGPage(0, value & 0x3F); break;
 			case 0x8008: SelectPRGPage(1, value & 0x3F); break;
 			case 0x9000: SelectPRGPage(2, value & 0x3F); break;
 				
-			case 0x9010: break; //Audio
-			case 0x9030: break; //Audio
-
+			case 0x9010: case 0x9030: _audio.WriteReg(addr, value); break;
+			 
 			case 0xA000: SelectCHRPage(0, value);  break;
 			case 0xA008: SelectCHRPage(1, value);  break;
 			case 0xB000: SelectCHRPage(2, value);  break;

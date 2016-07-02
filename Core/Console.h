@@ -70,6 +70,7 @@ class Console
 		static string GetROMPath();
 		static string GetRomName();
 		static uint32_t GetCrc32();
+		static NesModel GetModel();
 
 		static bool IsRunning();
 

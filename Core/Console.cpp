@@ -163,6 +163,11 @@ uint32_t Console::GetCrc32()
 	}
 }
 
+NesModel Console::GetModel()
+{
+	return Instance->_model;
+}
+
 void Console::Reset(bool softReset)
 {
 	Movie::Stop();

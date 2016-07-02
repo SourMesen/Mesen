@@ -3,6 +3,7 @@
 #include "SquareChannel.h"
 #include "BaseExpansionAudio.h"
 #include "CPU.h"
+#include "Console.h"
 
 class MMC5Square : public SquareChannel
 {
@@ -71,7 +72,7 @@ protected:
 		_square2.Run();
 		if(_audioCounter <= 0) {
 			//~240hz envelope/length counter
-			_audioCounter = CPU::GetClockRate(EmulationSettings::GetNesModel()) / 240;
+			_audioCounter = CPU::GetClockRate(Console::GetModel()) / 240;
 			_square1.TickLengthCounter();
 			_square1.TickEnvelope();
 			_square2.TickLengthCounter();

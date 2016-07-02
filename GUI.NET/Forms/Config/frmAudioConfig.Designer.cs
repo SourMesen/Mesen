@@ -282,7 +282,6 @@
 			// trkVrc7Vol
 			// 
 			this.trkVrc7Vol.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkVrc7Vol.Enabled = false;
 			this.trkVrc7Vol.Location = new System.Drawing.Point(231, 160);
 			this.trkVrc7Vol.Margin = new System.Windows.Forms.Padding(0);
 			this.trkVrc7Vol.Maximum = 100;
