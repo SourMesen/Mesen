@@ -9,6 +9,7 @@ NsfMapper::NsfMapper()
 {
 	_instance = this;
 	EmulationSettings::DisableOverclocking(true);
+	EmulationSettings::ClearFlags(EmulationFlags::Paused);
 }
 
 NsfMapper::~NsfMapper()
