@@ -38,8 +38,8 @@ namespace Mesen.GUI.Controls
 		
 		protected override void OnDoubleClick(EventArgs e)
 		{
-			if(!InteropEmu.HasZapper()) {
-				//Disable double clicking (used to switch to fullscreen mode) when using zapper
+			if(!InteropEmu.HasZapper() && !InteropEmu.HasArkanoidPaddle()) {
+				//Disable double clicking (used to switch to fullscreen mode) when using zapper/arkanoid controller
 				base.OnDoubleClick(e);
 			}
 		}
