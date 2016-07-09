@@ -30,6 +30,8 @@ private:
 		Sunsoft = 0x20
 	};
 
+	NesModel _model;
+
 	NsfHeader _nsfHeader;
 	MMC5Audio _mmc5Audio;
 	Vrc6Audio _vrc6Audio;
@@ -115,6 +117,8 @@ public:
 	~NsfMapper();
 
 	static NsfMapper* GetInstance();
+
+	void SetNesModel(NesModel model);
 
 	void SelectTrack(uint8_t trackNumber);
 	uint8_t GetCurrentTrack();

@@ -5,6 +5,7 @@
 #include "IMemoryHandler.h"
 #include "MessageManager.h"
 #include "RomLoader.h"
+#include "EmulationSettings.h"
 
 enum class PrgMemoryType
 {
@@ -163,6 +164,7 @@ public:
 	virtual ~BaseMapper();
 	virtual void Reset(bool softReset);
 
+	virtual void SetNesModel(NesModel model) { }
 	virtual void ProcessCpuClock() { }
 	virtual void NotifyVRAMAddressChange(uint16_t addr);
 	void ProcessNotification(ConsoleNotificationType type, void* parameter);

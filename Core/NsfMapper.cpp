@@ -40,6 +40,19 @@ void NsfMapper::InitMapper()
 	AddRegisterRange(0x5FF6, 0x5FFF, MemoryOperation::Write);
 }
 
+void NsfMapper::SetNesModel(NesModel model) 
+{ 
+	if(model != _model) {
+		//Cheat a bit and change the IRQ reload value when the model changes to adjust tempo
+		if(model == NesModel::NTSC) {
+			_irqReloadValue = _ntscSpeed;
+		} else if(model == NesModel::PAL || model == NesModel::Dendy) {
+			_irqReloadValue = _palSpeed;
+		}
+		_model = model;
+	}
+}
+
 void NsfMapper::InitMapper(RomData& romData)
 {
 	_nsfHeader = romData.NsfHeader;
@@ -236,28 +249,36 @@ uint8_t NsfMapper::ReadRegister(uint16_t addr)
 		return _namcoAudio.ReadRegister(addr);
 	} else {
 		switch(addr) {
-			case 0x3E00: return _nsfHeader.InitAddress & 0xFF; break;
-			case 0x3E01: return (_nsfHeader.InitAddress >> 8) & 0xFF; break;
-			case 0x3E02: return _nsfHeader.PlayAddress & 0xFF; break;
-			case 0x3E03: return (_nsfHeader.PlayAddress >> 8) & 0xFF; break;
-			case 0x3E04: return _ntscSpeed & 0xFF; break;
-			case 0x3E06: return (_ntscSpeed >> 8) & 0xFF; break;
-			case 0x3E05: return _palSpeed & 0xFF; break;
-			case 0x3E07: return (_palSpeed >> 8) & 0xFF; break;
+			case 0x3E00: return _nsfHeader.InitAddress & 0xFF;
+			case 0x3E01: return (_nsfHeader.InitAddress >> 8) & 0xFF;
+			case 0x3E02: return _nsfHeader.PlayAddress & 0xFF;
+			case 0x3E03: return (_nsfHeader.PlayAddress >> 8) & 0xFF;
+			case 0x3E04: return _ntscSpeed & 0xFF;
+			case 0x3E06: return (_ntscSpeed >> 8) & 0xFF;
+			case 0x3E05: return _palSpeed & 0xFF;
+			case 0x3E07: return (_palSpeed >> 8) & 0xFF;
 
 			case 0x3E08: case 0x3E09: case 0x3E0A: case 0x3E0B:
 			case 0x3E0C: case 0x3E0D: case 0x3E0E: case 0x3E0F:
-				return _nsfHeader.BankSetup[addr & 0x07]; break;
+				return _nsfHeader.BankSetup[addr & 0x07];
 
-			case 0x3E10: return _songNumber; break;
-			case 0x3E11: return _nsfHeader.Flags == 0x01 ? 0x01 : 0x00; break;
+			case 0x3E10: return _songNumber;
+
+			case 0x3E11:
+				if(_model == NesModel::NTSC) {
+					return 0x00;
+				} else if(_model == NesModel::PAL || _model == NesModel::Dendy) {
+					return 0x01;
+				}
+				return _nsfHeader.Flags == 0x01 ? 0x01 : 0x00;
+
 			case 0x3E12: {
 				NsfIrqType result = _irqStatus;
 				ClearIrq();
 				return (uint8_t)result;
 			}
 
-			case 0x3E13: return _nsfHeader.SoundChips & 0x3F; break;
+			case 0x3E13: return _nsfHeader.SoundChips & 0x3F;
 
 			case 0x5205: return (_mmc5MultiplierValues[0] * _mmc5MultiplierValues[1]) & 0xFF;
 			case 0x5206: return (_mmc5MultiplierValues[0] * _mmc5MultiplierValues[0]) >> 8;

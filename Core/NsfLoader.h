@@ -37,6 +37,14 @@ protected:
 			romData.System = GameSystem::NesPal;
 		}
 
+		if(header.PlaySpeedNtsc == 0) {
+			header.PlaySpeedNtsc = 16639;
+		}
+
+		if(header.PlaySpeedPal == 0) {
+			header.PlaySpeedPal = 19997;
+		}
+
 		//Log window output
 		MessageManager::Log("[NSF] Region: " + string(header.Flags == 0x00 ? "NTSC" : (header.Flags == 0x01 ? "PAL" : "NTSC & PAL")));
 		if(header.PlaySpeedNtsc > 0) {

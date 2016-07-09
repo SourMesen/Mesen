@@ -370,6 +370,7 @@ double Console::UpdateNesModel(bool sendNotification)
 		frameDelay /= (double)emulationSpeed / 100.0;
 	}
 
+	_mapper->SetNesModel(model);
 	_ppu->SetNesModel(model);
 	_apu->SetNesModel(model);
 
