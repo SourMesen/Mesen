@@ -236,6 +236,7 @@
       <Control ID="lblExtraScanlinesAfterNmi">Nombre de lignes additionnelles après le NMI : </Control>
       <Control ID="lblEffectiveClockRate">Fréquence d'horloge (NTSC) : </Control>
       <Control ID="lblEffectiveClockRatePal">Fréquence d'horloge (PAL) : </Control>
+      <Control ID="lblEffectiveClockRateDendy">Fréquence d'horloge (Dendy) : </Control>
       
       <Control ID="chkOverclockAdjustApu">Ne pas overclocker l'APU (Empêche le changement de tonalité causé par l'overclocking)</Control>
 

@@ -237,6 +237,7 @@
       <Control ID="lblExtraScanlinesAfterNmi">NMIの後の追加走査線数: </Control>
       <Control ID="lblEffectiveClockRate">クロックレート (NTSC) : </Control>
       <Control ID="lblEffectiveClockRatePal">クロックレート (PAL) : </Control>
+      <Control ID="lblEffectiveClockRateDendy">クロックレート (Dendy) : </Control>
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>

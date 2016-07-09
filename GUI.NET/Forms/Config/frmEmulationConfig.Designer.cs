@@ -42,6 +42,9 @@
 			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.tpgOverclocking = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblEffectiveClockRateDendy = new System.Windows.Forms.Label();
+			this.lblEffectiveClockRateValueDendy = new System.Windows.Forms.Label();
 			this.lblOverclockWarning = new System.Windows.Forms.Label();
 			this.chkOverclockAdjustApu = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
@@ -72,6 +75,7 @@
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tpgOverclocking.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
+			this.flowLayoutPanel4.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
 			this.grpOverclocking.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -86,7 +90,7 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 264);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 268);
 			this.baseConfigPanel.Size = new System.Drawing.Size(487, 29);
 			// 
 			// tabMain
@@ -98,7 +102,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(487, 264);
+			this.tabMain.Size = new System.Drawing.Size(487, 268);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -107,7 +111,7 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(479, 238);
+			this.tpgGeneral.Size = new System.Drawing.Size(479, 242);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -125,7 +129,7 @@
 			this.tableLayoutPanel4.RowCount = 2;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(473, 232);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(473, 236);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// flowLayoutPanel6
@@ -178,7 +182,7 @@
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(479, 238);
+			this.tpgAdvanced.Size = new System.Drawing.Size(479, 242);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -187,9 +191,9 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -200,13 +204,13 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 232);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 236);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// chkUseAlternativeMmc3Irq
 			// 
 			this.chkUseAlternativeMmc3Irq.AutoSize = true;
-			this.chkUseAlternativeMmc3Irq.Location = new System.Drawing.Point(3, 3);
+			this.chkUseAlternativeMmc3Irq.Location = new System.Drawing.Point(3, 49);
 			this.chkUseAlternativeMmc3Irq.Name = "chkUseAlternativeMmc3Irq";
 			this.chkUseAlternativeMmc3Irq.Size = new System.Drawing.Size(197, 17);
 			this.chkUseAlternativeMmc3Irq.TabIndex = 0;
@@ -226,7 +230,7 @@
 			// chkRemoveSpriteLimit
 			// 
 			this.chkRemoveSpriteLimit.AutoSize = true;
-			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 49);
+			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 3);
 			this.chkRemoveSpriteLimit.Name = "chkRemoveSpriteLimit";
 			this.chkRemoveSpriteLimit.Size = new System.Drawing.Size(205, 17);
 			this.chkRemoveSpriteLimit.TabIndex = 2;
@@ -239,7 +243,7 @@
 			this.tpgOverclocking.Location = new System.Drawing.Point(4, 22);
 			this.tpgOverclocking.Name = "tpgOverclocking";
 			this.tpgOverclocking.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgOverclocking.Size = new System.Drawing.Size(479, 238);
+			this.tpgOverclocking.Size = new System.Drawing.Size(479, 242);
 			this.tpgOverclocking.TabIndex = 2;
 			this.tpgOverclocking.Text = "Overclocking";
 			this.tpgOverclocking.UseVisualStyleBackColor = true;
@@ -248,8 +252,9 @@
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel4, 0, 5);
 			this.tableLayoutPanel3.Controls.Add(this.lblOverclockWarning, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.chkOverclockAdjustApu, 0, 5);
+			this.tableLayoutPanel3.Controls.Add(this.chkOverclockAdjustApu, 0, 6);
 			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel3, 0, 4);
 			this.tableLayoutPanel3.Controls.Add(this.grpOverclocking, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.grpPpuTiming, 0, 2);
@@ -257,16 +262,47 @@
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 7;
+			this.tableLayoutPanel3.RowCount = 8;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(473, 232);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(473, 236);
 			this.tableLayoutPanel3.TabIndex = 0;
+			// 
+			// flowLayoutPanel4
+			// 
+			this.flowLayoutPanel4.Controls.Add(this.lblEffectiveClockRateDendy);
+			this.flowLayoutPanel4.Controls.Add(this.lblEffectiveClockRateValueDendy);
+			this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 189);
+			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
+			this.flowLayoutPanel4.Size = new System.Drawing.Size(473, 20);
+			this.flowLayoutPanel4.TabIndex = 11;
+			// 
+			// lblEffectiveClockRateDendy
+			// 
+			this.lblEffectiveClockRateDendy.AutoSize = true;
+			this.lblEffectiveClockRateDendy.Location = new System.Drawing.Point(3, 0);
+			this.lblEffectiveClockRateDendy.Name = "lblEffectiveClockRateDendy";
+			this.lblEffectiveClockRateDendy.Size = new System.Drawing.Size(148, 13);
+			this.lblEffectiveClockRateDendy.TabIndex = 0;
+			this.lblEffectiveClockRateDendy.Text = "Effective Clock Rate (Dendy):";
+			// 
+			// lblEffectiveClockRateValueDendy
+			// 
+			this.lblEffectiveClockRateValueDendy.AutoSize = true;
+			this.lblEffectiveClockRateValueDendy.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblEffectiveClockRateValueDendy.Location = new System.Drawing.Point(157, 0);
+			this.lblEffectiveClockRateValueDendy.Name = "lblEffectiveClockRateValueDendy";
+			this.lblEffectiveClockRateValueDendy.Size = new System.Drawing.Size(37, 13);
+			this.lblEffectiveClockRateValueDendy.TabIndex = 1;
+			this.lblEffectiveClockRateValueDendy.Text = "100%";
 			// 
 			// lblOverclockWarning
 			// 
@@ -282,7 +318,7 @@
 			// chkOverclockAdjustApu
 			// 
 			this.chkOverclockAdjustApu.AutoSize = true;
-			this.chkOverclockAdjustApu.Location = new System.Drawing.Point(3, 204);
+			this.chkOverclockAdjustApu.Location = new System.Drawing.Point(3, 212);
 			this.chkOverclockAdjustApu.Name = "chkOverclockAdjustApu";
 			this.chkOverclockAdjustApu.Size = new System.Drawing.Size(401, 17);
 			this.chkOverclockAdjustApu.TabIndex = 10;
@@ -294,9 +330,10 @@
 			this.flowLayoutPanel3.Controls.Add(this.lblEffectiveClockRatePal);
 			this.flowLayoutPanel3.Controls.Add(this.lblEffectiveClockRateValuePal);
 			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 181);
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 172);
+			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(467, 17);
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(473, 17);
 			this.flowLayoutPanel3.TabIndex = 9;
 			// 
 			// lblEffectiveClockRatePal
@@ -497,9 +534,10 @@
 			this.flowLayoutPanel2.Controls.Add(this.lblEffectiveClockRate);
 			this.flowLayoutPanel2.Controls.Add(this.lblEffectiveClockRateValue);
 			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 158);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 155);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(467, 17);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(473, 17);
 			this.flowLayoutPanel2.TabIndex = 8;
 			// 
 			// lblEffectiveClockRate
@@ -530,7 +568,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(487, 293);
+			this.ClientSize = new System.Drawing.Size(487, 297);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -554,6 +592,8 @@
 			this.tpgOverclocking.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
+			this.flowLayoutPanel4.ResumeLayout(false);
+			this.flowLayoutPanel4.PerformLayout();
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
 			this.grpOverclocking.ResumeLayout(false);
@@ -605,8 +645,11 @@
 		private System.Windows.Forms.Label lblEffectiveClockRateValue;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
 		private System.Windows.Forms.Label lblEffectiveClockRatePal;
-		private System.Windows.Forms.Label lblEffectiveClockRateValuePal;
 		private System.Windows.Forms.Timer tmrUpdateClockRate;
 		private System.Windows.Forms.CheckBox chkOverclockAdjustApu;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
+		private System.Windows.Forms.Label lblEffectiveClockRateDendy;
+		private System.Windows.Forms.Label lblEffectiveClockRateValueDendy;
+		private System.Windows.Forms.Label lblEffectiveClockRateValuePal;
 	}
 }
