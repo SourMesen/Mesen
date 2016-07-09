@@ -27,6 +27,7 @@ enum EmulationFlags
 	SwapDutyCycles = 0x10000,
 
 	DisableGameDatabase = 0x20000,
+	AutoConfigureInput = 0x40000,
 
 	InBackground = 0x40000000,
 };

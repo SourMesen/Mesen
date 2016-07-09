@@ -1404,8 +1404,8 @@ namespace Mesen.GUI.Forms
 		private void mnuBilinearInterpolation_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.VideoInfo.UseBilinearInterpolation = mnuBilinearInterpolation.Checked;
-			ConfigManager.Config.ApplyConfig();
 			ConfigManager.ApplyChanges();
+			VideoInfo.ApplyConfig();
 		}
 
 		private void mnuLogWindow_Click(object sender, EventArgs e)

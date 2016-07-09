@@ -4,6 +4,7 @@
 #include "MessageManager.h"
 #include "../Utilities/CRC32.h"
 #include "GameDatabase.h"
+#include "EmulationSettings.h"
 
 std::unordered_map<uint32_t, GameInfo> GameDatabase::_gameDatabase;
 
@@ -38,7 +39,7 @@ void GameDatabase::InitDatabase()
 				continue;
 			}
 			vector<string> values = split(lineContent, ',');
-			if(values.size() >= 11) {
+			if(values.size() >= 12) {
 				GameInfo gameInfo{
 					(uint32_t)std::stoll(values[0], nullptr, 16),
 					values[1],
@@ -51,7 +52,8 @@ void GameDatabase::InitDatabase()
 					ToInt<uint32_t>(values[8]),
 					ToInt<uint32_t>(values[9]),
 					ToInt<uint32_t>(values[10]) == 0 ? false : true,
-					values.size() > 11 ? values[11] : ""
+					values[11],
+					values.size() > 12 ? values[12] : ""
 				};
 				_gameDatabase[gameInfo.Crc] = gameInfo;
 			}
@@ -79,6 +81,46 @@ GameSystem GameDatabase::GetGameSystem(string system)
 	}
 	
 	return GameSystem::NesNtsc;
+}
+
+void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
+{
+	ControllerType controllers[4] = { ControllerType::StandardController, ControllerType::StandardController, ControllerType::None, ControllerType::None };
+	ExpansionPortDevice expDevice = ExpansionPortDevice::None;
+	EmulationSettings::ClearFlags(EmulationFlags::HasFourScore);
+
+	if(inputType.compare("Zapper") == 0) {
+		MessageManager::Log("[DB] Input: Zapper connected");
+		if(system == GameSystem::Famicom) {
+			expDevice = ExpansionPortDevice::Zapper;
+		} else {
+			controllers[1] = ControllerType::Zapper;
+		}
+	} else if(inputType.compare("FourPlayer") == 0) {
+		MessageManager::Log("[DB] Input: Four player adapter connected");
+		EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
+		if(system == GameSystem::Famicom) {
+			expDevice = ExpansionPortDevice::FourPlayerAdapter;
+			controllers[2] = controllers[3] = ControllerType::StandardController;
+		} else {
+			controllers[2] = controllers[3] = ControllerType::StandardController;
+		}
+	} else if(inputType.compare("Arkanoid") == 0) {
+		MessageManager::Log("[DB] Input: Arkanoid controller connected");
+		if(system == GameSystem::Famicom) {
+			expDevice = ExpansionPortDevice::ArkanoidController;
+		} else {
+			controllers[1] = ControllerType::ArkanoidController;
+		}
+	} else {
+		MessageManager::Log("[DB] Input: 2 standard controllers connected");
+	}
+
+	EmulationSettings::SetConsoleType(system == GameSystem::Famicom ? ConsoleType::Famicom : ConsoleType::Nes);
+	for(int i = 0; i < 4; i++) {
+		EmulationSettings::SetControllerType(i, controllers[i]);
+	}
+	EmulationSettings::SetExpansionDevice(expDevice);
 }
 
 uint8_t GameDatabase::GetSubMapper(GameInfo &info)
@@ -177,8 +219,17 @@ void GameDatabase::UpdateRomData(uint32_t romCrc, RomData &romData)
 		}
 		MessageManager::Log("[DB] Battery: " + string(info.HasBattery ? "Yes" : "No"));
 
+		if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
+			InitializeInputDevices(info.InputType, romData.System);
+		}
+
 		#ifdef _DEBUG
 		MessageManager::DisplayMessage("DB", "Mapper: " + std::to_string(romData.MapperID) + "  Sub: " + std::to_string(romData.SubMapperID) + "  System: " + info.System);
 		#endif
+	} else {
+		MessageManager::Log("[DB] Game not found in database");
+		if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
+			InitializeInputDevices("", romData.System);
+		}
 	}
 }

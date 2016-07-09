@@ -16,6 +16,7 @@ struct GameInfo
 	uint32_t WorkRamSize;
 	bool HasBattery;
 	string Mirroring;
+	string InputType;
 };
 
 class GameDatabase
@@ -28,6 +29,7 @@ private:
 
 	static GameSystem GetGameSystem(string system);
 	static uint8_t GetSubMapper(GameInfo &info);
+	static void InitializeInputDevices(string inputType, GameSystem system);
 
 	static void InitDatabase();
 

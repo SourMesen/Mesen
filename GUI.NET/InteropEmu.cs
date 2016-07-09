@@ -35,12 +35,17 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetMousePosition(double x, double y);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasZapper();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasArkanoidPaddle();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasFourScore();
 
 		[DllImport(DLLPath)] public static extern void SetControllerType(int port, ControllerType type);
 		[DllImport(DLLPath)] public static extern void SetControllerKeys(int port, KeyMappingSet mapping);
 		[DllImport(DLLPath)] public static extern void SetExpansionDevice(ExpansionPortDevice device);
 		[DllImport(DLLPath)] public static extern void SetConsoleType(ConsoleType type);
 
+		[DllImport(DLLPath)] public static extern ControllerType GetControllerType(int port);
+		[DllImport(DLLPath)] public static extern ExpansionPortDevice GetExpansionDevice();
+		[DllImport(DLLPath)] public static extern ConsoleType GetConsoleType();
+		
 		[DllImport(DLLPath)] public static extern UInt32 GetPressedKey();
 		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string keyName);
 		[DllImport(DLLPath, EntryPoint="GetKeyName")] private static extern IntPtr GetKeyNameWrapper(UInt32 key);
@@ -606,6 +611,7 @@ namespace Mesen.GUI
 		SwapDutyCycles = 0x10000,
 
 		DisableGameDatabase = 0x20000,
+		AutoConfigureInput = 0x40000,
 
 		InBackground = 0x40000000,
 	}

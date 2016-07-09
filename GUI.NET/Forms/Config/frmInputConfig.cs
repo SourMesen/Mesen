@@ -19,9 +19,19 @@ namespace Mesen.GUI.Forms.Config
 
 			Entity = ConfigManager.Config.InputInfo;
 
+			if(ConfigManager.Config.InputInfo.AutoConfigureInput) {
+				for(int i = 0; i < 4; i++) {
+					ConfigManager.Config.InputInfo.Controllers[i].ControllerType = InteropEmu.GetControllerType(i);
+				}
+				ConfigManager.Config.InputInfo.ExpansionPortDevice = InteropEmu.GetExpansionDevice();
+				ConfigManager.Config.InputInfo.ConsoleType = InteropEmu.GetConsoleType();
+				ConfigManager.Config.InputInfo.UseFourScore = InteropEmu.HasFourScore();
+			}
+
 			AddBinding("ExpansionPortDevice", cboExpansionPort);
 			AddBinding("ConsoleType", cboConsoleType);
 			AddBinding("UseFourScore", chkFourScore);
+			AddBinding("AutoConfigureInput", chkAutoConfigureInput);
 		}
 
 		protected override void AfterUpdateUI()
@@ -91,6 +101,12 @@ namespace Mesen.GUI.Forms.Config
 				cboPlayer2.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[1].ControllerType);
 				cboPlayer3.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[2].ControllerType);
 				cboPlayer4.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[3].ControllerType);
+				
+				if(ConfigManager.Config.PreferenceInfo.DisableGameDatabase) {
+					//This option requires the game DB to be active
+					chkAutoConfigureInput.Enabled = false;
+					chkAutoConfigureInput.Checked = false;
+				}
 			}
 		}
 

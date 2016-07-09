@@ -93,8 +93,13 @@ namespace InteropEmu {
 		DllExport void __stdcall SetControllerKeys(uint32_t port, KeyMappingSet mappings) { EmulationSettings::SetControllerKeys(port, mappings); }
 		DllExport void __stdcall SetExpansionDevice(ExpansionPortDevice device) { EmulationSettings::SetExpansionDevice(device); }
 		DllExport void __stdcall SetConsoleType(ConsoleType type) { EmulationSettings::SetConsoleType(type); }
+
+		DllExport ControllerType __stdcall GetControllerType(uint32_t port) { return EmulationSettings::GetControllerType(port); }
+		DllExport ExpansionPortDevice GetExpansionDevice() { return EmulationSettings::GetExpansionDevice(); }
+		DllExport ConsoleType __stdcall GetConsoleType() { return EmulationSettings::GetConsoleType(); }
 		
 		DllExport bool __stdcall HasZapper() { return EmulationSettings::HasZapper(); }
+		DllExport bool __stdcall HasFourScore() { return EmulationSettings::CheckFlag(EmulationFlags::HasFourScore); }
 		DllExport bool __stdcall HasArkanoidPaddle() { return EmulationSettings::HasArkanoidPaddle(); }
 
 		DllExport void __stdcall SetMousePosition(double x, double y) { ControlManager::SetMousePosition(x, y); }

@@ -131,6 +131,7 @@ namespace Mesen.GUI.Config
 		public ConsoleType ConsoleType = ConsoleType.Nes;
 		public InteropEmu.ExpansionPortDevice ExpansionPortDevice = InteropEmu.ExpansionPortDevice.None;
 		public bool UseFourScore = false;
+		public bool AutoConfigureInput = true;
 
 		public List<ControllerInfo> Controllers = new List<ControllerInfo>();
 
@@ -159,6 +160,7 @@ namespace Mesen.GUI.Config
 				expansionDevice = inputInfo.ExpansionPortDevice;
 			}
 
+			InteropEmu.SetFlag(EmulationFlags.AutoConfigureInput, inputInfo.AutoConfigureInput);
 			InteropEmu.SetConsoleType(inputInfo.ConsoleType);
 			InteropEmu.SetExpansionDevice(inputInfo.ExpansionPortDevice);
 			bool hasFourScore = (inputInfo.ConsoleType == ConsoleType.Nes && inputInfo.UseFourScore) || (inputInfo.ConsoleType == ConsoleType.Famicom && expansionDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter);

@@ -155,6 +155,7 @@
       <Control ID="lblNesType">Type de console :</Control>
       <Control ID="lblExpansionPort">Port d'extension :</Control>
       <Control ID="chkFourScore">Utiliser l'accessoire pour 4 joueurs</Control>
+      <Control ID="chkAutoConfigureInput">Configurer les manettes automatiquement au chargement d'un jeu</Control>
       <Control ID="tpgEmulatorKeys">Raccourcis de l'émulateur</Control>
     </Form>
     <Form ID="frmControllerConfig" Title="Configuration de la manette">
