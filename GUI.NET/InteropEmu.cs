@@ -809,7 +809,10 @@ namespace Mesen.GUI
 		Scale4x = 12,
 		_2xSai = 13,
 		Super2xSai = 14,
-		SuperEagle = 15
+		SuperEagle = 15,
+		Prescale2x = 16,
+		Prescale3x = 17,
+		Prescale4x = 18
 	}
 
 	public enum VideoResizeFilter

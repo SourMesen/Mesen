@@ -1056,6 +1056,9 @@ namespace Mesen.GUI.Forms
 			mnu2xSaiFilter.Checked = (filterType == VideoFilterType._2xSai);
 			mnuSuper2xSaiFilter.Checked = (filterType == VideoFilterType.Super2xSai);
 			mnuSuperEagleFilter.Checked = (filterType == VideoFilterType.SuperEagle);
+			mnuPrescale2xFilter.Checked = (filterType == VideoFilterType.Prescale2x);
+			mnuPrescale3xFilter.Checked = (filterType == VideoFilterType.Prescale3x);
+			mnuPrescale4xFilter.Checked = (filterType == VideoFilterType.Prescale4x);
 
 			ConfigManager.Config.VideoInfo.VideoFilter = filterType;
 			ConfigManager.ApplyChanges();
@@ -1161,6 +1164,21 @@ namespace Mesen.GUI.Forms
 		private void mnuSuperEagleFilter_Click(object sender, EventArgs e)
 		{
 			SetVideoFilter(VideoFilterType.SuperEagle);
+		}
+		
+		private void mnuPrescale2xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Prescale2x);
+		}
+
+		private void mnuPrescale3xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Prescale3x);
+		}
+
+		private void mnuPrescale4xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Prescale4x);
 		}
 
 		private void InitializeFdsDiskMenu()

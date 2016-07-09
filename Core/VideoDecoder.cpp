@@ -68,6 +68,10 @@ void VideoDecoder::UpdateVideoFilter()
 			case VideoFilterType::Super2xSai: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Super2xSai, 2)); break;
 			case VideoFilterType::SuperEagle: _videoFilter.reset(new ScaleFilter(ScaleFilterType::SuperEagle, 2)); break;
 
+			case VideoFilterType::Prescale2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 2)); break;
+			case VideoFilterType::Prescale3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 3)); break;
+			case VideoFilterType::Prescale4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 4)); break;
+
 			case VideoFilterType::HdPack: _videoFilter.reset(new HdVideoFilter()); break;
 		}
 	}

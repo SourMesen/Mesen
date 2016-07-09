@@ -31,6 +31,29 @@ FrameInfo ScaleFilter::GetFrameInfo()
 	return{ overscan.GetScreenWidth()*_filterScale, overscan.GetScreenHeight()*_filterScale, 4 };
 }
 
+void ScaleFilter::ApplyPrescaleFilter()
+{
+	uint32_t* outputBuffer = (uint32_t*)GetOutputBuffer();
+
+	OverscanDimensions overscan = GetOverscan();
+	uint32_t height = overscan.GetScreenHeight();
+	uint32_t width = overscan.GetScreenWidth();
+
+	uint32_t *inputBuffer = _decodedPpuBuffer;
+	for(uint32_t y = 0; y < height; y++) {
+		for(uint32_t x = 0; x < width; x++) {
+			for(uint32_t i = 0; i < _filterScale; i++) {
+				*(outputBuffer++) = *inputBuffer;
+			}
+			inputBuffer++;
+		}
+		for(uint32_t i = 1; i< _filterScale; i++) {
+			memcpy(outputBuffer, outputBuffer - width*_filterScale, width*_filterScale *4);
+			outputBuffer += width*_filterScale;
+		}
+	}
+}
+
 void ScaleFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 {
 	DecodePpuBuffer(ppuOutputBuffer, _decodedPpuBuffer, false);
@@ -56,6 +79,8 @@ void ScaleFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 		supertwoxsai_generic_xrgb8888(width, height, _decodedPpuBuffer, width, outputBuffer, width * _filterScale);
 	} else if(_scaleFilterType == ScaleFilterType::SuperEagle) {
 		supereagle_generic_xrgb8888(width, height, _decodedPpuBuffer, width, outputBuffer, width * _filterScale);
+	} else if(_scaleFilterType == ScaleFilterType::Prescale) {
+		ApplyPrescaleFilter();
 	}
 
 	double scanlineIntensity = 1.0 - EmulationSettings::GetPictureSettings().ScanlineIntensity;

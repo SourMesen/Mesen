@@ -76,6 +76,9 @@
       <Value ID="_2xSai">2xSai</Value>
       <Value ID="Super2xSai">Super2xSai</Value>
       <Value ID="SuperEagle">SuperEagle</Value>
+      <Value ID="Prescale2x">Prescale 2x</Value>
+      <Value ID="Prescale3x">Prescale 3x</Value>
+      <Value ID="Prescale4x">Prescale 4x</Value>
     </Enum>
     <Enum ID="ConsoleType">
       <Value ID="Nes">NES</Value>

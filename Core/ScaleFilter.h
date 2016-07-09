@@ -11,6 +11,7 @@ enum class ScaleFilterType
 	_2xSai,
 	Super2xSai,
 	SuperEagle,
+	Prescale,
 };
 
 class ScaleFilter : public DefaultVideoFilter
@@ -20,6 +21,8 @@ private:
 	uint32_t *_decodedPpuBuffer;
 	uint32_t _filterScale;
 	ScaleFilterType _scaleFilterType;
+
+	void ApplyPrescaleFilter();
 
 public:
 	ScaleFilter(ScaleFilterType scaleFilterType, uint32_t scale);
