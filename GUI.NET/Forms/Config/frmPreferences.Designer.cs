@@ -722,7 +722,9 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameDatabase, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 2);
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 4;
