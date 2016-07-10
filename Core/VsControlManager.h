@@ -67,7 +67,7 @@ public:
 		_instance = this;
 	}
 
-	~VsControlManager()
+	virtual ~VsControlManager()
 	{
 		if(_instance == this) {
 			_instance = nullptr;

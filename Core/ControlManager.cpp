@@ -17,6 +17,10 @@ ControlManager::ControlManager()
 
 }
 
+ControlManager::~ControlManager()
+{
+}
+
 void ControlManager::RegisterKeyManager(IKeyManager* keyManager)
 {
 	_keyManager.reset(keyManager);

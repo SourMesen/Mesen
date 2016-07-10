@@ -42,6 +42,7 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 	public:
 		ControlManager();
+		virtual ~ControlManager();
 
 		void UpdateControlDevices();
 		bool GetLagFlag();
