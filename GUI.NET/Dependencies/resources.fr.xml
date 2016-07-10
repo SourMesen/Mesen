@@ -241,6 +241,9 @@
       
       <Control ID="chkOverclockAdjustApu">Ne pas overclocker l'APU (Empêche le changement de tonalité causé par l'overclocking)</Control>
 
+      <Control ID="chkShowLagCounter">Afficher le compteur de lag</Control>
+      <Control ID="btnResetLagCounter">Remettre le compteur à zéro</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>

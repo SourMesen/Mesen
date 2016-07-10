@@ -204,6 +204,8 @@ void Console::ResetComponents(bool softReset)
 	_cpu->Reset(softReset);
 	_controlManager->Reset(softReset);
 	_memoryManager->Reset(softReset);
+
+	_lagCounter = 0;
 	
 	SoundMixer::StopAudio(true);
 
@@ -317,6 +319,10 @@ void Console::Run()
 			targetTime -= timeLag;
 			if(targetTime < 0) {
 				targetTime = 0;
+			}
+
+			if(_controlManager->GetLagFlag()) {
+				_lagCounter++;
 			}
 			
 			if(_stop) {
@@ -445,4 +451,14 @@ void Console::RequestReset()
 NesModel Console::GetNesModel()
 {
 	return Instance->_model;
+}
+
+uint32_t Console::GetLagCounter()
+{
+	return Instance->_lagCounter;
+}
+
+void Console::ResetLagCounter()
+{
+	Instance->_lagCounter = 0;
 }

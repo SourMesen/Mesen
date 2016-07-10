@@ -436,6 +436,40 @@ namespace NES
 		DrawString("PAUSE", (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2, (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8, Colors::AntiqueWhite, 1.0f, _largeFont.get());
 	}
 
+	void Renderer::ShowFpsCounter()
+	{
+		if(_fpsTimer.GetElapsedMS() > 1000) {
+			//Update fps every sec
+			uint32_t frameCount = VideoDecoder::GetInstance()->GetFrameCount();
+			if(frameCount - _lastFrameCount < 0) {
+				_currentFPS = 0;
+			} else {
+				_currentFPS = (int)(std::round((double)(frameCount - _lastFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
+				_currentRenderedFPS = (int)(std::round((double)(_renderedFrameCount - _lastRenderedFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
+			}
+			_lastFrameCount = frameCount;
+			_lastRenderedFrameCount = _renderedFrameCount;
+			_fpsTimer.Reset();
+		}
+
+		if(_currentFPS > 5000) {
+			_currentFPS = 0;
+		}
+		if(_currentRenderedFPS > 5000) {
+			_currentRenderedFPS = 0;
+		}
+
+		string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
+		DrawString(fpsString, (float)(_screenWidth - 120), 13, Colors::AntiqueWhite, 1.0f);
+	}
+
+	void Renderer::ShowLagCounter()
+	{
+		float yPos = EmulationSettings::CheckFlag(EmulationFlags::ShowFPS) ? 37.0f : 13.0f;
+		string lagCounter = MessageManager::Localize("Lag") + ": " + std::to_string(Console::GetLagCounter());
+		DrawString(lagCounter, (float)(_screenWidth - 120), yPos, Colors::AntiqueWhite, 1.0f);
+	}
+
 	void Renderer::Render()
 	{
 		bool paused = EmulationSettings::IsPaused();
@@ -458,31 +492,11 @@ namespace NES
 			if(paused) {
 				DrawPauseScreen();
 			} else if(VideoDecoder::GetInstance()->IsRunning()) {
-				//Draw FPS counter
-				if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {				
-					if(_fpsTimer.GetElapsedMS() > 1000) {
-						//Update fps every sec
-						uint32_t frameCount = VideoDecoder::GetInstance()->GetFrameCount();
-						if(frameCount - _lastFrameCount < 0) {
-							_currentFPS = 0;
-						} else {
-							_currentFPS = (int)(std::round((double)(frameCount - _lastFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
-							_currentRenderedFPS = (int)(std::round((double)(_renderedFrameCount - _lastRenderedFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
-						}
-						_lastFrameCount = frameCount;
-						_lastRenderedFrameCount = _renderedFrameCount;
-						_fpsTimer.Reset();
-					}
-
-					if(_currentFPS > 5000) {
-						_currentFPS = 0;
-					}
-					if(_currentRenderedFPS > 5000) {
-						_currentRenderedFPS = 0;
-					}
-
-					string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
-					DrawString(fpsString, (float)(_screenWidth - 120), 13, Colors::AntiqueWhite, 1.0f);
+				if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
+					ShowFpsCounter();
+				}
+				if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
+					ShowLagCounter();
 				}
 			}
 

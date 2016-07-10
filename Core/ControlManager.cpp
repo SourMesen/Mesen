@@ -183,6 +183,10 @@ uint8_t ControlManager::GetPortValue(uint8_t port)
 
 uint8_t ControlManager::ReadRAM(uint16_t addr)
 {
+	//Used for lag counter
+	//Any frame where the input is read does not count as lag
+	_isLagging = false;
+
 	switch(addr) {
 		case 0x4016: return GetPortValue(0);
 		case 0x4017: return GetPortValue(1);
@@ -261,4 +265,11 @@ void ControlManager::SetMousePosition(double x, double y)
 MousePosition ControlManager::GetMousePosition()
 {
 	return _mousePosition;
+}
+
+bool ControlManager::GetLagFlag()
+{
+	bool flag = _isLagging;
+	_isLagging = true;
+	return flag;
 }

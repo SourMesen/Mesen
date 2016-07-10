@@ -29,6 +29,8 @@ enum EmulationFlags
 	DisableGameDatabase = 0x20000,
 	AutoConfigureInput = 0x40000,
 
+	ShowLagCounter = 0x80000,
+
 	InBackground = 0x40000000,
 };
 

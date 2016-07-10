@@ -26,6 +26,7 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		static IGameBroadcaster* _gameBroadcaster;
 		static MousePosition _mousePosition;
 
+		bool _isLagging = false;
 		bool _refreshState = false;
 
 		virtual shared_ptr<BaseControlDevice> GetZapper(uint8_t port);
@@ -43,6 +44,7 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		ControlManager();
 
 		void UpdateControlDevices();
+		bool GetLagFlag();
 
 		virtual void Reset(bool softReset);
 		

@@ -240,6 +240,9 @@
       <Control ID="lblEffectiveClockRatePal">クロックレート (PAL) : </Control>
       <Control ID="lblEffectiveClockRateDendy">クロックレート (Dendy) : </Control>
 
+      <Control ID="chkShowLagCounter">ラグカウンタを表示する</Control>
+      <Control ID="btnResetLagCounter">カウンタをリセットする</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>

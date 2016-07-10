@@ -82,6 +82,9 @@ namespace NES {
 		void DrawToasts();
 		void DrawToast(shared_ptr<ToastInfo> toast, int &lastHeight);
 		void RemoveOldToasts();
+
+		void ShowFpsCounter();
+		void ShowLagCounter();
 	
 	public:
 		Renderer(HWND hWnd);

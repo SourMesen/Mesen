@@ -60,6 +60,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath, EntryPoint = "GetRomInfo")] private static extern UInt32 GetRomInfoWrapper(ref InteropRomInfo romInfo, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename = "", Int32 archiveFileIndex = -1);
 
 		[DllImport(DLLPath)] public static extern void Reset();
+		[DllImport(DLLPath)] public static extern void ResetLagCounter();
+
 		[DllImport(DLLPath)] public static extern void StartServer(UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string hostPlayerName);
 		[DllImport(DLLPath)] public static extern void StopServer();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsServerRunning();
@@ -622,6 +624,8 @@ namespace Mesen.GUI
 
 		DisableGameDatabase = 0x20000,
 		AutoConfigureInput = 0x40000,
+
+		ShowLagCounter = 0x80000,
 
 		InBackground = 0x40000000,
 	}

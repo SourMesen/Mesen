@@ -65,6 +65,9 @@
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblEffectiveClockRate = new System.Windows.Forms.Label();
 			this.lblEffectiveClockRateValue = new System.Windows.Forms.Label();
+			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkShowLagCounter = new System.Windows.Forms.CheckBox();
+			this.btnResetLagCounter = new System.Windows.Forms.Button();
 			this.tmrUpdateClockRate = new System.Windows.Forms.Timer(this.components);
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
@@ -86,11 +89,12 @@
 			((System.ComponentModel.ISupportInitialize)(this.nudExtraScanlinesAfterNmi)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudExtraScanlinesBeforeNmi)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
+			this.flowLayoutPanel7.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 268);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 299);
 			this.baseConfigPanel.Size = new System.Drawing.Size(487, 29);
 			// 
 			// tabMain
@@ -102,7 +106,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(487, 268);
+			this.tabMain.Size = new System.Drawing.Size(487, 299);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -111,7 +115,7 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(479, 242);
+			this.tpgGeneral.Size = new System.Drawing.Size(479, 273);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -129,7 +133,7 @@
 			this.tableLayoutPanel4.RowCount = 2;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(473, 236);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(473, 267);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// flowLayoutPanel6
@@ -182,7 +186,7 @@
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(479, 242);
+			this.tpgAdvanced.Size = new System.Drawing.Size(479, 273);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -204,7 +208,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 236);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 267);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// chkUseAlternativeMmc3Irq
@@ -243,7 +247,7 @@
 			this.tpgOverclocking.Location = new System.Drawing.Point(4, 22);
 			this.tpgOverclocking.Name = "tpgOverclocking";
 			this.tpgOverclocking.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgOverclocking.Size = new System.Drawing.Size(479, 242);
+			this.tpgOverclocking.Size = new System.Drawing.Size(479, 273);
 			this.tpgOverclocking.TabIndex = 2;
 			this.tpgOverclocking.Text = "Overclocking";
 			this.tpgOverclocking.UseVisualStyleBackColor = true;
@@ -259,6 +263,7 @@
 			this.tableLayoutPanel3.Controls.Add(this.grpOverclocking, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.grpPpuTiming, 0, 2);
 			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel2, 0, 3);
+			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel7, 0, 7);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -271,7 +276,7 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(473, 236);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(473, 267);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// flowLayoutPanel4
@@ -559,6 +564,39 @@
 			this.lblEffectiveClockRateValue.TabIndex = 1;
 			this.lblEffectiveClockRateValue.Text = "100%";
 			// 
+			// flowLayoutPanel7
+			// 
+			this.flowLayoutPanel7.Controls.Add(this.chkShowLagCounter);
+			this.flowLayoutPanel7.Controls.Add(this.btnResetLagCounter);
+			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 232);
+			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
+			this.flowLayoutPanel7.Size = new System.Drawing.Size(473, 35);
+			this.flowLayoutPanel7.TabIndex = 12;
+			// 
+			// chkShowLagCounter
+			// 
+			this.chkShowLagCounter.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkShowLagCounter.AutoSize = true;
+			this.chkShowLagCounter.Location = new System.Drawing.Point(3, 6);
+			this.chkShowLagCounter.Name = "chkShowLagCounter";
+			this.chkShowLagCounter.Size = new System.Drawing.Size(114, 17);
+			this.chkShowLagCounter.TabIndex = 13;
+			this.chkShowLagCounter.Text = "Show Lag Counter";
+			this.chkShowLagCounter.UseVisualStyleBackColor = true;
+			// 
+			// btnResetLagCounter
+			// 
+			this.btnResetLagCounter.AutoSize = true;
+			this.btnResetLagCounter.Location = new System.Drawing.Point(123, 3);
+			this.btnResetLagCounter.Name = "btnResetLagCounter";
+			this.btnResetLagCounter.Size = new System.Drawing.Size(85, 23);
+			this.btnResetLagCounter.TabIndex = 14;
+			this.btnResetLagCounter.Text = "Reset Counter";
+			this.btnResetLagCounter.UseVisualStyleBackColor = true;
+			this.btnResetLagCounter.Click += new System.EventHandler(this.btnResetLagCounter_Click);
+			// 
 			// tmrUpdateClockRate
 			// 
 			this.tmrUpdateClockRate.Enabled = true;
@@ -568,7 +606,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(487, 297);
+			this.ClientSize = new System.Drawing.Size(487, 328);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -608,6 +646,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.nudExtraScanlinesBeforeNmi)).EndInit();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
+			this.flowLayoutPanel7.ResumeLayout(false);
+			this.flowLayoutPanel7.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -651,5 +691,8 @@
 		private System.Windows.Forms.Label lblEffectiveClockRateDendy;
 		private System.Windows.Forms.Label lblEffectiveClockRateValueDendy;
 		private System.Windows.Forms.Label lblEffectiveClockRateValuePal;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
+		private System.Windows.Forms.CheckBox chkShowLagCounter;
+		private System.Windows.Forms.Button btnResetLagCounter;
 	}
 }

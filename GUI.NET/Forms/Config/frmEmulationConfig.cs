@@ -31,6 +31,8 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("PpuExtraScanlinesBeforeNmi", nudExtraScanlinesBeforeNmi);
 			AddBinding("PpuExtraScanlinesAfterNmi", nudExtraScanlinesAfterNmi);
+
+			AddBinding("ShowLagCounter", chkShowLagCounter);		
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
@@ -60,6 +62,11 @@ namespace Mesen.GUI.Forms.Config
 			if(string.IsNullOrWhiteSpace(nudOverclockRate.Text)) {
 				nudOverclockRate.Value = 0;
 			}
+		}
+
+		private void btnResetLagCounter_Click(object sender, EventArgs e)
+		{
+			InteropEmu.ResetLagCounter();
 		}
 	}
 }

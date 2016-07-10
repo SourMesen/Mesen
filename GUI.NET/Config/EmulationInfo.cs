@@ -25,6 +25,8 @@ namespace Mesen.GUI.Config
 		public UInt32 PpuExtraScanlinesBeforeNmi = 0;
 		public UInt32 PpuExtraScanlinesAfterNmi = 0;
 
+		public bool ShowLagCounter = false;
+
 		public UInt32 EmulationSpeed = 100;
 
 		public EmulationInfo()
@@ -40,6 +42,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, emulationInfo.UseAlternativeMmc3Irq);
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, emulationInfo.AllowInvalidInput);
 			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, emulationInfo.RemoveSpriteLimit);
+			InteropEmu.SetFlag(EmulationFlags.ShowLagCounter, emulationInfo.ShowLagCounter);
 
 			InteropEmu.SetOverclockRate(emulationInfo.OverclockRate, emulationInfo.OverclockAdjustApu);
 			InteropEmu.SetPpuNmiConfig(emulationInfo.PpuExtraScanlinesBeforeNmi, emulationInfo.PpuExtraScanlinesAfterNmi);

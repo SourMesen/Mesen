@@ -35,6 +35,7 @@ class Console
 		bool _reset = false;
 
 		atomic<bool> _resetRequested = false;
+		atomic<uint32_t> _lagCounter;
 		
 		bool _initialized = false;
 
@@ -72,6 +73,9 @@ class Console
 		static uint32_t GetCrc32();
 		static uint32_t GetPrgCrc32();
 		static NesModel GetModel();
+
+		static uint32_t GetLagCounter();
+		static void ResetLagCounter();
 
 		static bool IsRunning();
 
