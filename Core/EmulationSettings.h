@@ -140,8 +140,7 @@ struct NtscFilterSettings
 enum class ConsoleType
 {
 	Nes = 0,
-	Famicom = 1,
-	VsSystem = 2,
+	Famicom = 1
 };
 
 enum class ControllerType

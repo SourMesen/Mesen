@@ -42,6 +42,8 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 	buffer += header.GetPrgSize();
 	romData.ChrRom.insert(romData.ChrRom.end(), buffer, buffer + header.GetChrSize());
 
+	romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
+
 	stringstream crcHex;
 	crcHex << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << romCrc;
 	MessageManager::Log("PRG+CHR CRC32: 0x" + crcHex.str());

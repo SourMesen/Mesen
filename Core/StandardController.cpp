@@ -127,3 +127,13 @@ void StandardController::AddAdditionalController(shared_ptr<BaseControlDevice> c
 	}
 	_additionalController = controller;
 }
+
+uint32_t StandardController::GetInternalState()
+{
+	return _stateBuffer;
+}
+
+void StandardController::SetInternalState(uint32_t state)
+{
+	_stateBuffer = state;
+}

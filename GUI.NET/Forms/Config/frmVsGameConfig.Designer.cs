@@ -33,13 +33,17 @@
 			this.lblPpuModel = new System.Windows.Forms.Label();
 			this.cboPpuModel = new System.Windows.Forms.ComboBox();
 			this.grpDipSwitches = new System.Windows.Forms.GroupBox();
+			this.btnReset = new System.Windows.Forms.Button();
+			this.baseConfigPanel.SuspendLayout();
 			this.tlpMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
+			this.baseConfigPanel.Controls.Add(this.btnReset);
 			this.baseConfigPanel.Location = new System.Drawing.Point(0, 295);
 			this.baseConfigPanel.Size = new System.Drawing.Size(305, 29);
+			this.baseConfigPanel.Controls.SetChildIndex(this.btnReset, 0);
 			// 
 			// tlpMain
 			// 
@@ -112,6 +116,17 @@
 			this.grpDipSwitches.TabStop = false;
 			this.grpDipSwitches.Text = "DIP Switches";
 			// 
+			// btnReset
+			// 
+			this.btnReset.AutoSize = true;
+			this.btnReset.Location = new System.Drawing.Point(6, 3);
+			this.btnReset.Name = "btnReset";
+			this.btnReset.Size = new System.Drawing.Size(94, 23);
+			this.btnReset.TabIndex = 3;
+			this.btnReset.Text = "Reset to Default";
+			this.btnReset.UseVisualStyleBackColor = true;
+			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+			// 
 			// frmVsGameConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -126,6 +141,8 @@
 			this.Text = "Game Configuration";
 			this.Controls.SetChildIndex(this.tlpMain, 0);
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
+			this.baseConfigPanel.ResumeLayout(false);
+			this.baseConfigPanel.PerformLayout();
 			this.tlpMain.ResumeLayout(false);
 			this.tlpMain.PerformLayout();
 			this.ResumeLayout(false);
@@ -140,5 +157,6 @@
 		private System.Windows.Forms.GroupBox grpDipSwitches;
 		private System.Windows.Forms.ComboBox cboGame;
 		private System.Windows.Forms.Label lblGame;
+		private System.Windows.Forms.Button btnReset;
 	}
 }

@@ -114,7 +114,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsVsSystem();
 		[DllImport(DLLPath)] public static extern void VsInsertCoin(UInt32 port);
-		[DllImport(DLLPath)] public static extern void VsSetGameConfig(PpuModel model, byte dipSwitches);
+		[DllImport(DLLPath)] public static extern void VsSetGameConfig(PpuModel model, VsInputType inputType, byte dipSwitches);
 
 		[DllImport(DLLPath)] public static extern void CheatAddCustom(UInt32 address, Byte value, Int32 compareValue, [MarshalAs(UnmanagedType.I1)]bool isRelativeAddress);
 		[DllImport(DLLPath)] public static extern void CheatAddGameGenie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string code);
@@ -387,6 +387,16 @@ namespace Mesen.GUI
 			ArkanoidController = 3,
 		}
 
+		public enum VsInputType
+		{
+			Default = 0,
+			TypeA = 1,
+			TypeB = 2,
+			TypeC = 3,
+			TypeD = 4,
+			TypeE = 5
+		}
+
 		public enum PpuModel
 		{
 			Ppu2C02 = 0,
@@ -627,17 +637,20 @@ namespace Mesen.GUI
 	{
 		public IntPtr RomNamePointer;
 		public UInt32 Crc32;
+		public UInt32 PrgCrc32;
 	}
 
 	public class RomInfo
 	{
 		public string RomName;
 		public UInt32 Crc32;
+		public UInt32 PrgCrc32;
 
 		public RomInfo(InteropRomInfo romInfo)
 		{
 			this.RomName = UTF8Marshaler.GetStringFromIntPtr(romInfo.RomNamePointer);
 			this.Crc32 = romInfo.Crc32;
+			this.PrgCrc32 = romInfo.PrgCrc32;
 		}
 
 		public string GetRomName()
@@ -779,8 +792,7 @@ namespace Mesen.GUI
 	public enum ConsoleType
 	{
 		Nes = 0,
-		Famicom = 1,
-		//VsSystem = 2,
+		Famicom = 1
 	}
 
 	public enum AudioChannel

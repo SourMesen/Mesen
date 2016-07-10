@@ -53,7 +53,6 @@ private:
 	uint8_t _nametableIndexes[4];
 
 	bool _onlyChrRam = false;
-	GameSystem _gameSystem;
 	bool _hasBusConflicts = false;
 	
 	string _romFilename;
@@ -72,6 +71,7 @@ private:
 	uint32_t _chrPageNumbers[64];
 
 	uint32_t _crc32 = 0;
+	uint32_t _prgCrc32 = 0;
 
 	vector<uint8_t> _originalPrgRom;
 
@@ -79,6 +79,7 @@ protected:
 	NESHeader _nesHeader;
 	uint16_t _mapperID;
 	uint8_t _subMapperID;
+	GameSystem _gameSystem;
 
 	uint8_t* _prgRom = nullptr;
 	uint8_t* _chrRom = nullptr;
@@ -176,6 +177,7 @@ public:
 
 	GameSystem GetGameSystem();
 	uint32_t GetCrc32();
+	uint32_t GetPrgCrc32();
 	string GetRomName();
 
 	uint8_t ReadRAM(uint16_t addr);

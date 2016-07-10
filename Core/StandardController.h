@@ -26,5 +26,9 @@ public:
 	uint8_t GetPortOutput();
 	void RefreshStateBuffer();
 
+	//Used for VS System button unscrambling
+	uint32_t GetInternalState();
+	void SetInternalState(uint32_t state);
+
 	void AddAdditionalController(shared_ptr<BaseControlDevice> controller);
 };

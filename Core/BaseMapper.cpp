@@ -371,6 +371,7 @@ void BaseMapper::Initialize(RomData &romData)
 	_hasBattery = romData.HasBattery || ForceBattery();
 	_gameSystem = romData.System;
 	_crc32 = romData.Crc32;
+	_prgCrc32 = romData.PrgCrc32;
 	_hasBusConflicts = HasBusConflicts();
 
 	_saveRam = new uint8_t[_saveRamSize];
@@ -545,6 +546,11 @@ string BaseMapper::GetRomName()
 uint32_t BaseMapper::GetCrc32()
 {
 	return _crc32;
+}
+
+uint32_t BaseMapper::GetPrgCrc32()
+{
+	return _prgCrc32;
 }
 
 MirroringType BaseMapper::GetMirroringType()

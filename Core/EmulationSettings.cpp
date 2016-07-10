@@ -22,7 +22,7 @@ double EmulationSettings::_reverbStrength = 0;
 double EmulationSettings::_reverbDelay = 0;
 
 NesModel EmulationSettings::_model = NesModel::Auto;
-PpuModel EmulationSettings::_ppuModel = PpuModel::Ppu2C03;
+PpuModel EmulationSettings::_ppuModel = PpuModel::Ppu2C02;
 
 uint32_t EmulationSettings::_emulationSpeed = 100;
 uint32_t EmulationSettings::_overclockRate = 100;

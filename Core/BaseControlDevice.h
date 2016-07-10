@@ -23,6 +23,18 @@ struct ButtonState
 		return (uint8_t)A | ((uint8_t)B << 1) | ((uint8_t)Select << 2) | ((uint8_t)Start << 3) |
 				((uint8_t)Up << 4) | ((uint8_t)Down << 5) | ((uint8_t)Left << 6) | ((uint8_t)Right << 7);
 	}
+
+	void FromByte(uint8_t stateData)
+	{
+		A = (stateData & 0x01) == 0x01;
+		B = (stateData & 0x02) == 0x02;
+		Select = (stateData & 0x04) == 0x04;
+		Start = (stateData & 0x08) == 0x08;
+		Up = (stateData & 0x10) == 0x10;
+		Down = (stateData & 0x20) == 0x20;
+		Left = (stateData & 0x40) == 0x40;
+		Right = (stateData & 0x80) == 0x80;
+	}
 };
 
 class BaseControlDevice : public Snapshotable

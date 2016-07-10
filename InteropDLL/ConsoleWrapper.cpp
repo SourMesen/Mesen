@@ -49,6 +49,7 @@ namespace InteropEmu {
 	{
 		const char* RomName;
 		uint32_t Crc32;
+		uint32_t PrgCrc32;
 	};
 
 	extern "C" {
@@ -141,6 +142,7 @@ namespace InteropEmu {
 				_returnString = Console::GetRomName();
 				romInfo.RomName = _returnString.c_str();
 				romInfo.Crc32 = Console::GetCrc32();
+				romInfo.PrgCrc32 = Console::GetPrgCrc32();
 			} else {
 				RomLoader romLoader;
 				if(romLoader.LoadFile(filename, nullptr, "", archiveFileIndex)) {
@@ -149,10 +151,12 @@ namespace InteropEmu {
 					_returnString = romData.RomName;
 					romInfo.RomName = _returnString.c_str();
 					romInfo.Crc32 = romData.Crc32;
+					romInfo.PrgCrc32 = romData.PrgCrc32;
 				} else {
 					_returnString = "";
 					romInfo.RomName = _returnString.c_str();
 					romInfo.Crc32 = 0;
+					romInfo.PrgCrc32 = 0;
 				}
 			}
 		}
@@ -373,12 +377,13 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport void __stdcall VsSetGameConfig(PpuModel model, uint8_t dipSwitches)
+		DllExport void __stdcall VsSetGameConfig(PpuModel model, VsInputType inputType, uint8_t dipSwitches)
 		{
 			VsControlManager* vs = VsControlManager::GetInstance();
 			if(vs) {
 				EmulationSettings::SetPpuModel(model);
 				vs->SetDipSwitches(dipSwitches);
+				vs->SetInputType(inputType);
 			}
 		}
 	}

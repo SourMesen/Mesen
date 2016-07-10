@@ -28,8 +28,6 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 		bool _refreshState = false;
 
-		void RefreshAllPorts();
-
 		virtual shared_ptr<BaseControlDevice> GetZapper(uint8_t port);
 
 		static void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice, uint8_t port);
@@ -37,6 +35,8 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 	protected:
 		uint8_t GetPortValue(uint8_t port);
+		virtual void RefreshAllPorts();
+
 		virtual void StreamState(bool saving);
 
 	public:

@@ -244,6 +244,7 @@ struct RomData
 
 	vector<uint8_t> RawData;
 	uint32_t Crc32 = 0;
+	uint32_t PrgCrc32 = 0;
 
 	bool Error = false;
 

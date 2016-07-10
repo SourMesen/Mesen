@@ -13,20 +13,31 @@ namespace Mesen.GUI.Forms.Config
 {
 	public partial class frmVsGameConfig : BaseConfigForm
 	{
+		private class DropdownElement
+		{
+			public string Name;
+			public string ID;
+
+			public override string ToString()
+			{
+				return Name;
+			}
+		}
+
 		public frmVsGameConfig(VsConfigInfo configInfo)
 		{
 			InitializeComponent();
 
 			Entity = configInfo;
 
-			if(string.IsNullOrWhiteSpace(configInfo.GameID)) {
-				configInfo.GameID = VsGameConfig.GetGameID(InteropEmu.GetRomInfo().GetRomName());
+			if(VsGameConfig.GetGameIdByCrc(InteropEmu.GetRomInfo().PrgCrc32) != null) {
+				cboGame.Enabled = false;
 			}
 
 			AddBinding("PpuModel", cboPpuModel);
 
 			foreach(KeyValuePair<string, VsGameConfig> kvp in VsGameConfig.GetGameConfigs()) {
-				cboGame.Items.Add(kvp.Value.GameName);
+				cboGame.Items.Add(new DropdownElement { Name = kvp.Value.GameName, ID = kvp.Value.GameID });
 				if(kvp.Key == configInfo.GameID) {
 					cboGame.SelectedIndex = cboGame.Items.Count - 1;
 				}
@@ -35,7 +46,7 @@ namespace Mesen.GUI.Forms.Config
 
 		private void cboGame_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			VsGameConfig config = VsGameConfig.GetGameConfig(VsGameConfig.GetGameID(cboGame.SelectedItem.ToString()));
+			VsGameConfig config = VsGameConfig.GetGameConfig(((DropdownElement)cboGame.SelectedItem).ID);
 			UpdateDipSwitches(config, false);
 		}
 
@@ -125,7 +136,17 @@ namespace Mesen.GUI.Forms.Config
 			base.UpdateConfig();
 
 			((VsConfigInfo)Entity).DipSwitches = (byte)GetDipSwitchValue();
-			((VsConfigInfo)Entity).GameID = VsGameConfig.GetGameID(cboGame.SelectedItem.ToString());
+			((VsConfigInfo)Entity).GameID = ((DropdownElement)cboGame.SelectedItem).ID;
+		}
+
+		private void btnReset_Click(object sender, EventArgs e)
+		{
+			VsGameConfig defaultConfig = VsGameConfig.GetGameConfig(((DropdownElement)cboGame.SelectedItem).ID);
+			((VsConfigInfo)Entity).DipSwitches = defaultConfig.DefaultDipSwitches;
+			((VsConfigInfo)Entity).PpuModel = defaultConfig.PpuModel;
+			((VsConfigInfo)Entity).InputType = defaultConfig.InputType;
+			UpdateUI();
+			UpdateDipSwitches(defaultConfig, false);
 		}
 	}
 

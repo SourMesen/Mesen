@@ -163,6 +163,15 @@ uint32_t Console::GetCrc32()
 	}
 }
 
+uint32_t Console::GetPrgCrc32()
+{
+	if(Instance->_mapper) {
+		return Instance->_mapper->GetPrgCrc32();
+	} else {
+		return 0;
+	}
+}
+
 NesModel Console::GetModel()
 {
 	return Instance->_model;

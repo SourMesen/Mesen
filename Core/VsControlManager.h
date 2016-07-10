@@ -5,6 +5,17 @@
 #include "Console.h"
 #include "VsZapper.h"
 #include <assert.h>
+#include "StandardController.h"
+
+enum class VsInputType
+{
+	Default = 0,
+	TypeA = 1,
+	TypeB = 2,
+	TypeC = 3,
+	TypeD = 4,
+	TypeE = 5
+};
 
 class VsControlManager : public ControlManager
 {
@@ -15,6 +26,7 @@ private:
 	bool _serviceButton = false;
 	bool _coinInserted[2] = { };
 	int32_t _coinInsertCycle[2] = { };
+	VsInputType _inputType = VsInputType::Default;
 	
 	uint32_t _protectionCounter = 0;
 	uint32_t _protectionData[3][32] = { 
@@ -96,6 +108,11 @@ public:
 		_dipSwitches = dipSwitches;
 	}
 
+	void SetInputType(VsInputType inputType)
+	{
+		_inputType = inputType;
+	}
+
 	void SetServiceButtonState(bool pushed)
 	{
 		_serviceButton = pushed;
@@ -111,6 +128,60 @@ public:
 	uint8_t GetPrgChrSelectBit()
 	{
 		return _prgChrSelectBit;
+	}
+
+	void RemapControllerButtons()
+	{
+		ButtonState ports[2];
+		shared_ptr<StandardController> controllers[2];
+		controllers[0] = std::dynamic_pointer_cast<StandardController>(GetControlDevice(0));
+		controllers[1] = std::dynamic_pointer_cast<StandardController>(GetControlDevice(1));
+		if(controllers[0]) {
+			ports[0].FromByte(controllers[0]->GetInternalState());
+		}
+		if(controllers[1]) {
+			ports[1].FromByte(controllers[1]->GetInternalState());
+		}
+
+		if(_inputType == VsInputType::TypeA) {
+			std::swap(ports[0], ports[1]);
+
+			std::swap(ports[0].Select, ports[0].Start);
+			std::swap(ports[1].Select, ports[1].Start);
+		} else if(_inputType == VsInputType::TypeB) {
+			std::swap(ports[1].Select, ports[0].Start);
+			std::swap(ports[1].Start, ports[0].Select);
+		} else if(_inputType == VsInputType::TypeC) {
+			ports[1].Select = ports[0].Start;
+			ports[0].Select = false;
+			ports[0].Start = false;
+		} else if(_inputType == VsInputType::TypeD) {
+			std::swap(ports[1].Select, ports[0].Start);
+			std::swap(ports[1].Start, ports[0].Select);
+			ports[0].Select = !ports[0].Select;
+			ports[1].Select = !ports[1].Select;
+		} else if(_inputType == VsInputType::TypeE) {
+			std::swap(ports[0], ports[1]);
+
+			std::swap(ports[0].B, ports[1].A);
+			std::swap(ports[1].Select, ports[1].Start);
+			std::swap(ports[0].Select, ports[0].Start);
+		}
+
+		if(controllers[0]) {
+			controllers[0]->SetInternalState((controllers[0]->GetInternalState() & ~0xFF) | ports[0].ToByte());
+		}
+		if(controllers[1]) {
+			controllers[1]->SetInternalState((controllers[1]->GetInternalState() & ~0xFF) | ports[1].ToByte());
+		}
+	}
+
+	void RefreshAllPorts()
+	{
+		ControlManager::RefreshAllPorts();
+		if(_inputType != VsInputType::Default) {
+			RemapControllerButtons();
+		}
 	}
 
 	uint8_t ReadRAM(uint16_t addr)
