@@ -97,7 +97,7 @@ PPUDebugState PPU::GetState()
 
 void PPU::UpdateVideoRamAddr()
 {
-	if(_scanline >= 239 || !IsRenderingEnabled()) {
+	if(_scanline >= 240 || !IsRenderingEnabled()) {
 		_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
 		
 		//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
@@ -170,7 +170,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 			break;
 
 		case PPURegisters::SpriteData:
-			if(_scanline <= 240 && IsRenderingEnabled() && (_cycle >= 257 || _cycle <= 64)) {
+			if(_scanline <= 239 && IsRenderingEnabled() && (_cycle >= 257 || _cycle <= 64)) {
 				if(_cycle >= 257 && _cycle <= 320) {
 					//Set OAM copy buffer to its proper value.  This is done here for performance.
 					//It's faster to only do this here when it's needed, rather than splitting LoadSpriteTileInfo() into an 8-step process
