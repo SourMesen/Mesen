@@ -71,6 +71,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		_memoryManager->RegisterIODevice(_controlManager.get());
 		_memoryManager->RegisterIODevice(_mapper.get());
 
+		_model = NesModel::Auto;
 		UpdateNesModel(false);
 
 		_initialized = true;
@@ -85,7 +86,10 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		VideoDecoder::GetInstance()->StartThread();
 	
 		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(romFilename));
-		MessageManager::DisplayMessage("GameLoaded", FolderUtilities::GetFilename(_mapper->GetRomName(), false));
+
+		string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
+		string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
+		MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(_mapper->GetRomName(), false));
 		if(EmulationSettings::GetOverclockRate() != 100) {
 			MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
 		}
@@ -258,9 +262,7 @@ void Console::Run()
 	_runLock.Acquire();
 	_stopLock.Acquire();
 
-	_model = NesModel::Auto;
-
-	targetTime = UpdateNesModel(false);
+	targetTime = GetFrameDelay();
 
 	VideoDecoder::GetInstance()->StartThread();
 		
@@ -314,7 +316,9 @@ void Console::Run()
 
 			//Get next target time, and adjust based on whether we are ahead or behind
 			double timeLag = EmulationSettings::GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
-			targetTime = UpdateNesModel(true);
+			UpdateNesModel(true);
+			targetTime = GetFrameDelay();
+
 			clockTimer.Reset();
 			targetTime -= timeLag;
 			if(targetTime < 0) {
@@ -349,7 +353,7 @@ bool Console::IsRunning()
 	return !Instance->_stopLock.IsFree();
 }
 
-double Console::UpdateNesModel(bool sendNotification)
+void Console::UpdateNesModel(bool sendNotification)
 {
 	bool configChanged = false;
 	if(EmulationSettings::NeedControllerUpdate()) {
@@ -358,7 +362,6 @@ double Console::UpdateNesModel(bool sendNotification)
 	}
 
 	NesModel model = EmulationSettings::GetNesModel();
-	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
 	if(model == NesModel::Auto) {
 		switch(_mapper->GetGameSystem()) {
 			case GameSystem::NesPal: model = NesModel::PAL; break;
@@ -369,20 +372,10 @@ double Console::UpdateNesModel(bool sendNotification)
 	if(_model != model) {
 		_model = model;
 		configChanged = true;
-	}
-	
-	double frameDelay;
-	if(emulationSpeed == 0) {
-		frameDelay = 0;
-	} else {
-		//60.1fps (NTSC), 50.01fps (PAL/Dendy)
-		switch(model) {
-			default:
-			case NesModel::NTSC: frameDelay = 16.63926405550947; break;
-			case NesModel::PAL:
-			case NesModel::Dendy: frameDelay = 19.99720920217466; break;
+
+		if(sendNotification) {
+			MessageManager::DisplayMessage("Region", model == NesModel::PAL ? "PAL" : (model == NesModel::Dendy ? "Dendy" : "NTSC"));
 		}
-		frameDelay /= (double)emulationSpeed / 100.0;
 	}
 
 	_mapper->SetNesModel(model);
@@ -391,6 +384,24 @@ double Console::UpdateNesModel(bool sendNotification)
 
 	if(configChanged && sendNotification) {
 		MessageManager::SendNotification(ConsoleNotificationType::ConfigChanged);
+	}
+}
+
+double Console::GetFrameDelay()
+{
+	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
+	double frameDelay;
+	if(emulationSpeed == 0) {
+		frameDelay = 0;
+	} else {
+		//60.1fps (NTSC), 50.01fps (PAL/Dendy)
+		switch(_model) {
+			default:
+			case NesModel::NTSC: frameDelay = 16.63926405550947; break;
+			case NesModel::PAL:
+			case NesModel::Dendy: frameDelay = 19.99720920217466; break;
+		}
+		frameDelay /= (double)emulationSpeed / 100.0;
 	}
 
 	return frameDelay;

@@ -41,7 +41,8 @@ class Console
 
 		void ResetComponents(bool softReset);
 		void Initialize(string filename, stringstream *filestream = nullptr, string ipsFilename = "", int32_t archiveFileIndex = -1);
-		double UpdateNesModel(bool sendNotification);
+		void UpdateNesModel(bool sendNotification);
+		double GetFrameDelay();
 
 	public:
 		Console();
