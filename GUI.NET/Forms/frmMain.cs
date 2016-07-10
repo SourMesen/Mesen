@@ -136,6 +136,12 @@ namespace Mesen.GUI.Forms
 					ConfigManager.Config.Cheats = new List<CheatInfo>();
 				}
 
+				if(oldVersion.Major == 0 && oldVersion.Minor <= 3 && (oldVersion.Build == 0 || oldVersion.Minor <= 2)) {
+					//Version 0.3.1+
+					//Remove all old VS system config to make sure the new defaults are used
+					ConfigManager.Config.VsConfig = new List<VsConfigInfo>();
+				}
+
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();
 				ConfigManager.ApplyChanges();
 
