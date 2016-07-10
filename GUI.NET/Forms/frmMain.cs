@@ -1018,7 +1018,7 @@ namespace Mesen.GUI.Forms
 			} else if(sender == mnuRegionDendy) {
 				ConfigManager.Config.Region = NesModel.Dendy;
 			}
-			ConfigManager.Config.ApplyConfig();
+			InteropEmu.SetNesModel(ConfigManager.Config.Region);
 		}
 
 		private void mnuRunAllTests_Click(object sender, EventArgs e)
