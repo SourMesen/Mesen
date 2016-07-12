@@ -14,6 +14,8 @@ class MemoryManager: public Snapshotable
 		static const int VRAMSize = 0x4000;
 		static const int NameTableScreenSize = 0x400;
 
+		static uint8_t _lastReadValue;
+
 		shared_ptr<BaseMapper> _mapper;
 
 		uint8_t *_internalRAM;
@@ -51,5 +53,7 @@ class MemoryManager: public Snapshotable
 		void WriteVRAM(uint16_t addr, uint8_t value);
 
 		uint32_t ToAbsoluteChrAddress(uint16_t vramAddr);
+
+		static uint8_t GetOpenBus(uint8_t mask = 0xFF);
 };
 

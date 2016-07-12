@@ -307,8 +307,7 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 		}
 	}
 
-	//Return open bus
-	return (addr & 0xFF00) >> 8;
+	return MemoryManager::GetOpenBus();
 }
 
 void FDS::StreamState(bool saving)

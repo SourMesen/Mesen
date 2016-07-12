@@ -177,7 +177,7 @@ uint8_t ControlManager::GetPortValue(uint8_t port)
 	//"In the NES and Famicom, the top three (or five) bits are not driven, and so retain the bits of the previous byte on the bus. 
 	//Usually this is the most significant byte of the address of the controller port - 0x40.
 	//Paperboy relies on this behavior and requires that reads from the controller ports return exactly $40 or $41 as appropriate."
-	uint8_t value = 0x40;
+	uint8_t value = MemoryManager::GetOpenBus(0xE0);
 	if(device) {
 		value |= device->GetPortOutput();
 	}

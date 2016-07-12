@@ -289,8 +289,7 @@ uint8_t NsfMapper::ReadRegister(uint16_t addr)
 		}
 	}
 
-	//Open bus
-	return (addr >> 8);
+	return MemoryManager::GetOpenBus();
 }
 
 void NsfMapper::WriteRegister(uint16_t addr, uint8_t value)

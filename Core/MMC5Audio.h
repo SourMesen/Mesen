@@ -111,8 +111,7 @@ public:
 				return status;
 		}
 
-		//Open bus
-		return (addr >> 8);
+		return MemoryManager::GetOpenBus();
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

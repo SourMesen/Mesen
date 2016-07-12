@@ -510,7 +510,6 @@ protected:
 			case 0x5206: return (_multiplierValue1*_multiplierValue2) >> 8;
 		}
 
-		//Open bus
-		return (addr >> 8);
+		return MemoryManager::GetOpenBus();
 	}
 };

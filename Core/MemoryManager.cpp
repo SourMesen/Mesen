@@ -4,9 +4,13 @@
 #include "Debugger.h"
 #include "CheatManager.h"
 
+//Used for open bus
+uint8_t MemoryManager::_lastReadValue = 0;
+
 MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 {
 	_mapper = mapper;
+	_lastReadValue = 0;
 
 	_internalRAM = new uint8_t[InternalRAMSize];
 	for(int i = 0; i < 2; i++) {
@@ -49,7 +53,7 @@ uint8_t MemoryManager::ReadRegister(uint16_t addr)
 	if(_ramReadHandlers[addr]) {
 		return _ramReadHandlers[addr]->ReadRAM(addr);
 	} else {
-		return (addr & 0xFF00) >> 8;
+		return GetOpenBus();
 	}
 }
 
@@ -94,6 +98,7 @@ uint8_t MemoryManager::DebugRead(uint16_t addr)
 	}
 
 	CheatManager::ApplyRamCodes(addr, value);
+
 	return value;
 }
 
@@ -114,6 +119,8 @@ uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 	CheatManager::ApplyRamCodes(addr, value);
 
 	Debugger::ProcessRamOperation(operationType, addr, value);
+
+	_lastReadValue = value;
 
 	return value;
 }
@@ -175,4 +182,9 @@ void MemoryManager::StreamState(bool saving)
 	ArrayInfo<uint8_t> nameTable0Ram = { _nametableRAM[0], MemoryManager::NameTableScreenSize };
 	ArrayInfo<uint8_t> nameTable1Ram = { _nametableRAM[1], MemoryManager::NameTableScreenSize };
 	Stream(internalRam, nameTable0Ram, nameTable1Ram);
+}
+
+uint8_t MemoryManager::GetOpenBus(uint8_t mask)
+{
+	return _lastReadValue & mask;
 }
