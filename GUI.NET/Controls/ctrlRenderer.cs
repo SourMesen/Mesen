@@ -81,6 +81,7 @@ namespace Mesen.GUI.Controls
 		{
 			tmrMouse.Stop();
 			ShowMouse();
+			InteropEmu.SetMousePosition(-1, -1);
 		}
 	}
 }

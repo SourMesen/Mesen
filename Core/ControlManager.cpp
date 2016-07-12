@@ -10,7 +10,7 @@
 unique_ptr<IKeyManager> ControlManager::_keyManager = nullptr;
 shared_ptr<BaseControlDevice> ControlManager::_controlDevices[2] = { nullptr, nullptr };
 IGameBroadcaster* ControlManager::_gameBroadcaster = nullptr;
-MousePosition ControlManager::_mousePosition = { 0, 0 };
+MousePosition ControlManager::_mousePosition = { -1, -1 };
 
 ControlManager::ControlManager()
 {
@@ -261,9 +261,14 @@ void ControlManager::StreamState(bool saving)
 
 void ControlManager::SetMousePosition(double x, double y)
 {
-	OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
-	_mousePosition.X = (int32_t)(x * (PPU::ScreenWidth - overscan.Left - overscan.Right) + overscan.Left);
-	_mousePosition.Y = (int32_t)(y * (PPU::ScreenHeight - overscan.Top - overscan.Bottom) + overscan.Top);
+	if(x < 0 || y < 0) {
+		_mousePosition.X = -1;
+		_mousePosition.Y = -1;
+	} else {
+		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+		_mousePosition.X = (int32_t)(x * (PPU::ScreenWidth - overscan.Left - overscan.Right) + overscan.Left);
+		_mousePosition.Y = (int32_t)(y * (PPU::ScreenHeight - overscan.Top - overscan.Bottom) + overscan.Top);
+	}
 }
 
 MousePosition ControlManager::GetMousePosition()
