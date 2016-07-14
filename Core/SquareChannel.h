@@ -47,7 +47,7 @@ private:
 		_reloadSweep = true;
 	}
 
-	void UpdateTargetPeriod(bool setPeriod)
+	void UpdateTargetPeriod()
 	{
 		uint16_t shiftResult = (_realPeriod >> _sweepShift);
 		if(_sweepNegate) {
@@ -59,10 +59,13 @@ private:
 		} else {
 			_sweepTargetPeriod = _realPeriod + shiftResult;
 		}
-		if(setPeriod && _sweepShift > 0 && _realPeriod >= 8 && _sweepTargetPeriod <= 0x7FF) {
-			_realPeriod = _sweepTargetPeriod;
-			_period = (_realPeriod * 2) + 1;
-		}
+	}
+
+	void SetPeriod(uint16_t newPeriod)
+	{
+		_realPeriod = newPeriod;
+		_period = (_realPeriod * 2) + 1;
+		UpdateTargetPeriod();
 	}
 
 protected:
@@ -136,17 +139,13 @@ public:
 				break;
 
 			case 2:		//4002 & 4006
-				_realPeriod &= ~0x00FF;
-				_realPeriod |= value;
-				_period = (_realPeriod * 2) + 1;
+				SetPeriod((_realPeriod & 0x0700) | value);
 				break;
 
 			case 3:		//4003 & 4007
 				LoadLengthCounter(value >> 3);
 
-				_realPeriod &= ~0x0700;
-				_realPeriod |= (value & 0x07) << 8;
-				_period = (_realPeriod * 2) + 1;
+				SetPeriod((_realPeriod & 0xFF) | ((value & 0x07) << 8));
 
 				//The sequencer is restarted at the first value of the current sequence.
 				_timer = 0;
@@ -160,26 +159,17 @@ public:
 
 	void TickSweep()
 	{
-		if(_reloadSweep) {
-			if(_sweepDivider == 0 && _sweepEnabled) {
-				//If the divider's counter was zero before the reload and the sweep is enabled, the pulse's period is also adjusted
-				UpdateTargetPeriod(true);
+		_sweepDivider--;
+		if(_sweepDivider == 0) {
+			if(_sweepShift > 0 && _sweepEnabled && _realPeriod >= 8 && _sweepTargetPeriod <= 0x7FF) {
+				SetPeriod(_sweepTargetPeriod);
 			}
 			_sweepDivider = _sweepPeriod;
-			_reloadSweep = false;
-		} else {
-			if(_sweepDivider > 0) {
-				_sweepDivider--;
-			} else if(_sweepEnabled) {
-				UpdateTargetPeriod(true);
-				_sweepDivider = _sweepPeriod;
-			}
 		}
-	}
 
-	void Run(uint32_t targetCycle)
-	{
-		UpdateTargetPeriod(false);
-		ApuLengthCounter::Run(targetCycle);
+		if(_reloadSweep) {
+			_sweepDivider = _sweepPeriod;
+			_reloadSweep = false;
+		}
 	}
 };
