@@ -99,10 +99,14 @@ namespace Mesen.GUI.Forms
 			this.mnuScale2xFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScale3xFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScale4xFilter = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnu2xSaiFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSuper2xSaiFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSuperEagleFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuPrescale2xFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPrescale3xFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPrescale4xFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem19 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuBilinearInterpolation = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRegion = new System.Windows.Forms.ToolStripMenuItem();
@@ -159,10 +163,8 @@ namespace Mesen.GUI.Forms
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPrescale3xFilter = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPrescale2xFilter = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPrescale4xFilter = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
 			this.panelRenderer.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -443,7 +445,7 @@ namespace Mesen.GUI.Forms
             this.mnuShowFPS});
 			this.mnuEmulationSpeed.Image = global::Mesen.GUI.Properties.Resources.Speed;
 			this.mnuEmulationSpeed.Name = "mnuEmulationSpeed";
-			this.mnuEmulationSpeed.Size = new System.Drawing.Size(152, 22);
+			this.mnuEmulationSpeed.Size = new System.Drawing.Size(135, 22);
 			this.mnuEmulationSpeed.Text = "Speed";
 			// 
 			// mnuEmuSpeedNormal
@@ -544,7 +546,7 @@ namespace Mesen.GUI.Forms
             this.mnuFullscreen});
 			this.mnuVideoScale.Image = global::Mesen.GUI.Properties.Resources.Fullscreen;
 			this.mnuVideoScale.Name = "mnuVideoScale";
-			this.mnuVideoScale.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoScale.Size = new System.Drawing.Size(135, 22);
 			this.mnuVideoScale.Text = "Video Size";
 			// 
 			// mnuScale1x
@@ -652,7 +654,7 @@ namespace Mesen.GUI.Forms
             this.toolStripMenuItem19,
             this.mnuBilinearInterpolation});
 			this.mnuVideoFilter.Name = "mnuVideoFilter";
-			this.mnuVideoFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoFilter.Size = new System.Drawing.Size(135, 22);
 			this.mnuVideoFilter.Text = "Video Filter";
 			// 
 			// mnuNoneFilter
@@ -761,10 +763,10 @@ namespace Mesen.GUI.Forms
 			this.mnuScale4xFilter.Text = "Scale 4x";
 			this.mnuScale4xFilter.Click += new System.EventHandler(this.mnuScale4xFilter_Click);
 			// 
-			// toolStripMenuItem18
+			// toolStripMenuItem23
 			// 
-			this.toolStripMenuItem18.Name = "toolStripMenuItem18";
-			this.toolStripMenuItem18.Size = new System.Drawing.Size(203, 6);
+			this.toolStripMenuItem23.Name = "toolStripMenuItem23";
+			this.toolStripMenuItem23.Size = new System.Drawing.Size(203, 6);
 			// 
 			// mnu2xSaiFilter
 			// 
@@ -786,6 +788,32 @@ namespace Mesen.GUI.Forms
 			this.mnuSuperEagleFilter.Size = new System.Drawing.Size(206, 22);
 			this.mnuSuperEagleFilter.Text = "SuperEagle";
 			this.mnuSuperEagleFilter.Click += new System.EventHandler(this.mnuSuperEagleFilter_Click);
+			// 
+			// toolStripMenuItem18
+			// 
+			this.toolStripMenuItem18.Name = "toolStripMenuItem18";
+			this.toolStripMenuItem18.Size = new System.Drawing.Size(203, 6);
+			// 
+			// mnuPrescale2xFilter
+			// 
+			this.mnuPrescale2xFilter.Name = "mnuPrescale2xFilter";
+			this.mnuPrescale2xFilter.Size = new System.Drawing.Size(206, 22);
+			this.mnuPrescale2xFilter.Text = "Prescale 2x";
+			this.mnuPrescale2xFilter.Click += new System.EventHandler(this.mnuPrescale2xFilter_Click);
+			// 
+			// mnuPrescale3xFilter
+			// 
+			this.mnuPrescale3xFilter.Name = "mnuPrescale3xFilter";
+			this.mnuPrescale3xFilter.Size = new System.Drawing.Size(206, 22);
+			this.mnuPrescale3xFilter.Text = "Prescale 3x";
+			this.mnuPrescale3xFilter.Click += new System.EventHandler(this.mnuPrescale3xFilter_Click);
+			// 
+			// mnuPrescale4xFilter
+			// 
+			this.mnuPrescale4xFilter.Name = "mnuPrescale4xFilter";
+			this.mnuPrescale4xFilter.Size = new System.Drawing.Size(206, 22);
+			this.mnuPrescale4xFilter.Text = "Prescale 4x";
+			this.mnuPrescale4xFilter.Click += new System.EventHandler(this.mnuPrescale4xFilter_Click);
 			// 
 			// toolStripMenuItem19
 			// 
@@ -809,7 +837,7 @@ namespace Mesen.GUI.Forms
             this.mnuRegionDendy});
 			this.mnuRegion.Image = global::Mesen.GUI.Properties.Resources.Globe;
 			this.mnuRegion.Name = "mnuRegion";
-			this.mnuRegion.Size = new System.Drawing.Size(152, 22);
+			this.mnuRegion.Size = new System.Drawing.Size(135, 22);
 			this.mnuRegion.Text = "Region";
 			// 
 			// mnuRegionAuto
@@ -843,13 +871,13 @@ namespace Mesen.GUI.Forms
 			// toolStripMenuItem10
 			// 
 			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-			this.toolStripMenuItem10.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(132, 6);
 			// 
 			// mnuAudioConfig
 			// 
 			this.mnuAudioConfig.Image = global::Mesen.GUI.Properties.Resources.Audio;
 			this.mnuAudioConfig.Name = "mnuAudioConfig";
-			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuAudioConfig.Size = new System.Drawing.Size(135, 22);
 			this.mnuAudioConfig.Text = "Audio";
 			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
 			// 
@@ -857,7 +885,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuInput.Image = global::Mesen.GUI.Properties.Resources.Controller;
 			this.mnuInput.Name = "mnuInput";
-			this.mnuInput.Size = new System.Drawing.Size(152, 22);
+			this.mnuInput.Size = new System.Drawing.Size(135, 22);
 			this.mnuInput.Text = "Input";
 			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
 			// 
@@ -865,7 +893,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuVideoConfig.Image = global::Mesen.GUI.Properties.Resources.Video;
 			this.mnuVideoConfig.Name = "mnuVideoConfig";
-			this.mnuVideoConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoConfig.Size = new System.Drawing.Size(135, 22);
 			this.mnuVideoConfig.Text = "Video";
 			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
 			// 
@@ -873,20 +901,20 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuEmulationConfig.Image = global::Mesen.GUI.Properties.Resources.DipSwitches;
 			this.mnuEmulationConfig.Name = "mnuEmulationConfig";
-			this.mnuEmulationConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuEmulationConfig.Size = new System.Drawing.Size(135, 22);
 			this.mnuEmulationConfig.Text = "Emulation";
 			this.mnuEmulationConfig.Click += new System.EventHandler(this.mnuEmulationConfig_Click);
 			// 
 			// toolStripMenuItem11
 			// 
 			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-			this.toolStripMenuItem11.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem11.Size = new System.Drawing.Size(132, 6);
 			// 
 			// mnuPreferences
 			// 
 			this.mnuPreferences.Image = global::Mesen.GUI.Properties.Resources.Cog;
 			this.mnuPreferences.Name = "mnuPreferences";
-			this.mnuPreferences.Size = new System.Drawing.Size(152, 22);
+			this.mnuPreferences.Size = new System.Drawing.Size(135, 22);
 			this.mnuPreferences.Text = "Preferences";
 			this.mnuPreferences.Click += new System.EventHandler(this.mnuPreferences_Click);
 			// 
@@ -1203,6 +1231,8 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuCheckForUpdates,
+            this.toolStripMenuItem20,
+            this.mnuReportBug,
             this.toolStripMenuItem5,
             this.mnuAbout});
 			this.mnuHelp.Name = "mnuHelp";
@@ -1230,31 +1260,17 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
-			// mnuPrescale3xFilter
+			// mnuReportBug
 			// 
-			this.mnuPrescale3xFilter.Name = "mnuPrescale3xFilter";
-			this.mnuPrescale3xFilter.Size = new System.Drawing.Size(206, 22);
-			this.mnuPrescale3xFilter.Text = "Prescale 3x";
-			this.mnuPrescale3xFilter.Click += new System.EventHandler(this.mnuPrescale3xFilter_Click);
+			this.mnuReportBug.Name = "mnuReportBug";
+			this.mnuReportBug.Size = new System.Drawing.Size(170, 22);
+			this.mnuReportBug.Text = "Report a bug";
+			this.mnuReportBug.Click += new System.EventHandler(this.mnuReportBug_Click);
 			// 
-			// mnuPrescale2xFilter
+			// toolStripMenuItem20
 			// 
-			this.mnuPrescale2xFilter.Name = "mnuPrescale2xFilter";
-			this.mnuPrescale2xFilter.Size = new System.Drawing.Size(206, 22);
-			this.mnuPrescale2xFilter.Text = "Prescale 2x";
-			this.mnuPrescale2xFilter.Click += new System.EventHandler(this.mnuPrescale2xFilter_Click);
-			// 
-			// mnuPrescale4xFilter
-			// 
-			this.mnuPrescale4xFilter.Name = "mnuPrescale4xFilter";
-			this.mnuPrescale4xFilter.Size = new System.Drawing.Size(206, 22);
-			this.mnuPrescale4xFilter.Text = "Prescale 4x";
-			this.mnuPrescale4xFilter.Click += new System.EventHandler(this.mnuPrescale4xFilter_Click);
-			// 
-			// toolStripMenuItem23
-			// 
-			this.toolStripMenuItem23.Name = "toolStripMenuItem23";
-			this.toolStripMenuItem23.Size = new System.Drawing.Size(203, 6);
+			this.toolStripMenuItem20.Name = "toolStripMenuItem20";
+			this.toolStripMenuItem20.Size = new System.Drawing.Size(167, 6);
 			// 
 			// frmMain
 			// 
@@ -1414,6 +1430,8 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem23;
 		private System.Windows.Forms.ToolStripMenuItem mnuPrescale2xFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuPrescale3xFilter;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem20;
+		private System.Windows.Forms.ToolStripMenuItem mnuReportBug;
 	}
 }
 

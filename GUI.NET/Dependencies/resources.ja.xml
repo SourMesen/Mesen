@@ -86,6 +86,7 @@
       <Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
       <Control ID="mnuHelp">ヘルプ</Control>
       <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
+      <Control ID="mnuReportBug">バグレポート</Control>
       <Control ID="mnuAbout">Mesenとは</Control>
 
       <!-- Archive Load Message -->

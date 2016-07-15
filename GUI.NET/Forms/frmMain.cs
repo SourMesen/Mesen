@@ -1376,6 +1376,11 @@ namespace Mesen.GUI.Forms
 		{
 			CheckForUpdates(true);
 		}
+		
+		private void mnuReportBug_Click(object sender, EventArgs e)
+		{
+			Process.Start("http://www.mesen.ca/ReportBug.php");
+		}
 
 		private void InitializeVsSystemMenu()
 		{
