@@ -1,28 +1,37 @@
 #include "stdafx.h"
-#include "GamePad.h"
+#include "XInputManager.h"
 
-GamePad::GamePad()
+XInputManager::XInputManager()
 {
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
 		_gamePadStates.push_back(shared_ptr<XINPUT_STATE>(new XINPUT_STATE()));
 	}
 }
 
-void GamePad::RefreshState()
+void XInputManager::RefreshState()
 {
 	for(DWORD i = 0; i < XUSER_MAX_COUNT; i++) {
 		if(_gamePadStates[i] != nullptr) {
 			ZeroMemory(_gamePadStates[i].get(), sizeof(XINPUT_STATE));
 			if(XInputGetState(i, _gamePadStates[i].get()) != ERROR_SUCCESS) {
 				//XInputGetState is incredibly slow when no controller is plugged in
-				//TODO: Periodically detect if a controller has been plugged in to allow controllers to be plugged in after the emu is started
 				_gamePadStates[i] = nullptr;
 			}
 		}
 	}
 }
 
-bool GamePad::IsPressed(uint8_t gamepadPort, uint8_t button)
+void XInputManager::UpdateDeviceList()
+{
+	//Periodically detect if a controller has been plugged in to allow controllers to be plugged in after the emu is started
+	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
+		if(_gamePadStates[i] == nullptr) {
+			_gamePadStates[i] = shared_ptr<XINPUT_STATE>(new XINPUT_STATE());
+		}
+	}
+}
+
+bool XInputManager::IsPressed(uint8_t gamepadPort, uint8_t button)
 {
 	if(_gamePadStates[gamepadPort] != nullptr) {
 		XINPUT_GAMEPAD &gamepad = _gamePadStates[gamepadPort]->Gamepad;

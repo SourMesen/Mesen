@@ -13,6 +13,7 @@ class IKeyManager
 {
 public:
 	virtual void RefreshState() = 0;
+	virtual void UpdateDevices() = 0;
 	virtual bool IsMouseButtonPressed(MouseButton button) = 0;
 	virtual bool IsKeyPressed(uint32_t keyCode) = 0;
 	virtual uint32_t GetPressedKey() = 0;

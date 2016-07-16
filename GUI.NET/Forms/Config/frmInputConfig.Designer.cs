@@ -232,7 +232,7 @@
 			this.btnSetupP1.AutoSize = true;
 			this.btnSetupP1.Location = new System.Drawing.Point(282, 55);
 			this.btnSetupP1.Name = "btnSetupP1";
-			this.btnSetupP1.Size = new System.Drawing.Size(45, 23);
+			this.btnSetupP1.Size = new System.Drawing.Size(56, 23);
 			this.btnSetupP1.TabIndex = 9;
 			this.btnSetupP1.Text = "Setup";
 			this.btnSetupP1.UseVisualStyleBackColor = true;
@@ -243,7 +243,7 @@
 			this.btnSetupP2.AutoSize = true;
 			this.btnSetupP2.Location = new System.Drawing.Point(282, 84);
 			this.btnSetupP2.Name = "btnSetupP2";
-			this.btnSetupP2.Size = new System.Drawing.Size(45, 23);
+			this.btnSetupP2.Size = new System.Drawing.Size(56, 23);
 			this.btnSetupP2.TabIndex = 10;
 			this.btnSetupP2.Text = "Setup";
 			this.btnSetupP2.UseVisualStyleBackColor = true;

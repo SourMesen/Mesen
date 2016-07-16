@@ -296,6 +296,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DirectInputManager.h" />
     <ClInclude Include="DirectXTK\Audio.h" />
     <ClInclude Include="DirectXTK\CommonStates.h" />
     <ClInclude Include="DirectXTK\DDSTextureLoader.h" />
@@ -311,7 +312,7 @@
     <ClInclude Include="DirectXTK\VertexTypes.h" />
     <ClInclude Include="DirectXTK\WICTextureLoader.h" />
     <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h" />
-    <ClInclude Include="GamePad.h" />
+    <ClInclude Include="XInputManager.h" />
     <ClInclude Include="WindowsKeyManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SoundManager.h" />
@@ -319,7 +320,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GamePad.cpp" />
+    <ClCompile Include="DirectInputManager.cpp" />
+    <ClCompile Include="XInputManager.cpp" />
     <ClCompile Include="WindowsKeyManager.cpp">
       <DeploymentContent>false</DeploymentContent>
     </ClCompile>

@@ -213,6 +213,9 @@ void ControlManager::WriteRAM(uint16_t addr, uint8_t value)
 
 void ControlManager::Reset(bool softReset)
 {
+	if(_keyManager != nullptr) {
+		_keyManager->UpdateDevices();
+	}
 }
 
 void ControlManager::StreamState(bool saving)

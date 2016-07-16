@@ -15,6 +15,7 @@ namespace Mesen.GUI.Forms.Config
 		public frmGetKey()
 		{
 			InitializeComponent();
+			InteropEmu.UpdateInputDevices();
 		}
 
 		public string BindedKey { get; set; }

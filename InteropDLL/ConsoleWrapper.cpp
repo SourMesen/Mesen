@@ -21,6 +21,7 @@
 
 NES::Renderer *_renderer = nullptr;
 SoundManager *_soundManager = nullptr;
+IKeyManager *_keyManager = nullptr;
 HWND _windowHandle = nullptr;
 HWND _viewerHandle = nullptr;
 string _returnString;
@@ -70,8 +71,9 @@ namespace InteropEmu {
 
 				_renderer = new NES::Renderer(_viewerHandle);
 				_soundManager = new SoundManager(_windowHandle);
+				_keyManager = new WindowsKeyManager(_windowHandle);
 
-				ControlManager::RegisterKeyManager(new WindowsKeyManager(_windowHandle));
+				ControlManager::RegisterKeyManager(_keyManager);
 			}
 		}
 
@@ -105,6 +107,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetMousePosition(double x, double y) { ControlManager::SetMousePosition(x, y); }
 
+		DllExport void __stdcall UpdateInputDevices() { _keyManager->UpdateDevices(); }
 		DllExport uint32_t __stdcall GetPressedKey() { return ControlManager::GetPressedKey(); }
 		DllExport const char* __stdcall GetKeyName(uint32_t keyCode) 
 		{

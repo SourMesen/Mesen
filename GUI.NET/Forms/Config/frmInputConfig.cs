@@ -17,6 +17,8 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InitializeComponent();
 
+			InteropEmu.UpdateInputDevices();
+
 			Entity = ConfigManager.Config.InputInfo;
 
 			if(ConfigManager.Config.InputInfo.AutoConfigureInput) {

@@ -3,14 +3,15 @@
 #include "stdafx.h"
 #include <Xinput.h>
 
-class GamePad
+class XInputManager
 {
 	private:
 		vector<shared_ptr<XINPUT_STATE>> _gamePadStates;
 
 	public:
-		GamePad();
+		XInputManager();
 
+		void UpdateDeviceList();
 		void RefreshState();
 		bool IsPressed(uint8_t gamepadPort, uint8_t button);
 };

@@ -46,6 +46,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern ExpansionPortDevice GetExpansionDevice();
 		[DllImport(DLLPath)] public static extern ConsoleType GetConsoleType();
 		
+		[DllImport(DLLPath)] public static extern void UpdateInputDevices();
 		[DllImport(DLLPath)] public static extern UInt32 GetPressedKey();
 		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string keyName);
 		[DllImport(DLLPath, EntryPoint="GetKeyName")] private static extern IntPtr GetKeyNameWrapper(UInt32 key);

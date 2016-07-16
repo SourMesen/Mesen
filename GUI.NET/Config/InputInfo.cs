@@ -42,6 +42,7 @@ namespace Mesen.GUI.Config
 					TurboA = "Z";
 					TurboB = "X";
 				} else if(keySetIndex == 1) {
+					//XInput Default (Xbox controllers)
 					A = "Pad1 A";
 					B = "Pad1 X";
 					Select = "Pad1 Back";
@@ -53,6 +54,19 @@ namespace Mesen.GUI.Config
 
 					TurboA = "Pad1 B";
 					TurboB = "Pad1 Y";
+				} else if(keySetIndex == 2) {
+					//DirectInput Default (Used PS4 controller as a default)
+					A = "Joy1 But2";
+					B = "Joy1 But1";
+					Select = "Joy1 But9";
+					Start = "Joy1 But10";
+					Up = "Joy1 DPad Up";
+					Down = "Joy1 DPad Down";
+					Left = "Joy1 DPad Left";
+					Right = "Joy1 DPad Right";
+
+					TurboA = "Joy1 But3";
+					TurboB = "Joy1 But4";
 				}
 			} else if(controllerIndex == 1) {
 				if(keySetIndex == 0) {
@@ -68,6 +82,7 @@ namespace Mesen.GUI.Config
 					TurboA = "B";
 					TurboB = "N";
 				} else if(keySetIndex == 1) {
+					//XInput Default (Xbox controllers)
 					A = "Pad2 A";
 					B = "Pad2 X";
 					Select = "Pad2 Back";
@@ -79,6 +94,19 @@ namespace Mesen.GUI.Config
 
 					TurboA = "Pad2 B";
 					TurboB = "Pad2 Y";
+				} else if(keySetIndex == 2) {
+					//DirectInput Default (Used PS4 controller as a default)
+					A = "Joy2 But2";
+					B = "Joy2 But1";
+					Select = "Joy2 But9";
+					Start = "Joy2 But10";
+					Up = "Joy2 DPad Up";
+					Down = "Joy2 DPad Down";
+					Left = "Joy2 DPad Left";
+					Right = "Joy2 DPad Right";
+
+					TurboA = "Joy2 But3";
+					TurboB = "Joy2 But4";
 				}
 			}
 		}
@@ -144,6 +172,7 @@ namespace Mesen.GUI.Config
 				if(Controllers.Count <= 1) {
 					controllerInfo.Keys.Add(new KeyMappings(Controllers.Count, 0));
 					controllerInfo.Keys.Add(new KeyMappings(Controllers.Count, 1));
+					controllerInfo.Keys.Add(new KeyMappings(Controllers.Count, 2));
 				}
 				Controllers.Add(controllerInfo);
 			}
