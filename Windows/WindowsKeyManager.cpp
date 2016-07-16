@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "WindowsKeyManager.h"
 #include "../Core/ControlManager.h"
+#include "../Core/Console.h"
 
 static vector<KeyDefinition> _keyDefinitions = {
 	//{ "VK_LBUTTON", 0x01, "Left mouse button" },
@@ -224,7 +225,8 @@ WindowsKeyManager::WindowsKeyManager(HWND hWnd)
 		}
 	}
 
-	_directInput.reset(new DirectInput(hWnd));
+	_xInput.reset(new XInputManager());
+	_directInput.reset(new DirectInputManager(hWnd));
 }
 
 WindowsKeyManager::~WindowsKeyManager()
@@ -233,7 +235,13 @@ WindowsKeyManager::~WindowsKeyManager()
 
 void WindowsKeyManager::RefreshState()
 {
-	_gamePad.RefreshState();
+	if(_timer.GetElapsedMS() > 5000) {
+		//Check for newly plugged in controllers every 5 secs (XInput only, DirectInput is too slow to do it this way)
+		_xInput->UpdateDeviceList();
+		_timer.Reset();
+	}
+
+	_xInput->RefreshState();
 	_directInput->RefreshState();
 }
 
@@ -244,12 +252,12 @@ bool WindowsKeyManager::IsKeyPressed(uint32_t key)
 			//Directinput key
 			uint8_t gamepadPort = (key - 0x11000) / 0x100;
 			uint8_t gamepadButton = (key - 0x11000) % 0x100;
-			return _directInput->IsButtonPressed(gamepadPort, gamepadButton);
+			return _directInput->IsPressed(gamepadPort, gamepadButton);
 		} else {
 			//XInput key
 			uint8_t gamepadPort = (key - 0xFFFF) / 0x100;
 			uint8_t gamepadButton = (key - 0xFFFF) % 0x100;
-			return _gamePad.IsPressed(gamepadPort, gamepadButton);
+			return _xInput->IsPressed(gamepadPort, gamepadButton);
 		}
 	} else {
 		return (GetAsyncKeyState(key) & 0x8000) == 0x8000;
@@ -271,10 +279,10 @@ bool WindowsKeyManager::IsMouseButtonPressed(MouseButton button)
 
 uint32_t WindowsKeyManager::GetPressedKey()
 {
-	_gamePad.RefreshState();
+	_xInput->RefreshState();
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
 		for(int j = 1; j <= 22; j++) {
-			if(_gamePad.IsPressed(i, j)) {
+			if(_xInput->IsPressed(i, j)) {
 				return 0xFFFF + i * 0x100 + j;
 			}
 		}
@@ -283,7 +291,7 @@ uint32_t WindowsKeyManager::GetPressedKey()
 	_directInput->RefreshState();
 	for(int i = _directInput->GetJoystickCount() - 1; i >= 0; i--) {
 		for(int j = 0; j < 0x29; j++) {
-			if(_directInput->IsButtonPressed(i, j)) {
+			if(_directInput->IsPressed(i, j)) {
 				return 0x11000 + i * 0x100 + j;
 			}
 		}
@@ -315,4 +323,12 @@ uint32_t WindowsKeyManager::GetKeyCode(string keyName)
 		}
 	}
 	return 0;
+}
+
+void WindowsKeyManager::UpdateDevices()
+{
+	Console::Pause();
+	_xInput->UpdateDeviceList();
+	_directInput->UpdateDeviceList();
+	Console::Resume();
 }
