@@ -599,7 +599,7 @@
 			this.chkNsfDisableApuIrqs.Name = "chkNsfDisableApuIrqs";
 			this.chkNsfDisableApuIrqs.Size = new System.Drawing.Size(113, 17);
 			this.chkNsfDisableApuIrqs.TabIndex = 6;
-			this.chkNsfDisableApuIrqs.Text = "Disable APU IRQs";
+			this.chkNsfDisableApuIrqs.Text = "Disable APU IRQs (Recommended)";
 			this.chkNsfDisableApuIrqs.UseVisualStyleBackColor = true;
 			// 
 			// tpgFileAssociations

@@ -284,7 +284,7 @@
       <Control ID="lblNsfMillisecondsOfSilence">millisecondes de silence</Control>
       <Control ID="chkNsfMoveToNextTrackAfterTime">Limiter la durée des pistes à</Control>      
       <Control ID="lblNsfSeconds">secondes</Control>
-      <Control ID="chkNsfDisableApuIrqs">Désactiver les IRQs du APU</Control>
+      <Control ID="chkNsfDisableApuIrqs">Désactiver les IRQs du APU (Recommandé)</Control>
       
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>

@@ -283,7 +283,7 @@
       <Control ID="lblNsfMillisecondsOfSilence">ミリ秒間で無音の場合、次の曲を再生</Control>
       <Control ID="chkNsfMoveToNextTrackAfterTime">曲の最大長さを</Control>
       <Control ID="lblNsfSeconds">秒に固定する</Control>
-      <Control ID="chkNsfDisableApuIrqs">APUのIRQを無効にする</Control>
+      <Control ID="chkNsfDisableApuIrqs">APUのIRQを無効にする （推奨）</Control>
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
