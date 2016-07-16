@@ -15,20 +15,11 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
-	virtual void Reset(bool softReset)
-	{
-		if(softReset) {
-			SelectPRGPage(0, 0);
-			SelectPRGPage(1, 1);
-			SelectCHRPage(0, 0);
-		}
-	}
-
 	void WriteRegister(uint16_t addr, uint8_t value)
 	{
 		uint8_t highBit = (addr >> 8) & 0x40;
 		uint8_t prgPage = ((addr >> 6) & 0x3F) | highBit;
-		if(addr & 0x0100) {
+		if(addr & 0x1000) {
 			SelectPRGPage(0, prgPage);
 			SelectPRGPage(1, prgPage);
 		} else {
