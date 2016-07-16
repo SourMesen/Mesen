@@ -170,7 +170,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 65: return new IremH3001();
 		case 66: return new GxRom();
 		case 67: return new Sunsoft3();
-		case 68: return new Sunsoft4();  //incomplete support
+		case 68: return new Sunsoft4();
 		case 69: return new SunsoftFme7();
 		case 70: return new Bandai74161_7432(false);
 		case 71: return new BF909x();
