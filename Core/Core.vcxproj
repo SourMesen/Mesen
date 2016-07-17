@@ -576,6 +576,7 @@
     <ClInclude Include="Sunsoft93.h" />
     <ClInclude Include="SunsoftFme7.h" />
     <ClInclude Include="TaitoTc0190.h" />
+    <ClInclude Include="TaitoTc0690.h" />
     <ClInclude Include="TaitoX1005.h" />
     <ClInclude Include="TaitoX1017.h" />
     <ClInclude Include="TraceLogger.h" />

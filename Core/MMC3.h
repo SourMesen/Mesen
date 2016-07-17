@@ -25,17 +25,11 @@ class MMC3 : public BaseMapper
 		uint8_t _chrMode;
 		uint8_t _prgMode;
 
-		uint8_t _irqReloadValue;
-		uint8_t _irqCounter;
-		bool _irqReload;
-
-		bool _irqEnabled;
-		uint32_t _lastCycle;
-		uint32_t _cyclesDown;
-
 		bool _wramEnabled;
 		bool _wramWriteProtected;
 
+		uint32_t _lastCycle;
+		uint32_t _cyclesDown;
 		bool _needIrq;
 
 		struct {
@@ -73,6 +67,11 @@ class MMC3 : public BaseMapper
 		}
 
 	protected:
+		uint8_t _irqReloadValue;
+		uint8_t _irqCounter;
+		bool _irqReload;
+		bool _irqEnabled;
+
 		uint8_t GetCurrentRegister() 
 		{
 			return _currentRegister;
@@ -218,7 +217,7 @@ class MMC3 : public BaseMapper
 			}
 		}
 
-		void TriggerIrq()
+		virtual void TriggerIrq()
 		{
 			if(IsMcAcc()) {
 				//MC-ACC (Acclaim copy of the MMC3)

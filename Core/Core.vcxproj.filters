@@ -709,6 +709,9 @@
     <ClInclude Include="ColorDreams46.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="TaitoTc0690.h">
+      <Filter>Nes\Mappers\Taito</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
