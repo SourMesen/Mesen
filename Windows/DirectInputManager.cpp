@@ -151,7 +151,7 @@ int DirectInputManager::GetJoystickCount()
 
 bool DirectInputManager::IsPressed(int port, int button)
 {
-	if(port >= _joysticks.size()) {
+	if(port >= (int)_joysticks.size()) {
 		return false;
 	}
 

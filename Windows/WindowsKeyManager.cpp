@@ -208,7 +208,7 @@ WindowsKeyManager::WindowsKeyManager(HWND hWnd)
 	//Init XInput buttons
 	vector<string> buttonNames = { "Up", "Down", "Left", "Right", "Start", "Back", "L3", "R3", "L1", "R1", "?", "?", "A", "B", "X", "Y", "L2", "R2", "RT Up", "RT Down", "RT Up", "RT Left", "RT Right" };
 	for(int i = 0; i < 4; i++) {
-		for(int j = 0; j < buttonNames.size(); j++) {
+		for(int j = 0; j < (int)buttonNames.size(); j++) {
 			_keyDefinitions.push_back({ "", (uint32_t)(0xFFFF + i * 0x100 + j + 1), "Pad" + std::to_string(i + 1) + " " + buttonNames[j] });
 		}
 	}
@@ -216,7 +216,7 @@ WindowsKeyManager::WindowsKeyManager(HWND hWnd)
 	//Init DirectInput buttons
 	vector<string> diButtonNames = { "Y+", "Y-", "X-", "X+", "Y2+", "Y2-", "X2-", "X2+", "Z+", "Z-", "Z2+", "Z2-", "DPad Up", "DPad Down", "DPad Right", "DPad Left" };
 	for(int i = 0; i < 16; i++) {
-		for(int j = 0; j < diButtonNames.size(); j++) {
+		for(int j = 0; j < (int)diButtonNames.size(); j++) {
 			_keyDefinitions.push_back({ "", (uint32_t)(0x11000 + i * 0x100 + j), "Joy" + std::to_string(i + 1) + " " + diButtonNames[j] });
 		}
 
