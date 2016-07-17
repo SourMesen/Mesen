@@ -45,6 +45,7 @@
 #include "Mapper91.h"
 #include "Mapper107.h"
 #include "Mapper112.h"
+#include "Mapper170.h"
 #include "Mapper200.h"
 #include "Mapper201.h"
 #include "Mapper202.h"
@@ -141,7 +142,7 @@ Supported mappers:  (... denotes bad mappers)
 |112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
 |   |   |   |   |132|133|   |   |   |137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
-|   |   |   |163|164|   |   |   |   |   |   |171|172|173|   |175|
+|   |   |   |163|164|   |   |   |   |   |170|171|172|173|   |175|
 |176|177|   |179|180|   |182|   |184|185|   |   |   |189|   |191|
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
 |   |   |210|   |   |   |   |   |   |   |218|   |   |   |   |   |
@@ -279,6 +280,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 159: return new BandaiFcg();
 		case 163: return new Nanjing();
 		case 164: return new Waixing164();
+		case 170: return new Mapper170();
 		case 171: return new Kaiser7058();
 		case 172: return new Txc22211B();
 		case 173: return new Txc22211C();
