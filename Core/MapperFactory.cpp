@@ -28,6 +28,9 @@
 #include "JalecoJf17_19.h"
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
+#include "Kaiser202.h"
+#include "Kaiser7022.h"
+#include "Kaiser7058.h"
 #include "Mapper15.h"
 #include "Mapper40.h"
 #include "Mapper42.h"
@@ -129,14 +132,14 @@ Supported mappers:  (... denotes bad mappers)
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13|   | 15|
 | 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27| 28|   |   | 31|
 | 32| 33| 34|   |   | 37| 38|   | 40|   | 42|   | 44| 45| 46| 47|
-| 48| 49| 50|   | 52|   |   |   |   | 57| 58|   | 60| 61| 62|   |
+| 48| 49| 50|   | 52|   |   |   | 56| 57| 58|   | 60| 61| 62|   |
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
 |   | 97|   | 99|...|101|   |   |   |   |   |107|   |   |   |   |
 |112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
-|   |   |   |   |132|133|   |   |   |137|138|139|140|141|   |143|
+|   |   |   |   |132|133|   |   |   |137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
-|   |   |   |163|164|   |   |   |   |   |   |   |172|173|   |   |
+|   |   |   |163|164|   |   |   |   |   |   |171|172|173|   |175|
 |176|   |   |   |180|   |182|   |184|185|   |   |   |189|   |191|
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
 |   |   |210|   |   |   |   |   |   |   |218|   |   |   |   |   |
@@ -203,6 +206,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 49: return new MMC3_49();
 		case 50: return new Mapper50();
 		case 52: return new MMC3_52();
+		case 56: return new Kaiser202();
 		case 57: return new Mapper57();
 		case 58: return new Mapper58();
 		case 60: return new Mapper60();  //Partial support?
@@ -254,6 +258,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 139: return new Sachen8259(Sachen8259Variant::Sachen8259C);
 		case 140: return new JalecoJf11_14();
 		case 141: return new Sachen8259(Sachen8259Variant::Sachen8259A);
+		case 142: return new Kaiser202();
 		case 143: return new Sachen_143();
 		case 144: return new ColorDreams();
 		case 145: return new Sachen_145();
@@ -272,8 +277,10 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 159: return new BandaiFcg();
 		case 163: return new Nanjing();
 		case 164: return new Waixing164();
+		case 171: return new Kaiser7058();
 		case 172: return new Txc22211B();
 		case 173: return new Txc22211C();
+		case 175: return new Kaiser7022();
 		case 176: return new Waixing176();
 		case 180: return new UnRom_180();
 		case 182: return new MMC3_182();

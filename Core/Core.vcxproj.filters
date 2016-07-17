@@ -77,6 +77,9 @@
     <Filter Include="Nes\Mappers\Waixing">
       <UniqueIdentifier>{a47ffe4e-02b9-43a0-a3d6-b4943c9aade4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\Mappers\Kaiser">
+      <UniqueIdentifier>{9b0da03f-174e-403b-b988-394f32d4e1d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -735,6 +738,15 @@
     </ClInclude>
     <ClInclude Include="Txc22211C.h">
       <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Kaiser7058.h">
+      <Filter>Nes\Mappers\Kaiser</Filter>
+    </ClInclude>
+    <ClInclude Include="Kaiser7022.h">
+      <Filter>Nes\Mappers\Kaiser</Filter>
+    </ClInclude>
+    <ClInclude Include="Kaiser202.h">
+      <Filter>Nes\Mappers\Kaiser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

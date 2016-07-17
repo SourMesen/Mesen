@@ -203,11 +203,11 @@ void Console::ResetComponents(bool softReset)
 	Movie::Stop();
 	SoundMixer::StopRecording();
 
+	_memoryManager->Reset(softReset);
 	_ppu->Reset();
 	_apu->Reset(softReset);
 	_cpu->Reset(softReset);
 	_controlManager->Reset(softReset);
-	_memoryManager->Reset(softReset);
 
 	_lagCounter = 0;
 	
