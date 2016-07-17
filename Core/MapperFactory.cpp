@@ -86,6 +86,7 @@
 #include "NsfMapper.h"
 #include "NtdecTc112.h"
 #include "Rambo1.h"
+#include "Sachen_133.h"
 #include "Sachen_143.h"
 #include "Sachen_145.h"
 #include "Sachen_147.h"
@@ -123,14 +124,14 @@
 Supported mappers:  (... denotes bad mappers)
 -----------------------------------------------------------------
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13|   | 15|
-| 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27|   |   |   | 31|
+| 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27| 28|   |   | 31|
 | 32| 33| 34|   |   | 37| 38|   | 40|   | 42|   | 44| 45| 46| 47|
 | 48| 49| 50|   | 52|   |   |   |   | 57| 58|   | 60| 61| 62|   |
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
 |   | 97|   | 99|...|101|   |   |   |   |   |107|   |   |   |   |
 |112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
-|   |   |   |   |   |   |   |   |   |137|138|139|140|141|   |143|
+|   |   |   |   |   |133|   |   |   |137|138|139|140|141|   |143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
 |   |   |   |163|164|   |   |   |   |   |   |   |   |   |   |   |
 |176|   |   |   |180|   |182|   |184|185|   |   |   |189|   |191|
@@ -243,6 +244,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 115: return new MMC3_115();
 		case 118: return new TxSRom();
 		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);
+		case 133: return new Sachen_133();
 		case 137: return new Sachen8259(Sachen8259Variant::Sachen8259D);
 		case 138: return new Sachen8259(Sachen8259Variant::Sachen8259B);
 		case 139: return new Sachen8259(Sachen8259Variant::Sachen8259C);

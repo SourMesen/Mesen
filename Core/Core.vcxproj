@@ -487,6 +487,7 @@
     <ClInclude Include="Sachen74LS374N.h" />
     <ClInclude Include="Sachen74LS374NB.h" />
     <ClInclude Include="Sachen8259.h" />
+    <ClInclude Include="Sachen_133.h" />
     <ClInclude Include="Sachen_143.h" />
     <ClInclude Include="SelectControllerMessage.h" />
     <ClInclude Include="SoundMixer.h" />
