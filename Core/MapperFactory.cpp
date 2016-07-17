@@ -105,6 +105,9 @@
 #include "TaitoTc0690.h"
 #include "TaitoX1005.h"
 #include "TaitoX1017.h"
+#include "Txc22211A.h"
+#include "Txc22211B.h"
+#include "Txc22211C.h"
 #include "TxSRom.h"
 #include "UnlPci556.h"
 #include "UNROM.h"
@@ -131,9 +134,9 @@ Supported mappers:  (... denotes bad mappers)
 | 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
 |   | 97|   | 99|...|101|   |   |   |   |   |107|   |   |   |   |
 |112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
-|   |   |   |   |   |133|   |   |   |137|138|139|140|141|   |143|
+|   |   |   |   |132|133|   |   |   |137|138|139|140|141|   |143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
-|   |   |   |163|164|   |   |   |   |   |   |   |   |   |   |   |
+|   |   |   |163|164|   |   |   |   |   |   |   |172|173|   |   |
 |176|   |   |   |180|   |182|   |184|185|   |   |   |189|   |191|
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
 |   |   |210|   |   |   |   |   |   |   |218|   |   |   |   |   |
@@ -244,6 +247,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 115: return new MMC3_115();
 		case 118: return new TxSRom();
 		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);
+		case 132: return new Txc22211A();
 		case 133: return new Sachen_133();
 		case 137: return new Sachen8259(Sachen8259Variant::Sachen8259D);
 		case 138: return new Sachen8259(Sachen8259Variant::Sachen8259B);
@@ -268,6 +272,8 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 159: return new BandaiFcg();
 		case 163: return new Nanjing();
 		case 164: return new Waixing164();
+		case 172: return new Txc22211B();
+		case 173: return new Txc22211C();
 		case 176: return new Waixing176();
 		case 180: return new UnRom_180();
 		case 182: return new MMC3_182();

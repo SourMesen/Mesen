@@ -584,6 +584,9 @@
     <ClInclude Include="TaitoX1017.h" />
     <ClInclude Include="TraceLogger.h" />
     <ClInclude Include="TriangleChannel.h" />
+    <ClInclude Include="Txc22211A.h" />
+    <ClInclude Include="Txc22211B.h" />
+    <ClInclude Include="Txc22211C.h" />
     <ClInclude Include="TxSRom.h" />
     <ClInclude Include="VideoRenderer.h" />
     <ClInclude Include="UnlPci556.h" />
