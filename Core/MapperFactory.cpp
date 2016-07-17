@@ -2,6 +2,7 @@
 #include "MessageManager.h"
 #include "MapperFactory.h"
 #include "RomLoader.h"
+#include "Action53.h"
 #include "ActionEnterprises.h"
 #include "AXROM.h"
 #include "Bandai74161_7432.h"
@@ -176,6 +177,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 25: return new VRC2_4();
 		case 26: return new VRC6(VRCVariant::VRC6b);
 		case 27: return new VRC2_4();
+		case 28: return new Action53();
 		case 31: return new NsfCart31();
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();

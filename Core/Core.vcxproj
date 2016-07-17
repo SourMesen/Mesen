@@ -398,6 +398,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Action53.h" />
     <ClInclude Include="ActionEnterprises.h" />
     <ClInclude Include="APU.h" />
     <ClInclude Include="ArkanoidController.h" />
