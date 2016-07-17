@@ -697,6 +697,9 @@
     <ClInclude Include="NsfCart31.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="Mapper40.h">
+      <Filter>Nes\Mappers\Unnamed</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
