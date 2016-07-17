@@ -47,7 +47,7 @@ namespace Mesen.GUI.Forms
 				MesenMsgBox.Show("UpdaterNotFound", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				DialogResult = DialogResult.Cancel;
 			} else if(!string.IsNullOrWhiteSpace(srcFilePath)) {
-				frmDownloadProgress frmDownload = new frmDownloadProgress("http://www.mesen.ca/Services/GetLatestVersion.php?a=download&p=win", srcFilePath);
+				frmDownloadProgress frmDownload = new frmDownloadProgress("http://www.mesen.ca/Services/GetLatestVersion.php?a=download&p=win&v=" + InteropEmu.GetMesenVersion(), srcFilePath);
 				if(frmDownload.ShowDialog() == DialogResult.OK) {
 					FileInfo fileInfo = new FileInfo(srcFilePath);
 					if(fileInfo.Length > 0 && GetSha1Hash(srcFilePath) == _fileHash) {
