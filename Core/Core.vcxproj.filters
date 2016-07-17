@@ -718,6 +718,9 @@
     <ClInclude Include="Waixing164.h">
       <Filter>Nes\Mappers\Waixing</Filter>
     </ClInclude>
+    <ClInclude Include="MMC3_182.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

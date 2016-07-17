@@ -65,6 +65,7 @@
 #include "MMC3_49.h"
 #include "MMC3_52.h"
 #include "MMC3_115.h"
+#include "MMC3_182.h"
 #include "MMC3_189.h"
 #include "MMC3_205.h"
 #include "MMC3_ChrRam.h"
@@ -131,7 +132,7 @@ Supported mappers:  (... denotes bad mappers)
 |   |   |   |   |   |   |   |   |   |137|138|139|140|141|   |143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
 |   |   |   |163|164|   |   |   |   |   |   |   |   |   |   |   |
-|176|   |   |   |180|   |   |   |184|185|   |   |   |189|   |191|
+|176|   |   |   |180|   |182|   |184|185|   |   |   |189|   |191|
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
 |   |   |210|   |   |   |   |   |   |   |218|   |   |   |   |   |
 |   |225|226|227|228|   |230|231|232|   |   |   |   |   |   |   |
@@ -265,6 +266,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 164: return new Waixing164();
 		case 176: return new Waixing176();
 		case 180: return new UnRom_180();
+		case 182: return new MMC3_182();
 		case 184: return new Sunsoft184();
 		case 185: return new CNROM(true);
 		case 189: return new MMC3_189();
