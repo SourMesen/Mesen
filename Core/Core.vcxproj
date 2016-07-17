@@ -608,6 +608,7 @@
     <ClInclude Include="VsZapper.h" />
     <ClInclude Include="Waixing164.h" />
     <ClInclude Include="Waixing176.h" />
+    <ClInclude Include="Waixing252.h" />
     <ClInclude Include="WaveRecorder.h" />
     <ClInclude Include="Zapper.h" />
   </ItemGroup>

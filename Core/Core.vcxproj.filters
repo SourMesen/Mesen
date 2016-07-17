@@ -74,6 +74,9 @@
     <Filter Include="Nes\Mappers\Bandai">
       <UniqueIdentifier>{2d5cebc1-c803-457f-bdeb-3c9dfba704ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\Mappers\Waixing">
+      <UniqueIdentifier>{a47ffe4e-02b9-43a0-a3d6-b4943c9aade4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -658,14 +661,8 @@
     <ClInclude Include="Sachen74LS374NB.h">
       <Filter>Nes\Mappers\Sachen</Filter>
     </ClInclude>
-    <ClInclude Include="Waixing176.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
     <ClInclude Include="Mapper227.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
-    </ClInclude>
-    <ClInclude Include="Waixing164.h">
-      <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="VsZapper.h">
       <Filter>Nes\Controllers</Filter>
@@ -711,6 +708,15 @@
     </ClInclude>
     <ClInclude Include="TaitoTc0690.h">
       <Filter>Nes\Mappers\Taito</Filter>
+    </ClInclude>
+    <ClInclude Include="Waixing252.h">
+      <Filter>Nes\Mappers\Waixing</Filter>
+    </ClInclude>
+    <ClInclude Include="Waixing176.h">
+      <Filter>Nes\Mappers\Waixing</Filter>
+    </ClInclude>
+    <ClInclude Include="Waixing164.h">
+      <Filter>Nes\Mappers\Waixing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

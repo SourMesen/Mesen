@@ -115,6 +115,7 @@
 #include "VsSystem.h"
 #include "Waixing164.h"
 #include "Waixing176.h"
+#include "Waixing252.h"
 
 /*
 Supported mappers:  (... denotes bad mappers)
@@ -125,7 +126,7 @@ Supported mappers:  (... denotes bad mappers)
 | 48| 49| 50|   | 52|   |   |   |   | 57| 58|   | 60| 61| 62|   |
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
-|   | 97|   | 99|   |101|   |   |   |   |   |107|   |   |   |   |
+|   | 97|   | 99|...|101|   |   |   |   |   |107|   |   |   |   |
 |112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
 |   |   |   |   |   |   |   |   |   |137|138|139|140|141|   |143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
@@ -134,7 +135,7 @@ Supported mappers:  (... denotes bad mappers)
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
 |   |   |210|   |   |   |   |   |   |   |218|   |   |   |   |   |
 |   |225|226|227|228|   |230|231|232|   |   |   |   |   |   |   |
-|240|241|242|243|   |   |246|   |   |   |   |   |   |   |   |   |
+|240|241|242|243|   |   |246|   |   |   |   |   |252|   |   |   |
 -----------------------------------------------------------------
 */
 
@@ -293,6 +294,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 242: return new Mapper242();
 		case 243: return new Sachen74LS374N();
 		case 246: return new Mapper246();
+		case 252: return new Waixing252();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();
