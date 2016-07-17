@@ -167,7 +167,7 @@ void BaseMapper::SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memor
 {
 	_prgPageNumbers[slot] = page;
 
-	if(_prgSize < PrgAddressRangeSize) {
+	if(_prgSize < PrgAddressRangeSize && GetPRGPageSize() > _prgSize) {
 		//Total PRG size is smaller than available memory range, map the entire PRG to all slots
 		//i.e same logic as NROM (mapper 0) when PRG is 16kb
 		//Needed by "Pyramid" (mapper 79)

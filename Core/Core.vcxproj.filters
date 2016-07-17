@@ -694,6 +694,9 @@
     <ClInclude Include="OpllChannel.h">
       <Filter>Nes\Mappers\VRC</Filter>
     </ClInclude>
+    <ClInclude Include="NsfCart31.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

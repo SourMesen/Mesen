@@ -76,6 +76,7 @@
 #include "Nina01.h"
 #include "Nina03_06.h"
 #include "NROM.h"
+#include "NsfCart31.h"
 #include "NsfMapper.h"
 #include "NtdecTc112.h"
 #include "Rambo1.h"
@@ -109,6 +110,28 @@
 #include "VsSystem.h"
 #include "Waixing164.h"
 #include "Waixing176.h"
+
+/*
+Supported mappers:  (... denotes bad mappers)
+-----------------------------------------------------------------
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13|   | 15|
+| 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27|   |   |   | 31|
+| 32| 33| 34|   |   | 37| 38|   |   |   |   |   | 44| 45|   | 47|
+|   | 49|   |   | 52|   |   |   |   | 57| 58|   | 60| 61| 62|   |
+| 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
+| 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
+|   | 97|   | 99|   |101|   |   |   |   |   |107|   |   |   |   |
+|112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
+|   |   |   |   |   |   |   |   |   |137|138|139|140|141|   |143|
+|144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
+|   |   |   |163|164|   |   |   |   |   |   |   |   |   |   |   |
+|176|   |   |   |180|   |   |   |184|185|   |   |   |189|   |191|
+|192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
+|   |   |210|   |   |   |   |   |   |   |218|   |   |   |   |   |
+|   |225|226|227|228|   |230|231|232|   |   |   |   |   |   |   |
+|240|241|242|243|   |   |246|   |   |   |   |   |   |   |   |   |
+-----------------------------------------------------------------
+*/
 
 const uint16_t MapperFactory::FdsMapperID;
 const uint16_t MapperFactory::NsfMapperID;
@@ -146,6 +169,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 25: return new VRC2_4();
 		case 26: return new VRC6(VRCVariant::VRC6b);
 		case 27: return new VRC2_4();
+		case 31: return new NsfCart31();
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();
 		case 34: 
