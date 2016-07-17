@@ -130,7 +130,7 @@ class VRC2_4 : public BaseMapper
 
 			if(addr >= 0x8000 && addr <= 0x8006) {
 				_prgReg0 = value & 0x1F;
-			} else if(addr == 0x9000 || addr == 0x9002) {
+			} else if((_variant <= VRCVariant::VRC2c && addr >= 0x9000 && addr <= 0x9003) || (_variant >= VRCVariant::VRC4a && addr >= 0x9000 && addr <= 0x9001)) {
 				uint8_t mask = 0x03;
 				if(_variant == VRCVariant::VRC2a || _variant == VRCVariant::VRC2b) {
 					mask = 0x01;
@@ -142,10 +142,8 @@ class VRC2_4 : public BaseMapper
 					case 2: SetMirroringType(MirroringType::ScreenAOnly); break;
 					case 3: SetMirroringType(MirroringType::ScreenBOnly); break;
 				}
-			} else if(addr == 0x9004 || addr == 0x9006) {
-				if(_variant >= VRCVariant::VRC4a) {
-					_prgMode = (value >> 1) & 0x01;
-				}
+			} else if(_variant >= VRCVariant::VRC4a && addr >= 0x9002 && addr <= 0x9003) {
+				_prgMode = (value >> 1) & 0x01;
 			} else if(addr >= 0xA000 && addr <= 0xA006) {
 				_prgReg1 = value & 0x1F;
 			} else if(addr >= 0xB000 && addr <= 0xE006) {
