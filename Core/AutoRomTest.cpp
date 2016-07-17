@@ -181,6 +181,13 @@ void AutoRomTest::RecordFromTest(string newTestFilename, string existingTestFile
 
 int32_t AutoRomTest::Run(string filename)
 {
+	string testName = FolderUtilities::GetFilename(filename, false);
+	if(testName.compare("5.MMC3_rev_A") == 0 || testName.compare("6-MMC6") == 0 || testName.compare("6-MMC3_alt") == 0) {
+		EmulationSettings::SetFlags(EmulationFlags::Mmc3IrqAltBehavior);
+	} else {
+		EmulationSettings::ClearFlags(EmulationFlags::Mmc3IrqAltBehavior);
+	}
+
 	ZipReader zipReader;
 	zipReader.LoadArchive(filename);
 	std::stringstream testData = zipReader.GetStream("TestData.mrt");
