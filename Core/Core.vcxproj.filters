@@ -748,6 +748,12 @@
     <ClInclude Include="Kaiser202.h">
       <Filter>Nes\Mappers\Kaiser</Filter>
     </ClInclude>
+    <ClInclude Include="Henggedianzi177.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Henggedianzi179.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

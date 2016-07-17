@@ -18,6 +18,8 @@
 #include "FDS.h"
 #include "FrontFareast.h"
 #include "GxRom.h"
+#include "Henggedianzi177.h"
+#include "Henggedianzi179.h"
 #include "IremG101.h"
 #include "IremH3001.h"
 #include "IremLrog017.h"
@@ -140,7 +142,7 @@ Supported mappers:  (... denotes bad mappers)
 |   |   |   |   |132|133|   |   |   |137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
 |   |   |   |163|164|   |   |   |   |   |   |171|172|173|   |175|
-|176|   |   |   |180|   |182|   |184|185|   |   |   |189|   |191|
+|176|177|   |179|180|   |182|   |184|185|   |   |   |189|   |191|
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
 |   |   |210|   |   |   |   |   |   |   |218|   |   |   |   |   |
 |   |225|226|227|228|   |230|231|232|   |   |   |   |   |   |   |
@@ -282,6 +284,8 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 173: return new Txc22211C();
 		case 175: return new Kaiser7022();
 		case 176: return new Waixing176();
+		case 177: return new Henggedianzi177();
+		case 179: return new Henggedianzi179();
 		case 180: return new UnRom_180();
 		case 182: return new MMC3_182();
 		case 184: return new Sunsoft184();
