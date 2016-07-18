@@ -592,7 +592,7 @@ namespace Mesen.GUI.Forms
 
 					mnuDebugger.Enabled = !netPlay && _emuThread != null;
 
-					mnuTakeScreenshot.Enabled = _emuThread != null;
+					mnuTakeScreenshot.Enabled = _emuThread != null && !InteropEmu.IsNsf();
 
 					mnuRegionAuto.Checked = ConfigManager.Config.Region == NesModel.Auto;
 					mnuRegionNtsc.Checked = ConfigManager.Config.Region == NesModel.NTSC;

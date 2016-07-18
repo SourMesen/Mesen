@@ -12,8 +12,10 @@ BaseVideoFilter::BaseVideoFilter()
 
 BaseVideoFilter::~BaseVideoFilter()
 {
+	auto lock = _frameLock.AcquireSafe();
 	if(_outputBuffer) {
 		delete[] _outputBuffer;
+		_outputBuffer = nullptr;
 	}
 }
 
@@ -21,12 +23,14 @@ void BaseVideoFilter::UpdateBufferSize()
 {
 	uint32_t newBufferSize = GetFrameInfo().Width*GetFrameInfo().Height*GetFrameInfo().BitsPerPixel;
 	if(_bufferSize != newBufferSize) {
+		_frameLock.Acquire();
 		if(_outputBuffer) {
 			delete[] _outputBuffer;
 		}
 
 		_bufferSize = newBufferSize;
 		_outputBuffer = new uint8_t[newBufferSize];
+		_frameLock.Release();
 
 		MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
 	}
@@ -59,11 +63,16 @@ uint8_t* BaseVideoFilter::GetOutputBuffer()
 void BaseVideoFilter::TakeScreenshot()
 {
 	string romFilename = FolderUtilities::GetFilename(Console::GetRomName(), false);
-	uint32_t* frameBuffer = (uint32_t*)new uint8_t[_bufferSize];
 
-	_frameLock.Acquire();
-	memcpy(frameBuffer, GetOutputBuffer(), _bufferSize);
-	_frameLock.Release();
+	uint32_t* frameBuffer = nullptr;
+	{
+		auto lock = _frameLock.AcquireSafe();
+		if(_bufferSize == 0 || !GetOutputBuffer()) {
+			return;
+		}
+		frameBuffer = (uint32_t*)new uint8_t[_bufferSize];
+		memcpy(frameBuffer, GetOutputBuffer(), _bufferSize);
+	}
 
 	//ARGB -> ABGR
 	for(uint32_t i = 0; i < _bufferSize/GetFrameInfo().BitsPerPixel; i++) {
