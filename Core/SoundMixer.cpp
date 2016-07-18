@@ -109,7 +109,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 
 		SoundMixer::AudioDevice->PlayBuffer(soundBuffer, (uint32_t)sampleCount, _sampleRate, isStereo);
 		if(_waveRecorder) {
-			_waveRecorderLock.AcquireSafe();
+			auto lock = _waveRecorderLock.AcquireSafe();
 			if(_waveRecorder) {
 				if(!_waveRecorder->WriteSamples(soundBuffer, (uint32_t)sampleCount, _sampleRate, isStereo)) {
 					_waveRecorder.reset();
@@ -224,13 +224,13 @@ void SoundMixer::EndFrame(uint32_t time)
 
 void SoundMixer::StartRecording(string filepath)
 {
-	_waveRecorderLock.AcquireSafe();
+	auto lock = _waveRecorderLock.AcquireSafe();
 	_waveRecorder.reset(new WaveRecorder(filepath, EmulationSettings::GetSampleRate(), EmulationSettings::GetStereoFilter() != StereoFilter::None));
 }
 
 void SoundMixer::StopRecording()
 {
-	_waveRecorderLock.AcquireSafe();
+	auto lock = _waveRecorderLock.AcquireSafe();
 	_waveRecorder.reset();
 }
 

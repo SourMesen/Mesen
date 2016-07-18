@@ -308,7 +308,7 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		breakDone = SleepUntilResume();
 
 		if(_traceLogger) {
-			_traceLock.AcquireSafe();
+			auto lock = _traceLock.AcquireSafe();
 			DebugState state;
 			GetState(&state);
 			_traceLogger->Log(state, _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr));
@@ -353,7 +353,7 @@ bool Debugger::SleepUntilResume()
 
 	if(stepCount == 0 && !_stopFlag && _suspendCount == 0) {
 		//Break
-		_breakLock.AcquireSafe();
+		auto lock = _breakLock.AcquireSafe();
 		_executionStopped = true;
 		SoundMixer::StopAudio();
 		MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
@@ -518,14 +518,14 @@ void Debugger::SetNextStatement(uint16_t addr)
 
 void Debugger::StartTraceLogger(TraceLoggerOptions options)
 {
-	_traceLock.AcquireSafe();
+	auto lock = _traceLock.AcquireSafe();
 	string traceFilepath = FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), "Trace.txt");
 	_traceLogger.reset(new TraceLogger(traceFilepath, options));
 }
 
 void Debugger::StopTraceLogger()
 {
-	_traceLock.AcquireSafe();
+	auto lock = _traceLock.AcquireSafe();
 	_traceLogger.reset();
 }
 

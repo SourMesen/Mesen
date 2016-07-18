@@ -254,7 +254,7 @@ void MessageManager::DisplayToast(string title, string message, uint8_t* iconDat
 
 void MessageManager::Log(string message)
 {
-	_logLock.AcquireSafe();
+	auto lock = _logLock.AcquireSafe();
 	if(message.empty()) {
 		message = "------------------------------------------------------";
 	}
@@ -266,7 +266,7 @@ void MessageManager::Log(string message)
 
 string MessageManager::GetLog()
 {
-	_logLock.AcquireSafe();
+	auto lock = _logLock.AcquireSafe();
 	stringstream ss;
 	for(string &msg : _log) {
 		ss << msg << "\n";
