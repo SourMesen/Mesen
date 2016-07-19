@@ -528,7 +528,9 @@ namespace Mesen.GUI.Forms
 					bool isNetPlayClient = InteropEmu.IsConnected();
 
 					mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !isNetPlayClient);
-					mnuSaveState.Enabled = mnuLoadState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf());
+					mnuSaveState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf());
+					mnuLoadState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording());
+
 					mnuPause.Text = InteropEmu.IsPaused() ? ResourceHelper.GetMessage("Resume") : ResourceHelper.GetMessage("Pause");
 					mnuPause.Image = InteropEmu.IsPaused() ? Mesen.GUI.Properties.Resources.Play : Mesen.GUI.Properties.Resources.Pause;
 
@@ -707,7 +709,9 @@ namespace Mesen.GUI.Forms
 							if(forSave) {
 								InteropEmu.SaveState(stateIndex);
 							} else {
-								InteropEmu.LoadState(stateIndex);
+								if(!InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording()) {
+									InteropEmu.LoadState(stateIndex);
+								}
 							}
 						}
 					};
