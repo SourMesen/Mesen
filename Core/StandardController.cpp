@@ -85,6 +85,7 @@ uint8_t StandardController::GetPortOutput()
 void StandardController::RefreshStateBuffer()
 {
 	_stateBuffer = GetControlState();
+	_lastButtonState = _stateBuffer;
 	if(_additionalController && !_hasZapper) {
 		//Next 8 bits = Gamepad 3/4
 		if(_famiconDevice) {
@@ -128,6 +129,11 @@ void StandardController::AddAdditionalController(shared_ptr<BaseControlDevice> c
 	_additionalController = controller;
 }
 
+shared_ptr<BaseControlDevice> StandardController::GetAdditionalController()
+{
+	return _additionalController;
+}
+
 uint32_t StandardController::GetInternalState()
 {
 	return _stateBuffer;
@@ -137,3 +143,10 @@ void StandardController::SetInternalState(uint32_t state)
 {
 	_stateBuffer = state;
 }
+
+uint8_t StandardController::GetLastButtonState()
+{
+	return _lastButtonState;
+}
+
+

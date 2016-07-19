@@ -421,6 +421,7 @@
     <ClInclude Include="FdsAudio.h" />
     <ClInclude Include="FdsLoader.h" />
     <ClInclude Include="ForceDisconnectMessage.h" />
+    <ClInclude Include="FrameInfo.h" />
     <ClInclude Include="FrontFareast.h" />
     <ClInclude Include="GameDatabase.h" />
     <ClInclude Include="HdVideoFilter.h" />
@@ -594,6 +595,7 @@
     <ClInclude Include="Txc22211B.h" />
     <ClInclude Include="Txc22211C.h" />
     <ClInclude Include="TxSRom.h" />
+    <ClInclude Include="VideoHud.h" />
     <ClInclude Include="VideoRenderer.h" />
     <ClInclude Include="UnlPci556.h" />
     <ClInclude Include="UNROM.h" />
@@ -680,6 +682,7 @@
     <ClCompile Include="StereoDelayFilter.cpp" />
     <ClCompile Include="StereoPanningFilter.cpp" />
     <ClCompile Include="TraceLogger.cpp" />
+    <ClCompile Include="VideoHud.cpp" />
     <ClCompile Include="VideoRenderer.cpp" />
     <ClCompile Include="VideoDecoder.cpp" />
     <ClCompile Include="BaseVideoFilter.cpp" />

@@ -158,6 +158,15 @@
       <Control ID="chkFourScore">Utiliser l'accessoire pour 4 joueurs</Control>
       <Control ID="chkAutoConfigureInput">Configurer les manettes automatiquement au chargement d'un jeu</Control>
       <Control ID="tpgEmulatorKeys">Raccourcis de l'émulateur</Control>
+
+      <Control ID="tpgAdvanced">Avancé</Control>
+      <Control ID="grpDisplayInput">Affichage des manettes</Control>
+      <Control ID="chkDisplayPort1">Joueur 1</Control>
+      <Control ID="chkDisplayPort2">Joueur 2</Control>
+      <Control ID="chkDisplayPort3">Joueur 3</Control>
+      <Control ID="chkDisplayPort4">Joueur 4</Control>
+      <Control ID="lblDisplayPosition">Position d'affichage :</Control>
+      <Control ID="chkDisplayInputHorizontally">Afficher horizontalement</Control>
     </Form>
     <Form ID="frmControllerConfig" Title="Configuration de la manette">
       <Control ID="lblTurboSpeed">Vitesse du mode turbo:</Control>
@@ -462,6 +471,12 @@
       <Value ID="Ppu2C05C">RP2C05-03</Value>
       <Value ID="Ppu2C05D">RP2C05-04</Value>
       <Value ID="Ppu2C05E">RP2C05-05</Value>
+    </Enum>
+    <Enum ID="InputDisplayPosition">
+      <Value ID="TopLeft">En haut à gauche</Value>
+      <Value ID="TopRight">En haut à droite</Value>
+      <Value ID="BottomLeft">En bas à gauche</Value>
+      <Value ID="BottomRight">En bas à droite</Value>
     </Enum>
     <Enum ID="Language">
       <Value ID="SystemDefault">Défaut du compte utilisateur</Value>

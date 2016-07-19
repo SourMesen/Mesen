@@ -4,6 +4,7 @@
 #include "../Utilities/PNGHelper.h"
 #include "../Utilities/FolderUtilities.h"
 #include "Console.h"
+#include "StandardController.h"
 
 BaseVideoFilter::BaseVideoFilter()
 {
@@ -52,6 +53,7 @@ void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer)
 	UpdateBufferSize();
 	OnBeforeApplyFilter();
 	ApplyFilter(ppuOutputBuffer);
+	_videoHud.DrawHud(GetOutputBuffer(), GetFrameInfo(), GetOverscan());
 	_frameLock.Release();
 }
 

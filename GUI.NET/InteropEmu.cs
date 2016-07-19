@@ -146,6 +146,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetRgbPalette(byte[] palette);
 		[DllImport(DLLPath)] public static extern void SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity);
 		[DllImport(DLLPath)] public static extern void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, [MarshalAs(UnmanagedType.I1)]bool mergeFields);
+		[DllImport(DLLPath)] public static extern void SetInputDisplaySettings(byte visiblePorts, InputDisplayPosition displayPosition, [MarshalAs(UnmanagedType.I1)]bool displayHorizontally);
 
 		[DllImport(DLLPath, EntryPoint="GetRgbPalette")] private static extern void GetRgbPaletteWrapper(IntPtr paletteBuffer);
 		
@@ -451,6 +452,14 @@ namespace Mesen.GUI
 		{
 			public Int32 Width;
 			public Int32 Height;
+		}
+
+		public enum InputDisplayPosition
+		{
+			TopLeft = 0,
+			TopRight = 1,
+			BottomLeft = 2,
+			BottomRight = 3
 		}
 
 		public class NotificationEventArgs

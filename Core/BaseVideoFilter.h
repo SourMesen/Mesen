@@ -2,17 +2,13 @@
 #include "stdafx.h"
 #include "../Utilities/SimpleLock.h"
 #include "EmulationSettings.h"
-
-struct FrameInfo
-{
-	uint32_t Width;
-	uint32_t Height;
-	uint32_t BitsPerPixel;
-};
+#include "FrameInfo.h"
+#include "VideoHud.h"
 
 class BaseVideoFilter
 {
 private:
+	VideoHud _videoHud;
 	uint8_t* _outputBuffer = nullptr;
 	uint32_t _bufferSize = 0;
 	SimpleLock _frameLock;

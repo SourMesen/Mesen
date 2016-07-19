@@ -102,6 +102,12 @@
       <Value ID="Ppu2C05D">RP2C05-04</Value>
       <Value ID="Ppu2C05E">RP2C05-05</Value>
     </Enum>
+    <Enum ID="InputDisplayPosition">
+      <Value ID="TopLeft">Top Left</Value>
+      <Value ID="TopRight">Top Right</Value>
+      <Value ID="BottomLeft">Bottom Left</Value>
+      <Value ID="BottomRight">Bottom Right</Value>
+    </Enum>
     <Enum ID="Language">
       <Value ID="SystemDefault">User Account Default</Value>
       <Value ID="English">English</Value>

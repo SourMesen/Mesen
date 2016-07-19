@@ -221,6 +221,21 @@ enum class PpuModel
 	Ppu2C05E = 10
 };
 
+enum class InputDisplayPosition
+{
+	TopLeft = 0,
+	TopRight = 1,
+	BottomLeft = 2,
+	BottomRight = 3
+};
+
+struct InputDisplaySettings
+{
+	uint8_t VisiblePorts;
+	InputDisplayPosition DisplayPosition;
+	bool DisplayHorizontally;
+};
+
 class EmulationSettings
 {
 private:
@@ -274,6 +289,8 @@ private:
 	static int32_t _nsfAutoDetectSilenceDelay;
 	static int32_t _nsfMoveToNextTrackTime;
 	static bool _nsfDisableApuIrqs;
+
+	static InputDisplaySettings _inputDisplaySettings;
 
 public:
 	static uint32_t GetMesenVersion()
@@ -724,5 +741,15 @@ public:
 	static bool GetNsfDisableApuIrqs()
 	{
 		return _nsfDisableApuIrqs;
+	}
+
+	static void SetInputDisplaySettings(uint8_t visiblePorts, InputDisplayPosition displayPosition, bool displayHorizontally)
+	{
+		_inputDisplaySettings = { visiblePorts, displayPosition, displayHorizontally };
+	}
+
+	static InputDisplaySettings GetInputDisplaySettings()
+	{
+		return _inputDisplaySettings;
 	}
 };

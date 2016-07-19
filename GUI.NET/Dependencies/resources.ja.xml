@@ -158,6 +158,15 @@
       <Control ID="chkFourScore">Four Scoreを使う</Control>
       <Control ID="tpgEmulatorKeys">ショートカットキー</Control>
       <Control ID="chkAutoConfigureInput">ゲームをロードする時、自動的に一番適切なコントローラを選ぶ</Control>
+
+      <Control ID="tpgAdvanced">詳細設定</Control>
+      <Control ID="grpDisplayInput">コントローラ表示</Control>
+      <Control ID="chkDisplayPort1">プレーヤー1</Control>
+      <Control ID="chkDisplayPort2">プレーヤー2</Control>
+      <Control ID="chkDisplayPort3">プレーヤー3</Control>
+      <Control ID="chkDisplayPort4">プレーヤー4</Control>
+      <Control ID="lblDisplayPosition">表示位置：</Control>
+      <Control ID="chkDisplayInputHorizontally">水平表示</Control>
     </Form>
     <Form ID="frmControllerConfig" Title="コントローラ設定">
       <Control ID="lblTurboSpeed">ターボの速度:</Control>
@@ -454,6 +463,12 @@
       <Value ID="Ppu2C05C">RP2C05-03</Value>
       <Value ID="Ppu2C05D">RP2C05-04</Value>
       <Value ID="Ppu2C05E">RP2C05-05</Value>
+    </Enum>
+    <Enum ID="InputDisplayPosition">
+      <Value ID="TopLeft">左上</Value>
+      <Value ID="TopRight">右上</Value>
+      <Value ID="BottomLeft">左下</Value>
+      <Value ID="BottomRight">右下</Value>
     </Enum>
     <Enum ID="Language">
       <Value ID="SystemDefault">ユーザーアカウントのデフォルト</Value>

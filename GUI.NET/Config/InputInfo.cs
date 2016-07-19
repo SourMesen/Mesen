@@ -161,6 +161,13 @@ namespace Mesen.GUI.Config
 		public bool UseFourScore = false;
 		public bool AutoConfigureInput = true;
 
+		public bool DisplayInputPort1 = false;
+		public bool DisplayInputPort2 = false;
+		public bool DisplayInputPort3 = false;
+		public bool DisplayInputPort4 = false;
+		public InteropEmu.InputDisplayPosition DisplayInputPosition = InteropEmu.InputDisplayPosition.BottomRight;
+		public bool DisplayInputHorizontally = true;
+
 		public List<ControllerInfo> Controllers = new List<ControllerInfo>();
 
 		public void InitializeDefaults()
@@ -198,6 +205,9 @@ namespace Mesen.GUI.Config
 				InteropEmu.SetControllerType(i, i < 2 || hasFourScore ? inputInfo.Controllers[i].ControllerType : InteropEmu.ControllerType.None);
 				InteropEmu.SetControllerKeys(i, inputInfo.Controllers[i].GetKeyMappingSet());
 			}
+
+			byte displayPorts = (byte)((inputInfo.DisplayInputPort1 ? 1 : 0) + (inputInfo.DisplayInputPort2 ? 2 : 0) + (inputInfo.DisplayInputPort3 ? 4 : 0) + (inputInfo.DisplayInputPort4 ? 8 : 0));
+			InteropEmu.SetInputDisplaySettings(displayPorts, inputInfo.DisplayInputPosition, inputInfo.DisplayInputHorizontally);
 		}
 	}
 }

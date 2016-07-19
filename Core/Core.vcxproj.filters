@@ -757,6 +757,12 @@
     <ClInclude Include="Mapper170.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
+    <ClInclude Include="VideoHud.h">
+      <Filter>VideoDecoder</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameInfo.h">
+      <Filter>VideoDecoder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -920,6 +926,9 @@
     </ClCompile>
     <ClCompile Include="NsfMapper.cpp">
       <Filter>Nes\Mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoHud.cpp">
+      <Filter>VideoDecoder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

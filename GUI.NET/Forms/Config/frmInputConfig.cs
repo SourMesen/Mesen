@@ -34,6 +34,13 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("ConsoleType", cboConsoleType);
 			AddBinding("UseFourScore", chkFourScore);
 			AddBinding("AutoConfigureInput", chkAutoConfigureInput);
+
+			AddBinding("DisplayInputPort1", chkDisplayPort1);
+			AddBinding("DisplayInputPort2", chkDisplayPort2);
+			AddBinding("DisplayInputPort3", chkDisplayPort3);
+			AddBinding("DisplayInputPort4", chkDisplayPort4);
+			AddBinding("DisplayInputPosition", cboDisplayInputPosition);
+			AddBinding("DisplayInputHorizontally", chkDisplayInputHorizontally);
 		}
 
 		protected override void AfterUpdateUI()
