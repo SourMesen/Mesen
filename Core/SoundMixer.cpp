@@ -186,23 +186,18 @@ void SoundMixer::EndFrame(uint32_t time)
 	for(size_t i = 0, len = _timestamps.size(); i < len; i++) {
 		uint32_t stamp = _timestamps[i];
 		for(int j = 0; j < MaxChannelCount; j++) {
+			if(_channelOutput[j][stamp] != 0) {
+				//Assume any change in output means sound is playing, disregarding volume options
+				//NSF tracks that mute the triangle channel by setting it to a high-frequency value will not be considered silent
+				muteFrame = false;
+			}
 			_currentOutput[j] += _channelOutput[j][stamp];
 		}
 
 		int16_t currentOutput = GetOutputVolume();
 		blip_add_delta(_blipBuf, stamp, (int)((currentOutput - _previousOutput) * masterVolume * _fadeRatio));
 
-		if(currentOutput != _previousOutput) {
-			if(std::abs(currentOutput - _previousOutput) > 100) {
-				muteFrame = false;
-			}
-			_previousOutput = currentOutput;
-		}
-	}
-
-	if(std::abs(originalOutput - _previousOutput) > 1500) {
-		//Count mute frames (10000 cycles each) - used by NSF player
-		muteFrame = false;
+		_previousOutput = currentOutput;
 	}
 
 	blip_end_frame(_blipBuf, time);
