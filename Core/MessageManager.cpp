@@ -204,42 +204,37 @@ string MessageManager::Localize(string key)
 		case Language::English: resources = &_enResources; break;
 		case Language::French: resources = &_frResources; break;
 		case Language::Japanese: resources = &_jaResources; break;
+		case Language::Russian: resources = &_enResources; break;
 	}
 	if(resources) {
 		if(resources->find(key) != resources->end()) {
 			return (*resources)[key];
+		} else if(EmulationSettings::GetDisplayLanguage() != Language::English) {
+			//Fallback on English if resource key is missing another language
+			resources = &_enResources;
+			if(resources->find(key) != resources->end()) {
+				return (*resources)[key];
+			}
 		}
 	}
 
-	return "";
+	return key;
 }
 
 void MessageManager::DisplayMessage(string title, string message, string param1, string param2)
 {
 	if(MessageManager::_messageManager) {
-		std::unordered_map<string, string> *resources = nullptr;
-		switch(EmulationSettings::GetDisplayLanguage()) {
-			case Language::English: resources = &_enResources; break;
-			case Language::French: resources = &_frResources; break;
-			case Language::Japanese: resources = &_jaResources; break;
+		title = Localize(title);
+		message = Localize(message);
+
+		size_t startPos = message.find(u8"%1");
+		if(startPos != std::string::npos) {
+			message.replace(startPos, 2, param1);
 		}
-		if(resources) {
-			if(resources->find(title) != resources->end()) {
-				title = (*resources)[title];
-			}
-			if(resources->find(message) != resources->end()) {
-				message = (*resources)[message];
 
-				size_t startPos = message.find(u8"%1");
-				if(startPos != std::string::npos) {
-					message.replace(startPos, 2, param1);
-				}
-
-				startPos = message.find(u8"%2");
-				if(startPos != std::string::npos) {
-					message.replace(startPos, 2, param2);
-				}
-			}
+		startPos = message.find(u8"%2");
+		if(startPos != std::string::npos) {
+			message.replace(startPos, 2, param2);
 		}
 		MessageManager::_messageManager->DisplayMessage(title, message);
 	}
