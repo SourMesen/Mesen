@@ -105,6 +105,7 @@
       <Control ID="tpgGeneral">Général</Control>
       <Control ID="tpgAdvanced">Avancé</Control>
       <Control ID="chkSwapDutyCycles">Inverser le rapport cyclique des canaux Square 1 et Square 2</Control>
+      <Control ID="chkSilenceTriangleHighFreq">Couper le canal triangle lors de fréquences ultrasoniques (réduit les "pops")</Control>
       <Control ID="tpgEffects">Effets</Control>
       <Control ID="grpStereo">Stéréo</Control>
       <Control ID="radStereoDisabled">Désactivé</Control>

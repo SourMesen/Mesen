@@ -637,6 +637,8 @@ namespace Mesen.GUI
 
 		ShowLagCounter = 0x80000,
 
+		SilenceTriangleHighFreq = 0x100000,
+
 		InBackground = 0x40000000,
 	}
 

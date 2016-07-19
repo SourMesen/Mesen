@@ -79,6 +79,7 @@
 			this.trkReverbStrength = new System.Windows.Forms.TrackBar();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkSilenceTriangleHighFreq = new System.Windows.Forms.CheckBox();
 			this.chkSwapDutyCycles = new System.Windows.Forms.CheckBox();
 			this.baseConfigPanel.SuspendLayout();
 			this.grpVolume.SuspendLayout();
@@ -787,6 +788,7 @@
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.chkSilenceTriangleHighFreq, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.chkSwapDutyCycles, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
@@ -796,6 +798,18 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(463, 343);
 			this.tableLayoutPanel3.TabIndex = 1;
+			// 
+			// chkSilenceTriangleHighFreq
+			// 
+			this.chkSilenceTriangleHighFreq.AutoSize = true;
+			this.chkSilenceTriangleHighFreq.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.chkSilenceTriangleHighFreq.Location = new System.Drawing.Point(3, 26);
+			this.chkSilenceTriangleHighFreq.Name = "chkSilenceTriangleHighFreq";
+			this.chkSilenceTriangleHighFreq.Size = new System.Drawing.Size(337, 17);
+			this.chkSilenceTriangleHighFreq.TabIndex = 1;
+			this.chkSilenceTriangleHighFreq.Text = "Mute ultrasonic frequencies on triangle channel (reduces popping)";
+			this.chkSilenceTriangleHighFreq.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.chkSilenceTriangleHighFreq.UseVisualStyleBackColor = true;
 			// 
 			// chkSwapDutyCycles
 			// 
@@ -911,5 +925,6 @@
 		private System.Windows.Forms.Label lblReverbDelay;
 		private System.Windows.Forms.TrackBar trkReverbDelay;
 		private System.Windows.Forms.TrackBar trkReverbStrength;
+		private System.Windows.Forms.CheckBox chkSilenceTriangleHighFreq;
 	}
 }

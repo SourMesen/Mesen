@@ -44,7 +44,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("MuteSoundInBackground", chkMuteSoundInBackground);
 
 			AddBinding("SwapDutyCycles", chkSwapDutyCycles);
-				
+			AddBinding("SilenceTriangleHighFreq", chkSilenceTriangleHighFreq);
+
 			radStereoDisabled.Tag = InteropEmu.StereoFilter.None;
 			radStereoDelay.Tag = InteropEmu.StereoFilter.Delay;
 			radStereoPanning.Tag = InteropEmu.StereoFilter.Panning;
