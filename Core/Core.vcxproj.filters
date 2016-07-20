@@ -763,6 +763,9 @@
     <ClInclude Include="FrameInfo.h">
       <Filter>VideoDecoder</Filter>
     </ClInclude>
+    <ClInclude Include="Txc22000.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

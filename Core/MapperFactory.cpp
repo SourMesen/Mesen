@@ -111,6 +111,7 @@
 #include "TaitoTc0690.h"
 #include "TaitoX1005.h"
 #include "TaitoX1017.h"
+#include "Txc22000.h"
 #include "Txc22211A.h"
 #include "Txc22211B.h"
 #include "Txc22211C.h"
@@ -134,7 +135,7 @@ Supported mappers:  (... denotes bad mappers)
 -----------------------------------------------------------------
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13|   | 15|
 | 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27| 28|   |   | 31|
-| 32| 33| 34|   |   | 37| 38|   | 40|   | 42|   | 44| 45| 46| 47|
+| 32| 33| 34|   | 36| 37| 38|   | 40|   | 42|   | 44| 45| 46| 47|
 | 48| 49| 50|   | 52|   |   |   | 56| 57| 58|   | 60| 61| 62|   |
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
@@ -197,6 +198,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 				case 1: return new Nina01();
 				case 2: return new BnRom();
 			}
+		case 36: return new Txc22000();
 		case 37: return new MMC3_37();
 		case 38: return new UnlPci556();
 		case 40: return new Mapper40();
