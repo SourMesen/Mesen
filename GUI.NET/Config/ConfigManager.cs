@@ -15,6 +15,8 @@ namespace Mesen.GUI.Config
 	{
 		private static Configuration _config;
 		private static Configuration _dirtyConfig;
+		private static bool? _portableMode = null;
+		private static string _portablePath = null;
 
 		private static void LoadConfig()
 		{
@@ -42,7 +44,16 @@ namespace Mesen.GUI.Config
 		{
 			get
 			{
-				return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create), "Mesen");
+				if(_portableMode == null) {
+					_portableMode = System.Reflection.Assembly.GetEntryAssembly().Location.EndsWith("_P.exe", StringComparison.InvariantCultureIgnoreCase);
+					_portablePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+				}
+
+				if(_portableMode.Value) {
+					return Path.Combine(_portablePath, "Mesen");
+				} else {
+					return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create), "Mesen");
+				}
 			}
 		}
 

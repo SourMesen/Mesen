@@ -1350,6 +1350,7 @@ namespace Mesen.GUI.Forms
 							case Language.English: langCode = "en"; break;
 							case Language.French: langCode = "fr"; break;
 							case Language.Japanese: langCode = "ja"; break;
+							case Language.Russian: langCode = "ru"; break;
 						}
 						xmlDoc.LoadXml(client.DownloadString("http://www.mesen.ca/Services/GetLatestVersion.php?v=" + InteropEmu.GetMesenVersion() + "&p=win&l=" + langCode));
 						Version currentVersion = new Version(InteropEmu.GetMesenVersion());
