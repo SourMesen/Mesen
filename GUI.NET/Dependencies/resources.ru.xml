@@ -159,6 +159,15 @@
       <Control ID="chkFourScore">Использовать NES Four Score</Control>
       <Control ID="chkAutoConfigureInput">Автоматически настраивать контроллеры при загрузке игры</Control>
       <Control ID="tpgEmulatorKeys">Emulator Keys</Control>
+
+      <Control ID="tpgAdvanced">Расширенные</Control>
+      <Control ID="grpDisplayInput">Отображать ввод</Control>
+      <Control ID="chkDisplayPort1">Порт 1</Control>
+      <Control ID="chkDisplayPort2">Порт 2</Control>
+      <Control ID="chkDisplayPort3">Порт 3</Control>
+      <Control ID="chkDisplayPort4">Порт 4</Control>
+      <Control ID="lblDisplayPosition">Позиция :</Control>
+      <Control ID="chkDisplayInputHorizontally">Отображать горизонтально</Control>
     </Form>
     <Form ID="frmControllerConfig" Title="Настройки контроллера">
       <Control ID="lblTurboSpeed">Скорость турбо-кнопок:</Control>
@@ -463,6 +472,12 @@
       <Value ID="Ppu2C05C">RP2C05-03</Value>
       <Value ID="Ppu2C05D">RP2C05-04</Value>
       <Value ID="Ppu2C05E">RP2C05-05</Value>
+    </Enum>
+    <Enum ID="InputDisplayPosition">
+      <Value ID="TopLeft">Сверху слева</Value>
+      <Value ID="TopRight">Сверху справа</Value>
+      <Value ID="BottomLeft">Снизу слева</Value>
+      <Value ID="BottomRight">Снизу справа</Value>
     </Enum>
     <Enum ID="Language">
       <Value ID="SystemDefault">Использовать язык по умолчанию</Value>
