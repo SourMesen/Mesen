@@ -775,6 +775,9 @@
     <ClInclude Include="Bmc51.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="Bmc63.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

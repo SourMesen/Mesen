@@ -8,6 +8,7 @@
 #include "Bandai74161_7432.h"
 #include "BandaiFcg.h"
 #include "Bmc51.h"
+#include "Bmc63.h"
 #include "Bmc235.h"
 #include "BnRom.h"
 #include "BF909x.h"
@@ -139,7 +140,7 @@ Supported mappers:  (... denotes bad mappers, --- denotes potentially bad mapper
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13|   | 15|
 | 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27| 28|   |   | 31|
 | 32| 33| 34|   | 36| 37| 38|---| 40| 41| 42|---| 44| 45| 46| 47|
-| 48| 49| 50| 51| 52|   |   |   | 56| 57| 58|   | 60| 61| 62|   |
+| 48| 49| 50| 51| 52|   |   |   | 56| 57| 58|   | 60| 61| 62| 63|
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
 |   | 97|   | 99|...|101|   |   |   |   |   |107|   |   |   |   |
@@ -222,6 +223,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 60: return new Mapper60();  //Partial support?
 		case 61: return new Mapper61();
 		case 62: return new Mapper62();
+		case 63: return new Bmc63();
 		case 64: return new Rambo1();
 		case 65: return new IremH3001();
 		case 66: return new GxRom();
