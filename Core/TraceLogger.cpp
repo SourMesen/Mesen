@@ -62,7 +62,7 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 		}
 
 		_outputFile << std::uppercase << std::hex 
-						<< std::setfill('0') << std::setw(4) << (short)cpuState.DebugPC << "  "
+						<< std::setfill('0') << std::setw(4) << std::right << (short)cpuState.DebugPC << "  "
 						<< std::setfill(' ') << std::setw(10) << std::left << byteCode 
 						<< std::setfill(' ') << std::setw(32) << std::left << assemblyCode
 						<< std::setfill('0') 
