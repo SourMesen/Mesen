@@ -126,6 +126,13 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 uint8_t GameDatabase::GetSubMapper(GameInfo &info)
 {
 	switch(info.MapperID) {
+		case 3:
+			if(info.Board.compare("NES-CNROM") == 0) {
+				//Enable bus conflicts for CNROM games
+				//Fixes "Cybernoid - The Fighting Machine" which requires open bus behavior to work properly
+				return 2;
+			}
+			break;
 		case 4:
 			if(info.Board.compare("ACCLAIM-MC-ACC") == 0) {
 				return 3; //Acclaim MC-ACC (MMC3 clone)
