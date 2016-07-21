@@ -7,6 +7,8 @@
 #include "AXROM.h"
 #include "Bandai74161_7432.h"
 #include "BandaiFcg.h"
+#include "Bmc51.h"
+#include "Bmc235.h"
 #include "BnRom.h"
 #include "BF909x.h"
 #include "BF9096.h"
@@ -18,7 +20,6 @@
 #include "DaouInfosys.h"
 #include "FDS.h"
 #include "FrontFareast.h"
-#include "Bmc235.h"
 #include "GxRom.h"
 #include "Henggedianzi177.h"
 #include "Henggedianzi179.h"
@@ -138,7 +139,7 @@ Supported mappers:  (... denotes bad mappers, --- denotes potentially bad mapper
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13|   | 15|
 | 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27| 28|   |   | 31|
 | 32| 33| 34|   | 36| 37| 38|---| 40| 41| 42|---| 44| 45| 46| 47|
-| 48| 49| 50|   | 52|   |   |   | 56| 57| 58|   | 60| 61| 62|   |
+| 48| 49| 50| 51| 52|   |   |   | 56| 57| 58|   | 60| 61| 62|   |
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
 |   | 97|   | 99|...|101|   |   |   |   |   |107|   |   |   |   |
@@ -213,6 +214,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 48: return new TaitoTc0690();
 		case 49: return new MMC3_49();
 		case 50: return new Mapper50();
+		case 51: return new Bmc51();
 		case 52: return new MMC3_52();
 		case 56: return new Kaiser202();
 		case 57: return new Mapper57();
