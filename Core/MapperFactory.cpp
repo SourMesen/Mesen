@@ -18,6 +18,7 @@
 #include "DaouInfosys.h"
 #include "FDS.h"
 #include "FrontFareast.h"
+#include "Bmc235.h"
 #include "GxRom.h"
 #include "Henggedianzi177.h"
 #include "Henggedianzi179.h"
@@ -136,7 +137,7 @@ Supported mappers:  (... denotes bad mappers, --- denotes potentially bad mapper
 -----------------------------------------------------------------
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13|   | 15|
 | 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27| 28|   |   | 31|
-| 32| 33| 34|   | 36| 37| 38|---| 40| 41| 42|   | 44| 45| 46| 47|
+| 32| 33| 34|   | 36| 37| 38|---| 40| 41| 42|---| 44| 45| 46| 47|
 | 48| 49| 50|   | 52|   |   |   | 56| 57| 58|   | 60| 61| 62|   |
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
@@ -148,7 +149,7 @@ Supported mappers:  (... denotes bad mappers, --- denotes potentially bad mapper
 |176|177|   |179|180|   |182|   |184|185|   |   |   |189|   |191|
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
 |   |   |210|   |   |   |   |   |   |   |218|   |   |   |   |   |
-|   |225|226|227|228|   |230|231|232|   |   |   |   |   |   |   |
+|   |225|226|227|228|   |230|231|232|   |   |235|   |   |   |   |
 |240|241|242|243|   |   |246|   |   |   |   |   |252|   |   |   |
 -----------------------------------------------------------------
 */
@@ -318,6 +319,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 230: return new Mapper230();
 		case 231: return new Mapper231();
 		case 232: return new BF9096();
+		case 235: return new Bmc235();
 		case 240: return new Mapper240();
 		case 241: return new Mapper241();
 		case 242: return new Mapper242();

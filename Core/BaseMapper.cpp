@@ -87,6 +87,12 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8
 	}
 }
 
+void BaseMapper::RemoveCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr)
+{
+	//Unmap this section of memory (causing open bus behavior)
+	SetCpuMemoryMapping(startAddr, endAddr, nullptr, MemoryAccessType::NoAccess);
+}
+
 void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, ChrMemoryType type, int8_t accessType)
 {
 	uint32_t pageCount = 0;
