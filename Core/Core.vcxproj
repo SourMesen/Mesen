@@ -412,6 +412,7 @@
     <ClInclude Include="BF9096.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="BnRom.h" />
+    <ClInclude Include="Caltron41.h" />
     <ClInclude Include="ColorDreams46.h" />
     <ClInclude Include="DaouInfosys.h" />
     <ClInclude Include="DebugState.h" />

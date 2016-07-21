@@ -10,6 +10,7 @@
 #include "BnRom.h"
 #include "BF909x.h"
 #include "BF9096.h"
+#include "Caltron41.h"
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
@@ -131,11 +132,11 @@
 #include "Waixing252.h"
 
 /*
-Supported mappers:  (... denotes bad mappers)
+Supported mappers:  (... denotes bad mappers, --- denotes potentially bad mappers)
 -----------------------------------------------------------------
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13|   | 15|
 | 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27| 28|   |   | 31|
-| 32| 33| 34|   | 36| 37| 38|   | 40|   | 42|   | 44| 45| 46| 47|
+| 32| 33| 34|   | 36| 37| 38|---| 40| 41| 42|   | 44| 45| 46| 47|
 | 48| 49| 50|   | 52|   |   |   | 56| 57| 58|   | 60| 61| 62|   |
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
@@ -202,6 +203,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 37: return new MMC3_37();
 		case 38: return new UnlPci556();
 		case 40: return new Mapper40();
+		case 41: return new Caltron41();
 		case 42: return new Mapper42();
 		case 44: return new MMC3_44();
 		case 45: return new MMC3_45();
