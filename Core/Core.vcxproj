@@ -439,6 +439,7 @@
     <ClInclude Include="JalecoJf13.h" />
     <ClInclude Include="JalecoJf16.h" />
     <ClInclude Include="JalecoJf17_19.h" />
+    <ClInclude Include="JyCompany.h" />
     <ClInclude Include="Kaiser202.h" />
     <ClInclude Include="Kaiser7022.h" />
     <ClInclude Include="Kaiser7058.h" />

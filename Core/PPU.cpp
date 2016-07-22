@@ -670,6 +670,9 @@ void PPU::ProcessPreVBlankScanline()
 				if(_cycle == 257) {
 					_spriteIndex = 0;
 				}
+			} else if((_cycle - 259) % 8 == 0) {
+				//Garbage AT sprite fetch
+				_memoryManager->ReadVRAM(GetAttributeAddr());
 			}
 		}
 	} else if(_cycle == 321 && IsRenderingEnabled()) {
@@ -709,6 +712,10 @@ void PPU::ProcessPrerenderScanline()
 		_scanline = 0;
 	} else if(_cycle >= 321 && _cycle <= 336) {
 		LoadTileInfo();
+	} else if(_cycle == 337 || _cycle == 339) {
+		if(IsRenderingEnabled()) {
+			_memoryManager->ReadVRAM(GetNameTableAddr());
+		}
 	}
 }
 
@@ -725,6 +732,10 @@ void PPU::ProcessVisibleScanline()
 		}
 	} else if(_cycle >= 321 && _cycle <= 336) {
 		LoadTileInfo();
+	} else if(_cycle == 337 || _cycle == 339) {
+		if(IsRenderingEnabled()) {
+			_memoryManager->ReadVRAM(GetNameTableAddr());
+		}
 	}
 
 	ProcessPreVBlankScanline();

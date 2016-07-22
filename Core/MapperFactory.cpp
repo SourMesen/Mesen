@@ -34,6 +34,7 @@
 #include "JalecoJf17_19.h"
 #include "JalecoJfxx.h"
 #include "JalecoSs88006.h"
+#include "JyCompany.h"
 #include "Kaiser202.h"
 #include "Kaiser7022.h"
 #include "Kaiser7058.h"
@@ -135,14 +136,17 @@
 #include "Waixing252.h"
 
 /*
-Supported mappers:  (... denotes bad mappers, --- denotes potentially bad mappers)
+Supported mappers:  
+... : bad mappers
+--- : potentially bad mappers
+=== : not supported by Nestopia & FCEUX
 -----------------------------------------------------------------
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13|   | 15|
 | 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27| 28|   |   | 31|
 | 32| 33| 34|   | 36| 37| 38|---| 40| 41| 42|---| 44| 45| 46| 47|
-| 48| 49| 50| 51| 52|   |   |   | 56| 57| 58|   | 60| 61| 62| 63|
+| 48| 49| 50| 51| 52|   |   |   | 56| 57| 58|===| 60| 61| 62| 63|
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
-| 80|   | 82|   |   | 85| 86| 87| 88| 89|   | 91| 92| 93| 94| 95|
+| 80|===| 82|   |===| 85| 86| 87| 88| 89| 90| 91| 92| 93| 94| 95|
 |   | 97|   | 99|...|101|   |   |   |   |   |107|   |   |   |   |
 |112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
 |   |   |   |   |132|133|   |   |   |137|138|139|140|141|142|143|
@@ -150,7 +154,7 @@ Supported mappers:  (... denotes bad mappers, --- denotes potentially bad mapper
 |   |   |   |163|164|   |   |   |   |   |170|171|172|173|   |175|
 |176|177|   |179|180|   |182|   |184|185|   |   |   |189|   |191|
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
-|   |   |210|   |   |   |   |   |   |   |218|   |   |   |   |   |
+|   |209|210|211|   |   |   |   |   |   |218|   |   |   |   |   |
 |   |225|226|227|228|   |230|231|232|   |   |235|   |   |   |   |
 |240|241|242|243|   |   |246|   |   |   |   |   |252|   |   |   |
 -----------------------------------------------------------------
@@ -247,6 +251,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 87: return new JalecoJfxx(false);
 		case 88: return new Namco108_88();
 		case 89: return new Sunsoft89();
+		case 90: return new JyCompany();
 		case 91: return new Mapper91();
 		case 92: return new JalecoJf17_19(true);
 		case 93: return new Sunsoft93();
@@ -314,7 +319,9 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 205: return new MMC3_205();
 		case 206: return new Namco108();
 		case 207: return new TaitoX1005(true);
+		case 209: return new JyCompany();
 		case 210: return new Namco163();
+		case 211: return new JyCompany();
 		case 218: return new Mapper218();
 		case 225: return new Mapper225();
 		case 226: return new Mapper226();

@@ -882,8 +882,8 @@ public:
 	static void RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue);
 	static void StartDmcTransfer();	
 	static uint32_t GetClockRate(NesModel model);
-
-	
+	static bool IsCpuWrite() { return CPU::Instance->_cpuWrite; }
+		
 	//Used by debugger for "Set Next Statement"
 	void SetDebugPC(uint16_t value) { SetPC(value); _state.DebugPC = value; }
 
