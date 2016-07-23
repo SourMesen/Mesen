@@ -32,6 +32,5 @@ protected:
 public:
 	MMC3_ChrRam(uint16_t firstRamBank, uint16_t lastRamBank, uint16_t chrRamSize) : _firstRamBank(firstRamBank), _lastRamBank(lastRamBank), _chrRamSize(chrRamSize)
 	{
-		InitializeChrRam();
 	}
 };

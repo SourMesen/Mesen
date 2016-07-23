@@ -13,8 +13,6 @@ protected:
 
 	void InitMapper()
 	{
-		InitializeChrRam();
-
 		SelectPRGPage(0, 0);
 		SelectCHRPage(0, 0);
 		SetMirroringType(MirroringType::FourScreens);

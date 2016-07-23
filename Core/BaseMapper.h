@@ -105,7 +105,7 @@ protected:
 	virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
 	virtual bool ForceBattery() { return false; }
 
-	virtual uint32_t GetChrRamSize() { return 0x2000; }
+	virtual uint32_t GetChrRamSize() { return 0x0000; }
 
 	//Work ram is NOT saved - aka Expansion ram, etc.
 	virtual uint32_t GetWorkRamPageSize() { return 0x2000; }

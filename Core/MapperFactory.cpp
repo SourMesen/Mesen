@@ -78,6 +78,7 @@
 #include "MMC3_49.h"
 #include "MMC3_52.h"
 #include "MMC3_115.h"
+#include "MMC3_165.h"
 #include "MMC3_182.h"
 #include "MMC3_189.h"
 #include "MMC3_205.h"
@@ -154,7 +155,7 @@ Supported mappers:
 |112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
 |   |   |   |   |132|133|   |   |   |137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
-|   |   |   |163|164|   |   |   |   |   |170|171|172|173|   |175|
+|   |   |   |163|164|165|   |   |   |   |170|171|172|173|   |175|
 |176|177|178|179|180|   |182|   |184|185|   |   |   |189|   |191|
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
 |   |209|210|211|   |   |   |   |   |   |218|   |   |   |   |   |
@@ -298,6 +299,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 159: return new BandaiFcg();
 		case 163: return new Nanjing();
 		case 164: return new Waixing164();
+		case 165: return new MMC3_165();
 		case 170: return new Mapper170();
 		case 171: return new Kaiser7058();
 		case 172: return new Txc22211B();
