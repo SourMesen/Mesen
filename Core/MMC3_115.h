@@ -26,7 +26,7 @@ private:
 	}
 
 protected:
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page)
+	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
 	{
 		page |= (_chrReg << 8);
 		BaseMapper::SelectCHRPage(slot, page);

@@ -117,6 +117,21 @@ class MMC3 : public BaseMapper
 			}
 		}
 
+		virtual void UpdatePrgMapping()
+		{
+			if(_prgMode == 0) {
+				SelectPRGPage(0, _registers[6]);
+				SelectPRGPage(1, _registers[7]);
+				SelectPRGPage(2, -2);
+				SelectPRGPage(3, -1);
+			} else if(_prgMode == 1) {
+				SelectPRGPage(0, -2);
+				SelectPRGPage(1, _registers[7]);
+				SelectPRGPage(2, _registers[6]);
+				SelectPRGPage(3, -1);
+			}
+		}
+
 		bool CanWriteToWorkRam()
 		{
 			return _wramEnabled && !_wramWriteProtected;
@@ -133,18 +148,7 @@ class MMC3 : public BaseMapper
 			_wramEnabled = (_state.RegA001 & 0x80) == 0x80;
 			_wramWriteProtected = (_state.RegA001 & 0x40) == 0x40;
 
-			if(_prgMode == 0) {
-				SelectPRGPage(0, _registers[6]);
-				SelectPRGPage(1, _registers[7]);
-				SelectPRGPage(2, -2);
-				SelectPRGPage(3, -1);
-			} else if(_prgMode == 1) {
-				SelectPRGPage(0, -2);
-				SelectPRGPage(1, _registers[7]);
-				SelectPRGPage(2, _registers[6]);
-				SelectPRGPage(3, -1);
-			}
-
+			UpdatePrgMapping();
 			UpdateChrMapping();
 		}
 
