@@ -498,6 +498,7 @@
     <ClInclude Include="NsfLoader.h" />
     <ClInclude Include="NsfMapper.h" />
     <ClInclude Include="NsfPpu.h" />
+    <ClInclude Include="OekaKids.h" />
     <ClInclude Include="PlayerListMessage.h" />
     <ClInclude Include="ReverbFilter.h" />
     <ClInclude Include="RomData.h" />

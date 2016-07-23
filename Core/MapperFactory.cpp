@@ -103,6 +103,7 @@
 #include "NsfCart31.h"
 #include "NsfMapper.h"
 #include "NtdecTc112.h"
+#include "OekaKids.h"
 #include "Rambo1.h"
 #include "Sachen_133.h"
 #include "Sachen_143.h"
@@ -156,7 +157,7 @@ Supported mappers:
 | 48| 49| 50| 51| 52|   |   |   | 56| 57| 58|===| 60| 61| 62| 63|
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|===| 82|   |===| 85| 86| 87| 88| 89| 90| 91| 92| 93| 94| 95|
-|   | 97|   | 99|...|101|   |   |   |   |   |107|108|   |   |   |
+| 96| 97|   | 99|...|101|   |   |   |   |   |107|108|   |   |   |
 |112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
 |   |   |   |   |132|133|   |   |   |137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
@@ -267,7 +268,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 93: return new Sunsoft93();
 		case 94: return new UnRom_94();
 		case 95: return new Namco108_95();
-		case 96: break;  //Bandai - Oeka Tablet
+		case 96: return new OekaKids();
 		case 97: return new IremTamS1();
 		case 99: return new VsSystem();
 		case 101: return new JalecoJfxx(true);
