@@ -82,7 +82,7 @@
       <Control ID="mnuTestStopRecording">Stop recording</Control>
       <Control ID="mnuRunAllTests">Run all tests</Control>
       <Control ID="mnuDebugger">デバッガ</Control>
-      <Control ID="mnuLogWindow">ログウィンドウ</Control>      
+      <Control ID="mnuLogWindow">ログウィンドウ</Control>
       <Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
       <Control ID="mnuHelp">ヘルプ</Control>
       <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
@@ -405,7 +405,7 @@
     <Message ID="UpdaterNotFound">必要不可欠なファイルがないため、アップデートは出来なかった。</Message>
     <Message ID="UpgradeSuccess">アップデートは完了しました。</Message>
     <Message ID="Net45NotFound">Microsoft .NET Framework 4.5はインストールされていないため、Mesenは起動できません。Microsoft .NET Frameworkの最新版をMicrosoftのサイトからダウンロードして、インストールしてください。</Message>
-    
+
     <Message ID="GoogleDriveIntegrationError">MesenはGoogle Driveにアクセス出来ませんでした。</Message>
   </Messages>
   <Enums>
@@ -477,6 +477,7 @@
       <Value ID="French">Français</Value>
       <Value ID="Japanese">日本語</Value>
       <Value ID="Russian">Русский</Value>
+      <Value ID="Spanish">Español</Value>
     </Enum>
   </Enums>
 </Resources>

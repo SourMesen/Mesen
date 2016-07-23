@@ -232,7 +232,7 @@
       <Control ID="lblEmuSpeedHint">%  (0 = Vitesse maximale)</Control>
       <Control ID="lblEmulationSpeed">Vitesse d'émulation :</Control>
 
-      <Control ID="tpgAdvanced">Avancé</Control>      
+      <Control ID="tpgAdvanced">Avancé</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
       <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
@@ -249,7 +249,7 @@
       <Control ID="lblEffectiveClockRate">Fréquence d'horloge (NTSC) : </Control>
       <Control ID="lblEffectiveClockRatePal">Fréquence d'horloge (PAL) : </Control>
       <Control ID="lblEffectiveClockRateDendy">Fréquence d'horloge (Dendy) : </Control>
-      
+
       <Control ID="chkOverclockAdjustApu">Ne pas overclocker l'APU (Empêche le changement de tonalité causé par l'overclocking)</Control>
 
       <Control ID="chkShowLagCounter">Afficher le compteur de lag</Control>
@@ -288,14 +288,14 @@
       <Control ID="btnResync">Resynchroniser</Control>
 
       <Control ID="chkDisableGameDatabase">Désactiver la base de données des jeux</Control>
-      
+
       <Control ID="tpgNsf">NSF / NSFe</Control>
       <Control ID="chkNsfAutoDetectSilence">Jouer la piste suivante après</Control>
       <Control ID="lblNsfMillisecondsOfSilence">millisecondes de silence</Control>
-      <Control ID="chkNsfMoveToNextTrackAfterTime">Limiter la durée des pistes à</Control>      
+      <Control ID="chkNsfMoveToNextTrackAfterTime">Limiter la durée des pistes à</Control>
       <Control ID="lblNsfSeconds">secondes</Control>
       <Control ID="chkNsfDisableApuIrqs">Désactiver les IRQs du APU (Recommandé)</Control>
-      
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
@@ -393,7 +393,7 @@
     <Message ID="NsfNextTrack">Piste Suivante (Garder enfoncé pour jouer plus rapidement)</Message>
     <Message ID="NsfUnnamedTrack">[sans nom]</Message>
     <Message ID="NsfUnknownField">[inconnu]</Message>
-    
+
     <Message ID="CouldNotInstallRuntime">Le package Redistribuable Visual C++ pour Visual Studio 2015 n'a pas été installé correctement.</Message>
     <Message ID="EmptyState">&lt;aucune sauvegarde&gt;</Message>
     <Message ID="ErrorWhileCheckingUpdates">Une erreur s'est produite lors de la recherche de mises-à-jour.&#xA;&#xA;Détails de l'erreur :&#xA;{0}</Message>
@@ -413,7 +413,7 @@
     <Message ID="UpgradeSuccess">La mise-à-jour s'est faite avec succès.</Message>
     <Message ID="UpdaterNotFound">Le processus de mise-à-jour ne peut être démarré puisque certains fichiers sont manquants.</Message>
     <Message ID="Net45NotFound">Le .NET Framework 4.5 de Microsoft n'a pas été trouvé. Veuillez télécharger la plus récente version du .NET Framework à partir du site de Microsoft et essayer à nouveau.</Message>
-    
+
     <Message ID="GoogleDriveIntegrationError">Mesen n'a pas été en mesure de se connecter à votre compte Google Drive, veuillez essayer à nouveau.</Message>
   </Messages>
   <Enums>
@@ -485,6 +485,7 @@
       <Value ID="French">Français</Value>
       <Value ID="Japanese">日本語</Value>
       <Value ID="Russian">Русский</Value>
+      <Value ID="Spanish">Español</Value>
     </Enum>
   </Enums>
 </Resources>

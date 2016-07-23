@@ -232,7 +232,7 @@
       <Control ID="lblEmuSpeedHint">%  (0 = Максимальная скорость)</Control>
       <Control ID="lblEmulationSpeed">Скорость эмуляции :</Control>
 
-      <Control ID="tpgAdvanced">Расширенные</Control>      
+      <Control ID="tpgAdvanced">Расширенные</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
       <Control ID="chkAllowInvalidInput">Разрешить недопустимые комбинации (Вниз+Вверх и Влево+Вправо)</Control>
       <Control ID="chkRemoveSpriteLimit">Отключить лимит спрайтов (уменьшает мерцание)</Control>
@@ -249,7 +249,7 @@
       <Control ID="lblEffectiveClockRate">Тактовая частота (NTSC) : </Control>
       <Control ID="lblEffectiveClockRatePal">Тактовая частота(PAL) : </Control>
       <Control ID="lblEffectiveClockRateDendy">Тактовая частота (Dendy) : </Control>
-      
+
       <Control ID="chkOverclockAdjustApu">Не разгонять APU (Предотвращает изменение тона звука)</Control>
 
       <Control ID="chkShowLagCounter">Показывать счётчик лага</Control>
@@ -288,14 +288,14 @@
       <Control ID="btnResync">Синхронизировать</Control>
 
       <Control ID="chkDisableGameDatabase">Отключить встроенную базу данных</Control>
-      
+
       <Control ID="tpgNsf">NSF / NSFe</Control>
       <Control ID="chkNsfAutoDetectSilence">Переходить на следующий трек после</Control>
       <Control ID="lblNsfMillisecondsOfSilence">миллисекунд тишины</Control>
-      <Control ID="chkNsfMoveToNextTrackAfterTime">Ограничить продолжительность воспроизведения</Control>      
+      <Control ID="chkNsfMoveToNextTrackAfterTime">Ограничить продолжительность воспроизведения</Control>
       <Control ID="lblNsfSeconds">секундами</Control>
       <Control ID="chkNsfDisableApuIrqs">Отключить IRQs APU (Рекомендовано)</Control>
-      
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>
     </Form>
@@ -484,7 +484,8 @@
       <Value ID="English">English</Value>
       <Value ID="French">Français</Value>
       <Value ID="Japanese">日本語</Value>
-	  <Value ID="Russian">Русский</Value>
+      <Value ID="Russian">Русский</Value>
+      <Value ID="Spanish">Español</Value>
     </Enum>
   </Enums>
 </Resources>

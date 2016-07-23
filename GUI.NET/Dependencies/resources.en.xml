@@ -114,6 +114,7 @@
       <Value ID="French">Français</Value>
       <Value ID="Japanese">日本語</Value>
       <Value ID="Russian">Русский</Value>
+      <Value ID="Spanish">Español</Value>
     </Enum>
   </Enums>
 </Resources>

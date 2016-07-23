@@ -248,6 +248,67 @@ std::unordered_map<string, string> MessageManager::_ruResources = {
 	{ "SynchronizationCompleted", u8"Синхронизация завершена." },
 };
 
+std::unordered_map<string, string> MessageManager::_esResources = {
+	{ "Cheats", u8"Trucos" },
+	{ "Debug", u8"Debug" },
+	{ "EmulationSpeed", u8"Velocidad" },
+	{ "ClockRate", u8"Frecuencia de Reloj" },
+	{ "Error", u8"Error" },
+	{ "GameInfo", u8"Info del Juego" },
+	{ "GameLoaded", u8"Juego Cargado" },
+	{ "Movies", u8"Videos" },
+	{ "NetPlay", u8"Juego Online" },
+	{ "Region", u8"Región" },
+	{ "SaveStates", u8"Partidas Guardadas" },
+	{ "ScreenshotSaved", u8"Captura Guardada" },
+	{ "SoundRecorder", u8"Grabadora de Sonido" },
+	{ "Test", u8"Test" },
+
+	{ "CheatApplied", u8"1 truco aplicado." },
+	{ "CheatsApplied", u8"%1 trucos aplicados." },
+	{ "ConnectedToServer", u8"Conectado al servidor." },
+	{ "ConnectedAsPlayer", u8"Conectado como jugador %1" },
+	{ "ConnectedAsSpectator", u8"Conectado como espectador." },
+	{ "ConnectionLost", u8"Conexión con el servidor perdida." },
+	{ "CouldNotConnect", u8"No se puede conectar con el servidor." },
+	{ "CouldNotIniitalizeAudioSystem", u8"No se puede iniciar el sistema de sonido" },
+	{ "CouldNotFindRom", u8"No se ha podido encontrar la ROM buscada." },
+	{ "CouldNotLoadFile", u8"No se puede cargar el archivo: %1" },
+	{ "EmulationMaximumSpeed", u8"Velocidad Máxima" },
+	{ "EmulationSpeedPercent", u8"%1%" },
+	{ "GameCrash", u8"El juego se ha colgado (%1)" },
+	{ "Lag", u8"Lag" },
+	{ "Mapper", u8"Mapeado: %1, SubMapeado: %2" },
+	{ "MovieEnded", u8"Video terminado." },
+	{ "MovieInvalid", u8"Tipo de video no válido." },
+	{ "MovieMissingRom", u8"La ROM (%1) del video seleccionado no se encuentra." },
+	{ "MovieNewerVersion", u8"No se pueden cargar videos creados con una versión mas reciente de Mesen. Por favor descargue la última versión." },
+	{ "MovieIncompatibleVersion", u8"Este video es incompatible con esta versión de Mesen." },
+	{ "MoviePlaying", u8"Reproduciendo video: %1" },
+	{ "MovieRecordingTo", u8"Grabando a: %1" },
+	{ "MovieSaved", u8"Video guardado en el archivo: %1" },
+	{ "NetplayVersionMismatch", u8"%1 no está ejecutando la misma versión de Mesen y ha sido desconectado." },
+	{ "PrgSizeWarning", u8"El tamaño del PRG es menor de 32kb" },
+	{ "SaveStateEmpty", u8"La partida guardada está vacia." },
+	{ "SaveStateIncompatibleVersion", u8"Partida guardada #%1 incompatible con esta versión de Mesen." },
+	{ "SaveStateInvalidFile", u8"Partida guardada no válida." },
+	{ "SaveStateLoaded", u8"Partida #%1 cargada." },
+	{ "SaveStateNewerVersion", u8"No se puede cargar una partida creada con una versión mas reciente de Mesen. Por favor descargue la última versión." },
+	{ "SaveStateSaved", u8"Partida #%1 guardada." },
+	{ "ScanlineTimingWarning", u8"El timing de PPU ha sido cambiado." },
+	{ "ServerStarted", u8"Servidor iniciado (Puerto: %1)" },
+	{ "ServerStopped", u8"Servidor detenido" },
+	{ "SoundRecorderStarted", u8"Grabando en: %1" },
+	{ "SoundRecorderStopped", u8"Grabación guardada en: %1" },
+	{ "TestFileSavedTo", u8"Archivo test guardado en: %1" },
+	{ "UnsupportedMapper", u8"Mapa no soportado, no se puede cargar el juego." },
+
+	{ "GoogleDrive", u8"Google Drive" },
+	{ "SynchronizationStarted", u8"Sincronización iniciada." },
+	{ "SynchronizationFailed", u8"Sincronización fallida." },
+	{ "SynchronizationCompleted", u8"Sincronización completada." },
+};
+
 std::list<string> MessageManager::_log;
 SimpleLock MessageManager::_logLock;
 IMessageManager* MessageManager::_messageManager = nullptr;
@@ -266,6 +327,7 @@ string MessageManager::Localize(string key)
 		case Language::French: resources = &_frResources; break;
 		case Language::Japanese: resources = &_jaResources; break;
 		case Language::Russian: resources = &_ruResources; break;
+		case Language::Spanish: resources = &_esResources; break;
 	}
 	if(resources) {
 		if(resources->find(key) != resources->end()) {
