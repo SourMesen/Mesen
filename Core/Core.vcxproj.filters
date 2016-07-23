@@ -80,6 +80,9 @@
     <Filter Include="Nes\Mappers\Kaiser">
       <UniqueIdentifier>{9b0da03f-174e-403b-b988-394f32d4e1d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\Mappers\Txc">
+      <UniqueIdentifier>{c877c2a1-f79e-4a58-82d2-f4318e21ff81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -730,15 +733,6 @@
     <ClInclude Include="Sachen_133.h">
       <Filter>Nes\Mappers\Sachen</Filter>
     </ClInclude>
-    <ClInclude Include="Txc22211A.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="Txc22211B.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="Txc22211C.h">
-      <Filter>Nes\Mappers</Filter>
-    </ClInclude>
     <ClInclude Include="Kaiser7058.h">
       <Filter>Nes\Mappers\Kaiser</Filter>
     </ClInclude>
@@ -762,9 +756,6 @@
     </ClInclude>
     <ClInclude Include="FrameInfo.h">
       <Filter>VideoDecoder</Filter>
-    </ClInclude>
-    <ClInclude Include="Txc22000.h">
-      <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="Caltron41.h">
       <Filter>Nes\Mappers</Filter>
@@ -792,6 +783,21 @@
     </ClInclude>
     <ClInclude Include="MMC3_165.h">
       <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
+    <ClInclude Include="Subor166.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Txc22000.h">
+      <Filter>Nes\Mappers\Txc</Filter>
+    </ClInclude>
+    <ClInclude Include="Txc22211A.h">
+      <Filter>Nes\Mappers\Txc</Filter>
+    </ClInclude>
+    <ClInclude Include="Txc22211B.h">
+      <Filter>Nes\Mappers\Txc</Filter>
+    </ClInclude>
+    <ClInclude Include="Txc22211C.h">
+      <Filter>Nes\Mappers\Txc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
