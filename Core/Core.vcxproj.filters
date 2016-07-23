@@ -799,6 +799,9 @@
     <ClInclude Include="Txc22211C.h">
       <Filter>Nes\Mappers\Txc</Filter>
     </ClInclude>
+    <ClInclude Include="Mapper234.h">
+      <Filter>Nes\Mappers\Unnamed</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -62,6 +62,7 @@
 #include "Mapper227.h"
 #include "Mapper230.h"
 #include "Mapper231.h"
+#include "Mapper234.h"
 #include "Mapper240.h"
 #include "Mapper241.h"
 #include "Mapper242.h"
@@ -160,7 +161,7 @@ Supported mappers:
 |176|177|178|179|180|   |182|   |184|185|   |   |   |189|   |191|
 |192|193|194|195|   |   |   |   |200|201|202|203|   |205|206|207|
 |   |209|210|211|   |   |   |   |   |   |218|   |   |   |   |   |
-|   |225|226|227|228|   |230|231|232|   |   |235|   |   |   |   |
+|   |225|226|227|228|   |230|231|232|   |234|235|   |   |   |   |
 |240|241|242|243|   |245|246|   |   |   |   |   |252|   |   |   |
 -----------------------------------------------------------------
 */
@@ -340,6 +341,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 230: return new Mapper230();
 		case 231: return new Mapper231();
 		case 232: return new BF9096();
+		case 234: return new Mapper234();
 		case 235: return new Bmc235();
 		case 240: return new Mapper240();
 		case 241: return new Mapper241();
