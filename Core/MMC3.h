@@ -22,7 +22,6 @@ class MMC3 : public BaseMapper
 		};
 
 		uint8_t _currentRegister;
-		uint8_t _chrMode;
 		uint8_t _prgMode;
 
 		bool _wramEnabled;
@@ -71,6 +70,8 @@ class MMC3 : public BaseMapper
 		uint8_t _irqCounter;
 		bool _irqReload;
 		bool _irqEnabled;
+		uint8_t _chrMode;
+		uint8_t _registers[8];
 
 		uint8_t GetCurrentRegister() 
 		{
@@ -83,7 +84,6 @@ class MMC3 : public BaseMapper
 		}
 
 		virtual bool ForceMmc3RevAIrqs() { return false; }
-		uint8_t _registers[8];
 
 		virtual void UpdateMirroring()
 		{
