@@ -50,6 +50,7 @@
 #include "Mapper62.h"
 #include "Mapper91.h"
 #include "Mapper107.h"
+#include "Mapper108.h"
 #include "Mapper112.h"
 #include "Mapper170.h"
 #include "Mapper200.h"
@@ -154,7 +155,7 @@ Supported mappers:
 | 48| 49| 50| 51| 52|   |   |   | 56| 57| 58|===| 60| 61| 62| 63|
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|===| 82|   |===| 85| 86| 87| 88| 89| 90| 91| 92| 93| 94| 95|
-|   | 97|   | 99|...|101|   |   |   |   |   |107|   |   |   |   |
+|   | 97|   | 99|...|101|   |   |   |   |   |107|108|   |   |   |
 |112|113|   |115|   |   |118|119|   |   |   |   |   |   |   |   |
 |   |   |   |   |132|133|   |   |   |137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
@@ -271,6 +272,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 101: return new JalecoJfxx(true);
 		case 105: break; //NES World Champ - has dip switches
 		case 107: return new Mapper107();
+		case 108: return new Mapper108();
 		case 112: return new Mapper112();
 		case 113: return new Nina03_06(true);
 		case 115: return new MMC3_115();
