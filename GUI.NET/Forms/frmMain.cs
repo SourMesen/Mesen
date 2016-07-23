@@ -37,10 +37,26 @@ namespace Mesen.GUI.Forms
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
 
+		private bool _noAudio = false;
+		private bool _noVideo = false;
+		private bool _noInput = false;
+
 		public frmMain(string[] args)
 		{
-			if(args.Length > 0 && File.Exists(args[0])) {
-				_romToLoad = args[0];
+			var a = new List<string>();
+			for(int i = 0; i < args.Length; i++) {
+				a.Add(args[i].ToLowerInvariant());
+			}
+			_noVideo = a.Contains("/novideo");
+			_noAudio = a.Contains("/noaudio");
+			_noInput = a.Contains("/noinput");
+
+			if(args.Length > 0) {
+				foreach(string arg in args) {
+					if(File.Exists(arg)) {
+						_romToLoad = args[0];
+					}
+				}
 			}
 
 			InitializeComponent();
@@ -156,7 +172,7 @@ namespace Mesen.GUI.Forms
 
 		void InitializeEmu()
 		{
-			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.ctrlRenderer.Handle);
+			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.ctrlRenderer.Handle, _noAudio, _noVideo, _noInput);
 			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
 				InteropEmu.AddKnowGameFolder(Path.GetDirectoryName(recentItem.Path).ToLowerInvariant());
 			}

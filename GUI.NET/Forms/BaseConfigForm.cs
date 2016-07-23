@@ -212,7 +212,7 @@ namespace Mesen.GUI.Forms
 							}
 						} else if(field.FieldType == typeof(string)) {
 							combo.SelectedItem = value;
-							if(combo.SelectedIndex < 0) {
+							if(combo.SelectedIndex < 0 && combo.Items.Count > 0) {
 								combo.SelectedIndex = 0;
 							}
 						}

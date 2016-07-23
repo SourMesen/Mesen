@@ -61,7 +61,7 @@ namespace InteropEmu {
 
 		DllExport uint32_t __stdcall GetMesenVersion() { return EmulationSettings::GetMesenVersion(); }
 
-		DllExport void __stdcall InitializeEmu(const char* homeFolder, HWND windowHandle, HWND dxViewerHandle)
+		DllExport void __stdcall InitializeEmu(const char* homeFolder, HWND windowHandle, HWND dxViewerHandle, bool noAudio, bool noVideo, bool noInput)
 		{
 			FolderUtilities::SetHomeFolder(homeFolder);
 
@@ -69,11 +69,18 @@ namespace InteropEmu {
 				_windowHandle = windowHandle;
 				_viewerHandle = dxViewerHandle;
 
-				_renderer = new NES::Renderer(_viewerHandle);
-				_soundManager = new SoundManager(_windowHandle);
-				_keyManager = new WindowsKeyManager(_windowHandle);
+				if(!noVideo) {
+					_renderer = new NES::Renderer(_viewerHandle);
+				} 
 
-				ControlManager::RegisterKeyManager(_keyManager);
+				if(!noAudio) {
+					_soundManager = new SoundManager(_windowHandle);
+				}
+
+				if(!noInput) {
+					_keyManager = new WindowsKeyManager(_windowHandle);
+					ControlManager::RegisterKeyManager(_keyManager);
+				}
 			}
 		}
 
@@ -107,7 +114,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetMousePosition(double x, double y) { ControlManager::SetMousePosition(x, y); }
 
-		DllExport void __stdcall UpdateInputDevices() { _keyManager->UpdateDevices(); }
+		DllExport void __stdcall UpdateInputDevices() { if(_keyManager) { _keyManager->UpdateDevices(); } }
 		DllExport uint32_t __stdcall GetPressedKey() { return ControlManager::GetPressedKey(); }
 		DllExport const char* __stdcall GetKeyName(uint32_t keyCode) 
 		{
@@ -229,8 +236,15 @@ namespace InteropEmu {
 			GameServer::StopServer();
 			GameClient::Disconnect();
 			MessageManager::RegisterMessageManager(nullptr);
-			delete _renderer;
-			delete _soundManager;
+			
+			if(_renderer) {
+				delete _renderer;
+				_renderer = nullptr;
+			}
+			if(_soundManager) {
+				delete _soundManager;
+				_soundManager = nullptr;
+			}
 		}
 
 		DllExport void __stdcall TakeScreenshot() { VideoDecoder::GetInstance()->TakeScreenshot(); }
@@ -337,11 +351,11 @@ namespace InteropEmu {
 
 		DllExport const char* __stdcall GetAudioDevices() 
 		{ 
-			_returnString = _soundManager->GetAvailableDevices();
+			_returnString = _soundManager ? _soundManager->GetAvailableDevices() : "";
 			return _returnString.c_str();
 		}
 
-		DllExport void __stdcall SetAudioDevice(char* audioDevice) { _soundManager->SetAudioDevice(audioDevice); }
+		DllExport void __stdcall SetAudioDevice(char* audioDevice) { if(_soundManager) { _soundManager->SetAudioDevice(audioDevice); } }
 
 		DllExport void __stdcall GetScreenSize(ScreenSize &size, bool ignoreScale) { VideoDecoder::GetInstance()->GetScreenSize(size, ignoreScale); }
 		
