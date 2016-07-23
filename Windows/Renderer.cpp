@@ -55,6 +55,7 @@ namespace NES
 
 	void Renderer::Reset()
 	{
+		auto lock = _frameLock.AcquireSafe();
 		CleanupDevice();
 		if(FAILED(InitDevice())) {
 			CleanupDevice();
@@ -65,17 +66,27 @@ namespace NES
 
 	void Renderer::CleanupDevice()
 	{
-		if(_pTexture[0]) {
-			_pTexture[0]->Release();
-			_pTexture[0] = nullptr;
-		}
-		if(_pTexture[1]) {
-			_pTexture[1]->Release();
-			_pTexture[1] = nullptr;
+		if(_pTexture) {
+			_pTexture->Release();
+			_pTexture = nullptr;
 		}
 		if(_overlayTexture) {
 			_overlayTexture->Release();
 			_overlayTexture = nullptr;
+		}
+		if(_pTextureSrv) {
+			_pTextureSrv->Release();
+			_pTextureSrv = nullptr;
+		}
+		if(_pOverlaySrv) {
+			_pOverlaySrv->Release();
+			_pOverlaySrv = nullptr;
+		}
+		if(_textureBuffer[0]) {
+			delete[] _textureBuffer[0];
+		}
+		if(_textureBuffer[1]) {
+			delete[] _textureBuffer[1];
 		}
 
 		if(_samplerState) {
@@ -169,6 +180,7 @@ namespace NES
 			}
 		}
 		if(FAILED(hr)) {
+			MessageManager::Log("D3D11CreateDeviceAndSwapChain() failed - Error:" + std::to_string(hr));
 			return hr;
 		}
 
@@ -176,12 +188,14 @@ namespace NES
 		ID3D11Texture2D* pBackBuffer = nullptr;
 		hr = _pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 		if(FAILED(hr)) {
+			MessageManager::Log("SwapChain::GetBuffer() failed - Error:" + std::to_string(hr));
 			return hr;
 		}
 
 		hr = _pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &_pRenderTargetView);
 		pBackBuffer->Release();
 		if(FAILED(hr)) {
+			MessageManager::Log("D3DDevice::CreateRenderTargetView() failed - Error:" + std::to_string(hr));
 			return hr;
 		}
 
@@ -203,8 +217,10 @@ namespace NES
 		depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 		// Create the state using the device.
-		if(FAILED(_pd3dDevice->CreateDepthStencilState(&depthDisabledStencilDesc, &_pDepthDisabledStencilState))) {
-			return S_FALSE;
+		hr = _pd3dDevice->CreateDepthStencilState(&depthDisabledStencilDesc, &_pDepthDisabledStencilState);
+		if(FAILED(hr)) {
+			MessageManager::Log("D3DDevice::CreateDepthStencilState() failed - Error:" + std::to_string(hr));
+			return hr;
 		}
 
 		// Clear the blend state description.
@@ -222,8 +238,10 @@ namespace NES
 		blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
 
 		// Create the blend state using the description.
-		if(FAILED(_pd3dDevice->CreateBlendState(&blendStateDescription, &_pAlphaEnableBlendingState))) {
-			return S_FALSE;
+		hr = _pd3dDevice->CreateBlendState(&blendStateDescription, &_pAlphaEnableBlendingState);
+		if(FAILED(hr)) {
+			MessageManager::Log("D3DDevice::CreateBlendState() failed - Error:" + std::to_string(hr));
+			return hr;
 		}
 
 		float blendFactor[4];
@@ -246,17 +264,25 @@ namespace NES
 		vp.TopLeftY = 0;
 		_pDeviceContext->RSSetViewports(1, &vp);
 
-		_pTexture[0] = CreateTexture(_nesFrameWidth, _nesFrameHeight);
-		if(!_pTexture[0]) {
-			return S_FALSE;
-		}
-		_pTexture[1] = CreateTexture(_nesFrameWidth, _nesFrameHeight);
-		if(!_pTexture[1]) {
-			return S_FALSE;
-		}
+		_textureBuffer[0] = new uint8_t[_nesFrameWidth*_nesFrameHeight*4];
+		_textureBuffer[1] = new uint8_t[_nesFrameWidth*_nesFrameHeight*4];
+		memset(_textureBuffer[0], 0, _nesFrameWidth*_nesFrameHeight*4);
+		memset(_textureBuffer[1], 0, _nesFrameWidth*_nesFrameHeight*4);
 
+		_pTexture = CreateTexture(_nesFrameWidth, _nesFrameHeight);
+		if(!_pTexture) {
+			return S_FALSE;
+		}
 		_overlayTexture = CreateTexture(8, 8);
 		if(!_overlayTexture) {
+			return S_FALSE;
+		}
+		_pTextureSrv = GetShaderResourceView(_pTexture);
+		if(!_pTextureSrv) {
+			return S_FALSE;
+		}
+		_pOverlaySrv = GetShaderResourceView(_overlayTexture);
+		if(!_pOverlaySrv) {
 			return S_FALSE;
 		}
 
@@ -282,7 +308,11 @@ namespace NES
 		samplerDesc.MaxAnisotropy = 1;
 		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 		
-		_pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
+		hr = _pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
+		if(FAILED(hr)) {
+			MessageManager::Log("D3DDevice::CreateSamplerState() failed - Error:" + std::to_string(hr));
+			return hr;
+		}
 
 		return S_OK;
 	}
@@ -308,6 +338,7 @@ namespace NES
 
 		HRESULT hr = _pd3dDevice->CreateTexture2D(&desc, nullptr, &texture);
 		if(FAILED(hr)) {
+			MessageManager::Log("D3DDevice::CreateTexture() failed - Error:" + std::to_string(hr));
 			return nullptr;
 		}
 		return texture;
@@ -315,18 +346,12 @@ namespace NES
 
 	ID3D11ShaderResourceView* Renderer::GetShaderResourceView(ID3D11Texture2D* texture)
 	{
-		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-		D3D11_TEXTURE2D_DESC desc;
-		D3D11_RESOURCE_DIMENSION type;
-		texture->GetType(&type);
-		texture->GetDesc(&desc);
-		srvDesc.Format = desc.Format;
-		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = desc.MipLevels;
-		srvDesc.Texture2D.MostDetailedMip = desc.MipLevels - 1;
-
 		ID3D11ShaderResourceView *shaderResourceView = nullptr;
-		_pd3dDevice->CreateShaderResourceView(texture, &srvDesc, &shaderResourceView);
+		HRESULT hr = _pd3dDevice->CreateShaderResourceView(texture, nullptr, &shaderResourceView);
+		if(FAILED(hr)) {
+			MessageManager::Log("D3DDevice::CreateShaderResourceView() failed - Error:" + std::to_string(hr));
+			return nullptr;
+		}
 
 		return shaderResourceView;
 	}
@@ -363,39 +388,45 @@ namespace NES
 		SetScreenSize(width, height);
 
 		uint32_t bpp = 4;
-		uint8_t* outputBuffer = (uint8_t*)frameBuffer;
-
-		_frameLock.Acquire();
-
-		uint32_t rowPitch = width * bpp;
-		D3D11_MAPPED_SUBRESOURCE dd;
-		_pDeviceContext->Map(_pTexture[0], 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		uint8_t* surfacePointer = (uint8_t*)dd.pData;
-		for(uint32_t i = 0, iMax = height; i < iMax; i++) {
-			memcpy(surfacePointer, outputBuffer, rowPitch);
-			outputBuffer += rowPitch;
-			surfacePointer += dd.RowPitch;
-		}
-		_pDeviceContext->Unmap(_pTexture[0], 0);
-
-		_needFlip = true;
-
-		_frameLock.Release();
-
+		auto lock = _textureLock.AcquireSafe();
+		memcpy(_textureBuffer[0], frameBuffer, width*height*bpp);
+		_needFlip = true;		
 		_frameChanged = true;
 	}
 
 	void Renderer::DrawNESScreen()
 	{
-		//Swap buffers - emulator always writes to texture 0, screen always draws texture 1 (allows us to release a lock earlier while avoiding crashes)
+		//Swap buffers - emulator always writes to _textureBuffer[0], screen always draws _textureBuffer[1]
 		if(_needFlip) {
-			ID3D11Texture2D *texture = _pTexture[0];
-			_pTexture[0] = _pTexture[1];
-			_pTexture[1] = texture;
+			auto lock = _textureLock.AcquireSafe();
+			uint8_t* textureBuffer = _textureBuffer[0];
+			_textureBuffer[0] = _textureBuffer[1];
+			_textureBuffer[1] = textureBuffer;
 			_needFlip = false;
+
+			if(_frameChanged) {
+				_frameChanged = false;
+				_renderedFrameCount++;
+			}
 		}
 
-		ID3D11ShaderResourceView *nesOutputBuffer = GetShaderResourceView(_pTexture[1]);
+		//Copy buffer to texture
+		uint32_t bpp = 4;
+		uint32_t rowPitch = _nesFrameWidth * bpp;
+		D3D11_MAPPED_SUBRESOURCE dd;
+		HRESULT hr = _pDeviceContext->Map(_pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
+		if(FAILED(hr)) {
+			MessageManager::Log("DeviceContext::Map() failed - Error:" + std::to_string(hr));
+			return;
+		}
+		uint8_t* surfacePointer = (uint8_t*)dd.pData;
+		uint8_t* videoBuffer = _textureBuffer[1];
+		for(uint32_t i = 0, iMax = _nesFrameHeight; i < iMax; i++) {
+			memcpy(surfacePointer, videoBuffer, rowPitch);
+			videoBuffer += rowPitch;
+			surfacePointer += dd.RowPitch;
+		}
+		_pDeviceContext->Unmap(_pTexture, 0);
 
 		RECT destRect;
 		destRect.left = 0;
@@ -403,8 +434,7 @@ namespace NES
 		destRect.right = _screenWidth;
 		destRect.bottom = _screenHeight;
 
-		_spriteBatch->Draw(nesOutputBuffer, destRect);
-		nesOutputBuffer->Release();
+		_spriteBatch->Draw(_pTextureSrv, destRect);
 	}
 
 	void Renderer::DrawPauseScreen()
@@ -416,8 +446,12 @@ namespace NES
 		destRect.top = 0;
 
 		D3D11_MAPPED_SUBRESOURCE dd;
-		_pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		
+		HRESULT hr = _pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
+		if(FAILED(hr)) {
+			MessageManager::Log("(DrawPauseScreen) DeviceContext::Map() failed - Error:" + std::to_string(hr));
+			return;
+		}
+
 		uint8_t* surfacePointer = (uint8_t*)dd.pData;
 		for(uint32_t i = 0, len = 8; i < len; i++) {
 			//Gray transparent overlay
@@ -428,10 +462,8 @@ namespace NES
 		}
 		_pDeviceContext->Unmap(_overlayTexture, 0);
 		
-		ID3D11ShaderResourceView *shaderResourceView = GetShaderResourceView(_overlayTexture);
-		_spriteBatch->Draw(shaderResourceView, destRect);
-		shaderResourceView->Release();
-
+		_spriteBatch->Draw(_pOverlaySrv, destRect);
+		
 		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
 		DrawString("PAUSE", (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2, (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8, Colors::AntiqueWhite, 1.0f, _largeFont.get());
 	}
@@ -474,13 +506,10 @@ namespace NES
 	{
 		bool paused = EmulationSettings::IsPaused();
 		if(_noUpdateCount > 10 || _frameChanged || paused || !_toasts.empty()) {
-			_frameLock.Acquire();
 			_noUpdateCount = 0;
+		
+			auto lock = _frameLock.AcquireSafe();
 
-			if(_frameChanged) {
-				_frameChanged = false;
-				_renderedFrameCount++;
-			}
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
 
@@ -504,10 +533,16 @@ namespace NES
 
 			_spriteBatch->End();
 
-			_frameLock.Release();
-
 			// Present the information rendered to the back buffer to the front buffer (the screen)
-			_pSwapChain->Present(EmulationSettings::CheckFlag(EmulationFlags::VerticalSync) ? 1 : 0, 0);
+			HRESULT hr = _pSwapChain->Present(EmulationSettings::CheckFlag(EmulationFlags::VerticalSync) ? 1 : 0, 0);
+			if(FAILED(hr)) {
+				MessageManager::Log("SwapChain::Present() failed - Error:" + std::to_string(hr));
+				if(hr == DXGI_ERROR_DEVICE_REMOVED) {
+					MessageManager::Log("D3DDevice: GetDeviceRemovedReason: " + std::to_string(_pd3dDevice->GetDeviceRemovedReason()));
+				}
+				MessageManager::Log("Trying to reset DX...");
+				Reset();
+			}
 		} else {
 			_noUpdateCount++;
 		}
