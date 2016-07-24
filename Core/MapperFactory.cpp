@@ -87,6 +87,7 @@
 #include "MMC3_197.h"
 #include "MMC3_205.h"
 #include "MMC3_245.h"
+#include "MMC3_249.h"
 #include "MMC3_250.h"
 #include "MMC3_ChrRam.h"
 #include "MMC4.h"
@@ -168,7 +169,7 @@ Supported mappers:
 |192|193|194|195|196|197|   |   |200|201|202|203|   |205|206|207|
 |   |209|210|211|   |   |   |   |   |   |218|   |   |   |   |   |
 |   |225|226|227|228|   |230|231|232|   |234|235|   |===|   |===|
-|240|241|242|243|   |245|246|===|===|   |250|===|252|   |   |   |
+|240|241|242|243|   |245|246|===|===|249|250|===|252|   |   |   |
 -----------------------------------------------------------------
 */
 
@@ -359,6 +360,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 243: return new Sachen74LS374N();
 		case 245: return new MMC3_245();
 		case 246: return new Mapper246();
+		case 249: return new MMC3_249();
 		case 250: return new MMC3_250();
 		case 252: return new Waixing252();
 

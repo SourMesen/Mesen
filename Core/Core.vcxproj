@@ -470,6 +470,7 @@
     <ClInclude Include="MMC3_187.h" />
     <ClInclude Include="MMC3_197.h" />
     <ClInclude Include="MMC3_245.h" />
+    <ClInclude Include="MMC3_249.h" />
     <ClInclude Include="MMC3_250.h" />
     <ClInclude Include="MMC3_45.h" />
     <ClInclude Include="Mapper57.h" />
