@@ -15,6 +15,12 @@ protected:
 		AddRegisterRange(0x5000, 0x5000, MemoryOperation::Write);
 	}
 
+	void StreamState(bool saving)
+	{
+		MMC3::StreamState(saving);
+		Stream(_exReg);
+	}
+
 	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
 	{
 		if(_exReg & 0x02) {
