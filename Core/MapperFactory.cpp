@@ -59,6 +59,7 @@
 #include "Mapper203.h"
 #include "Mapper212.h"
 #include "Mapper218.h"
+#include "Mapper221.h"
 #include "Mapper225.h"
 #include "Mapper226.h"
 #include "Mapper227.h"
@@ -169,7 +170,7 @@ Supported mappers:
 |   |===|   |163|164|165|166|167|   |===|170|171|172|173|===|175|
 |176|177|178|179|180|   |182|   |184|185|   |187|   |189|===|191|
 |192|193|194|195|196|197|   |   |200|201|202|203|   |205|206|207|
-|   |209|210|211|212|   |   |   |   |   |218|   |   |   |   |   |
+|   |209|210|211|212|   |   |   |   |   |218|   |   |221|   |   |
 |   |225|226|227|228|   |230|231|232|   |234|235|   |===|   |===|
 |240|241|242|243|   |245|246|===|===|249|250|===|252|   |   |   |
 -----------------------------------------------------------------
@@ -349,6 +350,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 211: return new JyCompany();
 		case 212: return new Mapper212();
 		case 218: return new Mapper218();
+		case 221: return new Mapper221();
 		case 225: return new Mapper225();
 		case 226: return new Mapper226();
 		case 227: return new Mapper227();
