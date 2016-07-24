@@ -817,6 +817,9 @@
     <ClInclude Include="Supervision.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="MMC3_250.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
