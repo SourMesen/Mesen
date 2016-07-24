@@ -4,7 +4,7 @@
 #include <string>
 
 extern "C" {
-	void __stdcall InitializeEmu(char* homeFolder, void*, void*);
+	void __stdcall InitializeEmu(char* homeFolder, void*, void*, bool, bool, bool);
 	void __stdcall LoadROM(const char* filename, int32_t archiveFileIndex);
 	void __stdcall Run();
 	void __stdcall Stop();
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 		"..\\..\\Games\\Dragon Warrior IV (USA).nes"
 	};
 
-	InitializeEmu("C:\\Windows\\Temp\\Mesen", nullptr, nullptr);
+	InitializeEmu("C:\\Windows\\Temp\\Mesen", nullptr, nullptr, false, false, false);
 	LoadROM(testRoms[0], -1);
 	std::cout << "Running: " << testRoms[0] << std::endl;
 	thread testThread([testRoms] {

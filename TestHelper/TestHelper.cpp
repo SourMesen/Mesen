@@ -33,7 +33,7 @@ public:
 };
 
 extern "C" {
-	void __stdcall InitializeEmu(const char* homeFolder, void*, void*);
+	void __stdcall InitializeEmu(const char* homeFolder, void*, void*, bool, bool, bool);
 	void __stdcall SetControllerType(uint32_t port, ControllerType type);
 	int __stdcall RomTestRun(char* filename);
 	void __stdcall LoadROM(char* filename);
@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 		char* testFilename = argv[2];
 		RegisterNotificationCallback((NotificationListenerCallback)OnNotificationReceived);
 
-		InitializeEmu(mesenFolder.c_str(), nullptr, nullptr);
+		InitializeEmu(mesenFolder.c_str(), nullptr, nullptr, false, false, false);
 		SetControllerType(0, ControllerType::StandardController);
 		SetControllerType(1, ControllerType::StandardController);
 
