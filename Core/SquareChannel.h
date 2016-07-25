@@ -43,6 +43,8 @@ private:
 		_sweepPeriod = ((regValue & 0x70) >> 4) + 1;
 		_sweepShift = (regValue & 0x07);
 
+		UpdateTargetPeriod();
+
 		//Side effects: Sets the reload flag 
 		_reloadSweep = true;
 	}
@@ -102,6 +104,7 @@ public:
 		_reloadSweep = false;
 		_sweepDivider = 0;
 		_sweepTargetPeriod = 0;
+		UpdateTargetPeriod();
 	}
 
 	virtual void StreamState(bool saving)
