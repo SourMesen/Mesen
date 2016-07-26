@@ -146,14 +146,22 @@ struct NESHeader
 
 	uint32_t GetWorkRamSize()
 	{
-		uint8_t value = Byte10 & 0x0F;
-		return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
+			uint8_t value = Byte10 & 0x0F;
+			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+		} else {
+			return -1;
+		}
 	}
 
 	uint32_t GetSaveRamSize()
 	{
-		uint8_t value = (Byte10 & 0xF0) >> 4;
-		return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
+			uint8_t value = (Byte10 & 0xF0) >> 4;
+			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+		} else {
+			return -1;
+		}
 	}
 
 	int32_t GetChrRamSize()
@@ -232,6 +240,25 @@ struct NsfHeader
 	int32_t TrackFade[256];
 };
 
+struct GameInfo
+{
+	uint32_t Crc;
+	string System;
+	string Board;
+	string Pcb;
+	string Chip;
+	uint8_t MapperID;
+	uint32_t PrgRomSize;
+	uint32_t ChrRomSize;
+	uint32_t ChrRamSize;
+	uint32_t WorkRamSize;
+	uint32_t SaveRamSize;
+	bool HasBattery;
+	string Mirroring;
+	string InputType;
+	bool Valid;
+};
+
 struct RomData
 {
 	string RomName;
@@ -243,7 +270,10 @@ struct RomData
 	bool HasBattery = false;
 	bool HasTrainer = false;
 	MirroringType MirroringType = MirroringType::Horizontal;
+	
 	int32_t ChrRamSize = -1;
+	int32_t SaveRamSize = -1;
+	int32_t WorkRamSize = -1;
 
 	bool IsNes20Header = false;
 
@@ -260,4 +290,5 @@ struct RomData
 
 	NESHeader NesHeader;
 	NsfHeader NsfHeader;
+	GameInfo DatabaseInfo;
 };

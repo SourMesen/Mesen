@@ -39,7 +39,7 @@ void GameDatabase::InitDatabase()
 				continue;
 			}
 			vector<string> values = split(lineContent, ',');
-			if(values.size() >= 12) {
+			if(values.size() >= 13) {
 				GameInfo gameInfo{
 					(uint32_t)std::stoll(values[0], nullptr, 16),
 					values[1],
@@ -51,9 +51,10 @@ void GameDatabase::InitDatabase()
 					ToInt<uint32_t>(values[7]),
 					ToInt<uint32_t>(values[8]),
 					ToInt<uint32_t>(values[9]),
-					ToInt<uint32_t>(values[10]) == 0 ? false : true,
-					values[11],
-					values.size() > 12 ? values[12] : ""
+					ToInt<uint32_t>(values[10]),
+					ToInt<uint32_t>(values[11]) == 0 ? false : true,
+					values[12],
+					values.size() > 13 ? values[13] : ""
 				};
 				_gameDatabase[gameInfo.Crc] = gameInfo;
 			}
@@ -126,6 +127,15 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 uint8_t GameDatabase::GetSubMapper(GameInfo &info)
 {
 	switch(info.MapperID) {
+		case 1:
+			if(info.Board.find("SEROM") != string::npos ||
+				info.Board.find("SHROM") != string::npos ||
+				info.Board.find("SH1ROM") != string::npos) {
+				//SEROM, SHROM, SH1ROM have fixed PRG banking
+				return 5;
+			}
+			break;
+
 		case 3:
 			if(info.Board.compare("NES-CNROM") == 0) {
 				//Enable bus conflicts for CNROM games
@@ -136,6 +146,8 @@ uint8_t GameDatabase::GetSubMapper(GameInfo &info)
 		case 4:
 			if(info.Board.compare("ACCLAIM-MC-ACC") == 0) {
 				return 3; //Acclaim MC-ACC (MMC3 clone)
+			} else if(info.Chip.compare("MMC6B") == 0) {
+				return 1; //MMC6 (Star Tropics)
 			}
 			break;
 
@@ -192,30 +204,24 @@ uint8_t GameDatabase::GetSubMapper(GameInfo &info)
 	return 0;
 }
 
-void GameDatabase::UpdateRomData(uint32_t romCrc, RomData &romData)
-{
+void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData)
+{	
+	GameInfo info = {};
+
 	InitDatabase();
 
 	auto result = _gameDatabase.find(romCrc);
 
 	if(result != _gameDatabase.end()) {
 		MessageManager::Log("[DB] Game found in database");
-		GameInfo info = result->second;
+		info = result->second;
 
-		romData.MapperID = info.MapperID;
-		romData.System = GetGameSystem(info.System);
-		romData.SubMapperID = GetSubMapper(info);
-		if(info.ChrRamSize > 0) {
-			romData.ChrRamSize = info.ChrRamSize * 1024;
-		}
-		romData.HasBattery |= info.HasBattery;
 
-		if(!info.Mirroring.empty()) {
-			romData.MirroringType = info.Mirroring.compare("h") == 0 ? MirroringType::Horizontal : MirroringType::Vertical;
-		}
-
-		MessageManager::Log("[DB] Mapper: " + std::to_string(romData.MapperID) + "  Sub: " + std::to_string(romData.SubMapperID));
+		MessageManager::Log("[DB] Mapper: " + std::to_string(info.MapperID) + "  Sub: " + std::to_string(GetSubMapper(info)));
 		MessageManager::Log("[DB] System : " + info.System);
+		MessageManager::Log("[DB] Board: " + info.Board);
+		MessageManager::Log("[DB] Chip: " + info.Chip);
+
 		if(!info.Mirroring.empty()) {
 			MessageManager::Log("[DB] Mirroring: " + string(info.Mirroring.compare("h") == 0 ? "Horizontal" : "Vertical"));
 		}
@@ -224,19 +230,51 @@ void GameDatabase::UpdateRomData(uint32_t romCrc, RomData &romData)
 		if(info.ChrRamSize > 0) {
 			MessageManager::Log("[DB] CHR RAM: " + std::to_string(info.ChrRamSize) + " KB");
 		}
+		if(info.WorkRamSize > 0) {
+			MessageManager::Log("[DB] Work RAM: " + std::to_string(info.WorkRamSize) + " KB");
+		}
+		if(info.SaveRamSize > 0) {
+			MessageManager::Log("[DB] Save RAM: " + std::to_string(info.SaveRamSize) + " KB");
+		}
 		MessageManager::Log("[DB] Battery: " + string(info.HasBattery ? "Yes" : "No"));
 
-		if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
-			InitializeInputDevices(info.InputType, romData.System);
+		if(updateRomData) {
+			MessageManager::Log("[DB] Database info will be used instead of file header.");
+			UpdateRomData(info, romData);
 		}
 
-		#ifdef _DEBUG
+
+#ifdef _DEBUG
 		MessageManager::DisplayMessage("DB", "Mapper: " + std::to_string(romData.MapperID) + "  Sub: " + std::to_string(romData.SubMapperID) + "  System: " + info.System);
-		#endif
+#endif
 	} else {
 		MessageManager::Log("[DB] Game not found in database");
-		if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
-			InitializeInputDevices("", romData.System);
-		}
+	}
+
+	if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
+		InitializeInputDevices(info.InputType, romData.System);
+	}
+
+	romData.DatabaseInfo = info;
+}
+
+void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
+{
+	romData.MapperID = info.MapperID;
+	romData.System = GetGameSystem(info.System);
+	romData.SubMapperID = GetSubMapper(info);
+	if(info.ChrRamSize > 0) {
+		romData.ChrRamSize = info.ChrRamSize * 1024;
+	}
+	if(info.WorkRamSize > 0) {
+		romData.WorkRamSize = info.WorkRamSize * 1024;
+	}
+	if(info.SaveRamSize > 0) {
+		romData.SaveRamSize = info.SaveRamSize * 1024;
+	}
+	romData.HasBattery |= info.HasBattery;
+
+	if(!info.Mirroring.empty()) {
+		romData.MirroringType = info.Mirroring.compare("h") == 0 ? MirroringType::Horizontal : MirroringType::Vertical;
 	}
 }

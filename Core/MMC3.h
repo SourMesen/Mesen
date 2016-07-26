@@ -145,8 +145,29 @@ class MMC3 : public BaseMapper
 
 			UpdateMirroring();
 
-			_wramEnabled = (_state.RegA001 & 0x80) == 0x80;
-			_wramWriteProtected = (_state.RegA001 & 0x40) == 0x40;
+			if(_subMapperID == 1) {
+				bool wramEnabled = (_state.Reg8000 & 0x20) == 0x20;
+				RemoveCpuMemoryMapping(0x6000, 0x7000);
+				
+				uint8_t firstBankAccess = (_state.RegA001 & 0x10 ? MemoryAccessType::Write : 0) | (_state.RegA001 & 0x20 ? MemoryAccessType::Read : 0);
+				uint8_t lastBankAccess = (_state.RegA001 & 0x40 ? MemoryAccessType::Write : 0) | (_state.RegA001 & 0x80 ? MemoryAccessType::Read : 0);
+
+				for(int i = 0; i < 4; i++) {
+					SetCpuMemoryMapping(0x7000 + i * 0x400, 0x71FF + i * 0x400, 0, PrgMemoryType::SaveRam, firstBankAccess);
+					SetCpuMemoryMapping(0x7200 + i * 0x400, 0x73FF + i * 0x400, 1, PrgMemoryType::SaveRam, lastBankAccess);
+				}
+			} else {
+				_wramEnabled = (_state.RegA001 & 0x80) == 0x80;
+				_wramWriteProtected = (_state.RegA001 & 0x40) == 0x40;
+
+				if(IsNes20() && _subMapperID == 0) {
+					if(_wramEnabled) {
+						SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, CanWriteToWorkRam() ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
+					} else {
+						RemoveCpuMemoryMapping(0x6000, 0x7FFF);
+					}
+				}
+			}
 
 			UpdatePrgMapping();
 			UpdateChrMapping();
@@ -163,6 +184,8 @@ class MMC3 : public BaseMapper
 
 		virtual uint16_t GetPRGPageSize() { return 0x2000; }
 		virtual uint16_t GetCHRPageSize() {	return 0x0400; }
+		virtual uint32_t GetSaveRamPageSize() { return _subMapperID == 1 ? 0x200 : 0x2000; }
+		virtual uint32_t GetSaveRamSize() { return _subMapperID == 1 ? 0x400 : 0x2000; }
 
 		virtual void InitMapper() 
 		{

@@ -49,12 +49,19 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 			break;
 		case PrgMemoryType::WorkRam:
 			source = _workRam;
-			pageCount = GetWorkRamSize() / GetWorkRamPageSize();
+			pageCount = _workRamSize / GetWorkRamPageSize();
 			pageSize = GetWorkRamPageSize();
 			defaultAccessType |= MemoryAccessType::Write;
 			break;
 		default:
 			throw new std::runtime_error("Invalid parameter");
+	}
+
+	if(pageCount == 0) {
+		#ifdef _DEBUG
+		MessageManager::DisplayMessage("Debug", "Tried to map undefined save/work ram.");
+		#endif
+		return;
 	}
 
 	if(pageNumber < 0) {
@@ -247,12 +254,14 @@ void BaseMapper::LoadBattery()
 
 void BaseMapper::SaveBattery()
 {
-	ofstream batteryFile(_batteryFilename, ios::out | ios::binary);
+	if(HasBattery()) {
+		ofstream batteryFile(_batteryFilename, ios::out | ios::binary);
 
-	if(batteryFile) {
-		batteryFile.write((char*)_saveRam, _saveRamSize);
+		if(batteryFile) {
+			batteryFile.write((char*)_saveRam, _saveRamSize);
 
-		batteryFile.close();
+			batteryFile.close();
+		}
 	}
 }
 
@@ -318,7 +327,7 @@ void BaseMapper::RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr, Memor
 void BaseMapper::StreamState(bool saving)
 {
 	ArrayInfo<uint8_t> chrRam = { _chrRam, _chrRamSize };
-	ArrayInfo<uint8_t> workRam = { _workRam, GetWorkRamSize() };
+	ArrayInfo<uint8_t> workRam = { _workRam, _workRamSize };
 	ArrayInfo<uint8_t> saveRam = { _saveRam, _saveRamSize };
 	ArrayInfo<uint32_t> prgPageNumbers = { _prgPageNumbers, 64 };
 	ArrayInfo<uint32_t> chrPageNumbers = { _chrPageNumbers, 64 };
@@ -349,10 +358,23 @@ void BaseMapper::Initialize(RomData &romData)
 	_mapperID = romData.MapperID;
 	_subMapperID = romData.SubMapperID;
 
+	_databaseInfo = romData.DatabaseInfo;
+
 	_romName = romData.RomName;
 	_romFilename = romData.Filename;
 	_batteryFilename = GetBatteryFilename();
-	_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
+	
+	if(romData.SaveRamSize == -1) {
+		_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
+	} else {
+		_saveRamSize = romData.SaveRamSize;
+	}
+
+	if(romData.WorkRamSize == -1) {
+		_workRamSize = GetWorkRamSize();
+	} else {
+		_workRamSize = romData.WorkRamSize;
+	}
 
 	_allowRegisterRead = AllowRegisterRead();
 
@@ -382,11 +404,11 @@ void BaseMapper::Initialize(RomData &romData)
 	_hasBusConflicts = HasBusConflicts();
 
 	_saveRam = new uint8_t[_saveRamSize];
-	_workRam = new uint8_t[GetWorkRamSize()];
+	_workRam = new uint8_t[_workRamSize];
 
 	memset(_saveRam, 0, _saveRamSize);
-	memset(_workRam, 0, GetWorkRamSize());
-	if(romData.HasTrainer && GetWorkRamSize() >= 0x2000) {
+	memset(_workRam, 0, _workRamSize);
+	if(romData.HasTrainer && _workRamSize >= 0x2000) {
 		memcpy(_workRam + 0x1000, romData.TrainerData.data(), 512);
 	}
 
@@ -424,7 +446,11 @@ void BaseMapper::Initialize(RomData &romData)
 	}
 
 	//Setup a default work/save ram in 0x6000-0x7FFF space
-	SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
+	if(HasBattery() && _saveRamSize > 0) {
+		SetCpuMemoryMapping(0x6000, 0x7FFF, 0, PrgMemoryType::SaveRam);
+	} else if(_workRamSize > 0) {
+		SetCpuMemoryMapping(0x6000, 0x7FFF, 0, PrgMemoryType::WorkRam);
+	}
 
 	InitMapper();
 	InitMapper(romData);
@@ -436,9 +462,8 @@ void BaseMapper::Initialize(RomData &romData)
 
 BaseMapper::~BaseMapper()
 {
-	if(HasBattery()) {
-		SaveBattery();
-	}
+	SaveBattery();
+
 	delete[] _chrRam;
 	delete[] _chrRom;
 	delete[] _prgRom;
@@ -623,6 +648,11 @@ void BaseMapper::NotifyVRAMAddressChange(uint16_t addr)
 	//Used by MMC3/MMC5/etc
 }
 
+bool BaseMapper::IsNes20()
+{
+	return _nesHeader.GetRomHeaderVersion() == RomHeaderVersion::Nes2_0;
+}
+
 //Debugger Helper Functions
 uint8_t* BaseMapper::GetPrgRom()
 {
@@ -642,7 +672,7 @@ void BaseMapper::GetPrgCopy(uint8_t **buffer)
 
 uint32_t BaseMapper::GetPrgSize(bool getWorkRamSize)
 {
-	return getWorkRamSize ? GetWorkRamSize() : _prgSize;
+	return getWorkRamSize ? _workRamSize : _prgSize;
 }
 
 void BaseMapper::GetChrRomCopy(uint8_t **buffer)
@@ -674,7 +704,7 @@ int32_t BaseMapper::ToAbsoluteAddress(uint16_t addr)
 int32_t BaseMapper::ToAbsoluteRamAddress(uint16_t addr)
 {
 	uint8_t *prgRamAddr = _prgPages[addr >> 8] + (addr & 0xFF);
-	if(prgRamAddr >= _workRam && prgRamAddr < _workRam + GetWorkRamSize()) {
+	if(prgRamAddr >= _workRam && prgRamAddr < _workRam + _workRamSize) {
 		return (uint32_t)(prgRamAddr - _workRam);
 	}
 	return -1;

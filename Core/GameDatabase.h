@@ -1,23 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <unordered_map>
-
-struct GameInfo
-{
-	uint32_t Crc;
-	string System;
-	string Board;
-	string Pcb;
-	string Chip;
-	uint8_t MapperID;
-	uint32_t PrgRomSize;
-	uint32_t ChrRomSize;
-	uint32_t ChrRamSize;
-	uint32_t WorkRamSize;
-	bool HasBattery;
-	string Mirroring;
-	string InputType;
-};
+#include "RomData.h"
 
 class GameDatabase
 {
@@ -32,7 +16,8 @@ private:
 	static void InitializeInputDevices(string inputType, GameSystem system);
 
 	static void InitDatabase();
+	static void UpdateRomData(GameInfo &info, RomData &romData);
 
 public:
-	static void UpdateRomData(uint32_t romCrc, RomData &romData);
+	static void SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData);
 };

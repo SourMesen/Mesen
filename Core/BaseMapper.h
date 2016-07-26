@@ -77,6 +77,8 @@ private:
 
 protected:
 	NESHeader _nesHeader;
+	GameInfo _databaseInfo;
+
 	uint16_t _mapperID;
 	uint8_t _subMapperID;
 	GameSystem _gameSystem;
@@ -90,6 +92,7 @@ protected:
 
 	uint8_t* _saveRam = nullptr;
 	uint32_t _saveRamSize = 0;
+	uint32_t _workRamSize = 0;
 	uint8_t* _workRam = nullptr;
 	bool _hasBattery = false;
 
@@ -97,6 +100,8 @@ protected:
 	virtual void InitMapper(RomData &romData);
 	virtual uint16_t GetPRGPageSize() = 0;
 	virtual uint16_t GetCHRPageSize() = 0;
+
+	bool IsNes20();
 
 	virtual uint16_t GetChrRamPageSize() { return 0x2000; }
 
@@ -139,7 +144,6 @@ protected:
 
 	bool HasBattery();
 	void LoadBattery();
-	void SaveBattery();
 	string GetBatteryFilename();
 
 	uint32_t GetPRGPageCount();
@@ -163,6 +167,7 @@ protected:
 
 public:
 	void Initialize(RomData &romData);
+
 	virtual ~BaseMapper();
 	virtual void Reset(bool softReset);
 
@@ -173,6 +178,7 @@ public:
 	virtual void GetMemoryRanges(MemoryRanges &ranges);
 	
 	void ApplyCheats();
+	void SaveBattery();
 
 	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 

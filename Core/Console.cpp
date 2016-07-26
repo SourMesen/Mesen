@@ -42,6 +42,11 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 {
 	SoundMixer::StopAudio();
 
+	if(_mapper) {
+		//Ensure we save any battery file before loading a new game
+		_mapper->SaveBattery();
+	}
+
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
 	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, filestream, ipsFilename, archiveFileIndex);
 

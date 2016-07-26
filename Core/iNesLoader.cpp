@@ -29,6 +29,8 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 	}
 	romData.HasTrainer = header.HasTrainer();
 	romData.ChrRamSize = header.GetChrRamSize();
+	romData.WorkRamSize = header.GetWorkRamSize();
+	romData.SaveRamSize = header.GetSaveRamSize();
 	romData.NesHeader = header;
 
 	if(romData.HasTrainer) {
@@ -54,20 +56,25 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 	MessageManager::Log("[iNes] Mapper: " + std::to_string(romData.MapperID) + " Sub:" + std::to_string(romData.SubMapperID));
 	MessageManager::Log("[iNes] PRG ROM: " + std::to_string(romData.PrgRom.size()/1024) + " KB");
 	MessageManager::Log("[iNes] CHR ROM: " + std::to_string(romData.ChrRom.size()/1024) + " KB");
-	if(romData.ChrRamSize > 0) {
-		MessageManager::Log("[iNes] CHR RAM: " + std::to_string(romData.ChrRamSize) + " KB");
+	if(romData.ChrRamSize > 0 || romData.IsNes20Header) {
+		MessageManager::Log("[iNes] CHR RAM: " + std::to_string(romData.ChrRamSize / 1024) + " KB");
 	} else if(romData.ChrRom.size() == 0) {
 		MessageManager::Log("[iNes] CHR RAM: 8 KB");
 	}
+	if(romData.WorkRamSize > 0 || romData.IsNes20Header) {
+		MessageManager::Log("[iNes] Work RAM: " + std::to_string(romData.WorkRamSize / 1024) + " KB");
+	}
+	if(romData.SaveRamSize > 0 || romData.IsNes20Header) {
+		MessageManager::Log("[iNes] Save RAM: " + std::to_string(romData.SaveRamSize / 1024) + " KB");
+	}
+
 	MessageManager::Log("[iNes] Mirroring: " + string(romData.MirroringType == MirroringType::Horizontal ? "Horizontal" : romData.MirroringType == MirroringType::Vertical ? "Vertical" : "Four Screens"));
 	MessageManager::Log("[iNes] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
 	if(romData.HasTrainer) {
 		MessageManager::Log("[iNes] Trainer: Yes");
 	}
 
-	if(!EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0) {
-		GameDatabase::UpdateRomData(romCrc, romData);
-	}
+	GameDatabase::SetGameInfo(romCrc, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0);
 
 	return romData;
 }
