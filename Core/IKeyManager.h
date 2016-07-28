@@ -19,4 +19,7 @@ public:
 	virtual uint32_t GetPressedKey() = 0;
 	virtual string GetKeyName(uint32_t keyCode) = 0;
 	virtual uint32_t GetKeyCode(string keyName) = 0;
+
+	virtual void SetKeyState(uint16_t scanCode, bool state) = 0;
+	virtual void ResetKeyState() = 0;
 };

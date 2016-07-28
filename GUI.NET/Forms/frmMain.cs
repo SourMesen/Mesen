@@ -20,7 +20,7 @@ using Mesen.GUI.GoogleDriveIntegration;
 
 namespace Mesen.GUI.Forms
 {
-	public partial class frmMain : BaseForm
+	public partial class frmMain : BaseForm, IMessageFilter
 	{
 		private InteropEmu.NotificationListener _notifListener;
 		private Thread _emuThread;
@@ -60,6 +60,9 @@ namespace Mesen.GUI.Forms
 			}
 
 			InitializeComponent();
+
+			Application.AddMessageFilter(this);
+			this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 		}
 
 		public void ProcessCommandLineArguments(string[] args)
@@ -107,6 +110,18 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.PreferenceInfo.AutomaticallyCheckForUpdates) {
 				CheckForUpdates(false);
 			}
+		}
+		
+		protected override void OnDeactivate(EventArgs e)
+		{
+			base.OnDeactivate(e);
+			InteropEmu.ResetKeyState();
+		}
+
+		protected override void OnActivated(EventArgs e)
+		{
+			base.OnActivated(e);
+			InteropEmu.ResetKeyState();
 		}
 
 		protected override void OnShown(EventArgs e)
@@ -176,6 +191,9 @@ namespace Mesen.GUI.Forms
 			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
 				InteropEmu.AddKnowGameFolder(Path.GetDirectoryName(recentItem.Path).ToLowerInvariant());
 			}
+
+			ConfigManager.Config.InitializeDefaults();
+			ConfigManager.ApplyChanges();
 
 			ConfigManager.Config.ApplyConfig();
 		
@@ -672,8 +690,28 @@ namespace Mesen.GUI.Forms
 			InteropEmu.Reset();
 		}
 
+		const int WM_KEYDOWN = 0x100;
+		const int WM_KEYUP = 0x101;
+
+		bool IMessageFilter.PreFilterMessage(ref Message m)
+		{
+			if(m.Msg == WM_KEYUP) {
+				int virtualKeyCode = (Int32)m.WParam;
+				int scanCode = (Int32)(((Int64)m.LParam & 0x1FF0000) >> 16);
+				InteropEmu.SetKeyState(scanCode, false);
+			}
+
+			return false;
+		}
+
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
+			if(msg.Msg == WM_KEYDOWN) {
+				int virtualKeyCode = (Int32)((Int64)msg.WParam & 0xFF);
+				int scanCode = (Int32)(((Int64)msg.LParam & 0x1FF0000) >> 16);
+				InteropEmu.SetKeyState(scanCode, true);
+			}
+
 			if(!this.menuStrip.Enabled) {
 				//Make sure we disable all shortcut keys while the bar is disabled (i.e when running tests)
 				return false;

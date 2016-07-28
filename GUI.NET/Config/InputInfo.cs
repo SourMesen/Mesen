@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Mesen.GUI.Config
 {
 	public class KeyMappings
 	{
-		public string A;
-		public string B;
-		public string Select;
-		public string Start;
-		public string Up;
-		public string Down;
-		public string Left;
-		public string Right;
+		public UInt32 A;
+		public UInt32 B;
+		public UInt32 Select;
+		public UInt32 Start;
+		public UInt32 Up;
+		public UInt32 Down;
+		public UInt32 Left;
+		public UInt32 Right;
 
-		public string TurboA;
-		public string TurboB;
-		public string TurboStart;
-		public string TurboSelect;
+		public UInt32 TurboA;
+		public UInt32 TurboB;
+		public UInt32 TurboStart;
+		public UInt32 TurboSelect;
 
 		public KeyMappings()
 		{
@@ -30,83 +31,83 @@ namespace Mesen.GUI.Config
 		{
 			if(controllerIndex == 0) {
 				if(keySetIndex == 0) {
-					A = "A";
-					B = "S";
-					Select = "Q";
-					Start = "W";
-					Up = "Up Arrow";
-					Down = "Down Arrow";
-					Left = "Left Arrow";
-					Right = "Right Arrow";
+					A = InteropEmu.GetKeyCode("A");
+					B = InteropEmu.GetKeyCode("S");
+					Select = InteropEmu.GetKeyCode("Q");
+					Start = InteropEmu.GetKeyCode("W");
+					Up = InteropEmu.GetKeyCode("Up Arrow");
+					Down = InteropEmu.GetKeyCode("Down Arrow");
+					Left = InteropEmu.GetKeyCode("Left Arrow");
+					Right = InteropEmu.GetKeyCode("Right Arrow");
 
-					TurboA = "Z";
-					TurboB = "X";
+					TurboA = InteropEmu.GetKeyCode("Z");
+					TurboB = InteropEmu.GetKeyCode("X");
 				} else if(keySetIndex == 1) {
 					//XInput Default (Xbox controllers)
-					A = "Pad1 A";
-					B = "Pad1 X";
-					Select = "Pad1 Back";
-					Start = "Pad1 Start";
-					Up = "Pad1 Up";
-					Down = "Pad1 Down";
-					Left = "Pad1 Left";
-					Right = "Pad1 Right";
+					A = InteropEmu.GetKeyCode("Pad1 A");
+					B = InteropEmu.GetKeyCode("Pad1 X");
+					Select = InteropEmu.GetKeyCode("Pad1 Back");
+					Start = InteropEmu.GetKeyCode("Pad1 Start");
+					Up = InteropEmu.GetKeyCode("Pad1 Up");
+					Down = InteropEmu.GetKeyCode("Pad1 Down");
+					Left = InteropEmu.GetKeyCode("Pad1 Left");
+					Right = InteropEmu.GetKeyCode("Pad1 Right");
 
-					TurboA = "Pad1 B";
-					TurboB = "Pad1 Y";
+					TurboA = InteropEmu.GetKeyCode("Pad1 B");
+					TurboB = InteropEmu.GetKeyCode("Pad1 Y");
 				} else if(keySetIndex == 2) {
 					//DirectInput Default (Used PS4 controller as a default)
-					A = "Joy1 But2";
-					B = "Joy1 But1";
-					Select = "Joy1 But9";
-					Start = "Joy1 But10";
-					Up = "Joy1 DPad Up";
-					Down = "Joy1 DPad Down";
-					Left = "Joy1 DPad Left";
-					Right = "Joy1 DPad Right";
+					A = InteropEmu.GetKeyCode("Joy1 But2");
+					B = InteropEmu.GetKeyCode("Joy1 But1");
+					Select = InteropEmu.GetKeyCode("Joy1 But9");
+					Start = InteropEmu.GetKeyCode("Joy1 But10");
+					Up = InteropEmu.GetKeyCode("Joy1 DPad Up");
+					Down = InteropEmu.GetKeyCode("Joy1 DPad Down");
+					Left = InteropEmu.GetKeyCode("Joy1 DPad Left");
+					Right = InteropEmu.GetKeyCode("Joy1 DPad Right");
 
-					TurboA = "Joy1 But3";
-					TurboB = "Joy1 But4";
+					TurboA = InteropEmu.GetKeyCode("Joy1 But3");
+					TurboB = InteropEmu.GetKeyCode("Joy1 But4");
 				}
 			} else if(controllerIndex == 1) {
 				if(keySetIndex == 0) {
-					A = "G";
-					B = "H";
-					Select = "T";
-					Start = "Y";
-					Up = "I";
-					Down = "K";
-					Left = "J";
-					Right = "L";
+					A = InteropEmu.GetKeyCode("G");
+					B = InteropEmu.GetKeyCode("H");
+					Select = InteropEmu.GetKeyCode("T");
+					Start = InteropEmu.GetKeyCode("Y");
+					Up = InteropEmu.GetKeyCode("I");
+					Down = InteropEmu.GetKeyCode("K");
+					Left = InteropEmu.GetKeyCode("J");
+					Right = InteropEmu.GetKeyCode("L");
 
-					TurboA = "B";
-					TurboB = "N";
+					TurboA = InteropEmu.GetKeyCode("B");
+					TurboB = InteropEmu.GetKeyCode("N");
 				} else if(keySetIndex == 1) {
 					//XInput Default (Xbox controllers)
-					A = "Pad2 A";
-					B = "Pad2 X";
-					Select = "Pad2 Back";
-					Start = "Pad2 Start";
-					Up = "Pad2 Up";
-					Down = "Pad2 Down";
-					Left = "Pad2 Left";
-					Right = "Pad2 Right";
+					A = InteropEmu.GetKeyCode("Pad2 A");
+					B = InteropEmu.GetKeyCode("Pad2 X");
+					Select = InteropEmu.GetKeyCode("Pad2 Back");
+					Start = InteropEmu.GetKeyCode("Pad2 Start");
+					Up = InteropEmu.GetKeyCode("Pad2 Up");
+					Down = InteropEmu.GetKeyCode("Pad2 Down");
+					Left = InteropEmu.GetKeyCode("Pad2 Left");
+					Right = InteropEmu.GetKeyCode("Pad2 Right");
 
-					TurboA = "Pad2 B";
-					TurboB = "Pad2 Y";
+					TurboA = InteropEmu.GetKeyCode("Pad2 B");
+					TurboB = InteropEmu.GetKeyCode("Pad2 Y");
 				} else if(keySetIndex == 2) {
 					//DirectInput Default (Used PS4 controller as a default)
-					A = "Joy2 But2";
-					B = "Joy2 But1";
-					Select = "Joy2 But9";
-					Start = "Joy2 But10";
-					Up = "Joy2 DPad Up";
-					Down = "Joy2 DPad Down";
-					Left = "Joy2 DPad Left";
-					Right = "Joy2 DPad Right";
+					A = InteropEmu.GetKeyCode("Joy2 But2");
+					B = InteropEmu.GetKeyCode("Joy2 But1");
+					Select = InteropEmu.GetKeyCode("Joy2 But9");
+					Start = InteropEmu.GetKeyCode("Joy2 But10");
+					Up = InteropEmu.GetKeyCode("Joy2 DPad Up");
+					Down = InteropEmu.GetKeyCode("Joy2 DPad Down");
+					Left = InteropEmu.GetKeyCode("Joy2 DPad Left");
+					Right = InteropEmu.GetKeyCode("Joy2 DPad Right");
 
-					TurboA = "Joy2 But3";
-					TurboB = "Joy2 But4";
+					TurboA = InteropEmu.GetKeyCode("Joy2 But3");
+					TurboB = InteropEmu.GetKeyCode("Joy2 But4");
 				}
 			}
 		}
@@ -115,18 +116,18 @@ namespace Mesen.GUI.Config
 		{
 			InteropEmu.KeyMapping mapping = new InteropEmu.KeyMapping();
 
-			mapping.A = InteropEmu.GetKeyCode(A);
-			mapping.B = InteropEmu.GetKeyCode(B);
-			mapping.Start = InteropEmu.GetKeyCode(Start);
-			mapping.Select = InteropEmu.GetKeyCode(Select);
-			mapping.Up = InteropEmu.GetKeyCode(Up);
-			mapping.Down = InteropEmu.GetKeyCode(Down);
-			mapping.Left = InteropEmu.GetKeyCode(Left);
-			mapping.Right = InteropEmu.GetKeyCode(Right);
-			mapping.TurboA = InteropEmu.GetKeyCode(TurboA);
-			mapping.TurboB = InteropEmu.GetKeyCode(TurboB);
-			mapping.TurboStart = InteropEmu.GetKeyCode(TurboStart);
-			mapping.TurboSelect = InteropEmu.GetKeyCode(TurboSelect);
+			mapping.A = A;
+			mapping.B = B;
+			mapping.Start = Start;
+			mapping.Select = Select;
+			mapping.Up = Up;
+			mapping.Down = Down;
+			mapping.Left = Left;
+			mapping.Right = Right;
+			mapping.TurboA = TurboA;
+			mapping.TurboB = TurboB;
+			mapping.TurboStart = TurboStart;
+			mapping.TurboSelect = TurboSelect;
 
 			return mapping;
 		}
@@ -135,6 +136,7 @@ namespace Mesen.GUI.Config
 	public class ControllerInfo
 	{
 		public InteropEmu.ControllerType ControllerType = InteropEmu.ControllerType.StandardController;
+		[XmlElement(ElementName = "KeyMappings")]
 		public List<KeyMappings> Keys = new List<KeyMappings>();
 		public UInt32 TurboSpeed = 2;
 

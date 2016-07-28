@@ -88,7 +88,6 @@ namespace Mesen.GUI.Config
 				config = new Configuration();
 			}
 
-			config.InitializeDefaults();
 			return config;
 		}
 

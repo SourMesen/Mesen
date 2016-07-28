@@ -50,7 +50,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern UInt32 GetPressedKey();
 		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string keyName);
 		[DllImport(DLLPath, EntryPoint="GetKeyName")] private static extern IntPtr GetKeyNameWrapper(UInt32 key);
-
+		[DllImport(DLLPath)] public static extern void SetKeyState(Int32 scanCode, [MarshalAs(UnmanagedType.I1)]bool pressed);
+		[DllImport(DLLPath)] public static extern void ResetKeyState();
 		
 		[DllImport(DLLPath)] public static extern void Run();
 		[DllImport(DLLPath)] public static extern void Pause();

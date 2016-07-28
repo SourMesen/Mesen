@@ -116,6 +116,8 @@ namespace InteropEmu {
 
 		DllExport void __stdcall UpdateInputDevices() { if(_keyManager) { _keyManager->UpdateDevices(); } }
 		DllExport uint32_t __stdcall GetPressedKey() { return ControlManager::GetPressedKey(); }
+		DllExport void __stdcall SetKeyState(int32_t scanCode, bool state) { if(_keyManager) { _keyManager->SetKeyState(scanCode, state); } }
+		DllExport void __stdcall ResetKeyState() { if(_keyManager) { _keyManager->ResetKeyState(); } }
 		DllExport const char* __stdcall GetKeyName(uint32_t keyCode) 
 		{
 			_returnString = ControlManager::GetKeyName(keyCode);
