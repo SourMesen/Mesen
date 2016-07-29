@@ -107,7 +107,7 @@ namespace Mesen.GUI
 							singleInstance.ListenForArgumentsFromSuccessiveInstances();
 							singleInstance.ArgumentsReceived += (object sender, ArgumentsReceivedEventArgs e) => {
 								frmMain.BeginInvoke((MethodInvoker)(() => {
-									frmMain.ProcessCommandLineArguments(e.Args);
+									frmMain.ProcessCommandLineArguments(e.Args, false);
 								}));
 							};
 						}

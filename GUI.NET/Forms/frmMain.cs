@@ -37,38 +37,44 @@ namespace Mesen.GUI.Forms
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
 
+		private string[] _commandLineArgs;
 		private bool _noAudio = false;
 		private bool _noVideo = false;
 		private bool _noInput = false;
 
 		public frmMain(string[] args)
 		{
-			var a = new List<string>();
-			for(int i = 0; i < args.Length; i++) {
-				a.Add(args[i].ToLowerInvariant());
-			}
-			_noVideo = a.Contains("/novideo");
-			_noAudio = a.Contains("/noaudio");
-			_noInput = a.Contains("/noinput");
-
-			if(args.Length > 0) {
-				foreach(string arg in args) {
-					if(File.Exists(arg)) {
-						_romToLoad = args[0];
-					}
-				}
-			}
-
 			InitializeComponent();
 
+			_commandLineArgs = args;
+			
 			Application.AddMessageFilter(this);
 			this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 		}
 
-		public void ProcessCommandLineArguments(string[] args)
+		public void ProcessCommandLineArguments(string[] args, bool forStartup)
 		{
-			if(args.Length > 0 && File.Exists(args[0])) {
-				this.LoadFile(args[0]);
+			if(forStartup) {
+				var switches = new List<string>();
+				for(int i = 0; i < args.Length; i++) {
+					switches.Add(args[i].ToLowerInvariant().Replace("-", "/"));
+				}
+
+				_noVideo = switches.Contains("/novideo");
+				_noAudio = switches.Contains("/noaudio");
+				_noInput = switches.Contains("/noinput");
+				if(switches.Contains("/fullscreen")) {
+					this.SetFullscreenState(true);
+				}
+			}
+
+			if(args.Length > 0) {
+				foreach(string arg in args) {
+					if(File.Exists(arg)) {
+						this.LoadFile(arg);
+						break;
+					}
+				}
 			}
 		}
 
@@ -103,9 +109,7 @@ namespace Mesen.GUI.Forms
 				Task.Run(() => CloudSyncHelper.Sync());
 			}
 
-			if(_romToLoad != null) {
-				LoadFile(this._romToLoad);
-			}
+			this.ProcessCommandLineArguments(_commandLineArgs, true);
 
 			if(ConfigManager.Config.PreferenceInfo.AutomaticallyCheckForUpdates) {
 				CheckForUpdates(false);
@@ -357,6 +361,7 @@ namespace Mesen.GUI.Forms
 			this.Resize += frmMain_Resize;
 
 			_fullscreenMode = enabled;
+			mnuFullscreen.Checked = enabled;
 		}
 
 		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
@@ -1348,13 +1353,11 @@ namespace Mesen.GUI.Forms
 		private void mnuFullscreen_Click(object sender, EventArgs e)
 		{
 			SetFullscreenState(!_fullscreenMode);
-			mnuFullscreen.Checked = _fullscreenMode;
 		}
 
 		private void ctrlRenderer_DoubleClick(object sender, EventArgs e)
 		{
 			SetFullscreenState(!_fullscreenMode);
-			mnuFullscreen.Checked = _fullscreenMode;
 		}
 
 		private void mnuScaleCustom_Click(object sender, EventArgs e)
