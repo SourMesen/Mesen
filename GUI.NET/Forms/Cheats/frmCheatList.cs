@@ -87,5 +87,24 @@ namespace Mesen.GUI.Forms.Cheats
 			mnuDeleteCheat.Enabled = enableDelete;
 			btnDeleteCheat.Enabled = enableDelete;
 		}
+
+		private void DeleteSelectedCheats()
+		{
+			foreach(var item in lstCheats.SelectedItems) {
+				CheatInfo cheat = ((ListViewItem)item).Tag as CheatInfo;
+				ConfigManager.Config.Cheats.Remove(cheat);
+			}
+			UpdateCheatList();
+		}
+
+		private void btnDeleteCheat_Click(object sender, EventArgs e)
+		{
+			DeleteSelectedCheats();
+		}
+
+		private void mnuDeleteCheat_Click(object sender, EventArgs e)
+		{
+			DeleteSelectedCheats();
+		}
 	}
 }

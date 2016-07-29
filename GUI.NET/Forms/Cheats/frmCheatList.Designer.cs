@@ -154,7 +154,7 @@ namespace Mesen.GUI.Forms.Cheats
             this.mnuAddCheat,
             this.mnuDeleteCheat});
 			this.contextMenuCheats.Name = "contextMenuCheats";
-			this.contextMenuCheats.Size = new System.Drawing.Size(160, 48);
+			this.contextMenuCheats.Size = new System.Drawing.Size(160, 70);
 			// 
 			// mnuAddCheat
 			// 
@@ -171,6 +171,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.mnuDeleteCheat.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.mnuDeleteCheat.Size = new System.Drawing.Size(159, 22);
 			this.mnuDeleteCheat.Text = "Delete";
+			this.mnuDeleteCheat.Click += new System.EventHandler(this.mnuDeleteCheat_Click);
 			// 
 			// flowLayoutPanel2
 			// 
@@ -205,6 +206,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.btnDeleteCheat.TabIndex = 3;
 			this.btnDeleteCheat.Text = "Delete Selected Cheats";
 			this.btnDeleteCheat.UseVisualStyleBackColor = true;
+			this.btnDeleteCheat.Click += new System.EventHandler(this.btnDeleteCheat_Click);
 			// 
 			// tableLayoutPanel2
 			// 
