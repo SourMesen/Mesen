@@ -174,10 +174,14 @@ struct NESHeader
 		}
 	}
 
-	uint32_t GetSavedChrRamSize()
+	uint32_t GetSaveChrRamSize()
 	{
-		uint8_t value = (Byte10 & 0xF0) >> 4;
-		return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
+			uint8_t value = (Byte10 & 0xF0) >> 4;
+			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+		} else {
+			return -1;
+		}
 	}
 
 	uint8_t GetSubMapper()
@@ -272,6 +276,7 @@ struct RomData
 	MirroringType MirroringType = MirroringType::Horizontal;
 	
 	int32_t ChrRamSize = -1;
+	int32_t SaveChrRamSize = -1;
 	int32_t SaveRamSize = -1;
 	int32_t WorkRamSize = -1;
 

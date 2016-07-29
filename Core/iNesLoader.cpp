@@ -29,6 +29,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 	}
 	romData.HasTrainer = header.HasTrainer();
 	romData.ChrRamSize = header.GetChrRamSize();
+	romData.SaveChrRamSize = header.GetSaveChrRamSize();
 	romData.WorkRamSize = header.GetWorkRamSize();
 	romData.SaveRamSize = header.GetSaveRamSize();
 	romData.NesHeader = header;

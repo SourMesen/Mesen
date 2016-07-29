@@ -506,6 +506,7 @@
     <ClInclude Include="NsfPpu.h" />
     <ClInclude Include="OekaKids.h" />
     <ClInclude Include="PlayerListMessage.h" />
+    <ClInclude Include="Racermate.h" />
     <ClInclude Include="ReverbFilter.h" />
     <ClInclude Include="RomData.h" />
     <ClInclude Include="NtdecTc112.h" />

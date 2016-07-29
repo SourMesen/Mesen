@@ -95,6 +95,7 @@ protected:
 	uint32_t _workRamSize = 0;
 	uint8_t* _workRam = nullptr;
 	bool _hasBattery = false;
+	bool _hasChrBattery = false;
 
 	virtual void InitMapper() = 0;
 	virtual void InitMapper(RomData &romData);
@@ -109,6 +110,7 @@ protected:
 	virtual uint32_t GetSaveRamSize() { return 0x2000; }
 	virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
 	virtual bool ForceBattery() { return false; }
+	virtual bool ForceChrBattery() { return false; }
 
 	virtual uint32_t GetChrRamSize() { return 0x0000; }
 

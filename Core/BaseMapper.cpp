@@ -240,16 +240,21 @@ bool BaseMapper::HasBattery()
 
 void BaseMapper::LoadBattery()
 {
-	ifstream batteryFile(_batteryFilename, ios::in | ios::binary);
-
-	if(batteryFile) {
-		batteryFile.read((char*)_saveRam, _saveRamSize);
-
-		batteryFile.close();
+	if(HasBattery()) {
+		ifstream batteryFile(_batteryFilename, ios::in | ios::binary);
+		if(batteryFile) {
+			batteryFile.read((char*)_saveRam, _saveRamSize);
+			batteryFile.close();
+		}
 	}
 
-	//Set a default mapping for save ram (this is what most games/mappers use)
-	SetCpuMemoryMapping(0x6000, 0x7FFF, 0, PrgMemoryType::SaveRam);
+	if(_hasChrBattery) {
+		ifstream batteryFile(_batteryFilename + ".chr", ios::in | ios::binary);
+		if(batteryFile) {
+			batteryFile.read((char*)_chrRam, _chrRamSize);
+			batteryFile.close();
+		}
+	}
 }
 
 void BaseMapper::SaveBattery()
@@ -260,6 +265,14 @@ void BaseMapper::SaveBattery()
 		if(batteryFile) {
 			batteryFile.write((char*)_saveRam, _saveRamSize);
 
+			batteryFile.close();
+		}
+	}
+
+	if(_hasChrBattery) {
+		ofstream batteryFile(_batteryFilename + ".chr", ios::out | ios::binary);
+		if(batteryFile) {
+			batteryFile.write((char*)_chrRam, _chrRamSize);
 			batteryFile.close();
 		}
 	}
@@ -397,7 +410,9 @@ void BaseMapper::Initialize(RomData &romData)
 		memcpy(_chrRom, romData.ChrRom.data(), _chrRomSize);
 	}
 
-	_hasBattery = romData.HasBattery || ForceBattery();
+	_hasBattery = (romData.HasBattery || ForceBattery()) && _saveRamSize > 0;
+	_hasChrBattery = romData.SaveChrRamSize > 0 || ForceChrBattery();
+
 	_gameSystem = romData.System;
 	_crc32 = romData.Crc32;
 	_prgCrc32 = romData.PrgCrc32;
@@ -426,11 +441,6 @@ void BaseMapper::Initialize(RomData &romData)
 		_chrPageAccessType.push_back(MemoryAccessType::NoAccess);
 	}
 
-	//Load battery data if present
-	if(HasBattery()) {
-		LoadBattery();
-	}
-
 	if(_chrRomSize == 0) {
 		//Assume there is CHR RAM if no CHR ROM exists
 		_onlyChrRam = true;
@@ -444,6 +454,9 @@ void BaseMapper::Initialize(RomData &romData)
 	} else if(GetChrRamSize()) {
 		InitializeChrRam();
 	}
+
+	//Load battery data if present
+	LoadBattery();
 
 	//Setup a default work/save ram in 0x6000-0x7FFF space
 	if(HasBattery() && _saveRamSize > 0) {
