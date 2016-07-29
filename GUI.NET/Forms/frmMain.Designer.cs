@@ -161,10 +161,10 @@ namespace Mesen.GUI.Forms
 			this.mnuTakeScreenshot = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
 			this.panelRenderer.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -337,6 +337,7 @@ namespace Mesen.GUI.Forms
 			this.mnuReset.Enabled = false;
 			this.mnuReset.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuReset.Name = "mnuReset";
+			this.mnuReset.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
 			this.mnuReset.Size = new System.Drawing.Size(200, 22);
 			this.mnuReset.Text = "Reset";
 			this.mnuReset.Click += new System.EventHandler(this.mnuReset_Click);
@@ -346,6 +347,7 @@ namespace Mesen.GUI.Forms
 			this.mnuStop.Enabled = false;
 			this.mnuStop.Image = global::Mesen.GUI.Properties.Resources.Stop;
 			this.mnuStop.Name = "mnuStop";
+			this.mnuStop.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
 			this.mnuStop.Size = new System.Drawing.Size(200, 22);
 			this.mnuStop.Text = "Stop";
 			this.mnuStop.Click += new System.EventHandler(this.mnuStop_Click);
@@ -1151,14 +1153,14 @@ namespace Mesen.GUI.Forms
             this.mnuTestRecordMovie,
             this.mnuTestRecordTest});
 			this.mnuTestRecordFrom.Name = "mnuTestRecordFrom";
-			this.mnuTestRecordFrom.Size = new System.Drawing.Size(193, 22);
+			this.mnuTestRecordFrom.Size = new System.Drawing.Size(192, 22);
 			this.mnuTestRecordFrom.Text = "Record from...";
 			// 
 			// mnuTestRecordStart
 			// 
 			this.mnuTestRecordStart.Name = "mnuTestRecordStart";
-			this.mnuTestRecordStart.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-			this.mnuTestRecordStart.Size = new System.Drawing.Size(138, 22);
+			this.mnuTestRecordStart.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+			this.mnuTestRecordStart.Size = new System.Drawing.Size(152, 22);
 			this.mnuTestRecordStart.Text = "Start";
 			this.mnuTestRecordStart.Click += new System.EventHandler(this.mnuTestRecordStart_Click);
 			// 
@@ -1186,8 +1188,8 @@ namespace Mesen.GUI.Forms
 			// mnuTestStopRecording
 			// 
 			this.mnuTestStopRecording.Name = "mnuTestStopRecording";
-			this.mnuTestStopRecording.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.mnuTestStopRecording.Size = new System.Drawing.Size(193, 22);
+			this.mnuTestStopRecording.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+			this.mnuTestStopRecording.Size = new System.Drawing.Size(192, 22);
 			this.mnuTestStopRecording.Text = "Stop recording";
 			this.mnuTestStopRecording.Click += new System.EventHandler(this.mnuTestStopRecording_Click);
 			// 
@@ -1247,6 +1249,18 @@ namespace Mesen.GUI.Forms
 			this.mnuCheckForUpdates.Text = "Check for updates";
 			this.mnuCheckForUpdates.Click += new System.EventHandler(this.mnuCheckForUpdates_Click);
 			// 
+			// toolStripMenuItem20
+			// 
+			this.toolStripMenuItem20.Name = "toolStripMenuItem20";
+			this.toolStripMenuItem20.Size = new System.Drawing.Size(167, 6);
+			// 
+			// mnuReportBug
+			// 
+			this.mnuReportBug.Name = "mnuReportBug";
+			this.mnuReportBug.Size = new System.Drawing.Size(170, 22);
+			this.mnuReportBug.Text = "Report a bug";
+			this.mnuReportBug.Click += new System.EventHandler(this.mnuReportBug_Click);
+			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
@@ -1259,18 +1273,6 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(170, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
-			// 
-			// mnuReportBug
-			// 
-			this.mnuReportBug.Name = "mnuReportBug";
-			this.mnuReportBug.Size = new System.Drawing.Size(170, 22);
-			this.mnuReportBug.Text = "Report a bug";
-			this.mnuReportBug.Click += new System.EventHandler(this.mnuReportBug_Click);
-			// 
-			// toolStripMenuItem20
-			// 
-			this.toolStripMenuItem20.Name = "toolStripMenuItem20";
-			this.toolStripMenuItem20.Size = new System.Drawing.Size(167, 6);
 			// 
 			// frmMain
 			// 
