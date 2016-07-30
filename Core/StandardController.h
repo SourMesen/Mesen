@@ -10,8 +10,6 @@ private:
 	uint32_t _stateBufferFamicom = 0;
 	uint8_t _lastButtonState = 0;
 
-	bool _hasZapper = false;
-	bool _hasArkanoidController = false;
 	shared_ptr<BaseControlDevice> _additionalController;
 	uint8_t GetButtonState();
 

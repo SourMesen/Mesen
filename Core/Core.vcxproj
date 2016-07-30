@@ -505,6 +505,7 @@
     <ClInclude Include="NsfMapper.h" />
     <ClInclude Include="NsfPpu.h" />
     <ClInclude Include="OekaKids.h" />
+    <ClInclude Include="OekaKidsTablet.h" />
     <ClInclude Include="PlayerListMessage.h" />
     <ClInclude Include="Racermate.h" />
     <ClInclude Include="ReverbFilter.h" />
@@ -681,6 +682,7 @@
     <ClCompile Include="iNesLoader.cpp" />
     <ClCompile Include="NsfMapper.cpp" />
     <ClCompile Include="NtscFilter.cpp" />
+    <ClCompile Include="OekaKidsTablet.cpp" />
     <ClCompile Include="ReverbFilter.cpp" />
     <ClCompile Include="RomLoader.cpp" />
     <ClCompile Include="Snapshotable.cpp" />

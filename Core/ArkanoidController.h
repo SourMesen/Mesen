@@ -5,9 +5,9 @@
 class ArkanoidController : public BaseControlDevice
 {
 private:
-	uint32_t _stateBuffer;
-	bool _buttonPressed;
-	int32_t _xPosition;
+	uint32_t _stateBuffer = 0;
+	bool _buttonPressed = false;
+	int32_t _xPosition = 0;
 
 	bool IsButtonPressed();
 

@@ -4,6 +4,7 @@
 #include "PPU.h"
 #include "EmulationSettings.h"
 #include "ArkanoidController.h"
+#include "OekaKidsTablet.h"
 
 void StandardController::StreamState(bool saving)
 {
@@ -65,9 +66,9 @@ uint8_t StandardController::GetPortOutput()
 	_stateBuffer >>= 1;
 
 	if(_famiconDevice && _additionalController) {
-		if(_hasZapper) {
+		if(std::dynamic_pointer_cast<Zapper>(_additionalController) || std::dynamic_pointer_cast<OekaKidsTablet>(_additionalController)) {
 			returnValue |= _additionalController->GetPortOutput();
-		} else if(_hasArkanoidController) {
+		} else if(std::dynamic_pointer_cast<ArkanoidController>(_additionalController)) {
 			returnValue |= std::dynamic_pointer_cast<ArkanoidController>(_additionalController)->GetExpansionPortOutput(_port);
 		} else {
 			returnValue |= (_stateBufferFamicom & 0x01) << 1;
@@ -86,11 +87,11 @@ void StandardController::RefreshStateBuffer()
 {
 	_stateBuffer = GetControlState();
 	_lastButtonState = _stateBuffer;
-	if(_additionalController && !_hasZapper) {
+	if(_additionalController && !std::dynamic_pointer_cast<Zapper>(_additionalController)) {
 		//Next 8 bits = Gamepad 3/4
 		if(_famiconDevice) {
 			//Four player adapter (Famicom)
-			if(_hasArkanoidController) {
+			if(std::dynamic_pointer_cast<ArkanoidController>(_additionalController) || std::dynamic_pointer_cast<OekaKidsTablet>(_additionalController)) {
 				_additionalController->RefreshStateBuffer();
 			} else {
 				_stateBufferFamicom = _additionalController->GetControlState();
@@ -118,14 +119,6 @@ uint8_t StandardController::RefreshState()
 
 void StandardController::AddAdditionalController(shared_ptr<BaseControlDevice> controller)
 {
-	_hasZapper = false;
-	_hasArkanoidController = false;
-
-	if(std::dynamic_pointer_cast<Zapper>(controller)) {
-		_hasZapper = true;
-	} else if(std::dynamic_pointer_cast<ArkanoidController>(controller)) {
-		_hasArkanoidController = true;
-	}
 	_additionalController = controller;
 }
 

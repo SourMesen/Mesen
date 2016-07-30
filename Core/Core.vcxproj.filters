@@ -838,6 +838,9 @@
     <ClInclude Include="Racermate.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="OekaKidsTablet.h">
+      <Filter>Nes\Controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1004,6 +1007,9 @@
     </ClCompile>
     <ClCompile Include="VideoHud.cpp">
       <Filter>VideoDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="OekaKidsTablet.cpp">
+      <Filter>Nes\Controllers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

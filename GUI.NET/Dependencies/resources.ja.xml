@@ -452,6 +452,7 @@
       <Value ID="Zapper">ガン</Value>
       <Value ID="FourPlayerAdapter">4-Player Adapter</Value>
       <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
+      <Value ID="OekaKidsTablet">おえかきっずタブレット</Value>
     </Enum>
     <Enum ID="PpuModel">
       <Value ID="Ppu2C03">RP2C03</Value>

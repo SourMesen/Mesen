@@ -20,6 +20,11 @@ namespace Mesen.GUI.Controls
 			InitializeComponent();
 		}
 
+		private bool NeedMouseIcon
+		{
+			get { return InteropEmu.GetExpansionDevice() == InteropEmu.ExpansionPortDevice.OekaKidsTablet || InteropEmu.HasZapper(); }
+		}
+
 		private void ShowMouse()
 		{
 			if(_cursorHidden) {
@@ -38,7 +43,7 @@ namespace Mesen.GUI.Controls
 		
 		protected override void OnDoubleClick(EventArgs e)
 		{
-			if(!InteropEmu.HasZapper() && !InteropEmu.HasArkanoidPaddle()) {
+			if(!this.NeedMouseIcon && !InteropEmu.HasArkanoidPaddle()) {
 				//Disable double clicking (used to switch to fullscreen mode) when using zapper/arkanoid controller
 				base.OnDoubleClick(e);
 			}
@@ -48,13 +53,13 @@ namespace Mesen.GUI.Controls
 		{
 			if(!InteropEmu.IsRunning() || InteropEmu.IsPaused() || !InteropEmu.HasArkanoidPaddle()) {
 				ShowMouse();
-			} else if(InteropEmu.HasArkanoidPaddle() && !InteropEmu.HasZapper()) {
+			} else if(InteropEmu.HasArkanoidPaddle() && !this.NeedMouseIcon) {
 				HideMouse();
 			}
 
 			tmrMouse.Stop();
 
-			if(InteropEmu.HasZapper()) {
+			if(this.NeedMouseIcon) {
 				this.Cursor = Cursors.Cross;
 			} else {
 				this.Cursor = Cursors.Default;

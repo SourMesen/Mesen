@@ -390,6 +390,7 @@ namespace Mesen.GUI
 			Zapper = 1,
 			FourPlayerAdapter = 2,
 			ArkanoidController = 3,
+			OekaKidsTablet = 4,
 		}
 
 		public enum VsInputType

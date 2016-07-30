@@ -16,9 +16,9 @@ struct ZapperButtonState
 class Zapper : public BaseControlDevice
 {
 private:
-	bool _pulled;
-	int32_t _xPosition;
-	int32_t _yPosition;
+	bool _pulled = false;
+	int32_t _xPosition = -1;
+	int32_t _yPosition = -1;
 
 protected:
 	virtual uint8_t RefreshState();

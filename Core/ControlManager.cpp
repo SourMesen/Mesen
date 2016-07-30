@@ -3,6 +3,7 @@
 #include "StandardController.h"
 #include "Zapper.h"
 #include "ArkanoidController.h"
+#include "OekaKidsTablet.h"
 #include "EmulationSettings.h"
 #include "Console.h"
 #include "GameServerConnection.h"
@@ -124,19 +125,15 @@ void ControlManager::UpdateControlDevices()
 	bool fourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
 	ExpansionPortDevice expansionDevice = EmulationSettings::GetExpansionDevice();
 	
-	shared_ptr<BaseControlDevice> arkanoidController;
 	if(EmulationSettings::GetConsoleType() != ConsoleType::Famicom) {
 		expansionDevice = ExpansionPortDevice::None;
 	} else if(expansionDevice != ExpansionPortDevice::FourPlayerAdapter) {
 		fourScore = false;
-		if(expansionDevice == ExpansionPortDevice::ArkanoidController) {
-			arkanoidController.reset(new ArkanoidController(2));
-		}
 	}
 
 	for(int i = 0; i < 2; i++) {
 		shared_ptr<BaseControlDevice> device;
-		if(fourScore || expansionDevice == ExpansionPortDevice::ArkanoidController || i == 1 && expansionDevice == ExpansionPortDevice::Zapper) {
+		if(fourScore || EmulationSettings::GetConsoleType() == ConsoleType::Famicom) {
 			//Need to set standard controller in all slots if four score (to allow emulation to work correctly)
 			device.reset(new StandardController(i));
 		} else {
@@ -152,10 +149,13 @@ void ControlManager::UpdateControlDevices()
 
 			if(fourScore) {
 				std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<StandardController>(new StandardController(i + 2)));
-			} else if(i == 1 && expansionDevice == ExpansionPortDevice::Zapper) {
-				std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<Zapper>(new Zapper(2)));
-			} else if(expansionDevice == ExpansionPortDevice::ArkanoidController) {
-				std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(arkanoidController);
+			} else if(i == 1 || expansionDevice == ExpansionPortDevice::ArkanoidController) {
+				switch(expansionDevice) {
+					case ExpansionPortDevice::Zapper: std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<Zapper>(new Zapper(2))); break;
+					case ExpansionPortDevice::ArkanoidController: std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<ArkanoidController>(new ArkanoidController(2))); break;
+					case ExpansionPortDevice::OekaKidsTablet: std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<OekaKidsTablet>(new OekaKidsTablet(2))); break;
+					default: break;
+				}
 			}
 
 		} else {
@@ -199,15 +199,33 @@ uint8_t ControlManager::ReadRAM(uint16_t addr)
 	return 0;
 }
 
+template<typename T>
+shared_ptr<T> ControlManager::GetExpansionDevice()
+{
+	shared_ptr<StandardController> controller;
+	controller = std::dynamic_pointer_cast<StandardController>(GetControlDevice(1));
+	if(controller) {
+		shared_ptr<T> expansionDevice;
+		expansionDevice = std::dynamic_pointer_cast<T>(controller->GetAdditionalController());
+		return expansionDevice;
+	}
+	return nullptr;
+}
+
 void ControlManager::WriteRAM(uint16_t addr, uint8_t value)
 {
 	//$4016 writes
 	bool previousState = _refreshState;
 	_refreshState = (value & 0x01) == 0x01;
-	
-	if(previousState && !_refreshState) {
-		//Refresh controller once strobe bit is disabled
-		RefreshAllPorts();
+
+	auto tablet = GetExpansionDevice<OekaKidsTablet>();
+	if(tablet) {
+		tablet->WriteRam(value);
+	} else {
+		if(previousState && !_refreshState) {
+			//Refresh controller once strobe bit is disabled
+			RefreshAllPorts();
+		}
 	}
 }
 

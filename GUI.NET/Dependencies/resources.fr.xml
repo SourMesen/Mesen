@@ -460,6 +460,7 @@
       <Value ID="Zapper">Zapper</Value>
       <Value ID="FourPlayerAdapter">Adapteur pour 4 joueurs</Value>
       <Value ID="ArkanoidController">Manette Arkanoid</Value>
+      <Value ID="OekaKidsTablet">Tablette Oeka Kids</Value>
     </Enum>
     <Enum ID="PpuModel">
       <Value ID="Ppu2C03">RP2C03</Value>

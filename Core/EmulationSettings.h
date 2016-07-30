@@ -161,6 +161,7 @@ enum class ExpansionPortDevice
 	Zapper = 1,
 	FourPlayerAdapter = 2,
 	ArkanoidController = 3,
+	OekaKidsTablet = 4,
 };
 
 struct KeyMapping

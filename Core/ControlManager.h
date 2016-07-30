@@ -29,6 +29,8 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		bool _isLagging = false;
 		bool _refreshState = false;
 
+		template<typename T> shared_ptr<T> GetExpansionDevice();
+
 		virtual shared_ptr<BaseControlDevice> GetZapper(uint8_t port);
 
 		static void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice, uint8_t port);

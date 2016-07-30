@@ -113,6 +113,10 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 		} else {
 			controllers[1] = ControllerType::ArkanoidController;
 		}
+	} else if(inputType.compare("OekaKidsTablet") == 0) {
+		MessageManager::Log("[DB] Input: Oeka Kids Tablet connected");
+		system = GameSystem::Famicom;
+		expDevice = ExpansionPortDevice::OekaKidsTablet;
 	} else {
 		MessageManager::Log("[DB] Input: 2 standard controllers connected");
 	}

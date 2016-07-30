@@ -5,7 +5,7 @@
 class VsZapper : public Zapper
 {
 private:
-	uint32_t _stateBuffer;
+	uint32_t _stateBuffer = 0;
 
 protected:
 	uint8_t RefreshState();
