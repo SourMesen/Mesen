@@ -223,8 +223,12 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 
 		MessageManager::Log("[DB] Mapper: " + std::to_string(info.MapperID) + "  Sub: " + std::to_string(GetSubMapper(info)));
 		MessageManager::Log("[DB] System : " + info.System);
-		MessageManager::Log("[DB] Board: " + info.Board);
-		MessageManager::Log("[DB] Chip: " + info.Chip);
+		if(!info.Board.empty()) {
+			MessageManager::Log("[DB] Board: " + info.Board);
+		}
+		if(!info.Chip.empty()) {
+			MessageManager::Log("[DB] Chip: " + info.Chip);
+		}
 
 		if(!info.Mirroring.empty()) {
 			MessageManager::Log("[DB] Mirroring: " + string(info.Mirroring.compare("h") == 0 ? "Horizontal" : "Vertical"));
