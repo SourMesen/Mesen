@@ -10,7 +10,7 @@ class OekaKids : public BaseMapper
 
 protected:
 	virtual uint16_t GetPRGPageSize() { return 0x8000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() { return 0x1000; }
 	virtual bool HasBusConflicts() { return true; }
 
 	void InitMapper()
@@ -31,6 +31,7 @@ protected:
 	void UpdateChrBanks()
 	{
 		SelectCHRPage(0, _outerChrBank | _innerChrBank);
+		SelectCHRPage(1, _outerChrBank | 0x03);
 	}
 
 	void NotifyVRAMAddressChange(uint16_t addr)
