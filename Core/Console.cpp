@@ -82,6 +82,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		_initialized = true;
 
 		if(_debugger) {
+			auto lock = _debuggerLock.AcquireSafe();
 			StopDebugger();
 			GetDebugger();
 		}
@@ -229,8 +230,10 @@ void Console::Stop()
 {
 	_stop = true;
 	EmulationSettings::ClearFlags(EmulationFlags::Paused);
-	if(_debugger) {
-		_debugger->Run();
+
+	shared_ptr<Debugger> debugger = _debugger;
+	if(debugger) {
+		debugger->Run();
 	}
 	_stopLock.Acquire();
 	_stopLock.Release();
@@ -238,9 +241,10 @@ void Console::Stop()
 
 void Console::Pause()
 {
-	if(Console::Instance->_debugger) {
+	shared_ptr<Debugger> debugger = Console::Instance->_debugger;
+	if(debugger) {
 		//Make sure debugger resumes if we try to pause the emu, otherwise we will get deadlocked.
-		Console::Instance->_debugger->Suspend();
+		debugger->Suspend();
 	}
 	Console::Instance->_pauseLock.Acquire();
 	//Spin wait until emu pauses
@@ -252,9 +256,10 @@ void Console::Resume()
 	Console::Instance->_runLock.Release();
 	Console::Instance->_pauseLock.Release();
 	
-	if(Console::Instance->_debugger) {
+	shared_ptr<Debugger> debugger = Console::Instance->_debugger;
+	if(debugger) {
 		//Make sure debugger resumes if we try to pause the emu, otherwise we will get deadlocked.
-		Console::Instance->_debugger->Resume();
+		debugger->Resume();
 	}
 }
 
@@ -452,6 +457,7 @@ void Console::LoadState(uint8_t *buffer, uint32_t bufferSize)
 
 std::shared_ptr<Debugger> Console::GetDebugger()
 {
+	auto lock = _debuggerLock.AcquireSafe();
 	if(!_debugger) {
 		_debugger.reset(new Debugger(Console::Instance, _cpu, _ppu, _memoryManager, _mapper));
 	}

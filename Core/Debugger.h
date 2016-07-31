@@ -69,8 +69,7 @@ private:
 
 	SimpleLock _breakLock;
 
-	unique_ptr<TraceLogger> _traceLogger;
-	SimpleLock _traceLock;
+	shared_ptr<TraceLogger> _traceLogger;
 
 	uint16_t *_currentReadAddr; //Used to alter the executing address via "Set Next Statement"
 

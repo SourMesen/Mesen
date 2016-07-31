@@ -23,6 +23,7 @@ class Console
 		shared_ptr<PPU> _ppu;
 		unique_ptr<APU> _apu;
 		shared_ptr<Debugger> _debugger;
+		SimpleLock _debuggerLock;
 		shared_ptr<BaseMapper> _mapper;
 		unique_ptr<ControlManager> _controlManager;
 		shared_ptr<MemoryManager> _memoryManager;
