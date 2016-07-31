@@ -83,6 +83,7 @@
 #include "MMC3_47.h"
 #include "MMC3_49.h"
 #include "MMC3_52.h"
+#include "MMC3_114.h"
 #include "MMC3_115.h"
 #include "MMC3_165.h"
 #include "MMC3_182.h"
@@ -166,7 +167,7 @@ Supported mappers:
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|===| 82|   |===| 85| 86| 87| 88| 89| 90| 91| 92| 93| 94| 95|
 | 96| 97|===| 99|...|101|===|103|   |   |   |107|108|===|===|===|
-|112|113|   |115|   |   |118|119|   |   |===|   |===|   |   |===|
+|112|113|114|115|   |   |118|119|   |   |===|   |===|   |   |===|
 |===|===|===|===|132|133|   |===|   |137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
 |   |===|   |163|164|165|166|167|168|===|170|171|172|173|===|175|
@@ -288,6 +289,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 108: return new Mapper108();
 		case 112: return new Mapper112();
 		case 113: return new Nina03_06(true);
+		case 114: return new MMC3_114();
 		case 115: return new MMC3_115();
 		case 118: return new TxSRom();
 		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);

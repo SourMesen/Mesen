@@ -841,6 +841,9 @@
     <ClInclude Include="OekaKidsTablet.h">
       <Filter>Nes\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="MMC3_114.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
