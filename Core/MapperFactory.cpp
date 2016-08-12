@@ -95,6 +95,7 @@
 #include "MMC3_189.h"
 #include "MMC3_197.h"
 #include "MMC3_205.h"
+#include "MMC3_238.h"
 #include "MMC3_245.h"
 #include "MMC3_249.h"
 #include "MMC3_250.h"
@@ -179,7 +180,7 @@ Supported mappers:
 |176|177|178|179|180|   |182|   |184|185|   |187|188|189|===|191|
 |192|193|194|195|   |197|   |   |200|201|202|203|   |205|206|207|
 |   |209|210|211|212|   |   |   |   |   |218|   |   |221|   |   |
-|   |225|226|227|228|   |230|231|232|   |234|235|   |===|   |===|
+|   |225|226|227|228|   |230|231|232|   |234|235|   |===|238|===|
 |240|241|242|243|244|245|246|===|===|249|250|===|252|   |254|   |
 -----------------------------------------------------------------
 */
@@ -374,6 +375,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 232: return new BF9096();
 		case 234: return new Mapper234();
 		case 235: return new Bmc235();
+		case 238: return new MMC3_238();
 		case 240: return new Mapper240();
 		case 241: return new Mapper241();
 		case 242: return new Mapper242();
