@@ -72,6 +72,7 @@
 #include "Mapper240.h"
 #include "Mapper241.h"
 #include "Mapper242.h"
+#include "Mapper244.h"
 #include "Mapper246.h"
 #include "MMC1.h"
 #include "MMC1_155.h"
@@ -178,7 +179,7 @@ Supported mappers:
 |192|193|194|195|   |197|   |   |200|201|202|203|   |205|206|207|
 |   |209|210|211|212|   |   |   |   |   |218|   |   |221|   |   |
 |   |225|226|227|228|   |230|231|232|   |234|235|   |===|   |===|
-|240|241|242|243|   |245|246|===|===|249|250|===|252|   |   |   |
+|240|241|242|243|244|245|246|===|===|249|250|===|252|   |   |   |
 -----------------------------------------------------------------
 */
 
@@ -376,6 +377,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 241: return new Mapper241();
 		case 242: return new Mapper242();
 		case 243: return new Sachen74LS374N();
+		case 244: return new Mapper244();
 		case 245: return new MMC3_245();
 		case 246: return new Mapper246();
 		case 249: return new MMC3_249();
