@@ -847,6 +847,9 @@
     <ClInclude Include="BandaiKaraoke.h">
       <Filter>Nes\Mappers\Bandai</Filter>
     </ClInclude>
+    <ClInclude Include="MMC3_121.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
