@@ -98,6 +98,7 @@
 #include "MMC3_245.h"
 #include "MMC3_249.h"
 #include "MMC3_250.h"
+#include "MMC3_254.h"
 #include "MMC3_ChrRam.h"
 #include "MMC4.h"
 #include "MMC5.h"
@@ -179,7 +180,7 @@ Supported mappers:
 |192|193|194|195|   |197|   |   |200|201|202|203|   |205|206|207|
 |   |209|210|211|212|   |   |   |   |   |218|   |   |221|   |   |
 |   |225|226|227|228|   |230|231|232|   |234|235|   |===|   |===|
-|240|241|242|243|244|245|246|===|===|249|250|===|252|   |   |   |
+|240|241|242|243|244|245|246|===|===|249|250|===|252|   |254|   |
 -----------------------------------------------------------------
 */
 
@@ -383,6 +384,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 249: return new MMC3_249();
 		case 250: return new MMC3_250();
 		case 252: return new Waixing252();
+		case 254: return new MMC3_254();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();
