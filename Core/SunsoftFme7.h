@@ -17,9 +17,9 @@ private:
 protected:
 	virtual uint16_t GetPRGPageSize() { return 0x2000; }
 	virtual uint16_t GetCHRPageSize() { return 0x400; }
-	virtual uint32_t GetWorkRamSize() { return 0x80000; }
+	virtual uint32_t GetWorkRamSize() { return 0x8000; }
 	virtual uint32_t GetWorkRamPageSize() { return 0x2000; }
-	virtual uint32_t GetSaveRamSize() { return 0x80000; }
+	virtual uint32_t GetSaveRamSize() { return 0x8000; }
 	virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
 
 	void InitMapper()
