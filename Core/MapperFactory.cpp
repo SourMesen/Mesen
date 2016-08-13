@@ -66,6 +66,7 @@
 #include "Mapper225.h"
 #include "Mapper226.h"
 #include "Mapper227.h"
+#include "Mapper229.h"
 #include "Mapper230.h"
 #include "Mapper231.h"
 #include "Mapper233.h"
@@ -181,7 +182,7 @@ Supported mappers:
 |176|177|178|179|180|   |182|   |184|185|   |187|188|189|===|191|
 |192|193|194|195|   |197|   |   |200|201|202|203|   |205|206|207|
 |   |209|210|211|212|   |   |   |   |   |218|   |   |221|   |   |
-|   |225|226|227|228|   |230|231|232|233|234|235|   |===|238|===|
+|   |225|226|227|228|229|230|231|232|233|234|235|   |===|238|===|
 |240|241|242|243|244|245|246|===|===|249|250|===|252|   |254|   |
 -----------------------------------------------------------------
 */
@@ -371,6 +372,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 226: return new Mapper226();
 		case 227: return new Mapper227();
 		case 228: return new ActionEnterprises();
+		case 229: return new Mapper229();
 		case 230: return new Mapper230();
 		case 231: return new Mapper231();
 		case 232: return new BF9096();
