@@ -60,6 +60,7 @@
 #include "Mapper201.h"
 #include "Mapper202.h"
 #include "Mapper203.h"
+#include "Mapper204.h"
 #include "Mapper212.h"
 #include "Mapper213.h"
 #include "Mapper214.h"
@@ -183,7 +184,7 @@ Supported mappers:
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
 |   |===|   |163|164|165|166|167|168|===|170|171|172|173|===|175|
 |176|177|178|179|180|   |182|   |184|185|   |187|188|189|===|191|
-|192|193|194|195|   |197|   |   |200|201|202|203|   |205|206|207|
+|192|193|194|195|   |197|   |   |200|201|202|203|204|205|206|207|
 |   |209|210|211|212|213|214|   |   |   |218|   |   |221|222|   |
 |   |225|226|227|228|229|230|231|232|233|234|235|   |===|238|===|
 |240|241|242|243|244|245|246|===|===|249|250|===|252|   |254|   |
@@ -362,6 +363,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 201: return new Mapper201();
 		case 202: return new Mapper202();
 		case 203: return new Mapper203();
+		case 204: return new Mapper204();
 		case 205: return new MMC3_205();
 		case 206: return new Namco108();
 		case 207: return new TaitoX1005(true);
