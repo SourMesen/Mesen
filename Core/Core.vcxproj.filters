@@ -889,6 +889,9 @@
     <ClInclude Include="Mapper253.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
+    <ClInclude Include="Sachen_136.h">
+      <Filter>Nes\Mappers\Sachen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

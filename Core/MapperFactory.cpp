@@ -129,6 +129,7 @@
 #include "Racermate.h"
 #include "Rambo1.h"
 #include "Sachen_133.h"
+#include "Sachen_136.h"
 #include "Sachen_143.h"
 #include "Sachen_145.h"
 #include "Sachen_147.h"
@@ -183,7 +184,7 @@ Supported mappers:
 | 80|===| 82|   |===| 85| 86| 87| 88| 89| 90| 91| 92| 93| 94| 95|
 | 96| 97|===| 99|...|101|===|103|   |   |   |107|108|===|===|===|
 |112|113|114|115|   |   |118|119|120|121|===|   |===|   |   |===|
-|===|===|===|===|132|133|   |===|   |137|138|139|140|141|142|143|
+|===|===|===|===|132|133|   |===|136|137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
 |   |===|   |163|164|165|166|167|168|===|170|171|172|173|===|175|
 |176|177|178|179|180|---|182|183|184|185|   |187|188|189|===|191|
@@ -312,6 +313,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 121: return new MMC3_121();
 		case 132: return new Txc22211A();
 		case 133: return new Sachen_133();
+		case 136: return new Sachen_136();
 		case 137: return new Sachen8259(Sachen8259Variant::Sachen8259D);
 		case 138: return new Sachen8259(Sachen8259Variant::Sachen8259B);
 		case 139: return new Sachen8259(Sachen8259Variant::Sachen8259C);
