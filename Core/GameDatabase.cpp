@@ -196,6 +196,14 @@ uint8_t GameDatabase::GetSubMapper(GameInfo &info)
 				return 3; //Holy Diver
 			}
 			break;
+		case 185:
+			if(info.Crc == 0x0F05FF0A) {
+				//Seicross (v2)
+				//Not a real submapper, used to alter behavior specifically for this game
+				//This is equivalent to FCEUX's mapper 181
+				return 16; 
+			}
+			break;
 		case 210:
 			if(info.Board.compare("NAMCOT-175") == 0) {
 				return 1; //Namco 175
