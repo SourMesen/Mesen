@@ -11,6 +11,7 @@
 #include "Bmc51.h"
 #include "Bmc63.h"
 #include "Bmc235.h"
+#include "Bmc255.h"
 #include "BnRom.h"
 #include "BF909x.h"
 #include "BF9096.h"
@@ -187,7 +188,7 @@ Supported mappers:
 |192|193|194|195|   |197|   |   |200|201|202|203|204|205|206|207|
 |   |209|210|211|212|213|214|   |   |   |218|   |   |221|222|   |
 |   |225|226|227|228|229|230|231|232|233|234|235|   |===|238|===|
-|240|241|242|243|244|245|246|===|===|249|250|===|252|   |254|   |
+|240|241|242|243|244|245|246|===|===|249|250|===|252|   |254|255|
 -----------------------------------------------------------------
 */
 
@@ -399,6 +400,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 250: return new MMC3_250();
 		case 252: return new Waixing252();
 		case 254: return new MMC3_254();
+		case 255: return new Bmc255();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();
