@@ -19,6 +19,7 @@ private:
 
 	bool Initialize();
 	bool UpdateInputState(DirectInputData& joystick);
+	static bool IsXInputDevice(const GUID* pGuidProductFromDirectInput);
 	static int __stdcall EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, void* pContext);
 	static int __stdcall EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, void* pContext);
 

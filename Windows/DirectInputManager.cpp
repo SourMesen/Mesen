@@ -5,6 +5,8 @@
 #include <windows.h>
 #include <dinput.h>
 #include <dinputd.h>
+#include <wbemidl.h>
+#include <oleauto.h>
 #include "DirectInputManager.h"
 
 LPDIRECTINPUT8 DirectInputManager::_directInput = nullptr;
@@ -31,6 +33,128 @@ bool DirectInputManager::Initialize()
 
 	return UpdateDeviceList();
 }
+
+//-----------------------------------------------------------------------------
+// Enum each PNP device using WMI and check each device ID to see if it contains 
+// "IG_" (ex. "VID_045E&PID_028E&IG_00").  If it does, then it's an XInput device
+// Unfortunately this information can not be found by just using DirectInput 
+//-----------------------------------------------------------------------------
+bool DirectInputManager::IsXInputDevice(const GUID* pGuidProductFromDirectInput)
+{
+	IWbemLocator*           pIWbemLocator = NULL;
+	IEnumWbemClassObject*   pEnumDevices = NULL;
+	IWbemClassObject*       pDevices[20] = { 0 };
+	IWbemServices*          pIWbemServices = NULL;
+	BSTR                    bstrNamespace = NULL;
+	BSTR                    bstrDeviceID = NULL;
+	BSTR                    bstrClassName = NULL;
+	DWORD                   uReturned = 0;
+	bool                    bIsXinputDevice = false;
+	UINT                    iDevice = 0;
+	VARIANT                 var;
+	HRESULT                 hr;
+
+	// CoInit if needed
+	hr = CoInitialize(NULL);
+	bool bCleanupCOM = SUCCEEDED(hr);
+
+	// Create WMI
+	hr = CoCreateInstance(__uuidof(WbemLocator), NULL, CLSCTX_INPROC_SERVER, __uuidof(IWbemLocator), (LPVOID*)&pIWbemLocator);
+	if(FAILED(hr) || pIWbemLocator == NULL) {
+		goto LCleanup;
+	}
+
+	bstrNamespace = SysAllocString(L"\\\\.\\root\\cimv2"); 
+	bstrClassName = SysAllocString(L"Win32_PNPEntity");
+	bstrDeviceID = SysAllocString(L"DeviceID");
+
+	// Connect to WMI 
+	hr = pIWbemLocator->ConnectServer(bstrNamespace, NULL, NULL, 0L, 0L, NULL, NULL, &pIWbemServices);
+	if(FAILED(hr) || pIWbemServices == NULL) {
+		goto LCleanup;
+	}
+
+	// Switch security level to IMPERSONATE. 
+	CoSetProxyBlanket(pIWbemServices, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL, RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
+
+	hr = pIWbemServices->CreateInstanceEnum(bstrClassName, 0, NULL, &pEnumDevices);
+	if(FAILED(hr) || pEnumDevices == NULL) {
+		goto LCleanup;
+	}
+
+	// Loop over all devices
+	for(;; ) {
+		// Get 20 at a time
+		hr = pEnumDevices->Next(10000, 20, pDevices, &uReturned);
+		if(FAILED(hr) || uReturned == 0 || bIsXinputDevice) {
+			break;
+		}
+
+		for(iDevice = 0; iDevice < uReturned; iDevice++) {
+			// For each device, get its device ID
+			hr = pDevices[iDevice]->Get(bstrDeviceID, 0L, &var, NULL, NULL);
+			if(SUCCEEDED(hr) && var.vt == VT_BSTR && var.bstrVal != NULL) {
+				// Check if the device ID contains "IG_".  If it does, then it's an XInput device
+				// This information can not be found from DirectInput 
+				if(wcsstr(var.bstrVal, L"IG_")) {
+					// If it does, then get the VID/PID from var.bstrVal
+					DWORD dwPid = 0, dwVid = 0;
+					WCHAR* strVid = wcsstr(var.bstrVal, L"VID_");
+					if(strVid && swscanf_s(strVid, L"VID_%4X", &dwVid) != 1) {
+						dwVid = 0;
+					}
+					WCHAR* strPid = wcsstr(var.bstrVal, L"PID_");
+					if(strPid && swscanf_s(strPid, L"PID_%4X", &dwPid) != 1) {
+						dwPid = 0;
+					}
+
+					// Compare the VID/PID to the DInput device
+					DWORD dwVidPid = MAKELONG(dwVid, dwPid);
+					if(dwVidPid == pGuidProductFromDirectInput->Data1) {
+						bIsXinputDevice = true;
+						pDevices[iDevice]->Release();
+						pDevices[iDevice] = nullptr;
+						break;
+					}
+				}
+			}
+			pDevices[iDevice]->Release();
+			pDevices[iDevice] = nullptr;
+		}
+	}
+
+LCleanup:
+	if(bstrNamespace) {
+		SysFreeString(bstrNamespace);
+	}
+	if(bstrDeviceID) {
+		SysFreeString(bstrDeviceID);
+	}
+	if(bstrClassName) {
+		SysFreeString(bstrClassName);
+	}
+	for(iDevice = 0; iDevice < 20; iDevice++) {
+		if(pDevices[iDevice]) {
+			pDevices[iDevice]->Release();
+		}
+	}
+	if(pEnumDevices) {
+		pEnumDevices->Release();
+	}
+	if(pIWbemLocator) {
+		pIWbemLocator->Release();
+	}
+	if(pIWbemServices) {
+		pIWbemServices->Release();
+	}
+
+	if(bCleanupCOM) {
+		CoUninitialize();
+	}
+
+	return bIsXinputDevice;
+}
+
 
 bool DirectInputManager::UpdateDeviceList()
 {
@@ -91,15 +215,17 @@ int DirectInputManager::EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstan
 {
 	HRESULT hr;
 
-	// Obtain an interface to the enumerated joystick.
-	LPDIRECTINPUTDEVICE8 pJoystick = nullptr;
-	hr = _directInput->CreateDevice(pdidInstance->guidInstance, &pJoystick, nullptr);
+	if(!IsXInputDevice(&pdidInstance->guidProduct)) {
+		// Obtain an interface to the enumerated joystick.
+		LPDIRECTINPUTDEVICE8 pJoystick = nullptr;
+		hr = _directInput->CreateDevice(pdidInstance->guidInstance, &pJoystick, nullptr);
 
-	if(SUCCEEDED(hr)) {
-		DIJOYSTATE2 state;
-		memset(&state, 0, sizeof(state));
-		DirectInputData data{ pJoystick, state, state };
-		_joysticks.push_back(data);
+		if(SUCCEEDED(hr)) {
+			DIJOYSTATE2 state;
+			memset(&state, 0, sizeof(state));
+			DirectInputData data{ pJoystick, state, state };
+			_joysticks.push_back(data);
+		}
 	}
 	return DIENUM_CONTINUE;
 }
