@@ -148,7 +148,7 @@ struct NESHeader
 	{
 		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
 			uint8_t value = Byte10 & 0x0F;
-			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value - 1);
 		} else {
 			return -1;
 		}
@@ -158,7 +158,7 @@ struct NESHeader
 	{
 		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
 			uint8_t value = (Byte10 & 0xF0) >> 4;
-			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value - 1);
 		} else {
 			return -1;
 		}
@@ -168,7 +168,7 @@ struct NESHeader
 	{
 		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
 			uint8_t value = Byte11 & 0x0F;
-			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value - 1);
 		} else {
 			return -1;
 		}
@@ -178,7 +178,7 @@ struct NESHeader
 	{
 		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
 			uint8_t value = (Byte10 & 0xF0) >> 4;
-			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value);
+			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value - 1);
 		} else {
 			return -1;
 		}
