@@ -136,7 +136,6 @@ namespace Mesen.GUI.Config
 	public class ControllerInfo
 	{
 		public InteropEmu.ControllerType ControllerType = InteropEmu.ControllerType.StandardController;
-		[XmlElement(ElementName = "KeyMappings")]
 		public List<KeyMappings> Keys = new List<KeyMappings>();
 		public UInt32 TurboSpeed = 2;
 
@@ -170,6 +169,7 @@ namespace Mesen.GUI.Config
 		public InteropEmu.InputDisplayPosition DisplayInputPosition = InteropEmu.InputDisplayPosition.BottomRight;
 		public bool DisplayInputHorizontally = true;
 
+		[XmlElement(ElementName = "InputDevice")]
 		public List<ControllerInfo> Controllers = new List<ControllerInfo>();
 
 		public void InitializeDefaults()
