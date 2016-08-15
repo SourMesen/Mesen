@@ -32,6 +32,7 @@ namespace Mesen.GUI.Config
 		public bool AssociateMstFiles = false;
 		public bool AssociateNsfFiles = false;
 		public bool AssociateNsfeFiles = false;
+		public bool AssociateUnfFiles = false;
 
 		public bool NsfDisableApuIrqs = true;
 		public bool NsfMoveToNextTrackAfterTime = true;
@@ -78,6 +79,7 @@ namespace Mesen.GUI.Config
 			UpdateFileAssociation("mst", preferenceInfo.AssociateMstFiles);
 			UpdateFileAssociation("nsf", preferenceInfo.AssociateNsfFiles);
 			UpdateFileAssociation("nsfe", preferenceInfo.AssociateNsfeFiles);
+			UpdateFileAssociation("unf", preferenceInfo.AssociateUnfFiles);
 
 			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, preferenceInfo.UseAlternativeMmc3Irq);
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, preferenceInfo.AllowInvalidInput);

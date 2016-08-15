@@ -72,6 +72,10 @@ private:
 
 	bool ReadChunk(uint8_t* &data, uint8_t* dataEnd, RomData& romData)
 	{
+		if(data + 4 > dataEnd) {
+			return false;
+		}
+
 		NsfHeader& header = romData.NsfHeader;
 
 		uint32_t length;
@@ -176,6 +180,7 @@ public:
 		InitHeader(header);
 
 		uint8_t* data = romFile.data() + 4;
+		uint8_t* endOfData = romFile.data() + romFile.size();
 
 		memset(header.SongName, 0, sizeof(header.SongName));
 		memset(header.ArtistName, 0, sizeof(header.ArtistName));
@@ -183,7 +188,7 @@ public:
 
 		//Will be set to false when we read NEND block
 		romData.Error = true;
-		while(ReadChunk(data, data + romFile.size(), romData)) {
+		while(ReadChunk(data, endOfData, romData)) {
 			//Read all chunks
 		}
 

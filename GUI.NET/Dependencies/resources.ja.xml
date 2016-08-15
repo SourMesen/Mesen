@@ -368,8 +368,8 @@
     <Message ID="FilterMovie">動画 (*.mmo)|*.mmo|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterWave">WAVファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE|ファミコンゲーム (*.nes)|*.NES|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
 
     <Message ID="Resume">再開</Message>

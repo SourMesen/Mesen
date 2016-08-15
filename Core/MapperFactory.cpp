@@ -197,6 +197,7 @@ Supported mappers:
 
 const uint16_t MapperFactory::FdsMapperID;
 const uint16_t MapperFactory::NsfMapperID;
+const uint16_t MapperFactory::UnknownBoard;
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
@@ -412,7 +413,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::FdsMapperID: return new FDS();
 	}
 
-	MessageManager::DisplayMessage("Error", "UnsupportedMapper");
+	MessageManager::DisplayMessage("Error", "UnsupportedMapper", "iNES #" + std::to_string(romData.MapperID));
 	return nullptr;
 }
 

@@ -7,6 +7,7 @@
 #include "FdsLoader.h"
 #include "NsfLoader.h"
 #include "NsfeLoader.h"
+#include "UnifLoader.h"
 
 vector<string> RomLoader::GetArchiveRomList(string filename)
 {
@@ -19,11 +20,11 @@ vector<string> RomLoader::GetArchiveRomList(string filename)
 		if(memcmp(header, "PK", 2) == 0) {
 			ZipReader reader;
 			reader.LoadArchive(filename);
-			return reader.GetFileList({ ".nes", ".fds", ".nsf", ".nsfe" });
+			return reader.GetFileList({ ".nes", ".fds", ".nsf", ".nsfe", "*.unf" });
 		} else if(memcmp(header, "7z", 2) == 0) {
 			SZReader reader;
 			reader.LoadArchive(filename);
-			return reader.GetFileList({ ".nes", ".fds", ".nsf", ".nsfe" });
+			return reader.GetFileList({ ".nes", ".fds", ".nsf", ".nsfe", "*.unf" });
 		}
 	}
 	return{};
@@ -38,7 +39,7 @@ bool RomLoader::LoadFromArchive(istream &zipFile, ArchiveReader& reader, int32_t
 
 	reader.LoadArchive(buffer, fileSize);
 
-	vector<string> fileList = reader.GetFileList({ ".nes", ".fds", ".nsf", ".nsfe" });
+	vector<string> fileList = reader.GetFileList({ ".nes", ".fds", ".nsf", ".nsfe", "*.unf" });
 	int32_t currentIndex = 0;
 	if(archiveFileIndex > (int32_t)fileList.size()) {
 		return false;
@@ -118,6 +119,9 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 	} else if(memcmp(buffer, "NSFE", 4) == 0) {
 		NsfeLoader loader;
 		_romData = loader.LoadRom(fileData);
+	} else if(memcmp(buffer, "UNIF", 4) == 0) {
+		UnifLoader loader;
+		_romData = loader.LoadRom(fileData);
 	} else {
 		MessageManager::Log("Invalid rom file.");
 		_romData.Error = true;
@@ -167,7 +171,7 @@ bool RomLoader::LoadFile(string filename, istream *filestream, string ipsFilenam
 	} else if(memcmp(header, "7z", 2) == 0) {
 		SZReader reader;
 		return LoadFromArchive(*input, reader, archiveFileIndex);
-	} else if(memcmp(header, "NES\x1a", 4) == 0 || memcmp(header, "NESM\x1a", 5) == 0 || memcmp(header, "NSFE", 4) == 0 || memcmp(header, "FDS\x1a", 4) == 0 || memcmp(header, "\x1*NINTENDO-HVC*", 15) == 0) {
+	} else if(memcmp(header, "NES\x1a", 4) == 0 || memcmp(header, "NESM\x1a", 5) == 0 || memcmp(header, "NSFE", 4) == 0 || memcmp(header, "FDS\x1a", 4) == 0 || memcmp(header, "\x1*NINTENDO-HVC*", 15) == 0 || memcmp(header, "UNIF", 4) == 0) {
 		if(archiveFileIndex > 0) {
 			return false;
 		}

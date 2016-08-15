@@ -80,10 +80,11 @@
 			this.chkNsfFormat = new System.Windows.Forms.CheckBox();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
-			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkDisableGameDatabase = new System.Windows.Forms.CheckBox();
+			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
+			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
+			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.chkUnfFormat = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -105,6 +106,7 @@
 			this.grpFileAssociations.SuspendLayout();
 			this.tlpFileFormat.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -597,7 +599,7 @@
 			this.chkNsfDisableApuIrqs.AutoSize = true;
 			this.chkNsfDisableApuIrqs.Location = new System.Drawing.Point(3, 51);
 			this.chkNsfDisableApuIrqs.Name = "chkNsfDisableApuIrqs";
-			this.chkNsfDisableApuIrqs.Size = new System.Drawing.Size(113, 17);
+			this.chkNsfDisableApuIrqs.Size = new System.Drawing.Size(194, 17);
 			this.chkNsfDisableApuIrqs.TabIndex = 6;
 			this.chkNsfDisableApuIrqs.Text = "Disable APU IRQs (Recommended)";
 			this.chkNsfDisableApuIrqs.UseVisualStyleBackColor = true;
@@ -629,16 +631,18 @@
 			this.tlpFileFormat.ColumnCount = 2;
 			this.tlpFileFormat.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tlpFileFormat.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tlpFileFormat.Controls.Add(this.chkNsfeFormat, 0, 3);
+			this.tlpFileFormat.Controls.Add(this.chkNsfeFormat, 0, 4);
 			this.tlpFileFormat.Controls.Add(this.chkNesFormat, 0, 0);
 			this.tlpFileFormat.Controls.Add(this.chkFdsFormat, 0, 1);
 			this.tlpFileFormat.Controls.Add(this.chkMmoFormat, 1, 0);
 			this.tlpFileFormat.Controls.Add(this.chkMstFormat, 1, 1);
-			this.tlpFileFormat.Controls.Add(this.chkNsfFormat, 0, 2);
+			this.tlpFileFormat.Controls.Add(this.chkNsfFormat, 0, 3);
+			this.tlpFileFormat.Controls.Add(this.chkUnfFormat, 0, 2);
 			this.tlpFileFormat.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpFileFormat.Location = new System.Drawing.Point(3, 16);
 			this.tlpFileFormat.Name = "tlpFileFormat";
-			this.tlpFileFormat.RowCount = 4;
+			this.tlpFileFormat.RowCount = 5;
+			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -649,7 +653,7 @@
 			// chkNsfeFormat
 			// 
 			this.chkNsfeFormat.AutoSize = true;
-			this.chkNsfeFormat.Location = new System.Drawing.Point(3, 72);
+			this.chkNsfeFormat.Location = new System.Drawing.Point(3, 95);
 			this.chkNsfeFormat.Name = "chkNsfeFormat";
 			this.chkNsfeFormat.Size = new System.Drawing.Size(226, 17);
 			this.chkNsfeFormat.TabIndex = 15;
@@ -700,7 +704,7 @@
 			// chkNsfFormat
 			// 
 			this.chkNsfFormat.AutoSize = true;
-			this.chkNsfFormat.Location = new System.Drawing.Point(3, 49);
+			this.chkNsfFormat.Location = new System.Drawing.Point(3, 72);
 			this.chkNsfFormat.Name = "chkNsfFormat";
 			this.chkNsfFormat.Size = new System.Drawing.Size(171, 17);
 			this.chkNsfFormat.TabIndex = 14;
@@ -738,20 +742,15 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 250);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
-			// tmrSyncDateTime
+			// chkDisableGameDatabase
 			// 
-			this.tmrSyncDateTime.Enabled = true;
-			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
-			// 
-			// chkFdsFastForwardOnLoad
-			// 
-			this.chkFdsFastForwardOnLoad.AutoSize = true;
-			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(3, 49);
-			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
-			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(342, 17);
-			this.chkFdsFastForwardOnLoad.TabIndex = 4;
-			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
-			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
+			this.chkDisableGameDatabase.AutoSize = true;
+			this.chkDisableGameDatabase.Location = new System.Drawing.Point(3, 3);
+			this.chkDisableGameDatabase.Name = "chkDisableGameDatabase";
+			this.chkDisableGameDatabase.Size = new System.Drawing.Size(170, 17);
+			this.chkDisableGameDatabase.TabIndex = 6;
+			this.chkDisableGameDatabase.Text = "Disable built-in game database";
+			this.chkDisableGameDatabase.UseVisualStyleBackColor = true;
 			// 
 			// chkFdsAutoLoadDisk
 			// 
@@ -763,15 +762,30 @@
 			this.chkFdsAutoLoadDisk.Text = "Automatically insert disk 1 side A when starting FDS games";
 			this.chkFdsAutoLoadDisk.UseVisualStyleBackColor = true;
 			// 
-			// chkDisableGameDatabase
+			// chkFdsFastForwardOnLoad
 			// 
-			this.chkDisableGameDatabase.AutoSize = true;
-			this.chkDisableGameDatabase.Location = new System.Drawing.Point(3, 3);
-			this.chkDisableGameDatabase.Name = "chkDisableGameDatabase";
-			this.chkDisableGameDatabase.Size = new System.Drawing.Size(170, 17);
-			this.chkDisableGameDatabase.TabIndex = 6;
-			this.chkDisableGameDatabase.Text = "Disable built-in game database";
-			this.chkDisableGameDatabase.UseVisualStyleBackColor = true;
+			this.chkFdsFastForwardOnLoad.AutoSize = true;
+			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(3, 49);
+			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
+			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(342, 17);
+			this.chkFdsFastForwardOnLoad.TabIndex = 4;
+			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
+			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
+			// 
+			// tmrSyncDateTime
+			// 
+			this.tmrSyncDateTime.Enabled = true;
+			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
+			// 
+			// chkUnfFormat
+			// 
+			this.chkUnfFormat.AutoSize = true;
+			this.chkUnfFormat.Location = new System.Drawing.Point(3, 49);
+			this.chkUnfFormat.Name = "chkUnfFormat";
+			this.chkUnfFormat.Size = new System.Drawing.Size(85, 17);
+			this.chkUnfFormat.TabIndex = 16;
+			this.chkUnfFormat.Text = ".UNF (UNIF)";
+			this.chkUnfFormat.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
 			// 
@@ -818,6 +832,8 @@
 			this.tlpFileFormat.ResumeLayout(false);
 			this.tlpFileFormat.PerformLayout();
 			this.tpgAdvanced.ResumeLayout(false);
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -879,5 +895,6 @@
 		private System.Windows.Forms.NumericUpDown nudNsfAutoDetectSilenceDelay;
 		private System.Windows.Forms.Label lblNsfMillisecondsOfSilence;
 		private System.Windows.Forms.CheckBox chkNsfDisableApuIrqs;
+		private System.Windows.Forms.CheckBox chkUnfFormat;
 	}
 }

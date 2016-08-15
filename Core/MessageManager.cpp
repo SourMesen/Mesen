@@ -57,7 +57,7 @@ std::unordered_map<string, string> MessageManager::_enResources = {
 	{ "SoundRecorderStarted", u8"Recording to: %1" },
 	{ "SoundRecorderStopped", u8"Recording saved to: %1" },
 	{ "TestFileSavedTo", u8"Test file saved to: %1" },
-	{ "UnsupportedMapper", u8"Unsupported mapper, cannot load game." },
+	{ "UnsupportedMapper", u8"Unsupported mapper (%1), cannot load game." },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Synchronization started." },
@@ -118,7 +118,7 @@ std::unordered_map<string, string> MessageManager::_frResources = {
 	{ "SoundRecorderStarted", u8"En cours d'enregistrement : %1" },
 	{ "SoundRecorderStopped", u8"Enregistrement audio sauvegardé : %1" },
 	{ "TestFileSavedTo", u8"Test sauvegardé : %1" },
-	{ "UnsupportedMapper", u8"Ce mapper n'est pas encore supporté - le jeu ne peut pas être démarré." },
+	{ "UnsupportedMapper", u8"Ce mapper (%1) n'est pas encore supporté - le jeu ne peut pas être démarré." },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Synchronisation en cours." },
@@ -179,7 +179,7 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "SoundRecorderStarted", u8"%1に録音しています。" },
 	{ "SoundRecorderStopped", u8"録音を終了しました: %1" },
 	{ "TestFileSavedTo", u8"Test file saved to: %1" },
-	{ "UnsupportedMapper", u8"このMapperを使うゲームはロードできません。" },
+	{ "UnsupportedMapper", u8"このMapper (%1)を使うゲームはロードできません。" },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"同期中。" },
@@ -240,7 +240,7 @@ std::unordered_map<string, string> MessageManager::_ruResources = {
 	{ "SoundRecorderStarted", u8"Запись начата to: %1" },
 	{ "SoundRecorderStopped", u8"Запись сохранена: %1" },
 	{ "TestFileSavedTo", u8"Тест сохранён: %1" },
-	{ "UnsupportedMapper", u8"Неподдерживаемый mapper, игра не загружена." },
+	{ "UnsupportedMapper", u8"Неподдерживаемый mapper (%1), игра не загружена." },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Синхронизация начата." },
@@ -301,7 +301,7 @@ std::unordered_map<string, string> MessageManager::_esResources = {
 	{ "SoundRecorderStarted", u8"Grabando en: %1" },
 	{ "SoundRecorderStopped", u8"Grabación guardada en: %1" },
 	{ "TestFileSavedTo", u8"Archivo test guardado en: %1" },
-	{ "UnsupportedMapper", u8"Mapa no soportado, no se puede cargar el juego." },
+	{ "UnsupportedMapper", u8"Mapa (%1) no soportado, no se puede cargar el juego." },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Sincronización iniciada." },

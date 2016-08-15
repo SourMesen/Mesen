@@ -376,8 +376,8 @@
     <Message ID="FilterMovie">Videos (*.mmo)|*.mmo|Todos los archivos (*.*)|*.*</Message>
     <Message ID="FilterWave">Archivos wave (*.wav)|*.wav|Todos los archivos (*.*)|*.*</Message>
     <Message ID="FilterPalette">Archivos pal (*.pal)|*.pal|Todos los archivos (*.*)|*.*</Message>
-    <Message ID="FilterRom">Todos los formatos soportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE|Roms de NES (*.nes)|*.NES|Roms de Famicom Disk System (*.fds)|*.FDS|Archivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Archivos ZIP (*.zip)|*.ZIP|Archivos 7-Zip (*.7z)|*.7z|Todos los archivos (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">Todos los formatos soportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE|Roms de NES(*.nes)|*.NES|Roms de Famicom Disk System (*.fds)|*.FDS|Archivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Archivos ZIP (*.zip)|*.ZIP|Archivos 7-Zip (*.7z)|*.7z|Archivos IPS (*.ips)|*.IPS|Todos los archivos (*.*)|*.*</Message>
+    <Message ID="FilterRom">Todos los formatos soportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Archivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Archivos ZIP (*.zip)|*.ZIP|Archivos 7-Zip (*.7z)|*.7z|Todos los archivos (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">Todos los formatos soportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES(*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Archivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Archivos ZIP (*.zip)|*.ZIP|Archivos 7-Zip (*.7z)|*.7z|Archivos IPS (*.ips)|*.IPS|Todos los archivos (*.*)|*.*</Message>
     <Message ID="FilterTest">Archivos de test (*.mtp)|*.mtp|Todos los archivos (*.*)|*.*</Message>
 
     <Message ID="Resume">Continuar</Message>
