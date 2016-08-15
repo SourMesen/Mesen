@@ -150,6 +150,7 @@
 #include "TaitoTc0690.h"
 #include "TaitoX1005.h"
 #include "TaitoX1017.h"
+#include "Tf1201.h"
 #include "Txc22000.h"
 #include "Txc22211A.h"
 #include "Txc22211B.h"
@@ -198,6 +199,7 @@ Supported mappers:
 const uint16_t MapperFactory::FdsMapperID;
 const uint16_t MapperFactory::NsfMapperID;
 const uint16_t MapperFactory::UnknownBoard;
+const uint16_t MapperFactory::UnifTf1201;
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
@@ -408,6 +410,8 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 253: return new Mapper253();
 		case 254: return new MMC3_254();
 		case 255: return new Bmc255();
+
+		case MapperFactory::UnifTf1201: return new Tf1201();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();

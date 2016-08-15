@@ -83,6 +83,9 @@
     <Filter Include="Nes\Mappers\Txc">
       <UniqueIdentifier>{c877c2a1-f79e-4a58-82d2-f4318e21ff81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\Mappers\Unif">
+      <UniqueIdentifier>{285b5df6-08c8-4d6e-8fe9-a499ffcf8c1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -894,6 +897,9 @@
     </ClInclude>
     <ClInclude Include="UnifLoader.h">
       <Filter>Nes\RomLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Tf1201.h">
+      <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

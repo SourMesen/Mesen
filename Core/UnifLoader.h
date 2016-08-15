@@ -129,7 +129,7 @@ private:
 		{ "TC-U01-1.5M", 147 },
 		{ "TEK90", 90 },
 		{ "TEROM", 4 },
-		{ "TF1201", MapperFactory::UnknownBoard },
+		{ "TF1201", MapperFactory::UnifTf1201 },
 		{ "TFROM", 4 },
 		{ "TGROM", 4 },
 		{ "TKROM", 4 },
