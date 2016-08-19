@@ -58,6 +58,7 @@ private:
 
 	uint16_t _ntscSpeed;
 	uint16_t _palSpeed;
+	uint16_t _dendySpeed;
 
 	uint8_t _songNumber = 0;
 	

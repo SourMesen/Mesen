@@ -44,10 +44,11 @@ void NsfMapper::SetNesModel(NesModel model)
 { 
 	if(model != _model) {
 		//Cheat a bit and change the IRQ reload value when the model changes to adjust tempo
-		if(model == NesModel::NTSC) {
-			_irqReloadValue = _ntscSpeed;
-		} else if(model == NesModel::PAL || model == NesModel::Dendy) {
-			_irqReloadValue = _palSpeed;
+		switch(model) {
+			default:
+			case NesModel::NTSC: _irqReloadValue = _ntscSpeed; break;
+			case NesModel::PAL: _irqReloadValue = _palSpeed; break;
+			case NesModel::Dendy: _irqReloadValue = _dendySpeed; break;
 		}
 		_model = model;
 	}
@@ -74,6 +75,7 @@ void NsfMapper::InitMapper(RomData& romData)
 	_songNumber = _nsfHeader.StartingSong - 1;
 	_ntscSpeed = (uint16_t)(_nsfHeader.PlaySpeedNtsc * (CPU::ClockRateNtsc / 1000000.0));
 	_palSpeed = (uint16_t)(_nsfHeader.PlaySpeedPal * (CPU::ClockRatePal / 1000000.0));
+	_dendySpeed = (uint16_t)(_nsfHeader.PlaySpeedPal * (CPU::ClockRateDendy / 1000000.0));
 
 	if(_nsfHeader.SoundChips & NsfSoundChips::MMC5) {
 		AddRegisterRange(0x5000, 0x5015, MemoryOperation::Write); //Registers
@@ -253,10 +255,27 @@ uint8_t NsfMapper::ReadRegister(uint16_t addr)
 			case 0x3E01: return (_nsfHeader.InitAddress >> 8) & 0xFF;
 			case 0x3E02: return _nsfHeader.PlayAddress & 0xFF;
 			case 0x3E03: return (_nsfHeader.PlayAddress >> 8) & 0xFF;
-			case 0x3E04: return _ntscSpeed & 0xFF;
-			case 0x3E06: return (_ntscSpeed >> 8) & 0xFF;
-			case 0x3E05: return _palSpeed & 0xFF;
-			case 0x3E07: return (_palSpeed >> 8) & 0xFF;
+			case 0x3E04: 
+				switch(_model) {
+					default:
+					case NesModel::NTSC: return _ntscSpeed & 0xFF;
+					case NesModel::PAL: return _palSpeed & 0xFF;
+					case NesModel::Dendy: return _dendySpeed & 0xFF;
+				}
+				break;
+
+			case 0x3E06: 
+				switch(_model) {
+					default:
+					case NesModel::NTSC: return (_ntscSpeed >> 8) & 0xFF;
+					case NesModel::PAL: return (_palSpeed >> 8) & 0xFF;
+					case NesModel::Dendy: return (_dendySpeed >> 8) & 0xFF;
+				}
+				break;
+
+			//These should never be called because $3E11 always returns 0
+			case 0x3E05: return 0xFF;
+			case 0x3E07: return 0xFF;
 
 			case 0x3E08: case 0x3E09: case 0x3E0A: case 0x3E0B:
 			case 0x3E0C: case 0x3E0D: case 0x3E0E: case 0x3E0F:
@@ -264,13 +283,7 @@ uint8_t NsfMapper::ReadRegister(uint16_t addr)
 
 			case 0x3E10: return _songNumber;
 
-			case 0x3E11:
-				if(_model == NesModel::NTSC) {
-					return 0x00;
-				} else if(_model == NesModel::PAL || _model == NesModel::Dendy) {
-					return 0x01;
-				}
-				return _nsfHeader.Flags == 0x01 ? 0x01 : 0x00;
+			case 0x3E11: return 0x00; //Force "NTSC" mode in the bios
 
 			case 0x3E12: {
 				NsfIrqType result = _irqStatus;
