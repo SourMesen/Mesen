@@ -165,14 +165,14 @@ namespace Mesen.GUI.Forms
 			Version oldVersion = new Version(ConfigManager.Config.MesenVersion);
 			if(oldVersion < newVersion) {
 				//Upgrade
-				if(oldVersion.Major == 0 && oldVersion.Minor <= 2) {
-					//Version 0.3.0+
+				if(oldVersion <= new Version("0.4.1")) {
+					//Version 0.4.1-
 					//Remove all old cheats (Game matching/CRC logic has been changed and no longer compatible)
 					ConfigManager.Config.Cheats = new List<CheatInfo>();
 				}
 
-				if(oldVersion.Major == 0 && oldVersion.Minor <= 3 && (oldVersion.Build == 0 || oldVersion.Minor <= 2)) {
-					//Version 0.3.1+
+				if(oldVersion <= new Version("0.3.0")) {
+					//Version 0.3.0-
 					//Remove all old VS system config to make sure the new defaults are used
 					ConfigManager.Config.VsConfig = new List<VsConfigInfo>();
 				}
@@ -1041,11 +1041,9 @@ namespace Mesen.GUI.Forms
 		private void mnuCheats_Click(object sender, EventArgs e)
 		{
 			frmCheatList frm = new frmCheatList();
-			frm.Show(sender, this);
-			frm.FormClosed += (object a, FormClosedEventArgs b) => {
-				frm = null;
+			if(frm.ShowDialog(sender, this) == DialogResult.OK) {
 				CheatInfo.ApplyCheats();
-			};
+			}
 		}
 
 		private void mnuInput_Click(object sender, EventArgs e)

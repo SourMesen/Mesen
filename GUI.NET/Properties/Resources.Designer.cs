@@ -73,6 +73,16 @@ namespace Mesen.GUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Add {
+            get {
+                object obj = ResourceManager.GetObject("Add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Audio {
             get {
                 object obj = ResourceManager.GetObject("Audio", resourceCulture);
@@ -173,6 +183,16 @@ namespace Mesen.GUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Export {
+            get {
+                object obj = ResourceManager.GetObject("Export", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Floppy {
             get {
                 object obj = ResourceManager.GetObject("Floppy", resourceCulture);
@@ -216,6 +236,16 @@ namespace Mesen.GUI.Properties {
         internal static System.Drawing.Bitmap Help {
             get {
                 object obj = ResourceManager.GetObject("Help", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Import {
+            get {
+                object obj = ResourceManager.GetObject("Import", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

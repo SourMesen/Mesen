@@ -318,16 +318,36 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>
     </Form>
+    <Form ID="frmCheatImport" Title="Import Cheats">
+      <Control ID="grpImportOptions">Import Options</Control>
+      <Control ID="lblCheatFile">Cheat File:</Control>
+      <Control ID="lblGame">Игра:</Control>
+      <Control ID="btnBrowseCheat">Выбрать...</Control>
+      <Control ID="btnBrowseGame">Выбрать...</Control>
+      <Control ID="btnImport">Import</Control>
+      <Control ID="btnCancel">Отмена</Control>
+    </Form>
     <Form ID="frmCheatList" Title="Читы">
       <Control ID="tabCheats">Читы</Control>
       <Control ID="chkCurrentGameOnly">Показывать читы только для текущей игры</Control>
       <Control ID="btnAddCheat">Добавить чит</Control>
+      <Control ID="btnDelete">Удалить</Control>
       <Control ID="btnDeleteCheat">Удалить выбранные читы</Control>
+      <Control ID="btnDeleteGameCheats">Delete all cheats for selected game</Control>
       <Control ID="mnuAddCheat">Добавить чит</Control>
+      <Control ID="mnuDeleteGameCheats">Удалить</Control>
       <Control ID="mnuDeleteCheat">Удалить</Control>
       <Control ID="colGameName">Игра</Control>
       <Control ID="colCheatName">Описание чита</Control>
       <Control ID="colCode">Код</Control>
+      <Control ID="btnImport">Import</Control>
+      <Control ID="btnExport">Export</Control>
+      <Control ID="btnExportAllCheats">All cheats</Control>
+      <Control ID="btnExportGame">Selected Game</Control>
+      <Control ID="mnuExportGame">Export</Control>
+      <Control ID="btnExportSelectedCheats">Selected Cheats</Control>
+      <Control ID="mnuExportSelectedCheats">Export</Control>
+      <Control ID="chkDisableCheats">Disable all cheats</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>
     </Form>
@@ -379,6 +399,7 @@
     <Message ID="FilterRom">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
     <Message ID="FilterRomIps">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*</Message>
     <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
+    <Message ID="FilterCheat">Все поддерживаемые форматы (*.cht, *.xml)|*.cht;*.xml</Message>
 
     <Message ID="Resume">Продолжить</Message>
     <Message ID="Pause">Пауза</Message>
@@ -415,6 +436,10 @@
     <Message ID="Net45NotFound">Microsoft .NET Framework 4.5 не найден. Пожалуйста загрузите и установите последнюю версию .NET Framework с сайта Microsoft и попробуйте снова.</Message>
 
     <Message ID="GoogleDriveIntegrationError">Mesen не смог подключиться к вашему аккаунту Google Drive - попробуйте ещё раз.</Message>
+
+    <Message ID="InvalidCheatFile">The selected file ({0}) is not a valid cheat file.</Message>
+    <Message ID="InvalidXmlFile">The selected file ({0}) is not a valid XML file.</Message>
+    <Message ID="NoMatchingCheats">The selected cheat file ({0}) contains no cheats that match the selected game.</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

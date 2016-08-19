@@ -136,6 +136,9 @@ namespace Mesen.GUI.Forms
 						((Control)ctrl).Text = controlNode.InnerText;
 					} else if(ctrl is ToolStripItem) {
 						((ToolStripItem)ctrl).Text = controlNode.InnerText;
+						if(((ToolStripItem)ctrl).DisplayStyle != ToolStripItemDisplayStyle.Image) {
+							((ToolStripItem)ctrl).ToolTipText = "";
+						}
 					} else if(ctrl is ColumnHeader) {
 						((ColumnHeader)ctrl).Text = controlNode.InnerText;
 					}
@@ -150,6 +153,10 @@ namespace Mesen.GUI.Forms
 					if(((ListView)ctrl).ContextMenuStrip != null) {
 						ApplyResources(baseNode, ((ListView)ctrl).ContextMenuStrip.Items);
 					}
+				} else if(ctrl is ToolStrip) {
+					ApplyResources(baseNode, ((ToolStrip)ctrl).Items);
+				} else if(ctrl is ToolStripSplitButton) {
+					ApplyResources(baseNode, ((ToolStripSplitButton)ctrl).DropDownItems);
 				} else if(ctrl is Control) {
 					ApplyResources(baseNode, ((Control)ctrl).Controls);
 				} else if(ctrl is ToolStripMenuItem) {

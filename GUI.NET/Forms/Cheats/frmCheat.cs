@@ -29,13 +29,6 @@ namespace Mesen.GUI.Forms.Cheats
 
 			_gameCrc = cheat.GameCrc;
 
-			if(string.IsNullOrWhiteSpace(cheat.GameName)) {
-				RomInfo romInfo = InteropEmu.GetRomInfo();
-				_gameCrc = romInfo.GetCrcString();
-				((CheatInfo)Entity).GameName = romInfo.GetRomName();
-				txtGameName.Text = ((CheatInfo)Entity).GameName;
-			}
-
 			radGameGenie.Tag = CheatType.GameGenie;
 			radProActionRocky.Tag = CheatType.ProActionRocky;
 			radCustom.Tag = CheatType.Custom;
@@ -76,7 +69,7 @@ namespace Mesen.GUI.Forms.Cheats
 			int archiveFileIndex = -1;
 			if(frmSelectRom.SelectRom(romPath, ref archiveFileIndex)) {
 				RomInfo romInfo = InteropEmu.GetRomInfo(romPath, archiveFileIndex);
-				_gameCrc = romInfo.GetCrcString();
+				_gameCrc = romInfo.GetPrgCrcString();
 				if(_gameCrc != null) {
 					((CheatInfo)Entity).GameName = Path.GetFileNameWithoutExtension(romInfo.RomName);
 					txtGameName.Text = ((CheatInfo)Entity).GameName;

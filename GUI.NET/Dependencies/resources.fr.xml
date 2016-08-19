@@ -318,16 +318,35 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
+    <Form ID="frmCheatImport" Title="Importer des codes">
+      <Control ID="grpImportOptions">Options de l'import</Control>
+      <Control ID="lblCheatFile">Fichier de codes :</Control>
+      <Control ID="lblGame">Jeu :</Control>
+      <Control ID="btnBrowseCheat">Parcourir...</Control>
+      <Control ID="btnBrowseGame">Parcourir...</Control>
+      <Control ID="btnImport">Importer</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
     <Form ID="frmCheatList" Title="Liste de codes">
       <Control ID="tabCheats">Codes</Control>
-      <Control ID="chkCurrentGameOnly">Afficher uniquement les codes pour le jeu en cours</Control>
       <Control ID="btnAddCheat">Ajouter un code</Control>
+      <Control ID="btnDelete">Effacer</Control>
       <Control ID="btnDeleteCheat">Effacer les codes sélectionnés</Control>
+      <Control ID="btnDeleteGameCheats">Effacer les codes du jeu sélectionné</Control>
       <Control ID="mnuAddCheat">Ajouter un code</Control>
+      <Control ID="mnuDeleteGameCheats">Effacer</Control>
       <Control ID="mnuDeleteCheat">Effacer</Control>
       <Control ID="colGameName">Jeu</Control>
       <Control ID="colCheatName">Nom du code</Control>
       <Control ID="colCode">Code</Control>
+      <Control ID="btnImport">Importer</Control>
+      <Control ID="btnExport">Exporter</Control>
+      <Control ID="btnExportAllCheats">Exporter tous les codes</Control>
+      <Control ID="btnExportGame">Exporter les codes du jeu sélectionné</Control>
+      <Control ID="mnuExportGame">Exporter</Control>
+      <Control ID="btnExportSelectedCheats">Exporter les codes sélectionnés</Control>
+      <Control ID="mnuExportSelectedCheats">Exporter</Control>
+      <Control ID="chkDisableCheats">Désactiver tous les codes</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
@@ -379,6 +398,7 @@
     <Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Fichiers IPS (*.ips)|*.IPS|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterTest">Fichiers de test (*.mtp)|*.mtp|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterCheat">Tous les formats supportés (*.cht, *.xml)|*.cht;*.xml</Message>
 
     <Message ID="Resume">Continuer</Message>
     <Message ID="Pause">Pause</Message>
@@ -415,6 +435,10 @@
     <Message ID="Net45NotFound">Le .NET Framework 4.5 de Microsoft n'a pas été trouvé. Veuillez télécharger la plus récente version du .NET Framework à partir du site de Microsoft et essayer à nouveau.</Message>
 
     <Message ID="GoogleDriveIntegrationError">Mesen n'a pas été en mesure de se connecter à votre compte Google Drive, veuillez essayer à nouveau.</Message>
+
+    <Message ID="InvalidCheatFile">Le fichier sélectionné ({0}) n'est pas un fichier de codes valide.</Message>
+    <Message ID="InvalidXmlFile">Le fichier sélectionné ({0}) n'est pas un fichier XML valide.</Message>
+    <Message ID="NoMatchingCheats">Le fichier sélectionné ({0}) ne contient aucun code correspondant au jeu sélectionné.</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

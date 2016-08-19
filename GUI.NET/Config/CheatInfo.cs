@@ -26,7 +26,7 @@ namespace Mesen.GUI.Config
 		public Byte Value;
 		public Byte CompareValue;
 		public bool UseCompareValue;
-		public bool IsRelativeAddress;
+		public bool IsRelativeAddress = true;
 
 		public override string ToString()
 		{
@@ -67,17 +67,19 @@ namespace Mesen.GUI.Config
 		{
 			InteropEmu.CheatClear();
 
-			string crc = InteropEmu.GetRomInfo().GetCrcString();
-			int cheatCount = 0;
-			foreach(CheatInfo cheat in ConfigManager.Config.Cheats.Where(c => c.GameCrc == crc)) {
-				if(cheat.Enabled) {
-					cheat.ApplyCheat();
-					cheatCount++;
+			if(!ConfigManager.Config.DisableAllCheats) {
+				string crc = InteropEmu.GetRomInfo().GetPrgCrcString();
+				int cheatCount = 0;
+				foreach(CheatInfo cheat in ConfigManager.Config.Cheats.Where(c => c.GameCrc == crc)) {
+					if(cheat.Enabled) {
+						cheat.ApplyCheat();
+						cheatCount++;
+					}
 				}
-			}
 
-			if(cheatCount > 0) {
-				InteropEmu.DisplayMessage("Cheats", cheatCount > 1 ? "CheatsApplied" : "CheatApplied", cheatCount.ToString());
+				if(cheatCount > 0) {
+					InteropEmu.DisplayMessage("Cheats", cheatCount > 1 ? "CheatsApplied" : "CheatApplied", cheatCount.ToString());
+				}
 			}
 		}
 	}

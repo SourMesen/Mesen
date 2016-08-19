@@ -315,16 +315,35 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
+    <Form ID="frmCheatImport" Title="インポート">
+      <Control ID="grpImportOptions">インポート設定</Control>
+      <Control ID="lblCheatFile">チートコードファイル：</Control>
+      <Control ID="lblGame">ゲーム：</Control>
+      <Control ID="btnBrowseCheat">参照...</Control>
+      <Control ID="btnBrowseGame">参照...</Control>
+      <Control ID="btnImport">インポート</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
     <Form ID="frmCheatList" Title="チートコード">
       <Control ID="tabCheats">チートコード</Control>
-      <Control ID="chkCurrentGameOnly">プレイ中のゲームのコードのみ表示する</Control>
       <Control ID="btnAddCheat">コード追加</Control>
+      <Control ID="btnDelete">削除</Control>
       <Control ID="btnDeleteCheat">選択中のコードを削除</Control>
+      <Control ID="btnDeleteGameCheats">選択中のコードを削除</Control>
       <Control ID="mnuAddCheat">コード追加</Control>
+      <Control ID="mnuDeleteGameCheats">削除</Control>
       <Control ID="mnuDeleteCheat">削除</Control>
       <Control ID="colGameName">ゲーム</Control>
       <Control ID="colCheatName">コード名</Control>
       <Control ID="colCode">コード</Control>
+      <Control ID="btnImport">インポート</Control>
+      <Control ID="btnExport">エクスポート</Control>
+      <Control ID="btnExportAllCheats">全てのコードをエクスポートする</Control>
+      <Control ID="btnExportGame">選択中のゲームのコードをエクスポートする</Control>
+      <Control ID="mnuExportGame">エクスポート</Control>
+      <Control ID="btnExportSelectedCheats">選択中のコードをエクスポートする</Control>
+      <Control ID="mnuExportSelectedCheats">エクスポート</Control>
+      <Control ID="chkDisableCheats">チートコード機能を無効にする</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
@@ -371,7 +390,8 @@
     <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
-
+    <Message ID="FilterCheat">対応するすべてのファイル (*.cht, *.xml)|*.cht;*.xml</Message>
+    
     <Message ID="Resume">再開</Message>
     <Message ID="Pause">ポーズ</Message>
     <Message ID="StartServer">サーバを起動する</Message>
@@ -407,6 +427,10 @@
     <Message ID="Net45NotFound">Microsoft .NET Framework 4.5はインストールされていないため、Mesenは起動できません。Microsoft .NET Frameworkの最新版をMicrosoftのサイトからダウンロードして、インストールしてください。</Message>
 
     <Message ID="GoogleDriveIntegrationError">MesenはGoogle Driveにアクセス出来ませんでした。</Message>
+
+    <Message ID="InvalidCheatFile">このファイル（{0}）にはチートコードを見つかりませんでした。</Message>
+    <Message ID="InvalidXmlFile">このファイル（{0}）はXMLファイルではないため読めませんでした.</Message>
+    <Message ID="NoMatchingCheats">このファイル（{0}）に選択されたゲームに該当するチートコードを見つかりませんでした。</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

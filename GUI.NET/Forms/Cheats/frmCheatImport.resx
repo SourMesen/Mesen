@@ -120,32 +120,4 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="contextMenuGames.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>400, 17</value>
-  </metadata>
-  <metadata name="contextMenuCheats.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>107, 17</value>
-  </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="mnuAddCheat.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xMK0KCsAAAACFSURBVDhPpZDR
-        DYAgDET50An8dRjWczHWqlQ5bOqBEC95ooW+EoOI/OJ6xBjlC5e3oBXsuTNcoKsFNcS8cwGL3yvfXKCr
-        hdVKnQtG0hVgQgucyeGCiXABJjE0y7FVcuZvoI1r2tsCOxFo7GQIwNAN0OiZEgA0girogVhBzvMPRrGT
-        75qEE3LcyzzdiXihAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <metadata name="tsCheatActions.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>267, 17</value>
-  </metadata>
-  <data name="btnAddCheat.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACKSURBVDhPrY3LDYAwDEN7gAm4MkzXYzHWAgXyGlMoH4kn
-        WZTEdtIv5JyXJykeC2qDwk49HgvUpGIGvD0WqKmm3tm/xwJM9lVdzUweC2z4ltsCLrSEx2MBy7d4LND2
-        loxuGoo8uoPhCQv289gu0IvI0MsUoENBC4K1PhUggqgU3Am0YAt+5XQ5pbQCv1TxCMUky/oAAAAASUVO
-        RK5CYII=
-</value>
-  </data>
 </root>

@@ -680,6 +680,11 @@ namespace Mesen.GUI
 		{
 			return this.Crc32.ToString("X8");
 		}
+
+		public string GetPrgCrcString()
+		{
+			return this.PrgCrc32.ToString("X8");
+		}
 	};
 
 	public struct InteropBreakpoint

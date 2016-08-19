@@ -21,7 +21,7 @@ namespace Mesen.GUI.Config
 		public List<RecentItem> RecentFiles;
 		public List<VsConfigInfo> VsConfig;
 		public List<CheatInfo> Cheats;
-		public bool ShowOnlyCheatsForCurrentGame;
+		public bool DisableAllCheats;
 		public NesModel Region;
 		public ClientConnectionInfo ClientConnectionInfo;
 		public ServerInfo ServerInfo;

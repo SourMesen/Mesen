@@ -374,12 +374,21 @@
     <Compile Include="Forms\BaseConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Cheats\FceuxCheatLoader.cs" />
     <Compile Include="Forms\Cheats\frmCheat.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Cheats\frmCheat.Designer.cs">
       <DependentUpon>frmCheat.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Cheats\frmCheatImport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Cheats\frmCheatImport.Designer.cs">
+      <DependentUpon>frmCheatImport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Cheats\MesenCheatExporter.cs" />
+    <Compile Include="Forms\Cheats\NestopiaCheatLoader.cs" />
     <Compile Include="Forms\Config\ctrlDipSwitch.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -592,6 +601,9 @@
     <EmbeddedResource Include="Forms\Cheats\frmCheat.resx">
       <DependentUpon>frmCheat.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Cheats\frmCheatImport.resx">
+      <DependentUpon>frmCheatImport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlDipSwitch.resx">
       <DependentUpon>ctrlDipSwitch.cs</DependentUpon>
     </EmbeddedResource>
@@ -740,15 +752,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\Import.png" />
+    <None Include="Resources\Export.png" />
     <None Include="Resources\NsfBackground.png" />
     <None Include="Resources\PrevTrack.png" />
     <None Include="Resources\NextTrack.png" />
     <None Include="Resources\LogWindow.png" />
-    <None Include="Resources\format-justify-fill.png" />
     <None Include="Resources\Record.png" />
     <None Include="Resources\microphone.png" />
     <None Include="Resources\DownArrow.png" />
     <None Include="Resources\accept.png" />
+    <None Include="Resources\Add.png" />
     <Content Include="Resources\coins.png" />
     <None Include="Resources\DipSwitches.png" />
     <None Include="Resources\MesenIcon.png" />
@@ -779,7 +793,6 @@
     <None Include="Resources\Close.png" />
     <None Include="Resources\PreviousArrow.png" />
     <None Include="Resources\NextArrow.png" />
-    <None Include="Resources\MesenIcon.ico" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
