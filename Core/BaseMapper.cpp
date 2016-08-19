@@ -9,19 +9,13 @@ uint8_t BaseMapper::ReadRegister(uint16_t addr) { return 0; }
 void BaseMapper::InitMapper(RomData &romData) { }
 void BaseMapper::Reset(bool softReset) { }
 
-uint16_t BaseMapper::InternalGetPrgPageSize()
-{
-	//Make sure the page size is no bigger than the size of the ROM itself
-	//Otherwise we will end up reading from unallocated memory
-	return std::min((uint32_t)GetPRGPageSize(), _prgSize);
-}
-
-uint16_t BaseMapper::InternalGetChrPageSize()
-{
-	//Make sure the page size is no bigger than the size of the ROM itself
-	//Otherwise we will end up reading from unallocated memory
-	return std::min((uint32_t)GetCHRPageSize(), _chrRomSize);
-}
+//Make sure the page size is no bigger than the size of the ROM itself
+//Otherwise we will end up reading from unallocated memory
+uint16_t BaseMapper::InternalGetPrgPageSize() { return std::min((uint32_t)GetPRGPageSize(), _prgSize); }
+uint16_t BaseMapper::InternalGetSaveRamPageSize() { return std::min((uint32_t)GetSaveRamPageSize(), _saveRamSize); }
+uint16_t BaseMapper::InternalGetWorkRamPageSize() { return std::min((uint32_t)GetWorkRamPageSize(), _workRamSize); }
+uint16_t BaseMapper::InternalGetChrPageSize() { return std::min((uint32_t)GetCHRPageSize(), _chrRomSize); }
+uint16_t BaseMapper::InternalGetChrRamPageSize() { return std::min((uint32_t)GetChrRamPageSize(), _chrRamSize); }
 	
 void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16_t pageNumber, PrgMemoryType type, int8_t accessType)
 {
@@ -43,14 +37,14 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 			break;
 		case PrgMemoryType::SaveRam:
 			source = _saveRam;
-			pageCount = _saveRamSize / GetSaveRamPageSize();
-			pageSize = GetSaveRamPageSize();
+			pageCount = _saveRamSize / InternalGetSaveRamPageSize();
+			pageSize = InternalGetSaveRamPageSize();
 			defaultAccessType |= MemoryAccessType::Write;
 			break;
 		case PrgMemoryType::WorkRam:
 			source = _workRam;
-			pageCount = _workRamSize / GetWorkRamPageSize();
-			pageSize = GetWorkRamPageSize();
+			pageCount = _workRamSize / InternalGetWorkRamPageSize();
+			pageSize = InternalGetWorkRamPageSize();
 			defaultAccessType |= MemoryAccessType::Write;
 			break;
 		default:
@@ -73,6 +67,16 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 	source = &source[pageNumber * pageSize];
 
 	accessType = accessType != -1 ? accessType : defaultAccessType;
+
+	if((uint16_t)(endAddr - startAddr) >= pageSize) {
+		#ifdef _DEBUG
+		MessageManager::DisplayMessage("Debug", "Tried to map undefined prg - page size too small for selected range.");
+		#endif
+		
+		//Make sure the range is no bigger than a single page, else we could read from unallocated memory
+		endAddr = startAddr + pageSize - 1;
+	}
+	
 	SetCpuMemoryMapping(startAddr, endAddr, source, accessType);
 }
 
@@ -123,7 +127,7 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 			break;
 
 		case ChrMemoryType::ChrRam:
-			pageSize = GetChrRamPageSize();
+			pageSize = InternalGetChrRamPageSize();
 			pageCount = _chrRamSize / pageSize;
 			sourceMemory = _chrRam;
 			defaultAccessType |= MemoryAccessType::Write;

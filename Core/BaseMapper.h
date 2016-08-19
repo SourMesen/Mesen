@@ -46,7 +46,10 @@ private:
 	string _batteryFilename;
 
 	uint16_t InternalGetPrgPageSize();
+	uint16_t InternalGetSaveRamPageSize();
+	uint16_t InternalGetWorkRamPageSize();
 	uint16_t InternalGetChrPageSize();
+	uint16_t InternalGetChrRamPageSize();	
 
 	uint8_t *_nesNametableRam[2];
 	uint8_t *_cartNametableRam[10];
