@@ -37,14 +37,29 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 			break;
 		case PrgMemoryType::SaveRam:
 			source = _saveRam;
-			pageCount = _saveRamSize / InternalGetSaveRamPageSize();
 			pageSize = InternalGetSaveRamPageSize();
+			if(pageSize == 0) {
+				#ifdef _DEBUG
+				MessageManager::DisplayMessage("Debug", "Tried to map undefined save ram.");
+				#endif
+				return;
+			}
+			pageCount = _saveRamSize / pageSize;
+			
 			defaultAccessType |= MemoryAccessType::Write;
 			break;
 		case PrgMemoryType::WorkRam:
 			source = _workRam;
-			pageCount = _workRamSize / InternalGetWorkRamPageSize();
 			pageSize = InternalGetWorkRamPageSize();
+			if(pageSize == 0) {
+				#ifdef _DEBUG
+				MessageManager::DisplayMessage("Debug", "Tried to map undefined work ram.");
+				#endif
+				return;
+			}
+
+			pageCount = _workRamSize / pageSize;
+			
 			defaultAccessType |= MemoryAccessType::Write;
 			break;
 		default:
@@ -128,6 +143,12 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 
 		case ChrMemoryType::ChrRam:
 			pageSize = InternalGetChrRamPageSize();
+			if(pageSize == 0) {
+				#ifdef _DEBUG
+				MessageManager::DisplayMessage("Debug", "Tried to map undefined chr ram.");
+				#endif
+				return;
+			}
 			pageCount = _chrRamSize / pageSize;
 			sourceMemory = _chrRam;
 			defaultAccessType |= MemoryAccessType::Write;

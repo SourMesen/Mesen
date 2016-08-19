@@ -279,15 +279,9 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 	romData.MapperID = info.MapperID;
 	romData.System = GetGameSystem(info.System);
 	romData.SubMapperID = GetSubMapper(info);
-	if(info.ChrRamSize > 0) {
-		romData.ChrRamSize = info.ChrRamSize * 1024;
-	}
-	if(info.WorkRamSize > 0) {
-		romData.WorkRamSize = info.WorkRamSize * 1024;
-	}
-	if(info.SaveRamSize > 0) {
-		romData.SaveRamSize = info.SaveRamSize * 1024;
-	}
+	romData.ChrRamSize = info.ChrRamSize * 1024;
+	romData.WorkRamSize = info.WorkRamSize * 1024;
+	romData.SaveRamSize = info.SaveRamSize * 1024;
 	romData.HasBattery |= info.HasBattery;
 
 	if(!info.Mirroring.empty()) {
