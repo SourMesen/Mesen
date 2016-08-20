@@ -910,6 +910,9 @@
     <ClInclude Include="A12Watcher.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="StudyBox.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
