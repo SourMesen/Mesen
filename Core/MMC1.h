@@ -165,7 +165,7 @@ class MMC1 : public BaseMapper
 			}
 		}
 
-		void StreamState(bool saving)
+		virtual void StreamState(bool saving)
 		{
 			BaseMapper::StreamState(saving);
 			Stream(_state.Reg8000, _state.RegA000, _state.RegC000, _state.RegE000, _writeBuffer, _shiftCount, _lastWriteCycle, _lastChrReg);
@@ -177,7 +177,7 @@ class MMC1 : public BaseMapper
 		virtual uint16_t GetPRGPageSize() { return 0x4000; }
 		virtual uint16_t GetCHRPageSize() {	return 0x1000; }
 
-		void InitMapper()
+		virtual void InitMapper()
 		{
 			_state.Reg8000 = 0x0C; //On powerup: bits 2,3 of $8000 are set (this ensures the $8000 is bank 0, and $C000 is the last bank - needed for SEROM/SHROM/SH1ROM which do no support banking)
 			_state.RegA000 = 0x00;
@@ -192,7 +192,7 @@ class MMC1 : public BaseMapper
 			UpdateState();
 		}
 
-		void WriteRegister(uint16_t addr, uint8_t value)
+		virtual void WriteRegister(uint16_t addr, uint8_t value)
 		{
 			int32_t currentCycle = CPU::GetCycleCount();
 			
