@@ -398,6 +398,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="A12Watcher.h" />
     <ClInclude Include="Action53.h" />
     <ClInclude Include="ActionEnterprises.h" />
     <ClInclude Include="APU.h" />
@@ -450,6 +451,7 @@
     <ClInclude Include="Mapper107.h" />
     <ClInclude Include="Mapper108.h" />
     <ClInclude Include="Mapper112.h" />
+    <ClInclude Include="Mapper117.h" />
     <ClInclude Include="Mapper120.h" />
     <ClInclude Include="Mapper15.h" />
     <ClInclude Include="Mapper170.h" />
