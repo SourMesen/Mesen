@@ -104,17 +104,10 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 	}
 }
 
-void Console::ApplyIpsPatch(string ipsFilename)
+void Console::LoadROM(string filepath, stringstream *filestream, int32_t archiveFileIndex, string ipsFile)
 {
 	Console::Pause();
-	Instance->Initialize(GetROMPath(), nullptr, ipsFilename);
-	Console::Resume();
-}
-
-void Console::LoadROM(string filepath, stringstream *filestream, int32_t archiveFileIndex)
-{
-	Console::Pause();
-	Instance->Initialize(filepath, filestream, "", archiveFileIndex);
+	Instance->Initialize(filepath, filestream, ipsFile, archiveFileIndex);
 	Console::Resume();
 }
 

@@ -26,7 +26,8 @@ namespace Mesen.GUI.Forms
 		private Thread _emuThread;
 		private frmDebugger _debugger;
 		private frmLogWindow _logWindow;
-		private string _romToLoad = null;
+		private string _currentRomPath = null;
+		private int _currentRomArchiveIndex = -1;
 		private string _currentGame = null;
 		private bool _customSize = false;
 		private FormWindowState _originalWindowState;
@@ -454,55 +455,47 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void LoadIpsFile(string filename)
+		private void LoadIpsFile(string ipsFile)
 		{
-			string ipsFile = filename;
-			string romFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
-
-			if(File.Exists(romFile+".nes") || File.Exists(romFile+".zip") || File.Exists(romFile+".fds")) {
-				string ext = string.Empty;
-				if(File.Exists(romFile+".nes"))
-					ext = ".nes";
-				if(File.Exists(romFile+".zip"))
-					ext = ".zip";
-				if(File.Exists(romFile+".fds"))
-					ext = ".fds";
-				LoadROM(romFile + ext);
-				InteropEmu.ApplyIpsPatch(ipsFile);
-			} else {
-				if(_emuThread == null) {
-					if(MesenMsgBox.Show("SelectRomIps", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-						OpenFileDialog ofd = new OpenFileDialog();
-						ofd.Filter = ResourceHelper.GetMessage("FilterRom");
-						if(ConfigManager.Config.RecentFiles.Count > 0) {
-							ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
-						}
-						if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-							LoadROM(ofd.FileName);
-						}
-						InteropEmu.ApplyIpsPatch(ipsFile);
+			if(_emuThread == null) {
+				if(MesenMsgBox.Show("SelectRomIps", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
+					OpenFileDialog ofd = new OpenFileDialog();
+					ofd.Filter = ResourceHelper.GetMessage("FilterRom");
+					if(ConfigManager.Config.RecentFiles.Count > 0) {
+						ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
 					}
-				} else if(MesenMsgBox.Show("PatchAndReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-					InteropEmu.ApplyIpsPatch(ipsFile);
+
+					if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+						LoadROM(ofd.FileName, true, -1, ipsFile);
+					}					
 				}
+			} else if(MesenMsgBox.Show("PatchAndReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
+				LoadROM(_currentRomPath, true, _currentRomArchiveIndex, ipsFile);
 			}
 		}
 
-		private void LoadROM(string filename, bool autoLoadIps = false, int archiveFileIndex = -1)
+		private void LoadROM(string filename, bool autoLoadIps = false, int archiveFileIndex = -1, string ipsFileToApply = null)
 		{
-			_romToLoad = filename;
+			_currentRomPath = filename;
+			_currentRomArchiveIndex = -1;
 			if(File.Exists(filename)) {
 				string romName;
 				if(frmSelectRom.SelectRom(filename, ref archiveFileIndex, out romName)) {
+					_currentRomArchiveIndex = archiveFileIndex;
 					if(archiveFileIndex >= 0) {
 						Interlocked.Increment(ref _romLoadCounter);
 						ctrlNsfPlayer.Visible = false;
 						ctrlLoading.Visible = true;
 					}
 
+					string ipsFile = ipsFileToApply ?? Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
+					if(!File.Exists(ipsFile)) {
+						autoLoadIps = false;
+					}
+
 					Task loadRomTask = new Task(() => {
 						lock(_loadRomLock) {
-							InteropEmu.LoadROM(filename, archiveFileIndex);
+							InteropEmu.LoadROM(filename, archiveFileIndex, autoLoadIps ? ipsFile : string.Empty);
 						}
 					});
 
@@ -510,11 +503,6 @@ namespace Mesen.GUI.Forms
 						this.BeginInvoke((MethodInvoker)(() => {
 							if(archiveFileIndex >= 0) {
 								Interlocked.Decrement(ref _romLoadCounter);
-							}
-
-							string ipsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
-							if(File.Exists(ipsFile)) {
-								InteropEmu.ApplyIpsPatch(ipsFile);
 							}
 
 							ConfigManager.Config.AddRecentFile(filename, romName, archiveFileIndex);
@@ -650,7 +638,7 @@ namespace Mesen.GUI.Forms
 				ToolStripMenuItem tsmi = new ToolStripMenuItem();
 				tsmi.Text = recentItem.RomName;
 				tsmi.Click += (object sender, EventArgs args) => {
-					LoadROM(recentItem.Path, false, recentItem.ArchiveFileIndex);
+					LoadROM(recentItem.Path, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches, recentItem.ArchiveFileIndex);
 				};
 				mnuRecentFiles.DropDownItems.Add(tsmi);
 			}
@@ -1296,7 +1284,7 @@ namespace Mesen.GUI.Forms
 				if(ofd.ShowDialog() == DialogResult.OK) {
 					if(MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant() == "ca30b50f880eb660a320674ed365ef7a") {
 						File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));
-						LoadROM(_romToLoad);
+						LoadROM(_currentRomPath, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
 					} else {
 						MesenMsgBox.Show("InvalidFdsBios", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}

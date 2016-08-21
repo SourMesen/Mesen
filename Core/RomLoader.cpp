@@ -97,6 +97,7 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 
 	if(!_ipsFilename.empty()) {
 		//Apply IPS patch
+		MessageManager::DisplayMessage("IPS", "ApplyingIps", FolderUtilities::GetFilename(_ipsFilename, true));
 		fileData = IpsPatcher::PatchBuffer(_ipsFilename, fileData);
 	}
 
