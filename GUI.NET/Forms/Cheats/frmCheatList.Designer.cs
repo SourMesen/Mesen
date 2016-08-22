@@ -51,7 +51,9 @@ namespace Mesen.GUI.Forms.Cheats
 			this.btnDelete = new System.Windows.Forms.ToolStripSplitButton();
 			this.btnDeleteCheat = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnDeleteGameCheats = new System.Windows.Forms.ToolStripMenuItem();
-			this.btnImport = new System.Windows.Forms.ToolStripButton();
+			this.btnImport = new System.Windows.Forms.ToolStripSplitButton();
+			this.btnImportCheatDB = new System.Windows.Forms.ToolStripMenuItem();
+			this.btnImportFromFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnExport = new System.Windows.Forms.ToolStripSplitButton();
 			this.btnExportAllCheats = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnExportGame = new System.Windows.Forms.ToolStripMenuItem();
@@ -276,7 +278,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.btnAddCheat.Image = ((System.Drawing.Image)(resources.GetObject("btnAddCheat.Image")));
 			this.btnAddCheat.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.btnAddCheat.Name = "btnAddCheat";
-			this.btnAddCheat.Size = new System.Drawing.Size(49, 20);
+			this.btnAddCheat.Size = new System.Drawing.Size(83, 20);
 			this.btnAddCheat.Text = "Add Cheat";
 			this.btnAddCheat.Click += new System.EventHandler(this.mnuAddCheat_Click);
 			// 
@@ -309,12 +311,29 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			// btnImport
 			// 
+			this.btnImport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnImportCheatDB,
+            this.btnImportFromFile});
 			this.btnImport.Image = global::Mesen.GUI.Properties.Resources.Import;
 			this.btnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.btnImport.Name = "btnImport";
-			this.btnImport.Size = new System.Drawing.Size(63, 20);
+			this.btnImport.Size = new System.Drawing.Size(75, 20);
 			this.btnImport.Text = "Import";
-			this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
+			this.btnImport.ButtonClick += new System.EventHandler(this.btnImport_ButtonClick);
+			// 
+			// btnImportCheatDB
+			// 
+			this.btnImportCheatDB.Name = "btnImportCheatDB";
+			this.btnImportCheatDB.Size = new System.Drawing.Size(188, 22);
+			this.btnImportCheatDB.Text = "From Cheat Database";
+			this.btnImportCheatDB.Click += new System.EventHandler(this.btnImportCheatDB_Click);
+			// 
+			// btnImportFromFile
+			// 
+			this.btnImportFromFile.Name = "btnImportFromFile";
+			this.btnImportFromFile.Size = new System.Drawing.Size(188, 22);
+			this.btnImportFromFile.Text = "From File (XML, CHT)";
+			this.btnImportFromFile.Click += new System.EventHandler(this.btnImportFromFile_Click);
 			// 
 			// btnExport
 			// 
@@ -421,7 +440,6 @@ namespace Mesen.GUI.Forms.Cheats
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private System.Windows.Forms.ToolStrip tsCheatActions;
 		private System.Windows.Forms.ToolStripButton btnAddCheat;
-		private System.Windows.Forms.ToolStripButton btnImport;
 		private System.Windows.Forms.CheckBox chkDisableCheats;
 		private System.Windows.Forms.ListView lstGameList;
 		private System.Windows.Forms.ColumnHeader colGameName;
@@ -436,5 +454,8 @@ namespace Mesen.GUI.Forms.Cheats
 		private System.Windows.Forms.ToolStripMenuItem btnExportSelectedCheats;
 		private System.Windows.Forms.ToolStripMenuItem mnuExportSelectedCheats;
 		private System.Windows.Forms.ToolStripMenuItem mnuExportGame;
+		private System.Windows.Forms.ToolStripSplitButton btnImport;
+		private System.Windows.Forms.ToolStripMenuItem btnImportCheatDB;
+		private System.Windows.Forms.ToolStripMenuItem btnImportFromFile;
 	}
 }

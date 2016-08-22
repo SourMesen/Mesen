@@ -20,6 +20,9 @@
 
     <Message ID="RomsFound">{0} roms found</Message>
 
+    <Message ID="CheatsFound">{0} games and {1} cheats in database</Message>
+    <Message ID="CheatsImported">{0} cheats imported for {1}.</Message>    
+
     <Message ID="NsfNextTrack">Next Track (Hold to fast forward)</Message>
     <Message ID="NsfUnnamedTrack">&lt;no name&gt;</Message>
     <Message ID="NsfUnknownField">&lt;unknown&gt;</Message>

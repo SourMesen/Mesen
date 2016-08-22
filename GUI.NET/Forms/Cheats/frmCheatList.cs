@@ -27,6 +27,7 @@ namespace Mesen.GUI.Forms.Cheats
 			base.OnLoad(e);
 			chkDisableCheats.Checked = ConfigManager.Config.DisableAllCheats;
 			UpdateGameList();
+			lstGameList.Select();
 		}
 		
 		protected override void UpdateConfig()
@@ -81,6 +82,10 @@ namespace Mesen.GUI.Forms.Cheats
 				}
 			} else {
 				_selectedItem = null;
+			}
+
+			if(_selectedItem != null) {
+				_selectedItem.EnsureVisible();
 			}
 
 			btnDeleteGameCheats.Enabled = mnuDeleteGameCheats.Enabled = btnExportGame.Enabled = mnuExportGame.Enabled = _selectedItem != null;
@@ -176,8 +181,20 @@ namespace Mesen.GUI.Forms.Cheats
 			}
 			UpdateGameList();
 		}
+		
+		private void btnImportCheatDB_Click(object sender, EventArgs e)
+		{
+			using(frmCheatImportFromDb frm = new frmCheatImportFromDb()) {
+				if(frm.ShowDialog() == DialogResult.OK) {
+					if(frm.ImportedCheats.Count > 0) {
+						this.AddCheats(frm.ImportedCheats);
+						MesenMsgBox.Show("CheatsImported", MessageBoxButtons.OK, MessageBoxIcon.Information, frm.ImportedCheats.Count.ToString(), frm.ImportedCheats[0].GameName);
+					}
+				}
+			}
+		}
 
-		private void btnImport_Click(object sender, EventArgs e)
+		private void btnImportFromFile_Click(object sender, EventArgs e)
 		{
 			var frm = new frmCheatImport();
 			frm.FormClosing += (o, evt) => {
@@ -206,11 +223,6 @@ namespace Mesen.GUI.Forms.Cheats
 			}
 		}
 
-		private void btnDelete_ButtonClick(object sender, EventArgs e)
-		{
-			btnDelete.ShowDropDown();
-		}
-
 		private void ExportCheats(IEnumerable<CheatInfo> cheats, string defaultFilename)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
@@ -228,11 +240,6 @@ namespace Mesen.GUI.Forms.Cheats
 			ExportCheats(this.Cheats, "MesenCheats.xml");
 		}
 
-		private void btnExport_ButtonClick(object sender, EventArgs e)
-		{
-			btnExport.ShowDropDown();
-		}
-
 		private void btnExportGame_Click(object sender, EventArgs e)
 		{
 			ExportCheats(this.Cheats.Where((c) => c.GameCrc == _selectedItem.Crc), _selectedItem.Text + "_Cheats.xml");
@@ -245,6 +252,21 @@ namespace Mesen.GUI.Forms.Cheats
 				cheats.Add(item.Tag as CheatInfo);
 			}
 			ExportCheats(cheats, _selectedItem.Text + "_Cheats.xml");
+		}
+
+		private void btnDelete_ButtonClick(object sender, EventArgs e)
+		{
+			btnDelete.ShowDropDown();
+		}
+
+		private void btnImport_ButtonClick(object sender, EventArgs e)
+		{
+			btnImport.ShowDropDown();
+		}
+
+		private void btnExport_ButtonClick(object sender, EventArgs e)
+		{
+			btnExport.ShowDropDown();
 		}
 	}
 

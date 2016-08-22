@@ -23,13 +23,37 @@ namespace Mesen.GUI.Forms.Cheats
 			}
 		}
 
+		public static List<CheatInfo> Load(Stream cheatFile, string gameName, string gameCrc)
+		{
+			try {
+				XmlDocument xml = new XmlDocument();
+				xml.Load(cheatFile);
+				return NestopiaCheatLoader.Load(xml, gameName, gameCrc, "");
+			} catch {
+				//Invalid xml file
+				MesenMsgBox.Show("InvalidXmlFile", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error, string.Empty);
+				return null;
+			}
+		}
+
 		public static List<CheatInfo> Load(string filepath, string gameName, string gameCrc)
+		{
+			try {
+				XmlDocument xml = new XmlDocument();
+				xml.Load(filepath);
+				return NestopiaCheatLoader.Load(xml, gameName, gameCrc, filepath);
+			} catch {
+				//Invalid xml file
+				MesenMsgBox.Show("InvalidXmlFile", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error, Path.GetFileName(filepath));
+				return null;
+			}
+		}
+
+		private static List<CheatInfo> Load(XmlDocument xml, string gameName, string gameCrc, string filepath)
 		{
 			try {
 				List<CheatInfo> cheats = new List<CheatInfo>();
 
-				XmlDocument xml = new XmlDocument();
-				xml.Load(filepath);
 				bool validFile = false;
 				bool hasMatchingCheats = false;
 				foreach(XmlNode node in xml.SelectNodes("/cheats/cheat")) {

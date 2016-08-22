@@ -1117,6 +1117,7 @@ namespace Mesen.GUI.Forms
 			// 
 			// mnuCheats
 			// 
+			this.mnuCheats.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
 			this.mnuCheats.Name = "mnuCheats";
 			this.mnuCheats.Size = new System.Drawing.Size(185, 22);
 			this.mnuCheats.Text = "Cheats";
@@ -1141,7 +1142,7 @@ namespace Mesen.GUI.Forms
 			// mnuTestRun
 			// 
 			this.mnuTestRun.Name = "mnuTestRun";
-			this.mnuTestRun.Size = new System.Drawing.Size(193, 22);
+			this.mnuTestRun.Size = new System.Drawing.Size(192, 22);
 			this.mnuTestRun.Text = "Run...";
 			this.mnuTestRun.Click += new System.EventHandler(this.mnuTestRun_Click);
 			// 
@@ -1160,28 +1161,28 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuTestRecordStart.Name = "mnuTestRecordStart";
 			this.mnuTestRecordStart.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-			this.mnuTestRecordStart.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordStart.Size = new System.Drawing.Size(143, 22);
 			this.mnuTestRecordStart.Text = "Start";
 			this.mnuTestRecordStart.Click += new System.EventHandler(this.mnuTestRecordStart_Click);
 			// 
 			// mnuTestRecordNow
 			// 
 			this.mnuTestRecordNow.Name = "mnuTestRecordNow";
-			this.mnuTestRecordNow.Size = new System.Drawing.Size(138, 22);
+			this.mnuTestRecordNow.Size = new System.Drawing.Size(143, 22);
 			this.mnuTestRecordNow.Text = "Now";
 			this.mnuTestRecordNow.Click += new System.EventHandler(this.mnuTestRecordNow_Click);
 			// 
 			// mnuTestRecordMovie
 			// 
 			this.mnuTestRecordMovie.Name = "mnuTestRecordMovie";
-			this.mnuTestRecordMovie.Size = new System.Drawing.Size(138, 22);
+			this.mnuTestRecordMovie.Size = new System.Drawing.Size(143, 22);
 			this.mnuTestRecordMovie.Text = "Movie";
 			this.mnuTestRecordMovie.Click += new System.EventHandler(this.mnuTestRecordMovie_Click);
 			// 
 			// mnuTestRecordTest
 			// 
 			this.mnuTestRecordTest.Name = "mnuTestRecordTest";
-			this.mnuTestRecordTest.Size = new System.Drawing.Size(138, 22);
+			this.mnuTestRecordTest.Size = new System.Drawing.Size(143, 22);
 			this.mnuTestRecordTest.Text = "Test";
 			this.mnuTestRecordTest.Click += new System.EventHandler(this.mnuTestRecordTest_Click);
 			// 
@@ -1196,7 +1197,7 @@ namespace Mesen.GUI.Forms
 			// mnuRunAllTests
 			// 
 			this.mnuRunAllTests.Name = "mnuRunAllTests";
-			this.mnuRunAllTests.Size = new System.Drawing.Size(193, 22);
+			this.mnuRunAllTests.Size = new System.Drawing.Size(192, 22);
 			this.mnuRunAllTests.Text = "Run all tests";
 			this.mnuRunAllTests.Click += new System.EventHandler(this.mnuRunAllTests_Click);
 			// 

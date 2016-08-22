@@ -324,6 +324,11 @@
       <Control ID="btnImport">インポート</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
+    <Form ID="frmCheatImportFromDb" Title="ゲーム選択">
+      <Control ID="lblSearch">検索：</Control>
+      <Control ID="btnOK">インポート</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
     <Form ID="frmCheatList" Title="チートコード">
       <Control ID="tabCheats">チートコード</Control>
       <Control ID="btnAddCheat">コード追加</Control>
@@ -337,6 +342,8 @@
       <Control ID="colCheatName">コード名</Control>
       <Control ID="colCode">コード</Control>
       <Control ID="btnImport">インポート</Control>
+      <Control ID="btnImportCheatDB">Mesenのチートコードリストから</Control>
+      <Control ID="btnImportFromFile">ファイルから</Control>
       <Control ID="btnExport">エクスポート</Control>
       <Control ID="btnExportAllCheats">全てのコードをエクスポートする</Control>
       <Control ID="btnExportGame">選択中のゲームのコードをエクスポートする</Control>
@@ -380,6 +387,9 @@
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
     <Form ID="frmSelectRom" Title="ゲーム選択">
+      <Control ID="lblSearch">検索：</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
     </Form>
   </Forms>
   <Messages>
@@ -401,6 +411,9 @@
     <Message ID="PlayerNumber">プレーヤー {0}</Message>
 
     <Message ID="RomsFound">{0}個</Message>
+
+    <Message ID="CheatsFound">ゲーム{0}個とチートコード{1}個を見つけました</Message>
+    <Message ID="CheatsImported">{1}用のチートコード{0}個がインポートされました。.</Message>
 
     <Message ID="NsfNextTrack">次の曲　(長押しで早送り)</Message>
     <Message ID="NsfUnnamedTrack">[名無し]</Message>

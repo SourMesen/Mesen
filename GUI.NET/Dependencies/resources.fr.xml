@@ -327,6 +327,20 @@
       <Control ID="btnImport">Importer</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
+    <Form ID="frmCheatImport" Title="Importer des codes">
+      <Control ID="grpImportOptions">Options de l'import</Control>
+      <Control ID="lblCheatFile">Fichier de codes :</Control>
+      <Control ID="lblGame">Jeu :</Control>
+      <Control ID="btnBrowseCheat">Parcourir...</Control>
+      <Control ID="btnBrowseGame">Parcourir...</Control>
+      <Control ID="btnImport">Importer</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
+    <Form ID="frmCheatImportFromDb" Title="Sélection du jeu...">
+      <Control ID="lblSearch">Recherche :</Control>
+      <Control ID="btnOK">Importer</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
     <Form ID="frmCheatList" Title="Liste de codes">
       <Control ID="tabCheats">Codes</Control>
       <Control ID="btnAddCheat">Ajouter un code</Control>
@@ -340,6 +354,8 @@
       <Control ID="colCheatName">Nom du code</Control>
       <Control ID="colCode">Code</Control>
       <Control ID="btnImport">Importer</Control>
+      <Control ID="btnImportCheatDB">De la liste de codes de Mesen</Control>
+      <Control ID="btnImportFromFile">D'un fichier</Control>
       <Control ID="btnExport">Exporter</Control>
       <Control ID="btnExportAllCheats">Exporter tous les codes</Control>
       <Control ID="btnExportGame">Exporter les codes du jeu sélectionné</Control>
@@ -388,6 +404,9 @@
       <Control ID="btnCancel">Annuler</Control>
     </Form>
     <Form ID="frmSelectRom" Title="Sélection du jeu...">
+      <Control ID="lblSearch">Recherche :</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
     </Form>
   </Forms>
   <Messages>
@@ -409,6 +428,9 @@
     <Message ID="PlayerNumber">Joueur {0}</Message>
 
     <Message ID="RomsFound">{0} roms trouvés</Message>
+
+    <Message ID="CheatsFound">{0} jeux et {1} codes présents dans la base de données</Message>
+    <Message ID="CheatsImported">{0} codes ont été importés pour le jeu {1}.</Message>
 
     <Message ID="NsfNextTrack">Piste Suivante (Garder enfoncé pour jouer plus rapidement)</Message>
     <Message ID="NsfUnnamedTrack">[sans nom]</Message>
