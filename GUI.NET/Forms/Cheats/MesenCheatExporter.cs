@@ -13,30 +13,36 @@ namespace Mesen.GUI.Forms.Cheats
 		public static void Export(string filename, IEnumerable<CheatInfo> cheats)
 		{
 			//Exports to an XML format compatible with Nestopia's, but with an extra flag (isPrgOffset)
-			string xml = "<cheats MesenCheatFile=\"true\" version=\"1.0\">";
+			XmlWriter writer = XmlWriter.Create(filename, new XmlWriterSettings() { Indent = true });
+			writer.WriteStartElement("cheats");
+			writer.WriteAttributeString("MesenCheatFile", "true");
+			writer.WriteAttributeString("version", "1.0");
 
 			foreach(CheatInfo cheat in cheats) {
-				string enabled = cheat.Enabled ? "1" : "0";
-				string gameCrc = "0x" + cheat.GameCrc;
-				string address = "0x" + cheat.Address.ToString("X4");
-				string value = "0x" + cheat.Value.ToString("X2");
-				string compare = "0x" + cheat.CompareValue.ToString("X2");
-				string genie = cheat.GameGenieCode;
-				string rocky = cheat.ProActionRockyCode.ToString("X8");
+				writer.WriteStartElement("cheat");
+				writer.WriteAttributeString("enabled", cheat.Enabled ? "1" : "0");
+				writer.WriteAttributeString("game", "0x" + cheat.GameCrc);
+				writer.WriteAttributeString("gameName", cheat.GameName);
 
-				string genieTag = cheat.CheatType == CheatType.GameGenie ? $"<genie>{genie}</genie>" : "";
-				string rockyTag = cheat.CheatType == CheatType.ProActionRocky ? $"<rocky>{rocky}</rocky>" : "";
-				string customTags = cheat.CheatType == CheatType.Custom ? $"<address>{address}</address><value>{value}</value><compare>{compare}</compare>" : "";
-
-				string prgAddress = !cheat.IsRelativeAddress ? "<isPrgOffset>true</isPrgOffset>" : "";
-
-				xml += $"<cheat enabled=\"{enabled}\" game=\"{gameCrc}\" gameName=\"{cheat.GameName}\">{genieTag}{rockyTag}{customTags}{prgAddress}<description>{cheat.CheatName}</description></cheat>";
+				switch(cheat.CheatType) {
+					case CheatType.GameGenie: writer.WriteElementString("genie", cheat.GameGenieCode); break;
+					case CheatType.ProActionRocky: writer.WriteElementString("rocky", cheat.ProActionRockyCode.ToString("X8")); break;
+					case CheatType.Custom:
+						writer.WriteElementString("address", "0x" + cheat.Address.ToString("X4"));
+						writer.WriteElementString("value", "0x" + cheat.Value.ToString("X2"));
+						writer.WriteElementString("compare", "0x" + cheat.CompareValue.ToString("X2"));
+						if(!cheat.IsRelativeAddress) {
+							writer.WriteElementString("isPrgOffset", "true");
+						}
+						break;
+				}
+				writer.WriteElementString("description", cheat.CheatName);
+				writer.WriteEndElement();
 			}
-			xml += "</cheats>";
+			writer.WriteEndElement();
 
-			XmlDocument xmlDoc = new XmlDocument();
-			xmlDoc.LoadXml(xml);
-			xmlDoc.Save(filename);
+			writer.Flush();
+			writer.Close();
 		}
 	}
 }

@@ -70,7 +70,7 @@ namespace Mesen.GUI.Forms.Cheats
 								var address = node.SelectSingleNode("address");
 								var value = node.SelectSingleNode("value");
 								var compare = node.SelectSingleNode("compare");
-								bool isPrgOffset = node.SelectSingleNode("isPrgOffset")?.Value == "true";
+								bool isPrgOffset = node.SelectSingleNode("isPrgOffset")?.InnerText == "true";
 
 								var cheat = new CheatInfo();
 								cheat.GameCrc = crc;
