@@ -188,6 +188,12 @@ int32_t AutoRomTest::Run(string filename)
 		EmulationSettings::ClearFlags(EmulationFlags::Mmc3IrqAltBehavior);
 	}
 
+	if(testName.compare("demo_pal") == 0 || testName.substr(0, 4).compare("pal_") == 0) {
+		EmulationSettings::SetNesModel(NesModel::PAL);
+	} else {
+		EmulationSettings::SetNesModel(NesModel::NTSC);
+	}
+
 	ZipReader zipReader;
 	zipReader.LoadArchive(filename);
 	std::stringstream testData = zipReader.GetStream("TestData.mrt");
