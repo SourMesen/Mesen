@@ -40,6 +40,9 @@
 			this.chkUseAlternativeMmc3Irq = new System.Windows.Forms.CheckBox();
 			this.chkAllowInvalidInput = new System.Windows.Forms.CheckBox();
 			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
+			this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblRamPowerOnState = new System.Windows.Forms.Label();
+			this.cboRamPowerOnState = new System.Windows.Forms.ComboBox();
 			this.tpgOverclocking = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
@@ -76,6 +79,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.flowLayoutPanel8.SuspendLayout();
 			this.tpgOverclocking.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.flowLayoutPanel4.SuspendLayout();
@@ -198,16 +202,16 @@
 			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel8, 0, 3);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 4;
+			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 267);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
@@ -240,6 +244,36 @@
 			this.chkRemoveSpriteLimit.TabIndex = 2;
 			this.chkRemoveSpriteLimit.Text = "Remove sprite limit (Reduces flashing)";
 			this.chkRemoveSpriteLimit.UseVisualStyleBackColor = true;
+			// 
+			// flowLayoutPanel8
+			// 
+			this.flowLayoutPanel8.Controls.Add(this.lblRamPowerOnState);
+			this.flowLayoutPanel8.Controls.Add(this.cboRamPowerOnState);
+			this.flowLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel8.Location = new System.Drawing.Point(0, 69);
+			this.flowLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel8.Name = "flowLayoutPanel8";
+			this.flowLayoutPanel8.Size = new System.Drawing.Size(473, 27);
+			this.flowLayoutPanel8.TabIndex = 3;
+			// 
+			// lblRamPowerOnState
+			// 
+			this.lblRamPowerOnState.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRamPowerOnState.AutoSize = true;
+			this.lblRamPowerOnState.Location = new System.Drawing.Point(3, 7);
+			this.lblRamPowerOnState.Name = "lblRamPowerOnState";
+			this.lblRamPowerOnState.Size = new System.Drawing.Size(159, 13);
+			this.lblRamPowerOnState.TabIndex = 0;
+			this.lblRamPowerOnState.Text = "Default power on state for RAM:";
+			// 
+			// cboRamPowerOnState
+			// 
+			this.cboRamPowerOnState.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboRamPowerOnState.FormattingEnabled = true;
+			this.cboRamPowerOnState.Location = new System.Drawing.Point(168, 3);
+			this.cboRamPowerOnState.Name = "cboRamPowerOnState";
+			this.cboRamPowerOnState.Size = new System.Drawing.Size(176, 21);
+			this.cboRamPowerOnState.TabIndex = 1;
 			// 
 			// tpgOverclocking
 			// 
@@ -627,6 +661,8 @@
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.flowLayoutPanel8.ResumeLayout(false);
+			this.flowLayoutPanel8.PerformLayout();
 			this.tpgOverclocking.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
@@ -694,5 +730,8 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
 		private System.Windows.Forms.CheckBox chkShowLagCounter;
 		private System.Windows.Forms.Button btnResetLagCounter;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel8;
+		private System.Windows.Forms.Label lblRamPowerOnState;
+		private System.Windows.Forms.ComboBox cboRamPowerOnState;
 	}
 }

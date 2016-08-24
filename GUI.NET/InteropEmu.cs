@@ -126,6 +126,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
+		[DllImport(DLLPath)] public static extern void SetRamPowerOnState(RamPowerOnState state);
 		[DllImport(DLLPath)] public static extern void SetMasterVolume(double volume);
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(AudioChannel channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetSampleRate(UInt32 sampleRate);
@@ -815,6 +816,13 @@ namespace Mesen.GUI
 	{
 		Nes = 0,
 		Famicom = 1
+	}
+
+	public enum RamPowerOnState
+	{
+		AllZeros = 0,
+		AllOnes = 1,
+		Random = 2
 	}
 
 	public enum AudioChannel

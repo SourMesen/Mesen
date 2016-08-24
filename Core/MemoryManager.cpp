@@ -3,6 +3,7 @@
 #include "BaseMapper.h"
 #include "Debugger.h"
 #include "CheatManager.h"
+#include <random>
 
 //Used for open bus
 uint8_t MemoryManager::_lastReadValue = 0;
@@ -22,8 +23,7 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 
 	_ramReadHandlers = new IMemoryHandler*[RAMSize];
 	_ramWriteHandlers = new IMemoryHandler*[RAMSize];
-	
-	memset(_internalRAM, 0, InternalRAMSize);
+
 	memset(_ramReadHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
 	memset(_ramWriteHandlers, 0, RAMSize * sizeof(IMemoryHandler*));
 }
@@ -42,7 +42,19 @@ MemoryManager::~MemoryManager()
 void MemoryManager::Reset(bool softReset)
 {
 	if(!softReset) {
-		memset(_internalRAM, 0, InternalRAMSize);
+		switch(EmulationSettings::GetRamPowerOnState()) {
+			default:
+			case RamPowerOnState::AllZeros: memset(_internalRAM, 0, InternalRAMSize); break;
+			case RamPowerOnState::AllOnes: memset(_internalRAM, 0xFF, InternalRAMSize); break;
+			case RamPowerOnState::Random:
+				std::random_device rd;
+				std::mt19937 mt(rd());
+				std::uniform_int_distribution<> dist(0, 255);
+				for(int i = 0; i < InternalRAMSize; i++) {
+					_internalRAM[i] = dist(mt);
+				}
+				break;
+		}
 	}
 
 	_mapper->Reset(softReset);

@@ -59,6 +59,13 @@ enum class NesModel
 	Dendy = 3,
 };
 
+enum class RamPowerOnState
+{
+	AllZeros = 0,
+	AllOnes = 1,
+	Random = 2
+};
+
 enum class VideoFilterType
 {
 	None = 0,
@@ -296,6 +303,8 @@ private:
 	static bool _nsfDisableApuIrqs;
 
 	static InputDisplaySettings _inputDisplaySettings;
+
+	static RamPowerOnState _ramPowerOnState;
 
 public:
 	static uint32_t GetMesenVersion()
@@ -756,5 +765,15 @@ public:
 	static InputDisplaySettings GetInputDisplaySettings()
 	{
 		return _inputDisplaySettings;
+	}
+
+	static void SetRamPowerOnState(RamPowerOnState state)
+	{
+		_ramPowerOnState = state;
+	}
+
+	static RamPowerOnState GetRamPowerOnState()
+	{
+		return _ramPowerOnState;
 	}
 };

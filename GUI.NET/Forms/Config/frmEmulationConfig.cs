@@ -32,7 +32,9 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("PpuExtraScanlinesBeforeNmi", nudExtraScanlinesBeforeNmi);
 			AddBinding("PpuExtraScanlinesAfterNmi", nudExtraScanlinesAfterNmi);
 
-			AddBinding("ShowLagCounter", chkShowLagCounter);		
+			AddBinding("ShowLagCounter", chkShowLagCounter);
+			
+			AddBinding("RamPowerOnState", cboRamPowerOnState);		
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)

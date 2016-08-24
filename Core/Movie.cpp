@@ -95,7 +95,11 @@ void Movie::StartRecording(string filename, bool reset)
 		Reset();
 
 		if(reset) {
+			//Movies need a fixed power up state to be identical on each replay, force all 0s for RAM, no matter the setting
+			RamPowerOnState originalState = EmulationSettings::GetRamPowerOnState();
+			EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllZeros);
 			Console::Reset(false);
+			EmulationSettings::SetRamPowerOnState(originalState);
 		} else {
 			Console::SaveState(_startState);
 		}

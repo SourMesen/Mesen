@@ -236,6 +236,7 @@
       <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
       <Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
       <Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
+      <Control ID="lblRamPowerOnState">起動時のメモリの状態 : </Control>
 
       <Control ID="tpgOverclocking">オーバークロック</Control>
       <Control ID="grpOverclocking">オーバークロック</Control>
@@ -516,6 +517,11 @@
       <Value ID="Japanese">日本語</Value>
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
+    </Enum>
+    <Enum ID="RamPowerOnState">
+      <Value ID="AllZeros">ビット全てを０にする　（デフォルト）</Value>
+      <Value ID="AllOnes">ビット全てを１にする</Value>
+      <Value ID="Random">乱数</Value>
     </Enum>
   </Enums>
 </Resources>

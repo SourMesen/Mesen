@@ -236,6 +236,7 @@
       <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
       <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
+      <Control ID="lblRamPowerOnState">État initial de la mémoire au démarrage : </Control>
 
       <Control ID="tpgOverclocking">Overclocking</Control>
       <Control ID="grpOverclocking">Overclocking du CPU</Control>
@@ -533,6 +534,11 @@
       <Value ID="Japanese">日本語</Value>
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
+    </Enum>
+    <Enum ID="RamPowerOnState">
+      <Value ID="AllZeros">Tous les bits à 0 (Défaut)</Value>
+      <Value ID="AllOnes">Tous les bits à 1</Value>
+      <Value ID="Random">Valeurs aléatoires</Value>
     </Enum>
   </Enums>
 </Resources>

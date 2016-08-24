@@ -91,7 +91,7 @@
     <Enum ID="ConsoleType">
       <Value ID="Nes">NES</Value>
       <Value ID="Famicom">Famicom</Value>
-    </Enum>
+    </Enum>    
     <Enum ID="ExpansionPortDevice">
       <Value ID="None">None</Value>
       <Value ID="Zapper">Zapper</Value>
@@ -124,6 +124,11 @@
       <Value ID="Japanese">日本語</Value>
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
+    </Enum>
+    <Enum ID="RamPowerOnState">
+      <Value ID="AllZeros">All 0s (Default)</Value>
+      <Value ID="AllOnes">All 1s</Value>
+      <Value ID="Random">Random Values</Value>
     </Enum>
   </Enums>
 </Resources>

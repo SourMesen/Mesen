@@ -38,6 +38,8 @@ int32_t EmulationSettings::_nsfAutoDetectSilenceDelay = 3000;
 int32_t EmulationSettings::_nsfMoveToNextTrackTime = 120;
 bool EmulationSettings::_nsfDisableApuIrqs = true;
 
+RamPowerOnState EmulationSettings::_ramPowerOnState = RamPowerOnState::AllZeros;
+
 InputDisplaySettings EmulationSettings::_inputDisplaySettings = { 0, InputDisplayPosition::TopLeft, false };
 
 OverscanDimensions EmulationSettings::_overscan;
