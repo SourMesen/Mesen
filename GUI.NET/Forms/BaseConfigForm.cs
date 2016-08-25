@@ -114,6 +114,15 @@ namespace Mesen.GUI.Forms
 			AddBinding(fieldName, trueRadio);
 		}
 
+		public static void InitializeComboBox(ComboBox combo, Type enumType)
+		{
+			combo.DropDownStyle = ComboBoxStyle.DropDownList;
+			combo.Items.Clear();
+			foreach(Enum value in Enum.GetValues(enumType)) {
+				combo.Items.Add(ResourceHelper.GetEnumText(value));
+			}
+		}
+
 		protected void AddBinding(string fieldName, Control bindedField)
 		{
 			if(BindedType == null) {
@@ -131,12 +140,7 @@ namespace Mesen.GUI.Forms
 			if(_fieldInfo.ContainsKey(fieldName)) {
 				Type fieldType = _fieldInfo[fieldName].FieldType;
 				if(fieldType.IsSubclassOf(typeof(Enum)) && bindedField is ComboBox) {
-					ComboBox combo = ((ComboBox)bindedField);
-					combo.DropDownStyle = ComboBoxStyle.DropDownList;
-					combo.Items.Clear();
-					foreach(Enum value in Enum.GetValues(fieldType)) {
-						combo.Items.Add(ResourceHelper.GetEnumText(value));
-					}
+					InitializeComboBox(((ComboBox)bindedField), fieldType);
 				}
 				_bindings[fieldName] = bindedField;
 			} else {

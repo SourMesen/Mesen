@@ -48,6 +48,7 @@ namespace Mesen.GUI.Debugger
 		private string _searchString = null;
 		private string _header = null;
 		private Font _noteFont = null;
+		private int _marginWidth = 6;
 
 		public ctrlTextbox()
 		{
@@ -155,6 +156,15 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				this._header = value;
+				this.Invalidate();
+			}
+		}
+
+		public int MarginWidth
+		{
+			set
+			{
+				this._marginWidth = value;
 				this.Invalidate();
 			}
 		}
@@ -284,7 +294,7 @@ namespace Mesen.GUI.Debugger
 
 		private int GetMargin(Graphics g)
 		{
-			return this.ShowLineNumbers ? (int)(g.MeasureString("W", this.Font).Width * 6) : 0;
+			return this.ShowLineNumbers ? (int)(g.MeasureString("W", this.Font).Width * _marginWidth) : 0;
 		}
 
 		public int GetLineIndexAtPosition(int yPos)
@@ -369,7 +379,7 @@ namespace Mesen.GUI.Debugger
 			get { return Math.Min(this._contents.Length - 1, Math.Max(0, _cursorPosition)); }
 			set
 			{ 
-				_cursorPosition = Math.Min(this._contents.Length - 1, Math.Max(0, value));
+				_cursorPosition = Math.Max(0, Math.Min(this._contents.Length - 1, Math.Max(0, value)));
 				if(_cursorPosition < this.ScrollPosition) {
 					this.ScrollPosition = _cursorPosition;
 				} else if(_cursorPosition > this.GetLastVisibleLineIndex()) {

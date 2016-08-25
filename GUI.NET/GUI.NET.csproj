@@ -271,6 +271,12 @@
     <Compile Include="Debugger\Controls\ctrlCallstack.Designer.cs">
       <DependentUpon>ctrlCallstack.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlAddressList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlAddressList.Designer.cs">
+      <DependentUpon>ctrlAddressList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlPaletteViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -373,6 +379,12 @@
     </Compile>
     <Compile Include="Forms\BaseConfigForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Cheats\ctrlCheatFinder.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Cheats\ctrlCheatFinder.Designer.cs">
+      <DependentUpon>ctrlCheatFinder.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Cheats\FceuxCheatLoader.cs" />
     <Compile Include="Forms\Cheats\frmCheat.cs">
@@ -553,6 +565,9 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlCallstack.resx">
       <DependentUpon>ctrlCallstack.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlAddressList.resx">
+      <DependentUpon>ctrlAddressList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlPaletteViewer.resx">
       <DependentUpon>ctrlPaletteViewer.cs</DependentUpon>
     </EmbeddedResource>
@@ -603,6 +618,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Cheats\ctrlCheatFinder.resx">
+      <DependentUpon>ctrlCheatFinder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Cheats\frmCheat.resx">
       <DependentUpon>frmCheat.cs</DependentUpon>

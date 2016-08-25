@@ -31,7 +31,21 @@ namespace Mesen.GUI.Forms
 				this.Icon = menuItem.Image;
 			}
 
+			if(owner != null) {
+				CenterOnParent(owner);
+			}
+
 			base.Show(owner);
+		}
+
+		private void CenterOnParent(IWin32Window owner)
+		{
+			Form parent = (Form)owner;
+			Point point = parent.PointToScreen(new Point(parent.Width / 2, parent.Height / 2));
+
+			this.StartPosition = FormStartPosition.Manual;
+			this.Top = point.Y - this.Height / 2;
+			this.Left = point.X - this.Width / 2;
 		}
 
 		public DialogResult ShowDialog(object sender, IWin32Window owner = null)

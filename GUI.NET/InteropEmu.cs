@@ -157,6 +157,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetAudioDevice(string audioDevice);
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsDebuggerRunning();
 		[DllImport(DLLPath)] public static extern void DebugRelease();
 		[DllImport(DLLPath)] public static extern void DebugSetFlags(DebuggerFlags flags);
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
@@ -189,6 +190,19 @@ namespace Mesen.GUI
 			GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
 			try {
 				UInt32 memorySize = InteropEmu.DebugGetMemoryStateWrapper(type, handle.AddrOfPinnedObject());
+				Array.Resize(ref buffer, (int)memorySize);
+			} finally {
+				handle.Free();
+			}
+			return buffer;
+		}
+
+		public static byte[] DebugGetInternalRam()
+		{
+			byte[] buffer = new byte[0x800];
+			GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+			try {
+				UInt32 memorySize = InteropEmu.DebugGetMemoryStateWrapper(DebugMemoryType.InternalRam, handle.AddrOfPinnedObject());
 				Array.Resize(ref buffer, (int)memorySize);
 			} finally {
 				handle.Free();
@@ -888,6 +902,7 @@ namespace Mesen.GUI
 		PrgRom = 5,
 		ChrRom = 6,
 		ChrRam = 7,
+		InternalRam = 8
 	}
 
 	public class MD5Helper

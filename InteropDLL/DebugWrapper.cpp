@@ -21,6 +21,11 @@ extern "C"
 		Console::GetInstance()->StopDebugger();
 	}
 
+	DllExport bool __stdcall DebugIsDebuggerRunning()
+	{
+		return Console::GetInstance()->GetDebugger(false).get() != nullptr;
+	}
+
 	DllExport void __stdcall DebugSetFlags(uint32_t flags) { GetDebugger()->SetFlags(flags); }
 
 	DllExport void __stdcall DebugGetState(DebugState *state) { GetDebugger()->GetState(state); }

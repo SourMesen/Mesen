@@ -14,7 +14,7 @@ namespace Mesen.GUI.Forms.Cheats
 {
 	public partial class frmCheatList : BaseConfigForm
 	{
-		private List<CheatInfo> Cheats { get { return ConfigManager.Config.Cheats; } }
+		private List<CheatInfo> _cheats;
 		private GameInfo _selectedItem = null;
 
 		public frmCheatList()
@@ -25,14 +25,45 @@ namespace Mesen.GUI.Forms.Cheats
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-			chkDisableCheats.Checked = ConfigManager.Config.DisableAllCheats;
-			UpdateGameList();
-			lstGameList.Select();
+			if(!DesignMode) {
+				_cheats = new List<CheatInfo>(ConfigManager.Config.Cheats);
+				chkDisableCheats.Checked = ConfigManager.Config.DisableAllCheats;
+				UpdateGameList();
+				lstGameList.Select();
+
+				ctrlCheatFinder.OnAddCheat += CtrlCheatFinder_OnAddCheat;
+				tabMain.TabIndexChanged += TabMain_TabIndexChanged;
+			}
 		}
-		
+
+		private void TabMain_TabIndexChanged(object sender, EventArgs e)
+		{
+			ctrlCheatFinder.TabIsFocused = (tabMain.SelectedTab == tpgCheatFinder);
+		}
+
+		protected override void OnActivated(EventArgs e)
+		{
+			if(tabMain.SelectedTab == tpgCheatFinder) {
+				ctrlCheatFinder.TabIsFocused = true;
+			}
+			base.OnActivated(e);
+		}
+
+		protected override void OnDeactivate(EventArgs e)
+		{
+			ctrlCheatFinder.TabIsFocused = false;
+			base.OnDeactivate(e);
+		}
+
+		private void CtrlCheatFinder_OnAddCheat(object sender, EventArgs e)
+		{
+			AddCheats(new List<CheatInfo>() { (CheatInfo)sender });
+		}
+
 		protected override void UpdateConfig()
 		{
 			ConfigManager.Config.DisableAllCheats = chkDisableCheats.Checked;
+			ConfigManager.Config.Cheats = _cheats;
 		}
 
 		private void UpdateGameList(string gameCrc = null)
@@ -42,7 +73,7 @@ namespace Mesen.GUI.Forms.Cheats
 			if(!string.IsNullOrWhiteSpace(romInfo.RomName)) {
 				nameByCrc[romInfo.GetPrgCrcString()] = romInfo.GetRomName();
 			}
-			foreach(CheatInfo cheat in this.Cheats) {
+			foreach(CheatInfo cheat in _cheats) {
 				if(!nameByCrc.ContainsKey(cheat.GameCrc)) {
 					nameByCrc[cheat.GameCrc] = cheat.GameName;
 				}
@@ -99,7 +130,7 @@ namespace Mesen.GUI.Forms.Cheats
 			lstCheats.Items.Clear();
 			if(_selectedItem != null) {
 				string crc32 = _selectedItem.Crc;
-				foreach(CheatInfo cheat in this.Cheats) {
+				foreach(CheatInfo cheat in _cheats) {
 					if(cheat.GameCrc == crc32) {
 						ListViewItem item = lstCheats.Items.Add(cheat.CheatName);
 						item.SubItems.Add(cheat.ToString());
@@ -163,7 +194,7 @@ namespace Mesen.GUI.Forms.Cheats
 		{
 			foreach(ListViewItem item in lstCheats.SelectedItems) {
 				CheatInfo cheat = item.Tag as CheatInfo;
-				this.Cheats.Remove(cheat);
+				_cheats.Remove(cheat);
 			}
 			UpdateGameList();
 		}
@@ -177,7 +208,7 @@ namespace Mesen.GUI.Forms.Cheats
 		{
 			foreach(var item in lstCheats.Items) {
 				CheatInfo cheat = ((ListViewItem)item).Tag as CheatInfo;
-				this.Cheats.Remove(cheat);
+				_cheats.Remove(cheat);
 			}
 			UpdateGameList();
 		}
@@ -209,13 +240,13 @@ namespace Mesen.GUI.Forms.Cheats
 		{
 			if(cheats.Count > 0) {
 				HashSet<string> existingCheats = new HashSet<string>();
-				foreach(CheatInfo cheat in this.Cheats) {
+				foreach(CheatInfo cheat in _cheats) {
 					existingCheats.Add(cheat.GameCrc + cheat.ToString());
 				}
 
 				foreach(CheatInfo cheat in cheats) {
 					if(!existingCheats.Contains(cheat.GameCrc + cheat.ToString())) {
-						this.Cheats.Add(cheat);
+						_cheats.Add(cheat);
 					}
 				}
 
@@ -237,12 +268,12 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private void btnExportAllCheats_Click(object sender, EventArgs e)
 		{
-			ExportCheats(this.Cheats, "MesenCheats.xml");
+			ExportCheats(_cheats, "MesenCheats.xml");
 		}
 
 		private void btnExportGame_Click(object sender, EventArgs e)
 		{
-			ExportCheats(this.Cheats.Where((c) => c.GameCrc == _selectedItem.Crc), _selectedItem.Text + "_Cheats.xml");
+			ExportCheats(_cheats.Where((c) => c.GameCrc == _selectedItem.Crc), _selectedItem.Text + "_Cheats.xml");
 		}
 
 		private void btnExportSelectedCheats_Click(object sender, EventArgs e)

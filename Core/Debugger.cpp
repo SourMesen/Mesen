@@ -597,6 +597,12 @@ uint32_t Debugger::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 			memcpy(buffer, chrRam, _mapper->GetChrSize(true));
 			delete[] chrRam;
 			return _mapper->GetChrSize(true);
+
+		case DebugMemoryType::InternalRam:
+			for(int i = 0; i < 0x800; i++) {
+				buffer[i] = _memoryManager->DebugRead(i);
+			}
+			return 0x800;
 	}
 	return 0;
 }

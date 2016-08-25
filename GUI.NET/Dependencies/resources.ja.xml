@@ -352,6 +352,19 @@
       <Control ID="btnExportSelectedCheats">選択中のコードをエクスポートする</Control>
       <Control ID="mnuExportSelectedCheats">エクスポート</Control>
       <Control ID="chkDisableCheats">チートコード機能を無効にする</Control>
+
+      <Control ID="tpgCheatFinder">コードファインダー</Control>
+      <Control ID="btnReset">リセット</Control>
+      <Control ID="btnUndo">元に戻す</Control>
+      <Control ID="lblCurrentValue">現在の数値は</Control>
+      <Control ID="lblPreviousValue">前回の数値は現在の数値</Control>
+      <Control ID="btnAddCurrentFilter">フィルター追加</Control>
+      <Control ID="btnAddPrevFilter">フィルター追加</Control>
+      <Control ID="btnCreateCheat">コード作成</Control>
+      <Control ID="mnuCreateCheat">コード作成</Control>
+      <Control ID="lblAtAddress"></Control>
+      <Control ID="chkPauseGameWhileWindowActive">このウィンドウがアクティブの時、自動的にゲームをポーズする</Control>
+      
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
@@ -522,6 +535,18 @@
       <Value ID="AllZeros">ビット全てを０にする　（デフォルト）</Value>
       <Value ID="AllOnes">ビット全てを１にする</Value>
       <Value ID="Random">乱数</Value>
+    </Enum>
+    <Enum ID="CheatCurrentFilterType">
+      <Value ID="Smaller">次の数値より小さい</Value>
+      <Value ID="Equal">次の数値と同じ</Value>
+      <Value ID="NotEqual">次の数値とは違う</Value>
+      <Value ID="Greater">次の数値より大きい</Value>
+    </Enum>
+    <Enum ID="CheatPrevFilterType">
+      <Value ID="Smaller">より小さい</Value>
+      <Value ID="Equal">と同じ</Value>
+      <Value ID="NotEqual">とは違う</Value>
+      <Value ID="Greater">より大きい</Value>
     </Enum>
   </Enums>
 </Resources>

@@ -364,6 +364,19 @@
       <Control ID="btnExportSelectedCheats">Exporter les codes sélectionnés</Control>
       <Control ID="mnuExportSelectedCheats">Exporter</Control>
       <Control ID="chkDisableCheats">Désactiver tous les codes</Control>
+
+      <Control ID="tpgCheatFinder">Recherche de codes</Control>
+      <Control ID="btnReset">Réinitialiser</Control>
+      <Control ID="btnUndo">Annuler</Control>
+      <Control ID="lblCurrentValue">La valeur courante est</Control>
+      <Control ID="lblPreviousValue">La valeur précédente était</Control>
+      <Control ID="btnAddCurrentFilter">Ajouter le filtre</Control>
+      <Control ID="btnAddPrevFilter">Ajouter le filtre</Control>
+      <Control ID="btnCreateCheat">Créer un code</Control>
+      <Control ID="mnuCreateCheat">Créer un code</Control>
+      <Control ID="lblAtAddress">à</Control>
+      <Control ID="chkPauseGameWhileWindowActive">Mettre le jeu à pause automatiquement lorsque cette fenêtre est active</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
@@ -539,6 +552,18 @@
       <Value ID="AllZeros">Tous les bits à 0 (Défaut)</Value>
       <Value ID="AllOnes">Tous les bits à 1</Value>
       <Value ID="Random">Valeurs aléatoires</Value>
+    </Enum>
+    <Enum ID="CheatCurrentFilterType">
+      <Value ID="Smaller">Plus petite que</Value>
+      <Value ID="Equal">Égale à</Value>
+      <Value ID="NotEqual">Pas égale à</Value>
+      <Value ID="Greater">Plus grand que</Value>
+    </Enum>
+    <Enum ID="CheatPrevFilterType">
+      <Value ID="Smaller">Plus petite</Value>
+      <Value ID="Equal">Égale</Value>
+      <Value ID="NotEqual">Pas égale</Value>
+      <Value ID="Greater">Plus grande</Value>
     </Enum>
   </Enums>
 </Resources>

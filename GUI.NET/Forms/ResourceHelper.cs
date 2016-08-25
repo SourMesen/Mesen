@@ -28,6 +28,7 @@ namespace Mesen.GUI.Forms
 	{
 		private static Language _language;
 		private static XmlDocument _resources = new XmlDocument();
+		private static XmlDocument _enResources = new XmlDocument();
 		private static XmlDocument _originalEnglishResources = null;
 
 		public static Language GetCurrentLanguage()
@@ -54,9 +55,10 @@ namespace Mesen.GUI.Forms
 			}
 
 			string filename;
+			string enFilename = "resources.en.xml";
 			switch(language) {
 				default:
-				case Language.English: filename = "resources.en.xml"; break;
+				case Language.English: filename = enFilename; break;
 				case Language.French: filename = "resources.fr.xml"; break;
 				case Language.Japanese: filename = "resources.ja.xml"; break;
 				case Language.Russian: filename = "resources.ru.xml"; break;
@@ -68,11 +70,19 @@ namespace Mesen.GUI.Forms
 			using(Stream stream = ResourceManager.GetZippedResource(filename)) {
 				_resources.Load(stream);
 			}
+
+			using(Stream stream = ResourceManager.GetZippedResource(enFilename)) {
+				_enResources.Load(stream);
+			}
 		}
 
 		public static string GetMessage(string id, params object[] args)
 		{
 			var baseNode = _resources.SelectSingleNode("/Resources/Messages/Message[@ID='" + id + "']");
+			if(baseNode == null) {
+				baseNode = _enResources.SelectSingleNode("/Resources/Messages/Message[@ID='" + id + "']");
+			}
+
 			if(baseNode != null) {
 				return string.Format(baseNode.InnerText, args);
 			} else {
@@ -83,6 +93,10 @@ namespace Mesen.GUI.Forms
 		public static string GetEnumText(Enum e)
 		{
 			var baseNode = _resources.SelectSingleNode("/Resources/Enums/Enum[@ID='" + e.GetType().Name + "']/Value[@ID='" + e.ToString() + "']");
+			if(baseNode == null) {
+				baseNode = _enResources.SelectSingleNode("/Resources/Enums/Enum[@ID='" + e.GetType().Name + "']/Value[@ID='" + e.ToString() + "']");
+			}
+
 			if(baseNode != null) {
 				return baseNode.InnerText;
 			} else {
@@ -150,9 +164,6 @@ namespace Mesen.GUI.Forms
 					ApplyResources(baseNode, ((ContextMenuStrip)ctrl).Items);
 				} else if(ctrl is ListView) {
 					ApplyResources(baseNode, ((ListView)ctrl).Columns);
-					if(((ListView)ctrl).ContextMenuStrip != null) {
-						ApplyResources(baseNode, ((ListView)ctrl).ContextMenuStrip.Items);
-					}
 				} else if(ctrl is ToolStrip) {
 					ApplyResources(baseNode, ((ToolStrip)ctrl).Items);
 				} else if(ctrl is ToolStripSplitButton) {
@@ -161,6 +172,12 @@ namespace Mesen.GUI.Forms
 					ApplyResources(baseNode, ((Control)ctrl).Controls);
 				} else if(ctrl is ToolStripMenuItem) {
 					ApplyResources(baseNode, ((ToolStripMenuItem)ctrl).DropDownItems);
+				}
+
+				if(ctrl is Control) {
+					if(((Control)ctrl).ContextMenuStrip != null) {
+						ApplyResources(baseNode, ((Control)ctrl).ContextMenuStrip.Items);
+					}
 				}
 			}
 		}

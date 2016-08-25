@@ -26,6 +26,7 @@ namespace Mesen.GUI.Forms
 		private Thread _emuThread;
 		private frmDebugger _debugger;
 		private frmLogWindow _logWindow;
+		private frmCheatList _cheatListWindow;
 		private string _currentRomPath = null;
 		private int _currentRomArchiveIndex = -1;
 		private string _currentGame = null;
@@ -1028,9 +1029,15 @@ namespace Mesen.GUI.Forms
 
 		private void mnuCheats_Click(object sender, EventArgs e)
 		{
-			frmCheatList frm = new frmCheatList();
-			if(frm.ShowDialog(sender, this) == DialogResult.OK) {
-				CheatInfo.ApplyCheats();
+			if(_cheatListWindow == null) {
+				_cheatListWindow = new frmCheatList();
+				_cheatListWindow.Show(sender, this);
+				_cheatListWindow.FormClosed += (s, evt) => {
+					_cheatListWindow = null;
+					CheatInfo.ApplyCheats();
+				};
+			} else {
+				_cheatListWindow.Focus();
 			}
 		}
 

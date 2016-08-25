@@ -28,6 +28,7 @@ enum class DebugMemoryType
 	PrgRom = 5,
 	ChrRom = 6,
 	ChrRam = 7,
+	InternalRam = 8,
 };
 
 enum class DebuggerFlags

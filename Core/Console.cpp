@@ -448,10 +448,10 @@ void Console::LoadState(uint8_t *buffer, uint32_t bufferSize)
 	LoadState(stream);
 }
 
-std::shared_ptr<Debugger> Console::GetDebugger()
+std::shared_ptr<Debugger> Console::GetDebugger(bool autoStart)
 {
 	auto lock = _debuggerLock.AcquireSafe();
-	if(!_debugger) {
+	if(!_debugger && autoStart) {
 		_debugger.reset(new Debugger(Console::Instance, _cpu, _ppu, _memoryManager, _mapper));
 	}
 	return _debugger;

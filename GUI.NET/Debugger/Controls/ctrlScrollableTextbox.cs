@@ -250,6 +250,8 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public int MarginWidth { set { this.ctrlTextbox.MarginWidth = value; } }
+
 		public void OpenSearchBox(bool forceFocus = false)
 		{
 			bool focus = !this.panelSearch.Visible;
