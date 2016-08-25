@@ -419,9 +419,7 @@ void NsfMapper::InternalSelectTrack(uint8_t trackNumber, bool requestReset)
 void NsfMapper::SelectTrack(uint8_t trackNumber)
 {
 	if(trackNumber < _nsfHeader.TotalSongs) {
-		Console::Pause();
 		InternalSelectTrack(trackNumber);
-		Console::Resume();
 	}
 }
 
