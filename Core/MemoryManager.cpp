@@ -3,7 +3,6 @@
 #include "BaseMapper.h"
 #include "Debugger.h"
 #include "CheatManager.h"
-#include <random>
 
 //Used for open bus
 uint8_t MemoryManager::_lastReadValue = 0;
@@ -16,7 +15,7 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	_internalRAM = new uint8_t[InternalRAMSize];
 	for(int i = 0; i < 2; i++) {
 		_nametableRAM[i] = new uint8_t[NameTableScreenSize];
-		memset(_nametableRAM[i], 0, NameTableScreenSize);
+		_mapper->InitializeRam(_nametableRAM[i], NameTableScreenSize);
 	}
 
 	_mapper->SetDefaultNametables(_nametableRAM[0], _nametableRAM[1]);
@@ -42,19 +41,7 @@ MemoryManager::~MemoryManager()
 void MemoryManager::Reset(bool softReset)
 {
 	if(!softReset) {
-		switch(EmulationSettings::GetRamPowerOnState()) {
-			default:
-			case RamPowerOnState::AllZeros: memset(_internalRAM, 0, InternalRAMSize); break;
-			case RamPowerOnState::AllOnes: memset(_internalRAM, 0xFF, InternalRAMSize); break;
-			case RamPowerOnState::Random:
-				std::random_device rd;
-				std::mt19937 mt(rd());
-				std::uniform_int_distribution<> dist(0, 255);
-				for(int i = 0; i < InternalRAMSize; i++) {
-					_internalRAM[i] = dist(mt);
-				}
-				break;
-		}
+		_mapper->InitializeRam(_internalRAM, InternalRAMSize);
 	}
 
 	_mapper->Reset(softReset);

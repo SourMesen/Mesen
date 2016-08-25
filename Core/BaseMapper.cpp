@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
+#include <random>
 #include <assert.h>
 #include "../Utilities/FolderUtilities.h"
 #include "CheatManager.h"
@@ -257,6 +258,23 @@ void BaseMapper::SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memor
 		SetPpuMemoryMapping(startAddr, endAddr, page, memoryType);
 	}
 }
+
+void BaseMapper::InitializeRam(void* data, uint32_t length)
+{
+	switch(EmulationSettings::GetRamPowerOnState()) {
+		default:
+		case RamPowerOnState::AllZeros: memset(data, 0, length); break;
+		case RamPowerOnState::AllOnes: memset(data, 0xFF, length); break;
+		case RamPowerOnState::Random:
+			std::random_device rd;
+			std::mt19937 mt(rd());
+			std::uniform_int_distribution<> dist(0, 255);
+			for(uint32_t i = 0; i < length; i++) {
+				((uint8_t*)data)[i] = dist(mt);
+			}
+			break;
+	}
+}
 		
 bool BaseMapper::HasBattery()
 {
@@ -329,7 +347,7 @@ void BaseMapper::InitializeChrRam(int32_t chrRamSize)
 	_chrRamSize = chrRamSize >= 0 ? chrRamSize : defaultRamSize;
 	if(_chrRamSize > 0) {
 		_chrRam = new uint8_t[_chrRamSize];
-		memset(_chrRam, 0, _chrRamSize);
+		InitializeRam(_chrRam, _chrRamSize);
 	}
 }
 
@@ -446,8 +464,8 @@ void BaseMapper::Initialize(RomData &romData)
 	_saveRam = new uint8_t[_saveRamSize];
 	_workRam = new uint8_t[_workRamSize];
 
-	memset(_saveRam, 0, _saveRamSize);
-	memset(_workRam, 0, _workRamSize);
+	InitializeRam(_saveRam, _saveRamSize);
+	InitializeRam(_workRam, _workRamSize);
 	if(romData.HasTrainer && _workRamSize >= 0x2000) {
 		memcpy(_workRam + 0x1000, romData.TrainerData.data(), 512);
 	}
@@ -575,9 +593,11 @@ void BaseMapper::SetNametable(uint8_t index, uint8_t nametableIndex)
 {
 	if(nametableIndex == 2 && _cartNametableRam[0] == nullptr) {
 		_cartNametableRam[0] = new uint8_t[0x400];
+		InitializeRam(_cartNametableRam[0], 0x400);
 	}
 	if(nametableIndex == 3 && _cartNametableRam[1] == nullptr) {
 		_cartNametableRam[1] = new uint8_t[0x400];
+		InitializeRam(_cartNametableRam[1], 0x400);
 	}
 
 	_nametableIndexes[index] = nametableIndex;

@@ -55,5 +55,6 @@ class MemoryManager: public Snapshotable
 		uint32_t ToAbsoluteChrAddress(uint16_t vramAddr);
 
 		static uint8_t GetOpenBus(uint8_t mask = 0xFF);
+		static void InitializeRam(uint8_t* data, uint32_t length);
 };
 

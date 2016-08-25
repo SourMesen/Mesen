@@ -25,6 +25,8 @@ namespace Mesen.GUI.Config
 		public UInt32 PpuExtraScanlinesBeforeNmi = 0;
 		public UInt32 PpuExtraScanlinesAfterNmi = 0;
 
+		public RamPowerOnState RamPowerOnState;
+
 		public bool ShowLagCounter = false;
 
 		public UInt32 EmulationSpeed = 100;
@@ -46,6 +48,8 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetOverclockRate(emulationInfo.OverclockRate, emulationInfo.OverclockAdjustApu);
 			InteropEmu.SetPpuNmiConfig(emulationInfo.PpuExtraScanlinesBeforeNmi, emulationInfo.PpuExtraScanlinesAfterNmi);
+
+			InteropEmu.SetRamPowerOnState(emulationInfo.RamPowerOnState);
 		}
 	}
 }
