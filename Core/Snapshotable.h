@@ -92,7 +92,17 @@ private:
 	void InternalStream(ArrayInfo<T> &info)
 	{
 		T* pointer = info.Array;
-		for(uint32_t i = 0; i < info.ElementCount; i++) {
+
+		uint32_t count = info.ElementCount;
+		StreamElement<uint32_t>(count);
+
+		if(!_saving) {
+			//Reset array to 0 before loading from file
+			memset(info.Array, 0, sizeof(T) * info.ElementCount);
+		}
+
+		//Load the number of elements requested, or the maximum possible (based on what is present in the save state)
+		for(uint32_t i = 0; i < info.ElementCount && i < count; i++) {
 			StreamElement<T>(*pointer);
 			pointer++;
 		}
