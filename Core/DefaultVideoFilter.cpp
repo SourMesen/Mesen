@@ -7,6 +7,8 @@
 
 DefaultVideoFilter::DefaultVideoFilter()
 {
+	InitDecodeTables();
+
 	InitConversionMatrix(_pictureSettings.Hue, _pictureSettings.Saturation);
 }
 
@@ -87,56 +89,75 @@ void DefaultVideoFilter::YiqToRgb(double y, double i, double q, double &r, doubl
 	b = std::max(0.0, std::min(1.0, (y + _yiqToRgbMatrix[4] * i + _yiqToRgbMatrix[5] * q)));
 }
 
+void DefaultVideoFilter::InitDecodeTables()
+{
+	for(int i = 0; i < 256; i++) {
+		for(int j = 0; j < 8; j++) {
+			double redColor = i;
+			double greenColor = i;
+			double blueColor = i;
+			if(j & 0x01) {
+				//Intensify red
+				redColor *= 1.1;
+				greenColor *= 0.9;
+				blueColor *= 0.9;
+			}
+			if(j & 0x02) {
+				//Intensify green
+				greenColor *= 1.1;
+				redColor *= 0.9;
+				blueColor *= 0.9;
+			}
+			if(j & 0x04) {
+				//Intensify blue
+				blueColor *= 1.1;
+				redColor *= 0.9;
+				greenColor *= 0.9;
+			}
+
+			redColor = (redColor > 255 ? 255 : redColor) / 255.0;
+			greenColor = (greenColor > 255 ? 255 : greenColor) / 255.0;
+			blueColor = (blueColor > 255 ? 255 : blueColor) / 255.0;
+
+			_redDecodeTable[i][j] = redColor;
+			_greenDecodeTable[i][j] = greenColor;
+			_blueDecodeTable[i][j] = blueColor;
+		}
+	}
+}
+
 uint32_t DefaultVideoFilter::ProcessIntensifyBits(uint16_t ppuPixel, double scanlineIntensity)
 {
 	uint32_t pixelOutput = EmulationSettings::GetRgbPalette()[ppuPixel & 0x3F];
+	uint32_t intensifyBits = (ppuPixel >> 6) & 0x07;
 
-	//Incorrect emphasis bit implementation, but will do for now.
-	double redChannel = (double)((pixelOutput & 0xFF0000) >> 16);
-	double greenChannel = (double)((pixelOutput & 0xFF00) >> 8);
-	double blueChannel = (double)(pixelOutput & 0xFF);
+	if(intensifyBits || _needToProcess || scanlineIntensity < 1.0) {
+		//Incorrect emphasis bit implementation, but will do for now.
+		double redChannel = _redDecodeTable[((pixelOutput & 0xFF0000) >> 16)][intensifyBits];
+		double greenChannel = _greenDecodeTable[((pixelOutput & 0xFF00) >> 8)][intensifyBits];
+		double blueChannel = _blueDecodeTable[(pixelOutput & 0xFF)][intensifyBits];
 
-	if(ppuPixel & 0x40) {
-		//Intensify red
-		redChannel *= 1.1;
-		greenChannel *= 0.9;
-		blueChannel *= 0.9;
+		//Apply brightness, contrast, hue & saturation
+		if(_needToProcess) {
+			double y, i, q;
+			RgbToYiq(redChannel, greenChannel, blueChannel, y, i, q);
+			y *= _pictureSettings.Contrast * 0.5f + 1;
+			y += _pictureSettings.Brightness * 0.5f;
+			YiqToRgb(y, i, q, redChannel, greenChannel, blueChannel);
+		}
+
+		if(scanlineIntensity < 1.0) {
+			redChannel *= scanlineIntensity;
+			greenChannel *= scanlineIntensity;
+			blueChannel *= scanlineIntensity;
+		}
+
+		int r = std::min(255, (int)(redChannel * 255));
+		int g = std::min(255, (int)(greenChannel * 255));
+		int b = std::min(255, (int)(blueChannel * 255));
+
+		return 0xFF000000 | (r << 16) | (g << 8) | b;
+	} else {
+		return pixelOutput;
 	}
-	if(ppuPixel & 0x80) {
-		//Intensify green
-		greenChannel *= 1.1;
-		redChannel *= 0.9;
-		blueChannel *= 0.9;
-	}
-	if(ppuPixel & 0x100) {
-		//Intensify blue
-		blueChannel *= 1.1;
-		redChannel *= 0.9;
-		greenChannel *= 0.9;
-	}
-
-	redChannel = (float)(redChannel > 255 ? 255 : redChannel) / 255.0;
-	greenChannel = (float)(greenChannel > 255 ? 255 : greenChannel) / 255.0;
-	blueChannel = (float)(blueChannel > 255 ? 255 : blueChannel) / 255.0;
-
-	//Apply brightness, contrast, hue & saturation
-	if(_needToProcess) {
-		double y, i, q;
-		RgbToYiq(redChannel, greenChannel, blueChannel, y, i, q);
-		y *= _pictureSettings.Contrast * 0.5f + 1;
-		y += _pictureSettings.Brightness * 0.5f;
-		YiqToRgb(y, i, q, redChannel, greenChannel, blueChannel);
-	}
-
-	if(scanlineIntensity < 1.0) {
-		redChannel *= scanlineIntensity;
-		greenChannel *= scanlineIntensity;
-		blueChannel *= scanlineIntensity;
-	}
-
-	int r = std::min(255, (int)(redChannel * 255));
-	int g = std::min(255, (int)(greenChannel * 255));
-	int b = std::min(255, (int)(blueChannel * 255));
-
-	return 0xFF000000 | (r << 16) | (g << 8) | b;
 }
