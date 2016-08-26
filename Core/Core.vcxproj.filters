@@ -919,6 +919,9 @@
     <ClInclude Include="Waixing162.h">
       <Filter>Nes\Mappers\Waixing</Filter>
     </ClInclude>
+    <ClInclude Include="MMC3_196.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

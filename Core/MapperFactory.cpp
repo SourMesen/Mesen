@@ -105,6 +105,7 @@
 #include "MMC3_182.h"
 #include "MMC3_187.h"
 #include "MMC3_189.h"
+#include "MMC3_196.h"
 #include "MMC3_197.h"
 #include "MMC3_205.h"
 #include "MMC3_238.h"
@@ -194,7 +195,7 @@ Supported mappers:
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
 |---|===|162|163|164|165|166|167|168|===|170|171|172|173|===|175|
 |176|177|178|179|180|---|182|183|184|185|186|187|188|189|===|191|
-|192|193|194|195|   |197|   |   |200|201|202|203|204|205|206|207|
+|192|193|194|195|196|197|   |   |200|201|202|203|204|205|206|207|
 |   |209|210|211|212|213|214|   |   |   |218|   |   |221|222|   |
 |   |225|226|227|228|229|230|231|232|233|234|235|   |===|238|===|
 |240|241|242|243|244|245|246|===|===|249|250|===|252|253|254|255|
@@ -376,7 +377,8 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 193: return new NtdecTc112();
 		case 194: return new MMC3_ChrRam(0x00, 0x01, 2);
 		case 195: return new MMC3_ChrRam(0x00, 0x03, 4);
-		case 197: return new MMC3_197();
+		case 196: return new MMC3_196();
+		case 197: return new MMC3_197();		
 		case 200: return new Mapper200();
 		case 201: return new Mapper201();
 		case 202: return new Mapper202();
