@@ -69,11 +69,9 @@ protected:
 				_irqCounter = _irqReloadValue + 2;
 			}
 
-			_cpuClockCounter = 0;
 			_needReload = false;
 		} else if(_irqCounter == 0) {
 			_irqCounter = _irqReloadValue + 1;
-			_cpuClockCounter = 0;
 		}
 
 		_irqCounter--;
@@ -138,6 +136,9 @@ protected:
 					_forceClock = true;
 				}
 				_irqCycleMode = (value & 0x01) == 0x01;
+				if(_irqCycleMode) {
+					_cpuClockCounter = 0;
+				}
 				_needReload = true;
 				break;
 
@@ -157,7 +158,7 @@ public:
 	{
 		if(!_irqCycleMode) {
 			if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {
-					ClockIrqCounter(Rambo1::PpuIrqDelay);
+				ClockIrqCounter(Rambo1::PpuIrqDelay);
 			}
 		}
 	}
