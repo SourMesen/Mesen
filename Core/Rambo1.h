@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "CPU.h"
+#include "A12Watcher.h"
 
 class Rambo1 : public BaseMapper
 {
@@ -13,9 +14,8 @@ private:
 	bool _needReload = false;
 	uint8_t _irqCounter = 0;
 	uint8_t _irqReloadValue = 0;
-	uint32_t _lastCycle = 0;
-	uint32_t _cyclesDown = 0;
 	uint8_t _cpuClockCounter = 0;
+	A12Watcher _a12Watcher;
 
 	uint8_t _currentRegister = 0;
 	uint8_t _registers[16];
@@ -36,8 +36,9 @@ protected:
 	{
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> registers = { _registers, 16 };
-		Stream(_irqEnabled, _irqCycleMode, _needReload, _needIrqDelay, _irqCounter, _irqReloadValue, _lastCycle,
-				_cyclesDown, _cpuClockCounter, _currentRegister, registers, _forceClock);
+		SnapshotInfo a12Watcher{ &_a12Watcher };
+		Stream(_irqEnabled, _irqCycleMode, _needReload, _needIrqDelay, _irqCounter, _irqReloadValue, 
+				a12Watcher, _cpuClockCounter, _currentRegister, registers, _forceClock);
 	}
 
 	virtual void ProcessCpuClock()
@@ -155,26 +156,9 @@ public:
 	virtual void NotifyVRAMAddressChange(uint16_t addr)
 	{
 		if(!_irqCycleMode) {
-			uint32_t cycle = PPU::GetFrameCycle();
-
-			if((addr & 0x1000) == 0) {
-				if(_cyclesDown == 0) {
-					_cyclesDown = 1;
-				} else {
-					if(_lastCycle > cycle) {
-						//We changed frames
-						_cyclesDown += (89342 - _lastCycle) + cycle;
-					} else {
-						_cyclesDown += (cycle - _lastCycle);
-					}
-				}
-			} else if(addr & 0x1000) {
-				if(_cyclesDown > 8) {
+			if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {
 					ClockIrqCounter(Rambo1::PpuIrqDelay);
-				}
-				_cyclesDown = 0;
 			}
-			_lastCycle = cycle;
 		}
 	}
 };

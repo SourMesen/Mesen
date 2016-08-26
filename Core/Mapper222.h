@@ -1,15 +1,14 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseMapper.h"
-#include "PPU.h"
 #include "CPU.h"
+#include "A12Watcher.h"
 
 class Mapper222 : public BaseMapper
 {
 private:
 	uint16_t _irqCounter;
-	uint32_t _cyclesDown;
-	uint32_t _lastCycle;
+	A12Watcher _a12Watcher;
 
 protected:
 	virtual uint16_t GetPRGPageSize() { return 0x2000; }
@@ -18,8 +17,6 @@ protected:
 	void InitMapper()
 	{
 		_irqCounter = 0;
-		_cyclesDown = 0;
-		_lastCycle = 0;
 
 		SelectPrgPage2x(1, -2);
 	}
@@ -27,37 +24,21 @@ protected:
 	void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_irqCounter, _cyclesDown, _lastCycle);
+		SnapshotInfo a12Watcher{ &_a12Watcher };
+		Stream(_irqCounter, a12Watcher);
 	}
 
 	virtual void NotifyVRAMAddressChange(uint16_t addr)
 	{
-		uint32_t cycle = PPU::GetFrameCycle();
-
-		if((addr & 0x1000) == 0) {
-			if(_cyclesDown == 0) {
-				_cyclesDown = 1;
-			} else {
-				if(_lastCycle > cycle) {
-					//We changed frames
-					_cyclesDown += (89342 - _lastCycle) + cycle;
-				} else {
-					_cyclesDown += (cycle - _lastCycle);
+		if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {
+			if(_irqCounter) {
+				_irqCounter++;
+				if(_irqCounter >= 240) {
+					CPU::SetIRQSource(IRQSource::External);
+					_irqCounter = 0;
 				}
 			}
-		} else if(addr & 0x1000) {
-			if(_cyclesDown > 8) {
-				if(_irqCounter) {
-					_irqCounter++;
-					if(_irqCounter >= 240) {
-						CPU::SetIRQSource(IRQSource::External);
-						_irqCounter = 0;
-					}
-				}
-			}
-			_cyclesDown = 0;
 		}
-		_lastCycle = cycle;
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

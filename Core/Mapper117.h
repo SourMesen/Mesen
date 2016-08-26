@@ -29,7 +29,8 @@ protected:
 	void StreamState(bool saving)
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_irqCounter, _irqEnabled, _irqEnabledAlt, _irqReloadValue, _a12Watcher);
+		SnapshotInfo a12Watcher{ &_a12Watcher };
+		Stream(_irqCounter, _irqEnabled, _irqEnabledAlt, _irqReloadValue, a12Watcher);
 	}
 
 	void NotifyVRAMAddressChange(uint16_t addr)

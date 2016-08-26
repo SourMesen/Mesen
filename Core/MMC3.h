@@ -3,8 +3,8 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "CPU.h"
-#include "PPU.h"
 #include "EmulationSettings.h"
+#include "A12Watcher.h"
 
 class MMC3 : public BaseMapper
 {
@@ -27,8 +27,7 @@ class MMC3 : public BaseMapper
 		bool _wramEnabled;
 		bool _wramWriteProtected;
 
-		uint32_t _lastCycle;
-		uint32_t _cyclesDown;
+		A12Watcher _a12Watcher;
 		bool _needIrq;
 
 		bool _forceMmc3RevAIrqs;
@@ -53,8 +52,6 @@ class MMC3 : public BaseMapper
 			_irqReloadValue = 0;
 			_irqReload = false;
 			_irqEnabled = false;
-			_lastCycle = 0xFFFF;
-			_cyclesDown = 0xFFFF;
 
 			_wramEnabled = false;
 			_wramWriteProtected = false;
@@ -179,8 +176,9 @@ class MMC3 : public BaseMapper
 		{
 			BaseMapper::StreamState(saving);
 			ArrayInfo<uint8_t> registers = { _registers, 8 };
+			SnapshotInfo a12Watcher{ &_a12Watcher };
 			Stream(_state.Reg8000, _state.RegA000, _state.RegA001, _currentRegister, _chrMode, _prgMode,
-				_irqReloadValue, _irqCounter, _irqReload, _irqEnabled, _lastCycle, _cyclesDown,
+				_irqReloadValue, _irqCounter, _irqReload, _irqEnabled, a12Watcher,
 				_wramEnabled, _wramWriteProtected, registers, _needIrq);
 		}
 
@@ -266,27 +264,15 @@ class MMC3 : public BaseMapper
 	public:
 		virtual void NotifyVRAMAddressChange(uint16_t addr)
 		{
-			uint32_t cycle = PPU::GetFrameCycle();
-
-			if((addr & 0x1000) == 0) {
-				if(_needIrq) {
-					//Used by MC-ACC (Acclaim copy of the MMC3), see TriggerIrq above
-					CPU::SetIRQSource(IRQSource::External);
-					_needIrq = false;
-				}
-
-				if(_cyclesDown == 0) {
-					_cyclesDown = 1;
-				} else {
-					if(_lastCycle > cycle) {
-						//We changed frames
-						_cyclesDown += (89342 - _lastCycle) + cycle;
-					} else {
-						_cyclesDown += (cycle - _lastCycle);
+			switch(_a12Watcher.UpdateVramAddress(addr)) {
+				case A12StateChange::Fall:
+					if(_needIrq) {
+						//Used by MC-ACC (Acclaim copy of the MMC3), see TriggerIrq above
+						CPU::SetIRQSource(IRQSource::External);
+						_needIrq = false;
 					}
-				}
-			} else if(addr & 0x1000) {
-				if(_cyclesDown > 8) {
+					break;
+				case A12StateChange::Rise:
 					uint32_t count = _irqCounter;
 					if(_irqCounter == 0 || _irqReload) {
 						_irqCounter = _irqReloadValue;
@@ -306,9 +292,7 @@ class MMC3 : public BaseMapper
 						}
 					}
 					_irqReload = false;
-				}
-				_cyclesDown = 0;
+					break;
 			}
-			_lastCycle = cycle;
 		}
 };
