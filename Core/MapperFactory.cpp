@@ -170,6 +170,7 @@
 #include "VRC6.h"
 #include "VRC7.h"
 #include "VsSystem.h"
+#include "Waixing162.h"
 #include "Waixing164.h"
 #include "Waixing176.h"
 #include "Waixing178.h"
@@ -191,7 +192,7 @@ Supported mappers:
 |112|113|114|115|   |117|118|119|120|121|===|   |===|   |   |===|
 |===|===|===|===|132|133|   |===|136|137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|   |159|
-|---|===|   |163|164|165|166|167|168|===|170|171|172|173|===|175|
+|---|===|162|163|164|165|166|167|168|===|170|171|172|173|===|175|
 |176|177|178|179|180|---|182|183|184|185|186|187|188|189|===|191|
 |192|193|194|195|   |197|   |   |200|201|202|203|204|205|206|207|
 |   |209|210|211|212|213|214|   |   |   |218|   |   |221|222|   |
@@ -345,6 +346,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 156: return new DaouInfosys();
 		case 157: return new BandaiFcg();
 		case 159: return new BandaiFcg();
+		case 162: return new Waixing162();
 		case 163: return new Nanjing();
 		case 164: return new Waixing164();
 		case 165: return new MMC3_165();

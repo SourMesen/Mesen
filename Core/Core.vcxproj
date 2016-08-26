@@ -668,6 +668,7 @@
     <ClInclude Include="VsSystem.h" />
     <ClInclude Include="ScaleFilter.h" />
     <ClInclude Include="VsZapper.h" />
+    <ClInclude Include="Waixing162.h" />
     <ClInclude Include="Waixing164.h" />
     <ClInclude Include="Waixing176.h" />
     <ClInclude Include="Waixing178.h" />
