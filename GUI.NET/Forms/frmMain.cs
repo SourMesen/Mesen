@@ -637,7 +637,7 @@ namespace Mesen.GUI.Forms
 			mnuRecentFiles.DropDownItems.Clear();
 			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
 				ToolStripMenuItem tsmi = new ToolStripMenuItem();
-				tsmi.Text = recentItem.RomName;
+				tsmi.Text = recentItem.RomName.Replace("&", "&&");
 				tsmi.Click += (object sender, EventArgs args) => {
 					LoadROM(recentItem.Path, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches, recentItem.ArchiveFileIndex);
 				};
