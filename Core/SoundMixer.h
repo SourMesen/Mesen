@@ -66,9 +66,6 @@ public:
 	void PlayAudioBuffer(uint32_t cycle);
 	void AddDelta(AudioChannel channel, uint32_t time, int16_t delta);
 
-	void SetExpansionAudioType(AudioChannel channel);
-	void AddExpansionAudioDelta(uint32_t time, int16_t delta);
-	
 	static void StartRecording(string filepath);
 	static void StopRecording();
 	static bool IsRecording();
