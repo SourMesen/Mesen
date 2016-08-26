@@ -623,6 +623,11 @@ namespace Mesen.GUI.Forms
 					mnuDebugger.Enabled = !netPlay && _emuThread != null;
 
 					mnuTakeScreenshot.Enabled = _emuThread != null && !InteropEmu.IsNsf();
+					mnuNetPlay.Enabled = !InteropEmu.IsNsf();
+					if(_emuThread != null && InteropEmu.IsNsf()) {
+						mnuStop.Enabled = false;
+						mnuMovies.Enabled = mnuPlayMovie.Enabled = mnuStopMovie.Enabled = mnuRecordFrom.Enabled = mnuRecordFromStart.Enabled = mnuRecordFromNow.Enabled = false;
+					}
 
 					mnuRegionAuto.Checked = ConfigManager.Config.Region == NesModel.Auto;
 					mnuRegionNtsc.Checked = ConfigManager.Config.Region == NesModel.NTSC;
@@ -1499,6 +1504,12 @@ namespace Mesen.GUI.Forms
 		private void InitializeNsfMode(bool updateTextOnly = false, bool gameLoaded = false)
 		{
 			if(this.InvokeRequired) {
+				if(InteropEmu.IsConnected()) {
+					InteropEmu.Disconnect();
+				}
+				if(InteropEmu.IsServerRunning()) {
+					InteropEmu.StopServer();
+				}
 				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode(updateTextOnly, gameLoaded)));
 			} else {
 				if(InteropEmu.IsNsf()) {
