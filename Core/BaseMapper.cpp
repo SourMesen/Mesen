@@ -89,11 +89,16 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 		MessageManager::DisplayMessage("Debug", "Tried to map undefined prg - page size too small for selected range.");
 		#endif
 		
-		//Make sure the range is no bigger than a single page, else we could read from unallocated memory
-		endAddr = startAddr + pageSize - 1;
+		//If range is bigger than a single page, keep going until we reach the last page
+		while(pageNumber < pageCount && startAddr <= endAddr - pageSize + 1) {
+			SetCpuMemoryMapping(startAddr, startAddr + pageSize - 1, source, accessType);
+			pageNumber++;
+			startAddr += pageSize;
+			source += pageSize;
+		}
+	} else {
+		SetCpuMemoryMapping(startAddr, endAddr, source, accessType);
 	}
-	
-	SetCpuMemoryMapping(startAddr, endAddr, source, accessType);
 }
 
 void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t *source, int8_t accessType)

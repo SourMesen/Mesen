@@ -118,9 +118,9 @@ protected:
 	virtual uint32_t GetChrRamSize() { return 0x0000; }
 
 	//Work ram is NOT saved - aka Expansion ram, etc.
-	virtual uint32_t GetWorkRamPageSize() { return HasBattery() ? 0 : 0x2000; }
-	virtual uint32_t GetWorkRamSize() { return 0x2000; }
-
+	virtual uint32_t GetWorkRamSize() { return HasBattery() ? 0 : 0x2000; }
+	virtual uint32_t GetWorkRamPageSize() { return 0x2000; }
+	
 	virtual uint16_t RegisterStartAddress() { return 0x8000; }
 	virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
 	virtual bool AllowRegisterRead() { return false; }
