@@ -2,10 +2,10 @@
 #include "EmulationSettings.h"
 #include "VsControlManager.h"
 
-//Version 0.4.1
+//Version 0.4.2
 uint16_t EmulationSettings::_versionMajor = 0;
 uint8_t EmulationSettings::_versionMinor = 4;
-uint8_t EmulationSettings::_versionRevision = 1;
+uint8_t EmulationSettings::_versionRevision = 2;
 
 Language EmulationSettings::_displayLanguage = Language::English;
 
