@@ -236,6 +236,7 @@
       <Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
       <Control ID="chkAllowInvalidInput">Разрешить недопустимые комбинации (Вниз+Вверх и Влево+Вправо)</Control>
       <Control ID="chkRemoveSpriteLimit">Отключить лимит спрайтов (уменьшает мерцание)</Control>
+      <Control ID="lblRamPowerOnState">Содержимое ОЗУ при включении : </Control>
 
       <Control ID="tpgOverclocking">Разгон</Control>
       <Control ID="grpOverclocking">Разгон CPU</Control>
@@ -318,36 +319,55 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>
     </Form>
-    <Form ID="frmCheatImport" Title="Import Cheats">
-      <Control ID="grpImportOptions">Import Options</Control>
-      <Control ID="lblCheatFile">Cheat File:</Control>
+    <Form ID="frmCheatImport" Title="Импорт читов">
+      <Control ID="grpImportOptions">Настройки импорта</Control>
+      <Control ID="lblCheatFile">Файл:</Control>
       <Control ID="lblGame">Игра:</Control>
       <Control ID="btnBrowseCheat">Выбрать...</Control>
       <Control ID="btnBrowseGame">Выбрать...</Control>
-      <Control ID="btnImport">Import</Control>
+      <Control ID="btnImport">Импорт</Control>
+      <Control ID="btnCancel">Отмена</Control>
+    </Form>
+    <Form ID="frmCheatImportFromDb" Title="Выбор игры...">
+      <Control ID="lblSearch">Поиск :</Control>
+      <Control ID="btnOK">Импорт</Control>
       <Control ID="btnCancel">Отмена</Control>
     </Form>
     <Form ID="frmCheatList" Title="Читы">
       <Control ID="tabCheats">Читы</Control>
-      <Control ID="chkCurrentGameOnly">Показывать читы только для текущей игры</Control>
       <Control ID="btnAddCheat">Добавить чит</Control>
       <Control ID="btnDelete">Удалить</Control>
       <Control ID="btnDeleteCheat">Удалить выбранные читы</Control>
-      <Control ID="btnDeleteGameCheats">Delete all cheats for selected game</Control>
+      <Control ID="btnDeleteGameCheats">Удалить все читы для выбранной игры</Control>
       <Control ID="mnuAddCheat">Добавить чит</Control>
       <Control ID="mnuDeleteGameCheats">Удалить</Control>
       <Control ID="mnuDeleteCheat">Удалить</Control>
       <Control ID="colGameName">Игра</Control>
       <Control ID="colCheatName">Описание чита</Control>
       <Control ID="colCode">Код</Control>
-      <Control ID="btnImport">Import</Control>
-      <Control ID="btnExport">Export</Control>
-      <Control ID="btnExportAllCheats">All cheats</Control>
-      <Control ID="btnExportGame">Selected Game</Control>
-      <Control ID="mnuExportGame">Export</Control>
-      <Control ID="btnExportSelectedCheats">Selected Cheats</Control>
-      <Control ID="mnuExportSelectedCheats">Export</Control>
-      <Control ID="chkDisableCheats">Disable all cheats</Control>
+      <Control ID="btnImport">Импорт</Control>
+      <Control ID="btnImportCheatDB">Из базы данных</Control>
+      <Control ID="btnImportFromFile">Из файла (XML, CHT)</Control>
+      <Control ID="btnExport">Экспорт</Control>
+      <Control ID="btnExportAllCheats">Все читы</Control>
+      <Control ID="btnExportGame">Для выбранной игры</Control>
+      <Control ID="mnuExportGame">Экспорт</Control>
+      <Control ID="btnExportSelectedCheats">Выбранные читы</Control>
+      <Control ID="mnuExportSelectedCheats">Экспорт</Control>
+      <Control ID="chkDisableCheats">Отключить все читы</Control>
+
+      <Control ID="tpgCheatFinder">Поиск читов</Control>
+      <Control ID="btnReset">Сброс</Control>
+      <Control ID="btnUndo">Отмена</Control>
+      <Control ID="lblCurrentValue">Текущее значение</Control>
+      <Control ID="lblPreviousValue">Предыдущее значение</Control>
+      <Control ID="btnAddCurrentFilter">Добавить фильтр</Control>
+      <Control ID="btnAddPrevFilter">Добавить фильтр</Control>
+      <Control ID="btnCreateCheat">Создать чит</Control>
+      <Control ID="mnuCreateCheat">Создать чит</Control>
+      <Control ID="lblAtAddress"></Control>
+      <Control ID="chkPauseGameWhileWindowActive">Ставить на паузу когда окно неактивно</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>
     </Form>
@@ -389,6 +409,9 @@
       <Control ID="btnCancel">Отмена</Control>
     </Form>
     <Form ID="frmSelectRom" Title="Выбрать игру">
+      <Control ID="lblSearch">Поиск :</Control>
+      <Control ID="btnOK">ОК</Control>
+      <Control ID="btnCancel">Отмена</Control>
     </Form>
   </Forms>
   <Messages>
@@ -410,6 +433,9 @@
     <Message ID="PlayerNumber">Игрок {0}</Message>
 
     <Message ID="RomsFound">{0} Найденные ROM  файлы</Message>
+
+    <Message ID="CheatsFound">игр {0}, читов {1}</Message>
+    <Message ID="CheatsImported">{0} читов импортировано для {1}.</Message>
 
     <Message ID="NsfNextTrack">Следующий трек (Зажмите для перемотки)</Message>
     <Message ID="NsfUnnamedTrack">&lt;безымянный&gt;</Message>
@@ -512,6 +538,23 @@
       <Value ID="Japanese">日本語</Value>
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
+    </Enum>
+    <Enum ID="RamPowerOnState">
+      <Value ID="AllZeros">Все 0 (По умолчанию)</Value>
+      <Value ID="AllOnes">Все 1</Value>
+      <Value ID="Random">Случайные значения</Value>
+    </Enum>
+    <Enum ID="CheatCurrentFilterType">
+      <Value ID="Smaller">Меньше чем</Value>
+      <Value ID="Equal">Равно</Value>
+      <Value ID="NotEqual">Не равно</Value>
+      <Value ID="Greater">Больше чем</Value>
+    </Enum>
+    <Enum ID="CheatPrevFilterType">
+      <Value ID="Smaller">Меньше</Value>
+      <Value ID="Equal">Равно</Value>
+      <Value ID="NotEqual">Не равно</Value>
+      <Value ID="Greater">Больше</Value>
     </Enum>
   </Enums>
 </Resources>
