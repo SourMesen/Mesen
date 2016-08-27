@@ -90,7 +90,7 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 		#endif
 		
 		//If range is bigger than a single page, keep going until we reach the last page
-		while(pageNumber < pageCount && startAddr <= endAddr - pageSize + 1) {
+		while((uint32_t)pageNumber < pageCount && startAddr <= endAddr - pageSize + 1) {
 			SetCpuMemoryMapping(startAddr, startAddr + pageSize - 1, source, accessType);
 			pageNumber++;
 			startAddr += pageSize;
@@ -425,10 +425,16 @@ void BaseMapper::Initialize(RomData &romData)
 	_romFilename = romData.Filename;
 	_batteryFilename = GetBatteryFilename();
 	
+	_hasBattery = (romData.HasBattery || ForceBattery());
+
 	if(romData.SaveRamSize == -1 || ForceSaveRamSize()) {
 		_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
 	} else {
 		_saveRamSize = romData.SaveRamSize;
+	}
+
+	if(_saveRamSize == 0) {
+		_hasBattery = false;
 	}
 
 	if(romData.WorkRamSize == -1 || ForceWorkRamSize()) {
@@ -458,7 +464,6 @@ void BaseMapper::Initialize(RomData &romData)
 		memcpy(_chrRom, romData.ChrRom.data(), _chrRomSize);
 	}
 
-	_hasBattery = (romData.HasBattery || ForceBattery()) && _saveRamSize > 0;
 	_hasChrBattery = romData.SaveChrRamSize > 0 || ForceChrBattery();
 
 	_gameSystem = romData.System;

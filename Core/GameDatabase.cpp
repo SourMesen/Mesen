@@ -3,6 +3,7 @@
 #include "RomData.h"
 #include "MessageManager.h"
 #include "../Utilities/CRC32.h"
+#include "../Utilities/FolderUtilities.h"
 #include "GameDatabase.h"
 #include "EmulationSettings.h"
 
@@ -31,7 +32,8 @@ vector<string> GameDatabase::split(const string &s, char delim)
 void GameDatabase::InitDatabase()
 {
 	if(_gameDatabase.size() == 0) {
-		ifstream db("MesenDB.txt", ios::in | ios::binary);
+		string dbPath = FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "MesenDB.txt");
+		ifstream db(dbPath, ios::in | ios::binary);
 		while(db.good()) {
 			string lineContent;
 			std::getline(db, lineContent);
@@ -280,8 +282,12 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 	romData.System = GetGameSystem(info.System);
 	romData.SubMapperID = GetSubMapper(info);
 	romData.ChrRamSize = info.ChrRamSize * 1024;
-	romData.WorkRamSize = info.WorkRamSize * 1024;
-	romData.SaveRamSize = info.SaveRamSize * 1024;
+	if(info.WorkRamSize > 0) {
+		romData.WorkRamSize = info.WorkRamSize * 1024;
+	}
+	if(info.SaveRamSize > 0) {
+		romData.SaveRamSize = info.SaveRamSize * 1024;
+	}
 	romData.HasBattery |= info.HasBattery;
 
 	if(!info.Mirroring.empty()) {
