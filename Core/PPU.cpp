@@ -744,9 +744,9 @@ void PPU::ProcessVisibleScanline()
 void PPU::CopyOAMData()
 {
 	if(_cycle < 65) {
-		//Clear secondary OAM at between cycle 0 and 64
+		//Clear secondary OAM at between cycle 1 and 64
 		_oamCopybuffer = 0xFF;
-		_secondarySpriteRAM[_cycle >> 1] = _oamCopybuffer;		
+		_secondarySpriteRAM[(_cycle - 1) >> 1] = 0xFF;
 	} else {
 		if(_cycle == 65) {
 			_sprite0Added = false;
