@@ -725,6 +725,16 @@ namespace Mesen.GUI.Forms
 				}
 			}
 
+			#if !HIDETESTMENU
+			if(keyData == Keys.Pause) {
+				if(InteropEmu.RomTestRecording()) {
+					InteropEmu.RomTestStop();
+				} else {
+					InteropEmu.RomTestRecord(ConfigManager.TestFolder + "\\" + InteropEmu.GetRomInfo().GetRomName() + ".mtp", true);
+				}
+			}
+			#endif
+
 			if(keyData == Keys.Escape && _emuThread != null && mnuPause.Enabled) {
 				PauseEmu();
 				return true;
@@ -1087,6 +1097,16 @@ namespace Mesen.GUI.Forms
 			string workingDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
 			ProcessStartInfo startInfo = new ProcessStartInfo();
 			startInfo.FileName = "TestHelper.exe";
+			startInfo.WorkingDirectory = workingDirectory;
+			Process.Start(startInfo);
+		}
+		
+		private void mnuRunAllGameTests_Click(object sender, EventArgs e)
+		{
+			string workingDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+			ProcessStartInfo startInfo = new ProcessStartInfo();
+			startInfo.FileName = "TestHelper.exe";
+			startInfo.Arguments = "\"" + Path.Combine(ConfigManager.HomeFolder, "TestGames") + "\"";
 			startInfo.WorkingDirectory = workingDirectory;
 			Process.Start(startInfo);
 		}

@@ -165,6 +165,7 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRunAllGameTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -1134,7 +1135,8 @@ namespace Mesen.GUI.Forms
             this.mnuTestRun,
             this.mnuTestRecordFrom,
             this.mnuTestStopRecording,
-            this.mnuRunAllTests});
+            this.mnuRunAllTests,
+            this.mnuRunAllGameTests});
 			this.mnuTests.Name = "mnuTests";
 			this.mnuTests.Size = new System.Drawing.Size(185, 22);
 			this.mnuTests.Text = "Tests";
@@ -1274,6 +1276,13 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(170, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
+			// 
+			// mnuRunAllGameTests
+			// 
+			this.mnuRunAllGameTests.Name = "mnuRunAllGameTests";
+			this.mnuRunAllGameTests.Size = new System.Drawing.Size(192, 22);
+			this.mnuRunAllGameTests.Text = "Run all game tests";
+			this.mnuRunAllGameTests.Click += new System.EventHandler(this.mnuRunAllGameTests_Click);
 			// 
 			// frmMain
 			// 
@@ -1435,6 +1444,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuPrescale3xFilter;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem20;
 		private System.Windows.Forms.ToolStripMenuItem mnuReportBug;
+		private System.Windows.Forms.ToolStripMenuItem mnuRunAllGameTests;
 	}
 }
 

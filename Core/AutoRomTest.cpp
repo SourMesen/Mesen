@@ -234,11 +234,11 @@ int32_t AutoRomTest::Run(string filename)
 		_runningTest = true;
 
 		//Start playing movie
-		Console::LoadROM("TestRom", &testRom);
+		Console::LoadROM(testName, &testRom);
 		Movie::Play(testMovie, false);
 
 		Console::Resume();
-
+		EmulationSettings::ClearFlags(EmulationFlags::Paused);
 		_signal.Wait();
 		_runningTest = false;
 
