@@ -269,6 +269,9 @@ protected:
 	virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
 	virtual uint32_t GetWorkRamSize() { return 0x400; } 
 	virtual uint32_t GetWorkRamPageSize() { return 0x400; }
+	virtual bool ForceSaveRamSize() { return true; }
+	virtual bool ForceWorkRamSize() { return true; }
+
 	virtual bool AllowRegisterRead() { return true; }
 
 	virtual void InitMapper()

@@ -425,13 +425,13 @@ void BaseMapper::Initialize(RomData &romData)
 	_romFilename = romData.Filename;
 	_batteryFilename = GetBatteryFilename();
 	
-	if(romData.SaveRamSize == -1) {
+	if(romData.SaveRamSize == -1 || ForceSaveRamSize()) {
 		_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
 	} else {
 		_saveRamSize = romData.SaveRamSize;
 	}
 
-	if(romData.WorkRamSize == -1) {
+	if(romData.WorkRamSize == -1 || ForceWorkRamSize()) {
 		_workRamSize = GetWorkRamSize();
 	} else {
 		_workRamSize = romData.WorkRamSize;

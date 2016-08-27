@@ -114,6 +114,9 @@ protected:
 	virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
 	virtual bool ForceBattery() { return false; }
 	virtual bool ForceChrBattery() { return false; }
+	
+	virtual bool ForceSaveRamSize() { return false; }
+	virtual bool ForceWorkRamSize() { return false; }
 
 	virtual uint32_t GetChrRamSize() { return 0x0000; }
 
