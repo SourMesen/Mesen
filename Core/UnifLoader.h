@@ -32,13 +32,13 @@ private:
 		{ "AX5705", MapperFactory::UnknownBoard },
 		{ "BB", MapperFactory::UnknownBoard },
 		{ "BS-5", MapperFactory::UnknownBoard },
-		{ "CC-21", 27 },
+		{ "CC-21", MapperFactory::UnknownBoard },
 		{ "CITYFIGHT", MapperFactory::UnknownBoard },
 		{ "10-24-C-A1", MapperFactory::UnknownBoard },
 		{ "CNROM", 3 },
 		{ "CPROM", 13 },
 		{ "D1038", 60 },
-		{ "DANCE", MapperFactory::UnknownBoard },	// redundant
+		{ "DANCE", MapperFactory::UnknownBoard },
 		{ "DANCE2000", MapperFactory::UnknownBoard },
 		{ "DREAMTECH01", MapperFactory::UnknownBoard },
 		{ "EDU2000", MapperFactory::UnknownBoard },
@@ -112,9 +112,9 @@ private:
 		{ "SNROM", 1 },
 		{ "SOROM", 1 },
 		{ "SSS-NROM-256", MapperFactory::UnknownBoard },
-		{ "SUNSOFT_UNROM", 93 },	// fix me, real pcb name, real pcb type
+		{ "SUNSOFT_UNROM", 93 },
 		{ "Sachen-74LS374N", 150 },
-		{ "Sachen-74LS374NA", 243 },	//seems to be custom mapper
+		{ "Sachen-74LS374NA", 243 },
 		{ "Sachen-8259A", 141 },
 		{ "Sachen-8259B", 138 },
 		{ "Sachen-8259C", 139 },
