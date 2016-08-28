@@ -317,10 +317,7 @@ namespace InteropEmu {
 
 		DllExport bool __stdcall RomTestRecording() { return _autoRomTest != nullptr; }
 
-		DllExport void __stdcall CheatAddCustom(uint32_t address, uint8_t value, int32_t compareValue, bool isRelativeAddress) { CheatManager::AddCustomCode(address, value, compareValue, isRelativeAddress); }
-		DllExport void __stdcall CheatAddGameGenie(char* code) { CheatManager::AddGameGenieCode(code); }
-		DllExport void __stdcall CheatAddProActionRocky(uint32_t code) { CheatManager::AddProActionRockyCode(code); }
-		DllExport void __stdcall CheatClear() { CheatManager::ClearCodes(); }
+		DllExport void __stdcall SetCheats(CheatInfo cheats[], uint32_t length) { CheatManager::SetCheats(cheats, length); }
 
 		DllExport void __stdcall SetFlags(EmulationFlags flags) { EmulationSettings::SetFlags(flags); }
 		DllExport void __stdcall ClearFlags(EmulationFlags flags) { EmulationSettings::ClearFlags(flags); }

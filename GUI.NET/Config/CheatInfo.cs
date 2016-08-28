@@ -41,45 +41,41 @@ namespace Mesen.GUI.Config
 			return string.Empty;
 		}
 
-		public void ApplyCheat()
-		{
-			switch(CheatType) {
-				case CheatType.Custom:
-					InteropEmu.CheatAddCustom(Address, Value, UseCompareValue ? CompareValue : -1, IsRelativeAddress);
-					break;
-
-				case Config.CheatType.GameGenie:
-					InteropEmu.CheatAddGameGenie(GameGenieCode);
-					break;
-
-				case Config.CheatType.ProActionRocky:
-					InteropEmu.CheatAddProActionRocky(ProActionRockyCode);
-					break;
-			}
-		}
-
 		public static void ClearCheats()
 		{
-			InteropEmu.CheatClear();
+			InteropEmu.SetCheats(new InteropCheatInfo[] { }, 0);
+		}
+
+		private InteropCheatInfo ToInterop()
+		{
+			byte[] ggCode = Encoding.UTF8.GetBytes(GameGenieCode ?? "");
+			Array.Resize(ref ggCode, 9);
+
+			return new InteropCheatInfo() {
+				CheatType = CheatType,
+				GameGenieCode = ggCode,
+				ProActionRockyCode = ProActionRockyCode,
+				Address = Address,
+				Value = Value,
+				CompareValue = CompareValue,
+				UseCompareValue = UseCompareValue,
+				IsRelativeAddress = IsRelativeAddress
+			};
 		}
 
 		public static void ApplyCheats()
 		{
-			InteropEmu.CheatClear();
-
 			if(!ConfigManager.Config.DisableAllCheats) {
 				string crc = InteropEmu.GetRomInfo().GetPrgCrcString();
-				int cheatCount = 0;
-				foreach(CheatInfo cheat in ConfigManager.Config.Cheats.Where(c => c.GameCrc == crc)) {
-					if(cheat.Enabled) {
-						cheat.ApplyCheat();
-						cheatCount++;
-					}
-				}
 
-				if(cheatCount > 0) {
-					InteropEmu.DisplayMessage("Cheats", cheatCount > 1 ? "CheatsApplied" : "CheatApplied", cheatCount.ToString());
+				InteropCheatInfo[] cheats = ConfigManager.Config.Cheats.Where(c => c.GameCrc == crc).Select(cheat => cheat.ToInterop()).ToArray();
+				InteropEmu.SetCheats(cheats, (UInt32)cheats.Length);
+								
+				if(cheats.Length > 0) {
+					InteropEmu.DisplayMessage("Cheats", cheats.Length > 1 ? "CheatsApplied" : "CheatApplied", cheats.Length.ToString());
 				}
+			} else {
+				ClearCheats();
 			}
 		}
 	}

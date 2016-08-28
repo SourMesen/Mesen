@@ -1048,8 +1048,10 @@ namespace Mesen.GUI.Forms
 				_cheatListWindow = new frmCheatList();
 				_cheatListWindow.Show(sender, this);
 				_cheatListWindow.FormClosed += (s, evt) => {
-					_cheatListWindow = null;
-					CheatInfo.ApplyCheats();
+					if(_cheatListWindow.DialogResult == DialogResult.OK) {
+						CheatInfo.ApplyCheats();
+					}
+					_cheatListWindow = null;					
 				};
 			} else {
 				_cheatListWindow.Focus();

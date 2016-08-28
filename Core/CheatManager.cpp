@@ -84,7 +84,6 @@ CodeInfo CheatManager::GetPARCodeInfo(uint32_t parCode)
 
 void CheatManager::AddCode(CodeInfo &code)
 {
-	Console::Pause();
 	if(code.IsRelativeAddress) {
 		if(_relativeCheatCodes[code.Address] == nullptr) {
 			_relativeCheatCodes[code.Address].reset(new vector<CodeInfo>());
@@ -94,19 +93,18 @@ void CheatManager::AddCode(CodeInfo &code)
 		_absoluteCheatCodes.push_back(code);
 	}
 	MessageManager::SendNotification(ConsoleNotificationType::CheatAdded);
-	Console::Resume();
 }
 
 void CheatManager::AddGameGenieCode(string code)
 {
-	CodeInfo info = Instance->GetGGCodeInfo(code);
-	Instance->AddCode(info);
+	CodeInfo info = GetGGCodeInfo(code);
+	AddCode(info);
 }
 
 void CheatManager::AddProActionRockyCode(uint32_t code)
 {
-	CodeInfo info = Instance->GetPARCodeInfo(code);
-	Instance->AddCode(info);
+	CodeInfo info = GetPARCodeInfo(code);
+	AddCode(info);
 }
 
 void CheatManager::AddCustomCode(uint32_t address, uint8_t value, int32_t compareValue, bool isRelativeAddress)
@@ -117,29 +115,26 @@ void CheatManager::AddCustomCode(uint32_t address, uint8_t value, int32_t compar
 	code.CompareValue = compareValue;
 	code.IsRelativeAddress = isRelativeAddress;
 
-	Instance->AddCode(code);
+	AddCode(code);
 }
 
 void CheatManager::ClearCodes()
 {
 	bool cheatRemoved = false;
-	Console::Pause();
 
 	for(int i = 0; i <= 0xFFFF; i++) {
-		if(!Instance->_relativeCheatCodes[i]) {
+		if(!_relativeCheatCodes[i]) {
 			cheatRemoved = true;
 		}
-		Instance->_relativeCheatCodes[i] = nullptr;
+		_relativeCheatCodes[i].reset();
 	}
 
-	cheatRemoved |= Instance->_absoluteCheatCodes.size() > 0;
-	Instance->_absoluteCheatCodes.clear();
+	cheatRemoved |= _absoluteCheatCodes.size() > 0;
+	_absoluteCheatCodes.clear();
 	
 	if(cheatRemoved) {
 		MessageManager::SendNotification(ConsoleNotificationType::CheatRemoved);
 	}
-
-	Console::Resume();
 }
 
 void CheatManager::ApplyRamCodes(uint16_t addr, uint8_t &value)
@@ -180,6 +175,24 @@ vector<CodeInfo> CheatManager::GetCheats()
 	}
 	std::copy(Instance->_absoluteCheatCodes.begin(), Instance->_absoluteCheatCodes.end(), std::back_inserter(cheats));
 	return cheats;
+}
+
+void CheatManager::SetCheats(CheatInfo cheats[], uint32_t length)
+{
+	Console::Pause();
+
+	Instance->ClearCodes();
+
+	for(uint32_t i = 0; i < length; i++) {
+		CheatInfo &cheat = cheats[i];
+		switch(cheat.CheatType) {
+			case CheatType::Custom: Instance->AddCustomCode(cheat.Address, cheat.Value, cheat.UseCompareValue ? cheat.CompareValue : -1, cheat.IsRelativeAddress); break;
+			case CheatType::GameGenie: Instance->AddGameGenieCode(cheat.GameGenieCode);	break;
+			case CheatType::ProActionRocky: Instance->AddProActionRockyCode(cheat.ProActionRockyCode); break;
+		}
+	}
+
+	Console::Resume();
 }
 
 void CheatManager::SetCheats(vector<CodeInfo> &cheats)

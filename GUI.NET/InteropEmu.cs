@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI
@@ -119,10 +120,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void VsInsertCoin(UInt32 port);
 		[DllImport(DLLPath)] public static extern void VsSetGameConfig(PpuModel model, VsInputType inputType, byte dipSwitches);
 
-		[DllImport(DLLPath)] public static extern void CheatAddCustom(UInt32 address, Byte value, Int32 compareValue, [MarshalAs(UnmanagedType.I1)]bool isRelativeAddress);
-		[DllImport(DLLPath)] public static extern void CheatAddGameGenie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string code);
-		[DllImport(DLLPath)] public static extern void CheatAddProActionRocky(UInt32 code);
-		[DllImport(DLLPath)] public static extern void CheatClear();
+		[DllImport(DLLPath)] public static extern void SetCheats([MarshalAs(UnmanagedType.LPArray, SizeParamIndex=1)]InteropCheatInfo[] cheats, UInt32 length);
 
 		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
@@ -700,6 +698,21 @@ namespace Mesen.GUI
 			return this.PrgCrc32.ToString("X8");
 		}
 	};
+
+	public struct InteropCheatInfo
+	{
+		public CheatType CheatType;
+		public UInt32 ProActionRockyCode;
+		public UInt32 Address;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+		public byte[] GameGenieCode;
+		public byte Value;
+		public byte CompareValue;
+		[MarshalAs(UnmanagedType.I1)]
+		public bool UseCompareValue;
+		[MarshalAs(UnmanagedType.I1)]
+		public bool IsRelativeAddress;
+	}
 
 	public struct InteropBreakpoint
 	{
