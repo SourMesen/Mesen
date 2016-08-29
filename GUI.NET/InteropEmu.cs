@@ -227,14 +227,14 @@ namespace Mesen.GUI
 			}
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette);
-		public static byte[] DebugGetChrBank(int bankIndex, int palette)
+		[DllImport(DLLPath, EntryPoint="DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette, [MarshalAs(UnmanagedType.I1)]bool largeSprites);
+		public static byte[] DebugGetChrBank(int bankIndex, int palette, bool largeSprites)
 		{
 			byte[] frameData = new byte[128*128*4];
 
 			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetChrBankWrapper((UInt32)bankIndex, hFrameData.AddrOfPinnedObject(), (Byte)palette);
+				InteropEmu.DebugGetChrBankWrapper((UInt32)bankIndex, hFrameData.AddrOfPinnedObject(), (Byte)palette, largeSprites);
 			} finally {
 				hFrameData.Free();
 			}

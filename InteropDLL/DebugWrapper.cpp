@@ -45,7 +45,7 @@ extern "C"
 
 	DllExport uint32_t __stdcall DebugGetMemoryState(uint32_t type, uint8_t *buffer) { return GetDebugger()->GetMemoryState((DebugMemoryType)type, buffer); }
 	DllExport void __stdcall DebugGetNametable(uint32_t nametableIndex, uint32_t *frameBuffer, uint8_t *tileData, uint8_t *attributeData) { GetDebugger()->GetNametable(nametableIndex, frameBuffer, tileData, attributeData); }
-	DllExport void __stdcall DebugGetChrBank(uint32_t bankIndex, uint32_t *frameBuffer, uint8_t palette) { GetDebugger()->GetChrBank(bankIndex, frameBuffer, palette); }
+	DllExport void __stdcall DebugGetChrBank(uint32_t bankIndex, uint32_t *frameBuffer, uint8_t palette, bool largeSprites) { GetDebugger()->GetChrBank(bankIndex, frameBuffer, palette, largeSprites); }
 	DllExport void __stdcall DebugGetSprites(uint32_t *frameBuffer) { GetDebugger()->GetSprites(frameBuffer); }
 	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { GetDebugger()->GetPalette(frameBuffer); }
 	

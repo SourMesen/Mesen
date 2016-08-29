@@ -639,7 +639,7 @@ void Debugger::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* 
 	delete[] screenBuffer;
 }
 
-void Debugger::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette)
+void Debugger::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites)
 {
 	uint16_t *screenBuffer = new uint16_t[128 * 128];
 	uint16_t bgAddr = bankIndex == 0 ? 0x0000 : 0x1000;
@@ -653,7 +653,18 @@ void Debugger::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette)
 				uint8_t highByte = _mapper->ReadVRAM(tileAddr + i + 8);
 				for(uint8_t j = 0; j < 8; j++) {
 					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
-					screenBuffer[(y<<10)+(x<<3)+(i<<7)+j] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color);
+
+					uint32_t position;
+					if(largeSprites) {
+						int tmpX = x / 2 + ((y & 0x01) ? 8 : 0);
+						int tmpY = (y & 0xFE) + ((x & 0x01) ? 1 : 0);
+
+						position = (tmpY << 10) + (tmpX << 3) + (i << 7) + j;
+					} else {
+						position = (y << 10) + (x << 3) + (i << 7) + j;
+					}
+
+					screenBuffer[position] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color);
 				}
 			}
 		}

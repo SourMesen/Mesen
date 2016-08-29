@@ -41,6 +41,7 @@
 			this.lblPalette = new System.Windows.Forms.Label();
 			this.cboPalette = new System.Windows.Forms.ComboBox();
 			this.picChrBank2 = new System.Windows.Forms.PictureBox();
+			this.chkLargeSprites = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpTileInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -75,10 +76,10 @@
 			// 
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel4);
 			this.grpTileInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpTileInfo.Location = new System.Drawing.Point(263, 31);
+			this.grpTileInfo.Location = new System.Drawing.Point(263, 56);
 			this.grpTileInfo.Name = "grpTileInfo";
 			this.tableLayoutPanel3.SetRowSpan(this.grpTileInfo, 2);
-			this.grpTileInfo.Size = new System.Drawing.Size(180, 488);
+			this.grpTileInfo.Size = new System.Drawing.Size(180, 463);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -105,7 +106,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(174, 469);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(174, 444);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// txtTileAddress
@@ -179,10 +180,11 @@
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.lblPalette);
 			this.flowLayoutPanel1.Controls.Add(this.cboPalette);
+			this.flowLayoutPanel1.Controls.Add(this.chkLargeSprites);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(260, 0);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(166, 28);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(180, 53);
 			this.flowLayoutPanel1.TabIndex = 5;
 			// 
 			// lblPalette
@@ -225,6 +227,17 @@
 			this.picChrBank2.TabStop = false;
 			this.picChrBank2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseMove);
 			// 
+			// chkLargeSprites
+			// 
+			this.chkLargeSprites.AutoSize = true;
+			this.chkLargeSprites.Location = new System.Drawing.Point(3, 30);
+			this.chkLargeSprites.Name = "chkLargeSprites";
+			this.chkLargeSprites.Size = new System.Drawing.Size(133, 17);
+			this.chkLargeSprites.TabIndex = 2;
+			this.chkLargeSprites.Text = "Display as 8x16 sprites";
+			this.chkLargeSprites.UseVisualStyleBackColor = true;
+			this.chkLargeSprites.Click += new System.EventHandler(this.chkLargeSprites_Click);
+			// 
 			// ctrlChrViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -261,5 +274,6 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Label lblPalette;
 		private System.Windows.Forms.ComboBox cboPalette;
+		private System.Windows.Forms.CheckBox chkLargeSprites;
 	}
 }

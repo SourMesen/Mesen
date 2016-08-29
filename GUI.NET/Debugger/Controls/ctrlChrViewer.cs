@@ -30,7 +30,7 @@ namespace Mesen.GUI.Debugger.Controls
 			PictureBox[] chrBanks = new PictureBox[] { this.picChrBank1, this.picChrBank2 };
 
 			for(int i = 0; i < 2; i++) {
-				byte[] pixelData = InteropEmu.DebugGetChrBank(i, this.cboPalette.SelectedIndex);
+				byte[] pixelData = InteropEmu.DebugGetChrBank(i, this.cboPalette.SelectedIndex, this.chkLargeSprites.Checked);
 
 				GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
 				try {
@@ -51,6 +51,11 @@ namespace Mesen.GUI.Debugger.Controls
 		}
 
 		private void cboPalette_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			this.RefreshViewer();
+		}
+
+		private void chkLargeSprites_Click(object sender, EventArgs e)
 		{
 			this.RefreshViewer();
 		}
