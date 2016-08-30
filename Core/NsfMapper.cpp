@@ -10,6 +10,7 @@ NsfMapper::NsfMapper()
 	_instance = this;
 	EmulationSettings::DisableOverclocking(true);
 	EmulationSettings::ClearFlags(EmulationFlags::Paused);
+	EmulationSettings::SetFlags(EmulationFlags::NsfPlayerEnabled);
 }
 
 NsfMapper::~NsfMapper()
@@ -17,6 +18,7 @@ NsfMapper::~NsfMapper()
 	if(_instance == this) {
 		_instance = nullptr;
 		EmulationSettings::DisableOverclocking(false);
+		EmulationSettings::ClearFlags(EmulationFlags::NsfPlayerEnabled);
 	}
 }
 

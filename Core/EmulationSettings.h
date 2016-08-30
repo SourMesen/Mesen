@@ -34,6 +34,7 @@ enum EmulationFlags
 	SilenceTriangleHighFreq = 0x100000,
 
 	InBackground = 0x40000000,
+	NsfPlayerEnabled = 0x80000000,
 };
 
 enum class AudioChannel
