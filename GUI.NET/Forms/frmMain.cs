@@ -1526,11 +1526,13 @@ namespace Mesen.GUI.Forms
 		private void InitializeNsfMode(bool updateTextOnly = false, bool gameLoaded = false)
 		{
 			if(this.InvokeRequired) {
-				if(InteropEmu.IsConnected()) {
-					InteropEmu.Disconnect();
-				}
-				if(InteropEmu.IsServerRunning()) {
-					InteropEmu.StopServer();
+				if(InteropEmu.IsNsf()) {
+					if(InteropEmu.IsConnected()) {
+						InteropEmu.Disconnect();
+					}
+					if(InteropEmu.IsServerRunning()) {
+						InteropEmu.StopServer();
+					}
 				}
 				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode(updateTextOnly, gameLoaded)));
 			} else {
