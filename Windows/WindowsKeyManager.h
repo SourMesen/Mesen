@@ -17,7 +17,6 @@ struct KeyDefinition {
 class WindowsKeyManager : public IKeyManager
 {
 	private:
-		Timer _timer;
 		HWND _hWnd;
 		vector<uint32_t> _keyState;
 		unique_ptr<DirectInputManager> _directInput;
@@ -25,6 +24,11 @@ class WindowsKeyManager : public IKeyManager
 		std::unordered_map<uint32_t, string> _keyNames;
 		std::unordered_map<uint32_t, string> _keyExtendedNames;
 		std::unordered_map<string, uint32_t> _keyCodes;
+		
+		std::thread _updateDeviceThread;
+		atomic<bool> _stopUpdateDeviceThread = false;
+
+		void StartUpdateDeviceThread();
 
 	public:
 		WindowsKeyManager(HWND hWnd);

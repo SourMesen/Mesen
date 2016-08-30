@@ -11,6 +11,7 @@ class XInputManager
 	public:
 		XInputManager();
 
+		bool NeedToUpdate();
 		void UpdateDeviceList();
 		void RefreshState();
 		bool IsPressed(uint8_t gamepadPort, uint8_t button);

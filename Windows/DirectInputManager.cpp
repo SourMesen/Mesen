@@ -8,9 +8,13 @@
 #include <wbemidl.h>
 #include <oleauto.h>
 #include "DirectInputManager.h"
+#include <algorithm>
 
 LPDIRECTINPUT8 DirectInputManager::_directInput = nullptr;
 vector<DirectInputData> DirectInputManager::_joysticks;
+std::vector<GUID> DirectInputManager::_xinputDeviceGuids;
+std::vector<GUID> DirectInputManager::_directInputDeviceGuids;
+bool DirectInputManager::_needToUpdate;
 
 bool DirectInputManager::Initialize()
 {
@@ -32,6 +36,32 @@ bool DirectInputManager::Initialize()
 	}
 
 	return UpdateDeviceList();
+}
+
+bool DirectInputManager::ProcessDevice(const GUID* deviceGuid, bool checkOnly)
+{
+	auto comp = [=](GUID guid) {
+		return guid.Data1 == deviceGuid->Data1 &&
+			guid.Data2 == deviceGuid->Data2 &&
+			guid.Data3 == deviceGuid->Data3 &&
+			memcmp(guid.Data4, deviceGuid->Data4, sizeof(guid.Data4)) == 0;
+	};
+
+	bool knownXInputDevice = std::find_if(_xinputDeviceGuids.begin(), _xinputDeviceGuids.end(), comp) != _xinputDeviceGuids.end();
+	bool knownDirectInputDevice = std::find_if(_directInputDeviceGuids.begin(), _directInputDeviceGuids.end(), comp) != _directInputDeviceGuids.end();
+	if(knownXInputDevice || knownDirectInputDevice) {
+		return false;
+	} else {
+		bool isXInput = IsXInputDevice(deviceGuid);
+		if(!checkOnly) {
+			if(isXInput) {
+				_xinputDeviceGuids.push_back(*deviceGuid);
+			} else {
+				_directInputDeviceGuids.push_back(*deviceGuid);
+			}
+		}
+		return !isXInput;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -118,6 +148,7 @@ bool DirectInputManager::IsXInputDevice(const GUID* pGuidProductFromDirectInput)
 					}
 				}
 			}
+			VariantClear(&var);
 			pDevices[iDevice]->Release();
 			pDevices[iDevice] = nullptr;
 		}
@@ -155,16 +186,31 @@ LCleanup:
 	return bIsXinputDevice;
 }
 
+bool DirectInputManager::NeedToUpdate()
+{
+	HRESULT hr;
+	_needToUpdate = false;
+	// Enumerate devices
+	if(FAILED(hr = _directInput->EnumDevices(DI8DEVCLASS_GAMECTRL, NeedToUpdateCallback, nullptr, DIEDFL_ALLDEVICES))) {
+		return false;
+	}
+	return _needToUpdate;
+}
+
+int DirectInputManager::NeedToUpdateCallback(const DIDEVICEINSTANCE* pdidInstance, void* pContext)
+{
+	if(ProcessDevice(&pdidInstance->guidProduct, true)) {
+		_needToUpdate = true;
+		return DIENUM_STOP;
+	}
+
+	return DIENUM_CONTINUE;
+}
+
 
 bool DirectInputManager::UpdateDeviceList()
 {
 	HRESULT hr;
-
-	for(DirectInputData &data : _joysticks) {
-		data.joystick->Unacquire();
-		data.joystick->Release();
-	}
-	_joysticks.clear();
 
 	// Enumerate devices
 	if(FAILED(hr = _directInput->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, nullptr, DIEDFL_ALLDEVICES))) {
@@ -215,7 +261,7 @@ int DirectInputManager::EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstan
 {
 	HRESULT hr;
 
-	if(!IsXInputDevice(&pdidInstance->guidProduct)) {
+	if(ProcessDevice(&pdidInstance->guidProduct, false)) {
 		// Obtain an interface to the enumerated joystick.
 		LPDIRECTINPUTDEVICE8 pJoystick = nullptr;
 		hr = _directInput->CreateDevice(pdidInstance->guidInstance, &pJoystick, nullptr);

@@ -21,6 +21,20 @@ void XInputManager::RefreshState()
 	}
 }
 
+bool XInputManager::NeedToUpdate()
+{
+	bool needToUpdate = false;
+	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
+		if(_gamePadStates[i] == nullptr) {
+			XINPUT_STATE state;
+			if(XInputGetState(i, &state) == ERROR_SUCCESS) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 void XInputManager::UpdateDeviceList()
 {
 	//Periodically detect if a controller has been plugged in to allow controllers to be plugged in after the emu is started
