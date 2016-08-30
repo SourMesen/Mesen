@@ -336,6 +336,7 @@
     <ClInclude Include="nes_ntsc.h" />
     <ClInclude Include="nes_ntsc_config.h" />
     <ClInclude Include="nes_ntsc_impl.h" />
+    <ClInclude Include="PlatformUtilities.h" />
     <ClInclude Include="PNGHelper.h" />
     <ClInclude Include="Scale2x\scale2x.h" />
     <ClInclude Include="Scale2x\scale3x.h" />
@@ -369,6 +370,7 @@
     <ClCompile Include="md5.cpp" />
     <ClCompile Include="miniz.cpp" />
     <ClCompile Include="nes_ntsc.cpp" />
+    <ClCompile Include="PlatformUtilities.cpp" />
     <ClCompile Include="PNGHelper.cpp" />
     <ClCompile Include="AutoResetEvent.cpp" />
     <ClCompile Include="Scale2x\scale2x.cpp" />

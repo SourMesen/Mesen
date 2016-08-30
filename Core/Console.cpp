@@ -11,6 +11,7 @@
 #include "EmulationSettings.h"
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
+#include "../Utilities/PlatformUtilities.h"
 #include "HdPpu.h"
 #include "NsfPpu.h"
 #include "SoundMixer.h"
@@ -268,6 +269,8 @@ void Console::Run()
 	targetTime = GetFrameDelay();
 
 	VideoDecoder::GetInstance()->StartThread();
+
+	PlatformUtilities::DisableScreensaver();
 		
 	while(true) { 
 		try {
@@ -307,13 +310,15 @@ void Console::Run()
 				
 				//Prevent audio from looping endlessly while game is paused
 				SoundMixer::StopAudio();
-
+				
+				PlatformUtilities::EnableScreensaver();
 				while(paused) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
 					paused = EmulationSettings::IsPaused();
 				}
-				_runLock.Acquire();
+				PlatformUtilities::DisableScreensaver();
+				_runLock.Acquire();								
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
 			}
 
@@ -341,6 +346,7 @@ void Console::Run()
 	SoundMixer::StopAudio();
 	Movie::Stop();
 	SoundMixer::StopRecording();
+	PlatformUtilities::EnableScreensaver();
 
 	VideoDecoder::GetInstance()->StopThread();
 
