@@ -268,7 +268,6 @@
       <Control ID="chkAllowBackgroundInput">Permettre les entrées lorsque Mesen est en arrière-plan</Control>
       <Control ID="chkPauseWhenInBackground">Pauser l'émulation lorsque Mesen est en arrière-plan</Control>
       <Control ID="chkAutoLoadIps">Charger les fichiers IPS automatiquement</Control>
-      <Control ID="chkDisableScreensaver">Désactiver l'économiseur d'écran pendant le jeu</Control>
       <Control ID="btnOpenMesenFolder">Ouvrir le dossier de Mesen</Control>
       <Control ID="tpgFileAssociations">Associations de fichiers</Control>
       <Control ID="grpFileAssociations">Associations de fichiers</Control>

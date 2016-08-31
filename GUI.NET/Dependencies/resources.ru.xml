@@ -268,7 +268,6 @@
       <Control ID="chkAllowBackgroundInput">Разрешить ввод в фоне</Control>
       <Control ID="chkPauseWhenInBackground">Ставить на паузу при потере фокуса</Control>
       <Control ID="chkAutoLoadIps">Автоматически загружать IPS</Control>
-      <Control ID="chkDisableScreensaver">Отключить скринсейвер</Control>
       <Control ID="btnOpenMesenFolder">Открыть папку Mesen</Control>
       <Control ID="tpgFileAssociations">Ассоциации файлов</Control>
       <Control ID="grpFileAssociations">Ассоциации файлов</Control>

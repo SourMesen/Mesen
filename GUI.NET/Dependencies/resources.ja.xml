@@ -267,7 +267,6 @@
       <Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時、コントローラは反応しない</Control>
       <Control ID="chkPauseWhenInBackground">Mesenが最前面ではない時、自動的にポーズする</Control>
       <Control ID="chkAutoLoadIps">自動的にIPSファイルをロードする</Control>
-      <Control ID="chkDisableScreensaver">ゲーム中にスクリーンセーバーを無効にする</Control>
       <Control ID="btnOpenMesenFolder">Mesenのフォルダを開く</Control>
       <Control ID="tpgFileAssociations">ファイルの関連付け</Control>
       <Control ID="grpFileAssociations">ファイルの関連付け</Control>

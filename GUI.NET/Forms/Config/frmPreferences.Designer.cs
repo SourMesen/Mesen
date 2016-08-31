@@ -37,7 +37,6 @@
 			this.chkPauseWhenInBackground = new System.Windows.Forms.CheckBox();
 			this.chkAutoLoadIps = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-			this.chkDisableScreensaver = new System.Windows.Forms.CheckBox();
 			this.btnOpenMesenFolder = new System.Windows.Forms.Button();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblDisplayLanguage = new System.Windows.Forms.Label();
@@ -78,13 +77,13 @@
 			this.chkMmoFormat = new System.Windows.Forms.CheckBox();
 			this.chkMstFormat = new System.Windows.Forms.CheckBox();
 			this.chkNsfFormat = new System.Windows.Forms.CheckBox();
+			this.chkUnfFormat = new System.Windows.Forms.CheckBox();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkDisableGameDatabase = new System.Windows.Forms.CheckBox();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.chkUnfFormat = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -125,7 +124,6 @@
 			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 4);
 			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 3);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 0, 1);
-			this.tlpMain.Controls.Add(this.chkDisableScreensaver, 0, 7);
 			this.tlpMain.Controls.Add(this.btnOpenMesenFolder, 0, 9);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel2, 0, 0);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -215,18 +213,6 @@
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
 			this.flowLayoutPanel6.Size = new System.Drawing.Size(473, 1);
 			this.flowLayoutPanel6.TabIndex = 10;
-			// 
-			// chkDisableScreensaver
-			// 
-			this.chkDisableScreensaver.AutoSize = true;
-			this.chkDisableScreensaver.Enabled = false;
-			this.chkDisableScreensaver.Location = new System.Drawing.Point(3, 167);
-			this.chkDisableScreensaver.Name = "chkDisableScreensaver";
-			this.chkDisableScreensaver.Size = new System.Drawing.Size(245, 17);
-			this.chkDisableScreensaver.TabIndex = 11;
-			this.chkDisableScreensaver.Text = "Disable screensaver while emulation is running";
-			this.chkDisableScreensaver.UseVisualStyleBackColor = true;
-			this.chkDisableScreensaver.Visible = false;
 			// 
 			// btnOpenMesenFolder
 			// 
@@ -711,6 +697,16 @@
 			this.chkNsfFormat.Text = ".NSF (Nintendo Sound Format)";
 			this.chkNsfFormat.UseVisualStyleBackColor = true;
 			// 
+			// chkUnfFormat
+			// 
+			this.chkUnfFormat.AutoSize = true;
+			this.chkUnfFormat.Location = new System.Drawing.Point(3, 49);
+			this.chkUnfFormat.Name = "chkUnfFormat";
+			this.chkUnfFormat.Size = new System.Drawing.Size(85, 17);
+			this.chkUnfFormat.TabIndex = 16;
+			this.chkUnfFormat.Text = ".UNF (UNIF)";
+			this.chkUnfFormat.UseVisualStyleBackColor = true;
+			// 
 			// tpgAdvanced
 			// 
 			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel1);
@@ -777,16 +773,6 @@
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
-			// chkUnfFormat
-			// 
-			this.chkUnfFormat.AutoSize = true;
-			this.chkUnfFormat.Location = new System.Drawing.Point(3, 49);
-			this.chkUnfFormat.Name = "chkUnfFormat";
-			this.chkUnfFormat.Size = new System.Drawing.Size(85, 17);
-			this.chkUnfFormat.TabIndex = 16;
-			this.chkUnfFormat.Text = ".UNF (UNIF)";
-			this.chkUnfFormat.UseVisualStyleBackColor = true;
-			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -845,7 +831,6 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
 		private System.Windows.Forms.CheckBox chkSingleInstance;
 		private System.Windows.Forms.CheckBox chkPauseWhenInBackground;
-		private System.Windows.Forms.CheckBox chkDisableScreensaver;
 		private System.Windows.Forms.TabControl tabMain;
 		private System.Windows.Forms.TabPage tpgGeneral;
 		private System.Windows.Forms.TabPage tpgFileAssociations;
