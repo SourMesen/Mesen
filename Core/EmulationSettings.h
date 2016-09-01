@@ -305,6 +305,9 @@ private:
 
 	static InputDisplaySettings _inputDisplaySettings;
 
+	static uint32_t _autoSaveDelay;
+	static bool _autoSaveNotify;
+
 	static RamPowerOnState _ramPowerOnState;
 
 public:
@@ -776,5 +779,17 @@ public:
 	static RamPowerOnState GetRamPowerOnState()
 	{
 		return _ramPowerOnState;
+	}
+
+	static void SetAutoSaveOptions(uint32_t delayInMinutes, bool showMessage)
+	{
+		_autoSaveDelay = delayInMinutes;
+		_autoSaveNotify = showMessage;
+	}
+
+	static uint32_t GetAutoSaveDelay(bool &showMessage)
+	{
+		showMessage = _autoSaveNotify;
+		return _autoSaveDelay;
 	}
 };

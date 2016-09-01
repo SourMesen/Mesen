@@ -54,6 +54,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 	if(mapper) {
 		_romFilepath = romFilename;
 				
+		_autoSaveManager.reset(new AutoSaveManager());
 		VideoDecoder::GetInstance()->StopThread();
 
 		_mapper = mapper;
@@ -210,7 +211,7 @@ void Console::ResetComponents(bool softReset)
 	_controlManager->Reset(softReset);
 
 	_lagCounter = 0;
-	
+
 	SoundMixer::StopAudio(true);
 
 	if(softReset) {
@@ -262,6 +263,8 @@ void Console::Run()
 	Timer clockTimer;
 	double targetTime;
 	uint32_t lastFrameNumber = -1;
+	
+	_autoSaveManager.reset(new AutoSaveManager());
 
 	_runLock.Acquire();
 	_stopLock.Acquire();
@@ -347,6 +350,8 @@ void Console::Run()
 	Movie::Stop();
 	SoundMixer::StopRecording();
 	PlatformUtilities::EnableScreensaver();
+
+	_autoSaveManager.reset();
 
 	VideoDecoder::GetInstance()->StopThread();
 

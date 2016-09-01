@@ -755,7 +755,8 @@ namespace Mesen.GUI.Forms
 				this.BeginInvoke((MethodInvoker)(() => this.InitializeStateMenu(menu, forSave)));
 			} else {
 				menu.DropDownItems.Clear();
-				for(uint i = 1; i <= frmMain.NumberOfSaveSlots; i++) {
+
+				Action<uint> addSaveStateInfo = (i) => {
 					Int64 fileTime = InteropEmu.GetStateInfo(i);
 					string label;
 					if(fileTime == 0) {
@@ -778,10 +779,20 @@ namespace Mesen.GUI.Forms
 							}
 						}
 					};
+
 					item.ShortcutKeys = (Keys)((int)Keys.F1 + i - 1);
 					if(forSave) {
 						item.ShortcutKeys |= Keys.Shift;
 					}
+				};
+
+				for(uint i = 1; i <= frmMain.NumberOfSaveSlots; i++) {
+					addSaveStateInfo(i);
+				}
+
+				if(!forSave) {
+					menu.DropDownItems.Add("-");
+					addSaveStateInfo(6);
 				}
 			}
 		}

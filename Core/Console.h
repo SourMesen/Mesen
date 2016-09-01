@@ -7,6 +7,7 @@
 #include "MemoryManager.h"
 #include "ControlManager.h"
 #include "../Utilities/SimpleLock.h"
+#include "AutoSaveManager.h"
 
 class Debugger;
 class BaseMapper;
@@ -27,6 +28,8 @@ class Console
 		shared_ptr<BaseMapper> _mapper;
 		unique_ptr<ControlManager> _controlManager;
 		shared_ptr<MemoryManager> _memoryManager;
+
+		unique_ptr<AutoSaveManager> _autoSaveManager;
 
 		NesModel _model;
 

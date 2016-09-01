@@ -279,7 +279,13 @@
       <Control ID="chkFdsAutoLoadDisk">Insérer le côté A du disque 1 lors du chargement d'un jeu de FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Augmenter la vitesse d'émulation pendant le chargement des jeux FDS</Control>
 
-      <Control ID="tpgCloudSave">Sauvegarde en ligne</Control>
+      <Control ID="tpgSaveData">Sauvegardes</Control>
+      <Control ID="grpAutomaticSaves">Sauvegarde d'état automatique</Control>
+      <Control ID="chkAutoSave">Créer une sauvegarde d'état à chaque</Control>
+      <Control ID="lblAutoSave">minutes (Appuyer sur F6 pour charger)</Control>
+      <Control ID="chkAutoSaveNotify">Afficher une notification à l'écran au moment de la sauvegarde automatique</Control>
+
+      <Control ID="grpCloudSaves">Sauvegarde en ligne</Control>
       <Control ID="lblGoogleDriveIntegration">Mesen peut utiliser Google Drive pour mettre vos sauvegardes dans votre compte Google Drive.  Lorsque l'intégration est activée, toutes les données de sauvegarde de vos jeux (fichiers .sav et sauvegardes rapides) sont facilement accessibles à partir de n'importe quel ordinateur.</Control>
       <Control ID="lblIntegrationOK">L'intégration avec Google Drive est active.</Control>
       <Control ID="btnDisableIntegration">Désactiver l'intégration Google Drive</Control>
@@ -295,6 +301,7 @@
       <Control ID="chkNsfMoveToNextTrackAfterTime">Limiter la durée des pistes à</Control>
       <Control ID="lblNsfSeconds">secondes</Control>
       <Control ID="chkNsfDisableApuIrqs">Désactiver les IRQs du APU (Recommandé)</Control>
+      
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>

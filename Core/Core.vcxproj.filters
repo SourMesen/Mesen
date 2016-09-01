@@ -925,6 +925,9 @@
     <ClInclude Include="MMC3_219.h">
       <Filter>Nes\Mappers\MMC</Filter>
     </ClInclude>
+    <ClInclude Include="AutoSaveManager.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1094,6 +1097,9 @@
     </ClCompile>
     <ClCompile Include="OekaKidsTablet.cpp">
       <Filter>Nes\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoSaveManager.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -404,6 +404,7 @@
     <ClInclude Include="APU.h" />
     <ClInclude Include="ArkanoidController.h" />
     <ClInclude Include="AutoRomTest.h" />
+    <ClInclude Include="AutoSaveManager.h" />
     <ClInclude Include="Bandai74161_7432.h" />
     <ClInclude Include="BandaiFcg.h" />
     <ClInclude Include="BandaiKaraoke.h" />
@@ -683,6 +684,7 @@
     <ClCompile Include="ApuLengthCounter.cpp" />
     <ClCompile Include="ArkanoidController.cpp" />
     <ClCompile Include="AutoRomTest.cpp" />
+    <ClCompile Include="AutoSaveManager.cpp" />
     <ClCompile Include="BaseControlDevice.cpp" />
     <ClCompile Include="BaseMapper.cpp" />
     <ClCompile Include="BaseSoundFilter.cpp" />

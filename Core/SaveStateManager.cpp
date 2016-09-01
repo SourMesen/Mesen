@@ -27,7 +27,7 @@ uint64_t SaveStateManager::GetStateInfo(int stateIndex)
 	return 0;
 }
 
-void SaveStateManager::SaveState(int stateIndex)
+void SaveStateManager::SaveState(int stateIndex, bool displayMessage)
 {
 	string filepath = SaveStateManager::GetStateFilepath(stateIndex);
 	ofstream file(filepath, ios::out | ios::binary);
@@ -43,7 +43,10 @@ void SaveStateManager::SaveState(int stateIndex)
 		Console::SaveState(file);
 		Console::Resume();
 		file.close();		
-		MessageManager::DisplayMessage("SaveStates", "SaveStateSaved" , std::to_string(stateIndex));
+
+		if(displayMessage) {
+			MessageManager::DisplayMessage("SaveStates", "SaveStateSaved", std::to_string(stateIndex));
+		}
 	}
 }
 

@@ -278,7 +278,13 @@
       <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
 
-      <Control ID="tpgCloudSave">クラウドバックアップ</Control>
+      <Control ID="tpgSaveData">セーブデータ</Control>
+      <Control ID="grpAutomaticSaves">オートクイックセーブ</Control>
+      <Control ID="chkAutoSave">オートクイックセーブを</Control>
+      <Control ID="lblAutoSave">分おきにする（F6でクイックロード）</Control>
+      <Control ID="chkAutoSaveNotify">オートクイックセーブする際、通信を表示する</Control>
+
+      <Control ID="grpCloudSaves">クラウドバックアップ</Control>
       <Control ID="lblGoogleDriveIntegration">MesenはGoogle Driveを利用することでクラウドバックアップが出来ます。　Google Drive同期を有効にすれば、ゲームのセーブデータはGoogle Driveにバックアップされ、どんなパソコンからでもアクセスが可能になります。</Control>
       <Control ID="lblIntegrationOK">Google Drive同期は有効です。</Control>
       <Control ID="btnDisableIntegration">Google Drive同期を無効にする</Control>

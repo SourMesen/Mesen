@@ -23,6 +23,10 @@ namespace Mesen.GUI.Config
 		public bool AllowInvalidInput = false;
 		public bool RemoveSpriteLimit = false;
 
+		public bool AutoSave = true;
+		public Int32 AutoSaveDelay = 5;
+		public bool AutoSaveNotify = false;
+
 		public bool FdsAutoLoadDisk = true;
 		public bool FdsFastForwardOnLoad = false;
 
@@ -92,6 +96,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.DisableGameDatabase, preferenceInfo.DisableGameDatabase);
 
 			InteropEmu.NsfSetNsfConfig(preferenceInfo.NsfAutoDetectSilence ? preferenceInfo.NsfAutoDetectSilenceDelay : 0, preferenceInfo.NsfMoveToNextTrackAfterTime ? preferenceInfo.NsfMoveToNextTrackTime : -1, preferenceInfo.NsfDisableApuIrqs);
+			InteropEmu.SetAutoSaveOptions(preferenceInfo.AutoSave ? (uint)preferenceInfo.AutoSaveDelay : 0, preferenceInfo.AutoSaveNotify);
 		}
 	}
 }

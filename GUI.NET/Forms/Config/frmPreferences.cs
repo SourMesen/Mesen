@@ -49,6 +49,10 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("DisableGameDatabase", chkDisableGameDatabase);
 
+			AddBinding("AutoSave", chkAutoSave);
+			AddBinding("AutoSaveDelay", nudAutoSave);
+			AddBinding("AutoSaveNotify", chkAutoSaveNotify);
+
 			UpdateCloudDisplay();
 		}
 
@@ -128,6 +132,12 @@ namespace Mesen.GUI.Forms.Config
 		private void btnResync_Click(object sender, EventArgs e)
 		{
 			Task.Run(() => CloudSyncHelper.Sync());
+		}
+
+		private void chkAutoSave_CheckedChanged(object sender, EventArgs e)
+		{
+			nudAutoSave.Enabled = chkAutoSave.Checked;
+			chkAutoSaveNotify.Enabled = chkAutoSave.Checked;
 		}
 	}
 }

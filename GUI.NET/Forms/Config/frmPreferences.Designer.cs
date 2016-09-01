@@ -43,7 +43,7 @@
 			this.cboDisplayLanguage = new System.Windows.Forms.ComboBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
-			this.tpgCloudSave = new System.Windows.Forms.TabPage();
+			this.tpgSaveData = new System.Windows.Forms.TabPage();
 			this.tlpCloudSaves = new System.Windows.Forms.TableLayoutPanel();
 			this.tlpCloudSaveDesc = new System.Windows.Forms.TableLayoutPanel();
 			this.lblGoogleDriveIntegration = new System.Windows.Forms.Label();
@@ -84,11 +84,20 @@
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.grpCloudSaves = new System.Windows.Forms.GroupBox();
+			this.grpAutomaticSaves = new System.Windows.Forms.GroupBox();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.flpAutoSave = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkAutoSave = new System.Windows.Forms.CheckBox();
+			this.nudAutoSave = new System.Windows.Forms.NumericUpDown();
+			this.lblAutoSave = new System.Windows.Forms.Label();
+			this.chkAutoSaveNotify = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
-			this.tpgCloudSave.SuspendLayout();
+			this.tpgSaveData.SuspendLayout();
 			this.tlpCloudSaves.SuspendLayout();
 			this.tlpCloudSaveDesc.SuspendLayout();
 			this.tlpCloudSaveEnabled.SuspendLayout();
@@ -106,11 +115,17 @@
 			this.tlpFileFormat.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
+			this.grpCloudSaves.SuspendLayout();
+			this.grpAutomaticSaves.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
+			this.flpAutoSave.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudAutoSave)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 282);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 369);
 			this.baseConfigPanel.Size = new System.Drawing.Size(487, 29);
 			// 
 			// tlpMain
@@ -140,7 +155,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(473, 250);
+			this.tlpMain.Size = new System.Drawing.Size(473, 223);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// chkSingleInstance
@@ -217,7 +232,7 @@
 			// btnOpenMesenFolder
 			// 
 			this.btnOpenMesenFolder.AutoSize = true;
-			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 224);
+			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 197);
 			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
 			this.btnOpenMesenFolder.Size = new System.Drawing.Size(117, 23);
 			this.btnOpenMesenFolder.TabIndex = 16;
@@ -257,7 +272,7 @@
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
-			this.tabMain.Controls.Add(this.tpgCloudSave);
+			this.tabMain.Controls.Add(this.tpgSaveData);
 			this.tabMain.Controls.Add(this.tpgNsf);
 			this.tabMain.Controls.Add(this.tpgFileAssociations);
 			this.tabMain.Controls.Add(this.tpgAdvanced);
@@ -265,7 +280,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(487, 282);
+			this.tabMain.Size = new System.Drawing.Size(487, 369);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -274,21 +289,21 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(479, 256);
+			this.tpgGeneral.Size = new System.Drawing.Size(479, 229);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
 			// 
-			// tpgCloudSave
+			// tpgSaveData
 			// 
-			this.tpgCloudSave.Controls.Add(this.tlpCloudSaves);
-			this.tpgCloudSave.Location = new System.Drawing.Point(4, 22);
-			this.tpgCloudSave.Name = "tpgCloudSave";
-			this.tpgCloudSave.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgCloudSave.Size = new System.Drawing.Size(479, 256);
-			this.tpgCloudSave.TabIndex = 3;
-			this.tpgCloudSave.Text = "Cloud Saves";
-			this.tpgCloudSave.UseVisualStyleBackColor = true;
+			this.tpgSaveData.Controls.Add(this.tableLayoutPanel3);
+			this.tpgSaveData.Location = new System.Drawing.Point(4, 22);
+			this.tpgSaveData.Name = "tpgSaveData";
+			this.tpgSaveData.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgSaveData.Size = new System.Drawing.Size(479, 343);
+			this.tpgSaveData.TabIndex = 3;
+			this.tpgSaveData.Text = "Save Data";
+			this.tpgSaveData.UseVisualStyleBackColor = true;
 			// 
 			// tlpCloudSaves
 			// 
@@ -297,12 +312,12 @@
 			this.tlpCloudSaves.Controls.Add(this.tlpCloudSaveDesc, 0, 0);
 			this.tlpCloudSaves.Controls.Add(this.tlpCloudSaveEnabled, 0, 1);
 			this.tlpCloudSaves.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tlpCloudSaves.Location = new System.Drawing.Point(3, 3);
+			this.tlpCloudSaves.Location = new System.Drawing.Point(3, 16);
 			this.tlpCloudSaves.Name = "tlpCloudSaves";
 			this.tlpCloudSaves.RowCount = 2;
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpCloudSaves.Size = new System.Drawing.Size(473, 250);
+			this.tlpCloudSaves.Size = new System.Drawing.Size(461, 239);
 			this.tlpCloudSaves.TabIndex = 0;
 			// 
 			// tlpCloudSaveDesc
@@ -318,7 +333,7 @@
 			this.tlpCloudSaveDesc.RowCount = 2;
 			this.tlpCloudSaveDesc.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCloudSaveDesc.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpCloudSaveDesc.Size = new System.Drawing.Size(473, 100);
+			this.tlpCloudSaveDesc.Size = new System.Drawing.Size(461, 100);
 			this.tlpCloudSaveDesc.TabIndex = 0;
 			// 
 			// lblGoogleDriveIntegration
@@ -326,7 +341,7 @@
 			this.lblGoogleDriveIntegration.AutoSize = true;
 			this.lblGoogleDriveIntegration.Location = new System.Drawing.Point(3, 0);
 			this.lblGoogleDriveIntegration.Name = "lblGoogleDriveIntegration";
-			this.lblGoogleDriveIntegration.Size = new System.Drawing.Size(467, 52);
+			this.lblGoogleDriveIntegration.Size = new System.Drawing.Size(455, 52);
 			this.lblGoogleDriveIntegration.TabIndex = 0;
 			this.lblGoogleDriveIntegration.Text = resources.GetString("lblGoogleDriveIntegration.Text");
 			this.lblGoogleDriveIntegration.UseWaitCursor = true;
@@ -355,9 +370,9 @@
 			this.tlpCloudSaveEnabled.RowCount = 4;
 			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpCloudSaveEnabled.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpCloudSaveEnabled.Size = new System.Drawing.Size(473, 150);
+			this.tlpCloudSaveEnabled.Size = new System.Drawing.Size(461, 139);
 			this.tlpCloudSaveEnabled.TabIndex = 1;
 			// 
 			// btnDisableIntegration
@@ -378,7 +393,7 @@
 			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(473, 22);
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(461, 22);
 			this.flowLayoutPanel3.TabIndex = 1;
 			// 
 			// picOK
@@ -453,7 +468,7 @@
 			this.tpgNsf.Location = new System.Drawing.Point(4, 22);
 			this.tpgNsf.Name = "tpgNsf";
 			this.tpgNsf.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgNsf.Size = new System.Drawing.Size(479, 256);
+			this.tpgNsf.Size = new System.Drawing.Size(479, 259);
 			this.tpgNsf.TabIndex = 4;
 			this.tpgNsf.Text = "NSF / NSFe";
 			this.tpgNsf.UseVisualStyleBackColor = true;
@@ -472,7 +487,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(473, 250);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(473, 253);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// flowLayoutPanel7
@@ -596,7 +611,7 @@
 			this.tpgFileAssociations.Location = new System.Drawing.Point(4, 22);
 			this.tpgFileAssociations.Name = "tpgFileAssociations";
 			this.tpgFileAssociations.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgFileAssociations.Size = new System.Drawing.Size(479, 256);
+			this.tpgFileAssociations.Size = new System.Drawing.Size(479, 259);
 			this.tpgFileAssociations.TabIndex = 2;
 			this.tpgFileAssociations.Text = "File Associations";
 			this.tpgFileAssociations.UseVisualStyleBackColor = true;
@@ -607,7 +622,7 @@
 			this.grpFileAssociations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFileAssociations.Location = new System.Drawing.Point(3, 3);
 			this.grpFileAssociations.Name = "grpFileAssociations";
-			this.grpFileAssociations.Size = new System.Drawing.Size(473, 250);
+			this.grpFileAssociations.Size = new System.Drawing.Size(473, 253);
 			this.grpFileAssociations.TabIndex = 12;
 			this.grpFileAssociations.TabStop = false;
 			this.grpFileAssociations.Text = "File Associations";
@@ -633,7 +648,7 @@
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpFileFormat.Size = new System.Drawing.Size(467, 231);
+			this.tlpFileFormat.Size = new System.Drawing.Size(467, 234);
 			this.tlpFileFormat.TabIndex = 0;
 			// 
 			// chkNsfeFormat
@@ -713,7 +728,7 @@
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(479, 256);
+			this.tpgAdvanced.Size = new System.Drawing.Size(479, 259);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -773,11 +788,132 @@
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 1;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.grpCloudSaves, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.grpAutomaticSaves, 0, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 2;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(473, 337);
+			this.tableLayoutPanel3.TabIndex = 1;
+			// 
+			// grpCloudSaves
+			// 
+			this.grpCloudSaves.Controls.Add(this.tlpCloudSaves);
+			this.grpCloudSaves.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpCloudSaves.Location = new System.Drawing.Point(3, 76);
+			this.grpCloudSaves.Name = "grpCloudSaves";
+			this.grpCloudSaves.Size = new System.Drawing.Size(467, 258);
+			this.grpCloudSaves.TabIndex = 2;
+			this.grpCloudSaves.TabStop = false;
+			this.grpCloudSaves.Text = "Cloud Saves";
+			// 
+			// grpAutomaticSaves
+			// 
+			this.grpAutomaticSaves.Controls.Add(this.tableLayoutPanel4);
+			this.grpAutomaticSaves.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpAutomaticSaves.Location = new System.Drawing.Point(3, 3);
+			this.grpAutomaticSaves.Name = "grpAutomaticSaves";
+			this.grpAutomaticSaves.Size = new System.Drawing.Size(467, 67);
+			this.grpAutomaticSaves.TabIndex = 3;
+			this.grpAutomaticSaves.TabStop = false;
+			this.grpAutomaticSaves.Text = "Automatic Save States";
+			// 
+			// tableLayoutPanel4
+			// 
+			this.tableLayoutPanel4.ColumnCount = 1;
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Controls.Add(this.chkAutoSaveNotify, 0, 2);
+			this.tableLayoutPanel4.Controls.Add(this.flpAutoSave, 0, 0);
+			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
+			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+			this.tableLayoutPanel4.RowCount = 3;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(461, 48);
+			this.tableLayoutPanel4.TabIndex = 0;
+			// 
+			// flpAutoSave
+			// 
+			this.flpAutoSave.Controls.Add(this.chkAutoSave);
+			this.flpAutoSave.Controls.Add(this.nudAutoSave);
+			this.flpAutoSave.Controls.Add(this.lblAutoSave);
+			this.flpAutoSave.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flpAutoSave.Location = new System.Drawing.Point(0, 0);
+			this.flpAutoSave.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flpAutoSave.Name = "flpAutoSave";
+			this.flpAutoSave.Size = new System.Drawing.Size(461, 23);
+			this.flpAutoSave.TabIndex = 0;
+			// 
+			// chkAutoSave
+			// 
+			this.chkAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkAutoSave.AutoSize = true;
+			this.chkAutoSave.Location = new System.Drawing.Point(3, 4);
+			this.chkAutoSave.Name = "chkAutoSave";
+			this.chkAutoSave.Size = new System.Drawing.Size(211, 17);
+			this.chkAutoSave.TabIndex = 0;
+			this.chkAutoSave.Text = "Automatically create a save state every";
+			this.chkAutoSave.UseVisualStyleBackColor = true;
+			this.chkAutoSave.CheckedChanged += new System.EventHandler(this.chkAutoSave_CheckedChanged);
+			// 
+			// nudAutoSave
+			// 
+			this.nudAutoSave.Location = new System.Drawing.Point(220, 3);
+			this.nudAutoSave.Maximum = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+			this.nudAutoSave.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudAutoSave.Name = "nudAutoSave";
+			this.nudAutoSave.Size = new System.Drawing.Size(42, 20);
+			this.nudAutoSave.TabIndex = 1;
+			this.nudAutoSave.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			// 
+			// lblAutoSave
+			// 
+			this.lblAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblAutoSave.AutoSize = true;
+			this.lblAutoSave.Location = new System.Drawing.Point(268, 6);
+			this.lblAutoSave.Name = "lblAutoSave";
+			this.lblAutoSave.Size = new System.Drawing.Size(99, 13);
+			this.lblAutoSave.TabIndex = 2;
+			this.lblAutoSave.Text = "minutes (F6 to load)";
+			// 
+			// chkAutoSaveNotify
+			// 
+			this.chkAutoSaveNotify.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkAutoSaveNotify.AutoSize = true;
+			this.chkAutoSaveNotify.Location = new System.Drawing.Point(15, 27);
+			this.chkAutoSaveNotify.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
+			this.chkAutoSaveNotify.Name = "chkAutoSaveNotify";
+			this.chkAutoSaveNotify.Size = new System.Drawing.Size(240, 17);
+			this.chkAutoSaveNotify.TabIndex = 1;
+			this.chkAutoSaveNotify.Text = "Notify when an automatic save state is saved";
+			this.chkAutoSaveNotify.UseVisualStyleBackColor = true;
+			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(487, 311);
+			this.ClientSize = new System.Drawing.Size(487, 398);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -794,7 +930,7 @@
 			this.flowLayoutPanel2.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
-			this.tpgCloudSave.ResumeLayout(false);
+			this.tpgSaveData.ResumeLayout(false);
 			this.tlpCloudSaves.ResumeLayout(false);
 			this.tlpCloudSaveDesc.ResumeLayout(false);
 			this.tlpCloudSaveDesc.PerformLayout();
@@ -820,6 +956,14 @@
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.grpCloudSaves.ResumeLayout(false);
+			this.grpAutomaticSaves.ResumeLayout(false);
+			this.tableLayoutPanel4.ResumeLayout(false);
+			this.tableLayoutPanel4.PerformLayout();
+			this.flpAutoSave.ResumeLayout(false);
+			this.flpAutoSave.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudAutoSave)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -847,7 +991,7 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.Label lblDisplayLanguage;
 		private System.Windows.Forms.ComboBox cboDisplayLanguage;
-		private System.Windows.Forms.TabPage tpgCloudSave;
+		private System.Windows.Forms.TabPage tpgSaveData;
 		private System.Windows.Forms.TableLayoutPanel tlpCloudSaves;
 		private System.Windows.Forms.TableLayoutPanel tlpCloudSaveDesc;
 		private System.Windows.Forms.Label lblGoogleDriveIntegration;
@@ -881,5 +1025,14 @@
 		private System.Windows.Forms.Label lblNsfMillisecondsOfSilence;
 		private System.Windows.Forms.CheckBox chkNsfDisableApuIrqs;
 		private System.Windows.Forms.CheckBox chkUnfFormat;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+		private System.Windows.Forms.GroupBox grpCloudSaves;
+		private System.Windows.Forms.GroupBox grpAutomaticSaves;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.FlowLayoutPanel flpAutoSave;
+		private System.Windows.Forms.CheckBox chkAutoSave;
+		private System.Windows.Forms.NumericUpDown nudAutoSave;
+		private System.Windows.Forms.Label lblAutoSave;
+		private System.Windows.Forms.CheckBox chkAutoSaveNotify;
 	}
 }
