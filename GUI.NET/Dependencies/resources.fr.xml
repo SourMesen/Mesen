@@ -177,7 +177,23 @@
       <Control ID="tpgSet2">Mappage #2</Control>
       <Control ID="tpgSet3">Mappage #3</Control>
       <Control ID="tpgSet4">Mappage #4</Control>
-      <Control ID="btnReset">Réinitialiser</Control>
+
+      <Control ID="btnSelectPreset">Choisir un préréglage...</Control>
+      <Control ID="mnuKeyboard">Clavier</Control>
+      <Control ID="mnuWasdLayout">Déplacement avec WSAD</Control>
+      <Control ID="mnuArrowLayout">Déplacement avec les flèches</Control>
+      <Control ID="mnuFceuxLayout">Disposition par défaut de FCEUX</Control>
+      <Control ID="mnuNestopiaLayout">Disposition par défaut de Nestopia</Control>      
+      <Control ID="mnuXboxController">Manette Xbox</Control>
+      <Control ID="mnuXboxLayout1">Manette #1</Control>
+      <Control ID="mnuXboxLayout2">Manette #2</Control>
+      <Control ID="mnuPs4Controller">Manette PS4</Control>
+      <Control ID="mnuPs4Layout1">Manette #1</Control>
+      <Control ID="mnuPs4Layout2">Manette #2</Control>
+      <Control ID="mnuSnes30Controller">Manette SNES30</Control>
+      <Control ID="mnuSnes30Layout1">Manette #1</Control>
+      <Control ID="mnuSnes30Layout2">Manette #2</Control>
+
       <Control ID="btnClear">Effacer le mappage</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>

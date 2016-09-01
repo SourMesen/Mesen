@@ -177,7 +177,23 @@
       <Control ID="tpgSet2">キーセット 2</Control>
       <Control ID="tpgSet3">キーセット 3</Control>
       <Control ID="tpgSet4">キーセット 4</Control>
-      <Control ID="btnReset">リセット</Control>
+      
+      <Control ID="btnSelectPreset">プリセットを選ぶ..</Control>
+      <Control ID="mnuKeyboard">キーボード</Control>
+      <Control ID="mnuWasdLayout">WSADレイアウト</Control>
+      <Control ID="mnuArrowLayout">アローキーレイアウト</Control>
+      <Control ID="mnuFceuxLayout">FCEUXのデフォルトレイアウト</Control>
+      <Control ID="mnuNestopiaLayout">Nestopiaのデフォルトレイアウト</Control>      
+      <Control ID="mnuXboxController">Xboxコントローラ</Control>
+      <Control ID="mnuXboxLayout1">コントローラ１</Control>
+      <Control ID="mnuXboxLayout2">コントローラ２</Control>
+      <Control ID="mnuPs4Controller">PS4コントローラ</Control>
+      <Control ID="mnuPs4Layout1">コントローラ１</Control>
+      <Control ID="mnuPs4Layout2">コントローラ２</Control>
+      <Control ID="mnuSnes30Controller">SFC30コントローラ</Control>
+      <Control ID="mnuSnes30Layout1">コントローラ１</Control>
+      <Control ID="mnuSnes30Layout2">コントローラ２</Control>
+
       <Control ID="btnClear">キーセットを削除</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>

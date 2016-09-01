@@ -13,6 +13,8 @@ namespace Mesen.GUI.Forms.Config
 {
 	public partial class frmControllerConfig : BaseConfigForm
 	{
+		private KeyPresets _presets = new KeyPresets();
+
 		public frmControllerConfig(ControllerInfo controllerInfo)
 		{
 			InitializeComponent();
@@ -24,6 +26,31 @@ namespace Mesen.GUI.Forms.Config
 			ctrlStandardController1.Initialize(controllerInfo.Keys[1]);
 			ctrlStandardController2.Initialize(controllerInfo.Keys[2]);
 			ctrlStandardController3.Initialize(controllerInfo.Keys[3]);
+
+			ResourceHelper.ApplyResources(this, mnuStripPreset);
+		}
+
+		private ctrlStandardController GetControllerControl()
+		{
+			if(tabMain.SelectedTab == tpgSet1) {
+				return ctrlStandardController0;
+			} else if(tabMain.SelectedTab == tpgSet2) {
+				return ctrlStandardController1;
+			} else if(tabMain.SelectedTab == tpgSet3) {
+				return ctrlStandardController2;
+			} else if(tabMain.SelectedTab == tpgSet4) {
+				return ctrlStandardController3;
+			}
+
+			return ctrlStandardController0;
+		}
+
+		private void UpdateTabIcons()
+		{
+			tpgSet1.ImageIndex = (int)ctrlStandardController0.GetKeyType() - 1;
+			tpgSet2.ImageIndex = (int)ctrlStandardController1.GetKeyType() - 1;
+			tpgSet3.ImageIndex = (int)ctrlStandardController2.GetKeyType() - 1;
+			tpgSet4.ImageIndex = (int)ctrlStandardController3.GetKeyType() - 1;
 		}
 
 		protected override void UpdateConfig()
@@ -50,9 +77,64 @@ namespace Mesen.GUI.Forms.Config
 			}
 		}
 
-		private void btnReset_Click(object sender, EventArgs e)
+		private void btnSelectPreset_Click(object sender, EventArgs e)
 		{
-			
+			mnuStripPreset.Show(btnSelectPreset.PointToScreen(new Point(0, btnSelectPreset.Height-1)));
+		}
+
+		private void mnuWasdLayout_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.WasdLayout);
+		}
+
+		private void mnuArrowLayout_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.ArrowLayout);
+		}
+
+		private void mnuFceuxLayout_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.FceuxLayout);
+		}
+
+		private void mnuNestopiaLayout_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.NestopiaLayout);
+		}
+
+		private void mnuXboxLayout1_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.XboxLayout1);
+		}
+
+		private void mnuXboxLayout2_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.XboxLayout1);
+		}
+
+		private void mnuPs4Layout1_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.Ps4Layout1);
+		}
+
+		private void mnuPs4Layout2_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.Ps4Layout2);
+		}
+
+		private void mnuSnes30Layout1_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.Snes30Layout1);
+		}
+
+		private void mnuSnes30Layout2_Click(object sender, EventArgs e)
+		{
+			GetControllerControl().Initialize(_presets.Snes30Layout2);
+		}
+
+		private void ctrlStandardController_OnChange(object sender, EventArgs e)
+		{
+			UpdateTabIcons();
 		}
 	}
 }

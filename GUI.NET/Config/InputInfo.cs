@@ -27,89 +27,9 @@ namespace Mesen.GUI.Config
 		{
 		}
 
-		public KeyMappings(int controllerIndex, int keySetIndex)
+		public KeyMappings Clone()
 		{
-			if(controllerIndex == 0) {
-				if(keySetIndex == 0) {
-					A = InteropEmu.GetKeyCode("A");
-					B = InteropEmu.GetKeyCode("S");
-					Select = InteropEmu.GetKeyCode("Q");
-					Start = InteropEmu.GetKeyCode("W");
-					Up = InteropEmu.GetKeyCode("Up Arrow");
-					Down = InteropEmu.GetKeyCode("Down Arrow");
-					Left = InteropEmu.GetKeyCode("Left Arrow");
-					Right = InteropEmu.GetKeyCode("Right Arrow");
-
-					TurboA = InteropEmu.GetKeyCode("Z");
-					TurboB = InteropEmu.GetKeyCode("X");
-				} else if(keySetIndex == 1) {
-					//XInput Default (Xbox controllers)
-					A = InteropEmu.GetKeyCode("Pad1 A");
-					B = InteropEmu.GetKeyCode("Pad1 X");
-					Select = InteropEmu.GetKeyCode("Pad1 Back");
-					Start = InteropEmu.GetKeyCode("Pad1 Start");
-					Up = InteropEmu.GetKeyCode("Pad1 Up");
-					Down = InteropEmu.GetKeyCode("Pad1 Down");
-					Left = InteropEmu.GetKeyCode("Pad1 Left");
-					Right = InteropEmu.GetKeyCode("Pad1 Right");
-
-					TurboA = InteropEmu.GetKeyCode("Pad1 B");
-					TurboB = InteropEmu.GetKeyCode("Pad1 Y");
-				} else if(keySetIndex == 2) {
-					//DirectInput Default (Used PS4 controller as a default)
-					A = InteropEmu.GetKeyCode("Joy1 But2");
-					B = InteropEmu.GetKeyCode("Joy1 But1");
-					Select = InteropEmu.GetKeyCode("Joy1 But9");
-					Start = InteropEmu.GetKeyCode("Joy1 But10");
-					Up = InteropEmu.GetKeyCode("Joy1 DPad Up");
-					Down = InteropEmu.GetKeyCode("Joy1 DPad Down");
-					Left = InteropEmu.GetKeyCode("Joy1 DPad Left");
-					Right = InteropEmu.GetKeyCode("Joy1 DPad Right");
-
-					TurboA = InteropEmu.GetKeyCode("Joy1 But3");
-					TurboB = InteropEmu.GetKeyCode("Joy1 But4");
-				}
-			} else if(controllerIndex == 1) {
-				if(keySetIndex == 0) {
-					A = InteropEmu.GetKeyCode("G");
-					B = InteropEmu.GetKeyCode("H");
-					Select = InteropEmu.GetKeyCode("T");
-					Start = InteropEmu.GetKeyCode("Y");
-					Up = InteropEmu.GetKeyCode("I");
-					Down = InteropEmu.GetKeyCode("K");
-					Left = InteropEmu.GetKeyCode("J");
-					Right = InteropEmu.GetKeyCode("L");
-
-					TurboA = InteropEmu.GetKeyCode("B");
-					TurboB = InteropEmu.GetKeyCode("N");
-				} else if(keySetIndex == 1) {
-					//XInput Default (Xbox controllers)
-					A = InteropEmu.GetKeyCode("Pad2 A");
-					B = InteropEmu.GetKeyCode("Pad2 X");
-					Select = InteropEmu.GetKeyCode("Pad2 Back");
-					Start = InteropEmu.GetKeyCode("Pad2 Start");
-					Up = InteropEmu.GetKeyCode("Pad2 Up");
-					Down = InteropEmu.GetKeyCode("Pad2 Down");
-					Left = InteropEmu.GetKeyCode("Pad2 Left");
-					Right = InteropEmu.GetKeyCode("Pad2 Right");
-
-					TurboA = InteropEmu.GetKeyCode("Pad2 B");
-					TurboB = InteropEmu.GetKeyCode("Pad2 Y");
-				} else if(keySetIndex == 2) {
-					//DirectInput Default (Used PS4 controller as a default)
-					A = InteropEmu.GetKeyCode("Joy2 But2");
-					B = InteropEmu.GetKeyCode("Joy2 But1");
-					Select = InteropEmu.GetKeyCode("Joy2 But9");
-					Start = InteropEmu.GetKeyCode("Joy2 But10");
-					Up = InteropEmu.GetKeyCode("Joy2 DPad Up");
-					Down = InteropEmu.GetKeyCode("Joy2 DPad Down");
-					Left = InteropEmu.GetKeyCode("Joy2 DPad Left");
-					Right = InteropEmu.GetKeyCode("Joy2 DPad Right");
-
-					TurboA = InteropEmu.GetKeyCode("Joy2 But3");
-					TurboB = InteropEmu.GetKeyCode("Joy2 But4");
-				}
-			}
+			return (KeyMappings)this.MemberwiseClone();
 		}
 
 		public InteropEmu.KeyMapping ToInteropMapping()
@@ -174,14 +94,15 @@ namespace Mesen.GUI.Config
 
 		public void InitializeDefaults()
 		{
+			KeyPresets presets = new KeyPresets();
 			while(Controllers.Count < 4) {
 				var controllerInfo = new ControllerInfo();
 				controllerInfo.ControllerType = Controllers.Count <= 1 ? InteropEmu.ControllerType.StandardController : InteropEmu.ControllerType.None;
 
 				if(Controllers.Count <= 1) {
-					controllerInfo.Keys.Add(new KeyMappings(Controllers.Count, 0));
-					controllerInfo.Keys.Add(new KeyMappings(Controllers.Count, 1));
-					controllerInfo.Keys.Add(new KeyMappings(Controllers.Count, 2));
+					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.ArrowLayout : presets.NestopiaLayout);
+					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.XboxLayout1 : presets.XboxLayout2);
+					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.Ps4Layout1 : presets.Ps4Layout2);
 				}
 				Controllers.Add(controllerInfo);
 			}

@@ -209,6 +209,7 @@
   <ItemGroup>
     <Compile Include="Config\DebugInfo.cs" />
     <Compile Include="Config\EmulationInfo.cs" />
+    <Compile Include="Config\KeyPresets.cs" />
     <Compile Include="Config\PreferenceInfo.cs" />
     <Compile Include="Config\VideoInfo.cs" />
     <Compile Include="Config\CheatInfo.cs" />
