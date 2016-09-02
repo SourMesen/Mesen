@@ -27,6 +27,13 @@ void ControlManager::RegisterKeyManager(IKeyManager* keyManager)
 	_keyManager.reset(keyManager);
 }
 
+void ControlManager::RefreshKeyState()
+{
+	if(_keyManager != nullptr) {
+		return _keyManager->RefreshState();
+	}
+}
+
 bool ControlManager::IsKeyPressed(uint32_t keyCode)
 {
 	if(_keyManager != nullptr) {

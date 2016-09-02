@@ -142,9 +142,11 @@ namespace Mesen.GUI.Forms
 					name = ((ToolStripItem)ctrl).Name;
 				} else if(ctrl is ColumnHeader) {
 					name = ((ColumnHeader)ctrl).Name;
+				} else if(ctrl is DataGridViewColumn) {
+					name = ((DataGridViewColumn)ctrl).Name;
 				}
 
-				var controlNode = baseNode.SelectSingleNode("Control[@ID='" + name + "']");
+			var controlNode = baseNode.SelectSingleNode("Control[@ID='" + name + "']");
 				if(controlNode != null) {
 					if(ctrl is Control) {
 						((Control)ctrl).Text = controlNode.InnerText;
@@ -155,10 +157,14 @@ namespace Mesen.GUI.Forms
 						}
 					} else if(ctrl is ColumnHeader) {
 						((ColumnHeader)ctrl).Text = controlNode.InnerText;
+					} else if(ctrl is DataGridViewColumn) {
+						((DataGridViewColumn)ctrl).HeaderText = controlNode.InnerText;
 					}
 				}
 
-				if(ctrl is MenuStrip) {
+				if(ctrl is DataGridView) {
+					ApplyResources(baseNode, ((DataGridView)ctrl).Columns);
+				} else if(ctrl is MenuStrip) {
 					ApplyResources(baseNode, ((MenuStrip)ctrl).Items);
 				} else if(ctrl is ContextMenuStrip) {
 					ApplyResources(baseNode, ((ContextMenuStrip)ctrl).Items);

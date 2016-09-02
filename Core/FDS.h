@@ -107,6 +107,7 @@ public:
 	static uint32_t GetSideCount();
 
 	static void InsertDisk(uint32_t diskNumber);
+	static void InsertNextDisk();
 	static void SwitchDiskSide();
 	static void EjectDisk();
 };

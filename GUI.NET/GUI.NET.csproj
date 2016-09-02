@@ -414,6 +414,12 @@
     <Compile Include="Forms\Config\ctrlDipSwitch.Designer.cs">
       <DependentUpon>ctrlDipSwitch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Config\ctrlEmulatorShortcuts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\ctrlEmulatorShortcuts.Designer.cs">
+      <DependentUpon>ctrlEmulatorShortcuts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Config\ctrlInputPortConfig.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -634,6 +640,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlDipSwitch.resx">
       <DependentUpon>ctrlDipSwitch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\ctrlEmulatorShortcuts.resx">
+      <DependentUpon>ctrlEmulatorShortcuts.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlInputPortConfig.resx">
       <DependentUpon>ctrlInputPortConfig.cs</DependentUpon>

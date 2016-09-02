@@ -41,6 +41,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetControllerKeys(int port, KeyMappingSet mapping);
 		[DllImport(DLLPath)] public static extern void SetExpansionDevice(ExpansionPortDevice device);
 		[DllImport(DLLPath)] public static extern void SetConsoleType(ConsoleType type);
+		[DllImport(DLLPath)] public static extern void SetEmulatorKeys(EmulatorKeyMappingSet mappings);
 
 		[DllImport(DLLPath)] public static extern ControllerType GetControllerType(int port);
 		[DllImport(DLLPath)] public static extern ExpansionPortDevice GetExpansionDevice();
@@ -135,6 +136,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetReverbParameters(double strength, double delay);
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
 		[DllImport(DLLPath)] public static extern void SetEmulationSpeed(UInt32 emulationSpeed);
+		[DllImport(DLLPath)] public static extern void SetTurboSpeed(UInt32 turboSpeed);
 		[DllImport(DLLPath)] public static extern void SetOverclockRate(UInt32 overclockRate, [MarshalAs(UnmanagedType.I1)]bool adjustApu);
 		[DllImport(DLLPath)] public static extern void SetPpuNmiConfig(UInt32 extraScanlinesBeforeNmi, UInt32 extraScanlineAfterNmi);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
@@ -699,6 +701,32 @@ namespace Mesen.GUI
 			return this.PrgCrc32.ToString("X8");
 		}
 	};
+
+	public struct EmulatorKeyMappingSet
+	{
+		public EmulatorKeyMappings KeySet1;
+		public EmulatorKeyMappings KeySet2;
+	}
+
+	public struct EmulatorKeyMappings
+	{
+		public UInt32 FastForward;
+		public UInt32 Pause;
+		public UInt32 Reset;
+
+		public UInt32 MoveToNextStateSlot;
+		public UInt32 MoveToPreviousStateSlot;
+		public UInt32 SaveState;
+		public UInt32 LoadState;
+
+		public UInt32 SwitchDiskSide;
+		public UInt32 InsertNextDisk;
+
+		public UInt32 InsertCoin1;
+		public UInt32 InsertCoin2;
+
+		public UInt32 TakeScreenshot;
+	}
 
 	public struct InteropCheatInfo
 	{

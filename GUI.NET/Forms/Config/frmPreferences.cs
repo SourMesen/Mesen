@@ -56,6 +56,12 @@ namespace Mesen.GUI.Forms.Config
 			UpdateCloudDisplay();
 		}
 
+		protected override void UpdateConfig()
+		{
+			base.UpdateConfig();
+			ctrlEmulatorShortcuts.UpdateConfig();
+		}
+
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
 			base.OnFormClosed(e);

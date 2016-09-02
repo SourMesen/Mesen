@@ -44,6 +44,8 @@
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgSaveData = new System.Windows.Forms.TabPage();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.grpCloudSaves = new System.Windows.Forms.GroupBox();
 			this.tlpCloudSaves = new System.Windows.Forms.TableLayoutPanel();
 			this.tlpCloudSaveDesc = new System.Windows.Forms.TableLayoutPanel();
 			this.lblGoogleDriveIntegration = new System.Windows.Forms.Label();
@@ -57,6 +59,13 @@
 			this.lblLastSync = new System.Windows.Forms.Label();
 			this.lblLastSyncDateTime = new System.Windows.Forms.Label();
 			this.btnResync = new System.Windows.Forms.Button();
+			this.grpAutomaticSaves = new System.Windows.Forms.GroupBox();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkAutoSaveNotify = new System.Windows.Forms.CheckBox();
+			this.flpAutoSave = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkAutoSave = new System.Windows.Forms.CheckBox();
+			this.nudAutoSave = new System.Windows.Forms.NumericUpDown();
+			this.lblAutoSave = new System.Windows.Forms.Label();
 			this.tpgNsf = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
@@ -84,26 +93,25 @@
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.grpCloudSaves = new System.Windows.Forms.GroupBox();
-			this.grpAutomaticSaves = new System.Windows.Forms.GroupBox();
-			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-			this.flpAutoSave = new System.Windows.Forms.FlowLayoutPanel();
-			this.chkAutoSave = new System.Windows.Forms.CheckBox();
-			this.nudAutoSave = new System.Windows.Forms.NumericUpDown();
-			this.lblAutoSave = new System.Windows.Forms.Label();
-			this.chkAutoSaveNotify = new System.Windows.Forms.CheckBox();
+			this.tpgShortcuts = new System.Windows.Forms.TabPage();
+			this.ctrlEmulatorShortcuts = new Mesen.GUI.Forms.Config.ctrlEmulatorShortcuts();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgSaveData.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
+			this.grpCloudSaves.SuspendLayout();
 			this.tlpCloudSaves.SuspendLayout();
 			this.tlpCloudSaveDesc.SuspendLayout();
 			this.tlpCloudSaveEnabled.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picOK)).BeginInit();
 			this.flowLayoutPanel4.SuspendLayout();
+			this.grpAutomaticSaves.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
+			this.flpAutoSave.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudAutoSave)).BeginInit();
 			this.tpgNsf.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
@@ -115,12 +123,7 @@
 			this.tlpFileFormat.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.tableLayoutPanel3.SuspendLayout();
-			this.grpCloudSaves.SuspendLayout();
-			this.grpAutomaticSaves.SuspendLayout();
-			this.tableLayoutPanel4.SuspendLayout();
-			this.flpAutoSave.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudAutoSave)).BeginInit();
+			this.tpgShortcuts.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -155,7 +158,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(473, 223);
+			this.tlpMain.Size = new System.Drawing.Size(473, 337);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// chkSingleInstance
@@ -232,7 +235,7 @@
 			// btnOpenMesenFolder
 			// 
 			this.btnOpenMesenFolder.AutoSize = true;
-			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 197);
+			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 311);
 			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
 			this.btnOpenMesenFolder.Size = new System.Drawing.Size(117, 23);
 			this.btnOpenMesenFolder.TabIndex = 16;
@@ -272,6 +275,7 @@
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
+			this.tabMain.Controls.Add(this.tpgShortcuts);
 			this.tabMain.Controls.Add(this.tpgSaveData);
 			this.tabMain.Controls.Add(this.tpgNsf);
 			this.tabMain.Controls.Add(this.tpgFileAssociations);
@@ -289,7 +293,7 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(479, 229);
+			this.tpgGeneral.Size = new System.Drawing.Size(479, 343);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -304,6 +308,32 @@
 			this.tpgSaveData.TabIndex = 3;
 			this.tpgSaveData.Text = "Save Data";
 			this.tpgSaveData.UseVisualStyleBackColor = true;
+			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 1;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.grpCloudSaves, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.grpAutomaticSaves, 0, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 2;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(473, 337);
+			this.tableLayoutPanel3.TabIndex = 1;
+			// 
+			// grpCloudSaves
+			// 
+			this.grpCloudSaves.Controls.Add(this.tlpCloudSaves);
+			this.grpCloudSaves.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpCloudSaves.Location = new System.Drawing.Point(3, 76);
+			this.grpCloudSaves.Name = "grpCloudSaves";
+			this.grpCloudSaves.Size = new System.Drawing.Size(467, 258);
+			this.grpCloudSaves.TabIndex = 2;
+			this.grpCloudSaves.TabStop = false;
+			this.grpCloudSaves.Text = "Cloud Saves";
 			// 
 			// tlpCloudSaves
 			// 
@@ -462,13 +492,108 @@
 			this.btnResync.UseVisualStyleBackColor = true;
 			this.btnResync.Click += new System.EventHandler(this.btnResync_Click);
 			// 
+			// grpAutomaticSaves
+			// 
+			this.grpAutomaticSaves.Controls.Add(this.tableLayoutPanel4);
+			this.grpAutomaticSaves.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpAutomaticSaves.Location = new System.Drawing.Point(3, 3);
+			this.grpAutomaticSaves.Name = "grpAutomaticSaves";
+			this.grpAutomaticSaves.Size = new System.Drawing.Size(467, 67);
+			this.grpAutomaticSaves.TabIndex = 3;
+			this.grpAutomaticSaves.TabStop = false;
+			this.grpAutomaticSaves.Text = "Automatic Save States";
+			// 
+			// tableLayoutPanel4
+			// 
+			this.tableLayoutPanel4.ColumnCount = 1;
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Controls.Add(this.chkAutoSaveNotify, 0, 2);
+			this.tableLayoutPanel4.Controls.Add(this.flpAutoSave, 0, 0);
+			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
+			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+			this.tableLayoutPanel4.RowCount = 3;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(461, 48);
+			this.tableLayoutPanel4.TabIndex = 0;
+			// 
+			// chkAutoSaveNotify
+			// 
+			this.chkAutoSaveNotify.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkAutoSaveNotify.AutoSize = true;
+			this.chkAutoSaveNotify.Location = new System.Drawing.Point(15, 27);
+			this.chkAutoSaveNotify.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
+			this.chkAutoSaveNotify.Name = "chkAutoSaveNotify";
+			this.chkAutoSaveNotify.Size = new System.Drawing.Size(240, 17);
+			this.chkAutoSaveNotify.TabIndex = 1;
+			this.chkAutoSaveNotify.Text = "Notify when an automatic save state is saved";
+			this.chkAutoSaveNotify.UseVisualStyleBackColor = true;
+			// 
+			// flpAutoSave
+			// 
+			this.flpAutoSave.Controls.Add(this.chkAutoSave);
+			this.flpAutoSave.Controls.Add(this.nudAutoSave);
+			this.flpAutoSave.Controls.Add(this.lblAutoSave);
+			this.flpAutoSave.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flpAutoSave.Location = new System.Drawing.Point(0, 0);
+			this.flpAutoSave.Margin = new System.Windows.Forms.Padding(0);
+			this.flpAutoSave.Name = "flpAutoSave";
+			this.flpAutoSave.Size = new System.Drawing.Size(461, 23);
+			this.flpAutoSave.TabIndex = 0;
+			// 
+			// chkAutoSave
+			// 
+			this.chkAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkAutoSave.AutoSize = true;
+			this.chkAutoSave.Location = new System.Drawing.Point(3, 4);
+			this.chkAutoSave.Name = "chkAutoSave";
+			this.chkAutoSave.Size = new System.Drawing.Size(211, 17);
+			this.chkAutoSave.TabIndex = 0;
+			this.chkAutoSave.Text = "Automatically create a save state every";
+			this.chkAutoSave.UseVisualStyleBackColor = true;
+			this.chkAutoSave.CheckedChanged += new System.EventHandler(this.chkAutoSave_CheckedChanged);
+			// 
+			// nudAutoSave
+			// 
+			this.nudAutoSave.Location = new System.Drawing.Point(220, 3);
+			this.nudAutoSave.Maximum = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+			this.nudAutoSave.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudAutoSave.Name = "nudAutoSave";
+			this.nudAutoSave.Size = new System.Drawing.Size(42, 20);
+			this.nudAutoSave.TabIndex = 1;
+			this.nudAutoSave.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			// 
+			// lblAutoSave
+			// 
+			this.lblAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblAutoSave.AutoSize = true;
+			this.lblAutoSave.Location = new System.Drawing.Point(268, 6);
+			this.lblAutoSave.Name = "lblAutoSave";
+			this.lblAutoSave.Size = new System.Drawing.Size(99, 13);
+			this.lblAutoSave.TabIndex = 2;
+			this.lblAutoSave.Text = "minutes (F6 to load)";
+			// 
 			// tpgNsf
 			// 
 			this.tpgNsf.Controls.Add(this.tableLayoutPanel2);
 			this.tpgNsf.Location = new System.Drawing.Point(4, 22);
 			this.tpgNsf.Name = "tpgNsf";
 			this.tpgNsf.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgNsf.Size = new System.Drawing.Size(479, 259);
+			this.tpgNsf.Size = new System.Drawing.Size(479, 343);
 			this.tpgNsf.TabIndex = 4;
 			this.tpgNsf.Text = "NSF / NSFe";
 			this.tpgNsf.UseVisualStyleBackColor = true;
@@ -487,7 +612,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(473, 253);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(473, 337);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// flowLayoutPanel7
@@ -611,7 +736,7 @@
 			this.tpgFileAssociations.Location = new System.Drawing.Point(4, 22);
 			this.tpgFileAssociations.Name = "tpgFileAssociations";
 			this.tpgFileAssociations.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgFileAssociations.Size = new System.Drawing.Size(479, 259);
+			this.tpgFileAssociations.Size = new System.Drawing.Size(479, 343);
 			this.tpgFileAssociations.TabIndex = 2;
 			this.tpgFileAssociations.Text = "File Associations";
 			this.tpgFileAssociations.UseVisualStyleBackColor = true;
@@ -622,7 +747,7 @@
 			this.grpFileAssociations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFileAssociations.Location = new System.Drawing.Point(3, 3);
 			this.grpFileAssociations.Name = "grpFileAssociations";
-			this.grpFileAssociations.Size = new System.Drawing.Size(473, 253);
+			this.grpFileAssociations.Size = new System.Drawing.Size(473, 337);
 			this.grpFileAssociations.TabIndex = 12;
 			this.grpFileAssociations.TabStop = false;
 			this.grpFileAssociations.Text = "File Associations";
@@ -648,7 +773,7 @@
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpFileFormat.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpFileFormat.Size = new System.Drawing.Size(467, 234);
+			this.tlpFileFormat.Size = new System.Drawing.Size(467, 318);
 			this.tlpFileFormat.TabIndex = 0;
 			// 
 			// chkNsfeFormat
@@ -728,7 +853,7 @@
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(479, 259);
+			this.tpgAdvanced.Size = new System.Drawing.Size(479, 343);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -788,126 +913,24 @@
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
-			// tableLayoutPanel3
+			// tpgShortcuts
 			// 
-			this.tableLayoutPanel3.ColumnCount = 1;
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.grpCloudSaves, 0, 1);
-			this.tableLayoutPanel3.Controls.Add(this.grpAutomaticSaves, 0, 0);
-			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
-			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 2;
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(473, 337);
-			this.tableLayoutPanel3.TabIndex = 1;
+			this.tpgShortcuts.Controls.Add(this.ctrlEmulatorShortcuts);
+			this.tpgShortcuts.Location = new System.Drawing.Point(4, 22);
+			this.tpgShortcuts.Name = "tpgShortcuts";
+			this.tpgShortcuts.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgShortcuts.Size = new System.Drawing.Size(479, 343);
+			this.tpgShortcuts.TabIndex = 7;
+			this.tpgShortcuts.Text = "Shortcut Keys";
+			this.tpgShortcuts.UseVisualStyleBackColor = true;
 			// 
-			// grpCloudSaves
+			// ctrlEmulatorShortcuts
 			// 
-			this.grpCloudSaves.Controls.Add(this.tlpCloudSaves);
-			this.grpCloudSaves.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpCloudSaves.Location = new System.Drawing.Point(3, 76);
-			this.grpCloudSaves.Name = "grpCloudSaves";
-			this.grpCloudSaves.Size = new System.Drawing.Size(467, 258);
-			this.grpCloudSaves.TabIndex = 2;
-			this.grpCloudSaves.TabStop = false;
-			this.grpCloudSaves.Text = "Cloud Saves";
-			// 
-			// grpAutomaticSaves
-			// 
-			this.grpAutomaticSaves.Controls.Add(this.tableLayoutPanel4);
-			this.grpAutomaticSaves.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpAutomaticSaves.Location = new System.Drawing.Point(3, 3);
-			this.grpAutomaticSaves.Name = "grpAutomaticSaves";
-			this.grpAutomaticSaves.Size = new System.Drawing.Size(467, 67);
-			this.grpAutomaticSaves.TabIndex = 3;
-			this.grpAutomaticSaves.TabStop = false;
-			this.grpAutomaticSaves.Text = "Automatic Save States";
-			// 
-			// tableLayoutPanel4
-			// 
-			this.tableLayoutPanel4.ColumnCount = 1;
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Controls.Add(this.chkAutoSaveNotify, 0, 2);
-			this.tableLayoutPanel4.Controls.Add(this.flpAutoSave, 0, 0);
-			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
-			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-			this.tableLayoutPanel4.RowCount = 3;
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(461, 48);
-			this.tableLayoutPanel4.TabIndex = 0;
-			// 
-			// flpAutoSave
-			// 
-			this.flpAutoSave.Controls.Add(this.chkAutoSave);
-			this.flpAutoSave.Controls.Add(this.nudAutoSave);
-			this.flpAutoSave.Controls.Add(this.lblAutoSave);
-			this.flpAutoSave.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flpAutoSave.Location = new System.Drawing.Point(0, 0);
-			this.flpAutoSave.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.flpAutoSave.Name = "flpAutoSave";
-			this.flpAutoSave.Size = new System.Drawing.Size(461, 23);
-			this.flpAutoSave.TabIndex = 0;
-			// 
-			// chkAutoSave
-			// 
-			this.chkAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkAutoSave.AutoSize = true;
-			this.chkAutoSave.Location = new System.Drawing.Point(3, 4);
-			this.chkAutoSave.Name = "chkAutoSave";
-			this.chkAutoSave.Size = new System.Drawing.Size(211, 17);
-			this.chkAutoSave.TabIndex = 0;
-			this.chkAutoSave.Text = "Automatically create a save state every";
-			this.chkAutoSave.UseVisualStyleBackColor = true;
-			this.chkAutoSave.CheckedChanged += new System.EventHandler(this.chkAutoSave_CheckedChanged);
-			// 
-			// nudAutoSave
-			// 
-			this.nudAutoSave.Location = new System.Drawing.Point(220, 3);
-			this.nudAutoSave.Maximum = new decimal(new int[] {
-            600,
-            0,
-            0,
-            0});
-			this.nudAutoSave.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.nudAutoSave.Name = "nudAutoSave";
-			this.nudAutoSave.Size = new System.Drawing.Size(42, 20);
-			this.nudAutoSave.TabIndex = 1;
-			this.nudAutoSave.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-			// 
-			// lblAutoSave
-			// 
-			this.lblAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblAutoSave.AutoSize = true;
-			this.lblAutoSave.Location = new System.Drawing.Point(268, 6);
-			this.lblAutoSave.Name = "lblAutoSave";
-			this.lblAutoSave.Size = new System.Drawing.Size(99, 13);
-			this.lblAutoSave.TabIndex = 2;
-			this.lblAutoSave.Text = "minutes (F6 to load)";
-			// 
-			// chkAutoSaveNotify
-			// 
-			this.chkAutoSaveNotify.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkAutoSaveNotify.AutoSize = true;
-			this.chkAutoSaveNotify.Location = new System.Drawing.Point(15, 27);
-			this.chkAutoSaveNotify.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
-			this.chkAutoSaveNotify.Name = "chkAutoSaveNotify";
-			this.chkAutoSaveNotify.Size = new System.Drawing.Size(240, 17);
-			this.chkAutoSaveNotify.TabIndex = 1;
-			this.chkAutoSaveNotify.Text = "Notify when an automatic save state is saved";
-			this.chkAutoSaveNotify.UseVisualStyleBackColor = true;
+			this.ctrlEmulatorShortcuts.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlEmulatorShortcuts.Location = new System.Drawing.Point(3, 3);
+			this.ctrlEmulatorShortcuts.Name = "ctrlEmulatorShortcuts";
+			this.ctrlEmulatorShortcuts.Size = new System.Drawing.Size(473, 337);
+			this.ctrlEmulatorShortcuts.TabIndex = 0;
 			// 
 			// frmPreferences
 			// 
@@ -931,6 +954,8 @@
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgSaveData.ResumeLayout(false);
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.grpCloudSaves.ResumeLayout(false);
 			this.tlpCloudSaves.ResumeLayout(false);
 			this.tlpCloudSaveDesc.ResumeLayout(false);
 			this.tlpCloudSaveDesc.PerformLayout();
@@ -940,6 +965,12 @@
 			((System.ComponentModel.ISupportInitialize)(this.picOK)).EndInit();
 			this.flowLayoutPanel4.ResumeLayout(false);
 			this.flowLayoutPanel4.PerformLayout();
+			this.grpAutomaticSaves.ResumeLayout(false);
+			this.tableLayoutPanel4.ResumeLayout(false);
+			this.tableLayoutPanel4.PerformLayout();
+			this.flpAutoSave.ResumeLayout(false);
+			this.flpAutoSave.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudAutoSave)).EndInit();
 			this.tpgNsf.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
@@ -956,14 +987,7 @@
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			this.tableLayoutPanel3.ResumeLayout(false);
-			this.grpCloudSaves.ResumeLayout(false);
-			this.grpAutomaticSaves.ResumeLayout(false);
-			this.tableLayoutPanel4.ResumeLayout(false);
-			this.tableLayoutPanel4.PerformLayout();
-			this.flpAutoSave.ResumeLayout(false);
-			this.flpAutoSave.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudAutoSave)).EndInit();
+			this.tpgShortcuts.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1034,5 +1058,7 @@
 		private System.Windows.Forms.NumericUpDown nudAutoSave;
 		private System.Windows.Forms.Label lblAutoSave;
 		private System.Windows.Forms.CheckBox chkAutoSaveNotify;
+		private System.Windows.Forms.TabPage tpgShortcuts;
+		private ctrlEmulatorShortcuts ctrlEmulatorShortcuts;
 	}
 }

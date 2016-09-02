@@ -85,8 +85,9 @@ void FDS::ProcessCpuClock()
 {
 	if(EmulationSettings::CheckFlag(EmulationFlags::FdsFastForwardOnLoad)) {
 		bool enableFastforward = (_scanningDisk || _gameStarted < 2);
-		if(EmulationSettings::GetEmulationSpeed() > 0 || !_fastForwarding) {
-			_previousSpeed = EmulationSettings::GetEmulationSpeed();
+		uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed(true);
+		if(emulationSpeed > 0 || !_fastForwarding) {
+			_previousSpeed = emulationSpeed;
 		}
 		EmulationSettings::SetEmulationSpeed(enableFastforward ? 0 : _previousSpeed);
 		_fastForwarding = enableFastforward;
@@ -366,12 +367,19 @@ void FDS::InsertDisk(uint32_t diskNumber)
 	}
 }
 
+void FDS::InsertNextDisk()
+{
+	InsertDisk(((FDS::Instance->_diskNumber & 0xFE) + 2) % GetSideCount());
+}
+
 void FDS::SwitchDiskSide()
 {
 	if(FDS::Instance) {
 		Console::Pause();
-		FDS::Instance->_newDiskNumber = (FDS::Instance->_diskNumber & 0x01) ? (FDS::Instance->_diskNumber & 0xFE) : (FDS::Instance->_diskNumber | 0x01);
-		FDS::Instance->_newDiskInsertDelay = FDS::DiskInsertDelay;
+		if(FDS::Instance->_newDiskInsertDelay == 0 && FDS::Instance->_diskNumber != NoDiskInserted) {
+			FDS::Instance->_newDiskNumber = (FDS::Instance->_diskNumber & 0x01) ? (FDS::Instance->_diskNumber & 0xFE) : (FDS::Instance->_diskNumber | 0x01);
+			FDS::Instance->_newDiskInsertDelay = FDS::DiskInsertDelay;
+		}
 		Console::Resume();
 
 		MessageManager::SendNotification(ConsoleNotificationType::FdsDiskChanged);

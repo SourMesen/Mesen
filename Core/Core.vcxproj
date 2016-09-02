@@ -542,6 +542,7 @@
     <ClInclude Include="Sachen_136.h" />
     <ClInclude Include="Sachen_143.h" />
     <ClInclude Include="SelectControllerMessage.h" />
+    <ClInclude Include="ShortcutKeyHandler.h" />
     <ClInclude Include="SoundMixer.h" />
     <ClInclude Include="Namco108.h" />
     <ClInclude Include="Namco108_154.h" />
@@ -714,6 +715,7 @@
     <ClCompile Include="OekaKidsTablet.cpp" />
     <ClCompile Include="ReverbFilter.cpp" />
     <ClCompile Include="RomLoader.cpp" />
+    <ClCompile Include="ShortcutKeyHandler.cpp" />
     <ClCompile Include="Snapshotable.cpp" />
     <ClCompile Include="SoundMixer.cpp" />
     <ClCompile Include="StandardController.cpp" />

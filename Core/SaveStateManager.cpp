@@ -7,6 +7,7 @@
 #include "EmulationSettings.h"
 
 const uint32_t SaveStateManager::FileFormatVersion;
+atomic<uint32_t> SaveStateManager::_lastIndex = 1;
 
 string SaveStateManager::GetStateFilepath(int stateIndex)
 {
@@ -27,12 +28,36 @@ uint64_t SaveStateManager::GetStateInfo(int stateIndex)
 	return 0;
 }
 
+void SaveStateManager::MoveToNextSlot()
+{
+	_lastIndex = (_lastIndex % MaxIndex) + 1;
+	MessageManager::DisplayMessage("SaveStates", "SaveStateSlotSelected", std::to_string(_lastIndex));
+}
+
+void SaveStateManager::MoveToPreviousSlot()
+{
+	_lastIndex = (_lastIndex == 1 ? SaveStateManager::MaxIndex : (_lastIndex - 1));
+	MessageManager::DisplayMessage("SaveStates", "SaveStateSlotSelected", std::to_string(_lastIndex));
+}
+
+void SaveStateManager::SaveState()
+{
+	SaveState(_lastIndex);
+}
+
+bool SaveStateManager::LoadState()
+{
+	return LoadState(_lastIndex);
+}
+
 void SaveStateManager::SaveState(int stateIndex, bool displayMessage)
 {
 	string filepath = SaveStateManager::GetStateFilepath(stateIndex);
 	ofstream file(filepath, ios::out | ios::binary);
 
 	if(file) {
+		_lastIndex = stateIndex;
+
 		Console::Pause();
 
 		uint32_t emuVersion = EmulationSettings::GetMesenVersion();
@@ -73,6 +98,8 @@ bool SaveStateManager::LoadState(int stateIndex)
 				MessageManager::DisplayMessage("Save States", "SaveStateIncompatibleVersion", std::to_string(stateIndex));
 				return false;
 			}
+
+			_lastIndex = stateIndex;
 
 			Console::Pause();
 			Console::LoadState(file);

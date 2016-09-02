@@ -16,6 +16,7 @@
 #include "NsfPpu.h"
 #include "SoundMixer.h"
 #include "NsfMapper.h"
+#include "ShortcutKeyHandler.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -264,6 +265,7 @@ void Console::Run()
 	double targetTime;
 	uint32_t lastFrameNumber = -1;
 	
+	ShortcutKeyHandler shortcutKeyHandler;
 	_autoSaveManager.reset(new AutoSaveManager());
 
 	_runLock.Acquire();

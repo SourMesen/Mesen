@@ -58,6 +58,7 @@ namespace Mesen.GUI.Config
 		public void InitializeDefaults()
 		{
 			InputInfo.InitializeDefaults();
+			PreferenceInfo.InitializeDefaults();
 		}
 		
 		public void AddRecentFile(string filepath, string romName, int archiveFileIndex)

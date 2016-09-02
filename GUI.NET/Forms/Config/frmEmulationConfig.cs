@@ -21,6 +21,7 @@ namespace Mesen.GUI.Forms.Config
 			Entity = ConfigManager.Config.EmulationInfo;
 
 			AddBinding("EmulationSpeed", nudEmulationSpeed);
+			AddBinding("TurboSpeed", nudTurboSpeed);
 
 			AddBinding("UseAlternativeMmc3Irq", chkUseAlternativeMmc3Irq);
 			AddBinding("AllowInvalidInput", chkAllowInvalidInput);

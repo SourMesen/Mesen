@@ -247,6 +247,8 @@
       <Control ID="tpgGeneral">Général</Control>
       <Control ID="lblEmuSpeedHint">%  (0 = Vitesse maximale)</Control>
       <Control ID="lblEmulationSpeed">Vitesse d'émulation :</Control>
+      <Control ID="lblTurboSpeedHint">%  (0 = Vitesse maximale)</Control>
+      <Control ID="lblTurboSpeed">Vitesse d'avance rapide:</Control>
 
       <Control ID="tpgAdvanced">Avancé</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
@@ -294,6 +296,11 @@
       <Control ID="tpgAdvanced">Avancé</Control>
       <Control ID="chkFdsAutoLoadDisk">Insérer le côté A du disque 1 lors du chargement d'un jeu de FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Augmenter la vitesse d'émulation pendant le chargement des jeux FDS</Control>
+
+      <Control ID="tpgShortcuts">Raccourcis</Control>
+      <Control ID="colAction">Action</Control>
+      <Control ID="colBinding1">Raccourci #1</Control>
+      <Control ID="colBinding2">Raccourci #2</Control>
 
       <Control ID="tpgSaveData">Sauvegardes</Control>
       <Control ID="grpAutomaticSaves">Sauvegarde d'état automatique</Control>
@@ -497,6 +504,19 @@
     <Message ID="InvalidCheatFile">Le fichier sélectionné ({0}) n'est pas un fichier de codes valide.</Message>
     <Message ID="InvalidXmlFile">Le fichier sélectionné ({0}) n'est pas un fichier XML valide.</Message>
     <Message ID="NoMatchingCheats">Le fichier sélectionné ({0}) ne contient aucun code correspondant au jeu sélectionné.</Message>
+
+    <Message ID="EmulatorShortcutMappings_FastForward">Avance rapide</Message>
+    <Message ID="EmulatorShortcutMappings_Pause">Pause</Message>
+    <Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
+    <Message ID="EmulatorShortcutMappings_TakeScreenshot">Capture d'écran</Message>
+    <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Changer le disque de côté</Message>
+    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insérer le disque suivant</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insérer une pièce (1)</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insérer une pièce (2)</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Position de sauvegarde suivante</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Position de sauvegarde précédente</Message>
+    <Message ID="EmulatorShortcutMappings_SaveState">Sauvegarder l'état à la position courante</Message>
+    <Message ID="EmulatorShortcutMappings_LoadState">Charger l'état de la position courante</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

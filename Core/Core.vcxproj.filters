@@ -928,6 +928,9 @@
     <ClInclude Include="AutoSaveManager.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="ShortcutKeyHandler.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1099,6 +1102,9 @@
       <Filter>Nes\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="AutoSaveManager.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ShortcutKeyHandler.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>

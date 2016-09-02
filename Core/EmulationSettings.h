@@ -33,6 +33,7 @@ enum EmulationFlags
 
 	SilenceTriangleHighFreq = 0x100000,
 
+	Turbo = 0x20000000,
 	InBackground = 0x40000000,
 	NsfPlayerEnabled = 0x80000000,
 };
@@ -202,6 +203,32 @@ struct KeyMappingSet
 	uint32_t TurboSpeed;
 };
 
+struct EmulatorKeyMappings
+{
+	uint32_t FastForward;
+	uint32_t Pause;
+	uint32_t Reset;
+
+	uint32_t MoveToNextStateSlot;
+	uint32_t MoveToPreviousStateSlot;
+	uint32_t SaveState;
+	uint32_t LoadState;
+
+	uint32_t SwitchDiskSide;
+	uint32_t InsertNextDisk;
+
+	uint32_t InsertCoin1;
+	uint32_t InsertCoin2;
+
+	uint32_t TakeScreenshot;
+};
+
+struct EmulatorKeyMappingSet
+{
+	EmulatorKeyMappings KeySet1 = {};
+	EmulatorKeyMappings KeySet2 = {};
+};
+
 enum class Language
 {
 	SystemDefault = 0,
@@ -276,6 +303,8 @@ private:
 	static PpuModel _ppuModel;
 
 	static uint32_t _emulationSpeed;
+	static uint32_t _turboSpeed;
+
 	static uint32_t _overclockRate;
 	static bool _overclockAdjustApu;
 	static bool _disableOverclocking;
@@ -307,6 +336,8 @@ private:
 
 	static uint32_t _autoSaveDelay;
 	static bool _autoSaveNotify;
+
+	static EmulatorKeyMappingSet _emulatorKeys;
 
 	static RamPowerOnState _ramPowerOnState;
 
@@ -449,9 +480,14 @@ public:
 		_emulationSpeed = emulationSpeed;
 	}
 
-	static uint32_t GetEmulationSpeed()
+	static void SetTurboSpeed(uint32_t turboSpeed)
 	{
-		return _emulationSpeed;
+		_turboSpeed = turboSpeed;
+	}
+
+	static uint32_t GetEmulationSpeed(bool ignoreTurbo = false)
+	{
+		return (CheckFlag(EmulationFlags::Turbo) && !ignoreTurbo) ? _turboSpeed : _emulationSpeed;
 	}
 
 	static void UpdateEffectiveOverclockRate()
@@ -717,6 +753,16 @@ public:
 	static KeyMappingSet GetControllerKeys(uint8_t port)
 	{
 		return _controllerKeys[port];
+	}
+
+	static void SetEmulatorKeys(EmulatorKeyMappingSet keyMappings)
+	{
+		_emulatorKeys = keyMappings;
+	}
+
+	static EmulatorKeyMappingSet GetEmulatorKeys()
+	{
+		return _emulatorKeys;
 	}
 
 	static bool NeedControllerUpdate()

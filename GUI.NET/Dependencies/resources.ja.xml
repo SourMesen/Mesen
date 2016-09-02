@@ -247,6 +247,8 @@
       <Control ID="tpgGeneral">全般</Control>
       <Control ID="lblEmuSpeedHint">%  (0 = 最高速度)</Control>
       <Control ID="lblEmulationSpeed">エミュレーションの速度:</Control>
+      <Control ID="lblTurboSpeedHint">%  (0 = 最高速度)</Control>
+      <Control ID="lblTurboSpeed">早送りの速度:</Control>      
 
       <Control ID="tpgAdvanced">詳細設定</Control>
       <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
@@ -293,6 +295,11 @@
       <Control ID="tpgAdvanced">詳細設定</Control>
       <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
+
+      <Control ID="tpgShortcuts"> ショートカットキー </Control>
+      <Control ID="colAction">機能</Control>
+      <Control ID="colBinding1">ショートカットキー1</Control>
+      <Control ID="colBinding2">ショートカットキー2</Control>
 
       <Control ID="tpgSaveData">セーブデータ</Control>
       <Control ID="grpAutomaticSaves">オートクイックセーブ</Control>
@@ -479,6 +486,19 @@
     <Message ID="InvalidCheatFile">このファイル（{0}）にはチートコードを見つかりませんでした。</Message>
     <Message ID="InvalidXmlFile">このファイル（{0}）はXMLファイルではないため読めませんでした.</Message>
     <Message ID="NoMatchingCheats">このファイル（{0}）に選択されたゲームに該当するチートコードを見つかりませんでした。</Message>
+
+    <Message ID="EmulatorShortcutMappings_FastForward">早送り</Message>
+    <Message ID="EmulatorShortcutMappings_Pause">ポーズ</Message>
+    <Message ID="EmulatorShortcutMappings_Reset">リセット</Message>
+    <Message ID="EmulatorShortcutMappings_TakeScreenshot">スクリーンショットを撮る</Message>
+    <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - A面B面切り替え</Message>
+    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - 次のディスクを入れる</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - インサートコイン 1</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - インサートコイン 2</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">次のクイックセーブスロットを選ぶ</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">前のクイックセーブスロットを選ぶ</Message>
+    <Message ID="EmulatorShortcutMappings_SaveState">選択中スロットにクイックセーブ</Message>
+    <Message ID="EmulatorShortcutMappings_LoadState">選択中スロットからクイックロード</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

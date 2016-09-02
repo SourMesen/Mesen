@@ -15,6 +15,8 @@ namespace Mesen.GUI.Forms.Config
 		const int WM_KEYDOWN = 0x100;
 		const int WM_KEYUP = 0x101;
 
+		private string[] _invalidKeys = new string[] { "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12" };
+
 		public frmGetKey()
 		{
 			InitializeComponent();
@@ -53,7 +55,7 @@ namespace Mesen.GUI.Forms.Config
 		{	
 			UInt32 scanCode = InteropEmu.GetPressedKey();
 			string pressedKey = InteropEmu.GetKeyName(scanCode);
-			if(!string.IsNullOrWhiteSpace(pressedKey)) {
+			if(!string.IsNullOrWhiteSpace(pressedKey) && !_invalidKeys.Contains(pressedKey)) {
 				BindedKeyName = pressedKey;
 				BindedKeyCode = scanCode;
 				this.Close();

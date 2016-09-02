@@ -25,6 +25,8 @@ NesModel EmulationSettings::_model = NesModel::Auto;
 PpuModel EmulationSettings::_ppuModel = PpuModel::Ppu2C02;
 
 uint32_t EmulationSettings::_emulationSpeed = 100;
+uint32_t EmulationSettings::_turboSpeed = 300;
+
 uint32_t EmulationSettings::_overclockRate = 100;
 uint32_t EmulationSettings::_extraScanlinesBeforeNmi = 0;
 uint32_t EmulationSettings::_extraScanlinesAfterNmi = 0;
@@ -40,6 +42,8 @@ bool EmulationSettings::_nsfDisableApuIrqs = true;
 
 uint32_t EmulationSettings::_autoSaveDelay = 5;
 bool EmulationSettings::_autoSaveNotify = false;
+
+EmulatorKeyMappingSet EmulationSettings::_emulatorKeys;
 
 RamPowerOnState EmulationSettings::_ramPowerOnState = RamPowerOnState::AllZeros;
 

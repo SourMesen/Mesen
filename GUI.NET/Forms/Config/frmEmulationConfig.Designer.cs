@@ -31,6 +31,9 @@
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
+			this.nudTurboSpeed = new System.Windows.Forms.NumericUpDown();
+			this.lblTurboSpeed = new System.Windows.Forms.Label();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.nudEmulationSpeed = new System.Windows.Forms.NumericUpDown();
 			this.lblEmuSpeedHint = new System.Windows.Forms.Label();
@@ -72,9 +75,12 @@
 			this.chkShowLagCounter = new System.Windows.Forms.CheckBox();
 			this.btnResetLagCounter = new System.Windows.Forms.Button();
 			this.tmrUpdateClockRate = new System.Windows.Forms.Timer(this.components);
+			this.lblTurboSpeedHint = new System.Windows.Forms.Label();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
+			this.flowLayoutPanel9.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudTurboSpeed)).BeginInit();
 			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).BeginInit();
 			this.tpgAdvanced.SuspendLayout();
@@ -129,16 +135,53 @@
 			this.tableLayoutPanel4.ColumnCount = 2;
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Controls.Add(this.flowLayoutPanel9, 1, 1);
+			this.tableLayoutPanel4.Controls.Add(this.lblTurboSpeed, 0, 1);
 			this.tableLayoutPanel4.Controls.Add(this.flowLayoutPanel6, 1, 0);
 			this.tableLayoutPanel4.Controls.Add(this.lblEmulationSpeed, 0, 0);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-			this.tableLayoutPanel4.RowCount = 2;
+			this.tableLayoutPanel4.RowCount = 3;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(473, 267);
 			this.tableLayoutPanel4.TabIndex = 0;
+			// 
+			// flowLayoutPanel9
+			// 
+			this.flowLayoutPanel9.AutoSize = true;
+			this.flowLayoutPanel9.Controls.Add(this.nudTurboSpeed);
+			this.flowLayoutPanel9.Controls.Add(this.lblTurboSpeedHint);
+			this.flowLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel9.Location = new System.Drawing.Point(111, 26);
+			this.flowLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel9.Name = "flowLayoutPanel9";
+			this.flowLayoutPanel9.Size = new System.Drawing.Size(362, 26);
+			this.flowLayoutPanel9.TabIndex = 14;
+			// 
+			// nudTurboSpeed
+			// 
+			this.nudTurboSpeed.Location = new System.Drawing.Point(3, 3);
+			this.nudTurboSpeed.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+			this.nudTurboSpeed.Name = "nudTurboSpeed";
+			this.nudTurboSpeed.Size = new System.Drawing.Size(48, 20);
+			this.nudTurboSpeed.TabIndex = 1;
+			// 
+			// lblTurboSpeed
+			// 
+			this.lblTurboSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblTurboSpeed.AutoSize = true;
+			this.lblTurboSpeed.Location = new System.Drawing.Point(3, 32);
+			this.lblTurboSpeed.Name = "lblTurboSpeed";
+			this.lblTurboSpeed.Size = new System.Drawing.Size(105, 13);
+			this.lblTurboSpeed.TabIndex = 13;
+			this.lblTurboSpeed.Text = "Fast Forward Speed:";
 			// 
 			// flowLayoutPanel6
 			// 
@@ -146,10 +189,10 @@
 			this.flowLayoutPanel6.Controls.Add(this.nudEmulationSpeed);
 			this.flowLayoutPanel6.Controls.Add(this.lblEmuSpeedHint);
 			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(96, 0);
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(111, 0);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(377, 26);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(362, 26);
 			this.flowLayoutPanel6.TabIndex = 11;
 			// 
 			// nudEmulationSpeed
@@ -636,6 +679,16 @@
 			this.tmrUpdateClockRate.Enabled = true;
 			this.tmrUpdateClockRate.Tick += new System.EventHandler(this.tmrUpdateClockRate_Tick);
 			// 
+			// lblTurboSpeedHint
+			// 
+			this.lblTurboSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblTurboSpeedHint.AutoSize = true;
+			this.lblTurboSpeedHint.Location = new System.Drawing.Point(57, 6);
+			this.lblTurboSpeedHint.Name = "lblTurboSpeedHint";
+			this.lblTurboSpeedHint.Size = new System.Drawing.Size(121, 13);
+			this.lblTurboSpeedHint.TabIndex = 2;
+			this.lblTurboSpeedHint.Text = "%  (0 = Maximum speed)";
+			// 
 			// frmEmulationConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -655,6 +708,9 @@
 			this.tpgGeneral.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
+			this.flowLayoutPanel9.ResumeLayout(false);
+			this.flowLayoutPanel9.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudTurboSpeed)).EndInit();
 			this.flowLayoutPanel6.ResumeLayout(false);
 			this.flowLayoutPanel6.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudEmulationSpeed)).EndInit();
@@ -733,5 +789,9 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel8;
 		private System.Windows.Forms.Label lblRamPowerOnState;
 		private System.Windows.Forms.ComboBox cboRamPowerOnState;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel9;
+		private System.Windows.Forms.NumericUpDown nudTurboSpeed;
+		private System.Windows.Forms.Label lblTurboSpeed;
+		private System.Windows.Forms.Label lblTurboSpeedHint;
 	}
 }

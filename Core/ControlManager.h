@@ -55,6 +55,7 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		static void UnregisterBroadcaster(IGameBroadcaster* gameBroadcaster);
 
 		static void RegisterKeyManager(IKeyManager* keyManager);
+		static void RefreshKeyState();
 		static bool IsKeyPressed(uint32_t keyCode);
 		static bool IsMouseButtonPressed(MouseButton button);
 		static uint32_t GetPressedKey();

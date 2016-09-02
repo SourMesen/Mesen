@@ -52,10 +52,28 @@ namespace Mesen.GUI.Config
 		public bool CloudSaveIntegration = false;
 		public DateTime CloudLastSync = DateTime.MinValue;
 
+		public EmulatorKeyMappings? EmulatorKeySet1;
+		public EmulatorKeyMappings? EmulatorKeySet2;
+
 		public bool DisableGameDatabase = false;
 
 		public PreferenceInfo()
 		{
+		}
+
+		public void InitializeDefaults()
+		{
+			if(EmulatorKeySet1 == null) {
+				EmulatorKeySet1 = new EmulatorKeyMappings() {
+					FastForward = InteropEmu.GetKeyCode("Tab")
+				};
+			}
+
+			if(EmulatorKeySet2 == null) {
+				EmulatorKeySet2 = new EmulatorKeyMappings() {
+					FastForward = InteropEmu.GetKeyCode("Pad1 R2")
+				};
+			}
 		}
 
 		static private void UpdateFileAssociation(string extension, bool associate)
@@ -97,6 +115,7 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.NsfSetNsfConfig(preferenceInfo.NsfAutoDetectSilence ? preferenceInfo.NsfAutoDetectSilenceDelay : 0, preferenceInfo.NsfMoveToNextTrackAfterTime ? preferenceInfo.NsfMoveToNextTrackTime : -1, preferenceInfo.NsfDisableApuIrqs);
 			InteropEmu.SetAutoSaveOptions(preferenceInfo.AutoSave ? (uint)preferenceInfo.AutoSaveDelay : 0, preferenceInfo.AutoSaveNotify);
+			InteropEmu.SetEmulatorKeys(new EmulatorKeyMappingSet() { KeySet1 = preferenceInfo.EmulatorKeySet1.Value, KeySet2 = preferenceInfo.EmulatorKeySet2.Value });
 		}
 	}
 }
