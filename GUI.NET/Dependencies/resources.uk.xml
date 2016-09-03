@@ -177,7 +177,22 @@
       <Control ID="tpgSet2">Контролер #2</Control>
       <Control ID="tpgSet3">Контролер #3</Control>
       <Control ID="tpgSet4">Контролер #4</Control>
-      <Control ID="btnReset">Скидання</Control>
+      <Control ID="btnSelectPreset">Пресети</Control>
+      <Control ID="mnuKeyboard">Клавіатура</Control>
+      <Control ID="mnuWasdLayout">WSAD розкладка</Control>
+      <Control ID="mnuArrowLayout">Курсорні клавіші</Control>
+      <Control ID="mnuFceuxLayout">FCEUX</Control>
+      <Control ID="mnuNestopiaLayout">Nestopia</Control>
+      <Control ID="mnuXboxController">Xbox геймпад</Control>
+      <Control ID="mnuXboxLayout1">Контролер #1</Control>
+      <Control ID="mnuXboxLayout2">Контролер #2</Control>
+      <Control ID="mnuPs4Controller">PS4 геймпад</Control>
+      <Control ID="mnuPs4Layout1">Контролер #1</Control>
+      <Control ID="mnuPs4Layout2">Контролер #2</Control>
+      <Control ID="mnuSnes30Controller">SNES30 геймпад</Control>
+      <Control ID="mnuSnes30Layout1">Контролер #1</Control>
+      <Control ID="mnuSnes30Layout2">Контролер #2</Control>
+      
       <Control ID="btnClear">Очистити</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Відміна</Control>
@@ -231,6 +246,8 @@
       <Control ID="tpgGeneral">Загальні</Control>
       <Control ID="lblEmuSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
       <Control ID="lblEmulationSpeed">Швидкість емуляції :</Control>
+      <Control ID="lblTurboSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
+      <Control ID="lblTurboSpeed">Перемотка:</Control>
 
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
@@ -279,7 +296,19 @@
       <Control ID="chkFdsAutoLoadDisk">Автоматично вставляти диск 1 стороною А при завантаженні FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Використовувати швидке завантаження FDS</Control>
 
-      <Control ID="tpgCloudSave">Хмарні збереження</Control>
+
+      <Control ID="tpgShortcuts">Гарячі клавіші</Control>
+      <Control ID="colAction">Дія</Control>
+      <Control ID="colBinding1">Варiант #1</Control>
+      <Control ID="colBinding2">Варiант #2</Control>
+
+      <Control ID="tpgSaveData">Збереження</Control>
+      <Control ID="grpAutomaticSaves">Автоматичні збереження</Control>
+      <Control ID="chkAutoSave">Автоматично створювати збереження через</Control>
+      <Control ID="lblAutoSave">хвилин (натисніть F6 для завантаження)</Control>
+      <Control ID="chkAutoSaveNotify">Сповіщати при збереженні</Control>
+
+      <Control ID="grpCloudSaves">Хмарнi збереження</Control>
       <Control ID="lblGoogleDriveIntegration">Mesen має можливість інтеграції з Google Drive . Коли інтеграція з Google Drive включена, ваші збереження стають доступні з будь-якого комп'ютера і можуть бути синхронізовані між комп'ютерами. Також, збереження зберігаються на Google Drive можуть бути відновлені якщо ви видалите їх зі свого комп'ютера.</Control>
       <Control ID="lblIntegrationOK">Iнтеграція с Google Drive включена</Control>
       <Control ID="btnDisableIntegration">Вимкнути інтеграцію</Control>
@@ -416,8 +445,8 @@
   <Messages>
     <Message ID="FilterAll">Всi файли (*.*)|*.*</Message>
     <Message ID="FilterMovie">Записи (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
-    <Message ID="FilterWave">Wave files (*.wav)|*.wav|All Files (*.*)|*.*</Message>
-    <Message ID="FilterPalette">Palette Files (*.pal)|*.pal|All Files (*.*)|*.*</Message>
+    <Message ID="FilterWave">Wave файли (*.wav)|*.wav|All Files (*.*)|*.*</Message>
+    <Message ID="FilterPalette">Файли палiтр (*.pal)|*.pal|All Files (*.*)|*.*</Message>
     <Message ID="FilterRom">Всі підтримувані формати (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
     <Message ID="FilterRomIps">Всі підтримувані формати (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*</Message>
     <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
@@ -462,9 +491,22 @@
 
     <Message ID="GoogleDriveIntegrationError">Mesen не зміг підключитися до вашого аккаунту Google Drive - спробуйте ще раз.</Message>
 
-    <Message ID="InvalidCheatFile">The selected file ({0}) is not a valid cheat file.</Message>
-    <Message ID="InvalidXmlFile">The selected file ({0}) is not a valid XML file.</Message>
-    <Message ID="NoMatchingCheats">The selected cheat file ({0}) contains no cheats that match the selected game.</Message>
+    <Message ID="InvalidCheatFile">Обраний Cheat файл ({0}) не є коректним.</Message>
+    <Message ID="InvalidXmlFile">Обраний XML файл ({0}) не є коректним.</Message>
+    <Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читов для даної гри.</Message>
+
+    <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
+    <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
+    <Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
+    <Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>
+    <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернути диск</Message>
+    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставити наступний диск</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставити монету в слот 1</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Вставити монету в слот 2</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Наступний слот для збережень</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Попередній слот для збережень</Message>
+    <Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
+    <Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
