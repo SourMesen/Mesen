@@ -177,6 +177,7 @@
       <Control ID="tpgSet2">Контролер #2</Control>
       <Control ID="tpgSet3">Контролер #3</Control>
       <Control ID="tpgSet4">Контролер #4</Control>
+      
       <Control ID="btnSelectPreset">Пресети</Control>
       <Control ID="mnuKeyboard">Клавіатура</Control>
       <Control ID="mnuWasdLayout">WSAD розкладка</Control>
@@ -440,6 +441,14 @@
       <Control ID="btnOK">ОК</Control>
       <Control ID="btnCancel">Вiдмiна</Control>
     </Form>
+    <Form ID="frmGetKey" Title="Налаштування клавіш...">
+      <Control ID="lblSetKeyMessage">Натисніть будь-яку клавішу на клавіатурі або контролері.</Control>...">
+     </Form>
+     <Form ID="frmPlayerProfile" Title="Профіль">
+       <Control ID="lblName">Iм'я :</Control>
+       <Control ID="btnOK">ОК</Control>
+       <Control ID="btnCancel">Вiдмiна</Control>
+     </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Всi файли (*.*)|*.*</Message>
@@ -502,6 +511,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставити наступний диск</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставити монету в слот 1</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Вставити монету в слот 2</Message>
+    <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Сервісна кнопка</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Наступний слот для збережень</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Попередній слот для збережень</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
