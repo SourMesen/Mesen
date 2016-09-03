@@ -322,6 +322,69 @@ std::unordered_map<string, string> MessageManager::_esResources = {
 	{ "SynchronizationCompleted", u8"Sincronización completada." },
 };
 
+std::unordered_map<string, string> MessageManager::_ukResources = {
+	{ "Cheats", u8"Чiти" },
+	{ "Debug", u8"Налагодження" },
+	{ "EmulationSpeed", u8"Швидкість емуляції" },
+	{ "ClockRate", u8"Тактова частота" },
+	{ "Error", u8"Помилка" },
+	{ "GameInfo", u8"Інформація про гру" },
+	{ "GameLoaded", u8"Гра завантажена" },
+	{ "IPS", u8"IPS" },
+	{ "Movies", u8"Записи" },
+	{ "NetPlay", u8"Гра по мережi" },
+	{ "Region", u8"Регiон" },
+	{ "SaveStates", u8"Збереження" },
+	{ "ScreenshotSaved", u8"Скріншот збережений" },
+	{ "SoundRecorder", u8"Запис звуку" },
+	{ "Test", u8"Тест" },
+
+	{ "ApplyingIps", u8"Застосування патчу: %1" },
+	{ "CheatApplied", u8"1 Чiт застосований." },
+	{ "CheatsApplied", u8"Чiтів застосовано %1" },
+	{ "ConnectedToServer", u8"Підключення до сервера." },
+	{ "ConnectedAsPlayer", u8"Пiдключен як гравець %1" },
+	{ "ConnectedAsSpectator", u8"Підключений як спостерігач." },
+	{ "ConnectionLost", u8"З'єднання втрачено." },
+	{ "CouldNotConnect", u8"Не вдалося підключитися до сервера" },
+	{ "CouldNotIniitalizeAudioSystem", u8"Не вдалося ініціалізувати звукову підсистему" },
+	{ "CouldNotFindRom", u8"Не вдалося знайти відповідний ROM." },
+	{ "CouldNotLoadFile", u8"Не вдалося завантажити файл: %1" },
+	{ "EmulationMaximumSpeed", u8"Максимальна швидкiсть" },
+	{ "EmulationSpeedPercent", u8"%1%" },
+	{ "GameCrash", u8"Гра була аварійно завершена (%1)" },
+	{ "Lag", u8"Лаг" },
+	{ "Mapper", u8"Mapper: %1, SubMapper: %2" },
+	{ "MovieEnded", u8"Відтворення закінчено." },
+	{ "MovieInvalid", u8"Некоректна запис" },
+	{ "MovieMissingRom", u8"Вiдсутнiй ROM (%1) необхідний для відтворення" },
+	{ "MovieNewerVersion", u8"Запис створена в більш нової версії Mesen. Будь ласка завантажте останню версію." },
+	{ "MovieIncompatibleVersion", u8"Ця запись не сумісна з вашою версією Mesen" },
+	{ "MoviePlaying", u8"Відтворення запису: %1" },
+	{ "MovieRecordingTo", u8"Запис розпочато: %1" },
+	{ "MovieSaved", u8"Запис збережена: %1" },
+	{ "NetplayVersionMismatch", u8"Версія Mesen відрізняється. %1 був відключений." },
+	{ "PrgSizeWarning", u8"Розмiр PRG менше 32kb" },
+	{ "SaveStateEmpty", u8"Слот порожнiй." },
+	{ "SaveStateIncompatibleVersion", u8"Збереження #%1 несумісне з вашою версією Mesen." },
+	{ "SaveStateInvalidFile", u8"Некоректне збереження." },
+	{ "SaveStateLoaded", u8"Збереження #%1 завантажено." },
+	{ "SaveStateNewerVersion", u8"Збереження створено в більш нової версії Mesen. Будь ласка завантажте останню версію." },
+	{ "SaveStateSaved", u8"Збережено в #%1 слот." },
+	{ "ScanlineTimingWarning", u8"Таймiнг PPU був змінений." },
+	{ "ServerStarted", u8"Сервер запущено (Порт: %1)" },
+	{ "ServerStopped", u8"Сервер зупинено" },
+	{ "SoundRecorderStarted", u8"Запис розпочато to: %1" },
+	{ "SoundRecorderStopped", u8"Запис збережена: %1" },
+	{ "TestFileSavedTo", u8"Тест збережений: %1" },
+	{ "UnsupportedMapper", u8"Непідтримуваний mapper (%1), гра не завантажена." },
+
+	{ "Google Диск", u8"Google Drive" },
+	{ "SynchronizationStarted", u8"Синхронізацію розпочато." },
+	{ "SynchronizationFailed", u8"Синхронізація не вдалася." },
+	{ "SynchronizationCompleted", u8"Синхронізація завершена." }
+};
+
 std::list<string> MessageManager::_log;
 SimpleLock MessageManager::_logLock;
 IMessageManager* MessageManager::_messageManager = nullptr;
@@ -341,6 +404,7 @@ string MessageManager::Localize(string key)
 		case Language::Japanese: resources = &_jaResources; break;
 		case Language::Russian: resources = &_ruResources; break;
 		case Language::Spanish: resources = &_esResources; break;
+		case Language::Ukrainian: resources = &_ukResources; break;
 	}
 	if(resources) {
 		if(resources->find(key) != resources->end()) {

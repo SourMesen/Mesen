@@ -21,7 +21,8 @@ namespace Mesen.GUI.Forms
 		French = 2,
 		Japanese = 3,
 		Russian = 4,
-		Spanish = 5
+		Spanish = 5,
+		Ukrainian = 6
 	}
 
 	class ResourceHelper
@@ -51,6 +52,7 @@ namespace Mesen.GUI.Forms
 					case "ja": language = Language.Japanese; break;
 					case "ru": language = Language.Russian; break;
 					case "es": language = Language.Spanish; break;
+					case "uk": language = Language.Ukrainian; break;
 				}
 			}
 
@@ -63,6 +65,7 @@ namespace Mesen.GUI.Forms
 				case Language.Japanese: filename = "resources.ja.xml"; break;
 				case Language.Russian: filename = "resources.ru.xml"; break;
 				case Language.Spanish: filename = "resources.es.xml"; break;
+				case Language.Ukrainian: filename = "resources.uk.xml"; break;
 			}
 
 			_language = language;

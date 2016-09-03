@@ -137,6 +137,7 @@
       <Value ID="Japanese">日本語</Value>
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
+      <Value ID="Ukrainian">Українська</Value>
     </Enum>
     <Enum ID="RamPowerOnState">
       <Value ID="AllZeros">All 0s (Default)</Value>

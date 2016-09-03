@@ -17,6 +17,7 @@ private:
 	static std::unordered_map<string, string> _jaResources;
 	static std::unordered_map<string, string> _ruResources;
 	static std::unordered_map<string, string> _esResources;
+	static std::unordered_map<string, string> _ukResources;
 
 	static SimpleLock _logLock;
 	static std::list<string> _log;
