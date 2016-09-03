@@ -451,6 +451,14 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
+    <Form ID="frmGetKey" Title="Configuration du bouton...">
+      <Control ID="lblSetKeyMessage">Appuyer sur n'importe quelle touche sur votre clavier ou manette pour l'associer à ce bouton.</Control>
+    </Form>
+    <Form ID="frmPlayerProfile" Title="Profil">
+      <Control ID="lblName">Nom du joueur :</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Tous les fichiers (*.*)|*.*</Message>

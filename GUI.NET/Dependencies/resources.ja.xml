@@ -433,6 +433,14 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
+    <Form ID="frmGetKey" Title="キーマッピング">
+      <Control ID="lblSetKeyMessage">キーボードのキーやコントローラのボタンを押してください。</Control>
+    </Form>
+    <Form ID="frmPlayerProfile" Title="プロファイル">
+      <Control ID="lblName">プレーヤー名：</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
