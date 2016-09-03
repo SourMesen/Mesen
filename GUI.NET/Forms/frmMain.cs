@@ -839,7 +839,7 @@ namespace Mesen.GUI.Forms
 				frmClientConfig frm = new frmClientConfig();
 				if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
 					Task.Run(() => {
-						InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, null, 0, ConfigManager.Config.ClientConnectionInfo.Spectator);
+						InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.ClientConnectionInfo.Spectator);
 					});
 				}
 			}

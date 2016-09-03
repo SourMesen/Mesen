@@ -180,14 +180,12 @@ namespace InteropEmu {
 		DllExport void __stdcall StopServer() { GameServer::StopServer(); }
 		DllExport bool __stdcall IsServerRunning() { return GameServer::Started(); }
 
-		DllExport void __stdcall Connect(char* host, uint16_t port, char* playerName, uint8_t* avatarData, uint32_t avatarSize, bool spectator)
+		DllExport void __stdcall Connect(char* host, uint16_t port, char* playerName, bool spectator)
 		{
 			shared_ptr<ClientConnectionData> connectionData(new ClientConnectionData(
 				host,
 				port,
 				playerName,
-				avatarData,
-				avatarSize,
 				spectator
 			));
 

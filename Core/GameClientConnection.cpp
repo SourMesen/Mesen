@@ -33,7 +33,7 @@ GameClientConnection::~GameClientConnection()
 
 void GameClientConnection::SendHandshake()
 {
-	HandShakeMessage message(_connectionData->PlayerName, _connectionData->AvatarData, _connectionData->AvatarSize, _connectionData->Spectator);
+	HandShakeMessage message(_connectionData->PlayerName, _connectionData->Spectator);
 	SendNetMessage(message);
 }
 

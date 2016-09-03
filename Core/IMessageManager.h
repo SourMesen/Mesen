@@ -9,7 +9,6 @@ class IMessageManager
 {
 public:
 	virtual void DisplayMessage(string title, string message) = 0;
-	virtual void DisplayToast(shared_ptr<ToastInfo> toast) = 0;
 };
 
 class ToastInfo

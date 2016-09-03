@@ -97,7 +97,6 @@ namespace NES {
 		void Reset();
 		void Render();
 		void DisplayMessage(string title, string message);
-		void DisplayToast(shared_ptr<ToastInfo> toast);
 
 		void UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height);
 	};

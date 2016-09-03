@@ -359,11 +359,6 @@ namespace NES
 	void Renderer::DisplayMessage(string title, string message)
 	{
 		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, ""));
-		DisplayToast(toast);
-	}
-
-	void Renderer::DisplayToast(shared_ptr<ToastInfo> toast)
-	{
 		_toasts.push_front(toast);
 	}
 

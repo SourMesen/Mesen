@@ -28,7 +28,7 @@ GameServerConnection::GameServerConnection(shared_ptr<Socket> socket) : GameConn
 GameServerConnection::~GameServerConnection()
 {
 	if(_connectionData) {
-		MessageManager::DisplayToast("Net Play", _connectionData->PlayerName + " (Player " + std::to_string(_controllerPort + 1) + ") disconnected.", _connectionData->AvatarData, _connectionData->AvatarSize);
+		MessageManager::DisplayMessage("NetPlay", _connectionData->PlayerName + " (Player " + std::to_string(_controllerPort + 1) + ") disconnected.");
 	}
 
 	UnregisterNetPlayDevice(this);
@@ -88,11 +88,11 @@ void GameServerConnection::ProcessHandshakeResponse(HandShakeMessage* message)
 		Console::Pause();
 
 		_controllerPort = message->IsSpectator() ? GameConnection::SpectatorPort : GetFirstFreeControllerPort();
-		_connectionData.reset(new ClientConnectionData("", 0, message->GetPlayerName(), message->GetAvatarData(), message->GetAvatarSize(), false));
+		_connectionData.reset(new ClientConnectionData("", 0, message->GetPlayerName(), false));
 
 		string playerPortMessage = _controllerPort == GameConnection::SpectatorPort ? "Spectator" : "Player " + std::to_string(_controllerPort + 1);
 
-		MessageManager::DisplayToast("Net Play", _connectionData->PlayerName + " (" + playerPortMessage + ") connected.", _connectionData->AvatarData, _connectionData->AvatarSize);
+		MessageManager::DisplayMessage("NetPlay", _connectionData->PlayerName + " (" + playerPortMessage + ") connected.");
 
 		if(Console::GetRomName().size() > 0) {
 			SendGameInformation();

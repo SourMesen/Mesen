@@ -29,16 +29,13 @@
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblName = new System.Windows.Forms.Label();
-			this.lblAvatar = new System.Windows.Forms.Label();
 			this.txtPlayerName = new System.Windows.Forms.TextBox();
-			this.picAvatar = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picAvatar)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 59);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 55);
 			this.baseConfigPanel.Size = new System.Drawing.Size(302, 29);
 			// 
 			// tableLayoutPanel1
@@ -47,18 +44,16 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.lblName, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.lblAvatar, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.txtPlayerName, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.picAvatar, 1, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 4;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(302, 59);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(302, 55);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// lblName
@@ -71,17 +66,6 @@
 			this.lblName.TabIndex = 3;
 			this.lblName.Text = "Player name:";
 			// 
-			// lblAvatar
-			// 
-			this.lblAvatar.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblAvatar.AutoSize = true;
-			this.lblAvatar.Location = new System.Drawing.Point(3, 55);
-			this.lblAvatar.Name = "lblAvatar";
-			this.lblAvatar.Size = new System.Drawing.Size(41, 13);
-			this.lblAvatar.TabIndex = 4;
-			this.lblAvatar.Text = "Avatar:";
-			this.lblAvatar.Visible = false;
-			// 
 			// txtPlayerName
 			// 
 			this.txtPlayerName.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -91,21 +75,11 @@
 			this.txtPlayerName.TabIndex = 5;
 			this.txtPlayerName.Text = "DefaultPlayer";
 			// 
-			// picAvatar
-			// 
-			this.picAvatar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picAvatar.Location = new System.Drawing.Point(77, 29);
-			this.picAvatar.Name = "picAvatar";
-			this.picAvatar.Size = new System.Drawing.Size(66, 66);
-			this.picAvatar.TabIndex = 8;
-			this.picAvatar.TabStop = false;
-			this.picAvatar.Visible = false;
-			// 
 			// frmPlayerProfile
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(302, 88);
+			this.ClientSize = new System.Drawing.Size(302, 84);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -117,7 +91,6 @@
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picAvatar)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -126,8 +99,6 @@
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label lblName;
-		private System.Windows.Forms.Label lblAvatar;
 		private System.Windows.Forms.TextBox txtPlayerName;
-		private System.Windows.Forms.PictureBox picAvatar;
 	}
 }
