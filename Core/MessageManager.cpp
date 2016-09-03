@@ -213,7 +213,7 @@ std::unordered_map<string, string> MessageManager::_ruResources = {
 	{ "SoundRecorder", u8"Запись звука" },
 	{ "Test", u8"Тест" },
 
-	{ "ApplyingIps", u8"Applying patch: %1" },
+	{ "ApplyingIps", u8"Применён патч: %1" },
 	{ "CheatApplied", u8"1 Чит применён." },
 	{ "CheatsApplied", u8"Читов применено %1" },
 	{ "ConnectedToServer", u8"Подключение к серверу." },
@@ -247,6 +247,7 @@ std::unordered_map<string, string> MessageManager::_ruResources = {
 	{ "SaveStateSaved", u8"Сохранено в #%1 слот." },
 	{ "ScanlineTimingWarning", u8"Тайминг PPU был изменён." },
 	{ "ServerStarted", u8"Сервер запущен (Порт: %1)" },
+	{ "SaveStateSlotSelected", u8"Выбран #%1 слот." },
 	{ "ServerStopped", u8"Сервер остановлен" },
 	{ "SoundRecorderStarted", u8"Запись начата to: %1" },
 	{ "SoundRecorderStopped", u8"Запись сохранена: %1" },
