@@ -500,9 +500,10 @@
     <Message ID="EmulatorShortcutMappings_Reset">リセット</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">スクリーンショットを撮る</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - A面B面切り替え</Message>
-    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - 次のディスクを入れる</Message>
+    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - 次のディスクを入れる</Message>    
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - インサートコイン 1</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - インサートコイン 2</Message>
+    <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - サービスボタン</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">次のクイックセーブスロットを選ぶ</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">前のクイックセーブスロットを選ぶ</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">選択中スロットにクイックセーブ</Message>

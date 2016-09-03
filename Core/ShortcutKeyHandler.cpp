@@ -36,25 +36,41 @@ bool ShortcutKeyHandler::DetectKeyPress(uint32_t keyCode)
 	return false;
 }
 
+bool ShortcutKeyHandler::DetectKeyRelease(uint32_t keyCode)
+{
+	if(!ControlManager::IsKeyPressed(keyCode)) {
+		if(_prevKeysDown.find(keyCode) != _prevKeysDown.end()) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 {
-	if(ControlManager::IsKeyPressed(mappings.FastForward)) {
-		_turboEnabled = true;
+	if(DetectKeyPress(mappings.FastForward)) {
+		EmulationSettings::SetFlags(EmulationFlags::Turbo);
+	} else if(DetectKeyRelease(mappings.FastForward)) {
+		EmulationSettings::ClearFlags(EmulationFlags::Turbo);
 	}
 
 	if(DetectKeyPress(mappings.TakeScreenshot)) {
 		VideoDecoder::GetInstance()->TakeScreenshot();
 	}
 
-	if(DetectKeyPress(mappings.InsertCoin1)) {
-		if(VsControlManager::GetInstance()) {
-			VsControlManager::GetInstance()->InsertCoin(0);
+	if(VsControlManager::GetInstance()) {
+		VsControlManager* manager = VsControlManager::GetInstance();
+		if(DetectKeyPress(mappings.InsertCoin1)) {
+			manager->InsertCoin(0);
 		}
-	}
-
-	if(DetectKeyPress(mappings.InsertCoin2)) {
-		if(VsControlManager::GetInstance()) {
-			VsControlManager::GetInstance()->InsertCoin(1);
+		if(DetectKeyPress(mappings.InsertCoin2)) {
+			manager->InsertCoin(1);
+		}
+		if(DetectKeyPress(mappings.VsServiceButton)) {
+			manager->SetServiceButtonState(true);
+		}
+		if(DetectKeyRelease(mappings.VsServiceButton)) {
+			manager->SetServiceButtonState(false);
 		}
 	}
 
@@ -100,15 +116,7 @@ void ShortcutKeyHandler::ProcessKeys(EmulatorKeyMappingSet mappings)
 	ControlManager::RefreshKeyState();
 
 	_keysDown.clear();
-
-	_turboEnabled = false;
 	CheckMappedKeys(mappings.KeySet1);
 	CheckMappedKeys(mappings.KeySet2);
-	if(_turboEnabled) {
-		EmulationSettings::SetFlags(EmulationFlags::Turbo);
-	} else {
-		EmulationSettings::ClearFlags(EmulationFlags::Turbo);
-	}
-
 	_prevKeysDown = _keysDown;
 }

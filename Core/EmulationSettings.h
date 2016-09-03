@@ -219,6 +219,7 @@ struct EmulatorKeyMappings
 
 	uint32_t InsertCoin1;
 	uint32_t InsertCoin2;
+	uint32_t VsServiceButton;
 
 	uint32_t TakeScreenshot;
 };

@@ -521,6 +521,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insérer le disque suivant</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insérer une pièce (1)</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insérer une pièce (2)</Message>
+    <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Bouton de service</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Position de sauvegarde suivante</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Position de sauvegarde précédente</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Sauvegarder l'état à la position courante</Message>
