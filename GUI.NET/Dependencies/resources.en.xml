@@ -61,6 +61,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insert Next Disk</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insert Coin 1</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insert Coin 2</Message>
+    <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Service Button</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Select Next Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Select Previous Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Save State</Message>
