@@ -442,6 +442,14 @@
       <Control ID="btnOK">ОК</Control>
       <Control ID="btnCancel">Отмена</Control>
     </Form>
+    <Form ID="frmGetKey" Title="Настройка клавиш...">
+      <Control ID="lblSetKeyMessage">Нажмите любую клавишу на клавиатуре или контроллере.</Control>
+    </Form>
+    <Form ID="frmPlayerProfile" Title="Профиль">
+      <Control ID="lblName">Имя :</Control>
+      <Control ID="btnOK">ОК</Control>
+      <Control ID="btnCancel">Отмена</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Все файлы (*.*)|*.*</Message>
@@ -504,6 +512,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставить следующий диск</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставить монету в слот 1</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Вставить монету в слот 2</Message>
+    <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Сервисная кнопка</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Следующий слот для сохранений</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Предыдущий слот для сохранений</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Сохранить</Message>
