@@ -89,13 +89,13 @@ bool SaveStateManager::LoadState(int stateIndex)
 
 			file.read((char*)&emuVersion, sizeof(emuVersion));
 			if(emuVersion > EmulationSettings::GetMesenVersion()) {
-				MessageManager::DisplayMessage("Save States", "SaveStateNewerVersion");
+				MessageManager::DisplayMessage("SaveStates", "SaveStateNewerVersion");
 				return false;
 			}
 
 			file.read((char*)&fileFormatVersion, sizeof(fileFormatVersion));
 			if(fileFormatVersion != SaveStateManager::FileFormatVersion) {
-				MessageManager::DisplayMessage("Save States", "SaveStateIncompatibleVersion", std::to_string(stateIndex));
+				MessageManager::DisplayMessage("SaveStates", "SaveStateIncompatibleVersion", std::to_string(stateIndex));
 				return false;
 			}
 
@@ -105,16 +105,16 @@ bool SaveStateManager::LoadState(int stateIndex)
 			Console::LoadState(file);
 			Console::Resume();
 
-			MessageManager::DisplayMessage("Save States", "SaveStateLoaded", std::to_string(stateIndex));
+			MessageManager::DisplayMessage("SaveStates", "SaveStateLoaded", std::to_string(stateIndex));
 			result = true;
 		} else {
-			MessageManager::DisplayMessage("Save States", "SaveStateInvalidFile");
+			MessageManager::DisplayMessage("SaveStates", "SaveStateInvalidFile");
 		}
 		file.close();
 	} 
 	
 	if(!result) {
-		MessageManager::DisplayMessage("Save States", "SaveStateEmpty");
+		MessageManager::DisplayMessage("SaveStates", "SaveStateEmpty");
 	}
 
 	return result;
