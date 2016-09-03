@@ -177,7 +177,23 @@
       <Control ID="tpgSet2">Контроллер #2</Control>
       <Control ID="tpgSet3">Контроллер #3</Control>
       <Control ID="tpgSet4">Контроллер #4</Control>
-      <Control ID="btnReset">Сброс</Control>
+
+      <Control ID="btnSelectPreset">Пресеты</Control>
+      <Control ID="mnuKeyboard">Клавиатура</Control>
+      <Control ID="mnuWasdLayout">WSAD раскладка</Control>
+      <Control ID="mnuArrowLayout">Курсорные клавиши</Control>
+      <Control ID="mnuFceuxLayout">FCEUX</Control>
+      <Control ID="mnuNestopiaLayout">Nestopia</Control>
+      <Control ID="mnuXboxController">Xbox геймпад</Control>
+      <Control ID="mnuXboxLayout1">Контроллер #1</Control>
+      <Control ID="mnuXboxLayout2">Контроллер #2</Control>
+      <Control ID="mnuPs4Controller">PS4 геймпад</Control>
+      <Control ID="mnuPs4Layout1">Контроллер #1</Control>
+      <Control ID="mnuPs4Layout2">Контроллер #2</Control>
+      <Control ID="mnuSnes30Controller">SNES30 геймпад</Control>
+      <Control ID="mnuSnes30Layout1">Контроллер #1</Control>
+      <Control ID="mnuSnes30Layout2">Контроллер #2</Control>
+
       <Control ID="btnClear">Очистить</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>
@@ -231,6 +247,8 @@
       <Control ID="tpgGeneral">Общие</Control>
       <Control ID="lblEmuSpeedHint">%  (0 = Максимальная скорость)</Control>
       <Control ID="lblEmulationSpeed">Скорость эмуляции :</Control>
+      <Control ID="lblTurboSpeedHint">%  (0 = Максимальная скорость)</Control>
+      <Control ID="lblTurboSpeed">Перемотка:</Control>
 
       <Control ID="tpgAdvanced">Расширенные</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
@@ -248,7 +266,7 @@
       <Control ID="lblExtraScanlinesBeforeNmi">Дополнительные scanlines до NMI : </Control>
       <Control ID="lblExtraScanlinesAfterNmi">Дополнительные scanlines после NMI : </Control>
       <Control ID="lblEffectiveClockRate">Тактовая частота (NTSC) : </Control>
-      <Control ID="lblEffectiveClockRatePal">Тактовая частота(PAL) : </Control>
+      <Control ID="lblEffectiveClockRatePal">Тактовая частота (PAL) : </Control>
       <Control ID="lblEffectiveClockRateDendy">Тактовая частота (Dendy) : </Control>
 
       <Control ID="chkOverclockAdjustApu">Не разгонять APU (Предотвращает изменение тона звука)</Control>
@@ -279,7 +297,18 @@
       <Control ID="chkFdsAutoLoadDisk">Автоматически вставлять диск 1 стороной А при загрузке FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Использовать быструю загрузку FDS</Control>
 
-      <Control ID="tpgCloudSave">Облачные сохранения</Control>
+      <Control ID="tpgShortcuts">Горячие клавиши</Control>
+      <Control ID="colAction">Действие</Control>
+      <Control ID="colBinding1">Вариант #1</Control>
+      <Control ID="colBinding2">Вариант #2</Control>
+
+      <Control ID="tpgSaveData">Сохранения</Control>
+      <Control ID="grpAutomaticSaves">Автоматические сохранения</Control>
+      <Control ID="chkAutoSave">Автоматически создавать сохранения через</Control>
+      <Control ID="lblAutoSave">минут (нажмите F6 для загрузки)</Control>
+      <Control ID="chkAutoSaveNotify">Оповещать при сохранении</Control>
+
+      <Control ID="grpCloudSaves">Облачные сохранения</Control>
       <Control ID="lblGoogleDriveIntegration">Mesen имеет возможность интеграции с Google Drive. Когда интеграция с Google Drive включена, ваши сохранения становятся доступны с любого компьютера и могут быть синхронизированы между компьютерами. Также, сохранения хранящиеся на Google Drive могут быть восстановлены если вы удалите их со своего компьютера.</Control>
       <Control ID="lblIntegrationOK">Интеграция с Google Drive включена</Control>
       <Control ID="btnDisableIntegration">Выключить интеграцию</Control>
@@ -295,6 +324,7 @@
       <Control ID="chkNsfMoveToNextTrackAfterTime">Ограничить продолжительность воспроизведения</Control>
       <Control ID="lblNsfSeconds">секундами</Control>
       <Control ID="chkNsfDisableApuIrqs">Отключить IRQs APU (Рекомендовано)</Control>
+
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>
@@ -416,8 +446,8 @@
   <Messages>
     <Message ID="FilterAll">Все файлы (*.*)|*.*</Message>
     <Message ID="FilterMovie">Записи (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
-    <Message ID="FilterWave">Wave files (*.wav)|*.wav|All Files (*.*)|*.*</Message>
-    <Message ID="FilterPalette">Palette Files (*.pal)|*.pal|All Files (*.*)|*.*</Message>
+    <Message ID="FilterWave">Wave файлы (*.wav)|*.wav|All Files (*.*)|*.*</Message>
+    <Message ID="FilterPalette">Файлы палитры (*.pal)|*.pal|All Files (*.*)|*.*</Message>
     <Message ID="FilterRom">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
     <Message ID="FilterRomIps">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*</Message>
     <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
@@ -462,9 +492,22 @@
 
     <Message ID="GoogleDriveIntegrationError">Mesen не смог подключиться к вашему аккаунту Google Drive - попробуйте ещё раз.</Message>
 
-    <Message ID="InvalidCheatFile">The selected file ({0}) is not a valid cheat file.</Message>
-    <Message ID="InvalidXmlFile">The selected file ({0}) is not a valid XML file.</Message>
-    <Message ID="NoMatchingCheats">The selected cheat file ({0}) contains no cheats that match the selected game.</Message>
+    <Message ID="InvalidCheatFile">Выбранный Cheat файл ({0}) не является корректным.</Message>
+    <Message ID="InvalidXmlFile">Выбранный XML файл ({0}) не является корректным.</Message>
+    <Message ID="NoMatchingCheats">Выбранный Cheat файл ({0}) не содержит читов для данной игры.</Message>
+
+    <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
+    <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
+    <Message ID="EmulatorShortcutMappings_Reset">Сброс</Message>
+    <Message ID="EmulatorShortcutMappings_TakeScreenshot">Сделать сриншот</Message>
+    <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернуть диск</Message>
+    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставить следующий диск</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставить монету в слот 1</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Вставить монету в слот 2</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Следующий слот для сохранений</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Предыдущий слот для сохранений</Message>
+    <Message ID="EmulatorShortcutMappings_SaveState">Сохранить</Message>
+    <Message ID="EmulatorShortcutMappings_LoadState">Загрузить</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
