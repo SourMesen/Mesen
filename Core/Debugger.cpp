@@ -518,7 +518,7 @@ void Debugger::SetNextStatement(uint16_t addr)
 
 void Debugger::StartTraceLogger(TraceLoggerOptions options)
 {
-	string traceFilepath = FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), "Trace.txt");
+	string traceFilepath = FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), "Trace - " + FolderUtilities::GetFilename(_romName, false) + ".log");
 	_traceLogger.reset(new TraceLogger(traceFilepath, options));
 }
 

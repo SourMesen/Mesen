@@ -103,6 +103,18 @@ namespace Mesen.GUI.Config
 			}
 		}
 
+		public static string DebuggerFolder
+		{
+			get
+			{
+				string debuggerFolder = Path.Combine(ConfigManager.HomeFolder, "Debugger");
+				if(!Directory.Exists(debuggerFolder)) {
+					Directory.CreateDirectory(debuggerFolder);
+				}
+				return debuggerFolder;
+			}
+		}
+
 		public static string DownloadFolder
 		{
 			get

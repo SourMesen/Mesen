@@ -19,6 +19,7 @@ namespace Mesen.GUI.Debugger
 		private List<Form> _childForms = new List<Form>();
 		private InteropEmu.NotificationListener _notifListener;
 		private ctrlDebuggerCode _lastCodeWindow;
+		private frmTraceLogger _traceLogger;
 
 		public frmDebugger()
 		{
@@ -388,7 +389,15 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuTraceLogger_Click(object sender, EventArgs e)
 		{
-			new frmTraceLogger().Show();
+			if(_traceLogger == null) {
+				_traceLogger = new frmTraceLogger();
+				_traceLogger.FormClosed += (s, evt) => {
+					_traceLogger = null;
+				};
+				_traceLogger.Show(sender, this);
+			} else {
+				_traceLogger.Focus();
+			}
 		}
 
 		private void mnuPpuPartialDraw_Click(object sender, EventArgs e)

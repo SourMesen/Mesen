@@ -6,7 +6,14 @@ struct DebugState;
 
 struct TraceLoggerOptions
 {
-
+	bool ShowByteCode;
+	bool ShowRegisters;
+	bool ShowCpuCycles;
+	bool ShowPpuCycles;
+	bool ShowPpuScanline;
+	bool ShowPpuFrames;
+	bool ShowExtraInfo;
+	bool IndentCode;
 };
 
 class TraceLogger

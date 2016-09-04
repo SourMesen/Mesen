@@ -92,6 +92,7 @@ PPUDebugState PPU::GetState()
 	state.State = _state;
 	state.Cycle = _cycle;
 	state.Scanline = _scanline;
+	state.FrameCount = _frameCount;
 	return state;
 }
 

@@ -176,7 +176,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
 		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
 		
-		[DllImport(DLLPath)] public static extern void DebugStartTraceLogger(TraceLoggingOptions options);
+		[DllImport(DLLPath)] public static extern void DebugStartTraceLogger(TraceLoggerOptions options);
 		[DllImport(DLLPath)] public static extern void DebugStopTraceLogger();
 		
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugLoadCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
@@ -540,6 +540,7 @@ namespace Mesen.GUI
 		public PPUState State;
 		public Int32 Scanline;
 		public UInt32 Cycle;
+		public UInt32 FrameCount;
 	}
 
 	public struct PPUState
@@ -599,10 +600,16 @@ namespace Mesen.GUI
 		public UInt16 DebugPC;
 	}
 
-	public struct TraceLoggingOptions
+	public struct TraceLoggerOptions
 	{
-
-
+		[MarshalAs(UnmanagedType.I1)] public bool ShowByteCode;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowRegisters;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowCpuCycles;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowPpuCycles;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowPpuScanline;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowPpuFrames;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowExtraInfo;
+		[MarshalAs(UnmanagedType.I1)] public bool IndentCode;
 	}
 
 	[Flags]

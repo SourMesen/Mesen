@@ -86,6 +86,7 @@ struct PPUDebugState
 	PPUState State;
 	int32_t Scanline;
 	uint32_t Cycle;
+	uint32_t FrameCount;
 };
 
 class PPU : public IMemoryHandler, public Snapshotable
