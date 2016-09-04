@@ -28,6 +28,9 @@ namespace Mesen.GUI.Config
 		public bool PpuAutoRefresh = true;
 		public bool PpuPartialDraw = false;
 
+		public bool ShowCpuMemoryMapping = true;
+		public bool ShowPpuMemoryMapping = true;
+
 		public bool RamAutoRefresh = true;
 		public int RamColumnCount = 2;
 		public float RamFontSize = 13;

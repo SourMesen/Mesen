@@ -531,6 +531,23 @@ namespace Mesen.GUI
 	{
 		public CPUState CPU;
 		public PPUDebugState PPU;
+		public CartridgeState Cartridge;
+	}
+	
+	public struct CartridgeState
+	{
+		public UInt32 PrgPageCount;
+		public UInt32 PrgPageSize;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public UInt32[] PrgSelectedPages;
+
+		public UInt32 ChrPageCount;
+		public UInt32 ChrPageSize;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+		public UInt32[] ChrSelectedPages;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		public UInt32[] Nametables;
 	}
 
 	public struct PPUDebugState

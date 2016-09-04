@@ -36,6 +36,17 @@ enum ChrSpecialPage
 	NametableB = 0x7001
 };
 
+struct CartridgeState
+{
+	uint32_t PrgPageCount;
+	uint32_t PrgPageSize;
+	uint32_t PrgSelectedPages[4];
+	uint32_t ChrPageCount;
+	uint32_t ChrPageSize;
+	uint32_t ChrSelectedPages[8];
+	uint32_t Nametables[8];
+};
+
 class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener
 {
 private:
@@ -205,6 +216,7 @@ public:
 	void InitializeRam(void* data, uint32_t length);
 
 	//Debugger Helper Functions
+	CartridgeState GetState();
 	uint8_t* GetPrgRom();
 	uint8_t* GetWorkRam();
 	void GetPrgCopy(uint8_t **buffer);

@@ -801,3 +801,36 @@ int32_t BaseMapper::FromAbsoluteAddress(uint32_t addr)
 	//Address is currently not mapped
 	return -1;
 }
+
+CartridgeState BaseMapper::GetState()
+{
+	CartridgeState state;
+
+	state.PrgPageCount = GetPRGPageCount();
+	state.PrgPageSize = InternalGetPrgPageSize();
+	state.ChrPageCount = GetCHRPageCount();
+	state.ChrPageSize = InternalGetChrPageSize();
+	for(int i = 0; i < 4; i++) {
+		if(_prgPageNumbers[i] != 0xEEEEEEEE) {
+			int16_t pageNumber = (int16_t)_prgPageNumbers[i];
+			state.PrgSelectedPages[i] = pageNumber < 0 ? state.PrgPageCount + pageNumber : pageNumber;
+		} else {
+			state.PrgSelectedPages[i] = 0xEEEEEEEE;
+		}
+	}
+
+	for(int i = 0; i < 8; i++) {
+		if(_chrPageNumbers[i] != 0xEEEEEEEE) {
+			int16_t pageNumber = (int16_t)_chrPageNumbers[i];
+			state.ChrSelectedPages[i] = pageNumber < 0 ? state.ChrPageCount + pageNumber : pageNumber;
+		} else {
+			state.ChrSelectedPages[i] = 0xEEEEEEEE;
+		}
+	}
+
+	for(int i = 0; i < 4; i++) {
+		state.Nametables[i] = _nametableIndexes[i];
+	}
+	
+	return state;
+}

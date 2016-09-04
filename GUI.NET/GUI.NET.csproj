@@ -278,6 +278,7 @@
     <Compile Include="Debugger\Controls\ctrlAddressList.Designer.cs">
       <DependentUpon>ctrlAddressList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlMemoryMapping.cs" />
     <Compile Include="Debugger\Controls\ctrlPaletteViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>

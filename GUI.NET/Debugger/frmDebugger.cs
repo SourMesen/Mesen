@@ -32,6 +32,8 @@ namespace Mesen.GUI.Debugger
 
 			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
+			this.mnuShowCpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping;
+			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
 
 			_lastCodeWindow = ctrlDebuggerCode;
 
@@ -142,6 +144,9 @@ namespace Mesen.GUI.Debugger
 			ctrlConsoleStatus.UpdateStatus(ref state);
 			ctrlWatch.UpdateWatch();
 			ctrlCallstack.UpdateCallstack();
+
+			ctrlCpuMemoryMapping.UpdateCpuRegions(state.Cartridge);
+			ctrlPpuMemoryMapping.UpdatePpuRegions(state.Cartridge);
 
 			this.BringToFront();
 		}
@@ -404,6 +409,24 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.PpuPartialDraw = mnuPpuPartialDraw.Checked;
 			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuShowCpuMemoryMapping_CheckedChanged(object sender, EventArgs e)
+		{
+			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
+			ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping = mnuShowCpuMemoryMapping.Checked;
+			ConfigManager.ApplyChanges();
+			ctrlCpuMemoryMapping.Invalidate();
+			ctrlPpuMemoryMapping.Invalidate();
+		}
+
+		private void mnuShowPpuMemoryMapping_CheckedChanged(object sender, EventArgs e)
+		{
+			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
+			ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping = mnuShowPpuMemoryMapping.Checked;
+			ConfigManager.ApplyChanges();
+			ctrlCpuMemoryMapping.Invalidate();
+			ctrlPpuMemoryMapping.Invalidate();
 		}
 	}
 }

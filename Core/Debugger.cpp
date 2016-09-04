@@ -389,6 +389,7 @@ void Debugger::GetState(DebugState *state)
 {
 	state->CPU = _cpu->GetState();
 	state->PPU = _ppu->GetState();
+	state->Cartridge = _mapper->GetState();
 }
 
 void Debugger::PpuStep(uint32_t count)
