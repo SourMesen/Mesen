@@ -77,7 +77,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 {
 	EndFrame(time);
 	size_t sampleCount = blip_read_samples(_blipBuf, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 0);
-	if(SoundMixer::AudioDevice) {
+	if(SoundMixer::AudioDevice && !EmulationSettings::IsPaused()) {
 		//Apply low pass filter/volume reduction when in background (based on options)
 		if(!_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled) && EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
 			if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {

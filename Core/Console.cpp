@@ -310,10 +310,11 @@ void Console::Run()
 			bool paused = EmulationSettings::IsPaused();
 			if(paused && !_stop) {
 				MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
-				_runLock.Release();
 				
 				//Prevent audio from looping endlessly while game is paused
 				SoundMixer::StopAudio();
+
+				_runLock.Release();
 				
 				PlatformUtilities::EnableScreensaver();
 				while(paused && !_stop) {
