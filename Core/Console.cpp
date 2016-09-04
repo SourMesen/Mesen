@@ -225,7 +225,6 @@ void Console::ResetComponents(bool softReset)
 void Console::Stop()
 {
 	_stop = true;
-	EmulationSettings::ClearFlags(EmulationFlags::Paused);
 
 	shared_ptr<Debugger> debugger = _debugger;
 	if(debugger) {
@@ -317,7 +316,7 @@ void Console::Run()
 				SoundMixer::StopAudio();
 				
 				PlatformUtilities::EnableScreensaver();
-				while(paused) {
+				while(paused && !_stop) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
 					paused = EmulationSettings::IsPaused();
