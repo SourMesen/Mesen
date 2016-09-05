@@ -38,6 +38,13 @@ enum class DebuggerFlags
 	PpuPartialDraw = 1
 };
 
+enum class CdlHighlightType
+{
+	None = 0,
+	HighlightUsed = 1,
+	HighlightUnused = 2,
+};
+
 class Debugger
 {
 private:
@@ -110,7 +117,7 @@ public:
 
 	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
 	void GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData);
-	void GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites);
+	void GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType);
 	void GetSprites(uint32_t* frameBuffer);
 	void GetPalette(uint32_t* frameBuffer);
 

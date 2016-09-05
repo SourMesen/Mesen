@@ -40,6 +40,10 @@ enum ChrSpecialPage
 
 struct CartridgeState
 {
+	uint32_t PrgRomSize;
+	uint32_t ChrRomSize;
+	uint32_t ChrRamSize;
+
 	uint32_t PrgPageCount;
 	uint32_t PrgPageSize;
 	uint32_t PrgSelectedPages[4];

@@ -241,14 +241,14 @@ namespace Mesen.GUI
 			}
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette, [MarshalAs(UnmanagedType.I1)]bool largeSprites);
-		public static byte[] DebugGetChrBank(int bankIndex, int palette, bool largeSprites)
+		[DllImport(DLLPath, EntryPoint="DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette, [MarshalAs(UnmanagedType.I1)]bool largeSprites, CdlHighlightType highlightType);
+		public static byte[] DebugGetChrBank(int bankIndex, int palette, bool largeSprites, CdlHighlightType highlightType)
 		{
 			byte[] frameData = new byte[128*128*4];
 
 			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetChrBankWrapper((UInt32)bankIndex, hFrameData.AddrOfPinnedObject(), (Byte)palette, largeSprites);
+				InteropEmu.DebugGetChrBankWrapper((UInt32)bankIndex, hFrameData.AddrOfPinnedObject(), (Byte)palette, largeSprites, highlightType);
 			} finally {
 				hFrameData.Free();
 			}
@@ -538,6 +538,13 @@ namespace Mesen.GUI
 		public float ChrDrawnRatio;
 	}
 
+	public enum CdlHighlightType
+	{
+		None = 0,
+		HighlightUsed = 1,
+		HighlightUnused = 2
+	}
+
 	public struct DebugState
 	{
 		public CPUState CPU;
@@ -547,6 +554,10 @@ namespace Mesen.GUI
 	
 	public struct CartridgeState
 	{
+		public UInt32 PrgRomSize;
+		public UInt32 ChrRomSize;
+		public UInt32 ChrRamSize;
+
 		public UInt32 PrgPageCount;
 		public UInt32 PrgPageSize;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]

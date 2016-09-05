@@ -37,49 +37,56 @@
 			this.txtTileIndex = new System.Windows.Forms.TextBox();
 			this.picTile = new System.Windows.Forms.PictureBox();
 			this.picChrBank1 = new System.Windows.Forms.PictureBox();
+			this.picChrBank2 = new System.Windows.Forms.PictureBox();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblPalette = new System.Windows.Forms.Label();
 			this.cboPalette = new System.Windows.Forms.ComboBox();
-			this.picChrBank2 = new System.Windows.Forms.PictureBox();
 			this.chkLargeSprites = new System.Windows.Forms.CheckBox();
+			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblChrSelection = new System.Windows.Forms.Label();
+			this.cboChrSelection = new System.Windows.Forms.ComboBox();
+			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblMask = new System.Windows.Forms.Label();
+			this.cboHighlightType = new System.Windows.Forms.ComboBox();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpTileInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picChrBank1)).BeginInit();
-			this.flowLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picChrBank2)).BeginInit();
+			this.tableLayoutPanel1.SuspendLayout();
+			this.flowLayoutPanel1.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
+			this.flowLayoutPanel3.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel3
 			// 
-			this.tableLayoutPanel3.ColumnCount = 3;
+			this.tableLayoutPanel3.ColumnCount = 2;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel1, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.grpTileInfo, 1, 1);
-			this.tableLayoutPanel3.Controls.Add(this.picChrBank1, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel1, 1, 0);
-			this.tableLayoutPanel3.Controls.Add(this.picChrBank2, 0, 2);
+			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel2, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 3;
+			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(446, 522);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(506, 525);
 			this.tableLayoutPanel3.TabIndex = 3;
 			// 
 			// grpTileInfo
 			// 
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel4);
-			this.grpTileInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpTileInfo.Location = new System.Drawing.Point(263, 56);
+			this.grpTileInfo.Location = new System.Drawing.Point(267, 109);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.tableLayoutPanel3.SetRowSpan(this.grpTileInfo, 2);
-			this.grpTileInfo.Size = new System.Drawing.Size(180, 463);
+			this.grpTileInfo.Size = new System.Drawing.Size(180, 142);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -106,7 +113,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(174, 444);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(174, 123);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// txtTileAddress
@@ -170,21 +177,51 @@
 			this.picChrBank1.Location = new System.Drawing.Point(1, 1);
 			this.picChrBank1.Margin = new System.Windows.Forms.Padding(1);
 			this.picChrBank1.Name = "picChrBank1";
-			this.tableLayoutPanel3.SetRowSpan(this.picChrBank1, 2);
-			this.picChrBank1.Size = new System.Drawing.Size(258, 258);
+			this.picChrBank1.Size = new System.Drawing.Size(256, 257);
 			this.picChrBank1.TabIndex = 0;
 			this.picChrBank1.TabStop = false;
 			this.picChrBank1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseMove);
+			// 
+			// picChrBank2
+			// 
+			this.picChrBank2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picChrBank2.Location = new System.Drawing.Point(1, 260);
+			this.picChrBank2.Margin = new System.Windows.Forms.Padding(1);
+			this.picChrBank2.Name = "picChrBank2";
+			this.picChrBank2.Size = new System.Drawing.Size(256, 257);
+			this.picChrBank2.TabIndex = 1;
+			this.picChrBank2.TabStop = false;
+			this.picChrBank2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseMove);
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.chkLargeSprites, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel3, 0, 2);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(267, 3);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(236, 100);
+			this.tableLayoutPanel1.TabIndex = 6;
 			// 
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.lblPalette);
 			this.flowLayoutPanel1.Controls.Add(this.cboPalette);
-			this.flowLayoutPanel1.Controls.Add(this.chkLargeSprites);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(260, 0);
+			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 27);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(180, 53);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(236, 27);
 			this.flowLayoutPanel1.TabIndex = 5;
 			// 
 			// lblPalette
@@ -216,21 +253,10 @@
 			this.cboPalette.TabIndex = 1;
 			this.cboPalette.SelectedIndexChanged += new System.EventHandler(this.cboPalette_SelectedIndexChanged);
 			// 
-			// picChrBank2
-			// 
-			this.picChrBank2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picChrBank2.Location = new System.Drawing.Point(1, 261);
-			this.picChrBank2.Margin = new System.Windows.Forms.Padding(1);
-			this.picChrBank2.Name = "picChrBank2";
-			this.picChrBank2.Size = new System.Drawing.Size(258, 258);
-			this.picChrBank2.TabIndex = 1;
-			this.picChrBank2.TabStop = false;
-			this.picChrBank2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseMove);
-			// 
 			// chkLargeSprites
 			// 
 			this.chkLargeSprites.AutoSize = true;
-			this.chkLargeSprites.Location = new System.Drawing.Point(3, 30);
+			this.chkLargeSprites.Location = new System.Drawing.Point(3, 84);
 			this.chkLargeSprites.Name = "chkLargeSprites";
 			this.chkLargeSprites.Size = new System.Drawing.Size(133, 17);
 			this.chkLargeSprites.TabIndex = 2;
@@ -238,22 +264,111 @@
 			this.chkLargeSprites.UseVisualStyleBackColor = true;
 			this.chkLargeSprites.Click += new System.EventHandler(this.chkLargeSprites_Click);
 			// 
+			// flowLayoutPanel2
+			// 
+			this.flowLayoutPanel2.Controls.Add(this.lblChrSelection);
+			this.flowLayoutPanel2.Controls.Add(this.cboChrSelection);
+			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(236, 27);
+			this.flowLayoutPanel2.TabIndex = 6;
+			// 
+			// lblChrSelection
+			// 
+			this.lblChrSelection.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblChrSelection.AutoSize = true;
+			this.lblChrSelection.Location = new System.Drawing.Point(3, 7);
+			this.lblChrSelection.Name = "lblChrSelection";
+			this.lblChrSelection.Size = new System.Drawing.Size(73, 13);
+			this.lblChrSelection.TabIndex = 0;
+			this.lblChrSelection.Text = "Chr Selection:";
+			// 
+			// cboChrSelection
+			// 
+			this.cboChrSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboChrSelection.FormattingEnabled = true;
+			this.cboChrSelection.Location = new System.Drawing.Point(82, 3);
+			this.cboChrSelection.Name = "cboChrSelection";
+			this.cboChrSelection.Size = new System.Drawing.Size(150, 21);
+			this.cboChrSelection.TabIndex = 1;
+			this.cboChrSelection.DropDown += new System.EventHandler(this.cboChrSelection_DropDown);
+			this.cboChrSelection.SelectionChangeCommitted += new System.EventHandler(this.cboChrSelection_SelectionChangeCommitted);
+			// 
+			// flowLayoutPanel3
+			// 
+			this.flowLayoutPanel3.Controls.Add(this.lblMask);
+			this.flowLayoutPanel3.Controls.Add(this.cboHighlightType);
+			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 54);
+			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(236, 27);
+			this.flowLayoutPanel3.TabIndex = 7;
+			// 
+			// lblMask
+			// 
+			this.lblMask.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblMask.AutoSize = true;
+			this.lblMask.Location = new System.Drawing.Point(3, 7);
+			this.lblMask.Name = "lblMask";
+			this.lblMask.Size = new System.Drawing.Size(36, 13);
+			this.lblMask.TabIndex = 0;
+			this.lblMask.Text = "Mask:";
+			// 
+			// cboHighlightType
+			// 
+			this.cboHighlightType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboHighlightType.FormattingEnabled = true;
+			this.cboHighlightType.Items.AddRange(new object[] {
+            "None",
+            "Unused Tiles",
+            "Used Tiles"});
+			this.cboHighlightType.Location = new System.Drawing.Point(45, 3);
+			this.cboHighlightType.Name = "cboHighlightType";
+			this.cboHighlightType.Size = new System.Drawing.Size(92, 21);
+			this.cboHighlightType.TabIndex = 1;
+			this.cboHighlightType.SelectedIndexChanged += new System.EventHandler(this.cboHighlightType_SelectedIndexChanged);
+			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 1;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.Controls.Add(this.picChrBank1, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.picChrBank2, 0, 1);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 2;
+			this.tableLayoutPanel3.SetRowSpan(this.tableLayoutPanel2, 2);
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(258, 519);
+			this.tableLayoutPanel2.TabIndex = 7;
+			// 
 			// ctrlChrViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Name = "ctrlChrViewer";
-			this.Size = new System.Drawing.Size(446, 522);
+			this.Size = new System.Drawing.Size(506, 525);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.grpTileInfo.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picChrBank1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picChrBank2)).EndInit();
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picChrBank2)).EndInit();
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
+			this.flowLayoutPanel3.ResumeLayout(false);
+			this.flowLayoutPanel3.PerformLayout();
+			this.tableLayoutPanel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -261,8 +376,18 @@
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-		private System.Windows.Forms.PictureBox picChrBank2;
 		private System.Windows.Forms.PictureBox picChrBank1;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+		private System.Windows.Forms.Label lblPalette;
+		private System.Windows.Forms.ComboBox cboPalette;
+		private System.Windows.Forms.CheckBox chkLargeSprites;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+		private System.Windows.Forms.Label lblChrSelection;
+		private System.Windows.Forms.ComboBox cboChrSelection;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+		private System.Windows.Forms.Label lblMask;
+		private System.Windows.Forms.ComboBox cboHighlightType;
 		private System.Windows.Forms.GroupBox grpTileInfo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.TextBox txtTileAddress;
@@ -271,9 +396,7 @@
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.TextBox txtTileIndex;
 		private System.Windows.Forms.PictureBox picTile;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-		private System.Windows.Forms.Label lblPalette;
-		private System.Windows.Forms.ComboBox cboPalette;
-		private System.Windows.Forms.CheckBox chkLargeSprites;
+		private System.Windows.Forms.PictureBox picChrBank2;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 	}
 }

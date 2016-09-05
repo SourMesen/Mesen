@@ -653,18 +653,41 @@ void Debugger::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* 
 	delete[] screenBuffer;
 }
 
-void Debugger::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites)
+void Debugger::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType)
 {
 	uint16_t *screenBuffer = new uint16_t[128 * 128];
-	uint16_t bgAddr = bankIndex == 0 ? 0x0000 : 0x1000;
+	uint8_t chrBuffer[0x1000];
+	bool chrIsDrawn[0x1000];
+	bool tileUsed[0x4000];
+	if(bankIndex == 0 || bankIndex == 1) {
+		uint16_t baseAddr = bankIndex == 0 ? 0x0000 : 0x1000;
+		for(int i = 0; i < 0x1000; i++) {
+			chrBuffer[i] = _mapper->ReadVRAM(baseAddr + i);
+			chrIsDrawn[i] = _codeDataLogger->IsDrawn(_mapper->ToAbsoluteChrAddress(baseAddr + i));
+		}
+	} else {
+		int bank = bankIndex - 2;
+		uint32_t baseAddr = bank * 0x1000;
+		bool useChrRam = _mapper->GetChrSize(false) == 0;
+		uint32_t chrSize = _mapper->GetChrSize(useChrRam);
+		vector<uint8_t> chrData(chrSize, 0);
+		_mapper->CopyMemory(useChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom, chrData.data());
+
+		for(int i = 0; i < 0x1000; i++) {
+			chrBuffer[i] = chrData[baseAddr + i];
+			chrIsDrawn[i] = _codeDataLogger->IsDrawn(baseAddr + i);
+		}
+	}
+
 	for(uint8_t y = 0; y < 16; y++) {
 		for(uint8_t x = 0; x < 16; x++) {
 			uint8_t tileIndex = y * 16 + x;
 			uint8_t paletteBaseAddr = palette << 2;
-			uint16_t tileAddr = bgAddr + (tileIndex << 4);
+			uint16_t tileAddr = tileIndex << 4;
 			for(uint8_t i = 0; i < 8; i++) {
-				uint8_t lowByte = _mapper->ReadVRAM(tileAddr + i);
-				uint8_t highByte = _mapper->ReadVRAM(tileAddr + i + 8);
+				uint8_t lowByte = chrBuffer[tileAddr + i];
+				uint8_t highByte = chrBuffer[tileAddr + i + 8];
+				bool isDrawn = chrIsDrawn[tileAddr + i];
 				for(uint8_t j = 0; j < 8; j++) {
 					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
 
@@ -679,12 +702,21 @@ void Debugger::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette,
 					}
 
 					screenBuffer[position] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color);
+					tileUsed[position] = isDrawn;
 				}
 			}
 		}
 	}
 	
 	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 128*128);
+
+	if(highlightType != CdlHighlightType::None) {
+		for(int i = 0; i < 0x4000; i++) {
+			if(tileUsed[i] == (highlightType != CdlHighlightType::HighlightUsed)) {
+				frameBuffer[i] &= 0x4FFFFFFF;
+			}
+		}
+	}
 
 	delete[] screenBuffer;
 }

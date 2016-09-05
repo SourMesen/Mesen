@@ -811,6 +811,10 @@ CartridgeState BaseMapper::GetState()
 {
 	CartridgeState state;
 
+	state.PrgRomSize = _prgSize;
+	state.ChrRomSize = _chrRomSize;
+	state.ChrRamSize = _chrRamSize;
+
 	state.PrgPageCount = GetPRGPageCount();
 	state.PrgPageSize = InternalGetPrgPageSize();
 	state.ChrPageCount = GetCHRPageCount();
