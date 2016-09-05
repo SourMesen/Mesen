@@ -812,7 +812,7 @@ CartridgeState BaseMapper::GetState()
 	CartridgeState state;
 
 	state.PrgRomSize = _prgSize;
-	state.ChrRomSize = _chrRomSize;
+	state.ChrRomSize = _onlyChrRam ? 0 : _chrRomSize;
 	state.ChrRamSize = _chrRamSize;
 
 	state.PrgPageCount = GetPRGPageCount();

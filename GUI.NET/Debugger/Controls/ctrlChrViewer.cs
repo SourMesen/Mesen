@@ -61,6 +61,13 @@ namespace Mesen.GUI.Debugger.Controls
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
 
+			if(state.Cartridge.ChrRomSize == 0) {
+				this.flpHighlight.Visible = false;
+				this.cboHighlightType.SelectedIndex = 0;
+			} else {
+				this.flpHighlight.Visible = true;
+			}
+
 			UInt32 chrSize = state.Cartridge.ChrRomSize == 0 ? state.Cartridge.ChrRamSize : state.Cartridge.ChrRomSize;
 
 			if(chrSize != _chrSize) {
