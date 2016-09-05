@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Resources>
   <Forms>
     <Form ID="frmMain" Title="Mesen">
@@ -176,6 +176,21 @@
       <Control ID="tpgSet1">Mapeado #1</Control>
       <Control ID="tpgSet2">Mapeado #2</Control>
       <Control ID="tpgSet3">Mapeado #3</Control>
+      <Control ID="btnSelectPreset">Seleccionar valor preestablecido...</Control>
+      <Control ID="mnuKeyboard">Teclado</Control>
+      <Control ID="mnuWasdLayout">Utilizar teclas WASD</Control>
+      <Control ID="mnuArrowLayout">Utilizar cursores</Control>
+      <Control ID="mnuFceuxLayout">Controles por defecto de FCEUX</Control>
+      <Control ID="mnuNestopiaLayout">Controles por defecto de Nestopia</Control>
+      <Control ID="mnuXboxController">Mando de Xbox</Control>
+      <Control ID="mnuXboxLayout1">Mando #1</Control>
+      <Control ID="mnuXboxLayout2">Mando #2</Control>
+      <Control ID="mnuPs4Controller">Mando de Ps4</Control>
+      <Control ID="mnuPs4Layout1">Mando #1</Control>
+      <Control ID="mnuPs4Layout2">Mando #2</Control>
+      <Control ID="mnuSnes30Controller">Mando de SNES30</Control>
+      <Control ID="mnuSnes30Layout1">Mando #1</Control>
+      <Control ID="mnuSnes30Layout2">Mando #2</Control>
       <Control ID="tpgSet4">Mapeado #4</Control>
       <Control ID="btnReset">Reiniciar</Control>
       <Control ID="btnClear">Deshacer controles</Control>
@@ -230,11 +245,14 @@
     <Form ID="frmEmulationConfig" Title="Parámetros de emulación">
       <Control ID="tpgGeneral">General</Control>
       <Control ID="lblEmuSpeedHint">%  (0 = Velocidad máxima)</Control>
+      <Control ID="lblTurboSpeedHint">%  (0 = Velocidad máxima)</Control>
+      <Control ID="lblTurboSpeed">Velocidad de avance rápido:</Control>
       <Control ID="lblEmulationSpeed">Velocidad de emulación:</Control>
 
       <Control ID="tpgAdvanced">Avanzado</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Utilizar la versión alternativa de componentes de IRQs de MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permitir las entradas inválidas (Arriba+Abajo e Izquierda+Derecha al mismo tiempo)</Control>
+      <Control ID="lblRamPowerOnState">Estado inicial de la memoria durante el inicio:</Control>
       <Control ID="chkRemoveSpriteLimit">Eliminar el límite de sprites (Reduce el parpadeo en algunos juegos)</Control>
 
       <Control ID="tpgOverclocking">Overclocking</Control>
@@ -250,7 +268,7 @@
       <Control ID="lblEffectiveClockRatePal">Frecuencia de reloj (PAL): </Control>
       <Control ID="lblEffectiveClockRateDendy">Frecuencia de reloj (Dendy): </Control>
 
-      <Control ID="chkOverclockAdjustApu">No realizar overclocking a la APU (Previene el cambio de tono causados por overclocking)</Control>
+      <Control ID="chkOverclockAdjustApu">No realizar overclocking a la APU (Previene el cambio de tono causado por overclocking)</Control>
 
       <Control ID="chkShowLagCounter">Ver contador de retardo</Control>
       <Control ID="btnResetLagCounter">Reiniciar contador a cero</Control>
@@ -261,7 +279,7 @@
     <Form ID="frmPreferences" Title="Preferencias">
       <Control ID="tpgGeneral">General</Control>
       <Control ID="lblDisplayLanguage">Idioma de pantalla:</Control>
-      <Control ID="chkSingleInstance">Permitir una sola copia de Mesen al a vez</Control>
+      <Control ID="chkSingleInstance">Permitir una sola copia de Mesen a la vez</Control>
       <Control ID="chkAutomaticallyCheckForUpdates">Buscar actualizaciones automáticamente</Control>
       <Control ID="chkPauseOnMovieEnd">Pausar la emulación al finalizar el video</Control>
       <Control ID="chkAllowBackgroundInput">Permitir entradas aunque Mesen esté en segundo plano</Control>
@@ -276,9 +294,19 @@
       <Control ID="chkMstFormat">.MST (Partidas guardadas de Mesen)</Control>
       <Control ID="tpgAdvanced">Avanzado</Control>
       <Control ID="chkFdsAutoLoadDisk">Insertar la cara A del disco 1 al cargar un juego FDS</Control>
+      <Control ID="tpgShortcuts">Atajos</Control>
+      <Control ID="colAction">Acción</Control>
+      <Control ID="colBinding1">Atajo #1</Control>
+      <Control ID="colBinding2">Atajo #2</Control>
+      <Control ID="tpgSaveData">Copias de seguridad</Control>
+      <Control ID="grpAutomaticSaves">Guardado de estado automático</Control>
+      <Control ID="chkAutoSave">Crear una copia de seguridad de cada estado</Control>
+      <Control ID="lblAutoSave">minutos (Pulse F6 para cargar)</Control>
+      <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
+      <Control ID="grpCloudSaves">Copia de seguridad online</Control>
       <Control ID="chkFdsFastForwardOnLoad">Aumentar la velocidad de la emulación de juegos de carga FDS</Control>
 
-      <Control ID="tpgCloudSave">Guadar online</Control>
+      <Control ID="tpgCloudSave">Guardar online</Control>
       <Control ID="lblGoogleDriveIntegration">Mesen puede utilizar Google Drive para almacenar las partidas guardadas en su cuenta de Google Drive. Cuando se habilita la integración, todos los datos de copia de seguridad de tus juegos (archivos .sav y partidas guardadas rápidas) son fácilmente accesibles desde cualquier ordenador.</Control>
       <Control ID="lblIntegrationOK">La integración con Google Drive está activa.</Control>
       <Control ID="btnDisableIntegration">Desactivar la integración con Google Drive</Control>
@@ -315,15 +343,20 @@
       <Control ID="lblPort">Puerto:</Control>
       <Control ID="chkSpectator">Unirse como espectador</Control>
       <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">CAncelar</Control>
+      <Control ID="btnCancel">Cancelar</Control>
     </Form>
-    <Form ID="frmCheatImport" Title="Import Cheats">
-      <Control ID="grpImportOptions">Import Options</Control>
-      <Control ID="lblCheatFile">Cheat File:</Control>
+    <Form ID="frmCheatImportFromDb" Title="Importar trucos desde BBDD">
+      <Control ID="lblSearch">Buscar</Control>
+      <Control ID="btnOK">Ok</Control>
+      <Control ID="btnCancel">Cancelar</Control>
+    </Form>
+    <Form ID="frmCheatImport" Title="Importar Trucos">
+      <Control ID="grpImportOptions">Importar Opciones</Control>
+      <Control ID="lblCheatFile">Archivo de truco:</Control>
       <Control ID="lblGame">Juego:</Control>
       <Control ID="btnBrowseCheat">Buscar...</Control>
       <Control ID="btnBrowseGame">Buscar...</Control>
-      <Control ID="btnImport">Import</Control>
+      <Control ID="btnImport">Importar</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
     <Form ID="frmCheatList" Title="Lista de trucos">
@@ -332,21 +365,34 @@
       <Control ID="btnAddCheat">Añadir un truco</Control>
       <Control ID="btnDelete">Eliminar</Control>
       <Control ID="btnDeleteCheat">Eliminar los trucos seleccionados</Control>
-      <Control ID="btnDeleteGameCheats">Delete all cheats for selected game</Control>
+      <Control ID="btnDeleteGameCheats">Eliminar todos los trucos del juego seleccionado</Control>
       <Control ID="mnuAddCheat">Añadir truco</Control>
       <Control ID="mnuDeleteGameCheats">Eliminar</Control>
       <Control ID="mnuDeleteCheat">Eliminar</Control>
       <Control ID="colGameName">Juego</Control>
       <Control ID="colCheatName">Nombre del truco</Control>
       <Control ID="colCode">Truco</Control>
-      <Control ID="btnImport">Import</Control>
-      <Control ID="btnExport">Export</Control>
-      <Control ID="btnExportAllCheats">All cheats</Control>
-      <Control ID="btnExportGame">Selected Game</Control>
-      <Control ID="mnuExportGame">Export</Control>
-      <Control ID="btnExportSelectedCheats">Selected Cheats</Control>
-      <Control ID="mnuExportSelectedCheats">Export</Control>
-      <Control ID="chkDisableCheats">Disable all cheats</Control>
+      <Control ID="btnImportCheatDB">Del listado de trucos de Mesen</Control>
+      <Control ID="btnImportFromFile">De un archivo</Control>
+      <Control ID="btnImport">Importar</Control>
+      <Control ID="btnExport">Exportar</Control>
+      <Control ID="btnExportAllCheats">Todos los trucos</Control>
+      <Control ID="btnExportGame">Juego Seleccionado</Control>
+      <Control ID="mnuExportGame">Exportar</Control>
+      <Control ID="btnExportSelectedCheats">Trucos seleccionados</Control>
+      <Control ID="mnuExportSelectedCheats">Exportar</Control>
+      <Control ID="tpgCheatFinder">Búsqueda de trucos</Control>
+      <Control ID="btnReset">Reiniciar</Control>
+      <Control ID="btnUndo">Deshacer</Control>
+      <Control ID="lblCurrentValue">El valor actual es</Control>
+      <Control ID="lblPreviousValue">El valor anterior es</Control>
+      <Control ID="btnAddCurrentFilter">Agregar filtro actual</Control>
+      <Control ID="btnAddPrevFilter">Agregar filtro anterior</Control>
+      <Control ID="btnCreateCheat">Crear un truco</Control>
+      <Control ID="mnuCreateCheat">Crear un truco</Control>
+      <Control ID="lblAtAddress">a</Control>
+      <Control ID="chkPauseGameWhileWindowActive">Pausar el juego automáticamente cuando la ventana esté activa</Control>
+      <Control ID="chkDisableCheats">Dehabilitar todos los trucos</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
@@ -361,7 +407,7 @@
       <Control ID="lblNewValue">Nuevo valor:</Control>
       <Control ID="radRelativeAddress">Memoria</Control>
       <Control ID="radAbsoluteAddress">Truco del juego</Control>
-      <Control ID="chkCompareValue">Comprar valor</Control>
+      <Control ID="chkCompareValue">Comparar valor</Control>
       <Control ID="btnBrowse">Buscar...</Control>
       <Control ID="chkEnabled">Truco activado</Control>
       <Control ID="btnOK">OK</Control>
@@ -387,7 +433,18 @@
       <Control ID="btnUpdate">Actualizar</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
+    <Form ID="frmGetKey" Title="Configuración de botón">
+      <Control ID="lblSetKeyMessage">Pulse cualquier tecla del teclado o del joystick para asignarla a ese botón.</Control>
+    </Form>
+    <Form ID="frmPlayerProfile" Title="Perfil del Jugador">
+      <Control ID="lblName">Nombre</Control>
+      <Control ID="btnOK">Ok</Control>
+      <Control ID="btnCancel">Cancelar</Control>
+    </Form>
     <Form ID="frmSelectRom" Title="Selección de juego...">
+      <Control ID="btnCancel">Cancelar</Control>
+      <Control ID="btnOK">Ok</Control>
+      <Control ID="lblSearch">Buscar</Control>
     </Form>
   </Forms>
   <Messages>
@@ -408,13 +465,13 @@
     <Message ID="Disconnect">Deconexión</Message>
     <Message ID="PlayerNumber">Jugador {0}</Message>
 
+    <Message ID="CheatsFound">{0} y {1} trucos de juegos presentes en la base de datos</Message>
+    <Message ID="CheatsImported">{0} trucos se importaron para el juego {1}.</Message>
     <Message ID="RomsFound">{0} roms encontradas</Message>
-
     <Message ID="NsfNextTrack">Pista siguiente (Espera para jugar más rápido)</Message>
     <Message ID="NsfUnnamedTrack">[sin nombre]</Message>
     <Message ID="NsfUnknownField">[desconocido]</Message>
-
-    <Message ID="CouldNotInstallRuntime">El paquete Visual C ++ Redistributable para Visual Studio 2015 no se ha instalado correctamente.</Message>
+    <Message ID="CouldNotInstallRuntime">El paquete Visual C++ Redistributable para Visual Studio 2015 no se ha instalado correctamente.</Message>
     <Message ID="EmptyState">&lt;No hay copia de seguridad&gt;</Message>
     <Message ID="ErrorWhileCheckingUpdates">Se ha producido un error en la búsqueda de actualizaciones.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>
     <Message ID="FdsBiosNotFound">No se encontró una bios para FDS. Se requiere una bios para jugar a juegos FDS.&#xA;&#xA;¿Desea seleccionar una bios manualmente?</Message>
@@ -422,23 +479,36 @@
     <Message ID="FileNotFound">Archivo no encontrado: {0}</Message>
     <Message ID="InvalidFdsBios">La bios seleccionada no es válida.</Message>
     <Message ID="HDNesTooltip">Esta opción permite los paquetes de gráficos en alta resolución de carga Mesen en el mismo formato que los del emulador HDNes.&#xA;&#xA;Los paquetes de alta resolución deberán ser colocados en los "HdPacks" en una subcarpeta con el nombre de la ROM.&#xA;Ejemplo: Un paquete para "MiRom.nes" debe estar colocado en "HdPacks\MiRom\hires.txt".&#xA;&#xA;Nota: El soporte para paquetes de alta resolución aún no es perfecto - algunas limitaciones siguen presentes.</Message>
-    <Message ID="MesenUpToDate">Ya utiliza la versión más reciente de Mesen.</Message>
+    <Message ID="MesenUpToDate">Ya utiliza la versión mas reciente de Mesen.</Message>
     <Message ID="PatchAndReset">¿Aplicar el parche y reiniciar el juego?</Message>
     <Message ID="SelectRomIps">Elija la ROM que corresponde al archivo IPS seleccionado.</Message>
     <Message ID="UnableToDownload">No se puede descargar el archivo. Compruebe su conexión a Internet e inténtelo de nuevo.&#xA;&#xA;Detalles del error:</Message>
-    <Message ID="UnableToStartMissingDependencies">Mesen debe descargar e instalar el paquete redistribuible de Visual C ++ de Microsoft Visual Studio 2015 antes de poder continuar. ¿Le gustaría instalarlo ahora?</Message>
+    <Message ID="UnableToStartMissingDependencies">Mesen debe descargar e instalar el paquete redistribuible de Visual C++ de Microsoft Visual Studio 2015 antes de poder continuar. ¿Le gustaría instalarlo ahora?</Message>
     <Message ID="UnableToStartMissingFiles">Mesen no puede iniciar debido a que faltan archivos.&#xA;&#xA;Error: No se encuentra el archivo WinMesen.dll.</Message>
     <Message ID="UnexpectedError">Se ha producido un error inesperado.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">Error en la descarga - el archivo parece estar dañado. Por favor, visite el sitio web de Mesen para descargar manualmente la versión más reciente.</Message>
     <Message ID="UpgradeSuccess">La actualización se ha realizado con éxito.</Message>
     <Message ID="UpdaterNotFound">El proceso de actualización no se puede iniciar porque faltan algunos archivos.</Message>
-    <Message ID="Net45NotFound">El Microsoft .NET Framework 4.5 no se ha encontrado. Por favor, descargue la versión más reciente de .NET Framework desde el sitio de Microsoft y vuelva a intentarlo.</Message>
+    <Message ID="Net45NotFound">Microsoft .NET Framework 4.5 no se ha encontrado. Por favor, descargue la versión más reciente de .NET Framework desde el sitio de Microsoft y vuelva a intentarlo.</Message>
 
     <Message ID="GoogleDriveIntegrationError">Mesen no fue capaz de conectarse a su cuenta de Google Drive, por favor inténtelo de nuevo.</Message>
 
-    <Message ID="InvalidCheatFile">The selected file ({0}) is not a valid cheat file.</Message>
-    <Message ID="InvalidXmlFile">The selected file ({0}) is not a valid XML file.</Message>
-    <Message ID="NoMatchingCheats">The selected cheat file ({0}) contains no cheats that match the selected game.</Message>
+    <Message ID="InvalidCheatFile">El archivo seleccionado ({0}) no es un archivo de trucos válido.</Message>
+    <Message ID="InvalidXmlFile">El archivo seleccionado ({0}) no es un archivo XML válido.</Message>
+    <Message ID="EmulatorShortcutMappings_FastForward">Avance rápido</Message>
+    <Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
+    <Message ID="EmulatorShortcutMappings_Reset">Reiniciar</Message>
+    <Message ID="EmulatorShortcutMappings_TakeScreenshot">Captura de pantalla</Message>
+    <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Cambiar cara del disco</Message>
+    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insertar siguiente disco</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insertar moneda (1)</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insertar moneda (2)</Message>
+    <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Botón de servicio</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Ir a posición de guardado siguiente</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Ir a posición de guardado anterior</Message>
+    <Message ID="EmulatorShortcutMappings_SaveState">Guardar estado en la posición actual</Message>
+    <Message ID="EmulatorShortcutMappings_LoadState">Cargar estado en la posición actual</Message>
+    <Message ID="NoMatchingCheats">El archivo de trucos seleccionado ({0}) no contiene trucos que coincidan con el juego seleccionado.</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
@@ -503,6 +573,23 @@
       <Value ID="TopRight">Arriba a la derecha</Value>
       <Value ID="BottomLeft">Abajo a la izquierda</Value>
       <Value ID="BottomRight">Abajo a la derecha</Value>
+    </Enum>
+    <Enum ID="RamPowerOnState">
+      <Value ID="AllZeros">Todos los bits a 0 (Defecto)</Value>
+      <Value ID="AllOnes">Todos los bist a 1</Value>
+      <Value ID="Random">Valores aleatóreos</Value>
+    </Enum>
+    <Enum ID="CheatCurrentFilterType">
+      <Value ID="Smaller">Menor que</Value>
+      <Value ID="Equal">Igual que</Value>
+      <Value ID="NotEqual">No igual que</Value>
+      <Value ID="Greater">Mayor que</Value>
+    </Enum>
+    <Enum ID="CheatPrevFilterType">
+      <Value ID="Smaller">Menor</Value>
+      <Value ID="Equal">Igual</Value>
+      <Value ID="NotEqual">No igual</Value>
+      <Value ID="Greater">Mayor</Value>
     </Enum>
     <Enum ID="Language">
       <Value ID="SystemDefault">Valor por defecto del usuario</Value>

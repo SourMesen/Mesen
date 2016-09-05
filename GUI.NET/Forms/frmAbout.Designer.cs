@@ -39,7 +39,6 @@
 			this.tableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
-			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel
@@ -113,11 +112,12 @@
 			// 
 			// lblWebsite
 			// 
+			this.lblWebsite.AutoSize = true;
 			this.lblWebsite.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblWebsite.Location = new System.Drawing.Point(6, 0);
 			this.lblWebsite.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this.lblWebsite.Name = "lblWebsite";
-			this.lblWebsite.Size = new System.Drawing.Size(61, 19);
+			this.lblWebsite.Size = new System.Drawing.Size(61, 16);
 			this.lblWebsite.TabIndex = 25;
 			this.lblWebsite.Text = "Website:";
 			this.lblWebsite.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -156,6 +156,13 @@
 			this.okButton.TabIndex = 24;
 			this.okButton.Text = "&OK";
 			// 
+			// flowLayoutPanel2
+			// 
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 74);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(64, 1);
+			this.flowLayoutPanel2.TabIndex = 27;
+			// 
 			// frmAbout
 			// 
 			this.AcceptButton = this.okButton;
@@ -176,8 +183,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
-			this.flowLayoutPanel2.ResumeLayout(false);
-			this.flowLayoutPanel2.PerformLayout();
 			this.ResumeLayout(false);
 
 		}

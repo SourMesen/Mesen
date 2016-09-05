@@ -24,7 +24,7 @@ namespace Mesen.GUI
 		{
 			MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, e.Exception.ToString());
 		}
-		
+
 		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, e.ExceptionObject.ToString());
@@ -74,7 +74,7 @@ namespace Mesen.GUI
 						case Language.French: message = "Le .NET Framework 4.5 de Microsoft n'a pas été trouvé. Veuillez télécharger la plus récente version du .NET Framework à partir du site de Microsoft et essayer à nouveau."; break;
 						case Language.Japanese: message = "Microsoft .NET Framework 4.5はインストールされていないため、Mesenは起動できません。Microsoft .NET Frameworkの最新版をMicrosoftのサイトからダウンロードして、インストールしてください。"; break;
 						case Language.Russian: message = "Microsoft .NET Framework 4.5 не найден. Пожалуйста загрузите и установите последнюю версию .NET Framework с сайта Microsoft и попробуйте снова."; break;
-						case Language.Spanish: message = "El Microsoft .NET Framework 4.5 no se ha encontrado. Por favor, descargue la versión más reciente de .NET Framework desde el sitio de Microsoft y vuelva a intentarlo."; break;
+						case Language.Spanish: message = "Microsoft .NET Framework 4.5 no se ha encontrado. Por favor, descargue la versión más reciente de .NET Framework desde el sitio de Microsoft y vuelva a intentarlo."; break;
 						case Language.Ukrainian: message = "Microsoft .NET Framework 4.5 не знайдений. Будь ласка завантажте і встановіть останню версію .NET Framework з сайту Microsoft і спробуйте знову."; break;
 					}
 					MessageBox.Show(message, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
