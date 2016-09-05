@@ -931,6 +931,9 @@
     <ClInclude Include="ShortcutKeyHandler.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="MMC3_134.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
