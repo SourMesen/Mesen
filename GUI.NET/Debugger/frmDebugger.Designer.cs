@@ -32,24 +32,17 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.splitContainer = new System.Windows.Forms.SplitContainer();
-			this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
-			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
-			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
-			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
+			this.tmrCdlRatios = new System.Windows.Forms.Timer(this.components);
+			this.splitContainer = new System.Windows.Forms.SplitContainer();
+			this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpWatch = new System.Windows.Forms.GroupBox();
 			this.picWatchHelp = new System.Windows.Forms.PictureBox();
-			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
 			this.grpBreakpoints = new System.Windows.Forms.GroupBox();
-			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
 			this.grpCallstack = new System.Windows.Forms.GroupBox();
-			this.ctrlCallstack = new Mesen.GUI.Debugger.Controls.ctrlCallstack();
-			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
-			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
@@ -105,13 +98,20 @@
 			this.lblPrgAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblChrAnalysis = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
-			this.tmrCdlRatios = new System.Windows.Forms.Timer(this.components);
+			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
+			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
+			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
+			this.ctrlWatch = new Mesen.GUI.Debugger.ctrlWatch();
+			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
+			this.ctrlCallstack = new Mesen.GUI.Debugger.Controls.ctrlCallstack();
+			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
+			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
+			this.contextMenuCode.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
 			this.tlpTop.SuspendLayout();
-			this.contextMenuCode.SuspendLayout();
 			this.tableLayoutPanel10.SuspendLayout();
 			this.grpWatch.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picWatchHelp)).BeginInit();
@@ -120,57 +120,6 @@
 			this.menuStrip.SuspendLayout();
 			this.statusStrip.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// splitContainer
-			// 
-			this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-			this.splitContainer.Location = new System.Drawing.Point(0, 24);
-			this.splitContainer.Name = "splitContainer";
-			this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-			// 
-			// splitContainer.Panel1
-			// 
-			this.splitContainer.Panel1.Controls.Add(this.tlpTop);
-			this.splitContainer.Panel1MinSize = 375;
-			// 
-			// splitContainer.Panel2
-			// 
-			this.splitContainer.Panel2.Controls.Add(this.tableLayoutPanel10);
-			this.splitContainer.Panel2MinSize = 50;
-			this.splitContainer.Size = new System.Drawing.Size(984, 534);
-			this.splitContainer.SplitterDistance = 387;
-			this.splitContainer.TabIndex = 1;
-			// 
-			// tlpTop
-			// 
-			this.tlpTop.ColumnCount = 3;
-			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
-			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpTop.Controls.Add(this.ctrlDebuggerCode, 0, 0);
-			this.tlpTop.Controls.Add(this.ctrlConsoleStatus, 2, 0);
-			this.tlpTop.Controls.Add(this.ctrlDebuggerCodeSplit, 1, 0);
-			this.tlpTop.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tlpTop.Location = new System.Drawing.Point(0, 0);
-			this.tlpTop.Name = "tlpTop";
-			this.tlpTop.RowCount = 1;
-			this.tlpTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpTop.Size = new System.Drawing.Size(984, 387);
-			this.tlpTop.TabIndex = 2;
-			// 
-			// ctrlDebuggerCode
-			// 
-			this.ctrlDebuggerCode.Code = null;
-			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
-			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
-			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(546, 381);
-			this.ctrlDebuggerCode.TabIndex = 2;
-			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
-			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
 			// 
 			// contextMenuCode
 			// 
@@ -196,27 +145,48 @@
 			this.mnuSetNextStatement.Size = new System.Drawing.Size(258, 22);
 			this.mnuSetNextStatement.Text = "Set Next Statement";
 			// 
-			// ctrlConsoleStatus
+			// tmrCdlRatios
 			// 
-			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
-			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
-			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
-			this.ctrlConsoleStatus.TabIndex = 3;
+			this.tmrCdlRatios.Interval = 300;
+			this.tmrCdlRatios.Tick += new System.EventHandler(this.tmrCdlRatios_Tick);
 			// 
-			// ctrlDebuggerCodeSplit
+			// splitContainer
 			// 
-			this.ctrlDebuggerCodeSplit.Code = null;
-			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(555, 3);
-			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
-			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 381);
-			this.ctrlDebuggerCodeSplit.TabIndex = 4;
-			this.ctrlDebuggerCodeSplit.Visible = false;
-			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
-			this.ctrlDebuggerCodeSplit.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
-			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
+			this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+			this.splitContainer.Location = new System.Drawing.Point(0, 24);
+			this.splitContainer.Name = "splitContainer";
+			this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainer.Panel1
+			// 
+			this.splitContainer.Panel1.Controls.Add(this.tlpTop);
+			this.splitContainer.Panel1MinSize = 375;
+			// 
+			// splitContainer.Panel2
+			// 
+			this.splitContainer.Panel2.Controls.Add(this.tableLayoutPanel10);
+			this.splitContainer.Panel2MinSize = 100;
+			this.splitContainer.Size = new System.Drawing.Size(984, 534);
+			this.splitContainer.SplitterDistance = 387;
+			this.splitContainer.TabIndex = 1;
+			// 
+			// tlpTop
+			// 
+			this.tlpTop.ColumnCount = 3;
+			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
+			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpTop.Controls.Add(this.ctrlDebuggerCode, 0, 0);
+			this.tlpTop.Controls.Add(this.ctrlConsoleStatus, 2, 0);
+			this.tlpTop.Controls.Add(this.ctrlDebuggerCodeSplit, 1, 0);
+			this.tlpTop.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpTop.Location = new System.Drawing.Point(0, 0);
+			this.tlpTop.Name = "tlpTop";
+			this.tlpTop.RowCount = 1;
+			this.tlpTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpTop.Size = new System.Drawing.Size(984, 387);
+			this.tlpTop.TabIndex = 2;
 			// 
 			// tableLayoutPanel10
 			// 
@@ -259,14 +229,6 @@
 			this.picWatchHelp.TabIndex = 1;
 			this.picWatchHelp.TabStop = false;
 			// 
-			// ctrlWatch
-			// 
-			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
-			this.ctrlWatch.Name = "ctrlWatch";
-			this.ctrlWatch.Size = new System.Drawing.Size(315, 118);
-			this.ctrlWatch.TabIndex = 0;
-			// 
 			// grpBreakpoints
 			// 
 			this.grpBreakpoints.Controls.Add(this.ctrlBreakpoints);
@@ -278,15 +240,6 @@
 			this.grpBreakpoints.TabStop = false;
 			this.grpBreakpoints.Text = "Breakpoints";
 			// 
-			// ctrlBreakpoints
-			// 
-			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
-			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
-			this.ctrlBreakpoints.Size = new System.Drawing.Size(316, 118);
-			this.ctrlBreakpoints.TabIndex = 0;
-			this.ctrlBreakpoints.BreakpointNavigation += new System.EventHandler(this.ctrlBreakpoints_BreakpointNavigation);
-			// 
 			// grpCallstack
 			// 
 			this.grpCallstack.Controls.Add(this.ctrlCallstack);
@@ -297,35 +250,6 @@
 			this.grpCallstack.TabIndex = 4;
 			this.grpCallstack.TabStop = false;
 			this.grpCallstack.Text = "Callstack";
-			// 
-			// ctrlCallstack
-			// 
-			this.ctrlCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlCallstack.Location = new System.Drawing.Point(3, 16);
-			this.ctrlCallstack.Name = "ctrlCallstack";
-			this.ctrlCallstack.Size = new System.Drawing.Size(317, 118);
-			this.ctrlCallstack.TabIndex = 0;
-			this.ctrlCallstack.FunctionSelected += new System.EventHandler(this.ctrlCallstack_FunctionSelected);
-			// 
-			// ctrlPpuMemoryMapping
-			// 
-			this.ctrlPpuMemoryMapping.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.ctrlPpuMemoryMapping.Location = new System.Drawing.Point(0, 558);
-			this.ctrlPpuMemoryMapping.Name = "ctrlPpuMemoryMapping";
-			this.ctrlPpuMemoryMapping.Size = new System.Drawing.Size(984, 40);
-			this.ctrlPpuMemoryMapping.TabIndex = 5;
-			this.ctrlPpuMemoryMapping.Text = "ctrlMemoryMapping1";
-			this.ctrlPpuMemoryMapping.Visible = false;
-			// 
-			// ctrlCpuMemoryMapping
-			// 
-			this.ctrlCpuMemoryMapping.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.ctrlCpuMemoryMapping.Location = new System.Drawing.Point(0, 598);
-			this.ctrlCpuMemoryMapping.Name = "ctrlCpuMemoryMapping";
-			this.ctrlCpuMemoryMapping.Size = new System.Drawing.Size(984, 40);
-			this.ctrlCpuMemoryMapping.TabIndex = 4;
-			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
-			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
 			// menuStrip
 			// 
@@ -783,10 +707,86 @@
 			this.lblChrAnalysisResult.Size = new System.Drawing.Size(239, 19);
 			this.lblChrAnalysisResult.Text = "xx% (Drawn: xx%, Read: xx%, Unknown: xx%)";
 			// 
-			// tmrCdlRatios
+			// ctrlDebuggerCode
 			// 
-			this.tmrCdlRatios.Interval = 300;
-			this.tmrCdlRatios.Tick += new System.EventHandler(this.tmrCdlRatios_Tick);
+			this.ctrlDebuggerCode.Code = null;
+			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
+			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
+			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(546, 381);
+			this.ctrlDebuggerCode.TabIndex = 2;
+			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
+			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
+			// 
+			// ctrlConsoleStatus
+			// 
+			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(552, 0);
+			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
+			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 362);
+			this.ctrlConsoleStatus.TabIndex = 3;
+			// 
+			// ctrlDebuggerCodeSplit
+			// 
+			this.ctrlDebuggerCodeSplit.Code = null;
+			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(555, 3);
+			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
+			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 381);
+			this.ctrlDebuggerCodeSplit.TabIndex = 4;
+			this.ctrlDebuggerCodeSplit.Visible = false;
+			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCodeSplit.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
+			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
+			// 
+			// ctrlWatch
+			// 
+			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
+			this.ctrlWatch.Name = "ctrlWatch";
+			this.ctrlWatch.Size = new System.Drawing.Size(315, 118);
+			this.ctrlWatch.TabIndex = 0;
+			// 
+			// ctrlBreakpoints
+			// 
+			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
+			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
+			this.ctrlBreakpoints.Size = new System.Drawing.Size(316, 118);
+			this.ctrlBreakpoints.TabIndex = 0;
+			this.ctrlBreakpoints.BreakpointNavigation += new System.EventHandler(this.ctrlBreakpoints_BreakpointNavigation);
+			// 
+			// ctrlCallstack
+			// 
+			this.ctrlCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlCallstack.Location = new System.Drawing.Point(3, 16);
+			this.ctrlCallstack.Name = "ctrlCallstack";
+			this.ctrlCallstack.Size = new System.Drawing.Size(317, 118);
+			this.ctrlCallstack.TabIndex = 0;
+			this.ctrlCallstack.FunctionSelected += new System.EventHandler(this.ctrlCallstack_FunctionSelected);
+			// 
+			// ctrlPpuMemoryMapping
+			// 
+			this.ctrlPpuMemoryMapping.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.ctrlPpuMemoryMapping.Location = new System.Drawing.Point(0, 558);
+			this.ctrlPpuMemoryMapping.Name = "ctrlPpuMemoryMapping";
+			this.ctrlPpuMemoryMapping.Size = new System.Drawing.Size(984, 40);
+			this.ctrlPpuMemoryMapping.TabIndex = 5;
+			this.ctrlPpuMemoryMapping.Text = "ctrlMemoryMapping1";
+			this.ctrlPpuMemoryMapping.Visible = false;
+			// 
+			// ctrlCpuMemoryMapping
+			// 
+			this.ctrlCpuMemoryMapping.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.ctrlCpuMemoryMapping.Location = new System.Drawing.Point(0, 598);
+			this.ctrlCpuMemoryMapping.Name = "ctrlCpuMemoryMapping";
+			this.ctrlCpuMemoryMapping.Size = new System.Drawing.Size(984, 40);
+			this.ctrlCpuMemoryMapping.TabIndex = 4;
+			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
+			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
 			// frmDebugger
 			// 
@@ -803,12 +803,12 @@
 			this.Name = "frmDebugger";
 			this.Text = "Debugger";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmDebugger_FormClosed);
+			this.contextMenuCode.ResumeLayout(false);
 			this.splitContainer.Panel1.ResumeLayout(false);
 			this.splitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
 			this.splitContainer.ResumeLayout(false);
 			this.tlpTop.ResumeLayout(false);
-			this.contextMenuCode.ResumeLayout(false);
 			this.tableLayoutPanel10.ResumeLayout(false);
 			this.grpWatch.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picWatchHelp)).EndInit();

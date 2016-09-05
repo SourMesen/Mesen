@@ -21,6 +21,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public ctrlMemoryMapping()
 		{
+			this.DoubleBuffered = true;
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -65,6 +66,8 @@ namespace Mesen.GUI.Debugger.Controls
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint(e);
+
+			e.Graphics.Clear(Color.LightGray);
 
 			if(_regions.Count > 0) {
 				Rectangle rect = Rectangle.Inflate(e.ClipRectangle, -2, -1);

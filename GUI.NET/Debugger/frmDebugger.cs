@@ -110,11 +110,11 @@ namespace Mesen.GUI.Debugger
 				tlpTop.ColumnStyles[1].SizeType = SizeType.Percent;
 				tlpTop.ColumnStyles[0].Width = 50f;
 				tlpTop.ColumnStyles[1].Width = 50f;
-				this.MinimumSize = new Size(1250, 650);
+				this.MinimumSize = new Size(1250, 700);
 			} else {
 				tlpTop.ColumnStyles[1].SizeType = SizeType.Absolute;
 				tlpTop.ColumnStyles[1].Width = 0f;
-				this.MinimumSize = new Size(1000, 650);
+				this.MinimumSize = new Size(1000, 700);
 			}
 			ctrlDebuggerCodeSplit.Visible = mnuSplitView.Checked;
 			return mnuSplitView.Checked;
@@ -425,6 +425,13 @@ namespace Mesen.GUI.Debugger
 			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
 			ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping = mnuShowPpuMemoryMapping.Checked;
 			ConfigManager.ApplyChanges();
+			ctrlCpuMemoryMapping.Invalidate();
+			ctrlPpuMemoryMapping.Invalidate();
+		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
 			ctrlCpuMemoryMapping.Invalidate();
 			ctrlPpuMemoryMapping.Invalidate();
 		}
