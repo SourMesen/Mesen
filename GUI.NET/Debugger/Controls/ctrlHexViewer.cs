@@ -22,7 +22,9 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 
-			this.cboNumberColumns.SelectedIndex = ConfigManager.Config.DebugInfo.RamColumnCount;
+			if(LicenseManager.UsageMode != LicenseUsageMode.Designtime) {
+				this.cboNumberColumns.SelectedIndex = ConfigManager.Config.DebugInfo.RamColumnCount;
+			}
 		}
 
 		protected override ctrlScrollableTextbox ScrollableTextbox

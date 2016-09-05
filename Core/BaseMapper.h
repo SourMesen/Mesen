@@ -7,6 +7,8 @@
 #include "RomLoader.h"
 #include "EmulationSettings.h"
 
+enum class DebugMemoryType;
+
 enum class PrgMemoryType
 {
 	PrgRom,
@@ -219,11 +221,10 @@ public:
 	CartridgeState GetState();
 	uint8_t* GetPrgRom();
 	uint8_t* GetWorkRam();
-	void GetPrgCopy(uint8_t **buffer);
 	uint32_t GetPrgSize(bool getWorkRamSize = false);
-	void GetChrRomCopy(uint8_t **buffer);
 	uint32_t GetChrSize(bool getRamSize = false);
-	void GetChrRamCopy(uint8_t **buffer);
+	uint32_t CopyMemory(DebugMemoryType type, uint8_t* buffer);
+	void WriteMemory(DebugMemoryType type, uint8_t* buffer);
 	int32_t ToAbsoluteAddress(uint16_t addr);
 	int32_t ToAbsoluteRamAddress(uint16_t addr);
 	int32_t ToAbsoluteChrAddress(uint16_t addr);

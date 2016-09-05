@@ -40,6 +40,7 @@ class MemoryManager: public Snapshotable
 
 		uint8_t DebugRead(uint16_t addr);
 		uint8_t DebugReadVRAM(uint16_t addr);
+		void DebugWrite(uint16_t addr, uint8_t value);
 
 		uint8_t* GetInternalRAM();
 

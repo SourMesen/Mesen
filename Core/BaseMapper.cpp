@@ -4,6 +4,7 @@
 #include <assert.h>
 #include "../Utilities/FolderUtilities.h"
 #include "CheatManager.h"
+#include "Debugger.h"
 
 void BaseMapper::WriteRegister(uint16_t addr, uint8_t value) { }
 uint8_t BaseMapper::ReadRegister(uint16_t addr) { return 0; }
@@ -732,10 +733,26 @@ uint8_t* BaseMapper::GetWorkRam()
 	return _workRam;
 }
 
-void BaseMapper::GetPrgCopy(uint8_t **buffer)
+uint32_t BaseMapper::CopyMemory(DebugMemoryType type, uint8_t* buffer)
 {
-	*buffer = new uint8_t[_prgSize];
-	memcpy(*buffer, _prgRom, _prgSize);
+	switch(type) {
+		case DebugMemoryType::ChrRam: memcpy(buffer, _chrRam, _chrRamSize); return _chrRamSize;
+		case DebugMemoryType::ChrRom: memcpy(buffer, _chrRom, _chrRomSize); return _chrRomSize;
+		case DebugMemoryType::PrgRom: memcpy(buffer, _prgRom, _prgSize); return _prgSize;
+		case DebugMemoryType::SaveRam: memcpy(buffer, _saveRam, _saveRamSize); return _saveRamSize;
+		case DebugMemoryType::WorkRam: memcpy(buffer, _workRam, _workRamSize); return _workRamSize;
+	}
+
+	return 0;
+}
+
+void BaseMapper::WriteMemory(DebugMemoryType type, uint8_t* buffer)
+{
+	switch(type) {
+		case DebugMemoryType::ChrRam: memcpy(_chrRam, buffer, _chrRamSize); break;
+		case DebugMemoryType::SaveRam: memcpy(_saveRam, buffer, _saveRamSize); break;
+		case DebugMemoryType::WorkRam: memcpy(_workRam, buffer, _workRamSize); break;
+	}
 }
 
 uint32_t BaseMapper::GetPrgSize(bool getWorkRamSize)
@@ -743,21 +760,9 @@ uint32_t BaseMapper::GetPrgSize(bool getWorkRamSize)
 	return getWorkRamSize ? _workRamSize : _prgSize;
 }
 
-void BaseMapper::GetChrRomCopy(uint8_t **buffer)
-{
-	*buffer = new uint8_t[_chrRomSize];
-	memcpy(*buffer, _chrRom, _chrRomSize);
-}
-
 uint32_t BaseMapper::GetChrSize(bool getRamSize)
 {
 	return getRamSize ? _chrRamSize : (_onlyChrRam ? 0 : _chrRomSize);
-}
-
-void BaseMapper::GetChrRamCopy(uint8_t **buffer)
-{
-	*buffer = new uint8_t[_chrRamSize];
-	memcpy(*buffer, _chrRam, _chrRamSize);
 }
 
 int32_t BaseMapper::ToAbsoluteAddress(uint16_t addr)

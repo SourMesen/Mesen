@@ -37,6 +37,9 @@
 			this.cboMemoryType = new System.Windows.Forms.ComboBox();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuImport = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExport = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuView = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,16 +54,20 @@
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindPrev = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.btnImport = new System.Windows.Forms.ToolStripButton();
+			this.btnExport = new System.Windows.Forms.ToolStripButton();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
+			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ctrlHexViewer
 			// 
 			this.ctrlHexViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlHexViewer.Location = new System.Drawing.Point(0, 24);
+			this.ctrlHexViewer.Location = new System.Drawing.Point(0, 49);
 			this.ctrlHexViewer.Name = "ctrlHexViewer";
-			this.ctrlHexViewer.Size = new System.Drawing.Size(334, 238);
+			this.ctrlHexViewer.Size = new System.Drawing.Size(461, 378);
 			this.ctrlHexViewer.TabIndex = 0;
 			this.ctrlHexViewer.ColumnCountChanged += new System.EventHandler(this.ctrlHexViewer_ColumnCountChanged);
 			// 
@@ -68,7 +75,7 @@
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.lblViewMemoryType);
 			this.flowLayoutPanel1.Controls.Add(this.cboMemoryType);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 25);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 49);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(167, 27);
 			this.flowLayoutPanel1.TabIndex = 1;
@@ -95,7 +102,10 @@
             "Secondary OAM Memory",
             "PRG ROM",
             "CHR ROM",
-            "CHR RAM"});
+            "CHR RAM",
+            "Work RAM",
+            "Save RAM",
+            "NES RAM"});
 			this.cboMemoryType.Location = new System.Drawing.Point(42, 3);
 			this.cboMemoryType.Name = "cboMemoryType";
 			this.cboMemoryType.Size = new System.Drawing.Size(121, 21);
@@ -110,22 +120,46 @@
             this.toolStripMenuItem1});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(334, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(461, 24);
 			this.menuStrip1.TabIndex = 2;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
 			// fileToolStripMenuItem
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuImport,
+            this.mnuExport,
+            this.toolStripMenuItem3,
             this.mnuClose});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
 			// 
+			// mnuImport
+			// 
+			this.mnuImport.Name = "mnuImport";
+			this.mnuImport.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+			this.mnuImport.Size = new System.Drawing.Size(153, 22);
+			this.mnuImport.Text = "Import";
+			this.mnuImport.Click += new System.EventHandler(this.mnuImport_Click);
+			// 
+			// mnuExport
+			// 
+			this.mnuExport.Name = "mnuExport";
+			this.mnuExport.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+			this.mnuExport.Size = new System.Drawing.Size(153, 22);
+			this.mnuExport.Text = "Export";
+			this.mnuExport.Click += new System.EventHandler(this.mnuExport_Click);
+			// 
+			// toolStripMenuItem3
+			// 
+			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(150, 6);
+			// 
 			// mnuClose
 			// 
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(103, 22);
+			this.mnuClose.Size = new System.Drawing.Size(153, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -144,7 +178,7 @@
 			// 
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
@@ -155,7 +189,7 @@
             this.mnuDecreaseFontSize,
             this.mnuResetFontSize});
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
-			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
 			this.fontSizeToolStripMenuItem.Text = "Text Size";
 			// 
 			// mnuIncreaseFontSize
@@ -188,7 +222,7 @@
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(138, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -196,7 +230,7 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -243,22 +277,54 @@
 			this.mnuGoTo.Text = "Go To...";
 			this.mnuGoTo.Click += new System.EventHandler(this.mnuGoTo_Click);
 			// 
+			// toolStrip1
+			// 
+			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnImport,
+            this.btnExport});
+			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+			this.toolStrip1.Name = "toolStrip1";
+			this.toolStrip1.Size = new System.Drawing.Size(461, 25);
+			this.toolStrip1.TabIndex = 3;
+			this.toolStrip1.Text = "toolStrip1";
+			// 
+			// btnImport
+			// 
+			this.btnImport.Image = global::Mesen.GUI.Properties.Resources.Import;
+			this.btnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.btnImport.Name = "btnImport";
+			this.btnImport.Size = new System.Drawing.Size(63, 22);
+			this.btnImport.Text = "Import";
+			this.btnImport.Click += new System.EventHandler(this.mnuImport_Click);
+			// 
+			// btnExport
+			// 
+			this.btnExport.Image = global::Mesen.GUI.Properties.Resources.Export;
+			this.btnExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.btnExport.Name = "btnExport";
+			this.btnExport.Size = new System.Drawing.Size(60, 22);
+			this.btnExport.Text = "Export";
+			this.btnExport.Click += new System.EventHandler(this.mnuExport_Click);
+			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(334, 262);
+			this.ClientSize = new System.Drawing.Size(461, 427);
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.Controls.Add(this.ctrlHexViewer);
+			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
-			this.MinimumSize = new System.Drawing.Size(350, 300);
+			this.MinimumSize = new System.Drawing.Size(477, 465);
 			this.Name = "frmMemoryViewer";
 			this.Text = "Memory Viewer";
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			this.toolStrip1.ResumeLayout(false);
+			this.toolStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -286,5 +352,11 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefresh;
+		private System.Windows.Forms.ToolStripMenuItem mnuImport;
+		private System.Windows.Forms.ToolStripMenuItem mnuExport;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+		private System.Windows.Forms.ToolStrip toolStrip1;
+		private System.Windows.Forms.ToolStripButton btnImport;
+		private System.Windows.Forms.ToolStripButton btnExport;
 	}
 }

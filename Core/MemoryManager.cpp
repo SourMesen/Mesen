@@ -135,6 +135,15 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 	}
 }
 
+void MemoryManager::DebugWrite(uint16_t addr, uint8_t value)
+{
+	if(addr <= 0x1FFF) {
+		_internalRAM[addr & 0x07FF] = value;
+	} else {
+		WriteRegister(addr, value);
+	}
+}
+
 void MemoryManager::ProcessVramAccess(uint16_t &addr)
 {
 	addr &= 0x3FFF;

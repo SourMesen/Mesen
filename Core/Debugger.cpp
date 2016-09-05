@@ -549,6 +549,33 @@ void Debugger::ProcessVramOperation(MemoryOperationType type, uint16_t addr, uin
 	}
 }
 
+void Debugger::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
+{
+	switch(type) {
+		case DebugMemoryType::InternalRam:
+			for(int i = 0; i < 0x800; i++) {
+				_memoryManager->DebugWrite(i, buffer[i]);
+			}
+			break;
+
+		case DebugMemoryType::PaletteMemory:
+			for(int i = 0; i < 0x20; i++) {
+				_ppu->WritePaletteRAM(i, buffer[i]);
+			}
+			break;
+
+		case DebugMemoryType::SpriteMemory: memcpy(_ppu->GetSpriteRam(), buffer, 0x100); break;
+		case DebugMemoryType::SecondarySpriteMemory: memcpy(_ppu->GetSecondarySpriteRam(), buffer, 0x20); break;
+		
+		case DebugMemoryType::ChrRam:
+		case DebugMemoryType::WorkRam:
+		case DebugMemoryType::SaveRam:
+			_mapper->WriteMemory(type, buffer); 
+			break;
+	}
+}
+
+
 uint32_t Debugger::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 {
 	switch(type) {
@@ -579,25 +606,11 @@ uint32_t Debugger::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 			return 0x20;
 
 		case DebugMemoryType::PrgRom:
-			uint8_t *prgRom;
-			_mapper->GetPrgCopy(&prgRom);
-			memcpy(buffer, prgRom, _mapper->GetPrgSize());
-			delete[] prgRom;
-			return _mapper->GetPrgSize();
-
 		case DebugMemoryType::ChrRom:
-			uint8_t *chrRom;
-			_mapper->GetChrRomCopy(&chrRom);
-			memcpy(buffer, chrRom, _mapper->GetChrSize());
-			delete[] chrRom;
-			return _mapper->GetChrSize();
-
 		case DebugMemoryType::ChrRam:
-			uint8_t *chrRam;
-			_mapper->GetChrRamCopy(&chrRam);
-			memcpy(buffer, chrRam, _mapper->GetChrSize(true));
-			delete[] chrRam;
-			return _mapper->GetChrSize(true);
+		case DebugMemoryType::WorkRam:
+		case DebugMemoryType::SaveRam:
+			return _mapper->CopyMemory(type, buffer);
 
 		case DebugMemoryType::InternalRam:
 			for(int i = 0; i < 0x800; i++) {

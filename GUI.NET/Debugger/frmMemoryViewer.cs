@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,18 +17,21 @@ namespace Mesen.GUI.Debugger
 	{
 		private InteropEmu.NotificationListener _notifListener;
 		private int _autoRefreshCounter = 0;
+		private DebugMemoryType _memoryType = DebugMemoryType.CpuMemory;
 
 		public frmMemoryViewer()
 		{
 			InitializeComponent();
-
-			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
-			this.ctrlHexViewer.FontSize = ConfigManager.Config.DebugInfo.RamFontSize;
 		}
 
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
+
+			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
+			this.ctrlHexViewer.FontSize = ConfigManager.Config.DebugInfo.RamFontSize;
+
+			UpdateImportButton();
 
 			this.cboMemoryType.SelectedIndex = 0;
 			this.Size = new Size(this.ctrlHexViewer.IdealWidth, this.Height);
@@ -52,6 +56,8 @@ namespace Mesen.GUI.Debugger
 		
 		private void cboMemoryType_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			this._memoryType = (DebugMemoryType)this.cboMemoryType.SelectedIndex;
+			this.UpdateImportButton();
 			this.RefreshData();
 			this.ctrlHexViewer.ScrollToTop();
 		}
@@ -124,6 +130,47 @@ namespace Mesen.GUI.Debugger
 		private void mnuAutoRefresh_Click(object sender, EventArgs e)
 		{
 			this.UpdateConfig();
+		}
+
+		private void UpdateImportButton()
+		{
+			switch(_memoryType) {
+				case DebugMemoryType.ChrRam:
+				case DebugMemoryType.InternalRam:
+				case DebugMemoryType.PaletteMemory:
+				case DebugMemoryType.SecondarySpriteMemory:
+				case DebugMemoryType.SpriteMemory:
+				case DebugMemoryType.WorkRam:
+				case DebugMemoryType.SaveRam:
+					btnImport.Enabled = mnuImport.Enabled = true;
+					break;
+
+				default:
+					btnImport.Enabled = mnuImport.Enabled = false;
+					break;
+			}
+		}
+
+		private void mnuImport_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Filter = "Memory dump files (*.dmp)|*.dmp|All files (*.*)|*.*";
+			ofd.InitialDirectory = ConfigManager.DebuggerFolder;
+			if(ofd.ShowDialog() == DialogResult.OK) {
+				InteropEmu.DebugSetMemoryState(_memoryType, File.ReadAllBytes(ofd.FileName));
+				RefreshData();
+			}
+		}
+
+		private void mnuExport_Click(object sender, EventArgs e)
+		{
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Filter = "Memory dump files (*.dmp)|*.dmp|All files (*.*)|*.*";
+			sfd.InitialDirectory = ConfigManager.DebuggerFolder;
+			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + " - " + cboMemoryType.SelectedItem.ToString() + ".dmp";
+			if(sfd.ShowDialog() == DialogResult.OK) {
+				File.WriteAllBytes(sfd.FileName, this.ctrlHexViewer.Data);
+			}
 		}
 	}
 }

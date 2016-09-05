@@ -28,7 +28,9 @@ enum class DebugMemoryType
 	PrgRom = 5,
 	ChrRom = 6,
 	ChrRam = 7,
-	InternalRam = 8,
+	WorkRam = 8,
+	SaveRam = 9,
+	InternalRam = 10
 };
 
 enum class DebuggerFlags
@@ -132,6 +134,7 @@ public:
 	void ResetCdlLog();
 
 	void SetNextStatement(uint16_t addr);
+	void SetMemoryState(DebugMemoryType type, uint8_t *buffer);
 
 	bool IsCodeChanged();
 	string GenerateOutput();

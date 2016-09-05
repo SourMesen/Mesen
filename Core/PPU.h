@@ -185,8 +185,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void TriggerNmi();
 		void EndVBlank();
 
-		void WritePaletteRAM(uint16_t addr, uint8_t value);
-
 		void LoadTileInfo();
 		void LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uint8_t spriteX, bool extraSprite);
 		void LoadSpriteTileInfo();
@@ -237,6 +235,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		}
 
 		uint8_t ReadPaletteRAM(uint16_t addr);
+		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
 		uint8_t ReadRAM(uint16_t addr);
 		void WriteRAM(uint16_t addr, uint8_t value);

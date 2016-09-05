@@ -198,6 +198,17 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
+		[DllImport(DLLPath, EntryPoint="DebugSetMemoryState")] private static extern void DebugSetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
+		public static void DebugSetMemoryState(DebugMemoryType type, byte[] data)
+		{
+			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugSetMemoryStateWrapper(type, handle.AddrOfPinnedObject());
+			} finally {
+				handle.Free();
+			}
+		}
+
 		public static byte[] DebugGetInternalRam()
 		{
 			byte[] buffer = new byte[0x800];
@@ -969,7 +980,9 @@ namespace Mesen.GUI
 		PrgRom = 5,
 		ChrRom = 6,
 		ChrRam = 7,
-		InternalRam = 8
+		WorkRam = 8,
+		SaveRam = 9,
+		InternalRam = 10
 	}
 
 	public class MD5Helper
