@@ -161,23 +161,24 @@ bool RomLoader::LoadFile(string filename, istream *filestream, string ipsFilenam
 		input = filestream;
 	}
 	
+	if(input) {
+		char header[15];
+		input->seekg(0, ios::beg);
+		input->read(header, 15);
+		input->seekg(0, ios::beg);
+		if(memcmp(header, "PK", 2) == 0) {
+			ZipReader reader;
+			return LoadFromArchive(*input, reader, archiveFileIndex);
+		} else if(memcmp(header, "7z", 2) == 0) {
+			SZReader reader;
+			return LoadFromArchive(*input, reader, archiveFileIndex);
+		} else if(memcmp(header, "NES\x1a", 4) == 0 || memcmp(header, "NESM\x1a", 5) == 0 || memcmp(header, "NSFE", 4) == 0 || memcmp(header, "FDS\x1a", 4) == 0 || memcmp(header, "\x1*NINTENDO-HVC*", 15) == 0 || memcmp(header, "UNIF", 4) == 0) {
+			if(archiveFileIndex > 0) {
+				return false;
+			}
 
-	char header[15];
-	input->seekg(0, ios::beg);
-	input->read(header, 15);
-	input->seekg(0, ios::beg);
-	if(memcmp(header, "PK", 2) == 0) {
-		ZipReader reader;
-		return LoadFromArchive(*input, reader, archiveFileIndex);
-	} else if(memcmp(header, "7z", 2) == 0) {
-		SZReader reader;
-		return LoadFromArchive(*input, reader, archiveFileIndex);
-	} else if(memcmp(header, "NES\x1a", 4) == 0 || memcmp(header, "NESM\x1a", 5) == 0 || memcmp(header, "NSFE", 4) == 0 || memcmp(header, "FDS\x1a", 4) == 0 || memcmp(header, "\x1*NINTENDO-HVC*", 15) == 0 || memcmp(header, "UNIF", 4) == 0) {
-		if(archiveFileIndex > 0) {
-			return false;
+			return LoadFromStream(*input, FolderUtilities::GetFilename(filename, true));
 		}
-
-		return LoadFromStream(*input, FolderUtilities::GetFilename(filename, true));
 	}
 	return false;
 }
