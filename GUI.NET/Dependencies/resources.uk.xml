@@ -209,7 +209,7 @@
       <Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Overscan</Control>
-      <Control ID="lblLeft">Злiвава</Control>
+      <Control ID="lblLeft">Злiва</Control>
       <Control ID="lblTop">Зверху</Control>
       <Control ID="lblBottom">Знизу</Control>
       <Control ID="lblRight">Справа</Control>
@@ -356,13 +356,13 @@
       <Control ID="btnImport">Iмпорт</Control>
       <Control ID="btnCancel">Вiдмiна</Control>
     </Form>
-    <Form ID="frmCheatImportFromDb" Title="Выбор игры...">
+    <Form ID="frmCheatImportFromDb" Title="Вибір гри...">
       <Control ID="lblSearch">Пошук :</Control>
       <Control ID="btnOK">Iмпорт</Control>
       <Control ID="btnCancel">Вiдео</Control>
     </Form>
-    <Form ID="frmCheatList" Title="Чiты">
-      <Control ID="tabCheats">Чiты</Control>
+    <Form ID="frmCheatList" Title="Чіти">
+      <Control ID="tabCheats">Чiти</Control>
       <Control ID="btnAddCheat">Додати чiт</Control>
       <Control ID="btnDelete">Видалити</Control>
       <Control ID="btnDeleteCheat">Видалити вибрані чіти</Control>
