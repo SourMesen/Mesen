@@ -158,6 +158,8 @@ namespace Mesen.GUI.Forms
 
 			InteropEmu.Release();
 
+			ConfigManager.SaveConfig();
+
 			base.OnClosing(e);
 		}
 

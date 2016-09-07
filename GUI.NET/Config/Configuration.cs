@@ -11,6 +11,7 @@ namespace Mesen.GUI.Config
 	public class Configuration
 	{
 		private const int MaxRecentFiles = 10;
+		private bool _needToSave = false;
 
 		public string MesenVersion = "0.5.0";
 		public PreferenceInfo PreferenceInfo;
@@ -42,6 +43,27 @@ namespace Mesen.GUI.Config
 			Cheats = new List<CheatInfo>();
 			VsConfig = new List<VsConfigInfo>();
 			DebugInfo = new DebugInfo();
+		}
+
+		~Configuration()
+		{
+			//Try to save before destruction if we were unable to save at a previous point in time
+			Save();
+		}
+
+		public void Save()
+		{
+			if(_needToSave) {
+				Serialize(ConfigManager.ConfigFile);
+			}
+		}
+
+		public bool NeedToSave
+		{
+			set
+			{
+				_needToSave = value;
+			}
 		}
 
 		public void ApplyConfig()
@@ -94,9 +116,15 @@ namespace Mesen.GUI.Config
 
 		public void Serialize(string configFile)
 		{
-			XmlSerializer xmlSerializer = new XmlSerializer(typeof(Configuration));
-			using(TextWriter textWriter = new StreamWriter(configFile)) {
-				xmlSerializer.Serialize(textWriter, this);
+			try {
+				XmlSerializer xmlSerializer = new XmlSerializer(typeof(Configuration));
+				using(TextWriter textWriter = new StreamWriter(configFile)) {
+					xmlSerializer.Serialize(textWriter, this);
+				}
+				_needToSave = false;
+			} catch {
+				//This can sometime fail due to the file being used by another Mesen instance, etc.
+				//In this case, the _needToSave flag will still be set, and the config will be saved when the emulator is closed
 			}
 		}
 
@@ -107,7 +135,9 @@ namespace Mesen.GUI.Config
 			xmlSerializer.Serialize(stringWriter, this);
 
 			StringReader stringReader = new StringReader(stringWriter.ToString());
-			return (Configuration)xmlSerializer.Deserialize(stringReader);
+			Configuration config = (Configuration)xmlSerializer.Deserialize(stringReader);
+			config.NeedToSave = false;
+			return config;
 		}
 	}
 

@@ -28,14 +28,14 @@ namespace Mesen.GUI.Config
 					//Create new config file and save it to disk
 					_config = new Configuration();
 					_dirtyConfig = new Configuration();
-					SaveConfig();
+					_config.Save();
 				}
 			}
 		}
 
-		private static void SaveConfig()
+		public static void SaveConfig()
 		{
-			_config.Serialize(ConfigFile);
+			_config.Save();
 		}
 
 		public static string HomeFolder
@@ -151,7 +151,7 @@ namespace Mesen.GUI.Config
 			}
 		}
 
-		private static string ConfigFile
+		public static string ConfigFile
 		{
 			get
 			{
@@ -174,8 +174,10 @@ namespace Mesen.GUI.Config
 
 		public static void ApplyChanges()
 		{
+			_config.NeedToSave = false;
 			_config = _dirtyConfig.Clone();
-			SaveConfig();
+			_config.NeedToSave = true;
+			_config.Save();
 		}
 
 		public static void RejectChanges()
