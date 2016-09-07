@@ -429,9 +429,8 @@ namespace Mesen.GUI.Debugger
 			ctrlPpuMemoryMapping.Invalidate();
 		}
 
-		protected override void OnResize(EventArgs e)
+		private void frmDebugger_Resize(object sender, EventArgs e)
 		{
-			base.OnResize(e);
 			ctrlCpuMemoryMapping.Invalidate();
 			ctrlPpuMemoryMapping.Invalidate();
 		}

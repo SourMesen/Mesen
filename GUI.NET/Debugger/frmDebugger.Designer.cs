@@ -803,6 +803,7 @@
 			this.Name = "frmDebugger";
 			this.Text = "Debugger";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmDebugger_FormClosed);
+			this.Resize += new System.EventHandler(this.frmDebugger_Resize);
 			this.contextMenuCode.ResumeLayout(false);
 			this.splitContainer.Panel1.ResumeLayout(false);
 			this.splitContainer.Panel2.ResumeLayout(false);
