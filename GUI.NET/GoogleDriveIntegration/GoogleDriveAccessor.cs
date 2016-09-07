@@ -12,6 +12,14 @@ using Google.Apis.Upload;
 
 namespace Mesen.GUI.GoogleDriveIntegration
 {
+	public enum FileDownloadResult
+	{
+		OK = 0,
+		FileNotFound = 1,
+		Error = 2,
+		FileCorrupted = 3,
+	};
+
 	public class GoogleDriveAccessor : IDisposable
 	{
 		private const string _contentType = @"application/zip";
@@ -46,13 +54,13 @@ namespace Mesen.GUI.GoogleDriveIntegration
 			return _connected;
 		}
 
-		public bool DownloadFile(System.IO.MemoryStream fileStream, string filename)
+		public FileDownloadResult DownloadFile(System.IO.MemoryStream fileStream, string filename)
 		{
 			try {
 				this.Connect().GetAwaiter().GetResult();
 
 				if(_connected) {
-					this.DownloadFileAsync(fileStream, filename).GetAwaiter().GetResult();
+					return this.DownloadFileAsync(fileStream, filename).GetAwaiter().GetResult();
 				}
 			} catch(TokenResponseException) {
 				_revoked = true;
@@ -64,7 +72,7 @@ namespace Mesen.GUI.GoogleDriveIntegration
 				_credentials = null;
 				_service = null;
 			}
-			return _connected;
+			return FileDownloadResult.Error;
 		}
 
 		public bool AcquireToken()
@@ -168,7 +176,7 @@ namespace Mesen.GUI.GoogleDriveIntegration
 			return task;
 		}
 
-		private async Task DownloadFileAsync(System.IO.MemoryStream outStream, string filename)
+		private async Task<FileDownloadResult> DownloadFileAsync(System.IO.MemoryStream outStream, string filename)
 		{
 			File driveFile = this.GetFileMatchingName(filename);
 
@@ -177,15 +185,20 @@ namespace Mesen.GUI.GoogleDriveIntegration
 				var progress = await request.DownloadAsync(outStream).ConfigureAwait(false);
 				if(progress.Status == DownloadStatus.Completed) {
 					_driveFile = driveFile;
+					return FileDownloadResult.OK;
 				} else {
 					_driveFile = null;
+					return FileDownloadResult.Error;
 				}
 			}
+			return FileDownloadResult.FileNotFound;
 		}
 
-		private async Task DeleteFile(File file)
+		public async Task DeleteFile(string filename)
 		{
-			await _service.Files.Delete(file.Id).ExecuteAsync().ConfigureAwait(false);
+			this.Connect().GetAwaiter().GetResult();
+			File driveFile = this.GetFileMatchingName(filename);
+			await _service.Files.Delete(driveFile.Id).ExecuteAsync().ConfigureAwait(false);
 		}
 
 		void Upload_ResponseReceived(File file)

@@ -38,7 +38,8 @@ namespace Mesen.GUI.GoogleDriveIntegration
 				try {
 					InteropEmu.DisplayMessage("GoogleDrive", "SynchronizationStarted");
 					using(_accessor = new GoogleDriveAccessor()) {
-						if(!CloudSyncHelper.DownloadData()) {
+						FileDownloadResult result = CloudSyncHelper.DownloadData();
+						if(result == FileDownloadResult.Error) {
 							InteropEmu.DisplayMessage("GoogleDrive", "SynchronizationFailed");
 							return false;
 						}
@@ -86,31 +87,39 @@ namespace Mesen.GUI.GoogleDriveIntegration
 			}
 		}
 
-		private static bool DownloadData()
+		private static FileDownloadResult DownloadData()
 		{
 			using(MemoryStream stream = new MemoryStream()) {
-				bool result = _accessor.DownloadFile(stream, "MesenData.zip");
+				FileDownloadResult result = _accessor.DownloadFile(stream, "MesenData.zip");
 
-				if(result) {
-					stream.Position = 0;
+				if(result == FileDownloadResult.OK) {
+					try {
+						stream.Position = 0;
 
-					string homeFolder = ConfigManager.HomeFolder;
+						string homeFolder = ConfigManager.HomeFolder;
 
-					//Make sure the folders exist
-					string saveFolder = ConfigManager.SaveFolder;
-					string saveStateFolder = ConfigManager.SaveStateFolder;
+						//Make sure the folders exist
+						string saveFolder = ConfigManager.SaveFolder;
+						string saveStateFolder = ConfigManager.SaveStateFolder;
 
-					using(ZipArchive archive = new ZipArchive(stream)) {
-						foreach(ZipArchiveEntry entry in archive.Entries) {
-							if(!string.IsNullOrWhiteSpace(entry.Name)) {
-								string[] fileAndFolder = entry.FullName.Split('/');
-								string fileName = Path.Combine(homeFolder, fileAndFolder[0], fileAndFolder[1]);
-								if(!File.Exists(fileName) || File.GetLastWriteTime(fileName) < entry.LastWriteTime.ToLocalTime()) {
-									//File on server is more recent, or doesn't exist on local computer, extract it
-									entry.ExtractToFile(fileName, true);
+						using(ZipArchive archive = new ZipArchive(stream)) {
+							foreach(ZipArchiveEntry entry in archive.Entries) {
+								if(!string.IsNullOrWhiteSpace(entry.Name)) {
+									string[] fileAndFolder = entry.FullName.Split('/');
+									string fileName = Path.Combine(homeFolder, fileAndFolder[0], fileAndFolder[1]);
+									if(!File.Exists(fileName) || File.GetLastWriteTime(fileName) < entry.LastWriteTime.ToLocalTime()) {
+										//File on server is more recent, or doesn't exist on local computer, extract it
+										try {
+											entry.ExtractToFile(fileName, true);
+										} catch {
+											//Files might be opened by another program or not read-only, etc.
+										}
+									}
 								}
 							}
 						}
+					} catch {
+						result = FileDownloadResult.FileCorrupted;
 					}
 				} else if(_accessor.Revoked) {
 					ConfigManager.Config.PreferenceInfo.CloudSaveIntegration = false;
