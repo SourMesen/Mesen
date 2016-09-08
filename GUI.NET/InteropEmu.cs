@@ -560,12 +560,12 @@ namespace Mesen.GUI
 
 		public UInt32 PrgPageCount;
 		public UInt32 PrgPageSize;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
 		public UInt32[] PrgSelectedPages;
 
 		public UInt32 ChrPageCount;
 		public UInt32 ChrPageSize;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
 		public UInt32[] ChrSelectedPages;
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]

@@ -46,10 +46,10 @@ struct CartridgeState
 
 	uint32_t PrgPageCount;
 	uint32_t PrgPageSize;
-	uint32_t PrgSelectedPages[4];
+	uint32_t PrgSelectedPages[64];
 	uint32_t ChrPageCount;
 	uint32_t ChrPageSize;
-	uint32_t ChrSelectedPages[8];
+	uint32_t ChrSelectedPages[64];
 	uint32_t Nametables[8];
 };
 
