@@ -13,7 +13,7 @@ namespace Mesen.GUI.Config
 		private const int MaxRecentFiles = 10;
 		private bool _needToSave = false;
 
-		public string MesenVersion = "0.5.0";
+		public string MesenVersion = "0.5.1";
 		public PreferenceInfo PreferenceInfo;
 		public AudioInfo AudioInfo;
 		public VideoInfo VideoInfo;
