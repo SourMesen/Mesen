@@ -63,7 +63,6 @@ void FDS::ClockIrq()
 				_irqCounter = _irqReloadValue;
 			} else {
 				_irqEnabled = false;
-				_irqReloadValue = 0;
 			}
 		}
 	}
@@ -229,6 +228,9 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 			_irqReloadEnabled = (value & 0x01) == 0x01;
 			_irqEnabled = (value & 0x02) == 0x02;
 			_irqCounter = _irqReloadValue;
+			if(!_irqReloadEnabled) {
+				_irqReloadValue = 0;
+			}
 			CPU::ClearIRQSource(IRQSource::External);
 			break;
 
