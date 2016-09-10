@@ -1390,7 +1390,10 @@ namespace Mesen.GUI.Forms
 
 		private void ctrlRenderer_DoubleClick(object sender, EventArgs e)
 		{
-			SetFullscreenState(!_fullscreenMode);
+			if(!ctrlRenderer.NeedMouseIcon && !InteropEmu.HasArkanoidPaddle()) {
+				//Disable double clicking (used to switch to fullscreen mode) when using zapper/arkanoid controller
+				SetFullscreenState(!_fullscreenMode);
+			}
 		}
 
 		private void mnuScaleCustom_Click(object sender, EventArgs e)
