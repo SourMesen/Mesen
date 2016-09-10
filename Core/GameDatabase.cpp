@@ -88,46 +88,50 @@ GameSystem GameDatabase::GetGameSystem(string system)
 
 void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 {
-	ControllerType controllers[4] = { ControllerType::StandardController, ControllerType::StandardController, ControllerType::None, ControllerType::None };
-	ExpansionPortDevice expDevice = ExpansionPortDevice::None;
-	EmulationSettings::ClearFlags(EmulationFlags::HasFourScore);
+	if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
+		ControllerType controllers[4] = { ControllerType::StandardController, ControllerType::StandardController, ControllerType::None, ControllerType::None };
+		ExpansionPortDevice expDevice = ExpansionPortDevice::None;
+		EmulationSettings::ClearFlags(EmulationFlags::HasFourScore);
 
-	if(inputType.compare("Zapper") == 0) {
-		MessageManager::Log("[DB] Input: Zapper connected");
-		if(system == GameSystem::Famicom) {
-			expDevice = ExpansionPortDevice::Zapper;
-		} else {
-			controllers[1] = ControllerType::Zapper;
-		}
-	} else if(inputType.compare("FourPlayer") == 0) {
-		MessageManager::Log("[DB] Input: Four player adapter connected");
-		EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
-		if(system == GameSystem::Famicom) {
-			expDevice = ExpansionPortDevice::FourPlayerAdapter;
-			controllers[2] = controllers[3] = ControllerType::StandardController;
-		} else {
-			controllers[2] = controllers[3] = ControllerType::StandardController;
-		}
-	} else if(inputType.compare("Arkanoid") == 0) {
-		MessageManager::Log("[DB] Input: Arkanoid controller connected");
-		if(system == GameSystem::Famicom) {
-			expDevice = ExpansionPortDevice::ArkanoidController;
-		} else {
-			controllers[1] = ControllerType::ArkanoidController;
-		}
-	} else if(inputType.compare("OekaKidsTablet") == 0) {
-		MessageManager::Log("[DB] Input: Oeka Kids Tablet connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::OekaKidsTablet;
-	} else {
-		MessageManager::Log("[DB] Input: 2 standard controllers connected");
-	}
+		bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS);
 
-	EmulationSettings::SetConsoleType(system == GameSystem::Famicom ? ConsoleType::Famicom : ConsoleType::Nes);
-	for(int i = 0; i < 4; i++) {
-		EmulationSettings::SetControllerType(i, controllers[i]);
+		if(inputType.compare("Zapper") == 0) {
+			MessageManager::Log("[DB] Input: Zapper connected");
+			if(isFamicom) {
+				expDevice = ExpansionPortDevice::Zapper;
+			} else {
+				controllers[1] = ControllerType::Zapper;
+			}
+		} else if(inputType.compare("FourPlayer") == 0) {
+			MessageManager::Log("[DB] Input: Four player adapter connected");
+			EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
+			if(isFamicom) {
+				expDevice = ExpansionPortDevice::FourPlayerAdapter;
+				controllers[2] = controllers[3] = ControllerType::StandardController;
+			} else {
+				controllers[2] = controllers[3] = ControllerType::StandardController;
+			}
+		} else if(inputType.compare("Arkanoid") == 0) {
+			MessageManager::Log("[DB] Input: Arkanoid controller connected");
+			if(isFamicom) {
+				expDevice = ExpansionPortDevice::ArkanoidController;
+			} else {
+				controllers[1] = ControllerType::ArkanoidController;
+			}
+		} else if(inputType.compare("OekaKidsTablet") == 0) {
+			MessageManager::Log("[DB] Input: Oeka Kids Tablet connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::OekaKidsTablet;
+		} else {
+			MessageManager::Log("[DB] Input: 2 standard controllers connected");
+		}
+
+		EmulationSettings::SetConsoleType(isFamicom ? ConsoleType::Famicom : ConsoleType::Nes);
+		for(int i = 0; i < 4; i++) {
+			EmulationSettings::SetControllerType(i, controllers[i]);
+		}
+		EmulationSettings::SetExpansionDevice(expDevice);
 	}
-	EmulationSettings::SetExpansionDevice(expDevice);
 }
 
 uint8_t GameDatabase::GetSubMapper(GameInfo &info)
@@ -269,9 +273,7 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		MessageManager::Log("[DB] Game not found in database");
 	}
 
-	if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
-		InitializeInputDevices(info.InputType, romData.System);
-	}
+	InitializeInputDevices(info.InputType, romData.System);
 
 	romData.DatabaseInfo = info;
 }

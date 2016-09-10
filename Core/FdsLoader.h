@@ -6,6 +6,7 @@
 #include "RomData.h"
 #include "MessageManager.h"
 #include "MapperFactory.h"
+#include "GameDatabase.h"
 
 class FdsLoader
 {
@@ -163,6 +164,9 @@ public:
 		} else {
 			LoadDiskData(romFile, romData);
 		}
+
+		//Setup default controllers
+		GameDatabase::InitializeInputDevices("", GameSystem::FDS);
 
 		return romData;
 	}
