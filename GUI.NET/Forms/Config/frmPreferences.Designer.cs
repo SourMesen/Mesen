@@ -595,7 +595,7 @@
 			this.tpgNsf.Padding = new System.Windows.Forms.Padding(3);
 			this.tpgNsf.Size = new System.Drawing.Size(479, 343);
 			this.tpgNsf.TabIndex = 4;
-			this.tpgNsf.Text = "NSF / NSFe";
+			this.tpgNsf.Text = "NSF";
 			this.tpgNsf.UseVisualStyleBackColor = true;
 			// 
 			// tableLayoutPanel2

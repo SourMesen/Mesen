@@ -323,7 +323,7 @@
 
       <Control ID="chkDisableGameDatabase">Отключить встроенную базу данных</Control>
 
-      <Control ID="tpgNsf">NSF / NSFe</Control>
+      <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Переходить на следующий трек после</Control>
       <Control ID="lblNsfMillisecondsOfSilence">миллисекунд тишины</Control>
       <Control ID="chkNsfMoveToNextTrackAfterTime">Ограничить продолжительность воспроизведения</Control>

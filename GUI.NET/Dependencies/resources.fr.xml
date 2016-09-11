@@ -323,7 +323,7 @@
 
       <Control ID="chkDisableGameDatabase">Désactiver la base de données des jeux</Control>
 
-      <Control ID="tpgNsf">NSF / NSFe</Control>
+      <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Jouer la piste suivante après</Control>
       <Control ID="lblNsfMillisecondsOfSilence">millisecondes de silence</Control>
       <Control ID="chkNsfMoveToNextTrackAfterTime">Limiter la durée des pistes à</Control>

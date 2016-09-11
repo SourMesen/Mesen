@@ -322,7 +322,7 @@
 
       <Control ID="chkDisableGameDatabase">ゲームデータベースを無効にする</Control>
 
-      <Control ID="tpgNsf">NSF / NSFe</Control>
+      <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">無音検出：</Control>
       <Control ID="lblNsfMillisecondsOfSilence">ミリ秒間で無音の場合、次の曲を再生</Control>
       <Control ID="chkNsfMoveToNextTrackAfterTime">曲の最大長さを</Control>
