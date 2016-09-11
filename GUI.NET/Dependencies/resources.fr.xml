@@ -514,6 +514,8 @@
     <Message ID="NoMatchingCheats">Le fichier sélectionné ({0}) ne contient aucun code correspondant au jeu sélectionné.</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Avance rapide</Message>
+    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Augmenter la vitesse</Message>
+    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Réduire la vitesse</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pause</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Capture d'écran</Message>

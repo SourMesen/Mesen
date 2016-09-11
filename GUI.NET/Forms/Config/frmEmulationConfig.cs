@@ -18,6 +18,7 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InitializeComponent();
 
+			ConfigManager.Config.EmulationInfo.EmulationSpeed = InteropEmu.GetEmulationSpeed();
 			Entity = ConfigManager.Config.EmulationInfo;
 
 			AddBinding("EmulationSpeed", nudEmulationSpeed);

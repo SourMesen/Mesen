@@ -504,6 +504,8 @@
     <Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читов для даної гри.</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
+    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Increase Speed</Message>
+    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>

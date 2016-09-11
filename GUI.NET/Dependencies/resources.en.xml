@@ -54,8 +54,10 @@
     <Message ID="NoMatchingCheats">The selected cheat file ({0}) contains no cheats that match the selected game.</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Fast Forward</Message>
+    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Increase Speed</Message>
+    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pause</Message>
-    <Message ID="EmulatorShortcutMappings_Reset">Reset</Message>    
+    <Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Take Screenshot</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Switch Side</Message>
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insert Next Disk</Message>

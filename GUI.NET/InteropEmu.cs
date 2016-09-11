@@ -136,6 +136,9 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetReverbParameters(double strength, double delay);
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
 		[DllImport(DLLPath)] public static extern void SetEmulationSpeed(UInt32 emulationSpeed);
+		[DllImport(DLLPath)] public static extern void IncreaseEmulationSpeed();
+		[DllImport(DLLPath)] public static extern void DecreaseEmulationSpeed();
+		[DllImport(DLLPath)] public static extern UInt32 GetEmulationSpeed();
 		[DllImport(DLLPath)] public static extern void SetTurboSpeed(UInt32 turboSpeed);
 		[DllImport(DLLPath)] public static extern void SetOverclockRate(UInt32 overclockRate, [MarshalAs(UnmanagedType.I1)]bool adjustApu);
 		[DllImport(DLLPath)] public static extern void SetPpuNmiConfig(UInt32 extraScanlinesBeforeNmi, UInt32 extraScanlineAfterNmi);
@@ -773,6 +776,8 @@ namespace Mesen.GUI
 		public UInt32 VsServiceButton;
 
 		public UInt32 TakeScreenshot;
+		public UInt32 IncreaseSpeed;
+		public UInt32 DecreaseSpeed;
 	}
 
 	public struct InteropCheatInfo

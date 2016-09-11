@@ -333,7 +333,10 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetNesModel(uint32_t model) { EmulationSettings::SetNesModel((NesModel)model); }
 		DllExport void __stdcall SetOverscanDimensions(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom) { EmulationSettings::SetOverscanDimensions(left, right, top, bottom); }
-		DllExport void __stdcall SetEmulationSpeed(uint32_t emulationSpeed) { EmulationSettings::SetEmulationSpeed(emulationSpeed); }
+		DllExport void __stdcall SetEmulationSpeed(uint32_t emulationSpeed) { EmulationSettings::SetEmulationSpeed(emulationSpeed, true); }
+		DllExport void __stdcall IncreaseEmulationSpeed() { EmulationSettings::IncreaseEmulationSpeed(); }
+		DllExport void __stdcall DecreaseEmulationSpeed() { EmulationSettings::DecreaseEmulationSpeed(); }
+		DllExport uint32_t __stdcall GetEmulationSpeed() { return EmulationSettings::GetEmulationSpeed(true); }
 		DllExport void __stdcall SetTurboSpeed(uint32_t turboSpeed) { EmulationSettings::SetTurboSpeed(turboSpeed); }
 		DllExport void __stdcall SetOverclockRate(uint32_t overclockRate, bool adjustApu) { EmulationSettings::SetOverclockRate(overclockRate, adjustApu); }
 		DllExport void __stdcall SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi) { EmulationSettings::SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi); }

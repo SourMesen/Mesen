@@ -496,6 +496,8 @@
     <Message ID="NoMatchingCheats">このファイル（{0}）に選択されたゲームに該当するチートコードを見つかりませんでした。</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">早送り</Message>
+    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">速度を上げる</Message>
+    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">速度を下げる</Message>
     <Message ID="EmulatorShortcutMappings_Pause">ポーズ</Message>
     <Message ID="EmulatorShortcutMappings_Reset">リセット</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">スクリーンショットを撮る</Message>

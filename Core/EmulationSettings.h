@@ -222,6 +222,8 @@ struct EmulatorKeyMappings
 	uint32_t VsServiceButton;
 
 	uint32_t TakeScreenshot;
+	uint32_t IncreaseSpeed;
+	uint32_t DecreaseSpeed;
 };
 
 struct EmulatorKeyMappingSet
@@ -477,9 +479,32 @@ public:
 	}
 
 	//0: No limit, Number: % of default speed (50/60fps)
-	static void SetEmulationSpeed(uint32_t emulationSpeed)
+	static void SetEmulationSpeed(uint32_t emulationSpeed, bool displaySpeed = false)
 	{
-		_emulationSpeed = emulationSpeed;
+		if(_emulationSpeed != emulationSpeed) {
+			_emulationSpeed = emulationSpeed;
+			if(displaySpeed) {
+				MessageManager::DisplayMessage("EmulationSpeed", _emulationSpeed == 0 ? "EmulationMaximumSpeed" : "EmulationSpeedPercent", std::to_string(_emulationSpeed));
+			}
+		}
+	}
+
+	static void IncreaseEmulationSpeed()
+	{
+		if(_emulationSpeed > 0 && _emulationSpeed < 450) {
+			EmulationSettings::SetEmulationSpeed(_emulationSpeed + (_emulationSpeed < 100 ? 25 : 50), true);
+		} else {
+			EmulationSettings::SetEmulationSpeed(0, true);
+		}
+	}
+
+	static void DecreaseEmulationSpeed()
+	{
+		if(_emulationSpeed == 0) {
+			EmulationSettings::SetEmulationSpeed(450, true);
+		} else if(_emulationSpeed > 25) {
+			EmulationSettings::SetEmulationSpeed(_emulationSpeed - (_emulationSpeed <= 100 ? 25 : 50), true);
+		}
 	}
 
 	static void SetTurboSpeed(uint32_t turboSpeed)

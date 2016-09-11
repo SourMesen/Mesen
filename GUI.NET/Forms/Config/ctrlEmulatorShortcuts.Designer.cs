@@ -51,7 +51,7 @@
 			this.gridShortcuts.MultiSelect = false;
 			this.gridShortcuts.Name = "gridShortcuts";
 			this.gridShortcuts.RowHeadersVisible = false;
-			this.gridShortcuts.ScrollBars = System.Windows.Forms.ScrollBars.None;
+			this.gridShortcuts.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.gridShortcuts.Size = new System.Drawing.Size(448, 248);
 			this.gridShortcuts.TabIndex = 2;
 			this.gridShortcuts.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridShortcuts_CellContentClick);
@@ -63,7 +63,7 @@
 			this.colAction.ReadOnly = true;
 			this.colAction.Resizable = System.Windows.Forms.DataGridViewTriState.False;
 			this.colAction.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			this.colAction.Width = 250;
+			this.colAction.Width = 233;
 			// 
 			// colBinding1
 			// 

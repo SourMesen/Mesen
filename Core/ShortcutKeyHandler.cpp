@@ -54,6 +54,14 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 		EmulationSettings::ClearFlags(EmulationFlags::Turbo);
 	}
 
+	if(DetectKeyPress(mappings.IncreaseSpeed)) {
+		EmulationSettings::IncreaseEmulationSpeed();
+	}
+	
+	if(DetectKeyPress(mappings.DecreaseSpeed)) {
+		EmulationSettings::DecreaseEmulationSpeed();
+	}
+
 	if(DetectKeyPress(mappings.TakeScreenshot)) {
 		VideoDecoder::GetInstance()->TakeScreenshot();
 	}

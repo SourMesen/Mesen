@@ -147,6 +147,7 @@ namespace Mesen.GUI.Forms
 				_debugger.Close();
 			}
 
+			ConfigManager.Config.EmulationInfo.EmulationSpeed = InteropEmu.GetEmulationSpeed();
 			ConfigManager.Config.VideoInfo.VideoScale = _regularScale;
 			ConfigManager.ApplyChanges();
 
@@ -216,12 +217,11 @@ namespace Mesen.GUI.Forms
 			mnuEmuSpeedHalf.Tag = 50;
 			mnuEmuSpeedQuarter.Tag = 25;
 			mnuEmuSpeedMaximumSpeed.Tag = 0;
-
-			UpdateEmulationSpeedMenu();
 		}
 
 		private void UpdateEmulationSpeedMenu()
 		{
+			ConfigManager.Config.EmulationInfo.EmulationSpeed = InteropEmu.GetEmulationSpeed();
 			foreach(ToolStripMenuItem item in new ToolStripMenuItem[] { mnuEmuSpeedDouble, mnuEmuSpeedHalf, mnuEmuSpeedNormal, mnuEmuSpeedQuarter, mnuEmuSpeedTriple, mnuEmuSpeedMaximumSpeed }) {
 				item.Checked = ((int)item.Tag == ConfigManager.Config.EmulationInfo.EmulationSpeed);
 			}
@@ -229,41 +229,24 @@ namespace Mesen.GUI.Forms
 
 		private void SetEmulationSpeed(uint emulationSpeed)
 		{
-			if(emulationSpeed == 0) {
-				InteropEmu.DisplayMessage("EmulationSpeed", "EmulationMaximumSpeed");
-			} else {
-				InteropEmu.DisplayMessage("EmulationSpeed", "EmulationSpeedPercent", emulationSpeed.ToString());
-			}
 			ConfigManager.Config.EmulationInfo.EmulationSpeed = emulationSpeed;
 			ConfigManager.ApplyChanges();
-			UpdateEmulationSpeedMenu();
 			EmulationInfo.ApplyConfig();
+		}
+
+		private void mnuEmulationSpeed_DropDownOpening(object sender, EventArgs e)
+		{
+			UpdateEmulationSpeedMenu();
 		}
 
 		private void mnuIncreaseSpeed_Click(object sender, EventArgs e)
 		{
-			if(ConfigManager.Config.EmulationInfo.EmulationSpeed > 0) {
-				if(ConfigManager.Config.EmulationInfo.EmulationSpeed < 100) {
-					SetEmulationSpeed(ConfigManager.Config.EmulationInfo.EmulationSpeed + 25);
-				} else if(ConfigManager.Config.EmulationInfo.EmulationSpeed < 450) {
-					SetEmulationSpeed(ConfigManager.Config.EmulationInfo.EmulationSpeed + 50);
-				} else {
-					SetEmulationSpeed(0);
-				}
-			}
+			InteropEmu.IncreaseEmulationSpeed();
 		}
 
 		private void mnuDecreaseSpeed_Click(object sender, EventArgs e)
 		{
-			if(ConfigManager.Config.EmulationInfo.EmulationSpeed == 0) {
-				SetEmulationSpeed(450);
-			} else if(ConfigManager.Config.EmulationInfo.EmulationSpeed <= 100) {
-				if(ConfigManager.Config.EmulationInfo.EmulationSpeed > 25) {
-					SetEmulationSpeed(ConfigManager.Config.EmulationInfo.EmulationSpeed - 25);
-				}
-			} else {
-				SetEmulationSpeed(ConfigManager.Config.EmulationInfo.EmulationSpeed - 50);
-			}
+			InteropEmu.DecreaseEmulationSpeed();
 		}
 
 		private void mnuEmuSpeedMaximumSpeed_Click(object sender, EventArgs e)
@@ -1538,7 +1521,6 @@ namespace Mesen.GUI.Forms
 		private void mnuEmulationConfig_Click(object sender, EventArgs e)
 		{
 			new frmEmulationConfig().ShowDialog(sender);
-			UpdateEmulationSpeedMenu();
 		}
 
 		private void InitializeNsfMode(bool updateTextOnly = false, bool gameLoaded = false)

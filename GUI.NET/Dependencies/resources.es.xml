@@ -496,6 +496,8 @@
     <Message ID="InvalidCheatFile">El archivo seleccionado ({0}) no es un archivo de trucos válido.</Message>
     <Message ID="InvalidXmlFile">El archivo seleccionado ({0}) no es un archivo XML válido.</Message>
     <Message ID="EmulatorShortcutMappings_FastForward">Avance rápido</Message>
+    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Increase Speed</Message>
+    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Reiniciar</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Captura de pantalla</Message>

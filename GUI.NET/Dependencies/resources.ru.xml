@@ -505,6 +505,8 @@
     <Message ID="NoMatchingCheats">Выбранный Cheat файл ({0}) не содержит читов для данной игры.</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
+    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Increase Speed</Message>
+    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Сброс</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Сделать сриншот</Message>
