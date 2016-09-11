@@ -56,6 +56,8 @@ double EmulationSettings::_videoScale = 1;
 VideoAspectRatio EmulationSettings::_aspectRatio = VideoAspectRatio::Auto;
 PictureSettings EmulationSettings::_pictureSettings;
 NtscFilterSettings EmulationSettings::_ntscFilterSettings;
+bool EmulationSettings::_backgroundEnabled = true;
+bool EmulationSettings::_spritesEnabled = true;
 
 ConsoleType EmulationSettings::_consoleType = ConsoleType::Nes;
 ExpansionPortDevice EmulationSettings::_expansionDevice = ExpansionPortDevice::None;

@@ -240,6 +240,11 @@
       <Control ID="mnuPresetSVideo">S-Vidéo</Control>
       <Control ID="menuPresetRgb">RGB</Control>
       <Control ID="mnuPresetMonochrome">Monochrome</Control>
+
+      <Control ID="tpgAdvanced">Avancé</Control>
+      <Control ID="chkDisableBackground">Désactiver l'arrière-plan</Control>
+      <Control ID="chkDisableSprites">Désactiver les sprites</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>

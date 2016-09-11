@@ -38,6 +38,9 @@ namespace Mesen.GUI.Config
 		public Int32 NtscSharpness = 0;
 		public bool NtscMergeFields = false;
 
+		public bool DisableBackground = false;
+		public bool DisableSprites = false;
+
 		public List<PaletteInfo> SavedPalettes = new List<PaletteInfo>();
 
 		public VideoInfo()
@@ -51,6 +54,9 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.ShowFPS, videoInfo.ShowFPS);
 			InteropEmu.SetFlag(EmulationFlags.VerticalSync, videoInfo.VerticalSync);
 			InteropEmu.SetFlag(EmulationFlags.UseHdPacks, videoInfo.UseHdPacks);
+
+			InteropEmu.SetFlag(EmulationFlags.DisableBackground, videoInfo.DisableBackground);
+			InteropEmu.SetFlag(EmulationFlags.DisableSprites, videoInfo.DisableSprites);
 
 			InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);
 

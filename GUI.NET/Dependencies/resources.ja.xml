@@ -240,6 +240,11 @@
       <Control ID="mnuPresetSVideo">S端子</Control>
       <Control ID="menuPresetRgb">RGB</Control>
       <Control ID="mnuPresetMonochrome">モノクロ</Control>
+
+      <Control ID="tpgAdvanced">詳細設定</Control>
+      <Control ID="chkDisableBackground">バックグラウンドを隠す</Control>
+      <Control ID="chkDisableSprites">スプライトを隠す</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>

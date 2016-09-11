@@ -574,10 +574,14 @@ uint32_t PPU::GetPixelColor(uint32_t &paletteOffset)
 {
 	uint8_t offset = _state.XScroll;
 	uint32_t backgroundColor = 0;
+	uint32_t spriteBgColor = 0;
 	
 	if((_cycle > 8 || _flags.BackgroundMask) && _flags.BackgroundEnabled) {
 		//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
-		backgroundColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+		spriteBgColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
+		if(EmulationSettings::GetBackgroundEnabled()) {
+			backgroundColor = spriteBgColor;
+		}
 	}
 
 	if((_cycle > 8 || _flags.SpriteMask) && _flags.SpritesEnabled) {
@@ -603,9 +607,9 @@ uint32_t PPU::GetPixelColor(uint32_t &paletteOffset)
 						_statusFlags.Sprite0Hit = true;
 					}
 
-					if(backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority) {
+					if(EmulationSettings::GetSpritesEnabled() && (backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority)) {
 						//Check sprite priority
-						paletteOffset = _lastSprite->PaletteOffset;
+						paletteOffset = _lastSprite->PaletteOffset;						
 						return spriteColor;
 					}
 					break;

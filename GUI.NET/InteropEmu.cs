@@ -705,6 +705,9 @@ namespace Mesen.GUI
 
 		SilenceTriangleHighFreq = 0x100000,
 
+		DisableBackground = 0x200000,
+		DisableSprites = 0x400000,
+
 		InBackground = 0x40000000,
 	}
 

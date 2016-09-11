@@ -33,6 +33,9 @@ enum EmulationFlags
 
 	SilenceTriangleHighFreq = 0x100000,
 
+	DisableBackground = 0x200000,
+	DisableSprites = 0x400000,
+
 	Turbo = 0x20000000,
 	InBackground = 0x40000000,
 	NsfPlayerEnabled = 0x80000000,
@@ -325,6 +328,8 @@ private:
 	static VideoResizeFilter _resizeFilter;
 	static PictureSettings _pictureSettings;
 	static NtscFilterSettings _ntscFilterSettings;
+	static bool _backgroundEnabled;
+	static bool _spritesEnabled;
 
 	static ConsoleType _consoleType;
 	static ExpansionPortDevice _expansionDevice;
@@ -359,6 +364,9 @@ public:
 	static void SetFlags(EmulationFlags flags)
 	{
 		_flags |= flags;
+
+		_backgroundEnabled = !CheckFlag(EmulationFlags::DisableBackground);
+		_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
 	}
 
 	static void ClearFlags(EmulationFlags flags)
@@ -661,6 +669,16 @@ public:
 	static VideoAspectRatio GetVideoAspectRatio()
 	{
 		return _aspectRatio;
+	}
+
+	static bool GetBackgroundEnabled()
+	{
+		return _backgroundEnabled;
+	}
+
+	static bool GetSpritesEnabled()
+	{
+		return _spritesEnabled;
 	}
 
 	static void SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity)

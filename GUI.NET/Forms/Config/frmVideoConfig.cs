@@ -51,6 +51,9 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("NtscSharpness", trkSharpness);
 			AddBinding("NtscMergeFields", chkMergeFields);
 
+			AddBinding("DisableBackground", chkDisableBackground);
+			AddBinding("DisableSprites", chkDisableSprites);
+
 			_paletteData = InteropEmu.GetRgbPalette();
 			RefreshPalette();
 

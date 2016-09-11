@@ -102,6 +102,10 @@
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
+			this.tpgAdvanced = new System.Windows.Forms.TabPage();
+			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkDisableBackground = new System.Windows.Forms.CheckBox();
+			this.chkDisableSprites = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -135,6 +139,8 @@
 			this.tableLayoutPanel2.SuspendLayout();
 			this.contextPicturePresets.SuspendLayout();
 			this.contextPaletteList.SuspendLayout();
+			this.tpgAdvanced.SuspendLayout();
+			this.tableLayoutPanel9.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -279,6 +285,7 @@
 			this.tabMain.Controls.Add(this.tpgPicture);
 			this.tabMain.Controls.Add(this.tpgOverscan);
 			this.tabMain.Controls.Add(this.tpgPalette);
+			this.tabMain.Controls.Add(this.tpgAdvanced);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
@@ -1040,6 +1047,53 @@
 			this.mnuPaletteNestopiaRgb.Text = "Nestopia (RGB)";
 			this.mnuPaletteNestopiaRgb.Click += new System.EventHandler(this.mnuPaletteNestopiaRgb_Click);
 			// 
+			// tpgAdvanced
+			// 
+			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel9);
+			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
+			this.tpgAdvanced.Name = "tpgAdvanced";
+			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgAdvanced.Size = new System.Drawing.Size(527, 376);
+			this.tpgAdvanced.TabIndex = 4;
+			this.tpgAdvanced.Text = "Advanced";
+			this.tpgAdvanced.UseVisualStyleBackColor = true;
+			// 
+			// tableLayoutPanel9
+			// 
+			this.tableLayoutPanel9.ColumnCount = 1;
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel9.Controls.Add(this.chkDisableBackground, 0, 0);
+			this.tableLayoutPanel9.Controls.Add(this.chkDisableSprites, 0, 1);
+			this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 3);
+			this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+			this.tableLayoutPanel9.RowCount = 3;
+			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel9.Size = new System.Drawing.Size(521, 370);
+			this.tableLayoutPanel9.TabIndex = 0;
+			// 
+			// chkDisableBackground
+			// 
+			this.chkDisableBackground.AutoSize = true;
+			this.chkDisableBackground.Location = new System.Drawing.Point(3, 3);
+			this.chkDisableBackground.Name = "chkDisableBackground";
+			this.chkDisableBackground.Size = new System.Drawing.Size(121, 17);
+			this.chkDisableBackground.TabIndex = 0;
+			this.chkDisableBackground.Text = "Disable background";
+			this.chkDisableBackground.UseVisualStyleBackColor = true;
+			// 
+			// chkDisableSprites
+			// 
+			this.chkDisableSprites.AutoSize = true;
+			this.chkDisableSprites.Location = new System.Drawing.Point(3, 26);
+			this.chkDisableSprites.Name = "chkDisableSprites";
+			this.chkDisableSprites.Size = new System.Drawing.Size(94, 17);
+			this.chkDisableSprites.TabIndex = 1;
+			this.chkDisableSprites.Text = "Disable sprites";
+			this.chkDisableSprites.UseVisualStyleBackColor = true;
+			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1098,6 +1152,9 @@
 			this.tableLayoutPanel2.PerformLayout();
 			this.contextPicturePresets.ResumeLayout(false);
 			this.contextPaletteList.ResumeLayout(false);
+			this.tpgAdvanced.ResumeLayout(false);
+			this.tableLayoutPanel9.ResumeLayout(false);
+			this.tableLayoutPanel9.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1177,5 +1234,9 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
 		private System.Windows.Forms.Label lblVideoFilter;
 		private System.Windows.Forms.ComboBox cboFilter;
+		private System.Windows.Forms.TabPage tpgAdvanced;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+		private System.Windows.Forms.CheckBox chkDisableBackground;
+		private System.Windows.Forms.CheckBox chkDisableSprites;
 	}
 }
