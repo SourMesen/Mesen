@@ -241,9 +241,9 @@
       <Control ID="menuPresetRgb">RGB</Control>
       <Control ID="mnuPresetMonochrome">Monochrome</Control>
 
-      <Control ID="tpgAdvanced">Advanced</Control>
-      <Control ID="chkDisableBackground">Disable background</Control>
-      <Control ID="chkDisableSprites">Disable sprites</Control>
+      <Control ID="tpgAdvanced">Розширенi</Control>
+      <Control ID="chkDisableBackground">Відключити background</Control>
+      <Control ID="chkDisableSprites">Відключити sprites</Control>
       
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Відміна</Control>
@@ -506,11 +506,11 @@
 
     <Message ID="InvalidCheatFile">Обраний Cheat файл ({0}) не є коректним.</Message>
     <Message ID="InvalidXmlFile">Обраний XML файл ({0}) не є коректним.</Message>
-    <Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читов для даної гри.</Message>
+    <Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читiв для даної гри.</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
-    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Increase Speed</Message>
-    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
+    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Збільшити Швидкість</Message>
+    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Зменшити Швидкість</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>
