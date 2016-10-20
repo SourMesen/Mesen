@@ -22,7 +22,6 @@ class MMC3 : public BaseMapper
 		};
 
 		uint8_t _currentRegister;
-		uint8_t _prgMode;
 
 		bool _wramEnabled;
 		bool _wramWriteProtected;
@@ -69,6 +68,7 @@ class MMC3 : public BaseMapper
 		uint8_t _irqCounter;
 		bool _irqReload;
 		bool _irqEnabled;
+		uint8_t _prgMode;
 		uint8_t _chrMode;
 		uint8_t _registers[8];
 
