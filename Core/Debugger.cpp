@@ -675,7 +675,7 @@ void Debugger::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette,
 
 		for(int i = 0; i < 0x1000; i++) {
 			chrBuffer[i] = chrData[baseAddr + i];
-			chrIsDrawn[i] = _codeDataLogger->IsDrawn(baseAddr + i);
+			chrIsDrawn[i] = useChrRam ? true : _codeDataLogger->IsDrawn(baseAddr + i);
 		}
 	}
 
