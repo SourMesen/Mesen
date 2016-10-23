@@ -272,9 +272,10 @@ void Debugger::PrivateProcessPpuCycle()
 	}
 }
 
-void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value)
+void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
 {
 	_currentReadAddr = &addr;
+	_currentReadValue = &value;
 
 	//Check if a breakpoint has been hit and freeze execution if one has
 	bool breakDone = false;
@@ -519,6 +520,7 @@ void Debugger::SetNextStatement(uint16_t addr)
 	if(_currentReadAddr) {
 		_cpu->SetDebugPC(addr);
 		*_currentReadAddr = addr;
+		*_currentReadValue = _memoryManager->DebugRead(addr);
 	}
 }
 
@@ -540,7 +542,7 @@ void Debugger::ProcessPpuCycle()
 	}
 }
 
-void Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value)
+void Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
 {
 	if(Debugger::Instance) {
 		Debugger::Instance->PrivateProcessRamOperation(type, addr, value);

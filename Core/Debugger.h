@@ -81,7 +81,9 @@ private:
 
 	shared_ptr<TraceLogger> _traceLogger;
 
-	uint16_t *_currentReadAddr; //Used to alter the executing address via "Set Next Statement"
+	//Used to alter the executing address via "Set Next Statement"
+	uint16_t *_currentReadAddr;
+	uint8_t *_currentReadValue;
 
 	uint32_t _flags;
 
@@ -98,7 +100,7 @@ private:
 	void UpdateBreakpoints();
 
 	void PrivateProcessPpuCycle();
-	void PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value);
+	void PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
 	bool HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value);
 	void UpdateCallstack(uint32_t addr);
@@ -156,7 +158,7 @@ public:
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
 	
-	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t value);
+	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
 	static void ProcessPpuCycle();
 
