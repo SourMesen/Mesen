@@ -33,7 +33,7 @@
 
 			_arrowLayout= new KeyMappings() {
 				A = InteropEmu.GetKeyCode("S"), B = InteropEmu.GetKeyCode("A"),
-				TurboA = InteropEmu.GetKeyCode("Z"), TurboB = InteropEmu.GetKeyCode("X"),
+				TurboA = InteropEmu.GetKeyCode("X"), TurboB = InteropEmu.GetKeyCode("Z"),
 				Select = InteropEmu.GetKeyCode("Q"), Start = InteropEmu.GetKeyCode("W"),
 				Up = InteropEmu.GetKeyCode("Up Arrow"), Down = InteropEmu.GetKeyCode("Down Arrow"),
 				Left = InteropEmu.GetKeyCode("Left Arrow"), Right = InteropEmu.GetKeyCode("Right Arrow")
