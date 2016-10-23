@@ -250,8 +250,8 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 				case EvalValues::PpuCycle: token = state.PPU.Cycle; break;
 				case EvalValues::PpuScanline: token = state.PPU.Scanline; break;
 				case EvalValues::Value: token = memoryValue; break;
-				case EvalValues::Address: token = debugger->GetRelativeAddress(memoryAddr); break;
-				case EvalValues::AbsoluteAddress: token = memoryAddr; break;
+				case EvalValues::Address: token = memoryAddr; break;
+				case EvalValues::AbsoluteAddress: token = debugger->GetAbsoluteAddress(memoryAddr); break;
 			}
 		} else if(token >= EvalOperators::Multiplication) {
 			right = operandStack[--pos];

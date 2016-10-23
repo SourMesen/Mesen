@@ -149,6 +149,7 @@ public:
 	
 	uint8_t GetMemoryValue(uint32_t addr);
 	uint32_t GetRelativeAddress(uint32_t addr);
+	uint32_t GetAbsoluteAddress(uint32_t addr);
 
 	void StartTraceLogger(TraceLoggerOptions options);
 	void StopTraceLogger();

@@ -206,7 +206,7 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 					GetState(&_debugState);
 					needState = false;
 				}
-				if(expEval.Evaluate(condition, _debugState, value, absoluteAddr) != 0) {
+				if(expEval.Evaluate(condition, _debugState, value, addr) != 0) {
 					return true;
 				}
 			}
@@ -507,6 +507,11 @@ uint8_t Debugger::GetMemoryValue(uint32_t addr)
 uint32_t Debugger::GetRelativeAddress(uint32_t addr)
 {
 	return _mapper->FromAbsoluteAddress(addr);
+}
+
+uint32_t Debugger::GetAbsoluteAddress(uint32_t addr)
+{
+	return _mapper->ToAbsoluteAddress(addr);
 }
 
 void Debugger::SetNextStatement(uint16_t addr)
