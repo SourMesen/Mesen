@@ -158,6 +158,10 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		//Used to resolve a race condition when the 2nd write to $2006 occurs at cycle 255 (i.e approx. the same time as the PPU tries to increase Y scrolling)
 		bool _skipScrollingIncrement;
+
+		uint32_t _minimumDrawBgCycle;
+		uint32_t _minimumDrawSpriteCycle;
+		uint32_t _minimumDrawSpriteStandardCycle;
 		
 		void UpdateStatusFlag();
 
@@ -192,6 +196,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void ShiftTileRegisters();
 		void InitializeShiftRegisters();
 		void LoadNextTile();
+
+		void UpdateMinimumDrawCycles();
 
 		__forceinline uint32_t GetPixelColor(uint32_t &paletteOffset);
 		__forceinline virtual void DrawPixel();

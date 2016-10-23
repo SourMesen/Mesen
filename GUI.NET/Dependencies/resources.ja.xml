@@ -244,6 +244,8 @@
       <Control ID="tpgAdvanced">詳細設定</Control>
       <Control ID="chkDisableBackground">バックグラウンドを隠す</Control>
       <Control ID="chkDisableSprites">スプライトを隠す</Control>
+      <Control ID="chkForceBackgroundFirstColumn">ゲームの設定を無視して、画面の一番左側にバックグラウンドを表す</Control>
+      <Control ID="chkForceSpritesFirstColumn">ゲームの設定を無視して、画面の一番左側にスプライトを表す</Control>
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>

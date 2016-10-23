@@ -40,6 +40,8 @@ namespace Mesen.GUI.Config
 
 		public bool DisableBackground = false;
 		public bool DisableSprites = false;
+		public bool ForceBackgroundFirstColumn = false;
+		public bool ForceSpritesFirstColumn = false;
 
 		public List<PaletteInfo> SavedPalettes = new List<PaletteInfo>();
 
@@ -57,6 +59,8 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetFlag(EmulationFlags.DisableBackground, videoInfo.DisableBackground);
 			InteropEmu.SetFlag(EmulationFlags.DisableSprites, videoInfo.DisableSprites);
+			InteropEmu.SetFlag(EmulationFlags.ForceBackgroundFirstColumn, videoInfo.ForceBackgroundFirstColumn);
+			InteropEmu.SetFlag(EmulationFlags.ForceSpritesFirstColumn, videoInfo.ForceSpritesFirstColumn);
 
 			InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);
 

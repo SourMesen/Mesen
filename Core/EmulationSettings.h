@@ -35,6 +35,8 @@ enum EmulationFlags
 
 	DisableBackground = 0x200000,
 	DisableSprites = 0x400000,
+	ForceBackgroundFirstColumn = 0x800000,
+	ForceSpritesFirstColumn = 0x1000000,
 
 	Turbo = 0x20000000,
 	InBackground = 0x40000000,

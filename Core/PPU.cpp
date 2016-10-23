@@ -56,6 +56,8 @@ void PPU::Reset()
 	_cycle = 0;
 	_frameCount = 1;
 	_memoryReadBuffer = 0;
+	
+	UpdateMinimumDrawCycles();
 }
 
 void PPU::SetNesModel(NesModel model)
@@ -348,6 +350,13 @@ void PPU::SetControlRegister(uint8_t value)
 	}
 }
 
+void PPU::UpdateMinimumDrawCycles()
+{
+	_minimumDrawBgCycle = _flags.BackgroundEnabled ? ((_flags.BackgroundMask || EmulationSettings::CheckFlag(EmulationFlags::ForceBackgroundFirstColumn)) ? 0 : 8) : 300;
+	_minimumDrawSpriteCycle = _flags.SpritesEnabled ? ((_flags.SpriteMask || EmulationSettings::CheckFlag(EmulationFlags::ForceSpritesFirstColumn)) ? 0 : 8) : 300;
+	_minimumDrawSpriteStandardCycle = _flags.SpritesEnabled ? (_flags.SpriteMask ? 0 : 8) : 300;
+}
+
 void PPU::SetMaskRegister(uint8_t value)
 {
 	_state.Mask = value;
@@ -357,7 +366,9 @@ void PPU::SetMaskRegister(uint8_t value)
 	_flags.BackgroundEnabled = (_state.Mask & 0x08) == 0x08;
 	_flags.SpritesEnabled = (_state.Mask & 0x10) == 0x10;
 	_flags.IntensifyBlue = (_state.Mask & 0x80) == 0x80;
-	
+
+	UpdateMinimumDrawCycles();
+
 	 //"Bit 0 controls a greyscale mode, which causes the palette to use only the colors from the grey column: $00, $10, $20, $30. This is implemented as a bitwise AND with $30 on any value read from PPU $3F00-$3FFF"
 	_paletteRamMask = _flags.Grayscale ? 0x30 : 0x3F;
 
@@ -576,7 +587,7 @@ uint32_t PPU::GetPixelColor(uint32_t &paletteOffset)
 	uint32_t backgroundColor = 0;
 	uint32_t spriteBgColor = 0;
 	
-	if((_cycle > 8 || _flags.BackgroundMask) && _flags.BackgroundEnabled) {
+	if(_cycle > _minimumDrawBgCycle) {
 		//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
 		spriteBgColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
 		if(EmulationSettings::GetBackgroundEnabled()) {
@@ -584,7 +595,7 @@ uint32_t PPU::GetPixelColor(uint32_t &paletteOffset)
 		}
 	}
 
-	if((_cycle > 8 || _flags.SpriteMask) && _flags.SpritesEnabled) {
+	if(_cycle > _minimumDrawSpriteCycle) {
 		//SpriteMask = true: Hide sprites in leftmost 8 pixels of screen
 		for(uint8_t i = 0; i < _spriteCount; i++) {
 			int32_t shift = -((int32_t)_spriteTiles[i].SpriteX - (int32_t)_cycle + 1);
@@ -599,7 +610,7 @@ uint32_t PPU::GetPixelColor(uint32_t &paletteOffset)
 				
 				if(spriteColor != 0) {
 					//First sprite without a 00 color, use it.
-					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && !_statusFlags.Sprite0Hit) {
+					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && !_statusFlags.Sprite0Hit && _cycle > _minimumDrawSpriteStandardCycle) {
 						//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
 						//"Sprite zero hits do not register at x=255" (cycle 256)
 						//"... provided that background and sprite rendering are both enabled"
@@ -889,6 +900,7 @@ void PPU::Exec()
 
 		if(++_scanline > _vblankEnd) {
 			_scanline = -1;
+			UpdateMinimumDrawCycles();
 		}
 	}
 	_cycle++;
@@ -972,5 +984,6 @@ void PPU::StreamState(bool saving)
 
 	if(!saving) {
 		SetNesModel(_nesModel);
+		UpdateMinimumDrawCycles();
 	}
 }

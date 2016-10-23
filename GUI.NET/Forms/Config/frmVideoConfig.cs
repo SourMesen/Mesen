@@ -53,6 +53,8 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("DisableBackground", chkDisableBackground);
 			AddBinding("DisableSprites", chkDisableSprites);
+			AddBinding("ForceBackgroundFirstColumn", chkForceBackgroundFirstColumn);
+			AddBinding("ForceSpritesFirstColumn", chkForceSpritesFirstColumn);
 
 			_paletteData = InteropEmu.GetRgbPalette();
 			RefreshPalette();

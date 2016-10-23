@@ -244,6 +244,8 @@
       <Control ID="tpgAdvanced">Розширенi</Control>
       <Control ID="chkDisableBackground">Відключити background</Control>
       <Control ID="chkDisableSprites">Відключити sprites</Control>
+      <Control ID="chkForceBackgroundFirstColumn">Force background display in first column</Control>
+      <Control ID="chkForceSpritesFirstColumn">Force sprite display in first column</Control>
       
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Відміна</Control>

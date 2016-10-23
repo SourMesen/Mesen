@@ -243,7 +243,9 @@
       <Control ID="tpgAdvanced">Advanced</Control>
       <Control ID="chkDisableBackground">Disable background</Control>
       <Control ID="chkDisableSprites">Disable sprites</Control>
-      
+      <Control ID="chkForceBackgroundFirstColumn">Force background display in first column</Control>
+      <Control ID="chkForceSpritesFirstColumn">Force sprite display in first column</Control>
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>

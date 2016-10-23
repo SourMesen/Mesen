@@ -244,6 +244,8 @@
       <Control ID="tpgAdvanced">Avancé</Control>
       <Control ID="chkDisableBackground">Désactiver l'arrière-plan</Control>
       <Control ID="chkDisableSprites">Désactiver les sprites</Control>
+      <Control ID="chkForceBackgroundFirstColumn">Forcer l'affichage de l'arrière-plan dans la première colonne</Control>
+      <Control ID="chkForceSpritesFirstColumn">Forcer l'affichage des sprites dans la première colonne</Control>
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
