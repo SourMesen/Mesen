@@ -943,6 +943,9 @@
     <ClInclude Include="MMC3_126.h">
       <Filter>Nes\Mappers\MMC</Filter>
     </ClInclude>
+    <ClInclude Include="MMC3_199.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

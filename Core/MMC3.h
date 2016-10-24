@@ -31,7 +31,7 @@ class MMC3 : public BaseMapper
 
 		bool _forceMmc3RevAIrqs;
 
-		struct {
+		struct Mmc3State {
 			uint8_t Reg8000;
 			uint8_t RegA000;
 			uint8_t RegA001;
@@ -75,6 +75,11 @@ class MMC3 : public BaseMapper
 		uint8_t GetCurrentRegister() 
 		{
 			return _currentRegister;
+		}
+
+		Mmc3State GetState()
+		{
+			return _state;
 		}
 
 		uint8_t GetChrMode()
