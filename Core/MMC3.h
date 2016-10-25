@@ -147,8 +147,6 @@ class MMC3 : public BaseMapper
 			_chrMode = (_state.Reg8000 & 0x80) >> 7;
 			_prgMode = (_state.Reg8000 & 0x40) >> 6;
 
-			UpdateMirroring();
-
 			if(_subMapperID == 1) {
 				bool wramEnabled = (_state.Reg8000 & 0x20) == 0x20;
 				RemoveCpuMemoryMapping(0x6000, 0x7000);
@@ -225,7 +223,7 @@ class MMC3 : public BaseMapper
 
 				case MMC3Registers::RegA000:
 					_state.RegA000 = value;
-					UpdateState();
+					UpdateMirroring();
 					break;
 
 				case MMC3Registers::RegA001:
