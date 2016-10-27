@@ -399,13 +399,13 @@ void BaseMapper::StreamState(bool saving)
 	if(!saving) {
 		for(uint16_t i = 0; i < 64; i++) {
 			if(_prgPageNumbers[i] != 0xEEEEEEEE) {
-				SelectPRGPage(i, (uint16_t)_prgPageNumbers[i]);
+				BaseMapper::SelectPRGPage(i, (uint16_t)_prgPageNumbers[i]);
 			}
 		}
 
 		for(uint16_t i = 0; i < 64; i++) {
 			if(_chrPageNumbers[i] != 0xEEEEEEEE) {
-				SelectCHRPage(i, (uint16_t)_chrPageNumbers[i]);
+				BaseMapper::SelectCHRPage(i, (uint16_t)_chrPageNumbers[i]);
 			}
 		}
 
