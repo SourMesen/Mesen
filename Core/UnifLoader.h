@@ -34,6 +34,7 @@ private:
 		{ "BS-5", MapperFactory::UnknownBoard },
 		{ "CC-21", MapperFactory::UnknownBoard },
 		{ "CITYFIGHT", MapperFactory::UnknownBoard },
+		{ "COOLBOY", MapperFactory::UnifCoolboy },
 		{ "10-24-C-A1", MapperFactory::UnknownBoard },
 		{ "CNROM", 3 },
 		{ "CPROM", 13 },

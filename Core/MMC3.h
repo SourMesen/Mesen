@@ -37,27 +37,6 @@ class MMC3 : public BaseMapper
 			uint8_t RegA001;
 		} _state;
 
-		void Reset()
-		{
-			_state.Reg8000 = 0;
-			_state.RegA000 = 0;
-			_state.RegA001 = 0;
-			_chrMode = 0;
-			_prgMode = 0;
-			_currentRegister = 0;
-			memset(_registers, 0, sizeof(_registers));
-
-			_irqCounter = 0;
-			_irqReloadValue = 0;
-			_irqReload = false;
-			_irqEnabled = false;
-
-			_wramEnabled = false;
-			_wramWriteProtected = false;
-
-			_needIrq = false;
-		}
-
 		bool IsMcAcc()
 		{
 			return _mapperID == 4 && _subMapperID == 3;
@@ -85,6 +64,27 @@ class MMC3 : public BaseMapper
 		uint8_t GetChrMode()
 		{
 			return _chrMode;
+		}
+
+		void Reset()
+		{
+			_state.Reg8000 = 0;
+			_state.RegA000 = 0;
+			_state.RegA001 = 0;
+			_chrMode = 0;
+			_prgMode = 0;
+			_currentRegister = 0;
+			memset(_registers, 0, sizeof(_registers));
+
+			_irqCounter = 0;
+			_irqReloadValue = 0;
+			_irqReload = false;
+			_irqEnabled = false;
+
+			_wramEnabled = false;
+			_wramWriteProtected = false;
+
+			_needIrq = false;
 		}
 
 		virtual bool ForceMmc3RevAIrqs() { return _forceMmc3RevAIrqs; }

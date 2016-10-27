@@ -122,6 +122,7 @@
 #include "MMC3_250.h"
 #include "MMC3_254.h"
 #include "MMC3_ChrRam.h"
+#include "MMC3_Coolboy.h"
 #include "MMC4.h"
 #include "MMC5.h"
 #include "Namco108.h"
@@ -214,6 +215,7 @@ const uint16_t MapperFactory::FdsMapperID;
 const uint16_t MapperFactory::NsfMapperID;
 const uint16_t MapperFactory::UnknownBoard;
 const uint16_t MapperFactory::UnifTf1201;
+const uint16_t MapperFactory::UnifCoolboy;
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
@@ -439,6 +441,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 255: return new Bmc255();
 
 		case MapperFactory::UnifTf1201: return new Tf1201();
+		case MapperFactory::UnifCoolboy: return new MMC3_Coolboy();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();
