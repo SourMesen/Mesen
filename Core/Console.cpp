@@ -472,6 +472,7 @@ std::shared_ptr<Debugger> Console::GetDebugger(bool autoStart)
 
 void Console::StopDebugger()
 {
+	auto lock = _debuggerLock.AcquireSafe();
 	_debugger.reset();
 }
 
