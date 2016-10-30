@@ -199,6 +199,7 @@ class MMC3 : public BaseMapper
 			Reset();
 			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
 			UpdateState();
+			UpdateMirroring();
 		}
 
 		virtual void WriteRegister(uint16_t addr, uint8_t value)
