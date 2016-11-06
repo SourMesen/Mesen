@@ -2,6 +2,7 @@
 #include "MessageManager.h"
 #include "MapperFactory.h"
 #include "RomLoader.h"
+#include "A65AS.h"
 #include "Action53.h"
 #include "ActionEnterprises.h"
 #include "AXROM.h"
@@ -227,6 +228,7 @@ Supported mappers:
 const uint16_t MapperFactory::FdsMapperID;
 const uint16_t MapperFactory::NsfMapperID;
 const uint16_t MapperFactory::UnknownBoard;
+const uint16_t MapperFactory::UnifA65AS;
 const uint16_t MapperFactory::UnifCoolboy;
 const uint16_t MapperFactory::UnifDreamTech01;
 const uint16_t MapperFactory::UnifEdu2000;
@@ -465,6 +467,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 254: return new MMC3_254();
 		case 255: return new Bmc255();
 
+		case MapperFactory::UnifA65AS: return new A65AS();
 		case MapperFactory::UnifCoolboy: return new MMC3_Coolboy();
 		case MapperFactory::UnifDreamTech01: return new DreamTech01();
 		case MapperFactory::UnifEdu2000: return new Edu2000();
