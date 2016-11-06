@@ -103,7 +103,7 @@ private:
 		{ "SCROM", 1 },
 		{ "SEROM", 1 },
 		{ "SGROM", 1 },
-		{ "SHERO", MapperFactory::UnknownBoard },
+		{ "SHERO", MapperFactory::UnifStreetHeroes },
 		{ "SKROM", 1 },
 		{ "SL12", 116 },
 		{ "SL1632", 14 },

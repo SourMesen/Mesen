@@ -254,8 +254,9 @@ void BaseMapper::SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memor
 {
 	_chrPageNumbers[slot] = page;
 
-	uint16_t startAddr = slot * InternalGetChrPageSize();
-	uint16_t endAddr = startAddr + InternalGetChrPageSize() - 1;
+	uint16_t pageSize = memoryType == ChrMemoryType::ChrRam ? InternalGetChrRamPageSize() : InternalGetChrPageSize();
+	uint16_t startAddr = slot * pageSize;
+	uint16_t endAddr = startAddr + pageSize - 1;
 	if(page == ChrSpecialPage::NametableA) {
 		SetPpuMemoryMapping(startAddr, endAddr, GetNametable(0));
 	} else if(page == ChrSpecialPage::NametableB) {

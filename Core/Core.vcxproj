@@ -636,6 +636,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StereoDelayFilter.h" />
     <ClInclude Include="StereoPanningFilter.h" />
+    <ClInclude Include="MMC3_StreetHeroes.h" />
     <ClInclude Include="StudyBox.h" />
     <ClInclude Include="Subor166.h" />
     <ClInclude Include="Sunsoft184.h" />
