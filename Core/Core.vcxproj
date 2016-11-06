@@ -537,6 +537,7 @@
     <ClInclude Include="Namco163.h" />
     <ClInclude Include="Namco163Audio.h" />
     <ClInclude Include="MMC1_105.h" />
+    <ClInclude Include="NovelDiamond.h" />
     <ClInclude Include="NsfCart31.h" />
     <ClInclude Include="NsfeLoader.h" />
     <ClInclude Include="NsfLoader.h" />

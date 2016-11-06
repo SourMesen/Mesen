@@ -82,7 +82,7 @@ private:
 		{ "NROM-256", 0 },
 		{ "NTBROM", 68 },
 		{ "NTD-03", MapperFactory::UnknownBoard },
-		{ "NovelDiamond9999999in1", MapperFactory::UnknownBoard },
+		{ "NovelDiamond9999999in1", MapperFactory::UnifNovelDiamond },
 		{ "OneBus", MapperFactory::UnknownBoard },
 		{ "PEC-586", MapperFactory::UnknownBoard },
 		{ "RET-CUFROM", 29 },

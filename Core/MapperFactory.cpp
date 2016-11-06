@@ -142,6 +142,7 @@
 #include "Nanjing.h"
 #include "Nina01.h"
 #include "Nina03_06.h"
+#include "NovelDiamond.h"
 #include "NROM.h"
 #include "NsfCart31.h"
 #include "NsfMapper.h"
@@ -230,6 +231,7 @@ const uint16_t MapperFactory::UnifEdu2000;
 const uint16_t MapperFactory::UnifGs2004;
 const uint16_t MapperFactory::UnifGs2013;
 const uint16_t MapperFactory::UnifMalee;
+const uint16_t MapperFactory::UnifNovelDiamond;
 const uint16_t MapperFactory::UnifStreetHeroes;
 const uint16_t MapperFactory::UnifSmb2j;
 const uint16_t MapperFactory::UnifTf1201;
@@ -465,6 +467,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::UnifGs2004: return new Gs2004();
 		case MapperFactory::UnifGs2013: return new Gs2013();
 		case MapperFactory::UnifMalee: return new Malee();
+		case MapperFactory::UnifNovelDiamond: return new NovelDiamond();
 		case MapperFactory::UnifSmb2j: return new Smb2j();
 		case MapperFactory::UnifStreetHeroes: return new MMC3_StreetHeroes();
 		case MapperFactory::UnifTf1201: return new Tf1201();
