@@ -171,6 +171,7 @@
 #include "Sunsoft184.h"
 #include "SunsoftFme7.h"
 #include "Supervision.h"
+#include "T262.h"
 #include "TaitoTc0190.h"
 #include "TaitoTc0690.h"
 #include "TaitoX1005.h"
@@ -236,6 +237,7 @@ const uint16_t MapperFactory::UnifMalee;
 const uint16_t MapperFactory::UnifNovelDiamond;
 const uint16_t MapperFactory::UnifStreetHeroes;
 const uint16_t MapperFactory::UnifSmb2j;
+const uint16_t MapperFactory::UnifT262;
 const uint16_t MapperFactory::UnifTf1201;
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
@@ -473,6 +475,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::UnifNovelDiamond: return new NovelDiamond();
 		case MapperFactory::UnifSmb2j: return new Smb2j();
 		case MapperFactory::UnifStreetHeroes: return new MMC3_StreetHeroes();
+		case MapperFactory::UnifT262: return new T262();
 		case MapperFactory::UnifTf1201: return new Tf1201();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();

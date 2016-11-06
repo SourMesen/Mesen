@@ -125,7 +125,7 @@ private:
 		{ "Supervision16in1", 53 },
 		{ "T-227-1", MapperFactory::UnknownBoard },
 		{ "T-230", MapperFactory::UnknownBoard },
-		{ "T-262", MapperFactory::UnknownBoard },
+		{ "T-262", MapperFactory::UnifT262 },
 		{ "TBROM", 4 },
 		{ "TC-U01-1.5M", 147 },
 		{ "TEK90", 90 },
