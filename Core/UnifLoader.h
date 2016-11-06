@@ -57,7 +57,7 @@ private:
 		{ "Ghostbusters63in1", MapperFactory::UnknownBoard },
 		{ "H2288", 123 },
 		{ "HKROM", MapperFactory::UnknownBoard },
-		{ "KOF97", MapperFactory::UnknownBoard },
+		{ "KOF97", MapperFactory::UnifKof97 },
 		{ "KONAMI-QTAI", MapperFactory::UnknownBoard },
 		{ "KS7010", MapperFactory::UnknownBoard },
 		{ "KS7012", MapperFactory::UnknownBoard },

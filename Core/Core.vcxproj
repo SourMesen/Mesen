@@ -532,6 +532,7 @@
     <ClInclude Include="MMC3_52.h" />
     <ClInclude Include="MMC3_ChrRam.h" />
     <ClInclude Include="MMC3_Coolboy.h" />
+    <ClInclude Include="MMC3_Kof97.h" />
     <ClInclude Include="MMC5Audio.h" />
     <ClInclude Include="ModChannel.h" />
     <ClInclude Include="Namco163.h" />
