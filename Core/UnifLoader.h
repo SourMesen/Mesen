@@ -109,7 +109,7 @@ private:
 		{ "SL1632", 14 },
 		{ "SL1ROM", 1 },
 		{ "SLROM", 1 },
-		{ "SMB2J", MapperFactory::UnknownBoard },
+		{ "SMB2J", MapperFactory::UnifSmb2j },
 		{ "SNROM", 1 },
 		{ "SOROM", 1 },
 		{ "SSS-NROM-256", MapperFactory::UnknownBoard },

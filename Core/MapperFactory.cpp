@@ -153,6 +153,7 @@
 #include "Sachen74LS374N.h"
 #include "Sachen74LS374NB.h"
 #include "Sachen8259.h"
+#include "Smb2j.h"
 #include "StudyBox.h"
 #include "Subor166.h"
 #include "Sunsoft3.h"
@@ -219,6 +220,7 @@ const uint16_t MapperFactory::NsfMapperID;
 const uint16_t MapperFactory::UnknownBoard;
 const uint16_t MapperFactory::UnifTf1201;
 const uint16_t MapperFactory::UnifCoolboy;
+const uint16_t MapperFactory::UnifSmb2j;
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
@@ -447,6 +449,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 
 		case MapperFactory::UnifTf1201: return new Tf1201();
 		case MapperFactory::UnifCoolboy: return new MMC3_Coolboy();
+		case MapperFactory::UnifSmb2j: return new Smb2j();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();

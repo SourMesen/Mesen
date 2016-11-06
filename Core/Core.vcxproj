@@ -553,6 +553,7 @@
     <ClInclude Include="Sachen_143.h" />
     <ClInclude Include="SelectControllerMessage.h" />
     <ClInclude Include="ShortcutKeyHandler.h" />
+    <ClInclude Include="Smb2j.h" />
     <ClInclude Include="SoundMixer.h" />
     <ClInclude Include="Namco108.h" />
     <ClInclude Include="Namco108_154.h" />
