@@ -31,7 +31,7 @@ private:
 		{ "ANROM", 7 },
 		{ "AX5705", MapperFactory::UnknownBoard },
 		{ "BB", MapperFactory::UnknownBoard },
-		{ "BS-5", MapperFactory::UnknownBoard },
+		{ "BS-5", MapperFactory::UnifBs5 },
 		{ "CC-21", MapperFactory::UnknownBoard },
 		{ "CITYFIGHT", MapperFactory::UnknownBoard },
 		{ "COOLBOY", MapperFactory::UnifCoolboy },

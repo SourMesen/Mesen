@@ -419,6 +419,7 @@
     <ClInclude Include="Bmc63.h" />
     <ClInclude Include="A65AS.h" />
     <ClInclude Include="BnRom.h" />
+    <ClInclude Include="Bs5.h" />
     <ClInclude Include="Caltron41.h" />
     <ClInclude Include="ColorDreams46.h" />
     <ClInclude Include="DaouInfosys.h" />
