@@ -424,6 +424,7 @@
     <ClInclude Include="DebugState.h" />
     <ClInclude Include="DefaultVideoFilter.h" />
     <ClInclude Include="DreamTech01.h" />
+    <ClInclude Include="Edu2000.h" />
     <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="FDS.h" />
     <ClInclude Include="FdsAudio.h" />

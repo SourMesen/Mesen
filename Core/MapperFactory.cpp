@@ -22,6 +22,7 @@
 #include "ColorDreams46.h"
 #include "DaouInfosys.h"
 #include "DreamTech01.h"
+#include "Edu2000.h"
 #include "FDS.h"
 #include "FrontFareast.h"
 #include "GxRom.h"
@@ -223,6 +224,7 @@ const uint16_t MapperFactory::NsfMapperID;
 const uint16_t MapperFactory::UnknownBoard;
 const uint16_t MapperFactory::UnifCoolboy;
 const uint16_t MapperFactory::UnifDreamTech01;
+const uint16_t MapperFactory::UnifEdu2000;
 const uint16_t MapperFactory::UnifMalee;
 const uint16_t MapperFactory::UnifStreetHeroes;
 const uint16_t MapperFactory::UnifSmb2j;
@@ -456,6 +458,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 
 		case MapperFactory::UnifCoolboy: return new MMC3_Coolboy();
 		case MapperFactory::UnifDreamTech01: return new DreamTech01();
+		case MapperFactory::UnifEdu2000: return new Edu2000();
 		case MapperFactory::UnifMalee: return new Malee();
 		case MapperFactory::UnifSmb2j: return new Smb2j();
 		case MapperFactory::UnifStreetHeroes: return new MMC3_StreetHeroes();
