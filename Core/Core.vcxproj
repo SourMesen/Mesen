@@ -434,6 +434,7 @@
     <ClInclude Include="FrontFareast.h" />
     <ClInclude Include="GameDatabase.h" />
     <ClInclude Include="Bmc235.h" />
+    <ClInclude Include="Gs2013.h" />
     <ClInclude Include="HdVideoFilter.h" />
     <ClInclude Include="Henggedianzi177.h" />
     <ClInclude Include="Henggedianzi179.h" />
