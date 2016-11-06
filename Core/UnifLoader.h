@@ -41,7 +41,7 @@ private:
 		{ "D1038", 60 },
 		{ "DANCE", MapperFactory::UnknownBoard },
 		{ "DANCE2000", MapperFactory::UnknownBoard },
-		{ "DREAMTECH01", MapperFactory::UnknownBoard },
+		{ "DREAMTECH01", MapperFactory::UnifDreamTech01 },
 		{ "EDU2000", MapperFactory::UnknownBoard },
 		{ "EKROM", 5 },
 		{ "ELROM", 5 },
