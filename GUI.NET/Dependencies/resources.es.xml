@@ -21,8 +21,8 @@
       <Control ID="mnuOptions">Opciones</Control>
       <Control ID="mnuEmulationSpeed">Velocidad</Control>
       <Control ID="mnuEmuSpeedNormal">Normal (100%)</Control>
-      <Control ID="mnuIncreaseSpeed">Aumentar la velocidad</Control>
-      <Control ID="mnuDecreaseSpeed">Reducir la velocidad</Control>
+      <Control ID="mnuIncreaseSpeed">Aumentar velocidad</Control>
+      <Control ID="mnuDecreaseSpeed">Reducir velocidad</Control>
       <Control ID="mnuEmuSpeedMaximumSpeed">Velocidad máxima</Control>
       <Control ID="mnuEmuSpeedTriple">Triple (300%)</Control>
       <Control ID="mnuEmuSpeedDouble">Doble (200%)</Control>
@@ -240,11 +240,11 @@
       <Control ID="menuPresetRgb">RGB</Control>
       <Control ID="mnuPresetMonochrome">Monocromo</Control>
 
-      <Control ID="tpgAdvanced">Advanced</Control>
-      <Control ID="chkDisableBackground">Disable background</Control>
-      <Control ID="chkDisableSprites">Disable sprites</Control>
-      <Control ID="chkForceBackgroundFirstColumn">Force background display in first column</Control>
-      <Control ID="chkForceSpritesFirstColumn">Force sprite display in first column</Control>
+      <Control ID="tpgAdvanced">Avanzado</Control>
+      <Control ID="chkDisableBackground">Deshabilitar fondo</Control>
+      <Control ID="chkDisableSprites">Deshabilitar sprites</Control>
+      <Control ID="chkForceBackgroundFirstColumn">Forzar ver fondo en primera columna</Control>
+      <Control ID="chkForceSpritesFirstColumn">Forzar ver sprite en primera columna</Control>
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
@@ -503,8 +503,8 @@
     <Message ID="InvalidCheatFile">El archivo seleccionado ({0}) no es un archivo de trucos válido.</Message>
     <Message ID="InvalidXmlFile">El archivo seleccionado ({0}) no es un archivo XML válido.</Message>
     <Message ID="EmulatorShortcutMappings_FastForward">Avance rápido</Message>
-    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Increase Speed</Message>
-    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
+    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Aumentar velocidad</Message>
+    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Reducir velocidad</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Reiniciar</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Captura de pantalla</Message>

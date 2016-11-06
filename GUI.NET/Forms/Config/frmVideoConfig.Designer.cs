@@ -94,6 +94,8 @@
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkDisableBackground = new System.Windows.Forms.CheckBox();
 			this.chkDisableSprites = new System.Windows.Forms.CheckBox();
+			this.chkForceBackgroundFirstColumn = new System.Windows.Forms.CheckBox();
+			this.chkForceSpritesFirstColumn = new System.Windows.Forms.CheckBox();
 			this.contextPicturePresets = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuPresetComposite = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPresetSVideo = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,8 +108,6 @@
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkForceBackgroundFirstColumn = new System.Windows.Forms.CheckBox();
-			this.chkForceSpritesFirstColumn = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -717,45 +717,46 @@
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.tableLayoutPanel1.ColumnCount = 3;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 262F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.Controls.Add(this.picOverscan, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel3, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel4, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel5, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 2, 1);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(75, 25);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(369, 327);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 246F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(515, 351);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// picOverscan
 			// 
 			this.picOverscan.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picOverscan.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.picOverscan.Location = new System.Drawing.Point(56, 43);
+			this.picOverscan.Location = new System.Drawing.Point(129, 55);
 			this.picOverscan.Name = "picOverscan";
-			this.picOverscan.Size = new System.Drawing.Size(257, 241);
+			this.picOverscan.Size = new System.Drawing.Size(256, 240);
 			this.picOverscan.TabIndex = 1;
 			this.picOverscan.TabStop = false;
 			// 
 			// flowLayoutPanel3
 			// 
 			this.flowLayoutPanel3.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.flowLayoutPanel3.AutoSize = true;
 			this.flowLayoutPanel3.Controls.Add(this.lblLeft);
 			this.flowLayoutPanel3.Controls.Add(this.nudOverscanLeft);
 			this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 143);
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(70, 155);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(53, 40);
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(56, 39);
 			this.flowLayoutPanel3.TabIndex = 1;
 			// 
 			// lblLeft
@@ -779,14 +780,15 @@
 			// 
 			// flowLayoutPanel4
 			// 
-			this.flowLayoutPanel4.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.flowLayoutPanel4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+			this.flowLayoutPanel4.AutoSize = true;
 			this.flowLayoutPanel4.Controls.Add(this.lblTop);
 			this.flowLayoutPanel4.Controls.Add(this.nudOverscanTop);
 			this.flowLayoutPanel4.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel4.Location = new System.Drawing.Point(158, 0);
+			this.flowLayoutPanel4.Location = new System.Drawing.Point(229, 13);
 			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-			this.flowLayoutPanel4.Size = new System.Drawing.Size(53, 40);
+			this.flowLayoutPanel4.Size = new System.Drawing.Size(56, 39);
 			this.flowLayoutPanel4.TabIndex = 2;
 			// 
 			// lblTop
@@ -810,14 +812,15 @@
 			// 
 			// flowLayoutPanel5
 			// 
-			this.flowLayoutPanel5.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.flowLayoutPanel5.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.flowLayoutPanel5.AutoSize = true;
 			this.flowLayoutPanel5.Controls.Add(this.lblBottom);
 			this.flowLayoutPanel5.Controls.Add(this.nudOverscanBottom);
 			this.flowLayoutPanel5.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel5.Location = new System.Drawing.Point(158, 287);
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(229, 298);
 			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-			this.flowLayoutPanel5.Size = new System.Drawing.Size(53, 40);
+			this.flowLayoutPanel5.Size = new System.Drawing.Size(56, 39);
 			this.flowLayoutPanel5.TabIndex = 3;
 			// 
 			// lblBottom
@@ -842,13 +845,14 @@
 			// flowLayoutPanel2
 			// 
 			this.flowLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.flowLayoutPanel2.AutoSize = true;
 			this.flowLayoutPanel2.Controls.Add(this.lblRight);
 			this.flowLayoutPanel2.Controls.Add(this.nudOverscanRight);
 			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(316, 143);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(388, 155);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(53, 40);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(56, 39);
 			this.flowLayoutPanel2.TabIndex = 0;
 			// 
 			// lblRight
@@ -1017,6 +1021,26 @@
 			this.chkDisableSprites.Text = "Disable sprites";
 			this.chkDisableSprites.UseVisualStyleBackColor = true;
 			// 
+			// chkForceBackgroundFirstColumn
+			// 
+			this.chkForceBackgroundFirstColumn.AutoSize = true;
+			this.chkForceBackgroundFirstColumn.Location = new System.Drawing.Point(3, 49);
+			this.chkForceBackgroundFirstColumn.Name = "chkForceBackgroundFirstColumn";
+			this.chkForceBackgroundFirstColumn.Size = new System.Drawing.Size(215, 17);
+			this.chkForceBackgroundFirstColumn.TabIndex = 2;
+			this.chkForceBackgroundFirstColumn.Text = "Force background display in first column";
+			this.chkForceBackgroundFirstColumn.UseVisualStyleBackColor = true;
+			// 
+			// chkForceSpritesFirstColumn
+			// 
+			this.chkForceSpritesFirstColumn.AutoSize = true;
+			this.chkForceSpritesFirstColumn.Location = new System.Drawing.Point(3, 72);
+			this.chkForceSpritesFirstColumn.Name = "chkForceSpritesFirstColumn";
+			this.chkForceSpritesFirstColumn.Size = new System.Drawing.Size(183, 17);
+			this.chkForceSpritesFirstColumn.TabIndex = 3;
+			this.chkForceSpritesFirstColumn.Text = "Force sprite display in first column";
+			this.chkForceSpritesFirstColumn.UseVisualStyleBackColor = true;
+			// 
 			// contextPicturePresets
 			// 
 			this.contextPicturePresets.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1100,26 +1124,6 @@
 			this.mnuPaletteNestopiaRgb.Text = "Nestopia (RGB)";
 			this.mnuPaletteNestopiaRgb.Click += new System.EventHandler(this.mnuPaletteNestopiaRgb_Click);
 			// 
-			// chkForceBackgroundFirstColumn
-			// 
-			this.chkForceBackgroundFirstColumn.AutoSize = true;
-			this.chkForceBackgroundFirstColumn.Location = new System.Drawing.Point(3, 49);
-			this.chkForceBackgroundFirstColumn.Name = "chkForceBackgroundFirstColumn";
-			this.chkForceBackgroundFirstColumn.Size = new System.Drawing.Size(215, 17);
-			this.chkForceBackgroundFirstColumn.TabIndex = 2;
-			this.chkForceBackgroundFirstColumn.Text = "Force background display in first column";
-			this.chkForceBackgroundFirstColumn.UseVisualStyleBackColor = true;
-			// 
-			// chkForceSpritesFirstColumn
-			// 
-			this.chkForceSpritesFirstColumn.AutoSize = true;
-			this.chkForceSpritesFirstColumn.Location = new System.Drawing.Point(3, 72);
-			this.chkForceSpritesFirstColumn.Name = "chkForceSpritesFirstColumn";
-			this.chkForceSpritesFirstColumn.Size = new System.Drawing.Size(183, 17);
-			this.chkForceSpritesFirstColumn.TabIndex = 3;
-			this.chkForceSpritesFirstColumn.Text = "Force sprite display in first column";
-			this.chkForceSpritesFirstColumn.UseVisualStyleBackColor = true;
-			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1158,6 +1162,7 @@
 			this.tpgOverscan.ResumeLayout(false);
 			this.grpCropping.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picOverscan)).EndInit();
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
