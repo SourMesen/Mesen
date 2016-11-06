@@ -40,6 +40,7 @@
 #include "Kaiser202.h"
 #include "Kaiser7022.h"
 #include "Kaiser7058.h"
+#include "Malee.h"
 #include "Mapper15.h"
 #include "Mapper35.h"
 #include "Mapper40.h"
@@ -221,6 +222,7 @@ const uint16_t MapperFactory::UnknownBoard;
 const uint16_t MapperFactory::UnifTf1201;
 const uint16_t MapperFactory::UnifCoolboy;
 const uint16_t MapperFactory::UnifSmb2j;
+const uint16_t MapperFactory::UnifMalee;
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
@@ -447,9 +449,10 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 254: return new MMC3_254();
 		case 255: return new Bmc255();
 
-		case MapperFactory::UnifTf1201: return new Tf1201();
 		case MapperFactory::UnifCoolboy: return new MMC3_Coolboy();
+		case MapperFactory::UnifMalee: return new Malee();
 		case MapperFactory::UnifSmb2j: return new Smb2j();
+		case MapperFactory::UnifTf1201: return new Tf1201();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();

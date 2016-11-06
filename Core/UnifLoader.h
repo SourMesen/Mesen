@@ -74,7 +74,7 @@ private:
 		{ "LH32", 125 },
 		{ "LH53", MapperFactory::UnknownBoard },
 		{ "MALISB", MapperFactory::UnknownBoard },
-		{ "MARIO1-MALEE2", MapperFactory::UnknownBoard },
+		{ "MARIO1-MALEE2", MapperFactory::UnifMalee },
 		{ "MHROM", 66 },
 		{ "N625092", 221 },
 		{ "NROM", 0 },

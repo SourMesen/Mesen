@@ -447,6 +447,7 @@
     <ClInclude Include="Kaiser202.h" />
     <ClInclude Include="Kaiser7022.h" />
     <ClInclude Include="Kaiser7058.h" />
+    <ClInclude Include="Malee.h" />
     <ClInclude Include="Mapper103.h" />
     <ClInclude Include="Mapper106.h" />
     <ClInclude Include="Mapper107.h" />
