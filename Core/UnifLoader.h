@@ -54,7 +54,7 @@ private:
 		{ "GK-192", 58 },
 		{ "GS-2004", MapperFactory::UnifGs2004 },
 		{ "GS-2013", MapperFactory::UnifGs2013 },
-		{ "Ghostbusters63in1", MapperFactory::UnknownBoard },
+		{ "Ghostbusters63in1", MapperFactory::UnifGhostbusters63in1 },
 		{ "H2288", 123 },
 		{ "HKROM", MapperFactory::UnknownBoard },
 		{ "KOF97", MapperFactory::UnifKof97 },
