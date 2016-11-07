@@ -11,7 +11,7 @@ private:
 		{ "11160", MapperFactory::UnknownBoard },
 		{ "12-IN-1", MapperFactory::UnknownBoard },
 		{ "13in1JY110", MapperFactory::UnknownBoard },
-		{ "190in1", MapperFactory::UnknownBoard },
+		{ "190in1", MapperFactory::UnifBmc190in1 },
 		{ "22211", 132 },
 		{ "3D-BLOCK", MapperFactory::UnknownBoard },
 		{ "411120-C", MapperFactory::UnknownBoard },

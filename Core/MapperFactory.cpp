@@ -13,6 +13,7 @@
 #include "BF9096.h"
 #include "Bmc51.h"
 #include "Bmc63.h"
+#include "Bmc190in1.h"
 #include "Bmc235.h"
 #include "Bmc255.h"
 #include "BnRom.h"
@@ -230,6 +231,7 @@ const uint16_t MapperFactory::FdsMapperID;
 const uint16_t MapperFactory::NsfMapperID;
 const uint16_t MapperFactory::UnknownBoard;
 const uint16_t MapperFactory::UnifA65AS;
+const uint16_t MapperFactory::UnifBmc190in1;
 const uint16_t MapperFactory::UnifBs5;
 const uint16_t MapperFactory::UnifCoolboy;
 const uint16_t MapperFactory::UnifDreamTech01;
@@ -470,6 +472,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 255: return new Bmc255();
 
 		case MapperFactory::UnifA65AS: return new A65AS();
+		case MapperFactory::UnifBmc190in1: return new Bmc190in1();
 		case MapperFactory::UnifBs5: return new Bs5();
 		case MapperFactory::UnifCoolboy: return new MMC3_Coolboy();
 		case MapperFactory::UnifDreamTech01: return new DreamTech01();
