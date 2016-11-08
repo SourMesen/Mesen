@@ -13,6 +13,7 @@
 #include "BF9096.h"
 #include "Bmc51.h"
 #include "Bmc63.h"
+#include "Bmc70in1.h"
 #include "Bmc190in1.h"
 #include "Bmc235.h"
 #include "Bmc255.h"
@@ -223,7 +224,7 @@ Supported mappers:
 |176|177|178|179|180|---|182|183|184|185|186|187|188|189|===|191|
 |192|193|194|195|196|197|   |199|200|201|202|203|204|205|206|207|
 |???|209|210|211|212|213|214|215|216|217|218|219|220|221|222|???|
-|???|225|226|227|228|229|230|231|232|233|234|235|???|===|238|===|
+|???|225|226|227|228|229|230|231|232|233|234|235|236|===|238|===|
 |240|241|242|243|244|245|246|===|===|249|250|===|252|253|254|255|
 -----------------------------------------------------------------
 */
@@ -232,6 +233,8 @@ const uint16_t MapperFactory::FdsMapperID;
 const uint16_t MapperFactory::NsfMapperID;
 const uint16_t MapperFactory::UnknownBoard;
 const uint16_t MapperFactory::UnifA65AS;
+const uint16_t MapperFactory::UnifBmc70in1;
+const uint16_t MapperFactory::UnifBmc70in1B;
 const uint16_t MapperFactory::UnifBmc190in1;
 const uint16_t MapperFactory::UnifBs5;
 const uint16_t MapperFactory::UnifCoolboy;
@@ -458,6 +461,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 233: return new Mapper233();
 		case 234: return new Mapper234();
 		case 235: return new Bmc235();
+		case 236: return new Bmc70in1();
 		case 238: return new MMC3_238();
 		case 240: return new Mapper240();
 		case 241: return new Mapper241();
@@ -474,6 +478,8 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 255: return new Bmc255();
 
 		case MapperFactory::UnifA65AS: return new A65AS();
+		case MapperFactory::UnifBmc70in1: return new Bmc70in1();
+		case MapperFactory::UnifBmc70in1B: return new Bmc70in1();
 		case MapperFactory::UnifBmc190in1: return new Bmc190in1();
 		case MapperFactory::UnifBs5: return new Bs5();
 		case MapperFactory::UnifCoolboy: return new MMC3_Coolboy();

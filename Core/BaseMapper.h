@@ -177,6 +177,7 @@ protected:
 	void RestoreOriginalPrgRam();
 	void InitializeChrRam(int32_t chrRamSize = -1);
 	bool HasChrRam();
+	bool HasChrRom();
 
 	void AddRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation = MemoryOperation::Any);
 	void RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation = MemoryOperation::Any);

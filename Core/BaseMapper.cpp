@@ -363,6 +363,11 @@ bool BaseMapper::HasChrRam()
 	return _chrRamSize > 0;
 }
 
+bool BaseMapper::HasChrRom()
+{
+	return !_onlyChrRam;
+}
+
 void BaseMapper::AddRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation)
 {
 	for(int i = startAddr; i <= endAddr; i++) {

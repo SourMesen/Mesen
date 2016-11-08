@@ -419,6 +419,7 @@
     <ClInclude Include="Bmc51.h" />
     <ClInclude Include="Bmc63.h" />
     <ClInclude Include="A65AS.h" />
+    <ClInclude Include="Bmc70in1.h" />
     <ClInclude Include="BnRom.h" />
     <ClInclude Include="Bs5.h" />
     <ClInclude Include="Caltron41.h" />
