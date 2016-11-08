@@ -5,6 +5,7 @@
 #include "A65AS.h"
 #include "Action53.h"
 #include "ActionEnterprises.h"
+#include "Ax5705.h"
 #include "AXROM.h"
 #include "Bandai74161_7432.h"
 #include "BandaiFcg.h"
@@ -233,6 +234,7 @@ const uint16_t MapperFactory::FdsMapperID;
 const uint16_t MapperFactory::NsfMapperID;
 const uint16_t MapperFactory::UnknownBoard;
 const uint16_t MapperFactory::UnifA65AS;
+const uint16_t MapperFactory::UnifAx5705;
 const uint16_t MapperFactory::UnifBmc70in1;
 const uint16_t MapperFactory::UnifBmc70in1B;
 const uint16_t MapperFactory::UnifBmc190in1;
@@ -478,6 +480,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 255: return new Bmc255();
 
 		case MapperFactory::UnifA65AS: return new A65AS();
+		case MapperFactory::UnifAx5705: return new Ax5705();
 		case MapperFactory::UnifBmc70in1: return new Bmc70in1();
 		case MapperFactory::UnifBmc70in1B: return new Bmc70in1();
 		case MapperFactory::UnifBmc190in1: return new Bmc190in1();

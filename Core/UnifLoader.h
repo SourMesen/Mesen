@@ -29,7 +29,7 @@ private:
 		{ "A65AS", MapperFactory::UnifA65AS },
 		{ "AC08", MapperFactory::UnknownBoard },
 		{ "ANROM", 7 },
-		{ "AX5705", MapperFactory::UnknownBoard },
+		{ "AX5705", MapperFactory::UnifAx5705 },
 		{ "BB", MapperFactory::UnknownBoard },
 		{ "BS-5", MapperFactory::UnifBs5 },
 		{ "CC-21", MapperFactory::UnknownBoard },

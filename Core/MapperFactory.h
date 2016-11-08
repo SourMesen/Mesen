@@ -30,6 +30,7 @@ class MapperFactory
 		static const uint16_t UnifGhostbusters63in1 = 65517;
 		static const uint16_t UnifBmc70in1 = 65516;
 		static const uint16_t UnifBmc70in1B = 65515;
+		static const uint16_t UnifAx5705 = 65514;
 
 		static shared_ptr<BaseMapper> InitializeFromFile(string romFilename, stringstream *filestream, string ipsFilename, int32_t archiveFileIndex);
 };
