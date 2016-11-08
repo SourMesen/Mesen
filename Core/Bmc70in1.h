@@ -34,6 +34,12 @@ protected:
 		UpdateState();
 	}
 
+	void StreamState(bool saving) override
+	{
+		BaseMapper::StreamState(saving);
+		Stream(_bankMode, _outerBank, _prgReg, _chrReg, _dipSwitch);
+	}
+
 	void Reset(bool softReset) override
 	{
 		BaseMapper::Reset(softReset);
