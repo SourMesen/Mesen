@@ -1012,6 +1012,9 @@
     <ClInclude Include="MMC3_Super24in1Sc03.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="Super40in1Ws.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

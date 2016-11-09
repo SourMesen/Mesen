@@ -659,6 +659,7 @@
     <ClInclude Include="Sunsoft93.h" />
     <ClInclude Include="SunsoftFme7.h" />
     <ClInclude Include="MMC3_Super24in1Sc03.h" />
+    <ClInclude Include="Super40in1Ws.h" />
     <ClInclude Include="Supervision.h" />
     <ClInclude Include="T262.h" />
     <ClInclude Include="TaitoTc0190.h" />

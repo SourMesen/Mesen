@@ -157,7 +157,8 @@ private:
 		{ "F-15", MapperFactory::UnknownBoard },
 		{ "RT-01", MapperFactory::UnknownBoard },
 		{ "81-01-31-C", MapperFactory::UnknownBoard },
-		{ "8-IN-1", MapperFactory::UnknownBoard }
+		{ "8-IN-1", MapperFactory::UnknownBoard },
+		{ "WS", MapperFactory::UnifSuper40in1Ws }
 	};
 
 	vector<uint8_t> _prgChunks[16];
