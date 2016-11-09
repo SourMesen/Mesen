@@ -32,7 +32,7 @@ private:
 		{ "AX5705", MapperFactory::UnifAx5705 },
 		{ "BB", MapperFactory::UnknownBoard },
 		{ "BS-5", MapperFactory::UnifBs5 },
-		{ "CC-21", MapperFactory::UnknownBoard },
+		{ "CC-21", MapperFactory::UnifCc21 },
 		{ "CITYFIGHT", MapperFactory::UnknownBoard },
 		{ "COOLBOY", MapperFactory::UnifCoolboy },
 		{ "10-24-C-A1", MapperFactory::UnknownBoard },

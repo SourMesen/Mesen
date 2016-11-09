@@ -21,6 +21,7 @@
 #include "BnRom.h"
 #include "Bs5.h"
 #include "Caltron41.h"
+#include "Cc21.h"
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
@@ -241,6 +242,7 @@ const uint16_t MapperFactory::UnifBmc70in1;
 const uint16_t MapperFactory::UnifBmc70in1B;
 const uint16_t MapperFactory::UnifBmc190in1;
 const uint16_t MapperFactory::UnifBs5;
+const uint16_t MapperFactory::UnifCc21;
 const uint16_t MapperFactory::UnifCoolboy;
 const uint16_t MapperFactory::UnifDreamTech01;
 const uint16_t MapperFactory::UnifEdu2000;
@@ -489,6 +491,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::UnifBmc70in1B: return new Bmc70in1();
 		case MapperFactory::UnifBmc190in1: return new Bmc190in1();
 		case MapperFactory::UnifBs5: return new Bs5();
+		case MapperFactory::UnifCc21: return new Cc21();
 		case MapperFactory::UnifCoolboy: return new MMC3_Coolboy();
 		case MapperFactory::UnifDreamTech01: return new DreamTech01();
 		case MapperFactory::UnifEdu2000: return new Edu2000();
