@@ -120,7 +120,7 @@ private:
 		{ "Sachen-8259B", 138 },
 		{ "Sachen-8259C", 139 },
 		{ "Sachen-8259D", 137 },
-		{ "Super24in1SC03", MapperFactory::UnknownBoard },
+		{ "Super24in1SC03", MapperFactory::UnifSuper24in1Sc03 },
 		{ "SuperHIK8in1", 45 },
 		{ "Supervision16in1", 53 },
 		{ "T-227-1", MapperFactory::UnknownBoard },

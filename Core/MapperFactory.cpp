@@ -138,6 +138,7 @@
 #include "MMC3_Coolboy.h"
 #include "MMC3_Kof97.h"
 #include "MMC3_StreetHeroes.h"
+#include "MMC3_Super24in1Sc03.h"
 #include "MMC4.h"
 #include "MMC5.h"
 #include "Namco108.h"
@@ -250,6 +251,7 @@ const uint16_t MapperFactory::UnifMalee;
 const uint16_t MapperFactory::UnifNovelDiamond;
 const uint16_t MapperFactory::UnifStreetHeroes;
 const uint16_t MapperFactory::UnifSmb2j;
+const uint16_t MapperFactory::UnifSuper24in1Sc03;
 const uint16_t MapperFactory::UnifT262;
 const uint16_t MapperFactory::UnifTf1201;
 
@@ -496,6 +498,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::UnifNovelDiamond: return new NovelDiamond();
 		case MapperFactory::UnifSmb2j: return new Smb2j();
 		case MapperFactory::UnifStreetHeroes: return new MMC3_StreetHeroes();
+		case MapperFactory::UnifSuper24in1Sc03: return new MMC3_Super24in1Sc03();
 		case MapperFactory::UnifT262: return new T262();
 		case MapperFactory::UnifTf1201: return new Tf1201();
 
