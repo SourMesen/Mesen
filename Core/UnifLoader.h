@@ -82,7 +82,7 @@ private:
 		{ "NROM-128", 0 },
 		{ "NROM-256", 0 },
 		{ "NTBROM", 68 },
-		{ "NTD-03", UnifBoards::UnknownBoard },
+		{ "NTD-03", UnifBoards::BmdNtd03 },
 		{ "NovelDiamond9999999in1", UnifBoards::NovelDiamond },
 		{ "OneBus", UnifBoards::UnknownBoard },
 		{ "PEC-586", UnifBoards::UnknownBoard },
