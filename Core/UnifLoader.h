@@ -155,7 +155,7 @@ private:
 		{ "EH8813A", MapperFactory::UnknownBoard },
 		{ "HP898F", MapperFactory::UnknownBoard },
 		{ "F-15", MapperFactory::UnknownBoard },
-		{ "RT-01", MapperFactory::UnknownBoard },
+		{ "RT-01", MapperFactory::UnifRt01 },
 		{ "81-01-31-C", MapperFactory::UnknownBoard },
 		{ "8-IN-1", MapperFactory::UnknownBoard },
 		{ "WS", MapperFactory::UnifSuper40in1Ws }

@@ -161,6 +161,7 @@
 #include "OekaKids.h"
 #include "Racermate.h"
 #include "Rambo1.h"
+#include "Rt01.h"
 #include "Sachen_133.h"
 #include "Sachen_136.h"
 #include "Sachen_143.h"
@@ -255,6 +256,7 @@ const uint16_t MapperFactory::UnifKof97;
 const uint16_t MapperFactory::UnifKs7016;
 const uint16_t MapperFactory::UnifMalee;
 const uint16_t MapperFactory::UnifNovelDiamond;
+const uint16_t MapperFactory::UnifRt01;
 const uint16_t MapperFactory::UnifStreetHeroes;
 const uint16_t MapperFactory::UnifSmb2j;
 const uint16_t MapperFactory::UnifSuper24in1Sc03;
@@ -506,6 +508,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::UnifKs7016: return new Kaiser7016();
 		case MapperFactory::UnifMalee: return new Malee();
 		case MapperFactory::UnifNovelDiamond: return new NovelDiamond();
+		case MapperFactory::UnifRt01: return new Rt01();
 		case MapperFactory::UnifSmb2j: return new Smb2j();
 		case MapperFactory::UnifStreetHeroes: return new MMC3_StreetHeroes();
 		case MapperFactory::UnifSuper24in1Sc03: return new MMC3_Super24in1Sc03();
