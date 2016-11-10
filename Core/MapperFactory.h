@@ -34,6 +34,7 @@ class MapperFactory
 		static const uint16_t UnifSuper24in1Sc03 = 65513;
 		static const uint16_t UnifSuper40in1Ws = 65512;
 		static const uint16_t UnifCc21 = 65511;
+		static const uint16_t UnifKs7016 = 65510;
 
 		static shared_ptr<BaseMapper> InitializeFromFile(string romFilename, stringstream *filestream, string ipsFilename, int32_t archiveFileIndex);
 };

@@ -49,6 +49,7 @@
 #include "JalecoSs88006.h"
 #include "JyCompany.h"
 #include "Kaiser202.h"
+#include "Kaiser7016.h"
 #include "Kaiser7022.h"
 #include "Kaiser7058.h"
 #include "Malee.h"
@@ -251,6 +252,7 @@ const uint16_t MapperFactory::UnifGhostbusters63in1;
 const uint16_t MapperFactory::UnifGs2004;
 const uint16_t MapperFactory::UnifGs2013;
 const uint16_t MapperFactory::UnifKof97;
+const uint16_t MapperFactory::UnifKs7016;
 const uint16_t MapperFactory::UnifMalee;
 const uint16_t MapperFactory::UnifNovelDiamond;
 const uint16_t MapperFactory::UnifStreetHeroes;
@@ -501,6 +503,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::UnifGs2004: return new Gs2004();
 		case MapperFactory::UnifGs2013: return new Gs2013();
 		case MapperFactory::UnifKof97: return new MMC3_Kof97();
+		case MapperFactory::UnifKs7016: return new Kaiser7016();
 		case MapperFactory::UnifMalee: return new Malee();
 		case MapperFactory::UnifNovelDiamond: return new NovelDiamond();
 		case MapperFactory::UnifSmb2j: return new Smb2j();

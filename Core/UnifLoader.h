@@ -62,7 +62,7 @@ private:
 		{ "KS7010", MapperFactory::UnknownBoard },
 		{ "KS7012", MapperFactory::UnknownBoard },
 		{ "KS7013B", MapperFactory::UnknownBoard },
-		{ "KS7016", MapperFactory::UnknownBoard },
+		{ "KS7016", MapperFactory::UnifKs7016 },
 		{ "KS7017", MapperFactory::UnknownBoard },
 		{ "KS7030", MapperFactory::UnknownBoard },
 		{ "KS7031", MapperFactory::UnknownBoard },
