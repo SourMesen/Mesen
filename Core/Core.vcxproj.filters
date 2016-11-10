@@ -1027,6 +1027,12 @@
     <ClInclude Include="Rt01.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="Hp898f.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
+    <ClInclude Include="UnifBoards.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

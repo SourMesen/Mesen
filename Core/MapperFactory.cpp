@@ -2,6 +2,8 @@
 #include "MessageManager.h"
 #include "MapperFactory.h"
 #include "RomLoader.h"
+#include "UnifBoards.h"
+
 #include "A65AS.h"
 #include "Action53.h"
 #include "ActionEnterprises.h"
@@ -37,6 +39,7 @@
 #include "GxRom.h"
 #include "Henggedianzi177.h"
 #include "Henggedianzi179.h"
+#include "Hp898f.h"
 #include "IremG101.h"
 #include "IremH3001.h"
 #include "IremLrog017.h"
@@ -235,34 +238,6 @@ Supported mappers:
 |240|241|242|243|244|245|246|===|===|249|250|===|252|253|254|255|
 -----------------------------------------------------------------
 */
-
-const uint16_t MapperFactory::FdsMapperID;
-const uint16_t MapperFactory::NsfMapperID;
-const uint16_t MapperFactory::UnknownBoard;
-const uint16_t MapperFactory::UnifA65AS;
-const uint16_t MapperFactory::UnifAx5705;
-const uint16_t MapperFactory::UnifBmc70in1;
-const uint16_t MapperFactory::UnifBmc70in1B;
-const uint16_t MapperFactory::UnifBmc190in1;
-const uint16_t MapperFactory::UnifBs5;
-const uint16_t MapperFactory::UnifCc21;
-const uint16_t MapperFactory::UnifCoolboy;
-const uint16_t MapperFactory::UnifDreamTech01;
-const uint16_t MapperFactory::UnifEdu2000;
-const uint16_t MapperFactory::UnifGhostbusters63in1;
-const uint16_t MapperFactory::UnifGs2004;
-const uint16_t MapperFactory::UnifGs2013;
-const uint16_t MapperFactory::UnifKof97;
-const uint16_t MapperFactory::UnifKs7016;
-const uint16_t MapperFactory::UnifMalee;
-const uint16_t MapperFactory::UnifNovelDiamond;
-const uint16_t MapperFactory::UnifRt01;
-const uint16_t MapperFactory::UnifStreetHeroes;
-const uint16_t MapperFactory::UnifSmb2j;
-const uint16_t MapperFactory::UnifSuper24in1Sc03;
-const uint16_t MapperFactory::UnifSuper40in1Ws;
-const uint16_t MapperFactory::UnifT262;
-const uint16_t MapperFactory::UnifTf1201;
 
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
@@ -491,30 +466,31 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 254: return new MMC3_254();
 		case 255: return new Bmc255();
 
-		case MapperFactory::UnifA65AS: return new A65AS();
-		case MapperFactory::UnifAx5705: return new Ax5705();
-		case MapperFactory::UnifBmc70in1: return new Bmc70in1();
-		case MapperFactory::UnifBmc70in1B: return new Bmc70in1();
-		case MapperFactory::UnifBmc190in1: return new Bmc190in1();
-		case MapperFactory::UnifBs5: return new Bs5();
-		case MapperFactory::UnifCc21: return new Cc21();
-		case MapperFactory::UnifCoolboy: return new MMC3_Coolboy();
-		case MapperFactory::UnifDreamTech01: return new DreamTech01();
-		case MapperFactory::UnifEdu2000: return new Edu2000();
-		case MapperFactory::UnifGhostbusters63in1: return new Ghostbusters63in1();			
-		case MapperFactory::UnifGs2004: return new Gs2004();
-		case MapperFactory::UnifGs2013: return new Gs2013();
-		case MapperFactory::UnifKof97: return new MMC3_Kof97();
-		case MapperFactory::UnifKs7016: return new Kaiser7016();
-		case MapperFactory::UnifMalee: return new Malee();
-		case MapperFactory::UnifNovelDiamond: return new NovelDiamond();
-		case MapperFactory::UnifRt01: return new Rt01();
-		case MapperFactory::UnifSmb2j: return new Smb2j();
-		case MapperFactory::UnifStreetHeroes: return new MMC3_StreetHeroes();
-		case MapperFactory::UnifSuper24in1Sc03: return new MMC3_Super24in1Sc03();
-		case MapperFactory::UnifSuper40in1Ws: return new Super40in1Ws();
-		case MapperFactory::UnifT262: return new T262();
-		case MapperFactory::UnifTf1201: return new Tf1201();
+		case UnifBoards::A65AS: return new A65AS();
+		case UnifBoards::Ax5705: return new Ax5705();
+		case UnifBoards::Bmc70in1: return new Bmc70in1();
+		case UnifBoards::Bmc70in1B: return new Bmc70in1();
+		case UnifBoards::Bmc190in1: return new Bmc190in1();
+		case UnifBoards::Bs5: return new Bs5();
+		case UnifBoards::Cc21: return new Cc21();
+		case UnifBoards::Coolboy: return new MMC3_Coolboy();
+		case UnifBoards::DreamTech01: return new DreamTech01();
+		case UnifBoards::Edu2000: return new Edu2000();
+		case UnifBoards::Ghostbusters63in1: return new Ghostbusters63in1();			
+		case UnifBoards::Gs2004: return new Gs2004();
+		case UnifBoards::Gs2013: return new Gs2013();
+		case UnifBoards::Hp898f: return new Hp898f();
+		case UnifBoards::Kof97: return new MMC3_Kof97();
+		case UnifBoards::Ks7016: return new Kaiser7016();
+		case UnifBoards::Malee: return new Malee();
+		case UnifBoards::NovelDiamond: return new NovelDiamond();
+		case UnifBoards::Rt01: return new Rt01();
+		case UnifBoards::Smb2j: return new Smb2j();
+		case UnifBoards::StreetHeroes: return new MMC3_StreetHeroes();
+		case UnifBoards::Super24in1Sc03: return new MMC3_Super24in1Sc03();
+		case UnifBoards::Super40in1Ws: return new Super40in1Ws();
+		case UnifBoards::T262: return new T262();
+		case UnifBoards::Tf1201: return new Tf1201();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();
