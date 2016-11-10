@@ -31,7 +31,7 @@ private:
 		{ "AC08", UnifBoards::UnknownBoard },
 		{ "ANROM", 7 },
 		{ "AX5705", UnifBoards::Ax5705 },
-		{ "BB", UnifBoards::UnknownBoard },
+		{ "BB", UnifBoards::Bb },
 		{ "BS-5", UnifBoards::Bs5 },
 		{ "CC-21", UnifBoards::Cc21 },
 		{ "CITYFIGHT", UnifBoards::UnknownBoard },

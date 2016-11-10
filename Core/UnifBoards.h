@@ -30,5 +30,6 @@ namespace UnifBoards {
 		Ks7016,
 		Rt01,
 		Hp898f,
+		Bb,
 	};
 }

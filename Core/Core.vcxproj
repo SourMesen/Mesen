@@ -413,6 +413,7 @@
     <ClInclude Include="BaseFdsChannel.h" />
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="BaseSoundFilter.h" />
+    <ClInclude Include="Bb.h" />
     <ClInclude Include="BF9096.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="Bmc190in1.h" />

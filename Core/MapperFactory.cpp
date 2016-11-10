@@ -12,6 +12,7 @@
 #include "Bandai74161_7432.h"
 #include "BandaiFcg.h"
 #include "BandaiKaraoke.h"
+#include "Bb.h"
 #include "BF909x.h"
 #include "BF9096.h"
 #include "Bmc51.h"
@@ -468,6 +469,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 
 		case UnifBoards::A65AS: return new A65AS();
 		case UnifBoards::Ax5705: return new Ax5705();
+		case UnifBoards::Bb: return new Bb();
 		case UnifBoards::Bmc70in1: return new Bmc70in1();
 		case UnifBoards::Bmc70in1B: return new Bmc70in1();
 		case UnifBoards::Bmc190in1: return new Bmc190in1();
