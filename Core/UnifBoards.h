@@ -31,5 +31,6 @@ namespace UnifBoards {
 		Rt01,
 		Hp898f,
 		Bb,
+		Ac08,
 	};
 }

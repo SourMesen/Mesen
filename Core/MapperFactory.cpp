@@ -5,6 +5,7 @@
 #include "UnifBoards.h"
 
 #include "A65AS.h"
+#include "Ac08.h"
 #include "Action53.h"
 #include "ActionEnterprises.h"
 #include "Ax5705.h"
@@ -468,6 +469,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 255: return new Bmc255();
 
 		case UnifBoards::A65AS: return new A65AS();
+		case UnifBoards::Ac08: return new Ac08();
 		case UnifBoards::Ax5705: return new Ax5705();
 		case UnifBoards::Bb: return new Bb();
 		case UnifBoards::Bmc70in1: return new Bmc70in1();

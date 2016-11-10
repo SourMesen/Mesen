@@ -399,6 +399,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="A12Watcher.h" />
+    <ClInclude Include="Ac08.h" />
     <ClInclude Include="Action53.h" />
     <ClInclude Include="ActionEnterprises.h" />
     <ClInclude Include="APU.h" />

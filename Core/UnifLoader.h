@@ -28,7 +28,7 @@ private:
 		{ "8237A", UnifBoards::UnknownBoard },
 		{ "830118C", UnifBoards::UnknownBoard },
 		{ "A65AS", UnifBoards::A65AS },
-		{ "AC08", UnifBoards::UnknownBoard },
+		{ "AC08", UnifBoards::Ac08 },
 		{ "ANROM", 7 },
 		{ "AX5705", UnifBoards::Ax5705 },
 		{ "BB", UnifBoards::Bb },
