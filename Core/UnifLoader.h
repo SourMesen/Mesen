@@ -51,7 +51,7 @@ private:
 		{ "FK23C", UnifBoards::UnknownBoard },
 		{ "FK23CA", UnifBoards::UnknownBoard },
 		{ "FS304", 162 },
-		{ "G-146", UnifBoards::UnknownBoard },
+		{ "G-146", UnifBoards::BmcG146 },
 		{ "GK-192", 58 },
 		{ "GS-2004", UnifBoards::Gs2004 },
 		{ "GS-2013", UnifBoards::Gs2013 },
