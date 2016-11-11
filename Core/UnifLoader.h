@@ -10,7 +10,7 @@ class UnifLoader
 private:
 	std::unordered_map<string, int> _boardMappings = {
 		{ "11160", UnifBoards::Bmc11160 },
-		{ "12-IN-1", UnifBoards::UnknownBoard },
+		{ "12-IN-1", UnifBoards::Bmc12in1 },
 		{ "13in1JY110", UnifBoards::UnknownBoard },
 		{ "190in1", UnifBoards::Bmc190in1 },
 		{ "22211", 132 },

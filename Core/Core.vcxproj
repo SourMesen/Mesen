@@ -418,6 +418,7 @@
     <ClInclude Include="BF9096.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="Bmc11160.h" />
+    <ClInclude Include="Bmc12in1.h" />
     <ClInclude Include="Bmc190in1.h" />
     <ClInclude Include="Bmc255.h" />
     <ClInclude Include="Bmc51.h" />
