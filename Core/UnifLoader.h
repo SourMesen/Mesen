@@ -22,7 +22,7 @@ private:
 		{ "64in1NoRepeat", UnifBoards::Bmc64in1NoRepeat },
 		{ "70in1", UnifBoards::Bmc70in1 },
 		{ "70in1B", UnifBoards::Bmc70in1B },
-		{ "810544-C-A1", UnifBoards::UnknownBoard },
+		{ "810544-C-A1", UnifBoards::Bmc810544CA1 },
 		{ "8157", UnifBoards::UnknownBoard },
 		{ "8237", 215 },
 		{ "8237A", UnifBoards::UnknownBoard },
