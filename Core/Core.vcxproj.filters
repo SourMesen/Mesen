@@ -1081,6 +1081,12 @@
     <ClInclude Include="MMC3_MaliSB.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="Unl43272.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
+    <ClInclude Include="MMC3_Bmc411120C.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

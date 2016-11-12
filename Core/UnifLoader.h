@@ -15,7 +15,7 @@ private:
 		{ "190in1", UnifBoards::Bmc190in1 },
 		{ "22211", 132 },
 		{ "3D-BLOCK", UnifBoards::UnknownBoard },
-		{ "411120-C", UnifBoards::UnknownBoard },
+		{ "411120-C", UnifBoards::Bmc411120C },
 		{ "42in1ResetSwitch", 226 },
 		{ "43272", UnifBoards::Unl43272 },
 		{ "603-5052", 238 },

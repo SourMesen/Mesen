@@ -554,6 +554,7 @@
     <ClInclude Include="MMC3_47.h" />
     <ClInclude Include="MMC3_49.h" />
     <ClInclude Include="MMC3_52.h" />
+    <ClInclude Include="MMC3_Bmc411120C.h" />
     <ClInclude Include="MMC3_BmcF15.h" />
     <ClInclude Include="MMC3_ChrRam.h" />
     <ClInclude Include="MMC3_Coolboy.h" />
@@ -697,6 +698,7 @@
     <ClInclude Include="TxSRom.h" />
     <ClInclude Include="UnifBoards.h" />
     <ClInclude Include="UnifLoader.h" />
+    <ClInclude Include="Unl43272.h" />
     <ClInclude Include="VideoHud.h" />
     <ClInclude Include="VideoRenderer.h" />
     <ClInclude Include="UnlPci556.h" />

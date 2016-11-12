@@ -198,14 +198,14 @@ uint8_t BaseMapper::InternalReadRam(uint16_t addr)
 
 void BaseMapper::SelectPrgPage4x(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
 {
-	SelectPrgPage2x(slot*2, page, memoryType);
-	SelectPrgPage2x(slot*2+1, page+2, memoryType);
+	BaseMapper::SelectPrgPage2x(slot*2, page, memoryType);
+	BaseMapper::SelectPrgPage2x(slot*2+1, page+2, memoryType);
 }
 
 void BaseMapper::SelectPrgPage2x(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
 {
-	SelectPRGPage(slot*2, page, memoryType);
-	SelectPRGPage(slot*2+1, page+1, memoryType);
+	BaseMapper::SelectPRGPage(slot*2, page, memoryType);
+	BaseMapper::SelectPRGPage(slot*2+1, page+1, memoryType);
 }
 
 void BaseMapper::SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
@@ -234,20 +234,20 @@ void BaseMapper::SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memor
 
 void BaseMapper::SelectChrPage8x(uint16_t slot, uint16_t page, ChrMemoryType memoryType)
 {
-	SelectChrPage4x(slot, page, memoryType);
-	SelectChrPage4x(slot*2+1, page+4, memoryType);
+	BaseMapper::SelectChrPage4x(slot, page, memoryType);
+	BaseMapper::SelectChrPage4x(slot*2+1, page+4, memoryType);
 }
 
 void BaseMapper::SelectChrPage4x(uint16_t slot, uint16_t page, ChrMemoryType memoryType)
 {
-	SelectChrPage2x(slot*2, page, memoryType);
-	SelectChrPage2x(slot*2+1, page+2, memoryType);
+	BaseMapper::SelectChrPage2x(slot*2, page, memoryType);
+	BaseMapper::SelectChrPage2x(slot*2+1, page+2, memoryType);
 }
 
 void BaseMapper::SelectChrPage2x(uint16_t slot, uint16_t page, ChrMemoryType memoryType)
 {
-	SelectCHRPage(slot*2, page, memoryType);
-	SelectCHRPage(slot*2+1, page+1, memoryType);
+	BaseMapper::SelectCHRPage(slot*2, page, memoryType);
+	BaseMapper::SelectCHRPage(slot*2+1, page+1, memoryType);
 }
 
 void BaseMapper::SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType)
