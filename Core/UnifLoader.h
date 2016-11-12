@@ -155,7 +155,7 @@ private:
 		{ "DRAGONFIGHTER", UnifBoards::UnknownBoard },
 		{ "EH8813A", UnifBoards::UnknownBoard },
 		{ "HP898F", UnifBoards::Hp898f },
-		{ "F-15", UnifBoards::UnknownBoard },
+		{ "F-15", UnifBoards::BmcF15 },
 		{ "RT-01", UnifBoards::Rt01 },
 		{ "81-01-31-C", UnifBoards::UnknownBoard },
 		{ "8-IN-1", UnifBoards::UnknownBoard },

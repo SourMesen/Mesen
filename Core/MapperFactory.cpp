@@ -148,6 +148,7 @@
 #include "MMC3_249.h"
 #include "MMC3_250.h"
 #include "MMC3_254.h"
+#include "MMC3_BmcF15.h"
 #include "MMC3_ChrRam.h"
 #include "MMC3_Coolboy.h"
 #include "MMC3_Kof97.h"
@@ -485,6 +486,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Bmc70in1B: return new Bmc70in1();
 		case UnifBoards::Bmc190in1: return new Bmc190in1();
 		case UnifBoards::Bmc810544CA1: return new Bmc810544CA1();
+		case UnifBoards::BmcF15: return new MMC3_BmcF15();
 		case UnifBoards::BmcG146: return new BmcG146();
 		case UnifBoards::BmdNtd03: return new BmcNtd03();
 		case UnifBoards::Bs5: return new Bs5();

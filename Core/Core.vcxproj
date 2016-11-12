@@ -548,6 +548,7 @@
     <ClInclude Include="MMC3_47.h" />
     <ClInclude Include="MMC3_49.h" />
     <ClInclude Include="MMC3_52.h" />
+    <ClInclude Include="MMC3_BmcF15.h" />
     <ClInclude Include="MMC3_ChrRam.h" />
     <ClInclude Include="MMC3_Coolboy.h" />
     <ClInclude Include="MMC3_Kof97.h" />
