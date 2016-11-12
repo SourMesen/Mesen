@@ -71,7 +71,7 @@ private:
 		{ "KS7037", UnifBoards::UnknownBoard },
 		{ "KS7057", UnifBoards::UnknownBoard },
 		{ "LE05", UnifBoards::UnknownBoard },
-		{ "LH10", UnifBoards::UnknownBoard },
+		{ "LH10", UnifBoards::Lh10 },
 		{ "LH32", 125 },
 		{ "LH53", UnifBoards::UnknownBoard },
 		{ "MALISB", UnifBoards::UnknownBoard },
