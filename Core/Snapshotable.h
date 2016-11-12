@@ -144,6 +144,7 @@ private:
 
 protected:
 	virtual void StreamState(bool saving) = 0;
+	virtual void AfterLoadState() { }
 
 	void Stream(Snapshotable* snapshotable);
 

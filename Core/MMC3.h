@@ -185,6 +185,11 @@ class MMC3 : public BaseMapper
 				_wramEnabled, _wramWriteProtected, registers, _needIrq);
 		}
 
+		void AfterLoadState() override
+		{
+			UpdateState();
+		}
+
 		virtual uint16_t GetPRGPageSize() { return 0x2000; }
 		virtual uint16_t GetCHRPageSize() {	return 0x0400; }
 		virtual uint32_t GetSaveRamPageSize() { return _subMapperID == 1 ? 0x200 : 0x2000; }
