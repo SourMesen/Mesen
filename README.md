@@ -1,6 +1,26 @@
-# README #
-
 Mesen is a NES/Famicom emulator for Windows built in C++ and C#.
+
+
+## Roadmap ##
+Things that ***may or may not*** be added in the future, in no particular order:
+
+-Support for more UNIF boards  
+-Rewind functionality  
+-Debugger improvements (labels, comments, edit cpu/ppu state, APU state display, memory editor, etc.)  
+-Support for more NES/Famicom input devices  
+-Shaders  
+-Improvements/Rewrite of movie file format to support VS System properly (among other things)  
+-RAR file support  
+-Linux support  
+-Libretro support  
+-TAS editor  
+
+
+## Building ##
+1) Open the solution in VS2015  
+2) Compile as Release/x64  
+3) Run  
+
 
 ### LICENSE ###
 
