@@ -158,6 +158,7 @@
 #include "MMC3_ChrRam.h"
 #include "MMC3_Coolboy.h"
 #include "MMC3_Kof97.h"
+#include "MMC3_MaliSB.h"
 #include "MMC3_StreetHeroes.h"
 #include "MMC3_Super24in1Sc03.h"
 #include "MMC4.h"
@@ -513,6 +514,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Ks7057: return new Kaiser7057();
 		case UnifBoards::Lh10: return new Lh10();
 		case UnifBoards::Malee: return new Malee();
+		case UnifBoards::MaliSB: return new MMC3_MaliSB();
 		case UnifBoards::NovelDiamond: return new NovelDiamond();
 		case UnifBoards::Rt01: return new Rt01();
 		case UnifBoards::Smb2j: return new Smb2j();

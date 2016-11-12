@@ -74,7 +74,7 @@ private:
 		{ "LH10", UnifBoards::Lh10 },
 		{ "LH32", 125 },
 		{ "LH53", UnifBoards::UnknownBoard },
-		{ "MALISB", UnifBoards::UnknownBoard },
+		{ "MALISB", UnifBoards::MaliSB },
 		{ "MARIO1-MALEE2", UnifBoards::Malee },
 		{ "MHROM", 66 },
 		{ "N625092", 221 },
