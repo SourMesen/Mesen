@@ -45,5 +45,6 @@ namespace UnifBoards {
 		Ks7013B,
 		Ks7012,
 		MaliSB,
+		Unl43272,
 	};
 }

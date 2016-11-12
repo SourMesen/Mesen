@@ -17,7 +17,7 @@ private:
 		{ "3D-BLOCK", UnifBoards::UnknownBoard },
 		{ "411120-C", UnifBoards::UnknownBoard },
 		{ "42in1ResetSwitch", 226 },
-		{ "43272", UnifBoards::UnknownBoard },
+		{ "43272", UnifBoards::Unl43272 },
 		{ "603-5052", 238 },
 		{ "64in1NoRepeat", UnifBoards::Bmc64in1NoRepeat },
 		{ "70in1", UnifBoards::Bmc70in1 },
