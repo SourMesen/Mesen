@@ -473,6 +473,7 @@
     <ClInclude Include="Kaiser7058.h" />
     <ClInclude Include="Kaiser7016.h" />
     <ClInclude Include="Lh10.h" />
+    <ClInclude Include="Lh32.h" />
     <ClInclude Include="Malee.h" />
     <ClInclude Include="Mapper103.h" />
     <ClInclude Include="Mapper106.h" />

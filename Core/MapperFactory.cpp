@@ -68,6 +68,7 @@
 #include "Kaiser7057.h"
 #include "Kaiser7058.h"
 #include "Lh10.h"
+#include "Lh32.h"
 #include "Malee.h"
 #include "Mapper15.h"
 #include "Mapper35.h"
@@ -371,6 +372,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 120: return new Mapper120();
 		case 121: return new MMC3_121();
 		case 123: return new MMC3_123();
+		case 125: return new Lh32();
 		case 126: return new MMC3_126();
 		case 132: return new Txc22211A();
 		case 133: return new Sachen_133();

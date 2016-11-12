@@ -1075,6 +1075,9 @@
     <ClInclude Include="Kaiser7012.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="Lh32.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
