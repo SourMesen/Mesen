@@ -41,5 +41,6 @@ namespace UnifBoards {
 		BmcF15,
 		Lh10,
 		Ks7037,
+		Ks7057,
 	};
 }

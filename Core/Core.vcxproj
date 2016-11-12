@@ -467,6 +467,7 @@
     <ClInclude Include="Kaiser202.h" />
     <ClInclude Include="Kaiser7022.h" />
     <ClInclude Include="Kaiser7037.h" />
+    <ClInclude Include="Kaiser7057.h" />
     <ClInclude Include="Kaiser7058.h" />
     <ClInclude Include="Kaiser7016.h" />
     <ClInclude Include="Lh10.h" />
