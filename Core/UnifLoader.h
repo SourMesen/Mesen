@@ -62,7 +62,7 @@ private:
 		{ "KONAMI-QTAI", UnifBoards::UnknownBoard },
 		{ "KS7010", UnifBoards::UnknownBoard },
 		{ "KS7012", UnifBoards::UnknownBoard },
-		{ "KS7013B", UnifBoards::UnknownBoard },
+		{ "KS7013B", UnifBoards::Ks7013B },
 		{ "KS7016", UnifBoards::Ks7016 },
 		{ "KS7017", UnifBoards::UnknownBoard },
 		{ "KS7030", UnifBoards::UnknownBoard },
