@@ -511,23 +511,27 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 		tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
 	}
 
+	bool fetchLastSprite = true;	
 	if((_spriteIndex < _spriteCount || extraSprite) && spriteY < 240) {
 		_spriteTiles[_spriteIndex].BackgroundPriority = backgroundPriority;
 		_spriteTiles[_spriteIndex].HorizontalMirror = horizontalMirror;
 		_spriteTiles[_spriteIndex].VerticalMirror = verticalMirror;
 		_spriteTiles[_spriteIndex].PaletteOffset = ((attributes & 0x03) << 2) | 0x10;
 		if(extraSprite) {
-			//Use DebugReadVRAM for extra sprites to prevent most side-effects.
+			//Use DebugReadVRAM for extra sprites to prevent side-effects.
 			_spriteTiles[_spriteIndex].LowByte = _memoryManager->DebugReadVRAM(tileAddr);
 			_spriteTiles[_spriteIndex].HighByte = _memoryManager->DebugReadVRAM(tileAddr + 8);
 		} else {
+			fetchLastSprite = false;
 			_spriteTiles[_spriteIndex].LowByte = _memoryManager->ReadVRAM(tileAddr);
 			_spriteTiles[_spriteIndex].HighByte = _memoryManager->ReadVRAM(tileAddr + 8);
 		}
 		_spriteTiles[_spriteIndex].TileAddr = tileAddr;
 		_spriteTiles[_spriteIndex].OffsetY = lineOffset;
 		_spriteTiles[_spriteIndex].SpriteX = spriteX;
-	} else if(!extraSprite) {
+	} 
+	
+	if(fetchLastSprite) {
 		//Fetches to sprite 0xFF for remaining sprites/hidden - used by MMC3 IRQ counter
 		lineOffset = 0;
 		tileIndex = 0xFF;
@@ -561,6 +565,9 @@ void PPU::LoadSpriteTileInfo()
 {
 	uint8_t *spriteAddr = _secondarySpriteRAM + _spriteIndex * 4;
 	LoadSprite(*spriteAddr, *(spriteAddr+1), *(spriteAddr+2), *(spriteAddr+3), false);
+	if(_cycle == 316) {
+		LoadExtraSprites();
+	}
 }
 
 void PPU::LoadNextTile()
@@ -776,8 +783,6 @@ void PPU::CopyOAMData()
 		} else if(_cycle == 256) {
 			_sprite0Visible = _sprite0Added;
 			_spriteCount = (_secondaryOAMAddr >> 2);
-
-			LoadExtraSprites();
 		}
 
 		if(_cycle & 0x01) {
