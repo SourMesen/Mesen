@@ -161,7 +161,7 @@ uint8_t MemoryManager::DebugReadVRAM(uint16_t addr)
 	if(addr >= 0x3000) {
 		addr -= 0x1000;
 	}
-	return _mapper->ReadVRAM(addr, MemoryOperationType::Read);
+	return _mapper->InternalReadVRAM(addr);
 }
 
 uint8_t MemoryManager::ReadVRAM(uint16_t addr, MemoryOperationType operationType)

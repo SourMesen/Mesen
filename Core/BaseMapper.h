@@ -217,6 +217,7 @@ public:
 	virtual void WriteRAM(uint16_t addr, uint8_t value);
 	void WritePrgRam(uint16_t addr, uint8_t value);
 
+	uint8_t InternalReadVRAM(uint16_t addr);	
 	virtual uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type = MemoryOperationType::Read);
 	void WriteVRAM(uint16_t addr, uint8_t value);
 

@@ -697,15 +697,18 @@ void BaseMapper::WritePrgRam(uint16_t addr, uint8_t value)
 		_prgPages[addr >> 8][addr & 0xFF] = value;
 	}
 }
-		
-uint8_t BaseMapper::ReadVRAM(uint16_t addr, MemoryOperationType operationType)
+
+uint8_t BaseMapper::InternalReadVRAM(uint16_t addr)
 {
 	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Read) {
 		return _chrPages[addr >> 8][addr & 0xFF];
-	} else {
-		//assert(false);
 	}
 	return 0;
+}
+
+uint8_t BaseMapper::ReadVRAM(uint16_t addr, MemoryOperationType operationType)
+{
+	return InternalReadVRAM(addr);
 }
 
 void BaseMapper::WriteVRAM(uint16_t addr, uint8_t value)
