@@ -29,7 +29,7 @@ protected:
 
 		romData.MapperID = MapperFactory::NsfMapperID;
 
-		if(header.LoadAddress < 0x6000) {
+		if(header.LoadAddress < 0x6000 || header.TotalSongs == 0) {
 			romData.Error = true;
 		}
 
@@ -43,6 +43,10 @@ protected:
 
 		if(header.PlaySpeedPal == 0) {
 			header.PlaySpeedPal = 19997;
+		}
+		
+		if(header.StartingSong > header.TotalSongs || header.StartingSong == 0) {
+			header.StartingSong = 1;
 		}
 
 		//Log window output
