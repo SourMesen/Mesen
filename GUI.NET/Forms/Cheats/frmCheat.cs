@@ -48,6 +48,12 @@ namespace Mesen.GUI.Forms.Cheats
 			AddBinding("IsRelativeAddress", radRelativeAddress.Parent);
 		}
 
+		protected override void OnShown(EventArgs e)
+		{
+			base.OnShown(e);
+			txtCheatName.Focus();
+		}
+
 		protected override Type BindedType
 		{
 			get { return typeof(CheatInfo); }

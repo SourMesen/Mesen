@@ -20,6 +20,12 @@ namespace Mesen.GUI.Debugger
 			Entity = address;
 			AddBinding("Address", txtAddress);
 		}
+
+		protected override void OnShown(EventArgs e)
+		{
+			base.OnShown(e);
+			txtAddress.Focus();
+		}
 	}
 
 	public class GoToAddress
