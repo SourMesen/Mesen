@@ -30,6 +30,7 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetState(ref state);
 			_programCounter = state.CPU.DebugPC;
 
+			this.lstCallstack.BeginUpdate();
 			this.lstCallstack.Items.Clear();
 			int subStartAddr = -1;
 			ListViewItem item;
@@ -60,6 +61,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			item = this.lstCallstack.Items.Insert(0, "$" + (subStartAddr >= 0 ? subStartAddr.ToString("X4") : "--------"));
 			item.SubItems.Add("@ $" + _programCounter.ToString("X4"));
+			this.lstCallstack.EndUpdate();
 		}
 
 		private void lstCallstack_DoubleClick(object sender, EventArgs e)

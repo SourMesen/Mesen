@@ -35,6 +35,9 @@ namespace Mesen.GUI.Debugger.Controls
 		public void RefreshList()
 		{
 			lstBreakpoints.ItemChecked -= new System.Windows.Forms.ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
+
+			int topIndex = lstBreakpoints.TopItem != null ? lstBreakpoints.TopItem.Index : 0;
+			lstBreakpoints.BeginUpdate();
 			lstBreakpoints.Items.Clear();
 			foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
 				string address = "$" + breakpoint.Address.ToString("X");
@@ -50,6 +53,11 @@ namespace Mesen.GUI.Debugger.Controls
 				item.SubItems.Add(breakpoint.Condition);
 				lstBreakpoints.Items.Add(item);
 			}
+			lstBreakpoints.EndUpdate();
+			if(lstBreakpoints.Items.Count > 0) {
+				lstBreakpoints.TopItem = lstBreakpoints.Items[lstBreakpoints.Items.Count > topIndex ? topIndex : lstBreakpoints.Items.Count - 1];
+			}
+
 			lstBreakpoints.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
 		}
 
