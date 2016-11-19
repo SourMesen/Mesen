@@ -50,6 +50,8 @@ class Debugger
 private:
 	static Debugger* Instance;
 
+	const static int BreakpointTypeCount = 6;
+
 	unique_ptr<Disassembler> _disassembler;
 	unique_ptr<CodeDataLogger> _codeDataLogger;
 	shared_ptr<Console> _console;
@@ -58,19 +60,15 @@ private:
 	shared_ptr<MemoryManager> _memoryManager;
 	shared_ptr<BaseMapper> _mapper;
 	
-	atomic<bool> _bpUpdateNeeded;
-	atomic<bool> _updatingBreakpoints;
+	bool _bpUpdateNeeded;
+	SimpleLock _bpUpdateLock;
+
 	atomic<bool> _stopFlag;
 	atomic<bool> _executionStopped;
 	atomic<int32_t> _suspendCount;
 	vector<Breakpoint> _newBreakpoints;
-	vector<Breakpoint> _readBreakpoints;
-	vector<Breakpoint> _writeBreakpoints;
-	vector<Breakpoint> _execBreakpoints;
-	vector<Breakpoint> _globalBreakpoints;
-	vector<Breakpoint> _readVramBreakpoints;
-	vector<Breakpoint> _writeVramBreakpoints;
-	atomic<bool> _hasBreakpoint;
+	vector<Breakpoint> _breakpoints[BreakpointTypeCount];
+	bool _hasBreakpoint[BreakpointTypeCount];
 
 	deque<uint32_t> _callstackAbsolute;
 	deque<uint32_t> _callstackRelative;
@@ -105,7 +103,6 @@ private:
 	bool HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value);
 	void UpdateCallstack(uint32_t addr);
 	void ProcessStepConditions(uint32_t addr);
-	void BreakOnBreakpoint(MemoryOperationType type, uint32_t addr, uint8_t value);
 	bool SleepUntilResume();
 
 public:

@@ -7,24 +7,35 @@ enum BreakpointType
 	Global = 0,
 	Execute = 1,
 	ReadRam = 2,
-	WriteRam = 4,
-	ReadVram = 8,
-	WriteVram = 16,
+	WriteRam = 3,
+	ReadVram = 4,
+	WriteVram = 5,
 };
 
 class Breakpoint
 {
+private:
+	enum BreakpointTypeFlags
+	{
+		Global = 0,
+		Execute = 1,
+		ReadRam = 2,
+		WriteRam = 4,
+		ReadVram = 8,
+		WriteVram = 16,
+	};
+
 public:
 	Breakpoint();
 	~Breakpoint();
 
 	bool Matches(uint32_t memoryAddr, uint32_t absoluteAddr);
-	BreakpointType GetType();
+	bool HasBreakpointType(BreakpointType type);
 	string GetCondition();
 	void ClearCondition();
 	
 private:
-	BreakpointType _type;
+	BreakpointTypeFlags _type;
 	int32_t _addr;
 	bool _isAbsoluteAddr;
 	char _condition[1000];

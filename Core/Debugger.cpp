@@ -12,6 +12,7 @@
 #include "ExpressionEvaluator.h"
 
 Debugger* Debugger::Instance = nullptr;
+const int Debugger::BreakpointTypeCount;
 
 Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
 {
@@ -32,7 +33,6 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_flags = 0;
 
-	_hasBreakpoint = false;
 	_bpUpdateNeeded = false;
 	_executionStopped = false;
 
@@ -121,27 +121,37 @@ CdlRatios Debugger::GetCdlRatios()
 
 void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 {
-	_hasBreakpoint = length > 0;
-	
-	while(_updatingBreakpoints) { }
+	_bpUpdateLock.AcquireSafe();
+
 	_newBreakpoints.clear();
 	_newBreakpoints.insert(_newBreakpoints.end(), breakpoints, breakpoints + length);	
 	_bpUpdateNeeded = true;
+
 	if(_executionStopped) {
 		UpdateBreakpoints();
+	} else {
+		bool hasBreakpoint[Debugger::BreakpointTypeCount]{ false,false,false,false,false,false };
+		for(Breakpoint &bp : _newBreakpoints) {
+			for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
+				hasBreakpoint[i] |= bp.HasBreakpointType((BreakpointType)i);
+			}
+		}
+
+		for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
+			_hasBreakpoint[i] = hasBreakpoint[i];
+		}
 	}
 }
 
 void Debugger::UpdateBreakpoints()
 {
-	_updatingBreakpoints = true;
 	if(_bpUpdateNeeded) {
-		_globalBreakpoints.clear();
-		_execBreakpoints.clear();
-		_readBreakpoints.clear();
-		_writeBreakpoints.clear();
-		_readVramBreakpoints.clear();
-		_writeVramBreakpoints.clear();
+		_bpUpdateLock.AcquireSafe();
+
+		for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
+			_breakpoints[i].clear();
+			_hasBreakpoint[i] = false;
+		}
 
 		ExpressionEvaluator expEval;
 		for(Breakpoint &bp : _newBreakpoints) {
@@ -150,31 +160,16 @@ void Debugger::UpdateBreakpoints()
 				bp.ClearCondition();
 			}
 
-			BreakpointType type = bp.GetType();
-			if(type & BreakpointType::Execute) {
-				_execBreakpoints.push_back(bp);
-			}
-			if(type & BreakpointType::ReadRam) {
-				_readBreakpoints.push_back(bp);
-			}
-			if(type & BreakpointType::ReadVram) {
-				_readVramBreakpoints.push_back(bp);
-			}
-			if(type & BreakpointType::WriteRam) {
-				_writeBreakpoints.push_back(bp);
-			}
-			if(type & BreakpointType::WriteVram) {
-				_writeVramBreakpoints.push_back(bp);
-			}
-			if(type == BreakpointType::Global) {
-				_globalBreakpoints.push_back(bp);
+			for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
+				if(bp.HasBreakpointType((BreakpointType)i)) {
+					_breakpoints[i].push_back(bp);
+					_hasBreakpoint[i] = true;
+				}
 			}
 		}
 
 		_bpUpdateNeeded = false;
 	}
-
-	_updatingBreakpoints = false;
 }
 
 bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value)
@@ -182,20 +177,11 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 	UpdateBreakpoints();
 
 	uint32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
-	vector<Breakpoint> *breakpoints = nullptr;
-
-	switch(type) {
-		case BreakpointType::Global: breakpoints = &_globalBreakpoints; break;
-		case BreakpointType::Execute: breakpoints = &_execBreakpoints; break;
-		case BreakpointType::ReadRam: breakpoints = &_readBreakpoints; break;
-		case BreakpointType::WriteRam: breakpoints = &_writeBreakpoints; break;
-		case BreakpointType::ReadVram: breakpoints = &_readVramBreakpoints; break;
-		case BreakpointType::WriteVram: breakpoints = &_writeVramBreakpoints; break;
-	}
+	vector<Breakpoint> &breakpoints = _breakpoints[(int)type];
 
 	bool needState = true;
-	for(size_t i = 0, len = breakpoints->size(); i < len; i++) {
-		Breakpoint &breakpoint = (*breakpoints)[i];
+	for(size_t i = 0, len = breakpoints.size(); i < len; i++) {
+		Breakpoint &breakpoint = breakpoints[i];
 		if(type == BreakpointType::Global || breakpoint.Matches(addr, absoluteAddr)) {
 			string condition = breakpoint.GetCondition();
 			if(condition.empty()) {
@@ -259,7 +245,7 @@ void Debugger::ProcessStepConditions(uint32_t addr)
 
 void Debugger::PrivateProcessPpuCycle()
 {
-	if(_hasBreakpoint && HasMatchingBreakpoint(BreakpointType::Global, 0, -1)) {
+	if(_hasBreakpoint[BreakpointType::Global] && HasMatchingBreakpoint(BreakpointType::Global, 0, -1)) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
 		SleepUntilResume();
@@ -316,32 +302,21 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		}
 	}
 
-	if(!breakDone && _hasBreakpoint) {
-		BreakOnBreakpoint(type, addr, value);
-	}
-
-	_currentReadAddr = nullptr;
-}
-
-void Debugger::BreakOnBreakpoint(MemoryOperationType type, uint32_t addr, uint8_t value)
-{
-	if(_hasBreakpoint) {
-		BreakpointType breakpointType;
+	if(!breakDone) {
+		BreakpointType breakpointType = BreakpointType::Execute;
 		switch(type) {
 			case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
 			case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
-
-			default:
-			case MemoryOperationType::ExecOpCode:
-			case MemoryOperationType::ExecOperand: breakpointType = BreakpointType::Execute; break;
 		}
 
-		if(HasMatchingBreakpoint(breakpointType, addr, (type == MemoryOperationType::ExecOperand) ? -1 : value)) {
+		if(_hasBreakpoint[breakpointType] && HasMatchingBreakpoint(breakpointType, addr, (type == MemoryOperationType::ExecOperand) ? -1 : value)) {
 			//Found a matching breakpoint, stop execution
 			Step(1);
 			SleepUntilResume();
 		}
 	}
+
+	_currentReadAddr = nullptr;
 }
 
 bool Debugger::SleepUntilResume()
@@ -379,7 +354,8 @@ void Debugger::PrivateProcessVramOperation(MemoryOperationType type, uint16_t ad
 		_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
 	}
 
-	if(_hasBreakpoint && HasMatchingBreakpoint(type == MemoryOperationType::Write ? BreakpointType::WriteVram : BreakpointType::ReadVram, addr, value)) {
+	BreakpointType bpType = type == MemoryOperationType::Write ? BreakpointType::WriteVram : BreakpointType::ReadVram;
+	if(_hasBreakpoint[bpType] && HasMatchingBreakpoint(bpType, addr, value)) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
 		SleepUntilResume();
