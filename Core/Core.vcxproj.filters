@@ -1087,6 +1087,9 @@
     <ClInclude Include="MMC3_Bmc411120C.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryDumper.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1262,6 +1265,9 @@
     </ClCompile>
     <ClCompile Include="ShortcutKeyHandler.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryDumper.cpp">
+      <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

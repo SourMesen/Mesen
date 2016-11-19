@@ -42,13 +42,13 @@ extern "C"
 	DllExport const char* __stdcall DebugGetCode() { return GetDebugger()->GetCode()->c_str(); }
 
 	DllExport void __stdcall DebugSetNextStatement(uint16_t addr) { GetDebugger()->SetNextStatement(addr); }
-	DllExport void __stdcall DebugSetMemoryState(uint32_t type, uint8_t *buffer) { GetDebugger()->SetMemoryState((DebugMemoryType)type, buffer); }
+	DllExport void __stdcall DebugSetMemoryState(uint32_t type, uint8_t *buffer) { GetDebugger()->GetMemoryDumper()->SetMemoryState((DebugMemoryType)type, buffer); }
 
-	DllExport uint32_t __stdcall DebugGetMemoryState(uint32_t type, uint8_t *buffer) { return GetDebugger()->GetMemoryState((DebugMemoryType)type, buffer); }
-	DllExport void __stdcall DebugGetNametable(uint32_t nametableIndex, uint32_t *frameBuffer, uint8_t *tileData, uint8_t *attributeData) { GetDebugger()->GetNametable(nametableIndex, frameBuffer, tileData, attributeData); }
-	DllExport void __stdcall DebugGetChrBank(uint32_t bankIndex, uint32_t *frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType) { GetDebugger()->GetChrBank(bankIndex, frameBuffer, palette, largeSprites, highlightType); }
-	DllExport void __stdcall DebugGetSprites(uint32_t *frameBuffer) { GetDebugger()->GetSprites(frameBuffer); }
-	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { GetDebugger()->GetPalette(frameBuffer); }
+	DllExport uint32_t __stdcall DebugGetMemoryState(uint32_t type, uint8_t *buffer) { return GetDebugger()->GetMemoryDumper()->GetMemoryState((DebugMemoryType)type, buffer); }
+	DllExport void __stdcall DebugGetNametable(uint32_t nametableIndex, uint32_t *frameBuffer, uint8_t *tileData, uint8_t *attributeData) { GetDebugger()->GetMemoryDumper()->GetNametable(nametableIndex, frameBuffer, tileData, attributeData); }
+	DllExport void __stdcall DebugGetChrBank(uint32_t bankIndex, uint32_t *frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType) { GetDebugger()->GetMemoryDumper()->GetChrBank(bankIndex, frameBuffer, palette, largeSprites, highlightType); }
+	DllExport void __stdcall DebugGetSprites(uint32_t *frameBuffer) { GetDebugger()->GetMemoryDumper()->GetSprites(frameBuffer); }
+	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { GetDebugger()->GetMemoryDumper()->GetPalette(frameBuffer); }
 	
 	DllExport void __stdcall DebugGetCallstack(int32_t *callstackAbsolute, int32_t *callstackRelative) { GetDebugger()->GetCallstack(callstackAbsolute, callstackRelative); }
 	

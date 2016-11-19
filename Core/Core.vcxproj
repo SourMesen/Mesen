@@ -435,6 +435,7 @@
     <ClInclude Include="Cc21.h" />
     <ClInclude Include="ColorDreams46.h" />
     <ClInclude Include="DaouInfosys.h" />
+    <ClInclude Include="MemoryDumper.h" />
     <ClInclude Include="DebugState.h" />
     <ClInclude Include="DefaultVideoFilter.h" />
     <ClInclude Include="DreamTech01.h" />
@@ -747,6 +748,7 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="Debugger.cpp" />
+    <ClCompile Include="MemoryDumper.cpp" />
     <ClCompile Include="DefaultVideoFilter.cpp" />
     <ClCompile Include="DeltaModulationChannel.cpp" />
     <ClCompile Include="Disassembler.cpp" />

@@ -11,6 +11,7 @@ using std::deque;
 #include "TraceLogger.h"
 #include "../Utilities/SimpleLock.h"
 #include "CodeDataLogger.h"
+#include "MemoryDumper.h"
 
 class CPU;
 class PPU;
@@ -18,31 +19,9 @@ class MemoryManager;
 class Console;
 class Disassembler;
 
-enum class DebugMemoryType
-{
-	CpuMemory = 0,
-	PpuMemory = 1,
-	PaletteMemory = 2,
-	SpriteMemory = 3,
-	SecondarySpriteMemory = 4,
-	PrgRom = 5,
-	ChrRom = 6,
-	ChrRam = 7,
-	WorkRam = 8,
-	SaveRam = 9,
-	InternalRam = 10
-};
-
 enum class DebuggerFlags
 {
 	PpuPartialDraw = 1
-};
-
-enum class CdlHighlightType
-{
-	None = 0,
-	HighlightUsed = 1,
-	HighlightUnused = 2,
 };
 
 class Debugger
@@ -53,7 +32,9 @@ private:
 	const static int BreakpointTypeCount = 6;
 
 	unique_ptr<Disassembler> _disassembler;
-	unique_ptr<CodeDataLogger> _codeDataLogger;
+	shared_ptr<MemoryDumper> _memoryDumper;
+	shared_ptr<CodeDataLogger> _codeDataLogger;
+
 	shared_ptr<Console> _console;
 	shared_ptr<CPU> _cpu;
 	shared_ptr<PPU> _ppu;
@@ -114,14 +95,7 @@ public:
 	
 	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
 
-	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
-	void GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData);
-	void GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType);
-	void GetSprites(uint32_t* frameBuffer);
-	void GetPalette(uint32_t* frameBuffer);
-
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
-
 	void GetState(DebugState *state);
 
 	void Suspend();
@@ -140,7 +114,6 @@ public:
 	void ResetCdlLog();
 
 	void SetNextStatement(uint16_t addr);
-	void SetMemoryState(DebugMemoryType type, uint8_t *buffer);
 
 	bool IsCodeChanged();
 	string GenerateOutput();
@@ -152,6 +125,8 @@ public:
 
 	void StartTraceLogger(TraceLoggerOptions options);
 	void StopTraceLogger();
+
+	shared_ptr<MemoryDumper> GetMemoryDumper();
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
 	
