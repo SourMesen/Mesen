@@ -93,6 +93,11 @@ Disassembler::~Disassembler()
 {
 }
 
+bool Disassembler::IsUnconditionalJump(uint8_t opCode)
+{
+	return opCode == 0x40 || opCode == 0x60 || opCode == 0x6C || opCode == 0x4C || opCode == 0x20;
+}
+
 uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr, uint16_t memoryAddr, bool isSubEntryPoint)
 {
 	if(memoryAddr < 0x2000) {
@@ -113,24 +118,26 @@ uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr,
 		}
 
 		if(absoluteAddr >= 0) {
-			if(!cache[absoluteAddr]) {
+			shared_ptr<DisassemblyInfo> disInfo = cache[absoluteAddr];
+			if(!disInfo) {
 				while(absoluteAddr < (int32_t)_prgSize && !cache[absoluteAddr]) {
-					shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&source[absoluteAddr], isSubEntryPoint));
+					bool isJump = IsUnconditionalJump(source[absoluteAddr]);
+					disInfo = shared_ptr<DisassemblyInfo>(new DisassemblyInfo(&source[absoluteAddr], isSubEntryPoint));
 					isSubEntryPoint = false;
+
 					cache[absoluteAddr] = disInfo;
 
-					uint8_t opCode = source[absoluteAddr];
 					absoluteAddr += disInfo->GetSize();
-					if(opCode == 0x10 || opCode == 0x20 || opCode == 0x30 || opCode == 0x40 || opCode == 0x50 || opCode == 0x60 || opCode == 0x70 || opCode == 0x90 || opCode == 0xB0 || opCode == 0xD0 || opCode == 0xF0 || opCode == 0x4C || opCode == 0x6C) {
+					if(isJump) {
 						//Hit a jump/return instruction, can't assume that what follows is actual code, stop disassembling
 						break;
 					}
 				}
 			} else {
 				if(isSubEntryPoint) {
-					cache[absoluteAddr]->SetSubEntryPoint();
+					disInfo->SetSubEntryPoint();
 				}
-				absoluteAddr += cache[absoluteAddr]->GetSize();
+				absoluteAddr += disInfo->GetSize();
 			}
 		}
 		return absoluteAddr;

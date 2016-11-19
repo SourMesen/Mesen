@@ -15,6 +15,8 @@ private:
 	uint8_t* _prgRam;
 	uint32_t _prgSize;
 
+	bool IsUnconditionalJump(uint8_t opCode);
+
 public:
 	Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize);
 	~Disassembler();
