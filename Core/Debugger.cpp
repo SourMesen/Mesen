@@ -100,6 +100,13 @@ bool Debugger::LoadCdlFile(string cdlFilepath)
 				i = _disassembler->BuildCache(i, -1, 0xFFFF, false) - 1;
 			}
 		}
+
+		for(int i = 0, len = _mapper->GetPrgSize(); i < len; i++) {
+			if(_codeDataLogger->IsSubEntryPoint(i)) {
+				_functionEntryPoints.emplace(i);
+			}
+		}
+		
 		return true;
 	}
 	return false;
@@ -282,11 +289,15 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	}
 
 	if(type == MemoryOperationType::ExecOpCode) {
+		bool isSubEntryPoint = _lastInstruction == 0x20; //Previous instruction was a JSR
 		if(absoluteAddr >= 0) {
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
+			if(isSubEntryPoint) {
+				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::SubEntryPoint);
+				_functionEntryPoints.emplace(absoluteAddr);
+			}
 		}
-		
-		bool isSubEntryPoint = _lastInstruction == 0x20; //Previous instruction was a JSR
+
 		_disassembler->BuildCache(absoluteAddr, absoluteRamAddr, addr, isSubEntryPoint);
 		_lastInstruction = _memoryManager->DebugRead(addr);
 
@@ -484,12 +495,12 @@ uint8_t Debugger::GetMemoryValue(uint32_t addr)
 	return _memoryManager->DebugRead(addr);
 }
 
-uint32_t Debugger::GetRelativeAddress(uint32_t addr)
+int32_t Debugger::GetRelativeAddress(uint32_t addr)
 {
 	return _mapper->FromAbsoluteAddress(addr);
 }
 
-uint32_t Debugger::GetAbsoluteAddress(uint32_t addr)
+int32_t Debugger::GetAbsoluteAddress(uint32_t addr)
 {
 	return _mapper->ToAbsoluteAddress(addr);
 }
@@ -549,6 +560,16 @@ void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelati
 	}
 	callstackAbsolute[_callstackRelative.size()] = -2;
 	callstackRelative[_callstackRelative.size()] = -2;
+}
+
+void Debugger::GetFunctionEntryPoints(int32_t* entryPoints)
+{
+	uint32_t i = 0;
+	for(auto itt = _functionEntryPoints.begin(); itt != _functionEntryPoints.end(); itt++) {
+		entryPoints[i] = *itt;
+		i++;
+	}
+	entryPoints[i] = -1;
 }
 
 shared_ptr<MemoryDumper> Debugger::GetMemoryDumper()

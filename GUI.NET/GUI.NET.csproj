@@ -278,6 +278,12 @@
     <Compile Include="Debugger\Controls\ctrlAddressList.Designer.cs">
       <DependentUpon>ctrlAddressList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlFunctionList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlFunctionList.Designer.cs">
+      <DependentUpon>ctrlFunctionList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlMemoryMapping.cs" />
     <Compile Include="Debugger\Controls\ctrlPaletteViewer.cs">
       <SubType>UserControl</SubType>
@@ -575,6 +581,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlAddressList.resx">
       <DependentUpon>ctrlAddressList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlFunctionList.resx">
+      <DependentUpon>ctrlFunctionList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlPaletteViewer.resx">
       <DependentUpon>ctrlPaletteViewer.cs</DependentUpon>

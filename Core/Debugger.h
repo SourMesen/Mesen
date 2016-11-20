@@ -3,8 +3,10 @@
 #include "stdafx.h"
 #include <atomic>
 #include <deque>
+#include <unordered_set>
 using std::atomic;
 using std::deque;
+using std::unordered_set;
 
 #include "DebugState.h"
 #include "Breakpoint.h"
@@ -55,6 +57,8 @@ private:
 	deque<uint32_t> _callstackAbsolute;
 	deque<uint32_t> _callstackRelative;
 
+	unordered_set<uint32_t> _functionEntryPoints;
+
 	DebugState _debugState;
 
 	SimpleLock _breakLock;
@@ -96,6 +100,7 @@ public:
 	
 	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
 
+	void GetFunctionEntryPoints(int32_t* entryPoints);
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
 	void GetState(DebugState *state);
 
@@ -121,8 +126,8 @@ public:
 	string* GetCode();
 	
 	uint8_t GetMemoryValue(uint32_t addr);
-	uint32_t GetRelativeAddress(uint32_t addr);
-	uint32_t GetAbsoluteAddress(uint32_t addr);
+	int32_t GetRelativeAddress(uint32_t addr);
+	int32_t GetAbsoluteAddress(uint32_t addr);
 
 	void StartTraceLogger(TraceLoggerOptions options);
 	void StopTraceLogger();

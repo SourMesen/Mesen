@@ -131,6 +131,7 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateDebugger()
 		{
+			ctrlFunctionList.UpdateFunctionList();
 			UpdateDebuggerFlags();
 
 			if(InteropEmu.DebugIsCodeChanged()) {
@@ -451,6 +452,11 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlCpuMemoryMapping.Invalidate();
 			ctrlPpuMemoryMapping.Invalidate();
+		}
+
+		private void ctrlFunctionList_OnFunctionSelected(object relativeAddress, EventArgs e)
+		{
+			_lastCodeWindow.ScrollToLineNumber((Int32)relativeAddress);
 		}
 	}
 }

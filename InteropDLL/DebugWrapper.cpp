@@ -51,9 +51,10 @@ extern "C"
 	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { GetDebugger()->GetMemoryDumper()->GetPalette(frameBuffer); }
 	
 	DllExport void __stdcall DebugGetCallstack(int32_t *callstackAbsolute, int32_t *callstackRelative) { GetDebugger()->GetCallstack(callstackAbsolute, callstackRelative); }
+	DllExport void __stdcall DebugGetFunctionEntryPoints(int32_t *entryPoints) { GetDebugger()->GetFunctionEntryPoints(entryPoints); }
 	
 	DllExport uint8_t __stdcall DebugGetMemoryValue(uint32_t addr) { return GetDebugger()->GetMemoryValue(addr); }
-	DllExport uint32_t __stdcall DebugGetRelativeAddress(uint32_t addr) { return GetDebugger()->GetRelativeAddress(addr); }
+	DllExport int32_t __stdcall DebugGetRelativeAddress(uint32_t addr) { return GetDebugger()->GetRelativeAddress(addr); }
 
 	DllExport bool __stdcall DebugLoadCdlFile(char* cdlFilepath) { return GetDebugger()->LoadCdlFile(cdlFilepath); }
 	DllExport bool __stdcall DebugSaveCdlFile(char* cdlFilepath) { return GetDebugger()->SaveCdlFile(cdlFilepath); }

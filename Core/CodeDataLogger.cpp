@@ -136,6 +136,11 @@ bool CodeDataLogger::IsCode(uint32_t absoluteAddr)
 	return (_cdlData[absoluteAddr] & (uint8_t)CdlPrgFlags::Code) == (uint8_t)CdlPrgFlags::Code;
 }
 
+bool CodeDataLogger::IsSubEntryPoint(uint32_t absoluteAddr)
+{
+	return (_cdlData[absoluteAddr] & (uint8_t)CdlPrgFlags::SubEntryPoint) == (uint8_t)CdlPrgFlags::SubEntryPoint;
+}
+
 bool CodeDataLogger::IsData(uint32_t absoluteAddr)
 {
 	return (_cdlData[absoluteAddr] & (uint8_t)CdlPrgFlags::Data) == (uint8_t)CdlPrgFlags::Data;

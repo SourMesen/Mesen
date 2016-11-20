@@ -10,6 +10,7 @@ enum class CdlPrgFlags
 	IndirectCode = 0x10,
 	IndirectData = 0x20,
 	PcmData = 0x40,
+	SubEntryPoint = 0x80
 };
 
 enum class CdlChrFlags
@@ -59,6 +60,7 @@ public:
 	CdlRatios GetRatios();
 
 	bool IsCode(uint32_t absoluteAddr);
+	bool IsSubEntryPoint(uint32_t absoluteAddr);
 	bool IsData(uint32_t absoluteAddr);
 	bool IsRead(uint32_t absoluteAddr);
 	bool IsDrawn(uint32_t absoluteAddr);

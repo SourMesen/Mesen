@@ -175,7 +175,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsCodeChanged();
 		[DllImport(DLLPath)] public static extern IntPtr DebugGetCode();
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
-		[DllImport(DLLPath)] public static extern UInt32 DebugGetRelativeAddress(UInt32 addr);
+		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeAddress(UInt32 addr);
 		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
 		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
 		
@@ -303,6 +303,22 @@ namespace Mesen.GUI
 				hAbsolute.Free();
 				hRelative.Free();
 			}
+		}
+
+		[DllImport(DLLPath, EntryPoint = "DebugGetFunctionEntryPoints")]
+		private static extern void DebugGetFunctionEntryPointsWrapper(IntPtr callstackAbsolute);
+		public static Int32[] DebugGetFunctionEntryPoints()
+		{
+			Int32[] entryPoints = new Int32[32768];
+
+			GCHandle hEntryPoints = GCHandle.Alloc(entryPoints, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetFunctionEntryPointsWrapper(hEntryPoints.AddrOfPinnedObject());
+			} finally {
+				hEntryPoints.Free();
+			}
+
+			return entryPoints;
 		}
 
 		public static NsfHeader NsfGetHeader()
