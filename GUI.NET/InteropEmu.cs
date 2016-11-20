@@ -652,6 +652,7 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)] public bool ShowPpuFrames;
 		[MarshalAs(UnmanagedType.I1)] public bool ShowExtraInfo;
 		[MarshalAs(UnmanagedType.I1)] public bool IndentCode;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowEffectiveAddresses;
 	}
 
 	[Flags]
@@ -717,7 +718,8 @@ namespace Mesen.GUI
 	public enum DebuggerFlags
 	{
 		None = 0,
-		PpuPartialDraw = 1
+		PpuPartialDraw = 1,
+		ShowEffectiveAddresses = 2
 	}
 
 	public struct InteropRomInfo

@@ -41,7 +41,8 @@ namespace Mesen.GUI.Debugger
 				ShowPpuFrames = chkShowFrameCount.Checked,
 				ShowPpuScanline = chkShowPpuScanline.Checked,
 				ShowRegisters = chkShowRegisters.Checked,
-				IndentCode = chkIndentCode.Checked
+				IndentCode = chkIndentCode.Checked,
+				ShowEffectiveAddresses = chkShowEffectiveAddresses.Checked
 			};
 
 			InteropEmu.DebugStartTraceLogger(options);

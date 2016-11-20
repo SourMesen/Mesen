@@ -24,6 +24,7 @@ public:
 	DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint);
 
 	void SetSubEntryPoint();
+	string GetEffectiveAddress(State& cpuState, shared_ptr<MemoryManager> memoryManager);
 	string ToString(uint32_t memoryAddr);
 	uint32_t GetSize();
 };

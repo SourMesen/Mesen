@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 
+struct State;
+class MemoryManager;
 class DisassemblyInfo;
 
 class Disassembler
@@ -24,7 +26,7 @@ public:
 	uint32_t BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr, uint16_t memoryAddr, bool isSubEntryPoint);
 	void InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr);
 
-	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType);
+	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, State& cpuState, shared_ptr<MemoryManager> memoryManager);
 
 	shared_ptr<DisassemblyInfo> GetDisassemblyInfo(int32_t absoluteAddress, int32_t absoluteRamAddress, uint16_t memoryAddress);
 };

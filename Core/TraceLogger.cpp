@@ -3,11 +3,13 @@
 #include "DisassemblyInfo.h"
 #include "DebugState.h"
 #include "Console.h"
+#include "MemoryManager.h"
 
 TraceLogger *TraceLogger::_instance = nullptr;
 
-TraceLogger::TraceLogger(string outputFilepath, TraceLoggerOptions options)
+TraceLogger::TraceLogger(string outputFilepath, shared_ptr<MemoryManager> memoryManager, TraceLoggerOptions options)
 {
+	_memoryManager = memoryManager;
 	_outputFile.open(outputFilepath, ios::out | ios::binary);
 	_options = options;
 	_firstLine = true;
@@ -73,7 +75,8 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 			_outputFile << std::string(indentLevel, ' ');
 		}
 
-		_outputFile << std::setfill(' ') << std::setw(32 - indentLevel) << std::left << assemblyCode;
+		string codeString = assemblyCode + (_options.ShowEffectiveAddresses ? disassemblyInfo->GetEffectiveAddress(state.CPU, _memoryManager) : "");
+		_outputFile << std::setfill(' ') << std::setw(32 - indentLevel) << std::left << codeString;
 						
 		if(_options.ShowRegisters) {
 			_outputFile << std::setfill('0')
@@ -101,7 +104,7 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 		if(_options.ShowCpuCycles) {
 			_outputFile << " CPU Cycle:" << cpuState.CycleCount;
 		}
-
+		
 		_firstLine = false;
 	}
 }

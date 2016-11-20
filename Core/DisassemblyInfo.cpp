@@ -125,6 +125,55 @@ void DisassemblyInfo::SetSubEntryPoint()
 		Initialize();
 	}
 }
+
+string DisassemblyInfo::GetEffectiveAddress(State& cpuState, shared_ptr<MemoryManager> memoryManager)
+{
+	std::stringstream ss;
+	ss << std::uppercase << std::setfill('0');
+	switch(_opMode) {
+		case AddrMode::ZeroX: ss << " @ $" << std::setw(2) << std::hex << (short)(uint8_t)(*(_opPointer + 1) + cpuState.X); break;
+		case AddrMode::ZeroY: ss << " @ $" << std::setw(2) << std::hex << (short)(uint8_t)(*(_opPointer + 1) + cpuState.Y); break;
+
+		case AddrMode::IndX: {
+			uint8_t zeroAddr = *(_opPointer + 1) + cpuState.X;
+			uint16_t addr = memoryManager->DebugRead(zeroAddr) | memoryManager->DebugRead((uint8_t)(zeroAddr + 1)) << 8;
+			ss << " @ $" << std::setw(4) << std::hex << addr;
+			break;
+		}
+
+		case AddrMode::IndY:
+		case AddrMode::IndYW: {
+			uint8_t zeroAddr = *(_opPointer + 1);
+			uint16_t addr = memoryManager->DebugRead(zeroAddr) | memoryManager->DebugRead((uint8_t)(zeroAddr + 1)) << 8;
+			addr += cpuState.Y;
+			ss << " @ $" << std::setw(4) << std::hex << addr;
+			break;
+		}
+
+		case AddrMode::Ind: {
+			uint8_t zeroAddr = *(_opPointer + 1);
+			uint16_t addr = memoryManager->DebugRead(zeroAddr) | memoryManager->DebugRead((uint8_t)(zeroAddr + 1)) << 8;
+			ss << " @ $" << std::setw(4) << std::hex << addr;
+			break;
+		}
+
+		case AddrMode::AbsX:
+		case AddrMode::AbsXW: {
+			uint16_t addr = (*(_opPointer + 1) | (*(_opPointer + 2) << 8)) + cpuState.X;
+			ss << " @ $" << std::setw(4) << std::hex << addr;
+			break;
+		}
+
+		case AddrMode::AbsY:
+		case AddrMode::AbsYW: {
+			uint16_t addr = (*(_opPointer + 1) | (*(_opPointer + 2) << 8)) + cpuState.Y;
+			ss << " @ $" << std::setfill('0') << std::setw(4) << std::hex << addr;
+			break;
+		}
+	}
+
+	return ss.str();
+}
 		
 string DisassemblyInfo::ToString(uint32_t memoryAddr)
 {

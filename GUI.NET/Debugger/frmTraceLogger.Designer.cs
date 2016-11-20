@@ -41,6 +41,7 @@
 			this.chkShowExtraInfo = new System.Windows.Forms.CheckBox();
 			this.chkShowByteCode = new System.Windows.Forms.CheckBox();
 			this.chkIndentCode = new System.Windows.Forms.CheckBox();
+			this.chkShowEffectiveAddresses = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpLogOptions.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -65,7 +66,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(339, 150);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(339, 193);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// btnOpenTrace
@@ -109,7 +110,7 @@
 			this.grpLogOptions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpLogOptions.Location = new System.Drawing.Point(3, 32);
 			this.grpLogOptions.Name = "grpLogOptions";
-			this.grpLogOptions.Size = new System.Drawing.Size(333, 90);
+			this.grpLogOptions.Size = new System.Drawing.Size(333, 132);
 			this.grpLogOptions.TabIndex = 3;
 			this.grpLogOptions.TabStop = false;
 			this.grpLogOptions.Text = "Log Contents";
@@ -118,24 +119,27 @@
 			// 
 			this.tableLayoutPanel2.ColumnCount = 3;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+			this.tableLayoutPanel2.Controls.Add(this.chkShowEffectiveAddresses, 0, 3);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowCpuCycles, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuCycles, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowRegisters, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuScanline, 1, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowFrameCount, 2, 1);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowExtraInfo, 0, 2);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowByteCode, 2, 2);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowExtraInfo, 0, 4);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowByteCode, 0, 2);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 4;
+			this.tableLayoutPanel2.RowCount = 6;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(327, 71);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(327, 113);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// chkShowCpuCycles
@@ -143,7 +147,7 @@
 			this.chkShowCpuCycles.AutoSize = true;
 			this.chkShowCpuCycles.Checked = true;
 			this.chkShowCpuCycles.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowCpuCycles.Location = new System.Drawing.Point(112, 3);
+			this.chkShowCpuCycles.Location = new System.Drawing.Point(111, 3);
 			this.chkShowCpuCycles.Name = "chkShowCpuCycles";
 			this.chkShowCpuCycles.Size = new System.Drawing.Size(82, 17);
 			this.chkShowCpuCycles.TabIndex = 3;
@@ -179,7 +183,7 @@
 			this.chkShowPpuScanline.AutoSize = true;
 			this.chkShowPpuScanline.Checked = true;
 			this.chkShowPpuScanline.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowPpuScanline.Location = new System.Drawing.Point(112, 26);
+			this.chkShowPpuScanline.Location = new System.Drawing.Point(111, 26);
 			this.chkShowPpuScanline.Name = "chkShowPpuScanline";
 			this.chkShowPpuScanline.Size = new System.Drawing.Size(92, 17);
 			this.chkShowPpuScanline.TabIndex = 6;
@@ -189,7 +193,7 @@
 			// chkShowFrameCount
 			// 
 			this.chkShowFrameCount.AutoSize = true;
-			this.chkShowFrameCount.Location = new System.Drawing.Point(221, 26);
+			this.chkShowFrameCount.Location = new System.Drawing.Point(220, 26);
 			this.chkShowFrameCount.Name = "chkShowFrameCount";
 			this.chkShowFrameCount.Size = new System.Drawing.Size(86, 17);
 			this.chkShowFrameCount.TabIndex = 7;
@@ -202,7 +206,7 @@
 			this.chkShowExtraInfo.Checked = true;
 			this.chkShowExtraInfo.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.tableLayoutPanel2.SetColumnSpan(this.chkShowExtraInfo, 2);
-			this.chkShowExtraInfo.Location = new System.Drawing.Point(3, 49);
+			this.chkShowExtraInfo.Location = new System.Drawing.Point(3, 95);
 			this.chkShowExtraInfo.Name = "chkShowExtraInfo";
 			this.chkShowExtraInfo.Size = new System.Drawing.Size(204, 17);
 			this.chkShowExtraInfo.TabIndex = 9;
@@ -214,7 +218,7 @@
 			this.chkShowByteCode.AutoSize = true;
 			this.chkShowByteCode.Checked = true;
 			this.chkShowByteCode.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowByteCode.Location = new System.Drawing.Point(221, 49);
+			this.chkShowByteCode.Location = new System.Drawing.Point(3, 49);
 			this.chkShowByteCode.Name = "chkShowByteCode";
 			this.chkShowByteCode.Size = new System.Drawing.Size(75, 17);
 			this.chkShowByteCode.TabIndex = 4;
@@ -225,18 +229,31 @@
 			// 
 			this.chkIndentCode.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.chkIndentCode, 3);
-			this.chkIndentCode.Location = new System.Drawing.Point(3, 128);
+			this.chkIndentCode.Location = new System.Drawing.Point(3, 170);
 			this.chkIndentCode.Name = "chkIndentCode";
 			this.chkIndentCode.Size = new System.Drawing.Size(194, 17);
 			this.chkIndentCode.TabIndex = 8;
 			this.chkIndentCode.Text = "Indent code based on stack pointer";
 			this.chkIndentCode.UseVisualStyleBackColor = true;
 			// 
+			// chkShowEffectiveAddresses
+			// 
+			this.chkShowEffectiveAddresses.AutoSize = true;
+			this.chkShowEffectiveAddresses.Checked = true;
+			this.chkShowEffectiveAddresses.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.tableLayoutPanel2.SetColumnSpan(this.chkShowEffectiveAddresses, 2);
+			this.chkShowEffectiveAddresses.Location = new System.Drawing.Point(3, 72);
+			this.chkShowEffectiveAddresses.Name = "chkShowEffectiveAddresses";
+			this.chkShowEffectiveAddresses.Size = new System.Drawing.Size(150, 17);
+			this.chkShowEffectiveAddresses.TabIndex = 10;
+			this.chkShowEffectiveAddresses.Text = "Show Effective Addresses";
+			this.chkShowEffectiveAddresses.UseVisualStyleBackColor = true;
+			// 
 			// frmTraceLogger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(339, 150);
+			this.ClientSize = new System.Drawing.Size(339, 193);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -269,5 +286,6 @@
 		private System.Windows.Forms.CheckBox chkShowExtraInfo;
 		private System.Windows.Forms.CheckBox chkIndentCode;
 		private System.Windows.Forms.Button btnOpenTrace;
+		private System.Windows.Forms.CheckBox chkShowEffectiveAddresses;
 	}
 }

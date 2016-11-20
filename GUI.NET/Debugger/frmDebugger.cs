@@ -32,6 +32,7 @@ namespace Mesen.GUI.Debugger
 
 			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
+			this.mnuShowEffectiveAddresses.Checked = ConfigManager.Config.DebugInfo.ShowEffectiveAddresses;
 			this.mnuShowCpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping;
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
 
@@ -87,13 +88,21 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void UpdateDebuggerFlags()
+		{
+			DebuggerFlags flags = mnuPpuPartialDraw.Checked ? DebuggerFlags.PpuPartialDraw : DebuggerFlags.None;
+			if(mnuShowEffectiveAddresses.Checked) {
+				flags |= DebuggerFlags.ShowEffectiveAddresses;
+			}
+			InteropEmu.DebugSetFlags(flags);
+		}
+
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
 					this.BeginInvoke((MethodInvoker)(() => UpdateDebugger()));
 					BreakpointManager.SetBreakpoints();
-					InteropEmu.DebugSetFlags(mnuPpuPartialDraw.Checked ? DebuggerFlags.PpuPartialDraw : DebuggerFlags.None);
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameReset:
@@ -122,6 +131,8 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateDebugger()
 		{
+			UpdateDebuggerFlags();
+
 			if(InteropEmu.DebugIsCodeChanged()) {
 				string code = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(InteropEmu.DebugGetCode());
 				ctrlDebuggerCode.Code = code;
@@ -409,6 +420,13 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.PpuPartialDraw = mnuPpuPartialDraw.Checked;
 			ConfigManager.ApplyChanges();
+		}
+		
+		private void mnuShowEffectiveAddresses_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowEffectiveAddresses = mnuShowEffectiveAddresses.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebugger();
 		}
 
 		private void mnuShowCpuMemoryMapping_CheckedChanged(object sender, EventArgs e)

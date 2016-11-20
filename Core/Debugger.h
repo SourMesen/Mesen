@@ -21,7 +21,8 @@ class Disassembler;
 
 enum class DebuggerFlags
 {
-	PpuPartialDraw = 1
+	PpuPartialDraw = 1,
+	ShowEffectiveAddresses = 2,
 };
 
 class Debugger

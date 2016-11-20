@@ -2,6 +2,8 @@
 #include "Disassembler.h"
 #include "DisassemblyInfo.h"
 #include "BaseMapper.h"
+#include "MemoryManager.h"
+#include "CPU.h"
 
 Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize)
 {
@@ -172,7 +174,7 @@ void Disassembler::InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr)
 	}
 }
 
-string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType)
+string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, State& cpuState, shared_ptr<MemoryManager> memoryManager)
 {
 	std::ostringstream output;
 	vector<shared_ptr<DisassemblyInfo>> *cache;
@@ -199,7 +201,8 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 				output << "\n";
 				byteCount = 0;
 			}
-			output << std::hex << std::uppercase << memoryAddr << ":" << addr << ":" << info->ToString(memoryAddr) << "\n";
+			string effectiveAddress = showEffectiveAddresses ? info->GetEffectiveAddress(cpuState, memoryManager) : "";
+			output << std::hex << std::uppercase << memoryAddr << ":" << addr << ":" << info->ToString(memoryAddr) << "||" << effectiveAddress << "\n";
 			addr += info->GetSize();
 			memoryAddr += info->GetSize();
 		} else {

@@ -28,6 +28,8 @@ namespace Mesen.GUI.Config
 		public bool PpuAutoRefresh = true;
 		public bool PpuPartialDraw = false;
 
+		public bool ShowEffectiveAddresses = true;
+
 		public bool ShowCpuMemoryMapping = true;
 		public bool ShowPpuMemoryMapping = true;
 

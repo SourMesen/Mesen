@@ -435,10 +435,12 @@ bool Debugger::IsCodeChanged()
 
 string Debugger::GenerateOutput()
 {
+	State cpuState = _cpu->GetState();
 	std::ostringstream output;
+	bool showEffectiveAddresses = CheckFlag(DebuggerFlags::ShowEffectiveAddresses);
 
 	//Get code in internal RAM
-	output << _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom);
+	output << _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, cpuState, _memoryManager);
 	output << "2000:::--END OF INTERNAL RAM--\n";
 
 	for(uint32_t i = 0x2000; i < 0x10000; i += 0x100) {
@@ -456,7 +458,7 @@ string Debugger::GenerateOutput()
 				romAddr += 0x100;
 				i+=0x100;
 			}
-			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::PrgRom);
+			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::PrgRom, showEffectiveAddresses, cpuState, _memoryManager);
 		} else if(ramAddr >= 0) {
 			startAddr = ramAddr;
 			endAddr = startAddr + 0xFF;
@@ -465,7 +467,7 @@ string Debugger::GenerateOutput()
 				ramAddr += 0x100;
 				i += 0x100;
 			}
-			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::WorkRam);
+			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::WorkRam, showEffectiveAddresses, cpuState, _memoryManager);
 		}
 	}
 
@@ -504,7 +506,7 @@ void Debugger::SetNextStatement(uint16_t addr)
 void Debugger::StartTraceLogger(TraceLoggerOptions options)
 {
 	string traceFilepath = FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), "Trace - " + FolderUtilities::GetFilename(_romName, false) + ".log");
-	_traceLogger.reset(new TraceLogger(traceFilepath, options));
+	_traceLogger.reset(new TraceLogger(traceFilepath, _memoryManager, options));
 }
 
 void Debugger::StopTraceLogger()

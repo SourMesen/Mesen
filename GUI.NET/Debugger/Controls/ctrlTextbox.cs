@@ -338,7 +338,7 @@ namespace Mesen.GUI.Debugger
 			int lineIndex;
 			if(this.GetCharIndex(position, out charIndex, out lineIndex)) {
 				string text = (useCompareText && _compareContents != null) ? _compareContents[lineIndex] : _contents[lineIndex];
-				List<char> wordDelimiters = new List<char>(new char[] { ' ', ',' });
+				List<char> wordDelimiters = new List<char>(new char[] { ' ', ',', '|', ';', '(', ')' });
 				if(wordDelimiters.Contains(text[charIndex])) {
 					return string.Empty;
 				} else {
@@ -444,6 +444,14 @@ namespace Mesen.GUI.Debugger
 
 		private void DrawLine(Graphics g, int currentLine, int marginLeft, int positionY)
 		{
+			string[] lineContent = _contents[currentLine].Split(new string[] { "||" }, StringSplitOptions.None);
+			string codeString = lineContent.Length > 0 ? lineContent[0] : "";
+			string addressString = lineContent.Length > 1 ? lineContent[1] : "";
+			string commentString = lineContent.Length > 2 ? lineContent[2] : "";
+
+			float codeStringLength = g.MeasureString(codeString, this.Font).Width;
+			float addressStringLength = g.MeasureString(addressString, this.Font).Width;
+
 			if(this.ShowLineNumbers) {
 				//Show line number
 				string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
@@ -466,16 +474,14 @@ namespace Mesen.GUI.Debugger
 				LineProperties lineProperties = _lineProperties[currentLine];
 				textColor = lineProperties.FgColor ?? Color.Black;
 
-				float stringLength = g.MeasureString(_contents[currentLine], this.Font).Width;
-
 				if(lineProperties.BgColor.HasValue) {
 					using(Brush bgBrush = new SolidBrush(lineProperties.BgColor.Value)) {
-						g.FillRectangle(bgBrush, marginLeft + 1, positionY + 1, stringLength, this.LineHeight-1);
+						g.FillRectangle(bgBrush, marginLeft + 1, positionY + 1, codeStringLength, this.LineHeight-1);
 					}
 				}
 				if(lineProperties.OutlineColor.HasValue) {
 					using(Pen outlinePen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-						g.DrawRectangle(outlinePen, marginLeft + 1, positionY + 1, stringLength, this.LineHeight-1);
+						g.DrawRectangle(outlinePen, marginLeft + 1, positionY + 1, codeStringLength, this.LineHeight-1);
 					}
 				}
 
@@ -508,14 +514,21 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			string lineText = _contents[currentLine];
 			using(Brush fgBrush = new SolidBrush(textColor)) {
-				g.DrawString(lineText, this.Font, fgBrush, marginLeft, positionY);
+				g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY);
+
+				using(Brush addressBrush = new SolidBrush(Color.SteelBlue)) {
+					g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength, positionY);
+				}
+				using(Brush commentBrush = new SolidBrush(Color.DarkGreen)) {
+					g.DrawString(commentString, this.Font, commentBrush, Math.Max(marginLeft + 220, marginLeft + codeStringLength + addressStringLength), positionY);
+				}
+
 				if(this.ShowContentNotes) {
 					g.DrawString(_contentNotes[currentLine], _noteFont, Brushes.Gray, marginLeft, positionY + this.Font.Size+3);
 				}
-				this.DrawHighlightedSearchString(g, lineText, marginLeft, positionY);
-				this.DrawHighlightedCompareString(g, lineText, currentLine, marginLeft, positionY);
+				this.DrawHighlightedSearchString(g, codeString, marginLeft, positionY);
+				this.DrawHighlightedCompareString(g, codeString, currentLine, marginLeft, positionY);
 			}
 		}
 
