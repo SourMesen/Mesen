@@ -16,6 +16,7 @@
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
+			BreakpointManager.BreakpointsChanged -= BreakpointManager_OnBreakpointChanged;
 			base.Dispose(disposing);
 		}
 
