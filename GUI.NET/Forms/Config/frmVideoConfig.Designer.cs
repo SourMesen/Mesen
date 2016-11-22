@@ -108,6 +108,8 @@
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteNostalgia = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteNesClassic = new System.Windows.Forms.ToolStripMenuItem();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -1084,11 +1086,13 @@
 			this.contextPaletteList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuDefaultPalette,
             this.toolStripMenuItem1,
+            this.mnuPaletteNostalgia,
+            this.mnuPaletteNesClassic,
             this.mnuPaletteUnsaturated,
             this.mnuPaletteYuv,
             this.mnuPaletteNestopiaRgb});
 			this.contextPaletteList.Name = "contextPicturePresets";
-			this.contextPaletteList.Size = new System.Drawing.Size(236, 98);
+			this.contextPaletteList.Size = new System.Drawing.Size(236, 142);
 			this.contextPaletteList.Opening += new System.ComponentModel.CancelEventHandler(this.contextPaletteList_Opening);
 			// 
 			// mnuDefaultPalette
@@ -1123,6 +1127,20 @@
 			this.mnuPaletteNestopiaRgb.Size = new System.Drawing.Size(235, 22);
 			this.mnuPaletteNestopiaRgb.Text = "Nestopia (RGB)";
 			this.mnuPaletteNestopiaRgb.Click += new System.EventHandler(this.mnuPaletteNestopiaRgb_Click);
+			// 
+			// mnuPaletteNostalgia
+			// 
+			this.mnuPaletteNostalgia.Name = "mnuPaletteNostalgia";
+			this.mnuPaletteNostalgia.Size = new System.Drawing.Size(235, 22);
+			this.mnuPaletteNostalgia.Text = "Nostalgia (by FirebrandX)";
+			this.mnuPaletteNostalgia.Click += new System.EventHandler(this.mnuPaletteNostalgia_Click);
+			// 
+			// mnuPaletteNesClassic
+			// 
+			this.mnuPaletteNesClassic.Name = "mnuPaletteNesClassic";
+			this.mnuPaletteNesClassic.Size = new System.Drawing.Size(235, 22);
+			this.mnuPaletteNesClassic.Text = "NES Classic (by FirebrandX)";
+			this.mnuPaletteNesClassic.Click += new System.EventHandler(this.mnuPaletteNesClassic_Click);
 			// 
 			// frmVideoConfig
 			// 
@@ -1271,5 +1289,7 @@
 		private System.Windows.Forms.CheckBox chkDisableSprites;
 		private System.Windows.Forms.CheckBox chkForceBackgroundFirstColumn;
 		private System.Windows.Forms.CheckBox chkForceSpritesFirstColumn;
+		private System.Windows.Forms.ToolStripMenuItem mnuPaletteNostalgia;
+		private System.Windows.Forms.ToolStripMenuItem mnuPaletteNesClassic;
 	}
 }
