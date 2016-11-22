@@ -55,11 +55,12 @@ struct State
 
 class CPU : public Snapshotable
 {
-private:
+public:
 	static const uint16_t NMIVector = 0xFFFA;
 	static const uint16_t ResetVector = 0xFFFC;
 	static const uint16_t IRQVector = 0xFFFE;
 
+private:
 	static CPU* Instance;
 
 	typedef void(CPU::*Func)();

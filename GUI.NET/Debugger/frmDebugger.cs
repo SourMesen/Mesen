@@ -35,6 +35,9 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowEffectiveAddresses.Checked = ConfigManager.Config.DebugInfo.ShowEffectiveAddresses;
 			this.mnuShowCpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping;
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
+			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
+
+			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
 
 			_lastCodeWindow = ctrlDebuggerCode;
 
@@ -94,6 +97,9 @@ namespace Mesen.GUI.Debugger
 			if(mnuShowEffectiveAddresses.Checked) {
 				flags |= DebuggerFlags.ShowEffectiveAddresses;
 			}
+			if(mnuShowOnlyDisassembledCode.Checked) {
+				flags |= DebuggerFlags.ShowOnlyDisassembledCode;
+			}
 			InteropEmu.DebugSetFlags(flags);
 		}
 
@@ -129,13 +135,13 @@ namespace Mesen.GUI.Debugger
 			return mnuSplitView.Checked;
 		}
 
-		private void UpdateDebugger()
+		private void UpdateDebugger(bool updateActiveAddress = true)
 		{
 			ctrlFunctionList.UpdateFunctionList();
 			UpdateDebuggerFlags();
 
 			if(InteropEmu.DebugIsCodeChanged()) {
-				string code = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(InteropEmu.DebugGetCode());
+				string code = InteropEmu.DebugGetCode();
 				ctrlDebuggerCode.Code = code;
 				ctrlDebuggerCodeSplit.Code = code;
 			}
@@ -149,8 +155,10 @@ namespace Mesen.GUI.Debugger
 				_lastCodeWindow = ctrlDebuggerCode;
 			}
 
-			ctrlDebuggerCode.SelectActiveAddress(state.CPU.DebugPC);
-			ctrlDebuggerCodeSplit.SetActiveAddress(state.CPU.DebugPC);
+			if(updateActiveAddress) {
+				ctrlDebuggerCode.SelectActiveAddress(state.CPU.DebugPC);
+				ctrlDebuggerCodeSplit.SetActiveAddress(state.CPU.DebugPC);
+			}
 			RefreshBreakpoints();
 
 			ctrlConsoleStatus.UpdateStatus(ref state);
@@ -282,7 +290,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.SplitView = this.mnuSplitView.Checked;
 			ConfigManager.ApplyChanges();
 
-			UpdateDebugger();
+			UpdateDebugger(false);
 		}
 
 		private void mnuMemoryViewer_Click(object sender, EventArgs e)
@@ -423,11 +431,18 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 		
-		private void mnuShowEffectiveAddresses_Click(object sender, EventArgs e)
+		private void mnuShowEffectiveAddresses_CheckedChanged(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.ShowEffectiveAddresses = mnuShowEffectiveAddresses.Checked;
 			ConfigManager.ApplyChanges();
-			UpdateDebugger();
+			UpdateDebugger(false);
+		}
+
+		private void mnuShowOnlyDisassembledCode_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode = mnuShowOnlyDisassembledCode.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebugger(false);
 		}
 
 		private void mnuShowCpuMemoryMapping_CheckedChanged(object sender, EventArgs e)
@@ -455,6 +470,17 @@ namespace Mesen.GUI.Debugger
 		}
 
 		private void ctrlFunctionList_OnFunctionSelected(object relativeAddress, EventArgs e)
+		{
+			_lastCodeWindow.ScrollToLineNumber((Int32)relativeAddress);
+		}
+
+		private void LabelManager_OnLabelUpdated(object sender, EventArgs e)
+		{
+			UpdateDebugger(false);
+			ctrlLabelList.UpdateLabelList();
+		}
+
+		private void ctrlLabelList_OnLabelSelected(object relativeAddress, EventArgs e)
 		{
 			_lastCodeWindow.ScrollToLineNumber((Int32)relativeAddress);
 		}

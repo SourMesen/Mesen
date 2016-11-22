@@ -4,9 +4,11 @@
 #include <atomic>
 #include <deque>
 #include <unordered_set>
+#include <unordered_map>
 using std::atomic;
 using std::deque;
 using std::unordered_set;
+using std::unordered_map;
 
 #include "DebugState.h"
 #include "Breakpoint.h"
@@ -25,6 +27,7 @@ enum class DebuggerFlags
 {
 	PpuPartialDraw = 1,
 	ShowEffectiveAddresses = 2,
+	ShowOnlyDisassembledCode = 4
 };
 
 class Debugger
@@ -53,6 +56,9 @@ private:
 	vector<Breakpoint> _newBreakpoints;
 	vector<Breakpoint> _breakpoints[BreakpointTypeCount];
 	bool _hasBreakpoint[BreakpointTypeCount];
+
+	unordered_map<uint32_t, string> _codeLabels;
+	unordered_map<uint32_t, string> _codeComments;
 
 	deque<uint32_t> _callstackAbsolute;
 	deque<uint32_t> _callstackRelative;
@@ -99,6 +105,7 @@ public:
 	bool CheckFlag(DebuggerFlags flag);
 	
 	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
+	void SetLabel(uint32_t address, string label, string comment);
 
 	void GetFunctionEntryPoints(int32_t* entryPoints);
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);

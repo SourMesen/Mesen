@@ -30,6 +30,12 @@ namespace Mesen.GUI.Debugger
 			remove { this.ctrlTextbox.MouseDown -= value; }
 		}
 
+		public new event MouseEventHandler MouseDoubleClick
+		{
+			add { this.ctrlTextbox.MouseDoubleClick += value; }
+			remove { this.ctrlTextbox.MouseDoubleClick -= value; }
+		}
+
 		public event EventHandler FontSizeChanged;
 
 		public ctrlScrollableTextbox()

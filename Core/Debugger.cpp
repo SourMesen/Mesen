@@ -97,7 +97,7 @@ bool Debugger::LoadCdlFile(string cdlFilepath)
 	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {
 		for(int i = 0, len = _mapper->GetPrgSize(); i < len; i++) {
 			if(_codeDataLogger->IsCode(i)) {
-				i = _disassembler->BuildCache(i, -1, 0xFFFF, false) - 1;
+				i = _disassembler->BuildCache(i, -1, 0xFFFF, _codeDataLogger->IsSubEntryPoint(i)) - 1;
 			}
 		}
 
@@ -125,6 +125,19 @@ void Debugger::ResetCdlLog()
 CdlRatios Debugger::GetCdlRatios()
 {
 	return _codeDataLogger->GetRatios();
+}
+
+void Debugger::SetLabel(uint32_t address, string label, string comment)
+{
+	_codeLabels.erase(address);
+	if(!label.empty()) {
+		_codeLabels.emplace(address, label);
+	}
+
+	_codeComments.erase(address);
+	if(!comment.empty()) {
+		_codeComments.emplace(address, comment);
+	}
 }
 
 void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
@@ -449,10 +462,11 @@ string Debugger::GenerateOutput()
 	State cpuState = _cpu->GetState();
 	std::ostringstream output;
 	bool showEffectiveAddresses = CheckFlag(DebuggerFlags::ShowEffectiveAddresses);
+	bool showOnlyDiassembledCode = CheckFlag(DebuggerFlags::ShowOnlyDisassembledCode);
 
 	//Get code in internal RAM
-	output << _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, cpuState, _memoryManager);
-	output << "2000:::--END OF INTERNAL RAM--\n";
+	output << _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _codeLabels, _codeComments);
+	output << "2000\x1\x1\x1--End of internal RAM--\n";
 
 	for(uint32_t i = 0x2000; i < 0x10000; i += 0x100) {
 		//Merge all sequential ranges into 1 chunk
@@ -469,7 +483,7 @@ string Debugger::GenerateOutput()
 				romAddr += 0x100;
 				i+=0x100;
 			}
-			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::PrgRom, showEffectiveAddresses, cpuState, _memoryManager);
+			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _codeLabels, _codeComments);
 		} else if(ramAddr >= 0) {
 			startAddr = ramAddr;
 			endAddr = startAddr + 0xFF;
@@ -478,7 +492,7 @@ string Debugger::GenerateOutput()
 				ramAddr += 0x100;
 				i += 0x100;
 			}
-			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::WorkRam, showEffectiveAddresses, cpuState, _memoryManager);
+			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::WorkRam, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _codeLabels, _codeComments);
 		}
 	}
 

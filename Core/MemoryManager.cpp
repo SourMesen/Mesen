@@ -101,6 +101,11 @@ uint8_t MemoryManager::DebugRead(uint16_t addr)
 	return value;
 }
 
+uint16_t MemoryManager::DebugReadWord(uint16_t addr)
+{
+	return DebugRead(addr) | (DebugRead(addr + 1) << 8);
+}
+
 void MemoryManager::ProcessCpuClock()
 {
 	_mapper->ProcessCpuClock();
@@ -177,6 +182,11 @@ void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
 	Debugger::ProcessVramOperation(MemoryOperationType::Write, addr, value);	
 	ProcessVramAccess(addr);
 	_mapper->WriteVRAM(addr, value);
+}
+
+uint32_t MemoryManager::ToAbsolutePrgAddress(uint16_t ramAddr)
+{
+	return _mapper->ToAbsoluteAddress(ramAddr);
 }
 
 uint32_t MemoryManager::ToAbsoluteChrAddress(uint16_t vramAddr)

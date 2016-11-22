@@ -39,6 +39,7 @@ class MemoryManager: public Snapshotable
 		void RegisterIODevice(IMemoryHandler *handler);
 
 		uint8_t DebugRead(uint16_t addr);
+		uint16_t DebugReadWord(uint16_t addr);
 		uint8_t DebugReadVRAM(uint16_t addr);
 		void DebugWrite(uint16_t addr, uint8_t value);
 
@@ -53,6 +54,7 @@ class MemoryManager: public Snapshotable
 		uint8_t ReadVRAM(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::PpuRenderingRead);
 		void WriteVRAM(uint16_t addr, uint8_t value);
 
+		uint32_t ToAbsolutePrgAddress(uint16_t ramAddr);
 		uint32_t ToAbsoluteChrAddress(uint16_t vramAddr);
 
 		static uint8_t GetOpenBus(uint8_t mask = 0xFF);

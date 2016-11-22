@@ -27,7 +27,6 @@ namespace Mesen.GUI.Debugger
 		public void SetConfig(DebugViewInfo config)
 		{
 			_config = config;
-			this.mnuShowOnlyDisassembledCode.Checked = config.ShowOnlyDiassembledCode;
 			this.mnuShowLineNotes.Checked = config.ShowPrgAddresses;
 			this.mnuShowCodeNotes.Checked = config.ShowByteCode;
 			this.FontSize = config.FontSize;
@@ -38,7 +37,6 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateConfig()
 		{
-			_config.ShowOnlyDiassembledCode = this.mnuShowOnlyDisassembledCode.Checked;
 			_config.ShowPrgAddresses = this.mnuShowLineNotes.Checked;
 			_config.ShowByteCode = this.mnuShowCodeNotes.Checked;
 			_config.FontSize = this.FontSize;
@@ -102,50 +100,17 @@ namespace Mesen.GUI.Debugger
 				List<string> lineNumberNotes = new List<string>();
 				List<string> codeNotes = new List<string>();
 				List<string> codeLines = new List<string>();
-				bool diassembledCodeOnly = mnuShowOnlyDisassembledCode.Checked;
-				bool skippingCode = false;
+				
 				string[] lines = _code.Split('\n');
 				for(int i = 0, len = lines.Length - 1; i < len; i++) {
 					string line = lines[i];
-					string[] lineParts = line.Split(':');
-					if(skippingCode && (i == len - 1 || lineParts[3][0] != '.')) {
-						lineNumbers.Add(-1);
-						lineNumberNotes.Add("");
-						codeLines.Add("[code not disassembled]");
-						codeNotes.Add("");
-
-						int address = (int)ParseHexAddress(lineParts[0]);
-						if(i != len - 1 || lineParts[3][0] != '.') {
-							address--;
-						} else if(i == len - 1 && lineParts[3][0] == '.' && address >= 0xFFF8) {
-							address = 0xFFFF;
-						}
-						lineNumbers.Add(address);
-						lineNumberNotes.Add(lineParts[1]);
-						codeLines.Add("[code not disassembled]");
-						codeNotes.Add("");
-
-						skippingCode = false;
-						if(i == len - 1 && lineParts[3][0] == '.') {
-							break;
-						}
-					}
-
+					string[] lineParts = line.Split('\x1');
+					
 					if(lineParts.Length >= 4) {
-						if(diassembledCodeOnly && lineParts[3][0] == '.') {
-							if(!skippingCode) {
-								lineNumbers.Add((int)ParseHexAddress(lineParts[0]));
-								lineNumberNotes.Add(lineParts[1]);
-								codeLines.Add("[code not disassembled]");
-								codeNotes.Add("");
-								skippingCode = true;
-							}
-						} else {
-							lineNumbers.Add((int)ParseHexAddress(lineParts[0]));
-							lineNumberNotes.Add(lineParts[1]);
-							codeLines.Add(lineParts[3]);
-							codeNotes.Add(lineParts[2]);
-						}
+						lineNumbers.Add(ParseHexAddress(lineParts[0]));
+						lineNumberNotes.Add(lineParts[1]);
+						codeNotes.Add(lineParts[2]);
+						codeLines.Add(lineParts[3]);
 					}
 				}
 
@@ -160,9 +125,13 @@ namespace Mesen.GUI.Debugger
 			return false;
 		}
 
-		private UInt32 ParseHexAddress(string hexAddress)
+		private int ParseHexAddress(string hexAddress)
 		{
-			return UInt32.Parse(hexAddress, System.Globalization.NumberStyles.AllowHexSpecifier);
+			if(string.IsNullOrWhiteSpace(hexAddress)) {
+				return -1;
+			} else {
+				return (int)UInt32.Parse(hexAddress, System.Globalization.NumberStyles.AllowHexSpecifier);
+			}
 		}
 
 		public void HighlightBreakpoints()
@@ -211,7 +180,19 @@ namespace Mesen.GUI.Debugger
 					string valueText = "$" + memoryValue.ToString("X");
 					toolTip.Show(valueText, ctrlCodeViewer, e.Location.X + 5, e.Location.Y - 20, 3000);
 				} else {
-					toolTip.Hide(ctrlCodeViewer);
+					CodeLabel label = LabelManager.GetLabel(word);
+
+					if(label == null) {
+						toolTip.Hide(ctrlCodeViewer);
+					} else {
+						Byte memoryValue = InteropEmu.DebugGetMemoryValue(label.Address);
+						toolTip.Show(
+							"Label: " + label.Label + Environment.NewLine + 
+							"Address: $" + InteropEmu.DebugGetRelativeAddress(label.Address).ToString("X4") + Environment.NewLine + 
+							"Value: $" + memoryValue.ToString("X2") + Environment.NewLine +
+							"Comment: " + (label.Comment.Contains(Environment.NewLine) ? (Environment.NewLine + label.Comment) : label.Comment)
+						, ctrlCodeViewer, e.Location.X + 5, e.Location.Y - 60 - label.Comment.Split('\n').Length * 14, 3000);
+					}
 				}
 				_previousLocation = e.Location;
 			}
@@ -251,6 +232,26 @@ namespace Mesen.GUI.Debugger
 						BreakpointManager.AddBreakpoint(bp);
 					} else {
 						BreakpointManager.RemoveBreakpoint(_lineBreakpoint);
+					}
+				}
+			}
+		}
+		
+		private void ctrlCodeViewer_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			int address = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
+
+			if(address >= 0 && e.Location.X > this.ctrlCodeViewer.CodeMargin / 2 && e.Location.X < this.ctrlCodeViewer.CodeMargin) {
+				UInt32 absoluteAddr = (UInt32)InteropEmu.DebugGetAbsoluteAddress((UInt32)address);
+				CodeLabel existingLabel = LabelManager.GetLabel(absoluteAddr);
+				CodeLabel newLabel = new CodeLabel() { Label = existingLabel?.Label, Comment = existingLabel?.Comment };
+
+				frmEditLabel frm = new frmEditLabel(absoluteAddr, newLabel);
+				if(frm.ShowDialog() == DialogResult.OK) {
+					if(string.IsNullOrWhiteSpace(newLabel.Label) && string.IsNullOrWhiteSpace(newLabel.Comment)) {
+						LabelManager.DeleteLabel(absoluteAddr);
+					} else {
+						LabelManager.SetLabel(absoluteAddr, newLabel.Label, newLabel.Comment);
 					}
 				}
 			}

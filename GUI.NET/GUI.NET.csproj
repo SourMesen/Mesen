@@ -278,6 +278,12 @@
     <Compile Include="Debugger\Controls\ctrlAddressList.Designer.cs">
       <DependentUpon>ctrlAddressList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlLabelList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlLabelList.Designer.cs">
+      <DependentUpon>ctrlLabelList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlFunctionList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -343,6 +349,12 @@
     <Compile Include="Debugger\Controls\ctrlWatch.Designer.cs">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmEditLabel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmEditLabel.Designer.cs">
+      <DependentUpon>frmEditLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmBreakpoint.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -379,6 +391,7 @@
     <Compile Include="Debugger\frmTraceLogger.Designer.cs">
       <DependentUpon>frmTraceLogger.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\LabelManager.cs" />
     <Compile Include="Forms\BaseConfigForm.Designer.cs">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>
     </Compile>
@@ -582,6 +595,9 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlAddressList.resx">
       <DependentUpon>ctrlAddressList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlLabelList.resx">
+      <DependentUpon>ctrlLabelList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlFunctionList.resx">
       <DependentUpon>ctrlFunctionList.cs</DependentUpon>
     </EmbeddedResource>
@@ -611,6 +627,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlWatch.resx">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmEditLabel.resx">
+      <DependentUpon>frmEditLabel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmBreakpoint.resx">
       <DependentUpon>frmBreakpoint.cs</DependentUpon>

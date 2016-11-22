@@ -174,9 +174,25 @@ void Disassembler::InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr)
 	}
 }
 
-string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, State& cpuState, shared_ptr<MemoryManager> memoryManager)
+vector<string> Disassembler::SplitComment(string input)
 {
+	vector<string> result;
+	size_t index;
+	while((index = input.find('\n')) != string::npos) {
+		result.push_back(input.substr(0, index));
+		input = input.substr(index + 1, input.size() - index - 1);
+	}
+	result.push_back(input);
+	return result;
+}
+
+string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, unordered_map<uint32_t, string> &codeLabels, unordered_map<uint32_t, string> &codeComments) {
 	std::ostringstream output;
+
+	uint16_t resetVector = memoryManager->DebugReadWord(CPU::ResetVector);
+	uint16_t nmiVector = memoryManager->DebugReadWord(CPU::NMIVector);
+	uint16_t irqVector = memoryManager->DebugReadWord(CPU::IRQVector);
+
 	vector<shared_ptr<DisassemblyInfo>> *cache;
 	uint8_t *source;
 	uint32_t mask = 0xFFFFFFFF;
@@ -194,32 +210,128 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 
 	uint32_t addr = startAddr;
 	uint32_t byteCount = 0;
+	bool skippingCode = false;
 	while(addr <= endAddr) {
-		shared_ptr<DisassemblyInfo> info;
-		if(info = (*cache)[addr&mask]) {
+		auto labelSearch = codeLabels.find(addr);
+		auto commentSearch = codeComments.find(addr);
+		string label = labelSearch != codeLabels.end() ? labelSearch->second : "";
+		string labelString = label.empty() ? "" : ("\x1\x1\x1" + labelSearch->second + ":\n");
+		string commentString = commentSearch != codeComments.end() ? commentSearch->second : "";
+		bool multilineComment = commentString.find_first_of('\n') != string::npos;
+		string singleLineComment = "";
+		string multiLineComment = "";
+		if(multilineComment) {
+			for(string &str : SplitComment(commentString)) {
+				multiLineComment += "\x1\x1\x1\x2\x2;" + str + "\n";
+			}
+		} else if(!commentString.empty()) {
+			singleLineComment = "\x2;" + commentString;
+		}
+
+		shared_ptr<DisassemblyInfo> info = (*cache)[addr&mask];
+		if(info) {
 			if(byteCount > 0) {
 				output << "\n";
 				byteCount = 0;
+			} 
+			
+			if(skippingCode) {
+				output << std::hex << std::uppercase << (memoryAddr - 1) << "\x1" << (addr - 1) << "\x1\x1";
+				if(showOnlyDiassembledCode) {
+					output << "----\n";
+				} else {
+					output << "__unknown block__\n";
+				}
+				skippingCode = false;
 			}
-			string effectiveAddress = showEffectiveAddresses ? info->GetEffectiveAddress(cpuState, memoryManager) : "";
-			output << std::hex << std::uppercase << memoryAddr << ":" << addr << ":" << info->ToString(memoryAddr) << "||" << effectiveAddress << "\n";
+
+			string effectiveAddress = showEffectiveAddresses ? info->GetEffectiveAddressString(cpuState, memoryManager, &codeLabels) : "";
+
+			if(info->IsSubEntryPoint()) {
+				if(label.empty()) {
+					output << "\x1\x1\x1\n\x1\x1\x1--sub start--\n";
+				} else {
+					output << "\x1\x1\x1\n\x1\x1\x1--" + label + "()--\n";
+				}
+			} else if(memoryAddr == resetVector) {
+				output << "\x1\x1\x1\n\x1\x1\x1--reset--\n";
+			} else if(memoryAddr == irqVector) {
+				output << "\x1\x1\x1\n\x1\x1\x1--irq--\n";
+			} else if(memoryAddr == nmiVector) {
+				output << "\x1\x1\x1\n\x1\x1\x1--nmi--\n";
+			}
+
+			output << multiLineComment;
+			output << labelString;
+			output << std::hex << std::uppercase << memoryAddr << "\x1" << addr << "\x1" << info->GetByteCode() << "\x1  " << info->ToString(memoryAddr, memoryManager, &codeLabels) << "\x2" << effectiveAddress;
+			output << singleLineComment;
+
+			output << "\n";
+
+			if(info->IsSubExitPoint()) {
+				output << "\x1\x1\x1__sub end__\n\x1\x1\x1\n";
+			}
+
 			addr += info->GetSize();
 			memoryAddr += info->GetSize();
 		} else {
-			if(byteCount >= 8) {
-				output << "\n";
-				byteCount = 0;
+			if(!skippingCode) {
+				output << std::hex << std::uppercase << memoryAddr << "\x1" << addr << "\x1\x1";
+				if(showOnlyDiassembledCode) {
+					output << "____\n\x1\x1\x1";
+					if(label.empty()) {
+						output << "[[unknown block]]\n";
+					} else {
+						output << "[[" << label << "]]\n";
+						if(!singleLineComment.empty()) {
+							output << "\x1\x1\x1" << singleLineComment << "\n";
+						} else {
+							output << multiLineComment;
+						}
+					}
+				} else {
+					output << "--unknown block--\n";
+				}
+				skippingCode = true;
 			}
-			if(byteCount == 0) {
-				output << std::hex << std::uppercase << memoryAddr << ":" << addr << "::" << ".db";
-			}
-			output << std::hex << " $" << std::setfill('0') << std::setw(2) << (short)source[addr&mask];
 
-			byteCount++;
+			if(!showOnlyDiassembledCode) {
+				if(byteCount >= 8 || !label.empty() || !commentString.empty()) {
+					output << "\n";
+					byteCount = 0;
+				}
+				if(byteCount == 0) {
+					output << multiLineComment;
+					output << labelString;
+					output << std::hex << std::uppercase << memoryAddr << "\x1" << addr << "\x1\x1" << ".db";
+					output << singleLineComment;
+
+					if(!label.empty() || !commentString.empty()) {
+						byteCount = 7;
+					}
+				}
+				output << std::hex << " $" << std::setfill('0') << std::setw(2) << (short)source[addr&mask];
+
+				byteCount++;
+			}
 			addr++;
 			memoryAddr++;
 		}
 	}
+
+	if(skippingCode) {
+		if(byteCount != 0) {
+			output << "\n";
+		}
+
+		output << std::hex << std::uppercase << (memoryAddr - 1) << "\x1" << (addr - 1) << "\x1\x1";
+		if(showOnlyDiassembledCode) {
+			output << "----\n";
+		} else {
+			output << "__unknown block__\n";
+		}
+	}
+
 	output << "\n";
 		
 	return output.str();

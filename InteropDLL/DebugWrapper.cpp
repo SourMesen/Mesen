@@ -31,6 +31,7 @@ extern "C"
 	DllExport void __stdcall DebugGetState(DebugState *state) { GetDebugger()->GetState(state); }
 
 	DllExport void __stdcall DebugSetBreakpoints(Breakpoint breakpoints[], uint32_t length) { GetDebugger()->SetBreakpoints(breakpoints, length); }
+	DllExport void __stdcall DebugSetLabel(uint32_t address, char* label, char* comment) { GetDebugger()->SetLabel(address, label, comment); }
 		
 	DllExport void __stdcall DebugRun() { GetDebugger()->Run(); }
 	DllExport void __stdcall DebugStep(uint32_t count) { GetDebugger()->Step(count); }
@@ -55,6 +56,7 @@ extern "C"
 	
 	DllExport uint8_t __stdcall DebugGetMemoryValue(uint32_t addr) { return GetDebugger()->GetMemoryValue(addr); }
 	DllExport int32_t __stdcall DebugGetRelativeAddress(uint32_t addr) { return GetDebugger()->GetRelativeAddress(addr); }
+	DllExport int32_t __stdcall DebugGetAbsoluteAddress(uint32_t addr) { return GetDebugger()->GetAbsoluteAddress(addr); }
 
 	DllExport bool __stdcall DebugLoadCdlFile(char* cdlFilepath) { return GetDebugger()->LoadCdlFile(cdlFilepath); }
 	DllExport bool __stdcall DebugSaveCdlFile(char* cdlFilepath) { return GetDebugger()->SaveCdlFile(cdlFilepath); }

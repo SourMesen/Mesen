@@ -12,7 +12,6 @@ namespace Mesen.GUI.Config
 {
 	public class DebugViewInfo
 	{
-		public bool ShowOnlyDiassembledCode = true;
 		public bool ShowByteCode = false;
 		public bool ShowPrgAddresses = false;
 		public float FontSize = 13;
@@ -22,6 +21,9 @@ namespace Mesen.GUI.Config
 	{
 		public DebugViewInfo LeftView;
 		public DebugViewInfo RightView;
+
+		public bool ShowOnlyDisassembledCode = true;
+
 		public bool SplitView = false;
 		public bool HexDisplay = true;
 

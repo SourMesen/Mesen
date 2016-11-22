@@ -32,7 +32,6 @@
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuShowOnlyDisassembledCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowLineNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCodeNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
@@ -54,7 +53,6 @@
             this.mnuShowNextStatement,
             this.mnuSetNextStatement,
             this.toolStripMenuItem1,
-            this.mnuShowOnlyDisassembledCode,
             this.mnuShowLineNotes,
             this.mnuShowCodeNotes,
             this.toolStripMenuItem2,
@@ -86,16 +84,6 @@
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(255, 6);
-			// 
-			// mnuShowOnlyDisassembledCode
-			// 
-			this.mnuShowOnlyDisassembledCode.Checked = true;
-			this.mnuShowOnlyDisassembledCode.CheckOnClick = true;
-			this.mnuShowOnlyDisassembledCode.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.mnuShowOnlyDisassembledCode.Name = "mnuShowOnlyDisassembledCode";
-			this.mnuShowOnlyDisassembledCode.Size = new System.Drawing.Size(258, 22);
-			this.mnuShowOnlyDisassembledCode.Text = "Show Only Disassembled Code";
-			this.mnuShowOnlyDisassembledCode.Click += new System.EventHandler(this.mnuShowOnlyDisassembledCode_Click);
 			// 
 			// mnuShowLineNotes
 			// 
@@ -146,6 +134,7 @@
 			this.ctrlCodeViewer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseUp);
 			this.ctrlCodeViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseMove);
 			this.ctrlCodeViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDown);
+			this.ctrlCodeViewer.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDoubleClick);
 			this.ctrlCodeViewer.FontSizeChanged += new System.EventHandler(this.ctrlCodeViewer_FontSizeChanged);
 			// 
 			// contextMenuMargin
@@ -199,7 +188,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuShowNextStatement;
 		private System.Windows.Forms.ToolStripMenuItem mnuSetNextStatement;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-		private System.Windows.Forms.ToolStripMenuItem mnuShowOnlyDisassembledCode;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToLocation;
 		private System.Windows.Forms.ToolStripMenuItem mnuAddToWatch;

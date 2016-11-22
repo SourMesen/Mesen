@@ -36,6 +36,7 @@ namespace Mesen.GUI.Debugger
 		private string[] _contentNotes = new string[0];
 		private string[] _compareContents = null;
 		private int[] _lineNumbers = new int[0];
+		private int[] _lineMargins = new int[0];		
 		private string[] _lineNumberNotes = new string[0];
 		private Dictionary<int, int> _lineNumberIndex = new Dictionary<int,int>();
 		private Dictionary<int, LineProperties> _lineProperties = new Dictionary<int,LineProperties>();
@@ -61,7 +62,13 @@ namespace Mesen.GUI.Debugger
 		{
 			set
 			{
-				_contents = value;
+				_contents = new string[value.Length];
+				_lineMargins = new int[value.Length];
+				for(int i = 0, len = value.Length; i < len; i++) {
+					_contents[i] = value[i].TrimStart();
+					_lineMargins[i] = (value[i].Length - _contents[i].Length) * 10;
+				}
+
 				_lineNumbers = new int[_contents.Length];
 				_lineNumberIndex.Clear();
 				for(int i = _contents.Length - 1; i >=0; i--) {
@@ -317,7 +324,10 @@ namespace Mesen.GUI.Debugger
 				}
 
 				if(positionX >= 0 && lineIndex < _contents.Length) {
-					string text = _contents[lineIndex];
+					string text = _contents[lineIndex].Replace("\x2", "");
+					//Adjust background color highlights based on number of spaces in front of content
+					positionX -= _lineMargins[lineIndex];
+
 					int previousWidth = 0;
 					for(int i = 0, len = text.Length; i < len; i++) {
 						int width = (int)g.MeasureString(text.Substring(0, i+1), this.Font).Width;
@@ -337,7 +347,7 @@ namespace Mesen.GUI.Debugger
 			int charIndex; 
 			int lineIndex;
 			if(this.GetCharIndex(position, out charIndex, out lineIndex)) {
-				string text = (useCompareText && _compareContents != null) ? _compareContents[lineIndex] : _contents[lineIndex];
+				string text = ((useCompareText && _compareContents != null) ? _compareContents[lineIndex] : _contents[lineIndex]).Replace("\x2", "");
 				List<char> wordDelimiters = new List<char>(new char[] { ' ', ',', '|', ';', '(', ')' });
 				if(wordDelimiters.Contains(text[charIndex])) {
 					return string.Empty;
@@ -444,8 +454,8 @@ namespace Mesen.GUI.Debugger
 
 		private void DrawLine(Graphics g, int currentLine, int marginLeft, int positionY)
 		{
-			string[] lineContent = _contents[currentLine].Split(new string[] { "||" }, StringSplitOptions.None);
-			string codeString = lineContent.Length > 0 ? lineContent[0] : "";
+			string[] lineContent = _contents[currentLine].Split('\x2');
+			string codeString = lineContent[0].TrimStart();
 			string addressString = lineContent.Length > 1 ? lineContent[1] : "";
 			string commentString = lineContent.Length > 2 ? lineContent[2] : "";
 
@@ -454,19 +464,16 @@ namespace Mesen.GUI.Debugger
 
 			if(this.ShowLineNumbers) {
 				//Show line number
-				string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
-				float width = g.MeasureString(lineNumber, this.Font).Width;
-				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY);
-				if(this.ShowLineNumberNotes) {
-					width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont).Width;
-					g.DrawString(_lineNumberNotes[currentLine], _noteFont, Brushes.Gray, marginLeft - width, positionY+this.Font.Size+3);
-				}
+				this.DrawLineNumber(g, currentLine, marginLeft, positionY);
 			}
 
 			if(currentLine == this.CursorPosition) {
 				//Highlight current line
 				g.FillRectangle(Brushes.AliceBlue, marginLeft, positionY, this.ClientRectangle.Width - marginLeft, this.LineHeight);
 			}
+
+			//Adjust background color highlights based on number of spaces in front of content
+			marginLeft += _lineMargins[currentLine];
 
 			Color textColor = Color.Black;
 			if(_lineProperties.ContainsKey(currentLine)) {
@@ -476,59 +483,100 @@ namespace Mesen.GUI.Debugger
 
 				if(lineProperties.BgColor.HasValue) {
 					using(Brush bgBrush = new SolidBrush(lineProperties.BgColor.Value)) {
-						g.FillRectangle(bgBrush, marginLeft + 1, positionY + 1, codeStringLength, this.LineHeight-1);
+						g.FillRectangle(bgBrush, marginLeft, positionY + 1, codeStringLength, this.LineHeight-1);
 					}
 				}
 				if(lineProperties.OutlineColor.HasValue) {
 					using(Pen outlinePen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-						g.DrawRectangle(outlinePen, marginLeft + 1, positionY + 1, codeStringLength, this.LineHeight-1);
+						g.DrawRectangle(outlinePen, marginLeft, positionY + 1, codeStringLength, this.LineHeight-1);
 					}
 				}
 
-				if(lineProperties.Symbol.HasFlag(LineSymbol.Circle)) {
-					using(Brush brush = new SolidBrush(lineProperties.OutlineColor.Value)) {
-						g.FillEllipse(brush, 1, positionY + 2, this.LineHeight - 3, this.LineHeight - 3);
-					}
-				} 
-				if(lineProperties.Symbol.HasFlag(LineSymbol.CircleOutline) && lineProperties.OutlineColor.HasValue) {
-					using(Pen pen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-						g.DrawEllipse(pen, 1, positionY + 2, this.LineHeight - 3, this.LineHeight - 3);
-					}
-				}
-				if(lineProperties.Symbol.HasFlag(LineSymbol.Arrow)) {
-					int arrowY = positionY + this.LineHeight / 2 + 1;
-					using(Pen pen = new Pen(Color.Black, this.LineHeight * 0.33f)) {
-						//Outline
-						g.DrawLine(pen, 3, arrowY, 3 + this.LineHeight * 0.25f, arrowY);
-						pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
-						g.DrawLine(pen, 3 + this.LineHeight * 0.25f, arrowY, 3 + this.LineHeight * 0.75f, arrowY);
-
-						//Fill
-						pen.Width-=2f;
-						pen.Color = lineProperties.BgColor.Value;
-						pen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
-						g.DrawLine(pen, 4, arrowY, 3 + this.LineHeight * 0.25f - 1, arrowY);
-						pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
-						g.DrawLine(pen, 3 + this.LineHeight * 0.25f, arrowY, this.LineHeight * 0.75f + 1, arrowY);
-					}
-				}
+				this.DrawLineSymbols(g, positionY, lineProperties);
 			}
 
+			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, codeStringLength, addressStringLength, textColor);
+		}
+
+		private void DrawLineNumber(Graphics g, int currentLine, int marginLeft, int positionY)
+		{
+			string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
+			float width = g.MeasureString(lineNumber, this.Font).Width;
+			g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY);
+			if(this.ShowLineNumberNotes) {
+				width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont).Width;
+				g.DrawString(_lineNumberNotes[currentLine], _noteFont, Brushes.Gray, marginLeft - width, positionY+this.Font.Size+3);
+			}
+		}
+
+		private void DrawLineText(Graphics g, int currentLine, int marginLeft, int positionY, string codeString, string addressString, string commentString, float codeStringLength, float addressStringLength, Color textColor)
+		{
 			using(Brush fgBrush = new SolidBrush(textColor)) {
-				g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY);
+				if(codeString.StartsWith("--") && codeString.EndsWith("--")) {
+					//Draw block start
+					string text = codeString.Substring(2, codeString.Length - 4);
+					float textLength = g.MeasureString(text, this._noteFont).Width;
+					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY);
+					g.DrawLine(Pens.Black, marginLeft, positionY+this.LineHeight-2, marginLeft+this.Width, positionY+this.LineHeight-2);
+				} else if(codeString.StartsWith("__") && codeString.EndsWith("__")) {
+					//Draw block end
+					string text = codeString.Substring(2, codeString.Length - 4);
+					float textLength = g.MeasureString(text, this._noteFont).Width;
+					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY + 4);
+					g.DrawLine(Pens.Black, marginLeft, positionY+2, marginLeft+this.Width, positionY+2);
+				} else if(codeString.StartsWith("[[") && codeString.EndsWith("]]")) {
+					//Draw small centered text
+					string text = codeString.Substring(2, codeString.Length - 4);
+					float textLength = g.MeasureString(text, this._noteFont).Width;
+					g.DrawString(text, new Font(this._noteFont, FontStyle.Italic), fgBrush, (marginLeft + this.Width - textLength) / 2, positionY + 2);
+				} else {
+					//Draw line content
+					g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY);
 
-				using(Brush addressBrush = new SolidBrush(Color.SteelBlue)) {
-					g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength, positionY);
-				}
-				using(Brush commentBrush = new SolidBrush(Color.DarkGreen)) {
-					g.DrawString(commentString, this.Font, commentBrush, Math.Max(marginLeft + 220, marginLeft + codeStringLength + addressStringLength), positionY);
-				}
+					using(Brush addressBrush = new SolidBrush(Color.SteelBlue)) {
+						g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength - 4, positionY);
+					}
+					using(Brush commentBrush = new SolidBrush(Color.DarkGreen)) {
+						g.DrawString(commentString, this.Font, commentBrush, codeString.Length == 0 && addressString.Length == 0 ? marginLeft : Math.Max(marginLeft + 220, marginLeft + codeStringLength + addressStringLength), positionY);
+					}
 
-				if(this.ShowContentNotes) {
-					g.DrawString(_contentNotes[currentLine], _noteFont, Brushes.Gray, marginLeft, positionY + this.Font.Size+3);
+					if(this.ShowContentNotes) {
+						g.DrawString(_contentNotes[currentLine], _noteFont, Brushes.Gray, marginLeft, positionY + this.Font.Size+3);
+					}
+					this.DrawHighlightedSearchString(g, codeString, marginLeft, positionY);
+					this.DrawHighlightedCompareString(g, codeString, currentLine, marginLeft, positionY);
 				}
-				this.DrawHighlightedSearchString(g, codeString, marginLeft, positionY);
-				this.DrawHighlightedCompareString(g, codeString, currentLine, marginLeft, positionY);
+			}
+		}
+
+		private void DrawLineSymbols(Graphics g, int positionY, LineProperties lineProperties)
+		{
+			if(lineProperties.Symbol.HasFlag(LineSymbol.Circle)) {
+				using(Brush brush = new SolidBrush(lineProperties.OutlineColor.Value)) {
+					g.FillEllipse(brush, 1, positionY + 2, this.LineHeight - 3, this.LineHeight - 3);
+				}
+			}
+			if(lineProperties.Symbol.HasFlag(LineSymbol.CircleOutline) && lineProperties.OutlineColor.HasValue) {
+				using(Pen pen = new Pen(lineProperties.OutlineColor.Value, 1)) {
+					g.DrawEllipse(pen, 1, positionY + 2, this.LineHeight - 3, this.LineHeight - 3);
+				}
+			}
+			if(lineProperties.Symbol.HasFlag(LineSymbol.Arrow)) {
+				int arrowY = positionY + this.LineHeight / 2 + 1;
+				using(Pen pen = new Pen(Color.Black, this.LineHeight * 0.33f)) {
+					//Outline
+					g.DrawLine(pen, 3, arrowY, 3 + this.LineHeight * 0.25f, arrowY);
+					pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+					g.DrawLine(pen, 3 + this.LineHeight * 0.25f, arrowY, 3 + this.LineHeight * 0.75f, arrowY);
+
+					//Fill
+					pen.Width-=2f;
+					pen.Color = lineProperties.BgColor.Value;
+					pen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+					g.DrawLine(pen, 4, arrowY, 3 + this.LineHeight * 0.25f - 1, arrowY);
+					pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+					g.DrawLine(pen, 3 + this.LineHeight * 0.25f, arrowY, this.LineHeight * 0.75f + 1, arrowY);
+				}
 			}
 		}
 

@@ -42,11 +42,7 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 		State &cpuState = state.CPU;
 		PPUDebugState &ppuState = state.PPU;
 
-		string disassembly = disassemblyInfo->ToString(cpuState.DebugPC);
-		auto separatorPosition = disassembly.begin() + disassembly.find_first_of(':', 0);
-		string byteCode(disassembly.begin(), separatorPosition);
-		byteCode.erase(std::remove(byteCode.begin(), byteCode.end(), '$'), byteCode.end());
-		string assemblyCode(separatorPosition + 1, disassembly.end());
+		string disassembly = disassemblyInfo->ToString(cpuState.DebugPC, _memoryManager);
 
 		//Roughly adjust PPU cycle & scanline to take into account the PPU already ran 3 cycles by the time we get here
 		short ppuCycle = (short)ppuState.Cycle - 3;
@@ -66,7 +62,7 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 		_outputFile << std::uppercase << std::hex << std::setfill('0') << std::setw(4) << std::right << (short)cpuState.DebugPC << "  ";
 
 		if(_options.ShowByteCode) {
-			_outputFile << std::setfill(' ') << std::setw(10) << std::left << byteCode;
+			_outputFile << std::setfill(' ') << std::setw(10) << std::left << disassemblyInfo->GetByteCode();
 		}
 
 		int indentLevel = 0; 
@@ -75,7 +71,7 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 			_outputFile << std::string(indentLevel, ' ');
 		}
 
-		string codeString = assemblyCode + (_options.ShowEffectiveAddresses ? disassemblyInfo->GetEffectiveAddress(state.CPU, _memoryManager) : "");
+		string codeString = disassembly + (_options.ShowEffectiveAddresses ? disassemblyInfo->GetEffectiveAddressString(state.CPU, _memoryManager, nullptr) : "");
 		_outputFile << std::setfill(' ') << std::setw(32 - indentLevel) << std::left << codeString;
 						
 		if(_options.ShowRegisters) {
