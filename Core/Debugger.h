@@ -58,6 +58,7 @@ private:
 	bool _hasBreakpoint[BreakpointTypeCount];
 
 	unordered_map<uint32_t, string> _codeLabels;
+	unordered_map<string, uint32_t> _codeLabelReverseLookup;
 	unordered_map<uint32_t, string> _codeComments;
 
 	deque<uint32_t> _callstackAbsolute;
@@ -109,6 +110,8 @@ public:
 	
 	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
 	void SetLabel(uint32_t address, string label, string comment);
+
+	int32_t GetCodeLabelAddress(string label);
 
 	void GetFunctionEntryPoints(int32_t* entryPoints);
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);

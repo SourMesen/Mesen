@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Forms;
@@ -31,9 +32,10 @@ namespace Mesen.GUI.Debugger
 		protected override bool ValidateInput()
 		{
 			CodeLabel existingLabel = LabelManager.GetLabel(txtLabel.Text);
+
 			return (existingLabel == null || existingLabel.Address == _address) 
 				&& !txtComment.Text.Contains('\x1') && !txtComment.Text.Contains('\x2')
-				&& !txtLabel.Text.Contains('\x1') && !txtLabel.Text.Contains('\x2');
+				&& (txtLabel.Text.Length == 0 || Regex.IsMatch(txtLabel.Text, "^[_a-zA-Z]+[_a-zA-Z0-9]*"));
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)

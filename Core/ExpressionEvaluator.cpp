@@ -5,6 +5,7 @@
 #include "Debugger.h"
 
 std::unordered_map<string, std::vector<int>, StringHasher> ExpressionEvaluator::_outputCache;
+std::unordered_map<string, std::vector<int>, StringHasher> ExpressionEvaluator::_customOutputCache;
 SimpleLock ExpressionEvaluator::_cacheLock;
 
 bool ExpressionEvaluator::IsOperator(string token, int &precedence, bool unaryOperator)
@@ -48,10 +49,12 @@ EvalOperators ExpressionEvaluator::GetOperator(string token, bool unaryOperator)
 bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, string &output)
 {
 	string token;
+	size_t initialPos = pos;
 	size_t len = expression.size();
 	do {
 		char c = std::tolower(expression[pos]);
-		if(c >= 'a' && c <= 'z') {
+		if(c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '_') {
+			//Only letters, numbers and underscore are allowed in code labels
 			token += c;
 			pos++;
 		} else {
@@ -84,7 +87,14 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 	} else if(!token.compare("romaddress")) {
 		output += std::to_string(EvalValues::AbsoluteAddress);
 	} else {
-		return false;
+		string originalExpression = expression.substr(initialPos, pos - initialPos);
+		int32_t address = _debugger->GetCodeLabelAddress(originalExpression);
+		if(address >= 0) {
+			_containsCustomLabels = true;
+			output += std::to_string(address);
+		} else {
+			return false;
+		}
 	}
 
 	return true;
@@ -134,7 +144,7 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 		} else {
 			if(c == '$') {
 				break;
-			} else if(c < 'a' || c > 'z') {
+			} else if((c < 'a' || c > 'z') && c != '_') {
 				//Not a number, not a letter, this is an operator
 				isOperator = true;
 				output += c;
@@ -307,12 +317,14 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 	return operandStack[0];
 }
 
-ExpressionEvaluator::ExpressionEvaluator()
+ExpressionEvaluator::ExpressionEvaluator(Debugger* debugger)
 {
+	_debugger = debugger;
 }
 
 int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr)
 {
+	vector<int> output;
 	vector<int> *outputQueue = nullptr;
 
 	{
@@ -321,22 +333,34 @@ int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &stat
 		auto cacheOutputQueue = _outputCache.find(expression);
 		if(cacheOutputQueue != _outputCache.end()) {
 			outputQueue = &(cacheOutputQueue->second);
+		} else {
+			auto customCacheResult = _customOutputCache.find(expression);
+			if(customCacheResult != _customOutputCache.end()) {
+				output = _customOutputCache[expression];
+			}
 		}
 	}
-
-	if(outputQueue == nullptr) {
-		vector<int> output;
-
+	
+	if(outputQueue == nullptr && output.empty()) {
 		string fixedExp = expression;
 		fixedExp.erase(std::remove(fixedExp.begin(), fixedExp.end(), ' '), fixedExp.end());
 		ToRpn(fixedExp, output);
 
 		LockHandler lock = _cacheLock.AcquireSafe();
-		_outputCache[expression] = output;
-		outputQueue = &_outputCache[expression];
+		if(_containsCustomLabels) {
+			_customOutputCache[expression] = output;
+			outputQueue = &output;
+		} else {
+			_outputCache[expression] = output;
+			outputQueue = &_outputCache[expression];
+		}
 	}
 
-	return EvaluateExpression(outputQueue, state, resultType, memoryValue, memoryAddr);
+	if(outputQueue) {
+		return EvaluateExpression(outputQueue, state, resultType, memoryValue, memoryAddr);
+	} else {
+		return EvaluateExpression(&output, state, resultType, memoryValue, memoryAddr);
+	}
 }
 
 int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, int16_t memoryValue, uint32_t memoryAddr)
@@ -349,7 +373,7 @@ int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, Eval
 {
 	try {
 		return PrivateEvaluate(expression, state, resultType, memoryValue, memoryAddr);
-	} catch(std::exception) {
+	} catch(std::exception e) {
 		resultType = EvalResultType::Invalid;
 		return 0;
 	}
@@ -365,4 +389,10 @@ bool ExpressionEvaluator::Validate(string expression)
 	} catch(std::exception e) {
 		return false;
 	}
+}
+
+void ExpressionEvaluator::ResetCustomCache()
+{
+	LockHandler lock = _cacheLock.AcquireSafe();
+	_customOutputCache.clear();
 }

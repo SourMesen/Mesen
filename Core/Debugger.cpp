@@ -129,9 +129,17 @@ CdlRatios Debugger::GetCdlRatios()
 
 void Debugger::SetLabel(uint32_t address, string label, string comment)
 {
+	ExpressionEvaluator::ResetCustomCache();
+
+	auto existingLabel = _codeLabels.find(address);
+	if(existingLabel != _codeLabels.end()) {
+		_codeLabelReverseLookup.erase(existingLabel->second);
+	}
+
 	_codeLabels.erase(address);
 	if(!label.empty()) {
 		_codeLabels.emplace(address, label);
+		_codeLabelReverseLookup.emplace(label, address);
 	}
 
 	_codeComments.erase(address);
@@ -174,7 +182,7 @@ void Debugger::UpdateBreakpoints()
 			_hasBreakpoint[i] = false;
 		}
 
-		ExpressionEvaluator expEval;
+		ExpressionEvaluator expEval(this);
 		for(Breakpoint &bp : _newBreakpoints) {
 			if(!expEval.Validate(bp.GetCondition())) {
 				//Remove any invalid condition (syntax-wise)
@@ -208,7 +216,7 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 			if(condition.empty()) {
 				return true;
 			} else {
-				ExpressionEvaluator expEval;
+				ExpressionEvaluator expEval(this);
 				if(needState) {
 					GetState(&_debugState);
 					needState = false;
@@ -225,7 +233,7 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 
 int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultType)
 {
-	ExpressionEvaluator expEval;
+	ExpressionEvaluator expEval(this);
 
 	DebugState state;
 	GetState(&state);
@@ -605,4 +613,13 @@ void Debugger::GetFunctionEntryPoints(int32_t* entryPoints)
 shared_ptr<MemoryDumper> Debugger::GetMemoryDumper()
 {
 	return _memoryDumper;
+}
+
+int32_t Debugger::GetCodeLabelAddress(string label)
+{
+	auto result = _codeLabelReverseLookup.find(label);
+	if(result != _codeLabelReverseLookup.end()) {
+		return _mapper->FromAbsoluteAddress(result->second);
+	}
+	return -1;
 }

@@ -53,7 +53,8 @@ namespace Mesen.GUI.Debugger
 
 			this.toolTip.SetToolTip(this.picWatchHelp,
 				"Most expressions/operators are accepted (C++ syntax)." + Environment.NewLine +
-				"Note: Use the $ prefix to denote hexadecimal values." + Environment.NewLine + Environment.NewLine +
+				"Note: Use the $ prefix to denote hexadecimal values." + Environment.NewLine + 
+				"Note 2: Labels assigned to the code can be used (their value will match the label's address in CPU memory)." + Environment.NewLine + Environment.NewLine +
 				"A/X/Y/PS/SP: Value of registers" + Environment.NewLine +
 				"Irq/Nmi: True if the Irq/Nmi flags are set" + Environment.NewLine +
 				"Cycle/Scanline: Current cycle (0-340)/scanline(-1 to 260) of the PPU" + Environment.NewLine +
