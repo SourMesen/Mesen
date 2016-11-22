@@ -235,8 +235,8 @@ int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultTy
 
 void Debugger::UpdateCallstack(uint32_t addr)
 {
-	if(_lastInstruction == 0x60 && !_callstackRelative.empty()) {
-		//RTS
+	if((_lastInstruction == 0x60 || _lastInstruction == 0x40) && !_callstackRelative.empty()) {
+		//RTS & RTI
 		_callstackRelative.pop_back();
 		_callstackRelative.pop_back();
 		_callstackAbsolute.pop_back();
@@ -249,6 +249,22 @@ void Debugger::UpdateCallstack(uint32_t addr)
 
 		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(addr));
 		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(targetAddr));
+	}
+}
+
+void Debugger::PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
+{
+	_callstackRelative.push_back(cpuAddr | (forNmi ? 0x40000 : 0x20000));
+	_callstackRelative.push_back(destCpuAddr);
+
+	_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(cpuAddr));
+	_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(destCpuAddr));
+}
+
+void Debugger::ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
+{
+	if(Debugger::Instance) {
+		Debugger::Instance->PrivateProcessInterrupt(cpuAddr, destCpuAddr, forNmi);
 	}
 }
 

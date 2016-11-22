@@ -93,7 +93,10 @@ private:
 	void PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
 	bool HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value);
+	
 	void UpdateCallstack(uint32_t addr);
+	void PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
+
 	void ProcessStepConditions(uint32_t addr);
 	bool SleepUntilResume();
 
@@ -146,6 +149,8 @@ public:
 	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
 	static void ProcessPpuCycle();
+
+	static void ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
 
 	static bool IsEnabled();
 	static void BreakIfDebugging();

@@ -216,6 +216,12 @@ void Console::ResetComponents(bool softReset)
 	SoundMixer::StopAudio(true);
 
 	if(softReset) {
+		if(_debugger) {
+			auto lock = _debuggerLock.AcquireSafe();
+			StopDebugger();
+			GetDebugger();
+		}
+
 		MessageManager::SendNotification(ConsoleNotificationType::GameReset);
 	} else {
 		MessageManager::SendNotification(ConsoleNotificationType::GameLoaded);

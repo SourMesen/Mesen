@@ -101,6 +101,32 @@ void CPU::Exec()
 	}
 }
 
+void CPU::IRQ() 
+{
+	uint16_t originalPc = PC();
+	DummyRead();  //fetch opcode (and discard it - $00 (BRK) is forced into the opcode register instead)
+	DummyRead();  //read next instruction byte (actually the same as above, since PC increment is suppressed. Also discarded.)
+	Push((uint16_t)(PC()));
+
+	if(_state.NMIFlag) {
+		Push((uint8_t)PS());
+		SetFlags(PSFlags::Interrupt);
+
+		SetPC(MemoryReadWord(CPU::NMIVector));
+		_state.NMIFlag = false;
+
+		TraceLogger::LogStatic("NMI");
+		Debugger::ProcessInterrupt(originalPc, _state.PC, true);
+	} else {
+		Push((uint8_t)PS());
+		SetFlags(PSFlags::Interrupt);
+		SetPC(MemoryReadWord(CPU::IRQVector));
+
+		TraceLogger::LogStatic("IRQ");
+		Debugger::ProcessInterrupt(originalPc, _state.PC, false);
+	}
+}
+
 uint16_t CPU::FetchOperand()
 {
 	switch(_instAddrMode) {

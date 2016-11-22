@@ -47,7 +47,7 @@
 			this.lstCallstack.Location = new System.Drawing.Point(0, 0);
 			this.lstCallstack.MultiSelect = false;
 			this.lstCallstack.Name = "lstCallstack";
-			this.lstCallstack.Size = new System.Drawing.Size(324, 125);
+			this.lstCallstack.Size = new System.Drawing.Size(330, 125);
 			this.lstCallstack.TabIndex = 1;
 			this.lstCallstack.UseCompatibleStateImageBehavior = false;
 			this.lstCallstack.View = System.Windows.Forms.View.Details;
@@ -55,18 +55,18 @@
 			// 
 			// colFunctionAddress
 			// 
-			this.colFunctionAddress.Text = "Subroutine Addr";
-			this.colFunctionAddress.Width = 100;
+			this.colFunctionAddress.Text = "Function";
+			this.colFunctionAddress.Width = 164;
 			// 
 			// colStackAddr
 			// 
 			this.colStackAddr.Text = "PC Addr";
-			this.colStackAddr.Width = 79;
+			this.colStackAddr.Width = 67;
 			// 
 			// colRomOffset
 			// 
 			this.colRomOffset.Text = "ROM Addr.";
-			this.colRomOffset.Width = 110;
+			this.colRomOffset.Width = 71;
 			// 
 			// ctrlCallstack
 			// 
@@ -74,7 +74,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.lstCallstack);
 			this.Name = "ctrlCallstack";
-			this.Size = new System.Drawing.Size(324, 125);
+			this.Size = new System.Drawing.Size(330, 125);
 			this.ResumeLayout(false);
 
 		}

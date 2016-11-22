@@ -90,6 +90,7 @@ private:
 
 	void IncCycleCount();
 	uint16_t FetchOperand();
+	void IRQ();
 
 	uint8_t GetOPCode()
 	{
@@ -637,28 +638,6 @@ private:
 
 		//Since we just set the flag to prevent interrupts, do not run one right away after this (fixes nmi_and_brk & nmi_and_irq tests)
 		_prevRunIrq = false;
-	}
-
-	void IRQ() {
-		DummyRead();  //fetch opcode (and discard it - $00 (BRK) is forced into the opcode register instead)
-		DummyRead();  //read next instruction byte (actually the same as above, since PC increment is suppressed. Also discarded.)
-		Push((uint16_t)(PC()));
-
-		if(_state.NMIFlag) {
-			Push((uint8_t)PS());
-			SetFlags(PSFlags::Interrupt);
-
-			SetPC(MemoryReadWord(CPU::NMIVector));
-			_state.NMIFlag = false;
-
-			TraceLogger::LogStatic("NMI");
-		} else {
-			Push((uint8_t)PS());
-			SetFlags(PSFlags::Interrupt);
-			SetPC(MemoryReadWord(CPU::IRQVector));
-
-			TraceLogger::LogStatic("IRQ");
-		}
 	}
 	
 	void RTI() {
