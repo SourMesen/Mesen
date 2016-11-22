@@ -135,10 +135,22 @@ namespace Mesen.GUI.Debugger
 			return mnuSplitView.Checked;
 		}
 
+		private void UpdateVectorAddresses()
+		{
+			int nmiHandler = InteropEmu.DebugGetMemoryValue(0xFFFA) | (InteropEmu.DebugGetMemoryValue(0xFFFB) << 8);
+			int resetHandler = InteropEmu.DebugGetMemoryValue(0xFFFC) | (InteropEmu.DebugGetMemoryValue(0xFFFD) << 8);
+			int irqHandler = InteropEmu.DebugGetMemoryValue(0xFFFE) | (InteropEmu.DebugGetMemoryValue(0xFFFF) << 8);
+
+			mnuGoToNmiHandler.Text = "NMI Handler ($" + nmiHandler.ToString("X4") + ")";
+			mnuGoToResetHandler.Text = "Reset Handler ($" + resetHandler.ToString("X4") + ")";
+			mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
+		}
+
 		private void UpdateDebugger(bool updateActiveAddress = true)
 		{
 			ctrlFunctionList.UpdateFunctionList();
 			UpdateDebuggerFlags();
+			UpdateVectorAddresses();
 
 			if(InteropEmu.DebugIsCodeChanged()) {
 				string code = InteropEmu.DebugGetCode();
