@@ -41,7 +41,7 @@
 			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
 			this.ctrlDebuggerCodeSplit = new Mesen.GUI.Debugger.ctrlDebuggerCode();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.tlpFunctionLabelLists = new System.Windows.Forms.TableLayoutPanel();
 			this.grpLabels = new System.Windows.Forms.GroupBox();
 			this.ctrlLabelList = new Mesen.GUI.Debugger.Controls.ctrlLabelList();
 			this.grpFunctions = new System.Windows.Forms.GroupBox();
@@ -89,9 +89,11 @@
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowCpuMemoryMapping = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowPpuMemoryMapping = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowFunctionLabelLists = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuPpuPartialDraw = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowEffectiveAddresses = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowOnlyDisassembledCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
@@ -112,14 +114,13 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
-			this.mnuShowOnlyDisassembledCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuCode.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
 			this.tlpTop.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
+			this.tlpFunctionLabelLists.SuspendLayout();
 			this.grpLabels.SuspendLayout();
 			this.grpFunctions.SuspendLayout();
 			this.tableLayoutPanel10.SuspendLayout();
@@ -187,11 +188,11 @@
 			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
 			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 310F));
+			this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpTop.Controls.Add(this.ctrlDebuggerCode, 0, 0);
 			this.tlpTop.Controls.Add(this.ctrlConsoleStatus, 2, 0);
 			this.tlpTop.Controls.Add(this.ctrlDebuggerCodeSplit, 1, 0);
-			this.tlpTop.Controls.Add(this.tableLayoutPanel1, 3, 0);
+			this.tlpTop.Controls.Add(this.tlpFunctionLabelLists, 3, 0);
 			this.tlpTop.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpTop.Location = new System.Drawing.Point(0, 0);
 			this.tlpTop.Name = "tlpTop";
@@ -235,21 +236,22 @@
 			this.ctrlDebuggerCodeSplit.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
 			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
 			// 
-			// tableLayoutPanel1
+			// tlpFunctionLabelLists
 			// 
-			this.tableLayoutPanel1.ColumnCount = 1;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Controls.Add(this.grpLabels, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.grpFunctions, 0, 0);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(948, 0);
-			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(310, 387);
-			this.tableLayoutPanel1.TabIndex = 5;
+			this.tlpFunctionLabelLists.ColumnCount = 1;
+			this.tlpFunctionLabelLists.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpFunctionLabelLists.Controls.Add(this.grpLabels, 0, 1);
+			this.tlpFunctionLabelLists.Controls.Add(this.grpFunctions, 0, 0);
+			this.tlpFunctionLabelLists.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpFunctionLabelLists.Location = new System.Drawing.Point(948, 0);
+			this.tlpFunctionLabelLists.Margin = new System.Windows.Forms.Padding(0);
+			this.tlpFunctionLabelLists.Name = "tlpFunctionLabelLists";
+			this.tlpFunctionLabelLists.RowCount = 2;
+			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(310, 387);
+			this.tlpFunctionLabelLists.TabIndex = 5;
+			this.tlpFunctionLabelLists.Visible = false;
 			// 
 			// grpLabels
 			// 
@@ -406,12 +408,12 @@
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(100, 6);
 			// 
 			// mnuClose
 			// 
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(152, 22);
+			this.mnuClose.Size = new System.Drawing.Size(103, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -609,6 +611,7 @@
             this.toolStripMenuItem5,
             this.mnuShowCpuMemoryMapping,
             this.mnuShowPpuMemoryMapping,
+            this.mnuShowFunctionLabelLists,
             this.toolStripMenuItem6,
             this.mnuPpuPartialDraw,
             this.mnuShowEffectiveAddresses,
@@ -683,6 +686,14 @@
 			this.mnuShowPpuMemoryMapping.Text = "Show PPU Memory Mapping";
 			this.mnuShowPpuMemoryMapping.CheckedChanged += new System.EventHandler(this.mnuShowPpuMemoryMapping_CheckedChanged);
 			// 
+			// mnuShowFunctionLabelLists
+			// 
+			this.mnuShowFunctionLabelLists.CheckOnClick = true;
+			this.mnuShowFunctionLabelLists.Name = "mnuShowFunctionLabelLists";
+			this.mnuShowFunctionLabelLists.Size = new System.Drawing.Size(237, 22);
+			this.mnuShowFunctionLabelLists.Text = "Show Function/Label Lists";
+			this.mnuShowFunctionLabelLists.CheckedChanged += new System.EventHandler(this.mnuShowFunctionLabelLists_CheckedChanged);
+			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
@@ -703,6 +714,14 @@
 			this.mnuShowEffectiveAddresses.Size = new System.Drawing.Size(237, 22);
 			this.mnuShowEffectiveAddresses.Text = "Show Effective Addresses";
 			this.mnuShowEffectiveAddresses.CheckedChanged += new System.EventHandler(this.mnuShowEffectiveAddresses_CheckedChanged);
+			// 
+			// mnuShowOnlyDisassembledCode
+			// 
+			this.mnuShowOnlyDisassembledCode.CheckOnClick = true;
+			this.mnuShowOnlyDisassembledCode.Name = "mnuShowOnlyDisassembledCode";
+			this.mnuShowOnlyDisassembledCode.Size = new System.Drawing.Size(237, 22);
+			this.mnuShowOnlyDisassembledCode.Text = "Show Only Disassembled Code";
+			this.mnuShowOnlyDisassembledCode.CheckedChanged += new System.EventHandler(this.mnuShowOnlyDisassembledCode_CheckedChanged);
 			// 
 			// toolsToolStripMenuItem
 			// 
@@ -866,14 +885,6 @@
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
-			// mnuShowOnlyDisassembledCode
-			// 
-			this.mnuShowOnlyDisassembledCode.CheckOnClick = true;
-			this.mnuShowOnlyDisassembledCode.Name = "mnuShowOnlyDisassembledCode";
-			this.mnuShowOnlyDisassembledCode.Size = new System.Drawing.Size(237, 22);
-			this.mnuShowOnlyDisassembledCode.Text = "Show Only Disassembled Code";
-			this.mnuShowOnlyDisassembledCode.CheckedChanged += new System.EventHandler(this.mnuShowOnlyDisassembledCode_CheckedChanged);
-			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -896,7 +907,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
 			this.splitContainer.ResumeLayout(false);
 			this.tlpTop.ResumeLayout(false);
-			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tlpFunctionLabelLists.ResumeLayout(false);
 			this.grpLabels.ResumeLayout(false);
 			this.grpFunctions.ResumeLayout(false);
 			this.tableLayoutPanel10.ResumeLayout(false);
@@ -990,11 +1001,12 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuShowPpuMemoryMapping;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowEffectiveAddresses;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel tlpFunctionLabelLists;
 		private System.Windows.Forms.GroupBox grpLabels;
 		private System.Windows.Forms.GroupBox grpFunctions;
 		private Controls.ctrlFunctionList ctrlFunctionList;
 		private Controls.ctrlLabelList ctrlLabelList;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowOnlyDisassembledCode;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowFunctionLabelLists;
 	}
 }

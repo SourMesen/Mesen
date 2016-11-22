@@ -34,6 +34,7 @@ namespace Mesen.GUI.Config
 
 		public bool ShowCpuMemoryMapping = true;
 		public bool ShowPpuMemoryMapping = true;
+		public bool ShowFunctionLabelLists = true;
 
 		public bool RamAutoRefresh = true;
 		public int RamColumnCount = 2;

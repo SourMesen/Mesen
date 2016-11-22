@@ -36,6 +36,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowCpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping;
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
 			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
+			this.mnuShowFunctionLabelLists.Checked = ConfigManager.Config.DebugInfo.ShowFunctionLabelLists;
 
 			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
 
@@ -473,6 +474,13 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 			ctrlCpuMemoryMapping.Invalidate();
 			ctrlPpuMemoryMapping.Invalidate();
+		}
+
+		private void mnuShowFunctionLabelLists_CheckedChanged(object sender, EventArgs e)
+		{
+			tlpFunctionLabelLists.Visible = mnuShowFunctionLabelLists.Checked;
+			ConfigManager.Config.DebugInfo.ShowFunctionLabelLists = mnuShowFunctionLabelLists.Checked;
+			ConfigManager.ApplyChanges();
 		}
 
 		private void frmDebugger_Resize(object sender, EventArgs e)
