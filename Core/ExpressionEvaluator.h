@@ -36,7 +36,8 @@ enum EvalOperators
 	LogicalNot = 2000000053,
 
 	//Used to read ram address
-	Bracket = 2000000054,
+	Bracket = 2000000054, //Read byte
+	Braces = 2000000055, //Read word
 
 	//Special value, not used as an operator
 	Parenthesis = 2000000100,

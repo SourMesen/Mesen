@@ -113,7 +113,7 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 		} else if(isNumber) {
 			//First non-numeric character, done
 			break;
-		} else if(c == '(' || c == ')' || c == '[' || c == ']' || c == '-' || c == '+' || c == '~') {
+		} else if(c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}' || c == '-' || c == '+' || c == '~') {
 			if(output.empty()) {
 				output += c;
 				pos++;
@@ -198,6 +198,7 @@ void ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 		} else if(token[0] == '(') {
 			opStack.push(EvalOperators::Parenthesis);
 			precedenceStack.push(0);
+			previousTokenIsOp = true;
 		} else if(token[0] == ')') {
 			while(opStack.top() != EvalOperators::Parenthesis) {
 				outputQueue.push_back(opStack.top());
@@ -209,6 +210,16 @@ void ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 			precedenceStack.push(0);
 		} else if(token[0] == ']') {
 			while(opStack.top() != EvalOperators::Bracket) {
+				outputQueue.push_back(opStack.top());
+				opStack.pop();
+			}
+			outputQueue.push_back(opStack.top());
+			opStack.pop();
+		} else if(token[0] == '{') {
+			opStack.push(EvalOperators::Braces);
+			precedenceStack.push(0);
+		} else if(token[0] == '}') {
+			while(opStack.top() != EvalOperators::Braces) {
 				outputQueue.push_back(opStack.top());
 				opStack.pop();
 			}
@@ -255,7 +266,8 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 			}
 		} else if(token >= EvalOperators::Multiplication) {
 			right = operandStack[--pos];
-			if(pos > 0) {
+			if(pos > 0 && token <= EvalOperators::LogicalOr) {
+				//Only do this for binary operators
 				left = operandStack[--pos];
 			}
 
@@ -282,6 +294,7 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 
 				//Unary operators
 				case EvalOperators::Bracket: token = debugger->GetMemoryValue(right); break;
+				case EvalOperators::Braces: token = debugger->GetMemoryValue(right) | (debugger->GetMemoryValue(right+1) << 8); break;
 				case EvalOperators::Plus: token = right; break;
 				case EvalOperators::Minus: token = -right; break;
 				case EvalOperators::BinaryNot: token = ~right; break;
