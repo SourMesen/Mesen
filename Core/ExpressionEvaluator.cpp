@@ -253,7 +253,6 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 	int left = 0;
 	int operandStack[1000];
 	resultType = EvalResultType::Numeric;
-	shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger();
 
 	for(size_t i = 0, len = outputQueue->size(); i < len; i++) {
 		int token = (*outputQueue)[i];
@@ -272,7 +271,7 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 				case EvalValues::PpuScanline: token = state.PPU.Scanline; break;
 				case EvalValues::Value: token = memoryValue; break;
 				case EvalValues::Address: token = memoryAddr; break;
-				case EvalValues::AbsoluteAddress: token = debugger->GetAbsoluteAddress(memoryAddr); break;
+				case EvalValues::AbsoluteAddress: token = _debugger->GetAbsoluteAddress(memoryAddr); break;
 			}
 		} else if(token >= EvalOperators::Multiplication) {
 			right = operandStack[--pos];
@@ -303,8 +302,8 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 				case EvalOperators::LogicalOr: token = left || right; resultType = EvalResultType::Boolean; break;
 
 				//Unary operators
-				case EvalOperators::Bracket: token = debugger->GetMemoryValue(right); break;
-				case EvalOperators::Braces: token = debugger->GetMemoryValue(right) | (debugger->GetMemoryValue(right+1) << 8); break;
+				case EvalOperators::Bracket: token = _debugger->GetMemoryValue(right); break;
+				case EvalOperators::Braces: token = _debugger->GetMemoryValue(right) | (_debugger->GetMemoryValue(right+1) << 8); break;
 				case EvalOperators::Plus: token = right; break;
 				case EvalOperators::Minus: token = -right; break;
 				case EvalOperators::BinaryNot: token = ~right; break;
