@@ -247,17 +247,7 @@ namespace Mesen.GUI.Debugger
 				InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)relativeAddress, ref info);
 
 				if(info.Address >= 0) {
-					CodeLabel existingLabel = LabelManager.GetLabel((UInt32)info.Address, info.Type);
-					CodeLabel newLabel = new CodeLabel() { Address = (UInt32)info.Address, AddressType = info.Type, Label = existingLabel?.Label, Comment = existingLabel?.Comment };
-
-					frmEditLabel frm = new frmEditLabel(newLabel);
-					if(frm.ShowDialog() == DialogResult.OK) {
-						if(string.IsNullOrWhiteSpace(newLabel.Label) && string.IsNullOrWhiteSpace(newLabel.Comment)) {
-							LabelManager.DeleteLabel(newLabel.Address, newLabel.AddressType);
-						} else {
-							LabelManager.SetLabel(newLabel.Address, newLabel.AddressType, newLabel.Label, newLabel.Comment);
-						}
-					}
+					ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
 				}
 			}
 		}

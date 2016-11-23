@@ -19,6 +19,23 @@ namespace Mesen.GUI.Debugger.Controls
 			InitializeComponent();
 		}
 
+		public static void EditLabel(UInt32 address, AddressType type)
+		{
+			CodeLabel existingLabel = LabelManager.GetLabel(address, type);
+			CodeLabel newLabel = new CodeLabel() { Address = address, AddressType = type, Label = existingLabel?.Label, Comment = existingLabel?.Comment };
+
+			frmEditLabel frm = new frmEditLabel(newLabel, existingLabel);
+			if(frm.ShowDialog() == DialogResult.OK) {
+				bool empty = string.IsNullOrWhiteSpace(newLabel.Label) && string.IsNullOrWhiteSpace(newLabel.Comment);
+				if(existingLabel != null) {
+					LabelManager.DeleteLabel(existingLabel.Address, existingLabel.AddressType, empty);
+				}
+				if(!empty) {
+					LabelManager.SetLabel(newLabel.Address, newLabel.AddressType, newLabel.Label, newLabel.Comment);
+				}
+			}
+		}
+
 		public void UpdateLabelList()
 		{
 			Int32[] entryPoints = InteropEmu.DebugGetFunctionEntryPoints();
@@ -61,13 +78,31 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuActions_Opening(object sender, CancelEventArgs e)
 		{
 			mnuDelete.Enabled = lstLabels.SelectedItems.Count > 0;
+			mnuEdit.Enabled = lstLabels.SelectedItems.Count == 1;
 		}
 
 		private void mnuDelete_Click(object sender, EventArgs e)
 		{
-			foreach(ListViewItem item in lstLabels.SelectedItems) {
-				LabelManager.DeleteLabel(((CodeLabel)item.SubItems[1].Tag).Address, ((CodeLabel)item.SubItems[1].Tag).AddressType);
+			for(int i = lstLabels.SelectedItems.Count - 1; i >= 0; i--) {
+				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[i].SubItems[1].Tag;
+				LabelManager.DeleteLabel(label.Address, label.AddressType, i == 0);
 			}
+		}
+
+		private void mnuAdd_Click(object sender, EventArgs e)
+		{
+			CodeLabel newLabel = new CodeLabel() { Address = 0, AddressType = AddressType.InternalRam, Label = "", Comment = "" };
+
+			frmEditLabel frm = new frmEditLabel(newLabel);
+			if(frm.ShowDialog() == DialogResult.OK) {
+				LabelManager.SetLabel(newLabel.Address, newLabel.AddressType, newLabel.Label, newLabel.Comment);
+			}
+		}
+
+		private void mnuEdit_Click(object sender, EventArgs e)
+		{
+			CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
+			EditLabel(label.Address, label.AddressType);
 		}
 	}
 }

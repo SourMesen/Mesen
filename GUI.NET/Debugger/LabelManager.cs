@@ -64,14 +64,16 @@ namespace Mesen.GUI.Debugger
 			return true;
 		}
 
-		public static void DeleteLabel(UInt32 address, AddressType type)
+		public static void DeleteLabel(UInt32 address, AddressType type, bool raiseEvent)
 		{
 			if(_labels.ContainsKey(GetKey(address, type))) {
 				_reverseLookup.Remove(_labels[GetKey(address, type)].Label);
 			}
 			if(_labels.Remove(GetKey(address, type))) {
 				InteropEmu.DebugSetLabel(address, type, string.Empty, string.Empty);
-				OnLabelUpdated?.Invoke(null, null);
+				if(raiseEvent) {
+					OnLabelUpdated?.Invoke(null, null);
+				}
 			}
 		}
 	}

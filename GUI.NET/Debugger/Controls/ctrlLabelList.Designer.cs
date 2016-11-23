@@ -34,6 +34,8 @@
 			this.colMemoryAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -76,9 +78,11 @@
 			// contextMenu
 			// 
 			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAdd,
+            this.mnuEdit,
             this.mnuDelete});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(153, 48);
+			this.contextMenu.Size = new System.Drawing.Size(153, 92);
 			this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.mnuActions_Opening);
 			// 
 			// mnuDelete
@@ -88,6 +92,21 @@
 			this.mnuDelete.Size = new System.Drawing.Size(152, 22);
 			this.mnuDelete.Text = "Delete";
 			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
+			// 
+			// mnuAdd
+			// 
+			this.mnuAdd.Name = "mnuAdd";
+			this.mnuAdd.ShortcutKeys = System.Windows.Forms.Keys.Insert;
+			this.mnuAdd.Size = new System.Drawing.Size(152, 22);
+			this.mnuAdd.Text = "Add";
+			this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
+			// 
+			// mnuEdit
+			// 
+			this.mnuEdit.Name = "mnuEdit";
+			this.mnuEdit.Size = new System.Drawing.Size(152, 22);
+			this.mnuEdit.Text = "Edit";
+			this.mnuEdit.Click += new System.EventHandler(this.mnuEdit_Click);
 			// 
 			// ctrlLabelList
 			// 
@@ -109,5 +128,7 @@
 		private System.Windows.Forms.ColumnHeader colMemoryAddress;
 		private System.Windows.Forms.ContextMenuStrip contextMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete;
+		private System.Windows.Forms.ToolStripMenuItem mnuAdd;
+		private System.Windows.Forms.ToolStripMenuItem mnuEdit;
 	}
 }
