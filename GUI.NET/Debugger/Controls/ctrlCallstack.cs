@@ -43,7 +43,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				relSubEntryAddr = i == 0 ? -1 : _relativeCallstack[i-1] & 0xFFFF;
-				absSubEntryAddr = i == 0 ? -1 : _absoluteCallstack[i-1] & 0xFFFF;
+				absSubEntryAddr = i == 0 ? -1 : _absoluteCallstack[i-1];
 
 				bool currentAddrUnmapped = (_relativeCallstack[i] & 0x10000) == 0x10000;
 				relCurrentAddr = _relativeCallstack[i] & 0xFFFF;
@@ -79,7 +79,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			string funcName;
-			CodeLabel label = LabelManager.GetLabel((UInt32)absSubEntryAddr);
+			CodeLabel label = LabelManager.GetLabel((UInt32)absSubEntryAddr, AddressType.PrgRom);
 			if(label != null) {
 				funcName = label.Label + (relSubEntryAddr >= 0 ? (" ($" + relSubEntryAddr.ToString("X4") + ")") : "");
 			} else {

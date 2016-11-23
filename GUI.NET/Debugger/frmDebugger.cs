@@ -38,6 +38,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
 			this.mnuShowFunctionLabelLists.Checked = ConfigManager.Config.DebugInfo.ShowFunctionLabelLists;
 
+			LabelManager.ResetLabels();
 			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
 
 			_lastCodeWindow = ctrlDebuggerCode;

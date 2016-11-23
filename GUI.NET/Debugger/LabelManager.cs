@@ -9,20 +9,27 @@ namespace Mesen.GUI.Debugger
 	public class CodeLabel
 	{
 		public UInt32 Address;
+		public AddressType AddressType;
 		public string Label;
 		public string Comment;
 	}
 
 	public class LabelManager
 	{
-		private static Dictionary<UInt32, CodeLabel> _labels = new Dictionary<uint, CodeLabel>();
+		private static Dictionary<string, CodeLabel> _labels = new Dictionary<string, CodeLabel>();
 		private static Dictionary<string, CodeLabel> _reverseLookup = new Dictionary<string, CodeLabel>();
 
 		public static event EventHandler OnLabelUpdated;
 
-		public static CodeLabel GetLabel(UInt32 address)
+		public static void ResetLabels()
 		{
-			return _labels.ContainsKey(address) ? _labels[address] : null;
+			_labels.Clear();
+			_reverseLookup.Clear();
+		}
+
+		public static CodeLabel GetLabel(UInt32 address, AddressType type)
+		{
+			return _labels.ContainsKey(GetKey(address, type)) ? _labels[GetKey(address, type)] : null;
 		}
 
 		public static CodeLabel GetLabel(string label)
@@ -30,40 +37,40 @@ namespace Mesen.GUI.Debugger
 			return _reverseLookup.ContainsKey(label) ? _reverseLookup[label] : null;
 		}
 
-		public static Dictionary<UInt32, CodeLabel> GetLabels()
+		public static Dictionary<string, CodeLabel> GetLabels()
 		{
 			return _labels;
 		}
 
-		public static bool SetLabel(UInt32 address, string label, string comment)
+		private static string GetKey(UInt32 address, AddressType addressType)
 		{
-			if(_reverseLookup.ContainsKey(label) && _reverseLookup[label].Address != address) {
-				//Label already exists
-				return false;
+			return address.ToString() + addressType.ToString();
+		}
+
+		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment)
+		{
+			if(_labels.ContainsKey(GetKey(address, type))) {
+				_reverseLookup.Remove(_labels[GetKey(address, type)].Label);
 			}
 
-			if(_labels.ContainsKey(address)) {
-				_reverseLookup.Remove(_labels[address].Label);
-			}
-
-			_labels[address] = new CodeLabel() { Address = address, Label = label, Comment = comment };
+			_labels[GetKey(address, type)] = new CodeLabel() { Address = address, AddressType = type, Label = label, Comment = comment };
 			if(label.Length > 0) {
-				_reverseLookup[label] = _labels[address];
+				_reverseLookup[label] = _labels[GetKey(address, type)];
 			}
 
-			InteropEmu.DebugSetLabel(address, label, comment);
+			InteropEmu.DebugSetLabel(address, type, label, comment);
 			OnLabelUpdated?.Invoke(null, null);
 
 			return true;
 		}
 
-		public static void DeleteLabel(UInt32 address)
+		public static void DeleteLabel(UInt32 address, AddressType type)
 		{
-			if(_labels.ContainsKey(address)) {
-				_reverseLookup.Remove(_labels[address].Label);
+			if(_labels.ContainsKey(GetKey(address, type))) {
+				_reverseLookup.Remove(_labels[GetKey(address, type)].Label);
 			}
-			if(_labels.Remove(address)) {
-				InteropEmu.DebugSetLabel(address, string.Empty, string.Empty);
+			if(_labels.Remove(GetKey(address, type))) {
+				InteropEmu.DebugSetLabel(address, type, string.Empty, string.Empty);
 				OnLabelUpdated?.Invoke(null, null);
 			}
 		}

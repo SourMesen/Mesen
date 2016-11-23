@@ -166,7 +166,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetFlags(DebuggerFlags flags);
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex=1)]InteropBreakpoint[] breakpoints, UInt32 length);
-		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
+		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, AddressType addressType, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
 		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugPpuStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);
@@ -175,8 +175,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugRun();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsCodeChanged();
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
-		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeAddress(UInt32 absoluteAddr);
+		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeAddress(UInt32 absoluteAddr, AddressType type);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetAbsoluteAddress(UInt32 relativeAddr);
+		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, ref AddressTypeInfo addressTypeInfo);
+
 		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
 		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
 		
@@ -1027,6 +1029,20 @@ namespace Mesen.GUI
 		WorkRam = 8,
 		SaveRam = 9,
 		InternalRam = 10
+	}
+
+	public enum AddressType
+	{
+		InternalRam = 0,
+		PrgRom = 1,
+		WorkRam = 2,
+		SaveRam = 3,
+	}
+
+	public struct AddressTypeInfo
+	{
+		public Int32 Address;
+		public AddressType Type;
 	}
 
 	public class MD5Helper

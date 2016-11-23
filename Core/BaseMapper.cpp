@@ -783,11 +783,20 @@ int32_t BaseMapper::ToAbsoluteAddress(uint16_t addr)
 	return -1;
 }
 
-int32_t BaseMapper::ToAbsoluteRamAddress(uint16_t addr)
+int32_t BaseMapper::ToAbsoluteWorkRamAddress(uint16_t addr)
 {
 	uint8_t *prgRamAddr = _prgPages[addr >> 8] + (addr & 0xFF);
 	if(prgRamAddr >= _workRam && prgRamAddr < _workRam + _workRamSize) {
 		return (uint32_t)(prgRamAddr - _workRam);
+	}
+	return -1;
+}
+
+int32_t BaseMapper::ToAbsoluteSaveRamAddress(uint16_t addr)
+{
+	uint8_t *prgRamAddr = _prgPages[addr >> 8] + (addr & 0xFF);
+	if(prgRamAddr >= _saveRam && prgRamAddr < _saveRam + _saveRamSize) {
+		return (uint32_t)(prgRamAddr - _saveRam);
 	}
 	return -1;
 }
@@ -801,9 +810,17 @@ int32_t BaseMapper::ToAbsoluteChrAddress(uint16_t addr)
 	return -1;
 }
 
-int32_t BaseMapper::FromAbsoluteAddress(uint32_t addr)
+int32_t BaseMapper::FromAbsoluteAddress(uint32_t addr, AddressType type)
 {
-	uint8_t* ptrAddress = _prgRom + addr;
+	uint8_t* ptrAddress;
+
+	switch(type) {
+		case AddressType::PrgRom: ptrAddress = _prgRom; break;
+		case AddressType::WorkRam: ptrAddress = _workRam; break;
+		case AddressType::SaveRam: ptrAddress = _saveRam; break;
+		default: return -1;
+	}
+	ptrAddress += addr;
 
 	for(int i = 0; i < 256; i++) {
 		uint8_t* pageAddress = _prgPages[i];
@@ -811,7 +828,7 @@ int32_t BaseMapper::FromAbsoluteAddress(uint32_t addr)
 			return (i << 8) + (uint32_t)(ptrAddress - pageAddress);
 		}
 	}
-			
+
 	//Address is currently not mapped
 	return -1;
 }

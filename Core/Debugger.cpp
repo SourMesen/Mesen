@@ -10,6 +10,7 @@
 #include "SoundMixer.h"
 #include "CodeDataLogger.h"
 #include "ExpressionEvaluator.h"
+#include "LabelManager.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
@@ -23,6 +24,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_memoryManager = memoryManager;
 	_mapper = mapper;
 
+	_labelManager.reset(new LabelManager(_mapper));
 	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPrgRom(), mapper->GetPrgSize(), mapper->GetWorkRam(), mapper->GetPrgSize(true)));
 	_codeDataLogger.reset(new CodeDataLogger(mapper->GetPrgSize(), mapper->GetChrSize()));
 	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger));
@@ -127,25 +129,9 @@ CdlRatios Debugger::GetCdlRatios()
 	return _codeDataLogger->GetRatios();
 }
 
-void Debugger::SetLabel(uint32_t address, string label, string comment)
+shared_ptr<LabelManager> Debugger::GetLabelManager()
 {
-	ExpressionEvaluator::ResetCustomCache();
-
-	auto existingLabel = _codeLabels.find(address);
-	if(existingLabel != _codeLabels.end()) {
-		_codeLabelReverseLookup.erase(existingLabel->second);
-	}
-
-	_codeLabels.erase(address);
-	if(!label.empty()) {
-		_codeLabels.emplace(address, label);
-		_codeLabelReverseLookup.emplace(label, address);
-	}
-
-	_codeComments.erase(address);
-	if(!comment.empty()) {
-		_codeComments.emplace(address, comment);
-	}
+	return _labelManager;
 }
 
 void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
@@ -311,7 +297,7 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	//Check if a breakpoint has been hit and freeze execution if one has
 	bool breakDone = false;
 	int32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
-	int32_t absoluteRamAddr = _mapper->ToAbsoluteRamAddress(addr);
+	int32_t absoluteRamAddr = _mapper->ToAbsoluteWorkRamAddress(addr);
 
 	if(absoluteAddr >= 0) {
 		if(type == MemoryOperationType::ExecOperand) {
@@ -489,34 +475,29 @@ string Debugger::GenerateOutput()
 	bool showOnlyDiassembledCode = CheckFlag(DebuggerFlags::ShowOnlyDisassembledCode);
 
 	//Get code in internal RAM
-	output << _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _codeLabels, _codeComments);
+	output << _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
 	output << "2000\x1\x1\x1--End of internal RAM--\n";
 
 	for(uint32_t i = 0x2000; i < 0x10000; i += 0x100) {
 		//Merge all sequential ranges into 1 chunk
-		int32_t romAddr = _mapper->ToAbsoluteAddress(i);
-		int32_t ramAddr = _mapper->ToAbsoluteRamAddress(i);
+		PrgMemoryType memoryType = PrgMemoryType::PrgRom;
+		int32_t addr = _mapper->ToAbsoluteAddress(i);
+		if(addr < 0) {
+			addr = _mapper->ToAbsoluteWorkRamAddress(i);
+			memoryType = PrgMemoryType::WorkRam;
+		}
 		uint32_t startMemoryAddr = i;
 		int32_t startAddr, endAddr;
 
-		if(romAddr >= 0) {
-			startAddr = romAddr;
+		if(addr >= 0) {
+			startAddr = addr;
 			endAddr = startAddr + 0xFF;
-			while(romAddr + 0x100 == _mapper->ToAbsoluteAddress(i + 0x100) && i < 0x10000) {
+			while(addr + 0x100 == (memoryType == PrgMemoryType::PrgRom ? _mapper->ToAbsoluteAddress(i + 0x100) : _mapper->ToAbsoluteWorkRamAddress(i + 0x100)) && i < 0x10000) {
 				endAddr += 0x100;
-				romAddr += 0x100;
+				addr += 0x100;
 				i+=0x100;
 			}
-			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _codeLabels, _codeComments);
-		} else if(ramAddr >= 0) {
-			startAddr = ramAddr;
-			endAddr = startAddr + 0xFF;
-			while(ramAddr + 0x100 == _mapper->ToAbsoluteRamAddress(i + 0x100) && i < 0x10000) {
-				endAddr += 0x100;
-				ramAddr += 0x100;
-				i += 0x100;
-			}
-			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, PrgMemoryType::WorkRam, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _codeLabels, _codeComments);
+			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, memoryType, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
 		}
 	}
 
@@ -533,9 +514,19 @@ uint8_t Debugger::GetMemoryValue(uint32_t addr)
 	return _memoryManager->DebugRead(addr);
 }
 
-int32_t Debugger::GetRelativeAddress(uint32_t addr)
+int32_t Debugger::GetRelativeAddress(uint32_t addr, AddressType type)
 {
-	return _mapper->FromAbsoluteAddress(addr);
+	switch(type) {
+		case AddressType::InternalRam: 
+			return addr;
+		
+		case AddressType::PrgRom: 
+		case AddressType::WorkRam: 
+		case AddressType::SaveRam: 
+			return _mapper->FromAbsoluteAddress(addr, type);
+	}
+
+	return -1;
 }
 
 int32_t Debugger::GetAbsoluteAddress(uint32_t addr)
@@ -615,11 +606,32 @@ shared_ptr<MemoryDumper> Debugger::GetMemoryDumper()
 	return _memoryDumper;
 }
 
-int32_t Debugger::GetCodeLabelAddress(string label)
+void Debugger::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info)
 {
-	auto result = _codeLabelReverseLookup.find(label);
-	if(result != _codeLabelReverseLookup.end()) {
-		return _mapper->FromAbsoluteAddress(result->second);
+	if(relativeAddr < 0x2000) {
+		info->Address = relativeAddr;
+		info->Type = AddressType::InternalRam;
+		return;
 	}
-	return -1;
+
+	int32_t addr = _mapper->ToAbsoluteAddress(relativeAddr);
+	if(addr >= 0) {
+		info->Address = addr;
+		info->Type = AddressType::PrgRom;
+		return;
+	}
+	
+	addr = _mapper->ToAbsoluteWorkRamAddress(relativeAddr);
+	if(addr >= 0) {
+		info->Address = addr;
+		info->Type = AddressType::WorkRam;
+		return;
+	}
+
+	addr = _mapper->ToAbsoluteSaveRamAddress(relativeAddr);
+	if(addr >= 0) {
+		info->Address = addr;
+		info->Type = AddressType::SaveRam;
+		return;
+	}
 }

@@ -4,6 +4,7 @@
 #include "BaseMapper.h"
 #include "MemoryManager.h"
 #include "CPU.h"
+#include "LabelManager.h"
 
 Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize)
 {
@@ -186,7 +187,8 @@ vector<string> Disassembler::SplitComment(string input)
 	return result;
 }
 
-string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, unordered_map<uint32_t, string> &codeLabels, unordered_map<uint32_t, string> &codeComments) {
+string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager) 
+{
 	std::ostringstream output;
 
 	uint16_t resetVector = memoryManager->DebugReadWord(CPU::ResetVector);
@@ -212,11 +214,9 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 	uint32_t byteCount = 0;
 	bool skippingCode = false;
 	while(addr <= endAddr) {
-		auto labelSearch = codeLabels.find(addr);
-		auto commentSearch = codeComments.find(addr);
-		string label = labelSearch != codeLabels.end() ? labelSearch->second : "";
-		string labelString = label.empty() ? "" : ("\x1\x1\x1" + labelSearch->second + ":\n");
-		string commentString = commentSearch != codeComments.end() ? commentSearch->second : "";
+		string label = labelManager->GetLabel(memoryAddr);
+		string commentString = labelManager->GetComment(memoryAddr);
+		string labelString = label.empty() ? "" : ("\x1\x1\x1" + label + ":\n");
 		bool multilineComment = commentString.find_first_of('\n') != string::npos;
 		string singleLineComment = "";
 		string multiLineComment = "";
@@ -245,7 +245,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 				skippingCode = false;
 			}
 
-			string effectiveAddress = showEffectiveAddresses ? info->GetEffectiveAddressString(cpuState, memoryManager, &codeLabels) : "";
+			string effectiveAddress = showEffectiveAddresses ? info->GetEffectiveAddressString(cpuState, memoryManager, labelManager) : "";
 
 			if(info->IsSubEntryPoint()) {
 				if(label.empty()) {
@@ -263,7 +263,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 
 			output << multiLineComment;
 			output << labelString;
-			output << std::hex << std::uppercase << memoryAddr << "\x1" << addr << "\x1" << info->GetByteCode() << "\x1  " << info->ToString(memoryAddr, memoryManager, &codeLabels) << "\x2" << effectiveAddress;
+			output << std::hex << std::uppercase << memoryAddr << "\x1" << addr << "\x1" << info->GetByteCode() << "\x1  " << info->ToString(memoryAddr, memoryManager, labelManager) << "\x2" << effectiveAddress;
 			output << singleLineComment;
 
 			output << "\n";

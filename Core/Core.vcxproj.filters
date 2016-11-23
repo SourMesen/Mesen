@@ -1090,6 +1090,12 @@
     <ClInclude Include="MemoryDumper.h">
       <Filter>Debugger</Filter>
     </ClInclude>
+    <ClInclude Include="LabelManager.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="DebuggerTypes.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1267,6 +1273,9 @@
       <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="MemoryDumper.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="LabelManager.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>

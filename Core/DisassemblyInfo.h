@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include "CPU.h"
 
+class LabelManager;
+
 class DisassemblyInfo
 {
 public:
@@ -26,9 +28,9 @@ public:
 	void SetSubEntryPoint();
 
 	int32_t GetEffectiveAddress(State& cpuState, shared_ptr<MemoryManager> memoryManager);
-	string GetEffectiveAddressString(State& cpuState, shared_ptr<MemoryManager> memoryManager, std::unordered_map<uint32_t, string> *codeLabels);
+	string GetEffectiveAddressString(State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 
-	string ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> memoryManager, std::unordered_map<uint32_t, string> *codeLabels = nullptr);
+	string ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 	string GetByteCode();
 	uint32_t GetSize();
 

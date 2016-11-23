@@ -4,11 +4,9 @@
 #include <atomic>
 #include <deque>
 #include <unordered_set>
-#include <unordered_map>
 using std::atomic;
 using std::deque;
 using std::unordered_set;
-using std::unordered_map;
 
 #include "DebugState.h"
 #include "Breakpoint.h"
@@ -16,19 +14,14 @@ using std::unordered_map;
 #include "../Utilities/SimpleLock.h"
 #include "CodeDataLogger.h"
 #include "MemoryDumper.h"
+#include "DebuggerTypes.h"
 
 class CPU;
 class PPU;
 class MemoryManager;
 class Console;
 class Disassembler;
-
-enum class DebuggerFlags
-{
-	PpuPartialDraw = 1,
-	ShowEffectiveAddresses = 2,
-	ShowOnlyDisassembledCode = 4
-};
+class LabelManager;
 
 class Debugger
 {
@@ -57,10 +50,6 @@ private:
 	vector<Breakpoint> _breakpoints[BreakpointTypeCount];
 	bool _hasBreakpoint[BreakpointTypeCount];
 
-	unordered_map<uint32_t, string> _codeLabels;
-	unordered_map<string, uint32_t> _codeLabelReverseLookup;
-	unordered_map<uint32_t, string> _codeComments;
-
 	deque<uint32_t> _callstackAbsolute;
 	deque<uint32_t> _callstackRelative;
 
@@ -70,6 +59,7 @@ private:
 
 	SimpleLock _breakLock;
 
+	shared_ptr<LabelManager> _labelManager;
 	shared_ptr<TraceLogger> _traceLogger;
 
 	//Used to alter the executing address via "Set Next Statement"
@@ -109,9 +99,8 @@ public:
 	bool CheckFlag(DebuggerFlags flag);
 	
 	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
-	void SetLabel(uint32_t address, string label, string comment);
-
-	int32_t GetCodeLabelAddress(string label);
+	
+	shared_ptr<LabelManager> GetLabelManager();
 
 	void GetFunctionEntryPoints(int32_t* entryPoints);
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
@@ -139,8 +128,9 @@ public:
 	string* GetCode();
 	
 	uint8_t GetMemoryValue(uint32_t addr);
-	int32_t GetRelativeAddress(uint32_t addr);
-	int32_t GetAbsoluteAddress(uint32_t addr);
+	int32_t GetRelativeAddress(uint32_t addr, AddressType type);
+	int32_t GetAbsoluteAddress(uint32_t addr);	
+	void GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info);
 
 	void StartTraceLogger(TraceLoggerOptions options);
 	void StopTraceLogger();

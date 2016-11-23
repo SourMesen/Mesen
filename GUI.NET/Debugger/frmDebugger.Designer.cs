@@ -16,6 +16,7 @@
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
+			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
 			if(_notifListener != null) {
 				_notifListener.Dispose();
 				_notifListener = null;

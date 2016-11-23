@@ -6,6 +6,7 @@
 #include "MessageManager.h"
 #include "RomLoader.h"
 #include "EmulationSettings.h"
+#include "DebuggerTypes.h"
 
 enum class DebugMemoryType;
 
@@ -232,7 +233,8 @@ public:
 	uint32_t CopyMemory(DebugMemoryType type, uint8_t* buffer);
 	void WriteMemory(DebugMemoryType type, uint8_t* buffer);
 	int32_t ToAbsoluteAddress(uint16_t addr);
-	int32_t ToAbsoluteRamAddress(uint16_t addr);
+	int32_t ToAbsoluteSaveRamAddress(uint16_t addr);
+	int32_t ToAbsoluteWorkRamAddress(uint16_t addr);
 	int32_t ToAbsoluteChrAddress(uint16_t addr);
-	int32_t FromAbsoluteAddress(uint32_t addr);
+	int32_t FromAbsoluteAddress(uint32_t addr, AddressType type = AddressType::PrgRom);
 };

@@ -185,11 +185,12 @@ namespace Mesen.GUI.Debugger
 					if(label == null) {
 						toolTip.Hide(ctrlCodeViewer);
 					} else {
-						Byte memoryValue = InteropEmu.DebugGetMemoryValue(label.Address);
+						Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
+						Int32 memoryValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress) : -1;
 						toolTip.Show(
 							"Label: " + label.Label + Environment.NewLine + 
-							"Address: $" + InteropEmu.DebugGetRelativeAddress(label.Address).ToString("X4") + Environment.NewLine + 
-							"Value: $" + memoryValue.ToString("X2") + Environment.NewLine +
+							"Address: $" + InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType).ToString("X4") + Environment.NewLine + 
+							"Value: " + (memoryValue >= 0 ? ("$" + memoryValue.ToString("X2")) : "n/a") + Environment.NewLine +
 							"Comment: " + (label.Comment.Contains(Environment.NewLine) ? (Environment.NewLine + label.Comment) : label.Comment)
 						, ctrlCodeViewer, e.Location.X + 5, e.Location.Y - 60 - label.Comment.Split('\n').Length * 14, 3000);
 					}
@@ -239,19 +240,23 @@ namespace Mesen.GUI.Debugger
 		
 		private void ctrlCodeViewer_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			int address = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
+			int relativeAddress = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
 
-			if(address >= 0 && e.Location.X > this.ctrlCodeViewer.CodeMargin / 2 && e.Location.X < this.ctrlCodeViewer.CodeMargin) {
-				UInt32 absoluteAddr = (UInt32)InteropEmu.DebugGetAbsoluteAddress((UInt32)address);
-				CodeLabel existingLabel = LabelManager.GetLabel(absoluteAddr);
-				CodeLabel newLabel = new CodeLabel() { Label = existingLabel?.Label, Comment = existingLabel?.Comment };
+			if(relativeAddress >= 0 && e.Location.X > this.ctrlCodeViewer.CodeMargin / 2 && e.Location.X < this.ctrlCodeViewer.CodeMargin) {
+				AddressTypeInfo info = new AddressTypeInfo();
+				InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)relativeAddress, ref info);
 
-				frmEditLabel frm = new frmEditLabel(absoluteAddr, newLabel);
-				if(frm.ShowDialog() == DialogResult.OK) {
-					if(string.IsNullOrWhiteSpace(newLabel.Label) && string.IsNullOrWhiteSpace(newLabel.Comment)) {
-						LabelManager.DeleteLabel(absoluteAddr);
-					} else {
-						LabelManager.SetLabel(absoluteAddr, newLabel.Label, newLabel.Comment);
+				if(info.Address >= 0) {
+					CodeLabel existingLabel = LabelManager.GetLabel((UInt32)info.Address, info.Type);
+					CodeLabel newLabel = new CodeLabel() { Address = (UInt32)info.Address, AddressType = info.Type, Label = existingLabel?.Label, Comment = existingLabel?.Comment };
+
+					frmEditLabel frm = new frmEditLabel(newLabel);
+					if(frm.ShowDialog() == DialogResult.OK) {
+						if(string.IsNullOrWhiteSpace(newLabel.Label) && string.IsNullOrWhiteSpace(newLabel.Comment)) {
+							LabelManager.DeleteLabel(newLabel.Address, newLabel.AddressType);
+						} else {
+							LabelManager.SetLabel(newLabel.Address, newLabel.AddressType, newLabel.Label, newLabel.Comment);
+						}
 					}
 				}
 			}

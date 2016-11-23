@@ -1,12 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseMapper.h"
-#include <unordered_map>
-using std::unordered_map;
 
 struct State;
 class MemoryManager;
 class DisassemblyInfo;
+class LabelManager;
 
 class Disassembler
 {
@@ -29,7 +28,7 @@ public:
 	uint32_t BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr, uint16_t memoryAddr, bool isSubEntryPoint);
 	void InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr);
 
-	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, unordered_map<uint32_t, string> &codeLabels, unordered_map<uint32_t, string> &codeComments);
+	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 
 	shared_ptr<DisassemblyInfo> GetDisassemblyInfo(int32_t absoluteAddress, int32_t absoluteRamAddress, uint16_t memoryAddress);
 };

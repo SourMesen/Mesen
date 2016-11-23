@@ -53,10 +53,10 @@ namespace Mesen.GUI.Debugger.Controls
 			lstFunctions.ListViewItemSorter = null;
 			lstFunctions.Items.Clear();
 			for(int i = 0; entryPoints[i] >= 0; i++) {
-				CodeLabel label = LabelManager.GetLabel((UInt32)entryPoints[i]);
+				CodeLabel label = LabelManager.GetLabel((UInt32)entryPoints[i], AddressType.PrgRom);
 				ListViewItem item = lstFunctions.Items.Add(label?.Label);
 
-				Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)entryPoints[i]);
+				Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)entryPoints[i], AddressType.PrgRom);
 				if(relativeAddress >= 0) {
 					item.SubItems.Add("$" + relativeAddress.ToString("X4"));
 				} else {

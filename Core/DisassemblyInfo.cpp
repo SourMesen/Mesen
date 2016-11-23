@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "DisassemblyInfo.h"
 #include "CPU.h"
+#include "LabelManager.h"
 
 string DisassemblyInfo::OPName[256];
 AddrMode DisassemblyInfo::OPMode[256];
 uint32_t DisassemblyInfo::OPSize[256];
 
-string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> memoryManager, std::unordered_map<uint32_t, string> *codeLabels)
+string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager)
 {
 	std::ostringstream output;
 	uint8_t opCode = *_opPointer;
@@ -24,11 +25,8 @@ string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> 
 	}
 	
 	string operandValue;
-	if(codeLabels) {
-		auto result = codeLabels->find(memoryManager->ToAbsolutePrgAddress(_opAddr));
-		if(result != codeLabels->end()) {
-			operandValue = result->second;
-		}
+	if(labelManager && _opMode != AddrMode::Imm) {
+		operandValue = labelManager->GetLabel(_opAddr);
 	}
 	
 	if(operandValue.empty()) {
@@ -110,17 +108,17 @@ void DisassemblyInfo::SetSubEntryPoint()
 	_isSubEntryPoint = true;
 }
 
-string DisassemblyInfo::GetEffectiveAddressString(State& cpuState, shared_ptr<MemoryManager> memoryManager, std::unordered_map<uint32_t, string> *codeLabels)
+string DisassemblyInfo::GetEffectiveAddressString(State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager)
 {
 	int32_t effectiveAddress = GetEffectiveAddress(cpuState, memoryManager);
 	if(effectiveAddress < 0) {
 		return "";
 	} else {
 		bool empty = true;
-		if(codeLabels) {
-			auto result = codeLabels->find(memoryManager->ToAbsolutePrgAddress(effectiveAddress));
-			if(result != codeLabels->end()) {
-				return " @ " + result->second;
+		if(labelManager) {
+			string label = labelManager->GetLabel(effectiveAddress);
+			if(!label.empty()) {
+				return " @ " + label;
 			}
 		}
 		

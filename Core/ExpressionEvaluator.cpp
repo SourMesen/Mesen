@@ -3,6 +3,7 @@
 #include "ExpressionEvaluator.h"
 #include "Console.h"
 #include "Debugger.h"
+#include "LabelManager.h"
 
 std::unordered_map<string, std::vector<int>, StringHasher> ExpressionEvaluator::_outputCache;
 std::unordered_map<string, std::vector<int>, StringHasher> ExpressionEvaluator::_customOutputCache;
@@ -88,7 +89,7 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 		output += std::to_string(EvalValues::AbsoluteAddress);
 	} else {
 		string originalExpression = expression.substr(initialPos, pos - initialPos);
-		int32_t address = _debugger->GetCodeLabelAddress(originalExpression);
+		int32_t address = _debugger->GetLabelManager()->GetLabelRelativeAddress(originalExpression);
 		if(address >= 0) {
 			_containsCustomLabels = true;
 			output += std::to_string(address);

@@ -42,7 +42,7 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 		State &cpuState = state.CPU;
 		PPUDebugState &ppuState = state.PPU;
 
-		string disassembly = disassemblyInfo->ToString(cpuState.DebugPC, _memoryManager);
+		string disassembly = disassemblyInfo->ToString(cpuState.DebugPC, _memoryManager, nullptr);
 
 		//Roughly adjust PPU cycle & scanline to take into account the PPU already ran 3 cycles by the time we get here
 		short ppuCycle = (short)ppuState.Cycle - 3;

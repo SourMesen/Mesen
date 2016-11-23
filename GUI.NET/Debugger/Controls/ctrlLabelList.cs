@@ -25,11 +25,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 			lstLabels.BeginUpdate();
 			lstLabels.Items.Clear();
-			foreach(KeyValuePair<UInt32, CodeLabel> kvp in LabelManager.GetLabels()) {
+			foreach(KeyValuePair<string, CodeLabel> kvp in LabelManager.GetLabels()) {
 				if(kvp.Value.Label.Length > 0) {
 					ListViewItem item = lstLabels.Items.Add(kvp.Value.Label);
 
-					Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(kvp.Value.Address);
+					Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(kvp.Value.Address, kvp.Value.AddressType);
 					if(relativeAddress >= 0) {
 						item.SubItems.Add("$" + relativeAddress.ToString("X4"));
 					} else {
@@ -38,7 +38,7 @@ namespace Mesen.GUI.Debugger.Controls
 						item.Font = new Font(item.Font, FontStyle.Italic);
 					}
 					item.SubItems.Add("$" + kvp.Value.Address.ToString("X4"));
-					item.SubItems[1].Tag = kvp.Value.Address;
+					item.SubItems[1].Tag = kvp.Value;
 
 					item.Tag = relativeAddress;
 				}
@@ -66,7 +66,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuDelete_Click(object sender, EventArgs e)
 		{
 			foreach(ListViewItem item in lstLabels.SelectedItems) {
-				LabelManager.DeleteLabel((UInt32)item.SubItems[1].Tag);
+				LabelManager.DeleteLabel(((CodeLabel)item.SubItems[1].Tag).Address, ((CodeLabel)item.SubItems[1].Tag).AddressType);
 			}
 		}
 	}

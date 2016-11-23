@@ -14,26 +14,35 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class frmEditLabel : BaseConfigForm
 	{
-		UInt32 _address;
+		private UInt32 _originalAddress;
+		private AddressType _originalMemoryType;
 
-		public frmEditLabel(UInt32 address, CodeLabel label)
+		public frmEditLabel(CodeLabel label)
 		{
 			InitializeComponent();
 
-			_address = address;
-			this.Text = "Edit Label: $" + address.ToString("X4");
+			_originalAddress = label.Address;
+			_originalMemoryType = label.AddressType;
 
 			Entity = label;
 
+			AddBinding("AddressType", cboRegion);
+			AddBinding("Address", txtAddress);
 			AddBinding("Label", txtLabel);
 			AddBinding("Comment", txtComment);
+		}
+
+		protected override void OnShown(EventArgs e)
+		{
+			base.OnShown(e);
+			txtLabel.Focus();
 		}
 
 		protected override bool ValidateInput()
 		{
 			CodeLabel existingLabel = LabelManager.GetLabel(txtLabel.Text);
 
-			return (existingLabel == null || existingLabel.Address == _address) 
+			return (existingLabel == null || (existingLabel.Address == _originalAddress && existingLabel.AddressType == _originalMemoryType)) 
 				&& !txtComment.Text.Contains('\x1') && !txtComment.Text.Contains('\x2')
 				&& (txtLabel.Text.Length == 0 || Regex.IsMatch(txtLabel.Text, "^[_a-zA-Z]+[_a-zA-Z0-9]*"));
 		}
