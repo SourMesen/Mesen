@@ -153,6 +153,7 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateDebugger(bool updateActiveAddress = true)
 		{
+			ctrlLabelList.UpdateLabelList();
 			ctrlFunctionList.UpdateFunctionList();
 			UpdateDebuggerFlags();
 			UpdateVectorAddresses();
@@ -501,7 +502,6 @@ namespace Mesen.GUI.Debugger
 		private void LabelManager_OnLabelUpdated(object sender, EventArgs e)
 		{
 			UpdateDebugger(false);
-			ctrlLabelList.UpdateLabelList();
 		}
 
 		private void ctrlLabelList_OnLabelSelected(object relativeAddress, EventArgs e)
