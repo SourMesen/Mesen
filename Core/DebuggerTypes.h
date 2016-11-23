@@ -13,6 +13,7 @@ enum class AddressType
 	PrgRom = 1,
 	WorkRam = 2,
 	SaveRam = 3,
+	Register = 4
 };
 
 struct AddressTypeInfo

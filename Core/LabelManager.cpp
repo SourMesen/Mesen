@@ -10,10 +10,11 @@ LabelManager::LabelManager(shared_ptr<BaseMapper> mapper)
 void LabelManager::SetLabel(uint32_t address, AddressType addressType, string label, string comment)
 {
 	switch(addressType) {
-		case AddressType::InternalRam: address |= 0x40000000; break;
-		case AddressType::PrgRom: address |= 0x20000000; break;
-		case AddressType::WorkRam: address |= 0x10000000; break;
-		case AddressType::SaveRam: address |= 0x08000000; break;
+		case AddressType::InternalRam: address |= 0x70000000; break;
+		case AddressType::PrgRom: address |= 0x60000000; break;
+		case AddressType::WorkRam: address |= 0x50000000; break;
+		case AddressType::SaveRam: address |= 0x40000000; break;
+		case AddressType::Register: address |= 0x30000000; break;
 	}
 
 	auto existingLabel = _codeLabels.find(address);
@@ -33,36 +34,41 @@ void LabelManager::SetLabel(uint32_t address, AddressType addressType, string la
 	}
 }
 
-int32_t LabelManager::GetLabelAddress(uint16_t relativeAddr)
+int32_t LabelManager::GetLabelAddress(uint16_t relativeAddr, bool checkRegisters)
 {
 	if(relativeAddr < 0x2000) {
-		return relativeAddr | 0x40000000;
+		return relativeAddr | 0x70000000;
 	} else {
 		int32_t addr = _mapper->ToAbsoluteAddress(relativeAddr);
 		if(addr >= 0) {
 			//PRG ROM
-			return addr | 0x20000000;
+			return addr | 0x60000000;
 		}
 
 		addr = _mapper->ToAbsoluteWorkRamAddress(relativeAddr);
 		if(addr >= 0) {
 			//Work RAM
-			return addr | 0x10000000;
+			return addr | 0x50000000;
 		}
 
 		addr = _mapper->ToAbsoluteSaveRamAddress(relativeAddr);
 		if(addr >= 0) {
 			//Save RAM
-			return addr | 0x08000000;
+			return addr | 0x40000000;
+		}
+
+		//Register
+		if(checkRegisters) {
+			return relativeAddr | 0x30000000;
 		}
 	}
 
 	return -1;
 }
 
-string LabelManager::GetLabel(uint16_t relativeAddr)
+string LabelManager::GetLabel(uint16_t relativeAddr, bool checkRegisters)
 {
-	uint32_t labelAddr = GetLabelAddress(relativeAddr);
+	uint32_t labelAddr = GetLabelAddress(relativeAddr, checkRegisters);
 
 	if(labelAddr >= 0) {
 		auto result = _codeLabels.find(labelAddr);
@@ -76,7 +82,7 @@ string LabelManager::GetLabel(uint16_t relativeAddr)
 
 string LabelManager::GetComment(uint16_t relativeAddr)
 {
-	uint32_t labelAddr = GetLabelAddress(relativeAddr);
+	uint32_t labelAddr = GetLabelAddress(relativeAddr, false);
 
 	if(labelAddr >= 0) {
 		auto result = _codeComments.find(labelAddr);
@@ -94,18 +100,20 @@ int32_t LabelManager::GetLabelRelativeAddress(string label)
 	if(result != _codeLabelReverseLookup.end()) {
 		uint32_t address = result->second;
 		AddressType type = AddressType::InternalRam;
-		if(address & 0x40000000) {
+		if((address & 0x70000000) == 0x70000000) {
 			type = AddressType::InternalRam;
-		} else if(address & 0x20000000) {
+		} else if((address & 0x60000000) == 0x60000000) {
 			type = AddressType::PrgRom;
-		} else if(address & 0x10000000) {
+		} else if((address & 0x50000000) == 0x50000000) {
 			type = AddressType::WorkRam;
-		} else if(address & 0x08000000) {
+		} else if((address & 0x40000000) == 0x40000000) {
 			type = AddressType::SaveRam;
-		} else {
+		}/* else if((address & 0x30000000) == 0x30000000) {
+			type = AddressType::Register;
+		}*/ else {
 			return -1;
 		}
-		return _mapper->FromAbsoluteAddress(address & 0x07FFFFFF, type);
+		return _mapper->FromAbsoluteAddress(address & 0x0FFFFFFF, type);
 	}
 	return -1;
 }

@@ -15,7 +15,7 @@ private:
 
 	shared_ptr<BaseMapper> _mapper;
 
-	int32_t GetLabelAddress(uint16_t relativeAddr);
+	int32_t GetLabelAddress(uint16_t relativeAddr, bool checkRegisters);
 
 public:
 	LabelManager(shared_ptr<BaseMapper> mapper);
@@ -24,6 +24,6 @@ public:
 	
 	int32_t GetLabelRelativeAddress(string label);
 
-	string GetLabel(uint16_t relativeAddr);
+	string GetLabel(uint16_t relativeAddr, bool checkRegisters);
 	string GetComment(uint16_t relativeAddr);
 };

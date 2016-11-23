@@ -26,7 +26,7 @@ string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> 
 	
 	string operandValue;
 	if(labelManager && _opMode != AddrMode::Imm) {
-		operandValue = labelManager->GetLabel(_opAddr);
+		operandValue = labelManager->GetLabel(_opAddr, true);
 	}
 	
 	if(operandValue.empty()) {
@@ -38,7 +38,7 @@ string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> 
 	output << " ";
 
 	switch(_opMode) {
-		case AddrMode::Acc: output << " A"; break;
+		case AddrMode::Acc: output << "A"; break;
 		case AddrMode::Imm: output << "#" << operandValue; break;
 		case AddrMode::Ind: output << "(" << operandValue << ")"; break;
 		case AddrMode::IndX: output << "(" << operandValue << ",X)"; break;
@@ -116,7 +116,7 @@ string DisassemblyInfo::GetEffectiveAddressString(State& cpuState, shared_ptr<Me
 	} else {
 		bool empty = true;
 		if(labelManager) {
-			string label = labelManager->GetLabel(effectiveAddress);
+			string label = labelManager->GetLabel(effectiveAddress, true);
 			if(!label.empty()) {
 				return " @ " + label;
 			}

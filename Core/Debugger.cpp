@@ -518,6 +518,7 @@ int32_t Debugger::GetRelativeAddress(uint32_t addr, AddressType type)
 {
 	switch(type) {
 		case AddressType::InternalRam: 
+		case AddressType::Register:
 			return addr;
 		
 		case AddressType::PrgRom: 

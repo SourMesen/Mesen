@@ -214,7 +214,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 	uint32_t byteCount = 0;
 	bool skippingCode = false;
 	while(addr <= endAddr) {
-		string label = labelManager->GetLabel(memoryAddr);
+		string label = labelManager->GetLabel(memoryAddr, false);
 		string commentString = labelManager->GetComment(memoryAddr);
 		string labelString = label.empty() ? "" : ("\x1\x1\x1" + label + ":\n");
 		bool multilineComment = commentString.find_first_of('\n') != string::npos;
