@@ -9,8 +9,6 @@ LabelManager::LabelManager(shared_ptr<BaseMapper> mapper)
 
 void LabelManager::SetLabel(uint32_t address, AddressType addressType, string label, string comment)
 {
-	ExpressionEvaluator::ResetCustomCache();
-
 	switch(addressType) {
 		case AddressType::InternalRam: address |= 0x40000000; break;
 		case AddressType::PrgRom: address |= 0x20000000; break;
@@ -94,7 +92,20 @@ int32_t LabelManager::GetLabelRelativeAddress(string label)
 {
 	auto result = _codeLabelReverseLookup.find(label);
 	if(result != _codeLabelReverseLookup.end()) {
-		return _mapper->FromAbsoluteAddress(result->second);
+		uint32_t address = result->second;
+		AddressType type = AddressType::InternalRam;
+		if(address & 0x40000000) {
+			type = AddressType::InternalRam;
+		} else if(address & 0x20000000) {
+			type = AddressType::PrgRom;
+		} else if(address & 0x10000000) {
+			type = AddressType::WorkRam;
+		} else if(address & 0x08000000) {
+			type = AddressType::SaveRam;
+		} else {
+			return -1;
+		}
+		return _mapper->FromAbsoluteAddress(address & 0x07FFFFFF, type);
 	}
 	return -1;
 }

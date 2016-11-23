@@ -86,7 +86,6 @@ private:
 	const vector<int> _unaryPrecedence = { {    11,  11,  11,  11 } };
 
 	static std::unordered_map<string, std::vector<int>, StringHasher> _outputCache;
-	static std::unordered_map<string, std::vector<int>, StringHasher> _customOutputCache;
 	static SimpleLock _cacheLock;
 
 	Debugger* _debugger;
@@ -107,6 +106,4 @@ public:
 	int32_t Evaluate(string expression, DebugState &state, int16_t memoryValue = 0, uint32_t memoryAddr = 0);
 	int32_t Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue = 0, uint32_t memoryAddr = 0);
 	bool Validate(string expression);
-
-	static void ResetCustomCache();
 };

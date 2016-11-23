@@ -6,7 +6,6 @@
 #include "LabelManager.h"
 
 std::unordered_map<string, std::vector<int>, StringHasher> ExpressionEvaluator::_outputCache;
-std::unordered_map<string, std::vector<int>, StringHasher> ExpressionEvaluator::_customOutputCache;
 SimpleLock ExpressionEvaluator::_cacheLock;
 
 bool ExpressionEvaluator::IsOperator(string token, int &precedence, bool unaryOperator)
@@ -333,11 +332,6 @@ int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &stat
 		auto cacheOutputQueue = _outputCache.find(expression);
 		if(cacheOutputQueue != _outputCache.end()) {
 			outputQueue = &(cacheOutputQueue->second);
-		} else {
-			auto customCacheResult = _customOutputCache.find(expression);
-			if(customCacheResult != _customOutputCache.end()) {
-				output = _customOutputCache[expression];
-			}
 		}
 	}
 	
@@ -346,11 +340,10 @@ int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &stat
 		fixedExp.erase(std::remove(fixedExp.begin(), fixedExp.end(), ' '), fixedExp.end());
 		ToRpn(fixedExp, output);
 
-		LockHandler lock = _cacheLock.AcquireSafe();
 		if(_containsCustomLabels) {
-			_customOutputCache[expression] = output;
 			outputQueue = &output;
 		} else {
+			LockHandler lock = _cacheLock.AcquireSafe();
 			_outputCache[expression] = output;
 			outputQueue = &_outputCache[expression];
 		}
@@ -389,10 +382,4 @@ bool ExpressionEvaluator::Validate(string expression)
 	} catch(std::exception e) {
 		return false;
 	}
-}
-
-void ExpressionEvaluator::ResetCustomCache()
-{
-	LockHandler lock = _cacheLock.AcquireSafe();
-	_customOutputCache.clear();
 }

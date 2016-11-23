@@ -4,7 +4,6 @@
 using std::unordered_map;
 
 class BaseMapper;
-class ExpressionEvaluator;
 enum class AddressType;
 
 class LabelManager
