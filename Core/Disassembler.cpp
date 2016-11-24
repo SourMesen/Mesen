@@ -249,9 +249,9 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 
 			if(info->IsSubEntryPoint()) {
 				if(label.empty()) {
-					output << "\x1\x1\x1\n\x1\x1\x1--sub start--\n";
+					output << "\x1\x1\x1\n\x1\x1\x1__sub start__\n";
 				} else {
-					output << "\x1\x1\x1\n\x1\x1\x1--" + label + "()--\n";
+					output << "\x1\x1\x1\n\x1\x1\x1__" + label + "()__\n";
 				}
 			} else if(memoryAddr == resetVector) {
 				output << "\x1\x1\x1\n\x1\x1\x1--reset--\n";
@@ -275,16 +275,25 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			addr += info->GetSize();
 			memoryAddr += info->GetSize();
 		} else {
+			if(!label.empty() && skippingCode) {
+				output << std::hex << std::uppercase << (memoryAddr - 1) << "\x1" << (addr - 1) << "\x1\x1";
+				if(showOnlyDiassembledCode) {
+					output << "----\n";
+				} else {
+					output << "__unknown block__\n";
+				}
+				skippingCode = false;
+			} 
+			
 			if(!skippingCode) {
 				output << std::hex << std::uppercase << memoryAddr << "\x1" << addr << "\x1\x1";
 				if(showOnlyDiassembledCode) {
-					output << "____\n\x1\x1\x1";
 					if(label.empty()) {
-						output << "[[unknown block]]\n";
+						output << "__unknown block__\n";
 					} else {
-						output << "[[" << label << "]]\n";
+						output << "__" << label << "__\n";
 						if(!singleLineComment.empty()) {
-							output << "\x1\x1\x1" << singleLineComment << "\n";
+							output << "\x1\x1\x1\x2" << singleLineComment << "\n";
 						} else {
 							output << multiLineComment;
 						}
