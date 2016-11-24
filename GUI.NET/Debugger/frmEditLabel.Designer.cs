@@ -41,8 +41,7 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 210);
-			this.baseConfigPanel.Size = new System.Drawing.Size(352, 29);
+			this.baseConfigPanel.Size = new System.Drawing.Size(377, 29);
 			// 
 			// tableLayoutPanel1
 			// 
@@ -65,7 +64,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(352, 210);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(377, 233);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// txtComment
@@ -74,7 +73,8 @@
 			this.txtComment.Location = new System.Drawing.Point(63, 82);
 			this.txtComment.Multiline = true;
 			this.txtComment.Name = "txtComment";
-			this.txtComment.Size = new System.Drawing.Size(286, 133);
+			this.txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.txtComment.Size = new System.Drawing.Size(311, 148);
 			this.txtComment.TabIndex = 3;
 			// 
 			// lblLabel
@@ -91,7 +91,7 @@
 			// 
 			this.lblComment.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblComment.AutoSize = true;
-			this.lblComment.Location = new System.Drawing.Point(3, 142);
+			this.lblComment.Location = new System.Drawing.Point(3, 149);
 			this.lblComment.Name = "lblComment";
 			this.lblComment.Size = new System.Drawing.Size(54, 13);
 			this.lblComment.TabIndex = 1;
@@ -102,7 +102,7 @@
 			this.txtLabel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtLabel.Location = new System.Drawing.Point(63, 56);
 			this.txtLabel.Name = "txtLabel";
-			this.txtLabel.Size = new System.Drawing.Size(286, 20);
+			this.txtLabel.Size = new System.Drawing.Size(311, 20);
 			this.txtLabel.TabIndex = 2;
 			// 
 			// lblRegion
@@ -146,7 +146,7 @@
 			this.AcceptButton = null;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(352, 239);
+			this.ClientSize = new System.Drawing.Size(377, 262);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmEditLabel";

@@ -54,6 +54,7 @@ namespace Mesen.GUI.Debugger
 		private Font _noteFont = null;
 		private int _marginWidth = 6;
 		private float _maxLineWidth = 0;
+		private int _maxLineWidthIndex = 0;
 
 		public ctrlTextbox()
 		{
@@ -67,7 +68,8 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				int maxLength = 0;
-				int maxLengthIndex = 0;
+
+				_maxLineWidthIndex = 0;
 
 				_contents = new string[value.Length];
 				_lineMargins = new int[value.Length];
@@ -75,14 +77,11 @@ namespace Mesen.GUI.Debugger
 					_contents[i] = value[i].TrimStart();
 					if(_contents[i].Length > maxLength) {
 						maxLength = _contents[i].Length;
-						maxLengthIndex = i;
+						_maxLineWidthIndex = i;
 					}
 					_lineMargins[i] = (value[i].Length - _contents[i].Length) * 10;
 				}
 
-				using(Graphics g = this.CreateGraphics()) {
-					_maxLineWidth = g.MeasureString(_contents[maxLengthIndex], this.Font).Width;
-				}
 				UpdateHorizontalScrollWidth();
 
 				_lineNumbers = new int[_contents.Length];
@@ -102,6 +101,7 @@ namespace Mesen.GUI.Debugger
 			{
 				base.Font = value;
 				_noteFont = new Font(value.FontFamily, value.Size * 0.75f);
+				UpdateHorizontalScrollWidth();
 			}
 		}
 
@@ -455,8 +455,11 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateHorizontalScrollWidth()
 		{
-			using(Graphics g = this.CreateGraphics()) {
-				HorizontalScrollWidth = (int)(Math.Max(0, 8 + _maxLineWidth - (this.Width - GetMargin(g))) / HorizontalScrollFactor);
+			if(_contents.Length > _maxLineWidthIndex) {
+				using(Graphics g = this.CreateGraphics()) {
+					_maxLineWidth = g.MeasureString(_contents[_maxLineWidthIndex], this.Font).Width;
+					HorizontalScrollWidth = (int)(Math.Max(0, HorizontalScrollFactor + _maxLineWidth - (this.Width - GetMargin(g))) / HorizontalScrollFactor);
+				}
 			}
 		}
 

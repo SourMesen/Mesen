@@ -60,6 +60,7 @@ namespace Mesen.GUI.Debugger
 			{
 				if(value >= 6 && value <= 20) {
 					this.ctrlTextbox.Font = new Font("Consolas", value);
+					UpdateHorizontalScrollbar();
 					this.ctrlTextbox.Invalidate();
 
 					if(this.FontSizeChanged != null) {
