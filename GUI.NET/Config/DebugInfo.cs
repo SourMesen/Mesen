@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 using Mesen.GUI.Debugger;
 
@@ -52,9 +53,12 @@ namespace Mesen.GUI.Config
 		public void Save()
 		{
 			try {
+				XmlWriterSettings ws = new XmlWriterSettings();
+				ws.NewLineHandling = NewLineHandling.Entitize;
+
 				XmlSerializer xmlSerializer = new XmlSerializer(typeof(DebugWorkspace));
-				using(TextWriter textWriter = new StreamWriter(_filePath)) {
-					xmlSerializer.Serialize(textWriter, this);
+				using(XmlWriter xmlWriter = XmlWriter.Create(_filePath, ws)) {
+					xmlSerializer.Serialize(xmlWriter, this);
 				}
 			} catch {
 			}
