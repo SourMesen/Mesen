@@ -44,6 +44,7 @@
 			this.lstCallstack.FullRowSelect = true;
 			this.lstCallstack.GridLines = true;
 			this.lstCallstack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.lstCallstack.HideSelection = false;
 			this.lstCallstack.Location = new System.Drawing.Point(0, 0);
 			this.lstCallstack.MultiSelect = false;
 			this.lstCallstack.Name = "lstCallstack";

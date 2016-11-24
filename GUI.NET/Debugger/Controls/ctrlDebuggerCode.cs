@@ -175,10 +175,12 @@ namespace Mesen.GUI.Debugger
 			if(_previousLocation != e.Location) {
 				string word = GetWordUnderLocation(e.Location);
 				if(word.StartsWith("$")) {
-					UInt32 address = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
-					Byte memoryValue = InteropEmu.DebugGetMemoryValue(address);
-					string valueText = "$" + memoryValue.ToString("X");
-					toolTip.Show(valueText, ctrlCodeViewer, e.Location.X + 5, e.Location.Y - 20, 3000);
+					try {
+						UInt32 address = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
+						Byte memoryValue = InteropEmu.DebugGetMemoryValue(address);
+						string valueText = "$" + memoryValue.ToString("X");
+						toolTip.Show(valueText, ctrlCodeViewer, e.Location.X + 5, e.Location.Y - 20, 3000);
+					} catch { }
 				} else {
 					CodeLabel label = LabelManager.GetLabel(word);
 

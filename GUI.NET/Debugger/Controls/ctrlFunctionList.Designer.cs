@@ -44,6 +44,7 @@
 			this.lstFunctions.FullRowSelect = true;
 			this.lstFunctions.GridLines = true;
 			this.lstFunctions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.lstFunctions.HideSelection = false;
 			this.lstFunctions.Location = new System.Drawing.Point(0, 0);
 			this.lstFunctions.MultiSelect = false;
 			this.lstFunctions.Name = "lstFunctions";

@@ -39,6 +39,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowFunctionLabelLists.Checked = ConfigManager.Config.DebugInfo.ShowFunctionLabelLists;
 
 			LabelManager.ResetLabels();
+			LabelManager.SetDefaultLabels(InteropEmu.FdsGetSideCount() > 0);
 			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
 
 			_lastCodeWindow = ctrlDebuggerCode;
