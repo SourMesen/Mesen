@@ -81,7 +81,7 @@ namespace Mesen.GUI.Debugger
 			tmrCdlRatios.Start();
 		}
 
-		private void UpdateWorkspace()
+		private void SaveWorkspace()
 		{
 			if(_workspace != null) {
 				_workspace.WatchValues = ctrlWatch.GetWatchValues();
@@ -89,7 +89,12 @@ namespace Mesen.GUI.Debugger
 				_workspace.Breakpoints = BreakpointManager.Breakpoints;
 				_workspace.Save();
 			}
+		}
 
+		private void UpdateWorkspace()
+		{
+			SaveWorkspace();
+			
 			_workspace = DebugWorkspace.GetWorkspace();
 
 			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
@@ -402,12 +407,10 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
+			SaveWorkspace();
+
 			foreach(Form frm in this._childForms.ToArray()) {
 				frm.Close();
-			}
-
-			if(_workspace != null) {
-				_workspace.Save();
 			}
 
 			base.OnFormClosed(e);
@@ -538,6 +541,24 @@ namespace Mesen.GUI.Debugger
 		private void ctrlLabelList_OnLabelSelected(object relativeAddress, EventArgs e)
 		{
 			_lastCodeWindow.ScrollToLineNumber((Int32)relativeAddress);
+		}
+
+		private void mnuResetWorkspace_Click(object sender, EventArgs e)
+		{
+			if(MessageBox.Show("This operation will empty the watch window, remove all breakpoints, and reset labels to their default state." + Environment.NewLine + "Are you sure?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
+				_workspace.Breakpoints = new List<Breakpoint>();
+				_workspace.Labels = new List<CodeLabel>();
+				_workspace.WatchValues = new List<string>();
+				_workspace.Save();
+				_workspace = null;
+				UpdateWorkspace();
+				UpdateDebugger();
+			}
+		}
+
+		private void mnuSaveWorkspace_Click(object sender, EventArgs e)
+		{
+			SaveWorkspace();
 		}
 	}
 }

@@ -115,6 +115,9 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
+			this.mnuWorkspace = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSaveWorkspace = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuResetWorkspace = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuCode.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -400,6 +403,7 @@
 			// fileToolStripMenuItem
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuWorkspace,
             this.toolStripMenuItem3,
             this.mnuClose});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -409,12 +413,12 @@
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(100, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuClose
 			// 
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(103, 22);
+			this.mnuClose.Size = new System.Drawing.Size(152, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -886,6 +890,30 @@
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
+			// mnuWorkspace
+			// 
+			this.mnuWorkspace.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuSaveWorkspace,
+            this.mnuResetWorkspace});
+			this.mnuWorkspace.Name = "mnuWorkspace";
+			this.mnuWorkspace.Size = new System.Drawing.Size(152, 22);
+			this.mnuWorkspace.Text = "Workspace";
+			// 
+			// mnuSaveWorkspace
+			// 
+			this.mnuSaveWorkspace.Name = "mnuSaveWorkspace";
+			this.mnuSaveWorkspace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+			this.mnuSaveWorkspace.Size = new System.Drawing.Size(152, 22);
+			this.mnuSaveWorkspace.Text = "Save";
+			this.mnuSaveWorkspace.Click += new System.EventHandler(this.mnuSaveWorkspace_Click);
+			// 
+			// mnuResetWorkspace
+			// 
+			this.mnuResetWorkspace.Name = "mnuResetWorkspace";
+			this.mnuResetWorkspace.Size = new System.Drawing.Size(152, 22);
+			this.mnuResetWorkspace.Text = "Reset";
+			this.mnuResetWorkspace.Click += new System.EventHandler(this.mnuResetWorkspace_Click);
+			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1009,5 +1037,8 @@
 		private Controls.ctrlLabelList ctrlLabelList;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowOnlyDisassembledCode;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowFunctionLabelLists;
+		private System.Windows.Forms.ToolStripMenuItem mnuWorkspace;
+		private System.Windows.Forms.ToolStripMenuItem mnuSaveWorkspace;
+		private System.Windows.Forms.ToolStripMenuItem mnuResetWorkspace;
 	}
 }
