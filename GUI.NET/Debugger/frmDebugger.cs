@@ -21,6 +21,8 @@ namespace Mesen.GUI.Debugger
 		private ctrlDebuggerCode _lastCodeWindow;
 		private frmTraceLogger _traceLogger;
 
+		private DebugWorkspace _workspace;
+
 		public frmDebugger()
 		{
 			InitializeComponent();
@@ -30,6 +32,11 @@ namespace Mesen.GUI.Debugger
 		{
  			base.OnLoad(e);
 
+			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
+			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
+
+			this.UpdateWorkspace();
+
 			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
 			this.mnuShowEffectiveAddresses.Checked = ConfigManager.Config.DebugInfo.ShowEffectiveAddresses;
@@ -38,20 +45,10 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
 			this.mnuShowFunctionLabelLists.Checked = ConfigManager.Config.DebugInfo.ShowFunctionLabelLists;
 
-			LabelManager.ResetLabels();
-			LabelManager.SetDefaultLabels(InteropEmu.FdsGetSideCount() > 0);
-			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
-
 			_lastCodeWindow = ctrlDebuggerCode;
 
 			this.ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
 			this.ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
-
-			BreakpointManager.Breakpoints.Clear();
-			BreakpointManager.Breakpoints.AddRange(ConfigManager.Config.DebugInfo.Breakpoints);
-			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
-			this.ctrlBreakpoints.RefreshList();
-			RefreshBreakpoints();
 
 			this.toolTip.SetToolTip(this.picWatchHelp,
 				"Most expressions/operators are accepted (C++ syntax)." + Environment.NewLine +
@@ -82,6 +79,33 @@ namespace Mesen.GUI.Debugger
 
 			UpdateCdlRatios();
 			tmrCdlRatios.Start();
+		}
+
+		private void UpdateWorkspace()
+		{
+			if(_workspace != null) {
+				_workspace.WatchValues = ctrlWatch.GetWatchValues();
+				_workspace.Labels = LabelManager.GetLabels();
+				_workspace.Breakpoints = BreakpointManager.Breakpoints;
+				_workspace.Save();
+			}
+
+			_workspace = DebugWorkspace.GetWorkspace();
+
+			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
+			if(_workspace.Labels.Count == 0) {
+				LabelManager.ResetLabels();
+				LabelManager.SetDefaultLabels(InteropEmu.FdsGetSideCount() > 0);
+			} else {
+				LabelManager.SetLabels(_workspace.Labels);
+			}
+			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
+
+			ctrlWatch.SetWatchValues(_workspace.WatchValues);
+
+			BreakpointManager.Breakpoints.Clear();
+			BreakpointManager.Breakpoints.AddRange(_workspace.Breakpoints);
+			ctrlBreakpoints.RefreshList();
 		}
 
 		private void UpdateCdlRatios()
@@ -119,7 +143,11 @@ namespace Mesen.GUI.Debugger
 
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
-					BreakpointManager.SetBreakpoints();
+					this.BeginInvoke((MethodInvoker)(() => {
+						this.UpdateWorkspace();
+						UpdateDebugger();
+						BreakpointManager.SetBreakpoints();
+					}));					
 					InteropEmu.DebugStep(1);
 					break;
 			}
@@ -204,9 +232,6 @@ namespace Mesen.GUI.Debugger
 		
 		private void RefreshBreakpoints()
 		{
-			ConfigManager.Config.DebugInfo.Breakpoints = new List<Breakpoint>(BreakpointManager.Breakpoints);
-			ConfigManager.ApplyChanges();
-
 			ctrlDebuggerCodeSplit.HighlightBreakpoints();
 			ctrlDebuggerCode.HighlightBreakpoints();
 		}
@@ -380,6 +405,11 @@ namespace Mesen.GUI.Debugger
 			foreach(Form frm in this._childForms.ToArray()) {
 				frm.Close();
 			}
+
+			if(_workspace != null) {
+				_workspace.Save();
+			}
+
 			base.OnFormClosed(e);
 		}
 

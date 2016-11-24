@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Mesen.GUI.Debugger;
 
 namespace Mesen.GUI.Config
@@ -15,6 +16,49 @@ namespace Mesen.GUI.Config
 		public bool ShowByteCode = false;
 		public bool ShowPrgAddresses = false;
 		public float FontSize = 13;
+	}
+
+	public class DebugWorkspace
+	{
+		public List<Breakpoint> Breakpoints = new List<Breakpoint>();
+		public List<string> WatchValues = new List<string>();
+		public List<CodeLabel> Labels = new List<CodeLabel>();
+		private string _filePath;
+
+		public static DebugWorkspace GetWorkspace()
+		{
+			RomInfo info = InteropEmu.GetRomInfo();
+			return Deserialize(Path.Combine(ConfigManager.DebuggerFolder, info.GetRomName() + ".Workspace.xml"));
+		}
+
+		private static DebugWorkspace Deserialize(string path)
+		{
+			DebugWorkspace config = config = new DebugWorkspace();
+
+			if(File.Exists(path)) {
+				try {
+					XmlSerializer xmlSerializer = new XmlSerializer(typeof(DebugWorkspace));
+					using(TextReader textReader = new StreamReader(path)) {
+						config = (DebugWorkspace)xmlSerializer.Deserialize(textReader);
+					}
+				} catch { }
+			} 
+
+			config._filePath = path;
+
+			return config;
+		}
+
+		public void Save()
+		{
+			try {
+				XmlSerializer xmlSerializer = new XmlSerializer(typeof(DebugWorkspace));
+				using(TextWriter textWriter = new StreamWriter(_filePath)) {
+					xmlSerializer.Serialize(textWriter, this);
+				}
+			} catch {
+			}
+		}
 	}
 
 	public class DebugInfo
@@ -39,9 +83,6 @@ namespace Mesen.GUI.Config
 		public bool RamAutoRefresh = true;
 		public int RamColumnCount = 2;
 		public float RamFontSize = 13;
-
-		public List<Breakpoint> Breakpoints;
-		public List<string> WatchValues;
 
 		public DebugInfo()
 		{

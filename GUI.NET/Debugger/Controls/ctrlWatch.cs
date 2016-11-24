@@ -20,11 +20,6 @@ namespace Mesen.GUI.Debugger
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
 				this.mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.HexDisplay;
-
-				foreach(string watchValue in ConfigManager.Config.DebugInfo.WatchValues) {
-					lstWatch.Items.Add(watchValue);
-				}
-				UpdateWatch();
 			}
 		}
 
@@ -58,6 +53,24 @@ namespace Mesen.GUI.Debugger
 
 			lstWatch.ColumnWidthChanging += lstWatch_ColumnWidthChanging;
 			lstWatch.ColumnWidthChanged += lstWatch_ColumnWidthChanged;
+		}
+
+		public List<string> GetWatchValues()
+		{
+			List<string> watchValues = new List<string>();
+			foreach(ListViewItem listView in lstWatch.Items) {
+				watchValues.Add(listView.Text);
+			}
+			return watchValues;
+		}
+
+		public void SetWatchValues(List<string> watchValues)
+		{
+			lstWatch.Items.Clear();
+			foreach(string watchValue in watchValues) {
+				lstWatch.Items.Add(watchValue);
+			}
+			UpdateWatch();
 		}
 
 		public void UpdateWatch(int currentSelection = -1)
@@ -112,13 +125,6 @@ namespace Mesen.GUI.Debugger
 			if(currentSelection >= 0 && lstWatch.Items.Count > currentSelection) {
 				lstWatch.FocusedItem = lstWatch.Items[currentSelection];
 				lstWatch.Items[currentSelection].Selected = true;
-			}
-
-			ConfigManager.Config.DebugInfo.WatchValues.Clear();
-			foreach(ListViewItem item in lstWatch.Items) {
-				if(!string.IsNullOrWhiteSpace(item.Text)) {
-					ConfigManager.Config.DebugInfo.WatchValues.Add(item.Text);
-				}
 			}
 		}
 

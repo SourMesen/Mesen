@@ -37,9 +37,18 @@ namespace Mesen.GUI.Debugger
 			return _reverseLookup.ContainsKey(label) ? _reverseLookup[label] : null;
 		}
 
-		public static Dictionary<string, CodeLabel> GetLabels()
+		public static void SetLabels(List<CodeLabel> labels)
 		{
-			return _labels;
+			ResetLabels();
+			foreach(CodeLabel label in labels) {
+				SetLabel(label.Address, label.AddressType, label.Label, label.Comment, false);
+			}
+			OnLabelUpdated?.Invoke(null, null);
+		}
+
+		public static List<CodeLabel> GetLabels()
+		{
+			return _labels.Values.ToList<CodeLabel>();
 		}
 
 		private static string GetKey(UInt32 address, AddressType addressType)
@@ -47,7 +56,7 @@ namespace Mesen.GUI.Debugger
 			return address.ToString() + addressType.ToString();
 		}
 
-		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment)
+		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment, bool raiseEvent = true)
 		{
 			if(_labels.ContainsKey(GetKey(address, type))) {
 				_reverseLookup.Remove(_labels[GetKey(address, type)].Label);
@@ -59,7 +68,9 @@ namespace Mesen.GUI.Debugger
 			}
 
 			InteropEmu.DebugSetLabel(address, type, label, comment);
-			OnLabelUpdated?.Invoke(null, null);
+			if(raiseEvent) {
+				OnLabelUpdated?.Invoke(null, null);
+			}
 
 			return true;
 		}

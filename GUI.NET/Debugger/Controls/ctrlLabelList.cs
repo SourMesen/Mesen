@@ -42,11 +42,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 			lstLabels.BeginUpdate();
 			lstLabels.Items.Clear();
-			foreach(KeyValuePair<string, CodeLabel> kvp in LabelManager.GetLabels()) {
-				if(kvp.Value.Label.Length > 0) {
-					ListViewItem item = lstLabels.Items.Add(kvp.Value.Label);
+			foreach(CodeLabel label in LabelManager.GetLabels()) {
+				if(label.Label.Length > 0) {
+					ListViewItem item = lstLabels.Items.Add(label.Label);
 
-					Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(kvp.Value.Address, kvp.Value.AddressType);
+					Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
 					if(relativeAddress >= 0) {
 						item.SubItems.Add("$" + relativeAddress.ToString("X4"));
 					} else {
@@ -54,8 +54,8 @@ namespace Mesen.GUI.Debugger.Controls
 						item.ForeColor = Color.Gray;
 						item.Font = new Font(item.Font, FontStyle.Italic);
 					}
-					item.SubItems.Add("$" + kvp.Value.Address.ToString("X4"));
-					item.SubItems[1].Tag = kvp.Value;
+					item.SubItems.Add("$" + label.Address.ToString("X4"));
+					item.SubItems[1].Tag = label;
 
 					item.Tag = relativeAddress;
 				}
