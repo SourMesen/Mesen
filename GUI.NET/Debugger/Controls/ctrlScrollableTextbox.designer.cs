@@ -34,6 +34,7 @@
 			this.picSearchNext = new System.Windows.Forms.PictureBox();
 			this.picSearchPrevious = new System.Windows.Forms.PictureBox();
 			this.cboSearch = new System.Windows.Forms.ComboBox();
+			this.hScrollBar = new System.Windows.Forms.HScrollBar();
 			this.ctrlTextbox = new Mesen.GUI.Debugger.ctrlTextbox();
 			this.panelSearch.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -48,7 +49,7 @@
 			this.vScrollBar.LargeChange = 20;
 			this.vScrollBar.Location = new System.Drawing.Point(305, 0);
 			this.vScrollBar.Name = "vScrollBar";
-			this.vScrollBar.Size = new System.Drawing.Size(18, 174);
+			this.vScrollBar.Size = new System.Drawing.Size(18, 156);
 			this.vScrollBar.TabIndex = 0;
 			// 
 			// panelSearch
@@ -132,15 +133,25 @@
 			this.cboSearch.TextUpdate += new System.EventHandler(this.cboSearch_TextUpdate);
 			this.cboSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cboSearch_KeyDown);
 			// 
+			// hScrollBar
+			// 
+			this.hScrollBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.hScrollBar.Location = new System.Drawing.Point(0, 156);
+			this.hScrollBar.Name = "hScrollBar";
+			this.hScrollBar.Size = new System.Drawing.Size(323, 18);
+			this.hScrollBar.TabIndex = 3;
+			// 
 			// ctrlTextbox
 			// 
 			this.ctrlTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlTextbox.Font = new System.Drawing.Font("Consolas", 13F);
 			this.ctrlTextbox.Location = new System.Drawing.Point(0, 0);
 			this.ctrlTextbox.Name = "ctrlTextbox";
+			this.ctrlTextbox.ShowContentNotes = false;
 			this.ctrlTextbox.ShowLineInHex = false;
+			this.ctrlTextbox.ShowLineNumberNotes = false;
 			this.ctrlTextbox.ShowLineNumbers = true;
-			this.ctrlTextbox.Size = new System.Drawing.Size(305, 174);
+			this.ctrlTextbox.Size = new System.Drawing.Size(305, 156);
 			this.ctrlTextbox.TabIndex = 1;
 			// 
 			// ctrlScrollableTextbox
@@ -151,6 +162,7 @@
 			this.Controls.Add(this.panelSearch);
 			this.Controls.Add(this.ctrlTextbox);
 			this.Controls.Add(this.vScrollBar);
+			this.Controls.Add(this.hScrollBar);
 			this.Name = "ctrlScrollableTextbox";
 			this.Size = new System.Drawing.Size(323, 174);
 			this.panelSearch.ResumeLayout(false);
@@ -173,6 +185,6 @@
 		private System.Windows.Forms.PictureBox picSearchNext;
 		private System.Windows.Forms.PictureBox picCloseSearch;
 		private System.Windows.Forms.ComboBox cboSearch;
-
+		private System.Windows.Forms.HScrollBar hScrollBar;
 	}
 }

@@ -44,6 +44,7 @@ namespace Mesen.GUI.Debugger
 
 			this.ctrlTextbox.ShowLineNumbers = true;
 			this.ctrlTextbox.ShowLineInHex = true;
+			this.hScrollBar.ValueChanged += hScrollBar_ValueChanged;
 			this.vScrollBar.ValueChanged += vScrollBar_ValueChanged;
 			this.ctrlTextbox.ScrollPositionChanged += ctrlTextbox_ScrollPositionChanged;
 
@@ -76,6 +77,18 @@ namespace Mesen.GUI.Debugger
 		private void ctrlTextbox_ScrollPositionChanged(object sender, EventArgs e)
 		{
 			this.vScrollBar.Value = this.ctrlTextbox.ScrollPosition;
+			this.hScrollBar.Value = this.ctrlTextbox.HorizontalScrollPosition;
+			UpdateHorizontalScrollbar();
+		}
+
+		private void UpdateHorizontalScrollbar()
+		{
+			this.hScrollBar.Visible = this.ctrlTextbox.HorizontalScrollWidth > 0;
+			int newMax = this.ctrlTextbox.HorizontalScrollWidth + this.hScrollBar.LargeChange - 1;
+			if(this.hScrollBar.Value > this.ctrlTextbox.HorizontalScrollWidth) {
+				this.hScrollBar.Value = this.ctrlTextbox.HorizontalScrollWidth;
+			}
+			this.hScrollBar.Maximum = newMax;
 		}
 
 		public void ClearLineStyles()
@@ -195,12 +208,18 @@ namespace Mesen.GUI.Debugger
 			this.ctrlTextbox.ScrollPosition = this.vScrollBar.Value;
 		}
 		
+		private void hScrollBar_ValueChanged(object sender, EventArgs e)
+		{
+			this.ctrlTextbox.HorizontalScrollPosition = this.hScrollBar.Value;
+		}
+
 		public string[] TextLines
 		{
 			set
 			{
 				this.ctrlTextbox.TextLines = value;
 				this.vScrollBar.Maximum = this.ctrlTextbox.LineCount + this.vScrollBar.LargeChange;
+				UpdateHorizontalScrollbar();
 			}
 		}
 

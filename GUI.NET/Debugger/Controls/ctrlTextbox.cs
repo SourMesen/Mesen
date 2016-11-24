@@ -32,6 +32,8 @@ namespace Mesen.GUI.Debugger
 	{
 		public event EventHandler ScrollPositionChanged;
 
+		private const float HorizontalScrollFactor = 8;
+
 		private string[] _contents = new string[0];
 		private string[] _contentNotes = new string[0];
 		private string[] _compareContents = null;
@@ -46,10 +48,12 @@ namespace Mesen.GUI.Debugger
 		private bool _showContentNotes = false;
 		private int _cursorPosition = 0;
 		private int _scrollPosition = 0;
+		private int _horizontalScrollPosition = 0;
 		private string _searchString = null;
 		private string _header = null;
 		private Font _noteFont = null;
 		private int _marginWidth = 6;
+		private float _maxLineWidth = 0;
 
 		public ctrlTextbox()
 		{
@@ -62,12 +66,24 @@ namespace Mesen.GUI.Debugger
 		{
 			set
 			{
+				int maxLength = 0;
+				int maxLengthIndex = 0;
+
 				_contents = new string[value.Length];
 				_lineMargins = new int[value.Length];
 				for(int i = 0, len = value.Length; i < len; i++) {
 					_contents[i] = value[i].TrimStart();
+					if(_contents[i].Length > maxLength) {
+						maxLength = _contents[i].Length;
+						maxLengthIndex = i;
+					}
 					_lineMargins[i] = (value[i].Length - _contents[i].Length) * 10;
 				}
+
+				using(Graphics g = this.CreateGraphics()) {
+					_maxLineWidth = g.MeasureString(_contents[maxLengthIndex], this.Font).Width;
+				}
+				UpdateHorizontalScrollWidth();
 
 				_lineNumbers = new int[_contents.Length];
 				_lineNumberIndex.Clear();
@@ -348,7 +364,7 @@ namespace Mesen.GUI.Debugger
 			int lineIndex;
 			if(this.GetCharIndex(position, out charIndex, out lineIndex)) {
 				string text = ((useCompareText && _compareContents != null) ? _compareContents[lineIndex] : _contents[lineIndex]).Replace("\x2", "");
-				List<char> wordDelimiters = new List<char>(new char[] { ' ', ',', '|', ';', '(', ')' });
+				List<char> wordDelimiters = new List<char>(new char[] { ' ', ',', '|', ';', '(', ')', '.', '-', ':' });
 				if(wordDelimiters.Contains(text[charIndex])) {
 					return string.Empty;
 				} else {
@@ -420,6 +436,37 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public int HorizontalScrollPosition
+		{
+			get { return _horizontalScrollPosition; }
+			set
+			{
+				_horizontalScrollPosition = value;
+				if(this.ScrollPositionChanged != null) {
+					ScrollPositionChanged(this, null);
+				}
+				this.Invalidate();
+			}
+		}
+
+		public int HorizontalScrollWidth { get; set; } = 0;
+
+		private void UpdateHorizontalScrollWidth()
+		{
+			using(Graphics g = this.CreateGraphics()) {
+				HorizontalScrollWidth = (int)(Math.Max(0, 8 + _maxLineWidth - (this.Width - GetMargin(g))) / HorizontalScrollFactor);
+			}
+		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			UpdateHorizontalScrollWidth();
+			ScrollPositionChanged?.Invoke(this, e);
+		}
+
 		public bool ShowLineNumbers
 		{
 			get { return _showLineNumbers; }
@@ -462,14 +509,9 @@ namespace Mesen.GUI.Debugger
 			float codeStringLength = g.MeasureString(codeString, this.Font).Width;
 			float addressStringLength = g.MeasureString(addressString, this.Font).Width;
 
-			if(this.ShowLineNumbers) {
-				//Show line number
-				this.DrawLineNumber(g, currentLine, marginLeft, positionY);
-			}
-
 			if(currentLine == this.CursorPosition) {
 				//Highlight current line
-				g.FillRectangle(Brushes.AliceBlue, marginLeft, positionY, this.ClientRectangle.Width - marginLeft, this.LineHeight);
+				g.FillRectangle(Brushes.AliceBlue, marginLeft, positionY, Math.Max(_maxLineWidth, this.ClientRectangle.Width), this.LineHeight);
 			}
 
 			//Adjust background color highlights based on number of spaces in front of content
@@ -491,8 +533,6 @@ namespace Mesen.GUI.Debugger
 						g.DrawRectangle(outlinePen, marginLeft, positionY + 1, codeStringLength, this.LineHeight-1);
 					}
 				}
-
-				this.DrawLineSymbols(g, positionY, lineProperties);
 			}
 
 			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, codeStringLength, addressStringLength, textColor);
@@ -514,21 +554,27 @@ namespace Mesen.GUI.Debugger
 			using(Brush fgBrush = new SolidBrush(textColor)) {
 				if(codeString.StartsWith("--") && codeString.EndsWith("--")) {
 					//Draw block start
+					g.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
 					string text = codeString.Substring(2, codeString.Length - 4);
 					float textLength = g.MeasureString(text, this._noteFont).Width;
 					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY);
 					g.DrawLine(Pens.Black, marginLeft, positionY+this.LineHeight-2, marginLeft+this.Width, positionY+this.LineHeight-2);
+					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 				} else if(codeString.StartsWith("__") && codeString.EndsWith("__")) {
 					//Draw block end
+					g.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
 					string text = codeString.Substring(2, codeString.Length - 4);
 					float textLength = g.MeasureString(text, this._noteFont).Width;
 					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY + 4);
 					g.DrawLine(Pens.Black, marginLeft, positionY+2, marginLeft+this.Width, positionY+2);
+					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 				} else if(codeString.StartsWith("[[") && codeString.EndsWith("]]")) {
 					//Draw small centered text
+					g.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
 					string text = codeString.Substring(2, codeString.Length - 4);
 					float textLength = g.MeasureString(text, this._noteFont).Width;
 					g.DrawString(text, new Font(this._noteFont, FontStyle.Italic), fgBrush, (marginLeft + this.Width - textLength) / 2, positionY + 2);
+					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 				} else {
 					//Draw line content
 					g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY);
@@ -631,6 +677,21 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void DrawMargin(Graphics g, int currentLine, int marginLeft, int positionY)
+		{
+			if(this.ShowLineNumbers) {
+				//Show line number
+				this.DrawLineNumber(g, currentLine, marginLeft, positionY);
+			}
+			
+			//Adjust background color highlights based on number of spaces in front of content
+			marginLeft += _lineMargins[currentLine];
+
+			if(_lineProperties.ContainsKey(currentLine)) {
+				this.DrawLineSymbols(g, positionY, _lineProperties[currentLine]);
+			}
+		}
+
 		protected override void OnPaint(PaintEventArgs pe)
 		{
 			pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
@@ -639,23 +700,35 @@ namespace Mesen.GUI.Debugger
 					Rectangle rect = this.ClientRectangle;
 					pe.Graphics.FillRectangle(Brushes.White, rect);
 
-					int marginLeft = this.GetMargin(pe.Graphics);
-					if(this.ShowLineNumbers) {
-						pe.Graphics.FillRectangle(lightGrayBrush, 0, 0, marginLeft, rect.Bottom);
-						pe.Graphics.DrawLine(grayPen, marginLeft, rect.Top, marginLeft, rect.Bottom);
-					}
+					pe.Graphics.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 
+					int marginLeft = this.GetMargin(pe.Graphics);
 					int currentLine = this.ScrollPosition;
 					int positionY = 0;
 
 					if(!string.IsNullOrWhiteSpace(this._header)) {
-						pe.Graphics.FillRectangle(lightGrayBrush, marginLeft, 0, rect.Right, this.LineHeight);
+						pe.Graphics.FillRectangle(lightGrayBrush, marginLeft, 0, Math.Max(_maxLineWidth, rect.Right), this.LineHeight);
 						pe.Graphics.DrawString(_header, this.Font, Brushes.Gray, marginLeft, positionY);
 						positionY += this.LineHeight;
 					}
 
 					while(positionY < rect.Bottom && currentLine < _contents.Length) {
 						this.DrawLine(pe.Graphics, currentLine, marginLeft, positionY);
+						positionY += this.LineHeight;
+						currentLine++;
+					}
+
+					pe.Graphics.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
+
+					if(this.ShowLineNumbers) {
+						pe.Graphics.FillRectangle(lightGrayBrush, 0, 0, marginLeft, rect.Bottom);
+						pe.Graphics.DrawLine(grayPen, marginLeft, rect.Top, marginLeft, rect.Bottom);
+					}
+
+					currentLine = this.ScrollPosition;
+					positionY = 0;
+					while(positionY < rect.Bottom && currentLine < _contents.Length) {
+						this.DrawMargin(pe.Graphics, currentLine, marginLeft, positionY);
 						positionY += this.LineHeight;
 						currentLine++;
 					}
