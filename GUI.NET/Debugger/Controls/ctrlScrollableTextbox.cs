@@ -12,6 +12,8 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class ctrlScrollableTextbox : UserControl
 	{
+		public event EventHandler ScrollPositionChanged;
+
 		public new event MouseEventHandler MouseUp
 		{
 			add { this.ctrlTextbox.MouseUp += value; }
@@ -80,6 +82,8 @@ namespace Mesen.GUI.Debugger
 			this.vScrollBar.Value = this.ctrlTextbox.ScrollPosition;
 			this.hScrollBar.Value = this.ctrlTextbox.HorizontalScrollPosition;
 			UpdateHorizontalScrollbar();
+
+			ScrollPositionChanged?.Invoke(null, null);
 		}
 
 		private void UpdateHorizontalScrollbar()

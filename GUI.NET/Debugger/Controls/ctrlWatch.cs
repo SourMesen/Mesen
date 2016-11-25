@@ -128,10 +128,9 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void AddWatch(UInt32 address)
+		public void AddWatch(string watchValue)
 		{
-			ListViewItem item = lstWatch.Items.Insert(lstWatch.Items.Count - 1, "[$" + address.ToString("X") + "]");
-			item.Tag = address;
+			ListViewItem item = lstWatch.Items.Insert(lstWatch.Items.Count - 1, watchValue);
 			UpdateWatch();
 		}
 

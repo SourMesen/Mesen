@@ -59,7 +59,7 @@
             this.mnuGoToLocation,
             this.mnuAddToWatch});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 170);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 148);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
 			// mnuShowNextStatement
@@ -131,6 +131,7 @@
 			this.ctrlCodeViewer.ShowLineNumberNotes = false;
 			this.ctrlCodeViewer.Size = new System.Drawing.Size(379, 218);
 			this.ctrlCodeViewer.TabIndex = 1;
+			this.ctrlCodeViewer.ScrollPositionChanged += new System.EventHandler(this.ctrlCodeViewer_ScrollPositionChanged);
 			this.ctrlCodeViewer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseUp);
 			this.ctrlCodeViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseMove);
 			this.ctrlCodeViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDown);

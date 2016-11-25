@@ -307,9 +307,9 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugPpuStep(89341);
 		}
 
-		private void ctrlDebuggerCode_OnWatchAdded(AddressEventArgs args)
+		private void ctrlDebuggerCode_OnWatchAdded(WatchEventArgs args)
 		{
-			this.ctrlWatch.AddWatch(args.Address);
+			this.ctrlWatch.AddWatch(args.WatchValue);
 		}
 
 		private void ctrlDebuggerCode_OnSetNextStatement(AddressEventArgs args)

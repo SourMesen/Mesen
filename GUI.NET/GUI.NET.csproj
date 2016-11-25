@@ -349,6 +349,12 @@
     <Compile Include="Debugger\Controls\ctrlWatch.Designer.cs">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmCodeTooltip.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmCodeTooltip.Designer.cs">
+      <DependentUpon>frmCodeTooltip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmEditLabel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -627,6 +633,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlWatch.resx">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmCodeTooltip.resx">
+      <DependentUpon>frmCodeTooltip.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmEditLabel.resx">
       <DependentUpon>frmEditLabel.cs</DependentUpon>

@@ -214,7 +214,7 @@
 			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
 			this.ctrlDebuggerCode.Size = new System.Drawing.Size(510, 381);
 			this.ctrlDebuggerCode.TabIndex = 2;
-			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
 			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
 			this.ctrlDebuggerCode.Enter += new System.EventHandler(this.ctrlDebuggerCode_Enter);
 			// 
@@ -236,7 +236,7 @@
 			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 381);
 			this.ctrlDebuggerCodeSplit.TabIndex = 4;
 			this.ctrlDebuggerCodeSplit.Visible = false;
-			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
+			this.ctrlDebuggerCodeSplit.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
 			this.ctrlDebuggerCodeSplit.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
 			this.ctrlDebuggerCodeSplit.Enter += new System.EventHandler(this.ctrlDebuggerCodeSplit_Enter);
 			// 

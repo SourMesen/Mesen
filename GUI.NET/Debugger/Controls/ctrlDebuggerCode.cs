@@ -15,9 +15,12 @@ namespace Mesen.GUI.Debugger
 	public partial class ctrlDebuggerCode : BaseScrollableTextboxUserControl
 	{
 		public delegate void AddressEventHandler(AddressEventArgs args);
-		public event AddressEventHandler OnWatchAdded;
+		public delegate void WatchEventHandler(WatchEventArgs args);
+		public event WatchEventHandler OnWatchAdded;
 		public event AddressEventHandler OnSetNextStatement;
 		private DebugViewInfo _config;
+
+		private frmCodeTooltip _codeTooltip = null;
 
 		public ctrlDebuggerCode()
 		{
@@ -164,6 +167,30 @@ namespace Mesen.GUI.Debugger
 
 		#region Events
 		private Point _previousLocation;
+		private bool _preventCloseTooltip = false;
+		private string _hoverLastWord = "";
+
+		private void ShowTooltip(string word, Dictionary<string, string> values)
+		{
+			if(_hoverLastWord != word || _codeTooltip == null) {
+				if(!_preventCloseTooltip && _codeTooltip != null) {
+					_codeTooltip.Close();
+					_codeTooltip = null;
+				}
+				_codeTooltip = new frmCodeTooltip(values);
+				_codeTooltip.Width = 0;
+				_codeTooltip.Height = 0;
+				_codeTooltip.Visible = false;
+				_codeTooltip.Show(this);
+				_codeTooltip.Visible = true;
+			}
+			_codeTooltip.Left = Cursor.Position.X + 10;
+			_codeTooltip.Top = Cursor.Position.Y + 10;
+
+			_preventCloseTooltip = true;
+			_hoverLastWord = word;
+		}
+
 		private void ctrlCodeViewer_MouseMove(object sender, MouseEventArgs e)
 		{
 			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 5) {
@@ -173,28 +200,42 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(_previousLocation != e.Location) {
+				if(!_preventCloseTooltip && _codeTooltip != null) {
+					_codeTooltip.Close();
+					_codeTooltip = null;
+				}
+				_preventCloseTooltip = false;
+
 				string word = GetWordUnderLocation(e.Location);
 				if(word.StartsWith("$")) {
 					try {
 						UInt32 address = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
 						Byte memoryValue = InteropEmu.DebugGetMemoryValue(address);
-						string valueText = "$" + memoryValue.ToString("X");
-						toolTip.Show(valueText, ctrlCodeViewer, e.Location.X + 5, e.Location.Y - 20, 3000);
+
+						var values = new Dictionary<string, string>() {
+							{ "Address", "$" + address.ToString("X4") },
+							{ "Value", "$" + memoryValue.ToString("X2") },
+						};
+
+						ShowTooltip(word, values);
 					} catch { }
 				} else {
 					CodeLabel label = LabelManager.GetLabel(word);
 
-					if(label == null) {
-						toolTip.Hide(ctrlCodeViewer);
-					} else {
+					if(label != null) {
 						Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
 						Int32 memoryValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress) : -1;
-						toolTip.Show(
-							"Label: " + label.Label + Environment.NewLine + 
-							"Address: $" + InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType).ToString("X4") + Environment.NewLine + 
-							"Value: " + (memoryValue >= 0 ? ("$" + memoryValue.ToString("X2")) : "n/a") + Environment.NewLine +
-							"Comment: " + (label.Comment.Contains(Environment.NewLine) ? (Environment.NewLine + label.Comment) : label.Comment)
-						, ctrlCodeViewer, e.Location.X + 5, e.Location.Y - 60 - label.Comment.Split('\n').Length * 14, 3000);
+						var values = new Dictionary<string, string>() {
+							{ "Label", label.Label },
+							{ "Address", "$" + InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType).ToString("X4") },
+							{ "Value", (memoryValue >= 0 ? ("$" + memoryValue.ToString("X2")) : "n/a") },
+						};
+
+						if(!string.IsNullOrWhiteSpace(label.Comment)) {
+							values["Comment"] = label.Comment;
+						}
+
+						ShowTooltip(word, values);
 					}
 				}
 				_previousLocation = e.Location;
@@ -202,11 +243,27 @@ namespace Mesen.GUI.Debugger
 		}
 
 		UInt32 _lastClickedAddress = UInt32.MaxValue;
+		string _newWatchValue = string.Empty;
 		private void ctrlCodeViewer_MouseUp(object sender, MouseEventArgs e)
 		{
 			string word = GetWordUnderLocation(e.Location);
-			if(word.StartsWith("$")) {
-				_lastClickedAddress = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
+			if(word.StartsWith("$") || LabelManager.GetLabel(word) != null) {
+				if(word.StartsWith("$")) {
+					_lastClickedAddress = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
+					_newWatchValue = "[$" + _lastClickedAddress.ToString("X") + "]";
+				} else {
+					_lastClickedAddress = (UInt32)InteropEmu.DebugGetRelativeAddress(LabelManager.GetLabel(word).Address, LabelManager.GetLabel(word).AddressType);
+					_newWatchValue = "[" + word + "]";
+				}
+
+				if(e.Button == MouseButtons.Left) {
+					if(ModifierKeys.HasFlag(Keys.Control)) {
+						GoToLocation();
+					} else if(ModifierKeys.HasFlag(Keys.Shift)) {
+						AddWatch();
+					}
+				}
+				
 				mnuGoToLocation.Enabled = true;
 				mnuGoToLocation.Text = "Go to Location (" + word + ")";
 
@@ -223,6 +280,11 @@ namespace Mesen.GUI.Debugger
 		Breakpoint _lineBreakpoint = null;
 		private void ctrlCodeViewer_MouseDown(object sender, MouseEventArgs e)
 		{
+			if(_codeTooltip != null) {
+				_codeTooltip.Close();
+				_codeTooltip = null;
+			}
+
 			int address = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
 			_lineBreakpoint = BreakpointManager.GetMatchingBreakpoint(address);
 
@@ -239,7 +301,15 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 		}
-		
+
+		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
+		{
+			if(_codeTooltip != null) {
+				_codeTooltip.Close();
+				_codeTooltip = null;
+			}
+		}
+
 		private void ctrlCodeViewer_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			int relativeAddress = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
@@ -314,13 +384,23 @@ namespace Mesen.GUI.Debugger
 		
 		private void mnuGoToLocation_Click(object sender, EventArgs e)
 		{
+			GoToLocation();
+		}
+
+		private void GoToLocation()
+		{
 			this.ctrlCodeViewer.ScrollToLineNumber((int)_lastClickedAddress);
 		}
 
 		private void mnuAddToWatch_Click(object sender, EventArgs e)
 		{
+			AddWatch();
+		}
+
+		private void AddWatch()
+		{
 			if(this.OnWatchAdded != null) {
-				this.OnWatchAdded(new AddressEventArgs() { Address = _lastClickedAddress});
+				this.OnWatchAdded(new WatchEventArgs() { WatchValue = _newWatchValue });
 			}
 		}
 
@@ -339,6 +419,11 @@ namespace Mesen.GUI.Debugger
 		#endregion
 
 		#endregion
+	}
+
+	public class WatchEventArgs : EventArgs
+	{
+		public string WatchValue { get; set; }
 	}
 
 	public class AddressEventArgs : EventArgs
