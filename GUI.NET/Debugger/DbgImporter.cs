@@ -37,7 +37,7 @@ namespace Mesen.GUI.Debugger
 
 		private static Regex _asmFirstLineRegex = new Regex(";(.*)", RegexOptions.Compiled);
 		private static Regex _asmPreviousLinesRegex = new Regex("^\\s*;(.*)", RegexOptions.Compiled);
-		private static Regex _cFirstLineRegex = new Regex("//(.*)", RegexOptions.Compiled);
+		private static Regex _cFirstLineRegex = new Regex("(.*)", RegexOptions.Compiled);
 		private static Regex _cPreviousLinesRegex = new Regex("^\\s*//(.*)", RegexOptions.Compiled);
 
 		private bool LoadSegments(string row)
@@ -180,7 +180,7 @@ namespace Mesen.GUI.Debugger
 						continue;
 					}
 
-					bool isAsm = Path.GetExtension(_files[line.FileID].Name) == ".s";
+					bool isAsm = Path.GetExtension(_files[line.FileID].Name).StartsWith(".s");
 
 					string comment = "";
 					for(int i = line.LineNumber; i >= 0; i--) {
@@ -199,10 +199,11 @@ namespace Mesen.GUI.Debugger
 
 						Match match = regex.Match(sourceCodeLine);
 						if(match.Success) {
+							string matchedComment = match.Groups[1].Value.Replace("\t", " ");
 							if(string.IsNullOrWhiteSpace(comment)) {
-								comment = match.Groups[1].Value;
+								comment = matchedComment;
 							} else {
-								comment = match.Groups[1].Value + Environment.NewLine + comment;
+								comment = matchedComment + Environment.NewLine + comment;
 							}
 						} else if(i != line.LineNumber) {
 							break;
