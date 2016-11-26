@@ -54,11 +54,6 @@ namespace Mesen.GUI.Forms.Cheats
 			txtCheatName.Focus();
 		}
 
-		protected override Type BindedType
-		{
-			get { return typeof(CheatInfo); }
-		}
-
 		protected override bool ApplyChangesOnOK
 		{
 			get {	return false; }

@@ -513,6 +513,7 @@
     <Compile Include="Forms\Config\frmVsGameConfig.Designer.cs">
       <DependentUpon>frmVsGameConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\EntityBinder.cs" />
     <Compile Include="Forms\frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
