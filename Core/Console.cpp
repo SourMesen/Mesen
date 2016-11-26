@@ -501,3 +501,8 @@ void Console::ResetLagCounter()
 {
 	Instance->_lagCounter = 0;
 }
+
+bool Console::IsDebuggerAttached()
+{
+	return (bool)Instance->_debugger;
+}

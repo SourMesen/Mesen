@@ -14,7 +14,9 @@ AutoSaveManager::AutoSaveManager()
 			uint32_t autoSaveDelay = EmulationSettings::GetAutoSaveDelay(showMessage) * 60 * 1000;
 			if(autoSaveDelay > 0) {
 				if(_timer.GetElapsedMS() > autoSaveDelay) {
-					SaveStateManager::SaveState(_autoSaveSlot, showMessage);
+					if(!Console::IsDebuggerAttached()) {
+						SaveStateManager::SaveState(_autoSaveSlot, showMessage);
+					}
 					_timer.Reset();
 				}
 			} else {

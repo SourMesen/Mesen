@@ -83,6 +83,8 @@ class Console
 
 		static bool IsRunning();
 
+		static bool IsDebuggerAttached();
+
 		static shared_ptr<Console> GetInstance();
 		static void Release();
 };
