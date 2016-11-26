@@ -30,10 +30,12 @@ extern "C"
 	DllExport void __stdcall DebugSetFlags(uint32_t flags) { GetDebugger()->SetFlags(flags); }
 
 	DllExport void __stdcall DebugGetState(DebugState *state) { GetDebugger()->GetState(state); }
+	DllExport void __stdcall DebugSetState(DebugState state) { GetDebugger()->SetState(state); }
 
 	DllExport void __stdcall DebugSetBreakpoints(Breakpoint breakpoints[], uint32_t length) { GetDebugger()->SetBreakpoints(breakpoints, length); }
 	DllExport void __stdcall DebugSetLabel(uint32_t address, AddressType addressType, char* label, char* comment) { GetDebugger()->GetLabelManager()->SetLabel(address, addressType, label, comment); }
-		
+
+	DllExport bool __stdcall DebugIsExecutionStopped() { return GetDebugger()->IsExecutionStopped(); }
 	DllExport void __stdcall DebugRun() { GetDebugger()->Run(); }
 	DllExport void __stdcall DebugStep(uint32_t count) { GetDebugger()->Step(count); }
 	DllExport void __stdcall DebugStepCycles(uint32_t count) { GetDebugger()->StepCycles(count); }

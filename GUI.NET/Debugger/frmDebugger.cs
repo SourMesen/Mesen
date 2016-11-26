@@ -32,6 +32,7 @@ namespace Mesen.GUI.Debugger
 		{
  			base.OnLoad(e);
 
+			ctrlConsoleStatus.OnStateChanged += ctrlConsoleStatus_OnStateChanged;
 			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
 			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
 
@@ -432,6 +433,11 @@ namespace Mesen.GUI.Debugger
 		private void ctrlCallstack_FunctionSelected(object sender, EventArgs e)
 		{
 			_lastCodeWindow.ScrollToLineNumber((int)sender);
+		}
+
+		private void ctrlConsoleStatus_OnStateChanged(object sender, EventArgs e)
+		{
+			UpdateDebugger(true);
 		}
 
 		private void tmrCdlRatios_Tick(object sender, EventArgs e)

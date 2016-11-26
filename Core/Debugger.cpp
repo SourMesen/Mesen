@@ -404,6 +404,13 @@ void Debugger::GetState(DebugState *state)
 	state->Cartridge = _mapper->GetState();
 }
 
+void Debugger::SetState(DebugState state)
+{
+	_cpu->SetState(state.CPU);
+	_ppu->SetState(state.PPU);
+	SetNextStatement(state.CPU.PC);
+}
+
 void Debugger::PpuStep(uint32_t count)
 {
 	_stepCount = -1;
@@ -606,6 +613,11 @@ void Debugger::GetFunctionEntryPoints(int32_t* entryPoints)
 shared_ptr<MemoryDumper> Debugger::GetMemoryDumper()
 {
 	return _memoryDumper;
+}
+
+bool Debugger::IsExecutionStopped()
+{
+	return _executionStopped;
 }
 
 void Debugger::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info)

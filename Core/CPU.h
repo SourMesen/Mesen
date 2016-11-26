@@ -876,4 +876,10 @@ public:
 		cpuState.CycleCount = _cycleCount;
 		return cpuState; 
 	}
+
+	void SetState(State state)
+	{
+		_state = state;
+		_cycleCount = state.CycleCount;
+	}
 };

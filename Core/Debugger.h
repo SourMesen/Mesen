@@ -104,7 +104,9 @@ public:
 
 	void GetFunctionEntryPoints(int32_t* entryPoints);
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
+	
 	void GetState(DebugState *state);
+	void SetState(DebugState state);
 
 	void Suspend();
 	void Resume();
@@ -122,6 +124,8 @@ public:
 	void ResetCdlLog();
 
 	void SetNextStatement(uint16_t addr);
+
+	bool IsExecutionStopped();
 
 	bool IsCodeChanged();
 	string GenerateOutput();

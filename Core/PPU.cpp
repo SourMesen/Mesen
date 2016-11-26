@@ -98,6 +98,16 @@ PPUDebugState PPU::GetState()
 	return state;
 }
 
+void PPU::SetState(PPUDebugState state)
+{
+	_flags = state.ControlFlags;
+	_statusFlags = state.StatusFlags;
+	_state = state.State;
+	_cycle = state.Cycle;
+	_scanline = state.Scanline;
+	_frameCount = state.FrameCount;
+}
+
 void PPU::UpdateVideoRamAddr()
 {
 	if(_scanline >= 240 || !IsRenderingEnabled()) {

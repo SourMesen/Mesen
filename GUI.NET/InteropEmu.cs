@@ -165,6 +165,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugRelease();
 		[DllImport(DLLPath)] public static extern void DebugSetFlags(DebuggerFlags flags);
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
+		[DllImport(DLLPath)] public static extern void DebugSetState(DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex=1)]InteropBreakpoint[] breakpoints, UInt32 length);
 		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, AddressType addressType, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
 		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
@@ -173,6 +174,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
 		[DllImport(DLLPath)] public static extern void DebugStepOver();
 		[DllImport(DLLPath)] public static extern void DebugRun();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsExecutionStopped();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsCodeChanged();
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeAddress(UInt32 absoluteAddr, AddressType type);
@@ -638,6 +640,31 @@ namespace Mesen.GUI
 		public Byte IntensifyRed;
 		public Byte IntensifyGreen;
 		public Byte IntensifyBlue;
+
+		public Byte GetMask()
+		{
+			byte mask = 0;
+			if(Grayscale != 0) mask |= 0x01;
+			if(BackgroundMask != 0) mask |= 0x02;
+			if(SpriteMask != 0) mask |= 0x04;
+			if(BackgroundEnabled != 0) mask |= 0x08;
+			if(SpritesEnabled != 0) mask |= 0x10;
+			if(IntensifyBlue != 0) mask |= 0x80;
+			if(IntensifyRed != 0) mask |= 0x20;
+			if(IntensifyGreen != 0) mask |= 0x40;
+			return mask;
+		}
+
+		public Byte GetControl()
+		{
+			byte control = 0;
+			if(VerticalWrite != 0) control |= 0x04;
+			if(SpritePatternAddr == 0x1000) control |= 0x08;
+			if(BackgroundPatternAddr != 0x1000) control |= 0x10;
+			if(LargeSprites != 0) control |= 0x20;
+			if(VBlank != 0) control |= 0x80;
+			return control;
+		}
 	}
 
 	public struct PPUStatusFlags
@@ -645,6 +672,15 @@ namespace Mesen.GUI
 		public Byte SpriteOverflow;
 		public Byte Sprite0Hit;
 		public Byte VerticalBlank;
+
+		public Byte GetStatus()
+		{
+			byte status = 0;
+			if(SpriteOverflow != 0) status |= 0x20;
+			if(Sprite0Hit != 0) status |= 0x40;
+			if(VerticalBlank != 0) status |= 0x80;
+			return status;
+		}
 	}
 
 	public struct CPUState

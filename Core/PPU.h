@@ -232,6 +232,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		void DebugSendFrame();
 		PPUDebugState GetState();
+		void SetState(PPUDebugState state);
 
 		void GetMemoryRanges(MemoryRanges &ranges)
 		{

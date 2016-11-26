@@ -27,6 +27,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpPPUStatus = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -89,8 +90,6 @@
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSP = new System.Windows.Forms.Label();
 			this.txtSP = new System.Windows.Forms.TextBox();
-			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblA = new System.Windows.Forms.Label();
 			this.txtA = new System.Windows.Forms.TextBox();
@@ -102,6 +101,10 @@
 			this.txtPC = new System.Windows.Forms.TextBox();
 			this.lblCycleCount = new System.Windows.Forms.Label();
 			this.txtCycleCount = new System.Windows.Forms.TextBox();
+			this.btnApplyChanges = new System.Windows.Forms.Button();
+			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.tmrButton = new System.Windows.Forms.Timer(this.components);
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -131,13 +134,15 @@
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Controls.Add(this.grpPPUStatus, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.grpCPUStatus, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.btnApplyChanges, 0, 2);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 2;
+			this.tableLayoutPanel2.RowCount = 3;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(470, 362);
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(470, 391);
 			this.tableLayoutPanel2.TabIndex = 2;
 			// 
 			// grpPPUStatus
@@ -534,6 +539,7 @@
 			this.txtNTAddr.Location = new System.Drawing.Point(51, 0);
 			this.txtNTAddr.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.txtNTAddr.Name = "txtNTAddr";
+			this.txtNTAddr.ReadOnly = true;
 			this.txtNTAddr.Size = new System.Drawing.Size(50, 20);
 			this.txtNTAddr.TabIndex = 1;
 			// 
@@ -707,6 +713,7 @@
 			this.txtStatus.Name = "txtStatus";
 			this.txtStatus.Size = new System.Drawing.Size(27, 20);
 			this.txtStatus.TabIndex = 1;
+			this.txtStatus.TextChanged += new System.EventHandler(this.txtStatus_TextChanged);
 			// 
 			// tableLayoutPanel5
 			// 
@@ -743,6 +750,7 @@
 			this.chkNegative.TabIndex = 7;
 			this.chkNegative.Text = "Negative";
 			this.chkNegative.UseVisualStyleBackColor = true;
+			this.chkNegative.Click += new System.EventHandler(this.chkCpuFlag_Click);
 			// 
 			// chkOverflow
 			// 
@@ -754,6 +762,7 @@
 			this.chkOverflow.TabIndex = 6;
 			this.chkOverflow.Text = "Overflow";
 			this.chkOverflow.UseVisualStyleBackColor = true;
+			this.chkOverflow.Click += new System.EventHandler(this.chkCpuFlag_Click);
 			// 
 			// chkReserved
 			// 
@@ -765,6 +774,7 @@
 			this.chkReserved.TabIndex = 5;
 			this.chkReserved.Text = "Reserved";
 			this.chkReserved.UseVisualStyleBackColor = true;
+			this.chkReserved.Click += new System.EventHandler(this.chkCpuFlag_Click);
 			// 
 			// chkBreak
 			// 
@@ -776,6 +786,7 @@
 			this.chkBreak.TabIndex = 4;
 			this.chkBreak.Text = "Break";
 			this.chkBreak.UseVisualStyleBackColor = true;
+			this.chkBreak.Click += new System.EventHandler(this.chkCpuFlag_Click);
 			// 
 			// chkDecimal
 			// 
@@ -787,6 +798,7 @@
 			this.chkDecimal.TabIndex = 3;
 			this.chkDecimal.Text = "Decimal";
 			this.chkDecimal.UseVisualStyleBackColor = true;
+			this.chkDecimal.Click += new System.EventHandler(this.chkCpuFlag_Click);
 			// 
 			// chkInterrupt
 			// 
@@ -798,6 +810,7 @@
 			this.chkInterrupt.TabIndex = 2;
 			this.chkInterrupt.Text = "Interrupt";
 			this.chkInterrupt.UseVisualStyleBackColor = true;
+			this.chkInterrupt.Click += new System.EventHandler(this.chkCpuFlag_Click);
 			// 
 			// chkZero
 			// 
@@ -809,6 +822,7 @@
 			this.chkZero.TabIndex = 1;
 			this.chkZero.Text = "Zero";
 			this.chkZero.UseVisualStyleBackColor = true;
+			this.chkZero.Click += new System.EventHandler(this.chkCpuFlag_Click);
 			// 
 			// chkCarry
 			// 
@@ -820,6 +834,7 @@
 			this.chkCarry.TabIndex = 0;
 			this.chkCarry.Text = "Carry";
 			this.chkCarry.UseVisualStyleBackColor = true;
+			this.chkCarry.Click += new System.EventHandler(this.chkCpuFlag_Click);
 			// 
 			// grpStack
 			// 
@@ -882,27 +897,6 @@
 			this.txtSP.Name = "txtSP";
 			this.txtSP.Size = new System.Drawing.Size(49, 20);
 			this.txtSP.TabIndex = 1;
-			// 
-			// lstStack
-			// 
-			this.lstStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-			this.lstStack.FullRowSelect = true;
-			this.lstStack.GridLines = true;
-			this.lstStack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.lstStack.Location = new System.Drawing.Point(3, 24);
-			this.lstStack.Name = "lstStack";
-			this.lstStack.Size = new System.Drawing.Size(81, 97);
-			this.lstStack.TabIndex = 4;
-			this.lstStack.UseCompatibleStateImageBehavior = false;
-			this.lstStack.View = System.Windows.Forms.View.Details;
-			// 
-			// columnHeader1
-			// 
-			this.columnHeader1.Text = "Value";
 			// 
 			// flowLayoutPanel1
 			// 
@@ -1022,13 +1016,49 @@
 			this.txtCycleCount.Size = new System.Drawing.Size(77, 20);
 			this.txtCycleCount.TabIndex = 9;
 			// 
+			// btnApplyChanges
+			// 
+			this.btnApplyChanges.Location = new System.Drawing.Point(3, 365);
+			this.btnApplyChanges.Name = "btnApplyChanges";
+			this.btnApplyChanges.Size = new System.Drawing.Size(87, 23);
+			this.btnApplyChanges.TabIndex = 3;
+			this.btnApplyChanges.Text = "Apply State";
+			this.btnApplyChanges.UseVisualStyleBackColor = true;
+			this.btnApplyChanges.Click += new System.EventHandler(this.btnApplyChanges_Click);
+			// 
+			// lstStack
+			// 
+			this.lstStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+			this.lstStack.FullRowSelect = true;
+			this.lstStack.GridLines = true;
+			this.lstStack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.lstStack.Location = new System.Drawing.Point(3, 24);
+			this.lstStack.Name = "lstStack";
+			this.lstStack.Size = new System.Drawing.Size(81, 97);
+			this.lstStack.TabIndex = 4;
+			this.lstStack.UseCompatibleStateImageBehavior = false;
+			this.lstStack.View = System.Windows.Forms.View.Details;
+			// 
+			// columnHeader1
+			// 
+			this.columnHeader1.Text = "Value";
+			// 
+			// tmrButton
+			// 
+			this.tmrButton.Enabled = true;
+			this.tmrButton.Tick += new System.EventHandler(this.tmrButton_Tick);
+			// 
 			// ctrlConsoleStatus
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.Name = "ctrlConsoleStatus";
-			this.Size = new System.Drawing.Size(470, 362);
+			this.Size = new System.Drawing.Size(470, 391);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.grpPPUStatus.ResumeLayout(false);
 			this.tableLayoutPanel8.ResumeLayout(false);
@@ -1141,5 +1171,7 @@
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.Label lblCycleCount;
 		private System.Windows.Forms.TextBox txtCycleCount;
+		private System.Windows.Forms.Button btnApplyChanges;
+		private System.Windows.Forms.Timer tmrButton;
 	}
 }
