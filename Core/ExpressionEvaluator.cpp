@@ -4,6 +4,7 @@
 #include "Console.h"
 #include "Debugger.h"
 #include "LabelManager.h"
+#include "../Utilities/HexUtilities.h"
 
 std::unordered_map<string, std::vector<int>, StringHasher> ExpressionEvaluator::_outputCache;
 SimpleLock ExpressionEvaluator::_cacheLock;
@@ -164,11 +165,7 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 	}
 
 	if(isHex) {
-		unsigned int x;
-		std::stringstream ss;
-		ss << std::hex << output;
-		ss >> x;
-		output = std::to_string(x);
+		output = std::to_string(HexUtilities::FromHex(output));
 	}
 
 	return output;

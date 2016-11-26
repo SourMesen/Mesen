@@ -325,6 +325,7 @@
     <ClInclude Include="blip_buf.h" />
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
+    <ClInclude Include="HexUtilities.h" />
     <ClInclude Include="HQX\common.h" />
     <ClInclude Include="HQX\hqx.h" />
     <ClInclude Include="IpsPatcher.h" />
@@ -359,6 +360,7 @@
     <ClCompile Include="blip_buf.cpp" />
     <ClCompile Include="CRC32.cpp" />
     <ClCompile Include="FolderUtilities.cpp" />
+    <ClCompile Include="HexUtilities.cpp" />
     <ClCompile Include="HQX\hq2x.cpp" />
     <ClCompile Include="HQX\hq3x.cpp" />
     <ClCompile Include="HQX\hq4x.cpp" />

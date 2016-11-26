@@ -2,6 +2,7 @@
 #include "DisassemblyInfo.h"
 #include "CPU.h"
 #include "LabelManager.h"
+#include "../Utilities/HexUtilities.h"
 
 string DisassemblyInfo::OPName[256];
 AddrMode DisassemblyInfo::OPMode[256];
@@ -9,19 +10,25 @@ uint32_t DisassemblyInfo::OPSize[256];
 
 string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager)
 {
-	std::ostringstream output;
+	string out;
+	out.reserve(50);
+
 	uint8_t opCode = *_opPointer;
 
-	output << DisassemblyInfo::OPName[opCode];
 	if(DisassemblyInfo::OPName[opCode].empty()) {
-		output << "invalid opcode";
+		out = "invalid opcode";
+	} else {
+		out = DisassemblyInfo::OPName[opCode];
 	}
 
-	std::ostringstream addrString;
 	if(_opSize == 2) {
 		_opAddr = *(_opPointer + 1);
 	} else if(_opSize == 3) {
 		_opAddr = *(_opPointer + 1) | (*(_opPointer + 2) << 8);
+	}
+
+	if(_opMode == AddrMode::Rel) {
+		_opAddr = (int8_t)_opAddr + memoryAddr + 2;
 	}
 	
 	string operandValue;
@@ -30,50 +37,48 @@ string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> 
 	}
 	
 	if(operandValue.empty()) {
-		std::stringstream ss;
-		ss << "$" << std::uppercase << std::hex << std::setw(_opSize == 2 ? 2 : 4) << std::setfill('0') << (short)_opAddr;
-		operandValue = ss.str();
+		if(_opSize == 2) {
+			operandValue += "$" + HexUtilities::ToHex((uint8_t)_opAddr);
+		} else {
+			operandValue += "$" + HexUtilities::ToHex((uint16_t)_opAddr);
+		}
 	}
 
-	output << " ";
+	out += " ";
 
 	switch(_opMode) {
-		case AddrMode::Acc: output << "A"; break;
-		case AddrMode::Imm: output << "#" << operandValue; break;
-		case AddrMode::Ind: output << "(" << operandValue << ")"; break;
-		case AddrMode::IndX: output << "(" << operandValue << ",X)"; break;
+		case AddrMode::Acc: out += "A"; break;
+		case AddrMode::Imm: out += "#" + operandValue; break;
+		case AddrMode::Ind: out += "(" + operandValue + ")"; break;
+		case AddrMode::IndX: out += "(" + operandValue + ",X)"; break;
 
 		case AddrMode::IndY:
 		case AddrMode::IndYW:
-			output << "(" << operandValue << "),Y";
+			out += "(" + operandValue + "),Y";
 			break;
 
 		case AddrMode::Abs:
+		case AddrMode::Rel:
 		case AddrMode::Zero:
-			output << operandValue;
+			out += operandValue;
 			break;
 
 		case AddrMode::AbsX:
 		case AddrMode::AbsXW:
 		case AddrMode::ZeroX:
-			output << operandValue << ",X";
+			out += operandValue + ",X";
 			break;
 
 		case AddrMode::AbsY:
 		case AddrMode::AbsYW:
 		case AddrMode::ZeroY:
-			output << operandValue << ",Y";
-			break;
-
-		case AddrMode::Rel:
-			//TODO (not correct when banks are switched around in memory)
-			output << "$" << std::uppercase << std::hex << std::setw(2) << std::setfill('0') << ((int8_t)*(_opPointer + 1) + memoryAddr + 2);
+			out += operandValue + ",Y";
 			break;
 		
 		default: break;
 	}
 
-	return output.str();
+	return out;
 }
 
 DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
@@ -86,21 +91,20 @@ DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
 	_opMode = DisassemblyInfo::OPMode[opCode];
 	_isSubExitPoint = opCode == 0x40 || opCode == 0x60;
 
-
 	//Raw byte code
-	std::stringstream byteCodeOutput;
+	string byteCodeOutput;
+	byteCodeOutput.reserve(10);
 	for(uint32_t i = 0; i < 3; i++) {
 		if(i < _opSize) {
-			byteCodeOutput << "$" << std::hex << std::uppercase << std::setfill('0') << std::setw(2) << (short)*(_opPointer + i);
+			byteCodeOutput += "$" + HexUtilities::ToHex((uint16_t)*(_opPointer + i));
 		} else {
-			byteCodeOutput << "   ";
+			byteCodeOutput += "   ";
 		}
 		if(i != 2) {
-			byteCodeOutput << " ";
+			byteCodeOutput += " ";
 		}
 	}
-	_byteCode = byteCodeOutput.str();
-
+	_byteCode = byteCodeOutput;
 }
 
 void DisassemblyInfo::SetSubEntryPoint()
@@ -122,15 +126,15 @@ string DisassemblyInfo::GetEffectiveAddressString(State& cpuState, shared_ptr<Me
 			}
 		}
 		
-		std::stringstream ss;
-		ss << std::uppercase << std::setfill('0') << " @ $";
+		string output;
+		output = " @ $";
 		if(_opMode == AddrMode::ZeroX || _opMode == AddrMode::ZeroY) {
-			ss << std::setw(2) << std::hex << (uint16_t)effectiveAddress;
+			output += HexUtilities::ToHex((uint8_t)effectiveAddress);
 		} else {
-			ss << std::setw(4) << std::hex << (uint16_t)effectiveAddress;
+			output += HexUtilities::ToHex((uint16_t)effectiveAddress);
 		}
 		
-		return ss.str();
+		return output;
 	}
 }
 

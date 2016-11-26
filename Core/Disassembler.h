@@ -20,6 +20,8 @@ private:
 
 	bool IsUnconditionalJump(uint8_t opCode);
 	vector<string> SplitComment(string input);
+	string GetLine(string code = "", string comment = "", int32_t cpuAddress = -1, int32_t absoluteAddress = -1, string byteCode = "", string addressing = "");
+	string GetSubHeader(DisassemblyInfo *info, string &label, uint16_t relativeAddr, uint16_t resetVector, uint16_t nmiVector, uint16_t irqVector);
 
 public:
 	Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize);

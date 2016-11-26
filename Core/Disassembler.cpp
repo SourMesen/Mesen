@@ -5,6 +5,7 @@
 #include "MemoryManager.h"
 #include "CPU.h"
 #include "LabelManager.h"
+#include "../Utilities/HexUtilities.h"
 
 Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize)
 {
@@ -187,9 +188,47 @@ vector<string> Disassembler::SplitComment(string input)
 	return result;
 }
 
+string Disassembler::GetLine(string code, string comment, int32_t cpuAddress, int32_t absoluteAddress, string byteCode, string addressing)
+{
+	string out;
+	out.reserve(50);
+	if(cpuAddress >= 0) {
+		out += HexUtilities::ToHex((uint16_t)cpuAddress);
+	}
+	out += "\x1";
+	if(absoluteAddress >= 0) {
+		out += HexUtilities::ToHex((uint32_t)absoluteAddress);
+	}
+	out += "\x1" + byteCode + "\x1" + code + "\x2" + addressing + "\x2" + (comment.empty() ? "" : (";" + comment)) + "\n";
+	return out;
+}
+
+string Disassembler::GetSubHeader(DisassemblyInfo *info, string &label, uint16_t relativeAddr, uint16_t resetVector, uint16_t nmiVector, uint16_t irqVector)
+{
+	if(info->IsSubEntryPoint()) {
+		if(label.empty()) {
+			return GetLine() + GetLine("__sub start__");
+		} else {
+			return GetLine() + GetLine("__" + label + "()__");
+		}
+	} else if(relativeAddr == resetVector) {
+		return GetLine() + GetLine("--reset--");
+	} else if(relativeAddr == irqVector) {
+		return GetLine() + GetLine("--irq--");
+	} else if(relativeAddr == nmiVector) {
+		return GetLine() + GetLine("--nmi--");
+	}
+	return "";
+}
+
 string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager) 
 {
-	std::ostringstream output;
+	string output;
+	output.reserve(10000000);
+
+	int32_t dbRelativeAddr;
+	int32_t dbAbsoluteAddr;
+	string dbBuffer;
 
 	uint16_t resetVector = memoryManager->DebugReadWord(CPU::ResetVector);
 	uint16_t nmiVector = memoryManager->DebugReadWord(CPU::NMIVector);
@@ -210,116 +249,90 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 		source = _prgRom;
 	}
 
+	string unknownBlockHeader = showOnlyDiassembledCode ? "----" : "__unknown block__";
 	uint32_t addr = startAddr;
 	uint32_t byteCount = 0;
 	bool skippingCode = false;
 	while(addr <= endAddr) {
 		string label = labelManager->GetLabel(memoryAddr, false);
 		string commentString = labelManager->GetComment(memoryAddr);
-		string labelString = label.empty() ? "" : ("\x1\x1\x1" + label + ":\n");
-		bool multilineComment = commentString.find_first_of('\n') != string::npos;
-		string singleLineComment = "";
-		string multiLineComment = "";
-		if(multilineComment) {
+		string labelLine = label.empty() ? "" : GetLine(label + ":");
+		string commentLines = "";
+		if(commentString.find_first_of('\n') != string::npos) {
 			for(string &str : SplitComment(commentString)) {
-				multiLineComment += "\x1\x1\x1\x2\x2;" + str + "\n";
+				commentLines += GetLine("", str);
 			}
-		} else if(!commentString.empty()) {
-			singleLineComment = "\x2;" + commentString;
+			commentString = "";
 		}
 
 		shared_ptr<DisassemblyInfo> info = (*cache)[addr&mask];
+
 		if(info) {
 			if(byteCount > 0) {
-				output << "\n";
+				output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
 				byteCount = 0;
 			} 
 			
 			if(skippingCode) {
-				output << std::hex << std::uppercase << (memoryAddr - 1) << "\x1" << (addr - 1) << "\x1\x1";
-				if(showOnlyDiassembledCode) {
-					output << "----\n";
-				} else {
-					output << "__unknown block__\n";
-				}
+				output += GetLine(unknownBlockHeader, "", (uint16_t)(memoryAddr - 1), addr - 1);
 				skippingCode = false;
 			}
 
+			output += GetSubHeader(info.get(), label, memoryAddr, resetVector, nmiVector, irqVector);
+			output += commentLines;
+			output += labelLine;
+
 			string effectiveAddress = showEffectiveAddresses ? info->GetEffectiveAddressString(cpuState, memoryManager, labelManager) : "";
-
-			if(info->IsSubEntryPoint()) {
-				if(label.empty()) {
-					output << "\x1\x1\x1\n\x1\x1\x1__sub start__\n";
-				} else {
-					output << "\x1\x1\x1\n\x1\x1\x1__" + label + "()__\n";
-				}
-			} else if(memoryAddr == resetVector) {
-				output << "\x1\x1\x1\n\x1\x1\x1--reset--\n";
-			} else if(memoryAddr == irqVector) {
-				output << "\x1\x1\x1\n\x1\x1\x1--irq--\n";
-			} else if(memoryAddr == nmiVector) {
-				output << "\x1\x1\x1\n\x1\x1\x1--nmi--\n";
-			}
-
-			output << multiLineComment;
-			output << labelString;
-			output << std::hex << std::uppercase << memoryAddr << "\x1" << addr << "\x1" << info->GetByteCode() << "\x1  " << info->ToString(memoryAddr, memoryManager, labelManager) << "\x2" << effectiveAddress;
-			output << singleLineComment;
-
-			output << "\n";
+			output += GetLine("  " + info->ToString(memoryAddr, memoryManager, labelManager), commentString, memoryAddr, addr, info->GetByteCode(), effectiveAddress);
 
 			if(info->IsSubExitPoint()) {
-				output << "\x1\x1\x1__sub end__\n\x1\x1\x1\n";
+				output += GetLine("__sub end__") + GetLine();
 			}
 
 			addr += info->GetSize();
 			memoryAddr += info->GetSize();
 		} else {
-			if(!label.empty() && skippingCode) {
-				output << std::hex << std::uppercase << (memoryAddr - 1) << "\x1" << (addr - 1) << "\x1\x1";
-				if(showOnlyDiassembledCode) {
-					output << "----\n";
-				} else {
-					output << "__unknown block__\n";
-				}
+			if((!label.empty() || !commentString.empty()) && skippingCode) {
+				output += GetLine(unknownBlockHeader, "", (uint16_t)(memoryAddr - 1), addr - 1);
 				skippingCode = false;
 			} 
 			
-			if(!skippingCode) {
-				output << std::hex << std::uppercase << memoryAddr << "\x1" << addr << "\x1\x1";
-				if(showOnlyDiassembledCode) {
-					if(label.empty()) {
-						output << "__unknown block__\n";
-					} else {
-						output << "__" << label << "__\n";
-						if(!singleLineComment.empty()) {
-							output << "\x1\x1\x1\x2" << singleLineComment << "\n";
-						} else {
-							output << multiLineComment;
-						}
+			if(!skippingCode && showOnlyDiassembledCode) {
+				if(label.empty()) {
+					output += GetLine("__unknown block__", "", memoryAddr, addr);
+					if(!commentString.empty()) {
+						output += GetLine("", commentString);
 					}
 				} else {
-					output << "--unknown block--\n";
+					output += GetLine("__" + label + "__", "", memoryAddr, addr);
+					if(!commentString.empty()) {
+						output += GetLine("", commentString);
+					}
+					output += commentLines;
 				}
 				skippingCode = true;
 			}
 
 			if(!showOnlyDiassembledCode) {
 				if(byteCount >= 8 || !label.empty() || !commentString.empty()) {
-					output << "\n";
+					output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
 					byteCount = 0;
 				}
-				if(byteCount == 0) {
-					output << multiLineComment;
-					output << labelString;
-					output << std::hex << std::uppercase << memoryAddr << "\x1" << addr << "\x1\x1" << ".db";
-					output << singleLineComment;
 
-					if(!label.empty() || !commentString.empty()) {
-						byteCount = 7;
-					}
+				if(byteCount == 0) {
+					dbBuffer = ".db";
+					output += commentLines;
+					output += labelLine;
+
+					dbRelativeAddr = memoryAddr;
+					dbAbsoluteAddr = addr;
 				}
-				output << std::hex << " $" << std::setfill('0') << std::setw(2) << (short)source[addr&mask];
+
+				dbBuffer += " $" + HexUtilities::ToHex(source[addr&mask]);
+
+				if(!label.empty() || !commentString.empty()) {
+					output += GetLine(dbBuffer, commentString, dbRelativeAddr, dbAbsoluteAddr);
+				}
 
 				byteCount++;
 			}
@@ -329,21 +342,14 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 	}
 
 	if(skippingCode) {
-		if(byteCount != 0) {
-			output << "\n";
-		}
-
-		output << std::hex << std::uppercase << (memoryAddr - 1) << "\x1" << (addr - 1) << "\x1\x1";
-		if(showOnlyDiassembledCode) {
-			output << "----\n";
-		} else {
-			output << "__unknown block__\n";
-		}
-	}
-
-	output << "\n";
+		if(showOnlyDiassembledCode && byteCount > 0) {
+			output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
+		} 
 		
-	return output.str();
+		output += GetLine("----", "", (uint16_t)(memoryAddr - 1), addr - 1);
+	}
+		
+	return output;
 }
 
 shared_ptr<DisassemblyInfo> Disassembler::GetDisassemblyInfo(int32_t absoluteAddress, int32_t absoluteRamAddress, uint16_t memoryAddress)

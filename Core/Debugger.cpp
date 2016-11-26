@@ -470,13 +470,14 @@ bool Debugger::IsCodeChanged()
 string Debugger::GenerateOutput()
 {
 	State cpuState = _cpu->GetState();
-	std::ostringstream output;
+	string output;
+	output.reserve(10000);
+
 	bool showEffectiveAddresses = CheckFlag(DebuggerFlags::ShowEffectiveAddresses);
 	bool showOnlyDiassembledCode = CheckFlag(DebuggerFlags::ShowOnlyDisassembledCode);
 
 	//Get code in internal RAM
-	output << _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
-	output << "2000\x1\x1\x1--End of internal RAM--\n";
+	output = _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
 
 	for(uint32_t i = 0x2000; i < 0x10000; i += 0x100) {
 		//Merge all sequential ranges into 1 chunk
@@ -497,11 +498,11 @@ string Debugger::GenerateOutput()
 				addr += 0x100;
 				i+=0x100;
 			}
-			output << _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, memoryType, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
+			output += _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, memoryType, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
 		}
 	}
 
-	return output.str();
+	return output;
 }
 
 string* Debugger::GetCode()
