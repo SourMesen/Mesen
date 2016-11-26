@@ -145,9 +145,12 @@ namespace Mesen.GUI.Debugger
 					if(_segments.ContainsKey(symbol.SegmentID)) {
 						SegmentInfo segment = _segments[symbol.SegmentID];
 
+						int count = 2;
+						string orgSymbolName = symbol.Name;
 						while(!_usedLabels.Add(symbol.Name)) {
 							//Ensure labels are unique
-							symbol.Name += "_";
+							symbol.Name = orgSymbolName + "_" + count.ToString();
+							count++;
 						}
 						
 						if(segment.IsRam) {
