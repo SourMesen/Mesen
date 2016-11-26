@@ -102,6 +102,7 @@ namespace Mesen.GUI.Debugger
 				LabelManager.ResetLabels();
 				LabelManager.SetDefaultLabels(InteropEmu.FdsGetSideCount() > 0);
 			} else {
+				LabelManager.ResetLabels();
 				LabelManager.SetLabels(_workspace.Labels);
 			}
 			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
@@ -551,6 +552,7 @@ namespace Mesen.GUI.Debugger
 				_workspace.WatchValues = new List<string>();
 				_workspace.Save();
 				_workspace = null;
+				LabelManager.ResetLabels();
 				UpdateWorkspace();
 				UpdateDebugger();
 			}
@@ -559,6 +561,16 @@ namespace Mesen.GUI.Debugger
 		private void mnuSaveWorkspace_Click(object sender, EventArgs e)
 		{
 			SaveWorkspace();
+		}
+
+		private void mnuImportLabels_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Filter = "All supported files (*.dbg)|*.dbg";
+			if(ofd.ShowDialog() == DialogResult.OK) {
+				Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
+				dbgImporter.Import(ofd.FileName);
+			}
 		}
 	}
 }

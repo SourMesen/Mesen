@@ -23,6 +23,9 @@ namespace Mesen.GUI.Debugger
 
 		public static void ResetLabels()
 		{
+			foreach(CodeLabel label in _labels.Values.ToList<CodeLabel>()) {
+				DeleteLabel(label.Address, label.AddressType, false);
+			}
 			_labels.Clear();
 			_reverseLookup.Clear();
 		}
@@ -37,9 +40,8 @@ namespace Mesen.GUI.Debugger
 			return _reverseLookup.ContainsKey(label) ? _reverseLookup[label] : null;
 		}
 
-		public static void SetLabels(List<CodeLabel> labels)
+		public static void SetLabels(IEnumerable<CodeLabel> labels)
 		{
-			ResetLabels();
 			foreach(CodeLabel label in labels) {
 				SetLabel(label.Address, label.AddressType, label.Label, label.Comment, false);
 			}

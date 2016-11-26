@@ -349,6 +349,7 @@
     <Compile Include="Debugger\Controls\ctrlWatch.Designer.cs">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\DbgImporter.cs" />
     <Compile Include="Debugger\frmCodeTooltip.cs">
       <SubType>Form</SubType>
     </Compile>
