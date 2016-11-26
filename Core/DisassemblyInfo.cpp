@@ -96,7 +96,7 @@ DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
 	byteCodeOutput.reserve(10);
 	for(uint32_t i = 0; i < 3; i++) {
 		if(i < _opSize) {
-			byteCodeOutput += "$" + HexUtilities::ToHex((uint16_t)*(_opPointer + i));
+			byteCodeOutput += "$" + HexUtilities::ToHex((uint8_t)*(_opPointer + i));
 		} else {
 			byteCodeOutput += "   ";
 		}

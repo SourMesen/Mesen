@@ -110,7 +110,7 @@ namespace Mesen.GUI.Debugger
 
 					if(lineParts.Length >= 4) {
 						lineNumbers.Add(ParseHexAddress(lineParts[0]));
-						lineNumberNotes.Add(lineParts[1]);
+						lineNumberNotes.Add(lineParts[1].Trim('0'));
 						codeNotes.Add(lineParts[2]);
 						codeLines.Add(lineParts[3]);
 					}

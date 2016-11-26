@@ -69,7 +69,11 @@ namespace Mesen.GUI.Debugger.Controls
 					CodeLabel label = LabelManager.GetLabel((UInt32)entryPoint, AddressType.PrgRom);
 					item = lstFunctions.Items.Add(label?.Label);
 					item.Tag = -1;
-					item.SubItems.Add("");
+
+					item.SubItems.Add("[n/a]");
+					item.ForeColor = Color.Gray;
+					item.Font = new Font(item.Font, FontStyle.Italic);
+
 					item.SubItems.Add("$" + entryPoint.ToString("X4"));
 					item.SubItems[2].Tag = entryPoint;
 
