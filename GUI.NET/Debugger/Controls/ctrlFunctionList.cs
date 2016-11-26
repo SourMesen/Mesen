@@ -30,8 +30,8 @@ namespace Mesen.GUI.Debugger.Controls
 				string bText = string.IsNullOrWhiteSpace(b.Text) ? "ZZZZZZZZZZZZZZZZZZZZZZZ" : b.Text;
 				Int32 aRelative = (Int32)a.Tag == -1 ? Int32.MaxValue : (Int32)a.Tag;
 				Int32 bRelative = (Int32)b.Tag == -1 ? Int32.MaxValue : (Int32)b.Tag;
-				Int32 aAbsolute = (Int32)a.SubItems[1].Tag;
-				Int32 bAbsolute = (Int32)b.SubItems[1].Tag;
+				Int32 aAbsolute = (Int32)a.SubItems[2].Tag;
+				Int32 bAbsolute = (Int32)b.SubItems[2].Tag;
 
 				if(a.Text == b.Text) {
 					if(a.Tag == b.Tag) {
@@ -45,33 +45,63 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		public void UpdateFunctionList()
+		private Dictionary<Int32, ListViewItem> _functions = new Dictionary<int, ListViewItem>(); 
+		public void UpdateFunctionList(bool reset)
 		{
-			Int32[] entryPoints = InteropEmu.DebugGetFunctionEntryPoints();
-
-			lstFunctions.BeginUpdate();
-			lstFunctions.ListViewItemSorter = null;
-			lstFunctions.Items.Clear();
-			for(int i = 0; entryPoints[i] >= 0; i++) {
-				CodeLabel label = LabelManager.GetLabel((UInt32)entryPoints[i], AddressType.PrgRom);
-				ListViewItem item = lstFunctions.Items.Add(label?.Label);
-
-				Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)entryPoints[i], AddressType.PrgRom);
-				if(relativeAddress >= 0) {
-					item.SubItems.Add("$" + relativeAddress.ToString("X4"));
-				} else {
-					item.SubItems.Add("[n/a]");
-					item.ForeColor = Color.Gray;
-					item.Font = new Font(item.Font, FontStyle.Italic);
-				}
-				item.SubItems.Add("$" + entryPoints[i].ToString("X4"));
-				item.SubItems[1].Tag = entryPoints[i];
-				
-				item.Tag = relativeAddress;
+			if(reset) {
+				lstFunctions.Items.Clear();
+				_functions.Clear();
 			}
-			lstFunctions.ListViewItemSorter = new FunctionComparer();
-			lstFunctions.Sort();
-			lstFunctions.EndUpdate();
+
+			Int32[] entryPoints = InteropEmu.DebugGetFunctionEntryPoints();
+			bool updating = false;
+
+			for(int i = 0; entryPoints[i] >= 0; i++) {
+				Int32 entryPoint = entryPoints[i];
+				ListViewItem item;
+				if(!_functions.TryGetValue(entryPoint, out item)) {
+					if(!updating) {
+						updating = true;
+						lstFunctions.BeginUpdate();
+						lstFunctions.ListViewItemSorter = null;
+					}
+
+					CodeLabel label = LabelManager.GetLabel((UInt32)entryPoint, AddressType.PrgRom);
+					item = lstFunctions.Items.Add(label?.Label);
+					item.Tag = -1;
+					item.SubItems.Add("");
+					item.SubItems.Add("$" + entryPoint.ToString("X4"));
+					item.SubItems[2].Tag = entryPoint;
+
+					_functions[entryPoint] = item;
+				}
+
+				Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)entryPoint, AddressType.PrgRom);
+				if(relativeAddress != (Int32)item.Tag) {
+					if(!updating) {
+						updating = true;
+						lstFunctions.BeginUpdate();
+						lstFunctions.ListViewItemSorter = null;
+					}
+
+					if(relativeAddress >= 0) {
+						item.SubItems[1].Text = "$" + relativeAddress.ToString("X4");
+						item.ForeColor = Color.Black;
+						item.Font = new Font(item.Font, FontStyle.Regular);
+					} else {
+						item.SubItems[1].Text = "[n/a]";
+						item.ForeColor = Color.Gray;
+						item.Font = new Font(item.Font, FontStyle.Italic);
+					}
+					item.Tag = relativeAddress;
+				}
+			}
+
+			if(updating) {
+				lstFunctions.ListViewItemSorter = new FunctionComparer();
+				lstFunctions.Sort();
+				lstFunctions.EndUpdate();
+			}
 		}
 
 		private void lstFunctions_DoubleClick(object sender, EventArgs e)

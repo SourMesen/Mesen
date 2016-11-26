@@ -95,8 +95,6 @@ namespace Mesen.GUI.Debugger
 		public bool UpdateCode(bool forceUpdate = false)
 		{
 			if(_codeChanged || forceUpdate) {
-				System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-				sw.Start();
 				this.ctrlCodeViewer.ClearLineStyles();
 
 				List<int> lineNumbers = new List<int>();
@@ -104,24 +102,26 @@ namespace Mesen.GUI.Debugger
 				List<string> codeNotes = new List<string>();
 				List<string> codeLines = new List<string>();
 				
-				string[] lines = _code.Split('\n');
-				for(int i = 0, len = lines.Length - 1; i < len; i++) {
-					string line = lines[i];
+				int index = -1;
+				int previousIndex = -1;
+				while((index = _code.IndexOf('\n', index + 1)) >= 0) {
+					string line = _code.Substring(previousIndex + 1, index - previousIndex - 1);
 					string[] lineParts = line.Split('\x1');
-					
+
 					if(lineParts.Length >= 4) {
 						lineNumbers.Add(ParseHexAddress(lineParts[0]));
 						lineNumberNotes.Add(lineParts[1]);
 						codeNotes.Add(lineParts[2]);
 						codeLines.Add(lineParts[3]);
 					}
+
+					previousIndex = index;
 				}
 
 				ctrlCodeViewer.TextLines = codeLines.ToArray();
 				ctrlCodeViewer.LineNumbers = lineNumbers.ToArray();
 				ctrlCodeViewer.TextLineNotes = codeNotes.ToArray();
 				ctrlCodeViewer.LineNumberNotes = lineNumberNotes.ToArray();
-				sw.Stop();
 				_codeChanged = false;
 				return true;
 			}

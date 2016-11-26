@@ -107,6 +107,9 @@ namespace Mesen.GUI.Debugger
 			}
 			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
 
+			ctrlLabelList.UpdateLabelList();
+			ctrlFunctionList.UpdateFunctionList(true);
+
 			ctrlWatch.SetWatchValues(_workspace.WatchValues);
 
 			BreakpointManager.Breakpoints.Clear();
@@ -186,32 +189,36 @@ namespace Mesen.GUI.Debugger
 			mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
 		}
 
+		string _previousCode = string.Empty;
 		private void UpdateDebugger(bool updateActiveAddress = true)
 		{
-			ctrlLabelList.UpdateLabelList();
-			ctrlFunctionList.UpdateFunctionList();
+			ctrlLabelList.UpdateLabelListAddresses();
+			ctrlFunctionList.UpdateFunctionList(false);
 			UpdateDebuggerFlags();
 			UpdateVectorAddresses();
 
 			if(InteropEmu.DebugIsCodeChanged()) {
-				string code = InteropEmu.DebugGetCode();
-				ctrlDebuggerCode.Code = code;
-				ctrlDebuggerCodeSplit.Code = code;
+				_previousCode = InteropEmu.DebugGetCode();
+				ctrlDebuggerCode.Code = _previousCode;
 			}
 
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
 
 			if(UpdateSplitView()) {
+				ctrlDebuggerCodeSplit.Code = _previousCode;
 				ctrlDebuggerCodeSplit.UpdateCode(true);
 			} else {
 				_lastCodeWindow = ctrlDebuggerCode;
 			}
 
+			ctrlDebuggerCode.SetActiveAddress(state.CPU.DebugPC);
+			ctrlDebuggerCodeSplit.SetActiveAddress(state.CPU.DebugPC);
+
 			if(updateActiveAddress) {
-				ctrlDebuggerCode.SelectActiveAddress(state.CPU.DebugPC);
-				ctrlDebuggerCodeSplit.SetActiveAddress(state.CPU.DebugPC);
+				_lastCodeWindow.SelectActiveAddress(state.CPU.DebugPC);
 			}
+
 			RefreshBreakpoints();
 
 			ctrlConsoleStatus.UpdateStatus(ref state);
@@ -536,6 +543,8 @@ namespace Mesen.GUI.Debugger
 
 		private void LabelManager_OnLabelUpdated(object sender, EventArgs e)
 		{
+			ctrlLabelList.UpdateLabelList();
+			ctrlFunctionList.UpdateFunctionList(true);
 			UpdateDebugger(false);
 		}
 

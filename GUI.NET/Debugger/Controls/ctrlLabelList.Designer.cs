@@ -28,7 +28,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.lstLabels = new System.Windows.Forms.ListView();
+			this.lstLabels = new Mesen.GUI.Controls.DoubleBufferedListView();
 			this.colFunctionLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colFunctionAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colMemoryAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -122,7 +122,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.ListView lstLabels;
+		private Mesen.GUI.Controls.DoubleBufferedListView lstLabels;
 		private System.Windows.Forms.ColumnHeader colFunctionLabel;
 		private System.Windows.Forms.ColumnHeader colFunctionAddress;
 		private System.Windows.Forms.ColumnHeader colMemoryAddress;

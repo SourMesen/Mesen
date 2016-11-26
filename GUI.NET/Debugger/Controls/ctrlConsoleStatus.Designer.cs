@@ -89,7 +89,7 @@
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSP = new System.Windows.Forms.Label();
 			this.txtSP = new System.Windows.Forms.TextBox();
-			this.lstStack = new System.Windows.Forms.ListView();
+			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblA = new System.Windows.Forms.Label();
@@ -1128,7 +1128,7 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
 		private System.Windows.Forms.Label lblSP;
 		private System.Windows.Forms.TextBox txtSP;
-		private System.Windows.Forms.ListView lstStack;
+		private Mesen.GUI.Controls.DoubleBufferedListView lstStack;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Label lblA;
 		private System.Windows.Forms.TextBox txtA;

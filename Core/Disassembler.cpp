@@ -191,7 +191,7 @@ vector<string> Disassembler::SplitComment(string input)
 string Disassembler::GetLine(string code, string comment, int32_t cpuAddress, int32_t absoluteAddress, string byteCode, string addressing)
 {
 	string out;
-	out.reserve(50);
+	out.reserve(100);
 	if(cpuAddress >= 0) {
 		out += HexUtilities::ToHex((uint16_t)cpuAddress);
 	}
@@ -226,8 +226,8 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 	string output;
 	output.reserve(10000000);
 
-	int32_t dbRelativeAddr;
-	int32_t dbAbsoluteAddr;
+	int32_t dbRelativeAddr = 0;
+	int32_t dbAbsoluteAddr = 0;
 	string dbBuffer;
 
 	uint16_t resetVector = memoryManager->DebugReadWord(CPU::ResetVector);
@@ -314,7 +314,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			}
 
 			if(!showOnlyDiassembledCode) {
-				if(byteCount >= 8 || !label.empty() || !commentString.empty()) {
+				if(byteCount >= 8 || ((!label.empty() || !commentString.empty()) && byteCount > 0)) {
 					output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
 					byteCount = 0;
 				}
@@ -332,20 +332,21 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 
 				if(!label.empty() || !commentString.empty()) {
 					output += GetLine(dbBuffer, commentString, dbRelativeAddr, dbAbsoluteAddr);
+					byteCount = 0;
+				} else {
+					byteCount++;
 				}
-
-				byteCount++;
 			}
 			addr++;
 			memoryAddr++;
 		}
 	}
 
+	if(byteCount > 0) {
+		output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
+	}
+
 	if(skippingCode) {
-		if(showOnlyDiassembledCode && byteCount > 0) {
-			output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
-		} 
-		
 		output += GetLine("----", "", (uint16_t)(memoryAddr - 1), addr - 1);
 	}
 		

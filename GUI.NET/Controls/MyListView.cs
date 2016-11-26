@@ -15,6 +15,11 @@ namespace Mesen.GUI.Controls
 		private int _editItemIndex = -1;
 		private string _originalText = null;
 
+		public MyListView()
+		{
+			this.DoubleBuffered = true;
+		}
+
 		public bool IsEditing
 		{
 			get { return _editItemIndex >= 0; }
@@ -94,6 +99,14 @@ namespace Mesen.GUI.Controls
 			}
 
 			base.OnKeyPress(e);
+		}
+	}
+
+	public class DoubleBufferedListView : ListView
+	{
+		public DoubleBufferedListView()
+		{
+			this.DoubleBuffered = true;
 		}
 	}
 }

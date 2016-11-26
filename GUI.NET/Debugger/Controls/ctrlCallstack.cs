@@ -12,6 +12,14 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlCallstack : UserControl
 	{
+		private class StackInfo
+		{
+			public string SubName;
+			public bool IsMapped;
+			public int CurrentRelativeAddr;
+			public int CurrentAbsoluteAddr;
+		}
+
 		public event EventHandler FunctionSelected;
 
 		private Int32[] _absoluteCallstack;
@@ -25,6 +33,12 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void UpdateCallstack()
 		{
+			List<StackInfo> stack = GetStackInfo();
+			this.UpdateList(stack);
+		}
+
+		private List<StackInfo> GetStackInfo()
+		{
 			int nmiHandler = InteropEmu.DebugGetMemoryValue(0xFFFA) | (InteropEmu.DebugGetMemoryValue(0xFFFB) << 8);
 			int irqHandler = InteropEmu.DebugGetMemoryValue(0xFFFE) | (InteropEmu.DebugGetMemoryValue(0xFFFF) << 8);
 
@@ -33,43 +47,69 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetState(ref state);
 			_programCounter = state.CPU.DebugPC;
 
-			this.lstCallstack.BeginUpdate();
-			this.lstCallstack.Items.Clear();
-			int relSubEntryAddr = -1, absSubEntryAddr = -1, relCurrentAddr = -1, relDestinationAddr = -1, absCurrentAddr = -1, absDestinationAddr = -1;
-			ListViewItem item;
+			int relDestinationAddr = -1, absDestinationAddr = -1;
+
+			List<StackInfo> stack = new List<StackInfo>();
 			for(int i = 0, len = _relativeCallstack.Length; i < len; i+=2) {
 				if(_relativeCallstack[i] == -2) {
 					break;
 				}
 
-				relSubEntryAddr = i == 0 ? -1 : _relativeCallstack[i-1] & 0xFFFF;
-				absSubEntryAddr = i == 0 ? -1 : _absoluteCallstack[i-1];
+				int relSubEntryAddr = i == 0 ? -1 : _relativeCallstack[i-1] & 0xFFFF;
+				int absSubEntryAddr = i == 0 ? -1 : _absoluteCallstack[i-1];
 
-				bool currentAddrUnmapped = (_relativeCallstack[i] & 0x10000) == 0x10000;
-				relCurrentAddr = _relativeCallstack[i] & 0xFFFF;
+				stack.Add(new StackInfo() {
+					SubName = this.GetFunctionName(relSubEntryAddr, absSubEntryAddr, nmiHandler, irqHandler),
+					IsMapped = (_relativeCallstack[i] & 0x10000) != 0x10000,
+					CurrentRelativeAddr = _relativeCallstack[i] & 0xFFFF,
+					CurrentAbsoluteAddr = _absoluteCallstack[i]
+				});
+
 				relDestinationAddr = _relativeCallstack[i+1] & 0xFFFF;
-				absCurrentAddr = _absoluteCallstack[i];
 				absDestinationAddr = _absoluteCallstack[i+1];
+			}
 
-				item = this.lstCallstack.Items.Insert(0, this.GetFunctionName(relSubEntryAddr, absSubEntryAddr, nmiHandler, irqHandler));
-				item.SubItems.Add("@ $" + relCurrentAddr.ToString("X4"));
-				item.SubItems.Add("[$" + absCurrentAddr.ToString("X4") + "]");
+			//Add current location
+			stack.Add(new StackInfo() {
+				SubName = this.GetFunctionName(relDestinationAddr, absDestinationAddr, nmiHandler, irqHandler),
+				IsMapped = true,
+				CurrentRelativeAddr = _programCounter,
+				CurrentAbsoluteAddr = InteropEmu.DebugGetAbsoluteAddress((UInt32)_programCounter)
+			});
 
-				if(currentAddrUnmapped) {
-					item.ForeColor = Color.Gray;
-					item.Font = new Font(item.Font, FontStyle.Italic);
+			return stack;
+		}
+
+		private void UpdateList(List<StackInfo> stack)
+		{
+			if(this.lstCallstack.Items.Count != stack.Count) {
+				this.lstCallstack.Items.Clear();
+				for(int i = 0, len = stack.Count; i < len; i++) {
+					this.lstCallstack.Items.Add("").SubItems.AddRange(new string[] { "", "" });
 				}
 			}
 
-			item = this.lstCallstack.Items.Insert(0, this.GetFunctionName(relDestinationAddr, absDestinationAddr, nmiHandler, irqHandler));
-			item.SubItems.Add("@ $" + _programCounter.ToString("X4"));
-			item.SubItems.Add("[$" + InteropEmu.DebugGetAbsoluteAddress((UInt32)_programCounter).ToString("X4") + "]");
-			if((relDestinationAddr & 0x10000) == 0x10000) {
-				item.ForeColor = Color.Gray;
-				item.Font = new Font(item.Font, FontStyle.Italic);
-			}
+			for(int i = 0, len = stack.Count; i < len; i++) {
+				StackInfo stackInfo = stack[i];
+				ListViewItem item = this.lstCallstack.Items[len - i - 1];
 
-			this.lstCallstack.EndUpdate();
+				item.Text = stackInfo.SubName;
+				item.SubItems[1].Text = "@ $" + stackInfo.CurrentRelativeAddr.ToString("X4");
+				item.SubItems[2].Text = "[$" + stackInfo.CurrentAbsoluteAddr.ToString("X4") + "]";
+
+				if(!stackInfo.IsMapped && item.ForeColor != Color.Gray) {
+					item.ForeColor = Color.Gray;
+					item.Font = new Font(item.Font, FontStyle.Italic);
+				} else if(stackInfo.IsMapped && item.ForeColor != Color.Black) {
+					item.ForeColor = Color.Black;
+					item.Font = new Font(item.Font, FontStyle.Regular);
+				}
+			}
+		}
+
+		private void UpdateList()
+		{
+
 		}
 
 		private string GetFunctionName(int relSubEntryAddr, int absSubEntryAddr, int nmiHandler, int irqHandler)

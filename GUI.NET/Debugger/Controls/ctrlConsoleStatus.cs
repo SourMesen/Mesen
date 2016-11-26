@@ -20,12 +20,12 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateCPUStatus(ref DebugState state)
 		{
-			txtA.Text = state.CPU.A.ToString("X");
-			txtX.Text = state.CPU.X.ToString("X");
-			txtY.Text = state.CPU.Y.ToString("X");
-			txtPC.Text = state.CPU.PC.ToString("X");
-			txtSP.Text = state.CPU.SP.ToString("X");
-			txtStatus.Text = state.CPU.PS.ToString("X");
+			txtA.Text = state.CPU.A.ToString("X2");
+			txtX.Text = state.CPU.X.ToString("X2");
+			txtY.Text = state.CPU.Y.ToString("X2");
+			txtPC.Text = state.CPU.PC.ToString("X4");
+			txtSP.Text = state.CPU.SP.ToString("X2");
+			txtStatus.Text = state.CPU.PS.ToString("X2");
 			txtCycleCount.Text = state.CPU.CycleCount.ToString();
 
 			PSFlags flags = (PSFlags)state.CPU.PS;
@@ -63,20 +63,20 @@ namespace Mesen.GUI.Debugger
 			chkIntensifyGreen.Checked = Convert.ToBoolean(state.PPU.ControlFlags.IntensifyGreen);
 			chkIntensifyBlue.Checked = Convert.ToBoolean(state.PPU.ControlFlags.IntensifyBlue);
 
-			txtBGAddr.Text = state.PPU.ControlFlags.BackgroundPatternAddr.ToString("X");
-			txtSprAddr.Text = state.PPU.ControlFlags.SpritePatternAddr.ToString("X");
+			txtBGAddr.Text = state.PPU.ControlFlags.BackgroundPatternAddr.ToString("X4");
+			txtSprAddr.Text = state.PPU.ControlFlags.SpritePatternAddr.ToString("X4");
 
-			txtVRAMAddr.Text = state.PPU.State.VideoRamAddr.ToString("X");
+			txtVRAMAddr.Text = state.PPU.State.VideoRamAddr.ToString("X4");
 			txtCycle.Text = state.PPU.Cycle.ToString();
 			txtScanline.Text = state.PPU.Scanline.ToString();
-			txtNTAddr.Text = (0x2000 | (state.PPU.State.VideoRamAddr & 0x0FFF)).ToString("X");
+			txtNTAddr.Text = (0x2000 | (state.PPU.State.VideoRamAddr & 0x0FFF)).ToString("X4");
 		}
 
 		private void UpdateStack(UInt16 stackPointer)
 		{
 			lstStack.Items.Clear();
 			for(UInt32 i = (UInt32)0x100 + stackPointer; i <  0x200; i++) {
-				lstStack.Items.Add("$" + InteropEmu.DebugGetMemoryValue(i).ToString("X"));
+				lstStack.Items.Add("$" + InteropEmu.DebugGetMemoryValue(i).ToString("X2"));
 			}
 		}
 

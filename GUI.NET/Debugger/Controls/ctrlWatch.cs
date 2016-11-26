@@ -17,6 +17,8 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
+			this.DoubleBuffered = true;
+
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
 				this.mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.HexDisplay;
@@ -68,7 +70,7 @@ namespace Mesen.GUI.Debugger
 		{
 			lstWatch.Items.Clear();
 			foreach(string watchValue in watchValues) {
-				lstWatch.Items.Add(watchValue);
+				lstWatch.Items.Add(watchValue).SubItems.Add("");
 			}
 			UpdateWatch();
 		}
@@ -92,7 +94,6 @@ namespace Mesen.GUI.Debugger
 					string previousValue = null;
 					if(item.SubItems.Count > 1) {
 						previousValue = item.SubItems[1].Text;
-						item.SubItems.RemoveAt(1);
 					}
 
 					string newValue = "";
@@ -116,8 +117,12 @@ namespace Mesen.GUI.Debugger
 							break;
 					}
 
-					item.SubItems.Add(newValue);
-					item.SubItems[1].ForeColor = newValue != previousValue ? Color.Red : Color.Black;
+					if(previousValue != newValue) {
+						item.SubItems[1].Text = newValue;
+						item.SubItems[1].ForeColor = Color.Red;
+					} else {
+						item.SubItems[1].ForeColor = Color.Black;
+					}
 				}
 			}
 			AdjustColumnWidth();
@@ -131,6 +136,7 @@ namespace Mesen.GUI.Debugger
 		public void AddWatch(string watchValue)
 		{
 			ListViewItem item = lstWatch.Items.Insert(lstWatch.Items.Count - 1, watchValue);
+			item.SubItems.Add("");
 			UpdateWatch();
 		}
 

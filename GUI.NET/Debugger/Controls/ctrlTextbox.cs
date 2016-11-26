@@ -502,7 +502,7 @@ namespace Mesen.GUI.Debugger
 			this.CursorPosition = this.ScrollPosition + clickedLine;
 		}
 
-		private void DrawLine(Graphics g, int currentLine, int marginLeft, int positionY)
+		private void DrawLine(Graphics g, int currentLine, int marginLeft, int positionY, int lineHeight)
 		{
 			string[] lineContent = _contents[currentLine].Split('\x2');
 			string codeString = lineContent[0].TrimStart();
@@ -514,7 +514,7 @@ namespace Mesen.GUI.Debugger
 
 			if(currentLine == this.CursorPosition) {
 				//Highlight current line
-				g.FillRectangle(Brushes.AliceBlue, marginLeft, positionY, Math.Max(_maxLineWidth, this.ClientRectangle.Width), this.LineHeight);
+				g.FillRectangle(Brushes.AliceBlue, marginLeft, positionY, Math.Max(_maxLineWidth, this.ClientRectangle.Width), lineHeight);
 			}
 
 			//Adjust background color highlights based on number of spaces in front of content
@@ -528,17 +528,17 @@ namespace Mesen.GUI.Debugger
 
 				if(lineProperties.BgColor.HasValue) {
 					using(Brush bgBrush = new SolidBrush(lineProperties.BgColor.Value)) {
-						g.FillRectangle(bgBrush, marginLeft, positionY + 1, codeStringLength, this.LineHeight-1);
+						g.FillRectangle(bgBrush, marginLeft, positionY + 1, codeStringLength, lineHeight-1);
 					}
 				}
 				if(lineProperties.OutlineColor.HasValue) {
 					using(Pen outlinePen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-						g.DrawRectangle(outlinePen, marginLeft, positionY + 1, codeStringLength, this.LineHeight-1);
+						g.DrawRectangle(outlinePen, marginLeft, positionY + 1, codeStringLength, lineHeight-1);
 					}
 				}
 			}
 
-			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, codeStringLength, addressStringLength, textColor);
+			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, codeStringLength, addressStringLength, textColor, lineHeight);
 		}
 
 		private void DrawLineNumber(Graphics g, int currentLine, int marginLeft, int positionY)
@@ -552,7 +552,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void DrawLineText(Graphics g, int currentLine, int marginLeft, int positionY, string codeString, string addressString, string commentString, float codeStringLength, float addressStringLength, Color textColor)
+		private void DrawLineText(Graphics g, int currentLine, int marginLeft, int positionY, string codeString, string addressString, string commentString, float codeStringLength, float addressStringLength, Color textColor, int lineHeight)
 		{
 			using(Brush fgBrush = new SolidBrush(textColor)) {
 				if(codeString.StartsWith("--") && codeString.EndsWith("--")) {
@@ -561,7 +561,7 @@ namespace Mesen.GUI.Debugger
 					string text = codeString.Substring(2, codeString.Length - 4);
 					float textLength = g.MeasureString(text, this._noteFont).Width;
 					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY);
-					g.DrawLine(Pens.Black, marginLeft, positionY+this.LineHeight-2, marginLeft+this.Width, positionY+this.LineHeight-2);
+					g.DrawLine(Pens.Black, marginLeft, positionY+lineHeight-2, marginLeft+this.Width, positionY+lineHeight-2);
 					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 				} else if(codeString.StartsWith("__") && codeString.EndsWith("__")) {
 					//Draw block end
@@ -598,33 +598,33 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void DrawLineSymbols(Graphics g, int positionY, LineProperties lineProperties)
+		private void DrawLineSymbols(Graphics g, int positionY, LineProperties lineProperties, int lineHeight)
 		{
 			if(lineProperties.Symbol.HasFlag(LineSymbol.Circle)) {
 				using(Brush brush = new SolidBrush(lineProperties.OutlineColor.Value)) {
-					g.FillEllipse(brush, 1, positionY + 2, this.LineHeight - 3, this.LineHeight - 3);
+					g.FillEllipse(brush, 1, positionY + 2, lineHeight - 3, lineHeight - 3);
 				}
 			}
 			if(lineProperties.Symbol.HasFlag(LineSymbol.CircleOutline) && lineProperties.OutlineColor.HasValue) {
 				using(Pen pen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-					g.DrawEllipse(pen, 1, positionY + 2, this.LineHeight - 3, this.LineHeight - 3);
+					g.DrawEllipse(pen, 1, positionY + 2, lineHeight - 3, lineHeight - 3);
 				}
 			}
 			if(lineProperties.Symbol.HasFlag(LineSymbol.Arrow)) {
-				int arrowY = positionY + this.LineHeight / 2 + 1;
-				using(Pen pen = new Pen(Color.Black, this.LineHeight * 0.33f)) {
+				int arrowY = positionY + lineHeight / 2 + 1;
+				using(Pen pen = new Pen(Color.Black, lineHeight * 0.33f)) {
 					//Outline
-					g.DrawLine(pen, 3, arrowY, 3 + this.LineHeight * 0.25f, arrowY);
+					g.DrawLine(pen, 3, arrowY, 3 + lineHeight * 0.25f, arrowY);
 					pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
-					g.DrawLine(pen, 3 + this.LineHeight * 0.25f, arrowY, 3 + this.LineHeight * 0.75f, arrowY);
+					g.DrawLine(pen, 3 + lineHeight * 0.25f, arrowY, 3 + lineHeight * 0.75f, arrowY);
 
 					//Fill
 					pen.Width-=2f;
 					pen.Color = lineProperties.BgColor.Value;
 					pen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
-					g.DrawLine(pen, 4, arrowY, 3 + this.LineHeight * 0.25f - 1, arrowY);
+					g.DrawLine(pen, 4, arrowY, 3 + lineHeight * 0.25f - 1, arrowY);
 					pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
-					g.DrawLine(pen, 3 + this.LineHeight * 0.25f, arrowY, this.LineHeight * 0.75f + 1, arrowY);
+					g.DrawLine(pen, 3 + lineHeight * 0.25f, arrowY, lineHeight * 0.75f + 1, arrowY);
 				}
 			}
 		}
@@ -680,7 +680,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void DrawMargin(Graphics g, int currentLine, int marginLeft, int positionY)
+		private void DrawMargin(Graphics g, int currentLine, int marginLeft, int positionY, int lineHeight)
 		{
 			if(this.ShowLineNumbers) {
 				//Show line number
@@ -691,12 +691,13 @@ namespace Mesen.GUI.Debugger
 			marginLeft += _lineMargins[currentLine];
 
 			if(_lineProperties.ContainsKey(currentLine)) {
-				this.DrawLineSymbols(g, positionY, _lineProperties[currentLine]);
+				this.DrawLineSymbols(g, positionY, _lineProperties[currentLine], lineHeight);
 			}
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
+			int lineHeight = this.LineHeight;
 			pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 			using(Brush lightGrayBrush = new SolidBrush(Color.FromArgb(240,240,240))) {
 				using(Pen grayPen = new Pen(Color.LightGray)) {
@@ -710,14 +711,14 @@ namespace Mesen.GUI.Debugger
 					int positionY = 0;
 
 					if(!string.IsNullOrWhiteSpace(this._header)) {
-						pe.Graphics.FillRectangle(lightGrayBrush, marginLeft, 0, Math.Max(_maxLineWidth, rect.Right), this.LineHeight);
+						pe.Graphics.FillRectangle(lightGrayBrush, marginLeft, 0, Math.Max(_maxLineWidth, rect.Right), lineHeight);
 						pe.Graphics.DrawString(_header, this.Font, Brushes.Gray, marginLeft, positionY);
-						positionY += this.LineHeight;
+						positionY += lineHeight;
 					}
 
 					while(positionY < rect.Bottom && currentLine < _contents.Length) {
-						this.DrawLine(pe.Graphics, currentLine, marginLeft, positionY);
-						positionY += this.LineHeight;
+						this.DrawLine(pe.Graphics, currentLine, marginLeft, positionY, lineHeight);
+						positionY += lineHeight;
 						currentLine++;
 					}
 
@@ -731,8 +732,8 @@ namespace Mesen.GUI.Debugger
 					currentLine = this.ScrollPosition;
 					positionY = 0;
 					while(positionY < rect.Bottom && currentLine < _contents.Length) {
-						this.DrawMargin(pe.Graphics, currentLine, marginLeft, positionY);
-						positionY += this.LineHeight;
+						this.DrawMargin(pe.Graphics, currentLine, marginLeft, positionY, lineHeight);
+						positionY += lineHeight;
 						currentLine++;
 					}
 				}

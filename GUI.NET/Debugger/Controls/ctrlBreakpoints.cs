@@ -17,7 +17,6 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlBreakpoints()
 		{
 			InitializeComponent();
-
 			BreakpointManager.BreakpointsChanged += BreakpointManager_OnBreakpointChanged;
 		}
 

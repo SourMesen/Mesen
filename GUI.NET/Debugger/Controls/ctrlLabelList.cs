@@ -14,6 +14,8 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlLabelList : UserControl
 	{
 		public event EventHandler OnLabelSelected;
+		private List<ListViewItem> _listItems = new List<ListViewItem>();
+
 		public ctrlLabelList()
 		{
 			InitializeComponent();
@@ -36,10 +38,38 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		public void UpdateLabelListAddresses()
+		{
+			bool updating = false;
+			foreach(ListViewItem item in _listItems) {
+				CodeLabel label = (CodeLabel)item.SubItems[1].Tag;
+
+				Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
+				if(relativeAddress != (Int32)item.Tag) {
+					if(!updating) {
+						lstLabels.BeginUpdate();
+						updating = true;
+					}
+					if(relativeAddress >= 0) {
+						item.SubItems[0].Text = "$" + relativeAddress.ToString("X4");
+						item.ForeColor = Color.Black;
+						item.Font = new Font(item.Font, FontStyle.Regular);
+					} else {
+						item.SubItems[0].Text = "[n/a]";
+						item.ForeColor = Color.Gray;
+						item.Font = new Font(item.Font, FontStyle.Italic);
+					}
+					item.Tag = relativeAddress;
+				}
+			}
+			if(updating) {
+				lstLabels.Sort();
+				lstLabels.EndUpdate();
+			}
+		}
+
 		public void UpdateLabelList()
 		{
-			Int32[] entryPoints = InteropEmu.DebugGetFunctionEntryPoints();
-
 			lstLabels.BeginUpdate();
 			lstLabels.Items.Clear();
 			foreach(CodeLabel label in LabelManager.GetLabels()) {
@@ -62,6 +92,11 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			lstLabels.Sort();
 			lstLabels.EndUpdate();
+
+			_listItems = new List<ListViewItem>();
+			foreach(ListViewItem item in lstLabels.Items) {
+				_listItems.Add(item);
+			}			
 		}
 
 		private void lstLabels_DoubleClick(object sender, EventArgs e)
