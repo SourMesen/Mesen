@@ -14,6 +14,7 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlPaletteViewer : UserControl
 	{
 		private byte[] _paletteRam;
+		private byte[] _palettePixelData;
 
 		public ctrlPaletteViewer()
 		{
@@ -25,12 +26,15 @@ namespace Mesen.GUI.Debugger.Controls
  			base.OnLoad(e);
 		}
 
-		public void RefreshViewer()
+		public void GetData()
 		{
 			this._paletteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.PaletteMemory);
-			byte[] pixelData = InteropEmu.DebugGetPalette();
+			this._palettePixelData = InteropEmu.DebugGetPalette();
+		}
 
-			GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
+		public void RefreshViewer()
+		{
+			GCHandle handle = GCHandle.Alloc(this._palettePixelData, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(4, 8, 4*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
 				Bitmap target = new Bitmap(128, 256);

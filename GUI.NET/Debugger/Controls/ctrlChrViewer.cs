@@ -13,28 +13,34 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlChrViewer : UserControl
 	{
+		private byte[][] _chrPixelData = new byte[2][];
+		private int _selectedPalette = 0;
+		private int _chrSelection = 0;
+		private CdlHighlightType _highlightType = CdlHighlightType.None;
+		private bool _useLargeSprites = false;
+
 		public ctrlChrViewer()
 		{
 			InitializeComponent();
+			this.cboPalette.SelectedIndex = 0;
+			this.cboHighlightType.SelectedIndex = 0;
 		}
-		protected override void OnLoad(EventArgs e)
+
+		public void GetData()
 		{
- 			base.OnLoad(e);
-			if(!this.DesignMode) {
-				this.UpdateDropdown();
-				this.cboHighlightType.SelectedIndex = 0;
-				this.cboPalette.SelectedIndex = 0;
+			for(int i = 0; i < 2; i++) {
+				_chrPixelData[i] = InteropEmu.DebugGetChrBank(i + _chrSelection * 2, _selectedPalette, _useLargeSprites, _highlightType);
 			}
 		}
 
 		public void RefreshViewer()
 		{
-			PictureBox[] chrBanks = new PictureBox[] { this.picChrBank1, this.picChrBank2 };
-
 			UpdateDropdown();
 
+			PictureBox[] chrBanks = new PictureBox[] { this.picChrBank1, this.picChrBank2 };
+
 			for(int i = 0; i < 2; i++) {
-				byte[] pixelData = InteropEmu.DebugGetChrBank(i + this.cboChrSelection.SelectedIndex * 2, this.cboPalette.SelectedIndex, this.chkLargeSprites.Checked, (CdlHighlightType)this.cboHighlightType.SelectedIndex);
+				byte[] pixelData = _chrPixelData[i];
 
 				GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
 				try {
@@ -91,21 +97,25 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void cboPalette_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			this._selectedPalette = this.cboPalette.SelectedIndex;
 			this.RefreshViewer();
 		}
 
 		private void chkLargeSprites_Click(object sender, EventArgs e)
 		{
+			this._useLargeSprites = this.chkLargeSprites.Checked;
 			this.RefreshViewer();
 		}
 
 		private void cboHighlightType_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			this._highlightType = (CdlHighlightType)this.cboHighlightType.SelectedIndex;
 			this.RefreshViewer();
 		}
 
 		private void cboChrSelection_SelectionChangeCommitted(object sender, EventArgs e)
 		{
+			this._chrSelection = this.cboChrSelection.SelectedIndex;
 			this.RefreshViewer();
 		}
 

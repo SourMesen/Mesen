@@ -45,6 +45,8 @@ extern "C"
 	DllExport bool __stdcall DebugIsCodeChanged() { return GetDebugger()->IsCodeChanged(); }
 	DllExport const char* __stdcall DebugGetCode() { return GetDebugger()->GetCode()->c_str(); }
 
+	DllExport void __stdcall DebugSetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle) { return GetDebugger()->SetPpuViewerScanlineCycle(scanline, cycle); }
+
 	DllExport void __stdcall DebugSetNextStatement(uint16_t addr) { GetDebugger()->SetNextStatement(addr); }
 	DllExport void __stdcall DebugSetMemoryState(uint32_t type, uint8_t *buffer) { GetDebugger()->GetMemoryDumper()->SetMemoryState((DebugMemoryType)type, buffer); }
 

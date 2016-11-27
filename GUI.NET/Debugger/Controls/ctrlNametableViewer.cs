@@ -13,12 +13,20 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlNametableViewer : UserControl
 	{
-		private List<byte[]> _tileData = new List<byte[]>() { null, null, null, null };
-		private List<byte[]> _attributeData = new List<byte[]>() { null, null, null, null };
+		private byte[][] _nametablePixelData = new byte[4][];
+		private byte[][] _tileData = new byte[4][];
+		private byte[][] _attributeData = new byte[4][];
 
 		public ctrlNametableViewer()
 		{
 			InitializeComponent();
+		}
+
+		public void GetData()
+		{
+			for(int i = 0; i < 4; i++) {
+				InteropEmu.DebugGetNametable(i, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
+			}
 		}
 
 		public void RefreshViewer()
@@ -26,12 +34,7 @@ namespace Mesen.GUI.Debugger.Controls
 			PictureBox[] nametables = new PictureBox[] { this.picNametable1, this.picNametable2, this.picNametable3, this.picNametable4 };
 
 			for(int i = 0; i < 4; i++) {
-				byte[] nametablePixelData, tileData, attributeData;
-				InteropEmu.DebugGetNametable(i, out nametablePixelData, out tileData, out attributeData);
-				_tileData[i] = tileData;
-				_attributeData[i] = attributeData;
-
-				GCHandle handle = GCHandle.Alloc(nametablePixelData, GCHandleType.Pinned);
+				GCHandle handle = GCHandle.Alloc(_nametablePixelData[i], GCHandleType.Pinned);
 				try {
 					Bitmap source = new Bitmap(256, 240, 4*256, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
 					Bitmap target = new Bitmap(256, 240);

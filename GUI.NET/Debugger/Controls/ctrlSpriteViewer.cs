@@ -14,6 +14,7 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlSpriteViewer : UserControl
 	{
 		private byte[] _spriteRam;
+		private byte[] _spritePixelData;
 
 		public ctrlSpriteViewer()
 		{
@@ -24,13 +25,15 @@ namespace Mesen.GUI.Debugger.Controls
  			base.OnLoad(e);
 		}
 
-		public void RefreshViewer()
+		public void GetData()
 		{
 			_spriteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.SpriteMemory);
+			_spritePixelData = InteropEmu.DebugGetSprites();
+		}
 
-			byte[] pixelData = InteropEmu.DebugGetSprites();
-
-			GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
+		public void RefreshViewer()
+		{
+			GCHandle handle = GCHandle.Alloc(_spritePixelData, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(64, 128, 4*64, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
 				Bitmap target = new Bitmap(256, 512);

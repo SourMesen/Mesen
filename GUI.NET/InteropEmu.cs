@@ -180,6 +180,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeAddress(UInt32 absoluteAddr, AddressType type);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetAbsoluteAddress(UInt32 relativeAddr);
 		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, ref AddressTypeInfo addressTypeInfo);
+		[DllImport(DLLPath)] public static extern void DebugSetPpuViewerScanlineCycle(Int32 scanline, Int32 cycle);
 
 		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
 		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
@@ -426,7 +427,8 @@ namespace Mesen.GUI
 			FdsDiskChanged = 12,
 			FdsBiosNotFound = 13,
 			ConfigChanged = 14,
-			DisconnectedFromServer = 15
+			DisconnectedFromServer = 15,
+			PpuViewerDisplayFrame = 16,
 		}
 
 		public enum ControllerType

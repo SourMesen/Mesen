@@ -77,6 +77,9 @@ private:
 	atomic<bool> _stepOut;
 	atomic<int32_t> _stepOverAddr;
 
+	int32_t _ppuViewerScanline;
+	int32_t _ppuViewerCycle;
+
 private:
 	void UpdateBreakpoints();
 
@@ -124,6 +127,7 @@ public:
 	void ResetCdlLog();
 
 	void SetNextStatement(uint16_t addr);
+	void SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle);
 
 	bool IsExecutionStopped();
 

@@ -34,6 +34,9 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 
+	_ppuViewerScanline = 241;
+	_ppuViewerCycle = 0;
+
 	_flags = 0;
 
 	_bpUpdateNeeded = false;
@@ -276,6 +279,10 @@ void Debugger::ProcessStepConditions(uint32_t addr)
 
 void Debugger::PrivateProcessPpuCycle()
 {
+	if(PPU::GetCurrentCycle() == _ppuViewerCycle && PPU::GetCurrentScanline() == _ppuViewerScanline) {
+		MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame);
+	}
+	
 	if(_hasBreakpoint[BreakpointType::Global] && HasMatchingBreakpoint(BreakpointType::Global, 0, -1)) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
@@ -648,4 +655,10 @@ void Debugger::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo*
 		info->Type = AddressType::SaveRam;
 		return;
 	}
+}
+
+void Debugger::SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle)
+{
+	_ppuViewerScanline = scanline;
+	_ppuViewerCycle = cycle;
 }

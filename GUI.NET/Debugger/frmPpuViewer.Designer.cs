@@ -47,12 +47,20 @@
 			this.ctrlSpriteViewer = new Mesen.GUI.Debugger.Controls.ctrlSpriteViewer();
 			this.tpgPaletteViewer = new System.Windows.Forms.TabPage();
 			this.ctrlPaletteViewer = new Mesen.GUI.Debugger.Controls.ctrlPaletteViewer();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblShowFrameAt = new System.Windows.Forms.Label();
+			this.nudScanline = new System.Windows.Forms.NumericUpDown();
+			this.lblCycle = new System.Windows.Forms.Label();
+			this.nudCycle = new System.Windows.Forms.NumericUpDown();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgNametableViewer.SuspendLayout();
 			this.tpgChrViewer.SuspendLayout();
 			this.tpgSpriteViewer.SuspendLayout();
 			this.tpgPaletteViewer.SuspendLayout();
+			this.flowLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudScanline)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudCycle)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -95,14 +103,14 @@
 			// 
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(138, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -110,7 +118,7 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -124,8 +132,9 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 24);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(709, 554);
+			this.tabMain.Size = new System.Drawing.Size(709, 552);
 			this.tabMain.TabIndex = 3;
+			this.tabMain.SelectedIndexChanged += new System.EventHandler(this.tabMain_SelectedIndexChanged);
 			// 
 			// tpgNametableViewer
 			// 
@@ -133,7 +142,7 @@
 			this.tpgNametableViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgNametableViewer.Name = "tpgNametableViewer";
 			this.tpgNametableViewer.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgNametableViewer.Size = new System.Drawing.Size(701, 528);
+			this.tpgNametableViewer.Size = new System.Drawing.Size(701, 526);
 			this.tpgNametableViewer.TabIndex = 0;
 			this.tpgNametableViewer.Text = "Nametable Viewer";
 			this.tpgNametableViewer.UseVisualStyleBackColor = true;
@@ -143,7 +152,7 @@
 			this.ctrlNametableViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlNametableViewer.Location = new System.Drawing.Point(3, 3);
 			this.ctrlNametableViewer.Name = "ctrlNametableViewer";
-			this.ctrlNametableViewer.Size = new System.Drawing.Size(695, 522);
+			this.ctrlNametableViewer.Size = new System.Drawing.Size(695, 520);
 			this.ctrlNametableViewer.TabIndex = 0;
 			// 
 			// tpgChrViewer
@@ -152,7 +161,7 @@
 			this.tpgChrViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgChrViewer.Name = "tpgChrViewer";
 			this.tpgChrViewer.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgChrViewer.Size = new System.Drawing.Size(701, 528);
+			this.tpgChrViewer.Size = new System.Drawing.Size(701, 526);
 			this.tpgChrViewer.TabIndex = 1;
 			this.tpgChrViewer.Text = "CHR Viewer";
 			this.tpgChrViewer.UseVisualStyleBackColor = true;
@@ -162,7 +171,7 @@
 			this.ctrlChrViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlChrViewer.Location = new System.Drawing.Point(3, 3);
 			this.ctrlChrViewer.Name = "ctrlChrViewer";
-			this.ctrlChrViewer.Size = new System.Drawing.Size(695, 522);
+			this.ctrlChrViewer.Size = new System.Drawing.Size(695, 520);
 			this.ctrlChrViewer.TabIndex = 2;
 			// 
 			// tpgSpriteViewer
@@ -170,7 +179,7 @@
 			this.tpgSpriteViewer.Controls.Add(this.ctrlSpriteViewer);
 			this.tpgSpriteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgSpriteViewer.Name = "tpgSpriteViewer";
-			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 528);
+			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 526);
 			this.tpgSpriteViewer.TabIndex = 2;
 			this.tpgSpriteViewer.Text = "Sprite Viewer";
 			this.tpgSpriteViewer.UseVisualStyleBackColor = true;
@@ -180,7 +189,7 @@
 			this.ctrlSpriteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlSpriteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlSpriteViewer.Name = "ctrlSpriteViewer";
-			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 528);
+			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 526);
 			this.ctrlSpriteViewer.TabIndex = 0;
 			// 
 			// tpgPaletteViewer
@@ -188,7 +197,7 @@
 			this.tpgPaletteViewer.Controls.Add(this.ctrlPaletteViewer);
 			this.tpgPaletteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgPaletteViewer.Name = "tpgPaletteViewer";
-			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 528);
+			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 526);
 			this.tpgPaletteViewer.TabIndex = 3;
 			this.tpgPaletteViewer.Text = "Palette Viewer";
 			this.tpgPaletteViewer.UseVisualStyleBackColor = true;
@@ -198,21 +207,90 @@
 			this.ctrlPaletteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlPaletteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlPaletteViewer.Name = "ctrlPaletteViewer";
-			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 528);
+			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 526);
 			this.ctrlPaletteViewer.TabIndex = 0;
+			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.Controls.Add(this.lblShowFrameAt);
+			this.flowLayoutPanel1.Controls.Add(this.nudScanline);
+			this.flowLayoutPanel1.Controls.Add(this.lblCycle);
+			this.flowLayoutPanel1.Controls.Add(this.nudCycle);
+			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 576);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(709, 26);
+			this.flowLayoutPanel1.TabIndex = 4;
+			// 
+			// lblShowFrameAt
+			// 
+			this.lblShowFrameAt.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblShowFrameAt.AutoSize = true;
+			this.lblShowFrameAt.Location = new System.Drawing.Point(3, 6);
+			this.lblShowFrameAt.Name = "lblShowFrameAt";
+			this.lblShowFrameAt.Size = new System.Drawing.Size(137, 13);
+			this.lblShowFrameAt.TabIndex = 0;
+			this.lblShowFrameAt.Text = "Show PPU data at scanline";
+			// 
+			// nudScanline
+			// 
+			this.nudScanline.Location = new System.Drawing.Point(146, 3);
+			this.nudScanline.Maximum = new decimal(new int[] {
+            260,
+            0,
+            0,
+            0});
+			this.nudScanline.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+			this.nudScanline.Name = "nudScanline";
+			this.nudScanline.Size = new System.Drawing.Size(52, 20);
+			this.nudScanline.TabIndex = 5;
+			this.nudScanline.Value = new decimal(new int[] {
+            241,
+            0,
+            0,
+            0});
+			this.nudScanline.ValueChanged += new System.EventHandler(this.nudScanlineCycle_ValueChanged);
+			// 
+			// lblCycle
+			// 
+			this.lblCycle.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblCycle.AutoSize = true;
+			this.lblCycle.Location = new System.Drawing.Point(204, 6);
+			this.lblCycle.Name = "lblCycle";
+			this.lblCycle.Size = new System.Drawing.Size(53, 13);
+			this.lblCycle.TabIndex = 5;
+			this.lblCycle.Text = "and cycle";
+			// 
+			// nudCycle
+			// 
+			this.nudCycle.Location = new System.Drawing.Point(263, 3);
+			this.nudCycle.Maximum = new decimal(new int[] {
+            340,
+            0,
+            0,
+            0});
+			this.nudCycle.Name = "nudCycle";
+			this.nudCycle.Size = new System.Drawing.Size(52, 20);
+			this.nudCycle.TabIndex = 6;
+			this.nudCycle.ValueChanged += new System.EventHandler(this.nudScanlineCycle_ValueChanged);
 			// 
 			// frmPpuViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(709, 578);
+			this.ClientSize = new System.Drawing.Size(709, 602);
 			this.Controls.Add(this.tabMain);
 			this.Controls.Add(this.menuStrip1);
+			this.Controls.Add(this.flowLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MainMenuStrip = this.menuStrip1;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(725, 607);
+			this.MinimumSize = new System.Drawing.Size(725, 640);
 			this.Name = "frmPpuViewer";
 			this.Text = "PPU Viewer";
 			this.menuStrip1.ResumeLayout(false);
@@ -222,6 +300,10 @@
 			this.tpgChrViewer.ResumeLayout(false);
 			this.tpgSpriteViewer.ResumeLayout(false);
 			this.tpgPaletteViewer.ResumeLayout(false);
+			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudScanline)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudCycle)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -245,5 +327,10 @@
 		private System.Windows.Forms.TabPage tpgPaletteViewer;
 		private Controls.ctrlPaletteViewer ctrlPaletteViewer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+		private System.Windows.Forms.Label lblShowFrameAt;
+		private System.Windows.Forms.NumericUpDown nudScanline;
+		private System.Windows.Forms.Label lblCycle;
+		private System.Windows.Forms.NumericUpDown nudCycle;
 	}
 }

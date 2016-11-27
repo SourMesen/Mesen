@@ -18,7 +18,8 @@ enum class ConsoleNotificationType
 	FdsDiskChanged = 12,
 	FdsBiosNotFound = 13,
 	ConfigChanged = 14,
-	DisconnectedFromServer = 15
+	DisconnectedFromServer = 15,
+	PpuViewerDisplayFrame = 16,
 };
 
 class INotificationListener
