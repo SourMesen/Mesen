@@ -370,5 +370,10 @@ namespace Mesen.GUI.Debugger
 				this.ctrlTextbox.ScrollToLineNumber((int)address.Address);
 			}
 		}
+
+		public List<Tuple<int, int, string>> FindAllOccurrences(string text)
+		{
+			return this.ctrlTextbox.FindAllOccurrences(text);
+		}
 	}
 }

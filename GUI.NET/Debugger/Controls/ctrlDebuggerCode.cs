@@ -25,6 +25,7 @@ namespace Mesen.GUI.Debugger
 		public ctrlDebuggerCode()
 		{
 			InitializeComponent();
+			splitContainer.Panel2Collapsed = true;
 		}
 
 		public void SetConfig(DebugViewInfo config)
@@ -244,10 +245,13 @@ namespace Mesen.GUI.Debugger
 
 		UInt32 _lastClickedAddress = UInt32.MaxValue;
 		string _newWatchValue = string.Empty;
+		string _lastWord = string.Empty;
 		private void ctrlCodeViewer_MouseUp(object sender, MouseEventArgs e)
 		{
 			string word = GetWordUnderLocation(e.Location);
 			if(word.StartsWith("$") || LabelManager.GetLabel(word) != null) {
+				_lastWord = word;
+
 				if(word.StartsWith("$")) {
 					_lastClickedAddress = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
 					_newWatchValue = "[$" + _lastClickedAddress.ToString("X") + "]";
@@ -269,11 +273,16 @@ namespace Mesen.GUI.Debugger
 
 				mnuAddToWatch.Enabled = true;
 				mnuAddToWatch.Text = "Add to Watch (" + word + ")";
+
+				mnuFindOccurrences.Enabled = true;
+				mnuFindOccurrences.Text = "Find Occurrences (" + word + ")";
 			} else {
 				mnuGoToLocation.Enabled = false;
 				mnuGoToLocation.Text = "Go to Location";
 				mnuAddToWatch.Enabled = false;
 				mnuAddToWatch.Text = "Add to Watch";
+				mnuFindOccurrences.Enabled = false;
+				mnuFindOccurrences.Text = "Find Occurrences";
 			}
 		}
 
@@ -387,14 +396,46 @@ namespace Mesen.GUI.Debugger
 			GoToLocation();
 		}
 
-		private void GoToLocation()
+		private void mnuFindOccurrences_Click(object sender, EventArgs e)
 		{
-			this.ctrlCodeViewer.ScrollToLineNumber((int)_lastClickedAddress);
+			this.FindAllOccurrences(_lastWord);
+		}
+
+		public void FindAllOccurrences(string text)
+		{
+			this.lstSearchResult.Items.Clear();
+			foreach(Tuple<int, int, string> searchResult in this.ctrlCodeViewer.FindAllOccurrences(text)) {
+				var item = this.lstSearchResult.Items.Add(searchResult.Item1.ToString("X4"));
+				item.Tag = searchResult.Item2;
+				item.SubItems.Add(searchResult.Item3);
+			}
+			this.lblSearchResult.Text = $"Search results for: {text} ({this.lstSearchResult.Items.Count} results)";
+			this.lstSearchResult.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+			this.lstSearchResult.Columns[0].Width += 20;
+			this.splitContainer.Panel2Collapsed = false;
+		}
+
+		private void picCloseOccurrenceList_Click(object sender, EventArgs e)
+		{
+			this.splitContainer.Panel2Collapsed = true;
+		}
+		
+		private void lstSearchResult_DoubleClick(object sender, EventArgs e)
+		{
+			if(lstSearchResult.SelectedItems.Count > 0) {
+				int lineIndex = (int)lstSearchResult.SelectedItems[0].Tag;
+				this.ctrlCodeViewer.ScrollToLineIndex(lineIndex);
+			}
 		}
 
 		private void mnuAddToWatch_Click(object sender, EventArgs e)
 		{
 			AddWatch();
+		}
+
+		private void GoToLocation()
+		{
+			this.ctrlCodeViewer.ScrollToLineNumber((int)_lastClickedAddress);
 		}
 
 		private void AddWatch()

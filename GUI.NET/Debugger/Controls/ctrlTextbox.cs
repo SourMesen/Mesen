@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -190,6 +191,40 @@ namespace Mesen.GUI.Debugger
 				this._marginWidth = value;
 				this.Invalidate();
 			}
+		}
+
+		public List<Tuple<int, int, string>> FindAllOccurrences(string text)
+		{
+			List<Tuple<int, int, string>> result = new List<Tuple<int, int, string>>();
+			string regex;
+			if(text.StartsWith("$")) {
+				regex = $"[^#]+\\$\\b{text.Substring(1, text.Length - 1)}\\b";
+			} else {
+				regex = $"\\b{text}\\b";
+			}
+
+			for(int i = 0, len = _contents.Length; i < len; i++) {
+				if(Regex.IsMatch(_contents[i], regex, RegexOptions.IgnoreCase)) {
+					string line = _contents[i].Replace("\x2", "\t").Trim();
+
+					if(line.StartsWith("__") && line.EndsWith("__") || line.StartsWith("[[") && line.EndsWith("]]")) {
+						line = "Block: " + line.Substring(2, line.Length - 4);
+					}
+
+					if(line.StartsWith("--") && line.EndsWith("--")) {
+						continue;
+					}
+
+					int j = i;
+					while(j < _lineNumbers.Length && _lineNumbers[j] < 0) {
+						j++;
+					}
+
+					var searchResult = new Tuple<int, int, string>(_lineNumbers[j], i, line);
+					result.Add(searchResult);
+				}
+			}
+			return result;
 		}
 
 		public bool Search(string searchString, bool searchBackwards, bool isNewSearch)

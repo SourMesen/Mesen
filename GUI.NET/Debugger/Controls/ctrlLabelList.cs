@@ -13,6 +13,7 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlLabelList : UserControl
 	{
+		public event EventHandler OnFindOccurrence;
 		public event EventHandler OnLabelSelected;
 		private List<ListViewItem> _listItems = new List<ListViewItem>();
 
@@ -114,6 +115,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			mnuDelete.Enabled = lstLabels.SelectedItems.Count > 0;
 			mnuEdit.Enabled = lstLabels.SelectedItems.Count == 1;
+			mnuFindOccurrences.Enabled = lstLabels.SelectedItems.Count == 1;
 		}
 
 		private void mnuDelete_Click(object sender, EventArgs e)
@@ -138,6 +140,11 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
 			EditLabel(label.Address, label.AddressType);
+		}
+
+		private void mnuFindOccurrences_Click(object sender, EventArgs e)
+		{
+			OnFindOccurrence?.Invoke(lstLabels.SelectedItems[0].SubItems[1].Tag, null);
 		}
 	}
 }

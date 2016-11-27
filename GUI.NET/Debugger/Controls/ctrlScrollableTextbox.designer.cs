@@ -47,9 +47,9 @@
 			// 
 			this.vScrollBar.Dock = System.Windows.Forms.DockStyle.Right;
 			this.vScrollBar.LargeChange = 20;
-			this.vScrollBar.Location = new System.Drawing.Point(305, 0);
+			this.vScrollBar.Location = new System.Drawing.Point(490, 0);
 			this.vScrollBar.Name = "vScrollBar";
-			this.vScrollBar.Size = new System.Drawing.Size(18, 156);
+			this.vScrollBar.Size = new System.Drawing.Size(18, 141);
 			this.vScrollBar.TabIndex = 0;
 			// 
 			// panelSearch
@@ -57,7 +57,7 @@
 			this.panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.panelSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panelSearch.Controls.Add(this.tableLayoutPanel1);
-			this.panelSearch.Location = new System.Drawing.Point(81, -1);
+			this.panelSearch.Location = new System.Drawing.Point(266, -1);
 			this.panelSearch.Name = "panelSearch";
 			this.panelSearch.Size = new System.Drawing.Size(222, 28);
 			this.panelSearch.TabIndex = 2;
@@ -136,22 +136,23 @@
 			// hScrollBar
 			// 
 			this.hScrollBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.hScrollBar.Location = new System.Drawing.Point(0, 156);
+			this.hScrollBar.Location = new System.Drawing.Point(0, 141);
 			this.hScrollBar.Name = "hScrollBar";
-			this.hScrollBar.Size = new System.Drawing.Size(323, 18);
+			this.hScrollBar.Size = new System.Drawing.Size(508, 18);
 			this.hScrollBar.TabIndex = 3;
 			// 
 			// ctrlTextbox
 			// 
 			this.ctrlTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlTextbox.Font = new System.Drawing.Font("Consolas", 13F);
+			this.ctrlTextbox.HorizontalScrollWidth = 0;
 			this.ctrlTextbox.Location = new System.Drawing.Point(0, 0);
 			this.ctrlTextbox.Name = "ctrlTextbox";
 			this.ctrlTextbox.ShowContentNotes = false;
 			this.ctrlTextbox.ShowLineInHex = false;
 			this.ctrlTextbox.ShowLineNumberNotes = false;
 			this.ctrlTextbox.ShowLineNumbers = true;
-			this.ctrlTextbox.Size = new System.Drawing.Size(305, 156);
+			this.ctrlTextbox.Size = new System.Drawing.Size(490, 141);
 			this.ctrlTextbox.TabIndex = 1;
 			// 
 			// ctrlScrollableTextbox
@@ -164,7 +165,7 @@
 			this.Controls.Add(this.vScrollBar);
 			this.Controls.Add(this.hScrollBar);
 			this.Name = "ctrlScrollableTextbox";
-			this.Size = new System.Drawing.Size(323, 174);
+			this.Size = new System.Drawing.Size(508, 159);
 			this.panelSearch.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();

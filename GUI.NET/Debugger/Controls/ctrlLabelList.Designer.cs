@@ -36,6 +36,8 @@
 			this.mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -80,23 +82,25 @@
 			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAdd,
             this.mnuEdit,
-            this.mnuDelete});
+            this.mnuDelete,
+            this.toolStripMenuItem1,
+            this.mnuFindOccurrences});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(132, 70);
+			this.contextMenu.Size = new System.Drawing.Size(167, 120);
 			this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.mnuActions_Opening);
 			// 
 			// mnuAdd
 			// 
 			this.mnuAdd.Name = "mnuAdd";
 			this.mnuAdd.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-			this.mnuAdd.Size = new System.Drawing.Size(131, 22);
+			this.mnuAdd.Size = new System.Drawing.Size(166, 22);
 			this.mnuAdd.Text = "Add";
 			this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
 			// 
 			// mnuEdit
 			// 
 			this.mnuEdit.Name = "mnuEdit";
-			this.mnuEdit.Size = new System.Drawing.Size(131, 22);
+			this.mnuEdit.Size = new System.Drawing.Size(166, 22);
 			this.mnuEdit.Text = "Edit";
 			this.mnuEdit.Click += new System.EventHandler(this.mnuEdit_Click);
 			// 
@@ -104,9 +108,21 @@
 			// 
 			this.mnuDelete.Name = "mnuDelete";
 			this.mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.mnuDelete.Size = new System.Drawing.Size(131, 22);
+			this.mnuDelete.Size = new System.Drawing.Size(166, 22);
 			this.mnuDelete.Text = "Delete";
 			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
+			// 
+			// mnuFindOccurrences
+			// 
+			this.mnuFindOccurrences.Name = "mnuFindOccurrences";
+			this.mnuFindOccurrences.Size = new System.Drawing.Size(166, 22);
+			this.mnuFindOccurrences.Text = "Find Occurrences";
+			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
 			// 
 			// ctrlLabelList
 			// 
@@ -130,5 +146,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete;
 		private System.Windows.Forms.ToolStripMenuItem mnuAdd;
 		private System.Windows.Forms.ToolStripMenuItem mnuEdit;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuFindOccurrences;
 	}
 }

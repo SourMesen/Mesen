@@ -276,6 +276,7 @@
 			this.ctrlLabelList.Name = "ctrlLabelList";
 			this.ctrlLabelList.Size = new System.Drawing.Size(298, 174);
 			this.ctrlLabelList.TabIndex = 0;
+			this.ctrlLabelList.OnFindOccurrence += new System.EventHandler(this.ctrlLabelList_OnFindOccurrence);
 			this.ctrlLabelList.OnLabelSelected += new System.EventHandler(this.ctrlLabelList_OnLabelSelected);
 			// 
 			// grpFunctions
@@ -296,6 +297,7 @@
 			this.ctrlFunctionList.Name = "ctrlFunctionList";
 			this.ctrlFunctionList.Size = new System.Drawing.Size(298, 174);
 			this.ctrlFunctionList.TabIndex = 0;
+			this.ctrlFunctionList.OnFindOccurrence += new System.EventHandler(this.ctrlFunctionList_OnFindOccurrence);
 			this.ctrlFunctionList.OnFunctionSelected += new System.EventHandler(this.ctrlFunctionList_OnFunctionSelected);
 			// 
 			// tableLayoutPanel10

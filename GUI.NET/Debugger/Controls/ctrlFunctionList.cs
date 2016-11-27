@@ -13,7 +13,9 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlFunctionList : UserControl
 	{
+		public event EventHandler OnFindOccurrence;
 		public event EventHandler OnFunctionSelected;
+
 		public ctrlFunctionList()
 		{
 			InitializeComponent();
@@ -28,8 +30,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 				string aText = string.IsNullOrWhiteSpace(a.Text) ? "ZZZZZZZZZZZZZZZZZZZZZZZ" : a.Text;
 				string bText = string.IsNullOrWhiteSpace(b.Text) ? "ZZZZZZZZZZZZZZZZZZZZZZZ" : b.Text;
-				Int32 aRelative = (Int32)a.Tag == -1 ? Int32.MaxValue : (Int32)a.Tag;
-				Int32 bRelative = (Int32)b.Tag == -1 ? Int32.MaxValue : (Int32)b.Tag;
+				Int32 aRelative = (Int32)a.SubItems[1].Tag == -1 ? Int32.MaxValue : (Int32)a.SubItems[1].Tag;
+				Int32 bRelative = (Int32)b.SubItems[1].Tag == -1 ? Int32.MaxValue : (Int32)b.SubItems[1].Tag;
 				Int32 aAbsolute = (Int32)a.SubItems[2].Tag;
 				Int32 bAbsolute = (Int32)b.SubItems[2].Tag;
 
@@ -68,9 +70,10 @@ namespace Mesen.GUI.Debugger.Controls
 
 					CodeLabel label = LabelManager.GetLabel((UInt32)entryPoint, AddressType.PrgRom);
 					item = lstFunctions.Items.Add(label?.Label);
-					item.Tag = -1;
+					item.Tag = label;
 
 					item.SubItems.Add("[n/a]");
+					item.SubItems[1].Tag = -1;
 					item.ForeColor = Color.Gray;
 					item.Font = new Font(item.Font, FontStyle.Italic);
 
@@ -81,7 +84,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)entryPoint, AddressType.PrgRom);
-				if(relativeAddress != (Int32)item.Tag) {
+				if(relativeAddress != (Int32)item.SubItems[1].Tag) {
 					if(!updating) {
 						updating = true;
 						lstFunctions.BeginUpdate();
@@ -97,7 +100,7 @@ namespace Mesen.GUI.Debugger.Controls
 						item.ForeColor = Color.Gray;
 						item.Font = new Font(item.Font, FontStyle.Italic);
 					}
-					item.Tag = relativeAddress;
+					item.SubItems[1].Tag = relativeAddress;
 				}
 			}
 
@@ -117,6 +120,32 @@ namespace Mesen.GUI.Debugger.Controls
 					OnFunctionSelected?.Invoke(relativeAddress, e);
 				}
 			}
+		}
+
+		private void mnuEditLabel_Click(object sender, EventArgs e)
+		{
+			CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
+			if(label != null) {
+				ctrlLabelList.EditLabel(label.Address, label.AddressType);
+			} else {
+				ctrlLabelList.EditLabel((UInt32)(Int32)lstFunctions.SelectedItems[0].SubItems[2].Tag, AddressType.PrgRom);
+			}
+		}
+
+		private void mnuFindOccurrences_Click(object sender, EventArgs e)
+		{
+			CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
+			if(label != null) {
+				OnFindOccurrence?.Invoke(label.Label, null);
+			} else {
+				OnFindOccurrence?.Invoke("$" + ((int)lstFunctions.SelectedItems[0].SubItems[1].Tag).ToString("X4"), null);
+			}			
+		}
+
+		private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+		{
+			mnuEditLabel.Enabled = lstFunctions.SelectedItems.Count == 1;
+			mnuFindOccurrences.Enabled = lstFunctions.SelectedItems.Count == 1;
 		}
 	}
 }

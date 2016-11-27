@@ -560,6 +560,7 @@ namespace Mesen.GUI.Debugger
 
 		private void LabelManager_OnLabelUpdated(object sender, EventArgs e)
 		{
+			SaveWorkspace();
 			ctrlLabelList.UpdateLabelList();
 			ctrlFunctionList.UpdateFunctionList(true);
 			UpdateDebugger(false);
@@ -597,6 +598,17 @@ namespace Mesen.GUI.Debugger
 				Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
 				dbgImporter.Import(ofd.FileName);
 			}
+		}
+
+		private void ctrlLabelList_OnFindOccurrence(object sender, EventArgs e)
+		{
+			CodeLabel label = sender as CodeLabel;
+			_lastCodeWindow.FindAllOccurrences(label.Label);
+		}
+
+		private void ctrlFunctionList_OnFindOccurrence(object sender, EventArgs e)
+		{
+			_lastCodeWindow.FindAllOccurrences(sender as string);
 		}
 	}
 }
