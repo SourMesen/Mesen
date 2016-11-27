@@ -352,7 +352,15 @@ namespace Mesen.GUI.Debugger
 		public void GoToAddress()
 		{
 			GoToAddress address = new GoToAddress();
-			address.Address = (UInt32)this.CurrentLine;
+
+			int currentAddr = this.CurrentLine;
+			int lineIndex = this.ctrlTextbox.CursorPosition;
+			while(currentAddr < 0) {
+				lineIndex++;
+				currentAddr = this.ctrlTextbox.GetLineNumber(lineIndex);
+			}
+
+			address.Address = (UInt32)currentAddr;
 
 			frmGoToLine frm = new frmGoToLine(address);
 			frm.StartPosition = FormStartPosition.Manual;
