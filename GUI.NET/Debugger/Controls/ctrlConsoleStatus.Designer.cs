@@ -90,6 +90,8 @@
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSP = new System.Windows.Forms.Label();
 			this.txtSP = new System.Windows.Forms.TextBox();
+			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblA = new System.Windows.Forms.Label();
 			this.txtA = new System.Windows.Forms.TextBox();
@@ -102,8 +104,6 @@
 			this.lblCycleCount = new System.Windows.Forms.Label();
 			this.txtCycleCount = new System.Windows.Forms.TextBox();
 			this.btnApplyChanges = new System.Windows.Forms.Button();
-			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tmrButton = new System.Windows.Forms.Timer(this.components);
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
@@ -898,6 +898,27 @@
 			this.txtSP.Size = new System.Drawing.Size(49, 20);
 			this.txtSP.TabIndex = 1;
 			// 
+			// lstStack
+			// 
+			this.lstStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+			this.lstStack.FullRowSelect = true;
+			this.lstStack.GridLines = true;
+			this.lstStack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.lstStack.Location = new System.Drawing.Point(3, 24);
+			this.lstStack.Name = "lstStack";
+			this.lstStack.Size = new System.Drawing.Size(81, 97);
+			this.lstStack.TabIndex = 4;
+			this.lstStack.UseCompatibleStateImageBehavior = false;
+			this.lstStack.View = System.Windows.Forms.View.Details;
+			// 
+			// columnHeader1
+			// 
+			this.columnHeader1.Text = "Value";
+			// 
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.lblA);
@@ -1026,30 +1047,8 @@
 			this.btnApplyChanges.UseVisualStyleBackColor = true;
 			this.btnApplyChanges.Click += new System.EventHandler(this.btnApplyChanges_Click);
 			// 
-			// lstStack
-			// 
-			this.lstStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-			this.lstStack.FullRowSelect = true;
-			this.lstStack.GridLines = true;
-			this.lstStack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.lstStack.Location = new System.Drawing.Point(3, 24);
-			this.lstStack.Name = "lstStack";
-			this.lstStack.Size = new System.Drawing.Size(81, 97);
-			this.lstStack.TabIndex = 4;
-			this.lstStack.UseCompatibleStateImageBehavior = false;
-			this.lstStack.View = System.Windows.Forms.View.Details;
-			// 
-			// columnHeader1
-			// 
-			this.columnHeader1.Text = "Value";
-			// 
 			// tmrButton
 			// 
-			this.tmrButton.Enabled = true;
 			this.tmrButton.Tick += new System.EventHandler(this.tmrButton_Tick);
 			// 
 			// ctrlConsoleStatus

@@ -26,6 +26,11 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				tmrButton.Enabled = true;
+			}
+
 			_cpuBinder.Entity = new CPUState();
 			_ppuControlBinder.Entity = new PPUControlFlags();
 			_ppuStatusBinder.Entity = new PPUStatusFlags();
