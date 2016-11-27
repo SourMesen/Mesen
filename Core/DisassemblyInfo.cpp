@@ -37,7 +37,7 @@ string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> 
 	}
 	
 	if(operandValue.empty()) {
-		if(_opSize == 2) {
+		if(_opSize == 2 && _opMode != AddrMode::Rel) {
 			operandValue += "$" + HexUtilities::ToHex((uint8_t)_opAddr);
 		} else {
 			operandValue += "$" + HexUtilities::ToHex((uint16_t)_opAddr);
