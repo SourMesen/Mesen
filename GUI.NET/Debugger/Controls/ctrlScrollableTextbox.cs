@@ -131,9 +131,9 @@ namespace Mesen.GUI.Debugger
 			this.ctrlTextbox.ScrollToLineIndex(lineIndex);
 		}
 
-		public void ScrollToLineNumber(int lineNumber)
+		public void ScrollToLineNumber(int lineNumber, eHistoryType historyType = eHistoryType.Always)
 		{
-			this.ctrlTextbox.ScrollToLineNumber(lineNumber);
+			this.ctrlTextbox.ScrollToLineNumber(lineNumber, historyType);
 		}
 
 		public int CurrentLine
@@ -374,6 +374,16 @@ namespace Mesen.GUI.Debugger
 		public List<Tuple<int, int, string>> FindAllOccurrences(string text)
 		{
 			return this.ctrlTextbox.FindAllOccurrences(text);
+		}
+
+		public void NavigateForward()
+		{
+			this.ctrlTextbox.NavigateForward();
+		}
+
+		public void NavigateBackward()
+		{
+			this.ctrlTextbox.NavigateBackward();
 		}
 	}
 }

@@ -399,6 +399,7 @@
       <DependentUpon>frmTraceLogger.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\LabelManager.cs" />
+    <Compile Include="Debugger\TextboxHistory.cs" />
     <Compile Include="Forms\BaseConfigForm.Designer.cs">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>
     </Compile>

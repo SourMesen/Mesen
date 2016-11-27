@@ -77,7 +77,7 @@ namespace Mesen.GUI.Debugger
 		public void SelectActiveAddress(UInt32 address)
 		{
 			this.SetActiveAddress(address);
-			this.ctrlCodeViewer.ScrollToLineNumber((int)address);
+			this.ctrlCodeViewer.ScrollToLineNumber((int)address, eHistoryType.OnScroll);
 		}
 
 		public void SetActiveAddress(UInt32 address)
@@ -455,6 +455,16 @@ namespace Mesen.GUI.Debugger
 		private void ctrlCodeViewer_FontSizeChanged(object sender, EventArgs e)
 		{
 			UpdateConfig();
+		}
+
+		private void mnuNavigateForward_Click(object sender, EventArgs e)
+		{
+			this.ctrlCodeViewer.NavigateForward();
+		}
+
+		private void mnuNavigateBackward_Click(object sender, EventArgs e)
+		{
+			this.ctrlCodeViewer.NavigateBackward();
 		}
 
 		#endregion

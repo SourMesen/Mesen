@@ -38,6 +38,9 @@
 			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuNavigateBackward = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNavigateForward = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.ctrlCodeViewer = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.contextMenuMargin = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -74,9 +77,12 @@
             this.toolStripMenuItem2,
             this.mnuGoToLocation,
             this.mnuAddToWatch,
-            this.mnuFindOccurrences});
+            this.mnuFindOccurrences,
+            this.toolStripMenuItem3,
+            this.mnuNavigateBackward,
+            this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 170);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 220);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
 			// mnuShowNextStatement
@@ -143,6 +149,29 @@
 			this.mnuFindOccurrences.Size = new System.Drawing.Size(258, 22);
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
+			// 
+			// toolStripMenuItem3
+			// 
+			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(255, 6);
+			// 
+			// mnuNavigateBackward
+			// 
+			this.mnuNavigateBackward.Image = global::Mesen.GUI.Properties.Resources.PreviousArrow;
+			this.mnuNavigateBackward.Name = "mnuNavigateBackward";
+			this.mnuNavigateBackward.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Left)));
+			this.mnuNavigateBackward.Size = new System.Drawing.Size(258, 22);
+			this.mnuNavigateBackward.Text = "Navigate Backward";
+			this.mnuNavigateBackward.Click += new System.EventHandler(this.mnuNavigateBackward_Click);
+			// 
+			// mnuNavigateForward
+			// 
+			this.mnuNavigateForward.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
+			this.mnuNavigateForward.Name = "mnuNavigateForward";
+			this.mnuNavigateForward.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Right)));
+			this.mnuNavigateForward.Size = new System.Drawing.Size(258, 22);
+			this.mnuNavigateForward.Text = "Navigate Forward";
+			this.mnuNavigateForward.Click += new System.EventHandler(this.mnuNavigateForward_Click);
 			// 
 			// ctrlCodeViewer
 			// 
@@ -345,5 +374,8 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.PictureBox picCloseOccurrenceList;
 		private System.Windows.Forms.Label lblSearchResult;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem mnuNavigateForward;
+		private System.Windows.Forms.ToolStripMenuItem mnuNavigateBackward;
 	}
 }

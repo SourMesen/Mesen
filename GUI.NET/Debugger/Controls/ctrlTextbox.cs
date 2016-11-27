@@ -21,6 +21,13 @@ namespace Mesen.GUI.Debugger
 		Arrow = 4,
 	}
 
+	public enum eHistoryType
+	{
+		Always,
+		OnScroll,
+		None
+	}
+
 	public class LineProperties
 	{
 		public Color? BgColor;
@@ -34,6 +41,8 @@ namespace Mesen.GUI.Debugger
 		public event EventHandler ScrollPositionChanged;
 
 		private const float HorizontalScrollFactor = 8;
+
+		private TextboxHistory _history = new TextboxHistory();
 
 		private string[] _contents = new string[0];
 		private string[] _contentNotes = new string[0];
@@ -323,20 +332,31 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void ScrollToLineIndex(int lineIndex)
+		public void ScrollToLineIndex(int lineIndex, eHistoryType historyType = eHistoryType.Always)
 		{
-			if(lineIndex < this.ScrollPosition || lineIndex > this.GetLastVisibleLineIndex()) {
-				//Line isn't currently visible, scroll it to the middle of the viewport
-				this.ScrollPosition = lineIndex - this.GetNumberVisibleLines()/2;
+			if(this.CursorPosition != lineIndex) {
+				bool scrolled = false;
+				if(lineIndex < this.ScrollPosition || lineIndex > this.GetLastVisibleLineIndex()) {
+					//Line isn't currently visible, scroll it to the middle of the viewport
+					this.ScrollPosition = lineIndex - this.GetNumberVisibleLines()/2;
+					scrolled = true;
+				}
+
+				if(historyType == eHistoryType.Always || scrolled && historyType == eHistoryType.OnScroll) {
+					_history.AddHistory(this.CursorPosition);
+				}
+				this.CursorPosition = lineIndex;
+				if(historyType == eHistoryType.Always || scrolled && historyType == eHistoryType.OnScroll) {
+					_history.AddHistory(this.CursorPosition);
+				}
 			}
-			this.CursorPosition = lineIndex;
 		}
 
-		public void ScrollToLineNumber(int lineNumber)
+		public void ScrollToLineNumber(int lineNumber, eHistoryType historyType = eHistoryType.Always)
 		{
 			int lineIndex = this.GetLineIndex(lineNumber);
 			if(lineIndex >= 0) {
-				ScrollToLineIndex(lineIndex);
+				ScrollToLineIndex(lineIndex, historyType);
 			}
 		}
 
@@ -533,8 +553,25 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnMouseDown(e);
 			this.Focus();
-			int clickedLine = this.GetLineAtPosition(e.Y);
-			this.CursorPosition = this.ScrollPosition + clickedLine;
+			
+			if(e.Button == MouseButtons.XButton1) {
+				this.NavigateBackward();
+			} else if(e.Button == MouseButtons.XButton2) {
+				this.NavigateForward();
+			} else {
+				int clickedLine = this.GetLineAtPosition(e.Y);
+				this.CursorPosition = this.ScrollPosition + clickedLine;
+			}
+		}
+
+		public void NavigateForward()
+		{
+			this.ScrollToLineIndex(_history.GoForward(), eHistoryType.None);
+		}
+
+		public void NavigateBackward()
+		{
+			this.ScrollToLineIndex(_history.GoBack(), eHistoryType.None);
 		}
 
 		private void DrawLine(Graphics g, int currentLine, int marginLeft, int positionY, int lineHeight)

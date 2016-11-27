@@ -114,7 +114,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void lstFunctions_DoubleClick(object sender, EventArgs e)
 		{
 			if(lstFunctions.SelectedItems.Count > 0) {
-				Int32 relativeAddress = (Int32)lstFunctions.SelectedItems[0].Tag;
+				Int32 relativeAddress = (Int32)lstFunctions.SelectedItems[0].SubItems[1].Tag;
 
 				if(relativeAddress >= 0) {
 					OnFunctionSelected?.Invoke(relativeAddress, e);
