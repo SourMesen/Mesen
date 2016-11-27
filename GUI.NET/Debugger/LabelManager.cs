@@ -92,44 +92,44 @@ namespace Mesen.GUI.Debugger
 
 		public static void SetDefaultLabels(bool forFDS)
 		{
-			LabelManager.SetLabel(0x2000, AddressType.Register, "PpuControl_2000", string.Empty);
-			LabelManager.SetLabel(0x2001, AddressType.Register, "PpuMask_2001", string.Empty);
-			LabelManager.SetLabel(0x2002, AddressType.Register, "PpuStatus_2002", string.Empty);
-			LabelManager.SetLabel(0x2003, AddressType.Register, "OamAddr_2003", string.Empty);
-			LabelManager.SetLabel(0x2004, AddressType.Register, "OamData_2004", string.Empty);
-			LabelManager.SetLabel(0x2005, AddressType.Register, "PpuScroll_2005", string.Empty);
-			LabelManager.SetLabel(0x2006, AddressType.Register, "PpuAddr_2006", string.Empty);
-			LabelManager.SetLabel(0x2007, AddressType.Register, "PpuData_2007", string.Empty);
+			LabelManager.SetLabel(0x2000, AddressType.Register, "PpuControl_2000", $"7  bit  0{Environment.NewLine}---- ----{Environment.NewLine}VPHB SINN{Environment.NewLine}|||| ||||{Environment.NewLine}|||| ||++- Base nametable address{Environment.NewLine}|||| ||    (0 = $2000; 1 = $2400; 2 = $2800; 3 = $2C00){Environment.NewLine}|||| |+--- VRAM address increment per CPU read/write of PPUDATA{Environment.NewLine}|||| |     (0: add 1, going across; 1: add 32, going down){Environment.NewLine}|||| +---- Sprite pattern table address for 8x8 sprites{Environment.NewLine}||||       (0: $0000; 1: $1000; ignored in 8x16 mode){Environment.NewLine}|||+------ Background pattern table address (0: $0000; 1: $1000){Environment.NewLine}||+------- Sprite size (0: 8x8; 1: 8x16){Environment.NewLine}|+-------- PPU master/slave select{Environment.NewLine}|          (0: read backdrop from EXT pins; 1: output color on EXT pins){Environment.NewLine}+--------- Generate an NMI at the start of the{Environment.NewLine}           vertical blanking interval (0: off; 1: on)");
+			LabelManager.SetLabel(0x2001, AddressType.Register, "PpuMask_2001", $"7  bit  0{Environment.NewLine}---- ----{Environment.NewLine}BGRs bMmG{Environment.NewLine}|||| ||||{Environment.NewLine}|||| |||+- Greyscale (0: normal color, 1: produce a greyscale display){Environment.NewLine}|||| ||+-- 1: Show background in leftmost 8 pixels of screen, 0: Hide{Environment.NewLine}|||| |+--- 1: Show sprites in leftmost 8 pixels of screen, 0: Hide{Environment.NewLine}|||| +---- 1: Show background{Environment.NewLine}|||+------ 1: Show sprites{Environment.NewLine}||+------- Emphasize red{Environment.NewLine}|+-------- Emphasize green{Environment.NewLine}+--------- Emphasize blue");
+			LabelManager.SetLabel(0x2002, AddressType.Register, "PpuStatus_2002", $"7  bit  0{Environment.NewLine}---- ----{Environment.NewLine}VSO. ....{Environment.NewLine}|||| ||||{Environment.NewLine}|||+-++++- Least significant bits previously written into a PPU register{Environment.NewLine}|||        (due to register not being updated for this address){Environment.NewLine}||+------- Sprite overflow. The intent was for this flag to be set{Environment.NewLine}||         whenever more than eight sprites appear on a scanline, but a{Environment.NewLine}||         hardware bug causes the actual behavior to be more complicated{Environment.NewLine}||         and generate false positives as well as false negatives; see{Environment.NewLine}||         PPU sprite evaluation. This flag is set during sprite{Environment.NewLine}||         evaluation and cleared at dot 1 (the second dot) of the{Environment.NewLine}||         pre-render line.{Environment.NewLine}|+-------- Sprite 0 Hit.  Set when a nonzero pixel of sprite 0 overlaps{Environment.NewLine}|          a nonzero background pixel; cleared at dot 1 of the pre-render{Environment.NewLine}|          line.  Used for raster timing.{Environment.NewLine}+--------- Vertical blank has started (0: not in vblank; 1: in vblank).{Environment.NewLine}           Set at dot 1 of line 241 (the line *after* the post-render{Environment.NewLine}           line); cleared after reading $2002 and at dot 1 of the{Environment.NewLine}           pre-render line.");
+			LabelManager.SetLabel(0x2003, AddressType.Register, "OamAddr_2003", "Set OAM address - Write only");
+			LabelManager.SetLabel(0x2004, AddressType.Register, "OamData_2004", "Read/Write OAM data");
+			LabelManager.SetLabel(0x2005, AddressType.Register, "PpuScroll_2005", "Set PPU scroll, write twice - Write only");
+			LabelManager.SetLabel(0x2006, AddressType.Register, "PpuAddr_2006", "Set PPU address, write twice - Write only");
+			LabelManager.SetLabel(0x2007, AddressType.Register, "PpuData_2007", "Read/Write VRAM");
 
-			LabelManager.SetLabel(0x4000, AddressType.Register, "Sq1Duty_4000", string.Empty);
-			LabelManager.SetLabel(0x4001, AddressType.Register, "Sq1Sweep_4001", string.Empty);
-			LabelManager.SetLabel(0x4002, AddressType.Register, "Sq1Timer_4002", string.Empty);
-			LabelManager.SetLabel(0x4003, AddressType.Register, "Sq1Length_4003", string.Empty);
+			LabelManager.SetLabel(0x4000, AddressType.Register, "Sq1Duty_4000", $"DDLC VVVV{Environment.NewLine}Duty (D), envelope loop / length counter halt (L), constant volume (C), volume/envelope (V)");
+			LabelManager.SetLabel(0x4001, AddressType.Register, "Sq1Sweep_4001", $"EPPP NSSS{Environment.NewLine}Sweep unit: enabled (E), period (P), negate (N), shift (S)");
+			LabelManager.SetLabel(0x4002, AddressType.Register, "Sq1Timer_4002", $"TTTT TTTT{Environment.NewLine}Timer low (T)");
+			LabelManager.SetLabel(0x4003, AddressType.Register, "Sq1Length_4003", $"LLLL LTTT{Environment.NewLine}Length counter load (L), timer high (T)");
 
-			LabelManager.SetLabel(0x4004, AddressType.Register, "Sq1Duty_4004", string.Empty);
-			LabelManager.SetLabel(0x4005, AddressType.Register, "Sq1Sweep_4005", string.Empty);
-			LabelManager.SetLabel(0x4006, AddressType.Register, "Sq1Timer_4006", string.Empty);
-			LabelManager.SetLabel(0x4007, AddressType.Register, "Sq1Length_4007", string.Empty);
+			LabelManager.SetLabel(0x4004, AddressType.Register, "Sq1Duty_4004", $"DDLC VVVV{Environment.NewLine}Duty (D), envelope loop / length counter halt (L), constant volume (C), volume/envelope (V)");
+			LabelManager.SetLabel(0x4005, AddressType.Register, "Sq1Sweep_4005", $"EPPP NSSS{Environment.NewLine}Sweep unit: enabled (E), period (P), negate (N), shift (S)");
+			LabelManager.SetLabel(0x4006, AddressType.Register, "Sq1Timer_4006", $"TTTT TTTT{Environment.NewLine}Timer low (T)");
+			LabelManager.SetLabel(0x4007, AddressType.Register, "Sq1Length_4007", $"LLLL LTTT{Environment.NewLine}Length counter load (L), timer high (T)");
 
-			LabelManager.SetLabel(0x4008, AddressType.Register, "TrgLinear_4008", string.Empty);
-			LabelManager.SetLabel(0x400A, AddressType.Register, "TrgTimer_400A", string.Empty);
-			LabelManager.SetLabel(0x400B, AddressType.Register, "TrgLength_400B", string.Empty);
+			LabelManager.SetLabel(0x4008, AddressType.Register, "TrgLinear_4008", $"CRRR RRRR{Environment.NewLine}Length counter halt / linear counter control (C), linear counter load (R)");
+			LabelManager.SetLabel(0x400A, AddressType.Register, "TrgTimer_400A", $"TTTT TTTT{Environment.NewLine}Timer low (T)");
+			LabelManager.SetLabel(0x400B, AddressType.Register, "TrgLength_400B", $"LLLL LTTT{Environment.NewLine}Length counter load (L), timer high (T)");
 
-			LabelManager.SetLabel(0x400C, AddressType.Register, "NoiseVolume_400C", string.Empty);
-			LabelManager.SetLabel(0x400E, AddressType.Register, "NoisePeriod_400E", string.Empty);
-			LabelManager.SetLabel(0x400F, AddressType.Register, "NoiseLength_400F", string.Empty);
+			LabelManager.SetLabel(0x400C, AddressType.Register, "NoiseVolume_400C", $"--LC VVVV{Environment.NewLine}Envelope loop / length counter halt (L), constant volume (C), volume/envelope (V)");
+			LabelManager.SetLabel(0x400E, AddressType.Register, "NoisePeriod_400E", $"L--- PPPP{Environment.NewLine}Loop noise (L), noise period (P)");
+			LabelManager.SetLabel(0x400F, AddressType.Register, "NoiseLength_400F", $"LLLL L---{Environment.NewLine}Length counter load (L)");
 
-			LabelManager.SetLabel(0x4010, AddressType.Register, "DmcFreq_4010", string.Empty);
-			LabelManager.SetLabel(0x4011, AddressType.Register, "DmcCounter_4011", string.Empty);
-			LabelManager.SetLabel(0x4012, AddressType.Register, "DmcAddress_4012", string.Empty);
-			LabelManager.SetLabel(0x4013, AddressType.Register, "DmcLength_4013", string.Empty);
+			LabelManager.SetLabel(0x4010, AddressType.Register, "DmcFreq_4010", $"IL-- RRRR{Environment.NewLine}IRQ enable (I), loop (L), frequency (R)");
+			LabelManager.SetLabel(0x4011, AddressType.Register, "DmcCounter_4011", $"-DDD DDDD{Environment.NewLine}Load counter (D)");
+			LabelManager.SetLabel(0x4012, AddressType.Register, "DmcAddress_4012", $"AAAA AAAA{Environment.NewLine}Sample address (A)");
+			LabelManager.SetLabel(0x4013, AddressType.Register, "DmcLength_4013", $"LLLL LLLL{Environment.NewLine}Sample length (L)");
 
-			LabelManager.SetLabel(0x4014, AddressType.Register, "SpriteDma_4014", string.Empty);
+			LabelManager.SetLabel(0x4014, AddressType.Register, "SpriteDma_4014", "Writing $XX will upload 256 bytes of data from CPU page $XX00-$XXFF to the internal PPU OAM.");
 
-			LabelManager.SetLabel(0x4015, AddressType.Register, "ApuStatus_4015", string.Empty);
+			LabelManager.SetLabel(0x4015, AddressType.Register, "ApuStatus_4015", $"Read:{Environment.NewLine}IF-D NT21{Environment.NewLine}DMC interrupt (I), frame interrupt (F), DMC active (D), length counter > 0 (N/T/2/1){Environment.NewLine+Environment.NewLine}Write:{Environment.NewLine}---D NT21{Environment.NewLine}Enable DMC (D), noise (N), triangle (T), and pulse channels (2/1)");
 
-			LabelManager.SetLabel(0x4016, AddressType.Register, "Ctrl1_4016", string.Empty);
-			LabelManager.SetLabel(0x4017, AddressType.Register, "Ctrl2_FrameCtr_4017", string.Empty);
+			LabelManager.SetLabel(0x4016, AddressType.Register, "Ctrl1_4016", $"Read (NES - input):{Environment.NewLine}---4 3210{Environment.NewLine}Read data from controller port #1.{Environment.NewLine}{Environment.NewLine}Write:{Environment.NewLine}---- ---A{Environment.NewLine}Output data (strobe) to both controllers.");
+			LabelManager.SetLabel(0x4017, AddressType.Register, "Ctrl2_FrameCtr_4017", $"Read (NES - input):{Environment.NewLine}---4 3210{Environment.NewLine}Read data from controller port #2.{Environment.NewLine}{Environment.NewLine}Write (Frame counter): MI-- ----{Environment.NewLine}Mode (M, 0 = 4-step, 1 = 5-step), IRQ inhibit flag (I)");
 
 			if(forFDS) {
 				LabelManager.SetLabel(0x01F8, AddressType.PrgRom, "LoadFiles", "Input: Pointer to Disk ID, Pointer to File List" + Environment.NewLine + "Output: A = error #, Y = # of files loaded" + Environment.NewLine + "Desc: Loads files specified by DiskID into memory from disk. Load addresses are decided by the file's header.");

@@ -42,6 +42,7 @@ namespace Mesen.GUI.Debugger
 				tlpMain.Controls.Add(lbl);
 
 				lbl = new Label();
+				lbl.Font = new Font("Consolas", 10);
 				lbl.Margin = new Padding(2);
 				lbl.AutoSize = true;
 				lbl.Text = kvp.Value;
