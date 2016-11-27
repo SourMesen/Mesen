@@ -88,6 +88,10 @@ namespace Mesen.GUI.Config
 		public int RamColumnCount = 2;
 		public float RamFontSize = 13;
 
+		public int WindowWidth = -1;
+		public int WindowHeight = -1;
+		public int BottomPanelHeight = -1;
+
 		public DebugInfo()
 		{
 			LeftView = new DebugViewInfo();

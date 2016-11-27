@@ -46,6 +46,12 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
 			this.mnuShowFunctionLabelLists.Checked = ConfigManager.Config.DebugInfo.ShowFunctionLabelLists;
 
+			this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
+			this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
+			if(ConfigManager.Config.DebugInfo.BottomPanelHeight > 0) {
+				this.splitContainer.SplitterDistance = ConfigManager.Config.DebugInfo.BottomPanelHeight;
+			}
+
 			_lastCodeWindow = ctrlDebuggerCode;
 
 			this.ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
@@ -416,6 +422,11 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
+			ConfigManager.Config.DebugInfo.WindowWidth = this.Width;
+			ConfigManager.Config.DebugInfo.WindowHeight = this.Height;
+			ConfigManager.Config.DebugInfo.BottomPanelHeight = this.splitContainer.SplitterDistance;
+			ConfigManager.ApplyChanges();
+
 			SaveWorkspace();
 
 			foreach(Form frm in this._childForms.ToArray()) {
