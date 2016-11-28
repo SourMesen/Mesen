@@ -85,7 +85,7 @@ namespace Mesen.GUI.Debugger
 					lstWatch.Items.RemoveAt(i);
 				}
 			}
-			lstWatch.Items.Add("");
+			lstWatch.Items.Add("").SubItems.Add("");
 
 			ListViewItem lastItem = lstWatch.Items[lstWatch.Items.Count - 1];
 			foreach(ListViewItem item in lstWatch.Items) {
