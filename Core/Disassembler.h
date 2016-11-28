@@ -20,6 +20,7 @@ private:
 	uint8_t* _prgRam;
 	uint32_t _prgSize;
 
+	bool IsJump(uint8_t opCode);
 	bool IsUnconditionalJump(uint8_t opCode);
 	vector<string> SplitComment(string input);
 	string GetLine(string code = "", string comment = "", int32_t cpuAddress = -1, int32_t absoluteAddress = -1, string byteCode = "", string addressing = "");

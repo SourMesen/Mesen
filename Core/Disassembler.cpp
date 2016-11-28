@@ -99,6 +99,11 @@ Disassembler::~Disassembler()
 {
 }
 
+bool Disassembler::IsJump(uint8_t opCode)
+{
+	return opCode == 0x10 || opCode == 0x30|| opCode == 0x50 || opCode == 0x70 || opCode == 0x90 || opCode == 0xB0 || opCode == 0xD0 || opCode == 0xF0 || opCode == 0x4C || opCode == 0x20;
+}
+
 bool Disassembler::IsUnconditionalJump(uint8_t opCode)
 {
 	return opCode == 0x40 || opCode == 0x60 || opCode == 0x6C || opCode == 0x4C || opCode == 0x20;
@@ -143,6 +148,25 @@ uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr,
 				if(isSubEntryPoint) {
 					disInfo->SetSubEntryPoint();
 				}
+
+				uint8_t opCode = source[absoluteAddr];
+				if(IsJump(opCode)) {
+					uint16_t jumpDest = disInfo->GetOpAddr(memoryAddr);
+					AddressTypeInfo info;
+					_debugger->GetAbsoluteAddressAndType(jumpDest, &info);
+
+					const uint8_t jsrCode = 0x20;
+					if(info.Address >= 0) {
+						if(info.Type == AddressType::PrgRom && !_disassembleCache[info.Address]) {
+							BuildCache(info.Address, -1, jumpDest, opCode == jsrCode);
+						} else if(info.Type == AddressType::WorkRam && !_disassembleRamCache[info.Address]) {
+							BuildCache(-1, info.Address, jumpDest, opCode == jsrCode);
+						} else if(info.Type == AddressType::InternalRam && !_disassembleMemoryCache[jumpDest]) {
+							BuildCache(-1, -1, jumpDest, opCode == jsrCode);
+						}
+					}
+				}
+
 				absoluteAddr += disInfo->GetSize();
 			}
 		}
