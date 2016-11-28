@@ -35,6 +35,8 @@
 			this.mnuShowLineNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCodeNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,6 +77,8 @@
             this.mnuShowLineNotes,
             this.mnuShowCodeNotes,
             this.toolStripMenuItem2,
+            this.mnuEditLabel,
+            this.toolStripMenuItem4,
             this.mnuGoToLocation,
             this.mnuAddToWatch,
             this.mnuFindOccurrences,
@@ -82,7 +86,7 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 220);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 270);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
 			// mnuShowNextStatement
@@ -128,6 +132,18 @@
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
 			this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
+			// 
+			// mnuEditLabel
+			// 
+			this.mnuEditLabel.Name = "mnuEditLabel";
+			this.mnuEditLabel.Size = new System.Drawing.Size(258, 22);
+			this.mnuEditLabel.Text = "Edit Label";
+			this.mnuEditLabel.Click += new System.EventHandler(this.mnuEditLabel_Click);
+			// 
+			// toolStripMenuItem4
+			// 
+			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(255, 6);
 			// 
 			// mnuGoToLocation
 			// 
@@ -377,5 +393,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 		private System.Windows.Forms.ToolStripMenuItem mnuNavigateForward;
 		private System.Windows.Forms.ToolStripMenuItem mnuNavigateBackward;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditLabel;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 	}
 }

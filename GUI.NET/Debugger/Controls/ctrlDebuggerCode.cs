@@ -290,15 +290,18 @@ namespace Mesen.GUI.Debugger
 						AddWatch();
 					}
 				}
-				
+
 				mnuGoToLocation.Enabled = true;
-				mnuGoToLocation.Text = "Go to Location (" + word + ")";
+				mnuGoToLocation.Text = $"Go to Location ({word})";
 
 				mnuAddToWatch.Enabled = true;
-				mnuAddToWatch.Text = "Add to Watch (" + word + ")";
+				mnuAddToWatch.Text = $"Add to Watch ({word})";
 
 				mnuFindOccurrences.Enabled = true;
-				mnuFindOccurrences.Text = "Find Occurrences (" + word + ")";
+				mnuFindOccurrences.Text = $"Find Occurrences ({word})";
+
+				mnuEditLabel.Enabled = true;
+				mnuEditLabel.Text = $"Edit Label ({word})";
 			} else {
 				mnuGoToLocation.Enabled = false;
 				mnuGoToLocation.Text = "Go to Location";
@@ -306,6 +309,23 @@ namespace Mesen.GUI.Debugger
 				mnuAddToWatch.Text = "Add to Watch";
 				mnuFindOccurrences.Enabled = false;
 				mnuFindOccurrences.Text = "Find Occurrences";
+				mnuEditLabel.Enabled = false;
+				mnuEditLabel.Text = "Edit Label";
+
+				if(e.Location.X < this.ctrlCodeViewer.CodeMargin && ctrlCodeViewer.CurrentLine >= 0) {
+					_lastClickedAddress = (UInt32)ctrlCodeViewer.CurrentLine;
+
+					string address = $"${_lastClickedAddress.ToString("X4")}";					
+					_newWatchValue = $"[{address}]";
+					_lastWord = address;
+
+					mnuAddToWatch.Enabled = true;
+					mnuAddToWatch.Text = $"Add to Watch ({address})";
+					mnuFindOccurrences.Enabled = true;
+					mnuFindOccurrences.Text = $"Find Occurrences ({address})";
+					mnuEditLabel.Enabled = true;
+					mnuEditLabel.Text = $"Edit Label ({address})";
+				}
 			}
 		}
 
@@ -478,6 +498,15 @@ namespace Mesen.GUI.Debugger
 		private void ctrlCodeViewer_FontSizeChanged(object sender, EventArgs e)
 		{
 			UpdateConfig();
+		}
+
+		private void mnuEditLabel_Click(object sender, EventArgs e)
+		{
+			AddressTypeInfo info = new AddressTypeInfo();
+			InteropEmu.DebugGetAbsoluteAddressAndType(_lastClickedAddress, ref info);
+			if(info.Address >= 0) {
+				ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+			}
 		}
 
 		private void mnuNavigateForward_Click(object sender, EventArgs e)
