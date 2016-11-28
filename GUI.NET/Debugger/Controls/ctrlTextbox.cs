@@ -813,7 +813,7 @@ namespace Mesen.GUI.Debugger
 					}
 
 					currentLine = this.ScrollPosition;
-					positionY = 0;
+					positionY = string.IsNullOrWhiteSpace(this._header) ? 0 : lineHeight;
 					while(positionY < rect.Bottom && currentLine < _contents.Length) {
 						this.DrawMargin(pe.Graphics, currentLine, marginLeft, positionY, lineHeight);
 						positionY += lineHeight;
