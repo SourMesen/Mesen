@@ -234,38 +234,61 @@ namespace Mesen.GUI.Debugger
 				if(word.StartsWith("$")) {
 					try {
 						UInt32 address = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
-						byte byteValue = InteropEmu.DebugGetMemoryValue(address);
-						UInt16 wordValue = (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(address+1) << 8));
 
-						var values = new Dictionary<string, string>() {
-							{ "Address", "$" + address.ToString("X4") },
-							{ "Value", $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" }
-						};
+						AddressTypeInfo info = new AddressTypeInfo();
+						InteropEmu.DebugGetAbsoluteAddressAndType(address, ref info);
 
-						ShowTooltip(word, values);
+						if(info.Address >= 0) {
+							CodeLabel label = LabelManager.GetLabel((UInt32)info.Address, info.Type);
+							if(label == null) {
+								DisplayAddressTooltip(word, address);
+							} else {
+								DisplayLabelTooltip(word, label);
+							}
+						} else {
+							DisplayAddressTooltip(word, address);
+						}
 					} catch { }
 				} else {
 					CodeLabel label = LabelManager.GetLabel(word);
 
 					if(label != null) {
-						Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
-						byte byteValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress) : (byte)0;
-						UInt16 wordValue = relativeAddress >= 0 ? (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress+1) << 8)) : (UInt16)0;
-						var values = new Dictionary<string, string>() {
+						DisplayLabelTooltip(word, label);
+					}
+				}
+				_previousLocation = e.Location;
+			}
+		}
+
+		private void DisplayAddressTooltip(string word, UInt32 address)
+		{
+			byte byteValue = InteropEmu.DebugGetMemoryValue(address);
+			UInt16 wordValue = (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(address+1) << 8));
+
+			var values = new Dictionary<string, string>() {
+								{ "Address", "$" + address.ToString("X4") },
+								{ "Value", $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" }
+							};
+
+			ShowTooltip(word, values);
+		}
+
+		private void DisplayLabelTooltip(string word, CodeLabel label)
+		{
+			Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
+			byte byteValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress) : (byte)0;
+			UInt16 wordValue = relativeAddress >= 0 ? (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress+1) << 8)) : (UInt16)0;
+			var values = new Dictionary<string, string>() {
 							{ "Label", label.Label },
 							{ "Address", "$" + InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType).ToString("X4") },
 							{ "Value", (relativeAddress >= 0 ? $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" : "n/a") },
 						};
 
-						if(!string.IsNullOrWhiteSpace(label.Comment)) {
-							values["Comment"] = label.Comment;
-						}
-
-						ShowTooltip(word, values);
-					}
-				}
-				_previousLocation = e.Location;
+			if(!string.IsNullOrWhiteSpace(label.Comment)) {
+				values["Comment"] = label.Comment;
 			}
+
+			ShowTooltip(word, values);
 		}
 
 		UInt32 _lastClickedAddress = UInt32.MaxValue;
