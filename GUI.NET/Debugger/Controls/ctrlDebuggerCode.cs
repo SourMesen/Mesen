@@ -19,6 +19,7 @@ namespace Mesen.GUI.Debugger
 		public event WatchEventHandler OnWatchAdded;
 		public event AddressEventHandler OnSetNextStatement;
 		private DebugViewInfo _config;
+		HashSet<int> _unexecutedAddresses = new HashSet<int>();
 
 		private frmCodeTooltip _codeTooltip = null;
 
@@ -82,9 +83,6 @@ namespace Mesen.GUI.Debugger
 
 		public void SetActiveAddress(UInt32 address)
 		{
-			//Set line background to yellow
-			this.ctrlCodeViewer.ClearLineStyles();
-			this.ctrlCodeViewer.SetLineColor((int)address, Color.Black, Color.Yellow, null, LineSymbol.Arrow);
 			_currentActiveAddress = address;
 		}
 		
@@ -93,15 +91,31 @@ namespace Mesen.GUI.Debugger
 			_currentActiveAddress = null;
 		}
 
+		public void UpdateLineColors()
+		{
+			this.ctrlCodeViewer.ClearLineStyles();
+
+			if(_currentActiveAddress.HasValue) {
+				this.ctrlCodeViewer.SetLineColor((int)_currentActiveAddress, Color.Black, Color.Yellow, null, LineSymbol.Arrow);
+			}
+
+			if(ConfigManager.Config.DebugInfo.HighlightUnexecutedCode) {
+				foreach(int relativeAddress in _unexecutedAddresses) {
+					this.ctrlCodeViewer.SetLineColor(relativeAddress, null, Color.FromArgb(183, 229, 190));
+				}
+			}
+
+			this.HighlightBreakpoints();
+		}
+
 		public bool UpdateCode(bool forceUpdate = false)
 		{
 			if(_codeChanged || forceUpdate) {
-				this.ctrlCodeViewer.ClearLineStyles();
-
 				List<int> lineNumbers = new List<int>();
 				List<string> lineNumberNotes = new List<string>();
 				List<string> codeNotes = new List<string>();
 				List<string> codeLines = new List<string>();
+				_unexecutedAddresses = new HashSet<int>();
 				
 				int index = -1;
 				int previousIndex = -1;
@@ -109,11 +123,17 @@ namespace Mesen.GUI.Debugger
 					string line = _code.Substring(previousIndex + 1, index - previousIndex - 1);
 					string[] lineParts = line.Split('\x1');
 
-					if(lineParts.Length >= 4) {
-						lineNumbers.Add(ParseHexAddress(lineParts[0]));
-						lineNumberNotes.Add(lineParts[1].Trim('0'));
-						codeNotes.Add(lineParts[2]);
-						codeLines.Add(lineParts[3]);
+					if(lineParts.Length >= 5) {
+						int relativeAddress = ParseHexAddress(lineParts[1]);
+
+						if(lineParts[0] == "0" && lineParts[4].StartsWith("  ")) {
+							_unexecutedAddresses.Add(relativeAddress);
+						}
+
+						lineNumbers.Add(relativeAddress);
+						lineNumberNotes.Add(lineParts[2].Trim('0'));
+						codeNotes.Add(lineParts[3]);
+						codeLines.Add(lineParts[4]);
 					}
 
 					previousIndex = index;
@@ -123,9 +143,12 @@ namespace Mesen.GUI.Debugger
 				ctrlCodeViewer.LineNumbers = lineNumbers.ToArray();
 				ctrlCodeViewer.TextLineNotes = codeNotes.ToArray();
 				ctrlCodeViewer.LineNumberNotes = lineNumberNotes.ToArray();
+
 				_codeChanged = false;
+				UpdateLineColors();
 				return true;
 			}
+			UpdateLineColors();
 			return false;
 		}
 
@@ -140,10 +163,6 @@ namespace Mesen.GUI.Debugger
 
 		public void HighlightBreakpoints()
 		{
-			ctrlCodeViewer.ClearLineStyles();
-			if(_currentActiveAddress.HasValue) {
-				SetActiveAddress(_currentActiveAddress.Value);
-			}
 			foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
 				Color? fgColor = Color.White;
 				Color? bgColor = null;
@@ -156,10 +175,14 @@ namespace Mesen.GUI.Debugger
 					fgColor = Color.Black;
 					symbol = LineSymbol.CircleOutline;
 				}
+
 				if(breakpoint.Address == (UInt32)(_currentActiveAddress.HasValue ? (int)_currentActiveAddress.Value : -1)) {
 					fgColor = Color.Black;
 					bgColor = Color.Yellow;
 					symbol |= LineSymbol.Arrow;
+				} else if(_unexecutedAddresses.Contains((Int32)breakpoint.Address)) {
+					fgColor = Color.Black;
+					bgColor = Color.FromArgb(183, 229, 190);
 				}
 
 				ctrlCodeViewer.SetLineColor((int)breakpoint.Address, fgColor, bgColor, outlineColor, symbol);

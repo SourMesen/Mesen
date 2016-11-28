@@ -20,8 +20,6 @@ private:
 	uint32_t _opSize = 0;
 	AddrMode _opMode;
 
-	uint16_t _opAddr;
-
 public:
 	DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint);
 
@@ -33,6 +31,7 @@ public:
 	string ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 	string GetByteCode();
 	uint32_t GetSize();
+	uint16_t GetOpAddr(uint16_t memoryAddr);
 
 	bool IsSubEntryPoint();
 	bool IsSubExitPoint();

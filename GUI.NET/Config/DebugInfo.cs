@@ -92,6 +92,8 @@ namespace Mesen.GUI.Config
 		public int WindowHeight = -1;
 		public int BottomPanelHeight = -1;
 
+		public bool HighlightUnexecutedCode = true;
+
 		public DebugInfo()
 		{
 			LeftView = new DebugViewInfo();

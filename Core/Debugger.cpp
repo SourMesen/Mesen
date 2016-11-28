@@ -25,7 +25,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_mapper = mapper;
 
 	_labelManager.reset(new LabelManager(_mapper));
-	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPrgRom(), mapper->GetPrgSize(), mapper->GetWorkRam(), mapper->GetPrgSize(true)));
+	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPrgRom(), mapper->GetPrgSize(), mapper->GetWorkRam(), mapper->GetPrgSize(true), this));
 	_codeDataLogger.reset(new CodeDataLogger(mapper->GetPrgSize(), mapper->GetChrSize()));
 	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger));
 
@@ -115,6 +115,17 @@ bool Debugger::LoadCdlFile(string cdlFilepath)
 		return true;
 	}
 	return false;
+}
+
+bool Debugger::IsMarkedAsCode(uint16_t relativeAddress)
+{
+	AddressTypeInfo info;
+	GetAbsoluteAddressAndType(relativeAddress, &info);
+	if(info.Address >= 0 && info.Type == AddressType::PrgRom) {
+		return _codeDataLogger->IsCode(info.Address);
+	} else {
+		return false;
+	}
 }
 
 bool Debugger::SaveCdlFile(string cdlFilepath)
@@ -655,6 +666,9 @@ void Debugger::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo*
 		info->Type = AddressType::SaveRam;
 		return;
 	}
+
+	info->Address = -1;
+	info->Type = AddressType::InternalRam;
 }
 
 void Debugger::SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle)

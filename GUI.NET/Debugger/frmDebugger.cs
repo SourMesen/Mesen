@@ -17,10 +17,11 @@ namespace Mesen.GUI.Debugger
 	public partial class frmDebugger : BaseForm
 	{
 		private List<Form> _childForms = new List<Form>();
+		private bool _debuggerInitialized = false;
+
 		private InteropEmu.NotificationListener _notifListener;
 		private ctrlDebuggerCode _lastCodeWindow;
 		private frmTraceLogger _traceLogger;
-
 		private DebugWorkspace _workspace;
 
 		public frmDebugger()
@@ -45,6 +46,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
 			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
 			this.mnuShowFunctionLabelLists.Checked = ConfigManager.Config.DebugInfo.ShowFunctionLabelLists;
+			this.mnuHighlightUnexecutedCode.Checked = ConfigManager.Config.DebugInfo.HighlightUnexecutedCode;
 
 			this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
 			this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
@@ -80,8 +82,9 @@ namespace Mesen.GUI.Debugger
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
 			InteropEmu.DebugInitialize();
-			
+
 			//Pause a few frames later to give the debugger a chance to disassemble some code
+			_debuggerInitialized = true;
 			InteropEmu.DebugStep(30000);
 
 			UpdateCdlRatios();
@@ -199,6 +202,10 @@ namespace Mesen.GUI.Debugger
 		string _previousCode = string.Empty;
 		private void UpdateDebugger(bool updateActiveAddress = true)
 		{
+			if(!_debuggerInitialized) {
+				return;
+			}
+
 			ctrlLabelList.UpdateLabelListAddresses();
 			ctrlFunctionList.UpdateFunctionList(false);
 			UpdateDebuggerFlags();
@@ -226,7 +233,7 @@ namespace Mesen.GUI.Debugger
 				_lastCodeWindow.SelectActiveAddress(state.CPU.DebugPC);
 			}
 
-			RefreshBreakpoints();
+			UpdateLineColors();
 
 			ctrlConsoleStatus.UpdateStatus(ref state);
 			ctrlWatch.UpdateWatch();
@@ -242,7 +249,7 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlDebuggerCode.ClearActiveAddress();
 			ctrlDebuggerCodeSplit.ClearActiveAddress();
-			RefreshBreakpoints();
+			UpdateLineColors();
 		}
 
 		private void ToggleBreakpoint(bool toggleEnabled)
@@ -250,10 +257,10 @@ namespace Mesen.GUI.Debugger
 			BreakpointManager.ToggleBreakpoint(_lastCodeWindow.GetCurrentLine(), toggleEnabled);
 		}
 		
-		private void RefreshBreakpoints()
+		private void UpdateLineColors()
 		{
-			ctrlDebuggerCodeSplit.HighlightBreakpoints();
-			ctrlDebuggerCode.HighlightBreakpoints();
+			ctrlDebuggerCodeSplit.UpdateLineColors();
+			ctrlDebuggerCode.UpdateLineColors();
 		}
 
 		private void OpenChildForm(Form frm)
@@ -364,7 +371,7 @@ namespace Mesen.GUI.Debugger
 
 		private void BreakpointManager_BreakpointsChanged(object sender, EventArgs e)
 		{
-			RefreshBreakpoints();
+			UpdateLineColors();
 		}
 
 		private void ctrlDebuggerCode_Enter(object sender, EventArgs e)
@@ -545,6 +552,14 @@ namespace Mesen.GUI.Debugger
 			tlpFunctionLabelLists.Visible = mnuShowFunctionLabelLists.Checked;
 			ConfigManager.Config.DebugInfo.ShowFunctionLabelLists = mnuShowFunctionLabelLists.Checked;
 			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuHighlightUnexecutedCode_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.HighlightUnexecutedCode = mnuHighlightUnexecutedCode.Checked;
+			ConfigManager.ApplyChanges();
+			ctrlDebuggerCode.UpdateLineColors();
+			ctrlDebuggerCodeSplit.UpdateLineColors();
 		}
 
 		private void frmDebugger_Resize(object sender, EventArgs e)

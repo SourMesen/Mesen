@@ -6,10 +6,12 @@ struct State;
 class MemoryManager;
 class DisassemblyInfo;
 class LabelManager;
+class Debugger;
 
 class Disassembler
 {
 private:
+	Debugger* _debugger;
 	vector<shared_ptr<DisassemblyInfo>> _disassembleCache;
 	vector<shared_ptr<DisassemblyInfo>> _disassembleRamCache;
 	vector<shared_ptr<DisassemblyInfo>> _disassembleMemoryCache;
@@ -24,7 +26,7 @@ private:
 	string GetSubHeader(DisassemblyInfo *info, string &label, uint16_t relativeAddr, uint16_t resetVector, uint16_t nmiVector, uint16_t irqVector);
 
 public:
-	Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize);
+	Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize, Debugger* debugger);
 	~Disassembler();
 	
 	uint32_t BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr, uint16_t memoryAddr, bool isSubEntryPoint);

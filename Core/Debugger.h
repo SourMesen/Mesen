@@ -125,6 +125,7 @@ public:
 	bool SaveCdlFile(string cdlFilepath);
 	CdlRatios GetCdlRatios();
 	void ResetCdlLog();
+	bool IsMarkedAsCode(uint16_t relativeAddress);
 
 	void SetNextStatement(uint16_t addr);
 	void SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle);

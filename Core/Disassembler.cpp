@@ -6,9 +6,11 @@
 #include "CPU.h"
 #include "LabelManager.h"
 #include "../Utilities/HexUtilities.h"
+#include "Debugger.h"
 
-Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize)
+Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize, Debugger* debugger)
 {
+	_debugger = debugger;
 	_internalRam = internalRam;
 	_prgRom = prgRom;
 	_prgRam = prgRam;
@@ -193,7 +195,10 @@ string Disassembler::GetLine(string code, string comment, int32_t cpuAddress, in
 	string out;
 	out.reserve(100);
 	if(cpuAddress >= 0) {
-		out += HexUtilities::ToHex((uint16_t)cpuAddress);
+		out += (_debugger->IsMarkedAsCode(cpuAddress) || absoluteAddress == -1) ? "1\x1" : "0\x1";
+		out += HexUtilities::ToHex((uint16_t)cpuAddress);		
+	} else {
+		out += "1\x1";
 	}
 	out += "\x1";
 	if(absoluteAddress >= 0) {

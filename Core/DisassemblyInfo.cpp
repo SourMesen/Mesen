@@ -21,26 +21,18 @@ string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> 
 		out = DisassemblyInfo::OPName[opCode];
 	}
 
-	if(_opSize == 2) {
-		_opAddr = *(_opPointer + 1);
-	} else if(_opSize == 3) {
-		_opAddr = *(_opPointer + 1) | (*(_opPointer + 2) << 8);
-	}
-
-	if(_opMode == AddrMode::Rel) {
-		_opAddr = (int8_t)_opAddr + memoryAddr + 2;
-	}
+	uint16_t opAddr = GetOpAddr(memoryAddr);
 	
 	string operandValue;
 	if(labelManager && _opMode != AddrMode::Imm) {
-		operandValue = labelManager->GetLabel(_opAddr, true);
+		operandValue = labelManager->GetLabel(opAddr, true);
 	}
 	
 	if(operandValue.empty()) {
 		if(_opSize == 2 && _opMode != AddrMode::Rel) {
-			operandValue += "$" + HexUtilities::ToHex((uint8_t)_opAddr);
+			operandValue += "$" + HexUtilities::ToHex((uint8_t)opAddr);
 		} else {
-			operandValue += "$" + HexUtilities::ToHex((uint16_t)_opAddr);
+			operandValue += "$" + HexUtilities::ToHex((uint16_t)opAddr);
 		}
 	}
 
@@ -79,6 +71,22 @@ string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> 
 	}
 
 	return out;
+}
+
+uint16_t DisassemblyInfo::GetOpAddr(uint16_t memoryAddr)
+{
+	uint16_t opAddr;
+	if(_opSize == 2) {
+		opAddr = *(_opPointer + 1);
+	} else if(_opSize == 3) {
+		opAddr = *(_opPointer + 1) | (*(_opPointer + 2) << 8);
+	}
+
+	if(_opMode == AddrMode::Rel) {
+		opAddr = (int8_t)opAddr + memoryAddr + 2;
+	}
+
+	return opAddr;
 }
 
 DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)

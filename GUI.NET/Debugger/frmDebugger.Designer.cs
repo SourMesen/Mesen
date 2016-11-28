@@ -99,6 +99,7 @@
 			this.mnuPpuPartialDraw = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowEffectiveAddresses = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowOnlyDisassembledCode = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHighlightUnexecutedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
@@ -119,6 +120,7 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
+			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.contextMenuCode.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -420,40 +422,43 @@
             this.mnuSaveWorkspace,
             this.mnuResetWorkspace});
 			this.mnuWorkspace.Name = "mnuWorkspace";
-			this.mnuWorkspace.Size = new System.Drawing.Size(132, 22);
+			this.mnuWorkspace.Size = new System.Drawing.Size(152, 22);
 			this.mnuWorkspace.Text = "Workspace";
 			// 
 			// mnuImportLabels
 			// 
+			this.mnuImportLabels.Image = global::Mesen.GUI.Properties.Resources.Import;
 			this.mnuImportLabels.Name = "mnuImportLabels";
-			this.mnuImportLabels.Size = new System.Drawing.Size(146, 22);
+			this.mnuImportLabels.Size = new System.Drawing.Size(152, 22);
 			this.mnuImportLabels.Text = "Import Labels";
 			this.mnuImportLabels.Click += new System.EventHandler(this.mnuImportLabels_Click);
 			// 
 			// mnuSaveWorkspace
 			// 
+			this.mnuSaveWorkspace.Image = global::Mesen.GUI.Properties.Resources.Floppy;
 			this.mnuSaveWorkspace.Name = "mnuSaveWorkspace";
 			this.mnuSaveWorkspace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.mnuSaveWorkspace.Size = new System.Drawing.Size(146, 22);
+			this.mnuSaveWorkspace.Size = new System.Drawing.Size(152, 22);
 			this.mnuSaveWorkspace.Text = "Save";
 			this.mnuSaveWorkspace.Click += new System.EventHandler(this.mnuSaveWorkspace_Click);
 			// 
 			// mnuResetWorkspace
 			// 
+			this.mnuResetWorkspace.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuResetWorkspace.Name = "mnuResetWorkspace";
-			this.mnuResetWorkspace.Size = new System.Drawing.Size(146, 22);
+			this.mnuResetWorkspace.Size = new System.Drawing.Size(152, 22);
 			this.mnuResetWorkspace.Text = "Reset";
 			this.mnuResetWorkspace.Click += new System.EventHandler(this.mnuResetWorkspace_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(129, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuClose
 			// 
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(132, 22);
+			this.mnuClose.Size = new System.Drawing.Size(152, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -478,6 +483,7 @@
 			// 
 			// mnuContinue
 			// 
+			this.mnuContinue.Image = global::Mesen.GUI.Properties.Resources.Play;
 			this.mnuContinue.Name = "mnuContinue";
 			this.mnuContinue.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.mnuContinue.Size = new System.Drawing.Size(258, 22);
@@ -486,6 +492,7 @@
 			// 
 			// mnuBreak
 			// 
+			this.mnuBreak.Image = global::Mesen.GUI.Properties.Resources.Pause;
 			this.mnuBreak.Name = "mnuBreak";
 			this.mnuBreak.ShortcutKeyDisplayString = "Ctrl+Alt+Break";
 			this.mnuBreak.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
@@ -653,9 +660,11 @@
             this.mnuShowPpuMemoryMapping,
             this.mnuShowFunctionLabelLists,
             this.toolStripMenuItem6,
-            this.mnuPpuPartialDraw,
+            this.mnuHighlightUnexecutedCode,
             this.mnuShowEffectiveAddresses,
-            this.mnuShowOnlyDisassembledCode});
+            this.mnuShowOnlyDisassembledCode,
+            this.toolStripMenuItem7,
+            this.mnuPpuPartialDraw});
 			this.mnuOptions.Name = "mnuOptions";
 			this.mnuOptions.Size = new System.Drawing.Size(61, 20);
 			this.mnuOptions.Text = "Options";
@@ -762,6 +771,14 @@
 			this.mnuShowOnlyDisassembledCode.Size = new System.Drawing.Size(237, 22);
 			this.mnuShowOnlyDisassembledCode.Text = "Show Only Disassembled Code";
 			this.mnuShowOnlyDisassembledCode.CheckedChanged += new System.EventHandler(this.mnuShowOnlyDisassembledCode_CheckedChanged);
+			// 
+			// mnuHighlightUnexecutedCode
+			// 
+			this.mnuHighlightUnexecutedCode.CheckOnClick = true;
+			this.mnuHighlightUnexecutedCode.Name = "mnuHighlightUnexecutedCode";
+			this.mnuHighlightUnexecutedCode.Size = new System.Drawing.Size(237, 22);
+			this.mnuHighlightUnexecutedCode.Text = "Highlight Unexecuted Code";
+			this.mnuHighlightUnexecutedCode.Click += new System.EventHandler(this.mnuHighlightUnexecutedCode_Click);
 			// 
 			// toolsToolStripMenuItem
 			// 
@@ -925,6 +942,11 @@
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
+			// toolStripMenuItem7
+			// 
+			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(234, 6);
+			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1052,5 +1074,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuSaveWorkspace;
 		private System.Windows.Forms.ToolStripMenuItem mnuResetWorkspace;
 		private System.Windows.Forms.ToolStripMenuItem mnuImportLabels;
+		private System.Windows.Forms.ToolStripMenuItem mnuHighlightUnexecutedCode;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
 	}
 }
