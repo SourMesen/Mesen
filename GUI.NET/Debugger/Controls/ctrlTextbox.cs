@@ -383,6 +383,17 @@ namespace Mesen.GUI.Debugger
 			return lineIndex;
 		}
 
+		private string GetStringForMouseOver(int lineIndex)
+		{
+			string text = _contents[lineIndex].Replace("\x2", "");
+			int commentIndex = text.IndexOf(";");
+			if(commentIndex > 0 && commentIndex < 24) {
+				text = text.Insert(commentIndex, "".PadLeft(24 - commentIndex));
+			}
+
+			return text;
+		}
+
 		private bool GetCharIndex(Point position, out int charIndex, out int lineIndex)
 		{
 			charIndex = -1;
@@ -395,7 +406,7 @@ namespace Mesen.GUI.Debugger
 				}
 
 				if(positionX >= 0 && lineIndex < _contents.Length) {
-					string text = _contents[lineIndex].Replace("\x2", "");
+					string text = this.GetStringForMouseOver(lineIndex);
 					//Adjust background color highlights based on number of spaces in front of content
 					positionX -= _lineMargins[lineIndex];
 
@@ -418,7 +429,7 @@ namespace Mesen.GUI.Debugger
 			int charIndex; 
 			int lineIndex;
 			if(this.GetCharIndex(position, out charIndex, out lineIndex)) {
-				string text = ((useCompareText && _compareContents != null) ? _compareContents[lineIndex] : _contents[lineIndex]).Replace("\x2", "");
+				string text = (useCompareText && _compareContents != null) ? _compareContents[lineIndex] : this.GetStringForMouseOver(lineIndex);
 				List<char> wordDelimiters = new List<char>(new char[] { ' ', ',', '|', ';', '(', ')', '.', '-', ':' });
 				if(wordDelimiters.Contains(text[charIndex])) {
 					return string.Empty;
