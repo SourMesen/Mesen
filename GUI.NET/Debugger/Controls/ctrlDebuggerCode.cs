@@ -234,11 +234,12 @@ namespace Mesen.GUI.Debugger
 				if(word.StartsWith("$")) {
 					try {
 						UInt32 address = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
-						Byte memoryValue = InteropEmu.DebugGetMemoryValue(address);
+						byte byteValue = InteropEmu.DebugGetMemoryValue(address);
+						UInt16 wordValue = (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(address+1) << 8));
 
 						var values = new Dictionary<string, string>() {
 							{ "Address", "$" + address.ToString("X4") },
-							{ "Value", "$" + memoryValue.ToString("X2") },
+							{ "Value", $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" }
 						};
 
 						ShowTooltip(word, values);
@@ -248,11 +249,12 @@ namespace Mesen.GUI.Debugger
 
 					if(label != null) {
 						Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
-						Int32 memoryValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress) : -1;
+						byte byteValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress) : (byte)0;
+						UInt16 wordValue = relativeAddress >= 0 ? (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress+1) << 8)) : (UInt16)0;
 						var values = new Dictionary<string, string>() {
 							{ "Label", label.Label },
 							{ "Address", "$" + InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType).ToString("X4") },
-							{ "Value", (memoryValue >= 0 ? ("$" + memoryValue.ToString("X2")) : "n/a") },
+							{ "Value", (relativeAddress >= 0 ? $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" : "n/a") },
 						};
 
 						if(!string.IsNullOrWhiteSpace(label.Comment)) {

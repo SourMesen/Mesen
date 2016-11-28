@@ -33,7 +33,7 @@ namespace Mesen.GUI.Debugger
 			foreach(KeyValuePair<string, string> kvp in _values) {
 				tlpMain.RowStyles.Insert(1, new RowStyle());
 				Label lbl = new Label();
-				lbl.Margin = new Padding(2);
+				lbl.Margin = new Padding(2, 3, 2, 2);
 				lbl.Text = kvp.Key + ":";
 				lbl.Font = new Font(lbl.Font, FontStyle.Bold);
 				lbl.AutoSize = true;
