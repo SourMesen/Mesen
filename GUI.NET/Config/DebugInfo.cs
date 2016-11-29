@@ -92,6 +92,9 @@ namespace Mesen.GUI.Config
 		public int WindowHeight = -1;
 		public int BottomPanelHeight = -1;
 
+		public int BreakInCount = 1;
+		public bool BreakInPpuCycles = false;
+
 		public bool HighlightUnexecutedCode = true;
 
 		public DebugInfo()

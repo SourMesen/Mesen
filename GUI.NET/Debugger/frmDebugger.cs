@@ -625,5 +625,12 @@ namespace Mesen.GUI.Debugger
 		{
 			_lastCodeWindow.FindAllOccurrences(sender as string);
 		}
+
+		private void mnuBreakIn_Click(object sender, EventArgs e)
+		{
+			using(frmBreakIn frm = new frmBreakIn()) {
+				frm.ShowDialog();
+			}
+		}
 	}
 }
