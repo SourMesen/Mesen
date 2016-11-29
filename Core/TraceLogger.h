@@ -24,6 +24,7 @@ private:
 	static TraceLogger *_instance;
 	TraceLoggerOptions _options;
 	string _outputFilepath;
+	string _outputBuffer;
 	ofstream _outputFile;
 	bool _firstLine;
 	shared_ptr<MemoryManager> _memoryManager;

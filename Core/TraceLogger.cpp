@@ -4,6 +4,7 @@
 #include "DebugState.h"
 #include "Console.h"
 #include "MemoryManager.h"
+#include "../Utilities/HexUtilities.h"
 
 TraceLogger *TraceLogger::_instance = nullptr;
 
@@ -24,6 +25,9 @@ TraceLogger::~TraceLogger()
 	}
 
 	if(_outputFile) {
+		if(!_outputBuffer.empty()) {
+			_outputFile << _outputBuffer;
+		}
 		_outputFile.close();
 	}
 	Console::Resume();
@@ -56,51 +60,55 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 		}
 
 		if(!_firstLine) {
-			_outputFile << std::endl;
+			_outputBuffer += "\n";
 		}
 
-		_outputFile << std::uppercase << std::hex << std::setfill('0') << std::setw(4) << std::right << (short)cpuState.DebugPC << "  ";
+		_outputBuffer += HexUtilities::ToHex(cpuState.DebugPC) + "  ";
 
 		if(_options.ShowByteCode) {
-			_outputFile << std::setfill(' ') << std::setw(10) << std::left << disassemblyInfo->GetByteCode();
+			_outputBuffer += disassemblyInfo->GetByteCode() + std::string(disassemblyInfo->GetByteCode().size() - 10, ' ');
 		}
 
 		int indentLevel = 0; 
 		if(_options.IndentCode) {
 			indentLevel = 0xFF - state.CPU.SP;
-			_outputFile << std::string(indentLevel, ' ');
+			_outputBuffer += std::string(indentLevel, ' ');
 		}
 
 		string codeString = disassembly + (_options.ShowEffectiveAddresses ? disassemblyInfo->GetEffectiveAddressString(state.CPU, _memoryManager, nullptr) : "");
-		_outputFile << std::setfill(' ') << std::setw(32 - indentLevel) << std::left << codeString;
+		_outputBuffer += codeString + std::string(32 - codeString.size(), ' ');
 						
 		if(_options.ShowRegisters) {
-			_outputFile << std::setfill('0')
-				<< "A:" << std::right << std::setw(2) << (short)cpuState.A
-				<< " X:" << std::setw(2) << (short)cpuState.X
-				<< " Y:" << std::setw(2) << (short)cpuState.Y
-				<< " P:" << std::setw(2) << (short)cpuState.PS
-				<< " SP:" << std::setw(2) << (short)cpuState.SP;
+			_outputBuffer += " A:" + HexUtilities::ToHex(cpuState.A) +
+				" X:" + HexUtilities::ToHex(cpuState.X) +
+				" Y:" + HexUtilities::ToHex(cpuState.Y) +
+				" P:" + HexUtilities::ToHex(cpuState.PS) +
+				" SP:" + HexUtilities::ToHex(cpuState.SP);
 		}
-		
-		_outputFile << std::dec << std::setfill(' ');
 
 		if(_options.ShowPpuCycles) {
-			_outputFile << std::right << " CYC:" << std::setw(3) << ppuCycle;
+			string str = std::to_string(ppuCycle);
+			_outputBuffer += " CYC:" + std::string(3 - str.size(), ' ') + str;
 		}
 
 		if(_options.ShowPpuScanline) {
-			_outputFile << std::left << " SL:" << std::setw(3) << scanline;
+			string str = std::to_string(scanline);
+			_outputBuffer += " SL:" + std::string(3 - str.size(), ' ') + str;
 		}
 
 		if(_options.ShowPpuFrames) {
-			_outputFile << " FC:" << ppuState.FrameCount;
+			_outputBuffer += " FC:" + std::to_string(ppuState.FrameCount);
 		}
 
 		if(_options.ShowCpuCycles) {
-			_outputFile << " CPU Cycle:" << cpuState.CycleCount;
+			_outputBuffer += " CPU Cycle:" + std::to_string(cpuState.CycleCount);
 		}
-		
+
+		if(_outputBuffer.size() > 32768) {
+			_outputFile << _outputBuffer;
+			_outputBuffer.clear();
+		}
+
 		_firstLine = false;
 	}
 }
