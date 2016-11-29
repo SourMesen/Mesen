@@ -41,6 +41,7 @@ namespace Mesen.GUI.Debugger
 		public event EventHandler ScrollPositionChanged;
 
 		private const float HorizontalScrollFactor = 8;
+		private const int CommentSpacingCharCount = 25;
 
 		private TextboxHistory _history = new TextboxHistory();
 
@@ -85,8 +86,10 @@ namespace Mesen.GUI.Debugger
 				_lineMargins = new int[value.Length];
 				for(int i = 0, len = value.Length; i < len; i++) {
 					_contents[i] = value[i].TrimStart();
-					if(_contents[i].Length > maxLength) {
-						maxLength = _contents[i].Length;
+
+					string stringToMeasure = GetFullWidthString(_contents[i]);
+					if(stringToMeasure.Length > maxLength) {
+						maxLength = stringToMeasure.Length;
 						_maxLineWidthIndex = i;
 					}
 					_lineMargins[i] = (value[i].Length - _contents[i].Length) * 10;
@@ -383,12 +386,12 @@ namespace Mesen.GUI.Debugger
 			return lineIndex;
 		}
 
-		private string GetStringForMouseOver(int lineIndex)
+		private string GetFullWidthString(string lineContent)
 		{
-			string text = _contents[lineIndex].Replace("\x2", "");
+			string text = lineContent.Replace("\x2", "");
 			int commentIndex = text.IndexOf(";");
-			if(commentIndex > 0 && commentIndex < 24) {
-				text = text.Insert(commentIndex, "".PadLeft(24 - commentIndex));
+			if(commentIndex > 0 && commentIndex < CommentSpacingCharCount) {
+				text = text.Insert(commentIndex, "".PadLeft(CommentSpacingCharCount - commentIndex));
 			}
 
 			return text;
@@ -406,7 +409,7 @@ namespace Mesen.GUI.Debugger
 				}
 
 				if(positionX >= 0 && lineIndex < _contents.Length) {
-					string text = this.GetStringForMouseOver(lineIndex);
+					string text = this.GetFullWidthString(_contents[lineIndex]);
 					//Adjust background color highlights based on number of spaces in front of content
 					positionX -= _lineMargins[lineIndex];
 
@@ -429,7 +432,7 @@ namespace Mesen.GUI.Debugger
 			int charIndex; 
 			int lineIndex;
 			if(this.GetCharIndex(position, out charIndex, out lineIndex)) {
-				string text = (useCompareText && _compareContents != null) ? _compareContents[lineIndex] : this.GetStringForMouseOver(lineIndex);
+				string text = (useCompareText && _compareContents != null) ? _compareContents[lineIndex] : this.GetFullWidthString(_contents[lineIndex]);
 				List<char> wordDelimiters = new List<char>(new char[] { ' ', ',', '|', ';', '(', ')', '.', '-', ':' });
 				if(wordDelimiters.Contains(text[charIndex])) {
 					return string.Empty;
@@ -523,7 +526,7 @@ namespace Mesen.GUI.Debugger
 		{
 			if(_contents.Length > _maxLineWidthIndex) {
 				using(Graphics g = this.CreateGraphics()) {
-					_maxLineWidth = g.MeasureString(_contents[_maxLineWidthIndex], this.Font).Width;
+					_maxLineWidth = _lineMargins[_maxLineWidthIndex] + g.MeasureString(GetFullWidthString(_contents[_maxLineWidthIndex]), this.Font).Width;
 					HorizontalScrollWidth = (int)(Math.Max(0, HorizontalScrollFactor + _maxLineWidth - (this.Width - GetMargin(g))) / HorizontalScrollFactor);
 				}
 			}
@@ -665,11 +668,17 @@ namespace Mesen.GUI.Debugger
 					//Draw line content
 					g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY);
 
-					using(Brush addressBrush = new SolidBrush(Color.SteelBlue)) {
-						g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength - 4, positionY);
+					if(!string.IsNullOrWhiteSpace(addressString)) {
+						using(Brush addressBrush = new SolidBrush(Color.SteelBlue)) {
+							g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength - 4, positionY);
+						}
 					}
-					using(Brush commentBrush = new SolidBrush(Color.DarkGreen)) {
-						g.DrawString(commentString, this.Font, commentBrush, codeString.Length == 0 && addressString.Length == 0 ? marginLeft : Math.Max(marginLeft + 220, marginLeft + codeStringLength + addressStringLength), positionY);
+
+					if(!string.IsNullOrWhiteSpace(commentString)) {
+						using(Brush commentBrush = new SolidBrush(Color.DarkGreen)) {
+							int padding = Math.Max(CommentSpacingCharCount, codeString.Length + addressString.Length);
+							g.DrawString(commentString.PadLeft(padding+commentString.Length), this.Font, commentBrush, marginLeft, positionY);
+						}
 					}
 
 					if(this.ShowContentNotes) {
