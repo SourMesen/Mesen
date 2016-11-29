@@ -28,54 +28,18 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.lstLabels = new Mesen.GUI.Controls.DoubleBufferedListView();
-			this.colFunctionLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.colFunctionAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.colMemoryAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
+			this.lstLabels = new Mesen.GUI.Controls.DoubleBufferedListView();
+			this.colFunctionLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colFunctionAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colMemoryAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// lstLabels
-			// 
-			this.lstLabels.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colFunctionLabel,
-            this.colFunctionAddress,
-            this.colMemoryAddress});
-			this.lstLabels.ContextMenuStrip = this.contextMenu;
-			this.lstLabels.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lstLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lstLabels.FullRowSelect = true;
-			this.lstLabels.GridLines = true;
-			this.lstLabels.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-			this.lstLabels.HideSelection = false;
-			this.lstLabels.Location = new System.Drawing.Point(0, 0);
-			this.lstLabels.Name = "lstLabels";
-			this.lstLabels.Size = new System.Drawing.Size(275, 112);
-			this.lstLabels.TabIndex = 2;
-			this.lstLabels.UseCompatibleStateImageBehavior = false;
-			this.lstLabels.View = System.Windows.Forms.View.Details;
-			this.lstLabels.DoubleClick += new System.EventHandler(this.lstLabels_DoubleClick);
-			// 
-			// colFunctionLabel
-			// 
-			this.colFunctionLabel.Text = "Label";
-			this.colFunctionLabel.Width = 136;
-			// 
-			// colFunctionAddress
-			// 
-			this.colFunctionAddress.Text = "Address";
-			this.colFunctionAddress.Width = 62;
-			// 
-			// colMemoryAddress
-			// 
-			this.colMemoryAddress.Text = "ROM Addr.";
-			this.colMemoryAddress.Width = 71;
 			// 
 			// contextMenu
 			// 
@@ -86,7 +50,7 @@
             this.toolStripMenuItem1,
             this.mnuFindOccurrences});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(167, 120);
+			this.contextMenu.Size = new System.Drawing.Size(167, 98);
 			this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.mnuActions_Opening);
 			// 
 			// mnuAdd
@@ -123,6 +87,42 @@
 			this.mnuFindOccurrences.Size = new System.Drawing.Size(166, 22);
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
+			// 
+			// lstLabels
+			// 
+			this.lstLabels.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colFunctionLabel,
+            this.colFunctionAddress,
+            this.colMemoryAddress});
+			this.lstLabels.ContextMenuStrip = this.contextMenu;
+			this.lstLabels.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lstLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lstLabels.FullRowSelect = true;
+			this.lstLabels.GridLines = true;
+			this.lstLabels.HideSelection = false;
+			this.lstLabels.Location = new System.Drawing.Point(0, 0);
+			this.lstLabels.Name = "lstLabels";
+			this.lstLabels.Size = new System.Drawing.Size(275, 112);
+			this.lstLabels.TabIndex = 2;
+			this.lstLabels.UseCompatibleStateImageBehavior = false;
+			this.lstLabels.View = System.Windows.Forms.View.Details;
+			this.lstLabels.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstLabels_ColumnClick);
+			this.lstLabels.DoubleClick += new System.EventHandler(this.lstLabels_DoubleClick);
+			// 
+			// colFunctionLabel
+			// 
+			this.colFunctionLabel.Text = "Label";
+			this.colFunctionLabel.Width = 136;
+			// 
+			// colFunctionAddress
+			// 
+			this.colFunctionAddress.Text = "Cpu Addr";
+			this.colFunctionAddress.Width = 57;
+			// 
+			// colMemoryAddress
+			// 
+			this.colMemoryAddress.Text = "ROM Addr.";
+			this.colMemoryAddress.Width = 84;
 			// 
 			// ctrlLabelList
 			// 

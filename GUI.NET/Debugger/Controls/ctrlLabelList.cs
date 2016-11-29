@@ -17,9 +17,30 @@ namespace Mesen.GUI.Debugger.Controls
 		public event EventHandler OnLabelSelected;
 		private List<ListViewItem> _listItems = new List<ListViewItem>();
 
+		private class LabelComparer : IComparer
+		{
+			private int _columnIndex;
+			private bool _sortOrder;
+			public LabelComparer(int columnIndex, bool sortOrder)
+			{
+				_columnIndex = columnIndex;
+				_sortOrder = sortOrder;
+			}
+
+			public int Compare(object x, object y)
+			{
+				if(_sortOrder) {
+					return String.Compare(((ListViewItem)y).SubItems[_columnIndex].Text, ((ListViewItem)x).SubItems[_columnIndex].Text);
+				} else {
+					return String.Compare(((ListViewItem)x).SubItems[_columnIndex].Text, ((ListViewItem)y).SubItems[_columnIndex].Text);
+				}
+			}
+		}
+
 		public ctrlLabelList()
 		{
 			InitializeComponent();
+			lstLabels.ListViewItemSorter = new LabelComparer(0, false);
 		}
 
 		public static void EditLabel(UInt32 address, AddressType type)
@@ -85,7 +106,16 @@ namespace Mesen.GUI.Debugger.Controls
 						item.ForeColor = Color.Gray;
 						item.Font = new Font(item.Font, FontStyle.Italic);
 					}
-					item.SubItems.Add("$" + label.Address.ToString("X4"));
+					string absAddress = string.Empty;
+					switch(label.AddressType) {
+						case AddressType.InternalRam: absAddress += "RAM: "; break;
+						case AddressType.PrgRom: absAddress += "PRG: "; break;
+						case AddressType.Register: absAddress += "REG: "; break;
+						case AddressType.SaveRam: absAddress += "SRAM: "; break;
+						case AddressType.WorkRam: absAddress += "WRAM: "; break;
+					}
+					absAddress += "$" + label.Address.ToString("X4");
+					item.SubItems.Add(absAddress);
 					item.SubItems[1].Tag = label;
 
 					item.Tag = relativeAddress;
@@ -145,6 +175,17 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuFindOccurrences_Click(object sender, EventArgs e)
 		{
 			OnFindOccurrence?.Invoke(lstLabels.SelectedItems[0].SubItems[1].Tag, null);
+		}
+
+		int _prevSortColumn = 0;
+		bool _descSort = false;
+		private void lstLabels_ColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			if(_prevSortColumn == e.Column) {
+				_descSort = !_descSort;
+			}
+			lstLabels.ListViewItemSorter = new LabelComparer(e.Column, _descSort);
+			_prevSortColumn = e.Column;
 		}
 	}
 }
