@@ -55,7 +55,7 @@ namespace Mesen.GUI.Debugger
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
 				this.GetData();
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
-			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuFrameDone) {
+			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame) {
 				if(_autoRefreshCounter % 4 == 0) {
 					this.GetData();
 				}
@@ -121,6 +121,11 @@ namespace Mesen.GUI.Debugger
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._selectedTab = this.tabMain.SelectedTab;
+			if(InteropEmu.DebugIsExecutionStopped()) {
+				//Refresh data when changing tabs when not running
+				this.GetData();
+				this.RefreshViewers();
+			}
 		}
 	}
 }

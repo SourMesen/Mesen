@@ -22,8 +22,12 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlChrViewer()
 		{
 			InitializeComponent();
-			this.cboPalette.SelectedIndex = 0;
-			this.cboHighlightType.SelectedIndex = 0;
+
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				this.cboPalette.SelectedIndex = 0;
+				this.cboHighlightType.SelectedIndex = 0;
+			}
 		}
 
 		public void GetData()

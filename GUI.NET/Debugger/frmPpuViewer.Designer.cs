@@ -228,13 +228,13 @@
 			this.lblShowFrameAt.AutoSize = true;
 			this.lblShowFrameAt.Location = new System.Drawing.Point(3, 6);
 			this.lblShowFrameAt.Name = "lblShowFrameAt";
-			this.lblShowFrameAt.Size = new System.Drawing.Size(137, 13);
+			this.lblShowFrameAt.Size = new System.Drawing.Size(266, 13);
 			this.lblShowFrameAt.TabIndex = 0;
-			this.lblShowFrameAt.Text = "Show PPU data at scanline";
+			this.lblShowFrameAt.Text = "When emulation is running, show PPU data at scanline";
 			// 
 			// nudScanline
 			// 
-			this.nudScanline.Location = new System.Drawing.Point(146, 3);
+			this.nudScanline.Location = new System.Drawing.Point(275, 3);
 			this.nudScanline.Maximum = new decimal(new int[] {
             260,
             0,
@@ -259,7 +259,7 @@
 			// 
 			this.lblCycle.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblCycle.AutoSize = true;
-			this.lblCycle.Location = new System.Drawing.Point(204, 6);
+			this.lblCycle.Location = new System.Drawing.Point(333, 6);
 			this.lblCycle.Name = "lblCycle";
 			this.lblCycle.Size = new System.Drawing.Size(53, 13);
 			this.lblCycle.TabIndex = 5;
@@ -267,7 +267,7 @@
 			// 
 			// nudCycle
 			// 
-			this.nudCycle.Location = new System.Drawing.Point(263, 3);
+			this.nudCycle.Location = new System.Drawing.Point(392, 3);
 			this.nudCycle.Maximum = new decimal(new int[] {
             340,
             0,
