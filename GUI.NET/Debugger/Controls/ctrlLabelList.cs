@@ -92,11 +92,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void UpdateLabelList()
 		{
-			lstLabels.BeginUpdate();
-			lstLabels.Items.Clear();
-			foreach(CodeLabel label in LabelManager.GetLabels()) {
+			List<CodeLabel> labels = LabelManager.GetLabels();
+			List<ListViewItem> items = new List<ListViewItem>(labels.Count);
+			foreach(CodeLabel label in labels) {
 				if(label.Label.Length > 0) {
-					ListViewItem item = lstLabels.Items.Add(label.Label);
+					ListViewItem item = new ListViewItem(label.Label);
 
 					Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
 					if(relativeAddress >= 0) {
@@ -119,15 +119,17 @@ namespace Mesen.GUI.Debugger.Controls
 					item.SubItems[1].Tag = label;
 
 					item.Tag = relativeAddress;
+					items.Add(item);
 				}
 			}
+
+			lstLabels.BeginUpdate();
+			lstLabels.Items.Clear();
+			lstLabels.Items.AddRange(items.ToArray());
 			lstLabels.Sort();
 			lstLabels.EndUpdate();
 
-			_listItems = new List<ListViewItem>();
-			foreach(ListViewItem item in lstLabels.Items) {
-				_listItems.Add(item);
-			}			
+			_listItems = items;
 		}
 
 		private void lstLabels_DoubleClick(object sender, EventArgs e)
