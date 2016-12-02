@@ -59,7 +59,6 @@
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuWorkspace = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuImportLabels = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSaveWorkspace = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResetWorkspace = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,6 +124,8 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
+			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuAutoLoadDbgFiles = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuCode.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -423,8 +424,9 @@
 			// 
 			this.mnuWorkspace.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuImportLabels,
-            this.mnuSaveWorkspace,
-            this.mnuResetWorkspace});
+            this.mnuResetWorkspace,
+            this.toolStripMenuItem10,
+            this.mnuAutoLoadDbgFiles});
 			this.mnuWorkspace.Name = "mnuWorkspace";
 			this.mnuWorkspace.Size = new System.Drawing.Size(152, 22);
 			this.mnuWorkspace.Text = "Workspace";
@@ -433,24 +435,15 @@
 			// 
 			this.mnuImportLabels.Image = global::Mesen.GUI.Properties.Resources.Import;
 			this.mnuImportLabels.Name = "mnuImportLabels";
-			this.mnuImportLabels.Size = new System.Drawing.Size(152, 22);
+			this.mnuImportLabels.Size = new System.Drawing.Size(178, 22);
 			this.mnuImportLabels.Text = "Import Labels";
 			this.mnuImportLabels.Click += new System.EventHandler(this.mnuImportLabels_Click);
-			// 
-			// mnuSaveWorkspace
-			// 
-			this.mnuSaveWorkspace.Image = global::Mesen.GUI.Properties.Resources.Floppy;
-			this.mnuSaveWorkspace.Name = "mnuSaveWorkspace";
-			this.mnuSaveWorkspace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.mnuSaveWorkspace.Size = new System.Drawing.Size(152, 22);
-			this.mnuSaveWorkspace.Text = "Save";
-			this.mnuSaveWorkspace.Click += new System.EventHandler(this.mnuSaveWorkspace_Click);
 			// 
 			// mnuResetWorkspace
 			// 
 			this.mnuResetWorkspace.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuResetWorkspace.Name = "mnuResetWorkspace";
-			this.mnuResetWorkspace.Size = new System.Drawing.Size(152, 22);
+			this.mnuResetWorkspace.Size = new System.Drawing.Size(178, 22);
 			this.mnuResetWorkspace.Text = "Reset";
 			this.mnuResetWorkspace.Click += new System.EventHandler(this.mnuResetWorkspace_Click);
 			// 
@@ -982,6 +975,19 @@
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
+			// toolStripMenuItem10
+			// 
+			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(175, 6);
+			// 
+			// mnuAutoLoadDbgFiles
+			// 
+			this.mnuAutoLoadDbgFiles.CheckOnClick = true;
+			this.mnuAutoLoadDbgFiles.Name = "mnuAutoLoadDbgFiles";
+			this.mnuAutoLoadDbgFiles.Size = new System.Drawing.Size(178, 22);
+			this.mnuAutoLoadDbgFiles.Text = "Auto-load DBG files";
+			this.mnuAutoLoadDbgFiles.CheckedChanged += new System.EventHandler(this.mnuAutoLoadDbgFiles_CheckedChanged);
+			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1106,7 +1112,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuShowOnlyDisassembledCode;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowFunctionLabelLists;
 		private System.Windows.Forms.ToolStripMenuItem mnuWorkspace;
-		private System.Windows.Forms.ToolStripMenuItem mnuSaveWorkspace;
 		private System.Windows.Forms.ToolStripMenuItem mnuResetWorkspace;
 		private System.Windows.Forms.ToolStripMenuItem mnuImportLabels;
 		private System.Windows.Forms.ToolStripMenuItem mnuHighlightUnexecutedCode;
@@ -1115,5 +1120,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuBreakIn;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem9;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindAllOccurrences;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoLoadDbgFiles;
 	}
 }

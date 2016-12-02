@@ -101,6 +101,8 @@ namespace Mesen.GUI.Config
 		public bool FindOccurrencesMatchWholeWord = false;
 		public string FindOccurrencesLastSearch = string.Empty;
 
+		public bool AutoLoadDbgFiles = false;
+
 		public DebugInfo()
 		{
 			LeftView = new DebugViewInfo();

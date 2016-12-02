@@ -236,7 +236,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void Import(string path)
+		public void Import(string path, bool silent = false)
 		{
 			string[] fileRows = File.ReadAllLines(path);
 
@@ -257,22 +257,24 @@ namespace Mesen.GUI.Debugger
 			LabelManager.SetLabels(_romLabels.Values);
 			LabelManager.SetLabels(_ramLabels.Values);
 
-			int labelCount = _romLabels.Count + _ramLabels.Count;
-			if(_errorCount > 0) {
-				_errorCount -= _filesNotFound.Count;
-				string message = $"Import completed with {labelCount} labels imported";
+			if(!silent) {
+				int labelCount = _romLabels.Count + _ramLabels.Count;
 				if(_errorCount > 0) {
-					message += $"and {_errorCount} errors - please file a bug report and attach the DBG file you tried to import.";
-				}
-				if(_filesNotFound.Count > 0) {
-					message += Environment.NewLine + Environment.NewLine + "The following files could not be found:";
-					foreach(string file in _filesNotFound) {
-						message += Environment.NewLine + file;
+					_errorCount -= _filesNotFound.Count;
+					string message = $"Import completed with {labelCount} labels imported";
+					if(_errorCount > 0) {
+						message += $"and {_errorCount} errors - please file a bug report and attach the DBG file you tried to import.";
 					}
+					if(_filesNotFound.Count > 0) {
+						message += Environment.NewLine + Environment.NewLine + "The following files could not be found:";
+						foreach(string file in _filesNotFound) {
+							message += Environment.NewLine + file;
+						}
+					}
+					MessageBox.Show(message, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				} else {
+					MessageBox.Show($"Import completed with {labelCount} labels imported.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
-				MessageBox.Show(message, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			} else {
-				MessageBox.Show($"Import completed with {labelCount} labels imported.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 		}
 

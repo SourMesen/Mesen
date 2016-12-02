@@ -38,6 +38,7 @@ namespace Mesen.GUI.Debugger
 			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
 
 			this.UpdateWorkspace();
+			this.AutoLoadDbgFile(true);
 
 			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
@@ -47,6 +48,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
 			this.mnuShowFunctionLabelLists.Checked = ConfigManager.Config.DebugInfo.ShowFunctionLabelLists;
 			this.mnuHighlightUnexecutedCode.Checked = ConfigManager.Config.DebugInfo.HighlightUnexecutedCode;
+			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 
 			this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
 			this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
@@ -89,6 +91,17 @@ namespace Mesen.GUI.Debugger
 
 			UpdateCdlRatios();
 			tmrCdlRatios.Start();
+		}
+
+		private void AutoLoadDbgFile(bool silent)
+		{
+			if(ConfigManager.Config.DebugInfo.AutoLoadDbgFiles) {
+				string dbgPath = Path.Combine(Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path), Path.GetFileNameWithoutExtension(ConfigManager.Config.RecentFiles[0].RomName) + ".dbg");
+				if(File.Exists(dbgPath)) {
+					Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
+					dbgImporter.Import(dbgPath, silent);
+				}
+			}
 		}
 
 		private void SaveWorkspace()
@@ -164,6 +177,7 @@ namespace Mesen.GUI.Debugger
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					this.BeginInvoke((MethodInvoker)(() => {
 						this.UpdateWorkspace();
+						this.AutoLoadDbgFile(true);
 						UpdateDebugger();
 						BreakpointManager.SetBreakpoints();
 					}));					
@@ -600,11 +614,6 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void mnuSaveWorkspace_Click(object sender, EventArgs e)
-		{
-			SaveWorkspace();
-		}
-
 		private void mnuImportLabels_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
@@ -638,6 +647,16 @@ namespace Mesen.GUI.Debugger
 			frmFindOccurrences frm = new Debugger.frmFindOccurrences();
 			if(frm.ShowDialog() == DialogResult.OK) {
 				_lastCodeWindow.FindAllOccurrences(frm.SearchString, frm.MatchWholeWord, frm.MatchCase);
+			}
+		}
+
+		private void mnuAutoLoadDbgFiles_CheckedChanged(object sender, EventArgs e)
+		{
+			if(_debuggerInitialized) {
+				ConfigManager.Config.DebugInfo.AutoLoadDbgFiles = mnuAutoLoadDbgFiles.Checked;
+				ConfigManager.ApplyChanges();
+
+				AutoLoadDbgFile(false);
 			}
 		}
 	}
