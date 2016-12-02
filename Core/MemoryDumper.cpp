@@ -132,8 +132,8 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 	} else {
 		int bank = bankIndex - 2;
 		uint32_t baseAddr = bank * 0x1000;
-		bool useChrRam = _mapper->GetChrSize(false) == 0;
-		uint32_t chrSize = _mapper->GetChrSize(useChrRam);
+		bool useChrRam = _mapper->GetMemorySize(DebugMemoryType::ChrRam) > 0;
+		uint32_t chrSize = _mapper->GetMemorySize(useChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom);
 		vector<uint8_t> chrData(chrSize, 0);
 		_mapper->CopyMemory(useChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom, chrData.data());
 

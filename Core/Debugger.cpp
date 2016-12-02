@@ -11,6 +11,8 @@
 #include "CodeDataLogger.h"
 #include "ExpressionEvaluator.h"
 #include "LabelManager.h"
+#include "MemoryDumper.h"
+#include "MemoryAccessCounter.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
@@ -25,9 +27,10 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_mapper = mapper;
 
 	_labelManager.reset(new LabelManager(_mapper));
-	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPrgRom(), mapper->GetPrgSize(), mapper->GetWorkRam(), mapper->GetPrgSize(true), this));
-	_codeDataLogger.reset(new CodeDataLogger(mapper->GetPrgSize(), mapper->GetChrSize()));
+	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPrgRom(), mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetWorkRam(), mapper->GetMemorySize(DebugMemoryType::WorkRam), this));
+	_codeDataLogger.reset(new CodeDataLogger(mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetMemorySize(DebugMemoryType::ChrRom)));
 	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger));
+	_memoryAccessCounter.reset(new MemoryAccessCounter());
 
 	_stepOut = false;
 	_stepCount = -1;
@@ -100,13 +103,13 @@ void Debugger::BreakIfDebugging()
 bool Debugger::LoadCdlFile(string cdlFilepath)
 {
 	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {
-		for(int i = 0, len = _mapper->GetPrgSize(); i < len; i++) {
+		for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 			if(_codeDataLogger->IsCode(i)) {
 				i = _disassembler->BuildCache(i, -1, 0xFFFF, _codeDataLogger->IsSubEntryPoint(i)) - 1;
 			}
 		}
 
-		for(int i = 0, len = _mapper->GetPrgSize(); i < len; i++) {
+		for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 			if(_codeDataLogger->IsSubEntryPoint(i)) {
 				_functionEntryPoints.emplace(i);
 			}
@@ -314,8 +317,14 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 
 	//Check if a breakpoint has been hit and freeze execution if one has
 	bool breakDone = false;
-	int32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
-	int32_t absoluteRamAddr = _mapper->ToAbsoluteWorkRamAddress(addr);
+	AddressTypeInfo addressInfo;
+	GetAbsoluteAddressAndType(addr, &addressInfo);
+	int32_t absoluteAddr = addressInfo.Type == AddressType::PrgRom ? addressInfo.Address : -1;
+	int32_t absoluteRamAddr = addressInfo.Type == AddressType::WorkRam ? addressInfo.Address : -1;
+
+	if(addressInfo.Address >= 0 && type != MemoryOperationType::DummyRead) {
+		_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type);
+	}
 
 	if(absoluteAddr >= 0) {
 		if(type == MemoryOperationType::ExecOperand) {
@@ -633,6 +642,11 @@ shared_ptr<MemoryDumper> Debugger::GetMemoryDumper()
 	return _memoryDumper;
 }
 
+shared_ptr<MemoryAccessCounter> Debugger::GetMemoryAccessCounter()
+{
+	return _memoryAccessCounter;
+}
+
 bool Debugger::IsExecutionStopped()
 {
 	return _executionStopped;
@@ -675,4 +689,9 @@ void Debugger::SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle)
 {
 	_ppuViewerScanline = scanline;
 	_ppuViewerCycle = cycle;
+}
+
+int Debugger::GetMemorySize(DebugMemoryType memoryType)
+{
+	return _mapper->GetMemorySize(memoryType);
 }

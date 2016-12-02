@@ -77,7 +77,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			get
 			{
-				return 135 + this.ColumnCount * 30;
+				return 145 + this.ColumnCount * 30;
 			}
 		}
 

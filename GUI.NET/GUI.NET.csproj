@@ -290,6 +290,12 @@
     <Compile Include="Debugger\Controls\ctrlFunctionList.Designer.cs">
       <DependentUpon>ctrlFunctionList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlMemoryAccessCounters.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlMemoryAccessCounters.Designer.cs">
+      <DependentUpon>ctrlMemoryAccessCounters.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlMemoryMapping.cs" />
     <Compile Include="Debugger\Controls\ctrlPaletteViewer.cs">
       <SubType>UserControl</SubType>
@@ -615,6 +621,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlFunctionList.resx">
       <DependentUpon>ctrlFunctionList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlMemoryAccessCounters.resx">
+      <DependentUpon>ctrlMemoryAccessCounters.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlPaletteViewer.resx">
       <DependentUpon>ctrlPaletteViewer.cs</DependentUpon>

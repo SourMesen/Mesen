@@ -13,7 +13,6 @@ using std::unordered_set;
 #include "TraceLogger.h"
 #include "../Utilities/SimpleLock.h"
 #include "CodeDataLogger.h"
-#include "MemoryDumper.h"
 #include "DebuggerTypes.h"
 
 class CPU;
@@ -22,6 +21,8 @@ class MemoryManager;
 class Console;
 class Disassembler;
 class LabelManager;
+class MemoryDumper;
+class MemoryAccessCounter;
 
 class Debugger
 {
@@ -33,6 +34,7 @@ private:
 	unique_ptr<Disassembler> _disassembler;
 	shared_ptr<MemoryDumper> _memoryDumper;
 	shared_ptr<CodeDataLogger> _codeDataLogger;
+	shared_ptr<MemoryAccessCounter> _memoryAccessCounter;
 
 	shared_ptr<Console> _console;
 	shared_ptr<CPU> _cpu;
@@ -145,6 +147,7 @@ public:
 	void StopTraceLogger();
 
 	shared_ptr<MemoryDumper> GetMemoryDumper();
+	shared_ptr<MemoryAccessCounter> GetMemoryAccessCounter();
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
 	
@@ -156,4 +159,6 @@ public:
 
 	static bool IsEnabled();
 	static void BreakIfDebugging();
+
+	int GetMemorySize(DebugMemoryType memoryType);
 };

@@ -16,7 +16,6 @@ namespace Mesen.GUI.Debugger
 	public partial class frmMemoryViewer : BaseForm
 	{
 		private InteropEmu.NotificationListener _notifListener;
-		private int _autoRefreshCounter = 0;
 		private DebugMemoryType _memoryType = DebugMemoryType.CpuMemory;
 
 		public frmMemoryViewer()
@@ -44,13 +43,6 @@ namespace Mesen.GUI.Debugger
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshData()));
-			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuFrameDone) {
-				this.BeginInvoke((MethodInvoker)(() => {
-					if(_autoRefreshCounter % 4 == 0 && this.mnuAutoRefresh.Checked) {
-						this.RefreshData();
-					}
-					_autoRefreshCounter++;
-				}));
 			}
 		}
 		
@@ -69,7 +61,11 @@ namespace Mesen.GUI.Debugger
 
 		private void RefreshData()
 		{
-			this.ctrlHexViewer.Data = InteropEmu.DebugGetMemoryState((DebugMemoryType)this.cboMemoryType.SelectedIndex);
+			if(this.tabMain.SelectedTab == this.tpgAccessCounters) {
+				this.ctrlMemoryAccessCounters.RefreshData();
+			} else {
+				this.ctrlHexViewer.Data = InteropEmu.DebugGetMemoryState((DebugMemoryType)this.cboMemoryType.SelectedIndex);
+			}
 		}
 
 		private void ctrlHexViewer_ColumnCountChanged(object sender, EventArgs e)
@@ -171,6 +167,18 @@ namespace Mesen.GUI.Debugger
 			if(sfd.ShowDialog() == DialogResult.OK) {
 				File.WriteAllBytes(sfd.FileName, this.ctrlHexViewer.Data);
 			}
+		}
+
+		private void tmrRefresh_Tick(object sender, EventArgs e)
+		{
+			if(this.mnuAutoRefresh.Checked) {
+				this.RefreshData();
+			}
+		}
+
+		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			this.tmrRefresh.Interval = this.tabMain.SelectedTab == this.tpgMemoryViewer ? 100 : 500;
 		}
 	}
 }

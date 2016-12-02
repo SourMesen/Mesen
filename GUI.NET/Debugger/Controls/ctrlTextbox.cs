@@ -97,11 +97,13 @@ namespace Mesen.GUI.Debugger
 
 				UpdateHorizontalScrollWidth();
 
-				_lineNumbers = new int[_contents.Length];
-				_lineNumberIndex.Clear();
-				for(int i = _contents.Length - 1; i >=0; i--) {
-					_lineNumbers[i] = i;
-					_lineNumberIndex[i] = i;
+				if(_lineNumbers.Length != _contents.Length) {
+					_lineNumbers = new int[_contents.Length];
+					_lineNumberIndex.Clear();
+					for(int i = _contents.Length - 1; i >=0; i--) {
+						_lineNumbers[i] = i;
+						_lineNumberIndex[i] = i;
+					}
 				}
 				this.Invalidate();
 			}

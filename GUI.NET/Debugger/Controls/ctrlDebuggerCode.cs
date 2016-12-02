@@ -131,7 +131,7 @@ namespace Mesen.GUI.Debugger
 						}
 
 						lineNumbers.Add(relativeAddress);
-						lineNumberNotes.Add(lineParts[2].Trim('0'));
+						lineNumberNotes.Add(lineParts[2].TrimStart('0'));
 						codeNotes.Add(lineParts[3]);
 						codeLines.Add(lineParts[4]);
 					}

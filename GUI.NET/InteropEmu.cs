@@ -179,6 +179,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(UInt32 addr);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeAddress(UInt32 absoluteAddr, AddressType type);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetAbsoluteAddress(UInt32 relativeAddr);
+		[DllImport(DLLPath)] public static extern Int32 DebugGetMemorySize(DebugMemoryType type);
 		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, ref AddressTypeInfo addressTypeInfo);
 		[DllImport(DLLPath)] public static extern void DebugSetPpuViewerScanlineCycle(Int32 scanline, Int32 cycle);
 
@@ -187,12 +188,13 @@ namespace Mesen.GUI
 		
 		[DllImport(DLLPath)] public static extern void DebugStartTraceLogger(TraceLoggerOptions options);
 		[DllImport(DLLPath)] public static extern void DebugStopTraceLogger();
-		
+
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugLoadCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugSaveCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
 		[DllImport(DLLPath)] public static extern void DebugGetCdlRatios(ref CdlRatios ratios);
 		[DllImport(DLLPath)] public static extern void DebugResetCdlLog();
-
+		[DllImport(DLLPath)] public static extern void DebugResetMemoryAccessCounts();
+		
 		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper();
 		public static string DebugGetCode() { return PtrToStringUtf8(InteropEmu.DebugGetCodeWrapper()); }
 
@@ -296,6 +298,31 @@ namespace Mesen.GUI
 			}
 
 			return frameData;
+		}
+
+		[DllImport(DLLPath, EntryPoint= "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(AddressType type, MemoryOperationType operationType, IntPtr counts, [MarshalAs(UnmanagedType.I1)]bool forUninitReads);
+		public static Int32[] DebugGetMemoryAccessCounts(AddressType type, MemoryOperationType operationType, bool forUninitReads)
+		{
+			int size = 0;
+			switch(type) {
+				case AddressType.InternalRam: size = 0x2000; break;
+				case AddressType.PrgRom: size = InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom); break;
+				case AddressType.WorkRam: size = InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam); break;
+				case AddressType.SaveRam: size = InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam); break;
+			}
+
+			Int32[] counts = new Int32[size];
+
+			if(size > 0) {
+				GCHandle hCounts = GCHandle.Alloc(counts, GCHandleType.Pinned);
+				try {
+					InteropEmu.DebugGetMemoryAccessCountsWrapper(type, operationType, hCounts.AddrOfPinnedObject(), forUninitReads);
+				} finally {
+					hCounts.Free();
+				}
+			}
+
+			return counts;
 		}
 
 		[DllImport(DLLPath, EntryPoint="DebugGetCallstack")] private static extern void DebugGetCallstackWrapper(IntPtr callstackAbsolute, IntPtr callstackRelative);
@@ -1076,6 +1103,14 @@ namespace Mesen.GUI
 		WorkRam = 2,
 		SaveRam = 3,
 		Register = 4
+	}
+
+	public enum MemoryOperationType
+	{
+		//Note: Not identical to the C++ enum
+		Read = 0,
+		Write = 1,
+		Exec = 2,
 	}
 
 	public struct AddressTypeInfo

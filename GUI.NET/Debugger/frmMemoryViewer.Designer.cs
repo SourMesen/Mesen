@@ -31,6 +31,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.ctrlHexViewer = new Mesen.GUI.Debugger.Controls.ctrlHexViewer();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblViewMemoryType = new System.Windows.Forms.Label();
@@ -57,17 +58,25 @@
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.btnImport = new System.Windows.Forms.ToolStripButton();
 			this.btnExport = new System.Windows.Forms.ToolStripButton();
+			this.tabMain = new System.Windows.Forms.TabControl();
+			this.tpgMemoryViewer = new System.Windows.Forms.TabPage();
+			this.tpgAccessCounters = new System.Windows.Forms.TabPage();
+			this.ctrlMemoryAccessCounters = new Mesen.GUI.Debugger.Controls.ctrlMemoryAccessCounters();
+			this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
+			this.tabMain.SuspendLayout();
+			this.tpgMemoryViewer.SuspendLayout();
+			this.tpgAccessCounters.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ctrlHexViewer
 			// 
 			this.ctrlHexViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlHexViewer.Location = new System.Drawing.Point(0, 49);
+			this.ctrlHexViewer.Location = new System.Drawing.Point(3, 28);
 			this.ctrlHexViewer.Name = "ctrlHexViewer";
-			this.ctrlHexViewer.Size = new System.Drawing.Size(461, 378);
+			this.ctrlHexViewer.Size = new System.Drawing.Size(513, 346);
 			this.ctrlHexViewer.TabIndex = 0;
 			this.ctrlHexViewer.ColumnCountChanged += new System.EventHandler(this.ctrlHexViewer_ColumnCountChanged);
 			// 
@@ -75,7 +84,7 @@
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.lblViewMemoryType);
 			this.flowLayoutPanel1.Controls.Add(this.cboMemoryType);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 49);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(6, 31);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(167, 27);
 			this.flowLayoutPanel1.TabIndex = 1;
@@ -120,7 +129,7 @@
             this.toolStripMenuItem1});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(461, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(527, 24);
 			this.menuStrip1.TabIndex = 2;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -282,9 +291,9 @@
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnImport,
             this.btnExport});
-			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+			this.toolStrip1.Location = new System.Drawing.Point(3, 3);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(461, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(513, 25);
 			this.toolStrip1.TabIndex = 3;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -306,17 +315,64 @@
 			this.btnExport.Text = "Export";
 			this.btnExport.Click += new System.EventHandler(this.mnuExport_Click);
 			// 
+			// tabMain
+			// 
+			this.tabMain.Controls.Add(this.tpgMemoryViewer);
+			this.tabMain.Controls.Add(this.tpgAccessCounters);
+			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabMain.Location = new System.Drawing.Point(0, 24);
+			this.tabMain.Name = "tabMain";
+			this.tabMain.SelectedIndex = 0;
+			this.tabMain.Size = new System.Drawing.Size(527, 403);
+			this.tabMain.TabIndex = 4;
+			this.tabMain.SelectedIndexChanged += new System.EventHandler(this.tabMain_SelectedIndexChanged);
+			// 
+			// tpgMemoryViewer
+			// 
+			this.tpgMemoryViewer.Controls.Add(this.flowLayoutPanel1);
+			this.tpgMemoryViewer.Controls.Add(this.ctrlHexViewer);
+			this.tpgMemoryViewer.Controls.Add(this.toolStrip1);
+			this.tpgMemoryViewer.Location = new System.Drawing.Point(4, 22);
+			this.tpgMemoryViewer.Name = "tpgMemoryViewer";
+			this.tpgMemoryViewer.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgMemoryViewer.Size = new System.Drawing.Size(519, 377);
+			this.tpgMemoryViewer.TabIndex = 0;
+			this.tpgMemoryViewer.Text = "Memory Viewer";
+			this.tpgMemoryViewer.UseVisualStyleBackColor = true;
+			// 
+			// tpgAccessCounters
+			// 
+			this.tpgAccessCounters.Controls.Add(this.ctrlMemoryAccessCounters);
+			this.tpgAccessCounters.Location = new System.Drawing.Point(4, 22);
+			this.tpgAccessCounters.Name = "tpgAccessCounters";
+			this.tpgAccessCounters.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgAccessCounters.Size = new System.Drawing.Size(519, 377);
+			this.tpgAccessCounters.TabIndex = 1;
+			this.tpgAccessCounters.Text = "Access Counters";
+			this.tpgAccessCounters.UseVisualStyleBackColor = true;
+			// 
+			// ctrlMemoryAccessCounters
+			// 
+			this.ctrlMemoryAccessCounters.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlMemoryAccessCounters.Location = new System.Drawing.Point(3, 3);
+			this.ctrlMemoryAccessCounters.Name = "ctrlMemoryAccessCounters";
+			this.ctrlMemoryAccessCounters.Size = new System.Drawing.Size(513, 371);
+			this.ctrlMemoryAccessCounters.TabIndex = 0;
+			// 
+			// tmrRefresh
+			// 
+			this.tmrRefresh.Enabled = true;
+			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
+			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(461, 427);
-			this.Controls.Add(this.flowLayoutPanel1);
-			this.Controls.Add(this.ctrlHexViewer);
-			this.Controls.Add(this.toolStrip1);
+			this.ClientSize = new System.Drawing.Size(527, 427);
+			this.Controls.Add(this.tabMain);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
-			this.MinimumSize = new System.Drawing.Size(477, 465);
+			this.MinimumSize = new System.Drawing.Size(543, 465);
 			this.Name = "frmMemoryViewer";
 			this.Text = "Memory Viewer";
 			this.flowLayoutPanel1.ResumeLayout(false);
@@ -325,6 +381,10 @@
 			this.menuStrip1.PerformLayout();
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
+			this.tabMain.ResumeLayout(false);
+			this.tpgMemoryViewer.ResumeLayout(false);
+			this.tpgMemoryViewer.PerformLayout();
+			this.tpgAccessCounters.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -358,5 +418,10 @@
 		private System.Windows.Forms.ToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripButton btnImport;
 		private System.Windows.Forms.ToolStripButton btnExport;
+		private System.Windows.Forms.TabControl tabMain;
+		private System.Windows.Forms.TabPage tpgMemoryViewer;
+		private System.Windows.Forms.TabPage tpgAccessCounters;
+		private Controls.ctrlMemoryAccessCounters ctrlMemoryAccessCounters;
+		private System.Windows.Forms.Timer tmrRefresh;
 	}
 }

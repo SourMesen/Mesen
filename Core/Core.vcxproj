@@ -437,6 +437,7 @@
     <ClInclude Include="DaouInfosys.h" />
     <ClInclude Include="DebuggerTypes.h" />
     <ClInclude Include="LabelManager.h" />
+    <ClInclude Include="MemoryAccessCounter.h" />
     <ClInclude Include="MemoryDumper.h" />
     <ClInclude Include="DebugState.h" />
     <ClInclude Include="DefaultVideoFilter.h" />
@@ -751,6 +752,7 @@
     <ClCompile Include="ControlManager.cpp" />
     <ClCompile Include="Debugger.cpp" />
     <ClCompile Include="LabelManager.cpp" />
+    <ClCompile Include="MemoryAccessCounter.cpp" />
     <ClCompile Include="MemoryDumper.cpp" />
     <ClCompile Include="DefaultVideoFilter.cpp" />
     <ClCompile Include="DeltaModulationChannel.cpp" />

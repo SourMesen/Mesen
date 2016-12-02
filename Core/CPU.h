@@ -102,7 +102,7 @@ private:
 
 	void DummyRead()
 	{
-		MemoryRead(_state.PC, MemoryOperationType::Read);
+		MemoryRead(_state.PC, MemoryOperationType::DummyRead);
 	}
 
 	uint8_t ReadByte()
@@ -166,7 +166,6 @@ private:
 			IncCycleCount();
 		}
 		_cpuWrite = false;
-
 	}
 
 	uint8_t MemoryRead(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
@@ -252,12 +251,12 @@ private:
 	uint8_t GetZeroAddr() { return ReadByte(); }
 	uint8_t GetZeroXAddr() { 
 		uint8_t value = ReadByte();
-		MemoryRead(value); //Dummy read
+		MemoryRead(value, MemoryOperationType::DummyRead); //Dummy read
 		return value + X();
 	}
 	uint8_t GetZeroYAddr() { 
 		uint8_t value = ReadByte();
-		MemoryRead(value); //Dummy read
+		MemoryRead(value, MemoryOperationType::DummyRead); //Dummy read
 		return value + Y();
 	}
 	uint16_t GetAbsAddr() { return ReadWord(); }
@@ -268,7 +267,7 @@ private:
 
 		if(pageCrossed || dummyRead) {
 			//Dummy read done by the processor (only when page is crossed for READ instructions)
-			MemoryRead(baseAddr + X() - (pageCrossed ? 0x100 : 0));
+			MemoryRead(baseAddr + X() - (pageCrossed ? 0x100 : 0), MemoryOperationType::DummyRead);
 		}
 		return baseAddr + X(); 
 	}
@@ -279,7 +278,7 @@ private:
 		
 		if(pageCrossed || dummyRead) {
 			//Dummy read done by the processor (only when page is crossed for READ instructions)
-			MemoryRead(baseAddr + Y() - (pageCrossed ? 0x100 : 0));
+			MemoryRead(baseAddr + Y() - (pageCrossed ? 0x100 : 0), MemoryOperationType::DummyRead);
 		}
 
 		return baseAddr + Y(); 
@@ -300,7 +299,7 @@ private:
 		uint8_t zero = ReadByte();
 		
 		//Dummy read
-		MemoryRead(zero);
+		MemoryRead(zero, MemoryOperationType::DummyRead);
 
 		zero += X();
 		
@@ -326,7 +325,7 @@ private:
 		bool pageCrossed = CheckPageCrossed(addr, Y());			
 		if(pageCrossed || dummyRead) {
 			//Dummy read done by the processor (only when page is crossed for READ instructions)
-			MemoryRead(addr + Y() - (pageCrossed ? 0x100 : 0));
+			MemoryRead(addr + Y() - (pageCrossed ? 0x100 : 0), MemoryOperationType::DummyRead);
 		}
 		return addr + Y();
 	}
@@ -419,7 +418,7 @@ private:
 
 		uint8_t result = value >> 1;
 		SetZeroNegativeFlags(result);
-		return value >> 1;
+		return result;
 	}
 
 	uint8_t ROL(uint8_t value) {

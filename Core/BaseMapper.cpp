@@ -5,6 +5,7 @@
 #include "../Utilities/FolderUtilities.h"
 #include "CheatManager.h"
 #include "Debugger.h"
+#include "MemoryDumper.h"
 
 void BaseMapper::WriteRegister(uint16_t addr, uint8_t value) { }
 uint8_t BaseMapper::ReadRegister(uint16_t addr) { return 0; }
@@ -570,7 +571,7 @@ void BaseMapper::ProcessNotification(ConsoleNotificationType type, void* paramet
 void BaseMapper::ApplyCheats()
 {
 	RestoreOriginalPrgRam();
-	CheatManager::ApplyPrgCodes(_prgRom, GetPrgSize());
+	CheatManager::ApplyPrgCodes(_prgRom, _prgSize);
 }
 
 void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
@@ -764,14 +765,16 @@ void BaseMapper::WriteMemory(DebugMemoryType type, uint8_t* buffer)
 	}
 }
 
-uint32_t BaseMapper::GetPrgSize(bool getWorkRamSize)
+uint32_t BaseMapper::GetMemorySize(DebugMemoryType type)
 {
-	return getWorkRamSize ? _workRamSize : _prgSize;
-}
-
-uint32_t BaseMapper::GetChrSize(bool getRamSize)
-{
-	return getRamSize ? _chrRamSize : (_onlyChrRam ? 0 : _chrRomSize);
+	switch(type) {
+		default: return 0;
+		case DebugMemoryType::ChrRom: return _chrRomSize;
+		case DebugMemoryType::ChrRam: return _chrRamSize;
+		case DebugMemoryType::SaveRam: return _saveRamSize;
+		case DebugMemoryType::PrgRom: return _prgSize;
+		case DebugMemoryType::WorkRam: return _workRamSize;
+	}	
 }
 
 int32_t BaseMapper::ToAbsoluteAddress(uint16_t addr)

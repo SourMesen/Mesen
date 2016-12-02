@@ -228,8 +228,9 @@ public:
 	CartridgeState GetState();
 	uint8_t* GetPrgRom();
 	uint8_t* GetWorkRam();
-	uint32_t GetPrgSize(bool getWorkRamSize = false);
-	uint32_t GetChrSize(bool getRamSize = false);
+	
+	uint32_t GetMemorySize(DebugMemoryType type);
+
 	uint32_t CopyMemory(DebugMemoryType type, uint8_t* buffer);
 	void WriteMemory(DebugMemoryType type, uint8_t* buffer);
 	int32_t ToAbsoluteAddress(uint16_t addr);

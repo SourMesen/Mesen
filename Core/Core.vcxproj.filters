@@ -1096,6 +1096,9 @@
     <ClInclude Include="DebuggerTypes.h">
       <Filter>Debugger</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryAccessCounter.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1276,6 +1279,9 @@
       <Filter>Debugger</Filter>
     </ClCompile>
     <ClCompile Include="LabelManager.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryAccessCounter.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>
