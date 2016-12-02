@@ -96,6 +96,10 @@ namespace Mesen.GUI.Config
 		public bool BreakInPpuCycles = false;
 
 		public bool HighlightUnexecutedCode = true;
+		
+		public bool FindOccurrencesMatchCase = false;
+		public bool FindOccurrencesMatchWholeWord = false;
+		public string FindOccurrencesLastSearch = string.Empty;
 
 		public DebugInfo()
 		{

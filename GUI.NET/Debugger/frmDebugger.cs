@@ -618,18 +618,26 @@ namespace Mesen.GUI.Debugger
 		private void ctrlLabelList_OnFindOccurrence(object sender, EventArgs e)
 		{
 			CodeLabel label = sender as CodeLabel;
-			_lastCodeWindow.FindAllOccurrences(label.Label);
+			_lastCodeWindow.FindAllOccurrences(label.Label, true, true);
 		}
 
 		private void ctrlFunctionList_OnFindOccurrence(object sender, EventArgs e)
 		{
-			_lastCodeWindow.FindAllOccurrences(sender as string);
+			_lastCodeWindow.FindAllOccurrences(sender as string, true, true);
 		}
 
 		private void mnuBreakIn_Click(object sender, EventArgs e)
 		{
 			using(frmBreakIn frm = new frmBreakIn()) {
 				frm.ShowDialog();
+			}
+		}
+
+		private void mnuFindAllOccurrences_Click(object sender, EventArgs e)
+		{
+			frmFindOccurrences frm = new Debugger.frmFindOccurrences();
+			if(frm.ShowDialog() == DialogResult.OK) {
+				_lastCodeWindow.FindAllOccurrences(frm.SearchString, frm.MatchWholeWord, frm.MatchCase);
 			}
 		}
 	}

@@ -371,9 +371,9 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public List<Tuple<int, int, string>> FindAllOccurrences(string text)
+		public List<Tuple<int, int, string>> FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
 		{
-			return this.ctrlTextbox.FindAllOccurrences(text);
+			return this.ctrlTextbox.FindAllOccurrences(text, matchWholeWord, matchCase);
 		}
 
 		public void NavigateForward()

@@ -86,7 +86,7 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 270);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 248);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
 			// mnuShowNextStatement
@@ -293,6 +293,7 @@
 			this.lstSearchResult.TabIndex = 9;
 			this.lstSearchResult.UseCompatibleStateImageBehavior = false;
 			this.lstSearchResult.View = System.Windows.Forms.View.Details;
+			this.lstSearchResult.SizeChanged += new System.EventHandler(this.lstSearchResult_SizeChanged);
 			this.lstSearchResult.DoubleClick += new System.EventHandler(this.lstSearchResult_DoubleClick);
 			// 
 			// columnHeader1

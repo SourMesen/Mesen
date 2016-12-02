@@ -386,6 +386,12 @@
     <Compile Include="Debugger\frmBreakIn.Designer.cs">
       <DependentUpon>frmBreakIn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmFindOccurrences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmFindOccurrences.Designer.cs">
+      <DependentUpon>frmFindOccurrences.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmGoToLine.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -666,6 +672,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmBreakIn.resx">
       <DependentUpon>frmBreakIn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmFindOccurrences.resx">
+      <DependentUpon>frmFindOccurrences.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmGoToLine.resx">
       <DependentUpon>frmGoToLine.cs</DependentUpon>

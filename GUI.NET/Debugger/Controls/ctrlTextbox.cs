@@ -207,18 +207,18 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public List<Tuple<int, int, string>> FindAllOccurrences(string text)
+		public List<Tuple<int, int, string>> FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
 		{
 			List<Tuple<int, int, string>> result = new List<Tuple<int, int, string>>();
 			string regex;
-			if(text.StartsWith("$")) {
-				regex = $"[^#]+\\$\\b{text.Substring(1, text.Length - 1)}\\b";
+			if(matchWholeWord) {
+				regex = $"[^0-9a-zA-Z_#@]+{Regex.Escape(text)}[^0-9a-zA-Z_#@]+";
 			} else {
-				regex = $"\\b{text}\\b";
+				regex = Regex.Escape(text);
 			}
 
 			for(int i = 0, len = _contents.Length; i < len; i++) {
-				if(Regex.IsMatch(_contents[i], regex, RegexOptions.IgnoreCase)) {
+				if(Regex.IsMatch(_contents[i], regex, matchCase ? RegexOptions.None : RegexOptions.IgnoreCase)) {
 					string line = _contents[i].Replace("\x2", "\t").Trim();
 
 					if(line.StartsWith("__") && line.EndsWith("__") || line.StartsWith("[[") && line.EndsWith("]]")) {

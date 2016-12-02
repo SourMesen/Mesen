@@ -466,21 +466,29 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuFindOccurrences_Click(object sender, EventArgs e)
 		{
-			this.FindAllOccurrences(_lastWord);
+			this.FindAllOccurrences(_lastWord, true, true);
 		}
 
-		public void FindAllOccurrences(string text)
+		public void FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
 		{
 			this.lstSearchResult.Items.Clear();
-			foreach(Tuple<int, int, string> searchResult in this.ctrlCodeViewer.FindAllOccurrences(text)) {
+			foreach(Tuple<int, int, string> searchResult in this.ctrlCodeViewer.FindAllOccurrences(text, matchWholeWord, matchCase)) {
 				var item = this.lstSearchResult.Items.Add(searchResult.Item1.ToString("X4"));
 				item.Tag = searchResult.Item2;
 				item.SubItems.Add(searchResult.Item3);
+				item.SubItems.Add("");
 			}
 			this.lblSearchResult.Text = $"Search results for: {text} ({this.lstSearchResult.Items.Count} results)";
 			this.lstSearchResult.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 			this.lstSearchResult.Columns[0].Width += 20;
+			this.lstSearchResult.Columns[1].Width = Math.Max(this.lstSearchResult.Columns[1].Width, this.lstSearchResult.Width - this.lstSearchResult.Columns[0].Width - 4);
 			this.splitContainer.Panel2Collapsed = false;
+		}
+		
+		private void lstSearchResult_SizeChanged(object sender, EventArgs e)
+		{
+			this.lstSearchResult.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+			this.lstSearchResult.Columns[1].Width = Math.Max(this.lstSearchResult.Columns[1].Width, this.lstSearchResult.Width - this.lstSearchResult.Columns[0].Width - 4);
 		}
 
 		private void picCloseOccurrenceList_Click(object sender, EventArgs e)
