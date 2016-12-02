@@ -28,6 +28,8 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkShowPpuScrollOverlay = new System.Windows.Forms.CheckBox();
+			this.picNametable = new System.Windows.Forms.PictureBox();
 			this.grpTileInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtPaletteAddress = new System.Windows.Forms.TextBox();
@@ -41,50 +43,60 @@
 			this.lblPaletteAddress = new System.Windows.Forms.Label();
 			this.lblTile = new System.Windows.Forms.Label();
 			this.txtTileIndex = new System.Windows.Forms.TextBox();
-			this.picNametable4 = new System.Windows.Forms.PictureBox();
-			this.picNametable3 = new System.Windows.Forms.PictureBox();
-			this.picNametable2 = new System.Windows.Forms.PictureBox();
-			this.picNametable1 = new System.Windows.Forms.PictureBox();
 			this.picTile = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.grpTileInfo.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picNametable4)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picNametable3)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picNametable2)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picNametable1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.ColumnCount = 3;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.picNametable4, 1, 1);
-			this.tableLayoutPanel1.Controls.Add(this.picNametable3, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.picNametable2, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.picNametable1, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.grpTileInfo, 2, 0);
+			this.tableLayoutPanel1.Controls.Add(this.picNametable, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.grpTileInfo, 1, 0);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay, 1, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(697, 488);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(697, 486);
 			this.tableLayoutPanel1.TabIndex = 2;
+			// 
+			// chkShowPpuScrollOverlay
+			// 
+			this.chkShowPpuScrollOverlay.AutoSize = true;
+			this.chkShowPpuScrollOverlay.Location = new System.Drawing.Point(519, 233);
+			this.chkShowPpuScrollOverlay.Name = "chkShowPpuScrollOverlay";
+			this.chkShowPpuScrollOverlay.Size = new System.Drawing.Size(146, 17);
+			this.chkShowPpuScrollOverlay.TabIndex = 0;
+			this.chkShowPpuScrollOverlay.Text = "Show PPU Scroll Overlay";
+			this.chkShowPpuScrollOverlay.UseVisualStyleBackColor = true;
+			// 
+			// picNametable
+			// 
+			this.picNametable.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picNametable.Location = new System.Drawing.Point(1, 1);
+			this.picNametable.Margin = new System.Windows.Forms.Padding(1);
+			this.picNametable.Name = "picNametable";
+			this.tableLayoutPanel1.SetRowSpan(this.picNametable, 2);
+			this.picNametable.Size = new System.Drawing.Size(514, 482);
+			this.picNametable.TabIndex = 0;
+			this.picNametable.TabStop = false;
+			this.picNametable.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picNametable_MouseMove);
 			// 
 			// grpTileInfo
 			// 
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
-			this.grpTileInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpTileInfo.Location = new System.Drawing.Point(523, 3);
+			this.grpTileInfo.Location = new System.Drawing.Point(519, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.tableLayoutPanel1.SetRowSpan(this.grpTileInfo, 2);
-			this.grpTileInfo.Size = new System.Drawing.Size(171, 482);
+			this.grpTileInfo.Size = new System.Drawing.Size(175, 224);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -117,7 +129,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(165, 463);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 205);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// txtPaletteAddress
@@ -220,50 +232,6 @@
 			this.txtTileIndex.Size = new System.Drawing.Size(26, 20);
 			this.txtTileIndex.TabIndex = 7;
 			// 
-			// picNametable4
-			// 
-			this.picNametable4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picNametable4.Location = new System.Drawing.Point(261, 245);
-			this.picNametable4.Margin = new System.Windows.Forms.Padding(1);
-			this.picNametable4.Name = "picNametable4";
-			this.picNametable4.Size = new System.Drawing.Size(258, 242);
-			this.picNametable4.TabIndex = 3;
-			this.picNametable4.TabStop = false;
-			this.picNametable4.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picNametable_MouseMove);
-			// 
-			// picNametable3
-			// 
-			this.picNametable3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picNametable3.Location = new System.Drawing.Point(1, 245);
-			this.picNametable3.Margin = new System.Windows.Forms.Padding(1);
-			this.picNametable3.Name = "picNametable3";
-			this.picNametable3.Size = new System.Drawing.Size(258, 242);
-			this.picNametable3.TabIndex = 2;
-			this.picNametable3.TabStop = false;
-			this.picNametable3.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picNametable_MouseMove);
-			// 
-			// picNametable2
-			// 
-			this.picNametable2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picNametable2.Location = new System.Drawing.Point(261, 1);
-			this.picNametable2.Margin = new System.Windows.Forms.Padding(1);
-			this.picNametable2.Name = "picNametable2";
-			this.picNametable2.Size = new System.Drawing.Size(258, 242);
-			this.picNametable2.TabIndex = 1;
-			this.picNametable2.TabStop = false;
-			this.picNametable2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picNametable_MouseMove);
-			// 
-			// picNametable1
-			// 
-			this.picNametable1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picNametable1.Location = new System.Drawing.Point(1, 1);
-			this.picNametable1.Margin = new System.Windows.Forms.Padding(1);
-			this.picNametable1.Name = "picNametable1";
-			this.picNametable1.Size = new System.Drawing.Size(258, 242);
-			this.picNametable1.TabIndex = 0;
-			this.picNametable1.TabStop = false;
-			this.picNametable1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picNametable_MouseMove);
-			// 
 			// picTile
 			// 
 			this.picTile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -279,15 +247,13 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "ctrlNametableViewer";
-			this.Size = new System.Drawing.Size(697, 488);
+			this.Size = new System.Drawing.Size(697, 486);
 			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picNametable)).EndInit();
 			this.grpTileInfo.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picNametable4)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picNametable3)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picNametable2)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picNametable1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
 			this.ResumeLayout(false);
 
@@ -296,10 +262,7 @@
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.PictureBox picNametable4;
-		private System.Windows.Forms.PictureBox picNametable3;
-		private System.Windows.Forms.PictureBox picNametable2;
-		private System.Windows.Forms.PictureBox picNametable1;
+		private System.Windows.Forms.PictureBox picNametable;
 		private System.Windows.Forms.GroupBox grpTileInfo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.TextBox txtPaletteAddress;
@@ -314,5 +277,6 @@
 		private System.Windows.Forms.Label lblTile;
 		private System.Windows.Forms.TextBox txtTileIndex;
 		private System.Windows.Forms.PictureBox picTile;
+		private System.Windows.Forms.CheckBox chkShowPpuScrollOverlay;
 	}
 }

@@ -744,6 +744,12 @@ void PPU::ProcessPrerenderScanline()
 		_cycle = -1;
 		_scanline = 0;
 	} else if(_cycle >= 321 && _cycle <= 336) {
+		if(_cycle == 321) {
+			Debugger::SetLastFramePpuScroll(
+				((_state.VideoRamAddr & 0x1F) << 3) | _state.XScroll | ((_state.VideoRamAddr & 0x400) ? 0x100 : 0),
+				(((_state.VideoRamAddr & 0x3E0) >> 2) | ((_state.VideoRamAddr & 0x7000) >> 12)) + ((_state.VideoRamAddr & 0x800) ? 240 : 0)
+			);
+		}
 		LoadTileInfo();
 	} else if(_cycle == 337 || _cycle == 339) {
 		if(IsRenderingEnabled()) {

@@ -52,6 +52,7 @@
 			this.nudScanline = new System.Windows.Forms.NumericUpDown();
 			this.lblCycle = new System.Windows.Forms.Label();
 			this.nudCycle = new System.Windows.Forms.NumericUpDown();
+			this.btnReset = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgNametableViewer.SuspendLayout();
@@ -179,7 +180,7 @@
 			this.tpgSpriteViewer.Controls.Add(this.ctrlSpriteViewer);
 			this.tpgSpriteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgSpriteViewer.Name = "tpgSpriteViewer";
-			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 526);
+			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 522);
 			this.tpgSpriteViewer.TabIndex = 2;
 			this.tpgSpriteViewer.Text = "Sprite Viewer";
 			this.tpgSpriteViewer.UseVisualStyleBackColor = true;
@@ -189,7 +190,7 @@
 			this.ctrlSpriteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlSpriteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlSpriteViewer.Name = "ctrlSpriteViewer";
-			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 526);
+			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 522);
 			this.ctrlSpriteViewer.TabIndex = 0;
 			// 
 			// tpgPaletteViewer
@@ -197,7 +198,7 @@
 			this.tpgPaletteViewer.Controls.Add(this.ctrlPaletteViewer);
 			this.tpgPaletteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgPaletteViewer.Name = "tpgPaletteViewer";
-			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 526);
+			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 522);
 			this.tpgPaletteViewer.TabIndex = 3;
 			this.tpgPaletteViewer.Text = "Palette Viewer";
 			this.tpgPaletteViewer.UseVisualStyleBackColor = true;
@@ -207,7 +208,7 @@
 			this.ctrlPaletteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlPaletteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlPaletteViewer.Name = "ctrlPaletteViewer";
-			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 526);
+			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 522);
 			this.ctrlPaletteViewer.TabIndex = 0;
 			// 
 			// flowLayoutPanel1
@@ -216,17 +217,18 @@
 			this.flowLayoutPanel1.Controls.Add(this.nudScanline);
 			this.flowLayoutPanel1.Controls.Add(this.lblCycle);
 			this.flowLayoutPanel1.Controls.Add(this.nudCycle);
+			this.flowLayoutPanel1.Controls.Add(this.btnReset);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 576);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(709, 26);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(709, 30);
 			this.flowLayoutPanel1.TabIndex = 4;
 			// 
 			// lblShowFrameAt
 			// 
 			this.lblShowFrameAt.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblShowFrameAt.AutoSize = true;
-			this.lblShowFrameAt.Location = new System.Drawing.Point(3, 6);
+			this.lblShowFrameAt.Location = new System.Drawing.Point(3, 8);
 			this.lblShowFrameAt.Name = "lblShowFrameAt";
 			this.lblShowFrameAt.Size = new System.Drawing.Size(266, 13);
 			this.lblShowFrameAt.TabIndex = 0;
@@ -234,7 +236,8 @@
 			// 
 			// nudScanline
 			// 
-			this.nudScanline.Location = new System.Drawing.Point(275, 3);
+			this.nudScanline.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudScanline.Location = new System.Drawing.Point(275, 4);
 			this.nudScanline.Maximum = new decimal(new int[] {
             260,
             0,
@@ -259,7 +262,7 @@
 			// 
 			this.lblCycle.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblCycle.AutoSize = true;
-			this.lblCycle.Location = new System.Drawing.Point(333, 6);
+			this.lblCycle.Location = new System.Drawing.Point(333, 8);
 			this.lblCycle.Name = "lblCycle";
 			this.lblCycle.Size = new System.Drawing.Size(53, 13);
 			this.lblCycle.TabIndex = 5;
@@ -267,7 +270,8 @@
 			// 
 			// nudCycle
 			// 
-			this.nudCycle.Location = new System.Drawing.Point(392, 3);
+			this.nudCycle.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudCycle.Location = new System.Drawing.Point(392, 4);
 			this.nudCycle.Maximum = new decimal(new int[] {
             340,
             0,
@@ -278,11 +282,21 @@
 			this.nudCycle.TabIndex = 6;
 			this.nudCycle.ValueChanged += new System.EventHandler(this.nudScanlineCycle_ValueChanged);
 			// 
+			// btnReset
+			// 
+			this.btnReset.Location = new System.Drawing.Point(450, 3);
+			this.btnReset.Name = "btnReset";
+			this.btnReset.Size = new System.Drawing.Size(75, 23);
+			this.btnReset.TabIndex = 7;
+			this.btnReset.Text = "Reset";
+			this.btnReset.UseVisualStyleBackColor = true;
+			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+			// 
 			// frmPpuViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(709, 602);
+			this.ClientSize = new System.Drawing.Size(709, 606);
 			this.Controls.Add(this.tabMain);
 			this.Controls.Add(this.menuStrip1);
 			this.Controls.Add(this.flowLayoutPanel1);
@@ -290,7 +304,7 @@
 			this.MainMenuStrip = this.menuStrip1;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(725, 640);
+			this.MinimumSize = new System.Drawing.Size(725, 644);
 			this.Name = "frmPpuViewer";
 			this.Text = "PPU Viewer";
 			this.menuStrip1.ResumeLayout(false);
@@ -332,5 +346,6 @@
 		private System.Windows.Forms.NumericUpDown nudScanline;
 		private System.Windows.Forms.Label lblCycle;
 		private System.Windows.Forms.NumericUpDown nudCycle;
+		private System.Windows.Forms.Button btnReset;
 	}
 }

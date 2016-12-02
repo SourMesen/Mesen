@@ -36,6 +36,9 @@ namespace Mesen.GUI.Debugger
 				this._notifListener = new InteropEmu.NotificationListener();
 				this._notifListener.OnNotification += this._notifListener_OnNotification;
 
+				this.nudScanline.Value = ConfigManager.Config.DebugInfo.PpuDisplayScanline;
+				this.nudCycle.Value = ConfigManager.Config.DebugInfo.PpuDisplayCycle;
+
 				InteropEmu.DebugSetPpuViewerScanlineCycle((int)this.nudScanline.Value, (int)this.nudCycle.Value);
 
 				this.ctrlNametableViewer.GetData();
@@ -116,6 +119,9 @@ namespace Mesen.GUI.Debugger
 		private void nudScanlineCycle_ValueChanged(object sender, EventArgs e)
 		{
 			InteropEmu.DebugSetPpuViewerScanlineCycle((int)this.nudScanline.Value, (int)this.nudCycle.Value);
+			ConfigManager.Config.DebugInfo.PpuDisplayScanline = (int)this.nudScanline.Value;
+			ConfigManager.Config.DebugInfo.PpuDisplayCycle = (int)this.nudCycle.Value;
+			ConfigManager.ApplyChanges();
 		}
 
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -126,6 +132,12 @@ namespace Mesen.GUI.Debugger
 				this.GetData();
 				this.RefreshViewers();
 			}
+		}
+
+		private void btnReset_Click(object sender, EventArgs e)
+		{
+			this.nudScanline.Value = 241;
+			this.nudCycle.Value = 0;
 		}
 	}
 }

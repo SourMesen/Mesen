@@ -79,4 +79,6 @@ extern "C"
 	DllExport int32_t __stdcall DebugGetMemorySize(DebugMemoryType type) { return GetDebugger()->GetMemorySize(type); }
 	DllExport void __stdcall DebugGetMemoryAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t* counts, bool forUninitReads) { GetDebugger()->GetMemoryAccessCounter()->GetAccessCounts(memoryType, operationType, counts, forUninitReads); }
 	DllExport void __stdcall DebugResetMemoryAccessCounts() { GetDebugger()->GetMemoryAccessCounter()->ResetCounts(); }
+
+	DllExport uint32_t __stdcall DebugGetPpuScroll() { return GetDebugger()->GetPpuScroll(); }
 };

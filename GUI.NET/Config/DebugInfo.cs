@@ -77,6 +77,9 @@ namespace Mesen.GUI.Config
 
 		public bool PpuAutoRefresh = true;
 		public bool PpuPartialDraw = false;
+		public bool ShowPpuScrollOverlay = true;
+		public int PpuDisplayCycle = 0;
+		public int PpuDisplayScanline = 241;
 
 		public bool ShowEffectiveAddresses = true;
 

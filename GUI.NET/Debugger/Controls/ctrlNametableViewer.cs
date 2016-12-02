@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -20,6 +21,12 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlNametableViewer()
 		{
 			InitializeComponent();
+
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				chkShowPpuScrollOverlay.Checked = ConfigManager.Config.DebugInfo.ShowPpuScrollOverlay;
+				chkShowPpuScrollOverlay.CheckedChanged += this.chkShowScrollWindow_CheckedChanged;
+			}
 		}
 
 		public void GetData()
@@ -31,27 +38,60 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void RefreshViewer()
 		{
-			PictureBox[] nametables = new PictureBox[] { this.picNametable1, this.picNametable2, this.picNametable3, this.picNametable4 };
+			int xScroll, yScroll;
+			InteropEmu.DebugGetPpuScroll(out xScroll, out yScroll);
 
-			for(int i = 0; i < 4; i++) {
-				GCHandle handle = GCHandle.Alloc(_nametablePixelData[i], GCHandleType.Pinned);
-				try {
+			Bitmap target = new Bitmap(512, 480);
+			using(Graphics g = Graphics.FromImage(target)) {
+				for(int i = 0; i < 4; i++) {
+					GCHandle handle = GCHandle.Alloc(_nametablePixelData[i], GCHandleType.Pinned);
 					Bitmap source = new Bitmap(256, 240, 4*256, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-					Bitmap target = new Bitmap(256, 240);
-					using(Graphics g = Graphics.FromImage(target)) {
-						g.DrawImage(source, new Rectangle(0, 0, 256, 240), new Rectangle(0, 0, 256, 240), GraphicsUnit.Pixel);
+					try {
+						g.DrawImage(source, new Rectangle(i % 2 == 0 ? 0 : 256, i <= 1 ? 0 : 240, 256, 240), new Rectangle(0, 0, 256, 240), GraphicsUnit.Pixel);
+					} finally {
+						handle.Free();
 					}
-					nametables[i].Image = target;
-				} finally {
-					handle.Free();
+				}
+
+				if(chkShowPpuScrollOverlay.Checked) {
+					using(Brush brush = new SolidBrush(Color.FromArgb(75, 100, 180, 215))) {
+						g.FillRectangle(brush, xScroll, yScroll, 256, 240);
+						if(xScroll + 256 >= 512) {
+							g.FillRectangle(brush, 0, yScroll, xScroll - 256, 240);
+						}
+						if(yScroll + 240 >= 480) {
+							g.FillRectangle(brush, xScroll, 0, 256, yScroll - 240);
+						}
+						if(xScroll + 256 >= 512 && yScroll + 240 >= 480) {
+							g.FillRectangle(brush, 0, 0, xScroll - 256, yScroll - 240);
+						}
+					}
+					using(Pen pen = new Pen(Color.FromArgb(230, 150, 150, 150), 2)) {
+						g.DrawRectangle(pen, xScroll, yScroll, 256, 240);
+						if(xScroll + 256 >= 512) {
+							g.DrawRectangle(pen, 0, yScroll, xScroll - 256, 240);
+						}
+						if(yScroll + 240 >= 480) {
+							g.DrawRectangle(pen, xScroll, 0, 256, yScroll - 240);
+						}
+						if(xScroll + 256 >= 512 && yScroll + 240 >= 480) {
+							g.DrawRectangle(pen, 0, 0, xScroll - 256, yScroll - 240);
+						}
+					}
 				}
 			}
+			this.picNametable.Image = target;
 		}
 
 		private void picNametable_MouseMove(object sender, MouseEventArgs e)
 		{
-			List<PictureBox> nametables = new List<PictureBox>() { this.picNametable1, this.picNametable2, this.picNametable3, this.picNametable4 };
-			int nametableIndex = nametables.IndexOf((PictureBox)sender);
+			int nametableIndex = 0;
+			if(e.X >= 256) {
+				nametableIndex++;
+			}
+			if(e.Y >= 240) {
+				nametableIndex+=2;
+			}
 
 			int baseAddress = 0x2000 + nametableIndex * 0x400;
 
@@ -79,10 +119,16 @@ namespace Mesen.GUI.Debugger.Controls
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.DrawImage(((PictureBox)sender).Image, new Rectangle(0, 0, 64, 64), new Rectangle(tileX*8, tileY*8, 8, 8), GraphicsUnit.Pixel);
+				g.DrawImage(this.picNametable.Image, new Rectangle(0, 0, 64, 64), new Rectangle(e.X/8*8, e.Y/8*8, 8, 8), GraphicsUnit.Pixel);
 			}
 			this.picTile.Image = tile;
 		}
 
+		private void chkShowScrollWindow_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowPpuScrollOverlay = chkShowPpuScrollOverlay.Checked;
+			ConfigManager.ApplyChanges();
+			this.RefreshViewer();
+		}
 	}
 }

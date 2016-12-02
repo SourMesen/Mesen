@@ -82,6 +82,9 @@ private:
 	int32_t _ppuViewerScanline;
 	int32_t _ppuViewerCycle;
 
+	uint16_t _ppuScrollX;
+	uint16_t _ppuScrollY;
+
 private:
 	void UpdateBreakpoints();
 
@@ -154,6 +157,9 @@ public:
 	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
 	static void ProcessPpuCycle();
+
+	static void SetLastFramePpuScroll(uint16_t x, uint16_t y);
+	uint32_t GetPpuScroll();
 
 	static void ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
 

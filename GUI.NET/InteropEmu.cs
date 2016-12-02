@@ -357,6 +357,14 @@ namespace Mesen.GUI
 			return entryPoints;
 		}
 
+		[DllImport(DLLPath, EntryPoint = "DebugGetPpuScroll")] private static extern UInt32 DebugGetPpuScrollWrapper();
+		public static void DebugGetPpuScroll(out int xScroll, out int yScroll)
+		{
+			UInt32 ppuScroll = InteropEmu.DebugGetPpuScrollWrapper();
+			xScroll = (int)ppuScroll & 0xFFFF;
+			yScroll = (int)(ppuScroll >> 16) & 0xFFFF;
+		}
+
 		public static NsfHeader NsfGetHeader()
 		{
 			NsfHeader header = new NsfHeader();
