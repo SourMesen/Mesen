@@ -48,7 +48,7 @@ namespace Mesen.GUI.Debugger
 				&& (sameAddress == null || sameAddress == _originalLabel)
 				&& (_originalLabel != null || txtLabel.Text.Length > 0 || txtComment.Text.Length > 0)
 				&& !txtComment.Text.Contains('\x1') && !txtComment.Text.Contains('\x2')
-				&& (txtLabel.Text.Length == 0 || Regex.IsMatch(txtLabel.Text, "^[@_a-zA-Z]+[@_a-zA-Z0-9]*"));
+				&& (txtLabel.Text.Length == 0 || Regex.IsMatch(txtLabel.Text, "^[@_a-zA-Z]+[@_a-zA-Z0-9]*$"));
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
