@@ -821,6 +821,8 @@ int32_t BaseMapper::FromAbsoluteAddress(uint32_t addr, AddressType type)
 		case AddressType::PrgRom: ptrAddress = _prgRom; break;
 		case AddressType::WorkRam: ptrAddress = _workRam; break;
 		case AddressType::SaveRam: ptrAddress = _saveRam; break;
+		case AddressType::Register: return addr & 0xFFFF; break;
+		case AddressType::InternalRam: return addr & 0x1FFF; break;
 		default: return -1;
 	}
 	ptrAddress += addr;

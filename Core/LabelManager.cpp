@@ -108,9 +108,9 @@ int32_t LabelManager::GetLabelRelativeAddress(string label)
 			type = AddressType::WorkRam;
 		} else if((address & 0x40000000) == 0x40000000) {
 			type = AddressType::SaveRam;
-		}/* else if((address & 0x30000000) == 0x30000000) {
+		} else if((address & 0x30000000) == 0x30000000) {
 			type = AddressType::Register;
-		}*/ else {
+		} else {
 			return -1;
 		}
 		return _mapper->FromAbsoluteAddress(address & 0x0FFFFFFF, type);
