@@ -214,13 +214,24 @@ namespace Mesen.GUI.Debugger
 			_preventCloseTooltip = true;
 			_hoverLastWord = word;
 		}
+		
+		private void ctrlCodeViewer_MouseLeave(object sender, EventArgs e)
+		{
+			if(_codeTooltip != null) {
+				_codeTooltip.Close();
+				_codeTooltip = null;
+			}
+		}
 
 		private void ctrlCodeViewer_MouseMove(object sender, MouseEventArgs e)
 		{
+			//Always enable to allow F2 shortcut
+			mnuEditLabel.Enabled = true;
+
 			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 5) {
-				this.ContextMenuStrip = contextMenuMargin;
+				this.ctrlCodeViewer.ContextMenuStrip = contextMenuMargin;
 			} else {
-				this.ContextMenuStrip = contextMenuCode;
+				this.ctrlCodeViewer.ContextMenuStrip = contextMenuCode;
 			}
 
 			if(_previousLocation != e.Location) {
@@ -291,29 +302,19 @@ namespace Mesen.GUI.Debugger
 			ShowTooltip(word, values);
 		}
 
-		UInt32 _lastClickedAddress = UInt32.MaxValue;
-		string _newWatchValue = string.Empty;
-		string _lastWord = string.Empty;
-		private void ctrlCodeViewer_MouseUp(object sender, MouseEventArgs e)
+		private bool UpdateContextMenu(Point mouseLocation)
 		{
-			string word = GetWordUnderLocation(e.Location);
+			string word = GetWordUnderLocation(mouseLocation);
 			if(word.StartsWith("$") || LabelManager.GetLabel(word) != null) {
+				//Cursor is on a numeric value or label
 				_lastWord = word;
 
 				if(word.StartsWith("$")) {
-					_lastClickedAddress = UInt32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
+					_lastClickedAddress = Int32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier);
 					_newWatchValue = "[$" + _lastClickedAddress.ToString("X") + "]";
 				} else {
-					_lastClickedAddress = (UInt32)InteropEmu.DebugGetRelativeAddress(LabelManager.GetLabel(word).Address, LabelManager.GetLabel(word).AddressType);
+					_lastClickedAddress = (Int32)InteropEmu.DebugGetRelativeAddress(LabelManager.GetLabel(word).Address, LabelManager.GetLabel(word).AddressType);
 					_newWatchValue = "[" + word + "]";
-				}
-
-				if(e.Button == MouseButtons.Left) {
-					if(ModifierKeys.HasFlag(Keys.Control)) {
-						GoToLocation();
-					} else if(ModifierKeys.HasFlag(Keys.Shift)) {
-						AddWatch();
-					}
 				}
 
 				mnuGoToLocation.Enabled = true;
@@ -327,6 +328,8 @@ namespace Mesen.GUI.Debugger
 
 				mnuEditLabel.Enabled = true;
 				mnuEditLabel.Text = $"Edit Label ({word})";
+
+				return true;
 			} else {
 				mnuGoToLocation.Enabled = false;
 				mnuGoToLocation.Text = "Go to Location";
@@ -337,10 +340,10 @@ namespace Mesen.GUI.Debugger
 				mnuEditLabel.Enabled = false;
 				mnuEditLabel.Text = "Edit Label";
 
-				if(e.Location.X < this.ctrlCodeViewer.CodeMargin && ctrlCodeViewer.CurrentLine >= 0) {
-					_lastClickedAddress = (UInt32)ctrlCodeViewer.CurrentLine;
-
-					string address = $"${_lastClickedAddress.ToString("X4")}";					
+				_lastClickedAddress = ctrlCodeViewer.GetLineNumberAtPosition(mouseLocation.Y);
+				if(mouseLocation.X < this.ctrlCodeViewer.CodeMargin && _lastClickedAddress >= 0) {
+					//Cursor is in the margin, over an address label					
+					string address = $"${_lastClickedAddress.ToString("X4")}";
 					_newWatchValue = $"[{address}]";
 					_lastWord = address;
 
@@ -350,6 +353,28 @@ namespace Mesen.GUI.Debugger
 					mnuFindOccurrences.Text = $"Find Occurrences ({address})";
 					mnuEditLabel.Enabled = true;
 					mnuEditLabel.Text = $"Edit Label ({address})";
+
+					return true;
+				}
+
+				return false;
+			}
+		}
+
+		int _lastClickedAddress = Int32.MaxValue;
+		string _newWatchValue = string.Empty;
+		string _lastWord = string.Empty;
+		private void ctrlCodeViewer_MouseUp(object sender, MouseEventArgs e)
+		{
+			if(UpdateContextMenu(e.Location)) {
+				if(e.Button == MouseButtons.Left) {
+					if(ModifierKeys.HasFlag(Keys.Control)) {
+						GoToLocation();
+					} else if(ModifierKeys.HasFlag(Keys.Shift)) {
+						AddWatch();
+					} else if(ModifierKeys.HasFlag(Keys.Alt)) {
+						FindAllOccurrences(_lastWord, true, true);
+					}
 				}
 			}
 		}
@@ -481,14 +506,16 @@ namespace Mesen.GUI.Debugger
 			this.lblSearchResult.Text = $"Search results for: {text} ({this.lstSearchResult.Items.Count} results)";
 			this.lstSearchResult.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 			this.lstSearchResult.Columns[0].Width += 20;
-			this.lstSearchResult.Columns[1].Width = Math.Max(this.lstSearchResult.Columns[1].Width, this.lstSearchResult.Width - this.lstSearchResult.Columns[0].Width - 4);
+			this.lstSearchResult.Columns[1].Width = Math.Max(this.lstSearchResult.Columns[1].Width, this.lstSearchResult.Width - this.lstSearchResult.Columns[0].Width - 24);
 			this.splitContainer.Panel2Collapsed = false;
 		}
 		
 		private void lstSearchResult_SizeChanged(object sender, EventArgs e)
 		{
+			this.lstSearchResult.SizeChanged -= lstSearchResult_SizeChanged;
 			this.lstSearchResult.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-			this.lstSearchResult.Columns[1].Width = Math.Max(this.lstSearchResult.Columns[1].Width, this.lstSearchResult.Width - this.lstSearchResult.Columns[0].Width - 4);
+			this.lstSearchResult.Columns[1].Width = Math.Max(this.lstSearchResult.Columns[1].Width, this.lstSearchResult.Width - this.lstSearchResult.Columns[0].Width - 24);
+			this.lstSearchResult.SizeChanged += lstSearchResult_SizeChanged;
 		}
 
 		private void picCloseOccurrenceList_Click(object sender, EventArgs e)
@@ -535,10 +562,12 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuEditLabel_Click(object sender, EventArgs e)
 		{
-			AddressTypeInfo info = new AddressTypeInfo();
-			InteropEmu.DebugGetAbsoluteAddressAndType(_lastClickedAddress, ref info);
-			if(info.Address >= 0) {
-				ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+			if(UpdateContextMenu(_previousLocation)) {
+				AddressTypeInfo info = new AddressTypeInfo();
+				InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)_lastClickedAddress, ref info);
+				if(info.Address >= 0) {
+					ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+				}
 			}
 		}
 

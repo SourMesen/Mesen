@@ -50,7 +50,7 @@
             this.toolStripMenuItem1,
             this.mnuFindOccurrences});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(167, 98);
+			this.contextMenu.Size = new System.Drawing.Size(167, 120);
 			this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.mnuActions_Opening);
 			// 
 			// mnuAdd
@@ -64,6 +64,7 @@
 			// mnuEdit
 			// 
 			this.mnuEdit.Name = "mnuEdit";
+			this.mnuEdit.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEdit.Size = new System.Drawing.Size(166, 22);
 			this.mnuEdit.Text = "Edit";
 			this.mnuEdit.Click += new System.EventHandler(this.mnuEdit_Click);

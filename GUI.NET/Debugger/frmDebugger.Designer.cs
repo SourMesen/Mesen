@@ -33,9 +33,6 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.tmrCdlRatios = new System.Windows.Forms.Timer(this.components);
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
@@ -60,6 +57,8 @@
 			this.mnuWorkspace = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuImportLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResetWorkspace = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuAutoLoadDbgFiles = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -124,9 +123,6 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
-			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuAutoLoadDbgFiles = new System.Windows.Forms.ToolStripMenuItem();
-			this.contextMenuCode.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -143,30 +139,6 @@
 			this.menuStrip.SuspendLayout();
 			this.statusStrip.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// contextMenuCode
-			// 
-			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuShowNextStatement,
-            this.mnuSetNextStatement});
-			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 48);
-			// 
-			// mnuShowNextStatement
-			// 
-			this.mnuShowNextStatement.Name = "mnuShowNextStatement";
-			this.mnuShowNextStatement.ShortcutKeyDisplayString = "Alt+*";
-			this.mnuShowNextStatement.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Multiply)));
-			this.mnuShowNextStatement.Size = new System.Drawing.Size(258, 22);
-			this.mnuShowNextStatement.Text = "Show Next Statement";
-			// 
-			// mnuSetNextStatement
-			// 
-			this.mnuSetNextStatement.Name = "mnuSetNextStatement";
-			this.mnuSetNextStatement.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F10)));
-			this.mnuSetNextStatement.Size = new System.Drawing.Size(258, 22);
-			this.mnuSetNextStatement.Text = "Set Next Statement";
 			// 
 			// tmrCdlRatios
 			// 
@@ -216,7 +188,6 @@
 			// ctrlDebuggerCode
 			// 
 			this.ctrlDebuggerCode.Code = null;
-			this.ctrlDebuggerCode.ContextMenuStrip = this.contextMenuCode;
 			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
 			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
@@ -428,7 +399,7 @@
             this.toolStripMenuItem10,
             this.mnuAutoLoadDbgFiles});
 			this.mnuWorkspace.Name = "mnuWorkspace";
-			this.mnuWorkspace.Size = new System.Drawing.Size(152, 22);
+			this.mnuWorkspace.Size = new System.Drawing.Size(132, 22);
 			this.mnuWorkspace.Text = "Workspace";
 			// 
 			// mnuImportLabels
@@ -447,15 +418,28 @@
 			this.mnuResetWorkspace.Text = "Reset";
 			this.mnuResetWorkspace.Click += new System.EventHandler(this.mnuResetWorkspace_Click);
 			// 
+			// toolStripMenuItem10
+			// 
+			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(175, 6);
+			// 
+			// mnuAutoLoadDbgFiles
+			// 
+			this.mnuAutoLoadDbgFiles.CheckOnClick = true;
+			this.mnuAutoLoadDbgFiles.Name = "mnuAutoLoadDbgFiles";
+			this.mnuAutoLoadDbgFiles.Size = new System.Drawing.Size(178, 22);
+			this.mnuAutoLoadDbgFiles.Text = "Auto-load DBG files";
+			this.mnuAutoLoadDbgFiles.CheckedChanged += new System.EventHandler(this.mnuAutoLoadDbgFiles_CheckedChanged);
+			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(129, 6);
 			// 
 			// mnuClose
 			// 
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(152, 22);
+			this.mnuClose.Size = new System.Drawing.Size(132, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -975,19 +959,6 @@
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
-			// toolStripMenuItem10
-			// 
-			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-			this.toolStripMenuItem10.Size = new System.Drawing.Size(175, 6);
-			// 
-			// mnuAutoLoadDbgFiles
-			// 
-			this.mnuAutoLoadDbgFiles.CheckOnClick = true;
-			this.mnuAutoLoadDbgFiles.Name = "mnuAutoLoadDbgFiles";
-			this.mnuAutoLoadDbgFiles.Size = new System.Drawing.Size(178, 22);
-			this.mnuAutoLoadDbgFiles.Text = "Auto-load DBG files";
-			this.mnuAutoLoadDbgFiles.CheckedChanged += new System.EventHandler(this.mnuAutoLoadDbgFiles_CheckedChanged);
-			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1004,7 +975,6 @@
 			this.Text = "Debugger";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmDebugger_FormClosed);
 			this.Resize += new System.EventHandler(this.frmDebugger_Resize);
-			this.contextMenuCode.ResumeLayout(false);
 			this.splitContainer.Panel1.ResumeLayout(false);
 			this.splitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
@@ -1051,9 +1021,6 @@
 		private ctrlDebuggerCode ctrlDebuggerCode;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuRunOneFrame;
-		private System.Windows.Forms.ContextMenuStrip contextMenuCode;
-		private System.Windows.Forms.ToolStripMenuItem mnuShowNextStatement;
-		private System.Windows.Forms.ToolStripMenuItem mnuSetNextStatement;
 		private ctrlWatch ctrlWatch;
 		private ctrlConsoleStatus ctrlConsoleStatus;
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;

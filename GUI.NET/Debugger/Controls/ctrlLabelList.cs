@@ -152,9 +152,26 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuDelete_Click(object sender, EventArgs e)
 		{
-			for(int i = lstLabels.SelectedItems.Count - 1; i >= 0; i--) {
-				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[i].SubItems[1].Tag;
-				LabelManager.DeleteLabel(label.Address, label.AddressType, i == 0);
+			if(lstLabels.SelectedItems.Count > 0) {
+				int topIndex = lstLabels.TopItem.Index;
+				int lastSelectedIndex = lstLabels.SelectedIndices[lstLabels.SelectedIndices.Count - 1];
+				for(int i = lstLabels.SelectedItems.Count - 1; i >= 0; i--) {
+					CodeLabel label = (CodeLabel)lstLabels.SelectedItems[i].SubItems[1].Tag;
+					LabelManager.DeleteLabel(label.Address, label.AddressType, i == 0);
+				}
+				
+				//Reposition scroll bar and selected/focused item
+				if(lstLabels.Items.Count > topIndex) {
+					lstLabels.TopItem = lstLabels.Items[topIndex];
+				}
+				if(lastSelectedIndex < lstLabels.Items.Count) {
+					lstLabels.Items[lastSelectedIndex].Selected = true;
+				} else if(lstLabels.Items.Count > 0) {
+					lstLabels.Items[lstLabels.Items.Count - 1].Selected = true;
+				}
+				if(lstLabels.SelectedItems.Count > 0) {
+					lstLabels.SelectedItems[0].Focused = true;
+				}
 			}
 		}
 
@@ -170,8 +187,10 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuEdit_Click(object sender, EventArgs e)
 		{
-			CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
-			EditLabel(label.Address, label.AddressType);
+			if(lstLabels.SelectedItems.Count > 0) {
+				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
+				EditLabel(label.Address, label.AddressType);
+			}
 		}
 
 		private void mnuFindOccurrences_Click(object sender, EventArgs e)

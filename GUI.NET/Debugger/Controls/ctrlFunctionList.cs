@@ -124,11 +124,13 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuEditLabel_Click(object sender, EventArgs e)
 		{
-			CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
-			if(label != null) {
-				ctrlLabelList.EditLabel(label.Address, label.AddressType);
-			} else {
-				ctrlLabelList.EditLabel((UInt32)(Int32)lstFunctions.SelectedItems[0].SubItems[2].Tag, AddressType.PrgRom);
+			if(lstFunctions.SelectedItems.Count > 0) {
+				CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
+				if(label != null) {
+					ctrlLabelList.EditLabel(label.Address, label.AddressType);
+				} else {
+					ctrlLabelList.EditLabel((UInt32)(Int32)lstFunctions.SelectedItems[0].SubItems[2].Tag, AddressType.PrgRom);
+				}
 			}
 		}
 

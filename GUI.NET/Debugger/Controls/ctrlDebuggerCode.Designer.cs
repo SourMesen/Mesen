@@ -136,6 +136,7 @@
 			// mnuEditLabel
 			// 
 			this.mnuEditLabel.Name = "mnuEditLabel";
+			this.mnuEditLabel.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEditLabel.Size = new System.Drawing.Size(258, 22);
 			this.mnuEditLabel.Text = "Edit Label";
 			this.mnuEditLabel.Click += new System.EventHandler(this.mnuEditLabel_Click);
@@ -148,6 +149,7 @@
 			// mnuGoToLocation
 			// 
 			this.mnuGoToLocation.Name = "mnuGoToLocation";
+			this.mnuGoToLocation.ShortcutKeyDisplayString = "Ctrl+Click";
 			this.mnuGoToLocation.Size = new System.Drawing.Size(258, 22);
 			this.mnuGoToLocation.Text = "Go To Location";
 			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
@@ -155,6 +157,7 @@
 			// mnuAddToWatch
 			// 
 			this.mnuAddToWatch.Name = "mnuAddToWatch";
+			this.mnuAddToWatch.ShortcutKeyDisplayString = "Shift+Click";
 			this.mnuAddToWatch.Size = new System.Drawing.Size(258, 22);
 			this.mnuAddToWatch.Text = "Add to Watch";
 			this.mnuAddToWatch.Click += new System.EventHandler(this.mnuAddToWatch_Click);
@@ -162,6 +165,7 @@
 			// mnuFindOccurrences
 			// 
 			this.mnuFindOccurrences.Name = "mnuFindOccurrences";
+			this.mnuFindOccurrences.ShortcutKeyDisplayString = "Alt+Click";
 			this.mnuFindOccurrences.Size = new System.Drawing.Size(258, 22);
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
@@ -206,6 +210,7 @@
 			this.ctrlCodeViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDown);
 			this.ctrlCodeViewer.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDoubleClick);
 			this.ctrlCodeViewer.FontSizeChanged += new System.EventHandler(this.ctrlCodeViewer_FontSizeChanged);
+			this.ctrlCodeViewer.MouseLeave += new System.EventHandler(this.ctrlCodeViewer_MouseLeave);
 			// 
 			// contextMenuMargin
 			// 

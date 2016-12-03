@@ -87,6 +87,7 @@
 			// mnuEditLabel
 			// 
 			this.mnuEditLabel.Name = "mnuEditLabel";
+			this.mnuEditLabel.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEditLabel.Size = new System.Drawing.Size(166, 22);
 			this.mnuEditLabel.Text = "Edit Label";
 			this.mnuEditLabel.Click += new System.EventHandler(this.mnuEditLabel_Click);
