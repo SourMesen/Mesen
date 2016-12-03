@@ -679,6 +679,10 @@ namespace Mesen.GUI.Debugger
 					if(!string.IsNullOrWhiteSpace(commentString)) {
 						using(Brush commentBrush = new SolidBrush(Color.DarkGreen)) {
 							int padding = Math.Max(CommentSpacingCharCount, codeString.Length + addressString.Length);
+							if(codeString.Length == 0 && addressString.Length == 0) {
+								//Draw comment left-aligned, next to the margin when there is no code on the line
+								padding = 0;
+							}
 							g.DrawString(commentString.PadLeft(padding+commentString.Length), this.Font, commentBrush, marginLeft, positionY);
 						}
 					}
