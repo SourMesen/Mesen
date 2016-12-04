@@ -33,10 +33,16 @@
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowLineNotes = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPrgAddressReplace = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPrgAddressBelow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHidePrgAddresses = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCodeNotes = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowByteCodeOnLeft = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowByteCodeBelow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHideByteCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,6 +64,8 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picCloseOccurrenceList = new System.Windows.Forms.PictureBox();
 			this.lblSearchResult = new System.Windows.Forms.Label();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.contextMenuCode.SuspendLayout();
 			this.contextMenuMargin.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -116,32 +124,73 @@
 			// 
 			// mnuShowLineNotes
 			// 
-			this.mnuShowLineNotes.CheckOnClick = true;
+			this.mnuShowLineNotes.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuPrgAddressReplace,
+            this.mnuPrgAddressBelow,
+            this.toolStripMenuItem6,
+            this.mnuHidePrgAddresses});
 			this.mnuShowLineNotes.Name = "mnuShowLineNotes";
 			this.mnuShowLineNotes.Size = new System.Drawing.Size(258, 22);
-			this.mnuShowLineNotes.Text = "Show PRG Addresses";
+			this.mnuShowLineNotes.Text = "PRG Address Display";
 			this.mnuShowLineNotes.Click += new System.EventHandler(this.mnuShowLineNotes_Click);
+			// 
+			// mnuPrgAddressReplace
+			// 
+			this.mnuPrgAddressReplace.Name = "mnuPrgAddressReplace";
+			this.mnuPrgAddressReplace.Size = new System.Drawing.Size(184, 22);
+			this.mnuPrgAddressReplace.Text = "Replace CPU address";
+			this.mnuPrgAddressReplace.Click += new System.EventHandler(this.mnuReplaceCpuAddress_Click);
+			// 
+			// mnuPrgAddressBelow
+			// 
+			this.mnuPrgAddressBelow.Name = "mnuPrgAddressBelow";
+			this.mnuPrgAddressBelow.Size = new System.Drawing.Size(184, 22);
+			this.mnuPrgAddressBelow.Text = "Below CPU address";
+			this.mnuPrgAddressBelow.Click += new System.EventHandler(this.mnuBelowCpuAddress_Click);
+			// 
+			// mnuHidePrgAddresses
+			// 
+			this.mnuHidePrgAddresses.Name = "mnuHidePrgAddresses";
+			this.mnuHidePrgAddresses.Size = new System.Drawing.Size(184, 22);
+			this.mnuHidePrgAddresses.Text = "Hidden";
+			this.mnuHidePrgAddresses.Click += new System.EventHandler(this.mnuHidePrgAddresses_Click);
 			// 
 			// mnuShowCodeNotes
 			// 
-			this.mnuShowCodeNotes.CheckOnClick = true;
+			this.mnuShowCodeNotes.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuShowByteCodeOnLeft,
+            this.mnuShowByteCodeBelow,
+            this.toolStripMenuItem5,
+            this.mnuHideByteCode});
 			this.mnuShowCodeNotes.Name = "mnuShowCodeNotes";
 			this.mnuShowCodeNotes.Size = new System.Drawing.Size(258, 22);
-			this.mnuShowCodeNotes.Text = "Show Byte Code";
-			this.mnuShowCodeNotes.Click += new System.EventHandler(this.mnuShowCodeNotes_Click);
+			this.mnuShowCodeNotes.Text = "Byte Code Display";
+			// 
+			// mnuShowByteCodeOnLeft
+			// 
+			this.mnuShowByteCodeOnLeft.Name = "mnuShowByteCodeOnLeft";
+			this.mnuShowByteCodeOnLeft.Size = new System.Drawing.Size(152, 22);
+			this.mnuShowByteCodeOnLeft.Text = "On the left";
+			this.mnuShowByteCodeOnLeft.Click += new System.EventHandler(this.mnuShowByteCodeOnLeft_Click);
+			// 
+			// mnuShowByteCodeBelow
+			// 
+			this.mnuShowByteCodeBelow.Name = "mnuShowByteCodeBelow";
+			this.mnuShowByteCodeBelow.Size = new System.Drawing.Size(152, 22);
+			this.mnuShowByteCodeBelow.Text = "Below";
+			this.mnuShowByteCodeBelow.Click += new System.EventHandler(this.mnuShowByteCodeBelow_Click);
+			// 
+			// mnuHideByteCode
+			// 
+			this.mnuHideByteCode.Name = "mnuHideByteCode";
+			this.mnuHideByteCode.Size = new System.Drawing.Size(152, 22);
+			this.mnuHideByteCode.Text = "Hidden";
+			this.mnuHideByteCode.Click += new System.EventHandler(this.mnuHideByteCode_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
 			this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
-			// 
-			// mnuToggleBreakpoint
-			// 
-			this.mnuToggleBreakpoint.Name = "mnuToggleBreakpoint";
-			this.mnuToggleBreakpoint.ShortcutKeyDisplayString = "F9";
-			this.mnuToggleBreakpoint.Size = new System.Drawing.Size(258, 22);
-			this.mnuToggleBreakpoint.Text = "Toggle Breakpoint";
-			this.mnuToggleBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
 			// 
 			// mnuEditLabel
 			// 
@@ -150,6 +199,14 @@
 			this.mnuEditLabel.Size = new System.Drawing.Size(258, 22);
 			this.mnuEditLabel.Text = "Edit Label";
 			this.mnuEditLabel.Click += new System.EventHandler(this.mnuEditLabel_Click);
+			// 
+			// mnuToggleBreakpoint
+			// 
+			this.mnuToggleBreakpoint.Name = "mnuToggleBreakpoint";
+			this.mnuToggleBreakpoint.ShortcutKeyDisplayString = "F9";
+			this.mnuToggleBreakpoint.Size = new System.Drawing.Size(258, 22);
+			this.mnuToggleBreakpoint.Text = "Toggle Breakpoint";
+			this.mnuToggleBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
 			// 
 			// toolStripMenuItem4
 			// 
@@ -212,6 +269,8 @@
 			this.ctrlCodeViewer.Name = "ctrlCodeViewer";
 			this.ctrlCodeViewer.ShowContentNotes = false;
 			this.ctrlCodeViewer.ShowLineNumberNotes = false;
+			this.ctrlCodeViewer.ShowSingleContentLineNotes = true;
+			this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = false;
 			this.ctrlCodeViewer.Size = new System.Drawing.Size(479, 150);
 			this.ctrlCodeViewer.TabIndex = 1;
 			this.ctrlCodeViewer.ScrollPositionChanged += new System.EventHandler(this.ctrlCodeViewer_ScrollPositionChanged);
@@ -359,6 +418,16 @@
 			this.lblSearchResult.TabIndex = 11;
 			this.lblSearchResult.Text = "Search results for: ";
 			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(149, 6);
+			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(181, 6);
+			// 
 			// ctrlDebuggerCode
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -412,5 +481,13 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEditLabel;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem mnuToggleBreakpoint;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowByteCodeOnLeft;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowByteCodeBelow;
+		private System.Windows.Forms.ToolStripMenuItem mnuHideByteCode;
+		private System.Windows.Forms.ToolStripMenuItem mnuPrgAddressReplace;
+		private System.Windows.Forms.ToolStripMenuItem mnuPrgAddressBelow;
+		private System.Windows.Forms.ToolStripMenuItem mnuHidePrgAddresses;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
 	}
 }

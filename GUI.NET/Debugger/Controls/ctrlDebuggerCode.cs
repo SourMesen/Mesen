@@ -32,19 +32,63 @@ namespace Mesen.GUI.Debugger
 		public void SetConfig(DebugViewInfo config)
 		{
 			_config = config;
-			this.mnuShowLineNotes.Checked = config.ShowPrgAddresses;
-			this.mnuShowCodeNotes.Checked = config.ShowByteCode;
-			this.FontSize = config.FontSize;
 
-			this.ctrlCodeViewer.ShowLineNumberNotes = this.mnuShowLineNotes.Checked;
-			this.ctrlCodeViewer.ShowContentNotes = this.mnuShowCodeNotes.Checked;
+			mnuPrgAddressReplace.Checked = false;
+			mnuPrgAddressBelow.Checked = false;
+			mnuHidePrgAddresses.Checked = false;
+
+			mnuShowByteCodeOnLeft.Checked = false;
+			mnuShowByteCodeBelow.Checked = false;
+			mnuHideByteCode.Checked = false;
+
+			switch(config.ByteCodePosition) {
+				case ByteCodePosition.Left:
+					this.ctrlCodeViewer.ShowContentNotes = true;
+					this.ctrlCodeViewer.ShowSingleContentLineNotes = true;
+					this.mnuShowByteCodeOnLeft.Checked = true;
+					break;
+
+				case ByteCodePosition.Below:
+					this.ctrlCodeViewer.ShowContentNotes = true;
+					this.ctrlCodeViewer.ShowSingleContentLineNotes = false;
+					this.mnuShowByteCodeBelow.Checked = true;
+					break;
+
+				case ByteCodePosition.Hidden:
+					this.ctrlCodeViewer.ShowContentNotes = false;
+					this.ctrlCodeViewer.ShowSingleContentLineNotes = false;
+					this.mnuHideByteCode.Checked = true;
+					break;
+			}
+
+			switch(config.PrgAddressPosition) {
+				case PrgAddressPosition.Replace:
+					this.ctrlCodeViewer.ShowLineNumberNotes = true;
+					this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = true;
+					this.mnuPrgAddressReplace.Checked = true;
+					break;
+
+				case PrgAddressPosition.Below:
+					this.ctrlCodeViewer.ShowLineNumberNotes = true;
+					this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = false;
+					this.mnuPrgAddressBelow.Checked = true;
+					break;
+
+				case PrgAddressPosition.Hidden:
+					this.ctrlCodeViewer.ShowLineNumberNotes = false;
+					this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = false;
+					this.mnuHidePrgAddresses.Checked = true;
+					break;
+			}
+
+			if(this.FontSize != config.FontSize) {
+				this.FontSize = config.FontSize;
+			}
 		}
 
 		private void UpdateConfig()
 		{
-			_config.ShowPrgAddresses = this.mnuShowLineNotes.Checked;
-			_config.ShowByteCode = this.mnuShowCodeNotes.Checked;
-			_config.FontSize = this.FontSize;
+			this.SetConfig(_config);
 			ConfigManager.ApplyChanges();
 		}
 
@@ -131,7 +175,7 @@ namespace Mesen.GUI.Debugger
 						}
 
 						lineNumbers.Add(relativeAddress);
-						lineNumberNotes.Add(lineParts[2].TrimStart('0'));
+						lineNumberNotes.Add(string.IsNullOrWhiteSpace(lineParts[2]) ? "" : lineParts[2].TrimStart('0').PadLeft(4, '0'));
 						codeNotes.Add(lineParts[3]);
 						codeLines.Add(lineParts[4]);
 					}
@@ -477,12 +521,6 @@ namespace Mesen.GUI.Debugger
 			this.ctrlCodeViewer.ShowLineNumberNotes = this.mnuShowLineNotes.Checked;
 			this.UpdateConfig();
 		}
-
-		private void mnuShowCodeNotes_Click(object sender, EventArgs e)
-		{
-			this.ctrlCodeViewer.ShowContentNotes = this.mnuShowCodeNotes.Checked;
-			this.UpdateConfig();
-		}
 		
 		private void mnuGoToLocation_Click(object sender, EventArgs e)
 		{
@@ -557,6 +595,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlCodeViewer_FontSizeChanged(object sender, EventArgs e)
 		{
+			_config.FontSize = this.FontSize;
 			UpdateConfig();
 		}
 
@@ -589,6 +628,42 @@ namespace Mesen.GUI.Debugger
 		#endregion
 
 		#endregion
+
+		private void mnuShowByteCodeOnLeft_Click(object sender, EventArgs e)
+		{
+			_config.ByteCodePosition = ByteCodePosition.Left;
+			this.UpdateConfig();
+		}
+
+		private void mnuShowByteCodeBelow_Click(object sender, EventArgs e)
+		{
+			_config.ByteCodePosition = ByteCodePosition.Below;
+			this.UpdateConfig();
+		}
+
+		private void mnuHideByteCode_Click(object sender, EventArgs e)
+		{
+			_config.ByteCodePosition = ByteCodePosition.Hidden;
+			this.UpdateConfig();
+		}
+
+		private void mnuReplaceCpuAddress_Click(object sender, EventArgs e)
+		{
+			_config.PrgAddressPosition = PrgAddressPosition.Replace;
+			this.UpdateConfig();
+		}
+
+		private void mnuBelowCpuAddress_Click(object sender, EventArgs e)
+		{
+			_config.PrgAddressPosition = PrgAddressPosition.Below;
+			this.UpdateConfig();
+		}
+
+		private void mnuHidePrgAddresses_Click(object sender, EventArgs e)
+		{
+			_config.PrgAddressPosition = PrgAddressPosition.Hidden;
+			this.UpdateConfig();
+		}
 	}
 
 	public class WatchEventArgs : EventArgs

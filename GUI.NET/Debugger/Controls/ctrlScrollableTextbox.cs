@@ -266,6 +266,12 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public bool ShowSingleContentLineNotes
+		{
+			get { return this.ctrlTextbox.ShowSingleContentLineNotes; }
+			set { this.ctrlTextbox.ShowSingleContentLineNotes = value; }
+		}
+
 		public bool ShowContentNotes
 		{
 			get { return this.ctrlTextbox.ShowContentNotes; }
@@ -276,6 +282,12 @@ namespace Mesen.GUI.Debugger
 		{
 			get { return this.ctrlTextbox.ShowLineNumberNotes; }
 			set { this.ctrlTextbox.ShowLineNumberNotes = value; }
+		}
+
+		public bool ShowSingleLineLineNumberNotes
+		{
+			get { return this.ctrlTextbox.ShowSingleLineLineNumberNotes; }
+			set { this.ctrlTextbox.ShowSingleLineLineNumberNotes = value; }
 		}
 
 		public string Header

@@ -12,10 +12,24 @@ using Mesen.GUI.Debugger;
 
 namespace Mesen.GUI.Config
 {
+	public enum ByteCodePosition
+	{
+		Hidden,
+		Left,
+		Below
+	}
+
+	public enum PrgAddressPosition
+	{
+		Hidden,
+		Replace,
+		Below
+	}
+
 	public class DebugViewInfo
 	{
-		public bool ShowByteCode = false;
-		public bool ShowPrgAddresses = false;
+		public ByteCodePosition ByteCodePosition = ByteCodePosition.Hidden;
+		public PrgAddressPosition PrgAddressPosition = PrgAddressPosition.Hidden;
 		public float FontSize = 13;
 	}
 

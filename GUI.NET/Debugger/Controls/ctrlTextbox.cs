@@ -56,14 +56,17 @@ namespace Mesen.GUI.Debugger
 		private bool _showLineNumbers = false;
 		private bool _showLineInHex = false;
 		private bool _showLineNumberNotes = false;
+		private bool _showSingleLineLineNumberNotes = false;
 		private bool _showContentNotes = false;
+		private bool _showSingleLineContentNotes = true;
 		private int _cursorPosition = 0;
 		private int _scrollPosition = 0;
 		private int _horizontalScrollPosition = 0;
 		private string _searchString = null;
 		private string _header = null;
 		private Font _noteFont = null;
-		private int _marginWidth = 6;
+		private int _marginWidth = 9;
+		private int _extendedMarginWidth = 13;
 		private float _maxLineWidth = 0;
 		private int _maxLineWidthIndex = 0;
 
@@ -120,12 +123,32 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public bool ShowSingleContentLineNotes
+		{
+			get { return _showSingleLineContentNotes; }
+			set
+			{
+				_showSingleLineContentNotes = value;
+				this.Invalidate();
+			}
+		}
+
 		public bool ShowContentNotes
 		{
 			get { return _showContentNotes; }
 			set 
 			{
 				_showContentNotes = value;
+				this.Invalidate();
+			}
+		}
+
+		public bool ShowSingleLineLineNumberNotes
+		{
+			get { return _showSingleLineLineNumberNotes; }
+			set
+			{
+				_showSingleLineLineNumberNotes = value;
 				this.Invalidate();
 			}
 		}
@@ -370,14 +393,15 @@ namespace Mesen.GUI.Debugger
 			get
 			{
 				using(Graphics g = Graphics.FromHwnd(this.Handle)) {
-					return this.GetMargin(g);
+					return this.GetMargin(g, false);
 				}
 			}
 		}
 
-		private int GetMargin(Graphics g)
+		private int GetMargin(Graphics g, bool getExtendedMargin)
 		{
-			return this.ShowLineNumbers ? (int)(g.MeasureString("W", this.Font).Width * _marginWidth) : 0;
+			int marginWidth = getExtendedMargin && this.ShowContentNotes && this.ShowSingleContentLineNotes ? _marginWidth + _extendedMarginWidth : _marginWidth;
+			return this.ShowLineNumbers ? (int)(g.MeasureString("".PadLeft(marginWidth, 'W'), this.Font).Width) : 0;
 		}
 
 		public int GetLineIndexAtPosition(int yPos)
@@ -403,7 +427,7 @@ namespace Mesen.GUI.Debugger
 		{
 			charIndex = -1;
 			using(Graphics g = Graphics.FromHwnd(this.Handle)) {
-				int marginLeft = this.GetMargin(g);
+				int marginLeft = this.GetMargin(g, true);
 				int positionX = position.X - marginLeft;
 				lineIndex = this.ScrollPosition + this.GetLineAtPosition(position.Y);
 				if(lineIndex > _contents.Length && _contents.Length != 0) {
@@ -529,7 +553,7 @@ namespace Mesen.GUI.Debugger
 			if(_contents.Length > _maxLineWidthIndex) {
 				using(Graphics g = this.CreateGraphics()) {
 					_maxLineWidth = _lineMargins[_maxLineWidthIndex] + g.MeasureString(GetFullWidthString(_contents[_maxLineWidthIndex]), this.Font).Width;
-					HorizontalScrollWidth = (int)(Math.Max(0, HorizontalScrollFactor + _maxLineWidth - (this.Width - GetMargin(g))) / HorizontalScrollFactor);
+					HorizontalScrollWidth = (int)(Math.Max(0, HorizontalScrollFactor + _maxLineWidth - (this.Width - GetMargin(g, true))) / HorizontalScrollFactor);
 				}
 			}
 		}
@@ -557,7 +581,7 @@ namespace Mesen.GUI.Debugger
 		{
 			get 
 			{
-				if(this.ShowLineNumberNotes || this.ShowContentNotes) {
+				if(this.ShowLineNumberNotes && !this.ShowSingleLineLineNumberNotes || this.ShowContentNotes && !this.ShowSingleContentLineNotes) {
 					return (int)(this.Font.Height * 1.60);
 				} else {
 					return this.Font.Height - 1;
@@ -631,12 +655,27 @@ namespace Mesen.GUI.Debugger
 
 		private void DrawLineNumber(Graphics g, int currentLine, int marginLeft, int positionY)
 		{
-			string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
-			float width = g.MeasureString(lineNumber, this.Font).Width;
-			g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY);
-			if(this.ShowLineNumberNotes) {
-				width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont).Width;
-				g.DrawString(_lineNumberNotes[currentLine], _noteFont, Brushes.Gray, marginLeft - width, positionY+this.Font.Size+3);
+			if(this.ShowLineNumberNotes && this.ShowSingleLineLineNumberNotes) {
+				//Display line note instead of line number
+				string lineNumber;
+				if(string.IsNullOrEmpty(_lineNumberNotes[currentLine])) {
+					lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
+				} else {
+					lineNumber = _lineNumberNotes[currentLine];
+				}
+				float width = g.MeasureString(lineNumber, this.Font).Width;
+				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY);
+			} else {
+				//Display line number
+				string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
+				float width = g.MeasureString(lineNumber, this.Font).Width;
+				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY);
+
+				if(this.ShowLineNumberNotes && !this.ShowSingleLineLineNumberNotes) {
+					//Display line note below line number
+					width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont).Width;
+					g.DrawString(_lineNumberNotes[currentLine], _noteFont, Brushes.Gray, marginLeft - width, positionY+this.Font.Size+3);
+				}
 			}
 		}
 
@@ -687,7 +726,7 @@ namespace Mesen.GUI.Debugger
 						}
 					}
 
-					if(this.ShowContentNotes) {
+					if(this.ShowContentNotes && !this.ShowSingleContentLineNotes) {
 						g.DrawString(_contentNotes[currentLine], _noteFont, Brushes.Gray, marginLeft, positionY + this.Font.Size+3);
 					}
 					this.DrawHighlightedSearchString(g, codeString, marginLeft, positionY);
@@ -778,13 +817,16 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void DrawMargin(Graphics g, int currentLine, int marginLeft, int positionY, int lineHeight)
+		private void DrawMargin(Graphics g, int currentLine, int marginLeft, int regularMargin, int positionY, int lineHeight)
 		{
 			if(this.ShowLineNumbers) {
 				//Show line number
-				this.DrawLineNumber(g, currentLine, marginLeft, positionY);
+				this.DrawLineNumber(g, currentLine, regularMargin, positionY);
 			}
-			
+			if(this.ShowContentNotes && this.ShowSingleContentLineNotes) {
+				g.DrawString(_contentNotes[currentLine], this.Font, Brushes.Gray, regularMargin + 6, positionY);
+			}
+
 			//Adjust background color highlights based on number of spaces in front of content
 			marginLeft += _lineMargins[currentLine];
 
@@ -797,44 +839,52 @@ namespace Mesen.GUI.Debugger
 		{
 			int lineHeight = this.LineHeight;
 			pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-			using(Brush lightGrayBrush = new SolidBrush(Color.FromArgb(240,240,240))) {
-				using(Pen grayPen = new Pen(Color.LightGray)) {
-					Rectangle rect = this.ClientRectangle;
-					pe.Graphics.FillRectangle(Brushes.White, rect);
+			Rectangle rect = this.ClientRectangle;
+			pe.Graphics.FillRectangle(Brushes.White, rect);
 
-					pe.Graphics.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
+			pe.Graphics.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 
-					int marginLeft = this.GetMargin(pe.Graphics);
-					int currentLine = this.ScrollPosition;
-					int positionY = 0;
+			int marginLeft = this.GetMargin(pe.Graphics, true);
+			int regularMargin = this.GetMargin(pe.Graphics, false);
+			int currentLine = this.ScrollPosition;
+			int positionY = 0;
 
-					if(!string.IsNullOrWhiteSpace(this._header)) {
-						pe.Graphics.FillRectangle(lightGrayBrush, marginLeft, 0, Math.Max(_maxLineWidth, rect.Right), lineHeight);
-						pe.Graphics.DrawString(_header, this.Font, Brushes.Gray, marginLeft, positionY);
-						positionY += lineHeight;
-					}
-
-					while(positionY < rect.Bottom && currentLine < _contents.Length) {
-						this.DrawLine(pe.Graphics, currentLine, marginLeft, positionY, lineHeight);
-						positionY += lineHeight;
-						currentLine++;
-					}
-
-					pe.Graphics.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
-
-					if(this.ShowLineNumbers) {
-						pe.Graphics.FillRectangle(lightGrayBrush, 0, 0, marginLeft, rect.Bottom);
-						pe.Graphics.DrawLine(grayPen, marginLeft, rect.Top, marginLeft, rect.Bottom);
-					}
-
-					currentLine = this.ScrollPosition;
-					positionY = string.IsNullOrWhiteSpace(this._header) ? 0 : lineHeight;
-					while(positionY < rect.Bottom && currentLine < _contents.Length) {
-						this.DrawMargin(pe.Graphics, currentLine, marginLeft, positionY, lineHeight);
-						positionY += lineHeight;
-						currentLine++;
-					}
+			if(!string.IsNullOrWhiteSpace(this._header)) {
+				using(Brush lightGrayBrush = new SolidBrush(Color.FromArgb(240, 240, 240))) {
+					pe.Graphics.FillRectangle(lightGrayBrush, marginLeft, 0, Math.Max(_maxLineWidth, rect.Right), lineHeight);
 				}
+				pe.Graphics.DrawString(_header, this.Font, Brushes.Gray, marginLeft, positionY);
+				positionY += lineHeight;
+			}
+
+			while(positionY < rect.Bottom && currentLine < _contents.Length) {
+				this.DrawLine(pe.Graphics, currentLine, marginLeft, positionY, lineHeight);
+				positionY += lineHeight;
+				currentLine++;
+			}
+
+			pe.Graphics.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
+
+			if(this.ShowLineNumbers) {
+				using(Brush brush = new SolidBrush(Color.FromArgb(235, 235, 235))) {
+					pe.Graphics.FillRectangle(brush, 0, 0, regularMargin, rect.Bottom);
+				}
+				using(Brush brush = new SolidBrush(Color.FromArgb(251, 251, 251))) {
+					pe.Graphics.FillRectangle(brush, regularMargin, 0, marginLeft - regularMargin, rect.Bottom);
+				}
+
+				using(Pen pen = new Pen(Color.LightGray)) {
+					pe.Graphics.DrawLine(pen, regularMargin, rect.Top, regularMargin, rect.Bottom);
+					pe.Graphics.DrawLine(pen, marginLeft, rect.Top, marginLeft, rect.Bottom);
+				}
+			}
+
+			currentLine = this.ScrollPosition;
+			positionY = string.IsNullOrWhiteSpace(this._header) ? 0 : lineHeight;
+			while(positionY < rect.Bottom && currentLine < _contents.Length) {
+				this.DrawMargin(pe.Graphics, currentLine, marginLeft, regularMargin, positionY, lineHeight);
+				positionY += lineHeight;
+				currentLine++;
 			}
 		}
 	}
