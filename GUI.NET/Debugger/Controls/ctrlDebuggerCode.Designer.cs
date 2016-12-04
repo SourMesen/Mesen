@@ -35,11 +35,12 @@
 			this.mnuShowLineNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCodeNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuNavigateBackward = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNavigateForward = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,15 +79,16 @@
             this.mnuShowCodeNotes,
             this.toolStripMenuItem2,
             this.mnuEditLabel,
+            this.mnuToggleBreakpoint,
             this.toolStripMenuItem4,
-            this.mnuGoToLocation,
             this.mnuAddToWatch,
             this.mnuFindOccurrences,
+            this.mnuGoToLocation,
             this.toolStripMenuItem3,
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 248);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 292);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
 			// mnuShowNextStatement
@@ -133,6 +135,14 @@
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
 			this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
 			// 
+			// mnuToggleBreakpoint
+			// 
+			this.mnuToggleBreakpoint.Name = "mnuToggleBreakpoint";
+			this.mnuToggleBreakpoint.ShortcutKeyDisplayString = "F9";
+			this.mnuToggleBreakpoint.Size = new System.Drawing.Size(258, 22);
+			this.mnuToggleBreakpoint.Text = "Toggle Breakpoint";
+			this.mnuToggleBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
+			// 
 			// mnuEditLabel
 			// 
 			this.mnuEditLabel.Name = "mnuEditLabel";
@@ -145,14 +155,6 @@
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
 			this.toolStripMenuItem4.Size = new System.Drawing.Size(255, 6);
-			// 
-			// mnuGoToLocation
-			// 
-			this.mnuGoToLocation.Name = "mnuGoToLocation";
-			this.mnuGoToLocation.ShortcutKeyDisplayString = "Ctrl+Click";
-			this.mnuGoToLocation.Size = new System.Drawing.Size(258, 22);
-			this.mnuGoToLocation.Text = "Go To Location";
-			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
 			// 
 			// mnuAddToWatch
 			// 
@@ -169,6 +171,14 @@
 			this.mnuFindOccurrences.Size = new System.Drawing.Size(258, 22);
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
+			// 
+			// mnuGoToLocation
+			// 
+			this.mnuGoToLocation.Name = "mnuGoToLocation";
+			this.mnuGoToLocation.ShortcutKeyDisplayString = "Ctrl+Click";
+			this.mnuGoToLocation.Size = new System.Drawing.Size(258, 22);
+			this.mnuGoToLocation.Text = "Go to Location";
+			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
 			// 
 			// toolStripMenuItem3
 			// 
@@ -209,8 +219,8 @@
 			this.ctrlCodeViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseMove);
 			this.ctrlCodeViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDown);
 			this.ctrlCodeViewer.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDoubleClick);
-			this.ctrlCodeViewer.FontSizeChanged += new System.EventHandler(this.ctrlCodeViewer_FontSizeChanged);
 			this.ctrlCodeViewer.MouseLeave += new System.EventHandler(this.ctrlCodeViewer_MouseLeave);
+			this.ctrlCodeViewer.FontSizeChanged += new System.EventHandler(this.ctrlCodeViewer_FontSizeChanged);
 			// 
 			// contextMenuMargin
 			// 
@@ -401,5 +411,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuNavigateBackward;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditLabel;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+		private System.Windows.Forms.ToolStripMenuItem mnuToggleBreakpoint;
 	}
 }

@@ -581,6 +581,11 @@ namespace Mesen.GUI.Debugger
 			this.ctrlCodeViewer.NavigateBackward();
 		}
 
+		private void mnuToggleBreakpoint_Click(object sender, EventArgs e)
+		{
+			BreakpointManager.ToggleBreakpoint(this.ctrlCodeViewer.CurrentLine, false);
+		}
+
 		#endregion
 
 		#endregion
