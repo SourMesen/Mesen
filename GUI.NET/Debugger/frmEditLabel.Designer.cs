@@ -35,8 +35,11 @@
 			this.lblRegion = new System.Windows.Forms.Label();
 			this.lblAddress = new System.Windows.Forms.Label();
 			this.cboRegion = new System.Windows.Forms.ComboBox();
+			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.txtAddress = new System.Windows.Forms.TextBox();
+			this.lblAddressSign = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -55,7 +58,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.lblRegion, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lblAddress, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.cboRegion, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.txtAddress, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -134,12 +137,34 @@
 			this.cboRegion.Size = new System.Drawing.Size(121, 21);
 			this.cboRegion.TabIndex = 6;
 			// 
+			// flowLayoutPanel2
+			// 
+			this.flowLayoutPanel2.Controls.Add(this.lblAddressSign);
+			this.flowLayoutPanel2.Controls.Add(this.txtAddress);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(60, 27);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(200, 26);
+			this.flowLayoutPanel2.TabIndex = 7;
+			// 
 			// txtAddress
 			// 
-			this.txtAddress.Location = new System.Drawing.Point(63, 30);
+			this.txtAddress.Location = new System.Drawing.Point(13, 3);
+			this.txtAddress.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.txtAddress.Name = "txtAddress";
 			this.txtAddress.Size = new System.Drawing.Size(57, 20);
-			this.txtAddress.TabIndex = 7;
+			this.txtAddress.TabIndex = 8;
+			// 
+			// lblAddressSign
+			// 
+			this.lblAddressSign.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblAddressSign.AutoSize = true;
+			this.lblAddressSign.Location = new System.Drawing.Point(0, 6);
+			this.lblAddressSign.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.lblAddressSign.Name = "lblAddressSign";
+			this.lblAddressSign.Size = new System.Drawing.Size(13, 13);
+			this.lblAddressSign.TabIndex = 9;
+			this.lblAddressSign.Text = "$";
 			// 
 			// frmEditLabel
 			// 
@@ -156,6 +181,8 @@
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -170,6 +197,8 @@
 		private System.Windows.Forms.Label lblRegion;
 		private System.Windows.Forms.Label lblAddress;
 		private System.Windows.Forms.ComboBox cboRegion;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+		private System.Windows.Forms.Label lblAddressSign;
 		private System.Windows.Forms.TextBox txtAddress;
 	}
 }

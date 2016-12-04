@@ -72,7 +72,7 @@
 			// 
 			// colMemoryAddress
 			// 
-			this.colMemoryAddress.Text = "ROM Addr.";
+			this.colMemoryAddress.Text = "ROM Addr";
 			this.colMemoryAddress.Width = 71;
 			// 
 			// contextMenuStrip

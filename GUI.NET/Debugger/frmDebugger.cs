@@ -192,11 +192,11 @@ namespace Mesen.GUI.Debugger
 				tlpTop.ColumnStyles[1].SizeType = SizeType.Percent;
 				tlpTop.ColumnStyles[0].Width = 50f;
 				tlpTop.ColumnStyles[1].Width = 50f;
-				this.MinimumSize = new Size(1250, 700);
+				this.MinimumSize = new Size(1250, 725);
 			} else {
 				tlpTop.ColumnStyles[1].SizeType = SizeType.Absolute;
 				tlpTop.ColumnStyles[1].Width = 0f;
-				this.MinimumSize = new Size(1000, 700);
+				this.MinimumSize = new Size(1000, 725);
 			}
 			ctrlDebuggerCodeSplit.Visible = mnuSplitView.Checked;
 			return mnuSplitView.Checked;

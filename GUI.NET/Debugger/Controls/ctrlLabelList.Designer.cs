@@ -113,16 +113,16 @@
 			// colFunctionLabel
 			// 
 			this.colFunctionLabel.Text = "Label";
-			this.colFunctionLabel.Width = 136;
+			this.colFunctionLabel.Width = 133;
 			// 
 			// colFunctionAddress
 			// 
-			this.colFunctionAddress.Text = "Cpu Addr";
-			this.colFunctionAddress.Width = 57;
+			this.colFunctionAddress.Text = "CPU Addr";
+			this.colFunctionAddress.Width = 60;
 			// 
 			// colMemoryAddress
 			// 
-			this.colMemoryAddress.Text = "ROM Addr.";
+			this.colMemoryAddress.Text = "ROM Addr";
 			this.colMemoryAddress.Width = 84;
 			// 
 			// ctrlLabelList

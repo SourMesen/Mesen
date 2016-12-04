@@ -66,7 +66,7 @@
 			// 
 			// colRomOffset
 			// 
-			this.colRomOffset.Text = "ROM Addr.";
+			this.colRomOffset.Text = "ROM Addr";
 			this.colRomOffset.Width = 71;
 			// 
 			// ctrlCallstack

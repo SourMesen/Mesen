@@ -27,22 +27,22 @@ Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSi
 
 	string opName[256] = {
 	//	0			1			2			3			4			5			6			7			8			9			A			B			C			D			E			F
-		"BRK",	"ORA",	"",		"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"PHP",	"ORA",	"ASL",	"AAC*",	"NOP",	"ORA",	"ASL",	"SLO*", //0
+		"BRK",	"ORA",	"",		"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"PHP",	"ORA",	"ASL",	"ANC*",	"NOP",	"ORA",	"ASL",	"SLO*", //0
 		"BPL",	"ORA",	"",		"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"CLC",	"ORA",	"NOP*",	"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*", //1
-		"JSR",	"AND",	"",		"RLA*",	"BIT",	"AND",	"ROL",	"RLA*",	"PLP",	"AND",	"ROL",	"AAC*",	"BIT",	"AND",	"ROL",	"RLA*", //2
+		"JSR",	"AND",	"",		"RLA*",	"BIT",	"AND",	"ROL",	"RLA*",	"PLP",	"AND",	"ROL",	"ANC*",	"BIT",	"AND",	"ROL",	"RLA*", //2
 		"BMI",	"AND",	"",		"RLA*",	"NOP",	"AND",	"ROL",	"RLA*",	"SEC",	"AND",	"NOP*",	"RLA*",	"NOP",	"AND",	"ROL",	"RLA*", //3
-		"RTI",	"EOR",	"",		"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*",	"PHA",	"EOR",	"LSR",	"ASR*",	"JMP",	"EOR",	"LSR",	"SRE*", //4
+		"RTI",	"EOR",	"",		"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*",	"PHA",	"EOR",	"LSR",	"ALR*",	"JMP",	"EOR",	"LSR",	"SRE*", //4
 		"BVC",	"EOR",	"",		"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*",	"CLI",	"EOR",	"NOP*",	"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*", //5
 		"RTS",	"ADC",	"",		"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*",	"PLA",	"ADC",	"ROR",	"ARR*",	"JMP",	"ADC",	"ROR",	"RRA*", //6
 		"BVS",	"ADC",	"",		"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*",	"SEI",	"ADC",	"NOP*",	"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*", //7
-		"NOP",	"STA",	"NOP",	"SAX*",	"STY",	"STA",	"STX",	"SAX*",	"DEY",	"NOP",	"TXA",	"",		"STY",	"STA",	"STX",	"SAX*", //8
-		"BCC",	"STA",	"",		"AXA*",	"STY",	"STA",	"STX",	"SAX*",	"TYA",	"STA",	"TXS",	"TAS*",	"SYA*",	"STA",	"SXA",	"AXA*", //9
-		"LDY",	"LDA",	"LDX",	"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*",	"TAY",	"LDA",	"TAX",	"ATX*",	"LDY",	"LDA",	"LDX",	"LAX*", //A
+		"NOP",	"STA",	"NOP",	"SAX*",	"STY",	"STA",	"STX",	"SAX*",	"DEY",	"NOP",	"TXA",	"XAA*",	"STY",	"STA",	"STX",	"SAX*", //8
+		"BCC",	"STA",	"",		"AHX*",	"STY",	"STA",	"STX",	"SAX*",	"TYA",	"STA",	"TXS",	"TAS*",	"SHY*",	"STA",	"SHX",	"AXA*", //9
+		"LDY",	"LDA",	"LDX",	"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*",	"TAY",	"LDA",	"TAX",	"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*", //A
 		"BCS",	"LDA",	"",		"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*",	"CLV",	"LDA",	"TSX",	"LAS*",	"LDY",	"LDA",	"LDX",	"LAX*", //B
-		"CPY",	"CPA",	"NOP",	"DCP*",	"CPY",	"CPA",	"DEC",	"DCP*",	"INY",	"CPA",	"DEX",	"AXS*",	"CPY",	"CPA",	"DEC",	"DCP*", //C
-		"BNE",	"CPA",	"",		"DCP*",	"NOP",	"CPA",	"DEC",	"DCP*",	"CLD",	"CPA",	"NOP*",	"DCP*",	"NOP",	"CPA",	"DEC",	"DCP*", //D
-		"CPX",	"SBC",	"NOP",	"ISB*",	"CPX",	"SBC",	"INC",	"ISB*",	"INX",	"SBC",	"NOP",	"SBC*",	"CPX",	"SBC",	"INC",	"ISB*", //E
-		"BEQ",	"SBC",	"",		"ISB*",	"NOP",	"SBC",	"INC",	"ISB*",	"SED",	"SBC",	"NOP*",	"ISB*",	"NOP",	"SBC",	"INC",	"ISB*"  //F
+		"CPY",	"CMP",	"NOP",	"DCP*",	"CPY",	"CMP",	"DEC",	"DCP*",	"INY",	"CMP",	"DEX",	"AXS*",	"CPY",	"CMP",	"DEC",	"DCP*", //C
+		"BNE",	"CMP",	"",		"DCP*",	"NOP",	"CMP",	"DEC",	"DCP*",	"CLD",	"CMP",	"NOP*",	"DCP*",	"NOP",	"CMP",	"DEC",	"DCP*", //D
+		"CPX",	"SBC",	"NOP",	"ISC*",	"CPX",	"SBC",	"INC",	"ISC*",	"INX",	"SBC",	"NOP",	"SBC*",	"CPX",	"SBC",	"INC",	"ISC*", //E
+		"BEQ",	"SBC",	"",		"ISC*",	"NOP",	"SBC",	"INC",	"ISC*",	"SED",	"SBC",	"NOP*",	"ISC*",	"NOP",	"SBC",	"INC",	"ISC*"  //F
 	};
 
 	AddrMode opMode[256] = {

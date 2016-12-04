@@ -50,6 +50,7 @@
 			this.chkRead = new System.Windows.Forms.CheckBox();
 			this.chkWrite = new System.Windows.Forms.CheckBox();
 			this.chkExec = new System.Windows.Forms.CheckBox();
+			this.lblAddressSign = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
@@ -167,14 +168,16 @@
 			// 
 			// tableLayoutPanel3
 			// 
-			this.tableLayoutPanel3.ColumnCount = 3;
+			this.tableLayoutPanel3.ColumnCount = 4;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel3.Controls.Add(this.txtAddress, 1, 0);
-			this.tableLayoutPanel3.Controls.Add(this.chkAbsolute, 2, 0);
+			this.tableLayoutPanel3.Controls.Add(this.txtAddress, 2, 0);
+			this.tableLayoutPanel3.Controls.Add(this.chkAbsolute, 3, 0);
 			this.tableLayoutPanel3.Controls.Add(this.radSpecificAddress, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.radAnyAddress, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.lblAddressSign, 1, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(60, 46);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
@@ -188,9 +191,10 @@
 			// txtAddress
 			// 
 			this.txtAddress.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtAddress.Location = new System.Drawing.Point(75, 3);
+			this.txtAddress.Location = new System.Drawing.Point(85, 3);
+			this.txtAddress.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.txtAddress.Name = "txtAddress";
-			this.txtAddress.Size = new System.Drawing.Size(167, 20);
+			this.txtAddress.Size = new System.Drawing.Size(157, 20);
 			this.txtAddress.TabIndex = 5;
 			this.txtAddress.Enter += new System.EventHandler(this.txtAddress_Enter);
 			// 
@@ -208,8 +212,9 @@
 			// 
 			// radSpecificAddress
 			// 
+			this.radSpecificAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.radSpecificAddress.AutoSize = true;
-			this.radSpecificAddress.Location = new System.Drawing.Point(3, 3);
+			this.radSpecificAddress.Location = new System.Drawing.Point(3, 4);
 			this.radSpecificAddress.Name = "radSpecificAddress";
 			this.radSpecificAddress.Size = new System.Drawing.Size(66, 17);
 			this.radSpecificAddress.TabIndex = 7;
@@ -219,6 +224,7 @@
 			// 
 			// radAnyAddress
 			// 
+			this.radAnyAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.radAnyAddress.AutoSize = true;
 			this.radAnyAddress.Location = new System.Drawing.Point(3, 29);
 			this.radAnyAddress.Name = "radAnyAddress";
@@ -349,6 +355,17 @@
 			this.chkExec.UseVisualStyleBackColor = true;
 			this.chkExec.Enter += new System.EventHandler(this.chkRead_Enter);
 			// 
+			// lblAddressSign
+			// 
+			this.lblAddressSign.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblAddressSign.AutoSize = true;
+			this.lblAddressSign.Location = new System.Drawing.Point(72, 6);
+			this.lblAddressSign.Margin = new System.Windows.Forms.Padding(0);
+			this.lblAddressSign.Name = "lblAddressSign";
+			this.lblAddressSign.Size = new System.Drawing.Size(13, 13);
+			this.lblAddressSign.TabIndex = 9;
+			this.lblAddressSign.Text = "$";
+			// 
 			// frmBreakpoint
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -403,5 +420,6 @@
 		private System.Windows.Forms.CheckBox chkWriteVram;
 		private System.Windows.Forms.RadioButton radCpu;
 		private System.Windows.Forms.RadioButton radPpu;
+		private System.Windows.Forms.Label lblAddressSign;
 	}
 }
