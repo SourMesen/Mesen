@@ -56,7 +56,7 @@
 			// 
 			// colFunctionAddress
 			// 
-			this.colFunctionAddress.Text = "Function";
+			this.colFunctionAddress.Text = "Function (Entry Addr)";
 			this.colFunctionAddress.Width = 164;
 			// 
 			// colStackAddr
