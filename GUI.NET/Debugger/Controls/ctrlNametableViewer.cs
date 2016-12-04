@@ -18,6 +18,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private byte[][] _tileData = new byte[4][];
 		private byte[][] _attributeData = new byte[4][];
 		private Bitmap _gridOverlay;
+		private Bitmap _nametableImage = new Bitmap(512, 480);
 
 		public ctrlNametableViewer()
 		{
@@ -44,37 +45,43 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetPpuScroll(out xScroll, out yScroll);
 
 			Bitmap target = new Bitmap(512, 480);
-			using(Graphics g = Graphics.FromImage(target)) {
+			_nametableImage = new Bitmap(512, 480);
+
+			using(Graphics gNametable = Graphics.FromImage(_nametableImage)) {
 				for(int i = 0; i < 4; i++) {
 					GCHandle handle = GCHandle.Alloc(_nametablePixelData[i], GCHandleType.Pinned);
 					Bitmap source = new Bitmap(256, 240, 4*256, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
 					try {
-						g.DrawImage(source, new Rectangle(i % 2 == 0 ? 0 : 256, i <= 1 ? 0 : 240, 256, 240), new Rectangle(0, 0, 256, 240), GraphicsUnit.Pixel);
+						gNametable.DrawImage(source, new Rectangle(i % 2 == 0 ? 0 : 256, i <= 1 ? 0 : 240, 256, 240), new Rectangle(0, 0, 256, 240), GraphicsUnit.Pixel);
 					} finally {
 						handle.Free();
 					}
 				}
+			}
 
-				if(this._gridOverlay == null && (chkShowTileGrid.Checked || chkShowAttributeGrid.Checked)) {
-					this._gridOverlay = new Bitmap(512, 480);
+			if(this._gridOverlay == null && (chkShowTileGrid.Checked || chkShowAttributeGrid.Checked)) {
+				this._gridOverlay = new Bitmap(512, 480);
 
-					using(Graphics overlay = Graphics.FromImage(this._gridOverlay)) {
-						if(chkShowTileGrid.Checked) {
-							using(Pen pen = new Pen(Color.FromArgb(chkShowAttributeGrid.Checked ? 120 : 180, 240, 100, 120))) {
-								if(chkShowAttributeGrid.Checked) {
-									pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-								}
-								DrawGrid(overlay, pen, 1);
+				using(Graphics overlay = Graphics.FromImage(this._gridOverlay)) {
+					if(chkShowTileGrid.Checked) {
+						using(Pen pen = new Pen(Color.FromArgb(chkShowAttributeGrid.Checked ? 120 : 180, 240, 100, 120))) {
+							if(chkShowAttributeGrid.Checked) {
+								pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 							}
+							DrawGrid(overlay, pen, 1);
 						}
+					}
 
-						if(chkShowAttributeGrid.Checked) {
-							using(Pen pen = new Pen(Color.FromArgb(180, 80, 130, 250))) {
-								DrawGrid(overlay, pen, 2);
-							}
+					if(chkShowAttributeGrid.Checked) {
+						using(Pen pen = new Pen(Color.FromArgb(180, 80, 130, 250))) {
+							DrawGrid(overlay, pen, 2);
 						}
 					}
 				}
+			}
+
+			using(Graphics g = Graphics.FromImage(target)) {
+				g.DrawImage(_nametableImage, 0, 0);
 
 				if(this._gridOverlay != null) {
 					g.DrawImage(this._gridOverlay, 0, 0);
@@ -162,7 +169,7 @@ namespace Mesen.GUI.Debugger.Controls
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.DrawImage(this.picNametable.Image, new Rectangle(0, 0, 64, 64), new Rectangle(e.X/8*8, e.Y/8*8, 8, 8), GraphicsUnit.Pixel);
+				g.DrawImage(_nametableImage, new Rectangle(0, 0, 64, 64), new Rectangle(e.X/8*8, e.Y/8*8, 8, 8), GraphicsUnit.Pixel);
 			}
 			this.picTile.Image = tile;
 		}
