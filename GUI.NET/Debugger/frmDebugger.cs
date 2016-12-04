@@ -52,6 +52,10 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
 
+			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
+			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
+			tlpFunctionLabelLists.Visible = mnuShowFunctionLabelLists.Checked;
+
 			this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
 			this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
 			if(ConfigManager.Config.DebugInfo.BottomPanelHeight > 0) {
@@ -127,7 +131,9 @@ namespace Mesen.GUI.Debugger
 			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
 			if(_workspace.Labels.Count == 0) {
 				LabelManager.ResetLabels();
-				LabelManager.SetDefaultLabels(InteropEmu.FdsGetSideCount() > 0);
+				if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
+					LabelManager.SetDefaultLabels(InteropEmu.FdsGetSideCount() > 0);
+				}
 			} else {
 				LabelManager.ResetLabels();
 				LabelManager.SetLabels(_workspace.Labels);
@@ -593,6 +599,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOnOpen_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnOpen = mnuBreakOnOpen.Checked;
+			ConfigManager.ApplyChanges();
+		}
+		
+		private void mnuDisableDefaultLabels_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.DisableDefaultLabels = mnuDisableDefaultLabels.Checked;
 			ConfigManager.ApplyChanges();
 		}
 

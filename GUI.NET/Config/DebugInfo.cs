@@ -105,6 +105,7 @@ namespace Mesen.GUI.Config
 		public string FindOccurrencesLastSearch = string.Empty;
 
 		public bool AutoLoadDbgFiles = false;
+		public bool DisableDefaultLabels = false;
 
 		public bool BreakOnOpen = true;
 
