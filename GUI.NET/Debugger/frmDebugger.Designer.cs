@@ -59,6 +59,7 @@
 			this.mnuResetWorkspace = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAutoLoadDbgFiles = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDisableDefaultLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,6 +95,7 @@
 			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuBreakOnReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreakOnOpen = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowCpuMemoryMapping = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,7 +127,6 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
-			this.mnuDisableDefaultLabels = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -403,7 +404,7 @@
             this.mnuAutoLoadDbgFiles,
             this.mnuDisableDefaultLabels});
 			this.mnuWorkspace.Name = "mnuWorkspace";
-			this.mnuWorkspace.Size = new System.Drawing.Size(152, 22);
+			this.mnuWorkspace.Size = new System.Drawing.Size(132, 22);
 			this.mnuWorkspace.Text = "Workspace";
 			// 
 			// mnuImportLabels
@@ -435,15 +436,23 @@
 			this.mnuAutoLoadDbgFiles.Text = "Auto-load DBG files";
 			this.mnuAutoLoadDbgFiles.Click += new System.EventHandler(this.mnuAutoLoadDbgFiles_Click);
 			// 
+			// mnuDisableDefaultLabels
+			// 
+			this.mnuDisableDefaultLabels.CheckOnClick = true;
+			this.mnuDisableDefaultLabels.Name = "mnuDisableDefaultLabels";
+			this.mnuDisableDefaultLabels.Size = new System.Drawing.Size(185, 22);
+			this.mnuDisableDefaultLabels.Text = "Disable default labels";
+			this.mnuDisableDefaultLabels.Click += new System.EventHandler(this.mnuDisableDefaultLabels_Click);
+			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(129, 6);
 			// 
 			// mnuClose
 			// 
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(152, 22);
+			this.mnuClose.Size = new System.Drawing.Size(132, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -672,6 +681,7 @@
             this.mnuSplitView,
             this.fontSizeToolStripMenuItem,
             this.toolStripMenuItem5,
+            this.mnuBreakOnReset,
             this.mnuBreakOnOpen,
             this.toolStripMenuItem11,
             this.mnuShowCpuMemoryMapping,
@@ -736,6 +746,14 @@
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
 			this.toolStripMenuItem5.Size = new System.Drawing.Size(240, 6);
+			// 
+			// mnuBreakOnReset
+			// 
+			this.mnuBreakOnReset.CheckOnClick = true;
+			this.mnuBreakOnReset.Name = "mnuBreakOnReset";
+			this.mnuBreakOnReset.Size = new System.Drawing.Size(243, 22);
+			this.mnuBreakOnReset.Text = "Break on power/reset";
+			this.mnuBreakOnReset.Click += new System.EventHandler(this.mnuBreakOnReset_Click);
 			// 
 			// mnuBreakOnOpen
 			// 
@@ -978,14 +996,6 @@
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
-			// mnuDisableDefaultLabels
-			// 
-			this.mnuDisableDefaultLabels.CheckOnClick = true;
-			this.mnuDisableDefaultLabels.Name = "mnuDisableDefaultLabels";
-			this.mnuDisableDefaultLabels.Size = new System.Drawing.Size(185, 22);
-			this.mnuDisableDefaultLabels.Text = "Disable default labels";
-			this.mnuDisableDefaultLabels.Click += new System.EventHandler(this.mnuDisableDefaultLabels_Click);
-			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1119,5 +1129,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnOpen;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
 		private System.Windows.Forms.ToolStripMenuItem mnuDisableDefaultLabels;
+		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnReset;
 	}
 }

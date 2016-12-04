@@ -108,6 +108,7 @@ namespace Mesen.GUI.Config
 		public bool DisableDefaultLabels = false;
 
 		public bool BreakOnOpen = true;
+		public bool BreakOnReset = true;
 
 		public DebugInfo()
 		{

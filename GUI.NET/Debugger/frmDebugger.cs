@@ -190,8 +190,15 @@ namespace Mesen.GUI.Debugger
 						this.AutoLoadDbgFile(true);
 						UpdateDebugger();
 						BreakpointManager.SetBreakpoints();
-					}));					
-					InteropEmu.DebugStep(1);
+
+						if(!ConfigManager.Config.DebugInfo.BreakOnReset) {
+							ClearActiveStatement();
+						}
+					}));
+
+					if(ConfigManager.Config.DebugInfo.BreakOnReset) {
+						InteropEmu.DebugStep(1);
+					}
 					break;
 			}
 		}
@@ -594,6 +601,12 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 			ctrlDebuggerCode.UpdateLineColors();
 			ctrlDebuggerCodeSplit.UpdateLineColors();
+		}
+		
+		private void mnuBreakOnReset_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnReset = mnuBreakOnReset.Checked;
+			ConfigManager.ApplyChanges();
 		}
 
 		private void mnuBreakOnOpen_Click(object sender, EventArgs e)
