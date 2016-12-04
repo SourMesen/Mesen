@@ -106,6 +106,8 @@ namespace Mesen.GUI.Config
 
 		public bool AutoLoadDbgFiles = false;
 
+		public bool BreakOnOpen = true;
+
 		public DebugInfo()
 		{
 			LeftView = new DebugViewInfo();

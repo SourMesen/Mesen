@@ -18,6 +18,7 @@ namespace Mesen.GUI.Debugger
 	{
 		private List<Form> _childForms = new List<Form>();
 		private bool _debuggerInitialized = false;
+		private bool _firstBreak = true;
 
 		private InteropEmu.NotificationListener _notifListener;
 		private ctrlDebuggerCode _lastCodeWindow;
@@ -49,6 +50,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowFunctionLabelLists.Checked = ConfigManager.Config.DebugInfo.ShowFunctionLabelLists;
 			this.mnuHighlightUnexecutedCode.Checked = ConfigManager.Config.DebugInfo.HighlightUnexecutedCode;
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
+			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
 
 			this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
 			this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
@@ -85,8 +87,10 @@ namespace Mesen.GUI.Debugger
 
 			InteropEmu.DebugInitialize();
 
-			//Pause a few frames later to give the debugger a chance to disassemble some code
 			_debuggerInitialized = true;
+
+			//Pause a few frames later to give the debugger a chance to disassemble some code
+			_firstBreak = true;
 			InteropEmu.DebugStep(30000);
 
 			UpdateCdlRatios();
@@ -257,8 +261,13 @@ namespace Mesen.GUI.Debugger
 			ctrlPpuMemoryMapping.UpdatePpuRegions(state.Cartridge);
 
 			this.BringToFront();
-		}
 
+			if(_firstBreak && !ConfigManager.Config.DebugInfo.BreakOnOpen) {
+				ResumeExecution();
+			}
+
+			_firstBreak = false;
+		}
 		private void ClearActiveStatement()
 		{
 			ctrlDebuggerCode.ClearActiveAddress();
@@ -286,10 +295,15 @@ namespace Mesen.GUI.Debugger
 			frm.Show();
 		}
 
-		private void mnuContinue_Click(object sender, EventArgs e)
+		private void ResumeExecution()
 		{
 			ClearActiveStatement();
 			InteropEmu.DebugRun();
+		}
+
+		private void mnuContinue_Click(object sender, EventArgs e)
+		{
+			ResumeExecution();
 		}
 
 		private void frmDebugger_FormClosed(object sender, FormClosedEventArgs e)
@@ -529,21 +543,21 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 		
-		private void mnuShowEffectiveAddresses_CheckedChanged(object sender, EventArgs e)
+		private void mnuShowEffectiveAddresses_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.ShowEffectiveAddresses = mnuShowEffectiveAddresses.Checked;
 			ConfigManager.ApplyChanges();
 			UpdateDebugger(false);
 		}
 
-		private void mnuShowOnlyDisassembledCode_CheckedChanged(object sender, EventArgs e)
+		private void mnuShowOnlyDisassembledCode_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode = mnuShowOnlyDisassembledCode.Checked;
 			ConfigManager.ApplyChanges();
 			UpdateDebugger(false);
 		}
 
-		private void mnuShowCpuMemoryMapping_CheckedChanged(object sender, EventArgs e)
+		private void mnuShowCpuMemoryMapping_Click(object sender, EventArgs e)
 		{
 			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
 			ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping = mnuShowCpuMemoryMapping.Checked;
@@ -552,7 +566,7 @@ namespace Mesen.GUI.Debugger
 			ctrlPpuMemoryMapping.Invalidate();
 		}
 
-		private void mnuShowPpuMemoryMapping_CheckedChanged(object sender, EventArgs e)
+		private void mnuShowPpuMemoryMapping_Click(object sender, EventArgs e)
 		{
 			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
 			ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping = mnuShowPpuMemoryMapping.Checked;
@@ -561,7 +575,7 @@ namespace Mesen.GUI.Debugger
 			ctrlPpuMemoryMapping.Invalidate();
 		}
 
-		private void mnuShowFunctionLabelLists_CheckedChanged(object sender, EventArgs e)
+		private void mnuShowFunctionLabelLists_Click(object sender, EventArgs e)
 		{
 			tlpFunctionLabelLists.Visible = mnuShowFunctionLabelLists.Checked;
 			ConfigManager.Config.DebugInfo.ShowFunctionLabelLists = mnuShowFunctionLabelLists.Checked;
@@ -574,6 +588,12 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 			ctrlDebuggerCode.UpdateLineColors();
 			ctrlDebuggerCodeSplit.UpdateLineColors();
+		}
+
+		private void mnuBreakOnOpen_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnOpen = mnuBreakOnOpen.Checked;
+			ConfigManager.ApplyChanges();
 		}
 
 		private void frmDebugger_Resize(object sender, EventArgs e)
@@ -650,7 +670,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void mnuAutoLoadDbgFiles_CheckedChanged(object sender, EventArgs e)
+		private void mnuAutoLoadDbgFiles_Click(object sender, EventArgs e)
 		{
 			if(_debuggerInitialized) {
 				ConfigManager.Config.DebugInfo.AutoLoadDbgFiles = mnuAutoLoadDbgFiles.Checked;

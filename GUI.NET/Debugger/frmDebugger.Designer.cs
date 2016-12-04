@@ -94,6 +94,7 @@
 			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuBreakOnOpen = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCpuMemoryMapping = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowPpuMemoryMapping = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowFunctionLabelLists = new System.Windows.Forms.ToolStripMenuItem();
@@ -123,6 +124,7 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
+			this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -429,7 +431,7 @@
 			this.mnuAutoLoadDbgFiles.Name = "mnuAutoLoadDbgFiles";
 			this.mnuAutoLoadDbgFiles.Size = new System.Drawing.Size(178, 22);
 			this.mnuAutoLoadDbgFiles.Text = "Auto-load DBG files";
-			this.mnuAutoLoadDbgFiles.CheckedChanged += new System.EventHandler(this.mnuAutoLoadDbgFiles_CheckedChanged);
+			this.mnuAutoLoadDbgFiles.Click += new System.EventHandler(this.mnuAutoLoadDbgFiles_Click);
 			// 
 			// toolStripMenuItem3
 			// 
@@ -668,6 +670,8 @@
             this.mnuSplitView,
             this.fontSizeToolStripMenuItem,
             this.toolStripMenuItem5,
+            this.mnuBreakOnOpen,
+            this.toolStripMenuItem11,
             this.mnuShowCpuMemoryMapping,
             this.mnuShowPpuMemoryMapping,
             this.mnuShowFunctionLabelLists,
@@ -685,7 +689,7 @@
 			// 
 			this.mnuSplitView.CheckOnClick = true;
 			this.mnuSplitView.Name = "mnuSplitView";
-			this.mnuSplitView.Size = new System.Drawing.Size(237, 22);
+			this.mnuSplitView.Size = new System.Drawing.Size(243, 22);
 			this.mnuSplitView.Text = "Split View";
 			this.mnuSplitView.Click += new System.EventHandler(this.mnuSplitView_Click);
 			// 
@@ -696,7 +700,7 @@
             this.mnuDecreaseFontSize,
             this.mnuResetFontSize});
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
-			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
 			this.fontSizeToolStripMenuItem.Text = "Text Size";
 			// 
 			// mnuIncreaseFontSize
@@ -729,42 +733,50 @@
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(234, 6);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(240, 6);
+			// 
+			// mnuBreakOnOpen
+			// 
+			this.mnuBreakOnOpen.CheckOnClick = true;
+			this.mnuBreakOnOpen.Name = "mnuBreakOnOpen";
+			this.mnuBreakOnOpen.Size = new System.Drawing.Size(243, 22);
+			this.mnuBreakOnOpen.Text = "Break when debugger is opened";
+			this.mnuBreakOnOpen.Click += new System.EventHandler(this.mnuBreakOnOpen_Click);
 			// 
 			// mnuShowCpuMemoryMapping
 			// 
 			this.mnuShowCpuMemoryMapping.CheckOnClick = true;
 			this.mnuShowCpuMemoryMapping.Name = "mnuShowCpuMemoryMapping";
-			this.mnuShowCpuMemoryMapping.Size = new System.Drawing.Size(237, 22);
+			this.mnuShowCpuMemoryMapping.Size = new System.Drawing.Size(243, 22);
 			this.mnuShowCpuMemoryMapping.Text = "Show CPU Memory Mapping";
-			this.mnuShowCpuMemoryMapping.CheckedChanged += new System.EventHandler(this.mnuShowCpuMemoryMapping_CheckedChanged);
+			this.mnuShowCpuMemoryMapping.Click += new System.EventHandler(this.mnuShowCpuMemoryMapping_Click);
 			// 
 			// mnuShowPpuMemoryMapping
 			// 
 			this.mnuShowPpuMemoryMapping.CheckOnClick = true;
 			this.mnuShowPpuMemoryMapping.Name = "mnuShowPpuMemoryMapping";
-			this.mnuShowPpuMemoryMapping.Size = new System.Drawing.Size(237, 22);
+			this.mnuShowPpuMemoryMapping.Size = new System.Drawing.Size(243, 22);
 			this.mnuShowPpuMemoryMapping.Text = "Show PPU Memory Mapping";
-			this.mnuShowPpuMemoryMapping.CheckedChanged += new System.EventHandler(this.mnuShowPpuMemoryMapping_CheckedChanged);
+			this.mnuShowPpuMemoryMapping.Click += new System.EventHandler(this.mnuShowPpuMemoryMapping_Click);
 			// 
 			// mnuShowFunctionLabelLists
 			// 
 			this.mnuShowFunctionLabelLists.CheckOnClick = true;
 			this.mnuShowFunctionLabelLists.Name = "mnuShowFunctionLabelLists";
-			this.mnuShowFunctionLabelLists.Size = new System.Drawing.Size(237, 22);
+			this.mnuShowFunctionLabelLists.Size = new System.Drawing.Size(243, 22);
 			this.mnuShowFunctionLabelLists.Text = "Show Function/Label Lists";
-			this.mnuShowFunctionLabelLists.CheckedChanged += new System.EventHandler(this.mnuShowFunctionLabelLists_CheckedChanged);
+			this.mnuShowFunctionLabelLists.Click += new System.EventHandler(this.mnuShowFunctionLabelLists_Click);
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(234, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(240, 6);
 			// 
 			// mnuHighlightUnexecutedCode
 			// 
 			this.mnuHighlightUnexecutedCode.CheckOnClick = true;
 			this.mnuHighlightUnexecutedCode.Name = "mnuHighlightUnexecutedCode";
-			this.mnuHighlightUnexecutedCode.Size = new System.Drawing.Size(237, 22);
+			this.mnuHighlightUnexecutedCode.Size = new System.Drawing.Size(243, 22);
 			this.mnuHighlightUnexecutedCode.Text = "Highlight Unexecuted Code";
 			this.mnuHighlightUnexecutedCode.Click += new System.EventHandler(this.mnuHighlightUnexecutedCode_Click);
 			// 
@@ -772,28 +784,28 @@
 			// 
 			this.mnuShowEffectiveAddresses.CheckOnClick = true;
 			this.mnuShowEffectiveAddresses.Name = "mnuShowEffectiveAddresses";
-			this.mnuShowEffectiveAddresses.Size = new System.Drawing.Size(237, 22);
+			this.mnuShowEffectiveAddresses.Size = new System.Drawing.Size(243, 22);
 			this.mnuShowEffectiveAddresses.Text = "Show Effective Addresses";
-			this.mnuShowEffectiveAddresses.CheckedChanged += new System.EventHandler(this.mnuShowEffectiveAddresses_CheckedChanged);
+			this.mnuShowEffectiveAddresses.Click += new System.EventHandler(this.mnuShowEffectiveAddresses_Click);
 			// 
 			// mnuShowOnlyDisassembledCode
 			// 
 			this.mnuShowOnlyDisassembledCode.CheckOnClick = true;
 			this.mnuShowOnlyDisassembledCode.Name = "mnuShowOnlyDisassembledCode";
-			this.mnuShowOnlyDisassembledCode.Size = new System.Drawing.Size(237, 22);
+			this.mnuShowOnlyDisassembledCode.Size = new System.Drawing.Size(243, 22);
 			this.mnuShowOnlyDisassembledCode.Text = "Show Only Disassembled Code";
-			this.mnuShowOnlyDisassembledCode.CheckedChanged += new System.EventHandler(this.mnuShowOnlyDisassembledCode_CheckedChanged);
+			this.mnuShowOnlyDisassembledCode.Click += new System.EventHandler(this.mnuShowOnlyDisassembledCode_Click);
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(234, 6);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(240, 6);
 			// 
 			// mnuPpuPartialDraw
 			// 
 			this.mnuPpuPartialDraw.CheckOnClick = true;
 			this.mnuPpuPartialDraw.Name = "mnuPpuPartialDraw";
-			this.mnuPpuPartialDraw.Size = new System.Drawing.Size(237, 22);
+			this.mnuPpuPartialDraw.Size = new System.Drawing.Size(243, 22);
 			this.mnuPpuPartialDraw.Text = "Draw Partial Frame";
 			this.mnuPpuPartialDraw.Click += new System.EventHandler(this.mnuPpuPartialDraw_Click);
 			// 
@@ -959,6 +971,11 @@
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
+			// toolStripMenuItem11
+			// 
+			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+			this.toolStripMenuItem11.Size = new System.Drawing.Size(240, 6);
+			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1089,5 +1106,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuFindAllOccurrences;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoLoadDbgFiles;
+		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnOpen;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
 	}
 }
