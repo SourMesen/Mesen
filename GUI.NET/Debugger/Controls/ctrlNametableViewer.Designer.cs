@@ -28,7 +28,6 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkShowPpuScrollOverlay = new System.Windows.Forms.CheckBox();
 			this.picNametable = new System.Windows.Forms.PictureBox();
 			this.grpTileInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -44,11 +43,16 @@
 			this.lblTile = new System.Windows.Forms.Label();
 			this.txtTileIndex = new System.Windows.Forms.TextBox();
 			this.picTile = new System.Windows.Forms.PictureBox();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkShowPpuScrollOverlay = new System.Windows.Forms.CheckBox();
+			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
+			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.grpTileInfo.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
+			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -58,7 +62,7 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.picNametable, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.grpTileInfo, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -68,16 +72,6 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(697, 486);
 			this.tableLayoutPanel1.TabIndex = 2;
-			// 
-			// chkShowPpuScrollOverlay
-			// 
-			this.chkShowPpuScrollOverlay.AutoSize = true;
-			this.chkShowPpuScrollOverlay.Location = new System.Drawing.Point(519, 233);
-			this.chkShowPpuScrollOverlay.Name = "chkShowPpuScrollOverlay";
-			this.chkShowPpuScrollOverlay.Size = new System.Drawing.Size(146, 17);
-			this.chkShowPpuScrollOverlay.TabIndex = 0;
-			this.chkShowPpuScrollOverlay.Text = "Show PPU Scroll Overlay";
-			this.chkShowPpuScrollOverlay.UseVisualStyleBackColor = true;
 			// 
 			// picNametable
 			// 
@@ -241,6 +235,50 @@
 			this.picTile.TabIndex = 12;
 			this.picTile.TabStop = false;
 			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay);
+			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
+			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 230);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(181, 100);
+			this.flowLayoutPanel1.TabIndex = 5;
+			// 
+			// chkShowPpuScrollOverlay
+			// 
+			this.chkShowPpuScrollOverlay.AutoSize = true;
+			this.chkShowPpuScrollOverlay.Location = new System.Drawing.Point(3, 3);
+			this.chkShowPpuScrollOverlay.Name = "chkShowPpuScrollOverlay";
+			this.chkShowPpuScrollOverlay.Size = new System.Drawing.Size(146, 17);
+			this.chkShowPpuScrollOverlay.TabIndex = 1;
+			this.chkShowPpuScrollOverlay.Text = "Show PPU Scroll Overlay";
+			this.chkShowPpuScrollOverlay.UseVisualStyleBackColor = true;
+			this.chkShowPpuScrollOverlay.Click += new System.EventHandler(this.chkShowScrollWindow_Click);
+			// 
+			// chkShowTileGrid
+			// 
+			this.chkShowTileGrid.AutoSize = true;
+			this.chkShowTileGrid.Location = new System.Drawing.Point(3, 26);
+			this.chkShowTileGrid.Name = "chkShowTileGrid";
+			this.chkShowTileGrid.Size = new System.Drawing.Size(95, 17);
+			this.chkShowTileGrid.TabIndex = 2;
+			this.chkShowTileGrid.Text = "Show Tile Grid";
+			this.chkShowTileGrid.UseVisualStyleBackColor = true;
+			this.chkShowTileGrid.Click += new System.EventHandler(this.chkShowTileGrid_Click);
+			// 
+			// chkShowAttributeGrid
+			// 
+			this.chkShowAttributeGrid.AutoSize = true;
+			this.chkShowAttributeGrid.Location = new System.Drawing.Point(3, 49);
+			this.chkShowAttributeGrid.Name = "chkShowAttributeGrid";
+			this.chkShowAttributeGrid.Size = new System.Drawing.Size(117, 17);
+			this.chkShowAttributeGrid.TabIndex = 3;
+			this.chkShowAttributeGrid.Text = "Show Attribute Grid";
+			this.chkShowAttributeGrid.UseVisualStyleBackColor = true;
+			this.chkShowAttributeGrid.Click += new System.EventHandler(this.chkShowAttributeGrid_Click);
+			// 
 			// ctrlNametableViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -249,12 +287,13 @@
 			this.Name = "ctrlNametableViewer";
 			this.Size = new System.Drawing.Size(697, 486);
 			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).EndInit();
 			this.grpTileInfo.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
+			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -277,6 +316,9 @@
 		private System.Windows.Forms.Label lblTile;
 		private System.Windows.Forms.TextBox txtTileIndex;
 		private System.Windows.Forms.PictureBox picTile;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.CheckBox chkShowPpuScrollOverlay;
+		private System.Windows.Forms.CheckBox chkShowTileGrid;
+		private System.Windows.Forms.CheckBox chkShowAttributeGrid;
 	}
 }

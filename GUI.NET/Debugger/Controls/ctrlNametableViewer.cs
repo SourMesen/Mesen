@@ -25,7 +25,8 @@ namespace Mesen.GUI.Debugger.Controls
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
 				chkShowPpuScrollOverlay.Checked = ConfigManager.Config.DebugInfo.ShowPpuScrollOverlay;
-				chkShowPpuScrollOverlay.CheckedChanged += this.chkShowScrollWindow_CheckedChanged;
+				chkShowTileGrid.Checked = ConfigManager.Config.DebugInfo.ShowTileGrid;
+				chkShowAttributeGrid.Checked = ConfigManager.Config.DebugInfo.ShowAttributeGrid;
 			}
 		}
 
@@ -53,34 +54,65 @@ namespace Mesen.GUI.Debugger.Controls
 					}
 				}
 
+				if(chkShowTileGrid.Checked) {
+					using(Pen pen = new Pen(Color.FromArgb(chkShowAttributeGrid.Checked ? 120 : 180, 240, 100, 120))) {
+						if(chkShowAttributeGrid.Checked) {
+							pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+						}
+						DrawGrid(g, pen, 1);
+					}
+				}
+
+				if(chkShowAttributeGrid.Checked) {
+					using(Pen pen = new Pen(Color.FromArgb(180, 80, 130, 250))) {
+						DrawGrid(g, pen, 2);
+					}
+				}
+
 				if(chkShowPpuScrollOverlay.Checked) {
-					using(Brush brush = new SolidBrush(Color.FromArgb(75, 100, 180, 215))) {
-						g.FillRectangle(brush, xScroll, yScroll, 256, 240);
-						if(xScroll + 256 >= 512) {
-							g.FillRectangle(brush, 0, yScroll, xScroll - 256, 240);
-						}
-						if(yScroll + 240 >= 480) {
-							g.FillRectangle(brush, xScroll, 0, 256, yScroll - 240);
-						}
-						if(xScroll + 256 >= 512 && yScroll + 240 >= 480) {
-							g.FillRectangle(brush, 0, 0, xScroll - 256, yScroll - 240);
-						}
-					}
-					using(Pen pen = new Pen(Color.FromArgb(230, 150, 150, 150), 2)) {
-						g.DrawRectangle(pen, xScroll, yScroll, 256, 240);
-						if(xScroll + 256 >= 512) {
-							g.DrawRectangle(pen, 0, yScroll, xScroll - 256, 240);
-						}
-						if(yScroll + 240 >= 480) {
-							g.DrawRectangle(pen, xScroll, 0, 256, yScroll - 240);
-						}
-						if(xScroll + 256 >= 512 && yScroll + 240 >= 480) {
-							g.DrawRectangle(pen, 0, 0, xScroll - 256, yScroll - 240);
-						}
-					}
+					DrawScrollOverlay(xScroll, yScroll, g);
 				}
 			}
 			this.picNametable.Image = target;
+		}
+
+		private static void DrawGrid(Graphics g, Pen pen, int factor)
+		{
+			for(int i = 0; i < 64 / factor; i++) {
+				g.DrawLine(pen, i * 8 * factor - 1, 0, i * 8 * factor - 1, 479);
+			}
+
+			for(int i = 0; i < 60 / factor; i++) {
+				g.DrawLine(pen, 0, i * 8 * factor - 1, 511, i * 8 * factor - 1);
+			}
+		}
+
+		private static void DrawScrollOverlay(int xScroll, int yScroll, Graphics g)
+		{
+			using(Brush brush = new SolidBrush(Color.FromArgb(75, 100, 180, 215))) {
+				g.FillRectangle(brush, xScroll, yScroll, 256, 240);
+				if(xScroll + 256 >= 512) {
+					g.FillRectangle(brush, 0, yScroll, xScroll - 256, 240);
+				}
+				if(yScroll + 240 >= 480) {
+					g.FillRectangle(brush, xScroll, 0, 256, yScroll - 240);
+				}
+				if(xScroll + 256 >= 512 && yScroll + 240 >= 480) {
+					g.FillRectangle(brush, 0, 0, xScroll - 256, yScroll - 240);
+				}
+			}
+			using(Pen pen = new Pen(Color.FromArgb(230, 150, 150, 150), 2)) {
+				g.DrawRectangle(pen, xScroll, yScroll, 256, 240);
+				if(xScroll + 256 >= 512) {
+					g.DrawRectangle(pen, 0, yScroll, xScroll - 256, 240);
+				}
+				if(yScroll + 240 >= 480) {
+					g.DrawRectangle(pen, xScroll, 0, 256, yScroll - 240);
+				}
+				if(xScroll + 256 >= 512 && yScroll + 240 >= 480) {
+					g.DrawRectangle(pen, 0, 0, xScroll - 256, yScroll - 240);
+				}
+			}
 		}
 
 		private void picNametable_MouseMove(object sender, MouseEventArgs e)
@@ -124,9 +156,23 @@ namespace Mesen.GUI.Debugger.Controls
 			this.picTile.Image = tile;
 		}
 
-		private void chkShowScrollWindow_CheckedChanged(object sender, EventArgs e)
+		private void chkShowScrollWindow_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.ShowPpuScrollOverlay = chkShowPpuScrollOverlay.Checked;
+			ConfigManager.ApplyChanges();
+			this.RefreshViewer();
+		}
+
+		private void chkShowTileGrid_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowTileGrid = chkShowTileGrid.Checked;
+			ConfigManager.ApplyChanges();
+			this.RefreshViewer();
+		}
+
+		private void chkShowAttributeGrid_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowAttributeGrid = chkShowAttributeGrid.Checked;
 			ConfigManager.ApplyChanges();
 			this.RefreshViewer();
 		}
