@@ -544,7 +544,7 @@ namespace Mesen.GUI.Debugger
 				_traceLogger.FormClosed += (s, evt) => {
 					_traceLogger = null;
 				};
-				_traceLogger.Show(sender, this);
+				OpenChildForm(_traceLogger);
 			} else {
 				_traceLogger.Focus();
 			}

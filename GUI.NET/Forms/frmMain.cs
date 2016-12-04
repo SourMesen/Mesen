@@ -853,7 +853,7 @@ namespace Mesen.GUI.Forms
 				_debugger.FormClosed += (obj, args) => {
 					_debugger = null;
 				};
-				_debugger.Show(sender);
+				_debugger.Show();
 			} else {
 				_debugger.Focus();
 			}
