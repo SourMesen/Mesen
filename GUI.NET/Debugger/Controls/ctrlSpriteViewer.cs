@@ -73,7 +73,7 @@ namespace Mesen.GUI.Debugger.Controls
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
 					g.FillRectangle(Brushes.Black, 0, 0, 256, 240);
 
-					for(int i = 0; i < 64; i++) {
+					for(int i = 63; i >= 0; i--) {
 						if(i != _selectedSprite) {
 							DrawSprite(source, g, i);
 						}
