@@ -700,7 +700,6 @@ void Debugger::SetLastFramePpuScroll(uint16_t x, uint16_t y)
 	if(Debugger::Instance) {
 		Debugger::Instance->_ppuScrollX = x;
 		Debugger::Instance->_ppuScrollY = y;
-		MessageManager::Log("X: " + std::to_string(x) + " Y: " + std::to_string(y));
 	}
 }
 
