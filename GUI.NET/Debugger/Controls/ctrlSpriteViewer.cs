@@ -131,6 +131,7 @@ namespace Mesen.GUI.Debugger.Controls
 			bool horizontalMirror = (attributes & 0x40) == 0x40;
 			bool backgroundPriority = (attributes & 0x20) == 0x20;
 
+			this.txtSpriteIndex.Text = _selectedSprite.ToString("X2");
 			this.txtTileIndex.Text = tileIndex.ToString("X2");
 			this.txtTileAddress.Text = tileAddr.ToString("X4");
 			this.txtPosition.Text = spriteX.ToString() + ", " + spriteY.ToString();
