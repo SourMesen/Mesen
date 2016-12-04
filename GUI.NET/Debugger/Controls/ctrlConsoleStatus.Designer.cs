@@ -316,8 +316,8 @@
 			// tableLayoutPanel9
 			// 
 			this.tableLayoutPanel9.ColumnCount = 2;
-			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.48536F));
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.51464F));
 			this.tableLayoutPanel9.Controls.Add(this.chkDrawLeftSpr, 0, 5);
 			this.tableLayoutPanel9.Controls.Add(this.flowLayoutPanel7, 0, 1);
 			this.tableLayoutPanel9.Controls.Add(this.chkSpritesEnabled, 0, 3);
@@ -339,7 +339,6 @@
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel9.Size = new System.Drawing.Size(239, 120);
 			this.tableLayoutPanel9.TabIndex = 1;
 			// 
@@ -349,9 +348,9 @@
 			this.chkDrawLeftSpr.Location = new System.Drawing.Point(0, 102);
 			this.chkDrawLeftSpr.Margin = new System.Windows.Forms.Padding(0);
 			this.chkDrawLeftSpr.Name = "chkDrawLeftSpr";
-			this.chkDrawLeftSpr.Size = new System.Drawing.Size(119, 17);
+			this.chkDrawLeftSpr.Size = new System.Drawing.Size(129, 17);
 			this.chkDrawLeftSpr.TabIndex = 23;
-			this.chkDrawLeftSpr.Text = "Draw left Sprite (8px)";
+			this.chkDrawLeftSpr.Text = "Draw left Sprites (8px)";
 			this.chkDrawLeftSpr.UseVisualStyleBackColor = true;
 			// 
 			// flowLayoutPanel7
@@ -450,7 +449,7 @@
 			// chkGrayscale
 			// 
 			this.chkGrayscale.AutoSize = true;
-			this.chkGrayscale.Location = new System.Drawing.Point(119, 51);
+			this.chkGrayscale.Location = new System.Drawing.Point(134, 51);
 			this.chkGrayscale.Margin = new System.Windows.Forms.Padding(0);
 			this.chkGrayscale.Name = "chkGrayscale";
 			this.chkGrayscale.Size = new System.Drawing.Size(73, 17);
@@ -461,7 +460,7 @@
 			// chkIntensifyRed
 			// 
 			this.chkIntensifyRed.AutoSize = true;
-			this.chkIntensifyRed.Location = new System.Drawing.Point(119, 68);
+			this.chkIntensifyRed.Location = new System.Drawing.Point(134, 68);
 			this.chkIntensifyRed.Margin = new System.Windows.Forms.Padding(0);
 			this.chkIntensifyRed.Name = "chkIntensifyRed";
 			this.chkIntensifyRed.Size = new System.Drawing.Size(88, 17);
@@ -472,7 +471,7 @@
 			// chkIntensifyGreen
 			// 
 			this.chkIntensifyGreen.AutoSize = true;
-			this.chkIntensifyGreen.Location = new System.Drawing.Point(119, 85);
+			this.chkIntensifyGreen.Location = new System.Drawing.Point(134, 85);
 			this.chkIntensifyGreen.Margin = new System.Windows.Forms.Padding(0);
 			this.chkIntensifyGreen.Name = "chkIntensifyGreen";
 			this.chkIntensifyGreen.Size = new System.Drawing.Size(97, 17);
@@ -538,7 +537,7 @@
 			// chkIntensifyBlue
 			// 
 			this.chkIntensifyBlue.AutoSize = true;
-			this.chkIntensifyBlue.Location = new System.Drawing.Point(119, 102);
+			this.chkIntensifyBlue.Location = new System.Drawing.Point(134, 102);
 			this.chkIntensifyBlue.Margin = new System.Windows.Forms.Padding(0);
 			this.chkIntensifyBlue.Name = "chkIntensifyBlue";
 			this.chkIntensifyBlue.Size = new System.Drawing.Size(89, 17);
@@ -1030,7 +1029,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.chkLargeSprites, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.chkVerticalWrite, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(119, 0);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(134, 0);
 			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
@@ -1038,7 +1037,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(120, 51);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(105, 51);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
 			// lstStack

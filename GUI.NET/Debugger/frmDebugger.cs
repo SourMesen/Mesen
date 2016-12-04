@@ -82,7 +82,7 @@ namespace Mesen.GUI.Debugger
 				"a == 10 || x == $23" + Environment.NewLine +
 				"scanline == 10 && (cycle >= 55 && cycle <= 100)" + Environment.NewLine +
 				"x == [$150] || y == [10]" + Environment.NewLine +
-				"[[$15] + y]   -> Reads the value at address $15, adds Y to it and reads the value at the resulting address." +
+				"[[$15] + y]   -> Reads the value at address $15, adds Y to it and reads the value at the resulting address." + Environment.NewLine +
 				"{$FFFA}  -> Returns the NMI handler's address."
 			);
 
