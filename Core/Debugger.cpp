@@ -368,7 +368,7 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		}
 	}
 
-	if(!breakDone) {
+	if(!breakDone && type != MemoryOperationType::DummyRead) {
 		BreakpointType breakpointType = BreakpointType::Execute;
 		switch(type) {
 			case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
