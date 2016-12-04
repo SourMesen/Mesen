@@ -94,6 +94,7 @@
 			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDisplayOpCodesInLowerCase = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuBreakOnReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreakOnOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,7 +128,6 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
-			this.mnuDisplayOpCodesInLowerCase = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -210,6 +210,7 @@
 			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
 			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 390);
 			this.ctrlConsoleStatus.TabIndex = 3;
+			this.ctrlConsoleStatus.OnGotoLocation += new System.EventHandler(this.ctrlConsoleStatus_OnGotoLocation);
 			// 
 			// ctrlDebuggerCodeSplit
 			// 
@@ -744,6 +745,14 @@
 			this.mnuResetFontSize.Text = "Reset to Default";
 			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
 			// 
+			// mnuDisplayOpCodesInLowerCase
+			// 
+			this.mnuDisplayOpCodesInLowerCase.CheckOnClick = true;
+			this.mnuDisplayOpCodesInLowerCase.Name = "mnuDisplayOpCodesInLowerCase";
+			this.mnuDisplayOpCodesInLowerCase.Size = new System.Drawing.Size(243, 22);
+			this.mnuDisplayOpCodesInLowerCase.Text = "Display OP codes in lower case";
+			this.mnuDisplayOpCodesInLowerCase.Click += new System.EventHandler(this.mnuDisplayOpCodesInLowerCase_Click);
+			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
@@ -997,14 +1006,6 @@
 			this.ctrlCpuMemoryMapping.TabIndex = 4;
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
-			// 
-			// mnuDisplayOpCodesInLowerCase
-			// 
-			this.mnuDisplayOpCodesInLowerCase.CheckOnClick = true;
-			this.mnuDisplayOpCodesInLowerCase.Name = "mnuDisplayOpCodesInLowerCase";
-			this.mnuDisplayOpCodesInLowerCase.Size = new System.Drawing.Size(243, 22);
-			this.mnuDisplayOpCodesInLowerCase.Text = "Display OP codes in lower case";
-			this.mnuDisplayOpCodesInLowerCase.Click += new System.EventHandler(this.mnuDisplayOpCodesInLowerCase_Click);
 			// 
 			// frmDebugger
 			// 

@@ -28,10 +28,13 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ctrlConsoleStatus));
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpPPUStatus = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+			this.txtNTAddr = new System.Windows.Forms.TextBox();
+			this.lblNTAddr = new System.Windows.Forms.Label();
 			this.lblVRAMAddr = new System.Windows.Forms.Label();
 			this.lblCycle = new System.Windows.Forms.Label();
 			this.txtCycle = new System.Windows.Forms.TextBox();
@@ -49,6 +52,10 @@
 			this.txtSprAddr = new System.Windows.Forms.TextBox();
 			this.chkSpritesEnabled = new System.Windows.Forms.CheckBox();
 			this.chkBGEnabled = new System.Windows.Forms.CheckBox();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkNMIOnBlank = new System.Windows.Forms.CheckBox();
+			this.chkLargeSprites = new System.Windows.Forms.CheckBox();
+			this.chkVerticalWrite = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblBGAddr = new System.Windows.Forms.Label();
 			this.txtBGAddr = new System.Windows.Forms.TextBox();
@@ -56,11 +63,6 @@
 			this.chkGrayscale = new System.Windows.Forms.CheckBox();
 			this.chkIntensifyRed = new System.Windows.Forms.CheckBox();
 			this.chkIntensifyGreen = new System.Windows.Forms.CheckBox();
-			this.chkVerticalWrite = new System.Windows.Forms.CheckBox();
-			this.chkNMIOnBlank = new System.Windows.Forms.CheckBox();
-			this.chkLargeSprites = new System.Windows.Forms.CheckBox();
-			this.lblNTAddr = new System.Windows.Forms.Label();
-			this.txtNTAddr = new System.Windows.Forms.TextBox();
 			this.chkIntensifyBlue = new System.Windows.Forms.CheckBox();
 			this.grpCPUStatus = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -89,6 +91,8 @@
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSP = new System.Windows.Forms.Label();
 			this.txtSP = new System.Windows.Forms.TextBox();
+			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblA = new System.Windows.Forms.Label();
 			this.txtA = new System.Windows.Forms.TextBox();
@@ -100,11 +104,14 @@
 			this.txtPC = new System.Windows.Forms.TextBox();
 			this.lblCycleCount = new System.Windows.Forms.Label();
 			this.txtCycleCount = new System.Windows.Forms.TextBox();
+			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+			this.btnGoto = new System.Windows.Forms.Button();
 			this.btnApplyChanges = new System.Windows.Forms.Button();
 			this.tmrButton = new System.Windows.Forms.Timer(this.components);
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.contextGoTo = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuGoToIrqHandler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGoToNmiHandler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGoToResetHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -112,6 +119,7 @@
 			this.grpControlMask.SuspendLayout();
 			this.tableLayoutPanel9.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			this.grpCPUStatus.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
@@ -125,7 +133,8 @@
 			this.tableLayoutPanel6.SuspendLayout();
 			this.flowLayoutPanel4.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
+			this.tableLayoutPanel10.SuspendLayout();
+			this.contextGoTo.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel2
@@ -134,7 +143,7 @@
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Controls.Add(this.grpPPUStatus, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.grpCPUStatus, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.btnApplyChanges, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel10, 0, 2);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -204,6 +213,28 @@
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel7.Size = new System.Drawing.Size(195, 151);
 			this.tableLayoutPanel7.TabIndex = 0;
+			// 
+			// txtNTAddr
+			// 
+			this.txtNTAddr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txtNTAddr.Location = new System.Drawing.Point(68, 74);
+			this.txtNTAddr.Margin = new System.Windows.Forms.Padding(2);
+			this.txtNTAddr.Name = "txtNTAddr";
+			this.txtNTAddr.ReadOnly = true;
+			this.txtNTAddr.Size = new System.Drawing.Size(58, 20);
+			this.txtNTAddr.TabIndex = 1;
+			// 
+			// lblNTAddr
+			// 
+			this.lblNTAddr.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblNTAddr.AutoSize = true;
+			this.lblNTAddr.Location = new System.Drawing.Point(0, 77);
+			this.lblNTAddr.Margin = new System.Windows.Forms.Padding(0);
+			this.lblNTAddr.Name = "lblNTAddr";
+			this.lblNTAddr.Size = new System.Drawing.Size(50, 13);
+			this.lblNTAddr.TabIndex = 0;
+			this.lblNTAddr.Text = "NT Addr:";
+			this.lblNTAddr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// lblVRAMAddr
 			// 
@@ -306,7 +337,7 @@
 			this.grpControlMask.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.grpControlMask.Controls.Add(this.tableLayoutPanel9);
 			this.grpControlMask.Location = new System.Drawing.Point(210, 0);
-			this.grpControlMask.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.grpControlMask.Margin = new System.Windows.Forms.Padding(0);
 			this.grpControlMask.Name = "grpControlMask";
 			this.grpControlMask.Size = new System.Drawing.Size(245, 139);
 			this.grpControlMask.TabIndex = 1;
@@ -405,6 +436,58 @@
 			this.chkBGEnabled.Text = "BG Enabled";
 			this.chkBGEnabled.UseVisualStyleBackColor = true;
 			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.chkNMIOnBlank, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.chkLargeSprites, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.chkVerticalWrite, 0, 0);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(135, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 3;
+			this.tableLayoutPanel9.SetRowSpan(this.tableLayoutPanel1, 2);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(104, 51);
+			this.tableLayoutPanel1.TabIndex = 5;
+			// 
+			// chkNMIOnBlank
+			// 
+			this.chkNMIOnBlank.AutoSize = true;
+			this.chkNMIOnBlank.Location = new System.Drawing.Point(0, 17);
+			this.chkNMIOnBlank.Margin = new System.Windows.Forms.Padding(0);
+			this.chkNMIOnBlank.Name = "chkNMIOnBlank";
+			this.chkNMIOnBlank.Size = new System.Drawing.Size(97, 17);
+			this.chkNMIOnBlank.TabIndex = 18;
+			this.chkNMIOnBlank.Text = "NMI on vBlank";
+			this.chkNMIOnBlank.UseVisualStyleBackColor = true;
+			// 
+			// chkLargeSprites
+			// 
+			this.chkLargeSprites.AutoSize = true;
+			this.chkLargeSprites.Location = new System.Drawing.Point(0, 34);
+			this.chkLargeSprites.Margin = new System.Windows.Forms.Padding(0);
+			this.chkLargeSprites.Name = "chkLargeSprites";
+			this.chkLargeSprites.Size = new System.Drawing.Size(88, 17);
+			this.chkLargeSprites.TabIndex = 19;
+			this.chkLargeSprites.Text = "Large Sprites";
+			this.chkLargeSprites.UseVisualStyleBackColor = true;
+			// 
+			// chkVerticalWrite
+			// 
+			this.chkVerticalWrite.AutoSize = true;
+			this.chkVerticalWrite.Location = new System.Drawing.Point(0, 0);
+			this.chkVerticalWrite.Margin = new System.Windows.Forms.Padding(0);
+			this.chkVerticalWrite.Name = "chkVerticalWrite";
+			this.chkVerticalWrite.Size = new System.Drawing.Size(89, 17);
+			this.chkVerticalWrite.TabIndex = 17;
+			this.chkVerticalWrite.Text = "Vertical Write";
+			this.chkVerticalWrite.UseVisualStyleBackColor = true;
+			// 
 			// flowLayoutPanel6
 			// 
 			this.flowLayoutPanel6.Controls.Add(this.lblBGAddr);
@@ -449,7 +532,7 @@
 			// chkGrayscale
 			// 
 			this.chkGrayscale.AutoSize = true;
-			this.chkGrayscale.Location = new System.Drawing.Point(134, 51);
+			this.chkGrayscale.Location = new System.Drawing.Point(135, 51);
 			this.chkGrayscale.Margin = new System.Windows.Forms.Padding(0);
 			this.chkGrayscale.Name = "chkGrayscale";
 			this.chkGrayscale.Size = new System.Drawing.Size(73, 17);
@@ -460,7 +543,7 @@
 			// chkIntensifyRed
 			// 
 			this.chkIntensifyRed.AutoSize = true;
-			this.chkIntensifyRed.Location = new System.Drawing.Point(134, 68);
+			this.chkIntensifyRed.Location = new System.Drawing.Point(135, 68);
 			this.chkIntensifyRed.Margin = new System.Windows.Forms.Padding(0);
 			this.chkIntensifyRed.Name = "chkIntensifyRed";
 			this.chkIntensifyRed.Size = new System.Drawing.Size(88, 17);
@@ -471,7 +554,7 @@
 			// chkIntensifyGreen
 			// 
 			this.chkIntensifyGreen.AutoSize = true;
-			this.chkIntensifyGreen.Location = new System.Drawing.Point(134, 85);
+			this.chkIntensifyGreen.Location = new System.Drawing.Point(135, 85);
 			this.chkIntensifyGreen.Margin = new System.Windows.Forms.Padding(0);
 			this.chkIntensifyGreen.Name = "chkIntensifyGreen";
 			this.chkIntensifyGreen.Size = new System.Drawing.Size(97, 17);
@@ -479,65 +562,10 @@
 			this.chkIntensifyGreen.Text = "Intensify Green";
 			this.chkIntensifyGreen.UseVisualStyleBackColor = true;
 			// 
-			// chkVerticalWrite
-			// 
-			this.chkVerticalWrite.AutoSize = true;
-			this.chkVerticalWrite.Location = new System.Drawing.Point(0, 0);
-			this.chkVerticalWrite.Margin = new System.Windows.Forms.Padding(0);
-			this.chkVerticalWrite.Name = "chkVerticalWrite";
-			this.chkVerticalWrite.Size = new System.Drawing.Size(89, 17);
-			this.chkVerticalWrite.TabIndex = 17;
-			this.chkVerticalWrite.Text = "Vertical Write";
-			this.chkVerticalWrite.UseVisualStyleBackColor = true;
-			// 
-			// chkNMIOnBlank
-			// 
-			this.chkNMIOnBlank.AutoSize = true;
-			this.chkNMIOnBlank.Location = new System.Drawing.Point(0, 17);
-			this.chkNMIOnBlank.Margin = new System.Windows.Forms.Padding(0);
-			this.chkNMIOnBlank.Name = "chkNMIOnBlank";
-			this.chkNMIOnBlank.Size = new System.Drawing.Size(97, 17);
-			this.chkNMIOnBlank.TabIndex = 18;
-			this.chkNMIOnBlank.Text = "NMI on vBlank";
-			this.chkNMIOnBlank.UseVisualStyleBackColor = true;
-			// 
-			// chkLargeSprites
-			// 
-			this.chkLargeSprites.AutoSize = true;
-			this.chkLargeSprites.Location = new System.Drawing.Point(0, 34);
-			this.chkLargeSprites.Margin = new System.Windows.Forms.Padding(0);
-			this.chkLargeSprites.Name = "chkLargeSprites";
-			this.chkLargeSprites.Size = new System.Drawing.Size(88, 17);
-			this.chkLargeSprites.TabIndex = 19;
-			this.chkLargeSprites.Text = "Large Sprites";
-			this.chkLargeSprites.UseVisualStyleBackColor = true;
-			// 
-			// lblNTAddr
-			// 
-			this.lblNTAddr.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblNTAddr.AutoSize = true;
-			this.lblNTAddr.Location = new System.Drawing.Point(0, 77);
-			this.lblNTAddr.Margin = new System.Windows.Forms.Padding(0);
-			this.lblNTAddr.Name = "lblNTAddr";
-			this.lblNTAddr.Size = new System.Drawing.Size(50, 13);
-			this.lblNTAddr.TabIndex = 0;
-			this.lblNTAddr.Text = "NT Addr:";
-			this.lblNTAddr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// txtNTAddr
-			// 
-			this.txtNTAddr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.txtNTAddr.Location = new System.Drawing.Point(68, 74);
-			this.txtNTAddr.Margin = new System.Windows.Forms.Padding(2);
-			this.txtNTAddr.Name = "txtNTAddr";
-			this.txtNTAddr.ReadOnly = true;
-			this.txtNTAddr.Size = new System.Drawing.Size(58, 20);
-			this.txtNTAddr.TabIndex = 1;
-			// 
 			// chkIntensifyBlue
 			// 
 			this.chkIntensifyBlue.AutoSize = true;
-			this.chkIntensifyBlue.Location = new System.Drawing.Point(134, 102);
+			this.chkIntensifyBlue.Location = new System.Drawing.Point(135, 102);
 			this.chkIntensifyBlue.Margin = new System.Windows.Forms.Padding(0);
 			this.chkIntensifyBlue.Name = "chkIntensifyBlue";
 			this.chkIntensifyBlue.Size = new System.Drawing.Size(89, 17);
@@ -889,6 +917,27 @@
 			this.txtSP.Size = new System.Drawing.Size(49, 20);
 			this.txtSP.TabIndex = 1;
 			// 
+			// lstStack
+			// 
+			this.lstStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+			this.lstStack.FullRowSelect = true;
+			this.lstStack.GridLines = true;
+			this.lstStack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.lstStack.Location = new System.Drawing.Point(3, 24);
+			this.lstStack.Name = "lstStack";
+			this.lstStack.Size = new System.Drawing.Size(81, 97);
+			this.lstStack.TabIndex = 4;
+			this.lstStack.UseCompatibleStateImageBehavior = false;
+			this.lstStack.View = System.Windows.Forms.View.Details;
+			// 
+			// columnHeader1
+			// 
+			this.columnHeader1.Text = "Value";
+			// 
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.lblA);
@@ -1007,11 +1056,42 @@
 			this.txtCycleCount.Size = new System.Drawing.Size(77, 20);
 			this.txtCycleCount.TabIndex = 9;
 			// 
+			// tableLayoutPanel10
+			// 
+			this.tableLayoutPanel10.ColumnCount = 3;
+			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel10.Controls.Add(this.btnGoto, 2, 0);
+			this.tableLayoutPanel10.Controls.Add(this.btnApplyChanges, 0, 0);
+			this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 362);
+			this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel10.Name = "tableLayoutPanel10";
+			this.tableLayoutPanel10.RowCount = 1;
+			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel10.Size = new System.Drawing.Size(470, 29);
+			this.tableLayoutPanel10.TabIndex = 3;
+			// 
+			// btnGoto
+			// 
+			this.btnGoto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnGoto.AutoSize = true;
+			this.btnGoto.Image = ((System.Drawing.Image)(resources.GetObject("btnGoto.Image")));
+			this.btnGoto.Location = new System.Drawing.Point(395, 3);
+			this.btnGoto.Name = "btnGoto";
+			this.btnGoto.Size = new System.Drawing.Size(72, 23);
+			this.btnGoto.TabIndex = 4;
+			this.btnGoto.Text = "Go To...";
+			this.btnGoto.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.btnGoto.UseVisualStyleBackColor = true;
+			this.btnGoto.Click += new System.EventHandler(this.btnGoto_Click);
+			// 
 			// btnApplyChanges
 			// 
-			this.btnApplyChanges.Location = new System.Drawing.Point(3, 365);
+			this.btnApplyChanges.Location = new System.Drawing.Point(3, 3);
 			this.btnApplyChanges.Name = "btnApplyChanges";
-			this.btnApplyChanges.Size = new System.Drawing.Size(87, 23);
+			this.btnApplyChanges.Size = new System.Drawing.Size(73, 23);
 			this.btnApplyChanges.TabIndex = 3;
 			this.btnApplyChanges.Text = "Apply State";
 			this.btnApplyChanges.UseVisualStyleBackColor = true;
@@ -1021,45 +1101,36 @@
 			// 
 			this.tmrButton.Tick += new System.EventHandler(this.tmrButton_Tick);
 			// 
-			// tableLayoutPanel1
+			// contextGoTo
 			// 
-			this.tableLayoutPanel1.ColumnCount = 1;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.chkNMIOnBlank, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.chkLargeSprites, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.chkVerticalWrite, 0, 0);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(134, 0);
-			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 3;
-			this.tableLayoutPanel9.SetRowSpan(this.tableLayoutPanel1, 2);
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(105, 51);
-			this.tableLayoutPanel1.TabIndex = 5;
+			this.contextGoTo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuGoToIrqHandler,
+            this.mnuGoToNmiHandler,
+            this.mnuGoToResetHandler});
+			this.contextGoTo.Name = "contextGoTo";
+			this.contextGoTo.Size = new System.Drawing.Size(148, 70);
+			this.contextGoTo.Opening += new System.ComponentModel.CancelEventHandler(this.contextGoTo_Opening);
 			// 
-			// lstStack
+			// mnuGoToIrqHandler
 			// 
-			this.lstStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-			this.lstStack.FullRowSelect = true;
-			this.lstStack.GridLines = true;
-			this.lstStack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.lstStack.Location = new System.Drawing.Point(3, 24);
-			this.lstStack.Name = "lstStack";
-			this.lstStack.Size = new System.Drawing.Size(81, 97);
-			this.lstStack.TabIndex = 4;
-			this.lstStack.UseCompatibleStateImageBehavior = false;
-			this.lstStack.View = System.Windows.Forms.View.Details;
+			this.mnuGoToIrqHandler.Name = "mnuGoToIrqHandler";
+			this.mnuGoToIrqHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToIrqHandler.Text = "IRQ Handler";
+			this.mnuGoToIrqHandler.Click += new System.EventHandler(this.mnuGoToIrqHandler_Click);
 			// 
-			// columnHeader1
+			// mnuGoToNmiHandler
 			// 
-			this.columnHeader1.Text = "Value";
+			this.mnuGoToNmiHandler.Name = "mnuGoToNmiHandler";
+			this.mnuGoToNmiHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToNmiHandler.Text = "NMI Handler";
+			this.mnuGoToNmiHandler.Click += new System.EventHandler(this.mnuGoToNmiHandler_Click);
+			// 
+			// mnuGoToResetHandler
+			// 
+			this.mnuGoToResetHandler.Name = "mnuGoToResetHandler";
+			this.mnuGoToResetHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToResetHandler.Text = "Reset Handler";
+			this.mnuGoToResetHandler.Click += new System.EventHandler(this.mnuGoToResetHandler_Click);
 			// 
 			// ctrlConsoleStatus
 			// 
@@ -1078,6 +1149,8 @@
 			this.tableLayoutPanel9.PerformLayout();
 			this.flowLayoutPanel7.ResumeLayout(false);
 			this.flowLayoutPanel7.PerformLayout();
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			this.flowLayoutPanel6.ResumeLayout(false);
 			this.flowLayoutPanel6.PerformLayout();
 			this.grpCPUStatus.ResumeLayout(false);
@@ -1097,8 +1170,9 @@
 			this.flowLayoutPanel4.PerformLayout();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
-			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
+			this.tableLayoutPanel10.ResumeLayout(false);
+			this.tableLayoutPanel10.PerformLayout();
+			this.contextGoTo.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1182,5 +1256,11 @@
 		private System.Windows.Forms.Button btnApplyChanges;
 		private System.Windows.Forms.Timer tmrButton;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+		private System.Windows.Forms.Button btnGoto;
+		private System.Windows.Forms.ContextMenuStrip contextGoTo;
+		private System.Windows.Forms.ToolStripMenuItem mnuGoToIrqHandler;
+		private System.Windows.Forms.ToolStripMenuItem mnuGoToNmiHandler;
+		private System.Windows.Forms.ToolStripMenuItem mnuGoToResetHandler;
 	}
 }

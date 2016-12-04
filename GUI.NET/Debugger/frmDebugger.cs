@@ -716,5 +716,10 @@ namespace Mesen.GUI.Debugger
 				AutoLoadDbgFile(false);
 			}
 		}
+
+		private void ctrlConsoleStatus_OnGotoLocation(object sender, EventArgs e)
+		{
+			_lastCodeWindow.ScrollToLineNumber((int)sender);
+		}
 	}
 }
