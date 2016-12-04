@@ -25,6 +25,15 @@ Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSi
 		_disassembleMemoryCache.push_back(shared_ptr<DisassemblyInfo>(nullptr));
 	}
 
+	BuildOpCodeTables(false);
+}
+
+Disassembler::~Disassembler()
+{
+}
+
+void Disassembler::BuildOpCodeTables(bool useLowerCase)
+{
 	string opName[256] = {
 	//	0			1			2			3			4			5			6			7			8			9			A			B			C			D			E			F
 		"BRK",	"ORA",	"",		"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"PHP",	"ORA",	"ASL",	"ANC*",	"NOP",	"ORA",	"ASL",	"SLO*", //0
@@ -65,7 +74,14 @@ Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSi
 	};
 
 	for(int i = 0; i < 256; i++) {
-		DisassemblyInfo::OPName[i] = opName[i];
+		if(useLowerCase) {
+			string name = opName[i];
+			std::transform(name.begin(), name.end(), name.begin(), std::tolower);
+			DisassemblyInfo::OPName[i] = name;
+		} else {
+			DisassemblyInfo::OPName[i] = opName[i];
+		}
+
 		DisassemblyInfo::OPMode[i] = opMode[i];
 		switch(DisassemblyInfo::OPMode[i]) {
 			case AddrMode::Abs:
@@ -93,10 +109,6 @@ Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSi
 				break;
 		}
 	}
-}
-
-Disassembler::~Disassembler()
-{
 }
 
 bool Disassembler::IsJump(uint8_t opCode)

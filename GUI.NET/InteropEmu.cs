@@ -816,6 +816,7 @@ namespace Mesen.GUI
 		PpuPartialDraw = 1,
 		ShowEffectiveAddresses = 2,
 		ShowOnlyDisassembledCode = 4,
+		DisplayOpCodesInLowerCase = 8,
 	}
 
 	public struct InteropRomInfo

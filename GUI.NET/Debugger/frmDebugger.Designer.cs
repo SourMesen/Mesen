@@ -127,6 +127,7 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
+			this.mnuDisplayOpCodesInLowerCase = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -680,6 +681,7 @@
 			this.mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuSplitView,
             this.fontSizeToolStripMenuItem,
+            this.mnuDisplayOpCodesInLowerCase,
             this.toolStripMenuItem5,
             this.mnuBreakOnReset,
             this.mnuBreakOnOpen,
@@ -996,6 +998,14 @@
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
+			// mnuDisplayOpCodesInLowerCase
+			// 
+			this.mnuDisplayOpCodesInLowerCase.CheckOnClick = true;
+			this.mnuDisplayOpCodesInLowerCase.Name = "mnuDisplayOpCodesInLowerCase";
+			this.mnuDisplayOpCodesInLowerCase.Size = new System.Drawing.Size(243, 22);
+			this.mnuDisplayOpCodesInLowerCase.Text = "Display OP codes in lower case";
+			this.mnuDisplayOpCodesInLowerCase.Click += new System.EventHandler(this.mnuDisplayOpCodesInLowerCase_Click);
+			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1130,5 +1140,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
 		private System.Windows.Forms.ToolStripMenuItem mnuDisableDefaultLabels;
 		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnReset;
+		private System.Windows.Forms.ToolStripMenuItem mnuDisplayOpCodesInLowerCase;
 	}
 }

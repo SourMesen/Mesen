@@ -29,6 +29,8 @@ private:
 public:
 	Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize, Debugger* debugger);
 	~Disassembler();
+
+	void BuildOpCodeTables(bool useLowerCase);
 	
 	uint32_t BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr, uint16_t memoryAddr, bool isSubEntryPoint);
 	void InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr);

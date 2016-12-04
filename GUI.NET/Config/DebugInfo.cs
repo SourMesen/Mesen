@@ -74,6 +74,7 @@ namespace Mesen.GUI.Config
 
 		public bool SplitView = false;
 		public bool HexDisplay = true;
+		public bool DisplayOpCodesInLowerCase = false;
 
 		public bool PpuAutoRefresh = true;
 		public bool PpuPartialDraw = false;

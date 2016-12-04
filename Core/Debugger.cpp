@@ -79,7 +79,11 @@ void Debugger::Resume()
 
 void Debugger::SetFlags(uint32_t flags)
 {
+	bool needUpdate = ((flags ^ _flags) & (int)DebuggerFlags::DisplayOpCodesInLowerCase) != 0;
 	_flags = flags;
+	if(needUpdate) {
+		_disassembler->BuildOpCodeTables(CheckFlag(DebuggerFlags::DisplayOpCodesInLowerCase));
+	}
 }
 
 bool Debugger::CheckFlag(DebuggerFlags flag)

@@ -51,6 +51,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuHighlightUnexecutedCode.Checked = ConfigManager.Config.DebugInfo.HighlightUnexecutedCode;
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
+			this.mnuDisplayOpCodesInLowerCase.Checked = ConfigManager.Config.DebugInfo.DisplayOpCodesInLowerCase;
 
 			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
 			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
@@ -171,6 +172,9 @@ namespace Mesen.GUI.Debugger
 			}
 			if(mnuShowOnlyDisassembledCode.Checked) {
 				flags |= DebuggerFlags.ShowOnlyDisassembledCode;
+			}
+			if(mnuDisplayOpCodesInLowerCase.Checked) {
+				flags |= DebuggerFlags.DisplayOpCodesInLowerCase;
 			}
 			InteropEmu.DebugSetFlags(flags);
 		}
@@ -621,6 +625,14 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 
+		private void mnuDisplayOpCodesInLowerCase_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.DisplayOpCodesInLowerCase = mnuDisplayOpCodesInLowerCase.Checked;
+			ConfigManager.ApplyChanges();
+			this.UpdateDebuggerFlags();
+			this.UpdateDebugger(false);
+		}
+
 		private void frmDebugger_Resize(object sender, EventArgs e)
 		{
 			ctrlCpuMemoryMapping.Invalidate();
@@ -655,7 +667,7 @@ namespace Mesen.GUI.Debugger
 				_workspace = null;
 				LabelManager.ResetLabels();
 				UpdateWorkspace();
-				UpdateDebugger();
+				UpdateDebugger(false);
 			}
 		}
 
