@@ -35,11 +35,13 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picHelp = new System.Windows.Forms.PictureBox();
 			this.txtCondition = new System.Windows.Forms.TextBox();
+			this.picExpressionWarning = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtAddress = new System.Windows.Forms.TextBox();
 			this.chkAbsolute = new System.Windows.Forms.CheckBox();
 			this.radSpecificAddress = new System.Windows.Forms.RadioButton();
 			this.radAnyAddress = new System.Windows.Forms.RadioButton();
+			this.lblAddressSign = new System.Windows.Forms.Label();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkReadVram = new System.Windows.Forms.CheckBox();
@@ -50,10 +52,10 @@
 			this.chkRead = new System.Windows.Forms.CheckBox();
 			this.chkWrite = new System.Windows.Forms.CheckBox();
 			this.chkExec = new System.Windows.Forms.CheckBox();
-			this.lblAddressSign = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).BeginInit();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
@@ -133,11 +135,14 @@
 			// 
 			// tableLayoutPanel2
 			// 
-			this.tableLayoutPanel2.ColumnCount = 2;
+			this.tableLayoutPanel2.ColumnCount = 3;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel2.Controls.Add(this.picHelp, 1, 0);
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.Controls.Add(this.picHelp, 2, 0);
 			this.tableLayoutPanel2.Controls.Add(this.txtCondition, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.picExpressionWarning, 1, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(60, 94);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
@@ -163,8 +168,19 @@
 			this.txtCondition.Location = new System.Drawing.Point(3, 3);
 			this.txtCondition.MaxLength = 900;
 			this.txtCondition.Name = "txtCondition";
-			this.txtCondition.Size = new System.Drawing.Size(288, 20);
+			this.txtCondition.Size = new System.Drawing.Size(264, 20);
 			this.txtCondition.TabIndex = 6;
+			// 
+			// picExpressionWarning
+			// 
+			this.picExpressionWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
+			this.picExpressionWarning.Location = new System.Drawing.Point(273, 5);
+			this.picExpressionWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.picExpressionWarning.Name = "picExpressionWarning";
+			this.picExpressionWarning.Size = new System.Drawing.Size(18, 18);
+			this.picExpressionWarning.TabIndex = 9;
+			this.picExpressionWarning.TabStop = false;
+			this.picExpressionWarning.Visible = false;
 			// 
 			// tableLayoutPanel3
 			// 
@@ -233,6 +249,17 @@
 			this.radAnyAddress.TabStop = true;
 			this.radAnyAddress.Text = "Any";
 			this.radAnyAddress.UseVisualStyleBackColor = true;
+			// 
+			// lblAddressSign
+			// 
+			this.lblAddressSign.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblAddressSign.AutoSize = true;
+			this.lblAddressSign.Location = new System.Drawing.Point(72, 6);
+			this.lblAddressSign.Margin = new System.Windows.Forms.Padding(0);
+			this.lblAddressSign.Name = "lblAddressSign";
+			this.lblAddressSign.Size = new System.Drawing.Size(13, 13);
+			this.lblAddressSign.TabIndex = 9;
+			this.lblAddressSign.Text = "$";
 			// 
 			// tableLayoutPanel4
 			// 
@@ -355,17 +382,6 @@
 			this.chkExec.UseVisualStyleBackColor = true;
 			this.chkExec.Enter += new System.EventHandler(this.chkRead_Enter);
 			// 
-			// lblAddressSign
-			// 
-			this.lblAddressSign.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblAddressSign.AutoSize = true;
-			this.lblAddressSign.Location = new System.Drawing.Point(72, 6);
-			this.lblAddressSign.Margin = new System.Windows.Forms.Padding(0);
-			this.lblAddressSign.Name = "lblAddressSign";
-			this.lblAddressSign.Size = new System.Drawing.Size(13, 13);
-			this.lblAddressSign.TabIndex = 9;
-			this.lblAddressSign.Text = "$";
-			// 
 			// frmBreakpoint
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -383,6 +399,7 @@
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).EndInit();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
@@ -421,5 +438,6 @@
 		private System.Windows.Forms.RadioButton radCpu;
 		private System.Windows.Forms.RadioButton radPpu;
 		private System.Windows.Forms.Label lblAddressSign;
+		private System.Windows.Forms.PictureBox picExpressionWarning;
 	}
 }

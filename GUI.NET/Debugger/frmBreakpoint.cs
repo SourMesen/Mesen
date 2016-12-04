@@ -36,6 +36,8 @@ namespace Mesen.GUI.Debugger
 			AddBinding("BreakOnWriteVram", chkWriteVram);
 			AddBinding("Condition", txtCondition);
 
+			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
+
 			this.toolTip.SetToolTip(this.chkAbsolute, "Check to set an absolute address based on the exact address in PRG/CHR ROM (not CPU/PPU memory)");
 			this.toolTip.SetToolTip(this.picHelp,
 				"Most expressions/operators are accepted (C++ syntax)." + Environment.NewLine +
@@ -61,6 +63,16 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ValidateInput()
 		{
+			if(txtCondition.Text.Length > 0) {
+				EvalResultType resultType;
+				InteropEmu.DebugEvaluateExpression(txtCondition.Text, out resultType);
+				if(resultType == EvalResultType.Invalid) {
+					picExpressionWarning.Visible = true;
+					return false;
+				}
+			}
+			picExpressionWarning.Visible = false;
+
 			return chkRead.Checked || chkWrite.Checked || chkExec.Checked || chkReadVram.Checked || chkWriteVram.Checked || txtCondition.Text.Length > 0;
 		}
 

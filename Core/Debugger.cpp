@@ -191,11 +191,6 @@ void Debugger::UpdateBreakpoints()
 
 		ExpressionEvaluator expEval(this);
 		for(Breakpoint &bp : _newBreakpoints) {
-			if(!expEval.Validate(bp.GetCondition())) {
-				//Remove any invalid condition (syntax-wise)
-				bp.ClearCondition();
-			}
-
 			for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
 				if(bp.HasBreakpointType((BreakpointType)i)) {
 					_breakpoints[i].push_back(bp);

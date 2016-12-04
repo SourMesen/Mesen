@@ -863,6 +863,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\Warning.png" />
     <None Include="Resources\Import.png" />
     <None Include="Resources\Export.png" />
     <None Include="Resources\NsfBackground.png" />
