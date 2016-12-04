@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace Mesen.GUI.Debugger
 {
+	public enum BreakpointAddressType
+	{
+		AnyAddress,
+		SingleAddress,
+		AddressRange,
+	}
 	public class Breakpoint
 	{
-
 		public bool BreakOnRead = false;
 		public bool BreakOnWrite = false;
 		public bool BreakOnReadVram = false;
@@ -18,9 +23,32 @@ namespace Mesen.GUI.Debugger
 
 		public bool Enabled = true;
 		public UInt32 Address;
-		public bool SpecificAddress = true;
+		public UInt32 StartAddress;
+		public UInt32 EndAddress;
+		public BreakpointAddressType AddressType = BreakpointAddressType.SingleAddress;
 		public bool IsAbsoluteAddress = false;
 		public string Condition = "";
+
+		public string GetAddressString()
+		{
+			switch(AddressType) {
+				case BreakpointAddressType.AnyAddress: return "<any>";
+				case BreakpointAddressType.SingleAddress:
+					if(IsAbsoluteAddress) {
+						return "[$" + Address.ToString("X4") + "]";
+					} else {
+						return "$" + Address.ToString("X4");
+					}
+
+				case BreakpointAddressType.AddressRange:
+					if(IsAbsoluteAddress) {
+						return $"[${StartAddress.ToString("X4")} - [${EndAddress.ToString("X4")}]";
+					} else {
+						return $"${StartAddress.ToString("X4")} - ${EndAddress.ToString("X4")}";
+					}
+			}
+			return string.Empty;
+		}
 
 		public void SetEnabled(bool enabled)
 		{
@@ -54,7 +82,27 @@ namespace Mesen.GUI.Debugger
 
 		public InteropBreakpoint ToInteropBreakpoint()
 		{
-			InteropBreakpoint bp = new InteropBreakpoint() { Address = SpecificAddress ? (Int32)Address : -1, Type = Type, IsAbsoluteAddress = IsAbsoluteAddress };
+			InteropBreakpoint bp = new InteropBreakpoint() {
+				Type = Type,
+				IsAbsoluteAddress = IsAbsoluteAddress
+			};
+			switch(AddressType) {
+				case BreakpointAddressType.AnyAddress:
+					bp.StartAddress = -1;
+					bp.EndAddress = -1;
+					break;
+
+				case BreakpointAddressType.SingleAddress:
+					bp.StartAddress = (Int32)Address;
+					bp.EndAddress = -1;
+					break;
+
+				case BreakpointAddressType.AddressRange:
+					bp.StartAddress = (Int32)StartAddress;
+					bp.EndAddress = (Int32)EndAddress;
+					break;
+			}
+
 			bp.Condition = new byte[1000];
 			byte[] condition = Encoding.UTF8.GetBytes(Condition);
 			Array.Copy(condition, bp.Condition, condition.Length);

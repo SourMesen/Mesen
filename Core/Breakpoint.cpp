@@ -12,7 +12,20 @@ Breakpoint::~Breakpoint()
 
 bool Breakpoint::Matches(uint32_t memoryAddr, uint32_t absoluteAddr)
 {
-	return _addr == -1 || ((int32_t)memoryAddr == _addr && !_isAbsoluteAddr) || ((int32_t)absoluteAddr == _addr && _isAbsoluteAddr);
+	if(_endAddr == -1) {
+		return _startAddr == -1 || ((int32_t)memoryAddr == _startAddr && !_isAbsoluteAddr) || ((int32_t)absoluteAddr == _startAddr && _isAbsoluteAddr);
+	} else {
+		if(_isAbsoluteAddr) {
+			if((int32_t)absoluteAddr >= _startAddr && (int32_t)absoluteAddr <= _endAddr) {
+				return true;
+			}
+		} else {
+			if((int32_t)memoryAddr >= _startAddr && (int32_t)memoryAddr <= _endAddr) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 bool Breakpoint::HasBreakpointType(BreakpointType type)

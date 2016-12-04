@@ -25,10 +25,17 @@ namespace Mesen.GUI.Debugger
 				radCpu.Checked = true;
 			}
 
-			AddBinding("SpecificAddress", radSpecificAddress, radAnyAddress);
+			switch(breakpoint.AddressType) {
+				case BreakpointAddressType.AnyAddress: radAnyAddress.Checked = true; break;
+				case BreakpointAddressType.SingleAddress: radSpecificAddress.Checked = true; break;
+				case BreakpointAddressType.AddressRange: radRange.Checked = true; break;
+			}
+
 			AddBinding("Enabled", chkEnabled);
 			AddBinding("IsAbsoluteAddress", chkAbsolute);
 			AddBinding("Address", txtAddress);
+			AddBinding("StartAddress", txtFrom);
+			AddBinding("EndAddress", txtTo);
 			AddBinding("BreakOnRead", chkRead);
 			AddBinding("BreakOnWrite", chkWrite);
 			AddBinding("BreakOnExec", chkExec);
@@ -59,6 +66,19 @@ namespace Mesen.GUI.Debugger
 				"[[$15] + y]   -> Reads the value at address $15, adds Y to it and reads the value at the resulting address." + Environment.NewLine +
 				"{$FFFA}  -> Returns the NMI handler's address."
 			);
+		}
+
+		protected override void UpdateConfig()
+		{
+			base.UpdateConfig();
+
+			if(radAnyAddress.Checked) {
+				((Breakpoint)Entity).AddressType = BreakpointAddressType.AnyAddress;
+			} else if(radSpecificAddress.Checked) {
+				((Breakpoint)Entity).AddressType = BreakpointAddressType.SingleAddress;
+			} else if(radRange.Checked) {
+				((Breakpoint)Entity).AddressType = BreakpointAddressType.AddressRange;
+			}
 		}
 
 		protected override bool ValidateInput()
@@ -106,6 +126,16 @@ namespace Mesen.GUI.Debugger
 				chkWrite.Checked = false;
 				chkExec.Checked = false;
 			}
+		}
+
+		private void txtFrom_Enter(object sender, EventArgs e)
+		{
+			radRange.Checked = true;
+		}
+
+		private void txtTo_Enter(object sender, EventArgs e)
+		{
+			radRange.Checked = true;
 		}
 	}
 }

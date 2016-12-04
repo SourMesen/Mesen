@@ -39,16 +39,11 @@ namespace Mesen.GUI.Debugger.Controls
 			lstBreakpoints.BeginUpdate();
 			lstBreakpoints.Items.Clear();
 			foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
-				string address = "$" + breakpoint.Address.ToString("X");
-				if(breakpoint.IsAbsoluteAddress) {
-					address = "[" + address + "]";
-				}
-
 				ListViewItem item = new ListViewItem();
 				item.Tag = breakpoint;
 				item.Checked = breakpoint.Enabled;
 				item.SubItems.Add(breakpoint.Type.ToString());
-				item.SubItems.Add(breakpoint.SpecificAddress ? address : "<any>");
+				item.SubItems.Add(breakpoint.GetAddressString());
 				item.SubItems.Add(breakpoint.Condition);
 				lstBreakpoints.Items.Add(item);
 			}

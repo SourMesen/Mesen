@@ -36,7 +36,8 @@ public:
 	
 private:
 	BreakpointTypeFlags _type;
-	int32_t _addr;
+	int32_t _startAddr;
+	int32_t _endAddr;
 	bool _isAbsoluteAddr;
 	char _condition[1000];
 };

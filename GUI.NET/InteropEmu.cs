@@ -902,8 +902,9 @@ namespace Mesen.GUI
 	public struct InteropBreakpoint
 	{
 		public BreakpointType Type;
-		public Int32 Address;
-		
+		public Int32 StartAddress;
+		public Int32 EndAddress;
+
 		[MarshalAs(UnmanagedType.I1)]
 		public bool IsAbsoluteAddress;
 

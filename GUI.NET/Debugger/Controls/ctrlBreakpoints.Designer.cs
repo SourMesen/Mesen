@@ -49,14 +49,14 @@
             this.mnuRemoveBreakpoint,
             this.mnuGoToLocation});
 			this.contextMenuBreakpoints.Name = "contextMenuWatch";
-			this.contextMenuBreakpoints.Size = new System.Drawing.Size(153, 92);
+			this.contextMenuBreakpoints.Size = new System.Drawing.Size(150, 70);
 			this.contextMenuBreakpoints.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuBreakpoints_Opening);
 			// 
 			// mnuAddBreakpoint
 			// 
 			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
 			this.mnuAddBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-			this.mnuAddBreakpoint.Size = new System.Drawing.Size(152, 22);
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(149, 22);
 			this.mnuAddBreakpoint.Text = "Add...";
 			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
 			// 
@@ -64,14 +64,14 @@
 			// 
 			this.mnuRemoveBreakpoint.Name = "mnuRemoveBreakpoint";
 			this.mnuRemoveBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(152, 22);
+			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(149, 22);
 			this.mnuRemoveBreakpoint.Text = "Remove";
 			this.mnuRemoveBreakpoint.Click += new System.EventHandler(this.mnuRemoveBreakpoint_Click);
 			// 
 			// mnuGoToLocation
 			// 
 			this.mnuGoToLocation.Name = "mnuGoToLocation";
-			this.mnuGoToLocation.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToLocation.Size = new System.Drawing.Size(149, 22);
 			this.mnuGoToLocation.Text = "Go to location";
 			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
 			// 
@@ -112,16 +112,17 @@
 			// columnHeader2
 			// 
 			this.columnHeader2.Text = "Address";
-			this.columnHeader2.Width = 70;
+			this.columnHeader2.Width = 108;
 			// 
 			// columnHeader4
 			// 
 			this.columnHeader4.Text = "Condition";
-			this.columnHeader4.Width = 100;
+			this.columnHeader4.Width = 142;
 			// 
 			// colLastColumn
 			// 
 			this.colLastColumn.Text = "";
+			this.colLastColumn.Width = 29;
 			// 
 			// ctrlBreakpoints
 			// 

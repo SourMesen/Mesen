@@ -42,6 +42,12 @@
 			this.radSpecificAddress = new System.Windows.Forms.RadioButton();
 			this.radAnyAddress = new System.Windows.Forms.RadioButton();
 			this.lblAddressSign = new System.Windows.Forms.Label();
+			this.radRange = new System.Windows.Forms.RadioButton();
+			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblFrom = new System.Windows.Forms.Label();
+			this.txtFrom = new System.Windows.Forms.TextBox();
+			this.lblTo = new System.Windows.Forms.Label();
+			this.txtTo = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkReadVram = new System.Windows.Forms.CheckBox();
@@ -57,6 +63,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).BeginInit();
 			this.tableLayoutPanel3.SuspendLayout();
+			this.flowLayoutPanel4.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -64,8 +71,8 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 151);
-			this.baseConfigPanel.Size = new System.Drawing.Size(378, 29);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 171);
+			this.baseConfigPanel.Size = new System.Drawing.Size(493, 29);
 			// 
 			// tableLayoutPanel1
 			// 
@@ -89,7 +96,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(378, 180);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(493, 200);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// lblBreakOn
@@ -116,7 +123,7 @@
 			// 
 			this.chkEnabled.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.chkEnabled, 2);
-			this.chkEnabled.Location = new System.Drawing.Point(3, 123);
+			this.chkEnabled.Location = new System.Drawing.Point(3, 150);
 			this.chkEnabled.Name = "chkEnabled";
 			this.chkEnabled.Size = new System.Drawing.Size(65, 17);
 			this.chkEnabled.TabIndex = 2;
@@ -127,7 +134,7 @@
 			// 
 			this.lblCondition.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblCondition.AutoSize = true;
-			this.lblCondition.Location = new System.Drawing.Point(3, 100);
+			this.lblCondition.Location = new System.Drawing.Point(3, 127);
 			this.lblCondition.Name = "lblCondition";
 			this.lblCondition.Size = new System.Drawing.Size(54, 13);
 			this.lblCondition.TabIndex = 7;
@@ -144,18 +151,18 @@
 			this.tableLayoutPanel2.Controls.Add(this.txtCondition, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.picExpressionWarning, 1, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(60, 94);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(60, 121);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(318, 26);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(433, 26);
 			this.tableLayoutPanel2.TabIndex = 10;
 			// 
 			// picHelp
 			// 
 			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picHelp.Location = new System.Drawing.Point(297, 5);
+			this.picHelp.Location = new System.Drawing.Point(412, 5);
 			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picHelp.Name = "picHelp";
 			this.picHelp.Size = new System.Drawing.Size(18, 18);
@@ -168,13 +175,13 @@
 			this.txtCondition.Location = new System.Drawing.Point(3, 3);
 			this.txtCondition.MaxLength = 900;
 			this.txtCondition.Name = "txtCondition";
-			this.txtCondition.Size = new System.Drawing.Size(264, 20);
+			this.txtCondition.Size = new System.Drawing.Size(379, 20);
 			this.txtCondition.TabIndex = 6;
 			// 
 			// picExpressionWarning
 			// 
 			this.picExpressionWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
-			this.picExpressionWarning.Location = new System.Drawing.Point(273, 5);
+			this.picExpressionWarning.Location = new System.Drawing.Point(388, 5);
 			this.picExpressionWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picExpressionWarning.Name = "picExpressionWarning";
 			this.picExpressionWarning.Size = new System.Drawing.Size(18, 18);
@@ -192,16 +199,20 @@
 			this.tableLayoutPanel3.Controls.Add(this.txtAddress, 2, 0);
 			this.tableLayoutPanel3.Controls.Add(this.chkAbsolute, 3, 0);
 			this.tableLayoutPanel3.Controls.Add(this.radSpecificAddress, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.radAnyAddress, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.radAnyAddress, 0, 2);
 			this.tableLayoutPanel3.Controls.Add(this.lblAddressSign, 1, 0);
+			this.tableLayoutPanel3.Controls.Add(this.radRange, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel4, 1, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(60, 46);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 2;
+			this.tableLayoutPanel3.RowCount = 4;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(318, 48);
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(433, 75);
 			this.tableLayoutPanel3.TabIndex = 11;
 			// 
 			// txtAddress
@@ -210,21 +221,22 @@
 			this.txtAddress.Location = new System.Drawing.Point(85, 3);
 			this.txtAddress.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.txtAddress.Name = "txtAddress";
-			this.txtAddress.Size = new System.Drawing.Size(157, 20);
+			this.txtAddress.Size = new System.Drawing.Size(189, 20);
 			this.txtAddress.TabIndex = 5;
 			this.txtAddress.Enter += new System.EventHandler(this.txtAddress_Enter);
 			// 
 			// chkAbsolute
 			// 
+			this.chkAbsolute.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkAbsolute.AutoSize = true;
-			this.chkAbsolute.Location = new System.Drawing.Point(248, 5);
+			this.chkAbsolute.Location = new System.Drawing.Point(280, 17);
 			this.chkAbsolute.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.chkAbsolute.Name = "chkAbsolute";
-			this.chkAbsolute.Size = new System.Drawing.Size(67, 17);
+			this.tableLayoutPanel3.SetRowSpan(this.chkAbsolute, 2);
+			this.chkAbsolute.Size = new System.Drawing.Size(150, 17);
 			this.chkAbsolute.TabIndex = 6;
-			this.chkAbsolute.Text = "Absolute";
+			this.chkAbsolute.Text = "Use PRG ROM addresses";
 			this.chkAbsolute.UseVisualStyleBackColor = true;
-			this.chkAbsolute.Enter += new System.EventHandler(this.txtAddress_Enter);
 			// 
 			// radSpecificAddress
 			// 
@@ -242,7 +254,7 @@
 			// 
 			this.radAnyAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.radAnyAddress.AutoSize = true;
-			this.radAnyAddress.Location = new System.Drawing.Point(3, 29);
+			this.radAnyAddress.Location = new System.Drawing.Point(3, 53);
 			this.radAnyAddress.Name = "radAnyAddress";
 			this.radAnyAddress.Size = new System.Drawing.Size(43, 17);
 			this.radAnyAddress.TabIndex = 8;
@@ -261,6 +273,73 @@
 			this.lblAddressSign.TabIndex = 9;
 			this.lblAddressSign.Text = "$";
 			// 
+			// radRange
+			// 
+			this.radRange.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.radRange.AutoSize = true;
+			this.radRange.Location = new System.Drawing.Point(3, 29);
+			this.radRange.Name = "radRange";
+			this.radRange.Size = new System.Drawing.Size(60, 17);
+			this.radRange.TabIndex = 10;
+			this.radRange.TabStop = true;
+			this.radRange.Text = "Range:";
+			this.radRange.UseVisualStyleBackColor = true;
+			// 
+			// flowLayoutPanel4
+			// 
+			this.tableLayoutPanel3.SetColumnSpan(this.flowLayoutPanel4, 2);
+			this.flowLayoutPanel4.Controls.Add(this.lblFrom);
+			this.flowLayoutPanel4.Controls.Add(this.txtFrom);
+			this.flowLayoutPanel4.Controls.Add(this.lblTo);
+			this.flowLayoutPanel4.Controls.Add(this.txtTo);
+			this.flowLayoutPanel4.Location = new System.Drawing.Point(72, 26);
+			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
+			this.flowLayoutPanel4.Size = new System.Drawing.Size(205, 24);
+			this.flowLayoutPanel4.TabIndex = 11;
+			// 
+			// lblFrom
+			// 
+			this.lblFrom.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblFrom.AutoSize = true;
+			this.lblFrom.Location = new System.Drawing.Point(0, 6);
+			this.lblFrom.Margin = new System.Windows.Forms.Padding(0);
+			this.lblFrom.Name = "lblFrom";
+			this.lblFrom.Size = new System.Drawing.Size(39, 13);
+			this.lblFrom.TabIndex = 10;
+			this.lblFrom.Text = "From $";
+			// 
+			// txtFrom
+			// 
+			this.txtFrom.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.txtFrom.Location = new System.Drawing.Point(39, 3);
+			this.txtFrom.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.txtFrom.Name = "txtFrom";
+			this.txtFrom.Size = new System.Drawing.Size(67, 20);
+			this.txtFrom.TabIndex = 12;
+			this.txtFrom.Enter += new System.EventHandler(this.txtFrom_Enter);
+			// 
+			// lblTo
+			// 
+			this.lblTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblTo.AutoSize = true;
+			this.lblTo.Location = new System.Drawing.Point(109, 6);
+			this.lblTo.Margin = new System.Windows.Forms.Padding(0);
+			this.lblTo.Name = "lblTo";
+			this.lblTo.Size = new System.Drawing.Size(25, 13);
+			this.lblTo.TabIndex = 11;
+			this.lblTo.Text = "to $";
+			// 
+			// txtTo
+			// 
+			this.txtTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.txtTo.Location = new System.Drawing.Point(134, 3);
+			this.txtTo.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.txtTo.Name = "txtTo";
+			this.txtTo.Size = new System.Drawing.Size(68, 20);
+			this.txtTo.TabIndex = 13;
+			this.txtTo.Enter += new System.EventHandler(this.txtTo_Enter);
+			// 
 			// tableLayoutPanel4
 			// 
 			this.tableLayoutPanel4.ColumnCount = 2;
@@ -277,7 +356,7 @@
 			this.tableLayoutPanel4.RowCount = 2;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(318, 46);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(433, 46);
 			this.tableLayoutPanel4.TabIndex = 12;
 			// 
 			// flowLayoutPanel3
@@ -288,7 +367,7 @@
 			this.flowLayoutPanel3.Location = new System.Drawing.Point(56, 23);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(262, 23);
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(377, 23);
 			this.flowLayoutPanel3.TabIndex = 5;
 			// 
 			// chkReadVram
@@ -346,7 +425,7 @@
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(56, 0);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(262, 23);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(377, 23);
 			this.flowLayoutPanel2.TabIndex = 4;
 			// 
 			// chkRead
@@ -386,7 +465,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(378, 180);
+			this.ClientSize = new System.Drawing.Size(493, 200);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmBreakpoint";
@@ -402,6 +481,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).EndInit();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
+			this.flowLayoutPanel4.ResumeLayout(false);
+			this.flowLayoutPanel4.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			this.flowLayoutPanel3.ResumeLayout(false);
@@ -439,5 +520,11 @@
 		private System.Windows.Forms.RadioButton radPpu;
 		private System.Windows.Forms.Label lblAddressSign;
 		private System.Windows.Forms.PictureBox picExpressionWarning;
+		private System.Windows.Forms.RadioButton radRange;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
+		private System.Windows.Forms.Label lblFrom;
+		private System.Windows.Forms.TextBox txtFrom;
+		private System.Windows.Forms.Label lblTo;
+		private System.Windows.Forms.TextBox txtTo;
 	}
 }
