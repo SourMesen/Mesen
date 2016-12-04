@@ -16,9 +16,11 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class frmPpuViewer : BaseForm
 	{
+		private DateTime _lastUpdate = DateTime.MinValue;
 		private InteropEmu.NotificationListener _notifListener;
 		private int _autoRefreshCounter = 0;
 		private TabPage _selectedTab;
+		private bool _refreshing = false;
 
 		public frmPpuViewer()
 		{
@@ -59,10 +61,12 @@ namespace Mesen.GUI.Debugger
 				this.GetData();
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
 			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame) {
-				if(_autoRefreshCounter % 4 == 0) {
+				if(!_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > 66) {
+					//Update at 15 fps most
 					this.GetData();
+					this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
+					_lastUpdate = DateTime.Now;
 				}
-				this.BeginInvoke((MethodInvoker)(() => this.AutoRefresh()));
 			}
 		}
 
@@ -81,6 +85,7 @@ namespace Mesen.GUI.Debugger
 
 		private void RefreshViewers()
 		{
+			_refreshing = true;
 			if(_selectedTab == this.tpgNametableViewer) {
 				this.ctrlNametableViewer.RefreshViewer();
 			} else if(_selectedTab == this.tpgChrViewer) {
@@ -90,16 +95,9 @@ namespace Mesen.GUI.Debugger
 			} else if(_selectedTab == this.tpgPaletteViewer) {
 				this.ctrlPaletteViewer.RefreshViewer();
 			}
+			_refreshing = false;
 		}
 
-		private void AutoRefresh()
-		{
-			if(_autoRefreshCounter % 4 == 0 && this.mnuAutoRefresh.Checked) {
-				this.RefreshViewers();
-			}
-			_autoRefreshCounter++;
-		}
-		
 		private void mnuRefresh_Click(object sender, EventArgs e)
 		{
 			this.RefreshViewers();

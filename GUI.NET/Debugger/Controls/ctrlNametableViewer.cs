@@ -17,6 +17,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private byte[][] _nametablePixelData = new byte[4][];
 		private byte[][] _tileData = new byte[4][];
 		private byte[][] _attributeData = new byte[4][];
+		private Bitmap _gridOverlay;
 
 		public ctrlNametableViewer()
 		{
@@ -54,19 +55,29 @@ namespace Mesen.GUI.Debugger.Controls
 					}
 				}
 
-				if(chkShowTileGrid.Checked) {
-					using(Pen pen = new Pen(Color.FromArgb(chkShowAttributeGrid.Checked ? 120 : 180, 240, 100, 120))) {
-						if(chkShowAttributeGrid.Checked) {
-							pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+				if(this._gridOverlay == null && (chkShowTileGrid.Checked || chkShowAttributeGrid.Checked)) {
+					this._gridOverlay = new Bitmap(512, 480);
+
+					using(Graphics overlay = Graphics.FromImage(this._gridOverlay)) {
+						if(chkShowTileGrid.Checked) {
+							using(Pen pen = new Pen(Color.FromArgb(chkShowAttributeGrid.Checked ? 120 : 180, 240, 100, 120))) {
+								if(chkShowAttributeGrid.Checked) {
+									pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+								}
+								DrawGrid(overlay, pen, 1);
+							}
 						}
-						DrawGrid(g, pen, 1);
+
+						if(chkShowAttributeGrid.Checked) {
+							using(Pen pen = new Pen(Color.FromArgb(180, 80, 130, 250))) {
+								DrawGrid(overlay, pen, 2);
+							}
+						}
 					}
 				}
 
-				if(chkShowAttributeGrid.Checked) {
-					using(Pen pen = new Pen(Color.FromArgb(180, 80, 130, 250))) {
-						DrawGrid(g, pen, 2);
-					}
+				if(this._gridOverlay != null) {
+					g.DrawImage(this._gridOverlay, 0, 0);
 				}
 
 				if(chkShowPpuScrollOverlay.Checked) {
@@ -167,6 +178,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			ConfigManager.Config.DebugInfo.ShowTileGrid = chkShowTileGrid.Checked;
 			ConfigManager.ApplyChanges();
+			this._gridOverlay = null;
 			this.RefreshViewer();
 		}
 
@@ -174,6 +186,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			ConfigManager.Config.DebugInfo.ShowAttributeGrid = chkShowAttributeGrid.Checked;
 			ConfigManager.ApplyChanges();
+			this._gridOverlay = null;
 			this.RefreshViewer();
 		}
 	}
