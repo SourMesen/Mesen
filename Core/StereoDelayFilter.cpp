@@ -5,14 +5,12 @@ int16_t* StereoDelayFilter::ApplyFilter(int16_t* monoBuffer, size_t sampleCount,
 {
 	UpdateBufferSize(sampleCount, true);
 
-	int32_t delay = EmulationSettings::GetStereoDelay();
-	if(delay != _lastDelay) {
+	size_t delaySampleCount = (int32_t)((double)EmulationSettings::GetStereoDelay() / 1000 * sampleRate);
+	if(delaySampleCount != _lastDelay) {
 		_delayedSamples.clear();
 	}
-	_lastDelay = delay;
-
-	size_t delaySampleCount = (int32_t)((double)delay / 1000 * sampleRate);
-
+	_lastDelay = delaySampleCount;
+	
 	for(size_t i = 0; i < sampleCount; i++) {
 		_delayedSamples.push_back(monoBuffer[i]);
 	}
