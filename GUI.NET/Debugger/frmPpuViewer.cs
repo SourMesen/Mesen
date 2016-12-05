@@ -18,7 +18,6 @@ namespace Mesen.GUI.Debugger
 	{
 		private DateTime _lastUpdate = DateTime.MinValue;
 		private InteropEmu.NotificationListener _notifListener;
-		private int _autoRefreshCounter = 0;
 		private TabPage _selectedTab;
 		private bool _refreshing = false;
 
