@@ -81,6 +81,7 @@
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkSilenceTriangleHighFreq = new System.Windows.Forms.CheckBox();
 			this.chkSwapDutyCycles = new System.Windows.Forms.CheckBox();
+			this.chkReduceDmcPopping = new System.Windows.Forms.CheckBox();
 			this.baseConfigPanel.SuspendLayout();
 			this.grpVolume.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -790,10 +791,13 @@
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Controls.Add(this.chkSilenceTriangleHighFreq, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.chkSwapDutyCycles, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.chkReduceDmcPopping, 0, 2);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 2;
+			this.tableLayoutPanel3.RowCount = 4;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(463, 343);
@@ -820,6 +824,18 @@
 			this.chkSwapDutyCycles.TabIndex = 0;
 			this.chkSwapDutyCycles.Text = "Swap square channels duty cycles (Mimics old clones)";
 			this.chkSwapDutyCycles.UseVisualStyleBackColor = true;
+			// 
+			// chkReduceDmcPopping
+			// 
+			this.chkReduceDmcPopping.AutoSize = true;
+			this.chkReduceDmcPopping.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.chkReduceDmcPopping.Location = new System.Drawing.Point(3, 49);
+			this.chkReduceDmcPopping.Name = "chkReduceDmcPopping";
+			this.chkReduceDmcPopping.Size = new System.Drawing.Size(243, 17);
+			this.chkReduceDmcPopping.TabIndex = 2;
+			this.chkReduceDmcPopping.Text = "Reduce popping sounds on the DMC channel";
+			this.chkReduceDmcPopping.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.chkReduceDmcPopping.UseVisualStyleBackColor = true;
 			// 
 			// frmAudioConfig
 			// 
@@ -926,5 +942,6 @@
 		private System.Windows.Forms.TrackBar trkReverbDelay;
 		private System.Windows.Forms.TrackBar trkReverbStrength;
 		private System.Windows.Forms.CheckBox chkSilenceTriangleHighFreq;
+		private System.Windows.Forms.CheckBox chkReduceDmcPopping;
 	}
 }

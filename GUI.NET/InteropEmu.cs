@@ -800,11 +800,12 @@ namespace Mesen.GUI
 		ShowLagCounter = 0x80000,
 
 		SilenceTriangleHighFreq = 0x100000,
+		ReduceDmcPopping = 0x200000,
 
-		DisableBackground = 0x200000,
-		DisableSprites = 0x400000,
-		ForceBackgroundFirstColumn = 0x800000,
-		ForceSpritesFirstColumn = 0x1000000,
+		DisableBackground = 0x400000,
+		DisableSprites = 0x800000,
+		ForceBackgroundFirstColumn = 0x1000000,
+		ForceSpritesFirstColumn = 0x2000000,
 
 		InBackground = 0x40000000,
 	}

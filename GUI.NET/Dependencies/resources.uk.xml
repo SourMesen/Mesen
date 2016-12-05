@@ -106,6 +106,7 @@
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkSwapDutyCycles">Переплутана шпаруватість (як на старих клонах)</Control>
       <Control ID="chkSilenceTriangleHighFreq">Заглушати ультразвукові частоти на каналі triangle (зменшує "трiск")</Control>
+      <Control ID="chkReduceDmcPopping">Reduce popping sounds on the DMC channel</Control>
       <Control ID="tpgEffects">Ефекти</Control>
       <Control ID="grpStereo">Стерео</Control>
       <Control ID="radStereoDisabled">Відключити</Control>

@@ -160,17 +160,24 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 			}
 			break;
 
-		case 1:		//4011
+		case 1: {		//4011
+			uint8_t previousLevel = _outputLevel;
 			_outputLevel = value & 0x7F;
+			
+			if(EmulationSettings::CheckFlag(EmulationFlags::ReduceDmcPopping) && abs(_outputLevel - previousLevel) > 50) {
+				//Reduce popping sounds for 4011 writes
+				_outputLevel -= (_outputLevel - previousLevel) / 2;
+			}
 
 			//4011 applies new output right away, not on the timer's reload.  This fixes bad DMC sound when playing through 4011.
 			AddOutput(_outputLevel);
-
+			
 			if(value > 0) {
 				_enableOverclockCounter = 30000;
 				EmulationSettings::DisableOverclocking(true);
 			}
 			break;
+		}
 
 		case 2:		//4012
 			_sampleAddr = 0xC000 | ((uint32_t)value << 6);

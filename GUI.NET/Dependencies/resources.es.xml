@@ -106,6 +106,7 @@
       <Control ID="tpgAdvanced">Avanzado</Control>
       <Control ID="chkSwapDutyCycles">Invertir ciclos de canales cuadrados (imita viejos clones)</Control>
       <Control ID="chkSilenceTriangleHighFreq">Cortar el canal de triángulo a frecuencias ultrasónicas (reduce los "pops")</Control>
+      <Control ID="chkReduceDmcPopping">Reduce popping sounds on the DMC channel</Control>
       <Control ID="tpgEffects">Efectos</Control>
       <Control ID="grpStereo">Estéreo</Control>
       <Control ID="radStereoDisabled">Desactivar</Control>

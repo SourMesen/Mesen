@@ -106,6 +106,7 @@
       <Control ID="tpgAdvanced">Расширенные</Control>
       <Control ID="chkSwapDutyCycles">Перепутанная скважность (как на старых клонах)</Control>
       <Control ID="chkSilenceTriangleHighFreq">Заглушать ультразвуковые частоты на канале triangle (уменьшает "треск")</Control>
+      <Control ID="chkReduceDmcPopping">Reduce popping sounds on the DMC channel</Control>
       <Control ID="tpgEffects">Эффекты</Control>
       <Control ID="grpStereo">Стерео</Control>
       <Control ID="radStereoDisabled">Отключить</Control>
