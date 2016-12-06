@@ -11,7 +11,7 @@
       <Control ID="mnuGame">Jeu</Control>
       <Control ID="mnuPause">Pause</Control>
       <Control ID="mnuReset">Reset</Control>
-      <Control ID="mnuStop">Arrêt</Control>
+      <Control ID="mnuPowerCycle">Arrêt &amp;&amp; redémarrage</Control>
       <Control ID="mnuSwitchDiskSide">Changer le disque de côté</Control>
       <Control ID="mnuSelectDisk">Choisir le disque</Control>
       <Control ID="mnuEjectDisk">Éjecter le disque</Control>

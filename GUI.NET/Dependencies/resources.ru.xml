@@ -11,7 +11,7 @@
       <Control ID="mnuGame">Игра</Control>
       <Control ID="mnuPause">Пауза</Control>
       <Control ID="mnuReset">Сброс</Control>
-      <Control ID="mnuStop">Стоп</Control>
+      <Control ID="mnuPowerCycle">Power Cycle</Control>
       <Control ID="mnuSwitchDiskSide">Сменить сторону диска</Control>
       <Control ID="mnuSelectDisk">Выбрать диск</Control>
       <Control ID="mnuEjectDisk">Извлечь диск</Control>

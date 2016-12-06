@@ -540,7 +540,7 @@ namespace Mesen.GUI.Forms
 
 					bool isNetPlayClient = InteropEmu.IsConnected();
 
-					mnuPause.Enabled = mnuStop.Enabled = mnuReset.Enabled = (_emuThread != null && !isNetPlayClient);
+					mnuPause.Enabled = mnuPowerCycle.Enabled = mnuReset.Enabled = (_emuThread != null && !isNetPlayClient);
 					mnuSaveState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf());
 					mnuLoadState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording());
 
@@ -610,7 +610,7 @@ namespace Mesen.GUI.Forms
 					mnuTakeScreenshot.Enabled = _emuThread != null && !InteropEmu.IsNsf();
 					mnuNetPlay.Enabled = !InteropEmu.IsNsf();
 					if(_emuThread != null && InteropEmu.IsNsf()) {
-						mnuStop.Enabled = false;
+						mnuPowerCycle.Enabled = false;
 						mnuMovies.Enabled = mnuPlayMovie.Enabled = mnuStopMovie.Enabled = mnuRecordFrom.Enabled = mnuRecordFromStart.Enabled = mnuRecordFromNow.Enabled = false;
 					}
 
@@ -794,9 +794,9 @@ namespace Mesen.GUI.Forms
 			ResetEmu();
 		}
 
-		private void mnuStop_Click(object sender, EventArgs e)
+		private void mnuPowerCycle_Click(object sender, EventArgs e)
 		{
-			InteropEmu.Stop();
+			LoadROM(_currentRomPath, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches, _currentRomArchiveIndex);
 		}
 
 		private void mnuShowFPS_Click(object sender, EventArgs e)
