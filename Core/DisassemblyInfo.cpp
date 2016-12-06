@@ -98,21 +98,6 @@ DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
 	_opSize = DisassemblyInfo::OPSize[opCode];
 	_opMode = DisassemblyInfo::OPMode[opCode];
 	_isSubExitPoint = opCode == 0x40 || opCode == 0x60;
-
-	//Raw byte code
-	string byteCodeOutput;
-	byteCodeOutput.reserve(10);
-	for(uint32_t i = 0; i < 3; i++) {
-		if(i < _opSize) {
-			byteCodeOutput += "$" + HexUtilities::ToHex((uint8_t)*(_opPointer + i));
-		} else {
-			byteCodeOutput += "   ";
-		}
-		if(i != 2) {
-			byteCodeOutput += " ";
-		}
-	}
-	_byteCode = byteCodeOutput;
 }
 
 void DisassemblyInfo::SetSubEntryPoint()
@@ -185,6 +170,19 @@ int32_t DisassemblyInfo::GetEffectiveAddress(State& cpuState, shared_ptr<MemoryM
 		
 string DisassemblyInfo::GetByteCode()
 {
+	if(_byteCode.empty()) {
+		//Raw byte code
+		string byteCodeOutput;
+		byteCodeOutput.reserve(10);
+		for(uint32_t i = 0; i < _opSize; i++) {
+			if(!byteCodeOutput.empty()) {
+				byteCodeOutput += " ";
+			}
+			byteCodeOutput += "$" + HexUtilities::ToHex((uint8_t)*(_opPointer + i));
+		}
+		_byteCode = byteCodeOutput;
+	}
+
 	return _byteCode;
 }
 

@@ -325,7 +325,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			}
 		}
 
-		if(info) {
+		if(info && addr + info->GetSize() <= endAddr) {
 			if(byteCount > 0) {
 				output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
 				byteCount = 0;
@@ -347,8 +347,21 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 				output += GetLine("__sub end__") + GetLine();
 			}
 
-			addr += info->GetSize();
-			memoryAddr += info->GetSize();
+			if(speculativeCode) {
+				//For unverified code, check if a verified instruction starts between the start of this instruction and its end.
+				//If so, we need to realign the disassembler to the start of the next verified instruction
+				for(uint32_t i = 0; i < info->GetSize(); i++) {
+					addr++;
+					memoryAddr++;
+					if(addr > endAddr || (*cache)[addr&mask]) {
+						//Verified code found, stop incrementing address counters
+						break;
+					}
+				}				
+			} else {
+				addr += info->GetSize();
+				memoryAddr += info->GetSize();
+			}
 		} else {
 			if((!label.empty() || !commentString.empty()) && skippingCode) {
 				output += GetLine(unknownBlockHeader, "", (uint16_t)(memoryAddr - 1), addr - 1);
