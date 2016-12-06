@@ -5,7 +5,9 @@ enum class DebuggerFlags
 	PpuPartialDraw = 1,
 	ShowEffectiveAddresses = 2,
 	ShowOnlyDisassembledCode = 4,
-	DisplayOpCodesInLowerCase = 8
+	DisplayOpCodesInLowerCase = 8,
+	DisassembleEverything = 16,
+	DisassembleEverythingButData = 32,
 };
 
 enum class AddressType

@@ -79,16 +79,25 @@ namespace Mesen.GUI.Config
 		}
 	}
 
+	public enum DisassemblyType
+	{
+		VerifiedCode,
+		Everything,
+		EverythingButData
+	}
+
 	public class DebugInfo
 	{
 		public DebugViewInfo LeftView;
 		public DebugViewInfo RightView;
 
 		public bool ShowOnlyDisassembledCode = true;
+		public bool DisplayOpCodesInLowerCase = false;
+		public bool ShowEffectiveAddresses = true;
+		public DisassemblyType DisassemblyType = DisassemblyType.VerifiedCode;
 
 		public bool SplitView = false;
 		public bool HexDisplay = true;
-		public bool DisplayOpCodesInLowerCase = false;
 
 		public bool PpuAutoRefresh = true;
 		public bool PpuPartialDraw = false;
@@ -97,8 +106,6 @@ namespace Mesen.GUI.Config
 		public bool ShowAttributeGrid = false;
 		public int PpuDisplayCycle = 0;
 		public int PpuDisplayScanline = 241;
-
-		public bool ShowEffectiveAddresses = true;
 
 		public bool ShowCpuMemoryMapping = true;
 		public bool ShowPpuMemoryMapping = true;

@@ -69,6 +69,7 @@ namespace Mesen.GUI.Debugger
 		private int _extendedMarginWidth = 13;
 		private float _maxLineWidth = 0;
 		private int _maxLineWidthIndex = 0;
+		private bool _updating = false;
 
 		public ctrlTextbox()
 		{
@@ -317,6 +318,19 @@ namespace Mesen.GUI.Debugger
 		public void ClearLineStyles()
 		{
 			_lineProperties.Clear();
+			if(!this._updating) {
+				this.Invalidate();
+			}
+		}
+
+		public void BeginUpdate()
+		{
+			this._updating = true;
+		}
+
+		public void EndUpdate()
+		{
+			this._updating = false;
 			this.Invalidate();
 		}
 
@@ -332,7 +346,9 @@ namespace Mesen.GUI.Debugger
 					};
 
 					_lineProperties[_lineNumberIndex[lineNumber]] = properties;
-					this.Invalidate();
+					if(!_updating) {
+						this.Invalidate();
+					}
 				}
 			}
 		}

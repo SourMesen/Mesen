@@ -76,9 +76,11 @@ namespace Mesen.GUI.Debugger.Controls
 			ctrlScrollableTextbox.TextLines = content;
 
 			if(chkHighlightUninitRead.Checked) {
+				ctrlScrollableTextbox.BeginUpdate();
 				foreach(int address in data.Where((e) => e.UninitRead).Select((e) => e.Address)) {
 					ctrlScrollableTextbox.SetLineColor(address, null, Color.LightCoral);
 				}
+				ctrlScrollableTextbox.EndUpdate();
 			}
 		}
 

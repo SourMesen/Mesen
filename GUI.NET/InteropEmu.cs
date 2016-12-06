@@ -818,6 +818,8 @@ namespace Mesen.GUI
 		ShowEffectiveAddresses = 2,
 		ShowOnlyDisassembledCode = 4,
 		DisplayOpCodesInLowerCase = 8,
+		DisassembleEverything = 16,
+		DisassembleEverythingButData = 32,
 	}
 
 	public struct InteropRomInfo

@@ -107,6 +107,16 @@ namespace Mesen.GUI.Debugger
 			this.ctrlTextbox.ClearLineStyles();
 		}
 
+		public void BeginUpdate()
+		{
+			this.ctrlTextbox.BeginUpdate();
+		}
+
+		public void EndUpdate()
+		{
+			this.ctrlTextbox.EndUpdate();
+		}
+
 		public void SetLineColor(int lineNumber, Color? fgColor = null, Color? bgColor = null, Color? outlineColor = null, LineSymbol symbol = LineSymbol.None)
 		{
 			this.ctrlTextbox.SetLineColor(lineNumber, fgColor, bgColor, outlineColor, symbol);

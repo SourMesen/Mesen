@@ -52,7 +52,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 Debugger::~Debugger()
 {
-	SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
+	_codeDataLogger->SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
 
 	_stopFlag = true;
 
@@ -135,19 +135,9 @@ bool Debugger::IsMarkedAsCode(uint16_t relativeAddress)
 	}
 }
 
-bool Debugger::SaveCdlFile(string cdlFilepath)
+shared_ptr<CodeDataLogger> Debugger::GetCodeDataLogger()
 {
-	return _codeDataLogger->SaveCdlFile(cdlFilepath);
-}
-
-void Debugger::ResetCdlLog()
-{
-	_codeDataLogger->Reset();
-}
-
-CdlRatios Debugger::GetCdlRatios()
-{
-	return _codeDataLogger->GetRatios();
+	return _codeDataLogger;
 }
 
 shared_ptr<LabelManager> Debugger::GetLabelManager()
@@ -328,7 +318,7 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	if(absoluteAddr >= 0) {
 		if(type == MemoryOperationType::ExecOperand) {
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
-		} else {
+		} else if(type == MemoryOperationType::Read) {
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Data);
 		}
 	} else if(addr < 0x2000 || absoluteRamAddr >= 0) {

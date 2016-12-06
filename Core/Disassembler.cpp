@@ -36,22 +36,22 @@ void Disassembler::BuildOpCodeTables(bool useLowerCase)
 {
 	string opName[256] = {
 	//	0			1			2			3			4			5			6			7			8			9			A			B			C			D			E			F
-		"BRK",	"ORA",	"",		"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"PHP",	"ORA",	"ASL",	"ANC*",	"NOP",	"ORA",	"ASL",	"SLO*", //0
-		"BPL",	"ORA",	"",		"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"CLC",	"ORA",	"NOP*",	"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*", //1
-		"JSR",	"AND",	"",		"RLA*",	"BIT",	"AND",	"ROL",	"RLA*",	"PLP",	"AND",	"ROL",	"ANC*",	"BIT",	"AND",	"ROL",	"RLA*", //2
-		"BMI",	"AND",	"",		"RLA*",	"NOP",	"AND",	"ROL",	"RLA*",	"SEC",	"AND",	"NOP*",	"RLA*",	"NOP",	"AND",	"ROL",	"RLA*", //3
-		"RTI",	"EOR",	"",		"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*",	"PHA",	"EOR",	"LSR",	"ALR*",	"JMP",	"EOR",	"LSR",	"SRE*", //4
-		"BVC",	"EOR",	"",		"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*",	"CLI",	"EOR",	"NOP*",	"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*", //5
-		"RTS",	"ADC",	"",		"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*",	"PLA",	"ADC",	"ROR",	"ARR*",	"JMP",	"ADC",	"ROR",	"RRA*", //6
-		"BVS",	"ADC",	"",		"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*",	"SEI",	"ADC",	"NOP*",	"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*", //7
+		"BRK",	"ORA",	"STP*",	"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"PHP",	"ORA",	"ASL",	"ANC*",	"NOP",	"ORA",	"ASL",	"SLO*", //0
+		"BPL",	"ORA",	"STP*",	"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"CLC",	"ORA",	"NOP*",	"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*", //1
+		"JSR",	"AND",	"STP*",	"RLA*",	"BIT",	"AND",	"ROL",	"RLA*",	"PLP",	"AND",	"ROL",	"ANC*",	"BIT",	"AND",	"ROL",	"RLA*", //2
+		"BMI",	"AND",	"STP*",	"RLA*",	"NOP",	"AND",	"ROL",	"RLA*",	"SEC",	"AND",	"NOP*",	"RLA*",	"NOP",	"AND",	"ROL",	"RLA*", //3
+		"RTI",	"EOR",	"STP*",	"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*",	"PHA",	"EOR",	"LSR",	"ALR*",	"JMP",	"EOR",	"LSR",	"SRE*", //4
+		"BVC",	"EOR",	"STP*",	"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*",	"CLI",	"EOR",	"NOP*",	"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*", //5
+		"RTS",	"ADC",	"STP*",	"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*",	"PLA",	"ADC",	"ROR",	"ARR*",	"JMP",	"ADC",	"ROR",	"RRA*", //6
+		"BVS",	"ADC",	"STP*",	"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*",	"SEI",	"ADC",	"NOP*",	"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*", //7
 		"NOP",	"STA",	"NOP",	"SAX*",	"STY",	"STA",	"STX",	"SAX*",	"DEY",	"NOP",	"TXA",	"XAA*",	"STY",	"STA",	"STX",	"SAX*", //8
-		"BCC",	"STA",	"",		"AHX*",	"STY",	"STA",	"STX",	"SAX*",	"TYA",	"STA",	"TXS",	"TAS*",	"SHY*",	"STA",	"SHX",	"AXA*", //9
+		"BCC",	"STA",	"STP*",	"AHX*",	"STY",	"STA",	"STX",	"SAX*",	"TYA",	"STA",	"TXS",	"TAS*",	"SHY*",	"STA",	"SHX",	"AXA*", //9
 		"LDY",	"LDA",	"LDX",	"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*",	"TAY",	"LDA",	"TAX",	"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*", //A
-		"BCS",	"LDA",	"",		"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*",	"CLV",	"LDA",	"TSX",	"LAS*",	"LDY",	"LDA",	"LDX",	"LAX*", //B
+		"BCS",	"LDA",	"STP*",	"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*",	"CLV",	"LDA",	"TSX",	"LAS*",	"LDY",	"LDA",	"LDX",	"LAX*", //B
 		"CPY",	"CMP",	"NOP",	"DCP*",	"CPY",	"CMP",	"DEC",	"DCP*",	"INY",	"CMP",	"DEX",	"AXS*",	"CPY",	"CMP",	"DEC",	"DCP*", //C
-		"BNE",	"CMP",	"",		"DCP*",	"NOP",	"CMP",	"DEC",	"DCP*",	"CLD",	"CMP",	"NOP*",	"DCP*",	"NOP",	"CMP",	"DEC",	"DCP*", //D
+		"BNE",	"CMP",	"STP*",	"DCP*",	"NOP",	"CMP",	"DEC",	"DCP*",	"CLD",	"CMP",	"NOP*",	"DCP*",	"NOP",	"CMP",	"DEC",	"DCP*", //D
 		"CPX",	"SBC",	"NOP",	"ISC*",	"CPX",	"SBC",	"INC",	"ISC*",	"INX",	"SBC",	"NOP",	"SBC*",	"CPX",	"SBC",	"INC",	"ISC*", //E
-		"BEQ",	"SBC",	"",		"ISC*",	"NOP",	"SBC",	"INC",	"ISC*",	"SED",	"SBC",	"NOP*",	"ISC*",	"NOP",	"SBC",	"INC",	"ISC*"  //F
+		"BEQ",	"SBC",	"STP*",	"ISC*",	"NOP",	"SBC",	"INC",	"ISC*",	"SED",	"SBC",	"NOP*",	"ISC*",	"NOP",	"SBC",	"INC",	"ISC*"  //F
 	};
 
 	AddrMode opMode[256] = {
@@ -226,12 +226,16 @@ vector<string> Disassembler::SplitComment(string input)
 	return result;
 }
 
-string Disassembler::GetLine(string code, string comment, int32_t cpuAddress, int32_t absoluteAddress, string byteCode, string addressing)
+string Disassembler::GetLine(string code, string comment, int32_t cpuAddress, int32_t absoluteAddress, string byteCode, string addressing, bool speculativeCode)
 {
 	string out;
-	out.reserve(100);
+	out.reserve(40);
 	if(cpuAddress >= 0) {
-		out += (_debugger->IsMarkedAsCode(cpuAddress) || absoluteAddress == -1) ? "1\x1" : "0\x1";
+		if(speculativeCode) {
+			out += "2\x1";
+		} else {
+			out += (_debugger->IsMarkedAsCode(cpuAddress) || absoluteAddress == -1) ? "1\x1" : "0\x1";
+		}
 		out += HexUtilities::ToHex((uint16_t)cpuAddress);		
 	} else {
 		out += "1\x1";
@@ -240,7 +244,11 @@ string Disassembler::GetLine(string code, string comment, int32_t cpuAddress, in
 	if(absoluteAddress >= 0) {
 		out += HexUtilities::ToHex((uint32_t)absoluteAddress);
 	}
-	out += "\x1" + byteCode + "\x1" + code + "\x2" + addressing + "\x2" + (comment.empty() ? "" : (";" + comment)) + "\n";
+	out += "\x1" + byteCode + "\x1" + code + "\x2" + addressing + "\x2";
+	if(!comment.empty()) {
+		out += ";" + comment;
+	}
+	out += "\n";
 	return out;
 }
 
@@ -294,19 +302,28 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 	uint32_t addr = startAddr;
 	uint32_t byteCount = 0;
 	bool skippingCode = false;
+	shared_ptr<CodeDataLogger> cdl = _debugger->GetCodeDataLogger();
 	while(addr <= endAddr) {
 		string label = labelManager->GetLabel(memoryAddr, false);
 		string commentString = labelManager->GetComment(memoryAddr);
 		string labelLine = label.empty() ? "" : GetLine(label + ":");
 		string commentLines = "";
+		bool speculativeCode = false;
+
 		if(commentString.find_first_of('\n') != string::npos) {
 			for(string &str : SplitComment(commentString)) {
 				commentLines += GetLine("", str);
 			}
 			commentString = "";
 		}
-
+		
 		shared_ptr<DisassemblyInfo> info = (*cache)[addr&mask];
+		if(!info && source == _prgRom) {
+			if(_debugger->CheckFlag(DebuggerFlags::DisassembleEverything) || _debugger->CheckFlag(DebuggerFlags::DisassembleEverythingButData) && !cdl->IsData(addr)) {
+				speculativeCode = true;
+				info = shared_ptr<DisassemblyInfo>(new DisassemblyInfo(source + addr, false));
+			}
+		}
 
 		if(info) {
 			if(byteCount > 0) {
@@ -324,7 +341,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			output += labelLine;
 
 			string effectiveAddress = showEffectiveAddresses ? info->GetEffectiveAddressString(cpuState, memoryManager, labelManager) : "";
-			output += GetLine("  " + info->ToString(memoryAddr, memoryManager, labelManager), commentString, memoryAddr, addr, info->GetByteCode(), effectiveAddress);
+			output += GetLine("  " + info->ToString(memoryAddr, memoryManager, labelManager), commentString, memoryAddr, addr, info->GetByteCode(), effectiveAddress, speculativeCode);
 
 			if(info->IsSubExitPoint()) {
 				output += GetLine("__sub end__") + GetLine();

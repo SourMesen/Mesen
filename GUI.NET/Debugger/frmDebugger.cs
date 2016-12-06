@@ -52,6 +52,9 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
 			this.mnuDisplayOpCodesInLowerCase.Checked = ConfigManager.Config.DebugInfo.DisplayOpCodesInLowerCase;
+			this.mnuDisassembleVerifiedCodeOnly.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.VerifiedCode;
+			this.mnuDisassembleEverything.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.Everything;
+			this.mnuDisassembleEverythingButData.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.EverythingButData;
 
 			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
 			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
@@ -176,6 +179,12 @@ namespace Mesen.GUI.Debugger
 			if(mnuDisplayOpCodesInLowerCase.Checked) {
 				flags |= DebuggerFlags.DisplayOpCodesInLowerCase;
 			}
+			if(mnuDisassembleEverything.Checked) {
+				flags |= DebuggerFlags.DisassembleEverything;
+			} else if(mnuDisassembleEverythingButData.Checked) {
+				flags |= DebuggerFlags.DisassembleEverythingButData;
+			}
+
 			InteropEmu.DebugSetFlags(flags);
 		}
 
@@ -720,6 +729,33 @@ namespace Mesen.GUI.Debugger
 		private void ctrlConsoleStatus_OnGotoLocation(object sender, EventArgs e)
 		{
 			_lastCodeWindow.ScrollToLineNumber((int)sender);
+		}
+
+		private void SetDisassemblyType(DisassemblyType type, ToolStripMenuItem item)
+		{
+			mnuDisassembleVerifiedCodeOnly.Checked = mnuDisassembleEverything.Checked = mnuDisassembleEverythingButData.Checked = false;
+			item.Checked = true;
+
+			ConfigManager.Config.DebugInfo.DisassemblyType = type;
+			ConfigManager.ApplyChanges();
+
+			UpdateDebuggerFlags();
+			UpdateDebugger();
+		}
+
+		private void mnuDisassembleVerifiedCodeOnly_Click(object sender, EventArgs e)
+		{
+			SetDisassemblyType(DisassemblyType.VerifiedCode, sender as ToolStripMenuItem);
+		}
+
+		private void mnuDisassembleEverything_Click(object sender, EventArgs e)
+		{
+			SetDisassemblyType(DisassemblyType.Everything, sender as ToolStripMenuItem);
+		}
+
+		private void mnuDisassembleEverythingButData_Click(object sender, EventArgs e)
+		{
+			SetDisassemblyType(DisassemblyType.EverythingButData, sender as ToolStripMenuItem);
 		}
 	}
 }

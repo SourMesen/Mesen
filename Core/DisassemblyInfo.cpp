@@ -11,7 +11,7 @@ uint32_t DisassemblyInfo::OPSize[256];
 string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager)
 {
 	string out;
-	out.reserve(50);
+	out.reserve(25);
 
 	uint8_t opCode = *_opPointer;
 
