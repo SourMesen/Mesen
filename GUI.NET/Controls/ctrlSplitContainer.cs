@@ -123,11 +123,15 @@ namespace Mesen.GUI.Controls
 								this.SuspendLayout();
 								this.Panel1.SuspendLayout();
 								this.Panel2.SuspendLayout();
-								this.SplitterDistance++;
-								this.SplitterDistance--;
-								this.ResumeLayout();
-								this.Panel1.ResumeLayout();
-								this.Panel2.ResumeLayout();
+								try {
+									this.SplitterDistance++;
+									this.SplitterDistance--;
+								} catch {
+								} finally {
+									this.ResumeLayout();
+									this.Panel1.ResumeLayout();
+									this.Panel2.ResumeLayout();
+								}
 							}
 							this.Invalidate();
 							lock(this) {
