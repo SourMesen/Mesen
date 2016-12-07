@@ -17,11 +17,12 @@ namespace Mesen.GUI.Debugger
 		public event EventHandler OnStateChanged;
 		public event EventHandler OnGotoLocation;
 
-		DebugState _lastState;
-
-		EntityBinder _cpuBinder = new EntityBinder();
-		EntityBinder _ppuControlBinder = new EntityBinder();
-		EntityBinder _ppuStatusBinder = new EntityBinder();
+		private bool _dirty = false;
+		private bool _preventDirty = false;
+		private DebugState _lastState;
+		private EntityBinder _cpuBinder = new EntityBinder();
+		private EntityBinder _ppuControlBinder = new EntityBinder();
+		private EntityBinder _ppuStatusBinder = new EntityBinder();
 
 		public ctrlConsoleStatus()
 		{
@@ -103,52 +104,60 @@ namespace Mesen.GUI.Debugger
 
 		public void UpdateStatus(ref DebugState state)
 		{
+			this._preventDirty = true;
 			_lastState = state;
 			UpdateCPUStatus(ref state.CPU);
 			UpdatePPUStatus(ref state.PPU);
 			UpdateStack(state.CPU.SP);
-			btnApplyChanges.Enabled = true;
+
+			btnUndo.Enabled = false;
+			this._dirty = false;
+			this._preventDirty = false;
 		}
 
-		private void btnApplyChanges_Click(object sender, EventArgs e)
+		public void ApplyChanges()
 		{
-			_cpuBinder.UpdateObject();
-			_ppuControlBinder.UpdateObject();
-			_ppuStatusBinder.UpdateObject();
+			if(this._dirty) {
+				_cpuBinder.UpdateObject();
+				_ppuControlBinder.UpdateObject();
+				_ppuStatusBinder.UpdateObject();
 
-			DebugState state = _lastState;
-			state.CPU = (CPUState)_cpuBinder.Entity;
+				DebugState state = _lastState;
+				state.CPU = (CPUState)_cpuBinder.Entity;
 
-			if(chkExternal.Checked) state.CPU.IRQFlag |= IRQSource.External;
-			if(chkFrameCounter.Checked) state.CPU.IRQFlag |= IRQSource.FrameCounter;
-			if(chkDMC.Checked) state.CPU.IRQFlag |= IRQSource.DMC;
+				if(chkExternal.Checked) state.CPU.IRQFlag |= IRQSource.External;
+				if(chkFrameCounter.Checked) state.CPU.IRQFlag |= IRQSource.FrameCounter;
+				if(chkDMC.Checked) state.CPU.IRQFlag |= IRQSource.DMC;
 
-			state.PPU.ControlFlags = (PPUControlFlags)_ppuControlBinder.Entity;
-			state.PPU.StatusFlags = (PPUStatusFlags)_ppuStatusBinder.Entity;
+				state.PPU.ControlFlags = (PPUControlFlags)_ppuControlBinder.Entity;
+				state.PPU.StatusFlags = (PPUStatusFlags)_ppuStatusBinder.Entity;
 
-			state.PPU.State.Mask = state.PPU.ControlFlags.GetMask();
-			state.PPU.State.Control = state.PPU.ControlFlags.GetControl();
-			state.PPU.State.Status = state.PPU.StatusFlags.GetStatus();
+				state.PPU.State.Mask = state.PPU.ControlFlags.GetMask();
+				state.PPU.State.Control = state.PPU.ControlFlags.GetControl();
+				state.PPU.State.Status = state.PPU.StatusFlags.GetStatus();
 
-			UInt32 cycle = 0;
-			UInt32.TryParse(txtCycle.Text, out cycle);
-			state.PPU.Cycle = cycle;
+				UInt32 cycle = 0;
+				UInt32.TryParse(txtCycle.Text, out cycle);
+				state.PPU.Cycle = cycle;
 
-			Int32 scanline = 0;
-			Int32.TryParse(txtScanline.Text, out scanline);
-			state.PPU.Scanline = scanline;
+				Int32 scanline = 0;
+				Int32.TryParse(txtScanline.Text, out scanline);
+				state.PPU.Scanline = scanline;
 
-			UInt16 vramAddr = 0;
-			UInt16.TryParse(txtVRAMAddr.Text, System.Globalization.NumberStyles.HexNumber, null, out vramAddr);
-			state.PPU.State.VideoRamAddr = vramAddr;
+				UInt16 vramAddr = 0;
+				UInt16.TryParse(txtVRAMAddr.Text, System.Globalization.NumberStyles.HexNumber, null, out vramAddr);
+				state.PPU.State.VideoRamAddr = vramAddr;
 
-			InteropEmu.DebugSetState(state);
-			btnApplyChanges.Enabled = false;
-			OnStateChanged?.Invoke(null, null);
+				InteropEmu.DebugSetState(state);
+				btnUndo.Enabled = false;
+				OnStateChanged?.Invoke(null, null);
+			}
 		}
 
 		private void chkCpuFlag_Click(object sender, EventArgs e)
 		{
+			this.OnOptionChanged(sender, e);
+
 			int ps = 0;
 			if(chkBreak.Checked) ps |= (int)PSFlags.Break;
 			if(chkCarry.Checked) ps |= (int)PSFlags.Carry;
@@ -176,6 +185,7 @@ namespace Mesen.GUI.Debugger
 
 		private void txtStatus_TextChanged(object sender, EventArgs e)
 		{
+			this.OnOptionChanged(sender, e);
 			if(!_cpuBinder.Updating) {
 				_cpuBinder.UpdateObject();
 				UpdateCpuFlags();
@@ -184,7 +194,7 @@ namespace Mesen.GUI.Debugger
 
 		private void tmrButton_Tick(object sender, EventArgs e)
 		{
-			btnApplyChanges.Enabled = InteropEmu.DebugIsExecutionStopped();
+			btnUndo.Enabled = this._dirty && InteropEmu.DebugIsExecutionStopped();
 		}
 
 		private void UpdateVectorAddresses()
@@ -197,7 +207,6 @@ namespace Mesen.GUI.Debugger
 			mnuGoToResetHandler.Text = "Reset Handler ($" + resetHandler.ToString("X4") + ")";
 			mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
 		}
-
 
 		private void btnGoto_Click(object sender, EventArgs e)
 		{
@@ -225,6 +234,26 @@ namespace Mesen.GUI.Debugger
 		private void contextGoTo_Opening(object sender, CancelEventArgs e)
 		{
 			UpdateVectorAddresses();
+		}
+
+		private void OnOptionChanged(object sender, EventArgs e)
+		{
+			if(InteropEmu.DebugIsExecutionStopped()) {
+				if(!this._preventDirty) {
+					this._dirty = true;
+					this.btnUndo.Enabled = true;
+				}
+			} else {
+				this.UpdateStatus(ref _lastState);
+			}
+		}
+
+		private void btnUndo_Click(object sender, EventArgs e)
+		{
+			if(this._dirty) {
+				this.UpdateStatus(ref _lastState);
+				this.btnUndo.Enabled = false;
+			}
 		}
 	}
 }

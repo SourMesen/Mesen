@@ -349,37 +349,43 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuBreak_Click(object sender, EventArgs e)
 		{
+			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugStep(1);
 		}
 
 		private void mnuStepInto_Click(object sender, EventArgs e)
 		{
+			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugStep(1);
 		}
 
 		private void mnuStepOut_Click(object sender, EventArgs e)
 		{
+			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugStepOut();
 		}
 		
 		private void mnuStepOver_Click(object sender, EventArgs e)
 		{
+			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugStepOver();
 		}
-
-
+		
 		private void mnuRunPpuCycle_Click(object sender, EventArgs e)
 		{
+			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugPpuStep(1);
 		}
 
 		private void mnuRunScanline_Click(object sender, EventArgs e)
 		{
+			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugPpuStep(341);
 		}
 
 		private void mnuRunOneFrame_Click(object sender, EventArgs e)
 		{
+			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugPpuStep(89341);
 		}
 

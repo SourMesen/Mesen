@@ -91,8 +91,6 @@
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSP = new System.Windows.Forms.Label();
 			this.txtSP = new System.Windows.Forms.TextBox();
-			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblA = new System.Windows.Forms.Label();
 			this.txtA = new System.Windows.Forms.TextBox();
@@ -106,12 +104,14 @@
 			this.txtCycleCount = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
 			this.btnGoto = new System.Windows.Forms.Button();
-			this.btnApplyChanges = new System.Windows.Forms.Button();
+			this.btnUndo = new System.Windows.Forms.Button();
 			this.tmrButton = new System.Windows.Forms.Timer(this.components);
 			this.contextGoTo = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuGoToIrqHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToNmiHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToResetHandler = new System.Windows.Forms.ToolStripMenuItem();
+			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -264,9 +264,11 @@
 			// 
 			this.txtCycle.Location = new System.Drawing.Point(68, 2);
 			this.txtCycle.Margin = new System.Windows.Forms.Padding(2);
+			this.txtCycle.MaxLength = 3;
 			this.txtCycle.Name = "txtCycle";
 			this.txtCycle.Size = new System.Drawing.Size(58, 20);
 			this.txtCycle.TabIndex = 2;
+			this.txtCycle.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// txtVRAMAddr
 			// 
@@ -275,6 +277,7 @@
 			this.txtVRAMAddr.Name = "txtVRAMAddr";
 			this.txtVRAMAddr.Size = new System.Drawing.Size(58, 20);
 			this.txtVRAMAddr.TabIndex = 6;
+			this.txtVRAMAddr.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkVerticalBlank
 			// 
@@ -287,6 +290,7 @@
 			this.chkVerticalBlank.TabIndex = 7;
 			this.chkVerticalBlank.Text = "Vertical Blank";
 			this.chkVerticalBlank.UseVisualStyleBackColor = true;
+			this.chkVerticalBlank.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkSprite0Hit
 			// 
@@ -299,6 +303,7 @@
 			this.chkSprite0Hit.TabIndex = 9;
 			this.chkSprite0Hit.Text = "Sprite 0 Hit";
 			this.chkSprite0Hit.UseVisualStyleBackColor = true;
+			this.chkSprite0Hit.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkSpriteOverflow
 			// 
@@ -311,6 +316,7 @@
 			this.chkSpriteOverflow.TabIndex = 8;
 			this.chkSpriteOverflow.Text = "Sprite Overflow";
 			this.chkSpriteOverflow.UseVisualStyleBackColor = true;
+			this.chkSpriteOverflow.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// lblScanline
 			// 
@@ -328,9 +334,11 @@
 			// 
 			this.txtScanline.Location = new System.Drawing.Point(68, 26);
 			this.txtScanline.Margin = new System.Windows.Forms.Padding(2);
+			this.txtScanline.MaxLength = 3;
 			this.txtScanline.Name = "txtScanline";
 			this.txtScanline.Size = new System.Drawing.Size(58, 20);
 			this.txtScanline.TabIndex = 4;
+			this.txtScanline.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// grpControlMask
 			// 
@@ -383,6 +391,7 @@
 			this.chkDrawLeftSpr.TabIndex = 23;
 			this.chkDrawLeftSpr.Text = "Draw left Sprites (8px)";
 			this.chkDrawLeftSpr.UseVisualStyleBackColor = true;
+			this.chkDrawLeftSpr.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// flowLayoutPanel7
 			// 
@@ -410,9 +419,11 @@
 			// 
 			this.txtSprAddr.Location = new System.Drawing.Point(51, 2);
 			this.txtSprAddr.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
+			this.txtSprAddr.MaxLength = 4;
 			this.txtSprAddr.Name = "txtSprAddr";
 			this.txtSprAddr.Size = new System.Drawing.Size(50, 20);
 			this.txtSprAddr.TabIndex = 1;
+			this.txtSprAddr.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkSpritesEnabled
 			// 
@@ -424,6 +435,7 @@
 			this.chkSpritesEnabled.TabIndex = 8;
 			this.chkSpritesEnabled.Text = "Sprites Enabled";
 			this.chkSpritesEnabled.UseVisualStyleBackColor = true;
+			this.chkSpritesEnabled.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkBGEnabled
 			// 
@@ -435,6 +447,7 @@
 			this.chkBGEnabled.TabIndex = 7;
 			this.chkBGEnabled.Text = "BG Enabled";
 			this.chkBGEnabled.UseVisualStyleBackColor = true;
+			this.chkBGEnabled.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// tableLayoutPanel1
 			// 
@@ -465,6 +478,7 @@
 			this.chkNMIOnBlank.TabIndex = 18;
 			this.chkNMIOnBlank.Text = "NMI on vBlank";
 			this.chkNMIOnBlank.UseVisualStyleBackColor = true;
+			this.chkNMIOnBlank.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkLargeSprites
 			// 
@@ -476,6 +490,7 @@
 			this.chkLargeSprites.TabIndex = 19;
 			this.chkLargeSprites.Text = "Large Sprites";
 			this.chkLargeSprites.UseVisualStyleBackColor = true;
+			this.chkLargeSprites.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkVerticalWrite
 			// 
@@ -487,6 +502,7 @@
 			this.chkVerticalWrite.TabIndex = 17;
 			this.chkVerticalWrite.Text = "Vertical Write";
 			this.chkVerticalWrite.UseVisualStyleBackColor = true;
+			this.chkVerticalWrite.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// flowLayoutPanel6
 			// 
@@ -514,9 +530,11 @@
 			// 
 			this.txtBGAddr.Location = new System.Drawing.Point(51, 2);
 			this.txtBGAddr.Margin = new System.Windows.Forms.Padding(1, 2, 0, 0);
+			this.txtBGAddr.MaxLength = 4;
 			this.txtBGAddr.Name = "txtBGAddr";
 			this.txtBGAddr.Size = new System.Drawing.Size(50, 20);
 			this.txtBGAddr.TabIndex = 1;
+			this.txtBGAddr.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkDrawLeftBG
 			// 
@@ -528,6 +546,7 @@
 			this.chkDrawLeftBG.TabIndex = 13;
 			this.chkDrawLeftBG.Text = "Draw left BG (8px)";
 			this.chkDrawLeftBG.UseVisualStyleBackColor = true;
+			this.chkDrawLeftBG.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkGrayscale
 			// 
@@ -539,6 +558,7 @@
 			this.chkGrayscale.TabIndex = 12;
 			this.chkGrayscale.Text = "Grayscale";
 			this.chkGrayscale.UseVisualStyleBackColor = true;
+			this.chkGrayscale.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkIntensifyRed
 			// 
@@ -550,6 +570,7 @@
 			this.chkIntensifyRed.TabIndex = 16;
 			this.chkIntensifyRed.Text = "Intensify Red";
 			this.chkIntensifyRed.UseVisualStyleBackColor = true;
+			this.chkIntensifyRed.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkIntensifyGreen
 			// 
@@ -561,6 +582,7 @@
 			this.chkIntensifyGreen.TabIndex = 14;
 			this.chkIntensifyGreen.Text = "Intensify Green";
 			this.chkIntensifyGreen.UseVisualStyleBackColor = true;
+			this.chkIntensifyGreen.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkIntensifyBlue
 			// 
@@ -572,6 +594,7 @@
 			this.chkIntensifyBlue.TabIndex = 24;
 			this.chkIntensifyBlue.Text = "Intensify Blue";
 			this.chkIntensifyBlue.UseVisualStyleBackColor = true;
+			this.chkIntensifyBlue.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// grpCPUStatus
 			// 
@@ -638,6 +661,7 @@
 			this.chkExternal.TabIndex = 1;
 			this.chkExternal.Text = "External";
 			this.chkExternal.UseVisualStyleBackColor = true;
+			this.chkExternal.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkFrameCounter
 			// 
@@ -649,6 +673,7 @@
 			this.chkFrameCounter.TabIndex = 2;
 			this.chkFrameCounter.Text = "Frame Counter";
 			this.chkFrameCounter.UseVisualStyleBackColor = true;
+			this.chkFrameCounter.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkDMC
 			// 
@@ -660,6 +685,7 @@
 			this.chkDMC.TabIndex = 3;
 			this.chkDMC.Text = "DMC";
 			this.chkDMC.UseVisualStyleBackColor = true;
+			this.chkDMC.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// chkNMI
 			// 
@@ -671,6 +697,7 @@
 			this.chkNMI.TabIndex = 4;
 			this.chkNMI.Text = "NMI";
 			this.chkNMI.UseVisualStyleBackColor = true;
+			this.chkNMI.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// grpFlags
 			// 
@@ -729,6 +756,7 @@
 			// 
 			this.txtStatus.Location = new System.Drawing.Point(40, 0);
 			this.txtStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.txtStatus.MaxLength = 2;
 			this.txtStatus.Name = "txtStatus";
 			this.txtStatus.Size = new System.Drawing.Size(27, 20);
 			this.txtStatus.TabIndex = 1;
@@ -913,30 +941,11 @@
 			// 
 			this.txtSP.Location = new System.Drawing.Point(24, 0);
 			this.txtSP.Margin = new System.Windows.Forms.Padding(0);
+			this.txtSP.MaxLength = 2;
 			this.txtSP.Name = "txtSP";
 			this.txtSP.Size = new System.Drawing.Size(49, 20);
 			this.txtSP.TabIndex = 1;
-			// 
-			// lstStack
-			// 
-			this.lstStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-			this.lstStack.FullRowSelect = true;
-			this.lstStack.GridLines = true;
-			this.lstStack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.lstStack.Location = new System.Drawing.Point(3, 24);
-			this.lstStack.Name = "lstStack";
-			this.lstStack.Size = new System.Drawing.Size(81, 97);
-			this.lstStack.TabIndex = 4;
-			this.lstStack.UseCompatibleStateImageBehavior = false;
-			this.lstStack.View = System.Windows.Forms.View.Details;
-			// 
-			// columnHeader1
-			// 
-			this.columnHeader1.Text = "Value";
+			this.txtSP.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// flowLayoutPanel1
 			// 
@@ -972,9 +981,11 @@
 			// 
 			this.txtA.Location = new System.Drawing.Point(17, 0);
 			this.txtA.Margin = new System.Windows.Forms.Padding(0);
+			this.txtA.MaxLength = 2;
 			this.txtA.Name = "txtA";
 			this.txtA.Size = new System.Drawing.Size(27, 20);
 			this.txtA.TabIndex = 1;
+			this.txtA.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// lblX
 			// 
@@ -992,9 +1003,11 @@
 			// 
 			this.txtX.Location = new System.Drawing.Point(61, 0);
 			this.txtX.Margin = new System.Windows.Forms.Padding(0);
+			this.txtX.MaxLength = 2;
 			this.txtX.Name = "txtX";
 			this.txtX.Size = new System.Drawing.Size(27, 20);
 			this.txtX.TabIndex = 3;
+			this.txtX.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// lblY
 			// 
@@ -1012,9 +1025,11 @@
 			// 
 			this.txtY.Location = new System.Drawing.Point(105, 0);
 			this.txtY.Margin = new System.Windows.Forms.Padding(0);
+			this.txtY.MaxLength = 2;
 			this.txtY.Name = "txtY";
 			this.txtY.Size = new System.Drawing.Size(27, 20);
 			this.txtY.TabIndex = 5;
+			this.txtY.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// lblPC
 			// 
@@ -1032,9 +1047,11 @@
 			// 
 			this.txtPC.Location = new System.Drawing.Point(156, 0);
 			this.txtPC.Margin = new System.Windows.Forms.Padding(0);
+			this.txtPC.MaxLength = 4;
 			this.txtPC.Name = "txtPC";
 			this.txtPC.Size = new System.Drawing.Size(42, 20);
 			this.txtPC.TabIndex = 7;
+			this.txtPC.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// lblCycleCount
 			// 
@@ -1052,6 +1069,7 @@
 			// 
 			this.txtCycleCount.Location = new System.Drawing.Point(234, 0);
 			this.txtCycleCount.Margin = new System.Windows.Forms.Padding(0);
+			this.txtCycleCount.MaxLength = 8;
 			this.txtCycleCount.Name = "txtCycleCount";
 			this.txtCycleCount.Size = new System.Drawing.Size(77, 20);
 			this.txtCycleCount.TabIndex = 9;
@@ -1063,7 +1081,7 @@
 			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel10.Controls.Add(this.btnGoto, 2, 0);
-			this.tableLayoutPanel10.Controls.Add(this.btnApplyChanges, 0, 0);
+			this.tableLayoutPanel10.Controls.Add(this.btnUndo, 0, 0);
 			this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 362);
 			this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
@@ -1087,15 +1105,15 @@
 			this.btnGoto.UseVisualStyleBackColor = true;
 			this.btnGoto.Click += new System.EventHandler(this.btnGoto_Click);
 			// 
-			// btnApplyChanges
+			// btnUndo
 			// 
-			this.btnApplyChanges.Location = new System.Drawing.Point(3, 3);
-			this.btnApplyChanges.Name = "btnApplyChanges";
-			this.btnApplyChanges.Size = new System.Drawing.Size(73, 23);
-			this.btnApplyChanges.TabIndex = 3;
-			this.btnApplyChanges.Text = "Apply State";
-			this.btnApplyChanges.UseVisualStyleBackColor = true;
-			this.btnApplyChanges.Click += new System.EventHandler(this.btnApplyChanges_Click);
+			this.btnUndo.Location = new System.Drawing.Point(3, 3);
+			this.btnUndo.Name = "btnUndo";
+			this.btnUndo.Size = new System.Drawing.Size(87, 23);
+			this.btnUndo.TabIndex = 3;
+			this.btnUndo.Text = "Undo changes";
+			this.btnUndo.UseVisualStyleBackColor = true;
+			this.btnUndo.Click += new System.EventHandler(this.btnUndo_Click);
 			// 
 			// tmrButton
 			// 
@@ -1114,23 +1132,44 @@
 			// mnuGoToIrqHandler
 			// 
 			this.mnuGoToIrqHandler.Name = "mnuGoToIrqHandler";
-			this.mnuGoToIrqHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToIrqHandler.Size = new System.Drawing.Size(147, 22);
 			this.mnuGoToIrqHandler.Text = "IRQ Handler";
 			this.mnuGoToIrqHandler.Click += new System.EventHandler(this.mnuGoToIrqHandler_Click);
 			// 
 			// mnuGoToNmiHandler
 			// 
 			this.mnuGoToNmiHandler.Name = "mnuGoToNmiHandler";
-			this.mnuGoToNmiHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToNmiHandler.Size = new System.Drawing.Size(147, 22);
 			this.mnuGoToNmiHandler.Text = "NMI Handler";
 			this.mnuGoToNmiHandler.Click += new System.EventHandler(this.mnuGoToNmiHandler_Click);
 			// 
 			// mnuGoToResetHandler
 			// 
 			this.mnuGoToResetHandler.Name = "mnuGoToResetHandler";
-			this.mnuGoToResetHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToResetHandler.Size = new System.Drawing.Size(147, 22);
 			this.mnuGoToResetHandler.Text = "Reset Handler";
 			this.mnuGoToResetHandler.Click += new System.EventHandler(this.mnuGoToResetHandler_Click);
+			// 
+			// lstStack
+			// 
+			this.lstStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+			this.lstStack.FullRowSelect = true;
+			this.lstStack.GridLines = true;
+			this.lstStack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.lstStack.Location = new System.Drawing.Point(3, 24);
+			this.lstStack.Name = "lstStack";
+			this.lstStack.Size = new System.Drawing.Size(81, 97);
+			this.lstStack.TabIndex = 4;
+			this.lstStack.UseCompatibleStateImageBehavior = false;
+			this.lstStack.View = System.Windows.Forms.View.Details;
+			// 
+			// columnHeader1
+			// 
+			this.columnHeader1.Text = "Value";
 			// 
 			// ctrlConsoleStatus
 			// 
@@ -1253,7 +1292,7 @@
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.Label lblCycleCount;
 		private System.Windows.Forms.TextBox txtCycleCount;
-		private System.Windows.Forms.Button btnApplyChanges;
+		private System.Windows.Forms.Button btnUndo;
 		private System.Windows.Forms.Timer tmrButton;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;

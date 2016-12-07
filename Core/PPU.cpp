@@ -741,8 +741,7 @@ void PPU::ProcessPrerenderScanline()
 	} else if(_nesModel == NesModel::NTSC && _cycle == 339 && IsRenderingEnabled() && (_frameCount & 0x01)) {
 		//This behavior is NTSC-specific - PAL frames are always the same number of cycles
 		//"With rendering enabled, each odd PPU frame is one PPU clock shorter than normal" (skip from 339 to 0, going over 340)
-		_cycle = -1;
-		_scanline = 0;
+		_cycle = 340;
 	} else if(_cycle >= 321 && _cycle <= 336) {
 		if(_cycle == 321) {
 			Debugger::SetLastFramePpuScroll(
@@ -916,7 +915,7 @@ void PPU::EndVBlank()
 
 void PPU::Exec()
 {
-	if(_cycle == 340) {
+	if(_cycle > 339) {
 		_cycle = -1;
 
 		if(++_scanline > _vblankEnd) {
