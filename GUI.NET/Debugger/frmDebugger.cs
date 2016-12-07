@@ -47,7 +47,6 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowCpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping;
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
 			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
-			this.mnuShowFunctionLabelLists.Checked = ConfigManager.Config.DebugInfo.ShowFunctionLabelLists;
 			this.mnuHighlightUnexecutedCode.Checked = ConfigManager.Config.DebugInfo.HighlightUnexecutedCode;
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
@@ -56,14 +55,27 @@ namespace Mesen.GUI.Debugger
 			this.mnuDisassembleEverything.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.Everything;
 			this.mnuDisassembleEverythingButData.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.EverythingButData;
 
+			if(ConfigManager.Config.DebugInfo.WindowWidth > -1) {
+				this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
+				this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
+			}
+
 			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
 			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
-			tlpFunctionLabelLists.Visible = mnuShowFunctionLabelLists.Checked;
 
-			this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
-			this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
-			if(ConfigManager.Config.DebugInfo.BottomPanelHeight > 0) {
-				this.splitContainer.SplitterDistance = ConfigManager.Config.DebugInfo.BottomPanelHeight;
+			if(ConfigManager.Config.DebugInfo.LeftPanelWidth > 0) {
+				this.ctrlSplitContainerTop.SplitterDistance = ConfigManager.Config.DebugInfo.LeftPanelWidth;
+			}
+			if(ConfigManager.Config.DebugInfo.TopPanelHeight > 0) {
+				this.splitContainer.SplitterDistance = ConfigManager.Config.DebugInfo.TopPanelHeight;
+			}
+
+			if(!ConfigManager.Config.DebugInfo.ShowRightPanel) {
+				ctrlSplitContainerTop.CollapsePanel();
+			}
+
+			if(!ConfigManager.Config.DebugInfo.ShowBottomPanel) {
+				splitContainer.CollapsePanel();
 			}
 
 			_lastCodeWindow = ctrlDebuggerCode;
@@ -491,7 +503,8 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.WindowWidth = this.Width;
 			ConfigManager.Config.DebugInfo.WindowHeight = this.Height;
-			ConfigManager.Config.DebugInfo.BottomPanelHeight = this.splitContainer.SplitterDistance;
+			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
+			ConfigManager.Config.DebugInfo.LeftPanelWidth = this.ctrlSplitContainerTop.GetSplitterDistance();
 			ConfigManager.ApplyChanges();
 
 			SaveWorkspace();
@@ -605,13 +618,6 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 			ctrlCpuMemoryMapping.Invalidate();
 			ctrlPpuMemoryMapping.Invalidate();
-		}
-
-		private void mnuShowFunctionLabelLists_Click(object sender, EventArgs e)
-		{
-			tlpFunctionLabelLists.Visible = mnuShowFunctionLabelLists.Checked;
-			ConfigManager.Config.DebugInfo.ShowFunctionLabelLists = mnuShowFunctionLabelLists.Checked;
-			ConfigManager.ApplyChanges();
 		}
 
 		private void mnuHighlightUnexecutedCode_Click(object sender, EventArgs e)
@@ -762,6 +768,52 @@ namespace Mesen.GUI.Debugger
 		private void mnuDisassembleEverythingButData_Click(object sender, EventArgs e)
 		{
 			SetDisassemblyType(DisassemblyType.EverythingButData, sender as ToolStripMenuItem);
+		}
+
+		private void ctrlSplitContainerTop_PanelCollapsed(object sender, EventArgs e)
+		{
+			mnuShowFunctionLabelLists.Checked = false;
+			ConfigManager.Config.DebugInfo.ShowRightPanel = mnuShowFunctionLabelLists.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void ctrlSplitContainerTop_PanelExpanded(object sender, EventArgs e)
+		{
+			mnuShowFunctionLabelLists.Checked = true;
+			ConfigManager.Config.DebugInfo.ShowRightPanel = mnuShowFunctionLabelLists.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuShowFunctionLabelLists_Click(object sender, EventArgs e)
+		{
+			if(mnuShowFunctionLabelLists.Checked) {
+				this.ctrlSplitContainerTop.ExpandPanel();
+			} else {
+				this.ctrlSplitContainerTop.CollapsePanel();
+			}
+		}
+
+		private void splitContainer_PanelCollapsed(object sender, EventArgs e)
+		{
+			mnuShowBottomPanel.Checked = false;
+			ConfigManager.Config.DebugInfo.ShowBottomPanel = mnuShowBottomPanel.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void splitContainer_PanelExpanded(object sender, EventArgs e)
+		{
+			mnuShowBottomPanel.Checked = true;
+			ConfigManager.Config.DebugInfo.ShowBottomPanel = mnuShowBottomPanel.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuShowBottomPanel_Click(object sender, EventArgs e)
+		{
+			if(mnuShowBottomPanel.Checked) {
+				splitContainer.ExpandPanel();
+			} else {
+				splitContainer.CollapsePanel();
+			}
 		}
 	}
 }

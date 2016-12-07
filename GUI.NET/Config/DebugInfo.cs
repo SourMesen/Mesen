@@ -109,7 +109,11 @@ namespace Mesen.GUI.Config
 
 		public bool ShowCpuMemoryMapping = true;
 		public bool ShowPpuMemoryMapping = true;
-		public bool ShowFunctionLabelLists = true;
+
+		public bool ShowRightPanel = true;
+		public bool ShowBottomPanel = true;
+		public int LeftPanelWidth = 930;
+		public int TopPanelHeight = 450;
 
 		public bool RamAutoRefresh = true;
 		public int RamColumnCount = 2;
@@ -117,7 +121,6 @@ namespace Mesen.GUI.Config
 
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;
-		public int BottomPanelHeight = -1;
 
 		public int BreakInCount = 1;
 		public bool BreakInPpuCycles = false;

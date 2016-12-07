@@ -34,7 +34,8 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.tmrCdlRatios = new System.Windows.Forms.Timer(this.components);
-			this.splitContainer = new System.Windows.Forms.SplitContainer();
+			this.splitContainer = new Mesen.GUI.Controls.ctrlSplitContainer();
+			this.ctrlSplitContainerTop = new Mesen.GUI.Controls.ctrlSplitContainer();
 			this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
 			this.ctrlDebuggerCode = new Mesen.GUI.Debugger.ctrlDebuggerCode();
 			this.ctrlConsoleStatus = new Mesen.GUI.Debugger.ctrlConsoleStatus();
@@ -95,6 +96,7 @@
 			this.mnuDisassembleEverything = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDisassembleEverythingButData = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuDisplayOpCodesInLowerCase = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHighlightUnexecutedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowEffectiveAddresses = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowOnlyDisassembledCode = new System.Windows.Forms.ToolStripMenuItem();
@@ -133,11 +135,15 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
-			this.mnuDisplayOpCodesInLowerCase = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowBottomPanel = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.ctrlSplitContainerTop)).BeginInit();
+			this.ctrlSplitContainerTop.Panel1.SuspendLayout();
+			this.ctrlSplitContainerTop.Panel2.SuspendLayout();
+			this.ctrlSplitContainerTop.SuspendLayout();
 			this.tlpTop.SuspendLayout();
 			this.tlpFunctionLabelLists.SuspendLayout();
 			this.grpLabels.SuspendLayout();
@@ -166,16 +172,43 @@
 			// 
 			// splitContainer.Panel1
 			// 
-			this.splitContainer.Panel1.Controls.Add(this.tlpTop);
-			this.splitContainer.Panel1MinSize = 375;
+			this.splitContainer.Panel1.Controls.Add(this.ctrlSplitContainerTop);
+			this.splitContainer.Panel1MinSize = 390;
 			// 
 			// splitContainer.Panel2
 			// 
 			this.splitContainer.Panel2.Controls.Add(this.tableLayoutPanel10);
 			this.splitContainer.Panel2MinSize = 100;
-			this.splitContainer.Size = new System.Drawing.Size(1260, 559);
+			this.splitContainer.Size = new System.Drawing.Size(1260, 581);
 			this.splitContainer.SplitterDistance = 390;
+			this.splitContainer.SplitterWidth = 7;
 			this.splitContainer.TabIndex = 1;
+			this.splitContainer.TabStop = false;
+			this.splitContainer.PanelCollapsed += new System.EventHandler(this.splitContainer_PanelCollapsed);
+			this.splitContainer.PanelExpanded += new System.EventHandler(this.splitContainer_PanelExpanded);
+			// 
+			// ctrlSplitContainerTop
+			// 
+			this.ctrlSplitContainerTop.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlSplitContainerTop.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+			this.ctrlSplitContainerTop.Location = new System.Drawing.Point(0, 0);
+			this.ctrlSplitContainerTop.Name = "ctrlSplitContainerTop";
+			// 
+			// ctrlSplitContainerTop.Panel1
+			// 
+			this.ctrlSplitContainerTop.Panel1.Controls.Add(this.tlpTop);
+			this.ctrlSplitContainerTop.Panel1MinSize = 750;
+			// 
+			// ctrlSplitContainerTop.Panel2
+			// 
+			this.ctrlSplitContainerTop.Panel2.Controls.Add(this.tlpFunctionLabelLists);
+			this.ctrlSplitContainerTop.Panel2MinSize = 150;
+			this.ctrlSplitContainerTop.Size = new System.Drawing.Size(1260, 390);
+			this.ctrlSplitContainerTop.SplitterDistance = 960;
+			this.ctrlSplitContainerTop.SplitterWidth = 7;
+			this.ctrlSplitContainerTop.TabIndex = 3;
+			this.ctrlSplitContainerTop.PanelCollapsed += new System.EventHandler(this.ctrlSplitContainerTop_PanelCollapsed);
+			this.ctrlSplitContainerTop.PanelExpanded += new System.EventHandler(this.ctrlSplitContainerTop_PanelExpanded);
 			// 
 			// tlpTop
 			// 
@@ -187,13 +220,12 @@
 			this.tlpTop.Controls.Add(this.ctrlDebuggerCode, 0, 0);
 			this.tlpTop.Controls.Add(this.ctrlConsoleStatus, 2, 0);
 			this.tlpTop.Controls.Add(this.ctrlDebuggerCodeSplit, 1, 0);
-			this.tlpTop.Controls.Add(this.tlpFunctionLabelLists, 3, 0);
 			this.tlpTop.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpTop.Location = new System.Drawing.Point(0, 0);
 			this.tlpTop.Name = "tlpTop";
 			this.tlpTop.RowCount = 1;
 			this.tlpTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpTop.Size = new System.Drawing.Size(1260, 390);
+			this.tlpTop.Size = new System.Drawing.Size(960, 390);
 			this.tlpTop.TabIndex = 2;
 			// 
 			// ctrlDebuggerCode
@@ -202,7 +234,7 @@
 			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
 			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(512, 384);
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(522, 384);
 			this.ctrlDebuggerCode.TabIndex = 2;
 			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
 			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
@@ -210,8 +242,8 @@
 			// 
 			// ctrlConsoleStatus
 			// 
-			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(518, 0);
+			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(528, 0);
 			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
 			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 390);
@@ -222,7 +254,7 @@
 			// 
 			this.ctrlDebuggerCodeSplit.Code = null;
 			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(521, 3);
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(531, 3);
 			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
 			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 384);
 			this.ctrlDebuggerCodeSplit.TabIndex = 4;
@@ -238,15 +270,14 @@
 			this.tlpFunctionLabelLists.Controls.Add(this.grpLabels, 0, 1);
 			this.tlpFunctionLabelLists.Controls.Add(this.grpFunctions, 0, 0);
 			this.tlpFunctionLabelLists.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tlpFunctionLabelLists.Location = new System.Drawing.Point(950, 0);
+			this.tlpFunctionLabelLists.Location = new System.Drawing.Point(0, 0);
 			this.tlpFunctionLabelLists.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpFunctionLabelLists.Name = "tlpFunctionLabelLists";
 			this.tlpFunctionLabelLists.RowCount = 2;
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(310, 390);
+			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(293, 390);
 			this.tlpFunctionLabelLists.TabIndex = 5;
-			this.tlpFunctionLabelLists.Visible = false;
 			// 
 			// grpLabels
 			// 
@@ -254,7 +285,7 @@
 			this.grpLabels.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpLabels.Location = new System.Drawing.Point(3, 198);
 			this.grpLabels.Name = "grpLabels";
-			this.grpLabels.Size = new System.Drawing.Size(304, 189);
+			this.grpLabels.Size = new System.Drawing.Size(287, 189);
 			this.grpLabels.TabIndex = 6;
 			this.grpLabels.TabStop = false;
 			this.grpLabels.Text = "Labels";
@@ -264,7 +295,7 @@
 			this.ctrlLabelList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlLabelList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlLabelList.Name = "ctrlLabelList";
-			this.ctrlLabelList.Size = new System.Drawing.Size(298, 170);
+			this.ctrlLabelList.Size = new System.Drawing.Size(281, 170);
 			this.ctrlLabelList.TabIndex = 0;
 			this.ctrlLabelList.OnFindOccurrence += new System.EventHandler(this.ctrlLabelList_OnFindOccurrence);
 			this.ctrlLabelList.OnLabelSelected += new System.EventHandler(this.ctrlLabelList_OnLabelSelected);
@@ -275,7 +306,7 @@
 			this.grpFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFunctions.Location = new System.Drawing.Point(3, 3);
 			this.grpFunctions.Name = "grpFunctions";
-			this.grpFunctions.Size = new System.Drawing.Size(304, 189);
+			this.grpFunctions.Size = new System.Drawing.Size(287, 189);
 			this.grpFunctions.TabIndex = 5;
 			this.grpFunctions.TabStop = false;
 			this.grpFunctions.Text = "Functions";
@@ -285,7 +316,7 @@
 			this.ctrlFunctionList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlFunctionList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlFunctionList.Name = "ctrlFunctionList";
-			this.ctrlFunctionList.Size = new System.Drawing.Size(298, 170);
+			this.ctrlFunctionList.Size = new System.Drawing.Size(281, 170);
 			this.ctrlFunctionList.TabIndex = 0;
 			this.ctrlFunctionList.OnFindOccurrence += new System.EventHandler(this.ctrlFunctionList_OnFindOccurrence);
 			this.ctrlFunctionList.OnFunctionSelected += new System.EventHandler(this.ctrlFunctionList_OnFunctionSelected);
@@ -306,7 +337,7 @@
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel10.Size = new System.Drawing.Size(1260, 165);
+			this.tableLayoutPanel10.Size = new System.Drawing.Size(1260, 190);
 			this.tableLayoutPanel10.TabIndex = 0;
 			// 
 			// grpWatch
@@ -316,7 +347,7 @@
 			this.grpWatch.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpWatch.Location = new System.Drawing.Point(3, 3);
 			this.grpWatch.Name = "grpWatch";
-			this.grpWatch.Size = new System.Drawing.Size(413, 159);
+			this.grpWatch.Size = new System.Drawing.Size(413, 184);
 			this.grpWatch.TabIndex = 2;
 			this.grpWatch.TabStop = false;
 			this.grpWatch.Text = "Watch";
@@ -336,7 +367,7 @@
 			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
 			this.ctrlWatch.Name = "ctrlWatch";
-			this.ctrlWatch.Size = new System.Drawing.Size(407, 140);
+			this.ctrlWatch.Size = new System.Drawing.Size(407, 165);
 			this.ctrlWatch.TabIndex = 0;
 			// 
 			// grpBreakpoints
@@ -345,7 +376,7 @@
 			this.grpBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpBreakpoints.Location = new System.Drawing.Point(422, 3);
 			this.grpBreakpoints.Name = "grpBreakpoints";
-			this.grpBreakpoints.Size = new System.Drawing.Size(414, 159);
+			this.grpBreakpoints.Size = new System.Drawing.Size(414, 184);
 			this.grpBreakpoints.TabIndex = 3;
 			this.grpBreakpoints.TabStop = false;
 			this.grpBreakpoints.Text = "Breakpoints";
@@ -355,7 +386,7 @@
 			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
 			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
-			this.ctrlBreakpoints.Size = new System.Drawing.Size(408, 140);
+			this.ctrlBreakpoints.Size = new System.Drawing.Size(408, 165);
 			this.ctrlBreakpoints.TabIndex = 0;
 			this.ctrlBreakpoints.BreakpointNavigation += new System.EventHandler(this.ctrlBreakpoints_BreakpointNavigation);
 			// 
@@ -365,7 +396,7 @@
 			this.grpCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCallstack.Location = new System.Drawing.Point(842, 3);
 			this.grpCallstack.Name = "grpCallstack";
-			this.grpCallstack.Size = new System.Drawing.Size(415, 159);
+			this.grpCallstack.Size = new System.Drawing.Size(415, 184);
 			this.grpCallstack.TabIndex = 4;
 			this.grpCallstack.TabStop = false;
 			this.grpCallstack.Text = "Call Stack";
@@ -375,7 +406,7 @@
 			this.ctrlCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlCallstack.Location = new System.Drawing.Point(3, 16);
 			this.ctrlCallstack.Name = "ctrlCallstack";
-			this.ctrlCallstack.Size = new System.Drawing.Size(409, 140);
+			this.ctrlCallstack.Size = new System.Drawing.Size(409, 165);
 			this.ctrlCallstack.TabIndex = 0;
 			this.ctrlCallstack.FunctionSelected += new System.EventHandler(this.ctrlCallstack_FunctionSelected);
 			// 
@@ -697,6 +728,7 @@
             this.mnuShowCpuMemoryMapping,
             this.mnuShowPpuMemoryMapping,
             this.mnuShowFunctionLabelLists,
+            this.mnuShowBottomPanel,
             this.toolStripMenuItem6,
             this.mnuPpuPartialDraw});
 			this.mnuOptions.Name = "mnuOptions";
@@ -713,7 +745,7 @@
             this.mnuShowEffectiveAddresses,
             this.mnuShowOnlyDisassembledCode});
 			this.mnuDisassemblyOptions.Name = "mnuDisassemblyOptions";
-			this.mnuDisassemblyOptions.Size = new System.Drawing.Size(243, 22);
+			this.mnuDisassemblyOptions.Size = new System.Drawing.Size(259, 22);
 			this.mnuDisassemblyOptions.Text = "Disassembly Options";
 			// 
 			// mnuDisassemble
@@ -752,6 +784,14 @@
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
 			this.toolStripMenuItem7.Size = new System.Drawing.Size(234, 6);
 			// 
+			// mnuDisplayOpCodesInLowerCase
+			// 
+			this.mnuDisplayOpCodesInLowerCase.CheckOnClick = true;
+			this.mnuDisplayOpCodesInLowerCase.Name = "mnuDisplayOpCodesInLowerCase";
+			this.mnuDisplayOpCodesInLowerCase.Size = new System.Drawing.Size(237, 22);
+			this.mnuDisplayOpCodesInLowerCase.Text = "Display OP codes in lower case";
+			this.mnuDisplayOpCodesInLowerCase.Click += new System.EventHandler(this.mnuDisplayOpCodesInLowerCase_Click);
+			// 
 			// mnuHighlightUnexecutedCode
 			// 
 			this.mnuHighlightUnexecutedCode.CheckOnClick = true;
@@ -779,13 +819,13 @@
 			// toolStripMenuItem12
 			// 
 			this.toolStripMenuItem12.Name = "toolStripMenuItem12";
-			this.toolStripMenuItem12.Size = new System.Drawing.Size(240, 6);
+			this.toolStripMenuItem12.Size = new System.Drawing.Size(256, 6);
 			// 
 			// mnuSplitView
 			// 
 			this.mnuSplitView.CheckOnClick = true;
 			this.mnuSplitView.Name = "mnuSplitView";
-			this.mnuSplitView.Size = new System.Drawing.Size(243, 22);
+			this.mnuSplitView.Size = new System.Drawing.Size(259, 22);
 			this.mnuSplitView.Text = "Split View";
 			this.mnuSplitView.Click += new System.EventHandler(this.mnuSplitView_Click);
 			// 
@@ -796,7 +836,7 @@
             this.mnuDecreaseFontSize,
             this.mnuResetFontSize});
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
-			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
 			this.fontSizeToolStripMenuItem.Text = "Text Size";
 			// 
 			// mnuIncreaseFontSize
@@ -829,13 +869,13 @@
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(240, 6);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(256, 6);
 			// 
 			// mnuBreakOnReset
 			// 
 			this.mnuBreakOnReset.CheckOnClick = true;
 			this.mnuBreakOnReset.Name = "mnuBreakOnReset";
-			this.mnuBreakOnReset.Size = new System.Drawing.Size(243, 22);
+			this.mnuBreakOnReset.Size = new System.Drawing.Size(259, 22);
 			this.mnuBreakOnReset.Text = "Break on power/reset";
 			this.mnuBreakOnReset.Click += new System.EventHandler(this.mnuBreakOnReset_Click);
 			// 
@@ -843,20 +883,20 @@
 			// 
 			this.mnuBreakOnOpen.CheckOnClick = true;
 			this.mnuBreakOnOpen.Name = "mnuBreakOnOpen";
-			this.mnuBreakOnOpen.Size = new System.Drawing.Size(243, 22);
+			this.mnuBreakOnOpen.Size = new System.Drawing.Size(259, 22);
 			this.mnuBreakOnOpen.Text = "Break when debugger is opened";
 			this.mnuBreakOnOpen.Click += new System.EventHandler(this.mnuBreakOnOpen_Click);
 			// 
 			// toolStripMenuItem11
 			// 
 			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-			this.toolStripMenuItem11.Size = new System.Drawing.Size(240, 6);
+			this.toolStripMenuItem11.Size = new System.Drawing.Size(256, 6);
 			// 
 			// mnuShowCpuMemoryMapping
 			// 
 			this.mnuShowCpuMemoryMapping.CheckOnClick = true;
 			this.mnuShowCpuMemoryMapping.Name = "mnuShowCpuMemoryMapping";
-			this.mnuShowCpuMemoryMapping.Size = new System.Drawing.Size(243, 22);
+			this.mnuShowCpuMemoryMapping.Size = new System.Drawing.Size(259, 22);
 			this.mnuShowCpuMemoryMapping.Text = "Show CPU Memory Mapping";
 			this.mnuShowCpuMemoryMapping.Click += new System.EventHandler(this.mnuShowCpuMemoryMapping_Click);
 			// 
@@ -864,7 +904,7 @@
 			// 
 			this.mnuShowPpuMemoryMapping.CheckOnClick = true;
 			this.mnuShowPpuMemoryMapping.Name = "mnuShowPpuMemoryMapping";
-			this.mnuShowPpuMemoryMapping.Size = new System.Drawing.Size(243, 22);
+			this.mnuShowPpuMemoryMapping.Size = new System.Drawing.Size(259, 22);
 			this.mnuShowPpuMemoryMapping.Text = "Show PPU Memory Mapping";
 			this.mnuShowPpuMemoryMapping.Click += new System.EventHandler(this.mnuShowPpuMemoryMapping_Click);
 			// 
@@ -872,20 +912,20 @@
 			// 
 			this.mnuShowFunctionLabelLists.CheckOnClick = true;
 			this.mnuShowFunctionLabelLists.Name = "mnuShowFunctionLabelLists";
-			this.mnuShowFunctionLabelLists.Size = new System.Drawing.Size(243, 22);
+			this.mnuShowFunctionLabelLists.Size = new System.Drawing.Size(259, 22);
 			this.mnuShowFunctionLabelLists.Text = "Show Function/Label Lists";
 			this.mnuShowFunctionLabelLists.Click += new System.EventHandler(this.mnuShowFunctionLabelLists_Click);
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(240, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(256, 6);
 			// 
 			// mnuPpuPartialDraw
 			// 
 			this.mnuPpuPartialDraw.CheckOnClick = true;
 			this.mnuPpuPartialDraw.Name = "mnuPpuPartialDraw";
-			this.mnuPpuPartialDraw.Size = new System.Drawing.Size(243, 22);
+			this.mnuPpuPartialDraw.Size = new System.Drawing.Size(259, 22);
 			this.mnuPpuPartialDraw.Text = "Draw Partial Frame";
 			this.mnuPpuPartialDraw.Click += new System.EventHandler(this.mnuPpuPartialDraw_Click);
 			// 
@@ -998,7 +1038,7 @@
             this.lblPrgAnalysisResult,
             this.lblChrAnalysis,
             this.lblChrAnalysisResult});
-			this.statusStrip.Location = new System.Drawing.Point(0, 663);
+			this.statusStrip.Location = new System.Drawing.Point(0, 671);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(1260, 24);
 			this.statusStrip.TabIndex = 3;
@@ -1034,9 +1074,9 @@
 			// ctrlPpuMemoryMapping
 			// 
 			this.ctrlPpuMemoryMapping.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.ctrlPpuMemoryMapping.Location = new System.Drawing.Point(0, 583);
+			this.ctrlPpuMemoryMapping.Location = new System.Drawing.Point(0, 605);
 			this.ctrlPpuMemoryMapping.Name = "ctrlPpuMemoryMapping";
-			this.ctrlPpuMemoryMapping.Size = new System.Drawing.Size(1260, 40);
+			this.ctrlPpuMemoryMapping.Size = new System.Drawing.Size(1260, 33);
 			this.ctrlPpuMemoryMapping.TabIndex = 5;
 			this.ctrlPpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlPpuMemoryMapping.Visible = false;
@@ -1044,26 +1084,26 @@
 			// ctrlCpuMemoryMapping
 			// 
 			this.ctrlCpuMemoryMapping.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.ctrlCpuMemoryMapping.Location = new System.Drawing.Point(0, 623);
+			this.ctrlCpuMemoryMapping.Location = new System.Drawing.Point(0, 638);
 			this.ctrlCpuMemoryMapping.Name = "ctrlCpuMemoryMapping";
-			this.ctrlCpuMemoryMapping.Size = new System.Drawing.Size(1260, 40);
+			this.ctrlCpuMemoryMapping.Size = new System.Drawing.Size(1260, 33);
 			this.ctrlCpuMemoryMapping.TabIndex = 4;
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
 			// 
-			// mnuDisplayOpCodesInLowerCase
+			// mnuShowBottomPanel
 			// 
-			this.mnuDisplayOpCodesInLowerCase.CheckOnClick = true;
-			this.mnuDisplayOpCodesInLowerCase.Name = "mnuDisplayOpCodesInLowerCase";
-			this.mnuDisplayOpCodesInLowerCase.Size = new System.Drawing.Size(237, 22);
-			this.mnuDisplayOpCodesInLowerCase.Text = "Display OP codes in lower case";
-			this.mnuDisplayOpCodesInLowerCase.Click += new System.EventHandler(this.mnuDisplayOpCodesInLowerCase_Click);
+			this.mnuShowBottomPanel.CheckOnClick = true;
+			this.mnuShowBottomPanel.Name = "mnuShowBottomPanel";
+			this.mnuShowBottomPanel.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowBottomPanel.Text = "Show Watch/Breakpoints/Callstack";
+			this.mnuShowBottomPanel.Click += new System.EventHandler(this.mnuShowBottomPanel_Click);
 			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1260, 687);
+			this.ClientSize = new System.Drawing.Size(1260, 695);
 			this.Controls.Add(this.splitContainer);
 			this.Controls.Add(this.ctrlPpuMemoryMapping);
 			this.Controls.Add(this.ctrlCpuMemoryMapping);
@@ -1079,6 +1119,10 @@
 			this.splitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
 			this.splitContainer.ResumeLayout(false);
+			this.ctrlSplitContainerTop.Panel1.ResumeLayout(false);
+			this.ctrlSplitContainerTop.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.ctrlSplitContainerTop)).EndInit();
+			this.ctrlSplitContainerTop.ResumeLayout(false);
 			this.tlpTop.ResumeLayout(false);
 			this.tlpFunctionLabelLists.ResumeLayout(false);
 			this.grpLabels.ResumeLayout(false);
@@ -1099,7 +1143,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.SplitContainer splitContainer;
+		private Mesen.GUI.Controls.ctrlSplitContainer splitContainer;
 		private System.Windows.Forms.TableLayoutPanel tlpTop;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
 		private System.Windows.Forms.GroupBox grpBreakpoints;
@@ -1121,7 +1165,6 @@
 		private ctrlDebuggerCode ctrlDebuggerCode;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuRunOneFrame;
-		private ctrlWatch ctrlWatch;
 		private ctrlConsoleStatus ctrlConsoleStatus;
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;
 		private ctrlDebuggerCode ctrlDebuggerCodeSplit;
@@ -1200,5 +1243,8 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuDisassembleEverything;
 		private System.Windows.Forms.ToolStripMenuItem mnuDisassembleEverythingButData;
 		private System.Windows.Forms.ToolStripMenuItem mnuDisplayOpCodesInLowerCase;
+		private ctrlWatch ctrlWatch;
+		private GUI.Controls.ctrlSplitContainer ctrlSplitContainerTop;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowBottomPanel;
 	}
 }
