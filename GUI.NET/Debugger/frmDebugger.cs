@@ -72,10 +72,14 @@ namespace Mesen.GUI.Debugger
 
 			if(!ConfigManager.Config.DebugInfo.ShowRightPanel) {
 				ctrlSplitContainerTop.CollapsePanel();
+			} else {
+				mnuShowFunctionLabelLists.Checked = true;
 			}
 
 			if(!ConfigManager.Config.DebugInfo.ShowBottomPanel) {
 				splitContainer.CollapsePanel();
+			} else {
+				mnuShowBottomPanel.Checked = true;
 			}
 
 			_lastCodeWindow = ctrlDebuggerCode;
