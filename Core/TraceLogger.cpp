@@ -66,7 +66,7 @@ void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassembly
 		_outputBuffer += HexUtilities::ToHex(cpuState.DebugPC) + "  ";
 
 		if(_options.ShowByteCode) {
-			_outputBuffer += disassemblyInfo->GetByteCode() + std::string(disassemblyInfo->GetByteCode().size() - 10, ' ');
+			_outputBuffer += disassemblyInfo->GetByteCode() + std::string(13 - disassemblyInfo->GetByteCode().size(), ' ');
 		}
 
 		int indentLevel = 0; 
