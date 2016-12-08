@@ -36,6 +36,10 @@ TraceLogger::~TraceLogger()
 void TraceLogger::LogStatic(string log)
 {
 	if(_instance && _instance->_options.ShowExtraInfo) {
+		//Flush current buffer
+		_instance->_outputFile << _instance->_outputBuffer;
+		_instance->_outputBuffer.clear();
+
 		_instance->_outputFile << " - [" << log << " - Cycle: " << std::to_string(CPU::GetCycleCount()) << "]";
 	}
 }
