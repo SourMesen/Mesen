@@ -31,6 +31,7 @@ private:
 
 	int32_t _currentFunction;
 	int32_t _currentInstruction;
+	int32_t _nextFunctionAddr;
 
 	uint32_t _resetFunctionIndex;
 	uint32_t _inMemoryFunctionIndex;

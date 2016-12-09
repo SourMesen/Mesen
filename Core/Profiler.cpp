@@ -7,6 +7,7 @@ Profiler::Profiler(Debugger * debugger)
 {
 	_debugger = debugger;
 
+	_nextFunctionAddr = -1;
 	_currentCycleCount = 0;
 	_currentInstruction = 0;
 
@@ -32,14 +33,8 @@ void Profiler::ProcessCycle()
 void Profiler::StackFunction(int32_t instructionAddr, int32_t functionAddr)
 {
 	if(functionAddr >= 0) {
-		_cycleCountStack.push(_currentCycleCount);
-		_functionStack.push(_currentFunction);
-
-		_currentFunction = functionAddr;
-		_currentCycleCount = 0;
+		_nextFunctionAddr = functionAddr;
 		_jsrStack.push(instructionAddr);
-
-		_functionCallCount[functionAddr]++;
 	}
 }
 
@@ -73,6 +68,17 @@ void Profiler::UnstackFunction()
 
 void Profiler::ProcessInstructionStart(int32_t absoluteAddr)
 {
+	if(_nextFunctionAddr >= 0) {
+		_cycleCountStack.push(_currentCycleCount);
+		_functionStack.push(_currentFunction);
+
+		_currentFunction = _nextFunctionAddr;
+		_currentCycleCount = 0;
+		_functionCallCount[_nextFunctionAddr]++;
+
+		_nextFunctionAddr = -1;
+	}
+
 	if(absoluteAddr >= 0) {
 		_currentInstruction = absoluteAddr;
 		ProcessCycle();

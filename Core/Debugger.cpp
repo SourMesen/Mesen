@@ -353,10 +353,10 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		_disassembler->BuildCache(absoluteAddr, absoluteRamAddr, addr, isSubEntryPoint);
 		_lastInstruction = _memoryManager->DebugRead(addr);
 
-		UpdateCallstack(addr);
 		ProcessStepConditions(addr);
 
 		_profiler->ProcessInstructionStart(absoluteAddr);
+		UpdateCallstack(addr);
 
 		breakDone = SleepUntilResume();
 
