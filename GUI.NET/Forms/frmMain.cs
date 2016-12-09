@@ -289,6 +289,7 @@ namespace Mesen.GUI.Forms
 				} else {
 					SetScale(1);
 				}
+				_regularScale = 1;
 				_needScaleUpdate = false;
 			}
 
@@ -304,16 +305,23 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(false);
 
-			if(!_customSize && this.WindowState != FormWindowState.Maximized) {
-				Size sizeGap = this.Size - this.ClientSize;
-				this.Resize -= frmMain_Resize;
-				this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + menuStrip.Height));
-				this.Resize += frmMain_Resize;
-			}
+			Rectangle screenBounds = Screen.FromHandle(this.Handle).Bounds;
+			if(size.Width > screenBounds.Width || size.Height > screenBounds.Height) {
+				SetScaleBasedOnWindowSize();
+			} else {
+				if(!_customSize && this.WindowState != FormWindowState.Maximized) {
+					Size sizeGap = this.Size - this.ClientSize;
+					this.Resize -= frmMain_Resize;
+					this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + menuStrip.Height));
+					this.Resize += frmMain_Resize;
+				} else {
+					SetScaleBasedOnWindowSize();
+				}
 
-			ctrlRenderer.Size = new Size(size.Width, size.Height);
-			ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
-			ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
+				ctrlRenderer.Size = new Size(size.Width, size.Height);
+				ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
+				ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
+			}
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -350,9 +358,10 @@ namespace Mesen.GUI.Forms
 				this.menuStrip.Visible = true;
 				this.WindowState = _originalWindowState;
 				this.FormBorderStyle = FormBorderStyle.Sizable;
+				this.SetScale(_regularScale);
 				this.UpdateScaleMenu(_regularScale);
-				VideoInfo.ApplyConfig();
-				SetScaleBasedOnWindowSize();
+				VideoInfo.ApplyConfig();				
+				UpdateViewerSize();
 			}
 			this.Resize += frmMain_Resize;
 
