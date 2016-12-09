@@ -12,7 +12,7 @@ FrameInfo HdVideoFilter::GetFrameInfo()
 	OverscanDimensions overscan = GetOverscan();
 	uint32_t hdScale = _hdNesPack->GetScale();
 
-	return { overscan.GetScreenWidth() * hdScale, overscan.GetScreenHeight() * hdScale, 4 };
+	return { overscan.GetScreenWidth() * hdScale, overscan.GetScreenHeight() * hdScale, PPU::ScreenWidth*hdScale, PPU::ScreenHeight*hdScale, 4 };
 }
 
 void HdVideoFilter::SetHdScreenTiles(HdPpuPixelInfo *screenTiles)

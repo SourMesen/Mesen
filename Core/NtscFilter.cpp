@@ -15,7 +15,7 @@ FrameInfo NtscFilter::GetFrameInfo()
 	OverscanDimensions overscan = GetOverscan();
 	int overscanLeft = overscan.Left > 0 ? NES_NTSC_OUT_WIDTH(overscan.Left) : 0;
 	int overscanRight = overscan.Right > 0 ? NES_NTSC_OUT_WIDTH(overscan.Right) : 0;
-	return { NES_NTSC_OUT_WIDTH(PPU::ScreenWidth) - overscanLeft - overscanRight, (PPU::ScreenHeight - overscan.Top - overscan.Bottom) * 2, 4 };
+	return { NES_NTSC_OUT_WIDTH(PPU::ScreenWidth) - overscanLeft - overscanRight, (PPU::ScreenHeight - overscan.Top - overscan.Bottom) * 2, NES_NTSC_OUT_WIDTH(PPU::ScreenWidth), PPU::ScreenHeight * 2, 4 };
 }
 
 void NtscFilter::OnBeforeApplyFilter()

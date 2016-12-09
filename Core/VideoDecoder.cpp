@@ -31,11 +31,13 @@ VideoDecoder::~VideoDecoder()
 void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
 {
 	if(_videoFilter) {
+		FrameInfo frameInfo = _videoFilter->GetFrameInfo();
 		double aspectRatio = EmulationSettings::GetAspectRatio();
-		size.Width = (int32_t)(_videoFilter->GetFrameInfo().Width * (ignoreScale ? 1 : EmulationSettings::GetVideoScale()));
-		size.Height = (int32_t)(_videoFilter->GetFrameInfo().Height * (ignoreScale ? 1 : EmulationSettings::GetVideoScale()));
+		double scale = (ignoreScale ? 1 : EmulationSettings::GetVideoScale());
+		size.Width = (int32_t)(frameInfo.Width * scale);
+		size.Height = (int32_t)(frameInfo.Height * scale);
 		if(aspectRatio != 0.0) {
-			size.Width = (uint32_t)(size.Height * aspectRatio);
+			size.Width = (uint32_t)(frameInfo.OriginalHeight * scale * aspectRatio * ((double)frameInfo.Width / frameInfo.OriginalWidth));
 		}
 	}
 }

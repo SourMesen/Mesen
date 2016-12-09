@@ -28,7 +28,7 @@ ScaleFilter::~ScaleFilter()
 FrameInfo ScaleFilter::GetFrameInfo()
 {
 	OverscanDimensions overscan = GetOverscan();
-	return{ overscan.GetScreenWidth()*_filterScale, overscan.GetScreenHeight()*_filterScale, 4 };
+	return{ overscan.GetScreenWidth()*_filterScale, overscan.GetScreenHeight()*_filterScale, PPU::ScreenWidth*_filterScale, PPU::ScreenHeight*_filterScale, 4 };
 }
 
 void ScaleFilter::ApplyPrescaleFilter()

@@ -4,6 +4,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <algorithm>
+#include "PPU.h"
 
 DefaultVideoFilter::DefaultVideoFilter()
 {
@@ -38,7 +39,7 @@ void DefaultVideoFilter::InitConversionMatrix(double hueShift, double saturation
 FrameInfo DefaultVideoFilter::GetFrameInfo()
 {
 	OverscanDimensions overscan = GetOverscan();
-	return { overscan.GetScreenWidth(), overscan.GetScreenHeight(), 4 };
+	return { overscan.GetScreenWidth(), overscan.GetScreenHeight(), PPU::ScreenWidth, PPU::ScreenHeight, 4 };
 }
 
 void DefaultVideoFilter::OnBeforeApplyFilter()
