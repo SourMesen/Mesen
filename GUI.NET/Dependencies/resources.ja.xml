@@ -84,6 +84,7 @@
       <Control ID="mnuDebugger">デバッガ</Control>
       <Control ID="mnuLogWindow">ログウィンドウ</Control>
       <Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
+      <Control ID="mnuRandomGame">ランダムゲームを開く</Control>
       <Control ID="mnuHelp">ヘルプ</Control>
       <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
       <Control ID="mnuReportBug">バグレポート</Control>
@@ -470,6 +471,8 @@
     <Message ID="PlayerNumber">プレーヤー {0}</Message>
 
     <Message ID="RomsFound">{0}個</Message>
+
+    <Message ID="RandomGameNoGameFound">Mesenはゲームファイルを見つかりませんでした。</Message>
 
     <Message ID="CheatsFound">ゲーム{0}個とチートコード{1}個を見つけました</Message>
     <Message ID="CheatsImported">{1}用のチートコード{0}個がインポートされました。.</Message>

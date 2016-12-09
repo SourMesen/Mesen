@@ -12,8 +12,8 @@ public:
 	static void SetHomeFolder(string homeFolder);
 	static string GetHomeFolder();
 
-	static void AddKnowGameFolder(string gameFolder);
-	static vector<string> GetKnowGameFolders();
+	static void AddKnownGameFolder(string gameFolder);
+	static vector<string> GetKnownGameFolders();
 
 	static string GetSaveFolder();
 	static string GetSaveStateFolder();

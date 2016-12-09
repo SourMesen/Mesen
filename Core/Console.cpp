@@ -94,7 +94,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		
 		VideoDecoder::GetInstance()->StartThread();
 	
-		FolderUtilities::AddKnowGameFolder(FolderUtilities::GetFolderName(romFilename));
+		FolderUtilities::AddKnownGameFolder(FolderUtilities::GetFolderName(romFilename));
 
 		string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
 		string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
@@ -126,7 +126,7 @@ bool Console::LoadROM(string filename, uint32_t crc32Hash)
 	}
 
 	int32_t archiveFileIndex = -1;
-	for(string folder : FolderUtilities::GetKnowGameFolders()) {
+	for(string folder : FolderUtilities::GetKnownGameFolders()) {
 		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, true, archiveFileIndex);
 		if(!match.empty()) {
 			Console::LoadROM(match, nullptr, archiveFileIndex);
@@ -135,7 +135,7 @@ bool Console::LoadROM(string filename, uint32_t crc32Hash)
 	}
 
 	//Perform slow CRC32 search for ROM
-	for(string folder : FolderUtilities::GetKnowGameFolders()) {
+	for(string folder : FolderUtilities::GetKnownGameFolders()) {
 		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, false, archiveFileIndex);
 		if(!match.empty()) {
 			Console::LoadROM(match, nullptr, archiveFileIndex);

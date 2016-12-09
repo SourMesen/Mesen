@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -207,7 +208,7 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.ctrlRenderer.Handle, _noAudio, _noVideo, _noInput);
 			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
-				InteropEmu.AddKnowGameFolder(Path.GetDirectoryName(recentItem.Path).ToLowerInvariant());
+				InteropEmu.AddKnownGameFolder(Path.GetDirectoryName(recentItem.Path).ToLowerInvariant());
 			}
 
 			ConfigManager.Config.InitializeDefaults();
@@ -1579,6 +1580,26 @@ namespace Mesen.GUI.Forms
 					this._isNsfPlayerMode = false;
 					this.ctrlNsfPlayer.Visible = false;
 				}
+			}
+		}
+
+		private void mnuRandomGame_Click(object sender, EventArgs e)
+		{
+			IEnumerable<string> gameFolders = ConfigManager.Config.RecentFiles.Select(recentFile => Path.GetDirectoryName(recentFile.Path).ToLowerInvariant()).Distinct();
+			List<string> gameRoms = new List<string>();
+
+			foreach(string folder in gameFolders) {
+				gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.nes", SearchOption.TopDirectoryOnly));
+				gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unf", SearchOption.TopDirectoryOnly));
+				gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.fds", SearchOption.TopDirectoryOnly));
+			}
+
+			if(gameRoms.Count == 0) {
+				MesenMsgBox.Show("RandomGameNoGameFound", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			} else {
+				Random random = new Random();
+				string randomGame = gameRoms[random.Next(gameRoms.Count - 1)];
+				LoadFile(randomGame);
 			}
 		}
 	}

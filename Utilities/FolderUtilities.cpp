@@ -24,7 +24,7 @@ string FolderUtilities::GetHomeFolder()
 	return _homeFolder;
 }
 
-void FolderUtilities::AddKnowGameFolder(string gameFolder)
+void FolderUtilities::AddKnownGameFolder(string gameFolder)
 {
 	bool alreadyExists = false;
 	for(string folder : _gameFolders) {
@@ -40,7 +40,7 @@ void FolderUtilities::AddKnowGameFolder(string gameFolder)
 	}
 }
 
-vector<string> FolderUtilities::GetKnowGameFolders()
+vector<string> FolderUtilities::GetKnownGameFolders()
 {
 	return _gameFolders;
 }

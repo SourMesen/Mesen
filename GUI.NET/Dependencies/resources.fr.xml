@@ -83,6 +83,7 @@
       <Control ID="mnuRunAllTests">Run all tests</Control>
       <Control ID="mnuDebugger">Débogueur</Control>
       <Control ID="mnuLogWindow">Fenêtre de log</Control>
+      <Control ID="mnuRandomGame">Ouvrir un jeu aléatoire</Control>
       <Control ID="mnuTakeScreenshot">Capture d'écran</Control>
       <Control ID="mnuHelp">Aide</Control>
       <Control ID="mnuCheckForUpdates">Recherche de mises-à-jour</Control>
@@ -488,6 +489,8 @@
     <Message ID="PlayerNumber">Joueur {0}</Message>
 
     <Message ID="RomsFound">{0} roms trouvés</Message>
+
+    <Message ID="RandomGameNoGameFound">Mesen n'a pas trouvé de jeu sur votre disque.</Message>
 
     <Message ID="CheatsFound">{0} jeux et {1} codes présents dans la base de données</Message>
     <Message ID="CheatsImported">{0} codes ont été importés pour le jeu {1}.</Message>

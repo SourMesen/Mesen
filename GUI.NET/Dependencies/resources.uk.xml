@@ -84,6 +84,7 @@
       <Control ID="mnuDebugger">Налагодження</Control>
       <Control ID="mnuLogWindow">Лог</Control>
       <Control ID="mnuTakeScreenshot">Зробити скріншот</Control>
+      <Control ID="mnuRandomGame">Load Random Game</Control>
       <Control ID="mnuHelp">Допомога</Control>
       <Control ID="mnuCheckForUpdates">Перевірити оновлення</Control>
       <Control ID="mnuReportBug">Повідомити про помилку</Control>
@@ -478,6 +479,8 @@
     <Message ID="PlayerNumber">Гравець {0}</Message>
 
     <Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
+
+    <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
 
     <Message ID="CheatsFound">iгр {0}, читiв {1}</Message>
     <Message ID="CheatsImported">{0} читiв імпортовано для {1}.</Message>

@@ -84,6 +84,7 @@
       <Control ID="mnuDebugger">Depurar</Control>
       <Control ID="mnuLogWindow">Ventana de log</Control>
       <Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
+      <Control ID="mnuRandomGame">Load Random Game</Control>
       <Control ID="mnuHelp">Ayuda</Control>
       <Control ID="mnuCheckForUpdates">Buscar actualizaciones</Control>
       <Control ID="mnuReportBug">Enviar un error</Control>
@@ -476,7 +477,11 @@
 
     <Message ID="CheatsFound">{0} y {1} trucos de juegos presentes en la base de datos</Message>
     <Message ID="CheatsImported">{0} trucos se importaron para el juego {1}.</Message>
+    
     <Message ID="RomsFound">{0} roms encontradas</Message>
+
+    <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
+    
     <Message ID="NsfNextTrack">Pista siguiente (Espera para jugar más rápido)</Message>
     <Message ID="NsfUnnamedTrack">[sin nombre]</Message>
     <Message ID="NsfUnknownField">[desconocido]</Message>
