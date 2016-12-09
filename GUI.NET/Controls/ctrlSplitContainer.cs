@@ -124,8 +124,10 @@ namespace Mesen.GUI.Controls
 								this.Panel1.SuspendLayout();
 								this.Panel2.SuspendLayout();
 								try {
-									this.SplitterDistance++;
-									this.SplitterDistance--;
+									if(this.Width > 0 && this.Height > 0) {
+										this.SplitterDistance++;
+										this.SplitterDistance--;
+									}
 								} catch {
 								} finally {
 									this.ResumeLayout();
