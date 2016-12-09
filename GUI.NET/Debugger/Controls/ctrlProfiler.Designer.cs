@@ -92,6 +92,7 @@
 			this.lstFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstFunctions.FullRowSelect = true;
 			this.lstFunctions.GridLines = true;
+			this.lstFunctions.HideSelection = false;
 			this.lstFunctions.Location = new System.Drawing.Point(3, 3);
 			this.lstFunctions.Name = "lstFunctions";
 			this.lstFunctions.Size = new System.Drawing.Size(508, 272);
@@ -99,6 +100,7 @@
 			this.lstFunctions.UseCompatibleStateImageBehavior = false;
 			this.lstFunctions.View = System.Windows.Forms.View.Details;
 			this.lstFunctions.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstFunctions_ColumnClick);
+			this.lstFunctions.DoubleClick += new System.EventHandler(this.lstFunctions_DoubleClick);
 			// 
 			// columnHeader1
 			// 

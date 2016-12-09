@@ -13,12 +13,13 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlProfiler : UserControl
 	{
+		public static event EventHandler OnFunctionSelected;
 		private Int64[] _exclusiveTime;
 		private Int64[] _inclusiveTime;
 		private Int64[] _callCount;
 
-		private int _sortColumn = 1;
-		private bool _sortOrder = false;
+		private int _sortColumn = 5;
+		private bool _sortOrder = true;
 
 		public ctrlProfiler()
 		{
@@ -63,7 +64,7 @@ namespace Mesen.GUI.Debugger.Controls
 			lstFunctions.BeginUpdate();
 			lstFunctions.ListViewItemSorter = null;
 			lstFunctions.Items.Clear();			
-			for(int i = 0; i < _exclusiveTime.Length; i++) {
+			for(UInt32 i = 0; i < _exclusiveTime.Length; i++) {
 				if(_exclusiveTime[i] > 0) {
 					string functionName;
 
@@ -80,6 +81,8 @@ namespace Mesen.GUI.Debugger.Controls
 					}
 
 					ListViewItem item = lstFunctions.Items.Add(functionName);
+					item.Tag = i;
+
 					item.SubItems.Add(_callCount[i].ToString());
 					item.SubItems[1].Tag = _callCount[i];
 
@@ -123,6 +126,13 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			RefreshList();
+		}
+		
+		private void lstFunctions_DoubleClick(object sender, EventArgs e)
+		{
+			if(lstFunctions.SelectedItems.Count > 0) {
+				OnFunctionSelected?.Invoke(lstFunctions.SelectedItems[0].Tag, EventArgs.Empty);
+			}
 		}
 
 		private class ListComparer : IComparer

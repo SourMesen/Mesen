@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
@@ -37,6 +38,7 @@ namespace Mesen.GUI.Debugger
 			ctrlConsoleStatus.OnStateChanged += ctrlConsoleStatus_OnStateChanged;
 			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
 			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
+			ctrlProfiler.OnFunctionSelected += ctrlProfiler_OnFunctionSelected;
 
 			this.UpdateWorkspace();
 			this.AutoLoadDbgFile(true);
@@ -120,6 +122,15 @@ namespace Mesen.GUI.Debugger
 
 			UpdateCdlRatios();
 			tmrCdlRatios.Start();
+		}
+
+		private void ctrlProfiler_OnFunctionSelected(object sender, EventArgs e)
+		{
+			int relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)sender, AddressType.PrgRom);
+			if(relativeAddress >= 0) {
+				BringToFront();
+				_lastCodeWindow.ScrollToLineNumber(relativeAddress);
+			}
 		}
 
 		private void AutoLoadDbgFile(bool silent)

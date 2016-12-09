@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger
+﻿using Mesen.GUI.Debugger.Controls;
+
+namespace Mesen.GUI.Debugger
 {
 	partial class frmDebugger
 	{
@@ -17,6 +19,10 @@
 				components.Dispose();
 			}
 			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
+			BreakpointManager.BreakpointsChanged -= BreakpointManager_BreakpointsChanged;
+			ctrlConsoleStatus.OnStateChanged -= ctrlConsoleStatus_OnStateChanged;
+			ctrlProfiler.OnFunctionSelected -= ctrlProfiler_OnFunctionSelected;
+
 			if(_notifListener != null) {
 				_notifListener.Dispose();
 				_notifListener = null;
