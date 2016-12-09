@@ -31,7 +31,7 @@ namespace Mesen.GUI.Debugger
 		private static Regex _segmentRegex = new Regex("seg\tid=([0-9]+),.*start=0x([0-9a-fA-F]+)", RegexOptions.Compiled);
 		private static Regex _segmentPrgRomRegex = new Regex("seg\tid=([0-9]+),.*start=0x([0-9a-fA-F]+),.*ooffs=([0-9]+)", RegexOptions.Compiled);
 		private static Regex _lineRegex = new Regex("line\tid=([0-9]+),.*file=([0-9]+),.*line=([0-9]+),.*span=([0-9]+)", RegexOptions.Compiled);
-		private static Regex _fileRegex = new Regex("file\tid=([0-9]+),.*name=\"([0-9a-zA-Z()_.-:/\\\\ ]+)\"", RegexOptions.Compiled);
+		private static Regex _fileRegex = new Regex("file\tid=([0-9]+),.*name=\"([^\"]+)\"", RegexOptions.Compiled);
 		private static Regex _spanRegex = new Regex("span\tid=([0-9]+),.*seg=([0-9]+),.*start=([0-9]+)", RegexOptions.Compiled);
 		private static Regex _symbolRegex = new Regex("sym\tid=([0-9]+).*name=\"([0-9a-zA-Z@_]+)\",.*val=0x([0-9a-fA-F]+),.*seg=([0-9a-zA-Z]+)", RegexOptions.Compiled);
 
@@ -71,10 +71,14 @@ namespace Mesen.GUI.Debugger
 					ID = Int32.Parse(match.Groups[1].Value),
 					Name = match.Groups[2].Value.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar)
 				};
-				
-				string sourceFile = Path.Combine(basePath, file.Name);
-				if(File.Exists(sourceFile)) {
-					file.Data = File.ReadAllLines(sourceFile);
+
+				try {
+					string sourceFile = Path.Combine(basePath, file.Name);
+					if(File.Exists(sourceFile)) {
+						file.Data = File.ReadAllLines(sourceFile);
+					}
+				} catch {
+					_errorCount++;
 				}
 
 				_files.Add(file.ID, file);
