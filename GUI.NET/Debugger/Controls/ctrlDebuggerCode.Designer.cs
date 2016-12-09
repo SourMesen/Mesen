@@ -35,10 +35,12 @@
 			this.mnuShowLineNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPrgAddressReplace = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPrgAddressBelow = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHidePrgAddresses = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCodeNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowByteCodeOnLeft = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowByteCodeBelow = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHideByteCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,8 +66,6 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picCloseOccurrenceList = new System.Windows.Forms.PictureBox();
 			this.lblSearchResult = new System.Windows.Forms.Label();
-			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.contextMenuCode.SuspendLayout();
 			this.contextMenuMargin.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -83,8 +83,8 @@
             this.mnuShowNextStatement,
             this.mnuSetNextStatement,
             this.toolStripMenuItem1,
-            this.mnuShowLineNotes,
             this.mnuShowCodeNotes,
+            this.mnuShowLineNotes,
             this.toolStripMenuItem2,
             this.mnuEditLabel,
             this.mnuToggleBreakpoint,
@@ -96,7 +96,7 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 292);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 270);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
 			// mnuShowNextStatement
@@ -148,6 +148,11 @@
 			this.mnuPrgAddressBelow.Text = "Below CPU address";
 			this.mnuPrgAddressBelow.Click += new System.EventHandler(this.mnuBelowCpuAddress_Click);
 			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(181, 6);
+			// 
 			// mnuHidePrgAddresses
 			// 
 			this.mnuHidePrgAddresses.Name = "mnuHidePrgAddresses";
@@ -179,6 +184,11 @@
 			this.mnuShowByteCodeBelow.Size = new System.Drawing.Size(152, 22);
 			this.mnuShowByteCodeBelow.Text = "Below";
 			this.mnuShowByteCodeBelow.Click += new System.EventHandler(this.mnuShowByteCodeBelow_Click);
+			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuHideByteCode
 			// 
@@ -417,16 +427,6 @@
 			this.lblSearchResult.Size = new System.Drawing.Size(95, 13);
 			this.lblSearchResult.TabIndex = 11;
 			this.lblSearchResult.Text = "Search results for: ";
-			// 
-			// toolStripMenuItem5
-			// 
-			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(149, 6);
-			// 
-			// toolStripMenuItem6
-			// 
-			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(181, 6);
 			// 
 			// ctrlDebuggerCode
 			// 

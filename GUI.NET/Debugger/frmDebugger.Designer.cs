@@ -117,8 +117,10 @@
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuPpuPartialDraw = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuCodeDataLogger = new System.Windows.Forms.ToolStripMenuItem();
 			this.autoLoadsaveCDLFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
@@ -128,7 +130,6 @@
 			this.generateROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveStrippedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveUnusedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.lblPrgAnalysis = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblPrgAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
@@ -136,7 +137,6 @@
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
-			this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -205,7 +205,7 @@
 			this.ctrlSplitContainerTop.Panel2.Controls.Add(this.tlpFunctionLabelLists);
 			this.ctrlSplitContainerTop.Panel2MinSize = 150;
 			this.ctrlSplitContainerTop.Size = new System.Drawing.Size(1260, 390);
-			this.ctrlSplitContainerTop.SplitterDistance = 951;
+			this.ctrlSplitContainerTop.SplitterDistance = 948;
 			this.ctrlSplitContainerTop.SplitterWidth = 7;
 			this.ctrlSplitContainerTop.TabIndex = 3;
 			this.ctrlSplitContainerTop.PanelCollapsed += new System.EventHandler(this.ctrlSplitContainerTop_PanelCollapsed);
@@ -226,7 +226,7 @@
 			this.tlpTop.Name = "tlpTop";
 			this.tlpTop.RowCount = 1;
 			this.tlpTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpTop.Size = new System.Drawing.Size(951, 390);
+			this.tlpTop.Size = new System.Drawing.Size(948, 390);
 			this.tlpTop.TabIndex = 2;
 			// 
 			// ctrlDebuggerCode
@@ -235,7 +235,7 @@
 			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
 			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(513, 384);
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(510, 384);
 			this.ctrlDebuggerCode.TabIndex = 2;
 			this.ctrlDebuggerCode.OnWatchAdded += new Mesen.GUI.Debugger.ctrlDebuggerCode.WatchEventHandler(this.ctrlDebuggerCode_OnWatchAdded);
 			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
@@ -244,7 +244,7 @@
 			// ctrlConsoleStatus
 			// 
 			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(519, 0);
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(516, 0);
 			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
 			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 390);
@@ -255,7 +255,7 @@
 			// 
 			this.ctrlDebuggerCodeSplit.Code = null;
 			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(522, 3);
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(519, 3);
 			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
 			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 384);
 			this.ctrlDebuggerCodeSplit.TabIndex = 4;
@@ -277,7 +277,7 @@
 			this.tlpFunctionLabelLists.RowCount = 2;
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(302, 390);
+			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(305, 390);
 			this.tlpFunctionLabelLists.TabIndex = 5;
 			// 
 			// grpLabels
@@ -286,7 +286,7 @@
 			this.grpLabels.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpLabels.Location = new System.Drawing.Point(3, 198);
 			this.grpLabels.Name = "grpLabels";
-			this.grpLabels.Size = new System.Drawing.Size(296, 189);
+			this.grpLabels.Size = new System.Drawing.Size(299, 189);
 			this.grpLabels.TabIndex = 6;
 			this.grpLabels.TabStop = false;
 			this.grpLabels.Text = "Labels";
@@ -296,7 +296,7 @@
 			this.ctrlLabelList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlLabelList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlLabelList.Name = "ctrlLabelList";
-			this.ctrlLabelList.Size = new System.Drawing.Size(290, 170);
+			this.ctrlLabelList.Size = new System.Drawing.Size(293, 170);
 			this.ctrlLabelList.TabIndex = 0;
 			this.ctrlLabelList.OnFindOccurrence += new System.EventHandler(this.ctrlLabelList_OnFindOccurrence);
 			this.ctrlLabelList.OnLabelSelected += new System.EventHandler(this.ctrlLabelList_OnLabelSelected);
@@ -307,7 +307,7 @@
 			this.grpFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFunctions.Location = new System.Drawing.Point(3, 3);
 			this.grpFunctions.Name = "grpFunctions";
-			this.grpFunctions.Size = new System.Drawing.Size(296, 189);
+			this.grpFunctions.Size = new System.Drawing.Size(299, 189);
 			this.grpFunctions.TabIndex = 5;
 			this.grpFunctions.TabStop = false;
 			this.grpFunctions.Text = "Functions";
@@ -317,7 +317,7 @@
 			this.ctrlFunctionList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlFunctionList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlFunctionList.Name = "ctrlFunctionList";
-			this.ctrlFunctionList.Size = new System.Drawing.Size(290, 170);
+			this.ctrlFunctionList.Size = new System.Drawing.Size(293, 170);
 			this.ctrlFunctionList.TabIndex = 0;
 			this.ctrlFunctionList.OnFindOccurrence += new System.EventHandler(this.ctrlFunctionList_OnFindOccurrence);
 			this.ctrlFunctionList.OnFunctionSelected += new System.EventHandler(this.ctrlFunctionList_OnFunctionSelected);
@@ -444,7 +444,7 @@
             this.mnuAutoLoadDbgFiles,
             this.mnuDisableDefaultLabels});
 			this.mnuWorkspace.Name = "mnuWorkspace";
-			this.mnuWorkspace.Size = new System.Drawing.Size(132, 22);
+			this.mnuWorkspace.Size = new System.Drawing.Size(152, 22);
 			this.mnuWorkspace.Text = "Workspace";
 			// 
 			// mnuImportLabels
@@ -487,12 +487,12 @@
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(129, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuClose
 			// 
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(132, 22);
+			this.mnuClose.Size = new System.Drawing.Size(152, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -631,8 +631,8 @@
             this.mnuFindNext,
             this.mnuFindPrev,
             this.toolStripMenuItem9,
-            this.mnuGoTo,
-            this.mnuFindAllOccurrences});
+            this.mnuFindAllOccurrences,
+            this.mnuGoTo});
 			this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
 			this.searchToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
 			this.searchToolStripMenuItem.Text = "Search";
@@ -950,6 +950,13 @@
 			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
 			this.toolsToolStripMenuItem.Text = "Tools";
 			// 
+			// mnuMemoryViewer
+			// 
+			this.mnuMemoryViewer.Name = "mnuMemoryViewer";
+			this.mnuMemoryViewer.Size = new System.Drawing.Size(171, 22);
+			this.mnuMemoryViewer.Text = "Memory Tools";
+			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
+			// 
 			// mnuPpuViewer
 			// 
 			this.mnuPpuViewer.Name = "mnuPpuViewer";
@@ -957,12 +964,17 @@
 			this.mnuPpuViewer.Text = "PPU Viewer";
 			this.mnuPpuViewer.Click += new System.EventHandler(this.mnuNametableViewer_Click);
 			// 
-			// mnuMemoryViewer
+			// mnuTraceLogger
 			// 
-			this.mnuMemoryViewer.Name = "mnuMemoryViewer";
-			this.mnuMemoryViewer.Size = new System.Drawing.Size(171, 22);
-			this.mnuMemoryViewer.Text = "Memory Tools";
-			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
+			this.mnuTraceLogger.Name = "mnuTraceLogger";
+			this.mnuTraceLogger.Size = new System.Drawing.Size(171, 22);
+			this.mnuTraceLogger.Text = "Trace Logger";
+			this.mnuTraceLogger.Click += new System.EventHandler(this.mnuTraceLogger_Click);
+			// 
+			// toolStripMenuItem13
+			// 
+			this.toolStripMenuItem13.Name = "toolStripMenuItem13";
+			this.toolStripMenuItem13.Size = new System.Drawing.Size(168, 6);
 			// 
 			// mnuCodeDataLogger
 			// 
@@ -1034,13 +1046,6 @@
 			this.saveUnusedDataToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
 			this.saveUnusedDataToolStripMenuItem.Text = "Save unused data";
 			// 
-			// mnuTraceLogger
-			// 
-			this.mnuTraceLogger.Name = "mnuTraceLogger";
-			this.mnuTraceLogger.Size = new System.Drawing.Size(171, 22);
-			this.mnuTraceLogger.Text = "Trace Logger";
-			this.mnuTraceLogger.Click += new System.EventHandler(this.mnuTraceLogger_Click);
-			// 
 			// statusStrip
 			// 
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1100,11 +1105,6 @@
 			this.ctrlCpuMemoryMapping.TabIndex = 4;
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
-			// 
-			// toolStripMenuItem13
-			// 
-			this.toolStripMenuItem13.Name = "toolStripMenuItem13";
-			this.toolStripMenuItem13.Size = new System.Drawing.Size(168, 6);
 			// 
 			// frmDebugger
 			// 
