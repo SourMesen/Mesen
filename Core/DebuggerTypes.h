@@ -24,3 +24,25 @@ struct AddressTypeInfo
 	int32_t Address;
 	AddressType Type;
 };
+
+enum class DebugMemoryType
+{
+	CpuMemory = 0,
+	PpuMemory = 1,
+	PaletteMemory = 2,
+	SpriteMemory = 3,
+	SecondarySpriteMemory = 4,
+	PrgRom = 5,
+	ChrRom = 6,
+	ChrRam = 7,
+	WorkRam = 8,
+	SaveRam = 9,
+	InternalRam = 10
+};
+
+enum class CdlHighlightType
+{
+	None = 0,
+	HighlightUsed = 1,
+	HighlightUnused = 2,
+};

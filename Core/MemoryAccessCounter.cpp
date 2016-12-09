@@ -1,8 +1,22 @@
 #include "stdafx.h"
 #include "MemoryAccessCounter.h"
 #include "Console.h"
+#include "DebugBreakHelper.h"
+#include "Debugger.h"
 
-std::unordered_map<int, int>& MemoryAccessCounter::GetCountMap(MemoryOperationType operationType, AddressType addressType)
+MemoryAccessCounter::MemoryAccessCounter(Debugger* debugger)
+{
+	_debugger = debugger;
+	
+	int memorySizes[4] = { 0x2000, _debugger->GetMemorySize(DebugMemoryType::PrgRom), _debugger->GetMemorySize(DebugMemoryType::WorkRam), _debugger->GetMemorySize(DebugMemoryType::SaveRam) };
+	for(int i = 0; i < 4; i++) {
+		_readCounts[i].insert(_readCounts[i].end(), memorySizes[i], 0);
+		_writeCounts[i].insert(_writeCounts[i].end(), memorySizes[i], 0);
+		_execCounts[i].insert(_execCounts[i].end(), memorySizes[i], 0);
+	}
+}
+
+vector<int>& MemoryAccessCounter::GetArray(MemoryOperationType operationType, AddressType addressType)
 {
 	switch(operationType) {
 		case MemoryOperationType::Read: return _readCounts[(int)addressType];
@@ -17,7 +31,7 @@ std::unordered_map<int, int>& MemoryAccessCounter::GetCountMap(MemoryOperationTy
 void MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation)
 {
 	int index = (int)addressInfo.Type;
-	std::unordered_map<int, int> &countMap = GetCountMap(operation, addressInfo.Type);
+	vector<int> &counts = GetArray(operation, addressInfo.Type);
 	if(operation != MemoryOperationType::Write &&
 		(addressInfo.Type == AddressType::InternalRam || addressInfo.Type == AddressType::WorkRam) &&
 		_initWrites[index].find(addressInfo.Address) == _initWrites[index].end()) {
@@ -27,18 +41,17 @@ void MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, Memo
 		_initWrites[index].emplace(addressInfo.Address);
 	}
 
-	countMap[addressInfo.Address]++;
+	counts.data()[addressInfo.Address]++;
 }
 
 void MemoryAccessCounter::ResetCounts()
 {
-	Console::Pause();
+	DebugBreakHelper helper(_debugger);
 	for(int i = 0; i < 4; i++) {
-		_readCounts[i].clear();
-		_writeCounts[i].clear();
-		_execCounts[i].clear();
+		memset(_readCounts[i].data(), 0, _readCounts[i].size() * sizeof(uint32_t));
+		memset(_writeCounts[i].data(), 0, _writeCounts[i].size() * sizeof(uint32_t));
+		memset(_execCounts[i].data(), 0, _execCounts[i].size() * sizeof(uint32_t));
 	}
-	Console::Resume();
 }
 
 void MemoryAccessCounter::GetAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t counts[], bool forUninitReads)
@@ -48,8 +61,6 @@ void MemoryAccessCounter::GetAccessCounts(AddressType memoryType, MemoryOperatio
 			counts[address] = 1;
 		}
 	} else {
-		for(auto kvp : GetCountMap(operationType, memoryType)) {
-			counts[kvp.first] = kvp.second;
-		}
+		memcpy(counts, GetArray(operationType, memoryType).data(), GetArray(operationType, memoryType).size() * sizeof(uint32_t));
 	}
 }

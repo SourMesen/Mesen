@@ -2,7 +2,6 @@
 #include "Profiler.h"
 #include "DebugBreakHelper.h"
 #include "Debugger.h"
-#include "MemoryDumper.h"
 
 Profiler::Profiler(Debugger * debugger)
 {
