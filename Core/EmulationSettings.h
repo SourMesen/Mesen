@@ -308,6 +308,7 @@ private:
 	static double _stereoAngle;
 	static double _reverbStrength;
 	static double _reverbDelay;
+	static uint32_t _crossFeedRatio;
 		
 	static NesModel _model;
 	static PpuModel _ppuModel;
@@ -487,6 +488,16 @@ public:
 	static double GetReverbDelay()
 	{
 		return _reverbDelay;
+	}
+
+	static void SetCrossFeedRatio(uint32_t ratio)
+	{
+		_crossFeedRatio = ratio;
+	}
+
+	static uint32_t GetCrossFeedRatio()
+	{
+		return _crossFeedRatio;
 	}
 
 	//0: No limit, Number: % of default speed (50/60fps)

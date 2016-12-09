@@ -115,6 +115,7 @@
       <Control ID="radStereoPanning">Панорамування</Control>
       <Control ID="lblStereoDelayMs">мс</Control>
       <Control ID="lblStereoPanningAngle">кут в градусах</Control>
+      <Control ID="chkCrossFeedEnabled">Enable Crossfeed:</Control>
       <Control ID="grpReverb">Відлуння</Control>
       <Control ID="chkReverbEnabled">Включена</Control>
       <Control ID="lblReverbDelay">Затримка :</Control>

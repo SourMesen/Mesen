@@ -115,6 +115,7 @@
       <Control ID="radStereoPanning">Panoramique</Control>
       <Control ID="lblStereoDelayMs">ms</Control>
       <Control ID="lblStereoPanningAngle">(angle en degrés)</Control>
+      <Control ID="chkCrossFeedEnabled">Activer le crossfeed :</Control>
       <Control ID="grpReverb">Réverbération</Control>
       <Control ID="chkReverbEnabled">Activer la réverbération</Control>
       <Control ID="lblReverbDelay">Délai :</Control>

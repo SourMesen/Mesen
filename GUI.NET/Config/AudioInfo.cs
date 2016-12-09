@@ -38,6 +38,8 @@ namespace Mesen.GUI.Config
 		public bool ReverbEnabled = false;
 		public UInt32 ReverbStrength = 5;
 		public UInt32 ReverbDelay = 10;
+		public bool CrossFeedEnabled = false;
+		public UInt32 CrossFeedRatio = 0;
 
 		public AudioInfo()
 		{
@@ -86,6 +88,12 @@ namespace Mesen.GUI.Config
 				InteropEmu.SetReverbParameters(audioInfo.ReverbStrength/10.0, audioInfo.ReverbDelay/10.0);
 			} else {
 				InteropEmu.SetReverbParameters(0, 0);
+			}
+
+			if(audioInfo.CrossFeedEnabled) {
+				InteropEmu.SetCrossFeedRatio(audioInfo.CrossFeedRatio);
+			} else {
+				InteropEmu.SetCrossFeedRatio(0);
 			}
 		}
 	}

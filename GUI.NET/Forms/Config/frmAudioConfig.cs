@@ -58,6 +58,9 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("ReverbEnabled", chkReverbEnabled);
 			AddBinding("ReverbDelay", trkReverbDelay);
 			AddBinding("ReverbStrength", trkReverbStrength);
+
+			AddBinding("CrossFeedEnabled", chkCrossFeedEnabled);
+			AddBinding("CrossFeedRatio", nudCrossFeedRatio);
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
@@ -91,6 +94,12 @@ namespace Mesen.GUI.Forms.Config
 		{
 			picLatencyWarning.Visible = nudLatency.Value <= 30;
 			lblLatencyWarning.Visible = nudLatency.Value <= 30;
+		}
+
+		private void radStereoDisabled_CheckedChanged(object sender, EventArgs e)
+		{
+			chkCrossFeedEnabled.Enabled = !radStereoDisabled.Checked;
+			nudCrossFeedRatio.Enabled = !radStereoDisabled.Checked;
 		}
 	}
 }

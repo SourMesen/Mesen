@@ -20,6 +20,7 @@ int32_t EmulationSettings::_stereoDelay = 0;
 double EmulationSettings::_stereoAngle = 0;
 double EmulationSettings::_reverbStrength = 0;
 double EmulationSettings::_reverbDelay = 0;
+uint32_t EmulationSettings::_crossFeedRatio = 0;
 
 NesModel EmulationSettings::_model = NesModel::Auto;
 PpuModel EmulationSettings::_ppuModel = PpuModel::Ppu2C02;

@@ -115,6 +115,7 @@
       <Control ID="radStereoPanning">パニング</Control>
       <Control ID="lblStereoDelayMs">ミリ秒</Control>
       <Control ID="lblStereoPanningAngle">(角度)</Control>
+      <Control ID="chkCrossFeedEnabled">クロスフィード：</Control>
       <Control ID="grpReverb">残響</Control>
       <Control ID="chkReverbEnabled">残響を有効にする</Control>
       <Control ID="lblReverbDelay">ディレイ:</Control>

@@ -2,6 +2,7 @@
 #include "SoundMixer.h"
 #include "APU.h"
 #include "CPU.h"
+#include "CrossFeedFilter.h"
 
 IAudioDevice* SoundMixer::AudioDevice = nullptr;
 unique_ptr<WaveRecorder> SoundMixer::_waveRecorder;
@@ -105,6 +106,11 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 				soundBuffer = _stereoPanning.ApplyFilter(soundBuffer, sampleCount);
 				isStereo = true;
 				break;
+		}
+
+		if(isStereo && EmulationSettings::GetCrossFeedRatio() > 0) {
+			CrossFeedFilter filter;
+			filter.ApplyFilter(soundBuffer, sampleCount, EmulationSettings::GetCrossFeedRatio());
 		}
 
 		SoundMixer::AudioDevice->PlayBuffer(soundBuffer, (uint32_t)sampleCount, _sampleRate, isStereo);

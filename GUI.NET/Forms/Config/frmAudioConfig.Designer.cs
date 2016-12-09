@@ -72,6 +72,10 @@
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.nudStereoPanning = new System.Windows.Forms.NumericUpDown();
 			this.lblStereoPanningAngle = new System.Windows.Forms.Label();
+			this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkCrossFeedEnabled = new System.Windows.Forms.CheckBox();
+			this.nudCrossFeedRatio = new System.Windows.Forms.NumericUpDown();
+			this.lblCrossFeedRatio = new System.Windows.Forms.Label();
 			this.grpReverb = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkReverbEnabled = new System.Windows.Forms.CheckBox();
@@ -102,6 +106,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.nudStereoDelay)).BeginInit();
 			this.flowLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudStereoPanning)).BeginInit();
+			this.flowLayoutPanel5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudCrossFeedRatio)).BeginInit();
 			this.grpReverb.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkReverbDelay)).BeginInit();
@@ -590,7 +596,7 @@
 			this.grpStereo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpStereo.Location = new System.Drawing.Point(3, 3);
 			this.grpStereo.Name = "grpStereo";
-			this.grpStereo.Size = new System.Drawing.Size(457, 95);
+			this.grpStereo.Size = new System.Drawing.Size(457, 130);
 			this.grpStereo.TabIndex = 0;
 			this.grpStereo.TabStop = false;
 			this.grpStereo.Text = "Stereo";
@@ -605,15 +611,18 @@
 			this.tlpStereoFilter.Controls.Add(this.radStereoDelay, 0, 1);
 			this.tlpStereoFilter.Controls.Add(this.radStereoPanning, 0, 2);
 			this.tlpStereoFilter.Controls.Add(this.flowLayoutPanel4, 1, 2);
+			this.tlpStereoFilter.Controls.Add(this.flowLayoutPanel5, 0, 4);
 			this.tlpStereoFilter.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpStereoFilter.Location = new System.Drawing.Point(3, 16);
 			this.tlpStereoFilter.Name = "tlpStereoFilter";
-			this.tlpStereoFilter.RowCount = 4;
+			this.tlpStereoFilter.RowCount = 6;
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpStereoFilter.Size = new System.Drawing.Size(451, 76);
+			this.tlpStereoFilter.Size = new System.Drawing.Size(451, 111);
 			this.tlpStereoFilter.TabIndex = 0;
 			// 
 			// flowLayoutPanel3
@@ -647,6 +656,7 @@
 			// radStereoDisabled
 			// 
 			this.radStereoDisabled.AutoSize = true;
+			this.radStereoDisabled.Checked = true;
 			this.radStereoDisabled.Location = new System.Drawing.Point(3, 3);
 			this.radStereoDisabled.Name = "radStereoDisabled";
 			this.radStereoDisabled.Size = new System.Drawing.Size(66, 17);
@@ -655,6 +665,7 @@
 			this.radStereoDisabled.Tag = "None";
 			this.radStereoDisabled.Text = "Disabled";
 			this.radStereoDisabled.UseVisualStyleBackColor = true;
+			this.radStereoDisabled.CheckedChanged += new System.EventHandler(this.radStereoDisabled_CheckedChanged);
 			// 
 			// radStereoDelay
 			// 
@@ -718,11 +729,56 @@
 			this.lblStereoPanningAngle.TabIndex = 1;
 			this.lblStereoPanningAngle.Text = "(Angle in degrees)";
 			// 
+			// flowLayoutPanel5
+			// 
+			this.tlpStereoFilter.SetColumnSpan(this.flowLayoutPanel5, 2);
+			this.flowLayoutPanel5.Controls.Add(this.chkCrossFeedEnabled);
+			this.flowLayoutPanel5.Controls.Add(this.nudCrossFeedRatio);
+			this.flowLayoutPanel5.Controls.Add(this.lblCrossFeedRatio);
+			this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(20, 85);
+			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(20, 0, 0, 0);
+			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
+			this.flowLayoutPanel5.Size = new System.Drawing.Size(431, 25);
+			this.flowLayoutPanel5.TabIndex = 5;
+			// 
+			// chkCrossFeedEnabled
+			// 
+			this.chkCrossFeedEnabled.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkCrossFeedEnabled.AutoSize = true;
+			this.chkCrossFeedEnabled.Enabled = false;
+			this.chkCrossFeedEnabled.Location = new System.Drawing.Point(3, 5);
+			this.chkCrossFeedEnabled.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.chkCrossFeedEnabled.Name = "chkCrossFeedEnabled";
+			this.chkCrossFeedEnabled.Size = new System.Drawing.Size(112, 17);
+			this.chkCrossFeedEnabled.TabIndex = 1;
+			this.chkCrossFeedEnabled.Text = "Enable Crossfeed:";
+			this.chkCrossFeedEnabled.UseVisualStyleBackColor = true;
+			// 
+			// nudCrossFeedRatio
+			// 
+			this.nudCrossFeedRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudCrossFeedRatio.Enabled = false;
+			this.nudCrossFeedRatio.Location = new System.Drawing.Point(121, 3);
+			this.nudCrossFeedRatio.Name = "nudCrossFeedRatio";
+			this.nudCrossFeedRatio.Size = new System.Drawing.Size(42, 20);
+			this.nudCrossFeedRatio.TabIndex = 2;
+			// 
+			// lblCrossFeedRatio
+			// 
+			this.lblCrossFeedRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblCrossFeedRatio.AutoSize = true;
+			this.lblCrossFeedRatio.Location = new System.Drawing.Point(169, 6);
+			this.lblCrossFeedRatio.Name = "lblCrossFeedRatio";
+			this.lblCrossFeedRatio.Size = new System.Drawing.Size(15, 13);
+			this.lblCrossFeedRatio.TabIndex = 3;
+			this.lblCrossFeedRatio.Text = "%";
+			// 
 			// grpReverb
 			// 
 			this.grpReverb.Controls.Add(this.tableLayoutPanel5);
 			this.grpReverb.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpReverb.Location = new System.Drawing.Point(3, 104);
+			this.grpReverb.Location = new System.Drawing.Point(3, 139);
 			this.grpReverb.Name = "grpReverb";
 			this.grpReverb.Size = new System.Drawing.Size(457, 109);
 			this.grpReverb.TabIndex = 1;
@@ -904,6 +960,9 @@
 			this.flowLayoutPanel4.ResumeLayout(false);
 			this.flowLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudStereoPanning)).EndInit();
+			this.flowLayoutPanel5.ResumeLayout(false);
+			this.flowLayoutPanel5.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudCrossFeedRatio)).EndInit();
 			this.grpReverb.ResumeLayout(false);
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
@@ -975,5 +1034,9 @@
 		private System.Windows.Forms.CheckBox chkReduceDmcPopping;
 		private System.Windows.Forms.PictureBox picLatencyWarning;
 		private System.Windows.Forms.Label lblLatencyWarning;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
+		private System.Windows.Forms.CheckBox chkCrossFeedEnabled;
+		private System.Windows.Forms.NumericUpDown nudCrossFeedRatio;
+		private System.Windows.Forms.Label lblCrossFeedRatio;
 	}
 }
