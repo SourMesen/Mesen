@@ -23,6 +23,7 @@ class Disassembler;
 class LabelManager;
 class MemoryDumper;
 class MemoryAccessCounter;
+class Profiler;
 
 class Debugger
 {
@@ -35,6 +36,9 @@ private:
 	shared_ptr<MemoryDumper> _memoryDumper;
 	shared_ptr<CodeDataLogger> _codeDataLogger;
 	shared_ptr<MemoryAccessCounter> _memoryAccessCounter;
+	shared_ptr<LabelManager> _labelManager;
+	shared_ptr<TraceLogger> _traceLogger;
+	shared_ptr<Profiler> _profiler;
 
 	shared_ptr<Console> _console;
 	shared_ptr<CPU> _cpu;
@@ -61,9 +65,6 @@ private:
 
 	SimpleLock _breakLock;
 
-	shared_ptr<LabelManager> _labelManager;
-	shared_ptr<TraceLogger> _traceLogger;
-
 	//Used to alter the executing address via "Set Next Statement"
 	uint16_t *_currentReadAddr;
 	uint8_t *_currentReadValue;
@@ -78,6 +79,7 @@ private:
 	atomic<uint8_t> _lastInstruction;
 	atomic<bool> _stepOut;
 	atomic<int32_t> _stepOverAddr;
+	atomic<bool> _sendNotification;
 
 	int32_t _ppuViewerScanline;
 	int32_t _ppuViewerCycle;
@@ -120,7 +122,7 @@ public:
 	void Resume();
 
 	void PpuStep(uint32_t count = 1);
-	void Step(uint32_t count = 1);
+	void Step(uint32_t count = 1, bool sendNotification = true);
 	void StepCycles(uint32_t cycleCount = 1);
 	void StepOver();
 	void StepOut();
@@ -146,6 +148,8 @@ public:
 
 	void StartTraceLogger(TraceLoggerOptions options);
 	void StopTraceLogger();
+
+	shared_ptr<Profiler> GetProfiler();
 
 	shared_ptr<MemoryDumper> GetMemoryDumper();
 	shared_ptr<MemoryAccessCounter> GetMemoryAccessCounter();

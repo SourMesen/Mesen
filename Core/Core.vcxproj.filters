@@ -1099,6 +1099,12 @@
     <ClInclude Include="MemoryAccessCounter.h">
       <Filter>Debugger</Filter>
     </ClInclude>
+    <ClInclude Include="Profiler.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugBreakHelper.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1283,6 +1289,9 @@
     </ClCompile>
     <ClCompile Include="MemoryAccessCounter.cpp">
       <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="Profiler.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

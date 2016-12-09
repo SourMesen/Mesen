@@ -5,6 +5,7 @@
 #include "../Core/LabelManager.h"
 #include "../Core/MemoryDumper.h"
 #include "../Core/MemoryAccessCounter.h"
+#include "../Core/Profiler.h"
 
 shared_ptr<Debugger> GetDebugger()
 {
@@ -79,6 +80,10 @@ extern "C"
 	DllExport int32_t __stdcall DebugGetMemorySize(DebugMemoryType type) { return GetDebugger()->GetMemorySize(type); }
 	DllExport void __stdcall DebugGetMemoryAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t* counts, bool forUninitReads) { GetDebugger()->GetMemoryAccessCounter()->GetAccessCounts(memoryType, operationType, counts, forUninitReads); }
 	DllExport void __stdcall DebugResetMemoryAccessCounts() { GetDebugger()->GetMemoryAccessCounter()->ResetCounts(); }
+
+	DllExport void __stdcall DebugGetProfilerData(int64_t* profilerData, ProfilerDataType dataType) { GetDebugger()->GetProfiler()->GetProfilerData(profilerData, dataType); }
+	DllExport void __stdcall DebugResetProfiler() { GetDebugger()->GetProfiler()->Reset(); }
+	
 
 	DllExport uint32_t __stdcall DebugGetPpuScroll() { return GetDebugger()->GetPpuScroll(); }
 };

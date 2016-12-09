@@ -13,6 +13,7 @@
 #include "LabelManager.h"
 #include "MemoryDumper.h"
 #include "MemoryAccessCounter.h"
+#include "Profiler.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
@@ -31,6 +32,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_codeDataLogger.reset(new CodeDataLogger(mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetMemorySize(DebugMemoryType::ChrRom)));
 	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger));
 	_memoryAccessCounter.reset(new MemoryAccessCounter());
+	_profiler.reset(new Profiler(this));
 
 	_stepOut = false;
 	_stepCount = -1;
@@ -145,6 +147,11 @@ shared_ptr<LabelManager> Debugger::GetLabelManager()
 	return _labelManager;
 }
 
+shared_ptr<Profiler> Debugger::GetProfiler()
+{
+	return _profiler;
+}
+
 void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 {
 	_bpUpdateLock.AcquireSafe();
@@ -241,6 +248,8 @@ void Debugger::UpdateCallstack(uint32_t addr)
 		_callstackRelative.pop_back();
 		_callstackAbsolute.pop_back();
 		_callstackAbsolute.pop_back();
+
+		_profiler->UnstackFunction();
 	} else if(_lastInstruction == 0x20 && _callstackRelative.size() < 1022) {
 		//JSR
 		uint16_t targetAddr = _memoryManager->DebugRead(addr + 1) | (_memoryManager->DebugRead(addr + 2) << 8);
@@ -249,6 +258,8 @@ void Debugger::UpdateCallstack(uint32_t addr)
 
 		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(addr));
 		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(targetAddr));
+
+		_profiler->StackFunction(_mapper->ToAbsoluteAddress(addr), _mapper->ToAbsoluteAddress(targetAddr));
 	}
 }
 
@@ -259,6 +270,8 @@ void Debugger::PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, b
 
 	_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(cpuAddr));
 	_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(destCpuAddr));
+
+	_profiler->StackFunction(-1, _mapper->ToAbsoluteAddress(destCpuAddr));
 }
 
 void Debugger::ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
@@ -343,6 +356,8 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		UpdateCallstack(addr);
 		ProcessStepConditions(addr);
 
+		_profiler->ProcessInstructionStart(absoluteAddr);
+
 		breakDone = SleepUntilResume();
 
 		shared_ptr<TraceLogger> logger = _traceLogger;
@@ -351,6 +366,8 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			GetState(&state);
 			logger->Log(state, _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr));
 		}
+	} else {
+		_profiler->ProcessCycle();
 	}
 
 	if(!breakDone && type != MemoryOperationType::DummyRead) {
@@ -382,12 +399,18 @@ bool Debugger::SleepUntilResume()
 		//Break
 		auto lock = _breakLock.AcquireSafe();
 		_executionStopped = true;
-		SoundMixer::StopAudio();
-		MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
-		_stepOverAddr = -1;
-		if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
-			_ppu->DebugSendFrame();
+
+		if(_sendNotification) {
+			SoundMixer::StopAudio();
+			MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
+			_stepOverAddr = -1;
+			if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
+				_ppu->DebugSendFrame();
+			}
 		}
+
+		_sendNotification = true;
+
 		while(stepCount == 0 && !_stopFlag && _suspendCount == 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();
@@ -435,7 +458,7 @@ void Debugger::PpuStep(uint32_t count)
 	_stepCycleCount = -1;
 }
 
-void Debugger::Step(uint32_t count)
+void Debugger::Step(uint32_t count, bool sendNotification)
 {
 	//Run CPU for [count] INSTRUCTIONS before breaking again
 	_stepOut = false;
@@ -443,6 +466,7 @@ void Debugger::Step(uint32_t count)
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_ppuStepCount = -1;
+	_sendNotification = sendNotification;
 }
 
 void Debugger::StepCycles(uint32_t count)

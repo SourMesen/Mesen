@@ -63,7 +63,7 @@ namespace Mesen.GUI.Debugger
 		{
 			if(this.tabMain.SelectedTab == this.tpgAccessCounters) {
 				this.ctrlMemoryAccessCounters.RefreshData();
-			} else {
+			} else if(this.tabMain.SelectedTab == this.tpgMemoryViewer) {
 				this.ctrlHexViewer.Data = InteropEmu.DebugGetMemoryState((DebugMemoryType)this.cboMemoryType.SelectedIndex);
 			}
 		}
@@ -179,6 +179,10 @@ namespace Mesen.GUI.Debugger
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.tmrRefresh.Interval = this.tabMain.SelectedTab == this.tpgMemoryViewer ? 100 : 500;
+
+			if(this.tabMain.SelectedTab == this.tpgProfiler) {
+				this.ctrlProfiler.RefreshData();
+			}
 		}
 	}
 }

@@ -194,7 +194,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugGetCdlRatios(ref CdlRatios ratios);
 		[DllImport(DLLPath)] public static extern void DebugResetCdlLog();
 		[DllImport(DLLPath)] public static extern void DebugResetMemoryAccessCounts();
-		
+		[DllImport(DLLPath)] public static extern void DebugResetProfiler();
+
 		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper();
 		public static string DebugGetCode() { return PtrToStringUtf8(InteropEmu.DebugGetCodeWrapper()); }
 
@@ -298,6 +299,21 @@ namespace Mesen.GUI
 			}
 
 			return frameData;
+		}
+
+		[DllImport(DLLPath, EntryPoint= "DebugGetProfilerData")] private static extern void DebugGetProfilerDataWrapper(IntPtr profilerData, ProfilerDataType dataType);
+		public static Int64[] DebugGetProfilerData(ProfilerDataType dataType)
+		{
+			Int64[] profileData = new Int64[InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) + 2];
+
+			GCHandle hProfilerData = GCHandle.Alloc(profileData, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetProfilerDataWrapper(hProfilerData.AddrOfPinnedObject(), dataType);
+			} finally {
+				hProfilerData.Free();
+			}
+
+			return profileData;
 		}
 
 		[DllImport(DLLPath, EntryPoint= "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(AddressType type, MemoryOperationType operationType, IntPtr counts, [MarshalAs(UnmanagedType.I1)]bool forUninitReads);
@@ -748,6 +764,14 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)] public bool ShowExtraInfo;
 		[MarshalAs(UnmanagedType.I1)] public bool IndentCode;
 		[MarshalAs(UnmanagedType.I1)] public bool ShowEffectiveAddresses;
+	}
+
+	public enum ProfilerDataType
+	{
+		FunctionExclusive = 0,
+		FunctionInclusive = 1,
+		Instructions = 2,
+		FunctionCallCount = 3,
 	}
 
 	[Flags]
