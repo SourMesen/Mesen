@@ -123,6 +123,7 @@
       <Control ID="chkEnableAudio">Включить звук</Control>
       <Control ID="lblSampleRate">Частота дискретизации:</Control>
       <Control ID="lblLatencyMs">мс</Control>
+      <Control ID="lblLatencyWarning">Low values may cause sound problems</Control>
       <Control ID="lblAudioLatency">Задержка:</Control>
       <Control ID="lblAudioDevice">Устройство:</Control>
       <Control ID="tpgVolume">Громкость</Control>

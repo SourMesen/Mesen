@@ -86,5 +86,11 @@ namespace Mesen.GUI.Forms.Config
 		{
 			chkReduceSoundInBackground.Enabled = !chkMuteSoundInBackground.Checked;
 		}
+
+		private void nudLatency_ValueChanged(object sender, EventArgs e)
+		{
+			picLatencyWarning.Visible = nudLatency.Value <= 30;
+			lblLatencyWarning.Visible = nudLatency.Value <= 30;
+		}
 	}
 }

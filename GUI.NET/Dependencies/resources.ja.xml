@@ -123,6 +123,7 @@
       <Control ID="chkEnableAudio">音声オン</Control>
       <Control ID="lblSampleRate">サンプルレート:</Control>
       <Control ID="lblLatencyMs">ミリ秒</Control>
+      <Control ID="lblLatencyWarning">低すぎる場合は、音声にノイズが発生することがある</Control>
       <Control ID="lblAudioLatency">レイテンシ:</Control>
       <Control ID="lblAudioDevice">デバイス:</Control>
       <Control ID="tpgVolume">音量ミキサー</Control>

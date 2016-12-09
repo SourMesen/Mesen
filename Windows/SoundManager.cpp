@@ -241,44 +241,37 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32
 	uint32_t soundBufferSize = sampleCount * bytesPerSample;
 
 	int32_t byteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * bytesPerSample);
+	DWORD currentPlayCursor;
+	DWORD safeWriteCursor;
+	_secondaryBuffer->GetCurrentPosition(&currentPlayCursor, &safeWriteCursor);
+
+	if(safeWriteCursor > _lastWriteOffset && safeWriteCursor - _lastWriteOffset < 10000) {
+		_lastWriteOffset = (uint16_t)safeWriteCursor;
+	}
+
+	int32_t playWriteByteLatency = (_lastWriteOffset - currentPlayCursor);
+	if(playWriteByteLatency < 0) {
+		playWriteByteLatency = 0xFFFF + playWriteByteLatency;
+	}
+
 	if(byteLatency != _previousLatency) {
 		Stop();
 		_previousLatency = byteLatency;
+	} else if(playWriteByteLatency > byteLatency * 3) {
+		_secondaryBuffer->SetCurrentPosition(_lastWriteOffset - byteLatency);
 	}
+
+	uint32_t targetRate = sampleRate;
+	if(EmulationSettings::GetEmulationSpeed() > 0 && EmulationSettings::GetEmulationSpeed() < 100) {
+		targetRate = (uint32_t)(targetRate * ((double)EmulationSettings::GetEmulationSpeed() / 100.0));
+	}
+	_secondaryBuffer->SetFrequency(targetRate);
+
+	CopyToSecondaryBuffer((uint8_t*)soundBuffer, soundBufferSize);
+
 	DWORD status;
 	_secondaryBuffer->GetStatus(&status);
-
-	if(!(status & DSBSTATUS_PLAYING)) {
-		CopyToSecondaryBuffer((uint8_t*)soundBuffer, soundBufferSize);
-		if(_lastWriteOffset >= byteLatency) {
-			Play();
-		}
-	} else {
-		CopyToSecondaryBuffer((uint8_t*)soundBuffer, soundBufferSize);
-		DWORD currentPlayCursor;
-		_secondaryBuffer->GetCurrentPosition(&currentPlayCursor, nullptr);
-		
-		int32_t playWriteByteLatency = (_lastWriteOffset - currentPlayCursor);
-		if(playWriteByteLatency < 0) {
-			playWriteByteLatency = 0xFFFF - currentPlayCursor + _lastWriteOffset;
-		}
-
-		int32_t latencyGap = playWriteByteLatency - byteLatency;
-		int32_t tolerance = byteLatency / 35;
-		uint32_t targetRate = sampleRate;
-		if(EmulationSettings::GetEmulationSpeed() > 0 && EmulationSettings::GetEmulationSpeed() < 100) {
-			targetRate = (uint32_t)(targetRate * ((double)EmulationSettings::GetEmulationSpeed() / 100.0));
-		}
-		if(abs(latencyGap) > byteLatency / 2) {
-			//Out of sync, move back to where we should be (start of the latency buffer)
-			_secondaryBuffer->SetCurrentPosition(_lastWriteOffset - byteLatency);
-		} else if(latencyGap < -tolerance) {
-			//Playing too fast, slow down playing
-			targetRate = (uint32_t)(targetRate * 0.9975);
-		} else if(latencyGap > tolerance) {
-			//Playing too slow, speed up
-			targetRate = (uint32_t)(targetRate * 1.0025);
-		}
-		_secondaryBuffer->SetFrequency((DWORD)targetRate);
+	if(!(status & DSBSTATUS_PLAYING) && _lastWriteOffset >= byteLatency) {
+		Play();
 	}
 }

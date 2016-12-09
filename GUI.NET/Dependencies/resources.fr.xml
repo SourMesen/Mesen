@@ -123,6 +123,7 @@
       <Control ID="chkEnableAudio">Activer le son</Control>
       <Control ID="lblSampleRate">Taux d'échantillonnage:</Control>
       <Control ID="lblLatencyMs">ms</Control>
+      <Control ID="lblLatencyWarning">Une latence trop faible peut causer des problèmes</Control>
       <Control ID="lblAudioLatency">Latence:</Control>
       <Control ID="lblAudioDevice">Périphérique:</Control>
       <Control ID="tpgVolume">Volume</Control>

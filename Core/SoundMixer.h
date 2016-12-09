@@ -14,7 +14,7 @@
 class SoundMixer : public Snapshotable
 {
 public:
-	static const uint32_t CycleLength = 10000;
+	static const uint32_t CycleLength = 1000;
 	static const uint32_t BitsPerSample = 16;
 
 private:

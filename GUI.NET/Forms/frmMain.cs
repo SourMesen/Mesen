@@ -170,6 +170,15 @@ namespace Mesen.GUI.Forms
 			Version oldVersion = new Version(ConfigManager.Config.MesenVersion);
 			if(oldVersion < newVersion) {
 				//Upgrade
+				if(oldVersion <= new Version("5.3.0")) {
+					//Version 0.5.3-
+					//Reduce sound latency if still using default
+					if(ConfigManager.Config.AudioInfo.AudioLatency == 100) {
+						//50ms is a fairly safe number - seems to work fine as low as 20ms (varies by computer)
+						ConfigManager.Config.AudioInfo.AudioLatency = 50;
+					}
+				}
+
 				if(oldVersion <= new Version("0.4.1")) {
 					//Version 0.4.1-
 					//Remove all old cheats (Game matching/CRC logic has been changed and no longer compatible)

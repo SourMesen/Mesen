@@ -49,6 +49,8 @@
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.nudLatency = new System.Windows.Forms.NumericUpDown();
 			this.lblLatencyMs = new System.Windows.Forms.Label();
+			this.picLatencyWarning = new System.Windows.Forms.PictureBox();
+			this.lblLatencyWarning = new System.Windows.Forms.Label();
 			this.lblAudioLatency = new System.Windows.Forms.Label();
 			this.cboSampleRate = new System.Windows.Forms.ComboBox();
 			this.lblAudioDevice = new System.Windows.Forms.Label();
@@ -88,6 +90,7 @@
 			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudLatency)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picLatencyWarning)).BeginInit();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgVolume.SuspendLayout();
@@ -401,10 +404,13 @@
 			// 
 			this.flowLayoutPanel2.Controls.Add(this.nudLatency);
 			this.flowLayoutPanel2.Controls.Add(this.lblLatencyMs);
+			this.flowLayoutPanel2.Controls.Add(this.picLatencyWarning);
+			this.flowLayoutPanel2.Controls.Add(this.lblLatencyWarning);
+			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(77, 80);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(78, 24);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(386, 24);
 			this.flowLayoutPanel2.TabIndex = 4;
 			// 
 			// nudLatency
@@ -416,7 +422,7 @@
             0,
             0});
 			this.nudLatency.Minimum = new decimal(new int[] {
-            100,
+            15,
             0,
             0,
             0});
@@ -428,6 +434,7 @@
             0,
             0,
             0});
+			this.nudLatency.ValueChanged += new System.EventHandler(this.nudLatency_ValueChanged);
 			// 
 			// lblLatencyMs
 			// 
@@ -438,6 +445,28 @@
 			this.lblLatencyMs.Size = new System.Drawing.Size(20, 13);
 			this.lblLatencyMs.TabIndex = 2;
 			this.lblLatencyMs.Text = "ms";
+			// 
+			// picLatencyWarning
+			// 
+			this.picLatencyWarning.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picLatencyWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
+			this.picLatencyWarning.Location = new System.Drawing.Point(82, 5);
+			this.picLatencyWarning.Margin = new System.Windows.Forms.Padding(5, 3, 0, 3);
+			this.picLatencyWarning.Name = "picLatencyWarning";
+			this.picLatencyWarning.Size = new System.Drawing.Size(16, 16);
+			this.picLatencyWarning.TabIndex = 3;
+			this.picLatencyWarning.TabStop = false;
+			// 
+			// lblLatencyWarning
+			// 
+			this.lblLatencyWarning.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLatencyWarning.AutoSize = true;
+			this.lblLatencyWarning.Location = new System.Drawing.Point(98, 6);
+			this.lblLatencyWarning.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblLatencyWarning.Name = "lblLatencyWarning";
+			this.lblLatencyWarning.Size = new System.Drawing.Size(192, 13);
+			this.lblLatencyWarning.TabIndex = 4;
+			this.lblLatencyWarning.Text = "Low values may cause sound problems";
 			// 
 			// lblAudioLatency
 			// 
@@ -860,6 +889,7 @@
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudLatency)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picLatencyWarning)).EndInit();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgVolume.ResumeLayout(false);
@@ -943,5 +973,7 @@
 		private System.Windows.Forms.TrackBar trkReverbStrength;
 		private System.Windows.Forms.CheckBox chkSilenceTriangleHighFreq;
 		private System.Windows.Forms.CheckBox chkReduceDmcPopping;
+		private System.Windows.Forms.PictureBox picLatencyWarning;
+		private System.Windows.Forms.Label lblLatencyWarning;
 	}
 }
