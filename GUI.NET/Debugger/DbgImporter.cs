@@ -69,11 +69,21 @@ namespace Mesen.GUI.Debugger
 			if(match.Success) {
 				FileInfo file = new FileInfo() {
 					ID = Int32.Parse(match.Groups[1].Value),
-					Name = match.Groups[2].Value.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar)
+					Name = Path.GetFullPath(Path.Combine(basePath, match.Groups[2].Value.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar))).Replace(basePath + Path.DirectorySeparatorChar, "")
 				};
 
 				try {
 					string sourceFile = Path.Combine(basePath, file.Name);
+					while(!File.Exists(sourceFile)) {
+						//Go back up folder structure to attempt to find the file
+						string oldPath = basePath;
+						basePath = Path.GetFullPath(Path.Combine(basePath, @"..\"));
+						if(basePath == oldPath) {
+							break;
+						}
+						sourceFile = Path.Combine(basePath, file.Name);
+					}
+
 					if(File.Exists(sourceFile)) {
 						file.Data = File.ReadAllLines(sourceFile);
 					}
