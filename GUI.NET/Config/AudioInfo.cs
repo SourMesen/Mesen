@@ -13,7 +13,7 @@ namespace Mesen.GUI.Config
 	{
 		public string AudioDevice = "";
 		public bool EnableAudio = true;
-		public UInt32 AudioLatency = 100;
+		public UInt32 AudioLatency = 50;
 		public UInt32 MasterVolume = 25;
 		public UInt32 Square1Volume = 100;
 		public UInt32 Square2Volume = 100;
