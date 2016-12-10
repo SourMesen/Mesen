@@ -145,6 +145,19 @@
       <Control ID="trkVrc7Vol">VRC7</Control>
       <Control ID="trkNamco163Vol">Namco</Control>
       <Control ID="trkSunsoft5b">Sunsoft</Control>
+
+      <Control ID="tpgPanning">Panning</Control>
+      <Control ID="trkDmcPan">DMC</Control>
+      <Control ID="trkNoisePan">Noise</Control>
+      <Control ID="trkTrianglePan">Triangle</Control>
+      <Control ID="trkSquare2Pan">Square 2</Control>
+      <Control ID="trkSquare1Pan">Square 1</Control>
+      <Control ID="trkFdsPan">FDS</Control>
+      <Control ID="trkMmc5Pan">MMC5</Control>
+      <Control ID="trkVrc6Pan">VRC6</Control>
+      <Control ID="trkVrc7Pan">VRC7</Control>
+      <Control ID="trkNamcoPan">Namco</Control>
+      <Control ID="trkSunsoftPan">Sunsoft</Control>
     </Form>
     <Form ID="frmInputConfig" Title="Пристрої введення">
       <Control ID="btnOK">OK</Control>
