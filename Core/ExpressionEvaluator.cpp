@@ -171,12 +171,37 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 	return output;
 }
 	
-void ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
+bool ExpressionEvaluator::ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, vector<int> &outputQueue)
+{
+	if(opStack.empty()) {
+		return false;
+	}
+	while(opStack.top() != evalOp) {
+		outputQueue.push_back(opStack.top());
+		opStack.pop();
+
+		if(opStack.empty()) {
+			return false;
+		}
+	}
+	if(evalOp != EvalOperators::Parenthesis) {
+		outputQueue.push_back(opStack.top());
+	}
+	opStack.pop();
+
+	return true;
+}
+
+bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 {
 	std::stack<EvalOperators> opStack = std::stack<EvalOperators>();	
 	std::stack<int> precedenceStack;
 
 	size_t position = 0;
+	int parenthesisCount = 0;
+	int bracketCount = 0;
+	int braceCount = 0;
+
 	bool previousTokenIsOp = true;
 	while(true) {
 		string token = GetNextToken(expression, position);
@@ -203,44 +228,49 @@ void ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 			
 			previousTokenIsOp = true;
 		} else if(token[0] == '(') {
+			parenthesisCount++;
 			opStack.push(EvalOperators::Parenthesis);
 			precedenceStack.push(0);
 			previousTokenIsOp = true;
 		} else if(token[0] == ')') {
-			while(opStack.top() != EvalOperators::Parenthesis) {
-				outputQueue.push_back(opStack.top());
-				opStack.pop();
+			parenthesisCount--;
+			if(!ProcessSpecialOperator(EvalOperators::Parenthesis, opStack, outputQueue)) {
+				return false;
 			}
-			opStack.pop();
 		} else if(token[0] == '[') {
+			bracketCount++;
 			opStack.push(EvalOperators::Bracket);
 			precedenceStack.push(0);
 		} else if(token[0] == ']') {
-			while(opStack.top() != EvalOperators::Bracket) {
-				outputQueue.push_back(opStack.top());
-				opStack.pop();
+			bracketCount--;
+			if(!ProcessSpecialOperator(EvalOperators::Bracket, opStack, outputQueue)) {
+				return false;
 			}
-			outputQueue.push_back(opStack.top());
-			opStack.pop();
 		} else if(token[0] == '{') {
+			braceCount++;
 			opStack.push(EvalOperators::Braces);
 			precedenceStack.push(0);
 		} else if(token[0] == '}') {
-			while(opStack.top() != EvalOperators::Braces) {
-				outputQueue.push_back(opStack.top());
-				opStack.pop();
+			braceCount--;
+			if(!ProcessSpecialOperator(EvalOperators::Braces, opStack, outputQueue)){
+				return false;
 			}
-			outputQueue.push_back(opStack.top());
-			opStack.pop();
 		} else {
 			outputQueue.push_back(std::stoi(token));
 		}
+	}
+
+	if(braceCount || bracketCount || parenthesisCount) {
+		//Mismatching number of brackets/braces/parenthesis
+		return false;
 	}
 
 	while(!opStack.empty()) {
 		outputQueue.push_back(opStack.top());
 		opStack.pop();
 	}
+
+	return true;
 }
 
 int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr)
@@ -318,8 +348,9 @@ ExpressionEvaluator::ExpressionEvaluator(Debugger* debugger)
 	_debugger = debugger;
 }
 
-int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr)
+int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr, bool& success)
 {
+	success = true;
 	vector<int> output;
 	vector<int> *outputQueue = nullptr;
 
@@ -335,14 +366,18 @@ int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &stat
 	if(outputQueue == nullptr && output.empty()) {
 		string fixedExp = expression;
 		fixedExp.erase(std::remove(fixedExp.begin(), fixedExp.end(), ' '), fixedExp.end());
-		ToRpn(fixedExp, output);
+		success = ToRpn(fixedExp, output);
 
-		if(_containsCustomLabels) {
-			outputQueue = &output;
+		if(success) {
+			if(_containsCustomLabels) {
+				outputQueue = &output;
+			} else {
+				LockHandler lock = _cacheLock.AcquireSafe();
+				_outputCache[expression] = output;
+				outputQueue = &_outputCache[expression];
+			}
 		} else {
-			LockHandler lock = _cacheLock.AcquireSafe();
-			_outputCache[expression] = output;
-			outputQueue = &_outputCache[expression];
+			return 0;
 		}
 	}
 
@@ -362,11 +397,16 @@ int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, int1
 int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr)
 {
 	try {
-		return PrivateEvaluate(expression, state, resultType, memoryValue, memoryAddr);
+		bool success;
+		int32_t result = PrivateEvaluate(expression, state, resultType, memoryValue, memoryAddr, success);
+		if(success) {
+			return result;
+		}
 	} catch(std::exception e) {
-		resultType = EvalResultType::Invalid;
-		return 0;
 	}
+	resultType = EvalResultType::Invalid;
+	return 0;
+
 }
 
 bool ExpressionEvaluator::Validate(string expression)
@@ -374,8 +414,9 @@ bool ExpressionEvaluator::Validate(string expression)
 	try {
 		DebugState state;
 		EvalResultType type;
-		PrivateEvaluate(expression, state, type, 0, 0);
-		return true;
+		bool success;
+		PrivateEvaluate(expression, state, type, 0, 0, success);
+		return success;
 	} catch(std::exception e) {
 		return false;
 	}

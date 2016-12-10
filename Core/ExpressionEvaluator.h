@@ -93,12 +93,12 @@ private:
 
 	bool IsOperator(string token, int &precedence, bool unaryOperator);
 	EvalOperators GetOperator(string token, bool unaryOperator);
-	int GetOperatorPrecendence(string token);
 	bool CheckSpecialTokens(string expression, size_t &pos, string &output);
 	string GetNextToken(string expression, size_t &pos);	
-	void ToRpn(string expression, vector<int> &outputQueue);
+	bool ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, vector<int> &outputQueue);
+	bool ToRpn(string expression, vector<int> &outputQueue);
 	int32_t EvaluateExpression(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr);
-	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr);
+	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr, bool &success);
 
 public:
 	ExpressionEvaluator(Debugger* debugger);
