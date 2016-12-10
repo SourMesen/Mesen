@@ -128,6 +128,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetRamPowerOnState(RamPowerOnState state);
 		[DllImport(DLLPath)] public static extern void SetMasterVolume(double volume);
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(AudioChannel channel, double volume);
+		[DllImport(DLLPath)] public static extern void SetChannelPanning(AudioChannel channel, double panning);
 		[DllImport(DLLPath)] public static extern void SetSampleRate(UInt32 sampleRate);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
 		[DllImport(DLLPath)] public static extern void SetStereoFilter(StereoFilter stereoFilter);

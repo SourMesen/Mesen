@@ -36,6 +36,18 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("Namco163Volume", trkNamco163Vol);
 			AddBinding("Sunsoft5bVolume", trkSunsoft5b);
 
+			AddBinding("Square1Panning", trkSquare1Pan);
+			AddBinding("Square2Panning", trkSquare2Pan);
+			AddBinding("TrianglePanning", trkTrianglePan);
+			AddBinding("NoisePanning", trkNoisePan);
+			AddBinding("DmcPanning", trkDmcPan);
+			AddBinding("FdsPanning", trkFdsPan);
+			AddBinding("Mmc5Panning", trkMmc5Pan);
+			AddBinding("Vrc6Panning", trkVrc6Pan);
+			AddBinding("Vrc7Panning", trkVrc7Pan);
+			AddBinding("Namco163Panning", trkNamcoPan);
+			AddBinding("Sunsoft5bPanning", trkSunsoftPan);
+
 			AddBinding("AudioLatency", nudLatency);
 			AddBinding("SampleRate", cboSampleRate);
 			AddBinding("AudioDevice", cboAudioDevice);
@@ -94,12 +106,6 @@ namespace Mesen.GUI.Forms.Config
 		{
 			picLatencyWarning.Visible = nudLatency.Value <= 30;
 			lblLatencyWarning.Visible = nudLatency.Value <= 30;
-		}
-
-		private void radStereoDisabled_CheckedChanged(object sender, EventArgs e)
-		{
-			chkCrossFeedEnabled.Enabled = !radStereoDisabled.Checked;
-			nudCrossFeedRatio.Enabled = !radStereoDisabled.Checked;
 		}
 	}
 }

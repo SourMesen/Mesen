@@ -9,6 +9,7 @@
 #include "StereoPanningFilter.h"
 #include "StereoDelayFilter.h"
 #include "ReverbFilter.h"
+#include "CrossFeedFilter.h"
 #include "WaveRecorder.h"
 
 class SoundMixer : public Snapshotable
@@ -25,30 +26,34 @@ private:
 
 	static IAudioDevice* AudioDevice;
 	static const uint32_t MaxSampleRate = 48000;
-	static const uint32_t MaxSamplesPerFrame = MaxSampleRate / 60 * 4; //x4 to allow CPU overclocking up to 10x
+	static const uint32_t MaxSamplesPerFrame = MaxSampleRate / 60 * 4 * 2; //x4 to allow CPU overclocking up to 10x, x2 for panning stereo
 	static const uint32_t MaxChannelCount = 11;
 	
+	CrossFeedFilter _crossFeedFilter;
 	LowPassFilter _lowPassFilter;
 	StereoPanningFilter _stereoPanning;
 	StereoDelayFilter _stereoDelay;
 	ReverbFilter _reverbFilter;
 
-	int16_t _previousOutput = 0;
+	int16_t _previousOutputLeft = 0;
+	int16_t _previousOutputRight = 0;
 
 	vector<uint32_t> _timestamps;
 	int16_t _channelOutput[MaxChannelCount][CycleLength];
 	int16_t _currentOutput[MaxChannelCount];
 
-	blip_t* _blipBuf;
+	blip_t* _blipBufLeft;
+	blip_t* _blipBufRight;
 	int16_t *_outputBuffer;
 	double _volumes[MaxChannelCount];
+	double _panning[MaxChannelCount];
 
 	NesModel _model;
 	uint32_t _sampleRate;
 	uint32_t _clockRate;
 
-	double GetChannelOutput(AudioChannel channel);
-	int16_t GetOutputVolume();
+	double GetChannelOutput(AudioChannel channel, bool forRightChannel);
+	int16_t GetOutputVolume(bool forRightChannel);
 	void EndFrame(uint32_t time);
 
 	void UpdateRates(bool forceUpdate);

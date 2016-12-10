@@ -50,7 +50,7 @@ namespace Mesen.GUI.Controls
 			get { return trackBar.Value; }
 			set
 			{
-				trackBar.Value = value;
+				trackBar.Value = Math.Max(trackBar.Minimum, Math.Min(value, trackBar.Maximum));
 				txtValue.Text = trackBar.Value.ToString();
 			}
 		}

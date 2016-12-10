@@ -26,6 +26,19 @@ namespace Mesen.GUI.Config
 		public UInt32 Vrc7Volume = 100;
 		public UInt32 Namco163Volume = 100;
 		public UInt32 Sunsoft5bVolume = 100;
+
+		public Int32 Square1Panning = 0;
+		public Int32 Square2Panning = 0;
+		public Int32 TrianglePanning = 0;
+		public Int32 NoisePanning = 0;
+		public Int32 DmcPanning = 0;
+		public Int32 FdsPanning = 0;
+		public Int32 Mmc5Panning = 0;
+		public Int32 Vrc6Panning = 0;
+		public Int32 Vrc7Panning = 0;
+		public Int32 Namco163Panning = 0;
+		public Int32 Sunsoft5bPanning = 0;
+
 		public UInt32 SampleRate = 44100;
 		public bool ReduceSoundInBackground = true;
 		public bool MuteSoundInBackground = false;
@@ -54,6 +67,11 @@ namespace Mesen.GUI.Config
 			}
 		}
 
+		static private double ConvertPanning(Int32 panning)
+		{
+			return (double)((panning + 100) / 200d);
+		}
+
 		static public void ApplyConfig()
 		{
 			AudioInfo audioInfo = ConfigManager.Config.AudioInfo;
@@ -71,6 +89,19 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetChannelVolume(AudioChannel.VRC7, ConvertVolume(audioInfo.Vrc7Volume));
 			InteropEmu.SetChannelVolume(AudioChannel.Namco163, ConvertVolume(audioInfo.Namco163Volume));
 			InteropEmu.SetChannelVolume(AudioChannel.Sunsoft5B, ConvertVolume(audioInfo.Sunsoft5bVolume));
+
+			InteropEmu.SetChannelPanning(AudioChannel.Square1, ConvertPanning(audioInfo.Square1Panning));
+			InteropEmu.SetChannelPanning(AudioChannel.Square2, ConvertPanning(audioInfo.Square2Panning));
+			InteropEmu.SetChannelPanning(AudioChannel.Triangle, ConvertPanning(audioInfo.TrianglePanning));
+			InteropEmu.SetChannelPanning(AudioChannel.Noise, ConvertPanning(audioInfo.NoisePanning));
+			InteropEmu.SetChannelPanning(AudioChannel.DMC, ConvertPanning(audioInfo.DmcPanning));
+			InteropEmu.SetChannelPanning(AudioChannel.FDS, ConvertPanning(audioInfo.FdsPanning));
+			InteropEmu.SetChannelPanning(AudioChannel.MMC5, ConvertPanning(audioInfo.Mmc5Panning));
+			InteropEmu.SetChannelPanning(AudioChannel.VRC6, ConvertPanning(audioInfo.Vrc6Panning));
+			InteropEmu.SetChannelPanning(AudioChannel.VRC7, ConvertPanning(audioInfo.Vrc7Panning));
+			InteropEmu.SetChannelPanning(AudioChannel.Namco163, ConvertPanning(audioInfo.Namco163Panning));
+			InteropEmu.SetChannelPanning(AudioChannel.Sunsoft5B, ConvertPanning(audioInfo.Sunsoft5bPanning));
+
 			InteropEmu.SetSampleRate(audioInfo.SampleRate);
 
 			InteropEmu.SetFlag(EmulationFlags.MuteSoundInBackground, audioInfo.MuteSoundInBackground);

@@ -2,7 +2,6 @@
 #include "SoundMixer.h"
 #include "APU.h"
 #include "CPU.h"
-#include "CrossFeedFilter.h"
 
 IAudioDevice* SoundMixer::AudioDevice = nullptr;
 unique_ptr<WaveRecorder> SoundMixer::_waveRecorder;
@@ -13,7 +12,8 @@ uint32_t SoundMixer::_muteFrameCount;
 SoundMixer::SoundMixer()
 {
 	_outputBuffer = new int16_t[SoundMixer::MaxSamplesPerFrame];
-	_blipBuf = blip_new(SoundMixer::MaxSamplesPerFrame);
+	_blipBufLeft = blip_new(SoundMixer::MaxSamplesPerFrame);
+	_blipBufRight = blip_new(SoundMixer::MaxSamplesPerFrame);
 	_sampleRate = EmulationSettings::GetSampleRate();
 	_model = NesModel::NTSC;
 
@@ -25,7 +25,8 @@ SoundMixer::~SoundMixer()
 	delete[] _outputBuffer;
 	_outputBuffer = nullptr;
 
-	blip_delete(_blipBuf);
+	blip_delete(_blipBufLeft);
+	blip_delete(_blipBufRight);
 }
 
 void SoundMixer::StreamState(bool saving)
@@ -38,7 +39,7 @@ void SoundMixer::StreamState(bool saving)
 	}
 
 	ArrayInfo<int16_t> currentOutput = { _currentOutput, MaxChannelCount };
-	Stream(_previousOutput, currentOutput);
+	Stream(_previousOutputLeft, currentOutput, _previousOutputRight);
 }
 
 void SoundMixer::RegisterAudioDevice(IAudioDevice *audioDevice)
@@ -62,13 +63,16 @@ void SoundMixer::Reset()
 	_fadeRatio = 1.0;
 	_muteFrameCount = 0;
 
-	_previousOutput = 0;
-	blip_clear(_blipBuf);
+	_previousOutputLeft = 0;
+	_previousOutputRight = 0;
+	blip_clear(_blipBufLeft);
+	blip_clear(_blipBufRight);
 
 	_timestamps.clear();
 
 	for(int i = 0; i < MaxChannelCount; i++) {
-		_volumes[0] = 0;
+		_volumes[i] = 0;
+		_panning[i] = 0;
 	}
 	memset(_channelOutput, 0, sizeof(_channelOutput));
 	memset(_currentOutput, 0, sizeof(_currentOutput));
@@ -77,7 +81,10 @@ void SoundMixer::Reset()
 void SoundMixer::PlayAudioBuffer(uint32_t time)
 {
 	EndFrame(time);
-	size_t sampleCount = blip_read_samples(_blipBuf, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 0);
+
+	size_t sampleCount = blip_read_samples(_blipBufLeft, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 1);
+	blip_read_samples(_blipBufRight, _outputBuffer + 1, SoundMixer::MaxSamplesPerFrame, 1);
+
 	if(SoundMixer::AudioDevice && !EmulationSettings::IsPaused()) {
 		//Apply low pass filter/volume reduction when in background (based on options)
 		if(!_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled) && EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
@@ -88,36 +95,26 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 			}
 		}
 
-		int16_t* soundBuffer = _outputBuffer;
 		if(EmulationSettings::GetReverbStrength() > 0) {
-			soundBuffer = _reverbFilter.ApplyFilter(soundBuffer, sampleCount, _sampleRate, EmulationSettings::GetReverbStrength(), EmulationSettings::GetReverbDelay());
+			_reverbFilter.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, EmulationSettings::GetReverbStrength(), EmulationSettings::GetReverbDelay());
 		} else {
 			_reverbFilter.ResetFilter();
 		}
 
-		bool isStereo = false;
 		switch(EmulationSettings::GetStereoFilter()) {
-			case StereoFilter::Delay:
-				soundBuffer = _stereoDelay.ApplyFilter(soundBuffer, sampleCount, _sampleRate);
-				isStereo = true;
-				break;
-
-			case StereoFilter::Panning:
-				soundBuffer = _stereoPanning.ApplyFilter(soundBuffer, sampleCount);
-				isStereo = true;
-				break;
+			case StereoFilter::Delay: _stereoDelay.ApplyFilter(_outputBuffer, sampleCount, _sampleRate); break;
+			case StereoFilter::Panning: _stereoPanning.ApplyFilter(_outputBuffer, sampleCount); break;
 		}
 
-		if(isStereo && EmulationSettings::GetCrossFeedRatio() > 0) {
-			CrossFeedFilter filter;
-			filter.ApplyFilter(soundBuffer, sampleCount, EmulationSettings::GetCrossFeedRatio());
+		if(EmulationSettings::GetCrossFeedRatio() > 0) {
+			_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, EmulationSettings::GetCrossFeedRatio());
 		}
 
-		SoundMixer::AudioDevice->PlayBuffer(soundBuffer, (uint32_t)sampleCount, _sampleRate, isStereo);
+		SoundMixer::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true);
 		if(_waveRecorder) {
 			auto lock = _waveRecorderLock.AcquireSafe();
 			if(_waveRecorder) {
-				if(!_waveRecorder->WriteSamples(soundBuffer, (uint32_t)sampleCount, _sampleRate, isStereo)) {
+				if(!_waveRecorder->WriteSamples(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true)) {
 					_waveRecorder.reset();
 				}
 			}
@@ -147,30 +144,35 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 
 	if(_clockRate != newRate || forceUpdate) {
 		_clockRate = newRate;
-		blip_set_rates(_blipBuf, _clockRate, _sampleRate);
+		blip_set_rates(_blipBufLeft, _clockRate, _sampleRate);
+		blip_set_rates(_blipBufRight, _clockRate, _sampleRate);
 	}
 }
 
-double SoundMixer::GetChannelOutput(AudioChannel channel)
+double SoundMixer::GetChannelOutput(AudioChannel channel, bool forRightChannel)
 {
-	return _currentOutput[(int)channel] * _volumes[(int)channel];
+	if(forRightChannel) {
+		return _currentOutput[(int)channel] * _volumes[(int)channel] * _panning[(int)channel];
+	} else {
+		return _currentOutput[(int)channel] * _volumes[(int)channel] * (1.0 - _panning[(int)channel]);
+	}
 }
 
-int16_t SoundMixer::GetOutputVolume()
+int16_t SoundMixer::GetOutputVolume(bool forRightChannel)
 {
-	double squareOutput = GetChannelOutput(AudioChannel::Square1) + GetChannelOutput(AudioChannel::Square2);
-	double tndOutput = 3 * GetChannelOutput(AudioChannel::Triangle) + 2 * GetChannelOutput(AudioChannel::Noise) + GetChannelOutput(AudioChannel::DMC);
+	double squareOutput = GetChannelOutput(AudioChannel::Square1, forRightChannel) + GetChannelOutput(AudioChannel::Square2, forRightChannel);
+	double tndOutput = 3 * GetChannelOutput(AudioChannel::Triangle, forRightChannel) + 2 * GetChannelOutput(AudioChannel::Noise, forRightChannel) + GetChannelOutput(AudioChannel::DMC, forRightChannel);
 
 	uint16_t squareVolume = (uint16_t)(95.52 / (8128.0 / squareOutput + 100.0) * 5000);
 	uint16_t tndVolume = (uint16_t)(163.67 / (24329.0 / tndOutput + 100.0) * 5000);
 	
 	return (int16_t)(squareVolume + tndVolume +
-		GetChannelOutput(AudioChannel::FDS) * 20 +
-		GetChannelOutput(AudioChannel::MMC5) * 40 +
-		GetChannelOutput(AudioChannel::Namco163) * 20 +
-		GetChannelOutput(AudioChannel::Sunsoft5B) * 15 +
-		GetChannelOutput(AudioChannel::VRC6) * 75 + 
-		GetChannelOutput(AudioChannel::VRC7));
+		GetChannelOutput(AudioChannel::FDS, forRightChannel) * 20 +
+		GetChannelOutput(AudioChannel::MMC5, forRightChannel) * 40 +
+		GetChannelOutput(AudioChannel::Namco163, forRightChannel) * 20 +
+		GetChannelOutput(AudioChannel::Sunsoft5B, forRightChannel) * 15 +
+		GetChannelOutput(AudioChannel::VRC6, forRightChannel) * 75 +
+		GetChannelOutput(AudioChannel::VRC7, forRightChannel));
 }
 
 void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int16_t delta)
@@ -188,7 +190,6 @@ void SoundMixer::EndFrame(uint32_t time)
 	_timestamps.erase(std::unique(_timestamps.begin(), _timestamps.end()), _timestamps.end());
 
 	bool muteFrame = true;
-	int16_t originalOutput = _previousOutput;
 	for(size_t i = 0, len = _timestamps.size(); i < len; i++) {
 		uint32_t stamp = _timestamps[i];
 		for(int j = 0; j < MaxChannelCount; j++) {
@@ -200,13 +201,17 @@ void SoundMixer::EndFrame(uint32_t time)
 			_currentOutput[j] += _channelOutput[j][stamp];
 		}
 
-		int16_t currentOutput = GetOutputVolume();
-		blip_add_delta(_blipBuf, stamp, (int)((currentOutput - _previousOutput) * masterVolume * _fadeRatio));
+		int16_t currentOutput = GetOutputVolume(false);
+		blip_add_delta(_blipBufLeft, stamp, (int)((currentOutput - _previousOutputLeft) * masterVolume * _fadeRatio));
+		_previousOutputLeft = currentOutput;
 
-		_previousOutput = currentOutput;
+		currentOutput = GetOutputVolume(true);
+		blip_add_delta(_blipBufRight, stamp, (int)((currentOutput - _previousOutputRight) * masterVolume * _fadeRatio));
+		_previousOutputRight = currentOutput;
 	}
 
-	blip_end_frame(_blipBuf, time);
+	blip_end_frame(_blipBufLeft, time);
+	blip_end_frame(_blipBufRight, time);
 
 	if(muteFrame) {
 		_muteFrameCount++;
@@ -217,6 +222,7 @@ void SoundMixer::EndFrame(uint32_t time)
 	//Reset everything
 	for(int i = 0; i < MaxChannelCount; i++) {
 		_volumes[i] = EmulationSettings::GetChannelVolume((AudioChannel)i);
+		_panning[i] = EmulationSettings::GetChannelPanning((AudioChannel)i);
 	}
 
 	_timestamps.clear();
@@ -226,7 +232,7 @@ void SoundMixer::EndFrame(uint32_t time)
 void SoundMixer::StartRecording(string filepath)
 {
 	auto lock = _waveRecorderLock.AcquireSafe();
-	_waveRecorder.reset(new WaveRecorder(filepath, EmulationSettings::GetSampleRate(), EmulationSettings::GetStereoFilter() != StereoFilter::None));
+	_waveRecorder.reset(new WaveRecorder(filepath, EmulationSettings::GetSampleRate(), true));
 }
 
 void SoundMixer::StopRecording()

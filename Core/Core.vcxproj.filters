@@ -523,9 +523,6 @@
     <ClInclude Include="ReverbFilter.h">
       <Filter>Nes\APU\Filters</Filter>
     </ClInclude>
-    <ClInclude Include="BaseSoundFilter.h">
-      <Filter>Nes\APU\Filters</Filter>
-    </ClInclude>
     <ClInclude Include="TaitoX1005.h">
       <Filter>Nes\Mappers\Taito</Filter>
     </ClInclude>
@@ -1234,9 +1231,6 @@
       <Filter>Nes\APU\Filters</Filter>
     </ClCompile>
     <ClCompile Include="StereoDelayFilter.cpp">
-      <Filter>Nes\APU\Filters</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseSoundFilter.cpp">
       <Filter>Nes\APU\Filters</Filter>
     </ClCompile>
     <ClCompile Include="ReverbFilter.cpp">

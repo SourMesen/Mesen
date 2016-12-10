@@ -10,15 +10,14 @@ void StereoPanningFilter::UpdateFactors()
 	_rightChannelFactor = _baseFactor * (std::cos(angle) + std::sin(angle));
 }
 
-int16_t* StereoPanningFilter::ApplyFilter(int16_t* monoBuffer, size_t sampleCount)
+void StereoPanningFilter::ApplyFilter(int16_t* stereoBuffer, size_t sampleCount)
 {
 	UpdateFactors();
-	UpdateBufferSize(sampleCount, true);
 
-	for(size_t i = 0; i < sampleCount; i++) {
-		_filterBuffer[i * 2] = (int16_t)(_leftChannelFactor * (double)monoBuffer[i]);
-		_filterBuffer[i * 2 + 1] = (int16_t)(_rightChannelFactor * (double)monoBuffer[i]);
+	for(size_t i = 0; i < sampleCount * 2; i+=2) {
+		int16_t leftSample = stereoBuffer[i];
+		int16_t rightSample = stereoBuffer[i+1];
+		stereoBuffer[i] = (int16_t)((_leftChannelFactor * leftSample + _leftChannelFactor * rightSample) / 2);
+		stereoBuffer[i+1] = (int16_t)((_rightChannelFactor * rightSample + _rightChannelFactor * leftSample) / 2);
 	}
-
-	return _filterBuffer;
 }

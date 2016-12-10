@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "BaseSoundFilter.h"
 #include <deque>
 
 class ReverbDelay
@@ -29,7 +28,7 @@ public:
 	void AddSamples(int16_t* buffer, size_t sampleCount)
 	{
 		for(size_t i = 0; i < sampleCount; i++) {
-			_samples.push_back(buffer[i]);
+			_samples.push_back(buffer[i*2]);
 		}
 	}
 
@@ -39,19 +38,19 @@ public:
 			size_t samplesToInsert = std::min<size_t>(_samples.size() - _delay, sampleCount);
 
 			for(size_t j = sampleCount - samplesToInsert; j < sampleCount; j++) {
-				buffer[j] += (int16_t)((double)_samples.front() * _decay);
+				buffer[j*2] += (int16_t)((double)_samples.front() * _decay);
 				_samples.pop_front();
 			}
 		}
 	}
 };
 
-class ReverbFilter : public BaseSoundFilter
+class ReverbFilter
 {
 private:
-	ReverbDelay _delay[5];
+	ReverbDelay _delay[10];
 
 public:
 	void ResetFilter();
-	int16_t* ApplyFilter(int16_t* monoBuffer, size_t sampleCount, uint32_t sampleRate, double reverbStrength, double reverbDelay);
+	void ApplyFilter(int16_t* stereoBuffer, size_t sampleCount, uint32_t sampleRate, double reverbStrength, double reverbDelay);
 };

@@ -413,7 +413,6 @@
     <ClInclude Include="BaseExpansionAudio.h" />
     <ClInclude Include="BaseFdsChannel.h" />
     <ClInclude Include="BaseMapper.h" />
-    <ClInclude Include="BaseSoundFilter.h" />
     <ClInclude Include="Bb.h" />
     <ClInclude Include="BF9096.h" />
     <ClInclude Include="BF909x.h" />
@@ -747,7 +746,6 @@
     <ClCompile Include="AutoSaveManager.cpp" />
     <ClCompile Include="BaseControlDevice.cpp" />
     <ClCompile Include="BaseMapper.cpp" />
-    <ClCompile Include="BaseSoundFilter.cpp" />
     <ClCompile Include="Breakpoint.cpp" />
     <ClCompile Include="CheatManager.cpp" />
     <ClCompile Include="CodeDataLogger.cpp" />

@@ -13,6 +13,7 @@ uint32_t EmulationSettings::_flags = 0;
 
 uint32_t EmulationSettings::_audioLatency = 20000;
 double EmulationSettings::_channelVolume[11] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+double EmulationSettings::_channelPanning[11] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 double EmulationSettings::_masterVolume = 1.0;
 uint32_t EmulationSettings::_sampleRate = 44100;
 StereoFilter EmulationSettings::_stereoFilter = StereoFilter::None;

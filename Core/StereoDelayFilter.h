@@ -3,14 +3,14 @@
 #include <deque>
 #include <algorithm>
 #include "EmulationSettings.h"
-#include "BaseSoundFilter.h"
 
-class StereoDelayFilter : public BaseSoundFilter
+class StereoDelayFilter
 {
 private:
-	std::deque<int16_t> _delayedSamples;
+	std::deque<int16_t> _delayedSamplesLeft;
+	std::deque<int16_t> _delayedSamplesRight;
 	size_t _lastDelay = 0;
 	
 public:
-	int16_t* ApplyFilter(int16_t* monoBuffer, size_t sampleCount, uint32_t sampleRate);
+	void ApplyFilter(int16_t* stereoBuffer, size_t sampleCount, uint32_t sampleRate);
 };

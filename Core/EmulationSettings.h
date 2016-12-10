@@ -301,6 +301,7 @@ private:
 
 	static uint32_t _audioLatency;
 	static double _channelVolume[11];
+	static double _channelPanning[11];
 	static double _masterVolume;
 	static uint32_t _sampleRate;
 	static StereoFilter _stereoFilter;
@@ -427,6 +428,11 @@ public:
 	static void SetMasterVolume(double volume)
 	{
 		_masterVolume = volume;
+	}
+
+	static void SetChannelPanning(AudioChannel channel, double panning)
+	{
+		_channelPanning[(int)channel] = panning;
 	}
 
 	static void SetSampleRate(uint32_t sampleRate)
@@ -645,6 +651,11 @@ public:
 	static double GetMasterVolume()
 	{
 		return _masterVolume;
+	}
+
+	static double GetChannelPanning(AudioChannel channel)
+	{
+		return _channelPanning[(int)channel];
 	}
 
 	static uint32_t GetAudioLatency()
