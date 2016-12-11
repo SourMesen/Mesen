@@ -62,6 +62,9 @@ namespace Mesen.GUI
 				if(Directory.Exists(Path.Combine(ConfigManager.HomeFolder, "WinMesen"))) {
 					Directory.Delete(Path.Combine(ConfigManager.HomeFolder, "WinMesen"), true);
 				}
+				if(File.Exists(Path.Combine(ConfigManager.HomeFolder, "WinMesen.dll"))) {
+					File.Delete(Path.Combine(ConfigManager.HomeFolder, "WinMesen.dll"));
+				}				
 				if(File.Exists(Path.Combine(ConfigManager.HomeFolder, "NesNtsc.dll"))) {
 					File.Delete(Path.Combine(ConfigManager.HomeFolder, "NesNtsc.dll"));
 				}
@@ -84,7 +87,8 @@ namespace Mesen.GUI
 			string suffix = IntPtr.Size == 4 ? ".x86" : ".x64";
 			foreach(ZipArchiveEntry entry in zip.Entries) {
 				if(entry.Name.Contains(suffix)) {
-					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
+					string baseFolder = Program.IsMono ? Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) : ConfigManager.HomeFolder; 
+					string outputFilename = Path.Combine(baseFolder, entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name == "MesenUpdater.exe" || entry.Name == "MesenDB.txt") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));

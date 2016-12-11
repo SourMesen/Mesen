@@ -21,7 +21,7 @@ namespace Mesen.GUI
 			} catch {
 			}
 
-			if(!File.Exists("WinMesen.dll")) {
+			if(!File.Exists("MesenCore.dll") && !File.Exists("libMesenCore.dll")) {
 				MesenMsgBox.Show("UnableToStartMissingFiles", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			} else {
 				if(MesenMsgBox.Show("UnableToStartMissingDependencies", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {

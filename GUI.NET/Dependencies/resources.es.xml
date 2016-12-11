@@ -512,7 +512,7 @@
     <Message ID="SelectRomIps">Elija la ROM que corresponde al archivo IPS seleccionado.</Message>
     <Message ID="UnableToDownload">No se puede descargar el archivo. Compruebe su conexión a Internet e inténtelo de nuevo.&#xA;&#xA;Detalles del error:</Message>
     <Message ID="UnableToStartMissingDependencies">Mesen debe descargar e instalar el paquete redistribuible de Visual C++ de Microsoft Visual Studio 2015 antes de poder continuar. ¿Le gustaría instalarlo ahora?</Message>
-    <Message ID="UnableToStartMissingFiles">Mesen no puede iniciar debido a que faltan archivos.&#xA;&#xA;Error: No se encuentra el archivo WinMesen.dll.</Message>
+    <Message ID="UnableToStartMissingFiles">Mesen no puede iniciar debido a que faltan archivos.&#xA;&#xA;Error: No se encuentra el archivo MesenCore.dll.</Message>
     <Message ID="UnexpectedError">Se ha producido un error inesperado.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">Error en la descarga - el archivo parece estar dañado. Por favor, visite el sitio web de Mesen para descargar manualmente la versión más reciente.</Message>
     <Message ID="UpgradeSuccess">La actualización se ha realizado con éxito.</Message>

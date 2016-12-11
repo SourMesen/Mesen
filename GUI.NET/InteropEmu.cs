@@ -14,7 +14,7 @@ namespace Mesen.GUI
 {
 	public class InteropEmu
 	{
-		private const string DLLPath = "WinMesen.dll";
+		private const string DLLPath = "MesenCore.dll";
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool TestDll();
 
 		[DllImport(DLLPath, EntryPoint = "GetMesenVersion")] private static extern UInt32 GetMesenVersionWrapper();

@@ -526,7 +526,7 @@
     <Message ID="SelectRomIps">Choisissez un ROM qui correspond au fichier IPS choisi.</Message>
     <Message ID="UnableToDownload">Impossible de télécharger le fichier. Vérifier votre connexion internet et essayez à nouveau.&#xA;&#xA;Détails de l'erreur:</Message>
     <Message ID="UnableToStartMissingDependencies">Mesen doit télécharger et installer le package Redistribuable Visual C++ pour Microsoft Visual Studio 2015 avant de pouvoir continuer. Voulez-vous l'installer maintenant?"</Message>
-    <Message ID="UnableToStartMissingFiles">Mesen est incapable de démarrer puisqu'il manque des fichiers.&#xA;&#xA;Erreur: Le fichier WinMesen.dll est introuvable.</Message>
+    <Message ID="UnableToStartMissingFiles">Mesen est incapable de démarrer puisqu'il manque des fichiers.&#xA;&#xA;Erreur: Le fichier MesenCore.dll est introuvable.</Message>
     <Message ID="UnexpectedError">Une erreur inattendue s'est produite.&#xA;&#xA;Détails de l'erreur :&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">Le téléchargement a échoué - le fichier semble être corrompu. Veuillez visiter le site de Mesen pour télécharger manuellement la version la plus récente.</Message>
     <Message ID="UpgradeSuccess">La mise-à-jour s'est faite avec succès.</Message>

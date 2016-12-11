@@ -12,7 +12,6 @@ struct KeyDefinition {
 class LinuxKeyManager : public IKeyManager
 {
 private:
-	int _numKeys;
 	vector<uint32_t> _keyState;
 	std::unordered_map<uint32_t, string> _keyNames;
 	std::unordered_map<string, uint32_t> _keyCodes;	

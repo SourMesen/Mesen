@@ -195,11 +195,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationClient" />
     <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Zlib.Portable.dll</HintPath>
@@ -222,6 +220,9 @@
     <Compile Include="Config\ConfigManager.cs" />
     <Compile Include="Config\ServerInfo.cs" />
     <Compile Include="Config\VsConfigInfo.cs" />
+    <Compile Include="Controls\BaseControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>	 
     <Compile Include="Controls\ctrlHorizontalTrackbar.cs">
       <SubType>UserControl</SubType>
     </Compile>
