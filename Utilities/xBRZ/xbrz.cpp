@@ -13,7 +13,6 @@
 // * do so, delete this exception statement from your version.                *
 // ****************************************************************************
 
-#include "stdafx.h"
 #include "../stdafx.h"
 #include "xbrz.h"
 #include <cassert>

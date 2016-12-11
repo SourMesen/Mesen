@@ -120,7 +120,6 @@ private:
 		StreamElement<T>(value);
 	}
 
-	template<>
 	void InternalStream(SnapshotInfo &info)
 	{
 		if(info.Entity != nullptr) {

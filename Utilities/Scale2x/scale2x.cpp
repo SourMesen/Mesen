@@ -22,9 +22,6 @@
  * http://www.scale2x.it/
  */
 
-#ifdef _WIN32
-#include "stdafx.h"
-#endif
 #include "../stdafx.h"
 
 #if HAVE_CONFIG_H

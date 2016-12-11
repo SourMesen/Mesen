@@ -76,7 +76,7 @@ private:
 			return false;
 		}
 
-		NsfHeader& header = romData.NsfHeader;
+		NsfHeader& header = romData.NsfInfo;
 
 		uint32_t length;
 		Read(data, length);
@@ -175,7 +175,7 @@ public:
 	RomData LoadRom(vector<uint8_t>& romFile)
 	{
 		RomData romData;
-		NsfHeader &header = romData.NsfHeader;
+		NsfHeader &header = romData.NsfInfo;
 
 		InitHeader(header);
 
