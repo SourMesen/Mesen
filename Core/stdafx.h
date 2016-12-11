@@ -20,7 +20,7 @@
 #include "../Utilities/UTF8Util.h"
 
 #ifdef __GNUC__
-#define __forceinline inline
+#define __forceinline
 #endif
 
 using std::vector;

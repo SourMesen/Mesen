@@ -23,9 +23,9 @@
 	#include "../Windows/SoundManager.h"
 	#include "../Windows/WindowsKeyManager.h"
 #else
-	#include "../SDL/SdlRenderer.h"
-	#include "../SDL/SdlSoundManager.h"
-	#include "../SDL/SdlKeyManager.h"
+	#include "../Linux/SdlRenderer.h"
+	#include "../Linux/SdlSoundManager.h"
+	#include "../Linux/LinuxKeyManager.h"
 #endif
 
 IRenderingDevice *_renderer = nullptr;
@@ -98,7 +98,7 @@ namespace InteropEmu {
 					#ifdef _WIN32
 						_keyManager = new WindowsKeyManager((HWND)_windowHandle);
 					#else 
-						_keyManager = new SdlKeyManager();
+						_keyManager = new LinuxKeyManager();
 					#endif				
 					
 					ControlManager::RegisterKeyManager(_keyManager);

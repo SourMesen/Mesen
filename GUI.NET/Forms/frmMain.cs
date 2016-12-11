@@ -9,7 +9,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Automation;
 using System.Windows.Forms;
 using System.Xml;
 using Mesen.GUI.Config;
@@ -699,7 +698,6 @@ namespace Mesen.GUI.Forms
 		bool IMessageFilter.PreFilterMessage(ref Message m)
 		{
 			if(m.Msg == WM_KEYUP) {
-				int virtualKeyCode = (Int32)m.WParam;
 				int scanCode = (Int32)(((Int64)m.LParam & 0x1FF0000) >> 16);
 				InteropEmu.SetKeyState(scanCode, false);
 			}
@@ -710,7 +708,6 @@ namespace Mesen.GUI.Forms
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if(msg.Msg == WM_KEYDOWN) {
-				int virtualKeyCode = (Int32)((Int64)msg.WParam & 0xFF);
 				int scanCode = (Int32)(((Int64)msg.LParam & 0x1FF0000) >> 16);
 				InteropEmu.SetKeyState(scanCode, true);
 			}
@@ -1346,10 +1343,7 @@ namespace Mesen.GUI.Forms
 			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 			if(File.Exists(files[0])) {
 				LoadFile(files[0]);
-				AutomationElement element = AutomationElement.FromHandle(System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle);
-				if(element != null) {
-					element.SetFocus();
-				}
+				this.Activate();
 			}
 		}
 
