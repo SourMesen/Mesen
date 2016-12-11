@@ -18,7 +18,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 	romData.IsNes20Header = (header.GetRomHeaderVersion() == RomHeaderVersion::Nes2_0);
 	romData.MapperID = header.GetMapperID();
 	romData.SubMapperID = header.GetSubMapper();
-	romData.MirroringType = header.GetMirroringType();
+	romData.Mirroring = header.GetMirroringType();
 	romData.HasBattery = header.HasBattery();
 	if(header.IsPalRom()) {
 		romData.System = GameSystem::NesPal;
@@ -69,7 +69,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 		MessageManager::Log("[iNes] Save RAM: " + std::to_string(romData.SaveRamSize / 1024) + " KB");
 	}
 
-	MessageManager::Log("[iNes] Mirroring: " + string(romData.MirroringType == MirroringType::Horizontal ? "Horizontal" : romData.MirroringType == MirroringType::Vertical ? "Vertical" : "Four Screens"));
+	MessageManager::Log("[iNes] Mirroring: " + string(romData.Mirroring == MirroringType::Horizontal ? "Horizontal" : romData.Mirroring == MirroringType::Vertical ? "Vertical" : "Four Screens"));
 	MessageManager::Log("[iNes] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
 	if(romData.HasTrainer) {
 		MessageManager::Log("[iNes] Trainer: Yes");

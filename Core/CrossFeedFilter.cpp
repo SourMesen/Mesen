@@ -3,7 +3,7 @@
 
 void CrossFeedFilter::ApplyFilter(int16_t *stereoBuffer, size_t sampleCount, int ratio)
 {
-	for(int i = 0; i < sampleCount; i++) {
+	for(size_t i = 0; i < sampleCount; i++) {
 		int16_t leftSample = stereoBuffer[0];
 		int16_t rightSample = stereoBuffer[1];
 

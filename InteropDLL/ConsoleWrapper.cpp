@@ -15,15 +15,24 @@
 #include "../Core/SoundMixer.h"
 #include "../Core/RomLoader.h"
 #include "../Core/NsfMapper.h"
-#include "../Windows/Renderer.h"
-#include "../Windows/SoundManager.h"
-#include "../Windows/WindowsKeyManager.h"
+#include "../Core/IRenderingDevice.h"
+#include "../Core/IAudioDevice.h"
 
-NES::Renderer *_renderer = nullptr;
-SoundManager *_soundManager = nullptr;
+#ifdef WIN32
+	#include "../Windows/Renderer.h"
+	#include "../Windows/SoundManager.h"
+	#include "../Windows/WindowsKeyManager.h"
+#else
+	#include "../SDL/SdlRenderer.h"
+	#include "../SDL/SdlSoundManager.h"
+	#include "../SDL/SdlKeyManager.h"
+#endif
+
+IRenderingDevice *_renderer = nullptr;
+IAudioDevice *_soundManager = nullptr;
 IKeyManager *_keyManager = nullptr;
-HWND _windowHandle = nullptr;
-HWND _viewerHandle = nullptr;
+void*  _windowHandle = nullptr;
+void* _viewerHandle = nullptr;
 string _returnString;
 string _logString;
 AutoRomTest *_autoRomTest = nullptr;
@@ -61,24 +70,37 @@ namespace InteropEmu {
 
 		DllExport uint32_t __stdcall GetMesenVersion() { return EmulationSettings::GetMesenVersion(); }
 
-		DllExport void __stdcall InitializeEmu(const char* homeFolder, HWND windowHandle, HWND dxViewerHandle, bool noAudio, bool noVideo, bool noInput)
+		DllExport void __stdcall InitializeEmu(const char* homeFolder, void *windowHandle, void *viewerHandle, bool noAudio, bool noVideo, bool noInput)
 		{
 			FolderUtilities::SetHomeFolder(homeFolder);
 
-			if(windowHandle != nullptr && dxViewerHandle != nullptr) {
+			if(windowHandle != nullptr && viewerHandle != nullptr) {
 				_windowHandle = windowHandle;
-				_viewerHandle = dxViewerHandle;
+				_viewerHandle = viewerHandle;
 
 				if(!noVideo) {
-					_renderer = new NES::Renderer(_viewerHandle);
+					#ifdef _WIN32
+						_renderer = new NES::Renderer((HWND)_viewerHandle);
+					#else 
+						_renderer = new SdlRenderer(_viewerHandle);
+					#endif
 				} 
 
 				if(!noAudio) {
-					_soundManager = new SoundManager(_windowHandle);
+					#ifdef _WIN32
+						_soundManager = new SoundManager((HWND)_windowHandle);
+					#else
+						_soundManager = new SdlSoundManager(); 
+					#endif
 				}
 
 				if(!noInput) {
-					_keyManager = new WindowsKeyManager(_windowHandle);
+					#ifdef _WIN32
+						_keyManager = new WindowsKeyManager((HWND)_windowHandle);
+					#else 
+						_keyManager = new SdlKeyManager();
+					#endif				
+					
 					ControlManager::RegisterKeyManager(_keyManager);
 				}
 			}

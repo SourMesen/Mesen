@@ -1,4 +1,3 @@
-#pragma once
 #include "stdafx.h"
 #include "RomData.h"
 #include "MessageManager.h"
@@ -293,6 +292,6 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 	romData.HasBattery |= info.HasBattery;
 
 	if(!info.Mirroring.empty()) {
-		romData.MirroringType = info.Mirroring.compare("h") == 0 ? MirroringType::Horizontal : MirroringType::Vertical;
+		romData.Mirroring = info.Mirroring.compare("h") == 0 ? MirroringType::Horizontal : MirroringType::Vertical;
 	}
 }

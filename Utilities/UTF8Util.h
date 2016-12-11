@@ -3,14 +3,14 @@
 #include <fstream>
 
 namespace utf8 {
-#ifdef _WIN32
 	class utf8
 	{
 	public:
 		static std::wstring decode(const std::string &str);
 		static std::string encode(const std::wstring &wstr);
 	};
-
+		
+#ifdef _WIN32
 	class ifstream : public std::ifstream
 	{
 	public:

@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <cmath>
 
 enum class MirroringType
 {
@@ -273,7 +274,7 @@ struct RomData
 	GameSystem System = GameSystem::Unknown;
 	bool HasBattery = false;
 	bool HasTrainer = false;
-	MirroringType MirroringType = MirroringType::Horizontal;
+	MirroringType Mirroring = MirroringType::Horizontal;
 	
 	int32_t ChrRamSize = -1;
 	int32_t SaveChrRamSize = -1;
@@ -294,6 +295,6 @@ struct RomData
 	bool Error = false;
 
 	NESHeader NesHeader;
-	NsfHeader NsfHeader;
+	NsfHeader NsfInfo;
 	GameInfo DatabaseInfo;
 };

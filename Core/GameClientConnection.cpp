@@ -16,6 +16,10 @@
 
 GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData) : GameConnection(socket, connectionData)
 {
+	_shutdown = false;
+	_enableControllers = false;
+	_minimumQueueSize = 3;
+
 	MessageManager::RegisterNotificationListener(this);
 	MessageManager::DisplayMessage("NetPlay", "ConnectedToServer");
 	SendHandshake();

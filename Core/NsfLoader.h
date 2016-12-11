@@ -25,7 +25,7 @@ private:
 protected:
 	void InitializeFromHeader(RomData& romData)
 	{
-		NsfHeader &header = romData.NsfHeader;
+		NsfHeader &header = romData.NsfInfo;
 
 		romData.MapperID = MapperFactory::NsfMapperID;
 
@@ -121,7 +121,7 @@ public:
 	RomData LoadRom(vector<uint8_t>& romFile)
 	{
 		RomData romData;
-		NsfHeader &header = romData.NsfHeader;
+		NsfHeader &header = romData.NsfInfo;
 
 		InitHeader(header);
 

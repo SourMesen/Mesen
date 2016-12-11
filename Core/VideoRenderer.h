@@ -13,7 +13,7 @@ private:
 	AutoResetEvent _waitForRender;
 	unique_ptr<std::thread> _renderThread;
 	IRenderingDevice* _renderer = nullptr;
-	atomic<bool> _stopFlag = false;
+	atomic<bool> _stopFlag;
 
 	void RenderThread();
 

@@ -20,6 +20,8 @@ namespace Mesen.GUI
 		[return: MarshalAs(UnmanagedType.Bool)]
 		private static extern bool SetForegroundWindow(IntPtr hWnd);
 
+		public static bool IsMono { get; private set; }
+
 		private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
 			MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, e.Exception.ToString());
@@ -58,6 +60,10 @@ namespace Mesen.GUI
 		private static void Main(string[] args)
 		{
 			try {
+				if(Type.GetType("Mono.Runtime") != null) {
+					Program.IsMono = true;
+				}
+        				
 				AppDomain.CurrentDomain.AssemblyResolve += LoadAssemblies;
 				Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 				Application.ThreadException += Application_ThreadException;

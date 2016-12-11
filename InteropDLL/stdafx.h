@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include "targetver.h"
-
 #if _WIN32 || _WIN64
 	#if _WIN64
 		#define ENVIRONMENT64
@@ -35,14 +33,18 @@
 	#define MESEN_LIBRARY_SUFFIX "x64.lib"
 #endif
 
-#pragma comment(lib, "Core.lib")
-#pragma comment(lib, "Utilities.lib")
-#pragma comment(lib, "Windows.lib")
-#pragma comment(lib, "SevenZip.lib")
-#ifdef PGO
-	#pragma comment(lib, "../Dependencies/DirectXTK." MESEN_LIBRARY_DEBUG_SUFFIX ".Static." MESEN_LIBRARY_SUFFIX)
+#if _WIN32 || _WIN64
+	#pragma comment(lib, "Core.lib")
+	#pragma comment(lib, "Utilities.lib")
+	#pragma comment(lib, "Windows.lib")
+	#pragma comment(lib, "SevenZip.lib")
+	#ifdef PGO
+		#pragma comment(lib, "../Dependencies/DirectXTK." MESEN_LIBRARY_DEBUG_SUFFIX ".Static." MESEN_LIBRARY_SUFFIX)
+	#else
+		#pragma comment(lib, "../Dependencies/DirectXTK." MESEN_LIBRARY_DEBUG_SUFFIX "." MESEN_LIBRARY_SUFFIX)	
+	#endif
+	#define DllExport __declspec(dllexport)
 #else
-	#pragma comment(lib, "../Dependencies/DirectXTK." MESEN_LIBRARY_DEBUG_SUFFIX "." MESEN_LIBRARY_SUFFIX)	
+	#define __stdcall
+	#define DllExport __attribute__((visibility("default")))
 #endif
-
-#define DllExport __declspec(dllexport)

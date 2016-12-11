@@ -75,7 +75,7 @@ string DisassemblyInfo::ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> 
 
 uint16_t DisassemblyInfo::GetOpAddr(uint16_t memoryAddr)
 {
-	uint16_t opAddr;
+	uint16_t opAddr = 0;
 	if(_opSize == 2) {
 		opAddr = *(_opPointer + 1);
 	} else if(_opSize == 3) {
@@ -111,7 +111,6 @@ string DisassemblyInfo::GetEffectiveAddressString(State& cpuState, shared_ptr<Me
 	if(effectiveAddress < 0) {
 		return "";
 	} else {
-		bool empty = true;
 		if(labelManager) {
 			string label = labelManager->GetLabel(effectiveAddress, true);
 			if(!label.empty()) {

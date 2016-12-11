@@ -22,6 +22,8 @@ shared_ptr<Console> Console::Instance(new Console());
 
 Console::Console()
 {
+	_resetRequested = false;
+	_lagCounter = 0;
 }
 
 Console::~Console()

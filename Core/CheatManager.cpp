@@ -185,7 +185,7 @@ void CheatManager::SetCheats(CheatInfo cheats[], uint32_t length)
 
 	for(uint32_t i = 0; i < length; i++) {
 		CheatInfo &cheat = cheats[i];
-		switch(cheat.CheatType) {
+		switch(cheat.Type) {
 			case CheatType::Custom: Instance->AddCustomCode(cheat.Address, cheat.Value, cheat.UseCompareValue ? cheat.CompareValue : -1, cheat.IsRelativeAddress); break;
 			case CheatType::GameGenie: Instance->AddGameGenieCode(cheat.GameGenieCode);	break;
 			case CheatType::ProActionRocky: Instance->AddProActionRockyCode(cheat.ProActionRockyCode); break;

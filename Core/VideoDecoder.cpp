@@ -20,6 +20,8 @@ VideoDecoder* VideoDecoder::GetInstance()
 
 VideoDecoder::VideoDecoder()
 {
+	_frameChanged = false;
+	_stopFlag = false;
 	UpdateVideoFilter();
 }
 
@@ -162,7 +164,7 @@ void VideoDecoder::StopThread()
 
 		if(_ppuOutputBuffer != nullptr) {
 			//Clear whole screen
-			for(int i = 0; i < PPU::PixelCount; i++) {
+			for(uint32_t i = 0; i < PPU::PixelCount; i++) {
 				_ppuOutputBuffer[i] = 14; //Black
 			}
 			DecodeFrame();

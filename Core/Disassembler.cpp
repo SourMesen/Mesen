@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "Disassembler.h"
 #include "DisassemblyInfo.h"
 #include "BaseMapper.h"
@@ -76,7 +77,7 @@ void Disassembler::BuildOpCodeTables(bool useLowerCase)
 	for(int i = 0; i < 256; i++) {
 		if(useLowerCase) {
 			string name = opName[i];
-			std::transform(name.begin(), name.end(), name.begin(), std::tolower);
+			std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 			DisassemblyInfo::OPName[i] = name;
 		} else {
 			DisassemblyInfo::OPName[i] = opName[i];

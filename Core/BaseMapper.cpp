@@ -459,7 +459,7 @@ void BaseMapper::Initialize(RomData &romData)
 
 	_nesHeader = romData.NesHeader;
 
-	_mirroringType = romData.MirroringType;
+	_mirroringType = romData.Mirroring;
 
 	_prgSize = (uint32_t)romData.PrgRom.size();
 	_chrRomSize = (uint32_t)romData.ChrRom.size();

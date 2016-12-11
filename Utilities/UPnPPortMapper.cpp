@@ -148,9 +148,9 @@ bool UPnPPortMapper::RemoveNATPortMapping(uint16_t externalPort, IPProtocol prot
 	return false;
 }
 
-wstring UPnPPortMapper::GetLocalIP()
+vector<wstring> UPnPPortMapper::GetLocalIPs()
 {
-	return L"";
+	return vector<wstring>();
 }	
 	
 #endif

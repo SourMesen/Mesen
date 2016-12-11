@@ -12,6 +12,8 @@ enum class MouseButton
 class IKeyManager
 {
 public:
+	virtual ~IKeyManager() {}
+
 	virtual void RefreshState() = 0;
 	virtual void UpdateDevices() = 0;
 	virtual bool IsMouseButtonPressed(MouseButton button) = 0;

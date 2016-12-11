@@ -29,12 +29,12 @@ private:
 
 	AutoResetEvent _waitForFrame;
 	
-	atomic<bool> _frameChanged = false;
-	atomic<bool> _stopFlag = false;
+	atomic<bool> _frameChanged;
+	atomic<bool> _stopFlag;
 	uint32_t _frameCount = 0;
 
 	VideoFilterType _videoFilterType = VideoFilterType::None;
-	unique_ptr<BaseVideoFilter> _videoFilter = nullptr;
+	unique_ptr<BaseVideoFilter> _videoFilter;
 
 	void UpdateVideoFilter();
 

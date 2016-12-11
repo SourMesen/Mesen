@@ -36,6 +36,7 @@ bool VideoHud::DisplayControllerInput(int inputPort, uint8_t *outputBuffer, Fram
 			xStart = 3 * scale + (settings.DisplayHorizontally ? displayIndex * 40 * scale : 0);
 			yStart = frameInfo.Height - 15 * scale - (settings.DisplayHorizontally ? 0 : displayIndex * 14 * scale);
 			break;
+		default:
 		case InputDisplayPosition::BottomRight: 
 			xStart = frameInfo.Width - 40 * scale - (settings.DisplayHorizontally ? displayIndex * 40 * scale : 0);
 			yStart = frameInfo.Height - 15 * scale - (settings.DisplayHorizontally ? 0 : displayIndex * 14 * scale);

@@ -25,4 +25,20 @@ namespace utf8 {
 		return strTo;
 	}
 }
+#else
+#include <codecvt>
+#include <locale>
+namespace utf8 {
+	std::wstring utf8::decode(const std::string &str)
+	{
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+		return myconv.from_bytes(str);
+	}
+
+	std::string utf8::encode(const std::wstring &wstr)
+	{
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+    	return myconv.to_bytes(wstr);
+	}
+}
 #endif

@@ -16,8 +16,8 @@ private:
 	AutoResetEvent _waitForInput[4];
 	SimpleLock _writeLock;
 	atomic<bool> _shutdown;
-	atomic<bool> _enableControllers = false;
-	atomic<uint32_t> _minimumQueueSize = 3;
+	atomic<bool> _enableControllers;
+	atomic<uint32_t> _minimumQueueSize;
 
 	vector<PlayerInfo> _playerList;
 

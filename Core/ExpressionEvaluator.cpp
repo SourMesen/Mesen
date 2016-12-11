@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <climits>
+#include <algorithm>
 #include "ExpressionEvaluator.h"
 #include "Console.h"
 #include "Debugger.h"

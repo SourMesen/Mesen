@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include <atomic>
 #include "CPU.h"
 #include "PPU.h"
 #include "APU.h"
@@ -38,7 +39,7 @@ class Console
 		bool _stop = false;
 		bool _reset = false;
 
-		atomic<bool> _resetRequested = false;
+		atomic<bool> _resetRequested;
 		atomic<uint32_t> _lagCounter;
 		
 		bool _initialized = false;

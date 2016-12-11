@@ -7,7 +7,7 @@
 #include "EmulationSettings.h"
 
 const uint32_t SaveStateManager::FileFormatVersion;
-atomic<uint32_t> SaveStateManager::_lastIndex = 1;
+atomic<uint32_t> SaveStateManager::_lastIndex(1);
 
 string SaveStateManager::GetStateFilepath(int stateIndex)
 {

@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "../Utilities/CRC32.h"
 #include "BaseMapper.h"
 
 class Supervision : public BaseMapper

@@ -1,12 +1,7 @@
 #pragma once
-
 #include "stdafx.h"
-#include <algorithm>
-#include "../Utilities/FolderUtilities.h"
-#include "../Utilities/ArchiveReader.h"
-#include "../Utilities/CRC32.h"
-#include "../Utilities/IpsPatcher.h"
 #include "RomData.h"
+class ArchiveReader;
 
 class RomLoader
 {

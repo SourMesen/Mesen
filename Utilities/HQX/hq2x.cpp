@@ -18,7 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#ifdef _WIN32
 #include "stdafx.h"
+#endif
 #include "../stdafx.h"
 #include <stdint.h>
 #include "common.h"

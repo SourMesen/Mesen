@@ -70,7 +70,7 @@ void SoundMixer::Reset()
 
 	_timestamps.clear();
 
-	for(int i = 0; i < MaxChannelCount; i++) {
+	for(uint32_t i = 0; i < MaxChannelCount; i++) {
 		_volumes[i] = 0;
 		_panning[i] = 0;
 	}
@@ -192,7 +192,7 @@ void SoundMixer::EndFrame(uint32_t time)
 	bool muteFrame = true;
 	for(size_t i = 0, len = _timestamps.size(); i < len; i++) {
 		uint32_t stamp = _timestamps[i];
-		for(int j = 0; j < MaxChannelCount; j++) {
+		for(uint32_t j = 0; j < MaxChannelCount; j++) {
 			if(_channelOutput[j][stamp] != 0) {
 				//Assume any change in output means sound is playing, disregarding volume options
 				//NSF tracks that mute the triangle channel by setting it to a high-frequency value will not be considered silent
@@ -220,7 +220,7 @@ void SoundMixer::EndFrame(uint32_t time)
 	}
 
 	//Reset everything
-	for(int i = 0; i < MaxChannelCount; i++) {
+	for(uint32_t i = 0; i < MaxChannelCount; i++) {
 		_volumes[i] = EmulationSettings::GetChannelVolume((AudioChannel)i);
 		_panning[i] = EmulationSettings::GetChannelPanning((AudioChannel)i);
 	}

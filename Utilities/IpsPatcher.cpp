@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <assert.h>
+#include <cstring>
 #include "IpsPatcher.h"
 
 class IpsRecord

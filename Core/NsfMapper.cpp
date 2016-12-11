@@ -58,7 +58,7 @@ void NsfMapper::SetNesModel(NesModel model)
 
 void NsfMapper::InitMapper(RomData& romData)
 {
-	_nsfHeader = romData.NsfHeader;
+	_nsfHeader = romData.NsfInfo;
 
 	_hasBankSwitching = HasBankSwitching();
 	if(!_hasBankSwitching) {

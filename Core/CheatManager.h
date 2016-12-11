@@ -19,7 +19,7 @@ enum class CheatType
 
 struct CheatInfo
 {
-	CheatType CheatType;
+	CheatType Type;
 	uint32_t ProActionRockyCode;
 	uint32_t Address;
 	char GameGenieCode[9];

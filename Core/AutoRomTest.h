@@ -36,7 +36,7 @@ private:
 
 public:
 	AutoRomTest();
-	~AutoRomTest();
+	virtual ~AutoRomTest();
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter);
 	void Record(string filename, bool reset);

@@ -33,8 +33,6 @@ protected:
 
 	void UpdateState()
 	{
-		uint8_t bank = ((_regs[0] & 0x80) >> 7) | ((_regs[1] & 0x01) << 1);
-
 		uint8_t chip = (_regs[1] << 5 & 0x20) << (_regs[0] >> 7);
 		if(chip < (_regs[0] >> 7)) {
 			RemoveCpuMemoryMapping(0x8000, 0xFFFF);

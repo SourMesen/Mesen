@@ -217,8 +217,6 @@ private:
 			return false;
 		}
 
-		NsfHeader& header = romData.NsfHeader;
-
 		string fourCC = ReadFourCC(data);
 
 		uint32_t length;
@@ -269,11 +267,11 @@ private:
 
 			switch(value) {
 				default:
-				case 0: romData.MirroringType = MirroringType::Horizontal; break;
-				case 1: romData.MirroringType = MirroringType::Vertical; break;
-				case 2: romData.MirroringType = MirroringType::ScreenAOnly; break;
-				case 3: romData.MirroringType = MirroringType::ScreenBOnly; break;
-				case 4: romData.MirroringType = MirroringType::FourScreens; break;
+				case 0: romData.Mirroring = MirroringType::Horizontal; break;
+				case 1: romData.Mirroring = MirroringType::Vertical; break;
+				case 2: romData.Mirroring = MirroringType::ScreenAOnly; break;
+				case 3: romData.Mirroring = MirroringType::ScreenBOnly; break;
+				case 4: romData.Mirroring = MirroringType::FourScreens; break;
 			}
 		} else {
 			//Unsupported/unused FourCCs: PCKn, CCKn, NAME, WRTR, READ, DINF, VROR
@@ -341,7 +339,7 @@ public:
 			}
 
 			string mirroringType;
-			switch(romData.MirroringType) {
+			switch(romData.Mirroring) {
 				case MirroringType::Horizontal: mirroringType = "Horizontal"; break;
 				case MirroringType::Vertical: mirroringType = "Vertical"; break;
 				case MirroringType::ScreenAOnly: mirroringType = "1-Screen (A)"; break;

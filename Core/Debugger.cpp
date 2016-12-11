@@ -295,7 +295,7 @@ void Debugger::ProcessStepConditions(uint32_t addr)
 
 void Debugger::PrivateProcessPpuCycle()
 {
-	if(PPU::GetCurrentCycle() == _ppuViewerCycle && PPU::GetCurrentScanline() == _ppuViewerScanline) {
+	if(PPU::GetCurrentCycle() == (uint32_t)_ppuViewerCycle && PPU::GetCurrentScanline() == _ppuViewerScanline) {
 		MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame);
 	}
 	

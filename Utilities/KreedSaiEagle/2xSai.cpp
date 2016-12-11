@@ -16,7 +16,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef _WIN32
 #include "stdafx.h"
+#endif
 #include "../stdafx.h"
 
 #define twoxsai_interpolate_xrgb8888(A, B) ((((A) & 0xFEFEFEFE) >> 1) + (((B) & 0xFEFEFEFE) >> 1) + ((A) & (B) & 0x01010101))

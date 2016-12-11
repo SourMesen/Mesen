@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include <algorithm>
+#include <cstring>
 #include "SZReader.h"
+#include "UTF8Util.h"
 #include "../SevenZip/7zMemBuffer.h"
 
 SZReader::SZReader()
@@ -66,8 +68,6 @@ vector<string> SZReader::InternalGetFileList()
 
 	if(_initialized) {
 		for(uint32_t i = 0; i < _archive.NumFiles; i++) {
-			size_t offset = 0;
-			size_t outSizeProcessed = 0;
 			unsigned isDir = SzArEx_IsDir(&_archive, i);
 			if(isDir) {
 				continue;

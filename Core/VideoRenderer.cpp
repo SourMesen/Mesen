@@ -14,6 +14,7 @@ VideoRenderer* VideoRenderer::GetInstance()
 
 VideoRenderer::VideoRenderer()
 {
+	_stopFlag = false;	
 	StartThread();
 }
 
@@ -59,7 +60,7 @@ void VideoRenderer::RenderThread()
 
 void VideoRenderer::UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height)
 {
-	if(_renderer) {
+	if(_renderer) {		
 		_renderer->UpdateFrame(frameBuffer, width, height);
 		_waitForRender.Signal();
 	}

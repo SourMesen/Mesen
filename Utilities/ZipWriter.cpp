@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <string>
+#include <cstring>
 #include <sstream>
 #include "ZipWriter.h"
 #include "FolderUtilities.h"

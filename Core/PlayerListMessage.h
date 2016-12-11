@@ -13,8 +13,8 @@ protected:
 	{
 		uint32_t nameLength = PlayerNameMaxLength + 1;
 		char playerName[PlayerNameMaxLength + 1];
-		uint8_t playerPort;
-		bool isHost;
+		uint8_t playerPort = 0;
+		bool isHost = false;
 
 		if(_sending) {
 			uint32_t playerCount = (uint32_t)_playerList.size();
