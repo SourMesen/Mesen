@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlProfiler : UserControl
+	public partial class ctrlProfiler : BaseControl
 	{
 		public static event EventHandler OnFunctionSelected;
 		private Int64[] _exclusiveTime;

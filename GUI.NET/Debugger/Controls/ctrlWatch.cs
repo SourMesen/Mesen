@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class ctrlWatch : UserControl
+	public partial class ctrlWatch : BaseControl
 	{
 		public ctrlWatch()
 		{

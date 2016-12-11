@@ -19,6 +19,10 @@
 
 #include "../Utilities/UTF8Util.h"
 
+#ifdef __GNUC__
+#define __forceinline inline
+#endif
+
 using std::vector;
 using std::shared_ptr;
 using std::unique_ptr;

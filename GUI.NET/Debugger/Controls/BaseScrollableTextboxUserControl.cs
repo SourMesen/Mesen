@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public class BaseScrollableTextboxUserControl : UserControl
+	public class BaseScrollableTextboxUserControl : BaseControl
 	{
 		virtual protected ctrlScrollableTextbox ScrollableTextbox
 		{

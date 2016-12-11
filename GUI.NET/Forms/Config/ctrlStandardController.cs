@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Forms.Config
 {
-	public partial class ctrlStandardController : UserControl
+	public partial class ctrlStandardController : BaseControl
 	{
 		public event EventHandler OnChange;
 

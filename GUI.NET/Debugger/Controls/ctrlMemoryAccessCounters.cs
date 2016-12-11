@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlMemoryAccessCounters : UserControl
+	public partial class ctrlMemoryAccessCounters : BaseControl
 	{
 		private MemoryCountData[] _data;
 		private AddressType _memoryType = AddressType.InternalRam;

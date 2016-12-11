@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger
 {
@@ -42,7 +43,7 @@ namespace Mesen.GUI.Debugger
 				tlpMain.Controls.Add(lbl);
 
 				lbl = new Label();
-				lbl.Font = new Font("Consolas", 10);
+				lbl.Font = new Font(BaseControl.MonospaceFontFamily, 10);
 				lbl.Margin = new Padding(2);
 				lbl.AutoSize = true;
 				lbl.Text = kvp.Value;

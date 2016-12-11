@@ -11,7 +11,7 @@ using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Controls
 {
-	public partial class ctrlRenderer : UserControl
+	public partial class ctrlRenderer : BaseControl
 	{
 		private bool _cursorHidden = false;
 

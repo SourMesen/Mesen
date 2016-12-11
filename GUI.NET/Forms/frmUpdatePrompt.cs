@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Forms
 {
@@ -21,6 +22,8 @@ namespace Mesen.GUI.Forms
 		public frmUpdatePrompt(Version currentVersion, Version latestVersion, string changeLog, string fileHash)
 		{
 			InitializeComponent();
+
+			this.txtChangelog.Font = new System.Drawing.Font(BaseControl.MonospaceFontFamily, 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
 			_fileHash = fileHash;
 

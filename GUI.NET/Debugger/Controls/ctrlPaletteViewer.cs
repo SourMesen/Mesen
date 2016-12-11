@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlPaletteViewer : UserControl
+	public partial class ctrlPaletteViewer : BaseControl
 	{
 		private byte[] _paletteRam;
 		private byte[] _palettePixelData;

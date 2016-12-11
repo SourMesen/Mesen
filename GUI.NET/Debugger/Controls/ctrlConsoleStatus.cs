@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class ctrlConsoleStatus : UserControl
+	public partial class ctrlConsoleStatus : BaseControl
 	{
 		public event EventHandler OnStateChanged;
 		public event EventHandler OnGotoLocation;

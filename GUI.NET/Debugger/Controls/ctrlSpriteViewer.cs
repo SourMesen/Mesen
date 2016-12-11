@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlSpriteViewer : UserControl
+	public partial class ctrlSpriteViewer : BaseControl
 	{
 		private byte[] _spriteRam;
 		private byte[] _spritePixelData;

@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Forms.Config
 {
-	public partial class ctrlDipSwitch : UserControl
+	public partial class ctrlDipSwitch : BaseControl
 	{
 		public ctrlDipSwitch()
 		{

@@ -12,7 +12,7 @@ using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Controls
 {
-	public partial class ctrlNsfPlayer : UserControl
+	public partial class ctrlNsfPlayer : BaseControl
 	{
 		private List<ComboboxItem> _trackList = new List<ComboboxItem>();
 		private int _frameCount = 0;

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Controls
 {
-	public partial class ctrlTrackbar : UserControl
+	public partial class ctrlTrackbar : BaseControl
 	{
 		public event EventHandler ValueChanged
 		{

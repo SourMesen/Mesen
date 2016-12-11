@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlLabelList : UserControl
+	public partial class ctrlLabelList : BaseControl
 	{
 		public event EventHandler OnFindOccurrence;
 		public event EventHandler OnLabelSelected;

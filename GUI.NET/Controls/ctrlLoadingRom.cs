@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Controls
 {
-	public partial class ctrlLoadingRom : UserControl
+	public partial class ctrlLoadingRom : BaseControl
 	{
 		public ctrlLoadingRom()
 		{

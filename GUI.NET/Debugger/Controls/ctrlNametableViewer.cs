@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlNametableViewer : UserControl
+	public partial class ctrlNametableViewer : BaseControl
 	{
 		private byte[][] _nametablePixelData = new byte[4][];
 		private byte[][] _tileData = new byte[4][];

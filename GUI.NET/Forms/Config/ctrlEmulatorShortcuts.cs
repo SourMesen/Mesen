@@ -3,10 +3,11 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
 using System.Reflection;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Forms.Config
 {
-	public partial class ctrlEmulatorShortcuts : UserControl
+	public partial class ctrlEmulatorShortcuts : BaseControl
 	{
 		public ctrlEmulatorShortcuts()
 		{

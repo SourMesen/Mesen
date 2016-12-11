@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class ctrlScrollableTextbox : UserControl
+	public partial class ctrlScrollableTextbox : BaseControl
 	{
 		public event EventHandler ScrollPositionChanged;
 
@@ -52,6 +53,8 @@ namespace Mesen.GUI.Debugger
 
 			this.ctrlTextbox.ShowLineNumbers = true;
 			this.ctrlTextbox.ShowLineInHex = true;
+			this.ctrlTextbox.Font = new System.Drawing.Font(BaseControl.MonospaceFontFamily, 13F);
+			
 			this.hScrollBar.ValueChanged += hScrollBar_ValueChanged;
 			this.vScrollBar.ValueChanged += vScrollBar_ValueChanged;
 			this.ctrlTextbox.ScrollPositionChanged += ctrlTextbox_ScrollPositionChanged;
@@ -67,7 +70,7 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				if(value >= 6 && value <= 20) {
-					this.ctrlTextbox.Font = new Font("Consolas", value);
+					this.ctrlTextbox.Font = new Font(BaseControl.MonospaceFontFamily, value);
 					UpdateHorizontalScrollbar();
 					this.ctrlTextbox.Invalidate();
 

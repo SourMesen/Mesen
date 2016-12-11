@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlBreakpoints : UserControl
+	public partial class ctrlBreakpoints : BaseControl
 	{
 		public event EventHandler BreakpointNavigation;
 

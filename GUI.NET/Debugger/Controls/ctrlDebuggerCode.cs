@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger
 {
@@ -29,6 +30,7 @@ namespace Mesen.GUI.Debugger
 		public ctrlDebuggerCode()
 		{
 			InitializeComponent();
+			this.lstSearchResult.Font = new System.Drawing.Font(BaseControl.MonospaceFontFamily, 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));			
 			splitContainer.Panel2Collapsed = true;
 		}
 

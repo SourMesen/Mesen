@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Forms.Cheats
 {
-	public partial class ctrlCheatFinder : UserControl
+	public partial class ctrlCheatFinder : BaseControl
 	{
 		public event EventHandler OnAddCheat;
 		public bool TabIsFocused

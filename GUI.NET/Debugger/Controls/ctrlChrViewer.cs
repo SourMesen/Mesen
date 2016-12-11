@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlChrViewer : UserControl
+	public partial class ctrlChrViewer : BaseControl
 	{
 		private byte[][] _chrPixelData = new byte[2][];
 		private int _selectedPalette = 0;
