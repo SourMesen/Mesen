@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
 		}
 
 		vector<std::thread*> testThreads;
-		testFilenames = FolderUtilities::GetFilesInFolder(testFolder, "*.mtp", true);
+		testFilenames = FolderUtilities::GetFilesInFolder(testFolder, ".mtp", true);
 		testIndex = 0;
 
 		timer.Reset();

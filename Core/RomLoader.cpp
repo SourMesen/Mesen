@@ -42,7 +42,7 @@ bool RomLoader::LoadFromArchive(istream &zipFile, ArchiveReader& reader, int32_t
 
 	reader.LoadArchive(buffer, fileSize);
 
-	vector<string> fileList = reader.GetFileList({ ".nes", ".fds", ".nsf", ".nsfe", "*.unf" });
+	vector<string> fileList = reader.GetFileList({ ".nes", ".fds", ".nsf", ".nsfe", ".unf" });
 	int32_t currentIndex = 0;
 	if(archiveFileIndex > (int32_t)fileList.size()) {
 		return false;
@@ -207,7 +207,7 @@ int32_t RomLoader::FindMatchingRomInFile(string filename, uint32_t crc32Hash)
 string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash, bool useFastSearch, int32_t &archiveFileIndex)
 {
 	std::transform(romFilename.begin(), romFilename.end(), romFilename.begin(), ::tolower);
-	vector<string> validExtensions = { { "*.nes", "*.zip", "*.7z", "*.fds" } };
+	vector<string> validExtensions = { { ".nes", ".zip", ".7z", ".fds" } };
 	vector<string> romFiles;
 
 	for(string extension : validExtensions) {

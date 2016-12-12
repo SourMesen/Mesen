@@ -763,7 +763,7 @@ namespace Mesen.GUI.Forms
 					if(fileTime == 0) {
 						label = i.ToString() + ". " + ResourceHelper.GetMessage("EmptyState");
 					} else {
-						DateTime dateTime = DateTime.FromFileTime(fileTime);
+						DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(fileTime).ToLocalTime();
 						label = i.ToString() + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
 					}
 
