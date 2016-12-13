@@ -71,39 +71,39 @@ namespace Vrc7Opll
 			{0x21, 0x62, 0x0D, 0x00, 0xB1, 0xA0, 0x54, 0x17}
 		};
 
-		uint32_t adr;
-		int32_t out;
+		uint32_t adr = 0;
+		int32_t out = 0;
 
-		uint32_t realstep;
-		uint32_t oplltime;
-		uint32_t opllstep;
-		int32_t prev, next;
+		uint32_t realstep = 0;
+		uint32_t oplltime = 0;
+		uint32_t opllstep = 0;
+		int32_t prev = 0, next = 0;
 
 		/* Register */
-		uint8_t LowFreq[6];
-		uint8_t HiFreq[6];
-		uint8_t InstVol[6];
+		uint8_t LowFreq[6] = {};
+		uint8_t HiFreq[6] = {};
+		uint8_t InstVol[6] = {};
 
-		uint8_t CustInst[8];
+		uint8_t CustInst[8] = {};
 
-		int32_t slot_on_flag[6 * 2];
+		int32_t slot_on_flag[6 * 2] = {};
 
 		/* Pitch Modulator */
-		uint32_t pm_phase;
-		int32_t lfo_pm;
+		uint32_t pm_phase = 0;
+		int32_t lfo_pm = 0;
 
 		/* Amp Modulator */
-		int32_t am_phase;
-		int32_t lfo_am;
+		int32_t am_phase = 0;
+		int32_t lfo_am = 0;
 
 		/* Channel Data */
-		int32_t patch_number[6];
-		int32_t key_status[6];
+		int32_t patch_number[6] = {};
+		int32_t key_status[6] = {};
 
 		/* Slot */
 		OpllChannel slot[6 * 2];
 
-		uint32_t mask;
+		uint32_t mask = 0;
 		shared_ptr<OpllTables> tables;
 
 		OpllChannel* GetModulator(uint8_t i)
@@ -181,32 +181,21 @@ namespace Vrc7Opll
 		/* Setup */
 		void Reset(uint32_t clk, uint32_t rate)
 		{
-			int32_t i;
-
-			adr = 0;
-			out = 0;
-
-			pm_phase = 0;
-			am_phase = 0;
-
-			mask = 0;
-
-			for(i = 0; i < 12; i++) {
+			for(int32_t i = 0; i < 12; i++) {
 				slot[i].reset(i % 2);
 			}
 
-			for(i = 0; i < 6; i++) {
+			for(int32_t i = 0; i < 6; i++) {
 				key_status[i] = 0;
 				//setPatch (opll, i, 0);
 			}
 
-			for(i = 0; i < 0x40; i++) {
+			for(int32_t i = 0; i < 0x40; i++) {
 				WriteReg(i, 0);
 			}
 
 			realstep = (uint32_t)((1 << 31) / rate);
 			opllstep = (uint32_t)((1 << 31) / (clk / 72));
-			oplltime = 0;
 		}
 
 		/* Port/Register access */
