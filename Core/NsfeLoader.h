@@ -1,12 +1,19 @@
 #pragma once
 #include "stdafx.h"
-#include "RomData.h"
+#include <cstring>
 #include <algorithm>
+#include "RomData.h"
 #include "NsfLoader.h"
 
 class NsfeLoader : public NsfLoader
 {
 private:
+	void CopyString(char* dest, string source, int maxLength)
+	{
+		memset(dest, 0, maxLength);
+		memcpy(dest, source.c_str(), std::max(source.size(), (size_t)maxLength - 1));
+	}
+
 	void Read(uint8_t* &data, uint8_t& dest)
 	{
 		dest = data[0];
@@ -140,19 +147,18 @@ private:
 				ss << trackName;
 				ss << "[!|!]";
 			}
-			strcpy_s(header.TrackName, ss.str().c_str());
-
+			CopyString(header.TrackName, ss.str(), 20000);
 		} else if(fourCC.compare("auth") == 0) {
 			vector<string> infoStrings = ReadStrings(data, chunkEnd);
 
 			if(infoStrings.size() > 0) {
-				strcpy_s(header.SongName, infoStrings[0].c_str());
+				CopyString(header.SongName, infoStrings[0], 256);
 				if(infoStrings.size() > 1) {
-					strcpy_s(header.ArtistName, infoStrings[1].c_str());
+					CopyString(header.ArtistName, infoStrings[1], 256);
 					if(infoStrings.size() > 2) {
-						strcpy_s(header.CopyrightHolder, infoStrings[2].c_str());
+						CopyString(header.CopyrightHolder, infoStrings[2], 256);
 						if(infoStrings.size() > 3) {
-							strcpy_s(header.RipperName, infoStrings[3].c_str());
+							CopyString(header.RipperName, infoStrings[3], 256);
 						}
 					}
 				}
