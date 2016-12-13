@@ -261,7 +261,7 @@ int DirectInputManager::EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstan
 {
 	HRESULT hr;
 
-	if(ProcessDevice(&pdidInstance->guidProduct, false)) {
+	if(ProcessDevice(&pdidInstance->guidInstance, false)) {
 		// Obtain an interface to the enumerated joystick.
 		LPDIRECTINPUTDEVICE8 pJoystick = nullptr;
 		hr = _directInput->CreateDevice(pdidInstance->guidInstance, &pJoystick, nullptr);
