@@ -81,7 +81,7 @@ namespace Mesen.GUI.Forms.Cheats
 		private void btnBrowse_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = ResourceHelper.GetMessage("FilterRom");
+			ofd.SetFilter(ResourceHelper.GetMessage("FilterRom"));
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				LoadGame(ofd.FileName);
 			}

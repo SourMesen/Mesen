@@ -437,7 +437,7 @@ namespace Mesen.GUI.Forms
 		private void mnuOpen_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = ResourceHelper.GetMessage("FilterRomIps");
+			ofd.SetFilter(ResourceHelper.GetMessage("FilterRomIps"));
 			if(ConfigManager.Config.RecentFiles.Count > 0) {
 				ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
 			}			
@@ -464,7 +464,7 @@ namespace Mesen.GUI.Forms
 			if(_emuThread == null) {
 				if(MesenMsgBox.Show("SelectRomIps", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
 					OpenFileDialog ofd = new OpenFileDialog();
-					ofd.Filter = ResourceHelper.GetMessage("FilterRom");
+					ofd.SetFilter(ResourceHelper.GetMessage("FilterRom"));
 					if(ConfigManager.Config.RecentFiles.Count > 0) {
 						ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
 					}
@@ -895,7 +895,7 @@ namespace Mesen.GUI.Forms
 		private void RecordMovie(bool resetEmu)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = ResourceHelper.GetMessage("FilterMovie");
+			sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
 			sfd.InitialDirectory = ConfigManager.MovieFolder;
 			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -906,7 +906,7 @@ namespace Mesen.GUI.Forms
 		private void mnuPlayMovie_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = ResourceHelper.GetMessage("FilterMovie");
+			ofd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
 			ofd.InitialDirectory = ConfigManager.MovieFolder;
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				InteropEmu.MoviePlay(ofd.FileName);
@@ -932,7 +932,7 @@ namespace Mesen.GUI.Forms
 		private void mnuWaveRecord_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = ResourceHelper.GetMessage("FilterWave");
+			sfd.SetFilter(ResourceHelper.GetMessage("FilterWave"));
 			sfd.InitialDirectory = ConfigManager.WaveFolder;
 			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".wav";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -948,7 +948,7 @@ namespace Mesen.GUI.Forms
 		private void mnuTestRun_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = ResourceHelper.GetMessage("FilterTest");
+			ofd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 			ofd.InitialDirectory = ConfigManager.TestFolder;
 			ofd.Multiselect = true;
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -1008,7 +1008,7 @@ namespace Mesen.GUI.Forms
 		private void RecordTest(bool resetEmu)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = ResourceHelper.GetMessage("FilterTest");
+			sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 			sfd.InitialDirectory = ConfigManager.TestFolder;
 			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mtp";
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -1019,11 +1019,11 @@ namespace Mesen.GUI.Forms
 		private void mnuTestRecordMovie_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = ResourceHelper.GetMessage("FilterMovie");
+			ofd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
 			ofd.InitialDirectory = ConfigManager.MovieFolder;
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.Filter = ResourceHelper.GetMessage("FilterTest");
+				sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 				sfd.InitialDirectory = ConfigManager.TestFolder;
 				sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
 				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -1035,12 +1035,12 @@ namespace Mesen.GUI.Forms
 		private void mnuTestRecordTest_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = ResourceHelper.GetMessage("FilterTest");
+			ofd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 			ofd.InitialDirectory = ConfigManager.TestFolder;
 
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.Filter = ResourceHelper.GetMessage("FilterTest");
+				sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 				sfd.InitialDirectory = ConfigManager.TestFolder;
 				sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
 				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -1326,7 +1326,7 @@ namespace Mesen.GUI.Forms
 		{
 			if(MesenMsgBox.Show("FdsBiosNotFound", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
 				OpenFileDialog ofd = new OpenFileDialog();
-				ofd.Filter = ResourceHelper.GetMessage("FilterAll");
+				ofd.SetFilter(ResourceHelper.GetMessage("FilterAll"));
 				if(ofd.ShowDialog() == DialogResult.OK) {
 					if(MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant() == "ca30b50f880eb660a320674ed365ef7a") {
 						File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));

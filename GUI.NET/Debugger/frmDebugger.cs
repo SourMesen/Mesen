@@ -555,7 +555,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuLoadCdlFile_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "CDL files (*.cdl)|*.cdl";
+			ofd.SetFilter("CDL files (*.cdl)|*.cdl");
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				if(!InteropEmu.DebugLoadCdlFile(ofd.FileName)) {
 					MessageBox.Show("Could not load CDL file.  The file selected file is invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -566,7 +566,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuSaveAsCdlFile_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "CDL files (*.cdl)|*.cdl";
+			sfd.SetFilter("CDL files (*.cdl)|*.cdl");
 			sfd.AddExtension = true;
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				if(!InteropEmu.DebugSaveCdlFile(sfd.FileName)) {
@@ -711,7 +711,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuImportLabels_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "All supported files (*.dbg)|*.dbg";
+			ofd.SetFilter("All supported files (*.dbg)|*.dbg");
 			if(ofd.ShowDialog() == DialogResult.OK) {
 				Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
 				dbgImporter.Import(ofd.FileName);

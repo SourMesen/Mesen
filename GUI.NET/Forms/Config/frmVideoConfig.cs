@@ -128,7 +128,7 @@ namespace Mesen.GUI.Forms.Config
 		private void btnLoadPalFile_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "Palette Files (*.pal)|*.pal|All Files (*.*)|*.*";
+			ofd.SetFilter("Palette Files (*.pal)|*.pal|All Files (*.*)|*.*");
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				using(FileStream paletteFile = File.OpenRead(ofd.FileName)) {
 					byte[] paletteFileData = new byte[64*3];
@@ -419,7 +419,7 @@ namespace Mesen.GUI.Forms.Config
 		private void btnExportPalette_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "Palette Files (*.pal)|*.pal";
+			sfd.SetFilter("Palette Files (*.pal)|*.pal");
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				List<byte>bytePalette = new List<byte>();
 				foreach(int value in _paletteData) {

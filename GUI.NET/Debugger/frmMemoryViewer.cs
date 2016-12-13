@@ -150,7 +150,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuImport_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = "Memory dump files (*.dmp)|*.dmp|All files (*.*)|*.*";
+			ofd.SetFilter("Memory dump files (*.dmp)|*.dmp|All files (*.*)|*.*");
 			ofd.InitialDirectory = ConfigManager.DebuggerFolder;
 			if(ofd.ShowDialog() == DialogResult.OK) {
 				InteropEmu.DebugSetMemoryState(_memoryType, File.ReadAllBytes(ofd.FileName));
@@ -161,7 +161,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuExport_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "Memory dump files (*.dmp)|*.dmp|All files (*.*)|*.*";
+			sfd.SetFilter("Memory dump files (*.dmp)|*.dmp|All files (*.*)|*.*");
 			sfd.InitialDirectory = ConfigManager.DebuggerFolder;
 			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + " - " + cboMemoryType.SelectedItem.ToString() + ".dmp";
 			if(sfd.ShowDialog() == DialogResult.OK) {

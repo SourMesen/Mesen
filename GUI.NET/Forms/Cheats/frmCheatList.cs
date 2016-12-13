@@ -259,7 +259,7 @@ namespace Mesen.GUI.Forms.Cheats
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.AddExtension = true;
 			sfd.FileName = defaultFilename;
-			sfd.Filter = "XML (*.xml)|*.xml";
+			sfd.SetFilter("XML (*.xml)|*.xml");
 
 			if(sfd.ShowDialog() == DialogResult.OK) {
 				MesenCheatExporter.Export(sfd.FileName, cheats);

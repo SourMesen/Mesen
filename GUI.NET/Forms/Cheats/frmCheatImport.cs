@@ -54,7 +54,7 @@ namespace Mesen.GUI.Forms.Cheats
 		private void btnBrowseGame_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = ResourceHelper.GetMessage("FilterRom");
+			ofd.SetFilter(ResourceHelper.GetMessage("FilterRom"));
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				LoadGame(ofd.FileName);
 			}
@@ -63,7 +63,7 @@ namespace Mesen.GUI.Forms.Cheats
 		private void btnBrowseCheat_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter = ResourceHelper.GetMessage("FilterCheat");
+			ofd.SetFilter(ResourceHelper.GetMessage("FilterCheat"));
 			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				_cheatFile = ofd.FileName;
 				_isMesenCheatFile = NestopiaCheatLoader.IsMesenCheatFile(_cheatFile);

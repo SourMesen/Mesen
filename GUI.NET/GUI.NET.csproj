@@ -598,6 +598,7 @@
     <Compile Include="Forms\NetPlay\frmServerConfig.Designer.cs">
       <DependentUpon>frmServerConfig.cs</DependentUpon>
     </Compile>
+	<Compile Include="Forms\OpenSaveFileDialogExtensions.cs" />	 
     <Compile Include="Forms\ResourceHelper.cs" />
     <Compile Include="GoogleDriveIntegration\CloudSyncHelper.cs" />
     <Compile Include="GoogleDriveIntegration\GoogleDriveAccessor.cs" />
