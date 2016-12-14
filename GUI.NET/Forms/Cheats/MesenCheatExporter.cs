@@ -30,7 +30,9 @@ namespace Mesen.GUI.Forms.Cheats
 					case CheatType.Custom:
 						writer.WriteElementString("address", "0x" + cheat.Address.ToString("X4"));
 						writer.WriteElementString("value", "0x" + cheat.Value.ToString("X2"));
-						writer.WriteElementString("compare", "0x" + cheat.CompareValue.ToString("X2"));
+						if(cheat.UseCompareValue) {
+							writer.WriteElementString("compare", "0x" + cheat.CompareValue.ToString("X2"));
+						}
 						if(!cheat.IsRelativeAddress) {
 							writer.WriteElementString("isPrgOffset", "true");
 						}
