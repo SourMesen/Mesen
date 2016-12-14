@@ -767,7 +767,7 @@ namespace Mesen.GUI.Forms
 						label = i.ToString() + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
 					}
 
-					ToolStripMenuItem item = (ToolStripMenuItem)menu.DropDownItems.Add(label);
+					ToolStripMenuItem item = new ToolStripMenuItem(label);
 					uint stateIndex = i;
 					item.Click += (object sender, EventArgs e) => {
 						if(_emuThread != null && !InteropEmu.IsNsf()) {
@@ -785,6 +785,7 @@ namespace Mesen.GUI.Forms
 					if(forSave) {
 						item.ShortcutKeys |= Keys.Shift;
 					}
+					menu.DropDownItems.Add(item);
 				};
 
 				for(uint i = 1; i <= frmMain.NumberOfSaveSlots; i++) {
@@ -1443,7 +1444,8 @@ namespace Mesen.GUI.Forms
 							case Language.Spanish: langCode = "es"; break;
 							case Language.Ukrainian: langCode = "uk"; break;
 						}
-						xmlDoc.LoadXml(client.DownloadString("http://www.mesen.ca/Services/GetLatestVersion.php?v=" + InteropEmu.GetMesenVersion() + "&p=win&l=" + langCode));
+						string platform = Program.IsMono ? "linux" : "win";
+						xmlDoc.LoadXml(client.DownloadString("http://www.mesen.ca/Services/GetLatestVersion.php?v=" + InteropEmu.GetMesenVersion() + "&p=" + platform + "&l=" + langCode));
 						Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 						Version latestVersion = new Version(xmlDoc.SelectSingleNode("VersionInfo/LatestVersion").InnerText);
 						string changeLog = xmlDoc.SelectSingleNode("VersionInfo/ChangeLog").InnerText;
