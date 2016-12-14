@@ -57,6 +57,11 @@ void GameDatabase::InitDatabase()
 					values[12],
 					values.size() > 13 ? values[13] : ""
 				};
+
+				if(!gameInfo.InputType.empty() && gameInfo.InputType[gameInfo.InputType.size() - 1] == '\r') {
+					gameInfo.InputType = gameInfo.InputType.substr(0, gameInfo.InputType.size() - 1);
+				}
+
 				_gameDatabase[gameInfo.Crc] = gameInfo;
 			}
 		}

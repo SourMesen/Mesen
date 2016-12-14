@@ -261,7 +261,6 @@ struct GameInfo
 	bool HasBattery;
 	string Mirroring;
 	string InputType;
-	bool Valid;
 };
 
 struct RomData
