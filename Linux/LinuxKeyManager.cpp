@@ -226,7 +226,7 @@ static vector<KeyDefinition> _keyDefinitions = {
 
 LinuxKeyManager::LinuxKeyManager()
 {
-	_keyState.insert(_keyState.end(), 0x200, 0);
+	ResetKeyState();
 
 	for(KeyDefinition &keyDef : _keyDefinitions) {
 		_keyNames[keyDef.keyCode] = keyDef.description;
@@ -254,8 +254,12 @@ bool LinuxKeyManager::IsKeyPressed(uint32_t key)
 
 bool LinuxKeyManager::IsMouseButtonPressed(MouseButton button)
 {
-	//TODO: NOT IMPLEMENTED YET
-	//Only needed for zapper/etc
+	switch(button) {
+		case MouseButton::LeftButton: return _mouseState[0];
+		case MouseButton::RightButton: return _mouseState[1];
+		case MouseButton::MiddleButton: return _mouseState[2];
+	}
+
 	return false;
 }
 
@@ -295,10 +299,15 @@ void LinuxKeyManager::UpdateDevices()
 
 void LinuxKeyManager::SetKeyState(uint16_t scanCode, bool state)
 {
-	_keyState[scanCode & 0xFF] = state ? 1 : 0;
+	if(scanCode > 0x1FF) {
+		_mouseState[scanCode & 0x03] = state;
+	} else {
+		_keyState[scanCode & 0xFF] = state;
+	}
 }
 
 void LinuxKeyManager::ResetKeyState()
 {
-	memset(_keyState.data(), 0, 0x200 * sizeof(uint32_t));
-}		
+	memset(_mouseState, 0, sizeof(_mouseState));
+	memset(_keyState, 0, sizeof(_keyState));
+}

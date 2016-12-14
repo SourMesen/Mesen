@@ -205,7 +205,7 @@ WindowsKeyManager::WindowsKeyManager(HWND hWnd)
 {
 	_hWnd = hWnd;
 
-	_keyState.insert(_keyState.end(), 0x200, 0);
+	ResetKeyState();
 
 	//Init XInput buttons
 	vector<string> buttonNames = { "Up", "Down", "Left", "Right", "Start", "Back", "L3", "R3", "L1", "R1", "?", "?", "A", "B", "X", "Y", "L2", "R2", "RT Up", "RT Down", "RT Up", "RT Left", "RT Right" };
@@ -298,14 +298,13 @@ bool WindowsKeyManager::IsKeyPressed(uint32_t key)
 
 bool WindowsKeyManager::IsMouseButtonPressed(MouseButton button)
 {
-	uint32_t key = 0;
 	switch(button) {
-		case MouseButton::LeftButton: key = VK_LBUTTON; break;
-		case MouseButton::RightButton: key = VK_RBUTTON; break;
-		case MouseButton::MiddleButton: key = VK_MBUTTON; break;
+		case MouseButton::LeftButton: return _mouseState[0];
+		case MouseButton::RightButton: return _mouseState[1];
+		case MouseButton::MiddleButton: return _mouseState[2];
 	}
 
-	return (GetAsyncKeyState(key) & 0x8000) == 0x8000;
+	return false;
 }
 
 uint32_t WindowsKeyManager::GetPressedKey()
@@ -366,10 +365,15 @@ void WindowsKeyManager::UpdateDevices()
 
 void WindowsKeyManager::SetKeyState(uint16_t scanCode, bool state)
 {
-	_keyState[scanCode & 0x1FF] = state ? 1 : 0;
+	if(scanCode > 0x1FF) {
+		_mouseState[scanCode & 0x03] = state;
+	} else {
+		_keyState[scanCode & 0x1FF] = state;
+	}
 }
 
 void WindowsKeyManager::ResetKeyState()
 {
-	memset(_keyState.data(), 0, 0x200);
+	memset(_mouseState, 0, sizeof(_mouseState));
+	memset(_keyState, 0, sizeof(_keyState));
 }

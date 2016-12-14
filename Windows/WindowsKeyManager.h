@@ -18,7 +18,8 @@ class WindowsKeyManager : public IKeyManager
 {
 	private:
 		HWND _hWnd;
-		vector<uint32_t> _keyState;
+		bool _keyState[0x200];
+		bool _mouseState[0x03];
 		unique_ptr<DirectInputManager> _directInput;
 		unique_ptr<XInputManager> _xInput;
 		std::unordered_map<uint32_t, string> _keyNames;

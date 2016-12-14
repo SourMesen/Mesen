@@ -13,6 +13,10 @@ namespace Mesen.GUI.Controls
 {
 	public partial class ctrlRenderer : BaseControl
 	{
+		private const int LeftMouseButtonKeyCode = 0x200;
+		private const int RightMouseButtonKeyCode = 0x201;
+		private const int MiddleMouseButtonKeyCode = 0x202;
+
 		private bool _cursorHidden = false;
 
 		public ctrlRenderer()
@@ -38,6 +42,27 @@ namespace Mesen.GUI.Controls
 			if(!_cursorHidden) {
 				Cursor.Hide();
 				_cursorHidden = true;
+			}
+		}
+
+		protected override void OnMouseDown(MouseEventArgs e)
+		{
+			base.OnMouseDown(e);
+			SetMouseButtonState(e.Button, true);
+		}
+
+		protected override void OnMouseUp(MouseEventArgs e)
+		{
+			base.OnMouseUp(e);
+			SetMouseButtonState(e.Button, false);
+		}
+
+		private void SetMouseButtonState(MouseButtons button, bool down)
+		{
+			switch(button) {
+				case MouseButtons.Left: InteropEmu.SetKeyState(LeftMouseButtonKeyCode, down); break;
+				case MouseButtons.Right: InteropEmu.SetKeyState(RightMouseButtonKeyCode, down); break;
+				case MouseButtons.Middle: InteropEmu.SetKeyState(MiddleMouseButtonKeyCode, down); break;
 			}
 		}
 
