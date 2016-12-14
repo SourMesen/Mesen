@@ -165,12 +165,17 @@ namespace Mesen.GUI.Debugger.Controls
 			this.txtAttributeAddress.Text = attributeAddr.ToString("X4");
 			this.txtPaletteAddress.Text = (0x3F00 + paletteBaseAddr).ToString("X4");
 
-			Bitmap tile = new Bitmap(64, 64);
+			Bitmap tile = new Bitmap(64, 64);			
+			Bitmap tilePreview = new Bitmap(8, 8);
+			using(Graphics g = Graphics.FromImage(tilePreview)) {
+				g.DrawImage(_nametableImage, new Rectangle(0, 0, 8, 8), new Rectangle(e.X/8*8, e.Y/8*8, 8, 8), GraphicsUnit.Pixel);
+			}			
 			using(Graphics g = Graphics.FromImage(tile)) {
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.DrawImage(_nametableImage, new Rectangle(0, 0, 64, 64), new Rectangle(e.X/8*8, e.Y/8*8, 8, 8), GraphicsUnit.Pixel);
+				g.ScaleTransform(8, 8);
+				g.DrawImageUnscaled(tilePreview, 0, 0);
 			}
 			this.picTile.Image = tile;
 		}

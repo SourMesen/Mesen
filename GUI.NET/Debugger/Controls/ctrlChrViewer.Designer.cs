@@ -89,7 +89,7 @@
 			this.grpTileInfo.Dock = System.Windows.Forms.DockStyle.Top;
 			this.grpTileInfo.Location = new System.Drawing.Point(267, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.grpTileInfo.Size = new System.Drawing.Size(264, 142);
+			this.grpTileInfo.Size = new System.Drawing.Size(264, 152);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";

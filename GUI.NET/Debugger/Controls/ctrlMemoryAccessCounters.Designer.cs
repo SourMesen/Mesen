@@ -104,7 +104,7 @@
 			this.flowLayoutPanel2.Controls.Add(this.cboSort);
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(335, 3);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(176, 26);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(182, 26);
 			this.flowLayoutPanel2.TabIndex = 3;
 			// 
 			// lblSort

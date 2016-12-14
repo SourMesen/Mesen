@@ -87,7 +87,7 @@
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.lblViewMemoryType);
 			this.flowLayoutPanel1.Controls.Add(this.cboMemoryType);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(6, 31);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(6, 27);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(167, 27);
 			this.flowLayoutPanel1.TabIndex = 1;

@@ -102,7 +102,8 @@ namespace Mesen.GUI.Forms.Config
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-					g.DrawImage(source, new Rectangle(0, 0, 384, 96), new Rectangle(0, 0, 16, 4), GraphicsUnit.Pixel);
+					g.ScaleTransform(22, 22);
+					g.DrawImageUnscaled(source, 0, 0);
 				}
 				this.picPalette.Image = target;
 			} finally {
@@ -112,7 +113,7 @@ namespace Mesen.GUI.Forms.Config
 
 		private void picPalette_MouseDown(object sender, MouseEventArgs e)
 		{
-			int offset = (e.X / 24) + (e.Y / 24 * 16);
+			int offset = (e.X / 22) + (e.Y / 22 * 16);
 
 			colorDialog.SolidColorOnly = true;
 			colorDialog.AllowFullOpen = true;

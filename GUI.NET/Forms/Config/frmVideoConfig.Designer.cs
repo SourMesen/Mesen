@@ -891,8 +891,7 @@
 			// 
 			this.tableLayoutPanel3.ColumnCount = 2;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.Controls.Add(this.picPalette, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel2, 1, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -911,7 +910,7 @@
 			this.picPalette.Location = new System.Drawing.Point(1, 1);
 			this.picPalette.Margin = new System.Windows.Forms.Padding(1);
 			this.picPalette.Name = "picPalette";
-			this.picPalette.Size = new System.Drawing.Size(386, 98);
+			this.picPalette.Size = new System.Drawing.Size(352, 88);
 			this.picPalette.TabIndex = 0;
 			this.picPalette.TabStop = false;
 			this.picPalette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
@@ -923,6 +922,7 @@
 			this.tableLayoutPanel2.Controls.Add(this.btnExportPalette, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.btnSelectPalette, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.btnLoadPalFile, 0, 1);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(388, 0);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";

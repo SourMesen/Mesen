@@ -51,7 +51,9 @@ namespace Mesen.GUI.Debugger.Controls
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-					g.DrawImage(source, new Rectangle(0, 0, 256, 512), new Rectangle(0, 0, 64, 128), GraphicsUnit.Pixel);
+					
+					g.ScaleTransform(4, 4);
+					g.DrawImageUnscaled(source, 0, 0);
 				}
 				picSprites.Image = target;
 			} finally {
@@ -142,11 +144,16 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkBackgroundPriority.Checked = backgroundPriority;
 
 			Bitmap tile = new Bitmap(64, 128);
+			Bitmap tilePreview = new Bitmap(8, 16);
+			using(Graphics g = Graphics.FromImage(tilePreview)) {
+				g.DrawImage(((PictureBox)sender).Image, new Rectangle(0, 0, 8, 16), new Rectangle(tileX*32, tileY*64, 32, 64), GraphicsUnit.Pixel);
+			}			
 			using(Graphics g = Graphics.FromImage(tile)) {
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.DrawImage(((PictureBox)sender).Image, new Rectangle(0, 0, 64, 128), new Rectangle(tileX*32, tileY*64, 32, 64), GraphicsUnit.Pixel);
+				g.ScaleTransform(8, 8);
+				g.DrawImageUnscaled(tilePreview, 0, 0);
 			}
 			this.picTile.Image = tile;
 

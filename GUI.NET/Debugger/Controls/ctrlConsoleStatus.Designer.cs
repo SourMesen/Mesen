@@ -150,16 +150,14 @@
 			this.tableLayoutPanel2.RowCount = 3;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(470, 391);
 			this.tableLayoutPanel2.TabIndex = 2;
 			// 
 			// grpPPUStatus
 			// 
-			this.grpPPUStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grpPPUStatus.Controls.Add(this.tableLayoutPanel8);
+			this.grpPPUStatus.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpPPUStatus.Location = new System.Drawing.Point(3, 180);
 			this.grpPPUStatus.Name = "grpPPUStatus";
 			this.grpPPUStatus.Size = new System.Drawing.Size(464, 179);

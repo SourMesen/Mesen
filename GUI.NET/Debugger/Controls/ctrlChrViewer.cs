@@ -56,8 +56,8 @@ namespace Mesen.GUI.Debugger.Controls
 						g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 						g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 						g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-						g.Clear(Color.Black);
-						g.DrawImage(source, new Rectangle(0, 0, 256, 256), new Rectangle(0, 0, 128, 128), GraphicsUnit.Pixel);
+						g.ScaleTransform(2, 2);
+						g.DrawImageUnscaled(source, 0, 0);
 					}
 					chrBanks[i].Image = target;
 				} finally {
@@ -142,11 +142,16 @@ namespace Mesen.GUI.Debugger.Controls
 			this.txtTileAddress.Text = (baseAddress + tileIndex * 16).ToString("X4");
 
 			Bitmap tile = new Bitmap(64, 64);
+			Bitmap tilePreview = new Bitmap(16, 16);
+			using(Graphics g = Graphics.FromImage(tilePreview)) {
+				g.DrawImage(((PictureBox)sender).Image, new Rectangle(0, 0, 16, 16), new Rectangle(tileX*16, tileY*16, 16, 16), GraphicsUnit.Pixel);
+			}
 			using(Graphics g = Graphics.FromImage(tile)) {
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.DrawImage(((PictureBox)sender).Image, new Rectangle(0, 0, 64, 64), new Rectangle(tileX*16, tileY*16, 16, 16), GraphicsUnit.Pixel);
+				g.ScaleTransform(4, 4);
+				g.DrawImageUnscaled(tilePreview, 0, 0);
 			}
 			this.picTile.Image = tile;
 		}

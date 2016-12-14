@@ -70,6 +70,7 @@
 			// 
 			this.logoPictureBox.Image = global::Mesen.GUI.Properties.Resources.MesenLogo;
 			this.logoPictureBox.Location = new System.Drawing.Point(3, 3);
+			this.logoPictureBox.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
 			this.logoPictureBox.Name = "logoPictureBox";
 			this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 4);
 			this.logoPictureBox.Size = new System.Drawing.Size(64, 65);

@@ -90,7 +90,7 @@
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
 			this.grpTileInfo.Location = new System.Drawing.Point(519, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.grpTileInfo.Size = new System.Drawing.Size(175, 224);
+			this.grpTileInfo.Size = new System.Drawing.Size(175, 238);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -196,7 +196,7 @@
 			this.lblAttributeAddress.Name = "lblAttributeAddress";
 			this.lblAttributeAddress.Size = new System.Drawing.Size(90, 13);
 			this.lblAttributeAddress.TabIndex = 3;
-			this.lblAttributeAddress.Text = "Attribute Address:";
+			this.lblAttributeAddress.Text = "Attribute Addr:";
 			// 
 			// lblPaletteAddress
 			// 
@@ -206,7 +206,7 @@
 			this.lblPaletteAddress.Name = "lblPaletteAddress";
 			this.lblPaletteAddress.Size = new System.Drawing.Size(84, 13);
 			this.lblPaletteAddress.TabIndex = 4;
-			this.lblPaletteAddress.Text = "Palette Address:";
+			this.lblPaletteAddress.Text = "Palette Addr:";
 			// 
 			// lblTile
 			// 

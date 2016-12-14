@@ -44,7 +44,8 @@ namespace Mesen.GUI.Debugger.Controls
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-					g.DrawImage(source, new Rectangle(0, 0, 128, 256), new Rectangle(0, 0, 4, 8), GraphicsUnit.Pixel);
+					g.ScaleTransform(32, 32);
+					g.DrawImageUnscaled(source, 0, 0);
 				}
 				this.picPalette.Image = target;
 			} finally {
