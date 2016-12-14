@@ -38,6 +38,19 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stepCount = -1;
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
+	_ppuStepCount = -1;
+
+	_stopFlag = false;
+	_suspendCount = 0;
+
+	_lastInstruction = 0;
+	_sendNotification = false;
+
+	_currentReadAddr = nullptr;
+	_currentReadValue = nullptr;
+
+	_ppuScrollX = 0;
+	_ppuScrollY = 0;
 
 	_ppuViewerScanline = 241;
 	_ppuViewerCycle = 0;
@@ -59,7 +72,9 @@ Debugger::~Debugger()
 	_stopFlag = true;
 
 	Console::Pause();
-	Debugger::Instance = nullptr;
+	if(Debugger::Instance == this) {
+		Debugger::Instance = nullptr;
+	}
 	_breakLock.Acquire();
 	_breakLock.Release();
 	Console::Resume();
