@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mesen.GUI
 {
@@ -11,6 +12,89 @@ namespace Mesen.GUI
 		public String[] Args { get; set; }
 	}
 
+#if __MonoCS__
+	public class SingleInstance : IDisposable
+	{
+		private bool _firstInstance = false;
+		private FileStream _fileStream;
+
+		public SingleInstance()
+		{
+			try {
+				_fileStream = System.IO.File.Open("mesen.lock", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+				_fileStream.Lock(0, 0);
+				_firstInstance = true;
+			} catch {
+				_firstInstance = false;
+			}
+		}
+
+		public bool FirstInstance { get { return _firstInstance; } }
+
+		public bool PassArgumentsToFirstInstance(string[] arguments)
+		{
+			try {
+				File.WriteAllText("mesen.arguments", string.Join(Environment.NewLine, arguments));
+			} catch { }
+
+			return true;
+		}
+
+		public void ListenForArgumentsFromSuccessiveInstances()
+		{
+			Task.Run(() => this.ListenForArguments());
+		}
+
+		private void ListenForArguments()
+		{
+			while(true) {
+				if(File.Exists("mesen.arguments")) {
+					try {
+						string[] arguments = File.ReadAllLines("mesen.arguments");
+						ThreadPool.QueueUserWorkItem(new WaitCallback(CallOnArgumentsReceived), arguments);
+						File.Delete("mesen.arguments");
+					} catch { }
+				}
+				System.Threading.Thread.Sleep(200);
+			}
+		}
+
+		private void CallOnArgumentsReceived(object state)
+		{
+			OnArgumentsReceived((string[])state); 
+		}
+
+		public event EventHandler<ArgumentsReceivedEventArgs> ArgumentsReceived;
+		private void OnArgumentsReceived(string[] arguments)
+		{
+			if(ArgumentsReceived != null)
+				ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = arguments });
+		}
+
+		private bool _disposed = false;
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if(!_disposed) {
+				if(_fileStream != null) {
+					_fileStream.Dispose();
+				}
+				_disposed = true;
+			}
+		}
+
+		~SingleInstance()
+		{
+			Dispose(false);
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+	}
+#else 
 	public class SingleInstance : IDisposable
 	{
 		/// <summary>
@@ -26,7 +110,7 @@ namespace Mesen.GUI
 		/// <param name="identifier">An identifier unique to this application.</param>
 		public SingleInstance(Guid identifier)
 		{
-			this._identifier = identifier;
+			this._identifier = new Guid("{A46606B7-2D1C-4CC5-A52F-43BCAF094AED}");
 			this._mutex = new Mutex(true, identifier.ToString(), out _firstInstance);
 		}
 
@@ -142,4 +226,5 @@ namespace Mesen.GUI
 		}
 		#endregion
 	}
+#endif
 }

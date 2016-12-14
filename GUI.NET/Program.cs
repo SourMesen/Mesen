@@ -103,8 +103,7 @@ namespace Mesen.GUI
 
 				ResourceHelper.UpdateEmuLanguage();
 
-				Guid guid = new Guid("{A46606B7-2D1C-4CC5-A52F-43BCAF094AED}");
-				using(SingleInstance singleInstance = new SingleInstance(guid)) {
+				using(SingleInstance singleInstance = new SingleInstance()) {
 					if(singleInstance.FirstInstance || !Config.ConfigManager.Config.PreferenceInfo.SingleInstance) {
 						Application.EnableVisualStyles();
 						Application.SetCompatibleTextRenderingDefault(false);
