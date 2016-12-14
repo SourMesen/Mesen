@@ -207,7 +207,7 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.ctrlRenderer.Handle, _noAudio, _noVideo, _noInput);
 			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
-				InteropEmu.AddKnownGameFolder(Path.GetDirectoryName(recentItem.Path).ToLowerInvariant());
+				InteropEmu.AddKnownGameFolder(Path.GetDirectoryName(recentItem.Path));
 			}
 
 			ConfigManager.Config.InitializeDefaults();

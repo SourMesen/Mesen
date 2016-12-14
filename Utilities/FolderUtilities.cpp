@@ -28,6 +28,9 @@ string FolderUtilities::GetHomeFolder()
 void FolderUtilities::AddKnownGameFolder(string gameFolder)
 {
 	bool alreadyExists = false;
+	string lowerCaseFolder = gameFolder;
+	std::transform(lowerCaseFolder.begin(), lowerCaseFolder.end(), lowerCaseFolder.begin(), ::tolower);
+
 	for(string folder : _gameFolders) {
 		std::transform(folder.begin(), folder.end(), folder.begin(), ::tolower);
 		if(folder.compare(gameFolder) == 0) {
@@ -97,6 +100,10 @@ vector<string> FolderUtilities::GetFolders(string rootFolder)
 {
 	vector<string> folders;
 
+	if(!fs::is_directory(rootFolder)) {
+		return folders;
+	} 
+
 	for(fs::recursive_directory_iterator i(rootFolder), end; i != end; i++) {
 		if(fs::is_directory(i->path())) {
 			folders.push_back(i->path().string());
@@ -110,6 +117,11 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, string mask,
 {
 	vector<string> files;
 	vector<string> folders = { { rootFolder } };
+
+	if(!fs::is_directory(rootFolder)) {
+		return files;
+	}
+
 	if(recursive) {
 		for(string subFolder : GetFolders(rootFolder)) {
 			folders.push_back(subFolder);

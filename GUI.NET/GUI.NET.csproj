@@ -214,6 +214,7 @@
     <Compile Include="Config\InputInfo.cs" />
     <Compile Include="Config\ClientConnection.cs" />
     <Compile Include="Config\Configuration.cs" />
+	 <Compile Include="Config\FileAssociationHelper.cs" />
     <Compile Include="Config\ImageExtensions.cs" />
     <Compile Include="Config\AudioInfo.cs" />
     <Compile Include="Config\PlayerProfile.cs" />

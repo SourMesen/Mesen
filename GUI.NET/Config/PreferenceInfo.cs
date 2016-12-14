@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Mesen.GUI.Forms;
-using Microsoft.Win32;
 
 namespace Mesen.GUI.Config
 {
@@ -76,32 +67,21 @@ namespace Mesen.GUI.Config
 			}
 		}
 
-		static private void UpdateFileAssociation(string extension, bool associate)
-		{
-			string key = @"HKEY_CURRENT_USER\Software\Classes\." + extension;
-			if(associate) {
-				Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\Mesen\shell\open\command", null, Application.ExecutablePath + " \"%1\"");
-				Registry.SetValue(key, null, "Mesen");
-			} else {
-				//Unregister Mesen if Mesen was registered for .nes files
-				object regKey = Registry.GetValue(key, null, "");
-				if(regKey != null && regKey.Equals("Mesen")) {
-					Registry.SetValue(key, null, "");
-				}
-			}
-		}
-
 		static public void ApplyConfig()
 		{
 			PreferenceInfo preferenceInfo = ConfigManager.Config.PreferenceInfo;
 			
-			UpdateFileAssociation("nes", preferenceInfo.AssociateNesFiles);
-			UpdateFileAssociation("fds", preferenceInfo.AssociateFdsFiles);
-			UpdateFileAssociation("mmo", preferenceInfo.AssociateMmoFiles);
-			UpdateFileAssociation("mst", preferenceInfo.AssociateMstFiles);
-			UpdateFileAssociation("nsf", preferenceInfo.AssociateNsfFiles);
-			UpdateFileAssociation("nsfe", preferenceInfo.AssociateNsfeFiles);
-			UpdateFileAssociation("unf", preferenceInfo.AssociateUnfFiles);
+			if(Program.IsMono) {
+				FileAssociationHelper.ConfigureLinuxMimeTypes();
+			} else {
+				FileAssociationHelper.UpdateFileAssociation("nes", preferenceInfo.AssociateNesFiles);
+				FileAssociationHelper.UpdateFileAssociation("fds", preferenceInfo.AssociateFdsFiles);
+				FileAssociationHelper.UpdateFileAssociation("mmo", preferenceInfo.AssociateMmoFiles);
+				FileAssociationHelper.UpdateFileAssociation("mst", preferenceInfo.AssociateMstFiles);
+				FileAssociationHelper.UpdateFileAssociation("nsf", preferenceInfo.AssociateNsfFiles);
+				FileAssociationHelper.UpdateFileAssociation("nsfe", preferenceInfo.AssociateNsfeFiles);
+				FileAssociationHelper.UpdateFileAssociation("unf", preferenceInfo.AssociateUnfFiles);
+			}
 
 			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, preferenceInfo.UseAlternativeMmc3Irq);
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, preferenceInfo.AllowInvalidInput);
