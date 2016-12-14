@@ -108,10 +108,10 @@ namespace Mesen.GUI
 		/// Enforces single instance for an application.
 		/// </summary>
 		/// <param name="identifier">An identifier unique to this application.</param>
-		public SingleInstance(Guid identifier)
+		public SingleInstance()
 		{
 			this._identifier = new Guid("{A46606B7-2D1C-4CC5-A52F-43BCAF094AED}");
-			this._mutex = new Mutex(true, identifier.ToString(), out _firstInstance);
+			this._mutex = new Mutex(true, _identifier.ToString(), out _firstInstance);
 		}
 
 		/// <summary>
