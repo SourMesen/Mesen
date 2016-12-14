@@ -341,7 +341,7 @@ uint32_t BaseMapper::GetCHRPageCount()
 
 string BaseMapper::GetBatteryFilename()
 {
-	return FolderUtilities::GetSaveFolder() + FolderUtilities::GetFilename(_romName, false) + ".sav";
+	return FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), FolderUtilities::GetFilename(_romName, false) + ".sav");
 }
 		
 void BaseMapper::RestoreOriginalPrgRam()

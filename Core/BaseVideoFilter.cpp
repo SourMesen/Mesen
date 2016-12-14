@@ -82,7 +82,7 @@ void BaseVideoFilter::TakeScreenshot()
 	}
 
 	int counter = 0;
-	string baseFilename = FolderUtilities::GetScreenshotFolder() + romFilename;
+	string baseFilename = FolderUtilities::CombinePath(FolderUtilities::GetScreenshotFolder(), romFilename);
 	string ssFilename;
 	while(true) {
 		string counterStr = std::to_string(counter);
