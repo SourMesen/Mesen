@@ -325,11 +325,17 @@ void Console::Run()
 				_runLock.Release();
 				
 				PlatformUtilities::EnableScreensaver();
-				while(paused && !_stop) {
+				while(paused && !_stop && _debugger == nullptr) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
 					paused = EmulationSettings::IsPaused();
 				}
+
+				if(_debugger != nullptr) {
+					//Prevent pausing when debugger is active
+					EmulationSettings::ClearFlags(EmulationFlags::Paused);
+				}
+
 				PlatformUtilities::DisableScreensaver();
 				_runLock.Acquire();								
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
