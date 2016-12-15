@@ -22,7 +22,7 @@ private:
 
 	bool Initialize();
 	bool UpdateInputState(DirectInputData& joystick);
-	static bool ProcessDevice(const GUID* deviceGuid, bool checkOnly);
+	static bool ProcessDevice(const DIDEVICEINSTANCE* pdidInstance, bool checkOnly);
 	static bool IsXInputDevice(const GUID* pGuidProductFromDirectInput);
 	static int __stdcall NeedToUpdateCallback(const DIDEVICEINSTANCE* pdidInstance, void* pContext);
 	static int __stdcall EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, void* pContext);

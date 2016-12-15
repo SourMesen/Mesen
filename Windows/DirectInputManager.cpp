@@ -38,8 +38,10 @@ bool DirectInputManager::Initialize()
 	return UpdateDeviceList();
 }
 
-bool DirectInputManager::ProcessDevice(const GUID* deviceGuid, bool checkOnly)
+bool DirectInputManager::ProcessDevice(const DIDEVICEINSTANCE* pdidInstance, bool checkOnly)
 {
+	const GUID* deviceGuid = &pdidInstance->guidInstance;
+
 	auto comp = [=](GUID guid) {
 		return guid.Data1 == deviceGuid->Data1 &&
 			guid.Data2 == deviceGuid->Data2 &&
@@ -52,7 +54,7 @@ bool DirectInputManager::ProcessDevice(const GUID* deviceGuid, bool checkOnly)
 	if(knownXInputDevice || knownDirectInputDevice) {
 		return false;
 	} else {
-		bool isXInput = IsXInputDevice(deviceGuid);
+		bool isXInput = IsXInputDevice(&pdidInstance->guidProduct);
 		if(!checkOnly) {
 			if(isXInput) {
 				_xinputDeviceGuids.push_back(*deviceGuid);
@@ -199,7 +201,7 @@ bool DirectInputManager::NeedToUpdate()
 
 int DirectInputManager::NeedToUpdateCallback(const DIDEVICEINSTANCE* pdidInstance, void* pContext)
 {
-	if(ProcessDevice(&pdidInstance->guidProduct, true)) {
+	if(ProcessDevice(pdidInstance, true)) {
 		_needToUpdate = true;
 		return DIENUM_STOP;
 	}
@@ -261,7 +263,7 @@ int DirectInputManager::EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstan
 {
 	HRESULT hr;
 
-	if(ProcessDevice(&pdidInstance->guidInstance, false)) {
+	if(ProcessDevice(pdidInstance, false)) {
 		// Obtain an interface to the enumerated joystick.
 		LPDIRECTINPUTDEVICE8 pJoystick = nullptr;
 		hr = _directInput->CreateDevice(pdidInstance->guidInstance, &pJoystick, nullptr);
