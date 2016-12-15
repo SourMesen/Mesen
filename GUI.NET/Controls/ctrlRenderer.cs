@@ -48,22 +48,20 @@ namespace Mesen.GUI.Controls
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
-			SetMouseButtonState(e.Button, true);
+			SetMouseButtonState(System.Windows.Forms.Control.MouseButtons);
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
-			SetMouseButtonState(e.Button, false);
-		}
+			SetMouseButtonState(System.Windows.Forms.Control.MouseButtons);
+		}		
 
-		private void SetMouseButtonState(MouseButtons button, bool down)
+		private void SetMouseButtonState(MouseButtons pressedButtons)
 		{
-			switch(button) {
-				case MouseButtons.Left: InteropEmu.SetKeyState(LeftMouseButtonKeyCode, down); break;
-				case MouseButtons.Right: InteropEmu.SetKeyState(RightMouseButtonKeyCode, down); break;
-				case MouseButtons.Middle: InteropEmu.SetKeyState(MiddleMouseButtonKeyCode, down); break;
-			}
+			InteropEmu.SetKeyState(LeftMouseButtonKeyCode, pressedButtons.HasFlag(MouseButtons.Left));
+			InteropEmu.SetKeyState(RightMouseButtonKeyCode, pressedButtons.HasFlag(MouseButtons.Right));
+			InteropEmu.SetKeyState(MiddleMouseButtonKeyCode, pressedButtons.HasFlag(MouseButtons.Middle));
 		}
 
 		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
