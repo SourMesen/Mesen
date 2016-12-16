@@ -1,7 +1,18 @@
-#pragma comment(lib, "Utilities.lib")
+#ifdef _WIN32
+	#pragma comment(lib, "Utilities.lib")
+	#include <Windows.h>
+	#include <Shlobj.h>
+#else
+	#include <sys/wait.h>
+	#include <stdio.h>
+	#include <execinfo.h>
+	#include <signal.h>
+	#include <stdlib.h>
+	#include <unistd.h>
 
-#include <Windows.h>
-#include <Shlobj.h>
+	#define __stdcall	
+#endif
+
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -49,7 +60,7 @@ vector<string> failedTests;
 SimpleLock lock;
 Timer timer;
 
-void _stdcall OnNotificationReceived(ConsoleNotificationType type)
+void __stdcall OnNotificationReceived(ConsoleNotificationType type)
 {
 	if(type == ConsoleNotificationType::GameLoaded) {
 		runThread = new std::thread(Run);
@@ -71,13 +82,21 @@ void RunTest()
 		if(index < testFilenames.size()) {
 			string filepath = testFilenames[index];
 			string filename = FolderUtilities::GetFilename(filepath, false);
-			string command = "TestHelper.exe /testrom \"" + filepath + "\"";
+			#ifdef _WIN32
+				string command = "TestHelper.exe /testrom \"" + filepath + "\"";
+			#else
+				string command = "./testhelper /testrom \"" + filepath + "\"";
+			#endif
 
 			lock.Acquire();
 			std::cout << std::to_string(index) << ") " << filename << std::endl;
 			lock.Release();
 
 			int failedFrames = std::system(command.c_str());
+			#ifdef __GNUC__
+				failedFrames = WEXITSTATUS(failedFrames);
+			#endif
+
 			if(failedFrames != 0) {
 				//Test failed
 				lock.Acquire();
@@ -91,11 +110,27 @@ void RunTest()
 	}
 }
 
+#ifdef __GNUC__
+	void handler(int sig) {
+		void *array[20];
+		size_t size = backtrace(array, 20);
+
+		std::cout << "Error: signal: " << std::to_string(sig) << std::endl;
+		backtrace_symbols_fd(array, size, STDERR_FILENO);
+		exit(1);
+	}
+#endif
+
 int main(int argc, char* argv[])
 {
-	wchar_t path[MAX_PATH];
-	SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, path);
-	string mesenFolder = FolderUtilities::CombinePath(utf8::utf8::encode(path), "Mesen");
+	#ifdef _WIN32
+		wchar_t path[MAX_PATH];
+		SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, path);
+		string mesenFolder = FolderUtilities::CombinePath(utf8::utf8::encode(path), "Mesen");
+	#else 
+		string mesenFolder = "/home/saitoh/Mesen";
+		signal(SIGSEGV, handler);		
+	#endif
 
 	if(argc <= 2) {
 		string testFolder;
