@@ -9,7 +9,7 @@
 
 CPU* CPU::Instance = nullptr;
 
-CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
+CPU::CPU(MemoryManager *memoryManager)
 {
 	CPU::Instance = this;
 
@@ -55,6 +55,22 @@ CPU::CPU(MemoryManager *memoryManager) : _memoryManager(memoryManager)
 	
 	memcpy(_opTable, opTable, sizeof(opTable));
 	memcpy(_addrMode, addrMode, sizeof(addrMode));
+
+	_instAddrMode = AddrMode::None;
+	_state = {};
+	_cycleCount = 0;
+	_operand = 0;
+	_spriteDmaCounter = 0;
+	_spriteDmaTransfer = false;
+	_dmcCounter = 0;
+	_dmcDmaRunning = false;
+	_cpuWrite = false;
+	_writeAddr = false;
+	_irqMask = 0;
+	_state = {};
+	_prevRunIrq = false;
+	_runIrq = false;
+ 	_memoryManager = memoryManager;	
 }
 
 void CPU::Reset(bool softReset)

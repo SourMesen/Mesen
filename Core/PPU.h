@@ -93,7 +93,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 {
 	protected:
 		static PPU* Instance;
-
+	
 		MemoryManager *_memoryManager;
 
 		PPUState _state;
@@ -127,19 +127,19 @@ class PPU : public IMemoryHandler, public Snapshotable
 		TileInfo _previousTile;
 
 		SpriteInfo _spriteTiles[64];
-		uint32_t _spriteCount = 0;
-		uint32_t _secondaryOAMAddr = 0;
-		bool _sprite0Visible = false;
+		uint32_t _spriteCount;
+		uint32_t _secondaryOAMAddr;
+		bool _sprite0Visible;
 
-		uint32_t _overflowSpriteAddr = 0;
-		uint32_t _spriteIndex = 0;
+		uint32_t _overflowSpriteAddr;
+		uint32_t _spriteIndex;
 
-		uint8_t _openBus = 0;
+		uint8_t _openBus;
 		int32_t _openBusDecayStamp[8];
-		uint32_t _ignoreVramRead = 0;
+		uint32_t _ignoreVramRead;
 
-		uint16_t _spriteDmaCounter = 0;
-		uint16_t _spriteDmaAddr = 0;
+		uint16_t _spriteDmaCounter;
+		uint16_t _spriteDmaAddr;
 
 		uint8_t _oamCopybuffer;
 		bool _spriteInRange;

@@ -52,6 +52,33 @@ void PPU::Reset()
 	_flags = {};
 	_statusFlags = {};
 
+	_intensifyColorBits = 0;
+	_paletteRamMask = 0;
+	_lastSprite = nullptr;
+	_oamCopybuffer = 0;
+	_spriteInRange = false;
+	_sprite0Added = false;
+	_spriteAddrH = 0;
+	_spriteAddrL = 0;
+	_oamCopyDone = false;
+	_renderingEnabled = false;
+	_prevRenderingEnabled = false;
+	_cyclesNeeded = 0.0;
+	_simpleMode = false;
+	_skipScrollingIncrement = false;
+
+	memset(_spriteTiles, 0, sizeof(SpriteInfo));	
+	_spriteCount = 0;
+	_secondaryOAMAddr = 0;
+	_sprite0Visible = false;
+	_overflowSpriteAddr = 0;
+	_spriteIndex = 0;
+	_openBus = 0;
+	memset(_openBusDecayStamp, 0, sizeof(_openBusDecayStamp));
+	_ignoreVramRead = 0;
+	_spriteDmaCounter = 0;
+	_spriteDmaAddr = 0;
+
 	_scanline = 0;
 	_cycle = 0;
 	_frameCount = 1;
@@ -690,6 +717,9 @@ void PPU::ProcessPreVBlankScanline()
 	_skipScrollingIncrement = false;
 
 	if(_cycle >= 257 && _cycle <= 320) {
+		if(_cycle == 257) {
+			_spriteIndex = 0;
+		}
 		if(IsRenderingEnabled()) {
 			//"OAMADDR is set to 0 during each of ticks 257-320 (the sprite tile loading interval) of the pre-render and visible scanlines." (When rendering)
 			_state.SpriteRamAddr = 0;
@@ -700,9 +730,6 @@ void PPU::ProcessPreVBlankScanline()
 			} else if((_cycle - 257) % 8 == 0) {
 				//Garbage NT sprite fetch (257, 265, 273, etc.) - Required for proper MC-ACC IRQs (MMC3 clone)
 				_memoryManager->ReadVRAM(GetNameTableAddr());
-				if(_cycle == 257) {
-					_spriteIndex = 0;
-				}
 			} else if((_cycle - 259) % 8 == 0) {
 				//Garbage AT sprite fetch
 				_memoryManager->ReadVRAM(GetAttributeAddr());

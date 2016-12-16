@@ -57,13 +57,17 @@ public:
 				_lengthCounterHalt = false;
 				_lengthCounter = 0;
 				_newHaltValue = false;
+				_lengthCounterReloadValue = 0;
+				_lengthCounterPreviousValue = 0;			
 			}
 		} else {
 			_enabled = false;
 			_lengthCounterHalt = false;
 			_lengthCounter = 0;
 			_newHaltValue = false;
-		}
+			_lengthCounterReloadValue = 0;
+			_lengthCounterPreviousValue = 0;		
+		}		
 
 		ApuLengthCounter::_needToRun = false;
 	}
