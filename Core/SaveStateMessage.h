@@ -7,11 +7,11 @@
 class SaveStateMessage : public NetMessage
 {
 private:
-	uint8_t* _stateData;
-	uint32_t _dataSize;
+	uint8_t* _stateData = nullptr;
+	uint32_t _dataSize = 0;
 
 	CodeInfo* _cheats;
-	uint32_t _cheatArraySize;
+	uint32_t _cheatArraySize = 0;
 
 protected:
 	virtual void ProtectedStreamState()

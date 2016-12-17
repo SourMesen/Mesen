@@ -13,13 +13,17 @@ unique_ptr<GameClient> GameClient::Instance;
 
 GameClient::GameClient()
 {
+	_stop = false;
+	
 	MessageManager::RegisterNotificationListener(this);
 }
 
 GameClient::~GameClient()
 {
 	_stop = true;
-	_clientThread->join();
+	if(_clientThread) {
+		_clientThread->join();
+	}
 	MessageManager::UnregisterNotificationListener(this);
 }
 

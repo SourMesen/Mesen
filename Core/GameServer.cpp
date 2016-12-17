@@ -12,6 +12,7 @@ unique_ptr<GameServer> GameServer::Instance;
 
 GameServer::GameServer(uint16_t listenPort, string hostPlayerName)
 {
+	_stop = false;
 	_port = listenPort;
 	_hostPlayerName = hostPlayerName;
 	_hostControllerPort = 0;
