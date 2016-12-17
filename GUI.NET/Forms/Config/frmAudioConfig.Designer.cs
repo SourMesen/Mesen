@@ -1002,7 +1002,6 @@
 			// 
 			// trkReverbDelay
 			// 
-			this.trkReverbDelay.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.trkReverbDelay.Location = new System.Drawing.Point(59, 58);
 			this.trkReverbDelay.Maximum = 30;
 			this.trkReverbDelay.Minimum = 1;
@@ -1013,8 +1012,7 @@
 			this.trkReverbDelay.Value = 1;
 			// 
 			// trkReverbStrength
-			// 
-			this.trkReverbStrength.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			//
 			this.trkReverbStrength.Location = new System.Drawing.Point(59, 26);
 			this.trkReverbStrength.Minimum = 1;
 			this.trkReverbStrength.Name = "trkReverbStrength";

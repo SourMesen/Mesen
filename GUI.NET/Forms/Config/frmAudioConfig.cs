@@ -17,6 +17,11 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InitializeComponent();
 
+			if(!Program.IsMono) {
+				this.trkReverbDelay.BackColor = System.Drawing.SystemColors.ControlLightLight;
+				this.trkReverbStrength.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			}
+
 			Icon = Properties.Resources.Audio;
 			Entity = ConfigManager.Config.AudioInfo;
 

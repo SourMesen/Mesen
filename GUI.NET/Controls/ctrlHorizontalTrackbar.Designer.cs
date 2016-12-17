@@ -55,7 +55,6 @@
 			// 
 			// trackBar
 			// 
-			this.trackBar.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.trackBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.trackBar.Location = new System.Drawing.Point(0, 20);
 			this.trackBar.Margin = new System.Windows.Forms.Padding(0);

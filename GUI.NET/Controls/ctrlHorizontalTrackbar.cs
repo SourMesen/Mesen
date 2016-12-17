@@ -21,6 +21,10 @@ namespace Mesen.GUI.Controls
 		public ctrlHorizontalTrackbar()
 		{
 			InitializeComponent();
+
+			if(!Program.IsMono) {
+				this.trackBar.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			}
 		}
 
 		public int Maximum

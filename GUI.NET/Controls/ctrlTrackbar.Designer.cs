@@ -67,7 +67,6 @@
 			// 
 			this.trackBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.trackBar.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.trackBar.Location = new System.Drawing.Point(17, 0);
 			this.trackBar.Margin = new System.Windows.Forms.Padding(0);
 			this.trackBar.Maximum = 100;
