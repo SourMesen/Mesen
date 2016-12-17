@@ -31,7 +31,9 @@
 			this.components = new System.ComponentModel.Container();
 			this.contextMenuBreakpoints = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEditBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRemoveBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstBreakpoints = new Mesen.GUI.Controls.MyListView();
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -46,11 +48,12 @@
 			// 
 			this.contextMenuBreakpoints.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAddBreakpoint,
+            this.mnuEditBreakpoint,
             this.mnuRemoveBreakpoint,
+            this.toolStripMenuItem1,
             this.mnuGoToLocation});
 			this.contextMenuBreakpoints.Name = "contextMenuWatch";
-			this.contextMenuBreakpoints.Size = new System.Drawing.Size(150, 70);
-			this.contextMenuBreakpoints.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuBreakpoints_Opening);
+			this.contextMenuBreakpoints.Size = new System.Drawing.Size(150, 98);
 			// 
 			// mnuAddBreakpoint
 			// 
@@ -60,6 +63,14 @@
 			this.mnuAddBreakpoint.Text = "Add...";
 			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
 			// 
+			// mnuEditBreakpoint
+			// 
+			this.mnuEditBreakpoint.Name = "mnuEditBreakpoint";
+			this.mnuEditBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.F2;
+			this.mnuEditBreakpoint.Size = new System.Drawing.Size(149, 22);
+			this.mnuEditBreakpoint.Text = "Edit";
+			this.mnuEditBreakpoint.Click += new System.EventHandler(this.mnuEditBreakpoint_Click);
+			// 
 			// mnuRemoveBreakpoint
 			// 
 			this.mnuRemoveBreakpoint.Name = "mnuRemoveBreakpoint";
@@ -67,6 +78,11 @@
 			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(149, 22);
 			this.mnuRemoveBreakpoint.Text = "Remove";
 			this.mnuRemoveBreakpoint.Click += new System.EventHandler(this.mnuRemoveBreakpoint_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(146, 6);
 			// 
 			// mnuGoToLocation
 			// 
@@ -97,6 +113,7 @@
 			this.lstBreakpoints.View = System.Windows.Forms.View.Details;
 			this.lstBreakpoints.ColumnWidthChanged += new System.Windows.Forms.ColumnWidthChangedEventHandler(this.lstBreakpoints_ColumnWidthChanged);
 			this.lstBreakpoints.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstBreakpoints_ColumnWidthChanging);
+			this.lstBreakpoints.SelectedIndexChanged += new System.EventHandler(this.lstBreakpoints_SelectedIndexChanged);
 			this.lstBreakpoints.DoubleClick += new System.EventHandler(this.lstBreakpoints_DoubleClick);
 			// 
 			// columnHeader3
@@ -148,5 +165,7 @@
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToLocation;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditBreakpoint;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 	}
 }

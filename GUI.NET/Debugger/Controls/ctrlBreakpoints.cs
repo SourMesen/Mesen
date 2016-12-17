@@ -118,9 +118,17 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		private void contextMenuBreakpoints_Opening(object sender, CancelEventArgs e)
+		private void mnuEditBreakpoint_Click(object sender, EventArgs e)
+		{
+			if(lstBreakpoints.SelectedItems.Count > 0) {
+				BreakpointManager.EditBreakpoint(((Breakpoint)lstBreakpoints.SelectedItems[0].Tag));
+			}
+		}
+
+		private void lstBreakpoints_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			mnuRemoveBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count > 0);
+			mnuEditBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count == 1);
 			mnuGoToLocation.Enabled = (lstBreakpoints.SelectedItems.Count == 1);
 		}
 	}
