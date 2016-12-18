@@ -123,7 +123,7 @@ SpriteFont::Impl::Impl(SDL_Renderer* renderer, BinaryReader* reader) :
 	
 	textureData.insert(textureData.end(), pixelData, pixelData+textureStride*textureHeight);
 
-	SDL_Surface* surf = SDL_CreateRGBSurfaceFrom((void*)textureData.data(), textureWidth, textureHeight, 32, textureStride, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+	SDL_Surface* surf = SDL_CreateRGBSurfaceFrom((void*)textureData.data(), textureWidth, textureHeight, 32, textureStride, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
 	texture = SDL_CreateTextureFromSurface(renderer, surf);
 	SDL_FreeSurface(surf);
 }
