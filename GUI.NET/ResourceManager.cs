@@ -74,7 +74,7 @@ namespace Mesen.GUI
 			} catch { }
 		}
 
-		public static void ExtractResources()
+		public static bool ExtractResources()
 		{
 			CleanupOldFiles();
 
@@ -91,16 +91,29 @@ namespace Mesen.GUI
 					string outputFilename = Path.Combine(baseFolder, entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name == "MesenUpdater.exe" || entry.Name == "MesenDB.txt") {
-					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
+					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name);
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name.StartsWith("Google.Apis") || entry.Name == "BouncyCastle.Crypto.dll" || entry.Name == "Zlib.Portable.dll" || entry.Name == "Newtonsoft.Json.dll") {
-					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "GoogleDrive", entry.Name.Replace(suffix, ""));
+					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "GoogleDrive", entry.Name);
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name == "Font.24.spritefont" || entry.Name == "Font.64.spritefont" || entry.Name == "LICENSE.txt") {
-					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "Resources", entry.Name.Replace(suffix, ""));
+					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "Resources", entry.Name);
 					ExtractFile(entry, outputFilename);
+				} else if(entry.Name == "DroidSansMono.ttf") {
+					if(Program.IsMono) {
+						string outputFilename = Path.Combine(ConfigManager.FontFolder, entry.Name);
+						bool needRestart = !File.Exists(outputFilename);
+						ExtractFile(entry, outputFilename);
+						if(needRestart) {
+							//If font is newly installed, restart Mesen (otherwise debugger will not be able to use the font and display incorrectly)
+							System.Diagnostics.Process.Start("mono", "\"" + Assembly.GetEntryAssembly().Location + "\" /delayrestart");
+							return false;
+						}
+					}
 				}
 			}
+
+			return true;
 		}
 	}
 }

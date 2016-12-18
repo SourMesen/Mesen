@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -19,6 +20,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 			this.ctrlDataViewer.MarginWidth = 3;
+			this.ctrlDataViewer.FontSize = BaseControl.DefaultFontSize;
 		}
 
 		protected override ctrlScrollableTextbox ScrollableTextbox

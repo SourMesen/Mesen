@@ -220,7 +220,7 @@ namespace Mesen.GUI.Debugger
 					return true;
 
 				case Keys.Control | Keys.D0:
-					this.FontSize = 13;
+					this.FontSize = BaseControl.DefaultFontSize;
 					return true;
 			}
 

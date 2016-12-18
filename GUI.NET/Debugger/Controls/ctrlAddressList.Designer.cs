@@ -52,7 +52,6 @@
 			// 
 			this.ctrlDataViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.ctrlDataViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDataViewer.FontSize = 13F;
 			this.ctrlDataViewer.Location = new System.Drawing.Point(3, 3);
 			this.ctrlDataViewer.Name = "ctrlDataViewer";
 			this.ctrlDataViewer.ShowContentNotes = false;

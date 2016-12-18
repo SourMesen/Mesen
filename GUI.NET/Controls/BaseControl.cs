@@ -6,12 +6,14 @@ namespace Mesen.GUI.Controls
 {
 	public class BaseControl : UserControl
 	{
+		public static float DefaultFontSize = Program.IsMono ? 10 : 12;
+				
 		public static string MonospaceFontFamily
 		{
 			get
 			{
 				if(Program.IsMono) {
-					return "Ubuntu Mono";
+					return "DroidSansMono";
 				} else {
 					return "Consolas";
 				}

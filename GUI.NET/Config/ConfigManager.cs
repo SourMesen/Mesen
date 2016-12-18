@@ -55,6 +55,18 @@ namespace Mesen.GUI.Config
 			}
 		}
 
+		public static string FontFolder
+		{
+			get
+			{
+				string fontPath = Environment.GetFolderPath(Environment.SpecialFolder.Fonts, Environment.SpecialFolderOption.Create);
+				if(!Directory.Exists(fontPath)) {
+					Directory.CreateDirectory(fontPath);
+				}
+				return fontPath;
+			}
+		}		
+
 		public static string MovieFolder
 		{
 			get

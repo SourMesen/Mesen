@@ -20,6 +20,8 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlMemoryAccessCounters()
 		{
 			InitializeComponent();
+			
+			this.ctrlScrollableTextbox.FontSize = BaseControl.DefaultFontSize;
 
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {

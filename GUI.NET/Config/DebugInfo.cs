@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Mesen.GUI.Debugger;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Config
 {
@@ -30,7 +31,7 @@ namespace Mesen.GUI.Config
 	{
 		public ByteCodePosition ByteCodePosition = ByteCodePosition.Hidden;
 		public PrgAddressPosition PrgAddressPosition = PrgAddressPosition.Hidden;
-		public float FontSize = 13;
+		public float FontSize = BaseControl.DefaultFontSize;
 	}
 
 	public class DebugWorkspace
@@ -117,7 +118,7 @@ namespace Mesen.GUI.Config
 
 		public bool RamAutoRefresh = true;
 		public int RamColumnCount = 2;
-		public float RamFontSize = 13;
+		public float RamFontSize = BaseControl.DefaultFontSize;
 
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;

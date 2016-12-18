@@ -73,7 +73,9 @@ namespace Mesen.GUI
 				Directory.SetCurrentDirectory(ConfigManager.HomeFolder);
 				try {
 					ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
-					ResourceManager.ExtractResources();
+					if(!ResourceManager.ExtractResources()) { 
+						return;
+					}
 				} catch(FileNotFoundException) {
 					string message = "The Microsoft .NET Framework 4.5 could not be found. Please download and install the latest version of the .NET Framework from Microsoft's website and try again.";
 					switch(ResourceHelper.GetCurrentLanguage()) {

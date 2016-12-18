@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger
 {
@@ -507,7 +508,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.FontSize = 13;
+			_lastCodeWindow.FontSize = BaseControl.DefaultFontSize;
 		}
 
 		private void mnuClose_Click(object sender, EventArgs e)

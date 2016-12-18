@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger
 {
@@ -107,7 +108,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
-			this.ctrlHexViewer.FontSize = 13;
+			this.ctrlHexViewer.FontSize = BaseControl.DefaultFontSize;
 			this.UpdateConfig();
 		}
 
