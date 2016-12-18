@@ -50,12 +50,12 @@ private:
 	}
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x400; }
-	virtual uint32_t GetSaveRamPageSize() { return 0x800; }
-	virtual bool AllowRegisterRead() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
+	virtual uint32_t GetSaveRamPageSize() override { return 0x800; }
+	virtual bool AllowRegisterRead() override { return true; }
 	
-	void InitMapper()
+	void InitMapper() override
 	{
 		switch(_mapperID) {
 			case 19: _variant = NamcoVariant::Namco163; _autoDetectVariant = true; break;
@@ -82,7 +82,7 @@ protected:
 		UpdateSaveRamAccess();
 	}
 	
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
@@ -93,7 +93,7 @@ protected:
 		}
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqCounter & 0x8000 && (_irqCounter & 0x7FFF) != 0x7FFF) {
 			_irqCounter++;
@@ -107,7 +107,7 @@ protected:
 		}
 	}
 
-	void WriteRAM(uint16_t addr, uint8_t value)
+	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		if(addr >= 0x6000 && addr <= 0x7FFF) {
 			_notNamco340 = true;
@@ -118,7 +118,7 @@ protected:
 		BaseMapper::WriteRAM(addr, value);
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		switch(addr & 0xF800) {
 			case 0x4800: return _audio.ReadRegister(addr);
@@ -128,7 +128,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		addr &= 0xF800;
 
@@ -171,7 +171,7 @@ protected:
 			}
 
 			case 0xC000: case 0xC800: case 0xD000: case 0xD800:
-				if(addr >= 0xC8000) {
+				if(addr >= 0xC800) {
 					SetVariant(NamcoVariant::Namco163);
 				} else if(_variant != NamcoVariant::Namco163) {
 					SetVariant(NamcoVariant::Namco175);

@@ -5,8 +5,8 @@
 class Bmc190in1 : public BaseMapper
 {
 protected:
-	uint16_t GetPRGPageSize() { return 0x4000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
+	uint16_t GetPRGPageSize() override { return 0x4000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
 
 	void InitMapper() override
 	{

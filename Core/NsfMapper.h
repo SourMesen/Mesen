@@ -98,20 +98,20 @@ private:
 	void ClockLengthAndFadeCounters();
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x1000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
-	uint32_t GetWorkRamSize() { return 0x4000; }
-	uint32_t GetWorkRamPageSize() { return 0x1000; }
-	bool AllowRegisterRead() { return true; }
+	uint16_t GetPRGPageSize() override { return 0x1000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	uint32_t GetWorkRamSize() override { return 0x4000; }
+	uint32_t GetWorkRamPageSize() override { return 0x1000; }
+	bool AllowRegisterRead() override { return true; }
 
-	void InitMapper();
-	void InitMapper(RomData& romData);
-	void Reset(bool softReset);
-	void GetMemoryRanges(MemoryRanges &ranges);
+	void InitMapper() override;
+	void InitMapper(RomData& romData) override;
+	void Reset(bool softReset) override;
+	void GetMemoryRanges(MemoryRanges &ranges) override;
 	
-	void ProcessCpuClock();
-	uint8_t ReadRegister(uint16_t addr);
-	void WriteRegister(uint16_t addr, uint8_t value);
+	void ProcessCpuClock() override;
+	uint8_t ReadRegister(uint16_t addr) override;
+	void WriteRegister(uint16_t addr, uint8_t value) override;
 
 public:
 	NsfMapper();
@@ -119,7 +119,7 @@ public:
 
 	static NsfMapper* GetInstance();
 
-	void SetNesModel(NesModel model);
+	void SetNesModel(NesModel model) override;
 
 	void SelectTrack(uint8_t trackNumber);
 	uint8_t GetCurrentTrack();

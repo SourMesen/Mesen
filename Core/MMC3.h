@@ -66,7 +66,7 @@ class MMC3 : public BaseMapper
 			return _chrMode;
 		}
 
-		void Reset()
+		void ResetMmc3()
 		{
 			_state.Reg8000 = 0;
 			_state.RegA000 = 0;
@@ -148,7 +148,7 @@ class MMC3 : public BaseMapper
 			_prgMode = (_state.Reg8000 & 0x40) >> 6;
 
 			if(_subMapperID == 1) {
-				bool wramEnabled = (_state.Reg8000 & 0x20) == 0x20;
+				//bool wramEnabled = (_state.Reg8000 & 0x20) == 0x20;
 				RemoveCpuMemoryMapping(0x6000, 0x7000);
 				
 				uint8_t firstBankAccess = (_state.RegA001 & 0x10 ? MemoryAccessType::Write : 0) | (_state.RegA001 & 0x20 ? MemoryAccessType::Read : 0);
@@ -175,7 +175,7 @@ class MMC3 : public BaseMapper
 			UpdateChrMapping();
 		}
 
-		virtual void StreamState(bool saving)
+		virtual void StreamState(bool saving) override
 		{
 			BaseMapper::StreamState(saving);
 			ArrayInfo<uint8_t> registers = { _registers, 8 };
@@ -190,24 +190,24 @@ class MMC3 : public BaseMapper
 			UpdateState();
 		}
 
-		virtual uint16_t GetPRGPageSize() { return 0x2000; }
-		virtual uint16_t GetCHRPageSize() {	return 0x0400; }
-		virtual uint32_t GetSaveRamPageSize() { return _subMapperID == 1 ? 0x200 : 0x2000; }
-		virtual uint32_t GetSaveRamSize() { return _subMapperID == 1 ? 0x400 : 0x2000; }
+		virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+		virtual uint16_t GetCHRPageSize() override {	return 0x0400; }
+		virtual uint32_t GetSaveRamPageSize() override { return _subMapperID == 1 ? 0x200 : 0x2000; }
+		virtual uint32_t GetSaveRamSize() override { return _subMapperID == 1 ? 0x400 : 0x2000; }
 
-		virtual void InitMapper() 
+		virtual void InitMapper() override 
 		{
 			//Force MMC3A irqs for boards that are known to use the A revision.
 			//Some MMC3B boards also have the A behavior, but currently no way to tell them apart.
 			_forceMmc3RevAIrqs = _databaseInfo.Chip.substr(0, 5).compare("MMC3A") == 0;
 
-			Reset();
+			ResetMmc3();
 			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
 			UpdateState();
 			UpdateMirroring();
 		}
 
-		virtual void WriteRegister(uint16_t addr, uint8_t value)
+		virtual void WriteRegister(uint16_t addr, uint8_t value) override
 		{
 			switch((MMC3Registers)(addr & 0xE001)) {
 				case MMC3Registers::Reg8000:
@@ -271,7 +271,7 @@ class MMC3 : public BaseMapper
 
 
 	public:
-		virtual void NotifyVRAMAddressChange(uint16_t addr)
+		virtual void NotifyVRAMAddressChange(uint16_t addr) override
 		{
 			switch(_a12Watcher.UpdateVramAddress(addr)) {
 				case A12StateChange::Fall:

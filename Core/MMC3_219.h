@@ -7,7 +7,7 @@ private:
 	uint8_t _exRegs[3];
 
 protected:
-	void InitMapper()
+	void InitMapper() override
 	{
 		MMC3::InitMapper();
 		SelectPrgPage4x(0, -4);

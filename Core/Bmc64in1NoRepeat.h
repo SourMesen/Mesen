@@ -16,7 +16,7 @@ protected:
 		AddRegisterRange(0x5000, 0x5003, MemoryOperation::Write);
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		BaseMapper::Reset(softReset);
 
@@ -27,7 +27,7 @@ protected:
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_regs[0], _regs[1], _regs[2], _regs[3]);

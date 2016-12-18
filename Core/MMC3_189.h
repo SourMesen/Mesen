@@ -8,9 +8,9 @@ class MMC3_189 : public MMC3
 private:
 	uint8_t _prgReg = 0;
 
-	virtual uint16_t RegisterStartAddress() { return 0x4120; }
+	virtual uint16_t RegisterStartAddress() override { return 0x4120; }
 	
-	virtual void WriteRegister(uint16_t addr, uint8_t value)
+	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr <= 0x4FFF) {
 			_prgReg = value;
@@ -20,7 +20,7 @@ private:
 		}
 	}
 
-	virtual void UpdateState()
+	virtual void UpdateState() override
 	{
 		MMC3::UpdateState();
 
@@ -33,7 +33,7 @@ private:
 		SelectPRGPage(3, prgPage+3);
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_prgReg);

@@ -9,12 +9,12 @@ private:
 	uint8_t _chrHigh[8];
 
 protected:
-	virtual uint16_t RegisterStartAddress() { return 0xC000; }
-	virtual uint16_t RegisterEndAddress() { return 0xC014; }
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x400; }
+	virtual uint16_t RegisterStartAddress() override { return 0xC000; }
+	virtual uint16_t RegisterEndAddress() override { return 0xC014; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		memset(_chrLow, 0, sizeof(_chrLow));
 		memset(_chrHigh, 0, sizeof(_chrHigh));
@@ -22,7 +22,7 @@ protected:
 		SetMirroringType(MirroringType::ScreenAOnly);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
@@ -42,7 +42,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr) {
 			case 0xC000: case 0xC001: case 0xC002: case 0xC003:

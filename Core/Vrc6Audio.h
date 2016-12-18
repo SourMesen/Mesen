@@ -13,7 +13,7 @@ private:
 	int32_t _lastOutput;
 
 protected:
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		SnapshotInfo pulse1{ &_pulse1 };
 		SnapshotInfo pulse2{ &_pulse2 };
@@ -22,7 +22,7 @@ protected:
 		Stream(_lastOutput, _haltAudio, pulse1, pulse2, saw);
 	}
 	
-	void ClockAudio()
+	void ClockAudio() override
 	{
 		if(!_haltAudio) {
 			_pulse1.Clock();

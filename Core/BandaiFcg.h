@@ -13,13 +13,13 @@ private:
 	uint8_t _chrRegs[8];
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x4000; }
-	uint16_t GetCHRPageSize() { return 0x400; }
-	uint16_t RegisterStartAddress() { return 0x6000; }
-	uint16_t RegisterEndAddress() { return 0xFFFF; }
-	bool AllowRegisterRead() { return true; }
+	uint16_t GetPRGPageSize() override { return 0x4000; }
+	uint16_t GetCHRPageSize() override { return 0x400; }
+	uint16_t RegisterStartAddress() override { return 0x6000; }
+	uint16_t RegisterEndAddress() override { return 0xFFFF; }
+	bool AllowRegisterRead() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		memset(_chrRegs, 0, sizeof(_chrRegs));
 		_irqEnabled = false;
@@ -41,7 +41,7 @@ protected:
 		SelectPRGPage(1, 0x0F);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
@@ -49,7 +49,7 @@ protected:
 		Stream(_irqEnabled, _irqCounter, _irqReload, _prgPage, _prgBankSelect, chrRegs);
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqEnabled) {
 			//Checking counter before decrementing seems to be the only way to get both
@@ -62,13 +62,13 @@ protected:
 		}
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		//Pretend EEPROM data is always 0
 		return 0;
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0x000F) {
 			case 0x00: case 0x01: case 0x02: case 0x03: case 0x04: case 0x05: case 0x06: case 0x07:

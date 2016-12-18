@@ -35,19 +35,19 @@ private:
 	void InitSample();
 	void FillReadBuffer();
 	
-	void Clock();
+	void Clock() override;
 
 public:
 	DeltaModulationChannel(AudioChannel channel, SoundMixer* mixer, MemoryManager* memoryManager);
 
-	virtual void Reset(bool softReset);
-	virtual void StreamState(bool saving);
+	virtual void Reset(bool softReset) override;
+	virtual void StreamState(bool saving) override;
 
 	bool IrqPending(uint32_t cyclesToRun);
 	bool NeedToRun();
-	bool GetStatus();
-	void GetMemoryRanges(MemoryRanges &ranges);
-	void WriteRAM(uint16_t addr, uint8_t value);
+	bool GetStatus() override;
+	void GetMemoryRanges(MemoryRanges &ranges) override;
+	void WriteRAM(uint16_t addr, uint8_t value) override;
 
 	void SetEnabled(bool enabled);
 	void StartDmcTransfer();

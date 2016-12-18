@@ -38,7 +38,7 @@ public:
 	AutoRomTest();
 	virtual ~AutoRomTest();
 
-	void ProcessNotification(ConsoleNotificationType type, void* parameter);
+	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	void Record(string filename, bool reset);
 	void RecordFromMovie(string testFilename, string movieFilename);
 	void RecordFromTest(string newTestFilename, string existingTestFilename);

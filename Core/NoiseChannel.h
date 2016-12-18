@@ -21,7 +21,7 @@ private:
 	}
 
 protected:
-	void Clock()
+	void Clock() override
 	{
 		//Feedback is calculated as the exclusive-OR of bit 0 and one other bit: bit 6 if Mode flag is set, otherwise bit 1.
 		uint16_t feedback = (_shiftRegister & 0x01) ^ ((_shiftRegister >> (_modeFlag ? 6 : 1)) & 0x01);
@@ -40,7 +40,7 @@ public:
 	{
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		ApuEnvelope::Reset(softReset);
 		
@@ -49,19 +49,19 @@ public:
 		_modeFlag = false;
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		ApuEnvelope::StreamState(saving);
 
 		Stream(_shiftRegister, _modeFlag);
 	}
 
-	void GetMemoryRanges(MemoryRanges &ranges)
+	void GetMemoryRanges(MemoryRanges &ranges) override
 	{
 		ranges.AddHandler(MemoryOperation::Write, 0x400C, 0x400F);
 	}
 
-	void WriteRAM(uint16_t addr, uint8_t value)
+	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		APU::StaticRun();
 		switch(addr & 0x03) {

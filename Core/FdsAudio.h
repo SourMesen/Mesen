@@ -33,7 +33,7 @@ private:
 	uint8_t _lastOutput = 0;
 
 protected:
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseExpansionAudio::StreamState(saving);
 
@@ -44,7 +44,7 @@ protected:
 		Stream(volume, mod, _waveWriteEnabled, _disableEnvelopes, _haltWaveform, _masterVolume, _waveOverflowCounter, _wavePitch, _wavePosition, _lastOutput, waveTable);
 	}
 
-	void ClockAudio()
+	void ClockAudio() override
 	{
 		//"The envelopes are not ticked while the waveform is halted."
 		_volume.TickEnvelope(_disableEnvelopes || _haltWaveform);

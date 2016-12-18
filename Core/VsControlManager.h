@@ -74,12 +74,12 @@ public:
 		}
 	}
 
-	shared_ptr<BaseControlDevice> GetZapper(uint8_t port)
+	shared_ptr<BaseControlDevice> GetZapper(uint8_t port) override
 	{
 		return shared_ptr<BaseControlDevice>(new VsZapper(port));
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		_protectionCounter = 0;
 	}
@@ -89,7 +89,7 @@ public:
 		return _instance;
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		ControlManager::StreamState(saving);
 		Stream(_prgChrSelectBit, _protectionCounter);
@@ -118,7 +118,7 @@ public:
 		_serviceButton = pushed;
 	}
 
-	void GetMemoryRanges(MemoryRanges &ranges)
+	void GetMemoryRanges(MemoryRanges &ranges) override
 	{
 		ControlManager::GetMemoryRanges(ranges);
 		ranges.AddHandler(MemoryOperation::Read, 0x4020, 0x5FFF);
@@ -176,7 +176,7 @@ public:
 		}
 	}
 
-	void RefreshAllPorts()
+	void RefreshAllPorts() override
 	{
 		ControlManager::RefreshAllPorts();
 		if(_inputType != VsInputType::Default) {
@@ -184,7 +184,7 @@ public:
 		}
 	}
 
-	uint8_t ReadRAM(uint16_t addr)
+	uint8_t ReadRAM(uint16_t addr) override
 	{
 		UpdateCoinInsertedFlags();
 
@@ -245,7 +245,7 @@ public:
 		return value;
 	}
 	
-	void WriteRAM(uint16_t addr, uint8_t value)
+	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		ControlManager::WriteRAM(addr, value);
 

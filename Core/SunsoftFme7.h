@@ -15,14 +15,14 @@ private:
 	uint16_t _irqCounter;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x400; }
-	virtual uint32_t GetWorkRamSize() { return 0x8000; }
-	virtual uint32_t GetWorkRamPageSize() { return 0x2000; }
-	virtual uint32_t GetSaveRamSize() { return 0x8000; }
-	virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
+	virtual uint32_t GetWorkRamSize() override { return 0x8000; }
+	virtual uint32_t GetWorkRamPageSize() override { return 0x2000; }
+	virtual uint32_t GetSaveRamSize() override { return 0x8000; }
+	virtual uint32_t GetSaveRamPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_command = 0;
 		_workRamValue = 0;
@@ -35,7 +35,7 @@ protected:
 		UpdateWorkRam();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		SnapshotInfo audio{ &_audio };
 		Stream(_command, _workRamValue, _irqEnabled, _irqCounterEnabled, _irqCounter, audio);
@@ -44,7 +44,7 @@ protected:
 		}
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqCounterEnabled) {
 			_irqCounter--;
@@ -68,7 +68,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xE000) {
 			case 0x8000:

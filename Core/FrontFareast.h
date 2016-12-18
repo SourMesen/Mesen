@@ -10,13 +10,13 @@ private:
 	bool _ffeAltMode;
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x2000; }
-	uint16_t GetCHRPageSize() { return 0x400; }
-	uint32_t GetChrRamSize() { return 0x8000; }
-	uint16_t RegisterStartAddress() { return 0x42FE; }
-	uint16_t RegisterEndAddress() { return 0x4517; }
+	uint16_t GetPRGPageSize() override { return 0x2000; }
+	uint16_t GetCHRPageSize() override { return 0x400; }
+	uint32_t GetChrRamSize() override { return 0x8000; }
+	uint16_t RegisterStartAddress() override { return 0x42FE; }
+	uint16_t RegisterEndAddress() override { return 0x4517; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_irqCounter = 0;
 		_irqEnabled = false;
@@ -40,13 +40,13 @@ protected:
 		}
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_irqCounter, _irqEnabled, _ffeAltMode);
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqEnabled) {
 			_irqCounter++;
@@ -57,7 +57,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr) {
 			case 0x42FE:

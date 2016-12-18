@@ -8,22 +8,22 @@ private:
 	bool _contraMode = false;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		SelectCHRPage(0, 0);
 		Reset(true);
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_contraMode);
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		if(softReset) {
 			_contraMode = !_contraMode;
@@ -39,7 +39,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(_contraMode) {
 			SelectPRGPage(0, value & 0x07);

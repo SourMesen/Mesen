@@ -12,7 +12,7 @@ protected:
 	{
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		BaseMapper::Reset(softReset);
 

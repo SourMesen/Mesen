@@ -5,18 +5,18 @@
 class AXROM : public BaseMapper
 {
 	protected:
-		virtual uint16_t GetPRGPageSize() { return 0x8000; }
-		virtual uint16_t GetCHRPageSize() {	return 0x2000; }
+		virtual uint16_t GetPRGPageSize() override { return 0x8000; }
+		virtual uint16_t GetCHRPageSize() override {	return 0x2000; }
 
-		void InitMapper() 
+		void InitMapper() override 
 		{
 			SelectPRGPage(0, 0);
 			SelectCHRPage(0, 0);
 		}
 
-		bool HasBusConflicts() { return _subMapperID == 2; }
+		bool HasBusConflicts() override { return _subMapperID == 2; }
 
-		void WriteRegister(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value) override
 		{
 			SelectPRGPage(0, value & 0x0F);
 

@@ -19,10 +19,10 @@ private:
 	}
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x0400; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x0400; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_irq.Reset();
 		_controlFlags = 0;
@@ -30,7 +30,7 @@ protected:
 		SelectPRGPage(3, -1);
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		SnapshotInfo irq{ &_irq };
@@ -44,7 +44,7 @@ protected:
 		}
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		_irq.ProcessCpuClock();
 		_audio.Clock();
@@ -62,7 +62,7 @@ protected:
 		UpdatePrgRamAccess();
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr & 0x10 && (addr & 0xF010) != 0x9010) {
 			addr |= 0x08;

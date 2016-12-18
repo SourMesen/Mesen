@@ -5,10 +5,10 @@
 class Malee : public BaseMapper
 {
 protected:
-	uint16_t GetPRGPageSize() { return 0x800; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
+	uint16_t GetPRGPageSize() override { return 0x800; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		SelectPrgPage4x(0, 0);
 		SelectPrgPage4x(1, 4);

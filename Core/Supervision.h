@@ -11,13 +11,13 @@ private:
 	bool _epromFirst;
 
 protected:
-	virtual uint16_t RegisterStartAddress() { return 0x6000; }
-	virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
+	virtual uint16_t RegisterStartAddress() override { return 0x6000; }
+	virtual uint16_t RegisterEndAddress() override { return 0xFFFF; }
 
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_epromFirst = _prgSize >= 0x8000 && CRC32::GetCRC(_prgRom, 0x8000) == EPROM_CRC;
 		_regs[0] = _regs[1] = 0;
@@ -25,7 +25,7 @@ protected:
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_regs[0], _regs[1]);
@@ -43,7 +43,7 @@ protected:
 		SetMirroringType(_regs[0] & 0x20 ? MirroringType::Horizontal : MirroringType::Vertical);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
 			_regs[0] = value;

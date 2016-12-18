@@ -17,11 +17,11 @@ class Mapper83 : public BaseMapper
 	uint8_t _resetBit;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x400; }
-	virtual bool AllowRegisterRead() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
+	virtual bool AllowRegisterRead() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		memset(_regs, 0, sizeof(_regs));
 		memset(_exRegs, 0, sizeof(_exRegs));

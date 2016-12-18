@@ -6,7 +6,7 @@
 class Namco108_95 : public Namco108
 {
 protected:
-	virtual void WriteRegister(uint16_t addr, uint8_t value)
+	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		Namco108::WriteRegister(addr, value);
 

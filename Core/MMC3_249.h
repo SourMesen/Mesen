@@ -8,20 +8,20 @@ private:
 	uint8_t _exReg;
 
 protected:
-	virtual void InitMapper()
+	virtual void InitMapper() override
 	{
 		MMC3::InitMapper();
 
 		AddRegisterRange(0x5000, 0x5000, MemoryOperation::Write);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_exReg);
 	}
 
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
+	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
 	{
 		if(_exReg & 0x02) {
 			page = (page & 0x03) | ((page >> 1) & 0x04) | ((page >> 4) & 0x08) | ((page >> 2) & 0x10) | ((page << 3) & 0x20) | ((page << 2) & 0xC0);
@@ -30,7 +30,7 @@ protected:
 		BaseMapper::SelectCHRPage(slot, page, memoryType);
 	}
 
-	virtual void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom)
+	virtual void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom) override
 	{
 		if(_exReg & 0x02) {
 			if(page < 0x20) {
@@ -44,7 +44,7 @@ protected:
 		BaseMapper::SelectPRGPage(slot, page, memoryType);
 	}
 
-	virtual void WriteRegister(uint16_t addr, uint8_t value)
+	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr == 0x5000) {
 			_exReg = value;

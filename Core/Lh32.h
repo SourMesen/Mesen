@@ -8,10 +8,10 @@ private:
 	uint8_t _prgReg;
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x2000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
-	uint16_t RegisterStartAddress() { return 0x6000; }
-	uint16_t RegisterEndAddress() { return 0x6000; }
+	uint16_t GetPRGPageSize() override { return 0x2000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	uint16_t RegisterStartAddress() override { return 0x6000; }
+	uint16_t RegisterEndAddress() override { return 0x6000; }
 
 	void InitMapper() override
 	{
@@ -26,7 +26,7 @@ protected:
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_prgReg);

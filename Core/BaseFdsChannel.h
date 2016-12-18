@@ -16,7 +16,7 @@ protected:
 	//"Few FDS NSFs write to this register. The BIOS initializes this to $FF."
 	uint8_t _masterSpeed = 0xFF;
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		Stream(_speed, _gain, _envelopeOff, _volumeIncrease, _frequency, _timer, _masterSpeed);
 	}

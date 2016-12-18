@@ -9,10 +9,10 @@ private:
 	uint8_t _prgReg;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_prgReg = 0;
 		_mode = 0;
@@ -22,7 +22,7 @@ protected:
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_mode, _prgReg);
@@ -46,7 +46,7 @@ protected:
 		SetMirroringType(_mode & 0x01 ? MirroringType::Horizontal : MirroringType::Vertical);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xC000) {
 			case 0x8000:

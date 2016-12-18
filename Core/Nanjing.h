@@ -20,17 +20,17 @@ private:
 	}
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x8000; }
-	virtual uint16_t GetCHRPageSize() {	return 0x1000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
+	virtual uint16_t GetCHRPageSize() override {	return 0x1000; }
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> registers = { _registers, 5 };
 		Stream(registers, _toggle, _autoSwitchCHR);
 	}
 
-	void InitMapper() 
+	void InitMapper() override 
 	{
 		memset(_registers, 0, sizeof(_registers));
 		_autoSwitchCHR = false;
@@ -44,9 +44,9 @@ protected:
 		SelectCHRPage(1, 0);
 	}
 
-	uint16_t RegisterStartAddress() { return 0x5000; }
-	uint16_t RegisterEndAddress() { return 0x5FFF; }
-	void WriteRegister(uint16_t addr, uint8_t value)
+	uint16_t RegisterStartAddress() override { return 0x5000; }
+	uint16_t RegisterEndAddress() override { return 0x5FFF; }
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr >= 0x5000 && addr <= 0x5FFF) {
 			//"(Address is masked with 0x7300, except for 5101)"
@@ -83,7 +83,7 @@ protected:
 	}
 
 public:
-	uint8_t ReadRAM(uint16_t addr)
+	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr >= 0x5000 && addr <= 0x5FFF) {
 			//"Reading: (Address is masked with 0x7700)"
@@ -105,7 +105,7 @@ public:
 		}
 	}
 
-	virtual void NotifyVRAMAddressChange(uint16_t addr)
+	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(_autoSwitchCHR) {
 			if(PPU::GetCurrentScanline() == 239) {

@@ -5,16 +5,16 @@
 class TaitoTc0190 : public BaseMapper
 {
 	protected:
-		virtual uint16_t GetPRGPageSize() { return 0x2000; }
-		virtual uint16_t GetCHRPageSize() {	return 0x0400; }
+		virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+		virtual uint16_t GetCHRPageSize() override {	return 0x0400; }
 
-		void InitMapper() 
+		void InitMapper() override 
 		{
 			SelectPRGPage(2, -2);
 			SelectPRGPage(3, -1);
 		}
 
-		void WriteRegister(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value) override
 		{
 			switch(addr & 0xA003) {
 				case 0x8000:

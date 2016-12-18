@@ -8,8 +8,8 @@ private:
 	uint8_t _chrReg[8];
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x2000; }
-	uint16_t GetCHRPageSize() { return 0x400; }
+	uint16_t GetPRGPageSize() override { return 0x2000; }
+	uint16_t GetCHRPageSize() override { return 0x400; }
 
 	void InitMapper() override
 	{

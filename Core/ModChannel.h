@@ -16,7 +16,7 @@ private:
 	uint16_t _overflowCounter = 0;
 
 protected:
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseFdsChannel::StreamState(saving);
 		
@@ -25,7 +25,7 @@ protected:
 	}
 
 public:
-	virtual void WriteReg(uint16_t addr, uint8_t value)
+	virtual void WriteReg(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0x03) {
 			case 1: UpdateCounter(value & 0x7F); break;

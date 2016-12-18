@@ -5,10 +5,10 @@
 class DreamTech01 : public BaseMapper
 {
 protected:
-	uint16_t GetPRGPageSize() { return 0x4000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
-	uint16_t RegisterStartAddress() { return 0x5020; }
-	uint16_t RegisterEndAddress() { return 0x5020; }
+	uint16_t GetPRGPageSize() override { return 0x4000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	uint16_t RegisterStartAddress() override { return 0x5020; }
+	uint16_t RegisterEndAddress() override { return 0x5020; }
 
 	void InitMapper() override
 	{

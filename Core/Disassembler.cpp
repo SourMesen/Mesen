@@ -189,7 +189,7 @@ uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr,
 
 void Disassembler::InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr)
 {
-	uint32_t addr;
+	int32_t addr;
 	vector<shared_ptr<DisassemblyInfo>> *cache;
 	if(memoryAddr < 0x2000) {
 		addr = memoryAddr & 0x7FF;

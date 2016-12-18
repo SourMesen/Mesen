@@ -142,7 +142,7 @@ namespace Vrc7Opll {
 		}
 
 	protected:
-		void StreamState(bool saving)
+		void StreamState(bool saving) override
 		{
 			Stream(clk, rate);
 			if(!saving) {

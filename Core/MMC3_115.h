@@ -10,15 +10,15 @@ private:
 	uint8_t _chrReg = 0;
 
 protected:
-	virtual uint16_t RegisterStartAddress() { return 0x6000; }
+	virtual uint16_t RegisterStartAddress() override { return 0x6000; }
 
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
+	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
 	{
 		page |= (_chrReg << 8);
 		BaseMapper::SelectCHRPage(slot, page);
 	}
 
-	virtual void UpdateState()
+	virtual void UpdateState() override
 	{
 		MMC3::UpdateState();
 
@@ -28,7 +28,7 @@ protected:
 		}
 	}
 
-	virtual void WriteRegister(uint16_t addr, uint8_t value)
+	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
 			if(addr & 0x01) {
@@ -42,7 +42,7 @@ protected:
 		}
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_prgReg, _chrReg);

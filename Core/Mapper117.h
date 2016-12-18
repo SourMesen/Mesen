@@ -13,10 +13,10 @@ private:
 	A12Watcher _a12Watcher;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x400; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_irqEnabled = false;
 		_irqEnabledAlt = false;
@@ -26,14 +26,14 @@ protected:
 		SelectPrgPage4x(0, -4);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		SnapshotInfo a12Watcher{ &_a12Watcher };
 		Stream(_irqCounter, _irqEnabled, _irqEnabledAlt, _irqReloadValue, a12Watcher);
 	}
 
-	void NotifyVRAMAddressChange(uint16_t addr)
+	void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {
 			if(_irqEnabled && _irqEnabledAlt && _irqCounter) {
@@ -46,7 +46,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr) {
 			case 0x8000: case 0x8001: case 0x8002: case 0x8003:

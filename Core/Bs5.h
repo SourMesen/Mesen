@@ -8,8 +8,8 @@ private:
 	uint8_t _dipSwitch = 0;
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x2000; }
-	uint16_t GetCHRPageSize() { return 0x800; }
+	uint16_t GetPRGPageSize() override { return 0x2000; }
+	uint16_t GetCHRPageSize() override { return 0x800; }
 
 	void InitMapper() override
 	{
@@ -19,13 +19,13 @@ protected:
 		}
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_dipSwitch);
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		if(softReset) {
 			_dipSwitch = (_dipSwitch + 1) & 0x03;

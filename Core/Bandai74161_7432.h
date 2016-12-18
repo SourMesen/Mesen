@@ -8,10 +8,10 @@ private:
 	bool _enableMirroringControl;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		SelectPRGPage(0, 0);
 		SelectPRGPage(1, -1);
@@ -21,7 +21,7 @@ protected:
 		SetMirroringType(MirroringType::Vertical);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		bool mirroringBit = (value & 0x80) == 0x80;
 		if(mirroringBit) {
@@ -39,7 +39,7 @@ protected:
 		SelectCHRPage(0, value & 0x0F);
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_enableMirroringControl);		

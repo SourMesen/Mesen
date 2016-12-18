@@ -73,7 +73,7 @@ private:
 	}
 
 protected:
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseExpansionAudio::StreamState(saving);
 
@@ -83,7 +83,7 @@ protected:
 		Stream(timer, registers, toneStep, _currentRegister, _lastOutput, _processTick);
 	}
 
-	void ClockAudio()
+	void ClockAudio() override
 	{
 		if(_processTick) {
 			for(int i = 0; i < 3; i++) {

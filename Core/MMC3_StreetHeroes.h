@@ -9,9 +9,9 @@ private:
 	uint8_t _resetSwitch;
 
 protected:
-	uint16_t GetChrRamPageSize() { return 0x2000; }
-	uint32_t GetChrRamSize() { return 0x2000; }
-	bool AllowRegisterRead() { return true; }
+	uint16_t GetChrRamPageSize() override { return 0x2000; }
+	uint32_t GetChrRamSize() override { return 0x2000; }
+	bool AllowRegisterRead() override { return true; }
 
 	void InitMapper() override
 	{
@@ -24,13 +24,13 @@ protected:
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_exReg, _resetSwitch);
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		if(softReset) {
 			_resetSwitch ^= 0xFF;
@@ -38,7 +38,7 @@ protected:
 		UpdateState();
 	}
 
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
+	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
 	{
 		if(_exReg & 0x40) {
 			MMC3::SelectCHRPage(0, 0, ChrMemoryType::ChrRam);

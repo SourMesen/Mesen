@@ -6,12 +6,12 @@
 class TxSRom : public MMC3
 {
 protected:
-	void UpdateMirroring()
+	void UpdateMirroring() override
 	{
 		//This is disabled, 8001 writes are used to setup mirroring instead
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if((addr & 0xE001) == 0x8001) {
 			uint8_t nametable = value >> 7;

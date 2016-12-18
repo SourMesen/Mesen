@@ -8,20 +8,20 @@ private:
 	uint8_t _regs[2];
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x4000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
+	uint16_t GetPRGPageSize() override { return 0x4000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
 
 	void InitMapper() override
 	{
 	}
 	
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		_regs[0] = _regs[1] = 0;
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_regs[0], _regs[1]);

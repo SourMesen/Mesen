@@ -112,7 +112,7 @@ private:
 	}
 
 protected:
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseExpansionAudio::StreamState(saving);
 
@@ -121,7 +121,7 @@ protected:
 		Stream(internalRam, channelOutput, _ramPosition, _autoIncrement, _updateCounter, _currentChannel, _lastOutput);
 	}
 
-	void ClockAudio()
+	void ClockAudio() override
 	{
 		if(!_disableSound && GetNumberOfChannels()) {
 			_updateCounter++;

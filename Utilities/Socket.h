@@ -5,9 +5,12 @@
 class Socket
 {
 private:
+	#ifdef WIN32
+	bool _cleanupWSA = false;
+	#endif
+	
 	uintptr_t _socket = ~0;
 	bool _connectionError = false;
-	bool _cleanupWSA = false;
 	char* _sendBuffer;
 	int _bufferPosition;
 	int32_t _UPnPPort = -1;

@@ -10,12 +10,12 @@ class MMC5Square : public SquareChannel
 	int8_t _currentOutput;
 
 private:
-	virtual void InitializeSweep()
+	virtual void InitializeSweep(uint8_t regValue) override
 	{
 		//"$5001 has no effect. The MMC5 pulse channels will not sweep, as they have no sweep unit."
 	}
 
-	bool IsMuted()
+	bool IsMuted() override
 	{
 		//"Frequency values less than 8 do not silence the MMC5 pulse channels; they can output ultrasonic frequencies."
 		return false;
@@ -26,7 +26,7 @@ public:
 		_currentOutput = 0;
 	}
 	
-	virtual void AddOutput(int8_t output)
+	virtual void AddOutput(int8_t output) override
 	{
 		_currentOutput = output;
 	}
@@ -36,9 +36,9 @@ public:
 		return _currentOutput;
 	}
 
-	void Run()
+	void RunChannel()
 	{
-		SquareChannel::Run(1);
+		Run(1);
 		EndFrame();
 	}
 };
@@ -56,7 +56,7 @@ private:
 	uint8_t _pcmOutput;
 
 protected:
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseExpansionAudio::StreamState(saving);
 
@@ -65,11 +65,11 @@ protected:
 		Stream(square1, square2, _audioCounter, _lastOutput, _pcmReadMode, _pcmIrqEnabled, _pcmOutput);
 	}
 
-	void ClockAudio()
+	void ClockAudio() override
 	{
 		_audioCounter--;
-		_square1.Run();
-		_square2.Run();
+		_square1.RunChannel();
+		_square2.RunChannel();
 		if(_audioCounter <= 0) {
 			//~240hz envelope/length counter
 			_audioCounter = CPU::GetClockRate(Console::GetModel()) / 240;

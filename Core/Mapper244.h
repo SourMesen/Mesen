@@ -24,16 +24,16 @@ private:
 	};
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x8000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		SelectPRGPage(0, 0);
 		SelectCHRPage(0, 0);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(value & 0x08) {
 			SelectCHRPage(0, _lutChr[(value >> 4) & 0x07][value & 0x07]);

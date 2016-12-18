@@ -11,7 +11,7 @@ private:
 protected: 
 	virtual void ClockAudio() = 0;
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		Stream(_clocksNeeded);
 	}

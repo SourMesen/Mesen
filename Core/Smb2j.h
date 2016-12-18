@@ -10,10 +10,10 @@ private:
 	bool _irqEnabled;
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x1000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
-	uint16_t RegisterStartAddress() { return 0x4122; }
-	uint16_t RegisterEndAddress() { return 0x4122; }
+	uint16_t GetPRGPageSize() override { return 0x1000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	uint16_t RegisterStartAddress() override { return 0x4122; }
+	uint16_t RegisterEndAddress() override { return 0x4122; }
 
 	void InitMapper() override
 	{

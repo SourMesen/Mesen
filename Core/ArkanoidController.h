@@ -12,17 +12,17 @@ private:
 	bool IsButtonPressed();
 
 protected:
-	uint8_t RefreshState();
-	virtual void StreamState(bool saving);
+	uint8_t RefreshState() override;
+	virtual void StreamState(bool saving) override;
 
 public:
 	using BaseControlDevice::BaseControlDevice;
 
-	uint8_t GetPortOutput();
-	void RefreshStateBuffer();
+	uint8_t GetPortOutput() override;
+	void RefreshStateBuffer() override;
 
-	virtual uint32_t GetNetPlayState();
-	uint8_t ProcessNetPlayState(uint32_t netplayState);
+	virtual uint32_t GetNetPlayState() override;
+	uint8_t ProcessNetPlayState(uint32_t netplayState) override;
 
 	uint8_t GetExpansionPortOutput(uint8_t port);
 };

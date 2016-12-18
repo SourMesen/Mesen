@@ -10,22 +10,22 @@ private:
 	uint8_t _exRegs[2];
 
 protected:
-	virtual uint16_t RegisterStartAddress() { return 0x5000; }
-	virtual bool ForceMmc3RevAIrqs() { return true; }
+	virtual uint16_t RegisterStartAddress() override { return 0x5000; }
+	virtual bool ForceMmc3RevAIrqs() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		MMC3::InitMapper();
 		_exRegs[0] = _exRegs[1] = 0;
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_exRegs[0], _exRegs[1]);
 	}
 
-	virtual void UpdatePrgMapping()
+	virtual void UpdatePrgMapping() override
 	{
 		if(_exRegs[0] & 0x80) {
 			SelectPrgPage2x(0, _exRegs[0] & 0x1F);
@@ -35,12 +35,12 @@ protected:
 		}
 	}
 
-	virtual void UpdateMirroring()
+	virtual void UpdateMirroring() override
 	{
 		//See $8000 writes below
 	}
 
-	virtual void WriteRegister(uint16_t addr, uint8_t value)
+	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xE000) {
 			case 0x4000: case 0x6000:

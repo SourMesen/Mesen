@@ -9,7 +9,7 @@ private:
 	bool _irqEnabled;
 
 protected:
-	void InitMapper()
+	void InitMapper() override
 	{
 		MMC1::InitMapper();
 		_initState = 0;
@@ -18,13 +18,13 @@ protected:
 		_state.RegA000 |= 0x10;  //Set I bit to 1
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		MMC1::StreamState(saving);
 		Stream(_initState, _irqCounter, _irqEnabled);
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqEnabled) {
 			_irqCounter++;
@@ -36,7 +36,7 @@ protected:
 		}
 	}
 
-	void UpdateState()
+	void UpdateState() override
 	{
 		if(_initState == 0 && (_state.RegA000 & 0x10) == 0x00) {
 			_initState = 1;

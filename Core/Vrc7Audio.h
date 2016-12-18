@@ -13,7 +13,7 @@ private:
 	double _clockTimer;
 
 protected:
-	void ClockAudio()
+	void ClockAudio() override
 	{
 		_clockTimer--;
 		if(_clockTimer <= 0) {
@@ -24,7 +24,7 @@ protected:
 		}
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseExpansionAudio::StreamState(saving);
 

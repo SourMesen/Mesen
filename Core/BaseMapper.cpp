@@ -213,7 +213,7 @@ void BaseMapper::SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memor
 {
 	_prgPageNumbers[slot] = page;
 
-	if(_prgSize < PrgAddressRangeSize && GetPRGPageSize() > _prgSize) {
+	if(_prgSize < 0x8000 && GetPRGPageSize() > _prgSize) {
 		//Total PRG size is smaller than available memory range, map the entire PRG to all slots
 		//i.e same logic as NROM (mapper 0) when PRG is 16kb
 		//Needed by "Pyramid" (mapper 79)
@@ -221,7 +221,7 @@ void BaseMapper::SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memor
 			MessageManager::DisplayMessage("Debug", "PrgSizeWarning");
 		#endif
 
-		for(slot = 0; slot < PrgAddressRangeSize / _prgSize; slot++) {
+		for(slot = 0; slot < 0x8000 / _prgSize; slot++) {
 			uint16_t startAddr = 0x8000 + slot * _prgSize;
 			uint16_t endAddr = startAddr + _prgSize - 1;
 			SetCpuMemoryMapping(startAddr, endAddr, 0, memoryType);

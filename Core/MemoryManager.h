@@ -29,7 +29,7 @@ class MemoryManager: public Snapshotable
 		void InitializeMemoryHandlers(IMemoryHandler** memoryHandlers, IMemoryHandler* handler, vector<uint16_t> *addresses, bool allowOverride);
 
 	protected:
-		void StreamState(bool saving);
+		void StreamState(bool saving) override;
 
 	public:
 		MemoryManager(shared_ptr<BaseMapper> mapper);

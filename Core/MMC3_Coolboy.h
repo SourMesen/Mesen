@@ -9,14 +9,14 @@ private:
 	uint8_t _exRegs[4];
 
 protected:
-	uint16_t RegisterStartAddress() { return 0x6000; }
-	uint32_t GetChrRamSize() { return 0x40000; }
+	uint16_t RegisterStartAddress() override { return 0x6000; }
+	uint32_t GetChrRamSize() override { return 0x40000; }
 
 	void Reset(bool softReset) override
 	{
 		memset(_exRegs, 0, sizeof(_exRegs));		
 		BaseMapper::Reset(softReset);
-		MMC3::Reset();
+		MMC3::ResetMmc3();
 
 		UpdateState();
 	}
@@ -88,7 +88,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
 			if(GetState().RegA001 & 0x80) {

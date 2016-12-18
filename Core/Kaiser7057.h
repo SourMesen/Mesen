@@ -8,8 +8,8 @@ private:
 	uint8_t _regs[8];
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x800; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
+	uint16_t GetPRGPageSize() override { return 0x800; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
 
 	void InitMapper() override
 	{
@@ -18,7 +18,7 @@ protected:
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> regs{ _regs, 8 };

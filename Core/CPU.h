@@ -843,7 +843,7 @@ private:
 	}
 
 protected:
-	void StreamState(bool saving);
+	void StreamState(bool saving) override;
 
 public:
 	static const uint32_t ClockRateNtsc = 1789773;

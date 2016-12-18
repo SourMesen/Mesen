@@ -58,7 +58,7 @@ protected:
 		}
 	}
 
-	void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType) override
+	void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom) override
 	{
 		uint8_t sbank = 0;
 		uint8_t bank = 0;

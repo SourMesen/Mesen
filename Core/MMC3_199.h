@@ -9,8 +9,8 @@ private:
 	uint8_t _exRegs[4];
 
 protected:
-	uint32_t GetChrRamSize() { return 0x2000; }
-	uint16_t GetChrRamPageSize() { return 0x400; }
+	uint32_t GetChrRamSize() override { return 0x2000; }
+	uint16_t GetChrRamPageSize() override { return 0x400; }
 
 	void InitMapper() override
 	{

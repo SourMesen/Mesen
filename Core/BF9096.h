@@ -9,10 +9,10 @@ private:
 	uint8_t _prgPage;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_prgPage = 0;
 		_prgBlock = 0;
@@ -23,7 +23,7 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr >= 0xC000) {
 			_prgPage = value & 0x03;
@@ -43,7 +43,7 @@ protected:
 		SelectPRGPage(1, (_prgBlock << 2) | 3);
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_prgBlock, _prgPage);

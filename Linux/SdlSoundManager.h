@@ -29,7 +29,6 @@ private:
 	string _deviceName;
 	bool _needReset = false;
 
-	uint16_t _lastWriteOffset = 0;
 	uint16_t _previousLatency = 0;
 	uint32_t _sampleRate = 0;
 	bool _isStereo = false;

@@ -6,8 +6,8 @@
 class JalecoSs88006 : public BaseMapper
 {
 	protected:
-		virtual uint16_t GetPRGPageSize() { return 0x2000; }
-		virtual uint16_t GetCHRPageSize() {	return 0x0400; }
+		virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+		virtual uint16_t GetCHRPageSize() override {	return 0x0400; }
 
 		const vector<uint16_t> _irqMask = { { 0xFFFF, 0x0FFF, 0x00FF, 0x000F } };
 
@@ -18,7 +18,7 @@ class JalecoSs88006 : public BaseMapper
 		uint8_t _irqCounterSize;
 		bool _irqEnabled;
 
-		void InitMapper() 
+		void InitMapper() override 
 		{
 			memset(_prgBanks, 0, 3);
 			memset(_chrBanks, 0, 8);
@@ -30,7 +30,7 @@ class JalecoSs88006 : public BaseMapper
 			SelectPRGPage(3, -1);
 		}
 
-		virtual void StreamState(bool saving)
+		virtual void StreamState(bool saving) override
 		{
 			BaseMapper::StreamState(saving);
 
@@ -72,7 +72,7 @@ class JalecoSs88006 : public BaseMapper
 			SelectCHRPage(bankNumber, _chrBanks[bankNumber]);
 		}
 
-		virtual void ProcessCpuClock()
+		virtual void ProcessCpuClock() override
 		{
 			//Clock irq counter every memory read/write (each cpu cycle either reads or writes memory)
 			ClockIrqCounter();
@@ -96,7 +96,7 @@ class JalecoSs88006 : public BaseMapper
 			}
 		}
 
-		void WriteRegister(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value) override
 		{
 			bool updateUpperBits = (addr & 0x01) == 0x01;
 			value &= 0x0F;

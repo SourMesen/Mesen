@@ -6,7 +6,7 @@
 class MMC3_197 : public MMC3
 {
 protected:
-	virtual void UpdateChrMapping()
+	virtual void UpdateChrMapping() override
 	{
 		if(_chrMode == 0) {
 			SelectChrPage4x(0, _registers[0] << 1);

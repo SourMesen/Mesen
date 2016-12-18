@@ -7,7 +7,7 @@ class MMC3_126 : public MMC3
 private:
 	uint8_t _exRegs[4];
 
-	void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType) override
+	void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom) override
 	{
 		uint16_t reg = _exRegs[0];
 		page &= ((~reg >> 2) & 0x10) | 0x0F;

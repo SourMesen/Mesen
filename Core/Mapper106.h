@@ -9,10 +9,10 @@ private:
 	bool _irqEnabled;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x400; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_irqEnabled = false;
 		_irqCounter = 0;
@@ -23,13 +23,13 @@ protected:
 		SelectPRGPage(3, -1);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_irqCounter, _irqEnabled);
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqEnabled) {
 			_irqCounter++;
@@ -40,7 +40,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0x0F) {
 			case 0: case 2: SelectCHRPage(addr & 0x0F, value & 0xFE); break;

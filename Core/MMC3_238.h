@@ -9,9 +9,9 @@ private:
 	uint8_t _exReg;
 
 protected:
-	virtual bool AllowRegisterRead() { return true; }
+	virtual bool AllowRegisterRead() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		MMC3::InitMapper();
 		_exReg = 0;
@@ -19,18 +19,18 @@ protected:
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_exReg);
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		return _exReg;
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
 			_exReg = _securityLut[value & 0x03];

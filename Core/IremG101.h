@@ -5,13 +5,13 @@
 class IremG101 : public BaseMapper
 {
 	protected:
-		virtual uint16_t GetPRGPageSize() { return 0x2000; }
-		virtual uint16_t GetCHRPageSize() {	return 0x0400; }
+		virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+		virtual uint16_t GetCHRPageSize() override {	return 0x0400; }
 
 		uint8_t _prgRegs[2];
 		uint8_t _prgMode;
 
-		void InitMapper() 
+		void InitMapper() override 
 		{
 			_prgRegs[0] = _prgRegs[1] = 0;
 			_prgMode = 0;
@@ -26,7 +26,7 @@ class IremG101 : public BaseMapper
 			}
 		}
 
-		virtual void StreamState(bool saving)
+		virtual void StreamState(bool saving) override
 		{
 			BaseMapper::StreamState(saving);
 
@@ -48,7 +48,7 @@ class IremG101 : public BaseMapper
 			}
 		}
 
-		void WriteRegister(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value) override
 		{
 			switch(addr & 0xF000) {
 				case 0x8000:

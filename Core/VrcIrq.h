@@ -13,7 +13,7 @@ private:
 	bool _irqCycleMode;
 
 protected:
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		Stream(_irqReloadValue, _irqCounter, _irqPrescalerCounter, _irqEnabled, _irqEnabledAfterAck, _irqCycleMode);
 	}

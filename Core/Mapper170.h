@@ -8,13 +8,13 @@ private:
 	uint8_t _reg;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x8000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual uint16_t RegisterStartAddress() { return 0x7000; }
-	virtual uint16_t RegisterEndAddress() { return 0x7001; }
-	virtual bool AllowRegisterRead() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual uint16_t RegisterStartAddress() override { return 0x7000; }
+	virtual uint16_t RegisterEndAddress() override { return 0x7001; }
+	virtual bool AllowRegisterRead() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_reg = 0;
 
@@ -27,23 +27,23 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		_reg = 0;
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_reg);
 	}
 	
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		_reg = (value << 1) & 0x80;
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		return _reg | ((addr >> 8) & 0x7F);
 	}

@@ -9,27 +9,27 @@ private:
 	uint8_t _irqDelay;
 
 protected:
-	virtual void InitMapper()
+	virtual void InitMapper() override
 	{
 		_irqDelay = 0;
 		SelectPRGPage(2, -2);
 		SelectPRGPage(3, -1);
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_irqDelay);
 	}
 
-	virtual void TriggerIrq()
+	virtual void TriggerIrq() override
 	{
 		//"The IRQ seems to trip a little later than it does on MMC3.  It looks like about a 4 CPU cycle delay from the normal MMC3 IRQ time."
 		//A value of 5 removes the shaking from The Jetsons
 		_irqDelay = 5;
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqDelay > 0) {
 			_irqDelay--;
@@ -39,7 +39,7 @@ protected:
 		}
 	}
 
-	virtual void WriteRegister(uint16_t addr, uint8_t value)
+	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xE003) {
 			case 0x8000:

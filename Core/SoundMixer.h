@@ -59,7 +59,7 @@ private:
 	void UpdateRates(bool forceUpdate);
 
 protected:
-	virtual void StreamState(bool saving);
+	virtual void StreamState(bool saving) override;
 
 public:
 	SoundMixer();

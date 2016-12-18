@@ -13,9 +13,9 @@ private:
 	bool _useOuterBank;
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x4000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
-	bool AllowRegisterRead() { return true; }
+	uint16_t GetPRGPageSize() override { return 0x4000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	bool AllowRegisterRead() override { return true; }
 
 	void InitMapper() override
 	{

@@ -9,17 +9,17 @@ private:
 	uint8_t _chrBank;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x8000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual uint16_t RegisterStartAddress() { return 0x8000; }
-	virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
+	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual uint16_t RegisterStartAddress() override { return 0x8000; }
+	virtual uint16_t RegisterEndAddress() override { return 0xFFFF; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		AddRegisterRange(0x6000, 0x67FF, MemoryOperation::Write);
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		_chrBank = 0;
 		_prgBank = 0;
@@ -27,13 +27,13 @@ protected:
 		WriteRegister(0x8000, 0);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_prgBank, _chrBank);
 	}
 	
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr <= 0x67FF) {
 			_prgBank = addr & 0x07;

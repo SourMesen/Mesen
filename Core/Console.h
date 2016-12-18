@@ -37,7 +37,6 @@ class Console
 		string _romFilepath;
 
 		bool _stop = false;
-		bool _reset = false;
 
 		atomic<bool> _resetRequested;
 		atomic<uint32_t> _lagCounter;

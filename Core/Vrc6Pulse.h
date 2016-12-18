@@ -15,7 +15,7 @@ private:
 	uint8_t _step = 0;
 	uint8_t _frequencyShift = 0;
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		Stream(_volume, _dutyCycle, _ignoreDuty, _frequency, _enabled, _timer, _step, _frequencyShift);
 	}

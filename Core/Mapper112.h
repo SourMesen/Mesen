@@ -9,23 +9,23 @@ private:
 	uint8_t _currentReg;
 
 protected:
-	void InitMapper()
+	void InitMapper() override
 	{
 		MMC3::InitMapper();
 		SetMirroringType(MirroringType::Vertical);
 	}
 
-	void UpdateMirroring()
+	void UpdateMirroring() override
 	{
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_currentReg);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xE001) {
 			case 0x8000:

@@ -28,10 +28,10 @@ private:
 	}
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x800; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x800; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_useChrForNametables = false;
 		_ntRegs[0] = _ntRegs[1] = 0;
@@ -42,7 +42,7 @@ protected:
 		SelectPRGPage(1, -1);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		
@@ -53,7 +53,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xF000) {
 			case 0x8000: SelectCHRPage(0, value); break;

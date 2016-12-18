@@ -71,16 +71,16 @@ private:
 	bool _fastForwarding = false;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual uint32_t GetWorkRamPageSize() { return 0x8000; }
-	virtual uint32_t GetWorkRamSize() { return 0x8000; }
-	uint16_t RegisterStartAddress() { return 0x4020; }
-	uint16_t RegisterEndAddress() { return 0x4092; }
-	bool AllowRegisterRead() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual uint32_t GetWorkRamPageSize() override { return 0x8000; }
+	virtual uint32_t GetWorkRamSize() override { return 0x8000; }
+	uint16_t RegisterStartAddress() override { return 0x4020; }
+	uint16_t RegisterEndAddress() override { return 0x4092; }
+	bool AllowRegisterRead() override { return true; }
 
-	void InitMapper();
-	void InitMapper(RomData &romData);
+	void InitMapper() override;
+	void InitMapper(RomData &romData) override;
 
 	uint32_t GetFdsDiskSideSize(uint8_t side);
 	uint8_t ReadFdsDisk();
@@ -88,17 +88,17 @@ protected:
 
 	void ClockIrq();
 
-	void ProcessCpuClock();
+	void ProcessCpuClock() override;
 	void UpdateCrc(uint8_t value);
 
 	bool IsDiskInserted();
 
-	void WriteRegister(uint16_t addr, uint8_t value);
-	uint8_t ReadRegister(uint16_t addr);
+	void WriteRegister(uint16_t addr, uint8_t value) override;
+	uint8_t ReadRegister(uint16_t addr) override;
 
-	uint8_t ReadRAM(uint16_t addr);
+	uint8_t ReadRAM(uint16_t addr) override;
 
-	void StreamState(bool saving);
+	void StreamState(bool saving) override;
 
 public:
 	FDS();

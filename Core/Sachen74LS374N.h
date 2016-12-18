@@ -9,19 +9,19 @@ private:
 	uint8_t _regs[8];
 
 protected:
-	uint16_t RegisterStartAddress() { return 0x4100; }
-	uint16_t RegisterEndAddress() { return 0x7FFF; }
-	uint16_t GetPRGPageSize() { return 0x8000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
+	uint16_t RegisterStartAddress() override { return 0x4100; }
+	uint16_t RegisterEndAddress() override { return 0x7FFF; }
+	uint16_t GetPRGPageSize() override { return 0x8000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_currentRegister = 0;
 		memset(_regs, 0, sizeof(_regs));
 		SelectPRGPage(0, 0);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
@@ -38,7 +38,7 @@ protected:
 		SetMirroringType(_regs[7] & 0x01 ? MirroringType::Vertical : MirroringType::Horizontal);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xC101) {
 			case 0x4100: _currentRegister = value & 0x07; break;

@@ -11,10 +11,10 @@ class Kaiser202 : public BaseMapper
 	uint8_t _prgRegs[4];
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x0400; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x0400; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_irqReloadValue = 0;
 		_irqCounter = 0;
@@ -25,7 +25,7 @@ protected:
 		SelectPRGPage(3, -1);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_irqReloadValue, _irqCounter, _irqEnabled, _selectedReg, _prgRegs[0], _prgRegs[1], _prgRegs[2], _prgRegs[3]);
@@ -35,7 +35,7 @@ protected:
 		}
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqEnabled) {
 			_irqCounter++;
@@ -46,7 +46,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xF000) {
 			case 0x8000: _irqReloadValue = (_irqReloadValue & 0xFFF0) | (value & 0x0F); break;

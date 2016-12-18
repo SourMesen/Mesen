@@ -217,7 +217,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 			_simpleMode = true;
 		}
 
-		void StreamState(bool saving);
+		void StreamState(bool saving) override;
 
 	public:
 		static const uint32_t ScreenWidth = 256;
@@ -234,7 +234,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		PPUDebugState GetState();
 		void SetState(PPUDebugState state);
 
-		void GetMemoryRanges(MemoryRanges &ranges)
+		void GetMemoryRanges(MemoryRanges &ranges) override
 		{
 			ranges.AddHandler(MemoryOperation::Read, 0x2000, 0x3FFF);
 			ranges.AddHandler(MemoryOperation::Write, 0x2000, 0x3FFF);
@@ -244,8 +244,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint8_t ReadPaletteRAM(uint16_t addr);
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
-		uint8_t ReadRAM(uint16_t addr);
-		void WriteRAM(uint16_t addr, uint8_t value);
+		uint8_t ReadRAM(uint16_t addr) override;
+		void WriteRAM(uint16_t addr, uint8_t value) override;
 
 		void SetNesModel(NesModel model);
 		

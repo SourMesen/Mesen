@@ -9,9 +9,9 @@ private:
 	uint8_t _exRegs[8];
 
 protected:
-	virtual bool AllowRegisterRead() { return true; }
+	virtual bool AllowRegisterRead() override { return true; }
 
-	virtual void InitMapper()
+	virtual void InitMapper() override
 	{
 		MMC3::InitMapper();
 
@@ -19,18 +19,18 @@ protected:
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		memset(_exRegs, 0, sizeof(_exRegs));
 		_exRegs[3] = 0x80;
 	}
 
-	virtual uint8_t ReadRegister(uint16_t addr)
+	virtual uint8_t ReadRegister(uint16_t addr) override
 	{
 		return _exRegs[4];
 	}
 
-	void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
+	void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom) override
 	{
 		uint8_t orValue = (_exRegs[3] & 0x80) >> 2;
 		if(_exRegs[5] & 0x3F) {
@@ -43,7 +43,7 @@ protected:
 		}
 	}
 
-	void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType)
+	void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType) override
 	{
 		if(_prgSize == _chrRomSize) {
 			//Hack for Super 3-in-1
@@ -78,7 +78,7 @@ protected:
 		}
 	}
 
-	virtual void WriteRegister(uint16_t addr, uint8_t value)
+	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
 			//$5000-$5FFF
@@ -109,7 +109,7 @@ protected:
 		}
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		ArrayInfo<uint8_t> exRegs{ _exRegs, 8 };

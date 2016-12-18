@@ -40,7 +40,7 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		uint8_t GetPortValue(uint8_t port);
 		virtual void RefreshAllPorts();
 
-		virtual void StreamState(bool saving);
+		virtual void StreamState(bool saving) override;
 
 	public:
 		ControlManager();
@@ -69,12 +69,12 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 
 		static void BroadcastInput(uint8_t port, uint8_t state);
 
-		virtual void GetMemoryRanges(MemoryRanges &ranges)
+		virtual void GetMemoryRanges(MemoryRanges &ranges) override
 		{
 			ranges.AddHandler(MemoryOperation::Read, 0x4016, 0x4017);
 			ranges.AddHandler(MemoryOperation::Write, 0x4016);
 		}
 		
-		virtual uint8_t ReadRAM(uint16_t addr);
-		virtual void WriteRAM(uint16_t addr, uint8_t value);
+		virtual uint8_t ReadRAM(uint16_t addr) override;
+		virtual void WriteRAM(uint16_t addr, uint8_t value) override;
 };

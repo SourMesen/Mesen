@@ -8,14 +8,14 @@ private:
 	uint8_t _regs[2];
 
 protected:
-	virtual uint16_t RegisterStartAddress() { return 0xFF80; }
-	virtual uint16_t RegisterEndAddress() { return 0xFF9F; }
-	virtual uint16_t GetPRGPageSize() { return 0x8000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual bool AllowRegisterRead() { return true; }
-	virtual bool HasBusConflicts() { return true; }
+	virtual uint16_t RegisterStartAddress() override { return 0xFF80; }
+	virtual uint16_t RegisterEndAddress() override { return 0xFF9F; }
+	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual bool AllowRegisterRead() override { return true; }
+	virtual bool HasBusConflicts() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		AddRegisterRange(0xFFE8, 0xFFF8, MemoryOperation::Any);
 		memset(_regs, 0, sizeof(_regs));
@@ -37,7 +37,7 @@ protected:
 		SetMirroringType(_regs[0] & 0x80 ? MirroringType::Horizontal : MirroringType::Vertical);
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		uint8_t value = InternalReadRam(addr);
 		if(addr <= 0xFF9F) {
@@ -53,7 +53,7 @@ protected:
 		return value;
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr <= 0xFF9F) {
 			if(!(_regs[0] & 0x3F)) {

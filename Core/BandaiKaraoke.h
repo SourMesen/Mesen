@@ -7,11 +7,11 @@
 class BandaiKaraoke : public BaseMapper
 {
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual bool AllowRegisterRead() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual bool AllowRegisterRead() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		AddRegisterRange(0x6000, 0x7FFF, MemoryOperation::Read);
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
@@ -21,13 +21,13 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		//Microphone not implemented - always return A/B buttons as not pressed
 		return 0x03;
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(value & 0x10) {
 			//Select internal rom

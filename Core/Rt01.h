@@ -5,8 +5,8 @@
 class Rt01 : public BaseMapper
 {
 protected:
-	uint16_t GetPRGPageSize() { return 0x4000; }
-	uint16_t GetCHRPageSize() { return 0x800; }
+	uint16_t GetPRGPageSize() override { return 0x4000; }
+	uint16_t GetCHRPageSize() override { return 0x800; }
 	bool AllowRegisterRead() override { return true; }
 
 	void InitMapper() override

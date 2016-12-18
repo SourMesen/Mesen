@@ -22,10 +22,10 @@ class MMC2 : public BaseMapper
 		uint8_t _rightChrPage[2];
 		bool _needChrUpdate;
 
-		virtual uint16_t GetPRGPageSize() { return 0x2000; }
-		virtual uint16_t GetCHRPageSize() {	return 0x1000; }
+		virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+		virtual uint16_t GetCHRPageSize() override {	return 0x1000; }
 
-		virtual void InitMapper() 
+		virtual void InitMapper() override 
 		{
 			_leftLatch = 1;
 			_rightLatch = 1;
@@ -43,13 +43,13 @@ class MMC2 : public BaseMapper
 			SelectCHRPage(0, 1);
 		}
 
-		void StreamState(bool saving)
+		void StreamState(bool saving) override
 		{
 			BaseMapper::StreamState(saving);
 			Stream(_leftLatch, _rightLatch, _needChrUpdate, _leftChrPage[0], _leftChrPage[1], _rightChrPage[0], _rightChrPage[1]);			
 		}
 
-		void WriteRegister(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value) override
 		{
 			switch((MMC2Registers)(addr >> 12)) {
 				case MMC2Registers::RegA000:
@@ -83,7 +83,7 @@ class MMC2 : public BaseMapper
 		}
 
 	public:
-		virtual void NotifyVRAMAddressChange(uint16_t addr)
+		virtual void NotifyVRAMAddressChange(uint16_t addr) override
 		{
 			if(_needChrUpdate) {
 				SelectCHRPage(0, _leftChrPage[_leftLatch]);

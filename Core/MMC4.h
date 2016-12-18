@@ -5,10 +5,10 @@
 class MMC4 : public MMC2
 {
 	protected:
-		virtual uint16_t GetPRGPageSize() { return 0x4000; }
-		virtual uint16_t GetCHRPageSize() {	return 0x1000; }
+		virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+		virtual uint16_t GetCHRPageSize() override {	return 0x1000; }
 
-		virtual void InitMapper() 
+		virtual void InitMapper() override 
 		{
 			_leftLatch = 1;
 			_rightLatch = 1;
@@ -24,7 +24,7 @@ class MMC4 : public MMC2
 		}
 		
 	public:
-		virtual void NotifyVRAMAddressChange(uint16_t addr)
+		virtual void NotifyVRAMAddressChange(uint16_t addr) override
 		{
 			if(_needChrUpdate) {
 				SelectCHRPage(0, _leftChrPage[_leftLatch]);

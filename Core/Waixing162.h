@@ -7,12 +7,12 @@ private:
 	uint8_t _regs[4];
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x8000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
-	uint16_t RegisterStartAddress() { return 0x5000; }
-	uint16_t RegisterEndAddress() { return 0x5FFF; }
+	uint16_t GetPRGPageSize() override { return 0x8000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	uint16_t RegisterStartAddress() override { return 0x5000; }
+	uint16_t RegisterEndAddress() override { return 0x5FFF; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_regs[0] = 3;
 		_regs[1] = 0;
@@ -23,7 +23,7 @@ protected:
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> regs{ _regs, 4 };
@@ -40,7 +40,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		_regs[(addr >> 8) & 0x03] = value;
 		UpdateState();

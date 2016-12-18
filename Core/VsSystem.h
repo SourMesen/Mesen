@@ -9,10 +9,10 @@ private:
 	uint8_t _prgChrSelectBit = false;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	virtual void InitMapper()
+	virtual void InitMapper() override
 	{
 		//"Note: unlike all other mappers, an undersize mapper 99 image implies open bus instead of mirroring."
 		//However, it doesn't look like any game actually rely on this behavior?  So not implemented for now.
@@ -27,14 +27,14 @@ protected:
 		_gameSystem = GameSystem::VsUniSystem;
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
 		Stream(_prgChrSelectBit);
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_prgChrSelectBit != VsControlManager::GetInstance()->GetPrgChrSelectBit()) {
 			_prgChrSelectBit = VsControlManager::GetInstance()->GetPrgChrSelectBit();

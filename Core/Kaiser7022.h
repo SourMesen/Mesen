@@ -8,13 +8,13 @@ private:
 	uint8_t _reg;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual uint16_t RegisterStartAddress() { return 0x8000; }
-	virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
-	virtual bool AllowRegisterRead() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual uint16_t RegisterStartAddress() override { return 0x8000; }
+	virtual uint16_t RegisterEndAddress() override { return 0xFFFF; }
+	virtual bool AllowRegisterRead() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_reg = 0;
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
@@ -22,19 +22,19 @@ protected:
 		SelectPRGPage(0, 0);
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		_reg = 0;
 		ReadRegister(0xFFFC);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_reg);
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		SelectCHRPage(0, _reg);
 		SelectPRGPage(0, _reg);
@@ -43,7 +43,7 @@ protected:
 		return InternalReadRam(addr);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr) {
 			case 0x8000: SetMirroringType(value & 0x04 ? MirroringType::Horizontal : MirroringType::Vertical); break;

@@ -19,7 +19,7 @@ private:
 	uint32_t _cyclesDown = 0;
 
 public:
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		Stream(_lastCycle, _cyclesDown);
 	}

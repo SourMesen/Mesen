@@ -21,15 +21,15 @@ private:
 	}
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x0400; }
-	virtual uint16_t RegisterStartAddress() { return 0x7EF0; }
-	virtual uint16_t RegisterEndAddress() { return 0x7EFF; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x0400; }
+	virtual uint16_t RegisterStartAddress() override { return 0x7EF0; }
+	virtual uint16_t RegisterEndAddress() override { return 0x7EFF; }
 
-	virtual uint32_t GetSaveRamSize() { return 0x1400; }
-	virtual uint32_t GetSaveRamPageSize() { return 0x400; }
+	virtual uint32_t GetSaveRamSize() override { return 0x1400; }
+	virtual uint32_t GetSaveRamPageSize() override { return 0x400; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_chrMode = 0;
 		memset(_ramPermission, 0, sizeof(_ramPermission));
@@ -40,7 +40,7 @@ protected:
 		UpdateRamAccess();
 	}
 
-	virtual bool ForceBattery()
+	virtual bool ForceBattery() override
 	{
 		//Patch: Force battery, because some headers are marked as having no battery even though the game expects one
 		return true;
@@ -67,7 +67,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr) {
 			case 0x7EF0:
@@ -107,7 +107,7 @@ protected:
 		}
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> ramPermission = { _ramPermission, 3 };

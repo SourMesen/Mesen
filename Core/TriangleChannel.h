@@ -17,7 +17,7 @@ private:
 	uint8_t _sequencePosition = 0;
 
 protected:
-	void Clock()
+	void Clock() override
 	{
 		//The sequencer is clocked by the timer as long as both the linear counter and the length counter are nonzero. 
 		if(_lengthCounter > 0 && _linearCounter > 0) {
@@ -37,7 +37,7 @@ public:
 	{
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		ApuLengthCounter::Reset(softReset);
 		
@@ -49,19 +49,19 @@ public:
 		_sequencePosition = 0;
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		ApuLengthCounter::StreamState(saving);
 
 		Stream(_linearCounter, _linearCounterReload, _linearReloadFlag, _linearControlFlag, _sequencePosition);
 	}
 
-	void GetMemoryRanges(MemoryRanges &ranges)
+	void GetMemoryRanges(MemoryRanges &ranges) override
 	{
 		ranges.AddHandler(MemoryOperation::Write, 0x4008, 0x400B);
 	}
 
-	void WriteRAM(uint16_t addr, uint8_t value)
+	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		APU::StaticRun();
 		switch(addr & 0x03) {

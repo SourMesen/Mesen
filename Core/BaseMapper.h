@@ -57,9 +57,6 @@ struct CartridgeState
 class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener
 {
 private:
-	const uint16_t PrgAddressRangeSize = 0x8000;
-	const uint16_t ChrAddressRangeSize = 0x2000;
-
 	MirroringType _mirroringType;
 	string _batteryFilename;
 
@@ -183,7 +180,7 @@ protected:
 	void AddRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation = MemoryOperation::Any);
 	void RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation = MemoryOperation::Any);
 
-	virtual void StreamState(bool saving);
+	virtual void StreamState(bool saving) override;
 
 	uint8_t* GetNametable(uint8_t index);
 	void AddNametable(uint8_t index, uint8_t *nametable);
@@ -201,8 +198,8 @@ public:
 	virtual void SetNesModel(NesModel model) { }
 	virtual void ProcessCpuClock() { }
 	virtual void NotifyVRAMAddressChange(uint16_t addr);
-	void ProcessNotification(ConsoleNotificationType type, void* parameter);
-	virtual void GetMemoryRanges(MemoryRanges &ranges);
+	void ProcessNotification(ConsoleNotificationType type, void* parameter) override; 
+	virtual void GetMemoryRanges(MemoryRanges &ranges) override;
 	
 	void ApplyCheats();
 	void SaveBattery();
@@ -214,8 +211,8 @@ public:
 	uint32_t GetPrgCrc32();
 	string GetRomName();
 
-	uint8_t ReadRAM(uint16_t addr);
-	virtual void WriteRAM(uint16_t addr, uint8_t value);
+	uint8_t ReadRAM(uint16_t addr) override;
+	virtual void WriteRAM(uint16_t addr, uint8_t value) override;
 	void WritePrgRam(uint16_t addr, uint8_t value);
 
 	uint8_t InternalReadVRAM(uint16_t addr);	

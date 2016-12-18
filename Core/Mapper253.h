@@ -14,12 +14,12 @@ private:
 	uint16_t _irqScaler;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x400; }
-	virtual uint32_t GetChrRamSize() { return 0x800; }
-	virtual uint16_t GetChrRamPageSize() { return 0x400; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
+	virtual uint32_t GetChrRamSize() override { return 0x800; }
+	virtual uint16_t GetChrRamPageSize() override { return 0x400; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		memset(_chrLow, 0, sizeof(_chrLow));
 		memset(_chrHigh, 0, sizeof(_chrHigh));
@@ -33,7 +33,7 @@ protected:
 		SelectPRGPage(3, -1);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
@@ -58,7 +58,7 @@ protected:
 		}
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqEnabled) {
 			_irqScaler++;
@@ -73,7 +73,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr >= 0xB000 && addr <= 0xE00C) {
 			uint8_t slot = ((((addr & 0x08) | (addr >> 8)) >> 3) + 2) & 0x07;

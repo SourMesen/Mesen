@@ -62,7 +62,7 @@ public:
 		_writeDelayCounter = -1;
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		Stream(_nextIrqCycle, _previousCycle, _currentStep, _stepMode, _inhibitIRQ, _nesModel, _blockFrameCounterTick, _writeDelayCounter, _newValue);
 
@@ -185,17 +185,17 @@ public:
 		return false;
 	}
 
-	void GetMemoryRanges(MemoryRanges &ranges)
+	void GetMemoryRanges(MemoryRanges &ranges) override
 	{
 		ranges.AddHandler(MemoryOperation::Write, 0x4017);
 	}
 
-	uint8_t ReadRAM(uint16_t addr)
+	uint8_t ReadRAM(uint16_t addr) override
 	{
 		return 0;
 	}
 
-	void WriteRAM(uint16_t addr, uint8_t value)
+	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		APU::StaticRun();
 		_newValue = value;

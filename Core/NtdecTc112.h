@@ -5,20 +5,20 @@
 class NtdecTc112 : public BaseMapper
 {
 protected:
-	virtual uint16_t RegisterStartAddress() { return 0x6000; }
-	virtual uint16_t RegisterEndAddress() { return 0x7FFF; }
+	virtual uint16_t RegisterStartAddress() override { return 0x6000; }
+	virtual uint16_t RegisterEndAddress() override { return 0x7FFF; }
 
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x0800; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x0800; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		SelectPRGPage(1, -3);
 		SelectPRGPage(2, -2);
 		SelectPRGPage(3, -1);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0x03){
 			case 0: 

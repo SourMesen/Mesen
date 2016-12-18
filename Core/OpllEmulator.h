@@ -127,7 +127,7 @@ namespace Vrc7Opll
 			return c >> b;
 		}
 	protected:
-		void StreamState(bool saving)
+		void StreamState(bool saving) override
 		{
 			ArrayInfo<uint8_t> lowFreq{ LowFreq, 6 };
 			ArrayInfo<uint8_t> hiFreq{ HiFreq, 6 };
@@ -415,14 +415,14 @@ namespace Vrc7Opll
 		uint32_t SetMask(uint32_t mask)
 		{
 			uint32_t ret = mask;
-			mask = mask;
+			this->mask = mask;
 			return ret;
 		}
 
 		uint32_t ToggleMask(uint32_t mask)
 		{
 			uint32_t ret = mask;
-			mask ^= mask;
+			this->mask ^= mask;
 			return ret;
 		}
 

@@ -10,13 +10,13 @@ private:
 	uint8_t _regs[8];
 
 protected:
-	uint16_t RegisterStartAddress() { return 0x4100; }
-	uint16_t RegisterEndAddress() { return 0x7FFF; }
-	uint16_t GetPRGPageSize() { return 0x8000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
-	bool AllowRegisterRead() { return true; }
+	uint16_t RegisterStartAddress() override { return 0x4100; }
+	uint16_t RegisterEndAddress() override { return 0x7FFF; }
+	uint16_t GetPRGPageSize() override { return 0x8000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	bool AllowRegisterRead() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_counter = 0;
 		_currentRegister = 0;
@@ -25,21 +25,21 @@ protected:
 		SelectPRGPage(0, 0);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> regs{ _regs, 8 };
 		Stream(_currentRegister, regs, _counter);
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		if(softReset) {
 			_counter++;
 		}
 	}
 
-	uint8_t ReadRegister(uint16_t addr) 
+	uint8_t ReadRegister(uint16_t addr) override 
 	{
 		switch(addr & 0xC101) {
 			case 0x4000: return (~_currentRegister) ^ (_counter & 1);
@@ -66,7 +66,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xC101) {
 			case 0x4100: _currentRegister = value & 0x07; break;

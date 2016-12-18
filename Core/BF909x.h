@@ -8,10 +8,10 @@ private:
 	bool _bf9097Mode = false;  //Auto-detect for firehawk
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() {	return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override {	return 0x2000; }
 
-	void InitMapper() 
+	void InitMapper() override 
 	{
 		if(_subMapperID == 1) {
 			_bf9097Mode = true;
@@ -24,7 +24,7 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr == 0x9000) {
 			//Firehawk uses $9000 to change mirroring
@@ -38,7 +38,7 @@ protected:
 		}
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_bf9097Mode);		

@@ -35,13 +35,13 @@ private:
 	void DisableControllers();
 
 protected:
-	void ProcessMessage(NetMessage* message);
+	void ProcessMessage(NetMessage* message) override;
 
 public:
 	GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData);
 	~GameClientConnection();
 
-	void ProcessNotification(ConsoleNotificationType type, void* parameter);
+	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 
 	uint8_t GetControllerState(uint8_t port);
 	void SendInput();

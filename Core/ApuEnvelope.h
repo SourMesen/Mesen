@@ -44,7 +44,7 @@ protected:
 	}
 
 public:
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		ApuLengthCounter::Reset(softReset);
 
@@ -56,7 +56,7 @@ public:
 		_counter = 0;
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		ApuLengthCounter::StreamState(saving);
 

@@ -10,10 +10,10 @@ private:
 	uint16_t _chrRamSize;
 
 protected:
-	virtual uint16_t GetChrRamPageSize() { return 0x400; }
-	virtual uint32_t GetChrRamSize() { return _chrRamSize * 0x400; }
+	virtual uint16_t GetChrRamPageSize() override { return 0x400; }
+	virtual uint32_t GetChrRamSize() override { return _chrRamSize * 0x400; }
 
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
+	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
 	{
 		if(page >= _firstRamBank && page <= _lastRamBank) {
 			memoryType = ChrMemoryType::ChrRam;
@@ -23,7 +23,7 @@ protected:
 		MMC3::SelectCHRPage(slot, page, memoryType);
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_firstRamBank, _lastRamBank, _chrRamSize);

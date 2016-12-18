@@ -11,13 +11,13 @@ private:
 	uint8_t _prgBank;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x8000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual uint16_t RegisterStartAddress() { return 0x8000; }
-	virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
-	virtual bool AllowRegisterRead() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual uint16_t RegisterStartAddress() override { return 0x8000; }
+	virtual uint16_t RegisterEndAddress() override { return 0xFFFF; }
+	virtual bool AllowRegisterRead() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		AddRegisterRange(0x4100, 0x5FFF, MemoryOperation::Any);
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
@@ -30,18 +30,18 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_state, _prgBank, _prgBankingMode);
 	}
 
-	virtual uint8_t ReadRegister(uint16_t addr)
+	virtual uint8_t ReadRegister(uint16_t addr) override
 	{
 		return MemoryManager::GetOpenBus() & 0xCF | (_state << 4);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
 			switch(addr & 0xE303) {

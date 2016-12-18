@@ -8,20 +8,20 @@ private:
 	bool _openBus;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		WriteRegister(0x8000, 0);
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		_openBus = false;
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_openBus);
@@ -30,7 +30,7 @@ protected:
 		}
 	}
 	
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		_openBus = ((addr & 0x0300) == 0x0300);
 

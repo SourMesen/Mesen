@@ -55,7 +55,7 @@ protected:
 		MMC3::SelectPRGPage(slot, (_exRegs[1] << 5 & 0x60) | page);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
 			switch(addr) {

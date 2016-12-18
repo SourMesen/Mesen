@@ -6,7 +6,7 @@
 class MMC3_182 : public MMC3
 {
 protected:
-	virtual void WriteRegister(uint16_t addr, uint8_t value)
+	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xE001) {
 			case 0x8001: MMC3::WriteRegister(0xA000, value); break;

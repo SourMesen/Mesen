@@ -169,7 +169,7 @@ private:
 		}
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(!PPU::GetControlFlags().BackgroundEnabled && !PPU::GetControlFlags().SpritesEnabled) {
 			_ppuInFrame = false;
@@ -178,7 +178,7 @@ private:
 		_audio.Clock();
 	}
 
-	virtual void NotifyVRAMAddressChange(uint16_t addr)
+	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(_spriteFetch != IsSpriteFetch() || _largeSprites != PPU::GetControlFlags().LargeSprites) {
 			if(PPU::GetControlFlags().BackgroundEnabled || PPU::GetControlFlags().SpritesEnabled) {
@@ -261,20 +261,20 @@ private:
 	}
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() {	return 0x400; }
-	virtual uint16_t RegisterStartAddress() { return 0x5000; }
-	virtual uint16_t RegisterEndAddress() { return 0x5206; }
-	virtual uint32_t GetSaveRamSize() { return 0x10000; } //Emulate as if a single 64k block of saved ram existed
-	virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
-	virtual uint32_t GetWorkRamSize() { return 0x400; } 
-	virtual uint32_t GetWorkRamPageSize() { return 0x400; }
-	virtual bool ForceSaveRamSize() { return true; }
-	virtual bool ForceWorkRamSize() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override {	return 0x400; }
+	virtual uint16_t RegisterStartAddress() override { return 0x5000; }
+	virtual uint16_t RegisterEndAddress() override { return 0x5206; }
+	virtual uint32_t GetSaveRamSize() override { return 0x10000; } //Emulate as if a single 64k block of saved ram existed
+	virtual uint32_t GetSaveRamPageSize() override { return 0x2000; }
+	virtual uint32_t GetWorkRamSize() override { return 0x400; } 
+	virtual uint32_t GetWorkRamPageSize() override { return 0x400; }
+	virtual bool ForceSaveRamSize() override { return true; }
+	virtual bool ForceWorkRamSize() override { return true; }
 
-	virtual bool AllowRegisterRead() { return true; }
+	virtual bool AllowRegisterRead() override { return true; }
 
-	virtual void InitMapper()
+	virtual void InitMapper() override
 	{
 		_hasBattery = true;
 
@@ -333,7 +333,7 @@ protected:
 		delete[] _emptyNametable;
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
@@ -353,7 +353,7 @@ protected:
 		}
 	}
 
-	virtual void WriteRAM(uint16_t addr, uint8_t value)
+	virtual void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		if(addr >= 0x5C00 && addr <= 0x5FFF && _extendedRamMode <= 1) {
 			PPUControlFlags flags = PPU::GetControlFlags();
@@ -366,7 +366,7 @@ protected:
 		BaseMapper::WriteRAM(addr, value);
 	}
 
-	virtual uint8_t ReadVRAM(uint16_t addr, MemoryOperationType memoryOperationType)
+	virtual uint8_t ReadVRAM(uint16_t addr, MemoryOperationType memoryOperationType) override
 	{
 		if(_extendedRamMode <= 1 && _verticalSplitEnabled && memoryOperationType == MemoryOperationType::PpuRenderingRead) {
 			uint32_t cycle = PPU::GetCurrentCycle();
@@ -449,7 +449,7 @@ protected:
 		return BaseMapper::ReadVRAM(addr, memoryOperationType);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr >= 0x5113 && addr <= 0x5117) {
 			SwitchPrgBank(addr, value);
@@ -495,7 +495,7 @@ protected:
 		}
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		switch(addr) {
 			case 0x5010: case 0x5015: 

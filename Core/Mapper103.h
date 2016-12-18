@@ -9,14 +9,14 @@ private:
 	uint8_t _prgReg;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual uint32_t GetWorkRamSize() { return 0x4000; }
-	virtual uint32_t GetWorkRamPageSize() { return 0x2000; }
-	virtual uint16_t RegisterStartAddress() { return 0x6000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual uint32_t GetWorkRamSize() override { return 0x4000; }
+	virtual uint32_t GetWorkRamPageSize() override { return 0x2000; }
+	virtual uint16_t RegisterStartAddress() override { return 0x6000; }
 	virtual uint16_t EndStartAddress() { return 0xFFFF; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_prgRamDisabled = false;
 		_prgReg = 0;
@@ -24,7 +24,7 @@ protected:
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_prgRamDisabled, _prgReg);
@@ -44,7 +44,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xF000) {
 			case 0x6000: case 0x7000:

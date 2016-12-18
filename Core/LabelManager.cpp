@@ -68,7 +68,7 @@ int32_t LabelManager::GetLabelAddress(uint16_t relativeAddr, bool checkRegisters
 
 string LabelManager::GetLabel(uint16_t relativeAddr, bool checkRegisters)
 {
-	uint32_t labelAddr = GetLabelAddress(relativeAddr, checkRegisters);
+	int32_t labelAddr = GetLabelAddress(relativeAddr, checkRegisters);
 
 	if(labelAddr >= 0) {
 		auto result = _codeLabels.find(labelAddr);
@@ -82,7 +82,7 @@ string LabelManager::GetLabel(uint16_t relativeAddr, bool checkRegisters)
 
 string LabelManager::GetComment(uint16_t relativeAddr)
 {
-	uint32_t labelAddr = GetLabelAddress(relativeAddr, false);
+	int32_t labelAddr = GetLabelAddress(relativeAddr, false);
 
 	if(labelAddr >= 0) {
 		auto result = _codeComments.find(labelAddr);

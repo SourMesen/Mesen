@@ -23,16 +23,16 @@ private:
 	bool _forceClock = false;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x400; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		memset(_registers, 0, sizeof(_registers));
 		SelectPRGPage(3, -1);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> registers = { _registers, 16 };
@@ -41,7 +41,7 @@ protected:
 				a12Watcher, _cpuClockCounter, _currentRegister, registers, _forceClock);
 	}
 
-	virtual void ProcessCpuClock()
+	virtual void ProcessCpuClock() override
 	{
 		if(_needIrqDelay) {
 			_needIrqDelay--;
@@ -109,7 +109,7 @@ protected:
 		}		
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xE001) {
 			case 0x8000: 
@@ -154,7 +154,7 @@ protected:
 	}
 
 public:
-	virtual void NotifyVRAMAddressChange(uint16_t addr)
+	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(!_irqCycleMode) {
 			if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {

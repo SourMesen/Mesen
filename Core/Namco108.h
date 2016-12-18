@@ -6,13 +6,13 @@
 class Namco108 : public MMC3
 {
 protected:
-	virtual void UpdateMirroring()
+	virtual void UpdateMirroring() override
 	{
 		//Do nothing - Namco 108 has hardwired mirroring only
 		//"Mirroring is hardwired, one game uses 4-screen mirroring (Gauntlet, DRROM)."
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		//Redirect all 0x8000-0xFFFF writes to 0x8000-0x8001, all other features do not exist in this version
 		addr &= 0x8001;

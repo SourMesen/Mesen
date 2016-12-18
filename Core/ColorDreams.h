@@ -5,17 +5,17 @@
 class ColorDreams : public BaseMapper
 {
 	protected:
-		virtual uint16_t GetPRGPageSize() { return 0x8000; }
-		virtual uint16_t GetCHRPageSize() {	return 0x2000; }
-		virtual bool HasBusConflicts() { return true; }
+		virtual uint16_t GetPRGPageSize() override { return 0x8000; }
+		virtual uint16_t GetCHRPageSize() override {	return 0x2000; }
+		virtual bool HasBusConflicts() override { return true; }
 
-		void InitMapper() 
+		void InitMapper() override 
 		{
 			SelectPRGPage(0, 0);
 			SelectCHRPage(0, 0);
 		}
 
-		void WriteRegister(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value) override
 		{
 			if(_mapperID == 144) {
 				//"This addition means that only the ROM's least significant bit always wins bus conflicts."

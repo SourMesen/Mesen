@@ -6,7 +6,7 @@
 class Namco108_88 : public Namco108
 {
 protected:
-	virtual void UpdateChrMapping()
+	virtual void UpdateChrMapping() override
 	{
 		_registers[0] &= 0x3F;
 		_registers[1] &= 0x3F;

@@ -46,7 +46,7 @@ public:
 		return ApuLengthCounter::_needToRun;
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		BaseApuChannel::Reset(softReset);
 
@@ -72,19 +72,19 @@ public:
 		ApuLengthCounter::_needToRun = false;
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		BaseApuChannel::StreamState(saving);
 
 		Stream(_enabled, _lengthCounterHalt, _newHaltValue, _lengthCounter, _lengthCounterPreviousValue, _lengthCounterReloadValue);
 	}
 
-	bool GetStatus()
+	bool GetStatus() override
 	{
 		return _lengthCounter > 0;
 	}
 
-	virtual void Run(uint32_t targetCycle)
+	virtual void Run(uint32_t targetCycle) override
 	{
 		ApuLengthCounter::_needToRun = false;
 		_lengthCounterHalt = _newHaltValue;

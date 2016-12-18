@@ -10,10 +10,10 @@ private:
 	uint8_t _mirroringBit;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_selectedReg = 0;
 		memset(_regs, 0, sizeof(_regs));
@@ -23,7 +23,7 @@ protected:
 		SelectPRGPage(1, -1);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
@@ -76,7 +76,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr <= 0x5FFF) {
 			_selectedReg = ((value & 0x80) >> 6) | (value & 0x01);

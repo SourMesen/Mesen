@@ -8,7 +8,7 @@ private:
 	uint8_t _reset;
 
 protected:
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		Mapper226::Reset(softReset);
 
@@ -20,13 +20,13 @@ protected:
 		}
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		Mapper226::StreamState(saving);
 		Stream(_reset);
 	}
 
-	uint8_t GetPrgPage()
+	uint8_t GetPrgPage() override
 	{
 		return (_registers[0] & 0x1F) | (_reset << 5) | ((_registers[1] & 0x01) << 6);
 	}

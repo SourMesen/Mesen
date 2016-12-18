@@ -8,19 +8,19 @@ private:
 	uint8_t _selectedBlock = 0;
 
 protected:
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_selectedBlock);
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		_selectedBlock = 0;
 		UpdateState();
 	}
 
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
+	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
 	{
 		page &= _selectedBlock <= 5 ? 0x7F : 0xFF;
 		page |= _selectedBlock * 0x80;
@@ -28,7 +28,7 @@ protected:
 		MMC3::SelectCHRPage(slot, page, memoryType);
 	}
 
-	virtual void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom)
+	virtual void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom) override
 	{
 		page &= _selectedBlock <= 5 ? 0x0F : 0x1F;
 		page |= _selectedBlock * 0x10;
@@ -36,7 +36,7 @@ protected:
 		MMC3::SelectPRGPage(slot, page, memoryType);
 	}
 
-	virtual void WriteRegister(uint16_t addr, uint8_t value)
+	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if((addr & 0xE001) == 0xA001) {
 			_selectedBlock = value & 0x07;

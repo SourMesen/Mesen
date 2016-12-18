@@ -71,7 +71,7 @@ private:
 	}
 
 protected:
-	void Clock()
+	void Clock() override
 	{
 		if(IsMuted()) {
 			AddOutput(0);
@@ -88,7 +88,7 @@ public:
 		_isChannel1 = isChannel1;
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		ApuEnvelope::Reset(softReset);
 		
@@ -107,14 +107,14 @@ public:
 		UpdateTargetPeriod();
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		ApuEnvelope::StreamState(saving);
 
 		Stream(_realPeriod, _duty, _dutyPos, _sweepEnabled, _sweepPeriod, _sweepNegate, _sweepShift, _reloadSweep, _sweepDivider, _sweepTargetPeriod);
 	}
 
-	void GetMemoryRanges(MemoryRanges &ranges)
+	void GetMemoryRanges(MemoryRanges &ranges) override
 	{
 		if(_isChannel1) {
 			ranges.AddHandler(MemoryOperation::Write, 0x4000, 0x4003);
@@ -123,7 +123,7 @@ public:
 		}
 	}
 
-	void WriteRAM(uint16_t addr, uint8_t value)
+	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		APU::StaticRun();
 		switch(addr & 0x03) {

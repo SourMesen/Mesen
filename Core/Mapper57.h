@@ -8,10 +8,10 @@ private:
 	uint8_t _registers[2];
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_registers[0] = 0;
 		_registers[1] = 0;
@@ -19,7 +19,7 @@ protected:
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{		
 		BaseMapper::StreamState(saving);
 		Stream(_registers[0], _registers[1]);
@@ -40,7 +40,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0x8800) {
 			case 0x8000: _registers[0] = value; break;

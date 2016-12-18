@@ -78,10 +78,10 @@ class VRC2_4 : public BaseMapper
 		}
 
 	protected:
-		virtual uint16_t GetPRGPageSize() { return 0x2000; }
-		virtual uint16_t GetCHRPageSize() {	return 0x0400; }
+		virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+		virtual uint16_t GetCHRPageSize() override {	return 0x0400; }
 
-		void InitMapper() 
+		void InitMapper() override 
 		{
 			DetectVariant();
 
@@ -95,7 +95,7 @@ class VRC2_4 : public BaseMapper
 			UpdateState();
 		}
 
-		void ProcessCpuClock()
+		void ProcessCpuClock() override
 		{
 			_irq.ProcessCpuClock();
 		}
@@ -124,7 +124,7 @@ class VRC2_4 : public BaseMapper
 			}
 		}
 
-		void WriteRegister(uint16_t addr, uint8_t value)
+		void WriteRegister(uint16_t addr, uint8_t value) override
 		{
 			addr = TranslateAddress(addr) & 0xF00F;
 
@@ -278,7 +278,7 @@ class VRC2_4 : public BaseMapper
 			return (addr & 0xFF00) | (A1 << 1) | A0;
 		}
 
-		void StreamState(bool saving)
+		void StreamState(bool saving) override
 		{
 			BaseMapper::StreamState(saving);
 			ArrayInfo<uint8_t> loChrRegs = { _loCHRRegs, 8 };

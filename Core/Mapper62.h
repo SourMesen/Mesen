@@ -5,17 +5,17 @@
 class Mapper62 : public BaseMapper
 {
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		SelectPRGPage(0, 0);
 		SelectPRGPage(1, 1);
 		SelectCHRPage(0, 0);
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		if(softReset) {
 			SelectPRGPage(0, 0);
@@ -24,7 +24,7 @@ protected:
 		}
 	}
 	
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		uint8_t prgPage = ((addr & 0x3F00) >> 8) | (addr & 0x40);
 		uint8_t chrPage = ((addr & 0x1F) << 2) | (value & 0x03);

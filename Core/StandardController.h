@@ -14,16 +14,16 @@ private:
 	uint8_t GetButtonState();
 
 protected:
-	uint8_t RefreshState();
-	virtual void StreamState(bool saving);
+	uint8_t RefreshState() override;
+	virtual void StreamState(bool saving) override;
 
 public:
 	using BaseControlDevice::BaseControlDevice;
 
-	uint32_t GetNetPlayState();
+	uint32_t GetNetPlayState() override;
 
-	uint8_t GetPortOutput();
-	void RefreshStateBuffer();
+	uint8_t GetPortOutput() override;
+	void RefreshStateBuffer() override;
 
 	//Used for VS System button unscrambling
 	uint32_t GetInternalState();

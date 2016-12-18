@@ -124,7 +124,7 @@ namespace Vrc7Opll
 		uint32_t egout;      /* output */
 
 	protected:
-		void StreamState(bool saving)
+		void StreamState(bool saving) override
 		{
 			Stream(type, feedback, output[0], output[1], phase, dphase, pgout, fnum, block, volume, sustine, tll, rks, eg_mode, eg_phase, eg_dphase, egout,
 				patch.TL, patch.FB, patch.EG, patch.ML, patch.AR, patch.DR, patch.SL, patch.RR, patch.KR, patch.KL, patch.AM, patch.PM, patch.WF);

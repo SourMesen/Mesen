@@ -9,17 +9,17 @@ private:
 	bool _needUpdate = false;
 
 protected:
-	virtual uint16_t GetCHRPageSize() { return 0x1000; }
-	virtual uint32_t GetChrRamSize() { return 0x1000; }
-	virtual uint16_t GetChrRamPageSize() { return 0x1000; }	
+	virtual uint16_t GetCHRPageSize() override { return 0x1000; }
+	virtual uint32_t GetChrRamSize() override { return 0x1000; }
+	virtual uint16_t GetChrRamPageSize() override { return 0x1000; }	
 	
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_chrLatch[0], _chrLatch[1], _needUpdate);
 	}
 
-	virtual void UpdateChrMapping()
+	virtual void UpdateChrMapping() override
 	{
 		uint16_t page;
 		
@@ -35,7 +35,7 @@ protected:
 		_needUpdate = false;
 	}
 
-	virtual void NotifyVRAMAddressChange(uint16_t addr)
+	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(_needUpdate) {
 			UpdateChrMapping();

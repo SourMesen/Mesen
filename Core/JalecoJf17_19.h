@@ -11,11 +11,11 @@ private:
 	bool _chrFlag = false;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual bool HasBusConflicts() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual bool HasBusConflicts() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		SelectPRGPage(0, 0);
 		SelectPRGPage(1, -1);
@@ -23,13 +23,13 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_prgFlag, _chrFlag);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(!_prgFlag && (value & 0x80)) {
 			if(_jf19Mode) {

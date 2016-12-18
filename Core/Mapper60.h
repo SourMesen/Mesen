@@ -8,10 +8,10 @@ private:
 	uint8_t _resetCounter;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_resetCounter = 0;
 		SelectPRGPage(0, 0);
@@ -19,7 +19,7 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
-	virtual void Reset(bool softReset)
+	virtual void Reset(bool softReset) override
 	{
 		if(softReset) {
 			_resetCounter = (_resetCounter + 1) % 4;
@@ -30,7 +30,7 @@ protected:
 		}
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_resetCounter);

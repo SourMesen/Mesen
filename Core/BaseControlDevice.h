@@ -53,7 +53,7 @@ protected:
 	virtual uint8_t RefreshState() = 0;	
 	virtual uint8_t ProcessNetPlayState(uint32_t netplayState);
 
-	virtual void StreamState(bool saving);
+	virtual void StreamState(bool saving) override;
 
 public:
 	//Used by controller-specific code to get the current state (buttons, position, etc)

@@ -19,12 +19,12 @@ private:
 	uint8_t _chrOr[3];
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x8000; }
-	uint16_t GetCHRPageSize() { return _variant == Sachen8259Variant::Sachen8259D ? 0x400 : 0x800; }
-	uint16_t RegisterStartAddress() { return 0x4100; }
-	uint16_t RegisterEndAddress() { return 0x7FFF; }
+	uint16_t GetPRGPageSize() override { return 0x8000; }
+	uint16_t GetCHRPageSize() override { return _variant == Sachen8259Variant::Sachen8259D ? 0x400 : 0x800; }
+	uint16_t RegisterStartAddress() override { return 0x4100; }
+	uint16_t RegisterEndAddress() override { return 0x7FFF; }
 	
-	void InitMapper()
+	void InitMapper() override
 	{
 		_currentReg = 0;
 		memset(_regs, 0, sizeof(_regs));
@@ -32,7 +32,7 @@ protected:
 		SelectPRGPage(0, 0);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
@@ -74,7 +74,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xC101) {
 			case 0x4100: _currentReg = value & 0x07; break;

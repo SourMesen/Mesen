@@ -188,7 +188,7 @@ bool Socket::Connect(const char* hostname, uint16_t port)
 		} else {
 			//Could not connect
 			if(returnVal == SOCKET_ERROR) {
-				int nError = WSAGetLastError();				
+				//int nError = WSAGetLastError();				
 				//std::cout << "select failed: nError " << std::to_string(nError) << " returnVal" << std::to_string(returnVal) << std::endl;			
 			}
 			SetConnectionErrorFlag();

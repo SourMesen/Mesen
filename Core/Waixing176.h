@@ -7,12 +7,12 @@ private:
 	bool _registersEnabled;
 
 protected:
-	uint16_t GetPRGPageSize() { return 0x2000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
-	uint16_t RegisterStartAddress() { return 0x5000; }
-	uint16_t RegisterEndAddress() { return 0x5FFF; }
+	uint16_t GetPRGPageSize() override { return 0x2000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	uint16_t RegisterStartAddress() override { return 0x5000; }
+	uint16_t RegisterEndAddress() override { return 0x5FFF; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_registersEnabled = false;
 
@@ -22,13 +22,13 @@ protected:
 		SelectPRGPage(3, (GetPRGPageCount() - 1) & 0x3F);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_registersEnabled);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr) {
 			case 0x5001:

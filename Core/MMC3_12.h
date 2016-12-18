@@ -8,21 +8,21 @@ private:
 	uint8_t _chrSelection = 0;
 
 protected:
-	virtual bool ForceMmc3RevAIrqs() { return true; }
+	virtual bool ForceMmc3RevAIrqs() override { return true; }
 
-	virtual void InitMapper()
+	virtual void InitMapper() override
 	{
 		AddRegisterRange(0x4020, 0x5FFF);
 		MMC3::InitMapper();
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_chrSelection);
 	}
 
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
+	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
 	{
 		if(slot < 4 && (_chrSelection & 0x01)) {
 			//0x0000 to 0x0FFF
@@ -35,7 +35,7 @@ protected:
 		MMC3::SelectCHRPage(slot, page, memoryType);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr <= 0x5FFF) {
 			_chrSelection = value;

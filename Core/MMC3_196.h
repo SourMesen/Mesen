@@ -7,7 +7,7 @@ private:
 	uint8_t _exRegs[2];
 
 protected:
-	void InitMapper()
+	void InitMapper() override
 	{
 		MMC3::InitMapper();
 		_exRegs[0] = _exRegs[1] = 0;

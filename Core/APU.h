@@ -47,7 +47,7 @@ class APU : public Snapshotable, public IMemoryHandler
 		static void FrameCounterTick(FrameType type);
 
 	protected:
-		void StreamState(bool saving);
+		void StreamState(bool saving) override;
 
 	public:
 		APU(MemoryManager* memoryManager);
@@ -56,9 +56,9 @@ class APU : public Snapshotable, public IMemoryHandler
 		void Reset(bool softReset);
 		void SetNesModel(NesModel model, bool forceInit = false);
 
-		uint8_t ReadRAM(uint16_t addr);
-		void WriteRAM(uint16_t addr, uint8_t value);
-		void GetMemoryRanges(MemoryRanges &ranges);
+		uint8_t ReadRAM(uint16_t addr) override;
+		void WriteRAM(uint16_t addr, uint8_t value) override;
+		void GetMemoryRanges(MemoryRanges &ranges) override;
 
 		void Exec();
 

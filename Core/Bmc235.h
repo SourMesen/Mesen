@@ -7,22 +7,22 @@ class Bmc235 : public BaseMapper
 private:
 	bool _openBus = false;
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		SelectPrgPage2x(0, 0);
 		SelectCHRPage(0, 0);
 	}
 
-	void Reset(bool softReset)
+	void Reset(bool softReset) override
 	{
 		SelectPrgPage2x(0, 0);
 		_openBus = false;
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		Stream(_openBus);
@@ -31,7 +31,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		SetMirroringType((addr & 0x0400) ? MirroringType::ScreenAOnly : (addr & 0x2000) ? MirroringType::Horizontal : MirroringType::Vertical);
 

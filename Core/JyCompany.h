@@ -52,11 +52,11 @@ private:
 	uint16_t _lastPpuAddr;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x0400; }
-	virtual bool AllowRegisterRead() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x0400; }
+	virtual bool AllowRegisterRead() override { return true; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
 		AddRegisterRange(0x5000, 0x5FFF, MemoryOperation::Any);
@@ -102,7 +102,7 @@ protected:
 		UpdateState();
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
@@ -241,7 +241,7 @@ protected:
 		}
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		switch(addr & 0xF803) {
 			case 0x5000: return 0; //Dip switches
@@ -253,7 +253,7 @@ protected:
 		return MemoryManager::GetOpenBus();
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
 			switch(addr & 0xF803) {
@@ -336,14 +336,14 @@ protected:
 		UpdateState();
 	}
 
-	void ProcessCpuClock()
+	void ProcessCpuClock() override
 	{
 		if(_irqSource == JyIrqSource::CpuClock || (_irqSource == JyIrqSource::CpuWrite && CPU::IsCpuWrite())) {
 			TickIrqCounter();
 		}
 	}
 
-	uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type)
+	uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type) override
 	{
 		if(_irqSource == JyIrqSource::PpuRead && type == MemoryOperationType::PpuRenderingRead) {
 			TickIrqCounter();
@@ -351,7 +351,7 @@ protected:
 		return BaseMapper::ReadVRAM(addr, type);
 	}
 
-	void NotifyVRAMAddressChange(uint16_t addr)
+	void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(_irqSource == JyIrqSource::PpuA12Rise && (addr & 0x1000) && !(_lastPpuAddr & 0x1000)) {
 			TickIrqCounter();

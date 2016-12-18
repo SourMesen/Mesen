@@ -21,15 +21,15 @@ private:
 	int32_t _yPosition = -1;
 
 protected:
-	virtual uint8_t RefreshState();
-	uint8_t ProcessNetPlayState(uint32_t netplayState);
-	void StreamState(bool saving);
+	virtual uint8_t RefreshState() override;
+	uint8_t ProcessNetPlayState(uint32_t netplayState) override;
+	void StreamState(bool saving) override;
 	ZapperButtonState GetZapperState();
 
 public:
 	using BaseControlDevice::BaseControlDevice;
 
-	virtual uint8_t GetPortOutput();
+	virtual uint8_t GetPortOutput() override;
 
-	virtual uint32_t GetNetPlayState();
+	virtual uint32_t GetNetPlayState() override;
 };

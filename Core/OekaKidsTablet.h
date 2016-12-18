@@ -15,15 +15,15 @@ private:
 	int32_t _yPosition = 0;
 
 protected:
-	virtual uint8_t RefreshState();
-	uint8_t ProcessNetPlayState(uint32_t netplayState);
-	void StreamState(bool saving);
+	virtual uint8_t RefreshState() override;
+	uint8_t ProcessNetPlayState(uint32_t netplayState) override;
+	void StreamState(bool saving) override;
 
 public:
 	using BaseControlDevice::BaseControlDevice;
 
-	virtual uint8_t GetPortOutput();
-	virtual uint32_t GetNetPlayState();
+	virtual uint8_t GetPortOutput() override;
+	virtual uint32_t GetNetPlayState() override;
 
 	void WriteRam(uint8_t value);
 };

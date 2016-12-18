@@ -11,7 +11,7 @@ private:
 	uint8_t _mode;
 
 protected:
-	virtual void InitMapper()
+	virtual void InitMapper() override
 	{
 		_mode = 0;
 		_vrcMirroring = 0;
@@ -21,7 +21,7 @@ protected:
 		MMC3::InitMapper();
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		ArrayInfo<uint8_t> prgRegs{ _vrcPrgRegs, 2 };
@@ -29,7 +29,7 @@ protected:
 		Stream(_mode, _vrcMirroring, prgRegs, chrRegs);
 	}
 
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default)
+	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
 	{
 		if(_mode & 0x02) {
 			if(slot <= 3) {
@@ -59,7 +59,7 @@ protected:
 		SetMirroringType(_vrcMirroring & 0x01 ? MirroringType::Horizontal : MirroringType::Vertical);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr == 0xA131) {
 			_mode = value;

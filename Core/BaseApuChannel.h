@@ -47,7 +47,7 @@ public:
 		}
 	}
 
-	virtual void StreamState(bool saving)
+	virtual void StreamState(bool saving) override
 	{
 		if(!saving) {
 			_previousCycle = 0;
@@ -91,7 +91,7 @@ public:
 		}
 	}
 	
-	uint8_t ReadRAM(uint16_t addr)
+	uint8_t ReadRAM(uint16_t addr) override
 	{
 		return 0;
 	}

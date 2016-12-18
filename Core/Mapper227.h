@@ -4,15 +4,15 @@
 class Mapper227 : public BaseMapper
 {
 protected:
-	uint16_t GetPRGPageSize() { return 0x4000; }
-	uint16_t GetCHRPageSize() { return 0x2000; }
+	uint16_t GetPRGPageSize() override { return 0x4000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		WriteRegister(0x8000, 0);
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		uint16_t prgBank = ((addr >> 2) & 0x1F) | ((addr & 0x100) >> 3);
 		bool sFlag = (addr & 0x01) == 0x01;

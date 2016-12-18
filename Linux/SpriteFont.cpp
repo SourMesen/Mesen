@@ -79,11 +79,6 @@ static const char spriteFontMagic[] = "DXTKfont";
 
 
 // Comparison operators make our sorted glyph vector work with std::binary_search and lower_bound.
-static inline bool operator< (SpriteFont::Glyph const& left, SpriteFont::Glyph const& right)
-{
-	return left.Character < right.Character;
-}
-
 static inline bool operator< (wchar_t left, SpriteFont::Glyph const& right)
 {
 	return (uint32_t)left < right.Character;
@@ -302,7 +297,7 @@ RECT SpriteFont::MeasureDrawBounds(wchar_t const* text, XMFLOAT2 const& position
 			result.bottom = long(maxY);
 	});
 
-	if (result.left == LONG_MAX)
+	if (result.left == UINT32_MAX)
 	{
 		result.left = 0;
 		result.top = 0;

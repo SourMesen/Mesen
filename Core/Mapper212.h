@@ -5,16 +5,16 @@
 class Mapper212 : public BaseMapper
 {
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() { return 0x2000; }
-	virtual bool AllowRegisterRead() { return true; }
+	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual bool AllowRegisterRead() override { return true; }
 	
-	void InitMapper()
+	void InitMapper() override
 	{
 		WriteRegister(0x8000, 0);
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		uint8_t value = InternalReadRam(addr);
 
@@ -25,7 +25,7 @@ protected:
 		return value;
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr & 0x4000) {
 			SelectPrgPage2x(0, addr & 0x06);

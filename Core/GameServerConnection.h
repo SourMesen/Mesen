@@ -29,7 +29,7 @@ private:
 	static uint8_t GetFirstFreeControllerPort();
 
 protected:
-	void ProcessMessage(NetMessage* message);
+	void ProcessMessage(NetMessage* message) override;
 	
 public:
 	GameServerConnection(shared_ptr<Socket> socket);
@@ -41,7 +41,7 @@ public:
 	string GetPlayerName();
 	uint8_t GetControllerPort();
 
-	virtual void ProcessNotification(ConsoleNotificationType type, void* parameter);
+	virtual void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 
 	static GameServerConnection* GetNetPlayDevice(uint8_t port);
 };

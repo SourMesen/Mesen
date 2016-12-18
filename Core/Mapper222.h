@@ -11,24 +11,24 @@ private:
 	A12Watcher _a12Watcher;
 
 protected:
-	virtual uint16_t GetPRGPageSize() { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() { return 0x400; }
+	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
 
-	void InitMapper()
+	void InitMapper() override
 	{
 		_irqCounter = 0;
 
 		SelectPrgPage2x(1, -2);
 	}
 
-	void StreamState(bool saving)
+	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		SnapshotInfo a12Watcher{ &_a12Watcher };
 		Stream(_irqCounter, a12Watcher);
 	}
 
-	virtual void NotifyVRAMAddressChange(uint16_t addr)
+	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {
 			if(_irqCounter) {
@@ -41,7 +41,7 @@ protected:
 		}
 	}
 
-	void WriteRegister(uint16_t addr, uint8_t value)
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr & 0xF003) {
 			case 0x8000: SelectPRGPage(0, value); break;
