@@ -139,7 +139,7 @@ void Socket::Bind(uint16_t port)
 		_UPnPPort = port;
 	}
 
-	if(bind(_socket, (SOCKADDR*)(&serverInf), sizeof(serverInf)) == SOCKET_ERROR) {
+	if(::bind(_socket, (SOCKADDR*)(&serverInf), sizeof(serverInf)) == SOCKET_ERROR) {
 		std::cout << "Unable to bind socket." << std::endl;
 		SetConnectionErrorFlag();
 	}
@@ -182,7 +182,7 @@ bool Socket::Connect(const char* hostname, uint16_t port)
 		timeout.tv_usec = 0;
 
 		// check if the socket is ready
-		int returnVal = select(_socket+1, nullptr, &writeSockets, nullptr, &timeout);
+		int returnVal = select((int)_socket+1, nullptr, &writeSockets, nullptr, &timeout);
 		if(returnVal > 0) {
 			result = true;
 		} else {
