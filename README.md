@@ -1,28 +1,35 @@
-Mesen is a NES/Famicom emulator for Windows built in C++ and C#.
+Mesen is a cross-platform NES/Famicom emulator for Windows & Linux built in C++ and C#.
 
+If you want to support this project, please consider making a donation:  
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W97QP2LYC9H4W"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" title="Donate to this project using Paypal" alt="Donate to this project using Paypal"/></a>
 
 ## Roadmap ##
 Things that ***may or may not*** be added in the future, in no particular order:
 
--Support for more UNIF boards  
+-Support for more UNIF boards and more NES/Famicom input devices  
 -Rewind functionality  
--Debugger improvements (labels, comments, edit cpu/ppu state, APU state display, memory editor, etc.)  
--Support for more NES/Famicom input devices  
+-Debugger improvements (APU state display, memory editor, scripting, etc.)  
 -Shaders  
--Improvements/Rewrite of movie file format to support VS System properly (among other things)  
+-Improvements to movie file format to support a few things that currently do not work  
 -RAR file support  
--Linux support  
 -Libretro support  
 -TAS editor  
 
+## Compiling ##
 
-## Building ##
+### Windows ###
 1) Open the solution in VS2015  
 2) Compile as Release/x64  
 3) Run  
 
+### Linux ###
+You will need clang/gcc, Mono/XBuild and SDL2 to compile and run Mesen under Linux.
+A makefile is included - running "make" and then "make run" should start the emulator.
 
-### LICENSE ###
+A few limitations remain in the Linux version at the moment, which is why there is no official Linux build yet.
+Most importantly, gamepads/controllers are not supported.
+
+## LICENSE ##
 
 Mesen is available under the GPL V3 license.  Full text here: http://www.gnu.org/licenses/gpl-3.0.en.html
 
