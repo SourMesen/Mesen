@@ -5,14 +5,15 @@
 
 COREOBJ=$(patsubst Core/%.cpp,Core/obj/%.o,$(wildcard Core/*.cpp))
 UTILOBJ=$(patsubst Utilities/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/*.cpp)) $(patsubst Utilities/HQX/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/HQX/*.cpp)) $(patsubst Utilities/xBRZ/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/xBRZ/*.cpp)) $(patsubst Utilities/KreedSaiEagle/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/KreedSaiEagle/*.cpp)) $(patsubst Utilities/Scale2x/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/Scale2x/*.cpp))
-LINUXOBJ=$(patsubst Linux/%.cpp,Linux/obj/%.o,$(wildcard Linux/*.cpp))
+LINUXOBJ=$(patsubst Linux/%.cpp,Linux/obj/%.o,$(wildcard Linux/*.cpp)) 
+LIBEVDEVOBJ=$(patsubst Linux/libevdev/%.c,Linux/obj/%.o,$(wildcard Linux/libevdev/*.c))
 SEVENZIPOBJ=$(patsubst SevenZip/%.c,SevenZip/obj/%.o,$(wildcard SevenZip/*.c))
 
 CPPC=clang++
 GCCOPTIONS=-fPIC -Wall --std=c++14 -O3
 
 CC=clang
-7ZOPTIONS=-fPIC -Wall -O3
+CCOPTIONS=-fPIC -Wall -O3
 
 SHAREDLIB=libMesenCore.dll
 RELEASEFOLDER=bin/x64/Release
@@ -42,7 +43,7 @@ testhelper: $(SHAREDLIB)
 	cd TestHelper/obj && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -o testhelper ../*.cpp ../../InteropDLL/ConsoleWrapper.cpp -L ./ -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
 
 SevenZip/obj/%.o: SevenZip/%.c
-	mkdir -p SevenZip/obj && cd SevenZip/obj && $(CC) $(7ZOPTIONS) -fpermissive -c $(patsubst SevenZip/%, ../%, $<)
+	mkdir -p SevenZip/obj && cd SevenZip/obj && $(CC) $(CCOPTIONS) -fpermissive -c $(patsubst SevenZip/%, ../%, $<)
 Utilities/obj/%.o: Utilities/%.cpp
 	mkdir -p Utilities/obj && cd Utilities/obj && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
 Utilities/obj/%.o: Utilities/HQX/%.cpp
@@ -57,11 +58,13 @@ Core/obj/%.o: Core/%.cpp
 	mkdir -p Core/obj && cd Core/obj && $(CPPC) $(GCCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Core/%, ../%, $<)
 Linux/obj/%.o: Linux/%.cpp
 	mkdir -p Linux/obj && cd Linux/obj && $(CPPC) $(GCCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Linux/%, ../%, $<)
+Linux/obj/%.o: Linux/libevdev/%.c
+	mkdir -p Linux/obj && cd Linux/obj && $(CC) $(CCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Linux/%, ../%, $<)
 
-$(SHAREDLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
+$(SHAREDLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
 	mkdir -p InteropDLL/obj
 	ar -rcs InteropDLL/obj/libSevenZip.a $(SEVENZIPOBJ)
-	ar -rcs InteropDLL/obj/libMesenLinux.a $(LINUXOBJ)
+	ar -rcs InteropDLL/obj/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
 	ar -rcs InteropDLL/obj/libUtilities.a $(UTILOBJ)
 	ar -rcs InteropDLL/obj/libCore.a $(COREOBJ)
 	cd InteropDLL/obj && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs

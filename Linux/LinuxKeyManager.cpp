@@ -1,5 +1,8 @@
-﻿#include "LinuxKeyManager.h"
+﻿#include <algorithm>
+#include "LinuxKeyManager.h"
+#include "LinuxGameController.h"
 #include "../Core/ControlManager.h"
+#include "../Core/Console.h"
 
 static vector<KeyDefinition> _keyDefinitions = {
 	{ "", 9, "Escape", "" },
@@ -228,14 +231,45 @@ LinuxKeyManager::LinuxKeyManager()
 {
 	ResetKeyState();
 
+	vector<string> buttonNames = { 
+		"A", "B", "C", "X", "Y", "Z", "L1", "R1", "L2", "R2", "Select", "Start", "L3", "R3", 
+		"X+", "X-", "Y+", "Y-", "Z+", "Z-", 
+		"X2+", "X2-", "Y2+", "Y2-", "Z2+", "Z2-", 
+		"Right", "Left", "Down", "Up", 
+		"Right 2", "Left 2", "Down 2", "Up 2", 
+		"Right 3", "Left 3", "Down 3", "Up 3", 
+		"Right 4", "Left 4", "Down 4", "Up 4",
+		"Trigger", "Thumb", "Thumb2", "Top", "Top2",
+		"Pinkie", "Base", "Base2", "Base3", "Base4",
+		"Base5", "Base6", "Dead"
+	};
+
+	for(int i = 0; i < 20; i++) {
+		for(int j = 0; j < (int)buttonNames.size(); j++) {
+			_keyDefinitions.push_back({ "", (uint32_t)(0x10000 + i * 0x100 + j), "Pad" + std::to_string(i + 1) + " " + buttonNames[j] });
+		}
+	}
+
 	for(KeyDefinition &keyDef : _keyDefinitions) {
 		_keyNames[keyDef.keyCode] = keyDef.description;
 		_keyCodes[keyDef.description] = keyDef.keyCode;
 	}
+
+	for(int i = 0; i < 30; i++) {
+		std::shared_ptr<LinuxGameController> controller = LinuxGameController::GetController(i);
+		if(controller) {
+			_controllers.push_back(controller);
+		}
+	}
+
+	_stopUpdateDeviceThread = false;
+	StartUpdateDeviceThread();	
 }
 
 LinuxKeyManager::~LinuxKeyManager()
 {
+	_stopUpdateDeviceThread = true;
+	_updateDeviceThread.join();
 }
 
 void LinuxKeyManager::RefreshState()
@@ -246,7 +280,13 @@ void LinuxKeyManager::RefreshState()
 
 bool LinuxKeyManager::IsKeyPressed(uint32_t key)
 {
-	if(key < 0x200) {
+	if(key >= 0x10000) {
+		uint8_t gamepadPort = (key - 0x10000) / 0x100;
+		uint8_t gamepadButton = (key - 0x10000) % 0x100;
+		if(_controllers.size() > gamepadPort) {
+			return _controllers[gamepadPort]->IsButtonPressed(gamepadButton);
+		}
+	} else if(key < 0x200) {
 		return _keyState[key & 0xFF] != 0;
 	}
 	return false;
@@ -265,6 +305,14 @@ bool LinuxKeyManager::IsMouseButtonPressed(MouseButton button)
 
 uint32_t LinuxKeyManager::GetPressedKey()
 {
+	for(size_t i = 0; i < _controllers.size(); i++) {
+		for(int j = 0; j <= 54; j++) {
+			if(_controllers[i]->IsButtonPressed(j)) {
+				return 0x10000 + i * 0x100 + j;
+			}
+		}
+	}
+
 	for(int i = 0; i < 0x200; i++) {
 		if(_keyState[i]) {
 			return i;
@@ -275,7 +323,7 @@ uint32_t LinuxKeyManager::GetPressedKey()
 
 string LinuxKeyManager::GetKeyName(uint32_t key)
 {
-	auto keyDef = _keyNames.find(key & 0xFF);
+	auto keyDef = _keyNames.find(key);
 	if(keyDef != _keyNames.end()) {
 		return keyDef->second;
 	}
@@ -296,6 +344,47 @@ void LinuxKeyManager::UpdateDevices()
 	//TODO: NOT IMPLEMENTED YET
 	//Only needed to detect newly plugged in devices
 }
+
+void LinuxKeyManager::StartUpdateDeviceThread()
+{
+	_updateDeviceThread = std::thread([=]() {
+		while(!_stopUpdateDeviceThread) {
+			//Check for newly plugged in controllers every 2 secs
+			vector<int> indexesToRemove;
+			vector<int> connectedIDs;
+			std::vector<shared_ptr<LinuxGameController>> controllersToAdd;
+			for(int i = _controllers.size() - 1; i >= 0; i--) {
+				if(_controllers[i]->IsDisconnected()) {
+					indexesToRemove.push_back(i);
+				} else {
+					connectedIDs.push_back(_controllers[i]->GetDeviceID());
+				}
+			}
+
+			for(int i = 0; i < 30; i++) {
+				if(std::find(connectedIDs.begin(), connectedIDs.end(), i) == connectedIDs.end()) { 
+					std::shared_ptr<LinuxGameController> controller = LinuxGameController::GetController(i);
+					if(controller) {
+						controllersToAdd.push_back(controller);
+					}
+				}
+			}
+
+			if(!indexesToRemove.empty() || !controllersToAdd.empty()) {
+				Console::Pause();
+				for(int index : indexesToRemove) {
+					_controllers.erase(_controllers.begin()+index);
+				}
+				for(std::shared_ptr<LinuxGameController> controller : controllersToAdd) {
+					_controllers.push_back(controller);
+				} 
+				Console::Resume();
+			}
+
+			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(2000));
+		}
+	});
+}	
 
 void LinuxKeyManager::SetKeyState(uint16_t scanCode, bool state)
 {

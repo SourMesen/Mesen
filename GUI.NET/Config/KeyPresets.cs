@@ -55,32 +55,61 @@
 				Left = InteropEmu.GetKeyCode("Left Arrow"), Right = InteropEmu.GetKeyCode("Right Arrow")
 			};
 
-			for(int i = 0; i < 2; i++) {
-				string prefix = "Pad" + (i+1).ToString() + " ";
-				_xboxLayouts[i] = new KeyMappings() {
-					A = InteropEmu.GetKeyCode(prefix + "A"), B = InteropEmu.GetKeyCode(prefix + "X"),
-					TurboA = InteropEmu.GetKeyCode(prefix + "B"), TurboB = InteropEmu.GetKeyCode(prefix + "Y"),
-					Select = InteropEmu.GetKeyCode(prefix + "Back"), Start = InteropEmu.GetKeyCode(prefix + "Start"),
-					Up = InteropEmu.GetKeyCode(prefix + "Up"), Down = InteropEmu.GetKeyCode(prefix + "Down"),
-					Left = InteropEmu.GetKeyCode(prefix + "Left"), Right = InteropEmu.GetKeyCode(prefix + "Right")
-				};
+			if(Program.IsMono) {
+				for(int i = 0; i < 2; i++) {
+					string prefix = "Pad" + (i+1).ToString() + " ";
+					_xboxLayouts[i] = new KeyMappings() {
+						A = InteropEmu.GetKeyCode(prefix + "A"), B = InteropEmu.GetKeyCode(prefix + "X"),
+						TurboA = InteropEmu.GetKeyCode(prefix + "B"), TurboB = InteropEmu.GetKeyCode(prefix + "Y"),
+						Select = InteropEmu.GetKeyCode(prefix + "Select"), Start = InteropEmu.GetKeyCode(prefix + "Start"),
+						Up = InteropEmu.GetKeyCode(prefix + "Up"), Down = InteropEmu.GetKeyCode(prefix + "Down"),
+						Left = InteropEmu.GetKeyCode(prefix + "Left"), Right = InteropEmu.GetKeyCode(prefix + "Right")
+					};
 
-				prefix = "Joy" + (i+1).ToString() + " ";
-				_ps4Layouts[i] = new KeyMappings() {
-					A = InteropEmu.GetKeyCode(prefix + "But2"), B = InteropEmu.GetKeyCode(prefix + "But1"),
-					TurboA = InteropEmu.GetKeyCode(prefix + "But3"), TurboB = InteropEmu.GetKeyCode(prefix + "But4"),
-					Select = InteropEmu.GetKeyCode(prefix + "But9"), Start = InteropEmu.GetKeyCode(prefix + "But10"),
-					Up = InteropEmu.GetKeyCode(prefix + "DPad Up"), Down = InteropEmu.GetKeyCode(prefix + "DPad Down"),
-					Left = InteropEmu.GetKeyCode(prefix + "DPad Left"), Right = InteropEmu.GetKeyCode(prefix + "DPad Right")
-				};
+					_ps4Layouts[i] = new KeyMappings() {
+						A = InteropEmu.GetKeyCode(prefix + "B"), B = InteropEmu.GetKeyCode(prefix + "A"),
+						TurboA = InteropEmu.GetKeyCode(prefix + "C"), TurboB = InteropEmu.GetKeyCode(prefix + "X"),
+						Select = InteropEmu.GetKeyCode(prefix + "L2"), Start = InteropEmu.GetKeyCode(prefix + "R2"),
+						Up = InteropEmu.GetKeyCode(prefix + "Up"), Down = InteropEmu.GetKeyCode(prefix + "Down"),
+						Left = InteropEmu.GetKeyCode(prefix + "Left"), Right = InteropEmu.GetKeyCode(prefix + "Right")
+					};
 
-				_snes30Layouts[i] = new KeyMappings() {
-					A = InteropEmu.GetKeyCode(prefix + "But2"), B = InteropEmu.GetKeyCode(prefix + "But5"),
-					TurboA = InteropEmu.GetKeyCode(prefix + "But1"), TurboB = InteropEmu.GetKeyCode(prefix + "But4"),
-					Select = InteropEmu.GetKeyCode(prefix + "But11"), Start = InteropEmu.GetKeyCode(prefix + "But12"),
-					Up = InteropEmu.GetKeyCode(prefix + "Y+"), Down = InteropEmu.GetKeyCode(prefix + "Y-"),
-					Left = InteropEmu.GetKeyCode(prefix + "X-"), Right = InteropEmu.GetKeyCode(prefix + "X+")
-				};
+					_snes30Layouts[i] = new KeyMappings() {
+						A = InteropEmu.GetKeyCode(prefix + "Thumb"), B = InteropEmu.GetKeyCode(prefix + "Top2"),
+						TurboA = InteropEmu.GetKeyCode(prefix + "Trigger"), TurboB = InteropEmu.GetKeyCode(prefix + "Top"),
+						Select = InteropEmu.GetKeyCode(prefix + "Base5"), Start = InteropEmu.GetKeyCode(prefix + "Base6"),
+						Up = InteropEmu.GetKeyCode(prefix + "Y-"), Down = InteropEmu.GetKeyCode(prefix + "Y+"),
+						Left = InteropEmu.GetKeyCode(prefix + "X-"), Right = InteropEmu.GetKeyCode(prefix + "X+")
+					};
+				}
+			} else {
+				for(int i = 0; i < 2; i++) {
+					string prefix = "Pad" + (i+1).ToString() + " ";
+					_xboxLayouts[i] = new KeyMappings() {
+						A = InteropEmu.GetKeyCode(prefix + "A"), B = InteropEmu.GetKeyCode(prefix + "X"),
+						TurboA = InteropEmu.GetKeyCode(prefix + "B"), TurboB = InteropEmu.GetKeyCode(prefix + "Y"),
+						Select = InteropEmu.GetKeyCode(prefix + "Back"), Start = InteropEmu.GetKeyCode(prefix + "Start"),
+						Up = InteropEmu.GetKeyCode(prefix + "Up"), Down = InteropEmu.GetKeyCode(prefix + "Down"),
+						Left = InteropEmu.GetKeyCode(prefix + "Left"), Right = InteropEmu.GetKeyCode(prefix + "Right")
+					};
+
+					prefix = "Joy" + (i+1).ToString() + " ";
+					_ps4Layouts[i] = new KeyMappings() {
+						A = InteropEmu.GetKeyCode(prefix + "But2"), B = InteropEmu.GetKeyCode(prefix + "But1"),
+						TurboA = InteropEmu.GetKeyCode(prefix + "But3"), TurboB = InteropEmu.GetKeyCode(prefix + "But4"),
+						Select = InteropEmu.GetKeyCode(prefix + "But9"), Start = InteropEmu.GetKeyCode(prefix + "But10"),
+						Up = InteropEmu.GetKeyCode(prefix + "DPad Up"), Down = InteropEmu.GetKeyCode(prefix + "DPad Down"),
+						Left = InteropEmu.GetKeyCode(prefix + "DPad Left"), Right = InteropEmu.GetKeyCode(prefix + "DPad Right")
+					};
+
+					_snes30Layouts[i] = new KeyMappings() {
+						A = InteropEmu.GetKeyCode(prefix + "But2"), B = InteropEmu.GetKeyCode(prefix + "But5"),
+						TurboA = InteropEmu.GetKeyCode(prefix + "But1"), TurboB = InteropEmu.GetKeyCode(prefix + "But4"),
+						Select = InteropEmu.GetKeyCode(prefix + "But11"), Start = InteropEmu.GetKeyCode(prefix + "But12"),
+						Up = InteropEmu.GetKeyCode(prefix + "Y+"), Down = InteropEmu.GetKeyCode(prefix + "Y-"),
+						Left = InteropEmu.GetKeyCode(prefix + "X-"), Right = InteropEmu.GetKeyCode(prefix + "X+")
+					};
+				}
 			}
 		}
 	}

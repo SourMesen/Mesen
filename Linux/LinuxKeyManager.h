@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include <unordered_map>
+#include <vector>
+#include <thread>
 #include "../Core/IKeyManager.h"
+
+class LinuxGameController;
 
 struct KeyDefinition {
 	string name;
@@ -12,10 +16,16 @@ struct KeyDefinition {
 class LinuxKeyManager : public IKeyManager
 {
 private:
+	std::vector<shared_ptr<LinuxGameController>> _controllers;
 	bool _keyState[0x200];
 	bool _mouseState[0x03];
 	std::unordered_map<uint32_t, string> _keyNames;
 	std::unordered_map<string, uint32_t> _keyCodes;	
+
+	std::thread _updateDeviceThread;
+	atomic<bool> _stopUpdateDeviceThread; 
+
+	void StartUpdateDeviceThread();
 
 public:
 	LinuxKeyManager();
