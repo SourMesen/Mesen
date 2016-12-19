@@ -53,6 +53,9 @@ namespace Mesen.GUI.Debugger
 
 				i++;
 			}
+
+			this.Width = this.tlpMain.Width;
+			this.Height = this.tlpMain.Height; 
 		}
 	}
 }

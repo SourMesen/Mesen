@@ -265,11 +265,9 @@ namespace Mesen.GUI.Debugger
 					_codeTooltip = null;
 				}
 				_codeTooltip = new frmCodeTooltip(values);
-				_codeTooltip.Width = 0;
-				_codeTooltip.Height = 0;
-				_codeTooltip.Visible = false;
+				_codeTooltip.Left = Cursor.Position.X + 10;
+				_codeTooltip.Top = Cursor.Position.Y + 10;
 				_codeTooltip.Show(this);
-				_codeTooltip.Visible = true;
 			}
 			_codeTooltip.Left = Cursor.Position.X + 10;
 			_codeTooltip.Top = Cursor.Position.Y + 10;
