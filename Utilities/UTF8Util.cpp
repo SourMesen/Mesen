@@ -40,5 +40,11 @@ namespace utf8 {
 		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
     	return myconv.to_bytes(wstr);
 	}
+
+	std::string utf8::encode(const std::u16string &wstr)
+	{
+		std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> myconv;
+    	return myconv.to_bytes(wstr);
+	}	
 }
 #endif

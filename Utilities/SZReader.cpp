@@ -29,7 +29,7 @@ bool SZReader::InternalLoadArchive(void* buffer, size_t size)
 void SZReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSize)
 {
 	if(_initialized) {
-		wchar_t *utf16Filename = (wchar_t*)SzAlloc(nullptr, 2000);
+		char16_t *utf16Filename = (char16_t*)SzAlloc(nullptr, 2000);
 
 		uint32_t blockIndex = 0xFFFFFFFF;
 		uint8_t *outBuffer = 0;
@@ -44,7 +44,7 @@ void SZReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSi
 			}
 
 			SzArEx_GetFileNameUtf16(&_archive, i, (uint16_t*)utf16Filename);
-			string entryName = utf8::utf8::encode(std::wstring(utf16Filename));
+			string entryName = utf8::utf8::encode(std::u16string(utf16Filename));
 			if(filename == entryName) {
 				WRes res = SzArEx_Extract(&_archive, &_lookStream.s, i, &blockIndex, &outBuffer, &outBufferSize, &offset, &outSizeProcessed, &_allocImp, &_allocTempImp);
 				if(res == SZ_OK) {
@@ -64,7 +64,7 @@ void SZReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSi
 vector<string> SZReader::InternalGetFileList()
 {
 	vector<string> filenames;
-	wchar_t *utf16Filename = (wchar_t*)SzAlloc(nullptr, 2000);
+	char16_t *utf16Filename = (char16_t*)SzAlloc(nullptr, 2000);
 
 	if(_initialized) {
 		for(uint32_t i = 0; i < _archive.NumFiles; i++) {
@@ -74,7 +74,7 @@ vector<string> SZReader::InternalGetFileList()
 			}
 
 			SzArEx_GetFileNameUtf16(&_archive, i, (uint16_t*)utf16Filename);
-			string filename = utf8::utf8::encode(std::wstring(utf16Filename));
+			string filename = utf8::utf8::encode(std::u16string(utf16Filename));
 			filenames.push_back(filename);
 		}
 	}

@@ -8,6 +8,7 @@ namespace utf8 {
 	public:
 		static std::wstring decode(const std::string &str);
 		static std::string encode(const std::wstring &wstr);
+		static std::string encode(const std::u16string &wstr);
 	};
 		
 #ifdef _WIN32
