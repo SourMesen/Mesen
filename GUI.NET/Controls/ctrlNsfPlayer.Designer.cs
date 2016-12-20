@@ -93,6 +93,7 @@
 			// btnPrevious
 			// 
 			this.btnPrevious.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.btnPrevious.BackColor = System.Drawing.SystemColors.Control;
 			this.btnPrevious.Image = global::Mesen.GUI.Properties.Resources.PrevTrack;
 			this.btnPrevious.Location = new System.Drawing.Point(126, 220);
 			this.btnPrevious.Name = "btnPrevious";
@@ -104,6 +105,7 @@
 			// btnPause
 			// 
 			this.btnPause.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.btnPause.BackColor = System.Drawing.SystemColors.Control;
 			this.btnPause.Image = global::Mesen.GUI.Properties.Resources.Pause;
 			this.btnPause.Location = new System.Drawing.Point(165, 216);
 			this.btnPause.Name = "btnPause";
@@ -115,6 +117,7 @@
 			// btnNext
 			// 
 			this.btnNext.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.btnNext.BackColor = System.Drawing.SystemColors.Control;
 			this.btnNext.Image = global::Mesen.GUI.Properties.Resources.NextTrack;
 			this.btnNext.Location = new System.Drawing.Point(211, 220);
 			this.btnNext.Name = "btnNext";
