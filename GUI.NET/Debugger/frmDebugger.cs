@@ -624,8 +624,6 @@ namespace Mesen.GUI.Debugger
 			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
 			ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping = mnuShowCpuMemoryMapping.Checked;
 			ConfigManager.ApplyChanges();
-			ctrlCpuMemoryMapping.Invalidate();
-			ctrlPpuMemoryMapping.Invalidate();
 		}
 
 		private void mnuShowPpuMemoryMapping_Click(object sender, EventArgs e)
@@ -633,8 +631,6 @@ namespace Mesen.GUI.Debugger
 			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
 			ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping = mnuShowPpuMemoryMapping.Checked;
 			ConfigManager.ApplyChanges();
-			ctrlCpuMemoryMapping.Invalidate();
-			ctrlPpuMemoryMapping.Invalidate();
 		}
 
 		private void mnuHighlightUnexecutedCode_Click(object sender, EventArgs e)
@@ -669,12 +665,6 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 			this.UpdateDebuggerFlags();
 			this.UpdateDebugger(false);
-		}
-
-		private void frmDebugger_Resize(object sender, EventArgs e)
-		{
-			ctrlCpuMemoryMapping.Invalidate();
-			ctrlPpuMemoryMapping.Invalidate();
 		}
 
 		private void ctrlFunctionList_OnFunctionSelected(object relativeAddress, EventArgs e)

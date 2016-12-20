@@ -22,12 +22,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlMemoryMapping()
 		{
 			this.DoubleBuffered = true;
-		}
-
-		protected override void OnResize(EventArgs e)
-		{
-			base.OnResize(e);
-			this.Invalidate();
+			this.ResizeRedraw = true;
 		}
 
 		public void UpdateCpuRegions(CartridgeState state)
@@ -70,7 +65,7 @@ namespace Mesen.GUI.Debugger.Controls
 			e.Graphics.Clear(Color.LightGray);
 
 			if(_regions.Count > 0) {
-				Rectangle rect = Rectangle.Inflate(e.ClipRectangle, -2, -1);
+				Rectangle rect = Rectangle.Inflate(this.ClientRectangle, -2, -1);
 
 				int totalSize = 0;
 				foreach(MemoryRegionInfo region in _regions) {
