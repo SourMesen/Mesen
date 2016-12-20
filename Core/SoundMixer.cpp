@@ -154,7 +154,7 @@ double SoundMixer::GetChannelOutput(AudioChannel channel, bool forRightChannel)
 	if(forRightChannel) {
 		return _currentOutput[(int)channel] * _volumes[(int)channel] * _panning[(int)channel];
 	} else {
-		return _currentOutput[(int)channel] * _volumes[(int)channel] * (1.0 - _panning[(int)channel]);
+		return _currentOutput[(int)channel] * _volumes[(int)channel] * (2.0 - _panning[(int)channel]);
 	}
 }
 

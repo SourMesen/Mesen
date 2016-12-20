@@ -69,7 +69,7 @@ namespace Mesen.GUI.Config
 
 		static private double ConvertPanning(Int32 panning)
 		{
-			return (double)((panning + 100) / 200d);
+			return (double)((panning + 100) / 100d);
 		}
 
 		static public void ApplyConfig()
