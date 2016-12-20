@@ -10,27 +10,38 @@
 #include <fcntl.h>
 #include <iostream>
 
-std::shared_ptr<LinuxGameController> LinuxGameController::GetController(int deviceID)
+std::shared_ptr<LinuxGameController> LinuxGameController::GetController(int deviceID, bool logInformation)
 {
-	int fd = open(("/dev/input/event" + std::to_string(deviceID)).c_str(), O_RDONLY | O_NONBLOCK);
-	if(fd < 0) {
-		//fprintf(stderr, "error: %d %s\n", errno, strerror(errno));
-		return nullptr;
-	}
-	
-	libevdev* device = nullptr;
-	int rc = libevdev_new_from_fd(fd, &device);
-	if(rc < 0) {
-		//fprintf(stderr, "error: %d %s\n", -rc, strerror(-rc));
-		return nullptr;
-	}
+	std::string deviceName = "/dev/input/event" + std::to_string(deviceID);
+	struct stat buffer;   
+	if(stat(deviceName.c_str(), &buffer) == 0) { 	
+		int fd = open(deviceName.c_str(), O_RDONLY | O_NONBLOCK);
+		if(fd < 0) {
+			if(logInformation) {
+				MessageManager::Log("[Input] " + deviceName + "  error: " + std::to_string(errno) + " " + strerror(errno));
+			}
+			return nullptr;
+		}
+		
+		libevdev* device = nullptr;
+		int rc = libevdev_new_from_fd(fd, &device);
+		if(rc < 0) {
+			if(logInformation) {
+				MessageManager::Log("[Input] " + deviceName + "  error: " + std::to_string(errno) + " " + strerror(errno));
+			}
+			close(fd);
+			return nullptr;
+		}
 
-	if(libevdev_has_event_type(device, EV_KEY) && libevdev_has_event_code(device, EV_KEY, BTN_GAMEPAD) ||
-		libevdev_has_event_type(device, EV_ABS) && libevdev_has_event_code(device, EV_ABS, ABS_X)) {
-		MessageManager::Log(std::string("[Input Connected] Name: ") + libevdev_get_name(device) + " Vendor: " + std::to_string(libevdev_get_id_vendor(device)) + " Product: " + std::to_string(libevdev_get_id_product(device)));
-		return std::shared_ptr<LinuxGameController>(new LinuxGameController(deviceID, fd, device));
-	}
-
+		if(libevdev_has_event_type(device, EV_KEY) && libevdev_has_event_code(device, EV_KEY, BTN_GAMEPAD) ||
+			libevdev_has_event_type(device, EV_ABS) && libevdev_has_event_code(device, EV_ABS, ABS_X)) {
+			MessageManager::Log(std::string("[Input Connected] Name: ") + libevdev_get_name(device) + " Vendor: " + std::to_string(libevdev_get_id_vendor(device)) + " Product: " + std::to_string(libevdev_get_id_product(device)));
+			return std::shared_ptr<LinuxGameController>(new LinuxGameController(deviceID, fd, device));
+		} else {
+			MessageManager::Log(std::string("[Input] Device ignored (Not a gamepad) - Name: ") + libevdev_get_name(device) + " Vendor: " + std::to_string(libevdev_get_id_vendor(device)) + " Product: " + std::to_string(libevdev_get_id_product(device)));
+			close(fd);			
+		}
+	}	
 	return nullptr;
 }
 

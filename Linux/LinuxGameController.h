@@ -22,7 +22,7 @@ private:
 public:
 	~LinuxGameController();
 
-	static std::shared_ptr<LinuxGameController> GetController(int deviceID);
+	static std::shared_ptr<LinuxGameController> GetController(int deviceID, bool logInformation);
 
 	bool IsDisconnected();
 	int GetDeviceID();

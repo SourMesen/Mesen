@@ -256,7 +256,7 @@ LinuxKeyManager::LinuxKeyManager()
 	}
 
 	for(int i = 0; i < 30; i++) {
-		std::shared_ptr<LinuxGameController> controller = LinuxGameController::GetController(i);
+		std::shared_ptr<LinuxGameController> controller = LinuxGameController::GetController(i, true);
 		if(controller) {
 			_controllers.push_back(controller);
 		}
@@ -363,7 +363,7 @@ void LinuxKeyManager::StartUpdateDeviceThread()
 
 			for(int i = 0; i < 30; i++) {
 				if(std::find(connectedIDs.begin(), connectedIDs.end(), i) == connectedIDs.end()) { 
-					std::shared_ptr<LinuxGameController> controller = LinuxGameController::GetController(i);
+					std::shared_ptr<LinuxGameController> controller = LinuxGameController::GetController(i, false);
 					if(controller) {
 						controllersToAdd.push_back(controller);
 					}
