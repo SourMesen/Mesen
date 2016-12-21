@@ -246,7 +246,8 @@ enum class Language
 	Japanese = 3,
 	Russian = 4,
 	Spanish = 5,
-	Ukrainian = 6
+	Ukrainian = 6,
+	Portuguese = 7,
 };
 
 enum class StereoFilter
