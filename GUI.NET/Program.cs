@@ -21,6 +21,7 @@ namespace Mesen.GUI
 		private static extern bool SetForegroundWindow(IntPtr hWnd);
 
 		public static bool IsMono { get; private set; }
+		public static string OriginalFolder { get; private set; }
 
 		private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
@@ -63,6 +64,8 @@ namespace Mesen.GUI
 				if(Type.GetType("Mono.Runtime") != null) {
 					Program.IsMono = true;
 				}
+
+				Program.OriginalFolder = Directory.GetCurrentDirectory();
         				
 				AppDomain.CurrentDomain.AssemblyResolve += LoadAssemblies;
 				Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
