@@ -37,13 +37,13 @@ rungametests:
 testhelper: $(SHAREDLIB)
 	mkdir -p TestHelper/obj
 	ar -rcs TestHelper/obj/libSevenZip.a $(SEVENZIPOBJ)
-	ar -rcs TestHelper/obj/libMesenLinux.a $(LINUXOBJ)
+	ar -rcs TestHelper/obj/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
 	ar -rcs TestHelper/obj/libUtilities.a $(UTILOBJ)
 	ar -rcs TestHelper/obj/libCore.a $(COREOBJ)	
 	cd TestHelper/obj && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -o testhelper ../*.cpp ../../InteropDLL/ConsoleWrapper.cpp -L ./ -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
 
 SevenZip/obj/%.o: SevenZip/%.c
-	mkdir -p SevenZip/obj && cd SevenZip/obj && $(CC) $(CCOPTIONS) -fpermissive -c $(patsubst SevenZip/%, ../%, $<)
+	mkdir -p SevenZip/obj && cd SevenZip/obj && $(CC) $(CCOPTIONS) -c $(patsubst SevenZip/%, ../%, $<)
 Utilities/obj/%.o: Utilities/%.cpp
 	mkdir -p Utilities/obj && cd Utilities/obj && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
 Utilities/obj/%.o: Utilities/HQX/%.cpp
