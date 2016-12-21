@@ -8,10 +8,10 @@ class SquareChannel : public ApuEnvelope
 {
 private:
 	const vector<vector<uint8_t>> _dutySequences = { {
-		{ 0, 1, 0, 0, 0, 0, 0, 0 },
-		{ 0, 1, 1, 0, 0, 0, 0, 0 },
-		{ 0, 1, 1, 1, 1, 0, 0, 0 },
-		{ 1, 0, 0, 1, 1, 1, 1, 1 }
+		{ 0, 0, 0, 0, 0, 0, 0, 1 },
+		{ 0, 0, 0, 0, 0, 0, 1, 1 },
+		{ 0, 0, 0, 0, 1, 1, 1, 1 },
+		{ 1, 1, 1, 1, 1, 1, 0, 0 }
 	} };
 
 	bool _isChannel1 = false;
@@ -70,16 +70,20 @@ private:
 		UpdateTargetPeriod();
 	}
 
-protected:
-	void Clock() override
+	void UpdateOutput()
 	{
 		if(IsMuted()) {
 			AddOutput(0);
 		} else {
 			AddOutput(_dutySequences[_duty][_dutyPos] * GetVolume());
 		}
+	}
 
-		_dutyPos = (_dutyPos + 1) & 0x07;
+protected:
+	void Clock() override
+	{
+		_dutyPos = (_dutyPos - 1) & 0x07;
+		UpdateOutput();
 	}
 
 public:
@@ -151,13 +155,14 @@ public:
 				SetPeriod((_realPeriod & 0xFF) | ((value & 0x07) << 8));
 
 				//The sequencer is restarted at the first value of the current sequence.
-				_timer = 0;
 				_dutyPos = 0;
 
 				//The envelope is also restarted.
 				ResetEnvelope();
 				break;
 		}
+
+		UpdateOutput();
 	}
 
 	void TickSweep()
