@@ -342,7 +342,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			output += labelLine;
 
 			string effectiveAddress = showEffectiveAddresses ? info->GetEffectiveAddressString(cpuState, memoryManager, labelManager) : "";
-			output += GetLine("  " + info->ToString(memoryAddr, memoryManager, labelManager), commentString, memoryAddr, addr, info->GetByteCode(), effectiveAddress, speculativeCode);
+			output += GetLine("  " + info->ToString(memoryAddr, memoryManager, labelManager), commentString, memoryAddr, source != _internalRam ? addr : -1, info->GetByteCode(), effectiveAddress, speculativeCode);
 
 			if(info->IsSubExitPoint()) {
 				output += GetLine("__sub end__") + GetLine();
