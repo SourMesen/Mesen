@@ -16,7 +16,7 @@ namespace Mesen.GUI.Config
 			string baseFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ".local", "share");
 			string filename = Path.Combine(baseFolder, "mime", "packages", mimeType + ".xml");
 			if(addType) {
-				File.WriteAllText(filename, 
+				File.WriteAllText(filename,
 					"<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine +
 					"<mime-info xmlns=\"http://www.freedesktop.org/standards/shared-mime-info\">" + Environment.NewLine +
 					"\t<mime-type type=\"application/" + mimeType + "\">" + Environment.NewLine +
@@ -33,7 +33,7 @@ namespace Mesen.GUI.Config
 					File.Delete(filename);
 				} catch { }
 			}
-			return mimeType;				
+			return mimeType;
 		}
 
 		static public void ConfigureLinuxMimeTypes()
@@ -43,10 +43,21 @@ namespace Mesen.GUI.Config
 			string baseFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ".local", "share");
 			string desktopFolder = Path.Combine(baseFolder, "applications");
 			string mimeFolder = Path.Combine(baseFolder, "mime");
+			string iconFolder = Path.Combine(baseFolder, "icons");
+			if(!Directory.Exists(mimeFolder)) {
+				Directory.CreateDirectory(mimeFolder);
+			}
+			if(!Directory.Exists(iconFolder)) {
+				Directory.CreateDirectory(iconFolder);
+			}
+			if(!Directory.Exists(desktopFolder)) {
+				Directory.CreateDirectory(desktopFolder);
+			}
+
 
 			//Use a GUID to get a unique filename and then delete old files to force a reset of file associations
 			//Otherwise they are sometimes not refreshed properly
-			string desktopFilename = "mesen." + Guid.NewGuid().ToString() + ".desktop";			
+			string desktopFilename = "mesen." + Guid.NewGuid().ToString() + ".desktop";
 			string desktopFile = Path.Combine(desktopFolder, desktopFilename);
 
 			foreach(string file in Directory.GetFiles(desktopFolder, "mesen.*.desktop")) {
@@ -66,7 +77,7 @@ namespace Mesen.GUI.Config
 			CreateMimeType("x-mesen-unif", "unf", "NES Rom (UNIF)", mimeTypes, preferenceInfo.AssociateUnfFiles);
 
 			//Icon used for shortcuts
-			Mesen.GUI.Properties.Resources.MesenLogo.Save(Path.Combine(baseFolder, "icons", "MesenIcon.png"), ImageFormat.Png);
+			Mesen.GUI.Properties.Resources.MesenLogo.Save(Path.Combine(iconFolder, "MesenIcon.png"), ImageFormat.Png);
 
 			File.WriteAllText(desktopFile,
 					"[Desktop Entry]" + Environment.NewLine +
@@ -83,7 +94,7 @@ namespace Mesen.GUI.Config
 
 			//Update databases
 			System.Diagnostics.Process.Start("update-mime-database", mimeFolder).WaitForExit();
-			System.Diagnostics.Process.Start("update-desktop-database", desktopFolder);					
+			System.Diagnostics.Process.Start("update-desktop-database", desktopFolder);
 		}
 
 		static public void UpdateFileAssociation(string extension, bool associate)
