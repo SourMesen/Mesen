@@ -38,6 +38,7 @@ namespace Mesen.GUI.Forms
 		private bool _isNsfPlayerMode = false;
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
+		private bool _removeFocus = false;
 
 		private string[] _commandLineArgs;
 		private bool _noAudio = false;
@@ -131,12 +132,14 @@ namespace Mesen.GUI.Forms
 		protected override void OnDeactivate(EventArgs e)
 		{
 			base.OnDeactivate(e);
+			_removeFocus = true;
 			InteropEmu.ResetKeyState();
 		}
 
 		protected override void OnActivated(EventArgs e)
 		{
 			base.OnActivated(e);
+			_removeFocus = false;
 			InteropEmu.ResetKeyState();
 		}
 
@@ -540,11 +543,8 @@ namespace Mesen.GUI.Forms
 				}
 			}
 
-			foreach(ToolStripItem item in menuStrip.Items) {
-				if(item.Pressed || item.Selected) {
-					hasFocus = false;
-					break;
-				}
+			if(_removeFocus) {
+				hasFocus = false;
 			}
 
 			InteropEmu.SetFlag(EmulationFlags.InBackground, !hasFocus);
