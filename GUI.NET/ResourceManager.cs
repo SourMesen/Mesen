@@ -86,9 +86,11 @@ namespace Mesen.GUI
 			//Extract all needed files
 			string suffix = IntPtr.Size == 4 ? ".x86" : ".x64";
 			foreach(ZipArchiveEntry entry in zip.Entries) {
-				if(entry.Name.Contains(suffix)) {
-					string baseFolder = Program.IsMono ? Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) : ConfigManager.HomeFolder; 
-					string outputFilename = Path.Combine(baseFolder, entry.Name.Replace(suffix, ""));
+				if(entry.Name.StartsWith("MesenCore") && !Program.IsMono && entry.Name.Contains(suffix)) {
+					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
+					ExtractFile(entry, outputFilename);					
+				} else if(entry.Name.StartsWith("libMesenCore") && Program.IsMono && entry.Name.Contains(suffix)) {
+					string outputFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name == "MesenUpdater.exe" || entry.Name == "MesenDB.txt") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name);
@@ -99,16 +101,14 @@ namespace Mesen.GUI
 				} else if(entry.Name == "Font.24.spritefont" || entry.Name == "Font.64.spritefont" || entry.Name == "LICENSE.txt") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "Resources", entry.Name);
 					ExtractFile(entry, outputFilename);
-				} else if(entry.Name == "DroidSansMono.ttf") {
-					if(Program.IsMono) {
-						string outputFilename = Path.Combine(ConfigManager.FontFolder, entry.Name);
-						bool needRestart = !File.Exists(outputFilename);
-						ExtractFile(entry, outputFilename);
-						if(needRestart) {
-							//If font is newly installed, restart Mesen (otherwise debugger will not be able to use the font and display incorrectly)
-							System.Diagnostics.Process.Start("mono", "\"" + Assembly.GetEntryAssembly().Location + "\" /delayrestart");
-							return false;
-						}
+				} else if(entry.Name == "DroidSansMono.ttf" && Program.IsMono) {
+					string outputFilename = Path.Combine(ConfigManager.FontFolder, entry.Name);
+					bool needRestart = !File.Exists(outputFilename);
+					ExtractFile(entry, outputFilename);
+					if(needRestart) {
+						//If font is newly installed, restart Mesen (otherwise debugger will not be able to use the font and display incorrectly)
+						System.Diagnostics.Process.Start("mono", "\"" + Assembly.GetEntryAssembly().Location + "\" /delayrestart");
+						return false;
 					}
 				}
 			}

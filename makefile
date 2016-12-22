@@ -2,12 +2,9 @@
 #Both clang & gcc work fine - clang seems to output faster code
 #The only external dependency is SDL2 - everything else is pretty standard.
 #Run "make" to build, "make run" to run
-
-COREOBJ=$(patsubst Core/%.cpp,Core/obj/%.o,$(wildcard Core/*.cpp))
-UTILOBJ=$(patsubst Utilities/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/*.cpp)) $(patsubst Utilities/HQX/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/HQX/*.cpp)) $(patsubst Utilities/xBRZ/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/xBRZ/*.cpp)) $(patsubst Utilities/KreedSaiEagle/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/KreedSaiEagle/*.cpp)) $(patsubst Utilities/Scale2x/%.cpp,Utilities/obj/%.o,$(wildcard Utilities/Scale2x/*.cpp))
-LINUXOBJ=$(patsubst Linux/%.cpp,Linux/obj/%.o,$(wildcard Linux/*.cpp)) 
-LIBEVDEVOBJ=$(patsubst Linux/libevdev/%.c,Linux/obj/%.o,$(wildcard Linux/libevdev/*.c))
-SEVENZIPOBJ=$(patsubst SevenZip/%.c,SevenZip/obj/%.o,$(wildcard SevenZip/*.c))
+#To specify whether you want to build for x86 or x64:
+#"MESENPLATFORM=x86 make" or "MESENPLATFORM=x64 make"
+#Default is x64
 
 CPPC=clang++
 GCCOPTIONS=-fPIC -Wall --std=c++14 -O3
@@ -15,67 +12,89 @@ GCCOPTIONS=-fPIC -Wall --std=c++14 -O3
 CC=clang
 CCOPTIONS=-fPIC -Wall -O3
 
-SHAREDLIB=libMesenCore.dll
-RELEASEFOLDER=bin/x64/Release
+ifeq ($(MESENPLATFORM),x86)
+	MESENPLATFORM=x86
+
+	GCCOPTIONS += -m32
+	CCOPTIONS += -m32
+else
+	MESENPLATFORM=x64
+	GCCOPTIONS += -m64
+	CCOPTIONS += -m64
+endif
+
+OBJFOLDER=obj.$(MESENPLATFORM)
+SHAREDLIB=libMesenCore.$(MESENPLATFORM).dll
+RELEASEFOLDER=bin/$(MESENPLATFORM)/Release
+
+COREOBJ=$(patsubst Core/%.cpp,Core/$(OBJFOLDER)/%.o,$(wildcard Core/*.cpp))
+UTILOBJ=$(patsubst Utilities/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/*.cpp)) $(patsubst Utilities/HQX/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/HQX/*.cpp)) $(patsubst Utilities/xBRZ/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/xBRZ/*.cpp)) $(patsubst Utilities/KreedSaiEagle/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/KreedSaiEagle/*.cpp)) $(patsubst Utilities/Scale2x/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/Scale2x/*.cpp))
+LINUXOBJ=$(patsubst Linux/%.cpp,Linux/$(OBJFOLDER)/%.o,$(wildcard Linux/*.cpp)) 
+LIBEVDEVOBJ=$(patsubst Linux/libevdev/%.c,Linux/$(OBJFOLDER)/%.o,$(wildcard Linux/libevdev/*.c))
+SEVENZIPOBJ=$(patsubst SevenZip/%.c,SevenZip/$(OBJFOLDER)/%.o,$(wildcard SevenZip/*.c))
+
 
 all: ui
 
-ui: $(SHAREDLIB)
+ui: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	mkdir -p $(RELEASEFOLDER)/Dependencies
 	rm -f $(RELEASEFOLDER)/Dependencies/*		
 	cp GUI.NET/Dependencies/* $(RELEASEFOLDER)/Dependencies/
-	cp InteropDLL/obj/$(SHAREDLIB) $(RELEASEFOLDER)/Dependencies/libMesenCore.x64.dll	
-	zip $(RELEASEFOLDER)/Dependencies.zip $(RELEASEFOLDER)/Dependencies/*
-	cd GUI.NET && xbuild /property:Configuration="Release" /property:Platform="x64" /property:PreBuildEvent="" /property:DefineConstants="HIDETESTMENU"
+	cp InteropDLL/$(OBJFOLDER)/$(SHAREDLIB) $(RELEASEFOLDER)/Dependencies/$(SHAREDLIB)	
+	cd $(RELEASEFOLDER)/Dependencies && zip ../Dependencies.zip *
+	cd GUI.NET && xbuild /property:Configuration="Release" /property:Platform="$(MESENPLATFORM)" /property:PreBuildEvent="" /property:DefineConstants="HIDETESTMENU"
+
+core: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 
 runtests:
-	cd TestHelper/obj && ./testhelper
+	cd TestHelper/$(OBJFOLDER) && ./testhelper
 
 rungametests:
-	cd TestHelper/obj && ./testhelper ~/Mesen/TestGames
+	cd TestHelper/$(OBJFOLDER) && ./testhelper ~/Mesen/TestGames
 
-testhelper: $(SHAREDLIB)
-	mkdir -p TestHelper/obj
-	ar -rcs TestHelper/obj/libSevenZip.a $(SEVENZIPOBJ)
-	ar -rcs TestHelper/obj/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
-	ar -rcs TestHelper/obj/libUtilities.a $(UTILOBJ)
-	ar -rcs TestHelper/obj/libCore.a $(COREOBJ)	
-	cd TestHelper/obj && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -o testhelper ../*.cpp ../../InteropDLL/ConsoleWrapper.cpp -L ./ -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
+testhelper: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
+	mkdir -p TestHelper/$(OBJFOLDER)
+	ar -rcs TestHelper/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
+	ar -rcs TestHelper/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
+	ar -rcs TestHelper/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
+	ar -rcs TestHelper/$(OBJFOLDER)/libCore.a $(COREOBJ)	
+	cd TestHelper/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -o testhelper ../*.cpp ../../InteropDLL/ConsoleWrapper.cpp -L ./ -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
 
-SevenZip/obj/%.o: SevenZip/%.c
-	mkdir -p SevenZip/obj && cd SevenZip/obj && $(CC) $(CCOPTIONS) -c $(patsubst SevenZip/%, ../%, $<)
-Utilities/obj/%.o: Utilities/%.cpp
-	mkdir -p Utilities/obj && cd Utilities/obj && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
-Utilities/obj/%.o: Utilities/HQX/%.cpp
-	mkdir -p Utilities/obj && cd Utilities/obj && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
-Utilities/obj/%.o: Utilities/xBRZ/%.cpp
-	mkdir -p Utilities/obj && cd Utilities/obj && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
-Utilities/obj/%.o: Utilities/KreedSaiEagle/%.cpp
-	mkdir -p Utilities/obj && cd Utilities/obj && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
-Utilities/obj/%.o: Utilities/Scale2x/%.cpp
-	mkdir -p Utilities/obj && cd Utilities/obj && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
-Core/obj/%.o: Core/%.cpp
-	mkdir -p Core/obj && cd Core/obj && $(CPPC) $(GCCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Core/%, ../%, $<)
-Linux/obj/%.o: Linux/%.cpp
-	mkdir -p Linux/obj && cd Linux/obj && $(CPPC) $(GCCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Linux/%, ../%, $<)
-Linux/obj/%.o: Linux/libevdev/%.c
-	mkdir -p Linux/obj && cd Linux/obj && $(CC) $(CCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Linux/%, ../%, $<)
+SevenZip/$(OBJFOLDER)/%.o: SevenZip/%.c
+	mkdir -p SevenZip/$(OBJFOLDER) && cd SevenZip/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -c $(patsubst SevenZip/%, ../%, $<)
+Utilities/$(OBJFOLDER)/%.o: Utilities/%.cpp
+	mkdir -p Utilities/$(OBJFOLDER) && cd Utilities/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
+Utilities/$(OBJFOLDER)/%.o: Utilities/HQX/%.cpp
+	mkdir -p Utilities/$(OBJFOLDER) && cd Utilities/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
+Utilities/$(OBJFOLDER)/%.o: Utilities/xBRZ/%.cpp
+	mkdir -p Utilities/$(OBJFOLDER) && cd Utilities/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
+Utilities/$(OBJFOLDER)/%.o: Utilities/KreedSaiEagle/%.cpp
+	mkdir -p Utilities/$(OBJFOLDER) && cd Utilities/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
+Utilities/$(OBJFOLDER)/%.o: Utilities/Scale2x/%.cpp
+	mkdir -p Utilities/$(OBJFOLDER) && cd Utilities/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
+Core/$(OBJFOLDER)/%.o: Core/%.cpp
+	mkdir -p Core/$(OBJFOLDER) && cd Core/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Core/%, ../%, $<)
+Linux/$(OBJFOLDER)/%.o: Linux/%.cpp
+	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Linux/%, ../%, $<)
+Linux/$(OBJFOLDER)/%.o: Linux/libevdev/%.c
+	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Linux/%, ../%, $<)
 
-$(SHAREDLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
-	mkdir -p InteropDLL/obj
-	ar -rcs InteropDLL/obj/libSevenZip.a $(SEVENZIPOBJ)
-	ar -rcs InteropDLL/obj/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
-	ar -rcs InteropDLL/obj/libUtilities.a $(UTILOBJ)
-	ar -rcs InteropDLL/obj/libCore.a $(COREOBJ)
-	cd InteropDLL/obj && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
+InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
+	mkdir -p InteropDLL/$(OBJFOLDER)
+	ar -rcs InteropDLL/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
+	ar -rcs InteropDLL/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
+	ar -rcs InteropDLL/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
+	ar -rcs InteropDLL/$(OBJFOLDER)/libCore.a $(COREOBJ)
+	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
 
 run:
-	MONO_LOG_LEVEL=debug mono bin/x64/Release/Mesen.exe
+	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe
 
 clean:
-	rm SevenZip/obj -r -f
-	rm Utilities/obj -r -f
-	rm Core/obj -r -f
-	rm Linux/obj -r -f
-	rm InteropDLL/obj -r -f
-	rm TestHelper/obj -r -f
+	rm SevenZip/$(OBJFOLDER) -r -f
+	rm Utilities/$(OBJFOLDER) -r -f
+	rm Core/$(OBJFOLDER) -r -f
+	rm Linux/$(OBJFOLDER) -r -f
+	rm InteropDLL/$(OBJFOLDER) -r -f
+	rm TestHelper/$(OBJFOLDER) -r -f
+	rm $(RELEASEFOLDER) -r -f
