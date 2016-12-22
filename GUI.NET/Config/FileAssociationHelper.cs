@@ -13,8 +13,12 @@ namespace Mesen.GUI.Config
 	{
 		static private string CreateMimeType(string mimeType, string extension, string description, List<string> mimeTypes, bool addType)
 		{
-			string baseFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ".local", "share");
-			string filename = Path.Combine(baseFolder, "mime", "packages", mimeType + ".xml");
+			string baseFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ".local", "share", "mime", "packages");
+			if(!Directory.Exists(baseFolder)) {
+				Directory.CreateDirectory(baseFolder);
+			}
+			string filename = Path.Combine(baseFolder, mimeType + ".xml");
+			
 			if(addType) {
 				File.WriteAllText(filename,
 					"<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine +
