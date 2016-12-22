@@ -19,8 +19,12 @@
 
 #include "../Utilities/UTF8Util.h"
 
-#ifdef __GNUC__
-#define __forceinline
+#ifdef __clang__
+	#define __forceinline __attribute__((always_inline))
+#else
+	#ifdef __GNUC__
+		#define __forceinline 
+	#endif
 #endif
 
 using std::vector;
