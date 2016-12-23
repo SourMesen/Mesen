@@ -367,7 +367,6 @@
             this.columnHeader1,
             this.columnHeader2});
 			this.lstSearchResult.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lstSearchResult.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lstSearchResult.FullRowSelect = true;
 			this.lstSearchResult.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.lstSearchResult.Location = new System.Drawing.Point(1, 24);

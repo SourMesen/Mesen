@@ -144,7 +144,6 @@
 			// ctrlTextbox
 			// 
 			this.ctrlTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlTextbox.Font = new System.Drawing.Font("Consolas", 13F);
 			this.ctrlTextbox.HorizontalScrollWidth = 0;
 			this.ctrlTextbox.Location = new System.Drawing.Point(0, 0);
 			this.ctrlTextbox.Name = "ctrlTextbox";
