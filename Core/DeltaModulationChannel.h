@@ -30,8 +30,6 @@ private:
 	bool _silenceFlag = true;
 	bool _needToRun = false;
 
-	int32_t _enableOverclockCounter;
-
 	void InitSample();
 	void FillReadBuffer();
 	

@@ -38,6 +38,8 @@ class Console
 
 		bool _stop = false;
 
+		bool _disableOcNextFrame = false;
+
 		atomic<bool> _resetRequested;
 		atomic<uint32_t> _lagCounter;
 		
@@ -82,6 +84,8 @@ class Console
 		static void ResetLagCounter();
 
 		static bool IsRunning();
+
+		static void DisableOcNextFrame();
 
 		static bool IsDebuggerAttached();
 

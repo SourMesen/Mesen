@@ -2,6 +2,7 @@
 #include "DeltaModulationChannel.h"
 #include "APU.h"
 #include "CPU.h"
+#include "Console.h"
 
 DeltaModulationChannel *DeltaModulationChannel::Instance = nullptr;
 
@@ -14,9 +15,6 @@ DeltaModulationChannel::DeltaModulationChannel(AudioChannel channel, SoundMixer 
 void DeltaModulationChannel::Reset(bool softReset)
 {
 	BaseApuChannel::Reset(softReset);
-
-	EmulationSettings::DisableOverclocking(false);
-	_enableOverclockCounter = 0;
 
 	_sampleAddr = 0;
 	_sampleLength = 0;
@@ -105,21 +103,14 @@ void DeltaModulationChannel::Clock()
 		}
 	}
 
-	if(_enableOverclockCounter > 0) {
-		_enableOverclockCounter -= _period;
-		if(_enableOverclockCounter <= 0) {
-			//Reenable overclocking if no sample was written for over a full frame
-			EmulationSettings::DisableOverclocking(false);
-		}
-	}
-
 	AddOutput(_outputLevel);
 }
 
 void DeltaModulationChannel::StreamState(bool saving)
 {
 	BaseApuChannel::StreamState(saving);
-	Stream(_sampleAddr, _sampleLength, _outputLevel, _irqEnabled, _loopFlag, _currentAddr, _bytesRemaining, _readBuffer, _bufferEmpty, _shiftRegister, _bitsRemaining, _silenceFlag, _needToRun, _enableOverclockCounter);
+	int32_t unused_enableOverclockCounter = 0;
+	Stream(_sampleAddr, _sampleLength, _outputLevel, _irqEnabled, _loopFlag, _currentAddr, _bytesRemaining, _readBuffer, _bufferEmpty, _shiftRegister, _bitsRemaining, _silenceFlag, _needToRun, unused_enableOverclockCounter);
 }
 
 bool DeltaModulationChannel::IrqPending(uint32_t cyclesToRun)
@@ -172,9 +163,8 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 			//4011 applies new output right away, not on the timer's reload.  This fixes bad DMC sound when playing through 4011.
 			AddOutput(_outputLevel);
 			
-			if(value > 0) {
-				_enableOverclockCounter = 30000;
-				EmulationSettings::DisableOverclocking(true);
+			if(value > 0 && EmulationSettings::GetOverclockAdjustApu()) {
+				Console::DisableOcNextFrame();
 			}
 			break;
 		}

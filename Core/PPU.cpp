@@ -933,19 +933,13 @@ void PPU::TriggerNmi()
 	}
 }
 
-void PPU::EndVBlank()
-{
-	if(_cycle == 340) {
-		_frameCount++;
-	}
-}
-
 void PPU::Exec()
 {
 	if(_cycle > 339) {
 		_cycle = -1;
 
 		if(++_scanline > _vblankEnd) {
+			_frameCount++;
 			_scanline = -1;
 			UpdateMinimumDrawCycles();
 		}
@@ -961,15 +955,11 @@ void PPU::Exec()
 			ProcessPrerenderScanline();
 		} else if(_scanline == _nmiScanline) {
 			BeginVBlank();
-		} else if(_scanline == _vblankEnd) {
-			EndVBlank();
 		}
 	} else {
 		//Used by NSF player to speed things up
 		if(_scanline == _nmiScanline) {
 			BeginVBlank();
-		} else if(_scanline == _vblankEnd) {
-			EndVBlank();
 		}
 	}
 

@@ -294,6 +294,9 @@ void Console::Run()
 
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
 		if(currentFrameNumber != lastFrameNumber) {
+			EmulationSettings::DisableOverclocking(_disableOcNextFrame);
+			_disableOcNextFrame = false;
+
 			lastFrameNumber = currentFrameNumber;
 
 			//Sleep until we're ready to start the next frame
@@ -513,4 +516,9 @@ void Console::ResetLagCounter()
 bool Console::IsDebuggerAttached()
 {
 	return (bool)Instance->_debugger;
+}
+
+void Console::DisableOcNextFrame()
+{
+	Instance->_disableOcNextFrame = true;
 }
