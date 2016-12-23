@@ -609,7 +609,7 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnMouseDown(e);
 			this.Focus();
-			
+
 			if(e.Button == MouseButtons.XButton1) {
 				this.NavigateBackward();
 			} else if(e.Button == MouseButtons.XButton2) {
@@ -755,29 +755,36 @@ namespace Mesen.GUI.Debugger
 		{
 			if(lineProperties.Symbol.HasFlag(LineSymbol.Circle)) {
 				using(Brush brush = new SolidBrush(lineProperties.OutlineColor.Value)) {
-					g.FillEllipse(brush, 1, positionY + 2, lineHeight - 3, lineHeight - 3);
+					g.FillEllipse(brush, 3, positionY + 4, lineHeight - 3, lineHeight - 3);
 				}
 			}
 			if(lineProperties.Symbol.HasFlag(LineSymbol.CircleOutline) && lineProperties.OutlineColor.HasValue) {
 				using(Pen pen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-					g.DrawEllipse(pen, 1, positionY + 2, lineHeight - 3, lineHeight - 3);
+					g.DrawEllipse(pen, 3, positionY + 4, lineHeight - 3, lineHeight - 3);
 				}
 			}
 			if(lineProperties.Symbol.HasFlag(LineSymbol.Arrow)) {
 				int arrowY = positionY + lineHeight / 2 + 1;
-				using(Pen pen = new Pen(Color.Black, lineHeight * 0.33f)) {
-					//Outline
-					g.DrawLine(pen, 3, arrowY, 3 + lineHeight * 0.25f, arrowY);
-					pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
-					g.DrawLine(pen, 3 + lineHeight * 0.25f, arrowY, 3 + lineHeight * 0.75f, arrowY);
+				if(Program.IsMono) {
+					using(Brush brush = new SolidBrush(lineProperties.BgColor.Value)) {
+						g.FillRectangle(brush, 1, arrowY - lineHeight * 0.25f / 2, lineHeight - 1, lineHeight * 0.35f); 
+					}
+					g.DrawRectangle(Pens.Black, 1, arrowY - lineHeight * 0.25f / 2, lineHeight - 1, lineHeight * 0.35f); 
+				} else {
+					using(Pen pen = new Pen(Color.Black, lineHeight * 0.33f)) {
+						//Outline
+						g.DrawLine(pen, 3, arrowY, 3 + lineHeight * 0.25f, arrowY);
+						pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+						g.DrawLine(pen, 3 + lineHeight * 0.25f, arrowY, 3 + lineHeight * 0.75f, arrowY);
 
-					//Fill
-					pen.Width-=2f;
-					pen.Color = lineProperties.BgColor.Value;
-					pen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
-					g.DrawLine(pen, 4, arrowY, 3 + lineHeight * 0.25f - 1, arrowY);
-					pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
-					g.DrawLine(pen, 3 + lineHeight * 0.25f, arrowY, lineHeight * 0.75f + 1, arrowY);
+						//Fill
+						pen.Width-=2f;
+						pen.Color = lineProperties.BgColor.Value;
+						pen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+						g.DrawLine(pen, 4, arrowY, 3 + lineHeight * 0.25f - 1, arrowY);
+						pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+						g.DrawLine(pen, 3 + lineHeight * 0.25f, arrowY, lineHeight * 0.75f + 1, arrowY);
+					}
 				}
 			}
 		}

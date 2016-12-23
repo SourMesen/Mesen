@@ -289,7 +289,7 @@ namespace Mesen.GUI.Debugger
 			//Always enable to allow F2 shortcut
 			mnuEditLabel.Enabled = true;
 
-			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 5) {
+			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
 				this.ctrlCodeViewer.ContextMenuStrip = contextMenuMargin;
 			} else {
 				this.ctrlCodeViewer.ContextMenuStrip = contextMenuCode;
@@ -451,7 +451,7 @@ namespace Mesen.GUI.Debugger
 			int address = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
 			_lineBreakpoint = BreakpointManager.GetMatchingBreakpoint(address);
 
-			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 5) {
+			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
 				if(e.Button == System.Windows.Forms.MouseButtons.Left) {
 					if(_lineBreakpoint == null) {
 						Breakpoint bp = new Breakpoint();
