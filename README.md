@@ -19,15 +19,12 @@ Things that ***may or may not*** be added in the future, in no particular order:
 
 ### Windows ###
 1) Open the solution in VS2015  
-2) Compile as Release/x64  
+2) Compile as Release/x64 or Release/x86  
 3) Run  
 
 ### Linux ###
-You will need clang/gcc, Mono/XBuild and SDL2 to compile and run Mesen under Linux.
-A makefile is included - running "make" and then "make run" should start the emulator.
-
-A few limitations remain in the Linux version at the moment, which is why there is no official Linux build yet.
-Most importantly, gamepads/controllers are not supported.
+You will need clang/gcc, Mono/XBuild and SDL2 to compile and run Mesen under Linux.  
+The makefile contains some more information at the top.  Running "make" will build the x64 version by default, and then "make run" should start the emulator.  
 
 ## LICENSE ##
 
