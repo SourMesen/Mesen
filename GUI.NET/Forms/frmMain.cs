@@ -1092,6 +1092,7 @@ namespace Mesen.GUI.Forms
 		private void mnuAudioConfig_Click(object sender, EventArgs e)
 		{
 			new frmAudioConfig().ShowDialog(sender);
+			this.ctrlNsfPlayer.UpdateVolume();
 		}
 
 		private void mnuPreferences_Click(object sender, EventArgs e)

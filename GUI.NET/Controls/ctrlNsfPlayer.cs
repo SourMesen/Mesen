@@ -36,6 +36,11 @@ namespace Mesen.GUI.Controls
 			StopFastForward();
 		}
 
+		public void UpdateVolume()
+		{
+			trkVolume.Value = (int)ConfigManager.Config.AudioInfo.MasterVolume;
+		}
+
 		public void ResetCount()
 		{
 			_frameCount = 0;
@@ -135,7 +140,7 @@ namespace Mesen.GUI.Controls
 					toolTip.SetToolTip(btnNext, ResourceHelper.GetMessage("NsfNextTrack"));
 
 					NsfHeader header = InteropEmu.NsfGetHeader();
-					trkVolume.Value = (int)ConfigManager.Config.AudioInfo.MasterVolume;
+					this.UpdateVolume();
 
 					lblTitleValue.Text = header.GetSongName();
 					lblArtistValue.Text = header.GetArtistName();
