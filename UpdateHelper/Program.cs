@@ -38,7 +38,7 @@ namespace MesenUpdater
 						if(!isAdmin) {
 							ProcessStartInfo proc = new ProcessStartInfo();
 							proc.WindowStyle = ProcessWindowStyle.Normal;
-							proc.FileName = Process.GetCurrentProcess().MainModule.FileName;
+							proc.FileName = System.Reflection.Assembly.GetEntryAssembly().Location;
 							proc.Arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" admin", srcFile, destFile, backupDestFile);
 							proc.UseShellExecute = true;
 							proc.Verb = "runas";

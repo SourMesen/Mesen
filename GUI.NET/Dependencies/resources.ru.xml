@@ -516,7 +516,7 @@
     <Message ID="PatchAndReset">Пропатчить и сбросить текущую игру?</Message>
     <Message ID="SelectRomIps">Пожалуйста выберите ROM соответствующий IPS.</Message>
     <Message ID="UnableToDownload">Невозможно загрузить файл. Проверьте ваше соединение с интернетом и попробуйте ещё раз.&#xA;&#xA;Подробно:</Message>
-    <Message ID="UnableToStartMissingDependencies">Mesen должен загрузить и установить Microsoft Visual Studio 2015 runtime чтобы продолжить. Хотите автоматически загрузить Microsoft Visual Studio 2015 runtime с сайта Microsoft и установить его сейчас?"</Message>
+    <Message ID="UnableToStartMissingDependencies">Mesen could not launch because it was unable to load MesenCore.dll due to missing dependencies.</Message>
     <Message ID="UnableToStartMissingFiles">Mesen не может  запуститься из за отсутствующих файлов.&#xA;&#xA;Ошибка: MesenCore.dll не найден.</Message>
     <Message ID="UnexpectedError">Неизвестная ошибка.&#xA;&#xA;Подробно:&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">Загрузка не удалась - файл повреждён. Пожалуйста посетите сайт Mesen и загрузите последнюю версию вручную.</Message>

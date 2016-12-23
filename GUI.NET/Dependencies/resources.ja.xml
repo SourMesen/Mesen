@@ -507,7 +507,7 @@
     <Message ID="PatchAndReset">IPSパッチを当てて、ゲームをリセットしますか？</Message>
     <Message ID="SelectRomIps">IPSファイルに合うゲームファイルを選んでください。</Message>
     <Message ID="UnableToDownload">ファイルをダウンロードできませんでした。ネット接続を確認してから、再試行してください。&#xA;&#xA;エラーの詳細:</Message>
-    <Message ID="UnableToStartMissingDependencies">MesenはMicrosoft Visual Studio 2015のVisual C++再頒布可能パッケージなしではゲームをロードできません。　パッケージを自動的にMicrosoftのサーバからダウンロードして、インストールしますか？</Message>
+    <Message ID="UnableToStartMissingDependencies">MesenはMesenCore.dllをロード出来なかったため、起動できませんでした。</Message>
     <Message ID="UnableToStartMissingFiles">必要なファイルはロード出来なかったため、Mesenは起動できません。&#xA;&#xA;エラー: MesenCore.dllはロードできません。</Message>
     <Message ID="UnexpectedError">予期しないエラーが発生しました。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">ダウンロードは失敗しました。　Mesenのサイトに行って、新しいバージョンをダウンロードしてください。</Message>

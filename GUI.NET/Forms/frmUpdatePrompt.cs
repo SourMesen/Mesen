@@ -41,7 +41,7 @@ namespace Mesen.GUI.Forms
 		
 		private void btnUpdate_Click(object sender, EventArgs e)
 		{
-			string destFilePath = Process.GetCurrentProcess().MainModule.FileName;
+			string destFilePath = System.Reflection.Assembly.GetEntryAssembly().Location;
 			string srcFilePath = Path.Combine(ConfigManager.DownloadFolder, "Mesen." + lblLatestVersionString.Text + ".exe");
 			string backupFilePath = Path.Combine(ConfigManager.BackupFolder, "Mesen." + lblCurrentVersionString.Text + ".exe");
 			string updateHelper = Path.Combine(ConfigManager.HomeFolder, "MesenUpdater.exe");
@@ -54,7 +54,11 @@ namespace Mesen.GUI.Forms
 				if(frmDownload.ShowDialog() == DialogResult.OK) {
 					FileInfo fileInfo = new FileInfo(srcFilePath);
 					if(fileInfo.Length > 0 && GetSha1Hash(srcFilePath) == _fileHash) {
-						Process.Start(updateHelper, string.Format("\"{0}\" \"{1}\" \"{2}\"", srcFilePath, destFilePath, backupFilePath));
+						if(Program.IsMono) {
+							Process.Start("mono", string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\"", updateHelper, srcFilePath, destFilePath, backupFilePath));
+						} else {
+							Process.Start(updateHelper, string.Format("\"{0}\" \"{1}\" \"{2}\"", srcFilePath, destFilePath, backupFilePath));
+						}
 					} else {
 						//Download failed, mismatching hashes
 						MesenMsgBox.Show("UpdateDownloadFailed", MessageBoxButtons.OK, MessageBoxIcon.Error);
