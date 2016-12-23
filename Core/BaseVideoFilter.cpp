@@ -32,8 +32,6 @@ void BaseVideoFilter::UpdateBufferSize()
 		_bufferSize = newBufferSize;
 		_outputBuffer = new uint8_t[newBufferSize];
 		_frameLock.Release();
-
-		MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
 	}
 }
 

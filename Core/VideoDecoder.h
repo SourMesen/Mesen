@@ -7,6 +7,7 @@ using std::thread;
 #include "../Utilities/AutoResetEvent.h"
 #include "EmulationSettings.h"
 #include "HdNesPack.h"
+#include "FrameInfo.h"
 
 class BaseVideoFilter;
 class IRenderingDevice;
@@ -15,6 +16,7 @@ struct ScreenSize
 {
 	int32_t Width;
 	int32_t Height;
+	double Scale;
 };
 
 class VideoDecoder
@@ -32,6 +34,9 @@ private:
 	atomic<bool> _frameChanged;
 	atomic<bool> _stopFlag;
 	uint32_t _frameCount = 0;
+
+	FrameInfo _previousFrameInfo = {};
+	double _previousScale = 0;
 
 	VideoFilterType _videoFilterType = VideoFilterType::None;
 	unique_ptr<BaseVideoFilter> _videoFilter;

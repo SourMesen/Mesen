@@ -41,6 +41,7 @@ void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
 		if(aspectRatio != 0.0) {
 			size.Width = (uint32_t)(frameInfo.OriginalHeight * scale * aspectRatio * ((double)frameInfo.Width / frameInfo.OriginalWidth));
 		}
+		size.Scale = scale;
 	}
 }
 
@@ -90,9 +91,16 @@ void VideoDecoder::DecodeFrame()
 	}
 	_videoFilter->SendFrame(_ppuOutputBuffer);
 
+	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
+	if(_previousScale != EmulationSettings::GetVideoScale() || frameInfo.Height != _previousFrameInfo.Height || frameInfo.Width != _previousFrameInfo.Width) {
+		MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
+	}
+	_previousScale = EmulationSettings::GetVideoScale();
+	_previousFrameInfo = frameInfo;
+
 	_frameChanged = false;
 
-	VideoRenderer::GetInstance()->UpdateFrame(_videoFilter->GetOutputBuffer(), _videoFilter->GetFrameInfo().Width, _videoFilter->GetFrameInfo().Height);
+	VideoRenderer::GetInstance()->UpdateFrame(_videoFilter->GetOutputBuffer(), frameInfo.Width, frameInfo.Height);
 }
 
 void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length)

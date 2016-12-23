@@ -635,7 +635,6 @@ public:
 			_overscan.Right = right;
 			_overscan.Top = top;
 			_overscan.Bottom = bottom;
-			MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
 		}
 	}
 
@@ -666,7 +665,10 @@ public:
 
 	static void SetVideoFilterType(VideoFilterType videoFilterType)
 	{
-		_videoFilterType = videoFilterType;
+		if(_videoFilterType != videoFilterType) {
+			_videoScale = videoFilterType == VideoFilterType::None ? 2.0 : 1.0;
+			_videoFilterType = videoFilterType;
+		}
 	}
 
 	static VideoFilterType GetVideoFilterType()
@@ -688,7 +690,6 @@ public:
 	{
 		if(_aspectRatio != aspectRatio) {
 			_aspectRatio = aspectRatio;
-			MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
 		}
 	}
 
@@ -753,7 +754,6 @@ public:
 	{
 		if(_videoScale != scale) {
 			_videoScale = scale;
-			MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
 		}
 	}
 

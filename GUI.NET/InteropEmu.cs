@@ -563,6 +563,7 @@ namespace Mesen.GUI
 		{
 			public Int32 Width;
 			public Int32 Height;
+			public double Scale;
 		}
 
 		public enum InputDisplayPosition

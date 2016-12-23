@@ -34,7 +34,6 @@ namespace Mesen.GUI.Forms
 		private FormWindowState _originalWindowState;
 		private bool _fullscreenMode = false;
 		private double _regularScale = ConfigManager.Config.VideoInfo.VideoScale;
-		private bool _needScaleUpdate = false;
 		private bool _isNsfPlayerMode = false;
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
@@ -295,17 +294,6 @@ namespace Mesen.GUI.Forms
 
 		private void UpdateVideoSettings()
 		{
-			if(_needScaleUpdate) {
-				//Reset scale to 1 when filter is changed
-				if(this.WindowState == FormWindowState.Maximized || mnuNoneFilter.Checked) {
-					SetScaleBasedOnWindowSize();
-				} else {
-					SetScale(1);
-				}
-				_regularScale = 1;
-				_needScaleUpdate = false;
-			}
-
 			mnuShowFPS.Checked = ConfigManager.Config.VideoInfo.ShowFPS;
 			mnuBilinearInterpolation.Checked = ConfigManager.Config.VideoInfo.UseBilinearInterpolation;
 			UpdateScaleMenu(ConfigManager.Config.VideoInfo.VideoScale);
@@ -324,11 +312,13 @@ namespace Mesen.GUI.Forms
 			} else {
 				if(!_customSize && this.WindowState != FormWindowState.Maximized) {
 					Size sizeGap = this.Size - this.ClientSize;
+
+					_regularScale = size.Scale;
+					UpdateScaleMenu(size.Scale);
+
 					this.Resize -= frmMain_Resize;
 					this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + menuStrip.Height));
 					this.Resize += frmMain_Resize;
-				} else {
-					SetScaleBasedOnWindowSize();
 				}
 
 				ctrlRenderer.Size = new Size(size.Width, size.Height);
@@ -374,7 +364,6 @@ namespace Mesen.GUI.Forms
 				this.SetScale(_regularScale);
 				this.UpdateScaleMenu(_regularScale);
 				VideoInfo.ApplyConfig();				
-				UpdateViewerSize();
 			}
 			this.Resize += frmMain_Resize;
 
@@ -431,7 +420,7 @@ namespace Mesen.GUI.Forms
 
 				case InteropEmu.ConsoleNotificationType.ResolutionChanged:
 					this.BeginInvoke((MethodInvoker)(() => {
-						UpdateVideoSettings();
+						UpdateViewerSize();
 					}));
 					break;
 
@@ -1196,10 +1185,9 @@ namespace Mesen.GUI.Forms
 
 		private void SetVideoFilter(VideoFilterType type)
 		{
+			_customSize = false;
 			InteropEmu.SetVideoFilter(type);
 			UpdateFilterMenu(type);
-
-			_needScaleUpdate = true;
 		}
 
 		private void mnuNoneFilter_Click(object sender, EventArgs e)
@@ -1430,12 +1418,12 @@ namespace Mesen.GUI.Forms
 
 		private void menuStrip_VisibleChanged(object sender, EventArgs e)
 		{
-			IntPtr handle = this.Handle;
-			this.BeginInvoke((MethodInvoker)(() => {
-				if(_fullscreenMode && _customSize) {
-					SetScaleBasedOnWindowSize();
-				}
-			}));
+			if(_fullscreenMode) {
+				IntPtr handle = this.Handle;
+				this.BeginInvoke((MethodInvoker)(() => {
+					this.ctrlRenderer.Top = this.menuStrip.Visible ? -menuStrip.Height : 0;
+				}));
+			}
 		}
 
 		private void mnuAbout_Click(object sender, EventArgs e)
