@@ -319,6 +319,8 @@ namespace Mesen.GUI.Forms
 					this.Resize -= frmMain_Resize;
 					this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + menuStrip.Height));
 					this.Resize += frmMain_Resize;
+				} else if(_customSize) {
+					SetScaleBasedOnWindowSize();
 				}
 
 				ctrlRenderer.Size = new Size(size.Width, size.Height);
@@ -363,6 +365,7 @@ namespace Mesen.GUI.Forms
 				this.FormBorderStyle = FormBorderStyle.Sizable;
 				this.SetScale(_regularScale);
 				this.UpdateScaleMenu(_regularScale);
+				this.UpdateViewerSize();
 				VideoInfo.ApplyConfig();				
 			}
 			this.Resize += frmMain_Resize;
@@ -1185,7 +1188,9 @@ namespace Mesen.GUI.Forms
 
 		private void SetVideoFilter(VideoFilterType type)
 		{
-			_customSize = false;
+			if(!_fullscreenMode) {
+				_customSize = false;
+			}
 			InteropEmu.SetVideoFilter(type);
 			UpdateFilterMenu(type);
 		}
@@ -1421,7 +1426,7 @@ namespace Mesen.GUI.Forms
 			if(_fullscreenMode) {
 				IntPtr handle = this.Handle;
 				this.BeginInvoke((MethodInvoker)(() => {
-					this.ctrlRenderer.Top = this.menuStrip.Visible ? -menuStrip.Height : 0;
+					this.ctrlRenderer.Top += this.menuStrip.Visible ? -menuStrip.Height : menuStrip.Height;
 				}));
 			}
 		}
