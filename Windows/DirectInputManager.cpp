@@ -9,12 +9,14 @@
 #include <oleauto.h>
 #include "DirectInputManager.h"
 #include <algorithm>
+#include "../Core/MessageManager.h"
 
 LPDIRECTINPUT8 DirectInputManager::_directInput = nullptr;
 vector<DirectInputData> DirectInputManager::_joysticks;
 std::vector<GUID> DirectInputManager::_xinputDeviceGuids;
 std::vector<GUID> DirectInputManager::_directInputDeviceGuids;
-bool DirectInputManager::_needToUpdate;
+bool DirectInputManager::_needToUpdate = false;
+HWND DirectInputManager::_hWnd = nullptr;
 
 bool DirectInputManager::Initialize()
 {
@@ -58,8 +60,6 @@ bool DirectInputManager::ProcessDevice(const DIDEVICEINSTANCE* pdidInstance, boo
 		if(!checkOnly) {
 			if(isXInput) {
 				_xinputDeviceGuids.push_back(*deviceGuid);
-			} else {
-				_directInputDeviceGuids.push_back(*deviceGuid);
 			}
 		}
 		return !isXInput;
@@ -224,25 +224,6 @@ bool DirectInputManager::UpdateDeviceList()
 		return false;
 	}
 
-	for(DirectInputData& data : _joysticks) {
-		// Set the data format to "simple joystick" - a predefined data format 
-		// A data format specifies which controls on a device we are interested in, and how they should be reported.
-		// This tells DInput that we will be passing a DIJOYSTATE2 structure to IDirectInputDevice::GetDeviceState().
-		if(FAILED(hr = data.joystick->SetDataFormat(&c_dfDIJoystick2))) {
-			return false;
-		}
-
-		// Set the cooperative level to let DInput know how this device should interact with the system and with other DInput applications.
-		if(FAILED(hr = data.joystick->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND))) {
-			return false;
-		}
-
-		// Enumerate the joystick objects. The callback function enabled user interface elements for objects that are found, and sets the min/max values property for discovered axes.
-		if(FAILED(hr = data.joystick->EnumObjects(EnumObjectsCallback, data.joystick, DIDFT_ALL))) {
-			return false;
-		}
-	}
-
 	//Sleeping apparently lets us read accurate "default" values, otherwise a PS4 controller returns all 0s, despite not doing so normally
 	RefreshState();
 	std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
@@ -271,8 +252,22 @@ int DirectInputManager::EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstan
 		if(SUCCEEDED(hr)) {
 			DIJOYSTATE2 state;
 			memset(&state, 0, sizeof(state));
-			DirectInputData data{ pJoystick, state, state };
-			_joysticks.push_back(data);
+			DirectInputData data{ pJoystick, state, state, false };
+			memcpy(&data.instanceInfo, pdidInstance, sizeof(DIDEVICEINSTANCE));
+
+			// Set the data format to "simple joystick" - a predefined data format 
+			// A data format specifies which controls on a device we are interested in, and how they should be reported.
+			// This tells DInput that we will be passing a DIJOYSTATE2 structure to IDirectInputDevice::GetDeviceState().
+			if(SUCCEEDED(hr = data.joystick->SetDataFormat(&c_dfDIJoystick2))) {
+				// Set the cooperative level to let DInput know how this device should interact with the system and with other DInput applications.
+				if(SUCCEEDED(hr = data.joystick->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND))) {
+					// Enumerate the joystick objects. The callback function enabled user interface elements for objects that are found, and sets the min/max values property for discovered axes.
+					if(SUCCEEDED(hr = data.joystick->EnumObjects(EnumObjectsCallback, data.joystick, DIDFT_ALL))) {
+						_directInputDeviceGuids.push_back(pdidInstance->guidInstance);
+						_joysticks.push_back(data);
+					}
+				}
+			}
 		}
 	}
 	return DIENUM_CONTINUE;
@@ -325,7 +320,7 @@ int DirectInputManager::GetJoystickCount()
 
 bool DirectInputManager::IsPressed(int port, int button)
 {
-	if(port >= (int)_joysticks.size()) {
+	if(port >= (int)_joysticks.size() || !_joysticks[port].stateValid) {
 		return false;
 	}
 
@@ -333,7 +328,8 @@ bool DirectInputManager::IsPressed(int port, int button)
 	DIJOYSTATE2& defaultState = _joysticks[port].defaultState;
 	int deadRange = 500;
 
-	bool povCentered = (LOWORD(state.rgdwPOV[0]) == 0xFFFF);
+	int povDirection = state.rgdwPOV[0] / 4500;
+	bool povCentered = (LOWORD(state.rgdwPOV[0]) == 0xFFFF) || povDirection >= 8;
 
 	switch(button) {
 		case 0x00: return state.lY - defaultState.lY < -deadRange;
@@ -348,10 +344,10 @@ bool DirectInputManager::IsPressed(int port, int button)
 		case 0x09: return state.lZ - defaultState.lZ > deadRange;
 		case 0x0A: return state.lRz - defaultState.lRz < -deadRange;
 		case 0x0B: return state.lRz - defaultState.lRz > deadRange;
-		case 0x0C: return !povCentered && (state.rgdwPOV[0] >= 31500 || state.rgdwPOV[0] <= 4500);
-		case 0x0D: return !povCentered && state.rgdwPOV[0] >= 13500 && state.rgdwPOV[0] <= 22500;
-		case 0x0E: return !povCentered && state.rgdwPOV[0] >= 4500 && state.rgdwPOV[0] <= 13500;
-		case 0x0F: return !povCentered && state.rgdwPOV[0] >= 22500 && state.rgdwPOV[0] <= 31500;
+		case 0x0C: return !povCentered && (povDirection == 7 || povDirection == 0 || povDirection == 1);
+		case 0x0D: return !povCentered && (povDirection >= 3 && povDirection <= 5);
+		case 0x0E: return !povCentered && (povDirection >= 1 && povDirection <= 3);
+		case 0x0F: return !povCentered && (povDirection >= 5 && povDirection <= 7);
 		default: return state.rgbButtons[button - 0x10] != 0;
 	}
 
@@ -361,6 +357,8 @@ bool DirectInputManager::IsPressed(int port, int button)
 bool DirectInputManager::UpdateInputState(DirectInputData &data)
 {
 	HRESULT hr;
+
+	data.stateValid = false;
 
 	// Poll the device to read the current state
 	hr = data.joystick->Poll();
@@ -383,6 +381,8 @@ bool DirectInputManager::UpdateInputState(DirectInputData &data)
 	if(FAILED(hr = data.joystick->GetDeviceState(sizeof(DIJOYSTATE2), &data.state))) {
 		return false; // The device should have been acquired during the Poll()
 	}
+
+	data.stateValid = true;
 
 	return true;
 }

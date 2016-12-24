@@ -8,12 +8,14 @@ struct DirectInputData
 	LPDIRECTINPUTDEVICE8 joystick;
 	DIJOYSTATE2 state;
 	DIJOYSTATE2 defaultState;
+	bool stateValid;
+	DIDEVICEINSTANCE instanceInfo;
 };
 
 class DirectInputManager
 {
 private:
-	HWND _hWnd;
+	static HWND _hWnd;
 	static bool _needToUpdate;
 	static LPDIRECTINPUT8 _directInput;
 	static vector<DirectInputData> _joysticks;
