@@ -38,6 +38,21 @@ namespace Mesen.GUI.Forms
 			return _language;
 		}
 
+		public static string GetLanguageCode()
+		{
+			switch(ResourceHelper.GetCurrentLanguage()) {
+				case Language.English: return "en";
+				case Language.French: return "fr";
+				case Language.Japanese: return "ja";
+				case Language.Russian: return "ru";
+				case Language.Spanish: return "es";
+				case Language.Ukrainian: return "uk";
+				case Language.Portuguese: return "pt";
+			}
+
+			return "";
+		}
+
 		public static void UpdateEmuLanguage()
 		{
 			InteropEmu.SetDisplayLanguage(_language);

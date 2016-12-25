@@ -442,7 +442,8 @@
       <Control ID="labelCopyright">© 2016 M. Bibaud (aka Sour)</Control>
       <Control ID="lblWebsite">Sitio web:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Version: 0.6.0 (Beta)</Control>
+      <Control ID="labelVersion">Version: 0.6.1 (Beta)</Control>
+      <Control ID="lblDonate">If you want to support Mesen, please consider donating.&#xA;Thank you for your support!</Control>
       <Control ID="okButton">&amp;OK</Control>
     </Form>
     <Form ID="frmVsGameConfig" Title="Configuração de jogo VS">
@@ -454,6 +455,7 @@
       <Control ID="lblLatestVersion">Última versão: </Control>
       <Control ID="lblCurrentVersion">Versão atual: </Control>
       <Control ID="lblChangeLog">Changelog</Control>
+      <Control ID="lblDonate">If you want to support Mesen, please consider donating. Thank you!</Control>
       <Control ID="btnUpdate">Atualizar</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>

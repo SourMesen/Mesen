@@ -1442,25 +1442,18 @@ namespace Mesen.GUI.Forms
 				try {
 					using(var client = new WebClient()) {
 						XmlDocument xmlDoc = new XmlDocument();
-						string langCode = "";
-						switch(ResourceHelper.GetCurrentLanguage()) {
-							case Language.English: langCode = "en"; break;
-							case Language.French: langCode = "fr"; break;
-							case Language.Japanese: langCode = "ja"; break;
-							case Language.Russian: langCode = "ru"; break;
-							case Language.Spanish: langCode = "es"; break;
-							case Language.Ukrainian: langCode = "uk"; break;
-						}
+
 						string platform = Program.IsMono ? "linux" : "win";
-						xmlDoc.LoadXml(client.DownloadString("http://www.mesen.ca/Services/GetLatestVersion.php?v=" + InteropEmu.GetMesenVersion() + "&p=" + platform + "&l=" + langCode));
+						xmlDoc.LoadXml(client.DownloadString("http://www.mesen.ca/Services/GetLatestVersion.php?v=" + InteropEmu.GetMesenVersion() + "&p=" + platform + "&l=" + ResourceHelper.GetLanguageCode()));
 						Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 						Version latestVersion = new Version(xmlDoc.SelectSingleNode("VersionInfo/LatestVersion").InnerText);
 						string changeLog = xmlDoc.SelectSingleNode("VersionInfo/ChangeLog").InnerText;
 						string fileHash = xmlDoc.SelectSingleNode("VersionInfo/Sha1Hash").InnerText;
+						string donateText = xmlDoc.SelectSingleNode("VersionInfo/DonateText")?.InnerText;
 
 						if(latestVersion > currentVersion) {
 							this.BeginInvoke((MethodInvoker)(() => {
-								frmUpdatePrompt frmUpdate = new frmUpdatePrompt(currentVersion, latestVersion, changeLog, fileHash);
+								frmUpdatePrompt frmUpdate = new frmUpdatePrompt(currentVersion, latestVersion, changeLog, fileHash, donateText);
 								if(frmUpdate.ShowDialog(null, this) == DialogResult.OK) {
 									Application.Exit();
 								}

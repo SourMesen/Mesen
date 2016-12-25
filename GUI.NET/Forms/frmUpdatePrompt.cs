@@ -18,10 +18,13 @@ namespace Mesen.GUI.Forms
 	public partial class frmUpdatePrompt : BaseForm
 	{
 		private string _fileHash;
+		private string _donateText;
 
-		public frmUpdatePrompt(Version currentVersion, Version latestVersion, string changeLog, string fileHash)
+		public frmUpdatePrompt(Version currentVersion, Version latestVersion, string changeLog, string fileHash, string donateText)
 		{
 			InitializeComponent();
+
+			_donateText = donateText;
 
 			this.txtChangelog.Font = new System.Drawing.Font(BaseControl.MonospaceFontFamily, 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
@@ -35,6 +38,17 @@ namespace Mesen.GUI.Forms
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
+
+			if(_donateText != null) {
+				if(!string.IsNullOrEmpty(_donateText)) {
+					this.lblDonate.Text = _donateText;
+				}
+				this.lblDonate.Visible = true;
+				this.picDonate.Visible = true;
+			} else {
+				this.lblDonate.Visible = false;
+				this.picDonate.Visible = false;
+			}
 
 			btnUpdate.Focus();
 		}
@@ -79,6 +93,11 @@ namespace Mesen.GUI.Forms
 				}
 				return sb.ToString();
 			}
+		}
+
+		private void picDonate_Click(object sender, EventArgs e)
+		{
+			Process.Start("http://www.mesen.ca/Donate.php?l=" + ResourceHelper.GetLanguageCode());
 		}
 	}
 }

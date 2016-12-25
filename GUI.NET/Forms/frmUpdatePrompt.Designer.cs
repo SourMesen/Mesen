@@ -27,6 +27,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUpdatePrompt));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblLatestVersionString = new System.Windows.Forms.Label();
 			this.lblLatestVersion = new System.Windows.Forms.Label();
@@ -34,11 +35,18 @@
 			this.txtChangelog = new System.Windows.Forms.TextBox();
 			this.lblChangeLog = new System.Windows.Forms.Label();
 			this.lblCurrentVersionString = new System.Windows.Forms.Label();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnUpdate = new System.Windows.Forms.Button();
+			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+			this.picDonate = new System.Windows.Forms.PictureBox();
+			this.lblDonate = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picDonate)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -54,7 +62,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.txtChangelog, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.lblChangeLog, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblCurrentVersionString, 3, 0);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 3);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -105,7 +113,7 @@
 			this.txtChangelog.Name = "txtChangelog";
 			this.txtChangelog.ReadOnly = true;
 			this.txtChangelog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtChangelog.Size = new System.Drawing.Size(673, 273);
+			this.txtChangelog.Size = new System.Drawing.Size(673, 271);
 			this.txtChangelog.TabIndex = 4;
 			this.txtChangelog.TabStop = false;
 			// 
@@ -129,23 +137,38 @@
 			this.lblCurrentVersionString.TabIndex = 6;
 			this.lblCurrentVersionString.Text = "x.x.x";
 			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 2;
+			this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 4);
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel1, 1, 0);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel2, 0, 0);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(5, 323);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 1;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(679, 31);
+			this.tableLayoutPanel2.TabIndex = 9;
+			// 
 			// flowLayoutPanel1
 			// 
-			this.tableLayoutPanel1.SetColumnSpan(this.flowLayoutPanel1, 4);
 			this.flowLayoutPanel1.Controls.Add(this.btnCancel);
 			this.flowLayoutPanel1.Controls.Add(this.btnUpdate);
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 325);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(520, 0);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(679, 29);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(159, 28);
 			this.flowLayoutPanel1.TabIndex = 8;
 			// 
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(605, 3);
+			this.btnCancel.Location = new System.Drawing.Point(85, 3);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(71, 23);
 			this.btnCancel.TabIndex = 1;
@@ -155,13 +178,49 @@
 			// btnUpdate
 			// 
 			this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnUpdate.Location = new System.Drawing.Point(524, 3);
+			this.btnUpdate.Location = new System.Drawing.Point(4, 3);
 			this.btnUpdate.Name = "btnUpdate";
 			this.btnUpdate.Size = new System.Drawing.Size(75, 23);
 			this.btnUpdate.TabIndex = 0;
 			this.btnUpdate.Text = "Update";
 			this.btnUpdate.UseVisualStyleBackColor = true;
 			this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+			// 
+			// flowLayoutPanel2
+			// 
+			this.flowLayoutPanel2.Controls.Add(this.picDonate);
+			this.flowLayoutPanel2.Controls.Add(this.lblDonate);
+			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(520, 31);
+			this.flowLayoutPanel2.TabIndex = 9;
+			this.flowLayoutPanel2.WrapContents = false;
+			// 
+			// picDonate
+			// 
+			this.picDonate.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picDonate.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picDonate.Image = ((System.Drawing.Image)(resources.GetObject("picDonate.Image")));
+			this.picDonate.Location = new System.Drawing.Point(3, 3);
+			this.picDonate.Name = "picDonate";
+			this.picDonate.Size = new System.Drawing.Size(78, 22);
+			this.picDonate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+			this.picDonate.TabIndex = 0;
+			this.picDonate.TabStop = false;
+			this.picDonate.Click += new System.EventHandler(this.picDonate_Click);
+			// 
+			// lblDonate
+			// 
+			this.lblDonate.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblDonate.AutoSize = true;
+			this.lblDonate.Location = new System.Drawing.Point(84, 7);
+			this.lblDonate.Margin = new System.Windows.Forms.Padding(0);
+			this.lblDonate.Name = "lblDonate";
+			this.lblDonate.Size = new System.Drawing.Size(331, 13);
+			this.lblDonate.TabIndex = 1;
+			this.lblDonate.Text = "If you want to support Mesen, please consider donating.  Thank you!";
 			// 
 			// frmUpdatePrompt
 			// 
@@ -180,7 +239,11 @@
 			this.Text = "Mesen - Update Available";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.tableLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picDonate)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -197,5 +260,9 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnUpdate;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+		private System.Windows.Forms.PictureBox picDonate;
+		private System.Windows.Forms.Label lblDonate;
 	}
 }

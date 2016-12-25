@@ -214,7 +214,7 @@
     <Compile Include="Config\InputInfo.cs" />
     <Compile Include="Config\ClientConnection.cs" />
     <Compile Include="Config\Configuration.cs" />
-	 <Compile Include="Config\FileAssociationHelper.cs" />
+    <Compile Include="Config\FileAssociationHelper.cs" />
     <Compile Include="Config\ImageExtensions.cs" />
     <Compile Include="Config\AudioInfo.cs" />
     <Compile Include="Config\PlayerProfile.cs" />
@@ -599,7 +599,7 @@
     <Compile Include="Forms\NetPlay\frmServerConfig.Designer.cs">
       <DependentUpon>frmServerConfig.cs</DependentUpon>
     </Compile>
-	<Compile Include="Forms\OpenSaveFileDialogExtensions.cs" />	 
+    <Compile Include="Forms\OpenSaveFileDialogExtensions.cs" />
     <Compile Include="Forms\ResourceHelper.cs" />
     <Compile Include="GoogleDriveIntegration\CloudSyncHelper.cs" />
     <Compile Include="GoogleDriveIntegration\GoogleDriveAccessor.cs" />
@@ -873,7 +873,7 @@
     <Content Include="Dependencies\resources.pt.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Content>	 
+    </Content>
     <Content Include="Dependencies\VsSystem.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -882,6 +882,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\Donate.png" />
     <None Include="Resources\Dice.png" />
     <None Include="Resources\Warning.png" />
     <None Include="Resources\Import.png" />
