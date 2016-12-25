@@ -22,26 +22,22 @@
 
 #define supereagle_interpolate2_xrgb8888(A, B, C, D) ((((A) & 0xFCFCFCFC) >> 2) + (((B) & 0xFCFCFCFC) >> 2) + (((C) & 0xFCFCFCFC) >> 2) + (((D) & 0xFCFCFCFC) >> 2) + (((((A) & 0x03030303) + ((B) & 0x03030303) + ((C) & 0x03030303) + ((D) & 0x03030303)) >> 2) & 0x03030303))
 
-#define supereagle_interpolate_rgb565(A, B) ((((A) & 0xF7DE) >> 1) + (((B) & 0xF7DE) >> 1) + ((A) & (B) & 0x0821));
-
-#define supereagle_interpolate2_rgb565(A, B, C, D) ((((A) & 0xE79C) >> 2) + (((B) & 0xE79C) >> 2) + (((C) & 0xE79C) >> 2) + (((D) & 0xE79C) >> 2)  + (((((A) & 0x1863) + ((B) & 0x1863) + ((C) & 0x1863) + ((D) & 0x1863)) >> 2) & 0x1863))
-
 #define supereagle_result(A, B, C, D) (((A) != (C) || (A) != (D)) - ((B) != (C) || (B) != (D)));
 
-#define supereagle_declare_variables(typename_t, in, nextline) \
+#define supereagle_declare_variables(typename_t, in) \
          typename_t product1a, product1b, product2a, product2b; \
-         const typename_t colorB1 = *(in - nextline + 0); \
-         const typename_t colorB2 = *(in - nextline + 1); \
-         const typename_t color4  = *(in - 1); \
+         const typename_t colorB1 = *(in - prevline + 0); \
+         const typename_t colorB2 = *(in - prevline + nextcolumn); \
+         const typename_t color4  = *(in - prevcolumn); \
          const typename_t color5  = *(in + 0); \
-         const typename_t color6  = *(in + 1); \
-         const typename_t colorS2 = *(in + 2); \
-         const typename_t color1  = *(in + nextline - 1); \
+         const typename_t color6  = *(in + nextcolumn); \
+         const typename_t colorS2 = *(in + nextcolumn2); \
+         const typename_t color1  = *(in + nextline - prevcolumn); \
          const typename_t color2  = *(in + nextline + 0); \
-         const typename_t color3  = *(in + nextline + 1); \
-         const typename_t colorS1 = *(in + nextline + 2); \
-         const typename_t colorA1 = *(in + nextline + nextline + 0); \
-         const typename_t colorA2 = *(in + nextline + nextline + 1)
+         const typename_t color3  = *(in + nextline + nextcolumn); \
+         const typename_t colorS1 = *(in + nextline + nextcolumn2); \
+         const typename_t colorA1 = *(in + nextline2 + 0); \
+         const typename_t colorA2 = *(in + nextline2 + nextcolumn)
 
 #ifndef supereagle_function
 #define supereagle_function(result_cb, interpolate_cb, interpolate2_cb) \
@@ -132,17 +128,29 @@
 void supereagle_generic_xrgb8888(unsigned width, unsigned height, uint32_t *src, unsigned src_stride, uint32_t *dst, unsigned dst_stride)
 {
    unsigned finish;
+	int y = 0;
+	int x = 0;
 	for(; height; height--) {
 		uint32_t *in = (uint32_t*)src;
 		uint32_t *out = (uint32_t*)dst;
 
+		int prevline = (y > 0 ? src_stride : 0);
+		int nextline = (height > 1 ? src_stride : 0);
+		int nextline2 = (height > 2 ? src_stride * 2 : nextline);
+
 		for(finish = width; finish; finish -= 1) {
-			supereagle_declare_variables(uint32_t, in, (height > 1 ? src_stride : 0));
+			int prevcolumn = (x > 0 ? 1 : 0);
+			int nextcolumn = (finish > 1 ? 1 : 0);
+			int nextcolumn2 = (finish > 2 ? 2 : nextcolumn);
+			supereagle_declare_variables(uint32_t, in);
 
 			supereagle_function(supereagle_result, supereagle_interpolate_xrgb8888, supereagle_interpolate2_xrgb8888);
+			x++;
 		}
 
 		src += src_stride;
 		dst += 2 * dst_stride;
+		y++;
+		x = 0;
 	}
 }

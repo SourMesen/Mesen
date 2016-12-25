@@ -22,31 +22,27 @@
 
 #define supertwoxsai_interpolate2_xrgb8888(A, B, C, D) ((((A) & 0xFCFCFCFC) >> 2) + (((B) & 0xFCFCFCFC) >> 2) + (((C) & 0xFCFCFCFC) >> 2) + (((D) & 0xFCFCFCFC) >> 2) + (((((A) & 0x03030303) + ((B) & 0x03030303) + ((C) & 0x03030303) + ((D) & 0x03030303)) >> 2) & 0x03030303))
 
-#define supertwoxsai_interpolate_rgb565(A, B) ((((A) & 0xF7DE) >> 1) + (((B) & 0xF7DE) >> 1) + ((A) & (B) & 0x0821));
-
-#define supertwoxsai_interpolate2_rgb565(A, B, C, D) ((((A) & 0xE79C) >> 2) + (((B) & 0xE79C) >> 2) + (((C) & 0xE79C) >> 2) + (((D) & 0xE79C) >> 2)  + (((((A) & 0x1863) + ((B) & 0x1863) + ((C) & 0x1863) + ((D) & 0x1863)) >> 2) & 0x1863))
-
 #define supertwoxsai_result(A, B, C, D) (((A) != (C) || (A) != (D)) - ((B) != (C) || (B) != (D)))
 
 #ifndef supertwoxsai_declare_variables
-#define supertwoxsai_declare_variables(typename_t, in, nextline) \
+#define supertwoxsai_declare_variables(typename_t, in) \
          typename_t product1a, product1b, product2a, product2b; \
-         const typename_t colorB0 = *(in - nextline - 1); \
-         const typename_t colorB1 = *(in - nextline + 0); \
-         const typename_t colorB2 = *(in - nextline + 1); \
-         const typename_t colorB3 = *(in - nextline + 2); \
-         const typename_t color4  = *(in - 1); \
+         const typename_t colorB0 = *(in - prevline - prevcolumn); \
+         const typename_t colorB1 = *(in - prevline + 0); \
+         const typename_t colorB2 = *(in - prevline + nextcolumn); \
+         const typename_t colorB3 = *(in - prevline + nextcolumn2); \
+         const typename_t color4  = *(in - prevcolumn); \
          const typename_t color5  = *(in + 0); \
-         const typename_t color6  = *(in + 1); \
-         const typename_t colorS2 = *(in + 2); \
-         const typename_t color1  = *(in + nextline - 1); \
+         const typename_t color6  = *(in + nextcolumn); \
+         const typename_t colorS2 = *(in + nextcolumn2); \
+         const typename_t color1  = *(in + nextline - prevcolumn); \
          const typename_t color2  = *(in + nextline + 0); \
-         const typename_t color3  = *(in + nextline + 1); \
-         const typename_t colorS1 = *(in + nextline + 2); \
-         const typename_t colorA0 = *(in + nextline + nextline - 1); \
-         const typename_t colorA1 = *(in + nextline + nextline + 0); \
-         const typename_t colorA2 = *(in + nextline + nextline + 1); \
-         const typename_t colorA3 = *(in + nextline + nextline + 2)
+         const typename_t color3  = *(in + nextline + nextcolumn); \
+         const typename_t colorS1 = *(in + nextline + nextcolumn2); \
+         const typename_t colorA0 = *(in + nextline2 - prevcolumn); \
+         const typename_t colorA1 = *(in + nextline2 + 0); \
+         const typename_t colorA2 = *(in + nextline2 + nextcolumn); \
+         const typename_t colorA3 = *(in + nextline2 + nextcolumn2)
 #endif
 
 #ifndef supertwoxsai_function
@@ -115,12 +111,21 @@
 void supertwoxsai_generic_xrgb8888(unsigned width, unsigned height, uint32_t *src, unsigned src_stride, uint32_t *dst, unsigned dst_stride)
 {
 	unsigned finish;
+	int y = 0;
+	int x = 0;
 	for(; height; height--) {
 		uint32_t *in = (uint32_t*)src;
 		uint32_t *out = (uint32_t*)dst;
 
+		int prevline = (y > 0 ? src_stride : 0);
+		int nextline = (height > 1 ? src_stride : 0);
+		int nextline2 = (height > 2 ? src_stride * 2 : nextline);
+
 		for(finish = width; finish; finish -= 1) {
-			supertwoxsai_declare_variables(uint32_t, in, (height > 1 ? src_stride : 0));
+			int prevcolumn = (x > 0 ? 1 : 0);
+			int nextcolumn = (finish > 1 ? 1 : 0);
+			int nextcolumn2 = (finish > 2 ? 2 : nextcolumn);
+			supertwoxsai_declare_variables(uint32_t, in);
 
 			//---------------------------    B1 B2
 			//                             4  5  6 S2
@@ -129,9 +134,12 @@ void supertwoxsai_generic_xrgb8888(unsigned width, unsigned height, uint32_t *sr
 			//--------------------------------------
 
 			supertwoxsai_function(supertwoxsai_result, supertwoxsai_interpolate_xrgb8888, supertwoxsai_interpolate2_xrgb8888);
+			x++;
 		}
 
 		src += src_stride;
 		dst += 2 * dst_stride;
+		y++;
+		x = 0;
 	}
 }
