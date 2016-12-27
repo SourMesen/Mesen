@@ -40,7 +40,7 @@
       <Control ID="mnuNoneFilter">Nenhum</Control>
       <Control ID="mnuNtscFilter">NTSC</Control>
       <Control ID="mnuBilinearInterpolation">Usar interpolação Bilinear</Control>
-      <Control ID="mnuAudioConfig">Audio</Control>
+      <Control ID="mnuAudioConfig">Áudio</Control>
       <Control ID="mnuInput">Controles</Control>
       <Control ID="mnuRegion">Região</Control>
       <Control ID="mnuRegionAuto">Auto</Control>
@@ -64,7 +64,7 @@
       <Control ID="mnuProfile">Configurar perfil</Control>
       <Control ID="mnuMovies">Vídeos</Control>
       <Control ID="mnuPlayMovie">Reproduzir...</Control>
-      <Control ID="mnuRecordFrom">Gravar a partir...</Control>
+      <Control ID="mnuRecordFrom">Gravar a partir de...</Control>
       <Control ID="mnuRecordFromStart">Do início do jogo</Control>
       <Control ID="mnuRecordFromNow">Do estado atual</Control>
       <Control ID="mnuStopMovie">Parar</Control>
@@ -277,7 +277,7 @@
       <Control ID="chkUseAlternativeMmc3Irq">Utilizar a versão alternativa de componentes de IRQs de MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
       <Control ID="lblRamPowerOnState">Estado inicial da memória durante o início:</Control>
-      <Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz as piscadas em alguns jogos)</Control>
+      <Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
 
       <Control ID="tpgOverclocking">Overclocking</Control>
       <Control ID="grpOverclocking">Overclocking de CPU</Control>
@@ -315,7 +315,7 @@
       <Control ID="chkNesFormat">.NES</Control>
       <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
       <Control ID="chkMmoFormat">.MMO (Vídeos do Mesen)</Control>
-      <Control ID="chkMstFormat">.MST (Partidas guardadas do Mesen)</Control>
+      <Control ID="chkMstFormat">.MST (Saves do Mesen)</Control>
       <Control ID="tpgAdvanced">Avançado</Control>
       <Control ID="chkFdsAutoLoadDisk">Inserir a parte A do disco 1 ao carregar um jogo FDS</Control>
       <Control ID="tpgShortcuts">Atalhos</Control>
@@ -440,10 +440,10 @@
     <Form ID="frmAbout" Title="Sobre...">
       <Control ID="labelProductName">Mesen</Control>
       <Control ID="labelCopyright">© 2016 M. Bibaud (aka Sour)</Control>
-      <Control ID="lblWebsite">Sitio web:</Control>
+      <Control ID="lblWebsite">Site:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Version: 0.6.1 (Beta)</Control>
-      <Control ID="lblDonate">If you want to support Mesen, please consider donating.&#xA;Thank you for your support!</Control>
+      <Control ID="labelVersion">Versão: 0.6.1 (Beta)</Control>
+      <Control ID="lblDonate">Caso queira apoiar Mesen, por favor considere fazer uma doação ao projeto.&#xA;Obrigado pelo seu apoio!</Control>
       <Control ID="okButton">&amp;OK</Control>
     </Form>
     <Form ID="frmVsGameConfig" Title="Configuração de jogo VS">
@@ -451,15 +451,15 @@
       <Control ID="lblPpuModel">Modelo de PPU</Control>
       <Control ID="grpDipSwitches">Comutadores DIP</Control>
     </Form>
-    <Form ID="frmUpdatePrompt" Title="Mesen - Actualização disponível">
+    <Form ID="frmUpdatePrompt" Title="Mesen - Atualização disponível">
       <Control ID="lblLatestVersion">Última versão: </Control>
       <Control ID="lblCurrentVersion">Versão atual: </Control>
       <Control ID="lblChangeLog">Changelog</Control>
-      <Control ID="lblDonate">If you want to support Mesen, please consider donating. Thank you!</Control>
+      <Control ID="lblDonate">Caso queira apoiar Mesen, por favor considere fazer uma doação ao projeto. Obrigado!</Control>
       <Control ID="btnUpdate">Atualizar</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
-    <Form ID="frmGetKey" Title="Configuração de botão">
+    <Form ID="frmGetKey" Title="Configuração dos botões">
       <Control ID="lblSetKeyMessage">Pressione qualquer tecla do teclado ou do joystick para registrar esse botão.</Control>
     </Form>
     <Form ID="frmPlayerProfile" Title="Perfil do Jogador">
@@ -498,11 +498,11 @@
 
     <Message ID="RandomGameNoGameFound">Mesen não encontrou nenhum jogo para carregar.</Message>
     
-    <Message ID="NsfNextTrack">Track seguinte (Espera para jogar mais rápido)</Message>
+    <Message ID="NsfNextTrack">Track seguinte (Esperar para jogar mais rápido)</Message>
     <Message ID="NsfUnnamedTrack">[sem nome]</Message>
     <Message ID="NsfUnknownField">[desconhecido]</Message>
     <Message ID="CouldNotInstallRuntime">O pacote Visual C++ Redistributable para Visual Studio 2015 não foi instalado corretamente.</Message>
-    <Message ID="EmptyState">&lt;Não há cópia de segurança&gt;</Message>
+    <Message ID="EmptyState">&lt;Não há State&gt;</Message>
     <Message ID="ErrorWhileCheckingUpdates">Houve um erro na busca por atualizações.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
     <Message ID="FdsBiosNotFound">Não foi encontrada uma bios para FDS. É preciso de uma bios para jogos do FDS.&#xA;&#xA;Deseja selecionar uma bios manualmente?</Message>
     <Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
@@ -513,7 +513,7 @@
     <Message ID="PatchAndReset">Aplicar o patch e reiniciar o jogo?</Message>
     <Message ID="SelectRomIps">Selecione a ROM que corresponde ao arquivo IPS selecionado.</Message>
     <Message ID="UnableToDownload">Não foi possível baixar o arquivo. Verifique sua conexão com a internet e tente de novo.&#xA;&#xA;Detalhes do erro:</Message>
-    <Message ID="UnableToStartMissingDependencies">Mesen could not launch because it was unable to load MesenCore.dll due to missing dependencies.</Message>
+    <Message ID="UnableToStartMissingDependencies">Mesen não pode iniciar pois foi incapaz de carregar MesenCore.dll devido a falta de dependências.</Message>
     <Message ID="UnableToStartMissingFiles">Mesen não pode iniciar devido a falta de arquivos.&#xA;&#xA;Erro: Não se encontra o arquivo MesenCore.dll.</Message>
     <Message ID="UnexpectedError">Houve um erro inesperado.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">Erro ao baixar - o arquivo parece estar danificado. Por favor, visite o site de Mesen para baixar manualmente a versão mais recente.</Message>
@@ -544,7 +544,7 @@
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
-      <Value ID="None">Ninguno</Value>
+      <Value ID="None">Nenhum</Value>
       <Value ID="StandardController">Controle padrão</Value>
       <Value ID="Zapper">Zapper</Value>
       <Value ID="ArkanoidController">Controle Arkanoid</Value>
