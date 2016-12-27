@@ -84,7 +84,11 @@ namespace Mesen.GUI.Forms
 			this.mnuFullscreen = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuVideoFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNoneFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem21 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuNtscFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNtscBisqwitQuarterFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNtscBisqwitHalfFilter = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNtscBisqwitFullFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem15 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuXBRZ2xFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuXBRZ3xFilter = new System.Windows.Forms.ToolStripMenuItem();
@@ -259,50 +263,50 @@ namespace Mesen.GUI.Forms
 			this.mnuOpen.Image = global::Mesen.GUI.Properties.Resources.FolderOpen;
 			this.mnuOpen.Name = "mnuOpen";
 			this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.mnuOpen.Size = new System.Drawing.Size(152, 22);
+			this.mnuOpen.Size = new System.Drawing.Size(146, 22);
 			this.mnuOpen.Text = "Open";
 			this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(143, 6);
 			// 
 			// mnuSaveState
 			// 
 			this.mnuSaveState.Name = "mnuSaveState";
-			this.mnuSaveState.Size = new System.Drawing.Size(152, 22);
+			this.mnuSaveState.Size = new System.Drawing.Size(146, 22);
 			this.mnuSaveState.Text = "Save State";
 			this.mnuSaveState.DropDownOpening += new System.EventHandler(this.mnuSaveState_DropDownOpening);
 			// 
 			// mnuLoadState
 			// 
 			this.mnuLoadState.Name = "mnuLoadState";
-			this.mnuLoadState.Size = new System.Drawing.Size(152, 22);
+			this.mnuLoadState.Size = new System.Drawing.Size(146, 22);
 			this.mnuLoadState.Text = "Load State";
 			this.mnuLoadState.DropDownOpening += new System.EventHandler(this.mnuLoadState_DropDownOpening);
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(143, 6);
 			// 
 			// mnuRecentFiles
 			// 
 			this.mnuRecentFiles.Name = "mnuRecentFiles";
-			this.mnuRecentFiles.Size = new System.Drawing.Size(152, 22);
+			this.mnuRecentFiles.Size = new System.Drawing.Size(146, 22);
 			this.mnuRecentFiles.Text = "Recent Files";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(143, 6);
 			// 
 			// mnuExit
 			// 
 			this.mnuExit.Image = global::Mesen.GUI.Properties.Resources.Exit;
 			this.mnuExit.Name = "mnuExit";
-			this.mnuExit.Size = new System.Drawing.Size(152, 22);
+			this.mnuExit.Size = new System.Drawing.Size(146, 22);
 			this.mnuExit.Text = "Exit";
 			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
@@ -633,7 +637,11 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuVideoFilter.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuNoneFilter,
+            this.toolStripMenuItem21,
             this.mnuNtscFilter,
+            this.mnuNtscBisqwitQuarterFilter,
+            this.mnuNtscBisqwitHalfFilter,
+            this.mnuNtscBisqwitFullFilter,
             this.toolStripMenuItem15,
             this.mnuXBRZ2xFilter,
             this.mnuXBRZ3xFilter,
@@ -669,12 +677,38 @@ namespace Mesen.GUI.Forms
 			this.mnuNoneFilter.Text = "None";
 			this.mnuNoneFilter.Click += new System.EventHandler(this.mnuNoneFilter_Click);
 			// 
+			// toolStripMenuItem21
+			// 
+			this.toolStripMenuItem21.Name = "toolStripMenuItem21";
+			this.toolStripMenuItem21.Size = new System.Drawing.Size(203, 6);
+			// 
 			// mnuNtscFilter
 			// 
 			this.mnuNtscFilter.Name = "mnuNtscFilter";
 			this.mnuNtscFilter.Size = new System.Drawing.Size(206, 22);
 			this.mnuNtscFilter.Text = "NTSC";
 			this.mnuNtscFilter.Click += new System.EventHandler(this.mnuNtscFilter_Click);
+			// 
+			// mnuNtscBisqwitQuarterFilter
+			// 
+			this.mnuNtscBisqwitQuarterFilter.Name = "mnuNtscBisqwitQuarterFilter";
+			this.mnuNtscBisqwitQuarterFilter.Size = new System.Drawing.Size(206, 22);
+			this.mnuNtscBisqwitQuarterFilter.Text = "NTSC 2x (Bisqwit)";
+			this.mnuNtscBisqwitQuarterFilter.Click += new System.EventHandler(this.mnuNtscBisqwitQuarterFilter_Click);
+			// 
+			// mnuNtscBisqwitHalfFilter
+			// 
+			this.mnuNtscBisqwitHalfFilter.Name = "mnuNtscBisqwitHalfFilter";
+			this.mnuNtscBisqwitHalfFilter.Size = new System.Drawing.Size(206, 22);
+			this.mnuNtscBisqwitHalfFilter.Text = "NTSC 4x (Bisqwit)";
+			this.mnuNtscBisqwitHalfFilter.Click += new System.EventHandler(this.mnuNtscBisqwitHalfFilter_Click);
+			// 
+			// mnuNtscBisqwitFullFilter
+			// 
+			this.mnuNtscBisqwitFullFilter.Name = "mnuNtscBisqwitFullFilter";
+			this.mnuNtscBisqwitFullFilter.Size = new System.Drawing.Size(206, 22);
+			this.mnuNtscBisqwitFullFilter.Text = "NTSC 8x (Bisqwit)";
+			this.mnuNtscBisqwitFullFilter.Click += new System.EventHandler(this.mnuNtscBisqwitFullFilter_Click);
 			// 
 			// toolStripMenuItem15
 			// 
@@ -1458,6 +1492,10 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuReportBug;
 		private System.Windows.Forms.ToolStripMenuItem mnuRunAllGameTests;
 		private System.Windows.Forms.ToolStripMenuItem mnuRandomGame;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem21;
+		private System.Windows.Forms.ToolStripMenuItem mnuNtscBisqwitHalfFilter;
+		private System.Windows.Forms.ToolStripMenuItem mnuNtscBisqwitFullFilter;
+		private System.Windows.Forms.ToolStripMenuItem mnuNtscBisqwitQuarterFilter;
 	}
 }
 

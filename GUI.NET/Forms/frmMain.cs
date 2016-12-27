@@ -1150,6 +1150,10 @@ namespace Mesen.GUI.Forms
 		{
 			mnuNoneFilter.Checked = (filterType == VideoFilterType.None);
 			mnuNtscFilter.Checked = (filterType == VideoFilterType.NTSC);
+			mnuNtscBisqwitFullFilter.Checked = (filterType == VideoFilterType.BisqwitNtsc);
+			mnuNtscBisqwitHalfFilter.Checked = (filterType == VideoFilterType.BisqwitNtscHalfRes);
+			mnuNtscBisqwitQuarterFilter.Checked = (filterType == VideoFilterType.BisqwitNtscQuarterRes);
+
 			mnuXBRZ2xFilter.Checked = (filterType == VideoFilterType.xBRZ2x);
 			mnuXBRZ3xFilter.Checked = (filterType == VideoFilterType.xBRZ3x);
 			mnuXBRZ4xFilter.Checked = (filterType == VideoFilterType.xBRZ4x);
@@ -1288,6 +1292,21 @@ namespace Mesen.GUI.Forms
 		private void mnuPrescale4xFilter_Click(object sender, EventArgs e)
 		{
 			SetVideoFilter(VideoFilterType.Prescale4x);
+		}
+
+		private void mnuNtscBisqwitFullFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.BisqwitNtsc);
+		}
+
+		private void mnuNtscBisqwitHalfFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.BisqwitNtscHalfRes);
+		}
+
+		private void mnuNtscBisqwitQuarterFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.BisqwitNtscQuarterRes);
 		}
 
 		private void InitializeFdsDiskMenu()

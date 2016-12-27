@@ -250,6 +250,11 @@
       <Control ID="trkResolution">Résolution</Control>
       <Control ID="trkSharpness">Piqué</Control>
       <Control ID="chkMergeFields">Combiner les images alternées</Control>
+
+      <Control ID="trkYFilterLength">Filtre Y (Flou horizontal)</Control>
+      <Control ID="trkIFilterLength">Filtre I (Dispersion horizontale)</Control>
+      <Control ID="trkQFilterLength">Filter Q (Dispersion horizontale)</Control>
+      
       <Control ID="grpScanlines">Lignes de balayage</Control>
       <Control ID="trkScanlines">Lignes de balayage</Control>
       <Control ID="btnResetPictureSettings">Réinitialiser</Control>
@@ -574,6 +579,9 @@
     <Enum ID="VideoFilterType">
       <Value ID="None">Aucun</Value>
       <Value ID="NTSC">NTSC</Value>
+      <Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
+      <Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
+      <Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
       <Value ID="xBRZ2x">xBRZ 2x</Value>
       <Value ID="xBRZ3x">xBRZ 3x</Value>
       <Value ID="xBRZ4x">xBRZ 4x</Value>

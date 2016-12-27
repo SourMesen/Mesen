@@ -249,6 +249,11 @@
       <Control ID="trkResolution">Resolución</Control>
       <Control ID="trkSharpness">Nitidez</Control>
       <Control ID="chkMergeFields">Combinar imágenes alternas</Control>
+
+      <Control ID="trkYFilterLength">Y Filter (Horizontal Blur)</Control>
+      <Control ID="trkIFilterLength">I Filter (Horizontal Bleed)</Control>
+      <Control ID="trkQFilterLength">Q Filter (Horizontal Bleed)</Control>
+      
       <Control ID="grpScanlines">Lineas de escaneo</Control>
       <Control ID="trkScanlines">Lineas de escaneo</Control>
       <Control ID="btnResetPictureSettings">Reiniciar</Control>
@@ -559,6 +564,9 @@
     <Enum ID="VideoFilterType">
       <Value ID="None">Ninguno</Value>
       <Value ID="NTSC">NTSC</Value>
+      <Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
+      <Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
+      <Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
       <Value ID="xBRZ2x">xBRZ 2x</Value>
       <Value ID="xBRZ3x">xBRZ 3x</Value>
       <Value ID="xBRZ4x">xBRZ 4x</Value>

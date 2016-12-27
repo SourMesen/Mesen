@@ -1105,6 +1105,9 @@
     <ClInclude Include="CrossFeedFilter.h">
       <Filter>Nes\APU\Filters</Filter>
     </ClInclude>
+    <ClInclude Include="BisqwitNtscFilter.h">
+      <Filter>VideoDecoder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1292,6 +1295,9 @@
     </ClCompile>
     <ClCompile Include="CrossFeedFilter.cpp">
       <Filter>Nes\APU\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="BisqwitNtscFilter.cpp">
+      <Filter>VideoDecoder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

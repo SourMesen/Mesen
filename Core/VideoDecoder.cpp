@@ -3,6 +3,7 @@
 #include "VideoDecoder.h"
 #include "EmulationSettings.h"
 #include "DefaultVideoFilter.h"
+#include "BisqwitNtscFilter.h"
 #include "NtscFilter.h"
 #include "HdVideoFilter.h"
 #include "ScaleFilter.h"
@@ -16,6 +17,13 @@ VideoDecoder* VideoDecoder::GetInstance()
 		Instance.reset(new VideoDecoder());
 	}
 	return Instance.get();
+}
+
+void VideoDecoder::Release()
+{
+	if(Instance) {
+		Instance.reset();
+	}
 }
 
 VideoDecoder::VideoDecoder()
@@ -58,6 +66,9 @@ void VideoDecoder::UpdateVideoFilter()
 		switch(_videoFilterType) {
 			case VideoFilterType::None: _videoFilter.reset(new DefaultVideoFilter()); break;
 			case VideoFilterType::NTSC: _videoFilter.reset(new NtscFilter()); break;
+			case VideoFilterType::BisqwitNtsc: _videoFilter.reset(new BisqwitNtscFilter(1)); break;
+			case VideoFilterType::BisqwitNtscHalfRes: _videoFilter.reset(new BisqwitNtscFilter(2)); break;
+			case VideoFilterType::BisqwitNtscQuarterRes: _videoFilter.reset(new BisqwitNtscFilter(4)); break;
 			case VideoFilterType::xBRZ2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 2)); break;
 			case VideoFilterType::xBRZ3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 3)); break;
 			case VideoFilterType::xBRZ4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 4)); break;

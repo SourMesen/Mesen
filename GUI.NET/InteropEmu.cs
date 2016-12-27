@@ -152,7 +152,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetVideoResizeFilter(VideoResizeFilter filter);
 		[DllImport(DLLPath)] public static extern void SetRgbPalette(byte[] palette);
 		[DllImport(DLLPath)] public static extern void SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity);
-		[DllImport(DLLPath)] public static extern void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, [MarshalAs(UnmanagedType.I1)]bool mergeFields);
+		[DllImport(DLLPath)] public static extern void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, [MarshalAs(UnmanagedType.I1)]bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength);
 		[DllImport(DLLPath)] public static extern void SetInputDisplaySettings(byte visiblePorts, InputDisplayPosition displayPosition, [MarshalAs(UnmanagedType.I1)]bool displayHorizontally);
 		[DllImport(DLLPath)] public static extern void SetAutoSaveOptions(UInt32 delayInMinutes, [MarshalAs(UnmanagedType.I1)]bool showMessage);
 
@@ -1088,23 +1088,26 @@ namespace Mesen.GUI
 	{
 		None = 0,
 		NTSC = 1,
-		xBRZ2x = 2,
-		xBRZ3x = 3,
-		xBRZ4x = 4,
-		xBRZ5x = 5,
-		xBRZ6x = 6,
-		HQ2x = 7,
-		HQ3x = 8,
-		HQ4x = 9,
-		Scale2x = 10,
-		Scale3x = 11,
-		Scale4x = 12,
-		_2xSai = 13,
-		Super2xSai = 14,
-		SuperEagle = 15,
-		Prescale2x = 16,
-		Prescale3x = 17,
-		Prescale4x = 18
+		BisqwitNtscQuarterRes = 2,
+		BisqwitNtscHalfRes = 3,
+		BisqwitNtsc = 4,
+		xBRZ2x = 5,
+		xBRZ3x = 6,
+		xBRZ4x = 7,
+		xBRZ5x = 8,
+		xBRZ6x = 9,
+		HQ2x = 10,
+		HQ3x = 11,
+		HQ4x = 12,
+		Scale2x = 13,
+		Scale3x = 14,
+		Scale4x = 15,
+		_2xSai = 16,
+		Super2xSai = 17,
+		SuperEagle = 18,
+		Prescale2x = 19,
+		Prescale3x = 20,
+		Prescale4x = 21,
 	}
 
 	public enum VideoResizeFilter

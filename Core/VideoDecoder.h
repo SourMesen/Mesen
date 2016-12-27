@@ -50,6 +50,8 @@ public:
 	VideoDecoder();
 	~VideoDecoder();
 
+	static void Release();
+
 	void DecodeFrame();
 	void TakeScreenshot();
 

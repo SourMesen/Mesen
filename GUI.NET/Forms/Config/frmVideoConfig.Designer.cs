@@ -47,7 +47,11 @@
 			this.btnSelectPreset = new System.Windows.Forms.Button();
 			this.btnResetPictureSettings = new System.Windows.Forms.Button();
 			this.grpNtscFilter = new System.Windows.Forms.GroupBox();
-			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+			this.tlpNtscFilter2 = new System.Windows.Forms.TableLayoutPanel();
+			this.trkYFilterLength = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.trkIFilterLength = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.trkQFilterLength = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.tlpNtscFilter1 = new System.Windows.Forms.TableLayoutPanel();
 			this.trkArtifacts = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.trkBleed = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.trkFringing = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
@@ -105,11 +109,11 @@
 			this.contextPaletteList = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuDefaultPalette = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuPaletteNostalgia = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteNesClassic = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPaletteNostalgia = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPaletteNesClassic = new System.Windows.Forms.ToolStripMenuItem();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -120,7 +124,8 @@
 			this.tableLayoutPanel5.SuspendLayout();
 			this.tableLayoutPanel7.SuspendLayout();
 			this.grpNtscFilter.SuspendLayout();
-			this.tableLayoutPanel6.SuspendLayout();
+			this.tlpNtscFilter2.SuspendLayout();
+			this.tlpNtscFilter1.SuspendLayout();
 			this.grpCommon.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.grpScanlines.SuspendLayout();
@@ -386,7 +391,8 @@
 			// 
 			// grpNtscFilter
 			// 
-			this.grpNtscFilter.Controls.Add(this.tableLayoutPanel6);
+			this.grpNtscFilter.Controls.Add(this.tlpNtscFilter2);
+			this.grpNtscFilter.Controls.Add(this.tlpNtscFilter1);
 			this.grpNtscFilter.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpNtscFilter.Location = new System.Drawing.Point(262, 27);
 			this.grpNtscFilter.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
@@ -397,31 +403,98 @@
 			this.grpNtscFilter.TabStop = false;
 			this.grpNtscFilter.Text = "NTSC Filter";
 			// 
-			// tableLayoutPanel6
+			// tlpNtscFilter2
 			// 
-			this.tableLayoutPanel6.ColumnCount = 1;
-			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.Controls.Add(this.trkArtifacts, 0, 0);
-			this.tableLayoutPanel6.Controls.Add(this.trkBleed, 0, 1);
-			this.tableLayoutPanel6.Controls.Add(this.trkFringing, 0, 2);
-			this.tableLayoutPanel6.Controls.Add(this.trkGamma, 0, 3);
-			this.tableLayoutPanel6.Controls.Add(this.trkResolution, 0, 4);
-			this.tableLayoutPanel6.Controls.Add(this.trkSharpness, 0, 5);
-			this.tableLayoutPanel6.Controls.Add(this.chkMergeFields, 0, 6);
-			this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 16);
-			this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-			this.tableLayoutPanel6.RowCount = 7;
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(253, 324);
-			this.tableLayoutPanel6.TabIndex = 5;
+			this.tlpNtscFilter2.ColumnCount = 1;
+			this.tlpNtscFilter2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpNtscFilter2.Controls.Add(this.trkYFilterLength, 0, 0);
+			this.tlpNtscFilter2.Controls.Add(this.trkIFilterLength, 0, 1);
+			this.tlpNtscFilter2.Controls.Add(this.trkQFilterLength, 0, 2);
+			this.tlpNtscFilter2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpNtscFilter2.Location = new System.Drawing.Point(3, 16);
+			this.tlpNtscFilter2.Margin = new System.Windows.Forms.Padding(0);
+			this.tlpNtscFilter2.Name = "tlpNtscFilter2";
+			this.tlpNtscFilter2.RowCount = 7;
+			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpNtscFilter2.Size = new System.Drawing.Size(253, 324);
+			this.tlpNtscFilter2.TabIndex = 6;
+			// 
+			// trkYFilterLength
+			// 
+			this.trkYFilterLength.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.trkYFilterLength.Location = new System.Drawing.Point(0, 0);
+			this.trkYFilterLength.Margin = new System.Windows.Forms.Padding(0);
+			this.trkYFilterLength.Maximum = 400;
+			this.trkYFilterLength.MaximumSize = new System.Drawing.Size(0, 60);
+			this.trkYFilterLength.Minimum = -50;
+			this.trkYFilterLength.MinimumSize = new System.Drawing.Size(206, 50);
+			this.trkYFilterLength.Name = "trkYFilterLength";
+			this.trkYFilterLength.Size = new System.Drawing.Size(253, 50);
+			this.trkYFilterLength.TabIndex = 24;
+			this.trkYFilterLength.Text = "Y Filter (Horizontal Blur)";
+			this.trkYFilterLength.Value = 0;
+			// 
+			// trkIFilterLength
+			// 
+			this.trkIFilterLength.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.trkIFilterLength.Location = new System.Drawing.Point(0, 50);
+			this.trkIFilterLength.Margin = new System.Windows.Forms.Padding(0);
+			this.trkIFilterLength.Maximum = 400;
+			this.trkIFilterLength.MaximumSize = new System.Drawing.Size(400, 55);
+			this.trkIFilterLength.Minimum = 0;
+			this.trkIFilterLength.MinimumSize = new System.Drawing.Size(206, 50);
+			this.trkIFilterLength.Name = "trkIFilterLength";
+			this.trkIFilterLength.Size = new System.Drawing.Size(253, 50);
+			this.trkIFilterLength.TabIndex = 25;
+			this.trkIFilterLength.Text = "I Filter (Horizontal Bleed)";
+			this.trkIFilterLength.Value = 0;
+			// 
+			// trkQFilterLength
+			// 
+			this.trkQFilterLength.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.trkQFilterLength.Location = new System.Drawing.Point(0, 100);
+			this.trkQFilterLength.Margin = new System.Windows.Forms.Padding(0);
+			this.trkQFilterLength.Maximum = 400;
+			this.trkQFilterLength.MaximumSize = new System.Drawing.Size(0, 41);
+			this.trkQFilterLength.Minimum = 0;
+			this.trkQFilterLength.MinimumSize = new System.Drawing.Size(206, 50);
+			this.trkQFilterLength.Name = "trkQFilterLength";
+			this.trkQFilterLength.Size = new System.Drawing.Size(253, 50);
+			this.trkQFilterLength.TabIndex = 26;
+			this.trkQFilterLength.Text = "Q Filter (Horizontal Bleed)";
+			this.trkQFilterLength.Value = 0;
+			// 
+			// tlpNtscFilter1
+			// 
+			this.tlpNtscFilter1.ColumnCount = 1;
+			this.tlpNtscFilter1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpNtscFilter1.Controls.Add(this.trkArtifacts, 0, 0);
+			this.tlpNtscFilter1.Controls.Add(this.trkBleed, 0, 1);
+			this.tlpNtscFilter1.Controls.Add(this.trkFringing, 0, 2);
+			this.tlpNtscFilter1.Controls.Add(this.trkGamma, 0, 3);
+			this.tlpNtscFilter1.Controls.Add(this.trkResolution, 0, 4);
+			this.tlpNtscFilter1.Controls.Add(this.trkSharpness, 0, 5);
+			this.tlpNtscFilter1.Controls.Add(this.chkMergeFields, 0, 6);
+			this.tlpNtscFilter1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpNtscFilter1.Location = new System.Drawing.Point(3, 16);
+			this.tlpNtscFilter1.Margin = new System.Windows.Forms.Padding(0);
+			this.tlpNtscFilter1.Name = "tlpNtscFilter1";
+			this.tlpNtscFilter1.RowCount = 7;
+			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpNtscFilter1.Size = new System.Drawing.Size(253, 324);
+			this.tlpNtscFilter1.TabIndex = 5;
 			// 
 			// trkArtifacts
 			// 
@@ -923,7 +996,7 @@
 			this.tableLayoutPanel2.Controls.Add(this.btnSelectPalette, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.btnLoadPalFile, 0, 1);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(388, 0);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(354, 0);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 4;
@@ -931,7 +1004,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(133, 122);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(167, 370);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// btnExportPalette
@@ -940,7 +1013,7 @@
 			this.btnExportPalette.Dock = System.Windows.Forms.DockStyle.Top;
 			this.btnExportPalette.Location = new System.Drawing.Point(3, 61);
 			this.btnExportPalette.Name = "btnExportPalette";
-			this.btnExportPalette.Size = new System.Drawing.Size(127, 23);
+			this.btnExportPalette.Size = new System.Drawing.Size(161, 23);
 			this.btnExportPalette.TabIndex = 3;
 			this.btnExportPalette.Text = "Export Palette";
 			this.btnExportPalette.UseVisualStyleBackColor = true;
@@ -953,7 +1026,7 @@
 			this.btnSelectPalette.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectPalette.Image")));
 			this.btnSelectPalette.Location = new System.Drawing.Point(3, 3);
 			this.btnSelectPalette.Name = "btnSelectPalette";
-			this.btnSelectPalette.Size = new System.Drawing.Size(127, 23);
+			this.btnSelectPalette.Size = new System.Drawing.Size(161, 23);
 			this.btnSelectPalette.TabIndex = 2;
 			this.btnSelectPalette.Text = "Load Preset Palette...";
 			this.btnSelectPalette.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -966,7 +1039,7 @@
 			this.btnLoadPalFile.Dock = System.Windows.Forms.DockStyle.Top;
 			this.btnLoadPalFile.Location = new System.Drawing.Point(3, 32);
 			this.btnLoadPalFile.Name = "btnLoadPalFile";
-			this.btnLoadPalFile.Size = new System.Drawing.Size(127, 23);
+			this.btnLoadPalFile.Size = new System.Drawing.Size(161, 23);
 			this.btnLoadPalFile.TabIndex = 0;
 			this.btnLoadPalFile.Text = "Load Palette File";
 			this.btnLoadPalFile.UseVisualStyleBackColor = true;
@@ -1107,6 +1180,20 @@
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(232, 6);
 			// 
+			// mnuPaletteNostalgia
+			// 
+			this.mnuPaletteNostalgia.Name = "mnuPaletteNostalgia";
+			this.mnuPaletteNostalgia.Size = new System.Drawing.Size(235, 22);
+			this.mnuPaletteNostalgia.Text = "Nostalgia (by FirebrandX)";
+			this.mnuPaletteNostalgia.Click += new System.EventHandler(this.mnuPaletteNostalgia_Click);
+			// 
+			// mnuPaletteNesClassic
+			// 
+			this.mnuPaletteNesClassic.Name = "mnuPaletteNesClassic";
+			this.mnuPaletteNesClassic.Size = new System.Drawing.Size(235, 22);
+			this.mnuPaletteNesClassic.Text = "NES Classic (by FirebrandX)";
+			this.mnuPaletteNesClassic.Click += new System.EventHandler(this.mnuPaletteNesClassic_Click);
+			// 
 			// mnuPaletteUnsaturated
 			// 
 			this.mnuPaletteUnsaturated.Name = "mnuPaletteUnsaturated";
@@ -1127,20 +1214,6 @@
 			this.mnuPaletteNestopiaRgb.Size = new System.Drawing.Size(235, 22);
 			this.mnuPaletteNestopiaRgb.Text = "Nestopia (RGB)";
 			this.mnuPaletteNestopiaRgb.Click += new System.EventHandler(this.mnuPaletteNestopiaRgb_Click);
-			// 
-			// mnuPaletteNostalgia
-			// 
-			this.mnuPaletteNostalgia.Name = "mnuPaletteNostalgia";
-			this.mnuPaletteNostalgia.Size = new System.Drawing.Size(235, 22);
-			this.mnuPaletteNostalgia.Text = "Nostalgia (by FirebrandX)";
-			this.mnuPaletteNostalgia.Click += new System.EventHandler(this.mnuPaletteNostalgia_Click);
-			// 
-			// mnuPaletteNesClassic
-			// 
-			this.mnuPaletteNesClassic.Name = "mnuPaletteNesClassic";
-			this.mnuPaletteNesClassic.Size = new System.Drawing.Size(235, 22);
-			this.mnuPaletteNesClassic.Text = "NES Classic (by FirebrandX)";
-			this.mnuPaletteNesClassic.Click += new System.EventHandler(this.mnuPaletteNesClassic_Click);
 			// 
 			// frmVideoConfig
 			// 
@@ -1169,8 +1242,9 @@
 			this.tableLayoutPanel7.ResumeLayout(false);
 			this.tableLayoutPanel7.PerformLayout();
 			this.grpNtscFilter.ResumeLayout(false);
-			this.tableLayoutPanel6.ResumeLayout(false);
-			this.tableLayoutPanel6.PerformLayout();
+			this.tlpNtscFilter2.ResumeLayout(false);
+			this.tlpNtscFilter1.ResumeLayout(false);
+			this.tlpNtscFilter1.PerformLayout();
 			this.grpCommon.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
@@ -1252,7 +1326,7 @@
 		private Controls.ctrlHorizontalTrackbar trkSaturation;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
 		private System.Windows.Forms.GroupBox grpNtscFilter;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+		private System.Windows.Forms.TableLayoutPanel tlpNtscFilter1;
 		private Controls.ctrlHorizontalTrackbar trkArtifacts;
 		private Controls.ctrlHorizontalTrackbar trkBleed;
 		private Controls.ctrlHorizontalTrackbar trkFringing;
@@ -1291,5 +1365,9 @@
 		private System.Windows.Forms.CheckBox chkForceSpritesFirstColumn;
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteNostalgia;
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteNesClassic;
+		private System.Windows.Forms.TableLayoutPanel tlpNtscFilter2;
+		private Controls.ctrlHorizontalTrackbar trkYFilterLength;
+		private Controls.ctrlHorizontalTrackbar trkIFilterLength;
+		private Controls.ctrlHorizontalTrackbar trkQFilterLength;
 	}
 }

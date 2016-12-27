@@ -38,6 +38,10 @@ namespace Mesen.GUI.Config
 		public Int32 NtscSharpness = 0;
 		public bool NtscMergeFields = false;
 
+		public Int32 NtscYFilterLength = 0;
+		public Int32 NtscIFilterLength = 50;
+		public Int32 NtscQFilterLength = 50;
+
 		public bool DisableBackground = false;
 		public bool DisableSprites = false;
 		public bool ForceBackgroundFirstColumn = false;
@@ -70,7 +74,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetVideoAspectRatio(videoInfo.AspectRatio);
 
 			InteropEmu.SetPictureSettings(videoInfo.Brightness / 100.0, videoInfo.Contrast / 100.0, videoInfo.Saturation / 100.0, videoInfo.Hue / 100.0, videoInfo.ScanlineIntensity / 100.0);
-			InteropEmu.SetNtscFilterSettings(videoInfo.NtscArtifacts / 100.0, videoInfo.NtscBleed / 100.0, videoInfo.NtscFringing / 100.0, videoInfo.NtscGamma / 100.0, videoInfo.NtscResolution / 100.0, videoInfo.NtscSharpness / 100.0, videoInfo.NtscMergeFields);
+			InteropEmu.SetNtscFilterSettings(videoInfo.NtscArtifacts / 100.0, videoInfo.NtscBleed / 100.0, videoInfo.NtscFringing / 100.0, videoInfo.NtscGamma / 100.0, videoInfo.NtscResolution / 100.0, videoInfo.NtscSharpness / 100.0, videoInfo.NtscMergeFields, videoInfo.NtscYFilterLength / 100.0, videoInfo.NtscIFilterLength / 100.0, videoInfo.NtscQFilterLength / 100.0);
 
 			if(!string.IsNullOrWhiteSpace(videoInfo.PaletteData)) {
 				try {

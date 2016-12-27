@@ -250,6 +250,11 @@
       <Control ID="trkResolution">解像度</Control>
       <Control ID="trkSharpness">シャープネス</Control>
       <Control ID="chkMergeFields">画像をマージする</Control>
+
+      <Control ID="trkYFilterLength">Y フィルター (ブラー)</Control>
+      <Control ID="trkIFilterLength">I フィルター (色にじみ)</Control>
+      <Control ID="trkQFilterLength">Q フィルター (色にじみ)</Control>
+      
       <Control ID="grpScanlines">走査線</Control>
       <Control ID="trkScanlines">走査線</Control>
       <Control ID="btnResetPictureSettings">リセット</Control>
@@ -556,6 +561,9 @@
     <Enum ID="VideoFilterType">
       <Value ID="None">なし</Value>
       <Value ID="NTSC">NTSC</Value>
+      <Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
+      <Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
+      <Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
       <Value ID="xBRZ2x">xBRZ 2x</Value>
       <Value ID="xBRZ3x">xBRZ 3x</Value>
       <Value ID="xBRZ4x">xBRZ 4x</Value>

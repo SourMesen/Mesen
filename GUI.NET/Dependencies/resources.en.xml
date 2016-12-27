@@ -88,6 +88,9 @@
     <Enum ID="VideoFilterType">
       <Value ID="None">None</Value>
       <Value ID="NTSC">NTSC</Value>
+      <Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
+      <Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
+      <Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
       <Value ID="xBRZ2x">xBRZ 2x</Value>
       <Value ID="xBRZ3x">xBRZ 3x</Value>
       <Value ID="xBRZ4x">xBRZ 4x</Value>

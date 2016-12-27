@@ -250,6 +250,11 @@
       <Control ID="trkResolution">Дозвіл</Control>
       <Control ID="trkSharpness">Рiзкiсть</Control>
       <Control ID="chkMergeFields">Злиття полів</Control>
+
+      <Control ID="trkYFilterLength">Y Filter (Horizontal Blur)</Control>
+      <Control ID="trkIFilterLength">I Filter (Horizontal Bleed)</Control>
+      <Control ID="trkQFilterLength">Q Filter (Horizontal Bleed)</Control>
+      
       <Control ID="grpScanlines">Scanlines</Control>
       <Control ID="trkScanlines">Scanlines</Control>
       <Control ID="btnResetPictureSettings">Скидання</Control>
@@ -564,6 +569,9 @@
     <Enum ID="VideoFilterType">
       <Value ID="None">Відсутнє</Value>
       <Value ID="NTSC">NTSC</Value>
+      <Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
+      <Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
+      <Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
       <Value ID="xBRZ2x">xBRZ 2x</Value>
       <Value ID="xBRZ3x">xBRZ 3x</Value>
       <Value ID="xBRZ4x">xBRZ 4x</Value>
