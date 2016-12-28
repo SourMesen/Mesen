@@ -114,6 +114,7 @@
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -1163,9 +1164,10 @@
             this.mnuPaletteNesClassic,
             this.mnuPaletteUnsaturated,
             this.mnuPaletteYuv,
-            this.mnuPaletteNestopiaRgb});
+            this.mnuPaletteNestopiaRgb,
+            this.mnuPaletteSonyCxa2025As});
 			this.contextPaletteList.Name = "contextPicturePresets";
-			this.contextPaletteList.Size = new System.Drawing.Size(236, 142);
+			this.contextPaletteList.Size = new System.Drawing.Size(236, 186);
 			this.contextPaletteList.Opening += new System.ComponentModel.CancelEventHandler(this.contextPaletteList_Opening);
 			// 
 			// mnuDefaultPalette
@@ -1198,7 +1200,7 @@
 			// 
 			this.mnuPaletteUnsaturated.Name = "mnuPaletteUnsaturated";
 			this.mnuPaletteUnsaturated.Size = new System.Drawing.Size(235, 22);
-			this.mnuPaletteUnsaturated.Text = "Unsaturated v5 (by Firebrandx)";
+			this.mnuPaletteUnsaturated.Text = "Unsaturated v6 (by Firebrandx)";
 			this.mnuPaletteUnsaturated.Click += new System.EventHandler(this.mnuPaletteUnsaturated_Click);
 			// 
 			// mnuPaletteYuv
@@ -1214,6 +1216,13 @@
 			this.mnuPaletteNestopiaRgb.Size = new System.Drawing.Size(235, 22);
 			this.mnuPaletteNestopiaRgb.Text = "Nestopia (RGB)";
 			this.mnuPaletteNestopiaRgb.Click += new System.EventHandler(this.mnuPaletteNestopiaRgb_Click);
+			// 
+			// mnuPaletteSonyCxa2025As
+			// 
+			this.mnuPaletteSonyCxa2025As.Name = "mnuPaletteSonyCxa2025As";
+			this.mnuPaletteSonyCxa2025As.Size = new System.Drawing.Size(235, 22);
+			this.mnuPaletteSonyCxa2025As.Text = "Sony CXA2025AS";
+			this.mnuPaletteSonyCxa2025As.Click += new System.EventHandler(this.mnuPaletteSonyCxa2025As_Click);
 			// 
 			// frmVideoConfig
 			// 
@@ -1369,5 +1378,6 @@
 		private Controls.ctrlHorizontalTrackbar trkYFilterLength;
 		private Controls.ctrlHorizontalTrackbar trkIFilterLength;
 		private Controls.ctrlHorizontalTrackbar trkQFilterLength;
+		private System.Windows.Forms.ToolStripMenuItem mnuPaletteSonyCxa2025As;
 	}
 }
