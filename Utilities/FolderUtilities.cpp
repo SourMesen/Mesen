@@ -93,20 +93,20 @@ string FolderUtilities::GetScreenshotFolder()
 
 void FolderUtilities::CreateFolder(string folder)
 {
-	fs::create_directory(folder);
+	fs::create_directory(fs::u8path(folder));
 }
 
 vector<string> FolderUtilities::GetFolders(string rootFolder)
 {
 	vector<string> folders;
 
-	if(!fs::is_directory(rootFolder)) {
+	if(!fs::is_directory(fs::u8path(rootFolder))) {
 		return folders;
 	} 
 
-	for(fs::recursive_directory_iterator i(rootFolder), end; i != end; i++) {
+	for(fs::recursive_directory_iterator i(fs::u8path(rootFolder)), end; i != end; i++) {
 		if(fs::is_directory(i->path())) {
-			folders.push_back(i->path().string());
+			folders.push_back(i->path().u8string());
 		}
 	}
 
@@ -118,7 +118,7 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, string mask,
 	vector<string> files;
 	vector<string> folders = { { rootFolder } };
 
-	if(!fs::is_directory(rootFolder)) {
+	if(!fs::is_directory(fs::u8path(rootFolder))) {
 		return files;
 	}
 
@@ -129,11 +129,11 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, string mask,
 	}
 
 	for(string folder : folders) {
-		for(fs::directory_iterator i(fs::path(folder.c_str())), end; i != end; i++) {
-			string extension = i->path().extension().string();
+		for(fs::directory_iterator i(fs::u8path(folder.c_str())), end; i != end; i++) {
+			string extension = i->path().extension().u8string();
 			std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 			if(extension == mask) {
-				files.push_back(i->path().string());
+				files.push_back(i->path().u8string());
 			}
 		}
 	}
@@ -143,24 +143,24 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, string mask,
 
 string FolderUtilities::GetFilename(string filepath, bool includeExtension)
 {
-	fs::path filename = fs::path(filepath).filename();
+	fs::path filename = fs::u8path(filepath).filename();
 	if(!includeExtension) {
 		filename.replace_extension("");
 	}
-	return filename.string();
+	return filename.u8string();
 }
 
 string FolderUtilities::GetFolderName(string filepath)
 {
-	return fs::path(filepath).remove_filename().string();
+	return fs::u8path(filepath).remove_filename().u8string();
 }
 
 string FolderUtilities::CombinePath(string folder, string filename)
 {
-	return fs::path(folder).append(filename).string();
+	return fs::u8path(folder).append(fs::u8path(filename)).u8string();
 }
 
 int64_t FolderUtilities::GetFileModificationTime(string filepath)
 {
-	return fs::last_write_time(fs::path(filepath)).time_since_epoch() / std::chrono::seconds(1);
+	return fs::last_write_time(fs::u8path(filepath)).time_since_epoch() / std::chrono::seconds(1);
 }
