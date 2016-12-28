@@ -63,7 +63,7 @@
       <Control ID="mnuFindServer">Buscar un servidor público...</Control>
       <Control ID="mnuProfile">Configurar tu perfil</Control>
       <Control ID="mnuMovies">Videos</Control>
-      <Control ID="mnuPlayMovie">Repriducir...</Control>
+      <Control ID="mnuPlayMovie">Reproducir...</Control>
       <Control ID="mnuRecordFrom">Grabar a partir...</Control>
       <Control ID="mnuRecordFromStart">Del inicio del juego</Control>
       <Control ID="mnuRecordFromNow">Del estado actual</Control>
@@ -84,7 +84,7 @@
       <Control ID="mnuDebugger">Depurar</Control>
       <Control ID="mnuLogWindow">Ventana de log</Control>
       <Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
-      <Control ID="mnuRandomGame">Load Random Game</Control>
+      <Control ID="mnuRandomGame">Cargar Juego Aletóreo</Control>
       <Control ID="mnuHelp">Ayuda</Control>
       <Control ID="mnuCheckForUpdates">Buscar actualizaciones</Control>
       <Control ID="mnuReportBug">Enviar un error</Control>
@@ -106,8 +106,8 @@
       <Control ID="tpgGeneral">General</Control>
       <Control ID="tpgAdvanced">Avanzado</Control>
       <Control ID="chkSwapDutyCycles">Invertir ciclos de canales cuadrados (imita viejos clones)</Control>
-      <Control ID="chkSilenceTriangleHighFreq">Cortar el canal de triángulo a frecuencias ultrasónicas (reduce los "pops")</Control>
-      <Control ID="chkReduceDmcPopping">Reduce popping sounds on the DMC channel</Control>
+      <Control ID="chkSilenceTriangleHighFreq">Cortar el canal de triángulo a frecuencias ultrasónicas (reduce los "chasquidos")</Control>
+      <Control ID="chkReduceDmcPopping">Reducir los chasquidos en el canal DMC</Control>
       <Control ID="tpgEffects">Efectos</Control>
       <Control ID="grpStereo">Estéreo</Control>
       <Control ID="radStereoDisabled">Desactivar</Control>
@@ -115,7 +115,7 @@
       <Control ID="radStereoPanning">Panorámico</Control>
       <Control ID="lblStereoDelayMs">ms</Control>
       <Control ID="lblStereoPanningAngle">(Ángulo en grados)</Control>
-      <Control ID="chkCrossFeedEnabled">Enable Crossfeed:</Control>
+      <Control ID="chkCrossFeedEnabled">Activar mezcla de canales:</Control>
       <Control ID="grpReverb">Reverberación</Control>
       <Control ID="chkReverbEnabled">Activar la reverberación</Control>
       <Control ID="lblReverbDelay">Retraso:</Control>
@@ -125,7 +125,7 @@
       <Control ID="chkEnableAudio">Activar el sonido</Control>
       <Control ID="lblSampleRate">Frecuencia de muestreo:</Control>
       <Control ID="lblLatencyMs">ms</Control>
-      <Control ID="lblLatencyWarning">Low values may cause sound problems</Control>
+      <Control ID="lblLatencyWarning">Valores bajos pueden causar problemas de sonido</Control>
       <Control ID="lblAudioLatency">Latencia:</Control>
       <Control ID="lblAudioDevice">Dispositivo:</Control>
       <Control ID="tpgVolume">Volumen</Control>
@@ -146,7 +146,7 @@
       <Control ID="trkNamco163Vol">Namco</Control>
       <Control ID="trkSunsoft5b">Sunsoft</Control>
 
-      <Control ID="tpgPanning">Panning</Control>
+      <Control ID="tpgPanning">Panoramización</Control>
       <Control ID="trkDmcPan">DMC</Control>
       <Control ID="trkNoisePan">Ruido</Control>
       <Control ID="trkTrianglePan">Triángulo</Control>
@@ -244,7 +244,7 @@
       <Control ID="grpNtscFilter">Parámetros de filtro NTSC</Control>
       <Control ID="trkArtifacts">Artefacto</Control>
       <Control ID="trkBleed">Dispersión de colores</Control>
-      <Control ID="trkFringing">Franjas de distrosión</Control>
+      <Control ID="trkFringing">Franjas de distorsión</Control>
       <Control ID="trkGamma">Gama</Control>
       <Control ID="trkResolution">Resolución</Control>
       <Control ID="trkSharpness">Nitidez</Control>
@@ -336,7 +336,7 @@
       <Control ID="chkFdsFastForwardOnLoad">Aumentar la velocidad de la emulación de juegos de carga FDS</Control>
 
       <Control ID="tpgCloudSave">Guardar online</Control>
-      <Control ID="lblGoogleDriveIntegration">Mesen puede utilizar Google Drive para almacenar las partidas guardadas en su cuenta de Google Drive. Cuando se habilita la integración, todos los datos de copia de seguridad de tus juegos (archivos .sav y partidas guardadas rápidas) son fácilmente accesibles desde cualquier ordenador.</Control>
+      <Control ID="lblGoogleDriveIntegration">Mesen puede utilizar Google Drive para almacenar las partidas guardadas en su cuenta de Google Drive. Cuando se habilita la integración, todos los datos de copia de seguridad de sus juegos (archivos .sav y partidas guardadas rápidas) son fácilmente accesibles desde cualquier ordenador.</Control>
       <Control ID="lblIntegrationOK">La integración con Google Drive está activa.</Control>
       <Control ID="btnDisableIntegration">Desactivar la integración con Google Drive</Control>
       <Control ID="btnEnableIntegration">Activar la integración con Google Drive</Control>
@@ -347,7 +347,7 @@
 
       <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Reproducir la siguiente pista después</Control>
-      <Control ID="lblNsfMillisecondsOfSilence">millisegundos de silencio</Control>
+      <Control ID="lblNsfMillisecondsOfSilence">milisegundos de silencio</Control>
       <Control ID="chkNsfMoveToNextTrackAfterTime">Limitar la duración de pistas a</Control>
       <Control ID="lblNsfSeconds">segundos</Control>
       <Control ID="chkNsfDisableApuIrqs">Deshabilitar las IRQs de la APU (Recomendado)</Control>
@@ -421,7 +421,7 @@
       <Control ID="mnuCreateCheat">Crear un truco</Control>
       <Control ID="lblAtAddress">a</Control>
       <Control ID="chkPauseGameWhileWindowActive">Pausar el juego automáticamente cuando la ventana esté activa</Control>
-      <Control ID="chkDisableCheats">Dehabilitar todos los trucos</Control>
+      <Control ID="chkDisableCheats">Deshabilitar todos los trucos</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
@@ -447,8 +447,8 @@
       <Control ID="labelCopyright">© 2016 M. Bibaud (aka Sour)</Control>
       <Control ID="lblWebsite">Sitio web:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Version: 0.6.1 (Beta)</Control>
-      <Control ID="lblDonate">If you want to support Mesen, please consider donating.&#xA;Thank you for your support!</Control>
+      <Control ID="labelVersion">Versión: 0.6.1 (Beta)</Control>
+      <Control ID="lblDonate">Si deseas colaborar con Mesen, por favor considera hacer una donación.&#xA;¡Gracias por tu colaboración!</Control>
       <Control ID="okButton">&amp;OK</Control>
     </Form>
     <Form ID="frmVsGameConfig" Title="Configuración de juego VS">
@@ -460,7 +460,7 @@
       <Control ID="lblLatestVersion">Última versión: </Control>
       <Control ID="lblCurrentVersion">Versión actual: </Control>
       <Control ID="lblChangeLog">Changelog</Control>
-      <Control ID="lblDonate">If you want to support Mesen, please consider donating. Thank you!</Control>
+      <Control ID="lblDonate">Si deseas colaborar con Mesen, por favor considera hacer una donación. ¡Gracias!</Control>
       <Control ID="btnUpdate">Actualizar</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
@@ -493,7 +493,7 @@
     <Message ID="StartServer">Iniciar servidor</Message>
     <Message ID="StopServer">Detener servidor</Message>
     <Message ID="ConnectToServer">Conectar a un servidor</Message>
-    <Message ID="Disconnect">Deconexión</Message>
+    <Message ID="Disconnect">Desconexión</Message>
     <Message ID="PlayerNumber">Jugador {0}</Message>
 
     <Message ID="CheatsFound">{0} y {1} trucos de juegos presentes en la base de datos</Message>
@@ -501,8 +501,8 @@
     
     <Message ID="RomsFound">{0} roms encontradas</Message>
 
-    <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
-    
+    <Message ID="RandomGameNoGameFound">Mesen no puede encontrar ningún juego para cargar.</Message>
+
     <Message ID="NsfNextTrack">Pista siguiente (Espera para jugar más rápido)</Message>
     <Message ID="NsfUnnamedTrack">[sin nombre]</Message>
     <Message ID="NsfUnknownField">[desconocido]</Message>
@@ -518,8 +518,8 @@
     <Message ID="PatchAndReset">¿Aplicar el parche y reiniciar el juego?</Message>
     <Message ID="SelectRomIps">Elija la ROM que corresponde al archivo IPS seleccionado.</Message>
     <Message ID="UnableToDownload">No se puede descargar el archivo. Compruebe su conexión a Internet e inténtelo de nuevo.&#xA;&#xA;Detalles del error:</Message>
-    <Message ID="UnableToStartMissingDependencies">Mesen could not launch because it was unable to load MesenCore.dll due to missing dependencies.</Message>
-    <Message ID="UnableToStartMissingFiles">Mesen no puede iniciar debido a que faltan archivos.&#xA;&#xA;Error: No se encuentra el archivo MesenCore.dll.</Message>
+    <Message ID="UnableToStartMissingDependencies">Mesen no puede inciarse porque porque no puede cargar MesenCore.dll debido a dependencias no encontradas.</Message>
+    <Message ID="UnableToStartMissingFiles">Mesen no puede iniciarse debido a que faltan archivos.&#xA;&#xA;Error: No se encuentra el archivo MesenCore.dll.</Message>
     <Message ID="UnexpectedError">Se ha producido un error inesperado.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>
     <Message ID="UpdateDownloadFailed">Error en la descarga - el archivo parece estar dañado. Por favor, visite el sitio web de Mesen para descargar manualmente la versión más reciente.</Message>
     <Message ID="UpgradeSuccess">La actualización se ha realizado con éxito.</Message>
@@ -616,7 +616,7 @@
     </Enum>
     <Enum ID="RamPowerOnState">
       <Value ID="AllZeros">Todos los bits a 0 (Defecto)</Value>
-      <Value ID="AllOnes">Todos los bist a 1</Value>
+      <Value ID="AllOnes">Todos los bits a 1</Value>
       <Value ID="Random">Valores aleatóreos</Value>
     </Enum>
     <Enum ID="CheatCurrentFilterType">
@@ -636,7 +636,7 @@
       <Value ID="English">English</Value>
       <Value ID="French">Français</Value>
       <Value ID="Japanese">日本語</Value>
-		<Value ID="Portuguese">Português</Value>
+      <Value ID="Portuguese">Português</Value>
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
       <Value ID="Ukrainian">Українська</Value>
