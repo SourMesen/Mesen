@@ -463,7 +463,7 @@
       <Control ID="labelCopyright">© 2016 M. Bibaud (aka Sour)</Control>
       <Control ID="lblWebsite">Site web:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Version: 0.6.1 (Beta)</Control>
+      <Control ID="labelVersion">Version: 0.7.0 (Beta)</Control>
       <Control ID="lblDonate">Si vous voulez supporter le développement de Mesen, vous pouvez faire une donation. Merci de votre support!</Control>
       <Control ID="okButton">&amp;OK</Control>
     </Form>
