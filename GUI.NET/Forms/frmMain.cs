@@ -306,27 +306,22 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(false);
 
-			Rectangle screenBounds = Screen.FromHandle(this.Handle).Bounds;
-			if(size.Width > screenBounds.Width || size.Height > screenBounds.Height) {
+			if(!_customSize && this.WindowState != FormWindowState.Maximized) {
+				Size sizeGap = this.Size - this.ClientSize;
+
+				_regularScale = size.Scale;
+				UpdateScaleMenu(size.Scale);
+
+				this.Resize -= frmMain_Resize;
+				this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + menuStrip.Height));
+				this.Resize += frmMain_Resize;
+			} else if(_customSize) {
 				SetScaleBasedOnWindowSize();
-			} else {
-				if(!_customSize && this.WindowState != FormWindowState.Maximized) {
-					Size sizeGap = this.Size - this.ClientSize;
-
-					_regularScale = size.Scale;
-					UpdateScaleMenu(size.Scale);
-
-					this.Resize -= frmMain_Resize;
-					this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + menuStrip.Height));
-					this.Resize += frmMain_Resize;
-				} else if(_customSize) {
-					SetScaleBasedOnWindowSize();
-				}
-
-				ctrlRenderer.Size = new Size(size.Width, size.Height);
-				ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
-				ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
 			}
+
+			ctrlRenderer.Size = new Size(size.Width, size.Height);
+			ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
+			ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -1462,7 +1457,8 @@ namespace Mesen.GUI.Forms
 			if(_fullscreenMode) {
 				IntPtr handle = this.Handle;
 				this.BeginInvoke((MethodInvoker)(() => {
-					this.ctrlRenderer.Top += this.menuStrip.Visible ? -menuStrip.Height : menuStrip.Height;
+					int rendererTop = (panelRenderer.Height + (this.menuStrip.Visible ? menuStrip.Height : 0) - ctrlRenderer.Height) / 2;
+					this.ctrlRenderer.Top = rendererTop + (this.menuStrip.Visible ? -menuStrip.Height : 0);
 				}));
 			}
 		}

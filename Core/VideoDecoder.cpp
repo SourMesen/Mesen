@@ -112,15 +112,18 @@ void VideoDecoder::DecodeFrame()
 		aviRecorder->AddFrame(_videoFilter->GetOutputBuffer());
 	}
 
-	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
-	if(_previousScale != EmulationSettings::GetVideoScale() || frameInfo.Height != _previousFrameInfo.Height || frameInfo.Width != _previousFrameInfo.Width) {
+	ScreenSize screenSize;
+	GetScreenSize(screenSize, true);
+	if(_previousScale != EmulationSettings::GetVideoScale() || screenSize.Height != _previousScreenSize.Height || screenSize.Width != _previousScreenSize.Width) {
 		MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
 	}
 	_previousScale = EmulationSettings::GetVideoScale();
-	_previousFrameInfo = frameInfo;
+	_previousScreenSize = screenSize;
 	
-	_frameChanged = false;
+	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
 
+	_frameChanged = false;
+	
 	VideoRenderer::GetInstance()->UpdateFrame(_videoFilter->GetOutputBuffer(), frameInfo.Width, frameInfo.Height);
 }
 

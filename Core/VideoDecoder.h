@@ -38,7 +38,7 @@ private:
 	atomic<bool> _stopFlag;
 	uint32_t _frameCount = 0;
 
-	FrameInfo _previousFrameInfo = {};
+	ScreenSize _previousScreenSize = {};
 	double _previousScale = 0;
 
 	VideoFilterType _videoFilterType = VideoFilterType::None;

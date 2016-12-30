@@ -80,6 +80,7 @@ namespace Mesen.GUI.Forms.Config
 
 		protected override bool ValidateInput()
 		{
+			VideoFilterType orgFilter = ((VideoInfo)Entity).VideoFilter;
 			UpdateObject();
 			UpdatePalette();
 			VideoFilterType filter = ((VideoInfo)Entity).VideoFilter;
@@ -94,6 +95,11 @@ namespace Mesen.GUI.Forms.Config
 			} else {
 				grpNtscFilter.Visible = false;
 			}
+
+			if(filter != orgFilter) {
+				nudScale.Value = filter == VideoFilterType.None ? 2 : 1;
+			}
+
 			VideoInfo.ApplyConfig();
 			return true;
 		}
