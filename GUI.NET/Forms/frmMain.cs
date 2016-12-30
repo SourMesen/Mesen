@@ -396,6 +396,9 @@ namespace Mesen.GUI.Forms
 					InitializeStateMenu(mnuSaveState, true);
 					InitializeStateMenu(mnuLoadState, false);
 					this.StartEmuThread();
+					this.BeginInvoke((MethodInvoker)(() => {
+						UpdateViewerSize();
+					}));
 					break;
 
 				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
