@@ -351,6 +351,7 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	char* romFilename = new char[header.FilenameLength + 1];
 	memset(romFilename, 0, header.FilenameLength + 1);
 	file.read((char*)romFilename, header.FilenameLength);
+	delete[] romFilename;
 	
 	_cheatList.clear();
 	CodeInfo cheatCode;
