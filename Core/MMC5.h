@@ -73,7 +73,7 @@ private:
 	{
 		bankNumber = _prgBanks[reg-0x5113];
 		memoryType = PrgMemoryType::PrgRom;
-		if((((bankNumber & 0x80) == 0x00) && reg != 0x04) || reg == 0x00) {
+		if((((bankNumber & 0x80) == 0x00) && reg != 0x5117) || reg == 0x5113) {
 			bankNumber &= 0x07;
 			memoryType = PrgMemoryType::SaveRam;
 			accessType = MemoryAccessType::Read;
