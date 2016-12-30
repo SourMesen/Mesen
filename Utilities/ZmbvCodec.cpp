@@ -189,13 +189,9 @@ INLINE void ZmbvCodec::AddXorBlock(int vx,int vy,FrameBlock * block) {
 
 template<class P>
 void ZmbvCodec::AddXorFrame(void) {
-	int written=0;
-	int lastvector=0;
 	signed char * vectors=(signed char*)&work[workUsed];
 	/* Align the following xor data on 4 byte boundary*/
 	workUsed=(workUsed + blockcount*2 +3) & ~3;
-	int totalx=0;
-	int totaly=0;
 	for (int b=0;b<blockcount;b++) {
 		FrameBlock * block=&blocks[b];
 		int bestvx = 0;
@@ -208,7 +204,6 @@ void ZmbvCodec::AddXorFrame(void) {
 			int vy = VectorTable[v].y;
 			if (PossibleBlock<P>(vx, vy, block) < 4) {
 				possibles--;
-//				if (!possibles) Msg("Ran out of possibles, at %d of %d best %d\n",v,VectorCount,bestchange);
 				int testchange=CompareBlock<P>(vx,vy, block);
 				if (testchange<bestchange) {
 					bestchange=testchange;
@@ -329,16 +324,18 @@ int ZmbvCodec::FinishCompressFrame(uint8_t** compressedData)
 	} else {
 		/* Add the delta frame data */
 		switch (format) {
-		case ZMBV_FORMAT_8BPP:
-			AddXorFrame<char>();
-			break;
-		case ZMBV_FORMAT_15BPP:
-		case ZMBV_FORMAT_16BPP:
-			AddXorFrame<short>();
-			break;
-		case ZMBV_FORMAT_32BPP:
-			AddXorFrame<long>();
-			break;
+			case ZMBV_FORMAT_8BPP:
+				AddXorFrame<int8_t>();
+				break;
+			case ZMBV_FORMAT_15BPP:
+			case ZMBV_FORMAT_16BPP:
+				AddXorFrame<int16_t>();
+				break;
+
+			default:
+			case ZMBV_FORMAT_32BPP:
+				AddXorFrame<int32_t>();
+				break;
 		}
 	}
 	/* Create the actual frame with compression */
@@ -349,7 +346,8 @@ int ZmbvCodec::FinishCompressFrame(uint8_t** compressedData)
 	zstream.next_out = (Bytef *)(compressInfo.writeBuf + compressInfo.writeDone);
 	zstream.avail_out = compressInfo.writeSize - compressInfo.writeDone;
 	zstream.total_out = 0;
-	int res = deflate(&zstream, Z_SYNC_FLUSH);
+	
+	deflate(&zstream, Z_SYNC_FLUSH);
 
 	*compressedData = _buf;
 

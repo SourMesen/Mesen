@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <cstring>
 #include "BaseCodec.h"
 
 class RawCodec : public BaseCodec

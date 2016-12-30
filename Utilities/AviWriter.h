@@ -37,8 +37,6 @@ private:
 
 	uint8_t* _frameBuffer = nullptr;
 
-	int _bufSize = 0;
-	void *_buf = nullptr;
 	vector<uint8_t> _aviIndex;
 	
 	SimpleLock _audioLock;

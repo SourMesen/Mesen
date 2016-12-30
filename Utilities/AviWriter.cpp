@@ -21,6 +21,7 @@
 
 #include "stdafx.h"
 #include <fstream>
+#include <cstring>
 #include "AviWriter.h"
 #include "BaseCodec.h"
 #include "RawCodec.h"

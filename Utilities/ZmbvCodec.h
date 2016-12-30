@@ -46,50 +46,50 @@ class ZmbvCodec : public BaseCodec
 {
 private:
 	struct FrameBlock {
-		int start;
-		int dx,dy;
+		int start = 0;
+		int dx = 0,dy = 0;
 	};
 	struct CodecVector {
-		int x,y;
-		int slot;
+		int x = 0,y = 0;
+		int slot = 0;
 	};
 	struct KeyframeHeader {
-		unsigned char high_version;
-		unsigned char low_version;
-		unsigned char compression;
-		unsigned char format;
-		unsigned char blockwidth,blockheight;
+		unsigned char high_version = 0;
+		unsigned char low_version = 0;
+		unsigned char compression = 0;
+		unsigned char format = 0;
+		unsigned char blockwidth = 0,blockheight = 0;
 	};
 
 	struct {
-		int		linesDone;
-		int		writeSize;
-		int		writeDone;
-		unsigned char	*writeBuf;
+		int		linesDone = 0;
+		int		writeSize = 0;
+		int		writeDone = 0;
+		unsigned char	*writeBuf = nullptr;
 	} compressInfo;
 
-	CodecVector VectorTable[512];
-	int VectorCount;
+	CodecVector VectorTable[512] = {};
+	int VectorCount = 0;
 
-	unsigned char *oldframe, *newframe;
-	unsigned char *buf1, *buf2, *work;
-	int bufsize;
+	unsigned char *oldframe=nullptr, *newframe=nullptr;
+	unsigned char *buf1=nullptr, *buf2=nullptr, *work=nullptr;
+	int bufsize = 0;
 
-	int blockcount; 
-	FrameBlock * blocks;
+	int blockcount = 0; 
+	FrameBlock * blocks = nullptr;
 
-	int workUsed, workPos;
+	int workUsed = 0, workPos = 0;
 
-	int palsize;
-	char palette[256*4];
-	int height, width, pitch;
-	zmbv_format_t format;
-	int pixelsize;
+	int palsize = 0;
+	char palette[256*4] = {};
+	int height = 0, width = 0, pitch = 0;
+	zmbv_format_t format = zmbv_format_t::ZMBV_FORMAT_NONE;
+	int pixelsize = 0;
 
-	uint8_t* _buf;
-	uint32_t _bufSize;
+	uint8_t* _buf = nullptr;
+	uint32_t _bufSize = 0;
 
-	z_stream zstream;
+	z_stream zstream = {};
 
 	// methods
 	void FreeBuffers(void);
