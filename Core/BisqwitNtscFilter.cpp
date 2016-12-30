@@ -2,6 +2,7 @@
 //As described here:
 //http://forums.nesdev.com/viewtopic.php?p=172329
 #include "stdafx.h"
+#include <cmath>
 #include "BisqwitNtscFilter.h"
 #include "PPU.h"
 #include "EmulationSettings.h"
