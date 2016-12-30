@@ -157,7 +157,7 @@ string FolderUtilities::GetFolderName(string filepath)
 
 string FolderUtilities::CombinePath(string folder, string filename)
 {
-	return fs::u8path(folder).append(fs::u8path(filename)).u8string();
+	return (fs::u8path(folder) / fs::u8path(filename)).u8string();
 }
 
 int64_t FolderUtilities::GetFileModificationTime(string filepath)
