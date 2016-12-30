@@ -145,10 +145,14 @@ namespace Mesen.GUI.Forms
 			this.mnuRecordFromStart = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRecordFromNow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStopMovie = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCheats = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem22 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuVideoRecorder = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAviRecord = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAviStop = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSoundRecorder = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuWaveRecord = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuWaveStop = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuCheats = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTestRun = new System.Windows.Forms.ToolStripMenuItem();
@@ -453,7 +457,7 @@ namespace Mesen.GUI.Forms
             this.mnuShowFPS});
 			this.mnuEmulationSpeed.Image = global::Mesen.GUI.Properties.Resources.Speed;
 			this.mnuEmulationSpeed.Name = "mnuEmulationSpeed";
-			this.mnuEmulationSpeed.Size = new System.Drawing.Size(152, 22);
+			this.mnuEmulationSpeed.Size = new System.Drawing.Size(135, 22);
 			this.mnuEmulationSpeed.Text = "Speed";
 			this.mnuEmulationSpeed.DropDownOpening += new System.EventHandler(this.mnuEmulationSpeed_DropDownOpening);
 			// 
@@ -555,7 +559,7 @@ namespace Mesen.GUI.Forms
             this.mnuFullscreen});
 			this.mnuVideoScale.Image = global::Mesen.GUI.Properties.Resources.Fullscreen;
 			this.mnuVideoScale.Name = "mnuVideoScale";
-			this.mnuVideoScale.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoScale.Size = new System.Drawing.Size(135, 22);
 			this.mnuVideoScale.Text = "Video Size";
 			// 
 			// mnuScale1x
@@ -667,7 +671,7 @@ namespace Mesen.GUI.Forms
             this.toolStripMenuItem19,
             this.mnuBilinearInterpolation});
 			this.mnuVideoFilter.Name = "mnuVideoFilter";
-			this.mnuVideoFilter.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoFilter.Size = new System.Drawing.Size(135, 22);
 			this.mnuVideoFilter.Text = "Video Filter";
 			// 
 			// mnuNoneFilter
@@ -876,7 +880,7 @@ namespace Mesen.GUI.Forms
             this.mnuRegionDendy});
 			this.mnuRegion.Image = global::Mesen.GUI.Properties.Resources.Globe;
 			this.mnuRegion.Name = "mnuRegion";
-			this.mnuRegion.Size = new System.Drawing.Size(152, 22);
+			this.mnuRegion.Size = new System.Drawing.Size(135, 22);
 			this.mnuRegion.Text = "Region";
 			// 
 			// mnuRegionAuto
@@ -910,13 +914,13 @@ namespace Mesen.GUI.Forms
 			// toolStripMenuItem10
 			// 
 			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-			this.toolStripMenuItem10.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(132, 6);
 			// 
 			// mnuAudioConfig
 			// 
 			this.mnuAudioConfig.Image = global::Mesen.GUI.Properties.Resources.Audio;
 			this.mnuAudioConfig.Name = "mnuAudioConfig";
-			this.mnuAudioConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuAudioConfig.Size = new System.Drawing.Size(135, 22);
 			this.mnuAudioConfig.Text = "Audio";
 			this.mnuAudioConfig.Click += new System.EventHandler(this.mnuAudioConfig_Click);
 			// 
@@ -924,7 +928,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuInput.Image = global::Mesen.GUI.Properties.Resources.Controller;
 			this.mnuInput.Name = "mnuInput";
-			this.mnuInput.Size = new System.Drawing.Size(152, 22);
+			this.mnuInput.Size = new System.Drawing.Size(135, 22);
 			this.mnuInput.Text = "Input";
 			this.mnuInput.Click += new System.EventHandler(this.mnuInput_Click);
 			// 
@@ -932,7 +936,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuVideoConfig.Image = global::Mesen.GUI.Properties.Resources.Video;
 			this.mnuVideoConfig.Name = "mnuVideoConfig";
-			this.mnuVideoConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuVideoConfig.Size = new System.Drawing.Size(135, 22);
 			this.mnuVideoConfig.Text = "Video";
 			this.mnuVideoConfig.Click += new System.EventHandler(this.mnuVideoConfig_Click);
 			// 
@@ -940,20 +944,20 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuEmulationConfig.Image = global::Mesen.GUI.Properties.Resources.DipSwitches;
 			this.mnuEmulationConfig.Name = "mnuEmulationConfig";
-			this.mnuEmulationConfig.Size = new System.Drawing.Size(152, 22);
+			this.mnuEmulationConfig.Size = new System.Drawing.Size(135, 22);
 			this.mnuEmulationConfig.Text = "Emulation";
 			this.mnuEmulationConfig.Click += new System.EventHandler(this.mnuEmulationConfig_Click);
 			// 
 			// toolStripMenuItem11
 			// 
 			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-			this.toolStripMenuItem11.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem11.Size = new System.Drawing.Size(132, 6);
 			// 
 			// mnuPreferences
 			// 
 			this.mnuPreferences.Image = global::Mesen.GUI.Properties.Resources.Cog;
 			this.mnuPreferences.Name = "mnuPreferences";
-			this.mnuPreferences.Size = new System.Drawing.Size(152, 22);
+			this.mnuPreferences.Size = new System.Drawing.Size(135, 22);
 			this.mnuPreferences.Text = "Preferences";
 			this.mnuPreferences.Click += new System.EventHandler(this.mnuPreferences_Click);
 			// 
@@ -962,8 +966,10 @@ namespace Mesen.GUI.Forms
 			this.mnuTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuNetPlay,
             this.mnuMovies,
-            this.mnuSoundRecorder,
             this.mnuCheats,
+            this.toolStripMenuItem22,
+            this.mnuSoundRecorder,
+            this.mnuVideoRecorder,
             this.toolStripMenuItem12,
             this.mnuTests,
             this.mnuDebugger,
@@ -1127,6 +1133,45 @@ namespace Mesen.GUI.Forms
 			this.mnuStopMovie.Text = "Stop";
 			this.mnuStopMovie.Click += new System.EventHandler(this.mnuStopMovie_Click);
 			// 
+			// mnuCheats
+			// 
+			this.mnuCheats.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuCheats.Name = "mnuCheats";
+			this.mnuCheats.Size = new System.Drawing.Size(231, 22);
+			this.mnuCheats.Text = "Cheats";
+			this.mnuCheats.Click += new System.EventHandler(this.mnuCheats_Click);
+			// 
+			// toolStripMenuItem22
+			// 
+			this.toolStripMenuItem22.Name = "toolStripMenuItem22";
+			this.toolStripMenuItem22.Size = new System.Drawing.Size(228, 6);
+			// 
+			// mnuVideoRecorder
+			// 
+			this.mnuVideoRecorder.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAviRecord,
+            this.mnuAviStop});
+			this.mnuVideoRecorder.Image = global::Mesen.GUI.Properties.Resources.VideoRecorder;
+			this.mnuVideoRecorder.Name = "mnuVideoRecorder";
+			this.mnuVideoRecorder.Size = new System.Drawing.Size(231, 22);
+			this.mnuVideoRecorder.Text = "Video Recorder";
+			// 
+			// mnuAviRecord
+			// 
+			this.mnuAviRecord.Image = global::Mesen.GUI.Properties.Resources.Record;
+			this.mnuAviRecord.Name = "mnuAviRecord";
+			this.mnuAviRecord.Size = new System.Drawing.Size(155, 22);
+			this.mnuAviRecord.Text = "Record...";
+			this.mnuAviRecord.Click += new System.EventHandler(this.mnuAviRecord_Click);
+			// 
+			// mnuAviStop
+			// 
+			this.mnuAviStop.Image = global::Mesen.GUI.Properties.Resources.Stop;
+			this.mnuAviStop.Name = "mnuAviStop";
+			this.mnuAviStop.Size = new System.Drawing.Size(155, 22);
+			this.mnuAviStop.Text = "Stop Recording";
+			this.mnuAviStop.Click += new System.EventHandler(this.mnuAviStop_Click);
+			// 
 			// mnuSoundRecorder
 			// 
 			this.mnuSoundRecorder.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1152,14 +1197,6 @@ namespace Mesen.GUI.Forms
 			this.mnuWaveStop.Size = new System.Drawing.Size(155, 22);
 			this.mnuWaveStop.Text = "Stop Recording";
 			this.mnuWaveStop.Click += new System.EventHandler(this.mnuWaveStop_Click);
-			// 
-			// mnuCheats
-			// 
-			this.mnuCheats.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
-			this.mnuCheats.Name = "mnuCheats";
-			this.mnuCheats.Size = new System.Drawing.Size(231, 22);
-			this.mnuCheats.Text = "Cheats";
-			this.mnuCheats.Click += new System.EventHandler(this.mnuCheats_Click);
 			// 
 			// toolStripMenuItem12
 			// 
@@ -1496,6 +1533,10 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuNtscBisqwitHalfFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuNtscBisqwitFullFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuNtscBisqwitQuarterFilter;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem22;
+		private System.Windows.Forms.ToolStripMenuItem mnuVideoRecorder;
+		private System.Windows.Forms.ToolStripMenuItem mnuAviRecord;
+		private System.Windows.Forms.ToolStripMenuItem mnuAviStop;
 	}
 }
 

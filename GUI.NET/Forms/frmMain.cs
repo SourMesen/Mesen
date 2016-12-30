@@ -619,6 +619,10 @@ namespace Mesen.GUI.Forms
 					mnuWaveRecord.Enabled = _emuThread != null && !waveRecording;
 					mnuWaveStop.Enabled = _emuThread != null && waveRecording;
 
+					bool aviRecording = InteropEmu.AviIsRecording();
+					mnuAviRecord.Enabled = _emuThread != null && !aviRecording;
+					mnuAviStop.Enabled = _emuThread != null && aviRecording;
+
 					bool testRecording = InteropEmu.RomTestRecording();
 					mnuTestRun.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuTestStopRecording.Enabled = _emuThread != null && testRecording;
@@ -934,7 +938,6 @@ namespace Mesen.GUI.Forms
 			RecordMovie(false);
 		}
 
-
 		private void mnuWaveRecord_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
@@ -949,6 +952,20 @@ namespace Mesen.GUI.Forms
 		private void mnuWaveStop_Click(object sender, EventArgs e)
 		{
 			InteropEmu.WaveStop();
+		}
+
+		private void mnuAviRecord_Click(object sender, EventArgs e)
+		{
+			using(frmRecordAvi frm = new frmRecordAvi()) {
+				if(frm.ShowDialog(mnuVideoRecorder) == DialogResult.OK) {
+					InteropEmu.AviRecord(frm.Filename, frm.UseCompression ? VideoCodec.ZMBV : VideoCodec.None);
+				}
+			}
+		}
+
+		private void mnuAviStop_Click(object sender, EventArgs e)
+		{
+			InteropEmu.AviStop();
 		}
 
 		private void mnuTestRun_Click(object sender, EventArgs e)

@@ -71,6 +71,9 @@
       <Control ID="mnuSoundRecorder">Enregistreur audio</Control>
       <Control ID="mnuWaveRecord">Enregistrer...</Control>
       <Control ID="mnuWaveStop">Arrêter</Control>
+      <Control ID="mnuVideoRecorder">Enregistreur vidéo</Control>
+      <Control ID="mnuAviRecord">Enregistrer...</Control>
+      <Control ID="mnuAviStop">Arrêter</Control>
       <Control ID="mnuCheats">Codes</Control>
       <Control ID="mnuTests">Tests</Control>
       <Control ID="mnuTestRun">Run...</Control>
@@ -490,11 +493,19 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
+    <Form ID="frmRecordAvi" Title="Enregistreur vidéo">
+      <Control ID="lblAviFile">Enregistrer sous:</Control>
+      <Control ID="chkUseCompression">Utiliser la compression ZMBV</Control>
+      <Control ID="btnBrowse">Parcourir...</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterMovie">Films (*.mmo)|*.mmo|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterWave">Fichiers wave (*.wav)|*.wav|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterAvi">Fichiers avi (*.avi)|*.avi|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterPalette">Fichier de palette (*.pal)|*.pal|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Fichiers IPS (*.ips)|*.IPS|Tous les fichiers (*.*)|*.*</Message>

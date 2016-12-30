@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "AviRecorder.h"
 #include "IRenderingDevice.h"
 #include "VideoDecoder.h"
 #include "EmulationSettings.h"
@@ -90,6 +91,10 @@ void VideoDecoder::UpdateVideoFilter()
 
 			case VideoFilterType::HdPack: _videoFilter.reset(new HdVideoFilter()); break;
 		}
+
+		if(_aviRecorder) {
+			StopRecording();
+		}
 	}
 }
 
@@ -102,13 +107,18 @@ void VideoDecoder::DecodeFrame()
 	}
 	_videoFilter->SendFrame(_ppuOutputBuffer);
 
+	shared_ptr<AviRecorder> aviRecorder = _aviRecorder;
+	if(aviRecorder) {
+		aviRecorder->AddFrame(_videoFilter->GetOutputBuffer());
+	}
+
 	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
 	if(_previousScale != EmulationSettings::GetVideoScale() || frameInfo.Height != _previousFrameInfo.Height || frameInfo.Width != _previousFrameInfo.Width) {
 		MessageManager::SendNotification(ConsoleNotificationType::ResolutionChanged);
 	}
 	_previousScale = EmulationSettings::GetVideoScale();
 	_previousFrameInfo = frameInfo;
-
+	
 	_frameChanged = false;
 
 	VideoRenderer::GetInstance()->UpdateFrame(_videoFilter->GetOutputBuffer(), frameInfo.Width, frameInfo.Height);
@@ -126,7 +136,7 @@ void VideoDecoder::DecodeThread()
 	//This thread will decode the PPU's output (color ID to RGB, intensify r/g/b and produce a HD version of the frame if needed)
 	while(!_stopFlag.load()) {
 		//DecodeFrame returns the final ARGB frame we want to display in the emulator window
-		if(!_frameChanged) {
+		while(!_frameChanged) {
 			_waitForFrame.Wait();
 			if(_stopFlag.load()) {
 				return;
@@ -151,7 +161,7 @@ void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInf
 		}
 		//At this point, we are sure that the decode thread is no longer busy
 	}
-
+	
 	_hdScreenTiles = hdPixelInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 	_frameChanged = true;
@@ -202,4 +212,34 @@ void VideoDecoder::TakeScreenshot()
 	if(_videoFilter) {
 		_videoFilter->TakeScreenshot();
 	}
+}
+
+void VideoDecoder::StartRecording(string filename, VideoCodec codec)
+{
+	if(_videoFilter) {
+		shared_ptr<AviRecorder> recorder(new AviRecorder());
+
+		FrameInfo frameInfo = _videoFilter->GetFrameInfo();
+		if(recorder->StartRecording(filename, codec, frameInfo.Width, frameInfo.Height, frameInfo.BitsPerPixel, 60098814, EmulationSettings::GetSampleRate())) {
+			_aviRecorder = recorder;
+		}
+	}
+}
+
+void VideoDecoder::AddRecordingSound(int16_t* soundBuffer, uint32_t sampleCount, uint32_t sampleRate)
+{
+	shared_ptr<AviRecorder> aviRecorder = _aviRecorder;
+	if(aviRecorder) {
+		aviRecorder->AddSound(soundBuffer, sampleCount, sampleRate);
+	}
+}
+
+void VideoDecoder::StopRecording()
+{
+	_aviRecorder.reset();
+}
+
+bool VideoDecoder::IsRecording()
+{
+	return _aviRecorder != nullptr && _aviRecorder->IsRecording();
 }

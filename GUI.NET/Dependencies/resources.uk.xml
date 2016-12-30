@@ -71,6 +71,9 @@
       <Control ID="mnuSoundRecorder">Запис звуку</Control>
       <Control ID="mnuWaveRecord">Почати</Control>
       <Control ID="mnuWaveStop">Зупинити</Control>
+      <Control ID="mnuVideoRecorder">Video Recorder</Control>
+      <Control ID="mnuAviRecord">Почати</Control>
+      <Control ID="mnuAviStop">Зупинити</Control>      
       <Control ID="mnuCheats">Чити</Control>
       <Control ID="mnuTests">Тести</Control>
       <Control ID="mnuTestRun">Запустити...</Control>
@@ -194,7 +197,7 @@
       <Control ID="tpgSet2">Контролер #2</Control>
       <Control ID="tpgSet3">Контролер #3</Control>
       <Control ID="tpgSet4">Контролер #4</Control>
-      
+
       <Control ID="btnSelectPreset">Пресети</Control>
       <Control ID="mnuKeyboard">Клавіатура</Control>
       <Control ID="mnuWasdLayout">WSAD розкладка</Control>
@@ -210,7 +213,7 @@
       <Control ID="mnuSnes30Controller">SNES30 геймпад</Control>
       <Control ID="mnuSnes30Layout1">Контролер #1</Control>
       <Control ID="mnuSnes30Layout2">Контролер #2</Control>
-      
+
       <Control ID="btnClear">Очистити</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Відміна</Control>
@@ -254,7 +257,7 @@
       <Control ID="trkYFilterLength">Y Filter (Horizontal Blur)</Control>
       <Control ID="trkIFilterLength">I Filter (Horizontal Bleed)</Control>
       <Control ID="trkQFilterLength">Q Filter (Horizontal Bleed)</Control>
-      
+
       <Control ID="grpScanlines">Scanlines</Control>
       <Control ID="trkScanlines">Scanlines</Control>
       <Control ID="btnResetPictureSettings">Скидання</Control>
@@ -268,7 +271,7 @@
       <Control ID="chkDisableSprites">Відключити sprites</Control>
       <Control ID="chkForceBackgroundFirstColumn">Force background display in first column</Control>
       <Control ID="chkForceSpritesFirstColumn">Force sprite display in first column</Control>
-      
+
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Відміна</Control>
     </Form>
@@ -474,17 +477,25 @@
     </Form>
     <Form ID="frmGetKey" Title="Налаштування клавіш...">
       <Control ID="lblSetKeyMessage">Натисніть будь-яку клавішу на клавіатурі або контролері.</Control>...">
-     </Form>
-     <Form ID="frmPlayerProfile" Title="Профіль">
-       <Control ID="lblName">Iм'я :</Control>
-       <Control ID="btnOK">ОК</Control>
-       <Control ID="btnCancel">Вiдмiна</Control>
-     </Form>
+    </Form>
+    <Form ID="frmPlayerProfile" Title="Профіль">
+      <Control ID="lblName">Iм'я :</Control>
+      <Control ID="btnOK">ОК</Control>
+      <Control ID="btnCancel">Вiдмiна</Control>
+    </Form>
+    <Form ID="frmRecordAvi" Title="Video Recorder">
+      <Control ID="lblAviFile">Save to:</Control>
+      <Control ID="chkUseCompression">Use ZMBV compression</Control>
+      <Control ID="btnBrowse">Browse...</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Вiдмiна</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Всi файли (*.*)|*.*</Message>
     <Message ID="FilterMovie">Записи (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
     <Message ID="FilterWave">Wave файли (*.wav)|*.wav|All Files (*.*)|*.*</Message>
+    <Message ID="FilterAvi">Avi файли (*.avi)|*.avi|All Files (*.*)|*.*</Message>
     <Message ID="FilterPalette">Файли палiтр (*.pal)|*.pal|All Files (*.*)|*.*</Message>
     <Message ID="FilterRom">Всі підтримувані формати (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
     <Message ID="FilterRomIps">Всі підтримувані формати (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*</Message>

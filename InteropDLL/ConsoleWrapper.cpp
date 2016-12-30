@@ -17,6 +17,7 @@
 #include "../Core/NsfMapper.h"
 #include "../Core/IRenderingDevice.h"
 #include "../Core/IAudioDevice.h"
+#include "../Utilities/AviWriter.h"
 
 #ifdef WIN32
 	#include "../Windows/Renderer.h"
@@ -298,6 +299,10 @@ namespace InteropEmu {
 		DllExport void __stdcall MovieStop() { Movie::Stop(); }
 		DllExport bool __stdcall MoviePlaying() { return Movie::Playing(); }
 		DllExport bool __stdcall MovieRecording() { return Movie::Recording(); }
+
+		DllExport void __stdcall AviRecord(char* filename, VideoCodec codec) { VideoDecoder::GetInstance()->StartRecording(filename, codec); }
+		DllExport void __stdcall AviStop() { VideoDecoder::GetInstance()->StopRecording(); }
+		DllExport bool __stdcall AviIsRecording() { return VideoDecoder::GetInstance()->IsRecording(); }
 
 		DllExport void __stdcall WaveRecord(char* filename) { SoundMixer::StartRecording(filename); }
 		DllExport void __stdcall WaveStop() { SoundMixer::StopRecording(); }

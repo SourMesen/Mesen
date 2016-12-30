@@ -20,6 +20,7 @@ std::unordered_map<string, string> MessageManager::_enResources = {
 	{ "ScreenshotSaved", u8"Screenshot Saved" },
 	{ "SoundRecorder", u8"Sound Recorder" },
 	{ "Test", u8"Test" },
+	{ "VideoRecorder", u8"Video Recorder" },
 
 	{ "ApplyingIps", u8"Applying patch: %1" },
 	{ "CheatApplied", u8"1 cheat applied." },
@@ -61,6 +62,8 @@ std::unordered_map<string, string> MessageManager::_enResources = {
 	{ "SoundRecorderStopped", u8"Recording saved to: %1" },
 	{ "TestFileSavedTo", u8"Test file saved to: %1" },
 	{ "UnsupportedMapper", u8"Unsupported mapper (%1), cannot load game." },
+	{ "VideoRecorderStarted", u8"Recording to: %1" },
+	{ "VideoRecorderStopped", u8"Recording saved to: %1" },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Synchronization started." },
@@ -84,6 +87,7 @@ std::unordered_map<string, string> MessageManager::_frResources = {
 	{ "ScreenshotSaved", u8"Capture d'écran" },
 	{ "SoundRecorder", u8"Enregistreur audio" },
 	{ "Test", u8"Test" },
+	{ "VideoRecorder", u8"Enregistreur vidéo" },
 
 	{ "ApplyingIps", u8"Fichier IPS appliqué : %1" },
 	{ "CheatApplied", u8"%1 code activé." },
@@ -125,6 +129,8 @@ std::unordered_map<string, string> MessageManager::_frResources = {
 	{ "SoundRecorderStopped", u8"Enregistrement audio sauvegardé : %1" },
 	{ "TestFileSavedTo", u8"Test sauvegardé : %1" },
 	{ "UnsupportedMapper", u8"Ce mapper (%1) n'est pas encore supporté - le jeu ne peut pas être démarré." },
+	{ "VideoRecorderStarted", u8"En cours d'enregistrement : %1" },
+	{ "VideoRecorderStopped", u8"Enregistrement audio sauvegardé : %1" },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Synchronisation en cours." },
@@ -148,6 +154,7 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "ScreenshotSaved", u8"スクリーンショット" },
 	{ "SoundRecorder", u8"サウンドレコーダー" },
 	{ "Test", u8"テスト" },
+	{ "VideoRecorder", u8"動画レコーダー" },
 
 	{ "ApplyingIps", u8"パッチファイルを適用しました:　%1" },
 	{ "CheatApplied", u8"チートコード%1個を有効にしました。" },
@@ -189,6 +196,8 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "SoundRecorderStopped", u8"録音を終了しました: %1" },
 	{ "TestFileSavedTo", u8"Test file saved to: %1" },
 	{ "UnsupportedMapper", u8"このMapper (%1)を使うゲームはロードできません。" },
+	{ "VideoRecorderStarted", u8"%1に録画しています。" },
+	{ "VideoRecorderStopped", u8"録画を終了しました: %1" },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"同期中。" },
@@ -212,6 +221,7 @@ std::unordered_map<string, string> MessageManager::_ruResources = {
 	{ "ScreenshotSaved", u8"Скриншот сохранён" },
 	{ "SoundRecorder", u8"Запись звука" },
 	{ "Test", u8"Тест" },
+	{ "VideoRecorder", u8"Video Recorder" },
 
 	{ "ApplyingIps", u8"Применён патч: %1" },
 	{ "CheatApplied", u8"1 Чит применён." },
@@ -253,6 +263,8 @@ std::unordered_map<string, string> MessageManager::_ruResources = {
 	{ "SoundRecorderStopped", u8"Запись сохранена: %1" },
 	{ "TestFileSavedTo", u8"Тест сохранён: %1" },
 	{ "UnsupportedMapper", u8"Неподдерживаемый mapper (%1), игра не загружена." },
+	{ "VideoRecorderStarted", u8"Запись начата to: %1" },
+	{ "VideoRecorderStopped", u8"Запись сохранена: %1" },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Синхронизация начата." },
@@ -276,6 +288,7 @@ std::unordered_map<string, string> MessageManager::_esResources = {
 	{ "ScreenshotSaved", u8"Captura Guardada" },
 	{ "SoundRecorder", u8"Grabadora de Sonido" },
 	{ "Test", u8"Test" },
+	{ "VideoRecorder", u8"Video Recorder" },
 
 	{ "ApplyingIps", u8"Aplicando parche: %1" },
 	{ "CheatApplied", u8"1 truco aplicado." },
@@ -317,6 +330,9 @@ std::unordered_map<string, string> MessageManager::_esResources = {
 	{ "SoundRecorderStopped", u8"Grabación guardada en: %1" },
 	{ "TestFileSavedTo", u8"Archivo test guardado en: %1" },
 	{ "UnsupportedMapper", u8"Mapa (%1) no soportado, no se puede cargar el juego." },
+	{ "VideoRecorderStarted", u8"Grabando en: %1" },
+	{ "VideoRecorderStopped", u8"Grabación guardada en: %1" },
+
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Sincronización iniciada." },
@@ -340,6 +356,7 @@ std::unordered_map<string, string> MessageManager::_ukResources = {
 	{ "ScreenshotSaved", u8"Скріншот збережений" },
 	{ "SoundRecorder", u8"Запис звуку" },
 	{ "Test", u8"Тест" },
+	{ "VideoRecorder", u8"Video Recorder" },
 
 	{ "ApplyingIps", u8"Застосовано патч: %1" },
 	{ "CheatApplied", u8"1 Чiт застосований." },
@@ -381,6 +398,8 @@ std::unordered_map<string, string> MessageManager::_ukResources = {
 	{ "SoundRecorderStopped", u8"Запис збережена: %1" },
 	{ "TestFileSavedTo", u8"Тест збережений: %1" },
 	{ "UnsupportedMapper", u8"Непідтримуваний mapper (%1), гра не завантажена." },
+	{ "VideoRecorderStarted", u8"Запис розпочато to: %1" },
+	{ "VideoRecorderStopped", u8"Запис збережена: %1" },
 
 	{ "Google Диск", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Синхронізацію розпочато." },
@@ -404,6 +423,7 @@ std::unordered_map<string, string> MessageManager::_ptResources = {
 	{ "ScreenshotSaved", u8"Screenshot salva" },
 	{ "SoundRecorder", u8"Gravador de Som" },
 	{ "Test", u8"Teste" },
+	{ "VideoRecorder", u8"Video Recorder" },
 
 	{ "ApplyingIps", u8"Aplicando patch: %1" },
 	{ "CheatApplied", u8"1 cheat aplicado." },
@@ -445,6 +465,8 @@ std::unordered_map<string, string> MessageManager::_ptResources = {
 	{ "SoundRecorderStopped", u8"Gravação salva em: %1" },
 	{ "TestFileSavedTo", u8"Arquivo teste salvo em: %1" },
 	{ "UnsupportedMapper", u8"Mapa (%1) não suportado, não se pode carregar o jogo." },
+	{ "VideoRecorderStarted", u8"Gravando em: %1" },
+	{ "VideoRecorderStopped", u8"Gravação salva em: %1" },
 
 	{ "GoogleDrive", u8"Google Drive" },
 	{ "SynchronizationStarted", u8"Sincronização iniciada." },

@@ -1108,6 +1108,9 @@
     <ClInclude Include="BisqwitNtscFilter.h">
       <Filter>VideoDecoder</Filter>
     </ClInclude>
+    <ClInclude Include="AviRecorder.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1298,6 +1301,9 @@
     </ClCompile>
     <ClCompile Include="BisqwitNtscFilter.cpp">
       <Filter>VideoDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="AviRecorder.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

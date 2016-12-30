@@ -2,6 +2,7 @@
 #include "SoundMixer.h"
 #include "APU.h"
 #include "CPU.h"
+#include "VideoDecoder.h"
 
 IAudioDevice* SoundMixer::AudioDevice = nullptr;
 unique_ptr<WaveRecorder> SoundMixer::_waveRecorder;
@@ -85,41 +86,44 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	size_t sampleCount = blip_read_samples(_blipBufLeft, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 1);
 	blip_read_samples(_blipBufRight, _outputBuffer + 1, SoundMixer::MaxSamplesPerFrame, 1);
 
+	//Apply low pass filter/volume reduction when in background (based on options)
+	if(!VideoDecoder::GetInstance()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled) && EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
+		if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {
+			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
+		} else if(EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
+			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 6, 0.75);
+		}
+	}
+
+	if(EmulationSettings::GetReverbStrength() > 0) {
+		_reverbFilter.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, EmulationSettings::GetReverbStrength(), EmulationSettings::GetReverbDelay());
+	} else {
+		_reverbFilter.ResetFilter();
+	}
+
+	switch(EmulationSettings::GetStereoFilter()) {
+		case StereoFilter::Delay: _stereoDelay.ApplyFilter(_outputBuffer, sampleCount, _sampleRate); break;
+		case StereoFilter::Panning: _stereoPanning.ApplyFilter(_outputBuffer, sampleCount); break;
+	}
+
+	if(EmulationSettings::GetCrossFeedRatio() > 0) {
+		_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, EmulationSettings::GetCrossFeedRatio());
+	}
+
 	if(SoundMixer::AudioDevice && !EmulationSettings::IsPaused()) {
-		//Apply low pass filter/volume reduction when in background (based on options)
-		if(!_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled) && EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
-			if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {
-				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
-			} else if(EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
-				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 6, 0.75);
-			}
-		}
-
-		if(EmulationSettings::GetReverbStrength() > 0) {
-			_reverbFilter.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, EmulationSettings::GetReverbStrength(), EmulationSettings::GetReverbDelay());
-		} else {
-			_reverbFilter.ResetFilter();
-		}
-
-		switch(EmulationSettings::GetStereoFilter()) {
-			case StereoFilter::Delay: _stereoDelay.ApplyFilter(_outputBuffer, sampleCount, _sampleRate); break;
-			case StereoFilter::Panning: _stereoPanning.ApplyFilter(_outputBuffer, sampleCount); break;
-		}
-
-		if(EmulationSettings::GetCrossFeedRatio() > 0) {
-			_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, EmulationSettings::GetCrossFeedRatio());
-		}
-
 		SoundMixer::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true);
+	}
+
+	if(_waveRecorder) {
+		auto lock = _waveRecorderLock.AcquireSafe();
 		if(_waveRecorder) {
-			auto lock = _waveRecorderLock.AcquireSafe();
-			if(_waveRecorder) {
-				if(!_waveRecorder->WriteSamples(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true)) {
-					_waveRecorder.reset();
-				}
+			if(!_waveRecorder->WriteSamples(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true)) {
+				_waveRecorder.reset();
 			}
 		}
 	}
+		
+	VideoDecoder::GetInstance()->AddRecordingSound(_outputBuffer, (uint32_t)sampleCount, _sampleRate);
 
 	if(EmulationSettings::GetSampleRate() != _sampleRate) {
 		//Update sample rate for next frame if setting changed

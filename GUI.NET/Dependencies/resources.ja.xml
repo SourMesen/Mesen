@@ -71,6 +71,9 @@
       <Control ID="mnuSoundRecorder">サウンドレコーダー</Control>
       <Control ID="mnuWaveRecord">録音</Control>
       <Control ID="mnuWaveStop">停止</Control>
+      <Control ID="mnuVideoRecorder">動画レコーダー</Control>
+      <Control ID="mnuAviRecord">録画</Control>
+      <Control ID="mnuAviStop">停止</Control>
       <Control ID="mnuCheats">チートコード</Control>
       <Control ID="mnuTests">テスト</Control>
       <Control ID="mnuTestRun">Run...</Control>
@@ -472,11 +475,19 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
+    <Form ID="frmRecordAvi" Title="動画レコーダー">
+      <Control ID="lblAviFile">保存先：</Control>
+      <Control ID="chkUseCompression">ZMBV圧縮を利用する</Control>
+      <Control ID="btnBrowse">参照...</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterMovie">動画 (*.mmo)|*.mmo|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterWave">WAVファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterAvi">AVIファイル (*.avi)|*.avi|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>

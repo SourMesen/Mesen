@@ -21,6 +21,9 @@
     <Filter Include="KreedSaiEagle">
       <UniqueIdentifier>{8e159744-fb91-4e16-aa82-8d8703ba2762}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Avi">
+      <UniqueIdentifier>{8b0e23bf-1bd9-4cc1-8046-784fd01e8688}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -122,6 +125,18 @@
     <ClInclude Include="HexUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ZmbvCodec.h">
+      <Filter>Avi</Filter>
+    </ClInclude>
+    <ClInclude Include="AviWriter.h">
+      <Filter>Avi</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCodec.h">
+      <Filter>Avi</Filter>
+    </ClInclude>
+    <ClInclude Include="RawCodec.h">
+      <Filter>Avi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -219,6 +234,12 @@
     </ClCompile>
     <ClCompile Include="HexUtilities.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZmbvCodec.cpp">
+      <Filter>Avi</Filter>
+    </ClCompile>
+    <ClCompile Include="AviWriter.cpp">
+      <Filter>Avi</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

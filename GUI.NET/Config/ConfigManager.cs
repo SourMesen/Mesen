@@ -83,11 +83,23 @@ namespace Mesen.GUI.Config
 		{
 			get
 			{
-				string waveFoler = Path.Combine(ConfigManager.HomeFolder, "Wave");
-				if(!Directory.Exists(waveFoler)) {
-					Directory.CreateDirectory(waveFoler);
+				string waveFolder = Path.Combine(ConfigManager.HomeFolder, "Wave");
+				if(!Directory.Exists(waveFolder)) {
+					Directory.CreateDirectory(waveFolder);
 				}
-				return waveFoler;
+				return waveFolder;
+			}
+		}
+
+		public static string AviFolder
+		{
+			get
+			{
+				string aviFolder = Path.Combine(ConfigManager.HomeFolder, "Avi");
+				if(!Directory.Exists(aviFolder)) {
+					Directory.CreateDirectory(aviFolder);
+				}
+				return aviFolder;
 			}
 		}
 

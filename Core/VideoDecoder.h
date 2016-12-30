@@ -5,10 +5,12 @@ using std::thread;
 
 #include "../Utilities/SimpleLock.h"
 #include "../Utilities/AutoResetEvent.h"
+#include "../Utilities/AviWriter.h"
 #include "EmulationSettings.h"
 #include "HdNesPack.h"
 #include "FrameInfo.h"
 
+class AviRecorder;
 class BaseVideoFilter;
 class IRenderingDevice;
 
@@ -28,6 +30,7 @@ private:
 	HdPpuPixelInfo *_hdScreenTiles = nullptr;
 
 	unique_ptr<thread> _decodeThread;
+	shared_ptr<AviRecorder> _aviRecorder;
 
 	AutoResetEvent _waitForFrame;
 	
@@ -66,4 +69,9 @@ public:
 	bool IsRunning();
 	void StartThread();
 	void StopThread();
+
+	void StartRecording(string filename, VideoCodec codec);
+	void AddRecordingSound(int16_t* soundBuffer, uint32_t sampleCount, uint32_t sampleRate);
+	void StopRecording();
+	bool IsRecording();
 };

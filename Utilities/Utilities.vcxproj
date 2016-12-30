@@ -322,6 +322,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArchiveReader.h" />
+    <ClInclude Include="AviWriter.h" />
     <ClInclude Include="blip_buf.h" />
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
@@ -337,8 +338,10 @@
     <ClInclude Include="nes_ntsc.h" />
     <ClInclude Include="nes_ntsc_config.h" />
     <ClInclude Include="nes_ntsc_impl.h" />
+    <ClInclude Include="BaseCodec.h" />
     <ClInclude Include="PlatformUtilities.h" />
     <ClInclude Include="PNGHelper.h" />
+    <ClInclude Include="RawCodec.h" />
     <ClInclude Include="Scale2x\scale2x.h" />
     <ClInclude Include="Scale2x\scale3x.h" />
     <ClInclude Include="Scale2x\scalebit.h" />
@@ -354,9 +357,11 @@
     <ClInclude Include="xBRZ\xbrz.h" />
     <ClInclude Include="ZipReader.h" />
     <ClInclude Include="ZipWriter.h" />
+    <ClInclude Include="ZmbvCodec.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArchiveReader.cpp" />
+    <ClCompile Include="AviWriter.cpp" />
     <ClCompile Include="blip_buf.cpp" />
     <ClCompile Include="CRC32.cpp" />
     <ClCompile Include="FolderUtilities.cpp" />
@@ -496,6 +501,7 @@
     </ClCompile>
     <ClCompile Include="ZipReader.cpp" />
     <ClCompile Include="ZipWriter.cpp" />
+    <ClCompile Include="ZmbvCodec.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

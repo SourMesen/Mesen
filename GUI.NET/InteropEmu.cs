@@ -91,6 +91,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MoviePlaying();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MovieRecording();
 
+		[DllImport(DLLPath)] public static extern void AviRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, VideoCodec codec);
+		[DllImport(DLLPath)] public static extern void AviStop();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool AviIsRecording();
+
 		[DllImport(DLLPath)] public static extern void WaveRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void WaveStop();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool WaveIsRecording();
@@ -1082,6 +1086,12 @@ namespace Mesen.GUI
 		VRC7 = 8,
 		Namco163 = 9,
 		Sunsoft5B = 10
+	}
+
+	public enum VideoCodec
+	{
+		None = 0,
+		ZMBV = 1,
 	}
 
 	public enum VideoFilterType
