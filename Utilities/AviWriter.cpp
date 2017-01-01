@@ -26,6 +26,7 @@
 #include "BaseCodec.h"
 #include "RawCodec.h"
 #include "ZmbvCodec.h"
+#include "CamstudioCodec.h"
 
 void AviWriter::WriteAviChunk(const char *tag, uint32_t size, void *data, uint32_t flags)
 {
@@ -63,7 +64,7 @@ void AviWriter::host_writed(uint8_t* buffer, uint32_t value)
 	buffer[3] = value >> 24;
 }
 
-bool AviWriter::StartWrite(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t fps, uint32_t audioSampleRate)
+bool AviWriter::StartWrite(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t fps, uint32_t audioSampleRate, uint32_t compressionLevel)
 {
 	_codecType = codec;
 	_file.open(filename, std::ios::out | std::ios::binary);
@@ -71,13 +72,14 @@ bool AviWriter::StartWrite(string filename, VideoCodec codec, uint32_t width, ui
 		return false;
 	}
 	
-	if(_codecType == VideoCodec::ZMBV) {
-		_codec.reset(new ZmbvCodec());
-	} else {
-		_codec.reset(new RawCodec());
+	switch(_codecType) {
+		default:
+		case VideoCodec::None: _codec.reset(new RawCodec()); break;
+		case VideoCodec::ZMBV: _codec.reset(new ZmbvCodec()); break;
+		case VideoCodec::CSCD: _codec.reset(new CamstudioCodec()); break;
 	}
 
-	if(!_codec->SetupCompress(width, height)) {
+	if(!_codec->SetupCompress(width, height, compressionLevel)) {
 		return false;
 	}
 

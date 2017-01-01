@@ -205,6 +205,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\AviRecordInfo.cs" />
     <Compile Include="Config\DebugInfo.cs" />
     <Compile Include="Config\EmulationInfo.cs" />
     <Compile Include="Config\KeyPresets.cs" />

@@ -16,10 +16,13 @@ namespace Mesen.GUI.Forms
 		public frmRecordAvi()
 		{
 			InitializeComponent();
+
+			Entity = ConfigManager.Config.AviRecordInfo;
+			AddBinding("Codec", cboVideoCodec);
+			AddBinding("CompressionLevel", trkCompressionLevel);
 		}
 
 		public string Filename { get; internal set; }
-		public bool UseCompression { get; internal set; }
 
 		protected override bool ValidateInput()
 		{
@@ -31,7 +34,6 @@ namespace Mesen.GUI.Forms
 			base.OnFormClosed(e);
 
 			this.Filename = txtFilename.Text;
-			this.UseCompression = chkUseCompression.Checked;
 		}
 
 		private void btnBrowse_Click(object sender, EventArgs e)
@@ -43,6 +45,12 @@ namespace Mesen.GUI.Forms
 			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				txtFilename.Text = sfd.FileName;
 			}
+		}
+
+		private void cboVideoCodec_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			lblCompressionLevel.Visible = cboVideoCodec.SelectedIndex > 0;
+			tlpCompressionLevel.Visible = cboVideoCodec.SelectedIndex > 0;
 		}
 	}
 }

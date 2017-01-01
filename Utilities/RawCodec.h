@@ -12,7 +12,7 @@ private:
 	uint8_t* _buffer = nullptr;
 
 public:
-	virtual bool SetupCompress(int width, int height) override
+	virtual bool SetupCompress(int width, int height, uint32_t compressionLevel) override
 	{
 		_height = height;
 		_width = width;

@@ -23,7 +23,7 @@ AviRecorder::~AviRecorder()
 	}
 }
 
-bool AviRecorder::StartRecording(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t fps, uint32_t audioSampleRate)
+bool AviRecorder::StartRecording(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t fps, uint32_t audioSampleRate, uint32_t compressionLevel)
 {
 	if(!_recording) {
 		_outputFile = filename;
@@ -32,7 +32,7 @@ bool AviRecorder::StartRecording(string filename, VideoCodec codec, uint32_t wid
 		_frameBuffer = new uint8_t[_frameBufferLength];
 
 		_aviWriter.reset(new AviWriter());
-		if(!_aviWriter->StartWrite(filename, codec, width, height, bpp, fps, audioSampleRate)) {
+		if(!_aviWriter->StartWrite(filename, codec, width, height, bpp, fps, audioSampleRate, compressionLevel)) {
 			_aviWriter.reset();
 			return false;
 		}

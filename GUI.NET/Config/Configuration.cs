@@ -28,6 +28,7 @@ namespace Mesen.GUI.Config
 		public ServerInfo ServerInfo;
 		public PlayerProfile Profile;
 		public DebugInfo DebugInfo;
+		public AviRecordInfo AviRecordInfo;
 
 		public Configuration()
 		{
@@ -43,6 +44,7 @@ namespace Mesen.GUI.Config
 			Cheats = new List<CheatInfo>();
 			VsConfig = new List<VsConfigInfo>();
 			DebugInfo = new DebugInfo();
+			AviRecordInfo = new AviRecordInfo();
 		}
 
 		~Configuration()

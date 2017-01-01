@@ -217,13 +217,13 @@ void VideoDecoder::TakeScreenshot()
 	}
 }
 
-void VideoDecoder::StartRecording(string filename, VideoCodec codec)
+void VideoDecoder::StartRecording(string filename, VideoCodec codec, uint32_t compressionLevel)
 {
 	if(_videoFilter) {
 		shared_ptr<AviRecorder> recorder(new AviRecorder());
 
 		FrameInfo frameInfo = _videoFilter->GetFrameInfo();
-		if(recorder->StartRecording(filename, codec, frameInfo.Width, frameInfo.Height, frameInfo.BitsPerPixel, 60098814, EmulationSettings::GetSampleRate())) {
+		if(recorder->StartRecording(filename, codec, frameInfo.Width, frameInfo.Height, frameInfo.BitsPerPixel, 60098814, EmulationSettings::GetSampleRate(), compressionLevel)) {
 			_aviRecorder = recorder;
 		}
 	}

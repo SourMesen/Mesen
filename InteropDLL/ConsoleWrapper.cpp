@@ -300,7 +300,7 @@ namespace InteropEmu {
 		DllExport bool __stdcall MoviePlaying() { return Movie::Playing(); }
 		DllExport bool __stdcall MovieRecording() { return Movie::Recording(); }
 
-		DllExport void __stdcall AviRecord(char* filename, VideoCodec codec) { VideoDecoder::GetInstance()->StartRecording(filename, codec); }
+		DllExport void __stdcall AviRecord(char* filename, VideoCodec codec, uint32_t compressionLevel) { VideoDecoder::GetInstance()->StartRecording(filename, codec, compressionLevel); }
 		DllExport void __stdcall AviStop() { VideoDecoder::GetInstance()->StopRecording(); }
 		DllExport bool __stdcall AviIsRecording() { return VideoDecoder::GetInstance()->IsRecording(); }
 

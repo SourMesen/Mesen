@@ -495,7 +495,10 @@
     </Form>
     <Form ID="frmRecordAvi" Title="Enregistreur vidéo">
       <Control ID="lblAviFile">Enregistrer sous:</Control>
-      <Control ID="chkUseCompression">Utiliser la compression ZMBV</Control>
+      <Control ID="lblCodec">Codec vidéo :</Control>
+      <Control ID="lblCompressionLevel">Niveau de compression :</Control>
+      <Control ID="lblLowCompression">faible&#13;(rapide)</Control>
+      <Control ID="lblHighCompression">élevé&#13;(lent)</Control>
       <Control ID="btnBrowse">Parcourir...</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
@@ -666,6 +669,11 @@
       <Value ID="Equal">Égale</Value>
       <Value ID="NotEqual">Pas égale</Value>
       <Value ID="Greater">Plus grande</Value>
+    </Enum>
+    <Enum ID="VideoCodec">
+      <Value ID="None">Aucun (Vidéo non-compressé)</Value>
+      <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
+      <Value ID="CSCD">Camstudio (CSCD)</Value>
     </Enum>
   </Enums>
 </Resources>

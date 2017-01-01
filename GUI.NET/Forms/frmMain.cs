@@ -956,7 +956,7 @@ namespace Mesen.GUI.Forms
 		{
 			using(frmRecordAvi frm = new frmRecordAvi()) {
 				if(frm.ShowDialog(mnuVideoRecorder) == DialogResult.OK) {
-					InteropEmu.AviRecord(frm.Filename, frm.UseCompression ? VideoCodec.ZMBV : VideoCodec.None);
+					InteropEmu.AviRecord(frm.Filename, ConfigManager.Config.AviRecordInfo.Codec, ConfigManager.Config.AviRecordInfo.CompressionLevel);
 				}
 			}
 		}

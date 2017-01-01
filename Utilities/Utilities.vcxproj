@@ -324,6 +324,7 @@
     <ClInclude Include="ArchiveReader.h" />
     <ClInclude Include="AviWriter.h" />
     <ClInclude Include="blip_buf.h" />
+    <ClInclude Include="CamstudioCodec.h" />
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
     <ClInclude Include="HexUtilities.h" />
@@ -363,6 +364,7 @@
     <ClCompile Include="ArchiveReader.cpp" />
     <ClCompile Include="AviWriter.cpp" />
     <ClCompile Include="blip_buf.cpp" />
+    <ClCompile Include="CamstudioCodec.cpp" />
     <ClCompile Include="CRC32.cpp" />
     <ClCompile Include="FolderUtilities.cpp" />
     <ClCompile Include="HexUtilities.cpp" />

@@ -109,7 +109,7 @@ private:
 
 public:
 	ZmbvCodec();
-	bool SetupCompress(int _width, int _height) override;
+	bool SetupCompress(int _width, int _height, uint32_t compressionLevel) override;
 	int CompressFrame(bool isKeyFrame, uint8_t *frameData, uint8_t** compressedData) override;
 	const char* GetFourCC() override;
 };

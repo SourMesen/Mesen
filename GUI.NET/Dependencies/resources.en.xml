@@ -166,5 +166,10 @@
       <Value ID="NotEqual">Not equal</Value>
       <Value ID="Greater">Greater</Value>
     </Enum>
+    <Enum ID="VideoCodec">
+      <Value ID="None">None (Uncompressed)</Value>
+      <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
+      <Value ID="CSCD">Camstudio (CSCD)</Value>
+    </Enum>
   </Enums>
 </Resources>

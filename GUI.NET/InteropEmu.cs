@@ -91,7 +91,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MoviePlaying();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MovieRecording();
 
-		[DllImport(DLLPath)] public static extern void AviRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, VideoCodec codec);
+		[DllImport(DLLPath)] public static extern void AviRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, VideoCodec codec, UInt32 compressionLevel);
 		[DllImport(DLLPath)] public static extern void AviStop();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool AviIsRecording();
 
@@ -1092,6 +1092,7 @@ namespace Mesen.GUI
 	{
 		None = 0,
 		ZMBV = 1,
+		CSCD = 2,
 	}
 
 	public enum VideoFilterType

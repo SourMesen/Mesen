@@ -221,12 +221,12 @@ void ZmbvCodec::AddXorFrame(void) {
 	}
 }
 
-bool ZmbvCodec::SetupCompress( int _width, int _height ) {
+bool ZmbvCodec::SetupCompress( int _width, int _height, uint32_t compressionLevel ) {
 	width = _width;
 	height = _height;
 	pitch = _width + 2*MAX_VECTOR;
 	format = ZMBV_FORMAT_NONE;
-	if (deflateInit (&zstream, 4) != Z_OK)
+	if (deflateInit (&zstream, compressionLevel) != Z_OK)
 		return false;
 
 	return true;

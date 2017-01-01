@@ -10,6 +10,7 @@ enum class VideoCodec
 {
 	None = 0,
 	ZMBV = 1,
+	CSCD = 2,
 };
 
 class AviWriter
@@ -50,6 +51,6 @@ public:
 	void AddFrame(uint8_t* frameData);
 	void AddSound(int16_t * data, uint32_t sampleCount);
 
-	bool StartWrite(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t fps, uint32_t audioSampleRate);
+	bool StartWrite(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t fps, uint32_t audioSampleRate, uint32_t compressionLevel);
 	void EndWrite();
 };

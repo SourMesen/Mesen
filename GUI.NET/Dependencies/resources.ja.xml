@@ -477,7 +477,10 @@
     </Form>
     <Form ID="frmRecordAvi" Title="動画レコーダー">
       <Control ID="lblAviFile">保存先：</Control>
-      <Control ID="chkUseCompression">ZMBV圧縮を利用する</Control>
+      <Control ID="lblCodec">ビデオコーデック：</Control>
+      <Control ID="lblCompressionLevel">圧縮レベル：</Control>
+      <Control ID="lblLowCompression">低い&#13;(早い)</Control>
+      <Control ID="lblHighCompression">高い&#13;(遅い)</Control>
       <Control ID="btnBrowse">参照...</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
@@ -648,6 +651,11 @@
       <Value ID="Equal">と同じ</Value>
       <Value ID="NotEqual">とは違う</Value>
       <Value ID="Greater">より大きい</Value>
+    </Enum>
+    <Enum ID="VideoCodec">
+      <Value ID="None">圧縮なし</Value>
+      <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
+      <Value ID="CSCD">Camstudio (CSCD)</Value>
     </Enum>
   </Enums>
 </Resources>

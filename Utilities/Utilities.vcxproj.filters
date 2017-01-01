@@ -137,6 +137,9 @@
     <ClInclude Include="RawCodec.h">
       <Filter>Avi</Filter>
     </ClInclude>
+    <ClInclude Include="CamstudioCodec.h">
+      <Filter>Avi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -239,6 +242,9 @@
       <Filter>Avi</Filter>
     </ClCompile>
     <ClCompile Include="AviWriter.cpp">
+      <Filter>Avi</Filter>
+    </ClCompile>
+    <ClCompile Include="CamstudioCodec.cpp">
       <Filter>Avi</Filter>
     </ClCompile>
   </ItemGroup>

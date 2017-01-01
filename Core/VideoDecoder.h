@@ -70,7 +70,7 @@ public:
 	void StartThread();
 	void StopThread();
 
-	void StartRecording(string filename, VideoCodec codec);
+	void StartRecording(string filename, VideoCodec codec, uint32_t compressionLevel);
 	void AddRecordingSound(int16_t* soundBuffer, uint32_t sampleCount, uint32_t sampleRate);
 	void StopRecording();
 	bool IsRecording();
