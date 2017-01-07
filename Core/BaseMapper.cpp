@@ -135,8 +135,14 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 	uint8_t defaultAccessType = MemoryAccessType::Read;
 	switch(type) {
 		case ChrMemoryType::Default:
-			pageCount = GetCHRPageCount();
 			pageSize = InternalGetChrPageSize();
+			if(pageSize == 0) {
+				#ifdef _DEBUG
+				MessageManager::DisplayMessage("Debug", "Tried to map undefined chr rom/ram.");
+				#endif
+				return;
+			}
+			pageCount = GetCHRPageCount();
 			sourceMemory = _onlyChrRam ? _chrRam : _chrRom;
 			if(_onlyChrRam) {
 				defaultAccessType |= MemoryAccessType::Write;
@@ -144,8 +150,15 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 			break;
 
 		case ChrMemoryType::ChrRom:
-			pageCount = GetCHRPageCount();
 			pageSize = InternalGetChrPageSize();
+			if(pageSize == 0) {
+				#ifdef _DEBUG
+				MessageManager::DisplayMessage("Debug", "Tried to map undefined chr rom.");
+				#endif
+				return;
+			}
+			pageCount = GetCHRPageCount();
+
 			sourceMemory = _chrRom;
 			break;
 
@@ -161,6 +174,13 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 			sourceMemory = _chrRam;
 			defaultAccessType |= MemoryAccessType::Write;
 			break;
+	}
+
+	if(pageCount == 0) {
+		#ifdef _DEBUG
+		MessageManager::DisplayMessage("Debug", "Tried to map undefined chr ram.");
+		#endif
+		return;
 	}
 
 	SetPpuMemoryMapping(startAddr, endAddr, sourceMemory + (pageNumber % pageCount) * pageSize, accessType == -1 ? defaultAccessType : accessType);
