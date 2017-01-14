@@ -535,7 +535,7 @@
     <Message ID="MesenUpToDate">Ви використовуєте останню версію Mesen</Message>
     <Message ID="PatchAndReset">Пропатчити і скинути поточну гру?</Message>
     <Message ID="SelectRomIps">Будь ласка, оберіть ROM відповідний IPS.</Message>
-    <Message ID="UnableToDownload">Неможливо завантажити файл. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:</Message>
+    <Message ID="UnableToDownload">Неможливо завантажити файл. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
     <Message ID="UnableToStartMissingDependencies">Mesen could not launch because it was unable to load MesenCore.dll due to missing dependencies.</Message>
     <Message ID="UnableToStartMissingFiles">Mesen не може запуститися через відсутні файли.&#xA;&#xA;Помилка: MesenCore.dll не знайдений.</Message>
     <Message ID="UnexpectedError">Невідома помилка.&#xA;&#xA;Детально:&#xA;{0}</Message>

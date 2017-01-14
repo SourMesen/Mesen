@@ -531,7 +531,7 @@
     <Message ID="MesenUpToDate">Ya utiliza la versión mas reciente de Mesen.</Message>
     <Message ID="PatchAndReset">¿Aplicar el parche y reiniciar el juego?</Message>
     <Message ID="SelectRomIps">Elija la ROM que corresponde al archivo IPS seleccionado.</Message>
-    <Message ID="UnableToDownload">No se puede descargar el archivo. Compruebe su conexión a Internet e inténtelo de nuevo.&#xA;&#xA;Detalles del error:</Message>
+    <Message ID="UnableToDownload">No se puede descargar el archivo. Compruebe su conexión a Internet e inténtelo de nuevo.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>
     <Message ID="UnableToStartMissingDependencies">Mesen no puede inciarse porque porque no puede cargar MesenCore.dll debido a dependencias no encontradas.</Message>
     <Message ID="UnableToStartMissingFiles">Mesen no puede iniciarse debido a que faltan archivos.&#xA;&#xA;Error: No se encuentra el archivo MesenCore.dll.</Message>
     <Message ID="UnexpectedError">Se ha producido un error inesperado.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>

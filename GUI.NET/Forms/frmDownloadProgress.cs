@@ -46,44 +46,53 @@ namespace Mesen.GUI.Forms
 			
 			DialogResult result = System.Windows.Forms.DialogResult.None;
 	
-			using(var client = new WebClient()) {
-				client.DownloadProgressChanged += (object s, DownloadProgressChangedEventArgs args) => {
-					progressDownload.Value = args.ProgressPercentage;
-				};
-				client.DownloadFileCompleted += (object s, AsyncCompletedEventArgs args) => {
-					if(!args.Cancelled && args.Error == null && File.Exists(_filename)) {
-						result = System.Windows.Forms.DialogResult.OK;
-					} else if(args.Error != null) {
-						MesenMsgBox.Show("UnableToDownload", MessageBoxButtons.OK, MessageBoxIcon.Error, args.Error.ToString());
+			Task.Run(() => {
+				using(var client = new WebClient()) {
+					client.DownloadProgressChanged += (object s, DownloadProgressChangedEventArgs args) => {
+						this.BeginInvoke((Action)(() => {
+							lblFilename.Text = string.Format("{0} ({1:0.00}Mb)", _link, (double)args.TotalBytesToReceive/1024/1024);
+							progressDownload.Value = args.ProgressPercentage;
+						}));
+					};
+					client.DownloadFileCompleted += (object s, AsyncCompletedEventArgs args) => {
+						if(!args.Cancelled && args.Error == null && File.Exists(_filename)) {
+							result = System.Windows.Forms.DialogResult.OK;
+						} else if(args.Error != null) {
+							MesenMsgBox.Show("UnableToDownload", MessageBoxButtons.OK, MessageBoxIcon.Error, args.Error.ToString());
+							result = System.Windows.Forms.DialogResult.Cancel;
+						}
+					};
+
+					Task downloadTask = null;
+					try {
+						downloadTask = client.DownloadFileTaskAsync(_link, _filename);
+					} catch(Exception ex) {
+						MesenMsgBox.Show("UnableToDownload", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
 						result = System.Windows.Forms.DialogResult.Cancel;
 					}
-				};
 
-				Task downloadTask = null;
-				try {
-					downloadTask = client.DownloadFileTaskAsync(_link, _filename);
-				} catch(Exception ex) {
-					MesenMsgBox.Show("UnableToDownload", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
-					result = System.Windows.Forms.DialogResult.Cancel;
-				}
+					if(downloadTask == null) {
+						result = System.Windows.Forms.DialogResult.Cancel;
+					} else {
+						while(!downloadTask.IsCompleted && !_cancel) {
+							System.Threading.Thread.Sleep(200);
+						}
 
-				if(downloadTask == null) {
-					result = System.Windows.Forms.DialogResult.Cancel;
-				} else {
-					while(!downloadTask.IsCompleted && !_cancel) {
-						System.Threading.Thread.Sleep(200);
-						Application.DoEvents();
-					}
-
-					if(_cancel) {
-						client.CancelAsync();
-					} else if(result == System.Windows.Forms.DialogResult.None) {
-						result = System.Windows.Forms.DialogResult.OK;
+						if(_cancel) {
+							client.CancelAsync();
+						} else if(result == System.Windows.Forms.DialogResult.None) {
+							result = System.Windows.Forms.DialogResult.OK;
+						}
 					}
 				}
-			}
-			DialogResult = result;
-			this.Close();
+
+				//Wait a bit for the progress bar to update to 100% (display updates are slower than the .Value updates)
+				System.Threading.Thread.Sleep(500);
+				this.BeginInvoke((Action)(() => {
+					DialogResult = result;
+					this.Close();
+				}));
+			});
 		}
 	}
 }
