@@ -216,10 +216,7 @@ class MMC3 : public BaseMapper
 					break;
 
 				case MMC3Registers::Reg8001:
-					if(_currentRegister >= 6) {
-						//"Writes to registers 6 and 7 always ignore bits 6 and 7, as the MMC3 has only 6 PRG ROM address output lines."
-						value &= 0x3F;
-					} else if(_currentRegister <= 1) {
+					if(_currentRegister <= 1) {
 						//"Writes to registers 0 and 1 always ignore bit 0"
 						value &= ~0x01;
 					}
