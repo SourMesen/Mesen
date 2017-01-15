@@ -1620,9 +1620,11 @@ namespace Mesen.GUI.Forms
 			List<string> gameRoms = new List<string>();
 
 			foreach(string folder in gameFolders) {
-				gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.nes", SearchOption.TopDirectoryOnly));
-				gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unf", SearchOption.TopDirectoryOnly));
-				gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.fds", SearchOption.TopDirectoryOnly));
+				if(Directory.Exists(folder)) {
+					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.nes", SearchOption.TopDirectoryOnly));
+					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unf", SearchOption.TopDirectoryOnly));
+					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.fds", SearchOption.TopDirectoryOnly));
+				}
 			}
 
 			if(gameRoms.Count == 0) {
