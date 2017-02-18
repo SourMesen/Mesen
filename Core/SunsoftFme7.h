@@ -37,6 +37,7 @@ protected:
 
 	void StreamState(bool saving) override
 	{
+		BaseMapper::StreamState(saving);
 		SnapshotInfo audio{ &_audio };
 		Stream(_command, _workRamValue, _irqEnabled, _irqCounterEnabled, _irqCounter, audio);
 		if(!saving) {
