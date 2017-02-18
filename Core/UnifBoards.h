@@ -12,6 +12,7 @@ namespace UnifBoards {
 		StreetHeroes,
 		DreamTech01,
 		Edu2000,
+		Eh8813A,
 		Gs2013,
 		Gs2004,
 		NovelDiamond,

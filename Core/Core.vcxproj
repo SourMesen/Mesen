@@ -439,6 +439,7 @@
     <ClInclude Include="DaouInfosys.h" />
     <ClInclude Include="DebugBreakHelper.h" />
     <ClInclude Include="DebuggerTypes.h" />
+    <ClInclude Include="Eh8813A.h" />
     <ClInclude Include="LabelManager.h" />
     <ClInclude Include="MagicKidGooGoo.h" />
     <ClInclude Include="MemoryAccessCounter.h" />
