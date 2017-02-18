@@ -106,7 +106,7 @@
 			this.labelCopyright.Name = "labelCopyright";
 			this.labelCopyright.Size = new System.Drawing.Size(244, 17);
 			this.labelCopyright.TabIndex = 21;
-			this.labelCopyright.Text = "© 2016 M. Bibaud (aka Sour)";
+			this.labelCopyright.Text = "© 2017 M. Bibaud (aka Sour)";
 			this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// flowLayoutPanel1
@@ -152,7 +152,7 @@
 			this.labelVersion.Name = "labelVersion";
 			this.labelVersion.Size = new System.Drawing.Size(146, 17);
 			this.labelVersion.TabIndex = 0;
-			this.labelVersion.Text = "Version: 0.7.0 (Beta)";
+			this.labelVersion.Text = "Version: 0.7.1 (Beta)";
 			this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// okButton

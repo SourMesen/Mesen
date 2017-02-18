@@ -452,10 +452,10 @@
     </Form>
     <Form ID="frmAbout" Title="О программе">
       <Control ID="labelProductName">Mesen</Control>
-      <Control ID="labelCopyright">© 2016 M. Bibaud (aka Sour)</Control>
+      <Control ID="labelCopyright">© 2017 M. Bibaud (aka Sour)</Control>
       <Control ID="lblWebsite">Сайт:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Версия: 0.7.0 (Beta)</Control>
+      <Control ID="labelVersion">Версия: 0.7.1 (Beta)</Control>
       <Control ID="lblDonate">If you want to support Mesen, please consider donating.&#xA;Thank you for your support!</Control>
       <Control ID="okButton">&amp;OK</Control>
     </Form>
