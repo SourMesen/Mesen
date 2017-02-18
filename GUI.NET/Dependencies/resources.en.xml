@@ -85,6 +85,7 @@
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">Standard (4:3)</Value>
       <Value ID="Widescreen">Widescreen (16:9)</Value>
+      <Value ID="Custom">Custom</Value>
     </Enum>
     <Enum ID="VideoFilterType">
       <Value ID="None">None</Value>

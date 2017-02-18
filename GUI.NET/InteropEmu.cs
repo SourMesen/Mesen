@@ -151,7 +151,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetPpuNmiConfig(UInt32 extraScanlinesBeforeNmi, UInt32 extraScanlineAfterNmi);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
 		[DllImport(DLLPath)] public static extern void SetVideoScale(double scale);
-		[DllImport(DLLPath)] public static extern void SetVideoAspectRatio(VideoAspectRatio aspectRatio);
+		[DllImport(DLLPath)] public static extern void SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio);
 		[DllImport(DLLPath)] public static extern void SetVideoFilter(VideoFilterType filter);
 		[DllImport(DLLPath)] public static extern void SetVideoResizeFilter(VideoResizeFilter filter);
 		[DllImport(DLLPath)] public static extern void SetRgbPalette(byte[] palette);
@@ -1133,7 +1133,8 @@ namespace Mesen.GUI
 		NTSC = 1,
 		PAL = 2,
 		Standard = 3,
-		Widescreen = 4
+		Widescreen = 4,
+		Custom = 5
 	}
 
 	public enum DebugMemoryType

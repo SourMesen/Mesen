@@ -223,6 +223,7 @@
       <Control ID="lblVideoFilter">Filtro:</Control>
       <Control ID="chkVerticalSync">Ativar a sincronização vertical</Control>
       <Control ID="lblDisplayRatio">Formato de imagem:</Control>
+      <Control ID="lblCustomRatio">Custom ratio:</Control>
       <Control ID="chkBilinearInterpolation">Utilizar a interpolação Bilinear</Control>
       <Control ID="chkShowFps">Mostrar FPS</Control>
       <Control ID="chkUseHdPacks">Utilizar os packs de Alta Definição do HDNes</Control>
@@ -574,6 +575,7 @@
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">Padrão (4:3)</Value>
       <Value ID="Widescreen">Widescreen (16:9)</Value>
+      <Value ID="Custom">Custom</Value>
     </Enum>
     <Enum ID="VideoFilterType">
       <Value ID="None">Nenhum</Value>

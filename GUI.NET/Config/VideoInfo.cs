@@ -20,6 +20,7 @@ namespace Mesen.GUI.Config
 		public VideoFilterType VideoFilter = VideoFilterType.None;
 		public bool UseBilinearInterpolation = false;
 		public VideoAspectRatio AspectRatio = VideoAspectRatio.Auto;
+		public double CustomAspectRatio = 1.0;
 		public bool VerticalSync = false;
 		public bool UseHdPacks = false;
 		public string PaletteData;
@@ -71,7 +72,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetVideoFilter(videoInfo.VideoFilter);
 			InteropEmu.SetVideoResizeFilter(videoInfo.UseBilinearInterpolation ? VideoResizeFilter.Bilinear : VideoResizeFilter.NearestNeighbor);
 			InteropEmu.SetVideoScale(videoInfo.VideoScale);
-			InteropEmu.SetVideoAspectRatio(videoInfo.AspectRatio);
+			InteropEmu.SetVideoAspectRatio(videoInfo.AspectRatio, videoInfo.CustomAspectRatio);
 
 			InteropEmu.SetPictureSettings(videoInfo.Brightness / 100.0, videoInfo.Contrast / 100.0, videoInfo.Saturation / 100.0, videoInfo.Hue / 100.0, videoInfo.ScanlineIntensity / 100.0);
 			InteropEmu.SetNtscFilterSettings(videoInfo.NtscArtifacts / 100.0, videoInfo.NtscBleed / 100.0, videoInfo.NtscFringing / 100.0, videoInfo.NtscGamma / 100.0, videoInfo.NtscResolution / 100.0, videoInfo.NtscSharpness / 100.0, videoInfo.NtscMergeFields, videoInfo.NtscYFilterLength / 100.0, videoInfo.NtscIFilterLength / 100.0, videoInfo.NtscQFilterLength / 100.0);

@@ -224,6 +224,7 @@
       <Control ID="lblVideoFilter">Фiльтр :</Control>
       <Control ID="chkVerticalSync">Включити вертикальну синхронізацію</Control>
       <Control ID="lblDisplayRatio">Співвідношення сторін :</Control>
+      <Control ID="lblCustomRatio">Custom ratio:</Control>
       <Control ID="chkBilinearInterpolation">Білінійна інтерполяція</Control>
       <Control ID="chkShowFps">Показувати FPS</Control>
       <Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
@@ -579,6 +580,7 @@
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">Стандарт (4:3)</Value>
       <Value ID="Widescreen">Широкий екран (16:9)</Value>
+      <Value ID="Custom">Custom</Value>
     </Enum>
     <Enum ID="VideoFilterType">
       <Value ID="None">Відсутнє</Value>

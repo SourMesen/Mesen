@@ -30,6 +30,7 @@ namespace Mesen.GUI.Forms.Config
 			
 			AddBinding("VideoScale", nudScale);
 			AddBinding("AspectRatio", cboAspectRatio);
+			AddBinding("CustomAspectRatio", nudCustomRatio);
 			AddBinding("VideoFilter", cboFilter);
 
 			AddBinding("OverscanLeft", nudOverscanLeft);
@@ -82,6 +83,7 @@ namespace Mesen.GUI.Forms.Config
 		{
 			VideoFilterType orgFilter = ((VideoInfo)Entity).VideoFilter;
 			UpdateObject();
+			UpdateCustomRatioVisibility();
 			UpdatePalette();
 			VideoFilterType filter = ((VideoInfo)Entity).VideoFilter;
 			if(filter == VideoFilterType.NTSC) {
@@ -477,6 +479,18 @@ namespace Mesen.GUI.Forms.Config
 				}
 				File.WriteAllBytes(sfd.FileName, bytePalette.ToArray());
 			}
+		}
+
+		private void cboAspectRatio_SelectionChangeCommitted(object sender, EventArgs e)
+		{
+			UpdateCustomRatioVisibility();
+		}
+
+		private void UpdateCustomRatioVisibility()
+		{
+			VideoAspectRatio ratio = cboAspectRatio.GetEnumValue<VideoAspectRatio>();
+			lblCustomRatio.Visible = ratio == VideoAspectRatio.Custom;
+			nudCustomRatio.Visible = ratio == VideoAspectRatio.Custom;
 		}
 	}
 }

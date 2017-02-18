@@ -115,6 +115,9 @@
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
+			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblCustomRatio = new System.Windows.Forms.Label();
+			this.nudCustomRatio = new System.Windows.Forms.NumericUpDown();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -151,6 +154,8 @@
 			this.tableLayoutPanel9.SuspendLayout();
 			this.contextPicturePresets.SuspendLayout();
 			this.contextPaletteList.SuspendLayout();
+			this.flowLayoutPanel6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudCustomRatio)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -165,11 +170,11 @@
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 3);
-			this.tlpMain.Controls.Add(this.cboAspectRatio, 1, 1);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 1);
 			this.tlpMain.Controls.Add(this.chkShowFps, 0, 4);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 2);
 			this.tlpMain.Controls.Add(this.nudScale, 1, 0);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 1);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
@@ -200,7 +205,7 @@
 			this.chkVerticalSync.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkVerticalSync.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkVerticalSync, 2);
-			this.chkVerticalSync.Location = new System.Drawing.Point(3, 79);
+			this.chkVerticalSync.Location = new System.Drawing.Point(3, 78);
 			this.chkVerticalSync.Name = "chkVerticalSync";
 			this.chkVerticalSync.Size = new System.Drawing.Size(121, 17);
 			this.chkVerticalSync.TabIndex = 15;
@@ -217,16 +222,17 @@
             "PAL (18:13)",
             "Standard (4:3)",
             "Widescreen (16:9)"});
-			this.cboAspectRatio.Location = new System.Drawing.Point(80, 29);
+			this.cboAspectRatio.Location = new System.Drawing.Point(3, 3);
 			this.cboAspectRatio.Name = "cboAspectRatio";
 			this.cboAspectRatio.Size = new System.Drawing.Size(121, 21);
 			this.cboAspectRatio.TabIndex = 16;
+			this.cboAspectRatio.SelectionChangeCommitted += new System.EventHandler(this.cboAspectRatio_SelectionChangeCommitted);
 			// 
 			// lblDisplayRatio
 			// 
 			this.lblDisplayRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblDisplayRatio.AutoSize = true;
-			this.lblDisplayRatio.Location = new System.Drawing.Point(3, 33);
+			this.lblDisplayRatio.Location = new System.Drawing.Point(3, 32);
 			this.lblDisplayRatio.Name = "lblDisplayRatio";
 			this.lblDisplayRatio.Size = new System.Drawing.Size(71, 13);
 			this.lblDisplayRatio.TabIndex = 17;
@@ -237,7 +243,7 @@
 			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFps.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 102);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 101);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
@@ -250,7 +256,7 @@
 			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
 			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
 			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 53);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 52);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
 			this.flowLayoutPanel7.Size = new System.Drawing.Size(521, 23);
@@ -1167,7 +1173,7 @@
             this.mnuPaletteNestopiaRgb,
             this.mnuPaletteSonyCxa2025As});
 			this.contextPaletteList.Name = "contextPicturePresets";
-			this.contextPaletteList.Size = new System.Drawing.Size(236, 186);
+			this.contextPaletteList.Size = new System.Drawing.Size(236, 164);
 			this.contextPaletteList.Opening += new System.ComponentModel.CancelEventHandler(this.contextPaletteList_Opening);
 			// 
 			// mnuDefaultPalette
@@ -1223,6 +1229,57 @@
 			this.mnuPaletteSonyCxa2025As.Size = new System.Drawing.Size(235, 22);
 			this.mnuPaletteSonyCxa2025As.Text = "Sony CXA2025AS";
 			this.mnuPaletteSonyCxa2025As.Click += new System.EventHandler(this.mnuPaletteSonyCxa2025As_Click);
+			// 
+			// flowLayoutPanel6
+			// 
+			this.flowLayoutPanel6.Controls.Add(this.cboAspectRatio);
+			this.flowLayoutPanel6.Controls.Add(this.lblCustomRatio);
+			this.flowLayoutPanel6.Controls.Add(this.nudCustomRatio);
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(77, 26);
+			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(364, 26);
+			this.flowLayoutPanel6.TabIndex = 22;
+			// 
+			// lblCustomRatio
+			// 
+			this.lblCustomRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblCustomRatio.AutoSize = true;
+			this.lblCustomRatio.Location = new System.Drawing.Point(130, 7);
+			this.lblCustomRatio.Name = "lblCustomRatio";
+			this.lblCustomRatio.Size = new System.Drawing.Size(76, 13);
+			this.lblCustomRatio.TabIndex = 17;
+			this.lblCustomRatio.Text = "Custom Ratio: ";
+			this.lblCustomRatio.Visible = false;
+			// 
+			// nudCustomRatio
+			// 
+			this.nudCustomRatio.DecimalPlaces = 3;
+			this.nudCustomRatio.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.nudCustomRatio.Location = new System.Drawing.Point(212, 3);
+			this.nudCustomRatio.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.nudCustomRatio.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.nudCustomRatio.Name = "nudCustomRatio";
+			this.nudCustomRatio.Size = new System.Drawing.Size(48, 20);
+			this.nudCustomRatio.TabIndex = 22;
+			this.nudCustomRatio.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.nudCustomRatio.Visible = false;
 			// 
 			// frmVideoConfig
 			// 
@@ -1287,6 +1344,9 @@
 			this.tableLayoutPanel9.PerformLayout();
 			this.contextPicturePresets.ResumeLayout(false);
 			this.contextPaletteList.ResumeLayout(false);
+			this.flowLayoutPanel6.ResumeLayout(false);
+			this.flowLayoutPanel6.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudCustomRatio)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -1379,5 +1439,8 @@
 		private Controls.ctrlHorizontalTrackbar trkIFilterLength;
 		private Controls.ctrlHorizontalTrackbar trkQFilterLength;
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteSonyCxa2025As;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
+		private System.Windows.Forms.Label lblCustomRatio;
+		private System.Windows.Forms.NumericUpDown nudCustomRatio;
 	}
 }

@@ -225,6 +225,7 @@
       <Control ID="chkBilinearInterpolation">バイリニア補間を有効にする</Control>
       <Control ID="chkVerticalSync">垂直同期を有効にする</Control>
       <Control ID="lblDisplayRatio">画面アスペクト:</Control>
+      <Control ID="lblCustomRatio">アスペクトレシオ:</Control>
       <Control ID="chkShowFps">フレームレート表示</Control>
       <Control ID="chkUseHdPacks">HDNesのHDパックを使う</Control>
       <Control ID="tpgOverscan">オーバースキャン</Control>
@@ -571,6 +572,7 @@
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">ノーマル (4:3)</Value>
       <Value ID="Widescreen">ワイド (16:9)</Value>
+      <Value ID="Custom">カスタム</Value>
     </Enum>
     <Enum ID="VideoFilterType">
       <Value ID="None">なし</Value>
