@@ -440,6 +440,7 @@
     <ClInclude Include="DebugBreakHelper.h" />
     <ClInclude Include="DebuggerTypes.h" />
     <ClInclude Include="LabelManager.h" />
+    <ClInclude Include="MagicKidGooGoo.h" />
     <ClInclude Include="MemoryAccessCounter.h" />
     <ClInclude Include="MemoryDumper.h" />
     <ClInclude Include="DebugState.h" />

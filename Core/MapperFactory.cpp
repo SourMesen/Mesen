@@ -70,6 +70,7 @@
 #include "Lh10.h"
 #include "Lh32.h"
 #include "Malee.h"
+#include "MagicKidGooGoo.h"
 #include "Mapper15.h"
 #include "Mapper35.h"
 #include "Mapper40.h"
@@ -429,6 +430,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 187: return new MMC3_187();
 		case 188: return new BandaiKaraoke();
 		case 189: return new MMC3_189();
+		case 190: return new MagicKidGooGoo();
 		case 191: return new MMC3_ChrRam(0x80, 0xFF, 2);
 		case 192: return new MMC3_ChrRam(0x08, 0x0B, 4);
 		case 193: return new NtdecTc112();
