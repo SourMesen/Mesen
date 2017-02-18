@@ -7,7 +7,7 @@
       <Control ID="mnuSaveState">クイックセーブ</Control>
       <Control ID="mnuLoadState">クイックロード</Control>
       <Control ID="mnuRecentFiles">最近開いたファイル</Control>
-      <Control ID="mnuExit">終わる</Control>
+      <Control ID="mnuExit">終了</Control>
       <Control ID="mnuGame">ゲーム</Control>
       <Control ID="mnuPause">ポーズ</Control>
       <Control ID="mnuReset">リセット</Control>
@@ -548,6 +548,7 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">速度を下げる</Message>
     <Message ID="EmulatorShortcutMappings_Pause">ポーズ</Message>
     <Message ID="EmulatorShortcutMappings_Reset">リセット</Message>
+    <Message ID="EmulatorShortcutMappings_Exit">終了</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">スクリーンショットを撮る</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - A面B面切り替え</Message>
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - 次のディスクを入れる</Message>    

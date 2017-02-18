@@ -556,6 +556,7 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Зменшити Швидкість</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
+    <Message ID="EmulatorShortcutMappings_Exit">Exit</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернути диск</Message>
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставити наступний диск</Message>

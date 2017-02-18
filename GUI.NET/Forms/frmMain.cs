@@ -430,6 +430,10 @@ namespace Mesen.GUI.Forms
 						SelectFdsBiosPrompt();
 					}));
 					break;
+
+				case InteropEmu.ConsoleNotificationType.RequestExit:
+					this.BeginInvoke((MethodInvoker)(() => this.Close()));
+					break;
 			}
 
 			if(e.NotificationType != InteropEmu.ConsoleNotificationType.PpuFrameDone) {

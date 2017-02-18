@@ -222,6 +222,7 @@ struct EmulatorKeyMappings
 	uint32_t FastForward;
 	uint32_t Pause;
 	uint32_t Reset;
+	uint32_t Exit;
 
 	uint32_t MoveToNextStateSlot;
 	uint32_t MoveToPreviousStateSlot;

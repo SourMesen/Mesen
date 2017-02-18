@@ -487,6 +487,7 @@ namespace Mesen.GUI
 			ConfigChanged = 14,
 			DisconnectedFromServer = 15,
 			PpuViewerDisplayFrame = 16,
+			RequestExit = 17,
 		}
 
 		public enum ControllerType
@@ -901,6 +902,7 @@ namespace Mesen.GUI
 		public UInt32 FastForward;
 		public UInt32 Pause;
 		public UInt32 Reset;
+		public UInt32 Exit;
 
 		public UInt32 MoveToNextStateSlot;
 		public UInt32 MoveToPreviousStateSlot;

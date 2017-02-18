@@ -557,6 +557,7 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Сброс</Message>
+    <Message ID="EmulatorShortcutMappings_Exit">Exit</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Сделать сриншот</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернуть диск</Message>
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставить следующий диск</Message>

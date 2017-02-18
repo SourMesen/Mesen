@@ -117,6 +117,10 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 			EmulationSettings::SetFlags(EmulationFlags::Paused);
 		}
 	}
+
+	if(DetectKeyPress(mappings.Exit)) {
+		MessageManager::SendNotification(ConsoleNotificationType::RequestExit);
+	}
 }
 
 void ShortcutKeyHandler::ProcessKeys(EmulatorKeyMappingSet mappings)

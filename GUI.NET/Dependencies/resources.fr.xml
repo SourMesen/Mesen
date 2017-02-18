@@ -566,6 +566,7 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Réduire la vitesse</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pause</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
+    <Message ID="EmulatorShortcutMappings_Exit">Quitter</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Capture d'écran</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Changer le disque de côté</Message>
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insérer le disque suivant</Message>
