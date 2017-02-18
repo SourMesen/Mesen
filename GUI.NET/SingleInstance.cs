@@ -119,7 +119,8 @@ namespace Mesen.GUI
 				} catch(IOException) {
 					//Pipe was broken
 				} finally {
-					ListenForArguments();
+					Thread.Sleep(10000);
+					Task.Run(() => this.ListenForArguments());
 				}
 			}
 		}
