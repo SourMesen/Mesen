@@ -63,7 +63,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("SwapDutyCycles", chkSwapDutyCycles);
 			AddBinding("SilenceTriangleHighFreq", chkSilenceTriangleHighFreq);
 			AddBinding("ReduceDmcPopping", chkReduceDmcPopping);
-
+			AddBinding("DisableNoiseModeFlag", chkDisableNoiseModeFlag);
+			
 			radStereoDisabled.Tag = InteropEmu.StereoFilter.None;
 			radStereoDelay.Tag = InteropEmu.StereoFilter.Delay;
 			radStereoPanning.Tag = InteropEmu.StereoFilter.Panning;

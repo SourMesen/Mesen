@@ -111,6 +111,7 @@
       <Control ID="chkSwapDutyCycles">Squareチャンネルのデューティサイクルをスワップする</Control>
       <Control ID="chkSilenceTriangleHighFreq">Triangleチャンネルが超音波を出す場合、ミュートする　（ポップノイズを軽減する）</Control>
       <Control ID="chkReduceDmcPopping">DMCチャンネルのポップノイズを軽減する</Control>
+      <Control ID="chkDisableNoiseModeFlag">Noiseチャンネルのモードフラッグを無効にする</Control>
       <Control ID="tpgEffects">エフェクト</Control>
       <Control ID="grpStereo">ステレオ</Control>
       <Control ID="radStereoDisabled">無効</Control>
@@ -287,6 +288,7 @@
       <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
       <Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
       <Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
+      <Control ID="chkDisablePpu2004Reads">PPUの$2004を読み込み不可能にする</Control>
       <Control ID="lblRamPowerOnState">起動時のメモリの状態 : </Control>
 
       <Control ID="tpgOverclocking">オーバークロック</Control>

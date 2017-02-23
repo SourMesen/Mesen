@@ -111,6 +111,7 @@
       <Control ID="chkSwapDutyCycles">Inverser le rapport cyclique des canaux Square 1 et Square 2</Control>
       <Control ID="chkSilenceTriangleHighFreq">Couper le canal triangle lors de fréquences ultrasoniques (réduit les "pops")</Control>
       <Control ID="chkReduceDmcPopping">Réduire l'intensité des "pops" du canal DMC</Control>
+      <Control ID="chkDisableNoiseModeFlag">Désactiver le mode alternatif du canal Noise</Control>
       <Control ID="tpgEffects">Effets</Control>
       <Control ID="grpStereo">Stéréo</Control>
       <Control ID="radStereoDisabled">Désactivé</Control>
@@ -287,6 +288,7 @@
       <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
       <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
+      <Control ID="chkDisablePpu2004Reads">Empêcher la lecture du registre $2004 du PPU</Control>
       <Control ID="lblRamPowerOnState">État initial de la mémoire au démarrage : </Control>
 
       <Control ID="tpgOverclocking">Overclocking</Control>

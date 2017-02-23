@@ -61,16 +61,17 @@
 			this.tpgVolume = new System.Windows.Forms.TabPage();
 			this.tpgPanning = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-			this.trkDmcPan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
-			this.trkNoisePan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
-			this.trkVrc6Pan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
-			this.trkVrc7Pan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
-			this.trkNamcoPan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
-			this.trkSunsoftPan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.trkSquare1Pan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.trkFdsPan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.trkSquare2Pan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.trkMmc5Pan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.trkTrianglePan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.trkNoisePan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.trkDmcPan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.trkVrc6Pan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.trkVrc7Pan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.trkNamcoPan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.trkSunsoftPan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.tpgEffects = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpStereo = new System.Windows.Forms.GroupBox();
@@ -97,10 +98,10 @@
 			this.lblCrossFeedRatio = new System.Windows.Forms.Label();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkDisableNoiseModeFlag = new System.Windows.Forms.CheckBox();
 			this.chkSilenceTriangleHighFreq = new System.Windows.Forms.CheckBox();
 			this.chkSwapDutyCycles = new System.Windows.Forms.CheckBox();
 			this.chkReduceDmcPopping = new System.Windows.Forms.CheckBox();
-			this.trkTrianglePan = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.baseConfigPanel.SuspendLayout();
 			this.grpVolume.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -134,8 +135,8 @@
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Controls.Add(this.btnReset);
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 376);
-			this.baseConfigPanel.Size = new System.Drawing.Size(474, 29);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 375);
+			this.baseConfigPanel.Size = new System.Drawing.Size(477, 29);
 			this.baseConfigPanel.Controls.SetChildIndex(this.btnReset, 0);
 			// 
 			// grpVolume
@@ -373,7 +374,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(460, 344);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(463, 343);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
 			// chkMuteSoundInBackground
@@ -554,7 +555,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(474, 376);
+			this.tabMain.Size = new System.Drawing.Size(477, 375);
 			this.tabMain.TabIndex = 4;
 			// 
 			// tpgGeneral
@@ -563,7 +564,7 @@
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(466, 350);
+			this.tpgGeneral.Size = new System.Drawing.Size(469, 349);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -574,7 +575,7 @@
 			this.tpgVolume.Location = new System.Drawing.Point(4, 22);
 			this.tpgVolume.Name = "tpgVolume";
 			this.tpgVolume.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgVolume.Size = new System.Drawing.Size(466, 350);
+			this.tpgVolume.Size = new System.Drawing.Size(469, 349);
 			this.tpgVolume.TabIndex = 1;
 			this.tpgVolume.Text = "Volume";
 			this.tpgVolume.UseVisualStyleBackColor = true;
@@ -585,7 +586,7 @@
 			this.tpgPanning.Location = new System.Drawing.Point(4, 22);
 			this.tpgPanning.Name = "tpgPanning";
 			this.tpgPanning.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPanning.Size = new System.Drawing.Size(466, 350);
+			this.tpgPanning.Size = new System.Drawing.Size(469, 349);
 			this.tpgPanning.TabIndex = 4;
 			this.tpgPanning.Text = "Panning";
 			this.tpgPanning.UseVisualStyleBackColor = true;
@@ -618,98 +619,8 @@
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(460, 344);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(463, 343);
 			this.tableLayoutPanel6.TabIndex = 3;
-			// 
-			// trkDmcPan
-			// 
-			this.trkDmcPan.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkDmcPan.Location = new System.Drawing.Point(12, 220);
-			this.trkDmcPan.Margin = new System.Windows.Forms.Padding(0);
-			this.trkDmcPan.Maximum = 100;
-			this.trkDmcPan.MaximumSize = new System.Drawing.Size(63, 160);
-			this.trkDmcPan.Minimum = -100;
-			this.trkDmcPan.MinimumSize = new System.Drawing.Size(206, 55);
-			this.trkDmcPan.Name = "trkDmcPan";
-			this.trkDmcPan.Size = new System.Drawing.Size(206, 55);
-			this.trkDmcPan.TabIndex = 16;
-			this.trkDmcPan.Text = "DMC";
-			this.trkDmcPan.Value = 0;
-			// 
-			// trkNoisePan
-			// 
-			this.trkNoisePan.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkNoisePan.Location = new System.Drawing.Point(12, 165);
-			this.trkNoisePan.Margin = new System.Windows.Forms.Padding(0);
-			this.trkNoisePan.Maximum = 100;
-			this.trkNoisePan.MaximumSize = new System.Drawing.Size(63, 160);
-			this.trkNoisePan.Minimum = -100;
-			this.trkNoisePan.MinimumSize = new System.Drawing.Size(206, 55);
-			this.trkNoisePan.Name = "trkNoisePan";
-			this.trkNoisePan.Size = new System.Drawing.Size(206, 55);
-			this.trkNoisePan.TabIndex = 15;
-			this.trkNoisePan.Text = "Noise";
-			this.trkNoisePan.Value = 0;
-			// 
-			// trkVrc6Pan
-			// 
-			this.trkVrc6Pan.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkVrc6Pan.Location = new System.Drawing.Point(242, 110);
-			this.trkVrc6Pan.Margin = new System.Windows.Forms.Padding(0);
-			this.trkVrc6Pan.Maximum = 100;
-			this.trkVrc6Pan.MaximumSize = new System.Drawing.Size(63, 160);
-			this.trkVrc6Pan.Minimum = -100;
-			this.trkVrc6Pan.MinimumSize = new System.Drawing.Size(206, 55);
-			this.trkVrc6Pan.Name = "trkVrc6Pan";
-			this.trkVrc6Pan.Size = new System.Drawing.Size(206, 55);
-			this.trkVrc6Pan.TabIndex = 19;
-			this.trkVrc6Pan.Text = "VRC6";
-			this.trkVrc6Pan.Value = 0;
-			// 
-			// trkVrc7Pan
-			// 
-			this.trkVrc7Pan.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkVrc7Pan.Location = new System.Drawing.Point(242, 165);
-			this.trkVrc7Pan.Margin = new System.Windows.Forms.Padding(0);
-			this.trkVrc7Pan.Maximum = 100;
-			this.trkVrc7Pan.MaximumSize = new System.Drawing.Size(63, 160);
-			this.trkVrc7Pan.Minimum = -100;
-			this.trkVrc7Pan.MinimumSize = new System.Drawing.Size(206, 55);
-			this.trkVrc7Pan.Name = "trkVrc7Pan";
-			this.trkVrc7Pan.Size = new System.Drawing.Size(206, 55);
-			this.trkVrc7Pan.TabIndex = 20;
-			this.trkVrc7Pan.Text = "VRC7";
-			this.trkVrc7Pan.Value = 0;
-			// 
-			// trkNamcoPan
-			// 
-			this.trkNamcoPan.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkNamcoPan.Location = new System.Drawing.Point(242, 220);
-			this.trkNamcoPan.Margin = new System.Windows.Forms.Padding(0);
-			this.trkNamcoPan.Maximum = 100;
-			this.trkNamcoPan.MaximumSize = new System.Drawing.Size(63, 160);
-			this.trkNamcoPan.Minimum = -100;
-			this.trkNamcoPan.MinimumSize = new System.Drawing.Size(206, 55);
-			this.trkNamcoPan.Name = "trkNamcoPan";
-			this.trkNamcoPan.Size = new System.Drawing.Size(206, 55);
-			this.trkNamcoPan.TabIndex = 21;
-			this.trkNamcoPan.Text = "Namco";
-			this.trkNamcoPan.Value = 0;
-			// 
-			// trkSunsoftPan
-			// 
-			this.trkSunsoftPan.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkSunsoftPan.Location = new System.Drawing.Point(242, 275);
-			this.trkSunsoftPan.Margin = new System.Windows.Forms.Padding(0);
-			this.trkSunsoftPan.Maximum = 100;
-			this.trkSunsoftPan.MaximumSize = new System.Drawing.Size(63, 160);
-			this.trkSunsoftPan.Minimum = -100;
-			this.trkSunsoftPan.MinimumSize = new System.Drawing.Size(206, 55);
-			this.trkSunsoftPan.Name = "trkSunsoftPan";
-			this.trkSunsoftPan.Size = new System.Drawing.Size(206, 55);
-			this.trkSunsoftPan.TabIndex = 22;
-			this.trkSunsoftPan.Text = "Sunsoft";
-			this.trkSunsoftPan.Value = 0;
 			// 
 			// trkSquare1Pan
 			// 
@@ -729,7 +640,7 @@
 			// trkFdsPan
 			// 
 			this.trkFdsPan.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkFdsPan.Location = new System.Drawing.Point(242, 0);
+			this.trkFdsPan.Location = new System.Drawing.Point(244, 0);
 			this.trkFdsPan.Margin = new System.Windows.Forms.Padding(0);
 			this.trkFdsPan.Maximum = 100;
 			this.trkFdsPan.MaximumSize = new System.Drawing.Size(63, 160);
@@ -759,7 +670,7 @@
 			// trkMmc5Pan
 			// 
 			this.trkMmc5Pan.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkMmc5Pan.Location = new System.Drawing.Point(242, 55);
+			this.trkMmc5Pan.Location = new System.Drawing.Point(244, 55);
 			this.trkMmc5Pan.Margin = new System.Windows.Forms.Padding(0);
 			this.trkMmc5Pan.Maximum = 100;
 			this.trkMmc5Pan.MaximumSize = new System.Drawing.Size(63, 160);
@@ -771,13 +682,118 @@
 			this.trkMmc5Pan.Text = "MMC5";
 			this.trkMmc5Pan.Value = 0;
 			// 
+			// trkTrianglePan
+			// 
+			this.trkTrianglePan.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkTrianglePan.Location = new System.Drawing.Point(12, 110);
+			this.trkTrianglePan.Margin = new System.Windows.Forms.Padding(0);
+			this.trkTrianglePan.Maximum = 100;
+			this.trkTrianglePan.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkTrianglePan.Minimum = -100;
+			this.trkTrianglePan.MinimumSize = new System.Drawing.Size(206, 55);
+			this.trkTrianglePan.Name = "trkTrianglePan";
+			this.trkTrianglePan.Size = new System.Drawing.Size(206, 55);
+			this.trkTrianglePan.TabIndex = 14;
+			this.trkTrianglePan.Text = "Triangle";
+			this.trkTrianglePan.Value = 0;
+			// 
+			// trkNoisePan
+			// 
+			this.trkNoisePan.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkNoisePan.Location = new System.Drawing.Point(12, 165);
+			this.trkNoisePan.Margin = new System.Windows.Forms.Padding(0);
+			this.trkNoisePan.Maximum = 100;
+			this.trkNoisePan.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkNoisePan.Minimum = -100;
+			this.trkNoisePan.MinimumSize = new System.Drawing.Size(206, 55);
+			this.trkNoisePan.Name = "trkNoisePan";
+			this.trkNoisePan.Size = new System.Drawing.Size(206, 55);
+			this.trkNoisePan.TabIndex = 15;
+			this.trkNoisePan.Text = "Noise";
+			this.trkNoisePan.Value = 0;
+			// 
+			// trkDmcPan
+			// 
+			this.trkDmcPan.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkDmcPan.Location = new System.Drawing.Point(12, 220);
+			this.trkDmcPan.Margin = new System.Windows.Forms.Padding(0);
+			this.trkDmcPan.Maximum = 100;
+			this.trkDmcPan.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkDmcPan.Minimum = -100;
+			this.trkDmcPan.MinimumSize = new System.Drawing.Size(206, 55);
+			this.trkDmcPan.Name = "trkDmcPan";
+			this.trkDmcPan.Size = new System.Drawing.Size(206, 55);
+			this.trkDmcPan.TabIndex = 16;
+			this.trkDmcPan.Text = "DMC";
+			this.trkDmcPan.Value = 0;
+			// 
+			// trkVrc6Pan
+			// 
+			this.trkVrc6Pan.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkVrc6Pan.Location = new System.Drawing.Point(244, 110);
+			this.trkVrc6Pan.Margin = new System.Windows.Forms.Padding(0);
+			this.trkVrc6Pan.Maximum = 100;
+			this.trkVrc6Pan.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkVrc6Pan.Minimum = -100;
+			this.trkVrc6Pan.MinimumSize = new System.Drawing.Size(206, 55);
+			this.trkVrc6Pan.Name = "trkVrc6Pan";
+			this.trkVrc6Pan.Size = new System.Drawing.Size(206, 55);
+			this.trkVrc6Pan.TabIndex = 19;
+			this.trkVrc6Pan.Text = "VRC6";
+			this.trkVrc6Pan.Value = 0;
+			// 
+			// trkVrc7Pan
+			// 
+			this.trkVrc7Pan.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkVrc7Pan.Location = new System.Drawing.Point(244, 165);
+			this.trkVrc7Pan.Margin = new System.Windows.Forms.Padding(0);
+			this.trkVrc7Pan.Maximum = 100;
+			this.trkVrc7Pan.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkVrc7Pan.Minimum = -100;
+			this.trkVrc7Pan.MinimumSize = new System.Drawing.Size(206, 55);
+			this.trkVrc7Pan.Name = "trkVrc7Pan";
+			this.trkVrc7Pan.Size = new System.Drawing.Size(206, 55);
+			this.trkVrc7Pan.TabIndex = 20;
+			this.trkVrc7Pan.Text = "VRC7";
+			this.trkVrc7Pan.Value = 0;
+			// 
+			// trkNamcoPan
+			// 
+			this.trkNamcoPan.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkNamcoPan.Location = new System.Drawing.Point(244, 220);
+			this.trkNamcoPan.Margin = new System.Windows.Forms.Padding(0);
+			this.trkNamcoPan.Maximum = 100;
+			this.trkNamcoPan.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkNamcoPan.Minimum = -100;
+			this.trkNamcoPan.MinimumSize = new System.Drawing.Size(206, 55);
+			this.trkNamcoPan.Name = "trkNamcoPan";
+			this.trkNamcoPan.Size = new System.Drawing.Size(206, 55);
+			this.trkNamcoPan.TabIndex = 21;
+			this.trkNamcoPan.Text = "Namco";
+			this.trkNamcoPan.Value = 0;
+			// 
+			// trkSunsoftPan
+			// 
+			this.trkSunsoftPan.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.trkSunsoftPan.Location = new System.Drawing.Point(244, 275);
+			this.trkSunsoftPan.Margin = new System.Windows.Forms.Padding(0);
+			this.trkSunsoftPan.Maximum = 100;
+			this.trkSunsoftPan.MaximumSize = new System.Drawing.Size(63, 160);
+			this.trkSunsoftPan.Minimum = -100;
+			this.trkSunsoftPan.MinimumSize = new System.Drawing.Size(206, 55);
+			this.trkSunsoftPan.Name = "trkSunsoftPan";
+			this.trkSunsoftPan.Size = new System.Drawing.Size(206, 55);
+			this.trkSunsoftPan.TabIndex = 22;
+			this.trkSunsoftPan.Text = "Sunsoft";
+			this.trkSunsoftPan.Value = 0;
+			// 
 			// tpgEffects
 			// 
 			this.tpgEffects.Controls.Add(this.tableLayoutPanel4);
 			this.tpgEffects.Location = new System.Drawing.Point(4, 22);
 			this.tpgEffects.Name = "tpgEffects";
 			this.tpgEffects.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgEffects.Size = new System.Drawing.Size(466, 350);
+			this.tpgEffects.Size = new System.Drawing.Size(469, 349);
 			this.tpgEffects.TabIndex = 3;
 			this.tpgEffects.Text = "Effects";
 			this.tpgEffects.UseVisualStyleBackColor = true;
@@ -797,7 +813,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(460, 344);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(463, 343);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// grpStereo
@@ -806,7 +822,7 @@
 			this.grpStereo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpStereo.Location = new System.Drawing.Point(3, 3);
 			this.grpStereo.Name = "grpStereo";
-			this.grpStereo.Size = new System.Drawing.Size(454, 95);
+			this.grpStereo.Size = new System.Drawing.Size(457, 95);
 			this.grpStereo.TabIndex = 0;
 			this.grpStereo.TabStop = false;
 			this.grpStereo.Text = "Stereo";
@@ -831,7 +847,7 @@
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpStereoFilter.Size = new System.Drawing.Size(448, 76);
+			this.tlpStereoFilter.Size = new System.Drawing.Size(451, 76);
 			this.tlpStereoFilter.TabIndex = 0;
 			// 
 			// flowLayoutPanel3
@@ -842,7 +858,7 @@
 			this.flowLayoutPanel3.Location = new System.Drawing.Point(72, 23);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(376, 26);
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(379, 26);
 			this.flowLayoutPanel3.TabIndex = 1;
 			// 
 			// nudStereoDelay
@@ -907,7 +923,7 @@
 			this.flowLayoutPanel4.Location = new System.Drawing.Point(72, 49);
 			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-			this.flowLayoutPanel4.Size = new System.Drawing.Size(376, 26);
+			this.flowLayoutPanel4.Size = new System.Drawing.Size(379, 26);
 			this.flowLayoutPanel4.TabIndex = 4;
 			// 
 			// nudStereoPanning
@@ -943,7 +959,7 @@
 			this.grpReverb.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpReverb.Location = new System.Drawing.Point(3, 104);
 			this.grpReverb.Name = "grpReverb";
-			this.grpReverb.Size = new System.Drawing.Size(454, 109);
+			this.grpReverb.Size = new System.Drawing.Size(457, 109);
 			this.grpReverb.TabIndex = 1;
 			this.grpReverb.TabStop = false;
 			this.grpReverb.Text = "Reverb";
@@ -966,7 +982,7 @@
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(448, 90);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(451, 90);
 			this.tableLayoutPanel5.TabIndex = 0;
 			// 
 			// chkReverbEnabled
@@ -1012,7 +1028,7 @@
 			this.trkReverbDelay.Value = 1;
 			// 
 			// trkReverbStrength
-			//
+			// 
 			this.trkReverbStrength.Location = new System.Drawing.Point(59, 26);
 			this.trkReverbStrength.Minimum = 1;
 			this.trkReverbStrength.Name = "trkReverbStrength";
@@ -1029,7 +1045,7 @@
 			this.flowLayoutPanel5.Location = new System.Drawing.Point(6, 216);
 			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-			this.flowLayoutPanel5.Size = new System.Drawing.Size(454, 25);
+			this.flowLayoutPanel5.Size = new System.Drawing.Size(457, 25);
 			this.flowLayoutPanel5.TabIndex = 6;
 			// 
 			// chkCrossFeedEnabled
@@ -1068,7 +1084,7 @@
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(466, 350);
+			this.tpgAdvanced.Size = new System.Drawing.Size(469, 349);
 			this.tpgAdvanced.TabIndex = 2;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -1077,19 +1093,33 @@
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.chkDisableNoiseModeFlag, 0, 3);
 			this.tableLayoutPanel3.Controls.Add(this.chkSilenceTriangleHighFreq, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.chkSwapDutyCycles, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.chkReduceDmcPopping, 0, 2);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 4;
+			this.tableLayoutPanel3.RowCount = 5;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(460, 344);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(463, 343);
 			this.tableLayoutPanel3.TabIndex = 1;
+			// 
+			// chkDisableNoiseModeFlag
+			// 
+			this.chkDisableNoiseModeFlag.AutoSize = true;
+			this.chkDisableNoiseModeFlag.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.chkDisableNoiseModeFlag.Location = new System.Drawing.Point(3, 72);
+			this.chkDisableNoiseModeFlag.Name = "chkDisableNoiseModeFlag";
+			this.chkDisableNoiseModeFlag.Size = new System.Drawing.Size(179, 17);
+			this.chkDisableNoiseModeFlag.TabIndex = 3;
+			this.chkDisableNoiseModeFlag.Text = "Disable noise channel mode flag";
+			this.chkDisableNoiseModeFlag.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.chkDisableNoiseModeFlag.UseVisualStyleBackColor = true;
 			// 
 			// chkSilenceTriangleHighFreq
 			// 
@@ -1124,21 +1154,6 @@
 			this.chkReduceDmcPopping.Text = "Reduce popping sounds on the DMC channel";
 			this.chkReduceDmcPopping.TextAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.chkReduceDmcPopping.UseVisualStyleBackColor = true;
-			// 
-			// trkTrianglePan
-			// 
-			this.trkTrianglePan.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.trkTrianglePan.Location = new System.Drawing.Point(12, 110);
-			this.trkTrianglePan.Margin = new System.Windows.Forms.Padding(0);
-			this.trkTrianglePan.Maximum = 100;
-			this.trkTrianglePan.MaximumSize = new System.Drawing.Size(63, 160);
-			this.trkTrianglePan.Minimum = -100;
-			this.trkTrianglePan.MinimumSize = new System.Drawing.Size(206, 55);
-			this.trkTrianglePan.Name = "trkTrianglePan";
-			this.trkTrianglePan.Size = new System.Drawing.Size(206, 55);
-			this.trkTrianglePan.TabIndex = 14;
-			this.trkTrianglePan.Text = "Triangle";
-			this.trkTrianglePan.Value = 0;
 			// 
 			// frmAudioConfig
 			// 
@@ -1271,5 +1286,6 @@
 		private System.Windows.Forms.NumericUpDown nudCrossFeedRatio;
 		private System.Windows.Forms.Label lblCrossFeedRatio;
 		private Controls.ctrlHorizontalTrackbar trkTrianglePan;
+		private System.Windows.Forms.CheckBox chkDisableNoiseModeFlag;
 	}
 }

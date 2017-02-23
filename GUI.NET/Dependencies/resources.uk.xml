@@ -111,6 +111,7 @@
       <Control ID="chkSwapDutyCycles">Переплутана шпаруватість (як на старих клонах)</Control>
       <Control ID="chkSilenceTriangleHighFreq">Заглушати ультразвукові частоти на каналі triangle (зменшує "трiск")</Control>
       <Control ID="chkReduceDmcPopping">Reduce popping sounds on the DMC channel</Control>
+      <Control ID="chkDisableNoiseModeFlag">Disable noise channel mode flag</Control>
       <Control ID="tpgEffects">Ефекти</Control>
       <Control ID="grpStereo">Стерео</Control>
       <Control ID="radStereoDisabled">Відключити</Control>
@@ -287,6 +288,7 @@
       <Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
       <Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
       <Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
+      <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads</Control>
       <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
 
       <Control ID="tpgOverclocking">Розгін</Control>

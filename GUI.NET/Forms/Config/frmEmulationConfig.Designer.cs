@@ -33,6 +33,7 @@
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
 			this.nudTurboSpeed = new System.Windows.Forms.NumericUpDown();
+			this.lblTurboSpeedHint = new System.Windows.Forms.Label();
 			this.lblTurboSpeed = new System.Windows.Forms.Label();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.nudEmulationSpeed = new System.Windows.Forms.NumericUpDown();
@@ -75,7 +76,7 @@
 			this.chkShowLagCounter = new System.Windows.Forms.CheckBox();
 			this.btnResetLagCounter = new System.Windows.Forms.Button();
 			this.tmrUpdateClockRate = new System.Windows.Forms.Timer(this.components);
-			this.lblTurboSpeedHint = new System.Windows.Forms.Label();
+			this.chkDisablePpu2004Reads = new System.Windows.Forms.CheckBox();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -173,6 +174,16 @@
 			this.nudTurboSpeed.Size = new System.Drawing.Size(48, 20);
 			this.nudTurboSpeed.TabIndex = 1;
 			// 
+			// lblTurboSpeedHint
+			// 
+			this.lblTurboSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblTurboSpeedHint.AutoSize = true;
+			this.lblTurboSpeedHint.Location = new System.Drawing.Point(57, 6);
+			this.lblTurboSpeedHint.Name = "lblTurboSpeedHint";
+			this.lblTurboSpeedHint.Size = new System.Drawing.Size(121, 13);
+			this.lblTurboSpeedHint.TabIndex = 2;
+			this.lblTurboSpeedHint.Text = "%  (0 = Maximum speed)";
+			// 
 			// lblTurboSpeed
 			// 
 			this.lblTurboSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -245,11 +256,13 @@
 			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel8, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel8, 0, 4);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisablePpu2004Reads, 0, 3);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowCount = 6;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -293,7 +306,7 @@
 			this.flowLayoutPanel8.Controls.Add(this.lblRamPowerOnState);
 			this.flowLayoutPanel8.Controls.Add(this.cboRamPowerOnState);
 			this.flowLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel8.Location = new System.Drawing.Point(0, 69);
+			this.flowLayoutPanel8.Location = new System.Drawing.Point(0, 92);
 			this.flowLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel8.Name = "flowLayoutPanel8";
 			this.flowLayoutPanel8.Size = new System.Drawing.Size(473, 27);
@@ -679,15 +692,15 @@
 			this.tmrUpdateClockRate.Enabled = true;
 			this.tmrUpdateClockRate.Tick += new System.EventHandler(this.tmrUpdateClockRate_Tick);
 			// 
-			// lblTurboSpeedHint
+			// chkDisablePpu2004Reads
 			// 
-			this.lblTurboSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblTurboSpeedHint.AutoSize = true;
-			this.lblTurboSpeedHint.Location = new System.Drawing.Point(57, 6);
-			this.lblTurboSpeedHint.Name = "lblTurboSpeedHint";
-			this.lblTurboSpeedHint.Size = new System.Drawing.Size(121, 13);
-			this.lblTurboSpeedHint.TabIndex = 2;
-			this.lblTurboSpeedHint.Text = "%  (0 = Maximum speed)";
+			this.chkDisablePpu2004Reads.AutoSize = true;
+			this.chkDisablePpu2004Reads.Location = new System.Drawing.Point(3, 72);
+			this.chkDisablePpu2004Reads.Name = "chkDisablePpu2004Reads";
+			this.chkDisablePpu2004Reads.Size = new System.Drawing.Size(148, 17);
+			this.chkDisablePpu2004Reads.TabIndex = 4;
+			this.chkDisablePpu2004Reads.Text = "Disable PPU $2004 reads";
+			this.chkDisablePpu2004Reads.UseVisualStyleBackColor = true;
 			// 
 			// frmEmulationConfig
 			// 
@@ -793,5 +806,6 @@
 		private System.Windows.Forms.NumericUpDown nudTurboSpeed;
 		private System.Windows.Forms.Label lblTurboSpeed;
 		private System.Windows.Forms.Label lblTurboSpeedHint;
+		private System.Windows.Forms.CheckBox chkDisablePpu2004Reads;
 	}
 }

@@ -111,6 +111,7 @@
       <Control ID="chkSwapDutyCycles">Inverter ciclos de canais quadrados (imita velhos clones)</Control>
       <Control ID="chkSilenceTriangleHighFreq">Cortar o canal de triângulo a frequências ultrassônicas (reduz os "pops")</Control>
       <Control ID="chkReduceDmcPopping">Reduz sons "popping" no canal DMC</Control>
+      <Control ID="chkDisableNoiseModeFlag">Disable noise channel mode flag</Control>
       <Control ID="tpgEffects">Efeitos</Control>
       <Control ID="grpStereo">Estéreo</Control>
       <Control ID="radStereoDisabled">Desativar</Control>
@@ -287,6 +288,7 @@
       <Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
       <Control ID="lblRamPowerOnState">Estado inicial da memória durante o início:</Control>
       <Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
+      <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads</Control>
 
       <Control ID="tpgOverclocking">Overclocking</Control>
       <Control ID="grpOverclocking">Overclocking de CPU</Control>

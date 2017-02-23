@@ -210,19 +210,21 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 			break;
 
 		case PPURegisters::SpriteData:
-			if(_scanline <= 239 && IsRenderingEnabled() && (_cycle >= 257 || _cycle <= 64)) {
-				if(_cycle >= 257 && _cycle <= 320) {
-					//Set OAM copy buffer to its proper value.  This is done here for performance.
-					//It's faster to only do this here when it's needed, rather than splitting LoadSpriteTileInfo() into an 8-step process
-					uint8_t step = ((_cycle - 257) % 8) > 3 ? 3 : ((_cycle - 257) % 8);
-					_secondaryOAMAddr = (_cycle - 257) / 8 * 4 + step;
-					_oamCopybuffer = _secondarySpriteRAM[_secondaryOAMAddr];
+			if(!EmulationSettings::CheckFlag(EmulationFlags::DisablePpu2004Reads)) {
+				if(_scanline <= 239 && IsRenderingEnabled() && (_cycle >= 257 || _cycle <= 64)) {
+					if(_cycle >= 257 && _cycle <= 320) {
+						//Set OAM copy buffer to its proper value.  This is done here for performance.
+						//It's faster to only do this here when it's needed, rather than splitting LoadSpriteTileInfo() into an 8-step process
+						uint8_t step = ((_cycle - 257) % 8) > 3 ? 3 : ((_cycle - 257) % 8);
+						_secondaryOAMAddr = (_cycle - 257) / 8 * 4 + step;
+						_oamCopybuffer = _secondarySpriteRAM[_secondaryOAMAddr];
+					}
+					returnValue = _oamCopybuffer;
+				} else {
+					returnValue = _spriteRAM[_state.SpriteRamAddr];
 				}
-				returnValue = _oamCopybuffer;
-			} else {
-				returnValue = _spriteRAM[_state.SpriteRamAddr];
+				openBusMask = 0x00;
 			}
-			openBusMask = 0x00;
 			break;
 
 		case PPURegisters::VideoMemoryData:

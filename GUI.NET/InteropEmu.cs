@@ -839,6 +839,8 @@ namespace Mesen.GUI
 		DisableSprites = 0x800000,
 		ForceBackgroundFirstColumn = 0x1000000,
 		ForceSpritesFirstColumn = 0x2000000,
+		DisablePpu2004Reads = 0x4000000,
+		DisableNoiseModeFlag = 0x8000000,
 
 		InBackground = 0x40000000,
 	}

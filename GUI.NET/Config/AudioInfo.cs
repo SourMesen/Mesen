@@ -45,6 +45,7 @@ namespace Mesen.GUI.Config
 		public bool SwapDutyCycles = false;
 		public bool SilenceTriangleHighFreq = false;
 		public bool ReduceDmcPopping = false;
+		public bool DisableNoiseModeFlag = false;
 		public InteropEmu.StereoFilter StereoFilter;
 		public Int32 StereoDelay = 15;
 		public Int32 StereoPanningAngle = 15;
@@ -110,6 +111,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.SwapDutyCycles, audioInfo.SwapDutyCycles);
 			InteropEmu.SetFlag(EmulationFlags.SilenceTriangleHighFreq, audioInfo.SilenceTriangleHighFreq);
 			InteropEmu.SetFlag(EmulationFlags.ReduceDmcPopping, audioInfo.ReduceDmcPopping);
+			InteropEmu.SetFlag(EmulationFlags.DisableNoiseModeFlag, audioInfo.DisableNoiseModeFlag);
 
 			InteropEmu.SetStereoFilter(audioInfo.StereoFilter);
 			InteropEmu.SetStereoPanningAngle((double)audioInfo.StereoPanningAngle/180*Math.PI);
