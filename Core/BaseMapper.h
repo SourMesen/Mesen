@@ -219,7 +219,7 @@ public:
 	virtual uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type = MemoryOperationType::Read);
 	void WriteVRAM(uint16_t addr, uint8_t value);
 
-	void InitializeRam(void* data, uint32_t length);
+	static void InitializeRam(void* data, uint32_t length);
 
 	//Debugger Helper Functions
 	CartridgeState GetState();

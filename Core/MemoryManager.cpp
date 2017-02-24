@@ -15,7 +15,7 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 	_internalRAM = new uint8_t[InternalRAMSize];
 	for(int i = 0; i < 2; i++) {
 		_nametableRAM[i] = new uint8_t[NameTableScreenSize];
-		_mapper->InitializeRam(_nametableRAM[i], NameTableScreenSize);
+		BaseMapper::InitializeRam(_nametableRAM[i], NameTableScreenSize);
 	}
 
 	_mapper->SetDefaultNametables(_nametableRAM[0], _nametableRAM[1]);
@@ -41,7 +41,7 @@ MemoryManager::~MemoryManager()
 void MemoryManager::Reset(bool softReset)
 {
 	if(!softReset) {
-		_mapper->InitializeRam(_internalRAM, InternalRAMSize);
+		BaseMapper::InitializeRam(_internalRAM, InternalRAMSize);
 	}
 
 	_mapper->Reset(softReset);

@@ -404,7 +404,7 @@ void BaseMapper::InitializeChrRam(int32_t chrRamSize)
 	_chrRamSize = chrRamSize >= 0 ? chrRamSize : defaultRamSize;
 	if(_chrRamSize > 0) {
 		_chrRam = new uint8_t[_chrRamSize];
-		InitializeRam(_chrRam, _chrRamSize);
+		BaseMapper::InitializeRam(_chrRam, _chrRamSize);
 	}
 }
 
@@ -531,8 +531,8 @@ void BaseMapper::Initialize(RomData &romData)
 	_saveRam = new uint8_t[_saveRamSize];
 	_workRam = new uint8_t[_workRamSize];
 
-	InitializeRam(_saveRam, _saveRamSize);
-	InitializeRam(_workRam, _workRamSize);
+	BaseMapper::InitializeRam(_saveRam, _saveRamSize);
+	BaseMapper::InitializeRam(_workRam, _workRamSize);
 	if(romData.HasTrainer && _workRamSize >= 0x2000) {
 		memcpy(_workRam + 0x1000, romData.TrainerData.data(), 512);
 	}
@@ -660,11 +660,11 @@ void BaseMapper::SetNametable(uint8_t index, uint8_t nametableIndex)
 {
 	if(nametableIndex == 2 && _cartNametableRam[0] == nullptr) {
 		_cartNametableRam[0] = new uint8_t[0x400];
-		InitializeRam(_cartNametableRam[0], 0x400);
+		BaseMapper::InitializeRam(_cartNametableRam[0], 0x400);
 	}
 	if(nametableIndex == 3 && _cartNametableRam[1] == nullptr) {
 		_cartNametableRam[1] = new uint8_t[0x400];
-		InitializeRam(_cartNametableRam[1], 0x400);
+		BaseMapper::InitializeRam(_cartNametableRam[1], 0x400);
 	}
 
 	_nametableIndexes[index] = nametableIndex;
