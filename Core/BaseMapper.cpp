@@ -94,12 +94,12 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 		//If range is bigger than a single page, keep going until we reach the last page
 		while((uint32_t)pageNumber < pageCount && startAddr <= endAddr - pageSize + 1) {
 			SetCpuMemoryMapping(startAddr, startAddr + pageSize - 1, source, accessType);
+			startAddr += pageSize;
 			if(pageCount > 1) {
 				//If pageCount == 1, we mirror it instead
 				pageNumber++;
+				source += pageSize;
 			}
-			startAddr += pageSize;
-			source += pageSize;
 		}
 	} else {
 		SetCpuMemoryMapping(startAddr, endAddr, source, accessType);
@@ -203,12 +203,12 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 		//If range is bigger than a single page, keep going until we reach the last page
 		while((uint32_t)pageNumber < pageCount && startAddr <= endAddr - pageSize + 1) {
 			SetPpuMemoryMapping(startAddr, startAddr + pageSize - 1, sourceMemory, accessType);
+			startAddr += pageSize;
 			if(pageCount > 1) {
 				//If pageCount == 1, we mirror it instead
 				pageNumber++;
+				sourceMemory += pageSize;
 			}
-			startAddr += pageSize;
-			sourceMemory += pageSize;
 		}
 	} else {
 		SetPpuMemoryMapping(startAddr, endAddr, sourceMemory, accessType == -1 ? defaultAccessType : accessType);
