@@ -858,7 +858,7 @@ public:
 	static void SetIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag |= (int)source; }
 	static bool HasIRQSource(IRQSource source) { return (CPU::Instance->_state.IRQFlag & (int)source) != 0; }
 	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
-	static void RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue);
+	static void RunDMATransfer(uint8_t offsetValue);
 	static void StartDmcTransfer();	
 	static uint32_t GetClockRate(NesModel model);
 	static bool IsCpuWrite() { return CPU::Instance->_cpuWrite; }

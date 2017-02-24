@@ -206,7 +206,7 @@ void CPU::IncCycleCount()
 	}
 }
 
-void CPU::RunDMATransfer(uint8_t* spriteRAM, uint8_t offsetValue)
+void CPU::RunDMATransfer(uint8_t offsetValue)
 {
 	TraceLogger::LogStatic("Sprite DMA Start");
 	Instance->_spriteDmaTransfer = true;

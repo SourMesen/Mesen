@@ -76,8 +76,6 @@ void PPU::Reset()
 	_openBus = 0;
 	memset(_openBusDecayStamp, 0, sizeof(_openBusDecayStamp));
 	_ignoreVramRead = 0;
-	_spriteDmaCounter = 0;
-	_spriteDmaAddr = 0;
 
 	_scanline = 0;
 	_cycle = 0;
@@ -279,23 +277,17 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			_state.SpriteRamAddr = value;
 			break;
 		case PPURegisters::SpriteData:
-			if(_spriteDmaCounter > 0) {
-				_spriteRAM[_spriteDmaAddr & 0xFF] = value;
-				_spriteDmaAddr++;
-				_spriteDmaCounter--;
-			} else {
-				if(_scanline >= 240 || !IsRenderingEnabled()) {
-					if((_state.SpriteRamAddr & 0x03) == 0x02) {
-						//"The three unimplemented bits of each sprite's byte 2 do not exist in the PPU and always read back as 0 on PPU revisions that allow reading PPU OAM through OAMDATA ($2004)"
-						value &= 0xE3;
-					}
-					_spriteRAM[_state.SpriteRamAddr] = value;
-					_state.SpriteRamAddr = (_state.SpriteRamAddr + 1) & 0xFF;
-				} else {
-					//"Writes to OAMDATA during rendering (on the pre-render line and the visible lines 0-239, provided either sprite or background rendering is enabled) do not modify values in OAM, 
-					//but do perform a glitchy increment of OAMADDR, bumping only the high 6 bits"
-					_state.SpriteRamAddr = (_state.SpriteRamAddr + 4) & 0xFF;
+			if(_scanline >= 240 || !IsRenderingEnabled()) {
+				if((_state.SpriteRamAddr & 0x03) == 0x02) {
+					//"The three unimplemented bits of each sprite's byte 2 do not exist in the PPU and always read back as 0 on PPU revisions that allow reading PPU OAM through OAMDATA ($2004)"
+					value &= 0xE3;
 				}
+				_spriteRAM[_state.SpriteRamAddr] = value;
+				_state.SpriteRamAddr = (_state.SpriteRamAddr + 1) & 0xFF;
+			} else {
+				//"Writes to OAMDATA during rendering (on the pre-render line and the visible lines 0-239, provided either sprite or background rendering is enabled) do not modify values in OAM, 
+				//but do perform a glitchy increment of OAMADDR, bumping only the high 6 bits"
+				_state.SpriteRamAddr = (_state.SpriteRamAddr + 4) & 0xFF;
 			}
 			break;
 		case PPURegisters::ScrollOffsets:
@@ -333,9 +325,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			UpdateVideoRamAddr();
 			break;
 		case PPURegisters::SpriteDMA:
-			_spriteDmaCounter = 0x100;
-			_spriteDmaAddr = _state.SpriteRamAddr;
-			CPU::RunDMATransfer(_spriteRAM, value);
+			CPU::RunDMATransfer(value);
 			break;
 		default:
 			break;
@@ -1007,14 +997,17 @@ void PPU::StreamState(bool saving)
 	ArrayInfo<uint8_t> secondarySpriteRam = { _secondarySpriteRAM, 0x20 };
 	ArrayInfo<int32_t> openBusDecayStamp = { _openBusDecayStamp, 8 };
 	
+	uint16_t unusedSpriteDmaAddr = 0;
+	uint16_t unusedSpriteDmaCounter = 0;
+
 	Stream(_state.Control, _state.Mask, _state.Status, _state.SpriteRamAddr, _state.VideoRamAddr, _state.XScroll, _state.TmpVideoRamAddr, _state.WriteToggle,
 		_state.HighBitShift, _state.LowBitShift, _flags.VerticalWrite, _flags.SpritePatternAddr, _flags.BackgroundPatternAddr, _flags.LargeSprites, _flags.VBlank,
 		_flags.Grayscale, _flags.BackgroundMask, _flags.SpriteMask, _flags.BackgroundEnabled, _flags.SpritesEnabled, _flags.IntensifyRed, _flags.IntensifyGreen,
 		_flags.IntensifyBlue, _paletteRamMask, _intensifyColorBits, _statusFlags.SpriteOverflow, _statusFlags.Sprite0Hit, _statusFlags.VerticalBlank, _scanline,
 		_cycle, _frameCount, _memoryReadBuffer, _currentTile.LowByte, _currentTile.HighByte, _currentTile.PaletteOffset, _nextTile.LowByte, _nextTile.HighByte,
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
-		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, _spriteDmaAddr,
-		_spriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, _skipScrollingIncrement, paletteRam, spriteRam, secondarySpriteRam, 
+		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, unusedSpriteDmaAddr,
+		unusedSpriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, _skipScrollingIncrement, paletteRam, spriteRam, secondarySpriteRam,
 		openBusDecayStamp, _cyclesNeeded);
 
 	for(int i = 0; i < 64; i++) {
