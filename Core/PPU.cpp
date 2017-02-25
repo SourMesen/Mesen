@@ -236,7 +236,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 				returnValue = _memoryReadBuffer;
 				_memoryReadBuffer = _memoryManager->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
 
-				if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00) {
+				if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00 && !EmulationSettings::CheckFlag(EmulationFlags::DisablePaletteRead)) {
 					returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
 					openBusMask = 0xC0;
 				} else {
@@ -738,12 +738,6 @@ void PPU::ProcessPrerenderScanline()
 {
 	ProcessPreVBlankScanline();
 
-	if(IsRenderingEnabled() && _cycle == 0 && _state.SpriteRamAddr >= 0x08) {
-		//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)
-		//"If OAMADDR is not less than eight when rendering starts, the eight bytes starting at OAMADDR & 0xF8 are copied to the first eight bytes of OAM"
-		memcpy(_spriteRAM, _spriteRAM + (_state.SpriteRamAddr & 0xF8), 8);
-	}
-
 	if(_cycle == 0) {
 		_statusFlags.SpriteOverflow = false;
 		_statusFlags.Sprite0Hit = false;
@@ -786,9 +780,7 @@ void PPU::ProcessVisibleScanline()
 		DrawPixel();
 		ShiftTileRegisters();
 	
-		if(IsRenderingEnabled()) {
-			CopyOAMData();
-		}
+		CopyOAMData();
 	} else if(_cycle >= 321 && _cycle <= 336) {
 		LoadTileInfo();
 	} else if(_cycle == 337 || _cycle == 339) {
@@ -802,88 +794,96 @@ void PPU::ProcessVisibleScanline()
 
 void PPU::CopyOAMData()
 {
-	if(_cycle < 65) {
-		//Clear secondary OAM at between cycle 1 and 64
-		_oamCopybuffer = 0xFF;
-		_secondarySpriteRAM[(_cycle - 1) >> 1] = 0xFF;
-	} else {
-		if(_cycle == 65) {
-			_sprite0Added = false;
-			_spriteInRange = false;
-			_secondaryOAMAddr = 0;
-			_overflowSpriteAddr = 0;
+	if(_nesModel == NesModel::NTSC && IsRenderingEnabled() || _nesModel == NesModel::PAL && (_scanline < 240 || _scanline > 260)) {
+		if(_cycle < 65) {
+			if(_cycle < 9 && _state.SpriteRamAddr >= 0x08 && _scanline == -1 && !EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug)) {
+				//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)
+				//"If OAMADDR is not less than eight when rendering starts, the eight bytes starting at OAMADDR & 0xF8 are copied to the first eight bytes of OAM"
+				_spriteRAM[_cycle - 1] = _spriteRAM[((_state.SpriteRamAddr & 0xF8) + _cycle - 1) & 0xFF];
+			}
 
-			_oamCopyDone = false;
-			_spriteAddrH = (_state.SpriteRamAddr >> 2) & 0x3F;
-			_spriteAddrL = _state.SpriteRamAddr & 0x03;
-		} else if(_cycle == 256) {
-			_sprite0Visible = _sprite0Added;
-			_spriteCount = (_secondaryOAMAddr >> 2);
-		}
-
-		if(_cycle & 0x01) {
-			//Read a byte from the primary OAM on odd cycles
-			_oamCopybuffer = _spriteRAM[(_spriteAddrH << 2) + _spriteAddrL];
+			//Clear secondary OAM at between cycle 1 and 64
+			_oamCopybuffer = 0xFF;
+			_secondarySpriteRAM[(_cycle - 1) >> 1] = 0xFF;
 		} else {
-			if(_oamCopyDone) {
-				_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
+			if(_cycle == 65) {
+				_sprite0Added = false;
+				_spriteInRange = false;
+				_secondaryOAMAddr = 0;
+				_overflowSpriteAddr = 0;
+
+				_oamCopyDone = false;
+				_spriteAddrH = (_state.SpriteRamAddr >> 2) & 0x3F;
+				_spriteAddrL = _state.SpriteRamAddr & 0x03;
+			} else if(_cycle == 256) {
+				_sprite0Visible = _sprite0Added;
+				_spriteCount = (_secondaryOAMAddr >> 2);
+			}
+
+			if(_cycle & 0x01) {
+				//Read a byte from the primary OAM on odd cycles
+				_oamCopybuffer = _spriteRAM[(_spriteAddrH << 2) + _spriteAddrL];
 			} else {
-				if(!_spriteInRange && _scanline >= _oamCopybuffer && _scanline < _oamCopybuffer + (_flags.LargeSprites ? 16 : 8)) {
-					_spriteInRange = true;
-				}
+				if(_oamCopyDone) {
+					_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
+				} else {
+					if(!_spriteInRange && _scanline >= _oamCopybuffer && _scanline < _oamCopybuffer + (_flags.LargeSprites ? 16 : 8)) {
+						_spriteInRange = true;
+					}
 
-				if(_secondaryOAMAddr < 0x20) {
-					//Copy 1 byte to secondary OAM
-					_secondarySpriteRAM[_secondaryOAMAddr] = _oamCopybuffer;
+					if(_secondaryOAMAddr < 0x20) {
+						//Copy 1 byte to secondary OAM
+						_secondarySpriteRAM[_secondaryOAMAddr] = _oamCopybuffer;
 
-					if(_spriteInRange) {
-						_spriteAddrL++;
-						_secondaryOAMAddr++;
+						if(_spriteInRange) {
+							_spriteAddrL++;
+							_secondaryOAMAddr++;
 
-						if(_spriteAddrH == 0) {
-							_sprite0Added = true;
-						}
+							if(_spriteAddrH == 0) {
+								_sprite0Added = true;
+							}
 
-						if(_spriteAddrL == 4) {
-							//Done copying all 4 bytes
-							_spriteInRange = false;
-							_spriteAddrL = 0;
+							if(_spriteAddrL == 4) {
+								//Done copying all 4 bytes
+								_spriteInRange = false;
+								_spriteAddrL = 0;
+								_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
+								if(_spriteAddrH == 0) {
+									_oamCopyDone = true;
+								}
+							}
+						} else {
+							//Nothing to copy, skip to next sprite
 							_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
 							if(_spriteAddrH == 0) {
 								_oamCopyDone = true;
 							}
 						}
 					} else {
-						//Nothing to copy, skip to next sprite
-						_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
-						if(_spriteAddrH == 0) {
-							_oamCopyDone = true;
+						//8 sprites have been found, check next sprite for overflow + emulate PPU bug
+						if(_overflowSpriteAddr == 0) {
+							//Used to remove sprite limit
+							_overflowSpriteAddr = _spriteAddrH * 4;
 						}
-					}
-				} else {
-					//8 sprites have been found, check next sprite for overflow + emulate PPU bug
-					if(_overflowSpriteAddr == 0) {
-						//Used to remove sprite limit
-						_overflowSpriteAddr = _spriteAddrH * 4;
-					}
 
-					if(_spriteInRange) {
-						//Sprite is visible, consider this to be an overflow
-						_statusFlags.SpriteOverflow = true;
-						_spriteAddrL = (_spriteAddrL + 1) & 0x03;
-						if(_spriteAddrL == 4) {
-							_spriteInRange = false;
+						if(_spriteInRange) {
+							//Sprite is visible, consider this to be an overflow
+							_statusFlags.SpriteOverflow = true;
+							_spriteAddrL = (_spriteAddrL + 1) & 0x03;
+							if(_spriteAddrL == 4) {
+								_spriteInRange = false;
+								_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
+								_oamCopyDone = true;
+								_spriteAddrL = 0;
+							}
+						} else {
+							//Sprite isn't on this scanline, trigger sprite evaluation bug - increment both H & L at the same time
 							_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
-							_oamCopyDone = true;
-							_spriteAddrL = 0;
-						}
-					} else {
-						//Sprite isn't on this scanline, trigger sprite evaluation bug - increment both H & L at the same time
-						_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
-						_spriteAddrL = (_spriteAddrL + 1) & 0x03;
+							_spriteAddrL = (_spriteAddrL + 1) & 0x03;
 
-						if(_spriteAddrH == 0) {
-							_oamCopyDone = true;
+							if(_spriteAddrH == 0) {
+								_oamCopyDone = true;
+							}
 						}
 					}
 				}
@@ -949,6 +949,16 @@ void PPU::Exec()
 			ProcessPrerenderScanline();
 		} else if(_scanline == _nmiScanline) {
 			BeginVBlank();
+		} else if(_nesModel == NesModel::PAL && _scanline > _nmiScanline + 20) {
+			//"On a PAL machine, because of its extended vertical blank, the PPU begins refreshing OAM roughly 21 scanlines after NMI[2], to prevent it 
+			//from decaying during the longer hiatus of rendering. Additionally, it will continue to refresh during the visible portion of the screen 
+			//even if rendering is disabled. Because of this, OAM DMA must be done near the beginning of vertical blank on PAL, and everywhere else 
+			//it is liable to conflict with the refresh. Since the refresh can't be disabled like on the NTSC hardware, OAM decay does not occur at all on the PAL NES."
+			if(_cycle > 0 && _cycle <= 256) {
+				CopyOAMData();
+			} else if(_cycle >= 257 && _cycle < 320) {
+				_state.SpriteRamAddr = 0;
+			}
 		}
 	} else {
 		//Used by NSF player to speed things up

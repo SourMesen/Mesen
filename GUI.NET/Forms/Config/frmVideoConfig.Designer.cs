@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Forms.Config
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Forms.Config
 {
 	partial class frmVideoConfig
 	{
@@ -96,10 +98,10 @@
 			this.btnLoadPalFile = new System.Windows.Forms.Button();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkDisableBackground = new System.Windows.Forms.CheckBox();
-			this.chkDisableSprites = new System.Windows.Forms.CheckBox();
-			this.chkForceBackgroundFirstColumn = new System.Windows.Forms.CheckBox();
-			this.chkForceSpritesFirstColumn = new System.Windows.Forms.CheckBox();
+			this.chkDisableBackground = new ctrlRiskyOption();
+			this.chkDisableSprites = new ctrlRiskyOption();
+			this.chkForceBackgroundFirstColumn = new ctrlRiskyOption();
+			this.chkForceSpritesFirstColumn = new ctrlRiskyOption();
 			this.contextPicturePresets = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuPresetComposite = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPresetSVideo = new System.Windows.Forms.ToolStripMenuItem();
@@ -1091,7 +1093,6 @@
 			this.chkDisableBackground.Size = new System.Drawing.Size(121, 17);
 			this.chkDisableBackground.TabIndex = 0;
 			this.chkDisableBackground.Text = "Disable background";
-			this.chkDisableBackground.UseVisualStyleBackColor = true;
 			// 
 			// chkDisableSprites
 			// 
@@ -1101,7 +1102,6 @@
 			this.chkDisableSprites.Size = new System.Drawing.Size(94, 17);
 			this.chkDisableSprites.TabIndex = 1;
 			this.chkDisableSprites.Text = "Disable sprites";
-			this.chkDisableSprites.UseVisualStyleBackColor = true;
 			// 
 			// chkForceBackgroundFirstColumn
 			// 
@@ -1111,7 +1111,6 @@
 			this.chkForceBackgroundFirstColumn.Size = new System.Drawing.Size(215, 17);
 			this.chkForceBackgroundFirstColumn.TabIndex = 2;
 			this.chkForceBackgroundFirstColumn.Text = "Force background display in first column";
-			this.chkForceBackgroundFirstColumn.UseVisualStyleBackColor = true;
 			// 
 			// chkForceSpritesFirstColumn
 			// 
@@ -1121,7 +1120,6 @@
 			this.chkForceSpritesFirstColumn.Size = new System.Drawing.Size(183, 17);
 			this.chkForceSpritesFirstColumn.TabIndex = 3;
 			this.chkForceSpritesFirstColumn.Text = "Force sprite display in first column";
-			this.chkForceSpritesFirstColumn.UseVisualStyleBackColor = true;
 			// 
 			// contextPicturePresets
 			// 
@@ -1428,10 +1426,10 @@
 		private System.Windows.Forms.ComboBox cboFilter;
 		private System.Windows.Forms.TabPage tpgAdvanced;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
-		private System.Windows.Forms.CheckBox chkDisableBackground;
-		private System.Windows.Forms.CheckBox chkDisableSprites;
-		private System.Windows.Forms.CheckBox chkForceBackgroundFirstColumn;
-		private System.Windows.Forms.CheckBox chkForceSpritesFirstColumn;
+		private ctrlRiskyOption chkDisableBackground;
+		private ctrlRiskyOption chkDisableSprites;
+		private ctrlRiskyOption chkForceBackgroundFirstColumn;
+		private ctrlRiskyOption chkForceSpritesFirstColumn;
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteNostalgia;
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteNesClassic;
 		private System.Windows.Forms.TableLayoutPanel tlpNtscFilter2;

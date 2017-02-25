@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Forms.Config
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Forms.Config
 {
 	partial class frmAudioConfig
 	{
@@ -98,9 +100,9 @@
 			this.lblCrossFeedRatio = new System.Windows.Forms.Label();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkDisableNoiseModeFlag = new System.Windows.Forms.CheckBox();
+			this.chkDisableNoiseModeFlag = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkSilenceTriangleHighFreq = new System.Windows.Forms.CheckBox();
-			this.chkSwapDutyCycles = new System.Windows.Forms.CheckBox();
+			this.chkSwapDutyCycles = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkReduceDmcPopping = new System.Windows.Forms.CheckBox();
 			this.baseConfigPanel.SuspendLayout();
 			this.grpVolume.SuspendLayout();
@@ -1094,9 +1096,9 @@
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Controls.Add(this.chkDisableNoiseModeFlag, 0, 3);
-			this.tableLayoutPanel3.Controls.Add(this.chkSilenceTriangleHighFreq, 0, 1);
-			this.tableLayoutPanel3.Controls.Add(this.chkSwapDutyCycles, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.chkReduceDmcPopping, 0, 2);
+			this.tableLayoutPanel3.Controls.Add(this.chkSilenceTriangleHighFreq, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.chkSwapDutyCycles, 0, 2);
+			this.tableLayoutPanel3.Controls.Add(this.chkReduceDmcPopping, 0, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -1112,42 +1114,37 @@
 			// chkDisableNoiseModeFlag
 			// 
 			this.chkDisableNoiseModeFlag.AutoSize = true;
-			this.chkDisableNoiseModeFlag.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.chkDisableNoiseModeFlag.Location = new System.Drawing.Point(3, 72);
+			this.chkDisableNoiseModeFlag.Checked = false;
+			this.chkDisableNoiseModeFlag.Location = new System.Drawing.Point(0, 69);
 			this.chkDisableNoiseModeFlag.Name = "chkDisableNoiseModeFlag";
-			this.chkDisableNoiseModeFlag.Size = new System.Drawing.Size(179, 17);
+			this.chkDisableNoiseModeFlag.Size = new System.Drawing.Size(277, 23);
 			this.chkDisableNoiseModeFlag.TabIndex = 3;
 			this.chkDisableNoiseModeFlag.Text = "Disable noise channel mode flag";
-			this.chkDisableNoiseModeFlag.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.chkDisableNoiseModeFlag.UseVisualStyleBackColor = true;
 			// 
 			// chkSilenceTriangleHighFreq
 			// 
 			this.chkSilenceTriangleHighFreq.AutoSize = true;
-			this.chkSilenceTriangleHighFreq.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.chkSilenceTriangleHighFreq.Location = new System.Drawing.Point(3, 26);
+			this.chkSilenceTriangleHighFreq.Location = new System.Drawing.Point(3, 3);
 			this.chkSilenceTriangleHighFreq.Name = "chkSilenceTriangleHighFreq";
 			this.chkSilenceTriangleHighFreq.Size = new System.Drawing.Size(337, 17);
 			this.chkSilenceTriangleHighFreq.TabIndex = 1;
 			this.chkSilenceTriangleHighFreq.Text = "Mute ultrasonic frequencies on triangle channel (reduces popping)";
-			this.chkSilenceTriangleHighFreq.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.chkSilenceTriangleHighFreq.UseVisualStyleBackColor = true;
 			// 
 			// chkSwapDutyCycles
 			// 
 			this.chkSwapDutyCycles.AutoSize = true;
-			this.chkSwapDutyCycles.Location = new System.Drawing.Point(3, 3);
+			this.chkSwapDutyCycles.Checked = false;
+			this.chkSwapDutyCycles.Location = new System.Drawing.Point(0, 46);
 			this.chkSwapDutyCycles.Name = "chkSwapDutyCycles";
-			this.chkSwapDutyCycles.Size = new System.Drawing.Size(282, 17);
+			this.chkSwapDutyCycles.Size = new System.Drawing.Size(380, 23);
 			this.chkSwapDutyCycles.TabIndex = 0;
 			this.chkSwapDutyCycles.Text = "Swap square channels duty cycles (Mimics old clones)";
-			this.chkSwapDutyCycles.UseVisualStyleBackColor = true;
 			// 
 			// chkReduceDmcPopping
 			// 
 			this.chkReduceDmcPopping.AutoSize = true;
 			this.chkReduceDmcPopping.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.chkReduceDmcPopping.Location = new System.Drawing.Point(3, 49);
+			this.chkReduceDmcPopping.Location = new System.Drawing.Point(3, 26);
 			this.chkReduceDmcPopping.Name = "chkReduceDmcPopping";
 			this.chkReduceDmcPopping.Size = new System.Drawing.Size(243, 17);
 			this.chkReduceDmcPopping.TabIndex = 2;
@@ -1244,7 +1241,7 @@
 		private System.Windows.Forms.CheckBox chkReduceSoundInBackground;
 		private System.Windows.Forms.TabPage tpgAdvanced;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-		private System.Windows.Forms.CheckBox chkSwapDutyCycles;
+		private ctrlRiskyOption chkSwapDutyCycles;
 		private System.Windows.Forms.TabPage tpgEffects;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.GroupBox grpStereo;
@@ -1286,6 +1283,6 @@
 		private System.Windows.Forms.NumericUpDown nudCrossFeedRatio;
 		private System.Windows.Forms.Label lblCrossFeedRatio;
 		private Controls.ctrlHorizontalTrackbar trkTrianglePan;
-		private System.Windows.Forms.CheckBox chkDisableNoiseModeFlag;
+		private ctrlRiskyOption chkDisableNoiseModeFlag;
 	}
 }

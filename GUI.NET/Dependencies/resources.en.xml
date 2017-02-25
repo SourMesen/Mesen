@@ -21,6 +21,8 @@
 
     <Message ID="RomsFound">{0} roms found</Message>
 
+    <Message ID="RiskyOptionHint">(not recommended)</Message>
+
     <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
 
     <Message ID="CheatsFound">{0} games and {1} cheats in database</Message>

@@ -289,6 +289,9 @@
       <Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
       <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
       <Control ID="chkDisablePpu2004Reads">Empêcher la lecture du registre $2004 du PPU</Control>
+      <Control ID="chkDisableOamAddrBug">Désactiver l'émulation du bug de OAMADDR du PPU</Control>
+      <Control ID="chkDisablePaletteRead">Empêcher la lecture de la palette du PPU</Control>
+      
       <Control ID="lblRamPowerOnState">État initial de la mémoire au démarrage : </Control>
 
       <Control ID="tpgOverclocking">Overclocking</Control>
@@ -527,6 +530,8 @@
     <Message ID="PlayerNumber">Joueur {0}</Message>
 
     <Message ID="RomsFound">{0} roms trouvés</Message>
+    
+    <Message ID="RiskyOptionHint">(déconseillé)</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen n'a pas trouvé de jeu sur votre disque.</Message>
 

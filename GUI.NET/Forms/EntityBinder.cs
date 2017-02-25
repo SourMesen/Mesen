@@ -73,6 +73,8 @@ namespace Mesen.GUI.Forms
 						}
 					} else if(kvp.Value is CheckBox) {
 						((CheckBox)kvp.Value).Checked = Convert.ToBoolean(value);
+					} else if(kvp.Value is ctrlRiskyOption) {
+						((ctrlRiskyOption)kvp.Value).Checked = Convert.ToBoolean(value);
 					} else if(kvp.Value is RadioButton) {
 						((RadioButton)kvp.Value).Checked = (bool)value;
 					} else if(kvp.Value is Panel) {
@@ -159,6 +161,12 @@ namespace Mesen.GUI.Forms
 								field.SetValue(Entity, ((CheckBox)kvp.Value).Checked);
 							} else if(field.FieldType == typeof(byte)) {
 								field.SetValue(Entity, ((CheckBox)kvp.Value).Checked ? (byte)1 : (byte)0);
+							}
+						} else if(kvp.Value is ctrlRiskyOption) {
+							if(field.FieldType == typeof(bool)) {
+								field.SetValue(Entity, ((ctrlRiskyOption)kvp.Value).Checked);
+							} else if(field.FieldType == typeof(byte)) {
+								field.SetValue(Entity, ((ctrlRiskyOption)kvp.Value).Checked ? (byte)1 : (byte)0);
 							}
 						} else if(kvp.Value is RadioButton) {
 							field.SetValue(Entity, ((RadioButton)kvp.Value).Checked);

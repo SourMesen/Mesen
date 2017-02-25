@@ -9,7 +9,7 @@ uint8_t EmulationSettings::_versionRevision = 1;
 
 Language EmulationSettings::_displayLanguage = Language::English;
 
-uint32_t EmulationSettings::_flags = 0;
+uint64_t EmulationSettings::_flags = 0;
 
 uint32_t EmulationSettings::_audioLatency = 20000;
 double EmulationSettings::_channelVolume[11] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };

@@ -243,6 +243,12 @@
     <Compile Include="Controls\ctrlNsfPlayer.Designer.cs">
       <DependentUpon>ctrlNsfPlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ctrlRiskyOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ctrlRiskyOption.Designer.cs">
+      <DependentUpon>ctrlRiskyOption.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ctrlSplitContainer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -625,6 +631,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ctrlNsfPlayer.resx">
       <DependentUpon>ctrlNsfPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ctrlRiskyOption.resx">
+      <DependentUpon>ctrlRiskyOption.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ctrlTrackbar.resx">
       <DependentUpon>ctrlTrackbar.cs</DependentUpon>

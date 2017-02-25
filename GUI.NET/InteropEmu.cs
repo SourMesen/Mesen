@@ -805,7 +805,7 @@ namespace Mesen.GUI
 	}
 
 	[Flags]
-	public enum EmulationFlags
+	public enum EmulationFlags : UInt64
 	{
 		Paused = 0x01,
 		ShowFPS = 0x02,
@@ -841,8 +841,10 @@ namespace Mesen.GUI
 		ForceSpritesFirstColumn = 0x2000000,
 		DisablePpu2004Reads = 0x4000000,
 		DisableNoiseModeFlag = 0x8000000,
+		DisablePaletteRead = 0x10000000,
+		DisableOamAddrBug = 0x20000000,
 
-		InBackground = 0x40000000,
+		InBackground = 0x4000000000,
 	}
 
 	[Flags]

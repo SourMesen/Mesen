@@ -4,7 +4,7 @@
 #include "MessageManager.h"
 #include "GameClient.h"
 
-enum EmulationFlags
+enum EmulationFlags : int64_t
 {
 	Paused = 0x01,
 	ShowFPS = 0x02,
@@ -40,10 +40,12 @@ enum EmulationFlags
 	ForceSpritesFirstColumn = 0x2000000,
 	DisablePpu2004Reads = 0x4000000,
 	DisableNoiseModeFlag = 0x8000000,
+	DisablePaletteRead = 0x10000000,
+	DisableOamAddrBug = 0x20000000,
 
-	Turbo = 0x20000000,
-	InBackground = 0x40000000,
-	NsfPlayerEnabled = 0x80000000,
+	Turbo = 0x2000000000,
+	InBackground = 0x4000000000,
+	NsfPlayerEnabled = 0x8000000000,
 };
 
 enum class AudioChannel
@@ -307,7 +309,7 @@ private:
 
 	static uint32_t _ppuPaletteArgb[11][64];
 	static uint32_t _defaultPpuPalette[64];
-	static uint32_t _flags;
+	static uint64_t _flags;
 
 	static Language _displayLanguage;
 
@@ -392,7 +394,7 @@ public:
 		_flags &= ~flags;
 	}
 
-	static bool CheckFlag(uint32_t flag)
+	static bool CheckFlag(EmulationFlags flag)
 	{
 		return (_flags & flag) == flag;
 	}

@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Forms.Config
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Forms.Config
 {
 	partial class frmPreferences
 	{
@@ -89,7 +91,7 @@
 			this.chkUnfFormat = new System.Windows.Forms.CheckBox();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkDisableGameDatabase = new System.Windows.Forms.CheckBox();
+			this.chkDisableGameDatabase = new ctrlRiskyOption();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
@@ -886,7 +888,6 @@
 			this.chkDisableGameDatabase.Size = new System.Drawing.Size(170, 17);
 			this.chkDisableGameDatabase.TabIndex = 6;
 			this.chkDisableGameDatabase.Text = "Disable built-in game database";
-			this.chkDisableGameDatabase.UseVisualStyleBackColor = true;
 			// 
 			// chkFdsAutoLoadDisk
 			// 
@@ -1037,7 +1038,7 @@
 		private System.Windows.Forms.TabPage tpgNsf;
 		private System.Windows.Forms.CheckBox chkFdsFastForwardOnLoad;
 		private System.Windows.Forms.CheckBox chkFdsAutoLoadDisk;
-		private System.Windows.Forms.CheckBox chkDisableGameDatabase;
+		private ctrlRiskyOption chkDisableGameDatabase;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
 		private System.Windows.Forms.CheckBox chkNsfMoveToNextTrackAfterTime;

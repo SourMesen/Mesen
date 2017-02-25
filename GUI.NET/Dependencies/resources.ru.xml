@@ -287,10 +287,12 @@
       <Control ID="tpgAdvanced">Расширенные</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
       <Control ID="chkAllowInvalidInput">Разрешить недопустимые комбинации (Вниз+Вверх и Влево+Вправо)</Control>
+      <Control ID="lblRamPowerOnState">Содержимое ОЗУ при включении : </Control>
       <Control ID="chkRemoveSpriteLimit">Отключить лимит спрайтов (уменьшает мерцание)</Control>
       <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads</Control>
-      <Control ID="lblRamPowerOnState">Содержимое ОЗУ при включении : </Control>
-
+      <Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
+      <Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>
+      
       <Control ID="tpgOverclocking">Разгон</Control>
       <Control ID="grpOverclocking">Разгон CPU</Control>
       <Control ID="lblOverclockWarning">ВНИМАНИЕ: Разгон может вызвать ошибки в некоторых играх!</Control>
@@ -518,6 +520,8 @@
     <Message ID="PlayerNumber">Игрок {0}</Message>
 
     <Message ID="RomsFound">{0} Найденные ROM  файлы</Message>
+
+    <Message ID="RiskyOptionHint">(not recommended)</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
 

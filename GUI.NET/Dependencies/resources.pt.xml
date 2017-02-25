@@ -289,6 +289,8 @@
       <Control ID="lblRamPowerOnState">Estado inicial da memória durante o início:</Control>
       <Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
       <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads</Control>
+      <Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
+      <Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>
 
       <Control ID="tpgOverclocking">Overclocking</Control>
       <Control ID="grpOverclocking">Overclocking de CPU</Control>
@@ -517,6 +519,8 @@
     <Message ID="CheatsImported">{0} cheats foram importados para o jogo {1}.</Message>
     
     <Message ID="RomsFound">{0} roms encontradas</Message>
+
+    <Message ID="RiskyOptionHint">(not recommended)</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen não encontrou nenhum jogo para carregar.</Message>
     

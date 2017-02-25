@@ -287,9 +287,11 @@
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
       <Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
+      <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
       <Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
       <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads</Control>
-      <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
+      <Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
+      <Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>
 
       <Control ID="tpgOverclocking">Розгін</Control>
       <Control ID="grpOverclocking">Розгін CPU</Control>
@@ -517,6 +519,8 @@
     <Message ID="PlayerNumber">Гравець {0}</Message>
 
     <Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
+
+    <Message ID="RiskyOptionHint">(not recommended)</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
 

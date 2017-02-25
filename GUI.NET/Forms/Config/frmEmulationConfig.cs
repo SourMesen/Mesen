@@ -28,6 +28,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AllowInvalidInput", chkAllowInvalidInput);
 			AddBinding("RemoveSpriteLimit", chkRemoveSpriteLimit);
 			AddBinding("DisablePpu2004Reads", chkDisablePpu2004Reads);
+			AddBinding("DisablePaletteRead", chkDisablePaletteRead);
+			AddBinding("DisableOamAddrBug", chkDisableOamAddrBug);
 
 			AddBinding("OverclockRate", nudOverclockRate);
 			AddBinding("OverclockAdjustApu", chkOverclockAdjustApu);
