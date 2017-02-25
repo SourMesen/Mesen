@@ -49,7 +49,7 @@ ZapperButtonState Zapper::GetZapperState()
 
 	int32_t scanline = PPU::GetCurrentScanline();
 	int32_t cycle = PPU::GetCurrentCycle();
-	if(_xPosition == -1 || _yPosition == -1 || scanline > 240 || scanline < _yPosition || (scanline == _yPosition && cycle < _xPosition) || PPU::GetPixelBrightness(_xPosition, _yPosition) < 50) {
+	if(_xPosition == -1 || _yPosition == -1 || scanline < _yPosition || scanline - _yPosition > 20 || (scanline == _yPosition && cycle < _xPosition) || PPU::GetPixelBrightness(_xPosition, _yPosition) < 85) {
 		//Light cannot be detected if the Y/X position is further ahead than the PPU, or if the PPU drew a dark color
 		state.LightNotDetected = true;
 	}
@@ -68,7 +68,7 @@ uint8_t Zapper::RefreshState()
 			_xPosition = position.X;
 			_yPosition = position.Y;
 		}
-
+		
 		if(!EmulationSettings::CheckFlag(EmulationFlags::InBackground) || EmulationSettings::CheckFlag(EmulationFlags::AllowBackgroundInput)) {
 			_pulled = ControlManager::IsMouseButtonPressed(MouseButton::LeftButton);
 		} else {

@@ -140,9 +140,15 @@ void ControlManager::UpdateControlDevices()
 
 	for(int i = 0; i < 2; i++) {
 		shared_ptr<BaseControlDevice> device;
-		if(fourScore || (EmulationSettings::GetConsoleType() == ConsoleType::Famicom && !EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior))) {
+		bool forceController =
+			i == 1 && EmulationSettings::GetControllerType(1) != ControllerType::StandardController && 
+			(expansionDevice == ExpansionPortDevice::ArkanoidController || expansionDevice == ExpansionPortDevice::Zapper || expansionDevice == ExpansionPortDevice::OekaKidsTablet);
+
+		bool controllerRequired = forceController || (EmulationSettings::GetConsoleType() == ConsoleType::Famicom && !EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior));
+
+		if(fourScore || controllerRequired) {
 			//Need to set standard controller in all slots if four score (to allow emulation to work correctly)
-			device.reset(new StandardController(i));
+			device.reset(new StandardController(i, forceController));
 		} else {
 			switch(EmulationSettings::GetControllerType(i)) {
 				case ControllerType::StandardController: device.reset(new StandardController(i)); break;

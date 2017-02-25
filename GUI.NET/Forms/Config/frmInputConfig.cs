@@ -21,14 +21,12 @@ namespace Mesen.GUI.Forms.Config
 
 			Entity = ConfigManager.Config.InputInfo;
 
-			if(ConfigManager.Config.InputInfo.AutoConfigureInput) {
-				for(int i = 0; i < 4; i++) {
-					ConfigManager.Config.InputInfo.Controllers[i].ControllerType = InteropEmu.GetControllerType(i);
-				}
-				ConfigManager.Config.InputInfo.ExpansionPortDevice = InteropEmu.GetExpansionDevice();
-				ConfigManager.Config.InputInfo.ConsoleType = InteropEmu.GetConsoleType();
-				ConfigManager.Config.InputInfo.UseFourScore = InteropEmu.HasFourScore();
+			for(int i = 0; i < 4; i++) {
+				ConfigManager.Config.InputInfo.Controllers[i].ControllerType = InteropEmu.GetControllerType(i);
 			}
+			ConfigManager.Config.InputInfo.ExpansionPortDevice = InteropEmu.GetExpansionDevice();
+			ConfigManager.Config.InputInfo.ConsoleType = InteropEmu.GetConsoleType();
+			ConfigManager.Config.InputInfo.UseFourScore = InteropEmu.HasFourScore();
 
 			AddBinding("ExpansionPortDevice", cboExpansionPort);
 			AddBinding("ConsoleType", cboConsoleType);
@@ -41,6 +39,12 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisplayInputPort4", chkDisplayPort4);
 			AddBinding("DisplayInputPosition", cboDisplayInputPosition);
 			AddBinding("DisplayInputHorizontally", chkDisplayInputHorizontally);
+		}
+		
+		protected override void OnFormClosed(FormClosedEventArgs e)
+		{
+			base.OnFormClosed(e);
+			InputInfo.ApplyConfig();
 		}
 
 		protected override void AfterUpdateUI()
@@ -95,14 +99,11 @@ namespace Mesen.GUI.Forms.Config
 			inputInfo.Controllers[1].ControllerType = cboPlayer2.GetEnumValue<InteropEmu.ControllerType>();
 			inputInfo.Controllers[2].ControllerType = cboPlayer3.GetEnumValue<InteropEmu.ControllerType>();
 			inputInfo.Controllers[3].ControllerType = cboPlayer4.GetEnumValue<InteropEmu.ControllerType>();
-
-			InputInfo.ApplyConfig();
 		}
 
 		private void UpdateInterface()
 		{
 			if(!this.Updating) {
-				UpdateObject();
 				bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
 				cboExpansionPort.Visible = !isNes;
 				lblExpansionPort.Visible = !isNes;
@@ -139,17 +140,26 @@ namespace Mesen.GUI.Forms.Config
 
 		private void cboNesType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			UpdateInterface();
+			if(!this.Updating) {
+				UpdateObject();
+				UpdateInterface();
+			}
 		}
 
 		private void chkFourScore_CheckedChanged(object sender, EventArgs e)
 		{
-			UpdateInterface();
+			if(!this.Updating) {
+				UpdateObject();
+				UpdateInterface();
+			}
 		}
 
 		private void cboExpansionPort_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			UpdateInterface();
+			if(!this.Updating) {
+				UpdateObject();
+				UpdateInterface();
+			}
 		}
 
 		private void cboPlayerController_SelectedIndexChanged(object sender, EventArgs e)

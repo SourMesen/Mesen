@@ -48,6 +48,7 @@ namespace Mesen.GUI.Forms
 		protected void UpdateObject()
 		{
 			_binder.UpdateObject();
+			UpdateConfig();
 		}
 
 		private void OnValidateInput(object sender, EventArgs e)
@@ -71,8 +72,7 @@ namespace Mesen.GUI.Forms
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
 			if(this.DialogResult == System.Windows.Forms.DialogResult.OK) {
-				_binder.UpdateObject();
-				UpdateConfig();
+				UpdateObject();
 				if(ApplyChangesOnOK) {
 					ConfigManager.ApplyChanges();
 				}

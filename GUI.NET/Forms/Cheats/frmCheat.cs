@@ -61,7 +61,6 @@ namespace Mesen.GUI.Forms.Cheats
 
 		protected override void UpdateConfig()
 		{
-			UpdateObject();
 			((CheatInfo)Entity).GameCrc = _gameCrc;
 		}
 

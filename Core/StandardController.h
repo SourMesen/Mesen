@@ -6,6 +6,7 @@
 class StandardController : public BaseControlDevice
 {
 private:
+	bool _isEmptyPort = false;
 	uint32_t _stateBuffer = 0;
 	uint32_t _stateBufferFamicom = 0;
 	uint8_t _lastButtonState = 0;
@@ -18,7 +19,7 @@ protected:
 	virtual void StreamState(bool saving) override;
 
 public:
-	using BaseControlDevice::BaseControlDevice;
+	StandardController(uint8_t port, bool emptyPort = false);
 
 	uint32_t GetNetPlayState() override;
 

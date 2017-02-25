@@ -6,6 +6,11 @@
 #include "ArkanoidController.h"
 #include "OekaKidsTablet.h"
 
+StandardController::StandardController(uint8_t port, bool emptyPort) : BaseControlDevice(port) 
+{
+	_isEmptyPort = emptyPort;
+}
+
 void StandardController::StreamState(bool saving)
 {
 	BaseControlDevice::StreamState(saving);
@@ -65,7 +70,7 @@ uint8_t StandardController::GetPortOutput()
 	uint8_t returnValue = _stateBuffer & 0x01;
 	_stateBuffer >>= 1;
 
-	if(_famiconDevice && _additionalController) {
+	if(_famiconDevice && (_additionalController || EmulationSettings::CheckFlag(EmulationFlags::HasFourScore))) {
 		if(std::dynamic_pointer_cast<Zapper>(_additionalController) || std::dynamic_pointer_cast<OekaKidsTablet>(_additionalController)) {
 			returnValue |= _additionalController->GetPortOutput();
 		} else if(std::dynamic_pointer_cast<ArkanoidController>(_additionalController)) {
@@ -73,12 +78,12 @@ uint8_t StandardController::GetPortOutput()
 		} else {
 			returnValue |= (_stateBufferFamicom & 0x01) << 1;
 			_stateBufferFamicom >>= 1;
-			_stateBuffer |= 0x800000;
+			_stateBufferFamicom |= 0x800000;
 		}
 	}
 
 	//"All subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers."
-	_stateBuffer |= 0x800000;
+	_stateBuffer |= _isEmptyPort ? 0 : 0x800000;
 
 	return returnValue;
 }
@@ -87,19 +92,19 @@ void StandardController::RefreshStateBuffer()
 {
 	_stateBuffer = GetControlState();
 	_lastButtonState = _stateBuffer;
-	if(_additionalController && !std::dynamic_pointer_cast<Zapper>(_additionalController)) {
+	if((_additionalController && !std::dynamic_pointer_cast<Zapper>(_additionalController)) || EmulationSettings::CheckFlag(EmulationFlags::HasFourScore)) {
 		//Next 8 bits = Gamepad 3/4
 		if(_famiconDevice) {
-			//Four player adapter (Famicom)
 			if(std::dynamic_pointer_cast<ArkanoidController>(_additionalController) || std::dynamic_pointer_cast<OekaKidsTablet>(_additionalController)) {
 				_additionalController->RefreshStateBuffer();
 			} else {
-				_stateBufferFamicom = _additionalController->GetControlState();
+				//Four player adapter (Famicom)
+				_stateBufferFamicom = _additionalController ? _additionalController->GetControlState() : 0;
 				_stateBufferFamicom |= 0xFFFF00;
 			}
 		} else {
 			//Four-score adapter (NES)
-			_stateBuffer |= _additionalController->GetControlState() << 8;
+			_stateBuffer |= _additionalController ? (_additionalController->GetControlState() << 8) : 0;
 
 			//Last 8 bits = signature
 			//Signature for port 0 = 0x10, reversed bit order => 0x08
@@ -108,7 +113,7 @@ void StandardController::RefreshStateBuffer()
 		}
 	} else {
 		//"All subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers."
-		_stateBuffer |= 0xFFFF00;
+		_stateBuffer |= _isEmptyPort ? 0 : 0xFFFF00;
 	}
 }
 
