@@ -917,6 +917,7 @@
     <None Include="Resources\accept.png" />
     <None Include="Resources\Add.png" />
     <None Include="Resources\CheatCode.png" />
+    <None Include="Resources\bug.png" />
     <Content Include="Resources\coins.png" />
     <None Include="Resources\DipSwitches.png" />
     <None Include="Resources\MesenIcon.png" />

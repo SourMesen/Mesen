@@ -147,12 +147,12 @@ namespace Mesen.GUI.Forms
 			this.mnuStopMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCheats = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem22 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuVideoRecorder = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuAviRecord = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuAviStop = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSoundRecorder = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuWaveRecord = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuWaveStop = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuVideoRecorder = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAviRecord = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAviStop = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTestRun = new System.Windows.Forms.ToolStripMenuItem();
@@ -1146,32 +1146,6 @@ namespace Mesen.GUI.Forms
 			this.toolStripMenuItem22.Name = "toolStripMenuItem22";
 			this.toolStripMenuItem22.Size = new System.Drawing.Size(228, 6);
 			// 
-			// mnuVideoRecorder
-			// 
-			this.mnuVideoRecorder.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuAviRecord,
-            this.mnuAviStop});
-			this.mnuVideoRecorder.Image = global::Mesen.GUI.Properties.Resources.VideoRecorder;
-			this.mnuVideoRecorder.Name = "mnuVideoRecorder";
-			this.mnuVideoRecorder.Size = new System.Drawing.Size(231, 22);
-			this.mnuVideoRecorder.Text = "Video Recorder";
-			// 
-			// mnuAviRecord
-			// 
-			this.mnuAviRecord.Image = global::Mesen.GUI.Properties.Resources.Record;
-			this.mnuAviRecord.Name = "mnuAviRecord";
-			this.mnuAviRecord.Size = new System.Drawing.Size(155, 22);
-			this.mnuAviRecord.Text = "Record...";
-			this.mnuAviRecord.Click += new System.EventHandler(this.mnuAviRecord_Click);
-			// 
-			// mnuAviStop
-			// 
-			this.mnuAviStop.Image = global::Mesen.GUI.Properties.Resources.Stop;
-			this.mnuAviStop.Name = "mnuAviStop";
-			this.mnuAviStop.Size = new System.Drawing.Size(155, 22);
-			this.mnuAviStop.Text = "Stop Recording";
-			this.mnuAviStop.Click += new System.EventHandler(this.mnuAviStop_Click);
-			// 
 			// mnuSoundRecorder
 			// 
 			this.mnuSoundRecorder.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1197,6 +1171,32 @@ namespace Mesen.GUI.Forms
 			this.mnuWaveStop.Size = new System.Drawing.Size(155, 22);
 			this.mnuWaveStop.Text = "Stop Recording";
 			this.mnuWaveStop.Click += new System.EventHandler(this.mnuWaveStop_Click);
+			// 
+			// mnuVideoRecorder
+			// 
+			this.mnuVideoRecorder.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAviRecord,
+            this.mnuAviStop});
+			this.mnuVideoRecorder.Image = global::Mesen.GUI.Properties.Resources.VideoRecorder;
+			this.mnuVideoRecorder.Name = "mnuVideoRecorder";
+			this.mnuVideoRecorder.Size = new System.Drawing.Size(231, 22);
+			this.mnuVideoRecorder.Text = "Video Recorder";
+			// 
+			// mnuAviRecord
+			// 
+			this.mnuAviRecord.Image = global::Mesen.GUI.Properties.Resources.Record;
+			this.mnuAviRecord.Name = "mnuAviRecord";
+			this.mnuAviRecord.Size = new System.Drawing.Size(155, 22);
+			this.mnuAviRecord.Text = "Record...";
+			this.mnuAviRecord.Click += new System.EventHandler(this.mnuAviRecord_Click);
+			// 
+			// mnuAviStop
+			// 
+			this.mnuAviStop.Image = global::Mesen.GUI.Properties.Resources.Stop;
+			this.mnuAviStop.Name = "mnuAviStop";
+			this.mnuAviStop.Size = new System.Drawing.Size(155, 22);
+			this.mnuAviStop.Text = "Stop Recording";
+			this.mnuAviStop.Click += new System.EventHandler(this.mnuAviStop_Click);
 			// 
 			// toolStripMenuItem12
 			// 
@@ -1286,6 +1286,7 @@ namespace Mesen.GUI.Forms
 			// 
 			// mnuDebugger
 			// 
+			this.mnuDebugger.Image = global::Mesen.GUI.Properties.Resources.Bug;
 			this.mnuDebugger.Name = "mnuDebugger";
 			this.mnuDebugger.Size = new System.Drawing.Size(231, 22);
 			this.mnuDebugger.Text = "Debugger";
