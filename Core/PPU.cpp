@@ -1011,6 +1011,16 @@ void PPU::StreamState(bool saving)
 	ArrayInfo<uint8_t> secondarySpriteRam = { _secondarySpriteRAM, 0x20 };
 	ArrayInfo<int32_t> openBusDecayStamp = { _openBusDecayStamp, 8 };
 	
+	bool disablePpu2004Reads;
+	bool disablePaletteRead;
+	bool disableOamAddrBug;
+
+	if(saving) {
+		disablePpu2004Reads = EmulationSettings::CheckFlag(EmulationFlags::DisablePpu2004Reads);
+		disablePaletteRead = EmulationSettings::CheckFlag(EmulationFlags::DisablePaletteRead);
+		disableOamAddrBug = EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug);
+	}
+
 	uint16_t unusedSpriteDmaAddr = 0;
 	uint16_t unusedSpriteDmaCounter = 0;
 
@@ -1022,13 +1032,17 @@ void PPU::StreamState(bool saving)
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
 		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, unusedSpriteDmaAddr,
 		unusedSpriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, _skipScrollingIncrement, paletteRam, spriteRam, secondarySpriteRam,
-		openBusDecayStamp, _cyclesNeeded);
+		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug);
 
 	for(int i = 0; i < 64; i++) {
 		Stream(_spriteTiles[i].SpriteX, _spriteTiles[i].LowByte, _spriteTiles[i].HighByte, _spriteTiles[i].PaletteOffset, _spriteTiles[i].HorizontalMirror, _spriteTiles[i].BackgroundPriority);
 	}
 
 	if(!saving) {
+		EmulationSettings::SetFlagState(EmulationFlags::DisablePpu2004Reads, disablePpu2004Reads);
+		EmulationSettings::SetFlagState(EmulationFlags::DisablePaletteRead, disablePaletteRead);
+		EmulationSettings::SetFlagState(EmulationFlags::DisableOamAddrBug, disableOamAddrBug);
+
 		SetNesModel(_nesModel);
 		UpdateMinimumDrawCycles();
 	}

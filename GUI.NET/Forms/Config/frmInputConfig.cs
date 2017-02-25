@@ -17,6 +17,8 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InitializeComponent();
 
+			tlpControllers.Enabled = !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording();
+
 			InteropEmu.UpdateInputDevices();
 
 			Entity = ConfigManager.Config.InputInfo;

@@ -279,18 +279,20 @@ void ControlManager::StreamState(bool saving)
 	ExpansionPortDevice expansionDevice;
 	ConsoleType consoleType;
 	bool hasFourScore;
+	bool useNes101Hvc101Behavior;
 	if(saving) {
 		nesModel = Console::GetNesModel();
 		expansionDevice = EmulationSettings::GetExpansionDevice();
 		consoleType = EmulationSettings::GetConsoleType();
 		hasFourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
+		useNes101Hvc101Behavior = EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior);
 		for(int i = 0; i < 4; i++) {
 			controllerTypes[i] = EmulationSettings::GetControllerType(i);
 		}
 	}
 
 	ArrayInfo<ControllerType> types = { controllerTypes, 4 };
-	Stream(_refreshState, _mousePosition.X, _mousePosition.Y, nesModel, expansionDevice, consoleType, types, hasFourScore);
+	Stream(_refreshState, _mousePosition.X, _mousePosition.Y, nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior);
 
 	if(!saving) {
 		EmulationSettings::SetNesModel(nesModel);
@@ -300,11 +302,8 @@ void ControlManager::StreamState(bool saving)
 			EmulationSettings::SetControllerType(i, controllerTypes[i]);
 		}
 
-		if(hasFourScore) {
-			EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
-		} else {
-			EmulationSettings::ClearFlags(EmulationFlags::HasFourScore);
-		}
+		EmulationSettings::SetFlagState(EmulationFlags::HasFourScore, hasFourScore);
+		EmulationSettings::SetFlagState(EmulationFlags::UseNes101Hvc101Behavior, useNes101Hvc101Behavior);
 
 		UpdateControlDevices();
 	}

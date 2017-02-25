@@ -29,7 +29,7 @@
 		{
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgControllers = new System.Windows.Forms.TabPage();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.tlpControllers = new System.Windows.Forms.TableLayoutPanel();
 			this.btnSetupP4 = new System.Windows.Forms.Button();
 			this.btnSetupP3 = new System.Windows.Forms.Button();
 			this.lblPlayer1 = new System.Windows.Forms.Label();
@@ -63,7 +63,7 @@
 			this.cboDisplayInputPosition = new System.Windows.Forms.ComboBox();
 			this.tabMain.SuspendLayout();
 			this.tpgControllers.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
+			this.tlpControllers.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpDisplayInput.SuspendLayout();
@@ -90,7 +90,7 @@
 			// 
 			// tpgControllers
 			// 
-			this.tpgControllers.Controls.Add(this.tableLayoutPanel1);
+			this.tpgControllers.Controls.Add(this.tlpControllers);
 			this.tpgControllers.Location = new System.Drawing.Point(4, 22);
 			this.tpgControllers.Name = "tpgControllers";
 			this.tpgControllers.Size = new System.Drawing.Size(362, 225);
@@ -98,46 +98,46 @@
 			this.tpgControllers.Text = "Controllers";
 			this.tpgControllers.UseVisualStyleBackColor = true;
 			// 
-			// tableLayoutPanel1
+			// tlpControllers
 			// 
-			this.tableLayoutPanel1.ColumnCount = 3;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.Controls.Add(this.btnSetupP4, 2, 7);
-			this.tableLayoutPanel1.Controls.Add(this.btnSetupP3, 2, 6);
-			this.tableLayoutPanel1.Controls.Add(this.lblPlayer1, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.lblPlayer2, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.cboPlayer4, 1, 7);
-			this.tableLayoutPanel1.Controls.Add(this.cboPlayer3, 1, 6);
-			this.tableLayoutPanel1.Controls.Add(this.cboPlayer1, 1, 2);
-			this.tableLayoutPanel1.Controls.Add(this.lblPlayer4, 0, 7);
-			this.tableLayoutPanel1.Controls.Add(this.cboPlayer2, 1, 3);
-			this.tableLayoutPanel1.Controls.Add(this.lblPlayer3, 0, 6);
-			this.tableLayoutPanel1.Controls.Add(this.btnSetupP1, 2, 2);
-			this.tableLayoutPanel1.Controls.Add(this.btnSetupP2, 2, 3);
-			this.tableLayoutPanel1.Controls.Add(this.lblNesType, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.cboConsoleType, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.lblExpansionPort, 0, 5);
-			this.tableLayoutPanel1.Controls.Add(this.cboExpansionPort, 1, 5);
-			this.tableLayoutPanel1.Controls.Add(this.chkFourScore, 0, 4);
-			this.tableLayoutPanel1.Controls.Add(this.chkAutoConfigureInput, 0, 1);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 10;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(362, 225);
-			this.tableLayoutPanel1.TabIndex = 0;
+			this.tlpControllers.ColumnCount = 3;
+			this.tlpControllers.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpControllers.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpControllers.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpControllers.Controls.Add(this.btnSetupP4, 2, 7);
+			this.tlpControllers.Controls.Add(this.btnSetupP3, 2, 6);
+			this.tlpControllers.Controls.Add(this.lblPlayer1, 0, 2);
+			this.tlpControllers.Controls.Add(this.lblPlayer2, 0, 3);
+			this.tlpControllers.Controls.Add(this.cboPlayer4, 1, 7);
+			this.tlpControllers.Controls.Add(this.cboPlayer3, 1, 6);
+			this.tlpControllers.Controls.Add(this.cboPlayer1, 1, 2);
+			this.tlpControllers.Controls.Add(this.lblPlayer4, 0, 7);
+			this.tlpControllers.Controls.Add(this.cboPlayer2, 1, 3);
+			this.tlpControllers.Controls.Add(this.lblPlayer3, 0, 6);
+			this.tlpControllers.Controls.Add(this.btnSetupP1, 2, 2);
+			this.tlpControllers.Controls.Add(this.btnSetupP2, 2, 3);
+			this.tlpControllers.Controls.Add(this.lblNesType, 0, 0);
+			this.tlpControllers.Controls.Add(this.cboConsoleType, 1, 0);
+			this.tlpControllers.Controls.Add(this.lblExpansionPort, 0, 5);
+			this.tlpControllers.Controls.Add(this.cboExpansionPort, 1, 5);
+			this.tlpControllers.Controls.Add(this.chkFourScore, 0, 4);
+			this.tlpControllers.Controls.Add(this.chkAutoConfigureInput, 0, 1);
+			this.tlpControllers.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpControllers.Location = new System.Drawing.Point(0, 0);
+			this.tlpControllers.Name = "tlpControllers";
+			this.tlpControllers.RowCount = 10;
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpControllers.Size = new System.Drawing.Size(362, 225);
+			this.tlpControllers.TabIndex = 0;
 			// 
 			// btnSetupP4
 			// 
@@ -315,7 +315,7 @@
 			// 
 			this.chkFourScore.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkFourScore.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.chkFourScore, 2);
+			this.tlpControllers.SetColumnSpan(this.chkFourScore, 2);
 			this.chkFourScore.Location = new System.Drawing.Point(3, 113);
 			this.chkFourScore.Name = "chkFourScore";
 			this.chkFourScore.Size = new System.Drawing.Size(151, 17);
@@ -327,7 +327,7 @@
 			// chkAutoConfigureInput
 			// 
 			this.chkAutoConfigureInput.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.chkAutoConfigureInput, 3);
+			this.tlpControllers.SetColumnSpan(this.chkAutoConfigureInput, 3);
 			this.chkAutoConfigureInput.Location = new System.Drawing.Point(3, 30);
 			this.chkAutoConfigureInput.Name = "chkAutoConfigureInput";
 			this.chkAutoConfigureInput.Size = new System.Drawing.Size(290, 17);
@@ -497,8 +497,8 @@
 			this.Controls.SetChildIndex(this.tabMain, 0);
 			this.tabMain.ResumeLayout(false);
 			this.tpgControllers.ResumeLayout(false);
-			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
+			this.tlpControllers.ResumeLayout(false);
+			this.tlpControllers.PerformLayout();
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.grpDisplayInput.ResumeLayout(false);
@@ -516,7 +516,7 @@
 
 		private System.Windows.Forms.TabControl tabMain;
 		private System.Windows.Forms.TabPage tpgControllers;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel tlpControllers;
 		private System.Windows.Forms.Label lblPlayer1;
 		private System.Windows.Forms.Label lblPlayer2;
 		private System.Windows.Forms.Label lblPlayer3;

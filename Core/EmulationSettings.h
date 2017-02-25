@@ -384,7 +384,7 @@ public:
 		return std::to_string(_versionMajor) + "." + std::to_string(_versionMinor) + "." + std::to_string(_versionRevision);
 	}
 
-	static void SetFlags(EmulationFlags flags)
+	static void SetFlags(uint64_t flags)
 	{
 		_flags |= flags;
 
@@ -392,7 +392,19 @@ public:
 		_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
 	}
 
-	static void ClearFlags(EmulationFlags flags)
+	static void SetFlagState(EmulationFlags flag, bool enabled)
+	{
+		if(enabled) {
+			_flags |= flag;
+		} else {
+			_flags &= ~flag;
+		}
+		
+		_backgroundEnabled = !CheckFlag(EmulationFlags::DisableBackground);
+		_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
+	}
+
+	static void ClearFlags(uint64_t flags)
 	{
 		_flags &= ~flags;
 	}

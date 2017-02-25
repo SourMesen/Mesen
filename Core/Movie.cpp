@@ -215,10 +215,15 @@ struct MovieHeader
 	uint32_t ConsoleType;
 	uint8_t ControllerTypes[4];
 	uint32_t ExpansionDevice;
-	uint32_t OverclockRate;
-	bool OverclockAdjustApu;
-	uint32_t ExtraScanlinesBeforeNmi;
-	uint32_t ExtraScanlinesAfterNmi;
+	uint32_t OverclockRate = 100;
+	bool OverclockAdjustApu = true;
+	uint32_t ExtraScanlinesBeforeNmi = 0;
+	uint32_t ExtraScanlinesAfterNmi = 0;
+	bool DisablePpu2004Reads = false;
+	bool DisablePaletteRead = false;
+	bool DisableOamAddrBug = false;
+	bool UseNes101Hvc101Behavior = false;
+
 	uint32_t CheatCount;
 	uint32_t FilenameLength;
 };
@@ -237,6 +242,10 @@ bool Movie::Save()
 	header.ExpansionDevice = (uint32_t)EmulationSettings::GetExpansionDevice();
 	header.OverclockRate = (uint32_t)EmulationSettings::GetOverclockRate();
 	header.OverclockAdjustApu = EmulationSettings::GetOverclockAdjustApu();
+	header.DisablePpu2004Reads = EmulationSettings::CheckFlag(EmulationFlags::DisablePpu2004Reads);
+	header.DisablePaletteRead = EmulationSettings::CheckFlag(EmulationFlags::DisablePaletteRead);
+	header.DisableOamAddrBug = EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug);
+	header.UseNes101Hvc101Behavior = EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior);
 	for(int port = 0; port < 4; port++) {
 		header.ControllerTypes[port] = (uint32_t)EmulationSettings::GetControllerType(port);
 	}
@@ -258,6 +267,10 @@ bool Movie::Save()
 	_file.write((char*)&header.OverclockAdjustApu, sizeof(header.OverclockAdjustApu));
 	_file.write((char*)&header.ExtraScanlinesBeforeNmi, sizeof(header.ExtraScanlinesBeforeNmi));
 	_file.write((char*)&header.ExtraScanlinesAfterNmi, sizeof(header.ExtraScanlinesAfterNmi));
+	_file.write((char*)&header.DisablePpu2004Reads, sizeof(header.DisablePpu2004Reads));
+	_file.write((char*)&header.DisablePaletteRead, sizeof(header.DisablePaletteRead));
+	_file.write((char*)&header.DisableOamAddrBug, sizeof(header.DisableOamAddrBug));
+	_file.write((char*)&header.UseNes101Hvc101Behavior, sizeof(header.UseNes101Hvc101Behavior));
 	_file.write((char*)&header.CheatCount, sizeof(header.CheatCount));
 	_file.write((char*)&header.FilenameLength, sizeof(header.FilenameLength));
 
@@ -331,14 +344,25 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 		//New fields in version 3
 		file.read((char*)&header.OverclockRate, sizeof(header.OverclockRate));
 		file.read((char*)&header.OverclockAdjustApu, sizeof(header.OverclockAdjustApu));
-		EmulationSettings::SetOverclockRate(header.OverclockRate, header.OverclockAdjustApu);
-
-		if(header.MovieFormatVersion >= 4) {
-			file.read((char*)&header.ExtraScanlinesBeforeNmi, sizeof(header.ExtraScanlinesBeforeNmi));
-			file.read((char*)&header.ExtraScanlinesAfterNmi, sizeof(header.ExtraScanlinesAfterNmi));
-			EmulationSettings::SetPpuNmiConfig(header.ExtraScanlinesBeforeNmi, header.ExtraScanlinesAfterNmi);
-		}
 	}
+	if(header.MovieFormatVersion >= 4) {
+		file.read((char*)&header.ExtraScanlinesBeforeNmi, sizeof(header.ExtraScanlinesBeforeNmi));
+		file.read((char*)&header.ExtraScanlinesAfterNmi, sizeof(header.ExtraScanlinesAfterNmi));
+	}
+	if(header.MovieFormatVersion >= 5) {
+		file.read((char*)&header.DisablePpu2004Reads, sizeof(header.DisablePpu2004Reads));
+		file.read((char*)&header.DisablePaletteRead, sizeof(header.DisablePaletteRead));
+		file.read((char*)&header.DisableOamAddrBug, sizeof(header.DisableOamAddrBug));
+		file.read((char*)&header.UseNes101Hvc101Behavior, sizeof(header.UseNes101Hvc101Behavior));
+	}
+
+	EmulationSettings::SetOverclockRate(header.OverclockRate, header.OverclockAdjustApu);
+	EmulationSettings::SetPpuNmiConfig(header.ExtraScanlinesBeforeNmi, header.ExtraScanlinesAfterNmi);
+	EmulationSettings::SetFlagState(EmulationFlags::UseNes101Hvc101Behavior, header.UseNes101Hvc101Behavior);
+	EmulationSettings::SetFlagState(EmulationFlags::DisablePpu2004Reads, header.DisablePpu2004Reads);
+	EmulationSettings::SetFlagState(EmulationFlags::DisablePaletteRead, header.DisablePaletteRead);
+	EmulationSettings::SetFlagState(EmulationFlags::DisableOamAddrBug, header.DisableOamAddrBug);
+
 	file.read((char*)&header.CheatCount, sizeof(header.CheatCount));
 	file.read((char*)&header.FilenameLength, sizeof(header.FilenameLength));
 
@@ -351,7 +375,6 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	char* romFilename = new char[header.FilenameLength + 1];
 	memset(romFilename, 0, header.FilenameLength + 1);
 	file.read((char*)romFilename, header.FilenameLength);
-	delete[] romFilename;
 	
 	_cheatList.clear();
 	CodeInfo cheatCode;
@@ -402,5 +425,7 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	} else {
 		MessageManager::DisplayMessage("Movies", "MovieMissingRom", romFilename);
 	}
+	delete[] romFilename;
+
 	return loadedGame;
 }
