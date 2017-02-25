@@ -288,9 +288,10 @@
       <Control ID="chkAllowInvalidInput">Permitir las entradas inválidas (Arriba+Abajo e Izquierda+Derecha al mismo tiempo)</Control>
       <Control ID="lblRamPowerOnState">Estado inicial de la memoria durante el inicio:</Control>
       <Control ID="chkRemoveSpriteLimit">Eliminar el límite de sprites (Reduce el parpadeo en algunos juegos)</Control>
-      <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads</Control>
+      <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads (Famicom behavior)</Control>
       <Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
-      <Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>      
+      <Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>
+      <Control ID="chkDisablePpuReset">Do not reset PPU when resetting console (Famicom behavior)</Control>
 
       <Control ID="tpgOverclocking">Overclocking</Control>
       <Control ID="grpOverclocking">Overclocking de CPU</Control>

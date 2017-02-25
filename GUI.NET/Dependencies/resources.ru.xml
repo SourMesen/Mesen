@@ -289,9 +289,10 @@
       <Control ID="chkAllowInvalidInput">Разрешить недопустимые комбинации (Вниз+Вверх и Влево+Вправо)</Control>
       <Control ID="lblRamPowerOnState">Содержимое ОЗУ при включении : </Control>
       <Control ID="chkRemoveSpriteLimit">Отключить лимит спрайтов (уменьшает мерцание)</Control>
-      <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads</Control>
+      <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads (Famicom behavior)</Control>
       <Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
       <Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>
+      <Control ID="chkDisablePpuReset">Do not reset PPU when resetting console (Famicom behavior)</Control>
       
       <Control ID="tpgOverclocking">Разгон</Control>
       <Control ID="grpOverclocking">Разгон CPU</Control>

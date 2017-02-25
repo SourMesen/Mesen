@@ -42,6 +42,7 @@ enum EmulationFlags : int64_t
 	DisableNoiseModeFlag = 0x8000000,
 	DisablePaletteRead = 0x10000000,
 	DisableOamAddrBug = 0x20000000,
+	DisablePpuReset = 0x40000000,
 
 	Turbo = 0x2000000000,
 	InBackground = 0x4000000000,

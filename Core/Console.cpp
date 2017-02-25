@@ -187,18 +187,23 @@ NesModel Console::GetModel()
 
 void Console::Reset(bool softReset)
 {
-	Movie::Stop();
-	SoundMixer::StopRecording();
-
 	if(Instance->_initialized) {
-		Console::Pause();
-		if(softReset) {
-			Instance->ResetComponents(softReset);
+		if(softReset && EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset)) {
+			//Allow mid-frame resets to allow the PPU to get out-of-sync
+			RequestReset();
 		} else {
-			//Full reset of all objects to ensure the emulator always starts in the exact same state
-			Instance->Initialize(Instance->_romFilepath);
+			Movie::Stop();
+			SoundMixer::StopRecording();
+
+			Console::Pause();
+			if(softReset) {
+				Instance->ResetComponents(softReset);
+			} else {
+				//Full reset of all objects to ensure the emulator always starts in the exact same state
+				Instance->Initialize(Instance->_romFilepath);
+			}
+			Console::Resume();
 		}
-		Console::Resume();
 	}
 }
 
@@ -208,7 +213,9 @@ void Console::ResetComponents(bool softReset)
 	SoundMixer::StopRecording();
 
 	_memoryManager->Reset(softReset);
-	_ppu->Reset();
+	if(!EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
+		_ppu->Reset();
+	}
 	_apu->Reset(softReset);
 	_cpu->Reset(softReset);
 	_controlManager->Reset(softReset);
@@ -292,6 +299,15 @@ void Console::Run()
 			break;
 		}
 
+		if(_resetRequested) {
+			//Used by NSF player to reset console after changing track
+			//Also used with DisablePpuReset option to reset mid-frame
+			Movie::Stop();
+			SoundMixer::StopRecording();
+			ResetComponents(true);
+			_resetRequested = false;
+		}
+
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
 		if(currentFrameNumber != lastFrameNumber) {
 			EmulationSettings::DisableOverclocking(_disableOcNextFrame);
@@ -302,12 +318,6 @@ void Console::Run()
 			//Sleep until we're ready to start the next frame
 			clockTimer.WaitUntil(targetTime);
 			
-			if(_resetRequested) {
-				//Used by NSF player to reset console after changing track
-				ResetComponents(true);
-				_resetRequested = false;
-			}
-
 			if(!_pauseLock.IsFree()) {
 				//Need to temporarely pause the emu (to save/load a state, etc.)
 				_runLock.Release();
