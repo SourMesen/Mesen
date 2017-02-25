@@ -340,7 +340,7 @@
       <Control ID="tpgSaveData">Copias de seguridad</Control>
       <Control ID="grpAutomaticSaves">Guardado de estado automático</Control>
       <Control ID="chkAutoSave">Crear una copia de seguridad de cada estado</Control>
-      <Control ID="lblAutoSave">minutos (Pulse F6 para cargar)</Control>
+      <Control ID="lblAutoSave">minutos (Pulse F8 para cargar)</Control>
       <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
       <Control ID="grpCloudSaves">Copia de seguridad online</Control>
       <Control ID="chkFdsFastForwardOnLoad">Aumentar la velocidad de la emulación de juegos de carga FDS</Control>

@@ -345,7 +345,7 @@
       <Control ID="tpgSaveData">Sauvegardes</Control>
       <Control ID="grpAutomaticSaves">Sauvegarde d'état automatique</Control>
       <Control ID="chkAutoSave">Créer une sauvegarde d'état à chaque</Control>
-      <Control ID="lblAutoSave">minutes (Appuyer sur F6 pour charger)</Control>
+      <Control ID="lblAutoSave">minutes (Appuyer sur F8 pour charger)</Control>
       <Control ID="chkAutoSaveNotify">Afficher une notification à l'écran au moment de la sauvegarde automatique</Control>
 
       <Control ID="grpCloudSaves">Sauvegarde en ligne</Control>

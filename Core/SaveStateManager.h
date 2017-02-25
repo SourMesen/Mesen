@@ -5,7 +5,7 @@
 class SaveStateManager
 {
 private:
-	static const uint32_t MaxIndex = 5;
+	static const uint32_t MaxIndex = 7;
 	static atomic<uint32_t> _lastIndex;
 
 	static string GetStateFilepath(int stateIndex);	

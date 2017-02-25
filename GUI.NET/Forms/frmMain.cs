@@ -760,7 +760,7 @@ namespace Mesen.GUI.Forms
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
-		const int NumberOfSaveSlots = 5;
+		const int NumberOfSaveSlots = 7;
 		private void InitializeStateMenu(ToolStripMenuItem menu, bool forSave)
 		{
 			if(this.InvokeRequired) {
@@ -805,7 +805,7 @@ namespace Mesen.GUI.Forms
 
 				if(!forSave) {
 					menu.DropDownItems.Add("-");
-					addSaveStateInfo(6);
+					addSaveStateInfo(NumberOfSaveSlots+1);
 				}
 			}
 		}

@@ -6,7 +6,7 @@
 class AutoSaveManager
 {
 private:
-	const uint32_t _autoSaveSlot = 6;
+	const uint32_t _autoSaveSlot = 8;
 	std::thread _autoSaveThread;
 	atomic<bool> _stopThread;
 	Timer _timer;

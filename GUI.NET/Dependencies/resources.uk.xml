@@ -344,7 +344,7 @@
       <Control ID="tpgSaveData">Збереження</Control>
       <Control ID="grpAutomaticSaves">Автоматичні збереження</Control>
       <Control ID="chkAutoSave">Автоматично створювати збереження через</Control>
-      <Control ID="lblAutoSave">хвилин (натисніть F6 для завантаження)</Control>
+      <Control ID="lblAutoSave">хвилин (натисніть F8 для завантаження)</Control>
       <Control ID="chkAutoSaveNotify">Сповіщати при збереженні</Control>
 
       <Control ID="grpCloudSaves">Хмарнi збереження</Control>

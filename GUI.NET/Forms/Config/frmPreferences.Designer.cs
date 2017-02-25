@@ -587,7 +587,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblAutoSave.Name = "lblAutoSave";
 			this.lblAutoSave.Size = new System.Drawing.Size(99, 13);
 			this.lblAutoSave.TabIndex = 2;
-			this.lblAutoSave.Text = "minutes (F6 to load)";
+			this.lblAutoSave.Text = "minutes (F8 to load)";
 			// 
 			// tpgNsf
 			// 
