@@ -140,7 +140,7 @@ void ControlManager::UpdateControlDevices()
 
 	for(int i = 0; i < 2; i++) {
 		shared_ptr<BaseControlDevice> device;
-		if(fourScore || EmulationSettings::GetConsoleType() == ConsoleType::Famicom) {
+		if(fourScore || (EmulationSettings::GetConsoleType() == ConsoleType::Famicom && !EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior))) {
 			//Need to set standard controller in all slots if four score (to allow emulation to work correctly)
 			device.reset(new StandardController(i));
 		} else {
@@ -155,7 +155,9 @@ void ControlManager::UpdateControlDevices()
 			ControlManager::RegisterControlDevice(device, i);
 
 			if(fourScore) {
-				std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<StandardController>(new StandardController(i + 2)));
+				if(EmulationSettings::GetControllerType(i + 2) == ControllerType::StandardController) {
+					std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<StandardController>(new StandardController(i + 2)));
+				}
 			} else if(i == 1 || expansionDevice == ExpansionPortDevice::ArkanoidController) {
 				switch(expansionDevice) {
 					case ExpansionPortDevice::Zapper: std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<Zapper>(new Zapper(2))); break;
@@ -172,19 +174,38 @@ void ControlManager::UpdateControlDevices()
 	}
 }
 
+uint8_t ControlManager::GetOpenBusMask(uint8_t port)
+{
+	switch(EmulationSettings::GetConsoleType()) {
+		default:
+		case ConsoleType::Nes:
+			if(EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior)) {
+				return port == 0 ? 0xE4 : 0xE0;
+			} else {
+				return 0xE0;
+			}
+
+		case ConsoleType::Famicom:
+			if(EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior)) {
+				return port == 0 ? 0xF8 : 0xE0;
+			} else {
+				return port == 0 ? 0xF8 : 0xE0;
+			}
+	}
+}
+
 uint8_t ControlManager::GetPortValue(uint8_t port)
 {
 	if(_refreshState) {
 		//Reload until strobe bit is set to off
 		RefreshAllPorts();
 	}
-
 	shared_ptr<BaseControlDevice> device = GetControlDevice(port);
 
 	//"In the NES and Famicom, the top three (or five) bits are not driven, and so retain the bits of the previous byte on the bus. 
 	//Usually this is the most significant byte of the address of the controller port - 0x40.
 	//Paperboy relies on this behavior and requires that reads from the controller ports return exactly $40 or $41 as appropriate."
-	uint8_t value = MemoryManager::GetOpenBus(0xE0);
+	uint8_t value = MemoryManager::GetOpenBus(GetOpenBusMask(port));
 	if(device) {
 		value |= device->GetPortOutput();
 	}

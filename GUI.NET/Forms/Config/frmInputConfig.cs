@@ -56,22 +56,27 @@ namespace Mesen.GUI.Forms.Config
 			bool p3and4visible = (isNes && chkFourScore.Checked) || (!isNes && ((InputInfo)Entity).ExpansionPortDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter);
 
 			List<InteropEmu.ControllerType> controllerTypes = new List<InteropEmu.ControllerType>(new InteropEmu.ControllerType[] { InteropEmu.ControllerType.StandardController });
-			SetAvailableControllerTypes(cboPlayer3, controllerTypes.ToArray());
-			SetAvailableControllerTypes(cboPlayer4, controllerTypes.ToArray());
+			SetAvailableControllerTypes(cboPlayer3, controllerTypes.ToArray(), false);
+			SetAvailableControllerTypes(cboPlayer4, controllerTypes.ToArray(), false);
 
 			if(isNes && !chkFourScore.Checked) {
 				controllerTypes.Add(InteropEmu.ControllerType.Zapper);
 				controllerTypes.Add(InteropEmu.ControllerType.ArkanoidController);
 			}
-			SetAvailableControllerTypes(cboPlayer1, controllerTypes.ToArray());
-			SetAvailableControllerTypes(cboPlayer2, controllerTypes.ToArray());
+
+			bool isOriginalFamicom = !isNes && !ConfigManager.Config.EmulationInfo.UseNes101Hvc101Behavior;
+
+			SetAvailableControllerTypes(cboPlayer1, controllerTypes.ToArray(), isOriginalFamicom);
+			SetAvailableControllerTypes(cboPlayer2, controllerTypes.ToArray(), isOriginalFamicom);
 		}
 
-		private void SetAvailableControllerTypes(ComboBox comboBox, InteropEmu.ControllerType[] controllerTypes)
+		private void SetAvailableControllerTypes(ComboBox comboBox, InteropEmu.ControllerType[] controllerTypes, bool forceController)
 		{
 			object currentSelection = comboBox.SelectedItem;
 			comboBox.Items.Clear();
-			comboBox.Items.Add(ResourceHelper.GetEnumText(InteropEmu.ControllerType.None));
+			if(!forceController) {
+				comboBox.Items.Add(ResourceHelper.GetEnumText(InteropEmu.ControllerType.None));
+			}
 			foreach(InteropEmu.ControllerType type in controllerTypes) {
 				comboBox.Items.Add(ResourceHelper.GetEnumText(type));
 			}

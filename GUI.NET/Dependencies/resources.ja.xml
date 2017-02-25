@@ -292,6 +292,7 @@
       <Control ID="chkDisableOamAddrBug">PPUのOAMADDRバグを無効にする</Control>
       <Control ID="chkDisablePaletteRead">PPUのパレットラムを読み込み不可能にする</Control>
       <Control ID="chkDisablePpuReset">ゲーム機をリセットする時に、PPUをリセットしない　（ファミコン同様）</Control>
+      <Control ID="chkUseNes101Hvc101Behavior">AV仕様ファミコン（HVC-101とNES-101）の仕様を使う</Control>
 
       <Control ID="lblRamPowerOnState">起動時のメモリの状態 : </Control>
 

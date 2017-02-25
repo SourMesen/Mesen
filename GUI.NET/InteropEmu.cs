@@ -845,6 +845,8 @@ namespace Mesen.GUI
 		DisableOamAddrBug = 0x20000000,
 		DisablePpuReset = 0x40000000,
 
+		UseNes101Hvc101Behavior = 0x80000000,
+
 		InBackground = 0x4000000000,
 	}
 

@@ -293,7 +293,8 @@
       <Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
       <Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>
       <Control ID="chkDisablePpuReset">Do not reset PPU when resetting console (Famicom behavior)</Control>
-      
+      <Control ID="chkUseNes101Hvc101Behavior">Use NES/HVC-101 (Top-loader / AV Famicom) behavior</Control>
+
       <Control ID="tpgOverclocking">Разгон</Control>
       <Control ID="grpOverclocking">Разгон CPU</Control>
       <Control ID="lblOverclockWarning">ВНИМАНИЕ: Разгон может вызвать ошибки в некоторых играх!</Control>

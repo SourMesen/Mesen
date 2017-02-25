@@ -292,6 +292,7 @@
       <Control ID="chkDisableOamAddrBug">Désactiver l'émulation du bug de OAMADDR du PPU</Control>
       <Control ID="chkDisablePaletteRead">Empêcher la lecture de la palette du PPU</Control>
       <Control ID="chkDisablePpuReset">Ne pas faire un reset du PPU lors du reset de la console (Famicom)</Control>
+      <Control ID="chkUseNes101Hvc101Behavior">Simuler le comportement du NES/HVC-101 (Top Loader / AV Famicom)</Control>
       
       <Control ID="lblRamPowerOnState">État initial de la mémoire au démarrage : </Control>
 

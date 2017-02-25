@@ -29,6 +29,8 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		bool _isLagging = false;
 		bool _refreshState = false;
 
+		uint8_t GetOpenBusMask(uint8_t port);
+
 		template<typename T> shared_ptr<T> GetExpansionDevice();
 
 		virtual shared_ptr<BaseControlDevice> GetZapper(uint8_t port);
