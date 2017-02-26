@@ -434,6 +434,28 @@
     <Compile Include="Debugger\frmTraceLogger.Designer.cs">
       <DependentUpon>frmTraceLogger.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\HexBox\BuiltInContextMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Debugger\HexBox\ByteCharConverters.cs" />
+    <Compile Include="Debugger\HexBox\ByteCollection.cs" />
+    <Compile Include="Debugger\HexBox\BytePositionInfo.cs" />
+    <Compile Include="Debugger\HexBox\DataBlock.cs" />
+    <Compile Include="Debugger\HexBox\DataMap.cs" />
+    <Compile Include="Debugger\HexBox\DynamicByteProvider.cs" />
+    <Compile Include="Debugger\HexBox\DynamicFileByteProvider.cs" />
+    <Compile Include="Debugger\HexBox\FileByteProvider.cs" />
+    <Compile Include="Debugger\HexBox\FileDataBlock.cs" />
+    <Compile Include="Debugger\HexBox\FindOptions.cs" />
+    <Compile Include="Debugger\HexBox\HexBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Debugger\HexBox\HexCasing.cs" />
+    <Compile Include="Debugger\HexBox\IByteProvider.cs" />
+    <Compile Include="Debugger\HexBox\MemoryDataBlock.cs" />
+    <Compile Include="Debugger\HexBox\NativeMethods.cs" />
+    <Compile Include="Debugger\HexBox\StaticByteProvider.cs" />
+    <Compile Include="Debugger\HexBox\Util.cs" />
     <Compile Include="Debugger\LabelManager.cs" />
     <Compile Include="Debugger\TextboxHistory.cs" />
     <Compile Include="Forms\BaseConfigForm.Designer.cs">
@@ -719,6 +741,7 @@
     <EmbeddedResource Include="Debugger\frmTraceLogger.resx">
       <DependentUpon>frmTraceLogger.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\HexBox\HexBox.resx" />
     <EmbeddedResource Include="Forms\BaseConfigForm.resx">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>
     </EmbeddedResource>

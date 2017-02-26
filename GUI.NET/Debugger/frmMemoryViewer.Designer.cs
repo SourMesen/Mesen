@@ -81,7 +81,7 @@
 			this.ctrlHexViewer.Name = "ctrlHexViewer";
 			this.ctrlHexViewer.Size = new System.Drawing.Size(665, 346);
 			this.ctrlHexViewer.TabIndex = 0;
-			this.ctrlHexViewer.ColumnCountChanged += new System.EventHandler(this.ctrlHexViewer_ColumnCountChanged);
+			this.ctrlHexViewer.RequiredWidthChanged += new System.EventHandler(this.ctrlHexViewer_RequiredWidthChanged);
 			// 
 			// flowLayoutPanel1
 			// 

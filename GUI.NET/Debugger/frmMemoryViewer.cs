@@ -29,12 +29,11 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
-			this.ctrlHexViewer.FontSize = ConfigManager.Config.DebugInfo.RamFontSize;
+			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
 
 			UpdateImportButton();
 
 			this.cboMemoryType.SelectedIndex = 0;
-			this.Size = new Size(this.ctrlHexViewer.IdealWidth, this.Height);
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
@@ -52,7 +51,6 @@ namespace Mesen.GUI.Debugger
 			this._memoryType = (DebugMemoryType)this.cboMemoryType.SelectedIndex;
 			this.UpdateImportButton();
 			this.RefreshData();
-			this.ctrlHexViewer.ScrollToTop();
 		}
 
 		private void mnuRefresh_Click(object sender, EventArgs e)
@@ -60,18 +58,15 @@ namespace Mesen.GUI.Debugger
 			this.RefreshData();
 		}
 
+		int _previousIndex = -1;
 		private void RefreshData()
 		{
 			if(this.tabMain.SelectedTab == this.tpgAccessCounters) {
 				this.ctrlMemoryAccessCounters.RefreshData();
 			} else if(this.tabMain.SelectedTab == this.tpgMemoryViewer) {
-				this.ctrlHexViewer.Data = InteropEmu.DebugGetMemoryState((DebugMemoryType)this.cboMemoryType.SelectedIndex);
+				this.ctrlHexViewer.SetData(InteropEmu.DebugGetMemoryState((DebugMemoryType)this.cboMemoryType.SelectedIndex), this.cboMemoryType.SelectedIndex != _previousIndex);
+				this._previousIndex = this.cboMemoryType.SelectedIndex;
 			}
-		}
-
-		private void ctrlHexViewer_ColumnCountChanged(object sender, EventArgs e)
-		{
-			this.Size = new Size(this.ctrlHexViewer.IdealWidth, this.Height);
 		}
 
 		private void mnuFind_Click(object sender, EventArgs e)
@@ -96,19 +91,19 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
-			this.ctrlHexViewer.FontSize++;
+			this.ctrlHexViewer.IncreaseFontSize();
 			this.UpdateConfig();
 		}
 
 		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
 		{
-			this.ctrlHexViewer.FontSize--;
+			this.ctrlHexViewer.DecreaseFontSize();
 			this.UpdateConfig();
 		}
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
-			this.ctrlHexViewer.FontSize = BaseControl.DefaultFontSize;
+			this.ctrlHexViewer.ResetFontSize();
 			this.UpdateConfig();
 		}
 
@@ -120,7 +115,7 @@ namespace Mesen.GUI.Debugger
 		private void UpdateConfig()
 		{
 			ConfigManager.Config.DebugInfo.RamAutoRefresh = this.mnuAutoRefresh.Checked;
-			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlHexViewer.FontSize;
+			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlHexViewer.HexFont.Size;
 			ConfigManager.ApplyChanges();
 		}
 
@@ -166,7 +161,7 @@ namespace Mesen.GUI.Debugger
 			sfd.InitialDirectory = ConfigManager.DebuggerFolder;
 			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + " - " + cboMemoryType.SelectedItem.ToString() + ".dmp";
 			if(sfd.ShowDialog() == DialogResult.OK) {
-				File.WriteAllBytes(sfd.FileName, this.ctrlHexViewer.Data);
+				File.WriteAllBytes(sfd.FileName, this.ctrlHexViewer.GetData());
 			}
 		}
 
@@ -184,6 +179,11 @@ namespace Mesen.GUI.Debugger
 			if(this.tabMain.SelectedTab == this.tpgProfiler) {
 				this.ctrlProfiler.RefreshData();
 			}
+		}
+
+		private void ctrlHexViewer_RequiredWidthChanged(object sender, EventArgs e)
+		{
+			this.Size = new Size(this.ctrlHexViewer.RequiredWidth + this.Width - this.ctrlHexViewer.Width + 30, this.Height);
 		}
 	}
 }
