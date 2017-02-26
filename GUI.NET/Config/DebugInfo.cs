@@ -119,6 +119,7 @@ namespace Mesen.GUI.Config
 		public bool RamAutoRefresh = true;
 		public int RamColumnCount = 2;
 		public float RamFontSize = BaseControl.DefaultFontSize;
+		public bool RamShowCharacters = true;
 
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;

@@ -280,5 +280,19 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			this.UpdateSearchOptions();
 		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public IByteCharConverter ByteCharConverter
+		{
+			get { return this.ctrlHexBox.ByteCharConverter; }
+			set { this.ctrlHexBox.ByteCharConverter = value; }
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool StringViewVisible
+		{
+			get { return this.ctrlHexBox.StringViewVisible; }
+			set { this.ctrlHexBox.StringViewVisible = value; }
+		}
 	}
 }

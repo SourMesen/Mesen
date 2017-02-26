@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Controls;
+using Be.Windows.Forms;
 
 namespace Mesen.GUI.Debugger
 {
@@ -29,7 +30,10 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
+			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
+
+			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
 
 			UpdateImportButton();
 
@@ -37,6 +41,8 @@ namespace Mesen.GUI.Debugger
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
+
+			this.mnuShowCharacters.CheckedChanged += new EventHandler(this.mnuShowCharacters_CheckedChanged);
 		}
 
 		void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -115,6 +121,7 @@ namespace Mesen.GUI.Debugger
 		private void UpdateConfig()
 		{
 			ConfigManager.Config.DebugInfo.RamAutoRefresh = this.mnuAutoRefresh.Checked;
+			ConfigManager.Config.DebugInfo.RamShowCharacters = this.mnuShowCharacters.Checked;
 			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlHexViewer.HexFont.Size;
 			ConfigManager.ApplyChanges();
 		}
@@ -184,6 +191,27 @@ namespace Mesen.GUI.Debugger
 		private void ctrlHexViewer_RequiredWidthChanged(object sender, EventArgs e)
 		{
 			this.Size = new Size(this.ctrlHexViewer.RequiredWidth + this.Width - this.ctrlHexViewer.Width + 30, this.Height);
+		}
+
+		private void mnuLoadTblFile_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.SetFilter("TBL files (*.tbl)|*.tbl");
+			if(ofd.ShowDialog() == DialogResult.OK) {
+				var tblDict = TblLoader.ToDictionary(ofd.FileName);
+				if(tblDict == null) {
+					MessageBox.Show("Could not load TBL file.  The file selected file appears to be invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				} else {
+					this.ctrlHexViewer.ByteCharConverter = new TblByteCharConverter(tblDict);
+					this.mnuShowCharacters.Checked = true;
+				}
+			}
+		}
+
+		private void mnuShowCharacters_CheckedChanged(object sender, EventArgs e)
+		{
+			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
+			this.UpdateConfig();
 		}
 	}
 }

@@ -41,6 +41,8 @@
 			this.mnuImport = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExport = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuLoadTblFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuView = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,6 +67,7 @@
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
 			this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
+			this.mnuShowCharacters = new System.Windows.Forms.ToolStripMenuItem();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
@@ -142,6 +145,8 @@
             this.mnuImport,
             this.mnuExport,
             this.toolStripMenuItem3,
+            this.mnuLoadTblFile,
+            this.toolStripMenuItem4,
             this.mnuClose});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -168,6 +173,18 @@
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
 			this.toolStripMenuItem3.Size = new System.Drawing.Size(150, 6);
 			// 
+			// mnuLoadTblFile
+			// 
+			this.mnuLoadTblFile.Name = "mnuLoadTblFile";
+			this.mnuLoadTblFile.Size = new System.Drawing.Size(153, 22);
+			this.mnuLoadTblFile.Text = "Load TBL file";
+			this.mnuLoadTblFile.Click += new System.EventHandler(this.mnuLoadTblFile_Click);
+			// 
+			// toolStripMenuItem4
+			// 
+			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(150, 6);
+			// 
 			// mnuClose
 			// 
 			this.mnuClose.Name = "mnuClose";
@@ -181,7 +198,8 @@
             this.mnuRefresh,
             this.fontSizeToolStripMenuItem,
             this.toolStripMenuItem2,
-            this.mnuAutoRefresh});
+            this.mnuAutoRefresh,
+            this.mnuShowCharacters});
 			this.mnuView.Name = "mnuView";
 			this.mnuView.Size = new System.Drawing.Size(44, 20);
 			this.mnuView.Text = "View";
@@ -190,7 +208,7 @@
 			// 
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(160, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
@@ -201,7 +219,7 @@
             this.mnuDecreaseFontSize,
             this.mnuResetFontSize});
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
-			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.fontSizeToolStripMenuItem.Text = "Text Size";
 			// 
 			// mnuIncreaseFontSize
@@ -234,7 +252,7 @@
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(138, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(157, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -242,7 +260,7 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(160, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -386,6 +404,15 @@
 			this.tmrRefresh.Enabled = true;
 			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
 			// 
+			// mnuShowCharacters
+			// 
+			this.mnuShowCharacters.Checked = true;
+			this.mnuShowCharacters.CheckOnClick = true;
+			this.mnuShowCharacters.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuShowCharacters.Name = "mnuShowCharacters";
+			this.mnuShowCharacters.Size = new System.Drawing.Size(160, 22);
+			this.mnuShowCharacters.Text = "Show characters";
+			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -448,5 +475,8 @@
 		private System.Windows.Forms.Timer tmrRefresh;
 		private System.Windows.Forms.TabPage tpgProfiler;
 		private Controls.ctrlProfiler ctrlProfiler;
+		private System.Windows.Forms.ToolStripMenuItem mnuLoadTblFile;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowCharacters;
 	}
 }
