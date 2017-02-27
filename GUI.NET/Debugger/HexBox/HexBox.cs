@@ -3715,7 +3715,7 @@ namespace Be.Windows.Forms
 			}
 			set
 			{
-				if (value != null && value != _byteCharConverter)
+				if (value != _byteCharConverter)
 				{
 					_byteCharConverter = value;
 					Invalidate();

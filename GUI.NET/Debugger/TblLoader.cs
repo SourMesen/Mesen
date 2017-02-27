@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mesen.GUI.Debugger
 {
-	class TblLoader
+	public class TblLoader
 	{
 		public struct TblKey
 		{
@@ -16,15 +16,14 @@ namespace Mesen.GUI.Debugger
 			public int Length;
 		}
 
-		public static Dictionary<TblKey, string> ToDictionary(string filename)
+		public static Dictionary<TblKey, string> ToDictionary(string[] fileContents)
 		{
 			try {
 				Dictionary<TblKey, string> dict = new Dictionary<TblKey, string>();
 
-				string[] lines = File.ReadAllLines(filename);
-				for(int i = 0; i < lines.Length; i++) {
-					if(!string.IsNullOrWhiteSpace(lines[i])) {
-						string[] data = lines[i].Split('=');
+				for(int i = 0; i < fileContents.Length; i++) {
+					if(!string.IsNullOrWhiteSpace(fileContents[i])) {
+						string[] data = fileContents[i].Split('=');
 						if(data.Length == 2) {
 							data[0] = data[0].Replace(" ", "");
 							if(data[0].Length % 2 == 0 && Regex.IsMatch(data[0], "[0-9A-Fa-f]+")) {

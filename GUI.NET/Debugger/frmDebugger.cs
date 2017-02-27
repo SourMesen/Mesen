@@ -455,7 +455,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuMemoryViewer_Click(object sender, EventArgs e)
 		{
-			OpenChildForm(new frmMemoryViewer());
+			OpenChildForm(new frmMemoryViewer(() => { return _workspace; }));
 		}
 
 		private void BreakpointManager_BreakpointsChanged(object sender, EventArgs e)

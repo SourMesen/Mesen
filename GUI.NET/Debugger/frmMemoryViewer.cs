@@ -19,10 +19,13 @@ namespace Mesen.GUI.Debugger
 	{
 		private InteropEmu.NotificationListener _notifListener;
 		private DebugMemoryType _memoryType = DebugMemoryType.CpuMemory;
+		private Func<DebugWorkspace> _getWorkspace;
 
-		public frmMemoryViewer()
+		public frmMemoryViewer(Func<DebugWorkspace> getWorkspace)
 		{
 			InitializeComponent();
+
+			this._getWorkspace = getWorkspace;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -33,6 +36,12 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
 
+			if(this._getWorkspace().TblMappings != null) {
+				var tblDict = TblLoader.ToDictionary(this._getWorkspace().TblMappings.ToArray());
+				if(tblDict != null) {
+					this.ctrlHexViewer.ByteCharConverter = new TblByteCharConverter(tblDict);
+				}
+			}
 			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
 
 			UpdateImportButton();
@@ -198,14 +207,22 @@ namespace Mesen.GUI.Debugger
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.SetFilter("TBL files (*.tbl)|*.tbl");
 			if(ofd.ShowDialog() == DialogResult.OK) {
-				var tblDict = TblLoader.ToDictionary(ofd.FileName);
+				string[] fileContents = File.ReadAllLines(ofd.FileName);
+				var tblDict = TblLoader.ToDictionary(fileContents);
 				if(tblDict == null) {
 					MessageBox.Show("Could not load TBL file.  The file selected file appears to be invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				} else {
+					this._getWorkspace().TblMappings = new List<string>(fileContents);
 					this.ctrlHexViewer.ByteCharConverter = new TblByteCharConverter(tblDict);
 					this.mnuShowCharacters.Checked = true;
 				}
 			}
+		}
+
+		private void mnuResetTblMappings_Click(object sender, EventArgs e)
+		{
+			this._getWorkspace().TblMappings = null;
+			this.ctrlHexViewer.ByteCharConverter = null;
 		}
 
 		private void mnuShowCharacters_CheckedChanged(object sender, EventArgs e)

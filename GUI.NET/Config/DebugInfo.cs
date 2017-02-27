@@ -39,6 +39,7 @@ namespace Mesen.GUI.Config
 		public List<Breakpoint> Breakpoints = new List<Breakpoint>();
 		public List<string> WatchValues = new List<string>();
 		public List<CodeLabel> Labels = new List<CodeLabel>();
+		public List<string> TblMappings = null;
 		private string _filePath;
 
 		public static DebugWorkspace GetWorkspace()

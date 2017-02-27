@@ -41,6 +41,7 @@
 			this.mnuImport = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExport = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuResetTblMappings = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuLoadTblFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +53,7 @@
 			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowCharacters = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,7 +69,6 @@
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
 			this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
-			this.mnuShowCharacters = new System.Windows.Forms.ToolStripMenuItem();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
@@ -146,6 +147,7 @@
             this.mnuExport,
             this.toolStripMenuItem3,
             this.mnuLoadTblFile,
+            this.mnuResetTblMappings,
             this.toolStripMenuItem4,
             this.mnuClose});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -156,7 +158,7 @@
 			// 
 			this.mnuImport.Name = "mnuImport";
 			this.mnuImport.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.mnuImport.Size = new System.Drawing.Size(153, 22);
+			this.mnuImport.Size = new System.Drawing.Size(181, 22);
 			this.mnuImport.Text = "Import";
 			this.mnuImport.Click += new System.EventHandler(this.mnuImport_Click);
 			// 
@@ -164,31 +166,38 @@
 			// 
 			this.mnuExport.Name = "mnuExport";
 			this.mnuExport.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.mnuExport.Size = new System.Drawing.Size(153, 22);
+			this.mnuExport.Size = new System.Drawing.Size(181, 22);
 			this.mnuExport.Text = "Export";
 			this.mnuExport.Click += new System.EventHandler(this.mnuExport_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(150, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(178, 6);
+			// 
+			// mnuResetTblMappings
+			// 
+			this.mnuResetTblMappings.Name = "mnuResetTblMappings";
+			this.mnuResetTblMappings.Size = new System.Drawing.Size(181, 22);
+			this.mnuResetTblMappings.Text = "Reset TBL mappings";
+			this.mnuResetTblMappings.Click += new System.EventHandler(this.mnuResetTblMappings_Click);
 			// 
 			// mnuLoadTblFile
 			// 
 			this.mnuLoadTblFile.Name = "mnuLoadTblFile";
-			this.mnuLoadTblFile.Size = new System.Drawing.Size(153, 22);
+			this.mnuLoadTblFile.Size = new System.Drawing.Size(181, 22);
 			this.mnuLoadTblFile.Text = "Load TBL file";
 			this.mnuLoadTblFile.Click += new System.EventHandler(this.mnuLoadTblFile_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(150, 6);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(178, 6);
 			// 
 			// mnuClose
 			// 
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(153, 22);
+			this.mnuClose.Size = new System.Drawing.Size(181, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -263,6 +272,15 @@
 			this.mnuAutoRefresh.Size = new System.Drawing.Size(160, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
+			// 
+			// mnuShowCharacters
+			// 
+			this.mnuShowCharacters.Checked = true;
+			this.mnuShowCharacters.CheckOnClick = true;
+			this.mnuShowCharacters.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuShowCharacters.Name = "mnuShowCharacters";
+			this.mnuShowCharacters.Size = new System.Drawing.Size(160, 22);
+			this.mnuShowCharacters.Text = "Show characters";
 			// 
 			// toolStripMenuItem1
 			// 
@@ -404,15 +422,6 @@
 			this.tmrRefresh.Enabled = true;
 			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
 			// 
-			// mnuShowCharacters
-			// 
-			this.mnuShowCharacters.Checked = true;
-			this.mnuShowCharacters.CheckOnClick = true;
-			this.mnuShowCharacters.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.mnuShowCharacters.Name = "mnuShowCharacters";
-			this.mnuShowCharacters.Size = new System.Drawing.Size(160, 22);
-			this.mnuShowCharacters.Text = "Show characters";
-			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -478,5 +487,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuLoadTblFile;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowCharacters;
+		private System.Windows.Forms.ToolStripMenuItem mnuResetTblMappings;
 	}
 }
