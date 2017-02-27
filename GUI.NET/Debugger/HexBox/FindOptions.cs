@@ -7,16 +7,16 @@ namespace Be.Windows.Forms
 	/// <summary>
 	/// Defines the type of the Find operation.
 	/// </summary>
-	public enum FindType 
-	{ 
+	public enum FindType
+	{
 		/// <summary>
 		/// Used for Text Find operations
 		/// </summary>
-		Text, 
+		Text,
 		/// <summary>
 		/// Used for Hex Find operations
 		/// </summary>
-		Hex 
+		Hex
 	}
 
 	/// <summary>
@@ -56,7 +56,6 @@ namespace Be.Windows.Forms
 			set
 			{
 				_matchCase = value;
-				UpdateFindBuffer();
 			}
 		}
 		/// <summary>
@@ -72,7 +71,6 @@ namespace Be.Windows.Forms
 			set
 			{
 				_text = value;
-				UpdateFindBuffer();
 			}
 		}
 		/// <summary>
@@ -86,12 +84,12 @@ namespace Be.Windows.Forms
 		/// <summary>
 		/// Updates the find buffer.
 		/// </summary>
-		void UpdateFindBuffer()
+		internal void UpdateFindBuffer(IByteCharConverter byteCharConverter)
 		{
 			string text = this.Text != null ? this.Text : string.Empty;
-			FindBuffer = ASCIIEncoding.ASCII.GetBytes(text);
-			FindBufferLowerCase = ASCIIEncoding.ASCII.GetBytes(text.ToLower());
-			FindBufferUpperCase = ASCIIEncoding.ASCII.GetBytes(text.ToUpper());
+			FindBuffer = byteCharConverter.GetBytes(text);
+			FindBufferLowerCase = byteCharConverter.GetBytes(text.ToLower());
+			FindBufferUpperCase = byteCharConverter.GetBytes(text.ToUpper());
 		}
-}
+	}
 }

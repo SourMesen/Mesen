@@ -22,6 +22,8 @@ namespace Be.Windows.Forms
 		/// <param name="c"></param>
 		/// <returns></returns>
 		byte ToByte(char c);
+
+		byte[] GetBytes(string str);
 	}
 
 	/// <summary>
@@ -49,6 +51,15 @@ namespace Be.Windows.Forms
 		public virtual byte ToByte(char c)
 		{
 			return (byte)c;
+		}
+
+		public virtual byte[] GetBytes(string str)
+		{
+			List<byte> bytes = new List<byte>(str.Length);
+			foreach(char c in str) {
+				bytes.Add((byte)c);
+			}
+			return bytes.ToArray();
 		}
 
 		/// <summary>
@@ -94,6 +105,15 @@ namespace Be.Windows.Forms
 		{
 			byte[] decoded = _ebcdicEncoding.GetBytes(new char[] { c });
 			return decoded.Length > 0 ? decoded[0] : (byte)0;
+		}
+
+		public virtual byte[] GetBytes(string str)
+		{
+			List<byte> bytes = new List<byte>(str.Length);
+			foreach(char c in str) {
+				bytes.Add((byte)c);
+			}
+			return bytes.ToArray();
 		}
 
 		/// <summary>

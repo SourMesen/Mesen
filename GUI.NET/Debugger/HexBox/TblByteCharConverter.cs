@@ -13,10 +13,27 @@ namespace Be.Windows.Forms
 	class TblByteCharConverter : IByteCharConverter
 	{
 		Dictionary<TblKey, string> _tblRules;
+		Dictionary<string, TblKey> _reverseTblRules;
+		List<string> _stringList;
 
 		public TblByteCharConverter(Dictionary<TblKey, string> tblRules)
 		{
 			this._tblRules = tblRules;
+			this._stringList = new List<string>();
+			this._reverseTblRules = new Dictionary<string, TblKey>();
+			foreach(KeyValuePair<TblKey, string> kvp in tblRules) {
+				this._stringList.Add(kvp.Value);
+				this._reverseTblRules[kvp.Value] = kvp.Key;
+			}
+			this._stringList.Sort(new Comparison<string>((a, b) => {
+				if(a.Length > b.Length) {
+					return 1;
+				} else if(a.Length < b.Length) {
+					return -1;
+				} else {
+					return string.Compare(a, b);
+				}
+			}));
 		}
 
 		/// <summary>
@@ -40,6 +57,33 @@ namespace Be.Windows.Forms
 				keyLength = 1;
 				return ".";
 			}
+		}
+
+		public virtual byte[] GetBytes(string text)
+		{
+			List<byte> bytes = new List<byte>();
+			
+			bool match = false;
+			while(text.Length > 0) {
+				do {
+					match = false;
+					foreach(string key in _stringList) {
+						if(text.StartsWith(key)) {
+							bytes.AddRange(_reverseTblRules[key].GetBytes());
+							text = text.Substring(key.Length);
+							match = true;
+							break;
+						}
+					}
+				} while(match);
+
+				if(!match && text.Length > 0) {
+					bytes.Add(0);
+					text = text.Substring(1);
+				}
+			}
+
+			return bytes.ToArray();
 		}
 
 		/// <summary>

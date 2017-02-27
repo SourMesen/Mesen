@@ -1978,6 +1978,8 @@ namespace Be.Windows.Forms
 				case eSearchDirection.Next: startIndex = this.SelectionStart + 1; break;
 			}
 
+			options.UpdateFindBuffer(this.ByteCharConverter);
+
 			byte[] buffer1 = null;
 			byte[] buffer2 = null;
 			if(options.Type == FindType.Text && options.MatchCase) {

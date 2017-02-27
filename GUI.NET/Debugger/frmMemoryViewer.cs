@@ -36,11 +36,8 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
 
-			if(this._getWorkspace().TblMappings != null) {
-				var tblDict = TblLoader.ToDictionary(this._getWorkspace().TblMappings.ToArray());
-				if(tblDict != null) {
-					this.ctrlHexViewer.ByteCharConverter = new TblByteCharConverter(tblDict);
-				}
+			if(this._getWorkspace().TblMappings != null && this._getWorkspace().TblMappings.Count > 0) {
+				this.InitTblMappings();
 			}
 			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
 
@@ -52,6 +49,14 @@ namespace Mesen.GUI.Debugger
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
 			this.mnuShowCharacters.CheckedChanged += new EventHandler(this.mnuShowCharacters_CheckedChanged);
+		}
+
+		void InitTblMappings()
+		{
+			var tblDict = TblLoader.ToDictionary(this._getWorkspace().TblMappings.ToArray());
+			if(tblDict != null) {
+				this.ctrlHexViewer.ByteCharConverter = new TblByteCharConverter(tblDict);
+			}
 		}
 
 		void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -74,8 +79,14 @@ namespace Mesen.GUI.Debugger
 		}
 
 		int _previousIndex = -1;
+		DebugWorkspace _previousWorkspace;
 		private void RefreshData()
 		{
+			if(this._getWorkspace() != this._previousWorkspace) {
+				this.InitTblMappings();
+			}
+			_previousWorkspace = this._getWorkspace();
+
 			if(this.tabMain.SelectedTab == this.tpgAccessCounters) {
 				this.ctrlMemoryAccessCounters.RefreshData();
 			} else if(this.tabMain.SelectedTab == this.tpgMemoryViewer) {
