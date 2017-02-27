@@ -794,9 +794,10 @@ uint8_t* BaseMapper::GetWorkRam()
 
 uint32_t BaseMapper::CopyMemory(DebugMemoryType type, uint8_t* buffer)
 {
+	uint32_t chrRomSize = _onlyChrRam ? 0 : _chrRomSize;
 	switch(type) {
 		case DebugMemoryType::ChrRam: memcpy(buffer, _chrRam, _chrRamSize); return _chrRamSize;
-		case DebugMemoryType::ChrRom: memcpy(buffer, _chrRom, _chrRomSize); return _chrRomSize;
+		case DebugMemoryType::ChrRom: memcpy(buffer, _chrRom, chrRomSize); return chrRomSize;
 		case DebugMemoryType::PrgRom: memcpy(buffer, _prgRom, _prgSize); return _prgSize;
 		case DebugMemoryType::SaveRam: memcpy(buffer, _saveRam, _saveRamSize); return _saveRamSize;
 		case DebugMemoryType::WorkRam: memcpy(buffer, _workRam, _workRamSize); return _workRamSize;
@@ -818,12 +819,23 @@ uint32_t BaseMapper::GetMemorySize(DebugMemoryType type)
 {
 	switch(type) {
 		default: return 0;
-		case DebugMemoryType::ChrRom: return _chrRomSize;
+		case DebugMemoryType::ChrRom: return _onlyChrRam ? 0 : _chrRomSize;
 		case DebugMemoryType::ChrRam: return _chrRamSize;
 		case DebugMemoryType::SaveRam: return _saveRamSize;
 		case DebugMemoryType::PrgRom: return _prgSize;
 		case DebugMemoryType::WorkRam: return _workRamSize;
-	}	
+	}
+}
+
+void BaseMapper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value)
+{
+	switch(memoryType) {
+		case DebugMemoryType::ChrRom: _chrRom[address] = value; break;
+		case DebugMemoryType::ChrRam: _chrRam[address] = value; break;
+		case DebugMemoryType::SaveRam: _saveRam[address] = value; break;
+		case DebugMemoryType::PrgRom: _prgRom[address] = value; break;
+		case DebugMemoryType::WorkRam: _workRam[address] = value; break;
+	}
 }
 
 int32_t BaseMapper::ToAbsoluteAddress(uint16_t addr)

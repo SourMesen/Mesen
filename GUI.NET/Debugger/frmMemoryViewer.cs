@@ -170,6 +170,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void ctrlHexViewer_ByteChanged(int byteIndex, byte newValue, byte oldValue)
+		{
+			InteropEmu.DebugSetMemoryValue(_memoryType, (UInt32)byteIndex, newValue);
+		}
+
 		private void mnuImport_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();

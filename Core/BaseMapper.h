@@ -226,6 +226,7 @@ public:
 	uint8_t* GetPrgRom();
 	uint8_t* GetWorkRam();
 	
+	void SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value);
 	uint32_t GetMemorySize(DebugMemoryType type);
 
 	uint32_t CopyMemory(DebugMemoryType type, uint8_t* buffer);

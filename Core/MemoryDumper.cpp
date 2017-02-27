@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Debugger.h"
 #include "MemoryManager.h"
 #include "PPU.h"
 #include "CodeDataLogger.h"
@@ -6,8 +7,9 @@
 #include "MemoryDumper.h"
 #include "VideoDecoder.h"
 
-MemoryDumper::MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger)
+MemoryDumper::MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger, Debugger* debugger)
 {
+	_debugger = debugger;
 	_ppu = ppu;
 	_memoryManager = memoryManager;
 	_mapper = mapper;
@@ -36,6 +38,40 @@ void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
 			_mapper->WriteMemory(type, buffer);
+			break;
+	}
+}
+
+void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value)
+{
+	switch(memoryType) {
+		case DebugMemoryType::CpuMemory: 
+			AddressTypeInfo info;
+			_debugger->GetAbsoluteAddressAndType(address, &info);
+			if(info.Address >= 0) {
+				switch(info.Type) {
+					case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value); break;
+					case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value); break;
+					case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value); break;
+					case AddressType::SaveRam: SetMemoryValue(DebugMemoryType::SaveRam, info.Address, value); break;
+				}
+			}
+			break;
+
+		case DebugMemoryType::InternalRam: _memoryManager->DebugWrite(address, value); break;
+		
+		case DebugMemoryType::PaletteMemory: _ppu->WritePaletteRAM(address, value); break;
+		case DebugMemoryType::SpriteMemory: _ppu->GetSpriteRam()[address] = value; break;
+		case DebugMemoryType::SecondarySpriteMemory: _ppu->GetSecondarySpriteRam()[address] = value; break;
+		
+		case DebugMemoryType::PpuMemory: _mapper->WriteVRAM(address, value); break;
+
+		case DebugMemoryType::ChrRam:
+		case DebugMemoryType::WorkRam:
+		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::PrgRom:
+		case DebugMemoryType::ChrRom:
+			_mapper->SetMemoryValue(memoryType, address, value);
 			break;
 	}
 }

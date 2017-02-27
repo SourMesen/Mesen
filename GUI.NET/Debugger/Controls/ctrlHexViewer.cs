@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Be.Windows.Forms;
 using Mesen.GUI.Controls;
+using static Be.Windows.Forms.DynamicByteProvider;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -57,6 +58,9 @@ namespace Mesen.GUI.Debugger.Controls
 
 				if(changed) {
 					_byteProvider = new StaticByteProvider(data);
+					_byteProvider.ByteChanged += (int byteIndex, byte newValue, byte oldValue) => {
+						ByteChanged?.Invoke(byteIndex, newValue, oldValue);
+					};
 					this.ctrlHexBox.ByteProvider = _byteProvider;
 					if(clearHistory) {
 						this.ctrlHexBox.ClearHistory();
@@ -270,16 +274,18 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		public event EventHandler RequiredWidthChanged 
+		private void chkTextSearch_CheckedChanged(object sender, EventArgs e)
+		{
+			this.UpdateSearchOptions();
+		}
+		
+		public event EventHandler RequiredWidthChanged
 		{
 			add { this.ctrlHexBox.RequiredWidthChanged += value; }
 			remove { this.ctrlHexBox.RequiredWidthChanged -= value; }
 		}
 
-		private void chkTextSearch_CheckedChanged(object sender, EventArgs e)
-		{
-			this.UpdateSearchOptions();
-		}
+		public event ByteChangedHandler ByteChanged;
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IByteCharConverter ByteCharConverter
@@ -293,6 +299,13 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			get { return this.ctrlHexBox.StringViewVisible; }
 			set { this.ctrlHexBox.StringViewVisible = value; }
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool ReadOnly
+		{
+			get { return this.ctrlHexBox.ReadOnly; }
+			set { this.ctrlHexBox.ReadOnly = value; }
 		}
 	}
 }

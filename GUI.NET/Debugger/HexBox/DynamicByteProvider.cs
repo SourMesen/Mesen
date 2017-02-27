@@ -89,7 +89,8 @@ namespace Be.Windows.Forms
 		/// </summary>
 		public event EventHandler LengthChanged;
 
-		public event EventHandler ByteChanged;
+		public delegate void ByteChangedHandler(int byteIndex, byte newValue, byte oldValue);
+		public event ByteChangedHandler ByteChanged;
 
 
 		/// <summary>
@@ -108,8 +109,8 @@ namespace Be.Windows.Forms
 		public void WriteByte(long index, byte value)
 		{
 			if(_bytes[(int)index] != value) {
+				ByteChanged?.Invoke((int)index, value, _bytes[(int)index]);
 				_bytes[(int)index] = value;
-				ByteChanged?.Invoke((int)index, EventArgs.Empty);
 				OnChanged(EventArgs.Empty);
 			}
 		}

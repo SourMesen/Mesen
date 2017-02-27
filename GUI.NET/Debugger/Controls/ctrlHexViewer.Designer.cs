@@ -42,8 +42,8 @@
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkTextSearch = new System.Windows.Forms.CheckBox();
 			this.chkMatchCase = new System.Windows.Forms.CheckBox();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.ctrlHexBox = new Be.Windows.Forms.HexBox();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.panelSearch.SuspendLayout();
@@ -241,7 +241,7 @@
 			this.chkMatchCase.Text = "Match Case";
 			this.chkMatchCase.UseVisualStyleBackColor = true;
 			// 
-			// ctrlDataViewer
+			// ctrlHexBox
 			// 
 			this.ctrlHexBox.ColumnInfoVisible = true;
 			this.ctrlHexBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -250,7 +250,6 @@
 			this.ctrlHexBox.LineInfoVisible = true;
 			this.ctrlHexBox.Location = new System.Drawing.Point(3, 30);
 			this.ctrlHexBox.Name = "ctrlHexBox";
-			this.ctrlHexBox.ReadOnly = true;
 			this.ctrlHexBox.SelectionBackColor = System.Drawing.Color.RoyalBlue;
 			this.ctrlHexBox.ShadowSelectionColor = System.Drawing.Color.Orange;
 			this.ctrlHexBox.Size = new System.Drawing.Size(537, 248);
