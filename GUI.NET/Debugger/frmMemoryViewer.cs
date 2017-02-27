@@ -35,10 +35,9 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
-
-			if(this._getWorkspace().TblMappings != null && this._getWorkspace().TblMappings.Count > 0) {
-				this.InitTblMappings();
-			}
+						
+			this.InitTblMappings();
+			
 			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
 
 			UpdateImportButton();
@@ -53,9 +52,13 @@ namespace Mesen.GUI.Debugger
 
 		void InitTblMappings()
 		{
-			var tblDict = TblLoader.ToDictionary(this._getWorkspace().TblMappings.ToArray());
-			if(tblDict != null) {
-				this.ctrlHexViewer.ByteCharConverter = new TblByteCharConverter(tblDict);
+			if(this._getWorkspace().TblMappings != null && this._getWorkspace().TblMappings.Count > 0) {
+				var tblDict = TblLoader.ToDictionary(this._getWorkspace().TblMappings.ToArray());
+				if(tblDict != null) {
+					this.ctrlHexViewer.ByteCharConverter = new TblByteCharConverter(tblDict);
+				}
+			} else {
+				this.ctrlHexViewer.ByteCharConverter = null;
 			}
 		}
 
