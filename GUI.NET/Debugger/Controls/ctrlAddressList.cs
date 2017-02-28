@@ -41,7 +41,7 @@ namespace Mesen.GUI.Debugger.Controls
 			get
 			{
 				if(_addresses?.Length > 0) {
-					return _addresses[Math.Min(this.ctrlDataViewer.CurrentLine, _addresses.Length - 1)];
+					return _addresses[Math.Min(this.ctrlDataViewer.GetLineIndex(this.ctrlDataViewer.CurrentLine), _addresses.Length - 1)];
 				} else {
 					return null;
 				}
