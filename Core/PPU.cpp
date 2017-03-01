@@ -796,7 +796,7 @@ void PPU::ProcessVisibleScanline()
 
 void PPU::CopyOAMData()
 {
-	if(_nesModel == NesModel::NTSC && IsRenderingEnabled() || _nesModel == NesModel::PAL && (_scanline < 240 || _scanline > 260)) {
+	if(_nesModel != NesModel::PAL && IsRenderingEnabled() || _nesModel == NesModel::PAL && (_scanline < 240 || _scanline > 260)) {
 		if(_cycle < 65) {
 			if(_cycle < 9 && _state.SpriteRamAddr >= 0x08 && _scanline == -1 && !EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug)) {
 				//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)
