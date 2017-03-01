@@ -34,13 +34,16 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.lblVideoScale = new System.Windows.Forms.Label();
 			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
-			this.cboAspectRatio = new System.Windows.Forms.ComboBox();
 			this.lblDisplayRatio = new System.Windows.Forms.Label();
 			this.chkShowFps = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkUseHdPacks = new System.Windows.Forms.CheckBox();
 			this.picHdNesTooltip = new System.Windows.Forms.PictureBox();
 			this.nudScale = new System.Windows.Forms.NumericUpDown();
+			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+			this.cboAspectRatio = new System.Windows.Forms.ComboBox();
+			this.lblCustomRatio = new System.Windows.Forms.Label();
+			this.nudCustomRatio = new System.Windows.Forms.NumericUpDown();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgPicture = new System.Windows.Forms.TabPage();
@@ -98,10 +101,10 @@ namespace Mesen.GUI.Forms.Config
 			this.btnLoadPalFile = new System.Windows.Forms.Button();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkDisableBackground = new ctrlRiskyOption();
-			this.chkDisableSprites = new ctrlRiskyOption();
-			this.chkForceBackgroundFirstColumn = new ctrlRiskyOption();
-			this.chkForceSpritesFirstColumn = new ctrlRiskyOption();
+			this.chkDisableBackground = new Mesen.GUI.Controls.ctrlRiskyOption();
+			this.chkDisableSprites = new Mesen.GUI.Controls.ctrlRiskyOption();
+			this.chkForceBackgroundFirstColumn = new Mesen.GUI.Controls.ctrlRiskyOption();
+			this.chkForceSpritesFirstColumn = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.contextPicturePresets = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuPresetComposite = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPresetSVideo = new System.Windows.Forms.ToolStripMenuItem();
@@ -111,19 +114,20 @@ namespace Mesen.GUI.Forms.Config
 			this.contextPaletteList = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuDefaultPalette = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuPaletteNostalgia = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteCompositeDirect = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteNesClassic = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteOriginalHardware = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPalettePvmStyle = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPaletteNestopiaRgb = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
-			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-			this.lblCustomRatio = new System.Windows.Forms.Label();
-			this.nudCustomRatio = new System.Windows.Forms.NumericUpDown();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudScale)).BeginInit();
+			this.flowLayoutPanel6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudCustomRatio)).BeginInit();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgPicture.SuspendLayout();
@@ -156,8 +160,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel9.SuspendLayout();
 			this.contextPicturePresets.SuspendLayout();
 			this.contextPaletteList.SuspendLayout();
-			this.flowLayoutPanel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudCustomRatio)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -213,22 +215,6 @@ namespace Mesen.GUI.Forms.Config
 			this.chkVerticalSync.TabIndex = 15;
 			this.chkVerticalSync.Text = "Enable vertical sync";
 			this.chkVerticalSync.UseVisualStyleBackColor = true;
-			// 
-			// cboAspectRatio
-			// 
-			this.cboAspectRatio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboAspectRatio.FormattingEnabled = true;
-			this.cboAspectRatio.Items.AddRange(new object[] {
-            "Auto",
-            "NTSC (8:7)",
-            "PAL (18:13)",
-            "Standard (4:3)",
-            "Widescreen (16:9)"});
-			this.cboAspectRatio.Location = new System.Drawing.Point(3, 3);
-			this.cboAspectRatio.Name = "cboAspectRatio";
-			this.cboAspectRatio.Size = new System.Drawing.Size(121, 21);
-			this.cboAspectRatio.TabIndex = 16;
-			this.cboAspectRatio.SelectionChangeCommitted += new System.EventHandler(this.cboAspectRatio_SelectionChangeCommitted);
 			// 
 			// lblDisplayRatio
 			// 
@@ -296,6 +282,73 @@ namespace Mesen.GUI.Forms.Config
 			this.nudScale.Name = "nudScale";
 			this.nudScale.Size = new System.Drawing.Size(48, 20);
 			this.nudScale.TabIndex = 21;
+			// 
+			// flowLayoutPanel6
+			// 
+			this.flowLayoutPanel6.Controls.Add(this.cboAspectRatio);
+			this.flowLayoutPanel6.Controls.Add(this.lblCustomRatio);
+			this.flowLayoutPanel6.Controls.Add(this.nudCustomRatio);
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(77, 26);
+			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(364, 26);
+			this.flowLayoutPanel6.TabIndex = 22;
+			// 
+			// cboAspectRatio
+			// 
+			this.cboAspectRatio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboAspectRatio.FormattingEnabled = true;
+			this.cboAspectRatio.Items.AddRange(new object[] {
+            "Auto",
+            "NTSC (8:7)",
+            "PAL (18:13)",
+            "Standard (4:3)",
+            "Widescreen (16:9)"});
+			this.cboAspectRatio.Location = new System.Drawing.Point(3, 3);
+			this.cboAspectRatio.Name = "cboAspectRatio";
+			this.cboAspectRatio.Size = new System.Drawing.Size(121, 21);
+			this.cboAspectRatio.TabIndex = 16;
+			this.cboAspectRatio.SelectionChangeCommitted += new System.EventHandler(this.cboAspectRatio_SelectionChangeCommitted);
+			// 
+			// lblCustomRatio
+			// 
+			this.lblCustomRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblCustomRatio.AutoSize = true;
+			this.lblCustomRatio.Location = new System.Drawing.Point(130, 7);
+			this.lblCustomRatio.Name = "lblCustomRatio";
+			this.lblCustomRatio.Size = new System.Drawing.Size(76, 13);
+			this.lblCustomRatio.TabIndex = 17;
+			this.lblCustomRatio.Text = "Custom Ratio: ";
+			this.lblCustomRatio.Visible = false;
+			// 
+			// nudCustomRatio
+			// 
+			this.nudCustomRatio.DecimalPlaces = 3;
+			this.nudCustomRatio.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.nudCustomRatio.Location = new System.Drawing.Point(212, 3);
+			this.nudCustomRatio.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.nudCustomRatio.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.nudCustomRatio.Name = "nudCustomRatio";
+			this.nudCustomRatio.Size = new System.Drawing.Size(48, 20);
+			this.nudCustomRatio.TabIndex = 22;
+			this.nudCustomRatio.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.nudCustomRatio.Visible = false;
 			// 
 			// tabMain
 			// 
@@ -1088,36 +1141,40 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisableBackground
 			// 
 			this.chkDisableBackground.AutoSize = true;
-			this.chkDisableBackground.Location = new System.Drawing.Point(3, 3);
+			this.chkDisableBackground.Checked = false;
+			this.chkDisableBackground.Location = new System.Drawing.Point(0, 0);
 			this.chkDisableBackground.Name = "chkDisableBackground";
-			this.chkDisableBackground.Size = new System.Drawing.Size(121, 17);
+			this.chkDisableBackground.Size = new System.Drawing.Size(219, 23);
 			this.chkDisableBackground.TabIndex = 0;
 			this.chkDisableBackground.Text = "Disable background";
 			// 
 			// chkDisableSprites
 			// 
 			this.chkDisableSprites.AutoSize = true;
-			this.chkDisableSprites.Location = new System.Drawing.Point(3, 26);
+			this.chkDisableSprites.Checked = false;
+			this.chkDisableSprites.Location = new System.Drawing.Point(0, 23);
 			this.chkDisableSprites.Name = "chkDisableSprites";
-			this.chkDisableSprites.Size = new System.Drawing.Size(94, 17);
+			this.chkDisableSprites.Size = new System.Drawing.Size(192, 23);
 			this.chkDisableSprites.TabIndex = 1;
 			this.chkDisableSprites.Text = "Disable sprites";
 			// 
 			// chkForceBackgroundFirstColumn
 			// 
 			this.chkForceBackgroundFirstColumn.AutoSize = true;
-			this.chkForceBackgroundFirstColumn.Location = new System.Drawing.Point(3, 49);
+			this.chkForceBackgroundFirstColumn.Checked = false;
+			this.chkForceBackgroundFirstColumn.Location = new System.Drawing.Point(0, 46);
 			this.chkForceBackgroundFirstColumn.Name = "chkForceBackgroundFirstColumn";
-			this.chkForceBackgroundFirstColumn.Size = new System.Drawing.Size(215, 17);
+			this.chkForceBackgroundFirstColumn.Size = new System.Drawing.Size(313, 23);
 			this.chkForceBackgroundFirstColumn.TabIndex = 2;
 			this.chkForceBackgroundFirstColumn.Text = "Force background display in first column";
 			// 
 			// chkForceSpritesFirstColumn
 			// 
 			this.chkForceSpritesFirstColumn.AutoSize = true;
-			this.chkForceSpritesFirstColumn.Location = new System.Drawing.Point(3, 72);
+			this.chkForceSpritesFirstColumn.Checked = false;
+			this.chkForceSpritesFirstColumn.Location = new System.Drawing.Point(0, 69);
 			this.chkForceSpritesFirstColumn.Name = "chkForceSpritesFirstColumn";
-			this.chkForceSpritesFirstColumn.Size = new System.Drawing.Size(183, 17);
+			this.chkForceSpritesFirstColumn.Size = new System.Drawing.Size(281, 23);
 			this.chkForceSpritesFirstColumn.TabIndex = 3;
 			this.chkForceSpritesFirstColumn.Text = "Force sprite display in first column";
 			// 
@@ -1164,120 +1221,85 @@ namespace Mesen.GUI.Forms.Config
 			this.contextPaletteList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuDefaultPalette,
             this.toolStripMenuItem1,
-            this.mnuPaletteNostalgia,
+            this.mnuPaletteCompositeDirect,
             this.mnuPaletteNesClassic,
-            this.mnuPaletteUnsaturated,
-            this.mnuPaletteYuv,
             this.mnuPaletteNestopiaRgb,
-            this.mnuPaletteSonyCxa2025As});
+            this.mnuPaletteOriginalHardware,
+            this.mnuPalettePvmStyle,
+            this.mnuPaletteSonyCxa2025As,
+            this.mnuPaletteUnsaturated,
+            this.mnuPaletteYuv});
 			this.contextPaletteList.Name = "contextPicturePresets";
-			this.contextPaletteList.Size = new System.Drawing.Size(236, 164);
+			this.contextPaletteList.Size = new System.Drawing.Size(255, 208);
 			this.contextPaletteList.Opening += new System.ComponentModel.CancelEventHandler(this.contextPaletteList_Opening);
 			// 
 			// mnuDefaultPalette
 			// 
 			this.mnuDefaultPalette.Name = "mnuDefaultPalette";
-			this.mnuDefaultPalette.Size = new System.Drawing.Size(235, 22);
+			this.mnuDefaultPalette.Size = new System.Drawing.Size(254, 22);
 			this.mnuDefaultPalette.Text = "Default (NTSC)";
 			this.mnuDefaultPalette.Click += new System.EventHandler(this.mnuDefaultPalette_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(232, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(251, 6);
 			// 
-			// mnuPaletteNostalgia
+			// mnuPaletteCompositeDirect
 			// 
-			this.mnuPaletteNostalgia.Name = "mnuPaletteNostalgia";
-			this.mnuPaletteNostalgia.Size = new System.Drawing.Size(235, 22);
-			this.mnuPaletteNostalgia.Text = "Nostalgia (by FirebrandX)";
-			this.mnuPaletteNostalgia.Click += new System.EventHandler(this.mnuPaletteNostalgia_Click);
+			this.mnuPaletteCompositeDirect.Name = "mnuPaletteCompositeDirect";
+			this.mnuPaletteCompositeDirect.Size = new System.Drawing.Size(254, 22);
+			this.mnuPaletteCompositeDirect.Text = "Composite Direct (by FirebrandX)";
+			this.mnuPaletteCompositeDirect.Click += new System.EventHandler(this.mnuPaletteCompositeDirect_Click);
 			// 
 			// mnuPaletteNesClassic
 			// 
 			this.mnuPaletteNesClassic.Name = "mnuPaletteNesClassic";
-			this.mnuPaletteNesClassic.Size = new System.Drawing.Size(235, 22);
+			this.mnuPaletteNesClassic.Size = new System.Drawing.Size(254, 22);
 			this.mnuPaletteNesClassic.Text = "NES Classic (by FirebrandX)";
 			this.mnuPaletteNesClassic.Click += new System.EventHandler(this.mnuPaletteNesClassic_Click);
+			// 
+			// mnuPaletteNestopiaRgb
+			// 
+			this.mnuPaletteNestopiaRgb.Name = "mnuPaletteNestopiaRgb";
+			this.mnuPaletteNestopiaRgb.Size = new System.Drawing.Size(254, 22);
+			this.mnuPaletteNestopiaRgb.Text = "Nestopia (RGB)";
+			this.mnuPaletteNestopiaRgb.Click += new System.EventHandler(this.mnuPaletteNestopiaRgb_Click);
+			// 
+			// mnuPaletteOriginalHardware
+			// 
+			this.mnuPaletteOriginalHardware.Name = "mnuPaletteOriginalHardware";
+			this.mnuPaletteOriginalHardware.Size = new System.Drawing.Size(254, 22);
+			this.mnuPaletteOriginalHardware.Text = "Original Hardware (by FirebrandX)";
+			this.mnuPaletteOriginalHardware.Click += new System.EventHandler(this.mnuPaletteOriginalHardware_Click);
+			// 
+			// mnuPalettePvmStyle
+			// 
+			this.mnuPalettePvmStyle.Name = "mnuPalettePvmStyle";
+			this.mnuPalettePvmStyle.Size = new System.Drawing.Size(254, 22);
+			this.mnuPalettePvmStyle.Text = "PVM Style (by FirebrandX)";
+			this.mnuPalettePvmStyle.Click += new System.EventHandler(this.mnuPalettePvmStyle_Click);
+			// 
+			// mnuPaletteSonyCxa2025As
+			// 
+			this.mnuPaletteSonyCxa2025As.Name = "mnuPaletteSonyCxa2025As";
+			this.mnuPaletteSonyCxa2025As.Size = new System.Drawing.Size(254, 22);
+			this.mnuPaletteSonyCxa2025As.Text = "Sony CXA2025AS";
+			this.mnuPaletteSonyCxa2025As.Click += new System.EventHandler(this.mnuPaletteSonyCxa2025As_Click);
 			// 
 			// mnuPaletteUnsaturated
 			// 
 			this.mnuPaletteUnsaturated.Name = "mnuPaletteUnsaturated";
-			this.mnuPaletteUnsaturated.Size = new System.Drawing.Size(235, 22);
-			this.mnuPaletteUnsaturated.Text = "Unsaturated v6 (by Firebrandx)";
+			this.mnuPaletteUnsaturated.Size = new System.Drawing.Size(254, 22);
+			this.mnuPaletteUnsaturated.Text = "Unsaturated v6 (by FirebrandX)";
 			this.mnuPaletteUnsaturated.Click += new System.EventHandler(this.mnuPaletteUnsaturated_Click);
 			// 
 			// mnuPaletteYuv
 			// 
 			this.mnuPaletteYuv.Name = "mnuPaletteYuv";
-			this.mnuPaletteYuv.Size = new System.Drawing.Size(235, 22);
-			this.mnuPaletteYuv.Text = "YUV v3 (by Firebrandx)";
+			this.mnuPaletteYuv.Size = new System.Drawing.Size(254, 22);
+			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
-			// 
-			// mnuPaletteNestopiaRgb
-			// 
-			this.mnuPaletteNestopiaRgb.Name = "mnuPaletteNestopiaRgb";
-			this.mnuPaletteNestopiaRgb.Size = new System.Drawing.Size(235, 22);
-			this.mnuPaletteNestopiaRgb.Text = "Nestopia (RGB)";
-			this.mnuPaletteNestopiaRgb.Click += new System.EventHandler(this.mnuPaletteNestopiaRgb_Click);
-			// 
-			// mnuPaletteSonyCxa2025As
-			// 
-			this.mnuPaletteSonyCxa2025As.Name = "mnuPaletteSonyCxa2025As";
-			this.mnuPaletteSonyCxa2025As.Size = new System.Drawing.Size(235, 22);
-			this.mnuPaletteSonyCxa2025As.Text = "Sony CXA2025AS";
-			this.mnuPaletteSonyCxa2025As.Click += new System.EventHandler(this.mnuPaletteSonyCxa2025As_Click);
-			// 
-			// flowLayoutPanel6
-			// 
-			this.flowLayoutPanel6.Controls.Add(this.cboAspectRatio);
-			this.flowLayoutPanel6.Controls.Add(this.lblCustomRatio);
-			this.flowLayoutPanel6.Controls.Add(this.nudCustomRatio);
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(77, 26);
-			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(364, 26);
-			this.flowLayoutPanel6.TabIndex = 22;
-			// 
-			// lblCustomRatio
-			// 
-			this.lblCustomRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblCustomRatio.AutoSize = true;
-			this.lblCustomRatio.Location = new System.Drawing.Point(130, 7);
-			this.lblCustomRatio.Name = "lblCustomRatio";
-			this.lblCustomRatio.Size = new System.Drawing.Size(76, 13);
-			this.lblCustomRatio.TabIndex = 17;
-			this.lblCustomRatio.Text = "Custom Ratio: ";
-			this.lblCustomRatio.Visible = false;
-			// 
-			// nudCustomRatio
-			// 
-			this.nudCustomRatio.DecimalPlaces = 3;
-			this.nudCustomRatio.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-			this.nudCustomRatio.Location = new System.Drawing.Point(212, 3);
-			this.nudCustomRatio.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-			this.nudCustomRatio.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-			this.nudCustomRatio.Name = "nudCustomRatio";
-			this.nudCustomRatio.Size = new System.Drawing.Size(48, 20);
-			this.nudCustomRatio.TabIndex = 22;
-			this.nudCustomRatio.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-			this.nudCustomRatio.Visible = false;
 			// 
 			// frmVideoConfig
 			// 
@@ -1299,6 +1321,9 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudScale)).EndInit();
+			this.flowLayoutPanel6.ResumeLayout(false);
+			this.flowLayoutPanel6.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudCustomRatio)).EndInit();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgPicture.ResumeLayout(false);
@@ -1342,9 +1367,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel9.PerformLayout();
 			this.contextPicturePresets.ResumeLayout(false);
 			this.contextPaletteList.ResumeLayout(false);
-			this.flowLayoutPanel6.ResumeLayout(false);
-			this.flowLayoutPanel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudCustomRatio)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -1430,7 +1452,6 @@ namespace Mesen.GUI.Forms.Config
 		private ctrlRiskyOption chkDisableSprites;
 		private ctrlRiskyOption chkForceBackgroundFirstColumn;
 		private ctrlRiskyOption chkForceSpritesFirstColumn;
-		private System.Windows.Forms.ToolStripMenuItem mnuPaletteNostalgia;
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteNesClassic;
 		private System.Windows.Forms.TableLayoutPanel tlpNtscFilter2;
 		private Controls.ctrlHorizontalTrackbar trkYFilterLength;
@@ -1440,5 +1461,8 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
 		private System.Windows.Forms.Label lblCustomRatio;
 		private System.Windows.Forms.NumericUpDown nudCustomRatio;
+		private System.Windows.Forms.ToolStripMenuItem mnuPalettePvmStyle;
+		private System.Windows.Forms.ToolStripMenuItem mnuPaletteOriginalHardware;
+		private System.Windows.Forms.ToolStripMenuItem mnuPaletteCompositeDirect;
 	}
 }
