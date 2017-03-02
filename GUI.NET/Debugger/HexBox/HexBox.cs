@@ -2591,6 +2591,10 @@ namespace Be.Windows.Forms
 			}
 
 			int skipCount = 0;
+			if(this.ByteColorProvider != null) {
+				this.ByteColorProvider.Prepare(_startByte, intern_endByte);
+			}
+
 			for(long i = startByte; i < intern_endByte + 1; i++) {
 				counter++;
 				Point gridPoint = GetGridBytePoint(counter);
@@ -2607,66 +2611,60 @@ namespace Be.Windows.Forms
 				yPrevious = gridPoint.Y;
 
 				byte b = _byteProvider.ReadByte(i);
-				bool byteHasChanged = false;
-				if(_prevByteProvider != null && _prevByteProvider.Length == _byteProvider.Length) {
-					byteHasChanged = _prevByteProvider.ReadByte(i) != b;
-				}
-
 				bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
 
-				using(Brush brush = new SolidBrush(GetDefaultForeColor())) {
-					using(Brush changeBrush = new SolidBrush(_changeColor)) {
-						using(Brush selectionChangeBrush = new SolidBrush(_selectionChangeColor)) {
-							using(Brush selBrush = new SolidBrush(_selectionForeColor)) {
-								using(Brush selBrushBack = new SolidBrush(_selectionBackColor)) {
-									if(isSelectedByte && isKeyInterpreterActive) {
-										PaintHexStringSelected(g, b, byteHasChanged ? selectionChangeBrush : selBrush, selBrushBack, gridPoint);
-									} else {
-										PaintHexString(g, b, byteHasChanged ? changeBrush : brush, gridPoint);
-									}
+				using(Brush selBrushBack = new SolidBrush(_selectionBackColor)) {
+					Color byteColor = this.ForeColor;
+					if(this.ByteColorProvider != null) {
+						byteColor = this.ByteColorProvider.GetByteColor(_startByte, i);
+					}
 
-									string s;
-									if(skipCount > 0) {
-										skipCount--;
-										s = "";
-									} else {
-										long len = _byteProvider.Length;
-										UInt64 tblValue = (UInt64)b;
-										for(int j = 1; j < 8; j++) {
-											if(len > i + j) {
-												tblValue += (UInt64)_byteProvider.ReadByte(i+j) << (8 * j);
-											}
-										}
+					using(Brush byteBrush = new SolidBrush(byteColor)) {
+						if(isSelectedByte && isKeyInterpreterActive) {
+							PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint);
+						} else {
+							PaintHexString(g, b, byteBrush, gridPoint);
+						}
 
-										int keyLength;
-										s = ByteCharConverter.ToChar(tblValue, out keyLength);
-										skipCount = keyLength - 1;
-									}
-
-									float width = (float)Math.Ceiling(g.MeasureString(s, Font, 100, _stringFormat).Width);
-									float xPos = byteStringPointF.X+xOffset;
-									_xPosCache[gridPoint] = xPos;
-									_xPosList[gridPoint.Y].Add(xPos);
-
-									if(gridPoint == caretPoint) {
-										int caretWidth = (this.InsertActive) ? 1 : (int)width;
-										int caretHeight = (int)_charSize.Height;
-										g.FillRectangle(Brushes.Yellow, xPos - 1, _caretPos.Y, caretWidth, caretHeight);
-										g.DrawRectangle(Pens.Gray, xPos - 1, _caretPos.Y, caretWidth, caretHeight);
-									}
-
-									if(isSelectedByte && isStringKeyInterpreterActive) {
-										g.FillRectangle(selBrushBack, xPos, byteStringPointF.Y, width, _charSize.Height);
-										g.DrawString(s, Font, selBrush, new PointF(xPos, byteStringPointF.Y), _stringFormat);
-									} else {
-										g.DrawString(s, Font, brush, new PointF(xPos, byteStringPointF.Y), _stringFormat);
-									}
-									xOffset += width - _charSize.Width;
-
-									xPrevious = xPos + width;
+						string s;
+						if(skipCount > 0) {
+							skipCount--;
+							s = "";
+						} else {
+							long len = _byteProvider.Length;
+							UInt64 tblValue = (UInt64)b;
+							for(int j = 1; j < 8; j++) {
+								if(len > i + j) {
+									tblValue += (UInt64)_byteProvider.ReadByte(i+j) << (8 * j);
 								}
 							}
+
+							int keyLength;
+							s = ByteCharConverter.ToChar(tblValue, out keyLength);
+							skipCount = keyLength - 1;
 						}
+
+						float width = (float)Math.Ceiling(g.MeasureString(s, Font, 100, _stringFormat).Width);
+						float xPos = byteStringPointF.X+xOffset;
+						_xPosCache[gridPoint] = xPos;
+						_xPosList[gridPoint.Y].Add(xPos);
+
+						if(gridPoint == caretPoint) {
+							int caretWidth = (this.InsertActive) ? 1 : (int)width;
+							int caretHeight = (int)_charSize.Height;
+							g.FillRectangle(Brushes.Yellow, xPos - 1, _caretPos.Y, caretWidth, caretHeight);
+							g.DrawRectangle(Pens.Gray, xPos - 1, _caretPos.Y, caretWidth, caretHeight);
+						}
+
+						if(isSelectedByte && isStringKeyInterpreterActive) {
+							g.FillRectangle(selBrushBack, xPos, byteStringPointF.Y, width, _charSize.Height);
+							g.DrawString(s, Font, byteBrush, new PointF(xPos, byteStringPointF.Y), _stringFormat);
+						} else {
+							g.DrawString(s, Font, byteBrush, new PointF(xPos, byteStringPointF.Y), _stringFormat);
+						}
+
+						xOffset += width - _charSize.Width;
+						xPrevious = xPos + width;
 					}
 				}
 			}
@@ -3261,7 +3259,6 @@ namespace Be.Windows.Forms
 				if (_byteProvider != null)
 					_byteProvider.LengthChanged -= new EventHandler(_byteProvider_LengthChanged);
 
-				_prevByteProvider = _byteProvider;
 				_byteProvider = value;
 				if (_byteProvider != null)
 					_byteProvider.LengthChanged += new EventHandler(_byteProvider_LengthChanged);
@@ -3304,12 +3301,8 @@ namespace Be.Windows.Forms
 		}
 
 		IByteProvider _byteProvider;
-		IByteProvider _prevByteProvider;
 
-		internal void ClearHistory()
-		{
-			this._prevByteProvider = null;
-		}
+		public IByteColorProvider ByteColorProvider { get; set; }
 
 		/// <summary>
 		/// Gets or sets the visibility of the group separator.
@@ -3545,30 +3538,6 @@ namespace Be.Windows.Forms
 			get { return _selectionForeColor; }
 			set { _selectionForeColor = value; Invalidate(); }
 		} Color _selectionForeColor = Color.White;
-
-		/// <summary>
-		/// Gets or sets the foreground color for the changed bytes.
-		/// </summary>
-		[DefaultValue(typeof(Color), "White"), Category("Hex"), Description("Gets or sets the foreground color for the selected bytes.")]
-		public Color ChangeColor
-		{
-			get { return _changeColor; }
-			set { _changeColor = value; Invalidate(); }
-		}
-		Color _changeColor = Color.White;
-
-		/// <summary>
-		/// Gets or sets the foreground color for the selected changed bytes.
-		/// </summary>
-		[DefaultValue(typeof(Color), "White"), Category("Hex"), Description("Gets or sets the foreground color for the selected bytes.")]
-		public Color SelectionChangeColor
-		{
-			get { return _selectionChangeColor; }
-			set { _selectionChangeColor = value; Invalidate(); }
-		}
-		Color _selectionChangeColor = Color.White;
-
-
 
 		/// <summary>
 		/// Gets or sets the visibility of a shadow selection.

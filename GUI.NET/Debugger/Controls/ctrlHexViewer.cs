@@ -26,8 +26,6 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ctrlHexBox.Font = new Font(BaseControl.MonospaceFontFamily, 10, FontStyle.Regular);
 			this.ctrlHexBox.SelectionForeColor = Color.White;
 			this.ctrlHexBox.SelectionBackColor = Color.FromArgb(31, 123, 205);
-			this.ctrlHexBox.ChangeColor = Color.Red;
-			this.ctrlHexBox.SelectionChangeColor = Color.FromArgb(255, 125, 125);
 			this.ctrlHexBox.ShadowSelectionColor = Color.FromArgb(100, 60, 128, 200);
 			this.ctrlHexBox.InfoBackColor = Color.FromArgb(235, 235, 235);
 			this.ctrlHexBox.InfoForeColor = Color.Gray;
@@ -42,7 +40,7 @@ namespace Mesen.GUI.Debugger.Controls
 			return this._byteProvider != null ? this._byteProvider.Bytes.ToArray() : new byte[0];
 		}
 		
-		public void SetData(byte[] data, bool clearHistory)
+		public void SetData(byte[] data)
 		{
 			if(data != null) {
 				bool changed = true;
@@ -62,9 +60,6 @@ namespace Mesen.GUI.Debugger.Controls
 						ByteChanged?.Invoke(byteIndex, newValue, oldValue);
 					};
 					this.ctrlHexBox.ByteProvider = _byteProvider;
-					if(clearHistory) {
-						this.ctrlHexBox.ClearHistory();
-					}
 				}
 			}
 		}
@@ -292,6 +287,13 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			get { return this.ctrlHexBox.ByteCharConverter; }
 			set { this.ctrlHexBox.ByteCharConverter = value; }
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public IByteColorProvider ByteColorProvider
+		{
+			get { return this.ctrlHexBox.ByteColorProvider; }
+			set { this.ctrlHexBox.ByteColorProvider = value; }
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

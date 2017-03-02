@@ -46,6 +46,18 @@
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuView = new System.Windows.Forms.ToolStripMenuItem();
+			this.highlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHightlightReads = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHighlightWrites = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHighlightExecution = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+			this.fadeSpeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFadeSlow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFadeNormal = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFadeFast = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuCustomFadeSpeed = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.fontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
@@ -205,6 +217,8 @@
 			// mnuView
 			// 
 			this.mnuView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.highlightToolStripMenuItem,
+            this.toolStripMenuItem5,
             this.mnuRefresh,
             this.fontSizeToolStripMenuItem,
             this.toolStripMenuItem2,
@@ -213,6 +227,96 @@
 			this.mnuView.Name = "mnuView";
 			this.mnuView.Size = new System.Drawing.Size(44, 20);
 			this.mnuView.Text = "View";
+			// 
+			// highlightToolStripMenuItem
+			// 
+			this.highlightToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuHightlightReads,
+            this.mnuHighlightWrites,
+            this.mnuHighlightExecution,
+            this.toolStripMenuItem6,
+            this.fadeSpeedToolStripMenuItem});
+			this.highlightToolStripMenuItem.Name = "highlightToolStripMenuItem";
+			this.highlightToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+			this.highlightToolStripMenuItem.Text = "Highlight";
+			// 
+			// mnuHightlightReads
+			// 
+			this.mnuHightlightReads.CheckOnClick = true;
+			this.mnuHightlightReads.Name = "mnuHightlightReads";
+			this.mnuHightlightReads.Size = new System.Drawing.Size(152, 22);
+			this.mnuHightlightReads.Text = "Reads";
+			// 
+			// mnuHighlightWrites
+			// 
+			this.mnuHighlightWrites.CheckOnClick = true;
+			this.mnuHighlightWrites.Name = "mnuHighlightWrites";
+			this.mnuHighlightWrites.Size = new System.Drawing.Size(152, 22);
+			this.mnuHighlightWrites.Text = "Writes";
+			// 
+			// mnuHighlightExecution
+			// 
+			this.mnuHighlightExecution.CheckOnClick = true;
+			this.mnuHighlightExecution.Name = "mnuHighlightExecution";
+			this.mnuHighlightExecution.Size = new System.Drawing.Size(152, 22);
+			this.mnuHighlightExecution.Text = "Execution";
+			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+			// 
+			// fadeSpeedToolStripMenuItem
+			// 
+			this.fadeSpeedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuFadeSlow,
+            this.mnuFadeNormal,
+            this.mnuFadeFast,
+            this.toolStripMenuItem7,
+            this.mnuCustomFadeSpeed});
+			this.fadeSpeedToolStripMenuItem.Name = "fadeSpeedToolStripMenuItem";
+			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fadeSpeedToolStripMenuItem.Text = "Fade speed";
+			// 
+			// mnuFadeSlow
+			// 
+			this.mnuFadeSlow.Name = "mnuFadeSlow";
+			this.mnuFadeSlow.Size = new System.Drawing.Size(152, 22);
+			this.mnuFadeSlow.Text = "Slow";
+			this.mnuFadeSlow.Click += new System.EventHandler(this.mnuFadeSpeed_Click);
+			// 
+			// mnuFadeNormal
+			// 
+			this.mnuFadeNormal.Checked = true;
+			this.mnuFadeNormal.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuFadeNormal.Name = "mnuFadeNormal";
+			this.mnuFadeNormal.Size = new System.Drawing.Size(152, 22);
+			this.mnuFadeNormal.Text = "Normal";
+			this.mnuFadeNormal.Click += new System.EventHandler(this.mnuFadeSpeed_Click);
+			// 
+			// mnuFadeFast
+			// 
+			this.mnuFadeFast.Name = "mnuFadeFast";
+			this.mnuFadeFast.Size = new System.Drawing.Size(152, 22);
+			this.mnuFadeFast.Text = "Fast";
+			this.mnuFadeFast.Click += new System.EventHandler(this.mnuFadeSpeed_Click);
+			// 
+			// toolStripMenuItem7
+			// 
+			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(149, 6);
+			// 
+			// mnuCustomFadeSpeed
+			// 
+			this.mnuCustomFadeSpeed.Name = "mnuCustomFadeSpeed";
+			this.mnuCustomFadeSpeed.Size = new System.Drawing.Size(152, 22);
+			this.mnuCustomFadeSpeed.Text = "Custom...";
+			this.mnuCustomFadeSpeed.Click += new System.EventHandler(this.mnuCustomFadeSpeed_Click);
+			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(157, 6);
 			// 
 			// mnuRefresh
 			// 
@@ -489,5 +593,17 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowCharacters;
 		private System.Windows.Forms.ToolStripMenuItem mnuResetTblMappings;
+		private System.Windows.Forms.ToolStripMenuItem highlightToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuHightlightReads;
+		private System.Windows.Forms.ToolStripMenuItem mnuHighlightWrites;
+		private System.Windows.Forms.ToolStripMenuItem mnuHighlightExecution;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+		private System.Windows.Forms.ToolStripMenuItem fadeSpeedToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+		private System.Windows.Forms.ToolStripMenuItem mnuFadeSlow;
+		private System.Windows.Forms.ToolStripMenuItem mnuFadeNormal;
+		private System.Windows.Forms.ToolStripMenuItem mnuFadeFast;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+		private System.Windows.Forms.ToolStripMenuItem mnuCustomFadeSpeed;
 	}
 }

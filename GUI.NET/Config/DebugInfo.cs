@@ -121,6 +121,10 @@ namespace Mesen.GUI.Config
 		public int RamColumnCount = 2;
 		public float RamFontSize = BaseControl.DefaultFontSize;
 		public bool RamShowCharacters = true;
+		public bool RamHighlightExecution = true;
+		public bool RamHighlightWrites = true;
+		public bool RamHighlightReads = true;
+		public int RamFadeSpeed = 300;
 
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;

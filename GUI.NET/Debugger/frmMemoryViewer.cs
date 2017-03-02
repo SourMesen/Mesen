@@ -35,9 +35,14 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
-						
+
+			this.mnuHighlightExecution.Checked = ConfigManager.Config.DebugInfo.RamHighlightExecution;
+			this.mnuHightlightReads.Checked = ConfigManager.Config.DebugInfo.RamHighlightReads;
+			this.mnuHighlightWrites.Checked = ConfigManager.Config.DebugInfo.RamHighlightWrites;
+			this.UpdateFadeOptions();
+
 			this.InitTblMappings();
-			
+
 			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
 
 			UpdateImportButton();
@@ -68,12 +73,29 @@ namespace Mesen.GUI.Debugger
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshData()));
 			}
 		}
-		
+
 		private void cboMemoryType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._memoryType = (DebugMemoryType)this.cboMemoryType.SelectedIndex;
 			this.UpdateImportButton();
 			this.RefreshData();
+		}
+
+		private void UpdateByteColorProvider()
+		{
+			switch((DebugMemoryType)this.cboMemoryType.SelectedIndex) {
+				case DebugMemoryType.CpuMemory:
+				case DebugMemoryType.PrgRom:
+				case DebugMemoryType.WorkRam:
+				case DebugMemoryType.SaveRam:
+				case DebugMemoryType.InternalRam:
+					this.ctrlHexViewer.ByteColorProvider = new ByteColorProvider((DebugMemoryType)this.cboMemoryType.SelectedIndex, mnuHighlightExecution.Checked, mnuHighlightWrites.Checked, mnuHightlightReads.Checked, ConfigManager.Config.DebugInfo.RamFadeSpeed);
+					break;
+
+				default:
+					this.ctrlHexViewer.ByteColorProvider = null;
+					break;
+			}
 		}
 
 		private void mnuRefresh_Click(object sender, EventArgs e)
@@ -93,7 +115,8 @@ namespace Mesen.GUI.Debugger
 			if(this.tabMain.SelectedTab == this.tpgAccessCounters) {
 				this.ctrlMemoryAccessCounters.RefreshData();
 			} else if(this.tabMain.SelectedTab == this.tpgMemoryViewer) {
-				this.ctrlHexViewer.SetData(InteropEmu.DebugGetMemoryState((DebugMemoryType)this.cboMemoryType.SelectedIndex), this.cboMemoryType.SelectedIndex != _previousIndex);
+				this.UpdateByteColorProvider();
+				this.ctrlHexViewer.SetData(InteropEmu.DebugGetMemoryState((DebugMemoryType)this.cboMemoryType.SelectedIndex));
 				this._previousIndex = this.cboMemoryType.SelectedIndex;
 			}
 		}
@@ -248,6 +271,39 @@ namespace Mesen.GUI.Debugger
 		{
 			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
 			this.UpdateConfig();
+		}
+
+		private void UpdateFadeOptions()
+		{
+			int fadeSpeed = ConfigManager.Config.DebugInfo.RamFadeSpeed;
+			mnuFadeSlow.Checked = fadeSpeed == 600;
+			mnuFadeNormal.Checked = fadeSpeed == 300;
+			mnuFadeFast.Checked = fadeSpeed == 120;
+			mnuCustomFadeSpeed.Checked = !mnuFadeSlow.Checked && !mnuFadeNormal.Checked && !mnuFadeFast.Checked;
+		}
+
+		private void mnuFadeSpeed_Click(object sender, EventArgs e)
+		{
+			if(sender == mnuFadeSlow) {
+				ConfigManager.Config.DebugInfo.RamFadeSpeed = 600;
+			} else if(sender == mnuFadeNormal) {
+				ConfigManager.Config.DebugInfo.RamFadeSpeed = 300;
+			} else if(sender == mnuFadeFast) {
+				ConfigManager.Config.DebugInfo.RamFadeSpeed = 120;
+			}
+			ConfigManager.ApplyChanges();
+			UpdateFadeOptions();
+		}
+
+		private void mnuCustomFadeSpeed_Click(object sender, EventArgs e)
+		{
+			using(frmFadeSpeed frm = new frmFadeSpeed(ConfigManager.Config.DebugInfo.RamFadeSpeed)) {
+				if(frm.ShowDialog() == DialogResult.OK) {
+					ConfigManager.Config.DebugInfo.RamFadeSpeed = frm.FadeSpeed;
+					ConfigManager.ApplyChanges();
+					UpdateFadeOptions();
+				}
+			}
 		}
 	}
 }

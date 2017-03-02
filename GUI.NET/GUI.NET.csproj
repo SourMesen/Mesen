@@ -269,6 +269,7 @@
     </Compile>
     <Compile Include="Debugger\Breakpoint.cs" />
     <Compile Include="Debugger\BreakpointManager.cs" />
+    <Compile Include="Debugger\ByteColorProvider.cs" />
     <Compile Include="Debugger\Controls\BaseScrollableTextboxUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -410,6 +411,12 @@
     <Compile Include="Debugger\frmFindOccurrences.Designer.cs">
       <DependentUpon>frmFindOccurrences.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmFadeSpeed.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmFadeSpeed.Designer.cs">
+      <DependentUpon>frmFadeSpeed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmGoToLine.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -451,6 +458,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Debugger\HexBox\HexCasing.cs" />
+    <Compile Include="Debugger\HexBox\IByteColorProvider.cs" />
     <Compile Include="Debugger\HexBox\IByteProvider.cs" />
     <Compile Include="Debugger\HexBox\MemoryDataBlock.cs" />
     <Compile Include="Debugger\HexBox\NativeMethods.cs" />
@@ -730,6 +738,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmFindOccurrences.resx">
       <DependentUpon>frmFindOccurrences.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmFadeSpeed.resx">
+      <DependentUpon>frmFadeSpeed.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmGoToLine.resx">
       <DependentUpon>frmGoToLine.cs</DependentUpon>

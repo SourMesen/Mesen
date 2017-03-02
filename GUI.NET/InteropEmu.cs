@@ -349,6 +349,21 @@ namespace Mesen.GUI
 			return counts;
 		}
 
+		[DllImport(DLLPath, EntryPoint= "DebugGetMemoryAccessStamps")] private static extern void DebugGetMemoryAccessStampsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr stamps);
+		public static Int32[] DebugGetMemoryAccessStamps(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
+		{
+			Int32[] stamps = new Int32[length];
+
+			GCHandle hStamps = GCHandle.Alloc(stamps, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetMemoryAccessStampsWrapper(offset, length, type, operationType, hStamps.AddrOfPinnedObject());
+			} finally {
+				hStamps.Free();
+			}
+
+			return stamps;
+		}
+
 		[DllImport(DLLPath, EntryPoint="DebugGetCallstack")] private static extern void DebugGetCallstackWrapper(IntPtr callstackAbsolute, IntPtr callstackRelative);
 		public static void DebugGetCallstack(out Int32[] callstackAbsolute, out Int32[] callstackRelative)
 		{

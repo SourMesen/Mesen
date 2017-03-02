@@ -9,20 +9,25 @@ class MemoryAccessCounter
 {
 private:
 	Debugger* _debugger;
-	vector<int> _readCounts[4];
-	vector<int> _writeCounts[4];
-	vector<int> _execCounts[4];
+	vector<int32_t> _readCounts[4];
+	vector<int32_t> _writeCounts[4];
+	vector<int32_t> _execCounts[4];
 
-	std::unordered_set<int> _initWrites[4];
-	std::unordered_set<int> _uninitReads[4];
+	vector<int32_t> _readStamps[4];
+	vector<int32_t> _writeStamps[4];
+	vector<int32_t> _execStamps[4];
 
-	vector<int>& GetArray(MemoryOperationType operationType, AddressType addressType);
+	std::unordered_set<int32_t> _initWrites[4];
+	std::unordered_set<int32_t> _uninitReads[4];
+
+	vector<int32_t>& GetArray(MemoryOperationType operationType, AddressType addressType, bool stampArray);
 	
 public:
 	MemoryAccessCounter(Debugger* debugger);
 
-	void ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation);
+	void ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle);
 	void ResetCounts();
 	
 	void GetAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t counts[], bool forUninitReads);
+	void GetAccessStamps(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, uint32_t stamps[]);
 };
