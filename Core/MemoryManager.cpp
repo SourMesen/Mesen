@@ -131,12 +131,12 @@ uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 
 void MemoryManager::Write(uint16_t addr, uint8_t value)
 {
-	Debugger::ProcessRamOperation(MemoryOperationType::Write, addr, value);
-
-	if(addr <= 0x1FFF) {
-		_internalRAM[addr & 0x07FF] = value;
-	} else {
-		WriteRegister(addr, value);
+	if(Debugger::ProcessRamOperation(MemoryOperationType::Write, addr, value)) {
+		if(addr <= 0x1FFF) {
+			_internalRAM[addr & 0x07FF] = value;
+		} else {
+			WriteRegister(addr, value);
+		}
 	}
 }
 

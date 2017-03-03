@@ -56,6 +56,8 @@ private:
 	vector<Breakpoint> _breakpoints[BreakpointTypeCount];
 	bool _hasBreakpoint[BreakpointTypeCount] = {};
 
+	vector<uint8_t> _frozenAddresses;
+
 	deque<uint32_t> _callstackAbsolute;
 	deque<uint32_t> _callstackRelative;
 
@@ -91,7 +93,7 @@ private:
 	void UpdateBreakpoints();
 
 	void PrivateProcessPpuCycle();
-	void PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
+	bool PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
 	bool HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value);
 	
@@ -156,7 +158,7 @@ public:
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
 	
-	static void ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
+	static bool ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
 	static void ProcessPpuCycle();
 
@@ -169,4 +171,7 @@ public:
 	static void BreakIfDebugging();
 
 	int GetMemorySize(DebugMemoryType memoryType);
+
+	void SetFreezeState(uint16_t address, bool frozen);
+	void GetFreezeState(uint16_t startAddress, uint16_t length, bool* freezeState);
 };

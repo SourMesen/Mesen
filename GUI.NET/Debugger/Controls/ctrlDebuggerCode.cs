@@ -17,7 +17,6 @@ namespace Mesen.GUI.Debugger
 	{
 		public delegate void AddressEventHandler(AddressEventArgs args);
 		public delegate void WatchEventHandler(WatchEventArgs args);
-		public event WatchEventHandler OnWatchAdded;
 		public event AddressEventHandler OnSetNextStatement;
 		private DebugViewInfo _config;
 		private HashSet<int> _unexecutedAddresses = new HashSet<int>();
@@ -598,9 +597,7 @@ namespace Mesen.GUI.Debugger
 
 		private void AddWatch()
 		{
-			if(this.OnWatchAdded != null) {
-				this.OnWatchAdded(new WatchEventArgs() { WatchValue = _newWatchValue });
-			}
+			WatchManager.AddWatch(_newWatchValue);
 		}
 
 		private void mnuSetNextStatement_Click(object sender, EventArgs e)

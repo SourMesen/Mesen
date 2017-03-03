@@ -10,6 +10,7 @@ namespace Mesen.GUI.Debugger
 		Int32[] _readStamps;
 		Int32[] _writeStamps;
 		Int32[] _execStamps;
+		bool[] _freezeState;
 		DebugState _state = new DebugState();
 		bool _showExec;
 		bool _showWrite;
@@ -30,6 +31,9 @@ namespace Mesen.GUI.Debugger
 			_readStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Read);
 			_writeStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Write);
 			_execStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Exec);
+			if(_memoryType == DebugMemoryType.CpuMemory) {
+				_freezeState = InteropEmu.DebugGetFreezeState((UInt16)firstByteIndex, (UInt16)(lastByteIndex - firstByteIndex + 1));
+			}
 			InteropEmu.DebugGetState(ref _state);
 		}
 
@@ -51,7 +55,9 @@ namespace Mesen.GUI.Debugger
 			double framesSinceWrite = (double)(_state.CPU.CycleCount - _writeStamps[index]) / CyclesPerFrame;
 			double framesSinceRead = (double)(_state.CPU.CycleCount - _readStamps[index]) / CyclesPerFrame;
 
-			if(_showExec && _execStamps[index] != 0 && framesSinceExec < _framesToFade) {
+			if(_freezeState != null && _freezeState[index]) {
+				return Color.Magenta;
+			} else if(_showExec && _execStamps[index] != 0 && framesSinceExec < _framesToFade) {
 				return DarkerColor(Color.Green, (_framesToFade - framesSinceExec) / _framesToFade);
 			} else if(_showWrite && _writeStamps[index] != 0 && framesSinceWrite < _framesToFade) {
 				return DarkerColor(Color.Red, (_framesToFade - framesSinceWrite) / _framesToFade);

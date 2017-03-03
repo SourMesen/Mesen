@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mesen.GUI.Debugger
 {
@@ -24,8 +25,12 @@ namespace Mesen.GUI.Debugger
 
 		public static void EditBreakpoint(Breakpoint bp)
 		{
-			new frmBreakpoint(bp).ShowDialog();
-			RefreshBreakpoints(bp);
+			if(new frmBreakpoint(bp).ShowDialog() == DialogResult.OK) {
+				if(!Breakpoints.Contains(bp)) {
+					Breakpoints.Add(bp);
+				}
+				RefreshBreakpoints(bp);
+			}
 		}
 
 		public static void RemoveBreakpoint(Breakpoint bp)
@@ -42,7 +47,18 @@ namespace Mesen.GUI.Debugger
 
 		public static Breakpoint GetMatchingBreakpoint(int address)
 		{
-			return Breakpoints.FirstOrDefault<Breakpoint>((bp) => { return bp.Address == address; });
+			return Breakpoints.FirstOrDefault<Breakpoint>((bp) => { return !bp.IsAbsoluteAddress && bp.Address == address; });
+		}
+
+		public static Breakpoint GetMatchingBreakpoint(UInt32 startAddress, UInt32 endAddress, bool ppuBreakpoint)
+		{
+			bool isAddressRange = startAddress != endAddress;
+			return BreakpointManager.Breakpoints.Where((bp) =>
+				!bp.IsAbsoluteAddress &&
+				((!isAddressRange && bp.Address == startAddress) || (isAddressRange && bp.StartAddress == startAddress && bp.EndAddress == endAddress)) &&
+				((!ppuBreakpoint && (bp.BreakOnExec || bp.BreakOnRead || bp.BreakOnWrite)) ||
+				 (ppuBreakpoint && (bp.BreakOnReadVram || bp.BreakOnWriteVram)))
+			).FirstOrDefault();
 		}
 
 		public static void ToggleBreakpoint(int address, bool toggleEnabled)

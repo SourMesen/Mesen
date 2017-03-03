@@ -60,6 +60,8 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_bpUpdateNeeded = false;
 	_executionStopped = false;
 
+	_frozenAddresses.insert(_frozenAddresses.end(), 0x10000, 0);
+
 	LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
 		
 	Debugger::Instance = this;
@@ -327,7 +329,7 @@ void Debugger::PrivateProcessPpuCycle()
 	}
 }
 
-void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
+bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
 {
 	_currentReadAddr = &addr;
 	_currentReadValue = &value;
@@ -400,6 +402,14 @@ void Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	}
 
 	_currentReadAddr = nullptr;
+
+	if(type == MemoryOperationType::Write) {
+		if(_frozenAddresses[addr]) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 bool Debugger::SleepUntilResume()
@@ -625,11 +635,12 @@ void Debugger::ProcessPpuCycle()
 	}
 }
 
-void Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
+bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
 {
 	if(Debugger::Instance) {
-		Debugger::Instance->PrivateProcessRamOperation(type, addr, value);
+		return Debugger::Instance->PrivateProcessRamOperation(type, addr, value);
 	}
+	return true;
 }
 
 void Debugger::ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value)
@@ -735,4 +746,16 @@ void Debugger::SetLastFramePpuScroll(uint16_t x, uint16_t y)
 uint32_t Debugger::GetPpuScroll()
 {
 	return (_ppuScrollY << 16) | _ppuScrollX;
+}
+
+void Debugger::SetFreezeState(uint16_t address, bool frozen)
+{
+	_frozenAddresses[address] = frozen ? 1 : 0;
+}
+
+void Debugger::GetFreezeState(uint16_t startAddress, uint16_t length, bool* freezeState)
+{
+	for(uint16_t i = 0; i < length; i++) {
+		freezeState[i] = _frozenAddresses[startAddress + i] ? true : false;
+	}	
 }

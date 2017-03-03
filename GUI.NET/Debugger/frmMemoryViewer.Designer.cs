@@ -98,6 +98,7 @@
 			this.ctrlHexViewer.Size = new System.Drawing.Size(665, 346);
 			this.ctrlHexViewer.TabIndex = 0;
 			this.ctrlHexViewer.RequiredWidthChanged += new System.EventHandler(this.ctrlHexViewer_RequiredWidthChanged);
+			this.ctrlHexViewer.InitializeContextMenu += new System.EventHandler(this.ctrlHexViewer_InitializeContextMenu);
 			this.ctrlHexViewer.ByteChanged += new Be.Windows.Forms.DynamicByteProvider.ByteChangedHandler(this.ctrlHexViewer_ByteChanged);
 			// 
 			// flowLayoutPanel1
@@ -244,27 +245,27 @@
 			// 
 			this.mnuHightlightReads.CheckOnClick = true;
 			this.mnuHightlightReads.Name = "mnuHightlightReads";
-			this.mnuHightlightReads.Size = new System.Drawing.Size(152, 22);
+			this.mnuHightlightReads.Size = new System.Drawing.Size(133, 22);
 			this.mnuHightlightReads.Text = "Reads";
 			// 
 			// mnuHighlightWrites
 			// 
 			this.mnuHighlightWrites.CheckOnClick = true;
 			this.mnuHighlightWrites.Name = "mnuHighlightWrites";
-			this.mnuHighlightWrites.Size = new System.Drawing.Size(152, 22);
+			this.mnuHighlightWrites.Size = new System.Drawing.Size(133, 22);
 			this.mnuHighlightWrites.Text = "Writes";
 			// 
 			// mnuHighlightExecution
 			// 
 			this.mnuHighlightExecution.CheckOnClick = true;
 			this.mnuHighlightExecution.Name = "mnuHighlightExecution";
-			this.mnuHighlightExecution.Size = new System.Drawing.Size(152, 22);
+			this.mnuHighlightExecution.Size = new System.Drawing.Size(133, 22);
 			this.mnuHighlightExecution.Text = "Execution";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(130, 6);
 			// 
 			// fadeSpeedToolStripMenuItem
 			// 
@@ -275,13 +276,13 @@
             this.toolStripMenuItem7,
             this.mnuCustomFadeSpeed});
 			this.fadeSpeedToolStripMenuItem.Name = "fadeSpeedToolStripMenuItem";
-			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
 			this.fadeSpeedToolStripMenuItem.Text = "Fade speed";
 			// 
 			// mnuFadeSlow
 			// 
 			this.mnuFadeSlow.Name = "mnuFadeSlow";
-			this.mnuFadeSlow.Size = new System.Drawing.Size(152, 22);
+			this.mnuFadeSlow.Size = new System.Drawing.Size(125, 22);
 			this.mnuFadeSlow.Text = "Slow";
 			this.mnuFadeSlow.Click += new System.EventHandler(this.mnuFadeSpeed_Click);
 			// 
@@ -290,26 +291,26 @@
 			this.mnuFadeNormal.Checked = true;
 			this.mnuFadeNormal.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuFadeNormal.Name = "mnuFadeNormal";
-			this.mnuFadeNormal.Size = new System.Drawing.Size(152, 22);
+			this.mnuFadeNormal.Size = new System.Drawing.Size(125, 22);
 			this.mnuFadeNormal.Text = "Normal";
 			this.mnuFadeNormal.Click += new System.EventHandler(this.mnuFadeSpeed_Click);
 			// 
 			// mnuFadeFast
 			// 
 			this.mnuFadeFast.Name = "mnuFadeFast";
-			this.mnuFadeFast.Size = new System.Drawing.Size(152, 22);
+			this.mnuFadeFast.Size = new System.Drawing.Size(125, 22);
 			this.mnuFadeFast.Text = "Fast";
 			this.mnuFadeFast.Click += new System.EventHandler(this.mnuFadeSpeed_Click);
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(122, 6);
 			// 
 			// mnuCustomFadeSpeed
 			// 
 			this.mnuCustomFadeSpeed.Name = "mnuCustomFadeSpeed";
-			this.mnuCustomFadeSpeed.Size = new System.Drawing.Size(152, 22);
+			this.mnuCustomFadeSpeed.Size = new System.Drawing.Size(125, 22);
 			this.mnuCustomFadeSpeed.Text = "Custom...";
 			this.mnuCustomFadeSpeed.Click += new System.EventHandler(this.mnuCustomFadeSpeed_Click);
 			// 

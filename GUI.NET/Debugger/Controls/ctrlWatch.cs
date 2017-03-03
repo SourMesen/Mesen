@@ -14,6 +14,8 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class ctrlWatch : BaseControl
 	{
+		private int _currentSelection = -1;
+
 		public ctrlWatch()
 		{
 			InitializeComponent();
@@ -23,7 +25,13 @@ namespace Mesen.GUI.Debugger
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
 				this.mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.HexDisplay;
+				WatchManager.WatchChanged += WatchManager_WatchChanged;
 			}
+		}
+
+		private void WatchManager_WatchChanged(object sender, EventArgs e)
+		{
+			this.UpdateWatch();
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -58,96 +66,36 @@ namespace Mesen.GUI.Debugger
 			lstWatch.ColumnWidthChanged += lstWatch_ColumnWidthChanged;
 		}
 
-		public List<string> GetWatchValues()
+		public void UpdateWatch()
 		{
-			List<string> watchValues = new List<string>();
-			foreach(ListViewItem listView in lstWatch.Items) {
-				watchValues.Add(listView.Text);
-			}
-			return watchValues;
-		}
-
-		public void SetWatchValues(List<string> watchValues)
-		{
+			lstWatch.BeginUpdate();
 			lstWatch.Items.Clear();
-			foreach(string watchValue in watchValues) {
-				lstWatch.Items.Add(watchValue).SubItems.Add("");
-			}
-			UpdateWatch();
-		}
 
-		public void UpdateWatch(int currentSelection = -1)
-		{
-			lstWatch.SelectedIndices.Clear();
-
-			//Remove empty items
-			for(int i = lstWatch.Items.Count - 1; i >= 0; i--) {
-				if(string.IsNullOrWhiteSpace(lstWatch.Items[i].Text)) {
-					lstWatch.Items.RemoveAt(i);
-				}
-			}
-			lstWatch.Items.Add("").SubItems.Add("");
-
-			ListViewItem lastItem = lstWatch.Items[lstWatch.Items.Count - 1];
-			foreach(ListViewItem item in lstWatch.Items) {
+			List<ListViewItem> itemsToAdd = new List<ListViewItem>();
+			foreach(WatchValueInfo watch in WatchManager.GetWatchContent(mnuHexDisplay.Checked)) {
+				ListViewItem item = new ListViewItem(watch.Expression);
 				item.UseItemStyleForSubItems = false;
-				if(item != lastItem) {
-					string previousValue = null;
-					if(item.SubItems.Count > 1) {
-						previousValue = item.SubItems[1].Text;
-					}
-
-					string newValue = "";
-					EvalResultType resultType;
-					Int32 result = InteropEmu.DebugEvaluateExpression(item.Text, out resultType);
-
-					switch(resultType) {
-						case EvalResultType.Numeric:
-							if(mnuHexDisplay.Checked) {
-								newValue = "$" + result.ToString("X");
-							} else {
-								newValue = result.ToString();
-							}
-							break;
-						case EvalResultType.Boolean:
-							newValue = result == 0 ? "false" : "true";
-							break;
-
-						case EvalResultType.Invalid:
-							newValue = "<invalid expression>";
-							break;
-					}
-
-					if(previousValue != newValue) {
-						item.SubItems[1].Text = newValue;
-						item.SubItems[1].ForeColor = Color.Red;
-					} else {
-						item.SubItems[1].ForeColor = Color.Black;
-					}
-				}
+				item.SubItems.Add(watch.Value).ForeColor = watch.HasChanged ? Color.Red : Color.Black;
+				itemsToAdd.Add(item);
 			}
+			var lastItem = new ListViewItem("");
+			lastItem.SubItems.Add("");
+			itemsToAdd.Add(lastItem);
+			lstWatch.Items.AddRange(itemsToAdd.ToArray());
 			AdjustColumnWidth();
+			lstWatch.EndUpdate();
 
-			if(currentSelection >= 0 && lstWatch.Items.Count > currentSelection) {
-				lstWatch.FocusedItem = lstWatch.Items[currentSelection];
-				lstWatch.Items[currentSelection].Selected = true;
+			if(_currentSelection >= 0 && lstWatch.Items.Count > _currentSelection) {
+				lstWatch.FocusedItem = lstWatch.Items[_currentSelection];
+				lstWatch.Items[_currentSelection].Selected = true;
+				_currentSelection = -1;
 			}
 		}
-
-		public void AddWatch(string watchValue)
+				
+		private void lstWatch_AfterEdit(object sender, LabelEditEventArgs e)
 		{
-			ListViewItem item = lstWatch.Items.Insert(lstWatch.Items.Count - 1, watchValue);
-			item.SubItems.Add("");
-			UpdateWatch();
-		}
-
-		private void lstWatch_BeforeLabelEdit(object sender, LabelEditEventArgs e)
-		{
-		}
-
-		private void lstWatch_AfterLabelEdit(object sender, LabelEditEventArgs e)
-		{
-			this.BeginInvoke((MethodInvoker)(() => { this.UpdateWatch(e.Item); }));
+			_currentSelection = e.Item;
+			WatchManager.UpdateWatch(e.Item, e.Label);
 		}
 
 		private void mnuHexDisplay_Click(object sender, EventArgs e)
@@ -179,14 +127,14 @@ namespace Mesen.GUI.Debugger
 		private void mnuRemoveWatch_Click(object sender, EventArgs e)
 		{
 			if(lstWatch.SelectedItems.Count >= 1) {
-				var itemsToRemove = new List<ListViewItem>();
+				var itemsToRemove = new List<int>();
 				foreach(ListViewItem item in lstWatch.SelectedItems) {
-					itemsToRemove.Add(item);
+					if(_currentSelection == -1) {
+						_currentSelection = item.Index;
+					}
+					itemsToRemove.Add(item.Index);
 				}
-				foreach(ListViewItem item in itemsToRemove) {
-					lstWatch.Items.Remove(item);
-				}
-				UpdateWatch();
+				WatchManager.RemoveWatch(itemsToRemove.ToArray());
 			}
 		}
 	}

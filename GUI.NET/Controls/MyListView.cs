@@ -12,17 +12,10 @@ namespace Mesen.GUI.Controls
 	class MyListView : ListView
 	{
 		private bool _preventCheck = false;
-		private int _editItemIndex = -1;
-		private string _originalText = null;
 
 		public MyListView()
 		{
 			this.DoubleBuffered = true;
-		}
-
-		public bool IsEditing
-		{
-			get { return _editItemIndex >= 0; }
 		}
 
 		protected override void OnItemCheck(ItemCheckEventArgs e)
@@ -44,45 +37,60 @@ namespace Mesen.GUI.Controls
 			base.OnMouseDown(e);
 		}
 
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			this._preventCheck = false;
+			base.OnKeyDown(e);
+		}
+	}
+
+	class WatchList : MyListView
+	{
+		private int _editItemIndex = -1;
+		private string _originalText = null;
+		private bool _pressedEsc = false;
+
+		public event LabelEditEventHandler AfterEdit;
+
+		public WatchList()
+		{
+			this.DoubleBuffered = true;
+		}
+
+		public bool IsEditing
+		{
+			get { return _editItemIndex >= 0; }
+		}
+
 		protected override void OnBeforeLabelEdit(LabelEditEventArgs e)
 		{
 			if(_originalText == null) {
 				_originalText = this.Items[e.Item].Text;
 			}
-			_editItemIndex = e.Item;		
+			_editItemIndex = e.Item;
 			base.OnBeforeLabelEdit(e);
 		}
 
 		protected override void OnAfterLabelEdit(LabelEditEventArgs e)
 		{
 			base.OnAfterLabelEdit(e);
+			string text = e.Label;
+			var item = this.Items[e.Item];
+			if(_pressedEsc) {
+				text = _originalText;
+				item = new ListViewItem(_originalText);
+				this.Items.Insert(e.Item, item);
+				_pressedEsc = false;
+			}
 			_originalText = null;
 			_editItemIndex = -1;
+			AfterEdit?.Invoke(this, new LabelEditEventArgs(item.Index, text));
 		}
-
-		protected override void OnKeyDown(KeyEventArgs e)
-		{
-			if(!this.IsEditing && e.KeyData == Keys.Delete) {
-				if(this.SelectedItems.Count >= 1) {
-					var itemsToRemove = new List<ListViewItem>();
-					foreach(ListViewItem item in this.SelectedItems) {
-						itemsToRemove.Add(item);
-					}
-					foreach(ListViewItem item in itemsToRemove) {
-						this.Items.Remove(item);
-					}
-				}
-			}
-			this._preventCheck = false;
-			base.OnKeyDown(e);
-		}
-
+		
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if(this.SelectedItems.Count > _editItemIndex && _editItemIndex >= 0) {
-				if(keyData == Keys.Escape) {
-					this.SelectedItems[_editItemIndex].Text = _originalText;
-				}
+			if(_editItemIndex >= 0 && keyData == Keys.Escape) {
+				_pressedEsc = true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}

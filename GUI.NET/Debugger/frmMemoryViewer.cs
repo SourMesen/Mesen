@@ -12,6 +12,7 @@ using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Controls;
 using Be.Windows.Forms;
+using Mesen.GUI.Debugger.Controls;
 
 namespace Mesen.GUI.Debugger
 {
@@ -304,6 +305,120 @@ namespace Mesen.GUI.Debugger
 					UpdateFadeOptions();
 				}
 			}
+		}
+
+		private AddressType? GetAddressType()
+		{
+			switch(_memoryType) {
+				case DebugMemoryType.InternalRam: return AddressType.InternalRam;
+				case DebugMemoryType.WorkRam: return AddressType.WorkRam;
+				case DebugMemoryType.SaveRam: return AddressType.SaveRam;
+				case DebugMemoryType.PrgRom: return AddressType.PrgRom;
+			}
+
+			return null;
+		}
+
+		private void ctrlHexViewer_InitializeContextMenu(object sender, EventArgs evt)
+		{
+			HexBox hexBox = (HexBox)sender;
+
+			var mnuEditLabel = new ToolStripMenuItem();
+			mnuEditLabel.Click += (s, e) => {
+				UInt32 address = (UInt32)hexBox.SelectionStart;
+				if(this._memoryType == DebugMemoryType.CpuMemory) {
+					AddressTypeInfo info = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType(address, ref info);
+					ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+				} else {
+					ctrlLabelList.EditLabel(address, GetAddressType().Value);
+				}
+			};
+
+			var mnuEditBreakpoint = new ToolStripMenuItem();
+			mnuEditBreakpoint.Click += (s, e) => {
+				UInt32 startAddress = (UInt32)hexBox.SelectionStart;
+				UInt32 endAddress = (UInt32)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
+				BreakpointAddressType addressType = startAddress == endAddress ? BreakpointAddressType.SingleAddress : BreakpointAddressType.AddressRange;
+
+				Breakpoint bp = BreakpointManager.GetMatchingBreakpoint(startAddress, endAddress, this._memoryType == DebugMemoryType.PpuMemory);
+				if(bp == null) {
+					bp = new Breakpoint() { Address = startAddress, StartAddress = startAddress, EndAddress = endAddress, AddressType = addressType, IsAbsoluteAddress = false };
+					if(this._memoryType == DebugMemoryType.CpuMemory) {
+						bp.BreakOnWrite = bp.BreakOnRead = true;
+					} else {
+						bp.BreakOnWriteVram = bp.BreakOnReadVram = true;
+					}
+				}
+				BreakpointManager.EditBreakpoint(bp);
+			};
+
+			var mnuAddWatch = new ToolStripMenuItem();
+			mnuAddWatch.Click += (s, e) => {
+				UInt32 startAddress = (UInt32)hexBox.SelectionStart;
+				UInt32 endAddress = (UInt32)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
+				string[] toAdd = Enumerable.Range((int)startAddress, (int)(endAddress - startAddress + 1)).Select((num) => $"[${num.ToString("X4")}]").ToArray();
+				WatchManager.AddWatch(toAdd);
+			};
+
+			var mnuFreeze = new ToolStripMenuItem();
+			mnuFreeze.Click += (s, e) => {
+				UInt32 startAddress = (UInt32)hexBox.SelectionStart;
+				UInt32 endAddress = (UInt32)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
+
+				for(UInt32 i = startAddress; i <= endAddress; i++) {
+					InteropEmu.DebugSetFreezeState((UInt16)i, (bool)mnuFreeze.Tag);
+				}
+			};
+
+			hexBox.ContextMenuStrip.Opening += (s, e) => {
+				UInt32 startAddress = (UInt32)hexBox.SelectionStart;
+				UInt32 endAddress = (UInt32)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
+
+				string address = "$" + startAddress.ToString("X4");
+				string addressRange;
+				if(startAddress != endAddress) {
+					addressRange = "$" + startAddress.ToString("X4") + "-$" + endAddress.ToString("X4");
+				} else {
+					addressRange = address;
+				}
+
+				mnuEditLabel.Text = $"Edit Label ({address})";
+				mnuEditBreakpoint.Text = $"Edit Breakpoint ({addressRange})";
+				mnuAddWatch.Text = $"Add to Watch ({addressRange})";
+
+				if(this._memoryType == DebugMemoryType.CpuMemory) {
+					bool[] freezeState = InteropEmu.DebugGetFreezeState((UInt16)startAddress, (UInt16)(endAddress - startAddress + 1));
+					if(freezeState.All((frozen) => frozen)) {
+						mnuFreeze.Text = $"Unfreeze ({addressRange})";
+						mnuFreeze.Tag = false;
+					} else {
+						mnuFreeze.Text = $"Freeze ({addressRange})";
+						mnuFreeze.Tag = true;
+					}
+				} else {
+					mnuFreeze.Text = $"Freeze";
+					mnuFreeze.Tag = false;
+				}
+
+				bool disableEditLabel = false;
+				if(this._memoryType == DebugMemoryType.CpuMemory) {
+					AddressTypeInfo info = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType(startAddress, ref info);
+					disableEditLabel = info.Address == -1;
+				}
+
+				mnuEditLabel.Enabled = !disableEditLabel && (this._memoryType == DebugMemoryType.CpuMemory || this.GetAddressType().HasValue);
+				mnuEditBreakpoint.Enabled = this._memoryType == DebugMemoryType.CpuMemory || this._memoryType == DebugMemoryType.PpuMemory;
+				mnuAddWatch.Enabled = this._memoryType == DebugMemoryType.CpuMemory;
+				mnuFreeze.Enabled = this._memoryType == DebugMemoryType.CpuMemory;
+			};
+
+			hexBox.ContextMenuStrip.Items.Insert(0, new ToolStripSeparator());
+			hexBox.ContextMenuStrip.Items.Insert(0, mnuFreeze);
+			hexBox.ContextMenuStrip.Items.Insert(0, mnuEditLabel);
+			hexBox.ContextMenuStrip.Items.Insert(0, mnuEditBreakpoint);
+			hexBox.ContextMenuStrip.Items.Insert(0, mnuAddWatch);
 		}
 	}
 }

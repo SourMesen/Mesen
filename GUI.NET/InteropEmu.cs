@@ -191,6 +191,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, ref AddressTypeInfo addressTypeInfo);
 		[DllImport(DLLPath)] public static extern void DebugSetPpuViewerScanlineCycle(Int32 scanline, Int32 cycle);
 
+		[DllImport(DLLPath)] public static extern void DebugSetFreezeState(UInt16 address, [MarshalAs(UnmanagedType.I1)]bool frozen);
+
 		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
 		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
 		
@@ -362,6 +364,21 @@ namespace Mesen.GUI
 			}
 
 			return stamps;
+		}
+
+		[DllImport(DLLPath, EntryPoint= "DebugGetFreezeState")] private static extern void DebugGetFreezeStateWrapper(UInt16 startAddress, UInt16 length, IntPtr freezeState);
+		public static bool[] DebugGetFreezeState(UInt16 startAddress, UInt16 length)
+		{
+			bool[] freezeState = new bool[length];
+
+			GCHandle hFreezeState = GCHandle.Alloc(freezeState, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetFreezeStateWrapper(startAddress, length, hFreezeState.AddrOfPinnedObject());
+			} finally {
+				hFreezeState.Free();
+			}
+
+			return freezeState;
 		}
 
 		[DllImport(DLLPath, EntryPoint="DebugGetCallstack")] private static extern void DebugGetCallstackWrapper(IntPtr callstackAbsolute, IntPtr callstackRelative);

@@ -55,11 +55,17 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				if(changed) {
+					bool needInit = _byteProvider == null;
 					_byteProvider = new StaticByteProvider(data);
 					_byteProvider.ByteChanged += (int byteIndex, byte newValue, byte oldValue) => {
 						ByteChanged?.Invoke(byteIndex, newValue, oldValue);
 					};
+
 					this.ctrlHexBox.ByteProvider = _byteProvider;
+
+					if(needInit) {
+						InitializeContextMenu?.Invoke(this.ctrlHexBox, EventArgs.Empty);
+					}
 				}
 			}
 		}
@@ -280,6 +286,7 @@ namespace Mesen.GUI.Debugger.Controls
 			remove { this.ctrlHexBox.RequiredWidthChanged -= value; }
 		}
 
+		public event EventHandler InitializeContextMenu;
 		public event ByteChangedHandler ByteChanged;
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

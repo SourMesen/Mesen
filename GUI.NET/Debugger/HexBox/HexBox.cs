@@ -1792,10 +1792,6 @@ namespace Be.Windows.Forms
 
 			System.Diagnostics.Debug.WriteLine("CreateCaret()", "HexBox");
 
-			// define the caret width depending on InsertActive mode
-			int caretWidth = (this.InsertActive) ? 1 : (int)_charSize.Width;
-			int caretHeight = (int)_charSize.Height;
-
 			UpdateCaret();
 
 			_caretVisible = true;
@@ -1818,13 +1814,18 @@ namespace Be.Windows.Forms
 
 		void DestroyCaret()
 		{
-			if (!_caretVisible)
-				return;
+			//Never hide caret
+			return;
+		}
 
-			System.Diagnostics.Debug.WriteLine("DestroyCaret()", "HexBox");
-
-			_caretVisible = false;
-			this.Invalidate();
+		BytePositionInfo? GetBytePositionInfo(Point p)
+		{
+			if(_recHex.Contains(p)) {
+				return GetHexBytePositionInfo(p);
+			} else if(_recStringView.Contains(p) || p.X > _recStringView.Right) {
+				return GetStringBytePositionInfo(p);
+			}
+			return null;
 		}
 
 		void SetCaretPosition(Point p)
@@ -1836,6 +1837,8 @@ namespace Be.Windows.Forms
 
 			long pos = _bytePos;
 			int cp = _byteCharacterPos;
+
+			CreateCaret();
 
 			if (_recHex.Contains(p))
 			{
@@ -2644,7 +2647,7 @@ namespace Be.Windows.Forms
 							skipCount = keyLength - 1;
 						}
 
-						float width = (float)Math.Ceiling(g.MeasureString(s, Font, 100, _stringFormat).Width);
+						float width = (float)Math.Ceiling(g.MeasureString(s, Font, 1000, _stringFormat).Width);
 						float xPos = byteStringPointF.X+xOffset;
 						_xPosCache[gridPoint] = xPos;
 						_xPosList[gridPoint.Y].Add(xPos);
@@ -3064,12 +3067,13 @@ namespace Be.Windows.Forms
 			}
 			set
 			{
-                if (value == null)
-                    return;
-                
+				if(value == null)
+					return;
+
 				base.Font = value;
-                this.UpdateRectanglePositioning();
-                this.Invalidate();
+				this.UpdateRectanglePositioning();
+				this.UpdateCaret();
+				this.Invalidate();
 			}
 		}
 
@@ -4065,8 +4069,21 @@ namespace Be.Windows.Forms
 			if (!Focused)
 				Focus();
 
-			if (e.Button == MouseButtons.Left)
+			BytePositionInfo? bpi = GetBytePositionInfo(new Point(e.X, e.Y));
+			bool insideSelection = false;
+			if(bpi.HasValue) {
+				if(_bytePos <= bpi.Value.Index && _bytePos + _selectionLength >= bpi.Value.Index) {
+					//Clicked inside selection
+					insideSelection = true;
+				}
+			}
+
+			if(!insideSelection || e.Button == MouseButtons.Left) {
+				if(e.Button != MouseButtons.Left) {
+					_selectionLength = 0;
+				}
 				SetCaretPosition(new Point(e.X, e.Y));
+			}
 
 			base.OnMouseDown(e);
 		}

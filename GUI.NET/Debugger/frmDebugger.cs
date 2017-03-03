@@ -148,7 +148,7 @@ namespace Mesen.GUI.Debugger
 		private void SaveWorkspace()
 		{
 			if(_workspace != null) {
-				_workspace.WatchValues = ctrlWatch.GetWatchValues();
+				_workspace.WatchValues = WatchManager.WatchEntries;
 				_workspace.Labels = LabelManager.GetLabels();
 				_workspace.Breakpoints = BreakpointManager.Breakpoints;
 				_workspace.Save();
@@ -176,7 +176,7 @@ namespace Mesen.GUI.Debugger
 			ctrlLabelList.UpdateLabelList();
 			ctrlFunctionList.UpdateFunctionList(true);
 
-			ctrlWatch.SetWatchValues(_workspace.WatchValues);
+			WatchManager.WatchEntries = _workspace.WatchValues;
 
 			BreakpointManager.Breakpoints.Clear();
 			BreakpointManager.Breakpoints.AddRange(_workspace.Breakpoints);
@@ -416,11 +416,6 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugPpuStep(89341);
-		}
-
-		private void ctrlDebuggerCode_OnWatchAdded(WatchEventArgs args)
-		{
-			this.ctrlWatch.AddWatch(args.WatchValue);
 		}
 
 		private void ctrlDebuggerCode_OnSetNextStatement(AddressEventArgs args)

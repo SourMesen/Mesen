@@ -16,6 +16,7 @@
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
+			WatchManager.WatchChanged -= WatchManager_WatchChanged;
 			base.Dispose(disposing);
 		}
 
@@ -29,13 +30,14 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
-			this.lstWatch = new Mesen.GUI.Controls.MyListView();
+			this.lstWatch = new Mesen.GUI.Controls.WatchList();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuWatch = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuRemoveWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHexDisplay = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.contextMenuWatch.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -59,8 +61,7 @@
 			this.lstWatch.TabIndex = 6;
 			this.lstWatch.UseCompatibleStateImageBehavior = false;
 			this.lstWatch.View = System.Windows.Forms.View.Details;
-			this.lstWatch.BeforeLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.lstWatch_BeforeLabelEdit);
-			this.lstWatch.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.lstWatch_AfterLabelEdit);
+			this.lstWatch.AfterEdit += new System.Windows.Forms.LabelEditEventHandler(this.lstWatch_AfterEdit);
 			this.lstWatch.SelectedIndexChanged += new System.EventHandler(this.lstWatch_SelectedIndexChanged);
 			this.lstWatch.Click += new System.EventHandler(this.lstWatch_Click);
 			this.lstWatch.DoubleClick += new System.EventHandler(this.lstWatch_DoubleClick);
@@ -83,14 +84,16 @@
 			// 
 			this.contextMenuWatch.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuRemoveWatch,
+            this.toolStripMenuItem1,
             this.mnuHexDisplay});
 			this.contextMenuWatch.Name = "contextMenuWatch";
-			this.contextMenuWatch.Size = new System.Drawing.Size(184, 48);
+			this.contextMenuWatch.Size = new System.Drawing.Size(184, 76);
 			// 
 			// mnuRemoveWatch
 			// 
 			this.mnuRemoveWatch.Name = "mnuRemoveWatch";
-			this.mnuRemoveWatch.ShortcutKeyDisplayString = "Del";
+			this.mnuRemoveWatch.ShortcutKeyDisplayString = "";
+			this.mnuRemoveWatch.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.mnuRemoveWatch.Size = new System.Drawing.Size(183, 22);
 			this.mnuRemoveWatch.Text = "Remove";
 			this.mnuRemoveWatch.Click += new System.EventHandler(this.mnuRemoveWatch_Click);
@@ -104,6 +107,11 @@
 			this.mnuHexDisplay.Size = new System.Drawing.Size(183, 22);
 			this.mnuHexDisplay.Text = "Hexadecimal Display";
 			this.mnuHexDisplay.Click += new System.EventHandler(this.mnuHexDisplay_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 6);
 			// 
 			// ctrlWatch
 			// 
@@ -119,12 +127,13 @@
 
 		#endregion
 
-		private Mesen.GUI.Controls.MyListView lstWatch;
+		private Mesen.GUI.Controls.WatchList lstWatch;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ContextMenuStrip contextMenuWatch;
 		private System.Windows.Forms.ToolStripMenuItem mnuRemoveWatch;
 		private System.Windows.Forms.ToolStripMenuItem mnuHexDisplay;
 		private System.Windows.Forms.ColumnHeader colLastColumn;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 	}
 }

@@ -85,7 +85,9 @@ extern "C"
 
 	DllExport void __stdcall DebugGetProfilerData(int64_t* profilerData, ProfilerDataType dataType) { GetDebugger()->GetProfiler()->GetProfilerData(profilerData, dataType); }
 	DllExport void __stdcall DebugResetProfiler() { GetDebugger()->GetProfiler()->Reset(); }
-	
+
+	DllExport void __stdcall DebugSetFreezeState(uint16_t address, bool frozen) { GetDebugger()->SetFreezeState(address, frozen); }
+	DllExport void __stdcall DebugGetFreezeState(uint16_t startAddress, uint16_t length, bool* freezeState) { GetDebugger()->GetFreezeState(startAddress, length, freezeState); }
 
 	DllExport uint32_t __stdcall DebugGetPpuScroll() { return GetDebugger()->GetPpuScroll(); }
 };
