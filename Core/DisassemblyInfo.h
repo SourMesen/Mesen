@@ -10,7 +10,8 @@ class DisassemblyInfo
 public:
 	static string OPName[256];
 	static AddrMode OPMode[256];
-	static uint32_t OPSize[256];
+	static uint8_t OPSize[256];
+	static bool IsUnofficialCode[256];
 
 private:
 	string _byteCode;

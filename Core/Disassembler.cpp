@@ -37,22 +37,42 @@ void Disassembler::BuildOpCodeTables(bool useLowerCase)
 {
 	string opName[256] = {
 	//	0			1			2			3			4			5			6			7			8			9			A			B			C			D			E			F
-		"BRK",	"ORA",	"STP*",	"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"PHP",	"ORA",	"ASL",	"ANC*",	"NOP",	"ORA",	"ASL",	"SLO*", //0
-		"BPL",	"ORA",	"STP*",	"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*",	"CLC",	"ORA",	"NOP*",	"SLO*",	"NOP",	"ORA",	"ASL",	"SLO*", //1
-		"JSR",	"AND",	"STP*",	"RLA*",	"BIT",	"AND",	"ROL",	"RLA*",	"PLP",	"AND",	"ROL",	"ANC*",	"BIT",	"AND",	"ROL",	"RLA*", //2
-		"BMI",	"AND",	"STP*",	"RLA*",	"NOP",	"AND",	"ROL",	"RLA*",	"SEC",	"AND",	"NOP*",	"RLA*",	"NOP",	"AND",	"ROL",	"RLA*", //3
-		"RTI",	"EOR",	"STP*",	"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*",	"PHA",	"EOR",	"LSR",	"ALR*",	"JMP",	"EOR",	"LSR",	"SRE*", //4
-		"BVC",	"EOR",	"STP*",	"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*",	"CLI",	"EOR",	"NOP*",	"SRE*",	"NOP",	"EOR",	"LSR",	"SRE*", //5
-		"RTS",	"ADC",	"STP*",	"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*",	"PLA",	"ADC",	"ROR",	"ARR*",	"JMP",	"ADC",	"ROR",	"RRA*", //6
-		"BVS",	"ADC",	"STP*",	"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*",	"SEI",	"ADC",	"NOP*",	"RRA*",	"NOP",	"ADC",	"ROR",	"RRA*", //7
-		"NOP",	"STA",	"NOP",	"SAX*",	"STY",	"STA",	"STX",	"SAX*",	"DEY",	"NOP",	"TXA",	"XAA*",	"STY",	"STA",	"STX",	"SAX*", //8
-		"BCC",	"STA",	"STP*",	"AHX*",	"STY",	"STA",	"STX",	"SAX*",	"TYA",	"STA",	"TXS",	"TAS*",	"SHY*",	"STA",	"SHX",	"AXA*", //9
-		"LDY",	"LDA",	"LDX",	"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*",	"TAY",	"LDA",	"TAX",	"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*", //A
-		"BCS",	"LDA",	"STP*",	"LAX*",	"LDY",	"LDA",	"LDX",	"LAX*",	"CLV",	"LDA",	"TSX",	"LAS*",	"LDY",	"LDA",	"LDX",	"LAX*", //B
-		"CPY",	"CMP",	"NOP",	"DCP*",	"CPY",	"CMP",	"DEC",	"DCP*",	"INY",	"CMP",	"DEX",	"AXS*",	"CPY",	"CMP",	"DEC",	"DCP*", //C
-		"BNE",	"CMP",	"STP*",	"DCP*",	"NOP",	"CMP",	"DEC",	"DCP*",	"CLD",	"CMP",	"NOP*",	"DCP*",	"NOP",	"CMP",	"DEC",	"DCP*", //D
-		"CPX",	"SBC",	"NOP",	"ISC*",	"CPX",	"SBC",	"INC",	"ISC*",	"INX",	"SBC",	"NOP",	"SBC*",	"CPX",	"SBC",	"INC",	"ISC*", //E
-		"BEQ",	"SBC",	"STP*",	"ISC*",	"NOP",	"SBC",	"INC",	"ISC*",	"SED",	"SBC",	"NOP*",	"ISC*",	"NOP",	"SBC",	"INC",	"ISC*"  //F
+		"BRK",	"ORA",	"STP",	"SLO",	"NOP",	"ORA",	"ASL",	"SLO",	"PHP",	"ORA",	"ASL",	"ANC",	"NOP",	"ORA",	"ASL",	"SLO", //0
+		"BPL",	"ORA",	"STP",	"SLO",	"NOP",	"ORA",	"ASL",	"SLO",	"CLC",	"ORA",	"NOP",	"SLO",	"NOP",	"ORA",	"ASL",	"SLO", //1
+		"JSR",	"AND",	"STP",	"RLA",	"BIT",	"AND",	"ROL",	"RLA",	"PLP",	"AND",	"ROL",	"ANC",	"BIT",	"AND",	"ROL",	"RLA", //2
+		"BMI",	"AND",	"STP",	"RLA",	"NOP",	"AND",	"ROL",	"RLA",	"SEC",	"AND",	"NOP",	"RLA",	"NOP",	"AND",	"ROL",	"RLA", //3
+		"RTI",	"EOR",	"STP",	"SRE",	"NOP",	"EOR",	"LSR",	"SRE",	"PHA",	"EOR",	"LSR",	"ALR",	"JMP",	"EOR",	"LSR",	"SRE", //4
+		"BVC",	"EOR",	"STP",	"SRE",	"NOP",	"EOR",	"LSR",	"SRE",	"CLI",	"EOR",	"NOP",	"SRE",	"NOP",	"EOR",	"LSR",	"SRE", //5
+		"RTS",	"ADC",	"STP",	"RRA",	"NOP",	"ADC",	"ROR",	"RRA",	"PLA",	"ADC",	"ROR",	"ARR",	"JMP",	"ADC",	"ROR",	"RRA", //6
+		"BVS",	"ADC",	"STP",	"RRA",	"NOP",	"ADC",	"ROR",	"RRA",	"SEI",	"ADC",	"NOP",	"RRA",	"NOP",	"ADC",	"ROR",	"RRA", //7
+		"NOP",	"STA",	"NOP",	"SAX",	"STY",	"STA",	"STX",	"SAX",	"DEY",	"NOP",	"TXA",	"XAA",	"STY",	"STA",	"STX",	"SAX", //8
+		"BCC",	"STA",	"STP",	"AHX",	"STY",	"STA",	"STX",	"SAX",	"TYA",	"STA",	"TXS",	"TAS",	"SHY",	"STA",	"SHX",	"AXA", //9
+		"LDY",	"LDA",	"LDX",	"LAX",	"LDY",	"LDA",	"LDX",	"LAX",	"TAY",	"LDA",	"TAX",	"LAX",	"LDY",	"LDA",	"LDX",	"LAX", //A
+		"BCS",	"LDA",	"STP",	"LAX",	"LDY",	"LDA",	"LDX",	"LAX",	"CLV",	"LDA",	"TSX",	"LAS",	"LDY",	"LDA",	"LDX",	"LAX", //B
+		"CPY",	"CMP",	"NOP",	"DCP",	"CPY",	"CMP",	"DEC",	"DCP",	"INY",	"CMP",	"DEX",	"AXS",	"CPY",	"CMP",	"DEC",	"DCP", //C
+		"BNE",	"CMP",	"STP",	"DCP",	"NOP",	"CMP",	"DEC",	"DCP",	"CLD",	"CMP",	"NOP",	"DCP",	"NOP",	"CMP",	"DEC",	"DCP", //D
+		"CPX",	"SBC",	"NOP",	"ISC",	"CPX",	"SBC",	"INC",	"ISC",	"INX",	"SBC",	"NOP",	"SBC",	"CPX",	"SBC",	"INC",	"ISC", //E
+		"BEQ",	"SBC",	"STP",	"ISC",	"NOP",	"SBC",	"INC",	"ISC",	"SED",	"SBC",	"NOP",	"ISC",	"NOP",	"SBC",	"INC",	"ISC"  //F
+	};
+
+	bool unofficial[256] = {
+		//	0		1		2		3		4		5		6		7		8		9		A		B		C		D		E		F
+			false,false,true, true, true, false,false,true, false,false,false,true, true, false,false,true, //0
+			false,false,true, true, true, false,false,true, false,false,true, true, true, false,false,true, //1
+			false,false,true, true, false,false,false,true, false,false,false,true, false,false,false,true, //2
+			false,false,true, true, true, false,false,true, false,false,true, true, true, false,false,true, //3
+			false,false,true, true, true, false,false,true, false,false,false,true, false,false,false,true, //4
+			false,false,true, true, true, false,false,true, false,false,true, true, true, false,false,true, //5
+			false,false,true, true, true, false,false,true, false,false,false,true, false,false,false,true, //6
+			false,false,true, true, true, false,false,true, false,false,true, true, true, false,false,true, //7
+			true, false,true, true, false,false,false,true, false,true, false,true, false,false,false,true, //8
+			false,false,true, true, false,false,false,true, false,false,false,true, true, false,true, true, //9
+			false,false,false,true, false,false,false,true, false,false,false,true, false,false,false,true, //A
+			false,false,true, true, false,false,false,true, false,false,false,true, false,false,false,true, //B
+			false,false,true, true, false,false,false,true, false,false,false,true, false,false,false,true, //C
+			false,false,true, true, true, false,false,true, false,false,true, true, true, false,false,true, //D
+			false,false,true, true, false,false,false,true, false,false,false,true, false,false,false,true, //E
+			false,false,true, true, true, false,false,true, false,false,true, true, true, false,false,true  //F
 	};
 
 	AddrMode opMode[256] = {
@@ -78,11 +98,12 @@ void Disassembler::BuildOpCodeTables(bool useLowerCase)
 		if(useLowerCase) {
 			string name = opName[i];
 			std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-			DisassemblyInfo::OPName[i] = name + " ";
+			DisassemblyInfo::OPName[i] = name + (unofficial[i] ? "* " : " ");
 		} else {
-			DisassemblyInfo::OPName[i] = opName[i] + " ";
+			DisassemblyInfo::OPName[i] = opName[i] + (unofficial[i] ? "* " : " ");
 		}
 
+		DisassemblyInfo::IsUnofficialCode[i] = unofficial[i];
 		DisassemblyInfo::OPMode[i] = opMode[i];
 		switch(DisassemblyInfo::OPMode[i]) {
 			case AddrMode::Abs:
@@ -110,6 +131,11 @@ void Disassembler::BuildOpCodeTables(bool useLowerCase)
 				break;
 		}
 	}
+}
+
+bool Disassembler::IsUnofficialOpCode(uint8_t opCode)
+{
+	return DisassemblyInfo::IsUnofficialCode[opCode];
 }
 
 bool Disassembler::IsJump(uint8_t opCode)

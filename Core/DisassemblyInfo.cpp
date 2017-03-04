@@ -6,7 +6,8 @@
 
 string DisassemblyInfo::OPName[256];
 AddrMode DisassemblyInfo::OPMode[256];
-uint32_t DisassemblyInfo::OPSize[256];
+bool DisassemblyInfo::IsUnofficialCode[256];
+uint8_t DisassemblyInfo::OPSize[256];
 
 static const char* hexTable[256] = {
 		"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F",
@@ -36,9 +37,9 @@ char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManage
 char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, uint16_t &length)
 {
 	uint8_t opCode = *_opPointer;
-	memcpy(_toStringBuffer, DisassemblyInfo::OPName[opCode].c_str(), 4);
-	
-	length = 4;
+	length = DisassemblyInfo::OPName[opCode].size();
+	memcpy(_toStringBuffer, DisassemblyInfo::OPName[opCode].c_str(), length);
+
 	uint16_t* ptrPos = &length;
 
 	uint16_t opAddr = GetOpAddr(memoryAddr);

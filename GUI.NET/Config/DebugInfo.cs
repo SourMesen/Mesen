@@ -143,6 +143,8 @@ namespace Mesen.GUI.Config
 
 		public bool BreakOnOpen = true;
 		public bool BreakOnReset = true;
+		public bool BreakOnUnofficialOpcodes = true;
+		public bool BreakOnBrk = false;
 
 		public bool TraceAutoRefresh = true;
 		public int TraceLineCount = 1000;
@@ -155,7 +157,7 @@ namespace Mesen.GUI.Config
 		public bool TraceShowPpuCycles = true;
 		public bool TraceShowPpuScanline = true;
 		public bool TraceShowRegisters = true;
-		internal bool TraceUseLabels;
+		public bool TraceUseLabels = false;
 
 		public DebugInfo()
 		{

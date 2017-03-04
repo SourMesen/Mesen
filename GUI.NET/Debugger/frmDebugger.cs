@@ -54,6 +54,8 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuBreakOnReset.Checked = ConfigManager.Config.DebugInfo.BreakOnReset;
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
+			this.mnuBreakOnUnofficialOpcodes.Checked = ConfigManager.Config.DebugInfo.BreakOnUnofficialOpcodes;
+			this.mnuBreakOnBrk.Checked = ConfigManager.Config.DebugInfo.BreakOnBrk;
 			this.mnuDisplayOpCodesInLowerCase.Checked = ConfigManager.Config.DebugInfo.DisplayOpCodesInLowerCase;
 			this.mnuDisassembleVerifiedCodeOnly.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.VerifiedCode;
 			this.mnuDisassembleEverything.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.Everything;
@@ -213,7 +215,12 @@ namespace Mesen.GUI.Debugger
 			} else if(mnuDisassembleEverythingButData.Checked) {
 				flags |= DebuggerFlags.DisassembleEverythingButData;
 			}
-
+			if(mnuBreakOnUnofficialOpcodes.Checked) {
+				flags |= DebuggerFlags.BreakOnUnofficialOpCode;
+			}
+			if(mnuBreakOnBrk.Checked) {
+				flags |= DebuggerFlags.BreakOnBrk;
+			}
 			InteropEmu.DebugSetFlags(flags);
 		}
 
@@ -353,6 +360,7 @@ namespace Mesen.GUI.Debugger
 		private void ResumeExecution()
 		{
 			ClearActiveStatement();
+			UpdateDebuggerFlags();
 			InteropEmu.DebugRun();
 		}
 
@@ -648,6 +656,18 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 		
+		private void mnuBreakOnUnofficialOpcodes_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnUnofficialOpcodes = mnuBreakOnUnofficialOpcodes.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuBreakOnBrk_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnBrk = mnuBreakOnBrk.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
 		private void mnuDisableDefaultLabels_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.DisableDefaultLabels = mnuDisableDefaultLabels.Checked;

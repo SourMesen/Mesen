@@ -373,17 +373,24 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		}
 
 		_disassembler->BuildCache(absoluteAddr, absoluteRamAddr, addr, isSubEntryPoint);
-		_lastInstruction = _memoryManager->DebugRead(addr);
 
 		ProcessStepConditions(addr);
 
 		_profiler->ProcessInstructionStart(absoluteAddr);
 		UpdateCallstack(addr);
 
+		if(value == 0 && CheckFlag(DebuggerFlags::BreakOnBrk)) {
+			Step(1);
+		} else if(CheckFlag(DebuggerFlags::BreakOnUnofficialOpCode) && _disassembler->IsUnofficialOpCode(value)) {
+			Step(1);
+		}
+
 		breakDone = SleepUntilResume();
 
 		GetState(&_debugState, false);
 		_traceLogger->Log(_debugState.CPU, _debugState.PPU, _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr));
+
+		_lastInstruction = value;
 	} else {
 		_profiler->ProcessCycle();
 	}

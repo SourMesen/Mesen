@@ -890,13 +890,15 @@ namespace Mesen.GUI
 	[Flags]
 	public enum DebuggerFlags
 	{
-		None = 0,
-		PpuPartialDraw = 1,
-		ShowEffectiveAddresses = 2,
-		ShowOnlyDisassembledCode = 4,
-		DisplayOpCodesInLowerCase = 8,
-		DisassembleEverything = 16,
-		DisassembleEverythingButData = 32,
+		None = 0x00,
+		PpuPartialDraw = 0x01,
+		ShowEffectiveAddresses = 0x02,
+		ShowOnlyDisassembledCode = 0x04,
+		DisplayOpCodesInLowerCase = 0x08,
+		DisassembleEverything = 0x10,
+		DisassembleEverythingButData = 0x20,
+		BreakOnBrk = 0x40,
+		BreakOnUnofficialOpCode = 0x80,
 	}
 
 	public struct InteropRomInfo
