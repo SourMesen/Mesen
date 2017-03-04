@@ -80,14 +80,15 @@ public:
 class ExpressionEvaluator
 {
 private:
-	const vector<string> _binaryOperators = { { "*", "/", "%", "+", "-", "<<", ">>", "<", "<=", ">", ">=", "==", "!=", "&", "^", "|", "&&", "||" } };
-	const vector<int> _binaryPrecedence = { {    10,  10,  10,   9,   9,    8,    8,   7,   7,    7,    7,    6,    6,   5,   4,   3,    2,    1 } };
-	const vector<string> _unaryOperators = { { "+", "-", "!", "~" } };
-	const vector<int> _unaryPrecedence = { {    11,  11,  11,  11 } };
+	static const vector<string> _binaryOperators;
+	static const vector<int> _binaryPrecedence;
+	static const vector<string> _unaryOperators;
+	static const vector<int> _unaryPrecedence;
 
 	static std::unordered_map<string, std::vector<int>, StringHasher> _outputCache;
 	static SimpleLock _cacheLock;
 
+	int operandStack[1000];
 	Debugger* _debugger;
 	bool _containsCustomLabels = false;
 
@@ -97,13 +98,15 @@ private:
 	string GetNextToken(string expression, size_t &pos);	
 	bool ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, vector<int> &outputQueue);
 	bool ToRpn(string expression, vector<int> &outputQueue);
-	int32_t EvaluateExpression(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr);
 	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr, bool &success);
+	vector<int>* GetRpnList(string expression, vector<int> &output, bool& success);
 
 public:
 	ExpressionEvaluator(Debugger* debugger);
 
-	int32_t Evaluate(string expression, DebugState &state, int16_t memoryValue = 0, uint32_t memoryAddr = 0);
+	int32_t Evaluate(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue = 0, uint32_t memoryAddr = 0);
 	int32_t Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue = 0, uint32_t memoryAddr = 0);
+	vector<int>* GetRpnList(string expression);
+
 	bool Validate(string expression);
 };

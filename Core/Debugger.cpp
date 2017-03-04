@@ -200,6 +200,7 @@ void Debugger::UpdateBreakpoints()
 
 		for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
 			_breakpoints[i].clear();
+			_breakpointRpnList[i].clear();
 			_hasBreakpoint[i] = false;
 		}
 
@@ -208,6 +209,7 @@ void Debugger::UpdateBreakpoints()
 			for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
 				if(bp.HasBreakpointType((BreakpointType)i)) {
 					_breakpoints[i].push_back(bp);
+					_breakpointRpnList[i].push_back(expEval.GetRpnList(bp.GetCondition()));
 					_hasBreakpoint[i] = true;
 				}
 			}
@@ -225,20 +227,25 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 	vector<Breakpoint> &breakpoints = _breakpoints[(int)type];
 
 	bool needState = true;
+	EvalResultType resultType;
 	for(size_t i = 0, len = breakpoints.size(); i < len; i++) {
 		Breakpoint &breakpoint = breakpoints[i];
 		if(type == BreakpointType::Global || breakpoint.Matches(addr, absoluteAddr)) {
-			string condition = breakpoint.GetCondition();
-			if(condition.empty()) {
+			if(!breakpoint.HasCondition()) {
 				return true;
 			} else {
-				ExpressionEvaluator expEval(this);
 				if(needState) {
-					GetState(&_debugState);
+					GetState(&_debugState, false);
 					needState = false;
 				}
-				if(expEval.Evaluate(condition, _debugState, value, addr) != 0) {
-					return true;
+				if(_breakpointRpnList[(int)type][i]) {
+					if(_bpExpEval.Evaluate(_breakpointRpnList[(int)type][i], _debugState, resultType, value, addr) != 0) {
+						return true;
+					}
+				} else {
+					if(_bpExpEval.Evaluate(breakpoint.GetCondition(), _debugState, resultType, value, addr) != 0) {
+						return true;
+					}
 				}
 			}
 		}
@@ -249,12 +256,9 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 
 int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultType)
 {
-	ExpressionEvaluator expEval(this);
-
 	DebugState state;
 	GetState(&state);
-
-	return expEval.Evaluate(expression, state, resultType);
+	return _watchExpEval.Evaluate(expression, state, resultType);
 }
 
 void Debugger::UpdateCallstack(uint32_t addr)
@@ -461,11 +465,13 @@ void Debugger::PrivateProcessVramOperation(MemoryOperationType type, uint16_t ad
 	}
 }
 
-void Debugger::GetState(DebugState *state)
+void Debugger::GetState(DebugState *state, bool includeMapperInfo)
 {
 	state->CPU = _cpu->GetState();
 	state->PPU = _ppu->GetState();
-	state->Cartridge = _mapper->GetState();
+	if(includeMapperInfo) {
+		state->Cartridge = _mapper->GetState();
+	}
 }
 
 void Debugger::SetState(DebugState state)

@@ -46,6 +46,11 @@ string Breakpoint::GetCondition()
 	return _condition;
 }
 
+bool Breakpoint::HasCondition()
+{
+	return _condition[0] != 0;
+}
+
 void Breakpoint::ClearCondition()
 {
 	memset(_condition, 0, sizeof(_condition));

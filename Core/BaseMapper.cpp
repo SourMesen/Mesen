@@ -911,7 +911,7 @@ CartridgeState BaseMapper::GetState()
 	state.PrgPageSize = InternalGetPrgPageSize();
 	state.ChrPageCount = GetCHRPageCount();
 	state.ChrPageSize = InternalGetChrPageSize();
-	for(int i = 0; i < 64; i++) {
+	for(int i = 0, max = 0x8000 / state.PrgPageSize; i < max; i++) {
 		if(_prgPageNumbers[i] != 0xEEEEEEEE) {
 			int16_t pageNumber = (int16_t)_prgPageNumbers[i];
 			state.PrgSelectedPages[i] = pageNumber < 0 ? state.PrgPageCount + pageNumber : pageNumber;
@@ -920,7 +920,7 @@ CartridgeState BaseMapper::GetState()
 		}
 	}
 
-	for(int i = 0; i < 64; i++) {
+	for(int i = 0, max = 0x2000 / state.ChrPageSize; i < max; i++) {
 		if(_chrPageNumbers[i] != 0xEEEEEEEE) {
 			int16_t pageNumber = (int16_t)_chrPageNumbers[i];
 			state.ChrSelectedPages[i] = pageNumber < 0 ? state.ChrPageCount + pageNumber : pageNumber;

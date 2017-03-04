@@ -32,6 +32,7 @@ public:
 	bool Matches(uint32_t memoryAddr, uint32_t absoluteAddr);
 	bool HasBreakpointType(BreakpointType type);
 	string GetCondition();
+	bool HasCondition();
 	void ClearCondition();
 	
 private:

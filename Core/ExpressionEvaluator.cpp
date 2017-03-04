@@ -10,6 +10,11 @@
 std::unordered_map<string, std::vector<int>, StringHasher> ExpressionEvaluator::_outputCache;
 SimpleLock ExpressionEvaluator::_cacheLock;
 
+const vector<string> ExpressionEvaluator::_binaryOperators = { { "*", "/", "%", "+", "-", "<<", ">>", "<", "<=", ">", ">=", "==", "!=", "&", "^", "|", "&&", "||" } };
+const vector<int> ExpressionEvaluator::_binaryPrecedence = { { 10,  10,  10,   9,   9,    8,    8,   7,   7,    7,    7,    6,    6,   5,   4,   3,    2,    1 } };
+const vector<string> ExpressionEvaluator::_unaryOperators = { { "+", "-", "!", "~" } };
+const vector<int> ExpressionEvaluator::_unaryPrecedence = { { 11,  11,  11,  11 } };
+
 bool ExpressionEvaluator::IsOperator(string token, int &precedence, bool unaryOperator)
 {
 	if(unaryOperator) {
@@ -257,7 +262,11 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 				return false;
 			}
 		} else {
-			outputQueue.push_back(std::stoi(token));
+			if(token[0] < '0' || token[0] > '9') {
+				return false;
+			} else {
+				outputQueue.push_back(std::stoi(token));
+			}
 		}
 	}
 
@@ -274,16 +283,15 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 	return true;
 }
 
-int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr)
+int32_t ExpressionEvaluator::Evaluate(vector<int> *rpnList, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr)
 {
 	int pos = 0;
 	int right = 0;
 	int left = 0;
-	int operandStack[1000];
 	resultType = EvalResultType::Numeric;
 
-	for(size_t i = 0, len = outputQueue->size(); i < len; i++) {
-		int token = (*outputQueue)[i];
+	for(size_t i = 0, len = rpnList->size(); i < len; i++) {
+		int token = (*rpnList)[i];
 
 		if(token >= EvalValues::RegA) {
 			//Replace value with a special value
@@ -291,12 +299,12 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 				case EvalValues::RegA: token = state.CPU.A; break;
 				case EvalValues::RegX: token = state.CPU.X; break;
 				case EvalValues::RegY: token = state.CPU.Y; break;
-				case EvalValues::RegPS: token = state.CPU.PS; break;
 				case EvalValues::RegSP: token = state.CPU.SP; break;
-				case EvalValues::Irq: token = state.CPU.IRQFlag; break;
-				case EvalValues::Nmi: token = state.CPU.NMIFlag; break;
+				case EvalValues::RegPS: token = state.CPU.PS; break;
 				case EvalValues::PpuCycle: token = state.PPU.Cycle; break;
 				case EvalValues::PpuScanline: token = state.PPU.Scanline; break;
+				case EvalValues::Nmi: token = state.CPU.NMIFlag; break;
+				case EvalValues::Irq: token = state.CPU.IRQFlag; break;
 				case EvalValues::Value: token = memoryValue; break;
 				case EvalValues::Address: token = memoryAddr; break;
 				case EvalValues::AbsoluteAddress: token = _debugger->GetAbsoluteAddress(memoryAddr); break;
@@ -330,12 +338,12 @@ int32_t ExpressionEvaluator::EvaluateExpression(vector<int> *outputQueue, DebugS
 				case EvalOperators::LogicalOr: token = left || right; resultType = EvalResultType::Boolean; break;
 
 				//Unary operators
-				case EvalOperators::Bracket: token = _debugger->GetMemoryValue(right); break;
-				case EvalOperators::Braces: token = _debugger->GetMemoryValue(right) | (_debugger->GetMemoryValue(right+1) << 8); break;
 				case EvalOperators::Plus: token = right; break;
 				case EvalOperators::Minus: token = -right; break;
 				case EvalOperators::BinaryNot: token = ~right; break;
 				case EvalOperators::LogicalNot: token = !right; break;
+				case EvalOperators::Bracket: token = _debugger->GetMemoryValue(right); break;
+				case EvalOperators::Braces: token = _debugger->GetMemoryValue(right) | (_debugger->GetMemoryValue(right+1) << 8); break;
 				default: throw std::runtime_error("Invalid operator");
 			}
 		}
@@ -349,12 +357,16 @@ ExpressionEvaluator::ExpressionEvaluator(Debugger* debugger)
 	_debugger = debugger;
 }
 
-int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr, bool& success)
+vector<int>* ExpressionEvaluator::GetRpnList(string expression)
 {
-	success = true;
 	vector<int> output;
-	vector<int> *outputQueue = nullptr;
+	bool success;
+	return GetRpnList(expression, output, success);
+}
 
+vector<int>* ExpressionEvaluator::GetRpnList(string expression, vector<int> &output, bool& success)
+{
+	vector<int> *outputQueue = nullptr;
 	{
 		LockHandler lock = _cacheLock.AcquireSafe();
 
@@ -363,36 +375,37 @@ int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &stat
 			outputQueue = &(cacheOutputQueue->second);
 		}
 	}
-	
-	if(outputQueue == nullptr && output.empty()) {
+
+	if(outputQueue == nullptr) {
 		string fixedExp = expression;
 		fixedExp.erase(std::remove(fixedExp.begin(), fixedExp.end(), ' '), fixedExp.end());
 		success = ToRpn(fixedExp, output);
 
-		if(success) {
-			if(_containsCustomLabels) {
-				outputQueue = &output;
-			} else {
-				LockHandler lock = _cacheLock.AcquireSafe();
-				_outputCache[expression] = output;
-				outputQueue = &_outputCache[expression];
-			}
-		} else {
-			return 0;
+		if(success && !_containsCustomLabels) {
+			LockHandler lock = _cacheLock.AcquireSafe();
+			_outputCache[expression] = output;
+			outputQueue = &_outputCache[expression];
 		}
 	}
 
-	if(outputQueue) {
-		return EvaluateExpression(outputQueue, state, resultType, memoryValue, memoryAddr);
-	} else {
-		return EvaluateExpression(&output, state, resultType, memoryValue, memoryAddr);
-	}
+	return outputQueue;
 }
 
-int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, int16_t memoryValue, uint32_t memoryAddr)
+int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr, bool& success)
 {
-	EvalResultType resultType;
-	return Evaluate(expression, state, resultType, memoryValue, memoryAddr);
+	success = true;
+	vector<int> output;
+	vector<int> *rpnList = GetRpnList(expression, output, success);
+
+	if(!success) {
+		return 0;
+	}
+
+	if(!rpnList) {
+		rpnList = &output;
+	}
+
+	return Evaluate(rpnList, state, resultType, memoryValue, memoryAddr);	
 }
 
 int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr)
@@ -407,7 +420,6 @@ int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, Eval
 	}
 	resultType = EvalResultType::Invalid;
 	return 0;
-
 }
 
 bool ExpressionEvaluator::Validate(string expression)

@@ -54,6 +54,7 @@ private:
 	atomic<int32_t> _suspendCount;
 	vector<Breakpoint> _newBreakpoints;
 	vector<Breakpoint> _breakpoints[BreakpointTypeCount];
+	vector<vector<int>*> _breakpointRpnList[BreakpointTypeCount];
 	bool _hasBreakpoint[BreakpointTypeCount] = {};
 
 	vector<uint8_t> _frozenAddresses;
@@ -63,6 +64,8 @@ private:
 
 	unordered_set<uint32_t> _functionEntryPoints;
 
+	ExpressionEvaluator _watchExpEval = ExpressionEvaluator(this);
+	ExpressionEvaluator _bpExpEval = ExpressionEvaluator(this);
 	DebugState _debugState;
 
 	SimpleLock _breakLock;
@@ -117,7 +120,7 @@ public:
 	void GetFunctionEntryPoints(int32_t* entryPoints);
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
 	
-	void GetState(DebugState *state);
+	void GetState(DebugState *state, bool includeMapperInfo = true);
 	void SetState(DebugState state);
 
 	void Suspend();
