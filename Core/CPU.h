@@ -5,6 +5,7 @@
 #include "Snapshotable.h"
 #include "TraceLogger.h"
 #include "EmulationSettings.h"
+#include "CpuState.h"
 
 namespace PSFlags
 {
@@ -24,9 +25,9 @@ namespace PSFlags
 enum AddrMode
 {
 	None,	Acc, Imp, Imm, Rel,
-	Zero, ZeroX, ZeroY,
+	Zero, Abs, ZeroX, ZeroY,
 	Ind, IndX, IndY, IndYW,
-	Abs, AbsX, AbsXW, AbsY, AbsYW
+	AbsX, AbsXW, AbsY, AbsYW
 };
 
 enum class IRQSource
@@ -35,22 +36,6 @@ enum class IRQSource
 	FrameCounter = 2,
 	DMC = 4,
 	FdsDisk = 8,
-};
-
-struct State
-{
-	uint16_t PC = 0;
-	uint8_t SP = 0;
-	uint8_t A = 0;
-	uint8_t X = 0;
-	uint8_t Y = 0;
-	uint8_t PS = 0;
-	uint32_t IRQFlag = 0;
-	int32_t CycleCount = 0;
-	bool NMIFlag = false;
-
-	//Used by debugger
-	uint16_t DebugPC = 0;
 };
 
 class CPU : public Snapshotable

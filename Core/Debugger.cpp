@@ -33,6 +33,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger, this));
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
 	_profiler.reset(new Profiler(this));
+	_traceLogger.reset(new TraceLogger(memoryManager, _labelManager));
 
 	_stepOut = false;
 	_stepCount = -1;
@@ -381,12 +382,8 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 
 		breakDone = SleepUntilResume();
 
-		shared_ptr<TraceLogger> logger = _traceLogger;
-		if(logger) {
-			DebugState state;
-			GetState(&state);
-			logger->Log(state, _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr));
-		}
+		GetState(&_debugState, false);
+		_traceLogger->Log(_debugState.CPU, _debugState.PPU, _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr));
 	} else {
 		_profiler->ProcessCycle();
 	}
@@ -623,17 +620,6 @@ void Debugger::SetNextStatement(uint16_t addr)
 	}
 }
 
-void Debugger::StartTraceLogger(TraceLoggerOptions options)
-{
-	string traceFilepath = FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), "Trace - " + FolderUtilities::GetFilename(_romName, false) + ".log");
-	_traceLogger.reset(new TraceLogger(traceFilepath, _memoryManager, options));
-}
-
-void Debugger::StopTraceLogger()
-{
-	_traceLogger.reset();
-}
-
 void Debugger::ProcessPpuCycle()
 {
 	if(Debugger::Instance) {
@@ -680,6 +666,11 @@ void Debugger::GetFunctionEntryPoints(int32_t* entryPoints)
 		i++;
 	}
 	entryPoints[i] = -1;
+}
+
+shared_ptr<TraceLogger> Debugger::GetTraceLogger()
+{
+	return _traceLogger;
 }
 
 shared_ptr<MemoryDumper> Debugger::GetMemoryDumper()

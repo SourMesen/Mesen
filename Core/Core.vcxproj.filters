@@ -1117,6 +1117,12 @@
     <ClInclude Include="Eh8813A.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="PpuState.h">
+      <Filter>Nes</Filter>
+    </ClInclude>
+    <ClInclude Include="CpuState.h">
+      <Filter>Nes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

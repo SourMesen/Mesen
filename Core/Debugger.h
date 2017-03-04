@@ -155,7 +155,7 @@ public:
 	void StopTraceLogger();
 
 	shared_ptr<Profiler> GetProfiler();
-
+	shared_ptr<TraceLogger> GetTraceLogger();
 	shared_ptr<MemoryDumper> GetMemoryDumper();
 	shared_ptr<MemoryAccessCounter> GetMemoryAccessCounter();
 

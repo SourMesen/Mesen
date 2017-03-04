@@ -78,9 +78,9 @@ void Disassembler::BuildOpCodeTables(bool useLowerCase)
 		if(useLowerCase) {
 			string name = opName[i];
 			std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-			DisassemblyInfo::OPName[i] = name;
+			DisassemblyInfo::OPName[i] = name + " ";
 		} else {
-			DisassemblyInfo::OPName[i] = opName[i];
+			DisassemblyInfo::OPName[i] = opName[i] + " ";
 		}
 
 		DisassemblyInfo::OPMode[i] = opMode[i];
@@ -341,8 +341,11 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			output += commentLines;
 			output += labelLine;
 
-			string effectiveAddress = showEffectiveAddresses ? info->GetEffectiveAddressString(cpuState, memoryManager, labelManager) : "";
-			output += GetLine("  " + info->ToString(memoryAddr, memoryManager, labelManager), commentString, memoryAddr, source != _internalRam ? addr : -1, info->GetByteCode(), effectiveAddress, speculativeCode);
+			char* effectiveAddress = info->GetEffectiveAddressString(cpuState, memoryManager.get(), labelManager.get());
+			if(!effectiveAddress) {
+				effectiveAddress = "";
+			}
+			output += GetLine("  " + string(info->ToString(memoryAddr, memoryManager.get(), labelManager.get())), commentString, memoryAddr, source != _internalRam ? addr : -1, info->GetByteCode(), effectiveAddress, speculativeCode);
 
 			if(info->IsSubExitPoint()) {
 				output += GetLine("__sub end__") + GetLine();

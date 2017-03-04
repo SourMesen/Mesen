@@ -195,10 +195,13 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
 		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
-		
-		[DllImport(DLLPath)] public static extern void DebugStartTraceLogger(TraceLoggerOptions options);
-		[DllImport(DLLPath)] public static extern void DebugStopTraceLogger();
 
+		[DllImport(DLLPath)] public static extern void DebugStartTraceLogger([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath)] public static extern void DebugStopTraceLogger();
+		[DllImport(DLLPath)] public static extern void DebugSetTraceOptions(TraceLoggerOptions options);
+		[DllImport(DLLPath, EntryPoint = "DebugGetExecutionTrace")] private static extern IntPtr DebugGetExecutionTraceWrapper(UInt32 lineCount);
+		public static string DebugGetExecutionTrace(UInt32 lineCount) { return PtrToStringUtf8(InteropEmu.DebugGetExecutionTraceWrapper(lineCount)); }
+		
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugLoadCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugSaveCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
 		[DllImport(DLLPath)] public static extern void DebugGetCdlRatios(ref CdlRatios ratios);
@@ -806,6 +809,7 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)] public bool ShowExtraInfo;
 		[MarshalAs(UnmanagedType.I1)] public bool IndentCode;
 		[MarshalAs(UnmanagedType.I1)] public bool ShowEffectiveAddresses;
+		[MarshalAs(UnmanagedType.I1)] public bool UseLabels;
 	}
 
 	public enum ProfilerDataType

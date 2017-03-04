@@ -144,6 +144,19 @@ namespace Mesen.GUI.Config
 		public bool BreakOnOpen = true;
 		public bool BreakOnReset = true;
 
+		public bool TraceAutoRefresh = true;
+		public int TraceLineCount = 1000;
+		public bool TraceIndentCode = false;
+		public bool TraceShowByteCode = true;
+		public bool TraceShowCpuCycles = false;
+		public bool TraceShowEffectiveAddresses = true;
+		public bool TraceShowExtraInfo = true;
+		public bool TraceShowFrameCount = false;
+		public bool TraceShowPpuCycles = true;
+		public bool TraceShowPpuScanline = true;
+		public bool TraceShowRegisters = true;
+		internal bool TraceUseLabels;
+
 		public DebugInfo()
 		{
 			LeftView = new DebugViewInfo();

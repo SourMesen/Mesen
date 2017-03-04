@@ -24,6 +24,10 @@ void LabelManager::SetLabel(uint32_t address, AddressType addressType, string la
 
 	_codeLabels.erase(address);
 	if(!label.empty()) {
+		if(label.size() > 400) {
+			//Restrict labels to 400 bytes
+			label = label.substr(0, 400);
+		}
 		_codeLabels.emplace(address, label);
 		_codeLabelReverseLookup.emplace(label, address);
 	}

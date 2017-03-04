@@ -1,9 +1,11 @@
 #pragma once
 #include "stdafx.h"
+#include "CpuState.h"
+#include "PpuState.h"
 
 class DisassemblyInfo;
 class MemoryManager;
-struct DebugState;
+class LabelManager;
 
 struct TraceLoggerOptions
 {
@@ -16,6 +18,7 @@ struct TraceLoggerOptions
 	bool ShowExtraInfo;
 	bool IndentCode;
 	bool ShowEffectiveAddresses;
+	bool UseLabels;
 };
 
 class TraceLogger
@@ -28,12 +31,30 @@ private:
 	ofstream _outputFile;
 	bool _firstLine;
 	shared_ptr<MemoryManager> _memoryManager;
+	shared_ptr<LabelManager> _labelManager;
+
+	constexpr static int ExecutionLogSize = 30000;
+	bool _logToFile;
+	uint16_t _currentPos;
+	State _cpuStateCache[ExecutionLogSize] = {};
+	PPUDebugState _ppuStateCache[ExecutionLogSize] = {};
+	int _memoryAddrCache[ExecutionLogSize] = {};
+	shared_ptr<DisassemblyInfo> _disassemblyCache[ExecutionLogSize] = {};
+
+	string _executionTrace;
 
 public:
-	TraceLogger(string outputFilepath, shared_ptr<MemoryManager> memoryManager, TraceLoggerOptions options);
+	TraceLogger(shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 	~TraceLogger();
 
-	void Log(DebugState &state, shared_ptr<DisassemblyInfo> disassemblyInfo);
+	void Log(State &cpuState, PPUDebugState &ppuState, shared_ptr<DisassemblyInfo> disassemblyInfo);
+	void SetOptions(TraceLoggerOptions options);
+	void StartLogging(string filename);
+	void StopLogging();
+
+	void GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, shared_ptr<DisassemblyInfo> &disassemblyInfo, bool firstLine);
+	const char* GetExecutionTrace(uint32_t lineCount);
 
 	static void LogStatic(string log);
+
 };

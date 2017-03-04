@@ -20,15 +20,21 @@ private:
 	uint32_t _opSize = 0;
 	AddrMode _opMode;
 
+	char _toStringBuffer[1000];
+	char _effectiveAddressBuffer[1000];
+
 public:
 	DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint);
 
 	void SetSubEntryPoint();
 
-	int32_t GetEffectiveAddress(State& cpuState, shared_ptr<MemoryManager> memoryManager);
-	string GetEffectiveAddressString(State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
+	int32_t GetEffectiveAddress(State& cpuState, MemoryManager* memoryManager);
+	
+	char* GetEffectiveAddressString(State& cpuState, MemoryManager* memoryManager, LabelManager* labelManager);
+	char* GetEffectiveAddressString(State& cpuState, MemoryManager* memoryManager, LabelManager* labelManager, uint16_t &length);
 
-	string ToString(uint32_t memoryAddr, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
+	char* ToString(uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager);
+	char* ToString(uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, uint16_t &length);
 	string GetByteCode();
 	uint32_t GetSize();
 	uint16_t GetOpAddr(uint16_t memoryAddr);
