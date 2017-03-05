@@ -9,6 +9,7 @@
 #include "ControlManager.h"
 #include "../Utilities/SimpleLock.h"
 #include "AutoSaveManager.h"
+#include "RomData.h"
 
 class Debugger;
 class BaseMapper;
@@ -76,6 +77,7 @@ class Console
 		static bool LoadROM(string romName, uint32_t crc32Hash);
 		static string GetROMPath();
 		static string GetRomName();
+		static RomFormat GetRomFormat();
 		static uint32_t GetCrc32();
 		static uint32_t GetPrgCrc32();
 		static NesModel GetModel();

@@ -61,6 +61,7 @@ namespace InteropEmu {
 		const char* RomName;
 		uint32_t Crc32;
 		uint32_t PrgCrc32;
+		RomFormat Format;
 	};
 
 	extern "C" {
@@ -178,6 +179,7 @@ namespace InteropEmu {
 				romInfo.RomName = _returnString.c_str();
 				romInfo.Crc32 = Console::GetCrc32();
 				romInfo.PrgCrc32 = Console::GetPrgCrc32();
+				romInfo.Format = Console::GetRomFormat();
 			} else {
 				RomLoader romLoader;
 				if(romLoader.LoadFile(filename, nullptr, "", archiveFileIndex)) {
@@ -187,11 +189,13 @@ namespace InteropEmu {
 					romInfo.RomName = _returnString.c_str();
 					romInfo.Crc32 = romData.Crc32;
 					romInfo.PrgCrc32 = romData.PrgCrc32;
+					romInfo.Format = RomFormat::Unknown;
 				} else {
 					_returnString = "";
 					romInfo.RomName = _returnString.c_str();
 					romInfo.Crc32 = 0;
 					romInfo.PrgCrc32 = 0;
+					romInfo.Format = RomFormat::Unknown;
 				}
 			}
 		}

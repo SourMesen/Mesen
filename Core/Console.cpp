@@ -162,6 +162,15 @@ string Console::GetRomName()
 	}
 }
 
+RomFormat Console::GetRomFormat()
+{
+	if(Instance->_mapper) {
+		return Instance->_mapper->GetRomFormat();
+	} else {
+		return RomFormat::Unknown;
+	}
+}
+
 uint32_t Console::GetCrc32()
 {
 	if(Instance->_mapper) {

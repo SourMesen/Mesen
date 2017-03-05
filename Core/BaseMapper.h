@@ -75,6 +75,7 @@ private:
 	
 	string _romFilename;
 	string _romName;
+	RomFormat _romFormat;
 
 	bool _allowRegisterRead = false;
 	uint8_t _isReadRegisterAddr[0x10000];
@@ -210,6 +211,7 @@ public:
 	uint32_t GetCrc32();
 	uint32_t GetPrgCrc32();
 	string GetRomName();
+	RomFormat GetRomFormat();
 
 	uint8_t ReadRAM(uint16_t addr) override;
 	virtual void WriteRAM(uint16_t addr, uint8_t value) override;
@@ -238,4 +240,6 @@ public:
 	int32_t ToAbsoluteWorkRamAddress(uint16_t addr);
 	int32_t ToAbsoluteChrAddress(uint16_t addr);
 	int32_t FromAbsoluteAddress(uint32_t addr, AddressType type = AddressType::PrgRom);
+
+	void SaveRomToDisk(string filename);
 };

@@ -125,6 +125,8 @@ namespace Mesen.GUI.Debugger
 
 			UpdateCdlRatios();
 			tmrCdlRatios.Start();
+
+			mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
 		}
 
 		private void ctrlProfiler_OnFunctionSelected(object sender, EventArgs e)
@@ -235,6 +237,8 @@ namespace Mesen.GUI.Debugger
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					this.BeginInvoke((MethodInvoker)(() => {
+						mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
+
 						this.UpdateWorkspace();
 						this.AutoLoadDbgFile(true);
 						UpdateDebugger();
@@ -835,6 +839,18 @@ namespace Mesen.GUI.Debugger
 				splitContainer.ExpandPanel();
 			} else {
 				splitContainer.CollapsePanel();
+			}
+		}
+
+		private void mnuSaveRom_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.Filter = "NES roms (*.nes)|*.nes";
+				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + "_Modified.nes";
+				sfd.InitialDirectory = ConfigManager.DebuggerFolder;
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					InteropEmu.DebugSaveRomToDisk(sfd.FileName);
+				}
 			}
 		}
 	}

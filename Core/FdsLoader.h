@@ -154,6 +154,7 @@ public:
 
 		RomData romData;
 
+		romData.Format = RomFormat::Fds;
 		romData.MapperID = MapperFactory::FdsMapperID;
 		romData.Mirroring = MirroringType::Vertical;
 		romData.PrgRom = LoadBios();

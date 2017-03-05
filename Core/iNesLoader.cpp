@@ -15,6 +15,8 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
 
 	header.SanitizeHeader(romFile.size());
 
+	romData.Format = RomFormat::iNes;
+
 	romData.IsNes20Header = (header.GetRomHeaderVersion() == RomHeaderVersion::Nes2_0);
 	romData.MapperID = header.GetMapperID();
 	romData.SubMapperID = header.GetSubMapper();

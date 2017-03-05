@@ -263,10 +263,19 @@ struct GameInfo
 	string InputType;
 };
 
+enum class RomFormat
+{
+	Unknown = 0,
+	iNes = 1,
+	Unif = 2,
+	Fds = 3,
+};
+
 struct RomData
 {
 	string RomName;
 	string Filename;
+	RomFormat Format;
 
 	uint16_t MapperID = 0;
 	uint8_t SubMapperID = 0;

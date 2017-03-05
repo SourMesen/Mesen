@@ -209,6 +209,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugResetMemoryAccessCounts();
 		[DllImport(DLLPath)] public static extern void DebugResetProfiler();
 
+		[DllImport(DLLPath)] public static extern void DebugSaveRomToDisk([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
+
 		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper();
 		public static string DebugGetCode() { return PtrToStringUtf8(InteropEmu.DebugGetCodeWrapper()); }
 
@@ -906,6 +908,15 @@ namespace Mesen.GUI
 		public IntPtr RomNamePointer;
 		public UInt32 Crc32;
 		public UInt32 PrgCrc32;
+		public RomFormat Format;
+	}
+
+	public enum RomFormat
+	{
+		Unknown = 0,
+		iNes = 1,
+		Unif = 2,
+		Fds = 3,
 	}
 
 	public class RomInfo
@@ -913,12 +924,14 @@ namespace Mesen.GUI
 		public string RomName;
 		public UInt32 Crc32;
 		public UInt32 PrgCrc32;
+		public RomFormat Format;
 
 		public RomInfo(InteropRomInfo romInfo)
 		{
 			this.RomName = UTF8Marshaler.GetStringFromIntPtr(romInfo.RomNamePointer);
 			this.Crc32 = romInfo.Crc32;
 			this.PrgCrc32 = romInfo.PrgCrc32;
+			this.Format = romInfo.Format;
 		}
 
 		public string GetRomName()

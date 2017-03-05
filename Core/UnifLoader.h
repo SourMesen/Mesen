@@ -324,6 +324,7 @@ public:
 			fullRom.insert(fullRom.end(), romData.PrgRom.begin(), romData.PrgRom.end());
 			fullRom.insert(fullRom.end(), romData.ChrRom.begin(), romData.ChrRom.end());
 
+			romData.Format = RomFormat::Unif;
 			romData.Crc32 = CRC32::GetCRC(fullRom.data(), fullRom.size());;
 			romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
 

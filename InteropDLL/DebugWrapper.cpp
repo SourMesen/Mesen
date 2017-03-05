@@ -92,4 +92,6 @@ extern "C"
 	DllExport void __stdcall DebugGetFreezeState(uint16_t startAddress, uint16_t length, bool* freezeState) { GetDebugger()->GetFreezeState(startAddress, length, freezeState); }
 
 	DllExport uint32_t __stdcall DebugGetPpuScroll() { return GetDebugger()->GetPpuScroll(); }
+
+	DllExport void __stdcall DebugSaveRomToDisk(char* filename) { GetDebugger()->SaveRomToDisk(filename); }
 };

@@ -37,7 +37,7 @@ char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManage
 char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, uint16_t &length)
 {
 	uint8_t opCode = *_opPointer;
-	length = DisassemblyInfo::OPName[opCode].size();
+	length = (uint16_t)DisassemblyInfo::OPName[opCode].size();
 	memcpy(_toStringBuffer, DisassemblyInfo::OPName[opCode].c_str(), length);
 
 	uint16_t* ptrPos = &length;

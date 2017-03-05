@@ -758,3 +758,8 @@ void Debugger::GetFreezeState(uint16_t startAddress, uint16_t length, bool* free
 		freezeState[i] = _frozenAddresses[startAddress + i] ? true : false;
 	}	
 }
+
+void Debugger::SaveRomToDisk(string filename)
+{
+	_mapper->SaveRomToDisk(filename);
+}

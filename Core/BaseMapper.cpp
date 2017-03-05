@@ -507,6 +507,7 @@ void BaseMapper::Initialize(RomData &romData)
 	AddRegisterRange(RegisterStartAddress(), RegisterEndAddress(), MemoryOperation::Any);
 
 	_nesHeader = romData.NesHeader;
+	_romFormat = romData.Format;
 
 	_mirroringType = romData.Mirroring;
 
@@ -700,6 +701,11 @@ GameSystem BaseMapper::GetGameSystem()
 string BaseMapper::GetRomName()
 {
 	return _romName;
+}
+
+RomFormat BaseMapper::GetRomFormat()
+{
+	return _romFormat;
 }
 
 uint32_t BaseMapper::GetCrc32()
@@ -952,4 +958,15 @@ CartridgeState BaseMapper::GetState()
 	}
 	
 	return state;
+}
+
+void BaseMapper::SaveRomToDisk(string filename)
+{
+	ofstream file(filename, ios::out | ios::binary);
+	if(file.good()) {
+		file.write((char*)&_nesHeader, sizeof(NESHeader));
+		file.write((char*)_prgRom, _prgSize);
+		file.write((char*)_chrRom, _onlyChrRam ? 0 : _chrRomSize);
+		file.close();
+	}
 }
