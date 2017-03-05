@@ -84,6 +84,7 @@ extern "C"
 	DllExport void __stdcall DebugGetMemoryAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t* counts, bool forUninitReads) { GetDebugger()->GetMemoryAccessCounter()->GetAccessCounts(memoryType, operationType, counts, forUninitReads); }
 	DllExport void __stdcall DebugResetMemoryAccessCounts() { GetDebugger()->GetMemoryAccessCounter()->ResetCounts(); }
 	DllExport void __stdcall DebugGetMemoryAccessStamps(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, uint32_t* stamps) { GetDebugger()->GetMemoryAccessCounter()->GetAccessStamps(offset, length, memoryType, operationType, stamps); }
+	DllExport void __stdcall DebugGetMemoryAccessCountsEx(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, int32_t* counts) { GetDebugger()->GetMemoryAccessCounter()->GetAccessCountsEx(offset, length, memoryType, operationType, counts); }
 
 	DllExport void __stdcall DebugGetProfilerData(int64_t* profilerData, ProfilerDataType dataType) { GetDebugger()->GetProfiler()->GetProfilerData(profilerData, dataType); }
 	DllExport void __stdcall DebugResetProfiler() { GetDebugger()->GetProfiler()->Reset(); }

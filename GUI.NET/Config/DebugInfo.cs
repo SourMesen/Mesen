@@ -125,6 +125,10 @@ namespace Mesen.GUI.Config
 		public bool RamHighlightWrites = true;
 		public bool RamHighlightReads = true;
 		public int RamFadeSpeed = 300;
+		public bool RamHideUnusedBytes;
+		public bool RamHideReadBytes;
+		public bool RamHideWrittenBytes;
+		public bool RamHideExecutedBytes;
 
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;

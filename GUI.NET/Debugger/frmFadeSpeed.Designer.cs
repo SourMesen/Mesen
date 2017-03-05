@@ -87,11 +87,6 @@
             0,
             0,
             0});
-			this.nudFrameCount.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
 			this.nudFrameCount.Name = "nudFrameCount";
 			this.nudFrameCount.Size = new System.Drawing.Size(79, 20);
 			this.nudFrameCount.TabIndex = 3;

@@ -36,10 +36,15 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
-
+			
 			this.mnuHighlightExecution.Checked = ConfigManager.Config.DebugInfo.RamHighlightExecution;
 			this.mnuHightlightReads.Checked = ConfigManager.Config.DebugInfo.RamHighlightReads;
 			this.mnuHighlightWrites.Checked = ConfigManager.Config.DebugInfo.RamHighlightWrites;
+			this.mnuHideUnusedBytes.Checked = ConfigManager.Config.DebugInfo.RamHideUnusedBytes;
+			this.mnuHideReadBytes.Checked = ConfigManager.Config.DebugInfo.RamHideReadBytes;
+			this.mnuHideWrittenBytes.Checked = ConfigManager.Config.DebugInfo.RamHideWrittenBytes;
+			this.mnuHideExecutedBytes.Checked = ConfigManager.Config.DebugInfo.RamHideExecutedBytes;
+
 			this.UpdateFadeOptions();
 
 			this.InitTblMappings();
@@ -90,7 +95,17 @@ namespace Mesen.GUI.Debugger
 				case DebugMemoryType.WorkRam:
 				case DebugMemoryType.SaveRam:
 				case DebugMemoryType.InternalRam:
-					this.ctrlHexViewer.ByteColorProvider = new ByteColorProvider((DebugMemoryType)this.cboMemoryType.SelectedIndex, mnuHighlightExecution.Checked, mnuHighlightWrites.Checked, mnuHightlightReads.Checked, ConfigManager.Config.DebugInfo.RamFadeSpeed);
+					this.ctrlHexViewer.ByteColorProvider = new ByteColorProvider(
+						(DebugMemoryType)this.cboMemoryType.SelectedIndex,
+						mnuHighlightExecution.Checked,
+						mnuHighlightWrites.Checked,
+						mnuHightlightReads.Checked,
+						ConfigManager.Config.DebugInfo.RamFadeSpeed,
+						mnuHideUnusedBytes.Checked,
+						mnuHideReadBytes.Checked,
+						mnuHideWrittenBytes.Checked,
+						mnuHideExecutedBytes.Checked
+					);
 					break;
 
 				default:
@@ -170,6 +185,16 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamAutoRefresh = this.mnuAutoRefresh.Checked;
 			ConfigManager.Config.DebugInfo.RamShowCharacters = this.mnuShowCharacters.Checked;
 			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlHexViewer.HexFont.Size;
+
+			ConfigManager.Config.DebugInfo.RamHighlightExecution = this.mnuHighlightExecution.Checked;
+			ConfigManager.Config.DebugInfo.RamHighlightReads = this.mnuHightlightReads.Checked;
+			ConfigManager.Config.DebugInfo.RamHighlightWrites = this.mnuHighlightWrites.Checked;
+			ConfigManager.Config.DebugInfo.RamHideUnusedBytes = this.mnuHideUnusedBytes.Checked;
+			ConfigManager.Config.DebugInfo.RamHideReadBytes = this.mnuHideReadBytes.Checked;
+			ConfigManager.Config.DebugInfo.RamHideWrittenBytes = this.mnuHideWrittenBytes.Checked;
+			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
+			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
+
 			ConfigManager.ApplyChanges();
 		}
 
@@ -280,7 +305,8 @@ namespace Mesen.GUI.Debugger
 			mnuFadeSlow.Checked = fadeSpeed == 600;
 			mnuFadeNormal.Checked = fadeSpeed == 300;
 			mnuFadeFast.Checked = fadeSpeed == 120;
-			mnuCustomFadeSpeed.Checked = !mnuFadeSlow.Checked && !mnuFadeNormal.Checked && !mnuFadeFast.Checked;
+			mnuFadeNever.Checked = fadeSpeed == 0;
+			mnuCustomFadeSpeed.Checked = !mnuFadeSlow.Checked && !mnuFadeNormal.Checked && !mnuFadeFast.Checked && !mnuFadeSlow.Checked;
 		}
 
 		private void mnuFadeSpeed_Click(object sender, EventArgs e)
@@ -291,6 +317,8 @@ namespace Mesen.GUI.Debugger
 				ConfigManager.Config.DebugInfo.RamFadeSpeed = 300;
 			} else if(sender == mnuFadeFast) {
 				ConfigManager.Config.DebugInfo.RamFadeSpeed = 120;
+			} else if(sender == mnuFadeNever) {
+				ConfigManager.Config.DebugInfo.RamFadeSpeed = 0;
 			}
 			ConfigManager.ApplyChanges();
 			UpdateFadeOptions();
@@ -419,6 +447,12 @@ namespace Mesen.GUI.Debugger
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuEditLabel);
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuEditBreakpoint);
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuAddWatch);
+		}
+
+		private void mnuColorProviderOptions_Click(object sender, EventArgs e)
+		{
+			this.UpdateConfig();
+			this.UpdateByteColorProvider();
 		}
 	}
 }

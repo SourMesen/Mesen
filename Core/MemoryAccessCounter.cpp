@@ -20,7 +20,7 @@ MemoryAccessCounter::MemoryAccessCounter(Debugger* debugger)
 	}
 }
 
-vector<int>& MemoryAccessCounter::GetArray(MemoryOperationType operationType, AddressType addressType, bool stampArray)
+vector<int32_t>& MemoryAccessCounter::GetArray(MemoryOperationType operationType, AddressType addressType, bool stampArray)
 {
 	switch(operationType) {
 		case MemoryOperationType::Read: return stampArray ? _readStamps[(int)addressType] : _readCounts[(int)addressType];
@@ -97,6 +97,35 @@ void MemoryAccessCounter::GetAccessStamps(uint32_t offset, uint32_t length, Debu
 				_debugger->GetAbsoluteAddressAndType(offset + i, &info);
 				stamps[i] = GetArray(operationType, info.Type, true).data()[info.Address];
 			}			
+			break;
+	}
+}
+
+void MemoryAccessCounter::GetAccessCountsEx(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, int32_t counts[])
+{
+	switch(memoryType) {
+		case DebugMemoryType::InternalRam:
+			memcpy(counts, GetArray(operationType, AddressType::InternalRam, false).data() + offset, length * sizeof(uint32_t));
+			break;
+
+		case DebugMemoryType::WorkRam:
+			memcpy(counts, GetArray(operationType, AddressType::WorkRam, false).data() + offset, length * sizeof(uint32_t));
+			break;
+
+		case DebugMemoryType::SaveRam:
+			memcpy(counts, GetArray(operationType, AddressType::SaveRam, false).data() + offset, length * sizeof(uint32_t));
+			break;
+
+		case DebugMemoryType::PrgRom:
+			memcpy(counts, GetArray(operationType, AddressType::PrgRom, false).data() + offset, length * sizeof(uint32_t));
+			break;
+
+		case DebugMemoryType::CpuMemory:
+			for(uint32_t i = 0; i < length; i++) {
+				AddressTypeInfo info;
+				_debugger->GetAbsoluteAddressAndType(offset + i, &info);
+				counts[i] = GetArray(operationType, info.Type, false).data()[info.Address];
+			}
 			break;
 	}
 }

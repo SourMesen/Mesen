@@ -3305,8 +3305,13 @@ namespace Be.Windows.Forms
 		}
 
 		IByteProvider _byteProvider;
+		IByteColorProvider _byteColorProvider;
 
-		public IByteColorProvider ByteColorProvider { get; set; }
+		public IByteColorProvider ByteColorProvider
+		{
+			get { return _byteColorProvider; }
+			set { _byteColorProvider = value; Invalidate(); }
+		}
 
 		/// <summary>
 		/// Gets or sets the visibility of the group separator.

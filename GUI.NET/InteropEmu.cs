@@ -371,6 +371,21 @@ namespace Mesen.GUI
 			return stamps;
 		}
 
+		[DllImport(DLLPath, EntryPoint= "DebugGetMemoryAccessCountsEx")] private static extern void DebugGetMemoryAccessCountsExWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr counts);
+		public static Int32[] DebugGetMemoryAccessCountsEx(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
+		{
+			Int32[] counts = new Int32[length];
+
+			GCHandle hResult = GCHandle.Alloc(counts, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetMemoryAccessCountsExWrapper(offset, length, type, operationType, hResult.AddrOfPinnedObject());
+			} finally {
+				hResult.Free();
+			}
+
+			return counts;
+		}
+
 		[DllImport(DLLPath, EntryPoint= "DebugGetFreezeState")] private static extern void DebugGetFreezeStateWrapper(UInt16 startAddress, UInt16 length, IntPtr freezeState);
 		public static bool[] DebugGetFreezeState(UInt16 startAddress, UInt16 length)
 		{

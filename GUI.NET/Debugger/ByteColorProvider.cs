@@ -10,20 +10,31 @@ namespace Mesen.GUI.Debugger
 		Int32[] _readStamps;
 		Int32[] _writeStamps;
 		Int32[] _execStamps;
+		Int32[] _readCounts;
+		Int32[] _writeCounts;
+		Int32[] _execCounts;
 		bool[] _freezeState;
 		DebugState _state = new DebugState();
 		bool _showExec;
 		bool _showWrite;
 		bool _showRead;
 		int _framesToFade;
+		bool _hideUnusedBytes;
+		bool _hideReadBytes;
+		bool _hideWrittenBytes;
+		bool _hideExecutedBytes;
 
-		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade)
+		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade, bool hideUnusedBytes, bool hideReadBytes, bool hideWrittenBytes, bool hideExecutedBytes)
 		{
 			_memoryType = memoryType;
 			_showExec = showExec;
 			_showWrite = showWrite;
 			_showRead = showRead;
 			_framesToFade = framesToFade;
+			_hideUnusedBytes = hideUnusedBytes;
+			_hideReadBytes = hideReadBytes;
+			_hideWrittenBytes = hideWrittenBytes;
+			_hideExecutedBytes = hideExecutedBytes;
 		}
 
 		public void Prepare(long firstByteIndex, long lastByteIndex)
@@ -34,11 +45,19 @@ namespace Mesen.GUI.Debugger
 			if(_memoryType == DebugMemoryType.CpuMemory) {
 				_freezeState = InteropEmu.DebugGetFreezeState((UInt16)firstByteIndex, (UInt16)(lastByteIndex - firstByteIndex + 1));
 			}
+
+			_readCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Read);
+			_writeCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Write);
+			_execCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Exec);
+
 			InteropEmu.DebugGetState(ref _state);
 		}
 
 		public Color DarkerColor(Color input, double brightnessPercentage)
 		{
+			if(double.IsInfinity(brightnessPercentage)) {
+				brightnessPercentage = 1.0;
+			}
 			if(brightnessPercentage < 0.20) {
 				brightnessPercentage *= 5;
 			} else {
@@ -55,17 +74,30 @@ namespace Mesen.GUI.Debugger
 			double framesSinceWrite = (double)(_state.CPU.CycleCount - _writeStamps[index]) / CyclesPerFrame;
 			double framesSinceRead = (double)(_state.CPU.CycleCount - _readStamps[index]) / CyclesPerFrame;
 
-			if(_freezeState != null && _freezeState[index]) {
-				return Color.Magenta;
-			} else if(_showExec && _execStamps[index] != 0 && framesSinceExec < _framesToFade) {
-				return DarkerColor(Color.Green, (_framesToFade - framesSinceExec) / _framesToFade);
-			} else if(_showWrite && _writeStamps[index] != 0 && framesSinceWrite < _framesToFade) {
-				return DarkerColor(Color.Red, (_framesToFade - framesSinceWrite) / _framesToFade);
-			} else if(_showRead && _readStamps[index] != 0 && framesSinceRead < _framesToFade) {
-				return DarkerColor(Color.Blue, (_framesToFade - framesSinceRead) / _framesToFade);
+			bool isRead = _readCounts[index] > 0;
+			bool isWritten = _writeCounts[index] > 0;
+			bool isExecuted = _execCounts[index] > 0;
+			bool isUnused = !isRead && !isWritten && !isExecuted;
+
+			int alpha = 0;
+			if(isRead && _hideReadBytes || isWritten && _hideWrittenBytes || isExecuted && _hideExecutedBytes || isUnused && _hideUnusedBytes) {
+				alpha = 128;
+			}
+			if(isRead && !_hideReadBytes || isWritten && !_hideWrittenBytes || isExecuted && !_hideExecutedBytes || isUnused && !_hideUnusedBytes) {
+				alpha = 255;
 			}
 
-			return Color.Black;
+			if(_freezeState != null && _freezeState[index]) {
+				return Color.Magenta;
+			} else if(_showExec && _execStamps[index] != 0 && (framesSinceExec < _framesToFade || _framesToFade == 0)) {
+				return Color.FromArgb(alpha, DarkerColor(Color.Green, (_framesToFade - framesSinceExec) / _framesToFade));
+			} else if(_showWrite && _writeStamps[index] != 0 && (framesSinceWrite < _framesToFade || _framesToFade == 0)) {
+				return Color.FromArgb(alpha, DarkerColor(Color.Red, (_framesToFade - framesSinceWrite) / _framesToFade));
+			} else if(_showRead && _readStamps[index] != 0 && (framesSinceRead < _framesToFade || _framesToFade == 0)) {
+				return Color.FromArgb(alpha, DarkerColor(Color.Blue, (_framesToFade - framesSinceRead) / _framesToFade));
+			}
+
+			return Color.FromArgb(alpha, Color.Black);
 		}
 	}
 }
