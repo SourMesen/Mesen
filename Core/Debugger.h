@@ -146,7 +146,6 @@ public:
 	string GenerateOutput();
 	string* GetCode();
 	
-	uint8_t GetMemoryValue(uint32_t addr);
 	int32_t GetRelativeAddress(uint32_t addr, AddressType type);
 	int32_t GetAbsoluteAddress(uint32_t addr);	
 	void GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info);

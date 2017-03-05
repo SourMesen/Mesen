@@ -99,7 +99,7 @@ namespace Mesen.GUI.Debugger
 		{
 			lstStack.Items.Clear();
 			for(UInt32 i = (UInt32)0x100 + stackPointer; i <  0x200; i++) {
-				lstStack.Items.Add("$" + InteropEmu.DebugGetMemoryValue(i).ToString("X2"));
+				lstStack.Items.Add("$" + InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, i).ToString("X2"));
 			}
 		}
 
@@ -200,9 +200,9 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateVectorAddresses()
 		{
-			int nmiHandler = InteropEmu.DebugGetMemoryValue(0xFFFA) | (InteropEmu.DebugGetMemoryValue(0xFFFB) << 8);
-			int resetHandler = InteropEmu.DebugGetMemoryValue(0xFFFC) | (InteropEmu.DebugGetMemoryValue(0xFFFD) << 8);
-			int irqHandler = InteropEmu.DebugGetMemoryValue(0xFFFE) | (InteropEmu.DebugGetMemoryValue(0xFFFF) << 8);
+			int nmiHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFA) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFB) << 8);
+			int resetHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8);
+			int irqHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFE) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFF) << 8);
 
 			mnuGoToNmiHandler.Text = "NMI Handler ($" + nmiHandler.ToString("X4") + ")";
 			mnuGoToResetHandler.Text = "Reset Handler ($" + resetHandler.ToString("X4") + ")";
@@ -216,19 +216,19 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuGoToIrqHandler_Click(object sender, EventArgs e)
 		{
-			int address = (InteropEmu.DebugGetMemoryValue(0xFFFF) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFE);
+			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFF) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFE);
 			this.OnGotoLocation?.Invoke(address, null);
 		}
 
 		private void mnuGoToNmiHandler_Click(object sender, EventArgs e)
 		{
-			int address = (InteropEmu.DebugGetMemoryValue(0xFFFB) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFA);
+			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFB) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFA);
 			this.OnGotoLocation?.Invoke(address, null);
 		}
 
 		private void mnuGoToResetHandler_Click(object sender, EventArgs e)
 		{
-			int address = (InteropEmu.DebugGetMemoryValue(0xFFFD) << 8) | InteropEmu.DebugGetMemoryValue(0xFFFC);
+			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC);
 			this.OnGotoLocation?.Invoke(address, null);
 		}
 

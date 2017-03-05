@@ -4,6 +4,7 @@
 #include "ExpressionEvaluator.h"
 #include "Console.h"
 #include "Debugger.h"
+#include "MemoryDumper.h"
 #include "LabelManager.h"
 #include "../Utilities/HexUtilities.h"
 
@@ -342,8 +343,8 @@ int32_t ExpressionEvaluator::Evaluate(vector<int> *rpnList, DebugState &state, E
 				case EvalOperators::Minus: token = -right; break;
 				case EvalOperators::BinaryNot: token = ~right; break;
 				case EvalOperators::LogicalNot: token = !right; break;
-				case EvalOperators::Bracket: token = _debugger->GetMemoryValue(right); break;
-				case EvalOperators::Braces: token = _debugger->GetMemoryValue(right) | (_debugger->GetMemoryValue(right+1) << 8); break;
+				case EvalOperators::Bracket: token = _debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, right); break;
+				case EvalOperators::Braces: token = _debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, right) | (_debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, right+1) << 8); break;
 				default: throw std::runtime_error("Invalid operator");
 			}
 		}

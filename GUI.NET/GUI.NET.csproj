@@ -938,6 +938,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\pencil.png" />
+    <None Include="Resources\pipette.png" />
     <None Include="Resources\VideoRecorder.png" />
     <None Include="Resources\Donate.png" />
     <None Include="Resources\Dice.png" />

@@ -217,6 +217,7 @@ public:
 
 	uint8_t InternalReadVRAM(uint16_t addr);	
 	virtual uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type = MemoryOperationType::Read);
+	void InternalWriteVRAM(uint16_t addr, uint8_t value);
 	void WriteVRAM(uint16_t addr, uint8_t value);
 
 	static void InitializeRam(void* data, uint32_t length);
@@ -226,6 +227,7 @@ public:
 	uint8_t* GetPrgRom();
 	uint8_t* GetWorkRam();
 	
+	uint8_t GetMemoryValue(DebugMemoryType memoryType, uint32_t address);
 	void SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value);
 	uint32_t GetMemorySize(DebugMemoryType type);
 

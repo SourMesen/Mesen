@@ -333,8 +333,8 @@ namespace Mesen.GUI.Debugger
 
 		private void DisplayAddressTooltip(string word, UInt32 address)
 		{
-			byte byteValue = InteropEmu.DebugGetMemoryValue(address);
-			UInt16 wordValue = (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(address+1) << 8));
+			byte byteValue = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, address);
+			UInt16 wordValue = (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, address+1) << 8));
 
 			var values = new Dictionary<string, string>() {
 								{ "Address", "$" + address.ToString("X4") },
@@ -347,8 +347,8 @@ namespace Mesen.GUI.Debugger
 		private void DisplayLabelTooltip(string word, CodeLabel label)
 		{
 			Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
-			byte byteValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress) : (byte)0;
-			UInt16 wordValue = relativeAddress >= 0 ? (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue((UInt32)relativeAddress+1) << 8)) : (UInt16)0;
+			byte byteValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress) : (byte)0;
+			UInt16 wordValue = relativeAddress >= 0 ? (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress+1) << 8)) : (UInt16)0;
 			var values = new Dictionary<string, string>() {
 							{ "Label", label.Label },
 							{ "Address", "$" + InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType).ToString("X4") },

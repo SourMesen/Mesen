@@ -62,7 +62,6 @@ extern "C"
 	DllExport void __stdcall DebugGetCallstack(int32_t *callstackAbsolute, int32_t *callstackRelative) { GetDebugger()->GetCallstack(callstackAbsolute, callstackRelative); }
 	DllExport void __stdcall DebugGetFunctionEntryPoints(int32_t *entryPoints) { GetDebugger()->GetFunctionEntryPoints(entryPoints); }
 	
-	DllExport uint8_t __stdcall DebugGetMemoryValue(uint32_t addr) { return GetDebugger()->GetMemoryValue(addr); }
 	DllExport int32_t __stdcall DebugGetRelativeAddress(uint32_t addr, AddressType type) { return GetDebugger()->GetRelativeAddress(addr, type); }
 	DllExport int32_t __stdcall DebugGetAbsoluteAddress(uint32_t addr) { return GetDebugger()->GetAbsoluteAddress(addr); }
 	DllExport void __stdcall DebugGetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info) { return GetDebugger()->GetAbsoluteAddressAndType(relativeAddr, info); }
@@ -79,6 +78,7 @@ extern "C"
 	DllExport void __stdcall DebugStopTraceLogger() { GetDebugger()->GetTraceLogger()->StopLogging(); }
 	DllExport const char* DebugGetExecutionTrace(uint32_t lineCount) { return GetDebugger()->GetTraceLogger()->GetExecutionTrace(lineCount); }
 
+	DllExport uint8_t __stdcall DebugGetMemoryValue(DebugMemoryType type, uint32_t address) { return GetDebugger()->GetMemoryDumper()->GetMemoryValue(type, address); }
 	DllExport void __stdcall DebugSetMemoryValue(DebugMemoryType type, uint32_t address, uint8_t value) { return GetDebugger()->GetMemoryDumper()->SetMemoryValue(type, address, value); }
 	DllExport int32_t __stdcall DebugGetMemorySize(DebugMemoryType type) { return GetDebugger()->GetMemorySize(type); }
 	DllExport void __stdcall DebugGetMemoryAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t* counts, bool forUninitReads) { GetDebugger()->GetMemoryAccessCounter()->GetAccessCounts(memoryType, operationType, counts, forUninitReads); }

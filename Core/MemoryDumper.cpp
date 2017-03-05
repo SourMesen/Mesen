@@ -42,40 +42,6 @@ void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
 	}
 }
 
-void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value)
-{
-	switch(memoryType) {
-		case DebugMemoryType::CpuMemory: 
-			AddressTypeInfo info;
-			_debugger->GetAbsoluteAddressAndType(address, &info);
-			if(info.Address >= 0) {
-				switch(info.Type) {
-					case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value); break;
-					case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value); break;
-					case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value); break;
-					case AddressType::SaveRam: SetMemoryValue(DebugMemoryType::SaveRam, info.Address, value); break;
-				}
-			}
-			break;
-
-		case DebugMemoryType::InternalRam: _memoryManager->DebugWrite(address, value); break;
-		
-		case DebugMemoryType::PaletteMemory: _ppu->WritePaletteRAM(address, value); break;
-		case DebugMemoryType::SpriteMemory: _ppu->GetSpriteRam()[address] = value; break;
-		case DebugMemoryType::SecondarySpriteMemory: _ppu->GetSecondarySpriteRam()[address] = value; break;
-		
-		case DebugMemoryType::PpuMemory: _mapper->WriteVRAM(address, value); break;
-
-		case DebugMemoryType::ChrRam:
-		case DebugMemoryType::WorkRam:
-		case DebugMemoryType::SaveRam:
-		case DebugMemoryType::PrgRom:
-		case DebugMemoryType::ChrRom:
-			_mapper->SetMemoryValue(memoryType, address, value);
-			break;
-	}
-}
-
 uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 {
 	switch(type) {
@@ -118,6 +84,75 @@ uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 			}
 			return 0x800;
 	}
+	return 0;
+}
+
+void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value)
+{
+	switch(memoryType) {
+		case DebugMemoryType::CpuMemory:
+			AddressTypeInfo info;
+			_debugger->GetAbsoluteAddressAndType(address, &info);
+			if(info.Address >= 0) {
+				switch(info.Type) {
+					case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value); break;
+					case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value); break;
+					case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value); break;
+					case AddressType::SaveRam: SetMemoryValue(DebugMemoryType::SaveRam, info.Address, value); break;
+				}
+			}
+			break;
+
+		case DebugMemoryType::InternalRam: _memoryManager->DebugWrite(address, value); break;
+
+		case DebugMemoryType::PaletteMemory: _ppu->WritePaletteRAM(address, value); break;
+		case DebugMemoryType::SpriteMemory: _ppu->GetSpriteRam()[address] = value; break;
+		case DebugMemoryType::SecondarySpriteMemory: _ppu->GetSecondarySpriteRam()[address] = value; break;
+
+		case DebugMemoryType::PpuMemory: _mapper->InternalWriteVRAM(address, value); break;
+
+		case DebugMemoryType::ChrRam:
+		case DebugMemoryType::WorkRam:
+		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::PrgRom:
+		case DebugMemoryType::ChrRom:
+			_mapper->SetMemoryValue(memoryType, address, value);
+			break;
+	}
+}
+
+uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t address)
+{
+	switch(memoryType) {
+		case DebugMemoryType::CpuMemory:
+			AddressTypeInfo info;
+			_debugger->GetAbsoluteAddressAndType(address, &info);
+			if(info.Address >= 0) {
+				switch(info.Type) {
+					case AddressType::InternalRam: return GetMemoryValue(DebugMemoryType::InternalRam, info.Address);
+					case AddressType::PrgRom: return GetMemoryValue(DebugMemoryType::PrgRom, info.Address);
+					case AddressType::WorkRam: return GetMemoryValue(DebugMemoryType::WorkRam, info.Address);
+					case AddressType::SaveRam: return GetMemoryValue(DebugMemoryType::SaveRam, info.Address);
+				}
+			}
+			break;
+
+		case DebugMemoryType::InternalRam: return _memoryManager->DebugRead(address);
+
+		case DebugMemoryType::PaletteMemory: return _ppu->ReadPaletteRAM(address);
+		case DebugMemoryType::SpriteMemory: return _ppu->GetSpriteRam()[address];
+		case DebugMemoryType::SecondarySpriteMemory: return _ppu->GetSecondarySpriteRam()[address];
+
+		case DebugMemoryType::PpuMemory: return _mapper->InternalReadVRAM(address);
+
+		case DebugMemoryType::ChrRam:
+		case DebugMemoryType::WorkRam:
+		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::PrgRom:
+		case DebugMemoryType::ChrRom:
+			return _mapper->GetMemoryValue(memoryType, address);
+	}
+
 	return 0;
 }
 

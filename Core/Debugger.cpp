@@ -592,11 +592,6 @@ string* Debugger::GetCode()
 	return &_outputCache;
 }
 
-uint8_t Debugger::GetMemoryValue(uint32_t addr)
-{
-	return _memoryManager->DebugRead(addr);
-}
-
 int32_t Debugger::GetRelativeAddress(uint32_t addr, AddressType type)
 {
 	switch(type) {

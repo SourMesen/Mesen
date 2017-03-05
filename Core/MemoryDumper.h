@@ -26,6 +26,7 @@ public:
 	void GetSprites(uint32_t* frameBuffer);
 	void GetPalette(uint32_t* frameBuffer);
 
+	uint8_t GetMemoryValue(DebugMemoryType memoryType, uint32_t address);
 	void SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value);
 	void SetMemoryState(DebugMemoryType type, uint8_t *buffer);
 };

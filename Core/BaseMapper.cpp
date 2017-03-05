@@ -756,6 +756,13 @@ uint8_t BaseMapper::InternalReadVRAM(uint16_t addr)
 	return 0;
 }
 
+void BaseMapper::InternalWriteVRAM(uint16_t addr, uint8_t value)
+{
+	if(_chrPages[addr >> 8]) {
+		_chrPages[addr >> 8][addr & 0xFF] = value;
+	}
+}
+
 uint8_t BaseMapper::ReadVRAM(uint16_t addr, MemoryOperationType operationType)
 {
 	return InternalReadVRAM(addr);
@@ -765,8 +772,6 @@ void BaseMapper::WriteVRAM(uint16_t addr, uint8_t value)
 {
 	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
 		_chrPages[addr >> 8][addr & 0xFF] = value;
-	} else {
-		//assert(false);
 	}
 }
 
@@ -825,6 +830,19 @@ uint32_t BaseMapper::GetMemorySize(DebugMemoryType type)
 		case DebugMemoryType::PrgRom: return _prgSize;
 		case DebugMemoryType::WorkRam: return _workRamSize;
 	}
+}
+
+uint8_t BaseMapper::GetMemoryValue(DebugMemoryType memoryType, uint32_t address)
+{
+	switch(memoryType) {
+		case DebugMemoryType::ChrRom: return _chrRom[address];
+		case DebugMemoryType::ChrRam: return _chrRam[address];
+		case DebugMemoryType::SaveRam: return _saveRam[address];
+		case DebugMemoryType::PrgRom: return _prgRom[address];
+		case DebugMemoryType::WorkRam: return _workRam[address];
+	}
+
+	return 0;
 }
 
 void BaseMapper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value)

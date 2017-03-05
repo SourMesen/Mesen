@@ -19,6 +19,19 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _chrSelection = 0;
 		private CdlHighlightType _highlightType = CdlHighlightType.None;
 		private bool _useLargeSprites = false;
+		private Bitmap _tilePreview;
+		private Bitmap[] _chrBanks = new Bitmap[2];
+
+		private bool _bottomBank = false;
+		private int _tileIndex = 0;
+
+		private bool _hoverBottomBank = false;
+		private int _hoverTileIndex = -1;
+
+		private int _selectedColor = 1;
+		private int _hoverColor = -1;
+		private int _tilePosX = -1;
+		private int _tilePosY = -1;
 
 		public ctrlChrViewer()
 		{
@@ -28,6 +41,13 @@ namespace Mesen.GUI.Debugger.Controls
 			if(!designMode) {
 				this.cboPalette.SelectedIndex = 0;
 				this.cboHighlightType.SelectedIndex = 0;
+
+				this.picTile.Cursor = new Cursor(Properties.Resources.Pencil.GetHicon());
+				this.picPaletteSelection.Cursor = new Cursor(Properties.Resources.Pipette.GetHicon());
+
+				this.toolTip.SetToolTip(this.picTileTooltip, "Click on the tile to draw with the selected color." + Environment.NewLine + "Right button draws the background color.");
+				this.toolTip.SetToolTip(this.picColorTooltip, "Click on a color (or press 1-4) to select it.");
+				this.toolTip.SetToolTip(this.picPaletteTooltip, "Press Shift-1 to Shift-8 to select the palette.");
 			}
 		}
 
@@ -59,11 +79,40 @@ namespace Mesen.GUI.Debugger.Controls
 						g.ScaleTransform(2, 2);
 						g.DrawImageUnscaled(source, 0, 0);
 					}
-					chrBanks[i].Image = target;
+
+					_chrBanks[i] = target;
+
+					Bitmap chrBankImage = new Bitmap(256, 256);
+					using(Graphics g = Graphics.FromImage(chrBankImage)) {
+						g.DrawImage(_chrBanks[i], 0, 0);
+
+						if((_bottomBank && i == 1) || (!_bottomBank && i == 0)) {
+							int tileX = _tileIndex % 16;
+							int tileY = _tileIndex / 16;
+							using(Brush brush = new SolidBrush(Color.FromArgb(192, Color.White))) {
+								g.FillRectangle(brush, tileX * 16, tileY * 16, 16, 16);
+								g.DrawRectangle(Pens.Black, tileX * 16, tileY * 16, 16, 16);
+							}
+						}
+						if(_hoverTileIndex >= 0) {
+							if((_hoverBottomBank && i == 1) || (!_hoverBottomBank && i == 0)) {
+								int tileX = _hoverTileIndex % 16;
+								int tileY = _hoverTileIndex / 16;
+								using(Brush brush = new SolidBrush(Color.FromArgb(192, Color.LightBlue))) {
+									g.FillRectangle(brush, tileX * 16, tileY * 16, 16, 16);
+									g.DrawRectangle(Pens.Black, tileX * 16 - 1, tileY * 16 - 1, 18, 18);
+								}
+							}
+						}
+					}
+					chrBanks[i].Image = chrBankImage;
 				} finally {
 					handle.Free();
 				}
 			}
+
+			this.RefreshPreview(_tileIndex, _bottomBank);
+			this.RefreshPalettePicker();
 		}
 
 		private UInt32 _chrSize;
@@ -103,57 +152,253 @@ namespace Mesen.GUI.Debugger.Controls
 		private void cboPalette_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._selectedPalette = this.cboPalette.SelectedIndex;
+			this.GetData();
 			this.RefreshViewer();
 		}
 
 		private void chkLargeSprites_Click(object sender, EventArgs e)
 		{
 			this._useLargeSprites = this.chkLargeSprites.Checked;
+			this.GetData();
 			this.RefreshViewer();
 		}
 
 		private void cboHighlightType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._highlightType = (CdlHighlightType)this.cboHighlightType.SelectedIndex;
+			this.GetData();
 			this.RefreshViewer();
 		}
 
 		private void cboChrSelection_SelectionChangeCommitted(object sender, EventArgs e)
 		{
 			this._chrSelection = this.cboChrSelection.SelectedIndex;
+			this.GetData();
 			this.RefreshViewer();
 		}
 
 		private void picChrBank_MouseMove(object sender, MouseEventArgs e)
 		{
-			List<PictureBox> chrBanks = new List<PictureBox>() { this.picChrBank1, this.picChrBank2 };
-			int bankIndex = chrBanks.IndexOf((PictureBox)sender);
-			int baseAddress = bankIndex == 0 ? 0x0000 : 0x1000;
+			int tileX = Math.Min(e.X / 16, 15);
+			int tileY = Math.Min(e.Y / 16, 15);
+
+			_hoverBottomBank = sender == this.picChrBank2;
+			_hoverTileIndex = tileY * 16 + tileX;
+			RefreshViewer();
+			RefreshPreview(_hoverTileIndex, _hoverBottomBank);
+		}
+
+		private void picChrBank_MouseDown(object sender, MouseEventArgs e)
+		{
+			int tileX = Math.Min(e.X / 16, 15);
+			int tileY = Math.Min(e.Y / 16, 15);
+
+			_tileIndex = tileY * 16 + tileX;
+			_bottomBank = sender == this.picChrBank2;
+		}
+
+		private void picChrBank_MouseLeave(object sender, EventArgs e)
+		{
+			_hoverTileIndex = -1;
+			RefreshPreview(_tileIndex, _bottomBank);
+		}
+
+		private void RefreshPreview(int tileIndex, bool bottomBank)
+		{
+			int baseAddress = bottomBank ? 0x1000 : 0x0000;
 			if(this.cboChrSelection.SelectedIndex > 1) {
 				baseAddress += (this.cboChrSelection.SelectedIndex - 1) * 0x2000;
 			}
 
-			int tileX = Math.Min(e.X / 16, 15);
-			int tileY = Math.Min(e.Y / 16, 15);
+			int tileX = tileIndex % 16;
+			int tileY = tileIndex / 16;
 
-			int tileIndex = tileY * 16 + tileX;
+			int realIndex = GetLargeSpriteIndex(tileIndex);
+			this.txtTileIndex.Text = realIndex.ToString("X2");
+			this.txtTileAddress.Text = (baseAddress + realIndex * 16).ToString("X4");
 
-			this.txtTileIndex.Text = tileIndex.ToString("X2");
-			this.txtTileAddress.Text = (baseAddress + tileIndex * 16).ToString("X4");
-
-			Bitmap tile = new Bitmap(64, 64);
-			Bitmap tilePreview = new Bitmap(16, 16);
-			using(Graphics g = Graphics.FromImage(tilePreview)) {
-				g.DrawImage(((PictureBox)sender).Image, new Rectangle(0, 0, 16, 16), new Rectangle(tileX*16, tileY*16, 16, 16), GraphicsUnit.Pixel);
+			_tilePreview = new Bitmap(128, 128);
+			Bitmap source = new Bitmap(16, 16);
+			using(Graphics g = Graphics.FromImage(source)) {
+				g.DrawImage(bottomBank ? this._chrBanks[1]: this._chrBanks[0], new Rectangle(0, 0, 16, 16), new Rectangle(tileX*16, tileY*16, 16, 16), GraphicsUnit.Pixel);
 			}
-			using(Graphics g = Graphics.FromImage(tile)) {
+			using(Graphics g = Graphics.FromImage(_tilePreview)) {
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.ScaleTransform(4, 4);
-				g.DrawImageUnscaled(tilePreview, 0, 0);
+				g.ScaleTransform(8, 8);
+				g.DrawImageUnscaled(source, 0, 0);
+			}
+
+			Bitmap tile = new Bitmap(128, 128);
+			using(Graphics g = Graphics.FromImage(tile)) {
+				g.DrawImageUnscaled(_tilePreview, 0, 0);
+				using(Brush brush = new SolidBrush(Color.FromArgb(128, Color.White))) {
+					g.FillRectangle(brush, _tilePosX*16, _tilePosY*16, 16, 16);
+				}
 			}
 			this.picTile.Image = tile;
+		}
+
+		private void picTile_MouseMove(object sender, MouseEventArgs e)
+		{
+			_tilePosX = Math.Max(0, Math.Min(e.X / 16, 7));
+			_tilePosY = Math.Max(0, Math.Min(e.Y / 16, 7));
+
+			RefreshPreview(_tileIndex, _bottomBank);
+
+			if(_drawing) {
+				DrawPixel(e.Button == MouseButtons.Left, _tilePosX, _tilePosY);
+			}
+		}
+		
+		private void picTile_MouseLeave(object sender, EventArgs e)
+		{
+			_tilePosX = -1;
+			_tilePosY = -1;
+		}
+
+		private int GetLargeSpriteIndex(int tileIndex)
+		{
+			if(chkLargeSprites.Checked) {
+				int tileY = tileIndex / 16;
+				int tileX = tileIndex % 16;
+
+				int newX = (tileX * 2) % 16 + ((tileY & 0x01) == 0x01 ? 1 : 0);
+				int newY = (tileY & 0xFE) + ((tileX >= 8) ? 1 : 0);
+				return newY * 16 + newX;
+			} else {
+				return tileIndex;
+			}
+		}
+
+		private void DrawPixel(bool leftButton, int x, int y)
+		{
+			int baseAddress = _bottomBank ? 0x1000 : 0x0000;
+			bool ppuMemory = this.cboChrSelection.SelectedIndex == 0;
+			if(this.cboChrSelection.SelectedIndex > 1) {
+				baseAddress += (this.cboChrSelection.SelectedIndex - 1) * 0x2000;
+			}
+
+			int tileIndex = GetLargeSpriteIndex(_tileIndex);
+
+			byte orgByte1 = InteropEmu.DebugGetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + y));
+			byte orgByte2 = InteropEmu.DebugGetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + y + 8));
+
+			byte byte1 = (byte)(orgByte1 & ~(0x80 >> x));
+			byte byte2 = (byte)(orgByte2 & ~(0x80 >> x));
+
+			byte value = 0;
+			if(leftButton) {
+				value = (byte)_selectedColor;
+				byte1 |= (byte)(((value << 7) & 0x80) >> x);
+				byte2 |= (byte)(((value << 6) & 0x80) >> x);
+			}
+
+			if(byte1 != orgByte1 || byte2 != orgByte2) {
+				InteropEmu.DebugSetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + y), byte1);
+				InteropEmu.DebugSetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + y + 8), byte2);
+
+				GetData();
+				RefreshViewer();
+			}
+		}
+
+		private bool _drawing = false;
+		private void picTile_MouseDown(object sender, MouseEventArgs e)
+		{
+			_drawing = true;
+
+			int x = Math.Max(0, Math.Min(e.X / 16, 7));
+			int y = Math.Max(0, Math.Min(e.Y / 16, 7));
+			DrawPixel(e.Button == MouseButtons.Left, x, y);
+		}
+
+		private void picTile_MouseUp(object sender, MouseEventArgs e)
+		{
+			_drawing = false;
+		}
+
+		private void RefreshPalettePicker()
+		{
+			byte[] palette = InteropEmu.DebugGetPalette();
+			byte[] currentPalette = new byte[16];
+			Array.Copy(palette, cboPalette.SelectedIndex * 16, currentPalette, 0, 16);
+
+			GCHandle handle = GCHandle.Alloc(currentPalette, GCHandleType.Pinned);
+			try {
+				Bitmap source = new Bitmap(4, 1, 4*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+				Bitmap target = new Bitmap(128, 32);
+
+				using(Graphics g = Graphics.FromImage(target)) {
+					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+					g.ScaleTransform(32, 32);
+					g.DrawImageUnscaled(source, 0, 0);
+
+					g.ResetTransform();
+					DrawString("1", 5, 2, g);
+					DrawString("2", 37, 2, g);
+					DrawString("3", 69, 2, g);
+					DrawString("4", 101, 2, g);
+
+					using(Pen pen = new Pen(Color.LightBlue, 3)) {
+						g.DrawRectangle(pen, _selectedColor * 32 + 2, 2, 29, 29);
+					}
+					if(_hoverColor >= 0) {
+						using(Pen pen = new Pen(Color.DarkGray, 3)) {
+							g.DrawRectangle(pen, _hoverColor * 32 + 2, 2, 29, 29);
+						}
+					}
+				}
+				this.picPaletteSelection.Image = target;
+			} finally {
+				handle.Free();
+			}
+		}
+
+		private void DrawString(string number, int x, int y, Graphics g)
+		{
+			using(Font font = new Font(BaseControl.MonospaceFontFamily, 10)) {
+				for(int i = -1; i < 2; i++) {
+					for(int j = -1; j < 2; j++) {
+						if(i != 0 || j != 0) {
+							g.DrawString(number, font, Brushes.Black, j+x, i+y);
+						}
+					}
+				}
+				g.DrawString(number, font, Brushes.White, x, y);
+			}
+		}
+
+		private void picPaletteSelection_MouseMove(object sender, MouseEventArgs e)
+		{
+			_hoverColor = e.X / 32;
+			RefreshPalettePicker();
+		}
+
+		private void picPaletteSelection_MouseDown(object sender, MouseEventArgs e)
+		{
+			_selectedColor = e.X / 32;
+			RefreshPalettePicker();
+		}
+
+		private void picPaletteSelection_MouseLeave(object sender, EventArgs e)
+		{
+			_hoverColor = -1;
+			RefreshPalettePicker();
+		}
+
+		public void SelectPalette(int palette)
+		{
+			cboPalette.SelectedIndex = palette;
+		}
+
+		public void SelectColor(int color)
+		{
+			_selectedColor = color;
+			RefreshPalettePicker();
 		}
 	}
 }
