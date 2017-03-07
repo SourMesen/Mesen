@@ -6,6 +6,7 @@
 #include "../Core/MemoryDumper.h"
 #include "../Core/MemoryAccessCounter.h"
 #include "../Core/Profiler.h"
+#include "../Core/Assembler.h"
 
 shared_ptr<Debugger> GetDebugger()
 {
@@ -45,8 +46,7 @@ extern "C"
 	DllExport void __stdcall DebugStepOver() { GetDebugger()->StepOver(); }
 	DllExport void __stdcall DebugStepOut() { GetDebugger()->StepOut(); }
 	DllExport void __stdcall DebugPpuStep(uint32_t count) { GetDebugger()->PpuStep(count); }
-	DllExport bool __stdcall DebugIsCodeChanged() { return GetDebugger()->IsCodeChanged(); }
-	DllExport const char* __stdcall DebugGetCode() { return GetDebugger()->GetCode()->c_str(); }
+	DllExport const char* __stdcall DebugGetCode() { return GetDebugger()->GetCode(); }
 
 	DllExport void __stdcall DebugSetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle) { return GetDebugger()->SetPpuViewerScanlineCycle(scanline, cycle); }
 
@@ -93,6 +93,8 @@ extern "C"
 	DllExport void __stdcall DebugGetFreezeState(uint16_t startAddress, uint16_t length, bool* freezeState) { GetDebugger()->GetFreezeState(startAddress, length, freezeState); }
 
 	DllExport uint32_t __stdcall DebugGetPpuScroll() { return GetDebugger()->GetPpuScroll(); }
+
+	DllExport uint32_t __stdcall DebugAssembleCode(char* code, uint16_t startAddress, int16_t* assembledOutput) { return GetDebugger()->GetAssembler()->AssembleCode(code, startAddress, assembledOutput); }
 
 	DllExport void __stdcall DebugSaveRomToDisk(char* filename) { GetDebugger()->SaveRomToDisk(filename); }
 };

@@ -19,6 +19,7 @@ class CPU;
 class PPU;
 class MemoryManager;
 class Console;
+class Assembler;
 class Disassembler;
 class LabelManager;
 class MemoryDumper;
@@ -33,6 +34,7 @@ private:
 	const static int BreakpointTypeCount = 6;
 
 	unique_ptr<Disassembler> _disassembler;
+	shared_ptr<Assembler> _assembler;
 	shared_ptr<MemoryDumper> _memoryDumper;
 	shared_ptr<CodeDataLogger> _codeDataLogger;
 	shared_ptr<MemoryAccessCounter> _memoryAccessCounter;
@@ -77,7 +79,7 @@ private:
 	uint32_t _flags;
 
 	string _romName;
-	string _outputCache;
+	string _disassemblerOutput;
 	atomic<int32_t> _stepCount;
 	atomic<int32_t> _ppuStepCount;
 	atomic<int32_t> _stepCycleCount;
@@ -142,9 +144,8 @@ public:
 
 	bool IsExecutionStopped();
 
-	bool IsCodeChanged();
-	string GenerateOutput();
-	string* GetCode();
+	void GenerateCodeOutput();
+	const char* GetCode();
 	
 	int32_t GetRelativeAddress(uint32_t addr, AddressType type);
 	int32_t GetAbsoluteAddress(uint32_t addr);	
@@ -154,6 +155,7 @@ public:
 	void StopTraceLogger();
 
 	shared_ptr<Profiler> GetProfiler();
+	shared_ptr<Assembler> GetAssembler();
 	shared_ptr<TraceLogger> GetTraceLogger();
 	shared_ptr<MemoryDumper> GetMemoryDumper();
 	shared_ptr<MemoryAccessCounter> GetMemoryAccessCounter();

@@ -375,6 +375,12 @@
       <DependentUpon>ctrlWatch.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\DbgImporter.cs" />
+    <Compile Include="Debugger\frmAssembler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmAssembler.Designer.cs">
+      <DependentUpon>frmAssembler.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmCodeTooltip.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -722,6 +728,9 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlWatch.resx">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmAssembler.resx">
+      <DependentUpon>frmAssembler.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmCodeTooltip.resx">
       <DependentUpon>frmCodeTooltip.cs</DependentUpon>
     </EmbeddedResource>
@@ -938,6 +947,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\Edit.png" />
     <None Include="Resources\pencil.png" />
     <None Include="Resources\pipette.png" />
     <None Include="Resources\VideoRecorder.png" />

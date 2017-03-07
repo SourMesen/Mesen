@@ -182,7 +182,6 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugStepOver();
 		[DllImport(DLLPath)] public static extern void DebugRun();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsExecutionStopped();
-		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsCodeChanged();
 		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeAddress(UInt32 absoluteAddr, AddressType type);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetAbsoluteAddress(UInt32 relativeAddr);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetMemorySize(DebugMemoryType type);
@@ -213,6 +212,26 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper();
 		public static string DebugGetCode() { return PtrToStringUtf8(InteropEmu.DebugGetCodeWrapper()); }
+
+		[DllImport(DLLPath, EntryPoint="DebugAssembleCode")] private static extern UInt32 DebugAssembleCodeWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string code, UInt16 startAddress, IntPtr assembledCodeBuffer);
+		public static Int16[] DebugAssembleCode(string code, UInt16 startAddress)
+		{
+			code = code.Replace(Environment.NewLine, "\n");
+			int lineCount = code.Count(c => c == '\n');
+
+			Int16[] assembledCode = new Int16[(lineCount + 1) * 4];
+			UInt32 size = 0;
+
+			GCHandle hAssembledCode = GCHandle.Alloc(assembledCode, GCHandleType.Pinned);
+			try {
+				size = InteropEmu.DebugAssembleCodeWrapper(code, startAddress, hAssembledCode.AddrOfPinnedObject());
+			} finally {
+				hAssembledCode.Free();
+			}
+
+			Array.Resize(ref assembledCode, (int)size);
+			return assembledCode;
+		}
 
 		[DllImport(DLLPath, EntryPoint="DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
 		public static byte[] DebugGetMemoryState(DebugMemoryType type)

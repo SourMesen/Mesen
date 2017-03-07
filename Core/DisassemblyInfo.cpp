@@ -210,7 +210,7 @@ int32_t DisassemblyInfo::GetEffectiveAddress(State& cpuState, MemoryManager* mem
 		case AddrMode::IndYW: {
 			uint8_t zeroAddr = *(_opPointer + 1);
 			uint16_t addr = memoryManager->DebugRead(zeroAddr) | memoryManager->DebugRead((uint8_t)(zeroAddr + 1)) << 8;
-			return addr + cpuState.Y;
+			return (uint16_t)(addr + cpuState.Y);
 		}
 
 		case AddrMode::Ind: {
@@ -220,12 +220,12 @@ int32_t DisassemblyInfo::GetEffectiveAddress(State& cpuState, MemoryManager* mem
 
 		case AddrMode::AbsX:
 		case AddrMode::AbsXW: {
-			return (*(_opPointer + 1) | (*(_opPointer + 2) << 8)) + cpuState.X;
+			return (uint16_t)((*(_opPointer + 1) | (*(_opPointer + 2) << 8)) + cpuState.X) & 0xFFFF;
 		}
 
 		case AddrMode::AbsY:
 		case AddrMode::AbsYW: {
-			return (*(_opPointer + 1) | (*(_opPointer + 2) << 8)) + cpuState.Y;
+			return (uint16_t)((*(_opPointer + 1) | (*(_opPointer + 2) << 8)) + cpuState.Y) & 0xFFFF;
 		}
 	}
 

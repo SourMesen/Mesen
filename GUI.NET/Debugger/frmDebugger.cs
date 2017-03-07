@@ -295,10 +295,8 @@ namespace Mesen.GUI.Debugger
 			UpdateDebuggerFlags();
 			UpdateVectorAddresses();
 
-			if(InteropEmu.DebugIsCodeChanged()) {
-				_previousCode = InteropEmu.DebugGetCode();
-				ctrlDebuggerCode.Code = _previousCode;
-			}
+			_previousCode = InteropEmu.DebugGetCode();
+			ctrlDebuggerCode.Code = _previousCode;
 
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
@@ -358,6 +356,9 @@ namespace Mesen.GUI.Debugger
 			frm.FormClosed += (obj, args) => {
 				this._childForms.Remove((Form)obj);
 			};
+			frm.StartPosition = FormStartPosition.Manual;
+			frm.Left = this.Left + this.Width / 2 - frm.Width / 2;
+			frm.Top = this.Top + this.Height / 2 - frm.Height / 2;
 			frm.Show();
 		}
 
@@ -435,6 +436,17 @@ namespace Mesen.GUI.Debugger
 			UInt16 addr = (UInt16)args.Address;
 			InteropEmu.DebugSetNextStatement(addr);
 			this.UpdateDebugger();
+		}
+
+		private void ctrlDebuggerCode_OnEditCode(AssemblerEventArgs args)
+		{
+			frmAssembler assembler = new frmAssembler(args.Code, args.StartAddress, args.BlockLength);
+			assembler.FormClosed += (s, e) => {
+				if(assembler.DialogResult == DialogResult.OK) {
+					this.UpdateDebugger(false);
+				}
+			};
+			OpenChildForm(assembler);
 		}
 
 		private void mnuFind_Click(object sender, EventArgs e)
@@ -852,6 +864,11 @@ namespace Mesen.GUI.Debugger
 					InteropEmu.DebugSaveRomToDisk(sfd.FileName);
 				}
 			}
+		}
+
+		private void mnuAssembler_Click(object sender, EventArgs e)
+		{
+			OpenChildForm(new frmAssembler());
 		}
 	}
 }

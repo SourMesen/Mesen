@@ -29,19 +29,21 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuEditSubroutine = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuShowLineNotes = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPrgAddressReplace = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPrgAddressBelow = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuHidePrgAddresses = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCodeNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowByteCodeOnLeft = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowByteCodeBelow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHideByteCode = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowLineNotes = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPrgAddressReplace = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPrgAddressBelow = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuHidePrgAddresses = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,6 +82,8 @@
 			// contextMenuCode
 			// 
 			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuEditSubroutine,
+            this.toolStripMenuItem7,
             this.mnuShowNextStatement,
             this.mnuSetNextStatement,
             this.toolStripMenuItem1,
@@ -96,8 +100,23 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 270);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 320);
+			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
+			// 
+			// mnuEditSubroutine
+			// 
+			this.mnuEditSubroutine.Image = global::Mesen.GUI.Properties.Resources.Edit;
+			this.mnuEditSubroutine.Name = "mnuEditSubroutine";
+			this.mnuEditSubroutine.ShortcutKeys = System.Windows.Forms.Keys.F4;
+			this.mnuEditSubroutine.Size = new System.Drawing.Size(258, 22);
+			this.mnuEditSubroutine.Text = "Edit subroutine";
+			this.mnuEditSubroutine.Click += new System.EventHandler(this.mnuEditSubroutine_Click);
+			// 
+			// toolStripMenuItem7
+			// 
+			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(255, 6);
 			// 
 			// mnuShowNextStatement
 			// 
@@ -121,6 +140,43 @@
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(255, 6);
+			// 
+			// mnuShowCodeNotes
+			// 
+			this.mnuShowCodeNotes.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuShowByteCodeOnLeft,
+            this.mnuShowByteCodeBelow,
+            this.toolStripMenuItem5,
+            this.mnuHideByteCode});
+			this.mnuShowCodeNotes.Name = "mnuShowCodeNotes";
+			this.mnuShowCodeNotes.Size = new System.Drawing.Size(258, 22);
+			this.mnuShowCodeNotes.Text = "Byte Code Display";
+			// 
+			// mnuShowByteCodeOnLeft
+			// 
+			this.mnuShowByteCodeOnLeft.Name = "mnuShowByteCodeOnLeft";
+			this.mnuShowByteCodeOnLeft.Size = new System.Drawing.Size(130, 22);
+			this.mnuShowByteCodeOnLeft.Text = "On the left";
+			this.mnuShowByteCodeOnLeft.Click += new System.EventHandler(this.mnuShowByteCodeOnLeft_Click);
+			// 
+			// mnuShowByteCodeBelow
+			// 
+			this.mnuShowByteCodeBelow.Name = "mnuShowByteCodeBelow";
+			this.mnuShowByteCodeBelow.Size = new System.Drawing.Size(130, 22);
+			this.mnuShowByteCodeBelow.Text = "Below";
+			this.mnuShowByteCodeBelow.Click += new System.EventHandler(this.mnuShowByteCodeBelow_Click);
+			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(127, 6);
+			// 
+			// mnuHideByteCode
+			// 
+			this.mnuHideByteCode.Name = "mnuHideByteCode";
+			this.mnuHideByteCode.Size = new System.Drawing.Size(130, 22);
+			this.mnuHideByteCode.Text = "Hidden";
+			this.mnuHideByteCode.Click += new System.EventHandler(this.mnuHideByteCode_Click);
 			// 
 			// mnuShowLineNotes
 			// 
@@ -159,43 +215,6 @@
 			this.mnuHidePrgAddresses.Size = new System.Drawing.Size(184, 22);
 			this.mnuHidePrgAddresses.Text = "Hidden";
 			this.mnuHidePrgAddresses.Click += new System.EventHandler(this.mnuHidePrgAddresses_Click);
-			// 
-			// mnuShowCodeNotes
-			// 
-			this.mnuShowCodeNotes.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuShowByteCodeOnLeft,
-            this.mnuShowByteCodeBelow,
-            this.toolStripMenuItem5,
-            this.mnuHideByteCode});
-			this.mnuShowCodeNotes.Name = "mnuShowCodeNotes";
-			this.mnuShowCodeNotes.Size = new System.Drawing.Size(258, 22);
-			this.mnuShowCodeNotes.Text = "Byte Code Display";
-			// 
-			// mnuShowByteCodeOnLeft
-			// 
-			this.mnuShowByteCodeOnLeft.Name = "mnuShowByteCodeOnLeft";
-			this.mnuShowByteCodeOnLeft.Size = new System.Drawing.Size(152, 22);
-			this.mnuShowByteCodeOnLeft.Text = "On the left";
-			this.mnuShowByteCodeOnLeft.Click += new System.EventHandler(this.mnuShowByteCodeOnLeft_Click);
-			// 
-			// mnuShowByteCodeBelow
-			// 
-			this.mnuShowByteCodeBelow.Name = "mnuShowByteCodeBelow";
-			this.mnuShowByteCodeBelow.Size = new System.Drawing.Size(152, 22);
-			this.mnuShowByteCodeBelow.Text = "Below";
-			this.mnuShowByteCodeBelow.Click += new System.EventHandler(this.mnuShowByteCodeBelow_Click);
-			// 
-			// toolStripMenuItem5
-			// 
-			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(149, 6);
-			// 
-			// mnuHideByteCode
-			// 
-			this.mnuHideByteCode.Name = "mnuHideByteCode";
-			this.mnuHideByteCode.Size = new System.Drawing.Size(152, 22);
-			this.mnuHideByteCode.Text = "Hidden";
-			this.mnuHideByteCode.Click += new System.EventHandler(this.mnuHideByteCode_Click);
 			// 
 			// toolStripMenuItem2
 			// 
@@ -488,5 +507,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuHidePrgAddresses;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditSubroutine;
 	}
 }

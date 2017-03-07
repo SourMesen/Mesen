@@ -17,6 +17,8 @@ namespace Mesen.GUI.Debugger
 	{
 		public delegate void AddressEventHandler(AddressEventArgs args);
 		public delegate void WatchEventHandler(WatchEventArgs args);
+		public delegate void AssemblerEventHandler(AssemblerEventArgs args);
+		public event AssemblerEventHandler OnEditCode;
 		public event AddressEventHandler OnSetNextStatement;
 		private DebugViewInfo _config;
 		private HashSet<int> _unexecutedAddresses = new HashSet<int>();
@@ -164,6 +166,46 @@ namespace Mesen.GUI.Debugger
 			this.ctrlCodeViewer.EndUpdate();
 		}
 
+		Dictionary<int, Tuple<string, string>> _codeContent = new Dictionary<int, Tuple<string, string>>();
+		Dictionary<int, int> _codeByteContentLength = new Dictionary<int, int>();
+		public List<string> GetCode(out int byteLength, int startAddress, int endAddress = -1)
+		{
+			List<string> result = new List<string>();
+			byteLength = 0;
+
+			//TODO: Handle multi-line comments
+			//TODO: Find start of function
+			//TODO: Display labels in code window
+			//TODO: Status bar to show cursor's current line
+			//TODO: Bind "Start Address" field
+			//TODO: Byte code cache doesn't update
+			//TODO: Invalidate disassembly info cache / CDL file (not needed?)
+			//TODO: Support .data syntax in assembler
+			for(int i = startAddress; (i < endAddress || endAddress == -1) && endAddress < 65536; ) {
+				Tuple<string, string> codeRow;
+				if(_codeContent.TryGetValue(i, out codeRow)) {
+					string code = codeRow.Item1;
+					string comment = codeRow.Item2;
+					if(code.StartsWith("--") || code.StartsWith("__") || code.StartsWith("[[")) {
+						break;
+					}
+
+					result.Add(code + (comment ?? ""));
+					int length = _codeByteContentLength[i];
+					byteLength += length;
+					i += length;
+
+					if(endAddress == -1 && (string.Compare(code, "RTI", true) == 0 || string.Compare(code, "RTS", true) == 0)) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+
+			return result;
+		}
+
 		public bool UpdateCode(bool forceUpdate = false)
 		{
 			if(_codeChanged || forceUpdate) {
@@ -171,6 +213,8 @@ namespace Mesen.GUI.Debugger
 				List<string> lineNumberNotes = new List<string>();
 				List<string> codeNotes = new List<string>();
 				List<string> codeLines = new List<string>();
+				_codeContent = new Dictionary<int, Tuple<string, string>>();
+				_codeByteContentLength = new Dictionary<int, int>();
 				_unexecutedAddresses = new HashSet<int>();
 				_speculativeCodeAddreses = new HashSet<int>();
 				
@@ -193,6 +237,10 @@ namespace Mesen.GUI.Debugger
 						lineNumberNotes.Add(string.IsNullOrWhiteSpace(lineParts[2]) ? "" : lineParts[2].TrimStart('0').PadLeft(4, '0'));
 						codeNotes.Add(lineParts[3]);
 						codeLines.Add(lineParts[4]);
+						_codeByteContentLength[relativeAddress] = lineParts[3].Count(c => c == ' ') + 1;
+
+						string[] codeRow = lineParts[4].Split('\x2');
+						_codeContent[relativeAddress] = new Tuple<string, string>(codeRow[0].Trim(), codeRow.Length > 2 ? " " + codeRow[2].Replace(Environment.NewLine, " | ") : null);
 					}
 
 					previousIndex = index;
@@ -516,6 +564,12 @@ namespace Mesen.GUI.Debugger
 		{
 			mnuShowNextStatement.Enabled = _currentActiveAddress.HasValue;
 			mnuSetNextStatement.Enabled = _currentActiveAddress.HasValue;
+			mnuEditSubroutine.Enabled = InteropEmu.DebugIsExecutionStopped();
+		}
+		
+		private void contextMenuCode_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+		{
+			mnuEditSubroutine.Enabled = true;
 		}
 
 		private void mnuShowNextStatement_Click(object sender, EventArgs e)
@@ -678,6 +732,16 @@ namespace Mesen.GUI.Debugger
 			_config.PrgAddressPosition = PrgAddressPosition.Hidden;
 			this.UpdateConfig();
 		}
+
+		private void mnuEditSubroutine_Click(object sender, EventArgs e)
+		{
+			int currentLine = this.GetCurrentLine();
+			if(currentLine != -1 && InteropEmu.DebugIsExecutionStopped()) {
+				int byteLength;
+				List<string> code = this.GetCode(out byteLength, currentLine);
+				this.OnEditCode?.Invoke(new AssemblerEventArgs() { Code = string.Join(Environment.NewLine, code), StartAddress = (UInt16)currentLine, BlockLength = (UInt16)byteLength });
+			}
+		}
 	}
 
 	public class WatchEventArgs : EventArgs
@@ -688,5 +752,12 @@ namespace Mesen.GUI.Debugger
 	public class AddressEventArgs : EventArgs
 	{
 		public UInt32 Address { get; set; }
+	}
+
+	public class AssemblerEventArgs : EventArgs
+	{
+		public string Code { get; set; }
+		public UInt16 StartAddress { get; set; }
+		public UInt16 BlockLength { get; set; }
 	}
 }

@@ -14,6 +14,7 @@
 #include "MemoryDumper.h"
 #include "MemoryAccessCounter.h"
 #include "Profiler.h"
+#include "Assembler.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
@@ -28,6 +29,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_mapper = mapper;
 
 	_labelManager.reset(new LabelManager(_mapper));
+	_assembler.reset(new Assembler(_labelManager));
 	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPrgRom(), mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetWorkRam(), mapper->GetMemorySize(DebugMemoryType::WorkRam), this));
 	_codeDataLogger.reset(new CodeDataLogger(mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetMemorySize(DebugMemoryType::ChrRom)));
 	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger, this));
@@ -538,28 +540,17 @@ void Debugger::Run()
 	_ppuStepCount = -1;
 }
 
-bool Debugger::IsCodeChanged()
-{
-	string output = GenerateOutput();
-	if(_outputCache.compare(output) == 0) {
-		return false;
-	} else {
-		_outputCache = output;
-		return true;
-	}
-}
-
-string Debugger::GenerateOutput()
+void Debugger::GenerateCodeOutput()
 {
 	State cpuState = _cpu->GetState();
-	string output;
-	output.reserve(10000);
+	_disassemblerOutput.clear();
+	_disassemblerOutput.reserve(10000);
 
 	bool showEffectiveAddresses = CheckFlag(DebuggerFlags::ShowEffectiveAddresses);
 	bool showOnlyDiassembledCode = CheckFlag(DebuggerFlags::ShowOnlyDisassembledCode);
 
 	//Get code in internal RAM
-	output = _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
+	_disassemblerOutput = _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
 
 	for(uint32_t i = 0x2000; i < 0x10000; i += 0x100) {
 		//Merge all sequential ranges into 1 chunk
@@ -580,16 +571,15 @@ string Debugger::GenerateOutput()
 				addr += 0x100;
 				i+=0x100;
 			}
-			output += _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, memoryType, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
+			_disassemblerOutput += _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, memoryType, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
 		}
 	}
-
-	return output;
 }
 
-string* Debugger::GetCode()
+const char* Debugger::GetCode()
 {
-	return &_outputCache;
+	GenerateCodeOutput();
+	return _disassemblerOutput.c_str();
 }
 
 int32_t Debugger::GetRelativeAddress(uint32_t addr, AddressType type)
@@ -668,6 +658,11 @@ void Debugger::GetFunctionEntryPoints(int32_t* entryPoints)
 		i++;
 	}
 	entryPoints[i] = -1;
+}
+
+shared_ptr<Assembler> Debugger::GetAssembler()
+{
+	return _assembler;
 }
 
 shared_ptr<TraceLogger> Debugger::GetTraceLogger()

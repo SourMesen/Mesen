@@ -1,0 +1,51 @@
+#pragma once
+#include "stdafx.h"
+#include <regex>
+#include "CPU.h"
+
+class LabelManager;
+
+struct LineData
+{
+	string OpCode;
+	string Operand;
+	string OperandSuffix;
+	AddrMode Mode = AddrMode::None;
+	int OperandSize = 0;
+	bool IsHex = false;
+	bool IsDecimal = false;
+	bool IsImmediate = false;
+	bool HasComment = false;
+	bool HasOpeningParenthesis = false;
+};
+
+enum AssemblerSpecialCodes
+{
+	OK = 0,
+	EndOfLine = -1,
+	ParsingError = -2,
+	OutOfRangeJump = -3,
+	LabelRedefinition = -4,
+	MissingOperand = -5,
+	OperandOutOfRange = -6,
+	InvalidHex = -7,
+	InvalidSpaces = -8,
+	TrailingText = -9,
+	UnknownLabel = -10,
+	InvalidInstruction = -11,
+};
+
+class Assembler
+{
+private:
+	shared_ptr<LabelManager> _labelManager;
+	void ProcessLine(string code, uint16_t &instructionAddress, vector<int16_t>& output, std::unordered_map<string, uint16_t> &labels);
+	AssemblerSpecialCodes GetLineData(std::smatch match, LineData &lineData, std::unordered_map<string, uint16_t> &labels);
+	AssemblerSpecialCodes GetAddrModeAndOperandSize(LineData &lineData, std::unordered_map<string, uint16_t> &labels);
+	void AssembleInstruction(LineData &lineData, uint16_t &instructionAddress, vector<int16_t>& output);
+
+public:
+	Assembler(shared_ptr<LabelManager> labelManager);
+
+	uint32_t AssembleCode(string code, uint16_t startAddress, int16_t* assembledCode);
+};

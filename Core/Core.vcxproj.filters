@@ -1123,6 +1123,9 @@
     <ClInclude Include="CpuState.h">
       <Filter>Nes</Filter>
     </ClInclude>
+    <ClInclude Include="Assembler.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1316,6 +1319,9 @@
     </ClCompile>
     <ClCompile Include="AviRecorder.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Assembler.cpp">
+      <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
