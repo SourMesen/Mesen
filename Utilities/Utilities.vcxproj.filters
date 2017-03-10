@@ -140,6 +140,9 @@
     <ClInclude Include="CamstudioCodec.h">
       <Filter>Avi</Filter>
     </ClInclude>
+    <ClInclude Include="StringUtilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

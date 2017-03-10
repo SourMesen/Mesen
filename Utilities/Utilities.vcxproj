@@ -346,6 +346,7 @@
     <ClInclude Include="Scale2x\scale2x.h" />
     <ClInclude Include="Scale2x\scale3x.h" />
     <ClInclude Include="Scale2x\scalebit.h" />
+    <ClInclude Include="StringUtilities.h" />
     <ClInclude Include="SZReader.h" />
     <ClInclude Include="UPnPPortMapper.h" />
     <ClInclude Include="SimpleLock.h" />

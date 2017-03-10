@@ -7,6 +7,7 @@
 #include "CPU.h"
 #include "LabelManager.h"
 #include "../Utilities/HexUtilities.h"
+#include "../Utilities/StringUtilities.h"
 #include "Debugger.h"
 
 Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize, Debugger* debugger)
@@ -241,18 +242,6 @@ void Disassembler::InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr)
 	}
 }
 
-vector<string> Disassembler::SplitComment(string input)
-{
-	vector<string> result;
-	size_t index;
-	while((index = input.find('\n')) != string::npos) {
-		result.push_back(input.substr(0, index));
-		input = input.substr(index + 1, input.size() - index - 1);
-	}
-	result.push_back(input);
-	return result;
-}
-
 static const char* hexTable[256] = {
 	"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F",
 	"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1A", "1B", "1C", "1D", "1E", "1F",
@@ -428,7 +417,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 		speculativeCode = false;
 
 		if(commentString.find_first_of('\n') != string::npos) {
-			for(string &str : SplitComment(commentString)) {
+			for(string &str : StringUtilities::Split(commentString, '\n')) {
 				GetLine(commentLines, "", str);
 			}
 			commentString.clear();
