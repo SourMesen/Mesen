@@ -129,7 +129,7 @@ namespace Mesen.GUI.Debugger
 			get { return _code; }
 			set
 			{
-				if(value != _code) {
+				if(value != null) {
 					_codeChanged = true;
 					_code = value;
 					UpdateCode();

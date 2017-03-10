@@ -242,7 +242,6 @@ namespace Mesen.GUI.Debugger
 			// 
 			// ctrlDebuggerCode
 			// 
-			this.ctrlDebuggerCode.Code = null;
 			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
 			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
@@ -264,7 +263,6 @@ namespace Mesen.GUI.Debugger
 			// 
 			// ctrlDebuggerCodeSplit
 			// 
-			this.ctrlDebuggerCodeSplit.Code = null;
 			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(495, 3);
 			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";

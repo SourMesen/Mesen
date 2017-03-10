@@ -283,7 +283,6 @@ namespace Mesen.GUI.Debugger
 			mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
 		}
 
-		string _previousCode = string.Empty;
 		private void UpdateDebugger(bool updateActiveAddress = true)
 		{
 			if(!_debuggerInitialized) {
@@ -295,14 +294,18 @@ namespace Mesen.GUI.Debugger
 			UpdateDebuggerFlags();
 			UpdateVectorAddresses();
 
-			_previousCode = InteropEmu.DebugGetCode();
-			ctrlDebuggerCode.Code = _previousCode;
+			string newCode = InteropEmu.DebugGetCode();
+			if(newCode != null) {
+				ctrlDebuggerCode.Code = newCode;
+			}
 
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
 
 			if(UpdateSplitView()) {
-				ctrlDebuggerCodeSplit.Code = _previousCode;
+				if(newCode != null || ctrlDebuggerCodeSplit.Code == null) {
+					ctrlDebuggerCodeSplit.Code = ctrlDebuggerCode.Code;
+				}
 				ctrlDebuggerCodeSplit.UpdateCode(true);
 			} else {
 				_lastCodeWindow = ctrlDebuggerCode;

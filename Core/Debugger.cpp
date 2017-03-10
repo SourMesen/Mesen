@@ -578,9 +578,17 @@ void Debugger::GenerateCodeOutput()
 
 const char* Debugger::GetCode(uint32_t &length)
 {
+	string previousCode = _disassemblerOutput;
 	GenerateCodeOutput();
 	length = (uint32_t)_disassemblerOutput.size();
-	return _disassemblerOutput.c_str();
+	if(previousCode.compare(_disassemblerOutput) == 0) {
+		//Return null pointer if the code is identical to last call
+		//This avois the UTF8->UTF16 conversion that the UI needs to do
+		//before comparing the strings
+		return nullptr;
+	} else {
+		return _disassemblerOutput.c_str();
+	}
 }
 
 int32_t Debugger::GetRelativeAddress(uint32_t addr, AddressType type)

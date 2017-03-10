@@ -215,7 +215,12 @@ namespace Mesen.GUI
 		public static string DebugGetCode()
 		{
 			UInt32 length;
-			return PtrToStringUtf8(InteropEmu.DebugGetCodeWrapper(out length), length);
+			IntPtr ptrCodeString = InteropEmu.DebugGetCodeWrapper(out length);
+			if(ptrCodeString == IntPtr.Zero) {
+				return null;
+			} else {
+				return PtrToStringUtf8(ptrCodeString, length);
+			}
 		}
 
 		[DllImport(DLLPath, EntryPoint="DebugAssembleCode")] private static extern UInt32 DebugAssembleCodeWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string code, UInt16 startAddress, IntPtr assembledCodeBuffer);
