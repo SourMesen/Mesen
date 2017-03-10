@@ -576,9 +576,10 @@ void Debugger::GenerateCodeOutput()
 	}
 }
 
-const char* Debugger::GetCode()
+const char* Debugger::GetCode(uint32_t &length)
 {
 	GenerateCodeOutput();
+	length = (uint32_t)_disassemblerOutput.size();
 	return _disassemblerOutput.c_str();
 }
 
@@ -650,12 +651,20 @@ void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelati
 	callstackRelative[_callstackRelative.size()] = -2;
 }
 
-void Debugger::GetFunctionEntryPoints(int32_t* entryPoints)
+int32_t Debugger::GetFunctionEntryPointCount()
+{
+	return (uint32_t)_functionEntryPoints.size();
+}
+
+void Debugger::GetFunctionEntryPoints(int32_t* entryPoints, int32_t maxCount)
 {
 	uint32_t i = 0;
 	for(auto itt = _functionEntryPoints.begin(); itt != _functionEntryPoints.end(); itt++) {
 		entryPoints[i] = *itt;
 		i++;
+		if(i == maxCount - 1) {
+			break;
+		}
 	}
 	entryPoints[i] = -1;
 }
@@ -765,11 +774,14 @@ int32_t Debugger::FindSubEntryPoint(uint16_t relativeAddress)
 	int32_t address = relativeAddress;
 	do {
 		GetAbsoluteAddressAndType(address, &info);
-		if(info.Address < 0 || info.Type != AddressType::PrgRom || !_codeDataLogger->IsCode(info.Address) || _codeDataLogger->IsSubEntryPoint(info.Address)) {
+		if(info.Address < 0 || info.Type != AddressType::PrgRom || _codeDataLogger->IsData(info.Address)) {
 			break;
 		}
 		address--;
+		if(_codeDataLogger->IsSubEntryPoint(info.Address)) {
+			break;
+		}
 	} while(address >= 0);
 
-	return address + 1;
+	return address > relativeAddress ? relativeAddress : (address + 1);
 }

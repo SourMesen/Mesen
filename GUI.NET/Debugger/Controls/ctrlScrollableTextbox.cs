@@ -105,11 +105,6 @@ namespace Mesen.GUI.Debugger
 			this.hScrollBar.Maximum = newMax;
 		}
 
-		public void ClearLineStyles()
-		{
-			this.ctrlTextbox.ClearLineStyles();
-		}
-
 		public void BeginUpdate()
 		{
 			this.ctrlTextbox.BeginUpdate();
@@ -120,10 +115,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlTextbox.EndUpdate();
 		}
 
-		public void SetLineColor(int lineNumber, Color? fgColor = null, Color? bgColor = null, Color? outlineColor = null, LineSymbol symbol = LineSymbol.None)
-		{
-			this.ctrlTextbox.SetLineColor(lineNumber, fgColor, bgColor, outlineColor, symbol);
-		}
+		public ctrlTextbox.ILineStyleProvider StyleProvider { set { this.ctrlTextbox.StyleProvider = value; } }
 
 		public int GetLineIndex(int lineNumber)
 		{
@@ -266,6 +258,10 @@ namespace Mesen.GUI.Debugger
 		{
 			this.ctrlTextbox.HorizontalScrollPosition = this.hScrollBar.Value;
 		}
+
+		public string[] Addressing { set { this.ctrlTextbox.Addressing = value; } }
+		public string[] Comments { set { this.ctrlTextbox.Comments = value; } }
+		public int[] LineIndentations{ set { this.ctrlTextbox.LineIndentations = value; } }
 
 		public string[] TextLines
 		{

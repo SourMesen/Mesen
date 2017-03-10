@@ -97,10 +97,14 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateStack(UInt16 stackPointer)
 		{
+			lstStack.BeginUpdate();
 			lstStack.Items.Clear();
-			for(UInt32 i = (UInt32)0x100 + stackPointer; i <  0x200; i++) {
-				lstStack.Items.Add("$" + InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, i).ToString("X2"));
+			ListViewItem[] itemsToAdd = new ListViewItem[256 - stackPointer];
+			for(UInt32 i = (UInt32)0x100 + stackPointer; i < 0x200; i++) {
+				itemsToAdd[i-stackPointer-0x100] = new ListViewItem("$" + InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, i).ToString("X2"));
 			}
+			lstStack.Items.AddRange(itemsToAdd);
+			lstStack.EndUpdate();
 		}
 
 		public void UpdateStatus(ref DebugState state)

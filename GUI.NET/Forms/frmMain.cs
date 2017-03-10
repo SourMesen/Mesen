@@ -544,6 +544,8 @@ namespace Mesen.GUI.Forms
 			InteropEmu.SetFlag(EmulationFlags.InBackground, !hasFocus);
 		}
 
+		Image _pauseButton = Mesen.GUI.Properties.Resources.Pause;
+		Image _playButton = Mesen.GUI.Properties.Resources.Play;
 		private void UpdateMenus()
 		{
 			try {
@@ -570,7 +572,7 @@ namespace Mesen.GUI.Forms
 					mnuPause.Enabled &= !InteropEmu.DebugIsDebuggerRunning();
 
 					mnuPause.Text = InteropEmu.IsPaused() ? ResourceHelper.GetMessage("Resume") : ResourceHelper.GetMessage("Pause");
-					mnuPause.Image = InteropEmu.IsPaused() ? Mesen.GUI.Properties.Resources.Play : Mesen.GUI.Properties.Resources.Pause;
+					mnuPause.Image = InteropEmu.IsPaused() ? _playButton : _pauseButton;
 
 					bool netPlay = InteropEmu.IsServerRunning() || isNetPlayClient;
 

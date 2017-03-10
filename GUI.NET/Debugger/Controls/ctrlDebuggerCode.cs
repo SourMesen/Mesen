@@ -21,10 +21,23 @@ namespace Mesen.GUI.Debugger
 		public event AssemblerEventHandler OnEditCode;
 		public event AddressEventHandler OnSetNextStatement;
 		private DebugViewInfo _config;
+
+		List<int> _lineNumbers = new List<int>(10000);
+		List<string> _lineNumberNotes = new List<string>(10000);
+		List<string> _codeNotes = new List<string>(10000);
+		List<string> _codeLines = new List<string>(10000);
 		private HashSet<int> _unexecutedAddresses = new HashSet<int>();
 		private HashSet<int> _speculativeCodeAddreses = new HashSet<int>();
+		Dictionary<int, string> _codeContent = new Dictionary<int, string>(10000);
+		Dictionary<int, string> _codeComments = new Dictionary<int, string>(10000);
+		Dictionary<int, string> _codeByteCode = new Dictionary<int, string>(10000);
+		List<string> _addressing = new List<string>(10000);
+		List<string> _comments = new List<string>(10000);
+		List<int> _lineIndentations = new List<int>(10000);
+
 		private Color _unexecutedColor = Color.FromArgb(183, 229, 190);
 		private Color _speculativeColor = Color.FromArgb(240, 220, 220);
+		private UInt32? _currentActiveAddress { get; set; } = null;
 
 		private frmCodeTooltip _codeTooltip = null;
 
@@ -124,7 +137,6 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private UInt32? _currentActiveAddress = null;
 		public void SelectActiveAddress(UInt32 address)
 		{
 			this.SetActiveAddress(address);
@@ -144,30 +156,10 @@ namespace Mesen.GUI.Debugger
 		public void UpdateLineColors()
 		{
 			this.ctrlCodeViewer.BeginUpdate();
-
-			this.ctrlCodeViewer.ClearLineStyles();
-
-			if(_currentActiveAddress.HasValue) {
-				this.ctrlCodeViewer.SetLineColor((int)_currentActiveAddress, Color.Black, Color.Yellow, null, LineSymbol.Arrow);
-			}
-
-			if(ConfigManager.Config.DebugInfo.HighlightUnexecutedCode) {
-				foreach(int relativeAddress in _unexecutedAddresses) {
-					this.ctrlCodeViewer.SetLineColor(relativeAddress, null, _unexecutedColor);
-				}
-			}
-
-			foreach(int relativeAddress in _speculativeCodeAddreses) {
-				this.ctrlCodeViewer.SetLineColor(relativeAddress, null, _speculativeColor);
-			}			
-
-			this.HighlightBreakpoints();
-
+			this.ctrlCodeViewer.StyleProvider = new LineStyleProvider(this);
 			this.ctrlCodeViewer.EndUpdate();
 		}
 
-		Dictionary<int, string> _codeContent = new Dictionary<int, string>();
-		Dictionary<int, int> _codeByteContentLength = new Dictionary<int, int>();
 		public List<string> GetCode(out int byteLength, ref int startAddress, int endAddress = -1)
 		{
 			List<string> result = new List<string>();
@@ -184,7 +176,10 @@ namespace Mesen.GUI.Debugger
 			//TODO: Invalidate disassembly info cache / CDL file (not needed?)
 			//TODO: Support .data syntax in assembler
 			for(int i = startAddress; (i <= endAddress || endAddress == -1) && endAddress < 65536; ) {
-				if(_codeContent.TryGetValue(i, out string code)) {
+				string code;
+				if(_codeContent.TryGetValue(i, out code)) {
+					code = code.Split('\x2')[0].Trim();
+
 					if(code.StartsWith("--") || code.StartsWith("__") || code.StartsWith("[[")) {
 						//Stop adding code when we find a new section (new function, data blocks, etc.)
 						break;
@@ -196,6 +191,16 @@ namespace Mesen.GUI.Debugger
 					string comment = codeLabel?.Comment;
 					string label = codeLabel?.Label;
 
+					if(code == "STP*" || code == "NOP*") {
+						//Transform unofficial opcodes that can't be reassembled properly into .byte statements
+						if(comment != null) {
+							comment.Insert(1, code + " - ");
+						} else {
+							comment = code;
+						}
+						code = ".byte " + string.Join(",", _codeByteCode[i].Split(' ').Select((hexByte) => "$" + hexByte));
+					}
+
 					if(!string.IsNullOrWhiteSpace(comment) && comment.Contains("\n")) {
 						result.AddRange(comment.Replace("\r", "").Split('\n').Select(cmt => ";" + cmt));
 						comment = null;
@@ -205,7 +210,7 @@ namespace Mesen.GUI.Debugger
 					}
 					result.Add("  " + code + (!string.IsNullOrWhiteSpace(comment) ? (" ;" + comment) : ""));
 					
-					int length = _codeByteContentLength[i];
+					int length = _codeByteCode[i].Count(c => c == ' ') + 1;
 					byteLength += length;
 					i += length;
 
@@ -223,46 +228,84 @@ namespace Mesen.GUI.Debugger
 		public bool UpdateCode(bool forceUpdate = false)
 		{
 			if(_codeChanged || forceUpdate) {
-				List<int> lineNumbers = new List<int>();
-				List<string> lineNumberNotes = new List<string>();
-				List<string> codeNotes = new List<string>();
-				List<string> codeLines = new List<string>();
-				_codeContent = new Dictionary<int, string>();
-				_codeByteContentLength = new Dictionary<int, int>();
-				_unexecutedAddresses = new HashSet<int>();
-				_speculativeCodeAddreses = new HashSet<int>();
-				
-				int index = -1;
-				int previousIndex = -1;
-				while((index = _code.IndexOf('\n', index + 1)) >= 0) {
-					string line = _code.Substring(previousIndex + 1, index - previousIndex - 1);
-					string[] lineParts = line.Split('\x1');
+				_codeContent.Clear();
+				_codeComments.Clear();
+				_codeByteCode.Clear();
+				_unexecutedAddresses.Clear();
+				_speculativeCodeAddreses.Clear();
 
-					if(lineParts.Length >= 5) {
-						int relativeAddress = ParseHexAddress(lineParts[1]);
+				string[] token = new string[7];
+				int tokenIndex = 0;
+				int startPos = 0;
+				int endPos = 0;
 
-						if(lineParts[0] == "0" && lineParts[4].StartsWith("  ")) {
-							_unexecutedAddresses.Add(relativeAddress);
-						} else if(lineParts[0] == "2" && lineParts[4].StartsWith("  ")) {
-							_speculativeCodeAddreses.Add(relativeAddress);
-						}
+				Action readToken = () => {
+					endPos = _code.IndexOf('\x1', endPos) + 1;
+					token[tokenIndex++] = _code.Substring(startPos, endPos - startPos - 1);
+					startPos = endPos;
+				};
+			
+				Action readLine = () => {
+					tokenIndex = 0;
+					readToken(); readToken(); readToken(); readToken(); readToken();  readToken();  readToken();
+				};
 
-						lineNumbers.Add(relativeAddress);
-						lineNumberNotes.Add(string.IsNullOrWhiteSpace(lineParts[2]) ? "" : lineParts[2].TrimStart('0').PadLeft(4, '0'));
-						codeNotes.Add(lineParts[3]);
-						codeLines.Add(lineParts[4]);
-						_codeByteContentLength[relativeAddress] = lineParts[3].Count(c => c == ' ') + 1;
+				Func<bool> processLine = () => {
+					readLine();
 
-						_codeContent[relativeAddress] = lineParts[4].Split('\x2')[0].Trim();
+					int relativeAddress = ParseHexAddress(token[1]);
+
+					//Flags:
+					//1: Executed code
+					//2: Speculative Code
+					//4: Indented line
+					if(token[0] == "4") {
+						_unexecutedAddresses.Add(relativeAddress);
+						_lineIndentations.Add(20);
+					} else if(token[0] == "6") {
+						_speculativeCodeAddreses.Add(relativeAddress);
+						_lineIndentations.Add(20);
+					} else if(token[0] == "5") {
+						_lineIndentations.Add(20);
+					} else {
+						_lineIndentations.Add(0);
 					}
 
-					previousIndex = index;
-				}
+					_lineNumbers.Add(relativeAddress);
+					_lineNumberNotes.Add(string.IsNullOrWhiteSpace(token[2]) ? "" : (token[2].Length > 5 ? token[2].TrimStart('0').PadLeft(4, '0') : token[2]));
+					_codeNotes.Add(token[3]);
+					_codeLines.Add(token[4]);
 
-				ctrlCodeViewer.TextLines = codeLines.ToArray();
-				ctrlCodeViewer.LineNumbers = lineNumbers.ToArray();
-				ctrlCodeViewer.TextLineNotes = codeNotes.ToArray();
-				ctrlCodeViewer.LineNumberNotes = lineNumberNotes.ToArray();
+					_addressing.Add(token[5]);
+					_comments.Add(token[6]);
+
+					//Used by assembler
+					_codeByteCode[relativeAddress] = token[3];
+					_codeContent[relativeAddress] = token[4];
+					_codeComments[relativeAddress] = token[6];
+
+					return endPos < _code.Length;
+				};
+
+				while(processLine());
+
+				ctrlCodeViewer.LineIndentations = _lineIndentations.ToArray();
+				ctrlCodeViewer.Addressing = _addressing.ToArray();
+				ctrlCodeViewer.Comments = _comments.ToArray();
+
+				ctrlCodeViewer.TextLines = _codeLines.ToArray();
+				ctrlCodeViewer.LineNumbers = _lineNumbers.ToArray();
+				ctrlCodeViewer.TextLineNotes = _codeNotes.ToArray();
+				ctrlCodeViewer.LineNumberNotes = _lineNumberNotes.ToArray();
+
+				//These are all temporary and can be cleared right away
+				_lineNumbers.Clear();
+				_lineNumberNotes.Clear();
+				_codeNotes.Clear();
+				_codeLines.Clear();
+				_addressing.Clear();
+				_comments.Clear();
+				_lineIndentations.Clear();
 
 				_codeChanged = false;
 				UpdateLineColors();
@@ -278,37 +321,6 @@ namespace Mesen.GUI.Debugger
 				return -1;
 			} else {
 				return (int)UInt32.Parse(hexAddress, System.Globalization.NumberStyles.AllowHexSpecifier);
-			}
-		}
-
-		private void HighlightBreakpoints()
-		{
-			foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
-				Color? fgColor = Color.White;
-				Color? bgColor = null;
-				Color? outlineColor = Color.FromArgb(140, 40, 40);
-				LineSymbol symbol;
-				if(breakpoint.Enabled) {
-					bgColor = Color.FromArgb(140, 40, 40);
-					symbol = LineSymbol.Circle;
-				} else {
-					fgColor = Color.Black;
-					symbol = LineSymbol.CircleOutline;
-				}
-
-				if(breakpoint.Address == (UInt32)(_currentActiveAddress.HasValue ? (int)_currentActiveAddress.Value : -1)) {
-					fgColor = Color.Black;
-					bgColor = Color.Yellow;
-					symbol |= LineSymbol.Arrow;
-				} else if(_unexecutedAddresses.Contains((Int32)breakpoint.Address)) {
-					fgColor = Color.Black;
-					bgColor = _unexecutedColor;
-				} else if(_speculativeCodeAddreses.Contains((Int32)breakpoint.Address)) {
-					fgColor = Color.Black;
-					bgColor = _speculativeColor;
-				}
-
-				ctrlCodeViewer.SetLineColor((int)breakpoint.Address, fgColor, bgColor, outlineColor, symbol);
 			}
 		}
 
@@ -764,6 +776,58 @@ namespace Mesen.GUI.Debugger
 				int byteLength;
 				List<string> code = this.GetCode(out byteLength, ref startAddress, endAddress);
 				this.OnEditCode?.Invoke(new AssemblerEventArgs() { Code = string.Join(Environment.NewLine, code), StartAddress = (UInt16)startAddress, BlockLength = (UInt16)byteLength });
+			}
+		}
+
+
+		class LineStyleProvider : ctrlTextbox.ILineStyleProvider
+		{
+			ctrlDebuggerCode _code;
+			public LineStyleProvider(ctrlDebuggerCode code)
+			{
+				_code = code;
+			}
+
+			public LineProperties GetLineStyle(int cpuAddress)
+			{
+				foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
+					if(!breakpoint.IsAbsoluteAddress && breakpoint.Address == cpuAddress) {
+						Color? fgColor = Color.White;
+						Color? bgColor = null;
+						Color? outlineColor = Color.FromArgb(140, 40, 40);
+						LineSymbol symbol;
+						if(breakpoint.Enabled) {
+							bgColor = Color.FromArgb(140, 40, 40);
+							symbol = LineSymbol.Circle;
+						} else {
+							fgColor = Color.Black;
+							symbol = LineSymbol.CircleOutline;
+						}
+
+						if(breakpoint.Address == (UInt32)(_code._currentActiveAddress.HasValue ? (int)_code._currentActiveAddress.Value : -1)) {
+							fgColor = Color.Black;
+							bgColor = Color.Yellow;
+							symbol |= LineSymbol.Arrow;
+						} else if(_code._unexecutedAddresses.Contains((Int32)breakpoint.Address)) {
+							fgColor = Color.Black;
+							bgColor =  _code._unexecutedColor;
+						} else if(_code._speculativeCodeAddreses.Contains((Int32)breakpoint.Address)) {
+							fgColor = Color.Black;
+							bgColor =  _code._speculativeColor;
+						}
+
+						return new LineProperties() { FgColor = fgColor, BgColor = bgColor, OutlineColor = outlineColor, Symbol = symbol };
+					}
+				}
+
+				if(_code._currentActiveAddress.HasValue && cpuAddress == _code._currentActiveAddress) {
+					return new LineProperties() { FgColor = Color.Black, BgColor = Color.Yellow, OutlineColor = null, Symbol = LineSymbol.Arrow };
+				} else if(ConfigManager.Config.DebugInfo.HighlightUnexecutedCode && _code._unexecutedAddresses.Contains(cpuAddress)) {
+					return new LineProperties() { FgColor = null, BgColor = _code._unexecutedColor, OutlineColor = null, Symbol = LineSymbol.None };
+				} else if(_code._speculativeCodeAddreses.Contains(cpuAddress)) {
+					return new LineProperties() { FgColor = null, BgColor = _code._speculativeColor, OutlineColor = null, Symbol = LineSymbol.None };
+				}
+				return null;
 			}
 		}
 	}

@@ -119,7 +119,9 @@ public:
 	
 	shared_ptr<LabelManager> GetLabelManager();
 
-	void GetFunctionEntryPoints(int32_t* entryPoints);
+	void GetFunctionEntryPoints(int32_t* entryPoints, int32_t maxCount);
+	int32_t GetFunctionEntryPointCount();
+
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
 	
 	void GetState(DebugState *state, bool includeMapperInfo = true);
@@ -145,7 +147,7 @@ public:
 	bool IsExecutionStopped();
 
 	void GenerateCodeOutput();
-	const char* GetCode();
+	const char* GetCode(uint32_t &length);
 	
 	int32_t GetRelativeAddress(uint32_t addr, AddressType type);
 	int32_t GetAbsoluteAddress(uint32_t addr);	

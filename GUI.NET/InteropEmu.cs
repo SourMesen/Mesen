@@ -211,8 +211,12 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void DebugSaveRomToDisk([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper();
-		public static string DebugGetCode() { return PtrToStringUtf8(InteropEmu.DebugGetCodeWrapper()); }
+		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper(out UInt32 length);
+		public static string DebugGetCode()
+		{
+			UInt32 length;
+			return PtrToStringUtf8(InteropEmu.DebugGetCodeWrapper(out length), length);
+		}
 
 		[DllImport(DLLPath, EntryPoint="DebugAssembleCode")] private static extern UInt32 DebugAssembleCodeWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string code, UInt16 startAddress, IntPtr assembledCodeBuffer);
 		public static Int16[] DebugAssembleCode(string code, UInt16 startAddress)
@@ -436,16 +440,16 @@ namespace Mesen.GUI
 				hRelative.Free();
 			}
 		}
-
-		[DllImport(DLLPath, EntryPoint = "DebugGetFunctionEntryPoints")]
-		private static extern void DebugGetFunctionEntryPointsWrapper(IntPtr callstackAbsolute);
+		[DllImport(DLLPath)] private static extern Int32 DebugGetFunctionEntryPointCount();
+		[DllImport(DLLPath, EntryPoint = "DebugGetFunctionEntryPoints")] private static extern void DebugGetFunctionEntryPointsWrapper(IntPtr callstackAbsolute, Int32 maxCount);
 		public static Int32[] DebugGetFunctionEntryPoints()
 		{
-			Int32[] entryPoints = new Int32[32768];
+			int maxCount = DebugGetFunctionEntryPointCount();
+			Int32[] entryPoints = new Int32[maxCount+1];
 
 			GCHandle hEntryPoints = GCHandle.Alloc(entryPoints, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetFunctionEntryPointsWrapper(hEntryPoints.AddrOfPinnedObject());
+				InteropEmu.DebugGetFunctionEntryPointsWrapper(hEntryPoints.AddrOfPinnedObject(), maxCount+1);
 			} finally {
 				hEntryPoints.Free();
 			}
@@ -521,24 +525,38 @@ namespace Mesen.GUI
 			return new List<string>(PtrToStringUtf8(InteropEmu.GetAudioDevicesWrapper()).Split(new string[1] { "||" }, StringSplitOptions.RemoveEmptyEntries ));
 		}
 
-		private static string PtrToStringUtf8(IntPtr ptr)
+		private static byte[] _codeByteArray = new byte[0];
+		private static string PtrToStringUtf8(IntPtr ptr, UInt32 length = 0)
 		{
 			if(ptr == IntPtr.Zero) {
 				return "";
 			}
-			
+
 			int len = 0;
-			while(System.Runtime.InteropServices.Marshal.ReadByte(ptr, len) != 0) {
-				len++;
+			if(length == 0) {
+				while(System.Runtime.InteropServices.Marshal.ReadByte(ptr, len) != 0) {
+					len++;
+				}
+			} else {
+				len = (int)length;
 			}
 
 			if(len == 0) {
 				return "";
 			}
 
-			byte[] array = new byte[len];
-			System.Runtime.InteropServices.Marshal.Copy(ptr, array, 0, len);
-			return System.Text.Encoding.UTF8.GetString(array);
+			if(length == 0) {
+				byte[] array = new byte[len];
+				System.Runtime.InteropServices.Marshal.Copy(ptr, array, 0, len);
+				return System.Text.Encoding.UTF8.GetString(array);
+			} else {
+				//For the code window, reuse the same buffer to reduce allocations
+				if(_codeByteArray.Length < len) {
+					Array.Resize(ref _codeByteArray, len);
+				}
+				System.Runtime.InteropServices.Marshal.Copy(ptr, _codeByteArray, 0, len);
+				return System.Text.Encoding.UTF8.GetString(_codeByteArray, 0, len);
+			}
 		}
 
 		public enum ConsoleNotificationType

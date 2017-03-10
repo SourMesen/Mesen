@@ -28,19 +28,16 @@ static const char* hexTable[256] = {
 		"F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "FA", "FB", "FC", "FD", "FE", "FF"
 };
 
-char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager)
+void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager)
 {
-	uint16_t length;
-	return ToString(memoryAddr, memoryManager, labelManager, length);
-}
-
-char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, uint16_t &length)
-{
+	char buffer[500];
 	uint8_t opCode = *_opPointer;
-	length = (uint16_t)DisassemblyInfo::OPName[opCode].size();
-	memcpy(_toStringBuffer, DisassemblyInfo::OPName[opCode].c_str(), length);
+	uint16_t length = (uint16_t)DisassemblyInfo::OPName[opCode].size();
+
+	memcpy(buffer, DisassemblyInfo::OPName[opCode].c_str(), length);
 
 	uint16_t* ptrPos = &length;
+	char* ptrBuf = buffer;
 
 	uint16_t opAddr = GetOpAddr(memoryAddr);
 	
@@ -59,19 +56,19 @@ char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManage
 	}
 
 	auto writeChar = [=](char c) -> void {
-		_toStringBuffer[(*ptrPos)++] = c;
+		ptrBuf[(*ptrPos)++] = c;
 	};
 
 	auto copyOperand = [=]() -> void { 
 		if(labelManager && _opMode != AddrMode::Imm) {
 			string label = labelManager->GetLabel(opAddr, true);
 			if(!label.empty()) {
-				memcpy(_toStringBuffer + (*ptrPos), label.c_str(), label.size());
+				memcpy(ptrBuf + (*ptrPos), label.c_str(), label.size());
 				(*ptrPos) += (uint16_t)label.size();
 				return;
 			}
 		}
-		memcpy(_toStringBuffer + (*ptrPos), opBuffer, operandLength);
+		memcpy(ptrBuf + (*ptrPos), opBuffer, operandLength);
 		(*ptrPos) += operandLength;
 	};
 
@@ -79,13 +76,13 @@ char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManage
 		case AddrMode::Acc: writeChar('A'); break;
 		case AddrMode::Imm: writeChar('#'); copyOperand(); break;
 		case AddrMode::Ind: writeChar('('); copyOperand(); writeChar(')'); break;
-		case AddrMode::IndX: writeChar('('); copyOperand(); memcpy(_toStringBuffer + length, ",X)", 3); length += 3; break;
+		case AddrMode::IndX: writeChar('('); copyOperand(); memcpy(ptrBuf + length, ",X)", 3); length += 3; break;
 
 		case AddrMode::IndY:
 		case AddrMode::IndYW:
 			writeChar('(');
 			copyOperand();
-			memcpy(_toStringBuffer + length, "),Y", 3);
+			memcpy(ptrBuf + length, "),Y", 3);
 			length += 3;
 			break;
 
@@ -99,7 +96,7 @@ char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManage
 		case AddrMode::AbsXW:
 		case AddrMode::ZeroX:
 			copyOperand(); 
-			memcpy(_toStringBuffer + length, ",X", 2);
+			memcpy(ptrBuf + length, ",X", 2);
 			length += 2;
 			break;
 
@@ -107,14 +104,14 @@ char* DisassemblyInfo::ToString(uint32_t memoryAddr, MemoryManager* memoryManage
 		case AddrMode::AbsYW:
 		case AddrMode::ZeroY:
 			copyOperand();
-			memcpy(_toStringBuffer + length, ",Y", 2);
+			memcpy(ptrBuf + length, ",Y", 2);
 			length += 2;
 			break;
 		
 		default: break;
 	}
-	_toStringBuffer[length] = 0;
-	return _toStringBuffer;
+	ptrBuf[length] = 0;
+	out.append(ptrBuf, length);
 }
 
 uint16_t DisassemblyInfo::GetOpAddr(uint16_t memoryAddr)
@@ -149,49 +146,45 @@ void DisassemblyInfo::SetSubEntryPoint()
 	_isSubEntryPoint = true;
 }
 
-char* DisassemblyInfo::GetEffectiveAddressString(State& cpuState, MemoryManager* memoryManager, LabelManager* labelManager)
-{
-	uint16_t length;
-	return GetEffectiveAddressString(cpuState, memoryManager, labelManager, length);
-}
-
-char* DisassemblyInfo::GetEffectiveAddressString(State& cpuState, MemoryManager* memoryManager, LabelManager* labelManager, uint16_t& length)
+void DisassemblyInfo::GetEffectiveAddressString(string &out, State& cpuState, MemoryManager* memoryManager, LabelManager* labelManager)
 {
 	if(_opMode <= AddrMode::Abs) {
-		length = 0;
-		return nullptr;
+		return;
 	} else {
 		int32_t effectiveAddress = GetEffectiveAddress(cpuState, memoryManager);
+		char buffer[500];
 
-		_effectiveAddressBuffer[0] = ' ';
-		_effectiveAddressBuffer[1] = '@';
-		_effectiveAddressBuffer[2] = ' ';
+		int length = 0;
+		buffer[0] = ' ';
+		buffer[1] = '@';
+		buffer[2] = ' ';
 
 		if(labelManager) {
 			string label = labelManager->GetLabel(effectiveAddress, true);
 			if(!label.empty()) {
-				memcpy(_effectiveAddressBuffer + 3, label.c_str(), label.size());
+				memcpy(buffer + 3, label.c_str(), label.size());
 				length = (uint16_t)label.size() + 3;
-				_effectiveAddressBuffer[length] = 0;
+				buffer[length] = 0;
 
-				return _effectiveAddressBuffer;
+				out.append(buffer, length);
+				return;
 			}
 		}
 
-		_effectiveAddressBuffer[3] = '$';
+		buffer[3] = '$';
 
 		if(_opMode == AddrMode::ZeroX || _opMode == AddrMode::ZeroY) {
-			memcpy(_effectiveAddressBuffer + 4, hexTable[effectiveAddress], 2);
-			_effectiveAddressBuffer[6] = 0;
+			memcpy(buffer + 4, hexTable[effectiveAddress], 2);
+			buffer[6] = 0;
 			length = 6;
 		} else {
-			memcpy(_effectiveAddressBuffer + 4, hexTable[effectiveAddress >> 8], 2);
-			memcpy(_effectiveAddressBuffer + 6, hexTable[effectiveAddress & 0xFF], 2);
-			_effectiveAddressBuffer[8] = 0;
+			memcpy(buffer + 4, hexTable[effectiveAddress >> 8], 2);
+			memcpy(buffer + 6, hexTable[effectiveAddress & 0xFF], 2);
+			buffer[8] = 0;
 			length = 8;
 		}
-
-		return _effectiveAddressBuffer;
+		
+		out.append(buffer, length);
 	}
 }
 
@@ -232,19 +225,24 @@ int32_t DisassemblyInfo::GetEffectiveAddress(State& cpuState, MemoryManager* mem
 	return -1;
 }
 		
-string DisassemblyInfo::GetByteCode()
+void DisassemblyInfo::GetByteCode(string &out)
 {
 	//Raw byte code
-	string byteCode;
-	byteCode.reserve(12);
+	char byteCode[12];
+	int pos = 1;
+	byteCode[0] = '$';
 	for(uint32_t i = 0; i < _opSize; i++) {
-		if(!byteCode.empty()) {
-			byteCode += " ";
+		if(i != 0) {
+			byteCode[pos++] = ' ';
+			byteCode[pos++] = '$';
 		}
-		byteCode += "$" + HexUtilities::ToHex((uint8_t)*(_opPointer + i));
+
+		byteCode[pos++] = hexTable[(uint8_t)*(_opPointer + i)][0];
+		byteCode[pos++] = hexTable[(uint8_t)*(_opPointer + i)][1];
 	}
 
-	return byteCode;
+	byteCode[pos] = 0;
+	out.append(byteCode, pos);
 }
 
 uint32_t DisassemblyInfo::GetSize()

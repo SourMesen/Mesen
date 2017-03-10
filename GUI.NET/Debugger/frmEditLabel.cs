@@ -47,7 +47,7 @@ namespace Mesen.GUI.Debugger
 				(sameLabel == null || sameLabel == _originalLabel) 
 				&& (sameAddress == null || sameAddress == _originalLabel)
 				&& (_originalLabel != null || txtLabel.Text.Length > 0 || txtComment.Text.Length > 0)
-				&& !txtComment.Text.Contains('\x1') && !txtComment.Text.Contains('\x2')
+				&& !txtComment.Text.Contains('\x1')
 				&& (txtLabel.Text.Length == 0 || Regex.IsMatch(txtLabel.Text, "^[@_a-zA-Z]+[@_a-zA-Z0-9]*$"));
 		}
 

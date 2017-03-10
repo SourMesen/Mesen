@@ -46,7 +46,7 @@ extern "C"
 	DllExport void __stdcall DebugStepOver() { GetDebugger()->StepOver(); }
 	DllExport void __stdcall DebugStepOut() { GetDebugger()->StepOut(); }
 	DllExport void __stdcall DebugPpuStep(uint32_t count) { GetDebugger()->PpuStep(count); }
-	DllExport const char* __stdcall DebugGetCode() { return GetDebugger()->GetCode(); }
+	DllExport const char* __stdcall DebugGetCode(uint32_t &length) { return GetDebugger()->GetCode(length); }
 
 	DllExport void __stdcall DebugSetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle) { return GetDebugger()->SetPpuViewerScanlineCycle(scanline, cycle); }
 
@@ -60,7 +60,8 @@ extern "C"
 	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { GetDebugger()->GetMemoryDumper()->GetPalette(frameBuffer); }
 	
 	DllExport void __stdcall DebugGetCallstack(int32_t *callstackAbsolute, int32_t *callstackRelative) { GetDebugger()->GetCallstack(callstackAbsolute, callstackRelative); }
-	DllExport void __stdcall DebugGetFunctionEntryPoints(int32_t *entryPoints) { GetDebugger()->GetFunctionEntryPoints(entryPoints); }
+	DllExport int32_t __stdcall DebugGetFunctionEntryPointCount() { return GetDebugger()->GetFunctionEntryPointCount(); }
+	DllExport void __stdcall DebugGetFunctionEntryPoints(int32_t *entryPoints, int32_t maxCount) { GetDebugger()->GetFunctionEntryPoints(entryPoints, maxCount); }
 	
 	DllExport int32_t __stdcall DebugGetRelativeAddress(uint32_t addr, AddressType type) { return GetDebugger()->GetRelativeAddress(addr, type); }
 	DllExport int32_t __stdcall DebugGetAbsoluteAddress(uint32_t addr) { return GetDebugger()->GetAbsoluteAddress(addr); }

@@ -98,6 +98,27 @@ string LabelManager::GetComment(uint16_t relativeAddr)
 	return "";
 }
 
+void LabelManager::GetLabelAndComment(uint16_t relativeAddr, string &label, string &comment)
+{
+	int32_t labelAddr = GetLabelAddress(relativeAddr, false);
+
+	if(labelAddr >= 0) {
+		auto result = _codeLabels.find(labelAddr);
+		if(result != _codeLabels.end()) {
+			label = result->second;
+		} else {
+			label.clear();
+		}
+
+		auto commentResult = _codeComments.find(labelAddr);
+		if(commentResult != _codeComments.end()) {
+			comment = commentResult->second;
+		} else {
+			comment.clear();
+		}
+	}
+}
+
 int32_t LabelManager::GetLabelRelativeAddress(string label)
 {
 	auto result = _codeLabelReverseLookup.find(label);

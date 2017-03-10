@@ -32,8 +32,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void RefreshData()
 		{
-			ctrlScrollableTextbox.ClearLineStyles();
-
 			int[] readCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Read, false);
 			int[] writeCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Write, false);
 			int[] execCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Exec, false);
@@ -74,16 +72,31 @@ namespace Mesen.GUI.Debugger.Controls
 				content[i] = data[i].Content;
 			}
 
+			if(chkHighlightUninitRead.Checked) {
+				ctrlScrollableTextbox.StyleProvider = new LineStyleProvider(new HashSet<int>(data.Where((e) => e.UninitRead).Select((e) => e.Address)));
+			} else {
+				ctrlScrollableTextbox.StyleProvider = null;
+			}
 			ctrlScrollableTextbox.Header = "Read".PadRight(12) + "Write".PadRight(12) + "Execute".PadRight(12);
 			ctrlScrollableTextbox.LineNumbers = addresses;
 			ctrlScrollableTextbox.TextLines = content;
+		}
 
-			if(chkHighlightUninitRead.Checked) {
-				ctrlScrollableTextbox.BeginUpdate();
-				foreach(int address in data.Where((e) => e.UninitRead).Select((e) => e.Address)) {
-					ctrlScrollableTextbox.SetLineColor(address, null, Color.LightCoral);
+		private class LineStyleProvider : ctrlTextbox.ILineStyleProvider
+		{
+			HashSet<int> _addresses = new HashSet<int>();
+
+			public LineStyleProvider(HashSet<int> addresses)
+			{
+				_addresses = addresses;
+			}
+
+			public LineProperties GetLineStyle(int cpuAddress)
+			{
+				if(_addresses.Contains(cpuAddress)) {
+					return new LineProperties() { BgColor = Color.LightCoral };
 				}
-				ctrlScrollableTextbox.EndUpdate();
+				return null;
 			}
 		}
 

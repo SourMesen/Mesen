@@ -253,48 +253,130 @@ vector<string> Disassembler::SplitComment(string input)
 	return result;
 }
 
-string Disassembler::GetLine(string code, string comment, int32_t cpuAddress, int32_t absoluteAddress, string byteCode, string addressing, bool speculativeCode)
+static const char* hexTable[256] = {
+	"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F",
+	"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1A", "1B", "1C", "1D", "1E", "1F",
+	"20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "2A", "2B", "2C", "2D", "2E", "2F",
+	"30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "3A", "3B", "3C", "3D", "3E", "3F",
+	"40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "4A", "4B", "4C", "4D", "4E", "4F",
+	"50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "5A", "5B", "5C", "5D", "5E", "5F",
+	"60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "6A", "6B", "6C", "6D", "6E", "6F",
+	"70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "7A", "7B", "7C", "7D", "7E", "7F",
+	"80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "8A", "8B", "8C", "8D", "8E", "8F",
+	"90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "9A", "9B", "9C", "9D", "9E", "9F",
+	"A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "AA", "AB", "AC", "AD", "AE", "AF",
+	"B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "BA", "BB", "BC", "BD", "BE", "BF",
+	"C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "CA", "CB", "CC", "CD", "CE", "CF",
+	"D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "DA", "DB", "DC", "DD", "DE", "DF",
+	"E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "EA", "EB", "EC", "ED", "EE", "EF",
+	"F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "FA", "FB", "FC", "FD", "FE", "FF"
+};
+
+static string emptyString;
+void Disassembler::GetLine(string &out, string code, string comment, int32_t cpuAddress, int32_t absoluteAddress)
 {
-	string out;
-	out.reserve(40);
-	if(cpuAddress >= 0) {
-		if(speculativeCode) {
-			out += "2\x1";
-		} else {
-			out += (_debugger->IsMarkedAsCode(cpuAddress) || absoluteAddress == -1) ? "1\x1" : "0\x1";
-		}
-		out += HexUtilities::ToHex((uint16_t)cpuAddress);		
-	} else {
-		out += "1\x1";
-	}
-	out += "\x1";
-	if(absoluteAddress >= 0) {
-		out += HexUtilities::ToHex((uint32_t)absoluteAddress);
-	}
-	out += "\x1" + byteCode + "\x1" + code + "\x2" + addressing + "\x2";
-	if(!comment.empty()) {
-		out += ";" + comment;
-	}
-	out += "\n";
-	return out;
+	GetCodeLine(out, code, comment, cpuAddress, absoluteAddress, emptyString, emptyString, false, false);
 }
 
-string Disassembler::GetSubHeader(DisassemblyInfo *info, string &label, uint16_t relativeAddr, uint16_t resetVector, uint16_t nmiVector, uint16_t irqVector)
+void Disassembler::GetCodeLine(string &out, string &code, string &comment, int32_t cpuAddress, int32_t absoluteAddress, string &byteCode, string &addressing, bool speculativeCode, bool isIndented)
+{
+	char buffer[1000];
+	int pos = 0;
+	char* ptrBuf = buffer;
+	int* ptrPos = &pos;
+
+	auto writeChar = [=](char c) -> void {
+		if(*ptrPos < 999) {
+			ptrBuf[(*ptrPos)++] = c;
+		}
+	};
+
+	auto writeHex = [=](const char* hex) -> void {
+		if(*ptrPos < 950) {
+			ptrBuf[(*ptrPos)++] = hex[0];
+			ptrBuf[(*ptrPos)++] = hex[1];
+		}
+	};
+
+	auto writeStr = [=](string &str) -> void {
+		uint32_t len = (uint32_t)str.size();
+		if(*ptrPos + len < 950) {
+			memcpy(ptrBuf + (*ptrPos), str.c_str(), len);
+			(*ptrPos) += len;
+		} else {
+			len = 950 - *ptrPos;
+			memcpy(ptrBuf + (*ptrPos), str.c_str(), len);
+			(*ptrPos) += len;
+		}
+	};
+	
+	//Fields:
+	//Flags | CpuAddress | AbsAddr | ByteCode | Code | Addressing | Comment
+	if(cpuAddress >= 0) {
+		if(speculativeCode) {
+			writeChar(isIndented ? '6' : '2');
+			writeChar('\x1');
+		} else {
+			writeChar((_debugger->IsMarkedAsCode(cpuAddress) || absoluteAddress == -1) ? (isIndented ? '5' : '1') : (isIndented ? '4' : '0'));
+			writeChar('\x1');
+		}
+		writeHex(hexTable[(cpuAddress >> 8) & 0xFF]);
+		writeHex(hexTable[cpuAddress & 0xFF]);
+		writeChar('\x1');
+	} else {
+		writeChar('1');
+		writeChar('\x1');
+		writeChar('\x1');
+	}
+
+	if(absoluteAddress >= 0) {
+		if(absoluteAddress > 0xFFFFFF) {
+			writeHex(hexTable[(absoluteAddress >> 24) & 0xFF]);
+		}
+		if(absoluteAddress > 0xFFFF) {
+			writeHex(hexTable[(absoluteAddress >> 16) & 0xFF]);
+		}			
+		writeHex(hexTable[(absoluteAddress >> 8) & 0xFF]);
+		writeHex(hexTable[absoluteAddress & 0xFF]);
+	}
+
+	writeChar('\x1');
+	writeStr(byteCode);
+	writeChar('\x1');
+	writeStr(code);
+	writeChar('\x1');
+	writeStr(addressing);
+	writeChar('\x1');
+	if(!comment.empty()) {
+		writeChar(';');
+		writeStr(comment);
+	}
+	writeChar('\x1');
+	ptrBuf[(*ptrPos)++] = 0;
+
+	out.append(buffer, pos - 1);
+}
+
+void Disassembler::GetSubHeader(string &out, DisassemblyInfo *info, string &label, uint16_t relativeAddr, uint16_t resetVector, uint16_t nmiVector, uint16_t irqVector)
 {
 	if(info->IsSubEntryPoint()) {
 		if(label.empty()) {
-			return GetLine() + GetLine("__sub start__");
+			GetLine(out);
+			GetLine(out, "__sub start__");
 		} else {
-			return GetLine() + GetLine("__" + label + "()__");
+			GetLine(out);
+			GetLine(out, "__" + label + "()__");
 		}
 	} else if(relativeAddr == resetVector) {
-		return GetLine() + GetLine("--reset--");
+		GetLine(out);
+		GetLine(out, "--reset--");
 	} else if(relativeAddr == irqVector) {
-		return GetLine() + GetLine("--irq--");
+		GetLine(out);
+		GetLine(out, "--irq--");
 	} else if(relativeAddr == nmiVector) {
-		return GetLine() + GetLine("--nmi--");
+		GetLine(out);
+		GetLine(out, "--nmi--");
 	}
-	return "";
 }
 
 string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager) 
@@ -330,51 +412,67 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 	uint32_t byteCount = 0;
 	bool skippingCode = false;
 	shared_ptr<CodeDataLogger> cdl = _debugger->GetCodeDataLogger();
+	string label;
+	string commentString;
+	string commentLines;
+	shared_ptr<DisassemblyInfo> infoRef;
+	DisassemblyInfo* info;
+	bool speculativeCode;
+	string spaces = "  ";
+	string effAddress;
+	string code;
+	string byteCode;
 	while(addr <= endAddr) {
-		string label = labelManager->GetLabel(memoryAddr, false);
-		string commentString = labelManager->GetComment(memoryAddr);
-		string labelLine = label.empty() ? "" : GetLine(label + ":");
-		string commentLines = "";
-		bool speculativeCode = false;
+		labelManager->GetLabelAndComment(memoryAddr, label, commentString);
+		commentLines.clear();
+		speculativeCode = false;
 
 		if(commentString.find_first_of('\n') != string::npos) {
 			for(string &str : SplitComment(commentString)) {
-				commentLines += GetLine("", str);
+				GetLine(commentLines, "", str);
 			}
-			commentString = "";
+			commentString.clear();
 		}
 		
-		shared_ptr<DisassemblyInfo> info = (*cache)[addr&mask];
+		infoRef = (*cache)[addr&mask];
+
+		info = infoRef.get();
 		if(!info && source == _prgRom) {
 			if(_debugger->CheckFlag(DebuggerFlags::DisassembleEverything) || _debugger->CheckFlag(DebuggerFlags::DisassembleEverythingButData) && !cdl->IsData(addr)) {
 				speculativeCode = true;
-				info = shared_ptr<DisassemblyInfo>(new DisassemblyInfo(source + addr, false));
+				info = new DisassemblyInfo(source + addr, false);
 			}
 		}
 
 		if(info && addr + info->GetSize() <= endAddr) {
 			if(byteCount > 0) {
-				output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
+				GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
 				byteCount = 0;
 			} 
 			
 			if(skippingCode) {
-				output += GetLine(unknownBlockHeader, "", (uint16_t)(memoryAddr - 1), addr - 1);
+				GetLine(output, unknownBlockHeader, "", (uint16_t)(memoryAddr - 1), addr - 1);
 				skippingCode = false;
 			}
 
-			output += GetSubHeader(info.get(), label, memoryAddr, resetVector, nmiVector, irqVector);
+			GetSubHeader(output, info, label, memoryAddr, resetVector, nmiVector, irqVector);
 			output += commentLines;
-			output += labelLine;
-
-			char* effectiveAddress = info->GetEffectiveAddressString(cpuState, memoryManager.get(), labelManager.get());
-			if(!effectiveAddress) {
-				effectiveAddress = "";
+			if(!label.empty()) {
+				GetLine(output, label + ":");
 			}
-			output += GetLine("  " + string(info->ToString(memoryAddr, memoryManager.get(), labelManager.get())), commentString, memoryAddr, source != _internalRam ? addr : -1, info->GetByteCode(), effectiveAddress, speculativeCode);
+			
+			byteCode.clear();
+			code.clear();
+			effAddress.clear();
+			info->GetEffectiveAddressString(effAddress, cpuState, memoryManager.get(), labelManager.get());
+			info->ToString(code, memoryAddr, memoryManager.get(), labelManager.get());
+			info->GetByteCode(byteCode);
+
+			GetCodeLine(output, code, commentString, memoryAddr, source != _internalRam ? addr : -1, byteCode, effAddress, speculativeCode, true);
 
 			if(info->IsSubExitPoint()) {
-				output += GetLine("__sub end__") + GetLine();
+				GetLine(output, "__sub end__");
+				GetLine(output);
 			}
 
 			if(speculativeCode) {
@@ -394,20 +492,20 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			}
 		} else {
 			if((!label.empty() || !commentString.empty()) && skippingCode) {
-				output += GetLine(unknownBlockHeader, "", (uint16_t)(memoryAddr - 1), addr - 1);
+				GetLine(output, unknownBlockHeader, "", (uint16_t)(memoryAddr - 1), addr - 1);
 				skippingCode = false;
 			} 
 			
 			if(!skippingCode && showOnlyDiassembledCode) {
 				if(label.empty()) {
-					output += GetLine("__unknown block__", "", memoryAddr, addr);
+					GetLine(output, "__unknown block__", "", memoryAddr, addr);
 					if(!commentString.empty()) {
-						output += GetLine("", commentString);
+						GetLine(output, "", commentString);
 					}
 				} else {
-					output += GetLine("__" + label + "__", "", memoryAddr, addr);
+					GetLine(output, "__" + label + "__", "", memoryAddr, addr);
 					if(!commentString.empty()) {
-						output += GetLine("", commentString);
+						GetLine(output, "", commentString);
 					}
 					output += commentLines;
 				}
@@ -416,14 +514,16 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 
 			if(!showOnlyDiassembledCode) {
 				if(byteCount >= 8 || ((!label.empty() || !commentString.empty()) && byteCount > 0)) {
-					output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
+					GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
 					byteCount = 0;
 				}
 
 				if(byteCount == 0) {
 					dbBuffer = ".db";
 					output += commentLines;
-					output += labelLine;
+					if(!label.empty()) {
+						GetLine(output, label + ":");
+					}
 
 					dbRelativeAddr = memoryAddr;
 					dbAbsoluteAddr = addr;
@@ -432,7 +532,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 				dbBuffer += " $" + HexUtilities::ToHex(source[addr&mask]);
 
 				if(!label.empty() || !commentString.empty()) {
-					output += GetLine(dbBuffer, commentString, dbRelativeAddr, dbAbsoluteAddr);
+					GetLine(output, dbBuffer, commentString, dbRelativeAddr, dbAbsoluteAddr);
 					byteCount = 0;
 				} else {
 					byteCount++;
@@ -441,14 +541,18 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			addr++;
 			memoryAddr++;
 		}
+
+		if(speculativeCode) {
+			delete info;
+		}
 	}
 
 	if(byteCount > 0) {
-		output += GetLine(dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
+		GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
 	}
 
 	if(skippingCode) {
-		output += GetLine("----", "", (uint16_t)(memoryAddr - 1), addr - 1);
+		GetLine(output, "----", "", (uint16_t)(memoryAddr - 1), addr - 1);
 	}
 		
 	return output;

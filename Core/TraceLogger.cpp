@@ -84,7 +84,9 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 	output += HexUtilities::ToHex(cpuState.DebugPC) + "  ";
 
 	if(_options.ShowByteCode) {
-		output += disassemblyInfo->GetByteCode() + std::string(13 - disassemblyInfo->GetByteCode().size(), ' ');
+		string byteCode;
+		disassemblyInfo->GetByteCode(byteCode);
+		output += byteCode + std::string(13 - byteCode.size(), ' ');
 	}
 
 	int indentLevel = 0;
@@ -93,17 +95,12 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 		output += std::string(indentLevel, ' ');
 	}
 
-	uint16_t disassemblyLength = 0;
-	uint16_t effectiveAddressLength = 0;
+	string code;
 	LabelManager* labelManager = _options.UseLabels ? _labelManager.get() : nullptr;
-	char* disassembly = disassemblyInfo->ToString(cpuState.DebugPC, _memoryManager.get(), labelManager, disassemblyLength);
-	char* effectiveAddress = (_options.ShowEffectiveAddresses ? disassemblyInfo->GetEffectiveAddressString(cpuState, _memoryManager.get(), labelManager, effectiveAddressLength) : nullptr);
-
-	output += disassembly;
-	if(effectiveAddress) {
-		output += effectiveAddress;
-	}
-	output += std::string(32 - disassemblyLength - effectiveAddressLength, ' ');
+	disassemblyInfo->ToString(code, cpuState.DebugPC, _memoryManager.get(), labelManager);
+	disassemblyInfo->GetEffectiveAddressString(code, cpuState, _memoryManager.get(), labelManager);
+	code += std::string(32 - code.size(), ' ');
+	output += code;
 
 	if(_options.ShowRegisters) {
 		output += " A:" + HexUtilities::ToHex(cpuState.A) +

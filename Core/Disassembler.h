@@ -23,8 +23,9 @@ private:
 	bool IsJump(uint8_t opCode);
 	bool IsUnconditionalJump(uint8_t opCode);
 	vector<string> SplitComment(string input);
-	string GetLine(string code = "", string comment = "", int32_t cpuAddress = -1, int32_t absoluteAddress = -1, string byteCode = "", string addressing = "", bool speculativeCode = false);
-	string GetSubHeader(DisassemblyInfo *info, string &label, uint16_t relativeAddr, uint16_t resetVector, uint16_t nmiVector, uint16_t irqVector);
+	void GetLine(string &out, string code = "", string comment = string(), int32_t cpuAddress = -1, int32_t absoluteAddress = -1);
+	void GetCodeLine(string &out, string &code, string &comment, int32_t cpuAddress, int32_t absoluteAddress, string &byteCode, string &addressing, bool speculativeCode, bool isCode);
+	void GetSubHeader(string &out, DisassemblyInfo *info, string &label, uint16_t relativeAddr, uint16_t resetVector, uint16_t nmiVector, uint16_t irqVector);
 
 public:
 	Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize, Debugger* debugger);
