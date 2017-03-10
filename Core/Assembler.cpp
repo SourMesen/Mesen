@@ -273,6 +273,7 @@ void Assembler::AssembleInstruction(LineData &lineData, uint16_t &instructionAdd
 				bool modeMatch = opMode == lineData.Mode;
 				if(!modeMatch) {
 					if(lineData.Mode == AddrMode::Imp && opMode == AddrMode::Acc ||
+						lineData.Mode == AddrMode::IndY && opMode == AddrMode::IndYW ||
 						lineData.Mode == AddrMode::AbsY && opMode == AddrMode::AbsYW ||
 						lineData.Mode == AddrMode::AbsX && opMode == AddrMode::AbsXW) {
 						modeMatch = true;
