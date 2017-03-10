@@ -180,4 +180,6 @@ public:
 	void GetFreezeState(uint16_t startAddress, uint16_t length, bool* freezeState);
 
 	void SaveRomToDisk(string filename);
+
+	int32_t FindSubEntryPoint(uint16_t relativeAddress);
 };

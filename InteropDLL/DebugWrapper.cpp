@@ -97,4 +97,6 @@ extern "C"
 	DllExport uint32_t __stdcall DebugAssembleCode(char* code, uint16_t startAddress, int16_t* assembledOutput) { return GetDebugger()->GetAssembler()->AssembleCode(code, startAddress, assembledOutput); }
 
 	DllExport void __stdcall DebugSaveRomToDisk(char* filename) { GetDebugger()->SaveRomToDisk(filename); }
+
+	DllExport int32_t __stdcall DebugFindSubEntryPoint(uint16_t relativeAddress) { return GetDebugger()->FindSubEntryPoint(relativeAddress); }
 };

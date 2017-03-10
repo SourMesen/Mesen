@@ -160,6 +160,11 @@ namespace Mesen.GUI.Debugger
 			get { return this.ctrlTextbox.CurrentLine; }
 		}
 
+		public int LastSelectedLine
+		{
+			get { return this.ctrlTextbox.LastSelectedLine; }
+		}
+
 		public int CodeMargin
 		{
 			get { return this.ctrlTextbox.CodeMargin; }
@@ -175,32 +180,57 @@ namespace Mesen.GUI.Debugger
 		{
 			if(!this.cboSearch.Focused) {
 				switch(keyData) {
+					case Keys.Right | Keys.Shift:
+					case Keys.Down | Keys.Shift:
+						this.ctrlTextbox.MoveSelectionDown();
+						return true;
+
 					case Keys.Down:
 					case Keys.Right:
-						this.ctrlTextbox.CursorPosition++;
+						this.ctrlTextbox.SelectionStart++;
+						this.ctrlTextbox.SelectionLength = 0;
 						return true;
+
+					case Keys.Up | Keys.Shift:
+					case Keys.Left | Keys.Shift:
+						this.ctrlTextbox.MoveSelectionUp();
+						return true;
+
 					case Keys.Up:
 					case Keys.Left:
-						this.ctrlTextbox.CursorPosition--;
+						this.ctrlTextbox.SelectionStart--;
+						this.ctrlTextbox.SelectionLength = 0;
 						return true;
 
 					case Keys.Home:
-						this.ctrlTextbox.CursorPosition = 0;
+						this.ctrlTextbox.SelectionStart = 0;
+						this.ctrlTextbox.SelectionLength = 0;
 						return true;
 
 					case Keys.End:
-						this.ctrlTextbox.CursorPosition = this.ctrlTextbox.LineCount - 1;
+						this.ctrlTextbox.SelectionStart = this.ctrlTextbox.LineCount - 1;
+						this.ctrlTextbox.SelectionLength = 0;
 						return true;
 				}
 			}
 
 			switch(keyData) {
+				case Keys.PageUp | Keys.Shift:
+					this.ctrlTextbox.MoveSelectionUp(20);
+					return true;
+
 				case Keys.PageUp:
-					this.ctrlTextbox.CursorPosition-=20;
+					this.ctrlTextbox.SelectionStart-=20;
+					this.ctrlTextbox.SelectionLength = 0;
+					return true;
+
+				case Keys.PageDown | Keys.Shift:
+					this.ctrlTextbox.MoveSelectionDown(20);
 					return true;
 
 				case Keys.PageDown:
-					this.ctrlTextbox.CursorPosition+=20;
+					this.ctrlTextbox.SelectionStart+=20;
+					this.ctrlTextbox.SelectionLength = 0;
 					return true;
 
 				case Keys.Control | Keys.F:
@@ -385,7 +415,7 @@ namespace Mesen.GUI.Debugger
 			GoToAddress address = new GoToAddress();
 
 			int currentAddr = this.CurrentLine;
-			int lineIndex = this.ctrlTextbox.CursorPosition;
+			int lineIndex = this.ctrlTextbox.SelectionStart;
 			while(currentAddr < 0) {
 				lineIndex++;
 				currentAddr = this.ctrlTextbox.GetLineNumber(lineIndex);

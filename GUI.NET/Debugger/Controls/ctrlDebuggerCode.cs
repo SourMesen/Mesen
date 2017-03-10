@@ -166,31 +166,45 @@ namespace Mesen.GUI.Debugger
 			this.ctrlCodeViewer.EndUpdate();
 		}
 
-		Dictionary<int, Tuple<string, string>> _codeContent = new Dictionary<int, Tuple<string, string>>();
+		Dictionary<int, string> _codeContent = new Dictionary<int, string>();
 		Dictionary<int, int> _codeByteContentLength = new Dictionary<int, int>();
-		public List<string> GetCode(out int byteLength, int startAddress, int endAddress = -1)
+		public List<string> GetCode(out int byteLength, ref int startAddress, int endAddress = -1)
 		{
 			List<string> result = new List<string>();
 			byteLength = 0;
 
-			//TODO: Handle multi-line comments
-			//TODO: Find start of function
-			//TODO: Display labels in code window
-			//TODO: Status bar to show cursor's current line
-			//TODO: Bind "Start Address" field
-			//TODO: Byte code cache doesn't update
+			if(endAddress == -1) {
+				//When no end address is specified, find the start of the function based on startAddress
+				int address = InteropEmu.DebugFindSubEntryPoint((UInt16)startAddress);
+				if(address != -1) {
+					startAddress = address;
+				}
+			}
+
 			//TODO: Invalidate disassembly info cache / CDL file (not needed?)
 			//TODO: Support .data syntax in assembler
-			for(int i = startAddress; (i < endAddress || endAddress == -1) && endAddress < 65536; ) {
-				Tuple<string, string> codeRow;
-				if(_codeContent.TryGetValue(i, out codeRow)) {
-					string code = codeRow.Item1;
-					string comment = codeRow.Item2;
+			for(int i = startAddress; (i <= endAddress || endAddress == -1) && endAddress < 65536; ) {
+				if(_codeContent.TryGetValue(i, out string code)) {
 					if(code.StartsWith("--") || code.StartsWith("__") || code.StartsWith("[[")) {
+						//Stop adding code when we find a new section (new function, data blocks, etc.)
 						break;
 					}
 
-					result.Add(code + (comment ?? ""));
+					AddressTypeInfo info = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)i, ref info);
+					CodeLabel codeLabel = info.Address >= 0 ? LabelManager.GetLabel((UInt32)info.Address, AddressType.PrgRom) : null;
+					string comment = codeLabel?.Comment;
+					string label = codeLabel?.Label;
+
+					if(!string.IsNullOrWhiteSpace(comment) && comment.Contains("\n")) {
+						result.AddRange(comment.Replace("\r", "").Split('\n').Select(cmt => ";" + cmt));
+						comment = null;
+					}
+					if(!string.IsNullOrWhiteSpace(label)) {
+						result.Add(label + ":");
+					}
+					result.Add("  " + code + (!string.IsNullOrWhiteSpace(comment) ? (" ;" + comment) : ""));
+					
 					int length = _codeByteContentLength[i];
 					byteLength += length;
 					i += length;
@@ -213,7 +227,7 @@ namespace Mesen.GUI.Debugger
 				List<string> lineNumberNotes = new List<string>();
 				List<string> codeNotes = new List<string>();
 				List<string> codeLines = new List<string>();
-				_codeContent = new Dictionary<int, Tuple<string, string>>();
+				_codeContent = new Dictionary<int, string>();
 				_codeByteContentLength = new Dictionary<int, int>();
 				_unexecutedAddresses = new HashSet<int>();
 				_speculativeCodeAddreses = new HashSet<int>();
@@ -239,8 +253,7 @@ namespace Mesen.GUI.Debugger
 						codeLines.Add(lineParts[4]);
 						_codeByteContentLength[relativeAddress] = lineParts[3].Count(c => c == ' ') + 1;
 
-						string[] codeRow = lineParts[4].Split('\x2');
-						_codeContent[relativeAddress] = new Tuple<string, string>(codeRow[0].Trim(), codeRow.Length > 2 ? " " + codeRow[2].Replace(Environment.NewLine, " | ") : null);
+						_codeContent[relativeAddress] = lineParts[4].Split('\x2')[0].Trim();
 					}
 
 					previousIndex = index;
@@ -738,8 +751,19 @@ namespace Mesen.GUI.Debugger
 			int currentLine = this.GetCurrentLine();
 			if(currentLine != -1 && InteropEmu.DebugIsExecutionStopped()) {
 				int byteLength;
-				List<string> code = this.GetCode(out byteLength, currentLine);
+				List<string> code = this.GetCode(out byteLength, ref currentLine);
 				this.OnEditCode?.Invoke(new AssemblerEventArgs() { Code = string.Join(Environment.NewLine, code), StartAddress = (UInt16)currentLine, BlockLength = (UInt16)byteLength });
+			}
+		}
+
+		private void mnuEditSelectedCode_Click(object sender, EventArgs e)
+		{
+			int startAddress = this.GetCurrentLine();
+			int endAddress = this.ctrlCodeViewer.LastSelectedLine;
+			if(startAddress != -1 && InteropEmu.DebugIsExecutionStopped()) {
+				int byteLength;
+				List<string> code = this.GetCode(out byteLength, ref startAddress, endAddress);
+				this.OnEditCode?.Invoke(new AssemblerEventArgs() { Code = string.Join(Environment.NewLine, code), StartAddress = (UInt16)startAddress, BlockLength = (UInt16)byteLength });
 			}
 		}
 	}

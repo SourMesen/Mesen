@@ -45,6 +45,10 @@
 			this.lblNoChanges = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.txtCode = new System.Windows.Forms.RichTextBox();
+			this.statCode = new System.Windows.Forms.StatusStrip();
+			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.lblLineNumber = new System.Windows.Forms.ToolStripStatusLabel();
+			this.picStartAddressWarning = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpSettings.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -53,6 +57,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.picSizeWarning)).BeginInit();
 			this.flowLayoutPanel3.SuspendLayout();
 			this.panel1.SuspendLayout();
+			this.statCode.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picStartAddressWarning)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btnOk
@@ -92,7 +98,7 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 141F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(999, 534);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(999, 555);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// ctrlHexBox
@@ -107,7 +113,7 @@
 			this.ctrlHexBox.Name = "ctrlHexBox";
 			this.ctrlHexBox.ReadOnly = true;
 			this.ctrlHexBox.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-			this.ctrlHexBox.Size = new System.Drawing.Size(444, 387);
+			this.ctrlHexBox.Size = new System.Drawing.Size(444, 408);
 			this.ctrlHexBox.TabIndex = 1;
 			this.ctrlHexBox.UseFixedBytesPerLine = true;
 			this.ctrlHexBox.VScrollBarVisible = true;
@@ -115,7 +121,7 @@
 			// lstErrors
 			// 
 			this.lstErrors.FormattingEnabled = true;
-			this.lstErrors.Location = new System.Drawing.Point(3, 396);
+			this.lstErrors.Location = new System.Drawing.Point(3, 417);
 			this.lstErrors.Name = "lstErrors";
 			this.lstErrors.Size = new System.Drawing.Size(543, 134);
 			this.lstErrors.TabIndex = 2;
@@ -124,7 +130,7 @@
 			// 
 			this.grpSettings.Controls.Add(this.tableLayoutPanel2);
 			this.grpSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpSettings.Location = new System.Drawing.Point(552, 396);
+			this.grpSettings.Location = new System.Drawing.Point(552, 417);
 			this.grpSettings.Name = "grpSettings";
 			this.grpSettings.Size = new System.Drawing.Size(444, 135);
 			this.grpSettings.TabIndex = 3;
@@ -152,6 +158,7 @@
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.label1);
 			this.flowLayoutPanel1.Controls.Add(this.txtStartAddress);
+			this.flowLayoutPanel1.Controls.Add(this.picStartAddressWarning);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
@@ -175,9 +182,11 @@
 			this.txtStartAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.txtStartAddress.Location = new System.Drawing.Point(84, 3);
 			this.txtStartAddress.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.txtStartAddress.MaxLength = 4;
 			this.txtStartAddress.Name = "txtStartAddress";
-			this.txtStartAddress.Size = new System.Drawing.Size(65, 20);
+			this.txtStartAddress.Size = new System.Drawing.Size(48, 20);
 			this.txtStartAddress.TabIndex = 1;
+			this.txtStartAddress.TextChanged += new System.EventHandler(this.txtStartAddress_TextChanged);
 			// 
 			// flowLayoutPanel2
 			// 
@@ -251,34 +260,76 @@
 			// 
 			this.panel1.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.panel1.Controls.Add(this.txtCode);
+			this.panel1.Controls.Add(this.statCode);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(3, 3);
 			this.panel1.Name = "panel1";
 			this.panel1.Padding = new System.Windows.Forms.Padding(1);
-			this.panel1.Size = new System.Drawing.Size(543, 387);
+			this.panel1.Size = new System.Drawing.Size(543, 408);
 			this.panel1.TabIndex = 4;
 			// 
 			// txtCode
 			// 
 			this.txtCode.AcceptsTab = true;
+			this.txtCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtCode.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.txtCode.DetectUrls = false;
-			this.txtCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtCode.Location = new System.Drawing.Point(1, 1);
 			this.txtCode.Name = "txtCode";
 			this.txtCode.Size = new System.Drawing.Size(541, 385);
 			this.txtCode.TabIndex = 4;
 			this.txtCode.Text = "";
 			this.txtCode.WordWrap = false;
+			this.txtCode.SelectionChanged += new System.EventHandler(this.txtCode_SelectionChanged);
 			this.txtCode.TextChanged += new System.EventHandler(this.txtCode_TextChanged);
 			this.txtCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCode_KeyDown);
+			// 
+			// statCode
+			// 
+			this.statCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.lblLineNumber});
+			this.statCode.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+			this.statCode.Location = new System.Drawing.Point(1, 387);
+			this.statCode.Name = "statCode";
+			this.statCode.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+			this.statCode.Size = new System.Drawing.Size(541, 20);
+			this.statCode.SizingGrip = false;
+			this.statCode.TabIndex = 5;
+			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Control;
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(32, 15);
+			this.toolStripStatusLabel1.Text = "Line:";
+			// 
+			// lblLineNumber
+			// 
+			this.lblLineNumber.BackColor = System.Drawing.SystemColors.Control;
+			this.lblLineNumber.Name = "lblLineNumber";
+			this.lblLineNumber.Size = new System.Drawing.Size(13, 15);
+			this.lblLineNumber.Text = "1";
+			// 
+			// picStartAddressWarning
+			// 
+			this.picStartAddressWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
+			this.picStartAddressWarning.Location = new System.Drawing.Point(138, 5);
+			this.picStartAddressWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.picStartAddressWarning.Name = "picStartAddressWarning";
+			this.picStartAddressWarning.Size = new System.Drawing.Size(18, 18);
+			this.picStartAddressWarning.TabIndex = 11;
+			this.picStartAddressWarning.TabStop = false;
+			this.picStartAddressWarning.Visible = false;
 			// 
 			// frmAssembler
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(999, 534);
+			this.ClientSize = new System.Drawing.Size(999, 555);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "frmAssembler";
 			this.Text = "Assembler";
@@ -293,6 +344,10 @@
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
 			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
+			this.statCode.ResumeLayout(false);
+			this.statCode.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picStartAddressWarning)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -316,5 +371,9 @@
 		private System.Windows.Forms.RichTextBox txtCode;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Label lblNoChanges;
+		private System.Windows.Forms.StatusStrip statCode;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+		private System.Windows.Forms.ToolStripStatusLabel lblLineNumber;
+		private System.Windows.Forms.PictureBox picStartAddressWarning;
 	}
 }

@@ -14,7 +14,6 @@ public:
 	static bool IsUnofficialCode[256];
 
 private:
-	string _byteCode;
 	uint8_t *_opPointer = nullptr;
 	bool _isSubEntryPoint = false;
 	bool _isSubExitPoint = false;

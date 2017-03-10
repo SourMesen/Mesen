@@ -88,7 +88,7 @@ AssemblerSpecialCodes Assembler::GetLineData(std::smatch match, LineData &lineDa
 
 	bool foundSpace = false;
 	for(char c : match.str(5)) {
-		if(c != ' ') {
+		if(c != ' ' && c != '\t') {
 			if(foundSpace) {
 				//can't have spaces in operands (except at the very end)
 				return AssemblerSpecialCodes::InvalidSpaces;

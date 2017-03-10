@@ -21,6 +21,7 @@ namespace Mesen.GUI.Debugger
 		private bool _hasParsingErrors = false;
 		private bool _containedRtiRts = false;
 		private bool _isEditMode = false;
+		private bool _startAddressValid = true;
 
 		public frmAssembler(string code = "", UInt16 startAddress = 0, UInt16 blockLength = 0)
 		{
@@ -52,6 +53,7 @@ namespace Mesen.GUI.Debugger
 			txtCode.Select(0, 0);
 
 			toolTip.SetToolTip(picSizeWarning, "Warning: The new code exceeds the original code's length." + Environment.NewLine + "Applying this modification will overwrite other portions of the code and potentially cause problems.");
+			toolTip.SetToolTip(picStartAddressWarning, "Warning: Start address is invalid.  Must be a valid hexadecimal string.");
 
 			UpdateWindow();
 		}
@@ -137,10 +139,13 @@ namespace Mesen.GUI.Debugger
 
 				bool isIdentical = IsIdentical;
 				lblNoChanges.Visible = isIdentical;
-				btnOk.Enabled = !isIdentical;
+				btnOk.Enabled = !isIdentical && _startAddressValid;
 			} else {
+				lblNoChanges.Visible = false;
 				lblByteUsage.Text = ctrlHexBox.ByteProvider.Length.ToString();
 			}
+
+			picStartAddressWarning.Visible = !_startAddressValid;
 		}
 
 		private void txtCode_TextChanged(object sender, EventArgs e)
@@ -156,6 +161,22 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void txtCode_SelectionChanged(object sender, EventArgs e)
+		{
+			lblLineNumber.Text = (txtCode.GetLineFromCharIndex(txtCode.GetFirstCharIndexOfCurrentLine()) + 1).ToString();
+		}
+
+		private void txtStartAddress_TextChanged(object sender, EventArgs e)
+		{
+			try {
+				_startAddress = UInt16.Parse(txtStartAddress.Text, System.Globalization.NumberStyles.HexNumber);
+				_startAddressValid = true;
+			} catch {
+				_startAddressValid = false;
+			}
+			UpdateWindow();
+		}
+
 		private void btnOk_Click(object sender, EventArgs e)
 		{
 			List<string> warningMessages = new List<string>();
@@ -167,6 +188,9 @@ namespace Mesen.GUI.Debugger
 			}
 			if(NeedRtiRtsWarning) {
 				warningMessages.Add("Warning: The code originally contained an RTI/RTS instruction and it no longer does - this will probably cause problems.");
+			}
+			if(!_startAddressValid) {
+				warningMessages.Add("Warning: Start address is invalid.  Must be a valid hexadecimal string.");
 			}
 
 			if(warningMessages.Count == 0 || MessageBox.Show(string.Join(Environment.NewLine+Environment.NewLine, warningMessages.ToArray()) + Environment.NewLine + Environment.NewLine + "OK?", "Warning", MessageBoxButtons.OKCancel) == DialogResult.OK) {

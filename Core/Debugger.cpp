@@ -758,3 +758,18 @@ void Debugger::SaveRomToDisk(string filename)
 {
 	_mapper->SaveRomToDisk(filename);
 }
+
+int32_t Debugger::FindSubEntryPoint(uint16_t relativeAddress)
+{
+	AddressTypeInfo info;
+	int32_t address = relativeAddress;
+	do {
+		GetAbsoluteAddressAndType(address, &info);
+		if(info.Address < 0 || info.Type != AddressType::PrgRom || !_codeDataLogger->IsCode(info.Address) || _codeDataLogger->IsSubEntryPoint(info.Address)) {
+			break;
+		}
+		address--;
+	} while(address >= 0);
+
+	return address + 1;
+}

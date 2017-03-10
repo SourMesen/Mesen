@@ -68,6 +68,7 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picCloseOccurrenceList = new System.Windows.Forms.PictureBox();
 			this.lblSearchResult = new System.Windows.Forms.Label();
+			this.mnuEditSelectedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuCode.SuspendLayout();
 			this.contextMenuMargin.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -82,6 +83,7 @@
 			// contextMenuCode
 			// 
 			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuEditSelectedCode,
             this.mnuEditSubroutine,
             this.toolStripMenuItem7,
             this.mnuShowNextStatement,
@@ -100,7 +102,7 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 320);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 342);
 			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
@@ -446,6 +448,14 @@
 			this.lblSearchResult.TabIndex = 11;
 			this.lblSearchResult.Text = "Search results for: ";
 			// 
+			// mnuEditSelectedCode
+			// 
+			this.mnuEditSelectedCode.Image = global::Mesen.GUI.Properties.Resources.Edit;
+			this.mnuEditSelectedCode.Name = "mnuEditSelectedCode";
+			this.mnuEditSelectedCode.Size = new System.Drawing.Size(258, 22);
+			this.mnuEditSelectedCode.Text = "Edit selected code";
+			this.mnuEditSelectedCode.Click += new System.EventHandler(this.mnuEditSelectedCode_Click);
+			// 
 			// ctrlDebuggerCode
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -509,5 +519,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSubroutine;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditSelectedCode;
 	}
 }

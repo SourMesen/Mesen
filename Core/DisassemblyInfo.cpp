@@ -234,20 +234,17 @@ int32_t DisassemblyInfo::GetEffectiveAddress(State& cpuState, MemoryManager* mem
 		
 string DisassemblyInfo::GetByteCode()
 {
-	if(_byteCode.empty()) {
-		//Raw byte code
-		string byteCodeOutput;
-		byteCodeOutput.reserve(10);
-		for(uint32_t i = 0; i < _opSize; i++) {
-			if(!byteCodeOutput.empty()) {
-				byteCodeOutput += " ";
-			}
-			byteCodeOutput += "$" + HexUtilities::ToHex((uint8_t)*(_opPointer + i));
+	//Raw byte code
+	string byteCode;
+	byteCode.reserve(12);
+	for(uint32_t i = 0; i < _opSize; i++) {
+		if(!byteCode.empty()) {
+			byteCode += " ";
 		}
-		_byteCode = byteCodeOutput;
+		byteCode += "$" + HexUtilities::ToHex((uint8_t)*(_opPointer + i));
 	}
 
-	return _byteCode;
+	return byteCode;
 }
 
 uint32_t DisassemblyInfo::GetSize()

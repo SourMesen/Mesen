@@ -59,7 +59,8 @@ namespace Mesen.GUI.Debugger
 		private bool _showSingleLineLineNumberNotes = false;
 		private bool _showContentNotes = false;
 		private bool _showSingleLineContentNotes = true;
-		private int _cursorPosition = 0;
+		private int _selectionStart = 0;
+		private int _selectionLength = 0;
 		private int _scrollPosition = 0;
 		private int _horizontalScrollPosition = 0;
 		private string _searchString = null;
@@ -278,8 +279,8 @@ namespace Mesen.GUI.Debugger
 				this._searchString = searchString.ToLowerInvariant();
 				int searchOffset = (searchBackwards ? -1 : 1);
 				if(isNewSearch) {
-					startPosition = this.CursorPosition;
-					endPosition = this.CursorPosition - searchOffset;
+					startPosition = this.SelectionStart;
+					endPosition = this.SelectionStart - searchOffset;
 					if(endPosition < 0) {
 						endPosition = _contents.Length - 1;
 					} else if(endPosition >= _contents.Length) {
@@ -287,8 +288,8 @@ namespace Mesen.GUI.Debugger
 					}
 
 				} else {
-					startPosition = this.CursorPosition + searchOffset;
-					endPosition = this.CursorPosition;
+					startPosition = this.SelectionStart + searchOffset;
+					endPosition = this.SelectionStart;
 					if(startPosition < 0) {
 						startPosition = _contents.Length - 1;
 					} else if(startPosition >= _contents.Length) {
@@ -311,7 +312,7 @@ namespace Mesen.GUI.Debugger
 					}
 				}
 				this.Invalidate();
-				return _contents[_cursorPosition].ToLowerInvariant().Contains(this._searchString);
+				return _contents[_selectionStart].ToLowerInvariant().Contains(this._searchString);
 			}
 		}
 
@@ -378,7 +379,7 @@ namespace Mesen.GUI.Debugger
 
 		public void ScrollToLineIndex(int lineIndex, eHistoryType historyType = eHistoryType.Always)
 		{
-			if(this.CursorPosition != lineIndex) {
+			if(this.SelectionStart != lineIndex) {
 				bool scrolled = false;
 				if(lineIndex < this.ScrollPosition || lineIndex > this.GetLastVisibleLineIndex()) {
 					//Line isn't currently visible, scroll it to the middle of the viewport
@@ -387,11 +388,12 @@ namespace Mesen.GUI.Debugger
 				}
 
 				if(historyType == eHistoryType.Always || scrolled && historyType == eHistoryType.OnScroll) {
-					_history.AddHistory(this.CursorPosition);
+					_history.AddHistory(this.SelectionStart);
 				}
-				this.CursorPosition = lineIndex;
+				this.SelectionStart = lineIndex;
+				this.SelectionLength = 0;
 				if(historyType == eHistoryType.Always || scrolled && historyType == eHistoryType.OnScroll) {
-					_history.AddHistory(this.CursorPosition);
+					_history.AddHistory(this.SelectionStart);
 				}
 			}
 		}
@@ -511,24 +513,110 @@ namespace Mesen.GUI.Debugger
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public int CursorPosition
+		public int SelectionStart
 		{
-			get { return Math.Min(this._contents.Length - 1, Math.Max(0, _cursorPosition)); }
+			get { return Math.Min(this._contents.Length - 1, Math.Max(0, _selectionStart)); }
 			set
-			{ 
-				_cursorPosition = Math.Max(0, Math.Min(this._contents.Length - 1, Math.Max(0, value)));
-				if(_cursorPosition < this.ScrollPosition) {
-					this.ScrollPosition = _cursorPosition;
-				} else if(_cursorPosition > this.GetLastVisibleLineIndex()) {
-					this.ScrollPosition = _cursorPosition - this.GetNumberVisibleLines() + 1;
+			{
+				int selectionStart = Math.Max(0, Math.Min(this._contents.Length - 1, Math.Max(0, value)));
+				
+				_selectionStart = selectionStart;
+
+				if(this.SelectionLength == 0) {
+					this.SelectedLine = this.SelectionStart;
+				}
+
+				this.Invalidate();
+			}
+		}
+
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public int SelectionLength
+		{
+			get { return (this.SelectionStart + _selectionLength) > this._contents.Length - 1 ? this._contents.Length - this.SelectionStart - 1 : _selectionLength; }
+			set
+			{
+				_selectionLength = value;
+
+				if(this.SelectionStart + _selectionLength > this._contents.Length - 1) {
+					_selectionLength = this._contents.Length - this.SelectionStart - 1;
+				}
+
+				if(value == 0) {
+					this.SelectedLine = this.SelectionStart;
+				}
+
+				this.Invalidate();
+			}
+		}
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		private int SelectedLine
+		{
+			get { return this._selectedLine; }
+			set
+			{
+				this._selectedLine = value;
+				if(_selectedLine < this.ScrollPosition) {
+					this.ScrollPosition = _selectedLine;
+				} else if(_selectedLine > this.GetLastVisibleLineIndex()) {
+					this.ScrollPosition = _selectedLine - this.GetNumberVisibleLines() + 1;
 				}
 				this.Invalidate();
+			}
+		}
+		private int _selectedLine = 0;
+
+		public void MoveSelectionDown(int lines = 1)
+		{
+			while(lines > 0) {
+				bool singleLineSelection = this.SelectionLength == 0;
+
+				if(singleLineSelection) {
+					this.SelectedLine = this.SelectionStart + 1;
+					this.SelectionLength++;
+				} else if(this.SelectionStart + this.SelectionLength == this.SelectedLine) {
+					this.SelectedLine++;
+					this.SelectionLength++;
+				} else {
+					this.SelectionStart++;
+					this.SelectedLine++;
+					this.SelectionLength--;
+				}
+				lines--;
+			}
+		}
+
+		public void MoveSelectionUp(int lines = 1)
+		{
+			while(lines > 0) {
+				bool singleLineSelection = this.SelectionLength == 0;
+
+				if(singleLineSelection) {
+					this.SelectionStart--;
+					this.SelectedLine = this.SelectionStart;
+					this.SelectionLength++;
+				} else if(this.SelectionStart == this.SelectedLine) {
+					this.SelectionStart--;
+					this.SelectedLine--;
+					this.SelectionLength++;
+				} else {
+					this.SelectedLine--;
+					this.SelectionLength--;
+				}
+				lines--;
 			}
 		}
 
 		public int CurrentLine
 		{
-			get { return _lineNumbers.Length > _cursorPosition ? _lineNumbers[_cursorPosition] : 0; }
+			get { return _lineNumbers.Length > _selectionStart ? _lineNumbers[_selectionStart] : 0; }
+		}
+
+		public int LastSelectedLine
+		{
+			get { return _lineNumbers.Length > _selectionStart + this.SelectionLength ? _lineNumbers[_selectionStart + this.SelectionLength] : 0; }
 		}
 
 		[Browsable(false)]
@@ -615,8 +703,26 @@ namespace Mesen.GUI.Debugger
 			} else if(e.Button == MouseButtons.XButton2) {
 				this.NavigateForward();
 			} else {
-				int clickedLine = this.GetLineAtPosition(e.Y);
-				this.CursorPosition = this.ScrollPosition + clickedLine;
+				int clickedLine = this.ScrollPosition + this.GetLineAtPosition(e.Y);
+
+				if(e.Button == MouseButtons.Right) {
+					if(clickedLine >= this.SelectionStart && clickedLine <= this.SelectionStart + this.SelectionLength) {
+						//Right-clicking on selection should not change it
+						return;
+					}
+				}
+
+				if(Control.ModifierKeys.HasFlag(Keys.Shift)) {
+					if(clickedLine > this.SelectedLine) {
+						MoveSelectionDown(clickedLine - this.SelectedLine);
+					} else {
+						MoveSelectionUp(this.SelectedLine - clickedLine);
+					}
+				} else {
+					this.SelectedLine = clickedLine;
+					this.SelectionStart = clickedLine;
+					this.SelectionLength = 0;
+				}
 			}
 		}
 
@@ -640,9 +746,15 @@ namespace Mesen.GUI.Debugger
 			float codeStringLength = g.MeasureString(codeString, this.Font).Width;
 			float addressStringLength = g.MeasureString(addressString, this.Font).Width;
 
-			if(currentLine == this.CursorPosition) {
+			if(currentLine >= this.SelectionStart && currentLine <= this.SelectionStart + this.SelectionLength) {
 				//Highlight current line
-				g.FillRectangle(Brushes.AliceBlue, marginLeft, positionY, Math.Max(_maxLineWidth, this.ClientRectangle.Width), lineHeight);
+				using(Brush brush = new SolidBrush(Color.FromArgb(230, 238, 255))) {
+					int offset = currentLine -  1 == this.SelectedLine ? 1 : 0;
+					g.FillRectangle(brush, marginLeft, positionY + offset, Math.Max(_maxLineWidth, this.ClientRectangle.Width), lineHeight - offset);
+				}
+				if(currentLine == this.SelectedLine) {
+					g.DrawRectangle(Pens.Blue, marginLeft + 1, positionY+1, Math.Max(_maxLineWidth, this.ClientRectangle.Width - marginLeft) - 1, lineHeight);
+				}
 			}
 
 			//Adjust background color highlights based on number of spaces in front of content
