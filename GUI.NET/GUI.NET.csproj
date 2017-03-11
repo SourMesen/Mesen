@@ -947,6 +947,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\Copy.png" />
     <None Include="Resources\StepOut.png" />
     <None Include="Resources\StepInto.png" />
     <None Include="Resources\StepOver.png" />

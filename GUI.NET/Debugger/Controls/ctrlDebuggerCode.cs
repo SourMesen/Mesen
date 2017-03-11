@@ -163,18 +163,18 @@ namespace Mesen.GUI.Debugger
 		public void SetActiveAddress(UInt32 address)
 		{
 			_currentActiveAddress = address;
+			this.UpdateLineColors();
 		}
 		
 		public void ClearActiveAddress()
 		{
 			_currentActiveAddress = null;
+			this.UpdateLineColors();
 		}
 
 		public void UpdateLineColors()
 		{
-			this.ctrlCodeViewer.BeginUpdate();
 			this.ctrlCodeViewer.StyleProvider = new LineStyleProvider(this);
-			this.ctrlCodeViewer.EndUpdate();
 		}
 
 		public List<string> GetCode(out int byteLength, ref int startAddress, int endAddress = -1)
@@ -197,7 +197,7 @@ namespace Mesen.GUI.Debugger
 				if(_codeContent.TryGetValue(i, out code)) {
 					code = code.Split('\x2')[0].Trim();
 
-					if(code.StartsWith("--") || code.StartsWith("__") || code.StartsWith("[[")) {
+					if(code.StartsWith("--") || code.StartsWith("__")) {
 						//Stop adding code when we find a new section (new function, data blocks, etc.)
 						break;
 					}
@@ -860,6 +860,11 @@ namespace Mesen.GUI.Debugger
 				}
 				return null;
 			}
+		}
+
+		private void copySelectionToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			this.ctrlCodeViewer.CopySelection();
 		}
 	}
 

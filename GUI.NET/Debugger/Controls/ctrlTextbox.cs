@@ -70,7 +70,6 @@ namespace Mesen.GUI.Debugger
 		private int _extendedMarginWidth = 13;
 		private float _maxLineWidth = 0;
 		private int _maxLineWidthIndex = 0;
-		private bool _updating = false;
 
 		public ctrlTextbox()
 		{
@@ -248,7 +247,7 @@ namespace Mesen.GUI.Debugger
 			for(int i = 0, len = _contents.Length; i < len; i++) {
 				string line = _contents[i] + Addressing?[i] + (Comments != null ? ("\t" + Comments[i]) : null);
 				if(Regex.IsMatch(line, regex, matchCase ? RegexOptions.None : RegexOptions.IgnoreCase)) {
-					if(line.StartsWith("__") && line.EndsWith("__") || line.StartsWith("[[") && line.EndsWith("]]")) {
+					if(line.StartsWith("__") && line.EndsWith("__")) {
 						line = "Block: " + line.Substring(2, line.Length - 4);
 					}
 
@@ -318,23 +317,21 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void BeginUpdate()
-		{
-			this._updating = true;
-		}
-
-		public void EndUpdate()
-		{
-			this._updating = false;
-			this.Invalidate();
-		}
-
 		public interface ILineStyleProvider
 		{
 			LineProperties GetLineStyle(int cpuAddress);
 		}
 
-		public ILineStyleProvider StyleProvider { get; set; }
+		private ILineStyleProvider _styleProvider;
+		public ILineStyleProvider StyleProvider
+		{
+			get { return _styleProvider; }
+			set
+			{
+				_styleProvider = value;
+				this.Invalidate();
+			}
+		}
 
 		public LineProperties GetLineStyle(int lineNumber)
 		{
@@ -682,6 +679,8 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		int _clickedLine;
+		bool _mouseDragging;
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
@@ -692,27 +691,77 @@ namespace Mesen.GUI.Debugger
 			} else if(e.Button == MouseButtons.XButton2) {
 				this.NavigateForward();
 			} else {
-				int clickedLine = this.ScrollPosition + this.GetLineAtPosition(e.Y);
+				_clickedLine = this.ScrollPosition + this.GetLineAtPosition(e.Y);
 
 				if(e.Button == MouseButtons.Right) {
-					if(clickedLine >= this.SelectionStart && clickedLine <= this.SelectionStart + this.SelectionLength) {
+					if(_clickedLine >= this.SelectionStart && _clickedLine <= this.SelectionStart + this.SelectionLength) {
 						//Right-clicking on selection should not change it
 						return;
 					}
 				}
 
 				if(Control.ModifierKeys.HasFlag(Keys.Shift)) {
-					if(clickedLine > this.SelectedLine) {
-						MoveSelectionDown(clickedLine - this.SelectedLine);
+					if(_clickedLine > this.SelectedLine) {
+						MoveSelectionDown(_clickedLine - this.SelectedLine);
 					} else {
-						MoveSelectionUp(this.SelectedLine - clickedLine);
+						MoveSelectionUp(this.SelectedLine - _clickedLine);
 					}
 				} else {
-					this.SelectedLine = clickedLine;
-					this.SelectionStart = clickedLine;
+					_mouseDragging = true;
+					this.SelectedLine = _clickedLine;
+					this.SelectionStart = _clickedLine;
 					this.SelectionLength = 0;
 				}
 			}
+		}
+
+		protected override void OnMouseUp(MouseEventArgs e)
+		{
+			_mouseDragging = false;
+			base.OnMouseUp(e);
+		}
+
+		protected override void OnMouseMove(MouseEventArgs e)
+		{
+			if(_mouseDragging) {
+				int lineUnderMouse = this.ScrollPosition + this.GetLineAtPosition(e.Y);
+				this.SelectedLine = lineUnderMouse;
+				this.SelectedLine = lineUnderMouse;
+				if(lineUnderMouse > _clickedLine) {
+					this.SelectionLength = lineUnderMouse - _clickedLine;
+				} else {
+					this.SelectedLine = lineUnderMouse;
+					this.SelectionStart = lineUnderMouse;
+					this.SelectionLength = _clickedLine - lineUnderMouse;
+				}
+			}
+			base.OnMouseMove(e);
+		}
+
+		public void CopySelection()
+		{
+			StringBuilder sb = new StringBuilder();
+			for(int i = this.SelectionStart, end = this.SelectionStart + this.SelectionLength; i <= end; i++) {
+				string indent = "";
+				if(LineIndentations != null) {
+					indent = "".PadLeft(LineIndentations[i] / 10);
+				}
+
+				string codeString = _contents[i].Trim();
+				if(codeString.StartsWith("__") || codeString.StartsWith("--")) {
+					codeString = "--------" + codeString.Substring(2, codeString.Length - 4) + "--------";
+				}
+
+				string commentString = Comments?[i].Trim() ?? "";
+				int padding = Math.Max(CommentSpacingCharCount, codeString.Length);
+				if(codeString.Length == 0) {
+					padding = 0;
+				}
+
+				codeString = codeString.PadRight(padding);
+				sb.AppendLine(indent + codeString + commentString);
+			}
+			Clipboard.SetText(sb.ToString());
 		}
 
 		public void NavigateForward()
@@ -813,13 +862,6 @@ namespace Mesen.GUI.Debugger
 					float textLength = g.MeasureString(text, this._noteFont).Width;
 					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY + 4);
 					g.DrawLine(Pens.Black, marginLeft, positionY+2, marginLeft+this.Width, positionY+2);
-					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
-				} else if(codeString.StartsWith("[[") && codeString.EndsWith("]]")) {
-					//Draw small centered text
-					g.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
-					string text = codeString.Substring(2, codeString.Length - 4);
-					float textLength = g.MeasureString(text, this._noteFont).Width;
-					g.DrawString(text, new Font(this._noteFont, FontStyle.Italic), fgBrush, (marginLeft + this.Width - textLength) / 2, positionY + 2);
 					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 				} else {
 					//Draw line content

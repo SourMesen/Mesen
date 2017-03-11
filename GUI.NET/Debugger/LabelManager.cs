@@ -69,7 +69,7 @@ namespace Mesen.GUI.Debugger
 				_reverseLookup[label] = _labels[GetKey(address, type)];
 			}
 
-			InteropEmu.DebugSetLabel(address, type, label, comment);
+			InteropEmu.DebugSetLabel(address, type, label, comment.Replace(Environment.NewLine, "\n"));
 			if(raiseEvent) {
 				OnLabelUpdated?.Invoke(null, null);
 			}

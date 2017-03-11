@@ -105,16 +105,6 @@ namespace Mesen.GUI.Debugger
 			this.hScrollBar.Maximum = newMax;
 		}
 
-		public void BeginUpdate()
-		{
-			this.ctrlTextbox.BeginUpdate();
-		}
-
-		public void EndUpdate()
-		{
-			this.ctrlTextbox.EndUpdate();
-		}
-
 		public ctrlTextbox.ILineStyleProvider StyleProvider { set { this.ctrlTextbox.StyleProvider = value; } }
 
 		public int GetLineIndex(int lineNumber)
@@ -147,6 +137,11 @@ namespace Mesen.GUI.Debugger
 			this.ctrlTextbox.ScrollToLineNumber(lineNumber, historyType);
 		}
 
+		public void CopySelection()
+		{
+			this.ctrlTextbox.CopySelection();
+		}
+		
 		public int CurrentLine
 		{
 			get { return this.ctrlTextbox.CurrentLine; }

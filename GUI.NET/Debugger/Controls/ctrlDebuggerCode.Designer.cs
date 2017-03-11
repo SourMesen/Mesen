@@ -31,6 +31,7 @@
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuEditSelectedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditSubroutine = new System.Windows.Forms.ToolStripMenuItem();
+			this.copySelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,6 +86,7 @@
 			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuEditSelectedCode,
             this.mnuEditSubroutine,
+            this.copySelectionToolStripMenuItem,
             this.toolStripMenuItem7,
             this.mnuShowNextStatement,
             this.mnuSetNextStatement,
@@ -102,7 +104,7 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 342);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 364);
 			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
@@ -111,7 +113,7 @@
 			this.mnuEditSelectedCode.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEditSelectedCode.Name = "mnuEditSelectedCode";
 			this.mnuEditSelectedCode.Size = new System.Drawing.Size(258, 22);
-			this.mnuEditSelectedCode.Text = "Edit selected code";
+			this.mnuEditSelectedCode.Text = "Edit Selected Code";
 			this.mnuEditSelectedCode.Click += new System.EventHandler(this.mnuEditSelectedCode_Click);
 			// 
 			// mnuEditSubroutine
@@ -120,8 +122,17 @@
 			this.mnuEditSubroutine.Name = "mnuEditSubroutine";
 			this.mnuEditSubroutine.ShortcutKeys = System.Windows.Forms.Keys.F4;
 			this.mnuEditSubroutine.Size = new System.Drawing.Size(258, 22);
-			this.mnuEditSubroutine.Text = "Edit subroutine";
+			this.mnuEditSubroutine.Text = "Edit Subroutine";
 			this.mnuEditSubroutine.Click += new System.EventHandler(this.mnuEditSubroutine_Click);
+			// 
+			// copySelectionToolStripMenuItem
+			// 
+			this.copySelectionToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Copy;
+			this.copySelectionToolStripMenuItem.Name = "copySelectionToolStripMenuItem";
+			this.copySelectionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.copySelectionToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+			this.copySelectionToolStripMenuItem.Text = "Copy Selection";
+			this.copySelectionToolStripMenuItem.Click += new System.EventHandler(this.copySelectionToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem7
 			// 
@@ -520,5 +531,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSubroutine;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSelectedCode;
+		private System.Windows.Forms.ToolStripMenuItem copySelectionToolStripMenuItem;
 	}
 }
