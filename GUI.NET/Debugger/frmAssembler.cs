@@ -139,7 +139,7 @@ namespace Mesen.GUI.Debugger
 
 				bool isIdentical = IsIdentical;
 				lblNoChanges.Visible = isIdentical;
-				btnOk.Enabled = !isIdentical && _startAddressValid;
+				btnOk.Enabled = !isIdentical && _startAddressValid && ctrlHexBox.ByteProvider.Length > 0;
 			} else {
 				lblNoChanges.Visible = false;
 				lblByteUsage.Text = ctrlHexBox.ByteProvider.Length.ToString();
@@ -200,15 +200,13 @@ namespace Mesen.GUI.Debugger
 				List<byte> bytes = new List<byte>(((StaticByteProvider)ctrlHexBox.ByteProvider).Bytes);
 				if(byteGap > 0) {
 					//Pad data with NOPs as needed
-					int insertPoint = endsWithRtiRts ? bytes.Count - 2 : bytes.Count - 1;
+					int insertPoint = endsWithRtiRts ? bytes.Count - 1 : bytes.Count;
 					for(int i = 0; i < byteGap; i++) {
 						bytes.Insert(insertPoint, 0xEA); //0xEA = NOP
 					}
 				}
 
-				for(int i = 0; i < bytes.Count; i++) {
-					InteropEmu.DebugSetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)(_startAddress + i), bytes[i]);
-				}
+				InteropEmu.DebugSetMemoryValues(DebugMemoryType.CpuMemory, (UInt32)_startAddress, bytes.ToArray());
 
 				this.DialogResult = DialogResult.OK;
 				this.Close();

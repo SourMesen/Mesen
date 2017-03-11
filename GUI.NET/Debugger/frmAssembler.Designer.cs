@@ -49,6 +49,8 @@
 			this.statCode = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblLineNumber = new System.Windows.Forms.ToolStripStatusLabel();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpSettings.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -59,6 +61,8 @@
 			this.flowLayoutPanel3.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.statCode.SuspendLayout();
+			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnOk
@@ -88,17 +92,17 @@
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.Controls.Add(this.ctrlHexBox, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lstErrors, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.grpSettings, 1, 1);
-			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.groupBox2, 1, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 141F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(999, 555);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(835, 557);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// ctrlHexBox
@@ -109,11 +113,11 @@
 			this.ctrlHexBox.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.ctrlHexBox.InfoBackColor = System.Drawing.Color.DarkGray;
 			this.ctrlHexBox.LineInfoVisible = true;
-			this.ctrlHexBox.Location = new System.Drawing.Point(552, 3);
+			this.ctrlHexBox.Location = new System.Drawing.Point(3, 16);
 			this.ctrlHexBox.Name = "ctrlHexBox";
 			this.ctrlHexBox.ReadOnly = true;
 			this.ctrlHexBox.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-			this.ctrlHexBox.Size = new System.Drawing.Size(444, 408);
+			this.ctrlHexBox.Size = new System.Drawing.Size(438, 391);
 			this.ctrlHexBox.TabIndex = 1;
 			this.ctrlHexBox.UseFixedBytesPerLine = true;
 			this.ctrlHexBox.VScrollBarVisible = true;
@@ -121,9 +125,9 @@
 			// lstErrors
 			// 
 			this.lstErrors.FormattingEnabled = true;
-			this.lstErrors.Location = new System.Drawing.Point(3, 417);
+			this.lstErrors.Location = new System.Drawing.Point(3, 419);
 			this.lstErrors.Name = "lstErrors";
-			this.lstErrors.Size = new System.Drawing.Size(543, 134);
+			this.lstErrors.Size = new System.Drawing.Size(379, 134);
 			this.lstErrors.TabIndex = 2;
 			this.lstErrors.DoubleClick += new System.EventHandler(this.lstErrors_DoubleClick);
 			// 
@@ -131,7 +135,7 @@
 			// 
 			this.grpSettings.Controls.Add(this.tableLayoutPanel2);
 			this.grpSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpSettings.Location = new System.Drawing.Point(552, 417);
+			this.grpSettings.Location = new System.Drawing.Point(388, 419);
 			this.grpSettings.Name = "grpSettings";
 			this.grpSettings.Size = new System.Drawing.Size(444, 135);
 			this.grpSettings.TabIndex = 3;
@@ -274,10 +278,10 @@
 			this.panel1.Controls.Add(this.txtCode);
 			this.panel1.Controls.Add(this.statCode);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(3, 3);
+			this.panel1.Location = new System.Drawing.Point(3, 16);
 			this.panel1.Name = "panel1";
 			this.panel1.Padding = new System.Windows.Forms.Padding(1);
-			this.panel1.Size = new System.Drawing.Size(543, 408);
+			this.panel1.Size = new System.Drawing.Size(373, 391);
 			this.panel1.TabIndex = 4;
 			// 
 			// txtCode
@@ -292,7 +296,7 @@
 			this.txtCode.HideSelection = false;
 			this.txtCode.Location = new System.Drawing.Point(1, 1);
 			this.txtCode.Name = "txtCode";
-			this.txtCode.Size = new System.Drawing.Size(541, 385);
+			this.txtCode.Size = new System.Drawing.Size(371, 368);
 			this.txtCode.TabIndex = 4;
 			this.txtCode.Text = "";
 			this.txtCode.WordWrap = false;
@@ -306,10 +310,10 @@
             this.toolStripStatusLabel1,
             this.lblLineNumber});
 			this.statCode.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-			this.statCode.Location = new System.Drawing.Point(1, 387);
+			this.statCode.Location = new System.Drawing.Point(1, 370);
 			this.statCode.Name = "statCode";
 			this.statCode.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-			this.statCode.Size = new System.Drawing.Size(541, 20);
+			this.statCode.Size = new System.Drawing.Size(371, 20);
 			this.statCode.SizingGrip = false;
 			this.statCode.TabIndex = 5;
 			// 
@@ -327,13 +331,36 @@
 			this.lblLineNumber.Size = new System.Drawing.Size(13, 15);
 			this.lblLineNumber.Text = "1";
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.panel1);
+			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox1.Location = new System.Drawing.Point(3, 3);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(379, 410);
+			this.groupBox1.TabIndex = 4;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Code Editor";
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.ctrlHexBox);
+			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox2.Location = new System.Drawing.Point(388, 3);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(444, 410);
+			this.groupBox2.TabIndex = 5;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Assembled Byte Code";
+			// 
 			// frmAssembler
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(999, 555);
+			this.ClientSize = new System.Drawing.Size(835, 557);
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.MinimumSize = new System.Drawing.Size(813, 502);
 			this.Name = "frmAssembler";
 			this.Text = "Assembler";
 			this.tableLayoutPanel1.ResumeLayout(false);
@@ -351,6 +378,8 @@
 			this.panel1.PerformLayout();
 			this.statCode.ResumeLayout(false);
 			this.statCode.PerformLayout();
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -378,5 +407,7 @@
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStripStatusLabel lblLineNumber;
 		private System.Windows.Forms.PictureBox picStartAddressWarning;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.GroupBox groupBox2;
 	}
 }

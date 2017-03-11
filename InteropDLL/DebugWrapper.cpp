@@ -81,6 +81,8 @@ extern "C"
 
 	DllExport uint8_t __stdcall DebugGetMemoryValue(DebugMemoryType type, uint32_t address) { return GetDebugger()->GetMemoryDumper()->GetMemoryValue(type, address); }
 	DllExport void __stdcall DebugSetMemoryValue(DebugMemoryType type, uint32_t address, uint8_t value) { return GetDebugger()->GetMemoryDumper()->SetMemoryValue(type, address, value); }
+	DllExport void __stdcall DebugSetMemoryValues(DebugMemoryType type, uint32_t address, uint8_t* data, int32_t length) { return GetDebugger()->GetMemoryDumper()->SetMemoryValues(type, address, data, length); }
+	
 	DllExport int32_t __stdcall DebugGetMemorySize(DebugMemoryType type) { return GetDebugger()->GetMemorySize(type); }
 	DllExport void __stdcall DebugGetMemoryAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t* counts, bool forUninitReads) { GetDebugger()->GetMemoryAccessCounter()->GetAccessCounts(memoryType, operationType, counts, forUninitReads); }
 	DllExport void __stdcall DebugResetMemoryAccessCounts() { GetDebugger()->GetMemoryAccessCounter()->ResetCounts(); }

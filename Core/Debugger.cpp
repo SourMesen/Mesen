@@ -32,7 +32,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_assembler.reset(new Assembler(_labelManager));
 	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPrgRom(), mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetWorkRam(), mapper->GetMemorySize(DebugMemoryType::WorkRam), this));
 	_codeDataLogger.reset(new CodeDataLogger(mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetMemorySize(DebugMemoryType::ChrRom)));
-	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger, this));
+	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger, this, _disassembler));
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
 	_profiler.reset(new Profiler(this));
 	_traceLogger.reset(new TraceLogger(memoryManager, _labelManager));

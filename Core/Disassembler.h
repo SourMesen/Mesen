@@ -40,4 +40,6 @@ public:
 	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 
 	shared_ptr<DisassemblyInfo> GetDisassemblyInfo(int32_t absoluteAddress, int32_t absoluteRamAddress, uint16_t memoryAddress);
+
+	void RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length);
 };

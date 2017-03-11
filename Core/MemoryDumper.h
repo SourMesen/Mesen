@@ -7,6 +7,7 @@ class MemoryManager;
 class BaseMapper;
 class CodeDataLogger;
 class Debugger;
+class Disassembler;
 
 class MemoryDumper
 {
@@ -16,9 +17,10 @@ private:
 	shared_ptr<MemoryManager> _memoryManager;
 	shared_ptr<BaseMapper> _mapper;
 	shared_ptr<CodeDataLogger> _codeDataLogger;
+	shared_ptr<Disassembler> _disassembler;
 
 public:
-	MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger, Debugger *debugger);
+	MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger, Debugger *debugger, shared_ptr<Disassembler> disassembler);
 
 	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
 	void GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData);
@@ -27,6 +29,7 @@ public:
 	void GetPalette(uint32_t* frameBuffer);
 
 	uint8_t GetMemoryValue(DebugMemoryType memoryType, uint32_t address);
-	void SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value);
+	void SetMemoryValues(DebugMemoryType memoryType, uint32_t address, uint8_t* data, int32_t length);
+	void SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value, bool preventRebuildCache = false);
 	void SetMemoryState(DebugMemoryType type, uint8_t *buffer);
 };

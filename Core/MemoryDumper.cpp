@@ -6,14 +6,16 @@
 #include "BaseMapper.h"
 #include "MemoryDumper.h"
 #include "VideoDecoder.h"
+#include "Disassembler.h"
 
-MemoryDumper::MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger, Debugger* debugger)
+MemoryDumper::MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger, Debugger* debugger, shared_ptr<Disassembler> disassembler)
 {
 	_debugger = debugger;
 	_ppu = ppu;
 	_memoryManager = memoryManager;
 	_mapper = mapper;
 	_codeDataLogger = codeDataLogger;
+	_disassembler = disassembler;
 }
 
 void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
@@ -87,7 +89,25 @@ uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 	return 0;
 }
 
-void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value)
+void MemoryDumper::SetMemoryValues(DebugMemoryType memoryType, uint32_t address, uint8_t* data, int32_t length)
+{
+	for(int i = 0; i < length; i++) {
+		SetMemoryValue(memoryType, address+i, data[i], true);
+	}
+
+	if(memoryType == DebugMemoryType::CpuMemory) {
+		//Rebuild prg rom cache as needed after editing the code with the assembler/hex editor
+		AddressTypeInfo infoStart, infoEnd;
+		_debugger->GetAbsoluteAddressAndType(address, &infoStart);
+		_debugger->GetAbsoluteAddressAndType(address+length, &infoEnd);
+
+		if(infoStart.Type == AddressType::PrgRom && infoEnd.Type == AddressType::PrgRom && infoEnd.Address - infoStart.Address == length) {
+			_disassembler->RebuildPrgRomCache(infoStart.Address, length);
+		}
+	}
+}
+
+void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value, bool preventRebuildCache)
 {
 	switch(memoryType) {
 		case DebugMemoryType::CpuMemory:
@@ -95,10 +115,10 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 			_debugger->GetAbsoluteAddressAndType(address, &info);
 			if(info.Address >= 0) {
 				switch(info.Type) {
-					case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value); break;
-					case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value); break;
-					case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value); break;
-					case AddressType::SaveRam: SetMemoryValue(DebugMemoryType::SaveRam, info.Address, value); break;
+					case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value, preventRebuildCache); break;
+					case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value, preventRebuildCache); break;
+					case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value, preventRebuildCache); break;
+					case AddressType::SaveRam: SetMemoryValue(DebugMemoryType::SaveRam, info.Address, value, preventRebuildCache); break;
 				}
 			}
 			break;
@@ -114,9 +134,15 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
-		case DebugMemoryType::PrgRom:
 		case DebugMemoryType::ChrRom:
 			_mapper->SetMemoryValue(memoryType, address, value);
+			break;
+
+		case DebugMemoryType::PrgRom:
+			_mapper->SetMemoryValue(memoryType, address, value);
+			if(!preventRebuildCache) {
+				_disassembler->RebuildPrgRomCache(address, 1);
+			}
 			break;
 	}
 }

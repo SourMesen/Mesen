@@ -188,6 +188,18 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Int32 DebugGetMemorySize(DebugMemoryType type);
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(DebugMemoryType type, UInt32 address);
 		[DllImport(DLLPath)] public static extern void DebugSetMemoryValue(DebugMemoryType type, UInt32 address, byte value);
+
+		[DllImport(DLLPath, EntryPoint = "DebugSetMemoryValues")] private static extern void DebugSetMemoryValuesWrapper(DebugMemoryType type, UInt32 address, IntPtr data, Int32 length);
+		public static void DebugSetMemoryValues(DebugMemoryType type, UInt32 address, byte[] data)
+		{
+			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugSetMemoryValuesWrapper(type, address, handle.AddrOfPinnedObject(), data.Length);
+			} finally {
+				handle.Free();
+			}
+		}
+
 		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, ref AddressTypeInfo addressTypeInfo);
 		[DllImport(DLLPath)] public static extern void DebugSetPpuViewerScanlineCycle(Int32 scanline, Int32 cycle);
 

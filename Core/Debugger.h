@@ -33,7 +33,7 @@ private:
 
 	const static int BreakpointTypeCount = 6;
 
-	unique_ptr<Disassembler> _disassembler;
+	shared_ptr<Disassembler> _disassembler;
 	shared_ptr<Assembler> _assembler;
 	shared_ptr<MemoryDumper> _memoryDumper;
 	shared_ptr<CodeDataLogger> _codeDataLogger;

@@ -242,6 +242,33 @@ void Disassembler::InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr)
 	}
 }
 
+void Disassembler::RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length)
+{
+	for(int i = 1; i <= 2; i++) {
+		int offsetAddr = (int)absoluteAddr - i;
+		if(offsetAddr >= 0) {
+			if(_disassembleCache[offsetAddr] != nullptr) {
+				if(_disassembleCache[offsetAddr]->GetSize() >= (uint32_t)i + 1) {
+					//Invalidate any instruction that overlapped this address
+					_disassembleCache[offsetAddr] = nullptr;
+				}
+			}
+		}
+	}
+
+	bool isSubEntryPoint = false;
+	if(_disassembleCache[absoluteAddr]) {
+		isSubEntryPoint = _disassembleCache[absoluteAddr]->IsSubEntryPoint();
+	}
+
+	for(int i = absoluteAddr, end = absoluteAddr + length; i < end; i++) {
+		_disassembleCache[i] = nullptr;
+	}
+
+	uint16_t memoryAddr = _debugger->GetRelativeAddress(absoluteAddr, AddressType::PrgRom);
+	BuildCache(absoluteAddr, -1, memoryAddr, isSubEntryPoint);
+}
+
 static const char* hexTable[256] = {
 	"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F",
 	"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1A", "1B", "1C", "1D", "1E", "1F",

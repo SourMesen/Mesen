@@ -191,8 +191,6 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			//TODO: Invalidate disassembly info cache / CDL file (not needed?)
-			//TODO: Support .data syntax in assembler
 			for(int i = startAddress; (i <= endAddress || endAddress == -1) && endAddress < 65536; ) {
 				string code;
 				if(_codeContent.TryGetValue(i, out code)) {
