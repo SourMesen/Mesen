@@ -57,16 +57,9 @@ void Assembler::ProcessLine(string code, uint16_t &instructionAddress, vector<in
 	} else if(std::regex_search(code, match, labelRegex)) {
 		string label = match.str(1);
 		string afterLabel = match.str(2);
-		int32_t addr = _labelManager->GetLabelRelativeAddress(label);
-		if(addr >= 0 && addr != instructionAddress) {
-			//Label already exists, at another address
-			output.push_back(AssemblerSpecialCodes::LabelRedefinition);
-			return;
-		} else {
-			labels[match.str(1)] = instructionAddress;
-			ProcessLine(afterLabel, instructionAddress, output, labels);
-			return;
-		}
+		labels[match.str(1)] = instructionAddress;
+		ProcessLine(afterLabel, instructionAddress, output, labels);
+		return;
 	} else if(std::regex_search(code, match, isCommentOrBlank)) {
 		output.push_back(AssemblerSpecialCodes::EndOfLine);
 		return;
@@ -178,25 +171,25 @@ AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, s
 		}
 	} else if(!operand.empty()) {
 		//Check if the operand is a known label
-		int32_t addr = _labelManager->GetLabelRelativeAddress(operand);
-		if(addr >= 256) {
-			lineData.Operand = HexUtilities::ToHex((uint16_t)addr);
+		auto findResult = labels.find(operand);
+		if(findResult != labels.end()) {
+			lineData.Operand = HexUtilities::ToHex((uint16_t)findResult->second);
 			lineData.IsHex = true;
 			opSize = 2;
-		} else if(addr >= 0) {
-			lineData.Operand = HexUtilities::ToHex((uint8_t)addr);
-			lineData.IsHex = true;
-			opSize = 1;
+		} else if(operand.size() == 1 && (operand[0] == 'A' || operand[0] == 'a') && lineData.OperandSuffix.empty() && !lineData.IsHex && !lineData.IsImmediate && !lineData.HasOpeningParenthesis) {
+			//Allow optional "A" after AddrMode == Accumulator instructions
+			lineData.Mode = AddrMode::Acc;
+			opSize = 0;
 		} else {
-			auto findResult = labels.find(operand);
-			if(findResult != labels.end()) {
-				lineData.Operand = HexUtilities::ToHex((uint16_t)findResult->second);
+			int32_t addr = _labelManager->GetLabelRelativeAddress(operand);
+			if(addr >= 256) {
+				lineData.Operand = HexUtilities::ToHex((uint16_t)addr);
 				lineData.IsHex = true;
 				opSize = 2;
-			} else if(operand.size() == 1 && (operand[0] == 'A' || operand[0] == 'a') && lineData.OperandSuffix.empty() && !lineData.IsHex && !lineData.IsImmediate && !lineData.HasOpeningParenthesis) {
-				//Allow optional "A" after AddrMode == Accumulator instructions
-				lineData.Mode = AddrMode::Acc;
-				opSize = 0;
+			} else if(addr >= 0) {
+				lineData.Operand = HexUtilities::ToHex((uint8_t)addr);
+				lineData.IsHex = true;
+				opSize = 1;
 			} else {
 				return AssemblerSpecialCodes::UnknownLabel;
 			}
