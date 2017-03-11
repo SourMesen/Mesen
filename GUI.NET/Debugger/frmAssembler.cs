@@ -65,7 +65,7 @@ namespace Mesen.GUI.Debugger
 
 		private bool SizeExceeded
 		{
-			get { return ctrlHexBox.ByteProvider.Length > _blockLength;	}
+			get { return ctrlHexBox.ByteProvider.Length > _blockLength; }
 		}
 
 		private bool NeedRtiRtsWarning
@@ -95,7 +95,7 @@ namespace Mesen.GUI.Debugger
 			short[] byteCode = InteropEmu.DebugAssembleCode(txtCode.Text, _startAddress);
 
 			List<byte> convertedByteCode = new List<byte>();
-			List<string> errorList = new List<string>();
+			List<ErrorDetail> errorList = new List<ErrorDetail>();
 			string[] codeLines = txtCode.Text.Replace("\r", "").Split('\n');
 			int line = 1;
 			foreach(short s in byteCode) {
@@ -117,7 +117,7 @@ namespace Mesen.GUI.Debugger
 						case AssemblerSpecialCodes.UnknownLabel: message = "Unknown label"; break;
 						case AssemblerSpecialCodes.InvalidInstruction: message = "Invalid instruction"; break;
 					}
-					errorList.Add("Line " + line.ToString() + ": " + message + " - " + codeLines[line-1]);
+					errorList.Add(new ErrorDetail() { Message = message + " - " + codeLines[line-1], LineNumber = line });
 					line++;
 				}
 			}
@@ -128,7 +128,7 @@ namespace Mesen.GUI.Debugger
 			lstErrors.Items.Clear();
 			lstErrors.Items.AddRange(errorList.ToArray());
 			lstErrors.EndUpdate();
-			
+
 			ctrlHexBox.ByteProvider = new StaticByteProvider(convertedByteCode.ToArray());
 
 			if(_isEditMode) {
@@ -234,6 +234,66 @@ namespace Mesen.GUI.Debugger
 			TrailingText = -9,
 			UnknownLabel = -10,
 			InvalidInstruction = -11,
+		}
+
+		private void lstErrors_DoubleClick(object sender, EventArgs e)
+		{
+			if(lstErrors.SelectedItem != null) {
+				int lineNumber = (lstErrors.SelectedItem as ErrorDetail).LineNumber;
+				int scrollIndex = txtCode.GetFirstCharIndexFromLine(Math.Max(0, lineNumber-1-txtCode.NumberOfVisibleLines/2));
+				txtCode.SelectionStart = scrollIndex + 2;
+				txtCode.ScrollToCaret();
+
+				int errorIndex = txtCode.GetFirstCharIndexFromLine(lineNumber-1);
+				txtCode.SelectionStart = errorIndex + 2;
+
+				txtCode.Focus();
+			}
+		}
+
+		private class ErrorDetail
+		{
+			public string Message { get; set; }
+			public int LineNumber { get; set; }
+
+			public override string ToString()
+			{
+				return "Line " + LineNumber.ToString() + ": " + this.Message;
+			}
+		}
+	}
+
+	public class ZoomlessRichTextBox : RichTextBox
+	{
+		public int NumberOfVisibleLines
+		{
+			get
+			{
+				int topIndex = this.GetCharIndexFromPosition(new Point(1, 1));
+				int bottomIndex = this.GetCharIndexFromPosition(new Point(1, this.Height - 1));
+				int topLine = this.GetLineFromCharIndex(topIndex);
+				int bottomLine = this.GetLineFromCharIndex(bottomIndex);
+				return bottomLine - topLine + 1;
+			}
+		}
+
+		protected override void WndProc(ref Message m)
+		{
+			const int WM_SCROLLWHEEL = 0x20A;
+
+			bool ctrl = Control.ModifierKeys.HasFlag(Keys.Control);
+			bool wheel = m.Msg == WM_SCROLLWHEEL;
+
+			if(!ctrl || !wheel) {
+				//Block mouse wheel messages
+				base.WndProc(ref m);
+			}
+		}
+
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			e.SuppressKeyPress = e.Control && e.Shift && (e.KeyValue == (int)Keys.Oemcomma || e.KeyValue == (int)Keys.OemPeriod);
+			base.OnKeyDown(e);
 		}
 	}
 }

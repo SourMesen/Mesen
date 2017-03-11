@@ -37,6 +37,7 @@
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtStartAddress = new System.Windows.Forms.TextBox();
+			this.picStartAddressWarning = new System.Windows.Forms.PictureBox();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.label2 = new System.Windows.Forms.Label();
 			this.lblByteUsage = new System.Windows.Forms.Label();
@@ -44,21 +45,20 @@
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblNoChanges = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.txtCode = new System.Windows.Forms.RichTextBox();
+			this.txtCode = new Mesen.GUI.Debugger.ZoomlessRichTextBox();
 			this.statCode = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblLineNumber = new System.Windows.Forms.ToolStripStatusLabel();
-			this.picStartAddressWarning = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpSettings.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picStartAddressWarning)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picSizeWarning)).BeginInit();
 			this.flowLayoutPanel3.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.statCode.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picStartAddressWarning)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btnOk
@@ -125,6 +125,7 @@
 			this.lstErrors.Name = "lstErrors";
 			this.lstErrors.Size = new System.Drawing.Size(543, 134);
 			this.lstErrors.TabIndex = 2;
+			this.lstErrors.DoubleClick += new System.EventHandler(this.lstErrors_DoubleClick);
 			// 
 			// grpSettings
 			// 
@@ -187,6 +188,17 @@
 			this.txtStartAddress.Size = new System.Drawing.Size(48, 20);
 			this.txtStartAddress.TabIndex = 1;
 			this.txtStartAddress.TextChanged += new System.EventHandler(this.txtStartAddress_TextChanged);
+			// 
+			// picStartAddressWarning
+			// 
+			this.picStartAddressWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
+			this.picStartAddressWarning.Location = new System.Drawing.Point(138, 5);
+			this.picStartAddressWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.picStartAddressWarning.Name = "picStartAddressWarning";
+			this.picStartAddressWarning.Size = new System.Drawing.Size(18, 18);
+			this.picStartAddressWarning.TabIndex = 11;
+			this.picStartAddressWarning.TabStop = false;
+			this.picStartAddressWarning.Visible = false;
 			// 
 			// flowLayoutPanel2
 			// 
@@ -274,8 +286,10 @@
 			this.txtCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtCode.AutoWordSelection = true;
 			this.txtCode.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.txtCode.DetectUrls = false;
+			this.txtCode.HideSelection = false;
 			this.txtCode.Location = new System.Drawing.Point(1, 1);
 			this.txtCode.Name = "txtCode";
 			this.txtCode.Size = new System.Drawing.Size(541, 385);
@@ -313,17 +327,6 @@
 			this.lblLineNumber.Size = new System.Drawing.Size(13, 15);
 			this.lblLineNumber.Text = "1";
 			// 
-			// picStartAddressWarning
-			// 
-			this.picStartAddressWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
-			this.picStartAddressWarning.Location = new System.Drawing.Point(138, 5);
-			this.picStartAddressWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-			this.picStartAddressWarning.Name = "picStartAddressWarning";
-			this.picStartAddressWarning.Size = new System.Drawing.Size(18, 18);
-			this.picStartAddressWarning.TabIndex = 11;
-			this.picStartAddressWarning.TabStop = false;
-			this.picStartAddressWarning.Visible = false;
-			// 
 			// frmAssembler
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -338,6 +341,7 @@
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picStartAddressWarning)).EndInit();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picSizeWarning)).EndInit();
@@ -347,7 +351,6 @@
 			this.panel1.PerformLayout();
 			this.statCode.ResumeLayout(false);
 			this.statCode.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picStartAddressWarning)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -368,7 +371,7 @@
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.PictureBox picSizeWarning;
-		private System.Windows.Forms.RichTextBox txtCode;
+		private ZoomlessRichTextBox txtCode;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Label lblNoChanges;
 		private System.Windows.Forms.StatusStrip statCode;
