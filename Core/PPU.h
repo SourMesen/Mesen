@@ -76,6 +76,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint8_t _spriteAddrH;
 		uint8_t _spriteAddrL;
 		bool _oamCopyDone;
+		uint8_t _overflowBugCounter;
 
 		bool _renderingEnabled;
 		bool _prevRenderingEnabled;

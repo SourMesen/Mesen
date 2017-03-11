@@ -103,6 +103,14 @@ void CPU::Reset(bool softReset)
 
 		_runIrq = false;
 	}
+
+	//The CPU takes some cycles before starting its execution after a reset/power up
+	for(int i = 0; i < 12; i++) {
+		PPU::ExecStatic();
+	}
+	for(int i = 0; i < 10; i++) {
+		APU::ExecStatic();
+	}
 }
 
 void CPU::Exec()

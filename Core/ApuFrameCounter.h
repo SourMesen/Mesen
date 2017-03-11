@@ -45,9 +45,7 @@ public:
 	{
 		_nextIrqCycle = 29828;
 
-		//"After reset or power-up, APU acts as if $4017 were written with $00 from 9 to 12 clocks before first instruction begins."
-		//Because of the 3-4 sequence reset delay, 9-12 clocks turns into 6-7
-		_previousCycle = 6;
+		_previousCycle = 0;
 
 		//"After reset: APU mode in $4017 was unchanged", so we need to keep whatever value _stepMode has for soft resets
 		if(!softReset) {
@@ -55,11 +53,16 @@ public:
 		}
 
 		_currentStep = 0;
+
+
+		//"After reset or power-up, APU acts as if $4017 were written with $00 from 9 to 12 clocks before first instruction begins."
+		//This is emulated in the CPU::Reset function 
+		//Reset acts as if $00 was written to $4017
+		_newValue = 0;
+		_writeDelayCounter = 3;
 		_inhibitIRQ = false;
 
 		_blockFrameCounterTick = 0;
-		_newValue = -1;
-		_writeDelayCounter = -1;
 	}
 
 	void StreamState(bool saving) override

@@ -85,6 +85,8 @@ void PPU::Reset()
 	_cycle = 0;
 	_frameCount = 1;
 	_memoryReadBuffer = 0;
+
+	_overflowBugCounter = 0;
 	
 	UpdateMinimumDrawCycles();
 }
@@ -213,14 +215,16 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 
 		case PPURegisters::SpriteData:
 			if(!EmulationSettings::CheckFlag(EmulationFlags::DisablePpu2004Reads)) {
-				if(_scanline <= 239 && IsRenderingEnabled() && (_cycle >= 257 || _cycle <= 64)) {
+				if(_scanline <= 239 && IsRenderingEnabled()) {
+					//While the screen is begin drawn
 					if(_cycle >= 257 && _cycle <= 320) {
-						//Set OAM copy buffer to its proper value.  This is done here for performance.
+						//If we're doing sprite rendering, set OAM copy buffer to its proper value.  This is done here for performance.
 						//It's faster to only do this here when it's needed, rather than splitting LoadSpriteTileInfo() into an 8-step process
 						uint8_t step = ((_cycle - 257) % 8) > 3 ? 3 : ((_cycle - 257) % 8);
 						_secondaryOAMAddr = (_cycle - 257) / 8 * 4 + step;
 						_oamCopybuffer = _secondarySpriteRAM[_secondaryOAMAddr];
 					}
+					//Return the value that PPU is currently using for sprite evaluation/rendering
 					returnValue = _oamCopybuffer;
 				} else {
 					returnValue = _spriteRAM[_state.SpriteRamAddr];
@@ -307,7 +311,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			if(_state.WriteToggle) {
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x00FF) | value;
 				_state.VideoRamAddr = _state.TmpVideoRamAddr;
-				
+
 				//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
 				//"4) Should be clocked when A12 changes to 1 via $2006 write"
 				_memoryManager->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
@@ -813,6 +817,7 @@ void PPU::CopyOAMData()
 				_spriteInRange = false;
 				_secondaryOAMAddr = 0;
 				_overflowSpriteAddr = 0;
+				_overflowBugCounter = 0;
 
 				_oamCopyDone = false;
 				_spriteAddrH = (_state.SpriteRamAddr >> 2) & 0x3F;
@@ -828,6 +833,10 @@ void PPU::CopyOAMData()
 			} else {
 				if(_oamCopyDone) {
 					_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
+					if(_secondaryOAMAddr >= 0x20) {
+						//"As seen above, a side effect of the OAM write disable signal is to turn writes to the secondary OAM into reads from it."
+						_oamCopybuffer = _secondarySpriteRAM[_secondaryOAMAddr & 0x1F];
+					}
 				} else {
 					if(!_spriteInRange && _scanline >= _oamCopybuffer && _scanline < _oamCopybuffer + (_flags.LargeSprites ? 16 : 8)) {
 						_spriteInRange = true;
@@ -862,6 +871,9 @@ void PPU::CopyOAMData()
 							}
 						}
 					} else {
+						//"As seen above, a side effect of the OAM write disable signal is to turn writes to the secondary OAM into reads from it."
+						_oamCopybuffer = _secondarySpriteRAM[_secondaryOAMAddr & 0x1F];
+
 						//8 sprites have been found, check next sprite for overflow + emulate PPU bug
 						if(_overflowSpriteAddr == 0) {
 							//Used to remove sprite limit
@@ -871,12 +883,21 @@ void PPU::CopyOAMData()
 						if(_spriteInRange) {
 							//Sprite is visible, consider this to be an overflow
 							_statusFlags.SpriteOverflow = true;
-							_spriteAddrL = (_spriteAddrL + 1) & 0x03;
+							_spriteAddrL = (_spriteAddrL + 1);
 							if(_spriteAddrL == 4) {
-								_spriteInRange = false;
 								_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
-								_oamCopyDone = true;
 								_spriteAddrL = 0;
+							}
+
+							if(_overflowBugCounter == 0) {
+								_overflowBugCounter = 3;
+							} else if(_overflowBugCounter > 0) {
+								_overflowBugCounter--;
+								if(_overflowBugCounter == 0) {
+									//"After it finishes "fetching" this sprite(and setting the overflow flag), it realigns back at the beginning of this line and then continues here on the next sprite"
+									_oamCopyDone = true;
+									_spriteAddrL = 0;
+								}
 							}
 						} else {
 							//Sprite isn't on this scanline, trigger sprite evaluation bug - increment both H & L at the same time
@@ -889,6 +910,7 @@ void PPU::CopyOAMData()
 						}
 					}
 				}
+				_state.SpriteRamAddr = (_spriteAddrL & 0x03) | (_spriteAddrH << 2);
 			}
 		}
 	}
@@ -1032,7 +1054,7 @@ void PPU::StreamState(bool saving)
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
 		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, unusedSpriteDmaAddr,
 		unusedSpriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, _skipScrollingIncrement, paletteRam, spriteRam, secondarySpriteRam,
-		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug);
+		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter);
 
 	for(int i = 0; i < 64; i++) {
 		Stream(_spriteTiles[i].SpriteX, _spriteTiles[i].LowByte, _spriteTiles[i].HighByte, _spriteTiles[i].PaletteOffset, _spriteTiles[i].HorizontalMirror, _spriteTiles[i].BackgroundPriority);
