@@ -947,6 +947,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\StepOut.png" />
+    <None Include="Resources\StepInto.png" />
+    <None Include="Resources\StepOver.png" />
+    <None Include="Resources\find.png" />
+    <None Include="Resources\SplitView.png" />
+    <None Include="Resources\font.png" />
     <None Include="Resources\Edit.png" />
     <None Include="Resources\pencil.png" />
     <None Include="Resources\pipette.png" />
@@ -967,6 +973,9 @@
     <None Include="Resources\Add.png" />
     <None Include="Resources\CheatCode.png" />
     <None Include="Resources\bug.png" />
+    <None Include="Resources\Chip.png" />
+    <None Include="Resources\Breakpoint.png" />
+    <None Include="Resources\BreakpointDisabled.png" />
     <Content Include="Resources\coins.png" />
     <None Include="Resources\DipSwitches.png" />
     <None Include="Resources\MesenIcon.png" />
