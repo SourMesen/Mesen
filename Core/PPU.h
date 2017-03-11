@@ -86,8 +86,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		//Used by NSF player for higher performance
 		bool _simpleMode;
 
-		//Used to resolve a race condition when the 2nd write to $2006 occurs at cycle 255 (i.e approx. the same time as the PPU tries to increase Y scrolling)
-		bool _skipScrollingIncrement;
+		uint16_t _updateVramAddr;
+		uint8_t _updateVramAddrDelay;
 
 		uint32_t _minimumDrawBgCycle;
 		uint32_t _minimumDrawSpriteCycle;
