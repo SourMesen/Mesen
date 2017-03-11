@@ -318,14 +318,6 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void ClearLineStyles()
-		{
-			_lineProperties.Clear();
-			if(!this._updating) {
-				this.Invalidate();
-			}
-		}
-
 		public void BeginUpdate()
 		{
 			this._updating = true;
@@ -341,7 +333,6 @@ namespace Mesen.GUI.Debugger
 		{
 			LineProperties GetLineStyle(int cpuAddress);
 		}
-
 
 		public ILineStyleProvider StyleProvider { get; set; }
 

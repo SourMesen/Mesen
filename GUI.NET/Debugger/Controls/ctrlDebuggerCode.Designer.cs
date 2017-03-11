@@ -29,6 +29,7 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuEditSelectedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditSubroutine = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,7 +48,7 @@
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+			this.sepBreakpoint = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +69,6 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picCloseOccurrenceList = new System.Windows.Forms.PictureBox();
 			this.lblSearchResult = new System.Windows.Forms.Label();
-			this.mnuEditSelectedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuCode.SuspendLayout();
 			this.contextMenuMargin.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -94,7 +94,7 @@
             this.toolStripMenuItem2,
             this.mnuEditLabel,
             this.mnuToggleBreakpoint,
-            this.toolStripMenuItem4,
+            this.sepBreakpoint,
             this.mnuAddToWatch,
             this.mnuFindOccurrences,
             this.mnuGoToLocation,
@@ -105,6 +105,14 @@
 			this.contextMenuCode.Size = new System.Drawing.Size(259, 342);
 			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
+			// 
+			// mnuEditSelectedCode
+			// 
+			this.mnuEditSelectedCode.Image = global::Mesen.GUI.Properties.Resources.Edit;
+			this.mnuEditSelectedCode.Name = "mnuEditSelectedCode";
+			this.mnuEditSelectedCode.Size = new System.Drawing.Size(258, 22);
+			this.mnuEditSelectedCode.Text = "Edit selected code";
+			this.mnuEditSelectedCode.Click += new System.EventHandler(this.mnuEditSelectedCode_Click);
 			// 
 			// mnuEditSubroutine
 			// 
@@ -239,10 +247,10 @@
 			this.mnuToggleBreakpoint.Text = "Toggle Breakpoint";
 			this.mnuToggleBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
 			// 
-			// toolStripMenuItem4
+			// sepBreakpoint
 			// 
-			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(255, 6);
+			this.sepBreakpoint.Name = "sepBreakpoint";
+			this.sepBreakpoint.Size = new System.Drawing.Size(255, 6);
 			// 
 			// mnuAddToWatch
 			// 
@@ -448,14 +456,6 @@
 			this.lblSearchResult.TabIndex = 11;
 			this.lblSearchResult.Text = "Search results for: ";
 			// 
-			// mnuEditSelectedCode
-			// 
-			this.mnuEditSelectedCode.Image = global::Mesen.GUI.Properties.Resources.Edit;
-			this.mnuEditSelectedCode.Name = "mnuEditSelectedCode";
-			this.mnuEditSelectedCode.Size = new System.Drawing.Size(258, 22);
-			this.mnuEditSelectedCode.Text = "Edit selected code";
-			this.mnuEditSelectedCode.Click += new System.EventHandler(this.mnuEditSelectedCode_Click);
-			// 
 			// ctrlDebuggerCode
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -507,7 +507,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuNavigateForward;
 		private System.Windows.Forms.ToolStripMenuItem mnuNavigateBackward;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditLabel;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+		private System.Windows.Forms.ToolStripSeparator sepBreakpoint;
 		private System.Windows.Forms.ToolStripMenuItem mnuToggleBreakpoint;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowByteCodeOnLeft;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowByteCodeBelow;

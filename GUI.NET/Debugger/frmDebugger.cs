@@ -873,5 +873,20 @@ namespace Mesen.GUI.Debugger
 		{
 			OpenChildForm(new frmAssembler());
 		}
+
+		private void mnuCode_DropDownOpening(object sender, EventArgs e)
+		{
+			this._lastCodeWindow.UpdateContextMenuItemVisibility(false);
+			mnuCode.DropDownItems.AddRange(this._lastCodeWindow.ContextMenuItems.ToArray());
+		}
+
+		private void mnuCode_DropDownClosed(object sender, EventArgs e)
+		{
+			List<ToolStripItem> items = new List<ToolStripItem>();
+			foreach(ToolStripItem item in mnuCode.DropDownItems) {
+				items.Add(item);
+			}
+			this._lastCodeWindow.ContextMenuItems = items;
+		}
 	}
 }

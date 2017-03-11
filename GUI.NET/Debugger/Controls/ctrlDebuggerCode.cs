@@ -48,6 +48,23 @@ namespace Mesen.GUI.Debugger
 			splitContainer.Panel2Collapsed = true;
 		}
 
+		public List<ToolStripItem> ContextMenuItems
+		{
+			get
+			{
+				List<ToolStripItem> items = new List<ToolStripItem>();
+				foreach(ToolStripItem item in this.contextMenuCode.Items) {
+					items.Add(item);
+				}
+				return items;
+			}
+
+			set
+			{
+				this.contextMenuCode.Items.AddRange(value.ToArray());
+			}
+		}
+
 		public void SetConfig(DebugViewInfo config)
 		{
 			_config = config;
@@ -437,6 +454,8 @@ namespace Mesen.GUI.Debugger
 
 		private bool UpdateContextMenu(Point mouseLocation)
 		{
+			UpdateContextMenuItemVisibility(true);
+
 			string word = GetWordUnderLocation(mouseLocation);
 			if(word.StartsWith("$") || LabelManager.GetLabel(word) != null) {
 				//Cursor is on a numeric value or label
@@ -492,6 +511,19 @@ namespace Mesen.GUI.Debugger
 
 				return false;
 			}
+		}
+
+		public void UpdateContextMenuItemVisibility(bool visible)
+		{
+			mnuShowNextStatement.Enabled = _currentActiveAddress.HasValue;
+			mnuSetNextStatement.Enabled = _currentActiveAddress.HasValue;
+			mnuEditSelectedCode.Enabled = mnuEditSubroutine.Enabled = InteropEmu.DebugIsExecutionStopped() && ctrlCodeViewer.CurrentLine >= 0;
+
+			mnuAddToWatch.Visible = visible;
+			mnuFindOccurrences.Visible = visible;
+			mnuEditLabel.Visible = visible;
+			mnuGoToLocation.Visible = visible;
+			sepBreakpoint.Visible = visible;
 		}
 
 		int _lastClickedAddress = Int32.MaxValue;
@@ -587,13 +619,12 @@ namespace Mesen.GUI.Debugger
 
 		private void contextMenuCode_Opening(object sender, CancelEventArgs e)
 		{
-			mnuShowNextStatement.Enabled = _currentActiveAddress.HasValue;
-			mnuSetNextStatement.Enabled = _currentActiveAddress.HasValue;
-			mnuEditSubroutine.Enabled = InteropEmu.DebugIsExecutionStopped();
+			UpdateContextMenuItemVisibility(true);
 		}
 		
 		private void contextMenuCode_Closed(object sender, ToolStripDropDownClosedEventArgs e)
 		{
+			mnuEditSelectedCode.Enabled = true;
 			mnuEditSubroutine.Enabled = true;
 		}
 
