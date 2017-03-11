@@ -977,6 +977,7 @@
     <None Include="Resources\Chip.png" />
     <None Include="Resources\Breakpoint.png" />
     <None Include="Resources\BreakpointDisabled.png" />
+    <None Include="Resources\BreakpointEnableDisable.png" />
     <Content Include="Resources\coins.png" />
     <None Include="Resources\DipSwitches.png" />
     <None Include="Resources\MesenIcon.png" />

@@ -53,41 +53,44 @@
             this.toolStripMenuItem1,
             this.mnuGoToLocation});
 			this.contextMenuBreakpoints.Name = "contextMenuWatch";
-			this.contextMenuBreakpoints.Size = new System.Drawing.Size(150, 98);
+			this.contextMenuBreakpoints.Size = new System.Drawing.Size(153, 120);
 			// 
 			// mnuAddBreakpoint
 			// 
+			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
 			this.mnuAddBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-			this.mnuAddBreakpoint.Size = new System.Drawing.Size(149, 22);
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(152, 22);
 			this.mnuAddBreakpoint.Text = "Add...";
 			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
 			// 
 			// mnuEditBreakpoint
 			// 
+			this.mnuEditBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEditBreakpoint.Name = "mnuEditBreakpoint";
 			this.mnuEditBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.F2;
-			this.mnuEditBreakpoint.Size = new System.Drawing.Size(149, 22);
+			this.mnuEditBreakpoint.Size = new System.Drawing.Size(152, 22);
 			this.mnuEditBreakpoint.Text = "Edit";
 			this.mnuEditBreakpoint.Click += new System.EventHandler(this.mnuEditBreakpoint_Click);
 			// 
 			// mnuRemoveBreakpoint
 			// 
+			this.mnuRemoveBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuRemoveBreakpoint.Name = "mnuRemoveBreakpoint";
 			this.mnuRemoveBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(149, 22);
+			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(152, 22);
 			this.mnuRemoveBreakpoint.Text = "Remove";
 			this.mnuRemoveBreakpoint.Click += new System.EventHandler(this.mnuRemoveBreakpoint_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(146, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuGoToLocation
 			// 
 			this.mnuGoToLocation.Name = "mnuGoToLocation";
-			this.mnuGoToLocation.Size = new System.Drawing.Size(149, 22);
+			this.mnuGoToLocation.Size = new System.Drawing.Size(152, 22);
 			this.mnuGoToLocation.Text = "Go to location";
 			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
 			// 

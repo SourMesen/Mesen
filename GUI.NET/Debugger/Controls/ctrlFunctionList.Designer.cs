@@ -35,6 +35,7 @@
 			this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.contextMenuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -79,13 +80,15 @@
 			// 
 			this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuEditLabel,
+            this.toolStripMenuItem1,
             this.mnuFindOccurrences});
 			this.contextMenuStrip.Name = "contextMenuStrip";
-			this.contextMenuStrip.Size = new System.Drawing.Size(167, 70);
+			this.contextMenuStrip.Size = new System.Drawing.Size(167, 76);
 			this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
 			// 
 			// mnuEditLabel
 			// 
+			this.mnuEditLabel.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEditLabel.Name = "mnuEditLabel";
 			this.mnuEditLabel.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEditLabel.Size = new System.Drawing.Size(166, 22);
@@ -94,10 +97,16 @@
 			// 
 			// mnuFindOccurrences
 			// 
+			this.mnuFindOccurrences.Image = global::Mesen.GUI.Properties.Resources.Find;
 			this.mnuFindOccurrences.Name = "mnuFindOccurrences";
 			this.mnuFindOccurrences.Size = new System.Drawing.Size(166, 22);
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
 			// 
 			// ctrlFunctionList
 			// 
@@ -120,5 +129,6 @@
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditLabel;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindOccurrences;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 	}
 }

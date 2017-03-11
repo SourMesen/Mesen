@@ -85,8 +85,9 @@
 			// 
 			// mnuClose
 			// 
+			this.mnuClose.Image = global::Mesen.GUI.Properties.Resources.Exit;
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(103, 22);
+			this.mnuClose.Size = new System.Drawing.Size(152, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -102,16 +103,17 @@
 			// 
 			// mnuRefresh
 			// 
+			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(138, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -119,7 +121,7 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -180,7 +182,7 @@
 			this.tpgSpriteViewer.Controls.Add(this.ctrlSpriteViewer);
 			this.tpgSpriteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgSpriteViewer.Name = "tpgSpriteViewer";
-			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 522);
+			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 526);
 			this.tpgSpriteViewer.TabIndex = 2;
 			this.tpgSpriteViewer.Text = "Sprite Viewer";
 			this.tpgSpriteViewer.UseVisualStyleBackColor = true;
@@ -190,7 +192,7 @@
 			this.ctrlSpriteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlSpriteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlSpriteViewer.Name = "ctrlSpriteViewer";
-			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 522);
+			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 526);
 			this.ctrlSpriteViewer.TabIndex = 0;
 			// 
 			// tpgPaletteViewer
@@ -198,7 +200,7 @@
 			this.tpgPaletteViewer.Controls.Add(this.ctrlPaletteViewer);
 			this.tpgPaletteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgPaletteViewer.Name = "tpgPaletteViewer";
-			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 522);
+			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 526);
 			this.tpgPaletteViewer.TabIndex = 3;
 			this.tpgPaletteViewer.Text = "Palette Viewer";
 			this.tpgPaletteViewer.UseVisualStyleBackColor = true;
@@ -208,7 +210,7 @@
 			this.ctrlPaletteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlPaletteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlPaletteViewer.Name = "ctrlPaletteViewer";
-			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 522);
+			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 526);
 			this.ctrlPaletteViewer.TabIndex = 0;
 			// 
 			// flowLayoutPanel1

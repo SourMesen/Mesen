@@ -55,6 +55,7 @@
 			// 
 			// mnuAdd
 			// 
+			this.mnuAdd.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAdd.Name = "mnuAdd";
 			this.mnuAdd.ShortcutKeys = System.Windows.Forms.Keys.Insert;
 			this.mnuAdd.Size = new System.Drawing.Size(166, 22);
@@ -63,6 +64,7 @@
 			// 
 			// mnuEdit
 			// 
+			this.mnuEdit.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEdit.Name = "mnuEdit";
 			this.mnuEdit.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEdit.Size = new System.Drawing.Size(166, 22);
@@ -71,6 +73,7 @@
 			// 
 			// mnuDelete
 			// 
+			this.mnuDelete.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuDelete.Name = "mnuDelete";
 			this.mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.mnuDelete.Size = new System.Drawing.Size(166, 22);
@@ -84,6 +87,7 @@
 			// 
 			// mnuFindOccurrences
 			// 
+			this.mnuFindOccurrences.Image = global::Mesen.GUI.Properties.Resources.Find;
 			this.mnuFindOccurrences.Name = "mnuFindOccurrences";
 			this.mnuFindOccurrences.Size = new System.Drawing.Size(166, 22);
 			this.mnuFindOccurrences.Text = "Find Occurrences";
@@ -118,7 +122,6 @@
 			// colFunctionAddress
 			// 
 			this.colFunctionAddress.Text = "CPU Addr";
-			this.colFunctionAddress.Width = 60;
 			// 
 			// colMemoryAddress
 			// 

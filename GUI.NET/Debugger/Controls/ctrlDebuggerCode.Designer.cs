@@ -46,10 +46,10 @@
 			this.mnuPrgAddressBelow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHidePrgAddresses = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.sepEditLabel = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
-			this.sepBreakpoint = new System.Windows.Forms.ToolStripSeparator();
+			this.sepAddToWatch = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,9 +59,9 @@
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.ctrlCodeViewer = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.contextMenuMargin = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuEditBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDisableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRemoveBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuEditBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.tlpSearchResults = new System.Windows.Forms.TableLayoutPanel();
 			this.lstSearchResult = new System.Windows.Forms.ListView();
@@ -93,10 +93,10 @@
             this.toolStripMenuItem1,
             this.mnuShowCodeNotes,
             this.mnuShowLineNotes,
-            this.toolStripMenuItem2,
+            this.sepEditLabel,
             this.mnuEditLabel,
             this.mnuToggleBreakpoint,
-            this.sepBreakpoint,
+            this.sepAddToWatch,
             this.mnuAddToWatch,
             this.mnuFindOccurrences,
             this.mnuGoToLocation,
@@ -104,7 +104,7 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 364);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 342);
 			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
@@ -237,10 +237,10 @@
 			this.mnuHidePrgAddresses.Text = "Hidden";
 			this.mnuHidePrgAddresses.Click += new System.EventHandler(this.mnuHidePrgAddresses_Click);
 			// 
-			// toolStripMenuItem2
+			// sepEditLabel
 			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
+			this.sepEditLabel.Name = "sepEditLabel";
+			this.sepEditLabel.Size = new System.Drawing.Size(255, 6);
 			// 
 			// mnuEditLabel
 			// 
@@ -252,21 +252,22 @@
 			// 
 			// mnuToggleBreakpoint
 			// 
+			this.mnuToggleBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
 			this.mnuToggleBreakpoint.Name = "mnuToggleBreakpoint";
 			this.mnuToggleBreakpoint.ShortcutKeyDisplayString = "F9";
 			this.mnuToggleBreakpoint.Size = new System.Drawing.Size(258, 22);
 			this.mnuToggleBreakpoint.Text = "Toggle Breakpoint";
 			this.mnuToggleBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
 			// 
-			// sepBreakpoint
+			// sepAddToWatch
 			// 
-			this.sepBreakpoint.Name = "sepBreakpoint";
-			this.sepBreakpoint.Size = new System.Drawing.Size(255, 6);
+			this.sepAddToWatch.Name = "sepAddToWatch";
+			this.sepAddToWatch.Size = new System.Drawing.Size(255, 6);
 			// 
 			// mnuAddToWatch
 			// 
 			this.mnuAddToWatch.Name = "mnuAddToWatch";
-			this.mnuAddToWatch.ShortcutKeyDisplayString = "Shift+Click";
+			this.mnuAddToWatch.ShortcutKeyDisplayString = "Ctrl+Click";
 			this.mnuAddToWatch.Size = new System.Drawing.Size(258, 22);
 			this.mnuAddToWatch.Text = "Add to Watch";
 			this.mnuAddToWatch.Click += new System.EventHandler(this.mnuAddToWatch_Click);
@@ -282,7 +283,7 @@
 			// mnuGoToLocation
 			// 
 			this.mnuGoToLocation.Name = "mnuGoToLocation";
-			this.mnuGoToLocation.ShortcutKeyDisplayString = "Ctrl+Click";
+			this.mnuGoToLocation.ShortcutKeyDisplayString = "Double+Click";
 			this.mnuGoToLocation.Size = new System.Drawing.Size(258, 22);
 			this.mnuGoToLocation.Text = "Go to Location";
 			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
@@ -334,15 +335,24 @@
 			// contextMenuMargin
 			// 
 			this.contextMenuMargin.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuEditBreakpoint,
             this.mnuDisableBreakpoint,
-            this.mnuRemoveBreakpoint,
-            this.mnuEditBreakpoint});
+            this.mnuRemoveBreakpoint});
 			this.contextMenuMargin.Name = "contextMenuMargin";
 			this.contextMenuMargin.Size = new System.Drawing.Size(178, 70);
 			this.contextMenuMargin.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuMargin_Opening);
 			// 
+			// mnuEditBreakpoint
+			// 
+			this.mnuEditBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Edit;
+			this.mnuEditBreakpoint.Name = "mnuEditBreakpoint";
+			this.mnuEditBreakpoint.Size = new System.Drawing.Size(177, 22);
+			this.mnuEditBreakpoint.Text = "Edit breakpoint";
+			this.mnuEditBreakpoint.Click += new System.EventHandler(this.mnuEditBreakpoint_Click);
+			// 
 			// mnuDisableBreakpoint
 			// 
+			this.mnuDisableBreakpoint.Image = global::Mesen.GUI.Properties.Resources.BreakpointEnableDisable;
 			this.mnuDisableBreakpoint.Name = "mnuDisableBreakpoint";
 			this.mnuDisableBreakpoint.Size = new System.Drawing.Size(177, 22);
 			this.mnuDisableBreakpoint.Text = "Disable breakpoint";
@@ -350,17 +360,11 @@
 			// 
 			// mnuRemoveBreakpoint
 			// 
+			this.mnuRemoveBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuRemoveBreakpoint.Name = "mnuRemoveBreakpoint";
 			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(177, 22);
 			this.mnuRemoveBreakpoint.Text = "Remove breakpoint";
 			this.mnuRemoveBreakpoint.Click += new System.EventHandler(this.mnuRemoveBreakpoint_Click);
-			// 
-			// mnuEditBreakpoint
-			// 
-			this.mnuEditBreakpoint.Name = "mnuEditBreakpoint";
-			this.mnuEditBreakpoint.Size = new System.Drawing.Size(177, 22);
-			this.mnuEditBreakpoint.Text = "Edit breakpoint";
-			this.mnuEditBreakpoint.Click += new System.EventHandler(this.mnuEditBreakpoint_Click);
 			// 
 			// splitContainer
 			// 
@@ -495,7 +499,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuShowNextStatement;
 		private System.Windows.Forms.ToolStripMenuItem mnuSetNextStatement;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripSeparator sepEditLabel;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToLocation;
 		private System.Windows.Forms.ToolStripMenuItem mnuAddToWatch;
 		private Mesen.GUI.Debugger.ctrlScrollableTextbox ctrlCodeViewer;
@@ -518,7 +522,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuNavigateForward;
 		private System.Windows.Forms.ToolStripMenuItem mnuNavigateBackward;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditLabel;
-		private System.Windows.Forms.ToolStripSeparator sepBreakpoint;
+		private System.Windows.Forms.ToolStripSeparator sepAddToWatch;
 		private System.Windows.Forms.ToolStripMenuItem mnuToggleBreakpoint;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowByteCodeOnLeft;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowByteCodeBelow;

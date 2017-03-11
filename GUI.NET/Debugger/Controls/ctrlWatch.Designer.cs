@@ -36,8 +36,8 @@
 			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuWatch = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuRemoveWatch = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuHexDisplay = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuHexDisplay = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuWatch.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -91,12 +91,18 @@
 			// 
 			// mnuRemoveWatch
 			// 
+			this.mnuRemoveWatch.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuRemoveWatch.Name = "mnuRemoveWatch";
 			this.mnuRemoveWatch.ShortcutKeyDisplayString = "";
 			this.mnuRemoveWatch.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.mnuRemoveWatch.Size = new System.Drawing.Size(183, 22);
 			this.mnuRemoveWatch.Text = "Remove";
 			this.mnuRemoveWatch.Click += new System.EventHandler(this.mnuRemoveWatch_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 6);
 			// 
 			// mnuHexDisplay
 			// 
@@ -107,11 +113,6 @@
 			this.mnuHexDisplay.Size = new System.Drawing.Size(183, 22);
 			this.mnuHexDisplay.Text = "Hexadecimal Display";
 			this.mnuHexDisplay.Click += new System.EventHandler(this.mnuHexDisplay_Click);
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 6);
 			// 
 			// ctrlWatch
 			// 

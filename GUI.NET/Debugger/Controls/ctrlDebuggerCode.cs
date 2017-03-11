@@ -48,6 +48,7 @@ namespace Mesen.GUI.Debugger
 			splitContainer.Panel2Collapsed = true;
 		}
 
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<ToolStripItem> ContextMenuItems
 		{
 			get
@@ -523,7 +524,9 @@ namespace Mesen.GUI.Debugger
 			mnuFindOccurrences.Visible = visible;
 			mnuEditLabel.Visible = visible;
 			mnuGoToLocation.Visible = visible;
-			sepBreakpoint.Visible = visible;
+			mnuToggleBreakpoint.Visible = visible;
+			sepAddToWatch.Visible = visible;
+			sepEditLabel.Visible = visible;
 		}
 
 		int _lastClickedAddress = Int32.MaxValue;
@@ -534,8 +537,6 @@ namespace Mesen.GUI.Debugger
 			if(UpdateContextMenu(e.Location)) {
 				if(e.Button == MouseButtons.Left) {
 					if(ModifierKeys.HasFlag(Keys.Control)) {
-						GoToLocation();
-					} else if(ModifierKeys.HasFlag(Keys.Shift)) {
 						AddWatch();
 					} else if(ModifierKeys.HasFlag(Keys.Alt)) {
 						FindAllOccurrences(_lastWord, true, true);
@@ -579,15 +580,18 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlCodeViewer_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			int relativeAddress = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
+			if(e.Location.X > this.ctrlCodeViewer.CodeMargin / 2 && e.Location.X < this.ctrlCodeViewer.CodeMargin) {
+				int relativeAddress = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
+				if(relativeAddress >= 0) {
+					AddressTypeInfo info = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)relativeAddress, ref info);
 
-			if(relativeAddress >= 0 && e.Location.X > this.ctrlCodeViewer.CodeMargin / 2 && e.Location.X < this.ctrlCodeViewer.CodeMargin) {
-				AddressTypeInfo info = new AddressTypeInfo();
-				InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)relativeAddress, ref info);
-
-				if(info.Address >= 0) {
-					ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+					if(info.Address >= 0) {
+						ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+					}
 				}
+			} else if(UpdateContextMenu(e.Location) && mnuGoToLocation.Enabled) {
+				GoToLocation();
 			}
 		}
 

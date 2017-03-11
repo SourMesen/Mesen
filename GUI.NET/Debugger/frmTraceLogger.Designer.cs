@@ -353,13 +353,13 @@
             this.mnu10000Lines,
             this.mnu30000Lines});
 			this.logLinesToolStripMenuItem.Name = "logLinesToolStripMenuItem";
-			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.logLinesToolStripMenuItem.Text = "Line Count";
 			// 
 			// mnu100Lines
 			// 
 			this.mnu100Lines.Name = "mnu100Lines";
-			this.mnu100Lines.Size = new System.Drawing.Size(104, 22);
+			this.mnu100Lines.Size = new System.Drawing.Size(152, 22);
 			this.mnu100Lines.Text = "100";
 			this.mnu100Lines.Click += new System.EventHandler(this.mnu100Lines_Click);
 			// 
@@ -368,21 +368,21 @@
 			this.mnu1000Lines.Checked = true;
 			this.mnu1000Lines.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnu1000Lines.Name = "mnu1000Lines";
-			this.mnu1000Lines.Size = new System.Drawing.Size(104, 22);
+			this.mnu1000Lines.Size = new System.Drawing.Size(152, 22);
 			this.mnu1000Lines.Text = "1000";
 			this.mnu1000Lines.Click += new System.EventHandler(this.mnu1000Lines_Click);
 			// 
 			// mnu10000Lines
 			// 
 			this.mnu10000Lines.Name = "mnu10000Lines";
-			this.mnu10000Lines.Size = new System.Drawing.Size(104, 22);
+			this.mnu10000Lines.Size = new System.Drawing.Size(152, 22);
 			this.mnu10000Lines.Text = "10000";
 			this.mnu10000Lines.Click += new System.EventHandler(this.mnu10000Lines_Click);
 			// 
 			// mnu30000Lines
 			// 
 			this.mnu30000Lines.Name = "mnu30000Lines";
-			this.mnu30000Lines.Size = new System.Drawing.Size(104, 22);
+			this.mnu30000Lines.Size = new System.Drawing.Size(152, 22);
 			this.mnu30000Lines.Text = "30000";
 			this.mnu30000Lines.Click += new System.EventHandler(this.mnu30000Lines_Click);
 			// 
@@ -392,19 +392,20 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(138, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuRefresh
 			// 
+			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
