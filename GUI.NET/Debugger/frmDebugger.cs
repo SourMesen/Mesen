@@ -441,17 +441,6 @@ namespace Mesen.GUI.Debugger
 			this.UpdateDebugger();
 		}
 
-		private void ctrlDebuggerCode_OnEditCode(AssemblerEventArgs args)
-		{
-			frmAssembler assembler = new frmAssembler(args.Code, args.StartAddress, args.BlockLength);
-			assembler.FormClosed += (s, e) => {
-				if(assembler.DialogResult == DialogResult.OK) {
-					this.UpdateDebugger(false);
-				}
-			};
-			OpenChildForm(assembler);
-		}
-
 		private void mnuFind_Click(object sender, EventArgs e)
 		{
 			_lastCodeWindow.OpenSearchBox();
@@ -869,9 +858,25 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void OpenAssembler(string code, UInt16 startAddress, UInt16 blockLength = 0)
+		{
+			frmAssembler assembler = new frmAssembler(code, startAddress, blockLength);
+			assembler.FormClosed += (s, e) => {
+				if(assembler.DialogResult == DialogResult.OK) {
+					this.UpdateDebugger(false);
+				}
+			};
+			OpenChildForm(assembler);
+		}
+
 		private void mnuAssembler_Click(object sender, EventArgs e)
 		{
-			OpenChildForm(new frmAssembler());
+			this.OpenAssembler(string.Empty, 0x8000);
+		}
+
+		private void ctrlDebuggerCode_OnEditCode(AssemblerEventArgs args)
+		{
+			this.OpenAssembler(args.Code, args.StartAddress, args.BlockLength);
 		}
 
 		private void mnuCode_DropDownOpening(object sender, EventArgs e)

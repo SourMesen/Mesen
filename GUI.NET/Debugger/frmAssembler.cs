@@ -27,11 +27,7 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
-			if(string.IsNullOrWhiteSpace(code)) {
-				btnCancel.Text = "Close";
-				btnOk.Enabled = false;
-				btnOk.Visible = false;
-			} else {
+			if(!string.IsNullOrWhiteSpace(code)) {
 				_isEditMode = true;
 				_containedRtiRts = ContainsRtiOrRts(code);
 			}
@@ -135,13 +131,16 @@ namespace Mesen.GUI.Debugger
 				lblByteUsage.Text = ctrlHexBox.ByteProvider.Length.ToString() + " / " + _blockLength.ToString();
 				lblByteUsage.ForeColor = SizeExceeded ? Color.Red : Color.Black;
 				picSizeWarning.Visible = SizeExceeded;
-				btnOk.Image = _hasParsingErrors || NeedRtiRtsWarning || SizeExceeded ? Properties.Resources.Warning : null;
 
 				bool isIdentical = IsIdentical;
 				lblNoChanges.Visible = isIdentical;
+				btnOk.Image = _hasParsingErrors || NeedRtiRtsWarning || SizeExceeded ? Properties.Resources.Warning : null;
 				btnOk.Enabled = !isIdentical && _startAddressValid && ctrlHexBox.ByteProvider.Length > 0;
 			} else {
 				lblNoChanges.Visible = false;
+				btnOk.Image = _hasParsingErrors ? Properties.Resources.Warning : null;
+				btnOk.Enabled = _startAddressValid && ctrlHexBox.ByteProvider.Length > 0;
+
 				lblByteUsage.Text = ctrlHexBox.ByteProvider.Length.ToString();
 			}
 
@@ -183,14 +182,15 @@ namespace Mesen.GUI.Debugger
 			if(_hasParsingErrors) {
 				warningMessages.Add("Warning: The code contains parsing errors - lines with errors will be ignored.");
 			}
-			if(SizeExceeded) {
-				warningMessages.Add("Warning: The new code exceeds the original code's length." + Environment.NewLine + "Applying this modification will overwrite other portions of the code and potentially cause problems.");
-			}
-			if(NeedRtiRtsWarning) {
-				warningMessages.Add("Warning: The code originally contained an RTI/RTS instruction and it no longer does - this will probably cause problems.");
-			}
-			if(!_startAddressValid) {
-				warningMessages.Add("Warning: Start address is invalid.  Must be a valid hexadecimal string.");
+			if(_isEditMode) {
+				if(SizeExceeded) {
+					warningMessages.Add("Warning: The new code exceeds the original code's length." + Environment.NewLine + "Applying this modification will overwrite other portions of the code and potentially cause problems.");
+				}
+				if(NeedRtiRtsWarning) {
+					warningMessages.Add("Warning: The code originally contained an RTI/RTS instruction and it no longer does - this will probably cause problems.");
+				}
+			} else {
+				warningMessages.Add($"Warning: The contents currently mapped to CPU memory addresses ${_startAddress.ToString("X4")} to ${(_startAddress+ctrlHexBox.ByteProvider.Length).ToString("X4")} will be overridden.");
 			}
 
 			if(warningMessages.Count == 0 || MessageBox.Show(string.Join(Environment.NewLine+Environment.NewLine, warningMessages.ToArray()) + Environment.NewLine + Environment.NewLine + "OK?", "Warning", MessageBoxButtons.OKCancel) == DialogResult.OK) {
