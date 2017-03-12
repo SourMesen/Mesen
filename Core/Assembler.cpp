@@ -8,10 +8,10 @@
 #include "DisassemblyInfo.h"
 #include "LabelManager.h"
 
-static const std::regex instRegex = std::regex("^\\s*([a-z]{3})[*]{0,1}[\\s]*([#]{0,1})([(]{0,1})[\\s]*([$]{0,1})([^,)(;:]*)[\\s]*((,x\\)|\\),y|,x|,y|\\)){0,1})\\s*(;*)(.*)", std::regex_constants::icase);
+static const std::regex instRegex = std::regex("^\\s*([a-zA-Z]{3})[*]{0,1}[\\s]*([#]{0,1})([(]{0,1})[\\s]*([$]{0,1})([^,)(;:]*)[\\s]*((,x\\)|\\),y|,x|,y|\\)){0,1})\\s*(;*)(.*)", std::regex_constants::icase);
 static const std::regex isCommentOrBlank = std::regex("^\\s*([;]+.*$|\\s*$)", std::regex_constants::icase);
-static const std::regex labelRegex = std::regex("^\\s*([@_a-z][@_a-z0-9]*):(.*)", std::regex_constants::icase);
-static const std::regex byteRegex = std::regex("^\\s*[.]byte\\s+((\\$[a-f0-9]{1,2},)*)(\\$[a-f0-9]{1,2})+\\s*(;*)(.*)$", std::regex_constants::icase);
+static const std::regex labelRegex = std::regex("^\\s*([@_a-zA-Z][@_a-zA-Z0-9]*):(.*)", std::regex_constants::icase);
+static const std::regex byteRegex = std::regex("^\\s*[.]byte\\s+((\\$[a-fA-F0-9]{1,2},)*)(\\$[a-fA-F0-9]{1,2})+\\s*(;*)(.*)$", std::regex_constants::icase);
 
 static string opName[256] = {
 	//	0			1			2			3			4			5			6			7			8			9			A			B			C			D			E			F

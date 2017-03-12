@@ -38,7 +38,6 @@ private:
 	uint16_t _currentPos;
 	State _cpuStateCache[ExecutionLogSize] = {};
 	PPUDebugState _ppuStateCache[ExecutionLogSize] = {};
-	int _memoryAddrCache[ExecutionLogSize] = {};
 	shared_ptr<DisassemblyInfo> _disassemblyCache[ExecutionLogSize] = {};
 
 	string _executionTrace;
