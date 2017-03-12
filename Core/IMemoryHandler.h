@@ -46,15 +46,16 @@ class MemoryRanges
 				end = start;
 			}
 
-			vector<uint16_t> *addresses;			
-			if(operation == MemoryOperation::Read) {
-				addresses = &_ramReadAddresses;
-			} else {
-				addresses = &_ramWriteAddresses;
+			if(operation == MemoryOperation::Read || operation == MemoryOperation::Any) {
+				for(uint32_t i = start; i <= end; i++) {
+					_ramReadAddresses.push_back((uint16_t)i);
+				}
 			}
-
-			for(uint32_t i = start; i <= end; i++) {
-				addresses->push_back((uint16_t)i);
+			
+			if(operation == MemoryOperation::Write || operation == MemoryOperation::Any) {
+				for(uint32_t i = start; i <= end; i++) {
+					_ramWriteAddresses.push_back((uint16_t)i);
+				}
 			}
 		}
 };

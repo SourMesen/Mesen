@@ -31,7 +31,7 @@ static const char* hexTable[256] = {
 void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager)
 {
 	char buffer[500];
-	uint8_t opCode = *_opPointer;
+	uint8_t opCode = _byteCode[0];
 	uint16_t length = (uint16_t)DisassemblyInfo::OPName[opCode].size();
 
 	memcpy(buffer, DisassemblyInfo::OPName[opCode].c_str(), length);
@@ -118,9 +118,9 @@ uint16_t DisassemblyInfo::GetOpAddr(uint16_t memoryAddr)
 {
 	uint16_t opAddr = 0;
 	if(_opSize == 2) {
-		opAddr = *(_opPointer + 1);
+		opAddr = _byteCode[1];
 	} else if(_opSize == 3) {
-		opAddr = *(_opPointer + 1) | (*(_opPointer + 2) << 8);
+		opAddr = _byteCode[1] | (_byteCode[2] << 8);
 	}
 
 	if(_opMode == AddrMode::Rel) {
@@ -132,12 +132,16 @@ uint16_t DisassemblyInfo::GetOpAddr(uint16_t memoryAddr)
 
 DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
 {
-	_opPointer = opPointer;
 	_isSubEntryPoint = isSubEntryPoint;
 
-	uint8_t opCode = *_opPointer;
+	uint8_t opCode = *opPointer;
 	_opSize = DisassemblyInfo::OPSize[opCode];
 	_opMode = DisassemblyInfo::OPMode[opCode];
+
+	for(uint32_t i = 0; i < _opSize; i++) {
+		_byteCode[i] = *(opPointer + i);
+	}
+
 	_isSubExitPoint = opCode == 0x40 || opCode == 0x60;
 }
 
@@ -191,34 +195,34 @@ void DisassemblyInfo::GetEffectiveAddressString(string &out, State& cpuState, Me
 int32_t DisassemblyInfo::GetEffectiveAddress(State& cpuState, MemoryManager* memoryManager)
 {
 	switch(_opMode) {
-		case AddrMode::ZeroX: return (uint8_t)(*(_opPointer + 1) + cpuState.X); break;
-		case AddrMode::ZeroY: return (uint8_t)(*(_opPointer + 1) + cpuState.Y); break;
+		case AddrMode::ZeroX: return (uint8_t)(_byteCode[1] + cpuState.X); break;
+		case AddrMode::ZeroY: return (uint8_t)(_byteCode[1] + cpuState.Y); break;
 
 		case AddrMode::IndX: {
-			uint8_t zeroAddr = *(_opPointer + 1) + cpuState.X;
+			uint8_t zeroAddr = _byteCode[1] + cpuState.X;
 			return memoryManager->DebugRead(zeroAddr) | memoryManager->DebugRead((uint8_t)(zeroAddr + 1)) << 8;
 		}
 
 		case AddrMode::IndY:
 		case AddrMode::IndYW: {
-			uint8_t zeroAddr = *(_opPointer + 1);
+			uint8_t zeroAddr = _byteCode[1];
 			uint16_t addr = memoryManager->DebugRead(zeroAddr) | memoryManager->DebugRead((uint8_t)(zeroAddr + 1)) << 8;
 			return (uint16_t)(addr + cpuState.Y);
 		}
 
 		case AddrMode::Ind: {
-			uint8_t zeroAddr = *(_opPointer + 1);
+			uint8_t zeroAddr = _byteCode[1];
 			return memoryManager->DebugRead(zeroAddr) | memoryManager->DebugRead((uint8_t)(zeroAddr + 1)) << 8;
 		}
 
 		case AddrMode::AbsX:
 		case AddrMode::AbsXW: {
-			return (uint16_t)((*(_opPointer + 1) | (*(_opPointer + 2) << 8)) + cpuState.X) & 0xFFFF;
+			return (uint16_t)((_byteCode[1] | (_byteCode[2] << 8)) + cpuState.X) & 0xFFFF;
 		}
 
 		case AddrMode::AbsY:
 		case AddrMode::AbsYW: {
-			return (uint16_t)((*(_opPointer + 1) | (*(_opPointer + 2) << 8)) + cpuState.Y) & 0xFFFF;
+			return (uint16_t)((_byteCode[1] | (_byteCode[2] << 8)) + cpuState.Y) & 0xFFFF;
 		}
 	}
 
@@ -237,8 +241,8 @@ void DisassemblyInfo::GetByteCode(string &out)
 			byteCode[pos++] = '$';
 		}
 
-		byteCode[pos++] = hexTable[(uint8_t)*(_opPointer + i)][0];
-		byteCode[pos++] = hexTable[(uint8_t)*(_opPointer + i)][1];
+		byteCode[pos++] = hexTable[_byteCode[i]][0];
+		byteCode[pos++] = hexTable[_byteCode[i]][1];
 	}
 
 	byteCode[pos] = 0;

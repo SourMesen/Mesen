@@ -144,6 +144,8 @@ namespace Mesen.GUI.Debugger
 				lblByteUsage.Text = ctrlHexBox.ByteProvider.Length.ToString();
 			}
 
+			btnExecute.Enabled = ctrlHexBox.ByteProvider.Length > 0 && ctrlHexBox.ByteProvider.Length <= 4000;
+
 			picStartAddressWarning.Visible = !_startAddressValid;
 		}
 
@@ -176,8 +178,39 @@ namespace Mesen.GUI.Debugger
 			UpdateWindow();
 		}
 
+		private void btnExecute_Click(object sender, EventArgs e)
+		{
+			WaitUntilBreak();
+
+			List<string> warningMessages = new List<string>();
+			if(_hasParsingErrors) {
+				warningMessages.Add("Warning: The code contains parsing errors - lines with errors will be ignored.");
+			}
+			warningMessages.Add("Warning: The CPU will not resume its normal execution until a write to $3000 is performed (or the last line of code is reached)!");
+			warningMessages.Add("This will assemble and execute the code in the $3000-$3FFF range, starting at address $3000." + Environment.NewLine + Environment.NewLine + "Execute?");
+
+			if(MessageBox.Show(string.Join(Environment.NewLine+Environment.NewLine, warningMessages.ToArray()), "Warning", MessageBoxButtons.OKCancel) == DialogResult.OK) {
+				UInt16 originalAddress = _startAddress;
+				_startAddress = 0x3000;
+				UpdateWindow();
+				List<byte> code = ((StaticByteProvider)ctrlHexBox.ByteProvider).Bytes;
+				_startAddress = originalAddress;
+				UpdateWindow();
+
+				//Inject a STA $3000 instruction at the end - not flawless, but will work for typical scenarions
+				code.Add(0x8D);
+				code.Add(0x00);
+				code.Add(0x30);
+
+				InteropEmu.DebugStartCodeRunner(code.ToArray());
+				InteropEmu.DebugRun();
+			}
+		}
+
 		private void btnOk_Click(object sender, EventArgs e)
 		{
+			WaitUntilBreak();
+
 			List<string> warningMessages = new List<string>();
 			if(_hasParsingErrors) {
 				warningMessages.Add("Warning: The code contains parsing errors - lines with errors will be ignored.");
@@ -210,6 +243,14 @@ namespace Mesen.GUI.Debugger
 
 				this.DialogResult = DialogResult.OK;
 				this.Close();
+			}
+		}
+
+		private void WaitUntilBreak()
+		{
+			while(!InteropEmu.DebugIsExecutionStopped()) {
+				InteropEmu.DebugStep(1);
+				System.Threading.Thread.Sleep(100);
 			}
 		}
 

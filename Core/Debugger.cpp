@@ -15,6 +15,8 @@
 #include "MemoryAccessCounter.h"
 #include "Profiler.h"
 #include "Assembler.h"
+#include "CodeRunner.h"
+#include "DisassemblyInfo.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
@@ -51,6 +53,8 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_currentReadAddr = nullptr;
 	_currentReadValue = nullptr;
+	_nextReadAddr = -1;
+	_returnToAddress = 0;
 
 	_ppuScrollX = 0;
 	_ppuScrollY = 0;
@@ -338,6 +342,18 @@ void Debugger::PrivateProcessPpuCycle()
 
 bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
 {
+	if(type == MemoryOperationType::ExecOpCode && _nextReadAddr != -1) {
+		//SetNextStatement (either from manual action or code runner)
+		if(addr < 0x3000 || addr >= 0x4000) {
+			_returnToAddress = addr;
+		}
+
+		addr = _nextReadAddr;
+		value = _memoryManager->DebugRead(addr, false);
+		_cpu->SetDebugPC(addr);
+		_nextReadAddr = -1;
+	}
+
 	_currentReadAddr = &addr;
 	_currentReadValue = &value;
 
@@ -389,8 +405,19 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 
 		breakDone = SleepUntilResume();
 
+		if(_codeRunner && !_codeRunner->IsRunning()) {
+			_codeRunner.reset();
+		}
+
 		GetState(&_debugState, false);
-		_traceLogger->Log(_debugState.CPU, _debugState.PPU, _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr));
+	
+		shared_ptr<DisassemblyInfo> disassemblyInfo;
+		if(_codeRunner && _codeRunner->IsRunning() && addr >= 0x3000 && addr < 0x4000) {
+			disassemblyInfo = _codeRunner->GetDisassemblyInfo(addr);
+		} else {
+			disassemblyInfo = _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr);
+		}
+		_traceLogger->Log(_debugState.CPU, _debugState.PPU, disassemblyInfo);
 
 		_lastInstruction = value;
 	} else {
@@ -412,6 +439,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	}
 
 	_currentReadAddr = nullptr;
+	_currentReadValue = nullptr;
 
 	if(type == MemoryOperationType::Write) {
 		if(_frozenAddresses[addr]) {
@@ -617,7 +645,11 @@ void Debugger::SetNextStatement(uint16_t addr)
 	if(_currentReadAddr) {
 		_cpu->SetDebugPC(addr);
 		*_currentReadAddr = addr;
-		*_currentReadValue = _memoryManager->DebugRead(addr);
+		*_currentReadValue = _memoryManager->DebugRead(addr, false);
+	} else {
+		//Can't change the address right away (CPU is in the middle of an instruction)
+		//Address will change after current instruction is done executing
+		_nextReadAddr = addr;
 	}
 }
 
@@ -769,6 +801,24 @@ void Debugger::GetFreezeState(uint16_t startAddress, uint16_t length, bool* free
 	for(uint16_t i = 0; i < length; i++) {
 		freezeState[i] = _frozenAddresses[startAddress + i] ? true : false;
 	}	
+}
+
+void Debugger::StartCodeRunner(uint8_t *byteCode, uint32_t codeLength)
+{
+	_codeRunner.reset(new CodeRunner(vector<uint8_t>(byteCode, byteCode + codeLength), this));
+	_memoryManager->RegisterIODevice(_codeRunner.get());
+	_returnToAddress = _cpu->GetState().DebugPC;
+	SetNextStatement(CodeRunner::BaseAddress);
+}
+
+void Debugger::StopCodeRunner()
+{
+	_memoryManager->UnregisterIODevice(_codeRunner.get());
+	_memoryManager->RegisterIODevice(_ppu.get());
+	
+	//Break debugger when code has finished executing
+	SetNextStatement(_returnToAddress);
+	Debugger::Instance->Step(1);
 }
 
 void Debugger::SaveRomToDisk(string filename)

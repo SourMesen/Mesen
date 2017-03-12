@@ -25,6 +25,7 @@ class LabelManager;
 class MemoryDumper;
 class MemoryAccessCounter;
 class Profiler;
+class CodeRunner;
 
 class Debugger
 {
@@ -41,6 +42,7 @@ private:
 	shared_ptr<LabelManager> _labelManager;
 	shared_ptr<TraceLogger> _traceLogger;
 	shared_ptr<Profiler> _profiler;
+	unique_ptr<CodeRunner> _codeRunner;
 
 	shared_ptr<Console> _console;
 	shared_ptr<CPU> _cpu;
@@ -75,6 +77,8 @@ private:
 	//Used to alter the executing address via "Set Next Statement"
 	uint16_t *_currentReadAddr;
 	uint8_t *_currentReadValue;
+	int32_t _nextReadAddr;
+	uint16_t _returnToAddress;
 
 	uint32_t _flags;
 
@@ -180,6 +184,9 @@ public:
 
 	void SetFreezeState(uint16_t address, bool frozen);
 	void GetFreezeState(uint16_t startAddress, uint16_t length, bool* freezeState);
+
+	void StartCodeRunner(uint8_t *byteCode, uint32_t codeLength);
+	void StopCodeRunner();
 
 	void SaveRomToDisk(string filename);
 

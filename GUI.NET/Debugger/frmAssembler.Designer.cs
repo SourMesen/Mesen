@@ -30,10 +30,10 @@
 			this.btnOk = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.ctrlHexBox = new Be.Windows.Forms.HexBox();
 			this.lstErrors = new System.Windows.Forms.ListBox();
 			this.grpSettings = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.btnExecute = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtStartAddress = new System.Windows.Forms.TextBox();
@@ -44,13 +44,14 @@
 			this.picSizeWarning = new System.Windows.Forms.PictureBox();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblNoChanges = new System.Windows.Forms.Label();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.txtCode = new Mesen.GUI.Debugger.ZoomlessRichTextBox();
 			this.statCode = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblLineNumber = new System.Windows.Forms.ToolStripStatusLabel();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.ctrlHexBox = new Be.Windows.Forms.HexBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpSettings.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -59,15 +60,15 @@
 			this.flowLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picSizeWarning)).BeginInit();
 			this.flowLayoutPanel3.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.statCode.SuspendLayout();
-			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnOk
 			// 
-			this.btnOk.Location = new System.Drawing.Point(279, 3);
+			this.btnOk.Location = new System.Drawing.Point(186, 3);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(75, 23);
 			this.btnOk.TabIndex = 0;
@@ -79,7 +80,7 @@
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(360, 3);
+			this.btnCancel.Location = new System.Drawing.Point(267, 3);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 1;
@@ -105,23 +106,6 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(835, 557);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
-			// ctrlHexBox
-			// 
-			this.ctrlHexBox.ByteColorProvider = null;
-			this.ctrlHexBox.ColumnInfoVisible = true;
-			this.ctrlHexBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlHexBox.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.ctrlHexBox.InfoBackColor = System.Drawing.Color.DarkGray;
-			this.ctrlHexBox.LineInfoVisible = true;
-			this.ctrlHexBox.Location = new System.Drawing.Point(3, 16);
-			this.ctrlHexBox.Name = "ctrlHexBox";
-			this.ctrlHexBox.ReadOnly = true;
-			this.ctrlHexBox.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-			this.ctrlHexBox.Size = new System.Drawing.Size(438, 391);
-			this.ctrlHexBox.TabIndex = 1;
-			this.ctrlHexBox.UseFixedBytesPerLine = true;
-			this.ctrlHexBox.VScrollBarVisible = true;
-			// 
 			// lstErrors
 			// 
 			this.lstErrors.FormattingEnabled = true;
@@ -144,23 +128,40 @@
 			// 
 			// tableLayoutPanel2
 			// 
-			this.tableLayoutPanel2.ColumnCount = 1;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.ColumnCount = 2;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.23288F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.76712F));
+			this.tableLayoutPanel2.Controls.Add(this.btnExecute, 0, 3);
 			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel1, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel2, 0, 1);
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel3, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel3, 1, 3);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowCount = 4;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(438, 116);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
+			// btnExecute
+			// 
+			this.btnExecute.Image = global::Mesen.GUI.Properties.Resources.Play;
+			this.btnExecute.Location = new System.Drawing.Point(3, 89);
+			this.btnExecute.Name = "btnExecute";
+			this.btnExecute.Size = new System.Drawing.Size(87, 23);
+			this.btnExecute.TabIndex = 6;
+			this.btnExecute.Text = "Execute";
+			this.btnExecute.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.btnExecute.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.btnExecute.UseVisualStyleBackColor = true;
+			this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
+			// 
 			// flowLayoutPanel1
 			// 
+			this.tableLayoutPanel2.SetColumnSpan(this.flowLayoutPanel1, 2);
 			this.flowLayoutPanel1.Controls.Add(this.label1);
 			this.flowLayoutPanel1.Controls.Add(this.txtStartAddress);
 			this.flowLayoutPanel1.Controls.Add(this.picStartAddressWarning);
@@ -206,6 +207,7 @@
 			// 
 			// flowLayoutPanel2
 			// 
+			this.tableLayoutPanel2.SetColumnSpan(this.flowLayoutPanel2, 2);
 			this.flowLayoutPanel2.Controls.Add(this.label2);
 			this.flowLayoutPanel2.Controls.Add(this.lblByteUsage);
 			this.flowLayoutPanel2.Controls.Add(this.picSizeWarning);
@@ -254,10 +256,10 @@
 			this.flowLayoutPanel3.Controls.Add(this.lblNoChanges);
 			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 86);
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(93, 86);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(438, 30);
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(345, 30);
 			this.flowLayoutPanel3.TabIndex = 5;
 			// 
 			// lblNoChanges
@@ -266,11 +268,22 @@
 			this.lblNoChanges.AutoSize = true;
 			this.lblNoChanges.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.lblNoChanges.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblNoChanges.Location = new System.Drawing.Point(99, 8);
+			this.lblNoChanges.Location = new System.Drawing.Point(6, 8);
 			this.lblNoChanges.Name = "lblNoChanges";
 			this.lblNoChanges.Size = new System.Drawing.Size(174, 13);
 			this.lblNoChanges.TabIndex = 2;
 			this.lblNoChanges.Text = "Current code matches original code";
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.panel1);
+			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox1.Location = new System.Drawing.Point(3, 3);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(379, 410);
+			this.groupBox1.TabIndex = 4;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Code Editor";
 			// 
 			// panel1
 			// 
@@ -331,17 +344,6 @@
 			this.lblLineNumber.Size = new System.Drawing.Size(13, 15);
 			this.lblLineNumber.Text = "1";
 			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.panel1);
-			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox1.Location = new System.Drawing.Point(3, 3);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(379, 410);
-			this.groupBox1.TabIndex = 4;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Code Editor";
-			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.ctrlHexBox);
@@ -353,6 +355,23 @@
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Assembled Byte Code";
 			// 
+			// ctrlHexBox
+			// 
+			this.ctrlHexBox.ByteColorProvider = null;
+			this.ctrlHexBox.ColumnInfoVisible = true;
+			this.ctrlHexBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlHexBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.ctrlHexBox.InfoBackColor = System.Drawing.Color.DarkGray;
+			this.ctrlHexBox.LineInfoVisible = true;
+			this.ctrlHexBox.Location = new System.Drawing.Point(3, 16);
+			this.ctrlHexBox.Name = "ctrlHexBox";
+			this.ctrlHexBox.ReadOnly = true;
+			this.ctrlHexBox.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+			this.ctrlHexBox.Size = new System.Drawing.Size(438, 391);
+			this.ctrlHexBox.TabIndex = 1;
+			this.ctrlHexBox.UseFixedBytesPerLine = true;
+			this.ctrlHexBox.VScrollBarVisible = true;
+			// 
 			// frmAssembler
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -360,7 +379,7 @@
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(835, 557);
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.MinimumSize = new System.Drawing.Size(813, 502);
+			this.MinimumSize = new System.Drawing.Size(851, 502);
 			this.Name = "frmAssembler";
 			this.Text = "Assembler";
 			this.tableLayoutPanel1.ResumeLayout(false);
@@ -374,11 +393,11 @@
 			((System.ComponentModel.ISupportInitialize)(this.picSizeWarning)).EndInit();
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
+			this.groupBox1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.statCode.ResumeLayout(false);
 			this.statCode.PerformLayout();
-			this.groupBox1.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -409,5 +428,6 @@
 		private System.Windows.Forms.PictureBox picStartAddressWarning;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.Button btnExecute;
 	}
 }

@@ -1126,6 +1126,9 @@
     <ClInclude Include="Assembler.h">
       <Filter>Debugger</Filter>
     </ClInclude>
+    <ClInclude Include="CodeRunner.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1321,6 +1324,9 @@
       <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="Assembler.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeRunner.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>
