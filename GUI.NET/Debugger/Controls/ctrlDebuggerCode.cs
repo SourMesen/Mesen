@@ -207,14 +207,16 @@ namespace Mesen.GUI.Debugger
 					string comment = codeLabel?.Comment;
 					string label = codeLabel?.Label;
 
-					if(code == "STP*" || code == "NOP*") {
+					bool addPadding = true;
+					if(code.StartsWith("STP*") || code.StartsWith("NOP*")) {
 						//Transform unofficial opcodes that can't be reassembled properly into .byte statements
 						if(comment != null) {
 							comment.Insert(1, code + " - ");
 						} else {
 							comment = code;
 						}
-						code = ".byte " + string.Join(",", _codeByteCode[i].Split(' ').Select((hexByte) => "$" + hexByte));
+						code = ".byte " + string.Join(",", _codeByteCode[i].Split(' '));
+						addPadding = false;
 					}
 
 					if(!string.IsNullOrWhiteSpace(comment) && comment.Contains("\n")) {
@@ -224,7 +226,7 @@ namespace Mesen.GUI.Debugger
 					if(!string.IsNullOrWhiteSpace(label)) {
 						result.Add(label + ":");
 					}
-					result.Add("  " + code + (!string.IsNullOrWhiteSpace(comment) ? (" ;" + comment) : ""));
+					result.Add((addPadding ? "  " : "") + code + (!string.IsNullOrWhiteSpace(comment) ? (" ;" + comment) : ""));
 					
 					int length = _codeByteCode[i].Count(c => c == ' ') + 1;
 					byteLength += length;
