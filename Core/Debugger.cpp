@@ -32,7 +32,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_labelManager.reset(new LabelManager(_mapper));
 	_assembler.reset(new Assembler(_labelManager));
-	_disassembler.reset(new Disassembler(memoryManager->GetInternalRAM(), mapper->GetPrgRom(), mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetWorkRam(), mapper->GetMemorySize(DebugMemoryType::WorkRam), this));
+	_disassembler.reset(new Disassembler(memoryManager.get(), mapper.get(), this));
 	_codeDataLogger.reset(new CodeDataLogger(mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetMemorySize(DebugMemoryType::ChrRom)));
 	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger, this, _disassembler));
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
@@ -135,7 +135,8 @@ bool Debugger::LoadCdlFile(string cdlFilepath)
 	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {
 		for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 			if(_codeDataLogger->IsCode(i)) {
-				i = _disassembler->BuildCache(i, -1, 0xFFFF, _codeDataLogger->IsSubEntryPoint(i)) - 1;
+				AddressTypeInfo info = { i, AddressType::PrgRom };
+				i = _disassembler->BuildCache(info, 0, _codeDataLogger->IsSubEntryPoint(i)) - 1;
 			}
 		}
 
@@ -376,7 +377,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		}
 	} else if(addr < 0x2000 || absoluteRamAddr >= 0) {
 		if(type == MemoryOperationType::Write) {
-			_disassembler->InvalidateCache(addr, absoluteRamAddr);
+			_disassembler->InvalidateCache(addressInfo);
 		}
 	}
 
@@ -390,7 +391,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			}
 		}
 
-		_disassembler->BuildCache(absoluteAddr, absoluteRamAddr, addr, isSubEntryPoint);
+		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint);
 
 		ProcessStepConditions(addr);
 
@@ -415,7 +416,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		if(_codeRunner && _codeRunner->IsRunning() && addr >= 0x3000 && addr < 0x4000) {
 			disassemblyInfo = _codeRunner->GetDisassemblyInfo(addr);
 		} else {
-			disassemblyInfo = _disassembler->GetDisassemblyInfo(absoluteAddr, absoluteRamAddr, addr);
+			disassemblyInfo = _disassembler->GetDisassemblyInfo(addressInfo);
 		}
 		_traceLogger->Log(_debugState.CPU, _debugState.PPU, disassemblyInfo);
 
@@ -577,29 +578,26 @@ void Debugger::GenerateCodeOutput()
 	bool showEffectiveAddresses = CheckFlag(DebuggerFlags::ShowEffectiveAddresses);
 	bool showOnlyDiassembledCode = CheckFlag(DebuggerFlags::ShowOnlyDisassembledCode);
 
-	//Get code in internal RAM
-	_disassemblerOutput = _disassembler->GetCode(0x0000, 0x1FFF, 0x0000, PrgMemoryType::PrgRom, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
-
-	for(uint32_t i = 0x2000; i < 0x10000; i += 0x100) {
+	for(uint32_t i = 0; i < 0x10000; i += 0x100) {
 		//Merge all sequential ranges into 1 chunk
-		PrgMemoryType memoryType = PrgMemoryType::PrgRom;
-		int32_t addr = _mapper->ToAbsoluteAddress(i);
-		if(addr < 0) {
-			addr = _mapper->ToAbsoluteWorkRamAddress(i);
-			memoryType = PrgMemoryType::WorkRam;
-		}
+		AddressTypeInfo startInfo, currentInfo, endInfo;
+		GetAbsoluteAddressAndType(i, &startInfo);
+		currentInfo = startInfo;
+		GetAbsoluteAddressAndType(i+0x100, &endInfo);
+
 		uint32_t startMemoryAddr = i;
 		int32_t startAddr, endAddr;
 
-		if(addr >= 0) {
-			startAddr = addr;
+		if(startInfo.Address >= 0) {
+			startAddr = startInfo.Address;
 			endAddr = startAddr + 0xFF;
-			while(addr + 0x100 == (memoryType == PrgMemoryType::PrgRom ? _mapper->ToAbsoluteAddress(i + 0x100) : _mapper->ToAbsoluteWorkRamAddress(i + 0x100)) && i < 0x10000) {
+			while(currentInfo.Type == endInfo.Type && currentInfo.Address + 0x100 == endInfo.Address && i < 0x10000) {
 				endAddr += 0x100;
-				addr += 0x100;
+				currentInfo = endInfo;
 				i+=0x100;
+				GetAbsoluteAddressAndType(i + 0x100, &endInfo);
 			}
-			_disassemblerOutput += _disassembler->GetCode(startAddr, endAddr, startMemoryAddr, memoryType, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
+			_disassemblerOutput += _disassembler->GetCode(startInfo, endAddr, startMemoryAddr, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
 		}
 	}
 }

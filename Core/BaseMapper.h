@@ -228,6 +228,7 @@ public:
 	CartridgeState GetState();
 	uint8_t* GetPrgRom();
 	uint8_t* GetWorkRam();
+	uint8_t* GetSaveRam();
 	
 	uint8_t GetMemoryValue(DebugMemoryType memoryType, uint32_t address);
 	void SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value);

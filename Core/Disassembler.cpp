@@ -10,18 +10,20 @@
 #include "../Utilities/StringUtilities.h"
 #include "Debugger.h"
 
-Disassembler::Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize, Debugger* debugger)
+Disassembler::Disassembler(MemoryManager* memoryManager, BaseMapper* mapper, Debugger* debugger)
 {
 	_debugger = debugger;
-	_internalRam = internalRam;
-	_prgRom = prgRom;
-	_prgRam = prgRam;
-	_prgSize = prgSize;
-	for(uint32_t i = 0; i < prgSize; i++) {
+	_memoryManager = memoryManager;
+	_mapper = mapper;
+
+	for(uint32_t i = 0; i < mapper->GetMemorySize(DebugMemoryType::PrgRom); i++) {
 		_disassembleCache.push_back(shared_ptr<DisassemblyInfo>(nullptr));
 	}
-	for(uint32_t i = 0; i < prgRamSize; i++) {
-		_disassembleRamCache.push_back(shared_ptr<DisassemblyInfo>(nullptr));
+	for(uint32_t i = 0; i < mapper->GetMemorySize(DebugMemoryType::WorkRam); i++) {
+		_disassembleWorkRamCache.push_back(shared_ptr<DisassemblyInfo>(nullptr));
+	}
+	for(uint32_t i = 0; i < mapper->GetMemorySize(DebugMemoryType::SaveRam); i++) {
+		_disassembleSaveRamCache.push_back(shared_ptr<DisassemblyInfo>(nullptr));
 	}
 	for(uint32_t i = 0; i < 0x800; i++) {
 		_disassembleMemoryCache.push_back(shared_ptr<DisassemblyInfo>(nullptr));
@@ -149,12 +151,42 @@ bool Disassembler::IsUnconditionalJump(uint8_t opCode)
 	return opCode == 0x40 || opCode == 0x60 || opCode == 0x6C || opCode == 0x4C || opCode == 0x20;
 }
 
-uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr, uint16_t memoryAddr, bool isSubEntryPoint)
+void Disassembler::GetInfo(AddressTypeInfo &info, uint8_t** source, uint32_t &size, vector<shared_ptr<DisassemblyInfo>> **cache)
 {
-	if(memoryAddr < 0x2000) {
-		memoryAddr = memoryAddr & 0x7FF;
+	switch(info.Type) {
+		case AddressType::InternalRam: 
+			*source = _memoryManager->GetInternalRAM();
+			*cache = &_disassembleMemoryCache;
+			size = 0x800;
+			break;
+
+		case AddressType::PrgRom: 
+			*source = _mapper->GetPrgRom();
+			*cache = &_disassembleCache;
+			size = _mapper->GetMemorySize(DebugMemoryType::PrgRom);
+			break;
+
+		case AddressType::WorkRam: 
+			*source = _mapper->GetWorkRam();
+			*cache = &_disassembleWorkRamCache;
+			size = _mapper->GetMemorySize(DebugMemoryType::WorkRam);
+			break;
+
+		case AddressType::SaveRam: 
+			*source = _mapper->GetSaveRam();
+			*cache = &_disassembleSaveRamCache;
+			size = _mapper->GetMemorySize(DebugMemoryType::SaveRam);
+			break;
+	}
+}
+
+
+uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bool isSubEntryPoint)
+{
+	if(info.Type == AddressType::InternalRam) {
+		uint16_t memoryAddr = info.Address & 0x7FF;
 		if(!_disassembleMemoryCache[memoryAddr]) {
-			shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(&_internalRam[memoryAddr], isSubEntryPoint));
+			shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(_memoryManager->GetInternalRAM()+memoryAddr, isSubEntryPoint));
 			_disassembleMemoryCache[memoryAddr] = disInfo;
 			memoryAddr += disInfo->GetSize();
 		} else if(isSubEntryPoint) {
@@ -162,21 +194,21 @@ uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr,
 		}
 		return memoryAddr;
 	} else {
-		vector<shared_ptr<DisassemblyInfo>> &cache = absoluteRamAddr >= 0 ? _disassembleRamCache : _disassembleCache;
-		uint8_t *source = absoluteRamAddr >= 0 ? _prgRam : _prgRom;
-		if(absoluteRamAddr >= 0) {
-			absoluteAddr = absoluteRamAddr;
-		}
+		vector<shared_ptr<DisassemblyInfo>> *cache;
+		uint8_t *source;
+		uint32_t size;
+		GetInfo(info, &source, size, &cache);
+		int32_t absoluteAddr = info.Address;
 
-		if(absoluteAddr >= 0) {
-			shared_ptr<DisassemblyInfo> disInfo = cache[absoluteAddr];
+		if(info.Address >= 0) {
+			shared_ptr<DisassemblyInfo> disInfo = (*cache)[info.Address];
 			if(!disInfo) {
-				while(absoluteAddr < (int32_t)_prgSize && !cache[absoluteAddr]) {
+				while(info.Address < (int32_t)size && !(*cache)[absoluteAddr]) {
 					bool isJump = IsUnconditionalJump(source[absoluteAddr]);
-					disInfo = shared_ptr<DisassemblyInfo>(new DisassemblyInfo(&source[absoluteAddr], isSubEntryPoint));
+					disInfo = shared_ptr<DisassemblyInfo>(new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint));
 					isSubEntryPoint = false;
 
-					cache[absoluteAddr] = disInfo;
+					(*cache)[absoluteAddr] = disInfo;
 
 					absoluteAddr += disInfo->GetSize();
 					if(isJump) {
@@ -189,21 +221,15 @@ uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr,
 					disInfo->SetSubEntryPoint();
 				}
 
-				uint8_t opCode = source[absoluteAddr];
+				uint8_t opCode = source[info.Address];
 				if(IsJump(opCode)) {
-					uint16_t jumpDest = disInfo->GetOpAddr(memoryAddr);
-					AddressTypeInfo info;
-					_debugger->GetAbsoluteAddressAndType(jumpDest, &info);
+					uint16_t jumpDest = disInfo->GetOpAddr(cpuAddress);
+					AddressTypeInfo addressInfo;
+					_debugger->GetAbsoluteAddressAndType(jumpDest, &addressInfo);
 
 					const uint8_t jsrCode = 0x20;
-					if(info.Address >= 0) {
-						if(info.Type == AddressType::PrgRom && !_disassembleCache[info.Address]) {
-							BuildCache(info.Address, -1, jumpDest, opCode == jsrCode);
-						} else if(info.Type == AddressType::WorkRam && !_disassembleRamCache[info.Address]) {
-							BuildCache(-1, info.Address, jumpDest, opCode == jsrCode);
-						} else if(info.Type == AddressType::InternalRam && !_disassembleMemoryCache[jumpDest]) {
-							BuildCache(-1, -1, jumpDest, opCode == jsrCode);
-						}
+					if(addressInfo.Address >= 0) {
+						BuildCache(addressInfo, jumpDest, opCode == jsrCode);
 					}
 				}
 
@@ -214,16 +240,26 @@ uint32_t Disassembler::BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr,
 	}
 }
 
-void Disassembler::InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr)
+void Disassembler::InvalidateCache(AddressTypeInfo &info)
 {
 	int32_t addr;
 	vector<shared_ptr<DisassemblyInfo>> *cache;
-	if(memoryAddr < 0x2000) {
-		addr = memoryAddr & 0x7FF;
-		cache = &_disassembleMemoryCache;
-	} else {
-		addr = absoluteRamAddr;
-		cache = &_disassembleRamCache;
+
+	switch(info.Type) {
+		case AddressType::InternalRam:
+			addr = info.Address & 0x7FF;
+			cache = &_disassembleMemoryCache;
+			break;
+
+		case AddressType::WorkRam:
+			addr = info.Address;
+			cache = &_disassembleWorkRamCache;
+			break;
+
+		case AddressType::SaveRam:
+			addr = info.Address;
+			cache = &_disassembleSaveRamCache;
+			break;
 	}
 
 	if(addr >= 0) {
@@ -266,7 +302,8 @@ void Disassembler::RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length)
 	}
 
 	uint16_t memoryAddr = _debugger->GetRelativeAddress(absoluteAddr, AddressType::PrgRom);
-	BuildCache(absoluteAddr, -1, memoryAddr, isSubEntryPoint);
+	AddressTypeInfo info = { (int32_t)absoluteAddr, AddressType::PrgRom };
+	BuildCache(info, memoryAddr, isSubEntryPoint);
 }
 
 static const char* hexTable[256] = {
@@ -395,7 +432,7 @@ void Disassembler::GetSubHeader(string &out, DisassemblyInfo *info, string &labe
 	}
 }
 
-string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager) 
+string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uint16_t memoryAddr, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager) 
 {
 	string output;
 	output.reserve(10000000);
@@ -410,21 +447,14 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 
 	vector<shared_ptr<DisassemblyInfo>> *cache;
 	uint8_t *source;
-	uint32_t mask = 0xFFFFFFFF;
-	if(memoryAddr < 0x2000) {
-		cache = &_disassembleMemoryCache;
-		source = _internalRam;
-		mask = 0x7FF;
-	} else if(memoryType == PrgMemoryType::WorkRam) {
-		cache = &_disassembleRamCache;
-		source = _prgRam;
-	} else {
-		cache = &_disassembleCache;
-		source = _prgRom;
-	}
+	uint32_t mask = addressInfo.Type == AddressType::InternalRam ? 0x7FF : 0xFFFFFFFF;
+	uint32_t size;
+	uint8_t* internalRam = _memoryManager->GetInternalRAM();
+
+	GetInfo(addressInfo, &source, size, &cache);
 
 	string unknownBlockHeader = showOnlyDiassembledCode ? "----" : "__unknown block__";
-	uint32_t addr = startAddr;
+	uint32_t addr = addressInfo.Address;
 	uint32_t byteCount = 0;
 	bool skippingCode = false;
 	shared_ptr<CodeDataLogger> cdl = _debugger->GetCodeDataLogger();
@@ -453,11 +483,9 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 		infoRef = (*cache)[addr&mask];
 
 		info = infoRef.get();
-		if(!info && source == _prgRom) {
-			if(_debugger->CheckFlag(DebuggerFlags::DisassembleEverything) || _debugger->CheckFlag(DebuggerFlags::DisassembleEverythingButData) && !cdl->IsData(addr)) {
-				speculativeCode = true;
-				info = new DisassemblyInfo(source + addr, false);
-			}
+		if(!info && (_debugger->CheckFlag(DebuggerFlags::DisassembleEverything) || _debugger->CheckFlag(DebuggerFlags::DisassembleEverythingButData) && !cdl->IsData(addr))) {
+			speculativeCode = true;
+			info = new DisassemblyInfo(source + (addr & mask), false);
 		}
 
 		if(info && addr + info->GetSize() <= endAddr) {
@@ -484,7 +512,7 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 			info->ToString(code, memoryAddr, memoryManager.get(), labelManager.get());
 			info->GetByteCode(byteCode);
 
-			GetCodeLine(output, code, commentString, memoryAddr, source != _internalRam ? addr : -1, byteCode, effAddress, speculativeCode, true);
+			GetCodeLine(output, code, commentString, memoryAddr, source != internalRam ? addr : -1, byteCode, effAddress, speculativeCode, true);
 
 			if(info->IsSubExitPoint()) {
 				GetLine(output, "__sub end__");
@@ -574,14 +602,13 @@ string Disassembler::GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memo
 	return output;
 }
 
-shared_ptr<DisassemblyInfo> Disassembler::GetDisassemblyInfo(int32_t absoluteAddress, int32_t absoluteRamAddress, uint16_t memoryAddress)
+shared_ptr<DisassemblyInfo> Disassembler::GetDisassemblyInfo(AddressTypeInfo &info)
 {
-	if(memoryAddress < 0x2000) {
-		return _disassembleMemoryCache[memoryAddress & 0x7FF];
-	} else if(absoluteAddress >= 0) {
-		return _disassembleCache[absoluteAddress];
-	} else if(absoluteRamAddress >= 0) {
-		return _disassembleRamCache[absoluteRamAddress];
+	switch(info.Type) {
+		case AddressType::InternalRam: return _disassembleMemoryCache[info.Address & 0x7FF];
+		case AddressType::PrgRom: return _disassembleCache[info.Address];
+		case AddressType::WorkRam: return _disassembleWorkRamCache[info.Address];
+		case AddressType::SaveRam: return _disassembleSaveRamCache[info.Address];
 	}
 
 	return nullptr;

@@ -1,45 +1,48 @@
 #pragma once
 #include "stdafx.h"
-#include "BaseMapper.h"
+#include "DebuggerTypes.h"
 
 struct State;
 class MemoryManager;
 class DisassemblyInfo;
 class LabelManager;
 class Debugger;
+class BaseMapper;
 
 class Disassembler
 {
 private:
 	Debugger* _debugger;
+	MemoryManager* _memoryManager;
+	BaseMapper *_mapper;
+
 	vector<shared_ptr<DisassemblyInfo>> _disassembleCache;
-	vector<shared_ptr<DisassemblyInfo>> _disassembleRamCache;
+	vector<shared_ptr<DisassemblyInfo>> _disassembleWorkRamCache;
+	vector<shared_ptr<DisassemblyInfo>> _disassembleSaveRamCache;
 	vector<shared_ptr<DisassemblyInfo>> _disassembleMemoryCache;
-	uint8_t* _internalRam;
-	uint8_t* _prgRom;
-	uint8_t* _prgRam;
-	uint32_t _prgSize;
 
 	bool IsJump(uint8_t opCode);
 	bool IsUnconditionalJump(uint8_t opCode);
 	void GetLine(string &out, string code = "", string comment = string(), int32_t cpuAddress = -1, int32_t absoluteAddress = -1);
 	void GetCodeLine(string &out, string &code, string &comment, int32_t cpuAddress, int32_t absoluteAddress, string &byteCode, string &addressing, bool speculativeCode, bool isCode);
 	void GetSubHeader(string &out, DisassemblyInfo *info, string &label, uint16_t relativeAddr, uint16_t resetVector, uint16_t nmiVector, uint16_t irqVector);
+	
+	void GetInfo(AddressTypeInfo &info, uint8_t** source, uint32_t &size, vector<shared_ptr<DisassemblyInfo>> **cache);
 
 public:
-	Disassembler(uint8_t* internalRam, uint8_t* prgRom, uint32_t prgSize, uint8_t* prgRam, uint32_t prgRamSize, Debugger* debugger);
+	Disassembler(MemoryManager* memoryManager, BaseMapper* mapper, Debugger* debugger);
 	~Disassembler();
 
 	void BuildOpCodeTables(bool useLowerCase);
 	
-	uint32_t BuildCache(int32_t absoluteAddr, int32_t absoluteRamAddr, uint16_t memoryAddr, bool isSubEntryPoint);
-	void InvalidateCache(uint16_t memoryAddr, int32_t absoluteRamAddr);
+	uint32_t BuildCache(AddressTypeInfo &info, uint16_t memoryAddr, bool isSubEntryPoint);
+	void InvalidateCache(AddressTypeInfo &info);
 
 	bool IsUnofficialOpCode(uint8_t opCode);
 
-	string GetCode(uint32_t startAddr, uint32_t endAddr, uint16_t memoryAddr, PrgMemoryType memoryType, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
+	string GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uint16_t memoryAddr, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 
-	shared_ptr<DisassemblyInfo> GetDisassemblyInfo(int32_t absoluteAddress, int32_t absoluteRamAddress, uint16_t memoryAddress);
+	shared_ptr<DisassemblyInfo> GetDisassemblyInfo(AddressTypeInfo &info);
 
 	void RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length);
 };

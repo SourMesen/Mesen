@@ -104,7 +104,7 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 342);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 364);
 			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
@@ -283,7 +283,7 @@
 			// mnuGoToLocation
 			// 
 			this.mnuGoToLocation.Name = "mnuGoToLocation";
-			this.mnuGoToLocation.ShortcutKeyDisplayString = "Double+Click";
+			this.mnuGoToLocation.ShortcutKeyDisplayString = "Double Click";
 			this.mnuGoToLocation.Size = new System.Drawing.Size(258, 22);
 			this.mnuGoToLocation.Text = "Go to Location";
 			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);

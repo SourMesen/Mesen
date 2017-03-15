@@ -798,6 +798,11 @@ uint8_t* BaseMapper::GetPrgRom()
 	return _prgRom;
 }
 
+uint8_t* BaseMapper::GetSaveRam()
+{
+	return _saveRam;
+}
+
 uint8_t* BaseMapper::GetWorkRam()
 {
 	return _workRam;
