@@ -64,6 +64,31 @@ void TraceLogger::LogStatic(string log)
 	}
 }
 
+void TraceLogger::GetStatusFlag(string &output, uint8_t ps)
+{
+	output += " P:";
+	if(_options.StatusFormat == StatusFlagFormat::Hexadecimal) {
+		output.append(HexUtilities::ToHex(ps));
+	} else {
+		constexpr char activeStatusLetters[8] = { 'N', 'V', 'B', '-', 'D', 'I', 'Z', 'C' };
+		constexpr char inactiveStatusLetters[8] = { 'n', 'v', 'b', '-', 'd', 'i', 'z', 'c' };
+		int padding = 6;
+		for(int i = 0; i < 8; i++) {
+			if(ps & 0x80) {
+				output += activeStatusLetters[i];
+				padding--;
+			} else if(_options.StatusFormat == StatusFlagFormat::Text) {
+				output += inactiveStatusLetters[i];
+				padding--;
+			}
+			ps <<= 1;
+		}
+		if(padding > 0) {
+			output += string(padding, ' ');
+		}
+	}
+}
+
 void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, shared_ptr<DisassemblyInfo> &disassemblyInfo, bool firstLine)
 {
 	//Roughly adjust PPU cycle & scanline to take into account the PPU already ran 3 cycles by the time we get here
@@ -105,9 +130,11 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 	if(_options.ShowRegisters) {
 		output += " A:" + HexUtilities::ToHex(cpuState.A) +
 			" X:" + HexUtilities::ToHex(cpuState.X) +
-			" Y:" + HexUtilities::ToHex(cpuState.Y) +
-			" P:" + HexUtilities::ToHex(cpuState.PS) +
-			" SP:" + HexUtilities::ToHex(cpuState.SP);
+			" Y:" + HexUtilities::ToHex(cpuState.Y);
+
+		GetStatusFlag(output, cpuState.PS);
+
+		output += " SP:" + HexUtilities::ToHex(cpuState.SP);
 	}
 
 	if(_options.ShowPpuCycles) {

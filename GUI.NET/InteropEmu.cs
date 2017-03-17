@@ -19,17 +19,17 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath, EntryPoint = "GetMesenVersion")] private static extern UInt32 GetMesenVersionWrapper();
 
-		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle, [MarshalAs(UnmanagedType.I1)]bool noAudio, [MarshalAs(UnmanagedType.I1)]bool noVideo, [MarshalAs(UnmanagedType.I1)]bool noInput);
+		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle, [MarshalAs(UnmanagedType.I1)]bool noAudio, [MarshalAs(UnmanagedType.I1)]bool noVideo, [MarshalAs(UnmanagedType.I1)]bool noInput);
 		[DllImport(DLLPath)] public static extern void Release();
 
 		[DllImport(DLLPath)] public static extern void SetDisplayLanguage(Language lang);
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRunning();
 
-		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, Int32 archiveFileIndex, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string ipsFile);
-		[DllImport(DLLPath)] public static extern void AddKnownGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string folder);
+		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, Int32 archiveFileIndex, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string ipsFile);
+		[DllImport(DLLPath)] public static extern void AddKnownGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string folder);
 
-		[DllImport(DLLPath, EntryPoint = "GetArchiveRomList")] private static extern IntPtr GetArchiveRomListWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath, EntryPoint = "GetArchiveRomList")] private static extern IntPtr GetArchiveRomListWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
 		public static List<string> GetArchiveRomList(string filename) { return new List<string>(PtrToStringUtf8(InteropEmu.GetArchiveRomListWrapper(filename)).Split(new string[] { "[!|!]" }, StringSplitOptions.RemoveEmptyEntries)); }
 
 		[DllImport(DLLPath)] public static extern void SetMousePosition(double x, double y);
@@ -46,14 +46,14 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern ControllerType GetControllerType(int port);
 		[DllImport(DLLPath)] public static extern ExpansionPortDevice GetExpansionDevice();
 		[DllImport(DLLPath)] public static extern ConsoleType GetConsoleType();
-		
+
 		[DllImport(DLLPath)] public static extern void UpdateInputDevices();
 		[DllImport(DLLPath)] public static extern UInt32 GetPressedKey();
-		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string keyName);
-		[DllImport(DLLPath, EntryPoint="GetKeyName")] private static extern IntPtr GetKeyNameWrapper(UInt32 key);
+		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string keyName);
+		[DllImport(DLLPath, EntryPoint = "GetKeyName")] private static extern IntPtr GetKeyNameWrapper(UInt32 key);
 		[DllImport(DLLPath)] public static extern void SetKeyState(Int32 scanCode, [MarshalAs(UnmanagedType.I1)]bool pressed);
 		[DllImport(DLLPath)] public static extern void ResetKeyState();
-		
+
 		[DllImport(DLLPath)] public static extern void Run();
 		[DllImport(DLLPath)] public static extern void Pause();
 		[DllImport(DLLPath)] public static extern void Resume();
@@ -68,7 +68,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void StartServer(UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string hostPlayerName);
 		[DllImport(DLLPath)] public static extern void StopServer();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsServerRunning();
-		[DllImport(DLLPath)] public static extern void Connect([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string host, UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string playerName, [MarshalAs(UnmanagedType.I1)]bool spectator);
+		[DllImport(DLLPath)] public static extern void Connect([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string host, UInt16 port, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string playerName, [MarshalAs(UnmanagedType.I1)]bool spectator);
 		[DllImport(DLLPath)] public static extern void Disconnect();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsConnected();
 
@@ -82,27 +82,27 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(NotificationListener.NotificationCallback callback);
 		[DllImport(DLLPath)] public static extern void UnregisterNotificationCallback(IntPtr notificationListener);
 
-		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string title, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string message, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string param1 = null);
-		[DllImport(DLLPath, EntryPoint= "GetLog")] private static extern IntPtr GetLogWrapper();
+		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string title, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string message, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string param1 = null);
+		[DllImport(DLLPath, EntryPoint = "GetLog")] private static extern IntPtr GetLogWrapper();
 
-		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
-		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
+		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
 		[DllImport(DLLPath)] public static extern void MovieStop();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MoviePlaying();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MovieRecording();
 
-		[DllImport(DLLPath)] public static extern void AviRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, VideoCodec codec, UInt32 compressionLevel);
+		[DllImport(DLLPath)] public static extern void AviRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, VideoCodec codec, UInt32 compressionLevel);
 		[DllImport(DLLPath)] public static extern void AviStop();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool AviIsRecording();
 
-		[DllImport(DLLPath)] public static extern void WaveRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath)] public static extern void WaveRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void WaveStop();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool WaveIsRecording();
 
-		[DllImport(DLLPath)] public static extern Int32 RomTestRun([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename);
-		[DllImport(DLLPath)] public static extern void RomTestRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
-		[DllImport(DLLPath)] public static extern void RomTestRecordFromMovie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string testFilename, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string movieFilename);
-		[DllImport(DLLPath)] public static extern void RomTestRecordFromTest([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string newTestFilename, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string existingTestFilename);
+		[DllImport(DLLPath)] public static extern Int32 RomTestRun([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath)] public static extern void RomTestRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
+		[DllImport(DLLPath)] public static extern void RomTestRecordFromMovie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string testFilename, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string movieFilename);
+		[DllImport(DLLPath)] public static extern void RomTestRecordFromTest([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string newTestFilename, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string existingTestFilename);
 		[DllImport(DLLPath)] public static extern void RomTestStop();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool RomTestRecording();
 
@@ -125,7 +125,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void VsInsertCoin(UInt32 port);
 		[DllImport(DLLPath)] public static extern void VsSetGameConfig(PpuModel model, VsInputType inputType, byte dipSwitches);
 
-		[DllImport(DLLPath)] public static extern void SetCheats([MarshalAs(UnmanagedType.LPArray, SizeParamIndex=1)]InteropCheatInfo[] cheats, UInt32 length);
+		[DllImport(DLLPath)] public static extern void SetCheats([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropCheatInfo[] cheats, UInt32 length);
 
 		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
@@ -160,11 +160,11 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetInputDisplaySettings(byte visiblePorts, InputDisplayPosition displayPosition, [MarshalAs(UnmanagedType.I1)]bool displayHorizontally);
 		[DllImport(DLLPath)] public static extern void SetAutoSaveOptions(UInt32 delayInMinutes, [MarshalAs(UnmanagedType.I1)]bool showMessage);
 
-		[DllImport(DLLPath, EntryPoint="GetRgbPalette")] private static extern void GetRgbPaletteWrapper(IntPtr paletteBuffer);
-		
-		[DllImport(DLLPath, EntryPoint="GetScreenSize")] private static extern void GetScreenSizeWrapper(out ScreenSize size, [MarshalAs(UnmanagedType.I1)]bool ignoreScale);
+		[DllImport(DLLPath, EntryPoint = "GetRgbPalette")] private static extern void GetRgbPaletteWrapper(IntPtr paletteBuffer);
 
-		[DllImport(DLLPath, EntryPoint= "GetAudioDevices")] private static extern IntPtr GetAudioDevicesWrapper();
+		[DllImport(DLLPath, EntryPoint = "GetScreenSize")] private static extern void GetScreenSizeWrapper(out ScreenSize size, [MarshalAs(UnmanagedType.I1)]bool ignoreScale);
+
+		[DllImport(DLLPath, EntryPoint = "GetAudioDevices")] private static extern IntPtr GetAudioDevicesWrapper();
 		[DllImport(DLLPath)] public static extern void SetAudioDevice(string audioDevice);
 
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
@@ -173,8 +173,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetFlags(DebuggerFlags flags);
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugSetState(DebugState state);
-		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex=1)]InteropBreakpoint[] breakpoints, UInt32 length);
-		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, AddressType addressType, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
+		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropBreakpoint[] breakpoints, UInt32 length);
+		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, AddressType addressType, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
 		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugPpuStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);
@@ -217,16 +217,16 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetFreezeState(UInt16 address, [MarshalAs(UnmanagedType.I1)]bool frozen);
 
 		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
-		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
+		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
 
 		[DllImport(DLLPath)] public static extern void DebugStartTraceLogger([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void DebugStopTraceLogger();
 		[DllImport(DLLPath)] public static extern void DebugSetTraceOptions(TraceLoggerOptions options);
 		[DllImport(DLLPath, EntryPoint = "DebugGetExecutionTrace")] private static extern IntPtr DebugGetExecutionTraceWrapper(UInt32 lineCount);
 		public static string DebugGetExecutionTrace(UInt32 lineCount) { return PtrToStringUtf8(InteropEmu.DebugGetExecutionTraceWrapper(lineCount)); }
-		
-		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugLoadCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
-		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugSaveCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(UTF8Marshaler))]string cdlFilepath);
+
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugLoadCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string cdlFilepath);
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugSaveCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string cdlFilepath);
 		[DllImport(DLLPath)] public static extern void DebugGetCdlRatios(ref CdlRatios ratios);
 		[DllImport(DLLPath)] public static extern void DebugResetCdlLog();
 		[DllImport(DLLPath)] public static extern void DebugResetMemoryAccessCounts();
@@ -246,7 +246,7 @@ namespace Mesen.GUI
 			}
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugAssembleCode")] private static extern UInt32 DebugAssembleCodeWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string code, UInt16 startAddress, IntPtr assembledCodeBuffer);
+		[DllImport(DLLPath, EntryPoint = "DebugAssembleCode")] private static extern UInt32 DebugAssembleCodeWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string code, UInt16 startAddress, IntPtr assembledCodeBuffer);
 		public static Int16[] DebugAssembleCode(string code, UInt16 startAddress)
 		{
 			code = code.Replace(Environment.NewLine, "\n");
@@ -266,7 +266,7 @@ namespace Mesen.GUI
 			return assembledCode;
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
+		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
 		public static byte[] DebugGetMemoryState(DebugMemoryType type)
 		{
 			byte[] buffer = new byte[10485760]; //10mb buffer
@@ -280,7 +280,7 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugSetMemoryState")] private static extern void DebugSetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
+		[DllImport(DLLPath, EntryPoint = "DebugSetMemoryState")] private static extern void DebugSetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
 		public static void DebugSetMemoryState(DebugMemoryType type, byte[] data)
 		{
 			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -304,7 +304,7 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugGetNametable")] private static extern void DebugGetNametableWrapper(UInt32 nametableIndex, IntPtr frameBuffer, IntPtr tileData, IntPtr attributeData);
+		[DllImport(DLLPath, EntryPoint = "DebugGetNametable")] private static extern void DebugGetNametableWrapper(UInt32 nametableIndex, IntPtr frameBuffer, IntPtr tileData, IntPtr attributeData);
 		public static void DebugGetNametable(int nametableIndex, out byte[] frameData, out byte[] tileData, out byte[] attributeData)
 		{
 			frameData = new byte[256*240*4];
@@ -323,7 +323,7 @@ namespace Mesen.GUI
 			}
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette, [MarshalAs(UnmanagedType.I1)]bool largeSprites, CdlHighlightType highlightType);
+		[DllImport(DLLPath, EntryPoint = "DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette, [MarshalAs(UnmanagedType.I1)]bool largeSprites, CdlHighlightType highlightType);
 		public static byte[] DebugGetChrBank(int bankIndex, int palette, bool largeSprites, CdlHighlightType highlightType)
 		{
 			byte[] frameData = new byte[128*128*4];
@@ -338,7 +338,7 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugGetSprites")] private static extern void DebugGetSpritesWrapper(IntPtr frameBuffer);
+		[DllImport(DLLPath, EntryPoint = "DebugGetSprites")] private static extern void DebugGetSpritesWrapper(IntPtr frameBuffer);
 		public static byte[] DebugGetSprites()
 		{
 			byte[] frameData = new byte[64*128*4];
@@ -353,7 +353,7 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugGetPalette")] private static extern void DebugGetPaletteWrapper(IntPtr frameBuffer);
+		[DllImport(DLLPath, EntryPoint = "DebugGetPalette")] private static extern void DebugGetPaletteWrapper(IntPtr frameBuffer);
 		public static byte[] DebugGetPalette()
 		{
 			byte[] frameData = new byte[4*8*4];
@@ -368,7 +368,7 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
-		[DllImport(DLLPath, EntryPoint= "DebugGetProfilerData")] private static extern void DebugGetProfilerDataWrapper(IntPtr profilerData, ProfilerDataType dataType);
+		[DllImport(DLLPath, EntryPoint = "DebugGetProfilerData")] private static extern void DebugGetProfilerDataWrapper(IntPtr profilerData, ProfilerDataType dataType);
 		public static Int64[] DebugGetProfilerData(ProfilerDataType dataType)
 		{
 			Int64[] profileData = new Int64[InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) + 2];
@@ -383,7 +383,7 @@ namespace Mesen.GUI
 			return profileData;
 		}
 
-		[DllImport(DLLPath, EntryPoint= "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(AddressType type, MemoryOperationType operationType, IntPtr counts, [MarshalAs(UnmanagedType.I1)]bool forUninitReads);
+		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(AddressType type, MemoryOperationType operationType, IntPtr counts, [MarshalAs(UnmanagedType.I1)]bool forUninitReads);
 		public static Int32[] DebugGetMemoryAccessCounts(AddressType type, MemoryOperationType operationType, bool forUninitReads)
 		{
 			int size = 0;
@@ -408,7 +408,7 @@ namespace Mesen.GUI
 			return counts;
 		}
 
-		[DllImport(DLLPath, EntryPoint= "DebugGetMemoryAccessStamps")] private static extern void DebugGetMemoryAccessStampsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr stamps);
+		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessStamps")] private static extern void DebugGetMemoryAccessStampsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr stamps);
 		public static Int32[] DebugGetMemoryAccessStamps(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
 		{
 			Int32[] stamps = new Int32[length];
@@ -423,7 +423,7 @@ namespace Mesen.GUI
 			return stamps;
 		}
 
-		[DllImport(DLLPath, EntryPoint= "DebugGetMemoryAccessCountsEx")] private static extern void DebugGetMemoryAccessCountsExWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr counts);
+		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCountsEx")] private static extern void DebugGetMemoryAccessCountsExWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr counts);
 		public static Int32[] DebugGetMemoryAccessCountsEx(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
 		{
 			Int32[] counts = new Int32[length];
@@ -438,7 +438,7 @@ namespace Mesen.GUI
 			return counts;
 		}
 
-		[DllImport(DLLPath, EntryPoint= "DebugGetFreezeState")] private static extern void DebugGetFreezeStateWrapper(UInt16 startAddress, UInt16 length, IntPtr freezeState);
+		[DllImport(DLLPath, EntryPoint = "DebugGetFreezeState")] private static extern void DebugGetFreezeStateWrapper(UInt16 startAddress, UInt16 length, IntPtr freezeState);
 		public static bool[] DebugGetFreezeState(UInt16 startAddress, UInt16 length)
 		{
 			bool[] freezeState = new bool[length];
@@ -453,7 +453,7 @@ namespace Mesen.GUI
 			return freezeState;
 		}
 
-		[DllImport(DLLPath, EntryPoint="DebugGetCallstack")] private static extern void DebugGetCallstackWrapper(IntPtr callstackAbsolute, IntPtr callstackRelative);
+		[DllImport(DLLPath, EntryPoint = "DebugGetCallstack")] private static extern void DebugGetCallstackWrapper(IntPtr callstackAbsolute, IntPtr callstackRelative);
 		public static void DebugGetCallstack(out Int32[] callstackAbsolute, out Int32[] callstackRelative)
 		{
 			callstackAbsolute = new Int32[1024];
@@ -550,7 +550,7 @@ namespace Mesen.GUI
 		public static string GetKeyName(UInt32 key) { return PtrToStringUtf8(InteropEmu.GetKeyNameWrapper(key)); }
 		public static List<string> GetAudioDevices()
 		{
-			return new List<string>(PtrToStringUtf8(InteropEmu.GetAudioDevicesWrapper()).Split(new string[1] { "||" }, StringSplitOptions.RemoveEmptyEntries ));
+			return new List<string>(PtrToStringUtf8(InteropEmu.GetAudioDevicesWrapper()).Split(new string[1] { "||" }, StringSplitOptions.RemoveEmptyEntries));
 		}
 
 		private static byte[] _codeByteArray = new byte[0];
@@ -740,7 +740,7 @@ namespace Mesen.GUI
 		public float CodeRatio;
 		public float DataRatio;
 		public float PrgRatio;
-		
+
 		public float ChrRatio;
 		public float ChrReadRatio;
 		public float ChrDrawnRatio;
@@ -759,7 +759,7 @@ namespace Mesen.GUI
 		public PPUDebugState PPU;
 		public CartridgeState Cartridge;
 	}
-	
+
 	public struct CartridgeState
 	{
 		public UInt32 PrgRomSize;
@@ -874,13 +874,21 @@ namespace Mesen.GUI
 		public Byte PS;
 		public IRQSource IRQFlag;
 		public Int32 CycleCount;
-		
+
 		[MarshalAs(UnmanagedType.I1)]
 		public bool NMIFlag;
 
 		public UInt16 DebugPC;
 	}
 
+	public enum StatusFlagFormat
+	{
+		Hexadecimal = 0,
+		Text = 1,
+		CompactText = 2
+	}
+
+	[Serializable]
 	public struct TraceLoggerOptions
 	{
 		[MarshalAs(UnmanagedType.I1)] public bool ShowByteCode;
@@ -893,6 +901,7 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)] public bool IndentCode;
 		[MarshalAs(UnmanagedType.I1)] public bool ShowEffectiveAddresses;
 		[MarshalAs(UnmanagedType.I1)] public bool UseLabels;
+		public StatusFlagFormat StatusFormat;
 	}
 
 	public enum ProfilerDataType

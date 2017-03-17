@@ -58,6 +58,8 @@
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.label1 = new System.Windows.Forms.Label();
+			this.cboStatusFlagFormat = new System.Windows.Forms.ComboBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpLogOptions.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -134,23 +136,26 @@
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 3;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33332F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.18605F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.32558F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
-			this.tableLayoutPanel2.Controls.Add(this.chkShowEffectiveAddresses, 0, 3);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuCycles, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowRegisters, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowExtraInfo, 0, 4);
-			this.tableLayoutPanel2.Controls.Add(this.chkIndentCode, 0, 6);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowByteCode, 0, 2);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowFrameCount, 2, 2);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuScanline, 2, 1);
+			this.tableLayoutPanel2.Controls.Add(this.chkIndentCode, 0, 7);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowCpuCycles, 2, 0);
-			this.tableLayoutPanel2.Controls.Add(this.chkUseLabels, 2, 6);
+			this.tableLayoutPanel2.Controls.Add(this.chkUseLabels, 2, 7);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowFrameCount, 2, 3);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuScanline, 2, 2);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuCycles, 2, 1);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowEffectiveAddresses, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowByteCode, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowExtraInfo, 0, 3);
+			this.tableLayoutPanel2.Controls.Add(this.label1, 0, 5);
+			this.tableLayoutPanel2.Controls.Add(this.cboStatusFlagFormat, 1, 5);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 7;
+			this.tableLayoutPanel2.RowCount = 8;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -167,7 +172,7 @@
 			this.chkShowEffectiveAddresses.Checked = true;
 			this.chkShowEffectiveAddresses.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.tableLayoutPanel2.SetColumnSpan(this.chkShowEffectiveAddresses, 2);
-			this.chkShowEffectiveAddresses.Location = new System.Drawing.Point(3, 72);
+			this.chkShowEffectiveAddresses.Location = new System.Drawing.Point(3, 49);
 			this.chkShowEffectiveAddresses.Name = "chkShowEffectiveAddresses";
 			this.chkShowEffectiveAddresses.Size = new System.Drawing.Size(150, 17);
 			this.chkShowEffectiveAddresses.TabIndex = 10;
@@ -179,7 +184,7 @@
 			this.chkShowPpuCycles.AutoSize = true;
 			this.chkShowPpuCycles.Checked = true;
 			this.chkShowPpuCycles.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowPpuCycles.Location = new System.Drawing.Point(3, 26);
+			this.chkShowPpuCycles.Location = new System.Drawing.Point(289, 26);
 			this.chkShowPpuCycles.Name = "chkShowPpuCycles";
 			this.chkShowPpuCycles.Size = new System.Drawing.Size(77, 17);
 			this.chkShowPpuCycles.TabIndex = 5;
@@ -204,7 +209,7 @@
 			this.chkShowExtraInfo.Checked = true;
 			this.chkShowExtraInfo.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.tableLayoutPanel2.SetColumnSpan(this.chkShowExtraInfo, 2);
-			this.chkShowExtraInfo.Location = new System.Drawing.Point(3, 95);
+			this.chkShowExtraInfo.Location = new System.Drawing.Point(3, 72);
 			this.chkShowExtraInfo.Name = "chkShowExtraInfo";
 			this.chkShowExtraInfo.Size = new System.Drawing.Size(204, 17);
 			this.chkShowExtraInfo.TabIndex = 9;
@@ -227,7 +232,7 @@
 			this.chkShowByteCode.AutoSize = true;
 			this.chkShowByteCode.Checked = true;
 			this.chkShowByteCode.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowByteCode.Location = new System.Drawing.Point(3, 49);
+			this.chkShowByteCode.Location = new System.Drawing.Point(3, 26);
 			this.chkShowByteCode.Name = "chkShowByteCode";
 			this.chkShowByteCode.Size = new System.Drawing.Size(75, 17);
 			this.chkShowByteCode.TabIndex = 4;
@@ -237,7 +242,7 @@
 			// chkShowFrameCount
 			// 
 			this.chkShowFrameCount.AutoSize = true;
-			this.chkShowFrameCount.Location = new System.Drawing.Point(289, 49);
+			this.chkShowFrameCount.Location = new System.Drawing.Point(289, 72);
 			this.chkShowFrameCount.Name = "chkShowFrameCount";
 			this.chkShowFrameCount.Size = new System.Drawing.Size(86, 17);
 			this.chkShowFrameCount.TabIndex = 7;
@@ -249,7 +254,7 @@
 			this.chkShowPpuScanline.AutoSize = true;
 			this.chkShowPpuScanline.Checked = true;
 			this.chkShowPpuScanline.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowPpuScanline.Location = new System.Drawing.Point(289, 26);
+			this.chkShowPpuScanline.Location = new System.Drawing.Point(289, 49);
 			this.chkShowPpuScanline.Name = "chkShowPpuScanline";
 			this.chkShowPpuScanline.Size = new System.Drawing.Size(92, 17);
 			this.chkShowPpuScanline.TabIndex = 6;
@@ -353,13 +358,13 @@
             this.mnu10000Lines,
             this.mnu30000Lines});
 			this.logLinesToolStripMenuItem.Name = "logLinesToolStripMenuItem";
-			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
 			this.logLinesToolStripMenuItem.Text = "Line Count";
 			// 
 			// mnu100Lines
 			// 
 			this.mnu100Lines.Name = "mnu100Lines";
-			this.mnu100Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu100Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu100Lines.Text = "100";
 			this.mnu100Lines.Click += new System.EventHandler(this.mnu100Lines_Click);
 			// 
@@ -368,21 +373,21 @@
 			this.mnu1000Lines.Checked = true;
 			this.mnu1000Lines.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnu1000Lines.Name = "mnu1000Lines";
-			this.mnu1000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu1000Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu1000Lines.Text = "1000";
 			this.mnu1000Lines.Click += new System.EventHandler(this.mnu1000Lines_Click);
 			// 
 			// mnu10000Lines
 			// 
 			this.mnu10000Lines.Name = "mnu10000Lines";
-			this.mnu10000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu10000Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu10000Lines.Text = "10000";
 			this.mnu10000Lines.Click += new System.EventHandler(this.mnu10000Lines_Click);
 			// 
 			// mnu30000Lines
 			// 
 			this.mnu30000Lines.Name = "mnu30000Lines";
-			this.mnu30000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu30000Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu30000Lines.Text = "30000";
 			this.mnu30000Lines.Click += new System.EventHandler(this.mnu30000Lines_Click);
 			// 
@@ -392,22 +397,41 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(138, 6);
 			// 
 			// mnuRefresh
 			// 
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
+			// 
+			// label1
+			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(3, 99);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(98, 13);
+			this.label1.TabIndex = 12;
+			this.label1.Text = "Status Flag Format:";
+			// 
+			// cboStatusFlagFormat
+			// 
+			this.cboStatusFlagFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboStatusFlagFormat.FormattingEnabled = true;
+			this.cboStatusFlagFormat.Location = new System.Drawing.Point(107, 95);
+			this.cboStatusFlagFormat.Name = "cboStatusFlagFormat";
+			this.cboStatusFlagFormat.Size = new System.Drawing.Size(121, 21);
+			this.cboStatusFlagFormat.TabIndex = 13;
 			// 
 			// frmTraceLogger
 			// 
@@ -465,5 +489,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnu10000Lines;
 		private System.Windows.Forms.ToolStripMenuItem mnu30000Lines;
 		private System.Windows.Forms.CheckBox chkUseLabels;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ComboBox cboStatusFlagFormat;
 	}
 }

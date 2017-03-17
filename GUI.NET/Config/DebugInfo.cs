@@ -150,23 +150,27 @@ namespace Mesen.GUI.Config
 		public bool BreakOnUnofficialOpcodes = true;
 		public bool BreakOnBrk = false;
 
+		public TraceLoggerOptions TraceLoggerOptions;
 		public bool TraceAutoRefresh = true;
 		public int TraceLineCount = 1000;
 		public bool TraceIndentCode = false;
-		public bool TraceShowByteCode = true;
-		public bool TraceShowCpuCycles = false;
-		public bool TraceShowEffectiveAddresses = true;
-		public bool TraceShowExtraInfo = true;
-		public bool TraceShowFrameCount = false;
-		public bool TraceShowPpuCycles = true;
-		public bool TraceShowPpuScanline = true;
-		public bool TraceShowRegisters = true;
-		public bool TraceUseLabels = false;
 
 		public DebugInfo()
 		{
 			LeftView = new DebugViewInfo();
 			RightView = new DebugViewInfo();
+			TraceLoggerOptions = new TraceLoggerOptions() {
+				ShowByteCode = true,
+				ShowCpuCycles = false,
+				ShowEffectiveAddresses = true,
+				ShowExtraInfo = true,
+				ShowPpuFrames = false,
+				ShowPpuCycles = true,
+				ShowPpuScanline = true,
+				ShowRegisters = true,
+				UseLabels = false,
+				StatusFormat = StatusFlagFormat.Hexadecimal
+			};
 		}
 	}
 }

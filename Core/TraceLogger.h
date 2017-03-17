@@ -7,6 +7,13 @@ class DisassemblyInfo;
 class MemoryManager;
 class LabelManager;
 
+enum class StatusFlagFormat
+{
+	Hexadecimal = 0,
+	Text = 1,
+	CompactText = 2
+};
+
 struct TraceLoggerOptions
 {
 	bool ShowByteCode;
@@ -19,6 +26,7 @@ struct TraceLoggerOptions
 	bool IndentCode;
 	bool ShowEffectiveAddresses;
 	bool UseLabels;
+	StatusFlagFormat StatusFormat;
 };
 
 class TraceLogger
@@ -41,6 +49,8 @@ private:
 	shared_ptr<DisassemblyInfo> _disassemblyCache[ExecutionLogSize] = {};
 
 	string _executionTrace;
+	
+	void GetStatusFlag(string &output, uint8_t ps);
 
 public:
 	TraceLogger(shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);

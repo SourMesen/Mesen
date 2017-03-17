@@ -19,6 +19,7 @@ namespace Mesen.GUI.Debugger
 		private int _lineCount;
 		private bool _loggingEnabled = false;
 		private string _lastFilename;
+		private EntityBinder _entityBinder = new EntityBinder();
 
 		public frmTraceLogger()
 		{
@@ -27,16 +28,20 @@ namespace Mesen.GUI.Debugger
 			DebugInfo debugInfo = ConfigManager.Config.DebugInfo;
 			mnuAutoRefresh.Checked = debugInfo.TraceAutoRefresh;
 			_lineCount = debugInfo.TraceLineCount;
-			chkIndentCode.Checked = debugInfo.TraceIndentCode;
-			chkShowByteCode.Checked = debugInfo.TraceShowByteCode;
-			chkShowCpuCycles.Checked = debugInfo.TraceShowCpuCycles;
-			chkShowEffectiveAddresses.Checked = debugInfo.TraceShowEffectiveAddresses;
-			chkShowExtraInfo.Checked = debugInfo.TraceShowExtraInfo;
-			chkShowFrameCount.Checked = debugInfo.TraceShowFrameCount;
-			chkShowPpuCycles.Checked = debugInfo.TraceShowPpuCycles;
-			chkShowPpuScanline.Checked = debugInfo.TraceShowPpuScanline;
-			chkShowRegisters.Checked = debugInfo.TraceShowRegisters;
-			chkUseLabels.Checked = debugInfo.TraceUseLabels;
+
+			_entityBinder.Entity = debugInfo.TraceLoggerOptions;
+			_entityBinder.AddBinding("ShowByteCode", chkShowByteCode);
+			_entityBinder.AddBinding("ShowCpuCycles", chkShowCpuCycles);
+			_entityBinder.AddBinding("ShowEffectiveAddresses", chkShowEffectiveAddresses);
+			_entityBinder.AddBinding("ShowExtraInfo", chkShowExtraInfo);
+			_entityBinder.AddBinding("ShowPpuFrames", chkShowFrameCount);
+			_entityBinder.AddBinding("ShowPpuCycles", chkShowPpuCycles);
+			_entityBinder.AddBinding("ShowPpuScanline", chkShowPpuScanline);
+			_entityBinder.AddBinding("ShowRegisters", chkShowRegisters);
+			_entityBinder.AddBinding("IndentCode", chkIndentCode);
+			_entityBinder.AddBinding("UseLabels", chkUseLabels);
+			_entityBinder.AddBinding("StatusFormat", cboStatusFlagFormat);
+			_entityBinder.UpdateUI();
 
 			UpdateMenu();
 			txtTraceLog.Font = new Font(BaseControl.MonospaceFontFamily, 10);
@@ -51,15 +56,10 @@ namespace Mesen.GUI.Debugger
 			debugInfo.TraceAutoRefresh = mnuAutoRefresh.Checked;
 			debugInfo.TraceLineCount = _lineCount;
 			debugInfo.TraceIndentCode = chkIndentCode.Checked;
-			debugInfo.TraceShowByteCode = chkShowByteCode.Checked;
-			debugInfo.TraceShowCpuCycles = chkShowCpuCycles.Checked;
-			debugInfo.TraceShowEffectiveAddresses = chkShowEffectiveAddresses.Checked;
-			debugInfo.TraceShowExtraInfo = chkShowExtraInfo.Checked;
-			debugInfo.TraceShowFrameCount = chkShowFrameCount.Checked;
-			debugInfo.TraceShowPpuCycles = chkShowPpuCycles.Checked;
-			debugInfo.TraceShowPpuScanline = chkShowPpuScanline.Checked;
-			debugInfo.TraceShowRegisters = chkShowRegisters.Checked;
-			debugInfo.TraceUseLabels = chkUseLabels.Checked;
+			_entityBinder.Entity = debugInfo.TraceLoggerOptions;
+			_entityBinder.UpdateObject();
+			debugInfo.TraceLoggerOptions = (TraceLoggerOptions)_entityBinder.Entity;
+
 			ConfigManager.ApplyChanges();
 
 			if(_loggingEnabled) {
@@ -69,20 +69,9 @@ namespace Mesen.GUI.Debugger
 
 		private void SetOptions()
 		{
-			TraceLoggerOptions options = new TraceLoggerOptions() {
-				ShowByteCode = chkShowByteCode.Checked,
-				ShowCpuCycles = chkShowCpuCycles.Checked,
-				ShowExtraInfo = chkShowExtraInfo.Checked,
-				ShowPpuCycles = chkShowPpuCycles.Checked,
-				ShowPpuFrames = chkShowFrameCount.Checked,
-				ShowPpuScanline = chkShowPpuScanline.Checked,
-				ShowRegisters = chkShowRegisters.Checked,
-				IndentCode = chkIndentCode.Checked,
-				ShowEffectiveAddresses = chkShowEffectiveAddresses.Checked,
-				UseLabels = chkUseLabels.Checked
-			};
-
-			InteropEmu.DebugSetTraceOptions(options);
+			_entityBinder.Entity = ConfigManager.Config.DebugInfo.TraceLoggerOptions;
+			_entityBinder.UpdateObject();
+			InteropEmu.DebugSetTraceOptions((TraceLoggerOptions)_entityBinder.Entity);
 		}
 
 		private void btnStartLogging_Click(object sender, EventArgs e)

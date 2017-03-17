@@ -175,5 +175,10 @@
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
     </Enum>
+    <Enum ID="StatusFlagFormat">
+      <Value ID="Hexadecimal">Hexadecimal</Value>
+      <Value ID="Text">Text</Value>
+      <Value ID="CompactText">Text (Active only)</Value>
+    </Enum>
   </Enums>
 </Resources>
