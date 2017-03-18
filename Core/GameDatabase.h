@@ -20,4 +20,5 @@ private:
 public:
 	static void InitializeInputDevices(string inputType, GameSystem system);
 	static void SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData);
+	static bool GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader);
 };

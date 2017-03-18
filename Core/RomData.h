@@ -69,16 +69,6 @@ struct NESHeader
 		}
 	}
 
-	uint32_t GetPrgCount()
-	{
-		if(PrgCount == 0) {
-			//0 prg banks is a special value meaning 256 banks
-			return 256;
-		} else {
-			return PrgCount;
-		}
-	}
-
 	bool HasBattery()
 	{
 		return (Byte6 & 0x02) == 0x02;
@@ -130,9 +120,13 @@ struct NESHeader
 	uint32_t GetPrgSize()
 	{
 		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
-			return (((Byte9 & 0x0F) << 4) | GetPrgCount()) * 0x4000;
+			return (((Byte9 & 0x0F) << 4) | PrgCount) * 0x4000;
 		} else {
-			return GetPrgCount() * 0x4000;
+			if(PrgCount == 0) {
+				return 256 * 0x4000; //0 is a special value and means 256
+			} else {
+				return PrgCount * 0x4000;
+			}
 		}
 	}
 
@@ -205,16 +199,18 @@ struct NESHeader
 
 	void SanitizeHeader(size_t romLength)
 	{
-		size_t calculatedLength = sizeof(NESHeader) + 0x4000 * GetPrgCount();
+		size_t calculatedLength = sizeof(NESHeader) + GetPrgSize();
 		while(calculatedLength > romLength) {
+			Byte9 = 0;
 			PrgCount--;
-			calculatedLength = sizeof(NESHeader) + 0x4000 * GetPrgCount();
+			calculatedLength = sizeof(NESHeader) + GetPrgSize();
 		}
 
-		calculatedLength = sizeof(NESHeader) + 0x4000 * GetPrgCount() + 0x2000 * ChrCount;
+		calculatedLength = sizeof(NESHeader) + GetPrgSize() + GetChrSize();
 		while(calculatedLength > romLength) {
+			Byte9 = 0;
 			ChrCount--;
-			calculatedLength = sizeof(NESHeader) + 0x4000 * GetPrgCount() + 0x2000 * ChrCount;
+			calculatedLength = sizeof(NESHeader) + GetPrgSize() + GetChrSize();
 		}
 	}
 };
@@ -252,7 +248,7 @@ struct GameInfo
 	string Board;
 	string Pcb;
 	string Chip;
-	uint8_t MapperID;
+	uint16_t MapperID;
 	uint32_t PrgRomSize;
 	uint32_t ChrRomSize;
 	uint32_t ChrRamSize;

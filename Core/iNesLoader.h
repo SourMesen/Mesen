@@ -5,5 +5,5 @@
 class iNesLoader
 {
 public:
-	RomData LoadRom(vector<uint8_t>& romFile);
+	RomData LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader);
 };

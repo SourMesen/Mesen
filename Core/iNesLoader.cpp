@@ -4,16 +4,20 @@
 #include "GameDatabase.h"
 #include "EmulationSettings.h"
 
-RomData iNesLoader::LoadRom(vector<uint8_t>& romFile)
+RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader)
 {
 	RomData romData;
 
-	uint8_t* buffer = romFile.data();
 	NESHeader header;
-	memcpy((char*)&header, buffer, sizeof(NESHeader));
-	buffer += sizeof(NESHeader);
-
-	header.SanitizeHeader(romFile.size());
+	uint8_t* buffer = romFile.data();
+	if(preloadedHeader) {
+		header = *preloadedHeader;
+		header.SanitizeHeader(romFile.size() + sizeof(NESHeader));
+	} else {
+		memcpy((char*)&header, buffer, sizeof(NESHeader));
+		buffer += sizeof(NESHeader);
+		header.SanitizeHeader(romFile.size());
+	}
 
 	romData.Format = RomFormat::iNes;
 

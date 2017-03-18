@@ -113,7 +113,7 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 
 	if(memcmp(buffer, "NES\x1a", 4) == 0) {
 		iNesLoader loader;
-		_romData = loader.LoadRom(fileData);
+		_romData = loader.LoadRom(fileData, nullptr);
 	} else if(memcmp(buffer, "FDS\x1a", 4) == 0 || memcmp(buffer, "\x1*NINTENDO-HVC*", 15) == 0) {
 		FdsLoader loader;
 		_romData = loader.LoadRom(fileData, _filename);
@@ -127,8 +127,14 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 		UnifLoader loader;
 		_romData = loader.LoadRom(fileData);
 	} else {
-		MessageManager::Log("Invalid rom file.");
-		_romData.Error = true;
+		NESHeader header = { };
+		if(GameDatabase::GetiNesHeader(crc, header)) {
+			iNesLoader loader;
+			_romData = loader.LoadRom(fileData, &header);
+		} else {
+			MessageManager::Log("Invalid rom file.");
+			_romData.Error = true;
+		}
 	}
 
 	_romData.Crc32 = crc;
@@ -175,7 +181,7 @@ bool RomLoader::LoadFile(string filename, istream *filestream, string ipsFilenam
 		} else if(memcmp(header, "7z", 2) == 0) {
 			SZReader reader;
 			return LoadFromArchive(*input, reader, archiveFileIndex);
-		} else if(memcmp(header, "NES\x1a", 4) == 0 || memcmp(header, "NESM\x1a", 5) == 0 || memcmp(header, "NSFE", 4) == 0 || memcmp(header, "FDS\x1a", 4) == 0 || memcmp(header, "\x1*NINTENDO-HVC*", 15) == 0 || memcmp(header, "UNIF", 4) == 0) {
+		} else {
 			if(archiveFileIndex > 0) {
 				return false;
 			}

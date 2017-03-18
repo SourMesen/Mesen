@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 22/02/2017 using:
+# Generated on 18/03/2017 using:
 #     -NesCartDB (dated 2016-08-20)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -177,6 +177,7 @@
 0DC53188,Famicom,HVC-SGROM,HVC-SGROM-03,MMC1A,1,256,,8,0,0,0,,
 0E1683C5,Famicom,TAITO-X1-005,P3-034A,X1-005,80,128,128,,0,0,1,,
 0E197A5E,Famicom,,,,0,32,8,,0,0,0,h,
+0E76E4C1,Famicom,,,,190,256,128,,0,0,0,,
 0E997CF6,Famicom,HVC-SNROM,HVC-SNROM-08,MMC1B2,1,256,,8,0,8,1,,
 0EAA7515,Famicom,,,,2,128,,8,0,0,0,v,
 0EC6C023,NesNtsc,NES-EKROM,NES-EKROM-01,MMC5,5,256,256,,0,8,1,,

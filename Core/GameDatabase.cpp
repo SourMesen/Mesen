@@ -226,6 +226,76 @@ uint8_t GameDatabase::GetSubMapper(GameInfo &info)
 	return 0;
 }
 
+bool GameDatabase::GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader)
+{
+	GameInfo info = {};
+	InitDatabase();
+	auto result = _gameDatabase.find(romCrc);
+	if(result != _gameDatabase.end()) {
+		MessageManager::Log("[DB] Headerless ROM file found - using game database data.");
+
+		info = result->second;
+
+		nesHeader.Byte9 = 0;
+		if(info.PrgRomSize > 4096) {
+			uint16_t prgSize = info.PrgRomSize / 16;
+			nesHeader.PrgCount = prgSize & 0xFF;
+			nesHeader.Byte9 |= (prgSize & 0xF00) >> 8;
+		} else {
+			nesHeader.PrgCount = info.PrgRomSize / 16;
+		}
+
+		if(info.ChrRomSize > 2048) {
+			uint16_t chrSize = info.ChrRomSize / 8;
+			nesHeader.ChrCount = chrSize & 0xFF;
+			nesHeader.Byte9 |= (chrSize & 0xF00) >> 4;
+		} else {
+			nesHeader.ChrCount = info.ChrRomSize / 8;
+		}
+		
+		nesHeader.Byte6 = (info.MapperID & 0x0F) << 4;
+		if(info.HasBattery) {
+			nesHeader.Byte6 |= 0x02;
+		}
+		if(info.Mirroring.compare("v") == 0) {
+			nesHeader.Byte6 |= 0x01;
+		}
+
+		nesHeader.Byte7 = (info.MapperID & 0xF0);
+		GameSystem system = GetGameSystem(info.System);
+		if(system == GameSystem::Playchoice) {
+			nesHeader.Byte7 |= 0x02;
+		} else if(system == GameSystem::VsUniSystem) {
+			nesHeader.Byte7 |= 0x01;
+		}
+		
+		//Don't set this, otherwise the header will be used over the game DB data
+		//nesHeader.Byte7 |= 0x08; //NES 2.0 marker
+
+		nesHeader.Byte8 = ((GetSubMapper(info) & 0x0F) << 4) | ((info.MapperID & 0xF00) >> 8);
+
+		nesHeader.Byte10 = 0;
+		if(info.SaveRamSize > 0) {
+			nesHeader.Byte10 |= ((int)log2(info.SaveRamSize * 1024) - 6) << 4;
+		}
+		if(info.WorkRamSize > 0) {
+			nesHeader.Byte10 |= ((int)log2(info.WorkRamSize * 1024) - 6);
+		}
+
+		nesHeader.Byte11 = 0;
+		if(info.ChrRamSize > 0) {
+			nesHeader.Byte11 |= ((int)log2(info.ChrRamSize * 1024) - 6);
+		}
+		
+		nesHeader.Byte12 = system == GameSystem::NesPal ? 0x01 : 0;
+		nesHeader.Byte13 = 0; //VS PPU variant
+
+		return true;
+	}
+
+	return false;
+}
+
 void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData)
 {	
 	GameInfo info = {};
