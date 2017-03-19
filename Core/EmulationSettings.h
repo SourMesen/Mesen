@@ -105,6 +105,9 @@ enum class VideoFilterType
 	Prescale2x = 19,
 	Prescale3x = 20,
 	Prescale4x = 21,
+	Prescale6x = 22,
+	Prescale8x = 23,
+	Prescale10x = 24,
 	HdPack = 999
 };
 

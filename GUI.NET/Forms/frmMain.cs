@@ -1202,6 +1202,9 @@ namespace Mesen.GUI.Forms
 			mnuPrescale2xFilter.Checked = (filterType == VideoFilterType.Prescale2x);
 			mnuPrescale3xFilter.Checked = (filterType == VideoFilterType.Prescale3x);
 			mnuPrescale4xFilter.Checked = (filterType == VideoFilterType.Prescale4x);
+			mnuPrescale6xFilter.Checked = (filterType == VideoFilterType.Prescale6x);
+			mnuPrescale8xFilter.Checked = (filterType == VideoFilterType.Prescale8x);
+			mnuPrescale10xFilter.Checked = (filterType == VideoFilterType.Prescale10x);
 
 			ConfigManager.Config.VideoInfo.VideoFilter = filterType;
 			ConfigManager.ApplyChanges();
@@ -1323,6 +1326,21 @@ namespace Mesen.GUI.Forms
 		private void mnuPrescale4xFilter_Click(object sender, EventArgs e)
 		{
 			SetVideoFilter(VideoFilterType.Prescale4x);
+		}
+
+		private void mnuPrescale6xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Prescale6x);
+		}
+
+		private void mnuPrescale8xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Prescale8x);
+		}
+
+		private void mnuPrescale10xFilter_Click(object sender, EventArgs e)
+		{
+			SetVideoFilter(VideoFilterType.Prescale10x);
 		}
 
 		private void mnuNtscBisqwitFullFilter_Click(object sender, EventArgs e)

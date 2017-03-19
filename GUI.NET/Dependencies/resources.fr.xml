@@ -635,6 +635,9 @@
       <Value ID="Prescale2x">Prescale 2x</Value>
       <Value ID="Prescale3x">Prescale 3x</Value>
       <Value ID="Prescale4x">Prescale 4x</Value>
+      <Value ID="Prescale6x">Prescale 6x</Value>
+      <Value ID="Prescale8x">Prescale 8x</Value>
+      <Value ID="Prescale10x">Prescale 10x</Value>
     </Enum>
     <Enum ID="ConsoleType">
       <Value ID="Nes">NES</Value>

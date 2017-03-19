@@ -88,6 +88,9 @@ void VideoDecoder::UpdateVideoFilter()
 			case VideoFilterType::Prescale2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 2)); break;
 			case VideoFilterType::Prescale3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 3)); break;
 			case VideoFilterType::Prescale4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 4)); break;
+			case VideoFilterType::Prescale6x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 6)); break;
+			case VideoFilterType::Prescale8x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 8)); break;
+			case VideoFilterType::Prescale10x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 10)); break;
 
 			case VideoFilterType::HdPack: _videoFilter.reset(new HdVideoFilter()); break;
 		}
