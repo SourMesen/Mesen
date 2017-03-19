@@ -24,18 +24,18 @@ namespace Mesen.GUI.Config
 
 		public bool UseAlternativeMmc3Irq = false;
 
-		public UInt32 OverclockRate = 100;
+		[MinMax(1, 1000)] public UInt32 OverclockRate = 100;
 		public bool OverclockAdjustApu = true;
 
-		public UInt32 PpuExtraScanlinesBeforeNmi = 0;
-		public UInt32 PpuExtraScanlinesAfterNmi = 0;
+		[MinMax(0, 1000)] public UInt32 PpuExtraScanlinesBeforeNmi = 0;
+		[MinMax(0, 1000)] public UInt32 PpuExtraScanlinesAfterNmi = 0;
 
 		public RamPowerOnState RamPowerOnState;
 
 		public bool ShowLagCounter = false;
 
-		public UInt32 EmulationSpeed = 100;
-		public UInt32 TurboSpeed = 300;
+		[MinMax(0, 500)] public UInt32 EmulationSpeed = 100;
+		[MinMax(0, 500)] public UInt32 TurboSpeed = 300;
 
 		public EmulationInfo()
 		{

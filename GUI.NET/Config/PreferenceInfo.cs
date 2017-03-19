@@ -38,8 +38,6 @@ namespace Mesen.GUI.Config
 		public bool PauseOnMovieEnd = true;
 		public bool AutomaticallyCheckForUpdates = true;
 
-		public bool UseAlternativeMmc3Irq = false;
-
 		public bool CloudSaveIntegration = false;
 		public DateTime CloudLastSync = DateTime.MinValue;
 
@@ -83,7 +81,6 @@ namespace Mesen.GUI.Config
 				FileAssociationHelper.UpdateFileAssociation("unf", preferenceInfo.AssociateUnfFiles);
 			}
 
-			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, preferenceInfo.UseAlternativeMmc3Irq);
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, preferenceInfo.AllowInvalidInput);
 			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, preferenceInfo.RemoveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);

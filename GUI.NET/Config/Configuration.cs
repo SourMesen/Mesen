@@ -119,9 +119,11 @@ namespace Mesen.GUI.Config
 		public void Serialize(string configFile)
 		{
 			try {
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(Configuration));
-				using(TextWriter textWriter = new StreamWriter(configFile)) {
-					xmlSerializer.Serialize(textWriter, this);
+				if(!ConfigManager.DoNotSaveSettings) {
+					XmlSerializer xmlSerializer = new XmlSerializer(typeof(Configuration));
+					using(TextWriter textWriter = new StreamWriter(configFile)) {
+						xmlSerializer.Serialize(textWriter, this);
+					}
 				}
 				_needToSave = false;
 			} catch {

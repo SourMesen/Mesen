@@ -56,20 +56,28 @@ namespace Mesen.GUI.Forms
 
 		public void ProcessCommandLineArguments(string[] args, bool forStartup)
 		{
-			if(forStartup) {
-				var switches = new List<string>();
-				for(int i = 0; i < args.Length; i++) {
-					switches.Add(args[i].ToLowerInvariant().Replace("-", "/"));
-				}
+			var switches = new List<string>();
+			for(int i = 0; i < args.Length; i++) {
+				switches.Add(args[i].ToLowerInvariant().Replace("--", "/").Replace("-", "/").Replace("=/", "=-"));
+			}
 
+			if(forStartup) {
 				_noVideo = switches.Contains("/novideo");
 				_noAudio = switches.Contains("/noaudio");
 				_noInput = switches.Contains("/noinput");
-				if(switches.Contains("/fullscreen")) {
-					this.SetFullscreenState(true);
-				}
 			}
 
+			if(switches.Contains("/fullscreen")) {
+				this.SetFullscreenState(true);
+			}
+			if(switches.Contains("/donotsavesettings")) {
+				ConfigManager.DoNotSaveSettings = true;
+			}
+			ConfigManager.ProcessSwitches(switches);
+		}
+
+		public void LoadGameFromCommandLine(string[] args)
+		{
 			if(args.Length > 0) {
 				foreach(string arg in args) {
 					string path = arg;
@@ -102,6 +110,8 @@ namespace Mesen.GUI.Forms
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
 			menuTimer.Start();
+			
+			this.ProcessCommandLineArguments(_commandLineArgs, true);
 
 			VideoInfo.ApplyConfig();
 			InitializeVsSystemMenu();
@@ -121,7 +131,7 @@ namespace Mesen.GUI.Forms
 				Task.Run(() => CloudSyncHelper.Sync());
 			}
 
-			this.ProcessCommandLineArguments(_commandLineArgs, true);
+			this.LoadGameFromCommandLine(_commandLineArgs);
 
 			if(ConfigManager.Config.PreferenceInfo.AutomaticallyCheckForUpdates) {
 				CheckForUpdates(false);
@@ -1639,6 +1649,13 @@ namespace Mesen.GUI.Forms
 				Random random = new Random();
 				string randomGame = gameRoms[random.Next(gameRoms.Count - 1)];
 				LoadFile(randomGame);
+			}
+		}
+
+		private void mnuHelpWindow_Click(object sender, EventArgs e)
+		{
+			using(frmHelp frm = new frmHelp()) {
+				frm.ShowDialog(sender, this);
 			}
 		}
 	}

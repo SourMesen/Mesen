@@ -122,6 +122,7 @@ namespace Mesen.GUI
 							singleInstance.ArgumentsReceived += (object sender, ArgumentsReceivedEventArgs e) => {
 								frmMain.BeginInvoke((MethodInvoker)(() => {
 									frmMain.ProcessCommandLineArguments(e.Args, false);
+									frmMain.LoadGameFromCommandLine(e.Args);
 								}));
 							};
 						}

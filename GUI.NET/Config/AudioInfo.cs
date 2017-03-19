@@ -13,33 +13,35 @@ namespace Mesen.GUI.Config
 	{
 		public string AudioDevice = "";
 		public bool EnableAudio = true;
-		public UInt32 AudioLatency = 50;
-		public UInt32 MasterVolume = 25;
-		public UInt32 Square1Volume = 100;
-		public UInt32 Square2Volume = 100;
-		public UInt32 TriangleVolume = 100;
-		public UInt32 NoiseVolume = 100;
-		public UInt32 DmcVolume = 100;
-		public UInt32 FdsVolume = 100;
-		public UInt32 Mmc5Volume = 100;
-		public UInt32 Vrc6Volume = 100;
-		public UInt32 Vrc7Volume = 100;
-		public UInt32 Namco163Volume = 100;
-		public UInt32 Sunsoft5bVolume = 100;
 
-		public Int32 Square1Panning = 0;
-		public Int32 Square2Panning = 0;
-		public Int32 TrianglePanning = 0;
-		public Int32 NoisePanning = 0;
-		public Int32 DmcPanning = 0;
-		public Int32 FdsPanning = 0;
-		public Int32 Mmc5Panning = 0;
-		public Int32 Vrc6Panning = 0;
-		public Int32 Vrc7Panning = 0;
-		public Int32 Namco163Panning = 0;
-		public Int32 Sunsoft5bPanning = 0;
+		[MinMax(15, 300)] public UInt32 AudioLatency = 50;
 
-		public UInt32 SampleRate = 44100;
+		[MinMax(0, 100)] public UInt32 MasterVolume = 25;
+		[MinMax(0, 100)] public UInt32 Square1Volume = 100;
+		[MinMax(0, 100)] public UInt32 Square2Volume = 100;
+		[MinMax(0, 100)] public UInt32 TriangleVolume = 100;
+		[MinMax(0, 100)] public UInt32 NoiseVolume = 100;
+		[MinMax(0, 100)] public UInt32 DmcVolume = 100;
+		[MinMax(0, 100)] public UInt32 FdsVolume = 100;
+		[MinMax(0, 100)] public UInt32 Mmc5Volume = 100;
+		[MinMax(0, 100)] public UInt32 Vrc6Volume = 100;
+		[MinMax(0, 100)] public UInt32 Vrc7Volume = 100;
+		[MinMax(0, 100)] public UInt32 Namco163Volume = 100;
+		[MinMax(0, 100)] public UInt32 Sunsoft5bVolume = 100;
+
+		[MinMax(-100, 100)] public Int32 Square1Panning = 0;
+		[MinMax(-100, 100)] public Int32 Square2Panning = 0;
+		[MinMax(-100, 100)] public Int32 TrianglePanning = 0;
+		[MinMax(-100, 100)] public Int32 NoisePanning = 0;
+		[MinMax(-100, 100)] public Int32 DmcPanning = 0;
+		[MinMax(-100, 100)] public Int32 FdsPanning = 0;
+		[MinMax(-100, 100)] public Int32 Mmc5Panning = 0;
+		[MinMax(-100, 100)] public Int32 Vrc6Panning = 0;
+		[MinMax(-100, 100)] public Int32 Vrc7Panning = 0;
+		[MinMax(-100, 100)] public Int32 Namco163Panning = 0;
+		[MinMax(-100, 100)] public Int32 Sunsoft5bPanning = 0;
+
+		[ValidValues(11025, 22050, 44100, 48000)] public UInt32 SampleRate = 44100;
 		public bool ReduceSoundInBackground = true;
 		public bool MuteSoundInBackground = false;
 		public bool SwapDutyCycles = false;
@@ -47,13 +49,13 @@ namespace Mesen.GUI.Config
 		public bool ReduceDmcPopping = false;
 		public bool DisableNoiseModeFlag = false;
 		public InteropEmu.StereoFilter StereoFilter;
-		public Int32 StereoDelay = 15;
-		public Int32 StereoPanningAngle = 15;
+		[MinMax(0, 100)] public Int32 StereoDelay = 15;
+		[MinMax(-180, 180)] public Int32 StereoPanningAngle = 15;
 		public bool ReverbEnabled = false;
-		public UInt32 ReverbStrength = 5;
-		public UInt32 ReverbDelay = 10;
+		[MinMax(1, 10)] public UInt32 ReverbStrength = 5;
+		[MinMax(1, 30)] public UInt32 ReverbDelay = 10;
 		public bool CrossFeedEnabled = false;
-		public UInt32 CrossFeedRatio = 0;
+		[MinMax(0, 100)] public UInt32 CrossFeedRatio = 0;
 
 		public AudioInfo()
 		{

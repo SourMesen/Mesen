@@ -8,6 +8,8 @@ using System.Xml.Serialization;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace Mesen.GUI.Config
 {
@@ -17,6 +19,7 @@ namespace Mesen.GUI.Config
 		private static Configuration _dirtyConfig;
 		private static bool? _portableMode = null;
 		private static string _portablePath = null;
+		public static bool DoNotSaveSettings { get; set; }
 
 		private static void LoadConfig()
 		{
@@ -29,6 +32,84 @@ namespace Mesen.GUI.Config
 					_config = new Configuration();
 					_dirtyConfig = new Configuration();
 					_config.Save();
+				}
+			}
+		}
+
+		private static void ApplySetting(Type type, object instance, string name, string value)
+		{
+			FieldInfo[] fields = type.GetFields();
+			foreach(FieldInfo info in fields) {
+				if(string.Compare(info.Name, name, true) == 0) {
+					try {
+						if(info.FieldType == typeof(int) || info.FieldType == typeof(uint) || info.FieldType == typeof(double)) {
+							MinMaxAttribute minMaxAttribute = info.GetCustomAttribute(typeof(MinMaxAttribute)) as MinMaxAttribute;
+							if(minMaxAttribute != null) {
+								if(info.FieldType == typeof(int)) {
+									int result;
+									if(int.TryParse(value, out result)) {
+										if(result >= (int)minMaxAttribute.Min && result <= (int)minMaxAttribute.Max) {
+											info.SetValue(instance, result);
+										}
+									}
+								} else if(info.FieldType == typeof(uint)) {
+									uint result;
+									if(uint.TryParse(value, out result)) {
+										if(result >= (uint)(int)minMaxAttribute.Min && result <= (uint)(int)minMaxAttribute.Max) {
+											info.SetValue(instance, result);
+										}
+									}
+								} else if(info.FieldType == typeof(double)) {
+									double result;
+									if(double.TryParse(value, out result)) {
+										if(result >= (double)minMaxAttribute.Min && result <= (double)minMaxAttribute.Max) {
+											info.SetValue(instance, result);
+										}
+									}
+								}
+							} else {
+								ValidValuesAttribute validValuesAttribute = info.GetCustomAttribute(typeof(ValidValuesAttribute)) as ValidValuesAttribute;
+								if(validValuesAttribute != null) {
+									uint result;
+									if(uint.TryParse(value, out result)) {
+										if(validValuesAttribute.ValidValues.Contains(result)) {
+											info.SetValue(instance, result);
+										}
+									}
+								}
+							}
+						} else if(info.FieldType == typeof(bool)) {
+							if(string.Compare(value, "false", true) == 0) {
+								info.SetValue(instance, false);
+							} else if(string.Compare(value, "true", true) == 0) {
+								info.SetValue(instance, true);
+							}
+						} else if(info.FieldType.IsEnum) {
+							int indexOf = Enum.GetNames(info.FieldType).Select((enumValue) => enumValue.ToLower()).ToList().IndexOf(value.ToLower());
+							if(indexOf >= 0) {
+								info.SetValue(instance, indexOf);
+							}
+						}
+					} catch {
+					}
+					break;
+				}
+			}
+		}
+
+		public static void ProcessSwitches(List<string> switches)
+		{
+			Regex regex = new Regex("/([a-z0-9_A-Z.]+)=([a-z0-9_A-Z.\\-]+)");
+			foreach(string param in switches) {
+				Match match = regex.Match(param);
+				if(match.Success) {
+					string switchName = match.Groups[1].Value;
+					string switchValue = match.Groups[2].Value;
+
+					ApplySetting(typeof(VideoInfo), Config.VideoInfo, switchName, switchValue);
+					ApplySetting(typeof(AudioInfo), Config.AudioInfo, switchName, switchValue);
+					ApplySetting(typeof(EmulationInfo), Config.EmulationInfo, switchName, switchValue);
+					ApplySetting(typeof(Configuration), Config, switchName, switchValue);
 				}
 			}
 		}

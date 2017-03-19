@@ -91,6 +91,7 @@
       <Control ID="mnuHelp">ヘルプ</Control>
       <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
       <Control ID="mnuReportBug">バグレポート</Control>
+      <Control ID="mnuHelpWindow">コマンドラインオプション</Control>
       <Control ID="mnuAbout">Mesenとは</Control>
 
       <!-- Archive Load Message -->
@@ -492,6 +493,15 @@
       <Control ID="btnBrowse">参照...</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
+    </Form>
+    <Form ID="frmHelp" Title="コマンドラインオプション">
+      <Control ID="grpExample">使い方</Control>
+      <Control ID="tpgGeneral">全般</Control>
+      <Control ID="tpgVideoOptions">映像</Control>
+      <Control ID="tpgAudioOptions">音声</Control>
+      <Control ID="tpgEmulationOptions">エミュレーション</Control>
+      <Control ID="lblExplanation">Mesenを全画面表示の状態で"MyGame.nes"を起動する. 画面エフェクトをNTSCにして、映像サイズを2xにして、オーバースキャン設定を変更する。</Control>
+      <Control ID="txtGeneralOptions">/fullscreen - 全画面表示の状態で起動する&#13;&#10;/DoNotSaveSettings - 設定のセーブ機能を無効にする</Control>
     </Form>
   </Forms>
   <Messages>

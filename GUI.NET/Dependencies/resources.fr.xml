@@ -91,6 +91,7 @@
       <Control ID="mnuHelp">Aide</Control>
       <Control ID="mnuCheckForUpdates">Recherche de mises-à-jour</Control>
       <Control ID="mnuReportBug">Signaler un problème</Control>
+      <Control ID="mnuHelpWindow">Options de ligne de commande</Control>
       <Control ID="mnuAbout">À propos de...</Control>
 
       <!-- Archive Load Message -->
@@ -510,6 +511,15 @@
       <Control ID="btnBrowse">Parcourir...</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
+    </Form>
+    <Form ID="frmHelp" Title="Options de ligne de commande">
+      <Control ID="grpExample">Exemple d'utilisation</Control>
+      <Control ID="tpgGeneral">Général</Control>
+      <Control ID="tpgVideoOptions">Options vidéo</Control>
+      <Control ID="tpgAudioOptions">Options audio</Control>
+      <Control ID="tpgEmulationOptions">Options d'émulation</Control>
+      <Control ID="lblExplanation">Cet exemple ouvrira Mesen en mode plein écran avec le jeu "MyGame.nes" de chargé. Le filtre vidéo NTSC avec un facteur d'agrandissement de 2x sera utilisé et les paramètres d'overscan seront modifiés.  L'option "DoNotSaveSettings" empêche les options données en ligne de commande de devenir les options par défaut de l'émulateur.</Control>
+      <Control ID="txtGeneralOptions">/fullscreen - Démarre Mesen en mode plein écran&#13;&#10;/DoNotSaveSettings - Empêche la sauvegarde des paramètres sur le disque (autrement les options données en ligne de commande seront permanentes)</Control>
     </Form>
   </Forms>
   <Messages>

@@ -91,6 +91,7 @@
       <Control ID="mnuHelp">Ajuda</Control>
       <Control ID="mnuCheckForUpdates">Procurar atualizações</Control>
       <Control ID="mnuReportBug">Reportar um erro</Control>
+      <Control ID="mnuHelpWindow">Command-line options</Control>
       <Control ID="mnuAbout">Sobre...</Control>
 
       <!-- Archive Load Message -->
@@ -496,6 +497,15 @@
       <Control ID="btnBrowse">Browse...</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
+    </Form>
+    <Form ID="frmHelp" Title="Command-line Options">
+      <Control ID="grpExample">Usage example</Control>
+      <Control ID="tpgGeneral">General</Control>
+      <Control ID="tpgVideoOptions">Video Options</Control>
+      <Control ID="tpgAudioOptions">Audio Options</Control>
+      <Control ID="tpgEmulationOptions">Emulation Options</Control>
+      <Control ID="lblExplanation">This will start Mesen in fullscreen mode with the "MyGame.nes" rom loaded.  It will also use the NTSC filter, set at a 2x scale and configure the Overscan settings.  The "DoNotSaveSettings" flag is used to prevent the command line switches from pernanently altering Mesen's settings.</Control>
+      <Control ID="txtGeneralOptions">/fullscreen - Start Mesen in fullscreen mode&#13;&#10;/DoNotSaveSettings - Prevent settings from being saved to the disk (useful to prevent command line options from becoming the default settings)</Control>
     </Form>
   </Forms>
   <Messages>

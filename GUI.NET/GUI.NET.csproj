@@ -146,6 +146,9 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -205,6 +208,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\ConfigAttributes.cs" />
     <Compile Include="Config\AviRecordInfo.cs" />
     <Compile Include="Config\DebugInfo.cs" />
     <Compile Include="Config\EmulationInfo.cs" />
@@ -602,6 +606,12 @@
     <Compile Include="Forms\frmDownloadProgress.Designer.cs">
       <DependentUpon>frmDownloadProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmHelp.Designer.cs">
+      <DependentUpon>frmHelp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmLogWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -829,6 +839,9 @@
     <EmbeddedResource Include="Forms\frmDownloadProgress.resx">
       <DependentUpon>frmDownloadProgress.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmHelp.resx">
+      <DependentUpon>frmHelp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmLogWindow.resx">
       <DependentUpon>frmLogWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -947,6 +960,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
+    <None Include="Resources\CommandLine.png" />
     <None Include="Resources\Copy.png" />
     <None Include="Resources\StepOut.png" />
     <None Include="Resources\StepInto.png" />

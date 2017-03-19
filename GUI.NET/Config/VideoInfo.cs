@@ -12,36 +12,36 @@ namespace Mesen.GUI.Config
 	public class VideoInfo
 	{
 		public bool ShowFPS = false;
-		public UInt32 OverscanLeft = 0;
-		public UInt32 OverscanRight = 0;
-		public UInt32 OverscanTop = 8;
-		public UInt32 OverscanBottom = 8;
-		public double VideoScale = 2;
+		[MinMax(0, 100)] public UInt32 OverscanLeft = 0;
+		[MinMax(0, 100)] public UInt32 OverscanRight = 0;
+		[MinMax(0, 100)] public UInt32 OverscanTop = 8;
+		[MinMax(0, 100)] public UInt32 OverscanBottom = 8;
+		[MinMax(0.1, 10.0)] public double VideoScale = 2;
 		public VideoFilterType VideoFilter = VideoFilterType.None;
 		public bool UseBilinearInterpolation = false;
 		public VideoAspectRatio AspectRatio = VideoAspectRatio.Auto;
-		public double CustomAspectRatio = 1.0;
+		[MinMax(0.1, 5.0)] public double CustomAspectRatio = 1.0;
 		public bool VerticalSync = false;
 		public bool UseHdPacks = false;
 		public string PaletteData;
 
-		public Int32 Brightness = 0;
-		public Int32 Contrast = 0;
-		public Int32 Hue = 0;
-		public Int32 Saturation = 0;
-		public Int32 ScanlineIntensity = 0;
+		[MinMax(-100, 100)] public Int32 Brightness = 0;
+		[MinMax(-100, 100)] public Int32 Contrast = 0;
+		[MinMax(-100, 100)] public Int32 Hue = 0;
+		[MinMax(-100, 100)] public Int32 Saturation = 0;
+		[MinMax(0, 100)] public Int32 ScanlineIntensity = 0;
 
-		public Int32 NtscArtifacts = 0;
-		public Int32 NtscBleed = 0;
-		public Int32 NtscFringing = 0;
-		public Int32 NtscGamma = 0;
-		public Int32 NtscResolution = 0;
-		public Int32 NtscSharpness = 0;
+		[MinMax(-100, 100)] public Int32 NtscArtifacts = 0;
+		[MinMax(-100, 100)] public Int32 NtscBleed = 0;
+		[MinMax(-100, 100)] public Int32 NtscFringing = 0;
+		[MinMax(-100, 100)] public Int32 NtscGamma = 0;
+		[MinMax(-100, 100)] public Int32 NtscResolution = 0;
+		[MinMax(-100, 100)] public Int32 NtscSharpness = 0;
 		public bool NtscMergeFields = false;
 
-		public Int32 NtscYFilterLength = 0;
-		public Int32 NtscIFilterLength = 50;
-		public Int32 NtscQFilterLength = 50;
+		[MinMax(-50, 400)] public Int32 NtscYFilterLength = 0;
+		[MinMax(0, 400)] public Int32 NtscIFilterLength = 50;
+		[MinMax(0, 400)] public Int32 NtscQFilterLength = 50;
 
 		public bool DisableBackground = false;
 		public bool DisableSprites = false;
