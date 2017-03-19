@@ -74,6 +74,7 @@
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Select Previous Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Save State</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Load State</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleCheats">Enable/Disable Cheat Codes</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

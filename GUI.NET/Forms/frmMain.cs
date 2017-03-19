@@ -444,6 +444,17 @@ namespace Mesen.GUI.Forms
 				case InteropEmu.ConsoleNotificationType.RequestExit:
 					this.BeginInvoke((MethodInvoker)(() => this.Close()));
 					break;
+
+				case InteropEmu.ConsoleNotificationType.ToggleCheats:
+					this.BeginInvoke((MethodInvoker)(() => {
+						ConfigManager.Config.DisableAllCheats = !ConfigManager.Config.DisableAllCheats;
+						if(ConfigManager.Config.DisableAllCheats) {
+							InteropEmu.DisplayMessage("Cheats", "CheatsDisabled");
+						}
+						CheatInfo.ApplyCheats();
+						ConfigManager.ApplyChanges();
+					}));
+					break;
 			}
 
 			if(e.NotificationType != InteropEmu.ConsoleNotificationType.PpuFrameDone) {

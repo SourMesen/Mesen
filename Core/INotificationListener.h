@@ -21,6 +21,7 @@ enum class ConsoleNotificationType
 	DisconnectedFromServer = 15,
 	PpuViewerDisplayFrame = 16,
 	RequestExit = 17,
+	ToggleCheats = 18,
 };
 
 class INotificationListener

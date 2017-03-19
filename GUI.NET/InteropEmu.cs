@@ -607,6 +607,7 @@ namespace Mesen.GUI
 			DisconnectedFromServer = 15,
 			PpuViewerDisplayFrame = 16,
 			RequestExit = 17,
+			ToggleCheats = 18,
 		}
 
 		public enum ControllerType
@@ -1068,6 +1069,8 @@ namespace Mesen.GUI
 		public UInt32 TakeScreenshot;
 		public UInt32 IncreaseSpeed;
 		public UInt32 DecreaseSpeed;
+
+		public UInt32 ToggleCheats;
 	}
 
 	public struct InteropCheatInfo

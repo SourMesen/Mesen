@@ -596,6 +596,7 @@
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Position de sauvegarde précédente</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Sauvegarder l'état à la position courante</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Charger l'état de la position courante</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleCheats">Activer/Désactiver tous les codes</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

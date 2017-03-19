@@ -578,6 +578,7 @@
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">前のクイックセーブスロットを選ぶ</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">選択中スロットにクイックセーブ</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">選択中スロットからクイックロード</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleCheats">チートコードを無効・有効にする</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

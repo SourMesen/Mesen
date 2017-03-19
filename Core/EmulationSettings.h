@@ -249,6 +249,8 @@ struct EmulatorKeyMappings
 	uint32_t TakeScreenshot;
 	uint32_t IncreaseSpeed;
 	uint32_t DecreaseSpeed;
+
+	uint32_t ToggleCheats;
 };
 
 struct EmulatorKeyMappingSet

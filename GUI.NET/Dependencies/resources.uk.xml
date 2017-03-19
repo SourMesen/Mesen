@@ -585,6 +585,7 @@
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Попередній слот для збережень</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleCheats">Enable/Disable Cheat Codes</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
