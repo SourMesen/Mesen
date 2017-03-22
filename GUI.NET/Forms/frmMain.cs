@@ -1415,7 +1415,8 @@ namespace Mesen.GUI.Forms
 				OpenFileDialog ofd = new OpenFileDialog();
 				ofd.SetFilter(ResourceHelper.GetMessage("FilterAll"));
 				if(ofd.ShowDialog() == DialogResult.OK) {
-					if(MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant() == "ca30b50f880eb660a320674ed365ef7a") {
+					string hash = MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant();
+					if(hash == "ca30b50f880eb660a320674ed365ef7a" || hash == "c1a9e9415a6adde3c8563c622d4c9fce") {
 						File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));
 						LoadROM(_currentRomPath, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
 					} else {
