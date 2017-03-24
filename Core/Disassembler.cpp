@@ -224,12 +224,14 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 				uint8_t opCode = source[info.Address];
 				if(IsJump(opCode)) {
 					uint16_t jumpDest = disInfo->GetOpAddr(cpuAddress);
-					AddressTypeInfo addressInfo;
-					_debugger->GetAbsoluteAddressAndType(jumpDest, &addressInfo);
+					if(jumpDest != cpuAddress) {
+						AddressTypeInfo addressInfo;
+						_debugger->GetAbsoluteAddressAndType(jumpDest, &addressInfo);
 
-					const uint8_t jsrCode = 0x20;
-					if(addressInfo.Address >= 0) {
-						BuildCache(addressInfo, jumpDest, opCode == jsrCode);
+						const uint8_t jsrCode = 0x20;
+						if(addressInfo.Address >= 0) {
+							BuildCache(addressInfo, jumpDest, opCode == jsrCode);
+						}
 					}
 				}
 
