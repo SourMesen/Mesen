@@ -47,6 +47,12 @@
 			this.chkShowPpuScrollOverlay = new System.Windows.Forms.CheckBox();
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
+			this.lblNametableIndex = new System.Windows.Forms.Label();
+			this.lblLocation = new System.Windows.Forms.Label();
+			this.txtNametable = new System.Windows.Forms.TextBox();
+			this.txtLocation = new System.Windows.Forms.TextBox();
+			this.lblPpuAddress = new System.Windows.Forms.Label();
+			this.txtPpuAddress = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.grpTileInfo.SuspendLayout();
@@ -90,7 +96,7 @@
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
 			this.grpTileInfo.Location = new System.Drawing.Point(519, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.grpTileInfo.Size = new System.Drawing.Size(175, 238);
+			this.grpTileInfo.Size = new System.Drawing.Size(175, 301);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -100,22 +106,31 @@
 			this.tableLayoutPanel2.ColumnCount = 2;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.txtPaletteAddress, 1, 4);
-			this.tableLayoutPanel2.Controls.Add(this.txtAttributeAddress, 1, 3);
-			this.tableLayoutPanel2.Controls.Add(this.txtAttributeData, 1, 2);
-			this.tableLayoutPanel2.Controls.Add(this.txtTileAddress, 1, 1);
-			this.tableLayoutPanel2.Controls.Add(this.lblTileIndex, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.lblTileAddress, 0, 1);
-			this.tableLayoutPanel2.Controls.Add(this.lblAttributeData, 0, 2);
-			this.tableLayoutPanel2.Controls.Add(this.lblAttributeAddress, 0, 3);
-			this.tableLayoutPanel2.Controls.Add(this.lblPaletteAddress, 0, 4);
-			this.tableLayoutPanel2.Controls.Add(this.lblTile, 0, 5);
-			this.tableLayoutPanel2.Controls.Add(this.txtTileIndex, 1, 0);
-			this.tableLayoutPanel2.Controls.Add(this.picTile, 1, 5);
+			this.tableLayoutPanel2.Controls.Add(this.txtPpuAddress, 1, 0);
+			this.tableLayoutPanel2.Controls.Add(this.txtLocation, 1, 2);
+			this.tableLayoutPanel2.Controls.Add(this.txtNametable, 1, 1);
+			this.tableLayoutPanel2.Controls.Add(this.txtPaletteAddress, 1, 7);
+			this.tableLayoutPanel2.Controls.Add(this.txtAttributeAddress, 1, 6);
+			this.tableLayoutPanel2.Controls.Add(this.txtAttributeData, 1, 5);
+			this.tableLayoutPanel2.Controls.Add(this.txtTileAddress, 1, 4);
+			this.tableLayoutPanel2.Controls.Add(this.lblTileIndex, 0, 3);
+			this.tableLayoutPanel2.Controls.Add(this.lblTileAddress, 0, 4);
+			this.tableLayoutPanel2.Controls.Add(this.lblAttributeData, 0, 5);
+			this.tableLayoutPanel2.Controls.Add(this.lblAttributeAddress, 0, 6);
+			this.tableLayoutPanel2.Controls.Add(this.lblPaletteAddress, 0, 7);
+			this.tableLayoutPanel2.Controls.Add(this.lblTile, 0, 8);
+			this.tableLayoutPanel2.Controls.Add(this.txtTileIndex, 1, 3);
+			this.tableLayoutPanel2.Controls.Add(this.picTile, 1, 8);
+			this.tableLayoutPanel2.Controls.Add(this.lblNametableIndex, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.lblLocation, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.lblPpuAddress, 0, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 7;
+			this.tableLayoutPanel2.RowCount = 10;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -123,12 +138,12 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 205);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 282);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// txtPaletteAddress
 			// 
-			this.txtPaletteAddress.Location = new System.Drawing.Point(99, 107);
+			this.txtPaletteAddress.Location = new System.Drawing.Point(84, 185);
 			this.txtPaletteAddress.Name = "txtPaletteAddress";
 			this.txtPaletteAddress.ReadOnly = true;
 			this.txtPaletteAddress.Size = new System.Drawing.Size(42, 20);
@@ -136,7 +151,7 @@
 			// 
 			// txtAttributeAddress
 			// 
-			this.txtAttributeAddress.Location = new System.Drawing.Point(99, 81);
+			this.txtAttributeAddress.Location = new System.Drawing.Point(84, 159);
 			this.txtAttributeAddress.Name = "txtAttributeAddress";
 			this.txtAttributeAddress.ReadOnly = true;
 			this.txtAttributeAddress.Size = new System.Drawing.Size(42, 20);
@@ -144,7 +159,7 @@
 			// 
 			// txtAttributeData
 			// 
-			this.txtAttributeData.Location = new System.Drawing.Point(99, 55);
+			this.txtAttributeData.Location = new System.Drawing.Point(84, 133);
 			this.txtAttributeData.Name = "txtAttributeData";
 			this.txtAttributeData.ReadOnly = true;
 			this.txtAttributeData.Size = new System.Drawing.Size(26, 20);
@@ -152,7 +167,7 @@
 			// 
 			// txtTileAddress
 			// 
-			this.txtTileAddress.Location = new System.Drawing.Point(99, 29);
+			this.txtTileAddress.Location = new System.Drawing.Point(84, 107);
 			this.txtTileAddress.Name = "txtTileAddress";
 			this.txtTileAddress.ReadOnly = true;
 			this.txtTileAddress.Size = new System.Drawing.Size(42, 20);
@@ -162,7 +177,7 @@
 			// 
 			this.lblTileIndex.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblTileIndex.AutoSize = true;
-			this.lblTileIndex.Location = new System.Drawing.Point(3, 6);
+			this.lblTileIndex.Location = new System.Drawing.Point(3, 84);
 			this.lblTileIndex.Name = "lblTileIndex";
 			this.lblTileIndex.Size = new System.Drawing.Size(56, 13);
 			this.lblTileIndex.TabIndex = 0;
@@ -172,7 +187,7 @@
 			// 
 			this.lblTileAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblTileAddress.AutoSize = true;
-			this.lblTileAddress.Location = new System.Drawing.Point(3, 32);
+			this.lblTileAddress.Location = new System.Drawing.Point(3, 110);
 			this.lblTileAddress.Name = "lblTileAddress";
 			this.lblTileAddress.Size = new System.Drawing.Size(68, 13);
 			this.lblTileAddress.TabIndex = 1;
@@ -182,7 +197,7 @@
 			// 
 			this.lblAttributeData.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblAttributeData.AutoSize = true;
-			this.lblAttributeData.Location = new System.Drawing.Point(3, 58);
+			this.lblAttributeData.Location = new System.Drawing.Point(3, 136);
 			this.lblAttributeData.Name = "lblAttributeData";
 			this.lblAttributeData.Size = new System.Drawing.Size(75, 13);
 			this.lblAttributeData.TabIndex = 2;
@@ -192,9 +207,9 @@
 			// 
 			this.lblAttributeAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblAttributeAddress.AutoSize = true;
-			this.lblAttributeAddress.Location = new System.Drawing.Point(3, 84);
+			this.lblAttributeAddress.Location = new System.Drawing.Point(3, 162);
 			this.lblAttributeAddress.Name = "lblAttributeAddress";
-			this.lblAttributeAddress.Size = new System.Drawing.Size(90, 13);
+			this.lblAttributeAddress.Size = new System.Drawing.Size(74, 13);
 			this.lblAttributeAddress.TabIndex = 3;
 			this.lblAttributeAddress.Text = "Attribute Addr:";
 			// 
@@ -202,9 +217,9 @@
 			// 
 			this.lblPaletteAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblPaletteAddress.AutoSize = true;
-			this.lblPaletteAddress.Location = new System.Drawing.Point(3, 110);
+			this.lblPaletteAddress.Location = new System.Drawing.Point(3, 188);
 			this.lblPaletteAddress.Name = "lblPaletteAddress";
-			this.lblPaletteAddress.Size = new System.Drawing.Size(84, 13);
+			this.lblPaletteAddress.Size = new System.Drawing.Size(68, 13);
 			this.lblPaletteAddress.TabIndex = 4;
 			this.lblPaletteAddress.Text = "Palette Addr:";
 			// 
@@ -212,7 +227,7 @@
 			// 
 			this.lblTile.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblTile.AutoSize = true;
-			this.lblTile.Location = new System.Drawing.Point(3, 159);
+			this.lblTile.Location = new System.Drawing.Point(3, 237);
 			this.lblTile.Name = "lblTile";
 			this.lblTile.Size = new System.Drawing.Size(27, 13);
 			this.lblTile.TabIndex = 6;
@@ -220,7 +235,7 @@
 			// 
 			// txtTileIndex
 			// 
-			this.txtTileIndex.Location = new System.Drawing.Point(99, 3);
+			this.txtTileIndex.Location = new System.Drawing.Point(84, 81);
 			this.txtTileIndex.Name = "txtTileIndex";
 			this.txtTileIndex.ReadOnly = true;
 			this.txtTileIndex.Size = new System.Drawing.Size(26, 20);
@@ -229,7 +244,7 @@
 			// picTile
 			// 
 			this.picTile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picTile.Location = new System.Drawing.Point(99, 133);
+			this.picTile.Location = new System.Drawing.Point(84, 211);
 			this.picTile.Name = "picTile";
 			this.picTile.Size = new System.Drawing.Size(63, 66);
 			this.picTile.TabIndex = 12;
@@ -240,8 +255,8 @@
 			this.flowLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 230);
-			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 307);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(181, 100);
 			this.flowLayoutPanel1.TabIndex = 5;
@@ -278,6 +293,60 @@
 			this.chkShowAttributeGrid.Text = "Show Attribute Grid";
 			this.chkShowAttributeGrid.UseVisualStyleBackColor = true;
 			this.chkShowAttributeGrid.Click += new System.EventHandler(this.chkShowAttributeGrid_Click);
+			// 
+			// lblNametableIndex
+			// 
+			this.lblNametableIndex.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblNametableIndex.AutoSize = true;
+			this.lblNametableIndex.Location = new System.Drawing.Point(3, 32);
+			this.lblNametableIndex.Name = "lblNametableIndex";
+			this.lblNametableIndex.Size = new System.Drawing.Size(61, 13);
+			this.lblNametableIndex.TabIndex = 13;
+			this.lblNametableIndex.Text = "Nametable:";
+			// 
+			// lblLocation
+			// 
+			this.lblLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLocation.AutoSize = true;
+			this.lblLocation.Location = new System.Drawing.Point(3, 58);
+			this.lblLocation.Name = "lblLocation";
+			this.lblLocation.Size = new System.Drawing.Size(51, 13);
+			this.lblLocation.TabIndex = 14;
+			this.lblLocation.Text = "Location:";
+			// 
+			// txtNametable
+			// 
+			this.txtNametable.Location = new System.Drawing.Point(84, 29);
+			this.txtNametable.Name = "txtNametable";
+			this.txtNametable.ReadOnly = true;
+			this.txtNametable.Size = new System.Drawing.Size(26, 20);
+			this.txtNametable.TabIndex = 15;
+			// 
+			// txtLocation
+			// 
+			this.txtLocation.Location = new System.Drawing.Point(84, 55);
+			this.txtLocation.Name = "txtLocation";
+			this.txtLocation.ReadOnly = true;
+			this.txtLocation.Size = new System.Drawing.Size(42, 20);
+			this.txtLocation.TabIndex = 16;
+			// 
+			// lblPpuAddress
+			// 
+			this.lblPpuAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblPpuAddress.AutoSize = true;
+			this.lblPpuAddress.Location = new System.Drawing.Point(3, 6);
+			this.lblPpuAddress.Name = "lblPpuAddress";
+			this.lblPpuAddress.Size = new System.Drawing.Size(57, 13);
+			this.lblPpuAddress.TabIndex = 17;
+			this.lblPpuAddress.Text = "PPU Addr:";
+			// 
+			// txtPpuAddress
+			// 
+			this.txtPpuAddress.Location = new System.Drawing.Point(84, 3);
+			this.txtPpuAddress.Name = "txtPpuAddress";
+			this.txtPpuAddress.ReadOnly = true;
+			this.txtPpuAddress.Size = new System.Drawing.Size(42, 20);
+			this.txtPpuAddress.TabIndex = 18;
 			// 
 			// ctrlNametableViewer
 			// 
@@ -320,5 +389,11 @@
 		private System.Windows.Forms.CheckBox chkShowPpuScrollOverlay;
 		private System.Windows.Forms.CheckBox chkShowTileGrid;
 		private System.Windows.Forms.CheckBox chkShowAttributeGrid;
+		private System.Windows.Forms.TextBox txtLocation;
+		private System.Windows.Forms.TextBox txtNametable;
+		private System.Windows.Forms.Label lblNametableIndex;
+		private System.Windows.Forms.Label lblLocation;
+		private System.Windows.Forms.TextBox txtPpuAddress;
+		private System.Windows.Forms.Label lblPpuAddress;
 	}
 }

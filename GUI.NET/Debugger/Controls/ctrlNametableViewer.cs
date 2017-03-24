@@ -150,15 +150,25 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetState(ref state);
 			int bgAddr = state.PPU.ControlFlags.BackgroundPatternAddr;
 
-			int tileX = Math.Min(e.X / 8, 31);
-			int tileY = Math.Min(e.Y / 8, 29);
+			int tileX = Math.Min(e.X / 8, 63);
+			int tileY = Math.Min(e.Y / 8, 59);
 			int shift = (tileX & 0x02) | ((tileY & 0x02) << 1);
+
+			if(nametableIndex % 2 == 1) {
+				tileX -= 32;
+			}
+			if(nametableIndex >= 2) {
+				tileY -= 30;
+			}
 
 			int tileIndex = _tileData[nametableIndex][tileY*32+tileX];
 			int attributeData = _attributeData[nametableIndex][tileY*32+tileX];
 			int attributeAddr = baseAddress + 960 + ((tileY & 0xFC) << 1) + (tileX >> 2);
 			int paletteBaseAddr = ((attributeData >> shift) & 0x03) << 2;
 
+			this.txtPpuAddress.Text = (baseAddress + tileX + tileY * 32).ToString("X4");
+			this.txtNametable.Text = nametableIndex.ToString();
+			this.txtLocation.Text = tileX.ToString() + ", " + tileY.ToString();
 			this.txtTileIndex.Text = tileIndex.ToString("X2");
 			this.txtTileAddress.Text = (bgAddr + tileIndex * 16).ToString("X4");
 			this.txtAttributeData.Text = attributeData.ToString("X2");
