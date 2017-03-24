@@ -20,6 +20,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private byte[][] _attributeData = new byte[4][];
 		private Bitmap _gridOverlay;
 		private Bitmap _nametableImage = new Bitmap(512, 480);
+		private int _currentPpuAddress = -1;
 
 		public ctrlNametableViewer()
 		{
@@ -42,6 +43,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void RefreshViewer()
 		{
+			_currentPpuAddress = -1;
+
 			int xScroll, yScroll;
 			InteropEmu.DebugGetPpuScroll(out xScroll, out yScroll);
 
@@ -146,10 +149,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 			int baseAddress = 0x2000 + nametableIndex * 0x400;
 
-			DebugState state = new DebugState();
-			InteropEmu.DebugGetState(ref state);
-			int bgAddr = state.PPU.ControlFlags.BackgroundPatternAddr;
-
 			int tileX = Math.Min(e.X / 8, 63);
 			int tileY = Math.Min(e.Y / 8, 59);
 			int shift = (tileX & 0x02) | ((tileY & 0x02) << 1);
@@ -161,12 +160,22 @@ namespace Mesen.GUI.Debugger.Controls
 				tileY -= 30;
 			}
 
+			int ppuAddress = (baseAddress + tileX + tileY * 32);
+			if(_currentPpuAddress == ppuAddress) {
+				return;
+			}
+			_currentPpuAddress = ppuAddress;
+
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+			int bgAddr = state.PPU.ControlFlags.BackgroundPatternAddr;
+			
 			int tileIndex = _tileData[nametableIndex][tileY*32+tileX];
 			int attributeData = _attributeData[nametableIndex][tileY*32+tileX];
 			int attributeAddr = baseAddress + 960 + ((tileY & 0xFC) << 1) + (tileX >> 2);
 			int paletteBaseAddr = ((attributeData >> shift) & 0x03) << 2;
 
-			this.txtPpuAddress.Text = (baseAddress + tileX + tileY * 32).ToString("X4");
+			this.txtPpuAddress.Text = _currentPpuAddress.ToString("X4");
 			this.txtNametable.Text = nametableIndex.ToString();
 			this.txtLocation.Text = tileX.ToString() + ", " + tileY.ToString();
 			this.txtTileIndex.Text = tileIndex.ToString("X2");

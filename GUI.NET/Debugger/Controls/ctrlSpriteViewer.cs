@@ -19,6 +19,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _selectedSprite = -1;
 		private bool _largeSprites;
 		private int _spritePatternAddr;
+		private bool _forceRefresh;
 
 		public ctrlSpriteViewer()
 		{
@@ -42,6 +43,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void RefreshViewer()
 		{
+			_forceRefresh = true;
+
 			GCHandle handle = GCHandle.Alloc(_spritePixelData, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(64, 128, 4*64, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
@@ -114,7 +117,12 @@ namespace Mesen.GUI.Debugger.Controls
 			int tileY = Math.Min(e.Y / 64, 63);
 
 			int ramAddr = ((tileY << 3) + tileX) << 2;
-			
+
+			if(ramAddr / 4 == _selectedSprite && !_forceRefresh) {
+				return;
+			}
+
+			_forceRefresh = false;
 			_selectedSprite = ramAddr / 4;
 
 			int spriteY = _spriteRam[ramAddr];

@@ -33,6 +33,8 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _tilePosX = -1;
 		private int _tilePosY = -1;
 
+		private bool _forceChrRefresh = false;
+
 		public ctrlChrViewer()
 		{
 			InitializeComponent();
@@ -58,8 +60,10 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		public void RefreshViewer()
+		public void RefreshViewer(bool refreshPreview = false)
 		{
+			_forceChrRefresh = true;
+
 			UpdateDropdown();
 
 			PictureBox[] chrBanks = new PictureBox[] { this.picChrBank1, this.picChrBank2 };
@@ -111,7 +115,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 			}
 
-			this.RefreshPreview(_tileIndex, _bottomBank);
+			this.RefreshPreview(_hoverTileIndex >= 0 ? _hoverTileIndex : _tileIndex, _hoverTileIndex >= 0 ? _hoverBottomBank : _bottomBank);
 			this.RefreshPalettePicker();
 		}
 
@@ -182,10 +186,16 @@ namespace Mesen.GUI.Debugger.Controls
 			int tileX = Math.Min(e.X / 16, 15);
 			int tileY = Math.Min(e.Y / 16, 15);
 
-			_hoverBottomBank = sender == this.picChrBank2;
-			_hoverTileIndex = tileY * 16 + tileX;
-			RefreshViewer();
-			RefreshPreview(_hoverTileIndex, _hoverBottomBank);
+			bool bottomBank = sender == this.picChrBank2;
+			int tileIndex = tileY * 16 + tileX;
+
+			if(_forceChrRefresh || bottomBank != _hoverBottomBank || tileIndex != _hoverTileIndex) {
+				_hoverBottomBank = sender == this.picChrBank2;
+				_hoverTileIndex = tileY * 16 + tileX;
+				RefreshViewer();
+				RefreshPreview(_hoverTileIndex, _hoverBottomBank);
+				_forceChrRefresh = false;
+			}
 		}
 
 		private void picChrBank_MouseDown(object sender, MouseEventArgs e)
@@ -242,13 +252,18 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picTile_MouseMove(object sender, MouseEventArgs e)
 		{
-			_tilePosX = Math.Max(0, Math.Min(e.X / 16, 7));
-			_tilePosY = Math.Max(0, Math.Min(e.Y / 16, 7));
+			int x = Math.Max(0, Math.Min(e.X / 16, 7));
+			int y = Math.Max(0, Math.Min(e.Y / 16, 7));
 
-			RefreshPreview(_tileIndex, _bottomBank);
+			if(x != _tilePosX || y != _tilePosY) {
+				_tilePosX = x;
+				_tilePosY = y;
 
-			if(_drawing) {
-				DrawPixel(e.Button == MouseButtons.Left, _tilePosX, _tilePosY);
+				RefreshPreview(_tileIndex, _bottomBank);
+
+				if(_drawing) {
+					DrawPixel(e.Button == MouseButtons.Left, _tilePosX, _tilePosY);
+				}
 			}
 		}
 		

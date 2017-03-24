@@ -16,6 +16,7 @@ namespace Mesen.GUI.Debugger.Controls
 	{
 		private byte[] _paletteRam;
 		private byte[] _palettePixelData;
+		private int _paletteIndex = -1;
 
 		public ctrlPaletteViewer()
 		{
@@ -35,6 +36,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void RefreshViewer()
 		{
+			_paletteIndex = -1;
+
 			GCHandle handle = GCHandle.Alloc(this._palettePixelData, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(4, 8, 4*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
@@ -57,19 +60,24 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			int tileX = Math.Min(e.X / 32, 31);
 			int tileY = Math.Min(e.Y / 32, 31);
+
 			int tileIndex = tileY * 4 + tileX;
 
-			this.txtColor.Text = _paletteRam[tileIndex].ToString("X2");
-			this.txtPaletteAddress.Text = (0x3F00 + tileIndex).ToString("X4");
+			if(tileIndex != _paletteIndex) {
+				_paletteIndex = tileIndex;
 
-			Bitmap tile = new Bitmap(64, 64);
-			using(Graphics g = Graphics.FromImage(tile)) {
-				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.DrawImage(picPalette.Image, new Rectangle(0, 0, 64, 64), new Rectangle(tileX*32, tileY*32, 32, 32), GraphicsUnit.Pixel);
+				this.txtColor.Text = _paletteRam[tileIndex].ToString("X2");
+				this.txtPaletteAddress.Text = (0x3F00 + tileIndex).ToString("X4");
+
+				Bitmap tile = new Bitmap(64, 64);
+				using(Graphics g = Graphics.FromImage(tile)) {
+					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+					g.DrawImage(picPalette.Image, new Rectangle(0, 0, 64, 64), new Rectangle(tileX*32, tileY*32, 32, 32), GraphicsUnit.Pixel);
+				}
+				this.picColor.Image = tile;
 			}
-			this.picColor.Image = tile;
 		}
 	}
 }
