@@ -302,6 +302,7 @@ namespace Mesen.GUI.Debugger
 					string line = _contents[i].ToLowerInvariant();
 					if(line.Contains(this._searchString)) {
 						this.ScrollToLineIndex(i);
+						this.Invalidate();
 						return true;
 					}
 
@@ -407,7 +408,7 @@ namespace Mesen.GUI.Debugger
 		private int GetMargin(Graphics g, bool getExtendedMargin)
 		{
 			int marginWidth = getExtendedMargin && this.ShowContentNotes && this.ShowSingleContentLineNotes ? _marginWidth + _extendedMarginWidth : _marginWidth;
-			return (this.ShowLineNumbers ? (int)(g.MeasureString("".PadLeft(marginWidth, 'W'), this.Font).Width) : 0) - 1;
+			return (this.ShowLineNumbers ? (int)(g.MeasureString("".PadLeft(marginWidth, 'W'), this.Font, int.MaxValue, StringFormat.GenericTypographic).Width) : 0) - 1;
 		}
 
 		public int GetLineIndexAtPosition(int yPos)
@@ -445,7 +446,7 @@ namespace Mesen.GUI.Debugger
 
 					int previousWidth = 0;
 					for(int i = 0, len = text.Length; i < len; i++) {
-						int width = (int)g.MeasureString(text.Substring(0, i+1), this.Font).Width;
+						int width = (int)g.MeasureString(text.Substring(0, i+1), this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
 						if(width >= positionX && previousWidth <= positionX) {
 							charIndex = i;
 							return true;
@@ -642,7 +643,7 @@ namespace Mesen.GUI.Debugger
 		{
 			if(_contents.Length > _maxLineWidthIndex) {
 				using(Graphics g = this.CreateGraphics()) {
-					_maxLineWidth = (LineIndentations != null ? LineIndentations[_maxLineWidthIndex] : 0) + g.MeasureString(GetFullWidthString(_maxLineWidthIndex), this.Font).Width;
+					_maxLineWidth = (LineIndentations != null ? LineIndentations[_maxLineWidthIndex] : 0) + g.MeasureString(GetFullWidthString(_maxLineWidthIndex), this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
 					HorizontalScrollWidth = (int)(Math.Max(0, HorizontalScrollFactor + _maxLineWidth - (this.Width - GetMargin(g, true))) / HorizontalScrollFactor);
 				}
 			}
@@ -780,8 +781,8 @@ namespace Mesen.GUI.Debugger
 			string addressString = this.Addressing?[currentLine];
 			string commentString = this.Comments?[currentLine];
 
-			float codeStringLength = g.MeasureString(codeString, this.Font).Width;
-			float addressStringLength = g.MeasureString(addressString, this.Font).Width;
+			float codeStringLength = g.MeasureString(codeString, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
+			float addressStringLength = g.MeasureString(addressString, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
 
 			if(currentLine >= this.SelectionStart && currentLine <= this.SelectionStart + this.SelectionLength) {
 				//Highlight current line
@@ -828,18 +829,18 @@ namespace Mesen.GUI.Debugger
 				} else {
 					lineNumber = _lineNumberNotes[currentLine];
 				}
-				float width = g.MeasureString(lineNumber, this.Font).Width;
-				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY);
+				float width = g.MeasureString(lineNumber, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
+				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY, StringFormat.GenericTypographic);
 			} else {
 				//Display line number
 				string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
-				float width = g.MeasureString(lineNumber, this.Font).Width;
-				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY);
+				float width = g.MeasureString(lineNumber, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
+				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY, StringFormat.GenericTypographic);
 
 				if(this.ShowLineNumberNotes && !this.ShowSingleLineLineNumberNotes) {
 					//Display line note below line number
-					width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont).Width;
-					g.DrawString(_lineNumberNotes[currentLine], _noteFont, Brushes.Gray, marginLeft - width, positionY+this.Font.Size+3);
+					width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont, int.MaxValue, StringFormat.GenericTypographic).Width;
+					g.DrawString(_lineNumberNotes[currentLine], _noteFont, Brushes.Gray, marginLeft - width, positionY+this.Font.Size+3, StringFormat.GenericTypographic);
 				}
 			}
 		}
@@ -851,25 +852,25 @@ namespace Mesen.GUI.Debugger
 					//Draw block start
 					g.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
 					string text = codeString.Substring(2, codeString.Length - 4);
-					float textLength = g.MeasureString(text, this._noteFont).Width;
-					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY);
+					float textLength = g.MeasureString(text, this._noteFont, int.MaxValue, StringFormat.GenericTypographic).Width;
+					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY, StringFormat.GenericTypographic);
 					g.DrawLine(Pens.Black, marginLeft, positionY+lineHeight-2, marginLeft+this.Width, positionY+lineHeight-2);
 					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 				} else if(codeString.StartsWith("__") && codeString.EndsWith("__")) {
 					//Draw block end
 					g.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
 					string text = codeString.Substring(2, codeString.Length - 4);
-					float textLength = g.MeasureString(text, this._noteFont).Width;
-					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY + 4);
+					float textLength = g.MeasureString(text, this._noteFont, int.MaxValue, StringFormat.GenericTypographic).Width;
+					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY + 4, StringFormat.GenericTypographic);
 					g.DrawLine(Pens.Black, marginLeft, positionY+2, marginLeft+this.Width, positionY+2);
 					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 				} else {
 					//Draw line content
-					g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY);
+					g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY, StringFormat.GenericTypographic);
 
 					if(!string.IsNullOrWhiteSpace(addressString)) {
 						using(Brush addressBrush = new SolidBrush(Color.SteelBlue)) {
-							g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength - 4, positionY);
+							g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength, positionY, StringFormat.GenericTypographic);
 						}
 					}
 
@@ -880,12 +881,12 @@ namespace Mesen.GUI.Debugger
 								//Draw comment left-aligned, next to the margin when there is no code on the line
 								padding = 0;
 							}
-							g.DrawString(commentString.PadLeft(padding+commentString.Length), this.Font, commentBrush, marginLeft, positionY);
+							g.DrawString(commentString.PadLeft(padding+commentString.Length), this.Font, commentBrush, marginLeft, positionY, StringFormat.GenericTypographic);
 						}
 					}
 
 					if(this.ShowContentNotes && !this.ShowSingleContentLineNotes) {
-						g.DrawString(_contentNotes[currentLine], _noteFont, Brushes.Gray, marginLeft, positionY + this.Font.Size+3);
+						g.DrawString(_contentNotes[currentLine], _noteFont, Brushes.Gray, marginLeft, positionY + this.Font.Size+3, StringFormat.GenericTypographic);
 					}
 					this.DrawHighlightedSearchString(g, codeString, marginLeft, positionY);
 					this.DrawHighlightedCompareString(g, codeString, currentLine, marginLeft, positionY);
@@ -946,7 +947,7 @@ namespace Mesen.GUI.Debugger
 						}
 					}
 
-					g.DrawString(sb.ToString(), new Font(this.Font, FontStyle.Bold), Brushes.Red, marginLeft, positionY);
+					g.DrawString(sb.ToString(), new Font(this.Font, FontStyle.Bold), Brushes.Red, marginLeft, positionY, StringFormat.GenericTypographic);
 				}
 			}
 		}
@@ -956,29 +957,27 @@ namespace Mesen.GUI.Debugger
 			int searchIndex;
 			if(!string.IsNullOrWhiteSpace(this._searchString) && (searchIndex = lineText.ToLowerInvariant().IndexOf(this._searchString)) >= 0) {
 				//Draw colored search string
-				int previousSearchIndex = -this._searchString.Length;
 				string lowerCaseText = lineText.ToLowerInvariant();
-				StringBuilder sb = new StringBuilder();
-				StringBuilder sbBackground = new StringBuilder();
-				do {
-					sb.Append(string.Empty.PadLeft(searchIndex - previousSearchIndex - this._searchString.Length));
-					sbBackground.Append(string.Empty.PadLeft(searchIndex - previousSearchIndex - this._searchString.Length));
-					
-					sb.Append(lineText.Substring(searchIndex, this._searchString.Length));
-					sbBackground.Append(string.Empty.PadLeft(this._searchString.Length, '█'));
 
-					previousSearchIndex = searchIndex;
-					searchIndex = lowerCaseText.IndexOf(this._searchString, searchIndex + this._searchString.Length);
-				} while(searchIndex >= 0);
+				Action<bool> draw = (bool forBackground) => {
+					int index = searchIndex;
+					do {
+						string padding = string.Empty.PadLeft(index, 'A');
+						string highlightedText = lineText.Substring(index, this._searchString.Length);
+						index = lowerCaseText.IndexOf(this._searchString, index + this._searchString.Length);
 
-				string drawSearchString = sb.ToString();
-				string drawSearchStringBg = sbBackground.ToString();
+						SizeF size = g.MeasureString(highlightedText, this.Font, int.MaxValue, StringFormat.GenericTypographic);
+						SizeF offsetSize = g.MeasureString(padding, this.Font, int.MaxValue, StringFormat.GenericTypographic);
+						if(forBackground) {
+							g.FillRectangle(Brushes.CornflowerBlue, marginLeft + offsetSize.Width, positionY + 1, size.Width + 1, size.Height - 2);
+						} else {
+							g.DrawString(highlightedText, this.Font, Brushes.White, marginLeft + offsetSize.Width + 1, positionY, StringFormat.GenericTypographic);
+						}
+					} while(index >= 0);
+				};
 
-				using(Brush selBrush = new SolidBrush(Color.White), selBgBrush = new SolidBrush(Color.CornflowerBlue)) {
-					g.DrawString(drawSearchStringBg, this.Font, selBgBrush, marginLeft-1, positionY);
-					g.DrawString(drawSearchStringBg, this.Font, selBgBrush, marginLeft+1, positionY);
-					g.DrawString(drawSearchString, this.Font, selBrush, marginLeft, positionY);
-				}
+				draw(true);
+				draw(false);
 			}
 		}
 
@@ -989,7 +988,7 @@ namespace Mesen.GUI.Debugger
 				this.DrawLineNumber(g, currentLine, regularMargin, positionY);
 			}
 			if(this.ShowContentNotes && this.ShowSingleContentLineNotes) {
-				g.DrawString(_contentNotes[currentLine], this.Font, Brushes.Gray, regularMargin + 6, positionY);
+				g.DrawString(_contentNotes[currentLine], this.Font, Brushes.Gray, regularMargin + 6, positionY, StringFormat.GenericTypographic);
 			}
 
 			//Adjust background color highlights based on number of spaces in front of content
@@ -1004,6 +1003,7 @@ namespace Mesen.GUI.Debugger
 		protected override void OnPaint(PaintEventArgs pe)
 		{
 			int lineHeight = this.LineHeight;
+			pe.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 			pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 			Rectangle rect = this.ClientRectangle;
 			pe.Graphics.FillRectangle(Brushes.White, rect);

@@ -51,6 +51,11 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
+			if(Program.IsMono) {
+				this.panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+				this.panelSearch.Location = new System.Drawing.Point(this.Width - this.panelSearch.Width - 20, -1);
+			}
+
 			this.ctrlTextbox.ShowLineNumbers = true;
 			this.ctrlTextbox.ShowLineInHex = true;
 			this.ctrlTextbox.Font = new System.Drawing.Font(BaseControl.MonospaceFontFamily, 13F);
@@ -62,6 +67,14 @@ namespace Mesen.GUI.Debugger
 			new ToolTip().SetToolTip(picCloseSearch, "Close");
 			new ToolTip().SetToolTip(picSearchNext, "Find Next (F3)");
 			new ToolTip().SetToolTip(picSearchPrevious, "Find Previous (Shift-F3)");
+		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			if(Program.IsMono) {
+				this.panelSearch.Location = new System.Drawing.Point(this.Width - this.panelSearch.Width - 20, -1);
+			}			
 		}
 
 		public float FontSize

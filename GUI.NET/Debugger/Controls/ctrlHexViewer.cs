@@ -143,6 +143,12 @@ namespace Mesen.GUI.Debugger.Controls
 
 			bool focus = !this.panelSearch.Visible;
 			this.panelSearch.Visible = true;
+
+			if(Program.IsMono) {
+				//Mono doesn't resize the TLP properly for some reason when set to autosize
+				this.tlpMain.RowStyles[2].SizeType = System.Windows.Forms.SizeType.Absolute;
+				this.tlpMain.RowStyles[2].Height = 30;
+			}
 			if(focus || forceFocus) {
 				this.cboSearch.Focus();
 				this.cboSearch.SelectAll();
@@ -152,6 +158,11 @@ namespace Mesen.GUI.Debugger.Controls
 		private void CloseSearchBox()
 		{
 			this.panelSearch.Visible = false;
+			if(Program.IsMono) {
+				//Mono doesn't resize the TLP properly for some reason when set to autosize
+				this.tlpMain.RowStyles[2].SizeType = System.Windows.Forms.SizeType.Absolute;
+				this.tlpMain.RowStyles[2].Height = 0;
+			}			
 			this.Focus();
 		}
 

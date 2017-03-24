@@ -35,6 +35,11 @@ namespace Mesen.GUI.Debugger
 		protected override void OnLoad(EventArgs e)
 		{
  			base.OnLoad(e);
+			 
+			if(Program.IsMono) {
+				//This doesn't work in Mono (menu is blank) - hide it for now
+				mnuCode.Visible = false;
+			}
 
 			ctrlConsoleStatus.OnStateChanged += ctrlConsoleStatus_OnStateChanged;
 			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
