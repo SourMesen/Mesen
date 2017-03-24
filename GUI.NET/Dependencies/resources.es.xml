@@ -71,7 +71,7 @@
       <Control ID="mnuSoundRecorder">Grabar sonido</Control>
       <Control ID="mnuWaveRecord">Grabar...</Control>
       <Control ID="mnuWaveStop">Detener</Control>
-      <Control ID="mnuVideoRecorder">Video Recorder</Control>
+      <Control ID="mnuVideoRecorder">Grabadora de Video</Control>
       <Control ID="mnuAviRecord">Grabar...</Control>
       <Control ID="mnuAviStop">Detener</Control>
       <Control ID="mnuCheats">Trucos</Control>
@@ -259,7 +259,7 @@
       <Control ID="trkYFilterLength">Y Filter (Horizontal Blur)</Control>
       <Control ID="trkIFilterLength">I Filter (Horizontal Bleed)</Control>
       <Control ID="trkQFilterLength">Q Filter (Horizontal Bleed)</Control>
-      
+
       <Control ID="grpScanlines">Lineas de escaneo</Control>
       <Control ID="trkScanlines">Lineas de escaneo</Control>
       <Control ID="btnResetPictureSettings">Reiniciar</Control>
@@ -488,13 +488,13 @@
       <Control ID="btnOK">Ok</Control>
       <Control ID="lblSearch">Buscar</Control>
     </Form>
-    <Form ID="frmRecordAvi" Title="Video Recorder">
-      <Control ID="lblAviFile">Save to:</Control>
-      <Control ID="lblCodec">Video Codec:</Control>
-      <Control ID="lblCompressionLevel">Compression Level:</Control>
-      <Control ID="lblLowCompression">low&#13;(fast)</Control>
-      <Control ID="lblHighCompression">high&#13;(slow)</Control>
-      <Control ID="btnBrowse">Browse...</Control>
+    <Form ID="frmRecordAvi" Title="Grabadora de Video">
+      <Control ID="lblAviFile">Guardar como:</Control>
+      <Control ID="lblCodec">Códec de Video:</Control>
+      <Control ID="lblCompressionLevel">Nivel de Compresión:</Control>
+      <Control ID="lblLowCompression">bajo&#13;(rápido)</Control>
+      <Control ID="lblHighCompression">alto&#13;(lento)</Control>
+      <Control ID="btnBrowse">Buscar...</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
@@ -529,7 +529,7 @@
 
     <Message ID="CheatsFound">{0} y {1} trucos de juegos presentes en la base de datos</Message>
     <Message ID="CheatsImported">{0} trucos se importaron para el juego {1}.</Message>
-    
+
     <Message ID="RomsFound">{0} roms encontradas</Message>
 
     <Message ID="RiskyOptionHint">(not recommended)</Message>
@@ -570,7 +570,7 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Reducir velocidad</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Reiniciar</Message>
-    <Message ID="EmulatorShortcutMappings_Exit">Exit</Message>
+    <Message ID="EmulatorShortcutMappings_Exit">Salir</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Captura de pantalla</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Cambiar cara del disco</Message>
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insertar siguiente disco</Message>
@@ -596,7 +596,7 @@
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">Estándar (4:3)</Value>
       <Value ID="Widescreen">Pantalla panorámica (16:9)</Value>
-      <Value ID="Custom">Custom</Value>
+      <Value ID="Custom">Personalizado</Value>
     </Enum>
     <Enum ID="VideoFilterType">
       <Value ID="None">Ninguno</Value>
@@ -682,7 +682,7 @@
       <Value ID="Ukrainian">Українська</Value>
     </Enum>
     <Enum ID="VideoCodec">
-      <Value ID="None">None (Uncompressed)</Value>
+      <Value ID="None">Ninguno (Sin comprimir)</Value>
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
     </Enum>
