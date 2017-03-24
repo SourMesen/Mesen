@@ -245,7 +245,7 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 void Disassembler::InvalidateCache(AddressTypeInfo &info)
 {
 	int32_t addr;
-	vector<shared_ptr<DisassemblyInfo>> *cache;
+	vector<shared_ptr<DisassemblyInfo>> *cache = nullptr;
 
 	switch(info.Type) {
 		case AddressType::InternalRam:
@@ -264,7 +264,7 @@ void Disassembler::InvalidateCache(AddressTypeInfo &info)
 			break;
 	}
 
-	if(addr >= 0) {
+	if(cache && addr >= 0) {
 		for(int i = 1; i <= 2; i++) {
 			int offsetAddr = (int)addr - i;
 			if(offsetAddr >= 0) {

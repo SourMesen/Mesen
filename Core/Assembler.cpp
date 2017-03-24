@@ -112,7 +112,7 @@ AssemblerSpecialCodes Assembler::GetLineData(std::smatch match, LineData &lineDa
 
 	if(!lineData.IsHex) {
 		bool allNumeric = true;
-		for(int i = 0; i < lineData.Operand.size(); i++) {
+		for(size_t i = 0; i < lineData.Operand.size(); i++) {
 			if(lineData.Operand[i] == '-' && i == 0 && lineData.Operand.size() > 1) {
 				//First char is a minus sign, and more characters follow, continue
 				continue;
