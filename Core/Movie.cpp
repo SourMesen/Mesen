@@ -122,7 +122,7 @@ void Movie::StopAll()
 		Save();
 	}
 	if(_playing) {
-		MessageManager::DisplayMessage("Movies", "MovieStopped");
+		MessageManager::DisplayMessage("Movies", "MovieEnded");
 		_playing = false;
 	}
 }
