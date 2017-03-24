@@ -278,8 +278,8 @@ void ControlManager::StreamState(bool saving)
 	NesModel nesModel;
 	ExpansionPortDevice expansionDevice;
 	ConsoleType consoleType;
-	bool hasFourScore;
-	bool useNes101Hvc101Behavior;
+	bool hasFourScore = false;
+	bool useNes101Hvc101Behavior = false;
 	if(saving) {
 		nesModel = Console::GetNesModel();
 		expansionDevice = EmulationSettings::GetExpansionDevice();

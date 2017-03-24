@@ -4,7 +4,7 @@
 #include "MessageManager.h"
 #include "GameClient.h"
 
-enum EmulationFlags : int64_t
+enum EmulationFlags : uint64_t
 {
 	Paused = 0x01,
 	ShowFPS = 0x02,

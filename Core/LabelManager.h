@@ -7,11 +7,21 @@ using std::unordered_map;
 class BaseMapper;
 enum class AddressType;
 
+class AddressHasher
+{
+public:
+	size_t operator()(const uint32_t& addr) const 
+	{
+		//Quick hash for addresses
+		return addr;
+	}
+};
+
 class LabelManager
 {
 private:
-	unordered_map<uint32_t, string, std::function<size_t(const uint32_t &addr)>> _codeLabels = unordered_map<uint32_t, string, std::function<size_t(const uint32_t &addr)>>(10000, [](const uint32_t & addr) { return addr; });
-	unordered_map<uint32_t, string, std::function<size_t(const uint32_t &addr)>> _codeComments = unordered_map<uint32_t, string, std::function<size_t(const uint32_t &addr)>>(10000, [](const uint32_t & addr) { return addr; });
+	unordered_map<uint32_t, string, AddressHasher> _codeLabels;
+	unordered_map<uint32_t, string, AddressHasher> _codeComments;	
 	unordered_map<string, uint32_t> _codeLabelReverseLookup;
 
 	shared_ptr<BaseMapper> _mapper;

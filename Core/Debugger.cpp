@@ -696,7 +696,7 @@ int32_t Debugger::GetFunctionEntryPointCount()
 
 void Debugger::GetFunctionEntryPoints(int32_t* entryPoints, int32_t maxCount)
 {
-	uint32_t i = 0;
+	int32_t i = 0;
 	for(auto itt = _functionEntryPoints.begin(); itt != _functionEntryPoints.end(); itt++) {
 		entryPoints[i] = *itt;
 		i++;

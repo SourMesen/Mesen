@@ -1040,9 +1040,9 @@ void PPU::StreamState(bool saving)
 	ArrayInfo<uint8_t> secondarySpriteRam = { _secondarySpriteRAM, 0x20 };
 	ArrayInfo<int32_t> openBusDecayStamp = { _openBusDecayStamp, 8 };
 	
-	bool disablePpu2004Reads;
-	bool disablePaletteRead;
-	bool disableOamAddrBug;
+	bool disablePpu2004Reads = false;
+	bool disablePaletteRead = false;
+	bool disableOamAddrBug = false;
 
 	if(saving) {
 		disablePpu2004Reads = EmulationSettings::CheckFlag(EmulationFlags::DisablePpu2004Reads);
