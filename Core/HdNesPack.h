@@ -205,13 +205,17 @@ public:
 
 		HdPackTileInfo *hdPackTileInfo = nullptr;
 		HdPackTileInfo *hdPackSpriteInfo = nullptr;		
-		auto hdTile = _tileInfoByKey.find(pixelInfo.Tile.GetKey(false));
-		if(hdTile != _tileInfoByKey.end()) {
-			hdPackTileInfo = hdTile->second;
-		} else {
-			hdTile = _tileInfoByKey.find(pixelInfo.Tile.GetKey(true));
+		
+		std::unordered_map<uint64_t, HdPackTileInfo*>::const_iterator hdTile;
+		if(pixelInfo.Tile.TileIndex != HdPpuTileInfo::NoTile) {
+			hdTile = _tileInfoByKey.find(pixelInfo.Tile.GetKey(false));
 			if(hdTile != _tileInfoByKey.end()) {
 				hdPackTileInfo = hdTile->second;
+			} else {
+				hdTile = _tileInfoByKey.find(pixelInfo.Tile.GetKey(true));
+				if(hdTile != _tileInfoByKey.end()) {
+					hdPackTileInfo = hdTile->second;
+				}
 			}
 		}
 
@@ -247,7 +251,7 @@ public:
 			DrawTile(pixelInfo.Tile, *hdPackTileInfo, outputBuffer, screenWidth, true);
 		}
 		
-		if(hdPackSpriteInfo && !pixelInfo.Sprite.BackgroundPriority) {
+		if(hdPackSpriteInfo && (!pixelInfo.Sprite.BackgroundPriority || pixelInfo.Tile.BgColorIndex == 0)) {
 			DrawTile(pixelInfo.Sprite, *hdPackSpriteInfo, outputBuffer, screenWidth, !hdPackTileInfo);
 		}
 

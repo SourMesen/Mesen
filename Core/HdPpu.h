@@ -27,7 +27,7 @@ protected:
 			}
 			
 			HdPpuPixelInfo &tileInfo = _screenTiles[bufferOffset];
-			if(_lastSprite) {
+			if(_lastSprite && _flags.SpritesEnabled) {
 				tileInfo.Sprite.TileIndex = _memoryManager->ToAbsoluteChrAddress(_lastSprite->TileAddr) / 16;
 				tileInfo.Sprite.PaletteColors = ReadPaletteRAM(_lastSprite->PaletteOffset + 1) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 2) << 8) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 3) << 16);
 				tileInfo.Sprite.OffsetY = _lastSprite->OffsetY;
@@ -43,26 +43,30 @@ protected:
 					backgroundColor = (((_state.LowBitShift << _state.XScroll) & 0x8000) >> 15) | (((_state.HighBitShift << _state.XScroll) & 0x8000) >> 14);
 				}
 
-				paletteOffset = ((_state.XScroll + ((_cycle - 1) & 0x07) < 8) ? _previousTile.PaletteOffset : _currentTile.PaletteOffset);
 				tileInfo.Sprite.BgColorIndex = backgroundColor;
 				if(backgroundColor == 0) {
 					tileInfo.Sprite.BgColor = ReadPaletteRAM(0);
 				} else {
-					tileInfo.Sprite.BgColor = ReadPaletteRAM(paletteOffset + backgroundColor);
+					tileInfo.Sprite.BgColor = ReadPaletteRAM(_lastSprite->PaletteOffset + backgroundColor);
 				}
 			} else {
 				tileInfo.Sprite.TileIndex = HdPpuTileInfo::NoTile;
 			}
-			TileInfo* lastTile = &((_state.XScroll + ((_cycle - 1) & 0x07) < 8) ? _previousTile : _currentTile);
-			tileInfo.Tile.TileIndex = _memoryManager->ToAbsoluteChrAddress(lastTile->TileAddr) / 16;
-			tileInfo.Tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 1) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 3) << 16);
-			tileInfo.Tile.OffsetY = lastTile->OffsetY;
-			tileInfo.Tile.BackgroundPriority = false;
 
-			tileInfo.Tile.OffsetX = (_state.XScroll + ((_cycle - 1) & 0x07)) & 0x07;
-			tileInfo.Tile.HorizontalMirroring = false;
-			tileInfo.Tile.VerticalMirroring = false;
-			tileInfo.Tile.BgColor = ReadPaletteRAM(0);
+			if(_flags.BackgroundEnabled) {
+				TileInfo* lastTile = &((_state.XScroll + ((_cycle - 1) & 0x07) < 8) ? _previousTile : _currentTile);
+				tileInfo.Tile.TileIndex = _memoryManager->ToAbsoluteChrAddress(lastTile->TileAddr) / 16;
+				tileInfo.Tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 1) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 3) << 16);
+				tileInfo.Tile.OffsetY = lastTile->OffsetY;
+				tileInfo.Tile.BackgroundPriority = false;
+
+				tileInfo.Tile.OffsetX = (_state.XScroll + ((_cycle - 1) & 0x07)) & 0x07;
+				tileInfo.Tile.HorizontalMirroring = false;
+				tileInfo.Tile.VerticalMirroring = false;
+				tileInfo.Tile.BgColor = ReadPaletteRAM(0);
+			} else {
+				tileInfo.Tile.TileIndex = HdPpuTileInfo::NoTile;
+			}
 		} else {
 			//"If the current VRAM address points in the range $3F00-$3FFF during forced blanking, the color indicated by this palette location will be shown on screen instead of the backdrop color."
 			pixel = ReadPaletteRAM(_state.VideoRamAddr) | _intensifyColorBits;
