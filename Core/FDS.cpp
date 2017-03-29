@@ -242,6 +242,8 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 		case 0x4024:
 			_writeDataReg = value;
 			_transferComplete = false;
+
+			//Unsure about clearing irq here: FCEUX/Nintendulator don't do this, puNES does.
 			CPU::ClearIRQSource(IRQSource::FdsDisk);
 			break;
 
@@ -254,6 +256,10 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 			//Bit 6 is not used, always 1
 			_diskReady = (value & 0x40) == 0x40;
 			_diskIrqEnabled = (value & 0x80) == 0x80;
+
+			//Writing to $4025 clears IRQ according to FCEUX, puNES & Nintendulator
+			//Fixes issues in some unlicensed games (error $20 at power on)
+			CPU::ClearIRQSource(IRQSource::FdsDisk);
 			break;
 
 		case 0x4026:
