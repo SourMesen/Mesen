@@ -339,6 +339,7 @@ private:
 	static uint32_t _emulationSpeed;
 	static uint32_t _turboSpeed;
 
+	static bool _hasOverclock;
 	static uint32_t _overclockRate;
 	static bool _overclockAdjustApu;
 	static bool _disableOverclocking;
@@ -589,6 +590,7 @@ public:
 			_effectiveOverclockRateSound = _overclockRate * (double)(1 + (double)(_extraScanlinesBeforeNmi + _extraScanlinesAfterNmi) / _ppuScanlineCount);
 			_effectiveOverclockRate = _overclockRate;
 		}
+		_hasOverclock = _effectiveOverclockRate != 100;
 	}
 
 	static void SetPpuScanlineCount(uint32_t scanlineCount)
@@ -606,6 +608,11 @@ public:
 	static uint32_t GetOverclockRateSetting()
 	{
 		return _overclockRate;
+	}
+
+	static bool HasOverclock()
+	{
+		return _hasOverclock;
 	}
 
 	static double GetOverclockRate(bool forApu = false, bool forSoundMixer = false)

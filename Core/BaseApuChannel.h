@@ -71,26 +71,20 @@ public:
 		}
 	}
 
-	virtual void Run(uint32_t targetCycle)
+	void Run(uint32_t targetCycle)
 	{
-		while(_previousCycle < targetCycle) {
-			if(_timer == 0) {
-				Clock();
-				_timer = _period;
-				_previousCycle++;
-			} else {
-				uint32_t cyclesToRun = targetCycle - _previousCycle;
-				uint16_t skipCount = _timer > cyclesToRun ? cyclesToRun : _timer;
-				_timer -= skipCount;
-				_previousCycle += skipCount;
-
-				if(cyclesToRun == 0) {
-					break;
-				}
-			}
+		int32_t cyclesToRun = targetCycle - _previousCycle;
+		while(cyclesToRun > _timer) {
+			cyclesToRun -= _timer + 1;
+			_previousCycle += _timer + 1;
+			Clock();
+			_timer = _period;
 		}
+
+		_timer -= cyclesToRun;
+		_previousCycle = targetCycle;
 	}
-	
+
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		return 0;

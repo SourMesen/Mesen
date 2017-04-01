@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TraceLogger.h"
 #include "DisassemblyInfo.h"
-#include "DebugState.h"
+#include "DebuggerTypes.h"
 #include "Console.h"
 #include "MemoryManager.h"
 #include "LabelManager.h"

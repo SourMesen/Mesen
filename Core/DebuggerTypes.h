@@ -1,4 +1,5 @@
 #pragma once
+#include "Types.h"
 
 enum class DebuggerFlags
 {
@@ -47,4 +48,21 @@ enum class CdlHighlightType
 	None = 0,
 	HighlightUsed = 1,
 	HighlightUnused = 2,
+};
+
+struct PPUDebugState
+{
+	PPUControlFlags ControlFlags;
+	PPUStatusFlags StatusFlags;
+	PPUState State;
+	int32_t Scanline;
+	uint32_t Cycle;
+	uint32_t FrameCount;
+};
+
+struct DebugState
+{
+	State CPU;
+	PPUDebugState PPU;
+	CartridgeState Cartridge;
 };

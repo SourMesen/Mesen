@@ -24,7 +24,7 @@ class APU : public Snapshotable, public IMemoryHandler
 		uint32_t _previousCycle;
 		uint32_t _currentCycle;
 
-		vector<unique_ptr<SquareChannel>> _squareChannel;
+		unique_ptr<SquareChannel> _squareChannel[2];
 		unique_ptr<TriangleChannel> _triangleChannel;
 		unique_ptr<NoiseChannel> _noiseChannel;
 		unique_ptr<DeltaModulationChannel> _deltaModulationChannel;

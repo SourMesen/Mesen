@@ -1,23 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-
-enum class MemoryOperation
-{
-	Read = 1,
-	Write = 2,
-	Any = 3
-};
-
-enum class MemoryOperationType
-{
-	Read = 0,
-	Write = 1,
-	ExecOpCode = 2,
-	ExecOperand = 3,
-	PpuRenderingRead = 4,
-	DummyRead = 5
-};
+#include "Types.h"
 
 class MemoryRanges
 {

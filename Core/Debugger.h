@@ -8,7 +8,6 @@ using std::atomic;
 using std::deque;
 using std::unordered_set;
 
-#include "DebugState.h"
 #include "Breakpoint.h"
 #include "TraceLogger.h"
 #include "../Utilities/SimpleLock.h"
@@ -26,6 +25,7 @@ class MemoryDumper;
 class MemoryAccessCounter;
 class Profiler;
 class CodeRunner;
+class BaseMapper;
 
 class Debugger
 {

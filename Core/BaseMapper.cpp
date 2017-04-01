@@ -5,7 +5,7 @@
 #include "../Utilities/FolderUtilities.h"
 #include "CheatManager.h"
 #include "Debugger.h"
-#include "MemoryDumper.h"
+#include "MemoryManager.h"
 
 void BaseMapper::WriteRegister(uint16_t addr, uint8_t value) { }
 uint8_t BaseMapper::ReadRegister(uint16_t addr) { return 0; }
@@ -243,7 +243,7 @@ void BaseMapper::RemovePpuMemoryMapping(uint16_t startAddr, uint16_t endAddr)
 
 uint8_t BaseMapper::InternalReadRam(uint16_t addr)
 {
-	return _prgPages[addr >> 8] ? _prgPages[addr >> 8][addr & 0xFF] : 0;
+	return _prgPages[addr >> 8] ? _prgPages[addr >> 8][(uint8_t)addr] : 0;
 }
 
 void BaseMapper::SelectPrgPage4x(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
@@ -546,10 +546,10 @@ void BaseMapper::Initialize(RomData &romData)
 
 	for(int i = 0; i <= 0xFF; i++) {
 		//Allow us to map a different page every 256 bytes
-		_prgPages.push_back(nullptr);
-		_prgPageAccessType.push_back(MemoryAccessType::NoAccess);
-		_chrPages.push_back(nullptr);
-		_chrPageAccessType.push_back(MemoryAccessType::NoAccess);
+		_prgPages[i] = nullptr;
+		_prgPageAccessType[i] = MemoryAccessType::NoAccess;
+		_chrPages[i] = nullptr;
+		_chrPageAccessType[i] = MemoryAccessType::NoAccess;
 	}
 
 	if(_chrRomSize == 0) {
@@ -728,18 +728,18 @@ uint8_t BaseMapper::ReadRAM(uint16_t addr)
 	if(_allowRegisterRead && _isReadRegisterAddr[addr]) {
 		return ReadRegister(addr);
 	} else if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Read) {
-		return _prgPages[addr >> 8][addr & 0xFF];
+		return _prgPages[addr >> 8][(uint8_t)addr];
 	} else {
 		//assert(false);
 	}
-	return (addr & 0xFF00) >> 8;
+	return MemoryManager::GetOpenBus();
 }
 
 void BaseMapper::WriteRAM(uint16_t addr, uint8_t value)
 {
 	if(_isWriteRegisterAddr[addr]) {
 		if(_hasBusConflicts) {
-			value &= _prgPages[addr >> 8][addr & 0xFF];
+			value &= _prgPages[addr >> 8][(uint8_t)addr];
 		}
 		WriteRegister(addr, value);
 	} else {
@@ -750,34 +750,17 @@ void BaseMapper::WriteRAM(uint16_t addr, uint8_t value)
 void BaseMapper::WritePrgRam(uint16_t addr, uint8_t value)
 {
 	if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Write) {
-		_prgPages[addr >> 8][addr & 0xFF] = value;
+		_prgPages[addr >> 8][(uint8_t)addr] = value;
 	}
 }
 
-uint8_t BaseMapper::InternalReadVRAM(uint16_t addr)
+void BaseMapper::ProcessVramAccess(uint16_t &addr)
 {
-	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Read) {
-		return _chrPages[addr >> 8][addr & 0xFF];
-	}
-	return 0;
-}
-
-void BaseMapper::InternalWriteVRAM(uint16_t addr, uint8_t value)
-{
-	if(_chrPages[addr >> 8]) {
-		_chrPages[addr >> 8][addr & 0xFF] = value;
-	}
-}
-
-uint8_t BaseMapper::ReadVRAM(uint16_t addr, MemoryOperationType operationType)
-{
-	return InternalReadVRAM(addr);
-}
-
-void BaseMapper::WriteVRAM(uint16_t addr, uint8_t value)
-{
-	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
-		_chrPages[addr >> 8][addr & 0xFF] = value;
+	addr &= 0x3FFF;
+	if(addr >= 0x3000) {
+		//Need to mirror 0x3000 writes to 0x2000, this appears to be how hardware behaves
+		//Required for proper MMC3 IRQ timing in Burai Fighter
+		addr -= 0x1000;
 	}
 }
 
@@ -785,6 +768,43 @@ void BaseMapper::NotifyVRAMAddressChange(uint16_t addr)
 {
 	//This is called when the VRAM addr on the PPU memory bus changes
 	//Used by MMC3/MMC5/etc
+}
+
+uint8_t BaseMapper::InternalReadVRAM(uint16_t addr)
+{
+	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Read) {
+		return _chrPages[addr >> 8][(uint8_t)addr];
+	}
+	return 0;
+}
+
+uint8_t BaseMapper::DebugReadVRAM(uint16_t addr)
+{
+	ProcessVramAccess(addr);
+	return InternalReadVRAM(addr);
+}
+
+uint8_t BaseMapper::MapperReadVRAM(uint16_t addr, MemoryOperationType operationType)
+{
+	return InternalReadVRAM(addr);
+}
+
+void BaseMapper::InternalWriteVRAM(uint16_t addr, uint8_t value)
+{
+	if(_chrPages[addr >> 8]) {
+		_chrPages[addr >> 8][(uint8_t)addr] = value;
+	}
+}
+
+void BaseMapper::WriteVRAM(uint16_t addr, uint8_t value)
+{
+	ProcessVramAccess(addr);
+	Debugger::ProcessVramOperation(MemoryOperationType::Write, addr, value);
+	NotifyVRAMAddressChange(addr);
+
+	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
+		_chrPages[addr >> 8][(uint8_t)addr] = value;
+	}
 }
 
 bool BaseMapper::IsNes20()
@@ -869,7 +889,7 @@ void BaseMapper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, ui
 
 int32_t BaseMapper::ToAbsoluteAddress(uint16_t addr)
 {
-	uint8_t *prgAddr = _prgPages[addr >> 8] + (addr & 0xFF);
+	uint8_t *prgAddr = _prgPages[addr >> 8] + (uint8_t)addr;
 	if(prgAddr >= _prgRom && prgAddr < _prgRom + _prgSize) {
 		return (uint32_t)(prgAddr - _prgRom);
 	}
@@ -878,7 +898,7 @@ int32_t BaseMapper::ToAbsoluteAddress(uint16_t addr)
 
 int32_t BaseMapper::ToAbsoluteWorkRamAddress(uint16_t addr)
 {
-	uint8_t *prgRamAddr = _prgPages[addr >> 8] + (addr & 0xFF);
+	uint8_t *prgRamAddr = _prgPages[addr >> 8] + (uint8_t)addr;
 	if(prgRamAddr >= _workRam && prgRamAddr < _workRam + _workRamSize) {
 		return (uint32_t)(prgRamAddr - _workRam);
 	}
@@ -887,7 +907,7 @@ int32_t BaseMapper::ToAbsoluteWorkRamAddress(uint16_t addr)
 
 int32_t BaseMapper::ToAbsoluteSaveRamAddress(uint16_t addr)
 {
-	uint8_t *prgRamAddr = _prgPages[addr >> 8] + (addr & 0xFF);
+	uint8_t *prgRamAddr = _prgPages[addr >> 8] + (uint8_t)addr;
 	if(prgRamAddr >= _saveRam && prgRamAddr < _saveRam + _saveRamSize) {
 		return (uint32_t)(prgRamAddr - _saveRam);
 	}
@@ -896,7 +916,7 @@ int32_t BaseMapper::ToAbsoluteSaveRamAddress(uint16_t addr)
 
 int32_t BaseMapper::ToAbsoluteChrAddress(uint16_t addr)
 {
-	uint8_t *chrAddr = _chrPages[addr >> 8] + (addr & 0xFF);
+	uint8_t *chrAddr = _chrPages[addr >> 8] + (uint8_t)addr;
 	if(chrAddr >= _chrRom && chrAddr < _chrRom + _chrRomSize) {
 		return (uint32_t)(chrAddr - _chrRom);
 	}

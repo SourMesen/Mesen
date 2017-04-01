@@ -2,11 +2,14 @@
 
 #include "stdafx.h"
 #include "Snapshotable.h"
-#include "MemoryManager.h"
 #include "EmulationSettings.h"
-#include "PpuState.h"
+#include "Types.h"
+#include "DebuggerTypes.h"
+#include "IMemoryHandler.h"
 
 enum class NesModel;
+
+class BaseMapper;
 
 enum PPURegisters
 {
@@ -26,7 +29,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 	protected:
 		static PPU* Instance;
 	
-		MemoryManager *_memoryManager;
+		BaseMapper *_mapper;
 
 		PPUState _state;
 		int32_t _scanline;
@@ -83,9 +86,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		double _cyclesNeeded;
 
-		//Used by NSF player for higher performance
-		bool _simpleMode;
-
 		uint16_t _updateVramAddr;
 		uint8_t _updateVramAddrDelay;
 
@@ -109,10 +109,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint16_t GetNameTableAddr();
 		uint16_t GetAttributeAddr();
 
-		__forceinline void ProcessPreVBlankScanline();
-		void ProcessPrerenderScanline();
-		__forceinline void ProcessVisibleScanline();
-
+		__forceinline void ProcessScanline();
 		__forceinline void CopyOAMData();
 
 		void BeginVBlank();
@@ -122,13 +119,13 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uint8_t spriteX, bool extraSprite);
 		void LoadSpriteTileInfo();
 		void LoadExtraSprites();
-		void ShiftTileRegisters();
+		__forceinline void ShiftTileRegisters();
 		void InitializeShiftRegisters();
 		void LoadNextTile();
 
 		void UpdateMinimumDrawCycles();
 
-		__forceinline uint32_t GetPixelColor(uint32_t &paletteOffset);
+		__forceinline uint32_t GetPixelColor();
 		__forceinline virtual void DrawPixel();
 		virtual void SendFrame();
 
@@ -141,11 +138,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 			}
 		}
 
-		void SetSimpleMode()
-		{
-			_simpleMode = true;
-		}
-
 		void StreamState(bool saving) override;
 
 	public:
@@ -154,7 +146,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		static const uint32_t PixelCount = 256*240;
 		static const uint32_t OutputBufferSize = 256*240*2;
 
-		PPU(MemoryManager *memoryManager);
+		PPU(BaseMapper *mapper);
 		virtual ~PPU();
 
 		void Reset();
@@ -170,7 +162,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 			ranges.AddHandler(MemoryOperation::Write, 0x4014);
 		}
 
-		uint8_t ReadPaletteRAM(uint16_t addr);
+		__forceinline uint8_t ReadPaletteRAM(uint16_t addr);
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
 		uint8_t ReadRAM(uint16_t addr) override;

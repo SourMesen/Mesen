@@ -14,14 +14,14 @@ enum class FrameType
 class ApuFrameCounter : public IMemoryHandler, public Snapshotable
 {
 private:
-	const vector<vector<int32_t>> _stepCyclesNtsc = { { { 7457, 14913, 22371, 29828, 29829, 29830},
-																		 { 7457, 14913, 22371, 29829, 37281, 37282} } };
-	const vector<vector<int32_t>> _stepCyclesPal =  { { { 8313, 16627, 24939, 33252, 33253, 33254},
-																		 { 8313, 16627, 24939, 33253, 41565, 41566} } };
-	const vector<vector<FrameType>> _frameType = { { { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None },
-																	 { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None } } };
+	const int32_t _stepCyclesNtsc[2][6] = { { 7457, 14913, 22371, 29828, 29829, 29830},
+														 { 7457, 14913, 22371, 29829, 37281, 37282} };
+	const int32_t _stepCyclesPal[2][6] =  { { 8313, 16627, 24939, 33252, 33253, 33254},
+														 { 8313, 16627, 24939, 33253, 41565, 41566} };
+	const FrameType _frameType[2][6] = { { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None },
+													 { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None } };
 
-	vector<vector<int32_t>> _stepCycles;
+	int32_t _stepCycles[2][6];
 	NesModel _nesModel;
 	int32_t _nextIrqCycle;
 	int32_t _previousCycle;
@@ -76,19 +76,16 @@ public:
 
 	void SetNesModel(NesModel model)
 	{
-		if(_nesModel != model || _stepCycles.size() == 0) {
+		if(_nesModel != model) {
 			_nesModel = model;
-			_stepCycles.clear();
 			switch(model) {
 				case NesModel::NTSC:
 				case NesModel::Dendy:
-					_stepCycles.push_back(_stepCyclesNtsc[0]);
-					_stepCycles.push_back(_stepCyclesNtsc[1]);
+					memcpy(_stepCycles, _stepCyclesNtsc, sizeof(_stepCycles));
 					break;
 				
 				case NesModel::PAL:
-					_stepCycles.push_back(_stepCyclesPal[0]);
-					_stepCycles.push_back(_stepCyclesPal[1]);
+					memcpy(_stepCycles, _stepCyclesPal, sizeof(_stepCycles));
 					break;
 			}
 		}

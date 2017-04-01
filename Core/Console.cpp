@@ -64,12 +64,12 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 		_memoryManager.reset(new MemoryManager(_mapper));
 		_cpu.reset(new CPU(_memoryManager.get()));
 		if(HdNesPack::HasHdPack(_romFilepath)) {
-			_ppu.reset(new HdPpu(_memoryManager.get()));
+			_ppu.reset(new HdPpu(_mapper.get()));
 		} else if(NsfMapper::GetInstance()) {
 			//Disable most of the PPU for NSFs
-			_ppu.reset(new NsfPpu(_memoryManager.get()));
+			_ppu.reset(new NsfPpu(_mapper.get()));
 		} else {
-			_ppu.reset(new PPU(_memoryManager.get()));
+			_ppu.reset(new PPU(_mapper.get()));
 		}
 		_apu.reset(new APU(_memoryManager.get()));
 

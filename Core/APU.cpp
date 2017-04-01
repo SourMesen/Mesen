@@ -21,8 +21,8 @@ APU::APU(MemoryManager* memoryManager)
 
 	_mixer.reset(new SoundMixer());
 
-	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(AudioChannel::Square1, _mixer.get(), true)));
-	_squareChannel.push_back(unique_ptr<SquareChannel>(new SquareChannel(AudioChannel::Square2, _mixer.get(), false)));
+	_squareChannel[0].reset(new SquareChannel(AudioChannel::Square1, _mixer.get(), true));
+	_squareChannel[1].reset(new SquareChannel(AudioChannel::Square2, _mixer.get(), false));
 	_triangleChannel.reset(new TriangleChannel(AudioChannel::Triangle, _mixer.get()));
 	_noiseChannel.reset(new NoiseChannel(AudioChannel::Noise, _mixer.get()));
 	_deltaModulationChannel.reset(new DeltaModulationChannel(AudioChannel::DMC, _mixer.get(), _memoryManager));

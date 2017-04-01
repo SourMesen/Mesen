@@ -55,7 +55,7 @@ uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 
 		case DebugMemoryType::PpuMemory:
 			for(int i = 0; i <= 0x3FFF; i++) {
-				buffer[i] = _memoryManager->DebugReadVRAM(i);
+				buffer[i] = _mapper->DebugReadVRAM(i);
 			}
 			return 0x4000;
 

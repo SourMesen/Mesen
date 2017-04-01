@@ -7,52 +7,8 @@
 #include "RomLoader.h"
 #include "EmulationSettings.h"
 #include "DebuggerTypes.h"
-
-enum class DebugMemoryType;
-
-enum class PrgMemoryType
-{
-	PrgRom,
-	SaveRam,
-	WorkRam,
-};
-
-enum class ChrMemoryType
-{
-	Default,
-	ChrRom,
-	ChrRam
-};
-
-enum MemoryAccessType
-{
-	Unspecified = -1,
-	NoAccess = 0x00,
-	Read = 0x01,
-	Write = 0x02,
-	ReadWrite = 0x03
-};
-
-enum ChrSpecialPage
-{
-	NametableA = 0x7000,
-	NametableB = 0x7001
-};
-
-struct CartridgeState
-{
-	uint32_t PrgRomSize;
-	uint32_t ChrRomSize;
-	uint32_t ChrRamSize;
-
-	uint32_t PrgPageCount;
-	uint32_t PrgPageSize;
-	uint32_t PrgSelectedPages[64];
-	uint32_t ChrPageCount;
-	uint32_t ChrPageSize;
-	uint32_t ChrSelectedPages[64];
-	uint32_t Nametables[8];
-};
+#include "Debugger.h"
+#include "Types.h"
 
 class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener
 {
@@ -81,10 +37,10 @@ private:
 	uint8_t _isReadRegisterAddr[0x10000];
 	uint8_t _isWriteRegisterAddr[0x10000];
 
-	vector<uint8_t*> _prgPages;
-	vector<uint8_t*> _chrPages;
-	vector<uint8_t> _prgPageAccessType;
-	vector<uint8_t> _chrPageAccessType;
+	uint8_t* _prgPages[0x100];
+	uint8_t* _chrPages[0x100];
+	uint8_t _prgPageAccessType[0x100];
+	uint8_t _chrPageAccessType[0x100];
 
 	uint32_t _prgPageNumbers[64];
 	uint32_t _chrPageNumbers[64];
@@ -213,14 +169,28 @@ public:
 	string GetRomName();
 	RomFormat GetRomFormat();
 
-	uint8_t ReadRAM(uint16_t addr) override;
+	__forceinline uint8_t ReadRAM(uint16_t addr) override;
 	virtual void WriteRAM(uint16_t addr, uint8_t value) override;
 	void WritePrgRam(uint16_t addr, uint8_t value);
 
-	uint8_t InternalReadVRAM(uint16_t addr);	
-	virtual uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type = MemoryOperationType::Read);
+	__forceinline uint8_t InternalReadVRAM(uint16_t addr);
+	__forceinline virtual uint8_t MapperReadVRAM(uint16_t addr, MemoryOperationType operationType);
+	
+	__forceinline uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type = MemoryOperationType::PpuRenderingRead) 
+	{
+		ProcessVramAccess(addr);
+		NotifyVRAMAddressChange(addr);
+
+		uint8_t value = MapperReadVRAM(addr, type);
+		Debugger::ProcessVramOperation(type, addr, value);
+		return value;
+	}
+
 	void InternalWriteVRAM(uint16_t addr, uint8_t value);
 	void WriteVRAM(uint16_t addr, uint8_t value);
+
+	__forceinline void ProcessVramAccess(uint16_t &addr);
+	uint8_t DebugReadVRAM(uint16_t addr);
 
 	static void InitializeRam(void* data, uint32_t length);
 

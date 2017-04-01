@@ -29,6 +29,7 @@ PpuModel EmulationSettings::_ppuModel = PpuModel::Ppu2C02;
 uint32_t EmulationSettings::_emulationSpeed = 100;
 uint32_t EmulationSettings::_turboSpeed = 300;
 
+bool EmulationSettings::_hasOverclock = false;
 uint32_t EmulationSettings::_overclockRate = 100;
 uint32_t EmulationSettings::_extraScanlinesBeforeNmi = 0;
 uint32_t EmulationSettings::_extraScanlinesAfterNmi = 0;

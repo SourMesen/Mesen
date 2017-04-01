@@ -163,49 +163,9 @@ void MemoryManager::DebugWrite(uint16_t addr, uint8_t value)
 	}
 }
 
-void MemoryManager::ProcessVramAccess(uint16_t &addr)
-{
-	addr &= 0x3FFF;
-	if(addr >= 0x3000) {
-		//Need to mirror 0x3000 writes to 0x2000, this appears to be how hardware behaves
-		//Required for proper MMC3 IRQ timing in Burai Fighter
-		addr -= 0x1000;
-	}
-	_mapper->NotifyVRAMAddressChange(addr);
-}
-
-uint8_t MemoryManager::DebugReadVRAM(uint16_t addr)
-{
-	addr &= 0x3FFF;
-	if(addr >= 0x3000) {
-		addr -= 0x1000;
-	}
-	return _mapper->InternalReadVRAM(addr);
-}
-
-uint8_t MemoryManager::ReadVRAM(uint16_t addr, MemoryOperationType operationType)
-{	
-	ProcessVramAccess(addr);
-	uint8_t value = _mapper->ReadVRAM(addr, operationType);
-	Debugger::ProcessVramOperation(operationType, addr, value);
-	return value;
-}
-
-void MemoryManager::WriteVRAM(uint16_t addr, uint8_t value)
-{
-	Debugger::ProcessVramOperation(MemoryOperationType::Write, addr, value);	
-	ProcessVramAccess(addr);
-	_mapper->WriteVRAM(addr, value);
-}
-
 uint32_t MemoryManager::ToAbsolutePrgAddress(uint16_t ramAddr)
 {
 	return _mapper->ToAbsoluteAddress(ramAddr);
-}
-
-uint32_t MemoryManager::ToAbsoluteChrAddress(uint16_t vramAddr)
-{
-	return _mapper->ToAbsoluteChrAddress(vramAddr);
 }
 
 void MemoryManager::StreamState(bool saving)

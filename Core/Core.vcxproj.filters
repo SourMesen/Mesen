@@ -277,9 +277,6 @@
     <ClInclude Include="TraceLogger.h">
       <Filter>Debugger</Filter>
     </ClInclude>
-    <ClInclude Include="DebugState.h">
-      <Filter>Debugger</Filter>
-    </ClInclude>
     <ClInclude Include="SoundMixer.h">
       <Filter>Nes\APU</Filter>
     </ClInclude>
@@ -1117,17 +1114,14 @@
     <ClInclude Include="Eh8813A.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
-    <ClInclude Include="PpuState.h">
-      <Filter>Nes</Filter>
-    </ClInclude>
-    <ClInclude Include="CpuState.h">
-      <Filter>Nes</Filter>
-    </ClInclude>
     <ClInclude Include="Assembler.h">
       <Filter>Debugger</Filter>
     </ClInclude>
     <ClInclude Include="CodeRunner.h">
       <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Nes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

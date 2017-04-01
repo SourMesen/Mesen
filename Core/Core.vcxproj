@@ -442,7 +442,6 @@
     <ClInclude Include="Cc21.h" />
     <ClInclude Include="CodeRunner.h" />
     <ClInclude Include="ColorDreams46.h" />
-    <ClInclude Include="CpuState.h" />
     <ClInclude Include="CrossFeedFilter.h" />
     <ClInclude Include="DaouInfosys.h" />
     <ClInclude Include="DebugBreakHelper.h" />
@@ -452,7 +451,6 @@
     <ClInclude Include="MagicKidGooGoo.h" />
     <ClInclude Include="MemoryAccessCounter.h" />
     <ClInclude Include="MemoryDumper.h" />
-    <ClInclude Include="DebugState.h" />
     <ClInclude Include="DefaultVideoFilter.h" />
     <ClInclude Include="DreamTech01.h" />
     <ClInclude Include="Edu2000.h" />
@@ -591,7 +589,6 @@
     <ClInclude Include="OekaKids.h" />
     <ClInclude Include="OekaKidsTablet.h" />
     <ClInclude Include="PlayerListMessage.h" />
-    <ClInclude Include="PpuState.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="Racermate.h" />
     <ClInclude Include="ReverbFilter.h" />
@@ -715,6 +712,7 @@
     <ClInclude Include="Txc22211B.h" />
     <ClInclude Include="Txc22211C.h" />
     <ClInclude Include="TxSRom.h" />
+    <ClInclude Include="Types.h" />
     <ClInclude Include="UnifBoards.h" />
     <ClInclude Include="UnifLoader.h" />
     <ClInclude Include="Unl43272.h" />

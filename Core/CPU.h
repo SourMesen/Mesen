@@ -5,7 +5,7 @@
 #include "Snapshotable.h"
 #include "TraceLogger.h"
 #include "EmulationSettings.h"
-#include "CpuState.h"
+#include "Types.h"
 
 namespace PSFlags
 {

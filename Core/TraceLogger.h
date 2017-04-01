@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "CpuState.h"
-#include "PpuState.h"
+#include "DebuggerTypes.h"
 
 class DisassemblyInfo;
 class MemoryManager;

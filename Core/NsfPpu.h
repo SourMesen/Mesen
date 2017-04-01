@@ -15,8 +15,8 @@ protected:
 	}
 
 public:
-	NsfPpu(MemoryManager* memoryManager) : PPU(memoryManager)
+	NsfPpu(BaseMapper* mapper) : PPU(mapper)
 	{
-		_simpleMode = true;
+
 	}
 };

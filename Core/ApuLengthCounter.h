@@ -5,7 +5,7 @@
 class ApuLengthCounter : public BaseApuChannel
 {
 private:
-	const vector<uint8_t> _lcLookupTable = { { 10, 254, 20, 2, 40, 4, 80, 6, 160, 8, 60, 10, 14, 12, 26, 14, 12, 16, 24, 18, 48, 20, 96, 22, 192, 24, 72, 26, 16, 28, 32, 30 } };
+	uint8_t _lcLookupTable[32] = { 10, 254, 20, 2, 40, 4, 80, 6, 160, 8, 60, 10, 14, 12, 26, 14, 12, 16, 24, 18, 48, 20, 96, 22, 192, 24, 72, 26, 16, 28, 32, 30 };
 	bool _enabled = false;
 	bool _newHaltValue;
 	static bool _needToRun;
@@ -43,7 +43,9 @@ public:
 	
 	static bool NeedToRun()
 	{
-		return ApuLengthCounter::_needToRun;
+		bool needToRun = ApuLengthCounter::_needToRun;
+		ApuLengthCounter::_needToRun = false;
+		return needToRun;
 	}
 
 	virtual void Reset(bool softReset) override
@@ -83,14 +85,7 @@ public:
 	{
 		return _lengthCounter > 0;
 	}
-
-	virtual void Run(uint32_t targetCycle) override
-	{
-		ApuLengthCounter::_needToRun = false;
-		_lengthCounterHalt = _newHaltValue;
-		BaseApuChannel::Run(targetCycle);
-	}
-
+	
 	void ReloadCounter()
 	{
 		if(_lengthCounterReloadValue) {
@@ -99,6 +94,8 @@ public:
 			}
 			_lengthCounterReloadValue = 0;
 		}
+
+		_lengthCounterHalt = _newHaltValue;
 	}
 
 	void TickLengthCounter()

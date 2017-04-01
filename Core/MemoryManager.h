@@ -41,7 +41,6 @@ class MemoryManager: public Snapshotable
 
 		uint8_t DebugRead(uint16_t addr, bool disableRegisterReads = true);
 		uint16_t DebugReadWord(uint16_t addr);
-		uint8_t DebugReadVRAM(uint16_t addr);
 		void DebugWrite(uint16_t addr, uint8_t value);
 
 		uint8_t* GetInternalRAM();
@@ -51,12 +50,7 @@ class MemoryManager: public Snapshotable
 		uint8_t Read(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read);
 		void Write(uint16_t addr, uint8_t value);
 
-		void ProcessVramAccess(uint16_t &addr);
-		uint8_t ReadVRAM(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::PpuRenderingRead);
-		void WriteVRAM(uint16_t addr, uint8_t value);
-
 		uint32_t ToAbsolutePrgAddress(uint16_t ramAddr);
-		uint32_t ToAbsoluteChrAddress(uint16_t vramAddr);
 
 		static uint8_t GetOpenBus(uint8_t mask = 0xFF);
 };

@@ -7,12 +7,12 @@
 class SquareChannel : public ApuEnvelope
 {
 private:
-	const vector<vector<uint8_t>> _dutySequences = { {
+	const uint8_t _dutySequences[4][8] = {
 		{ 0, 0, 0, 0, 0, 0, 0, 1 },
 		{ 0, 0, 0, 0, 0, 0, 1, 1 },
 		{ 0, 0, 0, 0, 1, 1, 1, 1 },
 		{ 1, 1, 1, 1, 1, 1, 0, 0 }
-	} };
+	};
 
 	bool _isChannel1 = false;
 

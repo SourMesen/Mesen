@@ -18,17 +18,12 @@ protected:
 		_lastSprite = nullptr;
 
 		if(IsRenderingEnabled() || ((_state.VideoRamAddr & 0x3F00) != 0x3F00)) {
-			uint32_t paletteOffset;
-			uint32_t color = GetPixelColor(paletteOffset);
-			if(color == 0) {
-				pixel = ReadPaletteRAM(0) | _intensifyColorBits;
-			} else {
-				pixel = ReadPaletteRAM(paletteOffset + color) | _intensifyColorBits;
-			}
+			uint32_t color = GetPixelColor();
+			pixel = (_paletteRAM[color & 0x03 ? color : 0] & _paletteRamMask) | _intensifyColorBits;
 			
 			HdPpuPixelInfo &tileInfo = _screenTiles[bufferOffset];
 			if(_lastSprite && _flags.SpritesEnabled) {
-				tileInfo.Sprite.TileIndex = _memoryManager->ToAbsoluteChrAddress(_lastSprite->TileAddr) / 16;
+				tileInfo.Sprite.TileIndex = _mapper->ToAbsoluteChrAddress(_lastSprite->TileAddr) / 16;
 				tileInfo.Sprite.PaletteColors = ReadPaletteRAM(_lastSprite->PaletteOffset + 1) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 2) << 8) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 3) << 16);
 				tileInfo.Sprite.OffsetY = _lastSprite->OffsetY;
 
@@ -55,7 +50,7 @@ protected:
 
 			if(_flags.BackgroundEnabled) {
 				TileInfo* lastTile = &((_state.XScroll + ((_cycle - 1) & 0x07) < 8) ? _previousTile : _currentTile);
-				tileInfo.Tile.TileIndex = _memoryManager->ToAbsoluteChrAddress(lastTile->TileAddr) / 16;
+				tileInfo.Tile.TileIndex = _mapper->ToAbsoluteChrAddress(lastTile->TileAddr) / 16;
 				tileInfo.Tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 1) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 3) << 16);
 				tileInfo.Tile.OffsetY = lastTile->OffsetY;
 				tileInfo.Tile.BackgroundPriority = false;
@@ -76,7 +71,7 @@ protected:
 	}
 
 public:
-	HdPpu(MemoryManager* memoryManager) : PPU(memoryManager)
+	HdPpu(BaseMapper* mapper) : PPU(mapper)
 	{
 		_screenTileBuffers[0] = new HdPpuPixelInfo[256 * 240];
 		_screenTileBuffers[1] = new HdPpuPixelInfo[256 * 240];

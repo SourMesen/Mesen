@@ -343,12 +343,12 @@ protected:
 		}
 	}
 
-	uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type) override
+	uint8_t MapperReadVRAM(uint16_t addr, MemoryOperationType type) override
 	{
 		if(_irqSource == JyIrqSource::PpuRead && type == MemoryOperationType::PpuRenderingRead) {
 			TickIrqCounter();
 		}
-		return BaseMapper::ReadVRAM(addr, type);
+		return BaseMapper::MapperReadVRAM(addr, type);
 	}
 
 	void NotifyVRAMAddressChange(uint16_t addr) override

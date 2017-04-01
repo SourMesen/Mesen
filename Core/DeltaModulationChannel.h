@@ -8,8 +8,8 @@ class MemoryManager;
 class DeltaModulationChannel : public BaseApuChannel
 {
 private:	
-	const vector<uint16_t> _dmcPeriodLookupTableNtsc = { { 428, 380, 340, 320, 286, 254, 226, 214, 190, 160, 142, 128, 106,  84,  72,  54 } };
-	const vector<uint16_t> _dmcPeriodLookupTablePal = { { 398, 354, 316, 298, 276, 236, 210, 198, 176, 148, 132, 118,  98,  78,  66,  50 } };
+	const uint16_t _dmcPeriodLookupTableNtsc[16] = { 428, 380, 340, 320, 286, 254, 226, 214, 190, 160, 142, 128, 106,  84,  72,  54 };
+	const uint16_t _dmcPeriodLookupTablePal[16] = { 398, 354, 316, 298, 276, 236, 210, 198, 176, 148, 132, 118,  98,  78,  66,  50 };
 	static DeltaModulationChannel *Instance;
 
 	MemoryManager *_memoryManager = nullptr;

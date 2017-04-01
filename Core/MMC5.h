@@ -366,7 +366,7 @@ protected:
 		BaseMapper::WriteRAM(addr, value);
 	}
 
-	virtual uint8_t ReadVRAM(uint16_t addr, MemoryOperationType memoryOperationType) override
+	virtual uint8_t MapperReadVRAM(uint16_t addr, MemoryOperationType memoryOperationType) override
 	{
 		if(_extendedRamMode <= 1 && _verticalSplitEnabled && memoryOperationType == MemoryOperationType::PpuRenderingRead) {
 			uint32_t cycle = PPU::GetCurrentCycle();
@@ -446,7 +446,7 @@ protected:
 				}
 			}
 		}
-		return BaseMapper::ReadVRAM(addr, memoryOperationType);
+		return BaseMapper::MapperReadVRAM(addr, memoryOperationType);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
