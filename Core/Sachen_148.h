@@ -7,6 +7,7 @@ class Sachen_148 : public BaseMapper
 protected:
 	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
 	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
+	virtual bool HasBusConflicts() override { return true; }
 
 	void InitMapper() override
 	{

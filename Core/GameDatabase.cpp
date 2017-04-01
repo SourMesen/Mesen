@@ -6,6 +6,7 @@
 #include "../Utilities/StringUtilities.h"
 #include "GameDatabase.h"
 #include "EmulationSettings.h"
+#include "UnifLoader.h"
 
 std::unordered_map<uint32_t, GameInfo> GameDatabase::_gameDatabase;
 
@@ -37,7 +38,7 @@ void GameDatabase::InitDatabase()
 					values[2],
 					values[3],
 					values[4],
-					ToInt<uint8_t>(values[5]),
+					(uint16_t)ToInt<uint32_t>(values[5]),
 					ToInt<uint32_t>(values[6]),
 					ToInt<uint32_t>(values[7]),
 					ToInt<uint32_t>(values[8]),
@@ -48,6 +49,10 @@ void GameDatabase::InitDatabase()
 					values[13],
 					values[14]
 				};
+
+				if(gameInfo.MapperID == 65000) {
+					gameInfo.MapperID = UnifLoader::GetMapperID(gameInfo.Board);
+				}
 
 				if(!gameInfo.InputType.empty() && gameInfo.InputType[gameInfo.InputType.size() - 1] == '\r') {
 					gameInfo.InputType = gameInfo.InputType.substr(0, gameInfo.InputType.size() - 1);
@@ -309,8 +314,10 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		MessageManager::Log("[DB] Game found in database");
 		info = result->second;
 
+		if(info.MapperID < UnifBoards::UnknownBoard) {
+			MessageManager::Log("[DB] Mapper: " + std::to_string(info.MapperID) + "  Sub: " + std::to_string(GetSubMapper(info)));
+		}
 
-		MessageManager::Log("[DB] Mapper: " + std::to_string(info.MapperID) + "  Sub: " + std::to_string(GetSubMapper(info)));
 		MessageManager::Log("[DB] System : " + info.System);
 		if(!info.Board.empty()) {
 			MessageManager::Log("[DB] Board: " + info.Board);

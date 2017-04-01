@@ -816,6 +816,7 @@
     <ClCompile Include="StereoDelayFilter.cpp" />
     <ClCompile Include="StereoPanningFilter.cpp" />
     <ClCompile Include="TraceLogger.cpp" />
+    <ClCompile Include="UnifLoader.cpp" />
     <ClCompile Include="VideoHud.cpp" />
     <ClCompile Include="VideoRenderer.cpp" />
     <ClCompile Include="VideoDecoder.cpp" />
