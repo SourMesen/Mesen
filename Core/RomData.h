@@ -30,6 +30,13 @@ enum class GameSystem
 	Unknown,
 };
 
+enum class BusConflictType
+{
+	Default = 0,
+	Yes,
+	No
+};
+
 struct NESHeader
 {
 	/*
@@ -257,6 +264,7 @@ struct GameInfo
 	bool HasBattery;
 	string Mirroring;
 	string InputType;
+	string BusConflicts;
 };
 
 enum class RomFormat
@@ -279,6 +287,7 @@ struct RomData
 	bool HasBattery = false;
 	bool HasTrainer = false;
 	MirroringType Mirroring = MirroringType::Horizontal;
+	BusConflictType BusConflicts = BusConflictType::Default;
 	
 	int32_t ChrRamSize = -1;
 	int32_t SaveChrRamSize = -1;

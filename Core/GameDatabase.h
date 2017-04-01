@@ -9,8 +9,8 @@ private:
 	static std::unordered_map<uint32_t, GameInfo> _gameDatabase;
 
 	template<typename T> static T ToInt(string value);
-	static vector<string> split(const string &s, char delim);
 
+	static BusConflictType GetBusConflictType(string busConflictSetting);
 	static GameSystem GetGameSystem(string system);
 	static uint8_t GetSubMapper(GameInfo &info);
 

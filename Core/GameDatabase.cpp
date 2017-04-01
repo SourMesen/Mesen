@@ -3,6 +3,7 @@
 #include "MessageManager.h"
 #include "../Utilities/CRC32.h"
 #include "../Utilities/FolderUtilities.h"
+#include "../Utilities/StringUtilities.h"
 #include "GameDatabase.h"
 #include "EmulationSettings.h"
 
@@ -17,17 +18,6 @@ T GameDatabase::ToInt(string value)
 	return std::stoi(value);
 }
 
-vector<string> GameDatabase::split(const string &s, char delim)
-{
-	vector<string> tokens;
-	std::stringstream ss(s);
-	std::string item;
-	while(std::getline(ss, item, delim)) {
-		tokens.push_back(item);
-	}
-	return tokens;
-}
-
 void GameDatabase::InitDatabase()
 {
 	if(_gameDatabase.size() == 0) {
@@ -39,8 +29,8 @@ void GameDatabase::InitDatabase()
 			if(lineContent.empty() || lineContent[0] == '#') {
 				continue;
 			}
-			vector<string> values = split(lineContent, ',');
-			if(values.size() >= 13) {
+			vector<string> values = StringUtilities::Split(lineContent, ',');
+			if(values.size() >= 15) {
 				GameInfo gameInfo{
 					(uint32_t)std::stoll(values[0], nullptr, 16),
 					values[1],
@@ -55,7 +45,8 @@ void GameDatabase::InitDatabase()
 					ToInt<uint32_t>(values[10]),
 					ToInt<uint32_t>(values[11]) == 0 ? false : true,
 					values[12],
-					values.size() > 13 ? values[13] : ""
+					values[13],
+					values[14]
 				};
 
 				if(!gameInfo.InputType.empty() && gameInfo.InputType[gameInfo.InputType.size() - 1] == '\r') {
@@ -69,6 +60,16 @@ void GameDatabase::InitDatabase()
 		MessageManager::Log();
 		MessageManager::Log("[DB] Initialized - " + std::to_string(_gameDatabase.size()) + " games in DB");		
 	}
+}
+
+BusConflictType GameDatabase::GetBusConflictType(string busConflictSetting)
+{
+	if(busConflictSetting.compare("Y") == 0) {
+		return BusConflictType::Yes;
+	} else if(busConflictSetting.compare("N") == 0) {
+		return BusConflictType::No;
+	}
+	return BusConflictType::Default;
 }
 
 GameSystem GameDatabase::GetGameSystem(string system)
@@ -317,6 +318,9 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		if(!info.Chip.empty()) {
 			MessageManager::Log("[DB] Chip: " + info.Chip);
 		}
+		if(!info.BusConflicts.empty()) {
+			MessageManager::Log("[DB] Bus conflicts: " + info.BusConflicts);
+		}
 
 		if(!info.Mirroring.empty()) {
 			MessageManager::Log("[DB] Mirroring: " + string(info.Mirroring.compare("h") == 0 ? "Horizontal" : "Vertical"));
@@ -355,6 +359,7 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 	romData.MapperID = info.MapperID;
 	romData.System = GetGameSystem(info.System);
 	romData.SubMapperID = GetSubMapper(info);
+	romData.BusConflicts = GetBusConflictType(info.BusConflicts);
 	romData.ChrRamSize = info.ChrRamSize * 1024;
 	if(info.WorkRamSize > 0) {
 		romData.WorkRamSize = info.WorkRamSize * 1024;

@@ -527,7 +527,11 @@ void BaseMapper::Initialize(RomData &romData)
 	_gameSystem = romData.System;
 	_crc32 = romData.Crc32;
 	_prgCrc32 = romData.PrgCrc32;
-	_hasBusConflicts = HasBusConflicts();
+	switch(romData.BusConflicts) {
+		case BusConflictType::Default: _hasBusConflicts = HasBusConflicts(); break;
+		case BusConflictType::Yes: _hasBusConflicts = true; break;
+		case BusConflictType::No: _hasBusConflicts = false; break;
+	}	
 
 	_saveRam = new uint8_t[_saveRamSize];
 	_workRam = new uint8_t[_workRamSize];
