@@ -15,20 +15,11 @@ private:
 		//"$5001 has no effect. The MMC5 pulse channels will not sweep, as they have no sweep unit."
 	}
 
-	bool IsMuted() override
-	{
-		//"Frequency values less than 8 do not silence the MMC5 pulse channels; they can output ultrasonic frequencies."
-		return false;
-	}
 public:
 	MMC5Square() : SquareChannel(AudioChannel::MMC5, nullptr, false)
 	{
 		_currentOutput = 0;
-	}
-	
-	virtual void AddOutput(int8_t output) override
-	{
-		_currentOutput = output;
+		_isMmc5Square = true;
 	}
 
 	int8_t GetOutput()
@@ -38,8 +29,14 @@ public:
 
 	void RunChannel()
 	{
-		Run(1);
-		EndFrame();
+		if(_timer == 0) {
+			_dutyPos = (_dutyPos - 1) & 0x07;
+			//"Frequency values less than 8 do not silence the MMC5 pulse channels; they can output ultrasonic frequencies."
+			_currentOutput = _dutySequences[_duty][_dutyPos] * GetVolume();
+			_timer = _period;
+		} else {
+			_timer--;
+		}
 	}
 };
 
@@ -80,8 +77,10 @@ protected:
 		}
 
 		int16_t summedOutput = (_square1.GetOutput() + _square2.GetOutput()) * 4 + _pcmOutput;
-		APU::AddExpansionAudioDelta(AudioChannel::MMC5, summedOutput - _lastOutput);
-		_lastOutput = summedOutput;
+		if(summedOutput != _lastOutput) {
+			APU::AddExpansionAudioDelta(AudioChannel::MMC5, summedOutput - _lastOutput);
+			_lastOutput = summedOutput;
+		}
 
 		_square1.ReloadCounter();
 		_square2.ReloadCounter();

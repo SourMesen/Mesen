@@ -6,7 +6,7 @@
 
 class SquareChannel : public ApuEnvelope
 {
-private:
+protected:
 	const uint8_t _dutySequences[4][8] = {
 		{ 0, 0, 0, 0, 0, 0, 0, 1 },
 		{ 0, 0, 0, 0, 0, 0, 1, 1 },
@@ -15,6 +15,7 @@ private:
 	};
 
 	bool _isChannel1 = false;
+	bool _isMmc5Square = false;
 
 	uint8_t _duty = 0;
 	uint8_t _dutyPos = 0;
@@ -28,7 +29,7 @@ private:
 	uint32_t _sweepTargetPeriod = 0;
 	uint16_t _realPeriod = 0;
 	
-	virtual bool IsMuted()
+	bool IsMuted()
 	{
 		//A period of t < 8, either set explicitly or via a sweep period update, silences the corresponding pulse channel.
 		return _realPeriod < 8 || (!_sweepNegate && _sweepTargetPeriod > 0x7FF);
@@ -161,8 +162,10 @@ public:
 				ResetEnvelope();
 				break;
 		}
-
-		UpdateOutput();
+		
+		if(!_isMmc5Square) {
+			UpdateOutput();
+		}
 	}
 
 	void TickSweep()

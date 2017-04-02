@@ -41,6 +41,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		uint8_t _spriteRAM[0x100];
 		uint8_t _secondarySpriteRAM[0x20];
+		bool _hasSprite[257];
 
 		uint16_t *_currentOutputBuffer;
 		uint16_t *_outputBuffers[2];

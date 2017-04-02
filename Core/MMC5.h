@@ -171,42 +171,40 @@ private:
 
 	void ProcessCpuClock() override
 	{
-		if(!PPU::GetControlFlags().BackgroundEnabled && !PPU::GetControlFlags().SpritesEnabled) {
-			_ppuInFrame = false;
-		}
-
 		_audio.Clock();
 	}
 
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
-		if(_spriteFetch != IsSpriteFetch() || _largeSprites != PPU::GetControlFlags().LargeSprites) {
-			if(PPU::GetControlFlags().BackgroundEnabled || PPU::GetControlFlags().SpritesEnabled) {
+		if(PPU::GetControlFlags().BackgroundEnabled || PPU::GetControlFlags().SpritesEnabled) {
+			if(_spriteFetch != IsSpriteFetch() || _largeSprites != PPU::GetControlFlags().LargeSprites) {
 				UpdateChrBanks();
 			}
-		}
 
-		int16_t currentScanline = PPU::GetCurrentScanline();
-		if(currentScanline != _previousScanline) {
-			if(currentScanline >= 239 || currentScanline < 0) {
-				_ppuInFrame = false;
-			} else {
-				if(!_ppuInFrame) {
-					_ppuInFrame = true;
-					_irqCounter = 0;
-					_irqPending = false;
-					CPU::ClearIRQSource(IRQSource::External);
+			int16_t currentScanline = PPU::GetCurrentScanline();
+			if(currentScanline != _previousScanline) {
+				if(currentScanline >= 239 || currentScanline < 0) {
+					_ppuInFrame = false;
 				} else {
-					_irqCounter++;
-					if(_irqCounter == _irqCounterTarget) {
-						_irqPending = true;
-						if(_irqEnabled) {
-							CPU::SetIRQSource(IRQSource::External);
+					if(!_ppuInFrame) {
+						_ppuInFrame = true;
+						_irqCounter = 0;
+						_irqPending = false;
+						CPU::ClearIRQSource(IRQSource::External);
+					} else {
+						_irqCounter++;
+						if(_irqCounter == _irqCounterTarget) {
+							_irqPending = true;
+							if(_irqEnabled) {
+								CPU::SetIRQSource(IRQSource::External);
+							}
 						}
 					}
 				}
+				_previousScanline = currentScanline;
 			}
-			_previousScanline = currentScanline;
+		} else {
+			_ppuInFrame = false;
 		}
 	}
 

@@ -52,6 +52,8 @@ private:
 	uint32_t _sampleRate;
 	uint32_t _clockRate;
 
+	bool _hasPanning;
+
 	double GetChannelOutput(AudioChannel channel, bool forRightChannel);
 	int16_t GetOutputVolume(bool forRightChannel);
 	void EndFrame(uint32_t time);

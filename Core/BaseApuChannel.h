@@ -90,7 +90,7 @@ public:
 		return 0;
 	}
 
-	virtual void AddOutput(int8_t output)
+	void AddOutput(int8_t output)
 	{
 		if(output != _lastOutput) {
 			_mixer->AddDelta(_channel, _previousCycle, output - _lastOutput);

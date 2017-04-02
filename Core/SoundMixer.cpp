@@ -84,7 +84,13 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	EndFrame(time);
 
 	size_t sampleCount = blip_read_samples(_blipBufLeft, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 1);
-	blip_read_samples(_blipBufRight, _outputBuffer + 1, SoundMixer::MaxSamplesPerFrame, 1);
+	if(_hasPanning) {
+		blip_read_samples(_blipBufRight, _outputBuffer + 1, SoundMixer::MaxSamplesPerFrame, 1);
+	} else {
+		for(int i = 0; i < sampleCount * 2; i+=2) {
+			_outputBuffer[i + 1] = _outputBuffer[i];
+		}
+	}
 
 	//Apply low pass filter/volume reduction when in background (based on options)
 	if(!VideoDecoder::GetInstance()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled) && EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
@@ -129,8 +135,9 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		//Update sample rate for next frame if setting changed
 		_sampleRate = EmulationSettings::GetSampleRate();
 		UpdateRates(true);
+	} else {
+		UpdateRates(false);
 	}
-	UpdateRates(false);
 }
 
 void SoundMixer::SetNesModel(NesModel model)
@@ -151,6 +158,20 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 		blip_set_rates(_blipBufLeft, _clockRate, _sampleRate);
 		blip_set_rates(_blipBufRight, _clockRate, _sampleRate);
 	}
+
+	bool hasPanning = false;
+	for(uint32_t i = 0; i < MaxChannelCount; i++) {
+		_volumes[i] = EmulationSettings::GetChannelVolume((AudioChannel)i);
+		_panning[i] = EmulationSettings::GetChannelPanning((AudioChannel)i);
+		if(_panning[i] != 1.0) {
+			if(_hasPanning) {
+				blip_clear(_blipBufLeft);
+				blip_clear(_blipBufRight);
+			}
+			_hasPanning = true;
+		}
+	}
+	_hasPanning = hasPanning;
 }
 
 double SoundMixer::GetChannelOutput(AudioChannel channel, bool forRightChannel)
@@ -167,8 +188,8 @@ int16_t SoundMixer::GetOutputVolume(bool forRightChannel)
 	double squareOutput = GetChannelOutput(AudioChannel::Square1, forRightChannel) + GetChannelOutput(AudioChannel::Square2, forRightChannel);
 	double tndOutput = 3 * GetChannelOutput(AudioChannel::Triangle, forRightChannel) + 2 * GetChannelOutput(AudioChannel::Noise, forRightChannel) + GetChannelOutput(AudioChannel::DMC, forRightChannel);
 
-	uint16_t squareVolume = (uint16_t)(95.52 / (8128.0 / squareOutput + 100.0) * 5000);
-	uint16_t tndVolume = (uint16_t)(163.67 / (24329.0 / tndOutput + 100.0) * 5000);
+	uint16_t squareVolume = (uint16_t)(477600 / (8128.0 / squareOutput + 100.0));
+	uint16_t tndVolume = (uint16_t)(818350 / (24329.0 / tndOutput + 100.0));
 	
 	return (int16_t)(squareVolume + tndVolume +
 		GetChannelOutput(AudioChannel::FDS, forRightChannel) * 20 +
@@ -189,7 +210,7 @@ void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int16_t delta)
 
 void SoundMixer::EndFrame(uint32_t time)
 {
-	double masterVolume = EmulationSettings::GetMasterVolume();
+	double masterVolume = EmulationSettings::GetMasterVolume() * _fadeRatio;
 	sort(_timestamps.begin(), _timestamps.end());
 	_timestamps.erase(std::unique(_timestamps.begin(), _timestamps.end()), _timestamps.end());
 
@@ -206,16 +227,20 @@ void SoundMixer::EndFrame(uint32_t time)
 		}
 
 		int16_t currentOutput = GetOutputVolume(false);
-		blip_add_delta(_blipBufLeft, stamp, (int)((currentOutput - _previousOutputLeft) * masterVolume * _fadeRatio));
+		blip_add_delta(_blipBufLeft, stamp, (int)((currentOutput - _previousOutputLeft) * masterVolume));
 		_previousOutputLeft = currentOutput;
 
-		currentOutput = GetOutputVolume(true);
-		blip_add_delta(_blipBufRight, stamp, (int)((currentOutput - _previousOutputRight) * masterVolume * _fadeRatio));
-		_previousOutputRight = currentOutput;
+		if(_hasPanning) {
+			currentOutput = GetOutputVolume(true);
+			blip_add_delta(_blipBufRight, stamp, (int)((currentOutput - _previousOutputRight) * masterVolume));
+			_previousOutputRight = currentOutput;
+		}
 	}
 
 	blip_end_frame(_blipBufLeft, time);
-	blip_end_frame(_blipBufRight, time);
+	if(_hasPanning) {
+		blip_end_frame(_blipBufRight, time);
+	}
 
 	if(muteFrame) {
 		_muteFrameCount++;
@@ -224,11 +249,6 @@ void SoundMixer::EndFrame(uint32_t time)
 	}
 
 	//Reset everything
-	for(uint32_t i = 0; i < MaxChannelCount; i++) {
-		_volumes[i] = EmulationSettings::GetChannelVolume((AudioChannel)i);
-		_panning[i] = EmulationSettings::GetChannelPanning((AudioChannel)i);
-	}
-
 	_timestamps.clear();
 	memset(_channelOutput, 0, sizeof(_channelOutput));
 }

@@ -577,6 +577,10 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 		info.TileAddr = tileAddr;
 		info.OffsetY = lineOffset;
 		info.SpriteX = spriteX;
+		
+		for(int i = 0; i < 8 && spriteX + i + 1 < 257; i++) {
+			_hasSprite[spriteX + i + 1] = true;
+		}
 	} 
 	
 	if(fetchLastSprite) {
@@ -650,10 +654,10 @@ uint32_t PPU::GetPixelColor()
 		}
 	}
 
-	if(_cycle > _minimumDrawSpriteCycle) {
+	if(_hasSprite[_cycle] && _cycle > _minimumDrawSpriteCycle) {
 		//SpriteMask = true: Hide sprites in leftmost 8 pixels of screen
 		for(uint8_t i = 0; i < _spriteCount; i++) {
-			int32_t shift = -((int32_t)_spriteTiles[i].SpriteX - (int32_t)_cycle + 1);
+			int32_t shift = (int32_t)_cycle - _spriteTiles[i].SpriteX - 1;
 			if(shift >= 0 && shift < 8) {
 				_lastSprite = &_spriteTiles[i];
 				uint32_t spriteColor;
@@ -699,10 +703,7 @@ void PPU::DrawPixel()
 
 void PPU::ProcessScanline()
 {
-	if(_scanline == -1 && _cycle == 0) {
-		_statusFlags.SpriteOverflow = false;
-		_statusFlags.Sprite0Hit = false;
-	} else if(_cycle > 0 && _cycle <= 256) {
+	if(_cycle > 0 && _cycle <= 256) {
 		LoadTileInfo();
 
 		if(_prevRenderingEnabled && (_cycle & 0x07) == 0) {
@@ -723,6 +724,7 @@ void PPU::ProcessScanline()
 	} else if(_cycle >= 257 && _cycle <= 320) {
 		if(_cycle == 257) {
 			_spriteIndex = 0;
+			memset(_hasSprite, 0, sizeof(_hasSprite));
 			if(_prevRenderingEnabled) {
 				//copy horizontal scrolling value from t
 				_state.VideoRamAddr = (_state.VideoRamAddr & ~0x041F) | (_state.TmpVideoRamAddr & 0x041F);
@@ -773,6 +775,9 @@ void PPU::ProcessScanline()
 				_cycle = 340;
 			}
 		}
+	} else if(_scanline == -1 && _cycle == 0) {
+		_statusFlags.SpriteOverflow = false;
+		_statusFlags.Sprite0Hit = false;
 	}
 }
 
@@ -1047,5 +1052,9 @@ void PPU::StreamState(bool saving)
 
 		SetNesModel(_nesModel);
 		UpdateMinimumDrawCycles();
+
+		for(int i = 0; i < 257; i++) {
+			_hasSprite[i] = true;
+		}
 	}
 }
