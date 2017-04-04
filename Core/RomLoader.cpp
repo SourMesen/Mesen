@@ -129,6 +129,7 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 	} else {
 		NESHeader header = { };
 		if(GameDatabase::GetiNesHeader(crc, header)) {
+			MessageManager::Log("[DB] Headerless ROM file found - using game database data.");
 			iNesLoader loader;
 			_romData = loader.LoadRom(fileData, &header);
 		} else {

@@ -48,5 +48,6 @@ namespace UnifBoards {
 		MaliSB,
 		Unl43272,
 		Bmc411120C,
+		UnlPuzzle,
 	};
 }

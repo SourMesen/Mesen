@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "iNesLoader.h"
 #include "../Utilities/CRC32.h"
+#include "../Utilities/HexUtilities.h"
 #include "GameDatabase.h"
 #include "EmulationSettings.h"
 
@@ -46,16 +47,27 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 		buffer += 512;
 	}
 
-	uint32_t romCrc = CRC32::GetCRC(buffer, header.GetPrgSize() + header.GetChrSize());
+	int bytesRead = buffer - romFile.data();
+
+	uint32_t romCrc = CRC32::GetCRC(buffer, romFile.size() - bytesRead);
+	romData.PrgChrCrc32 = romCrc;
+
+	NESHeader dbHeader;
+	GameDatabase::GetiNesHeader(romData.PrgChrCrc32, dbHeader);
+	if(dbHeader.GetPrgSize() != header.GetPrgSize() || dbHeader.GetChrSize() != header.GetChrSize()) {
+		if(dbHeader.GetPrgSize() + dbHeader.GetChrSize() + bytesRead <= romFile.size()) {
+			//Use corrected PRG/CHR sizes from the DB when reading from file
+			header = dbHeader;
+		}
+	}
+
 	romData.PrgRom.insert(romData.PrgRom.end(), buffer, buffer + header.GetPrgSize());
 	buffer += header.GetPrgSize();
 	romData.ChrRom.insert(romData.ChrRom.end(), buffer, buffer + header.GetChrSize());
 
 	romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
 
-	stringstream crcHex;
-	crcHex << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << romCrc;
-	MessageManager::Log("PRG+CHR CRC32: 0x" + crcHex.str());
+	MessageManager::Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32));
 
 	if(romData.IsNes20Header) {
 		MessageManager::Log("[iNes] NES 2.0 file: Yes");
@@ -81,7 +93,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 		MessageManager::Log("[iNes] Trainer: Yes");
 	}
 
-	GameDatabase::SetGameInfo(romCrc, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0);
+	GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0);
 
 	return romData;
 }

@@ -21,7 +21,7 @@ protected:
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
-		if((addr & 0x5100) != 0) {
+		if((addr & 0xE100) == 0x4100) {
 			if(_multicartMode) {
 				//Mapper 113
 				SelectPRGPage(0, (value >> 3) & 0x07);

@@ -4,6 +4,7 @@
 #include "../Utilities/CRC32.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/StringUtilities.h"
+#include "../Utilities/HexUtilities.h"
 #include "GameDatabase.h"
 #include "EmulationSettings.h"
 #include "UnifLoader.h"
@@ -238,8 +239,6 @@ bool GameDatabase::GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader)
 	InitDatabase();
 	auto result = _gameDatabase.find(romCrc);
 	if(result != _gameDatabase.end()) {
-		MessageManager::Log("[DB] Headerless ROM file found - using game database data.");
-
 		info = result->second;
 
 		nesHeader.Byte9 = 0;
@@ -330,7 +329,7 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		}
 
 		if(!info.Mirroring.empty()) {
-			MessageManager::Log("[DB] Mirroring: " + string(info.Mirroring.compare("h") == 0 ? "Horizontal" : "Vertical"));
+			MessageManager::Log("[DB] Mirroring: " + string(info.Mirroring.compare("h") == 0 ? "Horizontal" : (string(info.Mirroring.compare("v") == 0 ? "Vertical" : "4 Screens"))));
 		}
 		MessageManager::Log("[DB] PRG ROM: " + std::to_string(info.PrgRomSize) + " KB");
 		MessageManager::Log("[DB] CHR ROM: " + std::to_string(info.ChrRomSize) + " KB");
@@ -367,7 +366,9 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 	romData.System = GetGameSystem(info.System);
 	romData.SubMapperID = GetSubMapper(info);
 	romData.BusConflicts = GetBusConflictType(info.BusConflicts);
-	romData.ChrRamSize = info.ChrRamSize * 1024;
+	if(info.ChrRamSize > 0) {
+		romData.ChrRamSize = info.ChrRamSize * 1024;
+	}
 	if(info.WorkRamSize > 0) {
 		romData.WorkRamSize = info.WorkRamSize * 1024;
 	}
@@ -377,6 +378,10 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 	romData.HasBattery |= info.HasBattery;
 
 	if(!info.Mirroring.empty()) {
-		romData.Mirroring = info.Mirroring.compare("h") == 0 ? MirroringType::Horizontal : MirroringType::Vertical;
+		switch(info.Mirroring[0]) {
+			case 'h': romData.Mirroring = MirroringType::Horizontal; break;
+			case 'v': romData.Mirroring = MirroringType::Vertical; break;
+			case '4': romData.Mirroring = MirroringType::FourScreens; break;
+		}
 	}
 }

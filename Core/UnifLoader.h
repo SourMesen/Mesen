@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "../Utilities/CRC32.h"
+#include "../Utilities/HexUtilities.h"
 #include "RomData.h"
 #include "GameDatabase.h"
 #include "UnifBoards.h"
@@ -176,13 +177,10 @@ public:
 			fullRom.insert(fullRom.end(), romData.ChrRom.begin(), romData.ChrRom.end());
 
 			romData.Format = RomFormat::Unif;
-			romData.Crc32 = CRC32::GetCRC(fullRom.data(), fullRom.size());;
 			romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
+			romData.PrgChrCrc32 = CRC32::GetCRC(fullRom.data(), fullRom.size());
 
-			stringstream crcHex;
-			crcHex << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << romData.Crc32;
-			MessageManager::Log("PRG+CHR CRC32: 0x" + crcHex.str());
-
+			MessageManager::Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32));
 			MessageManager::Log("[UNIF] Board Name: " + _mapperName);
 			MessageManager::Log("[UNIF] PRG ROM: " + std::to_string(romData.PrgRom.size() / 1024) + " KB");
 			MessageManager::Log("[UNIF] CHR ROM: " + std::to_string(romData.ChrRom.size() / 1024) + " KB");
@@ -202,7 +200,7 @@ public:
 			MessageManager::Log("[UNIF] Mirroring: " + mirroringType);
 			MessageManager::Log("[UNIF] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
 
-			GameDatabase::SetGameInfo(romData.Crc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase));
+			GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase));
 
 			if(romData.MapperID == UnifBoards::UnknownBoard) {
 				MessageManager::DisplayMessage("Error", "UnsupportedMapper", "UNIF: " + _mapperName);
