@@ -87,7 +87,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	if(_hasPanning) {
 		blip_read_samples(_blipBufRight, _outputBuffer + 1, SoundMixer::MaxSamplesPerFrame, 1);
 	} else {
-		for(int i = 0; i < sampleCount * 2; i+=2) {
+		for(size_t i = 0; i < sampleCount * 2; i+=2) {
 			_outputBuffer[i + 1] = _outputBuffer[i];
 		}
 	}

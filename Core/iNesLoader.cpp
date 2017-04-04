@@ -47,7 +47,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 		buffer += 512;
 	}
 
-	int bytesRead = buffer - romFile.data();
+	size_t bytesRead = buffer - romFile.data();
 
 	uint32_t romCrc = CRC32::GetCRC(buffer, romFile.size() - bytesRead);
 	romData.PrgChrCrc32 = romCrc;
