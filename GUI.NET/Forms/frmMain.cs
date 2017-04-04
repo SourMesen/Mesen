@@ -58,7 +58,9 @@ namespace Mesen.GUI.Forms
 		{
 			var switches = new List<string>();
 			for(int i = 0; i < args.Length; i++) {
-				switches.Add(args[i].ToLowerInvariant().Replace("--", "/").Replace("-", "/").Replace("=/", "=-"));
+				if(args[i] != null) {
+					switches.Add(args[i].ToLowerInvariant().Replace("--", "/").Replace("-", "/").Replace("=/", "=-"));
+				}
 			}
 
 			if(forStartup) {
