@@ -28,6 +28,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 {
 	protected:
 		static PPU* Instance;
+		static constexpr uint16_t _palSpriteEvalScanline = 264;
 	
 		BaseMapper *_mapper;
 
@@ -111,7 +112,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint16_t GetAttributeAddr();
 
 		__forceinline void ProcessScanline();
-		__forceinline void CopyOAMData();
+		__forceinline void ProcessSpriteEvaluation();
 
 		void BeginVBlank();
 		void TriggerNmi();

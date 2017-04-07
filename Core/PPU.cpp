@@ -287,7 +287,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			_state.SpriteRamAddr = value;
 			break;
 		case PPURegisters::SpriteData:
-			if(_scanline >= 240 || !IsRenderingEnabled()) {
+			if((_scanline >= 240 && (_nesModel != NesModel::PAL || _scanline < _palSpriteEvalScanline)) || !IsRenderingEnabled()) {
 				if((_state.SpriteRamAddr & 0x03) == 0x02) {
 					//"The three unimplemented bits of each sprite's byte 2 do not exist in the PPU and always read back as 0 on PPU revisions that allow reading PPU OAM through OAMDATA ($2004)"
 					value &= 0xE3;
@@ -534,7 +534,7 @@ void PPU::LoadTileInfo()
 					InitializeShiftRegisters();
 				}
 				break;
-		}		
+		}
 	}
 }
 
@@ -578,8 +578,11 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 		info.OffsetY = lineOffset;
 		info.SpriteX = spriteX;
 		
-		for(int i = 0; i < 8 && spriteX + i + 1 < 257; i++) {
-			_hasSprite[spriteX + i + 1] = true;
+		if(_scanline >= 0) {
+			//Sprites read on prerender scanline are not shown on scanline 0
+			for(int i = 0; i < 8 && spriteX + i + 1 < 257; i++) {
+				_hasSprite[spriteX + i + 1] = true;
+			}
 		}
 	} 
 	
@@ -716,11 +719,19 @@ void PPU::ProcessScanline()
 		if(_scanline >= 0) {
 			DrawPixel();
 			ShiftTileRegisters();
-		} else if(_cycle == 1) {
-			_statusFlags.VerticalBlank = false;
-		}
-	
-		CopyOAMData();
+
+			//"Secondary OAM clear and sprite evaluation do not occur on the pre-render line"
+			ProcessSpriteEvaluation();
+		} else if(_cycle < 9) {
+			if(_cycle == 1) {
+				_statusFlags.VerticalBlank = false;
+			}
+			if(_state.SpriteRamAddr >= 0x08 && IsRenderingEnabled() && !EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug)) {
+				//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)
+				//"If OAMADDR is not less than eight when rendering starts, the eight bytes starting at OAMADDR & 0xF8 are copied to the first eight bytes of OAM"
+				_spriteRAM[_cycle - 1] = _spriteRAM[(uint8_t)((_state.SpriteRamAddr & 0xF8) + _cycle - 1)];
+			}
+		}	
 	} else if(_cycle >= 257 && _cycle <= 320) {
 		if(_cycle == 257) {
 			_spriteIndex = 0;
@@ -781,16 +792,10 @@ void PPU::ProcessScanline()
 	}
 }
 
-void PPU::CopyOAMData()
+void PPU::ProcessSpriteEvaluation()
 {
-	if(_nesModel != NesModel::PAL && IsRenderingEnabled() || _nesModel == NesModel::PAL && (_scanline < 240 || _scanline > 260)) {
+	if(IsRenderingEnabled() || (_nesModel == NesModel::PAL && _scanline >= _palSpriteEvalScanline)) {
 		if(_cycle < 65) {
-			if(_cycle < 9 && _state.SpriteRamAddr >= 0x08 && _scanline == -1 && !EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug)) {
-				//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)
-				//"If OAMADDR is not less than eight when rendering starts, the eight bytes starting at OAMADDR & 0xF8 are copied to the first eight bytes of OAM"
-				_spriteRAM[_cycle - 1] = _spriteRAM[(uint8_t)((_state.SpriteRamAddr & 0xF8) + _cycle - 1)];
-			}
-
 			//Clear secondary OAM at between cycle 1 and 64
 			_oamCopybuffer = 0xFF;
 			_secondarySpriteRAM[(_cycle - 1) >> 1] = 0xFF;
@@ -953,13 +958,13 @@ void PPU::Exec()
 		ProcessScanline();
 	} else if(_scanline == _nmiScanline) {
 		BeginVBlank();
-	} else if(_nesModel == NesModel::PAL && _scanline > _nmiScanline + 20) {
+	} else if(_nesModel == NesModel::PAL && _scanline >= _palSpriteEvalScanline) {
 		//"On a PAL machine, because of its extended vertical blank, the PPU begins refreshing OAM roughly 21 scanlines after NMI[2], to prevent it 
 		//from decaying during the longer hiatus of rendering. Additionally, it will continue to refresh during the visible portion of the screen 
 		//even if rendering is disabled. Because of this, OAM DMA must be done near the beginning of vertical blank on PAL, and everywhere else 
 		//it is liable to conflict with the refresh. Since the refresh can't be disabled like on the NTSC hardware, OAM decay does not occur at all on the PAL NES."
 		if(_cycle > 0 && _cycle <= 256) {
-			CopyOAMData();
+			ProcessSpriteEvaluation();
 		} else if(_cycle >= 257 && _cycle < 320) {
 			_state.SpriteRamAddr = 0;
 		}
