@@ -23,16 +23,16 @@ PPU::PPU(BaseMapper *mapper)
 	memset(_outputBuffers[1], 0, 256 * 240 * sizeof(uint16_t));
 
 	uint8_t paletteRamBootValues[0x20] { 0x09, 0x01, 0x00, 0x01, 0x00, 0x02, 0x02, 0x0D, 0x08, 0x10, 0x08, 0x24, 0x00, 0x00, 0x04, 0x2C,
-												0x09, 0x01, 0x34, 0x03, 0x00, 0x04, 0x00, 0x14, 0x08, 0x3A, 0x00, 0x02, 0x00, 0x20, 0x2C, 0x08 };
+		0x09, 0x01, 0x34, 0x03, 0x00, 0x04, 0x00, 0x14, 0x08, 0x3A, 0x00, 0x02, 0x00, 0x20, 0x2C, 0x08 };
 	memcpy(_paletteRAM, paletteRamBootValues, sizeof(_paletteRAM));
-	
+
 	BaseMapper::InitializeRam(_spriteRAM, 0x100);
 	BaseMapper::InitializeRam(_secondarySpriteRAM, 0x20);
 
 	Reset();
 }
 
-PPU::~PPU() 
+PPU::~PPU()
 {
 	delete[] _outputBuffers[0];
 	delete[] _outputBuffers[1];
@@ -70,7 +70,7 @@ void PPU::Reset()
 	_prevRenderingEnabled = false;
 	_cyclesNeeded = 0.0;
 
-	memset(_spriteTiles, 0, sizeof(SpriteInfo));	
+	memset(_spriteTiles, 0, sizeof(SpriteInfo));
 	_spriteCount = 0;
 	_secondaryOAMAddr = 0;
 	_sprite0Visible = false;
@@ -89,7 +89,10 @@ void PPU::Reset()
 
 	_updateVramAddrDelay = 0;
 	_updateVramAddr = 0;
-	
+
+	memset(_oamDecayCycles, 0, sizeof(_oamDecayCycles));
+	_enableOamDecay = EmulationSettings::CheckFlag(EmulationFlags::EnableOamDecay);
+
 	UpdateMinimumDrawCycles();
 }
 
@@ -145,7 +148,7 @@ void PPU::UpdateVideoRamAddr()
 {
 	if(_scanline >= 240 || !IsRenderingEnabled()) {
 		_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
-		
+
 		//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
 		//"Should be clocked when A12 changes to 1 via $2007 read/write"
 		_mapper->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
@@ -229,7 +232,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 					//Return the value that PPU is currently using for sprite evaluation/rendering
 					returnValue = _oamCopybuffer;
 				} else {
-					returnValue = _spriteRAM[_state.SpriteRamAddr];
+					returnValue = ReadSpriteRam(_state.SpriteRamAddr);
 				}
 				openBusMask = 0x00;
 			}
@@ -253,7 +256,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 
 				UpdateVideoRamAddr();
 				_ignoreVramRead = 2;
-			}				
+			}
 			break;
 
 		default:
@@ -273,13 +276,13 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			if(EmulationSettings::GetPpuModel() >= PpuModel::Ppu2C05A && EmulationSettings::GetPpuModel() <= PpuModel::Ppu2C05E) {
 				SetMaskRegister(value);
 			} else {
-				SetControlRegister(value);				
+				SetControlRegister(value);
 			}
 			break;
 		case PPURegisters::Mask:
 			if(EmulationSettings::GetPpuModel() >= PpuModel::Ppu2C05A && EmulationSettings::GetPpuModel() <= PpuModel::Ppu2C05E) {
 				SetControlRegister(value);
-			} else {				
+			} else {
 				SetMaskRegister(value);
 			}
 			break;
@@ -292,7 +295,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 					//"The three unimplemented bits of each sprite's byte 2 do not exist in the PPU and always read back as 0 on PPU revisions that allow reading PPU OAM through OAMDATA ($2004)"
 					value &= 0xE3;
 				}
-				_spriteRAM[_state.SpriteRamAddr] = value;
+				WriteSpriteRam(_state.SpriteRamAddr, value);
 				_state.SpriteRamAddr = (_state.SpriteRamAddr + 1) & 0xFF;
 			} else {
 				//"Writes to OAMDATA during rendering (on the pre-render line and the visible lines 0-239, provided either sprite or background rendering is enabled) do not modify values in OAM, 
@@ -387,7 +390,7 @@ void PPU::SetControlRegister(uint8_t value)
 	//"By toggling NMI_output ($2000 bit 7) during vertical blank without reading $2002, a program can cause /NMI to be pulled low multiple times, causing multiple NMIs to be generated."
 	bool originalVBlank = _flags.VBlank;
 	_flags.VBlank = (_state.Control & 0x80) == 0x80;
-	
+
 	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank && (_scanline != -1 || _cycle != 0)) {
 		CPU::SetNMIFlag();
 	}
@@ -415,7 +418,7 @@ void PPU::SetMaskRegister(uint8_t value)
 
 	UpdateMinimumDrawCycles();
 
-	 //"Bit 0 controls a greyscale mode, which causes the palette to use only the colors from the grey column: $00, $10, $20, $30. This is implemented as a bitwise AND with $30 on any value read from PPU $3F00-$3FFF"
+	//"Bit 0 controls a greyscale mode, which causes the palette to use only the colors from the grey column: $00, $10, $20, $30. This is implemented as a bitwise AND with $30 on any value read from PPU $3F00-$3FFF"
 	_paletteRamMask = _flags.Grayscale ? 0x30 : 0x3F;
 
 	if(_nesModel == NesModel::NTSC) {
@@ -433,13 +436,13 @@ void PPU::SetMaskRegister(uint8_t value)
 void PPU::UpdateStatusFlag()
 {
 	_state.Status = ((uint8_t)_statusFlags.SpriteOverflow << 5) |
-						 ((uint8_t)_statusFlags.Sprite0Hit << 6) |
-						 ((uint8_t)_statusFlags.VerticalBlank << 7);
+		((uint8_t)_statusFlags.Sprite0Hit << 6) |
+		((uint8_t)_statusFlags.VerticalBlank << 7);
 	_statusFlags.VerticalBlank = false;
 
 	if(_scanline == 241 && _cycle < 3) {
 		//"Reading on the same PPU clock or one later reads it as set, clears it, and suppresses the NMI for that frame."
-		_statusFlags.VerticalBlank = false;		
+		_statusFlags.VerticalBlank = false;
 		CPU::ClearNMIFlag();
 
 		if(_cycle == 0) {
@@ -481,7 +484,7 @@ void PPU::IncHorizontalScrolling()
 	uint16_t addr = _state.VideoRamAddr;
 	if((addr & 0x001F) == 31) {
 		//When the value is 31, wrap around to 0 and switch nametable
-		addr = (addr & ~0x001F) ^ 0x0400; 
+		addr = (addr & ~0x001F) ^ 0x0400;
 	} else {
 		addr++;
 	}
@@ -558,7 +561,7 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 		tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
 	}
 
-	bool fetchLastSprite = true;	
+	bool fetchLastSprite = true;
 	if((_spriteIndex < _spriteCount || extraSprite) && spriteY < 240) {
 		SpriteInfo &info = _spriteTiles[_spriteIndex];
 		info.BackgroundPriority = backgroundPriority;
@@ -577,15 +580,15 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 		info.TileAddr = tileAddr;
 		info.OffsetY = lineOffset;
 		info.SpriteX = spriteX;
-		
+
 		if(_scanline >= 0) {
 			//Sprites read on prerender scanline are not shown on scanline 0
 			for(int i = 0; i < 8 && spriteX + i + 1 < 257; i++) {
 				_hasSprite[spriteX + i + 1] = true;
 			}
 		}
-	} 
-	
+	}
+
 	if(fetchLastSprite) {
 		//Fetches to sprite 0xFF for remaining sprites/hidden - used by MMC3 IRQ counter
 		lineOffset = 0;
@@ -648,7 +651,7 @@ uint32_t PPU::GetPixelColor()
 	uint8_t offset = _state.XScroll;
 	uint32_t backgroundColor = 0;
 	uint32_t spriteBgColor = 0;
-	
+
 	if(_cycle > _minimumDrawBgCycle) {
 		//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
 		spriteBgColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
@@ -669,7 +672,7 @@ uint32_t PPU::GetPixelColor()
 				} else {
 					spriteColor = ((_lastSprite->LowByte << shift) & 0x80) >> 7 | ((_lastSprite->HighByte << shift) & 0x80) >> 6;
 				}
-				
+
 				if(spriteColor != 0) {
 					//First sprite without a 00 color, use it.
 					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && !_statusFlags.Sprite0Hit && _cycle > _minimumDrawSpriteStandardCycle) {
@@ -688,7 +691,7 @@ uint32_t PPU::GetPixelColor()
 				}
 			}
 		}
-	} 
+	}
 	return ((offset + ((_cycle - 1) & 0x07) < 8) ? _previousTile : _currentTile).PaletteOffset + backgroundColor;
 }
 
@@ -729,9 +732,9 @@ void PPU::ProcessScanline()
 			if(_state.SpriteRamAddr >= 0x08 && IsRenderingEnabled() && !EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug)) {
 				//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)
 				//"If OAMADDR is not less than eight when rendering starts, the eight bytes starting at OAMADDR & 0xF8 are copied to the first eight bytes of OAM"
-				_spriteRAM[_cycle - 1] = _spriteRAM[(uint8_t)((_state.SpriteRamAddr & 0xF8) + _cycle - 1)];
+				WriteSpriteRam(_cycle - 1, ReadSpriteRam((_state.SpriteRamAddr & 0xF8) + _cycle - 1));
 			}
-		}	
+		}
 	} else if(_cycle >= 257 && _cycle <= 320) {
 		if(_cycle == 257) {
 			_spriteIndex = 0;
@@ -817,7 +820,7 @@ void PPU::ProcessSpriteEvaluation()
 
 			if(_cycle & 0x01) {
 				//Read a byte from the primary OAM on odd cycles
-				_oamCopybuffer = _spriteRAM[(_spriteAddrH << 2) | _spriteAddrL];
+				_oamCopybuffer = ReadSpriteRam(_state.SpriteRamAddr);
 			} else {
 				if(_oamCopyDone) {
 					_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
@@ -904,6 +907,31 @@ void PPU::ProcessSpriteEvaluation()
 	}
 }
 
+uint8_t PPU::ReadSpriteRam(uint8_t addr)
+{
+	//return _spriteRAM[addr];
+	if(!_enableOamDecay) {
+		return _spriteRAM[addr];
+	} else {
+		int32_t cycle = CPU::GetCycleCount();
+		if(_oamDecayCycles[addr >> 2] >= cycle) {
+			_oamDecayCycles[addr >> 2] = cycle + 3000;
+			return _spriteRAM[addr];
+		} else {
+			//If this 4-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0xFF to simulate decay
+			return 0xFF;
+		}
+	}
+}
+
+void PPU::WriteSpriteRam(uint8_t addr, uint8_t value)
+{
+	_spriteRAM[addr] = value;
+	if(_enableOamDecay) {
+		_oamDecayCycles[addr >> 2] = CPU::GetCycleCount() + 3000;
+	}
+}
+
 void PPU::DebugSendFrame()
 {
 	VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
@@ -911,16 +939,18 @@ void PPU::DebugSendFrame()
 
 void PPU::SendFrame()
 {
-	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);	
-	
+	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
+
 	VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
-	
+
 	//Switch output buffer.  VideoDecoder will decode the last frame while we build the new one.
 	//If VideoDecoder isn't fast enough, UpdateFrame will block until it is ready to accept a new frame.
 	_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
 	if(Debugger::IsEnabled()) {
 		memset(_currentOutputBuffer, 0, PPU::PixelCount * 2);
 	}
+
+	_enableOamDecay = EmulationSettings::CheckFlag(EmulationFlags::EnableOamDecay);
 }
 
 void PPU::BeginVBlank()
@@ -1021,7 +1051,7 @@ void PPU::StreamState(bool saving)
 	ArrayInfo<uint8_t> spriteRam = { _spriteRAM, 0x100 };
 	ArrayInfo<uint8_t> secondarySpriteRam = { _secondarySpriteRAM, 0x20 };
 	ArrayInfo<int32_t> openBusDecayStamp = { _openBusDecayStamp, 8 };
-	
+
 	bool disablePpu2004Reads = false;
 	bool disablePaletteRead = false;
 	bool disableOamAddrBug = false;
@@ -1057,6 +1087,11 @@ void PPU::StreamState(bool saving)
 
 		SetNesModel(_nesModel);
 		UpdateMinimumDrawCycles();
+
+		for(int i = 0; i < 0x40; i++) {
+			//Set max value to ensure oam decay doesn't cause issues with savestates when used
+			_oamDecayCycles[i] = 0x7FFFFFFF;
+		}
 
 		for(int i = 0; i < 257; i++) {
 			_hasSprite[i] = true;

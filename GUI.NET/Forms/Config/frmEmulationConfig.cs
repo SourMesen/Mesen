@@ -31,6 +31,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisablePaletteRead", chkDisablePaletteRead);
 			AddBinding("DisableOamAddrBug", chkDisableOamAddrBug);
 			AddBinding("DisablePpuReset", chkDisablePpuReset);
+			AddBinding("EnableOamDecay", chkEnableOamDecay);
 			AddBinding("UseNes101Hvc101Behavior", chkUseNes101Hvc101Behavior);
 
 			AddBinding("OverclockRate", nudOverclockRate);

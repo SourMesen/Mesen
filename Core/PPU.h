@@ -94,6 +94,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint32_t _minimumDrawBgCycle;
 		uint32_t _minimumDrawSpriteCycle;
 		uint32_t _minimumDrawSpriteStandardCycle;
+
+		int32_t _oamDecayCycles[0x40];
+		bool _enableOamDecay;
 		
 		void UpdateStatusFlag();
 
@@ -124,6 +127,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 		__forceinline void ShiftTileRegisters();
 		void InitializeShiftRegisters();
 		void LoadNextTile();
+
+		__forceinline uint8_t ReadSpriteRam(uint8_t addr);
+		__forceinline void WriteSpriteRam(uint8_t addr, uint8_t value);
 
 		void UpdateMinimumDrawCycles();
 

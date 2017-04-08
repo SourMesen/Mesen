@@ -20,6 +20,7 @@ namespace Mesen.GUI.Config
 		public bool DisablePaletteRead = false;
 		public bool DisableOamAddrBug = false;
 		public bool DisablePpuReset = false;
+		public bool EnableOamDecay = false;
 		public bool UseNes101Hvc101Behavior = false;
 
 		public bool UseAlternativeMmc3Irq = false;
@@ -56,6 +57,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.DisablePaletteRead, emulationInfo.DisablePaletteRead);
 			InteropEmu.SetFlag(EmulationFlags.DisableOamAddrBug, emulationInfo.DisableOamAddrBug);
 			InteropEmu.SetFlag(EmulationFlags.DisablePpuReset, emulationInfo.DisablePpuReset);
+			InteropEmu.SetFlag(EmulationFlags.EnableOamDecay, emulationInfo.EnableOamDecay);
 			InteropEmu.SetFlag(EmulationFlags.UseNes101Hvc101Behavior, emulationInfo.UseNes101Hvc101Behavior);
 
 			InteropEmu.SetOverclockRate(emulationInfo.OverclockRate, emulationInfo.OverclockAdjustApu);

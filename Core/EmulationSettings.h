@@ -43,8 +43,9 @@ enum EmulationFlags : uint64_t
 	DisablePaletteRead = 0x10000000,
 	DisableOamAddrBug = 0x20000000,
 	DisablePpuReset = 0x40000000,
+	EnableOamDecay = 0x80000000,
 
-	UseNes101Hvc101Behavior = 0x80000000,
+	UseNes101Hvc101Behavior = 0x100000000,
 
 	Turbo = 0x2000000000,
 	InBackground = 0x4000000000,

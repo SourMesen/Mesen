@@ -289,6 +289,7 @@
       <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
       <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
+      <Control ID="chkEnableOamDecay">Activer l'émulation de la dégradation de la mémoire OAM</Control>
       <Control ID="chkDisablePpu2004Reads">Empêcher la lecture du registre $2004 du PPU (Famicom)</Control>
       <Control ID="chkDisableOamAddrBug">Désactiver l'émulation du bug de OAMADDR du PPU</Control>
       <Control ID="chkDisablePaletteRead">Empêcher la lecture de la palette du PPU</Control>
