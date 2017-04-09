@@ -76,13 +76,17 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 		return;
 	}
 
-	if(pageNumber < 0) {
-		//Can't use modulo for negative number because pageCount is sometimes not a power of 2.  (Fixes some Mapper 191 games)
-		pageNumber = pageCount + pageNumber;
-	} else {
-		pageNumber = pageNumber % pageCount;
-	}
-	source = &source[pageNumber * pageSize];
+	auto wrapPageNumber = [=](int16_t &page) -> void {
+		if(page < 0) {
+			//Can't use modulo for negative number because pageCount is sometimes not a power of 2.  (Fixes some Mapper 191 games)
+			page = pageCount + page;
+		} else {
+			page = page % pageCount;
+		}
+	};
+	wrapPageNumber(pageNumber);
+	
+	uint8_t* sourceBuffer = &source[pageNumber * pageSize];
 
 	accessType = accessType != -1 ? accessType : defaultAccessType;
 
@@ -92,17 +96,16 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 		#endif
 		
 		//If range is bigger than a single page, keep going until we reach the last page
-		while((uint32_t)pageNumber < pageCount && startAddr <= endAddr - pageSize + 1) {
-			SetCpuMemoryMapping(startAddr, startAddr + pageSize - 1, source, accessType);
-			startAddr += pageSize;
-			if(pageCount > 1) {
-				//If pageCount == 1, we mirror it instead
-				pageNumber++;
-				source += pageSize;
-			}
+		uint32_t addr = startAddr;
+		while(addr <= endAddr - pageSize + 1) {
+			SetCpuMemoryMapping(addr, addr + pageSize - 1, sourceBuffer, accessType);
+			addr += pageSize;
+			pageNumber++;
+			wrapPageNumber(pageNumber);
+			sourceBuffer = &source[pageNumber * pageSize];
 		}
 	} else {
-		SetCpuMemoryMapping(startAddr, endAddr, source, accessType);
+		SetCpuMemoryMapping(startAddr, endAddr, sourceBuffer, accessType);
 	}
 }
 
@@ -186,32 +189,24 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 		return;
 	}
 
-	if(pageNumber < 0) {
-		//Can't use modulo for negative number because pageCount is sometimes not a power of 2.
-		pageNumber = pageCount + pageNumber;
-	} else {
-		pageNumber = pageNumber % pageCount;
-	}
+	pageNumber = pageNumber % pageCount;
 
-	sourceMemory = sourceMemory + pageNumber * pageSize;
+	uint8_t* sourceBuffer = sourceMemory + pageNumber * pageSize;
 
 	if((uint16_t)(endAddr - startAddr) >= pageSize) {
 		#ifdef _DEBUG
 		MessageManager::DisplayMessage("Debug", "Tried to map undefined chr - page size too small for selected range.");
 		#endif
 
-		//If range is bigger than a single page, keep going until we reach the last page
-		while((uint32_t)pageNumber < pageCount && startAddr <= endAddr - pageSize + 1) {
-			SetPpuMemoryMapping(startAddr, startAddr + pageSize - 1, sourceMemory, accessType);
-			startAddr += pageSize;
-			if(pageCount > 1) {
-				//If pageCount == 1, we mirror it instead
-				pageNumber++;
-				sourceMemory += pageSize;
-			}
+		uint32_t addr = startAddr;
+		while(addr <= endAddr - pageSize + 1) {
+			SetPpuMemoryMapping(addr, addr + pageSize - 1, sourceBuffer, accessType);
+			addr += pageSize;
+			pageNumber = (pageNumber + 1) % pageCount;
+			sourceBuffer = &sourceMemory[pageNumber * pageSize];
 		}
 	} else {
-		SetPpuMemoryMapping(startAddr, endAddr, sourceMemory, accessType == -1 ? defaultAccessType : accessType);
+		SetPpuMemoryMapping(startAddr, endAddr, sourceBuffer, accessType == -1 ? defaultAccessType : accessType);
 	}
 }
 
