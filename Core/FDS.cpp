@@ -228,7 +228,9 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 			_irqReloadEnabled = (value & 0x01) == 0x01;
 			_irqEnabled = (value & 0x02) == 0x02;
 			_irqCounter = _irqReloadValue;
-			if(!_irqReloadEnabled) {
+			if(_irqEnabled && !_irqReloadEnabled) {
+				//Needed by Kaettekita Mario Bros
+				//If done when _irqEnabled is false, Lutter breaks
 				_irqReloadValue = 0;
 			}
 			CPU::ClearIRQSource(IRQSource::External);
