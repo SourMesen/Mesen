@@ -82,20 +82,22 @@ namespace Mesen.GUI.Forms
 		{
 			if(args.Length > 0) {
 				foreach(string arg in args) {
-					string path = arg;
-					try {
-						if(File.Exists(path)) {
-							this.LoadFile(path);
-							break;
-						}
+					if(arg != null) {
+						string path = arg;
+						try {
+							if(File.Exists(path)) {
+								this.LoadFile(path);
+								break;
+							}
 
-						//Try loading file as a relative path to the folder Mesen was started from
-						path = Path.Combine(Program.OriginalFolder, path);
-						if(File.Exists(path)) {
-							this.LoadFile(path);
-							break;
-						}
-					} catch { }
+							//Try loading file as a relative path to the folder Mesen was started from
+							path = Path.Combine(Program.OriginalFolder, path);
+							if(File.Exists(path)) {
+								this.LoadFile(path);
+								break;
+							}
+						} catch { }
+					}
 				}
 			}
 		}

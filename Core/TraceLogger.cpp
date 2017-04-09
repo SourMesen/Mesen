@@ -124,7 +124,7 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 	LabelManager* labelManager = _options.UseLabels ? _labelManager.get() : nullptr;
 	disassemblyInfo->ToString(code, cpuState.DebugPC, _memoryManager.get(), labelManager);
 	disassemblyInfo->GetEffectiveAddressString(code, cpuState, _memoryManager.get(), labelManager);
-	code += std::string(32 - code.size(), ' ');
+	code += std::string(std::max(0, (int)(32 - code.size())), ' ');
 	output += code;
 
 	if(_options.ShowRegisters) {
