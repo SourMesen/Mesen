@@ -143,6 +143,9 @@
     <ClInclude Include="StringUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UpsPatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -249,6 +252,9 @@
     </ClCompile>
     <ClCompile Include="CamstudioCodec.cpp">
       <Filter>Avi</Filter>
+    </ClCompile>
+    <ClCompile Include="UpsPatcher.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

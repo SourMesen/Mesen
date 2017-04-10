@@ -221,7 +221,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAutoLoadIps.Name = "chkAutoLoadIps";
 			this.chkAutoLoadIps.Size = new System.Drawing.Size(132, 17);
 			this.chkAutoLoadIps.TabIndex = 9;
-			this.chkAutoLoadIps.Text = "Auto-load IPS patches";
+			this.chkAutoLoadIps.Text = "Auto-load IPS/UPS patches";
 			this.chkAutoLoadIps.UseVisualStyleBackColor = true;
 			// 
 			// flowLayoutPanel6

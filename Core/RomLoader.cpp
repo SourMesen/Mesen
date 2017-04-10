@@ -3,6 +3,7 @@
 #include "../Utilities/ArchiveReader.h"
 #include "../Utilities/CRC32.h"
 #include "../Utilities/IpsPatcher.h"
+#include "../Utilities/UpsPatcher.h"
 #include "../Utilities/ZipReader.h"
 #include "../Utilities/SZReader.h"
 #include "RomLoader.h"
@@ -94,14 +95,29 @@ uint8_t* RomLoader::ReadFile(istream &file, uint32_t &fileSize)
 	return buffer;
 }
 
+void RomLoader::ApplyPatch(string patchPath, vector<uint8_t> &data)
+{
+	//Apply patch file
+	MessageManager::DisplayMessage("Patch", "ApplyingPatch", FolderUtilities::GetFilename(patchPath, true));
+	ifstream patchFile(patchPath, ios::binary | ios::in);
+	if(patchFile.good()) {
+		char buffer[5] = {};
+		patchFile.read(buffer, 5);
+		patchFile.close();
+		if(memcmp(buffer, "PATCH", 5) == 0) {
+			data = IpsPatcher::PatchBuffer(patchPath, data);
+		} else if(memcmp(buffer, "UPS1", 4) == 0) {
+			data = UpsPatcher::PatchBuffer(patchPath, data);
+		}
+	}
+}
+
 bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 {
 	vector<uint8_t> fileData(buffer, buffer + length);
-
-	if(!_ipsFilename.empty()) {
-		//Apply IPS patch
-		MessageManager::DisplayMessage("IPS", "ApplyingIps", FolderUtilities::GetFilename(_ipsFilename, true));
-		fileData = IpsPatcher::PatchBuffer(_ipsFilename, fileData);
+	
+	if(!_patchFilename.empty()) {
+		ApplyPatch(_patchFilename, fileData);
 	}
 
 	uint32_t crc = CRC32::GetCRC(buffer, length);
@@ -155,10 +171,10 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 	return !_romData.Error;
 }
 
-bool RomLoader::LoadFile(string filename, istream *filestream, string ipsFilename, int32_t archiveFileIndex)
+bool RomLoader::LoadFile(string filename, istream *filestream, string patchFilename, int32_t archiveFileIndex)
 {
 	_filename = filename;
-	_ipsFilename = ipsFilename;
+	_patchFilename = patchFilename;
 
 	ifstream file;
 	istream* input = nullptr;

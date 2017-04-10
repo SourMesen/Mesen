@@ -47,7 +47,7 @@ class Console
 		bool _initialized = false;
 
 		void ResetComponents(bool softReset);
-		void Initialize(string filename, stringstream *filestream = nullptr, string ipsFilename = "", int32_t archiveFileIndex = -1);
+		void Initialize(string filename, stringstream *filestream = nullptr, string patchFilename = "", int32_t archiveFileIndex = -1);
 		void UpdateNesModel(bool sendNotification);
 		double GetFrameDelay();
 
@@ -73,7 +73,7 @@ class Console
 		static void LoadState(istream &loadStream);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
-		static void LoadROM(string filepath, stringstream *filestream = nullptr, int32_t archiveFileIndex = -1, string ipsFile = "");
+		static void LoadROM(string filepath, stringstream *filestream = nullptr, int32_t archiveFileIndex = -1, string patchFilepath = "");
 		static bool LoadROM(string romName, uint32_t crc32Hash);
 		static string GetROMPath();
 		static string GetRomName();

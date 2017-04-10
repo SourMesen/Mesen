@@ -37,7 +37,7 @@ enum class VideoFilterType
 extern "C" {
 	void __stdcall SetVideoFilter(VideoFilterType filter);
 	void __stdcall InitializeEmu(char* homeFolder, void*, void*, bool, bool, bool);
-	void __stdcall LoadROM(const char* filename, int32_t archiveFileIndex, char* ipsFile);
+	void __stdcall LoadROM(const char* filename, int32_t archiveFileIndex, char* patchFile);
 	void __stdcall Run();
 	void __stdcall Stop();
 }

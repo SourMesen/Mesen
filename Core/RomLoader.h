@@ -8,7 +8,7 @@ class RomLoader
 	private:
 		RomData _romData;
 		string _filename;
-		string _ipsFilename;
+		string _patchFilename;
 
 		bool LoadFromArchive(istream &zipFile, ArchiveReader& reader, int32_t archiveFileIndex = -1);
 		bool LoadFromStream(istream &romFile, string romName);
@@ -17,9 +17,10 @@ class RomLoader
 		uint8_t* ReadFile(istream &file, uint32_t &fileSize);
 		bool LoadFromMemory(uint8_t* buffer, size_t length, string romName);
 		static int32_t FindMatchingRomInFile(string filename, uint32_t crc32Hash);
+		void ApplyPatch(string patchPath, vector<uint8_t> &data);
 
 	public:
-		bool LoadFile(string filename, istream *filestream = nullptr, string ipsFilename = "", int32_t archiveFileIndex = -1);
+		bool LoadFile(string filename, istream *filestream = nullptr, string patchFilename = "", int32_t archiveFileIndex = -1);
 		RomData GetRomData();
 		static string FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash, bool useFastSearch, int32_t &archiveFileIndex);
 		static vector<string> GetArchiveRomList(string filename);

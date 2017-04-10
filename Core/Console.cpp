@@ -42,7 +42,7 @@ void Console::Release()
 	Console::Instance.reset(new Console());
 }
 
-void Console::Initialize(string romFilename, stringstream *filestream, string ipsFilename, int32_t archiveFileIndex)
+void Console::Initialize(string romFilename, stringstream *filestream, string patchFilename, int32_t archiveFileIndex)
 {
 	SoundMixer::StopAudio();
 
@@ -52,7 +52,7 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 	}
 
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
-	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, filestream, ipsFilename, archiveFileIndex);
+	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, filestream, patchFilename, archiveFileIndex);
 
 	if(mapper) {
 		_romFilepath = romFilename;
@@ -109,10 +109,10 @@ void Console::Initialize(string romFilename, stringstream *filestream, string ip
 	}
 }
 
-void Console::LoadROM(string filepath, stringstream *filestream, int32_t archiveFileIndex, string ipsFile)
+void Console::LoadROM(string filepath, stringstream *filestream, int32_t archiveFileIndex, string patchFilepath)
 {
 	Console::Pause();
-	Instance->Initialize(filepath, filestream, ipsFile, archiveFileIndex);
+	Instance->Initialize(filepath, filestream, patchFilepath, archiveFileIndex);
 	Console::Resume();
 }
 

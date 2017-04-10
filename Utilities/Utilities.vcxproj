@@ -354,6 +354,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="UpsPatcher.h" />
     <ClInclude Include="UTF8Util.h" />
     <ClInclude Include="xBRZ\config.h" />
     <ClInclude Include="xBRZ\xbrz.h" />
@@ -491,6 +492,7 @@
     <ClCompile Include="SZReader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UPnPPortMapper.cpp" />
+    <ClCompile Include="UpsPatcher.cpp" />
     <ClCompile Include="UTF8Util.cpp" />
     <ClCompile Include="xBRZ\xbrz.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

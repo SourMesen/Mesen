@@ -326,7 +326,7 @@
       <Control ID="chkPauseOnMovieEnd">Ставить на паузу после проигрывания записи</Control>
       <Control ID="chkAllowBackgroundInput">Разрешить ввод в фоне</Control>
       <Control ID="chkPauseWhenInBackground">Ставить на паузу при потере фокуса</Control>
-      <Control ID="chkAutoLoadIps">Автоматически загружать IPS</Control>
+      <Control ID="chkAutoLoadIps">Автоматически загружать IPS/UPS</Control>
       <Control ID="btnOpenMesenFolder">Открыть папку Mesen</Control>
       <Control ID="tpgFileAssociations">Ассоциации файлов</Control>
       <Control ID="grpFileAssociations">Ассоциации файлов</Control>
@@ -520,7 +520,7 @@
     <Message ID="FilterAvi">Avi файлы (*.avi)|*.avi|All Files (*.*)|*.*</Message>
     <Message ID="FilterPalette">Файлы палитры (*.pal)|*.pal|All Files (*.*)|*.*</Message>
     <Message ID="FilterRom">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS Patches (*.ips)|*.IPS|All (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS/UPS Patches (*.ips, *.ups)|*.IPS;*.UPS|All (*.*)|*.*</Message>
     <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
     <Message ID="FilterCheat">Все поддерживаемые форматы (*.cht, *.xml)|*.cht;*.xml</Message>
 
@@ -555,7 +555,7 @@
     <Message ID="HDNesTooltip">Данная опция позволяет использовать HD packs для эмулятора HDNes если они найдены.&#xA;&#xA;HD Packs должны быть помещены в папку "HdPacks" в папке с именем совпадающем с именем ROM.&#xA;например: HD Pack для MyRom.nes должны лежать в "HdPacks\MyRom\hires.txt".&#xA;&#xA;Замечание: Поддержка HD Packs не закончена и имеет ряд ограничений.</Message>
     <Message ID="MesenUpToDate">Вы используете последнюю версию Mesen</Message>
     <Message ID="PatchAndReset">Пропатчить и сбросить текущую игру?</Message>
-    <Message ID="SelectRomIps">Пожалуйста выберите ROM соответствующий IPS.</Message>
+    <Message ID="SelectRomIps">Пожалуйста выберите ROM соответствующий IPS/UPS.</Message>
     <Message ID="UnableToDownload">Невозможно загрузить файл. Проверьте ваше соединение с интернетом и попробуйте ещё раз.&#xA;&#xA;Подробно:&#xA;{0}</Message>
     <Message ID="UnableToStartMissingDependencies">Mesen could not launch because it was unable to load MesenCore.dll due to missing dependencies.</Message>
     <Message ID="UnableToStartMissingFiles">Mesen не может  запуститься из за отсутствующих файлов.&#xA;&#xA;Ошибка: MesenCore.dll не найден.</Message>

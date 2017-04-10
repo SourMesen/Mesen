@@ -478,11 +478,25 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
+		private bool IsPatchFile(string filename)
+		{
+			using(FileStream stream = File.OpenRead(filename)) {
+				byte[] header = new byte[5];
+				stream.Read(header, 0, 5);
+				if(header[0] == 'P' && header[1] == 'A' && header[2] == 'T' && header[3] == 'C' && header[4] == 'H') {
+					return true;
+				} else if(header[0] == 'U' && header[1] == 'P' && header[2] == 'S' && header[3] == '1') {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		private void LoadFile(string filename)
 		{
 			if(File.Exists(filename)) {
-				if(Path.GetExtension(filename).ToLowerInvariant() == ".ips") {
-					LoadIpsFile(filename);
+				if(IsPatchFile(filename)) {
+					LoadPatchFile(filename);
 				} else if(Path.GetExtension(filename).ToLowerInvariant() == ".mmo") {
 					InteropEmu.MoviePlay(filename);
 				} else {
@@ -491,7 +505,7 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void LoadIpsFile(string ipsFile)
+		private void LoadPatchFile(string patchFile)
 		{
 			if(_emuThread == null) {
 				if(MesenMsgBox.Show("SelectRomIps", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
@@ -502,15 +516,15 @@ namespace Mesen.GUI.Forms
 					}
 
 					if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-						LoadROM(ofd.FileName, true, -1, ipsFile);
+						LoadROM(ofd.FileName, true, -1, patchFile);
 					}					
 				}
 			} else if(MesenMsgBox.Show("PatchAndReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-				LoadROM(_currentRomPath, true, _currentRomArchiveIndex, ipsFile);
+				LoadROM(_currentRomPath, true, _currentRomArchiveIndex, patchFile);
 			}
 		}
 
-		private void LoadROM(string filename, bool autoLoadIps = false, int archiveFileIndex = -1, string ipsFileToApply = null)
+		private void LoadROM(string filename, bool autoLoadPatches = false, int archiveFileIndex = -1, string patchFileToApply = null)
 		{
 			_currentRomPath = filename;
 			_currentRomArchiveIndex = -1;
@@ -524,14 +538,26 @@ namespace Mesen.GUI.Forms
 						ctrlLoading.Visible = true;
 					}
 
-					string ipsFile = ipsFileToApply ?? Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
-					if(!File.Exists(ipsFile)) {
-						autoLoadIps = false;
+					string patchFile = patchFileToApply;
+					if(patchFile == null) {
+						string ipsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
+						if(!File.Exists(ipsFile)) {
+							string upsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ups";
+							if(File.Exists(upsFile)) {
+								patchFile = upsFile;
+							}
+						} else {
+							patchFile = ipsFile;
+						}
+					}
+					
+					if(!File.Exists(patchFile)) {
+						autoLoadPatches = false;
 					}
 
 					Task loadRomTask = new Task(() => {
 						lock(_loadRomLock) {
-							InteropEmu.LoadROM(filename, archiveFileIndex, autoLoadIps ? ipsFile : string.Empty);
+							InteropEmu.LoadROM(filename, archiveFileIndex, autoLoadPatches ? patchFile : string.Empty);
 						}
 					});
 

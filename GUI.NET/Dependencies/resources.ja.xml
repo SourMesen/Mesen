@@ -326,7 +326,7 @@
       <Control ID="chkPauseOnMovieEnd">動画が終わると自動的にポーズする</Control>
       <Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時、コントローラは反応しない</Control>
       <Control ID="chkPauseWhenInBackground">Mesenが最前面ではない時、自動的にポーズする</Control>
-      <Control ID="chkAutoLoadIps">自動的にIPSファイルをロードする</Control>
+      <Control ID="chkAutoLoadIps">自動的にパッチファイル（IPS・UPS）をロードする</Control>
       <Control ID="btnOpenMesenFolder">Mesenのフォルダを開く</Control>
       <Control ID="tpgFileAssociations">ファイルの関連付け</Control>
       <Control ID="grpFileAssociations">ファイルの関連付け</Control>
@@ -512,7 +512,7 @@
     <Message ID="FilterAvi">AVIファイル (*.avi)|*.avi|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips)|*.NES;*.ZIP;*.7z;*.IPS;*.FDS;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|IPSファイル (*.ips)|*.IPS|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|パッチファイル (*.ips, *.ups)|*.IPS;*.UPS|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterCheat">対応するすべてのファイル (*.cht, *.xml)|*.cht;*.xml</Message>
     
@@ -546,8 +546,8 @@
     <Message ID="InvalidFdsBios">選んだBIOSファイルは使えません。</Message>
     <Message ID="HDNesTooltip">このオプションを有効にすれば、MesenはHDNesのようにHDパックをロード出来るようになります。&#xA;&#xA;HDパックはMesenのフォルダの中にある「HdPacks」のフォルダにゲームと同じ名前のサブフォルダに置くと自動的にロードされます。&#xA;例）ゲームファイルは「MyRom.nes」なら、「HdPacks\MyRom」にHDパックを置くとロードされます。&#xA;&#xA;この機能はまだ開発中で、不完全なところがあります、ご了承ください。</Message>
     <Message ID="MesenUpToDate">既にMesenの最新のバージョンを使っています。</Message>
-    <Message ID="PatchAndReset">IPSパッチを当てて、ゲームをリセットしますか？</Message>
-    <Message ID="SelectRomIps">IPSファイルに合うゲームファイルを選んでください。</Message>
+    <Message ID="PatchAndReset">パッチファイルを当てて、ゲームをリセットしますか？</Message>
+    <Message ID="SelectRomIps">パッチファイルに合うゲームファイルを選んでください。</Message>
     <Message ID="UnableToDownload">ファイルをダウンロードできませんでした。ネット接続を確認してから、再試行してください。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
     <Message ID="UnableToStartMissingDependencies">MesenはMesenCore.dllをロード出来なかったため、起動できませんでした。</Message>
     <Message ID="UnableToStartMissingFiles">必要なファイルはロード出来なかったため、Mesenは起動できません。&#xA;&#xA;エラー: MesenCore.dllはロードできません。</Message>

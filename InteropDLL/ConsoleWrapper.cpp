@@ -110,7 +110,7 @@ namespace InteropEmu {
 
 		DllExport bool __stdcall IsRunning() { return Console::IsRunning(); }
 
-		DllExport void __stdcall LoadROM(char* filename, int32_t archiveFileIndex, char* ipsFile) { Console::LoadROM(filename, nullptr, archiveFileIndex, ipsFile); }
+		DllExport void __stdcall LoadROM(char* filename, int32_t archiveFileIndex, char* patchFile) { Console::LoadROM(filename, nullptr, archiveFileIndex, patchFile); }
 		DllExport void __stdcall AddKnownGameFolder(char* folder) { FolderUtilities::AddKnownGameFolder(folder); }
 
 		DllExport const char* __stdcall GetArchiveRomList(char* filename) { 
