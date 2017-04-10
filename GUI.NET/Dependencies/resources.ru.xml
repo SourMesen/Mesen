@@ -520,7 +520,7 @@
     <Message ID="FilterAvi">Avi файлы (*.avi)|*.avi|All Files (*.*)|*.*</Message>
     <Message ID="FilterPalette">Файлы палитры (*.pal)|*.pal|All Files (*.*)|*.*</Message>
     <Message ID="FilterRom">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS/UPS Patches (*.ips, *.ups)|*.IPS;*.UPS|All (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">Все поддерживаемые форматы (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS/UPS/BPS Patches (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|All (*.*)|*.*</Message>
     <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
     <Message ID="FilterCheat">Все поддерживаемые форматы (*.cht, *.xml)|*.cht;*.xml</Message>
 

@@ -2,6 +2,7 @@
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/ArchiveReader.h"
 #include "../Utilities/CRC32.h"
+#include "../Utilities/BpsPatcher.h"
 #include "../Utilities/IpsPatcher.h"
 #include "../Utilities/UpsPatcher.h"
 #include "../Utilities/ZipReader.h"
@@ -108,6 +109,8 @@ void RomLoader::ApplyPatch(string patchPath, vector<uint8_t> &data)
 			data = IpsPatcher::PatchBuffer(patchPath, data);
 		} else if(memcmp(buffer, "UPS1", 4) == 0) {
 			data = UpsPatcher::PatchBuffer(patchPath, data);
+		} else if(memcmp(buffer, "BPS1", 4) == 0) {
+			data = BpsPatcher::PatchBuffer(patchPath, data);
 		}
 	}
 }

@@ -485,7 +485,7 @@ namespace Mesen.GUI.Forms
 				stream.Read(header, 0, 5);
 				if(header[0] == 'P' && header[1] == 'A' && header[2] == 'T' && header[3] == 'C' && header[4] == 'H') {
 					return true;
-				} else if(header[0] == 'U' && header[1] == 'P' && header[2] == 'S' && header[3] == '1') {
+				} else if((header[0] == 'U' || header[0] == 'B') && header[1] == 'P' && header[2] == 'S' && header[3] == '1') {
 					return true;
 				}
 			}
@@ -540,14 +540,13 @@ namespace Mesen.GUI.Forms
 
 					string patchFile = patchFileToApply;
 					if(patchFile == null) {
-						string ipsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ips";
-						if(!File.Exists(ipsFile)) {
-							string upsFile = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ".ups";
-							if(File.Exists(upsFile)) {
-								patchFile = upsFile;
+						string[] extensions = new string[3] { ".ips", ".ups", ".bps" };
+						foreach(string ext in extensions) {
+							string file = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ext;
+							if(File.Exists(file)) {
+								patchFile = file;
+								break;
 							}
-						} else {
-							patchFile = ipsFile;
 						}
 					}
 					

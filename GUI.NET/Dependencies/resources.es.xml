@@ -325,7 +325,7 @@
       <Control ID="chkPauseOnMovieEnd">Pausar la emulación al finalizar el video</Control>
       <Control ID="chkAllowBackgroundInput">Permitir entradas aunque Mesen esté en segundo plano</Control>
       <Control ID="chkPauseWhenInBackground">Pausar la emulación aunque Mesen esté en segundo plano</Control>
-      <Control ID="chkAutoLoadIps">Cargar los archivos IPS/UPS automáticamente</Control>
+      <Control ID="chkAutoLoadIps">Cargar los archivos IPS/UPS/BPS automáticamente</Control>
       <Control ID="btnOpenMesenFolder">Abrir el directorio de Mesen</Control>
       <Control ID="tpgFileAssociations">Asociación de archivos</Control>
       <Control ID="grpFileAssociations">Asociación de archivos</Control>
@@ -516,7 +516,7 @@
     <Message ID="FilterAvi">Archivos avi (*.avi)|*.avi|Todos los archivos (*.*)|*.*</Message>
     <Message ID="FilterPalette">Archivos pal (*.pal)|*.pal|Todos los archivos (*.*)|*.*</Message>
     <Message ID="FilterRom">Todos los formatos soportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Archivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Archivos ZIP (*.zip)|*.ZIP|Archivos 7-Zip (*.7z)|*.7z|Todos los archivos (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">Todos los formatos soportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES(*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Archivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Archivos ZIP (*.zip)|*.ZIP|Archivos 7-Zip (*.7z)|*.7z|Archivos IPS/UPS (*.ips, *.ups)|*.IPS;*.UPS|Todos los archivos (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">Todos los formatos soportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES(*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Archivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Archivos ZIP (*.zip)|*.ZIP|Archivos 7-Zip (*.7z)|*.7z|Archivos IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Todos los archivos (*.*)|*.*</Message>
     <Message ID="FilterTest">Archivos de test (*.mtp)|*.mtp|Todos los archivos (*.*)|*.*</Message>
     <Message ID="FilterCheat">Todos los formatos soportados (*.cht, *.xml)|*.cht;*.xml</Message>
 
@@ -550,7 +550,7 @@
     <Message ID="HDNesTooltip">Esta opción permite los paquetes de gráficos en alta resolución de carga Mesen en el mismo formato que los del emulador HDNes.&#xA;&#xA;Los paquetes de alta resolución deberán ser colocados en los "HdPacks" en una subcarpeta con el nombre de la ROM.&#xA;Ejemplo: Un paquete para "MiRom.nes" debe estar colocado en "HdPacks\MiRom\hires.txt".&#xA;&#xA;Nota: El soporte para paquetes de alta resolución aún no es perfecto - algunas limitaciones siguen presentes.</Message>
     <Message ID="MesenUpToDate">Ya utiliza la versión mas reciente de Mesen.</Message>
     <Message ID="PatchAndReset">¿Aplicar el parche y reiniciar el juego?</Message>
-    <Message ID="SelectRomIps">Elija la ROM que corresponde al archivo IPS/UPS seleccionado.</Message>
+    <Message ID="SelectRomIps">Elija la ROM que corresponde al archivo IPS/UPS/BPS seleccionado.</Message>
     <Message ID="UnableToDownload">No se puede descargar el archivo. Compruebe su conexión a Internet e inténtelo de nuevo.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>
     <Message ID="UnableToStartMissingDependencies">Mesen no puede inciarse porque porque no puede cargar MesenCore.dll debido a dependencias no encontradas.</Message>
     <Message ID="UnableToStartMissingFiles">Mesen no puede iniciarse debido a que faltan archivos.&#xA;&#xA;Error: No se encuentra el archivo MesenCore.dll.</Message>

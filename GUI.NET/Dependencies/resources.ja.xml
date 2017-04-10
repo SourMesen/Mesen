@@ -512,7 +512,7 @@
     <Message ID="FilterAvi">AVIファイル (*.avi)|*.avi|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|パッチファイル (*.ips, *.ups)|*.IPS;*.UPS|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|パッチファイル (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterCheat">対応するすべてのファイル (*.cht, *.xml)|*.cht;*.xml</Message>
     

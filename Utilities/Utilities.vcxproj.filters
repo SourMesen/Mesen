@@ -24,6 +24,9 @@
     <Filter Include="Avi">
       <UniqueIdentifier>{8b0e23bf-1bd9-4cc1-8046-784fd01e8688}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Patches">
+      <UniqueIdentifier>{6d519bc1-7c40-448a-95d2-9ad94cd20644}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -69,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ZipReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IpsPatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LowPassFilter.h">
@@ -143,8 +143,14 @@
     <ClInclude Include="StringUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IpsPatcher.h">
+      <Filter>Patches</Filter>
+    </ClInclude>
     <ClInclude Include="UpsPatcher.h">
-      <Filter>Header Files</Filter>
+      <Filter>Patches</Filter>
+    </ClInclude>
+    <ClInclude Include="BpsPatcher.h">
+      <Filter>Patches</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +194,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ZipReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IpsPatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="blip_buf.cpp">
@@ -254,7 +257,13 @@
       <Filter>Avi</Filter>
     </ClCompile>
     <ClCompile Include="UpsPatcher.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Patches</Filter>
+    </ClCompile>
+    <ClCompile Include="IpsPatcher.cpp">
+      <Filter>Patches</Filter>
+    </ClCompile>
+    <ClCompile Include="BpsPatcher.cpp">
+      <Filter>Patches</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
