@@ -22,7 +22,10 @@ AutoSaveManager::AutoSaveManager()
 			} else {
 				_timer.Reset();
 			}
-			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(1000));
+
+			if(!_stopThread) {
+				_signal.Wait(1000);
+			}
 		}
 	});
 }
@@ -30,5 +33,6 @@ AutoSaveManager::AutoSaveManager()
 AutoSaveManager::~AutoSaveManager()
 {
 	_stopThread = true;
+	_signal.Signal();
 	_autoSaveThread.join();
 }
