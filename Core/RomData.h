@@ -127,7 +127,7 @@ struct NESHeader
 	uint32_t GetPrgSize()
 	{
 		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
-			return (((Byte9 & 0x0F) << 4) | PrgCount) * 0x4000;
+			return (((Byte9 & 0x0F) << 8) | PrgCount) * 0x4000;
 		} else {
 			if(PrgCount == 0) {
 				return 256 * 0x4000; //0 is a special value and means 256
