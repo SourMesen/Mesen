@@ -49,5 +49,7 @@ namespace UnifBoards {
 		Unl43272,
 		Bmc411120C,
 		UnlPuzzle,
+		Fk23C,
+		Fk23Ca,
 	};
 }

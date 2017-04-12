@@ -160,6 +160,7 @@
 #include "MMC3_BmcF15.h"
 #include "MMC3_ChrRam.h"
 #include "MMC3_Coolboy.h"
+#include "MMC3_Fk23C.h"
 #include "MMC3_Kof97.h"
 #include "MMC3_MaliSB.h"
 #include "MMC3_StreetHeroes.h"
@@ -511,6 +512,8 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::DreamTech01: return new DreamTech01();
 		case UnifBoards::Edu2000: return new Edu2000();
 		case UnifBoards::Eh8813A: return new Eh8813A();
+		case UnifBoards::Fk23C: return new MMC3_Fk23C(false);
+		case UnifBoards::Fk23Ca: return new MMC3_Fk23C(true);
 		case UnifBoards::Ghostbusters63in1: return new Ghostbusters63in1();			
 		case UnifBoards::Gs2004: return new Gs2004();
 		case UnifBoards::Gs2013: return new Gs2013();
