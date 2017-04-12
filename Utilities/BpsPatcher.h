@@ -5,7 +5,7 @@
 class BpsPatcher
 {
 private:
-	static uint64_t BpsPatcher::ReadBase128Number(ifstream &file);
+	static uint64_t ReadBase128Number(ifstream &file);
 
 public:
 	static vector<uint8_t> PatchBuffer(string bpsFilepath, vector<uint8_t> input);
