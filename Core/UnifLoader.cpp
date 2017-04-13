@@ -33,7 +33,7 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "10-24-C-A1", UnifBoards::UnknownBoard },
 	{ "CNROM", 3 },
 	{ "CPROM", 13 },
-	{ "D1038", 60 },
+	{ "D1038", UnifBoards::UnlD1038 },
 	{ "DANCE", UnifBoards::UnknownBoard },
 	{ "DANCE2000", UnifBoards::UnknownBoard },
 	{ "DREAMTECH01", UnifBoards::DreamTech01 },
