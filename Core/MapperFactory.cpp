@@ -217,6 +217,7 @@
 #include "Txc22211B.h"
 #include "Txc22211C.h"
 #include "TxSRom.h"
+#include "Unl255in1.h"
 #include "Unl43272.h"
 #include "UnlPci556.h"
 #include "UnlPuzzle.h"
@@ -535,6 +536,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Super40in1Ws: return new Super40in1Ws();
 		case UnifBoards::T262: return new T262();
 		case UnifBoards::Tf1201: return new Tf1201();
+		case UnifBoards::Unl255in1: return new Unl255in1();
 		case UnifBoards::Unl43272: return new Unl43272();
 		case UnifBoards::UnlPuzzle: return new UnlPuzzle();
 

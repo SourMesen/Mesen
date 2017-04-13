@@ -51,5 +51,6 @@ namespace UnifBoards {
 		UnlPuzzle,
 		Fk23C,
 		Fk23Ca,
+		Unl255in1,
 	};
 }

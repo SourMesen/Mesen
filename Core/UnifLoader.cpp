@@ -7,6 +7,7 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "13in1JY110", UnifBoards::UnknownBoard },
 	{ "190in1", UnifBoards::Bmc190in1 },
 	{ "22211", 132 },
+	{ "255in1", UnifBoards::Unl255in1 }, //Doesn't actually exist as a UNIF file (used to assign a mapper to the 255-in-1 rom)
 	{ "3D-BLOCK", UnifBoards::UnknownBoard },
 	{ "411120-C", UnifBoards::Bmc411120C },
 	{ "42in1ResetSwitch", 226 },
