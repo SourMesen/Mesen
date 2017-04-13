@@ -443,6 +443,7 @@
     <ClInclude Include="CodeRunner.h" />
     <ClInclude Include="ColorDreams46.h" />
     <ClInclude Include="CrossFeedFilter.h" />
+    <ClInclude Include="GoldenFive.h" />
     <ClInclude Include="UnlD1038.h" />
     <ClInclude Include="DaouInfosys.h" />
     <ClInclude Include="DebugBreakHelper.h" />
