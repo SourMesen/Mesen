@@ -11,6 +11,7 @@ protected:
 	
 	void InitMapper() override
 	{
+		AddRegisterRange(0x6000, 0x7FFF, MemoryOperation::Read);
 		WriteRegister(0x8000, 0);
 	}
 
