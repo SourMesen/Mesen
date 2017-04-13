@@ -12,6 +12,20 @@ protected:
 	virtual uint16_t RegisterStartAddress() override { return 0x8000; }
 	virtual uint16_t RegisterEndAddress() override { return 0xFFFF; }
 
+	virtual void InitMapper() override
+	{
+		MMC3::InitMapper();
+
+		//Needed by Famicom Yarou Vol 1 - Game apparently writes to CHR RAM before initializing the registers
+		_registers[0] = 0;
+		_registers[1] = 2;
+		_registers[2] = 4;
+		_registers[3] = 5;
+		_registers[4] = 6;
+		_registers[5] = 7;
+		UpdateChrMapping();
+	}
+
 	virtual void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
@@ -34,8 +48,10 @@ protected:
 
 	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
 	{
-		page &= 0xFF >> (0x0F - (_reg[2] & 0x0F));
-		page |= _reg[0] | ((_reg[2] & 0xF0) << 4);
+		if(!HasChrRam()) {
+			page &= 0xFF >> (0x0F - (_reg[2] & 0x0F));
+			page |= _reg[0] | ((_reg[2] & 0xF0) << 4);
+		}
 		MMC3::SelectCHRPage(slot, page, memoryType);
 	}
 
