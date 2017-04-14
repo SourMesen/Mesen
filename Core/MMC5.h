@@ -63,6 +63,8 @@ private:
 	bool _irqPending;
 	bool _ppuInFrame;
 
+	MemoryOperationType _lastVramOperationType;
+
 	void SwitchPrgBank(uint16_t reg, uint8_t value)
 	{
 		_prgBanks[reg - 0x5113] = value;
@@ -138,15 +140,12 @@ private:
 	{
 		_chrBanks[reg - 0x5120] = value | (_chrUpperBits << 8);
 		_lastChrReg = reg;
-		UpdateChrBanks(!PPU::GetControlFlags().BackgroundEnabled && !PPU::GetControlFlags().SpritesEnabled);
+		UpdateChrBanks();
 	}
 
-	void UpdateChrBanks(bool forceA = false)
+	void UpdateChrBanks()
 	{
-		_spriteFetch = IsSpriteFetch();
-		_largeSprites = PPU::GetControlFlags().LargeSprites;
-
-		bool chrA = forceA || (_largeSprites && _spriteFetch) || (!_largeSprites && _lastChrReg <= 0x5127);
+		bool chrA = !_largeSprites || (_largeSprites && _spriteFetch) || (_lastVramOperationType != MemoryOperationType::PpuRenderingRead && (_lastChrReg <= 0x5127 || _extendedRamMode == 1));
 		if(_chrMode == 0) {
 			SelectChrPage8x(0, _chrBanks[chrA ? 0x07 : 0x0B] << 3);
 		} else if(_chrMode == 1) {
@@ -177,10 +176,6 @@ private:
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(PPU::GetControlFlags().BackgroundEnabled || PPU::GetControlFlags().SpritesEnabled) {
-			if(_spriteFetch != IsSpriteFetch() || _largeSprites != PPU::GetControlFlags().LargeSprites) {
-				UpdateChrBanks();
-			}
-
 			int16_t currentScanline = PPU::GetCurrentScanline();
 			if(currentScanline != _previousScanline) {
 				if(currentScanline >= 239 || currentScanline < 0) {
@@ -344,7 +339,7 @@ protected:
 				_nametableMapping, _extendedRamMode, _exAttributeLastNametableFetch, _exAttrLastFetchCounter, _exAttrSelectedChrBank, 
 				_prgMode, prgBanks, _chrMode, _chrUpperBits, chrBanks, _lastChrReg, 
 				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame, audio, fillModeNametable,
-				_splitInSplitRegion, _splitVerticalScroll, _splitTile, _splitTileNumber);
+				_splitInSplitRegion, _splitVerticalScroll, _splitTile, _splitTileNumber, _lastVramOperationType);
 
 		if(!saving) {
 			UpdatePrgBanks();
@@ -366,6 +361,13 @@ protected:
 
 	virtual uint8_t MapperReadVRAM(uint16_t addr, MemoryOperationType memoryOperationType) override
 	{
+		if(_spriteFetch != IsSpriteFetch() || _largeSprites != PPU::GetControlFlags().LargeSprites || _lastVramOperationType != memoryOperationType) {
+			_lastVramOperationType = memoryOperationType;
+			_spriteFetch = IsSpriteFetch();
+			_largeSprites = PPU::GetControlFlags().LargeSprites;
+			UpdateChrBanks();
+		}
+
 		if(_extendedRamMode <= 1 && _verticalSplitEnabled && memoryOperationType == MemoryOperationType::PpuRenderingRead) {
 			uint32_t cycle = PPU::GetCurrentCycle();
 			int32_t scanline = PPU::GetCurrentScanline();
@@ -406,41 +408,38 @@ protected:
 			}
 		}
 
-		if(_extendedRamMode == 1) {
+		if(_extendedRamMode == 1 && !IsSpriteFetch() && memoryOperationType == MemoryOperationType::PpuRenderingRead) {
 			//"In Mode 1, nametable fetches are processed normally, and can come from CIRAM nametables, fill mode, or even Expansion RAM, but attribute fetches are replaced by data from Expansion RAM."
 			//"Each byte of Expansion RAM is used to enhance the tile at the corresponding address in every nametable"
 
 			//When fetching NT data, we set a flag and then alter the VRAM values read by the PPU on the following 3 cycles (palette, tile low/high byte)
-			uint32_t cycle = PPU::GetCurrentCycle();
-			if(cycle < 257 || cycle > 320) {
-				if(addr >= 0x2000 && (addr & 0x3FF) < 0x3C0) {
-					//Nametable fetches
-					_exAttributeLastNametableFetch = addr & 0x03FF;
-					_exAttrLastFetchCounter = 3;
-				} else if(_exAttrLastFetchCounter > 0) {
-					//Attribute fetches
-					_exAttrLastFetchCounter--;
-					switch(_exAttrLastFetchCounter) {
-						case 2:
-						{
-							//PPU palette fetch
-							//Check work ram (expansion ram) to see which tile/palette to use
-							//Use InternalReadRam to bypass the fact that the ram is supposed to be write-only in mode 0/1
-							uint8_t value = InternalReadRam(0x5C00 + _exAttributeLastNametableFetch);
+			if(addr >= 0x2000 && (addr & 0x3FF) < 0x3C0) {
+				//Nametable fetches
+				_exAttributeLastNametableFetch = addr & 0x03FF;
+				_exAttrLastFetchCounter = 3;
+			} else if(_exAttrLastFetchCounter > 0) {
+				//Attribute fetches
+				_exAttrLastFetchCounter--;
+				switch(_exAttrLastFetchCounter) {
+					case 2:
+					{
+						//PPU palette fetch
+						//Check work ram (expansion ram) to see which tile/palette to use
+						//Use InternalReadRam to bypass the fact that the ram is supposed to be write-only in mode 0/1
+						uint8_t value = InternalReadRam(0x5C00 + _exAttributeLastNametableFetch);
 
-							//"The pattern fetches ignore the standard CHR banking bits, and instead use the top two bits of $5130 and the bottom 6 bits from Expansion RAM to choose a 4KB bank to select the tile from."
-							_exAttrSelectedChrBank = ((value & 0x3F) | (_chrUpperBits << 6)) % (_chrRomSize / 0x1000);
+						//"The pattern fetches ignore the standard CHR banking bits, and instead use the top two bits of $5130 and the bottom 6 bits from Expansion RAM to choose a 4KB bank to select the tile from."
+						_exAttrSelectedChrBank = ((value & 0x3F) | (_chrUpperBits << 6)) % (_chrRomSize / 0x1000);
 
-							//Return a byte containing the same palette 4 times - this allows the PPU to select the right palette no matter the shift value
-							uint8_t palette = (value & 0xC0) >> 6;
-							return palette | palette << 2 | palette << 4 | palette << 6;
-						}
-
-						case 1:
-						case 0:
-							//PPU tile data fetch (high byte & low byte)
-							return _chrRom[_exAttrSelectedChrBank * 0x1000 + (addr & 0xFFF)];
+						//Return a byte containing the same palette 4 times - this allows the PPU to select the right palette no matter the shift value
+						uint8_t palette = (value & 0xC0) >> 6;
+						return palette | palette << 2 | palette << 4 | palette << 6;
 					}
+
+					case 1:
+					case 0:
+						//PPU tile data fetch (high byte & low byte)
+						return _chrRom[_exAttrSelectedChrBank * 0x1000 + (addr & 0xFFF)];
 				}
 			}
 		}
