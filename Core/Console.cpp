@@ -219,7 +219,9 @@ void Console::Reset(bool softReset)
 void Console::ResetComponents(bool softReset)
 {
 	Movie::Stop();
-	SoundMixer::StopRecording();
+	if(!softReset) {
+		SoundMixer::StopRecording();
+	}
 
 	_memoryManager->Reset(softReset);
 	if(!EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
@@ -312,7 +314,6 @@ void Console::Run()
 			//Used by NSF player to reset console after changing track
 			//Also used with DisablePpuReset option to reset mid-frame
 			Movie::Stop();
-			SoundMixer::StopRecording();
 			ResetComponents(true);
 			_resetRequested = false;
 		}
