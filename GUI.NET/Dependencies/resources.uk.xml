@@ -270,10 +270,10 @@
       <Control ID="mnuPresetMonochrome">Monochrome</Control>
 
       <Control ID="tpgAdvanced">Розширенi</Control>
-      <Control ID="chkDisableBackground">Відключити background</Control>
-      <Control ID="chkDisableSprites">Відключити sprites</Control>
-      <Control ID="chkForceBackgroundFirstColumn">Force background display in first column</Control>
-      <Control ID="chkForceSpritesFirstColumn">Force sprite display in first column</Control>
+      <Control ID="chkDisableBackground">Відключити фон</Control>
+      <Control ID="chkDisableSprites">Відключити спрайти</Control>
+      <Control ID="chkForceBackgroundFirstColumn">Примусово показувати фон у першому стовпці</Control>
+      <Control ID="chkForceSpritesFirstColumn">Примусово показувати спрайти у першому стовпці</Control>
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Відміна</Control>
@@ -503,11 +503,11 @@
       <Control ID="btnCancel">Вiдмiна</Control>
     </Form>
     <Form ID="frmHelp" Title="Command-line Options">
-      <Control ID="grpExample">Usage example</Control>
-      <Control ID="tpgGeneral">General</Control>
-      <Control ID="tpgVideoOptions">Video Options</Control>
-      <Control ID="tpgAudioOptions">Audio Options</Control>
-      <Control ID="tpgEmulationOptions">Emulation Options</Control>
+      <Control ID="grpExample">Приклад використання</Control>
+      <Control ID="tpgGeneral">Загальний</Control>
+      <Control ID="tpgVideoOptions">Вiдео Опцiї</Control>
+      <Control ID="tpgAudioOptions">Аудiо Опцiї</Control>
+      <Control ID="tpgEmulationOptions">Опцiї Эмуляцiї</Control>
       <Control ID="lblExplanation">This will start Mesen in fullscreen mode with the "MyGame.nes" rom loaded.  It will also use the NTSC filter, set at a 2x scale and configure the Overscan settings.  The "DoNotSaveSettings" flag is used to prevent the command line switches from pernanently altering Mesen's settings.</Control>
       <Control ID="txtGeneralOptions">/fullscreen - Start Mesen in fullscreen mode&#13;&#10;/DoNotSaveSettings - Prevent settings from being saved to the disk (useful to prevent command line options from becoming the default settings)</Control>
     </Form>
@@ -687,7 +687,7 @@
       <Value ID="Greater">Бiльше</Value>
     </Enum>
     <Enum ID="VideoCodec">
-      <Value ID="None">None (Uncompressed)</Value>
+      <Value ID="None">Немає (Нестислено)</Value>
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
     </Enum>
