@@ -104,16 +104,18 @@ namespace Mesen.GUI
 				}
 			} else {
 				try {
-					using(NamedPipeServerStream server = new NamedPipeServerStream(_identifier.ToString())) {
-						using(StreamReader reader = new StreamReader(server)) {
-							server.WaitForConnection();
+					while(true) {
+						using(NamedPipeServerStream server = new NamedPipeServerStream(_identifier.ToString())) {
+							using(StreamReader reader = new StreamReader(server)) {
+								server.WaitForConnection();
 
-							List<String> arguments = new List<String>();
-							while(server.IsConnected) {
-								arguments.Add(reader.ReadLine());
+								List<String> arguments = new List<String>();
+								while(server.IsConnected) {
+									arguments.Add(reader.ReadLine());
+								}
+
+								ThreadPool.QueueUserWorkItem(new WaitCallback(CallOnArgumentsReceived), arguments.ToArray());
 							}
-
-							ThreadPool.QueueUserWorkItem(new WaitCallback(CallOnArgumentsReceived), arguments.ToArray());
 						}
 					}
 				} catch(IOException) {
