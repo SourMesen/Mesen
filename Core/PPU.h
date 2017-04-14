@@ -28,7 +28,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 {
 	protected:
 		static PPU* Instance;
-		static constexpr uint16_t _palSpriteEvalScanline = 264;
+		static constexpr uint16_t _palSpriteEvalScanline = 265;
 	
 		BaseMapper *_mapper;
 
