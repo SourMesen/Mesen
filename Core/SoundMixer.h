@@ -12,6 +12,11 @@
 #include "CrossFeedFilter.h"
 #include "WaveRecorder.h"
 
+namespace orfanidis_eq {
+	class freq_grid;
+	class eq1;
+}
+
 class SoundMixer : public Snapshotable
 {
 public:
@@ -29,6 +34,10 @@ private:
 	static const uint32_t MaxSamplesPerFrame = MaxSampleRate / 60 * 4 * 2; //x4 to allow CPU overclocking up to 10x, x2 for panning stereo
 	static const uint32_t MaxChannelCount = 11;
 	
+	unique_ptr<orfanidis_eq::freq_grid> _eqFrequencyGrid;
+	unique_ptr<orfanidis_eq::eq1> _equalizerLeft;
+	unique_ptr<orfanidis_eq::eq1> _equalizerRight;
+
 	CrossFeedFilter _crossFeedFilter;
 	LowPassFilter _lowPassFilter;
 	StereoPanningFilter _stereoPanning;
@@ -59,6 +68,9 @@ private:
 	void EndFrame(uint32_t time);
 
 	void UpdateRates(bool forceUpdate);
+	
+	void UpdateEqualizers(bool forceUpdate);
+	void ApplyEqualizer(orfanidis_eq::eq1* equalizer, size_t sampleCount);
 
 protected:
 	virtual void StreamState(bool saving) override;

@@ -3,6 +3,7 @@
 #include "APU.h"
 #include "CPU.h"
 #include "VideoDecoder.h"
+#include "../Utilities/orfanidis_eq.h"
 
 IAudioDevice* SoundMixer::AudioDevice = nullptr;
 unique_ptr<WaveRecorder> SoundMixer::_waveRecorder;
@@ -12,6 +13,7 @@ uint32_t SoundMixer::_muteFrameCount;
 
 SoundMixer::SoundMixer()
 {
+	_eqFrequencyGrid.reset(new orfanidis_eq::freq_grid());
 	_outputBuffer = new int16_t[SoundMixer::MaxSamplesPerFrame];
 	_blipBufLeft = blip_new(SoundMixer::MaxSamplesPerFrame);
 	_blipBufRight = blip_new(SoundMixer::MaxSamplesPerFrame);
@@ -77,6 +79,9 @@ void SoundMixer::Reset()
 	}
 	memset(_channelOutput, 0, sizeof(_channelOutput));
 	memset(_currentOutput, 0, sizeof(_currentOutput));
+
+	UpdateRates(true);
+	UpdateEqualizers(true);
 }
 
 void SoundMixer::PlayAudioBuffer(uint32_t time)
@@ -84,10 +89,14 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	EndFrame(time);
 
 	size_t sampleCount = blip_read_samples(_blipBufLeft, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 1);
+	ApplyEqualizer(_equalizerLeft.get(), sampleCount);
+
 	if(_hasPanning) {
 		blip_read_samples(_blipBufRight, _outputBuffer + 1, SoundMixer::MaxSamplesPerFrame, 1);
+		ApplyEqualizer(_equalizerRight.get(), sampleCount);
 	} else {
-		for(size_t i = 0; i < sampleCount * 2; i+=2) {
+		//Copy left channel to right channel (optimization - when no panning is used)
+		for(size_t i = 0; i < sampleCount * 2; i += 2) {
 			_outputBuffer[i + 1] = _outputBuffer[i];
 		}
 	}
@@ -128,15 +137,19 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 			}
 		}
 	}
-		
+
 	VideoDecoder::GetInstance()->AddRecordingSound(_outputBuffer, (uint32_t)sampleCount, _sampleRate);
 
-	if(EmulationSettings::GetSampleRate() != _sampleRate) {
-		//Update sample rate for next frame if setting changed
-		_sampleRate = EmulationSettings::GetSampleRate();
-		UpdateRates(true);
-	} else {
-		UpdateRates(false);
+	if(EmulationSettings::NeedAudioSettingsUpdate()) {
+		if(EmulationSettings::GetSampleRate() != _sampleRate) {
+			//Update sample rate for next frame if setting changed
+			_sampleRate = EmulationSettings::GetSampleRate();
+			UpdateRates(true);
+			UpdateEqualizers(true);
+		} else {
+			UpdateEqualizers(false);
+			UpdateRates(false);
+		}
 	}
 }
 
@@ -164,11 +177,11 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 		_volumes[i] = EmulationSettings::GetChannelVolume((AudioChannel)i);
 		_panning[i] = EmulationSettings::GetChannelPanning((AudioChannel)i);
 		if(_panning[i] != 1.0) {
-			if(_hasPanning) {
+			if(!_hasPanning) {
 				blip_clear(_blipBufLeft);
 				blip_clear(_blipBufRight);
 			}
-			_hasPanning = true;
+			hasPanning = true;
 		}
 	}
 	_hasPanning = hasPanning;
@@ -251,6 +264,54 @@ void SoundMixer::EndFrame(uint32_t time)
 	//Reset everything
 	_timestamps.clear();
 	memset(_channelOutput, 0, sizeof(_channelOutput));
+}
+
+void SoundMixer::ApplyEqualizer(orfanidis_eq::eq1* equalizer, size_t sampleCount)
+{
+	if(equalizer) {
+		int offset = equalizer == _equalizerRight.get() ? 1 : 0;
+		for(size_t i = 0; i < sampleCount; i++) {
+			double in = _outputBuffer[i * 2 + offset];
+			double out;
+			equalizer->sbs_process(&in, &out);
+			_outputBuffer[i * 2 + offset] = (int16_t)out;
+		}
+	}
+}
+
+void SoundMixer::UpdateEqualizers(bool forceUpdate)
+{
+	EqualizerFilterType type = EmulationSettings::GetEqualizerFilterType();
+	if(type != EqualizerFilterType::None) {
+		vector<double> bands = EmulationSettings::GetEqualizerBands();
+
+		if(bands.size() != _eqFrequencyGrid->get_number_of_bands()) {
+			_equalizerLeft.reset();
+			_equalizerRight.reset();
+		}
+
+		if((_equalizerLeft && (int)_equalizerLeft->get_eq_type() != (int)type) || !_equalizerLeft || forceUpdate) {
+			bands.insert(bands.begin(), bands[0] - (bands[1] - bands[0]));
+			bands.insert(bands.end(), bands[bands.size() - 1] + (bands[bands.size() - 1] - bands[bands.size() - 2]));
+			_eqFrequencyGrid.reset(new orfanidis_eq::freq_grid());
+			for(size_t i = 1; i < bands.size() - 1; i++) {
+				_eqFrequencyGrid->add_band((bands[i] + bands[i - 1]) / 2, bands[i], (bands[i + 1] + bands[i]) / 2);
+			}
+
+			_equalizerLeft.reset(new orfanidis_eq::eq1(_eqFrequencyGrid.get(), (orfanidis_eq::filter_type)EmulationSettings::GetEqualizerFilterType()));
+			_equalizerRight.reset(new orfanidis_eq::eq1(_eqFrequencyGrid.get(), (orfanidis_eq::filter_type)EmulationSettings::GetEqualizerFilterType()));
+			_equalizerLeft->set_sample_rate(_sampleRate);
+			_equalizerRight->set_sample_rate(_sampleRate);
+		}
+
+		for(unsigned int i = 0; i < _eqFrequencyGrid->get_number_of_bands(); i++) {
+			_equalizerLeft->change_band_gain_db(i, EmulationSettings::GetBandGain(i));
+			_equalizerRight->change_band_gain_db(i, EmulationSettings::GetBandGain(i));
+		}
+	} else {
+		_equalizerLeft.reset();
+		_equalizerRight.reset();
+	}
 }
 
 void SoundMixer::StartRecording(string filepath)

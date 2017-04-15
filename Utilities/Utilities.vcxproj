@@ -341,6 +341,7 @@
     <ClInclude Include="nes_ntsc_config.h" />
     <ClInclude Include="nes_ntsc_impl.h" />
     <ClInclude Include="BaseCodec.h" />
+    <ClInclude Include="orfanidis_eq.h" />
     <ClInclude Include="PlatformUtilities.h" />
     <ClInclude Include="PNGHelper.h" />
     <ClInclude Include="RawCodec.h" />

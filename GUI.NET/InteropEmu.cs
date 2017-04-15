@@ -133,6 +133,9 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetMasterVolume(double volume);
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(AudioChannel channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetChannelPanning(AudioChannel channel, double panning);
+		[DllImport(DLLPath)] public static extern void SetEqualizerFilterType(EqualizerFilterType filter);
+		[DllImport(DLLPath)] public static extern void SetEqualizerBands([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]double[] bands, UInt32 length);
+		[DllImport(DLLPath)] public static extern void SetBandGain(int band, double gain);
 		[DllImport(DLLPath)] public static extern void SetSampleRate(UInt32 sampleRate);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
 		[DllImport(DLLPath)] public static extern void SetStereoFilter(StereoFilter stereoFilter);
@@ -1241,6 +1244,14 @@ namespace Mesen.GUI
 		VRC7 = 8,
 		Namco163 = 9,
 		Sunsoft5B = 10
+	}
+
+	public enum EqualizerFilterType
+	{
+		None = 0,
+		Butterworth = 1,
+		Chebyshev1 = 2,
+		Chebyshev2 = 3
 	}
 
 	public enum VideoCodec

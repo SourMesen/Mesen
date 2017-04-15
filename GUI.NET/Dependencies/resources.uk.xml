@@ -163,6 +163,9 @@
       <Control ID="trkVrc7Pan">VRC7</Control>
       <Control ID="trkNamcoPan">Namco</Control>
       <Control ID="trkSunsoftPan">Sunsoft</Control>
+
+      <Control ID="tpgEqualizer">Equalizer</Control>
+      <Control ID="chkEnableEqualizer">Enable equalizer</Control>
     </Form>
     <Form ID="frmInputConfig" Title="Пристрої введення">
       <Control ID="btnOK">OK</Control>

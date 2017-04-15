@@ -85,7 +85,11 @@ namespace Mesen.GUI.Forms
 							throw new Exception("No radio button matching value found");
 						}
 					} else if(kvp.Value is ctrlTrackbar) {
-						((ctrlTrackbar)kvp.Value).Value = (int)(uint)value;
+						if(field.FieldType == typeof(Int32)) {
+							((ctrlTrackbar)kvp.Value).Value = (int)value;
+						} else {
+							((ctrlTrackbar)kvp.Value).Value = (int)(uint)value;
+						}
 					} else if(kvp.Value is ctrlHorizontalTrackbar) {
 						((ctrlHorizontalTrackbar)kvp.Value).Value = (int)value;
 					} else if(kvp.Value is TrackBar) {
@@ -173,7 +177,11 @@ namespace Mesen.GUI.Forms
 						} else if(kvp.Value is Panel) {
 							field.SetValue(Entity, kvp.Value.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag);
 						} else if(kvp.Value is ctrlTrackbar) {
-							field.SetValue(Entity, (UInt32)((ctrlTrackbar)kvp.Value).Value);
+							if(field.FieldType == typeof(Int32)) {
+								field.SetValue(Entity, (Int32)((ctrlTrackbar)kvp.Value).Value);
+							} else {
+								field.SetValue(Entity, (UInt32)((ctrlTrackbar)kvp.Value).Value);
+							}
 						} else if(kvp.Value is ctrlHorizontalTrackbar) {
 							field.SetValue(Entity, (Int32)((ctrlHorizontalTrackbar)kvp.Value).Value);
 						} else if(kvp.Value is TrackBar) {

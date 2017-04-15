@@ -27,13 +27,18 @@ namespace Mesen.GUI.Controls
 			}			
 		}
 
+		public int Minimum
+		{
+			get { return trackBar.Minimum; }
+			set { trackBar.Minimum = value; }
+		}
+
 		public int Maximum
 		{
 			get { return trackBar.Maximum; }
 			set { trackBar.Maximum = value; }
 		}
-
-
+		
 		[Bindable(true)]
 		[Browsable(true)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -50,13 +55,23 @@ namespace Mesen.GUI.Controls
 			set
 			{
 				trackBar.Value = value;
+				UpdateText();
+			}
+		}
+
+		private void UpdateText()
+		{
+			if(this.Minimum == 0) {
 				txtValue.Text = trackBar.Value.ToString() + "%";
+			} else {
+				txtValue.Text = (trackBar.Value / 10.0).ToString() + "dB";
+				txtValue.Font = new Font("Microsoft Sans Serif", 6.75F);
 			}
 		}
 
 		private void trackBar_ValueChanged(object sender, EventArgs e)
 		{
-			txtValue.Text = trackBar.Value.ToString() + "%";
+			UpdateText();
 		}
 	}
 }

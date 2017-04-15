@@ -162,7 +162,10 @@
       <Control ID="trkVrc6Pan">VRC6</Control>
       <Control ID="trkVrc7Pan">VRC7</Control>
       <Control ID="trkNamcoPan">Namco</Control>
-      <Control ID="trkSunsoftPan">Sunsoft</Control> 
+      <Control ID="trkSunsoftPan">Sunsoft</Control>
+      
+      <Control ID="tpgEqualizer">Equalizer</Control>
+      <Control ID="chkEnableEqualizer">Enable equalizer</Control>
     </Form>
     <Form ID="frmInputConfig" Title="Configuração de controles">
       <Control ID="btnOK">OK</Control>

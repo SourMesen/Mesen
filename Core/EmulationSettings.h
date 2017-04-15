@@ -67,6 +67,14 @@ enum class AudioChannel
 	Sunsoft5B = 10
 };
 
+enum class EqualizerFilterType
+{
+	None = 0,
+	Butterworth = 1,
+	Chebyshev1 = 2,
+	Chebyshev2 = 3
+};
+
 enum class NesModel
 {
 	Auto = 0,
@@ -322,9 +330,13 @@ private:
 
 	static Language _displayLanguage;
 
+	static bool _audioSettingsChanged;
 	static uint32_t _audioLatency;
 	static double _channelVolume[11];
 	static double _channelPanning[11];
+	static EqualizerFilterType _equalizerFilterType;
+	static vector<double> _bandGains;
+	static vector<double> _bands;
 	static double _masterVolume;
 	static uint32_t _sampleRate;
 	static StereoFilter _stereoFilter;
@@ -470,11 +482,48 @@ public:
 	static void SetChannelPanning(AudioChannel channel, double panning)
 	{
 		_channelPanning[(int)channel] = panning;
+		_audioSettingsChanged = true;
+	}
+
+	static double GetBandGain(int band)
+	{
+		if(band < (int)_bandGains.size()) {
+			return _bandGains[band];
+		} else {
+			return 0;
+		}
+	}
+
+	static void SetBandGain(int band, double gain)
+	{
+		if(band < (int)_bandGains.size()) {
+			_bandGains[band] = gain;
+		}
+		_audioSettingsChanged = true;
+	}
+	
+	static vector<double> GetEqualizerBands()
+	{
+		return _bands;
+	}
+
+	static void SetEqualizerBands(double *bands, uint32_t bandCount);
+
+	static EqualizerFilterType GetEqualizerFilterType()
+	{
+		return _equalizerFilterType;
+	}
+
+	static void SetEqualizerFilterType(EqualizerFilterType filter)
+	{
+		_equalizerFilterType = filter;
+		_audioSettingsChanged = true;
 	}
 
 	static void SetSampleRate(uint32_t sampleRate)
 	{
 		_sampleRate = sampleRate;
+		_audioSettingsChanged = true;
 	}
 
 	static uint32_t GetSampleRate()
@@ -485,27 +534,32 @@ public:
 	static void SetAudioLatency(uint32_t msLatency)
 	{
 		_audioLatency = msLatency;
+		_audioSettingsChanged = true;
 	}
 
 	static void SetStereoFilter(StereoFilter stereoFilter)
 	{
 		_stereoFilter = stereoFilter;
+		_audioSettingsChanged = true;
 	}
 
 	static void SetStereoDelay(int32_t delay)
 	{
 		_stereoDelay = delay;
+		_audioSettingsChanged = true;
 	}
 
 	static void SetStereoPanningAngle(double angle)
 	{
 		_stereoAngle = angle;
+		_audioSettingsChanged = true;
 	}
 
 	static void SetReverbParameters(double strength, double delay)
 	{
 		_reverbStrength = strength;
 		_reverbDelay = delay;
+		_audioSettingsChanged = true;
 	}
 
 	static StereoFilter GetStereoFilter()
@@ -536,6 +590,16 @@ public:
 	static void SetCrossFeedRatio(uint32_t ratio)
 	{
 		_crossFeedRatio = ratio;
+		_audioSettingsChanged = true;
+	}
+
+	static bool NeedAudioSettingsUpdate()
+	{
+		bool value = _audioSettingsChanged;
+		if(value) {
+			_audioSettingsChanged = false;
+		}
+		return value;
 	}
 
 	static uint32_t GetCrossFeedRatio()

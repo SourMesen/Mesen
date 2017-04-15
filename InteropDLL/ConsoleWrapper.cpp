@@ -358,6 +358,9 @@ namespace InteropEmu {
 		DllExport void __stdcall SetDisplayLanguage(Language lang) { EmulationSettings::SetDisplayLanguage(lang); }
 		DllExport void __stdcall SetChannelVolume(uint32_t channel, double volume) { EmulationSettings::SetChannelVolume((AudioChannel)channel, volume); }
 		DllExport void __stdcall SetChannelPanning(uint32_t channel, double panning) { EmulationSettings::SetChannelPanning((AudioChannel)channel, panning); }
+		DllExport void __stdcall SetEqualizerFilterType(EqualizerFilterType filter) { EmulationSettings::SetEqualizerFilterType(filter); }
+		DllExport void __stdcall SetBandGain(uint32_t band, double gain) { EmulationSettings::SetBandGain(band, gain); }
+		DllExport void __stdcall SetEqualizerBands(double *bands, uint32_t bandCount) { EmulationSettings::SetEqualizerBands(bands, bandCount); }
 		DllExport void __stdcall SetMasterVolume(double volume) { EmulationSettings::SetMasterVolume(volume); }
 		DllExport void __stdcall SetSampleRate(uint32_t sampleRate) { EmulationSettings::SetSampleRate(sampleRate); }
 		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { EmulationSettings::SetAudioLatency(msLatency); }

@@ -163,6 +163,9 @@
       <Control ID="trkVrc7Pan">VRC7</Control>
       <Control ID="trkNamcoPan">Namco</Control>
       <Control ID="trkSunsoftPan">Sunsoft</Control>
+
+      <Control ID="tpgEqualizer">イコライザー</Control>
+      <Control ID="chkEnableEqualizer">イコライザーを有効にする</Control>      
     </Form>
     <Form ID="frmInputConfig" Title="コントローラ設定">
       <Control ID="btnOK">OK</Control>

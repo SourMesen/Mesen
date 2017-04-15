@@ -163,6 +163,9 @@
       <Control ID="trkVrc7Pan">VRC7</Control>
       <Control ID="trkNamcoPan">Namco</Control>
       <Control ID="trkSunsoftPan">Sunsoft</Control>
+
+      <Control ID="tpgEqualizer">Égaliseur</Control>
+      <Control ID="chkEnableEqualizer">Activer l'égaliseur</Control>
     </Form>
     <Form ID="frmInputConfig" Title="Configuration des manettes">
       <Control ID="btnOK">OK</Control>

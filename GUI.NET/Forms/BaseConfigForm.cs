@@ -170,5 +170,15 @@ namespace Mesen.GUI.Forms
 
 			return default(T);
 		}
+
+		public static void SetEnumValue<T>(this ComboBox cbo, T value)
+		{
+			for(int i = 0; i < cbo.Items.Count; i++) {
+				if(ResourceHelper.GetEnumText((Enum)(object)value) == cbo.Items[i].ToString()) {
+					cbo.SelectedIndex = i;
+					break;
+				}
+			}
+		}
 	}
 }
