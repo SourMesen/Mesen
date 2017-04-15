@@ -49,12 +49,12 @@ vector<uint8_t> UpsPatcher::PatchBuffer(string upsFilepath, vector<uint8_t> inpu
 		}
 
 		vector<uint8_t> output;
-		output.resize(outputFileSize);
+		output.resize((size_t)outputFileSize);
 		std::copy(input.begin(), input.end(), output.begin());
 
-		uint64_t pos = 0;
+		uint32_t pos = 0;
 		while((size_t)upsFile.tellg() < fileSize - 12) {
-			uint64_t offset = ReadBase128Number(upsFile);
+			uint32_t offset = (uint32_t)ReadBase128Number(upsFile);
 			if(offset == -1) {
 				//Invalid file
 				return input;
