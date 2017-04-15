@@ -11,7 +11,7 @@
       <Control ID="mnuGame">Гра</Control>
       <Control ID="mnuPause">Пауза</Control>
       <Control ID="mnuReset">Скидання</Control>
-      <Control ID="mnuPowerCycle">Power Cycle</Control>
+      <Control ID="mnuPowerCycle">Цикл включення</Control>
       <Control ID="mnuSwitchDiskSide">Змінити сторону диска</Control>
       <Control ID="mnuSelectDisk">Вибрати диск</Control>
       <Control ID="mnuEjectDisk">Вилучити диск</Control>
@@ -71,7 +71,7 @@
       <Control ID="mnuSoundRecorder">Запис звуку</Control>
       <Control ID="mnuWaveRecord">Почати</Control>
       <Control ID="mnuWaveStop">Зупинити</Control>
-      <Control ID="mnuVideoRecorder">Video Recorder</Control>
+      <Control ID="mnuVideoRecorder">Відеомагнітофон</Control>
       <Control ID="mnuAviRecord">Почати</Control>
       <Control ID="mnuAviStop">Зупинити</Control>      
       <Control ID="mnuCheats">Чити</Control>
@@ -87,11 +87,11 @@
       <Control ID="mnuDebugger">Налагодження</Control>
       <Control ID="mnuLogWindow">Лог</Control>
       <Control ID="mnuTakeScreenshot">Зробити скріншот</Control>
-      <Control ID="mnuRandomGame">Load Random Game</Control>
+      <Control ID="mnuRandomGame">Завантажити випадкову гру</Control>
       <Control ID="mnuHelp">Допомога</Control>
       <Control ID="mnuCheckForUpdates">Перевірити оновлення</Control>
       <Control ID="mnuReportBug">Повідомити про помилку</Control>
-      <Control ID="mnuHelpWindow">Command-line options</Control>
+      <Control ID="mnuHelpWindow">Параметри командного рядка</Control>
       <Control ID="mnuAbout">Про програму</Control>
 
       <!-- Archive Load Message -->
@@ -111,8 +111,8 @@
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkSwapDutyCycles">Переплутана шпаруватість (як на старих клонах)</Control>
       <Control ID="chkSilenceTriangleHighFreq">Заглушати ультразвукові частоти на каналі triangle (зменшує "трiск")</Control>
-      <Control ID="chkReduceDmcPopping">Reduce popping sounds on the DMC channel</Control>
-      <Control ID="chkDisableNoiseModeFlag">Disable noise channel mode flag</Control>
+      <Control ID="chkReduceDmcPopping">Зменшити клацання на каналі DMC</Control>
+      <Control ID="chkDisableNoiseModeFlag">Відключити прапор режиму шумового каналу</Control>
       <Control ID="tpgEffects">Ефекти</Control>
       <Control ID="grpStereo">Стерео</Control>
       <Control ID="radStereoDisabled">Відключити</Control>
@@ -120,7 +120,7 @@
       <Control ID="radStereoPanning">Панорамування</Control>
       <Control ID="lblStereoDelayMs">мс</Control>
       <Control ID="lblStereoPanningAngle">кут в градусах</Control>
-      <Control ID="chkCrossFeedEnabled">Enable Crossfeed:</Control>
+      <Control ID="chkCrossFeedEnabled">Включити кільцювання:</Control>
       <Control ID="grpReverb">Відлуння</Control>
       <Control ID="chkReverbEnabled">Включена</Control>
       <Control ID="lblReverbDelay">Затримка :</Control>
@@ -130,7 +130,7 @@
       <Control ID="chkEnableAudio">Увімкнути звук</Control>
       <Control ID="lblSampleRate">Частота дискретизації:</Control>
       <Control ID="lblLatencyMs">мс</Control>
-      <Control ID="lblLatencyWarning">Low values may cause sound problems</Control>
+      <Control ID="lblLatencyWarning">Низькі значення можуть викликати проблеми зі звуком</Control>
       <Control ID="lblAudioLatency">Затримка:</Control>
       <Control ID="lblAudioDevice">Пристрій:</Control>
       <Control ID="tpgVolume">Гучність</Control>
@@ -151,7 +151,7 @@
       <Control ID="trkNamco163Vol">Namco</Control>
       <Control ID="trkSunsoft5b">Sunsoft</Control>
 
-      <Control ID="tpgPanning">Panning</Control>
+      <Control ID="tpgPanning">Панорамування</Control>
       <Control ID="trkDmcPan">DMC</Control>
       <Control ID="trkNoisePan">Noise</Control>
       <Control ID="trkTrianglePan">Triangle</Control>
@@ -229,7 +229,7 @@
       <Control ID="lblVideoFilter">Фiльтр :</Control>
       <Control ID="chkVerticalSync">Включити вертикальну синхронізацію</Control>
       <Control ID="lblDisplayRatio">Співвідношення сторін :</Control>
-      <Control ID="lblCustomRatio">Custom ratio:</Control>
+      <Control ID="lblCustomRatio">Користувацьке співвідношення:</Control>
       <Control ID="chkBilinearInterpolation">Білінійна інтерполяція</Control>
       <Control ID="chkShowFps">Показувати FPS</Control>
       <Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
@@ -260,9 +260,9 @@
       <Control ID="trkSharpness">Рiзкiсть</Control>
       <Control ID="chkMergeFields">Злиття полів</Control>
 
-      <Control ID="trkYFilterLength">Y Filter (Horizontal Blur)</Control>
-      <Control ID="trkIFilterLength">I Filter (Horizontal Bleed)</Control>
-      <Control ID="trkQFilterLength">Q Filter (Horizontal Bleed)</Control>
+      <Control ID="trkYFilterLength">Y Фільтр (Розмиття по горизонталі)</Control>
+      <Control ID="trkIFilterLength">I Фiльтр (Horizontal Bleed)</Control>
+      <Control ID="trkQFilterLength">Q Фiльтр (Horizontal Bleed)</Control>
 
       <Control ID="grpScanlines">Scanlines</Control>
       <Control ID="trkScanlines">Scanlines</Control>
@@ -295,10 +295,10 @@
       <Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
       <Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
       <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads (Famicom behavior)</Control>
-      <Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
-      <Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>
-      <Control ID="chkDisablePpuReset">Do not reset PPU when resetting console (Famicom behavior)</Control>
-      <Control ID="chkUseNes101Hvc101Behavior">Use NES/HVC-101 (Top-loader / AV Famicom) behavior</Control>
+      <Control ID="chkDisableOamAddrBug">Вiдключити PPU OAMADDR баг эмуляцiї</Control>
+      <Control ID="chkDisablePaletteRead">Вiдключити PPU читання палiтри</Control>
+      <Control ID="chkDisablePpuReset">Не скидувати PPU при перезавантаженні консолі (Поведiнка Famicom)</Control>
+      <Control ID="chkUseNes101Hvc101Behavior">Використовувати NES/HVC-101 (Top-loader / AV Famicom) поведінку</Control>
 
       <Control ID="tpgOverclocking">Розгін</Control>
       <Control ID="grpOverclocking">Розгін CPU</Control>
@@ -466,7 +466,7 @@
       <Control ID="lblWebsite">Сайт:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
       <Control ID="labelVersion">Версiя: 0.8.0 (Beta)</Control>
-      <Control ID="lblDonate">If you want to support Mesen, please consider donating.&#xA;Thank you for your support!</Control>
+      <Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте.&#xA;Дякую за вашу підтримку!</Control>
       <Control ID="okButton">&amp;OK</Control>
     </Form>
     <Form ID="frmVsGameConfig" Title="Конфігурація VS">
@@ -495,13 +495,13 @@
       <Control ID="btnOK">ОК</Control>
       <Control ID="btnCancel">Вiдмiна</Control>
     </Form>
-    <Form ID="frmRecordAvi" Title="Video Recorder">
-      <Control ID="lblAviFile">Save to:</Control>
-      <Control ID="lblCodec">Video Codec:</Control>
-      <Control ID="lblCompressionLevel">Compression Level:</Control>
-      <Control ID="lblLowCompression">low&#13;(fast)</Control>
-      <Control ID="lblHighCompression">high&#13;(slow)</Control>
-      <Control ID="btnBrowse">Browse...</Control>
+    <Form ID="frmRecordAvi" Title="Відеомагнітофон">
+      <Control ID="lblAviFile">Зберегти до:</Control>
+      <Control ID="lblCodec">Вiдео кодек:</Control>
+      <Control ID="lblCompressionLevel">Рівень Стиснення:</Control>
+      <Control ID="lblLowCompression">низький&#13;(швидко)</Control>
+      <Control ID="lblHighCompression">високий&#13;(повiльно)</Control>
+      <Control ID="btnBrowse">Огляд...</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Вiдмiна</Control>
     </Form>
@@ -536,9 +536,9 @@
 
     <Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
 
-    <Message ID="RiskyOptionHint">(not recommended)</Message>
+    <Message ID="RiskyOptionHint">(не рекомендовано)</Message>
 
-    <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
+    <Message ID="RandomGameNoGameFound">Mesen не зміг знайти будь-які ігри для завантаження.</Message>
 
     <Message ID="CheatsFound">iгр {0}, читiв {1}</Message>
     <Message ID="CheatsImported">{0} читiв імпортовано для {1}.</Message>
@@ -578,7 +578,7 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Зменшити Швидкість</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
-    <Message ID="EmulatorShortcutMappings_Exit">Exit</Message>
+    <Message ID="EmulatorShortcutMappings_Exit">Вихід</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернути диск</Message>
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставити наступний диск</Message>
@@ -589,7 +589,7 @@
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Попередній слот для збережень</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleCheats">Enable/Disable Cheat Codes</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleCheats">Включити/Виключити Чит Коди</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
