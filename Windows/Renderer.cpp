@@ -513,7 +513,7 @@ namespace NES
 			//Draw nes screen
 			DrawNESScreen();
 
-			if(paused) {
+			if(paused && !EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay)) {
 				DrawPauseScreen();
 			} else if(VideoDecoder::GetInstance()->IsRunning()) {
 				if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {

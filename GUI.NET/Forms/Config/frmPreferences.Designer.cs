@@ -45,6 +45,8 @@ namespace Mesen.GUI.Forms.Config
 			this.cboDisplayLanguage = new System.Windows.Forms.ComboBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
+			this.tpgShortcuts = new System.Windows.Forms.TabPage();
+			this.ctrlEmulatorShortcuts = new Mesen.GUI.Forms.Config.ctrlEmulatorShortcuts();
 			this.tpgSaveData = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpCloudSaves = new System.Windows.Forms.GroupBox();
@@ -91,16 +93,17 @@ namespace Mesen.GUI.Forms.Config
 			this.chkUnfFormat = new System.Windows.Forms.CheckBox();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkDisableGameDatabase = new ctrlRiskyOption();
+			this.chkDisableGameDatabase = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.tpgShortcuts = new System.Windows.Forms.TabPage();
-			this.ctrlEmulatorShortcuts = new Mesen.GUI.Forms.Config.ctrlEmulatorShortcuts();
+			this.chkDisplayMovieIcons = new System.Windows.Forms.CheckBox();
+			this.chkHidePauseOverlay = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
+			this.tpgShortcuts.SuspendLayout();
 			this.tpgSaveData.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpCloudSaves.SuspendLayout();
@@ -125,7 +128,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpFileFormat.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.tpgShortcuts.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -137,6 +139,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.tlpMain.ColumnCount = 1;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpMain.Controls.Add(this.chkHidePauseOverlay, 0, 9);
 			this.tlpMain.Controls.Add(this.chkSingleInstance, 0, 2);
 			this.tlpMain.Controls.Add(this.chkAutomaticallyCheckForUpdates, 0, 1);
 			this.tlpMain.Controls.Add(this.chkPauseOnMovieEnd, 0, 6);
@@ -144,12 +147,15 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 4);
 			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 3);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 0, 1);
-			this.tlpMain.Controls.Add(this.btnOpenMesenFolder, 0, 9);
+			this.tlpMain.Controls.Add(this.btnOpenMesenFolder, 0, 11);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel2, 0, 0);
+			this.tlpMain.Controls.Add(this.chkDisplayMovieIcons, 0, 8);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 10;
+			this.tlpMain.RowCount = 12;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -219,7 +225,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAutoLoadIps.AutoSize = true;
 			this.chkAutoLoadIps.Location = new System.Drawing.Point(3, 75);
 			this.chkAutoLoadIps.Name = "chkAutoLoadIps";
-			this.chkAutoLoadIps.Size = new System.Drawing.Size(132, 17);
+			this.chkAutoLoadIps.Size = new System.Drawing.Size(185, 17);
 			this.chkAutoLoadIps.TabIndex = 9;
 			this.chkAutoLoadIps.Text = "Auto-load IPS/UPS/BPS patches";
 			this.chkAutoLoadIps.UseVisualStyleBackColor = true;
@@ -299,6 +305,25 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
+			// 
+			// tpgShortcuts
+			// 
+			this.tpgShortcuts.Controls.Add(this.ctrlEmulatorShortcuts);
+			this.tpgShortcuts.Location = new System.Drawing.Point(4, 22);
+			this.tpgShortcuts.Name = "tpgShortcuts";
+			this.tpgShortcuts.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgShortcuts.Size = new System.Drawing.Size(479, 343);
+			this.tpgShortcuts.TabIndex = 7;
+			this.tpgShortcuts.Text = "Shortcut Keys";
+			this.tpgShortcuts.UseVisualStyleBackColor = true;
+			// 
+			// ctrlEmulatorShortcuts
+			// 
+			this.ctrlEmulatorShortcuts.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlEmulatorShortcuts.Location = new System.Drawing.Point(3, 3);
+			this.ctrlEmulatorShortcuts.Name = "ctrlEmulatorShortcuts";
+			this.ctrlEmulatorShortcuts.Size = new System.Drawing.Size(473, 337);
+			this.ctrlEmulatorShortcuts.TabIndex = 0;
 			// 
 			// tpgSaveData
 			// 
@@ -883,9 +908,10 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisableGameDatabase
 			// 
 			this.chkDisableGameDatabase.AutoSize = true;
-			this.chkDisableGameDatabase.Location = new System.Drawing.Point(3, 3);
+			this.chkDisableGameDatabase.Checked = false;
+			this.chkDisableGameDatabase.Location = new System.Drawing.Point(0, 0);
 			this.chkDisableGameDatabase.Name = "chkDisableGameDatabase";
-			this.chkDisableGameDatabase.Size = new System.Drawing.Size(170, 17);
+			this.chkDisableGameDatabase.Size = new System.Drawing.Size(268, 23);
 			this.chkDisableGameDatabase.TabIndex = 6;
 			this.chkDisableGameDatabase.Text = "Disable built-in game database";
 			// 
@@ -914,24 +940,25 @@ namespace Mesen.GUI.Forms.Config
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
-			// tpgShortcuts
+			// chkDisplayMovieIcons
 			// 
-			this.tpgShortcuts.Controls.Add(this.ctrlEmulatorShortcuts);
-			this.tpgShortcuts.Location = new System.Drawing.Point(4, 22);
-			this.tpgShortcuts.Name = "tpgShortcuts";
-			this.tpgShortcuts.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgShortcuts.Size = new System.Drawing.Size(479, 343);
-			this.tpgShortcuts.TabIndex = 7;
-			this.tpgShortcuts.Text = "Shortcut Keys";
-			this.tpgShortcuts.UseVisualStyleBackColor = true;
+			this.chkDisplayMovieIcons.AutoSize = true;
+			this.chkDisplayMovieIcons.Location = new System.Drawing.Point(3, 167);
+			this.chkDisplayMovieIcons.Name = "chkDisplayMovieIcons";
+			this.chkDisplayMovieIcons.Size = new System.Drawing.Size(304, 17);
+			this.chkDisplayMovieIcons.TabIndex = 19;
+			this.chkDisplayMovieIcons.Text = "Display play/record icon when playing or recording a movie";
+			this.chkDisplayMovieIcons.UseVisualStyleBackColor = true;
 			// 
-			// ctrlEmulatorShortcuts
+			// chkHidePauseOverlay
 			// 
-			this.ctrlEmulatorShortcuts.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlEmulatorShortcuts.Location = new System.Drawing.Point(3, 3);
-			this.ctrlEmulatorShortcuts.Name = "ctrlEmulatorShortcuts";
-			this.ctrlEmulatorShortcuts.Size = new System.Drawing.Size(473, 337);
-			this.ctrlEmulatorShortcuts.TabIndex = 0;
+			this.chkHidePauseOverlay.AutoSize = true;
+			this.chkHidePauseOverlay.Location = new System.Drawing.Point(3, 190);
+			this.chkHidePauseOverlay.Name = "chkHidePauseOverlay";
+			this.chkHidePauseOverlay.Size = new System.Drawing.Size(212, 17);
+			this.chkHidePauseOverlay.TabIndex = 20;
+			this.chkHidePauseOverlay.Text = "Hide the pause screen";
+			this.chkHidePauseOverlay.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
 			// 
@@ -954,6 +981,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel2.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
+			this.tpgShortcuts.ResumeLayout(false);
 			this.tpgSaveData.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.grpCloudSaves.ResumeLayout(false);
@@ -988,7 +1016,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			this.tpgShortcuts.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1061,5 +1088,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkAutoSaveNotify;
 		private System.Windows.Forms.TabPage tpgShortcuts;
 		private ctrlEmulatorShortcuts ctrlEmulatorShortcuts;
+		private System.Windows.Forms.CheckBox chkHidePauseOverlay;
+		private System.Windows.Forms.CheckBox chkDisplayMovieIcons;
 	}
 }

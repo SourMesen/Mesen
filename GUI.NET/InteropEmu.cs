@@ -982,6 +982,9 @@ namespace Mesen.GUI
 		UseNes101Hvc101Behavior = 0x100000000,
 
 		InBackground = 0x4000000000,
+
+		DisplayMovieIcons = 0x10000000000,
+		HidePauseOverlay = 0x20000000000,
 	}
 
 	[Flags]

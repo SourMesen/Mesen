@@ -329,6 +329,8 @@
       <Control ID="chkAllowBackgroundInput">Permitir inputs quando Mesen estiver em segundo plano</Control>
       <Control ID="chkPauseWhenInBackground">Pausar a emulação quando Mesen estiver em segundo plano</Control>
       <Control ID="chkAutoLoadIps">Carregar os arquivos IPS/UPS/BPS automaticamente</Control>
+      <Control ID="chkHidePauseOverlay">Hide the pause screen</Control>
+      <Control ID="chkDisplayMovieIcons">Display play/record icon when playing or recording a movie</Control>
       <Control ID="btnOpenMesenFolder">Abrir a pasta de Mesen</Control>
       <Control ID="tpgFileAssociations">Associação de arquivos</Control>
       <Control ID="grpFileAssociations">Associação de arquivos</Control>

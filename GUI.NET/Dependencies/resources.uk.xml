@@ -330,6 +330,8 @@
       <Control ID="chkAllowBackgroundInput">Дозволити введення в тлі</Control>
       <Control ID="chkPauseWhenInBackground">Ставити на паузу при втраті фокуса</Control>
       <Control ID="chkAutoLoadIps">Автоматично завантажувати IPS/UPS</Control>
+      <Control ID="chkHidePauseOverlay">Hide the pause screen</Control>
+      <Control ID="chkDisplayMovieIcons">Display play/record icon when playing or recording a movie</Control>
       <Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
       <Control ID="tpgFileAssociations">Асоціації файлів</Control>
       <Control ID="grpFileAssociations">Асоціації файлів</Control>

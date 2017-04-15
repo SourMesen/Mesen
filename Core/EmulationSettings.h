@@ -50,6 +50,9 @@ enum EmulationFlags : uint64_t
 	Turbo = 0x2000000000,
 	InBackground = 0x4000000000,
 	NsfPlayerEnabled = 0x8000000000,
+	
+	DisplayMovieIcons = 0x10000000000,
+	HidePauseOverlay = 0x20000000000,
 };
 
 enum class AudioChannel

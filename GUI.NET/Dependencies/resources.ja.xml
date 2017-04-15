@@ -330,6 +330,8 @@
       <Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時、コントローラは反応しない</Control>
       <Control ID="chkPauseWhenInBackground">Mesenが最前面ではない時、自動的にポーズする</Control>
       <Control ID="chkAutoLoadIps">自動的にパッチファイル（IPS・UPS）をロードする</Control>
+      <Control ID="chkHidePauseOverlay">ポーズ画面を隠す</Control>
+      <Control ID="chkDisplayMovieIcons">動画の録画や再生の際、アイコンを表示する</Control>
       <Control ID="btnOpenMesenFolder">Mesenのフォルダを開く</Control>
       <Control ID="tpgFileAssociations">ファイルの関連付け</Control>
       <Control ID="grpFileAssociations">ファイルの関連付け</Control>

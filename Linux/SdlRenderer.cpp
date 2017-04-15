@@ -124,7 +124,7 @@ void SdlRenderer::Render()
 		SDL_Rect dest = {0, 0, (int)_screenWidth, (int)_screenHeight };
 		SDL_RenderCopy(_sdlRenderer, _sdlTexture, &source, &dest);
 
-		if(paused) {
+		if(paused && !EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay)) {
 			DrawPauseScreen();
 		} else if(VideoDecoder::GetInstance()->IsRunning()) {
 			if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
