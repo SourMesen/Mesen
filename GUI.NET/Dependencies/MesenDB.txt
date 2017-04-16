@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 12/04/2017 using:
+# Generated on 16/04/2017 using:
 #     -NesCartDB (dated 2016-08-20)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -2850,6 +2850,7 @@ EB9960EE,NesNtsc,NES-CNROM,NES-CNROM-07,,3,32,32,,0,0,0,v,,
 EBB56E10,Dendy,,,,7,128,8,,0,0,0,,SubOrKeyboard,
 EBCF8419,Famicom,HVC-TKROM,HVC-TKROM-02,MMC3B,4,256,128,,0,8,1,,,
 EBCFE7C5,NesNtsc,NES-SC1ROM,NES-SC1ROM-01,MMC1B2,1,64,128,,0,0,0,,,
+EBD0644D,NesNtsc,,,,3,32,32,,0,0,0,v,,
 EC0517C4,Famicom,HVC-NROM-256,HVC-NROM-256K-02,,0,32,8,,0,0,0,h,,
 EC0FC2DE,NesNtsc,NES-SEROM,NES-SEROM-03,MMC1B2,1,32,32,,0,0,0,,,
 EC3B7B47,Famicom,,,,64,128,64,,0,0,0,,,
