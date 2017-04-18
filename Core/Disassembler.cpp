@@ -203,7 +203,7 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 		if(info.Address >= 0) {
 			shared_ptr<DisassemblyInfo> disInfo = (*cache)[info.Address];
 			if(!disInfo) {
-				while(info.Address < (int32_t)size && !(*cache)[absoluteAddr]) {
+				while(absoluteAddr < (int32_t)size && !(*cache)[absoluteAddr]) {
 					bool isJump = IsUnconditionalJump(source[absoluteAddr]);
 					disInfo = shared_ptr<DisassemblyInfo>(new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint));
 					isSubEntryPoint = false;
