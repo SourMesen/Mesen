@@ -294,7 +294,7 @@
       <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
       <Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
       <Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
-      <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads (Famicom behavior)</Control>
+      <Control ID="chkDisablePpu2004Reads">Вiдключити читання PPU $2004 (Поведiнка Famicom)</Control>
       <Control ID="chkDisableOamAddrBug">Вiдключити PPU OAMADDR баг эмуляцiї</Control>
       <Control ID="chkDisablePaletteRead">Вiдключити PPU читання палiтри</Control>
       <Control ID="chkDisablePpuReset">Не скидувати PPU при перезавантаженні консолі (Поведiнка Famicom)</Control>
@@ -330,8 +330,8 @@
       <Control ID="chkAllowBackgroundInput">Дозволити введення в тлі</Control>
       <Control ID="chkPauseWhenInBackground">Ставити на паузу при втраті фокуса</Control>
       <Control ID="chkAutoLoadIps">Автоматично завантажувати IPS/UPS</Control>
-      <Control ID="chkHidePauseOverlay">Hide the pause screen</Control>
-      <Control ID="chkDisplayMovieIcons">Display play/record icon when playing or recording a movie</Control>
+      <Control ID="chkHidePauseOverlay">Приховати екран паузи</Control>
+      <Control ID="chkDisplayMovieIcons">Відображати значок відтворення / запису при відтворенні або запису відео</Control>
       <Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
       <Control ID="tpgFileAssociations">Асоціації файлів</Control>
       <Control ID="grpFileAssociations">Асоціації файлів</Control>
@@ -479,8 +479,8 @@
     <Form ID="frmUpdatePrompt" Title="Mesen - Доступно оновлення">
       <Control ID="lblLatestVersion">Остання версія : </Control>
       <Control ID="lblCurrentVersion">Поточна версія : </Control>
-      <Control ID="lblChangeLog">Changelog</Control>
-      <Control ID="lblDonate">If you want to support Mesen, please consider donating. Thank you!</Control>
+      <Control ID="lblChangeLog">Cписок змін</Control>
+      <Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте.&#xA;Дякую за вашу підтримку!</Control>
       <Control ID="btnUpdate">Оновити</Control>
       <Control ID="btnCancel">Вiдмiна</Control>
     </Form>
