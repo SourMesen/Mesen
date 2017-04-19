@@ -2,7 +2,7 @@
 #include "VideoHud.h"
 #include "ControlManager.h"
 #include "StandardController.h"
-#include "Movie.h"
+#include "MovieManager.h"
 
 void VideoHud::DrawHud(uint8_t *outputBuffer, FrameInfo frameInfo, OverscanDimensions overscan)
 {
@@ -76,14 +76,14 @@ bool VideoHud::DisplayControllerInput(int inputPort, uint8_t *outputBuffer, Fram
 
 void VideoHud::DrawMovieIcons(uint8_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan)
 {
-	if(EmulationSettings::CheckFlag(EmulationFlags::DisplayMovieIcons) && (Movie::Playing() || Movie::Recording())) {
+	if(EmulationSettings::CheckFlag(EmulationFlags::DisplayMovieIcons) && (MovieManager::Playing() || MovieManager::Recording())) {
 		InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
 		uint32_t xOffset = settings.VisiblePorts > 0 && settings.DisplayPosition == InputDisplayPosition::TopRight ? 50 : 27;
 		uint32_t* rgbaBuffer = (uint32_t*)outputBuffer;
 		int scale = frameInfo.Width / overscan.GetScreenWidth();
 		uint32_t yStart = 15 * scale;
 		uint32_t xStart = (frameInfo.Width - xOffset) * scale;
-		if(Movie::Playing()) {
+		if(MovieManager::Playing()) {
 			for(int y = 0; y < 12 * scale; y++) {
 				for(int x = 0; x < 12 * scale; x++) {
 					uint32_t bufferPos = (yStart + y)*frameInfo.Width + (xStart + x);
@@ -97,7 +97,7 @@ void VideoHud::DrawMovieIcons(uint8_t *outputBuffer, FrameInfo &frameInfo, Overs
 					}
 				}
 			}
-		} else if(Movie::Recording()) {
+		} else if(MovieManager::Recording()) {
 			for(int y = 0; y < 12 * scale; y++) {
 				for(int x = 0; x < 12 * scale; x++) {
 					uint32_t bufferPos = (yStart + y)*frameInfo.Width + (xStart + x);

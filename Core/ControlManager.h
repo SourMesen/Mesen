@@ -3,7 +3,6 @@
 #include "stdafx.h"
 #include "BaseControlDevice.h"
 #include "IMemoryHandler.h"
-#include "Movie.h"
 #include "IGameBroadcaster.h"
 #include "Snapshotable.h"
 #include "../Utilities/SimpleLock.h"

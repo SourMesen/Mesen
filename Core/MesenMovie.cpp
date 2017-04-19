@@ -1,25 +1,28 @@
 #include "stdafx.h"
 #include "MessageManager.h"
-#include "Movie.h"
+#include "MesenMovie.h"
 #include "Console.h"
 #include "../Utilities/FolderUtilities.h"
 #include "RomLoader.h"
 #include "CheatManager.h"
 #include "SaveStateManager.h"
 
-shared_ptr<Movie> Movie::_instance(new Movie());
-
-Movie::~Movie()
+MesenMovie::~MesenMovie()
 {
-	_instance = nullptr;
+	Stop();
 }
 
-shared_ptr<Movie> Movie::GetInstance()
+bool MesenMovie::IsPlaying()
 {
-	return _instance;
+	return _playing;
 }
 
-void Movie::PushState(uint8_t port)
+bool MesenMovie::IsRecording()
+{
+	return _recording;
+}
+
+void MesenMovie::PushState(uint8_t port)
 {
 	if(_counter[port] > 0) {
 		uint16_t data = _lastState[port] << 8 | _counter[port];
@@ -30,7 +33,7 @@ void Movie::PushState(uint8_t port)
 	}
 }
 
-void Movie::RecordState(uint8_t port, uint8_t state)
+void MesenMovie::RecordState(uint8_t port, uint8_t state)
 {
 	if(_recording) {
 		if(_lastState[port] != state || _counter[port] == 0) {
@@ -49,7 +52,7 @@ void Movie::RecordState(uint8_t port, uint8_t state)
 	}
 }
 
-uint8_t Movie::GetState(uint8_t port)
+uint8_t MesenMovie::GetState(uint8_t port)
 {
 	uint16_t data = --_data.PortData[port][_readPosition[port]];
 	if((data & 0xFF) == 0) {
@@ -69,7 +72,7 @@ uint8_t Movie::GetState(uint8_t port)
 	return (data >> 8);
 }
 
-void Movie::Reset()
+void MesenMovie::Reset()
 {
 	_startState.clear();
 	_startState.seekg(0, ios::beg);
@@ -84,7 +87,7 @@ void Movie::Reset()
 	_playing = false;
 }
 
-void Movie::StartRecording(string filename, bool reset)
+void MesenMovie::Record(string filename, bool reset)
 {
 	_filename = filename;
 	_file.open(filename, ios::out | ios::binary);
@@ -112,7 +115,7 @@ void Movie::StartRecording(string filename, bool reset)
 	}
 }
 
-void Movie::StopAll()
+void MesenMovie::Stop()
 {
 	if(_recording) {
 		_recording = false;
@@ -127,9 +130,9 @@ void Movie::StopAll()
 	}
 }
 
-void Movie::PlayMovie(stringstream &filestream, bool autoLoadRom, string filename)
+void MesenMovie::Play(stringstream &filestream, bool autoLoadRom, string filename)
 {
-	StopAll();
+	Stop();
 
 	Reset();
 
@@ -148,60 +151,6 @@ void Movie::PlayMovie(stringstream &filestream, bool autoLoadRom, string filenam
 		}
 	}
 	Console::Resume();
-}
-
-void Movie::Record(string filename, bool reset)
-{
-	if(_instance) {
-		_instance->StartRecording(filename, reset);
-	}
-}
-
-void Movie::Play(string filename)
-{
-	if(_instance) {
-		ifstream file(filename, ios::in | ios::binary);
-		std::stringstream ss;
-
-		if(file) {
-			ss << file.rdbuf();
-			file.close();
-
-			_instance->PlayMovie(ss, true, filename);
-		}
-	}
-}
-
-void Movie::Play(std::stringstream &filestream, bool autoLoadRom)
-{
-	if(_instance) {
-		_instance->PlayMovie(filestream, autoLoadRom);
-	}
-}
-
-void Movie::Stop()
-{
-	if(_instance) {
-		_instance->StopAll();
-	}
-}
-
-bool Movie::Playing()
-{
-	if(_instance) {
-		return _instance->_playing;
-	} else {
-		return false;
-	}
-}
-
-bool Movie::Recording()
-{
-	if(_instance) {
-		return _instance->_recording;
-	} else {
-		return false;
-	}
 }
 
 struct MovieHeader
@@ -228,13 +177,13 @@ struct MovieHeader
 	uint32_t FilenameLength;
 };
 
-bool Movie::Save()
+bool MesenMovie::Save()
 {
 	string romFilename = Console::GetRomName();
 
 	MovieHeader header = {};
 	header.MesenVersion = EmulationSettings::GetMesenVersion();
-	header.MovieFormatVersion = Movie::MovieFormatVersion;
+	header.MovieFormatVersion = MesenMovie::MovieFormatVersion;
 	header.SaveStateFormatVersion = SaveStateManager::FileFormatVersion;
 	header.RomCrc32 = Console::GetCrc32();
 	header.Region = (uint32_t)Console::GetNesModel();
@@ -250,7 +199,7 @@ bool Movie::Save()
 		header.ControllerTypes[port] = (uint32_t)EmulationSettings::GetControllerType(port);
 	}
 	header.FilenameLength = (uint32_t)romFilename.size();
-	
+
 	vector<CodeInfo> cheatList = CheatManager::GetCheats();
 	header.CheatCount = (uint32_t)cheatList.size();
 
@@ -285,7 +234,7 @@ bool Movie::Save()
 
 	_data.SaveStateSize = (uint32_t)_startState.tellp();
 	_file.write((char*)&_data.SaveStateSize, sizeof(uint32_t));
-		
+
 	if(_data.SaveStateSize > 0) {
 		_startState.seekg(0, ios::beg);
 		uint8_t *stateBuffer = new uint8_t[_data.SaveStateSize];
@@ -309,7 +258,7 @@ bool Movie::Save()
 	return true;
 }
 
-bool Movie::Load(std::stringstream &file, bool autoLoadRom)
+bool MesenMovie::Load(std::stringstream &file, bool autoLoadRom)
 {
 	MovieHeader header = {};
 	file.read((char*)header.Header, sizeof(header.Header));
@@ -328,7 +277,7 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	}
 
 	file.read((char*)&header.MovieFormatVersion, sizeof(header.MovieFormatVersion));
-	if(header.MovieFormatVersion < 2 || header.MovieFormatVersion > Movie::MovieFormatVersion) {
+	if(header.MovieFormatVersion < 2 || header.MovieFormatVersion > MesenMovie::MovieFormatVersion) {
 		//Currently compatible with version 2 & 3
 		MessageManager::DisplayMessage("Movies", "MovieIncompatibleVersion");
 		return false;
@@ -375,7 +324,7 @@ bool Movie::Load(std::stringstream &file, bool autoLoadRom)
 	char* romFilename = new char[header.FilenameLength + 1];
 	memset(romFilename, 0, header.FilenameLength + 1);
 	file.read((char*)romFilename, header.FilenameLength);
-	
+
 	_cheatList.clear();
 	CodeInfo cheatCode;
 	for(uint32_t i = 0; i < header.CheatCount; i++) {

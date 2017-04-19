@@ -444,6 +444,7 @@
     <ClInclude Include="ColorDreams46.h" />
     <ClInclude Include="CrossFeedFilter.h" />
     <ClInclude Include="GoldenFive.h" />
+    <ClInclude Include="MesenMovie.h" />
     <ClInclude Include="UnlD1038.h" />
     <ClInclude Include="DaouInfosys.h" />
     <ClInclude Include="DebugBreakHelper.h" />
@@ -670,7 +671,7 @@
     <ClInclude Include="MessageType.h" />
     <ClInclude Include="MMC2.h" />
     <ClInclude Include="MMC3_189.h" />
-    <ClInclude Include="Movie.h" />
+    <ClInclude Include="MovieManager.h" />
     <ClInclude Include="MovieDataMessage.h" />
     <ClInclude Include="Nanjing.h" />
     <ClInclude Include="NetMessage.h" />
@@ -791,6 +792,7 @@
     <ClCompile Include="GameServerConnection.cpp" />
     <ClCompile Include="HdVideoFilter.cpp" />
     <ClCompile Include="iNesLoader.cpp" />
+    <ClCompile Include="MesenMovie.cpp" />
     <ClCompile Include="NsfMapper.cpp" />
     <ClCompile Include="NtscFilter.cpp" />
     <ClCompile Include="OekaKidsTablet.cpp" />
@@ -804,7 +806,7 @@
     <ClCompile Include="MapperFactory.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="MessageManager.cpp" />
-    <ClCompile Include="Movie.cpp" />
+    <ClCompile Include="MovieManager.cpp" />
     <ClCompile Include="PPU.cpp" />
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="SaveStateManager.cpp" />

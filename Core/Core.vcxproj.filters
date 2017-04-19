@@ -86,6 +86,9 @@
     <Filter Include="Nes\Mappers\Unif">
       <UniqueIdentifier>{285b5df6-08c8-4d6e-8fe9-a499ffcf8c1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Movies">
+      <UniqueIdentifier>{16c0726b-0c54-4fbc-a602-7930348d7f44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -557,9 +560,6 @@
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="MessageManager.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Movie.h">
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="SaveStateManager.h">
@@ -1138,12 +1138,15 @@
     <ClInclude Include="GoldenFive.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="MesenMovie.h">
+      <Filter>Movies</Filter>
+    </ClInclude>
+    <ClInclude Include="MovieManager.h">
+      <Filter>Movies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Movie.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="Debugger.cpp">
@@ -1340,6 +1343,12 @@
     </ClCompile>
     <ClCompile Include="UnifLoader.cpp">
       <Filter>Nes\RomLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="MesenMovie.cpp">
+      <Filter>Movies</Filter>
+    </ClCompile>
+    <ClCompile Include="MovieManager.cpp">
+      <Filter>Movies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

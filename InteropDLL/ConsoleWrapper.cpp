@@ -17,6 +17,7 @@
 #include "../Core/NsfMapper.h"
 #include "../Core/IRenderingDevice.h"
 #include "../Core/IAudioDevice.h"
+#include "../Core/MovieManager.h"
 #include "../Utilities/AviWriter.h"
 
 #ifdef WIN32
@@ -298,11 +299,11 @@ namespace InteropEmu {
 		DllExport uint32_t __stdcall LoadState(uint32_t stateIndex) { return SaveStateManager::LoadState(stateIndex); }
 		DllExport int64_t  __stdcall GetStateInfo(uint32_t stateIndex) { return SaveStateManager::GetStateInfo(stateIndex); }
 
-		DllExport void __stdcall MoviePlay(char* filename) { Movie::Play(filename); }
-		DllExport void __stdcall MovieRecord(char* filename, bool reset) { Movie::Record(filename, reset); }
-		DllExport void __stdcall MovieStop() { Movie::Stop(); }
-		DllExport bool __stdcall MoviePlaying() { return Movie::Playing(); }
-		DllExport bool __stdcall MovieRecording() { return Movie::Recording(); }
+		DllExport void __stdcall MoviePlay(char* filename) { MovieManager::Play(filename); }
+		DllExport void __stdcall MovieRecord(char* filename, bool reset) { MovieManager::Record(filename, reset); }
+		DllExport void __stdcall MovieStop() { MovieManager::Stop(); }
+		DllExport bool __stdcall MoviePlaying() { return MovieManager::Playing(); }
+		DllExport bool __stdcall MovieRecording() { return MovieManager::Recording(); }
 
 		DllExport void __stdcall AviRecord(char* filename, VideoCodec codec, uint32_t compressionLevel) { VideoDecoder::GetInstance()->StartRecording(filename, codec, compressionLevel); }
 		DllExport void __stdcall AviStop() { VideoDecoder::GetInstance()->StopRecording(); }

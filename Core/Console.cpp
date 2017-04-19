@@ -17,6 +17,7 @@
 #include "SoundMixer.h"
 #include "NsfMapper.h"
 #include "ShortcutKeyHandler.h"
+#include "MovieManager.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -28,7 +29,7 @@ Console::Console()
 
 Console::~Console()
 {
-	Movie::Stop();
+	MovieManager::Stop();
 	SoundMixer::StopRecording();
 }
 
@@ -201,7 +202,7 @@ void Console::Reset(bool softReset)
 			//Allow mid-frame resets to allow the PPU to get out-of-sync
 			RequestReset();
 		} else {
-			Movie::Stop();
+			MovieManager::Stop();
 			SoundMixer::StopRecording();
 
 			Console::Pause();
@@ -218,7 +219,7 @@ void Console::Reset(bool softReset)
 
 void Console::ResetComponents(bool softReset)
 {
-	Movie::Stop();
+	MovieManager::Stop();
 	if(!softReset) {
 		SoundMixer::StopRecording();
 	}
@@ -313,7 +314,7 @@ void Console::Run()
 		if(_resetRequested) {
 			//Used by NSF player to reset console after changing track
 			//Also used with DisablePpuReset option to reset mid-frame
-			Movie::Stop();
+			MovieManager::Stop();
 			ResetComponents(true);
 			_resetRequested = false;
 		}
@@ -386,7 +387,7 @@ void Console::Run()
 		}
 	}
 	SoundMixer::StopAudio();
-	Movie::Stop();
+	MovieManager::Stop();
 	SoundMixer::StopRecording();
 	PlatformUtilities::EnableScreensaver();
 
@@ -477,7 +478,7 @@ void Console::LoadState(istream &loadStream)
 	if(Instance->_initialized) {
 		//Stop any movie that might have been playing/recording if a state is loaded
 		//(Note: Loading a state is disabled in the UI while a movie is playing/recording)
-		Movie::Stop();
+		MovieManager::Stop();
 
 		Instance->_cpu->LoadSnapshot(&loadStream);
 		Instance->_ppu->LoadSnapshot(&loadStream);

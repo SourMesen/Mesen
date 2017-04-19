@@ -5,6 +5,7 @@
 #include "EmulationSettings.h"
 #include "MessageManager.h"
 #include "Debugger.h"
+#include "MovieManager.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/md5.h"
 #include "../Utilities/ZipWriter.h"
@@ -120,7 +121,7 @@ void AutoRomTest::Record(string filename, bool reset)
 		_recording = true;
 
 		//Start recording movie alongside with screenshots
-		Movie::Record(FolderUtilities::CombinePath(FolderUtilities::GetFolderName(filename), FolderUtilities::GetFilename(filename, false) + ".mmo"), reset);
+		MovieManager::Record(FolderUtilities::CombinePath(FolderUtilities::GetFolderName(filename), FolderUtilities::GetFilename(filename, false) + ".mmo"), reset);
 
 		Console::Resume();
 	}
@@ -140,7 +141,7 @@ void AutoRomTest::RecordFromMovie(string testFilename, stringstream &movieStream
 		_recording = true;
 
 		//Start playing movie
-		Movie::Play(movieStream, autoLoadRom);
+		MovieManager::Play(movieStream, autoLoadRom);
 		movieStream.seekg(0, ios::beg);
 		_movieStream << movieStream.rdbuf();
 
@@ -235,7 +236,7 @@ int32_t AutoRomTest::Run(string filename)
 
 		//Start playing movie
 		Console::LoadROM(testName, &testRom);
-		Movie::Play(testMovie, false);
+		MovieManager::Play(testMovie, false);
 
 		Console::Resume();
 		EmulationSettings::ClearFlags(EmulationFlags::Paused);
@@ -270,7 +271,7 @@ void AutoRomTest::Save()
 	_recording = false;
 
 	//Stop playing/recording the movie
-	Movie::Stop();
+	MovieManager::Stop();
 
 	_file.write("MRT", 3);
 

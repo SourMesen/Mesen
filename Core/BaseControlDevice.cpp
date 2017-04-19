@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BaseControlDevice.h"
 #include "ControlManager.h"
-#include "Movie.h"
+#include "MovieManager.h"
 #include "EmulationSettings.h"
 #include "GameClient.h"
 #include "GameServerConnection.h"
@@ -59,8 +59,8 @@ uint8_t BaseControlDevice::ProcessNetPlayState(uint32_t netplayState)
 uint8_t BaseControlDevice::GetControlState()
 {
 	GameServerConnection* netPlayDevice = GameServerConnection::GetNetPlayDevice(_port);
-	if(Movie::Playing()) {
-		_currentState = Movie::GetInstance()->GetState(_port);
+	if(MovieManager::Playing()) {
+		_currentState = MovieManager::GetState(_port);
 	} else if(GameClient::Connected()) {
 		_currentState = GameClient::GetControllerState(_port);
 	} else if(netPlayDevice) {
@@ -69,8 +69,8 @@ uint8_t BaseControlDevice::GetControlState()
 		_currentState = RefreshState();
 	}
 
-	if(Movie::Recording()) {
-		Movie::GetInstance()->RecordState(_port, _currentState);
+	if(MovieManager::Recording()) {
+		MovieManager::RecordState(_port, _currentState);
 	}
 
 	//For NetPlay
