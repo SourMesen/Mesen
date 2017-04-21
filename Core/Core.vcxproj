@@ -446,6 +446,7 @@
     <ClInclude Include="CrossFeedFilter.h" />
     <ClInclude Include="GoldenFive.h" />
     <ClInclude Include="MesenMovie.h" />
+    <ClInclude Include="SealieComputing.h" />
     <ClInclude Include="UnlD1038.h" />
     <ClInclude Include="DaouInfosys.h" />
     <ClInclude Include="DebugBreakHelper.h" />

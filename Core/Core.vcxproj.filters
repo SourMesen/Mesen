@@ -1150,6 +1150,9 @@
     <ClInclude Include="UnRom512.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="SealieComputing.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
