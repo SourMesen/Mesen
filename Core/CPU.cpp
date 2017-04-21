@@ -73,7 +73,7 @@ CPU::CPU(MemoryManager *memoryManager)
  	_memoryManager = memoryManager;	
 }
 
-void CPU::Reset(bool softReset)
+void CPU::Reset(bool softReset, NesModel model)
 {
 	_state.NMIFlag = false;
 	_state.IRQFlag = 0;
@@ -105,7 +105,7 @@ void CPU::Reset(bool softReset)
 	}
 
 	//The CPU takes some cycles before starting its execution after a reset/power up
-	for(int i = 0; i < 12; i++) {
+	for(int i = 0; i < (model == NesModel::NTSC ? 12 : 15); i++) {
 		PPU::ExecStatic();
 	}
 	for(int i = 0; i < 10; i++) {
@@ -177,7 +177,7 @@ uint16_t CPU::FetchOperand()
 	
 	if(NsfMapper::GetInstance()) {
 		//Don't stop emulation on CPU crash when playing NSFs, reset cpu instead
-		Reset(false);
+		Console::RequestReset();
 		return 0;
 	} else {
 		throw std::runtime_error("Invalid OP code - CPU crashed");

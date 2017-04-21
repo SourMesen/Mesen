@@ -229,7 +229,7 @@ void Console::ResetComponents(bool softReset)
 		_ppu->Reset();
 	}
 	_apu->Reset(softReset);
-	_cpu->Reset(softReset);
+	_cpu->Reset(softReset, _model);
 	_controlManager->Reset(softReset);
 
 	_lagCounter = 0;

@@ -58,7 +58,8 @@ void PPU::Reset()
 	_nextTile = {};
 
 	_intensifyColorBits = 0;
-	_paletteRamMask = 0;
+	_paletteRamMask = 0x3F;
+	_lastUpdatedPixel = -1;
 	_lastSprite = nullptr;
 	_oamCopybuffer = 0;
 	_spriteInRange = false;
@@ -353,6 +354,7 @@ uint8_t PPU::ReadPaletteRAM(uint16_t addr)
 void PPU::WritePaletteRAM(uint16_t addr, uint8_t value)
 {
 	addr &= 0x1F;
+	value &= 0x3F;
 	if(addr == 0x00 || addr == 0x10) {
 		_paletteRAM[0x00] = value;
 		_paletteRAM[0x10] = value;
@@ -417,6 +419,8 @@ void PPU::SetMaskRegister(uint8_t value)
 	_flags.IntensifyBlue = (_state.Mask & 0x80) == 0x80;
 
 	UpdateMinimumDrawCycles();
+
+	UpdateGrayscaleAndIntensifyBits();
 
 	//"Bit 0 controls a greyscale mode, which causes the palette to use only the colors from the grey column: $00, $10, $20, $30. This is implemented as a bitwise AND with $30 on any value read from PPU $3F00-$3FFF"
 	_paletteRamMask = _flags.Grayscale ? 0x30 : 0x3F;
@@ -700,10 +704,43 @@ void PPU::DrawPixel()
 	//This is called 3.7 million times per second - needs to be as fast as possible.
 	if(IsRenderingEnabled() || ((_state.VideoRamAddr & 0x3F00) != 0x3F00)) {
 		uint32_t color = GetPixelColor();
-		_currentOutputBuffer[(_scanline << 8) + _cycle - 1] = (_paletteRAM[color & 0x03 ? color : 0] & _paletteRamMask) | _intensifyColorBits;
+		_currentOutputBuffer[(_scanline << 8) + _cycle - 1] = _paletteRAM[color & 0x03 ? color : 0];
 	} else {
 		//"If the current VRAM address points in the range $3F00-$3FFF during forced blanking, the color indicated by this palette location will be shown on screen instead of the backdrop color."
-		_currentOutputBuffer[(_scanline << 8) + _cycle - 1] = (_paletteRAM[_state.VideoRamAddr & 0x1F] & _paletteRamMask) | _intensifyColorBits;
+		_currentOutputBuffer[(_scanline << 8) + _cycle - 1] = _paletteRAM[_state.VideoRamAddr & 0x1F];
+	}
+}
+
+void PPU::UpdateGrayscaleAndIntensifyBits()
+{
+	if(_scanline < 0 || _scanline > 241) {
+		return;
+	}
+
+	int pixelNumber;
+	if(_scanline >= 240) {
+		pixelNumber = 61439;
+	} else if(_cycle < 3) {
+		pixelNumber = (_scanline << 8) - 1;
+	} else if(_cycle <= 258) {
+		pixelNumber = (_scanline << 8) + _cycle - 3;
+	} else {
+		pixelNumber = (_scanline << 8) + 255;
+	}
+
+	if(_paletteRamMask == 0x3F && _intensifyColorBits == 0) {
+		//Nothing to do (most common case)
+		_lastUpdatedPixel = pixelNumber;
+		return;
+	}
+
+	if(_lastUpdatedPixel < pixelNumber) {
+		uint16_t *out = _currentOutputBuffer + _lastUpdatedPixel + 1;
+		while(_lastUpdatedPixel < pixelNumber) {
+			*out = (*out & _paletteRamMask) | _intensifyColorBits;
+			out++;
+			_lastUpdatedPixel++;
+		}
 	}
 }
 
@@ -939,7 +976,9 @@ void PPU::DebugSendFrame()
 
 void PPU::SendFrame()
 {
-	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
+	UpdateGrayscaleAndIntensifyBits();
+
+ 	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
 
 	VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
 
@@ -973,8 +1012,8 @@ void PPU::Exec()
 {
 	if(_cycle > 339) {
 		_cycle = -1;
-
 		if(++_scanline > _vblankEnd) {
+			_lastUpdatedPixel = -1;
 			_frameCount++;
 			_scanline = -1;
 			UpdateMinimumDrawCycles();
@@ -1096,5 +1135,7 @@ void PPU::StreamState(bool saving)
 		for(int i = 0; i < 257; i++) {
 			_hasSprite[i] = true;
 		}
+
+		_lastUpdatedPixel = -1;
 	}
 }

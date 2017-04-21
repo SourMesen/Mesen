@@ -56,6 +56,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		uint16_t _intensifyColorBits;
 		uint8_t _paletteRamMask;
+		int32_t _lastUpdatedPixel;
 
 		SpriteInfo *_lastSprite; //used by HD ppu
 
@@ -135,6 +136,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		__forceinline uint32_t GetPixelColor();
 		__forceinline virtual void DrawPixel();
+		void UpdateGrayscaleAndIntensifyBits();
 		virtual void SendFrame();
 
 		PPURegisters GetRegisterID(uint16_t addr)

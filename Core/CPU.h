@@ -851,7 +851,7 @@ public:
 	//Used by debugger for "Set Next Statement"
 	void SetDebugPC(uint16_t value) { SetPC(value); _state.DebugPC = value; }
 
-	void Reset(bool softReset);
+	void Reset(bool softReset, NesModel model);
 	void Exec();
 
 	State GetState() 
