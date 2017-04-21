@@ -6,7 +6,6 @@
 
 enum class VRCVariant;
 
-//incomplete - missing audio and more
 class VRC6 : public BaseMapper
 {
 private:
@@ -45,6 +44,7 @@ protected:
 
 		if(!saving) {
 			UpdatePrgRamAccess();
+			UpdatePpuBanking();
 		}
 	}
 
@@ -56,6 +56,9 @@ protected:
 
 	void UpdatePpuBanking()
 	{
+		uint8_t mask = (_bankingMode & 0x20) ? 0xFE : 0xFF;
+		uint8_t orMask = (_bankingMode & 0x20) ? 1 : 0;
+
 		switch(_bankingMode & 0x03) {
 			case 0:
 				SelectCHRPage(0, _chrRegisters[0]);
@@ -69,10 +72,14 @@ protected:
 				break;
 
 			case 1:
-				SelectChrPage2x(0, _chrRegisters[0]);
-				SelectChrPage2x(1, _chrRegisters[1]);
-				SelectChrPage2x(2, _chrRegisters[2]);
-				SelectChrPage2x(3, _chrRegisters[3]);
+				SelectCHRPage(0, _chrRegisters[0] & mask);
+				SelectCHRPage(1, (_chrRegisters[0] & mask) | orMask);
+				SelectCHRPage(2, _chrRegisters[1] & mask);
+				SelectCHRPage(3, (_chrRegisters[1] & mask) | orMask);
+				SelectCHRPage(4, _chrRegisters[2] & mask);
+				SelectCHRPage(5, (_chrRegisters[2] & mask) | orMask);
+				SelectCHRPage(6, _chrRegisters[3] & mask);
+				SelectCHRPage(7, (_chrRegisters[3] & mask) | orMask);
 				break;
 
 			case 2: case 3:
@@ -80,19 +87,132 @@ protected:
 				SelectCHRPage(1, _chrRegisters[1]);
 				SelectCHRPage(2, _chrRegisters[2]);
 				SelectCHRPage(3, _chrRegisters[3]);
-				SelectChrPage2x(2, _chrRegisters[4]);
-				SelectChrPage2x(3, _chrRegisters[5]);
+				SelectCHRPage(4, _chrRegisters[4] & mask);
+				SelectCHRPage(5, (_chrRegisters[4] & mask) | orMask);
+				SelectCHRPage(6, _chrRegisters[5] & mask);
+				SelectCHRPage(7, (_chrRegisters[5] & mask) | orMask);
 				break;
 		}
 		
-		//This is incorrect, but seems ok for all commercial games? (Based on old Disch documents)
-		switch((_bankingMode >> 2) & 0x03) {
-			case 0: SetMirroringType(MirroringType::Vertical); break;
-			case 1: SetMirroringType(MirroringType::Horizontal); break;
-			case 2: SetMirroringType(MirroringType::ScreenAOnly); break;
-			case 3: SetMirroringType(MirroringType::ScreenBOnly); break;
-		}
+		if(_bankingMode & 0x10) {
+			//CHR ROM nametables
+			switch(_bankingMode & 0x2F) {
+				case 0x20:
+				case 0x27:
+					SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[6] & 0xFE);
+					SetPpuMemoryMapping(0x2400, 0x27FF, (_chrRegisters[6] & 0xFE) | 1);
+					SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[7] & 0xFE);
+					SetPpuMemoryMapping(0x2C00, 0x2FFF, (_chrRegisters[7] & 0xFE) | 1);
+					break;
 
+				case 0x23:
+				case 0x24:
+					SetPpuMemoryMapping(0x2000, 0x23FF, (_chrRegisters[6] & 0xFE));
+					SetPpuMemoryMapping(0x2400, 0x27FF, (_chrRegisters[7] & 0xFE));
+					SetPpuMemoryMapping(0x2800, 0x2BFF, (_chrRegisters[6] & 0xFE) | 1);
+					SetPpuMemoryMapping(0x2C00, 0x2FFF, (_chrRegisters[7] & 0xFE) | 1);
+					break;
+
+				case 0x28:
+				case 0x2F:
+					SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[6] & 0xFE);
+					SetPpuMemoryMapping(0x2400, 0x27FF, _chrRegisters[6] & 0xFE);
+					SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[7] & 0xFE);
+					SetPpuMemoryMapping(0x2C00, 0x2FFF, _chrRegisters[7] & 0xFE);
+					break;
+
+				case 0x2B:
+				case 0x2C:
+					SetPpuMemoryMapping(0x2000, 0x23FF, (_chrRegisters[6] & 0xFE) | 1);
+					SetPpuMemoryMapping(0x2400, 0x27FF, (_chrRegisters[7] & 0xFE) | 1);
+					SetPpuMemoryMapping(0x2800, 0x2BFF, (_chrRegisters[6] & 0xFE) | 1);
+					SetPpuMemoryMapping(0x2C00, 0x2FFF, (_chrRegisters[7] & 0xFE) | 1);
+					break;
+
+				default:
+					switch(_bankingMode & 0x07) {
+						case 0:
+						case 6:
+						case 7:
+							SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[6]);
+							SetPpuMemoryMapping(0x2400, 0x27FF, _chrRegisters[6]);
+							SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[7]);
+							SetPpuMemoryMapping(0x2C00, 0x2FFF, _chrRegisters[7]);
+							break;
+
+						case 1:
+						case 5:
+							SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[4]);
+							SetPpuMemoryMapping(0x2400, 0x27FF, _chrRegisters[5]);
+							SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[6]);
+							SetPpuMemoryMapping(0x2C00, 0x2FFF, _chrRegisters[7]);
+							break;
+
+						case 2:
+						case 3:
+						case 4:
+							SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[6]);
+							SetPpuMemoryMapping(0x2400, 0x27FF, _chrRegisters[7]);
+							SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[6]);
+							SetPpuMemoryMapping(0x2C00, 0x2FFF, _chrRegisters[7]);
+							break;
+					}
+					break;
+			}
+		} else {
+			//Regular nametables (CIRAM)
+			switch(_bankingMode & 0x2F) {
+				case 0x20:
+				case 0x27:
+					SetMirroringType(MirroringType::Vertical);
+					break;
+
+				case 0x23:
+				case 0x24:
+					SetMirroringType(MirroringType::Horizontal);
+					break;
+
+				case 0x28:
+				case 0x2F:
+					SetMirroringType(MirroringType::ScreenAOnly);
+					break;
+
+				case 0x2B:
+				case 0x2C:
+					SetMirroringType(MirroringType::ScreenBOnly);
+					break;
+
+				default:
+					switch(_bankingMode & 0x07) {
+						case 0:
+						case 6:
+						case 7:
+							SetNametable(0, _chrRegisters[6] & 0x01);
+							SetNametable(1, _chrRegisters[6] & 0x01);
+							SetNametable(2, _chrRegisters[7] & 0x01);
+							SetNametable(3, _chrRegisters[7] & 0x01);
+							break;
+
+						case 1:
+						case 5:
+							SetNametable(0, _chrRegisters[4] & 0x01);
+							SetNametable(1, _chrRegisters[5] & 0x01);
+							SetNametable(2, _chrRegisters[6] & 0x01);
+							SetNametable(3, _chrRegisters[7] & 0x01);
+							break;
+
+						case 2:
+						case 3:
+						case 4:
+							SetNametable(0, _chrRegisters[6] & 0x01);
+							SetNametable(1, _chrRegisters[7] & 0x01);
+							SetNametable(2, _chrRegisters[6] & 0x01);
+							SetNametable(3, _chrRegisters[7] & 0x01);
+							break;
+					}
+					break;
+			}
+		}
 		UpdatePrgRamAccess();
 	}
 
