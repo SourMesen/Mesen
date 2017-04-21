@@ -32,6 +32,7 @@
 #include "Bs5.h"
 #include "Caltron41.h"
 #include "Cc21.h"
+#include "Cheapocabra.h"
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
@@ -251,7 +252,7 @@ Supported mappers:
 | 48| 49| 50| 51| 52| 53| 54|???| 56| 57| 58|===| 60| 61| 62| 63|
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|===| 82| 83|===| 85| 86| 87| 88| 89| 90| 91| 92| 93| 94| 95|
-| 96| 97|===| 99|...|101|===|103|104|105|106|107|108|===|===|===|
+| 96| 97|===| 99|...|101|===|103|104|105|106|107|108|===|===|111|
 |112|113|114|115|   |117|118|119|120|121|===|123|===|125|126|===|
 |===|===|===|===|132|133|134|===|136|137|138|139|140|141|142|143|
 |144|145|146|147|148|149|150|151|152|153|154|155|156|157|???|159|
@@ -374,6 +375,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 106: return new Mapper106();
 		case 107: return new Mapper107();
 		case 108: return new Mapper108();
+		case 111: return new Cheapocabra();
 		case 112: return new Mapper112();
 		case 113: return new Nina03_06(true);
 		case 114: return new MMC3_114();

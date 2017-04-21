@@ -1144,6 +1144,9 @@
     <ClInclude Include="MovieManager.h">
       <Filter>Movies</Filter>
     </ClInclude>
+    <ClInclude Include="Cheapocabra.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1323,9 +1326,6 @@
     <ClCompile Include="MemoryAccessCounter.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
-    <ClCompile Include="Profiler.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
     <ClCompile Include="CrossFeedFilter.cpp">
       <Filter>Nes\APU\Filters</Filter>
     </ClCompile>
@@ -1349,6 +1349,9 @@
     </ClCompile>
     <ClCompile Include="MovieManager.cpp">
       <Filter>Movies</Filter>
+    </ClCompile>
+    <ClCompile Include="Profiler.cpp">
+      <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
