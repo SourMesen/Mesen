@@ -326,10 +326,16 @@
       <Control ID="lblDisplayLanguage">言語:</Control>
       <Control ID="chkSingleInstance">Mesenを単一インスタンスモードにする</Control>
       <Control ID="chkAutomaticallyCheckForUpdates">自動的にアップデートを確認</Control>
+      
+      <Control ID="lblPauseBackgroundSettings">ポーズ・バックグラウンド設定</Control>
+      <Control ID="lblMiscSettings">その他</Control>
+      <Control ID="chkAutoHideMenu">自動的にメニューバーを隠す</Control>
+      <Control ID="chkDisplayTitleBarInfo">タイトルバーに追加情報を表す。</Control>
+
       <Control ID="chkPauseOnMovieEnd">動画が終わると自動的にポーズする</Control>
       <Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時、コントローラは反応しない</Control>
       <Control ID="chkPauseWhenInBackground">Mesenが最前面ではない時、自動的にポーズする</Control>
-      <Control ID="chkAutoLoadIps">自動的にパッチファイル（IPS・UPS）をロードする</Control>
+      <Control ID="chkAutoLoadIps">自動的にパッチファイル（IPS・BPS）をロードする</Control>
       <Control ID="chkHidePauseOverlay">ポーズ画面を隠す</Control>
       <Control ID="chkDisplayMovieIcons">動画の録画や再生の際、アイコンを表示する</Control>
       <Control ID="btnOpenMesenFolder">Mesenのフォルダを開く</Control>

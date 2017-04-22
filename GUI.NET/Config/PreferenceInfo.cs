@@ -16,6 +16,8 @@ namespace Mesen.GUI.Config
 
 		public bool DisplayMovieIcons = false;
 		public bool HidePauseOverlay = false;
+		public bool AutoHideMenu = false;
+		public bool DisplayTitleBarInfo = false;
 
 		public bool AutoSave = true;
 		public Int32 AutoSaveDelay = 5;

@@ -326,10 +326,16 @@
       <Control ID="lblDisplayLanguage">Мова :</Control>
       <Control ID="chkSingleInstance">Запускати тільки одну копію Mesen</Control>
       <Control ID="chkAutomaticallyCheckForUpdates">Автоматично перевіряти оновлення</Control>
+
+      <Control ID="lblPauseBackgroundSettings">Pause/Background Settings</Control>
+      <Control ID="lblMiscSettings">Misc. Settings</Control>
+      <Control ID="chkAutoHideMenu">Automatically hide menu bar</Control>
+      <Control ID="chkDisplayTitleBarInfo">Display additional information in title bar</Control>
+      
       <Control ID="chkPauseOnMovieEnd">Ставити на паузу після програвання запису</Control>
       <Control ID="chkAllowBackgroundInput">Дозволити введення в тлі</Control>
       <Control ID="chkPauseWhenInBackground">Ставити на паузу при втраті фокуса</Control>
-      <Control ID="chkAutoLoadIps">Автоматично завантажувати IPS/UPS</Control>
+      <Control ID="chkAutoLoadIps">Автоматично завантажувати IPS/BPS</Control>
       <Control ID="chkHidePauseOverlay">Приховати екран паузи</Control>
       <Control ID="chkDisplayMovieIcons">Відображати значок відтворення / запису при відтворенні або запису відео</Control>
       <Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>

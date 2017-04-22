@@ -327,10 +327,16 @@
       <Control ID="lblDisplayLanguage">Langue d'affichage :</Control>
       <Control ID="chkSingleInstance">Permettre une seule copie de Mesen à la fois</Control>
       <Control ID="chkAutomaticallyCheckForUpdates">Rechercher des mises-à-jour automatiquement</Control>
+
+      <Control ID="lblPauseBackgroundSettings">Options d'arrière-plan et pause</Control>
+      <Control ID="lblMiscSettings">Options diverses</Control>
+      <Control ID="chkAutoHideMenu">Cacher la barre de menu automatiquement</Control>
+      <Control ID="chkDisplayTitleBarInfo">Afficher plus d'informations dans la barre de titre</Control>
+      
       <Control ID="chkPauseOnMovieEnd">Pauser l'émulation à la fin d'un film</Control>
       <Control ID="chkAllowBackgroundInput">Permettre les entrées lorsque Mesen est en arrière-plan</Control>
       <Control ID="chkPauseWhenInBackground">Pauser l'émulation lorsque Mesen est en arrière-plan</Control>
-      <Control ID="chkAutoLoadIps">Charger les fichiers IPS/UPS/BPS automatiquement</Control>
+      <Control ID="chkAutoLoadIps">Charger les fichiers IPS/BPS automatiquement</Control>
       <Control ID="chkHidePauseOverlay">Ne pas afficher l'écran de pause</Control>
       <Control ID="chkDisplayMovieIcons">Afficher un icône lors de la lecture ou de l'enregistrement des films</Control>
       <Control ID="btnOpenMesenFolder">Ouvrir le dossier de Mesen</Control>

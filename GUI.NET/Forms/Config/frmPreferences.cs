@@ -56,6 +56,9 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisplayMovieIcons", chkDisplayMovieIcons);
 			AddBinding("HidePauseOverlay", chkHidePauseOverlay);
 
+			AddBinding("AutoHideMenu", chkAutoHideMenu);
+			AddBinding("DisplayTitleBarInfo", chkDisplayTitleBarInfo);
+
 			UpdateCloudDisplay();
 		}
 

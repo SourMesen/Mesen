@@ -327,7 +327,7 @@ namespace Mesen.GUI.Forms
 				UpdateScaleMenu(size.Scale);
 
 				this.Resize -= frmMain_Resize;
-				this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + menuStrip.Height));
+				this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + (this.HideMenuStrip ? 0 : menuStrip.Height)));
 				this.Resize += frmMain_Resize;
 			} else if(_customSize) {
 				SetScaleBasedOnWindowSize();
@@ -336,6 +336,10 @@ namespace Mesen.GUI.Forms
 			ctrlRenderer.Size = new Size(size.Width, size.Height);
 			ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
 			ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
+
+			if(this.HideMenuStrip) {
+				this.menuStrip.Visible = false;
+			}
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -346,7 +350,7 @@ namespace Mesen.GUI.Forms
 				ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
 			}
 		}
-
+		
 		private void SetScaleBasedOnWindowSize()
 		{
 			_customSize = true;
@@ -383,16 +387,28 @@ namespace Mesen.GUI.Forms
 			mnuFullscreen.Checked = enabled;
 		}
 
+		private bool HideMenuStrip
+		{
+			get
+			{
+				return _fullscreenMode || ConfigManager.Config.PreferenceInfo.AutoHideMenu;
+			}
+		}
+
 		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
 		{
-			if(_fullscreenMode && !this.menuStrip.ContainsFocus) {
-				this.menuStrip.Visible = e.Y < 30;
+			if(this.HideMenuStrip && !this.menuStrip.ContainsFocus) {
+				if(sender == ctrlRenderer) {
+					this.menuStrip.Visible = ctrlRenderer.Top + e.Y < 30;
+				} else {
+					this.menuStrip.Visible = e.Y < 30;
+				}
 			}
 		}
 
 		private void ctrlRenderer_MouseClick(object sender, MouseEventArgs e)
 		{
-			if(_fullscreenMode) {
+			if(this.HideMenuStrip) {
 				this.menuStrip.Visible = false;
 			}
 		}
@@ -605,12 +621,7 @@ namespace Mesen.GUI.Forms
 					ctrlLoading.Visible = (_romLoadCounter > 0);
 
 					UpdateFocusFlag();
-
-					if(string.IsNullOrWhiteSpace(_currentGame)) {
-						this.Text = "Mesen";
-					} else {
-						this.Text = "Mesen - " + _currentGame;
-					}
+					UpdateWindowTitle();
 
 					bool isNetPlayClient = InteropEmu.IsConnected();
 
@@ -703,6 +714,18 @@ namespace Mesen.GUI.Forms
 			} catch { }
 		}
 
+		private void UpdateWindowTitle()
+		{
+			string title = "Mesen";
+			if(!string.IsNullOrWhiteSpace(_currentGame)) {
+				title += " - " + _currentGame;
+			}
+			if(ConfigManager.Config.PreferenceInfo.DisplayTitleBarInfo) {
+				title += string.Format(" - {0}x{1} ({2:0.##}x, {3}) - {4}", ctrlRenderer.Width, ctrlRenderer.Height, ConfigManager.Config.VideoInfo.VideoScale, ResourceHelper.GetEnumText(ConfigManager.Config.VideoInfo.AspectRatio), ResourceHelper.GetEnumText(ConfigManager.Config.VideoInfo.VideoFilter));
+			}
+			this.Text = title;
+		}
+
 		private void UpdateRecentFiles()
 		{
 			mnuRecentFiles.DropDownItems.Clear();
@@ -780,7 +803,7 @@ namespace Mesen.GUI.Forms
 				return false;
 			}
 
-			if(_fullscreenMode && (keyData & Keys.Alt) == Keys.Alt) {
+			if(this.HideMenuStrip && (keyData & Keys.Alt) == Keys.Alt) {
 				if(this.menuStrip.Visible && !this.menuStrip.ContainsFocus) {
 					this.menuStrip.Visible = false;
 				} else {
@@ -1260,6 +1283,9 @@ namespace Mesen.GUI.Forms
 		{
 			_customSize = false;
 			_regularScale = scale;
+			if(this.HideMenuStrip) {
+				this.menuStrip.Visible = false;
+			}
 			InteropEmu.SetVideoScale(scale);
 			UpdateScaleMenu(scale);
 		}
@@ -1516,7 +1542,7 @@ namespace Mesen.GUI.Forms
 
 		private void panelRenderer_Click(object sender, EventArgs e)
 		{
-			if(_fullscreenMode) {
+			if(this.HideMenuStrip) {
 				this.menuStrip.Visible = false;
 			}
 
@@ -1525,14 +1551,14 @@ namespace Mesen.GUI.Forms
 
 		private void ctrlRenderer_Enter(object sender, EventArgs e)
 		{
-			if(_fullscreenMode) {
+			if(this.HideMenuStrip) {
 				this.menuStrip.Visible = false;
 			}
 		}
 
 		private void menuStrip_VisibleChanged(object sender, EventArgs e)
 		{
-			if(_fullscreenMode) {
+			if(this.HideMenuStrip) {
 				IntPtr handle = this.Handle;
 				this.BeginInvoke((MethodInvoker)(() => {
 					int rendererTop = (panelRenderer.Height + (this.menuStrip.Visible ? menuStrip.Height : 0) - ctrlRenderer.Height) / 2;
