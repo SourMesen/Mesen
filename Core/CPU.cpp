@@ -105,9 +105,10 @@ void CPU::Reset(bool softReset, NesModel model)
 	}
 
 	//The CPU takes some cycles before starting its execution after a reset/power up
-	for(int i = 0; i < (model == NesModel::NTSC ? 12 : 15); i++) {
-		PPU::ExecStatic();
+	for(int i = 0; i < (model == NesModel::NTSC ? 28 : 30); i++) {
+		PPU::RunOneCycle();
 	}
+
 	for(int i = 0; i < 10; i++) {
 		APU::ExecStatic();
 	}

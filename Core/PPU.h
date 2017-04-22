@@ -126,15 +126,13 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void LoadSpriteTileInfo();
 		void LoadExtraSprites();
 		__forceinline void ShiftTileRegisters();
-		void InitializeShiftRegisters();
-		void LoadNextTile();
 
 		__forceinline uint8_t ReadSpriteRam(uint8_t addr);
 		__forceinline void WriteSpriteRam(uint8_t addr, uint8_t value);
 
 		void UpdateMinimumDrawCycles();
 
-		__forceinline uint32_t GetPixelColor();
+		__forceinline uint8_t GetPixelColor();
 		__forceinline virtual void DrawPixel();
 		void UpdateGrayscaleAndIntensifyBits();
 		virtual void SendFrame();
@@ -182,6 +180,11 @@ class PPU : public IMemoryHandler, public Snapshotable
 		
 		void Exec();
 		static void ExecStatic();
+		
+		static void RunOneCycle()
+		{
+			Instance->Exec();
+		}
 
 		static uint32_t GetFrameCount()
 		{

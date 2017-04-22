@@ -71,6 +71,7 @@ void PPU::Reset()
 	_prevRenderingEnabled = false;
 	_cyclesNeeded = 0.0;
 
+	memset(_hasSprite, 0, sizeof(_hasSprite));
 	memset(_spriteTiles, 0, sizeof(SpriteInfo));
 	_spriteCount = 0;
 	_secondaryOAMAddr = 0;
@@ -81,8 +82,10 @@ void PPU::Reset()
 	memset(_openBusDecayStamp, 0, sizeof(_openBusDecayStamp));
 	_ignoreVramRead = 0;
 
-	_scanline = 0;
-	_cycle = 0;
+	//First execution will be cycle 0, scanline 0
+	_scanline = -1;
+	_cycle = 340;
+
 	_frameCount = 1;
 	_memoryReadBuffer = 0;
 
@@ -515,9 +518,8 @@ void PPU::LoadTileInfo()
 				_previousTile = _currentTile;
 				_currentTile = _nextTile;
 
-				if(_cycle > 1 && _cycle < 256) {
-					LoadNextTile();
-				}
+				_state.LowBitShift |= _nextTile.LowByte;
+				_state.HighBitShift |= _nextTile.HighByte;
 
 				uint8_t tileIndex = _mapper->ReadVRAM(GetNameTableAddr());
 				_nextTile.TileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
@@ -537,9 +539,6 @@ void PPU::LoadTileInfo()
 
 			case 5:
 				_nextTile.HighByte = _mapper->ReadVRAM(_nextTile.TileAddr + 8);
-				if(_cycle == 334) {
-					InitializeShiftRegisters();
-				}
 				break;
 		}
 	}
@@ -632,29 +631,17 @@ void PPU::LoadSpriteTileInfo()
 	}
 }
 
-void PPU::LoadNextTile()
-{
-	_state.LowBitShift |= _nextTile.LowByte;
-	_state.HighBitShift |= _nextTile.HighByte;
-}
-
-void PPU::InitializeShiftRegisters()
-{
-	_state.LowBitShift = (_currentTile.LowByte << 8) | _nextTile.LowByte;
-	_state.HighBitShift = (_currentTile.HighByte << 8) | _nextTile.HighByte;
-}
-
 void PPU::ShiftTileRegisters()
 {
 	_state.LowBitShift <<= 1;
 	_state.HighBitShift <<= 1;
 }
 
-uint32_t PPU::GetPixelColor()
+uint8_t PPU::GetPixelColor()
 {
 	uint8_t offset = _state.XScroll;
-	uint32_t backgroundColor = 0;
-	uint32_t spriteBgColor = 0;
+	uint8_t backgroundColor = 0;
+	uint8_t spriteBgColor = 0;
 
 	if(_cycle > _minimumDrawBgCycle) {
 		//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
@@ -670,7 +657,7 @@ uint32_t PPU::GetPixelColor()
 			int32_t shift = (int32_t)_cycle - _spriteTiles[i].SpriteX - 1;
 			if(shift >= 0 && shift < 8) {
 				_lastSprite = &_spriteTiles[i];
-				uint32_t spriteColor;
+				uint8_t spriteColor;
 				if(_spriteTiles[i].HorizontalMirror) {
 					spriteColor = ((_lastSprite->LowByte >> shift) & 0x01) | ((_lastSprite->HighByte >> shift) & 0x01) << 1;
 				} else {
@@ -746,7 +733,8 @@ void PPU::UpdateGrayscaleAndIntensifyBits()
 
 void PPU::ProcessScanline()
 {
-	if(_cycle > 0 && _cycle <= 256) {
+	//Only called for cycle 1+
+	if(_cycle <= 256) {
 		LoadTileInfo();
 
 		if(_prevRenderingEnabled && (_cycle & 0x07) == 0) {
@@ -763,6 +751,7 @@ void PPU::ProcessScanline()
 			//"Secondary OAM clear and sprite evaluation do not occur on the pre-render line"
 			ProcessSpriteEvaluation();
 		} else if(_cycle < 9) {
+			//Pre-render scanline logic
 			if(_cycle == 1) {
 				_statusFlags.VerticalBlank = false;
 			}
@@ -814,6 +803,8 @@ void PPU::ProcessScanline()
 				);
 			}
 		} else if(_prevRenderingEnabled && (_cycle == 328 || _cycle == 336)) {
+			_state.LowBitShift <<= 8;
+			_state.HighBitShift <<= 8;
 			IncHorizontalScrolling();
 		}
 	} else if(_cycle == 337 || _cycle == 339) {
@@ -826,9 +817,6 @@ void PPU::ProcessScanline()
 				_cycle = 340;
 			}
 		}
-	} else if(_scanline == -1 && _cycle == 0) {
-		_statusFlags.SpriteOverflow = false;
-		_statusFlags.Sprite0Hit = false;
 	}
 }
 
@@ -994,10 +982,8 @@ void PPU::SendFrame()
 
 void PPU::BeginVBlank()
 {
-	if(_cycle == 0) {
-		SendFrame();
-		TriggerNmi();
-	}
+	SendFrame();
+	TriggerNmi();
 }
 
 void PPU::TriggerNmi()
@@ -1011,31 +997,40 @@ void PPU::TriggerNmi()
 void PPU::Exec()
 {
 	if(_cycle > 339) {
-		_cycle = -1;
+		_cycle = 0;
 		if(++_scanline > _vblankEnd) {
 			_lastUpdatedPixel = -1;
 			_frameCount++;
 			_scanline = -1;
 			UpdateMinimumDrawCycles();
 		}
-	}
-	_cycle++;
 
-	Debugger::ProcessPpuCycle();
+		Debugger::ProcessPpuCycle();
 
-	if(_scanline < 240) {
-		ProcessScanline();
-	} else if(_scanline == _nmiScanline) {
-		BeginVBlank();
-	} else if(_nesModel == NesModel::PAL && _scanline >= _palSpriteEvalScanline) {
-		//"On a PAL machine, because of its extended vertical blank, the PPU begins refreshing OAM roughly 21 scanlines after NMI[2], to prevent it 
-		//from decaying during the longer hiatus of rendering. Additionally, it will continue to refresh during the visible portion of the screen 
-		//even if rendering is disabled. Because of this, OAM DMA must be done near the beginning of vertical blank on PAL, and everywhere else 
-		//it is liable to conflict with the refresh. Since the refresh can't be disabled like on the NTSC hardware, OAM decay does not occur at all on the PAL NES."
-		if(_cycle > 0 && _cycle <= 256) {
-			ProcessSpriteEvaluation();
-		} else if(_cycle >= 257 && _cycle < 320) {
-			_state.SpriteRamAddr = 0;
+		//Cycle = 0
+		if(_scanline == -1) {
+			_statusFlags.SpriteOverflow = false;
+			_statusFlags.Sprite0Hit = false;
+		} else if(_scanline == _nmiScanline) {
+			BeginVBlank();
+		}
+	} else {
+		//Cycle > 0
+		_cycle++;
+
+		Debugger::ProcessPpuCycle();
+		if(_scanline < 240) {
+			ProcessScanline();
+		} else if(_nesModel == NesModel::PAL && _scanline >= _palSpriteEvalScanline) {
+			//"On a PAL machine, because of its extended vertical blank, the PPU begins refreshing OAM roughly 21 scanlines after NMI[2], to prevent it 
+			//from decaying during the longer hiatus of rendering. Additionally, it will continue to refresh during the visible portion of the screen 
+			//even if rendering is disabled. Because of this, OAM DMA must be done near the beginning of vertical blank on PAL, and everywhere else 
+			//it is liable to conflict with the refresh. Since the refresh can't be disabled like on the NTSC hardware, OAM decay does not occur at all on the PAL NES."
+			if(_cycle <= 256) {
+				ProcessSpriteEvaluation();
+			} else if(_cycle >= 257 && _cycle < 320) {
+				_state.SpriteRamAddr = 0;
+			}
 		}
 	}
 
