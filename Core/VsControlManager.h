@@ -6,6 +6,7 @@
 #include "VsZapper.h"
 #include <assert.h>
 #include "StandardController.h"
+#include "MovieManager.h"
 
 enum class VsInputType
 {
@@ -179,7 +180,7 @@ public:
 	void RefreshAllPorts() override
 	{
 		ControlManager::RefreshAllPorts();
-		if(_inputType != VsInputType::Default) {
+		if(!MovieManager::Playing() && _inputType != VsInputType::Default) {
 			RemapControllerButtons();
 		}
 	}

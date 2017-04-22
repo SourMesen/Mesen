@@ -35,7 +35,7 @@ private:
 protected:
 	void PushState(uint8_t port);
 	void Record(string filename, bool reset);
-	void Play(stringstream &filestream, bool autoLoadRom, string filename = "");
+	bool Play(stringstream &filestream, bool autoLoadRom);
 
 	bool IsPlaying();
 	bool IsRecording();

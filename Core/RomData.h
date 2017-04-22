@@ -37,6 +37,12 @@ enum class BusConflictType
 	No
 };
 
+struct HashInfo
+{
+	uint32_t Crc32Hash;
+	string Sha1Hash;
+};
+
 struct NESHeader
 {
 	/*
@@ -311,6 +317,7 @@ struct RomData
 	vector<vector<uint8_t>> FdsDiskData;
 
 	vector<uint8_t> RawData;
+	string Sha1;
 	uint32_t Crc32 = 0;
 	uint32_t PrgCrc32 = 0;
 	uint32_t PrgChrCrc32 = 0;

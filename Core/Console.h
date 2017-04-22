@@ -74,7 +74,9 @@ class Console
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
 		static void LoadROM(string filepath, stringstream *filestream = nullptr, int32_t archiveFileIndex = -1, string patchFilepath = "");
+		static bool LoadROM(string romName, HashInfo hashInfo);
 		static bool LoadROM(string romName, uint32_t crc32Hash);
+		static bool LoadROM(string romName, string sha1Hash);
 		static string GetROMPath();
 		static string GetRomName();
 		static RomFormat GetRomFormat();

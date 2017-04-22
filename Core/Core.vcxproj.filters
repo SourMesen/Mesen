@@ -1153,6 +1153,9 @@
     <ClInclude Include="SealieComputing.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="BizhawkMovie.h">
+      <Filter>Movies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1358,6 +1361,9 @@
     </ClCompile>
     <ClCompile Include="Profiler.cpp">
       <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="BizhawkMovie.cpp">
+      <Filter>Movies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

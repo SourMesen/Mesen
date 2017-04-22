@@ -13,6 +13,8 @@ public:
 
 	bool LoadArchive(void* buffer, size_t size);
 	bool LoadArchive(string filename);
+	bool LoadArchive(std::istream &in);
+
 	std::stringstream GetStream(string filename);
 
 	vector<string> GetFileList(std::initializer_list<string> extensions);

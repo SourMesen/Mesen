@@ -2,6 +2,7 @@
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/ArchiveReader.h"
 #include "../Utilities/CRC32.h"
+#include "../Utilities/sha1.h"
 #include "../Utilities/BpsPatcher.h"
 #include "../Utilities/IpsPatcher.h"
 #include "../Utilities/UpsPatcher.h"
@@ -158,6 +159,7 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 	}
 
 	_romData.Crc32 = crc;
+	_romData.Sha1 = SHA1::GetHash(fileData);
 	_romData.RawData = fileData;
 	_romData.RomName = romName;
 	_romData.Filename = _filename;
@@ -217,12 +219,12 @@ RomData RomLoader::GetRomData()
 	return _romData;
 }
 
-int32_t RomLoader::FindMatchingRomInFile(string filename, uint32_t crc32Hash)
+int32_t RomLoader::FindMatchingRomInFile(string filename, HashInfo hashInfo)
 {
 	RomLoader loader;
 	int32_t fileIndex = 0;
 	while(loader.LoadFile(filename, nullptr, "", fileIndex)) {
-		if(crc32Hash == loader._romData.Crc32) {
+		if(hashInfo.Crc32Hash == loader._romData.Crc32 || hashInfo.Sha1Hash.compare(loader._romData.Sha1) == 0) {
 			return fileIndex;
 		}
 		fileIndex++;
@@ -230,7 +232,7 @@ int32_t RomLoader::FindMatchingRomInFile(string filename, uint32_t crc32Hash)
 	return -1;
 }
 
-string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uint32_t crc32Hash, bool useFastSearch, int32_t &archiveFileIndex)
+string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, HashInfo hashInfo, bool useFastSearch, int32_t &archiveFileIndex)
 {
 	std::transform(romFilename.begin(), romFilename.end(), romFilename.begin(), ::tolower);
 	vector<string> validExtensions = { { ".nes", ".zip", ".7z", ".fds" } };
@@ -248,7 +250,7 @@ string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uin
 			string originalFilename = romFile;
 			std::transform(romFile.begin(), romFile.end(), romFile.begin(), ::tolower);
 			if(FolderUtilities::GetFilename(romFile, true).compare(romFilename) == 0) {
-				archiveFileIndex = RomLoader::FindMatchingRomInFile(romFile, crc32Hash);
+				archiveFileIndex = RomLoader::FindMatchingRomInFile(romFile, hashInfo);
 				if(archiveFileIndex >= 0) {
 					return originalFilename;
 				}
@@ -257,7 +259,7 @@ string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, uin
 	} else {
 		for(string romFile : romFiles) {
 			//Slower search by CRC value
-			archiveFileIndex = RomLoader::FindMatchingRomInFile(romFile, crc32Hash);
+			archiveFileIndex = RomLoader::FindMatchingRomInFile(romFile, hashInfo);
 			if(archiveFileIndex >= 0) {
 				return romFile;
 			}

@@ -117,12 +117,25 @@ void Console::LoadROM(string filepath, stringstream *filestream, int32_t archive
 	Console::Resume();
 }
 
-bool Console::LoadROM(string filename, uint32_t crc32Hash)
+bool Console::LoadROM(string romName, uint32_t crc32Hash)
+{
+	HashInfo hashInfo{ crc32Hash, "" };
+	return Console::LoadROM(romName, hashInfo);
+}
+
+bool Console::LoadROM(string romName, string sha1Hash)
+{
+	HashInfo hashInfo{ 0, sha1Hash };
+	return Console::LoadROM(romName, hashInfo);
+}
+
+bool Console::LoadROM(string romName, HashInfo hashInfo)
 {
 	string currentRomFilepath = Console::GetROMPath();
 	string currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
 	if(!currentRomFilepath.empty()) {
-		if(Console::GetCrc32() == crc32Hash) {
+		HashInfo gameHashInfo = Instance->_mapper->GetHashInfo();
+		if(gameHashInfo.Crc32Hash == hashInfo.Crc32Hash || gameHashInfo.Sha1Hash.compare(hashInfo.Sha1Hash) == 0) {
 			//Current game matches, no need to do anything
 			return true;
 		}
@@ -130,7 +143,7 @@ bool Console::LoadROM(string filename, uint32_t crc32Hash)
 
 	int32_t archiveFileIndex = -1;
 	for(string folder : FolderUtilities::GetKnownGameFolders()) {
-		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, true, archiveFileIndex);
+		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, true, archiveFileIndex);
 		if(!match.empty()) {
 			Console::LoadROM(match, nullptr, archiveFileIndex);
 			return true;
@@ -139,7 +152,7 @@ bool Console::LoadROM(string filename, uint32_t crc32Hash)
 
 	//Perform slow CRC32 search for ROM
 	for(string folder : FolderUtilities::GetKnownGameFolders()) {
-		string match = RomLoader::FindMatchingRomInFolder(folder, filename, crc32Hash, false, archiveFileIndex);
+		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, false, archiveFileIndex);
 		if(!match.empty()) {
 			Console::LoadROM(match, nullptr, archiveFileIndex);
 			return true;
@@ -175,7 +188,7 @@ RomFormat Console::GetRomFormat()
 uint32_t Console::GetCrc32()
 {
 	if(Instance->_mapper) {
-		return Instance->_mapper->GetCrc32();
+		return Instance->_mapper->GetHashInfo().Crc32Hash;
 	} else {
 		return 0;
 	}

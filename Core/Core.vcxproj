@@ -424,6 +424,7 @@
     <ClInclude Include="BF9096.h" />
     <ClInclude Include="BF909x.h" />
     <ClInclude Include="BisqwitNtscFilter.h" />
+    <ClInclude Include="BizhawkMovie.h" />
     <ClInclude Include="Bmc11160.h" />
     <ClInclude Include="Bmc12in1.h" />
     <ClInclude Include="Bmc190in1.h" />
@@ -769,6 +770,7 @@
     <ClCompile Include="BaseControlDevice.cpp" />
     <ClCompile Include="BaseMapper.cpp" />
     <ClCompile Include="BisqwitNtscFilter.cpp" />
+    <ClCompile Include="BizhawkMovie.cpp" />
     <ClCompile Include="Breakpoint.cpp" />
     <ClCompile Include="CheatManager.cpp" />
     <ClCompile Include="CodeDataLogger.cpp" />

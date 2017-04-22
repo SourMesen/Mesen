@@ -1,6 +1,8 @@
 #include "stdafx.h"
+#include "../Utilities/FolderUtilities.h"
 #include "MovieManager.h"
 #include "MesenMovie.h"
+#include "BizhawkMovie.h"
 
 shared_ptr<IMovie> MovieManager::_instance;
 
@@ -18,11 +20,13 @@ void MovieManager::Play(string filename)
 		std::stringstream ss;
 		ss << file.rdbuf();
 		file.close();
-		MovieManager::Play(ss, true);
+		if(MovieManager::Play(ss, true)) {
+			MessageManager::DisplayMessage("Movies", "MoviePlaying", FolderUtilities::GetFilename(filename, true));
+		}
 	}
 }
 
-void MovieManager::Play(std::stringstream &filestream, bool autoLoadRom)
+bool MovieManager::Play(std::stringstream &filestream, bool autoLoadRom)
 {
 	char header[3] = { };
 	filestream.read(header, 3);
@@ -30,13 +34,26 @@ void MovieManager::Play(std::stringstream &filestream, bool autoLoadRom)
 
 	if(memcmp(header, "MMO", 3) == 0) {
 		shared_ptr<IMovie> movie(new MesenMovie());
-		movie->Play(filestream, autoLoadRom);
-		_instance = movie;
+		if(movie->Play(filestream, autoLoadRom)) {
+			_instance = movie;
+			return true;
+		}
+	} else if(memcmp(header, "PK", 2) == 0) {
+		shared_ptr<IMovie> movie(new BizhawkMovie());
+		if(movie->Play(filestream, autoLoadRom)) {
+			_instance = movie;
+			return true;
+		}
 	}
+
+	return false;
 }
 
 void MovieManager::Stop()
 {
+	if(_instance && _instance->IsPlaying()) {
+		MessageManager::DisplayMessage("Movies", "MovieEnded");
+	}
 	_instance.reset();
 }
 

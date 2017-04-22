@@ -155,6 +155,9 @@
     <ClInclude Include="orfanidis_eq.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sha1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -267,6 +270,9 @@
     </ClCompile>
     <ClCompile Include="BpsPatcher.cpp">
       <Filter>Patches</Filter>
+    </ClCompile>
+    <ClCompile Include="sha1.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

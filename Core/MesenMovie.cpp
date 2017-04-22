@@ -61,11 +61,7 @@ uint8_t MesenMovie::GetState(uint8_t port)
 
 	if(_readPosition[port] >= _data.DataSize[port]) {
 		//End of movie file
-		MessageManager::DisplayMessage("Movies", "MovieEnded");
-		MessageManager::SendNotification(ConsoleNotificationType::MovieEnded);
-		if(EmulationSettings::CheckFlag(EmulationFlags::PauseOnMovieEnd)) {
-			EmulationSettings::SetFlags(EmulationFlags::Paused);
-		}
+		EndMovie();
 		_playing = false;
 	}
 
@@ -124,13 +120,9 @@ void MesenMovie::Stop()
 		}
 		Save();
 	}
-	if(_playing) {
-		MessageManager::DisplayMessage("Movies", "MovieEnded");
-		_playing = false;
-	}
 }
 
-void MesenMovie::Play(stringstream &filestream, bool autoLoadRom, string filename)
+bool MesenMovie::Play(stringstream &filestream, bool autoLoadRom)
 {
 	Stop();
 
@@ -145,12 +137,9 @@ void MesenMovie::Play(stringstream &filestream, bool autoLoadRom, string filenam
 
 		CheatManager::SetCheats(_cheatList);
 		_playing = true;
-
-		if(!filename.empty()) {
-			MessageManager::DisplayMessage("Movies", "MoviePlaying", FolderUtilities::GetFilename(filename, true));
-		}
 	}
 	Console::Resume();
+	return _playing;
 }
 
 struct MovieHeader

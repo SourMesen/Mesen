@@ -47,6 +47,23 @@ vector<string> ArchiveReader::GetFileList(std::initializer_list<string> extensio
 	return filenames;
 }
 
+bool ArchiveReader::LoadArchive(std::istream &in)
+{
+	in.seekg(0, std::ios::end);
+	std::streampos filesize = in.tellg();
+	in.seekg(0, std::ios::beg);
+
+	if(_buffer) {
+		delete[] _buffer;
+		_buffer = nullptr;
+	}
+
+	_buffer = new uint8_t[(uint32_t)filesize];
+	in.read((char*)_buffer, filesize);
+	bool result = LoadArchive(_buffer, (size_t)filesize);
+	return result;
+}
+
 bool ArchiveReader::LoadArchive(void* buffer, size_t size)
 {
 	if(InternalLoadArchive(buffer, size)) {
@@ -59,20 +76,9 @@ bool ArchiveReader::LoadArchive(void* buffer, size_t size)
 bool ArchiveReader::LoadArchive(string filename)
 {
 	ifstream in(filename, std::ios::binary | std::ios::in);
-	if(in) {
-		in.seekg(0, std::ios::end);
-		std::streampos filesize = in.tellg();
-		in.seekg(0, std::ios::beg);
-
-		if(_buffer) {
-			delete[] _buffer;
-			_buffer = nullptr;
-		}
-
-		_buffer = new uint8_t[(uint32_t)filesize];
-		in.read((char*)_buffer, filesize);
-		bool result = LoadArchive(_buffer, (size_t)filesize);
-		return result;
+	if(in.good()) {
+		LoadArchive(in);
+		in.close();
 	}
 	return false;
 }

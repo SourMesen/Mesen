@@ -46,6 +46,7 @@ private:
 	uint32_t _chrPageNumbers[64];
 
 	uint32_t _crc32 = 0;
+	string _sha1Hash = "";
 	uint32_t _prgCrc32 = 0;
 
 	vector<uint8_t> _originalPrgRom;
@@ -164,7 +165,7 @@ public:
 	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
 	GameSystem GetGameSystem();
-	uint32_t GetCrc32();
+	HashInfo GetHashInfo();
 	uint32_t GetPrgCrc32();
 	string GetRomName();
 	RomFormat GetRomFormat();
