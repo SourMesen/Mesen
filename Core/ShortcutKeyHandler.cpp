@@ -125,6 +125,18 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 	if(DetectKeyPress(mappings.ToggleCheats)) {
 		MessageManager::SendNotification(ConsoleNotificationType::ToggleCheats);
 	}
+
+	if(ControlManager::IsKeyPressed(mappings.RunSingleFrame)) {
+		if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
+			EmulationSettings::ClearFlags(EmulationFlags::Paused);
+			Console::Pause();
+			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
+			EmulationSettings::SetFlags(EmulationFlags::Paused);
+			Console::Resume();
+		} else {
+			EmulationSettings::SetFlags(EmulationFlags::Paused);
+		}
+	}
 }
 
 void ShortcutKeyHandler::ProcessKeys(EmulatorKeyMappingSet mappings)

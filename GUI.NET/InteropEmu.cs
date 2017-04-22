@@ -1078,6 +1078,8 @@ namespace Mesen.GUI
 		public UInt32 DecreaseSpeed;
 
 		public UInt32 ToggleCheats;
+
+		public UInt32 RunSingleFrame;
 	}
 
 	public struct InteropCheatInfo

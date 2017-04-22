@@ -594,6 +594,7 @@
     <Message ID="EmulatorShortcutMappings_SaveState">Guardar estado en la posición actual</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Cargar estado en la posición actual</Message>
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Enable/Disable Cheat Codes</Message>
+    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Run Single Frame</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

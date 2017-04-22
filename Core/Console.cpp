@@ -364,7 +364,7 @@ void Console::Run()
 				PlatformUtilities::EnableScreensaver();
 				while(paused && !_stop && _debugger == nullptr) {
 					//Sleep until emulation is resumed
-					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
+					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
 					paused = EmulationSettings::IsPaused();
 				}
 

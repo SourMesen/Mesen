@@ -591,6 +591,7 @@
     <Message ID="EmulatorShortcutMappings_SaveState">選択中スロットにクイックセーブ</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">選択中スロットからクイックロード</Message>
     <Message ID="EmulatorShortcutMappings_ToggleCheats">チートコードを無効・有効にする</Message>
+    <Message ID="EmulatorShortcutMappings_RunSingleFrame">次のフレームを表す</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

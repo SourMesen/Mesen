@@ -598,6 +598,7 @@
     <Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Включити/Виключити Чит Коди</Message>
+    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Run Single Frame</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
