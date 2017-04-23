@@ -139,13 +139,25 @@ private:
 	void SwitchChrBank(uint16_t reg, uint8_t value)
 	{
 		_chrBanks[reg - 0x5120] = value | (_chrUpperBits << 8);
-		_lastChrReg = reg;
+		
+		if(_largeSprites) {
+			_lastChrReg = reg;
+		} else {
+			//Using 8x8 sprites resets the last written to bank logic
+			//Unsure about this part (hasn't been tested specifically, but would make sense)
+			_lastChrReg = 0;
+		}
 		UpdateChrBanks();
 	}
 
 	void UpdateChrBanks()
 	{
-		bool chrA = !_largeSprites || (_largeSprites && _spriteFetch) || (_lastVramOperationType != MemoryOperationType::PpuRenderingRead && (_lastChrReg <= 0x5127 || _extendedRamMode == 1));
+		if(!_largeSprites) {
+			//Using 8x8 sprites resets the last written to bank logic
+			_lastChrReg = 0;
+		}
+
+		bool chrA = !_largeSprites || (_largeSprites && _spriteFetch) || (_lastVramOperationType != MemoryOperationType::PpuRenderingRead && _lastChrReg <= 0x5127);
 		if(_chrMode == 0) {
 			SelectChrPage8x(0, _chrBanks[chrA ? 0x07 : 0x0B] << 3);
 		} else if(_chrMode == 1) {
