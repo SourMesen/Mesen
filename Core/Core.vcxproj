@@ -410,7 +410,8 @@
     <ClInclude Include="APU.h" />
     <ClInclude Include="ArkanoidController.h" />
     <ClInclude Include="Assembler.h" />
-    <ClInclude Include="AutoRomTest.h" />
+    <ClInclude Include="AutomaticRomTest.h" />
+    <ClInclude Include="RecordedRomTest.h" />
     <ClInclude Include="AutoSaveManager.h" />
     <ClInclude Include="AviRecorder.h" />
     <ClInclude Include="Ax5705.h" />
@@ -764,7 +765,8 @@
     <ClCompile Include="ApuLengthCounter.cpp" />
     <ClCompile Include="ArkanoidController.cpp" />
     <ClCompile Include="Assembler.cpp" />
-    <ClCompile Include="AutoRomTest.cpp" />
+    <ClCompile Include="AutomaticRomTest.cpp" />
+    <ClCompile Include="RecordedRomTest.cpp" />
     <ClCompile Include="AutoSaveManager.cpp" />
     <ClCompile Include="AviRecorder.cpp" />
     <ClCompile Include="BaseControlDevice.cpp" />

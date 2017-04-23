@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "AutoRomTest.h"
+#include "RecordedRomTest.h"
 #include "Console.h"
 #include "EmulationSettings.h"
 #include "MessageManager.h"
@@ -11,21 +11,21 @@
 #include "../Utilities/ZipWriter.h"
 #include "../Utilities/ZipReader.h"
 
-AutoRomTest::AutoRomTest()
+RecordedRomTest::RecordedRomTest()
 {
 	Reset();
 
 	MessageManager::RegisterNotificationListener(this);
 }
 
-AutoRomTest::~AutoRomTest()
+RecordedRomTest::~RecordedRomTest()
 {
 	Reset();
 
 	MessageManager::UnregisterNotificationListener(this);
 }
 
-void AutoRomTest::SaveFrame(uint16_t* ppuFrameBuffer)
+void RecordedRomTest::SaveFrame(uint16_t* ppuFrameBuffer)
 {
 	uint8_t md5Hash[16];
 	GetMd5Sum(md5Hash, ppuFrameBuffer, PPU::PixelCount * sizeof(uint16_t));
@@ -47,7 +47,7 @@ void AutoRomTest::SaveFrame(uint16_t* ppuFrameBuffer)
 	}
 }
 
-void AutoRomTest::ValidateFrame(uint16_t* ppuFrameBuffer)
+void RecordedRomTest::ValidateFrame(uint16_t* ppuFrameBuffer)
 {
 	uint8_t md5Hash[16];
 	GetMd5Sum(md5Hash, ppuFrameBuffer, PPU::PixelCount * sizeof(uint16_t));
@@ -71,7 +71,7 @@ void AutoRomTest::ValidateFrame(uint16_t* ppuFrameBuffer)
 	}
 }
 
-void AutoRomTest::ProcessNotification(ConsoleNotificationType type, void* parameter)
+void RecordedRomTest::ProcessNotification(ConsoleNotificationType type, void* parameter)
 {
 	switch(type) {
 		case ConsoleNotificationType::PpuFrameDone:
@@ -89,7 +89,7 @@ void AutoRomTest::ProcessNotification(ConsoleNotificationType type, void* parame
 	}
 }
 
-void AutoRomTest::Reset()
+void RecordedRomTest::Reset()
 {
 	memset(_previousHash, 0xFF, 16);
 	
@@ -107,7 +107,7 @@ void AutoRomTest::Reset()
 	_recordingFromMovie = false;
 }
 
-void AutoRomTest::Record(string filename, bool reset)
+void RecordedRomTest::Record(string filename, bool reset)
 {
 	_filename = filename;
 
@@ -127,7 +127,7 @@ void AutoRomTest::Record(string filename, bool reset)
 	}
 }
 
-void AutoRomTest::RecordFromMovie(string testFilename, stringstream &movieStream, bool autoLoadRom)
+void RecordedRomTest::RecordFromMovie(string testFilename, stringstream &movieStream, bool autoLoadRom)
 {
 	_filename = testFilename;
 
@@ -151,7 +151,7 @@ void AutoRomTest::RecordFromMovie(string testFilename, stringstream &movieStream
 	}
 }
 
-void AutoRomTest::RecordFromMovie(string testFilename, string movieFilename)
+void RecordedRomTest::RecordFromMovie(string testFilename, string movieFilename)
 {
 	stringstream ss;
 	ifstream file(movieFilename, ios::in | ios::binary);
@@ -162,7 +162,7 @@ void AutoRomTest::RecordFromMovie(string testFilename, string movieFilename)
 	}
 }
 
-void AutoRomTest::RecordFromTest(string newTestFilename, string existingTestFilename)
+void RecordedRomTest::RecordFromTest(string newTestFilename, string existingTestFilename)
 {
 	ZipReader zipReader;
 	zipReader.LoadArchive(existingTestFilename);
@@ -180,7 +180,7 @@ void AutoRomTest::RecordFromTest(string newTestFilename, string existingTestFile
 	}
 }
 
-int32_t AutoRomTest::Run(string filename)
+int32_t RecordedRomTest::Run(string filename)
 {
 	string testName = FolderUtilities::GetFilename(filename, false);
 	if(testName.compare("5.MMC3_rev_A") == 0 || testName.compare("6-MMC6") == 0 || testName.compare("6-MMC3_alt") == 0) {
@@ -255,7 +255,7 @@ int32_t AutoRomTest::Run(string filename)
 	return -1;
 }
 
-void AutoRomTest::Stop()
+void RecordedRomTest::Stop()
 {
 	if(_recording) {
 		Save();
@@ -263,7 +263,7 @@ void AutoRomTest::Stop()
 	Reset();
 }
 
-void AutoRomTest::Save()
+void RecordedRomTest::Save()
 {
 	//Wait until the next frame is captured to end the recording
 	_signal.Wait();

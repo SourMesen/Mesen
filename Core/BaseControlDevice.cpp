@@ -5,6 +5,7 @@
 #include "EmulationSettings.h"
 #include "GameClient.h"
 #include "GameServerConnection.h"
+#include "AutomaticRomTest.h"
 
 BaseControlDevice::BaseControlDevice(uint8_t port)
 {
@@ -63,6 +64,8 @@ uint8_t BaseControlDevice::GetControlState()
 		_currentState = MovieManager::GetState(_port);
 	} else if(GameClient::Connected()) {
 		_currentState = GameClient::GetControllerState(_port);
+	} else if(AutomaticRomTest::Running()) {
+		_currentState = AutomaticRomTest::GetControllerState(_port);
 	} else if(netPlayDevice) {
 		_currentState = ProcessNetPlayState(netPlayDevice->GetState());
 	} else {

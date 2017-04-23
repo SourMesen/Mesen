@@ -553,9 +553,6 @@
     <ClInclude Include="Snapshotable.h">
       <Filter>Nes</Filter>
     </ClInclude>
-    <ClInclude Include="AutoRomTest.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
     <ClInclude Include="EmulationSettings.h">
       <Filter>Misc</Filter>
     </ClInclude>
@@ -1156,6 +1153,12 @@
     <ClInclude Include="BizhawkMovie.h">
       <Filter>Movies</Filter>
     </ClInclude>
+    <ClInclude Include="RecordedRomTest.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="AutomaticRomTest.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1184,9 +1187,6 @@
     </ClCompile>
     <ClCompile Include="CodeDataLogger.cpp">
       <Filter>Debugger</Filter>
-    </ClCompile>
-    <ClCompile Include="AutoRomTest.cpp">
-      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="BaseVideoFilter.cpp">
       <Filter>VideoDecoder</Filter>
@@ -1364,6 +1364,12 @@
     </ClCompile>
     <ClCompile Include="BizhawkMovie.cpp">
       <Filter>Movies</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordedRomTest.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="AutomaticRomTest.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

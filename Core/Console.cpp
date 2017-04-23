@@ -43,7 +43,7 @@ void Console::Release()
 	Console::Instance.reset(new Console());
 }
 
-void Console::Initialize(string romFilename, stringstream *filestream, string patchFilename, int32_t archiveFileIndex)
+bool Console::Initialize(string romFilename, stringstream *filestream, string patchFilename, int32_t archiveFileIndex)
 {
 	SoundMixer::StopAudio();
 
@@ -105,16 +105,19 @@ void Console::Initialize(string romFilename, stringstream *filestream, string pa
 		if(EmulationSettings::GetOverclockRate() != 100) {
 			MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
 		}
+		return true;
 	} else {
 		MessageManager::DisplayMessage("Error", "CouldNotLoadFile", FolderUtilities::GetFilename(romFilename, true));
+		return false;
 	}
 }
 
-void Console::LoadROM(string filepath, stringstream *filestream, int32_t archiveFileIndex, string patchFilepath)
+bool Console::LoadROM(string filepath, stringstream *filestream, int32_t archiveFileIndex, string patchFilepath)
 {
 	Console::Pause();
-	Instance->Initialize(filepath, filestream, patchFilepath, archiveFileIndex);
+	bool result = Instance->Initialize(filepath, filestream, patchFilepath, archiveFileIndex);
 	Console::Resume();
+	return result;
 }
 
 bool Console::LoadROM(string romName, uint32_t crc32Hash)
@@ -145,8 +148,7 @@ bool Console::LoadROM(string romName, HashInfo hashInfo)
 	for(string folder : FolderUtilities::GetKnownGameFolders()) {
 		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, true, archiveFileIndex);
 		if(!match.empty()) {
-			Console::LoadROM(match, nullptr, archiveFileIndex);
-			return true;
+			return Console::LoadROM(match, nullptr, archiveFileIndex);
 		}
 	}
 
@@ -154,8 +156,7 @@ bool Console::LoadROM(string romName, HashInfo hashInfo)
 	for(string folder : FolderUtilities::GetKnownGameFolders()) {
 		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, false, archiveFileIndex);
 		if(!match.empty()) {
-			Console::LoadROM(match, nullptr, archiveFileIndex);
-			return true;
+			return Console::LoadROM(match, nullptr, archiveFileIndex);
 		}
 	}
 

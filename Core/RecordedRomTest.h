@@ -5,7 +5,7 @@
 #include "INotificationListener.h"
 #include "../Utilities/AutoResetEvent.h"
 
-class AutoRomTest : public INotificationListener
+class RecordedRomTest : public INotificationListener
 {
 private:
 	bool _recording;
@@ -35,8 +35,8 @@ private:
 	void RecordFromMovie(string testFilename, stringstream &movieStream, bool autoLoadRom);
 
 public:
-	AutoRomTest();
-	virtual ~AutoRomTest();
+	RecordedRomTest();
+	virtual ~RecordedRomTest();
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	void Record(string filename, bool reset);

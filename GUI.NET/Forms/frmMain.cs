@@ -1060,7 +1060,7 @@ namespace Mesen.GUI.Forms
 
 				Task.Run(() => {
 					foreach(string filename in ofd.FileNames) {
-						int result = InteropEmu.RomTestRun(filename);
+						int result = InteropEmu.RunRecordedTest(filename);
 
 						if(result == 0) {
 							passedTests.Add(Path.GetFileNameWithoutExtension(filename));
@@ -1205,6 +1205,20 @@ namespace Mesen.GUI.Forms
 				ConfigManager.Config.Region = NesModel.Dendy;
 			}
 			InteropEmu.SetNesModel(ConfigManager.Config.Region);
+		}
+
+		private void mnuRunAutomaticTest_Click(object sender, EventArgs e)
+		{
+			using(OpenFileDialog ofd = new OpenFileDialog()) {
+				ofd.SetFilter("*.nes|*.nes");
+				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					string filename = ofd.FileName;
+					
+					Task.Run(() => {
+						int result = InteropEmu.RunAutomaticTest(filename);
+					});
+				}
+			}
 		}
 
 		private void mnuRunAllTests_Click(object sender, EventArgs e)

@@ -9,7 +9,8 @@
 #include "../Core/CheatManager.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/VideoDecoder.h"
-#include "../Core/AutoRomTest.h"
+#include "../Core/AutomaticRomTest.h"
+#include "../Core/RecordedRomTest.h"
 #include "../Core/FDS.h"
 #include "../Core/VsControlManager.h"
 #include "../Core/SoundMixer.h"
@@ -37,7 +38,7 @@ void*  _windowHandle = nullptr;
 void* _viewerHandle = nullptr;
 string _returnString;
 string _logString;
-AutoRomTest *_autoRomTest = nullptr;
+RecordedRomTest *_recordedRomTest = nullptr;
 
 typedef void (__stdcall *NotificationListenerCallback)(int);
 
@@ -313,43 +314,49 @@ namespace InteropEmu {
 		DllExport void __stdcall WaveStop() { SoundMixer::StopRecording(); }
 		DllExport bool __stdcall WaveIsRecording() { return SoundMixer::IsRecording(); }
 
-		DllExport int32_t __stdcall RomTestRun(char* filename)
+		DllExport int32_t __stdcall RunRecordedTest(char* filename)
 		{
-			AutoRomTest romTest; 
+			RecordedRomTest romTest; 
+			return romTest.Run(filename);
+		}
+
+		DllExport int32_t __stdcall RunAutomaticTest(char* filename)
+		{
+			AutomaticRomTest romTest;
 			return romTest.Run(filename);
 		}
 
 		DllExport void __stdcall RomTestRecord(char* filename, bool reset) 
 		{
-			if(_autoRomTest) {
-				delete _autoRomTest;
+			if(_recordedRomTest) {
+				delete _recordedRomTest;
 			}
-			_autoRomTest = new AutoRomTest();
-			_autoRomTest->Record(filename, reset); 
+			_recordedRomTest = new RecordedRomTest();
+			_recordedRomTest->Record(filename, reset);
 		}
 
 		DllExport void __stdcall RomTestRecordFromMovie(char* testFilename, char* movieFilename) 
 		{
-			_autoRomTest = new AutoRomTest();
-			_autoRomTest->RecordFromMovie(testFilename, movieFilename);
+			_recordedRomTest = new RecordedRomTest();
+			_recordedRomTest->RecordFromMovie(testFilename, movieFilename);
 		}
 
 		DllExport void __stdcall RomTestRecordFromTest(char* newTestFilename, char* existingTestFilename) 
 		{
-			_autoRomTest = new AutoRomTest();
-			_autoRomTest->RecordFromTest(newTestFilename, existingTestFilename);
+			_recordedRomTest = new RecordedRomTest();
+			_recordedRomTest->RecordFromTest(newTestFilename, existingTestFilename);
 		}
 
 		DllExport void __stdcall RomTestStop() 
 		{
-			if(_autoRomTest) {
-				_autoRomTest->Stop();
-				delete _autoRomTest;
-				_autoRomTest = nullptr;
+			if(_recordedRomTest) {
+				_recordedRomTest->Stop();
+				delete _recordedRomTest;
+				_recordedRomTest = nullptr;
 			}
 		}
 
-		DllExport bool __stdcall RomTestRecording() { return _autoRomTest != nullptr; }
+		DllExport bool __stdcall RomTestRecording() { return _recordedRomTest != nullptr; }
 
 		DllExport void __stdcall SetCheats(CheatInfo cheats[], uint32_t length) { CheatManager::SetCheats(cheats, length); }
 

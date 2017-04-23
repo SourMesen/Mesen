@@ -179,6 +179,7 @@ namespace Mesen.GUI.Forms
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHelpWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRunAutomaticTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -1238,7 +1239,8 @@ namespace Mesen.GUI.Forms
             this.mnuTestRecordFrom,
             this.mnuTestStopRecording,
             this.mnuRunAllTests,
-            this.mnuRunAllGameTests});
+            this.mnuRunAllGameTests,
+            this.mnuRunAutomaticTest});
 			this.mnuTests.Name = "mnuTests";
 			this.mnuTests.Size = new System.Drawing.Size(231, 22);
 			this.mnuTests.Text = "Tests";
@@ -1265,28 +1267,28 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuTestRecordStart.Name = "mnuTestRecordStart";
 			this.mnuTestRecordStart.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-			this.mnuTestRecordStart.Size = new System.Drawing.Size(143, 22);
+			this.mnuTestRecordStart.Size = new System.Drawing.Size(152, 22);
 			this.mnuTestRecordStart.Text = "Start";
 			this.mnuTestRecordStart.Click += new System.EventHandler(this.mnuTestRecordStart_Click);
 			// 
 			// mnuTestRecordNow
 			// 
 			this.mnuTestRecordNow.Name = "mnuTestRecordNow";
-			this.mnuTestRecordNow.Size = new System.Drawing.Size(143, 22);
+			this.mnuTestRecordNow.Size = new System.Drawing.Size(152, 22);
 			this.mnuTestRecordNow.Text = "Now";
 			this.mnuTestRecordNow.Click += new System.EventHandler(this.mnuTestRecordNow_Click);
 			// 
 			// mnuTestRecordMovie
 			// 
 			this.mnuTestRecordMovie.Name = "mnuTestRecordMovie";
-			this.mnuTestRecordMovie.Size = new System.Drawing.Size(143, 22);
+			this.mnuTestRecordMovie.Size = new System.Drawing.Size(152, 22);
 			this.mnuTestRecordMovie.Text = "Movie";
 			this.mnuTestRecordMovie.Click += new System.EventHandler(this.mnuTestRecordMovie_Click);
 			// 
 			// mnuTestRecordTest
 			// 
 			this.mnuTestRecordTest.Name = "mnuTestRecordTest";
-			this.mnuTestRecordTest.Size = new System.Drawing.Size(143, 22);
+			this.mnuTestRecordTest.Size = new System.Drawing.Size(152, 22);
 			this.mnuTestRecordTest.Text = "Test";
 			this.mnuTestRecordTest.Click += new System.EventHandler(this.mnuTestRecordTest_Click);
 			// 
@@ -1405,6 +1407,13 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(198, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
+			// 
+			// mnuRunAutomaticTest
+			// 
+			this.mnuRunAutomaticTest.Name = "mnuRunAutomaticTest";
+			this.mnuRunAutomaticTest.Size = new System.Drawing.Size(192, 22);
+			this.mnuRunAutomaticTest.Text = "Run automatic test";
+			this.mnuRunAutomaticTest.Click += new System.EventHandler(this.mnuRunAutomaticTest_Click);
 			// 
 			// frmMain
 			// 
@@ -1580,6 +1589,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuPrescale6xFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuPrescale8xFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuPrescale10xFilter;
+		private System.Windows.Forms.ToolStripMenuItem mnuRunAutomaticTest;
 	}
 }
 

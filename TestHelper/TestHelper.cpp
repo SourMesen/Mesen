@@ -46,7 +46,8 @@ public:
 extern "C" {
 	void __stdcall InitializeEmu(const char* homeFolder, void*, void*, bool, bool, bool);
 	void __stdcall SetControllerType(uint32_t port, ControllerType type);
-	int __stdcall RomTestRun(char* filename);
+	int __stdcall RunAutomaticTest(char* filename);
+	int __stdcall RunRecordedTest(char* filename);
 	void __stdcall LoadROM(char* filename);
 	void __stdcall Run();
 	void __stdcall Stop();
@@ -57,19 +58,25 @@ std::thread *runThread = nullptr;
 std::atomic<int> testIndex;
 vector<string> testFilenames;
 vector<string> failedTests;
+vector<int32_t> failedTestErrorCode;
 SimpleLock lock;
 Timer timer;
+bool automaticTests = false;
+
+void RunEmu()
+{
+	try {
+		Run();
+	} catch(std::exception ex) {
+
+	}
+}
 
 void __stdcall OnNotificationReceived(ConsoleNotificationType type)
 {
 	if(type == ConsoleNotificationType::GameLoaded) {
-		runThread = new std::thread(Run);
+		runThread = new std::thread(RunEmu);
 	}
-}
-
-void RunEmu()
-{
-	Run();
 }
 
 void RunTest()
@@ -82,11 +89,21 @@ void RunTest()
 		if(index < testFilenames.size()) {
 			string filepath = testFilenames[index];
 			string filename = FolderUtilities::GetFilename(filepath, false);
-			#ifdef _WIN32
-				string command = "TestHelper.exe /testrom \"" + filepath + "\"";
-			#else
-				string command = "./testhelper /testrom \"" + filepath + "\"";
-			#endif
+
+			string command;
+			if(automaticTests) {
+				#ifdef _WIN32
+					command = "TestHelper.exe /autotest \"" + filepath + "\"";
+				#else
+					command = "./testhelper /autotest \"" + filepath + "\"";
+				#endif
+			} else {
+				#ifdef _WIN32
+					command = "TestHelper.exe /testrom \"" + filepath + "\"";
+				#else
+					command = "./testhelper /testrom \"" + filepath + "\"";
+				#endif
+			}
 
 			lock.Acquire();
 			std::cout << std::to_string(index) << ") " << filename << std::endl;
@@ -101,6 +118,7 @@ void RunTest()
 				//Test failed
 				lock.Acquire();
 				failedTests.push_back(filename);
+				failedTestErrorCode.push_back(failedFrames);
 				std::cout << "  ****  " << std::to_string(index) << ") " << filename << " failed (" << failedFrames << ")" << std::endl;
 				lock.Release();
 			}
@@ -132,18 +150,24 @@ int main(int argc, char* argv[])
 		signal(SIGSEGV, handler);		
 	#endif
 
-	if(argc <= 2) {
+	if(argc >= 3 && strcmp(argv[1], "/auto") == 0) {
+		string romFolder = argv[2];
+		testFilenames = FolderUtilities::GetFilesInFolder(romFolder, ".nes", true);
+		automaticTests = true;
+	} else if(argc <= 2) {
 		string testFolder;
 		if(argc == 1) {
 			testFolder = FolderUtilities::CombinePath(mesenFolder, "Tests");
 		} else {
 			testFolder = argv[1];
 		}
-
-		vector<std::thread*> testThreads;
 		testFilenames = FolderUtilities::GetFilesInFolder(testFolder, ".mtp", true);
-		testIndex = 0;
+		automaticTests = false;
+	}
 
+	if(!testFilenames.empty()) {
+		vector<std::thread*> testThreads;
+		testIndex = 0;
 		timer.Reset();
 
 		int numberOfThreads = 4;
@@ -162,9 +186,10 @@ int main(int argc, char* argv[])
 			std::cout << "------------" << std::endl;
 			std::cout << "Failed tests" << std::endl;
 			std::cout << "------------" << std::endl;
-			for(string failedTest : failedTests) {
-				std::cout << failedTest << std::endl;
+			for(int i = 0; i < failedTests.size(); i++) {
+				std::cout << failedTests[i] << " (" << std::to_string(failedTestErrorCode[i]) << ")" << std::endl;
 			}
+			std::cout << std::endl << std::to_string(failedTests.size()) << " tests failed." << std::endl;
 		} else {
 			std::cout << std::endl << std::endl << "All tests passed.";
 		}
@@ -179,7 +204,13 @@ int main(int argc, char* argv[])
 		SetControllerType(0, ControllerType::StandardController);
 		SetControllerType(1, ControllerType::StandardController);
 
-		int result = RomTestRun(testFilename);
+		int result = 0;
+		if(strcmp(argv[1], "/testrom") == 0) {
+			result = RunRecordedTest(testFilename);
+		} else {
+			result = RunAutomaticTest(testFilename);
+		}
+		
 		if(runThread != nullptr) {
 			runThread->join();
 			delete runThread;
