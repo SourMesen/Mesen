@@ -28,7 +28,7 @@ void BizhawkMovie::ProcessNotification(ConsoleNotificationType type, void* param
 				//Reset, not implemented yet
 			}
 			
-			if(_gameSystem == GameSystem::FDS) {
+			if(FDS::GetSideCount()) {
 				//FDS timings between NesHawk & Mesen are currently significantly different
 				//So FDS games will always go out of sync
 				if(systemAction & 0x04) {
@@ -42,7 +42,7 @@ void BizhawkMovie::ProcessNotification(ConsoleNotificationType type, void* param
 					}
 					FDS::InsertDisk(diskNumber);
 				}
-			} else if(_gameSystem == GameSystem::VsUniSystem) {
+			} else if(VsControlManager::GetInstance()) {
 				if(VsControlManager::GetInstance()) {
 					if(systemAction & 0x04) {
 						VsControlManager::GetInstance()->InsertCoin(0);
@@ -74,8 +74,6 @@ bool BizhawkMovie::InitializeGameData(ZipReader & reader)
 {
 	std::stringstream ss = reader.GetStream("Header.txt");
 
-	_gameSystem = GameSystem::NesNtsc;
-
 	bool result = false;
 	while(!ss.eof()) {
 		string line;
@@ -86,14 +84,6 @@ bool BizhawkMovie::InitializeGameData(ZipReader & reader)
 				if(Console::LoadROM("", sha1)) {
 					result = true;
 				}
-			}
-		} else if(line.compare(0, 9, "BoardName", 9) == 0) {
-			if(line.compare(10, 8, "MAPPER99", 8) == 0) {
-				//VS System
-				_gameSystem = GameSystem::VsUniSystem;
-			} else if(line.compare(10, 3, "FDS", 3) == 0) {
-				//FDS
-				_gameSystem = GameSystem::FDS;
 			}
 		}
 	}
@@ -106,10 +96,10 @@ bool BizhawkMovie::InitializeInputData(ZipReader & reader)
 	std::stringstream ss = reader.GetStream("Input Log.txt");
 
 	int systemActionCount = 2;
-	if(_gameSystem == GameSystem::FDS) {
+	if(FDS::GetSideCount() > 0) {
 		//Eject disk + Insert Disk #XX
 		systemActionCount += FDS::GetSideCount() + 1;
-	} else if(_gameSystem == GameSystem::VsUniSystem) {
+	} else if(VsControlManager::GetInstance()) {
 		//Insert coin 1, 2 + service button
 		systemActionCount += 3;
 	}

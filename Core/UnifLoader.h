@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "../Utilities/CRC32.h"
+#include "../Utilities/md5.h"
 #include "../Utilities/HexUtilities.h"
 #include "RomData.h"
 #include "GameDatabase.h"
@@ -179,6 +180,7 @@ public:
 			romData.Format = RomFormat::Unif;
 			romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
 			romData.PrgChrCrc32 = CRC32::GetCRC(fullRom.data(), fullRom.size());
+			romData.PrgChrMd5 = GetMd5Sum(fullRom.data(), fullRom.size());
 
 			MessageManager::Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32));
 			MessageManager::Log("[UNIF] Board Name: " + _mapperName);

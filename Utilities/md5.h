@@ -39,4 +39,4 @@ extern void MD5_Init(MD5_CTX *ctx);
 extern void MD5_Update(MD5_CTX *ctx, const void *data, unsigned long size);
 extern void MD5_Final(unsigned char *result, MD5_CTX *ctx);
 extern void GetMd5Sum(unsigned char *result, void* buffer, unsigned long size);
-extern string GetMd5Sum(void* buffer, unsigned long size);
+extern string GetMd5Sum(void* buffer, size_t size);

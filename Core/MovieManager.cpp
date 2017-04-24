@@ -3,6 +3,7 @@
 #include "MovieManager.h"
 #include "MesenMovie.h"
 #include "BizhawkMovie.h"
+#include "FceuxMovie.h"
 
 shared_ptr<IMovie> MovieManager::_instance;
 
@@ -40,6 +41,12 @@ bool MovieManager::Play(std::stringstream &filestream, bool autoLoadRom)
 		}
 	} else if(memcmp(header, "PK", 2) == 0) {
 		shared_ptr<IMovie> movie(new BizhawkMovie());
+		if(movie->Play(filestream, autoLoadRom)) {
+			_instance = movie;
+			return true;
+		}
+	} else if(memcmp(header, "ver", 3) == 0) {
+		shared_ptr<IMovie> movie(new FceuxMovie());
 		if(movie->Play(filestream, autoLoadRom)) {
 			_instance = movie;
 			return true;

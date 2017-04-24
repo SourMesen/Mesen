@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "iNesLoader.h"
 #include "../Utilities/CRC32.h"
+#include "../Utilities/md5.h"
 #include "../Utilities/HexUtilities.h"
 #include "GameDatabase.h"
 #include "EmulationSettings.h"
@@ -51,6 +52,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 
 	uint32_t romCrc = CRC32::GetCRC(buffer, romFile.size() - bytesRead);
 	romData.PrgChrCrc32 = romCrc;
+	romData.PrgChrMd5 = GetMd5Sum(buffer, romFile.size() - bytesRead);
 
 	NESHeader dbHeader;
 	GameDatabase::GetiNesHeader(romData.PrgChrCrc32, dbHeader);

@@ -122,13 +122,15 @@ bool Console::LoadROM(string filepath, stringstream *filestream, int32_t archive
 
 bool Console::LoadROM(string romName, uint32_t crc32Hash)
 {
-	HashInfo hashInfo{ crc32Hash, "" };
+	HashInfo hashInfo;
+	hashInfo.Crc32Hash = crc32Hash;
 	return Console::LoadROM(romName, hashInfo);
 }
 
 bool Console::LoadROM(string romName, string sha1Hash)
 {
-	HashInfo hashInfo{ 0, sha1Hash };
+	HashInfo hashInfo;
+	hashInfo.Sha1Hash = sha1Hash;
 	return Console::LoadROM(romName, hashInfo);
 }
 
@@ -138,7 +140,7 @@ bool Console::LoadROM(string romName, HashInfo hashInfo)
 	string currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
 	if(!currentRomFilepath.empty()) {
 		HashInfo gameHashInfo = Instance->_mapper->GetHashInfo();
-		if(gameHashInfo.Crc32Hash == hashInfo.Crc32Hash || gameHashInfo.Sha1Hash.compare(hashInfo.Sha1Hash) == 0) {
+		if(gameHashInfo.Crc32Hash == hashInfo.Crc32Hash || gameHashInfo.Sha1Hash.compare(hashInfo.Sha1Hash) == 0 || gameHashInfo.PrgChrMd5Hash.compare(hashInfo.PrgChrMd5Hash) == 0) {
 			//Current game matches, no need to do anything
 			return true;
 		}

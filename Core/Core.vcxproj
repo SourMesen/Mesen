@@ -411,6 +411,7 @@
     <ClInclude Include="ArkanoidController.h" />
     <ClInclude Include="Assembler.h" />
     <ClInclude Include="AutomaticRomTest.h" />
+    <ClInclude Include="FceuxMovie.h" />
     <ClInclude Include="RecordedRomTest.h" />
     <ClInclude Include="AutoSaveManager.h" />
     <ClInclude Include="AviRecorder.h" />
@@ -766,6 +767,7 @@
     <ClCompile Include="ArkanoidController.cpp" />
     <ClCompile Include="Assembler.cpp" />
     <ClCompile Include="AutomaticRomTest.cpp" />
+    <ClCompile Include="FceuxMovie.cpp" />
     <ClCompile Include="RecordedRomTest.cpp" />
     <ClCompile Include="AutoSaveManager.cpp" />
     <ClCompile Include="AviRecorder.cpp" />

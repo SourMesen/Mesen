@@ -301,15 +301,15 @@ void GetMd5Sum(unsigned char* result, void* buffer, unsigned long size)
 	MD5_Final(result, &context);
 }
 
-string GetMd5Sum(void* buffer, unsigned long size)
+string GetMd5Sum(void* buffer, size_t size)
 {
 	unsigned char result[16];
-	GetMd5Sum(result, buffer, size);
+	GetMd5Sum(result, buffer, (unsigned long)size);
 
 	std::stringstream ss;
-	ss << std::hex << std::setfill('0') << std::setw(2);
+	ss << std::hex << std::uppercase << std::setfill('0');
 	for(int i = 0; i < 16; i++) {
-		ss << (int)result[i];
+		ss << std::setw(2) << (int)result[i];
 	}
 	return ss.str();
 }

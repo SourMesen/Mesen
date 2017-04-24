@@ -45,8 +45,7 @@ private:
 	uint32_t _prgPageNumbers[64];
 	uint32_t _chrPageNumbers[64];
 
-	uint32_t _crc32 = 0;
-	string _sha1Hash = "";
+	HashInfo _hashInfo;
 	uint32_t _prgCrc32 = 0;
 
 	vector<uint8_t> _originalPrgRom;

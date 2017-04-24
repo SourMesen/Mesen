@@ -58,3 +58,13 @@ string HexUtilities::ToHex(uint32_t value)
 		return _hexCache[value >> 24] + _hexCache[(value >> 16) & 0xFF] + _hexCache[(value >> 8) & 0xFF] + _hexCache[value & 0xFF];
 	}
 }
+
+string HexUtilities::ToHex(vector<uint8_t> &data)
+{
+	string result;
+	result.reserve(data.size() * 2);
+	for(uint8_t value : data) {
+		result += HexUtilities::ToHex(value);
+	}
+	return result;
+}

@@ -1159,6 +1159,9 @@
     <ClInclude Include="AutomaticRomTest.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="FceuxMovie.h">
+      <Filter>Movies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1370,6 +1373,9 @@
     </ClCompile>
     <ClCompile Include="AutomaticRomTest.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="FceuxMovie.cpp">
+      <Filter>Movies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

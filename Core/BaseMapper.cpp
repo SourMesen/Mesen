@@ -520,8 +520,9 @@ void BaseMapper::Initialize(RomData &romData)
 	_hasChrBattery = romData.SaveChrRamSize > 0 || ForceChrBattery();
 
 	_gameSystem = romData.System;
-	_crc32 = romData.Crc32;
-	_sha1Hash = romData.Sha1;
+	_hashInfo.Crc32Hash = romData.Crc32;
+	_hashInfo.Sha1Hash = romData.Sha1;
+	_hashInfo.PrgChrMd5Hash = romData.PrgChrMd5;
 	_prgCrc32 = romData.PrgCrc32;
 	switch(romData.BusConflicts) {
 		case BusConflictType::Default: _hasBusConflicts = HasBusConflicts(); break;
@@ -710,7 +711,7 @@ RomFormat BaseMapper::GetRomFormat()
 
 HashInfo BaseMapper::GetHashInfo()
 {
-	return { _crc32, _sha1Hash };
+	return _hashInfo;
 }
 
 uint32_t BaseMapper::GetPrgCrc32()
