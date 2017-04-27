@@ -33,22 +33,25 @@ CamstudioCodec::~CamstudioCodec()
 bool CamstudioCodec::SetupCompress(int width, int height, uint32_t compressionLevel)
 {
 	_compressionLevel = compressionLevel;
-	_orgHeight = height;
 	_orgWidth = width;
 
-	_width = (width + 3) & ~3;
-	_height = (height + 3) & ~3;
+	if(width % 4 != 0) {
+		_rowStride = ((int)((width * 24 + 31) / 32 * 4));
+	} else {
+		_rowStride = width*3;
+	}
+	_height = height;
 
-	_prevFrame = new uint8_t[_width*_height*3]; //24-bit RGB
-	_currentFrame = new uint8_t[_width*height*3]; //24-bit RGB
-	_buffer = new uint8_t[_width*height*3]; //24-bit RGB
+	_prevFrame = new uint8_t[_rowStride*_height]; //24-bit RGB
+	_currentFrame = new uint8_t[_rowStride*_height]; //24-bit RGB
+	_buffer = new uint8_t[_rowStride*_height]; //24-bit RGB
 
-	_compressBufferLength = compressBound(_width*_height * 3) + 2;
+	_compressBufferLength = compressBound(_rowStride*_height) + 2;
 	_compressBuffer = new uint8_t[_compressBufferLength];
 	
-	memset(_prevFrame, 0, _width * _height * 3);
-	memset(_currentFrame, 0, _width * _height * 3);
-	memset(_buffer, 0, _width * _height * 3);
+	memset(_prevFrame, 0, _rowStride * _height);
+	memset(_currentFrame, 0, _rowStride * _height);
+	memset(_buffer, 0, _rowStride * _height);
 	memset(_compressBuffer, 0, _compressBufferLength);
 	
 	deflateInit(&_compressor, compressionLevel);
@@ -79,26 +82,22 @@ int CamstudioCodec::CompressFrame(bool isKeyFrame, uint8_t *frameData, uint8_t**
 
 	uint8_t* rowBuffer = _currentFrame;
 	for(int y = 0; y < _height; y++) {
-		if(y < _height - _orgHeight) {
-			memset(rowBuffer, 0, _width * 3);
-		} else {
-			LoadRow(frameData + (_height - y - 1) * _orgWidth * 4, rowBuffer);
-		}
-		rowBuffer += _width * 3;
+		LoadRow(frameData + (_height - y - 1) * _orgWidth * 4, rowBuffer);
+		rowBuffer += _rowStride;
 	}
 
 	if(isKeyFrame) {
 		_compressor.next_in = _currentFrame;
 	} else {
-		for(int i = 0, len = _width * _height * 3; i < len; i++) {
+		for(int i = 0, len = _rowStride * _height; i < len; i++) {
 			_buffer[i] = _currentFrame[i] - _prevFrame[i];
 		}
 		_compressor.next_in = _buffer;
 	}
 
-	memcpy(_prevFrame, _currentFrame, _width*_height*3);
+	memcpy(_prevFrame, _currentFrame, _rowStride*_height);
 	
-	_compressor.avail_in = _height * _width * 3;
+	_compressor.avail_in = _height * _rowStride;
 	deflate(&_compressor, MZ_FINISH);
 	
 	*compressedData = _compressBuffer;

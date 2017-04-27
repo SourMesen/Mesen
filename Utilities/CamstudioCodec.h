@@ -16,8 +16,7 @@ private:
 	int _compressionLevel = 0;
 
 	int _orgWidth = 0;
-	int _orgHeight = 0;
-	int _width = 0;
+	int _rowStride = 0;
 	int _height = 0;
 
 	void LoadRow(uint8_t* inPointer, uint8_t* outPointer);
