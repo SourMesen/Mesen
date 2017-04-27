@@ -76,7 +76,9 @@ protected:
 			_square2.TickEnvelope();
 		}
 
-		int16_t summedOutput = (_square1.GetOutput() + _square2.GetOutput()) * 4 + _pcmOutput;
+		//"The sound output of the square channels are equivalent in volume to the corresponding APU channels"
+		//"The polarity of all MMC5 channels is reversed compared to the APU."
+		int16_t summedOutput = -(_square1.GetOutput() + _square2.GetOutput() + _pcmOutput);
 		if(summedOutput != _lastOutput) {
 			APU::AddExpansionAudioDelta(AudioChannel::MMC5, summedOutput - _lastOutput);
 			_lastOutput = summedOutput;
