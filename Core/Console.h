@@ -13,6 +13,7 @@
 
 class Debugger;
 class BaseMapper;
+class RewindManager;
 
 class Console
 {
@@ -22,6 +23,7 @@ class Console
 		SimpleLock _runLock;
 		SimpleLock _stopLock;
 
+		shared_ptr<RewindManager> _rewindManager;
 		shared_ptr<CPU> _cpu;
 		shared_ptr<PPU> _ppu;
 		unique_ptr<APU> _apu;

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "IRenderingDevice.h"
 #include "VideoRenderer.h"
+#include "AviRecorder.h"
+#include "VideoDecoder.h"
 
 unique_ptr<VideoRenderer> VideoRenderer::Instance;
 
@@ -60,6 +62,11 @@ void VideoRenderer::RenderThread()
 
 void VideoRenderer::UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height)
 {
+	shared_ptr<AviRecorder> aviRecorder = _aviRecorder;
+	if(aviRecorder) {
+		aviRecorder->AddFrame(frameBuffer, width, height);
+	}
+
 	if(_renderer) {		
 		_renderer->UpdateFrame(frameBuffer, width, height);
 		_waitForRender.Signal();
@@ -78,4 +85,32 @@ void VideoRenderer::UnregisterRenderingDevice(IRenderingDevice *renderer)
 		StopThread();
 		_renderer = nullptr;
 	}
+}
+
+void VideoRenderer::StartRecording(string filename, VideoCodec codec, uint32_t compressionLevel)
+{
+	shared_ptr<AviRecorder> recorder(new AviRecorder());
+
+	FrameInfo frameInfo = VideoDecoder::GetInstance()->GetFrameInfo();
+	if(recorder->StartRecording(filename, codec, frameInfo.Width, frameInfo.Height, frameInfo.BitsPerPixel, 60098814, EmulationSettings::GetSampleRate(), compressionLevel)) {
+		_aviRecorder = recorder;
+	}
+}
+
+void VideoRenderer::AddRecordingSound(int16_t* soundBuffer, uint32_t sampleCount, uint32_t sampleRate)
+{
+	shared_ptr<AviRecorder> aviRecorder = _aviRecorder;
+	if(aviRecorder) {
+		aviRecorder->AddSound(soundBuffer, sampleCount, sampleRate);
+	}
+}
+
+void VideoRenderer::StopRecording()
+{
+	_aviRecorder.reset();
+}
+
+bool VideoRenderer::IsRecording()
+{
+	return _aviRecorder != nullptr && _aviRecorder->IsRecording();
 }

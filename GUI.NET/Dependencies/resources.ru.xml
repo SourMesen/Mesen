@@ -287,6 +287,8 @@
       <Control ID="lblEmulationSpeed">Скорость эмуляции :</Control>
       <Control ID="lblTurboSpeedHint">%  (0 = Максимальная скорость)</Control>
       <Control ID="lblTurboSpeed">Перемотка:</Control>
+      <Control ID="lblRewindSpeedHint">%  (0 = Максимальная скорость)</Control>
+      <Control ID="lblRewindSpeed">Rewind Speed:</Control>
 
       <Control ID="tpgAdvanced">Расширенные</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
@@ -348,6 +350,9 @@
       <Control ID="tpgAdvanced">Расширенные</Control>
       <Control ID="chkFdsAutoLoadDisk">Автоматически вставлять диск 1 стороной А при загрузке FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Использовать быструю загрузку FDS</Control>
+
+      <Control ID="lblRewind">Keep rewind data for the last</Control>
+      <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>
 
       <Control ID="tpgShortcuts">Горячие клавиши</Control>
       <Control ID="colAction">Действие</Control>
@@ -583,6 +588,9 @@
     <Message ID="NoMatchingCheats">Выбранный Cheat файл ({0}) не содержит читов для данной игры.</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
+    <Message ID="EmulatorShortcutMappings_Rewind">Rewind</Message>
+    <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rewind 10 seconds</Message>
+    <Message ID="EmulatorShortcutMappings_RewindOneMin">Rewind 1 minute</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Increase Speed</Message>
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>

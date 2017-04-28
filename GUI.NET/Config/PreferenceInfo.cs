@@ -51,6 +51,8 @@ namespace Mesen.GUI.Config
 
 		public bool DisableGameDatabase = false;
 
+		public UInt32 RewindBufferSize = 300;
+
 		public PreferenceInfo()
 		{
 		}
@@ -101,6 +103,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.NsfSetNsfConfig(preferenceInfo.NsfAutoDetectSilence ? preferenceInfo.NsfAutoDetectSilenceDelay : 0, preferenceInfo.NsfMoveToNextTrackAfterTime ? preferenceInfo.NsfMoveToNextTrackTime : -1, preferenceInfo.NsfDisableApuIrqs);
 			InteropEmu.SetAutoSaveOptions(preferenceInfo.AutoSave ? (uint)preferenceInfo.AutoSaveDelay : 0, preferenceInfo.AutoSaveNotify);
 			InteropEmu.SetEmulatorKeys(new EmulatorKeyMappingSet() { KeySet1 = preferenceInfo.EmulatorKeySet1.Value, KeySet2 = preferenceInfo.EmulatorKeySet2.Value });
+
+			InteropEmu.SetRewindBufferSize(preferenceInfo.RewindBufferSize);
 		}
 	}
 }

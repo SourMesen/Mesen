@@ -5,6 +5,7 @@
 #include "VideoDecoder.h"
 #include "Debugger.h"
 #include "BaseMapper.h"
+#include "RewindManager.h"
 
 PPU* PPU::Instance = nullptr;
 
@@ -968,7 +969,11 @@ void PPU::SendFrame()
 
  	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
 
-	VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
+	if(RewindManager::IsRewinding()) {
+		VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer);
+	} else {
+		VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
+	}
 
 	//Switch output buffer.  VideoDecoder will decode the last frame while we build the new one.
 	//If VideoDecoder isn't fast enough, UpdateFrame will block until it is ready to accept a new frame.

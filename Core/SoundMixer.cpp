@@ -1,9 +1,10 @@
 #include "stdafx.h"
+#include "../Utilities/orfanidis_eq.h"
 #include "SoundMixer.h"
 #include "APU.h"
 #include "CPU.h"
-#include "VideoDecoder.h"
-#include "../Utilities/orfanidis_eq.h"
+#include "VideoRenderer.h"
+#include "RewindManager.h"
 
 IAudioDevice* SoundMixer::AudioDevice = nullptr;
 unique_ptr<WaveRecorder> SoundMixer::_waveRecorder;
@@ -102,7 +103,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	}
 
 	//Apply low pass filter/volume reduction when in background (based on options)
-	if(!VideoDecoder::GetInstance()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled) && EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
+	if(!VideoRenderer::GetInstance()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled) && EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
 		if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {
 			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
 		} else if(EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
@@ -125,20 +126,22 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, EmulationSettings::GetCrossFeedRatio());
 	}
 
-	if(SoundMixer::AudioDevice && !EmulationSettings::IsPaused()) {
-		SoundMixer::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true);
-	}
-
-	if(_waveRecorder) {
-		auto lock = _waveRecorderLock.AcquireSafe();
+	if(RewindManager::SendAudio(_outputBuffer, (uint32_t)sampleCount, _sampleRate)) {
 		if(_waveRecorder) {
-			if(!_waveRecorder->WriteSamples(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true)) {
-				_waveRecorder.reset();
+			auto lock = _waveRecorderLock.AcquireSafe();
+			if(_waveRecorder) {
+				if(!_waveRecorder->WriteSamples(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true)) {
+					_waveRecorder.reset();
+				}
 			}
 		}
-	}
 
-	VideoDecoder::GetInstance()->AddRecordingSound(_outputBuffer, (uint32_t)sampleCount, _sampleRate);
+		VideoRenderer::GetInstance()->AddRecordingSound(_outputBuffer, (uint32_t)sampleCount, _sampleRate);
+
+		if(SoundMixer::AudioDevice && !EmulationSettings::IsPaused()) {
+			SoundMixer::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true);
+		}
+	}
 
 	if(EmulationSettings::NeedAudioSettingsUpdate()) {
 		if(EmulationSettings::GetSampleRate() != _sampleRate) {

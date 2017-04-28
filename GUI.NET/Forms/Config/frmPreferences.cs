@@ -59,6 +59,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AutoHideMenu", chkAutoHideMenu);
 			AddBinding("DisplayTitleBarInfo", chkDisplayTitleBarInfo);
 
+			AddBinding("RewindBufferSize", nudRewindBufferSize);
+
 			UpdateCloudDisplay();
 		}
 

@@ -242,6 +242,10 @@ struct KeyMappingSet
 struct EmulatorKeyMappings
 {
 	uint32_t FastForward;
+	uint32_t Rewind;
+	uint32_t RewindTenSecs;
+	uint32_t RewindOneMin;
+
 	uint32_t Pause;
 	uint32_t Reset;
 	uint32_t Exit;
@@ -356,6 +360,9 @@ private:
 
 	static uint32_t _emulationSpeed;
 	static uint32_t _turboSpeed;
+	static uint32_t _rewindSpeed;
+
+	static uint32_t _rewindBufferSize;
 
 	static bool _hasOverclock;
 	static uint32_t _overclockRate;
@@ -641,9 +648,25 @@ public:
 		}
 	}
 
-	static void SetTurboSpeed(uint32_t turboSpeed)
+	static void SetTurboRewindSpeed(uint32_t turboSpeed, uint32_t rewindSpeed)
 	{
 		_turboSpeed = turboSpeed;
+		_rewindSpeed = rewindSpeed;
+	}
+
+	static uint32_t GetRewindSpeed()
+	{
+		return _rewindSpeed;
+	}
+
+	static void SetRewindBufferSize(uint32_t seconds)
+	{
+		_rewindBufferSize = seconds;
+	}
+
+	static uint32_t GetRewindBufferSize()
+	{
+		return _rewindBufferSize;
 	}
 
 	static uint32_t GetEmulationSpeed(bool ignoreTurbo = false)

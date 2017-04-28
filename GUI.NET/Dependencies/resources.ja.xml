@@ -286,7 +286,9 @@
       <Control ID="lblEmuSpeedHint">%  (0 = 最高速度)</Control>
       <Control ID="lblEmulationSpeed">エミュレーションの速度:</Control>
       <Control ID="lblTurboSpeedHint">%  (0 = 最高速度)</Control>
-      <Control ID="lblTurboSpeed">早送りの速度:</Control>      
+      <Control ID="lblTurboSpeed">早送りの速度:</Control>
+      <Control ID="lblRewindSpeedHint">%  (0 = 最高速度)</Control>
+      <Control ID="lblRewindSpeed">巻き戻しの速度:</Control>
 
       <Control ID="tpgAdvanced">詳細設定</Control>
       <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
@@ -348,6 +350,9 @@
       <Control ID="tpgAdvanced">詳細設定</Control>
       <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
+
+      <Control ID="lblRewind">巻き戻し用データの</Control>
+      <Control ID="lblRewindMinutes">分をキープする (メモリの使用量：１分に約１MB)</Control>
 
       <Control ID="tpgShortcuts"> ショートカットキー </Control>
       <Control ID="colAction">機能</Control>
@@ -575,6 +580,9 @@
     <Message ID="NoMatchingCheats">このファイル（{0}）に選択されたゲームに該当するチートコードを見つかりませんでした。</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">早送り</Message>
+    <Message ID="EmulatorShortcutMappings_Rewind">巻き戻す</Message>
+    <Message ID="EmulatorShortcutMappings_RewindTenSecs">１０秒前に戻る</Message>
+    <Message ID="EmulatorShortcutMappings_RewindOneMin">１分前に戻る</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">速度を上げる</Message>
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">速度を下げる</Message>
     <Message ID="EmulatorShortcutMappings_Pause">ポーズ</Message>

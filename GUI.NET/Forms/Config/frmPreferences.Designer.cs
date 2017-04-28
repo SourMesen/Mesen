@@ -32,18 +32,21 @@ namespace Mesen.GUI.Forms.Config
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPreferences));
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-			this.chkHidePauseOverlay = new System.Windows.Forms.CheckBox();
+			this.lblPauseBackgroundSettings = new System.Windows.Forms.Label();
 			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
 			this.chkAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
-			this.chkPauseOnMovieEnd = new System.Windows.Forms.CheckBox();
-			this.chkAllowBackgroundInput = new System.Windows.Forms.CheckBox();
-			this.chkPauseWhenInBackground = new System.Windows.Forms.CheckBox();
-			this.chkAutoLoadIps = new System.Windows.Forms.CheckBox();
 			this.btnOpenMesenFolder = new System.Windows.Forms.Button();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblDisplayLanguage = new System.Windows.Forms.Label();
 			this.cboDisplayLanguage = new System.Windows.Forms.ComboBox();
+			this.lblMiscSettings = new System.Windows.Forms.Label();
+			this.chkAutoLoadIps = new System.Windows.Forms.CheckBox();
 			this.chkDisplayMovieIcons = new System.Windows.Forms.CheckBox();
+			this.chkAutoHideMenu = new System.Windows.Forms.CheckBox();
+			this.chkHidePauseOverlay = new System.Windows.Forms.CheckBox();
+			this.chkAllowBackgroundInput = new System.Windows.Forms.CheckBox();
+			this.chkPauseWhenInBackground = new System.Windows.Forms.CheckBox();
+			this.chkPauseOnMovieEnd = new System.Windows.Forms.CheckBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgShortcuts = new System.Windows.Forms.TabPage();
@@ -97,11 +100,12 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisableGameDatabase = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
-			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
 			this.chkDisplayTitleBarInfo = new System.Windows.Forms.CheckBox();
-			this.chkAutoHideMenu = new System.Windows.Forms.CheckBox();
-			this.lblMiscSettings = new System.Windows.Forms.Label();
-			this.lblPauseBackgroundSettings = new System.Windows.Forms.Label();
+			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+			this.nudRewindBufferSize = new System.Windows.Forms.NumericUpDown();
+			this.lblRewindMinutes = new System.Windows.Forms.Label();
+			this.lblRewind = new System.Windows.Forms.Label();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -131,6 +135,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpFileFormat.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.flowLayoutPanel6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -176,16 +182,17 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.Size = new System.Drawing.Size(473, 337);
 			this.tlpMain.TabIndex = 1;
 			// 
-			// chkHidePauseOverlay
+			// lblPauseBackgroundSettings
 			// 
-			this.chkHidePauseOverlay.AutoSize = true;
-			this.chkHidePauseOverlay.Location = new System.Drawing.Point(13, 95);
-			this.chkHidePauseOverlay.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkHidePauseOverlay.Name = "chkHidePauseOverlay";
-			this.chkHidePauseOverlay.Size = new System.Drawing.Size(133, 17);
-			this.chkHidePauseOverlay.TabIndex = 20;
-			this.chkHidePauseOverlay.Text = "Hide the pause screen";
-			this.chkHidePauseOverlay.UseVisualStyleBackColor = true;
+			this.lblPauseBackgroundSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblPauseBackgroundSettings.AutoSize = true;
+			this.lblPauseBackgroundSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblPauseBackgroundSettings.Location = new System.Drawing.Point(0, 79);
+			this.lblPauseBackgroundSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblPauseBackgroundSettings.Name = "lblPauseBackgroundSettings";
+			this.lblPauseBackgroundSettings.Size = new System.Drawing.Size(141, 13);
+			this.lblPauseBackgroundSettings.TabIndex = 23;
+			this.lblPauseBackgroundSettings.Text = "Pause/Background Settings";
 			// 
 			// chkSingleInstance
 			// 
@@ -206,51 +213,6 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAutomaticallyCheckForUpdates.TabIndex = 17;
 			this.chkAutomaticallyCheckForUpdates.Text = "Automatically check for updates";
 			this.chkAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
-			// 
-			// chkPauseOnMovieEnd
-			// 
-			this.chkPauseOnMovieEnd.AutoSize = true;
-			this.chkPauseOnMovieEnd.Location = new System.Drawing.Point(13, 118);
-			this.chkPauseOnMovieEnd.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkPauseOnMovieEnd.Name = "chkPauseOnMovieEnd";
-			this.chkPauseOnMovieEnd.Size = new System.Drawing.Size(199, 17);
-			this.chkPauseOnMovieEnd.TabIndex = 15;
-			this.chkPauseOnMovieEnd.Text = "Pause when a movie finishes playing";
-			this.chkPauseOnMovieEnd.UseVisualStyleBackColor = true;
-			// 
-			// chkAllowBackgroundInput
-			// 
-			this.chkAllowBackgroundInput.AutoSize = true;
-			this.chkAllowBackgroundInput.Location = new System.Drawing.Point(13, 164);
-			this.chkAllowBackgroundInput.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkAllowBackgroundInput.Name = "chkAllowBackgroundInput";
-			this.chkAllowBackgroundInput.Size = new System.Drawing.Size(177, 17);
-			this.chkAllowBackgroundInput.TabIndex = 14;
-			this.chkAllowBackgroundInput.Text = "Allow input when in background";
-			this.chkAllowBackgroundInput.UseVisualStyleBackColor = true;
-			// 
-			// chkPauseWhenInBackground
-			// 
-			this.chkPauseWhenInBackground.AutoSize = true;
-			this.chkPauseWhenInBackground.Location = new System.Drawing.Point(13, 141);
-			this.chkPauseWhenInBackground.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkPauseWhenInBackground.Name = "chkPauseWhenInBackground";
-			this.chkPauseWhenInBackground.Size = new System.Drawing.Size(204, 17);
-			this.chkPauseWhenInBackground.TabIndex = 13;
-			this.chkPauseWhenInBackground.Text = "Pause emulation when in background";
-			this.chkPauseWhenInBackground.UseVisualStyleBackColor = true;
-			this.chkPauseWhenInBackground.CheckedChanged += new System.EventHandler(this.chkPauseWhenInBackground_CheckedChanged);
-			// 
-			// chkAutoLoadIps
-			// 
-			this.chkAutoLoadIps.AutoSize = true;
-			this.chkAutoLoadIps.Location = new System.Drawing.Point(13, 207);
-			this.chkAutoLoadIps.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkAutoLoadIps.Name = "chkAutoLoadIps";
-			this.chkAutoLoadIps.Size = new System.Drawing.Size(198, 17);
-			this.chkAutoLoadIps.TabIndex = 9;
-			this.chkAutoLoadIps.Text = "Automatically load IPS/BPS patches";
-			this.chkAutoLoadIps.UseVisualStyleBackColor = true;
 			// 
 			// btnOpenMesenFolder
 			// 
@@ -292,6 +254,30 @@ namespace Mesen.GUI.Forms.Config
 			this.cboDisplayLanguage.Size = new System.Drawing.Size(206, 21);
 			this.cboDisplayLanguage.TabIndex = 1;
 			// 
+			// lblMiscSettings
+			// 
+			this.lblMiscSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblMiscSettings.AutoSize = true;
+			this.lblMiscSettings.Enabled = false;
+			this.lblMiscSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblMiscSettings.Location = new System.Drawing.Point(0, 191);
+			this.lblMiscSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblMiscSettings.Name = "lblMiscSettings";
+			this.lblMiscSettings.Size = new System.Drawing.Size(73, 13);
+			this.lblMiscSettings.TabIndex = 22;
+			this.lblMiscSettings.Text = "Misc. Settings";
+			// 
+			// chkAutoLoadIps
+			// 
+			this.chkAutoLoadIps.AutoSize = true;
+			this.chkAutoLoadIps.Location = new System.Drawing.Point(13, 207);
+			this.chkAutoLoadIps.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkAutoLoadIps.Name = "chkAutoLoadIps";
+			this.chkAutoLoadIps.Size = new System.Drawing.Size(198, 17);
+			this.chkAutoLoadIps.TabIndex = 9;
+			this.chkAutoLoadIps.Text = "Automatically load IPS/BPS patches";
+			this.chkAutoLoadIps.UseVisualStyleBackColor = true;
+			// 
 			// chkDisplayMovieIcons
 			// 
 			this.chkDisplayMovieIcons.AutoSize = true;
@@ -302,6 +288,62 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisplayMovieIcons.TabIndex = 19;
 			this.chkDisplayMovieIcons.Text = "Display play/record icon when playing or recording a movie";
 			this.chkDisplayMovieIcons.UseVisualStyleBackColor = true;
+			// 
+			// chkAutoHideMenu
+			// 
+			this.chkAutoHideMenu.AutoSize = true;
+			this.chkAutoHideMenu.Location = new System.Drawing.Point(13, 230);
+			this.chkAutoHideMenu.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkAutoHideMenu.Name = "chkAutoHideMenu";
+			this.chkAutoHideMenu.Size = new System.Drawing.Size(158, 17);
+			this.chkAutoHideMenu.TabIndex = 21;
+			this.chkAutoHideMenu.Text = "Automatically hide menu bar";
+			this.chkAutoHideMenu.UseVisualStyleBackColor = true;
+			// 
+			// chkHidePauseOverlay
+			// 
+			this.chkHidePauseOverlay.AutoSize = true;
+			this.chkHidePauseOverlay.Location = new System.Drawing.Point(13, 95);
+			this.chkHidePauseOverlay.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkHidePauseOverlay.Name = "chkHidePauseOverlay";
+			this.chkHidePauseOverlay.Size = new System.Drawing.Size(133, 17);
+			this.chkHidePauseOverlay.TabIndex = 20;
+			this.chkHidePauseOverlay.Text = "Hide the pause screen";
+			this.chkHidePauseOverlay.UseVisualStyleBackColor = true;
+			// 
+			// chkAllowBackgroundInput
+			// 
+			this.chkAllowBackgroundInput.AutoSize = true;
+			this.chkAllowBackgroundInput.Location = new System.Drawing.Point(13, 164);
+			this.chkAllowBackgroundInput.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkAllowBackgroundInput.Name = "chkAllowBackgroundInput";
+			this.chkAllowBackgroundInput.Size = new System.Drawing.Size(177, 17);
+			this.chkAllowBackgroundInput.TabIndex = 14;
+			this.chkAllowBackgroundInput.Text = "Allow input when in background";
+			this.chkAllowBackgroundInput.UseVisualStyleBackColor = true;
+			// 
+			// chkPauseWhenInBackground
+			// 
+			this.chkPauseWhenInBackground.AutoSize = true;
+			this.chkPauseWhenInBackground.Location = new System.Drawing.Point(13, 141);
+			this.chkPauseWhenInBackground.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkPauseWhenInBackground.Name = "chkPauseWhenInBackground";
+			this.chkPauseWhenInBackground.Size = new System.Drawing.Size(204, 17);
+			this.chkPauseWhenInBackground.TabIndex = 13;
+			this.chkPauseWhenInBackground.Text = "Pause emulation when in background";
+			this.chkPauseWhenInBackground.UseVisualStyleBackColor = true;
+			this.chkPauseWhenInBackground.CheckedChanged += new System.EventHandler(this.chkPauseWhenInBackground_CheckedChanged);
+			// 
+			// chkPauseOnMovieEnd
+			// 
+			this.chkPauseOnMovieEnd.AutoSize = true;
+			this.chkPauseOnMovieEnd.Location = new System.Drawing.Point(13, 118);
+			this.chkPauseOnMovieEnd.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkPauseOnMovieEnd.Name = "chkPauseOnMovieEnd";
+			this.chkPauseOnMovieEnd.Size = new System.Drawing.Size(199, 17);
+			this.chkPauseOnMovieEnd.TabIndex = 15;
+			this.chkPauseOnMovieEnd.Text = "Pause when a movie finishes playing";
+			this.chkPauseOnMovieEnd.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
@@ -916,16 +958,17 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.chkDisplayTitleBarInfo, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 4);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowCount = 6;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(473, 337);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
@@ -959,11 +1002,6 @@ namespace Mesen.GUI.Forms.Config
 			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
 			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
 			// 
-			// tmrSyncDateTime
-			// 
-			this.tmrSyncDateTime.Enabled = true;
-			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
-			// 
 			// chkDisplayTitleBarInfo
 			// 
 			this.chkDisplayTitleBarInfo.AutoSize = true;
@@ -974,41 +1012,59 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisplayTitleBarInfo.Text = "Display additional information in title bar";
 			this.chkDisplayTitleBarInfo.UseVisualStyleBackColor = true;
 			// 
-			// chkAutoHideMenu
+			// tmrSyncDateTime
 			// 
-			this.chkAutoHideMenu.AutoSize = true;
-			this.chkAutoHideMenu.Location = new System.Drawing.Point(13, 230);
-			this.chkAutoHideMenu.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkAutoHideMenu.Name = "chkAutoHideMenu";
-			this.chkAutoHideMenu.Size = new System.Drawing.Size(158, 17);
-			this.chkAutoHideMenu.TabIndex = 21;
-			this.chkAutoHideMenu.Text = "Automatically hide menu bar";
-			this.chkAutoHideMenu.UseVisualStyleBackColor = true;
+			this.tmrSyncDateTime.Enabled = true;
+			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
-			// lblMiscSettings
+			// flowLayoutPanel6
 			// 
-			this.lblMiscSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.lblMiscSettings.AutoSize = true;
-			this.lblMiscSettings.Enabled = false;
-			this.lblMiscSettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblMiscSettings.Location = new System.Drawing.Point(0, 191);
-			this.lblMiscSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.lblMiscSettings.Name = "lblMiscSettings";
-			this.lblMiscSettings.Size = new System.Drawing.Size(73, 13);
-			this.lblMiscSettings.TabIndex = 22;
-			this.lblMiscSettings.Text = "Misc. Settings";
+			this.flowLayoutPanel6.Controls.Add(this.lblRewind);
+			this.flowLayoutPanel6.Controls.Add(this.nudRewindBufferSize);
+			this.flowLayoutPanel6.Controls.Add(this.lblRewindMinutes);
+			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 92);
+			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(473, 23);
+			this.flowLayoutPanel6.TabIndex = 9;
 			// 
-			// lblPauseBackgroundSettings
+			// nudRewindBufferSize
 			// 
-			this.lblPauseBackgroundSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.lblPauseBackgroundSettings.AutoSize = true;
-			this.lblPauseBackgroundSettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblPauseBackgroundSettings.Location = new System.Drawing.Point(0, 79);
-			this.lblPauseBackgroundSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.lblPauseBackgroundSettings.Name = "lblPauseBackgroundSettings";
-			this.lblPauseBackgroundSettings.Size = new System.Drawing.Size(141, 13);
-			this.lblPauseBackgroundSettings.TabIndex = 23;
-			this.lblPauseBackgroundSettings.Text = "Pause/Background Settings";
+			this.nudRewindBufferSize.Location = new System.Drawing.Point(151, 3);
+			this.nudRewindBufferSize.Maximum = new decimal(new int[] {
+            900,
+            0,
+            0,
+            0});
+			this.nudRewindBufferSize.Name = "nudRewindBufferSize";
+			this.nudRewindBufferSize.Size = new System.Drawing.Size(42, 20);
+			this.nudRewindBufferSize.TabIndex = 1;
+			this.nudRewindBufferSize.Value = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+			// 
+			// lblRewindMinutes
+			// 
+			this.lblRewindMinutes.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRewindMinutes.AutoSize = true;
+			this.lblRewindMinutes.Location = new System.Drawing.Point(199, 6);
+			this.lblRewindMinutes.Name = "lblRewindMinutes";
+			this.lblRewindMinutes.Size = new System.Drawing.Size(173, 13);
+			this.lblRewindMinutes.TabIndex = 2;
+			this.lblRewindMinutes.Text = "minutes (Memory Usage ≈1MB/min)";
+			// 
+			// lblRewind
+			// 
+			this.lblRewind.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRewind.AutoSize = true;
+			this.lblRewind.Location = new System.Drawing.Point(3, 6);
+			this.lblRewind.Name = "lblRewind";
+			this.lblRewind.Size = new System.Drawing.Size(142, 13);
+			this.lblRewind.TabIndex = 3;
+			this.lblRewind.Text = "Keep rewind data for the last";
 			// 
 			// frmPreferences
 			// 
@@ -1066,6 +1122,9 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.flowLayoutPanel6.ResumeLayout(false);
+			this.flowLayoutPanel6.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -1143,5 +1202,9 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkDisplayTitleBarInfo;
 		private System.Windows.Forms.Label lblPauseBackgroundSettings;
 		private System.Windows.Forms.Label lblMiscSettings;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
+		private System.Windows.Forms.Label lblRewind;
+		private System.Windows.Forms.NumericUpDown nudRewindBufferSize;
+		private System.Windows.Forms.Label lblRewindMinutes;
 	}
 }

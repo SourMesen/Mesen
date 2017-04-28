@@ -286,7 +286,9 @@
       <Control ID="lblTurboSpeedHint">%  (0 = Velocidad máxima)</Control>
       <Control ID="lblTurboSpeed">Velocidad de avance rápido:</Control>
       <Control ID="lblEmulationSpeed">Velocidad de emulación:</Control>
-
+      <Control ID="lblRewindSpeedHint">%  (0 = Velocidad máxima)</Control>
+      <Control ID="lblRewindSpeed">Rewind Speed:</Control>
+      
       <Control ID="tpgAdvanced">Avanzado</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Utilizar la versión alternativa de componentes de IRQs de MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permitir las entradas inválidas (Arriba+Abajo e Izquierda+Derecha al mismo tiempo)</Control>
@@ -357,6 +359,9 @@
       <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
       <Control ID="grpCloudSaves">Copia de seguridad online</Control>
       <Control ID="chkFdsFastForwardOnLoad">Aumentar la velocidad de la emulación de juegos de carga FDS</Control>
+
+      <Control ID="lblRewind">Keep rewind data for the last</Control>
+      <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>
 
       <Control ID="tpgCloudSave">Guardar online</Control>
       <Control ID="lblGoogleDriveIntegration">Mesen puede utilizar Google Drive para almacenar las partidas guardadas en su cuenta de Google Drive. Cuando se habilita la integración, todos los datos de copia de seguridad de sus juegos (archivos .sav y partidas guardadas rápidas) son fácilmente accesibles desde cualquier ordenador.</Control>
@@ -578,6 +583,9 @@
     <Message ID="NoMatchingCheats">El archivo de trucos seleccionado ({0}) no contiene trucos que coincidan con el juego seleccionado.</Message>
     
     <Message ID="EmulatorShortcutMappings_FastForward">Avance rápido</Message>
+    <Message ID="EmulatorShortcutMappings_Rewind">Rewind</Message>
+    <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rewind 10 seconds</Message>
+    <Message ID="EmulatorShortcutMappings_RewindOneMin">Rewind 1 minute</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Aumentar velocidad</Message>
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Reducir velocidad</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>

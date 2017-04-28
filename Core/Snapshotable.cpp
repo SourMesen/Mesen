@@ -65,7 +65,6 @@ void Snapshotable::Stream(Snapshotable* snapshotable)
 void Snapshotable::SaveSnapshot(ostream* file)
 {
 	_stream = new uint8_t[0xFFFFF];
-	memset((char*)_stream, 0, 0xFFFFF);
 	_position = 0;
 	_saving = true;
 

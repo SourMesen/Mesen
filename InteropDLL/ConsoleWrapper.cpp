@@ -9,6 +9,7 @@
 #include "../Core/CheatManager.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/VideoDecoder.h"
+#include "../Core/VideoRenderer.h"
 #include "../Core/AutomaticRomTest.h"
 #include "../Core/RecordedRomTest.h"
 #include "../Core/FDS.h"
@@ -306,9 +307,9 @@ namespace InteropEmu {
 		DllExport bool __stdcall MoviePlaying() { return MovieManager::Playing(); }
 		DllExport bool __stdcall MovieRecording() { return MovieManager::Recording(); }
 
-		DllExport void __stdcall AviRecord(char* filename, VideoCodec codec, uint32_t compressionLevel) { VideoDecoder::GetInstance()->StartRecording(filename, codec, compressionLevel); }
-		DllExport void __stdcall AviStop() { VideoDecoder::GetInstance()->StopRecording(); }
-		DllExport bool __stdcall AviIsRecording() { return VideoDecoder::GetInstance()->IsRecording(); }
+		DllExport void __stdcall AviRecord(char* filename, VideoCodec codec, uint32_t compressionLevel) { VideoRenderer::GetInstance()->StartRecording(filename, codec, compressionLevel); }
+		DllExport void __stdcall AviStop() { VideoRenderer::GetInstance()->StopRecording(); }
+		DllExport bool __stdcall AviIsRecording() { return VideoRenderer::GetInstance()->IsRecording(); }
 
 		DllExport void __stdcall WaveRecord(char* filename) { SoundMixer::StartRecording(filename); }
 		DllExport void __stdcall WaveStop() { SoundMixer::StopRecording(); }
@@ -384,7 +385,8 @@ namespace InteropEmu {
 		DllExport void __stdcall IncreaseEmulationSpeed() { EmulationSettings::IncreaseEmulationSpeed(); }
 		DllExport void __stdcall DecreaseEmulationSpeed() { EmulationSettings::DecreaseEmulationSpeed(); }
 		DllExport uint32_t __stdcall GetEmulationSpeed() { return EmulationSettings::GetEmulationSpeed(true); }
-		DllExport void __stdcall SetTurboSpeed(uint32_t turboSpeed) { EmulationSettings::SetTurboSpeed(turboSpeed); }
+		DllExport void __stdcall SetTurboRewindSpeed(uint32_t turboSpeed, uint32_t rewindSpeed) { EmulationSettings::SetTurboRewindSpeed(turboSpeed, rewindSpeed); }
+		DllExport void __stdcall SetRewindBufferSize(uint32_t seconds) { EmulationSettings::SetRewindBufferSize(seconds); }
 		DllExport void __stdcall SetOverclockRate(uint32_t overclockRate, bool adjustApu) { EmulationSettings::SetOverclockRate(overclockRate, adjustApu); }
 		DllExport void __stdcall SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi) { EmulationSettings::SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi); }
 		DllExport void __stdcall SetVideoScale(double scale) { EmulationSettings::SetVideoScale(scale); }

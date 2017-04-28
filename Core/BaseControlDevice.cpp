@@ -6,6 +6,7 @@
 #include "GameClient.h"
 #include "GameServerConnection.h"
 #include "AutomaticRomTest.h"
+#include "RewindManager.h"
 
 BaseControlDevice::BaseControlDevice(uint8_t port)
 {
@@ -60,7 +61,9 @@ uint8_t BaseControlDevice::ProcessNetPlayState(uint32_t netplayState)
 uint8_t BaseControlDevice::GetControlState()
 {
 	GameServerConnection* netPlayDevice = GameServerConnection::GetNetPlayDevice(_port);
-	if(MovieManager::Playing()) {
+	if(RewindManager::IsRewinding()) {
+		_currentState = RewindManager::GetInput(_port);
+	} else if(MovieManager::Playing()) {
 		_currentState = MovieManager::GetState(_port);
 	} else if(GameClient::Connected()) {
 		_currentState = GameClient::GetControllerState(_port);
@@ -78,6 +81,8 @@ uint8_t BaseControlDevice::GetControlState()
 
 	//For NetPlay
 	ControlManager::BroadcastInput(_port, _currentState);
+
+	RewindManager::RecordInput(_port, _currentState);
 
 	return _currentState;
 }

@@ -286,7 +286,9 @@
       <Control ID="lblEmuSpeedHint">%  (0 = Vitesse maximale)</Control>
       <Control ID="lblEmulationSpeed">Vitesse d'émulation :</Control>
       <Control ID="lblTurboSpeedHint">%  (0 = Vitesse maximale)</Control>
-      <Control ID="lblTurboSpeed">Vitesse d'avance rapide:</Control>
+      <Control ID="lblTurboSpeed">Vitesse d'avance rapide :</Control>
+      <Control ID="lblRewindSpeedHint">%  (0 = Vitesse maximale)</Control>
+      <Control ID="lblRewindSpeed">Vitesse du rembobinage :</Control>
 
       <Control ID="tpgAdvanced">Avancé</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
@@ -349,6 +351,9 @@
       <Control ID="tpgAdvanced">Avancé</Control>
       <Control ID="chkFdsAutoLoadDisk">Insérer le côté A du disque 1 lors du chargement d'un jeu de FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Augmenter la vitesse d'émulation pendant le chargement des jeux FDS</Control>
+
+      <Control ID="lblRewind">Permettre de rembobiner jusqu'à</Control>
+      <Control ID="lblRewindMinutes">minutes (Utilise ≈1MB/min)</Control>
 
       <Control ID="tpgShortcuts">Raccourcis</Control>
       <Control ID="colAction">Action</Control>
@@ -593,6 +598,9 @@
     <Message ID="NoMatchingCheats">Le fichier sélectionné ({0}) ne contient aucun code correspondant au jeu sélectionné.</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Avance rapide</Message>
+    <Message ID="EmulatorShortcutMappings_Rewind">Rembobiner</Message>
+    <Message ID="EmulatorShortcutMappings_RewindTenSecs">Reculer de 10 secondes</Message>
+    <Message ID="EmulatorShortcutMappings_RewindOneMin">Reculer d'une minute</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Augmenter la vitesse</Message>
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Réduire la vitesse</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pause</Message>

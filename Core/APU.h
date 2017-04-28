@@ -42,7 +42,6 @@ class APU : public Snapshotable, public IMemoryHandler
 	private:
 		__forceinline bool NeedToRun(uint32_t currentCycle);
 		void Run();
-		void EndFrame();
 
 		static void FrameCounterTick(FrameType type);
 
@@ -52,6 +51,8 @@ class APU : public Snapshotable, public IMemoryHandler
 	public:
 		APU(MemoryManager* memoryManager);
 		~APU();
+
+		void EndFrame();
 
 		void Reset(bool softReset);
 		void SetNesModel(NesModel model, bool forceInit = false);

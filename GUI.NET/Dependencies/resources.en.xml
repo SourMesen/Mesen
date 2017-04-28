@@ -59,6 +59,9 @@
     <Message ID="NoMatchingCheats">The selected cheat file ({0}) contains no cheats that match the selected game.</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Fast Forward</Message>
+    <Message ID="EmulatorShortcutMappings_Rewind">Rewind</Message>
+    <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rewind 10 seconds</Message>
+    <Message ID="EmulatorShortcutMappings_RewindOneMin">Rewind 1 minute</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Increase Speed</Message>
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pause</Message>

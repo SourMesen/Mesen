@@ -449,6 +449,8 @@
     <ClInclude Include="CrossFeedFilter.h" />
     <ClInclude Include="GoldenFive.h" />
     <ClInclude Include="MesenMovie.h" />
+    <ClInclude Include="RewindData.h" />
+    <ClInclude Include="RewindManager.h" />
     <ClInclude Include="SealieComputing.h" />
     <ClInclude Include="UnlD1038.h" />
     <ClInclude Include="DaouInfosys.h" />
@@ -807,6 +809,8 @@
     <ClCompile Include="OekaKidsTablet.cpp" />
     <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="ReverbFilter.cpp" />
+    <ClCompile Include="RewindData.cpp" />
+    <ClCompile Include="RewindManager.cpp" />
     <ClCompile Include="RomLoader.cpp" />
     <ClCompile Include="ShortcutKeyHandler.cpp" />
     <ClCompile Include="Snapshotable.cpp" />

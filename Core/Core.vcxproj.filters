@@ -89,6 +89,9 @@
     <Filter Include="Movies">
       <UniqueIdentifier>{16c0726b-0c54-4fbc-a602-7930348d7f44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rewinder">
+      <UniqueIdentifier>{52b03b24-dd62-4daf-bac8-bb60a555d3d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -1162,6 +1165,12 @@
     <ClInclude Include="FceuxMovie.h">
       <Filter>Movies</Filter>
     </ClInclude>
+    <ClInclude Include="RewindData.h">
+      <Filter>Rewinder</Filter>
+    </ClInclude>
+    <ClInclude Include="RewindManager.h">
+      <Filter>Rewinder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1376,6 +1385,12 @@
     </ClCompile>
     <ClCompile Include="FceuxMovie.cpp">
       <Filter>Movies</Filter>
+    </ClCompile>
+    <ClCompile Include="RewindData.cpp">
+      <Filter>Rewinder</Filter>
+    </ClCompile>
+    <ClCompile Include="RewindManager.cpp">
+      <Filter>Rewinder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

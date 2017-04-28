@@ -18,6 +18,7 @@
 #include "NsfMapper.h"
 #include "ShortcutKeyHandler.h"
 #include "MovieManager.h"
+#include "RewindManager.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -95,6 +96,8 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 
 		ResetComponents(false);
 		
+		_rewindManager.reset(new RewindManager());
+
 		VideoDecoder::GetInstance()->StartThread();
 	
 		FolderUtilities::AddKnownGameFolder(FolderUtilities::GetFolderName(romFilename));
@@ -337,10 +340,11 @@ void Console::Run()
 
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
 		if(currentFrameNumber != lastFrameNumber) {
+			_rewindManager->ProcessEndOfFrame();
 			EmulationSettings::DisableOverclocking(_disableOcNextFrame);
 			_disableOcNextFrame = false;
 
-			lastFrameNumber = currentFrameNumber;
+			lastFrameNumber = PPU::GetFrameCount();
 
 			//Sleep until we're ready to start the next frame
 			clockTimer.WaitUntil(targetTime);
@@ -402,6 +406,7 @@ void Console::Run()
 			}
 		}
 	}
+	_rewindManager.reset();
 	SoundMixer::StopAudio();
 	MovieManager::Stop();
 	SoundMixer::StopRecording();
@@ -509,6 +514,9 @@ void Console::LoadState(istream &loadStream)
 
 void Console::LoadState(uint8_t *buffer, uint32_t bufferSize)
 {
+	//Send any unprocessed sound to the SoundMixer - needed for rewind
+	Instance->_apu->EndFrame();
+
 	stringstream stream;
 	stream.write((char*)buffer, bufferSize);
 	stream.seekg(0, ios::beg);

@@ -287,6 +287,8 @@
       <Control ID="lblEmulationSpeed">Швидкість емуляції :</Control>
       <Control ID="lblTurboSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
       <Control ID="lblTurboSpeed">Перемотка:</Control>
+      <Control ID="lblRewindSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
+      <Control ID="lblRewindSpeed">Rewind Speed:</Control>
 
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
@@ -348,6 +350,9 @@
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkFdsAutoLoadDisk">Автоматично вставляти диск 1 стороною А при завантаженні FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Використовувати швидке завантаження FDS</Control>
+
+      <Control ID="lblRewind">Keep rewind data for the last</Control>
+      <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>
 
       <Control ID="tpgShortcuts">Гарячі клавіші</Control>
       <Control ID="colAction">Дія</Control>
@@ -582,6 +587,9 @@
     <Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читiв для даної гри.</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
+    <Message ID="EmulatorShortcutMappings_Rewind">Rewind</Message>
+    <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rewind 10 seconds</Message>
+    <Message ID="EmulatorShortcutMappings_RewindOneMin">Rewind 1 minute</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Збільшити Швидкість</Message>
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Зменшити Швидкість</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>

@@ -152,6 +152,30 @@ void CPU::IRQ()
 	}
 }
 
+void CPU::BRK() {
+	Push((uint16_t)(PC() + 1));
+
+	uint8_t flags = PS() | PSFlags::Break;
+	if(_state.NMIFlag) {
+		Push((uint8_t)flags);
+		SetFlags(PSFlags::Interrupt);
+
+		SetPC(MemoryReadWord(CPU::NMIVector));
+
+		TraceLogger::LogStatic("NMI");
+	} else {
+		Push((uint8_t)flags);
+		SetFlags(PSFlags::Interrupt);
+
+		SetPC(MemoryReadWord(CPU::IRQVector));
+
+		TraceLogger::LogStatic("IRQ");
+	}
+
+	//Since we just set the flag to prevent interrupts, do not run one right away after this (fixes nmi_and_brk & nmi_and_irq tests)
+	_prevRunIrq = false;
+}
+
 uint16_t CPU::FetchOperand()
 {
 	switch(_instAddrMode) {

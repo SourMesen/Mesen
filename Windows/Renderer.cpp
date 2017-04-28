@@ -84,11 +84,12 @@ namespace NES
 		}
 		if(_textureBuffer[0]) {
 			delete[] _textureBuffer[0];
+			_textureBuffer[0] = nullptr;
 		}
 		if(_textureBuffer[1]) {
 			delete[] _textureBuffer[1];
+			_textureBuffer[1] = nullptr;
 		}
-
 		if(_samplerState) {
 			_samplerState->Release();
 			_samplerState = nullptr;
@@ -358,7 +359,7 @@ namespace NES
 
 	void Renderer::DisplayMessage(string title, string message)
 	{
-		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, ""));
+		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000));
 		_toasts.push_front(toast);
 	}
 

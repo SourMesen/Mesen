@@ -16,25 +16,8 @@ class ToastInfo
 private:
 	string _title;
 	string _message;
-	uint8_t* _icon;
-	uint32_t _iconSize;
 	uint64_t _endTime;
 	uint64_t _startTime;
-
-	uint8_t* ReadFile(string filename, uint32_t &fileSize)
-	{
-		ifstream file(filename, ios::in | ios::binary);
-		if(file) {
-			file.seekg(0, ios::end);
-			fileSize = (uint32_t)file.tellg();
-			file.seekg(0, ios::beg);
-
-			uint8_t* buffer = new uint8_t[fileSize];
-			file.read((char*)buffer, fileSize);
-			return buffer;
-		}
-		return nullptr;
-	}
 
 	uint64_t GetCurrentTime()
 	{
@@ -42,35 +25,12 @@ private:
 	}
 
 public:
-	ToastInfo(string title, string message, int displayDuration, string iconFile)
+	ToastInfo(string title, string message, int displayDuration)
 	{
 		_title = title;
 		_message = message;
-		
-		_icon = ReadFile(iconFile, _iconSize);
-
 		_startTime = GetCurrentTime();
 		_endTime = _startTime + displayDuration;
-	}
-
-	ToastInfo(string title, string message, int displayDuration, uint8_t* iconData, uint32_t iconSize)
-	{
-		_title = title;
-		_message = message;
-		
-		_iconSize = iconSize;
-		_icon = new uint8_t[iconSize];
-		memcpy(_icon, iconData, iconSize);
-
-		_startTime = GetCurrentTime();
-		_endTime = _startTime + displayDuration;
-	}
-
-	~ToastInfo()
-	{
-		if(_icon) {
-			delete _icon;
-		}
 	}
 
 	string GetToastTitle()
@@ -81,21 +41,6 @@ public:
 	string GetToastMessage() 
 	{
 		return _message;
-	}
-
-	uint8_t* GetToastIcon()
-	{
-		return _icon;
-	}
-
-	uint32_t GetIconSize()
-	{
-		return _iconSize;
-	}
-
-	bool HasIcon() 
-	{
-		return _iconSize > 0;
 	}
 
 	float GetOpacity()

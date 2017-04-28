@@ -150,7 +150,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void IncreaseEmulationSpeed();
 		[DllImport(DLLPath)] public static extern void DecreaseEmulationSpeed();
 		[DllImport(DLLPath)] public static extern UInt32 GetEmulationSpeed();
-		[DllImport(DLLPath)] public static extern void SetTurboSpeed(UInt32 turboSpeed);
+		[DllImport(DLLPath)] public static extern void SetTurboRewindSpeed(UInt32 turboSpeed, UInt32 rewindSpeed);
+		[DllImport(DLLPath)] public static extern void SetRewindBufferSize(UInt32 seconds);
 		[DllImport(DLLPath)] public static extern void SetOverclockRate(UInt32 overclockRate, [MarshalAs(UnmanagedType.I1)]bool adjustApu);
 		[DllImport(DLLPath)] public static extern void SetPpuNmiConfig(UInt32 extraScanlinesBeforeNmi, UInt32 extraScanlineAfterNmi);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
@@ -1058,6 +1059,11 @@ namespace Mesen.GUI
 	public struct EmulatorKeyMappings
 	{
 		public UInt32 FastForward;
+
+		public UInt32 Rewind;
+		public UInt32 RewindTenSecs;
+		public UInt32 RewindOneMin;
+
 		public UInt32 Pause;
 		public UInt32 Reset;
 		public UInt32 Exit;

@@ -6,6 +6,7 @@
 #include "VsControlManager.h"
 #include "FDS.h"
 #include "SaveStateManager.h"
+#include "RewindManager.h"
 
 ShortcutKeyHandler::ShortcutKeyHandler()
 {
@@ -48,6 +49,9 @@ bool ShortcutKeyHandler::DetectKeyRelease(uint32_t keyCode)
 
 void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 {
+	bool isNetplayClient = GameClient::Connected();
+	bool isMovieActive = MovieManager::Playing() || MovieManager::Recording();
+
 	if(DetectKeyPress(mappings.FastForward)) {
 		EmulationSettings::SetFlags(EmulationFlags::Turbo);
 	} else if(DetectKeyRelease(mappings.FastForward)) {
@@ -66,7 +70,7 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 		VideoDecoder::GetInstance()->TakeScreenshot();
 	}
 
-	if(VsControlManager::GetInstance()) {
+	if(VsControlManager::GetInstance() && !isNetplayClient && !isMovieActive) {
 		VsControlManager* manager = VsControlManager::GetInstance();
 		if(DetectKeyPress(mappings.InsertCoin1)) {
 			manager->InsertCoin(0);
@@ -82,11 +86,11 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 		}
 	}
 
-	if(DetectKeyPress(mappings.SwitchDiskSide)) {
+	if(DetectKeyPress(mappings.SwitchDiskSide) && !isNetplayClient && !isMovieActive) {
 		FDS::SwitchDiskSide();
 	}
 
-	if(DetectKeyPress(mappings.InsertNextDisk)) {
+	if(DetectKeyPress(mappings.InsertNextDisk) && !isNetplayClient && !isMovieActive) {
 		FDS::InsertNextDisk();
 	}
 
@@ -102,15 +106,15 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 		SaveStateManager::SaveState();
 	}
 
-	if(DetectKeyPress(mappings.LoadState)) {
+	if(DetectKeyPress(mappings.LoadState) && !isNetplayClient) {
 		SaveStateManager::LoadState();
 	}
 
-	if(DetectKeyPress(mappings.Reset)) {
+	if(DetectKeyPress(mappings.Reset) && !isNetplayClient && !isMovieActive) {
 		Console::Reset(true);
 	}
 
-	if(DetectKeyPress(mappings.Pause)) {
+	if(DetectKeyPress(mappings.Pause) && !isNetplayClient) {
 		if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
 			EmulationSettings::ClearFlags(EmulationFlags::Paused);
 		} else {
@@ -122,7 +126,7 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 		MessageManager::SendNotification(ConsoleNotificationType::RequestExit);
 	}
 
-	if(DetectKeyPress(mappings.ToggleCheats)) {
+	if(DetectKeyPress(mappings.ToggleCheats) && !isNetplayClient && !isMovieActive) {
 		MessageManager::SendNotification(ConsoleNotificationType::ToggleCheats);
 	}
 
@@ -135,6 +139,18 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 			Console::Resume();
 		} else {
 			EmulationSettings::SetFlags(EmulationFlags::Paused);
+		}
+	}
+
+	if(!isNetplayClient && !isMovieActive && !EmulationSettings::CheckFlag(NsfPlayerEnabled)) {
+		if(DetectKeyPress(mappings.Rewind)) {
+			RewindManager::StartRewinding();
+		} else if(DetectKeyRelease(mappings.Rewind)) {
+			RewindManager::StopRewinding();
+		} else  if(DetectKeyPress(mappings.RewindTenSecs)) {
+			RewindManager::RewindSeconds(10);
+		} else if(DetectKeyPress(mappings.RewindOneMin)) {
+			RewindManager::RewindSeconds(60);
 		}
 	}
 }

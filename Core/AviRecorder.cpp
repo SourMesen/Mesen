@@ -28,6 +28,8 @@ bool AviRecorder::StartRecording(string filename, VideoCodec codec, uint32_t wid
 	if(!_recording) {
 		_outputFile = filename;
 		_sampleRate = audioSampleRate;
+		_width = width;
+		_height = height;
 		_frameBufferLength = height * width * bpp;
 		_frameBuffer = new uint8_t[_frameBufferLength];
 
@@ -71,12 +73,16 @@ void AviRecorder::StopRecording()
 	}
 }
 
-void AviRecorder::AddFrame(void* frameBuffer)
+void AviRecorder::AddFrame(void* frameBuffer, uint32_t width, uint32_t height)
 {
 	if(_recording) {
-		auto lock = _lock.AcquireSafe();
-		memcpy(_frameBuffer, frameBuffer, _frameBufferLength);
-		_waitFrame.Signal();
+		if(_width != width || _height != height) {
+			StopRecording();
+		} else {
+			auto lock = _lock.AcquireSafe();
+			memcpy(_frameBuffer, frameBuffer, _frameBufferLength);
+			_waitFrame.Signal();
+		}
 	}
 }
 

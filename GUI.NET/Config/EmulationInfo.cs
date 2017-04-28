@@ -37,6 +37,7 @@ namespace Mesen.GUI.Config
 
 		[MinMax(0, 500)] public UInt32 EmulationSpeed = 100;
 		[MinMax(0, 500)] public UInt32 TurboSpeed = 300;
+		[MinMax(0, 500)] public UInt32 RewindSpeed = 100;
 
 		public EmulationInfo()
 		{
@@ -47,7 +48,7 @@ namespace Mesen.GUI.Config
 			EmulationInfo emulationInfo = ConfigManager.Config.EmulationInfo;
 
 			InteropEmu.SetEmulationSpeed(emulationInfo.EmulationSpeed);
-			InteropEmu.SetTurboSpeed(emulationInfo.TurboSpeed);
+			InteropEmu.SetTurboRewindSpeed(emulationInfo.TurboSpeed, emulationInfo.RewindSpeed);
 
 			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, emulationInfo.UseAlternativeMmc3Irq);
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, emulationInfo.AllowInvalidInput);

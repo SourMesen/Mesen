@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "AviRecorder.h"
 #include "IRenderingDevice.h"
 #include "VideoDecoder.h"
 #include "EmulationSettings.h"
@@ -9,6 +8,7 @@
 #include "HdVideoFilter.h"
 #include "ScaleFilter.h"
 #include "VideoRenderer.h"
+#include "RewindManager.h"
 
 unique_ptr<VideoDecoder> VideoDecoder::Instance;
 
@@ -37,6 +37,11 @@ VideoDecoder::VideoDecoder()
 VideoDecoder::~VideoDecoder()
 {
 	StopThread();
+}
+
+FrameInfo VideoDecoder::GetFrameInfo()
+{
+	return _videoFilter->GetFrameInfo();
 }
 
 void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
@@ -94,10 +99,6 @@ void VideoDecoder::UpdateVideoFilter()
 
 			case VideoFilterType::HdPack: _videoFilter.reset(new HdVideoFilter()); break;
 		}
-
-		if(_aviRecorder) {
-			StopRecording();
-		}
 	}
 }
 
@@ -109,11 +110,6 @@ void VideoDecoder::DecodeFrame()
 		((HdVideoFilter*)_videoFilter.get())->SetHdScreenTiles(_hdScreenTiles);
 	}
 	_videoFilter->SendFrame(_ppuOutputBuffer);
-
-	shared_ptr<AviRecorder> aviRecorder = _aviRecorder;
-	if(aviRecorder) {
-		aviRecorder->AddFrame(_videoFilter->GetOutputBuffer());
-	}
 
 	ScreenSize screenSize;
 	GetScreenSize(screenSize, true);
@@ -127,7 +123,8 @@ void VideoDecoder::DecodeFrame()
 
 	_frameChanged = false;
 	
-	VideoRenderer::GetInstance()->UpdateFrame(_videoFilter->GetOutputBuffer(), frameInfo.Width, frameInfo.Height);
+	//Rewind manager will take care of sending the correct frame to the video renderer
+	RewindManager::SendFrame(_videoFilter->GetOutputBuffer(), frameInfo.Width, frameInfo.Height);
 }
 
 void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length)
@@ -158,16 +155,24 @@ uint32_t VideoDecoder::GetFrameCount()
 	return _frameCount;
 }
 
+void VideoDecoder::UpdateFrameSync(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInfo)
+{
+	_hdScreenTiles = hdPixelInfo;
+	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
+	DecodeFrame();
+	_frameCount++;
+}
+
 void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInfo)
 {
 	if(_frameChanged) {
 		//Last frame isn't done decoding yet - sometimes Signal() introduces a 25-30ms delay
-		while(_frameChanged) { 
+		while(_frameChanged) {
 			//Spin until decode is done
 		}
 		//At this point, we are sure that the decode thread is no longer busy
 	}
-	
+
 	_hdScreenTiles = hdPixelInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 	_frameChanged = true;
@@ -218,34 +223,4 @@ void VideoDecoder::TakeScreenshot()
 	if(_videoFilter) {
 		_videoFilter->TakeScreenshot();
 	}
-}
-
-void VideoDecoder::StartRecording(string filename, VideoCodec codec, uint32_t compressionLevel)
-{
-	if(_videoFilter) {
-		shared_ptr<AviRecorder> recorder(new AviRecorder());
-
-		FrameInfo frameInfo = _videoFilter->GetFrameInfo();
-		if(recorder->StartRecording(filename, codec, frameInfo.Width, frameInfo.Height, frameInfo.BitsPerPixel, 60098814, EmulationSettings::GetSampleRate(), compressionLevel)) {
-			_aviRecorder = recorder;
-		}
-	}
-}
-
-void VideoDecoder::AddRecordingSound(int16_t* soundBuffer, uint32_t sampleCount, uint32_t sampleRate)
-{
-	shared_ptr<AviRecorder> aviRecorder = _aviRecorder;
-	if(aviRecorder) {
-		aviRecorder->AddSound(soundBuffer, sampleCount, sampleRate);
-	}
-}
-
-void VideoDecoder::StopRecording()
-{
-	_aviRecorder.reset();
-}
-
-bool VideoDecoder::IsRecording()
-{
-	return _aviRecorder != nullptr && _aviRecorder->IsRecording();
 }
