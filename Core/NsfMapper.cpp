@@ -2,6 +2,7 @@
 #include "NsfMapper.h"
 #include "CPU.h"
 #include "Console.h"
+#include "MemoryManager.h"
 
 NsfMapper* NsfMapper::_instance;
 

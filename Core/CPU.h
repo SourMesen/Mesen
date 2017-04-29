@@ -1,10 +1,11 @@
 #pragma once
 
 #include "stdafx.h"
-#include "MemoryManager.h"
 #include "Snapshotable.h"
-#include "EmulationSettings.h"
 #include "Types.h"
+
+enum class NesModel;
+class MemoryManager;
 
 namespace PSFlags
 {
@@ -135,39 +136,8 @@ private:
 		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
 	}
 
-	void MemoryWrite(uint16_t addr, uint8_t value)
-	{
-		_cpuWrite = true;;
-		_writeAddr = addr;
-		IncCycleCount();
-		while(_dmcDmaRunning) {
-			IncCycleCount();
-		}
-		_memoryManager->Write(addr, value);
-
-		//DMA DMC might have started after a write to $4015, stall CPU if needed
-		while (_dmcDmaRunning) {
-			IncCycleCount();
-		}
-		_cpuWrite = false;
-	}
-
-	uint8_t MemoryRead(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
-		IncCycleCount();
-		while(_dmcDmaRunning) {
-			//Stall CPU until we can process a DMC read
-			if((addr != 0x4016 && addr != 0x4017 && (_cycleCount & 0x01)) || _dmcCounter == 1) {
-				//While the CPU is stalled, reads are performed on the current address
-				//Reads are only performed every other cycle? This fixes "dma_2007_read" test
-				//This behavior causes the $4016/7 data corruption when a DMC is running.
-				//When reading $4016/7, only the last read counts (because this only occurs to low-to-high transitions, i.e once in this case)
-				_memoryManager->Read(addr);
-			}
-			IncCycleCount();
-		}
-		uint8_t value = _memoryManager->Read(addr, operationType);
-		return value;
-	}
+	void MemoryWrite(uint16_t addr, uint8_t value);
+	uint8_t MemoryRead(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read);
 
 	uint16_t MemoryReadWord(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
 		uint8_t lo = MemoryRead(addr, operationType);

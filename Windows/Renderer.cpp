@@ -1,17 +1,12 @@
 #include "stdafx.h"
-#include <Dwmapi.h>
 #include "Renderer.h"
 #include "DirectXTK/SpriteBatch.h"
 #include "DirectXTK/SpriteFont.h"
-#include "DirectXTK/DDSTextureLoader.h"
-#include "DirectXTK/WICTextureLoader.h"
-#include "../Core/PPU.h"
 #include "../Core/VideoRenderer.h"
 #include "../Core/VideoDecoder.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/MessageManager.h"
 #include "../Utilities/UTF8Util.h"
-#include "../Core/HdNesPack.h"
 
 using namespace DirectX;
 

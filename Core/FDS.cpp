@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "FDS.h"
 #include "FdsAudio.h"
+#include "MemoryManager.h"
 
 FDS* FDS::Instance = nullptr;
 

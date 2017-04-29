@@ -9,6 +9,7 @@
 #include "ScaleFilter.h"
 #include "VideoRenderer.h"
 #include "RewindManager.h"
+#include "PPU.h"
 
 unique_ptr<VideoDecoder> VideoDecoder::Instance;
 

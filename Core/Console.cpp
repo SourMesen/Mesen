@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include <thread>
 #include "Console.h"
+#include "CPU.h"
+#include "PPU.h"
+#include "APU.h"
+#include "MemoryManager.h"
+#include "AutoSaveManager.h"
 #include "BaseMapper.h"
 #include "ControlManager.h"
 #include "VsControlManager.h"

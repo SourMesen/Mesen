@@ -5,6 +5,7 @@ using std::thread;
 #include "MessageManager.h"
 #include "GameServer.h"
 #include "Console.h"
+#include "ControlManager.h"
 #include "../Utilities/Socket.h"
 #include "PlayerListMessage.h"
 

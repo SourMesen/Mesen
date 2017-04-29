@@ -1,12 +1,13 @@
 #pragma once
 #include "stdafx.h"
+#include <algorithm>
 #include "Snapshotable.h"
 #include "EmulationSettings.h"
 #include "APU.h"
 #include "BaseFdsChannel.h"
 #include "ModChannel.h"
-#include <algorithm>
 #include "BaseExpansionAudio.h"
+#include "MemoryManager.h"
 
 class FdsAudio : public BaseExpansionAudio
 {

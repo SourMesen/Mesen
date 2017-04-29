@@ -5,6 +5,7 @@
 #include "Console.h"
 #include "MemoryManager.h"
 #include "LabelManager.h"
+#include "EmulationSettings.h"
 #include "../Utilities/HexUtilities.h"
 #include "../Utilities/FolderUtilities.h"
 

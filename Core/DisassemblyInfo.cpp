@@ -1,8 +1,9 @@
 #include "stdafx.h"
+#include "../Utilities/HexUtilities.h"
 #include "DisassemblyInfo.h"
 #include "CPU.h"
 #include "LabelManager.h"
-#include "../Utilities/HexUtilities.h"
+#include "MemoryManager.h"
 
 string DisassemblyInfo::OPName[256];
 AddrMode DisassemblyInfo::OPMode[256];

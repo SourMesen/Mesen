@@ -4,6 +4,7 @@
 #include "BaseExpansionAudio.h"
 #include "CPU.h"
 #include "Console.h"
+#include "MemoryManager.h"
 
 class MMC5Square : public SquareChannel
 {

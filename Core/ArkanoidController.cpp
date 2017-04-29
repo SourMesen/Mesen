@@ -3,6 +3,7 @@
 #include "ControlManager.h"
 #include "PPU.h"
 #include "GameServerConnection.h"
+#include "IKeyManager.h"
 
 void ArkanoidController::StreamState(bool saving)
 {

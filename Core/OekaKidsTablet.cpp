@@ -2,6 +2,8 @@
 #include "OekaKidsTablet.h"
 #include "ControlManager.h"
 #include "GameServerConnection.h"
+#include "IKeyManager.h"
+#include "IKeyManager.h"
 
 void OekaKidsTablet::StreamState(bool saving)
 {

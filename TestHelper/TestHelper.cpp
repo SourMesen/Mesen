@@ -23,6 +23,7 @@
 #include "../Utilities/Timer.h"
 #include "../Core/MessageManager.h"
 #include "../Core/ControlManager.h"
+#include "../Core/EmulationSettings.h"
 
 using namespace std;
 

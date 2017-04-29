@@ -2,18 +2,19 @@
 
 #include "stdafx.h"
 #include <atomic>
-#include "CPU.h"
-#include "PPU.h"
-#include "APU.h"
-#include "MemoryManager.h"
-#include "ControlManager.h"
 #include "../Utilities/SimpleLock.h"
-#include "AutoSaveManager.h"
 #include "RomData.h"
 
 class Debugger;
 class BaseMapper;
 class RewindManager;
+class APU;
+class CPU;
+class PPU;
+class MemoryManager;
+class ControlManager;
+class AutoSaveManager;
+enum class NesModel;
 
 class Console
 {

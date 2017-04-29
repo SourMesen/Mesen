@@ -6,6 +6,7 @@
 #include "MessageManager.h"
 #include "Debugger.h"
 #include "MovieManager.h"
+#include "PPU.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/md5.h"
 #include "../Utilities/ZipWriter.h"

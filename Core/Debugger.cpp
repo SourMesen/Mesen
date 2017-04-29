@@ -17,6 +17,8 @@
 #include "Assembler.h"
 #include "CodeRunner.h"
 #include "DisassemblyInfo.h"
+#include "PPU.h"
+#include "MemoryManager.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;

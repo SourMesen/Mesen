@@ -8,6 +8,7 @@
 #include "ApuFrameCounter.h"
 #include "EmulationSettings.h"
 #include "SoundMixer.h"
+#include "MemoryManager.h"
 
 APU* APU::Instance = nullptr;
 

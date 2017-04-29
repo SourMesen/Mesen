@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "CPU.h"
+#include "MemoryManager.h"
 
 class JyCompany : public BaseMapper
 {

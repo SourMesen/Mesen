@@ -1,15 +1,15 @@
 #pragma once
 
 #include "stdafx.h"
-#include "BaseControlDevice.h"
-#include "IMemoryHandler.h"
-#include "IGameBroadcaster.h"
-#include "Snapshotable.h"
 #include "../Utilities/SimpleLock.h"
-#include "IKeyManager.h"
+#include "IMemoryHandler.h"
+#include "Snapshotable.h"
 
 class BaseControlDevice;
 class Zapper;
+class IGameBroadcaster;
+class IKeyManager;
+enum class MouseButton;
 
 struct MousePosition
 {

@@ -4,6 +4,7 @@
 #include "PPU.h"
 #include "ControlManager.h"
 #include "GameServerConnection.h"
+#include "IKeyManager.h"
 
 void Zapper::StreamState(bool saving)
 {

@@ -2,6 +2,7 @@
 #include "BizhawkMovie.h"
 #include "VsControlManager.h"
 #include "FDS.h"
+#include "PPU.h"
 
 BizhawkMovie::BizhawkMovie()
 {

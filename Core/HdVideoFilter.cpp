@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "PPU.h"
 #include "HdNesPack.h"
 #include "HdVideoFilter.h"
 

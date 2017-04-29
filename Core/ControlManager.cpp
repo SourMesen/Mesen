@@ -7,6 +7,9 @@
 #include "EmulationSettings.h"
 #include "Console.h"
 #include "GameServerConnection.h"
+#include "MemoryManager.h"
+#include "PPU.h"
+#include "IKeyManager.h"
 
 unique_ptr<IKeyManager> ControlManager::_keyManager = nullptr;
 shared_ptr<BaseControlDevice> ControlManager::_controlDevices[2] = { nullptr, nullptr };

@@ -3,6 +3,7 @@
 #include "APU.h"
 #include "CPU.h"
 #include "Console.h"
+#include "MemoryManager.h"
 
 DeltaModulationChannel *DeltaModulationChannel::Instance = nullptr;
 
