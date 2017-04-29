@@ -535,9 +535,6 @@ void BaseMapper::Initialize(RomData &romData)
 
 	BaseMapper::InitializeRam(_saveRam, _saveRamSize);
 	BaseMapper::InitializeRam(_workRam, _workRamSize);
-	if(romData.HasTrainer && _workRamSize >= 0x2000) {
-		memcpy(_workRam + 0x1000, romData.TrainerData.data(), 512);
-	}
 
 	memset(_prgPageNumbers, 0xEE, sizeof(_prgPageNumbers));
 	memset(_chrPageNumbers, 0xEE, sizeof(_chrPageNumbers));
@@ -569,6 +566,14 @@ void BaseMapper::Initialize(RomData &romData)
 
 	//Load battery data if present
 	LoadBattery();
+
+	if(romData.HasTrainer) {
+		if(_workRamSize >= 0x2000) {
+			memcpy(_workRam + 0x1000, romData.TrainerData.data(), 512);
+		} else if(_saveRamSize >= 0x2000) {
+			memcpy(_saveRam + 0x1000, romData.TrainerData.data(), 512);
+		}
+	}
 
 	//Setup a default work/save ram in 0x6000-0x7FFF space
 	if(HasBattery() && _saveRamSize > 0) {
