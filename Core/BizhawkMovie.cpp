@@ -86,6 +86,15 @@ bool BizhawkMovie::InitializeGameData(ZipReader & reader)
 					result = true;
 				}
 			}
+		} else if(line.compare(0, 3, "MD5", 3) == 0) {
+			if(line.size() >= 36) {
+				HashInfo hashInfo;
+				hashInfo.PrgChrMd5Hash = line.substr(4, 32);
+				std::transform(hashInfo.PrgChrMd5Hash.begin(), hashInfo.PrgChrMd5Hash.end(), hashInfo.PrgChrMd5Hash.begin(), ::toupper);
+				if(Console::LoadROM("", hashInfo)) {
+					result = true;
+				}
+			}
 		}
 	}
 	return result;
