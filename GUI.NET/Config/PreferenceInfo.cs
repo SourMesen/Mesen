@@ -61,13 +61,15 @@ namespace Mesen.GUI.Config
 		{
 			if(EmulatorKeySet1 == null) {
 				EmulatorKeySet1 = new EmulatorKeyMappings() {
-					FastForward = InteropEmu.GetKeyCode("Tab")
+					FastForward = InteropEmu.GetKeyCode("Tab"),
+					Rewind = InteropEmu.GetKeyCode("Backspace")
 				};
 			}
 
 			if(EmulatorKeySet2 == null) {
 				EmulatorKeySet2 = new EmulatorKeyMappings() {
-					FastForward = InteropEmu.GetKeyCode("Pad1 R2")
+					FastForward = InteropEmu.GetKeyCode("Pad1 R2"),
+					Rewind = InteropEmu.GetKeyCode("Pad1 L2")
 				};
 			}
 		}
