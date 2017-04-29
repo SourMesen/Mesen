@@ -92,7 +92,7 @@ class Console
 
 		static bool IsRunning();
 
-		static void DisableOcNextFrame();
+		static void SetNextFrameOverclockStatus(bool disabled);
 
 		static bool IsDebuggerAttached();
 

@@ -568,7 +568,7 @@ bool Console::IsDebuggerAttached()
 	return (bool)Instance->_debugger;
 }
 
-void Console::DisableOcNextFrame()
+void Console::SetNextFrameOverclockStatus(bool disabled)
 {
-	Instance->_disableOcNextFrame = true;
+	Instance->_disableOcNextFrame = disabled;
 }

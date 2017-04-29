@@ -164,18 +164,24 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 			//4011 applies new output right away, not on the timer's reload.  This fixes bad DMC sound when playing through 4011.
 			AddOutput(_outputLevel);
 			
-			if(value > 0 && EmulationSettings::GetOverclockAdjustApu()) {
-				Console::DisableOcNextFrame();
+			if((value & 0x7F) > 0 && EmulationSettings::GetOverclockAdjustApu()) {
+				Console::SetNextFrameOverclockStatus(true);
 			}
 			break;
 		}
 
 		case 2:		//4012
 			_sampleAddr = 0xC000 | ((uint32_t)value << 6);
+			if(value > 0) {
+				Console::SetNextFrameOverclockStatus(false);
+			}
 			break;
 
 		case 3:		//4013
 			_sampleLength = (value << 4) | 0x0001;
+			if(value > 0) {
+				Console::SetNextFrameOverclockStatus(false);
+			}
 			break;
 	}
 }
