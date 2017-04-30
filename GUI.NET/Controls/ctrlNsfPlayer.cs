@@ -33,7 +33,9 @@ namespace Mesen.GUI.Controls
 
 		private void Child_KeyUp(object sender, KeyEventArgs e)
 		{
-			StopFastForward();
+			if((e.KeyCode == Keys.Right || e.KeyCode == Keys.Control) && _fastForwarding) {
+				StopFastForward();
+			}
 		}
 
 		public void UpdateVolume()
@@ -77,6 +79,10 @@ namespace Mesen.GUI.Controls
 			if(trackNames.Length > 1 && trackNames.Length > currentTrack) {
 				label += Environment.NewLine + (string.IsNullOrWhiteSpace(trackNames[currentTrack]) ? ResourceHelper.GetMessage("NsfUnnamedTrack") : trackNames[currentTrack]);
 			}
+
+			lblRecording.Visible = lblRecordingDot.Visible = InteropEmu.WaveIsRecording();
+			lblFastForward.Visible = lblFastForwardIcon.Visible = InteropEmu.GetEmulationSpeed() > 100 || InteropEmu.GetEmulationSpeed() == 0 || InteropEmu.CheckFlag(EmulationFlags.Turbo);
+			lblSlowMotion.Visible = lblSlowMotionIcon.Visible = InteropEmu.GetEmulationSpeed() < 100 && InteropEmu.GetEmulationSpeed() > 0 && !InteropEmu.CheckFlag(EmulationFlags.Turbo);
 
 			lblTime.Text = label;
 		}

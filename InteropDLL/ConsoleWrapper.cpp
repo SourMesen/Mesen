@@ -361,6 +361,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetCheats(CheatInfo cheats[], uint32_t length) { CheatManager::SetCheats(cheats, length); }
 
+		DllExport bool __stdcall CheckFlag(EmulationFlags flags) { return EmulationSettings::CheckFlag(flags); }
 		DllExport void __stdcall SetFlags(EmulationFlags flags) { EmulationSettings::SetFlags(flags); }
 		DllExport void __stdcall ClearFlags(EmulationFlags flags) { EmulationSettings::ClearFlags(flags); }
 		DllExport void __stdcall SetRamPowerOnState(RamPowerOnState state) { EmulationSettings::SetRamPowerOnState(state); }

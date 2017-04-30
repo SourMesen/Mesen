@@ -687,6 +687,7 @@ namespace Mesen.GUI.Forms
 					bool aviRecording = InteropEmu.AviIsRecording();
 					mnuAviRecord.Enabled = _emuThread != null && !aviRecording;
 					mnuAviStop.Enabled = _emuThread != null && aviRecording;
+					mnuVideoRecorder.Enabled = !_isNsfPlayerMode;
 
 					bool testRecording = InteropEmu.RomTestRecording();
 					mnuTestRun.Enabled = !netPlay && !moviePlaying && !movieRecording;

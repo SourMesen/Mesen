@@ -102,6 +102,9 @@
       <Control ID="lblArtist">作者</Control>
       <Control ID="lblCopyright">コピーライト</Control>
       <Control ID="lblSoundChips">音源チップ</Control>
+      <Control ID="lblRecording">録音中</Control>
+      <Control ID="lblSlowMotion">スローモーション</Control>
+      <Control ID="lblFastForward">早送り</Control>
     </Form>
     <Form ID="frmLogWindow" Title="ログウィンドウ">
       <Control ID="btnClose">閉じる</Control>

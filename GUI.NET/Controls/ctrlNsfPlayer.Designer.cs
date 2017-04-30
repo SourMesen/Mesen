@@ -55,12 +55,26 @@
 			this.lblTime = new System.Windows.Forms.Label();
 			this.tmrFastForward = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.lblRecording = new System.Windows.Forms.Label();
+			this.lblRecordingDot = new System.Windows.Forms.Label();
+			this.lblFastForward = new System.Windows.Forms.Label();
+			this.lblFastForwardIcon = new System.Windows.Forms.Label();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.panel2 = new System.Windows.Forms.Panel();
+			this.panel3 = new System.Windows.Forms.Panel();
+			this.lblSlowMotion = new System.Windows.Forms.Label();
+			this.lblSlowMotionIcon = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picBackground)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
+			this.panel1.SuspendLayout();
+			this.panel2.SuspendLayout();
+			this.panel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -432,11 +446,136 @@
 			this.tmrFastForward.Interval = 500;
 			this.tmrFastForward.Tick += new System.EventHandler(this.tmrFastForward_Tick);
 			// 
+			// lblRecording
+			// 
+			this.lblRecording.AutoSize = true;
+			this.lblRecording.ForeColor = System.Drawing.Color.Red;
+			this.lblRecording.Location = new System.Drawing.Point(15, 4);
+			this.lblRecording.Margin = new System.Windows.Forms.Padding(0);
+			this.lblRecording.Name = "lblRecording";
+			this.lblRecording.Size = new System.Drawing.Size(29, 13);
+			this.lblRecording.TabIndex = 9;
+			this.lblRecording.Text = "REC";
+			// 
+			// lblRecordingDot
+			// 
+			this.lblRecordingDot.AutoSize = true;
+			this.lblRecordingDot.BackColor = System.Drawing.Color.Transparent;
+			this.lblRecordingDot.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblRecordingDot.ForeColor = System.Drawing.Color.Red;
+			this.lblRecordingDot.Location = new System.Drawing.Point(1, 0);
+			this.lblRecordingDot.Margin = new System.Windows.Forms.Padding(0);
+			this.lblRecordingDot.Name = "lblRecordingDot";
+			this.lblRecordingDot.Size = new System.Drawing.Size(17, 18);
+			this.lblRecordingDot.TabIndex = 10;
+			this.lblRecordingDot.Text = "●";
+			// 
+			// lblFastForward
+			// 
+			this.lblFastForward.AutoSize = true;
+			this.lblFastForward.ForeColor = System.Drawing.Color.RoyalBlue;
+			this.lblFastForward.Location = new System.Drawing.Point(14, 4);
+			this.lblFastForward.Margin = new System.Windows.Forms.Padding(0);
+			this.lblFastForward.Name = "lblFastForward";
+			this.lblFastForward.Size = new System.Drawing.Size(68, 13);
+			this.lblFastForward.TabIndex = 11;
+			this.lblFastForward.Text = "Fast Forward";
+			// 
+			// lblFastForwardIcon
+			// 
+			this.lblFastForwardIcon.AutoSize = true;
+			this.lblFastForwardIcon.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblFastForwardIcon.ForeColor = System.Drawing.Color.RoyalBlue;
+			this.lblFastForwardIcon.Location = new System.Drawing.Point(0, 0);
+			this.lblFastForwardIcon.Margin = new System.Windows.Forms.Padding(0);
+			this.lblFastForwardIcon.Name = "lblFastForwardIcon";
+			this.lblFastForwardIcon.Size = new System.Drawing.Size(17, 18);
+			this.lblFastForwardIcon.TabIndex = 12;
+			this.lblFastForwardIcon.Text = "»";
+			// 
+			// tableLayoutPanel4
+			// 
+			this.tableLayoutPanel4.ColumnCount = 1;
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Controls.Add(this.panel3, 0, 2);
+			this.tableLayoutPanel4.Controls.Add(this.panel2, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.panel1, 0, 1);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(5, 5);
+			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+			this.tableLayoutPanel4.RowCount = 4;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(121, 60);
+			this.tableLayoutPanel4.TabIndex = 13;
+			// 
+			// panel1
+			// 
+			this.panel1.AutoSize = true;
+			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panel1.Controls.Add(this.lblFastForward);
+			this.panel1.Controls.Add(this.lblFastForwardIcon);
+			this.panel1.Location = new System.Drawing.Point(0, 18);
+			this.panel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(82, 18);
+			this.panel1.TabIndex = 0;
+			// 
+			// panel2
+			// 
+			this.panel2.AutoSize = true;
+			this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panel2.Controls.Add(this.lblRecordingDot);
+			this.panel2.Controls.Add(this.lblRecording);
+			this.panel2.Location = new System.Drawing.Point(0, 0);
+			this.panel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(44, 18);
+			this.panel2.TabIndex = 1;
+			// 
+			// panel3
+			// 
+			this.panel3.AutoSize = true;
+			this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panel3.Controls.Add(this.lblSlowMotion);
+			this.panel3.Controls.Add(this.lblSlowMotionIcon);
+			this.panel3.Location = new System.Drawing.Point(0, 36);
+			this.panel3.Margin = new System.Windows.Forms.Padding(0);
+			this.panel3.Name = "panel3";
+			this.panel3.Size = new System.Drawing.Size(79, 18);
+			this.panel3.TabIndex = 2;
+			// 
+			// lblSlowMotion
+			// 
+			this.lblSlowMotion.AutoSize = true;
+			this.lblSlowMotion.ForeColor = System.Drawing.Color.DarkOrange;
+			this.lblSlowMotion.Location = new System.Drawing.Point(14, 4);
+			this.lblSlowMotion.Margin = new System.Windows.Forms.Padding(0);
+			this.lblSlowMotion.Name = "lblSlowMotion";
+			this.lblSlowMotion.Size = new System.Drawing.Size(65, 13);
+			this.lblSlowMotion.TabIndex = 11;
+			this.lblSlowMotion.Text = "Slow Motion";
+			// 
+			// lblSlowMotionIcon
+			// 
+			this.lblSlowMotionIcon.AutoSize = true;
+			this.lblSlowMotionIcon.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblSlowMotionIcon.ForeColor = System.Drawing.Color.DarkOrange;
+			this.lblSlowMotionIcon.Location = new System.Drawing.Point(0, 0);
+			this.lblSlowMotionIcon.Margin = new System.Windows.Forms.Padding(0);
+			this.lblSlowMotionIcon.Name = "lblSlowMotionIcon";
+			this.lblSlowMotionIcon.Size = new System.Drawing.Size(17, 18);
+			this.lblSlowMotionIcon.TabIndex = 12;
+			this.lblSlowMotionIcon.Text = "«";
+			// 
 			// ctrlNsfPlayer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
+			this.Controls.Add(this.tableLayoutPanel4);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "ctrlNsfPlayer";
 			this.Size = new System.Drawing.Size(371, 281);
@@ -451,6 +590,14 @@
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
+			this.tableLayoutPanel4.ResumeLayout(false);
+			this.tableLayoutPanel4.PerformLayout();
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
+			this.panel2.ResumeLayout(false);
+			this.panel2.PerformLayout();
+			this.panel3.ResumeLayout(false);
+			this.panel3.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -484,5 +631,15 @@
 		private System.Windows.Forms.Label lblTime;
 		private System.Windows.Forms.Timer tmrFastForward;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.Label lblRecording;
+		private System.Windows.Forms.Label lblRecordingDot;
+		private System.Windows.Forms.Label lblFastForward;
+		private System.Windows.Forms.Label lblFastForwardIcon;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Panel panel3;
+		private System.Windows.Forms.Label lblSlowMotion;
+		private System.Windows.Forms.Label lblSlowMotionIcon;
 	}
 }

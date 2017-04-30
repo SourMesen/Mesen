@@ -102,6 +102,9 @@
       <Control ID="lblArtist">Artiste</Control>
       <Control ID="lblCopyright">Copyright</Control>
       <Control ID="lblSoundChips">Puces audio</Control>
+      <Control ID="lblRecording">ENR</Control>
+      <Control ID="lblSlowMotion">Ralenti</Control>
+      <Control ID="lblFastForward">Avance rapide</Control>
     </Form>
     <Form ID="frmLogWindow" Title="Fenêtre de log">
       <Control ID="btnClose">Fermer</Control>

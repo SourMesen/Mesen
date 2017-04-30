@@ -346,7 +346,7 @@ void Console::Run()
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
 		if(currentFrameNumber != lastFrameNumber) {
 			_rewindManager->ProcessEndOfFrame();
-			EmulationSettings::DisableOverclocking(_disableOcNextFrame);
+			EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
 			_disableOcNextFrame = false;
 
 			lastFrameNumber = PPU::GetFrameCount();

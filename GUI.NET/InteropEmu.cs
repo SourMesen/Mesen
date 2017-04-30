@@ -128,6 +128,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void SetCheats([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropCheatInfo[] cheats, UInt32 length);
 
+		[DllImport(DLLPath)] public static extern bool CheckFlag(EmulationFlags flag);
 		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] public static extern void SetRamPowerOnState(RamPowerOnState state);
@@ -983,7 +984,9 @@ namespace Mesen.GUI
 
 		UseNes101Hvc101Behavior = 0x100000000,
 
+		Turbo = 0x2000000000,
 		InBackground = 0x4000000000,
+		NsfPlayerEnabled = 0x8000000000,
 
 		DisplayMovieIcons = 0x10000000000,
 		HidePauseOverlay = 0x20000000000,
