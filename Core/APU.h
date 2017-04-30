@@ -20,6 +20,7 @@ class APU : public Snapshotable, public IMemoryHandler
 {
 	private:
 		static APU* Instance;
+		static bool _apuEnabled;
 
 		uint32_t _previousCycle;
 		uint32_t _currentCycle;
@@ -65,13 +66,15 @@ class APU : public Snapshotable, public IMemoryHandler
 
 		__forceinline static void ExecStatic()
 		{
-			if(EmulationSettings::GetOverclockRate(true) == 100) {
-				Instance->Exec();
-			} else {
-				Instance->_cyclesNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate(true) / 100.0);
-				while(Instance->_cyclesNeeded >= 1.0) {
+			if(APU::_apuEnabled) {
+				if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
 					Instance->Exec();
-					Instance->_cyclesNeeded--;
+				} else {
+					Instance->_cyclesNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
+					while(Instance->_cyclesNeeded >= 1.0) {
+						Instance->Exec();
+						Instance->_cyclesNeeded--;
+					}
 				}
 			}
 		}
@@ -79,4 +82,6 @@ class APU : public Snapshotable, public IMemoryHandler
 		static void StaticRun();
 
 		static void AddExpansionAudioDelta(AudioChannel channel, int16_t delta);
+		static void SetApuStatus(bool enabled);
+		static bool IsApuEnabled();
 };

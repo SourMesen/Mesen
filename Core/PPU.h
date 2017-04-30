@@ -48,6 +48,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint16_t *_outputBuffers[2];
 
 		NesModel _nesModel;
+		uint16_t _standardVblankEnd;
+		uint16_t _standardNmiScanline;
 		uint16_t _vblankEnd;
 		uint16_t _nmiScanline;
 
@@ -136,6 +138,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		__forceinline virtual void DrawPixel();
 		void UpdateGrayscaleAndIntensifyBits();
 		virtual void SendFrame();
+
+		void UpdateApuStatus();
 
 		PPURegisters GetRegisterID(uint16_t addr)
 		{

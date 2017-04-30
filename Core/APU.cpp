@@ -11,6 +11,7 @@
 #include "MemoryManager.h"
 
 APU* APU::Instance = nullptr;
+bool APU::_apuEnabled = true;
 
 APU::APU(MemoryManager* memoryManager)
 {
@@ -19,6 +20,8 @@ APU::APU(MemoryManager* memoryManager)
 	_memoryManager = memoryManager;
 
 	_nesModel = NesModel::Auto;
+
+	_apuEnabled = true;
 
 	_mixer.reset(new SoundMixer());
 
@@ -202,6 +205,7 @@ void APU::EndFrame()
 
 void APU::Reset(bool softReset)
 {
+	_apuEnabled = true;
 	_cyclesNeeded = 0;
 	_currentCycle = 0;
 	_previousCycle = 0;
@@ -236,4 +240,18 @@ void APU::StreamState(bool saving)
 void APU::AddExpansionAudioDelta(AudioChannel channel, int16_t delta)
 {
 	Instance->_mixer->AddDelta(channel, Instance->_currentCycle, delta);
+}
+
+void APU::SetApuStatus(bool enabled)
+{
+	_apuEnabled = enabled;
+}
+
+bool APU::IsApuEnabled()
+{
+	//Adding extra lines before/after NMI temporarely turns off the APU
+	//This appears to result in less side-effects than spreading out the APU's
+	//load over the entire PPU frame, like what was done before.
+	//This is most likely due to the timing of the Frame Counter & DMC IRQs.
+	return _apuEnabled;
 }

@@ -166,7 +166,7 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 {
 	uint32_t newRate = CPU::GetClockRate(_model);
 	if(!EmulationSettings::GetOverclockAdjustApu()) {
-		newRate = (uint32_t)(newRate * (double)EmulationSettings::GetOverclockRate(false, true) / 100);
+		newRate = (uint32_t)(newRate * (double)EmulationSettings::GetOverclockRate() / 100);
 	}
 
 	if(_clockRate != newRate || forceUpdate) {

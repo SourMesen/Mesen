@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Snapshotable.h"
 #include "EmulationSettings.h"
+#include "APU.h"
 
 class BaseExpansionAudio : public Snapshotable
 {
@@ -19,13 +20,15 @@ protected:
 public:
 	void Clock()
 	{
-		if(EmulationSettings::GetOverclockRate(true) == 100) {
-			ClockAudio();
-		} else {
-			_clocksNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate(true) / 100);
-			while(_clocksNeeded >= 1.0) {
+		if(APU::IsApuEnabled()) {
+			if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
 				ClockAudio();
-				_clocksNeeded--;
+			} else {
+				_clocksNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100);
+				while(_clocksNeeded >= 1.0) {
+					ClockAudio();
+					_clocksNeeded--;
+				}
 			}
 		}
 	}

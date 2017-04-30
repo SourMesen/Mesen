@@ -677,13 +677,12 @@ public:
 	static void UpdateEffectiveOverclockRate()
 	{
 		if(_disableOverclocking) {
-			_effectiveOverclockRateSound = 100;
 			_effectiveOverclockRate = 100;
 		} else {
-			_effectiveOverclockRateSound = _overclockRate * (double)(1 + (double)(_extraScanlinesBeforeNmi + _extraScanlinesAfterNmi) / _ppuScanlineCount);
 			_effectiveOverclockRate = _overclockRate;
 		}
 		_hasOverclock = _effectiveOverclockRate != 100;
+		_audioSettingsChanged = true;
 	}
 
 	static void SetPpuScanlineCount(uint32_t scanlineCount)
@@ -708,15 +707,9 @@ public:
 		return _hasOverclock;
 	}
 
-	static double GetOverclockRate(bool forApu = false, bool forSoundMixer = false)
+	static double GetOverclockRate()
 	{
-		if(forApu && _overclockAdjustApu || forSoundMixer) {
-			return _effectiveOverclockRateSound;
-		} else if(!forApu) {
-			return _effectiveOverclockRate;
-		} else {
-			return 100;
-		}
+		return _effectiveOverclockRate;
 	}
 
 	static bool GetOverclockAdjustApu()

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PPU.h"
 #include "CPU.h"
+#include "APU.h"
 #include "EmulationSettings.h"
 #include "VideoDecoder.h"
 #include "Debugger.h"
@@ -109,16 +110,22 @@ void PPU::SetNesModel(NesModel model)
 		case NesModel::NTSC:
 			_nmiScanline = 241;
 			_vblankEnd = 260;
+			_standardNmiScanline = 241;
+			_standardVblankEnd = 260;
 			EmulationSettings::SetPpuScanlineCount(262);
 			break;
 		case NesModel::PAL:
 			_nmiScanline = 241;
 			_vblankEnd = 310;
+			_standardNmiScanline = 241;
+			_standardVblankEnd = 310;
 			EmulationSettings::SetPpuScanlineCount(312);
 			break;
 		case NesModel::Dendy:
 			_nmiScanline = 291;
 			_vblankEnd = 310;
+			_standardNmiScanline = 291;
+			_standardVblankEnd = 310;
 			EmulationSettings::SetPpuScanlineCount(312);
 			break;
 	}
@@ -1000,6 +1007,20 @@ void PPU::TriggerNmi()
 	}
 }
 
+void PPU::UpdateApuStatus()
+{
+	APU::SetApuStatus(true);
+	if(_scanline > 240) {
+		if(_scanline > _standardVblankEnd) {
+			//Disable APU for extra lines after NMI
+			APU::SetApuStatus(false);
+		} else if(_scanline < _standardNmiScanline) {
+			//Disable APU for extra lines before NMI
+			APU::SetApuStatus(false);
+		}
+	}
+}
+
 void PPU::Exec()
 {
 	if(_cycle > 339) {
@@ -1011,6 +1032,8 @@ void PPU::Exec()
 		}
 
 		Debugger::ProcessPpuCycle();
+		
+		UpdateApuStatus();
 
 		//Cycle = 0
 		if(_scanline == -1) {
@@ -1137,5 +1160,7 @@ void PPU::StreamState(bool saving)
 		}
 
 		_lastUpdatedPixel = -1;
+
+		UpdateApuStatus();
 	}
 }
