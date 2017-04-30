@@ -294,6 +294,7 @@
       <Control ID="lblRewindSpeed">Vitesse du rembobinage :</Control>
 
       <Control ID="tpgAdvanced">Avancé</Control>
+      <Control ID="chkShowFrameCounter">Afficher le compteur d'images</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
       <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>

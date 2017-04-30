@@ -46,6 +46,7 @@ enum EmulationFlags : uint64_t
 	EnableOamDecay = 0x80000000,
 
 	UseNes101Hvc101Behavior = 0x100000000,
+	ShowFrameCounter = 0x200000000,
 
 	Turbo = 0x2000000000,
 	InBackground = 0x4000000000,

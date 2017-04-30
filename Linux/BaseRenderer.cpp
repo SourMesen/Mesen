@@ -122,14 +122,27 @@ void BaseRenderer::ShowFpsCounter()
 	}
 
 	string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
-	DrawString(fpsString, (float)(_screenWidth - 120), 13, 250, 235, 215);
+	DrawString(fpsString, (float)(_screenWidth - 125), 13, 250, 235, 215);
 }
 
 void BaseRenderer::ShowLagCounter()
 {
 	float yPos = EmulationSettings::CheckFlag(EmulationFlags::ShowFPS) ? 37.0f : 13.0f;
 	string lagCounter = MessageManager::Localize("Lag") + ": " + std::to_string(Console::GetLagCounter());
-	DrawString(lagCounter, (float)(_screenWidth - 120), yPos, 250, 235, 215);
+	DrawString(lagCounter, (float)(_screenWidth - 123), yPos, 250, 235, 215);
+}
+
+void BaseRenderer::ShowFrameCounter()
+{
+	float yPos = 13.0f;
+	if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
+		yPos += 24.0f;
+	}
+	if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
+		yPos += 24.0f;
+	}
+	string lagCounter = MessageManager::Localize("Frame") + ": " + std::to_string(PPU::GetFrameCount());
+	DrawString(lagCounter, (float)(_screenWidth - 146), yPos, 250, 235, 215);
 }
 
 bool BaseRenderer::IsMessageShown()

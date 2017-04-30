@@ -2,6 +2,8 @@
 #include "Renderer.h"
 #include "DirectXTK/SpriteBatch.h"
 #include "DirectXTK/SpriteFont.h"
+#include "../Core/Console.h"
+#include "../Core/PPU.h"
 #include "../Core/VideoRenderer.h"
 #include "../Core/VideoDecoder.h"
 #include "../Core/EmulationSettings.h"
@@ -483,14 +485,27 @@ namespace NES
 		}
 
 		string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
-		DrawString(fpsString, (float)(_screenWidth - 120), 13, Colors::AntiqueWhite, 1.0f);
+		DrawString(fpsString, (float)(_screenWidth - 125), 13, Colors::AntiqueWhite, 1.0f);
 	}
 
 	void Renderer::ShowLagCounter()
 	{
 		float yPos = EmulationSettings::CheckFlag(EmulationFlags::ShowFPS) ? 37.0f : 13.0f;
 		string lagCounter = MessageManager::Localize("Lag") + ": " + std::to_string(Console::GetLagCounter());
-		DrawString(lagCounter, (float)(_screenWidth - 120), yPos, Colors::AntiqueWhite, 1.0f);
+		DrawString(lagCounter, (float)(_screenWidth - 123), yPos, Colors::AntiqueWhite, 1.0f);
+	}
+
+	void Renderer::ShowFrameCounter()
+	{
+		float yPos = 13.0f;
+		if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
+			yPos += 24.0f;
+		}
+		if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
+			yPos += 24.0f;
+		}
+		string lagCounter = MessageManager::Localize("Frame") + ": " + std::to_string(PPU::GetFrameCount());
+		DrawString(lagCounter, (float)(_screenWidth - 146), yPos, Colors::AntiqueWhite, 1.0f);
 	}
 
 	void Renderer::Render()
@@ -517,6 +532,9 @@ namespace NES
 				}
 				if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
 					ShowLagCounter();
+				}
+				if(EmulationSettings::CheckFlag(EmulationFlags::ShowFrameCounter)) {
+					ShowFrameCounter();
 				}
 			}
 

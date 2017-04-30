@@ -34,6 +34,7 @@ namespace Mesen.GUI.Config
 		public RamPowerOnState RamPowerOnState;
 
 		public bool ShowLagCounter = false;
+		public bool ShowFrameCounter = false;
 
 		[MinMax(0, 500)] public UInt32 EmulationSpeed = 100;
 		[MinMax(0, 500)] public UInt32 TurboSpeed = 300;
@@ -54,6 +55,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, emulationInfo.AllowInvalidInput);
 			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, emulationInfo.RemoveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.ShowLagCounter, emulationInfo.ShowLagCounter);
+			InteropEmu.SetFlag(EmulationFlags.ShowFrameCounter, emulationInfo.ShowFrameCounter);
 			InteropEmu.SetFlag(EmulationFlags.DisablePpu2004Reads, emulationInfo.DisablePpu2004Reads);
 			InteropEmu.SetFlag(EmulationFlags.DisablePaletteRead, emulationInfo.DisablePaletteRead);
 			InteropEmu.SetFlag(EmulationFlags.DisableOamAddrBug, emulationInfo.DisableOamAddrBug);

@@ -293,6 +293,7 @@
       <Control ID="lblRewindSpeed">Rewind Speed:</Control>
       
       <Control ID="tpgAdvanced">Avanzado</Control>
+      <Control ID="chkShowFrameCounter">Show Frame Counter</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Utilizar la versión alternativa de componentes de IRQs de MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permitir las entradas inválidas (Arriba+Abajo e Izquierda+Derecha al mismo tiempo)</Control>
       <Control ID="lblRamPowerOnState">Estado inicial de la memoria durante el inicio:</Control>

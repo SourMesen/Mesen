@@ -33,5 +33,6 @@ protected:
 	virtual void DrawString(std::wstring message, int x, int y, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) = 0;
 
 	void ShowFpsCounter();
-	void ShowLagCounter();	 	
+	void ShowLagCounter();
+	void ShowFrameCounter();
 };

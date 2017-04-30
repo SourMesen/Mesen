@@ -133,6 +133,9 @@ void SdlRenderer::Render()
 			if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
 				ShowLagCounter();
 			}
+			if(EmulationSettings::CheckFlag(EmulationFlags::ShowFrameCounter)) {
+				ShowFrameCounter();
+			}
 		}
 
 		DrawToasts();

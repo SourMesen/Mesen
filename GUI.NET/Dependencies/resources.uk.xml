@@ -294,6 +294,7 @@
       <Control ID="lblRewindSpeed">Rewind Speed:</Control>
 
       <Control ID="tpgAdvanced">Розширені</Control>
+      <Control ID="chkShowFrameCounter">Show Frame Counter</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
       <Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
       <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>

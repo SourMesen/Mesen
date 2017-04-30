@@ -25,6 +25,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("TurboSpeed", nudTurboSpeed);
 			AddBinding("RewindSpeed", nudRewindSpeed);
 
+			AddBinding("ShowFrameCounter", chkShowFrameCounter);
 			AddBinding("UseAlternativeMmc3Irq", chkUseAlternativeMmc3Irq);
 			AddBinding("AllowInvalidInput", chkAllowInvalidInput);
 			AddBinding("RemoveSpriteLimit", chkRemoveSpriteLimit);

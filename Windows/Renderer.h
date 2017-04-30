@@ -89,6 +89,7 @@ namespace NES {
 
 		void ShowFpsCounter();
 		void ShowLagCounter();
+		void ShowFrameCounter();
 	
 	public:
 		Renderer(HWND hWnd);

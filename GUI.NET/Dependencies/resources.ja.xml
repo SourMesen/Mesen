@@ -294,6 +294,7 @@
       <Control ID="lblRewindSpeed">巻き戻しの速度:</Control>
 
       <Control ID="tpgAdvanced">詳細設定</Control>
+      <Control ID="chkShowFrameCounter">フレームカウンタを表示する</Control>
       <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
       <Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
       <Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
