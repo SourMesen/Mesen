@@ -365,6 +365,7 @@ namespace Mesen.GUI.Forms
 		private void SetFullscreenState(bool enabled)
 		{
 			this.Resize -= frmMain_Resize;
+			_fullscreenMode = enabled;
 			if(enabled) {
 				this.menuStrip.Visible = false;
 				_originalWindowState = this.WindowState;
@@ -382,8 +383,6 @@ namespace Mesen.GUI.Forms
 				VideoInfo.ApplyConfig();				
 			}
 			this.Resize += frmMain_Resize;
-
-			_fullscreenMode = enabled;
 			mnuFullscreen.Checked = enabled;
 		}
 
