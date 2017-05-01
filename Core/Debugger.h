@@ -63,6 +63,7 @@ private:
 
 	vector<uint8_t> _frozenAddresses;
 
+	bool _hideTopOfCallstack;
 	deque<uint32_t> _callstackAbsolute;
 	deque<uint32_t> _callstackRelative;
 

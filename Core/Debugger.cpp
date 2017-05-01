@@ -68,6 +68,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_bpUpdateNeeded = false;
 	_executionStopped = false;
+	_hideTopOfCallstack = false;
 
 	_frozenAddresses.insert(_frozenAddresses.end(), 0x10000, 0);
 
@@ -273,6 +274,7 @@ int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultTy
 
 void Debugger::UpdateCallstack(uint32_t addr)
 {
+	_hideTopOfCallstack = false;
 	if((_lastInstruction == 0x60 || _lastInstruction == 0x40) && !_callstackRelative.empty()) {
 		//RTS & RTI
 		_callstackRelative.pop_back();
@@ -289,6 +291,8 @@ void Debugger::UpdateCallstack(uint32_t addr)
 
 		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(addr));
 		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(targetAddr));
+
+		_hideTopOfCallstack = true;
 
 		_profiler->StackFunction(_mapper->ToAbsoluteAddress(addr), _mapper->ToAbsoluteAddress(targetAddr));
 	}
@@ -398,13 +402,15 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		ProcessStepConditions(addr);
 
 		_profiler->ProcessInstructionStart(absoluteAddr);
-		UpdateCallstack(addr);
 
 		if(value == 0 && CheckFlag(DebuggerFlags::BreakOnBrk)) {
 			Step(1);
 		} else if(CheckFlag(DebuggerFlags::BreakOnUnofficialOpCode) && _disassembler->IsUnofficialOpCode(value)) {
 			Step(1);
 		}
+
+		_lastInstruction = value;
+		UpdateCallstack(addr);
 
 		breakDone = SleepUntilResume();
 
@@ -421,8 +427,6 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			disassemblyInfo = _disassembler->GetDisassemblyInfo(addressInfo);
 		}
 		_traceLogger->Log(_debugState.CPU, _debugState.PPU, disassemblyInfo);
-
-		_lastInstruction = value;
 	} else {
 		_profiler->ProcessCycle();
 	}
@@ -677,7 +681,8 @@ void Debugger::ProcessVramOperation(MemoryOperationType type, uint16_t addr, uin
 
 void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative)
 {
-	for(size_t i = 0, len = _callstackRelative.size(); i < len; i++) {
+	int callstackSize = (int)_callstackRelative.size() - (_hideTopOfCallstack ? 2 : 0);
+	for(size_t i = 0; i < callstackSize; i++) {
 		callstackAbsolute[i] = _callstackAbsolute[i];
 		
 		int32_t relativeAddr = _callstackRelative[i];
@@ -687,13 +692,13 @@ void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelati
 		}
 		callstackRelative[i] = relativeAddr;
 	}
-	callstackAbsolute[_callstackRelative.size()] = -2;
-	callstackRelative[_callstackRelative.size()] = -2;
+	callstackAbsolute[callstackSize] = -2;
+	callstackRelative[callstackSize] = -2;
 }
 
 int32_t Debugger::GetFunctionEntryPointCount()
 {
-	return (uint32_t)_functionEntryPoints.size();
+	return (int32_t)_functionEntryPoints.size();
 }
 
 void Debugger::GetFunctionEntryPoints(int32_t* entryPoints, int32_t maxCount)

@@ -59,7 +59,7 @@ namespace Mesen.GUI.Debugger.Controls
 			Int32[] entryPoints = InteropEmu.DebugGetFunctionEntryPoints();
 			bool updating = false;
 
-			for(int i = 0; entryPoints[i] >= 0 && i < entryPoints.Length; i++) {
+			for(int i = 0; i < entryPoints.Length && entryPoints[i] >= 0; i++) {
 				Int32 entryPoint = entryPoints[i];
 				ListViewItem item;
 				if(!_functions.TryGetValue(entryPoint, out item)) {
