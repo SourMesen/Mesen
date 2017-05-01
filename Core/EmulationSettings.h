@@ -868,8 +868,8 @@ public:
 	static double GetAspectRatio()
 	{
 		switch(_aspectRatio) {
-			case VideoAspectRatio::NTSC: return 8.0 / 7.0;
-			case VideoAspectRatio::PAL: return 18.0 / 13.0;
+			case VideoAspectRatio::NTSC: return 128.0 / 105.0;
+			case VideoAspectRatio::PAL: return 9440000.0 / 6384411.0;
 			case VideoAspectRatio::Standard: return 4.0 / 3.0;
 			case VideoAspectRatio::Widescreen: return 16.0 / 9.0;
 			case VideoAspectRatio::Custom: return _customAspectRatio;
