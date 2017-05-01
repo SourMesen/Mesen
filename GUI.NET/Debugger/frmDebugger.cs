@@ -103,8 +103,11 @@ namespace Mesen.GUI.Debugger
 				"Note: Use the $ prefix to denote hexadecimal values." + Environment.NewLine + 
 				"Note 2: Labels assigned to the code can be used (their value will match the label's address in CPU memory)." + Environment.NewLine + Environment.NewLine +
 				"A/X/Y/PS/SP: Value of registers" + Environment.NewLine +
+				"PC: Program Counter" + Environment.NewLine +
+				"OpPC: Address of the current instruction's first byte" + Environment.NewLine +
 				"Irq/Nmi: True if the Irq/Nmi flags are set" + Environment.NewLine +
 				"Cycle/Scanline: Current cycle (0-340)/scanline(-1 to 260) of the PPU" + Environment.NewLine +
+				"Frame: PPU frame number (since power on/reset)" + Environment.NewLine +
 				"Value: Current value being read/written from/to memory" + Environment.NewLine +
 				"[<address>]: (Byte) Memory value at <address> (CPU)" + Environment.NewLine +
 				"{<address>}: (Word) Memory value at <address> (CPU)" + Environment.NewLine + Environment.NewLine +

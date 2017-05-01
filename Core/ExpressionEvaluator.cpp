@@ -80,6 +80,12 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 		output += std::to_string(EvalValues::RegPS);
 	} else if(!token.compare("sp")) {
 		output += std::to_string(EvalValues::RegSP);
+	} else if(!token.compare("pc")) {
+		output += std::to_string(EvalValues::RegPC);
+	} else if(!token.compare("oppc")) {
+		output += std::to_string(EvalValues::RegOpPC);
+	} else if(!token.compare("frame")) {
+		output += std::to_string(EvalValues::PpuFrameCount);
 	} else if(!token.compare("cycle")) {
 		output += std::to_string(EvalValues::PpuCycle);
 	} else if(!token.compare("scanline")) {
@@ -302,6 +308,9 @@ int32_t ExpressionEvaluator::Evaluate(vector<int> *rpnList, DebugState &state, E
 				case EvalValues::RegY: token = state.CPU.Y; break;
 				case EvalValues::RegSP: token = state.CPU.SP; break;
 				case EvalValues::RegPS: token = state.CPU.PS; break;
+				case EvalValues::RegPC: token = state.CPU.PC; break;
+				case EvalValues::RegOpPC: token = state.CPU.DebugPC; break;
+				case EvalValues::PpuFrameCount: token = state.PPU.FrameCount; break;
 				case EvalValues::PpuCycle: token = state.PPU.Cycle; break;
 				case EvalValues::PpuScanline: token = state.PPU.Scanline; break;
 				case EvalValues::Nmi: token = state.CPU.NMIFlag; break;

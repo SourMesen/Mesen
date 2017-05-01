@@ -51,13 +51,16 @@ enum EvalValues
 	RegY = 2000000102,
 	RegSP = 2000000103,
 	RegPS = 2000000104,
-	PpuCycle = 2000000105,
-	PpuScanline = 2000000106,
-	Nmi = 2000000107,
-	Irq = 2000000108,
-	Value = 2000000109,
-	Address = 2000000110,
-	AbsoluteAddress = 2000000111,
+	RegPC = 2000000105,
+	RegOpPC = 2000000106,
+	PpuFrameCount = 2000000107,
+	PpuCycle = 2000000108,
+	PpuScanline = 2000000109,
+	Nmi = 2000000110,
+	Irq = 2000000111,
+	Value = 2000000112,
+	Address = 2000000113,
+	AbsoluteAddress = 2000000114,
 };
 
 enum EvalResultType
