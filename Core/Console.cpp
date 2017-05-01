@@ -345,6 +345,10 @@ void Console::Run()
 
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
 		if(currentFrameNumber != lastFrameNumber) {
+			if(_controlManager->GetLagFlag()) {
+				_lagCounter++;
+			}
+
 			_rewindManager->ProcessEndOfFrame();
 			EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
 			_disableOcNextFrame = false;
@@ -399,10 +403,6 @@ void Console::Run()
 			targetTime -= timeLag;
 			if(targetTime < 0) {
 				targetTime = 0;
-			}
-
-			if(_controlManager->GetLagFlag()) {
-				_lagCounter++;
 			}
 			
 			if(_stop) {
