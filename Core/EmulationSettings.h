@@ -793,10 +793,7 @@ public:
 
 	static void SetVideoFilterType(VideoFilterType videoFilterType)
 	{
-		if(_videoFilterType != videoFilterType) {
-			_videoScale = videoFilterType == VideoFilterType::None ? 2.0 : 1.0;
-			_videoFilterType = videoFilterType;
-		}
+		_videoFilterType = videoFilterType;
 	}
 
 	static VideoFilterType GetVideoFilterType()

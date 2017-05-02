@@ -48,7 +48,8 @@ FrameInfo VideoDecoder::GetFrameInfo()
 void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
 {
 	if(_videoFilter) {
-		FrameInfo frameInfo = _videoFilter->GetFrameInfo();
+		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+		FrameInfo frameInfo{ overscan.GetScreenWidth(), overscan.GetScreenHeight(), PPU::ScreenWidth, PPU::ScreenHeight, 4 };
 		double aspectRatio = EmulationSettings::GetAspectRatio();
 		double scale = (ignoreScale ? 1 : EmulationSettings::GetVideoScale());
 		size.Width = (int32_t)(frameInfo.Width * scale);

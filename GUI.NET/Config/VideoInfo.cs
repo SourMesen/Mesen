@@ -71,7 +71,7 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetVideoFilter(videoInfo.VideoFilter);
 			InteropEmu.SetVideoResizeFilter(videoInfo.UseBilinearInterpolation ? VideoResizeFilter.Bilinear : VideoResizeFilter.NearestNeighbor);
-			InteropEmu.SetVideoScale(videoInfo.VideoScale);
+			InteropEmu.SetVideoScale(videoInfo.VideoScale <= 10 ? videoInfo.VideoScale : 2);
 			InteropEmu.SetVideoAspectRatio(videoInfo.AspectRatio, videoInfo.CustomAspectRatio);
 
 			InteropEmu.SetPictureSettings(videoInfo.Brightness / 100.0, videoInfo.Contrast / 100.0, videoInfo.Saturation / 100.0, videoInfo.Hue / 100.0, videoInfo.ScanlineIntensity / 100.0);

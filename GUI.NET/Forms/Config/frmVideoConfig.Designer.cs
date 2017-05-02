@@ -275,13 +275,16 @@ namespace Mesen.GUI.Forms.Config
 			this.nudScale.DecimalPlaces = 2;
 			this.nudScale.Location = new System.Drawing.Point(80, 3);
 			this.nudScale.Maximum = new decimal(new int[] {
-            10,
+            9999,
             0,
             0,
             0});
 			this.nudScale.Name = "nudScale";
 			this.nudScale.Size = new System.Drawing.Size(48, 20);
 			this.nudScale.TabIndex = 21;
+			this.nudScale.ValueChanged += new System.EventHandler(this.nudScale_ValueChanged);
+			this.nudScale.Click += new System.EventHandler(this.nudScale_Click);
+			this.nudScale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudScale_KeyDown);
 			// 
 			// flowLayoutPanel6
 			// 
