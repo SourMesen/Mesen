@@ -323,6 +323,7 @@ namespace Mesen.GUI.Forms
 			UpdateScaleMenu(ConfigManager.Config.VideoInfo.VideoScale);
 			UpdateFilterMenu(ConfigManager.Config.VideoInfo.VideoFilter);
 
+			_customSize = false;
 			UpdateViewerSize();
 		}
 
