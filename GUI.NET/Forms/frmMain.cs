@@ -48,6 +48,11 @@ namespace Mesen.GUI.Forms
 		{
 			InitializeComponent();
 
+			if(ConfigManager.Config.WindowLocation.HasValue) {
+				this.StartPosition = FormStartPosition.Manual;
+				this.Location = ConfigManager.Config.WindowLocation.Value;
+			}
+
 			_commandLineArgs = args;
 			
 			Application.AddMessageFilter(this);
@@ -175,6 +180,11 @@ namespace Mesen.GUI.Forms
 
 			ConfigManager.Config.EmulationInfo.EmulationSpeed = InteropEmu.GetEmulationSpeed();
 			ConfigManager.Config.VideoInfo.VideoScale = _regularScale;
+			if(this.WindowState == FormWindowState.Normal) {
+				ConfigManager.Config.WindowLocation = this.Location;
+			} else {
+				ConfigManager.Config.WindowLocation = this.RestoreBounds.Location;
+			}
 			ConfigManager.ApplyChanges();
 
 			StopEmu();

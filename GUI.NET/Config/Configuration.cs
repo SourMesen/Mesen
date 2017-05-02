@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,7 @@ namespace Mesen.GUI.Config
 		public PlayerProfile Profile;
 		public DebugInfo DebugInfo;
 		public AviRecordInfo AviRecordInfo;
+		public Point? WindowLocation;
 
 		public Configuration()
 		{
