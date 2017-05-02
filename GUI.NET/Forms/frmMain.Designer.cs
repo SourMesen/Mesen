@@ -167,6 +167,7 @@ namespace Mesen.GUI.Forms
 			this.mnuTestStopRecording = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunAllTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunAllGameTests = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRunAutomaticTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebugger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuLogWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -179,9 +180,13 @@ namespace Mesen.GUI.Forms
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHelpWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRunAutomaticTest = new System.Windows.Forms.ToolStripMenuItem();
+			this.picIcon = new System.Windows.Forms.PictureBox();
+			this.panelInfo = new System.Windows.Forms.Panel();
+			this.lblVersion = new System.Windows.Forms.Label();
 			this.panelRenderer.SuspendLayout();
 			this.menuStrip.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
+			this.panelInfo.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuTimer
@@ -191,6 +196,7 @@ namespace Mesen.GUI.Forms
 			// panelRenderer
 			// 
 			this.panelRenderer.BackColor = System.Drawing.Color.Black;
+			this.panelRenderer.Controls.Add(this.panelInfo);
 			this.panelRenderer.Controls.Add(this.ctrlLoading);
 			this.panelRenderer.Controls.Add(this.ctrlNsfPlayer);
 			this.panelRenderer.Controls.Add(this.ctrlRenderer);
@@ -1267,28 +1273,28 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuTestRecordStart.Name = "mnuTestRecordStart";
 			this.mnuTestRecordStart.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-			this.mnuTestRecordStart.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordStart.Size = new System.Drawing.Size(143, 22);
 			this.mnuTestRecordStart.Text = "Start";
 			this.mnuTestRecordStart.Click += new System.EventHandler(this.mnuTestRecordStart_Click);
 			// 
 			// mnuTestRecordNow
 			// 
 			this.mnuTestRecordNow.Name = "mnuTestRecordNow";
-			this.mnuTestRecordNow.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordNow.Size = new System.Drawing.Size(143, 22);
 			this.mnuTestRecordNow.Text = "Now";
 			this.mnuTestRecordNow.Click += new System.EventHandler(this.mnuTestRecordNow_Click);
 			// 
 			// mnuTestRecordMovie
 			// 
 			this.mnuTestRecordMovie.Name = "mnuTestRecordMovie";
-			this.mnuTestRecordMovie.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordMovie.Size = new System.Drawing.Size(143, 22);
 			this.mnuTestRecordMovie.Text = "Movie";
 			this.mnuTestRecordMovie.Click += new System.EventHandler(this.mnuTestRecordMovie_Click);
 			// 
 			// mnuTestRecordTest
 			// 
 			this.mnuTestRecordTest.Name = "mnuTestRecordTest";
-			this.mnuTestRecordTest.Size = new System.Drawing.Size(152, 22);
+			this.mnuTestRecordTest.Size = new System.Drawing.Size(143, 22);
 			this.mnuTestRecordTest.Text = "Test";
 			this.mnuTestRecordTest.Click += new System.EventHandler(this.mnuTestRecordTest_Click);
 			// 
@@ -1313,6 +1319,13 @@ namespace Mesen.GUI.Forms
 			this.mnuRunAllGameTests.Size = new System.Drawing.Size(192, 22);
 			this.mnuRunAllGameTests.Text = "Run all game tests";
 			this.mnuRunAllGameTests.Click += new System.EventHandler(this.mnuRunAllGameTests_Click);
+			// 
+			// mnuRunAutomaticTest
+			// 
+			this.mnuRunAutomaticTest.Name = "mnuRunAutomaticTest";
+			this.mnuRunAutomaticTest.Size = new System.Drawing.Size(192, 22);
+			this.mnuRunAutomaticTest.Text = "Run automatic test";
+			this.mnuRunAutomaticTest.Click += new System.EventHandler(this.mnuRunAutomaticTest_Click);
 			// 
 			// mnuDebugger
 			// 
@@ -1408,12 +1421,39 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
-			// mnuRunAutomaticTest
+			// picIcon
 			// 
-			this.mnuRunAutomaticTest.Name = "mnuRunAutomaticTest";
-			this.mnuRunAutomaticTest.Size = new System.Drawing.Size(192, 22);
-			this.mnuRunAutomaticTest.Text = "Run automatic test";
-			this.mnuRunAutomaticTest.Click += new System.EventHandler(this.mnuRunAutomaticTest_Click);
+			this.picIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.picIcon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picIcon.Image = global::Mesen.GUI.Properties.Resources.MesenLogo;
+			this.picIcon.Location = new System.Drawing.Point(32, 6);
+			this.picIcon.Name = "picIcon";
+			this.picIcon.Size = new System.Drawing.Size(34, 34);
+			this.picIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.picIcon.TabIndex = 5;
+			this.picIcon.TabStop = false;
+			// 
+			// panelInfo
+			// 
+			this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.panelInfo.BackColor = System.Drawing.Color.Transparent;
+			this.panelInfo.Controls.Add(this.picIcon);
+			this.panelInfo.Controls.Add(this.lblVersion);
+			this.panelInfo.Location = new System.Drawing.Point(291, 196);
+			this.panelInfo.Name = "panelInfo";
+			this.panelInfo.Size = new System.Drawing.Size(69, 43);
+			this.panelInfo.TabIndex = 6;
+			// 
+			// lblVersion
+			// 
+			this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblVersion.AutoSize = true;
+			this.lblVersion.BackColor = System.Drawing.Color.Transparent;
+			this.lblVersion.ForeColor = System.Drawing.Color.White;
+			this.lblVersion.Location = new System.Drawing.Point(0, 26);
+			this.lblVersion.Name = "lblVersion";
+			this.lblVersion.Size = new System.Drawing.Size(0, 13);
+			this.lblVersion.TabIndex = 6;
 			// 
 			// frmMain
 			// 
@@ -1434,6 +1474,9 @@ namespace Mesen.GUI.Forms
 			this.panelRenderer.ResumeLayout(false);
 			this.menuStrip.ResumeLayout(false);
 			this.menuStrip.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picIcon)).EndInit();
+			this.panelInfo.ResumeLayout(false);
+			this.panelInfo.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1590,6 +1633,9 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuPrescale8xFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuPrescale10xFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuRunAutomaticTest;
+		private System.Windows.Forms.PictureBox picIcon;
+		private System.Windows.Forms.Panel panelInfo;
+		private System.Windows.Forms.Label lblVersion;
 	}
 }
 

@@ -53,6 +53,9 @@ namespace Mesen.GUI.Forms
 				this.Location = ConfigManager.Config.WindowLocation.Value;
 			}
 
+			Version currentVersion = new Version(InteropEmu.GetMesenVersion());
+			lblVersion.Text = currentVersion.ToString();
+
 			_commandLineArgs = args;
 			
 			Application.AddMessageFilter(this);
@@ -628,6 +631,10 @@ namespace Mesen.GUI.Forms
 				if(this.InvokeRequired) {
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
+					if(_emuThread != null) {
+						panelInfo.Visible = false;
+					}
+
 					ctrlLoading.Visible = (_romLoadCounter > 0);
 
 					UpdateFocusFlag();
