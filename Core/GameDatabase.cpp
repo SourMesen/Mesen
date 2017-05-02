@@ -324,12 +324,21 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		if(!info.Chip.empty()) {
 			MessageManager::Log("[DB] Chip: " + info.Chip);
 		}
-		if(!info.BusConflicts.empty()) {
-			MessageManager::Log("[DB] Bus conflicts: " + info.BusConflicts);
+
+		switch(GetBusConflictType(info.BusConflicts)) {
+			case BusConflictType::Yes: MessageManager::Log("[DB] Bus conflicts: Yes"); break;
+			case BusConflictType::No: MessageManager::Log("[DB] Bus conflicts: No"); break;
 		}
 
 		if(!info.Mirroring.empty()) {
-			MessageManager::Log("[DB] Mirroring: " + string(info.Mirroring.compare("h") == 0 ? "Horizontal" : (string(info.Mirroring.compare("v") == 0 ? "Vertical" : "4 Screens"))));
+			string msg = "[DB] Mirroring: ";
+			switch(info.Mirroring[0]) {
+				case 'h': msg += "Horizontal"; break;
+				case 'v': msg += "Vertical"; break;
+				case '4': msg += "4 Screens"; break;
+				case 'a': msg += "Single screen"; break;
+			}
+			MessageManager::Log(msg);
 		}
 		MessageManager::Log("[DB] PRG ROM: " + std::to_string(info.PrgRomSize) + " KB");
 		MessageManager::Log("[DB] CHR ROM: " + std::to_string(info.ChrRomSize) + " KB");
@@ -382,6 +391,7 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 			case 'h': romData.Mirroring = MirroringType::Horizontal; break;
 			case 'v': romData.Mirroring = MirroringType::Vertical; break;
 			case '4': romData.Mirroring = MirroringType::FourScreens; break;
+			case 'a': romData.Mirroring = MirroringType::ScreenAOnly; break;
 		}
 	}
 }
