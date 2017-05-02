@@ -1312,6 +1312,7 @@ namespace Mesen.GUI.Forms
 			}
 			InteropEmu.SetVideoScale(scale);
 			UpdateScaleMenu(scale);
+			UpdateViewerSize();
 		}
 
 		private void SetVideoFilter(VideoFilterType type)
