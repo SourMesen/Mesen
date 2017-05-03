@@ -18,15 +18,6 @@ namespace Mesen.GUI.Debugger
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
-			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
-			BreakpointManager.BreakpointsChanged -= BreakpointManager_BreakpointsChanged;
-			ctrlConsoleStatus.OnStateChanged -= ctrlConsoleStatus_OnStateChanged;
-			ctrlProfiler.OnFunctionSelected -= ctrlProfiler_OnFunctionSelected;
-
-			if(_notifListener != null) {
-				_notifListener.Dispose();
-				_notifListener = null;
-			}
 			base.Dispose(disposing);
 		}
 
@@ -1201,7 +1192,6 @@ namespace Mesen.GUI.Debugger
 			this.MinimumSize = new System.Drawing.Size(1000, 725);
 			this.Name = "frmDebugger";
 			this.Text = "Debugger";
-			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmDebugger_FormClosed);
 			this.splitContainer.Panel1.ResumeLayout(false);
 			this.splitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();

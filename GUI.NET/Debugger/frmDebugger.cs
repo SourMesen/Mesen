@@ -385,10 +385,6 @@ namespace Mesen.GUI.Debugger
 			ResumeExecution();
 		}
 
-		private void frmDebugger_FormClosed(object sender, FormClosedEventArgs e)
-		{
-			InteropEmu.DebugRelease();
-		}
 
 		private void mnuToggleBreakpoint_Click(object sender, EventArgs e)
 		{
@@ -537,6 +533,18 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
+			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
+			BreakpointManager.BreakpointsChanged -= BreakpointManager_BreakpointsChanged;
+			ctrlConsoleStatus.OnStateChanged -= ctrlConsoleStatus_OnStateChanged;
+			ctrlProfiler.OnFunctionSelected -= ctrlProfiler_OnFunctionSelected;
+
+			if(_notifListener != null) {
+				_notifListener.Dispose();
+				_notifListener = null;
+			}
+
+			InteropEmu.DebugRelease();
+
 			ConfigManager.Config.DebugInfo.WindowWidth = this.Width;
 			ConfigManager.Config.DebugInfo.WindowHeight = this.Height;
 			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
