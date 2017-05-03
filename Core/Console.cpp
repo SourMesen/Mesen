@@ -31,6 +31,7 @@ Console::Console()
 {
 	_resetRequested = false;
 	_lagCounter = 0;
+	_archiveFileIndex = -1;
 }
 
 Console::~Console()
@@ -63,6 +64,8 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 
 	if(mapper) {
 		_romFilepath = romFilename;
+		_patchFilename = patchFilename;
+		_archiveFileIndex = archiveFileIndex;
 				
 		_autoSaveManager.reset(new AutoSaveManager());
 		VideoDecoder::GetInstance()->StopThread();
@@ -217,6 +220,13 @@ uint32_t Console::GetPrgCrc32()
 NesModel Console::GetModel()
 {
 	return Instance->_model;
+}
+
+void Console::PowerCycle()
+{
+	if(Instance->_initialized && !Instance->_romFilepath.empty()) {
+		LoadROM(Instance->_romFilepath, nullptr, Instance->_archiveFileIndex, Instance->_patchFilename);
+	}
 }
 
 void Console::Reset(bool softReset)

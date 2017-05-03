@@ -917,7 +917,7 @@ namespace Mesen.GUI.Forms
 
 		private void mnuPowerCycle_Click(object sender, EventArgs e)
 		{
-			LoadROM(_currentRomPath, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches, _currentRomArchiveIndex);
+			InteropEmu.PowerCycle();
 		}
 
 		private void mnuShowFPS_Click(object sender, EventArgs e)

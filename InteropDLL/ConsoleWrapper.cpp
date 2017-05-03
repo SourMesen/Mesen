@@ -204,6 +204,7 @@ namespace InteropEmu {
 		}
 
 		DllExport void __stdcall Reset() { Console::Reset(); }
+		DllExport void __stdcall PowerCycle() { Console::PowerCycle(); }
 		DllExport void __stdcall ResetLagCounter() { Console::ResetLagCounter(); }
 
 		DllExport void __stdcall StartServer(uint16_t port, char* hostPlayerName) { GameServer::StartServer(port, hostPlayerName); }

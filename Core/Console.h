@@ -39,6 +39,8 @@ class Console
 		NesModel _model;
 
 		string _romFilepath;
+		string _patchFilename;
+		int32_t _archiveFileIndex;
 
 		bool _stop = false;
 
@@ -61,6 +63,7 @@ class Console
 		void Stop();
 		static void RequestReset();
 		static void Reset(bool softReset = true);
+		static void PowerCycle();
 
 		//Used to pause the emu loop to perform thread-safe operations
 		static void Pause();
