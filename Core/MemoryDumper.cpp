@@ -44,6 +44,25 @@ void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
 	}
 }
 
+uint32_t MemoryDumper::GetMemorySize(DebugMemoryType type)
+{
+	switch(type) {
+		case DebugMemoryType::CpuMemory: return 0x10000;
+		case DebugMemoryType::PpuMemory: return 0x4000;
+		case DebugMemoryType::PaletteMemory: return 0x20;
+		case DebugMemoryType::SpriteMemory: return 0x100;
+		case DebugMemoryType::SecondarySpriteMemory: return 0x20;
+		case DebugMemoryType::InternalRam: return 0x800;
+		case DebugMemoryType::PrgRom:
+		case DebugMemoryType::ChrRom:
+		case DebugMemoryType::ChrRam:
+		case DebugMemoryType::WorkRam:
+		case DebugMemoryType::SaveRam:
+			return _mapper->GetMemorySize(type);
+	}
+	return 0;
+}
+
 uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 {
 	switch(type) {

@@ -22,6 +22,7 @@ private:
 public:
 	MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger, Debugger *debugger, shared_ptr<Disassembler> disassembler);
 
+	uint32_t GetMemorySize(DebugMemoryType type);
 	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
 	void GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData);
 	void GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType);

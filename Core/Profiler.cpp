@@ -2,6 +2,7 @@
 #include "Profiler.h"
 #include "DebugBreakHelper.h"
 #include "Debugger.h"
+#include "MemoryDumper.h"
 
 Profiler::Profiler(Debugger * debugger)
 {
@@ -11,7 +12,7 @@ Profiler::Profiler(Debugger * debugger)
 	_currentCycleCount = 0;
 	_currentInstruction = 0;
 
-	int size = _debugger->GetMemorySize(DebugMemoryType::PrgRom);
+	int size = _debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::PrgRom);
 	_resetFunctionIndex = size;
 	_inMemoryFunctionIndex = size + 1;
 	_currentFunction = _resetFunctionIndex;

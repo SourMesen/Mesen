@@ -778,11 +778,6 @@ void Debugger::SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle)
 	_ppuViewerCycle = cycle;
 }
 
-int Debugger::GetMemorySize(DebugMemoryType memoryType)
-{
-	return _mapper->GetMemorySize(memoryType);
-}
-
 void Debugger::SetLastFramePpuScroll(uint16_t x, uint16_t y)
 {
 	if(Debugger::Instance) {

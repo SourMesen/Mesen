@@ -3,12 +3,19 @@
 #include "Console.h"
 #include "DebugBreakHelper.h"
 #include "Debugger.h"
+#include "MemoryDumper.h"
 
 MemoryAccessCounter::MemoryAccessCounter(Debugger* debugger)
 {
 	_debugger = debugger;
 	
-	int memorySizes[4] = { 0x2000, _debugger->GetMemorySize(DebugMemoryType::PrgRom), _debugger->GetMemorySize(DebugMemoryType::WorkRam), _debugger->GetMemorySize(DebugMemoryType::SaveRam) };
+	uint32_t memorySizes[4] = { 
+		0x2000, 
+		_debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::PrgRom), 
+		_debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::WorkRam), 
+		_debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::SaveRam)
+	};
+
 	for(int i = 0; i < 4; i++) {
 		_readCounts[i].insert(_readCounts[i].end(), memorySizes[i], 0);
 		_writeCounts[i].insert(_writeCounts[i].end(), memorySizes[i], 0);

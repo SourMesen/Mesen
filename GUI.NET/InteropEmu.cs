@@ -275,7 +275,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
 		public static byte[] DebugGetMemoryState(DebugMemoryType type)
 		{
-			byte[] buffer = new byte[10485760]; //10mb buffer
+			byte[] buffer = new byte[InteropEmu.DebugGetMemorySize(type)];
 			GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
 			try {
 				UInt32 memorySize = InteropEmu.DebugGetMemoryStateWrapper(type, handle.AddrOfPinnedObject());
