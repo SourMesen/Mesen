@@ -41,6 +41,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisplayInputPort4", chkDisplayPort4);
 			AddBinding("DisplayInputPosition", cboDisplayInputPosition);
 			AddBinding("DisplayInputHorizontally", chkDisplayInputHorizontally);
+
+			UpdateConflictWarning();
 		}
 		
 		protected override void OnFormClosed(FormClosedEventArgs e)
@@ -124,13 +126,23 @@ namespace Mesen.GUI.Forms.Config
 					chkAutoConfigureInput.Enabled = false;
 					chkAutoConfigureInput.Checked = false;
 				}
+
+				UpdateConflictWarning();
+			}
+		}
+
+		private bool FourScoreAttached
+		{
+			get
+			{
+				bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
+				return (isNes && chkFourScore.Checked) || (!isNes && ((InputInfo)Entity).ExpansionPortDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter);
 			}
 		}
 
 		private void UpdatePlayer3And4Visibility()
 		{
-			bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
-			bool visible = (isNes && chkFourScore.Checked) || (!isNes && ((InputInfo)Entity).ExpansionPortDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter);
+			bool visible = this.FourScoreAttached;
 
 			lblPlayer3.Visible = visible;
 			lblPlayer4.Visible = visible;
@@ -176,6 +188,7 @@ namespace Mesen.GUI.Forms.Config
 			} else if(sender == cboPlayer4) {
 				btnSetupP4.Enabled = enableButton;
 			}
+			UpdateConflictWarning();
 		}
 
 		private void btnSetup_Click(object sender, EventArgs e)
@@ -190,26 +203,74 @@ namespace Mesen.GUI.Forms.Config
 			} else if(sender == btnSetupP4) {
 				index = 3;
 			}
-			var frm = new frmControllerConfig(ConfigManager.Config.InputInfo.Controllers[index]);
 
-			Button btn = (Button)sender;
-			Point point = btn.PointToScreen(new Point(0, btn.Height));
-			Rectangle screen = Screen.FromControl(btn).Bounds;
+			using(var frm = new frmControllerConfig(ConfigManager.Config.InputInfo.Controllers[index], index)) {
+				Button btn = (Button)sender;
+				Point point = btn.PointToScreen(new Point(0, btn.Height));
+				Rectangle screen = Screen.FromControl(btn).Bounds;
 
-			if(frm.Height + point.Y > screen.Bottom) {
-				//Show on top instead
-				point.Y -= btn.Height + frm.Height;
+				if(frm.Height + point.Y > screen.Bottom) {
+					//Show on top instead
+					point.Y -= btn.Height + frm.Height;
+				}
+
+				if(frm.Width + point.X > screen.Right) {
+					//Show on left instead
+					point.X -= frm.Width - btn.Width;
+				}
+
+				frm.StartPosition = FormStartPosition.Manual;
+				frm.Top = point.Y;
+				frm.Left = point.X;
+				if(frm.ShowDialog(this) == DialogResult.OK) {
+					UpdateConflictWarning();
+				}
+			}
+		}
+
+		private void UpdateConflictWarning()
+		{
+			bool needWarning = false;
+			bool[] portConflicts = new bool[4];
+			Dictionary<uint, int> mappedKeys = new Dictionary<uint, int>();
+			Action<int, uint> countMapping = (int port, uint keyCode) => {
+				if(keyCode > 0) {
+					if(mappedKeys.ContainsKey(keyCode)) {
+						needWarning = true;
+						portConflicts[port] = true;
+						portConflicts[mappedKeys[keyCode]] = true;
+					} else {
+						mappedKeys.Add(keyCode, port);
+					}
+				}
+			};
+
+			for(int i = 0; i < 4; i++) {
+				if(i < 2 || this.FourScoreAttached && ((i == 2 && btnSetupP3.Enabled) || (i == 3 && btnSetupP4.Enabled))) {
+					foreach(KeyMappings mappings in ConfigManager.Config.InputInfo.Controllers[i].Keys) {
+						countMapping(i, mappings.A);
+						countMapping(i, mappings.B);
+						countMapping(i, mappings.Select);
+						countMapping(i, mappings.Start);
+						countMapping(i, mappings.TurboA);
+						countMapping(i, mappings.TurboB);
+						countMapping(i, mappings.TurboSelect);
+						countMapping(i, mappings.TurboStart);
+						countMapping(i, mappings.Up);
+						countMapping(i, mappings.Down);
+						countMapping(i, mappings.Left);
+						countMapping(i, mappings.Right);
+					}
+				}
 			}
 
-			if(frm.Width + point.X > screen.Right) {
-				//Show on left instead
-				point.X -= frm.Width - btn.Width;
-			}
+			pnlConflictWarning.Visible = needWarning;
+			btnSetupP1.Image = portConflicts[0] ? Properties.Resources.Warning : null;
+			btnSetupP2.Image = portConflicts[1] ? Properties.Resources.Warning : null;
+			btnSetupP3.Image = portConflicts[2] ? Properties.Resources.Warning : null;
+			btnSetupP4.Image = portConflicts[3] ? Properties.Resources.Warning : null;
 
-			frm.StartPosition = FormStartPosition.Manual;
-			frm.Top = point.Y;
-			frm.Left = point.X;
-			frm.ShowDialog(this);
+			this.Height = needWarning ? 360 : 310;
 		}
 	}
 }

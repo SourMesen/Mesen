@@ -15,7 +15,7 @@ namespace Mesen.GUI.Forms.Config
 	{
 		private KeyPresets _presets = new KeyPresets();
 
-		public frmControllerConfig(ControllerInfo controllerInfo)
+		public frmControllerConfig(ControllerInfo controllerInfo, int portNumber)
 		{
 			InitializeComponent();
 
@@ -28,6 +28,8 @@ namespace Mesen.GUI.Forms.Config
 			ctrlStandardController3.Initialize(controllerInfo.Keys[3]);
 
 			ResourceHelper.ApplyResources(this, mnuStripPreset);
+
+			this.Text += ": " + ResourceHelper.GetMessage("PlayerNumber", (portNumber + 1).ToString());
 		}
 
 		private ctrlStandardController GetControllerControl()

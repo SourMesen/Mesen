@@ -196,6 +196,8 @@
       <Control ID="chkDisplayPort4">Joueur 4</Control>
       <Control ID="lblDisplayPosition">Position d'affichage :</Control>
       <Control ID="chkDisplayInputHorizontally">Afficher horizontalement</Control>
+
+      <Control ID="lblKeyBinding">Attention: Votre configuration actuel contient des conflicts - certaines touches sur votre clavier ou manetter sont mappées à plusieurs boutons sur la console. Veuillez réviser votre configuration et la corriger au besoin.</Control>
     </Form>
     <Form ID="frmControllerConfig" Title="Configuration de la manette">
       <Control ID="lblTurboSpeed">Vitesse du mode turbo:</Control>
@@ -222,6 +224,8 @@
       <Control ID="mnuSnes30Layout1">Manette #1</Control>
       <Control ID="mnuSnes30Layout2">Manette #2</Control>
 
+      <Control ID="lblHint">Les tabs sans icône sont vides.&#13;&#10;Chaque bouton peut être mappé à 4 boutons différents sur votre clavier et/ou votre manette.</Control>
+      
       <Control ID="btnClear">Effacer le mappage</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>

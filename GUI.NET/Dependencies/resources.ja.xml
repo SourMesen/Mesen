@@ -196,6 +196,8 @@
       <Control ID="chkDisplayPort4">プレーヤー4</Control>
       <Control ID="lblDisplayPosition">表示位置：</Control>
       <Control ID="chkDisplayInputHorizontally">水平表示</Control>
+
+      <Control ID="lblKeyBinding">注意：　使っている設定の中には同じキーが複数のボタン―にマッピングされています。　間違いでこの設定にした場合は、設定を確認して直してください。</Control>
     </Form>
     <Form ID="frmControllerConfig" Title="コントローラ設定">
       <Control ID="lblTurboSpeed">ターボの速度:</Control>
@@ -221,6 +223,8 @@
       <Control ID="mnuSnes30Controller">SFC30コントローラ</Control>
       <Control ID="mnuSnes30Layout1">コントローラ１</Control>
       <Control ID="mnuSnes30Layout2">コントローラ２</Control>
+
+      <Control ID="lblHint">アイコンの付いてあるタブにはマッピングが設定されています。&#13;&#10;コントローラのボタンはキーボードのキーとゲームパッドのボタンを同時にマッピング出来ます。</Control>
 
       <Control ID="btnClear">キーセットを削除</Control>
       <Control ID="btnOK">OK</Control>

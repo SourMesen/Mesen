@@ -48,6 +48,10 @@
 			this.cboExpansionPort = new System.Windows.Forms.ComboBox();
 			this.chkFourScore = new System.Windows.Forms.CheckBox();
 			this.chkAutoConfigureInput = new System.Windows.Forms.CheckBox();
+			this.pnlConflictWarning = new System.Windows.Forms.Panel();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.picWarning = new System.Windows.Forms.PictureBox();
+			this.lblKeyBinding = new System.Windows.Forms.Label();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpDisplayInput = new System.Windows.Forms.GroupBox();
@@ -64,6 +68,9 @@
 			this.tabMain.SuspendLayout();
 			this.tpgControllers.SuspendLayout();
 			this.tlpControllers.SuspendLayout();
+			this.pnlConflictWarning.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picWarning)).BeginInit();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpDisplayInput.SuspendLayout();
@@ -74,7 +81,7 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 251);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 308);
 			this.baseConfigPanel.Size = new System.Drawing.Size(370, 29);
 			// 
 			// tabMain
@@ -85,7 +92,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(370, 251);
+			this.tabMain.Size = new System.Drawing.Size(370, 308);
 			this.tabMain.TabIndex = 11;
 			// 
 			// tpgControllers
@@ -93,7 +100,7 @@
 			this.tpgControllers.Controls.Add(this.tlpControllers);
 			this.tpgControllers.Location = new System.Drawing.Point(4, 22);
 			this.tpgControllers.Name = "tpgControllers";
-			this.tpgControllers.Size = new System.Drawing.Size(362, 225);
+			this.tpgControllers.Size = new System.Drawing.Size(362, 282);
 			this.tpgControllers.TabIndex = 0;
 			this.tpgControllers.Text = "Controllers";
 			this.tpgControllers.UseVisualStyleBackColor = true;
@@ -104,28 +111,30 @@
 			this.tlpControllers.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpControllers.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpControllers.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpControllers.Controls.Add(this.btnSetupP4, 2, 7);
-			this.tlpControllers.Controls.Add(this.btnSetupP3, 2, 6);
-			this.tlpControllers.Controls.Add(this.lblPlayer1, 0, 2);
-			this.tlpControllers.Controls.Add(this.lblPlayer2, 0, 3);
-			this.tlpControllers.Controls.Add(this.cboPlayer4, 1, 7);
-			this.tlpControllers.Controls.Add(this.cboPlayer3, 1, 6);
-			this.tlpControllers.Controls.Add(this.cboPlayer1, 1, 2);
-			this.tlpControllers.Controls.Add(this.lblPlayer4, 0, 7);
-			this.tlpControllers.Controls.Add(this.cboPlayer2, 1, 3);
-			this.tlpControllers.Controls.Add(this.lblPlayer3, 0, 6);
-			this.tlpControllers.Controls.Add(this.btnSetupP1, 2, 2);
-			this.tlpControllers.Controls.Add(this.btnSetupP2, 2, 3);
-			this.tlpControllers.Controls.Add(this.lblNesType, 0, 0);
-			this.tlpControllers.Controls.Add(this.cboConsoleType, 1, 0);
-			this.tlpControllers.Controls.Add(this.lblExpansionPort, 0, 5);
-			this.tlpControllers.Controls.Add(this.cboExpansionPort, 1, 5);
-			this.tlpControllers.Controls.Add(this.chkFourScore, 0, 4);
-			this.tlpControllers.Controls.Add(this.chkAutoConfigureInput, 0, 1);
+			this.tlpControllers.Controls.Add(this.btnSetupP4, 2, 8);
+			this.tlpControllers.Controls.Add(this.btnSetupP3, 2, 7);
+			this.tlpControllers.Controls.Add(this.lblPlayer1, 0, 3);
+			this.tlpControllers.Controls.Add(this.lblPlayer2, 0, 4);
+			this.tlpControllers.Controls.Add(this.cboPlayer4, 1, 8);
+			this.tlpControllers.Controls.Add(this.cboPlayer3, 1, 7);
+			this.tlpControllers.Controls.Add(this.cboPlayer1, 1, 3);
+			this.tlpControllers.Controls.Add(this.lblPlayer4, 0, 8);
+			this.tlpControllers.Controls.Add(this.cboPlayer2, 1, 4);
+			this.tlpControllers.Controls.Add(this.lblPlayer3, 0, 7);
+			this.tlpControllers.Controls.Add(this.btnSetupP1, 2, 3);
+			this.tlpControllers.Controls.Add(this.btnSetupP2, 2, 4);
+			this.tlpControllers.Controls.Add(this.lblNesType, 0, 1);
+			this.tlpControllers.Controls.Add(this.cboConsoleType, 1, 1);
+			this.tlpControllers.Controls.Add(this.lblExpansionPort, 0, 6);
+			this.tlpControllers.Controls.Add(this.cboExpansionPort, 1, 6);
+			this.tlpControllers.Controls.Add(this.chkFourScore, 0, 5);
+			this.tlpControllers.Controls.Add(this.chkAutoConfigureInput, 0, 2);
+			this.tlpControllers.Controls.Add(this.pnlConflictWarning, 0, 0);
 			this.tlpControllers.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpControllers.Location = new System.Drawing.Point(0, 0);
 			this.tlpControllers.Name = "tlpControllers";
 			this.tlpControllers.RowCount = 10;
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -134,30 +143,31 @@
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpControllers.Size = new System.Drawing.Size(362, 225);
+			this.tlpControllers.Size = new System.Drawing.Size(362, 282);
 			this.tlpControllers.TabIndex = 0;
 			// 
 			// btnSetupP4
 			// 
 			this.btnSetupP4.AutoSize = true;
-			this.btnSetupP4.Location = new System.Drawing.Point(297, 192);
+			this.btnSetupP4.Location = new System.Drawing.Point(297, 253);
 			this.btnSetupP4.Name = "btnSetupP4";
 			this.btnSetupP4.Size = new System.Drawing.Size(62, 23);
 			this.btnSetupP4.TabIndex = 12;
 			this.btnSetupP4.Text = "Setup";
+			this.btnSetupP4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupP4.UseVisualStyleBackColor = true;
 			this.btnSetupP4.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
 			// btnSetupP3
 			// 
 			this.btnSetupP3.AutoSize = true;
-			this.btnSetupP3.Location = new System.Drawing.Point(297, 163);
+			this.btnSetupP3.Location = new System.Drawing.Point(297, 224);
 			this.btnSetupP3.Name = "btnSetupP3";
 			this.btnSetupP3.Size = new System.Drawing.Size(62, 23);
 			this.btnSetupP3.TabIndex = 11;
 			this.btnSetupP3.Text = "Setup";
+			this.btnSetupP3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupP3.UseVisualStyleBackColor = true;
 			this.btnSetupP3.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
@@ -165,7 +175,7 @@
 			// 
 			this.lblPlayer1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblPlayer1.AutoSize = true;
-			this.lblPlayer1.Location = new System.Drawing.Point(3, 60);
+			this.lblPlayer1.Location = new System.Drawing.Point(3, 121);
 			this.lblPlayer1.Name = "lblPlayer1";
 			this.lblPlayer1.Size = new System.Drawing.Size(48, 13);
 			this.lblPlayer1.TabIndex = 0;
@@ -175,7 +185,7 @@
 			// 
 			this.lblPlayer2.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblPlayer2.AutoSize = true;
-			this.lblPlayer2.Location = new System.Drawing.Point(3, 89);
+			this.lblPlayer2.Location = new System.Drawing.Point(3, 150);
 			this.lblPlayer2.Name = "lblPlayer2";
 			this.lblPlayer2.Size = new System.Drawing.Size(48, 13);
 			this.lblPlayer2.TabIndex = 1;
@@ -186,7 +196,7 @@
 			this.cboPlayer4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.cboPlayer4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboPlayer4.FormattingEnabled = true;
-			this.cboPlayer4.Location = new System.Drawing.Point(90, 192);
+			this.cboPlayer4.Location = new System.Drawing.Point(90, 253);
 			this.cboPlayer4.Name = "cboPlayer4";
 			this.cboPlayer4.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer4.TabIndex = 8;
@@ -197,7 +207,7 @@
 			this.cboPlayer3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.cboPlayer3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboPlayer3.FormattingEnabled = true;
-			this.cboPlayer3.Location = new System.Drawing.Point(90, 163);
+			this.cboPlayer3.Location = new System.Drawing.Point(90, 224);
 			this.cboPlayer3.Name = "cboPlayer3";
 			this.cboPlayer3.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer3.TabIndex = 7;
@@ -208,7 +218,7 @@
 			this.cboPlayer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.cboPlayer1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboPlayer1.FormattingEnabled = true;
-			this.cboPlayer1.Location = new System.Drawing.Point(90, 55);
+			this.cboPlayer1.Location = new System.Drawing.Point(90, 116);
 			this.cboPlayer1.Name = "cboPlayer1";
 			this.cboPlayer1.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer1.TabIndex = 4;
@@ -218,7 +228,7 @@
 			// 
 			this.lblPlayer4.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblPlayer4.AutoSize = true;
-			this.lblPlayer4.Location = new System.Drawing.Point(3, 197);
+			this.lblPlayer4.Location = new System.Drawing.Point(3, 258);
 			this.lblPlayer4.Name = "lblPlayer4";
 			this.lblPlayer4.Size = new System.Drawing.Size(48, 13);
 			this.lblPlayer4.TabIndex = 3;
@@ -229,7 +239,7 @@
 			this.cboPlayer2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.cboPlayer2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboPlayer2.FormattingEnabled = true;
-			this.cboPlayer2.Location = new System.Drawing.Point(90, 84);
+			this.cboPlayer2.Location = new System.Drawing.Point(90, 145);
 			this.cboPlayer2.Name = "cboPlayer2";
 			this.cboPlayer2.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer2.TabIndex = 6;
@@ -239,7 +249,7 @@
 			// 
 			this.lblPlayer3.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblPlayer3.AutoSize = true;
-			this.lblPlayer3.Location = new System.Drawing.Point(3, 168);
+			this.lblPlayer3.Location = new System.Drawing.Point(3, 229);
 			this.lblPlayer3.Name = "lblPlayer3";
 			this.lblPlayer3.Size = new System.Drawing.Size(48, 13);
 			this.lblPlayer3.TabIndex = 2;
@@ -248,22 +258,24 @@
 			// btnSetupP1
 			// 
 			this.btnSetupP1.AutoSize = true;
-			this.btnSetupP1.Location = new System.Drawing.Point(297, 55);
+			this.btnSetupP1.Location = new System.Drawing.Point(297, 116);
 			this.btnSetupP1.Name = "btnSetupP1";
 			this.btnSetupP1.Size = new System.Drawing.Size(62, 23);
 			this.btnSetupP1.TabIndex = 9;
 			this.btnSetupP1.Text = "Setup";
+			this.btnSetupP1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupP1.UseVisualStyleBackColor = true;
 			this.btnSetupP1.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
 			// btnSetupP2
 			// 
 			this.btnSetupP2.AutoSize = true;
-			this.btnSetupP2.Location = new System.Drawing.Point(297, 84);
+			this.btnSetupP2.Location = new System.Drawing.Point(297, 145);
 			this.btnSetupP2.Name = "btnSetupP2";
 			this.btnSetupP2.Size = new System.Drawing.Size(62, 23);
 			this.btnSetupP2.TabIndex = 10;
 			this.btnSetupP2.Text = "Setup";
+			this.btnSetupP2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupP2.UseVisualStyleBackColor = true;
 			this.btnSetupP2.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
@@ -271,7 +283,7 @@
 			// 
 			this.lblNesType.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblNesType.AutoSize = true;
-			this.lblNesType.Location = new System.Drawing.Point(3, 7);
+			this.lblNesType.Location = new System.Drawing.Point(3, 68);
 			this.lblNesType.Name = "lblNesType";
 			this.lblNesType.Size = new System.Drawing.Size(75, 13);
 			this.lblNesType.TabIndex = 13;
@@ -284,7 +296,7 @@
 			this.cboConsoleType.Items.AddRange(new object[] {
             "NES",
             "Famicom"});
-			this.cboConsoleType.Location = new System.Drawing.Point(90, 3);
+			this.cboConsoleType.Location = new System.Drawing.Point(90, 64);
 			this.cboConsoleType.Name = "cboConsoleType";
 			this.cboConsoleType.Size = new System.Drawing.Size(109, 21);
 			this.cboConsoleType.TabIndex = 14;
@@ -294,7 +306,7 @@
 			// 
 			this.lblExpansionPort.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblExpansionPort.AutoSize = true;
-			this.lblExpansionPort.Location = new System.Drawing.Point(3, 140);
+			this.lblExpansionPort.Location = new System.Drawing.Point(3, 201);
 			this.lblExpansionPort.Name = "lblExpansionPort";
 			this.lblExpansionPort.Size = new System.Drawing.Size(81, 13);
 			this.lblExpansionPort.TabIndex = 16;
@@ -305,7 +317,7 @@
 			this.cboExpansionPort.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.cboExpansionPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboExpansionPort.FormattingEnabled = true;
-			this.cboExpansionPort.Location = new System.Drawing.Point(90, 136);
+			this.cboExpansionPort.Location = new System.Drawing.Point(90, 197);
 			this.cboExpansionPort.Name = "cboExpansionPort";
 			this.cboExpansionPort.Size = new System.Drawing.Size(201, 21);
 			this.cboExpansionPort.TabIndex = 17;
@@ -316,7 +328,7 @@
 			this.chkFourScore.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkFourScore.AutoSize = true;
 			this.tlpControllers.SetColumnSpan(this.chkFourScore, 2);
-			this.chkFourScore.Location = new System.Drawing.Point(3, 113);
+			this.chkFourScore.Location = new System.Drawing.Point(3, 174);
 			this.chkFourScore.Name = "chkFourScore";
 			this.chkFourScore.Size = new System.Drawing.Size(151, 17);
 			this.chkFourScore.TabIndex = 15;
@@ -328,19 +340,67 @@
 			// 
 			this.chkAutoConfigureInput.AutoSize = true;
 			this.tlpControllers.SetColumnSpan(this.chkAutoConfigureInput, 3);
-			this.chkAutoConfigureInput.Location = new System.Drawing.Point(3, 30);
+			this.chkAutoConfigureInput.Location = new System.Drawing.Point(3, 91);
 			this.chkAutoConfigureInput.Name = "chkAutoConfigureInput";
 			this.chkAutoConfigureInput.Size = new System.Drawing.Size(290, 17);
 			this.chkAutoConfigureInput.TabIndex = 18;
 			this.chkAutoConfigureInput.Text = "Automatically configure controllers when loading a game";
 			this.chkAutoConfigureInput.UseVisualStyleBackColor = true;
 			// 
+			// pnlConflictWarning
+			// 
+			this.pnlConflictWarning.BackColor = System.Drawing.Color.WhiteSmoke;
+			this.pnlConflictWarning.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tlpControllers.SetColumnSpan(this.pnlConflictWarning, 3);
+			this.pnlConflictWarning.Controls.Add(this.tableLayoutPanel1);
+			this.pnlConflictWarning.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pnlConflictWarning.Location = new System.Drawing.Point(3, 3);
+			this.pnlConflictWarning.Name = "pnlConflictWarning";
+			this.pnlConflictWarning.Size = new System.Drawing.Size(356, 55);
+			this.pnlConflictWarning.TabIndex = 19;
+			this.pnlConflictWarning.Visible = false;
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 2;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.picWarning, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.lblKeyBinding, 1, 0);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 1;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(354, 53);
+			this.tableLayoutPanel1.TabIndex = 0;
+			// 
+			// picWarning
+			// 
+			this.picWarning.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.picWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
+			this.picWarning.Location = new System.Drawing.Point(3, 18);
+			this.picWarning.Name = "picWarning";
+			this.picWarning.Size = new System.Drawing.Size(16, 16);
+			this.picWarning.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+			this.picWarning.TabIndex = 0;
+			this.picWarning.TabStop = false;
+			// 
+			// lblKeyBinding
+			// 
+			this.lblKeyBinding.AutoSize = true;
+			this.lblKeyBinding.Location = new System.Drawing.Point(25, 0);
+			this.lblKeyBinding.Name = "lblKeyBinding";
+			this.lblKeyBinding.Size = new System.Drawing.Size(320, 52);
+			this.lblKeyBinding.TabIndex = 1;
+			this.lblKeyBinding.Text = "Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyword or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.";
+			// 
 			// tpgAdvanced
 			// 
 			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel2);
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
-			this.tpgAdvanced.Size = new System.Drawing.Size(362, 225);
+			this.tpgAdvanced.Size = new System.Drawing.Size(362, 282);
 			this.tpgAdvanced.TabIndex = 5;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -356,7 +416,7 @@
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(362, 225);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(362, 282);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// grpDisplayInput
@@ -485,7 +545,8 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(370, 280);
+			this.AutoSize = true;
+			this.ClientSize = new System.Drawing.Size(370, 337);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -499,6 +560,10 @@
 			this.tpgControllers.ResumeLayout(false);
 			this.tlpControllers.ResumeLayout(false);
 			this.tlpControllers.PerformLayout();
+			this.pnlConflictWarning.ResumeLayout(false);
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picWarning)).EndInit();
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.grpDisplayInput.ResumeLayout(false);
@@ -548,5 +613,9 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
 		private System.Windows.Forms.Label lblDisplayPosition;
 		private System.Windows.Forms.ComboBox cboDisplayInputPosition;
+		private System.Windows.Forms.Panel pnlConflictWarning;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.Label lblKeyBinding;
+		private System.Windows.Forms.PictureBox picWarning;
 	}
 }

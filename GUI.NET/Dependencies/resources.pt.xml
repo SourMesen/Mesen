@@ -196,6 +196,8 @@
       <Control ID="chkDisplayPort4">Jogador 4</Control>
       <Control ID="lblDisplayPosition">Posição da tela</Control>
       <Control ID="chkDisplayInputHorizontally">Mostrar horizontalmente</Control>
+
+      <Control ID="lblKeyBinding">Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyword or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.</Control>
     </Form>
     <Form ID="frmControllerConfig" Title="Configuração de controles">
       <Control ID="lblTurboSpeed">Velocidade de modo turbo:</Control>
@@ -220,6 +222,7 @@
       <Control ID="mnuSnes30Layout1">Layout #1</Control>
       <Control ID="mnuSnes30Layout2">Layout #2</Control>
       <Control ID="tpgSet4">Mapeado #4</Control>
+      <Control ID="lblHint">Tabs with an icon contain key bindings for this player.&#13;&#10;Each button can be mapped to up to 4 different keyboard keys or gamepad buttons.</Control>
       <Control ID="btnReset">Reiniciar</Control>
       <Control ID="btnClear">Desfazer controles</Control>
       <Control ID="btnOK">OK</Control>

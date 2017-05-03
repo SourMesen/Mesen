@@ -64,6 +64,10 @@
 			this.mnuSnes30Controller = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSnes30Layout1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSnes30Layout2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.pnlHint = new System.Windows.Forms.Panel();
+			this.flpHint = new System.Windows.Forms.FlowLayoutPanel();
+			this.picHint = new System.Windows.Forms.PictureBox();
+			this.lblHint = new System.Windows.Forms.Label();
 			this.baseConfigPanel.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgSet1.SuspendLayout();
@@ -75,12 +79,15 @@
 			((System.ComponentModel.ISupportInitialize)(this.trkTurboSpeed)).BeginInit();
 			this.panel1.SuspendLayout();
 			this.mnuStripPreset.SuspendLayout();
+			this.pnlHint.SuspendLayout();
+			this.flpHint.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHint)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Controls.Add(this.flowLayoutPanel2);
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 288);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 324);
 			this.baseConfigPanel.Size = new System.Drawing.Size(599, 29);
 			this.baseConfigPanel.Controls.SetChildIndex(this.flowLayoutPanel2, 0);
 			// 
@@ -90,7 +97,7 @@
 			this.ctrlStandardController0.Location = new System.Drawing.Point(0, 0);
 			this.ctrlStandardController0.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlStandardController0.Name = "ctrlStandardController0";
-			this.ctrlStandardController0.Size = new System.Drawing.Size(585, 208);
+			this.ctrlStandardController0.Size = new System.Drawing.Size(585, 197);
 			this.ctrlStandardController0.TabIndex = 0;
 			this.ctrlStandardController0.OnChange += new System.EventHandler(this.ctrlStandardController_OnChange);
 			// 
@@ -103,10 +110,10 @@
 			this.tabMain.Controls.Add(this.tpgSet4);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.ImageList = this.imageList;
-			this.tabMain.Location = new System.Drawing.Point(3, 3);
+			this.tabMain.Location = new System.Drawing.Point(3, 38);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(593, 235);
+			this.tabMain.Size = new System.Drawing.Size(593, 236);
 			this.tabMain.TabIndex = 3;
 			// 
 			// tpgSet1
@@ -114,7 +121,7 @@
 			this.tpgSet1.Controls.Add(this.ctrlStandardController0);
 			this.tpgSet1.Location = new System.Drawing.Point(4, 23);
 			this.tpgSet1.Name = "tpgSet1";
-			this.tpgSet1.Size = new System.Drawing.Size(585, 208);
+			this.tpgSet1.Size = new System.Drawing.Size(585, 197);
 			this.tpgSet1.TabIndex = 0;
 			this.tpgSet1.Text = "Key Set #1";
 			this.tpgSet1.UseVisualStyleBackColor = true;
@@ -164,7 +171,7 @@
 			this.tpgSet4.Controls.Add(this.ctrlStandardController3);
 			this.tpgSet4.Location = new System.Drawing.Point(4, 23);
 			this.tpgSet4.Name = "tpgSet4";
-			this.tpgSet4.Size = new System.Drawing.Size(585, 208);
+			this.tpgSet4.Size = new System.Drawing.Size(585, 209);
 			this.tpgSet4.TabIndex = 3;
 			this.tpgSet4.Text = "Key Set #4";
 			this.tpgSet4.UseVisualStyleBackColor = true;
@@ -175,7 +182,7 @@
 			this.ctrlStandardController3.Location = new System.Drawing.Point(0, 0);
 			this.ctrlStandardController3.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlStandardController3.Name = "ctrlStandardController3";
-			this.ctrlStandardController3.Size = new System.Drawing.Size(585, 208);
+			this.ctrlStandardController3.Size = new System.Drawing.Size(585, 209);
 			this.ctrlStandardController3.TabIndex = 1;
 			this.ctrlStandardController3.OnChange += new System.EventHandler(this.ctrlStandardController_OnChange);
 			// 
@@ -213,20 +220,22 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.Controls.Add(this.btnSelectPreset, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.trkTurboSpeed, 2, 1);
-			this.tableLayoutPanel1.Controls.Add(this.lblTurboSpeed, 1, 1);
-			this.tableLayoutPanel1.Controls.Add(this.panel1, 2, 2);
-			this.tableLayoutPanel1.Controls.Add(this.tabMain, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.btnSelectPreset, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.trkTurboSpeed, 2, 2);
+			this.tableLayoutPanel1.Controls.Add(this.lblTurboSpeed, 1, 2);
+			this.tableLayoutPanel1.Controls.Add(this.panel1, 2, 3);
+			this.tableLayoutPanel1.Controls.Add(this.tabMain, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.pnlHint, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 3;
+			this.tableLayoutPanel1.RowCount = 4;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(599, 288);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(599, 324);
 			this.tableLayoutPanel1.TabIndex = 23;
 			// 
 			// btnSelectPreset
@@ -234,7 +243,7 @@
 			this.btnSelectPreset.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.btnSelectPreset.AutoSize = true;
 			this.btnSelectPreset.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectPreset.Image")));
-			this.btnSelectPreset.Location = new System.Drawing.Point(3, 245);
+			this.btnSelectPreset.Location = new System.Drawing.Point(3, 281);
 			this.btnSelectPreset.Name = "btnSelectPreset";
 			this.btnSelectPreset.Size = new System.Drawing.Size(105, 23);
 			this.btnSelectPreset.TabIndex = 4;
@@ -246,7 +255,7 @@
 			// trkTurboSpeed
 			// 
 			this.trkTurboSpeed.LargeChange = 2;
-			this.trkTurboSpeed.Location = new System.Drawing.Point(479, 244);
+			this.trkTurboSpeed.Location = new System.Drawing.Point(479, 280);
 			this.trkTurboSpeed.Maximum = 3;
 			this.trkTurboSpeed.Name = "trkTurboSpeed";
 			this.trkTurboSpeed.Size = new System.Drawing.Size(117, 26);
@@ -256,7 +265,7 @@
 			// 
 			this.lblTurboSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblTurboSpeed.AutoSize = true;
-			this.lblTurboSpeed.Location = new System.Drawing.Point(401, 250);
+			this.lblTurboSpeed.Location = new System.Drawing.Point(401, 286);
 			this.lblTurboSpeed.Name = "lblTurboSpeed";
 			this.lblTurboSpeed.Size = new System.Drawing.Size(72, 13);
 			this.lblTurboSpeed.TabIndex = 1;
@@ -266,7 +275,7 @@
 			// 
 			this.panel1.Controls.Add(this.lblTurboFast);
 			this.panel1.Controls.Add(this.lblSlow);
-			this.panel1.Location = new System.Drawing.Point(476, 273);
+			this.panel1.Location = new System.Drawing.Point(476, 309);
 			this.panel1.Margin = new System.Windows.Forms.Padding(0);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(120, 15);
@@ -300,7 +309,7 @@
             this.mnuPs4Controller,
             this.mnuSnes30Controller});
 			this.mnuStripPreset.Name = "mnuStripPreset";
-			this.mnuStripPreset.Size = new System.Drawing.Size(170, 120);
+			this.mnuStripPreset.Size = new System.Drawing.Size(170, 98);
 			// 
 			// mnuKeyboard
 			// 
@@ -381,14 +390,14 @@
 			// mnuPs4Layout1
 			// 
 			this.mnuPs4Layout1.Name = "mnuPs4Layout1";
-			this.mnuPs4Layout1.Size = new System.Drawing.Size(152, 22);
+			this.mnuPs4Layout1.Size = new System.Drawing.Size(143, 22);
 			this.mnuPs4Layout1.Text = "Controller #1";
 			this.mnuPs4Layout1.Click += new System.EventHandler(this.mnuPs4Layout1_Click);
 			// 
 			// mnuPs4Layout2
 			// 
 			this.mnuPs4Layout2.Name = "mnuPs4Layout2";
-			this.mnuPs4Layout2.Size = new System.Drawing.Size(152, 22);
+			this.mnuPs4Layout2.Size = new System.Drawing.Size(143, 22);
 			this.mnuPs4Layout2.Text = "Controller #2";
 			this.mnuPs4Layout2.Click += new System.EventHandler(this.mnuPs4Layout2_Click);
 			// 
@@ -404,22 +413,65 @@
 			// mnuSnes30Layout1
 			// 
 			this.mnuSnes30Layout1.Name = "mnuSnes30Layout1";
-			this.mnuSnes30Layout1.Size = new System.Drawing.Size(152, 22);
+			this.mnuSnes30Layout1.Size = new System.Drawing.Size(143, 22);
 			this.mnuSnes30Layout1.Text = "Controller #1";
 			this.mnuSnes30Layout1.Click += new System.EventHandler(this.mnuSnes30Layout1_Click);
 			// 
 			// mnuSnes30Layout2
 			// 
 			this.mnuSnes30Layout2.Name = "mnuSnes30Layout2";
-			this.mnuSnes30Layout2.Size = new System.Drawing.Size(152, 22);
+			this.mnuSnes30Layout2.Size = new System.Drawing.Size(143, 22);
 			this.mnuSnes30Layout2.Text = "Controller #2";
 			this.mnuSnes30Layout2.Click += new System.EventHandler(this.mnuSnes30Layout2_Click);
+			// 
+			// pnlHint
+			// 
+			this.pnlHint.BackColor = System.Drawing.Color.WhiteSmoke;
+			this.pnlHint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tableLayoutPanel1.SetColumnSpan(this.pnlHint, 3);
+			this.pnlHint.Controls.Add(this.flpHint);
+			this.pnlHint.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pnlHint.Location = new System.Drawing.Point(3, 3);
+			this.pnlHint.Name = "pnlHint";
+			this.pnlHint.Size = new System.Drawing.Size(593, 29);
+			this.pnlHint.TabIndex = 5;
+			// 
+			// flpHint
+			// 
+			this.flpHint.Controls.Add(this.picHint);
+			this.flpHint.Controls.Add(this.lblHint);
+			this.flpHint.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flpHint.Location = new System.Drawing.Point(0, 0);
+			this.flpHint.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flpHint.Name = "flpHint";
+			this.flpHint.Size = new System.Drawing.Size(591, 27);
+			this.flpHint.TabIndex = 0;
+			// 
+			// picHint
+			// 
+			this.picHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picHint.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picHint.Location = new System.Drawing.Point(3, 5);
+			this.picHint.Name = "picHint";
+			this.picHint.Size = new System.Drawing.Size(16, 16);
+			this.picHint.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+			this.picHint.TabIndex = 0;
+			this.picHint.TabStop = false;
+			// 
+			// lblHint
+			// 
+			this.lblHint.Location = new System.Drawing.Point(25, 0);
+			this.lblHint.Name = "lblHint";
+			this.lblHint.Size = new System.Drawing.Size(520, 27);
+			this.lblHint.TabIndex = 1;
+			this.lblHint.Text = "Tabs with an icon contain key bindings for this player.\r\nEach button can be mappe" +
+    "d to up to 4 different keyboard keys or gamepad buttons.";
 			// 
 			// frmControllerConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(599, 317);
+			this.ClientSize = new System.Drawing.Size(599, 353);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmControllerConfig";
@@ -440,6 +492,10 @@
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.mnuStripPreset.ResumeLayout(false);
+			this.pnlHint.ResumeLayout(false);
+			this.flpHint.ResumeLayout(false);
+			this.flpHint.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHint)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -481,5 +537,9 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuSnes30Layout1;
 		private System.Windows.Forms.ToolStripMenuItem mnuSnes30Layout2;
 		private System.Windows.Forms.ImageList imageList;
+		private System.Windows.Forms.Panel pnlHint;
+		private System.Windows.Forms.FlowLayoutPanel flpHint;
+		private System.Windows.Forms.PictureBox picHint;
+		private System.Windows.Forms.Label lblHint;
 	}
 }
