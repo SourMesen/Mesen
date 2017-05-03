@@ -424,7 +424,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(463, 364);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(463, 341);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
 			// chkMuteSoundInBackground
@@ -558,7 +558,8 @@ namespace Mesen.GUI.Forms.Config
             "11,025 Hz",
             "22,050 Hz",
             "44,100 Hz",
-            "48,000 Hz"});
+            "48,000 Hz",
+            "96,000 Hz"});
 			this.cboSampleRate.Location = new System.Drawing.Point(80, 56);
 			this.cboSampleRate.Name = "cboSampleRate";
 			this.cboSampleRate.Size = new System.Drawing.Size(75, 21);
@@ -615,7 +616,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(469, 370);
+			this.tpgGeneral.Size = new System.Drawing.Size(469, 347);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -637,7 +638,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgPanning.Location = new System.Drawing.Point(4, 22);
 			this.tpgPanning.Name = "tpgPanning";
 			this.tpgPanning.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPanning.Size = new System.Drawing.Size(469, 370);
+			this.tpgPanning.Size = new System.Drawing.Size(469, 347);
 			this.tpgPanning.TabIndex = 4;
 			this.tpgPanning.Text = "Panning";
 			this.tpgPanning.UseVisualStyleBackColor = true;
@@ -670,7 +671,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(463, 364);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(463, 341);
 			this.tableLayoutPanel6.TabIndex = 3;
 			// 
 			// trkSquare1Pan
@@ -1315,7 +1316,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgEffects.Location = new System.Drawing.Point(4, 22);
 			this.tpgEffects.Name = "tpgEffects";
 			this.tpgEffects.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgEffects.Size = new System.Drawing.Size(469, 370);
+			this.tpgEffects.Size = new System.Drawing.Size(469, 347);
 			this.tpgEffects.TabIndex = 3;
 			this.tpgEffects.Text = "Effects";
 			this.tpgEffects.UseVisualStyleBackColor = true;
@@ -1335,7 +1336,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(463, 364);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(463, 341);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// grpStereo
@@ -1606,7 +1607,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(469, 370);
+			this.tpgAdvanced.Size = new System.Drawing.Size(469, 347);
 			this.tpgAdvanced.TabIndex = 2;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -1628,7 +1629,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(463, 364);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(463, 341);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// chkDisableNoiseModeFlag

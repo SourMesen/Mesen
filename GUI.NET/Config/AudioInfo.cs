@@ -41,7 +41,7 @@ namespace Mesen.GUI.Config
 		[MinMax(-100, 100)] public Int32 Namco163Panning = 0;
 		[MinMax(-100, 100)] public Int32 Sunsoft5bPanning = 0;
 
-		[ValidValues(11025, 22050, 44100, 48000)] public UInt32 SampleRate = 44100;
+		[ValidValues(11025, 22050, 44100, 48000, 96000)] public UInt32 SampleRate = 44100;
 		public bool ReduceSoundInBackground = true;
 		public bool MuteSoundInBackground = false;
 		public bool SwapDutyCycles = false;
