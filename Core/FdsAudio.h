@@ -47,38 +47,43 @@ protected:
 
 	void ClockAudio() override
 	{
-		//"The envelopes are not ticked while the waveform is halted."
-		_volume.TickEnvelope(_disableEnvelopes || _haltWaveform);
-		_mod.TickEnvelope(_disableEnvelopes || _haltWaveform);
-		
-		if(_mod.IsEnabled()) {
-			if(_mod.TickModulator()) {
-				//Modulator was ticked, update wave pitch
-				_wavePitch = _mod.GetWavePitch(_volume.GetFrequency());
+		int frequency = _volume.GetFrequency();
+		if(!_haltWaveform && !_disableEnvelopes) {
+			_volume.TickEnvelope();
+			if(_mod.TickEnvelope()) {
+				_mod.UpdateOutput(frequency);
 			}
-		} else {
-			_wavePitch = 0;
 		}
 
+		if(_mod.TickModulator()) {
+			//Modulator was ticked, update wave pitch
+			_mod.UpdateOutput(frequency);
+		}
+	
 		if(_haltWaveform) {
-			//"The high bit of this register halts the waveform and resets its phase to 0. Note that if halted it will output the constant value at $4040"
-			//"writes to the volume register $4080 or master volume $4089 will affect the output."
 			_wavePosition = 0;
-		}
-		
-		int32_t freq = _volume.GetFrequency() + _wavePitch;
-		if(freq > 0 && !_waveWriteEnabled) {
-			_waveOverflowCounter += freq;
-			if(_waveOverflowCounter < freq) {
-				//Overflow, tick
-				uint32_t level = std::min((int)_volume.GetGain(), 32) * WaveVolumeTable[_masterVolume];
-				
-				uint8_t outputLevel = (_waveTable[_wavePosition] * level) / 1152;
-				APU::AddExpansionAudioDelta(AudioChannel::FDS, outputLevel - _lastOutput);
-				_lastOutput = outputLevel;
+			UpdateOutput();
+		} else {
+			UpdateOutput();
 
-				_wavePosition = (_wavePosition + 1) & 0x3F;
+			if(frequency + _mod.GetOutput() > 0 && !_waveWriteEnabled) {
+				_waveOverflowCounter += frequency + _mod.GetOutput();
+				if(_waveOverflowCounter < frequency + _mod.GetOutput()) {
+					_wavePosition = (_wavePosition + 1) & 0x3F;
+				}
 			}
+		}
+	}
+
+	void UpdateOutput()
+	{
+		uint32_t level = std::min((int)_volume.GetGain(), 32) * WaveVolumeTable[_masterVolume];
+		uint8_t outputLevel = (_waveTable[_wavePosition] * level) / 1152;
+
+
+		if(_lastOutput != outputLevel) {
+			APU::AddExpansionAudioDelta(AudioChannel::FDS, outputLevel - _lastOutput);
+			_lastOutput = outputLevel;
 		}
 	}
 
@@ -113,6 +118,10 @@ public:
 				case 0x4083:
 					_disableEnvelopes = (value & 0x40) == 0x40;
 					_haltWaveform = (value & 0x80) == 0x80;
+					if(_disableEnvelopes) {
+						_volume.ResetTimer();
+						_mod.ResetTimer();
+					}
 					_volume.WriteReg(addr, value);
 					break;
 

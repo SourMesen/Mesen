@@ -285,7 +285,9 @@ bool FDS::IsDiskInserted()
 uint8_t FDS::ReadRegister(uint16_t addr)
 {
 	uint8_t value = 0;
-	if(_diskRegEnabled && addr < 0x4040 || _soundRegEnabled && addr >= 0x4040) {
+	if(_soundRegEnabled && addr >= 0x4040) {
+		return _audio->ReadRegister(addr);
+	} else if(_diskRegEnabled && addr <= 0x4033) {
 		switch(addr) {
 			case 0x4030:
 				value |= CPU::HasIRQSource(IRQSource::External) ? 0x01 : 0x00;
@@ -313,9 +315,6 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 			case 0x4033:
 				//Always return good battery
 				return 0x80 & _extConWriteReg;
-
-			default:
-				return _audio->ReadRegister(addr);
 		}
 	}
 

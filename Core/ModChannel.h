@@ -14,6 +14,7 @@ private:
 	uint8_t _modTable[64];
 	uint8_t _modTablePosition = 0;
 	uint16_t _overflowCounter = 0;
+	int32_t _output = 0;
 
 protected:
 	void StreamState(bool saving) override
@@ -21,17 +22,28 @@ protected:
 		BaseFdsChannel::StreamState(saving);
 		
 		ArrayInfo<uint8_t> modTable = { _modTable, 64 };
-		Stream(_counter, _modulationDisabled, _modTablePosition, _overflowCounter, modTable);
+		Stream(_counter, _modulationDisabled, _modTablePosition, _overflowCounter, modTable, _output);
 	}
 
 public:
 	virtual void WriteReg(uint16_t addr, uint8_t value) override
 	{
-		switch(addr & 0x03) {
-			case 1: UpdateCounter(value & 0x7F); break;
-			case 3: _modulationDisabled = (value & 0x80) == 0x80; break;
+		switch(addr) {
+			case 0x4084:
+			case 0x4086:
+				BaseFdsChannel::WriteReg(addr, value);
+				break;
+			case 0x4085:
+				UpdateCounter(_counter & 0x7F);
+				break;
+			case 0x4087:
+				BaseFdsChannel::WriteReg(addr, value);
+				_modulationDisabled = (value & 0x80) == 0x80;
+				if(_modulationDisabled) {
+					_overflowCounter = 0;
+				}
+				break;
 		}
-		BaseFdsChannel::WriteReg(addr, value);
 	}
 
 	void WriteModTable(uint8_t value)
@@ -61,22 +73,23 @@ public:
 
 	bool TickModulator()
 	{
-		_overflowCounter += _frequency;
+		if(IsEnabled()) {
+			_overflowCounter += _frequency;
 
-		if(_overflowCounter < _frequency) {
-			//Overflowed, tick the modulator
-			int32_t offset = _modLut[_modTable[_modTablePosition]];
-			UpdateCounter(offset == ModReset ? 0 : _counter + offset);
+			if(_overflowCounter < _frequency) {
+				//Overflowed, tick the modulator
+				int32_t offset = _modLut[_modTable[_modTablePosition]];
+				UpdateCounter(offset == ModReset ? 0 : _counter + offset);
 
-			_modTablePosition = (_modTablePosition + 1) & 0x3F;
+				_modTablePosition = (_modTablePosition + 1) & 0x3F;
 
-			return true;
+				return true;
+			}
 		}
-
 		return false;
 	}
 
-	int32_t GetWavePitch(uint16_t volumePitch)
+	void UpdateOutput(uint16_t volumePitch)
 	{
 		//Code from NesDev Wiki
 
@@ -108,6 +121,11 @@ public:
 		}
 
 		// final mod result is in temp
-		return temp;
+		_output = temp;
+	}
+
+	int32_t GetOutput()
+	{
+		return IsEnabled() ? _output : 0;
 	}
 };

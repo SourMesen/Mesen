@@ -29,47 +29,47 @@ public:
 
 	virtual void WriteReg(uint16_t addr, uint8_t value)
 	{
-		switch(addr & 0x03) {
-			case 0:
+		switch(addr) {
+			case 0x4080:
 				_speed = value & 0x3F;
 				_volumeIncrease = (value & 0x40) == 0x40;
 				_envelopeOff = (value & 0x80) == 0x80;
 
 				//"Writing to this register immediately resets the clock timer that ticks the volume envelope (delaying the next tick slightly)."
-				_timer = 8 * (_speed + 1) * _masterSpeed;
+				ResetTimer();
+
+				if(_envelopeOff) {
+					//Envelope is off, gain = speed
+					_gain = _speed;
+				}
 				break;
 
-			case 2:
+			case 0x4082:
 				_frequency = (_frequency & 0x0F00) | value;
 				break;
 
-			case 3:
+			case 0x4083:
 				_frequency = (_frequency & 0xFF) | ((value & 0x0F) << 8);
 				break;
 		}
 	}
 
-	void TickEnvelope(bool envelopesDisabled)
+	bool TickEnvelope()
 	{
-		if(_envelopeOff) {
-			_gain = _speed;
-		} else if(!envelopesDisabled && _speed > 0) {
-			if(_timer > 0) {
-				_timer--;
-			} else {
-				_timer = 8 * (_speed + 1) * _masterSpeed;
+		if(!_envelopeOff && _masterSpeed > 0) {
+			_timer--;
+			if(_timer == 0) {
+				ResetTimer();
 
-				if(_volumeIncrease) {
-					if(_gain < 32) {
-						_gain++;
-					}
-				} else {
-					if(_gain > 0) {
-						_gain--;
-					}
+				if(_volumeIncrease && _gain < 32) {
+					_gain++;
+				} else if(!_volumeIncrease && _gain > 0) {
+					_gain--;
 				}
+				return true;
 			}
 		}
+		return false;
 	}
 
 	uint8_t GetGain()
@@ -80,5 +80,10 @@ public:
 	uint16_t GetFrequency()
 	{
 		return _frequency;
+	}
+
+	void ResetTimer()
+	{
+		_timer = 8 * (_speed + 1) * _masterSpeed;
 	}
 };
