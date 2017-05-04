@@ -2,10 +2,11 @@
 #include <cmath>
 #include "../Core/EmulationSettings.h"
 #include "../Core/VideoDecoder.h"
+#include "../Core/PPU.h"
 
 void BaseRenderer::DisplayMessage(string title, string message)
 {
-	shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000, ""));
+	shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000));
 	_toasts.push_front(toast);
 }
 
