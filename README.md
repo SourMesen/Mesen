@@ -21,12 +21,16 @@ Things that ***may or may not*** be added in the future, in no particular order:
 ## Compiling ##
 
 ### Windows ###
-1) Open the solution in VS2015  
+1) Open the solution in VS2015/2017
 2) Compile as Release/x64 or Release/x86  
 3) Run  
 
 ### Linux ###
-You will need clang/gcc, Mono/XBuild and SDL2 to compile and run Mesen under Linux.  
+To compile and run Mesen under Linux, you will need:
+* A recent version of clang/gcc
+* Mono 4.2.1+  (package: mono-devel)
+* SDL2  (package: libsdl2-dev)
+
 The makefile contains some more information at the top.  Running "make" will build the x64 version by default, and then "make run" should start the emulator.  
 
 ## LICENSE ##
