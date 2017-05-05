@@ -358,6 +358,7 @@
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkFdsAutoLoadDisk">Автоматично вставляти диск 1 стороною А при завантаженні FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Використовувати швидке завантаження FDS</Control>
+      <Control ID="chkFdsAutoInsertDisk">Automatically switch disks for FDS games</Control>
 
       <Control ID="lblRewind">Keep rewind data for the last</Control>
       <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>

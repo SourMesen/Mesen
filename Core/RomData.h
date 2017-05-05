@@ -316,6 +316,7 @@ struct RomData
 	vector<uint8_t> ChrRom;
 	vector<uint8_t> TrainerData;
 	vector<vector<uint8_t>> FdsDiskData;
+	vector<vector<uint8_t>> FdsDiskHeaders;
 
 	vector<uint8_t> RawData;
 	string Sha1;

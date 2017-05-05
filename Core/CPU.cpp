@@ -341,6 +341,16 @@ uint32_t CPU::GetClockRate(NesModel model)
 	}
 }
 
+uint8_t CPU::DebugReadByte(uint16_t addr)
+{ 
+	return CPU::Instance->_memoryManager->DebugRead(addr);
+}
+
+uint16_t CPU::DebugReadWord(uint16_t addr)
+{
+	return CPU::Instance->_memoryManager->DebugReadWord(addr);
+}
+
 void CPU::StreamState(bool saving)
 {
 	uint32_t overclockRate = EmulationSettings::GetOverclockRateSetting();

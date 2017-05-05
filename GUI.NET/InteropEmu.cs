@@ -986,6 +986,8 @@ namespace Mesen.GUI
 		UseNes101Hvc101Behavior = 0x100000000,
 		ShowFrameCounter = 0x200000000,
 
+		FdsAutoInsertDisk = 0x400000000,
+
 		Turbo = 0x2000000000,
 		InBackground = 0x4000000000,
 		NsfPlayerEnabled = 0x8000000000,

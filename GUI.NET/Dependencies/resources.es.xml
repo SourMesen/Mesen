@@ -355,6 +355,8 @@
       <Control ID="chkMstFormat">.MST (Partidas guardadas de Mesen)</Control>
       <Control ID="tpgAdvanced">Avanzado</Control>
       <Control ID="chkFdsAutoLoadDisk">Insertar la cara A del disco 1 al cargar un juego FDS</Control>
+      <Control ID="chkFdsFastForwardOnLoad">Aumentar la velocidad de la emulación de juegos de carga FDS</Control>
+      <Control ID="chkFdsAutoInsertDisk">Automatically switch disks for FDS games</Control>
       <Control ID="tpgShortcuts">Atajos</Control>
       <Control ID="colAction">Acción</Control>
       <Control ID="colBinding1">Atajo #1</Control>
@@ -364,8 +366,7 @@
       <Control ID="chkAutoSave">Crear una copia de seguridad de cada estado</Control>
       <Control ID="lblAutoSave">minutos (Pulse F8 para cargar)</Control>
       <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
-      <Control ID="grpCloudSaves">Copia de seguridad online</Control>
-      <Control ID="chkFdsFastForwardOnLoad">Aumentar la velocidad de la emulación de juegos de carga FDS</Control>
+      <Control ID="grpCloudSaves">Copia de seguridad online</Control>      
 
       <Control ID="lblRewind">Keep rewind data for the last</Control>
       <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>

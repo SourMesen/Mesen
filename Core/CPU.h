@@ -794,6 +794,9 @@ public:
 	static void StartDmcTransfer();	
 	static uint32_t GetClockRate(NesModel model);
 	static bool IsCpuWrite() { return CPU::Instance->_cpuWrite; }
+
+	static uint8_t DebugReadByte(uint16_t addr);
+	static uint16_t DebugReadWord(uint16_t addr);
 		
 	//Used by debugger for "Set Next Statement"
 	void SetDebugPC(uint16_t value) { SetPC(value); _state.DebugPC = value; }

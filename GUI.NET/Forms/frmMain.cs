@@ -1478,6 +1478,10 @@ namespace Mesen.GUI.Forms
 					mnuSelectDisk.Visible = true;
 					mnuEjectDisk.Visible = true;
 					mnuSwitchDiskSide.Visible = sideCount > 1;
+
+					mnuSelectDisk.Enabled = !ConfigManager.Config.PreferenceInfo.FdsAutoInsertDisk;
+					mnuEjectDisk.Enabled = !ConfigManager.Config.PreferenceInfo.FdsAutoInsertDisk;
+					mnuSwitchDiskSide.Enabled = !ConfigManager.Config.PreferenceInfo.FdsAutoInsertDisk;
 				} else {
 					sepFdsDisk.Visible = false;
 					mnuSelectDisk.Visible = false;

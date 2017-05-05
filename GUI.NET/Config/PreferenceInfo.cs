@@ -25,6 +25,7 @@ namespace Mesen.GUI.Config
 
 		public bool FdsAutoLoadDisk = true;
 		public bool FdsFastForwardOnLoad = false;
+		public bool FdsAutoInsertDisk = false;
 
 		public bool AssociateNesFiles = false;
 		public bool AssociateFdsFiles = false;
@@ -94,6 +95,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, preferenceInfo.RemoveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);
 			InteropEmu.SetFlag(EmulationFlags.FdsFastForwardOnLoad, preferenceInfo.FdsFastForwardOnLoad);
+			InteropEmu.SetFlag(EmulationFlags.FdsAutoInsertDisk, preferenceInfo.FdsAutoInsertDisk);
 			InteropEmu.SetFlag(EmulationFlags.PauseOnMovieEnd, preferenceInfo.PauseOnMovieEnd);
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
 			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground);

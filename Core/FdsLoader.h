@@ -107,6 +107,8 @@ private:
 			romData.FdsDiskData.push_back(vector<uint8_t>());
 			vector<uint8_t> &fdsDiskImage = romData.FdsDiskData.back();
 
+			romData.FdsDiskHeaders.push_back(vector<uint8_t>(romFile.data() + fileOffset + 1, romFile.data() + fileOffset + 57));
+
 			AddGaps(fdsDiskImage, &romFile[fileOffset]);			
 			fileOffset += FdsDiskSideCapacity;
 

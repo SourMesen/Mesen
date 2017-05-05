@@ -358,6 +358,7 @@
       <Control ID="tpgAdvanced">詳細設定</Control>
       <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
+      <Control ID="chkFdsAutoInsertDisk">ファミコンディスクシステムのゲーム中に自動的に該当するディスクを入れる</Control>
 
       <Control ID="lblRewind">巻き戻し用データの</Control>
       <Control ID="lblRewindMinutes">分をキープする (メモリの使用量：１分に約１MB)</Control>

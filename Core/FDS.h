@@ -37,6 +37,9 @@ private:
 	bool _diskReady = false;
 	bool _diskIrqEnabled = false;
 
+	int32_t _autoDiskEjectCounter = -1;
+	int32_t _autoDiskSwitchCounter = -1;
+
 	uint8_t _extConWriteReg = 0;
 
 	//Read registers
@@ -64,6 +67,7 @@ private:
 	
 	vector<uint8_t> _fdsRawData;
 	vector<vector<uint8_t>> _fdsDiskSides;
+	vector<vector<uint8_t>> _fdsDiskHeaders;
 	string _romFilepath;
 
 	uint8_t _gameStarted = 0;
@@ -81,6 +85,7 @@ protected:
 
 	void InitMapper() override;
 	void InitMapper(RomData &romData) override;
+	void Reset(bool softReset);
 
 	uint32_t GetFdsDiskSideSize(uint8_t side);
 	uint8_t ReadFdsDisk();
