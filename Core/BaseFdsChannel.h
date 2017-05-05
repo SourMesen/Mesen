@@ -29,8 +29,8 @@ public:
 
 	virtual void WriteReg(uint16_t addr, uint8_t value)
 	{
-		switch(addr) {
-			case 0x4080:
+		switch(addr & 0x03) {
+			case 0:
 				_speed = value & 0x3F;
 				_volumeIncrease = (value & 0x40) == 0x40;
 				_envelopeOff = (value & 0x80) == 0x80;
@@ -44,11 +44,11 @@ public:
 				}
 				break;
 
-			case 0x4082:
+			case 2:
 				_frequency = (_frequency & 0x0F00) | value;
 				break;
 
-			case 0x4083:
+			case 3:
 				_frequency = (_frequency & 0xFF) | ((value & 0x0F) << 8);
 				break;
 		}

@@ -34,7 +34,7 @@ public:
 				BaseFdsChannel::WriteReg(addr, value);
 				break;
 			case 0x4085:
-				UpdateCounter(_counter & 0x7F);
+				UpdateCounter(value & 0x7F);
 				break;
 			case 0x4087:
 				BaseFdsChannel::WriteReg(addr, value);
