@@ -27,7 +27,7 @@ protected:
 		Stream(_currentReg, _outerChrBank);
 	}
 
-	void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType)
+	void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType) override
 	{
 		switch(slot){
 			case 4: page |= (_outerChrBank & 0x10) << 4; break;

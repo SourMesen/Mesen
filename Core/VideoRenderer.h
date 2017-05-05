@@ -19,7 +19,6 @@ private:
 	atomic<bool> _stopFlag;
 
 	shared_ptr<AviRecorder> _aviRecorder;
-	FrameInfo type_info;
 
 	void RenderThread();
 

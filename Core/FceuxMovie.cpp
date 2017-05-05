@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "../Utilities/HexUtilities.h"
 #include "FceuxMovie.h"
 #include "Console.h"

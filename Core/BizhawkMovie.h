@@ -20,7 +20,7 @@ public:
 	virtual ~BizhawkMovie();
 
 	void RecordState(uint8_t port, uint8_t value) override;
-	void Record(string filename, bool reset);
+	void Record(string filename, bool reset) override;
 
 	uint8_t GetState(uint8_t port) override;
 
@@ -29,5 +29,5 @@ public:
 	bool IsRecording() override;
 	bool IsPlaying() override;
 
-	void ProcessNotification(ConsoleNotificationType type, void* parameter);
+	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 };

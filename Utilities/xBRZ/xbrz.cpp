@@ -163,47 +163,6 @@ private:
 template <class T> inline
 T square(T value) { return value * value; }
 
-
-
-inline
-double distRGB(uint32_t pix1, uint32_t pix2)
-{
-    const double r_diff = static_cast<int>(getRed  (pix1)) - getRed  (pix2);
-    const double g_diff = static_cast<int>(getGreen(pix1)) - getGreen(pix2);
-    const double b_diff = static_cast<int>(getBlue (pix1)) - getBlue (pix2);
-
-    //euklidean RGB distance
-    return std::sqrt(square(r_diff) + square(g_diff) + square(b_diff));
-}
-
-
-inline
-double distYCbCr(uint32_t pix1, uint32_t pix2, double lumaWeight)
-{
-    //http://en.wikipedia.org/wiki/YCbCr#ITU-R_BT.601_conversion
-    //YCbCr conversion is a matrix multiplication => take advantage of linearity by subtracting first!
-    const int r_diff = static_cast<int>(getRed  (pix1)) - getRed  (pix2); //we may delay division by 255 to after matrix multiplication
-    const int g_diff = static_cast<int>(getGreen(pix1)) - getGreen(pix2); //
-    const int b_diff = static_cast<int>(getBlue (pix1)) - getBlue (pix2); //substraction for int is noticeable faster than for double!
-
-    //const double k_b = 0.0722; //ITU-R BT.709 conversion
-    //const double k_r = 0.2126; //
-    const double k_b = 0.0593; //ITU-R BT.2020 conversion
-    const double k_r = 0.2627; //
-    const double k_g = 1 - k_b - k_r;
-
-    const double scale_b = 0.5 / (1 - k_b);
-    const double scale_r = 0.5 / (1 - k_r);
-
-    const double y   = k_r * r_diff + k_g * g_diff + k_b * b_diff; //[!], analog YCbCr!
-    const double c_b = scale_b * (b_diff - y);
-    const double c_r = scale_r * (r_diff - y);
-
-    //we skip division by 255 to have similar range like other distance functions
-    return std::sqrt(square(lumaWeight * y) + square(c_b) + square(c_r));
-}
-
-
 struct DistYCbCrBuffer //30% perf boost compared to distYCbCr()!
 {
 public:
@@ -352,26 +311,25 @@ DEF_GETTER(g) DEF_GETTER(h) DEF_GETTER(i)
 #undef DEF_GETTER
 
 #define DEF_GETTER(x, y) template <> inline uint32_t get_##x<ROT_90>(const Kernel_3x3& ker) { return ker.y; }
-DEF_GETTER(a, g) DEF_GETTER(b, d) DEF_GETTER(c, a)
+DEF_GETTER(b, d) DEF_GETTER(c, a)
 DEF_GETTER(d, h) DEF_GETTER(e, e) DEF_GETTER(f, b)
 DEF_GETTER(g, i) DEF_GETTER(h, f) DEF_GETTER(i, c)
 #undef DEF_GETTER
 
 #define DEF_GETTER(x, y) template <> inline uint32_t get_##x<ROT_180>(const Kernel_3x3& ker) { return ker.y; }
-DEF_GETTER(a, i) DEF_GETTER(b, h) DEF_GETTER(c, g)
+DEF_GETTER(b, h) DEF_GETTER(c, g)
 DEF_GETTER(d, f) DEF_GETTER(e, e) DEF_GETTER(f, d)
 DEF_GETTER(g, c) DEF_GETTER(h, b) DEF_GETTER(i, a)
 #undef DEF_GETTER
 
 #define DEF_GETTER(x, y) template <> inline uint32_t get_##x<ROT_270>(const Kernel_3x3& ker) { return ker.y; }
-DEF_GETTER(a, c) DEF_GETTER(b, f) DEF_GETTER(c, i)
+DEF_GETTER(b, f) DEF_GETTER(c, i)
 DEF_GETTER(d, b) DEF_GETTER(e, e) DEF_GETTER(f, h)
 DEF_GETTER(g, a) DEF_GETTER(h, d) DEF_GETTER(i,	g)
 #undef DEF_GETTER
 
 
 //compress four blend types into a single byte
-inline BlendType getTopL   (unsigned char b) { return static_cast<BlendType>(0x3 & b); }
 inline BlendType getTopR   (unsigned char b) { return static_cast<BlendType>(0x3 & (b >> 2)); }
 inline BlendType getBottomR(unsigned char b) { return static_cast<BlendType>(0x3 & (b >> 4)); }
 inline BlendType getBottomL(unsigned char b) { return static_cast<BlendType>(0x3 & (b >> 6)); }

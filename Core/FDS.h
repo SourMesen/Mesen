@@ -85,7 +85,7 @@ protected:
 
 	void InitMapper() override;
 	void InitMapper(RomData &romData) override;
-	void Reset(bool softReset);
+	void Reset(bool softReset) override;
 
 	uint32_t GetFdsDiskSideSize(uint8_t side);
 	uint8_t ReadFdsDisk();
