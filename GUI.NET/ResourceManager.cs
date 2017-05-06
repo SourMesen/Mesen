@@ -98,7 +98,7 @@ namespace Mesen.GUI
 				} else if(entry.Name.StartsWith("Google.Apis") || entry.Name == "BouncyCastle.Crypto.dll" || entry.Name == "Zlib.Portable.dll" || entry.Name == "Newtonsoft.Json.dll") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "GoogleDrive", entry.Name);
 					ExtractFile(entry, outputFilename);
-				} else if(entry.Name == "Font.24.spritefont" || entry.Name == "Font.64.spritefont" || entry.Name == "LICENSE.txt") {
+				} else if(entry.Name == "Font.24.spritefont" || entry.Name == "Font.64.spritefont" || entry.Name == "LICENSE.txt" || entry.Name == "PixelFont.ttf") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "Resources", entry.Name);
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name == "DroidSansMono.ttf" && Program.IsMono) {

@@ -160,6 +160,18 @@ namespace Mesen.GUI.Config
 			}
 		}
 
+		public static string RecentGamesFolder
+		{
+			get
+			{
+				string recentGamesPath = Path.Combine(ConfigManager.HomeFolder, "RecentGames");
+				if(!Directory.Exists(recentGamesPath)) {
+					Directory.CreateDirectory(recentGamesPath);
+				}
+				return recentGamesPath;
+			}
+		}
+
 		public static string WaveFolder
 		{
 			get

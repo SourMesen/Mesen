@@ -24,6 +24,7 @@
 #include "ShortcutKeyHandler.h"
 #include "MovieManager.h"
 #include "RewindManager.h"
+#include "SaveStateManager.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -54,9 +55,12 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 {
 	SoundMixer::StopAudio();
 
-	if(_mapper) {
+	if(!_romFilepath.empty() && _mapper) {
 		//Ensure we save any battery file before loading a new game
 		_mapper->SaveBattery();
+
+		//Save current game state before loading another one
+		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename, _archiveFileIndex);
 	}
 
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
@@ -336,11 +340,13 @@ void Console::Run()
 	VideoDecoder::GetInstance()->StartThread();
 
 	PlatformUtilities::DisableScreensaver();
-		
+
+	bool crashed = false;
 	while(true) { 
 		try {
 			_cpu->Exec();
 		} catch(const std::runtime_error &ex) {
+			crashed = true;
 			MessageManager::DisplayMessage("Error", "GameCrash", ex.what());
 			break;
 		}
@@ -421,6 +427,13 @@ void Console::Run()
 			}
 		}
 	}
+
+	if(!crashed) {
+		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename, _archiveFileIndex);
+	}
+
+	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
+
 	_rewindManager.reset();
 	SoundMixer::StopAudio();
 	MovieManager::Stop();
@@ -433,6 +446,11 @@ void Console::Run()
 
 	_initialized = false;
 	_romFilepath = "";
+	_mapper.reset();
+	_ppu.reset();
+	_cpu.reset();
+	_memoryManager.reset();
+	_controlManager.reset();
 
 	_stopLock.Release();
 	_runLock.Release();

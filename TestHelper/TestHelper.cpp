@@ -45,6 +45,7 @@ public:
 };
 
 extern "C" {
+	void __stdcall SetFlags(uint64_t flags);
 	void __stdcall InitializeEmu(const char* homeFolder, void*, void*, bool, bool, bool);
 	void __stdcall SetControllerType(uint32_t port, ControllerType type);
 	int __stdcall RunAutomaticTest(char* filename);
@@ -187,7 +188,7 @@ int main(int argc, char* argv[])
 			std::cout << "------------" << std::endl;
 			std::cout << "Failed tests" << std::endl;
 			std::cout << "------------" << std::endl;
-			for(int i = 0; i < failedTests.size(); i++) {
+			for(int i = 0; i < (int)failedTests.size(); i++) {
 				std::cout << failedTests[i] << " (" << std::to_string(failedTestErrorCode[i]) << ")" << std::endl;
 			}
 			std::cout << std::endl << std::to_string(failedTests.size()) << " tests failed." << std::endl;
@@ -201,6 +202,7 @@ int main(int argc, char* argv[])
 		char* testFilename = argv[2];
 		RegisterNotificationCallback((NotificationListenerCallback)OnNotificationReceived);
 
+		SetFlags(0x8000000000000000); //EmulationFlags::ConsoleMode
 		InitializeEmu(mesenFolder.c_str(), nullptr, nullptr, false, false, false);
 		SetControllerType(0, ControllerType::StandardController);
 		SetControllerType(1, ControllerType::StandardController);

@@ -34,6 +34,10 @@ namespace Mesen.GUI.Forms
 			this.menuTimer = new System.Windows.Forms.Timer(this.components);
 			this.panelRenderer = new System.Windows.Forms.Panel();
 			this.ctrlLoading = new Mesen.GUI.Controls.ctrlLoadingRom();
+			this.panelInfo = new System.Windows.Forms.Panel();
+			this.picIcon = new System.Windows.Forms.PictureBox();
+			this.lblVersion = new System.Windows.Forms.Label();
+			this.ctrlRecentGames = new Mesen.GUI.Controls.ctrlRecentGames();
 			this.ctrlNsfPlayer = new Mesen.GUI.Controls.ctrlNsfPlayer();
 			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -50,6 +54,8 @@ namespace Mesen.GUI.Forms
 			this.mnuPause = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPowerCycle = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem24 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuEjectCartridge = new System.Windows.Forms.ToolStripMenuItem();
 			this.sepFdsDisk = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuSwitchDiskSide = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSelectDisk = new System.Windows.Forms.ToolStripMenuItem();
@@ -180,13 +186,10 @@ namespace Mesen.GUI.Forms
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHelpWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.picIcon = new System.Windows.Forms.PictureBox();
-			this.panelInfo = new System.Windows.Forms.Panel();
-			this.lblVersion = new System.Windows.Forms.Label();
 			this.panelRenderer.SuspendLayout();
-			this.menuStrip.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
 			this.panelInfo.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
+			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuTimer
@@ -196,14 +199,15 @@ namespace Mesen.GUI.Forms
 			// panelRenderer
 			// 
 			this.panelRenderer.BackColor = System.Drawing.Color.Black;
-			this.panelRenderer.Controls.Add(this.panelInfo);
 			this.panelRenderer.Controls.Add(this.ctrlLoading);
+			this.panelRenderer.Controls.Add(this.panelInfo);
+			this.panelRenderer.Controls.Add(this.ctrlRecentGames);
 			this.panelRenderer.Controls.Add(this.ctrlNsfPlayer);
 			this.panelRenderer.Controls.Add(this.ctrlRenderer);
 			this.panelRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelRenderer.Location = new System.Drawing.Point(0, 24);
 			this.panelRenderer.Name = "panelRenderer";
-			this.panelRenderer.Size = new System.Drawing.Size(360, 239);
+			this.panelRenderer.Size = new System.Drawing.Size(430, 309);
 			this.panelRenderer.TabIndex = 2;
 			this.panelRenderer.Click += new System.EventHandler(this.panelRenderer_Click);
 			this.panelRenderer.DoubleClick += new System.EventHandler(this.ctrlRenderer_DoubleClick);
@@ -215,9 +219,52 @@ namespace Mesen.GUI.Forms
 			this.ctrlLoading.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlLoading.Location = new System.Drawing.Point(0, 0);
 			this.ctrlLoading.Name = "ctrlLoading";
-			this.ctrlLoading.Size = new System.Drawing.Size(360, 239);
+			this.ctrlLoading.Size = new System.Drawing.Size(430, 309);
 			this.ctrlLoading.TabIndex = 4;
 			this.ctrlLoading.Visible = false;
+			// 
+			// panelInfo
+			// 
+			this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.panelInfo.BackColor = System.Drawing.Color.Transparent;
+			this.panelInfo.Controls.Add(this.picIcon);
+			this.panelInfo.Controls.Add(this.lblVersion);
+			this.panelInfo.Location = new System.Drawing.Point(359, 283);
+			this.panelInfo.Name = "panelInfo";
+			this.panelInfo.Size = new System.Drawing.Size(71, 26);
+			this.panelInfo.TabIndex = 6;
+			// 
+			// picIcon
+			// 
+			this.picIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.picIcon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picIcon.Image = global::Mesen.GUI.Properties.Resources.MesenIconSmall;
+			this.picIcon.Location = new System.Drawing.Point(50, 5);
+			this.picIcon.Name = "picIcon";
+			this.picIcon.Size = new System.Drawing.Size(18, 18);
+			this.picIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+			this.picIcon.TabIndex = 5;
+			this.picIcon.TabStop = false;
+			// 
+			// lblVersion
+			// 
+			this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblVersion.AutoSize = true;
+			this.lblVersion.BackColor = System.Drawing.Color.Transparent;
+			this.lblVersion.ForeColor = System.Drawing.Color.White;
+			this.lblVersion.Location = new System.Drawing.Point(4, 7);
+			this.lblVersion.Name = "lblVersion";
+			this.lblVersion.Size = new System.Drawing.Size(0, 13);
+			this.lblVersion.TabIndex = 6;
+			// 
+			// ctrlRecentGames
+			// 
+			this.ctrlRecentGames.BackColor = System.Drawing.Color.Transparent;
+			this.ctrlRecentGames.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ctrlRecentGames.Location = new System.Drawing.Point(0, 0);
+			this.ctrlRecentGames.Name = "ctrlRecentGames";
+			this.ctrlRecentGames.Size = new System.Drawing.Size(430, 309);
+			this.ctrlRecentGames.TabIndex = 7;
 			// 
 			// ctrlNsfPlayer
 			// 
@@ -225,7 +272,7 @@ namespace Mesen.GUI.Forms
 			this.ctrlNsfPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlNsfPlayer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlNsfPlayer.Name = "ctrlNsfPlayer";
-			this.ctrlNsfPlayer.Size = new System.Drawing.Size(360, 239);
+			this.ctrlNsfPlayer.Size = new System.Drawing.Size(430, 309);
 			this.ctrlNsfPlayer.TabIndex = 2;
 			this.ctrlNsfPlayer.Visible = false;
 			// 
@@ -252,7 +299,7 @@ namespace Mesen.GUI.Forms
             this.mnuHelp});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
-			this.menuStrip.Size = new System.Drawing.Size(360, 24);
+			this.menuStrip.Size = new System.Drawing.Size(430, 24);
 			this.menuStrip.TabIndex = 0;
 			this.menuStrip.Text = "menuStrip1";
 			this.menuStrip.VisibleChanged += new System.EventHandler(this.menuStrip_VisibleChanged);
@@ -331,6 +378,8 @@ namespace Mesen.GUI.Forms
             this.mnuPause,
             this.mnuReset,
             this.mnuPowerCycle,
+            this.toolStripMenuItem24,
+            this.mnuEjectCartridge,
             this.sepFdsDisk,
             this.mnuSwitchDiskSide,
             this.mnuSelectDisk,
@@ -372,6 +421,19 @@ namespace Mesen.GUI.Forms
 			this.mnuPowerCycle.Size = new System.Drawing.Size(200, 22);
 			this.mnuPowerCycle.Text = "Power Cycle";
 			this.mnuPowerCycle.Click += new System.EventHandler(this.mnuPowerCycle_Click);
+			// 
+			// toolStripMenuItem24
+			// 
+			this.toolStripMenuItem24.Name = "toolStripMenuItem24";
+			this.toolStripMenuItem24.Size = new System.Drawing.Size(197, 6);
+			// 
+			// mnuEjectCartridge
+			// 
+			this.mnuEjectCartridge.Image = global::Mesen.GUI.Properties.Resources.Eject;
+			this.mnuEjectCartridge.Name = "mnuEjectCartridge";
+			this.mnuEjectCartridge.Size = new System.Drawing.Size(200, 22);
+			this.mnuEjectCartridge.Text = "Eject Cartridge";
+			this.mnuEjectCartridge.Click += new System.EventHandler(this.mnuEjectCartridge_Click);
 			// 
 			// sepFdsDisk
 			// 
@@ -1421,62 +1483,28 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
-			// picIcon
-			// 
-			this.picIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.picIcon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picIcon.Image = global::Mesen.GUI.Properties.Resources.MesenLogo;
-			this.picIcon.Location = new System.Drawing.Point(32, 6);
-			this.picIcon.Name = "picIcon";
-			this.picIcon.Size = new System.Drawing.Size(34, 34);
-			this.picIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.picIcon.TabIndex = 5;
-			this.picIcon.TabStop = false;
-			// 
-			// panelInfo
-			// 
-			this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.panelInfo.BackColor = System.Drawing.Color.Transparent;
-			this.panelInfo.Controls.Add(this.picIcon);
-			this.panelInfo.Controls.Add(this.lblVersion);
-			this.panelInfo.Location = new System.Drawing.Point(291, 196);
-			this.panelInfo.Name = "panelInfo";
-			this.panelInfo.Size = new System.Drawing.Size(69, 43);
-			this.panelInfo.TabIndex = 6;
-			// 
-			// lblVersion
-			// 
-			this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.lblVersion.AutoSize = true;
-			this.lblVersion.BackColor = System.Drawing.Color.Transparent;
-			this.lblVersion.ForeColor = System.Drawing.Color.White;
-			this.lblVersion.Location = new System.Drawing.Point(0, 26);
-			this.lblVersion.Name = "lblVersion";
-			this.lblVersion.Size = new System.Drawing.Size(0, 13);
-			this.lblVersion.TabIndex = 6;
-			// 
 			// frmMain
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
-			this.ClientSize = new System.Drawing.Size(360, 263);
+			this.ClientSize = new System.Drawing.Size(430, 333);
 			this.Controls.Add(this.panelRenderer);
 			this.Controls.Add(this.menuStrip);
 			this.MainMenuStrip = this.menuStrip;
-			this.MinimumSize = new System.Drawing.Size(320, 280);
+			this.MinimumSize = new System.Drawing.Size(340, 300);
 			this.Name = "frmMain";
 			this.Text = "Mesen";
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmMain_DragEnter);
 			this.Resize += new System.EventHandler(this.frmMain_Resize);
 			this.panelRenderer.ResumeLayout(false);
-			this.menuStrip.ResumeLayout(false);
-			this.menuStrip.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picIcon)).EndInit();
 			this.panelInfo.ResumeLayout(false);
 			this.panelInfo.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picIcon)).EndInit();
+			this.menuStrip.ResumeLayout(false);
+			this.menuStrip.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1636,6 +1664,9 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.PictureBox picIcon;
 		private System.Windows.Forms.Panel panelInfo;
 		private System.Windows.Forms.Label lblVersion;
+		private Controls.ctrlRecentGames ctrlRecentGames;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem24;
+		private System.Windows.Forms.ToolStripMenuItem mnuEjectCartridge;
 	}
 }
 

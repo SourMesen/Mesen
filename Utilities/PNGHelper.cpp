@@ -1,22 +1,34 @@
 #include "stdafx.h"
-
+#include <sstream>
 #include "PNGHelper.h"
 #include "miniz.h"
 
-bool PNGHelper::WritePNG(string filename, uint8_t* buffer, uint32_t xSize, uint32_t ySize, uint32_t bitsPerPixel)
+bool PNGHelper::WritePNG(std::stringstream &stream, uint8_t* buffer, uint32_t xSize, uint32_t ySize, uint32_t bitsPerPixel)
 {
 	size_t pngSize = 0;
-	void *pngData = tdefl_write_image_to_png_file_in_memory_ex(buffer, xSize, ySize, bitsPerPixel/8, &pngSize, MZ_DEFAULT_LEVEL, MZ_FALSE);
+	void *pngData = tdefl_write_image_to_png_file_in_memory_ex(buffer, xSize, ySize, bitsPerPixel / 8, &pngSize, MZ_DEFAULT_LEVEL, MZ_FALSE);
 	if(!pngData) {
 		std::cout << "tdefl_write_image_to_png_file_in_memory_ex() failed!" << std::endl;
 		return false;
 	} else {
-		ofstream file(filename, std::ios::out | std::ios::binary);
-		file.write((char*)pngData, pngSize);
-		file.close();
+		stream.write((char*)pngData, pngSize);
 		mz_free(pngData);
 		return true;
 	}
+}
+
+bool PNGHelper::WritePNG(string filename, uint8_t* buffer, uint32_t xSize, uint32_t ySize, uint32_t bitsPerPixel)
+{
+	std::stringstream stream;
+	if(WritePNG(stream, buffer, xSize, ySize, bitsPerPixel)) {
+		ofstream file(filename, std::ios::out | std::ios::binary);
+		if(file.good()) {
+			file << stream.rdbuf();
+		}
+		file.close();
+		return true;
+	}
+	return false;
 }
 
 void PNGHelper::ReadPNG(string filename, vector<uint8_t> &pngData, uint32_t &pngWidth, uint32_t &pngHeight)

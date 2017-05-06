@@ -2082,7 +2082,11 @@ void *tdefl_write_image_to_png_file_in_memory(const void *pImage, int w, int h, 
     static FILE *mz_fopen(const char *pFilename, const char *pMode)
     {
       FILE* pFile = NULL;
-      fopen_s(&pFile, pFilename, pMode);
+		#ifdef _MSC_VER
+			_wfopen_s(&pFile, utf8::utf8::decode(pFilename).c_str(), utf8::utf8::decode(pMode).c_str());
+		#else 
+			fopen_s(&pFile, pFilename, pMode);
+		#endif
       return pFile;
     }
     static FILE *mz_freopen(const char *pPath, const char *pMode, FILE *pStream)

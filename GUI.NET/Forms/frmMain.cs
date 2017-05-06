@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -44,6 +45,8 @@ namespace Mesen.GUI.Forms
 		private bool _noVideo = false;
 		private bool _noInput = false;
 
+		private PrivateFontCollection _fonts = new PrivateFontCollection();
+
 		public frmMain(string[] args)
 		{
 			InitializeComponent();
@@ -55,6 +58,9 @@ namespace Mesen.GUI.Forms
 
 			Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 			lblVersion.Text = currentVersion.ToString();
+
+			_fonts.AddFontFile(Path.Combine(ConfigManager.HomeFolder, "Resources", "PixelFont.ttf"));
+			lblVersion.Font = new Font(_fonts.Families[0], 11);
 
 			_commandLineArgs = args;
 			
@@ -356,6 +362,16 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			if(this.ClientSize.Height < 400) {
+				ctrlRecentGames.Height = this.ClientSize.Height - 125 + Math.Min(50, (400 - this.ClientSize.Height));
+			} else {
+				ctrlRecentGames.Height = this.ClientSize.Height - 125;
+			}
+		}
+
 		private void frmMain_Resize(object sender, EventArgs e)
 		{
 			if(this.WindowState != FormWindowState.Minimized) {
@@ -459,7 +475,11 @@ namespace Mesen.GUI.Forms
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameStopped:
+					this._currentGame = null;
 					CheatInfo.ClearCheats();
+					this.BeginInvoke((MethodInvoker)(() => {
+						ctrlRecentGames.Initialize();
+					}));
 					break;
 
 				case InteropEmu.ConsoleNotificationType.ResolutionChanged:
@@ -606,7 +626,7 @@ namespace Mesen.GUI.Forms
 				MesenMsgBox.Show("FileNotFound", MessageBoxButtons.OK, MessageBoxIcon.Error, filename);
 			}
 		}
-
+		
 		private void UpdateFocusFlag()
 		{
 			bool hasFocus = false;
@@ -631,9 +651,9 @@ namespace Mesen.GUI.Forms
 				if(this.InvokeRequired) {
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
-					if(_emuThread != null) {
-						panelInfo.Visible = false;
-					}
+					panelInfo.Visible = _emuThread == null;
+					ctrlRecentGames.Visible = _emuThread == null;
+					mnuEjectCartridge.Enabled = _emuThread != null;
 
 					ctrlLoading.Visible = (_romLoadCounter > 0);
 
@@ -918,6 +938,11 @@ namespace Mesen.GUI.Forms
 		private void mnuPowerCycle_Click(object sender, EventArgs e)
 		{
 			InteropEmu.PowerCycle();
+		}
+
+		private void mnuEjectCartridge_Click(object sender, EventArgs e)
+		{
+			InteropEmu.Stop();
 		}
 
 		private void mnuShowFPS_Click(object sender, EventArgs e)

@@ -35,6 +35,7 @@ enum class VideoFilterType
 
 
 extern "C" {
+	void __stdcall SetFlags(uint64_t flags);
 	void __stdcall SetVideoFilter(VideoFilterType filter);
 	void __stdcall InitializeEmu(char* homeFolder, void*, void*, bool, bool, bool);
 	void __stdcall LoadROM(const char* filename, int32_t archiveFileIndex, char* patchFile);
@@ -64,6 +65,7 @@ int main(int argc, char* argv[])
 		"..\\..\\Games\\Dragon Warrior IV (USA).nes"
 	};
 
+	SetFlags(0x8000000000000000); //EmulationFlags::ConsoleMode
 	InitializeEmu("C:\\Windows\\Temp\\Mesen", nullptr, nullptr, false, false, false);
 	LoadROM(testRoms[0], -1, "");
 	std::cout << "Running: " << testRoms[0] << std::endl;

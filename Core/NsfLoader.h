@@ -27,6 +27,7 @@ protected:
 	{
 		NsfHeader &header = romData.NsfInfo;
 
+		romData.Format = RomFormat::Nsf;
 		romData.MapperID = MapperFactory::NsfMapperID;
 
 		if(header.LoadAddress < 0x6000 || header.TotalSongs == 0) {

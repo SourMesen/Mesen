@@ -54,6 +54,7 @@ public:
 
 	void DecodeFrame();
 	void TakeScreenshot();
+	void TakeScreenshot(std::stringstream &stream);
 
 	uint32_t GetFrameCount();
 

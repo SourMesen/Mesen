@@ -91,6 +91,13 @@ string FolderUtilities::GetScreenshotFolder()
 	return folder;
 }
 
+string FolderUtilities::GetRecentGamesFolder()
+{
+	string folder = CombinePath(GetHomeFolder(), "RecentGames");
+	CreateFolder(folder);
+	return folder;
+}
+
 void FolderUtilities::CreateFolder(string folder)
 {
 	fs::create_directory(fs::u8path(folder));

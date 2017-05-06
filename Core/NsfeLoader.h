@@ -185,6 +185,8 @@ public:
 
 		InitHeader(header);
 
+		romData.Format = RomFormat::Nsf;
+
 		uint8_t* data = romFile.data() + 4;
 		uint8_t* endOfData = romFile.data() + romFile.size();
 

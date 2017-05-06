@@ -56,6 +56,8 @@ enum EmulationFlags : uint64_t
 	
 	DisplayMovieIcons = 0x10000000000,
 	HidePauseOverlay = 0x20000000000,
+	
+	ConsoleMode = 0x8000000000000000,
 };
 
 enum class AudioChannel

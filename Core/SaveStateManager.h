@@ -18,8 +18,13 @@ public:
 	static void SaveState();
 	static bool LoadState();
 
+	static void SaveState(ostream &stream);
 	static void SaveState(int stateIndex, bool displayMessage = true);
+	static bool LoadState(istream &stream);
 	static bool LoadState(int stateIndex);
+
+	static void SaveRecentGame(string romName, string romPath, string patchPath, int32_t archiveFileIndex);
+	static void LoadRecentGame(string filename);
 
 	static void MoveToNextSlot();
 	static void MoveToPreviousSlot();

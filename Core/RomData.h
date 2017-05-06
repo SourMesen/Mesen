@@ -289,6 +289,7 @@ enum class RomFormat
 	iNes = 1,
 	Unif = 2,
 	Fds = 3,
+	Nsf = 4,
 };
 
 struct RomData

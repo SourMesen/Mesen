@@ -204,6 +204,8 @@ void VideoDecoder::StopThread()
 
 		_decodeThread.reset();
 
+		_hdScreenTiles = nullptr;
+		UpdateVideoFilter();
 		if(_ppuOutputBuffer != nullptr) {
 			//Clear whole screen
 			for(uint32_t i = 0; i < PPU::PixelCount; i++) {
@@ -224,5 +226,12 @@ void VideoDecoder::TakeScreenshot()
 {
 	if(_videoFilter) {
 		_videoFilter->TakeScreenshot();
+	}
+}
+
+void VideoDecoder::TakeScreenshot(std::stringstream &stream)
+{
+	if(_videoFilter) {
+		_videoFilter->TakeScreenshot("", &stream);
 	}
 }

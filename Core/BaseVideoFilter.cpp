@@ -60,10 +60,8 @@ uint8_t* BaseVideoFilter::GetOutputBuffer()
 	return _outputBuffer;
 }
 
-void BaseVideoFilter::TakeScreenshot()
+void BaseVideoFilter::TakeScreenshot(string filename, std::stringstream *stream)
 {
-	string romFilename = FolderUtilities::GetFilename(Console::GetRomName(), false);
-
 	uint32_t* frameBuffer = nullptr;
 	{
 		auto lock = _frameLock.AcquireSafe();
@@ -75,9 +73,22 @@ void BaseVideoFilter::TakeScreenshot()
 	}
 
 	//ARGB -> ABGR
-	for(uint32_t i = 0; i < _bufferSize/GetFrameInfo().BitsPerPixel; i++) {
+	for(uint32_t i = 0; i < _bufferSize / GetFrameInfo().BitsPerPixel; i++) {
 		frameBuffer[i] = 0xFF000000 | (frameBuffer[i] & 0xFF00) | ((frameBuffer[i] & 0xFF0000) >> 16) | ((frameBuffer[i] & 0xFF) << 16);
 	}
+
+	if(!filename.empty()) {
+		PNGHelper::WritePNG(filename, (uint8_t*)frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
+	} else {
+		PNGHelper::WritePNG(*stream, (uint8_t*)frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
+	}
+
+	delete[] frameBuffer;
+}
+
+void BaseVideoFilter::TakeScreenshot()
+{
+	string romFilename = FolderUtilities::GetFilename(Console::GetRomName(), false);
 
 	int counter = 0;
 	string baseFilename = FolderUtilities::CombinePath(FolderUtilities::GetScreenshotFolder(), romFilename);
@@ -97,8 +108,7 @@ void BaseVideoFilter::TakeScreenshot()
 		counter++;
 	}
 
-	PNGHelper::WritePNG(ssFilename, (uint8_t*)frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
-	delete[] frameBuffer;
+	TakeScreenshot(ssFilename);
 
 	MessageManager::DisplayMessage("ScreenshotSaved", FolderUtilities::GetFilename(ssFilename, true));
 }

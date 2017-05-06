@@ -12,6 +12,7 @@
       <Control ID="mnuPause">Pausar</Control>
       <Control ID="mnuReset">Resetar</Control>
       <Control ID="mnuPowerCycle">Power Cycle</Control>
+      <Control ID="mnuEjectCartridge">Eject Cartridge</Control>
       <Control ID="mnuSwitchDiskSide">Trocar o lado do disco</Control>
       <Control ID="mnuSelectDisk">Selecionar o disco</Control>
       <Control ID="mnuEjectDisk">Ejetar o disco</Control>
