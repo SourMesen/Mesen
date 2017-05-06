@@ -533,6 +533,11 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
+			tmrCdlRatios.Stop();
+			foreach(Form frm in this._childForms.ToArray()) {
+				frm.Close();
+			}
+
 			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
 			BreakpointManager.BreakpointsChanged -= BreakpointManager_BreakpointsChanged;
 			ctrlConsoleStatus.OnStateChanged -= ctrlConsoleStatus_OnStateChanged;
@@ -552,10 +557,6 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 
 			SaveWorkspace();
-
-			foreach(Form frm in this._childForms.ToArray()) {
-				frm.Close();
-			}
 
 			base.OnFormClosed(e);
 		}
