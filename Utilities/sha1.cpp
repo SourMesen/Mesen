@@ -237,7 +237,7 @@ void SHA1::update(std::istream &is)
 
 	while(true) {
 		is.read(sbuf, BLOCK_BYTES - buffer.size());
-		buffer.append(sbuf, is.gcount());
+		buffer.append(sbuf, (size_t)is.gcount());
 		if(buffer.size() != BLOCK_BYTES) {
 			return;
 		}

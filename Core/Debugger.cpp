@@ -682,7 +682,7 @@ void Debugger::ProcessVramOperation(MemoryOperationType type, uint16_t addr, uin
 void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative)
 {
 	int callstackSize = (int)_callstackRelative.size() - (_hideTopOfCallstack ? 2 : 0);
-	for(size_t i = 0; i < callstackSize; i++) {
+	for(int i = 0; i < callstackSize; i++) {
 		callstackAbsolute[i] = _callstackAbsolute[i];
 		
 		int32_t relativeAddr = _callstackRelative[i];

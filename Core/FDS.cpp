@@ -93,7 +93,7 @@ uint8_t FDS::ReadRAM(uint16_t addr)
 			buffer[i] = CPU::DebugReadByte(bufferAddr + i);
 		}
 
-		for(int j = 0; j < _fdsDiskHeaders.size(); j++) {
+		for(int j = 0; j < (int)_fdsDiskHeaders.size(); j++) {
 			bool match = true;
 			for(int i = 0; i < 10; i++) {
 				if(buffer[i] != 0xFF && buffer[i] != _fdsDiskHeaders[j][i + 14]) {

@@ -20,7 +20,7 @@ void BizhawkMovie::ProcessNotification(ConsoleNotificationType type, void* param
 {
 	if(type == ConsoleNotificationType::PpuFrameDone) {
 		int32_t frameNumber = PPU::GetFrameCount() - 1;
-		if(frameNumber < _systemActionByFrame.size()) {
+		if(frameNumber < (int32_t)_systemActionByFrame.size()) {
 			uint32_t systemAction = _systemActionByFrame[frameNumber];
 			if(systemAction & 0x01) {
 				//Power, not implemented yet
@@ -61,7 +61,7 @@ void BizhawkMovie::ProcessNotification(ConsoleNotificationType type, void* param
 uint8_t BizhawkMovie::GetState(uint8_t port)
 {
 	int32_t frameNumber = PPU::GetFrameCount() - 1;
-	if(frameNumber < _dataByFrame[0].size()) {
+	if(frameNumber < (int32_t)_dataByFrame[0].size()) {
 		return _dataByFrame[port][frameNumber];
 	} else {
 		EndMovie();
@@ -137,7 +137,7 @@ bool BizhawkMovie::InitializeInputData(ZipReader & reader)
 
 				if(port <= 3) {
 					uint8_t portValue = 0;
-					for(int j = 0; j < 8 && i + j + systemActionCount < line.size(); j++) {
+					for(int j = 0; j < 8 && i + j + systemActionCount < (int)line.size(); j++) {
 						if(line[i+j+systemActionCount] != '.') {
 							portValue |= orValues[j];
 						}
