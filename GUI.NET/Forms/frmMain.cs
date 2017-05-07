@@ -65,6 +65,7 @@ namespace Mesen.GUI.Forms
 			_commandLineArgs = args;
 			
 			Application.AddMessageFilter(this);
+			this.Resize += ResizeRecentGames;
 			this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 		}
 
@@ -362,9 +363,8 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		protected override void OnResize(EventArgs e)
+		private void ResizeRecentGames(object sender, EventArgs e)
 		{
-			base.OnResize(e);
 			if(this.ClientSize.Height < 400) {
 				ctrlRecentGames.Height = this.ClientSize.Height - 125 + Math.Min(50, (400 - this.ClientSize.Height));
 			} else {
