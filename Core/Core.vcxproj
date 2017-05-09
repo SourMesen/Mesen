@@ -412,6 +412,7 @@
     <ClInclude Include="Assembler.h" />
     <ClInclude Include="AutomaticRomTest.h" />
     <ClInclude Include="FceuxMovie.h" />
+    <ClInclude Include="Mapper174.h" />
     <ClInclude Include="Rambo1_158.h" />
     <ClInclude Include="RecordedRomTest.h" />
     <ClInclude Include="AutoSaveManager.h" />
