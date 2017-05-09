@@ -186,6 +186,7 @@
 #include "OekaKids.h"
 #include "Racermate.h"
 #include "Rambo1.h"
+#include "Rambo1_158.h"
 #include "Rt01.h"
 #include "Sachen_133.h"
 #include "Sachen_136.h"
@@ -257,7 +258,7 @@ Supported mappers:
 | 96| 97|===| 99|...|101|===|103|104|105|106|107|108|===|===|111|
 |112|113|114|115|   |117|118|119|120|121|===|123|===|125|126|===|
 |===|===|===|===|132|133|134|===|136|137|138|139|140|141|142|143|
-|144|145|146|147|148|149|150|151|152|153|154|155|156|157|???|159|
+|144|145|146|147|148|149|150|151|152|153|154|155|156|157|158|159|
 |---|===|162|163|164|165|166|167|168|===|170|171|172|173|===|175|
 |176|177|178|179|180|---|182|183|184|185|186|187|188|189|190|191|
 |192|193|194|195|196|197|   |199|200|201|202|203|204|205|206|207|
@@ -417,6 +418,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 155: return new MMC1_155();
 		case 156: return new DaouInfosys();
 		case 157: return new BandaiFcg();
+		case 158: return new Rambo1_158();
 		case 159: return new BandaiFcg();
 		case 162: return new Waixing162();
 		case 163: return new Nanjing();

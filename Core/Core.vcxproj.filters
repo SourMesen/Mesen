@@ -1171,6 +1171,9 @@
     <ClInclude Include="RewindManager.h">
       <Filter>Rewinder</Filter>
     </ClInclude>
+    <ClInclude Include="Rambo1_158.h">
+      <Filter>Nes\Mappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

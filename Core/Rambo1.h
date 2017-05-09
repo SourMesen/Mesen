@@ -6,7 +6,7 @@
 
 class Rambo1 : public BaseMapper
 {
-private:	
+protected:	
 	const uint8_t PpuIrqDelay = 2;
 	const uint8_t CpuIrqDelay = 1;
 	bool _irqEnabled = false;
