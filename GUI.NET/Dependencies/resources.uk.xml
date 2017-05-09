@@ -7,12 +7,12 @@
       <Control ID="mnuSaveState">Зберегти</Control>
       <Control ID="mnuLoadState">Завантажити</Control>
       <Control ID="mnuRecentFiles">Недавнi файлы</Control>
-      <Control ID="mnuExit">Выхiд</Control>
+      <Control ID="mnuExit">Вихід</Control>
       <Control ID="mnuGame">Гра</Control>
       <Control ID="mnuPause">Пауза</Control>
       <Control ID="mnuReset">Скидання</Control>
       <Control ID="mnuPowerCycle">Цикл включення</Control>
-      <Control ID="mnuEjectCartridge">Eject Cartridge</Control>
+      <Control ID="mnuEjectCartridge">Витягти Картридж</Control>
       <Control ID="mnuSwitchDiskSide">Змінити сторону диска</Control>
       <Control ID="mnuSelectDisk">Вибрати диск</Control>
       <Control ID="mnuEjectDisk">Вилучити диск</Control>
@@ -104,8 +104,8 @@
       <Control ID="lblCopyright">Copyright</Control>
       <Control ID="lblSoundChips">Звукові чіпи</Control>
       <Control ID="lblRecording">REC</Control>
-      <Control ID="lblSlowMotion">Slow Motion</Control>
-      <Control ID="lblFastForward">Fast Forward</Control>
+      <Control ID="lblSlowMotion">Сповільнений Рух</Control>
+      <Control ID="lblFastForward">Перемотування Вперед</Control>
     </Form>
     <Form ID="frmLogWindow" Title="Лог">
       <Control ID="btnClose">Закрити</Control>
@@ -296,10 +296,10 @@
       <Control ID="lblTurboSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
       <Control ID="lblTurboSpeed">Перемотка:</Control>
       <Control ID="lblRewindSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
-      <Control ID="lblRewindSpeed">Rewind Speed:</Control>
+      <Control ID="lblRewindSpeed">Швидкість перемотування:</Control>
 
       <Control ID="tpgAdvanced">Розширені</Control>
-      <Control ID="chkShowFrameCounter">Show Frame Counter</Control>
+      <Control ID="chkShowFrameCounter">Показувати Лічильник Кадрів</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
       <Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
       <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
@@ -338,17 +338,17 @@
       <Control ID="chkSingleInstance">Запускати тільки одну копію Mesen</Control>
       <Control ID="chkAutomaticallyCheckForUpdates">Автоматично перевіряти оновлення</Control>
 
-      <Control ID="lblPauseBackgroundSettings">Pause/Background Settings</Control>
-      <Control ID="lblMiscSettings">Misc. Settings</Control>
-      <Control ID="chkAutoHideMenu">Automatically hide menu bar</Control>
-      <Control ID="chkDisplayTitleBarInfo">Display additional information in title bar</Control>
+      <Control ID="lblPauseBackgroundSettings">Пауза/Фонові настройки</Control>
+      <Control ID="lblMiscSettings">Різнi настройки</Control>
+      <Control ID="chkAutoHideMenu">Автоматично приховувати панель меню</Control>
+      <Control ID="chkDisplayTitleBarInfo">Відображення додаткової інформації в рядку заголовка</Control>
       
       <Control ID="chkPauseOnMovieEnd">Ставити на паузу після програвання запису</Control>
       <Control ID="chkAllowBackgroundInput">Дозволити введення в тлі</Control>
       <Control ID="chkPauseWhenInBackground">Ставити на паузу при втраті фокуса</Control>
       <Control ID="chkAutoLoadIps">Автоматично завантажувати IPS/BPS</Control>
       <Control ID="chkHidePauseOverlay">Приховати екран паузи</Control>
-      <Control ID="chkDisplayMovieIcons">Відображати значок відтворення / запису при відтворенні або запису відео</Control>
+      <Control ID="chkDisplayMovieIcons">Відображати значок відтворення/запису при відтворенні або запису відео</Control>
       <Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
       <Control ID="tpgFileAssociations">Асоціації файлів</Control>
       <Control ID="grpFileAssociations">Асоціації файлів</Control>
@@ -359,10 +359,10 @@
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkFdsAutoLoadDisk">Автоматично вставляти диск 1 стороною А при завантаженні FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Використовувати швидке завантаження FDS</Control>
-      <Control ID="chkFdsAutoInsertDisk">Automatically switch disks for FDS games</Control>
+      <Control ID="chkFdsAutoInsertDisk">Автоматичне перемикання дисків для FDS ігор</Control>
 
-      <Control ID="lblRewind">Keep rewind data for the last</Control>
-      <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>
+      <Control ID="lblRewind">Зберігати дані перемотування за останні</Control>
+      <Control ID="lblRewindMinutes">хвилин (Використання Пам'яті ≈1 МБ/хв)</Control>
 
       <Control ID="tpgShortcuts">Гарячі клавіші</Control>
       <Control ID="colAction">Дія</Control>
@@ -501,7 +501,7 @@
       <Control ID="lblLatestVersion">Остання версія : </Control>
       <Control ID="lblCurrentVersion">Поточна версія : </Control>
       <Control ID="lblChangeLog">Cписок змін</Control>
-      <Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте.&#xA;Дякую за вашу підтримку!</Control>
+      <Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте. Дякую!</Control>
       <Control ID="btnUpdate">Оновити</Control>
       <Control ID="btnCancel">Вiдмiна</Control>
     </Form>
@@ -598,8 +598,8 @@
 
     <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Rewind</Message>
-    <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rewind 10 seconds</Message>
-    <Message ID="EmulatorShortcutMappings_RewindOneMin">Rewind 1 minute</Message>
+    <Message ID="EmulatorShortcutMappings_RewindTenSecs">Перемотати 10 секунд</Message>
+    <Message ID="EmulatorShortcutMappings_RewindOneMin">Перемотати 1 хвилину</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Збільшити Швидкість</Message>
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Зменшити Швидкість</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
@@ -616,7 +616,7 @@
     <Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Включити/Виключити Чит Коди</Message>
-    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Run Single Frame</Message>
+    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Запуск Одного Кадру</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
