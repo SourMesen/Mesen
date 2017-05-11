@@ -3,6 +3,7 @@
 #include "../Utilities/HexUtilities.h"
 #include "FceuxMovie.h"
 #include "Console.h"
+#include <algorithm>
 
 vector<uint8_t> FceuxMovie::Base64Decode(string in)
 {

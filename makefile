@@ -6,10 +6,12 @@
 #"MESENPLATFORM=x86 make" or "MESENPLATFORM=x64 make"
 #Default is x64
 
-CPPC=clang++
+#CPPC=clang++
+CPPC=g++
 GCCOPTIONS=-fPIC -Wall --std=c++14 -O3
 
-CC=clang
+#CC=clang
+CC=gcc
 CCOPTIONS=-fPIC -Wall -O3
 
 ifeq ($(MESENPLATFORM),x86)
@@ -19,7 +21,7 @@ ifeq ($(MESENPLATFORM),x86)
 	CCOPTIONS += -m32
 else
 	MESENPLATFORM=x64
-	GCCOPTIONS += -m64
+	GCCOPTIONS += -m64 -msse4.1
 	CCOPTIONS += -m64
 endif
 
@@ -39,7 +41,7 @@ all: ui
 ui: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	mkdir -p $(RELEASEFOLDER)/Dependencies
 	rm -f $(RELEASEFOLDER)/Dependencies/*
-	cd UpdateHelper && xbuild /property:Configuration="Release" /property:Platform="AnyCPU"
+	cd UpdateHelper && xbuild /property:Configuration="Release" /property:Platform="AnyCPU" /target:build
 	cp "bin/Any CPU/Release/MesenUpdater.exe" $(RELEASEFOLDER)/Dependencies/
 	cp GUI.NET/Dependencies/* $(RELEASEFOLDER)/Dependencies/
 	cp InteropDLL/$(OBJFOLDER)/$(SHAREDLIB) $(RELEASEFOLDER)/Dependencies/$(SHAREDLIB)	
