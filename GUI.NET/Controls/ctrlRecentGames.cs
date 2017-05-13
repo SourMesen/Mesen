@@ -97,7 +97,7 @@ namespace Mesen.GUI.Controls
 			}
 		}
 
-		private void UpdateGameInfo()
+		public void UpdateGameInfo()
 		{
 			if(_currentIndex < _recentGames.Count) {
 				lblGameName.Text = Path.GetFileNameWithoutExtension(_recentGames[_currentIndex].RomName);
