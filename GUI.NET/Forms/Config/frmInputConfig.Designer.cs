@@ -388,9 +388,10 @@
 			// 
 			// lblKeyBinding
 			// 
-			this.lblKeyBinding.AutoSize = true;
+			this.lblKeyBinding.AutoSize = false;
+			this.lblKeyBinding.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lblKeyBinding.Location = new System.Drawing.Point(25, 0);
-			this.lblKeyBinding.Name = "lblKeyBinding";
+			this.lblKeyBinding.Name = "lblKeyBinding"; 
 			this.lblKeyBinding.Size = new System.Drawing.Size(320, 52);
 			this.lblKeyBinding.TabIndex = 1;
 			this.lblKeyBinding.Text = "Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyword or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.";

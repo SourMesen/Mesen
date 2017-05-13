@@ -105,7 +105,7 @@ void BaseRenderer::ShowFpsCounter(int lineNumber)
 	if(_fpsTimer.GetElapsedMS() > 1000) {
 		//Update fps every sec
 		uint32_t frameCount = VideoDecoder::GetInstance()->GetFrameCount();
-		if(frameCount - _lastFrameCount < 0) {
+		if(_lastFrameCount > frameCount) {
 			_currentFPS = 0;
 		} else {
 			_currentFPS = (int)(std::round((double)(frameCount - _lastFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));

@@ -45,9 +45,9 @@
 			// 
 			this.tlpPreviousState.BackColor = System.Drawing.Color.Black;
 			this.tlpPreviousState.ColumnCount = 3;
-			this.tlpPreviousState.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tlpPreviousState.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpPreviousState.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpPreviousState.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpPreviousState.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpPreviousState.Controls.Add(this.pnlPreviousState, 1, 1);
 			this.tlpPreviousState.Controls.Add(this.lblGameName, 1, 2);
 			this.tlpPreviousState.Controls.Add(this.lblSaveDate, 1, 3);

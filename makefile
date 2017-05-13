@@ -87,7 +87,7 @@ InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LIB
 	ar -rcs InteropDLL/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
 	ar -rcs InteropDLL/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
 	ar -rcs InteropDLL/$(OBJFOLDER)/libCore.a $(COREOBJ)
-	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
+	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
 
 run:
 	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe

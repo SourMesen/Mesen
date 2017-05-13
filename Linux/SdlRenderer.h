@@ -4,8 +4,8 @@
 #include "../Utilities/SimpleLock.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/VideoRenderer.h"
+#include "../Core/BaseRenderer.h"
 #include "SpriteFont.h"
-#include "BaseRenderer.h"
 
 struct SDL_Window
 {
