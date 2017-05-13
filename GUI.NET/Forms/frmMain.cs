@@ -653,7 +653,7 @@ namespace Mesen.GUI.Forms
 				} else {
 					panelInfo.Visible = _emuThread == null;
 					ctrlRecentGames.Visible = _emuThread == null;
-					mnuEjectCartridge.Enabled = _emuThread != null;
+					mnuPowerOff.Enabled = _emuThread != null;
 
 					ctrlLoading.Visible = (_romLoadCounter > 0);
 
@@ -940,7 +940,7 @@ namespace Mesen.GUI.Forms
 			InteropEmu.PowerCycle();
 		}
 
-		private void mnuEjectCartridge_Click(object sender, EventArgs e)
+		private void mnuPowerOff_Click(object sender, EventArgs e)
 		{
 			InteropEmu.Stop();
 		}

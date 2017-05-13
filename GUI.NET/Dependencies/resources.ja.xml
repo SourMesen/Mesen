@@ -12,7 +12,7 @@
       <Control ID="mnuPause">ポーズ</Control>
       <Control ID="mnuReset">リセット</Control>
       <Control ID="mnuPowerCycle">停止と再起動</Control>
-      <Control ID="mnuEjectCartridge">ゲームを取り出す</Control>
+      <Control ID="mnuPowerOff">ゲームを停止する</Control>
       <Control ID="mnuSwitchDiskSide">A面B面切り替え</Control>
       <Control ID="mnuSelectDisk">ディスク選択</Control>
       <Control ID="mnuEjectDisk">ディスクを取り出す</Control>

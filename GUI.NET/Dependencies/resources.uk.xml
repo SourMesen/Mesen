@@ -12,7 +12,7 @@
       <Control ID="mnuPause">Пауза</Control>
       <Control ID="mnuReset">Скидання</Control>
       <Control ID="mnuPowerCycle">Цикл включення</Control>
-      <Control ID="mnuEjectCartridge">Витягти Картридж</Control>
+      <Control ID="mnuPowerOff">Power Off</Control>
       <Control ID="mnuSwitchDiskSide">Змінити сторону диска</Control>
       <Control ID="mnuSelectDisk">Вибрати диск</Control>
       <Control ID="mnuEjectDisk">Вилучити диск</Control>

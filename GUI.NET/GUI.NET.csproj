@@ -678,6 +678,9 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\VideoFilter.png" />
+    <None Include="Resources\map.png" />
+    <None Include="Resources\PowerCycle.png" />
     <None Include="Resources\MesenIconSmall.png" />
     <EmbeddedResource Include="Controls\ctrlHorizontalTrackbar.resx">
       <DependentUpon>ctrlHorizontalTrackbar.cs</DependentUpon>
