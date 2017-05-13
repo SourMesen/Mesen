@@ -299,7 +299,6 @@
       <Control ID="lblRewindSpeed">Vitesse du rembobinage :</Control>
 
       <Control ID="tpgAdvanced">Avancé</Control>
-      <Control ID="chkShowFrameCounter">Afficher le compteur d'images</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
       <Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
@@ -361,6 +360,9 @@
       <Control ID="chkFdsAutoLoadDisk">Insérer le côté A du disque 1 lors du chargement d'un jeu de FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Augmenter la vitesse d'émulation pendant le chargement des jeux FDS</Control>
       <Control ID="chkFdsAutoInsertDisk">Insérer le disque demandé automatiquement pour les jeux de FDS</Control>
+
+      <Control ID="chkShowFrameCounter">Afficher le compteur d'images</Control>
+      <Control ID="chkShowGameTimer">Afficher le compteur de temps</Control>
 
       <Control ID="lblRewind">Permettre de rembobiner jusqu'à</Control>
       <Control ID="lblRewindMinutes">minutes (Utilise ≈1MB/min)</Control>

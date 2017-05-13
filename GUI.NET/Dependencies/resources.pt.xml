@@ -297,7 +297,6 @@
       <Control ID="lblRewindSpeed">Rewind Speed:</Control>
       
       <Control ID="tpgAdvanced">Avançado</Control>
-      <Control ID="chkShowFrameCounter">Show Frame Counter</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Utilizar a versão alternativa de componentes de IRQs de MMC3</Control>
       <Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
       <Control ID="lblRamPowerOnState">Estado inicial da memória durante o início:</Control>
@@ -367,8 +366,11 @@
       <Control ID="chkAutoSave">Criar uma cópia de segurança de cada state</Control>
       <Control ID="lblAutoSave">minutos (Aperte F8 para carregar)</Control>
       <Control ID="chkAutoSaveNotify">Mostrar uma notificação na tela ao fazer a cópia de segurança automática</Control>
-      <Control ID="grpCloudSaves">Cópia de segurança online</Control>      
-      
+      <Control ID="grpCloudSaves">Cópia de segurança online</Control>
+
+      <Control ID="chkShowFrameCounter">Show frame counter</Control>
+      <Control ID="chkShowGameTimer">Show game timer</Control>
+
       <Control ID="lblRewind">Keep rewind data for the last</Control>
       <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>
 

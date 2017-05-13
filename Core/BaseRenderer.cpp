@@ -1,8 +1,9 @@
-#include "BaseRenderer.h"
+#include "stdafx.h"
 #include <cmath>
-#include "../Core/EmulationSettings.h"
-#include "../Core/VideoDecoder.h"
-#include "../Core/PPU.h"
+#include "BaseRenderer.h"
+#include "EmulationSettings.h"
+#include "VideoDecoder.h"
+#include "PPU.h"
 
 void BaseRenderer::DisplayMessage(string title, string message)
 {
@@ -87,28 +88,28 @@ void BaseRenderer::DrawToast(shared_ptr<ToastInfo> toast, int &lastHeight)
 	int lineHeight = 25;
 	string text = "[" + toast->GetToastTitle() + "] " + toast->GetToastMessage();
 	uint32_t lineCount = 0;
-	std::wstring wrappedText = WrapText(text, _screenWidth - textLeftMargin * 2 - 20, lineCount);
+	std::wstring wrappedText = WrapText(text, (float)(_screenWidth - textLeftMargin * 2 - 20), lineCount);
 	lastHeight += lineCount * lineHeight;
-	DrawString(wrappedText, textLeftMargin, (float)(_screenHeight - lastHeight), opacity, opacity, opacity);
+	DrawString(wrappedText, textLeftMargin, _screenHeight - lastHeight, opacity, opacity, opacity, opacity);
 }
 
-void BaseRenderer::DrawString(std::string message, int x, int y, uint8_t r, uint8_t g, uint8_t b)
+void BaseRenderer::DrawString(std::string message, int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t opacity)
 {
 	std::wstring textStr = utf8::utf8::decode(message);
-	DrawString(textStr, x, y, r, g, b);
+	DrawString(textStr, x, y, r, g, b, opacity);
 }
 
-void BaseRenderer::ShowFpsCounter()
+void BaseRenderer::ShowFpsCounter(int lineNumber)
 {
-	double elapsedSeconds = _fpsTimer.GetElapsedMS() / 1000;
-	if(elapsedSeconds > 1.0) {
+	int yPos = 13 + 24 * lineNumber;
+	if(_fpsTimer.GetElapsedMS() > 1000) {
 		//Update fps every sec
 		uint32_t frameCount = VideoDecoder::GetInstance()->GetFrameCount();
-		if(frameCount < _lastFrameCount) {
+		if(frameCount - _lastFrameCount < 0) {
 			_currentFPS = 0;
 		} else {
-			_currentFPS = (int)(std::round((double)(frameCount - _lastFrameCount) / elapsedSeconds));
-			_currentRenderedFPS = (int)(std::round((double)(_renderedFrameCount - _lastRenderedFrameCount) / elapsedSeconds));
+			_currentFPS = (int)(std::round((double)(frameCount - _lastFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
+			_currentRenderedFPS = (int)(std::round((double)(_renderedFrameCount - _lastRenderedFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
 		}
 		_lastFrameCount = frameCount;
 		_lastRenderedFrameCount = _renderedFrameCount;
@@ -123,27 +124,56 @@ void BaseRenderer::ShowFpsCounter()
 	}
 
 	string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
-	DrawString(fpsString, (float)(_screenWidth - 125), 13, 250, 235, 215);
+	DrawString(fpsString, _screenWidth - 125, yPos, 250, 235, 215);
 }
 
-void BaseRenderer::ShowLagCounter()
+void BaseRenderer::ShowGameTimer(int lineNumber)
 {
-	float yPos = EmulationSettings::CheckFlag(EmulationFlags::ShowFPS) ? 37.0f : 13.0f;
+	int yPos = 13 + 24 * lineNumber;
+	double frameCount = PPU::GetFrameCount();
+	double frameRate = Console::GetNesModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
+	//uint32_t milliseconds = (uint32_t)(frameCount / 60.1 * 1000) % 1000;
+	uint32_t seconds = (uint32_t)(frameCount / frameRate) % 60;
+	uint32_t minutes = (uint32_t)(frameCount / frameRate / 60) % 60;
+	uint32_t hours = (uint32_t)(frameCount / frameRate / 3600);
+
+	std::stringstream ss;
+	ss << std::setw(2) << std::setfill('0') << hours << ":";
+	ss << std::setw(2) << std::setfill('0') << minutes << ":";
+	ss << std::setw(2) << std::setfill('0') << seconds;
+	//ss << "." << std::setw(3) << std::setfill('0') << milliseconds;
+	DrawString(ss.str(), _screenWidth - 95, yPos, 250, 235, 215);
+}
+
+void BaseRenderer::ShowLagCounter(int lineNumber)
+{
+	int yPos = 13 + 24 * lineNumber;
 	string lagCounter = MessageManager::Localize("Lag") + ": " + std::to_string(Console::GetLagCounter());
-	DrawString(lagCounter, (float)(_screenWidth - 123), yPos, 250, 235, 215);
+	DrawString(lagCounter, _screenWidth - 123, yPos, 250, 235, 215);
 }
 
-void BaseRenderer::ShowFrameCounter()
+void BaseRenderer::ShowFrameCounter(int lineNumber)
 {
-	float yPos = 13.0f;
+	int yPos = 13 + 24 * lineNumber;
+	string lagCounter = MessageManager::Localize("Frame") + ": " + std::to_string(PPU::GetFrameCount());
+	DrawString(lagCounter, _screenWidth - 146, yPos, 250, 235, 215);
+}
+
+void BaseRenderer::DrawCounters()
+{
+	int lineNumber = 0;
+	if(EmulationSettings::CheckFlag(EmulationFlags::ShowGameTimer)) {
+		ShowGameTimer(lineNumber++);
+	}
 	if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
-		yPos += 24.0f;
+		ShowFpsCounter(lineNumber++);
 	}
 	if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
-		yPos += 24.0f;
+		ShowLagCounter(lineNumber++);
 	}
-	string lagCounter = MessageManager::Localize("Frame") + ": " + std::to_string(PPU::GetFrameCount());
-	DrawString(lagCounter, (float)(_screenWidth - 146), yPos, 250, 235, 215);
+	if(EmulationSettings::CheckFlag(EmulationFlags::ShowFrameCounter)) {
+		ShowFrameCounter(lineNumber++);
+	}
 }
 
 bool BaseRenderer::IsMessageShown()

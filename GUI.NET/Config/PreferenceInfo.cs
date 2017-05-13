@@ -52,6 +52,9 @@ namespace Mesen.GUI.Config
 
 		public bool DisableGameDatabase = false;
 
+		public bool ShowFrameCounter = false;
+		public bool ShowGameTimer = false;
+
 		public UInt32 RewindBufferSize = 300;
 
 		public PreferenceInfo()
@@ -100,6 +103,9 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
 			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground);
 			InteropEmu.SetFlag(EmulationFlags.DisableGameDatabase, preferenceInfo.DisableGameDatabase);
+
+			InteropEmu.SetFlag(EmulationFlags.ShowFrameCounter, preferenceInfo.ShowFrameCounter);
+			InteropEmu.SetFlag(EmulationFlags.ShowGameTimer, preferenceInfo.ShowGameTimer);
 
 			InteropEmu.SetFlag(EmulationFlags.HidePauseOverlay, preferenceInfo.HidePauseOverlay);
 			InteropEmu.SetFlag(EmulationFlags.DisplayMovieIcons, preferenceInfo.DisplayMovieIcons);

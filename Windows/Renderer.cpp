@@ -354,12 +354,6 @@ namespace NES
 		return shaderResourceView;
 	}
 
-	void Renderer::DisplayMessage(string title, string message)
-	{
-		shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000));
-		_toasts.push_front(toast);
-	}
-
 	void Renderer::DrawString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, SpriteFont* font)
 	{
 		std::wstring textStr = utf8::utf8::decode(message);
@@ -461,57 +455,10 @@ namespace NES
 		DrawString("PAUSE", (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2, (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8, Colors::AntiqueWhite, 1.0f, _largeFont.get());
 	}
 
-	void Renderer::ShowFpsCounter()
-	{
-		if(_fpsTimer.GetElapsedMS() > 1000) {
-			//Update fps every sec
-			uint32_t frameCount = VideoDecoder::GetInstance()->GetFrameCount();
-			if(frameCount - _lastFrameCount < 0) {
-				_currentFPS = 0;
-			} else {
-				_currentFPS = (int)(std::round((double)(frameCount - _lastFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
-				_currentRenderedFPS = (int)(std::round((double)(_renderedFrameCount - _lastRenderedFrameCount) / (_fpsTimer.GetElapsedMS() / 1000)));
-			}
-			_lastFrameCount = frameCount;
-			_lastRenderedFrameCount = _renderedFrameCount;
-			_fpsTimer.Reset();
-		}
-
-		if(_currentFPS > 5000) {
-			_currentFPS = 0;
-		}
-		if(_currentRenderedFPS > 5000) {
-			_currentRenderedFPS = 0;
-		}
-
-		string fpsString = string("FPS: ") + std::to_string(_currentFPS) + " / " + std::to_string(_currentRenderedFPS);
-		DrawString(fpsString, (float)(_screenWidth - 125), 13, Colors::AntiqueWhite, 1.0f);
-	}
-
-	void Renderer::ShowLagCounter()
-	{
-		float yPos = EmulationSettings::CheckFlag(EmulationFlags::ShowFPS) ? 37.0f : 13.0f;
-		string lagCounter = MessageManager::Localize("Lag") + ": " + std::to_string(Console::GetLagCounter());
-		DrawString(lagCounter, (float)(_screenWidth - 123), yPos, Colors::AntiqueWhite, 1.0f);
-	}
-
-	void Renderer::ShowFrameCounter()
-	{
-		float yPos = 13.0f;
-		if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
-			yPos += 24.0f;
-		}
-		if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
-			yPos += 24.0f;
-		}
-		string lagCounter = MessageManager::Localize("Frame") + ": " + std::to_string(PPU::GetFrameCount());
-		DrawString(lagCounter, (float)(_screenWidth - 146), yPos, Colors::AntiqueWhite, 1.0f);
-	}
-
 	void Renderer::Render()
 	{
 		bool paused = EmulationSettings::IsPaused();
-		if(_noUpdateCount > 10 || _frameChanged || paused || !_toasts.empty()) {
+		if(_noUpdateCount > 10 || _frameChanged || paused || IsMessageShown()) {
 			_noUpdateCount = 0;
 		
 			auto lock = _frameLock.AcquireSafe();
@@ -527,15 +474,7 @@ namespace NES
 			if(paused && !EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay)) {
 				DrawPauseScreen();
 			} else if(VideoDecoder::GetInstance()->IsRunning()) {
-				if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
-					ShowFpsCounter();
-				}
-				if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
-					ShowLagCounter();
-				}
-				if(EmulationSettings::CheckFlag(EmulationFlags::ShowFrameCounter)) {
-					ShowFrameCounter();
-				}
+				DrawCounters();
 			}
 
 			DrawToasts();
@@ -557,84 +496,21 @@ namespace NES
 		}
 	}
 
-	void Renderer::RemoveOldToasts()
+	void Renderer::DrawString(std::wstring message, int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t opacity)
 	{
-		_toasts.remove_if([](shared_ptr<ToastInfo> toast) { return toast->IsToastExpired(); });
+		XMVECTORF32 color = { (float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, (float)opacity / 255.0f };
+		_font->DrawString(_spriteBatch.get(), message.c_str(), XMFLOAT2((float)x, (float)y), color);
 	}
 
-	void Renderer::DrawToasts()
+	float Renderer::MeasureString(std::wstring text)
 	{
-		RemoveOldToasts();
-
-		int counter = 0;
-		int lastHeight = 5;
-		for(shared_ptr<ToastInfo> toast : _toasts) {
-			if(counter < 6) {
-				DrawToast(toast, lastHeight);
-			} else {
-				break;
-			}
-			counter++;
-		}
+		XMVECTOR measure = _font->MeasureString(text.c_str());
+		float* measureF = (float*)&measure;
+		return measureF[0];
 	}
 
-	std::wstring Renderer::WrapText(string utf8Text, SpriteFont* font, float maxLineWidth, uint32_t &lineCount)
+	bool Renderer::ContainsCharacter(wchar_t character)
 	{
-		using std::wstring;
-		wstring text = utf8::utf8::decode(utf8Text);
-		wstring wrappedText;
-		list<wstring> words;
-		wstring currentWord;
-		for(size_t i = 0, len = text.length(); i < len; i++) {
-			if(text[i] == L' ' || text[i] == L'\n') {
-				if(currentWord.length() > 0) {
-					words.push_back(currentWord);
-					currentWord.clear();
-				}
-			} else {
-				currentWord += text[i];
-			}
-		}
-		if(currentWord.length() > 0) {
-			words.push_back(currentWord);
-		}
-
-		lineCount = 1;
-		float spaceWidth = font->MeasureString(L" ").m128_f32[0];
-		float lineWidth = 0.0f;
-		for(wstring word : words) {
-			for(unsigned int i = 0; i < word.size(); i++) {
-				if(!font->ContainsCharacter(word[i])) {
-					word[i] = L'?';
-				}
-			}
-			float wordWidth = font->MeasureString(word.c_str()).m128_f32[0];
-
-			if(lineWidth + wordWidth < maxLineWidth) {
-				wrappedText += word + L" ";
-				lineWidth += wordWidth + spaceWidth;
-			} else {
-				wrappedText += L"\n" + word + L" ";
-				lineWidth = wordWidth + spaceWidth;
-				lineCount++;
-			}
-		}
-
-		return wrappedText;
-	}
-
-	void Renderer::DrawToast(shared_ptr<ToastInfo> toast, int &lastHeight)
-	{
-		//Get opacity for fade in/out effect
-		float opacity = toast->GetOpacity();
-		XMVECTORF32 color = { opacity, opacity, opacity, opacity };
-		float textLeftMargin = 4.0f;
-
-		int lineHeight = 25;
-		string text = "[" + toast->GetToastTitle() + "] " + toast->GetToastMessage();
-		uint32_t lineCount = 0;
-		std::wstring wrappedText = WrapText(text, _font.get(), _screenWidth - textLeftMargin * 2 - 20, lineCount);
-		lastHeight += lineCount * lineHeight;
-		DrawString(wrappedText, textLeftMargin, (float)(_screenHeight - lastHeight), color, 1);
+		return _font->ContainsCharacter(character);
 	}
 }

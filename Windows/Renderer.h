@@ -7,6 +7,7 @@
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/SimpleLock.h"
 #include "../Utilities/Timer.h"
+#include "../Core/BaseRenderer.h"
 
 using namespace DirectX;
 
@@ -16,7 +17,7 @@ namespace DirectX {
 }
 
 namespace NES {
-	class Renderer : public IRenderingDevice, public IMessageManager
+	class Renderer : public BaseRenderer, public IRenderingDevice
 	{
 	private:
 		HWND                    _hWnd = nullptr;
@@ -43,21 +44,12 @@ namespace NES {
 
 		VideoResizeFilter _resizeFilter = VideoResizeFilter::NearestNeighbor;
 
-		Timer _fpsTimer;
-		uint32_t _lastFrameCount = 0;
-		uint32_t _renderedFrameCount = 0;
-		uint32_t _lastRenderedFrameCount = 0;
-		uint32_t _currentFPS = 0;
-		uint32_t _currentRenderedFPS = 0;
-
 		unique_ptr<SpriteFont>	_font;
 		unique_ptr<SpriteFont>	_largeFont;
 		
 		unique_ptr<SpriteBatch> _spriteBatch;
 
 		const uint32_t _bytesPerPixel = 4;
-		uint32_t _screenWidth = 0;
-		uint32_t _screenHeight = 0;
 		uint32_t _screenBufferSize = 0;
 
 		uint32_t _nesFrameHeight = 0;
@@ -65,9 +57,6 @@ namespace NES {
 		uint32_t _newFrameBufferSize = 0;
 
 		uint32_t _noUpdateCount = 0;
-
-		list<shared_ptr<ToastInfo>> _toasts;
-		//ID3D11ShaderResourceView* _toastTexture = nullptr;
 
 		HRESULT InitDevice();
 		void CleanupDevice();
@@ -83,21 +72,16 @@ namespace NES {
 		void DrawString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, SpriteFont* font = nullptr);
 		void DrawString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, SpriteFont* font = nullptr);
 
-		void DrawToasts();
-		void DrawToast(shared_ptr<ToastInfo> toast, int &lastHeight);
-		void RemoveOldToasts();
+		void DrawString(std::wstring message, int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t opacity);
+		float MeasureString(std::wstring text);
+		bool ContainsCharacter(wchar_t character);
 
-		void ShowFpsCounter();
-		void ShowLagCounter();
-		void ShowFrameCounter();
-	
 	public:
 		Renderer(HWND hWnd);
 		~Renderer();
 
 		void Reset();
 		void Render();
-		void DisplayMessage(string title, string message);
 
 		void UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height);
 	};

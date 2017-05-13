@@ -127,15 +127,7 @@ void SdlRenderer::Render()
 		if(paused && !EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay)) {
 			DrawPauseScreen();
 		} else if(VideoDecoder::GetInstance()->IsRunning()) {
-			if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
-				ShowFpsCounter();
-			}
-			if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
-				ShowLagCounter();
-			}
-			if(EmulationSettings::CheckFlag(EmulationFlags::ShowFrameCounter)) {
-				ShowFrameCounter();
-			}
+			DrawCounters();
 		}
 
 		DrawToasts();
@@ -162,7 +154,7 @@ void SdlRenderer::DrawPauseScreen()
 	_largeFont->DrawString(_sdlRenderer, L"PAUSE", (int)(_screenWidth / 2 - measureF[0] / 2), (int)(_screenHeight / 2 - measureF[1] / 2 - 8), 250, 235, 215);
 }
 
-void SdlRenderer::DrawString(std::wstring message, int x, int y, uint8_t r, uint8_t g, uint8_t b)
+void SdlRenderer::DrawString(std::wstring message, int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t opacity)
 {
 	const wchar_t *text = message.c_str();
 	_spriteFont->DrawString(_sdlRenderer, text, x, y, r, g, b);

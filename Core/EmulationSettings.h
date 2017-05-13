@@ -47,8 +47,9 @@ enum EmulationFlags : uint64_t
 
 	UseNes101Hvc101Behavior = 0x100000000,
 	ShowFrameCounter = 0x200000000,
+	ShowGameTimer = 0x400000000,
 
-	FdsAutoInsertDisk = 0x400000000,
+	FdsAutoInsertDisk = 0x800000000,
 
 	Turbo = 0x2000000000,
 	InBackground = 0x4000000000,

@@ -299,7 +299,6 @@
       <Control ID="lblRewindSpeed">Rewind Speed:</Control>
 
       <Control ID="tpgAdvanced">Расширенные</Control>
-      <Control ID="chkShowFrameCounter">Show Frame Counter</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
       <Control ID="chkAllowInvalidInput">Разрешить недопустимые комбинации (Вниз+Вверх и Влево+Вправо)</Control>
       <Control ID="lblRamPowerOnState">Содержимое ОЗУ при включении : </Control>
@@ -361,6 +360,9 @@
       <Control ID="chkFdsFastForwardOnLoad">Использовать быструю загрузку FDS</Control>
       <Control ID="chkFdsAutoInsertDisk">Automatically switch disks for FDS games</Control>
       
+      <Control ID="chkShowFrameCounter">Show frame counter</Control>
+      <Control ID="chkShowGameTimer">Show game timer</Control>
+
       <Control ID="lblRewind">Keep rewind data for the last</Control>
       <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>
 

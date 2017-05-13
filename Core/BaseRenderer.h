@@ -29,10 +29,12 @@ protected:
 	void DrawToasts();
 	
 	void DrawToast(shared_ptr<ToastInfo> toast, int &lastHeight);
-	void DrawString(std::string message, int x, int y, uint8_t r, uint8_t g, uint8_t b);	
-	virtual void DrawString(std::wstring message, int x, int y, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) = 0;
+	void DrawString(std::string message, int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t opacity = 255);	
+	virtual void DrawString(std::wstring message, int x, int y, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255, uint8_t opacity = 255) = 0;
 
-	void ShowFpsCounter();
-	void ShowLagCounter();
-	void ShowFrameCounter();
+	void ShowFpsCounter(int lineNumber);
+	void ShowLagCounter(int lineNumber);
+	void ShowFrameCounter(int lineNumber);
+	void ShowGameTimer(int lineNumber);
+	void DrawCounters();
 };

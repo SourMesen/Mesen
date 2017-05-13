@@ -50,6 +50,8 @@ public:
 			return (currentTime - _startTime) * 5.0f / 1000.0f;
 		} else if(_endTime - currentTime < 200) {
 			return (_endTime - currentTime) * 5.0f / 1000.0f;
+		} else if(currentTime >= _endTime) {
+			return 0.0f;
 		} else {
 			return 1.0f;
 		}

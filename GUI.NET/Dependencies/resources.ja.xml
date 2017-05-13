@@ -299,7 +299,6 @@
       <Control ID="lblRewindSpeed">巻き戻しの速度:</Control>
 
       <Control ID="tpgAdvanced">詳細設定</Control>
-      <Control ID="chkShowFrameCounter">フレームカウンタを表示する</Control>
       <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
       <Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
       <Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
@@ -360,6 +359,9 @@
       <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
       <Control ID="chkFdsAutoInsertDisk">ファミコンディスクシステムのゲーム中に自動的に該当するディスクを入れる</Control>
+
+      <Control ID="chkShowFrameCounter">フレームカウンタを表示する</Control>
+      <Control ID="chkShowGameTimer">ゲームタイマーを表示する</Control>
 
       <Control ID="lblRewind">巻き戻し用データの</Control>
       <Control ID="lblRewindMinutes">分をキープする (メモリの使用量：１分に約１MB)</Control>

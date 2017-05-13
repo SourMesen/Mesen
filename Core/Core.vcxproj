@@ -411,6 +411,7 @@
     <ClInclude Include="ArkanoidController.h" />
     <ClInclude Include="Assembler.h" />
     <ClInclude Include="AutomaticRomTest.h" />
+    <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="FceuxMovie.h" />
     <ClInclude Include="Mapper174.h" />
     <ClInclude Include="Rambo1_158.h" />
@@ -771,6 +772,7 @@
     <ClCompile Include="ArkanoidController.cpp" />
     <ClCompile Include="Assembler.cpp" />
     <ClCompile Include="AutomaticRomTest.cpp" />
+    <ClCompile Include="BaseRenderer.cpp" />
     <ClCompile Include="FceuxMovie.cpp" />
     <ClCompile Include="RecordedRomTest.cpp" />
     <ClCompile Include="AutoSaveManager.cpp" />

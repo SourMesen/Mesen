@@ -1177,6 +1177,9 @@
     <ClInclude Include="Mapper174.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
+    <ClInclude Include="BaseRenderer.h">
+      <Filter>VideoDecoder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1397,6 +1400,9 @@
     </ClCompile>
     <ClCompile Include="RewindManager.cpp">
       <Filter>Rewinder</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseRenderer.cpp">
+      <Filter>VideoDecoder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

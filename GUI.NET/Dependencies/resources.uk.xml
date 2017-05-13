@@ -299,7 +299,6 @@
       <Control ID="lblRewindSpeed">Швидкість перемотування:</Control>
 
       <Control ID="tpgAdvanced">Розширені</Control>
-      <Control ID="chkShowFrameCounter">Показувати Лічильник Кадрів</Control>
       <Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
       <Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
       <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
@@ -361,6 +360,9 @@
       <Control ID="chkFdsFastForwardOnLoad">Використовувати швидке завантаження FDS</Control>
       <Control ID="chkFdsAutoInsertDisk">Автоматичне перемикання дисків для FDS ігор</Control>
 
+      <Control ID="chkShowFrameCounter">Показувати Лічильник Кадрів</Control>
+      <Control ID="chkShowGameTimer">Show game timer</Control>
+      
       <Control ID="lblRewind">Зберігати дані перемотування за останні</Control>
       <Control ID="lblRewindMinutes">хвилин (Використання Пам'яті ≈1 МБ/хв)</Control>
 
