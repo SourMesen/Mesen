@@ -131,6 +131,7 @@ void PPU::SetNesModel(NesModel model)
 	}
 
 	_nmiScanline += EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
+	_standardVblankEnd += EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
 	_vblankEnd += EmulationSettings::GetPpuExtraScanlinesAfterNmi() + EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
 }
 
@@ -1014,7 +1015,7 @@ void PPU::UpdateApuStatus()
 		if(_scanline > _standardVblankEnd) {
 			//Disable APU for extra lines after NMI
 			APU::SetApuStatus(false);
-		} else if(_scanline < _standardNmiScanline) {
+		} else if(_scanline >= _standardNmiScanline && _scanline < _nmiScanline) {
 			//Disable APU for extra lines before NMI
 			APU::SetApuStatus(false);
 		}
