@@ -25,28 +25,46 @@ RewindManager::~RewindManager()
 	MessageManager::UnregisterNotificationListener(this);
 }
 
+void RewindManager::ClearBuffer()
+{
+	if(_instance) {
+		_instance->_history.clear();
+		_instance->_historyBackup.clear();
+		_instance->_currentHistory = RewindData();
+		_instance->_framesToFastForward = 0;
+		_instance->_videoHistory.clear();
+		_instance->_videoHistoryBuilder.clear();
+		_instance->_audioHistory.clear();
+		_instance->_audioHistoryBuilder.clear();
+		_instance->_rewindState = RewindState::Stopped;
+		_instance->AddHistoryBlock();
+	}
+}
+
 void RewindManager::ProcessNotification(ConsoleNotificationType type, void * parameter)
 {
 	if(type == ConsoleNotificationType::PpuFrameDone) {
-		if(_rewindState >= RewindState::Starting) {
-			_currentHistory.FrameCount--;
-		} else if(_rewindState == RewindState::Stopping) {
-			_framesToFastForward--;
-			_currentHistory.FrameCount++;
-			if(_framesToFastForward == 0) {
-				for(int i = 0; i < 4; i++) {
-					size_t numberToRemove = _currentHistory.InputLogs[i].size();
-					_currentHistory.InputLogs[i] = _historyBackup.front().InputLogs[i];
-					for(size_t j = 0; j < numberToRemove; j++) {
-						_currentHistory.InputLogs[i].pop_back();
+		if(EmulationSettings::GetRewindBufferSize() > 0) {
+			if(_rewindState >= RewindState::Starting) {
+				_currentHistory.FrameCount--;
+			} else if(_rewindState == RewindState::Stopping) {
+				_framesToFastForward--;
+				_currentHistory.FrameCount++;
+				if(_framesToFastForward == 0) {
+					for(int i = 0; i < 4; i++) {
+						size_t numberToRemove = _currentHistory.InputLogs[i].size();
+						_currentHistory.InputLogs[i] = _historyBackup.front().InputLogs[i];
+						for(size_t j = 0; j < numberToRemove; j++) {
+							_currentHistory.InputLogs[i].pop_back();
+						}
 					}
+					_historyBackup.clear();
+					_rewindState = RewindState::Stopped;
+					EmulationSettings::SetEmulationSpeed(100);
 				}
-				_historyBackup.clear();
-				_rewindState = RewindState::Stopped;
-				EmulationSettings::SetEmulationSpeed(100);
+			} else {
+				_currentHistory.FrameCount++;
 			}
-		} else {
-			_currentHistory.FrameCount++;
 		}
 	}
 }
@@ -54,19 +72,15 @@ void RewindManager::ProcessNotification(ConsoleNotificationType type, void * par
 void RewindManager::AddHistoryBlock()
 {
 	uint32_t maxHistorySize = EmulationSettings::GetRewindBufferSize() * 120;	
-	if(maxHistorySize == 0) {
-		_history.clear();
-	} else {
-		while(_history.size() > maxHistorySize) {
-			_history.pop_front();
-		}
-
-		if(_currentHistory.FrameCount > 0) {
-			_history.push_back(_currentHistory);
-		}
-		_currentHistory = RewindData();
-		_currentHistory.SaveState();
+	while(_history.size() > maxHistorySize) {
+		_history.pop_front();
 	}
+
+	if(_currentHistory.FrameCount > 0) {
+		_history.push_back(_currentHistory);
+	}
+	_currentHistory = RewindData();
+	_currentHistory.SaveState();
 }
 
 void RewindManager::PopHistory()
@@ -114,15 +128,17 @@ void RewindManager::Stop()
 		Console::Pause();
 		if(_rewindState == RewindState::Started) {
 			//Move back to the save state containing the frame currently shown on the screen
-			_framesToFastForward = (uint32_t)_videoHistory.size() + _historyBackup.front().FrameCount;
-			do {
-				_history.push_back(_historyBackup.front());
-				_framesToFastForward -= _historyBackup.front().FrameCount;
-				_historyBackup.pop_front();
+			if(_historyBackup.size() > 1) {
+				_framesToFastForward = (uint32_t)_videoHistory.size() + _historyBackup.front().FrameCount;
+				do {
+					_history.push_back(_historyBackup.front());
+					_framesToFastForward -= _historyBackup.front().FrameCount;
+					_historyBackup.pop_front();
 
-				_currentHistory = _historyBackup.front();
+					_currentHistory = _historyBackup.front();
+				}
+				while(_framesToFastForward > RewindManager::BufferSize && _historyBackup.size() > 1);
 			}
-			while(_framesToFastForward > RewindManager::BufferSize);
 		} else {
 			//We started rewinding, but didn't actually visually rewind anything yet
 			//Move back to the save state containing the frame currently shown on the screen
@@ -218,7 +234,7 @@ bool RewindManager::ProcessAudio(int16_t * soundBuffer, uint32_t sampleCount, ui
 
 void RewindManager::RecordInput(uint8_t port, uint8_t input)
 {
-	if(_instance && _instance->_rewindState == RewindState::Stopped) {
+	if(EmulationSettings::GetRewindBufferSize() > 0 && _instance && _instance->_rewindState == RewindState::Stopped) {
 		_instance->_currentHistory.InputLogs[port].push_back(input);
 	}
 }

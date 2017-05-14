@@ -2,6 +2,7 @@
 #include "EmulationSettings.h"
 #include "Console.h"
 #include "VsControlManager.h"
+#include "RewindManager.h"
 
 //Version 0.8.1
 uint16_t EmulationSettings::_versionMajor = 0;
@@ -102,4 +103,14 @@ void EmulationSettings::SetEqualizerBands(double *bands, uint32_t bandCount)
 		_bandGains.push_back(0);
 	}
 	Console::Resume();
+}
+
+void EmulationSettings::SetRewindBufferSize(uint32_t seconds)
+{
+	if(seconds == 0 || _rewindBufferSize == 0) {
+		Console::Pause();
+		RewindManager::ClearBuffer();
+		Console::Resume();
+	}
+	_rewindBufferSize = seconds;
 }

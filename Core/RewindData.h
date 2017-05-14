@@ -6,7 +6,7 @@ class RewindData
 {
 private:
 	vector<uint8_t> SaveStateData;
-	uint32_t OriginalSaveStateSize;
+	uint32_t OriginalSaveStateSize = 0;
 
 	void CompressState(string stateData, vector<uint8_t> &compressedState);
 

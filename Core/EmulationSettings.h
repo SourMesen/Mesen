@@ -665,10 +665,7 @@ public:
 		return _rewindSpeed;
 	}
 
-	static void SetRewindBufferSize(uint32_t seconds)
-	{
-		_rewindBufferSize = seconds;
-	}
+	static void SetRewindBufferSize(uint32_t seconds);
 
 	static uint32_t GetRewindBufferSize()
 	{

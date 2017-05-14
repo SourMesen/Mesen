@@ -5,11 +5,13 @@
 
 void RewindData::LoadState()
 {
-	unsigned long length = OriginalSaveStateSize;
-	uint8_t* buffer = new uint8_t[length];
-	uncompress(buffer, &length, SaveStateData.data(), (unsigned long)SaveStateData.size());
-	Console::LoadState(buffer, length);
-	delete[] buffer;
+	if(SaveStateData.size() > 0 && OriginalSaveStateSize > 0) {
+		unsigned long length = OriginalSaveStateSize;
+		uint8_t* buffer = new uint8_t[length];
+		uncompress(buffer, &length, SaveStateData.data(), (unsigned long)SaveStateData.size());
+		Console::LoadState(buffer, length);
+		delete[] buffer;
+	}
 }
 
 void RewindData::CompressState(string stateData, vector<uint8_t>& compressedState)

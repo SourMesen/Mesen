@@ -45,6 +45,8 @@ public:
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	void ProcessEndOfFrame();
 
+	static void ClearBuffer();
+
 	static void RecordInput(uint8_t port, uint8_t input);
 	static uint8_t GetInput(uint8_t port);
 
