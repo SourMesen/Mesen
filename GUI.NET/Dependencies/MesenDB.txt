@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 01/05/2017 using:
+# Generated on 15/05/2017 using:
 #     -NesCartDB (dated 2016-08-20)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -2264,6 +2264,7 @@ BC1FBD7B,Famicom,,,,1,128,,8,0,0,0,,,
 BC25A18B,NesPal,NES-TLROM,NES-TLROM-03,MMC3C,4,128,128,,0,0,0,,,
 BC66994F,Famicom,,,,62,2048,1024,,0,0,0,,,
 BC7364BB,Dendy,,,,4,256,128,,0,0,0,,,
+BC7485B5,NesPal,,,,1,128,,,0,0,0,h,,
 BC7B1D0F,Famicom,TAITO-TC0190FMC,J9100234A,TC0190FMC,33,128,256,,0,0,0,,,
 BC7FEDB9,NesNtsc,NES-TLROM,NES-TLROM-03,MMC3B,4,128,128,,0,0,0,,,
 BC80FB52,Famicom,HVC-EKROM,HVC-EKROM-01,MMC5,5,256,256,,0,8,1,,,
@@ -2558,6 +2559,7 @@ D445F698,Famicom,HVC-NROM-256,3A,,0,32,8,,0,0,0,v,,
 D44B412E,NesPal,NES-SNROM,NES-SNROM-03,MMC1A,1,128,,8,0,8,1,,,
 D4611B79,NesNtsc,ACCLAIM-MC-ACC,53361-2,MC-ACC,4,128,256,,0,0,0,,,
 D467C0CC,Famicom,KONAMI-VRC-4,352396,VRC4,23,128,128,,2,0,0,,,
+D4924CBA,NesNtsc,,,,149,32,16,,0,0,0,h,,
 D49DCA84,NesPal,NES-SGROM,NES-SGROM-05,MMC1B2,1,256,,8,0,0,0,,,
 D4C7F0C3,Famicom,,,,2,128,,8,0,0,0,h,,
 D4D9E21A,Famicom,HVC-NROM-128,2,,0,16,8,,0,0,0,h,,
