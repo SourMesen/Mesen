@@ -38,11 +38,7 @@
 	#pragma comment(lib, "Utilities.lib")
 	#pragma comment(lib, "Windows.lib")
 	#pragma comment(lib, "SevenZip.lib")
-	#ifdef PGO
-		#pragma comment(lib, "../Dependencies/DirectXTK." MESEN_LIBRARY_DEBUG_SUFFIX ".Static." MESEN_LIBRARY_SUFFIX)
-	#else
-		#pragma comment(lib, "../Dependencies/DirectXTK." MESEN_LIBRARY_DEBUG_SUFFIX "." MESEN_LIBRARY_SUFFIX)	
-	#endif
+	#pragma comment(lib, "../Dependencies/DirectXTK." MESEN_LIBRARY_DEBUG_SUFFIX ".Static." MESEN_LIBRARY_SUFFIX)
 	#define DllExport __declspec(dllexport)
 #else
 	#define __stdcall
