@@ -39,7 +39,7 @@ CodeInfo CheatManager::GetGGCodeInfo(string ggCode)
 	uint32_t valueBits[8] = { 3, 6, 5, 4, 23, 2, 1, 0 };
 	if(ggCode.size() == 8) {
 		//Bit 5 of the value is stored in a different location for 8-character codes
-		valueBits[5] = 31;
+		valueBits[4] = 31;
 
 		uint32_t compareValueBits[8] = { 27, 30, 29, 28, 23, 26, 25, 24 };
 		code.CompareValue = DecodeValue(rawCode, compareValueBits, 8);
