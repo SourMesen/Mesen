@@ -208,7 +208,7 @@ WindowsKeyManager::WindowsKeyManager(HWND hWnd)
 	ResetKeyState();
 
 	//Init XInput buttons
-	vector<string> buttonNames = { "Up", "Down", "Left", "Right", "Start", "Back", "L3", "R3", "L1", "R1", "?", "?", "A", "B", "X", "Y", "L2", "R2", "RT Up", "RT Down", "RT Up", "RT Left", "RT Right" };
+	vector<string> buttonNames = { "Up", "Down", "Left", "Right", "Start", "Back", "L3", "R3", "L1", "R1", "?", "?", "A", "B", "X", "Y", "L2", "R2", "RT Up", "RT Down", "RT Left", "RT Right", "LT Up", "LT Down", "LT Left", "LT Right" };
 	for(int i = 0; i < 4; i++) {
 		for(int j = 0; j < (int)buttonNames.size(); j++) {
 			_keyDefinitions.push_back({ "", (uint32_t)(0xFFFF + i * 0x100 + j + 1), "Pad" + std::to_string(i + 1) + " " + buttonNames[j] });
@@ -311,7 +311,7 @@ uint32_t WindowsKeyManager::GetPressedKey()
 {
 	_xInput->RefreshState();
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
-		for(int j = 1; j <= 22; j++) {
+		for(int j = 1; j <= 26; j++) {
 			if(_xInput->IsPressed(i, j)) {
 				return 0xFFFF + i * 0x100 + j;
 			}
