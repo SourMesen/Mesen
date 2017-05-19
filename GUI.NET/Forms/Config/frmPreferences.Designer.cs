@@ -106,9 +106,11 @@ namespace Mesen.GUI.Forms.Config
 			this.nudRewindBufferSize = new System.Windows.Forms.NumericUpDown();
 			this.lblRewindMinutes = new System.Windows.Forms.Label();
 			this.chkFdsAutoInsertDisk = new System.Windows.Forms.CheckBox();
-			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
 			this.chkShowGameTimer = new System.Windows.Forms.CheckBox();
 			this.chkShowFrameCounter = new System.Windows.Forms.CheckBox();
+			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.btnResetSettings = new System.Windows.Forms.Button();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -140,6 +142,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).BeginInit();
+			this.tableLayoutPanel5.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -154,7 +157,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.Controls.Add(this.lblPauseBackgroundSettings, 0, 3);
 			this.tlpMain.Controls.Add(this.chkSingleInstance, 0, 2);
 			this.tlpMain.Controls.Add(this.chkAutomaticallyCheckForUpdates, 0, 1);
-			this.tlpMain.Controls.Add(this.btnOpenMesenFolder, 0, 13);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel2, 0, 0);
 			this.tlpMain.Controls.Add(this.lblMiscSettings, 0, 8);
 			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 9);
@@ -164,6 +166,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.Controls.Add(this.chkAllowBackgroundInput, 0, 7);
 			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 6);
 			this.tlpMain.Controls.Add(this.chkPauseOnMovieEnd, 0, 5);
+			this.tlpMain.Controls.Add(this.tableLayoutPanel5, 0, 13);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Name = "tlpMain";
@@ -220,9 +223,9 @@ namespace Mesen.GUI.Forms.Config
 			// btnOpenMesenFolder
 			// 
 			this.btnOpenMesenFolder.AutoSize = true;
-			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 311);
+			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 3);
 			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
-			this.btnOpenMesenFolder.Size = new System.Drawing.Size(117, 23);
+			this.btnOpenMesenFolder.Size = new System.Drawing.Size(110, 23);
 			this.btnOpenMesenFolder.TabIndex = 16;
 			this.btnOpenMesenFolder.Text = "Open Mesen Folder";
 			this.btnOpenMesenFolder.UseVisualStyleBackColor = true;
@@ -1080,11 +1083,6 @@ namespace Mesen.GUI.Forms.Config
 			this.chkFdsAutoInsertDisk.Text = "Automatically switch disks for FDS games";
 			this.chkFdsAutoInsertDisk.UseVisualStyleBackColor = true;
 			// 
-			// tmrSyncDateTime
-			// 
-			this.tmrSyncDateTime.Enabled = true;
-			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
-			// 
 			// chkShowGameTimer
 			// 
 			this.chkShowGameTimer.AutoSize = true;
@@ -1104,6 +1102,39 @@ namespace Mesen.GUI.Forms.Config
 			this.chkShowFrameCounter.TabIndex = 12;
 			this.chkShowFrameCounter.Text = "Show frame counter";
 			this.chkShowFrameCounter.UseVisualStyleBackColor = true;
+			// 
+			// tmrSyncDateTime
+			// 
+			this.tmrSyncDateTime.Enabled = true;
+			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
+			// 
+			// tableLayoutPanel5
+			// 
+			this.tableLayoutPanel5.ColumnCount = 3;
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.Controls.Add(this.btnOpenMesenFolder, 0, 0);
+			this.tableLayoutPanel5.Controls.Add(this.btnResetSettings, 2, 0);
+			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 308);
+			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+			this.tableLayoutPanel5.RowCount = 1;
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(473, 29);
+			this.tableLayoutPanel5.TabIndex = 24;
+			// 
+			// btnResetSettings
+			// 
+			this.btnResetSettings.AutoSize = true;
+			this.btnResetSettings.Location = new System.Drawing.Point(370, 3);
+			this.btnResetSettings.Name = "btnResetSettings";
+			this.btnResetSettings.Size = new System.Drawing.Size(100, 23);
+			this.btnResetSettings.TabIndex = 17;
+			this.btnResetSettings.Text = "Reset All Settings";
+			this.btnResetSettings.UseVisualStyleBackColor = true;
+			this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
 			// 
 			// frmPreferences
 			// 
@@ -1164,6 +1195,8 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel6.ResumeLayout(false);
 			this.flowLayoutPanel6.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).EndInit();
+			this.tableLayoutPanel5.ResumeLayout(false);
+			this.tableLayoutPanel5.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1248,5 +1281,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkFdsAutoInsertDisk;
 		private System.Windows.Forms.CheckBox chkShowGameTimer;
 		private System.Windows.Forms.CheckBox chkShowFrameCounter;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+		private System.Windows.Forms.Button btnResetSettings;
 	}
 }

@@ -301,5 +301,13 @@ namespace Mesen.GUI.Config
 		{
 			_dirtyConfig = _config.Clone();
 		}
+
+		public static void ResetSettings()
+		{
+			_dirtyConfig = new Configuration();
+			Config.InitializeDefaults();
+			ApplyChanges();
+			Config.ApplyConfig();
+		}
 	}
 }

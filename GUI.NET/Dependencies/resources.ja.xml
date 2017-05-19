@@ -349,6 +349,7 @@
       <Control ID="chkHidePauseOverlay">ポーズ画面を隠す</Control>
       <Control ID="chkDisplayMovieIcons">動画の録画や再生の際、アイコンを表示する</Control>
       <Control ID="btnOpenMesenFolder">Mesenのフォルダを開く</Control>
+      <Control ID="btnResetSettings">初期化</Control>
       <Control ID="tpgFileAssociations">ファイルの関連付け</Control>
       <Control ID="grpFileAssociations">ファイルの関連付け</Control>
       <Control ID="chkNesFormat">.NES (ファミコン)</Control>
@@ -555,6 +556,8 @@
     <Message ID="RomsFound">{0}個</Message>
 
     <Message ID="RiskyOptionHint">（推奨されません）</Message>
+
+    <Message ID="ResetSettingsConfirmation">注意：全ての設定が初期化されます。&#xA;&#xA;よろしいですか？</Message>
 
     <Message ID="RandomGameNoGameFound">Mesenはゲームファイルを見つかりませんでした。</Message>
 

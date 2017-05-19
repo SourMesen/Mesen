@@ -23,6 +23,8 @@
 
     <Message ID="RiskyOptionHint">(not recommended)</Message>
 
+    <Message ID="ResetSettingsConfirmation">Warning: This will reset ALL of settings and cannot be undone!&#xA;&#xA;Continue?</Message>
+
     <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
 
     <Message ID="CheatsFound">{0} games and {1} cheats in database</Message>

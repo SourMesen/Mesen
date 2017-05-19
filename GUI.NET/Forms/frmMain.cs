@@ -1232,6 +1232,11 @@ namespace Mesen.GUI.Forms
 				InitializeFdsDiskMenu();
 				InitializeNsfMode(true);
 				ctrlRecentGames.UpdateGameInfo();
+			} else {
+				UpdateVideoSettings();
+				UpdateMenus();
+				UpdateRecentFiles();
+				UpdateViewerSize();
 			}
 		}
 

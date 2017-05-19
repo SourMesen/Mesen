@@ -157,5 +157,13 @@ namespace Mesen.GUI.Forms.Config
 			nudAutoSave.Enabled = chkAutoSave.Checked;
 			chkAutoSaveNotify.Enabled = chkAutoSave.Checked;
 		}
+
+		private void btnResetSettings_Click(object sender, EventArgs e)
+		{
+			if(MesenMsgBox.Show("ResetSettingsConfirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
+				ConfigManager.ResetSettings();
+				this.Close();
+			}
+		}
 	}
 }

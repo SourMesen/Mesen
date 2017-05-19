@@ -349,6 +349,7 @@
       <Control ID="chkHidePauseOverlay">Приховати екран паузи</Control>
       <Control ID="chkDisplayMovieIcons">Відображати значок відтворення/запису при відтворенні або запису відео</Control>
       <Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
+      <Control ID="btnResetSettings">Reset All Settings</Control>
       <Control ID="tpgFileAssociations">Асоціації файлів</Control>
       <Control ID="grpFileAssociations">Асоціації файлів</Control>
       <Control ID="chkNesFormat">.NES</Control>
@@ -562,6 +563,8 @@
     <Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
 
     <Message ID="RiskyOptionHint">(не рекомендовано)</Message>
+
+    <Message ID="ResetSettingsConfirmation">Warning: This will reset ALL of settings and cannot be undone!&#xA;&#xA;Continue?</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen не зміг знайти будь-які ігри для завантаження.</Message>
 

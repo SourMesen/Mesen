@@ -347,6 +347,7 @@
       <Control ID="chkHidePauseOverlay">Hide the pause screen</Control>
       <Control ID="chkDisplayMovieIcons">Display play/record icon when playing or recording a movie</Control>
       <Control ID="btnOpenMesenFolder">Abrir el directorio de Mesen</Control>
+      <Control ID="btnResetSettings">Reset All Settings</Control>
       <Control ID="tpgFileAssociations">Asociación de archivos</Control>
       <Control ID="grpFileAssociations">Asociación de archivos</Control>
       <Control ID="chkNesFormat">.NES</Control>
@@ -561,6 +562,8 @@
     <Message ID="RomsFound">{0} roms encontradas</Message>
 
     <Message ID="RiskyOptionHint">(not recommended)</Message>
+
+    <Message ID="ResetSettingsConfirmation">Warning: This will reset ALL of settings and cannot be undone!&#xA;&#xA;Continue?</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen no puede encontrar ningún juego para cargar.</Message>
 

@@ -350,6 +350,7 @@
       <Control ID="chkHidePauseOverlay">Ne pas afficher l'écran de pause</Control>
       <Control ID="chkDisplayMovieIcons">Afficher un icône lors de la lecture ou de l'enregistrement des films</Control>
       <Control ID="btnOpenMesenFolder">Ouvrir le dossier de Mesen</Control>
+      <Control ID="btnResetSettings">Réinitialiser la configuration</Control>
       <Control ID="tpgFileAssociations">Associations de fichiers</Control>
       <Control ID="grpFileAssociations">Associations de fichiers</Control>
       <Control ID="chkNesFormat">.NES</Control>
@@ -394,7 +395,6 @@
       <Control ID="chkNsfMoveToNextTrackAfterTime">Limiter la durée des pistes à</Control>
       <Control ID="lblNsfSeconds">secondes</Control>
       <Control ID="chkNsfDisableApuIrqs">Désactiver les IRQs du APU (Recommandé)</Control>
-      
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
@@ -573,6 +573,8 @@
     <Message ID="RomsFound">{0} roms trouvés</Message>
     
     <Message ID="RiskyOptionHint">(déconseillé)</Message>
+
+    <Message ID="ResetSettingsConfirmation">Avertissement: Cette opération va réinitialiser TOUTE la configuration de Mesen!&#xA;&#xA;Voulez-vous continuer?</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen n'a pas trouvé de jeu sur votre disque.</Message>
 
