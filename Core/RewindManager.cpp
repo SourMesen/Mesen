@@ -60,7 +60,7 @@ void RewindManager::ProcessNotification(ConsoleNotificationType type, void * par
 					}
 					_historyBackup.clear();
 					_rewindState = RewindState::Stopped;
-					EmulationSettings::SetEmulationSpeed(100);
+					EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 				}
 			} else {
 				_currentHistory.FrameCount++;
@@ -116,7 +116,7 @@ void RewindManager::Start()
 
 		PopHistory();
 		SoundMixer::StopAudio(true);
-		EmulationSettings::SetEmulationSpeed(0);
+		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 
 		Console::Resume();
 	}
@@ -154,11 +154,11 @@ void RewindManager::Stop()
 		if(_framesToFastForward > 0) {
 			_rewindState = RewindState::Stopping;
 			_currentHistory.FrameCount = 0;
-			EmulationSettings::SetEmulationSpeed(0);
+			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 		} else {
 			_rewindState = RewindState::Stopped;
 			_historyBackup.clear();
-			EmulationSettings::SetEmulationSpeed(100);
+			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 		}
 
 		_videoHistoryBuilder.clear();
@@ -195,7 +195,7 @@ void RewindManager::ProcessFrame(void * frameBuffer, uint32_t width, uint32_t he
 
 		if(_rewindState == RewindState::Started || _videoHistory.size() >= RewindManager::BufferSize) {
 			_rewindState = RewindState::Started;
-			EmulationSettings::SetEmulationSpeed(EmulationSettings::GetRewindSpeed());
+			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 			if(!_videoHistory.empty()) {
 				VideoRenderer::GetInstance()->UpdateFrame(_videoHistory.back().data(), width, height);
 				_videoHistory.pop_back();

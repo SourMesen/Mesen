@@ -210,7 +210,7 @@ int32_t RecordedRomTest::Run(string filename)
 			return false;
 		}
 
-		EmulationSettings::SetEmulationSpeed(0);
+		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 		EmulationSettings::SetMasterVolume(0);
 		
 		Console::Pause();
@@ -247,7 +247,7 @@ int32_t RecordedRomTest::Run(string filename)
 		Console::GetInstance()->Stop();
 
 
-		EmulationSettings::SetEmulationSpeed(100);
+		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 		EmulationSettings::SetMasterVolume(1.0);
 
 		return _badFrameCount;

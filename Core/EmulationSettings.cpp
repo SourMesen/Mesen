@@ -114,3 +114,18 @@ void EmulationSettings::SetRewindBufferSize(uint32_t seconds)
 	}
 	_rewindBufferSize = seconds;
 }
+
+uint32_t EmulationSettings::GetEmulationSpeed(bool ignoreTurbo)
+{
+	if(ignoreTurbo) {
+		return _emulationSpeed;
+	} else if(CheckFlag(EmulationFlags::ForceMaxSpeed)) {
+		return 0;
+	} else if(CheckFlag(EmulationFlags::Turbo)) {
+		return _turboSpeed;
+	} else if(RewindManager::IsRewinding()) {
+		return _rewindSpeed;
+	} else {
+		return _emulationSpeed;
+	}
+}

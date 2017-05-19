@@ -108,7 +108,7 @@ void AutomaticRomTest::ProcessNotification(ConsoleNotificationType type, void* p
 
 int32_t AutomaticRomTest::Run(string filename)
 {
-	EmulationSettings::SetEmulationSpeed(0);
+	EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 	EmulationSettings::SetMasterVolume(0);
 	Console::Pause();
 	if(Console::LoadROM(filename)) {
@@ -123,7 +123,7 @@ int32_t AutomaticRomTest::Run(string filename)
 			_errorCode |= 0x10;
 		}
 
-		EmulationSettings::SetEmulationSpeed(100);
+		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 		EmulationSettings::SetMasterVolume(1.0);
 
 		Console::GetInstance()->Stop();

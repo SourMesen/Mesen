@@ -135,13 +135,11 @@ void FDS::ProcessCpuClock()
 	}
 
 	if(EmulationSettings::CheckFlag(EmulationFlags::FdsFastForwardOnLoad)) {
-		bool enableFastforward = (_scanningDisk || _gameStarted < 2);
-		uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed(true);
-		if(emulationSpeed > 0 || !_fastForwarding) {
-			_previousSpeed = emulationSpeed;
+		if(_scanningDisk || _gameStarted < 2) {
+			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
+		} else {
+			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 		}
-		EmulationSettings::SetEmulationSpeed(enableFastforward ? 0 : _previousSpeed);
-		_fastForwarding = enableFastforward;
 	}
 
 	ClockIrq();
@@ -412,9 +410,7 @@ FDS::FDS()
 FDS::~FDS()
 {
 	//Restore emulation speed to normal when closing
-	if(_previousSpeed >= 0) {
-		EmulationSettings::SetEmulationSpeed(_previousSpeed);
-	}
+	EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 
 	if(_isDirty) {
 		FdsLoader loader;

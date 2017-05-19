@@ -71,8 +71,6 @@ private:
 	string _romFilepath;
 
 	uint8_t _gameStarted = 0;
-	int32_t _previousSpeed = -1;
-	bool _fastForwarding = false;
 
 protected:
 	virtual uint16_t GetPRGPageSize() override { return 0x2000; }

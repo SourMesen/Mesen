@@ -57,6 +57,8 @@ enum EmulationFlags : uint64_t
 	
 	DisplayMovieIcons = 0x10000000000,
 	HidePauseOverlay = 0x20000000000,
+
+	ForceMaxSpeed = 0x40000000000,
 	
 	ConsoleMode = 0x8000000000000000,
 };
@@ -672,10 +674,7 @@ public:
 		return _rewindBufferSize;
 	}
 
-	static uint32_t GetEmulationSpeed(bool ignoreTurbo = false)
-	{
-		return (CheckFlag(EmulationFlags::Turbo) && !ignoreTurbo) ? _turboSpeed : _emulationSpeed;
-	}
+	static uint32_t GetEmulationSpeed(bool ignoreTurbo = false);
 
 	static void UpdateEffectiveOverclockRate()
 	{

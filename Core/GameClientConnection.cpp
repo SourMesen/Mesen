@@ -166,8 +166,9 @@ uint8_t GameClientConnection::GetControllerState(uint8_t port)
 
 		if(_inputData[port].size() > _minimumQueueSize) {
 			//Too much data, catch up
-			EmulationSettings::SetEmulationSpeed(0);
+			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 		} else {
+			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 			EmulationSettings::SetEmulationSpeed(100);
 		}
 		return state;
