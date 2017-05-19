@@ -32,7 +32,7 @@ void GameDatabase::InitDatabase()
 				continue;
 			}
 			vector<string> values = StringUtilities::Split(lineContent, ',');
-			if(values.size() >= 15) {
+			if(values.size() >= 16) {
 				GameInfo gameInfo{
 					(uint32_t)std::stoll(values[0], nullptr, 16),
 					values[1],
@@ -48,7 +48,8 @@ void GameDatabase::InitDatabase()
 					ToInt<uint32_t>(values[11]) == 0 ? false : true,
 					values[12],
 					values[13],
-					values[14]
+					values[14],
+					values[15]
 				};
 
 				if(gameInfo.MapperID == 65000) {
@@ -147,89 +148,92 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 
 uint8_t GameDatabase::GetSubMapper(GameInfo &info)
 {
-	switch(info.MapperID) {
-		case 1:
-			if(info.Board.find("SEROM") != string::npos ||
-				info.Board.find("SHROM") != string::npos ||
-				info.Board.find("SH1ROM") != string::npos) {
-				//SEROM, SHROM, SH1ROM have fixed PRG banking
-				return 5;
-			}
-			break;
+	if(!info.SubmapperID.empty()) {
+		return ToInt<uint8_t>(info.SubmapperID);
+	} else {
+		switch(info.MapperID) {
+			case 1:
+				if(info.Board.find("SEROM") != string::npos ||
+					info.Board.find("SHROM") != string::npos ||
+					info.Board.find("SH1ROM") != string::npos) {
+					//SEROM, SHROM, SH1ROM have fixed PRG banking
+					return 5;
+				}
+				break;
 
-		case 3:
-			if(info.Board.compare("NES-CNROM") == 0) {
-				//Enable bus conflicts for CNROM games
-				//Fixes "Cybernoid - The Fighting Machine" which requires open bus behavior to work properly
-				return 2;
-			}
-			break;
-		case 4:
-			if(info.Board.compare("ACCLAIM-MC-ACC") == 0) {
-				return 3; //Acclaim MC-ACC (MMC3 clone)
-			} else if(info.Chip.compare("MMC6B") == 0) {
-				return 1; //MMC6 (Star Tropics)
-			}
-			break;
+			case 3:
+				if(info.Board.compare("NES-CNROM") == 0) {
+					//Enable bus conflicts for CNROM games
+					//Fixes "Cybernoid - The Fighting Machine" which requires open bus behavior to work properly
+					return 2;
+				}
+				break;
+			case 4:
+				if(info.Board.compare("ACCLAIM-MC-ACC") == 0) {
+					return 3; //Acclaim MC-ACC (MMC3 clone)
+				} else if(info.Chip.compare("MMC6B") == 0) {
+					return 1; //MMC6 (Star Tropics)
+				}
+				break;
 
-		case 21:
-			if(info.Pcb.compare("352398") == 0) {
-				return 1; //VRC4a
-			} else if(info.Pcb.compare("352889") == 0) {
-				return 2; //VRC4c
-			}
-			break;
+			case 21:
+				if(info.Pcb.compare("352398") == 0) {
+					return 1; //VRC4a
+				} else if(info.Pcb.compare("352889") == 0) {
+					return 2; //VRC4c
+				}
+				break;
 
-		case 23:
-			if(info.Pcb.compare("352396") == 0) {
-				return 2; //VRC4e
-			} else if(info.Pcb.compare("350603") == 0 || info.Pcb.compare("350636") == 0 || info.Pcb.compare("350926") == 0 || info.Pcb.compare("351179") == 0 || info.Pcb.compare("LROG009-00") == 0) {
-				return 3; //VRC2b
-			}
-			break;
+			case 23:
+				if(info.Pcb.compare("352396") == 0) {
+					return 2; //VRC4e
+				} else if(info.Pcb.compare("350603") == 0 || info.Pcb.compare("350636") == 0 || info.Pcb.compare("350926") == 0 || info.Pcb.compare("351179") == 0 || info.Pcb.compare("LROG009-00") == 0) {
+					return 3; //VRC2b
+				}
+				break;
 
-		case 25:
-			if(info.Pcb.compare("351406") == 0) {
-				return 1; //VRC4b
-			} else if(info.Pcb.compare("352400") == 0) {
-				return 2; //VRC4d	
-			} else if(info.Pcb.compare("351948") == 0) {
-				return 3; //VRC2c	
-			}
-			break;
+			case 25:
+				if(info.Pcb.compare("351406") == 0) {
+					return 1; //VRC4b
+				} else if(info.Pcb.compare("352400") == 0) {
+					return 2; //VRC4d	
+				} else if(info.Pcb.compare("351948") == 0) {
+					return 3; //VRC2c	
+				}
+				break;
 
-		case 32:
-			if(info.Board.compare("IREM-G101-B") == 0) {
-				return 1; //Major League
-			}
-			break;
-		case 71:
-			if(info.Board.compare("CAMERICA-BF9097") == 0) {
-				return 1; //Fire Hawk
-			}
-			break;
-		case 78:
-			if(info.Board.compare("IREM-HOLYDIVER") == 0) {
-				return 3; //Holy Diver
-			}
-			break;
-		case 185:
-			if(info.Crc == 0x0F05FF0A) {
-				//Seicross (v2)
-				//Not a real submapper, used to alter behavior specifically for this game
-				//This is equivalent to FCEUX's mapper 181
-				return 16; 
-			}
-			break;
-		case 210:
-			if(info.Board.compare("NAMCOT-175") == 0) {
-				return 1; //Namco 175
-			} else if(info.Board.compare("NAMCOT-340") == 0) {
-				return 2; //Namco 340
-			}
-			break;
+			case 32:
+				if(info.Board.compare("IREM-G101-B") == 0) {
+					return 1; //Major League
+				}
+				break;
+			case 71:
+				if(info.Board.compare("CAMERICA-BF9097") == 0) {
+					return 1; //Fire Hawk
+				}
+				break;
+			case 78:
+				if(info.Board.compare("IREM-HOLYDIVER") == 0) {
+					return 3; //Holy Diver
+				}
+				break;
+			case 185:
+				if(info.Crc == 0x0F05FF0A) {
+					//Seicross (v2)
+					//Not a real submapper, used to alter behavior specifically for this game
+					//This is equivalent to FCEUX's mapper 181
+					return 16;
+				}
+				break;
+			case 210:
+				if(info.Board.compare("NAMCOT-175") == 0) {
+					return 1; //Namco 175
+				} else if(info.Board.compare("NAMCOT-340") == 0) {
+					return 2; //Namco 340
+				}
+				break;
+		}
 	}
-
 	return 0;
 }
 

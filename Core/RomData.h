@@ -281,6 +281,7 @@ struct GameInfo
 	string Mirroring;
 	string InputType;
 	string BusConflicts;
+	string SubmapperID;
 };
 
 enum class RomFormat
