@@ -350,8 +350,6 @@ namespace Mesen.GUI.Forms
 				this.Resize -= frmMain_Resize;
 				this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + (this.HideMenuStrip ? 0 : menuStrip.Height)));
 				this.Resize += frmMain_Resize;
-			} else if(_customSize) {
-				SetScaleBasedOnWindowSize();
 			}
 
 			ctrlRenderer.Size = new Size(size.Width, size.Height);
