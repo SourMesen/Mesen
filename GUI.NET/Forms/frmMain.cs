@@ -746,6 +746,11 @@ namespace Mesen.GUI.Forms
 					mnuRegionNtsc.Checked = ConfigManager.Config.Region == NesModel.NTSC;
 					mnuRegionPal.Checked = ConfigManager.Config.Region == NesModel.PAL;
 					mnuRegionDendy.Checked = ConfigManager.Config.Region == NesModel.Dendy;
+
+					bool autoInsertDisabled = !InteropEmu.FdsIsAutoInsertDiskEnabled(); 
+					mnuSelectDisk.Enabled = autoInsertDisabled;
+					mnuEjectDisk.Enabled = autoInsertDisabled;
+					mnuSwitchDiskSide.Enabled = autoInsertDisabled;
 				}
 			} catch { }
 		}
@@ -1507,10 +1512,6 @@ namespace Mesen.GUI.Forms
 					mnuSelectDisk.Visible = true;
 					mnuEjectDisk.Visible = true;
 					mnuSwitchDiskSide.Visible = sideCount > 1;
-
-					mnuSelectDisk.Enabled = !ConfigManager.Config.PreferenceInfo.FdsAutoInsertDisk;
-					mnuEjectDisk.Enabled = !ConfigManager.Config.PreferenceInfo.FdsAutoInsertDisk;
-					mnuSwitchDiskSide.Enabled = !ConfigManager.Config.PreferenceInfo.FdsAutoInsertDisk;
 				} else {
 					sepFdsDisk.Visible = false;
 					mnuSelectDisk.Visible = false;

@@ -14,7 +14,8 @@ class FDS : public BaseMapper
 private:
 	static const uint32_t NoDiskInserted = 0xFF;
 	static const uint32_t DiskInsertDelay = 3600000; //approx 2 sec delay
-	
+	static bool _disableAutoInsertDisk;
+
 	static FDS* Instance;
 
 	unique_ptr<FdsAudio> _audio;
@@ -70,7 +71,7 @@ private:
 	vector<vector<uint8_t>> _fdsDiskHeaders;
 	string _romFilepath;
 
-	uint8_t _gameStarted = 0;
+	bool _gameStarted;
 
 protected:
 	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
@@ -113,4 +114,5 @@ public:
 	static void InsertNextDisk();
 	static void SwitchDiskSide();
 	static void EjectDisk();
+	static bool IsAutoInsertDiskEnabled();
 };

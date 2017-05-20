@@ -5,10 +5,11 @@
 #include "MemoryManager.h"
 
 FDS* FDS::Instance = nullptr;
+bool FDS::_disableAutoInsertDisk = false;
 
 void FDS::InitMapper()
 {
-	_diskNumber = EmulationSettings::CheckFlag(EmulationFlags::FdsAutoLoadDisk) ? 0 : FDS::NoDiskInserted;
+	_newDiskNumber = (IsAutoInsertDiskEnabled() || EmulationSettings::CheckFlag(EmulationFlags::FdsAutoLoadDisk)) ? 0 : FDS::NoDiskInserted;
 
 	//FDS BIOS
 	SetCpuMemoryMapping(0xE000, 0xFFFF, 0, PrgMemoryType::PrgRom, MemoryAccessType::Read);
@@ -32,6 +33,8 @@ void FDS::Reset(bool softReset)
 {
 	_autoDiskEjectCounter = -1;
 	_autoDiskSwitchCounter = -1;
+	_disableAutoInsertDisk = false;
+	_gameStarted = false;
 }
 
 uint32_t FDS::GetFdsDiskSideSize(uint8_t side)
@@ -77,14 +80,18 @@ void FDS::ClockIrq()
 	}
 }
 
+bool FDS::IsAutoInsertDiskEnabled()
+{
+	return !_disableAutoInsertDisk && EmulationSettings::CheckFlag(EmulationFlags::FdsAutoInsertDisk);
+}
+
 uint8_t FDS::ReadRAM(uint16_t addr)
 {
-	if(addr == 0xDFFC && _gameStarted < 2) {
-		//The BIOS reads $DFFC twice before starting the game
-		//The 2nd read occurs right at the end of the copyright screen
-		//We can fast forward until _gameStarted == 2
-		_gameStarted++;
-	} else if(addr == 0xE445) {
+	if(addr == 0xE18C && !_gameStarted && (CPU::DebugReadByte(0x100) & 0xC0) != 0) {
+		//$E18B is the NMI entry point (using $E18C due to dummy reads)
+		//When NMI occurs while $100 & $C0 != 0, it typically means that the game is starting.
+		_gameStarted = true;
+	} else if(addr == 0xE445 && IsAutoInsertDiskEnabled()) {
 		//Game is trying to check if a specific disk/side is inserted
 		//Find the matching disk and insert it automatically
 		uint16_t bufferAddr = CPU::DebugReadWord(0);
@@ -93,6 +100,8 @@ uint8_t FDS::ReadRAM(uint16_t addr)
 			buffer[i] = CPU::DebugReadByte(bufferAddr + i);
 		}
 
+		int matchCount = 0;
+		int matchIndex = -1;
 		for(int j = 0; j < (int)_fdsDiskHeaders.size(); j++) {
 			bool match = true;
 			for(int i = 0; i < 10; i++) {
@@ -101,11 +110,25 @@ uint8_t FDS::ReadRAM(uint16_t addr)
 					break;
 				}
 			}
+
 			if(match) {
-				//Found a match, insert it
-				_newDiskNumber = j;
-				_diskNumber = j;
-				break;
+				matchCount++;
+				matchIndex = matchCount > 1 ? -1 : j;
+			}
+		}
+
+		if(matchCount != 1) {
+			//More than 1 (or 0) disks match, can happen in unlicensed games - disable auto insert logic
+			_disableAutoInsertDisk = true;
+		}
+
+		if(matchIndex >= 0) {
+			//Found a single match, insert it
+			_newDiskNumber = matchIndex;
+			_diskNumber = matchIndex;
+			if(matchIndex > 0) {
+				//Make sure we disable fast forward
+				_gameStarted = true;
 			}
 		}
 
@@ -118,28 +141,37 @@ uint8_t FDS::ReadRAM(uint16_t addr)
 
 void FDS::ProcessCpuClock()
 {
-	if(EmulationSettings::CheckFlag(EmulationFlags::FdsAutoInsertDisk)) {
+	if(IsAutoInsertDiskEnabled()) {
 		if(_autoDiskEjectCounter > 0) {
 			//After reading a disk, wait until this counter reaches 0 before
 			//automatically ejecting the disk the next time $4032 is read
 			_autoDiskEjectCounter--;
+			if(_autoDiskEjectCounter) {
+				EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
+			} else {
+				EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+			}
 		}
 		if(_autoDiskSwitchCounter > 0) {
 			//After ejecting the disk, wait a bit before we insert a new one
 			_autoDiskSwitchCounter--;
+			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 			if(_autoDiskSwitchCounter == 0) {
 				//Insert a disk (real disk/side will be selected when game executes $E445
 				InsertDisk(0);
+				EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 			}
 		}
 	}
 
 	if(EmulationSettings::CheckFlag(EmulationFlags::FdsFastForwardOnLoad)) {
-		if(_scanningDisk || _gameStarted < 2) {
+		if(_scanningDisk || !_gameStarted) {
 			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 		} else {
 			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 		}
+	} else {
+		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 	}
 
 	ClockIrq();
@@ -365,7 +397,7 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 				value |= (!IsDiskInserted() || !_scanningDisk) ? 0x02 : 0x00;  //Disk not ready
 				value |= !IsDiskInserted() ? 0x04 : 0x00;  //Disk not writable
 
-				if(EmulationSettings::CheckFlag(EmulationFlags::FdsAutoInsertDisk) && _autoDiskEjectCounter == 0 && _autoDiskSwitchCounter == -1) {
+				if(IsAutoInsertDiskEnabled() && _autoDiskEjectCounter == 0 && _autoDiskSwitchCounter == -1) {
 					//Game tried to check if a disk was inserted or not - this is usually done when the disk needs to be changed
 					//Eject the current disk and insert a new one in 300k cycles (~10 frames)
 					_autoDiskSwitchCounter = 300000;
@@ -396,7 +428,7 @@ void FDS::StreamState(bool saving)
 	if(!saving) {
 		//Make sure we disable fast forwarding when loading a state
 		//Otherwise it's possible to get stuck in fast forward mode
-		_gameStarted = 2;
+		_gameStarted = true;
 	}
 }
 

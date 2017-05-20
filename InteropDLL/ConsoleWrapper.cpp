@@ -441,6 +441,7 @@ namespace InteropEmu {
 		DllExport void __stdcall FdsEjectDisk() { FDS::EjectDisk(); }
 		DllExport void __stdcall FdsInsertDisk(uint32_t diskNumber) { FDS::InsertDisk(diskNumber); }
 		DllExport void __stdcall FdsSwitchDiskSide() { FDS::SwitchDiskSide(); }
+		DllExport bool __stdcall FdsIsAutoInsertDiskEnabled() { return FDS::IsAutoInsertDiskEnabled(); }
 
 		//VS System functions
 		DllExport bool __stdcall IsVsSystem() { return VsControlManager::GetInstance() != nullptr; }

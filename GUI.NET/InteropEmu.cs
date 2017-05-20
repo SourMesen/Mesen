@@ -123,6 +123,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void FdsEjectDisk();
 		[DllImport(DLLPath)] public static extern void FdsInsertDisk(UInt32 diskNumber);
 		[DllImport(DLLPath)] public static extern void FdsSwitchDiskSide();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool FdsIsAutoInsertDiskEnabled();
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsVsSystem();
 		[DllImport(DLLPath)] public static extern void VsInsertCoin(UInt32 port);
