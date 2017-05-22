@@ -97,7 +97,12 @@ uint8_t FDS::ReadRAM(uint16_t addr)
 		uint16_t bufferAddr = CPU::DebugReadWord(0);
 		uint8_t buffer[10];
 		for(int i = 0; i < 10; i++) {
-			buffer[i] = CPU::DebugReadByte(bufferAddr + i);
+			//Prevent infinite recursion
+			if(bufferAddr + i != 0xE445) {
+				buffer[i] = CPU::DebugReadByte(bufferAddr + i);
+			} else {
+				buffer[i] = 0;
+			}
 		}
 
 		int matchCount = 0;
