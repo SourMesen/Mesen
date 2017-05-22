@@ -341,6 +341,8 @@ void Console::Run()
 
 	PlatformUtilities::DisableScreensaver();
 
+	UpdateNesModel(true);
+
 	bool crashed = false;
 	while(true) { 
 		try {

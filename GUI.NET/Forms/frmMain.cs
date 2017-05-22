@@ -445,6 +445,7 @@ namespace Mesen.GUI.Forms
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					_currentGame = InteropEmu.GetRomInfo().GetRomName();
+					InteropEmu.SetNesModel(ConfigManager.Config.Region);
 					InitializeNsfMode(false, true);
 					InitializeFdsDiskMenu();
 					InitializeVsSystemMenu();

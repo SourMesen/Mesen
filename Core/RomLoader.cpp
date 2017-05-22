@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/ArchiveReader.h"
 #include "../Utilities/CRC32.h"
@@ -166,9 +167,13 @@ bool RomLoader::LoadFromMemory(uint8_t* buffer, size_t length, string romName)
 
 	if(_romData.System == GameSystem::Unknown) {
 		//Use filename to detect PAL/VS system games
-		if(_filename.find("(e)") != string::npos || _filename.find("(E)") != string::npos) {
+		string name = _romData.Filename;
+		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+
+		if(name.find("(e)") != string::npos || name.find("(australia)") != string::npos || name.find("(europe)") != string::npos || 
+			name.find("(germany)") != string::npos || name.find("(spain)") != string::npos) {
 			_romData.System = GameSystem::NesPal;
-		} else if(_filename.find("(VS)") != string::npos || _filename.find("(vs)") != string::npos || _filename.find("(Vs)") != string::npos || _filename.find("(vS)") != string::npos) {
+		} else if(name.find("(vs)") != string::npos) {
 			_romData.System = GameSystem::VsUniSystem;
 		}
 	}
