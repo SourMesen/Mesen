@@ -205,6 +205,7 @@ void VideoDecoder::StopThread()
 		_decodeThread.reset();
 
 		_hdScreenTiles = nullptr;
+		EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
 		UpdateVideoFilter();
 		if(_ppuOutputBuffer != nullptr) {
 			//Clear whole screen
