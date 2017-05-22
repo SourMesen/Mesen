@@ -998,6 +998,9 @@ namespace Mesen.GUI
 		DisplayMovieIcons = 0x10000000000,
 		HidePauseOverlay = 0x20000000000,
 
+		UseCustomVsPalette = 0x40000000000,
+
+		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,
 	}
 

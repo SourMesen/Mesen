@@ -62,6 +62,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("ForceBackgroundFirstColumn", chkForceBackgroundFirstColumn);
 			AddBinding("ForceSpritesFirstColumn", chkForceSpritesFirstColumn);
 
+			AddBinding("UseCustomVsPalette", chkUseCustomVsPalette);
+
 			_paletteData = InteropEmu.GetRgbPalette();
 			RefreshPalette();
 

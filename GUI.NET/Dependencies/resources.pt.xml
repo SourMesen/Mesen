@@ -250,6 +250,7 @@
       <Control ID="btnSelectPalette">Escolher uma paleta...</Control>
       <Control ID="btnExportPalette">Exportar arquivo .pal</Control>
       <Control ID="btnLoadPalFile">Carregar arquivo .pal</Control>
+      <Control ID="chkUseCustomVsPalette">Use this palette for VS System games</Control>
       <Control ID="tpgPicture">Imagem</Control>
       <Control ID="btnSelectPreset">Escolher filtro predefinido...</Control>
       <Control ID="grpCommon">Parâmetros comuns</Control>

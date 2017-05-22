@@ -252,6 +252,7 @@
       <Control ID="btnSelectPalette">Выбрать палитру</Control>
       <Control ID="btnExportPalette">Экспорт .pal</Control>
       <Control ID="btnLoadPalFile">Загрузить .pal</Control>
+      <Control ID="chkUseCustomVsPalette">Use this palette for VS System games</Control>
       <Control ID="tpgPicture">Изображение</Control>
       <Control ID="btnSelectPreset">Шаблоны</Control>
       <Control ID="grpCommon">Общие настройки</Control>

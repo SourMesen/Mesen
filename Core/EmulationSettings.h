@@ -58,8 +58,9 @@ enum EmulationFlags : uint64_t
 	DisplayMovieIcons = 0x10000000000,
 	HidePauseOverlay = 0x20000000000,
 
-	ForceMaxSpeed = 0x40000000000,
+	UseCustomVsPalette = 0x40000000000,
 	
+	ForceMaxSpeed = 0x4000000000000000,	
 	ConsoleMode = 0x8000000000000000,
 };
 
@@ -343,6 +344,9 @@ private:
 
 	static uint32_t _ppuPaletteArgb[11][64];
 	static uint32_t _defaultPpuPalette[64];
+	static uint32_t _currentPalette[64];
+	static uint8_t _paletteLut[11][64];
+
 	static uint64_t _flags;
 
 	static Language _displayLanguage;
@@ -429,6 +433,9 @@ public:
 
 		_backgroundEnabled = !CheckFlag(EmulationFlags::DisableBackground);
 		_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
+		if(flags & EmulationFlags::UseCustomVsPalette) {
+			UpdateCurrentPalette();
+		}
 	}
 
 	static void SetFlagState(EmulationFlags flag, bool enabled)
@@ -446,6 +453,12 @@ public:
 	static void ClearFlags(uint64_t flags)
 	{
 		_flags &= ~flags;
+
+		_backgroundEnabled = !CheckFlag(EmulationFlags::DisableBackground);
+		_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
+		if(flags & EmulationFlags::UseCustomVsPalette) {
+			UpdateCurrentPalette();
+		}
 	}
 
 	static bool CheckFlag(EmulationFlags flag)
@@ -481,6 +494,18 @@ public:
 	static void SetPpuModel(PpuModel ppuModel)
 	{
 		_ppuModel = ppuModel;
+		UpdateCurrentPalette();
+	}
+
+	static void UpdateCurrentPalette()
+	{
+		if(CheckFlag(EmulationFlags::UseCustomVsPalette)) {
+			for(int i = 0; i < 64; i++) {
+				_currentPalette[i] = _ppuPaletteArgb[0][_paletteLut[(int)_ppuModel][i]];
+			}
+		} else {
+			memcpy(_currentPalette, _ppuPaletteArgb[(int)_ppuModel], sizeof(_currentPalette));
+		}
 	}
 
 	static PpuModel GetPpuModel()
@@ -889,7 +914,7 @@ public:
 	
 	static uint32_t* GetRgbPalette()
 	{
-		return _ppuPaletteArgb[(int)_ppuModel];
+		return _currentPalette;
 	}
 
 	static void GetRgbPalette(uint32_t* paletteBuffer)
@@ -900,6 +925,7 @@ public:
 	static void SetRgbPalette(uint32_t* paletteBuffer)
 	{
 		memcpy(_ppuPaletteArgb[0], paletteBuffer, sizeof(_ppuPaletteArgb[0]));
+		UpdateCurrentPalette();
 	}
 
 	static bool IsDefaultPalette()

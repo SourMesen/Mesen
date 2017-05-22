@@ -252,6 +252,7 @@
       <Control ID="btnSelectPalette">プリセットを選ぶ...</Control>
       <Control ID="btnExportPalette">.palファイルにエクスポートする</Control>
       <Control ID="btnLoadPalFile">.palファイルをロードする</Control>
+      <Control ID="chkUseCustomVsPalette">VS Systemのゲームにもこのパレットを使う</Control>
       <Control ID="tpgPicture">画像</Control>
       <Control ID="btnSelectPreset">プリセットを選ぶ...</Control>
       <Control ID="grpCommon">共通設定</Control>

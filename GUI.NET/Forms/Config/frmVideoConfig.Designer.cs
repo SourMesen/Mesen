@@ -122,6 +122,7 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
+			this.chkUseCustomVsPalette = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -1030,14 +1031,15 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel3.ColumnCount = 2;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel3.Controls.Add(this.picPalette, 0, 1);
-			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel2, 1, 1);
+			this.tableLayoutPanel3.Controls.Add(this.picPalette, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel2, 1, 0);
+			this.tableLayoutPanel3.Controls.Add(this.chkUseCustomVsPalette, 0, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(521, 370);
 			this.tableLayoutPanel3.TabIndex = 4;
 			// 
@@ -1069,7 +1071,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(167, 370);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(167, 90);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// btnExportPalette
@@ -1304,6 +1306,17 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
+			// chkUseCustomVsPalette
+			// 
+			this.chkUseCustomVsPalette.AutoSize = true;
+			this.tableLayoutPanel3.SetColumnSpan(this.chkUseCustomVsPalette, 2);
+			this.chkUseCustomVsPalette.Location = new System.Drawing.Point(3, 93);
+			this.chkUseCustomVsPalette.Name = "chkUseCustomVsPalette";
+			this.chkUseCustomVsPalette.Size = new System.Drawing.Size(220, 17);
+			this.chkUseCustomVsPalette.TabIndex = 2;
+			this.chkUseCustomVsPalette.Text = "Use this palette for VS System games";
+			this.chkUseCustomVsPalette.UseVisualStyleBackColor = true;
+			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1362,6 +1375,7 @@ namespace Mesen.GUI.Forms.Config
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).EndInit();
 			this.tpgPalette.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
@@ -1467,5 +1481,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.ToolStripMenuItem mnuPalettePvmStyle;
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteOriginalHardware;
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteCompositeDirect;
+		private System.Windows.Forms.CheckBox chkUseCustomVsPalette;
 	}
 }
