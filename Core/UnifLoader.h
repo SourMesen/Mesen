@@ -84,6 +84,9 @@ private:
 			_mapperName = ReadString(data, chunkEnd);
 			if(_mapperName.size() > 0) {
 				romData.MapperID = GetMapperID(_mapperName);
+				if(romData.MapperID == UnifBoards::UnknownBoard) {
+					MessageManager::Log("[UNIF] Error: Unknown board");
+				}
 			} else {
 				romData.Error = true;
 				return false;
@@ -147,8 +150,6 @@ public:
 		if(result != _boardMappings.end()) {
 			return result->second;
 		}
-
-		MessageManager::Log("[UNIF] Error: Unknown board");
 
 		return UnifBoards::UnknownBoard;
 	}

@@ -319,6 +319,8 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 
 		if(info.MapperID < UnifBoards::UnknownBoard) {
 			MessageManager::Log("[DB] Mapper: " + std::to_string(info.MapperID) + "  Sub: " + std::to_string(GetSubMapper(info)));
+		} else if(info.MapperID == UnifBoards::UnknownBoard) {
+			MessageManager::DisplayMessage("Error", "UnsupportedMapper", "UNIF: " + info.Board);
 		}
 
 		MessageManager::Log("[DB] System : " + info.System);

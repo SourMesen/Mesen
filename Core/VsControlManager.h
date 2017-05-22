@@ -191,7 +191,7 @@ public:
 
 		uint8_t value = 0;
 		
-		uint32_t crc = Console::GetCrc32();
+		uint32_t crc = Console::GetPrgCrc32();
 		
 		switch(addr) {
 			case 0x4016:
@@ -226,17 +226,17 @@ public:
 				break;
 
 			case 0x5E01:
-				if(crc == 0x4A5FEE2B) {
+				if(crc == 0xEB2DBA63 || crc == 0x98CFE016) {
 					//TKO Boxing
 					value = _protectionData[0][_protectionCounter++ & 0x1F];
-				} else if(crc == 0x90584067) {
+				} else if(crc == 0x135ADF7C) {
 					//RBI Baseball
 					value = _protectionData[1][_protectionCounter++ & 0x1F];
 				}
 				break;
 
 			default:
-				if(crc == 0x5B0433F3 && addr >= 0x5400 && addr <= 0x57FF) {
+				if((crc == 0xF9D3B0A3 || crc == 0x66BB838F || crc == 0x9924980A) && addr >= 0x5400 && addr <= 0x57FF) {
 					//Super devious
 					return _protectionData[2][_protectionCounter++ & 0x1F];
 				}

@@ -558,7 +558,9 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::FdsMapperID: return new FDS();
 	}
 
-	MessageManager::DisplayMessage("Error", "UnsupportedMapper", "iNES #" + std::to_string(romData.MapperID));
+	if(romData.MapperID != UnifBoards::UnknownBoard) {
+		MessageManager::DisplayMessage("Error", "UnsupportedMapper", "iNES #" + std::to_string(romData.MapperID));
+	}
 	return nullptr;
 }
 
