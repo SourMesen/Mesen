@@ -375,12 +375,15 @@ bool FDS::IsDiskInserted()
 
 uint8_t FDS::ReadRegister(uint16_t addr)
 {
-	uint8_t value = 0;
+	uint8_t value = MemoryManager::GetOpenBus();
 	if(_soundRegEnabled && addr >= 0x4040) {
 		return _audio->ReadRegister(addr);
 	} else if(_diskRegEnabled && addr <= 0x4033) {
 		switch(addr) {
 			case 0x4030:
+				//These 3 pins are open bus
+				value &= 0x2C;
+
 				value |= CPU::HasIRQSource(IRQSource::External) ? 0x01 : 0x00;
 				value |= _transferComplete ? 0x02 : 0x00;
 				value |= _badCrc ? 0x10 : 0x00;
@@ -398,6 +401,9 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 				return _readDataReg;
 
 			case 0x4032:
+				//These 5 pins are open bus
+				value &= 0xF8;
+
 				value |= !IsDiskInserted() ? 0x01 : 0x00;  //Disk not in drive
 				value |= (!IsDiskInserted() || !_scanningDisk) ? 0x02 : 0x00;  //Disk not ready
 				value |= !IsDiskInserted() ? 0x04 : 0x00;  //Disk not writable
@@ -413,7 +419,7 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 
 			case 0x4033:
 				//Always return good battery
-				return 0x80 & _extConWriteReg;
+				return _extConWriteReg;
 		}
 	}
 

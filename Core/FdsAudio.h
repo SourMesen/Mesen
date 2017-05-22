@@ -90,16 +90,19 @@ protected:
 public:
 	uint8_t ReadRegister(uint16_t addr)
 	{
+		uint8_t value = MemoryManager::GetOpenBus();
 		if(addr <= 0x407F) {
-			return 0x40 | _waveTable[addr & 0x3F];
-		} else {
-			switch(addr) {
-				case 0x4090: return 0x40 | _volume.GetGain();
-				case 0x4092: return 0x40 | _mod.GetGain();
-			}
+			value &= 0xC0;
+			value |= _waveTable[addr & 0x3F];
+		} else if(addr == 0x4090) {
+			value &= 0xC0;
+			value |= _volume.GetGain();
+		} else if(addr == 0x4092) {
+			value &= 0xC0;
+			value |= _mod.GetGain();
 		}
 
-		return MemoryManager::GetOpenBus();
+		return value;
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)
