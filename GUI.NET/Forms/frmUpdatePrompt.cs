@@ -55,6 +55,11 @@ namespace Mesen.GUI.Forms
 		
 		private void btnUpdate_Click(object sender, EventArgs e)
 		{
+#if DISABLEAUTOUPDATE
+			MesenMsgBox.Show("AutoUpdateDisabledMessage", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			this.DialogResult = DialogResult.Cancel;
+			this.Close();
+#else
 			string destFilePath = System.Reflection.Assembly.GetEntryAssembly().Location;
 			string srcFilePath = Path.Combine(ConfigManager.DownloadFolder, "Mesen." + lblLatestVersionString.Text + ".exe");
 			string backupFilePath = Path.Combine(ConfigManager.BackupFolder, "Mesen." + lblCurrentVersionString.Text + ".exe");
@@ -80,6 +85,7 @@ namespace Mesen.GUI.Forms
 					}
 				}
 			}
+#endif
 		}
 
 		private string GetSha1Hash(string filename)

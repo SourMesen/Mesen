@@ -575,6 +575,7 @@
     <Message ID="CouldNotInstallRuntime">El paquete Visual C++ Redistributable para Visual Studio 2015 no se ha instalado correctamente.</Message>
     <Message ID="EmptyState">&lt;No hay copia de seguridad&gt;</Message>
     <Message ID="ErrorWhileCheckingUpdates">Se ha producido un error en la búsqueda de actualizaciones.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>
+    <Message ID="AutoUpdateDisabledMessage">Automatic updates are not enabled on this build - please download the latest version of the code and recompile Mesen to get the latest updates.</Message>
     <Message ID="FdsBiosNotFound">No se encontró una bios para FDS. Se requiere una bios para jugar a juegos FDS.&#xA;&#xA;¿Desea seleccionar una bios manualmente?</Message>
     <Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
     <Message ID="FileNotFound">Archivo no encontrado: {0}</Message>

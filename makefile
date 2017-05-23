@@ -44,7 +44,7 @@ ui: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	cp GUI.NET/Dependencies/* $(RELEASEFOLDER)/Dependencies/
 	cp InteropDLL/$(OBJFOLDER)/$(SHAREDLIB) $(RELEASEFOLDER)/Dependencies/$(SHAREDLIB)	
 	cd $(RELEASEFOLDER)/Dependencies && zip ../Dependencies.zip *	
-	cd GUI.NET && xbuild /property:Configuration="Release" /property:Platform="$(MESENPLATFORM)" /property:PreBuildEvent="" /property:DefineConstants="HIDETESTMENU"
+	cd GUI.NET && xbuild /property:Configuration="Release" /property:Platform="$(MESENPLATFORM)" /property:PreBuildEvent="" /property:DefineConstants="HIDETESTMENU;DISABLEAUTOUPDATE"
 
 core: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 
