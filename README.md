@@ -3,12 +3,21 @@ Mesen is a cross-platform NES/Famicom emulator for Windows & Linux built in C++ 
 If you want to support this project, please consider making a donation:  
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W97QP2LYC9H4W"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" title="Donate to this project using Paypal" alt="Donate to this project using Paypal"/></a>
 
-## Links ##
-<a href="http://www.mesen.ca">Website</a>  
-<a href="http://www.mesen.ca/download.php">Latest version</a>  
-<a href="https://github.com/SourMesen/Mesen/releases">Older releases</a>  
+[Website (https://www.mesen.ca)](https://www.mesen.ca)
 
-## Roadmap ##
+# Releases #
+
+### Windows ###
+
+The latest version is available on the [website](https://www.mesen.ca).  Older releases are available from the [releases tab on GitHub](https://github.com/SourMesen/Mesen/releases).
+
+### Ubuntu ###
+The official releases (same downloads as the Windows builds above) also contain the Linux version of Mesen, built under Ubuntu 16 - you should be able to use that in most cases if you are using Ubuntu.
+
+### Arch Linux ###  
+Packages are available here: https://aur.archlinux.org/packages/mesen
+
+# Roadmap #
 Things that ***may or may not*** be added in the future, in no particular order:
 
 -Support for more UNIF boards and more NES/Famicom input devices  
@@ -18,7 +27,7 @@ Things that ***may or may not*** be added in the future, in no particular order:
 -Libretro support  
 -TAS editor  
 
-## Compiling ##
+# Compiling #
 
 ### Windows ###
 1) Open the solution in VS2015/2017
@@ -26,12 +35,14 @@ Things that ***may or may not*** be added in the future, in no particular order:
 3) Run  
 
 ### Linux ###
+
 To compile and run Mesen under Linux, you will need:
 * A recent version of clang/gcc
 * Mono 4.2.1+  (package: mono-devel)
 * SDL2  (package: libsdl2-dev)
 
 The makefile contains some more information at the top.  Running "make" will build the x64 version by default, and then "make run" should start the emulator.  
+
 
 ## LICENSE ##
 
