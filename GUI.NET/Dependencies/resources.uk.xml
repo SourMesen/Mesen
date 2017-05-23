@@ -364,6 +364,7 @@
 
       <Control ID="chkShowFrameCounter">Показувати Лічильник Кадрів</Control>
       <Control ID="chkShowGameTimer">Show game timer</Control>
+      <Control ID="chkShowVsConfigOnLoad">Show game configuration dialog when loading VS System games</Control>
       
       <Control ID="lblRewind">Зберігати дані перемотування за останні</Control>
       <Control ID="lblRewindMinutes">хвилин (Використання Пам'яті ≈1 МБ/хв)</Control>

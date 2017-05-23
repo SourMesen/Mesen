@@ -65,6 +65,8 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("RewindBufferSize", nudRewindBufferSize);
 
+			AddBinding("ShowVsConfigOnLoad", chkShowVsConfigOnLoad);
+
 			UpdateCloudDisplay();
 		}
 

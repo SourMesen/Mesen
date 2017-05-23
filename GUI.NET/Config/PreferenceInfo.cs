@@ -54,6 +54,7 @@ namespace Mesen.GUI.Config
 
 		public bool ShowFrameCounter = false;
 		public bool ShowGameTimer = false;
+		public bool ShowVsConfigOnLoad = false;
 
 		public UInt32 RewindBufferSize = 300;
 

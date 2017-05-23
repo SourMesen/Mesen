@@ -453,6 +453,12 @@ namespace Mesen.GUI.Forms
 					VsConfigInfo.ApplyConfig();
 					InitializeStateMenu(mnuSaveState, true);
 					InitializeStateMenu(mnuLoadState, false);
+					if(ConfigManager.Config.PreferenceInfo.ShowVsConfigOnLoad && InteropEmu.IsVsSystem()) {
+						this.Invoke((MethodInvoker)(() => {
+							this.ShowVsGameConfig();
+						}));
+					}
+
 					this.StartEmuThread();
 					this.BeginInvoke((MethodInvoker)(() => {
 						UpdateViewerSize();
@@ -1706,12 +1712,17 @@ namespace Mesen.GUI.Forms
 			InteropEmu.VsInsertCoin(1);
 		}
 
-		private void mnuVsGameConfig_Click(object sender, EventArgs e)
+		private void ShowVsGameConfig()
 		{
 			VsConfigInfo configInfo = VsConfigInfo.GetCurrentGameConfig(true);
-			if(new frmVsGameConfig(configInfo).ShowDialog(sender, this) == DialogResult.OK) {
+			if(new frmVsGameConfig(configInfo).ShowDialog(null, this) == DialogResult.OK) {
 				VsConfigInfo.ApplyConfig();
 			}
+		}
+
+		private void mnuVsGameConfig_Click(object sender, EventArgs e)
+		{
+			ShowVsGameConfig();
 		}
 
 		private void mnuBilinearInterpolation_Click(object sender, EventArgs e)

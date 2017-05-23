@@ -365,6 +365,7 @@
 
       <Control ID="chkShowFrameCounter">Afficher le compteur d'images</Control>
       <Control ID="chkShowGameTimer">Afficher le compteur de temps</Control>
+      <Control ID="chkShowVsConfigOnLoad">Afficher le dialogue de configuration du jeu lors du chargement de jeux VS System</Control>
 
       <Control ID="lblRewind">Permettre de rembobiner jusqu'à</Control>
       <Control ID="lblRewindMinutes">minutes (Utilise ≈1MB/min)</Control>

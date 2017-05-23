@@ -364,6 +364,7 @@
       
       <Control ID="chkShowFrameCounter">Show frame counter</Control>
       <Control ID="chkShowGameTimer">Show game timer</Control>
+      <Control ID="chkShowVsConfigOnLoad">Show game configuration dialog when loading VS System games</Control>
 
       <Control ID="lblRewind">Keep rewind data for the last</Control>
       <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>

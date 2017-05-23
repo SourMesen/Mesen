@@ -35,7 +35,6 @@ namespace Mesen.GUI.Forms.Config
 			this.lblPauseBackgroundSettings = new System.Windows.Forms.Label();
 			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
 			this.chkAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
-			this.btnOpenMesenFolder = new System.Windows.Forms.Button();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblDisplayLanguage = new System.Windows.Forms.Label();
 			this.cboDisplayLanguage = new System.Windows.Forms.ComboBox();
@@ -47,6 +46,9 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAllowBackgroundInput = new System.Windows.Forms.CheckBox();
 			this.chkPauseWhenInBackground = new System.Windows.Forms.CheckBox();
 			this.chkPauseOnMovieEnd = new System.Windows.Forms.CheckBox();
+			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.btnOpenMesenFolder = new System.Windows.Forms.Button();
+			this.btnResetSettings = new System.Windows.Forms.Button();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgShortcuts = new System.Windows.Forms.TabPage();
@@ -101,18 +103,18 @@ namespace Mesen.GUI.Forms.Config
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.chkDisplayTitleBarInfo = new System.Windows.Forms.CheckBox();
-			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-			this.lblRewind = new System.Windows.Forms.Label();
-			this.nudRewindBufferSize = new System.Windows.Forms.NumericUpDown();
-			this.lblRewindMinutes = new System.Windows.Forms.Label();
 			this.chkFdsAutoInsertDisk = new System.Windows.Forms.CheckBox();
 			this.chkShowGameTimer = new System.Windows.Forms.CheckBox();
 			this.chkShowFrameCounter = new System.Windows.Forms.CheckBox();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-			this.btnResetSettings = new System.Windows.Forms.Button();
+			this.lblRewindMinutes = new System.Windows.Forms.Label();
+			this.nudRewindBufferSize = new System.Windows.Forms.NumericUpDown();
+			this.lblRewind = new System.Windows.Forms.Label();
+			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkShowVsConfigOnLoad = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanel5.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgShortcuts.SuspendLayout();
@@ -140,9 +142,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpFileFormat.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).BeginInit();
-			this.tableLayoutPanel5.SuspendLayout();
+			this.flowLayoutPanel6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -219,17 +220,6 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAutomaticallyCheckForUpdates.TabIndex = 17;
 			this.chkAutomaticallyCheckForUpdates.Text = "Automatically check for updates";
 			this.chkAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
-			// 
-			// btnOpenMesenFolder
-			// 
-			this.btnOpenMesenFolder.AutoSize = true;
-			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 3);
-			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
-			this.btnOpenMesenFolder.Size = new System.Drawing.Size(110, 23);
-			this.btnOpenMesenFolder.TabIndex = 16;
-			this.btnOpenMesenFolder.Text = "Open Mesen Folder";
-			this.btnOpenMesenFolder.UseVisualStyleBackColor = true;
-			this.btnOpenMesenFolder.Click += new System.EventHandler(this.btnOpenMesenFolder_Click);
 			// 
 			// flowLayoutPanel2
 			// 
@@ -350,6 +340,45 @@ namespace Mesen.GUI.Forms.Config
 			this.chkPauseOnMovieEnd.TabIndex = 15;
 			this.chkPauseOnMovieEnd.Text = "Pause when a movie finishes playing";
 			this.chkPauseOnMovieEnd.UseVisualStyleBackColor = true;
+			// 
+			// tableLayoutPanel5
+			// 
+			this.tableLayoutPanel5.ColumnCount = 3;
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.Controls.Add(this.btnOpenMesenFolder, 0, 0);
+			this.tableLayoutPanel5.Controls.Add(this.btnResetSettings, 2, 0);
+			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 308);
+			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+			this.tableLayoutPanel5.RowCount = 1;
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(473, 29);
+			this.tableLayoutPanel5.TabIndex = 24;
+			// 
+			// btnOpenMesenFolder
+			// 
+			this.btnOpenMesenFolder.AutoSize = true;
+			this.btnOpenMesenFolder.Location = new System.Drawing.Point(3, 3);
+			this.btnOpenMesenFolder.Name = "btnOpenMesenFolder";
+			this.btnOpenMesenFolder.Size = new System.Drawing.Size(110, 23);
+			this.btnOpenMesenFolder.TabIndex = 16;
+			this.btnOpenMesenFolder.Text = "Open Mesen Folder";
+			this.btnOpenMesenFolder.UseVisualStyleBackColor = true;
+			this.btnOpenMesenFolder.Click += new System.EventHandler(this.btnOpenMesenFolder_Click);
+			// 
+			// btnResetSettings
+			// 
+			this.btnResetSettings.AutoSize = true;
+			this.btnResetSettings.Location = new System.Drawing.Point(370, 3);
+			this.btnResetSettings.Name = "btnResetSettings";
+			this.btnResetSettings.Size = new System.Drawing.Size(100, 23);
+			this.btnResetSettings.TabIndex = 17;
+			this.btnResetSettings.Text = "Reset All Settings";
+			this.btnResetSettings.UseVisualStyleBackColor = true;
+			this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
 			// 
 			// tabMain
 			// 
@@ -964,14 +993,16 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.chkDisplayTitleBarInfo, 0, 4);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 7);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 8);
 			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoInsertDisk, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.chkShowGameTimer, 0, 6);
 			this.tableLayoutPanel1.Controls.Add(this.chkShowFrameCounter, 0, 5);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowVsConfigOnLoad, 0, 7);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 9;
+			this.tableLayoutPanel1.RowCount = 10;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1024,55 +1055,6 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisplayTitleBarInfo.Text = "Display additional information in title bar";
 			this.chkDisplayTitleBarInfo.UseVisualStyleBackColor = true;
 			// 
-			// flowLayoutPanel6
-			// 
-			this.flowLayoutPanel6.Controls.Add(this.lblRewind);
-			this.flowLayoutPanel6.Controls.Add(this.nudRewindBufferSize);
-			this.flowLayoutPanel6.Controls.Add(this.lblRewindMinutes);
-			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 161);
-			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(473, 23);
-			this.flowLayoutPanel6.TabIndex = 9;
-			// 
-			// lblRewind
-			// 
-			this.lblRewind.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblRewind.AutoSize = true;
-			this.lblRewind.Location = new System.Drawing.Point(3, 6);
-			this.lblRewind.Name = "lblRewind";
-			this.lblRewind.Size = new System.Drawing.Size(142, 13);
-			this.lblRewind.TabIndex = 3;
-			this.lblRewind.Text = "Keep rewind data for the last";
-			// 
-			// nudRewindBufferSize
-			// 
-			this.nudRewindBufferSize.Location = new System.Drawing.Point(151, 3);
-			this.nudRewindBufferSize.Maximum = new decimal(new int[] {
-            900,
-            0,
-            0,
-            0});
-			this.nudRewindBufferSize.Name = "nudRewindBufferSize";
-			this.nudRewindBufferSize.Size = new System.Drawing.Size(42, 20);
-			this.nudRewindBufferSize.TabIndex = 1;
-			this.nudRewindBufferSize.Value = new decimal(new int[] {
-            300,
-            0,
-            0,
-            0});
-			// 
-			// lblRewindMinutes
-			// 
-			this.lblRewindMinutes.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblRewindMinutes.AutoSize = true;
-			this.lblRewindMinutes.Location = new System.Drawing.Point(199, 6);
-			this.lblRewindMinutes.Name = "lblRewindMinutes";
-			this.lblRewindMinutes.Size = new System.Drawing.Size(175, 13);
-			this.lblRewindMinutes.TabIndex = 2;
-			this.lblRewindMinutes.Text = "minutes (Memory Usage ≈1MB/min)";
-			// 
 			// chkFdsAutoInsertDisk
 			// 
 			this.chkFdsAutoInsertDisk.AutoSize = true;
@@ -1108,33 +1090,64 @@ namespace Mesen.GUI.Forms.Config
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
-			// tableLayoutPanel5
+			// lblRewindMinutes
 			// 
-			this.tableLayoutPanel5.ColumnCount = 3;
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel5.Controls.Add(this.btnOpenMesenFolder, 0, 0);
-			this.tableLayoutPanel5.Controls.Add(this.btnResetSettings, 2, 0);
-			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 308);
-			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-			this.tableLayoutPanel5.RowCount = 1;
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(473, 29);
-			this.tableLayoutPanel5.TabIndex = 24;
+			this.lblRewindMinutes.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRewindMinutes.AutoSize = true;
+			this.lblRewindMinutes.Location = new System.Drawing.Point(199, 6);
+			this.lblRewindMinutes.Name = "lblRewindMinutes";
+			this.lblRewindMinutes.Size = new System.Drawing.Size(175, 13);
+			this.lblRewindMinutes.TabIndex = 2;
+			this.lblRewindMinutes.Text = "minutes (Memory Usage ≈1MB/min)";
 			// 
-			// btnResetSettings
+			// nudRewindBufferSize
 			// 
-			this.btnResetSettings.AutoSize = true;
-			this.btnResetSettings.Location = new System.Drawing.Point(370, 3);
-			this.btnResetSettings.Name = "btnResetSettings";
-			this.btnResetSettings.Size = new System.Drawing.Size(100, 23);
-			this.btnResetSettings.TabIndex = 17;
-			this.btnResetSettings.Text = "Reset All Settings";
-			this.btnResetSettings.UseVisualStyleBackColor = true;
-			this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
+			this.nudRewindBufferSize.Location = new System.Drawing.Point(151, 3);
+			this.nudRewindBufferSize.Maximum = new decimal(new int[] {
+            900,
+            0,
+            0,
+            0});
+			this.nudRewindBufferSize.Name = "nudRewindBufferSize";
+			this.nudRewindBufferSize.Size = new System.Drawing.Size(42, 20);
+			this.nudRewindBufferSize.TabIndex = 1;
+			this.nudRewindBufferSize.Value = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+			// 
+			// lblRewind
+			// 
+			this.lblRewind.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRewind.AutoSize = true;
+			this.lblRewind.Location = new System.Drawing.Point(3, 6);
+			this.lblRewind.Name = "lblRewind";
+			this.lblRewind.Size = new System.Drawing.Size(142, 13);
+			this.lblRewind.TabIndex = 3;
+			this.lblRewind.Text = "Keep rewind data for the last";
+			// 
+			// flowLayoutPanel6
+			// 
+			this.flowLayoutPanel6.Controls.Add(this.lblRewind);
+			this.flowLayoutPanel6.Controls.Add(this.nudRewindBufferSize);
+			this.flowLayoutPanel6.Controls.Add(this.lblRewindMinutes);
+			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 184);
+			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(473, 23);
+			this.flowLayoutPanel6.TabIndex = 9;
+			// 
+			// chkShowVsConfigOnLoad
+			// 
+			this.chkShowVsConfigOnLoad.AutoSize = true;
+			this.chkShowVsConfigOnLoad.Location = new System.Drawing.Point(3, 164);
+			this.chkShowVsConfigOnLoad.Name = "chkShowVsConfigOnLoad";
+			this.chkShowVsConfigOnLoad.Size = new System.Drawing.Size(331, 17);
+			this.chkShowVsConfigOnLoad.TabIndex = 13;
+			this.chkShowVsConfigOnLoad.Text = "Show game configuration dialog when loading VS System games";
+			this.chkShowVsConfigOnLoad.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
 			// 
@@ -1155,6 +1168,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
+			this.tableLayoutPanel5.ResumeLayout(false);
+			this.tableLayoutPanel5.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgShortcuts.ResumeLayout(false);
@@ -1192,11 +1207,9 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).EndInit();
 			this.flowLayoutPanel6.ResumeLayout(false);
 			this.flowLayoutPanel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).EndInit();
-			this.tableLayoutPanel5.ResumeLayout(false);
-			this.tableLayoutPanel5.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1271,10 +1284,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkDisplayTitleBarInfo;
 		private System.Windows.Forms.Label lblPauseBackgroundSettings;
 		private System.Windows.Forms.Label lblMiscSettings;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
-		private System.Windows.Forms.Label lblRewind;
-		private System.Windows.Forms.NumericUpDown nudRewindBufferSize;
-		private System.Windows.Forms.Label lblRewindMinutes;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.CheckBox chkFdsAutoLoadDisk;
 		private System.Windows.Forms.CheckBox chkFdsFastForwardOnLoad;
@@ -1283,5 +1292,10 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkShowFrameCounter;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
 		private System.Windows.Forms.Button btnResetSettings;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
+		private System.Windows.Forms.Label lblRewind;
+		private System.Windows.Forms.NumericUpDown nudRewindBufferSize;
+		private System.Windows.Forms.Label lblRewindMinutes;
+		private System.Windows.Forms.CheckBox chkShowVsConfigOnLoad;
 	}
 }

@@ -364,6 +364,7 @@
 
       <Control ID="chkShowFrameCounter">フレームカウンタを表示する</Control>
       <Control ID="chkShowGameTimer">ゲームタイマーを表示する</Control>
+      <Control ID="chkShowVsConfigOnLoad">VSゲームを起動する時に設定ウィンドウを表示する</Control>
 
       <Control ID="lblRewind">巻き戻し用データの</Control>
       <Control ID="lblRewindMinutes">分をキープする (メモリの使用量：１分に約１MB)</Control>
