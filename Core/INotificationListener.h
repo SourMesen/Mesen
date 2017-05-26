@@ -22,6 +22,7 @@ enum class ConsoleNotificationType
 	PpuViewerDisplayFrame = 16,
 	RequestExit = 17,
 	ToggleCheats = 18,
+	ToggleAudio = 19,
 };
 
 class INotificationListener

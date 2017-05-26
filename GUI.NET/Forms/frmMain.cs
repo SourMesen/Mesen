@@ -513,6 +513,14 @@ namespace Mesen.GUI.Forms
 						ConfigManager.ApplyChanges();
 					}));
 					break;
+
+				case InteropEmu.ConsoleNotificationType.ToggleAudio:
+					this.BeginInvoke((MethodInvoker)(() => {
+						ConfigManager.Config.AudioInfo.EnableAudio = !ConfigManager.Config.AudioInfo.EnableAudio;
+						AudioInfo.ApplyConfig();
+						ConfigManager.ApplyChanges();
+					}));
+					break;
 			}
 
 			if(e.NotificationType != InteropEmu.ConsoleNotificationType.PpuFrameDone) {

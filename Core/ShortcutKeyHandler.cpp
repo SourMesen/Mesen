@@ -130,6 +130,10 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 		MessageManager::SendNotification(ConsoleNotificationType::ToggleCheats);
 	}
 
+	if(DetectKeyPress(mappings.ToggleAudio)) {
+		MessageManager::SendNotification(ConsoleNotificationType::ToggleAudio);
+	}
+
 	if(ControlManager::IsKeyPressed(mappings.RunSingleFrame)) {
 		if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
 			EmulationSettings::ClearFlags(EmulationFlags::Paused);

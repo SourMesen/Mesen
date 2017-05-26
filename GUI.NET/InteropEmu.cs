@@ -617,6 +617,7 @@ namespace Mesen.GUI
 			PpuViewerDisplayFrame = 16,
 			RequestExit = 17,
 			ToggleCheats = 18,
+			ToggleAudio = 19,
 		}
 
 		public enum ControllerType
@@ -1100,6 +1101,7 @@ namespace Mesen.GUI
 		public UInt32 DecreaseSpeed;
 
 		public UInt32 ToggleCheats;
+		public UInt32 ToggleAudio;
 
 		public UInt32 RunSingleFrame;
 	}

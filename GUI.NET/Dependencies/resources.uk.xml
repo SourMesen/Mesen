@@ -624,6 +624,7 @@
     <Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Включити/Виключити Чит Коди</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAudio">Enable/Disable Audio</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">Запуск Одного Кадру</Message>
   </Messages>
   <Enums>

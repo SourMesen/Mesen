@@ -276,6 +276,7 @@ struct EmulatorKeyMappings
 	uint32_t DecreaseSpeed;
 
 	uint32_t ToggleCheats;
+	uint32_t ToggleAudio;
 
 	uint32_t RunSingleFrame;
 };

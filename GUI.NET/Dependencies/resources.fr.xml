@@ -634,6 +634,7 @@
     <Message ID="EmulatorShortcutMappings_SaveState">Sauvegarder l'état à la position courante</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Charger l'état de la position courante</Message>
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Activer/Désactiver tous les codes</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAudio">Activer/Désactiver l'audio</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">Avancer d'une seule image</Message>
   </Messages>
   <Enums>
