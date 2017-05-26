@@ -54,6 +54,11 @@ namespace Mesen.GUI.Controls
 			base.OnVisibleChanged(e);
 		}
 
+		public int GameCount
+		{
+			get { return _recentGames.Count; }
+		}
+
 		public void Initialize()
 		{
 			_recentGames = new List<RecentGameInfo>();
