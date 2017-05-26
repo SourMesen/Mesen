@@ -665,8 +665,12 @@ namespace Mesen.GUI.Forms
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
 					panelInfo.Visible = _emuThread == null;
-					ctrlRecentGames.Visible = _emuThread == null;
 					mnuPowerOff.Enabled = _emuThread != null;
+					if(ctrlRecentGames.Visible && _emuThread == null) {
+						ctrlRecentGames.Visible = false;
+					} else {
+						ctrlRecentGames.Visible = true;
+					}
 
 					ctrlLoading.Visible = (_romLoadCounter > 0);
 
@@ -806,6 +810,7 @@ namespace Mesen.GUI.Forms
 						_emuThread = null;
 					} catch(Exception ex) {
 						MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+						_emuThread = null;
 					}
 				});
 				_emuThread.Start();
