@@ -12,6 +12,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 
 	NESHeader header;
 	uint8_t* buffer = romFile.data();
+	uint32_t dataSize = romFile.size();
 	if(preloadedHeader) {
 		header = *preloadedHeader;
 		header.SanitizeHeader(romFile.size() + sizeof(NESHeader));
@@ -19,6 +20,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 		memcpy((char*)&header, buffer, sizeof(NESHeader));
 		buffer += sizeof(NESHeader);
 		header.SanitizeHeader(romFile.size());
+		dataSize -= sizeof(NESHeader);
 	}
 
 	romData.Format = RomFormat::iNes;
@@ -54,18 +56,24 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	romData.PrgChrCrc32 = romCrc;
 	romData.PrgChrMd5 = GetMd5Sum(buffer, romFile.size() - bytesRead);
 
-	NESHeader dbHeader;
-	GameDatabase::GetiNesHeader(romData.PrgChrCrc32, dbHeader);
-	if(dbHeader.GetPrgSize() != header.GetPrgSize() || dbHeader.GetChrSize() != header.GetChrSize()) {
-		if(dbHeader.GetPrgSize() + dbHeader.GetChrSize() + bytesRead <= romFile.size()) {
-			//Use corrected PRG/CHR sizes from the DB when reading from file
-			header = dbHeader;
-		}
+	uint32_t prgSize = 0;
+	uint32_t chrSize = 0;
+
+	if(EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) || !GameDatabase::GetDbRomSize(romData.PrgChrCrc32, prgSize, chrSize)) {
+		//Fallback on header sizes when game is not in DB (or DB is disabled)
+		prgSize = header.GetPrgSize();
+		chrSize = header.GetChrSize();
 	}
 
-	romData.PrgRom.insert(romData.PrgRom.end(), buffer, buffer + header.GetPrgSize());
-	buffer += header.GetPrgSize();
-	romData.ChrRom.insert(romData.ChrRom.end(), buffer, buffer + header.GetChrSize());
+	if(prgSize + chrSize > dataSize) {
+		//Invalid rom file
+		romData.Error = true;
+		return romData;
+	}
+
+	romData.PrgRom.insert(romData.PrgRom.end(), buffer, buffer + prgSize);
+	buffer += prgSize;
+	romData.ChrRom.insert(romData.ChrRom.end(), buffer, buffer + chrSize);
 
 	romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
 

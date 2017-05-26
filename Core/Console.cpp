@@ -63,10 +63,14 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename, _archiveFileIndex);
 	}
 
-	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
 	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, filestream, patchFilename, archiveFileIndex);
 
 	if(mapper) {
+		if(_mapper) {
+			//Send notification only if a game was already running and we successfully loaded the new one
+			MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
+		}
+
 		_romFilepath = romFilename;
 		_patchFilename = patchFilename;
 		_archiveFileIndex = archiveFileIndex;

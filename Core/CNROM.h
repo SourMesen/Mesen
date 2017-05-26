@@ -15,6 +15,9 @@ protected:
 	{
 		SelectPRGPage(0, 0);
 		SelectCHRPage(0, 0);
+
+		//Needed for mighty bomb jack (j)
+		_vramOpenBusValue = 0xFF;
 	}
 	
 	bool HasBusConflicts() override { return (_mapperID == 3 && _subMapperID == 2) || _mapperID == 185; }

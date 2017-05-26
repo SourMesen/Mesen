@@ -781,7 +781,9 @@ uint8_t BaseMapper::InternalReadVRAM(uint16_t addr)
 	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Read) {
 		return _chrPages[addr >> 8][(uint8_t)addr];
 	}
-	return 0;
+
+	//Open bus - "When CHR is disabled, the pattern tables are open bus. Theoretically, this should return the LSB of the address read, but real-world behavior varies."
+	return _vramOpenBusValue >= 0 ? _vramOpenBusValue : addr;
 }
 
 uint8_t BaseMapper::DebugReadVRAM(uint16_t addr)

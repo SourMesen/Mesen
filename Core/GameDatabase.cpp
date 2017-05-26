@@ -237,6 +237,18 @@ uint8_t GameDatabase::GetSubMapper(GameInfo &info)
 	return 0;
 }
 
+bool GameDatabase::GetDbRomSize(uint32_t romCrc, uint32_t &prgSize, uint32_t &chrSize)
+{
+	InitDatabase();
+	auto result = _gameDatabase.find(romCrc);
+	if(result != _gameDatabase.end()) {
+		prgSize = result->second.PrgRomSize * 1024;
+		chrSize = result->second.ChrRomSize * 1024;
+		return true;
+	}
+	return false;
+}
+
 bool GameDatabase::GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader)
 {
 	GameInfo info = {};

@@ -71,6 +71,7 @@ protected:
 	uint8_t* _workRam = nullptr;
 	bool _hasBattery = false;
 	bool _hasChrBattery = false;
+	int16_t _vramOpenBusValue = -1;
 
 	virtual void InitMapper() = 0;
 	virtual void InitMapper(RomData &romData);
