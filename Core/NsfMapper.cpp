@@ -297,9 +297,9 @@ uint8_t NsfMapper::ReadRegister(uint16_t addr)
 			case 0x3E13: return _nsfHeader.SoundChips & 0x3F;
 
 			case 0x5205: return (_mmc5MultiplierValues[0] * _mmc5MultiplierValues[1]) & 0xFF;
-			case 0x5206: return (_mmc5MultiplierValues[0] * _mmc5MultiplierValues[0]) >> 8;
+			case 0x5206: return (_mmc5MultiplierValues[0] * _mmc5MultiplierValues[1]) >> 8;
 
-				//Reset/irq vectors
+			//Reset/irq vectors
 			case 0xFFFC: case 0xFFFD: case 0xFFFE: case 0xFFFF:
 				return _nsfBios[addr & 0xFF];
 		}
@@ -337,7 +337,7 @@ void NsfMapper::WriteRegister(uint16_t addr, uint8_t value)
 				_irqCounter = _irqReloadValue;
 				break;
 
-				//MMC5 multiplication
+			//MMC5 multiplication
 			case 0x5205: _mmc5MultiplierValues[0] = value; break;
 			case 0x5206: _mmc5MultiplierValues[1] = value; break;
 
