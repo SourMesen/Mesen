@@ -301,7 +301,7 @@ std::unordered_map<string, string> MessageManager::_esResources = {
 	{ "ApplyingPatch", u8"Aplicando parche: %1" },
 	{ "CheatApplied", u8"1 truco aplicado." },
 	{ "CheatsApplied", u8"%1 trucos aplicados." },
-	{ "CheatsDisabled", u8"All cheats disabled." },
+	{ "CheatsDisabled", u8"Todos los trucos deshabilitados." },
 	{ "ConnectedToServer", u8"Conectado al servidor." },
 	{ "ConnectedAsPlayer", u8"Conectado como jugador %1" },
 	{ "ConnectedAsSpectator", u8"Conectado como espectador." },
