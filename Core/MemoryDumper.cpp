@@ -242,7 +242,7 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 	if(bankIndex == 0 || bankIndex == 1) {
 		uint16_t baseAddr = bankIndex == 0 ? 0x0000 : 0x1000;
 		for(int i = 0; i < 0x1000; i++) {
-			chrBuffer[i] = _mapper->ReadVRAM(baseAddr + i);
+			chrBuffer[i] = _mapper->DebugReadVRAM(baseAddr + i);
 			chrIsDrawn[i] = _codeDataLogger->IsDrawn(_mapper->ToAbsoluteChrAddress(baseAddr + i));
 		}
 	} else {
