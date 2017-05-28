@@ -16,6 +16,18 @@ namespace Mesen.GUI.Controls
 {
 	public partial class ctrlRecentGames : UserControl
 	{
+		public new event MouseEventHandler MouseMove
+		{
+			add { this.tlpPreviousState.MouseMove += value; }
+			remove { this.tlpPreviousState.MouseMove -= value; }
+		}
+
+		public new event EventHandler DoubleClick
+		{
+			add { this.tlpPreviousState.DoubleClick += value; }
+			remove { this.tlpPreviousState.DoubleClick -= value; }
+		}
+
 		private int _currentIndex = 0;
 		private List<RecentGameInfo> _recentGames = new List<RecentGameInfo>();
 		private PrivateFontCollection _fonts = new PrivateFontCollection();

@@ -368,6 +368,8 @@ namespace Mesen.GUI.Forms
 			} else {
 				ctrlRecentGames.Height = this.ClientSize.Height - 125;
 			}
+			ctrlRecentGames.Width = this.ClientSize.Width;
+			ctrlRecentGames.Top = (this.HideMenuStrip && this.menuStrip.Visible) ? -menuStrip.Height : 0;
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -1259,6 +1261,7 @@ namespace Mesen.GUI.Forms
 				UpdateRecentFiles();
 				UpdateViewerSize();
 			}
+			ResizeRecentGames(sender, e);
 		}
 
 		private void mnuRegion_Click(object sender, EventArgs e)
@@ -1646,6 +1649,7 @@ namespace Mesen.GUI.Forms
 				this.BeginInvoke((MethodInvoker)(() => {
 					int rendererTop = (panelRenderer.Height + (this.menuStrip.Visible ? menuStrip.Height : 0) - ctrlRenderer.Height) / 2;
 					this.ctrlRenderer.Top = rendererTop + (this.menuStrip.Visible ? -menuStrip.Height : 0);
+					this.ctrlRecentGames.Top = this.menuStrip.Visible ? -menuStrip.Height : 0;
 				}));
 			}
 		}
