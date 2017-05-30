@@ -450,6 +450,8 @@ void Console::Run()
 
 	VideoDecoder::GetInstance()->StopThread();
 
+	EmulationSettings::ClearFlags(EmulationFlags::Paused);
+
 	_initialized = false;
 	_romFilepath = "";
 	_mapper.reset();
