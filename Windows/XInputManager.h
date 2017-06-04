@@ -7,6 +7,7 @@ class XInputManager
 {
 	private:
 		vector<shared_ptr<XINPUT_STATE>> _gamePadStates;
+		vector<uint8_t> _gamePadConnected;
 
 	public:
 		XInputManager();

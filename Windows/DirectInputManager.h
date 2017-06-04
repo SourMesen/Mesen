@@ -23,7 +23,7 @@ private:
 	static std::vector<GUID> _directInputDeviceGuids;
 
 	bool Initialize();
-	bool UpdateInputState(DirectInputData& joystick);
+	void UpdateInputState(DirectInputData& joystick);
 	static bool ProcessDevice(const DIDEVICEINSTANCE* pdidInstance, bool checkOnly);
 	static bool IsXInputDevice(const GUID* pGuidProductFromDirectInput);
 	static int __stdcall NeedToUpdateCallback(const DIDEVICEINSTANCE* pdidInstance, void* pContext);

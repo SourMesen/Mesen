@@ -5,17 +5,21 @@ XInputManager::XInputManager()
 {
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
 		_gamePadStates.push_back(shared_ptr<XINPUT_STATE>(new XINPUT_STATE()));
+		_gamePadConnected.push_back(true);
 	}
 }
 
 void XInputManager::RefreshState()
 {
+	XINPUT_STATE state;
 	for(DWORD i = 0; i < XUSER_MAX_COUNT; i++) {
-		if(_gamePadStates[i] != nullptr) {
-			ZeroMemory(_gamePadStates[i].get(), sizeof(XINPUT_STATE));
-			if(XInputGetState(i, _gamePadStates[i].get()) != ERROR_SUCCESS) {
+		if(_gamePadConnected[i]) {
+			if(XInputGetState(i, &state) != ERROR_SUCCESS) {
 				//XInputGetState is incredibly slow when no controller is plugged in
-				_gamePadStates[i] = nullptr;
+				ZeroMemory(_gamePadStates[i].get(), sizeof(XINPUT_STATE));
+				_gamePadConnected[i] = false;
+			} else {
+				*_gamePadStates[i] = state;
 			}
 		}
 	}
@@ -23,9 +27,8 @@ void XInputManager::RefreshState()
 
 bool XInputManager::NeedToUpdate()
 {
-	bool needToUpdate = false;
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
-		if(_gamePadStates[i] == nullptr) {
+		if(!_gamePadConnected[i]) {
 			XINPUT_STATE state;
 			if(XInputGetState(i, &state) == ERROR_SUCCESS) {
 				return true;
@@ -39,15 +42,13 @@ void XInputManager::UpdateDeviceList()
 {
 	//Periodically detect if a controller has been plugged in to allow controllers to be plugged in after the emu is started
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
-		if(_gamePadStates[i] == nullptr) {
-			_gamePadStates[i] = shared_ptr<XINPUT_STATE>(new XINPUT_STATE());
-		}
+		_gamePadConnected[i] = true;
 	}
 }
 
 bool XInputManager::IsPressed(uint8_t gamepadPort, uint8_t button)
 {
-	if(_gamePadStates[gamepadPort] != nullptr) {
+	if(_gamePadConnected[gamepadPort]) {
 		XINPUT_GAMEPAD &gamepad = _gamePadStates[gamepadPort]->Gamepad;
 		if(button <= 16) {
 			WORD xinputButton = 1 << (button - 1);

@@ -354,11 +354,10 @@ bool DirectInputManager::IsPressed(int port, int button)
 	return false;
 }
 
-bool DirectInputManager::UpdateInputState(DirectInputData &data)
+void DirectInputManager::UpdateInputState(DirectInputData &data)
 {
+	DIJOYSTATE2 newState;
 	HRESULT hr;
-
-	data.stateValid = false;
 
 	// Poll the device to read the current state
 	hr = data.joystick->Poll();
@@ -373,18 +372,19 @@ bool DirectInputManager::UpdateInputState(DirectInputData &data)
 		// hr may be DIERR_OTHERAPPHASPRIO or other errors.  This may occur when the app is minimized or in the process of 
 		// switching, so just try again later 
 		if(FAILED(hr)) {
-			return true;
+			data.stateValid = false;
+			return;
 		}
 	}
 
 	// Get the input's device state
-	if(FAILED(hr = data.joystick->GetDeviceState(sizeof(DIJOYSTATE2), &data.state))) {
-		return false; // The device should have been acquired during the Poll()
+	if(FAILED(hr = data.joystick->GetDeviceState(sizeof(DIJOYSTATE2), &newState))) {
+		data.stateValid = false;
+		return; // The device should have been acquired during the Poll()
 	}
 
+	data.state = newState;
 	data.stateValid = true;
-
-	return true;
 }
 
 
