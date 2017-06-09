@@ -145,3 +145,16 @@ uint32_t EmulationSettings::GetEmulationSpeed(bool ignoreTurbo)
 		return _emulationSpeed;
 	}
 }
+
+double EmulationSettings::GetAspectRatio()
+{
+	switch(_aspectRatio) {
+		case VideoAspectRatio::Auto: return (Console::GetModel() == NesModel::PAL || Console::GetModel() == NesModel::Dendy) ? (9440000.0 / 6384411.0) : (128.0 / 105.0);
+		case VideoAspectRatio::NTSC: return 128.0 / 105.0;
+		case VideoAspectRatio::PAL: return 9440000.0 / 6384411.0;
+		case VideoAspectRatio::Standard: return 4.0 / 3.0;
+		case VideoAspectRatio::Widescreen: return 16.0 / 9.0;
+		case VideoAspectRatio::Custom: return _customAspectRatio;
+	}
+	return 0.0;
+}

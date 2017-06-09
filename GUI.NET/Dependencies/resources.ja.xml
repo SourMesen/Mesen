@@ -629,7 +629,8 @@
       <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
     </Enum>
     <Enum ID="VideoAspectRatio">
-      <Value ID="Auto">オート</Value>
+      <Value ID="NoStretching">デフォルト (1:1)</Value>
+      <Value ID="Auto">自動的 (ゲーム8:7や11:8を使う)</Value>
       <Value ID="NTSC">NTSC (8:7)</Value>
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">ノーマル (4:3)</Value>

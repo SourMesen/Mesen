@@ -1329,12 +1329,13 @@ namespace Mesen.GUI
 
 	public enum VideoAspectRatio
 	{
-		Auto = 0,
-		NTSC = 1,
-		PAL = 2,
-		Standard = 3,
-		Widescreen = 4,
-		Custom = 5
+		NoStretching = 0,
+		Auto = 1,
+		NTSC = 2,
+		PAL = 3,
+		Standard = 4,
+		Widescreen = 5,
+		Custom = 6
 	}
 
 	public enum DebugMemoryType

@@ -216,6 +216,14 @@ namespace Mesen.GUI.Forms
 			Version oldVersion = new Version(ConfigManager.Config.MesenVersion);
 			if(oldVersion < newVersion) {
 				//Upgrade
+				if(oldVersion <= new Version("9.0.0")) {
+					//Version 0.9.0-
+					if(ConfigManager.Config.VideoInfo.AspectRatio == VideoAspectRatio.Auto) {
+						//0.9.0's "Auto" has been renamed to "NoStretching"
+						ConfigManager.Config.VideoInfo.AspectRatio = VideoAspectRatio.NoStretching;
+					}
+				}
+
 				if(oldVersion <= new Version("5.3.0")) {
 					//Version 0.5.3-
 					//Reduce sound latency if still using default

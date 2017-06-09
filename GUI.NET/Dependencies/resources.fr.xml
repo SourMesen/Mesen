@@ -646,7 +646,8 @@
       <Value ID="ArkanoidController">Manette Arkanoid</Value>
     </Enum>
     <Enum ID="VideoAspectRatio">
-      <Value ID="Auto">Auto</Value>
+      <Value ID="NoStretching">Défaut (Aucun étirement)</Value>
+      <Value ID="Auto">Auto (8:7 ou 11:8 selon le jeu)</Value>
       <Value ID="NTSC">NTSC (8:7)</Value>
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">Standard (4:3)</Value>

@@ -99,6 +99,7 @@ namespace Mesen.GUI.Forms.Config
 			this.btnExportPalette = new System.Windows.Forms.Button();
 			this.btnSelectPalette = new System.Windows.Forms.Button();
 			this.btnLoadPalFile = new System.Windows.Forms.Button();
+			this.chkUseCustomVsPalette = new System.Windows.Forms.CheckBox();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkDisableBackground = new Mesen.GUI.Controls.ctrlRiskyOption();
@@ -122,7 +123,6 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkUseCustomVsPalette = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -292,10 +292,11 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel6.Controls.Add(this.cboAspectRatio);
 			this.flowLayoutPanel6.Controls.Add(this.lblCustomRatio);
 			this.flowLayoutPanel6.Controls.Add(this.nudCustomRatio);
+			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel6.Location = new System.Drawing.Point(77, 26);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(364, 26);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(444, 26);
 			this.flowLayoutPanel6.TabIndex = 22;
 			// 
 			// cboAspectRatio
@@ -310,7 +311,7 @@ namespace Mesen.GUI.Forms.Config
             "Widescreen (16:9)"});
 			this.cboAspectRatio.Location = new System.Drawing.Point(3, 3);
 			this.cboAspectRatio.Name = "cboAspectRatio";
-			this.cboAspectRatio.Size = new System.Drawing.Size(121, 21);
+			this.cboAspectRatio.Size = new System.Drawing.Size(197, 21);
 			this.cboAspectRatio.TabIndex = 16;
 			this.cboAspectRatio.SelectionChangeCommitted += new System.EventHandler(this.cboAspectRatio_SelectionChangeCommitted);
 			// 
@@ -318,7 +319,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblCustomRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblCustomRatio.AutoSize = true;
-			this.lblCustomRatio.Location = new System.Drawing.Point(130, 7);
+			this.lblCustomRatio.Location = new System.Drawing.Point(206, 7);
 			this.lblCustomRatio.Name = "lblCustomRatio";
 			this.lblCustomRatio.Size = new System.Drawing.Size(76, 13);
 			this.lblCustomRatio.TabIndex = 17;
@@ -333,7 +334,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             65536});
-			this.nudCustomRatio.Location = new System.Drawing.Point(212, 3);
+			this.nudCustomRatio.Location = new System.Drawing.Point(288, 3);
 			this.nudCustomRatio.Maximum = new decimal(new int[] {
             5,
             0,
@@ -1112,6 +1113,17 @@ namespace Mesen.GUI.Forms.Config
 			this.btnLoadPalFile.UseVisualStyleBackColor = true;
 			this.btnLoadPalFile.Click += new System.EventHandler(this.btnLoadPalFile_Click);
 			// 
+			// chkUseCustomVsPalette
+			// 
+			this.chkUseCustomVsPalette.AutoSize = true;
+			this.tableLayoutPanel3.SetColumnSpan(this.chkUseCustomVsPalette, 2);
+			this.chkUseCustomVsPalette.Location = new System.Drawing.Point(3, 93);
+			this.chkUseCustomVsPalette.Name = "chkUseCustomVsPalette";
+			this.chkUseCustomVsPalette.Size = new System.Drawing.Size(202, 17);
+			this.chkUseCustomVsPalette.TabIndex = 2;
+			this.chkUseCustomVsPalette.Text = "Use this palette for VS System games";
+			this.chkUseCustomVsPalette.UseVisualStyleBackColor = true;
+			// 
 			// tpgAdvanced
 			// 
 			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel9);
@@ -1305,17 +1317,6 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Size = new System.Drawing.Size(254, 22);
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
-			// 
-			// chkUseCustomVsPalette
-			// 
-			this.chkUseCustomVsPalette.AutoSize = true;
-			this.tableLayoutPanel3.SetColumnSpan(this.chkUseCustomVsPalette, 2);
-			this.chkUseCustomVsPalette.Location = new System.Drawing.Point(3, 93);
-			this.chkUseCustomVsPalette.Name = "chkUseCustomVsPalette";
-			this.chkUseCustomVsPalette.Size = new System.Drawing.Size(220, 17);
-			this.chkUseCustomVsPalette.TabIndex = 2;
-			this.chkUseCustomVsPalette.Text = "Use this palette for VS System games";
-			this.chkUseCustomVsPalette.UseVisualStyleBackColor = true;
 			// 
 			// frmVideoConfig
 			// 

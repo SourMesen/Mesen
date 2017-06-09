@@ -631,7 +631,8 @@
       <Value ID="ArkanoidController">Control Arkanoid</Value>
     </Enum>
     <Enum ID="VideoAspectRatio">
-      <Value ID="Auto">Auto</Value>
+      <Value ID="NoStretching">Default (No Stretching)</Value>
+      <Value ID="Auto">Auto (8:7 or 11:8 based on game)</Value>
       <Value ID="NTSC">NTSC (8:7)</Value>
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">Estándar (4:3)</Value>

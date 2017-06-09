@@ -142,12 +142,13 @@ enum class VideoResizeFilter
 
 enum class VideoAspectRatio
 {
-	Auto = 0,
-	NTSC = 1,
-	PAL = 2,
-	Standard = 3,
-	Widescreen = 4,
-	Custom = 5
+	NoStretching = 0,
+	Auto = 1,
+	NTSC = 2,
+	PAL = 3,
+	Standard = 4,
+	Widescreen = 5,
+	Custom = 6
 };
 
 struct OverscanDimensions
@@ -891,17 +892,7 @@ public:
 		return _ntscFilterSettings;
 	}
 
-	static double GetAspectRatio()
-	{
-		switch(_aspectRatio) {
-			case VideoAspectRatio::NTSC: return 128.0 / 105.0;
-			case VideoAspectRatio::PAL: return 9440000.0 / 6384411.0;
-			case VideoAspectRatio::Standard: return 4.0 / 3.0;
-			case VideoAspectRatio::Widescreen: return 16.0 / 9.0;
-			case VideoAspectRatio::Custom: return _customAspectRatio;
-		}
-		return 0.0;
-	}
+	static double GetAspectRatio();
 
 	static void SetVideoScale(double scale)
 	{
