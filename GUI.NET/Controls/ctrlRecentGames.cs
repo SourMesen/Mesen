@@ -54,6 +54,7 @@ namespace Mesen.GUI.Controls
 				lblSaveDate.Font = new Font(_fonts.Families[0], 10);
 
 				picPrevGame.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+				tmrInput.Enabled = true;
 				Initialize();
 			}
 		}
@@ -159,16 +160,20 @@ namespace Mesen.GUI.Controls
 
 		private void picPreviousState_Click(object sender, EventArgs e)
 		{
-			InteropEmu.LoadRecentGame(_recentGames[_currentIndex].FileName);
+			LoadSelectedGame();
 		}
 
 		private void picNextGame_MouseDown(object sender, MouseEventArgs e)
 		{
-			_currentIndex = (_currentIndex + 1) % _recentGames.Count;
-			UpdateGameInfo();
+			GoToNextGame();
 		}
 
 		private void picPrevGame_MouseDown(object sender, MouseEventArgs e)
+		{
+			GoToPreviousGame();
+		}
+
+		private void GoToPreviousGame()
 		{
 			if(_currentIndex == 0) {
 				_currentIndex = _recentGames.Count - 1;
@@ -176,6 +181,45 @@ namespace Mesen.GUI.Controls
 				_currentIndex--;
 			}
 			UpdateGameInfo();
+		}
+
+		private void GoToNextGame()
+		{
+			_currentIndex = (_currentIndex + 1) % _recentGames.Count;
+			UpdateGameInfo();
+		}
+
+		private void LoadSelectedGame()
+		{
+			InteropEmu.LoadRecentGame(_recentGames[_currentIndex].FileName);
+		}
+
+		private bool _waitForRelease = false;
+		private void tmrInput_Tick(object sender, EventArgs e)
+		{
+			//Use player 1's controls to navigate the recent game selection screen
+			if(!InteropEmu.IsRunning()) {
+				uint keyCode = InteropEmu.GetPressedKey();
+
+				if(keyCode > 0) {
+					if(!_waitForRelease) {
+						foreach(KeyMappings mapping in ConfigManager.Config.InputInfo.Controllers[0].Keys) {
+							if(mapping.Left == keyCode) {
+								_waitForRelease = true;
+								GoToPreviousGame();
+							} else if(mapping.Right == keyCode) {
+								_waitForRelease = true;
+								GoToNextGame();
+							} else if(mapping.A == keyCode || mapping.B == keyCode) {
+								_waitForRelease = true;
+								LoadSelectedGame();
+							}
+						}
+					}
+				} else {
+					_waitForRelease = false;
+				}
+			}
 		}
 	}
 

@@ -27,6 +27,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tlpPreviousState = new Mesen.GUI.Controls.DBTableLayoutPanel();
 			this.pnlPreviousState = new System.Windows.Forms.Panel();
 			this.picPreviousState = new Mesen.GUI.Controls.GamePreviewBox();
@@ -34,6 +35,7 @@
 			this.lblSaveDate = new System.Windows.Forms.Label();
 			this.picNextGame = new System.Windows.Forms.PictureBox();
 			this.picPrevGame = new System.Windows.Forms.PictureBox();
+			this.tmrInput = new System.Windows.Forms.Timer(this.components);
 			this.tlpPreviousState.SuspendLayout();
 			this.pnlPreviousState.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPreviousState)).BeginInit();
@@ -144,6 +146,11 @@
 			this.picPrevGame.TabStop = false;
 			this.picPrevGame.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPrevGame_MouseDown);
 			// 
+			// tmrInput
+			// 
+			this.tmrInput.Interval = 50;
+			this.tmrInput.Tick += new System.EventHandler(this.tmrInput_Tick);
+			// 
 			// ctrlRecentGames
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -171,5 +178,6 @@
 		private System.Windows.Forms.Label lblSaveDate;
 		private System.Windows.Forms.PictureBox picNextGame;
 		private System.Windows.Forms.PictureBox picPrevGame;
+		private System.Windows.Forms.Timer tmrInput;
 	}
 }

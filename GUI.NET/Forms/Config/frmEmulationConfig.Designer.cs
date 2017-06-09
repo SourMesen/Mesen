@@ -830,6 +830,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkAdaptiveSpriteLimit
 			// 
 			this.chkAdaptiveSpriteLimit.AutoSize = true;
+			this.chkAdaptiveSpriteLimit.Enabled = false;
 			this.chkAdaptiveSpriteLimit.Location = new System.Drawing.Point(18, 26);
 			this.chkAdaptiveSpriteLimit.Margin = new System.Windows.Forms.Padding(18, 3, 3, 3);
 			this.chkAdaptiveSpriteLimit.Name = "chkAdaptiveSpriteLimit";
