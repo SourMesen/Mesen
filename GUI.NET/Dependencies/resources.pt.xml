@@ -302,6 +302,7 @@
       <Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
       <Control ID="lblRamPowerOnState">Estado inicial da memória durante o início:</Control>
       <Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
+      <Control ID="chkAdaptiveSpriteLimit">Automatically re-enable sprite limit as needed to prevent graphical glitches when possible</Control>
       <Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
       <Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads (Famicom behavior)</Control>
       <Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>

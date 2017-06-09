@@ -28,6 +28,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("UseAlternativeMmc3Irq", chkUseAlternativeMmc3Irq);
 			AddBinding("AllowInvalidInput", chkAllowInvalidInput);
 			AddBinding("RemoveSpriteLimit", chkRemoveSpriteLimit);
+			AddBinding("AdaptiveSpriteLimit", chkAdaptiveSpriteLimit);
 			AddBinding("DisablePpu2004Reads", chkDisablePpu2004Reads);
 			AddBinding("DisablePaletteRead", chkDisablePaletteRead);
 			AddBinding("DisableOamAddrBug", chkDisableOamAddrBug);
@@ -78,6 +79,11 @@ namespace Mesen.GUI.Forms.Config
 		private void btnResetLagCounter_Click(object sender, EventArgs e)
 		{
 			InteropEmu.ResetLagCounter();
+		}
+
+		private void chkRemoveSpriteLimit_CheckedChanged(object sender, EventArgs e)
+		{
+			chkAdaptiveSpriteLimit.Enabled = chkRemoveSpriteLimit.Checked;
 		}
 	}
 }

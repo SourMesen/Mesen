@@ -59,6 +59,8 @@ enum EmulationFlags : uint64_t
 	HidePauseOverlay = 0x20000000000,
 
 	UseCustomVsPalette = 0x40000000000,
+
+	AdaptiveSpriteLimit = 0x80000000000,
 	
 	ForceMaxSpeed = 0x4000000000000000,	
 	ConsoleMode = 0x8000000000000000,

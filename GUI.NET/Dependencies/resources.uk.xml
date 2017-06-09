@@ -304,6 +304,7 @@
       <Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
       <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
       <Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
+      <Control ID="chkAdaptiveSpriteLimit">Automatically re-enable sprite limit as needed to prevent graphical glitches when possible</Control>
       <Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
       <Control ID="chkDisablePpu2004Reads">Вiдключити читання PPU $2004 (Поведiнка Famicom)</Control>
       <Control ID="chkDisableOamAddrBug">Вiдключити PPU OAMADDR баг эмуляцiї</Control>

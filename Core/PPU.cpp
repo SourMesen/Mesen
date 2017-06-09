@@ -621,11 +621,40 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 void PPU::LoadExtraSprites()
 {
 	if(_spriteCount == 8 && EmulationSettings::CheckFlag(EmulationFlags::RemoveSpriteLimit)) {
-		for(uint32_t i = _overflowSpriteAddr; i < 0x100; i += 4) {
-			uint8_t spriteY = _spriteRAM[i];
-			if(_scanline >= spriteY && _scanline < spriteY + (_flags.LargeSprites ? 16 : 8)) {
-				LoadSprite(spriteY, _spriteRAM[i + 1], _spriteRAM[i + 2], _spriteRAM[i + 3], true);
-				_spriteCount++;
+		bool loadExtraSprites = true;
+		
+		if(EmulationSettings::CheckFlag(EmulationFlags::AdaptiveSpriteLimit)) {
+			bool lastSpritesIdentical = true;
+
+			uint16_t lastPosition = 0xFFFF;
+			uint8_t identicalSpriteCount = 0;
+			uint8_t maxIdenticalSpriteCount = 0;
+			for(int i = 0; i < 64; i++) {
+				uint8_t y = _spriteRAM[i << 2];
+				if(_scanline >= y && _scanline < y + (_flags.LargeSprites ? 16 : 8)) {
+					uint8_t x = _spriteRAM[(i << 2) + 3];
+					uint16_t position = (y << 8) | x;
+					if(lastPosition != position) {
+						if(identicalSpriteCount > maxIdenticalSpriteCount) {
+							maxIdenticalSpriteCount = identicalSpriteCount;
+						}
+						lastPosition = position;
+						identicalSpriteCount = 1;
+					} else {
+						identicalSpriteCount++;
+					}
+				}
+			}
+			loadExtraSprites = identicalSpriteCount < 8 && maxIdenticalSpriteCount < 8;
+		}
+
+		if(loadExtraSprites) {
+			for(uint32_t i = _overflowSpriteAddr; i < 0x100; i += 4) {
+				uint8_t spriteY = _spriteRAM[i];
+				if(_scanline >= spriteY && _scanline < spriteY + (_flags.LargeSprites ? 16 : 8)) {
+					LoadSprite(spriteY, _spriteRAM[i + 1], _spriteRAM[i + 2], _spriteRAM[i + 3], true);
+					_spriteCount++;
+				}
 			}
 		}
 	}
