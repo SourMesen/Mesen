@@ -253,6 +253,7 @@
     <Compile Include="Controls\ctrlRecentGames.Designer.cs">
       <DependentUpon>ctrlRecentGames.cs</DependentUpon>
     </Compile>
+    <Compile Include="CursorManager.cs" />
     <Compile Include="Controls\ctrlRiskyOption.cs">
       <SubType>UserControl</SubType>
     </Compile>

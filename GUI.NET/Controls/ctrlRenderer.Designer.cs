@@ -27,14 +27,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			this.tmrMouse = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
-			// 
-			// tmrMouse
-			// 
-			this.tmrMouse.Interval = 3000;
-			this.tmrMouse.Tick += new System.EventHandler(this.tmrMouse_Tick);
 			// 
 			// ctrlRenderer
 			// 
@@ -48,7 +41,5 @@
 		}
 
 		#endregion
-
-		private System.Windows.Forms.Timer tmrMouse;
 	}
 }

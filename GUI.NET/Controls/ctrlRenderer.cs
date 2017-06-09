@@ -17,32 +17,9 @@ namespace Mesen.GUI.Controls
 		private const int RightMouseButtonKeyCode = 0x201;
 		private const int MiddleMouseButtonKeyCode = 0x202;
 
-		private bool _cursorHidden = false;
-
 		public ctrlRenderer()
 		{
 			InitializeComponent();
-		}
-
-		public bool NeedMouseIcon
-		{
-			get { return InteropEmu.GetExpansionDevice() == InteropEmu.ExpansionPortDevice.OekaKidsTablet || InteropEmu.HasZapper(); }
-		}
-
-		private void ShowMouse()
-		{
-			if(_cursorHidden) {
-				Cursor.Show();
-				_cursorHidden = false;
-			}
-		}
-
-		private void HideMouse()
-		{
-			if(!_cursorHidden) {
-				Cursor.Hide();
-				_cursorHidden = true;
-			}
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -66,21 +43,10 @@ namespace Mesen.GUI.Controls
 
 		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
 		{
-			if(!InteropEmu.IsRunning() || InteropEmu.IsPaused() || !InteropEmu.HasArkanoidPaddle()) {
-				ShowMouse();
-			} else if(InteropEmu.HasArkanoidPaddle() && !this.NeedMouseIcon) {
-				HideMouse();
-			}
+			CursorManager.OnMouseMove(this);
 
-			tmrMouse.Stop();
-
-			if(this.NeedMouseIcon) {
+			if(CursorManager.NeedMouseIcon) {
 				this.Cursor = Cursors.Cross;
-			} else {
-				this.Cursor = Cursors.Default;
-
-				//Only hide mouse if no zapper (otherwise this could be pretty annoying)
-				tmrMouse.Start();
 			}
 
 			double xPos = (double)e.X / this.Width;
@@ -91,16 +57,10 @@ namespace Mesen.GUI.Controls
 
 			InteropEmu.SetMousePosition(xPos, yPos);
 		}
-		
-		private void tmrMouse_Tick(object sender, EventArgs e)
-		{
-			HideMouse();
-		}
 
 		private void ctrlRenderer_MouseLeave(object sender, EventArgs e)
 		{
-			tmrMouse.Stop();
-			ShowMouse();
+			CursorManager.OnMouseLeave();
 			InteropEmu.SetMousePosition(-1, -1);
 		}
 	}

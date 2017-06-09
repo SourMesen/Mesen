@@ -426,6 +426,10 @@ namespace Mesen.GUI.Forms
 
 		private void ctrlRenderer_MouseMove(object sender, MouseEventArgs e)
 		{
+			if(sender != this.ctrlRecentGames) {
+				CursorManager.OnMouseMove((Control)sender);
+			}
+
 			if(this.HideMenuStrip && !this.menuStrip.ContainsFocus) {
 				if(sender == ctrlRenderer) {
 					this.menuStrip.Visible = ctrlRenderer.Top + e.Y < 30;
@@ -1615,7 +1619,7 @@ namespace Mesen.GUI.Forms
 
 		private void ctrlRenderer_DoubleClick(object sender, EventArgs e)
 		{
-			if(!ctrlRenderer.NeedMouseIcon && !InteropEmu.HasArkanoidPaddle()) {
+			if(!CursorManager.NeedMouseIcon && !InteropEmu.HasArkanoidPaddle()) {
 				//Disable double clicking (used to switch to fullscreen mode) when using zapper/arkanoid controller
 				SetFullscreenState(!_fullscreenMode);
 			}
@@ -1834,6 +1838,11 @@ namespace Mesen.GUI.Forms
 			using(frmHelp frm = new frmHelp()) {
 				frm.ShowDialog(sender, this);
 			}
+		}
+
+		private void panelRenderer_MouseLeave(object sender, EventArgs e)
+		{
+			CursorManager.OnMouseLeave();
 		}
 	}
 }
