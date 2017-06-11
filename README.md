@@ -12,7 +12,14 @@ If you want to support this project, please consider making a donation:
 The latest version is available on the [website](https://www.mesen.ca).  Older releases are available from the [releases tab on GitHub](https://github.com/SourMesen/Mesen/releases).
 
 ### Ubuntu ###
-The official releases (same downloads as the Windows builds above) also contain the Linux version of Mesen, built under Ubuntu 16 - you should be able to use that in most cases if you are using Ubuntu. Please see the "Compiling - Linux" section below for a list of dependencies you will most likely need to install. The Linux version is a standard .NET executable file and requires Mono to run - you may need to configure your environment to allow it to automatically run .exe files through Mono, or manually run Mesen by using mono (e.g: "mono Mesen.exe").
+The official releases (same downloads as the Windows builds above) also contain the Linux version of Mesen, built under Ubuntu 16 - you should be able to use that in most cases if you are using Ubuntu.  
+
+The Linux version is a standard .NET executable file and requires Mono to run - you may need to configure your environment to allow it to automatically run .exe files through Mono, or manually run Mesen by using mono (e.g: "mono Mesen.exe").  
+
+The following packages need to be installed to run Mesen:
+* mono-complete
+* libsdl2-2.0
+* gnome-themes-standard
 
 ### Arch Linux ###  
 Packages are available here: https://aur.archlinux.org/packages/mesen
