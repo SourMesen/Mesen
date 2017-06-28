@@ -1180,6 +1180,21 @@
     <ClInclude Include="BaseRenderer.h">
       <Filter>VideoDecoder</Filter>
     </ClInclude>
+    <ClInclude Include="HdPackBuilder.h">
+      <Filter>VideoDecoder\HD</Filter>
+    </ClInclude>
+    <ClInclude Include="HdBuilderPpu.h">
+      <Filter>VideoDecoder\HD</Filter>
+    </ClInclude>
+    <ClInclude Include="HdData.h">
+      <Filter>VideoDecoder\HD</Filter>
+    </ClInclude>
+    <ClInclude Include="HdPackLoader.h">
+      <Filter>VideoDecoder\HD</Filter>
+    </ClInclude>
+    <ClInclude Include="FileLoader.h">
+      <Filter>Nes\RomLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1403,6 +1418,18 @@
     </ClCompile>
     <ClCompile Include="BaseRenderer.cpp">
       <Filter>VideoDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="HdPackBuilder.cpp">
+      <Filter>VideoDecoder\HD</Filter>
+    </ClCompile>
+    <ClCompile Include="HdPackLoader.cpp">
+      <Filter>VideoDecoder\HD</Filter>
+    </ClCompile>
+    <ClCompile Include="HdNesPack.cpp">
+      <Filter>VideoDecoder\HD</Filter>
+    </ClCompile>
+    <ClCompile Include="FileLoader.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -26,7 +26,7 @@ bool SZReader::InternalLoadArchive(void* buffer, size_t size)
 	return !SzArEx_Open(&_archive, &_lookStream.s, &allocImp, &allocTempImp);
 }
 
-void SZReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSize)
+void SZReader::ExtractFile(string filename, vector<uint8_t> &output)
 {
 	if(_initialized) {
 		char16_t *utf16Filename = (char16_t*)SzAlloc(nullptr, 2000);
@@ -49,9 +49,7 @@ void SZReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSi
 				WRes res = SzArEx_Extract(&_archive, &_lookStream.s, i, &blockIndex, &outBuffer, &outBufferSize, &offset, &outSizeProcessed, &_allocImp, &_allocTempImp);
 				if(res == SZ_OK) {
 					uint8_t* buf = new uint8_t[outSizeProcessed];
-					memcpy(buf, outBuffer+offset, outSizeProcessed);
-					*fileBuffer = buf;
-					fileSize = outSizeProcessed;
+					output = vector<uint8_t>(outBuffer+offset, outBuffer+offset+outSizeProcessed);
 				}
 				IAlloc_Free(&_allocImp, outBuffer);
 				break;

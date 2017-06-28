@@ -415,5 +415,34 @@ namespace Mesen.GUI.Debugger.Controls
 			_selectedColor = color;
 			RefreshPalettePicker();
 		}
+
+		string _copyData;
+		private void mnuCopyHdPack_Click(object sender, EventArgs e)
+		{
+			Clipboard.SetText(_copyData);
+		}
+
+		private void ctxMenu_Opening(object sender, CancelEventArgs e)
+		{
+			int baseAddress = _bottomBank ? 0x1000 : 0x0000;
+			bool ppuMemory = this.cboChrSelection.SelectedIndex == 0;
+			if(this.cboChrSelection.SelectedIndex > 1) {
+				baseAddress += (this.cboChrSelection.SelectedIndex - 1) * 0x2000;
+			}
+
+			int tileIndex = GetLargeSpriteIndex(_tileIndex);
+
+			StringBuilder sb = new StringBuilder();
+			for(int i = 0; i < 16; i++) {
+				sb.Append(InteropEmu.DebugGetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + i)).ToString("X2"));
+			}
+			sb.Append(",");
+			for(int i = 1; i < 4; i++) {
+				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PaletteMemory, (uint)(this._selectedPalette * 4 + i)).ToString("X2"));
+			}
+
+			_copyData = sb.ToString();
+			_copyData = _copyData.Substring(0, _copyData.Length - 1);
+		}
 	}
 }

@@ -874,7 +874,7 @@ uint32_t BaseMapper::GetMemorySize(DebugMemoryType type)
 uint8_t BaseMapper::GetMemoryValue(DebugMemoryType memoryType, uint32_t address)
 {
 	switch(memoryType) {
-		case DebugMemoryType::ChrRom: return _chrRom[address];
+		case DebugMemoryType::ChrRom: return _onlyChrRam ? _chrRam[address] : _chrRom[address];
 		case DebugMemoryType::ChrRam: return _chrRam[address];
 		case DebugMemoryType::SaveRam: return _saveRam[address];
 		case DebugMemoryType::PrgRom: return _prgRom[address];
@@ -927,6 +927,9 @@ int32_t BaseMapper::ToAbsoluteChrAddress(uint16_t addr)
 	uint8_t *chrAddr = _chrPages[addr >> 8] + (uint8_t)addr;
 	if(chrAddr >= _chrRom && chrAddr < _chrRom + _chrRomSize) {
 		return (uint32_t)(chrAddr - _chrRom);
+	}
+	if(chrAddr >= _chrRam && chrAddr < _chrRam + _chrRamSize) {
+		return (uint32_t)(chrAddr - _chrRam);
 	}
 	return -1;
 }

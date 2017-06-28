@@ -17,15 +17,10 @@ std::stringstream ArchiveReader::GetStream(string filename)
 {
 	std::stringstream ss;
 	if(_initialized) {
-		uint8_t* buffer = nullptr;
-		size_t size = 0;
-
-		ExtractFile(filename, &buffer, size);
-		ss.write((char*)buffer, size);
-
-		delete[] buffer;
+		vector<uint8_t> fileData;
+		ExtractFile(filename, fileData);
+		ss.write((char*)fileData.data(), fileData.size());
 	}
-
 	return ss;
 }
 

@@ -66,11 +66,7 @@ void ScaleFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 	if(_scaleFilterType == ScaleFilterType::xBRZ) {
 		xbrz::scale(_filterScale, _decodedPpuBuffer, outputBuffer, width, height, xbrz::ColorFormat::ARGB);
 	} else if(_scaleFilterType == ScaleFilterType::HQX) {
-		switch(_filterScale) {
-			case 2: hq2x_32(_decodedPpuBuffer, outputBuffer, width, height); break;
-			case 3: hq3x_32(_decodedPpuBuffer, outputBuffer, width, height); break;
-			case 4: hq4x_32(_decodedPpuBuffer, outputBuffer, width, height); break;
-		}
+		hqx(_filterScale, _decodedPpuBuffer, outputBuffer, width, height);
 	} else if(_scaleFilterType == ScaleFilterType::Scale2x) {
 		scale(_filterScale, outputBuffer, width*sizeof(uint32_t)*_filterScale, _decodedPpuBuffer, width*sizeof(uint32_t), 4, width, height);
 	} else if(_scaleFilterType == ScaleFilterType::_2xSai) {

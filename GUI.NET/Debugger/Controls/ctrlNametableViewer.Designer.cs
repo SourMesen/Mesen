@@ -27,10 +27,14 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picNametable = new System.Windows.Forms.PictureBox();
 			this.grpTileInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.txtPpuAddress = new System.Windows.Forms.TextBox();
+			this.txtLocation = new System.Windows.Forms.TextBox();
+			this.txtNametable = new System.Windows.Forms.TextBox();
 			this.txtPaletteAddress = new System.Windows.Forms.TextBox();
 			this.txtAttributeAddress = new System.Windows.Forms.TextBox();
 			this.txtAttributeData = new System.Windows.Forms.TextBox();
@@ -43,22 +47,22 @@
 			this.lblTile = new System.Windows.Forms.Label();
 			this.txtTileIndex = new System.Windows.Forms.TextBox();
 			this.picTile = new System.Windows.Forms.PictureBox();
+			this.lblNametableIndex = new System.Windows.Forms.Label();
+			this.lblLocation = new System.Windows.Forms.Label();
+			this.lblPpuAddress = new System.Windows.Forms.Label();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkShowPpuScrollOverlay = new System.Windows.Forms.CheckBox();
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
-			this.lblNametableIndex = new System.Windows.Forms.Label();
-			this.lblLocation = new System.Windows.Forms.Label();
-			this.txtNametable = new System.Windows.Forms.TextBox();
-			this.txtLocation = new System.Windows.Forms.TextBox();
-			this.lblPpuAddress = new System.Windows.Forms.Label();
-			this.txtPpuAddress = new System.Windows.Forms.TextBox();
+			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.grpTileInfo.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
+			this.ctxMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -82,6 +86,7 @@
 			// picNametable
 			// 
 			this.picNametable.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picNametable.ContextMenuStrip = this.ctxMenu;
 			this.picNametable.Location = new System.Drawing.Point(1, 1);
 			this.picNametable.Margin = new System.Windows.Forms.Padding(1);
 			this.picNametable.Name = "picNametable";
@@ -138,8 +143,32 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 282);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 311);
 			this.tableLayoutPanel2.TabIndex = 0;
+			// 
+			// txtPpuAddress
+			// 
+			this.txtPpuAddress.Location = new System.Drawing.Point(84, 3);
+			this.txtPpuAddress.Name = "txtPpuAddress";
+			this.txtPpuAddress.ReadOnly = true;
+			this.txtPpuAddress.Size = new System.Drawing.Size(42, 20);
+			this.txtPpuAddress.TabIndex = 18;
+			// 
+			// txtLocation
+			// 
+			this.txtLocation.Location = new System.Drawing.Point(84, 55);
+			this.txtLocation.Name = "txtLocation";
+			this.txtLocation.ReadOnly = true;
+			this.txtLocation.Size = new System.Drawing.Size(42, 20);
+			this.txtLocation.TabIndex = 16;
+			// 
+			// txtNametable
+			// 
+			this.txtNametable.Location = new System.Drawing.Point(84, 29);
+			this.txtNametable.Name = "txtNametable";
+			this.txtNametable.ReadOnly = true;
+			this.txtNametable.Size = new System.Drawing.Size(26, 20);
+			this.txtNametable.TabIndex = 15;
 			// 
 			// txtPaletteAddress
 			// 
@@ -250,12 +279,42 @@
 			this.picTile.TabIndex = 12;
 			this.picTile.TabStop = false;
 			// 
+			// lblNametableIndex
+			// 
+			this.lblNametableIndex.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblNametableIndex.AutoSize = true;
+			this.lblNametableIndex.Location = new System.Drawing.Point(3, 32);
+			this.lblNametableIndex.Name = "lblNametableIndex";
+			this.lblNametableIndex.Size = new System.Drawing.Size(61, 13);
+			this.lblNametableIndex.TabIndex = 13;
+			this.lblNametableIndex.Text = "Nametable:";
+			// 
+			// lblLocation
+			// 
+			this.lblLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLocation.AutoSize = true;
+			this.lblLocation.Location = new System.Drawing.Point(3, 58);
+			this.lblLocation.Name = "lblLocation";
+			this.lblLocation.Size = new System.Drawing.Size(51, 13);
+			this.lblLocation.TabIndex = 14;
+			this.lblLocation.Text = "Location:";
+			// 
+			// lblPpuAddress
+			// 
+			this.lblPpuAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblPpuAddress.AutoSize = true;
+			this.lblPpuAddress.Location = new System.Drawing.Point(3, 6);
+			this.lblPpuAddress.Name = "lblPpuAddress";
+			this.lblPpuAddress.Size = new System.Drawing.Size(57, 13);
+			this.lblPpuAddress.TabIndex = 17;
+			this.lblPpuAddress.Text = "PPU Addr:";
+			// 
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 307);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 336);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(181, 100);
@@ -294,59 +353,20 @@
 			this.chkShowAttributeGrid.UseVisualStyleBackColor = true;
 			this.chkShowAttributeGrid.Click += new System.EventHandler(this.chkShowAttributeGrid_Click);
 			// 
-			// lblNametableIndex
+			// ctxMenu
 			// 
-			this.lblNametableIndex.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblNametableIndex.AutoSize = true;
-			this.lblNametableIndex.Location = new System.Drawing.Point(3, 32);
-			this.lblNametableIndex.Name = "lblNametableIndex";
-			this.lblNametableIndex.Size = new System.Drawing.Size(61, 13);
-			this.lblNametableIndex.TabIndex = 13;
-			this.lblNametableIndex.Text = "Nametable:";
+			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopyHdPack});
+			this.ctxMenu.Name = "ctxMenu";
+			this.ctxMenu.Size = new System.Drawing.Size(222, 48);
+			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
-			// lblLocation
+			// mnuCopyHdPack
 			// 
-			this.lblLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblLocation.AutoSize = true;
-			this.lblLocation.Location = new System.Drawing.Point(3, 58);
-			this.lblLocation.Name = "lblLocation";
-			this.lblLocation.Size = new System.Drawing.Size(51, 13);
-			this.lblLocation.TabIndex = 14;
-			this.lblLocation.Text = "Location:";
-			// 
-			// txtNametable
-			// 
-			this.txtNametable.Location = new System.Drawing.Point(84, 29);
-			this.txtNametable.Name = "txtNametable";
-			this.txtNametable.ReadOnly = true;
-			this.txtNametable.Size = new System.Drawing.Size(26, 20);
-			this.txtNametable.TabIndex = 15;
-			// 
-			// txtLocation
-			// 
-			this.txtLocation.Location = new System.Drawing.Point(84, 55);
-			this.txtLocation.Name = "txtLocation";
-			this.txtLocation.ReadOnly = true;
-			this.txtLocation.Size = new System.Drawing.Size(42, 20);
-			this.txtLocation.TabIndex = 16;
-			// 
-			// lblPpuAddress
-			// 
-			this.lblPpuAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblPpuAddress.AutoSize = true;
-			this.lblPpuAddress.Location = new System.Drawing.Point(3, 6);
-			this.lblPpuAddress.Name = "lblPpuAddress";
-			this.lblPpuAddress.Size = new System.Drawing.Size(57, 13);
-			this.lblPpuAddress.TabIndex = 17;
-			this.lblPpuAddress.Text = "PPU Addr:";
-			// 
-			// txtPpuAddress
-			// 
-			this.txtPpuAddress.Location = new System.Drawing.Point(84, 3);
-			this.txtPpuAddress.Name = "txtPpuAddress";
-			this.txtPpuAddress.ReadOnly = true;
-			this.txtPpuAddress.Size = new System.Drawing.Size(42, 20);
-			this.txtPpuAddress.TabIndex = 18;
+			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
+			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
+			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
 			// ctrlNametableViewer
 			// 
@@ -363,6 +383,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
+			this.ctxMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -395,5 +416,7 @@
 		private System.Windows.Forms.Label lblLocation;
 		private System.Windows.Forms.TextBox txtPpuAddress;
 		private System.Windows.Forms.Label lblPpuAddress;
+		private System.Windows.Forms.ContextMenuStrip ctxMenu;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
 	}
 }

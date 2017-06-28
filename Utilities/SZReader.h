@@ -24,5 +24,5 @@ public:
 	SZReader();
 	virtual ~SZReader();
 
-	void ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSize);
+	void ExtractFile(string filename, vector<uint8_t> &output);
 };

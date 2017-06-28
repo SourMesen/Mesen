@@ -413,6 +413,11 @@
     <ClInclude Include="AutomaticRomTest.h" />
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="FceuxMovie.h" />
+    <ClInclude Include="FileLoader.h" />
+    <ClInclude Include="HdBuilderPpu.h" />
+    <ClInclude Include="HdData.h" />
+    <ClInclude Include="HdPackBuilder.h" />
+    <ClInclude Include="HdPackLoader.h" />
     <ClInclude Include="Mapper174.h" />
     <ClInclude Include="Rambo1_158.h" />
     <ClInclude Include="RecordedRomTest.h" />
@@ -774,6 +779,10 @@
     <ClCompile Include="AutomaticRomTest.cpp" />
     <ClCompile Include="BaseRenderer.cpp" />
     <ClCompile Include="FceuxMovie.cpp" />
+    <ClCompile Include="FileLoader.cpp" />
+    <ClCompile Include="HdNesPack.cpp" />
+    <ClCompile Include="HdPackBuilder.cpp" />
+    <ClCompile Include="HdPackLoader.cpp" />
     <ClCompile Include="RecordedRomTest.cpp" />
     <ClCompile Include="AutoSaveManager.cpp" />
     <ClCompile Include="AviRecorder.cpp" />

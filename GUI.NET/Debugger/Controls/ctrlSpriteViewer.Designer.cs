@@ -27,6 +27,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpSpriteInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -36,9 +37,6 @@
 			this.lblScreenPreview = new System.Windows.Forms.Label();
 			this.lblTile = new System.Windows.Forms.Label();
 			this.picTile = new System.Windows.Forms.PictureBox();
-			this.chkVerticalMirroring = new System.Windows.Forms.CheckBox();
-			this.chkHorizontalMirroring = new System.Windows.Forms.CheckBox();
-			this.chkBackgroundPriority = new System.Windows.Forms.CheckBox();
 			this.lblPosition = new System.Windows.Forms.Label();
 			this.txtPosition = new System.Windows.Forms.TextBox();
 			this.lblTileIndex = new System.Windows.Forms.Label();
@@ -47,15 +45,21 @@
 			this.lblTileAddress = new System.Windows.Forms.Label();
 			this.txtPaletteAddress = new System.Windows.Forms.TextBox();
 			this.txtTileAddress = new System.Windows.Forms.TextBox();
-			this.picSprites = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkHorizontalMirroring = new System.Windows.Forms.CheckBox();
+			this.chkVerticalMirroring = new System.Windows.Forms.CheckBox();
+			this.chkBackgroundPriority = new System.Windows.Forms.CheckBox();
+			this.picSprites = new System.Windows.Forms.PictureBox();
+			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpSpriteInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picSprites)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picSprites)).BeginInit();
+			this.ctxMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel3
@@ -178,39 +182,6 @@
 			this.picTile.TabIndex = 12;
 			this.picTile.TabStop = false;
 			// 
-			// chkVerticalMirroring
-			// 
-			this.chkVerticalMirroring.AutoCheck = false;
-			this.chkVerticalMirroring.AutoSize = true;
-			this.chkVerticalMirroring.Location = new System.Drawing.Point(6, 29);
-			this.chkVerticalMirroring.Name = "chkVerticalMirroring";
-			this.chkVerticalMirroring.Size = new System.Drawing.Size(77, 17);
-			this.chkVerticalMirroring.TabIndex = 14;
-			this.chkVerticalMirroring.Text = "Vertical flip";
-			this.chkVerticalMirroring.UseVisualStyleBackColor = true;
-			// 
-			// chkHorizontalMirroring
-			// 
-			this.chkHorizontalMirroring.AutoCheck = false;
-			this.chkHorizontalMirroring.AutoSize = true;
-			this.chkHorizontalMirroring.Location = new System.Drawing.Point(6, 6);
-			this.chkHorizontalMirroring.Name = "chkHorizontalMirroring";
-			this.chkHorizontalMirroring.Size = new System.Drawing.Size(89, 17);
-			this.chkHorizontalMirroring.TabIndex = 13;
-			this.chkHorizontalMirroring.Text = "Horizontal flip";
-			this.chkHorizontalMirroring.UseVisualStyleBackColor = true;
-			// 
-			// chkBackgroundPriority
-			// 
-			this.chkBackgroundPriority.AutoCheck = false;
-			this.chkBackgroundPriority.AutoSize = true;
-			this.chkBackgroundPriority.Location = new System.Drawing.Point(6, 52);
-			this.chkBackgroundPriority.Name = "chkBackgroundPriority";
-			this.chkBackgroundPriority.Size = new System.Drawing.Size(118, 17);
-			this.chkBackgroundPriority.TabIndex = 19;
-			this.chkBackgroundPriority.Text = "Background Priority";
-			this.chkBackgroundPriority.UseVisualStyleBackColor = true;
-			// 
 			// lblPosition
 			// 
 			this.lblPosition.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -283,18 +254,6 @@
 			this.txtTileAddress.Size = new System.Drawing.Size(42, 20);
 			this.txtTileAddress.TabIndex = 8;
 			// 
-			// picSprites
-			// 
-			this.picSprites.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picSprites.Location = new System.Drawing.Point(1, 1);
-			this.picSprites.Margin = new System.Windows.Forms.Padding(1);
-			this.picSprites.Name = "picSprites";
-			this.picSprites.Size = new System.Drawing.Size(258, 514);
-			this.picSprites.TabIndex = 0;
-			this.picSprites.TabStop = false;
-			this.picSprites.MouseLeave += new System.EventHandler(this.picSprites_MouseLeave);
-			this.picSprites.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picSprites_MouseMove);
-			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
@@ -304,7 +263,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.chkVerticalMirroring, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.chkBackgroundPriority, 0, 2);
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(206, 52);
-			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
 			this.tableLayoutPanel1.RowCount = 3;
@@ -314,6 +273,67 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 82);
 			this.tableLayoutPanel1.TabIndex = 24;
+			// 
+			// chkHorizontalMirroring
+			// 
+			this.chkHorizontalMirroring.AutoCheck = false;
+			this.chkHorizontalMirroring.AutoSize = true;
+			this.chkHorizontalMirroring.Location = new System.Drawing.Point(6, 6);
+			this.chkHorizontalMirroring.Name = "chkHorizontalMirroring";
+			this.chkHorizontalMirroring.Size = new System.Drawing.Size(89, 17);
+			this.chkHorizontalMirroring.TabIndex = 13;
+			this.chkHorizontalMirroring.Text = "Horizontal flip";
+			this.chkHorizontalMirroring.UseVisualStyleBackColor = true;
+			// 
+			// chkVerticalMirroring
+			// 
+			this.chkVerticalMirroring.AutoCheck = false;
+			this.chkVerticalMirroring.AutoSize = true;
+			this.chkVerticalMirroring.Location = new System.Drawing.Point(6, 29);
+			this.chkVerticalMirroring.Name = "chkVerticalMirroring";
+			this.chkVerticalMirroring.Size = new System.Drawing.Size(77, 17);
+			this.chkVerticalMirroring.TabIndex = 14;
+			this.chkVerticalMirroring.Text = "Vertical flip";
+			this.chkVerticalMirroring.UseVisualStyleBackColor = true;
+			// 
+			// chkBackgroundPriority
+			// 
+			this.chkBackgroundPriority.AutoCheck = false;
+			this.chkBackgroundPriority.AutoSize = true;
+			this.chkBackgroundPriority.Location = new System.Drawing.Point(6, 52);
+			this.chkBackgroundPriority.Name = "chkBackgroundPriority";
+			this.chkBackgroundPriority.Size = new System.Drawing.Size(118, 17);
+			this.chkBackgroundPriority.TabIndex = 19;
+			this.chkBackgroundPriority.Text = "Background Priority";
+			this.chkBackgroundPriority.UseVisualStyleBackColor = true;
+			// 
+			// picSprites
+			// 
+			this.picSprites.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picSprites.ContextMenuStrip = this.ctxMenu;
+			this.picSprites.Location = new System.Drawing.Point(1, 1);
+			this.picSprites.Margin = new System.Windows.Forms.Padding(1);
+			this.picSprites.Name = "picSprites";
+			this.picSprites.Size = new System.Drawing.Size(258, 514);
+			this.picSprites.TabIndex = 0;
+			this.picSprites.TabStop = false;
+			this.picSprites.MouseLeave += new System.EventHandler(this.picSprites_MouseLeave);
+			this.picSprites.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picSprites_MouseMove);
+			// 
+			// ctxMenu
+			// 
+			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopyHdPack});
+			this.ctxMenu.Name = "ctxMenu";
+			this.ctxMenu.Size = new System.Drawing.Size(222, 26);
+			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuCopyHdPack
+			// 
+			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
+			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
+			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
 			// ctrlSpriteViewer
 			// 
@@ -328,9 +348,10 @@
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picSprites)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picSprites)).EndInit();
+			this.ctxMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -359,5 +380,7 @@
 		private System.Windows.Forms.Label lblSpriteIndex;
 		private System.Windows.Forms.TextBox txtSpriteIndex;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.ContextMenuStrip ctxMenu;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
 	}
 }

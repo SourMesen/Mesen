@@ -239,23 +239,23 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 	uint8_t chrBuffer[0x1000];
 	bool chrIsDrawn[0x1000];
 	bool tileUsed[0x4000];
+	bool isChrRam = _mapper->GetMemorySize(DebugMemoryType::ChrRam) > 0;
 	if(bankIndex == 0 || bankIndex == 1) {
 		uint16_t baseAddr = bankIndex == 0 ? 0x0000 : 0x1000;
 		for(int i = 0; i < 0x1000; i++) {
 			chrBuffer[i] = _mapper->DebugReadVRAM(baseAddr + i);
-			chrIsDrawn[i] = _codeDataLogger->IsDrawn(_mapper->ToAbsoluteChrAddress(baseAddr + i));
+			chrIsDrawn[i] = isChrRam ? true : _codeDataLogger->IsDrawn(_mapper->ToAbsoluteChrAddress(baseAddr + i));
 		}
 	} else {
 		int bank = bankIndex - 2;
 		uint32_t baseAddr = bank * 0x1000;
-		bool useChrRam = _mapper->GetMemorySize(DebugMemoryType::ChrRam) > 0;
-		uint32_t chrSize = _mapper->GetMemorySize(useChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom);
+		uint32_t chrSize = _mapper->GetMemorySize(isChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom);
 		vector<uint8_t> chrData(chrSize, 0);
-		_mapper->CopyMemory(useChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom, chrData.data());
+		_mapper->CopyMemory(isChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom, chrData.data());
 
 		for(int i = 0; i < 0x1000; i++) {
 			chrBuffer[i] = chrData[baseAddr + i];
-			chrIsDrawn[i] = useChrRam ? true : _codeDataLogger->IsDrawn(baseAddr + i);
+			chrIsDrawn[i] = isChrRam ? true : _codeDataLogger->IsDrawn(baseAddr + i);
 		}
 	}
 

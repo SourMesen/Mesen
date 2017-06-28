@@ -31,11 +31,8 @@ namespace Mesen.GUI.Forms
 				this.Icon = menuItem.Image;
 			}
 
-			if(owner != null) {
-				CenterOnParent(owner);
-			}
-
-			base.Show(owner);
+			CenterOnParent(owner);
+			base.Show();
 		}
 
 		private void CenterOnParent(IWin32Window owner)

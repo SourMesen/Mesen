@@ -544,6 +544,7 @@ void PPU::LoadTileInfo()
 
 			case 3:
 				_nextTile.LowByte = _mapper->ReadVRAM(_nextTile.TileAddr);
+				_nextTile.AbsoluteTileAddr = _mapper->ToAbsoluteChrAddress(_nextTile.TileAddr);
 				break;
 
 			case 5:
@@ -590,6 +591,7 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 			info.HighByte = _mapper->ReadVRAM(tileAddr + 8);
 		}
 		info.TileAddr = tileAddr;
+		info.AbsoluteTileAddr = _mapper->ToAbsoluteChrAddress(tileAddr);
 		info.OffsetY = lineOffset;
 		info.SpriteX = spriteX;
 

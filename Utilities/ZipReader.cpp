@@ -36,7 +36,7 @@ vector<string> ZipReader::InternalGetFileList()
 	return fileList;
 }
 
-void ZipReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSize)
+void ZipReader::ExtractFile(string filename, vector<uint8_t> &output)
 {
 	if(_initialized) {
 		size_t uncompSize;
@@ -45,12 +45,9 @@ void ZipReader::ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileS
 			std::cout << "mz_zip_reader_extract_file_to_heap() failed!" << std::endl;
 		}
 
-		*fileBuffer = new uint8_t[uncompSize];
-		memcpy(*fileBuffer, p, uncompSize);
+		output = vector<uint8_t>((uint8_t*)p, (uint8_t*)p + uncompSize);
 
 		// We're done.
 		mz_free(p);
-
-		fileSize = uncompSize;
 	}
 }

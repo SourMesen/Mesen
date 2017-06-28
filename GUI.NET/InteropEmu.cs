@@ -502,6 +502,50 @@ namespace Mesen.GUI
 			yScroll = (int)(ppuScroll >> 16) & 0xFFFF;
 		}
 
+		[DllImport(DLLPath)] public static extern void HdBuilderStartRecording(
+			[MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string saveFolder,
+			ScaleFilterType filterType,
+			UInt32 scale,
+			HdPackRecordFlags flags, 
+			UInt32 chrRamBankSize);
+
+		[DllImport(DLLPath)] public static extern void HdBuilderStopRecording();
+
+		[DllImport(DLLPath, EntryPoint = "HdBuilderGetBankPreview")] private static extern void HdBuilderGetBankPreviewWrapper(UInt32 bankNumber, UInt32 pageNumber, IntPtr rgbBuffer);
+		public static byte[] HdBuilderGetBankPreview(UInt32 bankNumber, int scale, UInt32 pageNumber)
+		{
+			byte[] frameData = new byte[128*128*4*scale*scale];
+
+			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
+			try {
+				InteropEmu.HdBuilderGetBankPreviewWrapper(bankNumber, pageNumber, hFrameData.AddrOfPinnedObject());
+			} finally {
+				hFrameData.Free();
+			}
+
+			return frameData;
+		}
+
+		[DllImport(DLLPath, EntryPoint = "HdBuilderGetChrBankList")] private static extern void HdBuilderGetChrBankListWrapper(IntPtr bankList);
+		public static UInt32[] HdBuilderGetChrBankList()
+		{
+			UInt32[] bankList = new UInt32[1024];
+			GCHandle hBankList = GCHandle.Alloc(bankList, GCHandleType.Pinned);
+			try {
+				InteropEmu.HdBuilderGetChrBankListWrapper(hBankList.AddrOfPinnedObject());
+				for(int i = 0; i < bankList.Length; i++) {
+					if(bankList[i] == UInt32.MaxValue) {
+						Array.Resize(ref bankList, i);
+						break;
+					}
+				}
+			} finally {
+				hBankList.Free();
+			}
+
+			return bankList;
+		}
+
 		public static NsfHeader NsfGetHeader()
 		{
 			NsfHeader header = new NsfHeader();
@@ -1027,6 +1071,9 @@ namespace Mesen.GUI
 		public UInt32 Crc32;
 		public UInt32 PrgCrc32;
 		public RomFormat Format;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool IsChrRam;
 	}
 
 	public enum RomFormat
@@ -1043,6 +1090,7 @@ namespace Mesen.GUI
 		public UInt32 Crc32;
 		public UInt32 PrgCrc32;
 		public RomFormat Format;
+		public bool IsChrRam;
 
 		public RomInfo(InteropRomInfo romInfo)
 		{
@@ -1050,6 +1098,7 @@ namespace Mesen.GUI
 			this.Crc32 = romInfo.Crc32;
 			this.PrgCrc32 = romInfo.PrgCrc32;
 			this.Format = romInfo.Format;
+			this.IsChrRam = romInfo.IsChrRam;
 		}
 
 		public string GetRomName()
@@ -1292,6 +1341,17 @@ namespace Mesen.GUI
 		CSCD = 2,
 	}
 
+	public enum ScaleFilterType
+	{
+		xBRZ = 0,
+		HQX = 1,
+		Scale2x = 2,
+		_2xSai = 3,
+		Super2xSai = 4,
+		SuperEagle = 5,
+		Prescale = 6,
+	}
+
 	public enum VideoFilterType
 	{
 		None = 0,
@@ -1368,6 +1428,15 @@ namespace Mesen.GUI
 		Read = 0,
 		Write = 1,
 		Exec = 2,
+	}
+
+	[Flags]
+	public enum HdPackRecordFlags
+	{
+		None = 0,
+		UseLargeSprites = 1,
+		SortByUsageFrequency = 2,
+		GroupBlankTiles = 4,
 	}
 
 	public struct AddressTypeInfo

@@ -9,7 +9,7 @@ private:
 public:
 	static string ToHex(uint8_t addr);
 	static string ToHex(uint16_t addr);
-	static string ToHex(uint32_t addr);
+	static string ToHex(uint32_t addr, bool fullSize = false);
 	static string ToHex(vector<uint8_t> &data);
 
 	static int FromHex(string hex);

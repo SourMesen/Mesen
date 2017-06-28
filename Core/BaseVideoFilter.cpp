@@ -72,15 +72,10 @@ void BaseVideoFilter::TakeScreenshot(string filename, std::stringstream *stream)
 		memcpy(frameBuffer, GetOutputBuffer(), _bufferSize);
 	}
 
-	//ARGB -> ABGR
-	for(uint32_t i = 0; i < _bufferSize / GetFrameInfo().BitsPerPixel; i++) {
-		frameBuffer[i] = 0xFF000000 | (frameBuffer[i] & 0xFF00) | ((frameBuffer[i] & 0xFF0000) >> 16) | ((frameBuffer[i] & 0xFF) << 16);
-	}
-
 	if(!filename.empty()) {
-		PNGHelper::WritePNG(filename, (uint8_t*)frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
+		PNGHelper::WritePNG(filename, frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
 	} else {
-		PNGHelper::WritePNG(*stream, (uint8_t*)frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
+		PNGHelper::WritePNG(*stream, frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
 	}
 
 	delete[] frameBuffer;

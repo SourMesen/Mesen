@@ -28,11 +28,14 @@ void HdVideoFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 	uint32_t hdScale = _hdNesPack->GetScale();
 	uint32_t screenWidth = overscan.GetScreenWidth() * hdScale;
 
+	_hdNesPack->OnBeforeApplyFilter(_hdScreenTiles);
+
 	for(uint32_t i = overscan.Top, iMax = 240 - overscan.Bottom; i < iMax; i++) {
 		for(uint32_t j = overscan.Left, jMax = 256 - overscan.Right; j < jMax; j++) {
 			uint32_t sdPixel = EmulationSettings::GetRgbPalette()[ppuOutputBuffer[i * 256 + j] & 0x3F]; //ProcessIntensifyBits(inputBuffer[i * 256 + j]);
 			uint32_t bufferIndex = (i - overscan.Top) * screenWidth * hdScale + (j - overscan.Left) * hdScale;
-			_hdNesPack->GetPixels(_hdScreenTiles[i * 256 + j], sdPixel, (uint32_t*)GetOutputBuffer() + bufferIndex, screenWidth);
+
+			_hdNesPack->GetPixels(_hdScreenTiles, j, i, _hdScreenTiles[i * 256 + j], sdPixel, (uint32_t*)GetOutputBuffer() + bufferIndex, screenWidth);
 		}
 	}
 }

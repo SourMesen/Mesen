@@ -124,8 +124,9 @@ struct TileInfo
 	uint8_t LowByte;
 	uint8_t HighByte;
 	uint32_t PaletteOffset;
-
-	uint16_t TileAddr; //used by HD ppu
+	uint16_t TileAddr;
+	
+	int32_t AbsoluteTileAddr; //used by HD ppu
 	uint8_t OffsetY; //used by HD ppu
 };
 

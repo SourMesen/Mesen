@@ -61,11 +61,14 @@ namespace Mesen.GUI.Forms
 			if(DialogResult == System.Windows.Forms.DialogResult.OK) {
 				if(!ValidateInput()) {
 					e.Cancel = true;
-				} else {
-					_validateTimer.Tick -= OnValidateInput;
-					_validateTimer.Stop();
 				}
 			}
+
+			if(!e.Cancel) {
+				_validateTimer.Tick -= OnValidateInput;
+				_validateTimer.Stop();
+			}
+
 			base.OnFormClosing(e);
 		}
 

@@ -12,7 +12,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 
 	NESHeader header;
 	uint8_t* buffer = romFile.data();
-	uint32_t dataSize = romFile.size();
+	uint32_t dataSize = (uint32_t)romFile.size();
 	if(preloadedHeader) {
 		header = *preloadedHeader;
 		header.SanitizeHeader(romFile.size() + sizeof(NESHeader));

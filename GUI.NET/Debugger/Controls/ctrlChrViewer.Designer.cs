@@ -34,6 +34,7 @@
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblPalette = new System.Windows.Forms.Label();
 			this.cboPalette = new System.Windows.Forms.ComboBox();
+			this.picPaletteTooltip = new System.Windows.Forms.PictureBox();
 			this.chkLargeSprites = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblChrSelection = new System.Windows.Forms.Label();
@@ -57,11 +58,13 @@
 			this.picChrBank1 = new System.Windows.Forms.PictureBox();
 			this.picChrBank2 = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.picPaletteTooltip = new System.Windows.Forms.PictureBox();
+			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpDisplayOptions.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picPaletteTooltip)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.flpHighlight.SuspendLayout();
 			this.grpTileInfo.SuspendLayout();
@@ -73,7 +76,7 @@
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picChrBank1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picChrBank2)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picPaletteTooltip)).BeginInit();
+			this.ctxMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel3
@@ -165,6 +168,18 @@
 			this.cboPalette.Size = new System.Drawing.Size(45, 21);
 			this.cboPalette.TabIndex = 1;
 			this.cboPalette.SelectedIndexChanged += new System.EventHandler(this.cboPalette_SelectedIndexChanged);
+			// 
+			// picPaletteTooltip
+			// 
+			this.picPaletteTooltip.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picPaletteTooltip.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picPaletteTooltip.Location = new System.Drawing.Point(103, 7);
+			this.picPaletteTooltip.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+			this.picPaletteTooltip.Name = "picPaletteTooltip";
+			this.picPaletteTooltip.Size = new System.Drawing.Size(14, 14);
+			this.picPaletteTooltip.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.picPaletteTooltip.TabIndex = 16;
+			this.picPaletteTooltip.TabStop = false;
 			// 
 			// chkLargeSprites
 			// 
@@ -406,6 +421,7 @@
 			// picChrBank1
 			// 
 			this.picChrBank1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picChrBank1.ContextMenuStrip = this.ctxMenu;
 			this.picChrBank1.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.picChrBank1.Location = new System.Drawing.Point(1, 1);
 			this.picChrBank1.Margin = new System.Windows.Forms.Padding(1);
@@ -420,6 +436,7 @@
 			// picChrBank2
 			// 
 			this.picChrBank2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picChrBank2.ContextMenuStrip = this.ctxMenu;
 			this.picChrBank2.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.picChrBank2.Location = new System.Drawing.Point(1, 260);
 			this.picChrBank2.Margin = new System.Windows.Forms.Padding(1);
@@ -437,17 +454,20 @@
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
 			// 
-			// picPaletteTooltip
+			// ctxMenu
 			// 
-			this.picPaletteTooltip.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.picPaletteTooltip.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picPaletteTooltip.Location = new System.Drawing.Point(103, 7);
-			this.picPaletteTooltip.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
-			this.picPaletteTooltip.Name = "picPaletteTooltip";
-			this.picPaletteTooltip.Size = new System.Drawing.Size(14, 14);
-			this.picPaletteTooltip.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.picPaletteTooltip.TabIndex = 16;
-			this.picPaletteTooltip.TabStop = false;
+			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopyHdPack});
+			this.ctxMenu.Name = "ctxMenu";
+			this.ctxMenu.Size = new System.Drawing.Size(222, 48);
+			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuCopyHdPack
+			// 
+			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
+			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
+			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
 			// ctrlChrViewer
 			// 
@@ -462,6 +482,7 @@
 			this.tableLayoutPanel1.PerformLayout();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picPaletteTooltip)).EndInit();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
 			this.flpHighlight.ResumeLayout(false);
@@ -476,7 +497,7 @@
 			this.tableLayoutPanel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picChrBank1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picChrBank2)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picPaletteTooltip)).EndInit();
+			this.ctxMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -513,5 +534,7 @@
 		private System.Windows.Forms.PictureBox picTileTooltip;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.PictureBox picPaletteTooltip;
+		private System.Windows.Forms.ContextMenuStrip ctxMenu;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
 	}
 }

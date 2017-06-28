@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <thread>
+#include "../Utilities/FolderUtilities.h"
 #include "MessageManager.h"
 #include "Debugger.h"
 #include "Console.h"

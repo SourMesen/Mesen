@@ -16,6 +16,7 @@ using Mesen.GUI.Config;
 using Mesen.GUI.Debugger;
 using Mesen.GUI.Forms.Cheats;
 using Mesen.GUI.Forms.Config;
+using Mesen.GUI.Forms.HdPackEditor;
 using Mesen.GUI.Forms.NetPlay;
 using Mesen.GUI.GoogleDriveIntegration;
 
@@ -28,6 +29,7 @@ namespace Mesen.GUI.Forms
 		private frmDebugger _debugger;
 		private frmLogWindow _logWindow;
 		private frmCheatList _cheatListWindow;
+		private frmHdPackEditor _hdPackEditorWindow;
 		private string _currentRomPath = null;
 		private int _currentRomArchiveIndex = -1;
 		private string _currentGame = null;
@@ -497,6 +499,9 @@ namespace Mesen.GUI.Forms
 					this._currentGame = null;
 					CheatInfo.ClearCheats();
 					this.BeginInvoke((MethodInvoker)(() => {
+						if(_hdPackEditorWindow != null) {
+							_hdPackEditorWindow.Close();
+						}
 						ctrlRecentGames.Initialize();
 					}));
 					break;
@@ -544,13 +549,14 @@ namespace Mesen.GUI.Forms
 
 		private void mnuOpen_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.SetFilter(ResourceHelper.GetMessage("FilterRomIps"));
-			if(ConfigManager.Config.RecentFiles.Count > 0) {
-				ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
-			}			
-			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				LoadFile(ofd.FileName);
+			using(OpenFileDialog ofd = new OpenFileDialog()) {
+				ofd.SetFilter(ResourceHelper.GetMessage("FilterRomIps"));
+				if(ConfigManager.Config.RecentFiles.Count > 0) {
+					ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
+				}
+				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					LoadFile(ofd.FileName);
+				}
 			}
 		}
 
@@ -585,15 +591,16 @@ namespace Mesen.GUI.Forms
 		{
 			if(_emuThread == null) {
 				if(MesenMsgBox.Show("SelectRomIps", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-					OpenFileDialog ofd = new OpenFileDialog();
-					ofd.SetFilter(ResourceHelper.GetMessage("FilterRom"));
-					if(ConfigManager.Config.RecentFiles.Count > 0) {
-						ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
-					}
+					using(OpenFileDialog ofd = new OpenFileDialog()) {
+						ofd.SetFilter(ResourceHelper.GetMessage("FilterRom"));
+						if(ConfigManager.Config.RecentFiles.Count > 0) {
+							ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
+						}
 
-					if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-						LoadROM(ofd.FileName, true, -1, patchFile);
-					}					
+						if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+							LoadROM(ofd.FileName, true, -1, patchFile);
+						}
+					}
 				}
 			} else if(MesenMsgBox.Show("PatchAndReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
 				LoadROM(_currentRomPath, true, _currentRomArchiveIndex, patchFile);
@@ -763,6 +770,7 @@ namespace Mesen.GUI.Forms
 					mnuTestRecordFrom.Enabled = (mnuTestRecordStart.Enabled || mnuTestRecordNow.Enabled || mnuTestRecordMovie.Enabled || mnuTestRecordTest.Enabled);
 
 					mnuDebugger.Enabled = !netPlay && _emuThread != null;
+					mnuHdPackEditor.Enabled = !netPlay && _emuThread != null;
 
 					mnuTakeScreenshot.Enabled = _emuThread != null && !InteropEmu.IsNsf();
 					mnuNetPlay.Enabled = !InteropEmu.IsNsf();
@@ -988,9 +996,10 @@ namespace Mesen.GUI.Forms
 			if(InteropEmu.IsServerRunning()) {
 				Task.Run(() => InteropEmu.StopServer());
 			} else {
-				frmServerConfig frm = new frmServerConfig();
-				if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
-					InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port, ConfigManager.Config.Profile.PlayerName);
+				using(frmServerConfig frm = new frmServerConfig()) {
+					if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
+						InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port, ConfigManager.Config.Profile.PlayerName);
+					}
 				}
 			}
 		}
@@ -1000,18 +1009,21 @@ namespace Mesen.GUI.Forms
 			if(InteropEmu.IsConnected()) {
 				Task.Run(() => InteropEmu.Disconnect());
 			} else {
-				frmClientConfig frm = new frmClientConfig();
-				if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
-					Task.Run(() => {
-						InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.ClientConnectionInfo.Spectator);
-					});
+				using(frmClientConfig frm = new frmClientConfig()) {
+					if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
+						Task.Run(() => {
+							InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.ClientConnectionInfo.Spectator);
+						});
+					}
 				}
 			}
 		}
 
 		private void mnuProfile_Click(object sender, EventArgs e)
 		{
-			new frmPlayerProfile().ShowDialog(sender);
+			using(frmPlayerProfile frm = new frmPlayerProfile()) {
+				frm.ShowDialog(sender);
+			}
 		}
 		
 		private void mnuExit_Click(object sender, EventArgs e)
@@ -1021,7 +1033,9 @@ namespace Mesen.GUI.Forms
 		
 		private void mnuVideoConfig_Click(object sender, EventArgs e)
 		{
-			new frmVideoConfig().ShowDialog(sender);
+			using(frmVideoConfig frm = new frmVideoConfig()) {
+				frm.ShowDialog(sender);
+			}
 			UpdateVideoSettings();
 		}
 		
@@ -1057,22 +1071,24 @@ namespace Mesen.GUI.Forms
 		
 		private void RecordMovie(bool resetEmu)
 		{
-			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
-			sfd.InitialDirectory = ConfigManager.MovieFolder;
-			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
-			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				InteropEmu.MovieRecord(sfd.FileName, resetEmu);
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
+				sfd.InitialDirectory = ConfigManager.MovieFolder;
+				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
+				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					InteropEmu.MovieRecord(sfd.FileName, resetEmu);
+				}
 			}
 		}
 
 		private void mnuPlayMovie_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
-			ofd.InitialDirectory = ConfigManager.MovieFolder;
-			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				InteropEmu.MoviePlay(ofd.FileName);
+			using(OpenFileDialog ofd = new OpenFileDialog()) {
+				ofd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
+				ofd.InitialDirectory = ConfigManager.MovieFolder;
+				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					InteropEmu.MoviePlay(ofd.FileName);
+				}
 			}
 		}
 
@@ -1093,12 +1109,13 @@ namespace Mesen.GUI.Forms
 
 		private void mnuWaveRecord_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.SetFilter(ResourceHelper.GetMessage("FilterWave"));
-			sfd.InitialDirectory = ConfigManager.WaveFolder;
-			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".wav";
-			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				InteropEmu.WaveRecord(sfd.FileName);
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter(ResourceHelper.GetMessage("FilterWave"));
+				sfd.InitialDirectory = ConfigManager.WaveFolder;
+				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".wav";
+				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					InteropEmu.WaveRecord(sfd.FileName);
+				}
 			}
 		}
 
@@ -1123,51 +1140,52 @@ namespace Mesen.GUI.Forms
 
 		private void mnuTestRun_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
-			ofd.InitialDirectory = ConfigManager.TestFolder;
-			ofd.Multiselect = true;
-			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				List<string> passedTests = new List<string>();
-				List<string> failedTests = new List<string>();
-				List<int> failedFrameCount = new List<int>();
+			using(OpenFileDialog ofd = new OpenFileDialog()) {
+				ofd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
+				ofd.InitialDirectory = ConfigManager.TestFolder;
+				ofd.Multiselect = true;
+				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					List<string> passedTests = new List<string>();
+					List<string> failedTests = new List<string>();
+					List<int> failedFrameCount = new List<int>();
 
-				this.menuStrip.Enabled = false;
+					this.menuStrip.Enabled = false;
 
-				Task.Run(() => {
-					foreach(string filename in ofd.FileNames) {
-						int result = InteropEmu.RunRecordedTest(filename);
+					Task.Run(() => {
+						foreach(string filename in ofd.FileNames) {
+							int result = InteropEmu.RunRecordedTest(filename);
 
-						if(result == 0) {
-							passedTests.Add(Path.GetFileNameWithoutExtension(filename));
-						} else {
-							failedTests.Add(Path.GetFileNameWithoutExtension(filename));
-							failedFrameCount.Add(result);
+							if(result == 0) {
+								passedTests.Add(Path.GetFileNameWithoutExtension(filename));
+							} else {
+								failedTests.Add(Path.GetFileNameWithoutExtension(filename));
+								failedFrameCount.Add(result);
+							}
 						}
-					}
 
-					this.BeginInvoke((MethodInvoker)(() => {
-						if(failedTests.Count == 0) {
-							MessageBox.Show("All tests passed.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-						} else {
-							StringBuilder message = new StringBuilder();
-							if(passedTests.Count > 0) {
-								message.AppendLine("Passed tests:");
-								foreach(string test in passedTests) {
-									message.AppendLine("  -" + test);
+						this.BeginInvoke((MethodInvoker)(() => {
+							if(failedTests.Count == 0) {
+								MessageBox.Show("All tests passed.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+							} else {
+								StringBuilder message = new StringBuilder();
+								if(passedTests.Count > 0) {
+									message.AppendLine("Passed tests:");
+									foreach(string test in passedTests) {
+										message.AppendLine("  -" + test);
+									}
+									message.AppendLine("");
 								}
-								message.AppendLine("");
+								message.AppendLine("Failed tests:");
+								for(int i = 0, len = failedTests.Count; i < len; i++) {
+									message.AppendLine("  -" + failedTests[i] + " (" + failedFrameCount[i] + ")");
+								}
+								MessageBox.Show(message.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
-							message.AppendLine("Failed tests:");
-							for(int i = 0, len = failedTests.Count; i < len; i++) {
-								message.AppendLine("  -" + failedTests[i] + " (" + failedFrameCount[i] + ")");
-							}
-							MessageBox.Show(message.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						}
 
-						this.menuStrip.Enabled = true;
-					}));
-				});
+							this.menuStrip.Enabled = true;
+						}));
+					});
+				}
 			}
 		}
 
@@ -1183,44 +1201,47 @@ namespace Mesen.GUI.Forms
 
 		private void RecordTest(bool resetEmu)
 		{
-			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
-			sfd.InitialDirectory = ConfigManager.TestFolder;
-			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mtp";
-			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				InteropEmu.RomTestRecord(sfd.FileName, resetEmu);
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
+				sfd.InitialDirectory = ConfigManager.TestFolder;
+				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mtp";
+				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					InteropEmu.RomTestRecord(sfd.FileName, resetEmu);
+				}
 			}
 		}
 
 		private void mnuTestRecordMovie_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
-			ofd.InitialDirectory = ConfigManager.MovieFolder;
-			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
-				sfd.InitialDirectory = ConfigManager.TestFolder;
-				sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
-				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-					InteropEmu.RomTestRecordFromMovie(sfd.FileName, ofd.FileName);
+			using(OpenFileDialog ofd = new OpenFileDialog()) {
+				ofd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
+				ofd.InitialDirectory = ConfigManager.MovieFolder;
+				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					SaveFileDialog sfd = new SaveFileDialog();
+					sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
+					sfd.InitialDirectory = ConfigManager.TestFolder;
+					sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
+					if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+						InteropEmu.RomTestRecordFromMovie(sfd.FileName, ofd.FileName);
+					}
 				}
 			}
 		}
 
 		private void mnuTestRecordTest_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
-			ofd.InitialDirectory = ConfigManager.TestFolder;
+			using(OpenFileDialog ofd = new OpenFileDialog()) {
+				ofd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
+				ofd.InitialDirectory = ConfigManager.TestFolder;
 
-			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
-				sfd.InitialDirectory = ConfigManager.TestFolder;
-				sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
-				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-					InteropEmu.RomTestRecordFromTest(sfd.FileName, ofd.FileName);
+				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					SaveFileDialog sfd = new SaveFileDialog();
+					sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
+					sfd.InitialDirectory = ConfigManager.TestFolder;
+					sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
+					if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+						InteropEmu.RomTestRecordFromTest(sfd.FileName, ofd.FileName);
+					}
 				}
 			}
 		}
@@ -1248,30 +1269,36 @@ namespace Mesen.GUI.Forms
 
 		private void mnuInput_Click(object sender, EventArgs e)
 		{
-			new frmInputConfig().ShowDialog(sender);
+			using(frmInputConfig frm = new frmInputConfig()) {
+				frm.ShowDialog(sender);
+			}
 		}
 
 		private void mnuAudioConfig_Click(object sender, EventArgs e)
 		{
-			new frmAudioConfig().ShowDialog(sender);
+			using(frmAudioConfig frm = new frmAudioConfig()) {
+				frm.ShowDialog(sender);
+			}
 			this.ctrlNsfPlayer.UpdateVolume();
 		}
 
 		private void mnuPreferences_Click(object sender, EventArgs e)
 		{
-			if(new frmPreferences().ShowDialog(sender) == DialogResult.OK) {
-				ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
-				ResourceHelper.UpdateEmuLanguage();
-				ResourceHelper.ApplyResources(this);
-				UpdateMenus();
-				InitializeFdsDiskMenu();
-				InitializeNsfMode(true);
-				ctrlRecentGames.UpdateGameInfo();
-			} else {
-				UpdateVideoSettings();
-				UpdateMenus();
-				UpdateRecentFiles();
-				UpdateViewerSize();
+			using(frmPreferences frm = new frmPreferences()) {
+				if(frm.ShowDialog(sender) == DialogResult.OK) {
+					ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
+					ResourceHelper.UpdateEmuLanguage();
+					ResourceHelper.ApplyResources(this);
+					UpdateMenus();
+					InitializeFdsDiskMenu();
+					InitializeNsfMode(true);
+					ctrlRecentGames.UpdateGameInfo();
+				} else {
+					UpdateVideoSettings();
+					UpdateMenus();
+					UpdateRecentFiles();
+					UpdateViewerSize();
+				}
 			}
 			ResizeRecentGames(sender, e);
 		}
@@ -1565,15 +1592,16 @@ namespace Mesen.GUI.Forms
 		private void SelectFdsBiosPrompt()
 		{
 			if(MesenMsgBox.Show("FdsBiosNotFound", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
-				OpenFileDialog ofd = new OpenFileDialog();
-				ofd.SetFilter(ResourceHelper.GetMessage("FilterAll"));
-				if(ofd.ShowDialog() == DialogResult.OK) {
-					string hash = MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant();
-					if(hash == "ca30b50f880eb660a320674ed365ef7a" || hash == "c1a9e9415a6adde3c8563c622d4c9fce") {
-						File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));
-						LoadROM(_currentRomPath, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
-					} else {
-						MesenMsgBox.Show("InvalidFdsBios", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				using(OpenFileDialog ofd = new OpenFileDialog()) {
+					ofd.SetFilter(ResourceHelper.GetMessage("FilterAll"));
+					if(ofd.ShowDialog() == DialogResult.OK) {
+						string hash = MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant();
+						if(hash == "ca30b50f880eb660a320674ed365ef7a" || hash == "c1a9e9415a6adde3c8563c622d4c9fce") {
+							File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));
+							LoadROM(_currentRomPath, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
+						} else {
+							MesenMsgBox.Show("InvalidFdsBios", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
 					}
 				}
 			}
@@ -1668,7 +1696,9 @@ namespace Mesen.GUI.Forms
 
 		private void mnuAbout_Click(object sender, EventArgs e)
 		{
-			new frmAbout().ShowDialog();
+			using(frmAbout frm = new frmAbout()) {
+				frm.ShowDialog();
+			}
 		}
 
 		private void CheckForUpdates(bool displayResult)
@@ -1688,9 +1718,10 @@ namespace Mesen.GUI.Forms
 
 						if(latestVersion > currentVersion) {
 							this.BeginInvoke((MethodInvoker)(() => {
-								frmUpdatePrompt frmUpdate = new frmUpdatePrompt(currentVersion, latestVersion, changeLog, fileHash, donateText);
-								if(frmUpdate.ShowDialog(null, this) == DialogResult.OK) {
-									Application.Exit();
+								using(frmUpdatePrompt frmUpdate = new frmUpdatePrompt(currentVersion, latestVersion, changeLog, fileHash, donateText)) {
+									if(frmUpdate.ShowDialog(null, this) == DialogResult.OK) {
+										Application.Exit();
+									}
 								}
 							}));
 						} else if(displayResult) {
@@ -1740,8 +1771,10 @@ namespace Mesen.GUI.Forms
 		private void ShowVsGameConfig()
 		{
 			VsConfigInfo configInfo = VsConfigInfo.GetCurrentGameConfig(true);
-			if(new frmVsGameConfig(configInfo).ShowDialog(null, this) == DialogResult.OK) {
-				VsConfigInfo.ApplyConfig();
+			using(frmVsGameConfig frm = new frmVsGameConfig(configInfo)) {
+				if(frm.ShowDialog(null, this) == DialogResult.OK) {
+					VsConfigInfo.ApplyConfig();
+				}
 			}
 		}
 
@@ -1761,10 +1794,7 @@ namespace Mesen.GUI.Forms
 		{
 			if(_logWindow == null) {
 				_logWindow = new frmLogWindow();
-				_logWindow.StartPosition = FormStartPosition.Manual;
-				_logWindow.Left = this.Left + (this.Width - _logWindow.Width) / 2;
-				_logWindow.Top = this.Top + (this.Height - _logWindow.Height) / 2;
-				_logWindow.Show(sender, null);
+				_logWindow.Show(sender, this);
 				_logWindow.FormClosed += (object a, FormClosedEventArgs b) => {
 					_logWindow = null;
 				};
@@ -1775,7 +1805,9 @@ namespace Mesen.GUI.Forms
 
 		private void mnuEmulationConfig_Click(object sender, EventArgs e)
 		{
-			new frmEmulationConfig().ShowDialog(sender);
+			using(frmEmulationConfig frm = new frmEmulationConfig()) {
+				frm.ShowDialog(sender);
+			}
 		}
 
 		private void InitializeNsfMode(bool updateTextOnly = false, bool gameLoaded = false)
@@ -1851,6 +1883,19 @@ namespace Mesen.GUI.Forms
 		private void panelRenderer_MouseLeave(object sender, EventArgs e)
 		{
 			CursorManager.OnMouseLeave();
+		}
+
+		private void mnuHdPackEditor_Click(object sender, EventArgs e)
+		{
+			if(_hdPackEditorWindow == null) {
+				_hdPackEditorWindow = new frmHdPackEditor();
+				_hdPackEditorWindow.Show(sender, this);
+				_hdPackEditorWindow.FormClosed += (object a, FormClosedEventArgs b) => {
+					_hdPackEditorWindow = null;
+				};
+			} else {
+				_hdPackEditorWindow.Focus();
+			}
 		}
 	}
 }

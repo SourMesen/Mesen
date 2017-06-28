@@ -3,17 +3,6 @@
 #include "stdafx.h"
 #include "DefaultVideoFilter.h"
 
-enum class ScaleFilterType
-{
-	xBRZ,
-	HQX,
-	Scale2x,
-	_2xSai,
-	Super2xSai,
-	SuperEagle,
-	Prescale,
-};
-
 class ScaleFilter : public DefaultVideoFilter
 {
 private:

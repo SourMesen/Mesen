@@ -37,3 +37,12 @@ void HQX_CALLCONV hqxInit(void)
         RGBtoYUV[c] = (y << 16) + (u << 8) + v;
     }
 }
+
+void HQX_CALLCONV hqx(uint32_t scale, uint32_t * src, uint32_t * dest, int width, int height)
+{
+	switch(scale) {
+		case 2: hq2x_32(src, dest, width, height); break;
+		case 3: hq3x_32(src, dest, width, height); break;
+		case 4: hq4x_32(src, dest, width, height); break;
+	}
+}

@@ -46,16 +46,16 @@ string HexUtilities::ToHex(uint16_t value)
 	return _hexCache[value >> 8] + _hexCache[value & 0xFF];
 }
 
-string HexUtilities::ToHex(uint32_t value)
+string HexUtilities::ToHex(uint32_t value, bool fullSize)
 {
-	if(value <= 0xFF) {
+	if(fullSize || value > 0xFFFFFF) {
+		return _hexCache[value >> 24] + _hexCache[(value >> 16) & 0xFF] + _hexCache[(value >> 8) & 0xFF] + _hexCache[value & 0xFF];
+	} else if(value <= 0xFF) {
 		return ToHex((uint8_t)value);
 	} else if(value <= 0xFFFF) {
 		return ToHex((uint16_t)value);
-	} else if(value <= 0xFFFFFF) {
-		return _hexCache[(value >> 16) & 0xFF] + _hexCache[(value >> 8) & 0xFF] + _hexCache[value & 0xFF];
 	} else {
-		return _hexCache[value >> 24] + _hexCache[(value >> 16) & 0xFF] + _hexCache[(value >> 8) & 0xFF] + _hexCache[value & 0xFF];
+		return _hexCache[(value >> 16) & 0xFF] + _hexCache[(value >> 8) & 0xFF] + _hexCache[value & 0xFF];
 	}
 }
 

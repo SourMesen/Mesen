@@ -643,6 +643,12 @@
     <Compile Include="Forms\frmUpdatePrompt.Designer.cs">
       <DependentUpon>frmUpdatePrompt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\HdPackEditor\frmHdPackEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HdPackEditor\frmHdPackEditor.Designer.cs">
+      <DependentUpon>frmHdPackEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MesenMsgBox.cs" />
     <Compile Include="Forms\NetPlay\frmClientConfig.cs">
       <SubType>Form</SubType>
@@ -679,6 +685,7 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\HdPack.png" />
     <None Include="Resources\VideoFilter.png" />
     <None Include="Resources\map.png" />
     <None Include="Resources\PowerCycle.png" />
@@ -870,6 +877,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmUpdatePrompt.resx">
       <DependentUpon>frmUpdatePrompt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HdPackEditor\frmHdPackEditor.resx">
+      <DependentUpon>frmHdPackEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NetPlay\frmClientConfig.resx">
       <DependentUpon>frmClientConfig.cs</DependentUpon>

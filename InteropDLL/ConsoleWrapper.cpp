@@ -15,11 +15,13 @@
 #include "../Core/FDS.h"
 #include "../Core/VsControlManager.h"
 #include "../Core/SoundMixer.h"
+#include "../Core/FileLoader.h"
 #include "../Core/RomLoader.h"
 #include "../Core/NsfMapper.h"
 #include "../Core/IRenderingDevice.h"
 #include "../Core/IAudioDevice.h"
 #include "../Core/MovieManager.h"
+#include "../Core/HdPackBuilder.h"
 #include "../Utilities/AviWriter.h"
 
 #ifdef WIN32
@@ -65,6 +67,7 @@ namespace InteropEmu {
 		uint32_t Crc32;
 		uint32_t PrgCrc32;
 		RomFormat Format;
+		bool IsChrRam;
 	};
 
 	extern "C" {
@@ -119,7 +122,7 @@ namespace InteropEmu {
 
 		DllExport const char* __stdcall GetArchiveRomList(char* filename) { 
 			std::ostringstream out;
-			for(string romName : RomLoader::GetArchiveRomList(filename)) {
+			for(string romName : FileLoader::GetArchiveRomList(filename)) {
 				out << romName << "[!|!]";
 			}
 			_returnString = out.str();
@@ -184,9 +187,10 @@ namespace InteropEmu {
 				romInfo.Crc32 = Console::GetCrc32();
 				romInfo.PrgCrc32 = Console::GetPrgCrc32();
 				romInfo.Format = Console::GetRomFormat();
+				romInfo.IsChrRam = Console::IsChrRam();
 			} else {
 				RomLoader romLoader;
-				if(romLoader.LoadFile(filename, nullptr, "", archiveFileIndex)) {
+				if(romLoader.LoadFile(filename, archiveFileIndex)) {
 					RomData romData = romLoader.GetRomData();
 
 					_returnString = romData.RomName;
@@ -194,12 +198,14 @@ namespace InteropEmu {
 					romInfo.Crc32 = romData.Crc32;
 					romInfo.PrgCrc32 = romData.PrgCrc32;
 					romInfo.Format = RomFormat::Unknown;
+					romInfo.IsChrRam = romData.ChrRom.size() == 0;
 				} else {
 					_returnString = "";
 					romInfo.RomName = _returnString.c_str();
 					romInfo.Crc32 = 0;
 					romInfo.PrgCrc32 = 0;
 					romInfo.Format = RomFormat::Unknown;
+					romInfo.IsChrRam = false;
 				}
 			}
 		}
@@ -462,5 +468,11 @@ namespace InteropEmu {
 				vs->SetInputType(inputType);
 			}
 		}
+
+		DllExport void __stdcall HdBuilderStartRecording(char* saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize) { Console::StartRecordingHdPack(saveFolder, filterType, scale, flags, chrRamBankSize); }
+		DllExport void __stdcall HdBuilderStopRecording() { Console::StopRecordingHdPack(); }
+
+		DllExport void __stdcall HdBuilderGetChrBankList(uint32_t* bankBuffer) { HdPackBuilder::GetChrBankList(bankBuffer); }
+		DllExport void __stdcall HdBuilderGetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint8_t *rgbBuffer) { HdPackBuilder::GetBankPreview(bankNumber, pageNumber, rgbBuffer); }
 	}
 }

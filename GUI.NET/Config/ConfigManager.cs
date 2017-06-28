@@ -268,6 +268,18 @@ namespace Mesen.GUI.Config
 			}
 		}
 
+		public static string HdPackFolder
+		{
+			get
+			{
+				string hdPackFolder = Path.Combine(ConfigManager.HomeFolder, "HdPacks");
+				if(!Directory.Exists(hdPackFolder)) {
+					Directory.CreateDirectory(hdPackFolder);
+				}
+				return hdPackFolder;
+			}
+		}
+
 		public static string ConfigFile
 		{
 			get

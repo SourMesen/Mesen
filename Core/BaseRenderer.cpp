@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <cmath>
 #include "BaseRenderer.h"
+#include "Console.h"
 #include "EmulationSettings.h"
 #include "VideoDecoder.h"
 #include "PPU.h"

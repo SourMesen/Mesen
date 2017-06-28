@@ -19,5 +19,5 @@ public:
 
 	vector<string> GetFileList(std::initializer_list<string> extensions);
 
-	virtual void ExtractFile(string filename, uint8_t **fileBuffer, size_t &fileSize) = 0;
+	virtual void ExtractFile(string filename, vector<uint8_t> &output) = 0;
 };

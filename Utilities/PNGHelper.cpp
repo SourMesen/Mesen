@@ -3,9 +3,16 @@
 #include "PNGHelper.h"
 #include "miniz.h"
 
-bool PNGHelper::WritePNG(std::stringstream &stream, uint8_t* buffer, uint32_t xSize, uint32_t ySize, uint32_t bitsPerPixel)
+bool PNGHelper::WritePNG(std::stringstream &stream, uint32_t* buffer, uint32_t xSize, uint32_t ySize, uint32_t bitsPerPixel)
 {
 	size_t pngSize = 0;
+
+	//ARGB -> ABGR
+	uint32_t size = xSize * ySize * bitsPerPixel / 8 / 4;
+	for(uint32_t i = 0; i < size; i++) {
+		buffer[i] = (buffer[i] & 0xFF00FF00) | ((buffer[i] & 0xFF0000) >> 16) | ((buffer[i] & 0xFF) << 16);
+	}
+
 	void *pngData = tdefl_write_image_to_png_file_in_memory_ex(buffer, xSize, ySize, bitsPerPixel / 8, &pngSize, MZ_DEFAULT_LEVEL, MZ_FALSE);
 	if(!pngData) {
 		std::cout << "tdefl_write_image_to_png_file_in_memory_ex() failed!" << std::endl;
@@ -17,7 +24,7 @@ bool PNGHelper::WritePNG(std::stringstream &stream, uint8_t* buffer, uint32_t xS
 	}
 }
 
-bool PNGHelper::WritePNG(string filename, uint8_t* buffer, uint32_t xSize, uint32_t ySize, uint32_t bitsPerPixel)
+bool PNGHelper::WritePNG(string filename, uint32_t* buffer, uint32_t xSize, uint32_t ySize, uint32_t bitsPerPixel)
 {
 	std::stringstream stream;
 	if(WritePNG(stream, buffer, xSize, ySize, bitsPerPixel)) {
@@ -31,7 +38,7 @@ bool PNGHelper::WritePNG(string filename, uint8_t* buffer, uint32_t xSize, uint3
 	return false;
 }
 
-void PNGHelper::ReadPNG(string filename, vector<uint8_t> &pngData, uint32_t &pngWidth, uint32_t &pngHeight)
+bool PNGHelper::ReadPNG(string filename, vector<uint8_t> &pngData, uint32_t &pngWidth, uint32_t &pngHeight)
 {
 	unsigned long width;
 	unsigned long height;
@@ -56,7 +63,11 @@ void PNGHelper::ReadPNG(string filename, vector<uint8_t> &pngData, uint32_t &png
 		pngWidth = width;
 		pngHeight = height;
 		delete[] buffer;
+
+		return true;
 	}
+
+	return false;
 }
 
 /*

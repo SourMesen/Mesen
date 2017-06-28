@@ -44,6 +44,8 @@
 #endif
 
 void HQX_CALLCONV hqxInit(void);
+void HQX_CALLCONV hqx(uint32_t scale, uint32_t * src, uint32_t * dest, int width, int height);
+
 void HQX_CALLCONV hq2x_32( uint32_t * src, uint32_t * dest, int width, int height );
 void HQX_CALLCONV hq3x_32( uint32_t * src, uint32_t * dest, int width, int height );
 void HQX_CALLCONV hq4x_32( uint32_t * src, uint32_t * dest, int width, int height );

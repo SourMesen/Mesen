@@ -4,6 +4,7 @@
 #include <atomic>
 #include "../Utilities/SimpleLock.h"
 #include "RomData.h"
+#include "HdData.h"
 
 class Debugger;
 class BaseMapper;
@@ -14,7 +15,9 @@ class PPU;
 class MemoryManager;
 class ControlManager;
 class AutoSaveManager;
+class HdPackBuilder;
 enum class NesModel;
+enum class ScaleFilterType;
 
 class Console
 {
@@ -36,6 +39,9 @@ class Console
 
 		unique_ptr<AutoSaveManager> _autoSaveManager;
 
+		shared_ptr<HdPackBuilder> _hdPackBuilder;
+		unique_ptr<HdPackData> _hdData;
+
 		NesModel _model;
 
 		string _romFilepath;
@@ -50,6 +56,8 @@ class Console
 		atomic<uint32_t> _lagCounter;
 		
 		bool _initialized = false;
+
+		void LoadHdPack(string romFilename, vector<uint8_t> &fileData, string &patchFilename);
 
 		void ResetComponents(bool softReset);
 		bool Initialize(string filename, stringstream *filestream = nullptr, string patchFilename = "", int32_t archiveFileIndex = -1);
@@ -85,6 +93,7 @@ class Console
 		static bool LoadROM(string romName, string sha1Hash);
 		static string GetROMPath();
 		static string GetRomName();
+		static bool IsChrRam();
 		static RomFormat GetRomFormat();
 		static uint32_t GetCrc32();
 		static uint32_t GetPrgCrc32();
@@ -98,6 +107,11 @@ class Console
 		static void SetNextFrameOverclockStatus(bool disabled);
 
 		static bool IsDebuggerAttached();
+
+		static HdPackData* GetHdData();
+
+		static void StartRecordingHdPack(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize);
+		static void StopRecordingHdPack();
 
 		static shared_ptr<Console> GetInstance();
 		static void Release();

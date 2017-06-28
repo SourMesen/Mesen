@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <thread>
 #include "Console.h"
+#include "FileLoader.h"
 #include "CPU.h"
 #include "PPU.h"
 #include "APU.h"
@@ -14,9 +15,11 @@
 #include "MessageManager.h"
 #include "RomLoader.h"
 #include "EmulationSettings.h"
+#include "../Utilities/sha1.h"
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/PlatformUtilities.h"
+#include "HdBuilderPpu.h"
 #include "HdPpu.h"
 #include "NsfPpu.h"
 #include "SoundMixer.h"
@@ -25,6 +28,7 @@
 #include "MovieManager.h"
 #include "RewindManager.h"
 #include "SaveStateManager.h"
+#include "HdPackBuilder.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -62,73 +66,82 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 		//Save current game state before loading another one
 		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename, _archiveFileIndex);
 	}
-
-	shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, filestream, patchFilename, archiveFileIndex);
-
-	if(mapper) {
-		if(_mapper) {
-			//Send notification only if a game was already running and we successfully loaded the new one
-			MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
-		}
-
-		_romFilepath = romFilename;
-		_patchFilename = patchFilename;
-		_archiveFileIndex = archiveFileIndex;
-				
-		_autoSaveManager.reset(new AutoSaveManager());
-		VideoDecoder::GetInstance()->StopThread();
-
-		_mapper = mapper;
-		_memoryManager.reset(new MemoryManager(_mapper));
-		_cpu.reset(new CPU(_memoryManager.get()));
-		if(HdNesPack::HasHdPack(_romFilepath)) {
-			_ppu.reset(new HdPpu(_mapper.get()));
-		} else if(NsfMapper::GetInstance()) {
-			//Disable most of the PPU for NSFs
-			_ppu.reset(new NsfPpu(_mapper.get()));
-		} else {
-			_ppu.reset(new PPU(_mapper.get()));
-		}
-		_apu.reset(new APU(_memoryManager.get()));
-
-		_controlManager.reset(_mapper->GetGameSystem() == GameSystem::VsUniSystem ? new VsControlManager() : new ControlManager());
-		_controlManager->UpdateControlDevices();
-
-		_memoryManager->RegisterIODevice(_ppu.get());
-		_memoryManager->RegisterIODevice(_apu.get());
-		_memoryManager->RegisterIODevice(_controlManager.get());
-		_memoryManager->RegisterIODevice(_mapper.get());
-
-		_model = NesModel::Auto;
-		UpdateNesModel(false);
-
-		_initialized = true;
-
-		if(_debugger) {
-			auto lock = _debuggerLock.AcquireSafe();
-			StopDebugger();
-			GetDebugger();
-		}
-
-		ResetComponents(false);
-		
-		_rewindManager.reset(new RewindManager());
-
-		VideoDecoder::GetInstance()->StartThread();
 	
-		FolderUtilities::AddKnownGameFolder(FolderUtilities::GetFolderName(romFilename));
-
-		string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
-		string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
-		MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(_mapper->GetRomName(), false));
-		if(EmulationSettings::GetOverclockRate() != 100) {
-			MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
+	vector<uint8_t> fileData;	
+	if(FileLoader::LoadFile(romFilename, filestream, archiveFileIndex, fileData)) {
+		LoadHdPack(romFilename, fileData, patchFilename);
+		if(!patchFilename.empty()) {
+			FileLoader::ApplyPatch(patchFilename, fileData);
 		}
-		return true;
-	} else {
-		MessageManager::DisplayMessage("Error", "CouldNotLoadFile", FolderUtilities::GetFilename(romFilename, true));
-		return false;
+
+		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, fileData);
+		if(mapper) {
+			if(_mapper) {
+				//Send notification only if a game was already running and we successfully loaded the new one
+				MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
+			}
+
+			_romFilepath = romFilename;
+			_patchFilename = patchFilename;
+			_archiveFileIndex = archiveFileIndex;
+
+			_autoSaveManager.reset(new AutoSaveManager());
+			VideoDecoder::GetInstance()->StopThread();
+
+			_mapper = mapper;
+			_memoryManager.reset(new MemoryManager(_mapper));
+			_cpu.reset(new CPU(_memoryManager.get()));
+
+			if(_hdData) {
+				_ppu.reset(new HdPpu(_mapper.get()));
+			} else if(NsfMapper::GetInstance()) {
+				//Disable most of the PPU for NSFs
+				_ppu.reset(new NsfPpu(_mapper.get()));
+			} else {
+				_ppu.reset(new PPU(_mapper.get()));
+			}
+			
+			_apu.reset(new APU(_memoryManager.get()));
+
+			_controlManager.reset(_mapper->GetGameSystem() == GameSystem::VsUniSystem ? new VsControlManager() : new ControlManager());
+			_controlManager->UpdateControlDevices();
+
+			_memoryManager->RegisterIODevice(_ppu.get());
+			_memoryManager->RegisterIODevice(_apu.get());
+			_memoryManager->RegisterIODevice(_controlManager.get());
+			_memoryManager->RegisterIODevice(_mapper.get());
+
+			_model = NesModel::Auto;
+			UpdateNesModel(false);
+
+			_initialized = true;
+
+			if(_debugger) {
+				auto lock = _debuggerLock.AcquireSafe();
+				StopDebugger();
+				GetDebugger();
+			}
+
+			ResetComponents(false);
+
+			_rewindManager.reset(new RewindManager());
+
+			VideoDecoder::GetInstance()->StartThread();
+
+			FolderUtilities::AddKnownGameFolder(FolderUtilities::GetFolderName(romFilename));
+
+			string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
+			string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
+			MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(_mapper->GetRomName(), false));
+			if(EmulationSettings::GetOverclockRate() != 100) {
+				MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
+			}
+			return true;
+		}
 	}
+
+	MessageManager::DisplayMessage("Error", "CouldNotLoadFile", FolderUtilities::GetFilename(romFilename, true));
+	return false;
 }
 
 bool Console::LoadROM(string filepath, stringstream *filestream, int32_t archiveFileIndex, string patchFilepath)
@@ -207,6 +220,15 @@ RomFormat Console::GetRomFormat()
 	}
 }
 
+bool Console::IsChrRam()
+{
+	if(Instance->_mapper) {
+		return Instance->_mapper->HasChrRam();
+	} else {
+		return false;
+	}
+}
+
 uint32_t Console::GetCrc32()
 {
 	if(Instance->_mapper) {
@@ -264,8 +286,9 @@ void Console::ResetComponents(bool softReset)
 	MovieManager::Stop();
 	if(!softReset) {
 		SoundMixer::StopRecording();
+		_hdPackBuilder.reset();
 	}
-
+	
 	_memoryManager->Reset(softReset);
 	if(!EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
 		_ppu->Reset();
@@ -460,6 +483,9 @@ void Console::Run()
 	_memoryManager.reset();
 	_controlManager.reset();
 
+	_hdPackBuilder.reset();
+	_hdData.reset();
+
 	_stopLock.Release();
 	_runLock.Release();
 }
@@ -607,4 +633,63 @@ bool Console::IsDebuggerAttached()
 void Console::SetNextFrameOverclockStatus(bool disabled)
 {
 	Instance->_disableOcNextFrame = disabled;
+}
+
+HdPackData* Console::GetHdData()
+{
+	return Instance->_hdData.get();
+}
+
+void Console::LoadHdPack(string romFilename, vector<uint8_t> &fileData, string &patchFilename)
+{
+	_hdData.reset();
+	if(EmulationSettings::CheckFlag(EmulationFlags::UseHdPacks)) {
+		string hdPackFolder = FolderUtilities::CombinePath(FolderUtilities::GetHdPackFolder(), FolderUtilities::GetFilename(romFilename, false));
+		string hdPackDefinitionFile = FolderUtilities::CombinePath(hdPackFolder, "hires.txt");
+		_hdData.reset(new HdPackData());
+		if(!HdPackLoader::LoadHdNesPack(hdPackDefinitionFile, *_hdData.get())) {
+			_hdData.reset();
+		} else {
+			string sha1hash = SHA1::GetHash(fileData);
+			auto result = _hdData->PatchesByHash.find(sha1hash);
+			if(result != _hdData->PatchesByHash.end()) {
+				patchFilename = FolderUtilities::CombinePath(hdPackFolder, result->second);
+			}
+		}
+	}
+}
+
+void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize)
+{
+	Console::Pause();
+	std::stringstream saveState;
+	Instance->SaveState(saveState);
+	
+	Instance->_hdPackBuilder.reset();
+	Instance->_hdPackBuilder.reset(new HdPackBuilder(saveFolder, filterType, scale, flags, chrRamBankSize, !Instance->_mapper->HasChrRom()));
+
+	Instance->_memoryManager->UnregisterIODevice(Instance->_ppu.get());
+	Instance->_ppu.reset();
+	Instance->_ppu.reset(new HdBuilderPpu(Instance->_mapper.get(), Instance->_hdPackBuilder.get(), chrRamBankSize));
+	Instance->_memoryManager->RegisterIODevice(Instance->_ppu.get());
+
+	Instance->LoadState(saveState);
+	Console::Resume();
+}
+
+void Console::StopRecordingHdPack()
+{
+	Console::Pause();
+	std::stringstream saveState;
+	Instance->SaveState(saveState);
+	
+	Instance->_memoryManager->UnregisterIODevice(Instance->_ppu.get());
+	Instance->_ppu.reset();
+	Instance->_ppu.reset(new PPU(Instance->_mapper.get()));
+	Instance->_memoryManager->RegisterIODevice(Instance->_ppu.get());
+
+	Instance->_hdPackBuilder.reset();
+
+	Instance->LoadState(saveState);
+	Console::Resume();
 }

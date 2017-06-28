@@ -104,6 +104,17 @@ enum class RamPowerOnState
 	Random = 2
 };
 
+enum class ScaleFilterType
+{
+	xBRZ = 0,
+	HQX = 1,
+	Scale2x = 2,
+	_2xSai = 3,
+	Super2xSai = 4,
+	SuperEagle = 5,
+	Prescale = 6,
+};
+
 enum class VideoFilterType
 {
 	None = 0,
