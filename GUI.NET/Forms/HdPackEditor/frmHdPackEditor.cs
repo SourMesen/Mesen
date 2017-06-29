@@ -54,7 +54,8 @@ namespace Mesen.GUI.Forms.HdPackEditor
 				string fileContent = File.ReadAllText(hdDefFile);
 				Match match = Regex.Match(fileContent, "<scale>(\\d*)");
 				if(match.Success) {
-					if(Int32.TryParse(match.Groups[1].ToString(), out int scale)) {
+					int scale;
+					if(Int32.TryParse(match.Groups[1].ToString(), out scale)) {
 						scaleFilter = scale;
 					}
 				}
