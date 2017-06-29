@@ -65,6 +65,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuDisassembleVerifiedCodeOnly.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.VerifiedCode;
 			this.mnuDisassembleEverything.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.Everything;
 			this.mnuDisassembleEverythingButData.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.EverythingButData;
+			this.mnuRefreshWatchWhileRunning.Checked = ConfigManager.Config.DebugInfo.RefreshWatchWhileRunning;
 
 			if(ConfigManager.Config.DebugInfo.WindowWidth > -1) {
 				this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
@@ -237,6 +238,12 @@ namespace Mesen.GUI.Debugger
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			switch(e.NotificationType) {
+				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
+					if(ConfigManager.Config.DebugInfo.RefreshWatchWhileRunning) {
+						this.BeginInvoke((MethodInvoker)(() => ctrlWatch.UpdateWatch()));
+					}
+					break;
+
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
 					this.BeginInvoke((MethodInvoker)(() => UpdateDebugger()));
 					BreakpointManager.SetBreakpoints();
@@ -690,6 +697,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOnBrk_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnBrk = mnuBreakOnBrk.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuRefreshWatchWhileRunning_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.RefreshWatchWhileRunning = mnuRefreshWatchWhileRunning.Checked;
 			ConfigManager.ApplyChanges();
 		}
 

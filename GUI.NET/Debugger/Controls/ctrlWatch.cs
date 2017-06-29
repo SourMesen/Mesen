@@ -68,21 +68,33 @@ namespace Mesen.GUI.Debugger
 
 		public void UpdateWatch()
 		{
-			lstWatch.BeginUpdate();
-			lstWatch.Items.Clear();
+			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(mnuHexDisplay.Checked);
 
-			List<ListViewItem> itemsToAdd = new List<ListViewItem>();
-			foreach(WatchValueInfo watch in WatchManager.GetWatchContent(mnuHexDisplay.Checked)) {
-				ListViewItem item = new ListViewItem(watch.Expression);
-				item.UseItemStyleForSubItems = false;
-				item.SubItems.Add(watch.Value).ForeColor = watch.HasChanged ? Color.Red : Color.Black;
-				itemsToAdd.Add(item);
+			lstWatch.BeginUpdate();
+
+			if(watchContent.Count != lstWatch.Items.Count - 1) {
+				lstWatch.Items.Clear();
+
+				List<ListViewItem> itemsToAdd = new List<ListViewItem>();
+				foreach(WatchValueInfo watch in watchContent) {
+					ListViewItem item = new ListViewItem(watch.Expression);
+					item.UseItemStyleForSubItems = false;
+					item.SubItems.Add(watch.Value).ForeColor = watch.HasChanged ? Color.Red : Color.Black;
+					itemsToAdd.Add(item);
+				}
+				var lastItem = new ListViewItem("");
+				lastItem.SubItems.Add("");
+				itemsToAdd.Add(lastItem);
+				lstWatch.Items.AddRange(itemsToAdd.ToArray());
+			} else {
+				for(int i = 0; i < watchContent.Count; i++) {
+					ListViewItem item = lstWatch.Items[i];
+					item.SubItems[0].Text = watchContent[i].Expression;
+					item.SubItems[1].Text = watchContent[i].Value.ToString();
+					item.SubItems[1].ForeColor = watchContent[i].HasChanged ? Color.Red : Color.Black;
+				}
 			}
-			var lastItem = new ListViewItem("");
-			lastItem.SubItems.Add("");
-			itemsToAdd.Add(lastItem);
-			lstWatch.Items.AddRange(itemsToAdd.ToArray());
-			AdjustColumnWidth();
+
 			lstWatch.EndUpdate();
 
 			if(_currentSelection >= 0 && lstWatch.Items.Count > _currentSelection) {

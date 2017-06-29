@@ -145,6 +145,8 @@ namespace Mesen.GUI.Config
 		public bool AutoLoadDbgFiles = false;
 		public bool DisableDefaultLabels = false;
 
+		public bool RefreshWatchWhileRunning = false;
+
 		public bool BreakOnOpen = true;
 		public bool BreakOnReset = true;
 		public bool BreakOnUnofficialOpcodes = true;
