@@ -151,6 +151,7 @@ namespace Mesen.GUI.Config
 		public bool BreakOnReset = true;
 		public bool BreakOnUnofficialOpcodes = true;
 		public bool BreakOnBrk = false;
+		public bool BreakOnDebuggerFocus = false;
 
 		public TraceLoggerOptions TraceLoggerOptions;
 		public bool TraceAutoRefresh = true;

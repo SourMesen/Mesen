@@ -138,6 +138,14 @@ namespace Mesen.GUI.Debugger
 			mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
 		}
 
+		protected override void OnActivated(EventArgs e)
+		{
+			base.OnActivated(e);
+			if(ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus) {
+				InteropEmu.DebugStep(1);
+			}
+		}
+
 		private void ctrlProfiler_OnFunctionSelected(object sender, EventArgs e)
 		{
 			int relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)sender, AddressType.PrgRom);
@@ -697,6 +705,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOnBrk_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnBrk = mnuBreakOnBrk.Checked;
+			ConfigManager.ApplyChanges();
+		}
+		
+		private void mnuBreakOnDebuggerFocus_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus = mnuBreakOnDebuggerFocus.Checked;
 			ConfigManager.ApplyChanges();
 		}
 
