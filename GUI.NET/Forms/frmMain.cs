@@ -700,9 +700,6 @@ namespace Mesen.GUI.Forms
 					mnuSaveState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf());
 					mnuLoadState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording());
 
-					//Disable pause when debugger is running
-					mnuPause.Enabled &= !InteropEmu.DebugIsDebuggerRunning();
-
 					mnuPause.Text = InteropEmu.IsPaused() ? ResourceHelper.GetMessage("Resume") : ResourceHelper.GetMessage("Pause");
 					mnuPause.Image = InteropEmu.IsPaused() ? _playButton : _pauseButton;
 
@@ -843,13 +840,17 @@ namespace Mesen.GUI.Forms
 
 		private void PauseEmu()
 		{
-			if(InteropEmu.IsPaused()) {
-				InteropEmu.Resume();
+			if(InteropEmu.DebugIsDebuggerRunning()) {
+				InteropEmu.DebugStep(1);
 			} else {
-				InteropEmu.Pause();
-			}
+				if(InteropEmu.IsPaused()) {
+					InteropEmu.Resume();
+				} else {
+					InteropEmu.Pause();
+				}
 
-			ctrlNsfPlayer.UpdateText();
+				ctrlNsfPlayer.UpdateText();
+			}
 		}
 
 		private void ResetEmu()
