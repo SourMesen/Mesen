@@ -82,7 +82,6 @@ class Console
 		std::shared_ptr<Debugger> GetDebugger(bool autoStart = true);
 		void StopDebugger();
 
-		static NesModel GetNesModel();
 		static void SaveState(ostream &saveStream);
 		static void LoadState(istream &loadStream);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);

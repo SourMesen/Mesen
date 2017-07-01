@@ -132,7 +132,7 @@ void BaseRenderer::ShowGameTimer(int lineNumber)
 {
 	int yPos = 13 + 24 * lineNumber;
 	double frameCount = PPU::GetFrameCount();
-	double frameRate = Console::GetNesModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
+	double frameRate = Console::GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
 	//uint32_t milliseconds = (uint32_t)(frameCount / 60.1 * 1000) % 1000;
 	uint32_t seconds = (uint32_t)(frameCount / frameRate) % 60;
 	uint32_t minutes = (uint32_t)(frameCount / frameRate / 60) % 60;

@@ -175,7 +175,7 @@ bool MesenMovie::Save()
 	header.MovieFormatVersion = MesenMovie::MovieFormatVersion;
 	header.SaveStateFormatVersion = SaveStateManager::FileFormatVersion;
 	header.RomCrc32 = Console::GetCrc32();
-	header.Region = (uint32_t)Console::GetNesModel();
+	header.Region = (uint32_t)Console::GetModel();
 	header.ConsoleType = (uint32_t)EmulationSettings::GetConsoleType();
 	header.ExpansionDevice = (uint32_t)EmulationSettings::GetExpansionDevice();
 	header.OverclockRate = (uint32_t)EmulationSettings::GetOverclockRate();

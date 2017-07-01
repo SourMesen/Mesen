@@ -610,11 +610,6 @@ void Console::RequestReset()
 	Instance->_resetRequested = true;
 }
 
-NesModel Console::GetNesModel()
-{
-	return Instance->_model;
-}
-
 uint32_t Console::GetLagCounter()
 {
 	return Instance->_lagCounter;

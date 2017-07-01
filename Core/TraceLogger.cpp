@@ -99,7 +99,7 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 		ppuCycle = 341 + ppuCycle;
 		scanline--;
 		if(scanline < -1) {
-			scanline = EmulationSettings::GetNesModel() == NesModel::NTSC ? 260 : 310;
+			scanline = Console::GetModel() == NesModel::NTSC ? 260 : 310;
 		}
 	}
 

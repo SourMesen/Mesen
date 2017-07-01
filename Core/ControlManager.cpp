@@ -284,7 +284,7 @@ void ControlManager::StreamState(bool saving)
 	bool hasFourScore = false;
 	bool useNes101Hvc101Behavior = false;
 	if(saving) {
-		nesModel = Console::GetNesModel();
+		nesModel = Console::GetModel();
 		expansionDevice = EmulationSettings::GetExpansionDevice();
 		consoleType = EmulationSettings::GetConsoleType();
 		hasFourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
