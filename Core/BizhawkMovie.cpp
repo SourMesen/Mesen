@@ -19,7 +19,7 @@ BizhawkMovie::~BizhawkMovie()
 void BizhawkMovie::ProcessNotification(ConsoleNotificationType type, void* parameter)
 {
 	if(type == ConsoleNotificationType::PpuFrameDone) {
-		int32_t frameNumber = PPU::GetFrameCount() - 1;
+		int32_t frameNumber = PPU::GetFrameCount();
 		if(frameNumber < (int32_t)_systemActionByFrame.size()) {
 			uint32_t systemAction = _systemActionByFrame[frameNumber];
 			if(systemAction & 0x01) {
@@ -60,7 +60,7 @@ void BizhawkMovie::ProcessNotification(ConsoleNotificationType type, void* param
 
 uint8_t BizhawkMovie::GetState(uint8_t port)
 {
-	int32_t frameNumber = PPU::GetFrameCount() - 1;
+	int32_t frameNumber = PPU::GetFrameCount() - (PPU::GetCurrentScanline() >= 240 ? 0 : 1);
 	if(frameNumber < (int32_t)_dataByFrame[0].size()) {
 		return _dataByFrame[port][frameNumber];
 	} else {

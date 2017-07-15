@@ -1026,7 +1026,6 @@ void PPU::SendFrame()
 
 void PPU::BeginVBlank()
 {
-	_frameCount++;
 	SendFrame();
 	TriggerNmi();
 }
@@ -1059,6 +1058,7 @@ void PPU::Exec()
 		_cycle = 0;
 		if(++_scanline > _vblankEnd) {
 			_lastUpdatedPixel = -1;
+			_frameCount++;
 			_scanline = -1;
 			UpdateMinimumDrawCycles();
 		}
