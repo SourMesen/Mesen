@@ -158,7 +158,7 @@ public:
 	virtual void GetMemoryRanges(MemoryRanges &ranges) override;
 	
 	void ApplyCheats();
-	void SaveBattery();
+	virtual void SaveBattery();
 
 	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 

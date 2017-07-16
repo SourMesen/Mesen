@@ -455,13 +455,16 @@ FDS::~FDS()
 	//Restore emulation speed to normal when closing
 	EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 
+	if(FDS::Instance == this) {
+		FDS::Instance = nullptr;
+	}
+}
+
+void FDS::SaveBattery()
+{
 	if(_isDirty) {
 		FdsLoader loader;
 		loader.SaveIpsFile(_romFilepath, _fdsRawData, _fdsDiskSides);
-	}
-
-	if(FDS::Instance == this) {
-		FDS::Instance = nullptr;
 	}
 }
 

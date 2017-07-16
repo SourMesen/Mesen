@@ -87,7 +87,7 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 
 			_autoSaveManager.reset(new AutoSaveManager());
 			VideoDecoder::GetInstance()->StopThread();
-
+			
 			_mapper = mapper;
 			_memoryManager.reset(new MemoryManager(_mapper));
 			_cpu.reset(new CPU(_memoryManager.get()));
@@ -476,6 +476,12 @@ void Console::Run()
 	EmulationSettings::ClearFlags(EmulationFlags::Paused);
 
 	_initialized = false;
+
+	if(!_romFilepath.empty() && _mapper) {
+		//Ensure we save any battery file before unloading anything
+		_mapper->SaveBattery();
+	}
+
 	_romFilepath = "";
 	_mapper.reset();
 	_ppu.reset();

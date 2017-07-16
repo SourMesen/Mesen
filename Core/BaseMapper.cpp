@@ -592,8 +592,6 @@ void BaseMapper::Initialize(RomData &romData)
 
 BaseMapper::~BaseMapper()
 {
-	SaveBattery();
-
 	delete[] _chrRam;
 	delete[] _chrRom;
 	delete[] _prgRom;

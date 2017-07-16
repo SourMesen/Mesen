@@ -91,7 +91,7 @@ protected:
 	void WriteFdsDisk(uint8_t value);
 
 	void ClockIrq();
-
+	
 	void ProcessCpuClock() override;
 	void UpdateCrc(uint8_t value);
 
@@ -107,6 +107,8 @@ protected:
 public:
 	FDS();
 	~FDS();
+
+	void SaveBattery();
 
 	static uint32_t GetSideCount();
 
