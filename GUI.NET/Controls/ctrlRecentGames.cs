@@ -38,7 +38,6 @@ namespace Mesen.GUI.Controls
 			public string RomName { get; set; }
 			public string RomPath { get; set; }
 			public DateTime Timestamp { get; set; }
-			public Image Screenshot { get; set; }
 		}
 
 		public ctrlRecentGames()
@@ -82,9 +81,6 @@ namespace Mesen.GUI.Controls
 					RecentGameInfo info = new RecentGameInfo();
 					ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(file)));
 
-					Stream stream = zip.GetEntry("Screenshot.png").Open();
-					info.Screenshot = Image.FromStream(stream);
-
 					using(StreamReader sr = new StreamReader(zip.GetEntry("RomInfo.txt").Open())) {
 						info.RomName = sr.ReadLine();
 						info.RomPath = sr.ReadLine();
@@ -120,7 +116,16 @@ namespace Mesen.GUI.Controls
 			if(_currentIndex < _recentGames.Count) {
 				lblGameName.Text = Path.GetFileNameWithoutExtension(_recentGames[_currentIndex].RomName);
 				lblSaveDate.Text = _recentGames[_currentIndex].Timestamp.ToString();
-				picPreviousState.Image = _recentGames[_currentIndex].Screenshot;
+
+				ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(_recentGames[_currentIndex].FileName)));
+				ZipArchiveEntry entry = zip.GetEntry("Screenshot.png");
+				if(entry != null) {
+					using(Stream stream = entry.Open()) {
+						picPreviousState.Image = Image.FromStream(stream);
+					}
+				} else {
+					picPreviousState.Image = null;
+				}
 				UpdateSize();
 			}
 		}
