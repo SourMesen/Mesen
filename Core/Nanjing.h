@@ -107,7 +107,7 @@ public:
 
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
-		if(_autoSwitchCHR) {
+		if(_autoSwitchCHR && PPU::GetCurrentCycle() > 256) {
 			if(PPU::GetCurrentScanline() == 239) {
 				SelectCHRPage(0, 0);
 				SelectCHRPage(1, 0);
