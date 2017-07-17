@@ -397,7 +397,6 @@ private:
 	static bool _disableOverclocking;
 	static uint32_t _extraScanlinesBeforeNmi;
 	static uint32_t _extraScanlinesAfterNmi;
-	static uint32_t _ppuScanlineCount;
 	static double _effectiveOverclockRate;
 	static double _effectiveOverclockRateSound;
 
@@ -725,12 +724,6 @@ public:
 		}
 		_hasOverclock = _effectiveOverclockRate != 100;
 		_audioSettingsChanged = true;
-	}
-
-	static void SetPpuScanlineCount(uint32_t scanlineCount)
-	{
-		_ppuScanlineCount = scanlineCount;		
-		UpdateEffectiveOverclockRate();
 	}
 
 	static void DisableOverclocking(bool disabled)

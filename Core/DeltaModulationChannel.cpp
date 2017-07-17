@@ -33,6 +33,8 @@ void DeltaModulationChannel::Reset(bool softReset)
 	_silenceFlag = true;
 	_needToRun = false;
 
+	_lastValue4011 = 0;
+
 	//Not sure if this is accurate, but it seems to make things better rather than worse (for dpcmletterbox)
 	//"On the real thing, I think the power-on value is 428 (or the equivalent at least - it uses a linear feedback shift register), though only the even/oddness should matter for this test."
 	_period = (GetNesModel() == NesModel::NTSC ? _dmcPeriodLookupTableNtsc : _dmcPeriodLookupTablePal)[0] - 1;
@@ -153,8 +155,9 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 			break;
 
 		case 1: {		//4011
+			uint8_t newValue = value & 0x7F;
 			uint8_t previousLevel = _outputLevel;
-			_outputLevel = value & 0x7F;
+			_outputLevel = newValue;
 			
 			if(EmulationSettings::CheckFlag(EmulationFlags::ReduceDmcPopping) && abs(_outputLevel - previousLevel) > 50) {
 				//Reduce popping sounds for 4011 writes
@@ -164,9 +167,11 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 			//4011 applies new output right away, not on the timer's reload.  This fixes bad DMC sound when playing through 4011.
 			AddOutput(_outputLevel);
 			
-			if((value & 0x7F) > 0 && EmulationSettings::GetOverclockAdjustApu()) {
+			if(_lastValue4011 != value && newValue > 0) {
 				Console::SetNextFrameOverclockStatus(true);
 			}
+
+			_lastValue4011 = newValue;
 			break;
 		}
 

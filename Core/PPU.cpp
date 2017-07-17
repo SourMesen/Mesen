@@ -112,25 +112,23 @@ void PPU::SetNesModel(NesModel model)
 			_vblankEnd = 260;
 			_standardNmiScanline = 241;
 			_standardVblankEnd = 260;
-			EmulationSettings::SetPpuScanlineCount(262);
 			break;
 		case NesModel::PAL:
 			_nmiScanline = 241;
 			_vblankEnd = 310;
 			_standardNmiScanline = 241;
 			_standardVblankEnd = 310;
-			EmulationSettings::SetPpuScanlineCount(312);
 			break;
 		case NesModel::Dendy:
 			_nmiScanline = 291;
 			_vblankEnd = 310;
 			_standardNmiScanline = 291;
 			_standardVblankEnd = 310;
-			EmulationSettings::SetPpuScanlineCount(312);
 			break;
 	}
 
 	_nmiScanline += EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
+	_palSpriteEvalScanline = _nmiScanline + 24;
 	_standardVblankEnd += EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
 	_vblankEnd += EmulationSettings::GetPpuExtraScanlinesAfterNmi() + EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
 }
