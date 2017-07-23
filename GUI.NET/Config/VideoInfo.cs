@@ -19,7 +19,7 @@ namespace Mesen.GUI.Config
 		[MinMax(0.1, 10.0)] public double VideoScale = 2;
 		public VideoFilterType VideoFilter = VideoFilterType.None;
 		public bool UseBilinearInterpolation = false;
-		public VideoAspectRatio AspectRatio = VideoAspectRatio.Auto;
+		public VideoAspectRatio AspectRatio = VideoAspectRatio.NoStretching;
 		[MinMax(0.1, 5.0)] public double CustomAspectRatio = 1.0;
 		public bool VerticalSync = false;
 		public bool UseHdPacks = false;
