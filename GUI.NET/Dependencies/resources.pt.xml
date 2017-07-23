@@ -387,6 +387,7 @@
       <Control ID="btnResync">Ressincronizar</Control>
 
       <Control ID="chkDisableGameDatabase">Desabilitar a base de dados de jogos</Control>
+      <Control ID="chkDisableOsd">Disable on-screen display (OSD)</Control>
 
       <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Reproduzir a seguinte track depois</Control>

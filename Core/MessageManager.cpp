@@ -540,7 +540,12 @@ void MessageManager::DisplayMessage(string title, string message, string param1,
 		if(startPos != std::string::npos) {
 			message.replace(startPos, 2, param2);
 		}
-		MessageManager::_messageManager->DisplayMessage(title, message);
+
+		if(EmulationSettings::CheckFlag(EmulationFlags::DisableOsd)) {
+			MessageManager::Log("[" + title + "] " + message);
+		} else {
+			MessageManager::_messageManager->DisplayMessage(title, message);
+		}
 	}
 }
 

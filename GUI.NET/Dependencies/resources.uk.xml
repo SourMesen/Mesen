@@ -390,6 +390,7 @@
       <Control ID="btnResync">Синхронізувати</Control>
 
       <Control ID="chkDisableGameDatabase">Відключити вбудовану базу даних</Control>
+      <Control ID="chkDisableOsd">Disable on-screen display (OSD)</Control>
 
       <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Переходити на наступний трек після</Control>

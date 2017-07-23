@@ -103,15 +103,16 @@ namespace Mesen.GUI.Forms.Config
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
 			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.chkDisplayTitleBarInfo = new System.Windows.Forms.CheckBox();
+			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblRewind = new System.Windows.Forms.Label();
+			this.nudRewindBufferSize = new System.Windows.Forms.NumericUpDown();
+			this.lblRewindMinutes = new System.Windows.Forms.Label();
 			this.chkFdsAutoInsertDisk = new System.Windows.Forms.CheckBox();
 			this.chkShowGameTimer = new System.Windows.Forms.CheckBox();
 			this.chkShowFrameCounter = new System.Windows.Forms.CheckBox();
-			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.lblRewindMinutes = new System.Windows.Forms.Label();
-			this.nudRewindBufferSize = new System.Windows.Forms.NumericUpDown();
-			this.lblRewind = new System.Windows.Forms.Label();
-			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkShowVsConfigOnLoad = new System.Windows.Forms.CheckBox();
+			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.chkDisableOsd = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
@@ -142,8 +143,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpFileFormat.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).BeginInit();
 			this.flowLayoutPanel6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -992,16 +993,18 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameDatabase, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisplayTitleBarInfo, 0, 4);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 8);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisplayTitleBarInfo, 0, 5);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 9);
 			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoInsertDisk, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowGameTimer, 0, 6);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowFrameCounter, 0, 5);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowVsConfigOnLoad, 0, 7);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowGameTimer, 0, 7);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowFrameCounter, 0, 6);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowVsConfigOnLoad, 0, 8);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableOsd, 0, 4);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 10;
+			this.tableLayoutPanel1.RowCount = 11;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1048,57 +1051,34 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisplayTitleBarInfo
 			// 
 			this.chkDisplayTitleBarInfo.AutoSize = true;
-			this.chkDisplayTitleBarInfo.Location = new System.Drawing.Point(3, 95);
+			this.chkDisplayTitleBarInfo.Location = new System.Drawing.Point(3, 118);
 			this.chkDisplayTitleBarInfo.Name = "chkDisplayTitleBarInfo";
 			this.chkDisplayTitleBarInfo.Size = new System.Drawing.Size(210, 17);
 			this.chkDisplayTitleBarInfo.TabIndex = 8;
 			this.chkDisplayTitleBarInfo.Text = "Display additional information in title bar";
 			this.chkDisplayTitleBarInfo.UseVisualStyleBackColor = true;
 			// 
-			// chkFdsAutoInsertDisk
+			// flowLayoutPanel6
 			// 
-			this.chkFdsAutoInsertDisk.AutoSize = true;
-			this.chkFdsAutoInsertDisk.Location = new System.Drawing.Point(3, 72);
-			this.chkFdsAutoInsertDisk.Name = "chkFdsAutoInsertDisk";
-			this.chkFdsAutoInsertDisk.Size = new System.Drawing.Size(221, 17);
-			this.chkFdsAutoInsertDisk.TabIndex = 10;
-			this.chkFdsAutoInsertDisk.Text = "Automatically switch disks for FDS games";
-			this.chkFdsAutoInsertDisk.UseVisualStyleBackColor = true;
+			this.flowLayoutPanel6.Controls.Add(this.lblRewind);
+			this.flowLayoutPanel6.Controls.Add(this.nudRewindBufferSize);
+			this.flowLayoutPanel6.Controls.Add(this.lblRewindMinutes);
+			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 207);
+			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(473, 23);
+			this.flowLayoutPanel6.TabIndex = 9;
 			// 
-			// chkShowGameTimer
+			// lblRewind
 			// 
-			this.chkShowGameTimer.AutoSize = true;
-			this.chkShowGameTimer.Location = new System.Drawing.Point(3, 141);
-			this.chkShowGameTimer.Name = "chkShowGameTimer";
-			this.chkShowGameTimer.Size = new System.Drawing.Size(107, 17);
-			this.chkShowGameTimer.TabIndex = 11;
-			this.chkShowGameTimer.Text = "Show game timer";
-			this.chkShowGameTimer.UseVisualStyleBackColor = true;
-			// 
-			// chkShowFrameCounter
-			// 
-			this.chkShowFrameCounter.AutoSize = true;
-			this.chkShowFrameCounter.Location = new System.Drawing.Point(3, 118);
-			this.chkShowFrameCounter.Name = "chkShowFrameCounter";
-			this.chkShowFrameCounter.Size = new System.Drawing.Size(121, 17);
-			this.chkShowFrameCounter.TabIndex = 12;
-			this.chkShowFrameCounter.Text = "Show frame counter";
-			this.chkShowFrameCounter.UseVisualStyleBackColor = true;
-			// 
-			// tmrSyncDateTime
-			// 
-			this.tmrSyncDateTime.Enabled = true;
-			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
-			// 
-			// lblRewindMinutes
-			// 
-			this.lblRewindMinutes.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblRewindMinutes.AutoSize = true;
-			this.lblRewindMinutes.Location = new System.Drawing.Point(199, 6);
-			this.lblRewindMinutes.Name = "lblRewindMinutes";
-			this.lblRewindMinutes.Size = new System.Drawing.Size(175, 13);
-			this.lblRewindMinutes.TabIndex = 2;
-			this.lblRewindMinutes.Text = "minutes (Memory Usage ≈1MB/min)";
+			this.lblRewind.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRewind.AutoSize = true;
+			this.lblRewind.Location = new System.Drawing.Point(3, 6);
+			this.lblRewind.Name = "lblRewind";
+			this.lblRewind.Size = new System.Drawing.Size(142, 13);
+			this.lblRewind.TabIndex = 3;
+			this.lblRewind.Text = "Keep rewind data for the last";
 			// 
 			// nudRewindBufferSize
 			// 
@@ -1117,37 +1097,70 @@ namespace Mesen.GUI.Forms.Config
             0,
             0});
 			// 
-			// lblRewind
+			// lblRewindMinutes
 			// 
-			this.lblRewind.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblRewind.AutoSize = true;
-			this.lblRewind.Location = new System.Drawing.Point(3, 6);
-			this.lblRewind.Name = "lblRewind";
-			this.lblRewind.Size = new System.Drawing.Size(142, 13);
-			this.lblRewind.TabIndex = 3;
-			this.lblRewind.Text = "Keep rewind data for the last";
+			this.lblRewindMinutes.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRewindMinutes.AutoSize = true;
+			this.lblRewindMinutes.Location = new System.Drawing.Point(199, 6);
+			this.lblRewindMinutes.Name = "lblRewindMinutes";
+			this.lblRewindMinutes.Size = new System.Drawing.Size(175, 13);
+			this.lblRewindMinutes.TabIndex = 2;
+			this.lblRewindMinutes.Text = "minutes (Memory Usage ≈1MB/min)";
 			// 
-			// flowLayoutPanel6
+			// chkFdsAutoInsertDisk
 			// 
-			this.flowLayoutPanel6.Controls.Add(this.lblRewind);
-			this.flowLayoutPanel6.Controls.Add(this.nudRewindBufferSize);
-			this.flowLayoutPanel6.Controls.Add(this.lblRewindMinutes);
-			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 184);
-			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(473, 23);
-			this.flowLayoutPanel6.TabIndex = 9;
+			this.chkFdsAutoInsertDisk.AutoSize = true;
+			this.chkFdsAutoInsertDisk.Location = new System.Drawing.Point(3, 72);
+			this.chkFdsAutoInsertDisk.Name = "chkFdsAutoInsertDisk";
+			this.chkFdsAutoInsertDisk.Size = new System.Drawing.Size(221, 17);
+			this.chkFdsAutoInsertDisk.TabIndex = 10;
+			this.chkFdsAutoInsertDisk.Text = "Automatically switch disks for FDS games";
+			this.chkFdsAutoInsertDisk.UseVisualStyleBackColor = true;
+			// 
+			// chkShowGameTimer
+			// 
+			this.chkShowGameTimer.AutoSize = true;
+			this.chkShowGameTimer.Location = new System.Drawing.Point(3, 164);
+			this.chkShowGameTimer.Name = "chkShowGameTimer";
+			this.chkShowGameTimer.Size = new System.Drawing.Size(107, 17);
+			this.chkShowGameTimer.TabIndex = 11;
+			this.chkShowGameTimer.Text = "Show game timer";
+			this.chkShowGameTimer.UseVisualStyleBackColor = true;
+			// 
+			// chkShowFrameCounter
+			// 
+			this.chkShowFrameCounter.AutoSize = true;
+			this.chkShowFrameCounter.Location = new System.Drawing.Point(3, 141);
+			this.chkShowFrameCounter.Name = "chkShowFrameCounter";
+			this.chkShowFrameCounter.Size = new System.Drawing.Size(121, 17);
+			this.chkShowFrameCounter.TabIndex = 12;
+			this.chkShowFrameCounter.Text = "Show frame counter";
+			this.chkShowFrameCounter.UseVisualStyleBackColor = true;
 			// 
 			// chkShowVsConfigOnLoad
 			// 
 			this.chkShowVsConfigOnLoad.AutoSize = true;
-			this.chkShowVsConfigOnLoad.Location = new System.Drawing.Point(3, 164);
+			this.chkShowVsConfigOnLoad.Location = new System.Drawing.Point(3, 187);
 			this.chkShowVsConfigOnLoad.Name = "chkShowVsConfigOnLoad";
 			this.chkShowVsConfigOnLoad.Size = new System.Drawing.Size(331, 17);
 			this.chkShowVsConfigOnLoad.TabIndex = 13;
 			this.chkShowVsConfigOnLoad.Text = "Show game configuration dialog when loading VS System games";
 			this.chkShowVsConfigOnLoad.UseVisualStyleBackColor = true;
+			// 
+			// tmrSyncDateTime
+			// 
+			this.tmrSyncDateTime.Enabled = true;
+			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
+			// 
+			// chkDisableOsd
+			// 
+			this.chkDisableOsd.AutoSize = true;
+			this.chkDisableOsd.Location = new System.Drawing.Point(3, 95);
+			this.chkDisableOsd.Name = "chkDisableOsd";
+			this.chkDisableOsd.Size = new System.Drawing.Size(178, 17);
+			this.chkDisableOsd.TabIndex = 14;
+			this.chkDisableOsd.Text = "Disable on-screen display (OSD)";
+			this.chkDisableOsd.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
 			// 
@@ -1207,9 +1220,9 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).EndInit();
 			this.flowLayoutPanel6.ResumeLayout(false);
 			this.flowLayoutPanel6.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -1297,5 +1310,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.NumericUpDown nudRewindBufferSize;
 		private System.Windows.Forms.Label lblRewindMinutes;
 		private System.Windows.Forms.CheckBox chkShowVsConfigOnLoad;
+		private System.Windows.Forms.CheckBox chkDisableOsd;
 	}
 }

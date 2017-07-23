@@ -390,6 +390,7 @@
       <Control ID="btnResync">Синхронизировать</Control>
 
       <Control ID="chkDisableGameDatabase">Отключить встроенную базу данных</Control>
+      <Control ID="chkDisableOsd">Disable on-screen display (OSD)</Control>
 
       <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Переходить на следующий трек после</Control>
@@ -397,7 +398,6 @@
       <Control ID="chkNsfMoveToNextTrackAfterTime">Ограничить продолжительность воспроизведения</Control>
       <Control ID="lblNsfSeconds">секундами</Control>
       <Control ID="chkNsfDisableApuIrqs">Отключить IRQs APU (Рекомендовано)</Control>
-
 
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>

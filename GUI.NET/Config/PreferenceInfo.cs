@@ -51,6 +51,7 @@ namespace Mesen.GUI.Config
 		public EmulatorKeyMappings? EmulatorKeySet2;
 
 		public bool DisableGameDatabase = false;
+		public bool DisableOsd = false;
 
 		public bool ShowFrameCounter = false;
 		public bool ShowGameTimer = false;
@@ -104,6 +105,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
 			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground);
 			InteropEmu.SetFlag(EmulationFlags.DisableGameDatabase, preferenceInfo.DisableGameDatabase);
+			InteropEmu.SetFlag(EmulationFlags.DisableOsd, preferenceInfo.DisableOsd);
 
 			InteropEmu.SetFlag(EmulationFlags.ShowFrameCounter, preferenceInfo.ShowFrameCounter);
 			InteropEmu.SetFlag(EmulationFlags.ShowGameTimer, preferenceInfo.ShowGameTimer);

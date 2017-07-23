@@ -49,6 +49,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("PauseOnMovieEnd", chkPauseOnMovieEnd);
 
 			AddBinding("DisableGameDatabase", chkDisableGameDatabase);
+			AddBinding("DisableOsd", chkDisableOsd);
 
 			AddBinding("AutoSave", chkAutoSave);
 			AddBinding("AutoSaveDelay", nudAutoSave);
