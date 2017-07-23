@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "stdafx.h"
 #include "HdPackBuilder.h"
 

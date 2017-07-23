@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include <unordered_map>
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/StringUtilities.h"
