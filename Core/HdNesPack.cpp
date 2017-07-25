@@ -37,9 +37,49 @@ uint32_t HdNesPack::AdjustBrightness(uint8_t input[4], uint16_t brightness)
 	return *((uint32_t*)output);
 }
 
-void HdNesPack::DrawTile(HdPpuTileInfo &tileInfo, HdPackTileInfo &hdPackTileInfo, uint32_t *outputBuffer, uint32_t screenWidth, bool drawBackground)
+void HdNesPack::DrawColor(uint32_t color, uint32_t *outputBuffer, uint32_t scale, uint32_t screenWidth)
 {
+	if(scale == 1) {
+		*outputBuffer = color;
+	} else {
+		for(uint32_t i = 0; i < scale; i++) {
+			std::fill(outputBuffer, outputBuffer + scale, color);
+			outputBuffer += screenWidth;
+		}
+	}
+}
+
+void HdNesPack::DrawCustomBackground(uint32_t *outputBuffer, uint32_t x, uint32_t y, uint32_t scale, uint32_t screenWidth)
+{
+	if(scale == 1) {
+		*outputBuffer = GetCustomBackgroundPixel(x, y, 0, 0);
+	} else {
+		for(uint32_t i = 0; i < scale; i++) {
+			for(uint32_t j = 0; j < scale; j++) {
+				*outputBuffer = GetCustomBackgroundPixel(x, y, j, i);
+				outputBuffer++;
+			}
+			outputBuffer += screenWidth - scale;
+		}
+	}
+}
+
+bool HdNesPack::DrawTile(HdPpuTileInfo &tileInfo, HdPackTileInfo &hdPackTileInfo, uint32_t *outputBuffer, uint32_t screenWidth, bool drawBackground)
+{
+	if(tileInfo.BackgroundPriority && tileInfo.BgColorIndex != 0) {
+		//Nothing to draw, tile is hidden
+		return false;
+	}
+
+	uint32_t bgColor = EmulationSettings::GetRgbPalette()[tileInfo.PpuBackgroundColor];
 	uint32_t scale = GetScale();
+	if(hdPackTileInfo.IsFullyTransparent) {
+		if(drawBackground) {
+			DrawColor(bgColor, outputBuffer, scale, screenWidth);
+		}
+		return false;
+	}
+
 	uint32_t *bitmapData = hdPackTileInfo.HdTileData.data();
 	uint32_t tileWidth = 8 * scale;
 	uint8_t tileOffsetX = tileInfo.HorizontalMirroring ? 7 - tileInfo.OffsetX : tileInfo.OffsetX;
@@ -55,25 +95,50 @@ void HdNesPack::DrawTile(HdPpuTileInfo &tileInfo, HdPackTileInfo &hdPackTileInfo
 		bitmapOffset += tileWidth * (scale - 1);
 		bitmapLargeInc = (tileInfo.HorizontalMirroring ? (int32_t)scale : -(int32_t)scale) - (int32_t)tileWidth;
 	}
-	for(uint32_t y = 0; y < scale; y++) {
-		for(uint32_t x = 0; x < scale; x++) {
-			if(drawBackground) {
-				*outputBuffer = EmulationSettings::GetRgbPalette()[tileInfo.BgColor];
-			}
-			if(!tileInfo.BackgroundPriority || tileInfo.BgColorIndex == 0) {
-				uint32_t rgbValue = AdjustBrightness((uint8_t*)(bitmapData + bitmapOffset), hdPackTileInfo.Brightness);
-				if((bitmapData[bitmapOffset] & 0xFF000000) == 0xFF000000) {
-					*outputBuffer = rgbValue;
-				} else if((bitmapData[bitmapOffset] & 0xFF000000) != 0) {
-					BlendColors((uint8_t*)outputBuffer, (uint8_t*)&rgbValue);
+
+	bool pixelDrawn = false;
+	uint32_t rgbValue;
+	if(hdPackTileInfo.HasTransparentPixels || hdPackTileInfo.Brightness < 255) {
+		for(uint32_t y = 0; y < scale; y++) {
+			for(uint32_t x = 0; x < scale; x++) {
+				if(hdPackTileInfo.Brightness == 255) {
+					rgbValue = *(bitmapData + bitmapOffset);
+				} else {
+					rgbValue = AdjustBrightness((uint8_t*)(bitmapData + bitmapOffset), hdPackTileInfo.Brightness);
 				}
+
+				if(!hdPackTileInfo.HasTransparentPixels || (bitmapData[bitmapOffset] & 0xFF000000) == 0xFF000000) {
+					*outputBuffer = rgbValue;
+					pixelDrawn = true;
+				} else {
+					if(drawBackground) {
+						*outputBuffer = bgColor;
+					}
+					if(bitmapData[bitmapOffset] & 0xFF000000) {
+						BlendColors((uint8_t*)outputBuffer, (uint8_t*)&rgbValue);
+						pixelDrawn = true;
+					}
+				}
+				outputBuffer++;
+				bitmapOffset += bitmapSmallInc;
 			}
-			outputBuffer++;
-			bitmapOffset += bitmapSmallInc;
+			bitmapOffset += bitmapLargeInc;
+			outputBuffer += screenWidth - scale;
 		}
-		bitmapOffset += bitmapLargeInc;
-		outputBuffer += screenWidth - scale;
+	} else {
+		for(uint32_t y = 0; y < scale; y++) {
+			for(uint32_t x = 0; x < scale; x++) {
+				*outputBuffer = *(bitmapData + bitmapOffset);
+				outputBuffer++;
+				bitmapOffset += bitmapSmallInc;
+			}
+			bitmapOffset += bitmapLargeInc;
+			outputBuffer += screenWidth - scale;
+		}
+		pixelDrawn = true;
 	}
+
+	return pixelDrawn;
 }
 
 uint32_t HdNesPack::GetScale()
@@ -94,7 +159,7 @@ void HdNesPack::OnBeforeApplyFilter(HdPpuPixelInfo *screenTiles)
 	}
 
 	_backgroundIndex = -1;
-	for(int i = 0; i < hdData->Backgrounds.size(); i++) {
+	for(size_t i = 0; i < hdData->Backgrounds.size(); i++) {
 		bool isMatch = true;
 		for(HdPackCondition* condition : hdData->Backgrounds[i].Conditions) {
 			if(!condition->CheckCondition(screenTiles, 0, 0)) {
@@ -104,7 +169,7 @@ void HdNesPack::OnBeforeApplyFilter(HdPpuPixelInfo *screenTiles)
 		}
 
 		if(isMatch) {
-			_backgroundIndex = i;
+			_backgroundIndex = (int32_t)i;
 			break;
 		}
 	}
@@ -113,8 +178,7 @@ void HdNesPack::OnBeforeApplyFilter(HdPpuPixelInfo *screenTiles)
 HdPackTileInfo * HdNesPack::GetMatchingTile(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, HdTileKey &key)
 {
 	HdPackData *hdData = Console::GetHdData();
-	std::unordered_map<HdTileKey, vector<HdPackTileInfo*>>::const_iterator hdTile;
-	hdTile = hdData->TileByKey.find(key);
+	auto hdTile = hdData->TileByKey.find(key);
 	if(hdTile == hdData->TileByKey.end()) {
 		hdTile = hdData->TileByKey.find(key.GetKey(true));
 	}
@@ -134,8 +198,17 @@ bool HdNesPack::IsNextToSprite(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t
 {
 	bool hasNonBackgroundSurrounding = false;
 	auto processAdjacentTile = [&hasNonBackgroundSurrounding](HdPpuPixelInfo& pixelInfo) {
-		if(pixelInfo.Sprite.TileIndex == HdPpuTileInfo::NoTile || pixelInfo.Sprite.SpriteColorIndex == 0 || pixelInfo.Sprite.SpriteColor != pixelInfo.Sprite.BgColor) {
-			hasNonBackgroundSurrounding |= pixelInfo.Sprite.TileIndex != HdPpuTileInfo::NoTile && pixelInfo.Sprite.SpriteColorIndex != 0 || pixelInfo.Tile.BgColorIndex != 0;
+		if(pixelInfo.Tile.BgColorIndex != 0) {
+			hasNonBackgroundSurrounding = true;
+		} else {
+			for(int i = 0; i < pixelInfo.SpriteCount; i++) {
+				if(pixelInfo.Sprite[i].SpriteColorIndex == 0 || pixelInfo.Sprite[i].SpriteColor != pixelInfo.Sprite[i].BgColor) {
+					hasNonBackgroundSurrounding |= pixelInfo.Sprite[i].TileIndex != HdPpuTileInfo::NoTile && pixelInfo.Sprite[i].SpriteColorIndex != 0;
+				}
+				if(hasNonBackgroundSurrounding) {
+					break;
+				}
+			}
 		}
 	};
 	for(int i = -1; i <= 1; i++) {
@@ -151,79 +224,79 @@ bool HdNesPack::IsNextToSprite(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t
 uint32_t HdNesPack::GetCustomBackgroundPixel(int x, int y, int offsetX, int offsetY)
 {
 	HdPackData *hdData = Console::GetHdData();
-	return AdjustBrightness((uint8_t*)(hdData->Backgrounds[_backgroundIndex].data() + (y * hdData->Scale + offsetY) * 256 * hdData->Scale + x * hdData->Scale + offsetX), hdData->Backgrounds[_backgroundIndex].Brightness);
+	uint8_t brightness = hdData->Backgrounds[_backgroundIndex].Brightness;
+	uint32_t rgbColor = *(hdData->Backgrounds[_backgroundIndex].data() + (y * hdData->Scale + offsetY) * 256 * hdData->Scale + x * hdData->Scale + offsetX);
+	if(brightness < 255) {
+		return AdjustBrightness((uint8_t*)&rgbColor, brightness);
+	} else {
+		return rgbColor;
+	}	
 }
 
-void HdNesPack::GetPixels(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uint32_t sdPixel, uint32_t *outputBuffer, uint32_t screenWidth)
+void HdNesPack::GetPixels(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uint32_t *outputBuffer, uint32_t screenWidth)
 {
 	HdPackTileInfo *hdPackTileInfo = nullptr;
 	HdPackTileInfo *hdPackSpriteInfo = nullptr;
 	HdPackData *hdData = Console::GetHdData();
 
-	if(hdData->Version <= 2) {
-		pixelInfo.Sprite.PaletteColors &= 0xFFFFFF;
-		pixelInfo.Tile.PaletteColors &= 0xFFFFFF;
-	}
-
-	bool hasTile = pixelInfo.Tile.TileIndex != HdPpuTileInfo::NoTile;
-	bool hasSprite = pixelInfo.Sprite.TileIndex != HdPpuTileInfo::NoTile;
-
-	std::unordered_map<HdTileKey, HdPackTileInfo*>::const_iterator hdTile;
-	if(hasTile) {
+	bool hasSprite = pixelInfo.SpriteCount > 0;
+	if(pixelInfo.Tile.TileIndex != HdPpuTileInfo::NoTile) {
 		hdPackTileInfo = GetMatchingTile(screenTiles, x, y, pixelInfo.Tile);
 	}
 
+	bool hasBgSprite = false;
+	int lowestBgSprite = 999;
+	bool needBg = true;
 	if(hasSprite) {
-		hdPackSpriteInfo = GetMatchingTile(screenTiles, x, y, pixelInfo.Sprite);
-	}
+		for(int k = pixelInfo.SpriteCount - 1; k >= 0; k--) {
+			if(pixelInfo.Sprite[k].BackgroundPriority) {
+				hasBgSprite = true;
+				lowestBgSprite = k;
 
-	bool needPixel = true;
-	if(hdPackSpriteInfo && pixelInfo.Sprite.BackgroundPriority && pixelInfo.Tile.BgColorIndex == 0) {
-		DrawTile(pixelInfo.Sprite, *hdPackSpriteInfo, outputBuffer, screenWidth, !hdPackTileInfo);
-		needPixel = false;
+				if(pixelInfo.Tile.BgColorIndex == 0) {
+					hdPackSpriteInfo = GetMatchingTile(screenTiles, x, y, pixelInfo.Sprite[k]);
+					if(hdPackSpriteInfo) {
+						needBg &= !DrawTile(pixelInfo.Sprite[k], *hdPackSpriteInfo, outputBuffer, screenWidth, true);
+					} else if(pixelInfo.Sprite[k].SpriteColorIndex != 0) {
+						DrawColor(EmulationSettings::GetRgbPalette()[pixelInfo.Sprite[k].SpriteColor], outputBuffer, hdData->Scale, screenWidth);
+						needBg = false;
+					}
+				}
+			}
+		}
 	}
-
+	
 	bool hasCustomBackground = _backgroundIndex >= 0 && y < hdData->Backgrounds[_backgroundIndex].Data->Height;
 	bool hasNonBackgroundSurrounding = hasCustomBackground ? IsNextToSprite(screenTiles, x, y) : false;
 	if(hasCustomBackground) {
-		uint32_t *buffer = outputBuffer;
-		for(uint32_t i = 0; i < hdData->Scale; i++) {
-			for(uint32_t j = 0; j < hdData->Scale; j++) {
-				*buffer = GetCustomBackgroundPixel(x, y, j, i);
-				buffer++;
+		DrawCustomBackground(outputBuffer, x, y, hdData->Scale, screenWidth);
+	}
+
+	bool drawBg = !hasBgSprite || pixelInfo.Tile.BgColorIndex != 0 || needBg;
+	if(drawBg) {
+		if(hdPackTileInfo) {
+			DrawTile(pixelInfo.Tile, *hdPackTileInfo, outputBuffer, screenWidth, drawBg);
+		} else {
+			//Draw regular SD background tile
+			bool useCustomBackground = !hasNonBackgroundSurrounding && hasCustomBackground && pixelInfo.Tile.BgColorIndex == 0;
+			if(useCustomBackground) {
+				DrawCustomBackground(outputBuffer, x, y, hdData->Scale, screenWidth);
+			} else {
+				DrawColor(EmulationSettings::GetRgbPalette()[pixelInfo.Tile.BgColor], outputBuffer, hdData->Scale, screenWidth);
 			}
-			buffer += screenWidth - hdData->Scale;
 		}
 	}
 
-	if(hdPackTileInfo) {
-		DrawTile(pixelInfo.Tile, *hdPackTileInfo, outputBuffer, screenWidth, true);
-		needPixel = false;
-	}
-
-	if(needPixel || (!hdPackSpriteInfo && hasSprite && pixelInfo.Sprite.SpriteColorIndex != 0 && (!pixelInfo.Sprite.BackgroundPriority || pixelInfo.Tile.BgColorIndex == 0))) {
-		//Write the standard SD tile if no HD tile is present
-		uint32_t *buffer = outputBuffer;
-
-		if(hasSprite && hdPackSpriteInfo) {
-			sdPixel = EmulationSettings::GetRgbPalette()[pixelInfo.Sprite.BgColor];
-		}
-
-		bool useCustomBackground = !hasNonBackgroundSurrounding && hasCustomBackground && (!hasSprite || pixelInfo.Sprite.SpriteColorIndex == 0 || pixelInfo.Sprite.SpriteColor == pixelInfo.Sprite.BgColor) && pixelInfo.Tile.BgColorIndex == 0;
-
-		for(uint32_t i = 0; i < hdData->Scale; i++) {
-			for(uint32_t j = 0; j < hdData->Scale; j++) {
-				if(useCustomBackground) {
-					sdPixel = GetCustomBackgroundPixel(x, y, j, i);
+	if(hasSprite) {
+		for(int k = pixelInfo.SpriteCount - 1; k >= 0; k--) {
+			if(!pixelInfo.Sprite[k].BackgroundPriority && lowestBgSprite > k) {
+				hdPackSpriteInfo = GetMatchingTile(screenTiles, x, y, pixelInfo.Sprite[k]);
+				if(hdPackSpriteInfo) {
+					DrawTile(pixelInfo.Sprite[k], *hdPackSpriteInfo, outputBuffer, screenWidth, false);
+				} else if(pixelInfo.Sprite[k].SpriteColorIndex != 0) {
+					DrawColor(EmulationSettings::GetRgbPalette()[pixelInfo.Sprite[k].SpriteColor], outputBuffer, hdData->Scale, screenWidth);
 				}
-				*buffer = sdPixel;
-				buffer++;
 			}
-			buffer += screenWidth - hdData->Scale;
 		}
-	}
-
-	if(hdPackSpriteInfo && (!pixelInfo.Sprite.BackgroundPriority || pixelInfo.Tile.BgColorIndex == 0)) {
-		DrawTile(pixelInfo.Sprite, *hdPackSpriteInfo, outputBuffer, screenWidth, false);
 	}
 }

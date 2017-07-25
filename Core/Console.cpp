@@ -93,7 +93,7 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 			_cpu.reset(new CPU(_memoryManager.get()));
 
 			if(_hdData) {
-				_ppu.reset(new HdPpu(_mapper.get()));
+				_ppu.reset(new HdPpu(_mapper.get(), _hdData->Version));
 			} else if(NsfMapper::GetInstance()) {
 				//Disable most of the PPU for NSFs
 				_ppu.reset(new NsfPpu(_mapper.get()));

@@ -10,6 +10,7 @@
 #include "VideoRenderer.h"
 #include "RewindManager.h"
 #include "PPU.h"
+#include "HdNesPack.h"
 
 unique_ptr<VideoDecoder> VideoDecoder::Instance;
 

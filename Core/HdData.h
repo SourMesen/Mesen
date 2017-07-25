@@ -43,9 +43,7 @@ struct HdTileKey
 		if(IsChrRamTile) {
 			return memcmp((uint8_t*)&PaletteColors, (uint8_t*)&other.PaletteColors, 20) == 0;
 		} else {
-			uint64_t key = TileIndex | ((uint64_t)PaletteColors << 32);
-			uint64_t otherKey = other.TileIndex | ((uint64_t)other.PaletteColors << 32);
-			return key == otherKey;
+			return TileIndex == other.TileIndex && PaletteColors == other.PaletteColors;
 		}
 	}
 
@@ -83,17 +81,26 @@ struct HdPpuTileInfo : public HdTileKey
 	bool HorizontalMirroring;
 	bool VerticalMirroring;
 	bool BackgroundPriority;
+	
 	uint8_t BgColorIndex;
 	uint8_t SpriteColorIndex;
 	uint8_t BgColor;
 	uint8_t SpriteColor;
-	uint8_t NametableValue;
+	uint8_t PpuBackgroundColor;
 };
 
 struct HdPpuPixelInfo
 {
 	HdPpuTileInfo Tile;
-	HdPpuTileInfo Sprite;
+	vector<HdPpuTileInfo> Sprite;
+	int SpriteCount;
+
+	HdPpuPixelInfo()
+	{
+		for(int i = 0; i < 4; i++) {
+			Sprite.push_back(HdPpuTileInfo());
+		}		
+	}
 };
 
 enum class HdPackConditionType
@@ -124,11 +131,27 @@ struct HdPackCondition
 					return false;
 				}
 
-				HdPpuTileInfo &tile = Type == HdPackConditionType::TileAtPosition ? screenTiles[pixelIndex].Tile : screenTiles[pixelIndex].Sprite;
-				if(TileIndex >= 0) {
-					return tile.PaletteColors == PaletteColors && tile.TileIndex == TileIndex;
+				if(Type == HdPackConditionType::TileAtPosition) {
+					HdPpuTileInfo &tile = screenTiles[pixelIndex].Tile;
+					if(TileIndex >= 0) {
+						return tile.PaletteColors == PaletteColors && tile.TileIndex == TileIndex;
+					} else {
+						return tile.PaletteColors == PaletteColors && memcmp(tile.TileData, TileData, sizeof(TileData)) == 0;
+					}
 				} else {
-					return tile.PaletteColors == PaletteColors && memcmp(tile.TileData, TileData, sizeof(TileData)) == 0;
+					for(int i = 0; i < screenTiles[pixelIndex].SpriteCount; i++) {
+						HdPpuTileInfo &tile = screenTiles[pixelIndex].Sprite[i];
+						if(TileIndex >= 0) {
+							if(tile.PaletteColors == PaletteColors && tile.TileIndex == TileIndex) {
+								return true;
+							}
+						} else {
+							if(tile.PaletteColors == PaletteColors && memcmp(tile.TileData, TileData, sizeof(TileData)) == 0) {
+								return true;
+							}
+						}
+					}
+					return false;
 				}
 				break;
 			}
@@ -140,11 +163,26 @@ struct HdPackCondition
 					return false;
 				}
 
-				HdPpuTileInfo &tile = Type == HdPackConditionType::TileNearby ? screenTiles[pixelIndex].Tile : screenTiles[pixelIndex].Sprite;
-				if(TileIndex >= 0) {
-					return tile.TileIndex == TileIndex;
+				if(Type == HdPackConditionType::TileNearby) {
+					HdPpuTileInfo &tile = screenTiles[pixelIndex].Tile;
+					if(TileIndex >= 0) {
+						return tile.TileIndex == TileIndex;
+					} else {
+						return memcmp(tile.TileData, TileData, sizeof(TileData)) == 0;
+					}
 				} else {
-					return memcmp(tile.TileData, TileData, sizeof(TileData)) == 0;
+					for(int i = 0; i < screenTiles[pixelIndex].SpriteCount; i++) {
+						HdPpuTileInfo &tile = screenTiles[pixelIndex].Sprite[i];
+						if(TileIndex >= 0) {
+							if(tile.TileIndex == TileIndex) {
+								return true;
+							}
+						} else {
+							if(memcmp(tile.TileData, TileData, sizeof(TileData)) == 0) {
+								return true;
+							}
+						}
+					}
 				}
 				break;
 			}
@@ -187,6 +225,8 @@ struct HdPackTileInfo : public HdTileKey
 	uint8_t Brightness;
 	bool DefaultTile;
 	bool Blank;
+	bool HasTransparentPixels;
+	bool IsFullyTransparent;
 	vector<uint32_t> HdTileData;
 	uint32_t ChrBankId;
 
@@ -224,15 +264,22 @@ struct HdPackTileInfo : public HdTileKey
 		return rgbBuffer;
 	}
 
-	void UpdateBlankTileFlag()
+	void UpdateFlags()
 	{
+		Blank = true;
+		HasTransparentPixels = false;
+		IsFullyTransparent = true;
 		for(size_t i = 0; i < HdTileData.size(); i++) {
 			if(HdTileData[i] != HdTileData[0]) {
 				Blank = false;
-				return;
+			}
+			if((HdTileData[i] & 0xFF000000) != 0xFF000000) {
+				HasTransparentPixels = true;
+			}
+			if(HdTileData[i] & 0xFF000000) {
+				IsFullyTransparent = false;
 			}
 		}
-		Blank = true;
 	}
 
 	string ToString(int pngIndex)
@@ -241,7 +288,7 @@ struct HdPackTileInfo : public HdTileKey
 
 		if(Conditions.size() > 0) {
 			out << "[";
-			for(int i = 0; i < Conditions.size(); i++) {
+			for(size_t i = 0; i < Conditions.size(); i++) {
 				if(i > 0) {
 					out << "&";
 				}
@@ -298,7 +345,7 @@ struct HdBackgroundFileData
 struct HdBackgroundInfo
 {
 	HdBackgroundFileData* Data;
-	uint16_t Brightness;
+	uint8_t Brightness;
 	vector<HdPackCondition*> Conditions;
 
 	uint32_t* data()
@@ -312,7 +359,7 @@ struct HdBackgroundInfo
 
 		if(Conditions.size() > 0) {
 			out << "[";
-			for(int i = 0; i < Conditions.size(); i++) {
+			for(size_t i = 0; i < Conditions.size(); i++) {
 				if(i > 0) {
 					out << "&";
 				}

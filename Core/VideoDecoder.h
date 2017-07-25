@@ -6,11 +6,11 @@ using std::thread;
 #include "../Utilities/SimpleLock.h"
 #include "../Utilities/AutoResetEvent.h"
 #include "EmulationSettings.h"
-#include "HdNesPack.h"
 #include "FrameInfo.h"
 
 class BaseVideoFilter;
 class IRenderingDevice;
+struct HdPpuPixelInfo;
 
 struct ScreenSize
 {

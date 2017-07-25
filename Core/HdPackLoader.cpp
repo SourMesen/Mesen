@@ -102,7 +102,7 @@ void HdPackLoader::ProcessPatchTag(vector<string> &tokens)
 void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition*> conditions)
 {
 	HdPackTileInfo *tileInfo = new HdPackTileInfo();
-	int index = 0;
+	size_t index = 0;
 	if(_data->Version < 100) {
 		tileInfo->TileIndex = std::stoi(tokens[index++]);
 		tileInfo->BitmapIndex = std::stoi(tokens[index++]);
@@ -118,7 +118,7 @@ void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition
 			}
 			tileInfo->IsChrRamTile = true;
 		} else {
-			tileInfo->TileIndex = std::stoi(tokens[index++]);
+			tileInfo->TileIndex = std::stoi(tileData);
 			tileInfo->IsChrRamTile = false;
 		}
 		tileInfo->PaletteColors = HexUtilities::FromHex(tokens[index++]);
@@ -172,7 +172,7 @@ void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition
 		bitmapOffset += bitmapInfo.Width - 8 * _data->Scale;
 	}
 
-	tileInfo->UpdateBlankTileFlag();
+	tileInfo->UpdateFlags();
 
 	_data->Tiles.push_back(unique_ptr<HdPackTileInfo>(tileInfo));
 }
@@ -255,7 +255,7 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 	HdBackgroundInfo backgroundInfo;
 	if(fileData) {
 		backgroundInfo.Data = fileData;
-		backgroundInfo.Brightness = (uint16_t)(std::stof(tokens[1]) * 255);
+		backgroundInfo.Brightness = (uint8_t)(std::stof(tokens[1]) * 255);
 		backgroundInfo.Conditions = conditions;
 
 		for(HdPackCondition* condition : backgroundInfo.Conditions) {

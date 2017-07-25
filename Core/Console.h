@@ -4,7 +4,6 @@
 #include <atomic>
 #include "../Utilities/SimpleLock.h"
 #include "RomData.h"
-#include "HdData.h"
 
 class Debugger;
 class BaseMapper;
@@ -16,6 +15,7 @@ class MemoryManager;
 class ControlManager;
 class AutoSaveManager;
 class HdPackBuilder;
+struct HdPackData;
 enum class NesModel;
 enum class ScaleFilterType;
 

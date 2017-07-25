@@ -97,7 +97,7 @@ void HdPackBuilder::ProcessTile(int x, int y, uint16_t tileAddr, HdPpuTileInfo &
 
 		memcpy(hdTile->TileData, tile.TileData, 16);
 		GenerateHdTile(hdTile);
-		hdTile->UpdateBlankTileFlag();
+		hdTile->UpdateFlags();
 
 		_hdData.Tiles.push_back(unique_ptr<HdPackTileInfo>(hdTile));
 		AddTile(hdTile, 1);
@@ -270,7 +270,7 @@ void HdPackBuilder::SaveHdPack()
 					return a.first > b.first;
 				});
 
-				int j = 0;
+				size_t j = 0;
 				for(std::pair<const uint32_t, vector<HdPackTileInfo*>> &paletteMap : kvp.second) {
 					if(j < tiles.size()) {
 						paletteMap.second[i] = tiles[j].second;
@@ -372,7 +372,7 @@ void HdPackBuilder::GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uin
 					return a.first > b.first;
 				});
 
-				int j = 0;
+				size_t j = 0;
 				for(std::pair<const uint32_t, vector<HdPackTileInfo*>> &pageData : bankData) {
 					if(j < tiles.size()) {
 						pageData.second[i] = tiles[j].second;

@@ -15,6 +15,8 @@ private:
 	uint32_t _chrRamBankSize;
 	uint32_t _chrRamIndexMask;
 	vector<uint32_t> _bankHashes;
+	HdPpuTileInfo sprite;
+	HdPpuTileInfo tile;
 
 protected:
 	void DrawPixel()
@@ -39,31 +41,30 @@ protected:
 				_needChrHash = false;
 			}
 
-			HdPpuPixelInfo tileInfo;
 			if(_lastSprite && _flags.SpritesEnabled) {
 				if(_lastSprite->AbsoluteTileAddr >= 0) {
-					tileInfo.Sprite.TileIndex = (_isChrRam ? (_lastSprite->TileAddr & _chrRamIndexMask) : _lastSprite->AbsoluteTileAddr) / 16;
-					tileInfo.Sprite.PaletteColors = ReadPaletteRAM(_lastSprite->PaletteOffset + 3) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 2) << 8) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 1) << 16) | 0xFF000000;
-					tileInfo.Sprite.IsChrRamTile = _isChrRam;
+					sprite.TileIndex = (_isChrRam ? (_lastSprite->TileAddr & _chrRamIndexMask) : _lastSprite->AbsoluteTileAddr) / 16;
+					sprite.PaletteColors = ReadPaletteRAM(_lastSprite->PaletteOffset + 3) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 2) << 8) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 1) << 16) | 0xFF000000;
+					sprite.IsChrRamTile = _isChrRam;
 					for(int i = 0; i < 16; i++) {
-						tileInfo.Sprite.TileData[i] = _mapper->GetMemoryValue(DebugMemoryType::ChrRom, _lastSprite->AbsoluteTileAddr / 16 * 16 + i);
+						sprite.TileData[i] = _mapper->GetMemoryValue(DebugMemoryType::ChrRom, _lastSprite->AbsoluteTileAddr / 16 * 16 + i);
 					}
 
-					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, _lastSprite->AbsoluteTileAddr, tileInfo.Sprite, _mapper, false, _bankHashes[_lastSprite->TileAddr / _chrRamBankSize]);
+					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, _lastSprite->AbsoluteTileAddr, sprite, _mapper, false, _bankHashes[_lastSprite->TileAddr / _chrRamBankSize]);
 				}
 			}
 
 			if(_flags.BackgroundEnabled) {
 				TileInfo* lastTile = &((_state.XScroll + ((_cycle - 1) & 0x07) < 8) ? _previousTile : _currentTile);
 				if(lastTile->AbsoluteTileAddr >= 0) {
-					tileInfo.Tile.TileIndex = (_isChrRam ? (lastTile->TileAddr & _chrRamIndexMask) : lastTile->AbsoluteTileAddr) / 16;
-					tileInfo.Tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 3) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 1) << 16) | (ReadPaletteRAM(0) << 24);
-					tileInfo.Tile.IsChrRamTile = _isChrRam;
+					tile.TileIndex = (_isChrRam ? (lastTile->TileAddr & _chrRamIndexMask) : lastTile->AbsoluteTileAddr) / 16;
+					tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 3) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 1) << 16) | (ReadPaletteRAM(0) << 24);
+					tile.IsChrRamTile = _isChrRam;
 					for(int i = 0; i < 16; i++) {
-						tileInfo.Tile.TileData[i] = _mapper->GetMemoryValue(DebugMemoryType::ChrRom, lastTile->AbsoluteTileAddr / 16 * 16 + i);
+						tile.TileData[i] = _mapper->GetMemoryValue(DebugMemoryType::ChrRom, lastTile->AbsoluteTileAddr / 16 * 16 + i);
 					}
 
-					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, lastTile->AbsoluteTileAddr, tileInfo.Tile, _mapper, false, _bankHashes[lastTile->TileAddr / _chrRamBankSize]);
+					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, lastTile->AbsoluteTileAddr, tile, _mapper, false, _bankHashes[lastTile->TileAddr / _chrRamBankSize]);
 				}
 			}
 		} else {
