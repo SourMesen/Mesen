@@ -24,7 +24,7 @@ public:
 	static bool LoadState(int stateIndex);
 
 	static void SaveRecentGame(string romName, string romPath, string patchPath, int32_t archiveFileIndex);
-	static void LoadRecentGame(string filename);
+	static void LoadRecentGame(string filename, bool resetGame);
 
 	static void MoveToNextSlot();
 	static void MoveToPreviousSlot();

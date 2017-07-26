@@ -386,6 +386,12 @@
       <Control ID="lblLastSync">Última sincronización: </Control>
       <Control ID="btnResync">Resincronizar</Control>
 
+      <Control ID="lblFdsSettings">Famicom Disk System Settings</Control>
+      <Control ID="lblUiDisplaySettings">UI Display Settings</Control>
+      <Control ID="lblGameSelectionScreenSettings">Game Selection Screen Settings</Control>
+      <Control ID="chkGameSelectionScreenResetGame">Start game from power-on instead of resuming the previous gameplay session</Control>
+      <Control ID="chkDisableGameSelectionScreen">Disable game selection screen</Control>
+
       <Control ID="chkDisableGameDatabase">Deshabilitar la base de datos de juegos</Control>
       <Control ID="chkDisableOsd">Disable on-screen display (OSD)</Control>
 

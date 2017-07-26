@@ -687,7 +687,7 @@ namespace Mesen.GUI.Forms
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
 					panelInfo.Visible = _emuThread == null;
-					ctrlRecentGames.Visible = ctrlRecentGames.GameCount > 0 && _emuThread == null;
+					ctrlRecentGames.Visible = _emuThread == null;
 					mnuPowerOff.Enabled = _emuThread != null;
 
 					ctrlLoading.Visible = (_romLoadCounter > 0);

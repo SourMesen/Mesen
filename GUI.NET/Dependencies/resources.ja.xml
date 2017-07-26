@@ -389,6 +389,12 @@
       <Control ID="btnResync">同期</Control>
       <Control ID="lblLastSync">最終同期： </Control>
 
+      <Control ID="lblFdsSettings">ファミコンディスクシステム設定</Control>
+      <Control ID="lblUiDisplaySettings">ユーザーインターフェイス表示設定</Control>
+      <Control ID="lblGameSelectionScreenSettings">ゲーム選択画面設定</Control>
+      <Control ID="chkGameSelectionScreenResetGame">初めからゲームを実行する</Control>
+      <Control ID="chkDisableGameSelectionScreen">ゲーム選択画面を無効にする</Control>
+
       <Control ID="chkDisableGameDatabase">ゲームデータベースを無効にする</Control>
       <Control ID="chkDisableOsd">オンスクリーン表示を無効にする</Control>
 

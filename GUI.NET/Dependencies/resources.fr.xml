@@ -390,6 +390,12 @@
       <Control ID="lblLastSync">Dernière synchronisation : </Control>
       <Control ID="btnResync">Resynchroniser</Control>
 
+      <Control ID="lblFdsSettings">Options pour le Famicom Disk System</Control>
+      <Control ID="lblUiDisplaySettings">Options d'affichage de l'interface</Control>
+      <Control ID="lblGameSelectionScreenSettings">Options de l'écran de sélection de jeux</Control>
+      <Control ID="chkGameSelectionScreenResetGame">Reprendre le jeu depuis le début (plutôt que de continuer la partie précédente)</Control>
+      <Control ID="chkDisableGameSelectionScreen">Désactiver l'écran de sélection de jeux</Control>
+
       <Control ID="chkDisableGameDatabase">Désactiver la base de données des jeux</Control>
       <Control ID="chkDisableOsd">Désactiver les messages à l'écran (OSD)</Control>
 

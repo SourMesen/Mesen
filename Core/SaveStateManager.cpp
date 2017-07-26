@@ -136,7 +136,7 @@ bool SaveStateManager::LoadState(int stateIndex)
 
 void SaveStateManager::SaveRecentGame(string romName, string romPath, string patchPath, int32_t archiveFileIndex)
 {
-	if(!EmulationSettings::CheckFlag(EmulationFlags::ConsoleMode) && Console::GetRomFormat() != RomFormat::Nsf) {
+	if(!EmulationSettings::CheckFlag(EmulationFlags::ConsoleMode) && !EmulationSettings::CheckFlag(EmulationFlags::DisableGameSelectionScreen) && Console::GetRomFormat() != RomFormat::Nsf) {
 		string filename = FolderUtilities::GetFilename(Console::GetRomName(), false) + ".rgd";
 		ZipWriter writer(FolderUtilities::CombinePath(FolderUtilities::GetRecentGamesFolder(), filename));
 
@@ -157,7 +157,7 @@ void SaveStateManager::SaveRecentGame(string romName, string romPath, string pat
 	}
 }
 
-void SaveStateManager::LoadRecentGame(string filename)
+void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 {
 	ZipReader reader;
 	reader.LoadArchive(filename);
@@ -174,7 +174,9 @@ void SaveStateManager::LoadRecentGame(string filename)
 	Console::Pause();
 	try {
 		Console::LoadROM(romPath, nullptr, std::stoi(archiveIndex.c_str()), patchPath);
-		SaveStateManager::LoadState(stateStream);
+		if(!resetGame) {
+			SaveStateManager::LoadState(stateStream);
+		}
 	} catch(std::exception ex) { 
 		Console::GetInstance()->Stop();
 	}

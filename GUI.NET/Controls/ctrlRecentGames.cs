@@ -28,6 +28,7 @@ namespace Mesen.GUI.Controls
 			remove { this.tlpPreviousState.DoubleClick -= value; }
 		}
 
+		private bool _initialized = false;
 		private int _currentIndex = 0;
 		private List<RecentGameInfo> _recentGames = new List<RecentGameInfo>();
 		private PrivateFontCollection _fonts = new PrivateFontCollection();
@@ -53,19 +54,33 @@ namespace Mesen.GUI.Controls
 				lblSaveDate.Font = new Font(_fonts.Families[0], 10);
 
 				picPrevGame.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
-				tmrInput.Enabled = true;
-				Initialize();
+				if(!ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen) {
+					Initialize();
+				}
 			}
 		}
 
-		protected override void OnVisibleChanged(EventArgs e)
+		public new bool Visible
 		{
-			if(_recentGames.Count == 0) {
-				this.Visible = false;
-			}
-			base.OnVisibleChanged(e);
-		}
+			get { return base.Visible; }
+			set
+			{
+				if((_initialized && _recentGames.Count == 0) || ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen) {
+					value = false;
+				}
 
+				if(value != base.Visible) {
+					if(value && !_initialized) {
+						//We just re-enabled the screen, initialize it
+						Initialize();
+					}
+
+					base.Visible = value;
+					tmrInput.Enabled = value;
+				}
+			}
+		}
+				
 		public int GameCount
 		{
 			get { return _recentGames.Count; }
@@ -73,6 +88,8 @@ namespace Mesen.GUI.Controls
 
 		public void Initialize()
 		{
+			_initialized = true;
+			tmrInput.Enabled = true;
 			_recentGames = new List<RecentGameInfo>();
 			_currentIndex = 0;
 
@@ -196,7 +213,7 @@ namespace Mesen.GUI.Controls
 
 		private void LoadSelectedGame()
 		{
-			InteropEmu.LoadRecentGame(_recentGames[_currentIndex].FileName);
+			InteropEmu.LoadRecentGame(_recentGames[_currentIndex].FileName, ConfigManager.Config.PreferenceInfo.GameSelectionScreenResetGame);
 		}
 
 		private bool _waitForRelease = false;

@@ -64,6 +64,9 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("ShowFrameCounter", chkShowFrameCounter);
 			AddBinding("ShowGameTimer", chkShowGameTimer);
 
+			AddBinding("DisableGameSelectionScreen", chkDisableGameSelectionScreen);
+			AddBinding("GameSelectionScreenResetGame", chkGameSelectionScreenResetGame);
+
 			AddBinding("RewindBufferSize", nudRewindBufferSize);
 
 			AddBinding("ShowVsConfigOnLoad", chkShowVsConfigOnLoad);
