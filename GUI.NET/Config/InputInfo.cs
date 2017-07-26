@@ -100,7 +100,7 @@ namespace Mesen.GUI.Config
 				controllerInfo.ControllerType = Controllers.Count <= 1 ? InteropEmu.ControllerType.StandardController : InteropEmu.ControllerType.None;
 
 				if(Controllers.Count <= 1) {
-					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.ArrowLayout : presets.NestopiaLayout);
+					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.ArrowLayout : presets.Player2KeyboardLayout);
 					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.XboxLayout1 : presets.XboxLayout2);
 					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.Ps4Layout1 : presets.Ps4Layout2);
 				}

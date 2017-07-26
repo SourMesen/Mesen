@@ -6,6 +6,7 @@
 		KeyMappings _arrowLayout;
 		KeyMappings _nestopiaLayout;
 		KeyMappings _fceuxLayout;
+		KeyMappings _player2KeyboardLayout;
 		KeyMappings[] _xboxLayouts = new KeyMappings[2];
 		KeyMappings[] _ps4Layouts = new KeyMappings[2];
 		KeyMappings[] _snes30Layouts = new KeyMappings[2];
@@ -20,6 +21,7 @@
 		public KeyMappings Ps4Layout2 { get { return _ps4Layouts[1].Clone(); } }
 		public KeyMappings Snes30Layout1 { get { return _snes30Layouts[0].Clone(); } }
 		public KeyMappings Snes30Layout2 { get { return _snes30Layouts[1].Clone(); } }
+		public KeyMappings Player2KeyboardLayout { get { return _player2KeyboardLayout.Clone(); } }
 
 		public KeyPresets()
 		{
@@ -53,6 +55,14 @@
 				Select = InteropEmu.GetKeyCode("S"), Start = InteropEmu.GetKeyCode("Enter"),
 				Up = InteropEmu.GetKeyCode("Up Arrow"), Down = InteropEmu.GetKeyCode("Down Arrow"),
 				Left = InteropEmu.GetKeyCode("Left Arrow"), Right = InteropEmu.GetKeyCode("Right Arrow")
+			};
+
+			_player2KeyboardLayout = new KeyMappings() {
+				A = InteropEmu.GetKeyCode(";"), B = InteropEmu.GetKeyCode("L"),
+				TurboA = InteropEmu.GetKeyCode("/"), TurboB = InteropEmu.GetKeyCode("."),
+				Select = InteropEmu.GetKeyCode("O"), Start = InteropEmu.GetKeyCode("P"),
+				Up = InteropEmu.GetKeyCode("Y"), Down = InteropEmu.GetKeyCode("H"),
+				Left = InteropEmu.GetKeyCode("G"), Right = InteropEmu.GetKeyCode("J")
 			};
 
 			if(Program.IsMono) {
