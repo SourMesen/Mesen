@@ -204,13 +204,26 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateVectorAddresses()
 		{
-			int nmiHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFA) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFB) << 8);
-			int resetHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8);
-			int irqHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFE) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFF) << 8);
+			bool isNsf = InteropEmu.GetRomInfo().Format == RomFormat.Nsf;
+			if(isNsf) {
+				NsfHeader header = InteropEmu.NsfGetHeader();
+				mnuGoToInitHandler.Text = "Init Handler ($" + header.InitAddress.ToString("X4") + ")";
+				mnuGoToPlayHandler.Text = "Play Handler ($" + header.PlayAddress.ToString("X4") + ")";
+			} else {
+				int nmiHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFA) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFB) << 8);
+				int resetHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8);
+				int irqHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFE) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFF) << 8);
 
-			mnuGoToNmiHandler.Text = "NMI Handler ($" + nmiHandler.ToString("X4") + ")";
-			mnuGoToResetHandler.Text = "Reset Handler ($" + resetHandler.ToString("X4") + ")";
-			mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
+				mnuGoToNmiHandler.Text = "NMI Handler ($" + nmiHandler.ToString("X4") + ")";
+				mnuGoToResetHandler.Text = "Reset Handler ($" + resetHandler.ToString("X4") + ")";
+				mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
+			}
+
+			mnuGoToInitHandler.Visible = isNsf;
+			mnuGoToPlayHandler.Visible = isNsf;
+			mnuGoToIrqHandler.Visible = !isNsf;
+			mnuGoToNmiHandler.Visible = !isNsf;
+			mnuGoToResetHandler.Visible = !isNsf;
 		}
 
 		private void btnGoto_Click(object sender, EventArgs e)
@@ -234,6 +247,16 @@ namespace Mesen.GUI.Debugger
 		{
 			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC);
 			this.OnGotoLocation?.Invoke(address, null);
+		}
+
+		private void mnuGoToInitHandler_Click(object sender, EventArgs e)
+		{
+			this.OnGotoLocation?.Invoke((int)InteropEmu.NsfGetHeader().InitAddress, null);
+		}
+
+		private void mnuGoToPlayHandler_Click(object sender, EventArgs e)
+		{
+			this.OnGotoLocation?.Invoke((int)InteropEmu.NsfGetHeader().PlayAddress, null);
 		}
 
 		private void contextGoTo_Opening(object sender, CancelEventArgs e)

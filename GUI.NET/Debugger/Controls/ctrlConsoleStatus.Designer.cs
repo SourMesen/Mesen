@@ -112,6 +112,8 @@
 			this.mnuGoToIrqHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToNmiHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToResetHandler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGoToInitHandler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGoToPlayHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -1144,9 +1146,11 @@
 			this.contextGoTo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuGoToIrqHandler,
             this.mnuGoToNmiHandler,
-            this.mnuGoToResetHandler});
+            this.mnuGoToResetHandler,
+            this.mnuGoToInitHandler,
+            this.mnuGoToPlayHandler});
 			this.contextGoTo.Name = "contextGoTo";
-			this.contextGoTo.Size = new System.Drawing.Size(148, 70);
+			this.contextGoTo.Size = new System.Drawing.Size(153, 136);
 			this.contextGoTo.Opening += new System.ComponentModel.CancelEventHandler(this.contextGoTo_Opening);
 			// 
 			// mnuGoToIrqHandler
@@ -1169,6 +1173,20 @@
 			this.mnuGoToResetHandler.Size = new System.Drawing.Size(147, 22);
 			this.mnuGoToResetHandler.Text = "Reset Handler";
 			this.mnuGoToResetHandler.Click += new System.EventHandler(this.mnuGoToResetHandler_Click);
+			// 
+			// mnuGoToInitHandler
+			// 
+			this.mnuGoToInitHandler.Name = "mnuGoToInitHandler";
+			this.mnuGoToInitHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToInitHandler.Text = "Init Handler";
+			this.mnuGoToInitHandler.Click += new System.EventHandler(this.mnuGoToInitHandler_Click);
+			// 
+			// mnuGoToPlayHandler
+			// 
+			this.mnuGoToPlayHandler.Name = "mnuGoToPlayHandler";
+			this.mnuGoToPlayHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToPlayHandler.Text = "Play Handler";
+			this.mnuGoToPlayHandler.Click += new System.EventHandler(this.mnuGoToPlayHandler_Click);
 			// 
 			// ctrlConsoleStatus
 			// 
@@ -1300,5 +1318,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToIrqHandler;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToNmiHandler;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToResetHandler;
+		private System.Windows.Forms.ToolStripMenuItem mnuGoToInitHandler;
+		private System.Windows.Forms.ToolStripMenuItem mnuGoToPlayHandler;
 	}
 }
