@@ -87,6 +87,7 @@
       <Control ID="mnuRunAllTests">Ejecutar todos los tests</Control>
       <Control ID="mnuDebugger">Depurar</Control>
       <Control ID="mnuLogWindow">Ventana de log</Control>
+      <Control ID="mnuHdPackEditor">HD Pack Builder</Control>
       <Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
       <Control ID="mnuRandomGame">Cargar juego aletóreo</Control>
       <Control ID="mnuHelp">Ayuda</Control>
@@ -537,6 +538,21 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
+    <Form ID="frmHdPackEditor" Title="HD Pack Builder">
+      <Control ID="grpPreview">CHR Bank Preview</Control>
+      <Control ID="lblChrBank">CHR Bank:</Control>
+      <Control ID="grpOptions">Recording Options</Control>
+      <Control ID="lblBankSize">CHR Bank Size:</Control>
+      <Control ID="lblScale">Scale/Filter:</Control>
+      <Control ID="chkSortByFrequency">Sort pages by usage frequency</Control>
+      <Control ID="chkLargeSprites">Use 8x16 sprite display mode</Control>
+      <Control ID="chkGroupBlankTiles">Group blank tiles</Control>
+      <Control ID="lblFolder">Save Folder:</Control>
+      <Control ID="btnSelectFolder">Buscar...</Control>
+      <Control ID="btnStartRecording">Start Recording</Control>
+      <Control ID="btnStopRecording">Stop Recording</Control>
+      <Control ID="btnOpenFolder">Open Save Folder</Control>
+    </Form>
     <Form ID="frmHelp" Title="Opciones de linea de comandos">
       <Control ID="grpExample">Ejemplo de uso</Control>
       <Control ID="tpgGeneral">General</Control>
@@ -588,7 +604,14 @@
     <Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
     <Message ID="FileNotFound">Archivo no encontrado: {0}</Message>
     <Message ID="InvalidFdsBios">La bios seleccionada no es válida.</Message>
+    
     <Message ID="HDNesTooltip">Esta opción permite los paquetes de gráficos en alta resolución de carga Mesen en el mismo formato que los del emulador HDNes.&#xA;&#xA;Los paquetes de alta resolución deberán ser colocados en los "HdPacks" en una subcarpeta con el nombre de la ROM.&#xA;Ejemplo: Un paquete para "MiRom.nes" debe estar colocado en "HdPacks\MiRom\hires.txt".&#xA;&#xA;Nota: El soporte para paquetes de alta resolución aún no es perfecto - algunas limitaciones siguen presentes.</Message>
+    <Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
+    <Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, it larger values may produce &#xA;better results).</Message>
+    <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
+    <Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
+    <Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
+
     <Message ID="MesenUpToDate">Ya utiliza la versión mas reciente de Mesen.</Message>
     <Message ID="PatchAndReset">¿Aplicar el parche y reiniciar el juego?</Message>
     <Message ID="SelectRomIps">Elija la ROM que corresponde al archivo IPS/UPS/BPS seleccionado.</Message>

@@ -24,7 +24,7 @@ namespace Mesen.GUI.Forms.HdPackEditor
 			InitializeComponent();
 
 			if(!InteropEmu.GetRomInfo().IsChrRam) {
-				cboChrBankSize.Visible = false;
+				flpBankSize.Visible = false;
 				lblBankSize.Visible = false;
 			}
 
@@ -34,6 +34,12 @@ namespace Mesen.GUI.Forms.HdPackEditor
 			UpdateFilterDropdown();
 
 			cboChrBankSize.SelectedIndex = 2;
+
+			toolTip.SetToolTip(picScaleHelp, ResourceHelper.GetMessage("HdPackBuilderScaleHelp"));
+			toolTip.SetToolTip(picBankSizeHelp, ResourceHelper.GetMessage("HdPackBuilderBankSizeHelp"));
+			toolTip.SetToolTip(picFrequencyHelp, ResourceHelper.GetMessage("HdPackBuilderFrequencyHelp"));
+			toolTip.SetToolTip(picGroupBlankHelp, ResourceHelper.GetMessage("HdPackBuilderGroupBlankHelp"));
+			toolTip.SetToolTip(picLargeSpritesHelp, ResourceHelper.GetMessage("HdPackBuilderLargeSpritesHelp"));
 
 			UpdateUI(false);
 		}
@@ -156,6 +162,13 @@ namespace Mesen.GUI.Forms.HdPackEditor
 			UpdateFilterDropdown();
 
 			UpdateUI(false);
+
+			btnOpenFolder.Visible = true;
+		}
+
+		private void btnOpenFolder_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start(this.txtSaveFolder.Text);
 		}
 
 		private void btnSelectFolder_Click(object sender, EventArgs e)
@@ -190,7 +203,7 @@ namespace Mesen.GUI.Forms.HdPackEditor
 		}
 
 		private FilterInfo[] _filters = {
-			new FilterInfo() { Name = "None (1x)", FilterType = ScaleFilterType.Prescale, Scale = 1 },
+			new FilterInfo() { Name = ResourceHelper.GetEnumText(VideoFilterType.None) + " (1x)", FilterType = ScaleFilterType.Prescale, Scale = 1 },
 			new FilterInfo() { Name = ResourceHelper.GetEnumText(VideoFilterType.Prescale2x), FilterType = ScaleFilterType.Prescale, Scale = 2 },
 			new FilterInfo() { Name = ResourceHelper.GetEnumText(VideoFilterType.Prescale3x), FilterType = ScaleFilterType.Prescale, Scale = 3 },
 			new FilterInfo() { Name = ResourceHelper.GetEnumText(VideoFilterType.Prescale4x), FilterType = ScaleFilterType.Prescale, Scale = 4 },

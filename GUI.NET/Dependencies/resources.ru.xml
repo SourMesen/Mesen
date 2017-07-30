@@ -87,6 +87,7 @@
       <Control ID="mnuRunAllTests">Запустить все тесты</Control>
       <Control ID="mnuDebugger">Отладчик</Control>
       <Control ID="mnuLogWindow">Лог</Control>
+      <Control ID="mnuHdPackEditor">HD Pack Builder</Control>
       <Control ID="mnuTakeScreenshot">Сделать скриншот</Control>
       <Control ID="mnuRandomGame">Load Random Game</Control>
       <Control ID="mnuHelp">Помощь</Control>
@@ -541,6 +542,21 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>
     </Form>
+    <Form ID="frmHdPackEditor" Title="HD Pack Builder">
+      <Control ID="grpPreview">CHR Bank Preview</Control>
+      <Control ID="lblChrBank">CHR Bank:</Control>
+      <Control ID="grpOptions">Recording Options</Control>
+      <Control ID="lblBankSize">CHR Bank Size:</Control>
+      <Control ID="lblScale">Scale/Filter:</Control>
+      <Control ID="chkSortByFrequency">Sort pages by usage frequency</Control>
+      <Control ID="chkLargeSprites">Use 8x16 sprite display mode</Control>
+      <Control ID="chkGroupBlankTiles">Group blank tiles</Control>
+      <Control ID="lblFolder">Save Folder:</Control>
+      <Control ID="btnSelectFolder">Browse...</Control>
+      <Control ID="btnStartRecording">Start Recording</Control>
+      <Control ID="btnStopRecording">Stop Recording</Control>
+      <Control ID="btnOpenFolder">Open Save Folder</Control>
+    </Form>
     <Form ID="frmHelp" Title="Command-line Options">
       <Control ID="grpExample">Usage example</Control>
       <Control ID="tpgGeneral">General</Control>
@@ -593,7 +609,14 @@
     <Message ID="FdsDiskSide">Диск {0} Сторона {1}</Message>
     <Message ID="FileNotFound">Файл не найден: {0}</Message>
     <Message ID="InvalidFdsBios">Выбранный биос некорректный.</Message>
+    
     <Message ID="HDNesTooltip">Данная опция позволяет использовать HD packs для эмулятора HDNes если они найдены.&#xA;&#xA;HD Packs должны быть помещены в папку "HdPacks" в папке с именем совпадающем с именем ROM.&#xA;например: HD Pack для MyRom.nes должны лежать в "HdPacks\MyRom\hires.txt".&#xA;&#xA;Замечание: Поддержка HD Packs не закончена и имеет ряд ограничений.</Message>
+    <Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
+    <Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, it larger values may produce &#xA;better results).</Message>
+    <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
+    <Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
+    <Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
+
     <Message ID="MesenUpToDate">Вы используете последнюю версию Mesen</Message>
     <Message ID="PatchAndReset">Пропатчить и сбросить текущую игру?</Message>
     <Message ID="SelectRomIps">Пожалуйста выберите ROM соответствующий IPS/UPS.</Message>

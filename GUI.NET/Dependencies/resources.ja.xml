@@ -87,6 +87,7 @@
       <Control ID="mnuRunAllTests">Run all tests</Control>
       <Control ID="mnuDebugger">デバッガ</Control>
       <Control ID="mnuLogWindow">ログウィンドウ</Control>
+      <Control ID="mnuHdPackEditor">HDパック作成</Control>
       <Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
       <Control ID="mnuRandomGame">ランダムゲームを開く</Control>
       <Control ID="mnuHelp">ヘルプ</Control>
@@ -534,6 +535,21 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
+    <Form ID="frmHdPackEditor" Title="HDパック作成">
+      <Control ID="grpPreview">CHRバンクプレビュー</Control>
+      <Control ID="lblChrBank">CHRバンク:</Control>
+      <Control ID="grpOptions">設定</Control>
+      <Control ID="lblBankSize">CHRバンクのサイズ:</Control>
+      <Control ID="lblScale">映像サイズ/画面エフェクト:</Control>
+      <Control ID="chkSortByFrequency">タイルを使用頻度順に並べ替えする</Control>
+      <Control ID="chkLargeSprites">8x16スプライト表示モードを使う</Control>
+      <Control ID="chkGroupBlankTiles">空っぽなタイルとまとめて保存する</Control>
+      <Control ID="lblFolder">セーブフォルダ:</Control>
+      <Control ID="btnSelectFolder">参照...</Control>
+      <Control ID="btnStartRecording">開始</Control>
+      <Control ID="btnStopRecording">停止</Control>
+      <Control ID="btnOpenFolder">セーブフォルダを開く</Control>
+    </Form>
     <Form ID="frmHelp" Title="コマンドラインオプション">
       <Control ID="grpExample">使い方</Control>
       <Control ID="tpgGeneral">全般</Control>
@@ -586,7 +602,14 @@
     <Message ID="FdsDiskSide">ディスク{0} {1}面</Message>
     <Message ID="FileNotFound">ファイルが見つかりません: {0}</Message>
     <Message ID="InvalidFdsBios">選んだBIOSファイルは使えません。</Message>
+    
     <Message ID="HDNesTooltip">このオプションを有効にすれば、MesenはHDNesのようにHDパックをロード出来るようになります。&#xA;&#xA;HDパックはMesenのフォルダの中にある「HdPacks」のフォルダにゲームと同じ名前のサブフォルダに置くと自動的にロードされます。&#xA;例）ゲームファイルは「MyRom.nes」なら、「HdPacks\MyRom」にHDパックを置くとロードされます。&#xA;&#xA;この機能はまだ開発中で、不完全なところがあります、ご了承ください。</Message>
+    <Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
+    <Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, it larger values may produce &#xA;better results).</Message>
+    <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
+    <Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
+    <Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
+
     <Message ID="MesenUpToDate">既にMesenの最新のバージョンを使っています。</Message>
     <Message ID="PatchAndReset">パッチファイルを当てて、ゲームをリセットしますか？</Message>
     <Message ID="SelectRomIps">パッチファイルに合うゲームファイルを選んでください。</Message>

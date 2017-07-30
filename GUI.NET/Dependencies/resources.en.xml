@@ -42,7 +42,14 @@
     <Message ID="FdsDiskSide">Disk {0} Side {1}</Message>
     <Message ID="FileNotFound">File not found: {0}</Message>
     <Message ID="InvalidFdsBios">The selected bios file is invalid.</Message>
+    
     <Message ID="HDNesTooltip">This option allows Mesen to load HDNes-format HD packs if they are found.&#xA;&#xA;HD Packs should be placed in the "HdPacks" folder in a subfolder matching the name of the ROM.&#xA;e.g: MyRom.nes should have their HD Pack in "HdPacks\MyRom\hires.txt".&#xA;&#xA;Note: Support for HD Packs is a work in progress and some limitations remain.</Message>
+    <Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
+    <Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, it larger values may produce &#xA;better results).</Message>
+    <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
+    <Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
+    <Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
+
     <Message ID="MesenUpToDate">You are running the latest version of Mesen</Message>
     <Message ID="PatchAndReset">Patch and reset the current game?</Message>
     <Message ID="SelectRomIps">Please select a ROM matching the IPS/UPS/BPS patch file.</Message>
