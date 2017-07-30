@@ -419,6 +419,7 @@ private:
 	static ControllerType _controllerTypes[4];
 	static KeyMappingSet _controllerKeys[4];
 	static bool _needControllerUpdate;
+	static uint32_t _zapperDetectionRadius;
 
 	static int32_t _nsfAutoDetectSilenceDelay;
 	static int32_t _nsfMoveToNextTrackTime;
@@ -996,6 +997,16 @@ public:
 		} else {
 			return false;
 		}
+	}
+
+	static void SetZapperDetectionRadius(uint32_t detectionRadius)
+	{
+		_zapperDetectionRadius = detectionRadius;
+	}
+
+	static uint32_t GetZapperDetectionRadius()
+	{
+		return _zapperDetectionRadius;
 	}
 
 	static bool HasZapper()

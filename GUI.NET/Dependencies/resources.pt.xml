@@ -178,6 +178,7 @@
       <Control ID="tpgControllers">Controles</Control>
       <Control ID="btnSetupP4">Configuração</Control>
       <Control ID="btnSetupP3">Configuração</Control>
+      <Control ID="btnSetupExp">Configuração</Control>
       <Control ID="lblPlayer1">Jogador 1:</Control>
       <Control ID="lblPlayer2">Jogador 2:</Control>
       <Control ID="lblPlayer4">Jogador 4:</Control>
@@ -227,6 +228,13 @@
       <Control ID="lblHint">Tabs with an icon contain key bindings for this player.&#13;&#10;Each button can be mapped to up to 4 different keyboard keys or gamepad buttons.</Control>
       <Control ID="btnReset">Reiniciar</Control>
       <Control ID="btnClear">Desfazer controles</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Cancelar</Control>
+    </Form>
+    <Form ID="frmZapperConfig" Title="Zapper Configuration">
+      <Control ID="lblSmall">Small</Control>
+      <Control ID="lblLarge">Large</Control>
+      <Control ID="lblDetectRadius">Light Detection Radius:</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>

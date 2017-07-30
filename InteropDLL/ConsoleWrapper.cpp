@@ -133,6 +133,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetControllerType(uint32_t port, ControllerType type) { EmulationSettings::SetControllerType(port, type); }
 		DllExport void __stdcall SetControllerKeys(uint32_t port, KeyMappingSet mappings) { EmulationSettings::SetControllerKeys(port, mappings); }
+		DllExport void __stdcall SetZapperDetectionRadius(uint32_t detectionRadius) { EmulationSettings::SetZapperDetectionRadius(detectionRadius); }
 		DllExport void __stdcall SetExpansionDevice(ExpansionPortDevice device) { EmulationSettings::SetExpansionDevice(device); }
 		DllExport void __stdcall SetConsoleType(ConsoleType type) { EmulationSettings::SetConsoleType(type); }
 		DllExport void __stdcall SetEmulatorKeys(EmulatorKeyMappingSet mappings) { EmulationSettings::SetEmulatorKeys(mappings); }

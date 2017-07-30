@@ -75,6 +75,11 @@ namespace Mesen.GUI.Config
 		}
 	}
 
+	public class ZapperInfo
+	{
+		[MinMax(0, 3)] public UInt32 DetectionRadius = 0;
+	}
+
 	public class InputInfo
 	{
 		public ConsoleType ConsoleType = ConsoleType.Nes;
@@ -91,6 +96,7 @@ namespace Mesen.GUI.Config
 
 		[XmlElement(ElementName = "InputDevice")]
 		public List<ControllerInfo> Controllers = new List<ControllerInfo>();
+		public ZapperInfo Zapper = new ZapperInfo();
 
 		public void InitializeDefaults()
 		{
@@ -131,6 +137,8 @@ namespace Mesen.GUI.Config
 
 			byte displayPorts = (byte)((inputInfo.DisplayInputPort1 ? 1 : 0) + (inputInfo.DisplayInputPort2 ? 2 : 0) + (inputInfo.DisplayInputPort3 ? 4 : 0) + (inputInfo.DisplayInputPort4 ? 8 : 0));
 			InteropEmu.SetInputDisplaySettings(displayPorts, inputInfo.DisplayInputPosition, inputInfo.DisplayInputHorizontally);
+
+			InteropEmu.SetZapperDetectionRadius(inputInfo.Zapper.DetectionRadius);
 		}
 	}
 }

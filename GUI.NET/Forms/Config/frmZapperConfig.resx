@@ -120,7 +120,4 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="lblKeyBinding.Text" xml:space="preserve">
-    <value>Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyword or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.</value>
-  </data>
 </root>

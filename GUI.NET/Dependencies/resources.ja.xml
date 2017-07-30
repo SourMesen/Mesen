@@ -178,6 +178,7 @@
       <Control ID="tpgControllers">コントローラ</Control>
       <Control ID="btnSetupP4">設定</Control>
       <Control ID="btnSetupP3">設定</Control>
+      <Control ID="btnSetupExp">設定</Control>
       <Control ID="lblPlayer1">プレーヤー 1:</Control>
       <Control ID="lblPlayer2">プレーヤー 2:</Control>
       <Control ID="lblPlayer4">プレーヤー 4:</Control>
@@ -229,6 +230,13 @@
       <Control ID="lblHint">アイコンの付いてあるタブにはマッピングが設定されています。&#13;&#10;コントローラのボタンはキーボードのキーとゲームパッドのボタンを同時にマッピング出来ます。</Control>
 
       <Control ID="btnClear">キーセットを削除</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
+    <Form ID="frmZapperConfig" Title="ガン設定">
+      <Control ID="lblSmall">小</Control>
+      <Control ID="lblLarge">大</Control>
+      <Control ID="lblDetectRadius">光検出範囲:</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>

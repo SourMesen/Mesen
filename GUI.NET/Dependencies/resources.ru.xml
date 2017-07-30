@@ -178,6 +178,7 @@
       <Control ID="tpgControllers">Контроллеры</Control>
       <Control ID="btnSetupP4">Настроить</Control>
       <Control ID="btnSetupP3">Настроить</Control>
+      <Control ID="btnSetupExp">Настроить</Control>
       <Control ID="lblPlayer1">Контроллер 1:</Control>
       <Control ID="lblPlayer2">Контроллер 2:</Control>
       <Control ID="lblPlayer4">Контроллер 4:</Control>
@@ -229,6 +230,13 @@
       <Control ID="lblHint">Tabs with an icon contain key bindings for this player.&#13;&#10;Each button can be mapped to up to 4 different keyboard keys or gamepad buttons.</Control>
 
       <Control ID="btnClear">Очистить</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Отмена</Control>
+    </Form>
+    <Form ID="frmZapperConfig" Title="Zapper Configuration">
+      <Control ID="lblSmall">Small</Control>
+      <Control ID="lblLarge">Large</Control>
+      <Control ID="lblDetectRadius">Light Detection Radius:</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Отмена</Control>
     </Form>

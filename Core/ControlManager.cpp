@@ -283,19 +283,21 @@ void ControlManager::StreamState(bool saving)
 	ConsoleType consoleType;
 	bool hasFourScore = false;
 	bool useNes101Hvc101Behavior = false;
+	uint32_t zapperDetectionRadius = 0;
 	if(saving) {
 		nesModel = Console::GetModel();
 		expansionDevice = EmulationSettings::GetExpansionDevice();
 		consoleType = EmulationSettings::GetConsoleType();
 		hasFourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
 		useNes101Hvc101Behavior = EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior);
+		zapperDetectionRadius = EmulationSettings::GetZapperDetectionRadius();
 		for(int i = 0; i < 4; i++) {
 			controllerTypes[i] = EmulationSettings::GetControllerType(i);
 		}
 	}
 
 	ArrayInfo<ControllerType> types = { controllerTypes, 4 };
-	Stream(_refreshState, _mousePosition.X, _mousePosition.Y, nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior);
+	Stream(_refreshState, _mousePosition.X, _mousePosition.Y, nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior, zapperDetectionRadius);
 
 	if(!saving) {
 		EmulationSettings::SetNesModel(nesModel);
@@ -305,6 +307,7 @@ void ControlManager::StreamState(bool saving)
 			EmulationSettings::SetControllerType(i, controllerTypes[i]);
 		}
 
+		EmulationSettings::SetZapperDetectionRadius(zapperDetectionRadius);
 		EmulationSettings::SetFlagState(EmulationFlags::HasFourScore, hasFourScore);
 		EmulationSettings::SetFlagState(EmulationFlags::UseNes101Hvc101Behavior, useNes101Hvc101Behavior);
 

@@ -27,6 +27,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmInputConfig));
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgControllers = new System.Windows.Forms.TabPage();
 			this.tlpControllers = new System.Windows.Forms.TableLayoutPanel();
@@ -65,6 +66,7 @@
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblDisplayPosition = new System.Windows.Forms.Label();
 			this.cboDisplayInputPosition = new System.Windows.Forms.ComboBox();
+			this.btnSetupExp = new System.Windows.Forms.Button();
 			this.tabMain.SuspendLayout();
 			this.tpgControllers.SuspendLayout();
 			this.tlpControllers.SuspendLayout();
@@ -130,6 +132,7 @@
 			this.tlpControllers.Controls.Add(this.chkFourScore, 0, 5);
 			this.tlpControllers.Controls.Add(this.chkAutoConfigureInput, 0, 2);
 			this.tlpControllers.Controls.Add(this.pnlConflictWarning, 0, 0);
+			this.tlpControllers.Controls.Add(this.btnSetupExp, 2, 6);
 			this.tlpControllers.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpControllers.Location = new System.Drawing.Point(0, 0);
 			this.tlpControllers.Name = "tlpControllers";
@@ -150,7 +153,7 @@
 			// btnSetupP4
 			// 
 			this.btnSetupP4.AutoSize = true;
-			this.btnSetupP4.Location = new System.Drawing.Point(297, 253);
+			this.btnSetupP4.Location = new System.Drawing.Point(297, 255);
 			this.btnSetupP4.Name = "btnSetupP4";
 			this.btnSetupP4.Size = new System.Drawing.Size(62, 23);
 			this.btnSetupP4.TabIndex = 12;
@@ -162,7 +165,7 @@
 			// btnSetupP3
 			// 
 			this.btnSetupP3.AutoSize = true;
-			this.btnSetupP3.Location = new System.Drawing.Point(297, 224);
+			this.btnSetupP3.Location = new System.Drawing.Point(297, 226);
 			this.btnSetupP3.Name = "btnSetupP3";
 			this.btnSetupP3.Size = new System.Drawing.Size(62, 23);
 			this.btnSetupP3.TabIndex = 11;
@@ -196,7 +199,7 @@
 			this.cboPlayer4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.cboPlayer4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboPlayer4.FormattingEnabled = true;
-			this.cboPlayer4.Location = new System.Drawing.Point(90, 253);
+			this.cboPlayer4.Location = new System.Drawing.Point(90, 255);
 			this.cboPlayer4.Name = "cboPlayer4";
 			this.cboPlayer4.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer4.TabIndex = 8;
@@ -207,7 +210,7 @@
 			this.cboPlayer3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.cboPlayer3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboPlayer3.FormattingEnabled = true;
-			this.cboPlayer3.Location = new System.Drawing.Point(90, 224);
+			this.cboPlayer3.Location = new System.Drawing.Point(90, 226);
 			this.cboPlayer3.Name = "cboPlayer3";
 			this.cboPlayer3.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer3.TabIndex = 7;
@@ -228,7 +231,7 @@
 			// 
 			this.lblPlayer4.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblPlayer4.AutoSize = true;
-			this.lblPlayer4.Location = new System.Drawing.Point(3, 258);
+			this.lblPlayer4.Location = new System.Drawing.Point(3, 260);
 			this.lblPlayer4.Name = "lblPlayer4";
 			this.lblPlayer4.Size = new System.Drawing.Size(48, 13);
 			this.lblPlayer4.TabIndex = 3;
@@ -249,7 +252,7 @@
 			// 
 			this.lblPlayer3.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblPlayer3.AutoSize = true;
-			this.lblPlayer3.Location = new System.Drawing.Point(3, 229);
+			this.lblPlayer3.Location = new System.Drawing.Point(3, 231);
 			this.lblPlayer3.Name = "lblPlayer3";
 			this.lblPlayer3.Size = new System.Drawing.Size(48, 13);
 			this.lblPlayer3.TabIndex = 2;
@@ -306,7 +309,7 @@
 			// 
 			this.lblExpansionPort.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblExpansionPort.AutoSize = true;
-			this.lblExpansionPort.Location = new System.Drawing.Point(3, 201);
+			this.lblExpansionPort.Location = new System.Drawing.Point(3, 202);
 			this.lblExpansionPort.Name = "lblExpansionPort";
 			this.lblExpansionPort.Size = new System.Drawing.Size(81, 13);
 			this.lblExpansionPort.TabIndex = 16;
@@ -388,13 +391,12 @@
 			// 
 			// lblKeyBinding
 			// 
-			this.lblKeyBinding.AutoSize = false;
 			this.lblKeyBinding.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lblKeyBinding.Location = new System.Drawing.Point(25, 0);
-			this.lblKeyBinding.Name = "lblKeyBinding"; 
-			this.lblKeyBinding.Size = new System.Drawing.Size(320, 52);
+			this.lblKeyBinding.Name = "lblKeyBinding";
+			this.lblKeyBinding.Size = new System.Drawing.Size(326, 53);
 			this.lblKeyBinding.TabIndex = 1;
-			this.lblKeyBinding.Text = "Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyword or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.";
+			this.lblKeyBinding.Text = resources.GetString("lblKeyBinding.Text");
 			// 
 			// tpgAdvanced
 			// 
@@ -542,6 +544,18 @@
 			this.cboDisplayInputPosition.Size = new System.Drawing.Size(121, 21);
 			this.cboDisplayInputPosition.TabIndex = 1;
 			// 
+			// btnSetupExp
+			// 
+			this.btnSetupExp.AutoSize = true;
+			this.btnSetupExp.Location = new System.Drawing.Point(297, 197);
+			this.btnSetupExp.Name = "btnSetupExp";
+			this.btnSetupExp.Size = new System.Drawing.Size(62, 23);
+			this.btnSetupExp.TabIndex = 20;
+			this.btnSetupExp.Text = "Setup";
+			this.btnSetupExp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnSetupExp.UseVisualStyleBackColor = true;
+			this.btnSetupExp.Click += new System.EventHandler(this.btnSetup_Click);
+			// 
 			// frmInputConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -618,5 +632,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label lblKeyBinding;
 		private System.Windows.Forms.PictureBox picWarning;
+		private System.Windows.Forms.Button btnSetupExp;
 	}
 }

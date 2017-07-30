@@ -174,11 +174,16 @@ namespace Mesen.GUI.Forms.Config
 				UpdateObject();
 				UpdateInterface();
 			}
+
+			btnSetupExp.Enabled = cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Zapper));
 		}
 
 		private void cboPlayerController_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			bool enableButton = (((ComboBox)sender).SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController)));
+			object selectedItem = ((ComboBox)sender).SelectedItem;
+
+			bool enableButton = selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController)) ||
+										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper));
 			if(sender == cboPlayer1) {
 				btnSetupP1.Enabled = enableButton;
 			} else if(sender == cboPlayer2) {
@@ -194,17 +199,34 @@ namespace Mesen.GUI.Forms.Config
 		private void btnSetup_Click(object sender, EventArgs e)
 		{
 			int index = 0;
+			object selectedItem = null;
 			if(sender == btnSetupP1) {
+				selectedItem = cboPlayer1.SelectedItem;
 				index = 0;
 			} else if(sender == btnSetupP2) {
+				selectedItem = cboPlayer2.SelectedItem;
 				index = 1;
 			} else if(sender == btnSetupP3) {
+				selectedItem = cboPlayer3.SelectedItem;
 				index = 2;
 			} else if(sender == btnSetupP4) {
+				selectedItem = cboPlayer4.SelectedItem;
 				index = 3;
+			} else if(sender == btnSetupExp) {
+				selectedItem = cboExpansionPort.SelectedItem;
+				index = 0;
 			}
 
-			using(var frm = new frmControllerConfig(ConfigManager.Config.InputInfo.Controllers[index], index)) {
+			Form frm = null;
+			if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController))) {
+				frm = new frmControllerConfig(ConfigManager.Config.InputInfo.Controllers[index], index);
+			} else if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper))) {
+				frm = new frmZapperConfig(ConfigManager.Config.InputInfo.Zapper);
+			} else if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Zapper))) {
+				frm = new frmZapperConfig(ConfigManager.Config.InputInfo.Zapper);
+			}
+
+			if(frm != null) {
 				Button btn = (Button)sender;
 				Point point = btn.PointToScreen(new Point(0, btn.Height));
 				Rectangle screen = Screen.FromControl(btn).Bounds;
@@ -225,6 +247,7 @@ namespace Mesen.GUI.Forms.Config
 				if(frm.ShowDialog(this) == DialogResult.OK) {
 					UpdateConflictWarning();
 				}
+				frm.Dispose();
 			}
 		}
 

@@ -50,10 +50,23 @@ ZapperButtonState Zapper::GetZapperState()
 
 	int32_t scanline = PPU::GetCurrentScanline();
 	int32_t cycle = PPU::GetCurrentCycle();
-	if(_xPosition == -1 || _yPosition == -1 || scanline < _yPosition || scanline - _yPosition > 20 || (scanline == _yPosition && cycle < _xPosition) || PPU::GetPixelBrightness(_xPosition, _yPosition) < 85) {
-		//Light cannot be detected if the Y/X position is further ahead than the PPU, or if the PPU drew a dark color
-		state.LightNotDetected = true;
+	
+	bool lightFound = false;
+	int radius = (int)EmulationSettings::GetZapperDetectionRadius();
+	if(_xPosition != -1 && _yPosition != -1) {
+		for(int y = -radius; y <= radius; y++) {
+			int yPosition = _yPosition + y;
+			for(int x = -radius; x <= radius; x++) {
+				int xPosition = _xPosition + x;
+				if(scanline >= yPosition && (scanline - yPosition <= 20) && (scanline != yPosition || cycle > xPosition) && PPU::GetPixelBrightness(xPosition, yPosition) >= 85) {
+					//Light cannot be detected if the Y/X position is further ahead than the PPU, or if the PPU drew a dark color
+					lightFound = true;
+					break;
+				}
+			}
+		}
 	}
+	state.LightNotDetected = !lightFound;	
 
 	return state;
 }

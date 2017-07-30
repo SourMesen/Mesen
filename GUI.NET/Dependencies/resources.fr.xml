@@ -178,6 +178,7 @@
       <Control ID="tpgControllers">Manettes</Control>
       <Control ID="btnSetupP4">Configuration</Control>
       <Control ID="btnSetupP3">Configuration</Control>
+      <Control ID="btnSetupExp">Configuration</Control>
       <Control ID="lblPlayer1">Joueur 1:</Control>
       <Control ID="lblPlayer2">Joueur 2:</Control>
       <Control ID="lblPlayer4">Joueur 4:</Control>
@@ -229,6 +230,13 @@
       <Control ID="lblHint">Les tabs sans icône sont vides.&#13;&#10;Chaque bouton peut être mappé à 4 boutons différents sur votre clavier et/ou votre manette.</Control>
       
       <Control ID="btnClear">Effacer le mappage</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
+    <Form ID="frmZapperConfig" Title="Configuration du zapper">
+      <Control ID="lblSmall">Petit</Control>
+      <Control ID="lblLarge">Large</Control>
+      <Control ID="lblDetectRadius">Rayon de détection de la lumière :</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
