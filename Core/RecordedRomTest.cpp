@@ -11,6 +11,7 @@
 #include "../Utilities/md5.h"
 #include "../Utilities/ZipWriter.h"
 #include "../Utilities/ZipReader.h"
+#include "../Utilities/ArchiveReader.h"
 
 RecordedRomTest::RecordedRomTest()
 {
@@ -202,7 +203,7 @@ int32_t RecordedRomTest::Run(string filename)
 	std::stringstream testMovie = zipReader.GetStream("TestMovie.mmo");
 	std::stringstream testRom = zipReader.GetStream("TestRom.nes");
 
-	if(testData) {
+	if(testData && testMovie && testRom) {
 		char header[3];
 		testData.read((char*)&header, 3);
 		if(memcmp((char*)&header, "MRT", 3) != 0) {
@@ -233,19 +234,34 @@ int32_t RecordedRomTest::Run(string filename)
 		_currentCount = _repetitionCount.front();
 		_repetitionCount.pop_front();
 
-		_runningTest = true;
+		shared_ptr<ArchiveReader> reader = ArchiveReader::GetReader(testRom);
+		if(reader) {
+			//Some older test files contain a zip file instead of a rom file, grab the first rom we can find in the zip
+			vector<string> files = reader->GetFileList({ ".nes" });
+			vector<uint8_t> fileData;
+			if(files.size() > 0 && reader->ExtractFile(files[0], fileData)) {
+				testRom = std::stringstream();
+				testRom.write((char*)fileData.data(), fileData.size());
+				testRom.seekg(0, ios::beg);
+			} else {
+				return -3;
+			}
+		}
 
 		//Start playing movie
-		Console::LoadROM(testRom);
-		MovieManager::Play(testMovie, false);
+		if(Console::LoadROM(testRom)) {
+			_runningTest = true;
+			MovieManager::Play(testMovie, false);
 
-		Console::Resume();
-		EmulationSettings::ClearFlags(EmulationFlags::Paused);
-		_signal.Wait();
-		_runningTest = false;
-
-		Console::GetInstance()->Stop();
-
+			Console::Resume();
+			EmulationSettings::ClearFlags(EmulationFlags::Paused);
+			_signal.Wait();
+			_runningTest = false;
+			Console::GetInstance()->Stop();
+		} else {
+			//Something went wrong when loading the rom
+			return -2;
+		}
 
 		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 		EmulationSettings::SetMasterVolume(1.0);

@@ -84,25 +84,29 @@ bool ArchiveReader::LoadArchive(string filename)
 	return false;
 }
 
+shared_ptr<ArchiveReader> ArchiveReader::GetReader(std::istream &in)
+{
+	uint8_t header[2] = { 0,0 };
+	in.read((char*)header, 2);
+
+	shared_ptr<ArchiveReader> reader;
+	if(memcmp(header, "PK", 2) == 0) {
+		reader.reset(new ZipReader());
+	} else if(memcmp(header, "7z", 2) == 0) {
+		reader.reset(new SZReader());
+	}
+
+	if(reader) {
+		reader->LoadArchive(in);
+	}
+	return reader;
+}
+
 shared_ptr<ArchiveReader> ArchiveReader::GetReader(string filepath)
 {
 	ifstream in(filepath, std::ios::in | std::ios::binary);
 	if(in) {
-		uint8_t header[2] = { 0,0 };
-		in.read((char*)header, 2);
-		in.close();
-
-		shared_ptr<ArchiveReader> reader;
-		if(memcmp(header, "PK", 2) == 0) {
-			reader.reset(new ZipReader());
-		} else if(memcmp(header, "7z", 2) == 0) {
-			reader.reset(new SZReader());
-		}
-
-		if(reader) {
-			reader->LoadArchive(filepath);
-			return reader;
-		}
+		return GetReader(in);
 	}
 	return nullptr;
 }
