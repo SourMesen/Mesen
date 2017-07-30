@@ -241,9 +241,13 @@ void RewindManager::RecordInput(uint8_t port, uint8_t input)
 
 uint8_t RewindManager::GetInput(uint8_t port)
 {
-	uint8_t value = _instance->_currentHistory.InputLogs[port].front();
-	_instance->_currentHistory.InputLogs[port].pop_front();
-	return value;
+	if(!_instance->_currentHistory.InputLogs[port].empty()) {
+		uint8_t value = _instance->_currentHistory.InputLogs[port].front();
+		_instance->_currentHistory.InputLogs[port].pop_front();
+		return value;
+	} else {
+		return 0;
+	}
 }
 
 void RewindManager::StartRewinding()
