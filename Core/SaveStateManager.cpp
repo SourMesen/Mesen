@@ -134,7 +134,7 @@ bool SaveStateManager::LoadState(int stateIndex)
 	return result;
 }
 
-void SaveStateManager::SaveRecentGame(string romName, string romPath, string patchPath, int32_t archiveFileIndex)
+void SaveStateManager::SaveRecentGame(string romName, string romPath, string patchPath)
 {
 	if(!EmulationSettings::CheckFlag(EmulationFlags::ConsoleMode) && !EmulationSettings::CheckFlag(EmulationFlags::DisableGameSelectionScreen) && Console::GetRomFormat() != RomFormat::Nsf) {
 		string filename = FolderUtilities::GetFilename(Console::GetRomName(), false) + ".rgd";
@@ -152,7 +152,6 @@ void SaveStateManager::SaveRecentGame(string romName, string romPath, string pat
 		romInfoStream << romName << std::endl;
 		romInfoStream << romPath << std::endl;
 		romInfoStream << patchPath << std::endl;
-		romInfoStream << std::to_string(archiveFileIndex) << std::endl;
 		writer.AddFile(romInfoStream, "RomInfo.txt");
 	}
 }
@@ -165,15 +164,14 @@ void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 	std::stringstream romInfoStream = reader.GetStream("RomInfo.txt");
 	std::stringstream stateStream = reader.GetStream("Savestate.mst");
 
-	string romName, romPath, patchPath, archiveIndex;
+	string romName, romPath, patchPath;
 	std::getline(romInfoStream, romName);
 	std::getline(romInfoStream, romPath);
 	std::getline(romInfoStream, patchPath);
-	std::getline(romInfoStream, archiveIndex);
 
 	Console::Pause();
 	try {
-		Console::LoadROM(romPath, nullptr, std::stoi(archiveIndex.c_str()), patchPath);
+		Console::LoadROM(romPath, patchPath);
 		if(!resetGame) {
 			SaveStateManager::LoadState(stateStream);
 		}

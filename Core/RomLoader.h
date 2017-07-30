@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "../Utilities/VirtualFile.h"
 #include "RomData.h"
 class ArchiveReader;
 
@@ -9,12 +10,12 @@ class RomLoader
 		RomData _romData;
 		string _filename;
 
-		static int32_t FindMatchingRomInFile(string filename, HashInfo hashInfo);
+		static string FindMatchingRomInFile(string filePath, HashInfo hashInfo);
 
 	public:
-		bool LoadFile(string filename, int32_t archiveFileIndex);
+		bool LoadFile(VirtualFile romFile);
 		bool LoadFile(string filename, vector<uint8_t> &fileData);
 
 		RomData GetRomData();
-		static string FindMatchingRomInFolder(string folder, string romFilename, HashInfo hashInfo, bool useFastSearch, int32_t &archiveFileIndex);
+		static string FindMatchingRomInFolder(string folder, string romFilename, HashInfo hashInfo, bool useFastSearch);
 };

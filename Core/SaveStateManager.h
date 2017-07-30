@@ -23,7 +23,7 @@ public:
 	static bool LoadState(istream &stream);
 	static bool LoadState(int stateIndex);
 
-	static void SaveRecentGame(string romName, string romPath, string patchPath, int32_t archiveFileIndex);
+	static void SaveRecentGame(string romName, string romPath, string patchPath);
 	static void LoadRecentGame(string filename, bool resetGame);
 
 	static void MoveToNextSlot();

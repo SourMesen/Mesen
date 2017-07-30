@@ -16,5 +16,5 @@ public:
 	ZipReader();
 	virtual ~ZipReader();
 
-	void ExtractFile(string filename, vector<uint8_t> &output);
+	bool ExtractFile(string filename, vector<uint8_t> &output);
 };

@@ -158,7 +158,7 @@ namespace Mesen.GUI.Debugger
 		private void AutoLoadDbgFile(bool silent)
 		{
 			if(ConfigManager.Config.DebugInfo.AutoLoadDbgFiles) {
-				string dbgPath = Path.Combine(Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path), Path.GetFileNameWithoutExtension(ConfigManager.Config.RecentFiles[0].RomName) + ".dbg");
+				string dbgPath = Path.Combine(ConfigManager.Config.RecentFiles[0].RomFile.Folder, Path.GetFileNameWithoutExtension(ConfigManager.Config.RecentFiles[0].RomFile.FileName) + ".dbg");
 				if(File.Exists(dbgPath)) {
 					Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
 					dbgImporter.Import(dbgPath, silent);

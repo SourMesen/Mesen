@@ -5,8 +5,9 @@
 class UpsPatcher
 {
 private:
-	static uint64_t ReadBase128Number(ifstream &file);
+	static uint64_t ReadBase128Number(std::istream &file);
 
 public:
-	static vector<uint8_t> PatchBuffer(string upsFilepath, vector<uint8_t> input);
+	static bool PatchBuffer(std::istream &upsFile, vector<uint8_t> &input, vector<uint8_t> &output);
+	static bool PatchBuffer(string upsFilepath, vector<uint8_t> &input, vector<uint8_t> &output);
 };

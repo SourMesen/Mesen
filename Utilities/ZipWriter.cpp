@@ -34,7 +34,8 @@ void ZipWriter::AddFile(std::stringstream &filestream, string zipFilename)
 	uint8_t* buffer = new uint8_t[bufferSize];
 	filestream.read((char*)buffer, bufferSize);
 
-	if(!	mz_zip_writer_add_mem(&_zipArchive, zipFilename.c_str(), buffer, bufferSize, MZ_BEST_COMPRESSION)) {
+	if(!mz_zip_writer_add_mem(&_zipArchive, zipFilename.c_str(), buffer, bufferSize, MZ_BEST_COMPRESSION)) {
 		std::cout << "mz_zip_writer_add_file() failed!" << std::endl;
 	}
+	delete[] buffer;
 }

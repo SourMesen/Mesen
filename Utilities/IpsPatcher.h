@@ -5,6 +5,7 @@
 class IpsPatcher
 {
 public:
-	static vector<uint8_t> PatchBuffer(string ipsFilepath, vector<uint8_t> input);
+	static bool PatchBuffer(string ipsFilepath, vector<uint8_t> &input, vector<uint8_t> &output);
+	static bool PatchBuffer(std::istream &ipsFile, vector<uint8_t> &input, vector<uint8_t> &output);
 	static vector<uint8_t> CreatePatch(vector<uint8_t> originalData, vector<uint8_t> newData);
 };

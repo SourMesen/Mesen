@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "stdafx.h"
+#include "../Utilities/VirtualFile.h"
 #include "HdPackBuilder.h"
 
 HdPackBuilder* HdPackBuilder::_instance = nullptr;
@@ -197,6 +198,7 @@ void HdPackBuilder::SaveHdPack()
 	int pngIndex = 0;
 	ss << "<ver>100" << std::endl;
 	ss << "<scale>" << _hdData.Scale << std::endl;
+	ss << "<supportedRom>" << Console::GetRomName() << std::endl;
 
 	int tileDimension = 8 * _hdData.Scale;
 	int pngDimension = 16 * tileDimension;
@@ -238,26 +240,6 @@ void HdPackBuilder::SaveHdPack()
 	};
 
 	for(std::pair<const uint32_t, std::map<uint32_t, vector<HdPackTileInfo*>>> &kvp : _tilesByChrBankByPalette) {
-		/*if(true) { //flatten palette
-			for(int i = 0; i < 256; i++) {
-				auto readItt = kvp.second.begin();
-				auto writeItt = kvp.second.begin();
-				while(writeItt != kvp.second.end() && writeItt->second[i]) {
-					readItt++;
-					writeItt++;
-				}
-				for(; readItt != kvp.second.end() && writeItt != kvp.second.end(); readItt++) {
-					if(writeItt->second[i] == nullptr && readItt->second[i] != nullptr) {
-						writeItt->second[i] = readItt->second[i];
-						readItt->second[i] = nullptr;
-						while(writeItt != kvp.second.end() && writeItt->second[i]) {
-							writeItt++;
-						}
-					}
-				}
-			}
-		}*/
-
 		if(_flags & HdPackRecordFlags::SortByUsageFrequency) {
 			for(int i = 0; i < 256; i++) {
 				vector<std::pair<uint32_t, HdPackTileInfo*>> tiles;

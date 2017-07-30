@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Config
 {
@@ -87,13 +88,13 @@ namespace Mesen.GUI.Config
 			PreferenceInfo.InitializeDefaults();
 		}
 		
-		public void AddRecentFile(string filepath, string romName, int archiveFileIndex)
+		public void AddRecentFile(ResourcePath romFile, ResourcePath? patchFile)
 		{
-			RecentItem existingItem = RecentFiles.Where((item)  => item.Path == filepath && item.ArchiveFileIndex == archiveFileIndex).FirstOrDefault();
+			RecentItem existingItem = RecentFiles.Where((item) => item.RomFile == romFile && item.PatchFile == patchFile).FirstOrDefault();
 			if(existingItem != null) {
 				RecentFiles.Remove(existingItem);
 			}
-			RecentItem recentItem = new RecentItem { RomName = romName, Path = filepath, ArchiveFileIndex = archiveFileIndex };
+			RecentItem recentItem = new RecentItem { RomFile = romFile, PatchFile = patchFile };
 
 			RecentFiles.Insert(0, recentItem);
 			if(RecentFiles.Count > Configuration.MaxRecentFiles) {
@@ -149,8 +150,16 @@ namespace Mesen.GUI.Config
 
 	public class RecentItem
 	{
-		public string Path;
-		public string RomName;
-		public int ArchiveFileIndex;
+		public ResourcePath RomFile;
+		public ResourcePath? PatchFile;
+
+		public override string ToString()
+		{
+			string text = Path.GetFileName(RomFile.FileName).Replace("&", "&&");
+			if(PatchFile.HasValue) {
+				text += " [" + Path.GetFileName(PatchFile.Value) + "]";
+			}
+			return text;
+		}
 	}
 }

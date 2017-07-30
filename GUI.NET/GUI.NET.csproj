@@ -676,6 +676,7 @@
     </Compile>
     <Compile Include="Forms\OpenSaveFileDialogExtensions.cs" />
     <Compile Include="Forms\ResourceHelper.cs" />
+    <Compile Include="Forms\ResourcePath.cs" />
     <Compile Include="GoogleDriveIntegration\CloudSyncHelper.cs" />
     <Compile Include="GoogleDriveIntegration\GoogleDriveAccessor.cs" />
     <Compile Include="GoogleDriveIntegration\MesenCodeReceiver.cs" />

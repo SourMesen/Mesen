@@ -30,8 +30,7 @@ namespace Mesen.GUI.Forms
 		private frmLogWindow _logWindow;
 		private frmCheatList _cheatListWindow;
 		private frmHdPackEditor _hdPackEditorWindow;
-		private string _currentRomPath = null;
-		private int _currentRomArchiveIndex = -1;
+		private ResourcePath? _currentRomPath = null;
 		private string _currentGame = null;
 		private bool _customSize = false;
 		private FormWindowState _originalWindowState;
@@ -65,7 +64,7 @@ namespace Mesen.GUI.Forms
 			lblVersion.Font = new Font(_fonts.Families[0], 11);
 
 			_commandLineArgs = args;
-			
+
 			Application.AddMessageFilter(this);
 			this.Resize += ResizeRecentGames;
 			this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
@@ -123,22 +122,22 @@ namespace Mesen.GUI.Forms
 		{
 			base.OnLoad(e);
 
-			#if HIDETESTMENU
+#if HIDETESTMENU
 			mnuTests.Visible = false;
-			#endif
+#endif
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
 			menuTimer.Start();
-			
+
 			this.ProcessCommandLineArguments(_commandLineArgs, true);
 
 			VideoInfo.ApplyConfig();
 			InitializeVsSystemMenu();
 			InitializeFdsDiskMenu();
 			InitializeEmulationSpeedMenu();
-			
+
 			UpdateVideoSettings();
 
 			InitializeEmu();
@@ -158,7 +157,7 @@ namespace Mesen.GUI.Forms
 				CheckForUpdates(false);
 			}
 		}
-		
+
 		protected override void OnDeactivate(EventArgs e)
 		{
 			base.OnDeactivate(e);
@@ -224,6 +223,8 @@ namespace Mesen.GUI.Forms
 						//0.9.0's "Auto" has been renamed to "NoStretching"
 						ConfigManager.Config.VideoInfo.AspectRatio = VideoAspectRatio.NoStretching;
 					}
+
+					ConfigManager.Config.RecentFiles.Clear();
 				}
 
 				if(oldVersion <= new Version("0.5.3")) {
@@ -264,14 +265,14 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.ctrlRenderer.Handle, _noAudio, _noVideo, _noInput);
 			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
-				InteropEmu.AddKnownGameFolder(Path.GetDirectoryName(recentItem.Path));
+				InteropEmu.AddKnownGameFolder(recentItem.RomFile.Folder);
 			}
 
 			ConfigManager.Config.InitializeDefaults();
 			ConfigManager.ApplyChanges();
 
 			ConfigManager.Config.ApplyConfig();
-		
+
 			UpdateEmulationFlags();
 		}
 
@@ -391,7 +392,7 @@ namespace Mesen.GUI.Forms
 				ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
 			}
 		}
-		
+
 		private void SetScaleBasedOnWindowSize()
 		{
 			_customSize = true;
@@ -421,7 +422,7 @@ namespace Mesen.GUI.Forms
 				this.SetScale(_regularScale);
 				this.UpdateScaleMenu(_regularScale);
 				this.UpdateViewerSize();
-				VideoInfo.ApplyConfig();				
+				VideoInfo.ApplyConfig();
 			}
 			this.Resize += frmMain_Resize;
 			mnuFullscreen.Checked = enabled;
@@ -553,7 +554,7 @@ namespace Mesen.GUI.Forms
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
 				ofd.SetFilter(ResourceHelper.GetMessage("FilterRomIps"));
 				if(ConfigManager.Config.RecentFiles.Count > 0) {
-					ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
+					ofd.InitialDirectory = ConfigManager.Config.RecentFiles[0].RomFile.Folder;
 				}
 				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 					LoadFile(ofd.FileName);
@@ -595,62 +596,56 @@ namespace Mesen.GUI.Forms
 					using(OpenFileDialog ofd = new OpenFileDialog()) {
 						ofd.SetFilter(ResourceHelper.GetMessage("FilterRom"));
 						if(ConfigManager.Config.RecentFiles.Count > 0) {
-							ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.RecentFiles[0].Path);
+							ofd.InitialDirectory = ConfigManager.Config.RecentFiles[0].RomFile.Folder;
 						}
 
 						if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-							LoadROM(ofd.FileName, true, -1, patchFile);
+							LoadROM(ofd.FileName, true, patchFile);
 						}
 					}
 				}
 			} else if(MesenMsgBox.Show("PatchAndReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-				LoadROM(_currentRomPath, true, _currentRomArchiveIndex, patchFile);
+				LoadROM(_currentRomPath.Value, true, patchFile);
 			}
 		}
 
-		private void LoadROM(string filename, bool autoLoadPatches = false, int archiveFileIndex = -1, string patchFileToApply = null)
+		private void LoadROM(ResourcePath romFile, bool autoLoadPatches = false, ResourcePath? patchFileToApply = null)
 		{
-			_currentRomPath = filename;
-			_currentRomArchiveIndex = -1;
-			if(File.Exists(filename)) {
-				string romName;
-				if(frmSelectRom.SelectRom(filename, ref archiveFileIndex, out romName)) {
-					_currentRomArchiveIndex = archiveFileIndex;
-					if(archiveFileIndex >= 0) {
+			if(romFile.Exists) {
+				if(frmSelectRom.SelectRom(ref romFile)) {
+					_currentRomPath = romFile;
+
+					if(romFile.Compressed) {
 						Interlocked.Increment(ref _romLoadCounter);
 						ctrlNsfPlayer.Visible = false;
 						ctrlLoading.Visible = true;
 					}
 
-					string patchFile = patchFileToApply;
-					if(patchFile == null) {
+					ResourcePath? patchFile = patchFileToApply;
+					if(patchFile == null && autoLoadPatches) {
 						string[] extensions = new string[3] { ".ips", ".ups", ".bps" };
 						foreach(string ext in extensions) {
-							string file = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename)) + ext;
+							string file = Path.Combine(romFile.Folder, Path.GetFileNameWithoutExtension(romFile.FileName)) + ext;
 							if(File.Exists(file)) {
 								patchFile = file;
 								break;
 							}
 						}
 					}
-					
-					if(!File.Exists(patchFile)) {
-						autoLoadPatches = false;
-					}
 
 					Task loadRomTask = new Task(() => {
 						lock(_loadRomLock) {
-							InteropEmu.LoadROM(filename, archiveFileIndex, autoLoadPatches ? patchFile : string.Empty);
+							InteropEmu.LoadROM(romFile, (patchFile.HasValue && patchFile.Value.Exists) ? (string)patchFile.Value : string.Empty);
 						}
 					});
 
 					loadRomTask.ContinueWith((Task prevTask) => {
 						this.BeginInvoke((MethodInvoker)(() => {
-							if(archiveFileIndex >= 0) {
+							if(romFile.Compressed) {
 								Interlocked.Decrement(ref _romLoadCounter);
 							}
 
-							ConfigManager.Config.AddRecentFile(filename, romName, archiveFileIndex);
+							ConfigManager.Config.AddRecentFile(romFile, patchFileToApply);
 							UpdateRecentFiles();
 						}));
 					});
@@ -658,10 +653,10 @@ namespace Mesen.GUI.Forms
 					loadRomTask.Start();
 				}
 			} else {
-				MesenMsgBox.Show("FileNotFound", MessageBoxButtons.OK, MessageBoxIcon.Error, filename);
+				MesenMsgBox.Show("FileNotFound", MessageBoxButtons.OK, MessageBoxIcon.Error, romFile.Path);
 			}
 		}
-		
+
 		private void UpdateFocusFlag()
 		{
 			bool hasFocus = false;
@@ -688,7 +683,6 @@ namespace Mesen.GUI.Forms
 				} else {
 					panelInfo.Visible = _emuThread == null;
 					ctrlRecentGames.Visible = _emuThread == null;
-					mnuPowerOff.Enabled = _emuThread != null;
 
 					ctrlLoading.Visible = (_romLoadCounter > 0);
 
@@ -697,7 +691,7 @@ namespace Mesen.GUI.Forms
 
 					bool isNetPlayClient = InteropEmu.IsConnected();
 
-					mnuPause.Enabled = mnuPowerCycle.Enabled = mnuReset.Enabled = (_emuThread != null && !isNetPlayClient);
+					mnuPause.Enabled = mnuPowerCycle.Enabled = mnuReset.Enabled = mnuPowerOff.Enabled = (_emuThread != null && !isNetPlayClient);
 					mnuSaveState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf());
 					mnuLoadState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording());
 
@@ -782,7 +776,7 @@ namespace Mesen.GUI.Forms
 					mnuRegionPal.Checked = ConfigManager.Config.Region == NesModel.PAL;
 					mnuRegionDendy.Checked = ConfigManager.Config.Region == NesModel.Dendy;
 
-					bool autoInsertDisabled = !InteropEmu.FdsIsAutoInsertDiskEnabled(); 
+					bool autoInsertDisabled = !InteropEmu.FdsIsAutoInsertDiskEnabled();
 					mnuSelectDisk.Enabled = autoInsertDisabled;
 					mnuEjectDisk.Enabled = autoInsertDisabled;
 					mnuSwitchDiskSide.Enabled = autoInsertDisabled;
@@ -807,9 +801,9 @@ namespace Mesen.GUI.Forms
 			mnuRecentFiles.DropDownItems.Clear();
 			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
 				ToolStripMenuItem tsmi = new ToolStripMenuItem();
-				tsmi.Text = recentItem.RomName.Replace("&", "&&");
+				tsmi.Text = recentItem.ToString();
 				tsmi.Click += (object sender, EventArgs args) => {
-					LoadROM(recentItem.Path, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches, recentItem.ArchiveFileIndex);
+					LoadROM(recentItem.RomFile, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches, recentItem.PatchFile);
 				};
 				mnuRecentFiles.DropDownItems.Add(tsmi);
 			}
@@ -833,7 +827,7 @@ namespace Mesen.GUI.Forms
 			}
 			UpdateMenus();
 		}
-				
+
 		private void StopEmu()
 		{
 			InteropEmu.Stop();
@@ -893,7 +887,7 @@ namespace Mesen.GUI.Forms
 				}
 			}
 
-			#if !HIDETESTMENU
+#if !HIDETESTMENU
 			if(keyData == Keys.Pause) {
 				if(InteropEmu.RomTestRecording()) {
 					InteropEmu.RomTestStop();
@@ -901,7 +895,7 @@ namespace Mesen.GUI.Forms
 					InteropEmu.RomTestRecord(ConfigManager.TestFolder + "\\" + InteropEmu.GetRomInfo().GetRomName() + ".mtp", true);
 				}
 			}
-			#endif
+#endif
 
 			if(keyData == Keys.Escape && _emuThread != null && mnuPause.Enabled) {
 				PauseEmu();
@@ -1027,12 +1021,12 @@ namespace Mesen.GUI.Forms
 				frm.ShowDialog(sender);
 			}
 		}
-		
+
 		private void mnuExit_Click(object sender, EventArgs e)
 		{
 			this.Close();
 		}
-		
+
 		private void mnuVideoConfig_Click(object sender, EventArgs e)
 		{
 			using(frmVideoConfig frm = new frmVideoConfig()) {
@@ -1040,7 +1034,7 @@ namespace Mesen.GUI.Forms
 			}
 			UpdateVideoSettings();
 		}
-		
+
 		private void mnuDebugger_Click(object sender, EventArgs e)
 		{
 			if(_debugger == null) {
@@ -1053,7 +1047,7 @@ namespace Mesen.GUI.Forms
 				_debugger.Focus();
 			}
 		}
-		
+
 		private void mnuSaveState_DropDownOpening(object sender, EventArgs e)
 		{
 			InitializeStateMenu(mnuSaveState, true);
@@ -1070,7 +1064,7 @@ namespace Mesen.GUI.Forms
 		}
 
 		#endregion
-		
+
 		private void RecordMovie(bool resetEmu)
 		{
 			using(SaveFileDialog sfd = new SaveFileDialog()) {
@@ -1262,7 +1256,7 @@ namespace Mesen.GUI.Forms
 					if(_cheatListWindow.DialogResult == DialogResult.OK) {
 						CheatInfo.ApplyCheats();
 					}
-					_cheatListWindow = null;					
+					_cheatListWindow = null;
 				};
 			} else {
 				_cheatListWindow.Focus();
@@ -1325,7 +1319,7 @@ namespace Mesen.GUI.Forms
 				ofd.SetFilter("*.nes|*.nes");
 				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 					string filename = ofd.FileName;
-					
+
 					Task.Run(() => {
 						int result = InteropEmu.RunAutomaticTest(filename);
 					});
@@ -1341,7 +1335,7 @@ namespace Mesen.GUI.Forms
 			startInfo.WorkingDirectory = workingDirectory;
 			Process.Start(startInfo);
 		}
-		
+
 		private void mnuRunAllGameTests_Click(object sender, EventArgs e)
 		{
 			string workingDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
@@ -1440,7 +1434,7 @@ namespace Mesen.GUI.Forms
 		{
 			SetVideoFilter(VideoFilterType.xBRZ2x);
 		}
-		
+
 		private void mnuXBRZ3xFilter_Click(object sender, EventArgs e)
 		{
 			SetVideoFilter(VideoFilterType.xBRZ3x);
@@ -1505,7 +1499,7 @@ namespace Mesen.GUI.Forms
 		{
 			SetVideoFilter(VideoFilterType.SuperEagle);
 		}
-		
+
 		private void mnuPrescale2xFilter_Click(object sender, EventArgs e)
 		{
 			SetVideoFilter(VideoFilterType.Prescale2x);
@@ -1600,7 +1594,7 @@ namespace Mesen.GUI.Forms
 						string hash = MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant();
 						if(hash == "ca30b50f880eb660a320674ed365ef7a" || hash == "c1a9e9415a6adde3c8563c622d4c9fce") {
 							File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));
-							LoadROM(_currentRomPath, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
+							LoadROM(_currentRomPath.Value, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
 						} else {
 							MesenMsgBox.Show("InvalidFdsBios", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						}
@@ -1742,7 +1736,7 @@ namespace Mesen.GUI.Forms
 		{
 			CheckForUpdates(true);
 		}
-		
+
 		private void mnuReportBug_Click(object sender, EventArgs e)
 		{
 			Process.Start("http://www.mesen.ca/ReportBug.php");
@@ -1842,7 +1836,7 @@ namespace Mesen.GUI.Forms
 					}
 					this.ctrlNsfPlayer.Visible = true;
 					this.ctrlNsfPlayer.Focus();
-					
+
 					_currentGame = InteropEmu.NsfGetHeader().GetSongName();
 				} else if(this._isNsfPlayerMode) {
 					this.MinimumSize = new Size(335, 320);
@@ -1855,7 +1849,7 @@ namespace Mesen.GUI.Forms
 
 		private void mnuRandomGame_Click(object sender, EventArgs e)
 		{
-			IEnumerable<string> gameFolders = ConfigManager.Config.RecentFiles.Select(recentFile => Path.GetDirectoryName(recentFile.Path).ToLowerInvariant()).Distinct();
+			IEnumerable<string> gameFolders = ConfigManager.Config.RecentFiles.Select(recentFile => recentFile.RomFile.Folder.ToLowerInvariant()).Distinct();
 			List<string> gameRoms = new List<string>();
 
 			foreach(string folder in gameFolders) {

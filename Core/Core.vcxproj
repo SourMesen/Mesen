@@ -413,7 +413,6 @@
     <ClInclude Include="AutomaticRomTest.h" />
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="FceuxMovie.h" />
-    <ClInclude Include="FileLoader.h" />
     <ClInclude Include="HdBuilderPpu.h" />
     <ClInclude Include="HdData.h" />
     <ClInclude Include="HdPackBuilder.h" />
@@ -779,7 +778,6 @@
     <ClCompile Include="AutomaticRomTest.cpp" />
     <ClCompile Include="BaseRenderer.cpp" />
     <ClCompile Include="FceuxMovie.cpp" />
-    <ClCompile Include="FileLoader.cpp" />
     <ClCompile Include="HdNesPack.cpp" />
     <ClCompile Include="HdPackBuilder.cpp" />
     <ClCompile Include="HdPackLoader.cpp" />

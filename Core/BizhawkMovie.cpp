@@ -81,8 +81,9 @@ bool BizhawkMovie::InitializeGameData(ZipReader & reader)
 		std::getline(ss, line);
 		if(line.compare(0, 4, "SHA1", 4) == 0) {
 			if(line.size() >= 45) {
-				string sha1 = line.substr(5, 40);
-				if(Console::LoadROM("", sha1)) {
+				HashInfo hashInfo;
+				hashInfo.Sha1Hash = line.substr(5, 40);
+				if(Console::LoadROM("", hashInfo)) {
 					result = true;
 				}
 			}

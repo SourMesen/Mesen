@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,34 +73,25 @@ namespace Mesen.GUI.Forms
 			txtSearch.Focus();
 		}
 
-		public static bool SelectRom(string filename, ref int archiveFileIndex)
+		public static bool SelectRom(ref ResourcePath resource)
 		{
-			string romName;
-			return SelectRom(filename, ref archiveFileIndex, out romName);
-		}
+			List<string> archiveRomList = InteropEmu.GetArchiveRomList(resource.Path);
 
-		public static bool SelectRom(string filename, ref int archiveFileIndex, out string romName)
-		{
-			romName = "";
+			if(archiveRomList.Contains(resource.InnerFile)) {
+				return true;
+			}
 
-			List<string> archiveRomList = InteropEmu.GetArchiveRomList(filename);
 			if(archiveRomList.Count > 1) {
-				if(archiveFileIndex >= 0 && archiveFileIndex < archiveRomList.Count) {
-					romName = System.IO.Path.GetFileName(archiveRomList[archiveFileIndex]);
-					return true;
+				frmSelectRom frm = new frmSelectRom(archiveRomList);
+				if(frm.ShowDialog(null, Application.OpenForms[0]) == DialogResult.OK) {
+					resource.InnerFile = frm.lstRoms.SelectedItem.ToString();
 				} else {
-					frmSelectRom frm = new frmSelectRom(archiveRomList);
-					if(frm.ShowDialog(null, Application.OpenForms[0]) == DialogResult.OK) {
-						archiveFileIndex = frm.SelectedIndex;
-						romName = System.IO.Path.GetFileName(frm.lstRoms.SelectedItem.ToString());
-					} else {
-						return false;
-					}
+					return false;
 				}
 			} else if(archiveRomList.Count == 1) {
-				romName = System.IO.Path.GetFileName(archiveRomList[0]);
+				resource.InnerFile = archiveRomList[0];
 			} else {
-				romName = System.IO.Path.GetFileName(filename);
+				resource.InnerFile = "";
 			}
 
 			return true;

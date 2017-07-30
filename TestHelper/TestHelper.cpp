@@ -50,7 +50,6 @@ extern "C" {
 	void __stdcall SetControllerType(uint32_t port, ControllerType type);
 	int __stdcall RunAutomaticTest(char* filename);
 	int __stdcall RunRecordedTest(char* filename);
-	void __stdcall LoadROM(char* filename);
 	void __stdcall Run();
 	void __stdcall Stop();
 	INotificationListener* __stdcall RegisterNotificationCallback(NotificationListenerCallback callback);
@@ -154,7 +153,7 @@ int main(int argc, char* argv[])
 
 	if(argc >= 3 && strcmp(argv[1], "/auto") == 0) {
 		string romFolder = argv[2];
-		testFilenames = FolderUtilities::GetFilesInFolder(romFolder, ".nes", true);
+		testFilenames = FolderUtilities::GetFilesInFolder(romFolder, { ".nes" }, true);
 		automaticTests = true;
 	} else if(argc <= 2) {
 		string testFolder;
@@ -163,7 +162,7 @@ int main(int argc, char* argv[])
 		} else {
 			testFolder = argv[1];
 		}
-		testFilenames = FolderUtilities::GetFilesInFolder(testFolder, ".mtp", true);
+		testFilenames = FolderUtilities::GetFilesInFolder(testFolder, { ".mtp" }, true);
 		automaticTests = false;
 	}
 

@@ -38,11 +38,31 @@ bool PNGHelper::WritePNG(string filename, uint32_t* buffer, uint32_t xSize, uint
 	return false;
 }
 
+bool PNGHelper::ReadPNG(vector<uint8_t> input, vector<uint8_t> &output, uint32_t &pngWidth, uint32_t &pngHeight)
+{
+	unsigned long width = 0;
+	unsigned long height = 0;
+
+	pngWidth = 0;
+	pngHeight = 0;
+
+	if(DecodePNG(output, width, height, input.data(), input.size()) == 0) {
+		uint32_t *pngDataPtr = (uint32_t*)output.data();
+		for(size_t i = 0, len = output.size() / 4; i < len; i++) {
+			//ABGR to ARGB
+			pngDataPtr[i] = (pngDataPtr[i] & 0xFF00FF00) | ((pngDataPtr[i] & 0xFF0000) >> 16) | ((pngDataPtr[i] & 0xFF) << 16);
+		}
+		pngWidth = width;
+		pngHeight = height;
+
+		return true;
+	} else {
+		return false;
+	}
+} 
+
 bool PNGHelper::ReadPNG(string filename, vector<uint8_t> &pngData, uint32_t &pngWidth, uint32_t &pngHeight)
 {
-	unsigned long width;
-	unsigned long height;
-
 	pngWidth = 0;
 	pngHeight = 0;
 
@@ -52,19 +72,9 @@ bool PNGHelper::ReadPNG(string filename, vector<uint8_t> &pngData, uint32_t &png
 		size_t fileSize = (size_t)pngFile.tellg();
 		pngFile.seekg(0, std::ios::beg);
 
-		uint8_t* buffer = new uint8_t[fileSize];
-		pngFile.read((char*)buffer, fileSize);
-		DecodePNG(pngData, width, height, buffer, fileSize);
-		uint32_t *pngDataPtr = (uint32_t*)&pngData[0];
-		for(size_t i = 0, len = pngData.size() / 4; i < len; i++) {
-			//ABGR to ARGB
-			pngDataPtr[i] =  (pngDataPtr[i] & 0xFF00FF00) | ((pngDataPtr[i] & 0xFF0000) >> 16) | ((pngDataPtr[i] & 0xFF) << 16);
-		}
-		pngWidth = width;
-		pngHeight = height;
-		delete[] buffer;
-
-		return true;
+		vector<uint8_t> fileData(fileSize, 0);
+		pngFile.read((char*)fileData.data(), fileData.size());
+		return ReadPNG(fileData, pngData, pngWidth, pngHeight);
 	}
 
 	return false;

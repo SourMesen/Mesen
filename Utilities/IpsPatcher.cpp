@@ -14,7 +14,7 @@ public:
 	uint16_t RepeatCount = 0;
 	uint8_t Value = 0;
 
-	bool ReadRecord(ifstream &ipsFile)
+	bool ReadRecord(std::istream &ipsFile)
 	{
 		uint8_t buffer[3];
 
@@ -60,60 +60,61 @@ public:
 	}
 };
 
-vector<uint8_t> IpsPatcher::PatchBuffer(string ipsFilepath, vector<uint8_t> input)
+bool IpsPatcher::PatchBuffer(string ipsFilepath, vector<uint8_t> &input, vector<uint8_t> &output)
 {
 	ifstream ipsFile(ipsFilepath, std::ios::in | std::ios::binary);
-
 	if(ipsFile) {
-		char header[5];
-		ipsFile.read((char*)&header, 5);
-		if(memcmp((char*)&header, "PATCH", 5) != 0) {
-			//Invalid ips file
-			return input;
-		}
-
-		vector<IpsRecord> records;
-		int32_t truncateOffset = -1;
-		size_t maxOutputSize = input.size();
-		while(!ipsFile.eof()) {
-			IpsRecord record;
-			if(record.ReadRecord(ipsFile)) {
-				if(record.Address + record.Length + record.RepeatCount > maxOutputSize) {
-					maxOutputSize = record.Address + record.Length + record.RepeatCount;
-				}
-				records.push_back(record);
-			} else {
-				//EOF, try to read truncate offset record if it exists
-				uint8_t buffer[3];
-				ipsFile.read((char*)buffer, 3);
-				if(!ipsFile.eof()) {
-					truncateOffset = buffer[2] | (buffer[1] << 8) | (buffer[0] << 16);
-				}
-				break;
-			}
-		}
-
-		vector<uint8_t> output;
-		output.resize(maxOutputSize);
-		std::copy(input.begin(), input.end(), output.begin());
-
-		for(IpsRecord record : records) {
-			if(record.Length == 0) {
-				std::fill(&output[record.Address], &output[record.Address]+record.RepeatCount, record.Value);
-			} else {
-				std::copy(record.Replacement.begin(), record.Replacement.end(), output.begin()+record.Address);
-			}
-		}
-
-		if(truncateOffset != -1 && (int32_t)output.size() > truncateOffset) {
-			output.resize(truncateOffset);
-		}
-
-		ipsFile.close();
-
-		return output;
+		return PatchBuffer(ipsFile, input, output);
 	}
-	return input;
+	return false;
+}
+
+bool IpsPatcher::PatchBuffer(std::istream &ipsFile, vector<uint8_t> &input, vector<uint8_t> &output)
+{
+	char header[5];
+	ipsFile.read((char*)&header, 5);
+	if(memcmp((char*)&header, "PATCH", 5) != 0) {
+		//Invalid ips file
+		return false;
+	}
+
+	vector<IpsRecord> records;
+	int32_t truncateOffset = -1;
+	size_t maxOutputSize = input.size();
+	while(!ipsFile.eof()) {
+		IpsRecord record;
+		if(record.ReadRecord(ipsFile)) {
+			if(record.Address + record.Length + record.RepeatCount > maxOutputSize) {
+				maxOutputSize = record.Address + record.Length + record.RepeatCount;
+			}
+			records.push_back(record);
+		} else {
+			//EOF, try to read truncate offset record if it exists
+			uint8_t buffer[3];
+			ipsFile.read((char*)buffer, 3);
+			if(!ipsFile.eof()) {
+				truncateOffset = buffer[2] | (buffer[1] << 8) | (buffer[0] << 16);
+			}
+			break;
+		}
+	}
+
+	output.resize(maxOutputSize);
+	std::copy(input.begin(), input.end(), output.begin());
+
+	for(IpsRecord record : records) {
+		if(record.Length == 0) {
+			std::fill(&output[record.Address], &output[record.Address]+record.RepeatCount, record.Value);
+		} else {
+			std::copy(record.Replacement.begin(), record.Replacement.end(), output.begin()+record.Address);
+		}
+	}
+
+	if(truncateOffset != -1 && (int32_t)output.size() > truncateOffset) {
+		output.resize(truncateOffset);
+	}
+
+	return true;
 }
 
 vector<uint8_t> IpsPatcher::CreatePatch(vector<uint8_t> originalData, vector<uint8_t> newData)

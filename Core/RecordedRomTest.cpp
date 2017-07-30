@@ -172,7 +172,7 @@ void RecordedRomTest::RecordFromTest(string newTestFilename, string existingTest
 
 	if(testMovie && testRom) {
 		Console::Pause();
-		Console::LoadROM("TestRom", &testRom);
+		Console::LoadROM(testRom);
 		testRom.seekg(0, ios::beg);
 		_romStream << testRom.rdbuf();
 
@@ -236,7 +236,7 @@ int32_t RecordedRomTest::Run(string filename)
 		_runningTest = true;
 
 		//Start playing movie
-		Console::LoadROM(testName, &testRom);
+		Console::LoadROM(testRom);
 		MovieManager::Play(testMovie, false);
 
 		Console::Resume();
@@ -300,7 +300,7 @@ void RecordedRomTest::Save()
 		writer.AddFile(mmoFilename, "TestMovie.mmo");
 		std::remove(mmoFilename.c_str());
 
-		writer.AddFile(Console::GetROMPath(), "TestRom.nes");
+		writer.AddFile(Console::GetRomPath(), "TestRom.nes");
 	}
 
 

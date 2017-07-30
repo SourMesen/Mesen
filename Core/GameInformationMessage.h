@@ -39,7 +39,9 @@ public:
 	{
 		string filename = _romFilename;
 		if(filename.size() > 0) {
-			if(Console::LoadROM(filename, _crc32Hash)) {
+			HashInfo hashInfo;
+			hashInfo.Crc32Hash = _crc32Hash;
+			if(Console::LoadROM(filename, hashInfo)) {
 				return true;
 			} else {
 				MessageManager::DisplayMessage("NetPlay", "CouldNotFindRom");

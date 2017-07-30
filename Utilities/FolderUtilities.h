@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include <unordered_set>
 
 class FolderUtilities
 {
@@ -24,7 +25,7 @@ public:
 	static string GetRecentGamesFolder();
 
 	static vector<string> GetFolders(string rootFolder);
-	static vector<string> GetFilesInFolder(string rootFolder, string mask, bool recursive);
+	static vector<string> GetFilesInFolder(string rootFolder, std::unordered_set<string> extensions, bool recursive);
 
 	static string GetFilename(string filepath, bool includeExtension);
 	static string GetFolderName(string filepath);

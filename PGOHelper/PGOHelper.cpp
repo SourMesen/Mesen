@@ -38,7 +38,7 @@ extern "C" {
 	void __stdcall SetFlags(uint64_t flags);
 	void __stdcall SetVideoFilter(VideoFilterType filter);
 	void __stdcall InitializeEmu(char* homeFolder, void*, void*, bool, bool, bool);
-	void __stdcall LoadROM(const char* filename, int32_t archiveFileIndex, char* patchFile);
+	void __stdcall LoadROM(const char* filename, char* patchFile);
 	void __stdcall Run();
 	void __stdcall Stop();
 }
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 
 	SetFlags(0x8000000000000000); //EmulationFlags::ConsoleMode
 	InitializeEmu("C:\\Windows\\Temp\\Mesen", nullptr, nullptr, false, false, false);
-	LoadROM(testRoms[0], -1, "");
+	LoadROM(testRoms[0], "");
 	std::cout << "Running: " << testRoms[0] << std::endl;
 
 	thread testThread([testRoms] {
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
 			std::cout << "Running: " << testRoms[i] << std::endl;
 			SetVideoFilter(filterTypes[i % 13]);
-			LoadROM(testRoms[i], -1, "");
+			LoadROM(testRoms[i], "");
 		}
 		std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
 		Stop();

@@ -1,21 +1,23 @@
 #include "stdafx.h"
 #include <algorithm>
+#include <unordered_set>
+#include "../Utilities/VirtualFile.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/CRC32.h"
 #include "../Utilities/sha1.h"
 #include "RomLoader.h"
-#include "FileLoader.h"
 #include "iNesLoader.h"
 #include "FdsLoader.h"
 #include "NsfLoader.h"
 #include "NsfeLoader.h"
 #include "UnifLoader.h"
 
-bool RomLoader::LoadFile(string filename, int32_t archiveFileIndex)
+bool RomLoader::LoadFile(VirtualFile romFile)
 {
 	vector<uint8_t> fileData;
-	if(FileLoader::LoadFile(filename, nullptr, archiveFileIndex, fileData)) {
-		return LoadFile(filename, fileData);
+	if(romFile.IsValid()) {
+		romFile.ReadFile(fileData);
+		return LoadFile(romFile.GetFileName(), fileData);
 	} else {
 		return false;
 	}
@@ -23,6 +25,10 @@ bool RomLoader::LoadFile(string filename, int32_t archiveFileIndex)
 
 bool RomLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 {
+	if(fileData.size() < 10) {
+		return false;
+	}
+
 	_filename = filename;
 
 	string romName = FolderUtilities::GetFilename(filename, true);
@@ -88,56 +94,58 @@ RomData RomLoader::GetRomData()
 	return _romData;
 }
 
-int32_t RomLoader::FindMatchingRomInFile(string filename, HashInfo hashInfo)
+string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo)
 {
-	vector<uint8_t> fileData;
-	int fileIndex = 0;
-	while(FileLoader::LoadFile(filename, nullptr, fileIndex, fileData)) {
-		RomLoader loader;
-		if(loader.LoadFile(filename, fileData)) {
-			if(hashInfo.Crc32Hash == loader._romData.Crc32 || hashInfo.Sha1Hash.compare(loader._romData.Sha1) == 0) {
-				return fileIndex;
+	shared_ptr<ArchiveReader> reader = ArchiveReader::GetReader(filePath);
+	if(reader) {
+		for(string file : reader->GetFileList({ ".nes", ".fds", "*.unif", "*.unif", "*.nsf", "*.nsfe" })) {
+			RomLoader loader;
+			vector<uint8_t> fileData;
+			if(loader.LoadFile(filePath)) {
+				if(hashInfo.Crc32Hash == loader._romData.Crc32 || hashInfo.Sha1Hash.compare(loader._romData.Sha1) == 0) {
+					return filePath+"\n"+file;
+				}
 			}
-			fileIndex++;
+		}
+	} else {
+		RomLoader loader;
+		vector<uint8_t> fileData;
+		if(loader.LoadFile(filePath)) {
+			if(hashInfo.Crc32Hash == loader._romData.Crc32 || hashInfo.Sha1Hash.compare(loader._romData.Sha1) == 0) {
+				return filePath;
+			}
 		}
 	}
-	return -1;
+	return "";
 }
 
-string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, HashInfo hashInfo, bool useFastSearch, int32_t &archiveFileIndex)
+string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, HashInfo hashInfo, bool useFastSearch)
 {
 	std::transform(romFilename.begin(), romFilename.end(), romFilename.begin(), ::tolower);
-	vector<string> validExtensions = { { ".nes", ".zip", ".7z", ".fds" } };
-	vector<string> romFiles;
-
-	for(string extension : validExtensions) {
-		for(string file : FolderUtilities::GetFilesInFolder(folder, extension, true)) {
-			romFiles.push_back(file);
-		}
-	}
+	std::unordered_set<string> validExtensions = { { ".nes", ".fds", "*.unif", "*.unif", "*.nsf", "*.nsfe", "*.7z", "*.zip" } };
+	vector<string> romFiles = FolderUtilities::GetFilesInFolder(folder, validExtensions, true);
 
 	if(useFastSearch) {
 		for(string romFile : romFiles) {
 			//Quick search by filename
-			string originalFilename = romFile;
-			std::transform(romFile.begin(), romFile.end(), romFile.begin(), ::tolower);
-			if(FolderUtilities::GetFilename(romFile, true).compare(romFilename) == 0) {
-				archiveFileIndex = RomLoader::FindMatchingRomInFile(romFile, hashInfo);
-				if(archiveFileIndex >= 0) {
-					return originalFilename;
+			string lcRomFile = romFile;
+			std::transform(lcRomFile.begin(), lcRomFile.end(), lcRomFile.begin(), ::tolower);
+			if(FolderUtilities::GetFilename(lcRomFile, false).compare(FolderUtilities::GetFilename(romFilename, false)) == 0) {
+				string match = RomLoader::FindMatchingRomInFile(romFile, hashInfo);
+				if(!match.empty()) {
+					return match;
 				}
 			}
 		}
 	} else {
 		for(string romFile : romFiles) {
 			//Slower search by CRC value
-			archiveFileIndex = RomLoader::FindMatchingRomInFile(romFile, hashInfo);
-			if(archiveFileIndex >= 0) {
-				return romFile;
+			string match = RomLoader::FindMatchingRomInFile(romFile, hashInfo);
+			if(!match.empty()) {
+				return match;
 			}
 		}
 	}
 
-	archiveFileIndex = -1;
 	return "";
 }

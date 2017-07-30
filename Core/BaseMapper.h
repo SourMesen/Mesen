@@ -46,7 +46,6 @@ private:
 	uint32_t _chrPageNumbers[64];
 
 	HashInfo _hashInfo;
-	uint32_t _prgCrc32 = 0;
 
 	vector<uint8_t> _originalPrgRom;
 
@@ -164,7 +163,6 @@ public:
 
 	GameSystem GetGameSystem();
 	HashInfo GetHashInfo();
-	uint32_t GetPrgCrc32();
 	string GetRomName();
 	RomFormat GetRomFormat();
 

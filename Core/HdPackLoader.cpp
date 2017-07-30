@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <algorithm>
 #include <unordered_map>
+#include "../Utilities/ZipReader.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/StringUtilities.h"
 #include "../Utilities/HexUtilities.h"
@@ -8,32 +9,110 @@
 #include "Console.h"
 #include "HdPackLoader.h"
 
-HdPackLoader::HdPackLoader(string hdPackDefinitionFile, HdPackData *data)
+HdPackLoader::HdPackLoader()
 {
-	_hdPackDefinitionFile = hdPackDefinitionFile;
-	_hdPackFolder = FolderUtilities::GetFolderName(_hdPackDefinitionFile);
-	_data = data;
 }
 
-bool HdPackLoader::LoadHdNesPack(string hdPackDefinitionFile, HdPackData &outData)
+bool HdPackLoader::InitializeLoader(VirtualFile &romFile, HdPackData *data)
 {
-	//outData = HdPackData();
+	_data = data;
 
-	HdPackLoader loader(hdPackDefinitionFile, &outData);
-	return loader.LoadPack();
+	string romName = FolderUtilities::GetFilename(romFile.GetFileName(), false);
+	string hdPackFolder = FolderUtilities::GetHdPackFolder();
+	string zipName = romName + ".hdn";
+	string definitionPath = FolderUtilities::CombinePath(romName, "hires.txt");
+
+	string legacyPath = FolderUtilities::CombinePath(hdPackFolder, definitionPath);
+	if(ifstream(legacyPath)) {
+		_loadFromZip = false;
+		_hdPackFolder = FolderUtilities::GetFolderName(legacyPath);
+		return true;
+	} else {
+		vector<string> hdnPackages = FolderUtilities::GetFilesInFolder(romFile.GetFolderPath(), { ".hdn" }, false);
+		vector<string> more = FolderUtilities::GetFilesInFolder(hdPackFolder, { ".hdn", ".zip" }, false);
+		hdnPackages.insert(hdnPackages.end(), more.begin(), more.end());
+
+		string sha1Hash = romFile.GetSha1Hash();
+		for(string path : hdnPackages) {
+			_reader.LoadArchive(path);
+
+			vector<uint8_t> hdDefinition;
+			if(_reader.ExtractFile("hires.txt", hdDefinition)) {
+				if(FolderUtilities::GetFilename(path, false) == romName) {
+					_loadFromZip = true;
+					_hdPackFolder = path;
+					return true;
+				} else {
+					for(string line : StringUtilities::Split(string(hdDefinition.data(), hdDefinition.data() + hdDefinition.size()), '\n')) {
+						std::transform(line.begin(), line.end(), line.begin(), ::tolower);
+						if(line.find("<supportedrom>") != string::npos && line.find(sha1Hash) != string::npos) {
+							_loadFromZip = true;
+							_hdPackFolder = path;
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool HdPackLoader::LoadHdNesPack(string definitionFile, HdPackData &outData)
+{
+	HdPackLoader loader;
+	if(ifstream(definitionFile)) {
+		loader._data = &outData;
+		loader._loadFromZip = false;
+		loader._hdPackFolder = FolderUtilities::GetFolderName(definitionFile);
+		return loader.LoadPack();
+	}
+	return false;
+}
+
+bool HdPackLoader::LoadHdNesPack(VirtualFile &romFile, HdPackData &outData)
+{
+	HdPackLoader loader;
+	if(loader.InitializeLoader(romFile, &outData)) {
+		return loader.LoadPack();
+	}
+	return false;
+}
+
+bool HdPackLoader::LoadFile(string filename, vector<uint8_t> &fileData)
+{
+	fileData.clear();
+
+	if(_loadFromZip) {
+		if(_reader.ExtractFile(filename, fileData)) {
+			return true;
+		}
+	} else {
+		ifstream file(FolderUtilities::CombinePath(_hdPackFolder, filename), ios::in | ios::binary);
+		if(file.good()) {
+			file.seekg(0, ios::end);
+			uint32_t fileSize = (uint32_t)file.tellg();
+			file.seekg(0, ios::beg);
+
+			fileData = vector<uint8_t>(fileSize, 0);
+			file.read((char*)fileData.data(), fileSize);
+			
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool HdPackLoader::LoadPack()
 {
 	try {
-		ifstream packDefinition(_hdPackDefinitionFile, ios::in | ios::binary);
-		if(!packDefinition.good()) {
+		vector<uint8_t> hdDefinition;
+		if(!LoadFile("hires.txt", hdDefinition)) {
 			return false;
 		}
 
-		while(packDefinition.good()) {
-			string lineContent;
-			std::getline(packDefinition, lineContent);
+		for(string lineContent : StringUtilities::Split(string(hdDefinition.data(), hdDefinition.data() + hdDefinition.size()), '\n')) {
 			lineContent = lineContent.substr(0, lineContent.length() - 1);
 
 			vector<HdPackCondition*> conditions;
@@ -51,10 +130,9 @@ bool HdPackLoader::LoadPack()
 				_data->Scale = std::stoi(lineContent);
 			} else if(lineContent.substr(0, 5) == "<img>") {
 				lineContent = lineContent.substr(5);
-				HdPackBitmapInfo bitmapInfo;
-				string imageFile = FolderUtilities::CombinePath(_hdPackFolder, lineContent);
-				PNGHelper::ReadPNG(imageFile, bitmapInfo.PixelData, bitmapInfo.Width, bitmapInfo.Height);
-				_hdNesBitmaps.push_back(bitmapInfo);
+				if(!ProcessImgTag(lineContent)) {
+					return false;
+				}
 			} else if(lineContent.substr(0, 7) == "<patch>") {
 				tokens = StringUtilities::Split(lineContent.substr(7), ',');
 				ProcessPatchTag(tokens);
@@ -76,10 +154,23 @@ bool HdPackLoader::LoadPack()
 		LoadCustomPalette();
 		InitializeHdPack();
 
-		packDefinition.close();
 		return true;
 	} catch(std::exception ex) {
 		MessageManager::Log(string("[HDPack] Error loading HDPack: ") + ex.what());
+		return false;
+	}
+}
+
+bool HdPackLoader::ProcessImgTag(string src)
+{
+	HdPackBitmapInfo bitmapInfo;
+	vector<uint8_t> fileData;
+	LoadFile(src, fileData);
+	if(PNGHelper::ReadPNG(fileData, bitmapInfo.PixelData, bitmapInfo.Width, bitmapInfo.Height)) {
+		_hdNesBitmaps.push_back(bitmapInfo);
+		return true;
+	} else {
+		MessageManager::Log("[HDPack] Error loading HDPack: PNG file " + src + " could not be read.");
 		return false;
 	}
 }
@@ -90,13 +181,18 @@ void HdPackLoader::ProcessPatchTag(vector<string> &tokens)
 		MessageManager::Log(string("[HDPack] Invalid SHA1 hash for patch (" + tokens[0] + "): " + tokens[1]));
 		return;
 	}
-	if(!ifstream(FolderUtilities::CombinePath(_hdPackFolder, tokens[0]))) {
+	vector<uint8_t> fileData;
+	if(!LoadFile(tokens[0], fileData)) {
 		MessageManager::Log(string("[HDPack] Patch file not found: " + tokens[1]));
 		return;
 	}
 
-	std::transform(tokens[1].begin(), tokens[1].end(), tokens[1].begin(), ::toupper);
-	_data->PatchesByHash[tokens[1]] = tokens[0];
+	std::transform(tokens[1].begin(), tokens[1].end(), tokens[1].begin(), ::tolower);
+	if(_loadFromZip) {
+		_data->PatchesByHash[tokens[1]] = VirtualFile(_hdPackFolder, tokens[0]);
+	} else {
+		_data->PatchesByHash[tokens[1]] = FolderUtilities::CombinePath(_hdPackFolder, tokens[0]);
+	}
 }
 
 void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition*> conditions)
@@ -231,30 +327,32 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens)
 
 void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCondition*> conditions)
 {
-	HdBackgroundFileData* fileData = nullptr;
+	HdBackgroundFileData* bgFileData = nullptr;
 	for(unique_ptr<HdBackgroundFileData> &bgData : _data->BackgroundFileData) {
 		if(bgData->PngName == tokens[0]) {
-			fileData = bgData.get();
+			bgFileData = bgData.get();
 		}
 	}
 
-	if(!fileData) {
+	if(!bgFileData) {
 		vector<uint8_t> pixelData;
 		uint32_t width, height;
-		string imageFile = FolderUtilities::CombinePath(_hdPackFolder, tokens[0]);
-		if(PNGHelper::ReadPNG(imageFile, pixelData, width, height)) {
-			_data->BackgroundFileData.push_back(unique_ptr<HdBackgroundFileData>(new HdBackgroundFileData()));
-			fileData = _data->BackgroundFileData.back().get();
-			fileData->PixelData = pixelData;
-			fileData->Width = width;
-			fileData->Height = height;
-			fileData->PngName = tokens[0];
+		vector<uint8_t> fileContent;
+		if(LoadFile(tokens[0], fileContent)) {
+			if(PNGHelper::ReadPNG(fileContent, pixelData, width, height)) {
+				_data->BackgroundFileData.push_back(unique_ptr<HdBackgroundFileData>(new HdBackgroundFileData()));
+				bgFileData = _data->BackgroundFileData.back().get();
+				bgFileData->PixelData = pixelData;
+				bgFileData->Width = width;
+				bgFileData->Height = height;
+				bgFileData->PngName = tokens[0];
+			}
 		}
 	}
 
 	HdBackgroundInfo backgroundInfo;
-	if(fileData) {
-		backgroundInfo.Data = fileData;
+	if(bgFileData) {
+		backgroundInfo.Data = bgFileData;
 		backgroundInfo.Brightness = (uint8_t)(std::stof(tokens[1]) * 255);
 		backgroundInfo.Conditions = conditions;
 
@@ -297,17 +395,12 @@ vector<HdPackCondition*> HdPackLoader::ParseConditionString(string conditionStri
 
 void HdPackLoader::LoadCustomPalette()
 {
-	string customPalettePath = FolderUtilities::CombinePath(_hdPackFolder, "palette.dat");
-	ifstream file(customPalettePath, ios::binary);
-	if(file.good()) {
+	vector<uint8_t> fileData;
+	if(LoadFile("palette.dat", fileData)) {
 		vector<uint32_t> paletteData;
 
-		uint8_t rgb[3];
-		while(!file.eof()) {
-			file.read((char*)rgb, 3);
-			if(!file.eof()) {
-				paletteData.push_back(0xFF000000 | (rgb[0] << 16) | (rgb[1] << 8) | rgb[2]);
-			}
+		for(int i = 0; i < fileData.size(); i+= 3){
+			paletteData.push_back(0xFF000000 | (fileData[i] << 16) | (fileData[i+1] << 8) | fileData[i+2]);
 		}
 
 		if(paletteData.size() == 0x40) {

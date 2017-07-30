@@ -4,6 +4,7 @@
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 
+#include <unordered_set>
 #include <algorithm>
 #include "FolderUtilities.h"
 #include "UTF8Util.h"
@@ -120,7 +121,7 @@ vector<string> FolderUtilities::GetFolders(string rootFolder)
 	return folders;
 }
 
-vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, string mask, bool recursive)
+vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, std::unordered_set<string> extensions, bool recursive)
 {
 	vector<string> files;
 	vector<string> folders = { { rootFolder } };
@@ -139,7 +140,7 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, string mask,
 		for(fs::directory_iterator i(fs::u8path(folder.c_str())), end; i != end; i++) {
 			string extension = i->path().extension().u8string();
 			std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
-			if(extension == mask) {
+			if(extensions.find(extension) != extensions.end()) {
 				files.push_back(i->path().u8string());
 			}
 		}

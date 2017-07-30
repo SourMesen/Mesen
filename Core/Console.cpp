@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include <thread>
 #include "Console.h"
-#include "FileLoader.h"
 #include "CPU.h"
 #include "PPU.h"
 #include "APU.h"
@@ -19,6 +18,7 @@
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/PlatformUtilities.h"
+#include "../Utilities/VirtualFile.h"
 #include "HdBuilderPpu.h"
 #include "HdPpu.h"
 #include "NsfPpu.h"
@@ -36,7 +36,6 @@ Console::Console()
 {
 	_resetRequested = false;
 	_lagCounter = 0;
-	_archiveFileIndex = -1;
 }
 
 Console::~Console()
@@ -55,7 +54,7 @@ void Console::Release()
 	Console::Instance.reset(new Console());
 }
 
-bool Console::Initialize(string romFilename, stringstream *filestream, string patchFilename, int32_t archiveFileIndex)
+bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 {
 	SoundMixer::StopAudio();
 
@@ -64,26 +63,30 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 		_mapper->SaveBattery();
 
 		//Save current game state before loading another one
-		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename, _archiveFileIndex);
+		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename);
 	}
 	
-	vector<uint8_t> fileData;	
-	if(FileLoader::LoadFile(romFilename, filestream, archiveFileIndex, fileData)) {
-		LoadHdPack(romFilename, fileData, patchFilename);
-		if(!patchFilename.empty()) {
-			FileLoader::ApplyPatch(patchFilename, fileData);
+	if(romFile.IsValid()) {
+		LoadHdPack(romFile, patchFile);
+		if(patchFile.IsValid()) {
+			if(romFile.ApplyPatch(patchFile)) {
+				MessageManager::DisplayMessage("Patch", "ApplyingPatch", FolderUtilities::GetFilename(patchFile.GetFilePath(), true));
+			} else {
+				//Patch failed
+			}
 		}
+		vector<uint8_t> fileData;
+		romFile.ReadFile(fileData);
 
-		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFilename, fileData);
+		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFile.GetFileName(), fileData);
 		if(mapper) {
 			if(_mapper) {
 				//Send notification only if a game was already running and we successfully loaded the new one
 				MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
 			}
 
-			_romFilepath = romFilename;
-			_patchFilename = patchFilename;
-			_archiveFileIndex = archiveFileIndex;
+			_romFilepath = romFile;
+			_patchFilename = patchFile;
 
 			_autoSaveManager.reset(new AutoSaveManager());
 			VideoDecoder::GetInstance()->StopThread();
@@ -128,7 +131,7 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 
 			VideoDecoder::GetInstance()->StartThread();
 
-			FolderUtilities::AddKnownGameFolder(FolderUtilities::GetFolderName(romFilename));
+			FolderUtilities::AddKnownGameFolder(romFile.GetFolderPath());
 
 			string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
 			string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
@@ -140,35 +143,21 @@ bool Console::Initialize(string romFilename, stringstream *filestream, string pa
 		}
 	}
 
-	MessageManager::DisplayMessage("Error", "CouldNotLoadFile", FolderUtilities::GetFilename(romFilename, true));
+	MessageManager::DisplayMessage("Error", "CouldNotLoadFile", romFile.GetFileName());
 	return false;
 }
 
-bool Console::LoadROM(string filepath, stringstream *filestream, int32_t archiveFileIndex, string patchFilepath)
+bool Console::LoadROM(VirtualFile romFile, VirtualFile patchFile)
 {
 	Console::Pause();
-	bool result = Instance->Initialize(filepath, filestream, patchFilepath, archiveFileIndex);
+	bool result = Instance->Initialize(romFile, patchFile);
 	Console::Resume();
 	return result;
 }
 
-bool Console::LoadROM(string romName, uint32_t crc32Hash)
-{
-	HashInfo hashInfo;
-	hashInfo.Crc32Hash = crc32Hash;
-	return Console::LoadROM(romName, hashInfo);
-}
-
-bool Console::LoadROM(string romName, string sha1Hash)
-{
-	HashInfo hashInfo;
-	hashInfo.Sha1Hash = sha1Hash;
-	return Console::LoadROM(romName, hashInfo);
-}
-
 bool Console::LoadROM(string romName, HashInfo hashInfo)
 {
-	string currentRomFilepath = Console::GetROMPath();
+	string currentRomFilepath = Console::GetRomPath();
 	string currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
 	if(!currentRomFilepath.empty()) {
 		HashInfo gameHashInfo = Instance->_mapper->GetHashInfo();
@@ -178,28 +167,27 @@ bool Console::LoadROM(string romName, HashInfo hashInfo)
 		}
 	}
 
-	int32_t archiveFileIndex = -1;
 	for(string folder : FolderUtilities::GetKnownGameFolders()) {
-		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, true, archiveFileIndex);
+		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, true);
 		if(!match.empty()) {
-			return Console::LoadROM(match, nullptr, archiveFileIndex);
+			return Console::LoadROM(match);
 		}
 	}
 
 	//Perform slow CRC32 search for ROM
 	for(string folder : FolderUtilities::GetKnownGameFolders()) {
-		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, false, archiveFileIndex);
+		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, false);
 		if(!match.empty()) {
-			return Console::LoadROM(match, nullptr, archiveFileIndex);
+			return Console::LoadROM(match);
 		}
 	}
 
 	return false;
 }
 
-string Console::GetROMPath()
+string Console::GetRomPath()
 {
-	return Instance->_romFilepath;
+	return static_cast<VirtualFile>(Instance->_romFilepath).GetFilePath();
 }
 
 string Console::GetRomName()
@@ -229,24 +217,14 @@ bool Console::IsChrRam()
 	}
 }
 
-uint32_t Console::GetCrc32()
+HashInfo Console::GetHashInfo()
 {
 	if(Instance->_mapper) {
-		return Instance->_mapper->GetHashInfo().Crc32Hash;
+		return Instance->_mapper->GetHashInfo();
 	} else {
-		return 0;
+		return {};
 	}
 }
-
-uint32_t Console::GetPrgCrc32()
-{
-	if(Instance->_mapper) {
-		return Instance->_mapper->GetPrgCrc32();
-	} else {
-		return 0;
-	}
-}
-
 NesModel Console::GetModel()
 {
 	return Instance->_model;
@@ -255,7 +233,7 @@ NesModel Console::GetModel()
 void Console::PowerCycle()
 {
 	if(Instance->_initialized && !Instance->_romFilepath.empty()) {
-		LoadROM(Instance->_romFilepath, nullptr, Instance->_archiveFileIndex, Instance->_patchFilename);
+		LoadROM(Instance->_romFilepath, Instance->_patchFilename);
 	}
 }
 
@@ -274,7 +252,7 @@ void Console::Reset(bool softReset)
 				Instance->ResetComponents(softReset);
 			} else {
 				//Full reset of all objects to ensure the emulator always starts in the exact same state
-				Instance->Initialize(Instance->_romFilepath);
+				LoadROM(Instance->_romFilepath, Instance->_patchFilename);
 			}
 			Console::Resume();
 		}
@@ -458,7 +436,7 @@ void Console::Run()
 	}
 
 	if(!crashed) {
-		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename, _archiveFileIndex);
+		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename);
 	}
 
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
@@ -641,20 +619,17 @@ HdPackData* Console::GetHdData()
 	return Instance->_hdData.get();
 }
 
-void Console::LoadHdPack(string romFilename, vector<uint8_t> &fileData, string &patchFilename)
+void Console::LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile)
 {
 	_hdData.reset();
 	if(EmulationSettings::CheckFlag(EmulationFlags::UseHdPacks)) {
-		string hdPackFolder = FolderUtilities::CombinePath(FolderUtilities::GetHdPackFolder(), FolderUtilities::GetFilename(romFilename, false));
-		string hdPackDefinitionFile = FolderUtilities::CombinePath(hdPackFolder, "hires.txt");
 		_hdData.reset(new HdPackData());
-		if(!HdPackLoader::LoadHdNesPack(hdPackDefinitionFile, *_hdData.get())) {
+		if(!HdPackLoader::LoadHdNesPack(romFile, *_hdData.get())) {
 			_hdData.reset();
 		} else {
-			string sha1hash = SHA1::GetHash(fileData);
-			auto result = _hdData->PatchesByHash.find(sha1hash);
+			auto result = _hdData->PatchesByHash.find(romFile.GetSha1Hash());
 			if(result != _hdData->PatchesByHash.end()) {
-				patchFilename = FolderUtilities::CombinePath(hdPackFolder, result->second);
+				patchFile = result->second;
 			}
 		}
 	}

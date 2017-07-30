@@ -11,6 +11,7 @@ using System.IO;
 using Mesen.GUI.Config;
 using System.Drawing.Text;
 using System.IO.Compression;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Controls
 {
@@ -37,7 +38,7 @@ namespace Mesen.GUI.Controls
 		{
 			public string FileName { get; set; }
 			public string RomName { get; set; }
-			public string RomPath { get; set; }
+			public ResourcePath RomPath { get; set; }
 			public DateTime Timestamp { get; set; }
 		}
 
@@ -106,7 +107,7 @@ namespace Mesen.GUI.Controls
 					info.Timestamp = new FileInfo(file).LastWriteTime;
 					info.FileName = file;
 
-					if(File.Exists(info.RomPath)) {
+					if(info.RomPath.Exists) {
 						_recentGames.Add(info);
 					}
 				} catch { }

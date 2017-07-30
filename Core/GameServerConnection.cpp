@@ -38,7 +38,7 @@ GameServerConnection::~GameServerConnection()
 void GameServerConnection::SendGameInformation()
 {
 	Console::Pause();
-	GameInformationMessage gameInfo(Console::GetRomName(), Console::GetCrc32(), _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
+	GameInformationMessage gameInfo(Console::GetRomName(), Console::GetHashInfo().Crc32Hash, _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
 	SendNetMessage(gameInfo);
 	SaveStateMessage saveState;
 	SendNetMessage(saveState);

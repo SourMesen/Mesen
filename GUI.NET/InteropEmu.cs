@@ -26,7 +26,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRunning();
 
-		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, Int32 archiveFileIndex, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string patchFile);
+		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string patchFile);
 		[DllImport(DLLPath)] public static extern void AddKnownGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string folder);
 		[DllImport(DLLPath)] public static extern void LoadRecentGame([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath, [MarshalAs(UnmanagedType.I1)]bool resetGame);
 
@@ -553,10 +553,10 @@ namespace Mesen.GUI
 			return header;
 		}
 
-		public static RomInfo GetRomInfo(string filename = "", Int32 archiveFileIndex = -1)
+		public static RomInfo GetRomInfo(string filename = "")
 		{
 			InteropRomInfo romInfo = new InteropRomInfo();
-			InteropEmu.GetRomInfoWrapper(ref romInfo, filename, archiveFileIndex);
+			InteropEmu.GetRomInfoWrapper(ref romInfo, filename);
 			return new RomInfo(romInfo);
 		}
 

@@ -116,9 +116,6 @@
     <ClInclude Include="SZReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ArchiveReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlatformUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -156,6 +153,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sha1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArchiveReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

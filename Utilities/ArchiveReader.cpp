@@ -4,6 +4,8 @@
 #include <sstream>
 #include <algorithm>
 #include "FolderUtilities.h"
+#include "ZipReader.h"
+#include "SZReader.h"
 
 ArchiveReader::~ArchiveReader()
 {
@@ -26,13 +28,17 @@ std::stringstream ArchiveReader::GetStream(string filename)
 
 vector<string> ArchiveReader::GetFileList(std::initializer_list<string> extensions)
 {
+	if(extensions.size() == 0) {
+		return InternalGetFileList();
+	}
+
 	vector<string> filenames;
 	for(string filename : InternalGetFileList()) {
 		string lcFilename = filename;
 		std::transform(lcFilename.begin(), lcFilename.end(), lcFilename.begin(), ::tolower);
-		if(filename.length() > 4) {
-			for(string ext : extensions) {
-				if(lcFilename.substr(lcFilename.length() - 4, 4).compare(ext) == 0) {
+		for(string ext : extensions) {
+			if(lcFilename.size() >= ext.size()) {
+				if(lcFilename.substr(lcFilename.length() - ext.size(), ext.size()).compare(ext) == 0) {
 					filenames.push_back(filename);
 				}
 			}
@@ -76,4 +82,27 @@ bool ArchiveReader::LoadArchive(string filename)
 		in.close();
 	}
 	return false;
+}
+
+shared_ptr<ArchiveReader> ArchiveReader::GetReader(string filepath)
+{
+	ifstream in(filepath, std::ios::in | std::ios::binary);
+	if(in) {
+		uint8_t header[2] = { 0,0 };
+		in.read((char*)header, 2);
+		in.close();
+
+		shared_ptr<ArchiveReader> reader;
+		if(memcmp(header, "PK", 2) == 0) {
+			reader.reset(new ZipReader());
+		} else if(memcmp(header, "7z", 2) == 0) {
+			reader.reset(new SZReader());
+		}
+
+		if(reader) {
+			reader->LoadArchive(filepath);
+			return reader;
+		}
+	}
+	return nullptr;
 }

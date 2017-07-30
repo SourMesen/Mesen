@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include <atomic>
 #include "../Utilities/SimpleLock.h"
+#include "../Utilities/VirtualFile.h"
 #include "RomData.h"
 
 class Debugger;
@@ -46,7 +47,6 @@ class Console
 
 		string _romFilepath;
 		string _patchFilename;
-		int32_t _archiveFileIndex;
 
 		bool _stop = false;
 
@@ -57,10 +57,10 @@ class Console
 		
 		bool _initialized = false;
 
-		void LoadHdPack(string romFilename, vector<uint8_t> &fileData, string &patchFilename);
+		void LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile);
 
 		void ResetComponents(bool softReset);
-		bool Initialize(string filename, stringstream *filestream = nullptr, string patchFilename = "", int32_t archiveFileIndex = -1);
+		bool Initialize(VirtualFile &romFile, VirtualFile &patchFile);
 		void UpdateNesModel(bool sendNotification);
 		double GetFrameDelay();
 
@@ -86,16 +86,13 @@ class Console
 		static void LoadState(istream &loadStream);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
-		static bool LoadROM(string filepath, stringstream *filestream = nullptr, int32_t archiveFileIndex = -1, string patchFilepath = "");
+		static bool LoadROM(VirtualFile romFile, VirtualFile patchFile = {});
 		static bool LoadROM(string romName, HashInfo hashInfo);
-		static bool LoadROM(string romName, uint32_t crc32Hash);
-		static bool LoadROM(string romName, string sha1Hash);
-		static string GetROMPath();
+		static string GetRomPath();
 		static string GetRomName();
 		static bool IsChrRam();
 		static RomFormat GetRomFormat();
-		static uint32_t GetCrc32();
-		static uint32_t GetPrgCrc32();
+		static HashInfo GetHashInfo();
 		static NesModel GetModel();
 
 		static uint32_t GetLagCounter();

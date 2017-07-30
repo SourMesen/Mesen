@@ -191,7 +191,7 @@ public:
 
 		uint8_t value = 0;
 		
-		uint32_t crc = Console::GetPrgCrc32();
+		uint32_t crc = Console::GetHashInfo().PrgCrc32Hash;
 		
 		switch(addr) {
 			case 0x4016:

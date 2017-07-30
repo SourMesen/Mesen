@@ -359,6 +359,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UpsPatcher.h" />
     <ClInclude Include="UTF8Util.h" />
+    <ClInclude Include="VirtualFile.h" />
     <ClInclude Include="xBRZ\config.h" />
     <ClInclude Include="xBRZ\xbrz.h" />
     <ClInclude Include="ZipReader.h" />

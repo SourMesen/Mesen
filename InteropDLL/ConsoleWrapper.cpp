@@ -15,7 +15,6 @@
 #include "../Core/FDS.h"
 #include "../Core/VsControlManager.h"
 #include "../Core/SoundMixer.h"
-#include "../Core/FileLoader.h"
 #include "../Core/RomLoader.h"
 #include "../Core/NsfMapper.h"
 #include "../Core/IRenderingDevice.h"
@@ -116,14 +115,17 @@ namespace InteropEmu {
 
 		DllExport bool __stdcall IsRunning() { return Console::IsRunning(); }
 
-		DllExport void __stdcall LoadROM(char* filename, int32_t archiveFileIndex, char* patchFile) { Console::LoadROM(filename, nullptr, archiveFileIndex, patchFile); }
+		DllExport void __stdcall LoadROM(char* filename, char* patchFile) { Console::LoadROM((string)filename, (string)patchFile); }
 		DllExport void __stdcall AddKnownGameFolder(char* folder) { FolderUtilities::AddKnownGameFolder(folder); }
 		DllExport void __stdcall LoadRecentGame(char* filepath, bool resetGame) { SaveStateManager::LoadRecentGame(filepath, resetGame); }
 
 		DllExport const char* __stdcall GetArchiveRomList(char* filename) { 
 			std::ostringstream out;
-			for(string romName : FileLoader::GetArchiveRomList(filename)) {
-				out << romName << "[!|!]";
+			shared_ptr<ArchiveReader> reader = ArchiveReader::GetReader(filename);
+			if(reader) {
+				for(string romName : reader->GetFileList({ ".nes", ".fds", ".nsf", ".nsfe", "*.unf" })) {
+					out << romName << "[!|!]";
+				}
 			}
 			_returnString = out.str();
 			return _returnString.c_str();
@@ -174,23 +176,25 @@ namespace InteropEmu {
 		DllExport void __stdcall Stop()
 		{
 			if(Console::GetInstance()) {
+				GameServer::StopServer();
+				GameClient::Disconnect();
 				Console::GetInstance()->Stop();
 			}
 		}
 
-		DllExport const void __stdcall GetRomInfo(RomInfo &romInfo, char* filename, int32_t archiveFileIndex) 
+		DllExport const void __stdcall GetRomInfo(RomInfo &romInfo, char* filename) 
 		{
 			string romPath = filename;
 			if(romPath.empty()) {
 				_returnString = Console::GetRomName();
 				romInfo.RomName = _returnString.c_str();
-				romInfo.Crc32 = Console::GetCrc32();
-				romInfo.PrgCrc32 = Console::GetPrgCrc32();
+				romInfo.Crc32 = Console::GetHashInfo().Crc32Hash;
+				romInfo.PrgCrc32 = Console::GetHashInfo().PrgCrc32Hash;
 				romInfo.Format = Console::GetRomFormat();
 				romInfo.IsChrRam = Console::IsChrRam();
 			} else {
 				RomLoader romLoader;
-				if(romLoader.LoadFile(filename, archiveFileIndex)) {
+				if(romLoader.LoadFile(romPath)) {
 					RomData romData = romLoader.GetRomData();
 
 					_returnString = romData.RomName;

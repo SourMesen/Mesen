@@ -1192,9 +1192,6 @@
     <ClInclude Include="HdPackLoader.h">
       <Filter>VideoDecoder\HD</Filter>
     </ClInclude>
-    <ClInclude Include="FileLoader.h">
-      <Filter>Nes\RomLoader</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1427,9 +1424,6 @@
     </ClCompile>
     <ClCompile Include="HdNesPack.cpp">
       <Filter>VideoDecoder\HD</Filter>
-    </ClCompile>
-    <ClCompile Include="FileLoader.cpp">
-      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

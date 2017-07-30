@@ -174,7 +174,7 @@ bool MesenMovie::Save()
 	header.MesenVersion = EmulationSettings::GetMesenVersion();
 	header.MovieFormatVersion = MesenMovie::MovieFormatVersion;
 	header.SaveStateFormatVersion = SaveStateManager::FileFormatVersion;
-	header.RomCrc32 = Console::GetCrc32();
+	header.RomCrc32 = Console::GetHashInfo().Crc32Hash;
 	header.Region = (uint32_t)Console::GetModel();
 	header.ConsoleType = (uint32_t)EmulationSettings::GetConsoleType();
 	header.ExpansionDevice = (uint32_t)EmulationSettings::GetExpansionDevice();
@@ -336,9 +336,11 @@ bool MesenMovie::Load(std::stringstream &file, bool autoLoadRom)
 	bool loadedGame = true;
 	if(autoLoadRom) {
 		string currentRom = Console::GetRomName();
-		if(currentRom.empty() || header.RomCrc32 != Console::GetCrc32()) {
+		if(currentRom.empty() || header.RomCrc32 != Console::GetHashInfo().Crc32Hash) {
 			//Loaded game isn't the same as the game used for the movie, attempt to load the correct game
-			loadedGame = Console::LoadROM(romFilename, header.RomCrc32);
+			HashInfo hashInfo;
+			hashInfo.Crc32Hash = header.RomCrc32;
+			loadedGame = Console::LoadROM(romFilename, hashInfo);
 		} else {
 			Console::Reset(false);
 		}

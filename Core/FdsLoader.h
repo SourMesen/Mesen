@@ -152,7 +152,10 @@ public:
 	{
 		//Apply save data (saved as an IPS file), if found
 		string fdsSaveFilepath = FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), FolderUtilities::GetFilename(filename, false) + ".ips");
-		romFile = IpsPatcher::PatchBuffer(fdsSaveFilepath, romFile);
+		vector<uint8_t> patchedData;
+		if(IpsPatcher::PatchBuffer(fdsSaveFilepath, romFile, patchedData)) {
+			romFile = patchedData;
+		}
 
 		RomData romData;
 
