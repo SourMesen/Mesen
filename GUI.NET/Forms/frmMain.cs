@@ -40,6 +40,7 @@ namespace Mesen.GUI.Forms
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
 		private bool _removeFocus = false;
+		private bool _showUpgradeMessage = false;
 
 		private string[] _commandLineArgs;
 		private bool _noAudio = false;
@@ -126,6 +127,8 @@ namespace Mesen.GUI.Forms
 			mnuTests.Visible = false;
 #endif
 
+			PerformUpgrade();
+
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
@@ -176,7 +179,10 @@ namespace Mesen.GUI.Forms
 		{
 			base.OnShown(e);
 
-			PerformUpgrade();
+			if(_showUpgradeMessage) {
+				MesenMsgBox.Show("UpgradeSuccess", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				_showUpgradeMessage = false;
+			}
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -250,9 +256,8 @@ namespace Mesen.GUI.Forms
 
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();
 				ConfigManager.ApplyChanges();
-				ConfigManager.Config.ApplyConfig();
 
-				MesenMsgBox.Show("UpgradeSuccess", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				_showUpgradeMessage = true;
 			}
 		}
 
