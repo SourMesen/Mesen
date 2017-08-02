@@ -92,17 +92,6 @@ void TraceLogger::GetStatusFlag(string &output, uint8_t ps)
 
 void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, shared_ptr<DisassemblyInfo> &disassemblyInfo, bool firstLine)
 {
-	//Roughly adjust PPU cycle & scanline to take into account the PPU already ran 3 cycles by the time we get here
-	short ppuCycle = (short)ppuState.Cycle - 3;
-	short scanline = (short)ppuState.Scanline;
-	if(ppuCycle < 0) {
-		ppuCycle = 341 + ppuCycle;
-		scanline--;
-		if(scanline < -1) {
-			scanline = Console::GetModel() == NesModel::NTSC ? 260 : 310;
-		}
-	}
-
 	if(!firstLine) {
 		output += "\n";
 	}
@@ -139,12 +128,12 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 	}
 
 	if(_options.ShowPpuCycles) {
-		string str = std::to_string(ppuCycle);
+		string str = std::to_string(ppuState.Cycle);
 		output += " CYC:" + std::string(3 - str.size(), ' ') + str;
 	}
 
 	if(_options.ShowPpuScanline) {
-		string str = std::to_string(scanline);
+		string str = std::to_string(ppuState.Scanline);
 		output += " SL:" + std::string(3 - str.size(), ' ') + str;
 	}
 
