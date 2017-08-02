@@ -14,21 +14,39 @@ namespace Mesen.GUI
 	public class CursorManager
 	{
 		private static bool _cursorHidden = false;
-		private static Timer _tmrMouse = new Timer();
+		private static Point _lastPosition;
+		private static Timer _tmrHideMouse = new Timer();
+		private static Timer _tmrCheckMouseMove = new Timer();
 
 		static CursorManager()
 		{
-			_tmrMouse.Interval = 3000;
-			_tmrMouse.Tick += tmrMouse_Tick;
+			_tmrHideMouse.Interval = 3000;
+			_tmrHideMouse.Tick += tmrHideMouse_Tick;
+			_tmrCheckMouseMove.Interval = 500;
+			_tmrCheckMouseMove.Tick += tmrCheckMouseMove_Tick;
+			_tmrCheckMouseMove.Start();
 		}
 
-		private static void tmrMouse_Tick(object sender, EventArgs e)
+		private static void tmrCheckMouseMove_Tick(object sender, EventArgs e)
+		{
+			//Rarely the cursor becomes hidden despite leaving the window or moving
+			//Have not been able to find a reliable way to reproduce it yet
+			//This is a patch to prevent that bug from having any negative impact
+			if(_lastPosition != Cursor.Position) {
+				if(!InteropEmu.HasArkanoidPaddle()) {
+					ShowMouse();
+				}
+				_lastPosition = Cursor.Position;
+			}
+		}
+
+		private static void tmrHideMouse_Tick(object sender, EventArgs e)
 		{
 			if(InteropEmu.IsRunning() && !InteropEmu.IsPaused()) {
 				HideMouse();
 			} else {
 				ShowMouse();
-				_tmrMouse.Stop();
+				_tmrHideMouse.Stop();
 			}
 		}
 
@@ -61,19 +79,19 @@ namespace Mesen.GUI
 				HideMouse();
 			}
 
-			_tmrMouse.Stop();
+			_tmrHideMouse.Stop();
 
 			if(!CursorManager.NeedMouseIcon) {
 				ctrl.Cursor = Cursors.Default;
 
 				//Only hide mouse if no zapper (otherwise this could be pretty annoying)
-				_tmrMouse.Start();
+				_tmrHideMouse.Start();
 			}
 		}
 
 		public static void OnMouseLeave()
 		{
-			_tmrMouse.Stop();
+			_tmrHideMouse.Stop();
 			ShowMouse();
 		}
 	}
