@@ -606,7 +606,7 @@
     <Message ID="NsfUnknownField">[desconhecido]</Message>
     <Message ID="CouldNotInstallRuntime">O pacote Visual C++ Redistributable para Visual Studio 2015 não foi instalado corretamente.</Message>
     <Message ID="EmptyState">&lt;Não há State&gt;</Message>
-    <Message ID="ErrorWhileCheckingUpdates">Houve um erro na busca por atualizações.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
+    <Message ID="ErrorWhileCheckingUpdates">Houve um erro na busca por atualizações. Verifique sua conexão com a internet e tente de novo.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
     <Message ID="AutoUpdateDisabledMessage">Automatic updates are not enabled on this build - please download the latest version of the code and recompile Mesen to get the latest updates.</Message>
     <Message ID="FdsBiosNotFound">Não foi encontrada uma bios para FDS. É preciso de uma bios para jogos do FDS.&#xA;&#xA;Deseja selecionar uma bios manualmente?</Message>
     <Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>

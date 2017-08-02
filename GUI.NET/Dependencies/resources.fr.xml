@@ -621,7 +621,7 @@
 
     <Message ID="CouldNotInstallRuntime">Le package Redistribuable Visual C++ pour Visual Studio 2015 n'a pas été installé correctement.</Message>
     <Message ID="EmptyState">&lt;aucune sauvegarde&gt;</Message>
-    <Message ID="ErrorWhileCheckingUpdates">Une erreur s'est produite lors de la recherche de mises-à-jour.&#xA;&#xA;Détails de l'erreur :&#xA;{0}</Message>
+    <Message ID="ErrorWhileCheckingUpdates">Une erreur s'est produite lors de la recherche de mises-à-jour. Vérifier votre connexion internet et essayez à nouveau.&#xA;&#xA;Détails de l'erreur :&#xA;{0}</Message>
     <Message ID="AutoUpdateDisabledMessage">Les mises-à-jour automatiques ne sont pas disponibles avec votre build - s.v.p télécharger la dernière version du code et recompiler Mesen pour avoir accès à la version la plus récente.</Message>
     <Message ID="FdsBiosNotFound">Un bios pour le FDS n'a pas été trouvé. Le bios est requis pour jouer à des jeux de FDS.&#xA;&#xA;Voulez-vous sélectionnez un bios maintenant?</Message>
     <Message ID="FdsDiskSide">Disque {0} Côté {1}</Message>

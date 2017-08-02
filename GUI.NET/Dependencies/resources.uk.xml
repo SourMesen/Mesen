@@ -611,7 +611,7 @@
 
     <Message ID="CouldNotInstallRuntime">The Visual Studio Runtime не встановлений.</Message>
     <Message ID="EmptyState">&lt;пусто&gt;</Message>
-    <Message ID="ErrorWhileCheckingUpdates">Не вдалося перевірити оновлення.&#xA;&#xA;Детально:&#xA;{0}</Message>
+    <Message ID="ErrorWhileCheckingUpdates">Не вдалося перевірити оновлення. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
     <Message ID="AutoUpdateDisabledMessage">Automatic updates are not enabled on this build - please download the latest version of the code and recompile Mesen to get the latest updates.</Message>
     <Message ID="FdsBiosNotFound">FDS BIOS не знайдений. BIOS необхідний для запуску FDS игр.&#xA;&#xA;Вибрати BIOS зараз?</Message>
     <Message ID="FdsDiskSide">Диск {0} Сторона {1}</Message>

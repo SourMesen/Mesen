@@ -604,7 +604,7 @@
 
     <Message ID="CouldNotInstallRuntime">Microsoft Visual Studio 2015のVisual C++再頒布可能パッケージはインストールできませんでした。</Message>
     <Message ID="EmptyState">&lt;なし&gt;</Message>
-    <Message ID="ErrorWhileCheckingUpdates">アップデートを確認する時にエラーが発生しました。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
+    <Message ID="ErrorWhileCheckingUpdates">アップデートを確認する時にエラーが発生しました。ネット接続を確認してから、再試行してください。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
     <Message ID="AutoUpdateDisabledMessage">このビルドでは自動更新は出来ません。最新版を使うためにはコードの最新版をダウンロードしてビルドしてください。</Message>
     <Message ID="FdsBiosNotFound">ファミコンディスクシステム(FDS)のゲームをロードするためにFDSのBIOSファイルは必要です。&#xA;&#xA;FDSのBIOSファイルを選びますか？</Message>
     <Message ID="FdsDiskSide">ディスク{0} {1}面</Message>
