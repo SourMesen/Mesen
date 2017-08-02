@@ -140,6 +140,7 @@ void RewindManager::ForceStop()
 		_currentHistory = _historyBackup.front();
 		_historyBackup.clear();
 		_rewindState = RewindState::Stopped;
+		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 	}
 }
 
