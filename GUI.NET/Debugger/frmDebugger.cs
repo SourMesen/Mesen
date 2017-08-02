@@ -434,7 +434,13 @@ namespace Mesen.GUI.Debugger
 			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugStepOver();
 		}
-		
+
+		private void mnuStepBack_Click(object sender, EventArgs e)
+		{
+			ctrlConsoleStatus.ApplyChanges();
+			InteropEmu.DebugStepBack();
+		}
+
 		private void mnuRunPpuCycle_Click(object sender, EventArgs e)
 		{
 			ctrlConsoleStatus.ApplyChanges();

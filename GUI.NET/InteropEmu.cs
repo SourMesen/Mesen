@@ -190,6 +190,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
 		[DllImport(DLLPath)] public static extern void DebugStepOver();
+		[DllImport(DLLPath)] public static extern void DebugStepBack();
 		[DllImport(DLLPath)] public static extern void DebugRun();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsExecutionStopped();
 		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeAddress(UInt32 absoluteAddr, AddressType type);

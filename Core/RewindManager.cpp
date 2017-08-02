@@ -45,25 +45,33 @@ void RewindManager::ProcessNotification(ConsoleNotificationType type, void * par
 {
 	if(type == ConsoleNotificationType::PpuFrameDone) {
 		if(EmulationSettings::GetRewindBufferSize() > 0) {
-			if(_rewindState >= RewindState::Starting) {
-				_currentHistory.FrameCount--;
-			} else if(_rewindState == RewindState::Stopping) {
-				_framesToFastForward--;
-				_currentHistory.FrameCount++;
-				if(_framesToFastForward == 0) {
-					for(int i = 0; i < 4; i++) {
-						size_t numberToRemove = _currentHistory.InputLogs[i].size();
-						_currentHistory.InputLogs[i] = _historyBackup.front().InputLogs[i];
-						for(size_t j = 0; j < numberToRemove; j++) {
-							_currentHistory.InputLogs[i].pop_back();
+			switch(_rewindState) {
+				case RewindState::Starting:
+				case RewindState::Started:
+				case RewindState::Debugging:
+					_currentHistory.FrameCount--;
+					break;
+
+				case RewindState::Stopping:
+					_framesToFastForward--;
+					_currentHistory.FrameCount++;
+					if(_framesToFastForward == 0) {
+						for(int i = 0; i < 4; i++) {
+							size_t numberToRemove = _currentHistory.InputLogs[i].size();
+							_currentHistory.InputLogs[i] = _historyBackup.front().InputLogs[i];
+							for(size_t j = 0; j < numberToRemove; j++) {
+								_currentHistory.InputLogs[i].pop_back();
+							}
 						}
+						_historyBackup.clear();
+						_rewindState = RewindState::Stopped;
+						EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 					}
-					_historyBackup.clear();
-					_rewindState = RewindState::Stopped;
-					EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
-				}
-			} else {
-				_currentHistory.FrameCount++;
+					break;
+			
+				case RewindState::Stopped:
+					_currentHistory.FrameCount++;
+					break;
 			}
 		}
 	}
@@ -102,12 +110,12 @@ void RewindManager::PopHistory()
 	}
 }
 
-void RewindManager::Start()
+void RewindManager::Start(bool forDebugger)
 {
 	if(_rewindState == RewindState::Stopped && EmulationSettings::GetRewindBufferSize() > 0) {
 		Console::Pause();
 
-		_rewindState = RewindState::Starting;
+		_rewindState = forDebugger ? RewindState::Debugging : RewindState::Starting;
 		_videoHistoryBuilder.clear();
 		_videoHistory.clear();
 		_audioHistoryBuilder.clear();
@@ -119,6 +127,19 @@ void RewindManager::Start()
 		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 
 		Console::Resume();
+	}
+}
+
+void RewindManager::ForceStop()
+{
+	if(_rewindState != RewindState::Stopped) {
+		while(_historyBackup.size() > 1) {
+			_history.push_back(_historyBackup.front());
+			_historyBackup.pop_front();
+		}
+		_currentHistory = _historyBackup.front();
+		_historyBackup.clear();
+		_rewindState = RewindState::Stopped;
 	}
 }
 
@@ -174,7 +195,11 @@ void RewindManager::ProcessEndOfFrame()
 {
 	if(_rewindState >= RewindState::Starting) {
 		if(_currentHistory.FrameCount <= 0) {
-			PopHistory();
+			if(_rewindState == RewindState::Debugging) {
+				Stop();
+			} else {
+				PopHistory();
+			}
 		}
 	} else if(_currentHistory.FrameCount >= RewindManager::BufferSize) {
 		AddHistoryBlock();
@@ -183,7 +208,7 @@ void RewindManager::ProcessEndOfFrame()
 
 void RewindManager::ProcessFrame(void * frameBuffer, uint32_t width, uint32_t height)
 {
-	if(_rewindState >= RewindState::Starting) {
+	if(_rewindState == RewindState::Starting || _rewindState == RewindState::Started) {
 		_videoHistoryBuilder.push_back(vector<uint32_t>((uint32_t*)frameBuffer, (uint32_t*)frameBuffer + width*height));
 
 		if(_videoHistoryBuilder.size() == _historyBackup.front().FrameCount) {
@@ -201,7 +226,7 @@ void RewindManager::ProcessFrame(void * frameBuffer, uint32_t width, uint32_t he
 				_videoHistory.pop_back();
 			}
 		}
-	} else if(_rewindState == RewindState::Stopping) {
+	} else if(_rewindState == RewindState::Stopping || _rewindState == RewindState::Debugging) {
 		//Display nothing while resyncing
 	} else {
 		VideoRenderer::GetInstance()->UpdateFrame(frameBuffer, width, height);
@@ -210,7 +235,7 @@ void RewindManager::ProcessFrame(void * frameBuffer, uint32_t width, uint32_t he
 
 bool RewindManager::ProcessAudio(int16_t * soundBuffer, uint32_t sampleCount, uint32_t sampleRate)
 {
-	if(_rewindState >= RewindState::Starting) {
+	if(_rewindState == RewindState::Starting || _rewindState == RewindState::Started) {
 		_audioHistoryBuilder.insert(_audioHistoryBuilder.end(), soundBuffer, soundBuffer + sampleCount * 2);
 
 		if(_rewindState == RewindState::Started && _audioHistory.size() > sampleCount * 2) {
@@ -224,7 +249,7 @@ bool RewindManager::ProcessAudio(int16_t * soundBuffer, uint32_t sampleCount, ui
 			//Mute while we prepare to rewind
 			return false;
 		}
-	} else if(_rewindState == RewindState::Stopping) {
+	} else if(_rewindState == RewindState::Stopping || _rewindState == RewindState::Debugging) {
 		//Mute while we resync
 		return false;
 	} else {
@@ -250,23 +275,32 @@ uint8_t RewindManager::GetInput(uint8_t port)
 	}
 }
 
-void RewindManager::StartRewinding()
+void RewindManager::StartRewinding(bool forDebugger)
 {
 	if(_instance) {
-		_instance->Start();
+		_instance->Start(forDebugger);
 	}
 }
 
-void RewindManager::StopRewinding()
+void RewindManager::StopRewinding(bool forDebugger)
 {
 	if(_instance) {
-		_instance->Stop();
+		if(forDebugger) {
+			_instance->ForceStop();
+		} else {
+			_instance->Stop();
+		}
 	}
 }
 
 bool RewindManager::IsRewinding()
 {
 	return _instance ? _instance->_rewindState != RewindState::Stopped : false;
+}
+
+bool RewindManager::IsStepBack()
+{
+	return _instance ? _instance->_rewindState == RewindState::Debugging : false;
 }
 
 void RewindManager::RewindSeconds(uint32_t seconds)

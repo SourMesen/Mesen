@@ -1007,7 +1007,9 @@ void PPU::SendFrame()
  	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
 
 	if(RewindManager::IsRewinding()) {
-		VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer);
+		if(!RewindManager::IsStepBack()) {
+			VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer);
+		}
 	} else {
 		VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
 	}

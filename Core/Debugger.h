@@ -99,6 +99,12 @@ private:
 	uint16_t _ppuScrollX;
 	uint16_t _ppuScrollY;
 
+	int32_t _prevInstructionCycle;
+	int32_t _curInstructionCycle;
+	int32_t _runToCycle;
+	bool _needRewind;
+	vector<stringstream> _rewindCache;
+
 private:
 	void UpdateBreakpoints();
 
@@ -140,6 +146,7 @@ public:
 	void StepCycles(uint32_t cycleCount = 1);
 	void StepOver();
 	void StepOut();
+	void StepBack();
 	void Run();
 
 	bool LoadCdlFile(string cdlFilepath);

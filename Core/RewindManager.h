@@ -9,7 +9,8 @@ enum class RewindState
 	Stopped = 0,
 	Stopping = 1,
 	Starting = 2,
-	Started = 3
+	Started = 3,
+	Debugging = 4
 };
 
 class RewindManager : public INotificationListener
@@ -32,8 +33,9 @@ private:
 	void AddHistoryBlock();
 	void PopHistory();
 
-	void Start();
+	void Start(bool forDebugger);
 	void Stop();
+	void ForceStop();
 
 	void ProcessFrame(void *frameBuffer, uint32_t width, uint32_t height);
 	bool ProcessAudio(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate);
@@ -50,9 +52,10 @@ public:
 	static void RecordInput(uint8_t port, uint8_t input);
 	static uint8_t GetInput(uint8_t port);
 
-	static void StartRewinding();
-	static void StopRewinding();
+	static void StartRewinding(bool forDebugger = false);
+	static void StopRewinding(bool forDebugger = false);
 	static bool IsRewinding();
+	static bool IsStepBack();
 	static void RewindSeconds(uint32_t seconds);
 
 	static void SendFrame(void *frameBuffer, uint32_t width, uint32_t height);

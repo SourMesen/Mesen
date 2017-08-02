@@ -20,6 +20,7 @@
 #include "DisassemblyInfo.h"
 #include "PPU.h"
 #include "MemoryManager.h"
+#include "RewindManager.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
@@ -66,6 +67,11 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_ppuViewerCycle = 0;
 
 	_flags = 0;
+
+	_runToCycle = 0;
+	_prevInstructionCycle = 0;
+	_curInstructionCycle = 0;
+	_needRewind = false;
 
 	_bpUpdateNeeded = false;
 	_executionStopped = false;
@@ -233,6 +239,11 @@ void Debugger::UpdateBreakpoints()
 
 bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value)
 {
+	if(_runToCycle != 0) {
+		//Disable all breakpoints while stepping backwards
+		return false;
+	}
+
 	UpdateBreakpoints();
 
 	uint32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
@@ -350,16 +361,38 @@ void Debugger::PrivateProcessPpuCycle()
 
 bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
 {
-	if(type == MemoryOperationType::ExecOpCode && _nextReadAddr != -1) {
-		//SetNextStatement (either from manual action or code runner)
-		if(addr < 0x3000 || addr >= 0x4000) {
-			_returnToAddress = addr;
+	if(type == MemoryOperationType::ExecOpCode) {
+		if(_runToCycle == 0) {
+			_rewindCache.clear();
 		}
 
-		addr = _nextReadAddr;
-		value = _memoryManager->DebugRead(addr, false);
-		_cpu->SetDebugPC(addr);
-		_nextReadAddr = -1;
+		if(_nextReadAddr != -1) {
+			//SetNextStatement (either from manual action or code runner)
+			if(addr < 0x3000 || addr >= 0x4000) {
+				_returnToAddress = addr;
+			}
+
+			addr = _nextReadAddr;
+			value = _memoryManager->DebugRead(addr, false);
+			_cpu->SetDebugPC(addr);
+			_nextReadAddr = -1;
+		} else if(_needRewind) {
+			//Step back - Need to load a state, and then alter the current opcode based on the new program counter
+			if(!_rewindCache.empty()) {
+				Console::LoadState(_rewindCache.back());
+				_rewindCache.pop_back();
+				
+				//This state is for the instruction we want to stop on, break here.
+				_runToCycle = 0;
+				Step(1);
+			} else {
+				RewindManager::StartRewinding(true);
+			}
+			addr = _cpu->GetState().PC;
+			value = _memoryManager->DebugRead(addr, false);
+			_cpu->SetDebugPC(addr);
+			_needRewind = false;
+		}
 	}
 
 	_currentReadAddr = &addr;
@@ -389,6 +422,9 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	}
 
 	if(type == MemoryOperationType::ExecOpCode) {
+		_prevInstructionCycle = _curInstructionCycle;
+		_curInstructionCycle = CPU::GetCycleCount();
+
 		bool isSubEntryPoint = _lastInstruction == 0x20; //Previous instruction was a JSR
 		if(absoluteAddr >= 0) {
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
@@ -408,6 +444,18 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			Step(1);
 		} else if(CheckFlag(DebuggerFlags::BreakOnUnofficialOpCode) && _disassembler->IsUnofficialOpCode(value)) {
 			Step(1);
+		} 
+
+		if(_runToCycle != 0) {
+			if(CPU::GetCycleCount() >= _runToCycle) {
+				//Step back operation is done, revert RewindManager's state & break debugger
+				RewindManager::StopRewinding(true);
+				_runToCycle = 0;
+				Step(1);
+			} else if(_runToCycle - CPU::GetCycleCount() < 100) {
+				_rewindCache.push_back(stringstream());
+				Console::SaveState(_rewindCache.back());
+			}
 		}
 
 		_lastInstruction = value;
@@ -420,7 +468,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		}
 
 		GetState(&_debugState, false);
-	
+
 		shared_ptr<DisassemblyInfo> disassemblyInfo;
 		if(_codeRunner && _codeRunner->IsRunning() && addr >= 0x3000 && addr < 0x4000) {
 			disassemblyInfo = _codeRunner->GetDisassemblyInfo(addr);
@@ -566,6 +614,15 @@ void Debugger::StepOver()
 	} else {
 		//Except for JSR & BRK, StepOver behaves the same as StepTnto
 		Step(1);
+	}
+}
+
+void Debugger::StepBack()
+{
+	if(_runToCycle == 0) {
+		_runToCycle = _prevInstructionCycle;
+		_needRewind = true;
+		Run();
 	}
 }
 
