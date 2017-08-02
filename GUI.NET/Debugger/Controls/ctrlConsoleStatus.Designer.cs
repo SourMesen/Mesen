@@ -1094,6 +1094,7 @@
 			this.txtCycleCount.Name = "txtCycleCount";
 			this.txtCycleCount.Size = new System.Drawing.Size(77, 20);
 			this.txtCycleCount.TabIndex = 9;
+			this.txtCycleCount.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// tableLayoutPanel10
 			// 
@@ -1150,7 +1151,7 @@
             this.mnuGoToInitHandler,
             this.mnuGoToPlayHandler});
 			this.contextGoTo.Name = "contextGoTo";
-			this.contextGoTo.Size = new System.Drawing.Size(153, 136);
+			this.contextGoTo.Size = new System.Drawing.Size(148, 114);
 			this.contextGoTo.Opening += new System.ComponentModel.CancelEventHandler(this.contextGoTo_Opening);
 			// 
 			// mnuGoToIrqHandler
@@ -1177,14 +1178,14 @@
 			// mnuGoToInitHandler
 			// 
 			this.mnuGoToInitHandler.Name = "mnuGoToInitHandler";
-			this.mnuGoToInitHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToInitHandler.Size = new System.Drawing.Size(147, 22);
 			this.mnuGoToInitHandler.Text = "Init Handler";
 			this.mnuGoToInitHandler.Click += new System.EventHandler(this.mnuGoToInitHandler_Click);
 			// 
 			// mnuGoToPlayHandler
 			// 
 			this.mnuGoToPlayHandler.Name = "mnuGoToPlayHandler";
-			this.mnuGoToPlayHandler.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToPlayHandler.Size = new System.Drawing.Size(147, 22);
 			this.mnuGoToPlayHandler.Text = "Play Handler";
 			this.mnuGoToPlayHandler.Click += new System.EventHandler(this.mnuGoToPlayHandler_Click);
 			// 

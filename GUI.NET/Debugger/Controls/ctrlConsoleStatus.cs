@@ -44,7 +44,7 @@ namespace Mesen.GUI.Debugger
 			_cpuBinder.AddBinding("PC", txtPC);
 			_cpuBinder.AddBinding("SP", txtSP);
 			_cpuBinder.AddBinding("PS", txtStatus);
-			_cpuBinder.AddBinding("CycleCount", txtCycleCount);
+			_cpuBinder.AddBinding("CycleCount", txtCycleCount, eNumberFormat.Decimal);
 			_cpuBinder.AddBinding("NMIFlag", chkNMI);
 			
 			_ppuStatusBinder.AddBinding("VerticalBlank", chkVerticalBlank);

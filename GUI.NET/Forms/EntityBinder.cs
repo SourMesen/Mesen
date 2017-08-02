@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,6 +14,7 @@ namespace Mesen.GUI.Forms
 	public class EntityBinder
 	{
 		private Dictionary<string, Control> _bindings = new Dictionary<string, Control>();
+		private Dictionary<string, eNumberFormat> _fieldFormat = new Dictionary<string, eNumberFormat>();
 		private Dictionary<string, FieldInfo> _fieldInfo = null;
 
 		public object Entity { get; set; }
@@ -24,7 +26,7 @@ namespace Mesen.GUI.Forms
 
 		public bool Updating { get; private set; }
 
-		public void AddBinding(string fieldName, Control bindedField)
+		public void AddBinding(string fieldName, Control bindedField, eNumberFormat format = eNumberFormat.Default)
 		{
 			if(BindedType == null) {
 				throw new Exception("Need to override BindedType to use bindings");
@@ -44,6 +46,7 @@ namespace Mesen.GUI.Forms
 					BaseConfigForm.InitializeComboBox(((ComboBox)bindedField), fieldType);
 				}
 				_bindings[fieldName] = bindedField;
+				_fieldFormat[fieldName] = format;
 			} else {
 				throw new Exception("Invalid field name");
 			}
@@ -58,16 +61,11 @@ namespace Mesen.GUI.Forms
 					throw new Exception("Invalid binding key");
 				} else {
 					FieldInfo field = _fieldInfo[kvp.Key];
+					eNumberFormat format = _fieldFormat[kvp.Key];
 					object value = field.GetValue(this.Entity);
 					if(kvp.Value is TextBox) {
-						if(field.FieldType == typeof(UInt32)) {
-							kvp.Value.Text = ((UInt32)value).ToString("X");
-						} else if(field.FieldType == typeof(Int32)) {
-							kvp.Value.Text = ((Int32)value).ToString("X");
-						} else if(field.FieldType == typeof(UInt16)) {
-							kvp.Value.Text = ((UInt16)value).ToString("X4");
-						} else if(field.FieldType == typeof(Byte)) {
-							kvp.Value.Text = ((Byte)value).ToString("X");
+						if(value is IFormattable) {
+							kvp.Value.Text = ((IFormattable)value).ToString(format == eNumberFormat.Decimal ? "" : "X", System.Globalization.CultureInfo.InvariantCulture);
 						} else {
 							kvp.Value.Text = (string)value;
 						}
@@ -146,18 +144,19 @@ namespace Mesen.GUI.Forms
 				} else {
 					try {
 						FieldInfo field = _fieldInfo[kvp.Key];
+						eNumberFormat format = _fieldFormat[kvp.Key];
 						if(kvp.Value is TextBox) {
 							object value = kvp.Value.Text;
+							NumberStyles numberStyle = format == eNumberFormat.Decimal ? NumberStyles.Integer : NumberStyles.HexNumber;
+							value = ((string)value).Trim().Replace("$", "").Replace("0x", "");
 							if(field.FieldType == typeof(UInt32)) {
-								value = ((string)value).Trim().Replace("$", "").Replace("0x", "");
-								value = (object)UInt32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+								value = (object)UInt32.Parse((string)value, numberStyle);
 							} else if(field.FieldType == typeof(Int32)) {
-								value = ((string)value).Trim().Replace("$", "").Replace("0x", "");
-								value = (object)Int32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+								value = (object)Int32.Parse((string)value, numberStyle);
 							} else if(field.FieldType == typeof(Byte)) {
-								value = (object)Byte.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+								value = (object)Byte.Parse((string)value, numberStyle);
 							} else if(field.FieldType == typeof(UInt16)) {
-								value = (object)UInt16.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+								value = (object)UInt16.Parse((string)value, numberStyle);
 							}
 							field.SetValue(Entity, value);
 						} else if(kvp.Value is CheckBox) {
@@ -220,5 +219,12 @@ namespace Mesen.GUI.Forms
 				}
 			}
 		}
+	}
+
+	public enum eNumberFormat
+	{
+		Default,
+		Hex,
+		Decimal,
 	}
 }
