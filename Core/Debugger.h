@@ -119,6 +119,8 @@ private:
 	void ProcessStepConditions(uint32_t addr);
 	bool SleepUntilResume();
 
+	void RemoveExcessCallstackEntries();
+
 public:
 	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
 	~Debugger();
@@ -164,9 +166,6 @@ public:
 	int32_t GetRelativeAddress(uint32_t addr, AddressType type);
 	int32_t GetAbsoluteAddress(uint32_t addr);	
 	void GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info);
-
-	void StartTraceLogger(TraceLoggerOptions options);
-	void StopTraceLogger();
 
 	shared_ptr<Profiler> GetProfiler();
 	shared_ptr<Assembler> GetAssembler();

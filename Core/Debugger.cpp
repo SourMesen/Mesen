@@ -284,6 +284,17 @@ int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultTy
 	return _watchExpEval.Evaluate(expression, state, resultType);
 }
 
+void Debugger::RemoveExcessCallstackEntries()
+{
+	while(_callstackRelative.size() >= 1022) {
+		//Ensure callstack stays below 512 entries - some games never call RTI, causing an infinite stack
+		_callstackRelative.pop_front();
+		_callstackRelative.pop_front();
+		_callstackAbsolute.pop_front();
+		_callstackAbsolute.pop_front();
+	}
+}
+
 void Debugger::UpdateCallstack(uint32_t addr)
 {
 	_hideTopOfCallstack = false;
@@ -295,8 +306,10 @@ void Debugger::UpdateCallstack(uint32_t addr)
 		_callstackAbsolute.pop_back();
 
 		_profiler->UnstackFunction();
-	} else if(_lastInstruction == 0x20 && _callstackRelative.size() < 1022) {
+	} else if(_lastInstruction == 0x20) {
 		//JSR
+		RemoveExcessCallstackEntries();
+
 		uint16_t targetAddr = _memoryManager->DebugRead(addr + 1) | (_memoryManager->DebugRead(addr + 2) << 8);
 		_callstackRelative.push_back(addr);
 		_callstackRelative.push_back(targetAddr);
@@ -312,6 +325,8 @@ void Debugger::UpdateCallstack(uint32_t addr)
 
 void Debugger::PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
 {
+	RemoveExcessCallstackEntries();
+
 	_callstackRelative.push_back(cpuAddr | (forNmi ? 0x40000 : 0x20000));
 	_callstackRelative.push_back(destCpuAddr);
 
@@ -739,7 +754,7 @@ void Debugger::ProcessVramOperation(MemoryOperationType type, uint16_t addr, uin
 
 void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative)
 {
-	int callstackSize = (int)_callstackRelative.size() - (_hideTopOfCallstack ? 2 : 0);
+	int callstackSize = std::min(1022, (int)_callstackRelative.size() - (_hideTopOfCallstack ? 2 : 0));
 	for(int i = 0; i < callstackSize; i++) {
 		callstackAbsolute[i] = _callstackAbsolute[i];
 		
