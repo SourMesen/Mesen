@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 15/07/2017 using:
+# Generated on 04/08/2017 using:
 #     -NesCartDB (dated 2016-08-20)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -2545,7 +2545,7 @@ D188963D,NesNtsc,COLORDREAMS-74*377,UNK-COLORDREAMS-REVB,,11,64,64,,0,0,0,v,,,
 D18E6BE3,NesNtsc,NES-TLROM,NES-TLROM-03,MMC3B,4,256,256,,0,0,0,,,,
 D19ADDEB,NesNtsc,NES-TQROM,NES-TQROM-01,MMC3A,119,128,64,8,0,0,0,,,,
 D19DCB2B,NesNtsc,NES-TLROM,NES-TLROM-03,MMC3B,4,128,128,,0,0,0,,,,
-D1E50064,Famicom,,,,1,128,,8,8,0,0,,,,
+D1E50064,Famicom,,,,1,128,,8,0,32,1,,,,
 D1EA84C3,NesNtsc,NES-SLROM,NES-SLROM-06,MMC1B2,1,128,128,,0,0,0,,,,
 D1F7DF3A,Famicom,HVC-UNROM,HVC-UNROM-02,,2,128,,8,0,0,0,v,,,
 D2038FC5,Famicom,IREM-G101,FC-00-015,G-101,32,128,128,,8,0,0,,,,
