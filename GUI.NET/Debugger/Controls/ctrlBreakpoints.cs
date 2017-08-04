@@ -32,6 +32,15 @@ namespace Mesen.GUI.Debugger.Controls
 			AdjustColumnWidth();
 		}
 
+		public void RefreshListAddresses()
+		{
+			lstBreakpoints.BeginUpdate();
+			for(int i = 0; i < BreakpointManager.Breakpoints.Count; i++) {
+				lstBreakpoints.Items[i].SubItems[2].Text = BreakpointManager.Breakpoints[i].GetAddressString();
+			}
+			lstBreakpoints.EndUpdate();
+		}
+
 		public void RefreshList()
 		{
 			lstBreakpoints.ItemChecked -= new System.Windows.Forms.ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
@@ -129,7 +138,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			mnuRemoveBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count > 0);
 			mnuEditBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count == 1);
-			mnuGoToLocation.Enabled = (lstBreakpoints.SelectedItems.Count == 1);
+			mnuGoToLocation.Enabled = (lstBreakpoints.SelectedItems.Count == 1 && ((Breakpoint)lstBreakpoints.SelectedItems[0].Tag).IsCpuBreakpoint);
 		}
 	}
 }

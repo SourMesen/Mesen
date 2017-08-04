@@ -25,37 +25,54 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ResizeRedraw = true;
 		}
 
+		private void UpdateRegionArray(List<MemoryRegionInfo> regions)
+		{
+			if(regions.Count != _regions.Count) {
+				_regions = regions;
+				this.Invalidate();
+			} else {
+				bool needUpdate = false;
+				for(int i = 0; i < regions.Count; i++) {
+					if(_regions[i].Color != regions[i].Color || _regions[i].Name != regions[i].Name || _regions[i].Size != regions[i].Size) {
+						_regions = regions;
+						this.Invalidate();
+						return;
+					}
+				}
+			}
+		}
+
 		public void UpdateCpuRegions(CartridgeState state)
 		{
-			_regions.Clear();
+			List<MemoryRegionInfo> regions = new List<MemoryRegionInfo>();
 
-			_regions.Add(new MemoryRegionInfo() { Name = "Internal RAM", Size = 0x2000, Color = Color.FromArgb(222, 222, 222) });
-			_regions.Add(new MemoryRegionInfo() { Name = "CPU Registers", Size = 0x2020, Color = Color.FromArgb(222, 222, 222) });
-			_regions.Add(new MemoryRegionInfo() { Name = "N/A", Size = 0x1FE0, Color = Color.FromArgb(222, 222, 222) });
-			_regions.Add(new MemoryRegionInfo() { Name = "Work RAM", Size = 0x2000, Color = Color.FromArgb(0xCD, 0xDC, 0xFA) });
+			regions.Add(new MemoryRegionInfo() { Name = "Internal RAM", Size = 0x2000, Color = Color.FromArgb(222, 222, 222) });
+			regions.Add(new MemoryRegionInfo() { Name = "CPU Registers", Size = 0x2020, Color = Color.FromArgb(222, 222, 222) });
+			regions.Add(new MemoryRegionInfo() { Name = "N/A", Size = 0x1FE0, Color = Color.FromArgb(222, 222, 222) });
+			regions.Add(new MemoryRegionInfo() { Name = "Work RAM", Size = 0x2000, Color = Color.FromArgb(0xCD, 0xDC, 0xFA) });
 
 			for(int i = 0; i < 0x8000 / state.PrgPageSize; i++) {
 				string text = state.PrgSelectedPages[i] == 0xEEEEEEEE ? "N/A" : ("$" + state.PrgSelectedPages[i].ToString("X2"));
-				_regions.Add(new MemoryRegionInfo() { Name = text, Size = (int)state.PrgPageSize, Color = i % 2 == 0 ? Color.FromArgb(0xC4, 0xE7, 0xD4) : Color.FromArgb(0xA4, 0xD7, 0xB4) });
+				regions.Add(new MemoryRegionInfo() { Name = text, Size = (int)state.PrgPageSize, Color = i % 2 == 0 ? Color.FromArgb(0xC4, 0xE7, 0xD4) : Color.FromArgb(0xA4, 0xD7, 0xB4) });
 			}
 
-			this.Invalidate();
+			UpdateRegionArray(regions);
 		}
 
 		public void UpdatePpuRegions(CartridgeState state)
 		{
-			_regions.Clear();
+			List<MemoryRegionInfo> regions = new List<MemoryRegionInfo>();
 
 			for(int i = 0; i < 0x2000 / state.ChrPageSize; i++) {
 				string text = state.ChrSelectedPages[i] == 0xEEEEEEEE ? "N/A" : ("$" + state.ChrSelectedPages[i].ToString("X2"));
-				_regions.Add(new MemoryRegionInfo() { Name = text, Size = (int)state.ChrPageSize, Color = i % 2 == 0 ? Color.FromArgb(0xC4, 0xE0, 0xF4) : Color.FromArgb(0xB4, 0xD0, 0xE4) });
+				regions.Add(new MemoryRegionInfo() { Name = text, Size = (int)state.ChrPageSize, Color = i % 2 == 0 ? Color.FromArgb(0xC4, 0xE0, 0xF4) : Color.FromArgb(0xB4, 0xD0, 0xE4) });
 			}
 
 			for(int i = 0; i < 4; i++) {
-				_regions.Add(new MemoryRegionInfo() { Name = "NT " + state.Nametables[i].ToString(), Size = 0x400, Color = i % 2 == 0 ? Color.FromArgb(0xF4, 0xC7, 0xD4) : Color.FromArgb(0xD4, 0xA7, 0xB4) });
+				regions.Add(new MemoryRegionInfo() { Name = "NT " + state.Nametables[i].ToString(), Size = 0x400, Color = i % 2 == 0 ? Color.FromArgb(0xF4, 0xC7, 0xD4) : Color.FromArgb(0xD4, 0xA7, 0xB4) });
 			}
 
-			this.Invalidate();
+			UpdateRegionArray(regions);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)

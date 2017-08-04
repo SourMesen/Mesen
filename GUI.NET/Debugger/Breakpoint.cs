@@ -35,7 +35,13 @@ namespace Mesen.GUI.Debugger
 				case BreakpointAddressType.AnyAddress: return "<any>";
 				case BreakpointAddressType.SingleAddress:
 					if(IsAbsoluteAddress) {
-						return "[$" + Address.ToString("X4") + "]";
+						int relativeAddress = this.GetRelativeAddress();
+						string addr = "";
+						if(relativeAddress >= 0) {
+							addr += "$" + this.GetRelativeAddress().ToString("X4") + " ";
+						}
+						addr += "[$" + Address.ToString("X4") + "]";
+						return addr;
 					} else {
 						return "$" + Address.ToString("X4");
 					}
@@ -54,6 +60,17 @@ namespace Mesen.GUI.Debugger
 		{
 			Enabled = enabled;
 			BreakpointManager.RefreshBreakpoints(this);
+		}
+
+		public bool IsCpuBreakpoint
+		{
+			get
+			{
+				return 
+					Type.HasFlag(BreakpointType.Read) ||
+					Type.HasFlag(BreakpointType.Write) ||
+					Type.HasFlag(BreakpointType.Execute);
+			}
 		}
 
 		public BreakpointType Type
@@ -78,6 +95,33 @@ namespace Mesen.GUI.Debugger
 				}
 				return type;
 			}
+		}
+
+		public int GetRelativeAddress()
+		{
+			if(this.IsCpuBreakpoint) {
+				if(this.IsAbsoluteAddress) {
+					return InteropEmu.DebugGetRelativeAddress((uint)this.Address, GUI.AddressType.PrgRom);
+				} else {
+					return (int)this.Address;
+				}
+			}
+			return 0;
+		}
+
+		public bool Matches(int relativeAddress)
+		{
+			if(this.IsCpuBreakpoint) {
+				if(this.IsAbsoluteAddress) {
+					AddressTypeInfo addressTypeInfo = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType((uint)relativeAddress, ref addressTypeInfo);
+
+					return addressTypeInfo.Type == GUI.AddressType.PrgRom && addressTypeInfo.Address == this.Address;
+				} else {
+					return relativeAddress == this.Address;
+				}
+			}
+			return false;
 		}
 
 		public InteropBreakpoint ToInteropBreakpoint()

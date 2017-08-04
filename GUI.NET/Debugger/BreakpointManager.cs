@@ -47,7 +47,7 @@ namespace Mesen.GUI.Debugger
 
 		public static Breakpoint GetMatchingBreakpoint(int address)
 		{
-			return Breakpoints.FirstOrDefault<Breakpoint>((bp) => { return !bp.IsAbsoluteAddress && bp.Address == address; });
+			return Breakpoints.FirstOrDefault<Breakpoint>((bp) => { return bp.Matches(address); });
 		}
 
 		public static Breakpoint GetMatchingBreakpoint(UInt32 startAddress, UInt32 endAddress, bool ppuBreakpoint)
@@ -72,10 +72,12 @@ namespace Mesen.GUI.Debugger
 						BreakpointManager.RemoveBreakpoint(breakpoint);
 					}
 				} else {
+					AddressTypeInfo addressTypeInfo = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType((uint)address, ref addressTypeInfo);
 					breakpoint = new Breakpoint() {
 						BreakOnExec = true,
-						Address = (UInt32)address,
-						IsAbsoluteAddress = false,
+						Address = addressTypeInfo.Type == AddressType.PrgRom ? (UInt32)addressTypeInfo.Address : (UInt32)address,
+						IsAbsoluteAddress = addressTypeInfo.Type == AddressType.PrgRom,
 						Enabled = true
 					};
 					BreakpointManager.AddBreakpoint(breakpoint);

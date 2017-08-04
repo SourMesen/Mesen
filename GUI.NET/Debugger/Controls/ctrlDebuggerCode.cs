@@ -35,8 +35,6 @@ namespace Mesen.GUI.Debugger
 		List<string> _comments = new List<string>(10000);
 		List<int> _lineIndentations = new List<int>(10000);
 
-		private Color _unexecutedColor = Color.FromArgb(183, 229, 190);
-		private Color _speculativeColor = Color.FromArgb(240, 220, 220);
 		private UInt32? _currentActiveAddress { get; set; } = null;
 
 		private frmCodeTooltip _codeTooltip = null;
@@ -556,17 +554,8 @@ namespace Mesen.GUI.Debugger
 			int address = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
 			_lineBreakpoint = BreakpointManager.GetMatchingBreakpoint(address);
 
-			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
-				if(e.Button == System.Windows.Forms.MouseButtons.Left) {
-					if(_lineBreakpoint == null) {
-						Breakpoint bp = new Breakpoint();
-						bp.Address = (UInt32)address;
-						bp.BreakOnExec = true;
-						BreakpointManager.AddBreakpoint(bp);
-					} else {
-						BreakpointManager.RemoveBreakpoint(_lineBreakpoint);
-					}
-				}
+			if(e.Button == MouseButtons.Left && e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
+				BreakpointManager.ToggleBreakpoint(address, false);
 			}
 		}
 
@@ -817,7 +806,14 @@ namespace Mesen.GUI.Debugger
 
 		class LineStyleProvider : ctrlTextbox.ILineStyleProvider
 		{
-			ctrlDebuggerCode _code;
+			private Color _unexecutedColor = Color.FromArgb(183, 229, 190);
+			private Color _speculativeColor = Color.FromArgb(240, 220, 220);
+			private Color _execBpColor = Color.FromArgb(140, 40, 40);
+			private Color _writeBpColor = Color.FromArgb(40, 120, 80);
+			private Color _readBpColor = Color.FromArgb(40, 40, 200);
+
+			private ctrlDebuggerCode _code;
+
 			public LineStyleProvider(ctrlDebuggerCode code)
 			{
 				_code = code;
@@ -826,13 +822,14 @@ namespace Mesen.GUI.Debugger
 			public LineProperties GetLineStyle(int cpuAddress)
 			{
 				foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
-					if(!breakpoint.IsAbsoluteAddress && breakpoint.Address == cpuAddress) {
+					if(breakpoint.Matches(cpuAddress)) {
 						Color? fgColor = Color.White;
 						Color? bgColor = null;
-						Color? outlineColor = Color.FromArgb(140, 40, 40);
+						Color bpColor = breakpoint.BreakOnExec ? _execBpColor : (breakpoint.BreakOnWrite ? _writeBpColor : _readBpColor);
+						Color? outlineColor = bpColor;
 						LineSymbol symbol;
 						if(breakpoint.Enabled) {
-							bgColor = Color.FromArgb(140, 40, 40);
+							bgColor = bpColor;
 							symbol = LineSymbol.Circle;
 						} else {
 							fgColor = Color.Black;
@@ -845,10 +842,10 @@ namespace Mesen.GUI.Debugger
 							symbol |= LineSymbol.Arrow;
 						} else if(_code._unexecutedAddresses.Contains((Int32)breakpoint.Address)) {
 							fgColor = Color.Black;
-							bgColor =  _code._unexecutedColor;
+							bgColor =  _unexecutedColor;
 						} else if(_code._speculativeCodeAddreses.Contains((Int32)breakpoint.Address)) {
 							fgColor = Color.Black;
-							bgColor =  _code._speculativeColor;
+							bgColor =  _speculativeColor;
 						}
 
 						return new LineProperties() { FgColor = fgColor, BgColor = bgColor, OutlineColor = outlineColor, Symbol = symbol };
@@ -858,9 +855,9 @@ namespace Mesen.GUI.Debugger
 				if(_code._currentActiveAddress.HasValue && cpuAddress == _code._currentActiveAddress) {
 					return new LineProperties() { FgColor = Color.Black, BgColor = Color.Yellow, OutlineColor = null, Symbol = LineSymbol.Arrow };
 				} else if(ConfigManager.Config.DebugInfo.HighlightUnexecutedCode && _code._unexecutedAddresses.Contains(cpuAddress)) {
-					return new LineProperties() { FgColor = null, BgColor = _code._unexecutedColor, OutlineColor = null, Symbol = LineSymbol.None };
+					return new LineProperties() { FgColor = null, BgColor = _unexecutedColor, OutlineColor = null, Symbol = LineSymbol.None };
 				} else if(_code._speculativeCodeAddreses.Contains(cpuAddress)) {
-					return new LineProperties() { FgColor = null, BgColor = _code._speculativeColor, OutlineColor = null, Symbol = LineSymbol.None };
+					return new LineProperties() { FgColor = null, BgColor = _speculativeColor, OutlineColor = null, Symbol = LineSymbol.None };
 				}
 				return null;
 			}

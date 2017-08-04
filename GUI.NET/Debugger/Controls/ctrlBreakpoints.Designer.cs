@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.contextMenuBreakpoints = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuBreakpoints = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRemoveBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,19 +41,19 @@
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.contextMenuBreakpoints.SuspendLayout();
+			this.mnuBreakpoints.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// contextMenuBreakpoints
+			// mnuBreakpoints
 			// 
-			this.contextMenuBreakpoints.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.mnuBreakpoints.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAddBreakpoint,
             this.mnuEditBreakpoint,
             this.mnuRemoveBreakpoint,
             this.toolStripMenuItem1,
             this.mnuGoToLocation});
-			this.contextMenuBreakpoints.Name = "contextMenuWatch";
-			this.contextMenuBreakpoints.Size = new System.Drawing.Size(153, 120);
+			this.mnuBreakpoints.Name = "mnuBreakpoints";
+			this.mnuBreakpoints.Size = new System.Drawing.Size(153, 120);
 			// 
 			// mnuAddBreakpoint
 			// 
@@ -103,7 +103,7 @@
             this.columnHeader2,
             this.columnHeader4,
             this.colLastColumn});
-			this.lstBreakpoints.ContextMenuStrip = this.contextMenuBreakpoints;
+			this.lstBreakpoints.ContextMenuStrip = this.mnuBreakpoints;
 			this.lstBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstBreakpoints.FullRowSelect = true;
 			this.lstBreakpoints.GridLines = true;
@@ -151,7 +151,7 @@
 			this.Controls.Add(this.lstBreakpoints);
 			this.Name = "ctrlBreakpoints";
 			this.Size = new System.Drawing.Size(393, 101);
-			this.contextMenuBreakpoints.ResumeLayout(false);
+			this.mnuBreakpoints.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -162,7 +162,7 @@
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader colLastColumn;
-		private System.Windows.Forms.ContextMenuStrip contextMenuBreakpoints;
+		private System.Windows.Forms.ContextMenuStrip mnuBreakpoints;
 		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
 		private System.Windows.Forms.ToolStripMenuItem mnuRemoveBreakpoint;
 		private System.Windows.Forms.ColumnHeader columnHeader3;

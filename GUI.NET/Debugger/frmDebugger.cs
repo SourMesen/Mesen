@@ -312,6 +312,7 @@ namespace Mesen.GUI.Debugger
 				return;
 			}
 
+			ctrlBreakpoints.RefreshListAddresses();
 			ctrlLabelList.UpdateLabelListAddresses();
 			ctrlFunctionList.UpdateFunctionList(false);
 			UpdateDebuggerFlags();
@@ -632,7 +633,10 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlBreakpoints_BreakpointNavigation(object sender, EventArgs e)
 		{
-			_lastCodeWindow.ScrollToLineNumber((int)((Breakpoint)sender).Address);
+			Breakpoint bp = (Breakpoint)sender;
+			if(bp.IsCpuBreakpoint) {
+				_lastCodeWindow.ScrollToLineNumber(bp.GetRelativeAddress());
+			}
 		}
 
 		private void mnuTraceLogger_Click(object sender, EventArgs e)

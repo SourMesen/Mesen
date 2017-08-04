@@ -52,7 +52,6 @@ namespace Mesen.GUI.Debugger
 		private int[] _lineMargins = new int[0];		
 		private string[] _lineNumberNotes = new string[0];
 		private Dictionary<int, int> _lineNumberIndex = new Dictionary<int,int>();
-		private Dictionary<int, LineProperties> _lineProperties = new Dictionary<int,LineProperties>();
 		private bool _showLineNumbers = false;
 		private bool _showLineInHex = false;
 		private bool _showLineNumberNotes = false;
