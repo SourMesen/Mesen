@@ -248,6 +248,7 @@
       <Control ID="lblDisplayRatio">Format d'image :</Control>
       <Control ID="lblCustomRatio">Ratio personalisé :</Control>
       <Control ID="chkBilinearInterpolation">Utiliser l'interpolation bilinéaire</Control>
+      <Control ID="chkFullscreenForceIntegerScale">Utiliser une valeur entière pour l'échelle vidéo en mode plein écran</Control>
       <Control ID="chkShowFps">Afficher le FPS</Control>
       <Control ID="chkUseHdPacks">Utiliser les packs haute-définition de HDNes</Control>
       <Control ID="tpgOverscan">Overscan</Control>

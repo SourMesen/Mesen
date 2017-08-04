@@ -405,6 +405,9 @@ namespace Mesen.GUI.Forms
 			double verticalScale = (double)panelRenderer.ClientSize.Height / size.Height;
 			double horizontalScale = (double)panelRenderer.ClientSize.Width / size.Width;
 			double scale = Math.Min(verticalScale, horizontalScale);
+			if(_fullscreenMode && ConfigManager.Config.VideoInfo.FullscreenForceIntegerScale) {
+				scale = Math.Floor(scale);
+			}
 			UpdateScaleMenu(scale);
 			VideoInfo.ApplyConfig();
 		}

@@ -61,6 +61,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisableSprites", chkDisableSprites);
 			AddBinding("ForceBackgroundFirstColumn", chkForceBackgroundFirstColumn);
 			AddBinding("ForceSpritesFirstColumn", chkForceSpritesFirstColumn);
+			AddBinding("FullscreenForceIntegerScale", chkFullscreenForceIntegerScale);
 
 			AddBinding("UseCustomVsPalette", chkUseCustomVsPalette);
 

@@ -246,6 +246,7 @@
       <Control ID="lblDisplayRatio">Formato de imagen:</Control>
       <Control ID="lblCustomRatio">Relación personalizada:</Control>
       <Control ID="chkBilinearInterpolation">Utilizar la interpolación bilinear</Control>
+      <Control ID="chkFullscreenForceIntegerScale">Use integer scale values when entering fullscreen mode</Control>
       <Control ID="chkShowFps">Mostrar FPS</Control>
       <Control ID="chkUseHdPacks">Utilizar los packs de alta definición de HDNes</Control>
       <Control ID="tpgOverscan">Overscan</Control>

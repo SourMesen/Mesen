@@ -242,12 +242,13 @@
     </Form>
     <Form ID="frmVideoConfig" Title="映像設定">
       <Control ID="tpgGeneral">全般</Control>
-      <Control ID="lblVideoScale">映像サイズ:</Control>
+      <Control ID="lblVideoScale">画面サイズ:</Control>
       <Control ID="lblVideoFilter">画面エフェクト:</Control>
       <Control ID="chkBilinearInterpolation">バイリニア補間を有効にする</Control>
       <Control ID="chkVerticalSync">垂直同期を有効にする</Control>
       <Control ID="lblDisplayRatio">画面アスペクト:</Control>
       <Control ID="lblCustomRatio">アスペクトレシオ:</Control>
+      <Control ID="chkFullscreenForceIntegerScale">全画面表示モードに入る時、画面サイズの倍率を整数にする</Control>
       <Control ID="chkShowFps">フレームレート表示</Control>
       <Control ID="chkUseHdPacks">HDNesのHDパックを使う</Control>
       <Control ID="tpgOverscan">オーバースキャン</Control>

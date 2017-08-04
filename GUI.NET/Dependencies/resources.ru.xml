@@ -248,6 +248,7 @@
       <Control ID="lblDisplayRatio">Соотношение сторон :</Control>
       <Control ID="lblCustomRatio">Custom ratio:</Control>
       <Control ID="chkBilinearInterpolation">Билинейная интерполяция</Control>
+      <Control ID="chkFullscreenForceIntegerScale">Use integer scale values when entering fullscreen mode</Control>
       <Control ID="chkShowFps">Показывать FPS</Control>
       <Control ID="chkUseHdPacks">Использовать HDNes HD packs</Control>
       <Control ID="tpgOverscan">Overscan</Control>

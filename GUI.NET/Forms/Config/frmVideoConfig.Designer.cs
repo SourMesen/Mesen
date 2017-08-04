@@ -123,6 +123,7 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
+			this.chkFullscreenForceIntegerScale = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -176,22 +177,23 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 3);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 1);
-			this.tlpMain.Controls.Add(this.chkShowFps, 0, 4);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 2);
 			this.tlpMain.Controls.Add(this.nudScale, 1, 0);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 1);
+			this.tlpMain.Controls.Add(this.chkFullscreenForceIntegerScale, 0, 4);
+			this.tlpMain.Controls.Add(this.chkShowFps, 0, 5);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 6;
+			this.tlpMain.RowCount = 7;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.Size = new System.Drawing.Size(521, 370);
 			this.tlpMain.TabIndex = 1;
 			// 
@@ -232,7 +234,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFps.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 101);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 124);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
@@ -1318,6 +1320,18 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
+			// chkFullscreenForceIntegerScale
+			// 
+			this.chkFullscreenForceIntegerScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkFullscreenForceIntegerScale.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkFullscreenForceIntegerScale, 2);
+			this.chkFullscreenForceIntegerScale.Location = new System.Drawing.Point(3, 101);
+			this.chkFullscreenForceIntegerScale.Name = "chkFullscreenForceIntegerScale";
+			this.chkFullscreenForceIntegerScale.Size = new System.Drawing.Size(289, 17);
+			this.chkFullscreenForceIntegerScale.TabIndex = 23;
+			this.chkFullscreenForceIntegerScale.Text = "Use integer scale values when entering fullscreen mode";
+			this.chkFullscreenForceIntegerScale.UseVisualStyleBackColor = true;
+			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1483,5 +1497,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteOriginalHardware;
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteCompositeDirect;
 		private System.Windows.Forms.CheckBox chkUseCustomVsPalette;
+		private System.Windows.Forms.CheckBox chkFullscreenForceIntegerScale;
 	}
 }

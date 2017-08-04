@@ -48,6 +48,8 @@ namespace Mesen.GUI.Config
 		public bool ForceBackgroundFirstColumn = false;
 		public bool ForceSpritesFirstColumn = false;
 
+		public bool FullscreenForceIntegerScale = false;
+
 		public bool UseCustomVsPalette = false;
 
 		public List<PaletteInfo> SavedPalettes = new List<PaletteInfo>();
