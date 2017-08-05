@@ -836,7 +836,7 @@ namespace Mesen.GUI.Debugger
 							symbol = LineSymbol.CircleOutline;
 						}
 
-						if(breakpoint.Address == (UInt32)(_code._currentActiveAddress.HasValue ? (int)_code._currentActiveAddress.Value : -1)) {
+						if(_code._currentActiveAddress.HasValue && breakpoint.Matches((int)_code._currentActiveAddress.Value)) {
 							fgColor = Color.Black;
 							bgColor = Color.Yellow;
 							symbol |= LineSymbol.Arrow;
