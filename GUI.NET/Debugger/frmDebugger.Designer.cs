@@ -145,6 +145,9 @@ namespace Mesen.GUI.Debugger
 			this.lblChrAnalysisResult = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
+			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.lblCyclesElapsed = new System.Windows.Forms.ToolStripStatusLabel();
+			this.lblCyclesElapsedCount = new System.Windows.Forms.ToolStripStatusLabel();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -189,7 +192,7 @@ namespace Mesen.GUI.Debugger
 			this.splitContainer.Panel2.Controls.Add(this.tableLayoutPanel10);
 			this.splitContainer.Panel2MinSize = 100;
 			this.splitContainer.Size = new System.Drawing.Size(1260, 581);
-			this.splitContainer.SplitterDistance = 390;
+			this.splitContainer.SplitterDistance = 473;
 			this.splitContainer.SplitterWidth = 7;
 			this.splitContainer.TabIndex = 1;
 			this.splitContainer.TabStop = false;
@@ -212,8 +215,8 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.ctrlSplitContainerTop.Panel2.Controls.Add(this.tlpFunctionLabelLists);
 			this.ctrlSplitContainerTop.Panel2MinSize = 150;
-			this.ctrlSplitContainerTop.Size = new System.Drawing.Size(1260, 390);
-			this.ctrlSplitContainerTop.SplitterDistance = 861;
+			this.ctrlSplitContainerTop.Size = new System.Drawing.Size(1260, 473);
+			this.ctrlSplitContainerTop.SplitterDistance = 858;
 			this.ctrlSplitContainerTop.SplitterWidth = 7;
 			this.ctrlSplitContainerTop.TabIndex = 3;
 			this.ctrlSplitContainerTop.PanelCollapsed += new System.EventHandler(this.ctrlSplitContainerTop_PanelCollapsed);
@@ -234,7 +237,7 @@ namespace Mesen.GUI.Debugger
 			this.tlpTop.Name = "tlpTop";
 			this.tlpTop.RowCount = 1;
 			this.tlpTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpTop.Size = new System.Drawing.Size(861, 390);
+			this.tlpTop.Size = new System.Drawing.Size(858, 473);
 			this.tlpTop.TabIndex = 2;
 			// 
 			// ctrlDebuggerCode
@@ -243,7 +246,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
 			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(423, 384);
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(420, 467);
 			this.ctrlDebuggerCode.TabIndex = 2;
 			this.ctrlDebuggerCode.OnEditCode += new Mesen.GUI.Debugger.ctrlDebuggerCode.AssemblerEventHandler(this.ctrlDebuggerCode_OnEditCode);
 			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
@@ -252,10 +255,10 @@ namespace Mesen.GUI.Debugger
 			// ctrlConsoleStatus
 			// 
 			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(429, 0);
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(426, 0);
 			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
-			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 390);
+			this.ctrlConsoleStatus.Size = new System.Drawing.Size(432, 473);
 			this.ctrlConsoleStatus.TabIndex = 3;
 			this.ctrlConsoleStatus.OnGotoLocation += new System.EventHandler(this.ctrlConsoleStatus_OnGotoLocation);
 			// 
@@ -263,9 +266,9 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.ctrlDebuggerCodeSplit.Code = null;
 			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(432, 3);
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(429, 3);
 			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
-			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 384);
+			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 467);
 			this.ctrlDebuggerCodeSplit.TabIndex = 4;
 			this.ctrlDebuggerCodeSplit.Visible = false;
 			this.ctrlDebuggerCodeSplit.OnEditCode += new Mesen.GUI.Debugger.ctrlDebuggerCode.AssemblerEventHandler(this.ctrlDebuggerCode_OnEditCode);
@@ -285,16 +288,16 @@ namespace Mesen.GUI.Debugger
 			this.tlpFunctionLabelLists.RowCount = 2;
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(392, 390);
+			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(395, 473);
 			this.tlpFunctionLabelLists.TabIndex = 5;
 			// 
 			// grpLabels
 			// 
 			this.grpLabels.Controls.Add(this.ctrlLabelList);
 			this.grpLabels.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpLabels.Location = new System.Drawing.Point(3, 198);
+			this.grpLabels.Location = new System.Drawing.Point(3, 239);
 			this.grpLabels.Name = "grpLabels";
-			this.grpLabels.Size = new System.Drawing.Size(386, 189);
+			this.grpLabels.Size = new System.Drawing.Size(389, 231);
 			this.grpLabels.TabIndex = 6;
 			this.grpLabels.TabStop = false;
 			this.grpLabels.Text = "Labels";
@@ -304,7 +307,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlLabelList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlLabelList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlLabelList.Name = "ctrlLabelList";
-			this.ctrlLabelList.Size = new System.Drawing.Size(380, 170);
+			this.ctrlLabelList.Size = new System.Drawing.Size(383, 212);
 			this.ctrlLabelList.TabIndex = 0;
 			this.ctrlLabelList.OnFindOccurrence += new System.EventHandler(this.ctrlLabelList_OnFindOccurrence);
 			this.ctrlLabelList.OnLabelSelected += new System.EventHandler(this.ctrlLabelList_OnLabelSelected);
@@ -315,7 +318,7 @@ namespace Mesen.GUI.Debugger
 			this.grpFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFunctions.Location = new System.Drawing.Point(3, 3);
 			this.grpFunctions.Name = "grpFunctions";
-			this.grpFunctions.Size = new System.Drawing.Size(386, 189);
+			this.grpFunctions.Size = new System.Drawing.Size(389, 230);
 			this.grpFunctions.TabIndex = 5;
 			this.grpFunctions.TabStop = false;
 			this.grpFunctions.Text = "Functions";
@@ -325,7 +328,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlFunctionList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlFunctionList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlFunctionList.Name = "ctrlFunctionList";
-			this.ctrlFunctionList.Size = new System.Drawing.Size(380, 170);
+			this.ctrlFunctionList.Size = new System.Drawing.Size(383, 211);
 			this.ctrlFunctionList.TabIndex = 0;
 			this.ctrlFunctionList.OnFindOccurrence += new System.EventHandler(this.ctrlFunctionList_OnFindOccurrence);
 			this.ctrlFunctionList.OnFunctionSelected += new System.EventHandler(this.ctrlFunctionList_OnFunctionSelected);
@@ -346,7 +349,7 @@ namespace Mesen.GUI.Debugger
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel10.Size = new System.Drawing.Size(1260, 184);
+			this.tableLayoutPanel10.Size = new System.Drawing.Size(1260, 101);
 			this.tableLayoutPanel10.TabIndex = 0;
 			// 
 			// grpWatch
@@ -356,7 +359,7 @@ namespace Mesen.GUI.Debugger
 			this.grpWatch.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpWatch.Location = new System.Drawing.Point(3, 3);
 			this.grpWatch.Name = "grpWatch";
-			this.grpWatch.Size = new System.Drawing.Size(413, 178);
+			this.grpWatch.Size = new System.Drawing.Size(413, 95);
 			this.grpWatch.TabIndex = 2;
 			this.grpWatch.TabStop = false;
 			this.grpWatch.Text = "Watch";
@@ -376,7 +379,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
 			this.ctrlWatch.Name = "ctrlWatch";
-			this.ctrlWatch.Size = new System.Drawing.Size(407, 159);
+			this.ctrlWatch.Size = new System.Drawing.Size(407, 76);
 			this.ctrlWatch.TabIndex = 0;
 			// 
 			// grpBreakpoints
@@ -385,7 +388,7 @@ namespace Mesen.GUI.Debugger
 			this.grpBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpBreakpoints.Location = new System.Drawing.Point(422, 3);
 			this.grpBreakpoints.Name = "grpBreakpoints";
-			this.grpBreakpoints.Size = new System.Drawing.Size(414, 178);
+			this.grpBreakpoints.Size = new System.Drawing.Size(414, 95);
 			this.grpBreakpoints.TabIndex = 3;
 			this.grpBreakpoints.TabStop = false;
 			this.grpBreakpoints.Text = "Breakpoints";
@@ -395,7 +398,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
 			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
-			this.ctrlBreakpoints.Size = new System.Drawing.Size(408, 159);
+			this.ctrlBreakpoints.Size = new System.Drawing.Size(408, 76);
 			this.ctrlBreakpoints.TabIndex = 0;
 			this.ctrlBreakpoints.BreakpointNavigation += new System.EventHandler(this.ctrlBreakpoints_BreakpointNavigation);
 			// 
@@ -405,7 +408,7 @@ namespace Mesen.GUI.Debugger
 			this.grpCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCallstack.Location = new System.Drawing.Point(842, 3);
 			this.grpCallstack.Name = "grpCallstack";
-			this.grpCallstack.Size = new System.Drawing.Size(415, 178);
+			this.grpCallstack.Size = new System.Drawing.Size(415, 95);
 			this.grpCallstack.TabIndex = 4;
 			this.grpCallstack.TabStop = false;
 			this.grpCallstack.Text = "Call Stack";
@@ -415,7 +418,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlCallstack.Location = new System.Drawing.Point(3, 16);
 			this.ctrlCallstack.Name = "ctrlCallstack";
-			this.ctrlCallstack.Size = new System.Drawing.Size(409, 159);
+			this.ctrlCallstack.Size = new System.Drawing.Size(409, 76);
 			this.ctrlCallstack.TabIndex = 0;
 			this.ctrlCallstack.FunctionSelected += new System.EventHandler(this.ctrlCallstack_FunctionSelected);
 			// 
@@ -1171,7 +1174,10 @@ namespace Mesen.GUI.Debugger
             this.lblPrgAnalysis,
             this.lblPrgAnalysisResult,
             this.lblChrAnalysis,
-            this.lblChrAnalysisResult});
+            this.lblChrAnalysisResult,
+            this.toolStripStatusLabel1,
+            this.lblCyclesElapsedCount,
+            this.lblCyclesElapsed});
 			this.statusStrip.Location = new System.Drawing.Point(0, 671);
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(1260, 24);
@@ -1224,6 +1230,25 @@ namespace Mesen.GUI.Debugger
 			this.ctrlCpuMemoryMapping.TabIndex = 4;
 			this.ctrlCpuMemoryMapping.Text = "ctrlMemoryMapping1";
 			this.ctrlCpuMemoryMapping.Visible = false;
+			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(522, 19);
+			this.toolStripStatusLabel1.Spring = true;
+			// 
+			// lblCyclesElapsed
+			// 
+			this.lblCyclesElapsed.Margin = new System.Windows.Forms.Padding(-3, 3, 0, 2);
+			this.lblCyclesElapsed.Name = "lblCyclesElapsed";
+			this.lblCyclesElapsed.Size = new System.Drawing.Size(82, 19);
+			this.lblCyclesElapsed.Text = "cycles elapsed";
+			// 
+			// lblCyclesElapsedCount
+			// 
+			this.lblCyclesElapsedCount.Name = "lblCyclesElapsedCount";
+			this.lblCyclesElapsedCount.Size = new System.Drawing.Size(13, 19);
+			this.lblCyclesElapsedCount.Text = "0";
 			// 
 			// frmDebugger
 			// 
@@ -1382,5 +1407,8 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnDebuggerFocus;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem15;
 		private System.Windows.Forms.ToolStripMenuItem mnuStepBack;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+		private System.Windows.Forms.ToolStripStatusLabel lblCyclesElapsedCount;
+		private System.Windows.Forms.ToolStripStatusLabel lblCyclesElapsed;
 	}
 }

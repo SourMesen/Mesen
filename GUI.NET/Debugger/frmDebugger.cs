@@ -21,6 +21,7 @@ namespace Mesen.GUI.Debugger
 		private List<Form> _childForms = new List<Form>();
 		private bool _debuggerInitialized = false;
 		private bool _firstBreak = true;
+		private int _previousCycle = 0;
 
 		private InteropEmu.NotificationListener _notifListener;
 		private ctrlDebuggerCode _lastCodeWindow;
@@ -107,6 +108,10 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugInitialize();
 
 			_debuggerInitialized = true;
+
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+			_previousCycle = state.CPU.CycleCount;
 
 			//Pause a few frames later to give the debugger a chance to disassemble some code
 			_firstBreak = true;
@@ -305,6 +310,9 @@ namespace Mesen.GUI.Debugger
 
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
+
+			lblCyclesElapsedCount.Text = (state.CPU.CycleCount - _previousCycle).ToString();
+			_previousCycle = state.CPU.CycleCount;
 
 			if(UpdateSplitView()) {
 				if(newCode != null || ctrlDebuggerCodeSplit.Code == null) {
