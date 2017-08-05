@@ -153,6 +153,16 @@ void PPU::SetState(PPUDebugState state)
 	_cycle = state.Cycle;
 	_scanline = state.Scanline;
 	_frameCount = state.FrameCount;
+
+	UpdateMinimumDrawCycles();
+
+	_paletteRamMask = _flags.Grayscale ? 0x30 : 0x3F;
+	if(_nesModel == NesModel::NTSC) {
+		_intensifyColorBits = (_flags.IntensifyGreen ? 0x40 : 0x00) | (_flags.IntensifyRed ? 0x80 : 0x00) | (_flags.IntensifyBlue ? 0x100 : 0x00);
+	} else if(_nesModel == NesModel::PAL || _nesModel == NesModel::Dendy) {
+		//"Note that on the Dendy and PAL NES, the green and red bits swap meaning."
+		_intensifyColorBits = (_flags.IntensifyRed ? 0x40 : 0x00) | (_flags.IntensifyGreen ? 0x80 : 0x00) | (_flags.IntensifyBlue ? 0x100 : 0x00);
+	}
 }
 
 void PPU::UpdateVideoRamAddr()

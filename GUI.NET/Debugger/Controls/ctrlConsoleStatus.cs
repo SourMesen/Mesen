@@ -154,6 +154,8 @@ namespace Mesen.GUI.Debugger
 				state.PPU.State.VideoRamAddr = vramAddr;
 
 				InteropEmu.DebugSetState(state);
+				_lastState = state;
+				_dirty = false;
 				btnUndo.Enabled = false;
 				OnStateChanged?.Invoke(null, null);
 			}

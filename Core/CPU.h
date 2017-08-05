@@ -92,7 +92,9 @@ private:
 
 	uint8_t ReadByte()
 	{
-		return MemoryRead(_state.PC++, MemoryOperationType::ExecOperand);
+		uint8_t value = MemoryRead(_state.PC, MemoryOperationType::ExecOperand);
+		_state.PC++;
+		return value;
 	}
 
 	uint16_t ReadWord()
@@ -813,7 +815,11 @@ public:
 
 	void SetState(State state)
 	{
+		uint16_t originalPc = state.PC;
+		uint16_t originalDebugPc = state.DebugPC;
 		_state = state;
 		_cycleCount = state.CycleCount;
+		state.PC = originalPc;
+		state.DebugPC = originalDebugPc;
 	}
 };

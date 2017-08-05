@@ -371,6 +371,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ResumeExecution()
 		{
+			ctrlConsoleStatus.ApplyChanges();
 			ClearActiveStatement();
 			UpdateDebuggerFlags();
 			InteropEmu.DebugRun();
@@ -380,7 +381,6 @@ namespace Mesen.GUI.Debugger
 		{
 			ResumeExecution();
 		}
-
 
 		private void mnuToggleBreakpoint_Click(object sender, EventArgs e)
 		{

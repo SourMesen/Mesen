@@ -44,6 +44,7 @@ namespace Mesen.GUI
 		{
 			if(InteropEmu.IsRunning() && !InteropEmu.IsPaused()) {
 				HideMouse();
+				_tmrHideMouse.Stop();
 			} else {
 				ShowMouse();
 				_tmrHideMouse.Stop();

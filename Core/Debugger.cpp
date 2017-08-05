@@ -412,10 +412,10 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			_cpu->SetDebugPC(addr);
 			_needRewind = false;
 		}
-	}
 
-	_currentReadAddr = &addr;
-	_currentReadValue = &value;
+		_currentReadAddr = &addr;
+		_currentReadValue = &value;
+	}
 
 	//Check if a breakpoint has been hit and freeze execution if one has
 	bool breakDone = false;
@@ -589,26 +589,28 @@ void Debugger::SetState(DebugState state)
 {
 	_cpu->SetState(state.CPU);
 	_ppu->SetState(state.PPU);
-	SetNextStatement(state.CPU.PC);
+	if(state.CPU.PC != _cpu->GetState().PC) {
+		SetNextStatement(state.CPU.PC);
+	}
 }
 
 void Debugger::PpuStep(uint32_t count)
 {
-	_stepCount = -1;
 	_ppuStepCount = count;
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
+	_stepCount = -1;
 }
 
 void Debugger::Step(uint32_t count, bool sendNotification)
 {
 	//Run CPU for [count] INSTRUCTIONS before breaking again
 	_stepOut = false;
-	_stepCount = count;
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_ppuStepCount = -1;
 	_sendNotification = sendNotification;
+	_stepCount = count;
 }
 
 void Debugger::StepCycles(uint32_t count)
@@ -621,9 +623,9 @@ void Debugger::StepCycles(uint32_t count)
 void Debugger::StepOut()
 {
 	_stepOut = true;
-	_stepCount = -1;
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
+	_stepCount = -1;
 }
 
 void Debugger::StepOver()
@@ -650,8 +652,8 @@ void Debugger::StepBack()
 void Debugger::Run()
 {
 	//Resume execution after a breakpoint has been hit
-	_stepCount = -1;
 	_ppuStepCount = -1;
+	_stepCount = -1;
 }
 
 void Debugger::GenerateCodeOutput()
