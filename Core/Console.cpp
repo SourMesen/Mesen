@@ -248,11 +248,13 @@ void Console::Reset(bool softReset)
 			SoundMixer::StopRecording();
 
 			Console::Pause();
-			if(softReset) {
-				Instance->ResetComponents(softReset);
-			} else {
-				//Full reset of all objects to ensure the emulator always starts in the exact same state
-				LoadROM(Instance->_romFilepath, Instance->_patchFilename);
+			if(Instance->_initialized) {
+				if(softReset) {
+					Instance->ResetComponents(softReset);
+				} else {
+					//Full reset of all objects to ensure the emulator always starts in the exact same state
+					LoadROM(Instance->_romFilepath, Instance->_patchFilename);
+				}
 			}
 			Console::Resume();
 		}
@@ -439,8 +441,6 @@ void Console::Run()
 		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename);
 	}
 
-	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
-
 	_rewindManager.reset();
 	SoundMixer::StopAudio();
 	MovieManager::Stop();
@@ -472,6 +472,8 @@ void Console::Run()
 
 	_stopLock.Release();
 	_runLock.Release();
+
+	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
 }
 
 bool Console::IsRunning()
