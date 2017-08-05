@@ -46,9 +46,14 @@ namespace Mesen.GUI.Debugger
 			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
 
 			this.toolTip.SetToolTip(this.chkAbsolute, "Check to set an absolute address based on the exact address in PRG/CHR ROM (not CPU/PPU memory)");
-			this.toolTip.SetToolTip(this.picHelp,
+			this.toolTip.SetToolTip(this.picHelp, frmBreakpoint.GetConditionTooltip(false));
+		}
+
+		public static string GetConditionTooltip(bool forWatch)
+		{
+			string tooltip =
 				"Most expressions/operators are accepted (C++ syntax)." + Environment.NewLine +
-				"Note: Use the $ prefix to denote hexadecimal values." + Environment.NewLine + 
+				"Note: Use the $ prefix to denote hexadecimal values." + Environment.NewLine +
 				"Note 2: Labels assigned to the code can be used (their value will match the label's address in CPU memory)." + Environment.NewLine + Environment.NewLine +
 				"A/X/Y/PS/SP: Value of registers" + Environment.NewLine +
 				"PC: Program Counter" + Environment.NewLine +
@@ -57,8 +62,16 @@ namespace Mesen.GUI.Debugger
 				"Cycle/Scanline: Current cycle (0-340)/scanline(-1 to 260) of the PPU" + Environment.NewLine +
 				"Frame: PPU frame number (since power on/reset)" + Environment.NewLine +
 				"Value: Current value being read/written from/to memory" + Environment.NewLine +
-				"Address: Current CPU memory address being read/written" + Environment.NewLine +
-				"RomAddress: Current ROM address being read/written" + Environment.NewLine +
+				"IsRead: True if the CPU is reading from a memory address" + Environment.NewLine +
+				"IsWrite: True if the CPU is writing to a memory address" + Environment.NewLine;
+
+			if(!forWatch) {
+				tooltip +=
+					"Address: Current CPU memory address being read/written" + Environment.NewLine +
+					"RomAddress: Current ROM address being read/written" + Environment.NewLine;
+			}
+
+			tooltip +=
 				"[<address>]: (Byte) Memory value at <address> (CPU)" + Environment.NewLine +
 				"{<address>}: (Word) Memory value at <address> (CPU)" + Environment.NewLine + Environment.NewLine +
 
@@ -67,8 +80,9 @@ namespace Mesen.GUI.Debugger
 				"scanline == 10 && (cycle >= 55 && cycle <= 100)" + Environment.NewLine +
 				"x == [$150] || y == [10]" + Environment.NewLine +
 				"[[$15] + y]   -> Reads the value at address $15, adds Y to it and reads the value at the resulting address." + Environment.NewLine +
-				"{$FFFA}  -> Returns the NMI handler's address."
-			);
+				"{$FFFA}  -> Returns the NMI handler's address.";
+
+			return tooltip;
 		}
 
 		protected override void UpdateConfig()

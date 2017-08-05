@@ -66,3 +66,10 @@ struct DebugState
 	PPUDebugState PPU;
 	CartridgeState Cartridge;
 };
+
+struct OperationInfo
+{
+	uint16_t Address;
+	int16_t Value;
+	MemoryOperationType OperationType;
+};

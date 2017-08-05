@@ -58,7 +58,7 @@ private:
 	atomic<int32_t> _suspendCount;
 	vector<Breakpoint> _newBreakpoints;
 	vector<Breakpoint> _breakpoints[BreakpointTypeCount];
-	vector<vector<int>*> _breakpointRpnList[BreakpointTypeCount];
+	vector<vector<int>> _breakpointRpnList[BreakpointTypeCount];
 	bool _hasBreakpoint[BreakpointTypeCount] = {};
 
 	vector<uint8_t> _frozenAddresses;
@@ -111,7 +111,7 @@ private:
 	void PrivateProcessPpuCycle();
 	bool PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
-	bool HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value);
+	bool HasMatchingBreakpoint(BreakpointType type, OperationInfo &operationInfo);
 	
 	void UpdateCallstack(uint32_t addr);
 	void PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);

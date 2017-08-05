@@ -959,6 +959,10 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)] public bool ShowEffectiveAddresses;
 		[MarshalAs(UnmanagedType.I1)] public bool UseLabels;
 		public StatusFlagFormat StatusFormat;
+
+		[NonSerialized]
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
+		public byte[] Condition;
 	}
 
 	public enum ProfilerDataType

@@ -1,10 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include "DebuggerTypes.h"
+#include "../Utilities/SimpleLock.h"
 
 class DisassemblyInfo;
 class MemoryManager;
 class LabelManager;
+class ExpressionEvaluator;
+class Debugger;
 
 enum class StatusFlagFormat
 {
@@ -26,6 +29,8 @@ struct TraceLoggerOptions
 	bool ShowEffectiveAddresses;
 	bool UseLabels;
 	StatusFlagFormat StatusFormat;
+
+	char Condition[1000];
 };
 
 class TraceLogger
@@ -39,6 +44,11 @@ private:
 	bool _firstLine;
 	shared_ptr<MemoryManager> _memoryManager;
 	shared_ptr<LabelManager> _labelManager;
+	
+	shared_ptr<ExpressionEvaluator> _expEvaluator;
+	vector<int> _conditionRpnList;
+	DebugState _lastState;
+	shared_ptr<DisassemblyInfo> _lastDisassemblyInfo;
 
 	constexpr static int ExecutionLogSize = 30000;
 	bool _logToFile;
@@ -47,15 +57,20 @@ private:
 	PPUDebugState _ppuStateCache[ExecutionLogSize] = {};
 	shared_ptr<DisassemblyInfo> _disassemblyCache[ExecutionLogSize] = {};
 
+	SimpleLock _lock;
 	string _executionTrace;
 	
 	void GetStatusFlag(string &output, uint8_t ps);
+	void AddRow(shared_ptr<DisassemblyInfo> &disassemblyInfo, DebugState &state);
+	bool ConditionMatches(DebugState &state, shared_ptr<DisassemblyInfo> &disassemblyInfo, OperationInfo &operationInfo);
 
 public:
-	TraceLogger(shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
+	TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 	~TraceLogger();
 
-	void Log(State &cpuState, PPUDebugState &ppuState, shared_ptr<DisassemblyInfo> disassemblyInfo);
+	
+	void Log(DebugState &state, shared_ptr<DisassemblyInfo> disassemblyInfo, OperationInfo &operationInfo);
+	void LogNonExec(OperationInfo& operationInfo);
 	void SetOptions(TraceLoggerOptions options);
 	void StartLogging(string filename);
 	void StopLogging();

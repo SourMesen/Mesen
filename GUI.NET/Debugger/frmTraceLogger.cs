@@ -46,6 +46,9 @@ namespace Mesen.GUI.Debugger
 			UpdateMenu();
 			txtTraceLog.Font = new Font(BaseControl.MonospaceFontFamily, 10);
 			tmrUpdateLog.Start();
+
+			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
+			this.toolTip.SetToolTip(this.picHelp, "When a condition is given, instructions will only be logged by the trace logger if the condition returns a value not equal to 0 or false." + Environment.NewLine + Environment.NewLine + frmBreakpoint.GetConditionTooltip(false));
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -71,7 +74,10 @@ namespace Mesen.GUI.Debugger
 		{
 			_entityBinder.Entity = ConfigManager.Config.DebugInfo.TraceLoggerOptions;
 			_entityBinder.UpdateObject();
-			InteropEmu.DebugSetTraceOptions((TraceLoggerOptions)_entityBinder.Entity);
+			TraceLoggerOptions options = (TraceLoggerOptions)_entityBinder.Entity;
+			options.Condition = Encoding.UTF8.GetBytes(txtCondition.Text);
+			Array.Resize(ref options.Condition, 1000);
+			InteropEmu.DebugSetTraceOptions(options);
 		}
 
 		private void btnStartLogging_Click(object sender, EventArgs e)
@@ -141,6 +147,14 @@ namespace Mesen.GUI.Debugger
 
 		private void tmrUpdateLog_Tick(object sender, EventArgs e)
 		{
+			if(txtCondition.Text.Length > 0) {
+				EvalResultType resultType;
+				InteropEmu.DebugEvaluateExpression(txtCondition.Text, out resultType);
+				picExpressionWarning.Visible = (resultType == EvalResultType.Invalid);
+			} else {
+				picExpressionWarning.Visible = false;
+			}
+
 			if(mnuAutoRefresh.Checked) {
 				RefreshLog();
 			}

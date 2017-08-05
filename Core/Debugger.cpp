@@ -41,7 +41,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger, this, _disassembler));
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
 	_profiler.reset(new Profiler(this));
-	_traceLogger.reset(new TraceLogger(memoryManager, _labelManager));
+	_traceLogger.reset(new TraceLogger(this, memoryManager, _labelManager));
 
 	_stepOut = false;
 	_stepCount = -1;
@@ -227,7 +227,7 @@ void Debugger::UpdateBreakpoints()
 			for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
 				if(bp.HasBreakpointType((BreakpointType)i)) {
 					_breakpoints[i].push_back(bp);
-					_breakpointRpnList[i].push_back(expEval.GetRpnList(bp.GetCondition()));
+					_breakpointRpnList[i].push_back(*expEval.GetRpnList(bp.GetCondition()));
 					_hasBreakpoint[i] = true;
 				}
 			}
@@ -237,7 +237,7 @@ void Debugger::UpdateBreakpoints()
 	}
 }
 
-bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t value)
+bool Debugger::HasMatchingBreakpoint(BreakpointType type, OperationInfo &operationInfo)
 {
 	if(_runToCycle != 0) {
 		//Disable all breakpoints while stepping backwards
@@ -246,14 +246,14 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 
 	UpdateBreakpoints();
 
-	uint32_t absoluteAddr = _mapper->ToAbsoluteAddress(addr);
+	uint32_t absoluteAddr = _mapper->ToAbsoluteAddress(operationInfo.Address);
 	vector<Breakpoint> &breakpoints = _breakpoints[(int)type];
 
 	bool needState = true;
 	EvalResultType resultType;
 	for(size_t i = 0, len = breakpoints.size(); i < len; i++) {
 		Breakpoint &breakpoint = breakpoints[i];
-		if(type == BreakpointType::Global || breakpoint.Matches(addr, absoluteAddr)) {
+		if(type == BreakpointType::Global || breakpoint.Matches(operationInfo.Address, absoluteAddr)) {
 			if(!breakpoint.HasCondition()) {
 				return true;
 			} else {
@@ -261,12 +261,12 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 					GetState(&_debugState, false);
 					needState = false;
 				}
-				if(_breakpointRpnList[(int)type][i]) {
-					if(_bpExpEval.Evaluate(_breakpointRpnList[(int)type][i], _debugState, resultType, value, addr) != 0) {
+				if(_breakpointRpnList[(int)type][i].size() > 0) {
+					if(_bpExpEval.Evaluate(_breakpointRpnList[(int)type][i], _debugState, resultType, operationInfo) != 0) {
 						return true;
 					}
 				} else {
-					if(_bpExpEval.Evaluate(breakpoint.GetCondition(), _debugState, resultType, value, addr) != 0) {
+					if(_bpExpEval.Evaluate(breakpoint.GetCondition(), _debugState, resultType, operationInfo) != 0) {
 						return true;
 					}
 				}
@@ -280,8 +280,9 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, uint32_t addr, int16_t
 int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultType)
 {
 	DebugState state;
+	OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
 	GetState(&state);
-	return _watchExpEval.Evaluate(expression, state, resultType);
+	return _watchExpEval.Evaluate(expression, state, resultType, operationInfo);
 }
 
 void Debugger::RemoveExcessCallstackEntries()
@@ -361,7 +362,8 @@ void Debugger::PrivateProcessPpuCycle()
 		MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame);
 	}
 	
-	if(_hasBreakpoint[BreakpointType::Global] && HasMatchingBreakpoint(BreakpointType::Global, 0, -1)) {
+	OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
+	if(_hasBreakpoint[BreakpointType::Global] && HasMatchingBreakpoint(BreakpointType::Global, operationInfo)) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
 		SleepUntilResume();
@@ -376,6 +378,8 @@ void Debugger::PrivateProcessPpuCycle()
 
 bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
 {
+	OperationInfo operationInfo { addr, (int16_t)value, type };
+
 	if(type == MemoryOperationType::ExecOpCode) {
 		if(_runToCycle == 0) {
 			_rewindCache.clear();
@@ -490,8 +494,9 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		} else {
 			disassemblyInfo = _disassembler->GetDisassemblyInfo(addressInfo);
 		}
-		_traceLogger->Log(_debugState.CPU, _debugState.PPU, disassemblyInfo);
+		_traceLogger->Log(_debugState, disassemblyInfo, operationInfo);
 	} else {
+		_traceLogger->LogNonExec(operationInfo);
 		_profiler->ProcessCycle();
 	}
 
@@ -502,7 +507,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
 		}
 
-		if(_hasBreakpoint[breakpointType] && HasMatchingBreakpoint(breakpointType, addr, (type == MemoryOperationType::ExecOperand) ? -1 : value)) {
+		if(_hasBreakpoint[breakpointType] && HasMatchingBreakpoint(breakpointType, operationInfo)) {
 			//Found a matching breakpoint, stop execution
 			Step(1);
 			SleepUntilResume();
@@ -563,7 +568,8 @@ void Debugger::PrivateProcessVramOperation(MemoryOperationType type, uint16_t ad
 	}
 
 	BreakpointType bpType = type == MemoryOperationType::Write ? BreakpointType::WriteVram : BreakpointType::ReadVram;
-	if(_hasBreakpoint[bpType] && HasMatchingBreakpoint(bpType, addr, value)) {
+	OperationInfo operationInfo { addr, value, type };
+	if(_hasBreakpoint[bpType] && HasMatchingBreakpoint(bpType, operationInfo)) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
 		SleepUntilResume();

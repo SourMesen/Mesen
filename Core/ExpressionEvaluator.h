@@ -4,8 +4,8 @@
 #include <deque>
 #include <unordered_map>
 #include "../Utilities/SimpleLock.h"
+#include "DebuggerTypes.h"
 
-struct DebugState;
 class Debugger;
 
 enum EvalOperators
@@ -61,6 +61,8 @@ enum EvalValues
 	Value = 2000000112,
 	Address = 2000000113,
 	AbsoluteAddress = 2000000114,
+	IsWrite = 2000000115,
+	IsRead = 2000000116,
 };
 
 enum EvalResultType
@@ -101,14 +103,14 @@ private:
 	string GetNextToken(string expression, size_t &pos);	
 	bool ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, vector<int> &outputQueue);
 	bool ToRpn(string expression, vector<int> &outputQueue);
-	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr, bool &success);
+	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo, bool &success);
 	vector<int>* GetRpnList(string expression, vector<int> &output, bool& success);
 
 public:
 	ExpressionEvaluator(Debugger* debugger);
 
-	int32_t Evaluate(vector<int> *outputQueue, DebugState &state, EvalResultType &resultType, int16_t memoryValue = 0, uint32_t memoryAddr = 0);
-	int32_t Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue = 0, uint32_t memoryAddr = 0);
+	int32_t Evaluate(vector<int> &outputQueue, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo);
+	int32_t Evaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo);
 	vector<int>* GetRpnList(string expression);
 
 	bool Validate(string expression);

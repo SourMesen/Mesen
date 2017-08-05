@@ -31,7 +31,6 @@ namespace Mesen.GUI.Debugger.Controls
 				_regions = regions;
 				this.Invalidate();
 			} else {
-				bool needUpdate = false;
 				for(int i = 0; i < regions.Count; i++) {
 					if(_regions[i].Color != regions[i].Color || _regions[i].Name != regions[i].Name || _regions[i].Size != regions[i].Size) {
 						_regions = regions;

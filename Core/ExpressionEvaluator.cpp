@@ -100,6 +100,10 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 		output += std::to_string(EvalValues::Address);
 	} else if(!token.compare("romaddress")) {
 		output += std::to_string(EvalValues::AbsoluteAddress);
+	} else if(!token.compare("iswrite")) {
+		output += std::to_string(EvalValues::IsWrite);
+	} else if(!token.compare("isread")) {
+		output += std::to_string(EvalValues::IsRead);
 	} else {
 		string originalExpression = expression.substr(initialPos, pos - initialPos);
 		int32_t address = _debugger->GetLabelManager()->GetLabelRelativeAddress(originalExpression);
@@ -290,15 +294,15 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 	return true;
 }
 
-int32_t ExpressionEvaluator::Evaluate(vector<int> *rpnList, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr)
+int32_t ExpressionEvaluator::Evaluate(vector<int> &rpnList, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo)
 {
 	int pos = 0;
 	int right = 0;
 	int left = 0;
 	resultType = EvalResultType::Numeric;
 
-	for(size_t i = 0, len = rpnList->size(); i < len; i++) {
-		int token = (*rpnList)[i];
+	for(size_t i = 0, len = rpnList.size(); i < len; i++) {
+		int token = rpnList[i];
 
 		if(token >= EvalValues::RegA) {
 			//Replace value with a special value
@@ -315,9 +319,11 @@ int32_t ExpressionEvaluator::Evaluate(vector<int> *rpnList, DebugState &state, E
 				case EvalValues::PpuScanline: token = state.PPU.Scanline; break;
 				case EvalValues::Nmi: token = state.CPU.NMIFlag; break;
 				case EvalValues::Irq: token = state.CPU.IRQFlag; break;
-				case EvalValues::Value: token = memoryValue; break;
-				case EvalValues::Address: token = memoryAddr; break;
-				case EvalValues::AbsoluteAddress: token = _debugger->GetAbsoluteAddress(memoryAddr); break;
+				case EvalValues::Value: token = operationInfo.Value; break;
+				case EvalValues::Address: token = operationInfo.Address; break;
+				case EvalValues::AbsoluteAddress: token = _debugger->GetAbsoluteAddress(operationInfo.Address); break;
+				case EvalValues::IsWrite: token = operationInfo.OperationType == MemoryOperationType::Write; break;
+				case EvalValues::IsRead: token = operationInfo.OperationType == MemoryOperationType::Read; break;
 			}
 		} else if(token >= EvalOperators::Multiplication) {
 			right = operandStack[--pos];
@@ -401,7 +407,7 @@ vector<int>* ExpressionEvaluator::GetRpnList(string expression, vector<int> &out
 	return outputQueue;
 }
 
-int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr, bool& success)
+int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo, bool& success)
 {
 	success = true;
 	vector<int> output;
@@ -415,14 +421,14 @@ int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &stat
 		rpnList = &output;
 	}
 
-	return Evaluate(rpnList, state, resultType, memoryValue, memoryAddr);	
+	return Evaluate(*rpnList, state, resultType, operationInfo);	
 }
 
-int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, EvalResultType &resultType, int16_t memoryValue, uint32_t memoryAddr)
+int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo)
 {
 	try {
 		bool success;
-		int32_t result = PrivateEvaluate(expression, state, resultType, memoryValue, memoryAddr, success);
+		int32_t result = PrivateEvaluate(expression, state, resultType, operationInfo, success);
 		if(success) {
 			return result;
 		}
@@ -437,8 +443,9 @@ bool ExpressionEvaluator::Validate(string expression)
 	try {
 		DebugState state;
 		EvalResultType type;
+		OperationInfo operationInfo;
 		bool success;
-		PrivateEvaluate(expression, state, type, 0, 0, success);
+		PrivateEvaluate(expression, state, type, operationInfo, success);
 		return success;
 	} catch(std::exception e) {
 		return false;

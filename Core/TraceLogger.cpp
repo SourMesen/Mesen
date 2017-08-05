@@ -3,16 +3,19 @@
 #include "DisassemblyInfo.h"
 #include "DebuggerTypes.h"
 #include "Console.h"
+#include "Debugger.h"
 #include "MemoryManager.h"
 #include "LabelManager.h"
 #include "EmulationSettings.h"
+#include "ExpressionEvaluator.h"
 #include "../Utilities/HexUtilities.h"
 #include "../Utilities/FolderUtilities.h"
 
 TraceLogger *TraceLogger::_instance = nullptr;
 
-TraceLogger::TraceLogger(shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager)
+TraceLogger::TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager)
 {
+	_expEvaluator = shared_ptr<ExpressionEvaluator>(new ExpressionEvaluator(debugger));
 	_memoryManager = memoryManager;
 	_labelManager = labelManager;
 	_instance = this;
@@ -29,6 +32,16 @@ TraceLogger::~TraceLogger()
 void TraceLogger::SetOptions(TraceLoggerOptions options)
 {
 	_options = options;
+	string condition = _options.Condition;
+	
+	auto lock = _lock.AcquireSafe();
+	_conditionRpnList.clear();
+	if(!condition.empty()) {
+		vector<int> *rpnList = _expEvaluator->GetRpnList(condition);
+		if(rpnList) {
+			_conditionRpnList = *rpnList;
+		}
+	}
 }
 
 void TraceLogger::StartLogging(string filename)
@@ -146,24 +159,57 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 	}
 }
 
-SimpleLock _lock;
-void TraceLogger::Log(State &cpuState, PPUDebugState &ppuState, shared_ptr<DisassemblyInfo> disassemblyInfo)
+bool TraceLogger::ConditionMatches(DebugState &state, shared_ptr<DisassemblyInfo> &disassemblyInfo, OperationInfo &operationInfo)
+{
+	if(!_conditionRpnList.empty()) {
+		EvalResultType type;
+		if(!_expEvaluator->Evaluate(_conditionRpnList, state, type, operationInfo)) {
+			if(operationInfo.OperationType == MemoryOperationType::ExecOpCode) {
+				//Condition did not match, keep state/disassembly info for instruction's subsequent cycles
+				_lastState = state;
+				_lastDisassemblyInfo = disassemblyInfo;
+			}
+			return false;
+		}
+	}
+	return true;
+}
+
+void TraceLogger::AddRow(shared_ptr<DisassemblyInfo> &disassemblyInfo, DebugState &state)
+{
+	_disassemblyCache[_currentPos] = disassemblyInfo;
+	_cpuStateCache[_currentPos] = state.CPU;
+	_ppuStateCache[_currentPos] = state.PPU;
+	_currentPos = (_currentPos + 1) % ExecutionLogSize;
+	_lastDisassemblyInfo.reset();
+
+	if(_logToFile) {
+		GetTraceRow(_outputBuffer, state.CPU, state.PPU, disassemblyInfo, _firstLine);
+		if(_outputBuffer.size() > 32768) {
+			_outputFile << _outputBuffer;
+			_outputBuffer.clear();
+		}
+
+		_firstLine = false;
+	}
+}
+
+void TraceLogger::LogNonExec(OperationInfo& operationInfo)
+{
+	if(_lastDisassemblyInfo) {
+		auto lock = _lock.AcquireSafe();
+		if(ConditionMatches(_lastState, _lastDisassemblyInfo, operationInfo)) {
+			AddRow(_lastDisassemblyInfo, _lastState);
+		}
+	}
+}
+
+void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassemblyInfo, OperationInfo &operationInfo)
 {
 	if(disassemblyInfo) {
 		auto lock = _lock.AcquireSafe();
-		_disassemblyCache[_currentPos] = disassemblyInfo;
-		_cpuStateCache[_currentPos] = cpuState;
-		_ppuStateCache[_currentPos] = ppuState;
-		_currentPos = (_currentPos + 1) % ExecutionLogSize;
-		
-		if(_logToFile) {
-			GetTraceRow(_outputBuffer, cpuState, ppuState, disassemblyInfo, _firstLine);
-			if(_outputBuffer.size() > 32768) {
-				_outputFile << _outputBuffer;
-				_outputBuffer.clear();
-			}
-
-			_firstLine = false;
+		if(ConditionMatches(state, disassemblyInfo, operationInfo)) {
+			AddRow(disassemblyInfo, state);
 		}
 	}
 }
