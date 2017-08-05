@@ -72,12 +72,10 @@ namespace Mesen.GUI.Debugger
 						BreakpointManager.RemoveBreakpoint(breakpoint);
 					}
 				} else {
-					AddressTypeInfo addressTypeInfo = new AddressTypeInfo();
-					InteropEmu.DebugGetAbsoluteAddressAndType((uint)address, ref addressTypeInfo);
 					breakpoint = new Breakpoint() {
 						BreakOnExec = true,
-						Address = addressTypeInfo.Type == AddressType.PrgRom ? (UInt32)addressTypeInfo.Address : (UInt32)address,
-						IsAbsoluteAddress = addressTypeInfo.Type == AddressType.PrgRom,
+						Address = (UInt32)address,
+						IsAbsoluteAddress = false,
 						Enabled = true
 					};
 					BreakpointManager.AddBreakpoint(breakpoint);
