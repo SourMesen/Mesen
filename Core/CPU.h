@@ -22,7 +22,7 @@ namespace PSFlags
 	};
 }
 
-enum AddrMode
+enum class AddrMode
 {
 	None,	Acc, Imp, Imm, Rel,
 	Zero, Abs, ZeroX, ZeroY,

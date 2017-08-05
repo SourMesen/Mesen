@@ -14,7 +14,7 @@ Language EmulationSettings::_displayLanguage = Language::English;
 uint64_t EmulationSettings::_flags = 0;
 
 bool EmulationSettings::_audioSettingsChanged = true;
-uint32_t EmulationSettings::_audioLatency = 20000;
+uint32_t EmulationSettings::_audioLatency = 50;
 double EmulationSettings::_channelVolume[11] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 double EmulationSettings::_channelPanning[11] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 EqualizerFilterType EmulationSettings::_equalizerFilterType = EqualizerFilterType::None;

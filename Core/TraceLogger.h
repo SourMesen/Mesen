@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "DebuggerTypes.h"
 #include "../Utilities/SimpleLock.h"
+#include "DisassemblyInfo.h"
 
-class DisassemblyInfo;
 class MemoryManager;
 class LabelManager;
 class ExpressionEvaluator;
@@ -47,35 +47,39 @@ private:
 	
 	shared_ptr<ExpressionEvaluator> _expEvaluator;
 	vector<int> _conditionRpnList;
+
+	bool _pendingLog;
 	DebugState _lastState;
-	shared_ptr<DisassemblyInfo> _lastDisassemblyInfo;
+	DisassemblyInfo _lastDisassemblyInfo;
 
 	constexpr static int ExecutionLogSize = 30000;
 	bool _logToFile;
 	uint16_t _currentPos;
+	uint32_t _logCount;
 	State _cpuStateCache[ExecutionLogSize] = {};
 	PPUDebugState _ppuStateCache[ExecutionLogSize] = {};
-	shared_ptr<DisassemblyInfo> _disassemblyCache[ExecutionLogSize] = {};
+	DisassemblyInfo _disassemblyCache[ExecutionLogSize];
 
 	SimpleLock _lock;
 	string _executionTrace;
 	
 	void GetStatusFlag(string &output, uint8_t ps);
-	void AddRow(shared_ptr<DisassemblyInfo> &disassemblyInfo, DebugState &state);
-	bool ConditionMatches(DebugState &state, shared_ptr<DisassemblyInfo> &disassemblyInfo, OperationInfo &operationInfo);
+	void AddRow(DisassemblyInfo &disassemblyInfo, DebugState &state);
+	bool ConditionMatches(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo);
+	
+	void GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo, bool firstLine);
 
 public:
 	TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 	~TraceLogger();
 
 	
-	void Log(DebugState &state, shared_ptr<DisassemblyInfo> disassemblyInfo, OperationInfo &operationInfo);
+	void Log(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo);
 	void LogNonExec(OperationInfo& operationInfo);
 	void SetOptions(TraceLoggerOptions options);
 	void StartLogging(string filename);
 	void StopLogging();
 
-	void GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, shared_ptr<DisassemblyInfo> &disassemblyInfo, bool firstLine);
 	const char* GetExecutionTrace(uint32_t lineCount);
 
 	static void LogStatic(string log);

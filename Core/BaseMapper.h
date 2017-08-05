@@ -179,7 +179,7 @@ public:
 		NotifyVRAMAddressChange(addr);
 
 		uint8_t value = MapperReadVRAM(addr, type);
-		Debugger::ProcessVramOperation(type, addr, value);
+		Debugger::ProcessVramReadOperation(type, addr, value);
 		return value;
 	}
 

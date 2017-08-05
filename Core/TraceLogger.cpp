@@ -20,7 +20,9 @@ TraceLogger::TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryMan
 	_labelManager = labelManager;
 	_instance = this;
 	_currentPos = 0;
+	_logCount = 0;
 	_logToFile = false;
+	_pendingLog = false;
 }
 
 TraceLogger::~TraceLogger()
@@ -103,7 +105,7 @@ void TraceLogger::GetStatusFlag(string &output, uint8_t ps)
 	}
 }
 
-void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, shared_ptr<DisassemblyInfo> &disassemblyInfo, bool firstLine)
+void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo, bool firstLine)
 {
 	if(!firstLine) {
 		output += "\n";
@@ -113,7 +115,7 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 
 	if(_options.ShowByteCode) {
 		string byteCode;
-		disassemblyInfo->GetByteCode(byteCode);
+		disassemblyInfo.GetByteCode(byteCode);
 		output += byteCode + std::string(13 - byteCode.size(), ' ');
 	}
 
@@ -125,8 +127,8 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 
 	string code;
 	LabelManager* labelManager = _options.UseLabels ? _labelManager.get() : nullptr;
-	disassemblyInfo->ToString(code, cpuState.DebugPC, _memoryManager.get(), labelManager);
-	disassemblyInfo->GetEffectiveAddressString(code, cpuState, _memoryManager.get(), labelManager);
+	disassemblyInfo.ToString(code, cpuState.DebugPC, _memoryManager.get(), labelManager);
+	disassemblyInfo.GetEffectiveAddressString(code, cpuState, _memoryManager.get(), labelManager);
 	code += std::string(std::max(0, (int)(32 - code.size())), ' ');
 	output += code;
 
@@ -159,7 +161,7 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 	}
 }
 
-bool TraceLogger::ConditionMatches(DebugState &state, shared_ptr<DisassemblyInfo> &disassemblyInfo, OperationInfo &operationInfo)
+bool TraceLogger::ConditionMatches(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo)
 {
 	if(!_conditionRpnList.empty()) {
 		EvalResultType type;
@@ -168,6 +170,7 @@ bool TraceLogger::ConditionMatches(DebugState &state, shared_ptr<DisassemblyInfo
 				//Condition did not match, keep state/disassembly info for instruction's subsequent cycles
 				_lastState = state;
 				_lastDisassemblyInfo = disassemblyInfo;
+				_pendingLog = true;
 			}
 			return false;
 		}
@@ -175,13 +178,17 @@ bool TraceLogger::ConditionMatches(DebugState &state, shared_ptr<DisassemblyInfo
 	return true;
 }
 
-void TraceLogger::AddRow(shared_ptr<DisassemblyInfo> &disassemblyInfo, DebugState &state)
+void TraceLogger::AddRow(DisassemblyInfo &disassemblyInfo, DebugState &state)
 {
 	_disassemblyCache[_currentPos] = disassemblyInfo;
 	_cpuStateCache[_currentPos] = state.CPU;
 	_ppuStateCache[_currentPos] = state.PPU;
 	_currentPos = (_currentPos + 1) % ExecutionLogSize;
-	_lastDisassemblyInfo.reset();
+	_pendingLog = false;
+
+	if(_logCount < ExecutionLogSize) {
+		_logCount++;
+	}
 
 	if(_logToFile) {
 		GetTraceRow(_outputBuffer, state.CPU, state.PPU, disassemblyInfo, _firstLine);
@@ -196,7 +203,7 @@ void TraceLogger::AddRow(shared_ptr<DisassemblyInfo> &disassemblyInfo, DebugStat
 
 void TraceLogger::LogNonExec(OperationInfo& operationInfo)
 {
-	if(_lastDisassemblyInfo) {
+	if(_pendingLog) {
 		auto lock = _lock.AcquireSafe();
 		if(ConditionMatches(_lastState, _lastDisassemblyInfo, operationInfo)) {
 			AddRow(_lastDisassemblyInfo, _lastState);
@@ -204,13 +211,11 @@ void TraceLogger::LogNonExec(OperationInfo& operationInfo)
 	}
 }
 
-void TraceLogger::Log(DebugState &state, shared_ptr<DisassemblyInfo> disassemblyInfo, OperationInfo &operationInfo)
+void TraceLogger::Log(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo)
 {
-	if(disassemblyInfo) {
-		auto lock = _lock.AcquireSafe();
-		if(ConditionMatches(state, disassemblyInfo, operationInfo)) {
-			AddRow(disassemblyInfo, state);
-		}
+	auto lock = _lock.AcquireSafe();
+	if(ConditionMatches(state, disassemblyInfo, operationInfo)) {
+		AddRow(disassemblyInfo, state);
 	}
 }
 
@@ -218,14 +223,13 @@ const char* TraceLogger::GetExecutionTrace(uint32_t lineCount)
 {
 	_executionTrace.clear();
 	auto lock = _lock.AcquireSafe();
+	lineCount = std::min(lineCount, _logCount);
 	int startPos = _currentPos + ExecutionLogSize - lineCount;
 	bool firstLine = true;
 	for(int i = 0; i < (int)lineCount; i++) {
 		int index = (startPos + i) % ExecutionLogSize;
-		if(_disassemblyCache[index]) {
-			GetTraceRow(_executionTrace, _cpuStateCache[index], _ppuStateCache[index], _disassemblyCache[index], firstLine);
-			firstLine = false;
-		}
+		GetTraceRow(_executionTrace, _cpuStateCache[index], _ppuStateCache[index], _disassemblyCache[index], firstLine);
+		firstLine = false;
 	}
 	return _executionTrace.c_str();
 }

@@ -800,7 +800,7 @@ void BaseMapper::InternalWriteVRAM(uint16_t addr, uint8_t value)
 void BaseMapper::WriteVRAM(uint16_t addr, uint8_t value)
 {
 	ProcessVramAccess(addr);
-	Debugger::ProcessVramOperation(MemoryOperationType::Write, addr, value);
+	Debugger::ProcessVramWriteOperation(addr, value);
 	NotifyVRAMAddressChange(addr);
 
 	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {

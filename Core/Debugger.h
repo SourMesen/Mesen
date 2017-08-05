@@ -110,7 +110,8 @@ private:
 
 	void PrivateProcessPpuCycle();
 	bool PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
-	void PrivateProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
+	void PrivateProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
+	void PrivateProcessVramWriteOperation(uint16_t addr, uint8_t value);
 	bool HasMatchingBreakpoint(BreakpointType type, OperationInfo &operationInfo);
 	
 	void UpdateCallstack(uint32_t addr);
@@ -176,7 +177,8 @@ public:
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
 	
 	static bool ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
-	static void ProcessVramOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
+	static void ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
+	static void ProcessVramWriteOperation(uint16_t addr, uint8_t value);
 	static void ProcessPpuCycle();
 
 	static void SetLastFramePpuScroll(uint16_t x, uint16_t y);

@@ -21,6 +21,7 @@ private:
 	AddrMode _opMode;
 	
 public:
+	DisassemblyInfo();
 	DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint);
 
 	void SetSubEntryPoint();

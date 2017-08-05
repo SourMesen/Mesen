@@ -42,7 +42,7 @@ public:
 
 	string GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uint16_t memoryAddr, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 
-	shared_ptr<DisassemblyInfo> GetDisassemblyInfo(AddressTypeInfo &info);
+	DisassemblyInfo GetDisassemblyInfo(AddressTypeInfo &info);
 
 	void RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length);
 };
