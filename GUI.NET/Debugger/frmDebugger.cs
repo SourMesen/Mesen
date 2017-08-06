@@ -560,8 +560,8 @@ namespace Mesen.GUI.Debugger
 
 			InteropEmu.DebugRelease();
 
-			ConfigManager.Config.DebugInfo.WindowWidth = this.Width;
-			ConfigManager.Config.DebugInfo.WindowHeight = this.Height;
+			ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
+			ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Height : this.Height;
 			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
 			ConfigManager.Config.DebugInfo.LeftPanelWidth = this.ctrlSplitContainerTop.GetSplitterDistance();
 			ConfigManager.ApplyChanges();

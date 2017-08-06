@@ -20,12 +20,19 @@ namespace Mesen.GUI.Debugger
 		private bool _loggingEnabled = false;
 		private string _lastFilename;
 		private EntityBinder _entityBinder = new EntityBinder();
+		private int _previousCycleCount;
+		private string _previousTrace;
+		private bool _refreshRunning;
 
 		public frmTraceLogger()
 		{
 			InitializeComponent();
 
 			DebugInfo debugInfo = ConfigManager.Config.DebugInfo;
+			if(!debugInfo.TraceLoggerSize.IsEmpty) {
+				this.Size = debugInfo.TraceLoggerSize;
+			}
+
 			mnuAutoRefresh.Checked = debugInfo.TraceAutoRefresh;
 			_lineCount = debugInfo.TraceLineCount;
 
@@ -44,8 +51,9 @@ namespace Mesen.GUI.Debugger
 			_entityBinder.UpdateUI();
 
 			UpdateMenu();
-			txtTraceLog.Font = new Font(BaseControl.MonospaceFontFamily, 10);
+			txtTraceLog.FontSize = 10;
 			tmrUpdateLog.Start();
+			RefreshLog(true);
 
 			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
 			this.toolTip.SetToolTip(this.picHelp, "When a condition is given, instructions will only be logged by the trace logger if the condition returns a value not equal to 0 or false." + Environment.NewLine + Environment.NewLine + frmBreakpoint.GetConditionTooltip(false));
@@ -59,6 +67,7 @@ namespace Mesen.GUI.Debugger
 			debugInfo.TraceAutoRefresh = mnuAutoRefresh.Checked;
 			debugInfo.TraceLineCount = _lineCount;
 			debugInfo.TraceIndentCode = chkIndentCode.Checked;
+			debugInfo.TraceLoggerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			_entityBinder.Entity = debugInfo.TraceLoggerOptions;
 			_entityBinder.UpdateObject();
 			debugInfo.TraceLoggerOptions = (TraceLoggerOptions)_entityBinder.Entity;
@@ -115,16 +124,82 @@ namespace Mesen.GUI.Debugger
 			} catch { }
 		}
 
-		private void RefreshLog()
-		{
-			SetOptions();
-			string newTrace = InteropEmu.DebugGetExecutionTrace((UInt32)_lineCount).Replace("\n", Environment.NewLine);
 
-			if(newTrace != txtTraceLog.Text) {
-				txtTraceLog.Text = newTrace;
-				txtTraceLog.SelectionStart = txtTraceLog.TextLength;
-				txtTraceLog.ScrollToCaret();
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			switch(keyData) {
+				case Keys.C | Keys.Control:
+					if(_previousTrace != null) {
+						string[] lines = _previousTrace.Split('\n');
+						StringBuilder sb = new StringBuilder();
+						for(int i = txtTraceLog.SelectionStart, end = txtTraceLog.SelectionStart + txtTraceLog.SelectionLength; i <= end; i++) {
+							sb.AppendLine(lines[i]);
+						}
+						Clipboard.SetText(sb.ToString());
+					}
+					return true;
 			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		private void RefreshLog(bool scrollToBottom)
+		{
+			if(_refreshRunning) {
+				return;
+			}
+
+			_refreshRunning = true;
+			SetOptions();
+			Task.Run(() => {
+				//Update trace log in another thread for performance
+				DebugState state = new DebugState();
+				InteropEmu.DebugGetState(ref state);
+				if(_previousCycleCount != state.CPU.CycleCount) {
+					string newTrace = InteropEmu.DebugGetExecutionTrace((UInt32)_lineCount);
+					_previousCycleCount = state.CPU.CycleCount;
+					_previousTrace = newTrace;
+
+					int index = 0;
+					string line = null;
+					Func<bool> readLine = () => {
+						if(index < newTrace.Length) {
+							int endOfLineIndex = newTrace.IndexOf('\n', index);
+							line = newTrace.Substring(index, endOfLineIndex - index);
+							index = endOfLineIndex + 1;
+							return true;
+						} else {
+							return false;
+						}
+					};
+
+					List<int> programCounter = new List<int>(30000);
+					List<string> byteCode = new List<string>(30000);
+					List<string> lineContent = new List<string>(30000);
+					List<int> indent = new List<int>(30000);
+
+					char[] splitter = new char[] { ' ' };
+					while(readLine()) {
+						programCounter.Add(Int32.Parse(line.Substring(0, 4), System.Globalization.NumberStyles.HexNumber));
+						byteCode.Add(line.Substring(6, 11));
+						lineContent.Add(line.Substring(19));
+						indent.Add(6);
+					}
+					this.BeginInvoke((Action)(() => {
+						txtTraceLog.ShowContentNotes = chkShowByteCode.Checked;
+						txtTraceLog.ShowSingleContentLineNotes = chkShowByteCode.Checked;
+
+						txtTraceLog.LineIndentations = indent.ToArray();
+						txtTraceLog.TextLines = lineContent.ToArray();
+						txtTraceLog.LineNumbers = programCounter.ToArray();
+						txtTraceLog.TextLineNotes = byteCode.ToArray();
+
+						if(scrollToBottom) {
+							txtTraceLog.ScrollToLineIndex(txtTraceLog.LineCount - 1);
+						}
+					}));
+				}
+				_refreshRunning = false;
+			});
 		}
 
 		private void UpdateMenu()
@@ -134,15 +209,11 @@ namespace Mesen.GUI.Debugger
 			mnu1000Lines.Checked = _lineCount == 1000;
 			mnu100Lines.Checked = _lineCount == 100;
 
-			if(_lineCount >= 10000) {
-				mnuAutoRefresh.Checked = false;
-			} else if(_lineCount == 1000) {
+			if(_lineCount >= 1000) {
 				tmrUpdateLog.Interval = 250;
 			} else {
 				tmrUpdateLog.Interval = 150;
 			}
-
-			mnuAutoRefresh.Enabled = _lineCount < 10000;
 		}
 
 		private void tmrUpdateLog_Tick(object sender, EventArgs e)
@@ -156,7 +227,7 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(mnuAutoRefresh.Checked) {
-				RefreshLog();
+				RefreshLog(false);
 			}
 		}
 
@@ -186,7 +257,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuRefresh_Click(object sender, EventArgs e)
 		{
-			RefreshLog();
+			RefreshLog(false);
 		}
 	}
 }

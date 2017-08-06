@@ -41,7 +41,6 @@ private:
 	string _outputFilepath;
 	string _outputBuffer;
 	ofstream _outputFile;
-	bool _firstLine;
 	shared_ptr<MemoryManager> _memoryManager;
 	shared_ptr<LabelManager> _labelManager;
 	
@@ -60,6 +59,10 @@ private:
 	PPUDebugState _ppuStateCache[ExecutionLogSize] = {};
 	DisassemblyInfo _disassemblyCache[ExecutionLogSize];
 
+	State _cpuStateCacheCopy[ExecutionLogSize] = {};
+	PPUDebugState _ppuStateCacheCopy[ExecutionLogSize] = {};
+	DisassemblyInfo _disassemblyCacheCopy[ExecutionLogSize];
+
 	SimpleLock _lock;
 	string _executionTrace;
 	
@@ -67,7 +70,7 @@ private:
 	void AddRow(DisassemblyInfo &disassemblyInfo, DebugState &state);
 	bool ConditionMatches(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo);
 	
-	void GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo, bool firstLine);
+	void GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo, bool forceByteCode);
 
 public:
 	TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);

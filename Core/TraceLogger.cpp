@@ -48,30 +48,27 @@ void TraceLogger::SetOptions(TraceLoggerOptions options)
 
 void TraceLogger::StartLogging(string filename)
 {
+	_outputBuffer.clear();
 	_outputFile.open(filename, ios::out | ios::binary);
 	_logToFile = true;
-	_firstLine = true;
 }
 
 void TraceLogger::StopLogging() 
 {
 	if(_logToFile) {
-		Console::Pause();
+		_logToFile = false;
 		if(_outputFile) {
 			if(!_outputBuffer.empty()) {
 				_outputFile << _outputBuffer;
 			}
 			_outputFile.close();
 		}
-		Console::Resume();
-		_logToFile = false;
 	}
 }
 
-
 void TraceLogger::LogStatic(string log)
 {
-	if(_instance && _instance->_logToFile && _instance->_options.ShowExtraInfo && !_instance->_firstLine) {
+	if(_instance && _instance->_logToFile && _instance->_options.ShowExtraInfo) {
 		//Flush current buffer
 		_instance->_outputFile << _instance->_outputBuffer;
 		_instance->_outputBuffer.clear();
@@ -105,15 +102,11 @@ void TraceLogger::GetStatusFlag(string &output, uint8_t ps)
 	}
 }
 
-void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo, bool firstLine)
+void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo, bool forceByteCode)
 {
-	if(!firstLine) {
-		output += "\n";
-	}
-
 	output += HexUtilities::ToHex(cpuState.DebugPC) + "  ";
 
-	if(_options.ShowByteCode) {
+	if(_options.ShowByteCode || forceByteCode) {
 		string byteCode;
 		disassemblyInfo.GetByteCode(byteCode);
 		output += byteCode + std::string(13 - byteCode.size(), ' ');
@@ -159,6 +152,7 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 	if(_options.ShowCpuCycles) {
 		output += " CPU Cycle:" + std::to_string(cpuState.CycleCount);
 	}
+	output += "\n";
 }
 
 bool TraceLogger::ConditionMatches(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo)
@@ -191,13 +185,11 @@ void TraceLogger::AddRow(DisassemblyInfo &disassemblyInfo, DebugState &state)
 	}
 
 	if(_logToFile) {
-		GetTraceRow(_outputBuffer, state.CPU, state.PPU, disassemblyInfo, _firstLine);
+		GetTraceRow(_outputBuffer, state.CPU, state.PPU, disassemblyInfo, false);
 		if(_outputBuffer.size() > 32768) {
 			_outputFile << _outputBuffer;
 			_outputBuffer.clear();
 		}
-
-		_firstLine = false;
 	}
 }
 
@@ -221,15 +213,22 @@ void TraceLogger::Log(DebugState &state, DisassemblyInfo &disassemblyInfo, Opera
 
 const char* TraceLogger::GetExecutionTrace(uint32_t lineCount)
 {
+	int startPos;
+
 	_executionTrace.clear();
-	auto lock = _lock.AcquireSafe();
-	lineCount = std::min(lineCount, _logCount);
-	int startPos = _currentPos + ExecutionLogSize - lineCount;
-	bool firstLine = true;
+	{
+		auto lock = _lock.AcquireSafe();
+		lineCount = std::min(lineCount, _logCount);
+		memcpy(_cpuStateCacheCopy, _cpuStateCache, sizeof(_cpuStateCache));
+		memcpy(_ppuStateCacheCopy, _ppuStateCache, sizeof(_ppuStateCache));
+		memcpy(_disassemblyCacheCopy, _disassemblyCache, sizeof(_disassemblyCache));
+		startPos = _currentPos + ExecutionLogSize - lineCount;
+	}
+	
 	for(int i = 0; i < (int)lineCount; i++) {
 		int index = (startPos + i) % ExecutionLogSize;
-		GetTraceRow(_executionTrace, _cpuStateCache[index], _ppuStateCache[index], _disassemblyCache[index], firstLine);
-		firstLine = false;
+		GetTraceRow(_executionTrace, _cpuStateCacheCopy[index], _ppuStateCacheCopy[index], _disassemblyCacheCopy[index], true);
 	}
+
 	return _executionTrace.c_str();
 }

@@ -46,11 +46,13 @@
 			this.chkShowEffectiveAddresses = new System.Windows.Forms.CheckBox();
 			this.chkShowExtraInfo = new System.Windows.Forms.CheckBox();
 			this.cboStatusFlagFormat = new System.Windows.Forms.ComboBox();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.picHelp = new System.Windows.Forms.PictureBox();
+			this.picExpressionWarning = new System.Windows.Forms.PictureBox();
 			this.lblCondition = new System.Windows.Forms.Label();
 			this.txtCondition = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpExecutionLog = new System.Windows.Forms.GroupBox();
-			this.txtTraceLog = new System.Windows.Forms.TextBox();
 			this.tmrUpdateLog = new System.Windows.Forms.Timer(this.components);
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,18 +64,16 @@
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
-			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-			this.picExpressionWarning = new System.Windows.Forms.PictureBox();
-			this.picHelp = new System.Windows.Forms.PictureBox();
+			this.txtTraceLog = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpLogOptions.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).BeginInit();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpExecutionLog.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
-			this.tableLayoutPanel4.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -310,6 +310,48 @@
 			this.cboStatusFlagFormat.Size = new System.Drawing.Size(121, 21);
 			this.cboStatusFlagFormat.TabIndex = 13;
 			// 
+			// tableLayoutPanel4
+			// 
+			this.tableLayoutPanel4.ColumnCount = 4;
+			this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanel4, 4);
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel4.Controls.Add(this.picHelp, 3, 0);
+			this.tableLayoutPanel4.Controls.Add(this.picExpressionWarning, 2, 0);
+			this.tableLayoutPanel4.Controls.Add(this.lblCondition, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.txtCondition, 1, 0);
+			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 73);
+			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+			this.tableLayoutPanel4.RowCount = 1;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(769, 25);
+			this.tableLayoutPanel4.TabIndex = 16;
+			// 
+			// picHelp
+			// 
+			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picHelp.Location = new System.Drawing.Point(748, 5);
+			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.picHelp.Name = "picHelp";
+			this.picHelp.Size = new System.Drawing.Size(18, 17);
+			this.picHelp.TabIndex = 17;
+			this.picHelp.TabStop = false;
+			// 
+			// picExpressionWarning
+			// 
+			this.picExpressionWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
+			this.picExpressionWarning.Location = new System.Drawing.Point(724, 5);
+			this.picExpressionWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.picExpressionWarning.Name = "picExpressionWarning";
+			this.picExpressionWarning.Size = new System.Drawing.Size(18, 17);
+			this.picExpressionWarning.TabIndex = 16;
+			this.picExpressionWarning.TabStop = false;
+			this.picExpressionWarning.Visible = false;
+			// 
 			// lblCondition
 			// 
 			this.lblCondition.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -354,18 +396,6 @@
 			this.grpExecutionLog.TabIndex = 2;
 			this.grpExecutionLog.TabStop = false;
 			this.grpExecutionLog.Text = "Execution Log";
-			// 
-			// txtTraceLog
-			// 
-			this.txtTraceLog.BackColor = System.Drawing.SystemColors.Window;
-			this.txtTraceLog.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtTraceLog.Location = new System.Drawing.Point(3, 16);
-			this.txtTraceLog.Multiline = true;
-			this.txtTraceLog.Name = "txtTraceLog";
-			this.txtTraceLog.ReadOnly = true;
-			this.txtTraceLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtTraceLog.Size = new System.Drawing.Size(775, 246);
-			this.txtTraceLog.TabIndex = 1;
 			// 
 			// tmrUpdateLog
 			// 
@@ -457,47 +487,19 @@
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
-			// tableLayoutPanel4
+			// txtTraceLog
 			// 
-			this.tableLayoutPanel4.ColumnCount = 4;
-			this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanel4, 4);
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel4.Controls.Add(this.picHelp, 3, 0);
-			this.tableLayoutPanel4.Controls.Add(this.picExpressionWarning, 2, 0);
-			this.tableLayoutPanel4.Controls.Add(this.lblCondition, 0, 0);
-			this.tableLayoutPanel4.Controls.Add(this.txtCondition, 1, 0);
-			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 73);
-			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-			this.tableLayoutPanel4.RowCount = 1;
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(769, 25);
-			this.tableLayoutPanel4.TabIndex = 16;
-			// 
-			// picExpressionWarning
-			// 
-			this.picExpressionWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
-			this.picExpressionWarning.Location = new System.Drawing.Point(724, 5);
-			this.picExpressionWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-			this.picExpressionWarning.Name = "picExpressionWarning";
-			this.picExpressionWarning.Size = new System.Drawing.Size(18, 17);
-			this.picExpressionWarning.TabIndex = 16;
-			this.picExpressionWarning.TabStop = false;
-			this.picExpressionWarning.Visible = false;
-			// 
-			// picHelp
-			// 
-			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picHelp.Location = new System.Drawing.Point(748, 5);
-			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-			this.picHelp.Name = "picHelp";
-			this.picHelp.Size = new System.Drawing.Size(18, 17);
-			this.picHelp.TabIndex = 17;
-			this.picHelp.TabStop = false;
+			this.txtTraceLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtTraceLog.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtTraceLog.FontSize = 13F;
+			this.txtTraceLog.Location = new System.Drawing.Point(3, 16);
+			this.txtTraceLog.Name = "txtTraceLog";
+			this.txtTraceLog.ShowContentNotes = false;
+			this.txtTraceLog.ShowLineNumberNotes = false;
+			this.txtTraceLog.ShowSingleContentLineNotes = true;
+			this.txtTraceLog.ShowSingleLineLineNumberNotes = false;
+			this.txtTraceLog.Size = new System.Drawing.Size(775, 246);
+			this.txtTraceLog.TabIndex = 0;
 			// 
 			// frmTraceLogger
 			// 
@@ -514,15 +516,14 @@
 			this.grpLogOptions.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
-			this.tableLayoutPanel3.ResumeLayout(false);
-			this.grpExecutionLog.ResumeLayout(false);
-			this.grpExecutionLog.PerformLayout();
-			this.menuStrip1.ResumeLayout(false);
-			this.menuStrip1.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).EndInit();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.grpExecutionLog.ResumeLayout(false);
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -546,7 +547,6 @@
 		private System.Windows.Forms.Button btnOpenTrace;
 		private System.Windows.Forms.CheckBox chkShowEffectiveAddresses;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-		private System.Windows.Forms.TextBox txtTraceLog;
 		private System.Windows.Forms.Timer tmrUpdateLog;
 		private System.Windows.Forms.GroupBox grpExecutionLog;
 		private System.Windows.Forms.MenuStrip menuStrip1;
@@ -567,5 +567,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.PictureBox picExpressionWarning;
 		private System.Windows.Forms.PictureBox picHelp;
+		private ctrlScrollableTextbox txtTraceLog;
 	}
 }

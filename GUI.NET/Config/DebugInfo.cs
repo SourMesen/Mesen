@@ -157,6 +157,7 @@ namespace Mesen.GUI.Config
 		public bool TraceAutoRefresh = true;
 		public int TraceLineCount = 1000;
 		public bool TraceIndentCode = false;
+		public Size TraceLoggerSize = new Size(0, 0);
 
 		public DebugInfo()
 		{

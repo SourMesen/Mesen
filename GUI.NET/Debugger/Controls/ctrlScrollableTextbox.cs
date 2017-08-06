@@ -104,8 +104,14 @@ namespace Mesen.GUI.Debugger
 			this.vScrollBar.Value = this.ctrlTextbox.ScrollPosition;
 			this.hScrollBar.Value = this.ctrlTextbox.HorizontalScrollPosition;
 			UpdateHorizontalScrollbar();
+			UpdateVerticalScrollbar();
 
 			ScrollPositionChanged?.Invoke(null, null);
+		}
+
+		private void UpdateVerticalScrollbar()
+		{
+			this.vScrollBar.Maximum = Math.Max(0, this.ctrlTextbox.LineCount + this.vScrollBar.LargeChange - this.ctrlTextbox.GetNumberVisibleLines() + 1);
 		}
 
 		private void UpdateHorizontalScrollbar()
@@ -187,7 +193,7 @@ namespace Mesen.GUI.Debugger
 
 					case Keys.Down:
 					case Keys.Right:
-						this.ctrlTextbox.SelectionStart++;
+						this.ctrlTextbox.SelectionStart = this.ctrlTextbox.SelectedLine + 1;
 						this.ctrlTextbox.SelectionLength = 0;
 						return true;
 
@@ -198,9 +204,22 @@ namespace Mesen.GUI.Debugger
 
 					case Keys.Up:
 					case Keys.Left:
-						this.ctrlTextbox.SelectionStart--;
+						this.ctrlTextbox.SelectionStart = this.ctrlTextbox.SelectedLine - 1;
 						this.ctrlTextbox.SelectionLength = 0;
 						return true;
+
+					case Keys.Home | Keys.Shift:
+						this.ctrlTextbox.MoveSelectionUp(this.ctrlTextbox.LineCount);
+						break;
+
+					case Keys.End | Keys.Shift:
+						this.ctrlTextbox.MoveSelectionDown(this.ctrlTextbox.LineCount);
+						break;
+
+					case Keys.A | Keys.Control:
+						this.ctrlTextbox.SelectionStart = 0;
+						this.ctrlTextbox.SelectionLength = this.ctrlTextbox.LineCount;
+						break;
 
 					case Keys.Home:
 						this.ctrlTextbox.SelectionStart = 0;
@@ -276,7 +295,7 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				this.ctrlTextbox.TextLines = value;
-				this.vScrollBar.Maximum = this.ctrlTextbox.LineCount + this.vScrollBar.LargeChange;
+				UpdateVerticalScrollbar();
 				UpdateHorizontalScrollbar();
 			}
 		}
@@ -336,6 +355,10 @@ namespace Mesen.GUI.Debugger
 			get { return this.ctrlTextbox.ShowSingleLineLineNumberNotes; }
 			set { this.ctrlTextbox.ShowSingleLineLineNumberNotes = value; }
 		}
+
+		public int LineCount { get { return this.ctrlTextbox.LineCount; } }
+		public int SelectionStart { get { return this.ctrlTextbox.SelectionStart; } }
+		public int SelectionLength { get { return this.ctrlTextbox.SelectionLength; } }
 
 		public string Header
 		{

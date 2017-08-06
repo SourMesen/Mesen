@@ -39,6 +39,7 @@ namespace Mesen.GUI.Debugger
 	public partial class ctrlTextbox : Control
 	{
 		public event EventHandler ScrollPositionChanged;
+		private bool _disableScrollPositionChangedEvent;
 
 		private const float HorizontalScrollFactor = 8;
 		private const int CommentSpacingCharCount = 25;
@@ -115,12 +116,16 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		//Cache Font.Height value because accessing it is slow
+		private int FontHeight { get; set; }
+
 		public override Font Font
 		{
 			get { return base.Font; }
 			set
 			{
 				base.Font = value;
+				this.FontHeight = value.Height;
 				_noteFont = new Font(value.FontFamily, value.Size * 0.75f);
 				UpdateHorizontalScrollWidth();
 			}
@@ -538,7 +543,7 @@ namespace Mesen.GUI.Debugger
 		}
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		private int SelectedLine
+		public int SelectedLine
 		{
 			get { return this._selectedLine; }
 			set
@@ -556,13 +561,22 @@ namespace Mesen.GUI.Debugger
 
 		public void MoveSelectionDown(int lines = 1)
 		{
+			_disableScrollPositionChangedEvent = true;
 			while(lines > 0) {
 				bool singleLineSelection = this.SelectionLength == 0;
 
 				if(singleLineSelection) {
+					if(this.SelectionStart + this.SelectionLength >= this._contents.Length - 1) {
+						//End of document reached
+						break;
+					}
 					this.SelectedLine = this.SelectionStart + 1;
 					this.SelectionLength++;
 				} else if(this.SelectionStart + this.SelectionLength == this.SelectedLine) {
+					if(this.SelectionStart + this.SelectionLength >= this._contents.Length - 1) {
+						//End of document reached
+						break;
+					}
 					this.SelectedLine++;
 					this.SelectionLength++;
 				} else {
@@ -572,18 +586,29 @@ namespace Mesen.GUI.Debugger
 				}
 				lines--;
 			}
+			_disableScrollPositionChangedEvent = false;
+			ScrollPositionChanged?.Invoke(this, null);
 		}
 
 		public void MoveSelectionUp(int lines = 1)
 		{
+			_disableScrollPositionChangedEvent = true;
 			while(lines > 0) {
 				bool singleLineSelection = this.SelectionLength == 0;
 
 				if(singleLineSelection) {
+					if(this.SelectionStart == 0) {
+						//Top of document reached
+						break;
+					}
 					this.SelectionStart--;
 					this.SelectedLine = this.SelectionStart;
 					this.SelectionLength++;
 				} else if(this.SelectionStart == this.SelectedLine) {
+					if(this.SelectionStart == 0) {
+						//Top of document reached
+						break;
+					}
 					this.SelectionStart--;
 					this.SelectedLine--;
 					this.SelectionLength++;
@@ -593,6 +618,8 @@ namespace Mesen.GUI.Debugger
 				}
 				lines--;
 			}
+			_disableScrollPositionChangedEvent = false;
+			ScrollPositionChanged?.Invoke(this, null);
 		}
 
 		public int CurrentLine
@@ -612,9 +639,9 @@ namespace Mesen.GUI.Debugger
 			get { return _scrollPosition; }
 			set 
 			{
-				value = Math.Max(0, Math.Min(value, this._contents.Length-1));
+				value = Math.Max(0, Math.Min(value, this._contents.Length-this.GetNumberVisibleLines()));
 				_scrollPosition = value;
-				if(this.ScrollPositionChanged != null) {
+				if(!_disableScrollPositionChangedEvent && this.ScrollPositionChanged != null) {
 					ScrollPositionChanged(this, null);
 				}
 				this.Invalidate();
@@ -629,7 +656,7 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				_horizontalScrollPosition = value;
-				if(this.ScrollPositionChanged != null) {
+				if(!_disableScrollPositionChangedEvent && this.ScrollPositionChanged != null) {
 					ScrollPositionChanged(this, null);
 				}
 				this.Invalidate();
@@ -651,6 +678,7 @@ namespace Mesen.GUI.Debugger
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
+			this.ScrollPosition = this.ScrollPosition;
 			UpdateHorizontalScrollWidth();
 			ScrollPositionChanged?.Invoke(this, e);
 		}
@@ -672,9 +700,9 @@ namespace Mesen.GUI.Debugger
 			get 
 			{
 				if(this.ShowLineNumberNotes && !this.ShowSingleLineLineNumberNotes || this.ShowContentNotes && !this.ShowSingleContentLineNotes) {
-					return (int)(this.Font.Height * 1.60);
+					return (int)(this.FontHeight * 1.60);
 				} else {
-					return this.Font.Height - 1;
+					return this.FontHeight - 1;
 				}
 			}
 		}
