@@ -541,34 +541,41 @@ namespace Mesen.GUI.Debugger
 			this.Close();
 		}
 
-		protected override void OnFormClosed(FormClosedEventArgs e)
+		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			tmrCdlRatios.Stop();
-			foreach(Form frm in this._childForms.ToArray()) {
-				frm.Close();
+			if(_childForms.Count > 0) {
+				foreach(Form frm in this._childForms.ToArray()) {
+					frm.Close();
+				}
+				e.Cancel = true;
+
+				this.BeginInvoke((Action)(() => {
+					this.Close();
+				}));
+			} else {
+				tmrCdlRatios.Stop();
+
+				LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
+				BreakpointManager.BreakpointsChanged -= BreakpointManager_BreakpointsChanged;
+				ctrlConsoleStatus.OnStateChanged -= ctrlConsoleStatus_OnStateChanged;
+				ctrlProfiler.OnFunctionSelected -= ctrlProfiler_OnFunctionSelected;
+
+				if(_notifListener != null) {
+					_notifListener.Dispose();
+					_notifListener = null;
+				}
+
+				InteropEmu.DebugRelease();
+
+				ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
+				ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Height : this.Height;
+				ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
+				ConfigManager.Config.DebugInfo.LeftPanelWidth = this.ctrlSplitContainerTop.GetSplitterDistance();
+				ConfigManager.ApplyChanges();
+
+				SaveWorkspace();
 			}
-
-			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
-			BreakpointManager.BreakpointsChanged -= BreakpointManager_BreakpointsChanged;
-			ctrlConsoleStatus.OnStateChanged -= ctrlConsoleStatus_OnStateChanged;
-			ctrlProfiler.OnFunctionSelected -= ctrlProfiler_OnFunctionSelected;
-
-			if(_notifListener != null) {
-				_notifListener.Dispose();
-				_notifListener = null;
-			}
-
-			InteropEmu.DebugRelease();
-
-			ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
-			ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Height : this.Height;
-			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
-			ConfigManager.Config.DebugInfo.LeftPanelWidth = this.ctrlSplitContainerTop.GetSplitterDistance();
-			ConfigManager.ApplyChanges();
-
-			SaveWorkspace();
-
-			base.OnFormClosed(e);
+			base.OnFormClosing(e);
 		}
 
 		private void mnuNametableViewer_Click(object sender, EventArgs e)
