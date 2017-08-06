@@ -634,8 +634,6 @@ void PPU::LoadExtraSprites()
 		bool loadExtraSprites = true;
 		
 		if(EmulationSettings::CheckFlag(EmulationFlags::AdaptiveSpriteLimit)) {
-			bool lastSpritesIdentical = true;
-
 			uint16_t lastPosition = 0xFFFF;
 			uint8_t identicalSpriteCount = 0;
 			uint8_t maxIdenticalSpriteCount = 0;

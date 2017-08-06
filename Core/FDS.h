@@ -108,7 +108,7 @@ public:
 	FDS();
 	~FDS();
 
-	void SaveBattery();
+	void SaveBattery() override;
 
 	static uint32_t GetSideCount();
 

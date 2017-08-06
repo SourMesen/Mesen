@@ -399,7 +399,7 @@ void HdPackLoader::LoadCustomPalette()
 	if(LoadFile("palette.dat", fileData)) {
 		vector<uint32_t> paletteData;
 
-		for(int i = 0; i < fileData.size(); i+= 3){
+		for(size_t i = 0; i < fileData.size(); i+= 3){
 			paletteData.push_back(0xFF000000 | (fileData[i] << 16) | (fileData[i+1] << 8) | fileData[i+2]);
 		}
 

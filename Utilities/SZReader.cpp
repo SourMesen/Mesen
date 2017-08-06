@@ -54,7 +54,6 @@ bool SZReader::ExtractFile(string filename, vector<uint8_t> &output)
 			if(filename == entryName) {
 				WRes res = SzArEx_Extract(&_archive, &_lookStream.s, i, &blockIndex, &outBuffer, &outBufferSize, &offset, &outSizeProcessed, &_allocImp, &_allocTempImp);
 				if(res == SZ_OK) {
-					uint8_t* buf = new uint8_t[outSizeProcessed];
 					output = vector<uint8_t>(outBuffer+offset, outBuffer+offset+outSizeProcessed);
 					result = true;
 				}
