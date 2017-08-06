@@ -135,13 +135,17 @@ namespace Mesen.GUI.Controls
 				lblGameName.Text = Path.GetFileNameWithoutExtension(_recentGames[_currentIndex].RomName);
 				lblSaveDate.Text = _recentGames[_currentIndex].Timestamp.ToString();
 
-				ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(_recentGames[_currentIndex].FileName)));
-				ZipArchiveEntry entry = zip.GetEntry("Screenshot.png");
-				if(entry != null) {
-					using(Stream stream = entry.Open()) {
-						picPreviousState.Image = Image.FromStream(stream);
+				try {
+					ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(_recentGames[_currentIndex].FileName)));
+					ZipArchiveEntry entry = zip.GetEntry("Screenshot.png");
+					if(entry != null) {
+						using(Stream stream = entry.Open()) {
+							picPreviousState.Image = Image.FromStream(stream);
+						}
+					} else {
+						picPreviousState.Image = null;
 					}
-				} else {
+				} catch {
 					picPreviousState.Image = null;
 				}
 				UpdateSize();
@@ -153,13 +157,15 @@ namespace Mesen.GUI.Controls
 			tlpPreviousState.Visible = false;
 			Size maxSize = new Size(this.Size.Width - 120, this.Size.Height - 50);
 
-			double xRatio = (double)picPreviousState.Image.Width / maxSize.Width;
-			double yRatio = (double)picPreviousState.Image.Height / maxSize.Height;
-			double ratio = Math.Max(xRatio, yRatio);
+			if(picPreviousState.Image != null) {
+				double xRatio = (double)picPreviousState.Image.Width / maxSize.Width;
+				double yRatio = (double)picPreviousState.Image.Height / maxSize.Height;
+				double ratio = Math.Max(xRatio, yRatio);
 
-			Size newSize = new Size((int)(picPreviousState.Image.Width / ratio), (int)(picPreviousState.Image.Height / ratio));
-			picPreviousState.Size = newSize;
-			pnlPreviousState.Size = new Size(newSize.Width+4, newSize.Height+4);
+				Size newSize = new Size((int)(picPreviousState.Image.Width / ratio), (int)(picPreviousState.Image.Height / ratio));
+				picPreviousState.Size = newSize;
+				pnlPreviousState.Size = new Size(newSize.Width+4, newSize.Height+4);
+			}
 			tlpPreviousState.Visible = true;
 		}
 
