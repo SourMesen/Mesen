@@ -117,7 +117,7 @@ namespace Mesen.GUI.Debugger
 		}
 
 		//Cache Font.Height value because accessing it is slow
-		private int FontHeight { get; set; }
+		private new int FontHeight { get; set; }
 
 		public override Font Font
 		{
