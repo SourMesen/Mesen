@@ -187,7 +187,7 @@ struct NESHeader
 	uint32_t GetSaveChrRamSize()
 	{
 		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
-			uint8_t value = (Byte10 & 0xF0) >> 4;
+			uint8_t value = (Byte11 & 0xF0) >> 4;
 			return value == 0 ? 0 : 128 * (uint32_t)std::pow(2, value - 1);
 		} else {
 			return -1;
