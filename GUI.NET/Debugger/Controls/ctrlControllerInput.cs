@@ -77,6 +77,14 @@ namespace Mesen.GUI.Debugger.Controls
 			this.Invalidate();
 		}
 
+		protected override void OnMouseLeave(EventArgs e)
+		{
+			base.OnMouseLeave(e);
+			_highlightedButtons = Buttons.None;
+			this.Cursor = Cursors.Default;
+			this.Invalidate();
+		}
+
 		private Buttons ToggleButtonState(Buttons state, Point mouseLoc)
 		{
 			int scale = 2;
