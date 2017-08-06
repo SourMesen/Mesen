@@ -314,6 +314,9 @@
     <Compile Include="Debugger\Controls\ctrlFunctionList.Designer.cs">
       <DependentUpon>ctrlFunctionList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlControllerInput.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlProfiler.cs">
       <SubType>UserControl</SubType>
     </Compile>

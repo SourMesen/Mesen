@@ -7,6 +7,7 @@
 #include "GameServerConnection.h"
 #include "AutomaticRomTest.h"
 #include "RewindManager.h"
+#include "Debugger.h"
 
 BaseControlDevice::BaseControlDevice(uint8_t port)
 {
@@ -71,6 +72,8 @@ uint8_t BaseControlDevice::GetControlState()
 		_currentState = AutomaticRomTest::GetControllerState(_port);
 	} else if(netPlayDevice) {
 		_currentState = ProcessNetPlayState(netPlayDevice->GetState());
+	} else if(Debugger::HasInputOverride(_port)) {
+		_currentState = ProcessNetPlayState(Debugger::GetInputOverride(_port));
 	} else {
 		_currentState = RefreshState();
 	}

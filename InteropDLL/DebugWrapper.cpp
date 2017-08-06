@@ -104,4 +104,6 @@ extern "C"
 	DllExport void __stdcall DebugSaveRomToDisk(char* filename) { GetDebugger()->SaveRomToDisk(filename); }
 
 	DllExport int32_t __stdcall DebugFindSubEntryPoint(uint16_t relativeAddress) { return GetDebugger()->FindSubEntryPoint(relativeAddress); }
+
+	DllExport void __stdcall DebugSetInputOverride(uint32_t port, uint32_t state) { GetDebugger()->SetInputOverride(port, state); }
 };

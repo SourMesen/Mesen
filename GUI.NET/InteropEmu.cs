@@ -199,6 +199,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Int32 DebugGetMemorySize(DebugMemoryType type);
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(DebugMemoryType type, UInt32 address);
 		[DllImport(DLLPath)] public static extern void DebugSetMemoryValue(DebugMemoryType type, UInt32 address, byte value);
+		[DllImport(DLLPath)] public static extern void DebugSetInputOverride(Int32 port, Int32 state);
 
 		[DllImport(DLLPath, EntryPoint = "DebugStartCodeRunner")] private static extern void DebugStartCodeRunnerWrapper(IntPtr byteCode, Int32 codeLength);
 		public static void DebugStartCodeRunner(byte[] data)

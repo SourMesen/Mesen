@@ -105,6 +105,8 @@ private:
 	bool _needRewind;
 	vector<stringstream> _rewindCache;
 
+	uint32_t _inputOverride[4];
+
 private:
 	void UpdateBreakpoints();
 
@@ -198,4 +200,8 @@ public:
 	void SaveRomToDisk(string filename);
 
 	int32_t FindSubEntryPoint(uint16_t relativeAddress);
+	
+	static bool HasInputOverride(uint8_t port);
+	static uint32_t GetInputOverride(uint8_t port);
+	void SetInputOverride(uint8_t port, uint32_t state);
 };

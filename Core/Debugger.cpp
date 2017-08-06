@@ -77,6 +77,8 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_executionStopped = false;
 	_hideTopOfCallstack = false;
 
+	memset(_inputOverride, 0, sizeof(_inputOverride));
+
 	_frozenAddresses.insert(_frozenAddresses.end(), 0x10000, 0);
 
 	LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
@@ -941,4 +943,25 @@ int32_t Debugger::FindSubEntryPoint(uint16_t relativeAddress)
 	} while(address >= 0);
 
 	return address > relativeAddress ? relativeAddress : (address + 1);
+}
+
+bool Debugger::HasInputOverride(uint8_t port)
+{
+	if(Debugger::Instance) {
+		return Debugger::Instance->_inputOverride[port] != 0;
+	}
+	return false;
+}
+
+uint32_t Debugger::GetInputOverride(uint8_t port)
+{
+	if(Debugger::Instance) {
+		return Debugger::Instance->_inputOverride[port];
+	}
+	return 0;
+}
+
+void Debugger::SetInputOverride(uint8_t port, uint32_t state)
+{
+	_inputOverride[port] = state;
 }
