@@ -65,8 +65,9 @@ public:
 		}
 	}
 
-	VirtualFile(std::istream &input)
+	VirtualFile(std::istream &input, string filePath)
 	{
+		_path = filePath;
 		FromStream(input, _data);
 	}
 
@@ -99,7 +100,7 @@ public:
 
 	string GetFileName()
 	{
-		return _innerFile.empty() ? FolderUtilities::GetFilename(_path, false) : _innerFile;
+		return _innerFile.empty() ? FolderUtilities::GetFilename(_path, true) : _innerFile;
 	}
 
 	string GetSha1Hash()

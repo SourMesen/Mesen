@@ -170,10 +170,11 @@ void RecordedRomTest::RecordFromTest(string newTestFilename, string existingTest
 	zipReader.LoadArchive(existingTestFilename);
 	std::stringstream testMovie = zipReader.GetStream("TestMovie.mmo");
 	std::stringstream testRom = zipReader.GetStream("TestRom.nes");
+	VirtualFile romFile(testRom, newTestFilename);
 
 	if(testMovie && testRom) {
 		Console::Pause();
-		Console::LoadROM(testRom);
+		Console::LoadROM(romFile);
 		testRom.seekg(0, ios::beg);
 		_romStream << testRom.rdbuf();
 
@@ -248,8 +249,10 @@ int32_t RecordedRomTest::Run(string filename)
 			}
 		}
 
+		VirtualFile testRomFile(testRom, filename);
+
 		//Start playing movie
-		if(Console::LoadROM(testRom)) {
+		if(Console::LoadROM(testRomFile)) {
 			_runningTest = true;
 			MovieManager::Play(testMovie, false);
 
