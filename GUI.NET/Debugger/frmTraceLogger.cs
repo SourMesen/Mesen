@@ -22,7 +22,7 @@ namespace Mesen.GUI.Debugger
 		private EntityBinder _entityBinder = new EntityBinder();
 		private int _previousCycleCount;
 		private string _previousTrace;
-		private bool _refreshRunning;
+		private volatile bool _refreshRunning;
 
 		public frmTraceLogger()
 		{
@@ -61,6 +61,11 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
+			tmrUpdateLog.Stop();
+			while(_refreshRunning) {
+				System.Threading.Thread.Sleep(50);
+			}
+
 			base.OnFormClosing(e);
 
 			DebugInfo debugInfo = ConfigManager.Config.DebugInfo;
@@ -141,7 +146,7 @@ namespace Mesen.GUI.Debugger
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
-
+		
 		private void RefreshLog(bool scrollToBottom)
 		{
 			if(_refreshRunning) {
