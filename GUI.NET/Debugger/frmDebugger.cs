@@ -115,6 +115,7 @@ namespace Mesen.GUI.Debugger
 
 			//Pause a few frames later to give the debugger a chance to disassemble some code
 			_firstBreak = true;
+			InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, true);
 			InteropEmu.DebugStep(30000);
 
 			UpdateCdlRatios();
@@ -341,11 +342,13 @@ namespace Mesen.GUI.Debugger
 
 			this.BringToFront();
 
-			if(_firstBreak && !ConfigManager.Config.DebugInfo.BreakOnOpen) {
-				ResumeExecution();
+			if(_firstBreak) {
+				InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, false);
+				if(!ConfigManager.Config.DebugInfo.BreakOnOpen) {
+					ResumeExecution();
+				}
+				_firstBreak = false;
 			}
-
-			_firstBreak = false;
 		}
 		private void ClearActiveStatement()
 		{
