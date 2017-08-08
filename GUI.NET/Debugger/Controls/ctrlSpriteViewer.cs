@@ -199,13 +199,12 @@ namespace Mesen.GUI.Debugger.Controls
 			for(int i = 0; i < 16; i++) {
 				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PpuMemory, (UInt32)(tileAddr + i)).ToString("X2"));
 			}
-			sb.Append(",");
+			sb.Append(",FF");
 			for(int i = 1; i < 4; i++) {
 				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PaletteMemory, (uint)(palette * 4 + i)).ToString("X2"));
 			}
 
 			_copyData = sb.ToString();
-			_copyData = _copyData.Substring(0, _copyData.Length - 1);
 		}
 	}
 }

@@ -198,7 +198,7 @@ void HdPackBuilder::SaveHdPack()
 	int pngIndex = 0;
 	ss << "<ver>100" << std::endl;
 	ss << "<scale>" << _hdData.Scale << std::endl;
-	ss << "<supportedRom>" << Console::GetRomName() << std::endl;
+	ss << "<supportedRom>" << Console::GetHashInfo().Sha1Hash << std::endl;
 
 	int tileDimension = 8 * _hdData.Scale;
 	int pngDimension = 16 * tileDimension;

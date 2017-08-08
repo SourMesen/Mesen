@@ -423,7 +423,7 @@ void HdPackLoader::InitializeHdPack()
 		if(tileInfo->DefaultTile) {
 			auto tiles = _data->TileByKey.find(tileInfo->GetKey(true));
 			if(tiles == _data->TileByKey.end()) {
-				_data->TileByKey[tileInfo->GetKey(false)] = vector<HdPackTileInfo*>();
+				_data->TileByKey[tileInfo->GetKey(true)] = vector<HdPackTileInfo*>();
 			}
 			_data->TileByKey[tileInfo->GetKey(true)].push_back(tileInfo.get());
 		}

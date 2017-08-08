@@ -437,12 +437,11 @@ namespace Mesen.GUI.Debugger.Controls
 				sb.Append(InteropEmu.DebugGetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + i)).ToString("X2"));
 			}
 			sb.Append(",");
-			for(int i = 1; i < 4; i++) {
+			for(int i = 0; i < 4; i++) {
 				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PaletteMemory, (uint)(this._selectedPalette * 4 + i)).ToString("X2"));
 			}
 
 			_copyData = sb.ToString();
-			_copyData = _copyData.Substring(0, _copyData.Length - 1);
 		}
 	}
 }
