@@ -85,6 +85,11 @@ CodeInfo CheatManager::GetPARCodeInfo(uint32_t parCode)
 void CheatManager::AddCode(CodeInfo &code)
 {
 	if(code.IsRelativeAddress) {
+		if(code.Address > 0xFFFF) {
+			//Invalid cheat, ignore it
+			return;
+		}
+
 		if(_relativeCheatCodes[code.Address] == nullptr) {
 			_relativeCheatCodes[code.Address].reset(new vector<CodeInfo>());
 		}

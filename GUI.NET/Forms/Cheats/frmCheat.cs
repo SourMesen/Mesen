@@ -123,6 +123,10 @@ namespace Mesen.GUI.Forms.Cheats
 				if(!UInt32.TryParse(txtAddress.Text, System.Globalization.NumberStyles.AllowHexSpecifier, null, out val)) {
 					return false;
 				}
+				if(radRelativeAddress.Checked && val > 0xFFFF) {
+					//Do not allow cheats outside the 0-0xFFFF range in relative addressing mode
+					return false;
+				}
 
 				if(!Byte.TryParse(txtValue.Text, System.Globalization.NumberStyles.AllowHexSpecifier, null, out byteVal)) {
 					return false;
