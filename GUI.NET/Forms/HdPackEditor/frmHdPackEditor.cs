@@ -79,32 +79,34 @@ namespace Mesen.GUI.Forms.HdPackEditor
 		private void tmrRefresh_Tick(object sender, EventArgs e)
 		{
 			UInt32[] bankList = InteropEmu.HdBuilderGetChrBankList();
-			object selectedItem = cboBank.SelectedItem;
-			if(bankList.Length != cboBank.Items.Count) {
-				cboBank.Items.Clear();
-				foreach(UInt32 bankNumber in bankList) {
-					cboBank.Items.Add(bankNumber);
+			if(bankList.Length > 0) {
+				object selectedItem = cboBank.SelectedItem;
+				if(bankList.Length != cboBank.Items.Count) {
+					cboBank.Items.Clear();
+					foreach(UInt32 bankNumber in bankList) {
+						cboBank.Items.Add(bankNumber);
+					}
 				}
-			}
-			cboBank.SelectedItem = selectedItem;
-			if(cboBank.SelectedIndex < 0) {
-				cboBank.SelectedIndex = 0;
-			}
-
-			int scale = (int)((FilterInfo)cboScale.SelectedItem).Scale;
-
-			using(Graphics g = Graphics.FromImage(picBankPreview.Image)) {
-				Byte[] rgbBuffer = InteropEmu.HdBuilderGetBankPreview((uint)cboBank.SelectedItem, scale, 0);
-				GCHandle handle = GCHandle.Alloc(rgbBuffer, GCHandleType.Pinned);
-				Bitmap source = new Bitmap(128*scale, 128*scale, 4*128*scale, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				try {
-					g.Clear(Color.Black);
-					g.DrawImage(source, 0, 0, 256, 256);
-				} finally {
-					handle.Free();
+				cboBank.SelectedItem = selectedItem;
+				if(cboBank.SelectedIndex < 0) {
+					cboBank.SelectedIndex = 0;
 				}
+
+				int scale = (int)((FilterInfo)cboScale.SelectedItem).Scale;
+
+				using(Graphics g = Graphics.FromImage(picBankPreview.Image)) {
+					Byte[] rgbBuffer = InteropEmu.HdBuilderGetBankPreview((uint)cboBank.SelectedItem, scale, 0);
+					GCHandle handle = GCHandle.Alloc(rgbBuffer, GCHandleType.Pinned);
+					Bitmap source = new Bitmap(128*scale, 128*scale, 4*128*scale, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+					try {
+						g.Clear(Color.Black);
+						g.DrawImage(source, 0, 0, 256, 256);
+					} finally {
+						handle.Free();
+					}
+				}
+				picBankPreview.Refresh();
 			}
-			picBankPreview.Refresh();
 		}
 
 		private void UpdateUI(bool isRecording)
