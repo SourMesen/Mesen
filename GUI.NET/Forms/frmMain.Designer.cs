@@ -85,7 +85,6 @@ namespace Mesen.GUI.Forms
 			this.mnuScale4x = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScale5x = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScale6x = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuScaleCustom = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuFullscreen = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuVideoFilter = new System.Windows.Forms.ToolStripMenuItem();
@@ -631,7 +630,6 @@ namespace Mesen.GUI.Forms
             this.mnuScale4x,
             this.mnuScale5x,
             this.mnuScale6x,
-            this.mnuScaleCustom,
             this.toolStripMenuItem13,
             this.mnuFullscreen});
 			this.mnuVideoScale.Image = global::Mesen.GUI.Properties.Resources.Fullscreen;
@@ -692,14 +690,6 @@ namespace Mesen.GUI.Forms
 			this.mnuScale6x.Tag = "6";
 			this.mnuScale6x.Text = "6x";
 			this.mnuScale6x.Click += new System.EventHandler(this.mnuScale_Click);
-			// 
-			// mnuScaleCustom
-			// 
-			this.mnuScaleCustom.Name = "mnuScaleCustom";
-			this.mnuScaleCustom.Size = new System.Drawing.Size(152, 22);
-			this.mnuScaleCustom.Text = "Custom";
-			this.mnuScaleCustom.Visible = false;
-			this.mnuScaleCustom.Click += new System.EventHandler(this.mnuScaleCustom_Click);
 			// 
 			// toolStripMenuItem13
 			// 
@@ -1507,7 +1497,7 @@ namespace Mesen.GUI.Forms
 			this.Controls.Add(this.panelRenderer);
 			this.Controls.Add(this.menuStrip);
 			this.MainMenuStrip = this.menuStrip;
-			this.MinimumSize = new System.Drawing.Size(340, 300);
+			this.MinimumSize = new System.Drawing.Size(340, 280);
 			this.Name = "frmMain";
 			this.Text = "Mesen";
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
@@ -1617,7 +1607,6 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuNetPlaySpectator;
 		private System.Windows.Forms.Panel panelRenderer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem13;
-		private System.Windows.Forms.ToolStripMenuItem mnuScaleCustom;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem14;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowFPS;
 		private System.Windows.Forms.ToolStripMenuItem mnuFullscreen;

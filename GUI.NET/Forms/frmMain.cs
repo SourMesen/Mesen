@@ -35,7 +35,7 @@ namespace Mesen.GUI.Forms
 		private bool _customSize = false;
 		private FormWindowState _originalWindowState;
 		private bool _fullscreenMode = false;
-		private double _regularScale = ConfigManager.Config.VideoInfo.VideoScale;
+		private Size? _nonNsfSize = null;
 		private bool _isNsfPlayerMode = false;
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
@@ -159,6 +159,10 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.PreferenceInfo.AutomaticallyCheckForUpdates) {
 				CheckForUpdates(false);
 			}
+
+			if(ConfigManager.Config.WindowSize.HasValue) {
+				this.ClientSize = ConfigManager.Config.WindowSize.Value;
+			}
 		}
 
 		protected override void OnDeactivate(EventArgs e)
@@ -183,6 +187,10 @@ namespace Mesen.GUI.Forms
 				MesenMsgBox.Show("UpgradeSuccess", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				_showUpgradeMessage = false;
 			}
+
+			if(ConfigManager.Config.WindowSize.HasValue) {
+				this.Size = ConfigManager.Config.WindowSize.Value;
+			}
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -196,12 +204,17 @@ namespace Mesen.GUI.Forms
 			}
 
 			ConfigManager.Config.EmulationInfo.EmulationSpeed = InteropEmu.GetEmulationSpeed();
-			ConfigManager.Config.VideoInfo.VideoScale = _regularScale;
 			if(this.WindowState == FormWindowState.Normal) {
 				ConfigManager.Config.WindowLocation = this.Location;
+				ConfigManager.Config.WindowSize = this.Size;
 			} else {
 				ConfigManager.Config.WindowLocation = this.RestoreBounds.Location;
+				ConfigManager.Config.WindowSize = this.RestoreBounds.Size;
 			}
+			if(this._nonNsfSize.HasValue) {
+				ConfigManager.Config.WindowSize = this._nonNsfSize.Value;
+			}
+
 			ConfigManager.ApplyChanges();
 
 			StopEmu();
@@ -362,17 +375,15 @@ namespace Mesen.GUI.Forms
 
 		private void UpdateViewerSize()
 		{
+			this.Resize -= frmMain_Resize;
+
 			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(false);
 
 			if(!_customSize && this.WindowState != FormWindowState.Maximized) {
 				Size sizeGap = this.Size - this.ClientSize;
 
-				_regularScale = size.Scale;
 				UpdateScaleMenu(size.Scale);
-
-				this.Resize -= frmMain_Resize;
 				this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + (this.HideMenuStrip ? 0 : menuStrip.Height)));
-				this.Resize += frmMain_Resize;
 			}
 
 			ctrlRenderer.Size = new Size(size.Width, size.Height);
@@ -382,6 +393,8 @@ namespace Mesen.GUI.Forms
 			if(this.HideMenuStrip) {
 				this.menuStrip.Visible = false;
 			}
+
+			this.Resize += frmMain_Resize;
 		}
 
 		private void ResizeRecentGames(object sender, EventArgs e)
@@ -433,10 +446,7 @@ namespace Mesen.GUI.Forms
 				this.menuStrip.Visible = true;
 				this.WindowState = _originalWindowState;
 				this.FormBorderStyle = FormBorderStyle.Sizable;
-				this.SetScale(_regularScale);
-				this.UpdateScaleMenu(_regularScale);
-				this.UpdateViewerSize();
-				VideoInfo.ApplyConfig();
+				this.frmMain_Resize(null, EventArgs.Empty);
 			}
 			this.Resize += frmMain_Resize;
 			mnuFullscreen.Checked = enabled;
@@ -1043,10 +1053,22 @@ namespace Mesen.GUI.Forms
 
 		private void mnuVideoConfig_Click(object sender, EventArgs e)
 		{
+			Size originalSize = this.Size;
+			InteropEmu.ScreenSize originalScreenSize = InteropEmu.GetScreenSize(false);
+			Configuration configBackup = ConfigManager.Config.Clone();
+			bool cancelled = false;
 			using(frmVideoConfig frm = new frmVideoConfig()) {
-				frm.ShowDialog(sender);
+				cancelled = frm.ShowDialog(sender) == DialogResult.Cancel;
+			}
+			if(cancelled) {
+				ConfigManager.RevertToBackup(configBackup);
+				ConfigManager.Config.ApplyConfig();
 			}
 			UpdateVideoSettings();
+			InteropEmu.ScreenSize screenSize = InteropEmu.GetScreenSize(false);
+			if((cancelled || (screenSize.Height == originalScreenSize.Height && screenSize.Width == originalScreenSize.Width)) && this.WindowState == FormWindowState.Normal) {
+				this.Size = originalSize;
+			}
 		}
 
 		private void mnuDebugger_Click(object sender, EventArgs e)
@@ -1362,13 +1384,12 @@ namespace Mesen.GUI.Forms
 
 		private void UpdateScaleMenu(double scale)
 		{
-			mnuScale1x.Checked = (scale == 1.0) && !_customSize;
-			mnuScale2x.Checked = (scale == 2.0) && !_customSize;
-			mnuScale3x.Checked = (scale == 3.0) && !_customSize;
-			mnuScale4x.Checked = (scale == 4.0) && !_customSize;
-			mnuScale5x.Checked = (scale == 5.0) && !_customSize;
-			mnuScale6x.Checked = (scale == 6.0) && !_customSize;
-			mnuScaleCustom.Checked = _customSize || !mnuScale1x.Checked && !mnuScale2x.Checked && !mnuScale3x.Checked && !mnuScale4x.Checked && !mnuScale5x.Checked && !mnuScale6x.Checked;
+			mnuScale1x.Checked = (scale == 1.0);
+			mnuScale2x.Checked = (scale == 2.0);
+			mnuScale3x.Checked = (scale == 3.0);
+			mnuScale4x.Checked = (scale == 4.0);
+			mnuScale5x.Checked = (scale == 5.0);
+			mnuScale6x.Checked = (scale == 6.0);
 
 			ConfigManager.Config.VideoInfo.VideoScale = scale;
 			ConfigManager.ApplyChanges();
@@ -1416,7 +1437,6 @@ namespace Mesen.GUI.Forms
 		private void SetScale(double scale)
 		{
 			_customSize = false;
-			_regularScale = scale;
 			if(this.HideMenuStrip) {
 				this.menuStrip.Visible = false;
 			}
@@ -1671,11 +1691,6 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void mnuScaleCustom_Click(object sender, EventArgs e)
-		{
-			SetScaleBasedOnWindowSize();
-		}
-
 		private void panelRenderer_Click(object sender, EventArgs e)
 		{
 			if(this.HideMenuStrip) {
@@ -1840,6 +1855,7 @@ namespace Mesen.GUI.Forms
 					}
 
 					if(!this._isNsfPlayerMode) {
+						this._nonNsfSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 						this.Size = new Size(380, 320);
 						this.MinimumSize = new Size(380, 320);
 					}
@@ -1853,8 +1869,9 @@ namespace Mesen.GUI.Forms
 
 					_currentGame = InteropEmu.NsfGetHeader().GetSongName();
 				} else if(this._isNsfPlayerMode) {
-					this.MinimumSize = new Size(335, 320);
-					this.SetScale(_regularScale);
+					this.MinimumSize = new Size(340, 280);
+					this.Size = this._nonNsfSize.Value;
+					this._nonNsfSize = null;
 					this._isNsfPlayerMode = false;
 					this.ctrlNsfPlayer.Visible = false;
 				}

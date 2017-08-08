@@ -32,6 +32,7 @@ namespace Mesen.GUI.Config
 		public DebugInfo DebugInfo;
 		public AviRecordInfo AviRecordInfo;
 		public Point? WindowLocation;
+		public Size? WindowSize;
 
 		public Configuration()
 		{
