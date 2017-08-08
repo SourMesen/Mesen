@@ -150,8 +150,12 @@ public:
 		}
 	}
 
-	RomData LoadRom(vector<uint8_t>& romFile, string filename)
+	RomData LoadRom(vector<uint8_t> romFile, string filename)
 	{
+		//Note: "romFile" is intentionally passed by copy - modifying the original array will alter the "RawData" property which 
+		//is used when saving the IPS file for FDS save data.  If the RawData is modified by this function, then the IPS file will
+		//will only contain new changes, and all previous save data will be lost/corrupted.
+
 		//Apply save data (saved as an IPS file), if found
 		string fdsSaveFilepath = FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), FolderUtilities::GetFilename(filename, false) + ".ips");
 		vector<uint8_t> patchedData;
