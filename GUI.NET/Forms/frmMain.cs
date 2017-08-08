@@ -223,6 +223,12 @@ namespace Mesen.GUI.Forms
 			Version oldVersion = new Version(ConfigManager.Config.MesenVersion);
 			if(oldVersion < newVersion) {
 				//Upgrade
+				if(oldVersion <= new Version("0.9.1")) {
+					//Version 0.9.1-
+					//Remove all old cheats with a CRC value of 0 (bugged FDS cheats)
+					ConfigManager.Config.Cheats = ConfigManager.Config.Cheats.Where((cheat) => cheat.GameCrc != "00000000" && cheat.GameCrc.Length == 8).ToList();
+				}
+
 				if(oldVersion <= new Version("0.9.0")) {
 					//Version 0.9.0-
 					if(ConfigManager.Config.VideoInfo.AspectRatio == VideoAspectRatio.Auto) {

@@ -3,6 +3,8 @@
 #include <algorithm>
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/IpsPatcher.h"
+#include "../Utilities/CRC32.h"
+#include "../Utilities/sha1.h"
 #include "RomData.h"
 #include "MessageManager.h"
 #include "MapperFactory.h"
@@ -159,6 +161,10 @@ public:
 
 		RomData romData;
 
+		romData.Sha1 = SHA1::GetHash(romFile);
+		romData.Crc32 = CRC32::GetCRC(romFile.data(), romFile.size());
+		romData.PrgCrc32 = CRC32::GetCRC(romFile.data(), romFile.size());
+		
 		romData.Format = RomFormat::Fds;
 		romData.MapperID = MapperFactory::FdsMapperID;
 		romData.Mirroring = MirroringType::Vertical;
