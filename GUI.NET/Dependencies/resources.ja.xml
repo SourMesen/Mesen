@@ -355,7 +355,7 @@
       <Control ID="chkDisplayTitleBarInfo">タイトルバーに追加情報を表す。</Control>
 
       <Control ID="chkPauseOnMovieEnd">動画が終わると自動的にポーズする</Control>
-      <Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時、コントローラは反応しない</Control>
+      <Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時でも、コントローラの入力を受け付ける</Control>
       <Control ID="chkPauseWhenInBackground">Mesenが最前面ではない時、自動的にポーズする</Control>
       <Control ID="chkAutoLoadIps">自動的にパッチファイル（IPS・BPS）をロードする</Control>
       <Control ID="chkHidePauseOverlay">ポーズ画面を隠す</Control>
