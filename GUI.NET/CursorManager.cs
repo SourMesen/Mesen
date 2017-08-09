@@ -83,10 +83,12 @@ namespace Mesen.GUI
 			_tmrHideMouse.Stop();
 
 			if(!CursorManager.NeedMouseIcon) {
+				//Only hide mouse if no zapper (otherwise this could be pretty annoying)
 				ctrl.Cursor = Cursors.Default;
 
-				//Only hide mouse if no zapper (otherwise this could be pretty annoying)
-				_tmrHideMouse.Start();
+				if(InteropEmu.IsRunning() && !InteropEmu.IsPaused()) {
+					_tmrHideMouse.Start();
+				}
 			}
 		}
 
