@@ -132,7 +132,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void SetCheats([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropCheatInfo[] cheats, UInt32 length);
 
-		[DllImport(DLLPath)] public static extern bool CheckFlag(EmulationFlags flag);
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool CheckFlag(EmulationFlags flag);
 		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] public static extern void SetRamPowerOnState(RamPowerOnState state);
