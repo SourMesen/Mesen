@@ -60,7 +60,7 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 265);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 270);
 			this.baseConfigPanel.Size = new System.Drawing.Size(385, 29);
 			// 
 			// tableLayoutPanel2
@@ -84,7 +84,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(385, 265);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(385, 270);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
 			// label2
@@ -135,7 +135,7 @@
 			this.grpCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCode.Location = new System.Drawing.Point(3, 81);
 			this.grpCode.Name = "grpCode";
-			this.grpCode.Size = new System.Drawing.Size(379, 181);
+			this.grpCode.Size = new System.Drawing.Size(379, 186);
 			this.grpCode.TabIndex = 3;
 			this.grpCode.TabStop = false;
 			this.grpCode.Text = "Code";
@@ -158,7 +158,7 @@
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpAdd.Size = new System.Drawing.Size(373, 162);
+			this.tlpAdd.Size = new System.Drawing.Size(373, 167);
 			this.tlpAdd.TabIndex = 0;
 			// 
 			// radCustom
@@ -232,7 +232,7 @@
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpCustom.Size = new System.Drawing.Size(250, 104);
+			this.tlpCustom.Size = new System.Drawing.Size(250, 109);
 			this.tlpCustom.TabIndex = 4;
 			// 
 			// lblAddress
@@ -319,12 +319,11 @@
 			// 
 			// chkCompareValue
 			// 
-			this.chkCompareValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkCompareValue.AutoSize = true;
 			this.chkCompareValue.Location = new System.Drawing.Point(3, 85);
 			this.chkCompareValue.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
 			this.chkCompareValue.Name = "chkCompareValue";
-			this.chkCompareValue.Size = new System.Drawing.Size(98, 16);
+			this.chkCompareValue.Size = new System.Drawing.Size(98, 17);
 			this.chkCompareValue.TabIndex = 7;
 			this.chkCompareValue.Text = "Compare Value";
 			this.chkCompareValue.UseVisualStyleBackColor = true;
@@ -354,13 +353,13 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(385, 294);
+			this.ClientSize = new System.Drawing.Size(385, 299);
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(401, 332);
+			this.MaximumSize = new System.Drawing.Size(401, 337);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(401, 332);
+			this.MinimumSize = new System.Drawing.Size(401, 337);
 			this.Name = "frmCheat";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Edit Cheat";
