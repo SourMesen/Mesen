@@ -405,6 +405,7 @@ namespace Mesen.GUI.Forms
 
 				case InteropEmu.ConsoleNotificationType.GameStopped:
 					this._currentGame = null;
+					InitializeNsfMode();
 					CheatInfo.ClearCheats();
 					this.BeginInvoke((MethodInvoker)(() => {
 						if(_hdPackEditorWindow != null) {
