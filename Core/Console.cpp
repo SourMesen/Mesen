@@ -57,6 +57,7 @@ void Console::Release()
 bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 {
 	SoundMixer::StopAudio();
+	StopRecordingHdPack();
 
 	if(!_romFilepath.empty() && _mapper) {
 		//Ensure we save any battery file before loading a new game
@@ -442,6 +443,7 @@ void Console::Run()
 	}
 
 	_rewindManager.reset();
+	StopRecordingHdPack();
 	SoundMixer::StopAudio();
 	MovieManager::Stop();
 	SoundMixer::StopRecording();
@@ -657,17 +659,19 @@ void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType
 
 void Console::StopRecordingHdPack()
 {
-	Console::Pause();
-	std::stringstream saveState;
-	Instance->SaveState(saveState);
-	
-	Instance->_memoryManager->UnregisterIODevice(Instance->_ppu.get());
-	Instance->_ppu.reset();
-	Instance->_ppu.reset(new PPU(Instance->_mapper.get()));
-	Instance->_memoryManager->RegisterIODevice(Instance->_ppu.get());
+	if(Instance->_hdPackBuilder) {
+		Console::Pause();
+		std::stringstream saveState;
+		Instance->SaveState(saveState);
 
-	Instance->_hdPackBuilder.reset();
+		Instance->_memoryManager->UnregisterIODevice(Instance->_ppu.get());
+		Instance->_ppu.reset();
+		Instance->_ppu.reset(new PPU(Instance->_mapper.get()));
+		Instance->_memoryManager->RegisterIODevice(Instance->_ppu.get());
 
-	Instance->LoadState(saveState);
-	Console::Resume();
+		Instance->_hdPackBuilder.reset();
+
+		Instance->LoadState(saveState);
+		Console::Resume();
+	}
 }
