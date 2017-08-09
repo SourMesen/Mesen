@@ -113,10 +113,6 @@ void NsfMapper::InitMapper(RomData& romData)
 
 void NsfMapper::Reset(bool softReset)
 {
-	if(EmulationSettings::GetNsfDisableApuIrqs()) {
-		CPU::SetIRQMask((uint8_t)IRQSource::External);
-	}
-
 	if(!softReset) {
 		_songNumber = _nsfHeader.StartingSong - 1;
 	}
@@ -211,6 +207,8 @@ void NsfMapper::ClockLengthAndFadeCounters()
 
 void NsfMapper::ProcessCpuClock()
 {
+	CPU::SetIRQMask(EmulationSettings::GetNsfDisableApuIrqs() ? (uint8_t)IRQSource::External : 0xFF);
+
 	if(_needInit) {
 		TriggerIrq(NsfIrqType::Init);
 		_needInit = false;
