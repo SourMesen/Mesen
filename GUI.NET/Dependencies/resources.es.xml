@@ -86,10 +86,10 @@
       <Control ID="mnuTestStopRecording">Detener grabación</Control>
       <Control ID="mnuRunAllTests">Ejecutar todos los tests</Control>
       <Control ID="mnuDebugger">Depurar</Control>
-      <Control ID="mnuLogWindow">Ventana de log</Control>
-      <Control ID="mnuHdPackEditor">HD Pack Builder</Control>
+      <Control ID="mnuLogWindow">Ventana del registro</Control>
+      <Control ID="mnuHdPackEditor">Creador de paquetes de alta resolución</Control>
       <Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
-      <Control ID="mnuRandomGame">Cargar juego aletóreo</Control>
+      <Control ID="mnuRandomGame">Cargar juego aleatorio</Control>
       <Control ID="mnuHelp">Ayuda</Control>
       <Control ID="mnuCheckForUpdates">Buscar actualizaciones</Control>
       <Control ID="mnuReportBug">Enviar un error</Control>
@@ -108,7 +108,7 @@
       <Control ID="lblSlowMotion">Cámara lenta</Control>
       <Control ID="lblFastForward">Avance rápido</Control>
     </Form>
-    <Form ID="frmLogWindow" Title="Ventana de log">
+    <Form ID="frmLogWindow" Title="Ventana del registro">
       <Control ID="btnClose">Cerrar</Control>
     </Form>
     <Form ID="frmAudioConfig" Title="Opciones de audio">
@@ -218,7 +218,7 @@
       <Control ID="mnuXboxController">Mando de Xbox</Control>
       <Control ID="mnuXboxLayout1">Mando #1</Control>
       <Control ID="mnuXboxLayout2">Mando #2</Control>
-      <Control ID="mnuPs4Controller">Mando de Ps4</Control>
+      <Control ID="mnuPs4Controller">Mando de PS4</Control>
       <Control ID="mnuPs4Layout1">Mando #1</Control>
       <Control ID="mnuPs4Layout2">Mando #2</Control>
       <Control ID="mnuSnes30Controller">Mando de SNES30</Control>
@@ -232,9 +232,9 @@
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
     <Form ID="frmZapperConfig" Title="Zapper Configuration">
-      <Control ID="lblSmall">Small</Control>
-      <Control ID="lblLarge">Large</Control>
-      <Control ID="lblDetectRadius">Light Detection Radius:</Control>
+      <Control ID="lblSmall">Corto</Control>
+      <Control ID="lblLarge">Largo</Control>
+      <Control ID="lblDetectRadius">Radio de detección lumínica:</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
@@ -246,9 +246,9 @@
       <Control ID="lblDisplayRatio">Formato de imagen:</Control>
       <Control ID="lblCustomRatio">Relación personalizada:</Control>
       <Control ID="chkBilinearInterpolation">Utilizar la interpolación bilinear</Control>
-      <Control ID="chkFullscreenForceIntegerScale">Use integer scale values when entering fullscreen mode</Control>
+      <Control ID="chkFullscreenForceIntegerScale">Utilizar valores enteros de escalado en modo de pantalla completa</Control>
       <Control ID="chkShowFps">Mostrar FPS</Control>
-      <Control ID="chkUseHdPacks">Utilizar los packs de alta definición de HDNes</Control>
+      <Control ID="chkUseHdPacks">Utilizar los paquetes de alta resolución de HDNes</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Recorte</Control>
       <Control ID="lblLeft">Izquierda</Control>
@@ -260,7 +260,7 @@
       <Control ID="btnSelectPalette">Elegir una paleta...</Control>
       <Control ID="btnExportPalette">Exportar archivo .pal</Control>
       <Control ID="btnLoadPalFile">Cargar archivo .pal</Control>
-      <Control ID="chkUseCustomVsPalette">Use this palette for VS System games</Control>
+      <Control ID="chkUseCustomVsPalette">Utilizar esta paleta para juegos de VS System</Control>
       <Control ID="tpgPicture">Imagen</Control>
       <Control ID="btnSelectPreset">Elegir filtro predefinido...</Control>
       <Control ID="grpCommon">Parámetros comunes</Control>
@@ -312,7 +312,7 @@
       <Control ID="chkAllowInvalidInput">Permitir las entradas inválidas (Arriba+Abajo e Izquierda+Derecha al mismo tiempo)</Control>
       <Control ID="lblRamPowerOnState">Estado inicial de la memoria durante el inicio:</Control>
       <Control ID="chkRemoveSpriteLimit">Eliminar el límite de sprites (Reduce el parpadeo en algunos juegos)</Control>
-      <Control ID="chkAdaptiveSpriteLimit">Automatically re-enable sprite limit as needed to prevent graphical glitches when possible</Control>
+      <Control ID="chkAdaptiveSpriteLimit">Volver a habilitar el límite de sprites cuando haga falta para prevenir errores gráficos</Control>
       <Control ID="chkEnableOamDecay">Activar la emulación de la degradación de la memoria OAM</Control>
       <Control ID="chkDisablePpu2004Reads">Impedir la reproducción del registro $2004 de la PPU (Famicom)</Control>
       <Control ID="chkDisableOamAddrBug">Desactivar la emulación de errores OAMADDR de la PPU</Control>
@@ -359,7 +359,7 @@
       <Control ID="chkHidePauseOverlay">Ocultar la pantalla de pausa</Control>
       <Control ID="chkDisplayMovieIcons">Mostrar icono de iniciar/grabar al reproducir o grabar un video</Control>
       <Control ID="btnOpenMesenFolder">Abrir el directorio de Mesen</Control>
-      <Control ID="btnResetSettings">Reset All Settings</Control>
+      <Control ID="btnResetSettings">Restablecer todo</Control>
       <Control ID="tpgFileAssociations">Asociación de archivos</Control>
       <Control ID="grpFileAssociations">Asociación de archivos</Control>
       <Control ID="chkNesFormat">.NES</Control>
@@ -381,9 +381,9 @@
       <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
       <Control ID="grpCloudSaves">Copia de seguridad online</Control>
 
-      <Control ID="chkShowFrameCounter">Mostrar contador de frames</Control>
+      <Control ID="chkShowFrameCounter">Mostrar contador de fotogramas</Control>
       <Control ID="chkShowGameTimer">Mostrar tiempo de juego</Control>
-      <Control ID="chkShowVsConfigOnLoad">Show game configuration dialog when loading VS System games</Control>
+      <Control ID="chkShowVsConfigOnLoad">Mostrar configuración del juego cuando se carguen juegos de VS System</Control>
 
       <Control ID="lblRewind">Permitir rebobinar hasta</Control>
       <Control ID="lblRewindMinutes">minutos (Uso de memoria ≈1MB/min)</Control>
@@ -396,14 +396,14 @@
       <Control ID="lblLastSync">Última sincronización: </Control>
       <Control ID="btnResync">Resincronizar</Control>
 
-      <Control ID="lblFdsSettings">Famicom Disk System Settings</Control>
-      <Control ID="lblUiDisplaySettings">UI Display Settings</Control>
-      <Control ID="lblGameSelectionScreenSettings">Game Selection Screen Settings</Control>
-      <Control ID="chkGameSelectionScreenResetGame">Start game from power-on instead of resuming the previous gameplay session</Control>
-      <Control ID="chkDisableGameSelectionScreen">Disable game selection screen</Control>
+      <Control ID="lblFdsSettings">Configuración de Famicom Disk System</Control>
+      <Control ID="lblUiDisplaySettings">Configuración de interfaz de usuario</Control>
+      <Control ID="lblGameSelectionScreenSettings">Configuración de la pantalla de selección de juegos</Control>
+      <Control ID="chkGameSelectionScreenResetGame">Iniciar juego desde cero en vez de reanudar la sesión de juego anterior</Control>
+      <Control ID="chkDisableGameSelectionScreen">Deshabilitar pantalla de selección de juegos</Control>
 
       <Control ID="chkDisableGameDatabase">Deshabilitar la base de datos de juegos</Control>
-      <Control ID="chkDisableOsd">Disable on-screen display (OSD)</Control>
+      <Control ID="chkDisableOsd">Deshabilitar visualización en pantalla (OSD)</Control>
 
       <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Reproducir la siguiente pista después</Control>
@@ -441,7 +441,7 @@
     </Form>
     <Form ID="frmCheatImport" Title="Importar trucos">
       <Control ID="grpImportOptions">Importar opciones</Control>
-      <Control ID="lblCheatFile">Archivo de truco:</Control>
+      <Control ID="lblCheatFile">Archivo de trucos:</Control>
       <Control ID="lblGame">Juego:</Control>
       <Control ID="btnBrowseCheat">Buscar...</Control>
       <Control ID="btnBrowseGame">Buscar...</Control>
@@ -547,20 +547,20 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
-    <Form ID="frmHdPackEditor" Title="HD Pack Builder">
-      <Control ID="grpPreview">CHR Bank Preview</Control>
-      <Control ID="lblChrBank">CHR Bank:</Control>
-      <Control ID="grpOptions">Recording Options</Control>
-      <Control ID="lblBankSize">CHR Bank Size:</Control>
-      <Control ID="lblScale">Scale/Filter:</Control>
-      <Control ID="chkSortByFrequency">Sort pages by usage frequency</Control>
-      <Control ID="chkLargeSprites">Use 8x16 sprite display mode</Control>
-      <Control ID="chkGroupBlankTiles">Group blank tiles</Control>
-      <Control ID="lblFolder">Save Folder:</Control>
+    <Form ID="frmHdPackEditor" Title="Creador de paquetes de alta resolución">
+      <Control ID="grpPreview">Previsualización del banco CHR</Control>
+      <Control ID="lblChrBank">Banco CHR:</Control>
+      <Control ID="grpOptions">Opciones de grabación</Control>
+      <Control ID="lblBankSize">Tamaño del banco CHR:</Control>
+      <Control ID="lblScale">Escalado/Filtro:</Control>
+      <Control ID="chkSortByFrequency">Ordenar páginas por frecuencia de uso</Control>
+      <Control ID="chkLargeSprites">Usar sprites de 8x16</Control>
+      <Control ID="chkGroupBlankTiles">Agrupar tiles blancas</Control>
+      <Control ID="lblFolder">Guardar en:</Control>
       <Control ID="btnSelectFolder">Buscar...</Control>
-      <Control ID="btnStartRecording">Start Recording</Control>
-      <Control ID="btnStopRecording">Stop Recording</Control>
-      <Control ID="btnOpenFolder">Open Save Folder</Control>
+      <Control ID="btnStartRecording">Empezar a grabar</Control>
+      <Control ID="btnStopRecording">Parar de grabar</Control>
+      <Control ID="btnOpenFolder">Abrir carpeta contenedora</Control>
     </Form>
     <Form ID="frmHelp" Title="Opciones de linea de comandos">
       <Control ID="grpExample">Ejemplo de uso</Control>
@@ -598,7 +598,7 @@
 
     <Message ID="RiskyOptionHint">(no recomendado)</Message>
 
-    <Message ID="ResetSettingsConfirmation">Warning: This will reset ALL of settings and cannot be undone!&#xA;&#xA;Continue?</Message>
+    <Message ID="ResetSettingsConfirmation">ATENCIÓN: ¡Estás a punto restablecer TODA la configuración y no se podrá revertir!&#xA;&#xA;Continuar?</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen no puede encontrar ningún juego para cargar.</Message>
 
@@ -608,18 +608,18 @@
     <Message ID="CouldNotInstallRuntime">El paquete Visual C++ Redistributable para Visual Studio 2015 no se ha instalado correctamente.</Message>
     <Message ID="EmptyState">&lt;No hay copia de seguridad&gt;</Message>
     <Message ID="ErrorWhileCheckingUpdates">Se ha producido un error en la búsqueda de actualizaciones. Compruebe su conexión a Internet e inténtelo de nuevo.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>
-    <Message ID="AutoUpdateDisabledMessage">Automatic updates are not enabled on this build - please download the latest version of the code and recompile Mesen to get the latest updates.</Message>
+    <Message ID="AutoUpdateDisabledMessage">Las actualizaciones automáticas no están habilitadas en esta compilación - por favor descarga la última versión del código y vuelve a compilar Mesen para obtener las últimas actualizaciones.</Message>
     <Message ID="FdsBiosNotFound">No se encontró una bios para FDS. Se requiere una bios para jugar a juegos FDS.&#xA;&#xA;¿Desea seleccionar una bios manualmente?</Message>
     <Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
     <Message ID="FileNotFound">Archivo no encontrado: {0}</Message>
     <Message ID="InvalidFdsBios">La bios seleccionada no es válida.</Message>
     
     <Message ID="HDNesTooltip">Esta opción permite los paquetes de gráficos en alta resolución de carga Mesen en el mismo formato que los del emulador HDNes.&#xA;&#xA;Los paquetes de alta resolución deberán ser colocados en los "HdPacks" en una subcarpeta con el nombre de la ROM.&#xA;Ejemplo: Un paquete para "MiRom.nes" debe estar colocado en "HdPacks\MiRom\hires.txt".&#xA;&#xA;Nota: El soporte para paquetes de alta resolución aún no es perfecto - algunas limitaciones siguen presentes.</Message>
-    <Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
-    <Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, it larger values may produce &#xA;better results).</Message>
-    <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
-    <Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
-    <Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
+    <Message ID="HdPackBuilderScaleHelp">Escoge el tipo de escalado y filtro de vídeo a usar cuando se generen los ficheros PNG&#xA;para el paquete de alta resolución. Usa los filtros "Prescale" para generar las tiles&#xA;a una escala mayor sin aplicar ninguna transformación a los píxeles.</Message>
+    <Message ID="HdPackBuilderBankSizeHelp">Esta opción solo está disponible para juegos de RAM tipo CHR. Los juegos de RAM tipo CHR no tienen&#xA;"bancos" fijos - van siendo creados dinámicamente por el código del juego.&#xA;Esta opción altera el funcionamiento a la hora de agrupar tiles en &#xA;los ficheros PNG - un banco pequeño normalmente dará lugar a menos archivos &#xA;PNG (aunque dependiendo en el código del juego, valores más altos pueden producir &#xA;mejores resultados).</Message>
+    <Message ID="HdPackBuilderFrequencyHelp">Cuando esta opción está habilitada, las tiles en los ficheros PNG se ordenan por la&#xA;frecuencia en que se muestren en la pantalla mientras se esté grabando (paletas &#xA;más comunes se agruparan conjuntamente en el primer archivo para un número de banco &#xA;específico. Si esta casilla está desmarcada, los archivos PNG se ordenarán por paleta - &#xA;en ese caso, cada archivo PNG contendrá solamente 4 colores diferentes.</Message>
+    <Message ID="HdPackBuilderGroupBlankHelp">Esta opción agrupa todas las tiles blancas secuencialmente a los mismos ficheros&#xA;PNG - esto ayuda a reducir el número de archivos PNG producidos, ya que eliminan &#xA;archivos PNG casi vacíos que solo contienen tiles blancas.</Message>
+    <Message ID="HdPackBuilderLargeSpritesHelp">Si está habilitada, esta opción alterará el orden de aparición de los bancos CHR&#xA;que solo contengan sprites a fin de hacer que los sprites sean más fáciles de editar en el fichero PNG.</Message>
 
     <Message ID="MesenUpToDate">Ya utiliza la versión mas reciente de Mesen.</Message>
     <Message ID="PatchAndReset">¿Aplicar el parche y reiniciar el juego?</Message>
@@ -659,8 +659,8 @@
     <Message ID="EmulatorShortcutMappings_SaveState">Guardar estado en la posición actual</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Cargar estado en la posición actual</Message>
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Habilitar/Deshabilitar códigos de trucos</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAudio">Enable/Disable Audio</Message>
-    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Ejecutar un sólo frame</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAudio">Habilitar/Deshabilitar sonido</Message>
+    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Ejecutar un sólo fotograma</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
@@ -670,8 +670,8 @@
       <Value ID="ArkanoidController">Control Arkanoid</Value>
     </Enum>
     <Enum ID="VideoAspectRatio">
-      <Value ID="NoStretching">Default (No Stretching)</Value>
-      <Value ID="Auto">Auto (8:7 or 11:8 based on game)</Value>
+      <Value ID="NoStretching">Por defecto (No estirar)</Value>
+      <Value ID="Auto">Auto (8:7 o 11:8 según el juego)</Value>
       <Value ID="NTSC">NTSC (8:7)</Value>
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">Estándar (4:3)</Value>
@@ -737,18 +737,18 @@
     <Enum ID="RamPowerOnState">
       <Value ID="AllZeros">Todos los bits a 0 (Defecto)</Value>
       <Value ID="AllOnes">Todos los bits a 1</Value>
-      <Value ID="Random">Valores aleatóreos</Value>
+      <Value ID="Random">Valores aleatorios</Value>
     </Enum>
     <Enum ID="CheatCurrentFilterType">
       <Value ID="Smaller">Menor que</Value>
       <Value ID="Equal">Igual que</Value>
-      <Value ID="NotEqual">No igual que</Value>
+      <Value ID="NotEqual">Diferente a</Value>
       <Value ID="Greater">Mayor que</Value>
     </Enum>
     <Enum ID="CheatPrevFilterType">
       <Value ID="Smaller">Menor</Value>
       <Value ID="Equal">Igual</Value>
-      <Value ID="NotEqual">No igual</Value>
+      <Value ID="NotEqual">Diferente</Value>
       <Value ID="Greater">Mayor</Value>
     </Enum>
     <Enum ID="Language">
