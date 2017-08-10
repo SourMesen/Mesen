@@ -354,8 +354,8 @@
 
       <Control ID="chkPauseOnMovieEnd">Pausar la emulación al finalizar el video</Control>
       <Control ID="chkAllowBackgroundInput">Permitir entradas aunque Mesen esté en segundo plano</Control>
-      <Control ID="chkPauseWhenInBackground">Pausar la emulación aunque Mesen esté en segundo plano</Control>
-      <Control ID="chkAutoLoadIps">Cargar los archivos IPS/BPS automáticamente</Control>
+      <Control ID="chkPauseWhenInBackground">Pausar la emulación cuando Mesen esté en segundo plano</Control>
+      <Control ID="chkAutoLoadIps">Cargar los parches IPS/BPS automáticamente</Control>
       <Control ID="chkHidePauseOverlay">Ocultar la pantalla de pausa</Control>
       <Control ID="chkDisplayMovieIcons">Mostrar icono de iniciar/grabar al reproducir o grabar un video</Control>
       <Control ID="btnOpenMesenFolder">Abrir el directorio de Mesen</Control>
@@ -440,7 +440,7 @@
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
     <Form ID="frmCheatImport" Title="Importar trucos">
-      <Control ID="grpImportOptions">Importar opciones</Control>
+      <Control ID="grpImportOptions">Opciones de importación</Control>
       <Control ID="lblCheatFile">Archivo de trucos:</Control>
       <Control ID="lblGame">Juego:</Control>
       <Control ID="btnBrowseCheat">Buscar...</Control>
