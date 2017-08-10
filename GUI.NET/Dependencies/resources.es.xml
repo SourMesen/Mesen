@@ -350,7 +350,7 @@
       <Control ID="lblPauseBackgroundSettings">Pausa/Configuración en segundo plano</Control>
       <Control ID="lblMiscSettings">Configuraciones varias</Control>
       <Control ID="chkAutoHideMenu">Ocultar barra de menú automáticamente</Control>
-      <Control ID="chkDisplayTitleBarInfo">Mostar información adicional en la barra de título</Control>
+      <Control ID="chkDisplayTitleBarInfo">Mostrar información adicional en la barra de título</Control>
 
       <Control ID="chkPauseOnMovieEnd">Pausar la emulación al finalizar el video</Control>
       <Control ID="chkAllowBackgroundInput">Permitir entradas aunque Mesen esté en segundo plano</Control>
