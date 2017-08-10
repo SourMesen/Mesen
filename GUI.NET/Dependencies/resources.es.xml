@@ -231,7 +231,7 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
-    <Form ID="frmZapperConfig" Title="Zapper Configuration">
+    <Form ID="frmZapperConfig" Title="Configuración del Zapper">
       <Control ID="lblSmall">Corto</Control>
       <Control ID="lblLarge">Largo</Control>
       <Control ID="lblDetectRadius">Radio de detección lumínica:</Control>
