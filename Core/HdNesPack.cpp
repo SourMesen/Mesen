@@ -256,7 +256,7 @@ void HdNesPack::GetPixels(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, H
 				if(pixelInfo.Tile.BgColorIndex == 0) {
 					hdPackSpriteInfo = GetMatchingTile(screenTiles, x, y, pixelInfo.Sprite[k]);
 					if(hdPackSpriteInfo) {
-						needBg &= !DrawTile(pixelInfo.Sprite[k], *hdPackSpriteInfo, outputBuffer, screenWidth, true);
+						needBg &= !DrawTile(pixelInfo.Sprite[k], *hdPackSpriteInfo, outputBuffer, screenWidth, needBg);
 					} else if(pixelInfo.Sprite[k].SpriteColorIndex != 0) {
 						DrawColor(EmulationSettings::GetRgbPalette()[pixelInfo.Sprite[k].SpriteColor], outputBuffer, hdData->Scale, screenWidth);
 						needBg = false;
@@ -275,7 +275,7 @@ void HdNesPack::GetPixels(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, H
 	bool drawBg = !hasBgSprite || pixelInfo.Tile.BgColorIndex != 0 || needBg;
 	if(drawBg) {
 		if(hdPackTileInfo) {
-			DrawTile(pixelInfo.Tile, *hdPackTileInfo, outputBuffer, screenWidth, drawBg);
+			DrawTile(pixelInfo.Tile, *hdPackTileInfo, outputBuffer, screenWidth, true);
 		} else {
 			//Draw regular SD background tile
 			bool useCustomBackground = !hasNonBackgroundSurrounding && hasCustomBackground && pixelInfo.Tile.BgColorIndex == 0;
