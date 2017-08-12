@@ -70,7 +70,7 @@
 			// 
 			// pnlPreviousState
 			// 
-			this.pnlPreviousState.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.pnlPreviousState.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.pnlPreviousState.BackColor = System.Drawing.Color.Gray;
 			this.pnlPreviousState.Controls.Add(this.picPreviousState);
 			this.pnlPreviousState.Location = new System.Drawing.Point(113, 13);

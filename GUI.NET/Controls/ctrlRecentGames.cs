@@ -171,6 +171,14 @@ namespace Mesen.GUI.Controls
 
 		protected override void OnResize(EventArgs e)
 		{
+			if(Program.IsMono) {
+				//Fix resize issues
+				picNextGame.Dock = DockStyle.None;
+				picPrevGame.Dock = DockStyle.None;
+				picNextGame.Dock = DockStyle.Fill;
+				picPrevGame.Dock = DockStyle.Fill;
+			}
+
 			if(picPreviousState.Image != null) {
 				UpdateSize();
 			}
