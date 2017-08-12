@@ -158,10 +158,10 @@
 
       <Control ID="tpgPanning">Панорамування</Control>
       <Control ID="trkDmcPan">DMC</Control>
-      <Control ID="trkNoisePan">Noise</Control>
-      <Control ID="trkTrianglePan">Triangle</Control>
-      <Control ID="trkSquare2Pan">Square 2</Control>
-      <Control ID="trkSquare1Pan">Square 1</Control>
+      <Control ID="trkNoisePan">Шум</Control>
+      <Control ID="trkTrianglePan">Трикутник</Control>
+      <Control ID="trkSquare2Pan">Квадрат 2</Control>
+      <Control ID="trkSquare1Pan">Квадрат 1</Control>
       <Control ID="trkFdsPan">FDS</Control>
       <Control ID="trkMmc5Pan">MMC5</Control>
       <Control ID="trkVrc6Pan">VRC6</Control>
@@ -169,8 +169,8 @@
       <Control ID="trkNamcoPan">Namco</Control>
       <Control ID="trkSunsoftPan">Sunsoft</Control>
 
-      <Control ID="tpgEqualizer">Equalizer</Control>
-      <Control ID="chkEnableEqualizer">Enable equalizer</Control>
+      <Control ID="tpgEqualizer">Еквалайзер</Control>
+      <Control ID="chkEnableEqualizer">Увімкнути еквалайзер</Control>
     </Form>
     <Form ID="frmInputConfig" Title="Пристрої введення">
       <Control ID="btnOK">OK</Control>
@@ -189,7 +189,7 @@
       <Control ID="lblExpansionPort">Порт розширення :</Control>
       <Control ID="chkFourScore">Використовувати NES Four Score</Control>
       <Control ID="chkAutoConfigureInput">Автоматично налаштовувати контролери при завантаженні гри</Control>
-      <Control ID="tpgEmulatorKeys">Emulator Keys</Control>
+      <Control ID="tpgEmulatorKeys">Емуляторні ключі</Control>
 
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="grpDisplayInput">Відображати введення</Control>
@@ -200,7 +200,7 @@
       <Control ID="lblDisplayPosition">Позиція :</Control>
       <Control ID="chkDisplayInputHorizontally">Відображати горизонтально</Control>
 
-      <Control ID="lblKeyBinding">Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyword or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.</Control>
+      <Control ID="lblKeyBinding">Увага: Ваша поточна конфігурація містить конфліктуючі поєднання клавіш - деякі фізичні кнопки на вашому ключовому словнику або геймпадi відображаються на кількох кнопках на контролері NES. Якщо це не навмисне, перегляньте та виправте ключi.</Control>
     </Form>
     <Form ID="frmControllerConfig" Title="Налаштування контролера">
       <Control ID="lblTurboSpeed">Швидкість турбо-кнопок:</Control>
@@ -227,16 +227,16 @@
       <Control ID="mnuSnes30Layout1">Контролер #1</Control>
       <Control ID="mnuSnes30Layout2">Контролер #2</Control>
 
-      <Control ID="lblHint">Tabs with an icon contain key bindings for this player.&#13;&#10;Each button can be mapped to up to 4 different keyboard keys or gamepad buttons.</Control>     
+      <Control ID="lblHint">Вкладки з піктограмою містять ключові прив'язки для цього гравця.&#13;&#10;Кожна кнопка може бути віднесена до 4 різних клавіш клавіатури або геймпада.</Control>     
 
       <Control ID="btnClear">Очистити</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Відміна</Control>
     </Form>
-    <Form ID="frmZapperConfig" Title="Zapper Configuration">
-      <Control ID="lblSmall">Small</Control>
-      <Control ID="lblLarge">Large</Control>
-      <Control ID="lblDetectRadius">Light Detection Radius:</Control>
+    <Form ID="frmZapperConfig" Title="Конфiгурацiя Zapper">
+      <Control ID="lblSmall">Малий</Control>
+      <Control ID="lblLarge">Великий</Control>
+      <Control ID="lblDetectRadius">Радіус виявлення світла:</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Відміна</Control>
     </Form>
@@ -248,7 +248,7 @@
       <Control ID="lblDisplayRatio">Співвідношення сторін :</Control>
       <Control ID="lblCustomRatio">Користувацьке співвідношення:</Control>
       <Control ID="chkBilinearInterpolation">Білінійна інтерполяція</Control>
-      <Control ID="chkFullscreenForceIntegerScale">Use integer scale values when entering fullscreen mode</Control>
+      <Control ID="chkFullscreenForceIntegerScale">Використовуйте цілі значення масштабу при введенні повноекранного режиму</Control>
       <Control ID="chkShowFps">Показувати FPS</Control>
       <Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
       <Control ID="tpgOverscan">Overscan</Control>
@@ -262,7 +262,7 @@
       <Control ID="btnSelectPalette">Вибрати палітру</Control>
       <Control ID="btnExportPalette">Експорт .pal</Control>
       <Control ID="btnLoadPalFile">Завантажити .pal</Control>
-      <Control ID="chkUseCustomVsPalette">Use this palette for VS System games</Control>
+      <Control ID="chkUseCustomVsPalette">Використовуйте цю палітру для системних ігор VS</Control>
       <Control ID="tpgPicture">Зображення</Control>
       <Control ID="btnSelectPreset">Шаблони</Control>
       <Control ID="grpCommon">Загальні налаштування</Control>
@@ -286,10 +286,10 @@
       <Control ID="grpScanlines">Scanlines</Control>
       <Control ID="trkScanlines">Scanlines</Control>
       <Control ID="btnResetPictureSettings">Скидання</Control>
-      <Control ID="mnuPresetComposite">Composite</Control>
+      <Control ID="mnuPresetComposite">Композитний</Control>
       <Control ID="mnuPresetSVideo">S-Video</Control>
       <Control ID="menuPresetRgb">RGB</Control>
-      <Control ID="mnuPresetMonochrome">Monochrome</Control>
+      <Control ID="mnuPresetMonochrome">Монохромний</Control>
 
       <Control ID="tpgAdvanced">Розширенi</Control>
       <Control ID="chkDisableBackground">Відключити фон</Control>
@@ -314,7 +314,7 @@
       <Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
       <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
       <Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
-      <Control ID="chkAdaptiveSpriteLimit">Automatically re-enable sprite limit as needed to prevent graphical glitches when possible</Control>
+      <Control ID="chkAdaptiveSpriteLimit">Автоматичне повторне ввімкнення обмеження спрайтiв якщо це необхідно щоб запобігти графічних збоїв коли це можливо</Control>
       <Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
       <Control ID="chkDisablePpu2004Reads">Вiдключити читання PPU $2004 (Поведiнка Famicom)</Control>
       <Control ID="chkDisableOamAddrBug">Вiдключити PPU OAMADDR баг эмуляцiї</Control>
@@ -361,7 +361,7 @@
       <Control ID="chkHidePauseOverlay">Приховати екран паузи</Control>
       <Control ID="chkDisplayMovieIcons">Відображати значок відтворення/запису при відтворенні або запису відео</Control>
       <Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
-      <Control ID="btnResetSettings">Reset All Settings</Control>
+      <Control ID="btnResetSettings">Скинути всі налаштування</Control>
       <Control ID="tpgFileAssociations">Асоціації файлів</Control>
       <Control ID="grpFileAssociations">Асоціації файлів</Control>
       <Control ID="chkNesFormat">.NES</Control>
@@ -374,8 +374,8 @@
       <Control ID="chkFdsAutoInsertDisk">Автоматичне перемикання дисків для FDS ігор</Control>
 
       <Control ID="chkShowFrameCounter">Показувати Лічильник Кадрів</Control>
-      <Control ID="chkShowGameTimer">Show game timer</Control>
-      <Control ID="chkShowVsConfigOnLoad">Show game configuration dialog when loading VS System games</Control>
+      <Control ID="chkShowGameTimer">Показати таймер гри</Control>
+      <Control ID="chkShowVsConfigOnLoad">Показати діалогове вікно налаштування гри під час завантаження системних ігор VS</Control>
       
       <Control ID="lblRewind">Зберігати дані перемотування за останні</Control>
       <Control ID="lblRewindMinutes">хвилин (Використання Пам'яті ≈1 МБ/хв)</Control>
@@ -399,14 +399,14 @@
       <Control ID="lblLastSync">Востаннє синхронізовано : </Control>
       <Control ID="btnResync">Синхронізувати</Control>
 
-      <Control ID="lblFdsSettings">Famicom Disk System Settings</Control>
-      <Control ID="lblUiDisplaySettings">UI Display Settings</Control>
-      <Control ID="lblGameSelectionScreenSettings">Game Selection Screen Settings</Control>
-      <Control ID="chkGameSelectionScreenResetGame">Start game from power-on instead of resuming the previous gameplay session</Control>
-      <Control ID="chkDisableGameSelectionScreen">Disable game selection screen</Control>
+      <Control ID="lblFdsSettings">Famicom Disk System Налаштування</Control>
+      <Control ID="lblUiDisplaySettings">Налаштування дисплея інтерфейсу користувача</Control>
+      <Control ID="lblGameSelectionScreenSettings">Налаштування екрана вибору гри</Control>
+      <Control ID="chkGameSelectionScreenResetGame">Почати гру з включення замiсть того щоб вiдновити попереднiй сеанс гри</Control>
+      <Control ID="chkDisableGameSelectionScreen">Вимкнути екран вибору гри</Control>
       
       <Control ID="chkDisableGameDatabase">Відключити вбудовану базу даних</Control>
-      <Control ID="chkDisableOsd">Disable on-screen display (OSD)</Control>
+      <Control ID="chkDisableOsd">Вимкнути екранне меню (OSD)</Control>
 
       <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Переходити на наступний трек після</Control>
@@ -551,29 +551,29 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Вiдмiна</Control>
     </Form>
-    <Form ID="frmHdPackEditor" Title="HD Pack Builder">
-      <Control ID="grpPreview">CHR Bank Preview</Control>
+    <Form ID="frmHdPackEditor" Title="HD Pack Будівельник">
+      <Control ID="grpPreview">CHR Bank Попередній перегляд</Control>
       <Control ID="lblChrBank">CHR Bank:</Control>
-      <Control ID="grpOptions">Recording Options</Control>
-      <Control ID="lblBankSize">CHR Bank Size:</Control>
-      <Control ID="lblScale">Scale/Filter:</Control>
-      <Control ID="chkSortByFrequency">Sort pages by usage frequency</Control>
-      <Control ID="chkLargeSprites">Use 8x16 sprite display mode</Control>
-      <Control ID="chkGroupBlankTiles">Group blank tiles</Control>
-      <Control ID="lblFolder">Save Folder:</Control>
+      <Control ID="grpOptions">Параметри запису</Control>
+      <Control ID="lblBankSize">CHR Розмiр Банку:</Control>
+      <Control ID="lblScale">Масштаб/Фiльтр:</Control>
+      <Control ID="chkSortByFrequency">Сортування сторінок за частотою використання</Control>
+      <Control ID="chkLargeSprites">Використовувати режим відображення спрайтiв 8x16</Control>
+      <Control ID="chkGroupBlankTiles">Групувати порожнi тайли</Control>
+      <Control ID="lblFolder">Зберегти папку:</Control>
       <Control ID="btnSelectFolder">Огляд...</Control>
-      <Control ID="btnStartRecording">Start Recording</Control>
-      <Control ID="btnStopRecording">Stop Recording</Control>
-      <Control ID="btnOpenFolder">Open Save Folder</Control>
+      <Control ID="btnStartRecording">Почати запис</Control>
+      <Control ID="btnStopRecording">Зупинити запис</Control>
+      <Control ID="btnOpenFolder">Вiдкрити папку збережень</Control>
     </Form>
-    <Form ID="frmHelp" Title="Command-line Options">
+    <Form ID="frmHelp" Title="Параметри командного рядка">
       <Control ID="grpExample">Приклад використання</Control>
       <Control ID="tpgGeneral">Загальний</Control>
       <Control ID="tpgVideoOptions">Вiдео Опцiї</Control>
       <Control ID="tpgAudioOptions">Аудiо Опцiї</Control>
       <Control ID="tpgEmulationOptions">Опцiї Эмуляцiї</Control>
-      <Control ID="lblExplanation">This will start Mesen in fullscreen mode with the "MyGame.nes" rom loaded.  It will also use the NTSC filter, set at a 2x scale and configure the Overscan settings.  The "DoNotSaveSettings" flag is used to prevent the command line switches from pernanently altering Mesen's settings.</Control>
-      <Control ID="txtGeneralOptions">/fullscreen - Start Mesen in fullscreen mode&#13;&#10;/DoNotSaveSettings - Prevent settings from being saved to the disk (useful to prevent command line options from becoming the default settings)</Control>
+      <Control ID="lblExplanation">Це запустить Mesen у повноекранному режимi з "MyGame.nes" завантаженим ромом.  Вiн також буде використовувати фiльтр NTSC, встановлений у 2x масштабi та налаштує параметри Overscan. Прапор "DoNotSaveSettings" використовується для запобігання перемикання командного рядка від випадкової зміни налаштувань Mesen.</Control>
+      <Control ID="txtGeneralOptions">/fullscreen - Запустити Mesen у повноекранному режимi&#13;&#10;/DoNotSaveSettings - Заборонити збереження налаштувань на диску (корисно щоб запобігти становленню параметрів командного рядка за замовчуванням)</Control>
     </Form>
   </Forms>
   <Messages>
@@ -644,8 +644,8 @@
     <Message ID="InvalidXmlFile">Обраний XML файл ({0}) не є коректним.</Message>
     <Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читiв для даної гри.</Message>
 
-    <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
-    <Message ID="EmulatorShortcutMappings_Rewind">Rewind</Message>
+    <Message ID="EmulatorShortcutMappings_FastForward">Швидке перемотування</Message>
+    <Message ID="EmulatorShortcutMappings_Rewind">Перемотка</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Перемотати 10 секунд</Message>
     <Message ID="EmulatorShortcutMappings_RewindOneMin">Перемотати 1 хвилину</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Збільшити Швидкість</Message>
@@ -664,7 +664,7 @@
     <Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Включити/Виключити Чит Коди</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAudio">Enable/Disable Audio</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAudio">Увімкнути/Вимкнути звук</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">Запуск Одного Кадру</Message>
   </Messages>
   <Enums>
@@ -675,8 +675,8 @@
       <Value ID="ArkanoidController">Arkanoid</Value>
     </Enum>
     <Enum ID="VideoAspectRatio">
-      <Value ID="NoStretching">Default (No Stretching)</Value>
-      <Value ID="Auto">Auto (8:7 or 11:8 based on game)</Value>
+      <Value ID="NoStretching">Default (Не Розтягувати)</Value>
+      <Value ID="Auto">Auto (8:7 або 11:8 на основі гри)</Value>
       <Value ID="NTSC">NTSC (8:7)</Value>
       <Value ID="PAL">PAL (11:8)</Value>
       <Value ID="Standard">Стандарт (4:3)</Value>
@@ -744,7 +744,7 @@
       <Value ID="English">English</Value>
       <Value ID="French">Français</Value>
       <Value ID="Japanese">日本語</Value>
-		<Value ID="Portuguese">Português</Value>
+      <Value ID="Portuguese">Português</Value>
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
       <Value ID="Ukrainian">Українська</Value>
