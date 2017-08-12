@@ -162,8 +162,6 @@ namespace Mesen.GUI.Forms
 				Task.Run(() => CloudSyncHelper.Sync());
 			}
 
-			this.LoadGameFromCommandLine(_commandLineArgs);
-
 			if(ConfigManager.Config.PreferenceInfo.AutomaticallyCheckForUpdates) {
 				CheckForUpdates(false);
 			}
@@ -199,6 +197,8 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.WindowSize.HasValue) {
 				this.Size = ConfigManager.Config.WindowSize.Value;
 			}
+
+			this.LoadGameFromCommandLine(_commandLineArgs);			
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -790,7 +790,7 @@ namespace Mesen.GUI.Forms
 					if(!updateTextOnly) {
 						this.ctrlNsfPlayer.ResetCount();
 					}
-					this.ctrlNsfPlayer.Visible = true;
+					this.ctrlNsfPlayer.Visible = true;					
 					this.ctrlNsfPlayer.Focus();
 
 					_currentGame = InteropEmu.NsfGetHeader().GetSongName();
