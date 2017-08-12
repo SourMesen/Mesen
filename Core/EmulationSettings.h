@@ -64,6 +64,8 @@ enum EmulationFlags : uint64_t
 
 	DisableOsd = 0x100000000000,
 	DisableGameSelectionScreen = 0x200000000000,
+
+	ConfirmExitResetPower = 0x400000000000,
 	
 	ForceMaxSpeed = 0x4000000000000000,	
 	ConsoleMode = 0x8000000000000000,
@@ -275,6 +277,8 @@ struct EmulatorKeyMappings
 
 	uint32_t Pause;
 	uint32_t Reset;
+	uint32_t PowerCycle;
+	uint32_t PowerOff;
 	uint32_t Exit;
 
 	uint32_t MoveToNextStateSlot;

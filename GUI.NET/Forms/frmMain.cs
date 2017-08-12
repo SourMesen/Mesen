@@ -203,6 +203,11 @@ namespace Mesen.GUI.Forms
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
+			if(ConfigManager.Config.PreferenceInfo.ConfirmExitResetPower && MesenMsgBox.Show("ConfirmExit", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK) {
+				e.Cancel = true;
+				return;
+			}
+
 			if(_notifListener != null) {
 				_notifListener.Dispose();
 				_notifListener = null;
@@ -429,6 +434,14 @@ namespace Mesen.GUI.Forms
 					}));
 					break;
 
+				case InteropEmu.ConsoleNotificationType.RequestReset:
+					this.BeginInvoke((MethodInvoker)(() => this.ResetEmu()));
+					break;
+
+				case InteropEmu.ConsoleNotificationType.RequestPowerCycle:
+					this.BeginInvoke((MethodInvoker)(() => this.PowerCycleEmu()));
+					break;
+
 				case InteropEmu.ConsoleNotificationType.RequestExit:
 					this.BeginInvoke((MethodInvoker)(() => this.Close()));
 					break;
@@ -634,7 +647,16 @@ namespace Mesen.GUI.Forms
 
 		private void ResetEmu()
 		{
-			InteropEmu.Reset();
+			if(!ConfigManager.Config.PreferenceInfo.ConfirmExitResetPower || MesenMsgBox.Show("ConfirmReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
+				InteropEmu.Reset();
+			}
+		}
+
+		private void PowerCycleEmu()
+		{
+			if(!ConfigManager.Config.PreferenceInfo.ConfirmExitResetPower || MesenMsgBox.Show("ConfirmPowerCycle", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
+				InteropEmu.PowerCycle();
+			}
 		}
 
 		bool IMessageFilter.PreFilterMessage(ref Message m)

@@ -23,7 +23,7 @@ namespace Mesen.GUI.Forms
 
 		private void mnuPowerCycle_Click(object sender, EventArgs e)
 		{
-			InteropEmu.PowerCycle();
+			PowerCycleEmu();
 		}
 
 		private void mnuPowerOff_Click(object sender, EventArgs e)

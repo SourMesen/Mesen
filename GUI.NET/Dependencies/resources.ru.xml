@@ -354,6 +354,7 @@
       <Control ID="chkAutoHideMenu">Automatically hide menu bar</Control>
       <Control ID="chkDisplayTitleBarInfo">Display additional information in title bar</Control>
 
+      <Control ID="chkConfirmExitResetPower">Display confirmation dialog before reset/power cycle/exit</Control>
       <Control ID="chkPauseOnMovieEnd">Ставить на паузу после проигрывания записи</Control>
       <Control ID="chkAllowBackgroundInput">Разрешить ввод в фоне</Control>
       <Control ID="chkPauseWhenInBackground">Ставить на паузу при потере фокуса</Control>
@@ -681,6 +682,10 @@
     <Message ID="InvalidXmlFile">Выбранный XML файл ({0}) не является корректным.</Message>
     <Message ID="NoMatchingCheats">Выбранный Cheat файл ({0}) не содержит читов для данной игры.</Message>
 
+    <Message ID="ConfirmReset">Are you sure you want to reset?</Message>
+    <Message ID="ConfirmPowerCycle">Are you sure you want to power cycle?</Message>
+    <Message ID="ConfirmExit">Are you sure you want to exit?</Message>
+
     <Message ID="EmulatorShortcutMappings_FastForward">Перемотка</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Rewind</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rewind 10 seconds</Message>
@@ -689,6 +694,8 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Decrease Speed</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Сброс</Message>
+    <Message ID="EmulatorShortcutMappings_PowerCycle">Power Cycle</Message>
+    <Message ID="EmulatorShortcutMappings_PowerOff">Power Off</Message>
     <Message ID="EmulatorShortcutMappings_Exit">Exit</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Сделать сриншот</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернуть диск</Message>

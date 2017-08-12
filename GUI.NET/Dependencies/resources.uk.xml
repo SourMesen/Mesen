@@ -353,7 +353,8 @@
       <Control ID="lblMiscSettings">Різнi настройки</Control>
       <Control ID="chkAutoHideMenu">Автоматично приховувати панель меню</Control>
       <Control ID="chkDisplayTitleBarInfo">Відображення додаткової інформації в рядку заголовка</Control>
-      
+
+      <Control ID="chkConfirmExitResetPower">Display confirmation dialog before reset/power cycle/exit</Control>
       <Control ID="chkPauseOnMovieEnd">Ставити на паузу після програвання запису</Control>
       <Control ID="chkAllowBackgroundInput">Дозволити введення в тлі</Control>
       <Control ID="chkPauseWhenInBackground">Ставити на паузу при втраті фокуса</Control>
@@ -681,6 +682,10 @@
     <Message ID="InvalidXmlFile">Обраний XML файл ({0}) не є коректним.</Message>
     <Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читiв для даної гри.</Message>
 
+    <Message ID="ConfirmReset">Are you sure you want to reset?</Message>
+    <Message ID="ConfirmPowerCycle">Are you sure you want to power cycle?</Message>
+    <Message ID="ConfirmExit">Are you sure you want to exit?</Message>
+
     <Message ID="EmulatorShortcutMappings_FastForward">Швидке перемотування</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Перемотка</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Перемотати 10 секунд</Message>
@@ -689,6 +694,8 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Зменшити Швидкість</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
+    <Message ID="EmulatorShortcutMappings_PowerCycle">Цикл включення</Message>
+    <Message ID="EmulatorShortcutMappings_PowerOff">Power Off</Message>
     <Message ID="EmulatorShortcutMappings_Exit">Вихід</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернути диск</Message>

@@ -354,6 +354,7 @@
       <Control ID="chkAutoHideMenu">自動的にメニューバーを隠す</Control>
       <Control ID="chkDisplayTitleBarInfo">タイトルバーに追加情報を表す。</Control>
 
+      <Control ID="chkConfirmExitResetPower">リセットと再起度とMesenを終了する前に確認する</Control>
       <Control ID="chkPauseOnMovieEnd">動画が終わると自動的にポーズする</Control>
       <Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時でも、コントローラの入力を受け付ける</Control>
       <Control ID="chkPauseWhenInBackground">Mesenが最前面ではない時、自動的にポーズする</Control>
@@ -674,6 +675,10 @@
     <Message ID="InvalidXmlFile">このファイル（{0}）はXMLファイルではないため読めませんでした.</Message>
     <Message ID="NoMatchingCheats">このファイル（{0}）に選択されたゲームに該当するチートコードを見つかりませんでした。</Message>
 
+    <Message ID="ConfirmReset">ゲームをリセットします。よろしいですか？</Message>
+    <Message ID="ConfirmPowerCycle">ゲームを停止して再起動します。よろしいですか？</Message>
+    <Message ID="ConfirmExit">Mesenを終了します。よろしいですか？</Message>
+
     <Message ID="EmulatorShortcutMappings_FastForward">早送り</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">巻き戻す</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">１０秒前に戻る</Message>
@@ -682,6 +687,8 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">速度を下げる</Message>
     <Message ID="EmulatorShortcutMappings_Pause">ポーズ</Message>
     <Message ID="EmulatorShortcutMappings_Reset">リセット</Message>
+    <Message ID="EmulatorShortcutMappings_PowerCycle">停止と再起動</Message>
+    <Message ID="EmulatorShortcutMappings_PowerOff">ゲームを停止する</Message>
     <Message ID="EmulatorShortcutMappings_Exit">終了</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">スクリーンショットを撮る</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - A面B面切り替え</Message>

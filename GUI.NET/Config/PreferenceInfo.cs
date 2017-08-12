@@ -59,6 +59,8 @@ namespace Mesen.GUI.Config
 		public bool DisableGameSelectionScreen = false;
 		public bool GameSelectionScreenResetGame = false;
 
+		public bool ConfirmExitResetPower = false;
+
 		public UInt32 RewindBufferSize = 300;
 
 		public bool OverrideAviFolder = false;
@@ -128,6 +130,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.HidePauseOverlay, preferenceInfo.HidePauseOverlay);
 			InteropEmu.SetFlag(EmulationFlags.DisplayMovieIcons, preferenceInfo.DisplayMovieIcons);
 			InteropEmu.SetFlag(EmulationFlags.DisableGameSelectionScreen, preferenceInfo.DisableGameSelectionScreen);
+			InteropEmu.SetFlag(EmulationFlags.ConfirmExitResetPower, preferenceInfo.ConfirmExitResetPower);
 
 			InteropEmu.NsfSetNsfConfig(preferenceInfo.NsfAutoDetectSilence ? preferenceInfo.NsfAutoDetectSilenceDelay : 0, preferenceInfo.NsfMoveToNextTrackAfterTime ? preferenceInfo.NsfMoveToNextTrackTime : -1, preferenceInfo.NsfDisableApuIrqs);
 			InteropEmu.SetAutoSaveOptions(preferenceInfo.AutoSave ? (uint)preferenceInfo.AutoSaveDelay : 0, preferenceInfo.AutoSaveNotify);

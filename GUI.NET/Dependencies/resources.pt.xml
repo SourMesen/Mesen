@@ -351,7 +351,8 @@
       <Control ID="lblMiscSettings">Configurações diversas</Control>
       <Control ID="chkAutoHideMenu">Ocultar automaticamente a barra de menus</Control>
       <Control ID="chkDisplayTitleBarInfo">Exibir informações adicionais na barra de título</Control>
-      
+
+      <Control ID="chkConfirmExitResetPower">Display confirmation dialog before reset/power cycle/exit</Control>
       <Control ID="chkPauseOnMovieEnd">Pausar a emulação ao finalizar o vídeo</Control>
       <Control ID="chkAllowBackgroundInput">Permitir inputs quando Mesen estiver em segundo plano</Control>
       <Control ID="chkPauseWhenInBackground">Pausar a emulação quando Mesen estiver em segundo plano</Control>
@@ -675,7 +676,11 @@
     <Message ID="InvalidCheatFile">O arquivo selecionado ({0}) não é um arquivo de cheats válido.</Message>
     <Message ID="InvalidXmlFile">O arquivo selecionado ({0}) não é um arquivo XML válido.</Message>
     <Message ID="NoMatchingCheats">O arquivo de cheats selecionado ({0}) não contém cheats que pertencem ao jogo selecionado.</Message>
-    
+
+    <Message ID="ConfirmReset">Are you sure you want to reset?</Message>
+    <Message ID="ConfirmPowerCycle">Are you sure you want to power cycle?</Message>
+    <Message ID="ConfirmExit">Are you sure you want to exit?</Message>
+
     <Message ID="EmulatorShortcutMappings_FastForward">Fast Forward</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Rewind</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rewind 10 seconds</Message>
@@ -684,6 +689,8 @@
     <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Reduzir velocidade</Message>
     <Message ID="EmulatorShortcutMappings_Pause">Pausar</Message>
     <Message ID="EmulatorShortcutMappings_Reset">Reiniciar</Message>
+    <Message ID="EmulatorShortcutMappings_PowerCycle">Parar e ligar</Message>
+    <Message ID="EmulatorShortcutMappings_PowerOff">Desligar</Message>
     <Message ID="EmulatorShortcutMappings_Exit">Exit</Message>
     <Message ID="EmulatorShortcutMappings_TakeScreenshot">Tirar screenshot</Message>
     <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Mudar lado do disco</Message>

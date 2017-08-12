@@ -692,6 +692,8 @@ namespace Mesen.GUI
 			RequestExit = 17,
 			ToggleCheats = 18,
 			ToggleAudio = 19,
+			RequestReset = 20,
+			RequestPowerCycle = 21,
 		}
 
 		public enum ControllerType
@@ -1085,6 +1087,8 @@ namespace Mesen.GUI
 		DisableOsd = 0x100000000000,
 		DisableGameSelectionScreen = 0x200000000000,
 
+		ConfirmExitResetPower = 0x400000000000,
+
 		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,
 	}
@@ -1172,6 +1176,8 @@ namespace Mesen.GUI
 
 		public UInt32 Pause;
 		public UInt32 Reset;
+		public UInt32 PowerCycle;
+		public UInt32 PowerOff;
 		public UInt32 Exit;
 
 		public UInt32 MoveToNextStateSlot;

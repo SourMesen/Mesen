@@ -23,6 +23,8 @@ enum class ConsoleNotificationType
 	RequestExit = 17,
 	ToggleCheats = 18,
 	ToggleAudio = 19,
+	RequestReset = 20,
+	RequestPowerCycle = 21,
 };
 
 class INotificationListener

@@ -140,6 +140,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblUiDisplaySettings = new System.Windows.Forms.Label();
 			this.lblGameSelectionScreenSettings = new System.Windows.Forms.Label();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.chkConfirmExitResetPower = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
@@ -196,17 +197,18 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.Controls.Add(this.flowLayoutPanel2, 0, 0);
 			this.tlpMain.Controls.Add(this.lblMiscSettings, 0, 8);
 			this.tlpMain.Controls.Add(this.chkAutoLoadIps, 0, 9);
-			this.tlpMain.Controls.Add(this.chkDisplayMovieIcons, 0, 11);
+			this.tlpMain.Controls.Add(this.chkDisplayMovieIcons, 0, 12);
 			this.tlpMain.Controls.Add(this.chkAutoHideMenu, 0, 10);
 			this.tlpMain.Controls.Add(this.chkHidePauseOverlay, 0, 4);
 			this.tlpMain.Controls.Add(this.chkAllowBackgroundInput, 0, 7);
 			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 6);
 			this.tlpMain.Controls.Add(this.chkPauseOnMovieEnd, 0, 5);
-			this.tlpMain.Controls.Add(this.tableLayoutPanel5, 0, 13);
+			this.tlpMain.Controls.Add(this.tableLayoutPanel5, 0, 14);
+			this.tlpMain.Controls.Add(this.chkConfirmExitResetPower, 0, 11);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 14;
+			this.tlpMain.RowCount = 15;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -216,6 +218,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -312,7 +315,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisplayMovieIcons
 			// 
 			this.chkDisplayMovieIcons.AutoSize = true;
-			this.chkDisplayMovieIcons.Location = new System.Drawing.Point(13, 253);
+			this.chkDisplayMovieIcons.Location = new System.Drawing.Point(13, 276);
 			this.chkDisplayMovieIcons.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkDisplayMovieIcons.Name = "chkDisplayMovieIcons";
 			this.chkDisplayMovieIcons.Size = new System.Drawing.Size(304, 17);
@@ -963,7 +966,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel10.Size = new System.Drawing.Size(471, 135);
+			this.tableLayoutPanel10.Size = new System.Drawing.Size(471, 139);
 			this.tableLayoutPanel10.TabIndex = 0;
 			// 
 			// psWave
@@ -1307,9 +1310,9 @@ namespace Mesen.GUI.Forms.Config
 			this.lblLocation.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lblLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblLocation.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.lblLocation.Location = new System.Drawing.Point(60, 5);
+			this.lblLocation.Location = new System.Drawing.Point(48, 5);
 			this.lblLocation.Name = "lblLocation";
-			this.lblLocation.Size = new System.Drawing.Size(402, 13);
+			this.lblLocation.Size = new System.Drawing.Size(414, 13);
 			this.lblLocation.TabIndex = 1;
 			this.lblLocation.Text = "....";
 			// 
@@ -1318,7 +1321,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblDataLocation.AutoSize = true;
 			this.lblDataLocation.Location = new System.Drawing.Point(3, 5);
 			this.lblDataLocation.Name = "lblDataLocation";
-			this.lblDataLocation.Size = new System.Drawing.Size(51, 13);
+			this.lblDataLocation.Size = new System.Drawing.Size(39, 13);
 			this.lblDataLocation.TabIndex = 0;
 			this.lblDataLocation.Text = "Folder:";
 			// 
@@ -1585,6 +1588,17 @@ namespace Mesen.GUI.Forms.Config
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
+			// chkConfirmExitResetPower
+			// 
+			this.chkConfirmExitResetPower.AutoSize = true;
+			this.chkConfirmExitResetPower.Location = new System.Drawing.Point(13, 253);
+			this.chkConfirmExitResetPower.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkConfirmExitResetPower.Name = "chkConfirmExitResetPower";
+			this.chkConfirmExitResetPower.Size = new System.Drawing.Size(293, 17);
+			this.chkConfirmExitResetPower.TabIndex = 25;
+			this.chkConfirmExitResetPower.Text = "Display confirmation dialog before reset/power cycle/exit";
+			this.chkConfirmExitResetPower.UseVisualStyleBackColor = true;
+			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1772,5 +1786,6 @@ namespace Mesen.GUI.Forms.Config
 		private ctrlPathSelection psSaveStates;
 		private ctrlPathSelection psScreenshots;
 		private ctrlPathSelection psAvi;
+		private System.Windows.Forms.CheckBox chkConfirmExitResetPower;
 	}
 }

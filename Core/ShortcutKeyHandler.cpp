@@ -51,6 +51,7 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 {
 	bool isNetplayClient = GameClient::Connected();
 	bool isMovieActive = MovieManager::Playing() || MovieManager::Recording();
+	bool needConfirm = EmulationSettings::CheckFlag(ConfirmExitResetPower);
 
 	if(DetectKeyPress(mappings.FastForward)) {
 		EmulationSettings::SetFlags(EmulationFlags::Turbo);
@@ -110,8 +111,29 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 		SaveStateManager::LoadState();
 	}
 
-	if(DetectKeyPress(mappings.Reset) && !isNetplayClient && !isMovieActive) {
-		Console::Reset(true);
+	if(!isNetplayClient && !isMovieActive) {
+		if(DetectKeyPress(mappings.Reset)) {
+			if(needConfirm) {
+				MessageManager::SendNotification(ConsoleNotificationType::RequestReset);
+			} else {
+				Console::Reset(true);
+			}
+		}
+		if(DetectKeyPress(mappings.PowerCycle)) {
+			if(needConfirm) {
+				MessageManager::SendNotification(ConsoleNotificationType::RequestPowerCycle);
+			} else {
+				Console::Reset(false);
+			}
+		}
+	}
+
+	if(DetectKeyPress(mappings.PowerOff)) {
+		Console::GetInstance()->Stop();
+	}
+
+	if(DetectKeyPress(mappings.Exit)) {
+		MessageManager::SendNotification(ConsoleNotificationType::RequestExit);
 	}
 
 	if(DetectKeyPress(mappings.Pause) && !isNetplayClient) {
@@ -120,10 +142,6 @@ void ShortcutKeyHandler::CheckMappedKeys(EmulatorKeyMappings mappings)
 		} else {
 			EmulationSettings::SetFlags(EmulationFlags::Paused);
 		}
-	}
-
-	if(DetectKeyPress(mappings.Exit)) {
-		MessageManager::SendNotification(ConsoleNotificationType::RequestExit);
 	}
 
 	if(DetectKeyPress(mappings.ToggleCheats) && !isNetplayClient && !isMovieActive) {
