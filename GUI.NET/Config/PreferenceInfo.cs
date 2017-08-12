@@ -30,7 +30,6 @@ namespace Mesen.GUI.Config
 		public bool AssociateNesFiles = false;
 		public bool AssociateFdsFiles = false;
 		public bool AssociateMmoFiles = false;
-		public bool AssociateMstFiles = false;
 		public bool AssociateNsfFiles = false;
 		public bool AssociateNsfeFiles = false;
 		public bool AssociateUnfFiles = false;
@@ -61,6 +60,20 @@ namespace Mesen.GUI.Config
 		public bool GameSelectionScreenResetGame = false;
 
 		public UInt32 RewindBufferSize = 300;
+
+		public bool OverrideAviFolder = false;
+		public bool OverrideMovieFolder = false;
+		public bool OverrideSaveDataFolder = false;
+		public bool OverrideSaveStateFolder = false;
+		public bool OverrideScreenshotFolder = false;
+		public bool OverrideWaveFolder = false;
+
+		public string AviFolder = "";
+		public string MovieFolder = "";
+		public string SaveDataFolder = "";
+		public string SaveStateFolder = "";
+		public string ScreenshotFolder = "";
+		public string WaveFolder = "";
 
 		public PreferenceInfo()
 		{
@@ -93,7 +106,6 @@ namespace Mesen.GUI.Config
 				FileAssociationHelper.UpdateFileAssociation("nes", preferenceInfo.AssociateNesFiles);
 				FileAssociationHelper.UpdateFileAssociation("fds", preferenceInfo.AssociateFdsFiles);
 				FileAssociationHelper.UpdateFileAssociation("mmo", preferenceInfo.AssociateMmoFiles);
-				FileAssociationHelper.UpdateFileAssociation("mst", preferenceInfo.AssociateMstFiles);
 				FileAssociationHelper.UpdateFileAssociation("nsf", preferenceInfo.AssociateNsfFiles);
 				FileAssociationHelper.UpdateFileAssociation("nsfe", preferenceInfo.AssociateNsfeFiles);
 				FileAssociationHelper.UpdateFileAssociation("unf", preferenceInfo.AssociateUnfFiles);
@@ -122,6 +134,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetEmulatorKeys(new EmulatorKeyMappingSet() { KeySet1 = preferenceInfo.EmulatorKeySet1.Value, KeySet2 = preferenceInfo.EmulatorKeySet2.Value });
 
 			InteropEmu.SetRewindBufferSize(preferenceInfo.RewindBufferSize);
+
+			InteropEmu.SetFolderOverrides(ConfigManager.SaveFolder, ConfigManager.SaveStateFolder, ConfigManager.ScreenshotFolder);
 		}
 	}
 }

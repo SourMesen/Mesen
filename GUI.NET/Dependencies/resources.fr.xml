@@ -363,12 +363,27 @@
       <Control ID="chkDisplayMovieIcons">Afficher un icône lors de la lecture ou de l'enregistrement des films</Control>
       <Control ID="btnOpenMesenFolder">Ouvrir le dossier de Mesen</Control>
       <Control ID="btnResetSettings">Réinitialiser la configuration</Control>
-      <Control ID="tpgFileAssociations">Associations de fichiers</Control>
+      
+      <Control ID="tpgFiles">Fichiers/Dossiers</Control>
       <Control ID="grpFileAssociations">Associations de fichiers</Control>
       <Control ID="chkNesFormat">.NES</Control>
       <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
       <Control ID="chkMmoFormat">.MMO (Films Mesen)</Control>
       <Control ID="chkMstFormat">.MST (Savestate Mesen)</Control>
+
+      <Control ID="grpDataStorageLocation">Sauvegarde des fichiers</Control>
+      <Control ID="radStorageDocuments">Mettre les fichiers dans mon profil utilisateur</Control>
+      <Control ID="radStoragePortable">Mettre les fichiers dans le même dossier que l'application</Control>
+      <Control ID="lblDataLocation">Dossier:</Control>
+      
+      <Control ID="grpPathOverrides">Modification des dossiers par défaut</Control>
+      <Control ID="chkAviOverride">Vidéos:</Control>
+      <Control ID="chkScreenshotsOverride">Captures d'écran:</Control>
+      <Control ID="chkSaveDataOverride">Fichier de sauvegarde:</Control>
+      <Control ID="chkWaveOverride">Audio:</Control>
+      <Control ID="chkSaveStatesOverride">Sauvegardes rapides:</Control>
+      <Control ID="chkMoviesOverride">Films:</Control>
+
       <Control ID="tpgAdvanced">Avancé</Control>
       <Control ID="chkFdsAutoLoadDisk">Insérer le côté A du disque 1 lors du chargement d'un jeu de FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Augmenter la vitesse d'émulation pendant le chargement des jeux FDS</Control>
@@ -585,6 +600,25 @@
       <Control ID="lblExplanation">Cet exemple ouvrira Mesen en mode plein écran avec le jeu "MyGame.nes" de chargé. Le filtre vidéo NTSC avec un facteur d'agrandissement de 2x sera utilisé et les paramètres d'overscan seront modifiés.  L'option "DoNotSaveSettings" empêche les options données en ligne de commande de devenir les options par défaut de l'émulateur.</Control>
       <Control ID="txtGeneralOptions">/fullscreen - Démarre Mesen en mode plein écran&#13;&#10;/DoNotSaveSettings - Empêche la sauvegarde des paramètres sur le disque (autrement les options données en ligne de commande seront permanentes)</Control>
     </Form>
+    <Form ID="frmCopyFiles" Title="En cours d'exécution...">
+      <Control ID="lblCopying">Copie de :</Control>
+    </Form>
+    <Form ID="frmConfigWizard" Title="Mesen - Configuration">
+      <Control ID="lblMesen">Mesen - Émulateur NES</Control>
+      <Control ID="lblConfigWizard">Assistant de configuration</Control>
+      <Control ID="lblInitialSetup">Veuillez prendre un moment pour configurer Mesen.</Control>
+      <Control ID="lblStorageLocation">Sauvegarde des fichiers</Control>
+      <Control ID="lblStorageHint">Choisissez où Mesen sauvegardera ses fichiers :</Control>
+      <Control ID="radStorageDocuments">Mettre les fichiers dans mon profil utilisateur</Control>
+      <Control ID="radStoragePortable">Mettre les fichiers dans le même dossier que l'application</Control>
+      <Control ID="lblDataLocation">Dossier :</Control>
+      <Control ID="lblInputMappings">Configuration des contrôles</Control>
+      <Control ID="lblInputHint">Choisissez vos façons préférées de contrôler les jeux :</Control>
+      <Control ID="lblMiscOptions">Options diverses</Control>
+      <Control ID="chkCreateShortcut">Créer un raccourci sur mon bureau</Control>
+      <Control ID="btnOk">CONFIRMER</Control>
+      <Control ID="lblCancel">Annuler</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Tous les fichiers (*.*)|*.*</Message>
@@ -612,6 +646,9 @@
     <Message ID="ResetSettingsConfirmation">Avertissement: Cette opération va réinitialiser TOUTE la configuration de Mesen!&#xA;&#xA;Voulez-vous continuer?</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen n'a pas trouvé de jeu sur votre disque.</Message>
+
+    <Message ID="InvalidPaths">Les dossiers suivants sont invalides :&#xA;&#xA;{0}&#xA;&#xA;Veuillez entrer des noms de dossier valides et essayer à nouveau.</Message>
+    <Message ID="CopyMesenDataPrompt">Tous les fichiers seront copiés du dossier:&#xA;&#xA;{0}&#xA;au dossier&#xA;{1}&#xA;&#xA;Une fois la copie terminée, Mesen redémarrera.&#xA;Voulez-vous continuer?</Message>
 
     <Message ID="CheatsFound">{0} jeux et {1} codes présents dans la base de données</Message>
     <Message ID="CheatsImported">{0} codes ont été importés pour le jeu {1}.</Message>

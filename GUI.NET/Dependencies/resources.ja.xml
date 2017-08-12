@@ -362,12 +362,27 @@
       <Control ID="chkDisplayMovieIcons">動画の録画や再生の際、アイコンを表示する</Control>
       <Control ID="btnOpenMesenFolder">Mesenのフォルダを開く</Control>
       <Control ID="btnResetSettings">初期化</Control>
-      <Control ID="tpgFileAssociations">ファイルの関連付け</Control>
+      
+      <Control ID="tpgFiles">ファイル・フォルダ</Control>
       <Control ID="grpFileAssociations">ファイルの関連付け</Control>
       <Control ID="chkNesFormat">.NES (ファミコン)</Control>
       <Control ID="chkFdsFormat">.FDS (ファミコンディスクシステム)</Control>
       <Control ID="chkMmoFormat">.MMO (Mesenの動画)</Control>
       <Control ID="chkMstFormat">.MST (Mesenのクイックセーブ)</Control>
+
+      <Control ID="grpDataStorageLocation">データの保存先</Control>
+      <Control ID="radStorageDocuments">プロファイルフォルダに保存する</Control>
+      <Control ID="radStoragePortable">Mesenのフォルダに保存する</Control>
+      <Control ID="lblDataLocation">保存先:</Control>
+
+      <Control ID="grpPathOverrides">デフォルトフォルダの変更</Control>
+      <Control ID="chkAviOverride">録画:</Control>
+      <Control ID="chkScreenshotsOverride">スクリーンショット:</Control>
+      <Control ID="chkSaveDataOverride">セーブデータ:</Control>
+      <Control ID="chkWaveOverride">録音:</Control>
+      <Control ID="chkSaveStatesOverride">クイックセーブ:</Control>
+      <Control ID="chkMoviesOverride">映画:</Control>
+      
       <Control ID="tpgAdvanced">詳細設定</Control>
       <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
@@ -568,6 +583,25 @@
       <Control ID="lblExplanation">Mesenを全画面表示の状態で"MyGame.nes"を起動する. 画面エフェクトをNTSCにして、映像サイズを2xにして、オーバースキャン設定を変更する。</Control>
       <Control ID="txtGeneralOptions">/fullscreen - 全画面表示の状態で起動する&#13;&#10;/DoNotSaveSettings - 設定のセーブ機能を無効にする</Control>
     </Form>
+    <Form ID="frmCopyFiles" Title="しばらくお待ちください">
+      <Control ID="lblCopying">ファイル：</Control>
+    </Form>
+    <Form ID="frmConfigWizard" Title="Mesen - 設定">
+      <Control ID="lblMesen">Mesen - ファミコンエミュレータ</Control>
+      <Control ID="lblConfigWizard">セットアップウィザード</Control>
+      <Control ID="lblInitialSetup">Mesenの初期設定を行います。</Control>
+      <Control ID="lblStorageLocation">データの保存先</Control>
+      <Control ID="lblStorageHint">Mesenのデータの保存先を選んでください：</Control>
+      <Control ID="radStorageDocuments">プロファイルフォルダに保存する</Control>
+      <Control ID="radStoragePortable">Mesenのフォルダに保存する</Control>
+      <Control ID="lblDataLocation">保存先 :</Control>
+      <Control ID="lblInputMappings">コントローラ設定</Control>
+      <Control ID="lblInputHint">使いたいコントローラを選んでください：</Control>
+      <Control ID="lblMiscOptions">その他</Control>
+      <Control ID="chkCreateShortcut">デスクトップにショートカットを作る</Control>
+      <Control ID="btnOk">確認</Control>
+      <Control ID="lblCancel">キャンセル</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
@@ -595,6 +629,9 @@
     <Message ID="ResetSettingsConfirmation">注意：全ての設定が初期化されます。&#xA;&#xA;よろしいですか？</Message>
 
     <Message ID="RandomGameNoGameFound">Mesenはゲームファイルを見つかりませんでした。</Message>
+
+    <Message ID="InvalidPaths">次のフォルダには書き込むことが出来ません：&#xA;&#xA;{0}&#xA;&#xA;書き込むことが出来るフォルダを選択してください。</Message>
+    <Message ID="CopyMesenDataPrompt">全てのファイルが&#xA;{0}&#xA;から&#xA;{1}&#xA;にコピーされます。&#xA;&#xA;コピーが終わったら、Mesenが再起動します.&#xA;よろしいですか？</Message>
 
     <Message ID="CheatsFound">ゲーム{0}個とチートコード{1}個を見つけました</Message>
     <Message ID="CheatsImported">{1}用のチートコード{0}個がインポートされました。.</Message>

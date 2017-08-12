@@ -83,6 +83,16 @@ namespace Mesen.GUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ArrowKeys {
+            get {
+                object obj = ResourceManager.GetObject("ArrowKeys", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Audio {
             get {
                 object obj = ResourceManager.GetObject("Audio", resourceCulture);
@@ -563,6 +573,16 @@ namespace Mesen.GUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PsIcon {
+            get {
+                object obj = ResourceManager.GetObject("PsIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Record {
             get {
                 object obj = ResourceManager.GetObject("Record", resourceCulture);
@@ -696,6 +716,26 @@ namespace Mesen.GUI.Properties {
         internal static System.Drawing.Bitmap Warning {
             get {
                 object obj = ResourceManager.GetObject("Warning", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WasdKeys {
+            get {
+                object obj = ResourceManager.GetObject("WasdKeys", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap XbIcon {
+            get {
+                object obj = ResourceManager.GetObject("XbIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -7,18 +7,22 @@ class FolderUtilities
 {
 private:
 	static string _homeFolder;
+	static string _saveFolderOverride;
+	static string _saveStateFolderOverride;
+	static string _screenshotFolderOverride;
 	static vector<string> _gameFolders;
 
 public:
 	static void SetHomeFolder(string homeFolder);
 	static string GetHomeFolder();
 
+	static void SetFolderOverrides(string saveFolder, string saveStateFolder, string screenshotFolder);
+
 	static void AddKnownGameFolder(string gameFolder);
 	static vector<string> GetKnownGameFolders();
 
 	static string GetSaveFolder();
 	static string GetSaveStateFolder();
-	static string GetMovieFolder();
 	static string GetScreenshotFolder();
 	static string GetHdPackFolder();
 	static string GetDebuggerFolder();

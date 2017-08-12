@@ -82,6 +82,8 @@ namespace Mesen.GUI.Config
 
 	public class InputInfo
 	{
+		public DefaultKeyMappingType DefaultMapping;
+
 		public ConsoleType ConsoleType = ConsoleType.Nes;
 		public InteropEmu.ExpansionPortDevice ExpansionPortDevice = InteropEmu.ExpansionPortDevice.None;
 		public bool UseFourScore = false;
@@ -105,10 +107,19 @@ namespace Mesen.GUI.Config
 				var controllerInfo = new ControllerInfo();
 				controllerInfo.ControllerType = Controllers.Count <= 1 ? InteropEmu.ControllerType.StandardController : InteropEmu.ControllerType.None;
 
-				if(Controllers.Count <= 1) {
-					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.ArrowLayout : presets.Player2KeyboardLayout);
-					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.XboxLayout1 : presets.XboxLayout2);
-					controllerInfo.Keys.Add(Controllers.Count == 0 ? presets.Ps4Layout1 : presets.Ps4Layout2);
+				if(Controllers.Count == 0) {
+					if(DefaultMapping.HasFlag(DefaultKeyMappingType.Xbox)) {
+						controllerInfo.Keys.Add(presets.XboxLayout1);
+					}
+					if(DefaultMapping.HasFlag(DefaultKeyMappingType.Ps4)) {
+						controllerInfo.Keys.Add(presets.Ps4Layout1);
+					}
+					if(DefaultMapping.HasFlag(DefaultKeyMappingType.WasdKeys)) {
+						controllerInfo.Keys.Add(presets.WasdLayout);
+					}
+					if(DefaultMapping.HasFlag(DefaultKeyMappingType.ArrowKeys)) {
+						controllerInfo.Keys.Add(presets.ArrowLayout);
+					}
 				}
 				Controllers.Add(controllerInfo);
 			}

@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace Mesen.GUI.Config
 {
@@ -17,9 +18,61 @@ namespace Mesen.GUI.Config
 	{
 		private static Configuration _config;
 		private static Configuration _dirtyConfig;
-		private static bool? _portableMode = null;
-		private static string _portablePath = null;
 		public static bool DoNotSaveSettings { get; set; }
+
+		public static string DefaultPortableFolder { get { return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location); } }
+		public static string DefaultDocumentsFolder { get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Mesen"); } }
+
+		public static string DefaultAviFolder { get { return Path.Combine(HomeFolder, "Avi"); } }
+		public static string DefaultMovieFolder { get { return Path.Combine(HomeFolder, "Movies"); } }
+		public static string DefaultSaveDataFolder { get { return Path.Combine(HomeFolder, "Saves"); } }
+		public static string DefaultSaveStateFolder { get { return Path.Combine(HomeFolder, "SaveStates"); } }
+		public static string DefaultScreenshotFolder { get { return Path.Combine(HomeFolder, "Screenshots"); } }
+		public static string DefaultWaveFolder { get { return Path.Combine(HomeFolder, "Wave"); } }
+
+		public static void InitHomeFolder()
+		{
+			string portableFolder = DefaultPortableFolder;
+			string legacyPortableFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Mesen");
+			string documentsFolder = DefaultDocumentsFolder;
+
+			string portableConfig = Path.Combine(portableFolder, "settings.xml");
+			string legacyPortableConfig = Path.Combine(legacyPortableFolder, "settings.xml");
+			string documentsConfig = Path.Combine(documentsFolder, "settings.xml");
+
+			HomeFolder = null;
+			if(File.Exists(portableConfig)) {
+				HomeFolder = portableFolder;
+			} else if(File.Exists(legacyPortableConfig)) {
+				HomeFolder = legacyPortableFolder;
+			} else if(File.Exists(documentsConfig)) {
+				HomeFolder = documentsFolder;
+			}
+		}
+
+		public static string GetConfigFile()
+		{
+			InitHomeFolder();
+
+			if(!string.IsNullOrWhiteSpace(HomeFolder)) {
+				return Path.Combine(HomeFolder, "settings.xml");
+			} else {
+				return null;
+			}
+		}
+
+		public static void CreateConfig(bool portable)
+		{
+			if(portable) {
+				string portableFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+				HomeFolder = portableFolder;
+			} else {
+				string documentsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Mesen");
+				HomeFolder = documentsFolder;
+			}
+
+			LoadConfig();
+		}
 
 		private static void LoadConfig()
 		{
@@ -119,171 +172,46 @@ namespace Mesen.GUI.Config
 			_config.Save();
 		}
 
-		public static string HomeFolder
-		{
-			get
-			{
-				if(_portableMode == null) {
-					_portableMode = System.Reflection.Assembly.GetEntryAssembly().Location.EndsWith("_P.exe", StringComparison.InvariantCultureIgnoreCase);
-					_portablePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-				}
+		public static string HomeFolder { get; private set; }
 
-				if(_portableMode.Value) {
-					return Path.Combine(_portablePath, "Mesen");
-				} else {
-					return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create), "Mesen");
-				}
+		public static string GetFolder(string defaultFolderName, string overrideFolder, bool useOverride)
+		{
+			string folder;
+			if(useOverride) {
+				folder = overrideFolder;
+			} else {
+				folder = defaultFolderName;
 			}
+			if(!Directory.Exists(folder)) {
+				Directory.CreateDirectory(folder);
+			}
+			return folder;
 		}
 
-		public static string FontFolder
-		{
-			get
-			{
-				string fontPath = Environment.GetFolderPath(Environment.SpecialFolder.Fonts, Environment.SpecialFolderOption.Create);
-				if(!Directory.Exists(fontPath)) {
-					Directory.CreateDirectory(fontPath);
-				}
-				return fontPath;
-			}
-		}		
+		public static string AviFolder { get { return GetFolder(DefaultAviFolder, Config.PreferenceInfo.AviFolder, Config.PreferenceInfo.OverrideAviFolder); } }
+		public static string MovieFolder { get { return GetFolder(DefaultMovieFolder, Config.PreferenceInfo.MovieFolder, Config.PreferenceInfo.OverrideMovieFolder); } }
+		public static string SaveFolder { get { return GetFolder(DefaultSaveDataFolder, Config.PreferenceInfo.SaveDataFolder, Config.PreferenceInfo.OverrideSaveDataFolder); } }
+		public static string SaveStateFolder { get { return GetFolder(DefaultSaveStateFolder, Config.PreferenceInfo.SaveStateFolder, Config.PreferenceInfo.OverrideSaveStateFolder); } }
+		public static string ScreenshotFolder { get { return GetFolder(DefaultScreenshotFolder, Config.PreferenceInfo.ScreenshotFolder, Config.PreferenceInfo.OverrideScreenshotFolder); } }
+		public static string WaveFolder { get { return GetFolder(DefaultWaveFolder, Config.PreferenceInfo.WaveFolder, Config.PreferenceInfo.OverrideWaveFolder); } }
 
-		public static string MovieFolder
-		{
-			get
-			{
-				string movieFolder = Path.Combine(ConfigManager.HomeFolder, "Movies");
-				if(!Directory.Exists(movieFolder)) {
-					Directory.CreateDirectory(movieFolder);
-				}
-				return movieFolder;
-			}
-		}
-
-		public static string RecentGamesFolder
-		{
-			get
-			{
-				string recentGamesPath = Path.Combine(ConfigManager.HomeFolder, "RecentGames");
-				if(!Directory.Exists(recentGamesPath)) {
-					Directory.CreateDirectory(recentGamesPath);
-				}
-				return recentGamesPath;
-			}
-		}
-
-		public static string WaveFolder
-		{
-			get
-			{
-				string waveFolder = Path.Combine(ConfigManager.HomeFolder, "Wave");
-				if(!Directory.Exists(waveFolder)) {
-					Directory.CreateDirectory(waveFolder);
-				}
-				return waveFolder;
-			}
-		}
-
-		public static string AviFolder
-		{
-			get
-			{
-				string aviFolder = Path.Combine(ConfigManager.HomeFolder, "Avi");
-				if(!Directory.Exists(aviFolder)) {
-					Directory.CreateDirectory(aviFolder);
-				}
-				return aviFolder;
-			}
-		}
-
-		public static string SaveFolder
-		{
-			get
-			{
-				string movieFolder = Path.Combine(ConfigManager.HomeFolder, "Saves");
-				if(!Directory.Exists(movieFolder)) {
-					Directory.CreateDirectory(movieFolder);
-				}
-				return movieFolder;
-			}
-		}
-
-		public static string SaveStateFolder
-		{
-			get
-			{
-				string movieFolder = Path.Combine(ConfigManager.HomeFolder, "SaveStates");
-				if(!Directory.Exists(movieFolder)) {
-					Directory.CreateDirectory(movieFolder);
-				}
-				return movieFolder;
-			}
-		}
-
-		public static string DebuggerFolder
-		{
-			get
-			{
-				string debuggerFolder = Path.Combine(ConfigManager.HomeFolder, "Debugger");
-				if(!Directory.Exists(debuggerFolder)) {
-					Directory.CreateDirectory(debuggerFolder);
-				}
-				return debuggerFolder;
-			}
-		}
-
-		public static string DownloadFolder
-		{
-			get
-			{
-				string downloadFolder = Path.Combine(ConfigManager.HomeFolder, "Downloads");
-				if(!Directory.Exists(downloadFolder)) {
-					Directory.CreateDirectory(downloadFolder);
-				}
-				return downloadFolder;
-			}
-		}
-
-		public static string BackupFolder
-		{
-			get
-			{
-				string backupFolder = Path.Combine(ConfigManager.HomeFolder, "Backups");
-				if(!Directory.Exists(backupFolder)) {
-					Directory.CreateDirectory(backupFolder);
-				}
-				return backupFolder;
-			}
-		}
-
-		public static string TestFolder
-		{
-			get
-			{
-				string testFolder = Path.Combine(ConfigManager.HomeFolder, "Tests");
-				if(!Directory.Exists(testFolder)) {
-					Directory.CreateDirectory(testFolder);
-				}
-				return testFolder;
-			}
-		}
-
-		public static string HdPackFolder
-		{
-			get
-			{
-				string hdPackFolder = Path.Combine(ConfigManager.HomeFolder, "HdPacks");
-				if(!Directory.Exists(hdPackFolder)) {
-					Directory.CreateDirectory(hdPackFolder);
-				}
-				return hdPackFolder;
-			}
-		}
+		public static string DebuggerFolder { get { return GetFolder(Path.Combine(ConfigManager.HomeFolder, "Debugger"), null, false); } }
+		public static string DownloadFolder { get { return GetFolder(Path.Combine(ConfigManager.HomeFolder, "Downloads"), null, false); } }
+		public static string BackupFolder { get { return GetFolder(Path.Combine(ConfigManager.HomeFolder, "Backups"), null, false); } }
+		public static string TestFolder { get { return GetFolder(Path.Combine(ConfigManager.HomeFolder, "Tests"), null, false); } }
+		public static string HdPackFolder { get { return GetFolder(Path.Combine(ConfigManager.HomeFolder, "HdPacks"), null, false); } }
+		public static string RecentGamesFolder { get { return GetFolder(Path.Combine(ConfigManager.HomeFolder, "RecentGames"), null, false); } }
+		public static string FontFolder { get { return GetFolder(Environment.GetFolderPath(Environment.SpecialFolder.Fonts, Environment.SpecialFolderOption.Create), null, false); } }
 
 		public static string ConfigFile
 		{
 			get
 			{
+				if(HomeFolder == null) {
+					//Initializes the HomeFolder property
+					InitHomeFolder();
+				}
+
 				if(!Directory.Exists(HomeFolder)) {
 					Directory.CreateDirectory(HomeFolder);
 				}
@@ -322,10 +250,25 @@ namespace Mesen.GUI.Config
 
 		public static void ResetSettings()
 		{
+			DefaultKeyMappingType defaultMappings = Config.InputInfo.DefaultMapping;
 			_dirtyConfig = new Configuration();
+			Config.InputInfo.DefaultMapping = defaultMappings;
 			Config.InitializeDefaults();
 			ApplyChanges();
 			Config.ApplyConfig();
+		}
+
+		public static void RestartMesen(bool preventSave = false)
+		{
+			if(preventSave) {
+				DoNotSaveSettings = true;
+			}
+
+			if(Program.IsMono) {
+				System.Diagnostics.Process.Start("mono", "\"" + Assembly.GetEntryAssembly().Location + "\" /delayrestart");
+			} else {
+				System.Diagnostics.Process.Start(Assembly.GetEntryAssembly().Location, "/delayrestart");
+			}
 		}
 	}
 }

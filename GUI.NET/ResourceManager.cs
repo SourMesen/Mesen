@@ -107,7 +107,7 @@ namespace Mesen.GUI
 					ExtractFile(entry, outputFilename);
 					if(needRestart) {
 						//If font is newly installed, restart Mesen (otherwise debugger will not be able to use the font and display incorrectly)
-						System.Diagnostics.Process.Start("mono", "\"" + Assembly.GetEntryAssembly().Location + "\" /delayrestart");
+						ConfigManager.RestartMesen();
 						return false;
 					}
 				}

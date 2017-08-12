@@ -27,6 +27,9 @@
 
     <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
 
+    <Message ID="InvalidPaths">The following path overrides are invalid:&#xA;&#xA;{0}&#xA;&#xA;Please use valid and writable folders and try again.</Message>
+    <Message ID="CopyMesenDataPrompt">All files will be copied from:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Once the copy is completed, Mesen will restart.&#xA;Continue?</Message>    
+
     <Message ID="CheatsFound">{0} games and {1} cheats in database</Message>
     <Message ID="CheatsImported">{0} cheats imported for {1}.</Message>    
 

@@ -543,6 +543,12 @@
     <Compile Include="Forms\Config\ctrlInputPortConfig.Designer.cs">
       <DependentUpon>ctrlInputPortConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Config\ctrlPathSelection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\ctrlPathSelection.Designer.cs">
+      <DependentUpon>ctrlPathSelection.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Config\ctrlStandardController.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -554,6 +560,12 @@
     </Compile>
     <Compile Include="Forms\Config\frmControllerConfig.Designer.cs">
       <DependentUpon>frmControllerConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\frmCopyFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\frmCopyFiles.Designer.cs">
+      <DependentUpon>frmCopyFiles.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Config\frmGetKey.cs">
       <SubType>Form</SubType>
@@ -615,6 +627,12 @@
     </Compile>
     <Compile Include="Forms\frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmConfigWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmConfigWizard.Designer.cs">
+      <DependentUpon>frmConfigWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmDownloadProgress.cs">
       <SubType>Form</SubType>
@@ -719,6 +737,10 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\WasdKeys.png" />
+    <None Include="Resources\wasd.png" />
+    <None Include="Resources\PsIcon.png" />
+    <None Include="Resources\XbIcon.png" />
     <None Include="Resources\StepBack.png" />
     <None Include="Resources\HdPack.png" />
     <None Include="Resources\VideoFilter.png" />
@@ -857,11 +879,17 @@
     <EmbeddedResource Include="Forms\Config\ctrlInputPortConfig.resx">
       <DependentUpon>ctrlInputPortConfig.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\ctrlPathSelection.resx">
+      <DependentUpon>ctrlPathSelection.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlStandardController.resx">
       <DependentUpon>ctrlStandardController.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmControllerConfig.resx">
       <DependentUpon>frmControllerConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\frmCopyFiles.resx">
+      <DependentUpon>frmCopyFiles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmEmulationConfig.resx">
       <DependentUpon>frmEmulationConfig.cs</DependentUpon>
@@ -893,6 +921,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmConfigWizard.resx">
+      <DependentUpon>frmConfigWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmDownloadProgress.resx">
       <DependentUpon>frmDownloadProgress.cs</DependentUpon>
@@ -1056,6 +1087,7 @@
     <None Include="Resources\Breakpoint.png" />
     <None Include="Resources\BreakpointDisabled.png" />
     <None Include="Resources\BreakpointEnableDisable.png" />
+    <None Include="Resources\ArrowKeys.png" />
     <Content Include="Resources\coins.png" />
     <None Include="Resources\DipSwitches.png" />
     <None Include="Resources\MesenIcon.png" />

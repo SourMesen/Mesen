@@ -117,6 +117,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall LoadROM(char* filename, char* patchFile) { Console::LoadROM((string)filename, (string)patchFile); }
 		DllExport void __stdcall AddKnownGameFolder(char* folder) { FolderUtilities::AddKnownGameFolder(folder); }
+		DllExport void __stdcall SetFolderOverrides(char* saveFolder, char* saveStateFolder, char* screenshotFolder) { FolderUtilities::SetFolderOverrides(saveFolder, saveStateFolder, screenshotFolder); }
 		DllExport void __stdcall LoadRecentGame(char* filepath, bool resetGame) { SaveStateManager::LoadRecentGame(filepath, resetGame); }
 
 		DllExport const char* __stdcall GetArchiveRomList(char* filename) { 

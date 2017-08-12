@@ -10,6 +10,9 @@ namespace fs = std::experimental::filesystem;
 #include "UTF8Util.h"
 
 string FolderUtilities::_homeFolder = "";
+string FolderUtilities::_saveFolderOverride = "";
+string FolderUtilities::_saveStateFolderOverride = "";
+string FolderUtilities::_screenshotFolderOverride = "";
 vector<string> FolderUtilities::_gameFolders = vector<string>();
 
 void FolderUtilities::SetHomeFolder(string homeFolder)
@@ -50,9 +53,21 @@ vector<string> FolderUtilities::GetKnownGameFolders()
 	return _gameFolders;
 }
 
+void FolderUtilities::SetFolderOverrides(string saveFolder, string saveStateFolder, string screenshotFolder)
+{
+	_saveFolderOverride = saveFolder;
+	_saveStateFolderOverride = saveStateFolder;
+	_screenshotFolderOverride = screenshotFolder;
+}
+
 string FolderUtilities::GetSaveFolder()
 {
-	string folder = CombinePath(GetHomeFolder(), "Saves");
+	string folder;
+	if(_saveFolderOverride.empty()) {
+		folder = CombinePath(GetHomeFolder(), "Saves");
+	} else {
+		folder = _saveFolderOverride;
+	}
 	CreateFolder(folder);
 	return folder;
 }
@@ -73,21 +88,24 @@ string FolderUtilities::GetDebuggerFolder()
 
 string FolderUtilities::GetSaveStateFolder()
 {
-	string folder = CombinePath(GetHomeFolder(), "SaveStates");
-	CreateFolder(folder);
-	return folder;
-}
-
-string FolderUtilities::GetMovieFolder()
-{
-	string folder = CombinePath(GetHomeFolder(), + "Movies");
+	string folder;
+	if(_saveStateFolderOverride.empty()) {
+		folder = CombinePath(GetHomeFolder(), "SaveStates");
+	} else {
+		folder = _saveStateFolderOverride;
+	}
 	CreateFolder(folder);
 	return folder;
 }
 
 string FolderUtilities::GetScreenshotFolder()
 {
-	string folder = CombinePath(GetHomeFolder(), "Screenshots");
+	string folder;
+	if(_screenshotFolderOverride.empty()) {
+		folder = CombinePath(GetHomeFolder(), "Screenshots");
+	} else {
+		folder = _screenshotFolderOverride;
+	}
 	CreateFolder(folder);
 	return folder;
 }

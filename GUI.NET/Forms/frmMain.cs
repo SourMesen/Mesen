@@ -61,6 +61,9 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.WindowLocation.HasValue) {
 				this.StartPosition = FormStartPosition.Manual;
 				this.Location = ConfigManager.Config.WindowLocation.Value;
+			} else {
+				//First launch
+				this.StartPosition = FormStartPosition.CenterScreen;
 			}
 
 			Version currentVersion = new Version(InteropEmu.GetMesenVersion());
@@ -249,7 +252,6 @@ namespace Mesen.GUI.Forms
 
 			ConfigManager.Config.InitializeDefaults();
 			ConfigManager.ApplyChanges();
-
 			ConfigManager.Config.ApplyConfig();
 
 			UpdateEmulationFlags();

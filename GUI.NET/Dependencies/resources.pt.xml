@@ -360,12 +360,27 @@
       <Control ID="chkDisplayMovieIcons">Exibir ícone de reprodução/gravação ao reproduzir ou gravar um filme</Control>
       <Control ID="btnOpenMesenFolder">Abrir a pasta de Mesen</Control>
       <Control ID="btnResetSettings">Restaurar todas as configurações</Control>
-      <Control ID="tpgFileAssociations">Associação de arquivos</Control>
+      
+      <Control ID="tpgFiles">Files/Folders</Control>
       <Control ID="grpFileAssociations">Associação de arquivos</Control>
       <Control ID="chkNesFormat">.NES</Control>
       <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
       <Control ID="chkMmoFormat">.MMO (Vídeos do Mesen)</Control>
       <Control ID="chkMstFormat">.MST (Saves do Mesen)</Control>
+
+      <Control ID="grpDataStorageLocation">Data Storage Folder</Control>
+      <Control ID="radStorageDocuments">Store Mesen's data in my user profile</Control>
+      <Control ID="radStoragePortable">Store Mesen's data in the same folder as the application</Control>
+      <Control ID="lblDataLocation">Folder:</Control>
+
+      <Control ID="grpPathOverrides">Folder Overrides</Control>
+      <Control ID="chkAviOverride">Videos:</Control>
+      <Control ID="chkScreenshotsOverride">Screenshots:</Control>
+      <Control ID="chkSaveDataOverride">Save Data:</Control>
+      <Control ID="chkWaveOverride">Audio:</Control>
+      <Control ID="chkSaveStatesOverride">Save States:</Control>
+      <Control ID="chkMoviesOverride">Movies:</Control>
+      
       <Control ID="tpgAdvanced">Avançado</Control>
       <Control ID="chkFdsAutoLoadDisk">Inserir a parte A do disco 1 ao carregar um jogo FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Aumentar a velocidade da emulação de jogos ao carregar no FDS</Control>
@@ -571,7 +586,26 @@
       <Control ID="lblExplanation">This will start Mesen in fullscreen mode with the "MyGame.nes" rom loaded.  It will also use the NTSC filter, set at a 2x scale and configure the Overscan settings.  The "DoNotSaveSettings" flag is used to prevent the command line switches from pernanently altering Mesen's settings.</Control>
       <Control ID="txtGeneralOptions">/fullscreen - Start Mesen in fullscreen mode&#13;&#10;/DoNotSaveSettings - Prevent settings from being saved to the disk (useful to prevent command line options from becoming the default settings)</Control>
     </Form>
-  </Forms>
+    <Form ID="frmCopyFiles" Title="Please wait...">
+      <Control ID="lblCopying">Copying:</Control>
+    </Form>
+    <Form ID="frmConfigWizard" Title="Mesen - Configuration">
+      <Control ID="lblMesen">Mesen - NES Emulator</Control>
+      <Control ID="lblConfigWizard">Configuration Wizard</Control>
+      <Control ID="lblInitialSetup">Please take a moment to perform Mesen's initial setup.</Control>
+      <Control ID="lblStorageLocation">Data Storage Location</Control>
+      <Control ID="lblStorageHint">Select where you want to store Mesen's data:</Control>
+      <Control ID="radStorageDocuments">Store the data in my user profile</Control>
+      <Control ID="radStoragePortable">Store the data in the same folder as the application</Control>
+      <Control ID="lblDataLocation">Folder:</Control>
+      <Control ID="lblInputMappings">Input Mappings</Control>
+      <Control ID="lblInputHint">Select your preferred input methods:</Control>
+      <Control ID="lblMiscOptions">Other Options</Control>
+      <Control ID="chkCreateShortcut">Create a shortcut on my desktop</Control>
+      <Control ID="btnOk">CONFIRM</Control>
+      <Control ID="lblCancel">Cancel</Control>
+    </Form>
+  </Forms>  
   <Messages>
     <Message ID="FilterAll">Todos os tipos de arquivo (*.*)|*.*</Message>
     <Message ID="FilterMovie">Vídeos (*.mmo)|*.mmo|Todos os arquivos (*.*)|*.*</Message>
@@ -602,6 +636,9 @@
 
     <Message ID="RandomGameNoGameFound">Mesen não encontrou nenhum jogo para carregar.</Message>
     
+    <Message ID="InvalidPaths">The following path overrides are invalid:&#xA;&#xA;{0}&#xA;&#xA;Please use valid and writable folders and try again.</Message>
+    <Message ID="CopyMesenDataPrompt">All files will be copied from:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Once the copy is completed, Mesen will restart.&#xA;Continue?</Message>
+
     <Message ID="NsfNextTrack">Track seguinte (Esperar para jogar mais rápido)</Message>
     <Message ID="NsfUnnamedTrack">[sem nome]</Message>
     <Message ID="NsfUnknownField">[desconhecido]</Message>

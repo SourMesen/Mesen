@@ -28,6 +28,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string patchFile);
 		[DllImport(DLLPath)] public static extern void AddKnownGameFolder([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string folder);
+		[DllImport(DLLPath)] public static extern void SetFolderOverrides([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string saveDataFolder, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string saveStateFolder, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string screenshotFolder);
 		[DllImport(DLLPath)] public static extern void LoadRecentGame([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath, [MarshalAs(UnmanagedType.I1)]bool resetGame);
 
 		[DllImport(DLLPath, EntryPoint = "GetArchiveRomList")] private static extern IntPtr GetArchiveRomListWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);

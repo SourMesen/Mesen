@@ -163,4 +163,14 @@ namespace Mesen.GUI.Config
 			return text;
 		}
 	}
+
+	[Flags]
+	public enum DefaultKeyMappingType
+	{
+		None = 0,
+		Xbox = 1,
+		Ps4 = 2,
+		WasdKeys = 3,
+		ArrowKeys = 4
+	}
 }

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Controls;
+using Mesen.GUI.Forms.Config;
 
 namespace Mesen.GUI.Forms
 {
@@ -69,6 +70,8 @@ namespace Mesen.GUI.Forms
 						} else {
 							kvp.Value.Text = (string)value;
 						}
+					} else if(kvp.Value is ctrlPathSelection) {
+						kvp.Value.Text = (string)value;
 					} else if(kvp.Value is CheckBox) {
 						((CheckBox)kvp.Value).Checked = Convert.ToBoolean(value);
 					} else if(kvp.Value is ctrlRiskyOption) {
@@ -159,6 +162,8 @@ namespace Mesen.GUI.Forms
 								value = (object)UInt16.Parse((string)value, numberStyle);
 							}
 							field.SetValue(Entity, value);
+						} else if(kvp.Value is ctrlPathSelection) {
+							field.SetValue(Entity, ((ctrlPathSelection)kvp.Value).Text);
 						} else if(kvp.Value is CheckBox) {
 							if(field.FieldType == typeof(bool)) {
 								field.SetValue(Entity, ((CheckBox)kvp.Value).Checked);

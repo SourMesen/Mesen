@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,6 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AssociateNesFiles", chkNesFormat);
 			AddBinding("AssociateFdsFiles", chkFdsFormat);
 			AddBinding("AssociateMmoFiles", chkMmoFormat);
-			AddBinding("AssociateMstFiles", chkMstFormat);
 			AddBinding("AssociateNsfFiles", chkNsfFormat);
 			AddBinding("AssociateNsfeFiles", chkNsfeFormat);
 			AddBinding("AssociateUnfFiles", chkUnfFormat);
@@ -71,6 +71,25 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("ShowVsConfigOnLoad", chkShowVsConfigOnLoad);
 
+			AddBinding("AviFolder", psAvi);
+			AddBinding("MovieFolder", psMovies);
+			AddBinding("SaveDataFolder", psSaveData);
+			AddBinding("SaveStateFolder", psSaveStates);
+			AddBinding("ScreenshotFolder", psScreenshots);
+			AddBinding("WaveFolder", psWave);
+
+			AddBinding("OverrideAviFolder", chkAviOverride);
+			AddBinding("OverrideMovieFolder", chkMoviesOverride);
+			AddBinding("OverrideSaveDataFolder", chkSaveDataOverride);
+			AddBinding("OverrideSaveStateFolder", chkSaveStatesOverride);
+			AddBinding("OverrideScreenshotFolder", chkScreenshotsOverride);
+			AddBinding("OverrideWaveFolder", chkWaveOverride);
+
+			radStorageDocuments.Checked = ConfigManager.HomeFolder == ConfigManager.DefaultDocumentsFolder;
+			radStoragePortable.Checked = !radStorageDocuments.Checked;
+
+			UpdateLocationText();
+			UpdateFolderOverrideUi();
 			UpdateCloudDisplay();
 		}
 
@@ -170,6 +189,143 @@ namespace Mesen.GUI.Forms.Config
 				ConfigManager.ResetSettings();
 				this.Close();
 			}
+		}
+
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			if(this.DialogResult == DialogResult.OK) {
+				if(!ValidateFolderSettings()) {
+					e.Cancel = true;
+					return;
+				}
+
+				if(radStorageDocuments.Checked != (ConfigManager.HomeFolder == ConfigManager.DefaultDocumentsFolder)) {
+					//Need to copy files and display confirmation
+					string targetFolder = radStorageDocuments.Checked ? ConfigManager.DefaultDocumentsFolder : ConfigManager.DefaultPortableFolder;
+					if(MesenMsgBox.Show("CopyMesenDataPrompt", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, ConfigManager.HomeFolder, targetFolder) == DialogResult.OK) {
+						try {
+							MigrateData(ConfigManager.HomeFolder, targetFolder);
+						} catch(Exception ex) {
+							MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+							e.Cancel = true;
+						}
+					} else {
+						e.Cancel = true;
+						return;
+					}
+				}
+			} else {
+				base.OnFormClosing(e);
+			}
+		}
+
+		private bool MigrateData(string source, string target)
+		{
+			using(frmCopyFiles frm = new frmCopyFiles(source, target)) {
+				frm.ShowDialog(this);
+				if(frm.Exception != null) {
+					throw frm.Exception;
+				}
+			}
+			if(File.Exists(Path.Combine(source, "settings.backup.xml"))) {
+				File.Delete(Path.Combine(source, "settings.backup.xml"));
+			}
+			File.Move(Path.Combine(source, "settings.xml"), Path.Combine(source, "settings.backup.xml"));
+
+			ConfigManager.InitHomeFolder();
+			ConfigManager.SaveConfig();
+
+			ConfigManager.RestartMesen(true);
+			Application.Exit();
+
+			return true;
+		}
+
+		private bool ValidateFolderSettings()
+		{
+			bool result = true;
+			List<string> invalidFolders = new List<string>();
+			try {
+				if(chkAviOverride.Checked && !CheckFolderPermissions(psAvi.Text)) {
+					invalidFolders.Add(chkAviOverride.Text.Replace(":", "").Trim());
+				}
+				if(chkMoviesOverride.Checked && !CheckFolderPermissions(psMovies.Text)) {
+					invalidFolders.Add(chkMoviesOverride.Text.Replace(":", "").Trim());
+				}
+				if(chkSaveDataOverride.Checked && !CheckFolderPermissions(psSaveData.Text)) {
+					invalidFolders.Add(chkSaveDataOverride.Text.Replace(":", "").Trim());
+				}
+				if(chkSaveStatesOverride.Checked && !CheckFolderPermissions(psSaveStates.Text)) {
+					invalidFolders.Add(chkSaveStatesOverride.Text.Replace(":", "").Trim());
+				}
+				if(chkScreenshotsOverride.Checked && !CheckFolderPermissions(psScreenshots.Text)) {
+					invalidFolders.Add(chkScreenshotsOverride.Text.Replace(":", "").Trim());
+				}
+				if(chkWaveOverride.Checked && !CheckFolderPermissions(psWave.Text)) {
+					invalidFolders.Add(chkWaveOverride.Text.Replace(":", "").Trim());
+				}
+
+				result = invalidFolders.Count == 0;
+			} catch {
+				result = false;
+			}
+			if(!result) {
+				MesenMsgBox.Show("InvalidPaths", MessageBoxButtons.OK, MessageBoxIcon.Error, string.Join(Environment.NewLine, invalidFolders));
+			}
+			return result;
+		}
+
+		private bool CheckFolderPermissions(string folder)
+		{
+			if(!Directory.Exists(folder)) {
+				try {
+					if(string.IsNullOrWhiteSpace(folder)) {
+						return false;
+					}
+					Directory.CreateDirectory(folder);
+				} catch {
+					return false;
+				}
+			}
+			try {
+				File.WriteAllText(Path.Combine(folder, "test.txt"), "");
+				File.Delete(Path.Combine(folder, "test.txt"));
+			} catch {
+				return false;
+			}
+			return true;
+		}
+
+		private void UpdateFolderOverrideUi()
+		{
+			psAvi.Enabled = chkAviOverride.Checked;
+			psMovies.Enabled = chkMoviesOverride.Checked;
+			psSaveData.Enabled = chkSaveDataOverride.Checked;
+			psSaveStates.Enabled = chkSaveStatesOverride.Checked;
+			psScreenshots.Enabled = chkScreenshotsOverride.Checked;
+			psWave.Enabled = chkWaveOverride.Checked;
+
+			psAvi.DisabledText = ConfigManager.DefaultAviFolder;
+			psMovies.DisabledText = ConfigManager.DefaultMovieFolder;
+			psSaveData.DisabledText = ConfigManager.DefaultSaveDataFolder;
+			psSaveStates.DisabledText = ConfigManager.DefaultSaveStateFolder;
+			psScreenshots.DisabledText = ConfigManager.DefaultScreenshotFolder;
+			psWave.DisabledText = ConfigManager.DefaultWaveFolder;
+		}
+
+		private void UpdateLocationText()
+		{
+			lblLocation.Text = radStorageDocuments.Checked ? ConfigManager.DefaultDocumentsFolder : ConfigManager.DefaultPortableFolder;
+		}
+
+		private void chkOverride_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateFolderOverrideUi();
+		}
+
+		private void radStorageDocuments_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateLocationText();
 		}
 	}
 }

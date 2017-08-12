@@ -67,10 +67,26 @@ namespace Mesen.GUI
 
 				Program.OriginalFolder = Directory.GetCurrentDirectory();
         				
-				AppDomain.CurrentDomain.AssemblyResolve += LoadAssemblies;
 				Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 				Application.ThreadException += Application_ThreadException;
 				AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+				Application.EnableVisualStyles();
+				Application.SetCompatibleTextRenderingDefault(false);
+
+				if(ConfigManager.GetConfigFile() == null) {
+					//Show config wizard
+					//ResourceHelper.LoadResources(Language.SystemDefault);
+					ResourceHelper.LoadResources(Language.Japanese);
+					Application.Run(new frmConfigWizard());
+
+					if(ConfigManager.GetConfigFile() == null) {
+						Application.Exit();
+						return;
+					}
+				}
+
+				AppDomain.CurrentDomain.AssemblyResolve += LoadAssemblies;
 
 				Directory.CreateDirectory(ConfigManager.HomeFolder);
 				Directory.SetCurrentDirectory(ConfigManager.HomeFolder);
@@ -112,10 +128,7 @@ namespace Mesen.GUI
 
 				using(SingleInstance singleInstance = new SingleInstance()) {
 					if(singleInstance.FirstInstance || !Config.ConfigManager.Config.PreferenceInfo.SingleInstance) {
-						Application.EnableVisualStyles();
-						Application.SetCompatibleTextRenderingDefault(false);
-
-						Mesen.GUI.Forms.frmMain frmMain = new Mesen.GUI.Forms.frmMain(args);
+						frmMain frmMain = new frmMain(args);
 
 						if(Config.ConfigManager.Config.PreferenceInfo.SingleInstance) {
 							singleInstance.ListenForArgumentsFromSuccessiveInstances();
@@ -138,9 +151,7 @@ namespace Mesen.GUI
 								}
 							}
 						} else {
-							Application.EnableVisualStyles();
-							Application.SetCompatibleTextRenderingDefault(false);
-							Application.Run(new Mesen.GUI.Forms.frmMain(args));
+							Application.Run(new frmMain(args));
 						}
 					}
 				}

@@ -362,12 +362,27 @@
       <Control ID="chkDisplayMovieIcons">Відображати значок відтворення/запису при відтворенні або запису відео</Control>
       <Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
       <Control ID="btnResetSettings">Скинути всі налаштування</Control>
-      <Control ID="tpgFileAssociations">Асоціації файлів</Control>
+      
+      <Control ID="tpgFiles">Files/Folders</Control>
       <Control ID="grpFileAssociations">Асоціації файлів</Control>
       <Control ID="chkNesFormat">.NES</Control>
       <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
       <Control ID="chkMmoFormat">.MMO (Записи)</Control>
       <Control ID="chkMstFormat">.MST (Збереження)</Control>
+
+      <Control ID="grpDataStorageLocation">Data Storage Folder</Control>
+      <Control ID="radStorageDocuments">Store Mesen's data in my user profile</Control>
+      <Control ID="radStoragePortable">Store Mesen's data in the same folder as the application</Control>
+      <Control ID="lblDataLocation">Folder:</Control>
+
+      <Control ID="grpPathOverrides">Folder Overrides</Control>
+      <Control ID="chkAviOverride">Videos:</Control>
+      <Control ID="chkScreenshotsOverride">Screenshots:</Control>
+      <Control ID="chkSaveDataOverride">Save Data:</Control>
+      <Control ID="chkWaveOverride">Audio:</Control>
+      <Control ID="chkSaveStatesOverride">Save States:</Control>
+      <Control ID="chkMoviesOverride">Movies:</Control>
+      
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkFdsAutoLoadDisk">Автоматично вставляти диск 1 стороною А при завантаженні FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Використовувати швидке завантаження FDS</Control>
@@ -575,6 +590,25 @@
       <Control ID="lblExplanation">Це запустить Mesen у повноекранному режимi з "MyGame.nes" завантаженим ромом.  Вiн також буде використовувати фiльтр NTSC, встановлений у 2x масштабi та налаштує параметри Overscan. Прапор "DoNotSaveSettings" використовується для запобігання перемикання командного рядка від випадкової зміни налаштувань Mesen.</Control>
       <Control ID="txtGeneralOptions">/fullscreen - Запустити Mesen у повноекранному режимi&#13;&#10;/DoNotSaveSettings - Заборонити збереження налаштувань на диску (корисно щоб запобігти становленню параметрів командного рядка за замовчуванням)</Control>
     </Form>
+    <Form ID="frmCopyFiles" Title="Please wait...">
+      <Control ID="lblCopying">Copying:</Control>
+    </Form>
+    <Form ID="frmConfigWizard" Title="Mesen - Configuration">
+      <Control ID="lblMesen">Mesen - NES Emulator</Control>
+      <Control ID="lblConfigWizard">Configuration Wizard</Control>
+      <Control ID="lblInitialSetup">Please take a moment to perform Mesen's initial setup.</Control>
+      <Control ID="lblStorageLocation">Data Storage Location</Control>
+      <Control ID="lblStorageHint">Select where you want to store Mesen's data:</Control>
+      <Control ID="radStorageDocuments">Store the data in my user profile</Control>
+      <Control ID="radStoragePortable">Store the data in the same folder as the application</Control>
+      <Control ID="lblDataLocation">Folder:</Control>
+      <Control ID="lblInputMappings">Input Mappings</Control>
+      <Control ID="lblInputHint">Select your preferred input methods:</Control>
+      <Control ID="lblMiscOptions">Other Options</Control>
+      <Control ID="chkCreateShortcut">Create a shortcut on my desktop</Control>
+      <Control ID="btnOk">CONFIRM</Control>
+      <Control ID="lblCancel">Cancel</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Всi файли (*.*)|*.*</Message>
@@ -602,6 +636,9 @@
     <Message ID="ResetSettingsConfirmation">Warning: This will reset ALL of settings and cannot be undone!&#xA;&#xA;Continue?</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen не зміг знайти будь-які ігри для завантаження.</Message>
+    
+    <Message ID="InvalidPaths">The following path overrides are invalid:&#xA;&#xA;{0}&#xA;&#xA;Please use valid and writable folders and try again.</Message>
+    <Message ID="CopyMesenDataPrompt">All files will be copied from:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Once the copy is completed, Mesen will restart.&#xA;Continue?</Message>
 
     <Message ID="CheatsFound">iгр {0}, читiв {1}</Message>
     <Message ID="CheatsImported">{0} читiв імпортовано для {1}.</Message>

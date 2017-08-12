@@ -360,12 +360,27 @@
       <Control ID="chkDisplayMovieIcons">Mostrar icono de iniciar/grabar al reproducir o grabar un video</Control>
       <Control ID="btnOpenMesenFolder">Abrir el directorio de Mesen</Control>
       <Control ID="btnResetSettings">Restablecer todo</Control>
-      <Control ID="tpgFileAssociations">Asociación de archivos</Control>
+      
+      <Control ID="tpgFiles">Files/Folders</Control>
       <Control ID="grpFileAssociations">Asociación de archivos</Control>
       <Control ID="chkNesFormat">.NES</Control>
       <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
       <Control ID="chkMmoFormat">.MMO (Videos de Mesen)</Control>
       <Control ID="chkMstFormat">.MST (Partidas guardadas de Mesen)</Control>
+
+      <Control ID="grpDataStorageLocation">Data Storage Folder</Control>
+      <Control ID="radStorageDocuments">Store Mesen's data in my user profile</Control>
+      <Control ID="radStoragePortable">Store Mesen's data in the same folder as the application</Control>
+      <Control ID="lblDataLocation">Folder:</Control>
+
+      <Control ID="grpPathOverrides">Folder Overrides</Control>
+      <Control ID="chkAviOverride">Videos:</Control>
+      <Control ID="chkScreenshotsOverride">Screenshots:</Control>
+      <Control ID="chkSaveDataOverride">Save Data:</Control>
+      <Control ID="chkWaveOverride">Audio:</Control>
+      <Control ID="chkSaveStatesOverride">Save States:</Control>
+      <Control ID="chkMoviesOverride">Movies:</Control>
+      
       <Control ID="tpgAdvanced">Avanzado</Control>
       <Control ID="chkFdsAutoLoadDisk">Insertar la cara A del disco 1 al cargar un juego FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Aumentar la velocidad de la emulación de juegos de carga FDS</Control>
@@ -571,6 +586,25 @@
       <Control ID="lblExplanation">Esto iniciará Mesen en modo de pantalla completa con la rom "MyGame.nes" cargada. También usa el filtro NTSC, ajuste a escala 2x y establece la configuración de Overscan. El parámetro "DoNotSaveSettings" se usa para prevenir que las opciones dadas desde la línea de comandos alteren la configuración de Mesen.</Control>
       <Control ID="txtGeneralOptions">/fullscreen - Inicia Mesen en pantalla completa&#13;&#10;/DoNotSaveSettings - Previene que las opciones se graben en disco (útil para evitar que las opciones de la línea de comandos se conviertan en la configuración predeterminada)</Control>
     </Form>
+    <Form ID="frmCopyFiles" Title="Please wait...">
+      <Control ID="lblCopying">Copying:</Control>
+    </Form>
+    <Form ID="frmConfigWizard" Title="Mesen - Configuration">
+      <Control ID="lblMesen">Mesen - NES Emulator</Control>
+      <Control ID="lblConfigWizard">Configuration Wizard</Control>
+      <Control ID="lblInitialSetup">Please take a moment to perform Mesen's initial setup.</Control>
+      <Control ID="lblStorageLocation">Data Storage Location</Control>
+      <Control ID="lblStorageHint">Select where you want to store Mesen's data:</Control>
+      <Control ID="radStorageDocuments">Store the data in my user profile</Control>
+      <Control ID="radStoragePortable">Store the data in the same folder as the application</Control>
+      <Control ID="lblDataLocation">Folder:</Control>
+      <Control ID="lblInputMappings">Input Mappings</Control>
+      <Control ID="lblInputHint">Select your preferred input methods:</Control>
+      <Control ID="lblMiscOptions">Other Options</Control>
+      <Control ID="chkCreateShortcut">Create a shortcut on my desktop</Control>
+      <Control ID="btnOk">CONFIRM</Control>
+      <Control ID="lblCancel">Cancel</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Todos los tipos de archivo (*.*)|*.*</Message>
@@ -601,6 +635,9 @@
     <Message ID="ResetSettingsConfirmation">ATENCIÓN: ¡Estás a punto restablecer TODA la configuración y no se podrá revertir!&#xA;&#xA;Continuar?</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen no puede encontrar ningún juego para cargar.</Message>
+
+    <Message ID="InvalidPaths">The following path overrides are invalid:&#xA;&#xA;{0}&#xA;&#xA;Please use valid and writable folders and try again.</Message>
+    <Message ID="CopyMesenDataPrompt">All files will be copied from:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Once the copy is completed, Mesen will restart.&#xA;Continue?</Message>
 
     <Message ID="NsfNextTrack">Pista siguiente (Espera para jugar más rápido)</Message>
     <Message ID="NsfUnnamedTrack">[sin nombre]</Message>
