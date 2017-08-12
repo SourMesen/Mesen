@@ -509,6 +509,7 @@ void BaseMapper::Initialize(RomData &romData)
 	_prgSize = (uint32_t)romData.PrgRom.size();
 	_chrRomSize = (uint32_t)romData.ChrRom.size();
 	_originalPrgRom = romData.PrgRom;
+	_originalChrRom = romData.ChrRom;
 
 	_prgRom = new uint8_t[_prgSize];
 	_chrRom = new uint8_t[_chrRomSize];
@@ -989,13 +990,26 @@ CartridgeState BaseMapper::GetState()
 	return state;
 }
 
-void BaseMapper::SaveRomToDisk(string filename)
+NESHeader BaseMapper::GetNesHeader()
+{
+	return _nesHeader;
+}
+
+void BaseMapper::SaveRomToDisk(string filename, uint8_t* header)
 {
 	ofstream file(filename, ios::out | ios::binary);
 	if(file.good()) {
-		file.write((char*)&_nesHeader, sizeof(NESHeader));
-		file.write((char*)_prgRom, _prgSize);
-		file.write((char*)_chrRom, _onlyChrRam ? 0 : _chrRomSize);
+		if(header) {
+			//Save original rom with edited header
+			file.write((char*)header, sizeof(NESHeader));
+			file.write((char*)_originalPrgRom.data(), _originalPrgRom.size());
+			file.write((char*)_originalChrRom.data(), _originalChrRom.size());
+		} else {
+			//Save edited rom
+			file.write((char*)&_nesHeader, sizeof(NESHeader));
+			file.write((char*)_prgRom, _prgSize);
+			file.write((char*)_chrRom, _onlyChrRam ? 0 : _chrRomSize);
+		}
 		file.close();
 	}
 }

@@ -198,10 +198,60 @@
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
     </Enum>
+
+    <!-- Resources below are used by the debugger only - no translation is needed -->
     <Enum ID="StatusFlagFormat">
       <Value ID="Hexadecimal">Hexadecimal</Value>
       <Value ID="Text">Text</Value>
       <Value ID="CompactText">Text (Active only)</Value>
+    </Enum>
+    <Enum ID="MemorySizes">
+      <Value ID="None">None</Value>
+      <Value ID="_128Bytes">128 bytes</Value>
+      <Value ID="_256Bytes">256 bytes</Value>
+      <Value ID="_512Bytes">512 bytes</Value>
+      <Value ID="_1KB">1 KB</Value>
+      <Value ID="_2KB">2 KB</Value>
+      <Value ID="_4KB">4 KB</Value>
+      <Value ID="_8KB">8 KB</Value>
+      <Value ID="_16KB">16 KB</Value>
+      <Value ID="_32KB">32 KB</Value>
+      <Value ID="_64KB">64 KB</Value>
+      <Value ID="_128KB">128 KB</Value>
+      <Value ID="_256KB">256 KB</Value>
+      <Value ID="_512KB">512 KB</Value>
+      <Value ID="_1024KB">1024 KB</Value>
+      <Value ID="Reserved">Reserved</Value>
+    </Enum>
+    <Enum ID="TvSystem">
+      <Value ID="Ntsc">NTSC</Value>
+      <Value ID="Pal">PAL</Value>
+      <Value ID="NtscAndPal">NTSC and PAL</Value>
+      <Value ID="VsSystem">VS System</Value>
+      <Value ID="Playchoice">Playchoice-10</Value>
+    </Enum>
+    <Enum ID="MirroringType">
+      <Value ID="Horizontal">Horizontal</Value>
+      <Value ID="Vertical">Vertical</Value>
+      <Value ID="FourScreens">Four Screens</Value>
+    </Enum>
+    <Enum ID="VsPpuType">
+      <Value ID="RP2C03B">RP2C03B</Value>
+      <Value ID="RP2C03G">RP2C03G</Value>
+      <Value ID="RP2C040001">RP2C04-0001</Value>
+      <Value ID="RP2C040002">RP2C04-0002</Value>
+      <Value ID="RP2C040003">RP2C04-0003</Value>
+      <Value ID="RP2C040004">RP2C04-0004</Value>
+      <Value ID="RC2C03B">RC2C03B</Value>
+      <Value ID="RC2C03C">RC2C03C</Value>
+      <Value ID="RC2C0501">RC2C05-01</Value>
+      <Value ID="RC2C0502">RC2C05-02</Value>
+      <Value ID="RC2C0503">RC2C05-03</Value>
+      <Value ID="RC2C0504">RC2C05-04</Value>
+      <Value ID="RC2C0505">RC2C05-05</Value>
+      <Value ID="Undefined">Undefined</Value>
+      <Value ID="Undefined2">Undefined (2)</Value>
+      <Value ID="Undefined3">Undefined (3)</Value>
     </Enum>
   </Enums>
 </Resources>

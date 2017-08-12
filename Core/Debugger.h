@@ -197,7 +197,8 @@ public:
 	void StartCodeRunner(uint8_t *byteCode, uint32_t codeLength);
 	void StopCodeRunner();
 
-	void SaveRomToDisk(string filename);
+	void GetNesHeader(uint8_t* header);
+	void SaveRomToDisk(string filename, uint8_t* header);
 
 	int32_t FindSubEntryPoint(uint16_t relativeAddress);
 	

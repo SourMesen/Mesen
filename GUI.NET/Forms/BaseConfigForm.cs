@@ -121,9 +121,9 @@ namespace Mesen.GUI.Forms
 			_binder.AddBinding(fieldName, trueRadio);
 		}
 
-		protected void AddBinding(string fieldName, Control bindedField)
+		protected void AddBinding(string fieldName, Control bindedField, eNumberFormat format = eNumberFormat.Default)
 		{
-			_binder.AddBinding(fieldName, bindedField);
+			_binder.AddBinding(fieldName, bindedField, format);
 		}
 
 		public static void InitializeComboBox(ComboBox combo, Type enumType)

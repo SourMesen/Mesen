@@ -922,9 +922,15 @@ void Debugger::StopCodeRunner()
 	Debugger::Instance->Step(1);
 }
 
-void Debugger::SaveRomToDisk(string filename)
+void Debugger::GetNesHeader(uint8_t* header)
 {
-	_mapper->SaveRomToDisk(filename);
+	NESHeader nesHeader = _mapper->GetNesHeader();
+	memcpy(header, &nesHeader, sizeof(NESHeader));
+}
+
+void Debugger::SaveRomToDisk(string filename, uint8_t* header)
+{
+	_mapper->SaveRomToDisk(filename, header);
 }
 
 int32_t Debugger::FindSubEntryPoint(uint16_t relativeAddress)

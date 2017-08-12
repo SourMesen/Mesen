@@ -401,6 +401,12 @@
     <Compile Include="Debugger\frmCodeTooltip.Designer.cs">
       <DependentUpon>frmCodeTooltip.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmEditHeader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmEditHeader.Designer.cs">
+      <DependentUpon>frmEditHeader.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmEditLabel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -814,6 +820,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmCodeTooltip.resx">
       <DependentUpon>frmCodeTooltip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmEditHeader.resx">
+      <DependentUpon>frmEditHeader.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmEditLabel.resx">
       <DependentUpon>frmEditLabel.cs</DependentUpon>

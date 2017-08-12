@@ -152,6 +152,9 @@ namespace Mesen.GUI.Forms
 							object value = kvp.Value.Text;
 							NumberStyles numberStyle = format == eNumberFormat.Decimal ? NumberStyles.Integer : NumberStyles.HexNumber;
 							value = ((string)value).Trim().Replace("$", "").Replace("0x", "");
+							if(string.IsNullOrWhiteSpace((string)value)) {
+								value = "0";
+							}
 							if(field.FieldType == typeof(UInt32)) {
 								value = (object)UInt32.Parse((string)value, numberStyle);
 							} else if(field.FieldType == typeof(Int32)) {

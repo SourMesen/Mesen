@@ -121,7 +121,7 @@ namespace Mesen.GUI.Debugger
 			UpdateCdlRatios();
 			tmrCdlRatios.Start();
 
-			mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
+			mnuEditHeader.Enabled = mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
 		}
 
 		protected override void OnActivated(EventArgs e)
@@ -246,7 +246,7 @@ namespace Mesen.GUI.Debugger
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					this.BeginInvoke((MethodInvoker)(() => {
-						mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
+						mnuEditHeader.Enabled = mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
 
 						this.UpdateWorkspace();
 						this.AutoLoadDbgFile(true);
@@ -907,6 +907,13 @@ namespace Mesen.GUI.Debugger
 				if(sfd.ShowDialog() == DialogResult.OK) {
 					InteropEmu.DebugSaveRomToDisk(sfd.FileName);
 				}
+			}
+		}
+
+		private void mnuEditHeader_Click(object sender, EventArgs e)
+		{
+			using(frmEditHeader frm = new frmEditHeader()) {
+				frm.ShowDialog(sender, this);
 			}
 		}
 

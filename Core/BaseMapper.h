@@ -48,6 +48,7 @@ private:
 	HashInfo _hashInfo;
 
 	vector<uint8_t> _originalPrgRom;
+	vector<uint8_t> _originalChrRom;
 
 protected:
 	NESHeader _nesHeader;
@@ -212,5 +213,6 @@ public:
 	int32_t ToAbsoluteChrAddress(uint16_t addr);
 	int32_t FromAbsoluteAddress(uint32_t addr, AddressType type = AddressType::PrgRom);
 
-	void SaveRomToDisk(string filename);
+	NESHeader GetNesHeader();
+	void SaveRomToDisk(string filename, uint8_t* header);
 };

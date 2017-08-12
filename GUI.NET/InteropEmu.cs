@@ -245,7 +245,33 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugResetMemoryAccessCounts();
 		[DllImport(DLLPath)] public static extern void DebugResetProfiler();
 
-		[DllImport(DLLPath)] public static extern void DebugSaveRomToDisk([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
+		[DllImport(DLLPath, EntryPoint = "DebugGetNesHeader")] public static extern void DebugGetNesHeaderWrapper(IntPtr headerBuffer);
+		public static byte[] DebugGetNesHeader()
+		{
+			byte[] header = new byte[16];
+			GCHandle handle = GCHandle.Alloc(header, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetNesHeaderWrapper(handle.AddrOfPinnedObject());
+			} finally {
+				handle.Free();
+			}
+			return header;
+		}
+
+		[DllImport(DLLPath, EntryPoint = "DebugSaveRomToDisk")] public static extern void DebugSaveRomToDiskWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, IntPtr headerBuffer);
+		public static void DebugSaveRomToDisk(string filename, byte[] header = null)
+		{
+			if(header != null) {
+				GCHandle handle = GCHandle.Alloc(header, GCHandleType.Pinned);
+				try {
+					InteropEmu.DebugSaveRomToDiskWrapper(filename, handle.AddrOfPinnedObject());
+				} finally {
+					handle.Free();
+				}
+			} else {
+				InteropEmu.DebugSaveRomToDiskWrapper(filename, IntPtr.Zero);
+			}
+		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper(out UInt32 length);
 		public static string DebugGetCode()
