@@ -249,10 +249,11 @@ struct KeyMapping
 	uint32_t TurboB = 0;
 	uint32_t TurboStart = 0;
 	uint32_t TurboSelect = 0;
+	uint32_t Microphone = 0;
 
 	bool HasKeySet()
 	{
-		return A || B || Up || Down || Left || Right || Start || Select || TurboA || TurboB || TurboStart || TurboSelect;
+		return A || B || Up || Down || Left || Right || Start || Select || TurboA || TurboB || TurboStart || TurboSelect || Microphone;
 	}
 };
 

@@ -53,6 +53,7 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picWarning = new System.Windows.Forms.PictureBox();
 			this.lblKeyBinding = new System.Windows.Forms.Label();
+			this.btnSetupExp = new System.Windows.Forms.Button();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpDisplayInput = new System.Windows.Forms.GroupBox();
@@ -66,7 +67,6 @@
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblDisplayPosition = new System.Windows.Forms.Label();
 			this.cboDisplayInputPosition = new System.Windows.Forms.ComboBox();
-			this.btnSetupExp = new System.Windows.Forms.Button();
 			this.tabMain.SuspendLayout();
 			this.tpgControllers.SuspendLayout();
 			this.tlpControllers.SuspendLayout();
@@ -398,6 +398,19 @@
 			this.lblKeyBinding.TabIndex = 1;
 			this.lblKeyBinding.Text = resources.GetString("lblKeyBinding.Text");
 			// 
+			// btnSetupExp
+			// 
+			this.btnSetupExp.AutoSize = true;
+			this.btnSetupExp.Location = new System.Drawing.Point(297, 197);
+			this.btnSetupExp.Name = "btnSetupExp";
+			this.btnSetupExp.Size = new System.Drawing.Size(62, 23);
+			this.btnSetupExp.TabIndex = 20;
+			this.btnSetupExp.Text = "Setup";
+			this.btnSetupExp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnSetupExp.UseVisualStyleBackColor = true;
+			this.btnSetupExp.Visible = false;
+			this.btnSetupExp.Click += new System.EventHandler(this.btnSetup_Click);
+			// 
 			// tpgAdvanced
 			// 
 			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel2);
@@ -543,18 +556,6 @@
 			this.cboDisplayInputPosition.Name = "cboDisplayInputPosition";
 			this.cboDisplayInputPosition.Size = new System.Drawing.Size(121, 21);
 			this.cboDisplayInputPosition.TabIndex = 1;
-			// 
-			// btnSetupExp
-			// 
-			this.btnSetupExp.AutoSize = true;
-			this.btnSetupExp.Location = new System.Drawing.Point(297, 197);
-			this.btnSetupExp.Name = "btnSetupExp";
-			this.btnSetupExp.Size = new System.Drawing.Size(62, 23);
-			this.btnSetupExp.TabIndex = 20;
-			this.btnSetupExp.Text = "Setup";
-			this.btnSetupExp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-			this.btnSetupExp.UseVisualStyleBackColor = true;
-			this.btnSetupExp.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
 			// frmInputConfig
 			// 

@@ -217,6 +217,14 @@ uint8_t ControlManager::GetPortValue(uint8_t port)
 	uint8_t value = MemoryManager::GetOpenBus(GetOpenBusMask(port));
 	if(device) {
 		value |= device->GetPortOutput();
+		
+		if(port == 0 && EmulationSettings::GetConsoleType() == ConsoleType::Famicom) {
+			//Connect $4016.2 to the 2nd controller's microphone on Famicoms
+			shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(GetControlDevice(1));
+			if(controller && controller->IsMicrophoneActive()) {
+				value |= 0x04;
+			}
+		}
 	}
 
 	return value;

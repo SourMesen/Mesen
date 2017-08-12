@@ -111,6 +111,7 @@ namespace Mesen.GUI.Forms.Config
 				bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
 				cboExpansionPort.Visible = !isNes;
 				lblExpansionPort.Visible = !isNes;
+				btnSetupExp.Visible = !isNes;
 				chkFourScore.Visible = isNes;
 
 				UpdatePlayer3And4Visibility();
@@ -219,7 +220,7 @@ namespace Mesen.GUI.Forms.Config
 
 			Form frm = null;
 			if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController))) {
-				frm = new frmControllerConfig(ConfigManager.Config.InputInfo.Controllers[index], index);
+				frm = new frmControllerConfig(ConfigManager.Config.InputInfo.Controllers[index], index, cboConsoleType.GetEnumValue<ConsoleType>());
 			} else if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper))) {
 				frm = new frmZapperConfig(ConfigManager.Config.InputInfo.Zapper);
 			} else if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Zapper))) {

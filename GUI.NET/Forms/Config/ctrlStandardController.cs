@@ -31,6 +31,35 @@ namespace Mesen.GUI.Forms.Config
 			}
 		}
 
+		public bool ShowMicrophone
+		{
+			set
+			{
+				btnMicrophone.Visible = value;
+				lblMicrophone.Visible = value;
+			}
+		}
+
+		private Point[] _drawPoints = new Point[13] {
+			new Point(56, 29), new Point(56, 85), new Point(22, 85),
+			new Point(22, 130), new Point(56, 130), new Point(56, 181),
+			new Point(145, 181), new Point(145, 130), new Point(179, 130),
+			new Point(179, 85), new Point(145, 85), new Point(145, 28),
+			new Point(56, 29)
+		};
+
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			Rectangle rect = this.ClientRectangle;
+			rect.Inflate(-2, -2);
+			using(Pen pen = new Pen(Color.Black, 2f)) {
+				e.Graphics.DrawRectangle(pen, rect);
+				e.Graphics.DrawRectangle(pen, 226, 128, 159, 43);
+				e.Graphics.DrawPolygon(pen, _drawPoints);
+			}
+			base.OnPaint(e);
+		}
+
 		private void InitButton(Button btn, UInt32 scanCode)
 		{
 			btn.Text = InteropEmu.GetKeyName(scanCode);
@@ -49,6 +78,7 @@ namespace Mesen.GUI.Forms.Config
 			InitButton(btnRight, mappings.Right);
 			InitButton(btnTurboA, mappings.TurboA);
 			InitButton(btnTurboB, mappings.TurboB);
+			InitButton(btnMicrophone, mappings.Microphone);
 
 			this.OnChange?.Invoke(this, null);
 		}
@@ -79,6 +109,7 @@ namespace Mesen.GUI.Forms.Config
 			InitButton(btnRight, 0);
 			InitButton(btnTurboA, 0);
 			InitButton(btnTurboB, 0);
+			InitButton(btnMicrophone, 0);
 
 			this.OnChange?.Invoke(this, null);
 		}
@@ -108,6 +139,7 @@ namespace Mesen.GUI.Forms.Config
 				TurboB = (UInt32)btnTurboB.Tag,
 				TurboSelect = 0,
 				TurboStart = 0,
+				Microphone = (UInt32)btnMicrophone.Tag,
 			};
 			return mappings;
 		}

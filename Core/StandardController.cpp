@@ -19,6 +19,19 @@ void StandardController::StreamState(bool saving)
 	Stream(_stateBuffer, _stateBufferFamicom, additionalController);
 }
 
+bool StandardController::IsMicrophoneActive()
+{
+	if(!EmulationSettings::CheckFlag(EmulationFlags::InBackground) || EmulationSettings::CheckFlag(EmulationFlags::AllowBackgroundInput)) {
+		for(size_t i = 0, len = _keyMappings.size(); i < len; i++) {
+			KeyMapping keyMapping = _keyMappings[i];
+			if((PPU::GetFrameCount() % 3) == 0 && ControlManager::IsKeyPressed(keyMapping.Microphone)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 uint8_t StandardController::GetButtonState()
 {
 	ButtonState state;
@@ -84,7 +97,7 @@ uint8_t StandardController::GetPortOutput()
 
 	//"All subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers."
 	_stateBuffer |= _isEmptyPort ? 0 : 0x800000;
-
+	
 	return returnValue;
 }
 

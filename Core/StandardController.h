@@ -30,6 +30,8 @@ public:
 	uint32_t GetInternalState();
 	void SetInternalState(uint32_t state);
 
+	bool IsMicrophoneActive();
+
 	void AddAdditionalController(shared_ptr<BaseControlDevice> controller);
 	shared_ptr<BaseControlDevice> GetAdditionalController();
 

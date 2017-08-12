@@ -15,7 +15,7 @@ namespace Mesen.GUI.Forms.Config
 	{
 		private KeyPresets _presets = new KeyPresets();
 
-		public frmControllerConfig(ControllerInfo controllerInfo, int portNumber)
+		public frmControllerConfig(ControllerInfo controllerInfo, int portNumber, ConsoleType consoleType)
 		{
 			InitializeComponent();
 
@@ -26,6 +26,13 @@ namespace Mesen.GUI.Forms.Config
 			ctrlStandardController1.Initialize(controllerInfo.Keys[1]);
 			ctrlStandardController2.Initialize(controllerInfo.Keys[2]);
 			ctrlStandardController3.Initialize(controllerInfo.Keys[3]);
+
+			if(portNumber == 1 && consoleType == ConsoleType.Famicom) {
+				ctrlStandardController0.ShowMicrophone = true;
+				ctrlStandardController1.ShowMicrophone = true;
+				ctrlStandardController2.ShowMicrophone = true;
+				ctrlStandardController3.ShowMicrophone = true;
+			}
 
 			ResourceHelper.ApplyResources(this, mnuStripPreset);
 

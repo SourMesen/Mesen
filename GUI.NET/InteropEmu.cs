@@ -733,6 +733,7 @@ namespace Mesen.GUI
 			public UInt32 TurboB;
 			public UInt32 TurboStart;
 			public UInt32 TurboSelect;
+			public UInt32 Microphone;
 		}
 
 		public enum StereoFilter

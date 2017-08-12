@@ -23,6 +23,8 @@ namespace Mesen.GUI.Config
 		public UInt32 TurboStart;
 		public UInt32 TurboSelect;
 
+		public UInt32 Microphone;
+
 		public KeyMappings()
 		{
 		}
@@ -48,6 +50,7 @@ namespace Mesen.GUI.Config
 			mapping.TurboB = TurboB;
 			mapping.TurboStart = TurboStart;
 			mapping.TurboSelect = TurboSelect;
+			mapping.Microphone = Microphone;
 
 			return mapping;
 		}

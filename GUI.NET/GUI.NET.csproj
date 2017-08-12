@@ -537,12 +537,6 @@
     <Compile Include="Forms\Config\ctrlEmulatorShortcuts.Designer.cs">
       <DependentUpon>ctrlEmulatorShortcuts.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Config\ctrlInputPortConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Config\ctrlInputPortConfig.Designer.cs">
-      <DependentUpon>ctrlInputPortConfig.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\Config\ctrlPathSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -875,9 +869,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlEmulatorShortcuts.resx">
       <DependentUpon>ctrlEmulatorShortcuts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Config\ctrlInputPortConfig.resx">
-      <DependentUpon>ctrlInputPortConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlPathSelection.resx">
       <DependentUpon>ctrlPathSelection.cs</DependentUpon>
