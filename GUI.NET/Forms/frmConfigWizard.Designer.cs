@@ -394,6 +394,7 @@
 			// 
 			this.chkCreateShortcut.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.chkCreateShortcut, 2);
+			this.chkCreateShortcut.Checked = true;
 			this.chkCreateShortcut.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.chkCreateShortcut.Location = new System.Drawing.Point(21, 415);
 			this.chkCreateShortcut.Margin = new System.Windows.Forms.Padding(11, 6, 3, 3);

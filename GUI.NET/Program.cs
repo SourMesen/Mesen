@@ -76,8 +76,7 @@ namespace Mesen.GUI
 
 				if(ConfigManager.GetConfigFile() == null) {
 					//Show config wizard
-					//ResourceHelper.LoadResources(Language.SystemDefault);
-					ResourceHelper.LoadResources(Language.Japanese);
+					ResourceHelper.LoadResources(Language.SystemDefault);
 					Application.Run(new frmConfigWizard());
 
 					if(ConfigManager.GetConfigFile() == null) {

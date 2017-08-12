@@ -83,22 +83,32 @@ namespace Mesen.GUI.Config
 			//Icon used for shortcuts
 			Mesen.GUI.Properties.Resources.MesenLogo.Save(Path.Combine(iconFolder, "MesenIcon.png"), ImageFormat.Png);
 
-			File.WriteAllText(desktopFile,
-					"[Desktop Entry]" + Environment.NewLine +
-					"Type=Application" + Environment.NewLine +
-					"Name=Mesen" + Environment.NewLine +
-					"Comment=NES/Famicom Emulator" + Environment.NewLine +
-					"Keywords=game;nes;famicom;emulator;emu;ファミコン;nintendo" + Environment.NewLine +
-					"Categories=GNOME;GTK;Game;Emulator;" + Environment.NewLine +
-					"MimeType=" + string.Join(";", mimeTypes.Select(type => "application/" + type)) + Environment.NewLine +
-					"Exec=mono " + System.Reflection.Assembly.GetEntryAssembly().Location + " %f" + Environment.NewLine +
-					"NoDisplay=false" + Environment.NewLine +
-					"StartupNotify=true" + Environment.NewLine +
-					"Icon=MesenIcon" + Environment.NewLine);
+			CreateShortcutFile(desktopFile, mimeTypes);
 
 			//Update databases
 			System.Diagnostics.Process.Start("update-mime-database", mimeFolder).WaitForExit();
 			System.Diagnostics.Process.Start("update-desktop-database", desktopFolder);
+		}
+
+		static public void CreateShortcutFile(string filename, List<string> mimeTypes = null)
+		{
+			string content = 
+				"[Desktop Entry]" + Environment.NewLine +
+				"Type=Application" + Environment.NewLine +
+				"Name=Mesen" + Environment.NewLine +
+				"Comment=NES/Famicom Emulator" + Environment.NewLine +
+				"Keywords=game;nes;famicom;emulator;emu;ファミコン;nintendo" + Environment.NewLine +
+				"Categories=GNOME;GTK;Game;Emulator;" + Environment.NewLine;
+			if(mimeTypes != null) {
+				content += "MimeType=" + string.Join(";", mimeTypes.Select(type => "application/" + type)) + Environment.NewLine;
+			}
+			content +=
+				"Exec=mono " + System.Reflection.Assembly.GetEntryAssembly().Location + " %f" + Environment.NewLine +
+				"NoDisplay=false" + Environment.NewLine +
+				"StartupNotify=true" + Environment.NewLine +
+				"Icon=MesenIcon" + Environment.NewLine;
+
+			File.WriteAllText(filename, content);
 		}
 
 		static public void UpdateFileAssociation(string extension, bool associate)

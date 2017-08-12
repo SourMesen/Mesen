@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
@@ -56,7 +57,9 @@ namespace Mesen.GUI.Forms
 		private void CreateShortcut()
 		{
 			if(Program.IsMono) {
-				//TODO
+				string shortcutFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "mesen.desktop");
+				FileAssociationHelper.CreateShortcutFile(shortcutFile);
+				Process.Start("chmod", "775 " + shortcutFile); 
 			} else {
 				Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8"));
 				dynamic shell = Activator.CreateInstance(t);

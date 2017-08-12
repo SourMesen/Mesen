@@ -930,7 +930,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpPathOverrides.Controls.Add(this.tableLayoutPanel10);
 			this.grpPathOverrides.Location = new System.Drawing.Point(3, 198);
 			this.grpPathOverrides.Name = "grpPathOverrides";
-			this.grpPathOverrides.Size = new System.Drawing.Size(477, 154);
+			this.grpPathOverrides.Size = new System.Drawing.Size(477, 158);
 			this.grpPathOverrides.TabIndex = 15;
 			this.grpPathOverrides.TabStop = false;
 			this.grpPathOverrides.Text = "Folder Overrides";
