@@ -17,7 +17,6 @@ private:
 	void UpdateBufferSize();
 
 protected:
-	OverscanDimensions GetOverscan();
 	virtual void ApplyFilter(uint16_t *ppuOutputBuffer) = 0;
 	virtual void OnBeforeApplyFilter();
 
@@ -30,5 +29,6 @@ public:
 	void TakeScreenshot();
 	void TakeScreenshot(string filename, std::stringstream *stream = nullptr);
 
+	virtual OverscanDimensions GetOverscan();
 	virtual FrameInfo GetFrameInfo() = 0;
 };

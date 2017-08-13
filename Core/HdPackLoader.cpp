@@ -128,6 +128,9 @@ bool HdPackLoader::LoadPack()
 			} else if(lineContent.substr(0, 7) == "<scale>") {
 				lineContent = lineContent.substr(7);
 				_data->Scale = std::stoi(lineContent);
+			} else if(lineContent.substr(0, 10) == "<overscan>") {
+				tokens = StringUtilities::Split(lineContent.substr(10), ',');
+				ProcessOverscanTag(tokens);
 			} else if(lineContent.substr(0, 5) == "<img>") {
 				lineContent = lineContent.substr(5);
 				if(!ProcessImgTag(lineContent)) {
@@ -173,6 +176,17 @@ bool HdPackLoader::ProcessImgTag(string src)
 		MessageManager::Log("[HDPack] Error loading HDPack: PNG file " + src + " could not be read.");
 		return false;
 	}
+}
+
+void HdPackLoader::ProcessOverscanTag(vector<string> &tokens)
+{
+	OverscanDimensions overscan;
+	overscan.Top = std::stoi(tokens[0]);
+	overscan.Right = std::stoi(tokens[1]);
+	overscan.Bottom = std::stoi(tokens[2]);
+	overscan.Left = std::stoi(tokens[3]);
+	_data->HasOverscanConfig = true;
+	_data->Overscan = overscan;
 }
 
 void HdPackLoader::ProcessPatchTag(vector<string> &tokens)
@@ -404,8 +418,6 @@ void HdPackLoader::LoadCustomPalette()
 		}
 
 		if(paletteData.size() == 0x40) {
-			_data->PaletteBackup = vector<uint32_t>(0x40, 0);
-			EmulationSettings::GetRgbPalette(_data->PaletteBackup.data());
 			_data->Palette = paletteData;
 		}
 	}

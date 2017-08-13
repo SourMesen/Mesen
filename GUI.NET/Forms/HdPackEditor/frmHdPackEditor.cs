@@ -40,6 +40,7 @@ namespace Mesen.GUI.Forms.HdPackEditor
 			toolTip.SetToolTip(picFrequencyHelp, ResourceHelper.GetMessage("HdPackBuilderFrequencyHelp"));
 			toolTip.SetToolTip(picGroupBlankHelp, ResourceHelper.GetMessage("HdPackBuilderGroupBlankHelp"));
 			toolTip.SetToolTip(picLargeSpritesHelp, ResourceHelper.GetMessage("HdPackBuilderLargeSpritesHelp"));
+			toolTip.SetToolTip(picIgnoreOverscanHelp, ResourceHelper.GetMessage("HdPackBuilderIgnoreOverscanHelp"));
 
 			UpdateUI(false);
 		}
@@ -149,7 +150,9 @@ namespace Mesen.GUI.Forms.HdPackEditor
 			if(chkGroupBlankTiles.Checked) {
 				flags |= HdPackRecordFlags.GroupBlankTiles;
 			}
-
+			if(chkIgnoreOverscan.Checked) {
+				flags |= HdPackRecordFlags.IgnoreOverscan;
+			}
 			InteropEmu.HdBuilderStartRecording(txtSaveFolder.Text, ((FilterInfo)cboScale.SelectedItem).FilterType, ((FilterInfo)cboScale.SelectedItem).Scale, flags, (UInt32)Math.Pow(2, cboChrBankSize.SelectedIndex) * 0x400);
 			tmrRefresh.Start();
 

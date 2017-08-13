@@ -58,7 +58,7 @@ void ScaleFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 {
 	DecodePpuBuffer(ppuOutputBuffer, _decodedPpuBuffer, false);
 
-	OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+	OverscanDimensions overscan = GetOverscan();
 	uint32_t height = overscan.GetScreenHeight();
 	uint32_t width = overscan.GetScreenWidth();
 	uint32_t* outputBuffer = (uint32_t*)GetOutputBuffer();

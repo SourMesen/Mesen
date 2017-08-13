@@ -1482,6 +1482,7 @@ namespace Mesen.GUI
 		UseLargeSprites = 1,
 		SortByUsageFrequency = 2,
 		GroupBlankTiles = 4,
+		IgnoreOverscan = 8,
 	}
 
 	public struct AddressTypeInfo

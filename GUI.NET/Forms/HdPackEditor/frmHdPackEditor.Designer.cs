@@ -37,6 +37,9 @@
 			this.lblChrBank = new System.Windows.Forms.Label();
 			this.grpOptions = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkIgnoreOverscan = new System.Windows.Forms.CheckBox();
+			this.picIgnoreOverscanHelp = new System.Windows.Forms.PictureBox();
 			this.lblBankSize = new System.Windows.Forms.Label();
 			this.lblScale = new System.Windows.Forms.Label();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
@@ -54,20 +57,22 @@
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.cboScale = new System.Windows.Forms.ComboBox();
 			this.picScaleHelp = new System.Windows.Forms.PictureBox();
-			this.lblFolder = new System.Windows.Forms.Label();
-			this.txtSaveFolder = new System.Windows.Forms.TextBox();
-			this.btnSelectFolder = new System.Windows.Forms.Button();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnStartRecording = new System.Windows.Forms.Button();
 			this.btnStopRecording = new System.Windows.Forms.Button();
-			this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.btnSelectFolder = new System.Windows.Forms.Button();
+			this.txtSaveFolder = new System.Windows.Forms.TextBox();
+			this.lblFolder = new System.Windows.Forms.Label();
+			this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpPreview.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picBankPreview)).BeginInit();
 			this.grpOptions.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			this.flowLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picIgnoreOverscanHelp)).BeginInit();
 			this.flowLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picGroupBlankHelp)).BeginInit();
 			this.flowLayoutPanel4.SuspendLayout();
@@ -190,6 +195,7 @@
 			this.tableLayoutPanel2.ColumnCount = 2;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel1, 0, 6);
 			this.tableLayoutPanel2.Controls.Add(this.lblBankSize, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.lblScale, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel3, 0, 2);
@@ -200,16 +206,48 @@
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 6;
+			this.tableLayoutPanel2.RowCount = 8;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(325, 291);
 			this.tableLayoutPanel2.TabIndex = 0;
+			// 
+			// flowLayoutPanel1
+			// 
+			this.tableLayoutPanel2.SetColumnSpan(this.flowLayoutPanel1, 2);
+			this.flowLayoutPanel1.Controls.Add(this.chkIgnoreOverscan);
+			this.flowLayoutPanel1.Controls.Add(this.picIgnoreOverscanHelp);
+			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 114);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(325, 20);
+			this.flowLayoutPanel1.TabIndex = 19;
+			// 
+			// chkIgnoreOverscan
+			// 
+			this.chkIgnoreOverscan.AutoSize = true;
+			this.chkIgnoreOverscan.Location = new System.Drawing.Point(3, 3);
+			this.chkIgnoreOverscan.Name = "chkIgnoreOverscan";
+			this.chkIgnoreOverscan.Size = new System.Drawing.Size(257, 17);
+			this.chkIgnoreOverscan.TabIndex = 17;
+			this.chkIgnoreOverscan.Text = "Ignore tiles at the edges of the screen (overscan)";
+			this.chkIgnoreOverscan.UseVisualStyleBackColor = true;
+			// 
+			// picIgnoreOverscanHelp
+			// 
+			this.picIgnoreOverscanHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picIgnoreOverscanHelp.Location = new System.Drawing.Point(266, 3);
+			this.picIgnoreOverscanHelp.Name = "picIgnoreOverscanHelp";
+			this.picIgnoreOverscanHelp.Size = new System.Drawing.Size(16, 16);
+			this.picIgnoreOverscanHelp.TabIndex = 18;
+			this.picIgnoreOverscanHelp.TabStop = false;
 			// 
 			// lblBankSize
 			// 
@@ -332,6 +370,7 @@
 			// 
 			this.flpBankSize.Controls.Add(this.cboChrBankSize);
 			this.flpBankSize.Controls.Add(this.picBankSizeHelp);
+			this.flpBankSize.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flpBankSize.Location = new System.Drawing.Point(90, 24);
 			this.flpBankSize.Margin = new System.Windows.Forms.Padding(0);
 			this.flpBankSize.Name = "flpBankSize";
@@ -348,13 +387,13 @@
             "4 KB"});
 			this.cboChrBankSize.Location = new System.Drawing.Point(3, 3);
 			this.cboChrBankSize.Name = "cboChrBankSize";
-			this.cboChrBankSize.Size = new System.Drawing.Size(121, 21);
+			this.cboChrBankSize.Size = new System.Drawing.Size(105, 21);
 			this.cboChrBankSize.TabIndex = 10;
 			// 
 			// picBankSizeHelp
 			// 
 			this.picBankSizeHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picBankSizeHelp.Location = new System.Drawing.Point(130, 5);
+			this.picBankSizeHelp.Location = new System.Drawing.Point(114, 5);
 			this.picBankSizeHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picBankSizeHelp.Name = "picBankSizeHelp";
 			this.picBankSizeHelp.Size = new System.Drawing.Size(16, 16);
@@ -365,6 +404,7 @@
 			// 
 			this.flowLayoutPanel6.Controls.Add(this.cboScale);
 			this.flowLayoutPanel6.Controls.Add(this.picScaleHelp);
+			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel6.Location = new System.Drawing.Point(90, 0);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
@@ -377,49 +417,18 @@
 			this.cboScale.FormattingEnabled = true;
 			this.cboScale.Location = new System.Drawing.Point(3, 3);
 			this.cboScale.Name = "cboScale";
-			this.cboScale.Size = new System.Drawing.Size(121, 21);
+			this.cboScale.Size = new System.Drawing.Size(105, 21);
 			this.cboScale.TabIndex = 5;
 			// 
 			// picScaleHelp
 			// 
 			this.picScaleHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picScaleHelp.Location = new System.Drawing.Point(130, 5);
+			this.picScaleHelp.Location = new System.Drawing.Point(114, 5);
 			this.picScaleHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picScaleHelp.Name = "picScaleHelp";
 			this.picScaleHelp.Size = new System.Drawing.Size(16, 16);
 			this.picScaleHelp.TabIndex = 12;
 			this.picScaleHelp.TabStop = false;
-			// 
-			// lblFolder
-			// 
-			this.lblFolder.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblFolder.AutoSize = true;
-			this.lblFolder.Location = new System.Drawing.Point(3, 8);
-			this.lblFolder.Name = "lblFolder";
-			this.lblFolder.Size = new System.Drawing.Size(67, 13);
-			this.lblFolder.TabIndex = 0;
-			this.lblFolder.Text = "Save Folder:";
-			// 
-			// txtSaveFolder
-			// 
-			this.txtSaveFolder.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtSaveFolder.Location = new System.Drawing.Point(76, 3);
-			this.txtSaveFolder.Name = "txtSaveFolder";
-			this.txtSaveFolder.ReadOnly = true;
-			this.txtSaveFolder.Size = new System.Drawing.Size(465, 20);
-			this.txtSaveFolder.TabIndex = 1;
-			this.txtSaveFolder.TabStop = false;
-			// 
-			// btnSelectFolder
-			// 
-			this.btnSelectFolder.AutoSize = true;
-			this.btnSelectFolder.Location = new System.Drawing.Point(547, 3);
-			this.btnSelectFolder.Name = "btnSelectFolder";
-			this.btnSelectFolder.Size = new System.Drawing.Size(62, 23);
-			this.btnSelectFolder.TabIndex = 8;
-			this.btnSelectFolder.Text = "Browse...";
-			this.btnSelectFolder.UseVisualStyleBackColor = true;
-			this.btnSelectFolder.Click += new System.EventHandler(this.btnSelectFolder_Click);
 			// 
 			// flowLayoutPanel2
 			// 
@@ -463,11 +472,6 @@
 			this.btnStopRecording.Visible = false;
 			this.btnStopRecording.Click += new System.EventHandler(this.btnStopRecording_Click);
 			// 
-			// tmrRefresh
-			// 
-			this.tmrRefresh.Interval = 200;
-			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
-			// 
 			// tableLayoutPanel4
 			// 
 			this.tableLayoutPanel4.ColumnCount = 3;
@@ -480,12 +484,48 @@
 			this.tableLayoutPanel4.Controls.Add(this.lblFolder, 0, 0);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(612, 29);
 			this.tableLayoutPanel4.TabIndex = 9;
+			// 
+			// btnSelectFolder
+			// 
+			this.btnSelectFolder.AutoSize = true;
+			this.btnSelectFolder.Location = new System.Drawing.Point(547, 3);
+			this.btnSelectFolder.Name = "btnSelectFolder";
+			this.btnSelectFolder.Size = new System.Drawing.Size(62, 23);
+			this.btnSelectFolder.TabIndex = 8;
+			this.btnSelectFolder.Text = "Browse...";
+			this.btnSelectFolder.UseVisualStyleBackColor = true;
+			this.btnSelectFolder.Click += new System.EventHandler(this.btnSelectFolder_Click);
+			// 
+			// txtSaveFolder
+			// 
+			this.txtSaveFolder.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtSaveFolder.Location = new System.Drawing.Point(76, 3);
+			this.txtSaveFolder.Name = "txtSaveFolder";
+			this.txtSaveFolder.ReadOnly = true;
+			this.txtSaveFolder.Size = new System.Drawing.Size(465, 20);
+			this.txtSaveFolder.TabIndex = 1;
+			this.txtSaveFolder.TabStop = false;
+			// 
+			// lblFolder
+			// 
+			this.lblFolder.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblFolder.AutoSize = true;
+			this.lblFolder.Location = new System.Drawing.Point(3, 8);
+			this.lblFolder.Name = "lblFolder";
+			this.lblFolder.Size = new System.Drawing.Size(67, 13);
+			this.lblFolder.TabIndex = 0;
+			this.lblFolder.Text = "Save Folder:";
+			// 
+			// tmrRefresh
+			// 
+			this.tmrRefresh.Interval = 200;
+			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
 			// 
 			// frmHdPackEditor
 			// 
@@ -507,6 +547,9 @@
 			this.grpOptions.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
+			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picIgnoreOverscanHelp)).EndInit();
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picGroupBlankHelp)).EndInit();
@@ -564,5 +607,8 @@
 		private System.Windows.Forms.PictureBox picScaleHelp;
 		private System.Windows.Forms.Button btnOpenFolder;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.CheckBox chkIgnoreOverscan;
+		private System.Windows.Forms.PictureBox picIgnoreOverscanHelp;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 	}
 }

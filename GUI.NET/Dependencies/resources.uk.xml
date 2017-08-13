@@ -576,6 +576,7 @@
       <Control ID="chkSortByFrequency">Сортування сторінок за частотою використання</Control>
       <Control ID="chkLargeSprites">Використовувати режим відображення спрайтiв 8x16</Control>
       <Control ID="chkGroupBlankTiles">Групувати порожнi тайли</Control>
+      <Control ID="chkIgnoreOverscan">Ignore tiles at the edges of the screen (overscan)</Control>
       <Control ID="lblFolder">Зберегти папку:</Control>
       <Control ID="btnSelectFolder">Огляд...</Control>
       <Control ID="btnStartRecording">Почати запис</Control>
@@ -663,6 +664,7 @@
     <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
     <Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
     <Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
+    <Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
 
     <Message ID="MesenUpToDate">Ви використовуєте останню версію Mesen</Message>
     <Message ID="PatchAndReset">Пропатчити і скинути поточну гру?</Message>

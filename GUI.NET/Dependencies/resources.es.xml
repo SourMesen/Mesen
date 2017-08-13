@@ -572,6 +572,7 @@
       <Control ID="chkSortByFrequency">Ordenar páginas por frecuencia de uso</Control>
       <Control ID="chkLargeSprites">Usar sprites de 8x16</Control>
       <Control ID="chkGroupBlankTiles">Agrupar tiles blancas</Control>
+      <Control ID="chkIgnoreOverscan">Ignore tiles at the edges of the screen (overscan)</Control>
       <Control ID="lblFolder">Guardar en:</Control>
       <Control ID="btnSelectFolder">Buscar...</Control>
       <Control ID="btnStartRecording">Empezar a grabar</Control>
@@ -658,7 +659,8 @@
     <Message ID="HdPackBuilderFrequencyHelp">Cuando esta opción está habilitada, las tiles en los ficheros PNG se ordenan por la&#xA;frecuencia en que se muestren en la pantalla mientras se esté grabando (paletas &#xA;más comunes se agruparan conjuntamente en el primer archivo para un número de banco &#xA;específico. Si esta casilla está desmarcada, los archivos PNG se ordenarán por paleta - &#xA;en ese caso, cada archivo PNG contendrá solamente 4 colores diferentes.</Message>
     <Message ID="HdPackBuilderGroupBlankHelp">Esta opción agrupa todas las tiles blancas secuencialmente a los mismos ficheros&#xA;PNG - esto ayuda a reducir el número de archivos PNG producidos, ya que eliminan &#xA;archivos PNG casi vacíos que solo contienen tiles blancas.</Message>
     <Message ID="HdPackBuilderLargeSpritesHelp">Si está habilitada, esta opción alterará el orden de aparición de los bancos CHR&#xA;que solo contengan sprites a fin de hacer que los sprites sean más fáciles de editar en el fichero PNG.</Message>
-
+    <Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
+    
     <Message ID="MesenUpToDate">Ya utiliza la versión mas reciente de Mesen.</Message>
     <Message ID="PatchAndReset">¿Aplicar el parche y reiniciar el juego?</Message>
     <Message ID="SelectRomIps">Elija la ROM que corresponde al archivo IPS/UPS/BPS seleccionado.</Message>

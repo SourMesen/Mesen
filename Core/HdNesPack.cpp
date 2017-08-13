@@ -71,7 +71,7 @@ bool HdNesPack::DrawTile(HdPpuTileInfo &tileInfo, HdPackTileInfo &hdPackTileInfo
 		return false;
 	}
 
-	uint32_t bgColor = EmulationSettings::GetRgbPalette()[tileInfo.PpuBackgroundColor];
+	uint32_t bgColor = _palette[tileInfo.PpuBackgroundColor];
 	uint32_t scale = GetScale();
 	if(hdPackTileInfo.IsFullyTransparent) {
 		if(drawBackground) {
@@ -150,12 +150,10 @@ void HdNesPack::OnBeforeApplyFilter(HdPpuPixelInfo *screenTiles)
 {
 	HdPackData* hdData = Console::GetHdData();
 
+	_palette = hdData->Palette.size() == 0x40 ? hdData->Palette.data() : EmulationSettings::GetRgbPalette();
+
 	if(hdData->OptionFlags & (int)HdPackOptions::NoSpriteLimit) {
 		EmulationSettings::SetFlags(EmulationFlags::RemoveSpriteLimit | EmulationFlags::AdaptiveSpriteLimit);
-	}
-
-	if(hdData->Palette.size() == 0x40) {
-		EmulationSettings::SetRgbPalette(hdData->Palette.data());
 	}
 
 	_backgroundIndex = -1;
@@ -258,7 +256,7 @@ void HdNesPack::GetPixels(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, H
 					if(hdPackSpriteInfo) {
 						needBg &= !DrawTile(pixelInfo.Sprite[k], *hdPackSpriteInfo, outputBuffer, screenWidth, needBg);
 					} else if(pixelInfo.Sprite[k].SpriteColorIndex != 0) {
-						DrawColor(EmulationSettings::GetRgbPalette()[pixelInfo.Sprite[k].SpriteColor], outputBuffer, hdData->Scale, screenWidth);
+						DrawColor(_palette[pixelInfo.Sprite[k].SpriteColor], outputBuffer, hdData->Scale, screenWidth);
 						needBg = false;
 					}
 				}
@@ -282,7 +280,7 @@ void HdNesPack::GetPixels(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, H
 			if(useCustomBackground) {
 				DrawCustomBackground(outputBuffer, x, y, hdData->Scale, screenWidth);
 			} else {
-				DrawColor(EmulationSettings::GetRgbPalette()[pixelInfo.Tile.BgColor], outputBuffer, hdData->Scale, screenWidth);
+				DrawColor(_palette[pixelInfo.Tile.BgColor], outputBuffer, hdData->Scale, screenWidth);
 			}
 		}
 	}
@@ -294,7 +292,7 @@ void HdNesPack::GetPixels(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, H
 				if(hdPackSpriteInfo) {
 					DrawTile(pixelInfo.Sprite[k], *hdPackSpriteInfo, outputBuffer, screenWidth, false);
 				} else if(pixelInfo.Sprite[k].SpriteColorIndex != 0) {
-					DrawColor(EmulationSettings::GetRgbPalette()[pixelInfo.Sprite[k].SpriteColor], outputBuffer, hdData->Scale, screenWidth);
+					DrawColor(_palette[pixelInfo.Sprite[k].SpriteColor], outputBuffer, hdData->Scale, screenWidth);
 				}
 			}
 		}

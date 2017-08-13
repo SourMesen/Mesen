@@ -384,24 +384,19 @@ struct HdPackData
 	std::unordered_map<HdTileKey, vector<HdPackTileInfo*>> TileByKey;
 	std::unordered_map<string, string> PatchesByHash;
 	vector<uint32_t> Palette;
-	vector<uint32_t> PaletteBackup;
+
+	bool HasOverscanConfig = false;
+	OverscanDimensions Overscan;
+
 	uint32_t Scale = 1;
 	uint32_t Version = 0;
 	uint32_t OptionFlags = 0;
 
-	HdPackData()
-	{
-	}
+	HdPackData() { }
+	~HdPackData() { }
 
 	HdPackData(const HdPackData&) = delete;
 	HdPackData& operator=(const HdPackData&) = delete;
-
-	~HdPackData()
-	{
-		if(PaletteBackup.size() == 0x40) {
-			EmulationSettings::SetRgbPalette(PaletteBackup.data());
-		}
-	}
 };
 
 enum class HdPackOptions

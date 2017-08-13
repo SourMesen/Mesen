@@ -60,7 +60,7 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 270);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 273);
 			this.baseConfigPanel.Size = new System.Drawing.Size(385, 29);
 			// 
 			// tableLayoutPanel2
@@ -84,7 +84,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(385, 270);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(385, 273);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
 			// label2
@@ -135,7 +135,7 @@
 			this.grpCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCode.Location = new System.Drawing.Point(3, 81);
 			this.grpCode.Name = "grpCode";
-			this.grpCode.Size = new System.Drawing.Size(379, 186);
+			this.grpCode.Size = new System.Drawing.Size(379, 189);
 			this.grpCode.TabIndex = 3;
 			this.grpCode.TabStop = false;
 			this.grpCode.Text = "Code";
@@ -158,7 +158,7 @@
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpAdd.Size = new System.Drawing.Size(373, 167);
+			this.tlpAdd.Size = new System.Drawing.Size(373, 170);
 			this.tlpAdd.TabIndex = 0;
 			// 
 			// radCustom
@@ -232,7 +232,7 @@
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpCustom.Size = new System.Drawing.Size(250, 109);
+			this.tlpCustom.Size = new System.Drawing.Size(250, 112);
 			this.tlpCustom.TabIndex = 4;
 			// 
 			// lblAddress
@@ -353,13 +353,13 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(385, 299);
+			this.ClientSize = new System.Drawing.Size(385, 302);
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(401, 337);
+			this.MaximumSize = new System.Drawing.Size(401, 340);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(401, 337);
+			this.MinimumSize = new System.Drawing.Size(401, 340);
 			this.Name = "frmCheat";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Edit Cheat";

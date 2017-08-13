@@ -15,6 +15,7 @@ public:
 
 	void ApplyFilter(uint16_t *ppuOutputBuffer);
 	FrameInfo GetFrameInfo();
-
+	OverscanDimensions GetOverscan() override;
+	
 	void SetHdScreenTiles(HdPpuPixelInfo *screenTiles);
 };

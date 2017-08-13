@@ -6,6 +6,7 @@ class HdNesPack
 {
 private:
 	int32_t _backgroundIndex = -1;
+	uint32_t* _palette = nullptr;
 
 	__forceinline void BlendColors(uint8_t output[4], uint8_t input[4]);
 	__forceinline uint32_t AdjustBrightness(uint8_t input[4], uint16_t brightness);

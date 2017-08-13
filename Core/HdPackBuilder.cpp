@@ -11,6 +11,7 @@ enum HdPackRecordFlags
 	UseLargeSprites = 1,
 	SortByUsageFrequency = 2,
 	GroupBlankTiles = 4,
+	IgnoreOverscan = 8,
 };
 
 HdPackBuilder::HdPackBuilder(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize, bool isChrRam)
@@ -78,8 +79,16 @@ void HdPackBuilder::AddTile(HdPackTileInfo *tile, uint32_t usageCount)
 	_tileUsageCount[tile->GetKey(false)] = usageCount;
 }
 
-void HdPackBuilder::ProcessTile(int x, int y, uint16_t tileAddr, HdPpuTileInfo &tile, BaseMapper *mapper, bool isSprite, uint32_t chrBankHash)
+void HdPackBuilder::ProcessTile(uint32_t x, uint32_t y, uint16_t tileAddr, HdPpuTileInfo &tile, BaseMapper *mapper, bool isSprite, uint32_t chrBankHash)
 {
+	if(_flags & HdPackRecordFlags::IgnoreOverscan) {
+		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+		if(x < overscan.Left || y < overscan.Top || (PPU::ScreenWidth - x - 1) < overscan.Right || (PPU::ScreenHeight - y - 1) < overscan.Bottom) {
+			//Ignore tiles inside overscan
+			return;
+		}
+	}
+
 	auto result = _tileUsageCount.find(tile.GetKey(false));
 	if(result == _tileUsageCount.end()) {
 		//Check to see if a default tile matches
@@ -199,6 +208,10 @@ void HdPackBuilder::SaveHdPack()
 	ss << "<ver>100" << std::endl;
 	ss << "<scale>" << _hdData.Scale << std::endl;
 	ss << "<supportedRom>" << Console::GetHashInfo().Sha1Hash << std::endl;
+	if(_flags & HdPackRecordFlags::IgnoreOverscan) {
+		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+		ss << "<overscan>" << overscan.Top << "," << overscan.Right << "," << overscan.Bottom << "," << overscan.Left << std::endl;
+	}
 
 	int tileDimension = 8 * _hdData.Scale;
 	int pngDimension = 16 * tileDimension;

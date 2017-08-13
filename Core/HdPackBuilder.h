@@ -41,7 +41,7 @@ public:
 	HdPackBuilder(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize, bool isChrRam);
 	~HdPackBuilder();
 
-	void ProcessTile(int x, int y, uint16_t tileAddr, HdPpuTileInfo& tile, BaseMapper* mapper, bool isSprite, uint32_t chrBankHash);
+	void ProcessTile(uint32_t x, uint32_t y, uint16_t tileAddr, HdPpuTileInfo& tile, BaseMapper* mapper, bool isSprite, uint32_t chrBankHash);
 	void SaveHdPack();
 	
 	static void GetChrBankList(uint32_t *banks);

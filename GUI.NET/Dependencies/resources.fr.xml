@@ -586,6 +586,7 @@
       <Control ID="chkSortByFrequency">Trier par fréquence d'utilisation</Control>
       <Control ID="chkLargeSprites">Utiliser le mode d'affichage 8x16 pour les sprites</Control>
       <Control ID="chkGroupBlankTiles">Regrouper les tiles vides</Control>
+      <Control ID="chkIgnoreOverscan">Ignorer les tiles qui se trouvent dans l'overscan</Control>
       <Control ID="lblFolder">Dossier de sauvegarde :</Control>
       <Control ID="btnSelectFolder">Parcourir...</Control>
       <Control ID="btnStartRecording">Enregistrer</Control>
@@ -673,7 +674,8 @@
     <Message ID="HdPackBuilderFrequencyHelp">Quand cette option est activée, les tiles sont triés selon la fréquence à laquelle &#xA;elles apparaissent à l'écran pendant l'enregistrement (les palettes de couleurs plus &#xA;fréquentes seront regroupées dans la même image PNG pour une banque donnée.&#xA;Si cette option est désactivée, les tiles seront regroupées par palette, donc chaque&#xA;image PNG comportera au plus 4 couleurs différentes.</Message>
     <Message ID="HdPackBuilderGroupBlankHelp">Cette option regroupe toutes les tiles "vides" dans les mêmes fichiers PNG.&#xA;Ceci permet de réduire le nombre de fichiers PNG inutilement créés par le créateur de HD Packs.</Message>
     <Message ID="HdPackBuilderLargeSpritesHelp">Cette option change la mode d'afficher pour les banques ne contenant que des sprites.&#xA;Les fichiers PNG seront créées d'une façon à favoriser l'affichage des sprites de dimension 8x16.</Message>
-    
+    <Message ID="HdPackBuilderIgnoreOverscanHelp">Quand cette option est activée, les pixels contenus dans la région d'overscan sont ignorés.&#xA;Ceci permet d'éviter la capture des tiles buggés qui sont parfois visibles aux bords de l'écran.&#xA;Les combinaisons de palette incorrectes qui se retrouvent aux bords de l'écran ne seront pas dans les fichiers PNG.</Message>
+
     <Message ID="MesenUpToDate">Vous utilisez déjà la version la plus récente de Mesen.</Message>
     <Message ID="PatchAndReset">Appliquer la patch et faire un reset du jeu?</Message>
     <Message ID="SelectRomIps">Choisissez un ROM qui correspond au fichier IPS/UPS/BPS choisi.</Message>
