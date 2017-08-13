@@ -22,6 +22,7 @@ private:
 protected:
 	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
 	virtual uint16_t GetCHRPageSize() override {	return 0x1000; }
+	virtual bool AllowRegisterRead() override { return true; }
 
 	virtual void StreamState(bool saving) override
 	{
@@ -36,8 +37,8 @@ protected:
 		_autoSwitchCHR = false;
 		
 		//"Initial value of this register is 1, initial value of "trigger" is 0."
-		_toggle = false;
-		_registers[4] = 1;
+		_toggle = true;
+		_registers[4] = 0;
 
 		SelectPRGPage(0, 0);
 		SelectCHRPage(0, 0);
@@ -56,6 +57,8 @@ protected:
 					_toggle = !_toggle;
 				}
 				_registers[4] = value;
+			} else if(addr == 0x5100 && value == 6) {
+				SelectPRGPage(0, 3);
 			} else {
 				switch(addr & 0x7300) {
 					case 0x5000:
@@ -83,26 +86,20 @@ protected:
 	}
 
 public:
-	uint8_t ReadRAM(uint16_t addr) override
+	uint8_t ReadRegister(uint16_t addr) override
 	{
-		if(addr >= 0x5000 && addr <= 0x5FFF) {
-			//"Reading: (Address is masked with 0x7700)"
-			switch(addr & 0x7700) {
-				case 0x5100:
-					//"5100 = Returns value of 5300"
-					return _registers[3];
+		//Copy protection stuff - based on FCEUX's implementation
+		switch(addr & 0x7700) {
+			case 0x5100:
+				return _registers[3] | _registers[1] | _registers[0] | _registers[2] ^ 0xFF;
 
-				case 0x5500:
-					//"5500 = If "trigger" is 1, returns value of 5300, otherwise returns 0 "
-					if(_toggle) {
-						return _registers[3];
-					}
-					break;
-			}
-			return 0;
-		} else {
-			return BaseMapper::ReadRAM(addr);
+			case 0x5500:
+				if(_toggle) {
+					return _registers[3] | _registers[0];
+				}
+				return 0;
 		}
+		return 4;
 	}
 
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
