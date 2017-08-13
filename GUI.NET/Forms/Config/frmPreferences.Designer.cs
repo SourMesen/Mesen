@@ -866,13 +866,23 @@ namespace Mesen.GUI.Forms.Config
 			this.nudNsfMoveToNextTrackTime.Location = new System.Drawing.Point(129, 3);
 			this.nudNsfMoveToNextTrackTime.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.nudNsfMoveToNextTrackTime.Maximum = new decimal(new int[] {
-            999,
-            0,
-            0,
-            0});
+				999,
+				0,
+				0,
+				0});
+			this.nudNsfMoveToNextTrackTime.Minimum = new decimal(new int[] {
+				5,
+				0,
+				0,
+				0});
 			this.nudNsfMoveToNextTrackTime.Name = "nudNsfMoveToNextTrackTime";
 			this.nudNsfMoveToNextTrackTime.Size = new System.Drawing.Size(44, 20);
 			this.nudNsfMoveToNextTrackTime.TabIndex = 3;
+			this.nudNsfMoveToNextTrackTime.Value = new decimal(new int[] {
+				5,
+				0,
+				0,
+				0});
 			// 
 			// lblNsfSeconds
 			// 
