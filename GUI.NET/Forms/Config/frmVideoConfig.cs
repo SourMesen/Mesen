@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Forms.Config
 {
@@ -64,6 +65,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("FullscreenForceIntegerScale", chkFullscreenForceIntegerScale);
 
 			AddBinding("UseCustomVsPalette", chkUseCustomVsPalette);
+
+			AddBinding("ShowColorIndexes", chkShowColorIndexes);
 
 			_paletteData = InteropEmu.GetRgbPalette();
 			RefreshPalette();
@@ -120,14 +123,36 @@ namespace Mesen.GUI.Forms.Config
 			GCHandle handle = GCHandle.Alloc(_paletteData, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(16, 4, 16*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap target = new Bitmap(384, 96);
+				Bitmap target = new Bitmap(336, 336);
 
+				Font font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2);
 				using(Graphics g = Graphics.FromImage(target)) {
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-					g.ScaleTransform(22, 22);
+					g.ScaleTransform(42, 42);
 					g.DrawImageUnscaled(source, 0, 0);
+					g.DrawImageUnscaled(source, -8, 4);
+
+					if(chkShowColorIndexes.Checked) {
+						g.ScaleTransform(1f/42, 1f/42);
+						using(Brush bg = new SolidBrush(Color.FromArgb(150, Color.LightGray))) {
+							for(int y = 0; y < 8; y++) {
+								for(int x = 0; x < 8; x++) {
+									int index = y * 16 + x;
+									if(y >= 4) {
+										index = (y - 4) * 16 + x + 8;
+									}
+									for(int i = -1; i <= 1; i++) {
+										for(int j = -1; j <= 1; j++) {
+											g.DrawString(index.ToString("X2"), font, bg, 42*x + 22+j, 42*y + 26+i);
+										}
+									}
+									g.DrawString(index.ToString("X2"), font, Brushes.Black, 42*x + 22, 42*y + 26);
+								}
+							}
+						}
+					}
 				}
 				this.picPalette.Image = target;
 			} finally {
@@ -137,7 +162,10 @@ namespace Mesen.GUI.Forms.Config
 
 		private void picPalette_MouseDown(object sender, MouseEventArgs e)
 		{
-			int offset = (e.X / 22) + (e.Y / 22 * 16);
+			int y = e.Y / 42 < 4 ? e.Y : (e.Y - 168);
+			int x = e.Y / 42 < 4 ? e.X : (e.X + 336);
+
+			int offset = (x / 42) + (y / 42 * 16);
 
 			colorDialog.SolidColorOnly = true;
 			colorDialog.AllowFullOpen = true;
@@ -424,6 +452,11 @@ namespace Mesen.GUI.Forms.Config
 		{
 			//Used in ValueChanged to make field more user-friendly
 			_lastScaleInputNumber = -1;
+		}
+
+		private void chkShowColorIndexes_CheckedChanged(object sender, EventArgs e)
+		{
+			this.RefreshPalette();
 		}
 	}
 }

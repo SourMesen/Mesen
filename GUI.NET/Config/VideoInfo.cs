@@ -51,6 +51,7 @@ namespace Mesen.GUI.Config
 		public bool FullscreenForceIntegerScale = false;
 
 		public bool UseCustomVsPalette = false;
+		public bool ShowColorIndexes = true;
 
 		public List<PaletteInfo> SavedPalettes = new List<PaletteInfo>();
 

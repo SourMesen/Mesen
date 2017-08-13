@@ -35,7 +35,6 @@ namespace Mesen.GUI.Forms.Config
 			this.lblVideoScale = new System.Windows.Forms.Label();
 			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
 			this.lblDisplayRatio = new System.Windows.Forms.Label();
-			this.chkShowFps = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkUseHdPacks = new System.Windows.Forms.CheckBox();
 			this.picHdNesTooltip = new System.Windows.Forms.PictureBox();
@@ -44,6 +43,8 @@ namespace Mesen.GUI.Forms.Config
 			this.cboAspectRatio = new System.Windows.Forms.ComboBox();
 			this.lblCustomRatio = new System.Windows.Forms.Label();
 			this.nudCustomRatio = new System.Windows.Forms.NumericUpDown();
+			this.chkFullscreenForceIntegerScale = new System.Windows.Forms.CheckBox();
+			this.chkShowFps = new System.Windows.Forms.CheckBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgPicture = new System.Windows.Forms.TabPage();
@@ -123,7 +124,7 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkFullscreenForceIntegerScale = new System.Windows.Forms.CheckBox();
+			this.chkShowColorIndexes = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -228,18 +229,6 @@ namespace Mesen.GUI.Forms.Config
 			this.lblDisplayRatio.Size = new System.Drawing.Size(71, 13);
 			this.lblDisplayRatio.TabIndex = 17;
 			this.lblDisplayRatio.Text = "Aspect Ratio:";
-			// 
-			// chkShowFps
-			// 
-			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkShowFps.AutoSize = true;
-			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 124);
-			this.chkShowFps.Name = "chkShowFps";
-			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
-			this.chkShowFps.TabIndex = 9;
-			this.chkShowFps.Text = "Show FPS";
-			this.chkShowFps.UseVisualStyleBackColor = true;
 			// 
 			// flowLayoutPanel7
 			// 
@@ -356,6 +345,30 @@ namespace Mesen.GUI.Forms.Config
             0,
             65536});
 			this.nudCustomRatio.Visible = false;
+			// 
+			// chkFullscreenForceIntegerScale
+			// 
+			this.chkFullscreenForceIntegerScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkFullscreenForceIntegerScale.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkFullscreenForceIntegerScale, 2);
+			this.chkFullscreenForceIntegerScale.Location = new System.Drawing.Point(3, 101);
+			this.chkFullscreenForceIntegerScale.Name = "chkFullscreenForceIntegerScale";
+			this.chkFullscreenForceIntegerScale.Size = new System.Drawing.Size(289, 17);
+			this.chkFullscreenForceIntegerScale.TabIndex = 23;
+			this.chkFullscreenForceIntegerScale.Text = "Use integer scale values when entering fullscreen mode";
+			this.chkFullscreenForceIntegerScale.UseVisualStyleBackColor = true;
+			// 
+			// chkShowFps
+			// 
+			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkShowFps.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 124);
+			this.chkShowFps.Name = "chkShowFps";
+			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
+			this.chkShowFps.TabIndex = 9;
+			this.chkShowFps.Text = "Show FPS";
+			this.chkShowFps.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
@@ -1053,20 +1066,23 @@ namespace Mesen.GUI.Forms.Config
 			this.picPalette.Location = new System.Drawing.Point(1, 1);
 			this.picPalette.Margin = new System.Windows.Forms.Padding(1);
 			this.picPalette.Name = "picPalette";
-			this.picPalette.Size = new System.Drawing.Size(352, 88);
+			this.picPalette.Size = new System.Drawing.Size(338, 338);
 			this.picPalette.TabIndex = 0;
 			this.picPalette.TabStop = false;
 			this.picPalette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
 			// 
 			// tableLayoutPanel2
 			// 
+			this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Controls.Add(this.btnExportPalette, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.btnSelectPalette, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.btnLoadPalFile, 0, 1);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(354, 0);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowColorIndexes, 0, 3);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(340, 0);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 4;
@@ -1074,7 +1090,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(167, 90);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(181, 340);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// btnExportPalette
@@ -1083,7 +1099,7 @@ namespace Mesen.GUI.Forms.Config
 			this.btnExportPalette.Dock = System.Windows.Forms.DockStyle.Top;
 			this.btnExportPalette.Location = new System.Drawing.Point(3, 61);
 			this.btnExportPalette.Name = "btnExportPalette";
-			this.btnExportPalette.Size = new System.Drawing.Size(161, 23);
+			this.btnExportPalette.Size = new System.Drawing.Size(175, 23);
 			this.btnExportPalette.TabIndex = 3;
 			this.btnExportPalette.Text = "Export Palette";
 			this.btnExportPalette.UseVisualStyleBackColor = true;
@@ -1096,7 +1112,7 @@ namespace Mesen.GUI.Forms.Config
 			this.btnSelectPalette.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectPalette.Image")));
 			this.btnSelectPalette.Location = new System.Drawing.Point(3, 3);
 			this.btnSelectPalette.Name = "btnSelectPalette";
-			this.btnSelectPalette.Size = new System.Drawing.Size(161, 23);
+			this.btnSelectPalette.Size = new System.Drawing.Size(175, 23);
 			this.btnSelectPalette.TabIndex = 2;
 			this.btnSelectPalette.Text = "Load Preset Palette...";
 			this.btnSelectPalette.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -1109,7 +1125,7 @@ namespace Mesen.GUI.Forms.Config
 			this.btnLoadPalFile.Dock = System.Windows.Forms.DockStyle.Top;
 			this.btnLoadPalFile.Location = new System.Drawing.Point(3, 32);
 			this.btnLoadPalFile.Name = "btnLoadPalFile";
-			this.btnLoadPalFile.Size = new System.Drawing.Size(161, 23);
+			this.btnLoadPalFile.Size = new System.Drawing.Size(175, 23);
 			this.btnLoadPalFile.TabIndex = 0;
 			this.btnLoadPalFile.Text = "Load Palette File";
 			this.btnLoadPalFile.UseVisualStyleBackColor = true;
@@ -1119,7 +1135,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkUseCustomVsPalette.AutoSize = true;
 			this.tableLayoutPanel3.SetColumnSpan(this.chkUseCustomVsPalette, 2);
-			this.chkUseCustomVsPalette.Location = new System.Drawing.Point(3, 93);
+			this.chkUseCustomVsPalette.Location = new System.Drawing.Point(3, 343);
 			this.chkUseCustomVsPalette.Name = "chkUseCustomVsPalette";
 			this.chkUseCustomVsPalette.Size = new System.Drawing.Size(202, 17);
 			this.chkUseCustomVsPalette.TabIndex = 2;
@@ -1320,17 +1336,16 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
-			// chkFullscreenForceIntegerScale
+			// chkShowColorIndexes
 			// 
-			this.chkFullscreenForceIntegerScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkFullscreenForceIntegerScale.AutoSize = true;
-			this.tlpMain.SetColumnSpan(this.chkFullscreenForceIntegerScale, 2);
-			this.chkFullscreenForceIntegerScale.Location = new System.Drawing.Point(3, 101);
-			this.chkFullscreenForceIntegerScale.Name = "chkFullscreenForceIntegerScale";
-			this.chkFullscreenForceIntegerScale.Size = new System.Drawing.Size(289, 17);
-			this.chkFullscreenForceIntegerScale.TabIndex = 23;
-			this.chkFullscreenForceIntegerScale.Text = "Use integer scale values when entering fullscreen mode";
-			this.chkFullscreenForceIntegerScale.UseVisualStyleBackColor = true;
+			this.chkShowColorIndexes.AutoSize = true;
+			this.chkShowColorIndexes.Location = new System.Drawing.Point(3, 90);
+			this.chkShowColorIndexes.Name = "chkShowColorIndexes";
+			this.chkShowColorIndexes.Size = new System.Drawing.Size(118, 17);
+			this.chkShowColorIndexes.TabIndex = 4;
+			this.chkShowColorIndexes.Text = "Show color indexes";
+			this.chkShowColorIndexes.UseVisualStyleBackColor = true;
+			this.chkShowColorIndexes.CheckedChanged += new System.EventHandler(this.chkShowColorIndexes_CheckedChanged);
 			// 
 			// frmVideoConfig
 			// 
@@ -1498,5 +1513,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.ToolStripMenuItem mnuPaletteCompositeDirect;
 		private System.Windows.Forms.CheckBox chkUseCustomVsPalette;
 		private System.Windows.Forms.CheckBox chkFullscreenForceIntegerScale;
+		private System.Windows.Forms.CheckBox chkShowColorIndexes;
 	}
 }
