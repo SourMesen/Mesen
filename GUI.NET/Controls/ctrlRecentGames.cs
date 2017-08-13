@@ -55,9 +55,6 @@ namespace Mesen.GUI.Controls
 				lblSaveDate.Font = new Font(_fonts.Families[0], 10);
 
 				picPrevGame.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
-				if(!ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen) {
-					Initialize();
-				}
 			}
 		}
 
@@ -66,7 +63,7 @@ namespace Mesen.GUI.Controls
 			get { return base.Visible; }
 			set
 			{
-				if((_initialized && _recentGames.Count == 0) || ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen) {
+				if(value && ((_initialized && _recentGames.Count == 0) || ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen)) {
 					value = false;
 				}
 

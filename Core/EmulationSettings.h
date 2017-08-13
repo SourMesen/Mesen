@@ -323,6 +323,7 @@ enum class Language
 	Spanish = 5,
 	Ukrainian = 6,
 	Portuguese = 7,
+	Catalan = 8
 };
 
 enum class StereoFilter

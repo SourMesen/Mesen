@@ -12,32 +12,10 @@ namespace Mesen.GUI
 {
 	class ResourceManager
 	{
-		private static void ExtractResource(string resourceName, string filename)
-		{
-			if(File.Exists(filename)) {
-				try {
-					File.Delete(filename);
-				} catch { } 
-			}
-			Assembly a = Assembly.GetExecutingAssembly();
-			using(Stream s = a.GetManifestResourceStream(resourceName)) {
-				byte[] buffer = new byte[s.Length];
-				s.Read(buffer, 0, (int)s.Length);
-				try {
-					File.WriteAllBytes(Path.Combine(ConfigManager.HomeFolder, filename), buffer);
-				} catch { }
-			}
-		}
-
 		private static void ExtractFile(ZipArchiveEntry entry, string outputFilename)
 		{
-			if(File.Exists(outputFilename)) {
-				try {
-					File.Delete(outputFilename);
-				} catch { }
-			}
 			try {
-				entry.ExtractToFile(outputFilename);
+				entry.ExtractToFile(outputFilename, true);
 			} catch { }
 		}
 
@@ -55,10 +33,6 @@ namespace Mesen.GUI
 		private static void CleanupOldFiles()
 		{
 			try {
-				if(Directory.Exists(Path.Combine(ConfigManager.HomeFolder, "Resources"))) {
-					Directory.Delete(Path.Combine(ConfigManager.HomeFolder, "Resources"), true);
-				}
-
 				if(Directory.Exists(Path.Combine(ConfigManager.HomeFolder, "WinMesen"))) {
 					Directory.Delete(Path.Combine(ConfigManager.HomeFolder, "WinMesen"), true);
 				}

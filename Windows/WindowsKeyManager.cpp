@@ -238,9 +238,6 @@ WindowsKeyManager::WindowsKeyManager(HWND hWnd)
 		}
 	}
 	
-	_xInput.reset(new XInputManager());
-	_directInput.reset(new DirectInputManager(hWnd));
-
 	StartUpdateDeviceThread();
 }
 
@@ -253,6 +250,9 @@ WindowsKeyManager::~WindowsKeyManager()
 void WindowsKeyManager::StartUpdateDeviceThread()
 {
 	_updateDeviceThread = std::thread([=]() {
+		_xInput.reset(new XInputManager());
+		_directInput.reset(new DirectInputManager(_hWnd));
+
 		while(!_stopUpdateDeviceThread) {
 			//Check for newly plugged in controllers every 5 secs (this takes ~60-70ms when no new controllers are found)
 			if(_xInput->NeedToUpdate()) {
@@ -272,6 +272,10 @@ void WindowsKeyManager::StartUpdateDeviceThread()
 
 void WindowsKeyManager::RefreshState()
 {
+	if(!_xInput || !_directInput) {
+		return;
+	}
+
 	_xInput->RefreshState();
 	_directInput->RefreshState();
 }
@@ -279,6 +283,10 @@ void WindowsKeyManager::RefreshState()
 bool WindowsKeyManager::IsKeyPressed(uint32_t key)
 {
 	if(key >= 0x10000) {
+		if(!_xInput || !_directInput) {
+			return false;
+		}
+
 		if(key >= 0x11000) {
 			//Directinput key
 			uint8_t gamepadPort = (key - 0x11000) / 0x100;
@@ -309,6 +317,10 @@ bool WindowsKeyManager::IsMouseButtonPressed(MouseButton button)
 
 uint32_t WindowsKeyManager::GetPressedKey()
 {
+	if(!_xInput || !_directInput) {
+		return 0;
+	}
+
 	_xInput->RefreshState();
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
 		for(int j = 1; j <= 26; j++) {
@@ -357,6 +369,10 @@ uint32_t WindowsKeyManager::GetKeyCode(string keyName)
 
 void WindowsKeyManager::UpdateDevices()
 {
+	if(!_xInput || !_directInput) {
+		return;
+	}
+
 	Console::Pause();
 	_xInput->UpdateDeviceList();
 	_directInput->UpdateDeviceList();

@@ -286,9 +286,11 @@ namespace Mesen.GUI.Controls
 
 		private void ctrlNsfPlayer_VisibleChanged(object sender, EventArgs e)
 		{
-			this.Repeat = this.Repeat;
-			this.Shuffle = this.Shuffle;
-			btnPause.Focus();
+			if(!this.DesignMode && this.Visible) {
+				this.Repeat = this.Repeat;
+				this.Shuffle = this.Shuffle;
+				btnPause.Focus();
+			}
 		}
 
 		private void btnNext_MouseDown(object sender, MouseEventArgs e)

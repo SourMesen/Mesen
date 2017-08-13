@@ -58,14 +58,6 @@ namespace Mesen.GUI.Forms
 		{
 			InitializeComponent();
 
-			if(ConfigManager.Config.WindowLocation.HasValue) {
-				this.StartPosition = FormStartPosition.Manual;
-				this.Location = ConfigManager.Config.WindowLocation.Value;
-			} else {
-				//First launch
-				this.StartPosition = FormStartPosition.CenterScreen;
-			}
-
 			Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 			lblVersion.Text = currentVersion.ToString();
 
@@ -129,6 +121,9 @@ namespace Mesen.GUI.Forms
 
 		protected override void OnLoad(EventArgs e)
 		{
+			ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
+			ResourceHelper.UpdateEmuLanguage();
+
 			base.OnLoad(e);
 
 			#if HIDETESTMENU
@@ -157,6 +152,14 @@ namespace Mesen.GUI.Forms
 			UpdateRecentFiles();
 
 			UpdateViewerSize();
+			
+			if(ConfigManager.Config.WindowLocation.HasValue) {
+				this.StartPosition = FormStartPosition.Manual;
+				this.Location = ConfigManager.Config.WindowLocation.Value;
+			} else {
+				//First launch
+				this.StartPosition = FormStartPosition.CenterScreen;
+			}
 
 			if(ConfigManager.Config.PreferenceInfo.CloudSaveIntegration) {
 				Task.Run(() => CloudSyncHelper.Sync());
@@ -198,7 +201,10 @@ namespace Mesen.GUI.Forms
 				this.Size = ConfigManager.Config.WindowSize.Value;
 			}
 
-			this.LoadGameFromCommandLine(_commandLineArgs);			
+			this.LoadGameFromCommandLine(_commandLineArgs);
+
+			this.menuStrip.VisibleChanged += new System.EventHandler(this.menuStrip_VisibleChanged);
+			this.UpdateRendererLocation();
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -772,6 +778,11 @@ namespace Mesen.GUI.Forms
 		}
 
 		private void menuStrip_VisibleChanged(object sender, EventArgs e)
+		{
+			this.UpdateRendererLocation();
+		}
+
+		private void UpdateRendererLocation()
 		{
 			if(this.HideMenuStrip) {
 				IntPtr handle = this.Handle;

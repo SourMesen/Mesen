@@ -121,6 +121,7 @@ namespace Mesen.GUI.Forms
 					ResourceHelper.UpdateEmuLanguage();
 					ResourceHelper.ApplyResources(this);
 					UpdateMenus();
+					UpdateRecentFiles();
 					InitializeFdsDiskMenu();
 					InitializeNsfMode(true);
 					ctrlRecentGames.UpdateGameInfo();

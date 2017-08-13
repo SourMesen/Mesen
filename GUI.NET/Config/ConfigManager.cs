@@ -73,18 +73,23 @@ namespace Mesen.GUI.Config
 
 			LoadConfig();
 		}
-
+		
+		private static object _initLock = new object();
 		private static void LoadConfig()
 		{
 			if(_config == null) {
-				if(File.Exists(ConfigFile)) {
-					_config = Configuration.Deserialize(ConfigFile);
-					_dirtyConfig = Configuration.Deserialize(ConfigFile);
-				} else {
-					//Create new config file and save it to disk
-					_config = new Configuration();
-					_dirtyConfig = new Configuration();
-					_config.Save();
+				lock(_initLock) {
+					if(_config == null) {
+						if(File.Exists(ConfigFile)) {
+							_config = Configuration.Deserialize(ConfigFile);
+							_dirtyConfig = Configuration.Deserialize(ConfigFile);
+						} else {
+							//Create new config file and save it to disk
+							_config = new Configuration();
+							_dirtyConfig = new Configuration();
+							_config.Save();
+						}
+					}
 				}
 			}
 		}
@@ -229,12 +234,17 @@ namespace Mesen.GUI.Config
 			}
 		}
 
+		private static DateTime _lastSaveTime = DateTime.MinValue;
 		public static void ApplyChanges()
 		{
 			_config.NeedToSave = false;
 			_config = _dirtyConfig.Clone();
 			_config.NeedToSave = true;
-			_config.Save();
+
+			if((DateTime.Now - _lastSaveTime).Seconds > 1) {
+				ConfigManager.SaveConfig();
+				_lastSaveTime = DateTime.Now;
+			}
 		}
 
 		public static void RejectChanges()

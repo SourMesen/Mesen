@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 
@@ -61,6 +62,12 @@ namespace Mesen.GUI
 		private static void Main(string[] args)
 		{
 			try {
+				Task.Run(() => {
+					//Cache deserializers in another thread
+					XmlSerializer xmlSerializer = new XmlSerializer(typeof(Configuration));
+					xmlSerializer = new XmlSerializer(typeof(DebugWorkspace));
+				});
+
 				if(Type.GetType("Mono.Runtime") != null) {
 					Program.IsMono = true;
 				}
@@ -90,7 +97,6 @@ namespace Mesen.GUI
 				Directory.CreateDirectory(ConfigManager.HomeFolder);
 				Directory.SetCurrentDirectory(ConfigManager.HomeFolder);
 				try {
-					ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
 					if(!ResourceManager.ExtractResources()) { 
 						return;
 					}
@@ -123,21 +129,17 @@ namespace Mesen.GUI
 					return;
 				}
 
-				ResourceHelper.UpdateEmuLanguage();
-
 				using(SingleInstance singleInstance = new SingleInstance()) {
-					if(singleInstance.FirstInstance || !Config.ConfigManager.Config.PreferenceInfo.SingleInstance) {
+					if(singleInstance.FirstInstance || !ConfigManager.Config.PreferenceInfo.SingleInstance) {
 						frmMain frmMain = new frmMain(args);
 
-						if(Config.ConfigManager.Config.PreferenceInfo.SingleInstance) {
-							singleInstance.ListenForArgumentsFromSuccessiveInstances();
-							singleInstance.ArgumentsReceived += (object sender, ArgumentsReceivedEventArgs e) => {
-								frmMain.BeginInvoke((MethodInvoker)(() => {
-									frmMain.ProcessCommandLineArguments(e.Args, false);
-									frmMain.LoadGameFromCommandLine(e.Args);
-								}));
-							};
-						}
+						singleInstance.ListenForArgumentsFromSuccessiveInstances();
+						singleInstance.ArgumentsReceived += (object sender, ArgumentsReceivedEventArgs e) => {
+							frmMain.BeginInvoke((MethodInvoker)(() => {
+								frmMain.ProcessCommandLineArguments(e.Args, false);
+								frmMain.LoadGameFromCommandLine(e.Args);
+							}));
+						};
 
 						Application.Run(frmMain);
 					} else {
