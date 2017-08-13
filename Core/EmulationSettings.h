@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "MessageManager.h"
 #include "GameClient.h"
+#include "../Utilities/SimpleLock.h"
 
 enum EmulationFlags : uint64_t
 {
@@ -438,6 +439,8 @@ private:
 	static EmulatorKeyMappingSet _emulatorKeys;
 
 	static RamPowerOnState _ramPowerOnState;
+	
+	static SimpleLock _lock;
 
 public:
 	static uint32_t GetMesenVersion()
@@ -452,35 +455,40 @@ public:
 
 	static void SetFlags(uint64_t flags)
 	{
-		_flags |= flags;
+		if((_flags & flags) != flags) {
+			//Need a lock to prevent flag changes from being ignored due to multithreaded access
+			LockHandler lock = _lock.AcquireSafe();
+			_flags |= flags;
 
-		_backgroundEnabled = !CheckFlag(EmulationFlags::DisableBackground);
-		_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
-		if(flags & EmulationFlags::UseCustomVsPalette) {
-			UpdateCurrentPalette();
+			_backgroundEnabled = !CheckFlag(EmulationFlags::DisableBackground);
+			_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
+			if(flags & EmulationFlags::UseCustomVsPalette) {
+				UpdateCurrentPalette();
+			}
 		}
 	}
 
 	static void SetFlagState(EmulationFlags flag, bool enabled)
 	{
 		if(enabled) {
-			_flags |= flag;
+			SetFlags(flag);
 		} else {
-			_flags &= ~flag;
+			ClearFlags(flag);
 		}
-		
-		_backgroundEnabled = !CheckFlag(EmulationFlags::DisableBackground);
-		_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
 	}
 
 	static void ClearFlags(uint64_t flags)
 	{
-		_flags &= ~flags;
+		if((_flags & flags) != 0) {
+			//Need a lock to prevent flag changes from being ignored due to multithreaded access
+			LockHandler lock = _lock.AcquireSafe();
+			_flags &= ~flags;
 
-		_backgroundEnabled = !CheckFlag(EmulationFlags::DisableBackground);
-		_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
-		if(flags & EmulationFlags::UseCustomVsPalette) {
-			UpdateCurrentPalette();
+			_backgroundEnabled = !CheckFlag(EmulationFlags::DisableBackground);
+			_spritesEnabled = !CheckFlag(EmulationFlags::DisableSprites);
+			if(flags & EmulationFlags::UseCustomVsPalette) {
+				UpdateCurrentPalette();
+			}
 		}
 	}
 

@@ -11,6 +11,7 @@ uint8_t EmulationSettings::_versionRevision = 1;
 
 Language EmulationSettings::_displayLanguage = Language::English;
 
+SimpleLock EmulationSettings::_lock;
 uint64_t EmulationSettings::_flags = 0;
 
 bool EmulationSettings::_audioSettingsChanged = true;
