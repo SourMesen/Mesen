@@ -488,6 +488,75 @@ std::unordered_map<string, string> MessageManager::_ptResources = {
 	{ "SynchronizationCompleted", u8"Sincronização completada." },
 };
 
+std::unordered_map<string, string> MessageManager::_caResources = {
+	{ "Cheats", u8"Trucs" },
+	{ "Debug", u8"Depuració" },
+	{ "EmulationSpeed", u8"Velocitat de l'emulació" },
+	{ "ClockRate", u8"Freqüència de rellotge" },
+	{ "Error", u8"Error" },
+	{ "GameInfo", u8"Informació del joc" },
+	{ "GameLoaded", u8"Joc carregat" },
+	{ "Patch", u8"Pedaç" },
+	{ "Movies", u8"Pel·lícules" },
+	{ "NetPlay", u8"Joc en línia" },
+	{ "Region", u8"Regió" },
+	{ "SaveStates", u8"Partides guardades" },
+	{ "ScreenshotSaved", u8"Captura de pantalla" },
+	{ "SoundRecorder", u8"Enregistrador de so" },
+	{ "Test", u8"Prova" },
+	{ "VideoRecorder", u8"Enregistrador de vídeo" },
+
+	{ "ApplyingPatch", u8"Aplicant pedaç: %1" },
+	{ "CheatApplied", u8"1 truc activat." },
+	{ "CheatsApplied", u8"%1 trucs activats." },
+	{ "CheatsDisabled", u8"Tots els trucs han estat desactivats." },
+	{ "ConnectedToServer", u8"Connectat al servidor." },
+	{ "ConnectedAsPlayer", u8"Connectat com a %1" },
+	{ "ConnectedAsSpectator", u8"Connectat com a espectador." },
+	{ "ConnectionLost", u8"S'ha perdut la connexió amb el servidor." },
+	{ "CouldNotConnect", u8"No s'ha pogut connectar amb el servidor." },
+	{ "CouldNotIniitalizeAudioSystem", u8"No s'ha pogut inicialitzar el sistema de so" },
+	{ "CouldNotFindRom", u8"Incapaç de trobar una ROM corresponent." },
+	{ "CouldNotLoadFile", u8"Incapaç de carregar el fitxer: %1" },
+	{ "EmulationMaximumSpeed", u8"Velocitat màxima" },
+	{ "EmulationSpeedPercent", u8"%1%" },
+	{ "Frame", u8"Fotograma" },
+	{ "GameCrash", u8"El joc ha fallat (%1)" },
+	{ "Lag", u8"Retard" },
+	{ "Mapper", u8"Mapat: %1, SubMapat: %2" },
+	{ "MovieEnded", u8"Final de pel·lícula." },
+	{ "MovieInvalid", u8"Fitxer de pel·lícula invàlid." },
+	{ "MovieMissingRom", u8"No s'ha trobat la ROM necessària (%1) per reproduir la pel·lícula." },
+	{ "MovieNewerVersion", u8"Incapaç de reproduir pel·lícules creades per una versió més recent de Mesen. Si us plau, descarregueu-vos la darrera versió de Mesen." },
+	{ "MovieIncompatibleVersion", u8"Aquesta pel·lícula és incompatible amb aquesta versió de Mesen." },
+	{ "MoviePlaying", u8"Reproduint pel·lícula: %1" },
+	{ "MovieRecordingTo", u8"Enregistrament en curs: %1" },
+	{ "MovieSaved", u8"Pel·lícula desada: %1" },
+	{ "NetplayVersionMismatch", u8"%1 no fa servir la vostra mateixa versió de Mesen i ha estat desconnectat automàticament." },
+	{ "PrgSizeWarning", u8"La mida del PRG és més petit que 32kb" },
+	{ "SaveStateEmpty", u8"Aquesta partida guardada és buida." },
+	{ "SaveStateIncompatibleVersion", u8"La partida guardada nº%1 és incompatible amb aquesta versió de Mesen." },
+	{ "SaveStateInvalidFile", u8"Fitxer de partida guardada invàlid." },
+	{ "SaveStateLoaded", u8"Partida guardada nº%1 carregada." },
+	{ "SaveStateNewerVersion", u8"Incapaç de carregar partides guardades creades per una versió més recent de Mesen. Si us plau, descarregueu-vos la darrera versió de Mesen." },
+	{ "SaveStateSaved", u8"Partida guardada nº%1 desada." },
+	{ "SaveStateSlotSelected", u8"Partida guardada nº%1 seleccionada." },
+	{ "ScanlineTimingWarning", u8"La sincronització de la PPU ha estat modificada." },
+	{ "ServerStarted", u8"El servidor s'ha iniciat (Port: %1)" },
+	{ "ServerStopped", u8"El servidor s'ha aturat" },
+	{ "SoundRecorderStarted", u8"Enregistrament en curs: %1" },
+	{ "SoundRecorderStopped", u8"Enregistrament de so desat: %1" },
+	{ "TestFileSavedTo", u8"Prova desada: %1" },
+	{ "UnsupportedMapper", u8"El mapat (%1) encara no està suportat - el joc no es pot iniciar." },
+	{ "VideoRecorderStarted", u8"Enregistrament en curs: %1" },
+	{ "VideoRecorderStopped", u8"Enregistrament de vídeo desat: %1" },
+
+	{ "GoogleDrive", u8"Google Drive" },
+	{ "SynchronizationStarted", u8"Sincronització en curs." },
+	{ "SynchronizationFailed", u8"La sincronització ha fallat." },
+	{ "SynchronizationCompleted", u8"Sincronització finalitzada." },
+};
+
 std::list<string> MessageManager::_log;
 SimpleLock MessageManager::_logLock;
 IMessageManager* MessageManager::_messageManager = nullptr;
@@ -509,6 +578,7 @@ string MessageManager::Localize(string key)
 		case Language::Spanish: resources = &_esResources; break;
 		case Language::Ukrainian: resources = &_ukResources; break;
 		case Language::Portuguese: resources = &_ptResources; break;
+		case Language::Catalan: resources = &_caResources; break;
 	}
 	if(resources) {
 		if(resources->find(key) != resources->end()) {

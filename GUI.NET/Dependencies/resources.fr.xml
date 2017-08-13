@@ -804,6 +804,7 @@
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
       <Value ID="Ukrainian">Українська</Value>
+      <Value ID="Catalan">Català</Value>
     </Enum>
     <Enum ID="RamPowerOnState">
       <Value ID="AllZeros">Tous les bits à 0 (Défaut)</Value>
