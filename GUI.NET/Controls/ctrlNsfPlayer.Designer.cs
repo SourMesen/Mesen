@@ -29,9 +29,6 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.btnPrevious = new System.Windows.Forms.Button();
-			this.btnPause = new System.Windows.Forms.Button();
-			this.btnNext = new System.Windows.Forms.Button();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblCopyrightValue = new System.Windows.Forms.Label();
 			this.lblArtistValue = new System.Windows.Forms.Label();
@@ -47,7 +44,6 @@
 			this.lblVrc6 = new System.Windows.Forms.Label();
 			this.lblVrc7 = new System.Windows.Forms.Label();
 			this.lblSoundChips = new System.Windows.Forms.Label();
-			this.picBackground = new System.Windows.Forms.PictureBox();
 			this.trkVolume = new System.Windows.Forms.TrackBar();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.cboTrack = new System.Windows.Forms.ComboBox();
@@ -60,21 +56,31 @@
 			this.lblFastForward = new System.Windows.Forms.Label();
 			this.lblFastForwardIcon = new System.Windows.Forms.Label();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.lblSlowMotion = new System.Windows.Forms.Label();
 			this.lblSlowMotionIcon = new System.Windows.Forms.Label();
+			this.panel2 = new System.Windows.Forms.Panel();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.picRepeat = new System.Windows.Forms.PictureBox();
+			this.picShuffle = new System.Windows.Forms.PictureBox();
+			this.btnPrevious = new System.Windows.Forms.Button();
+			this.btnPause = new System.Windows.Forms.Button();
+			this.btnNext = new System.Windows.Forms.Button();
+			this.picBackground = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picBackground)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
-			this.panel1.SuspendLayout();
-			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
+			this.panel2.SuspendLayout();
+			this.panel1.SuspendLayout();
+			this.tableLayoutPanel5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picRepeat)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picShuffle)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picBackground)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -101,46 +107,9 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(371, 281);
 			this.tableLayoutPanel1.TabIndex = 0;
-			// 
-			// btnPrevious
-			// 
-			this.btnPrevious.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.btnPrevious.BackColor = System.Drawing.SystemColors.Control;
-			this.btnPrevious.Image = global::Mesen.GUI.Properties.Resources.PrevTrack;
-			this.btnPrevious.Location = new System.Drawing.Point(126, 220);
-			this.btnPrevious.Name = "btnPrevious";
-			this.btnPrevious.Size = new System.Drawing.Size(33, 25);
-			this.btnPrevious.TabIndex = 1;
-			this.btnPrevious.UseVisualStyleBackColor = true;
-			this.btnPrevious.Click += new System.EventHandler(this.btnPrevious_Click);
-			// 
-			// btnPause
-			// 
-			this.btnPause.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.btnPause.BackColor = System.Drawing.SystemColors.Control;
-			this.btnPause.Image = global::Mesen.GUI.Properties.Resources.Pause;
-			this.btnPause.Location = new System.Drawing.Point(165, 216);
-			this.btnPause.Name = "btnPause";
-			this.btnPause.Size = new System.Drawing.Size(40, 33);
-			this.btnPause.TabIndex = 0;
-			this.btnPause.UseVisualStyleBackColor = true;
-			this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
-			// 
-			// btnNext
-			// 
-			this.btnNext.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.btnNext.BackColor = System.Drawing.SystemColors.Control;
-			this.btnNext.Image = global::Mesen.GUI.Properties.Resources.NextTrack;
-			this.btnNext.Location = new System.Drawing.Point(211, 220);
-			this.btnNext.Name = "btnNext";
-			this.btnNext.Size = new System.Drawing.Size(33, 25);
-			this.btnNext.TabIndex = 2;
-			this.btnNext.UseVisualStyleBackColor = true;
-			this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
-			this.btnNext.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnNext_MouseDown);
-			this.btnNext.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnNext_MouseUp);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -352,21 +321,6 @@
 			this.lblSoundChips.TabIndex = 7;
 			this.lblSoundChips.Text = "Sound Chips:";
 			// 
-			// picBackground
-			// 
-			this.picBackground.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.picBackground.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.tableLayoutPanel1.SetColumnSpan(this.picBackground, 5);
-			this.picBackground.Image = global::Mesen.GUI.Properties.Resources.NsfBackground;
-			this.picBackground.Location = new System.Drawing.Point(66, 13);
-			this.picBackground.Margin = new System.Windows.Forms.Padding(10);
-			this.picBackground.MaximumSize = new System.Drawing.Size(334, 380);
-			this.picBackground.Name = "picBackground";
-			this.picBackground.Size = new System.Drawing.Size(238, 95);
-			this.picBackground.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.picBackground.TabIndex = 5;
-			this.picBackground.TabStop = false;
-			// 
 			// trkVolume
 			// 
 			this.trkVolume.Location = new System.Drawing.Point(257, 210);
@@ -501,7 +455,7 @@
 			this.tableLayoutPanel4.Controls.Add(this.panel2, 0, 0);
 			this.tableLayoutPanel4.Controls.Add(this.panel1, 0, 1);
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(5, 5);
-			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 4;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -510,30 +464,6 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(121, 60);
 			this.tableLayoutPanel4.TabIndex = 13;
-			// 
-			// panel1
-			// 
-			this.panel1.AutoSize = true;
-			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.panel1.Controls.Add(this.lblFastForward);
-			this.panel1.Controls.Add(this.lblFastForwardIcon);
-			this.panel1.Location = new System.Drawing.Point(0, 18);
-			this.panel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(82, 18);
-			this.panel1.TabIndex = 0;
-			// 
-			// panel2
-			// 
-			this.panel2.AutoSize = true;
-			this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.panel2.Controls.Add(this.lblRecordingDot);
-			this.panel2.Controls.Add(this.lblRecording);
-			this.panel2.Location = new System.Drawing.Point(0, 0);
-			this.panel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(44, 18);
-			this.panel2.TabIndex = 1;
 			// 
 			// panel3
 			// 
@@ -570,11 +500,129 @@
 			this.lblSlowMotionIcon.TabIndex = 12;
 			this.lblSlowMotionIcon.Text = "«";
 			// 
+			// panel2
+			// 
+			this.panel2.AutoSize = true;
+			this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panel2.Controls.Add(this.lblRecordingDot);
+			this.panel2.Controls.Add(this.lblRecording);
+			this.panel2.Location = new System.Drawing.Point(0, 0);
+			this.panel2.Margin = new System.Windows.Forms.Padding(0);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(44, 18);
+			this.panel2.TabIndex = 1;
+			// 
+			// panel1
+			// 
+			this.panel1.AutoSize = true;
+			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panel1.Controls.Add(this.lblFastForward);
+			this.panel1.Controls.Add(this.lblFastForwardIcon);
+			this.panel1.Location = new System.Drawing.Point(0, 18);
+			this.panel1.Margin = new System.Windows.Forms.Padding(0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(82, 18);
+			this.panel1.TabIndex = 0;
+			// 
+			// tableLayoutPanel5
+			// 
+			this.tableLayoutPanel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanel5.ColumnCount = 1;
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel5.Controls.Add(this.picRepeat, 0, 1);
+			this.tableLayoutPanel5.Controls.Add(this.picShuffle, 0, 0);
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(336, 8);
+			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+			this.tableLayoutPanel5.RowCount = 3;
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(30, 60);
+			this.tableLayoutPanel5.TabIndex = 14;
+			// 
+			// picRepeat
+			// 
+			this.picRepeat.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picRepeat.Image = global::Mesen.GUI.Properties.Resources.Repeat;
+			this.picRepeat.Location = new System.Drawing.Point(3, 33);
+			this.picRepeat.Name = "picRepeat";
+			this.picRepeat.Size = new System.Drawing.Size(24, 24);
+			this.picRepeat.TabIndex = 4;
+			this.picRepeat.TabStop = false;
+			this.picRepeat.Click += new System.EventHandler(this.picRepeat_Click);
+			// 
+			// picShuffle
+			// 
+			this.picShuffle.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picShuffle.Image = global::Mesen.GUI.Properties.Resources.Shuffle;
+			this.picShuffle.Location = new System.Drawing.Point(3, 3);
+			this.picShuffle.Name = "picShuffle";
+			this.picShuffle.Size = new System.Drawing.Size(24, 24);
+			this.picShuffle.TabIndex = 3;
+			this.picShuffle.TabStop = false;
+			this.picShuffle.Click += new System.EventHandler(this.picShuffle_Click);
+			// 
+			// btnPrevious
+			// 
+			this.btnPrevious.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.btnPrevious.BackColor = System.Drawing.SystemColors.Control;
+			this.btnPrevious.Image = global::Mesen.GUI.Properties.Resources.PrevTrack;
+			this.btnPrevious.Location = new System.Drawing.Point(126, 220);
+			this.btnPrevious.Name = "btnPrevious";
+			this.btnPrevious.Size = new System.Drawing.Size(33, 25);
+			this.btnPrevious.TabIndex = 1;
+			this.btnPrevious.UseVisualStyleBackColor = true;
+			this.btnPrevious.Click += new System.EventHandler(this.btnPrevious_Click);
+			// 
+			// btnPause
+			// 
+			this.btnPause.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.btnPause.BackColor = System.Drawing.SystemColors.Control;
+			this.btnPause.Image = global::Mesen.GUI.Properties.Resources.Pause;
+			this.btnPause.Location = new System.Drawing.Point(165, 216);
+			this.btnPause.Name = "btnPause";
+			this.btnPause.Size = new System.Drawing.Size(40, 33);
+			this.btnPause.TabIndex = 0;
+			this.btnPause.UseVisualStyleBackColor = true;
+			this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
+			// 
+			// btnNext
+			// 
+			this.btnNext.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.btnNext.BackColor = System.Drawing.SystemColors.Control;
+			this.btnNext.Image = global::Mesen.GUI.Properties.Resources.NextTrack;
+			this.btnNext.Location = new System.Drawing.Point(211, 220);
+			this.btnNext.Name = "btnNext";
+			this.btnNext.Size = new System.Drawing.Size(33, 25);
+			this.btnNext.TabIndex = 2;
+			this.btnNext.UseVisualStyleBackColor = true;
+			this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+			this.btnNext.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnNext_MouseDown);
+			this.btnNext.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnNext_MouseUp);
+			// 
+			// picBackground
+			// 
+			this.picBackground.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.picBackground.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.tableLayoutPanel1.SetColumnSpan(this.picBackground, 5);
+			this.picBackground.Image = global::Mesen.GUI.Properties.Resources.NsfBackground;
+			this.picBackground.Location = new System.Drawing.Point(66, 13);
+			this.picBackground.Margin = new System.Windows.Forms.Padding(10);
+			this.picBackground.MaximumSize = new System.Drawing.Size(334, 380);
+			this.picBackground.Name = "picBackground";
+			this.picBackground.Size = new System.Drawing.Size(238, 95);
+			this.picBackground.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.picBackground.TabIndex = 5;
+			this.picBackground.TabStop = false;
+			// 
 			// ctrlNsfPlayer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
+			this.Controls.Add(this.tableLayoutPanel5);
 			this.Controls.Add(this.tableLayoutPanel4);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "ctrlNsfPlayer";
@@ -586,18 +634,21 @@
 			this.tableLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picBackground)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
-			this.panel2.ResumeLayout(false);
-			this.panel2.PerformLayout();
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
+			this.panel2.ResumeLayout(false);
+			this.panel2.PerformLayout();
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
+			this.tableLayoutPanel5.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picRepeat)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picShuffle)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picBackground)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -641,5 +692,8 @@
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Label lblSlowMotion;
 		private System.Windows.Forms.Label lblSlowMotionIcon;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+		private System.Windows.Forms.PictureBox picShuffle;
+		private System.Windows.Forms.PictureBox picRepeat;
 	}
 }

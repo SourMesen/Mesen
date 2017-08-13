@@ -737,6 +737,11 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\ShuffleEnabled.png" />
+    <None Include="Resources\RepeatEnabled.png" />
+    <None Include="Resources\Repeat.png" />
+    <None Include="Resources\Shuffle1.png" />
+    <None Include="Resources\Shuffle.png" />
     <None Include="Resources\WasdKeys.png" />
     <None Include="Resources\wasd.png" />
     <None Include="Resources\PsIcon.png" />

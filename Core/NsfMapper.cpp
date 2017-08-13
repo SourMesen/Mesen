@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <random>
 #include "NsfMapper.h"
 #include "CPU.h"
 #include "Console.h"
@@ -198,11 +199,25 @@ void NsfMapper::ClockLengthAndFadeCounters()
 		}
 
 		if(_trackFadeCounter <= 0) {
-			_songNumber = (_songNumber + 1) % _nsfHeader.TotalSongs;
-			InternalSelectTrack(_songNumber);
-			_trackEnded = false;
+			SelectNextTrack();
 		}
 	}
+}
+
+void NsfMapper::SelectNextTrack()
+{
+	if(!EmulationSettings::CheckFlag(EmulationFlags::NsfRepeat)) {
+		if(EmulationSettings::CheckFlag(EmulationFlags::NsfShuffle)) {
+			std::random_device rd;
+			std::mt19937 mt(rd());
+			std::uniform_int_distribution<> dist(0, _nsfHeader.TotalSongs - 1);
+			_songNumber = dist(mt);
+		} else {
+			_songNumber = (_songNumber + 1) % _nsfHeader.TotalSongs;
+		}
+	}
+	InternalSelectTrack(_songNumber);
+	_trackEnded = false;
 }
 
 void NsfMapper::ProcessCpuClock()

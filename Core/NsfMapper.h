@@ -96,6 +96,7 @@ private:
 
 	void InternalSelectTrack(uint8_t trackNumber, bool requestReset = true);
 	void ClockLengthAndFadeCounters();
+	void SelectNextTrack();
 
 protected:
 	uint16_t GetPRGPageSize() override { return 0x1000; }

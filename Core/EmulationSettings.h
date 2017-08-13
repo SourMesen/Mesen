@@ -67,7 +67,10 @@ enum EmulationFlags : uint64_t
 	DisableGameSelectionScreen = 0x200000000000,
 
 	ConfirmExitResetPower = 0x400000000000,
-	
+
+	NsfRepeat = 0x800000000000,
+	NsfShuffle = 0x1000000000000,
+
 	ForceMaxSpeed = 0x4000000000000000,	
 	ConsoleMode = 0x8000000000000000,
 };

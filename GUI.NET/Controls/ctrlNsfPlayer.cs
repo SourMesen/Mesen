@@ -31,6 +31,40 @@ namespace Mesen.GUI.Controls
 			this.trkVolume.KeyUp += Child_KeyUp;
 		}
 
+		private bool Repeat
+		{
+			get
+			{
+				bool repeat = ConfigManager.Config.PreferenceInfo.NsfRepeat;
+				picRepeat.Image = repeat ? Properties.Resources.RepeatEnabled : Properties.Resources.Repeat;
+				return repeat;
+			}
+			set
+			{
+				ConfigManager.Config.PreferenceInfo.NsfRepeat = value;
+				ConfigManager.ApplyChanges();
+				ConfigManager.Config.ApplyConfig();
+				picRepeat.Image = value ? Properties.Resources.RepeatEnabled : Properties.Resources.Repeat;
+			}
+		}
+
+		private bool Shuffle
+		{
+			get
+			{
+				bool shuffle = ConfigManager.Config.PreferenceInfo.NsfShuffle;
+				picShuffle.Image = shuffle ? Properties.Resources.ShuffleEnabled : Properties.Resources.Shuffle;
+				return shuffle;
+			}
+			set
+			{
+				ConfigManager.Config.PreferenceInfo.NsfShuffle = value;
+				ConfigManager.ApplyChanges();
+				ConfigManager.Config.ApplyConfig();
+				picShuffle.Image = value ? Properties.Resources.ShuffleEnabled : Properties.Resources.Shuffle;
+			}
+		}
+
 		private void Child_KeyUp(object sender, KeyEventArgs e)
 		{
 			if((e.KeyCode == Keys.Right || e.KeyCode == Keys.Control) && _fastForwarding) {
@@ -182,10 +216,14 @@ namespace Mesen.GUI.Controls
 		private void btnNext_Click(object sender, EventArgs e)
 		{
 			if(!_fastForwarding) {
-				int soundCount = InteropEmu.NsfGetHeader().TotalSongs;
-				int currentTrack = InteropEmu.NsfGetCurrentTrack();
-				currentTrack = (currentTrack + 1) % soundCount;
-				InteropEmu.NsfSelectTrack((byte)currentTrack);
+				int trackCount = InteropEmu.NsfGetHeader().TotalSongs;
+				int newTrack = 0;
+				if(this.Shuffle) {
+					newTrack = new Random().Next() % trackCount;
+				} else {
+					newTrack = (InteropEmu.NsfGetCurrentTrack() + 1) % trackCount;
+				}
+				InteropEmu.NsfSelectTrack((byte)newTrack);
 				_frameCount = 0;
 			}
 		}
@@ -248,6 +286,8 @@ namespace Mesen.GUI.Controls
 
 		private void ctrlNsfPlayer_VisibleChanged(object sender, EventArgs e)
 		{
+			this.Repeat = this.Repeat;
+			this.Shuffle = this.Shuffle;
 			btnPause.Focus();
 		}
 
@@ -330,6 +370,16 @@ namespace Mesen.GUI.Controls
 				InteropEmu.NsfSelectTrack((byte)cboTrack.SelectedIndex);
 				_frameCount = 0;
 			}
+		}
+
+		private void picRepeat_Click(object sender, EventArgs e)
+		{
+			this.Repeat = !this.Repeat;
+		}
+
+		private void picShuffle_Click(object sender, EventArgs e)
+		{
+			this.Shuffle = !this.Shuffle;
 		}
 	}
 
