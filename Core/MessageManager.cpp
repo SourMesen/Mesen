@@ -523,7 +523,7 @@ std::unordered_map<string, string> MessageManager::_caResources = {
 	{ "Frame", u8"Fotograma" },
 	{ "GameCrash", u8"El joc ha fallat (%1)" },
 	{ "Lag", u8"Retard" },
-	{ "Mapper", u8"Mapper: %1, SubMapper: %2" },
+	{ "Mapper", u8"Mapat: %1, SubMapat: %2" },
 	{ "MovieEnded", u8"Final de pel·lícula." },
 	{ "MovieInvalid", u8"Fitxer de pel·lícula invàlid." },
 	{ "MovieMissingRom", u8"No s'ha trobat la ROM necessària (%1) per reproduir la pel·lícula." },
