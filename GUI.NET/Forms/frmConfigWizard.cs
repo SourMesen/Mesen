@@ -47,7 +47,6 @@ namespace Mesen.GUI.Forms
 			}
 
 			ConfigManager.Config.InputInfo.DefaultMapping = mappingType;
-			ConfigManager.Config.InitializeDefaults();
 			ConfigManager.ApplyChanges();
 			ConfigManager.SaveConfig();
 
