@@ -1294,6 +1294,8 @@ namespace Mesen.GUI
 			return output;
 		}
 
+		public bool HasSongName { get { return this.GetSongName() != ResourceHelper.GetMessage("NsfUnknownField"); } }
+
 		public string GetSongName()
 		{
 			return ConvertString(this.SongName);

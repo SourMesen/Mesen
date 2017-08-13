@@ -815,7 +815,11 @@ namespace Mesen.GUI.Forms
 					this.ctrlNsfPlayer.Visible = true;					
 					this.ctrlNsfPlayer.Focus();
 
-					_currentGame = InteropEmu.NsfGetHeader().GetSongName();
+
+					NsfHeader header = InteropEmu.NsfGetHeader();
+					if(header.HasSongName) {
+						_currentGame = header.GetSongName();
+					}
 				} else if(this._isNsfPlayerMode) {
 					this.MinimumSize = new Size(340, 280);
 					this.Size = this._nonNsfSize.Value;
