@@ -806,6 +806,7 @@
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
       <Value ID="Ukrainian">Українська</Value>
+      <Value ID="Catalan">Català</Value>
     </Enum>
     <Enum ID="VideoCodec">
       <Value ID="None">None (Uncompressed)</Value>
