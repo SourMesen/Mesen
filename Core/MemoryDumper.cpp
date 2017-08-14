@@ -250,6 +250,11 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 		int bank = bankIndex - 2;
 		uint32_t baseAddr = bank * 0x1000;
 		uint32_t chrSize = _mapper->GetMemorySize(isChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom);
+		if(baseAddr + 0xFFF >= chrSize) {
+			//Out of range, return to prevent crash
+			return;
+		} 
+
 		vector<uint8_t> chrData(chrSize, 0);
 		_mapper->CopyMemory(isChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom, chrData.data());
 

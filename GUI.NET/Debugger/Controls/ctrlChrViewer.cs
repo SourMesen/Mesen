@@ -145,6 +145,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				this.cboChrSelection.SelectedIndex = this.cboChrSelection.Items.Count > index && index >= 0 ? index : 0;
+				this._chrSelection = this.cboChrSelection.SelectedIndex;
 			}
 		}
 
@@ -432,9 +433,15 @@ namespace Mesen.GUI.Debugger.Controls
 
 			int tileIndex = GetLargeSpriteIndex(_tileIndex);
 
+			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
 			StringBuilder sb = new StringBuilder();
-			for(int i = 0; i < 16; i++) {
-				sb.Append(InteropEmu.DebugGetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + i)).ToString("X2"));
+			if(isChrRam) {
+				for(int i = 0; i < 16; i++) {
+					sb.Append(InteropEmu.DebugGetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + i)).ToString("X2"));
+				}
+			} else {
+				int absoluteTileIndex = ppuMemory ? InteropEmu.DebugGetAbsoluteChrAddress((uint)(baseAddress+tileIndex*16))/16 : (baseAddress / 16 + tileIndex);
+				sb.Append(absoluteTileIndex.ToString());
 			}
 			sb.Append(",");
 			for(int i = 0; i < 4; i++) {

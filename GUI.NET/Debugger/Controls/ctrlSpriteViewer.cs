@@ -195,9 +195,15 @@ namespace Mesen.GUI.Debugger.Controls
 				tileAddr = _spritePatternAddr + (tileIndex << 4);
 			}
 
+			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
 			StringBuilder sb = new StringBuilder();
-			for(int i = 0; i < 16; i++) {
-				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PpuMemory, (UInt32)(tileAddr + i)).ToString("X2"));
+			if(isChrRam) {
+				for(int i = 0; i < 16; i++) {
+					sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PpuMemory, (UInt32)(tileAddr + i)).ToString("X2"));
+				}
+			} else {
+				int absoluteTileIndex = InteropEmu.DebugGetAbsoluteChrAddress((uint)tileAddr)/16;
+				sb.Append(absoluteTileIndex.ToString());
 			}
 			sb.Append(",FF");
 			for(int i = 1; i < 4; i++) {
