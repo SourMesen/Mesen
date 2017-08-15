@@ -37,20 +37,26 @@
 			this.picColor = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.picPalette = new System.Windows.Forms.PictureBox();
+			this.lblClickColorHint = new System.Windows.Forms.Label();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.picHelp = new System.Windows.Forms.PictureBox();
 			this.grpColorInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picColor)).BeginInit();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).BeginInit();
+			this.flowLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// grpColorInfo
 			// 
 			this.grpColorInfo.Controls.Add(this.tableLayoutPanel4);
 			this.grpColorInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpColorInfo.Location = new System.Drawing.Point(135, 3);
+			this.grpColorInfo.Location = new System.Drawing.Point(137, 3);
 			this.grpColorInfo.Name = "grpColorInfo";
-			this.grpColorInfo.Size = new System.Drawing.Size(544, 254);
+			this.tableLayoutPanel3.SetRowSpan(this.grpColorInfo, 2);
+			this.grpColorInfo.Size = new System.Drawing.Size(542, 305);
 			this.grpColorInfo.TabIndex = 4;
 			this.grpColorInfo.TabStop = false;
 			this.grpColorInfo.Text = "Color Info";
@@ -77,7 +83,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(538, 235);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(536, 286);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// txtPaletteAddress
@@ -141,28 +147,57 @@
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.grpColorInfo, 2, 1);
-			this.tableLayoutPanel3.Controls.Add(this.picPalette, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.grpColorInfo, 2, 0);
+			this.tableLayoutPanel3.Controls.Add(this.picPalette, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel1, 0, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(682, 260);
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(682, 311);
 			this.tableLayoutPanel3.TabIndex = 3;
 			// 
 			// picPalette
 			// 
 			this.picPalette.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picPalette.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.picPalette.Location = new System.Drawing.Point(1, 1);
 			this.picPalette.Margin = new System.Windows.Forms.Padding(1);
 			this.picPalette.Name = "picPalette";
 			this.picPalette.Size = new System.Drawing.Size(130, 258);
 			this.picPalette.TabIndex = 0;
 			this.picPalette.TabStop = false;
+			this.picPalette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
 			this.picPalette.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseMove);
+			// 
+			// lblClickColorHint
+			// 
+			this.lblClickColorHint.Location = new System.Drawing.Point(27, 0);
+			this.lblClickColorHint.Name = "lblClickColorHint";
+			this.lblClickColorHint.Size = new System.Drawing.Size(92, 32);
+			this.lblClickColorHint.TabIndex = 5;
+			this.lblClickColorHint.Text = "Click on a color to change it";
+			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.Controls.Add(this.picHelp);
+			this.flowLayoutPanel1.Controls.Add(this.lblClickColorHint);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 263);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(128, 31);
+			this.flowLayoutPanel1.TabIndex = 5;
+			// 
+			// picHelp
+			// 
+			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picHelp.Location = new System.Drawing.Point(3, 5);
+			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.picHelp.Name = "picHelp";
+			this.picHelp.Size = new System.Drawing.Size(18, 18);
+			this.picHelp.TabIndex = 9;
+			this.picHelp.TabStop = false;
 			// 
 			// ctrlPaletteViewer
 			// 
@@ -170,13 +205,15 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Name = "ctrlPaletteViewer";
-			this.Size = new System.Drawing.Size(682, 260);
+			this.Size = new System.Drawing.Size(682, 311);
 			this.grpColorInfo.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picColor)).EndInit();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
+			this.flowLayoutPanel1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -193,6 +230,8 @@
 		private System.Windows.Forms.TextBox txtColor;
 		private System.Windows.Forms.PictureBox picColor;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-
+		private System.Windows.Forms.Label lblClickColorHint;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+		private System.Windows.Forms.PictureBox picHelp;
 	}
 }

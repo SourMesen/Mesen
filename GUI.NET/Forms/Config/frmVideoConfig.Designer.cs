@@ -95,12 +95,13 @@ namespace Mesen.GUI.Forms.Config
 			this.nudOverscanRight = new System.Windows.Forms.NumericUpDown();
 			this.tpgPalette = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.picPalette = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.btnExportPalette = new System.Windows.Forms.Button();
 			this.btnSelectPalette = new System.Windows.Forms.Button();
 			this.btnLoadPalFile = new System.Windows.Forms.Button();
+			this.chkShowColorIndexes = new System.Windows.Forms.CheckBox();
 			this.chkUseCustomVsPalette = new System.Windows.Forms.CheckBox();
+			this.ctrlPaletteDisplay = new Mesen.GUI.Debugger.ctrlPaletteDisplay();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkDisableBackground = new Mesen.GUI.Controls.ctrlRiskyOption();
@@ -124,7 +125,6 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkShowColorIndexes = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -157,7 +157,6 @@ namespace Mesen.GUI.Forms.Config
 			((System.ComponentModel.ISupportInitialize)(this.nudOverscanRight)).BeginInit();
 			this.tpgPalette.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picPalette)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel9.SuspendLayout();
@@ -1047,9 +1046,9 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel3.ColumnCount = 2;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel3.Controls.Add(this.picPalette, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel2, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.chkUseCustomVsPalette, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.ctrlPaletteDisplay, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -1058,18 +1057,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(521, 370);
 			this.tableLayoutPanel3.TabIndex = 4;
-			// 
-			// picPalette
-			// 
-			this.picPalette.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picPalette.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picPalette.Location = new System.Drawing.Point(1, 1);
-			this.picPalette.Margin = new System.Windows.Forms.Padding(1);
-			this.picPalette.Name = "picPalette";
-			this.picPalette.Size = new System.Drawing.Size(338, 338);
-			this.picPalette.TabIndex = 0;
-			this.picPalette.TabStop = false;
-			this.picPalette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -1082,7 +1069,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.Controls.Add(this.btnSelectPalette, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.btnLoadPalFile, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowColorIndexes, 0, 3);
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(340, 0);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(344, 0);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 4;
@@ -1090,7 +1077,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(181, 340);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(181, 344);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// btnExportPalette
@@ -1131,16 +1118,35 @@ namespace Mesen.GUI.Forms.Config
 			this.btnLoadPalFile.UseVisualStyleBackColor = true;
 			this.btnLoadPalFile.Click += new System.EventHandler(this.btnLoadPalFile_Click);
 			// 
+			// chkShowColorIndexes
+			// 
+			this.chkShowColorIndexes.AutoSize = true;
+			this.chkShowColorIndexes.Location = new System.Drawing.Point(3, 90);
+			this.chkShowColorIndexes.Name = "chkShowColorIndexes";
+			this.chkShowColorIndexes.Size = new System.Drawing.Size(118, 17);
+			this.chkShowColorIndexes.TabIndex = 4;
+			this.chkShowColorIndexes.Text = "Show color indexes";
+			this.chkShowColorIndexes.UseVisualStyleBackColor = true;
+			this.chkShowColorIndexes.CheckedChanged += new System.EventHandler(this.chkShowColorIndexes_CheckedChanged);
+			// 
 			// chkUseCustomVsPalette
 			// 
 			this.chkUseCustomVsPalette.AutoSize = true;
 			this.tableLayoutPanel3.SetColumnSpan(this.chkUseCustomVsPalette, 2);
-			this.chkUseCustomVsPalette.Location = new System.Drawing.Point(3, 343);
+			this.chkUseCustomVsPalette.Location = new System.Drawing.Point(3, 347);
 			this.chkUseCustomVsPalette.Name = "chkUseCustomVsPalette";
 			this.chkUseCustomVsPalette.Size = new System.Drawing.Size(202, 17);
 			this.chkUseCustomVsPalette.TabIndex = 2;
 			this.chkUseCustomVsPalette.Text = "Use this palette for VS System games";
 			this.chkUseCustomVsPalette.UseVisualStyleBackColor = true;
+			// 
+			// ctrlPaletteDisplay
+			// 
+			this.ctrlPaletteDisplay.Location = new System.Drawing.Point(3, 3);
+			this.ctrlPaletteDisplay.Name = "ctrlPaletteDisplay";
+			this.ctrlPaletteDisplay.Size = new System.Drawing.Size(338, 338);
+			this.ctrlPaletteDisplay.TabIndex = 3;
+			this.ctrlPaletteDisplay.ColorClick += new Mesen.GUI.Debugger.ctrlPaletteDisplay.PaletteClickHandler(this.ctrlPaletteDisplay_ColorClick);
 			// 
 			// tpgAdvanced
 			// 
@@ -1336,17 +1342,6 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
-			// chkShowColorIndexes
-			// 
-			this.chkShowColorIndexes.AutoSize = true;
-			this.chkShowColorIndexes.Location = new System.Drawing.Point(3, 90);
-			this.chkShowColorIndexes.Name = "chkShowColorIndexes";
-			this.chkShowColorIndexes.Size = new System.Drawing.Size(118, 17);
-			this.chkShowColorIndexes.TabIndex = 4;
-			this.chkShowColorIndexes.Text = "Show color indexes";
-			this.chkShowColorIndexes.UseVisualStyleBackColor = true;
-			this.chkShowColorIndexes.CheckedChanged += new System.EventHandler(this.chkShowColorIndexes_CheckedChanged);
-			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1406,7 +1401,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgPalette.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			this.tpgAdvanced.ResumeLayout(false);
@@ -1449,7 +1443,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkUseHdPacks;
 		private System.Windows.Forms.PictureBox picHdNesTooltip;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-		private System.Windows.Forms.PictureBox picPalette;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.Button btnLoadPalFile;
 		private System.Windows.Forms.ColorDialog colorDialog;
@@ -1514,5 +1507,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkUseCustomVsPalette;
 		private System.Windows.Forms.CheckBox chkFullscreenForceIntegerScale;
 		private System.Windows.Forms.CheckBox chkShowColorIndexes;
+		private Debugger.ctrlPaletteDisplay ctrlPaletteDisplay;
 	}
 }

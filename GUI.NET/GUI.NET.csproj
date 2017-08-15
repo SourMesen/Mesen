@@ -388,6 +388,12 @@
     <Compile Include="Debugger\Controls\ctrlWatch.Designer.cs">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\ctrlPaletteDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\ctrlPaletteDisplay.Designer.cs">
+      <DependentUpon>ctrlPaletteDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\DbgImporter.cs" />
     <Compile Include="Debugger\frmAssembler.cs">
       <SubType>Form</SubType>
@@ -460,6 +466,12 @@
     </Compile>
     <Compile Include="Debugger\frmPpuViewer.Designer.cs">
       <DependentUpon>frmPpuViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\frmSelectColor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmSelectColor.Designer.cs">
+      <DependentUpon>frmSelectColor.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\frmTraceLogger.cs">
       <SubType>Form</SubType>
@@ -694,6 +706,7 @@
     <Compile Include="Forms\frmUpdatePrompt.Designer.cs">
       <DependentUpon>frmUpdatePrompt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GraphicsExtensions.cs" />
     <Compile Include="Forms\HdPackEditor\frmHdPackEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -740,7 +753,6 @@
     <None Include="Resources\ShuffleEnabled.png" />
     <None Include="Resources\RepeatEnabled.png" />
     <None Include="Resources\Repeat.png" />
-    <None Include="Resources\Shuffle1.png" />
     <None Include="Resources\Shuffle.png" />
     <None Include="Resources\WasdKeys.png" />
     <None Include="Resources\wasd.png" />
@@ -820,6 +832,9 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlWatch.resx">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\ctrlPaletteDisplay.resx">
+      <DependentUpon>ctrlPaletteDisplay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmAssembler.resx">
       <DependentUpon>frmAssembler.cs</DependentUpon>
     </EmbeddedResource>
@@ -855,6 +870,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmPpuViewer.resx">
       <DependentUpon>frmPpuViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmSelectColor.resx">
+      <DependentUpon>frmSelectColor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmTraceLogger.resx">
       <DependentUpon>frmTraceLogger.cs</DependentUpon>

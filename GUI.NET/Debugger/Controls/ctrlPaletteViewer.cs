@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -49,6 +50,16 @@ namespace Mesen.GUI.Debugger.Controls
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
 					g.ScaleTransform(32, 32);
 					g.DrawImageUnscaled(source, 0, 0);
+
+					g.ScaleTransform(1f/32, 1f/32);
+					Font font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2);
+					using(Brush bg = new SolidBrush(Color.FromArgb(150, Color.LightGray))) {
+						for(int y = 0; y < 8; y++) {
+							for(int x = 0; x < 4; x++) {
+								g.DrawOutlinedString(_paletteRam[y*4+x].ToString("X2"), font, Brushes.Black, bg, 32*x+14, 32*y+18);
+							}
+						}
+					}
 				}
 				this.picPalette.Image = target;
 			} finally {
@@ -77,6 +88,22 @@ namespace Mesen.GUI.Debugger.Controls
 					g.DrawImage(picPalette.Image, new Rectangle(0, 0, 64, 64), new Rectangle(tileX*32, tileY*32, 32, 32), GraphicsUnit.Pixel);
 				}
 				this.picColor.Image = tile;
+			}
+		}
+
+		private void picPalette_MouseDown(object sender, MouseEventArgs e)
+		{
+			using(frmSelectColor frm = new frmSelectColor()) {
+				if(frm.ShowDialog(this) == DialogResult.OK) {
+					int x = Math.Min(e.X / 32, 31);
+					int y = Math.Min(e.Y / 32, 31);
+
+					int colorAddress = y * 4 + x;
+
+					InteropEmu.DebugSetMemoryValue(DebugMemoryType.PaletteMemory, (uint)colorAddress, (byte)frm.ColorIndex);
+					this.GetData();
+					this.RefreshViewer();
+				}
 			}
 		}
 	}
