@@ -54,6 +54,12 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			base.OnFormClosing(e);
+			this._notifListener.OnNotification -= this._notifListener_OnNotification;
+		}
+
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {

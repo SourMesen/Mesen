@@ -17,14 +17,38 @@ namespace Mesen.GUI.Forms
 	{
 		private void mnuDebugger_Click(object sender, EventArgs e)
 		{
-			if(_debugger == null) {
-				_debugger = new frmDebugger();
-				_debugger.FormClosed += (obj, args) => {
-					_debugger = null;
-				};
-				_debugger.Show();
-			} else {
-				_debugger.Focus();
+			DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
+		}
+
+		private void mnuDebugDebugger_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
+		}
+
+		private void mnuTraceLogger_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger);
+		}
+
+		private void mnuPpuViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer);
+		}
+
+		private void mnuMemoryViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.MemoryViewer);
+		}
+
+		private void mnuAssembler_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler);
+		}
+
+		private void mnuEditHeader_Click(object sender, EventArgs e)
+		{
+			using(frmEditHeader frm = new frmEditHeader()) {
+				frm.ShowDialog(sender, this);
 			}
 		}
 

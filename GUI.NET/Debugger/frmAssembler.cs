@@ -180,8 +180,6 @@ namespace Mesen.GUI.Debugger
 
 		private void btnExecute_Click(object sender, EventArgs e)
 		{
-			WaitUntilBreak();
-
 			List<string> warningMessages = new List<string>();
 			if(_hasParsingErrors) {
 				warningMessages.Add("Warning: The code contains parsing errors - lines with errors will be ignored.");
@@ -190,6 +188,8 @@ namespace Mesen.GUI.Debugger
 			warningMessages.Add("This will assemble and execute the code in the $3000-$3FFF range, starting at address $3000." + Environment.NewLine + Environment.NewLine + "Execute?");
 
 			if(MessageBox.Show(string.Join(Environment.NewLine+Environment.NewLine, warningMessages.ToArray()), "Warning", MessageBoxButtons.OKCancel) == DialogResult.OK) {
+				WaitUntilBreak();
+
 				UInt16 originalAddress = _startAddress;
 				_startAddress = 0x3000;
 				UpdateWindow();
@@ -209,8 +209,6 @@ namespace Mesen.GUI.Debugger
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			WaitUntilBreak();
-
 			List<string> warningMessages = new List<string>();
 			if(_hasParsingErrors) {
 				warningMessages.Add("Warning: The code contains parsing errors - lines with errors will be ignored.");
@@ -227,6 +225,8 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(warningMessages.Count == 0 || MessageBox.Show(string.Join(Environment.NewLine+Environment.NewLine, warningMessages.ToArray()) + Environment.NewLine + Environment.NewLine + "OK?", "Warning", MessageBoxButtons.OKCancel) == DialogResult.OK) {
+				WaitUntilBreak();
+
 				byte lastByte = ctrlHexBox.ByteProvider.ReadByte(ctrlHexBox.ByteProvider.Length - 1);
 				bool endsWithRtiRts = lastByte == 0x40 || lastByte == 0x60;
 				int byteGap = (int)(_blockLength - ctrlHexBox.ByteProvider.Length);
@@ -241,6 +241,12 @@ namespace Mesen.GUI.Debugger
 
 				InteropEmu.DebugSetMemoryValues(DebugMemoryType.CpuMemory, (UInt32)_startAddress, bytes.ToArray());
 
+				frmDebugger debugger = DebugWindowManager.GetDebugger();
+				if(debugger != null) {
+					debugger.UpdateDebugger(false);
+				} else {
+					InteropEmu.DebugRun();
+				}
 				this.DialogResult = DialogResult.OK;
 				this.Close();
 			}

@@ -18,15 +18,12 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class frmDebugger : BaseForm
 	{
-		private List<Form> _childForms = new List<Form>();
 		private bool _debuggerInitialized = false;
 		private bool _firstBreak = true;
 		private int _previousCycle = 0;
 
 		private InteropEmu.NotificationListener _notifListener;
 		private ctrlDebuggerCode _lastCodeWindow;
-		private frmTraceLogger _traceLogger;
-		private DebugWorkspace _workspace;
 
 		public frmDebugger()
 		{
@@ -41,6 +38,8 @@ namespace Mesen.GUI.Debugger
 				//This doesn't work in Mono (menu is blank) - hide it for now
 				mnuCode.Visible = false;
 			}
+
+			bool debuggerAlreadyRunning = InteropEmu.DebugIsDebuggerRunning();
 
 			ctrlConsoleStatus.OnStateChanged += ctrlConsoleStatus_OnStateChanged;
 			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
@@ -115,9 +114,15 @@ namespace Mesen.GUI.Debugger
 
 			//Pause a few frames later to give the debugger a chance to disassemble some code
 			_firstBreak = true;
-			InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, true);
-			InteropEmu.DebugStep(30000);
+			if(!debuggerAlreadyRunning) {
+				InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, true);
+				InteropEmu.DebugStep(5000);
+			} else {
+				//Break once to show code and then resume execution
+				InteropEmu.DebugStep(1);
+			}
 
+			UpdateDebuggerFlags();
 			UpdateCdlRatios();
 			tmrCdlRatios.Start();
 
@@ -152,41 +157,13 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void SaveWorkspace()
-		{
-			if(_workspace != null) {
-				_workspace.WatchValues = WatchManager.WatchEntries;
-				_workspace.Labels = LabelManager.GetLabels();
-				_workspace.Breakpoints = BreakpointManager.Breakpoints;
-				_workspace.Save();
-			}
-		}
-
 		private void UpdateWorkspace()
 		{
-			SaveWorkspace();
-			
-			_workspace = DebugWorkspace.GetWorkspace();
-
-			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
-			if(_workspace.Labels.Count == 0) {
-				LabelManager.ResetLabels();
-				if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
-					LabelManager.SetDefaultLabels(InteropEmu.FdsGetSideCount() > 0);
-				}
-			} else {
-				LabelManager.ResetLabels();
-				LabelManager.SetLabels(_workspace.Labels);
-			}
-			LabelManager.OnLabelUpdated += LabelManager_OnLabelUpdated;
+			DebugWorkspaceManager.SaveWorkspace();
+			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace();
 
 			ctrlLabelList.UpdateLabelList();
 			ctrlFunctionList.UpdateFunctionList(true);
-
-			WatchManager.WatchEntries = _workspace.WatchValues;
-
-			BreakpointManager.Breakpoints.Clear();
-			BreakpointManager.Breakpoints.AddRange(_workspace.Breakpoints);
 			ctrlBreakpoints.RefreshList();
 		}
 
@@ -226,7 +203,7 @@ namespace Mesen.GUI.Debugger
 			if(mnuBreakOnBrk.Checked) {
 				flags |= DebuggerFlags.BreakOnBrk;
 			}
-			InteropEmu.DebugSetFlags(flags);
+			InteropEmu.DebugSetFlags(flags | DebuggerFlags.DebuggerWindowEnabled);
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -292,7 +269,7 @@ namespace Mesen.GUI.Debugger
 			mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
 		}
 
-		private void UpdateDebugger(bool updateActiveAddress = true)
+		public void UpdateDebugger(bool updateActiveAddress = true)
 		{
 			if(!_debuggerInitialized) {
 				return;
@@ -366,18 +343,6 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlDebuggerCodeSplit.UpdateLineColors();
 			ctrlDebuggerCode.UpdateLineColors();
-		}
-
-		private void OpenChildForm(Form frm)
-		{
-			this._childForms.Add(frm);
-			frm.FormClosed += (obj, args) => {
-				this._childForms.Remove((Form)obj);
-			};
-			frm.StartPosition = FormStartPosition.Manual;
-			frm.Left = this.Left + this.Width / 2 - frm.Width / 2;
-			frm.Top = this.Top + this.Height / 2 - frm.Height / 2;
-			frm.Show();
 		}
 
 		private void ResumeExecution()
@@ -483,7 +448,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuMemoryViewer_Click(object sender, EventArgs e)
 		{
-			OpenChildForm(new frmMemoryViewer(() => { return _workspace; }));
+			DebugWindowManager.OpenDebugWindow(DebugWindow.MemoryViewer);
 		}
 
 		private void BreakpointManager_BreakpointsChanged(object sender, EventArgs e)
@@ -546,44 +511,34 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			if(_childForms.Count > 0) {
-				foreach(Form frm in this._childForms.ToArray()) {
-					frm.Close();
-				}
-				e.Cancel = true;
+			tmrCdlRatios.Stop();
 
-				this.BeginInvoke((Action)(() => {
-					this.Close();
-				}));
-			} else {
-				tmrCdlRatios.Stop();
+			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
+			BreakpointManager.BreakpointsChanged -= BreakpointManager_BreakpointsChanged;
+			ctrlConsoleStatus.OnStateChanged -= ctrlConsoleStatus_OnStateChanged;
+			ctrlProfiler.OnFunctionSelected -= ctrlProfiler_OnFunctionSelected;
 
-				LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
-				BreakpointManager.BreakpointsChanged -= BreakpointManager_BreakpointsChanged;
-				ctrlConsoleStatus.OnStateChanged -= ctrlConsoleStatus_OnStateChanged;
-				ctrlProfiler.OnFunctionSelected -= ctrlProfiler_OnFunctionSelected;
-
-				if(_notifListener != null) {
-					_notifListener.Dispose();
-					_notifListener = null;
-				}
-
-				InteropEmu.DebugRelease();
-
-				ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
-				ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Height : this.Height;
-				ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
-				ConfigManager.Config.DebugInfo.LeftPanelWidth = this.ctrlSplitContainerTop.GetSplitterDistance();
-				ConfigManager.ApplyChanges();
-
-				SaveWorkspace();
+			if(_notifListener != null) {
+				_notifListener.Dispose();
+				_notifListener = null;
 			}
-			base.OnFormClosing(e);
+
+			InteropEmu.DebugSetFlags(0);
+			InteropEmu.DebugSetBreakpoints(new InteropBreakpoint[0], 0);
+			InteropEmu.DebugRun();
+
+			ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
+			ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Height : this.Height;
+			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
+			ConfigManager.Config.DebugInfo.LeftPanelWidth = this.ctrlSplitContainerTop.GetSplitterDistance();
+			ConfigManager.ApplyChanges();
+
+			DebugWorkspaceManager.SaveWorkspace();
 		}
 
 		private void mnuNametableViewer_Click(object sender, EventArgs e)
 		{
-			OpenChildForm(new frmPpuViewer());
+			DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer);
 		}
 
 		private void ctrlCallstack_FunctionSelected(object sender, EventArgs e)
@@ -639,15 +594,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuTraceLogger_Click(object sender, EventArgs e)
 		{
-			if(_traceLogger == null) {
-				_traceLogger = new frmTraceLogger();
-				_traceLogger.FormClosed += (s, evt) => {
-					_traceLogger = null;
-				};
-				OpenChildForm(_traceLogger);
-			} else {
-				_traceLogger.Focus();
-			}
+			DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger);
 		}
 
 		private void mnuPpuPartialDraw_Click(object sender, EventArgs e)
@@ -749,7 +696,7 @@ namespace Mesen.GUI.Debugger
 
 		private void LabelManager_OnLabelUpdated(object sender, EventArgs e)
 		{
-			SaveWorkspace();
+			DebugWorkspaceManager.SaveWorkspace();
 			ctrlLabelList.UpdateLabelList();
 			ctrlFunctionList.UpdateFunctionList(true);
 			UpdateDebugger(false);
@@ -763,11 +710,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuResetWorkspace_Click(object sender, EventArgs e)
 		{
 			if(MessageBox.Show("This operation will empty the watch window, remove all breakpoints, and reset labels to their default state." + Environment.NewLine + "Are you sure?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
-				_workspace.Breakpoints = new List<Breakpoint>();
-				_workspace.Labels = new List<CodeLabel>();
-				_workspace.WatchValues = new List<string>();
-				_workspace.Save();
-				_workspace = null;
+				DebugWorkspaceManager.ResetWorkspace();
 				LabelManager.ResetLabels();
 				UpdateWorkspace();
 				UpdateDebugger(false);
@@ -919,13 +862,7 @@ namespace Mesen.GUI.Debugger
 
 		private void OpenAssembler(string code, UInt16 startAddress, UInt16 blockLength = 0)
 		{
-			frmAssembler assembler = new frmAssembler(code, startAddress, blockLength);
-			assembler.FormClosed += (s, e) => {
-				if(assembler.DialogResult == DialogResult.OK) {
-					this.UpdateDebugger(false);
-				}
-			};
-			OpenChildForm(assembler);
+			DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler);
 		}
 
 		private void mnuAssembler_Click(object sender, EventArgs e)

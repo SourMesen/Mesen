@@ -29,7 +29,6 @@ namespace Mesen.GUI.Forms
 
 		private InteropEmu.NotificationListener _notifListener;
 		private Thread _emuThread;
-		private frmDebugger _debugger;
 		private frmLogWindow _logWindow;
 		private frmCheatList _cheatListWindow;
 		private frmHdPackEditor _hdPackEditorWindow;
@@ -57,6 +56,8 @@ namespace Mesen.GUI.Forms
 		public frmMain(string[] args)
 		{
 			InitializeComponent();
+
+			this.StartPosition = FormStartPosition.CenterScreen;
 
 			Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 			lblVersion.Text = currentVersion.ToString();
@@ -156,9 +157,6 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.WindowLocation.HasValue) {
 				this.StartPosition = FormStartPosition.Manual;
 				this.Location = ConfigManager.Config.WindowLocation.Value;
-			} else {
-				//First launch
-				this.StartPosition = FormStartPosition.CenterScreen;
 			}
 
 			if(ConfigManager.Config.PreferenceInfo.CloudSaveIntegration) {
@@ -218,9 +216,7 @@ namespace Mesen.GUI.Forms
 				_notifListener.Dispose();
 				_notifListener = null;
 			}
-			if(_debugger != null) {
-				_debugger.Close();
-			}
+			DebugWindowManager.CloseAll();
 
 			ConfigManager.Config.EmulationInfo.EmulationSpeed = InteropEmu.GetEmulationSpeed();
 			if(this.WindowState == FormWindowState.Normal) {
@@ -400,6 +396,11 @@ namespace Mesen.GUI.Forms
 					this.BeginInvoke((MethodInvoker)(() => {
 						UpdateViewerSize();
 					}));
+
+					if(ConfigManager.Config.PreferenceInfo.DeveloperMode) {
+						//Preload workspace in the background to be able to open debugging tools faster
+						Task.Run(() => { DebugWorkspace.GetWorkspace(); });
+					}
 					break;
 
 				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
@@ -499,8 +500,19 @@ namespace Mesen.GUI.Forms
 				if(this.InvokeRequired) {
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
-					panelInfo.Visible = _emuThread == null;
-					ctrlRecentGames.Visible = _emuThread == null;
+					bool running = _emuThread != null;
+					bool devMode = ConfigManager.Config.PreferenceInfo.DeveloperMode;
+					mnuDebug.Visible = devMode;
+
+					mnuAssembler.Enabled = running;
+					mnuMemoryViewer.Enabled = running;
+					mnuPpuViewer.Enabled = running;
+					mnuTraceLogger.Enabled = running;
+					mnuDebugDebugger.Enabled = running;
+					mnuEditHeader.Enabled = running;
+
+					panelInfo.Visible = !running;
+					ctrlRecentGames.Visible = !running;
 
 					ctrlLoading.Visible = (_romLoadCounter > 0);
 
@@ -509,9 +521,9 @@ namespace Mesen.GUI.Forms
 
 					bool isNetPlayClient = InteropEmu.IsConnected();
 
-					mnuPause.Enabled = mnuPowerCycle.Enabled = mnuReset.Enabled = mnuPowerOff.Enabled = (_emuThread != null && !isNetPlayClient);
-					mnuSaveState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf());
-					mnuLoadState.Enabled = (_emuThread != null && !isNetPlayClient && !InteropEmu.IsNsf() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording());
+					mnuPause.Enabled = mnuPowerCycle.Enabled = mnuReset.Enabled = mnuPowerOff.Enabled = (running && !isNetPlayClient);
+					mnuSaveState.Enabled = (running && !isNetPlayClient && !InteropEmu.IsNsf());
+					mnuLoadState.Enabled = (running && !isNetPlayClient && !InteropEmu.IsNsf() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording());
 
 					mnuPause.Text = InteropEmu.IsPaused() ? ResourceHelper.GetMessage("Resume") : ResourceHelper.GetMessage("Pause");
 					mnuPause.Image = InteropEmu.IsPaused() ? _playButton : _pauseButton;
@@ -556,35 +568,36 @@ namespace Mesen.GUI.Forms
 					bool moviePlaying = InteropEmu.MoviePlaying();
 					bool movieRecording = InteropEmu.MovieRecording();
 					mnuPlayMovie.Enabled = !netPlay && !moviePlaying && !movieRecording;
-					mnuStopMovie.Enabled = _emuThread != null && !netPlay && (moviePlaying || movieRecording);
-					mnuRecordFrom.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
-					mnuRecordFromStart.Enabled = _emuThread != null && !isNetPlayClient && !moviePlaying && !movieRecording;
-					mnuRecordFromNow.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
+					mnuStopMovie.Enabled = running && !netPlay && (moviePlaying || movieRecording);
+					mnuRecordFrom.Enabled = running && !moviePlaying && !movieRecording;
+					mnuRecordFromStart.Enabled = running && !isNetPlayClient && !moviePlaying && !movieRecording;
+					mnuRecordFromNow.Enabled = running && !moviePlaying && !movieRecording;
 
 					bool waveRecording = InteropEmu.WaveIsRecording();
-					mnuWaveRecord.Enabled = _emuThread != null && !waveRecording;
-					mnuWaveStop.Enabled = _emuThread != null && waveRecording;
+					mnuWaveRecord.Enabled = running && !waveRecording;
+					mnuWaveStop.Enabled = running && waveRecording;
 
 					bool aviRecording = InteropEmu.AviIsRecording();
-					mnuAviRecord.Enabled = _emuThread != null && !aviRecording;
-					mnuAviStop.Enabled = _emuThread != null && aviRecording;
+					mnuAviRecord.Enabled = running && !aviRecording;
+					mnuAviStop.Enabled = running && aviRecording;
 					mnuVideoRecorder.Enabled = !_isNsfPlayerMode;
 
 					bool testRecording = InteropEmu.RomTestRecording();
 					mnuTestRun.Enabled = !netPlay && !moviePlaying && !movieRecording;
-					mnuTestStopRecording.Enabled = _emuThread != null && testRecording;
-					mnuTestRecordStart.Enabled = _emuThread != null && !isNetPlayClient && !moviePlaying && !movieRecording;
-					mnuTestRecordNow.Enabled = _emuThread != null && !moviePlaying && !movieRecording;
+					mnuTestStopRecording.Enabled = running && testRecording;
+					mnuTestRecordStart.Enabled = running && !isNetPlayClient && !moviePlaying && !movieRecording;
+					mnuTestRecordNow.Enabled = running && !moviePlaying && !movieRecording;
 					mnuTestRecordMovie.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuTestRecordTest.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuTestRecordFrom.Enabled = (mnuTestRecordStart.Enabled || mnuTestRecordNow.Enabled || mnuTestRecordMovie.Enabled || mnuTestRecordTest.Enabled);
 
-					mnuDebugger.Enabled = !netPlay && _emuThread != null;
-					mnuHdPackEditor.Enabled = !netPlay && _emuThread != null;
+					mnuDebugger.Visible = !devMode;
+					mnuDebugger.Enabled = !netPlay && running && !devMode;
+					mnuHdPackEditor.Enabled = !netPlay && running;
 
-					mnuTakeScreenshot.Enabled = _emuThread != null && !InteropEmu.IsNsf();
+					mnuTakeScreenshot.Enabled = running && !InteropEmu.IsNsf();
 					mnuNetPlay.Enabled = !InteropEmu.IsNsf();
-					if(_emuThread != null && InteropEmu.IsNsf()) {
+					if(running && InteropEmu.IsNsf()) {
 						mnuPowerCycle.Enabled = false;
 						mnuMovies.Enabled = mnuPlayMovie.Enabled = mnuStopMovie.Enabled = mnuRecordFrom.Enabled = mnuRecordFromStart.Enabled = mnuRecordFromNow.Enabled = false;
 					}
@@ -638,7 +651,8 @@ namespace Mesen.GUI.Forms
 
 		private void PauseEmu()
 		{
-			if(InteropEmu.DebugIsDebuggerRunning()) {
+			frmDebugger debugger = DebugWindowManager.GetDebugger();
+			if(debugger != null) {
 				InteropEmu.DebugStep(1);
 			} else {
 				if(InteropEmu.IsPaused()) {

@@ -20,13 +20,12 @@ namespace Mesen.GUI.Debugger
 	{
 		private InteropEmu.NotificationListener _notifListener;
 		private DebugMemoryType _memoryType = DebugMemoryType.CpuMemory;
-		private Func<DebugWorkspace> _getWorkspace;
+		private int _previousIndex = -1;
+		private DebugWorkspace _previousWorkspace;
 
-		public frmMemoryViewer(Func<DebugWorkspace> getWorkspace)
+		public frmMemoryViewer()
 		{
 			InitializeComponent();
-
-			this._getWorkspace = getWorkspace;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -61,10 +60,17 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowCharacters.CheckedChanged += new EventHandler(this.mnuShowCharacters_CheckedChanged);
 		}
 
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			base.OnFormClosing(e);
+			DebugWorkspaceManager.SaveWorkspace();
+		}
+
 		void InitTblMappings()
 		{
-			if(this._getWorkspace().TblMappings != null && this._getWorkspace().TblMappings.Count > 0) {
-				var tblDict = TblLoader.ToDictionary(this._getWorkspace().TblMappings.ToArray());
+			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace();
+			if(workspace.TblMappings != null && workspace.TblMappings.Count > 0) {
+				var tblDict = TblLoader.ToDictionary(workspace.TblMappings.ToArray());
 				if(tblDict != null) {
 					this.ctrlHexViewer.ByteCharConverter = new TblByteCharConverter(tblDict);
 				}
@@ -119,14 +125,12 @@ namespace Mesen.GUI.Debugger
 			this.RefreshData();
 		}
 
-		int _previousIndex = -1;
-		DebugWorkspace _previousWorkspace;
 		private void RefreshData()
 		{
-			if(this._getWorkspace() != this._previousWorkspace) {
+			if(DebugWorkspaceManager.GetWorkspace() != this._previousWorkspace) {
 				this.InitTblMappings();
+				_previousWorkspace = DebugWorkspaceManager.GetWorkspace();
 			}
-			_previousWorkspace = this._getWorkspace();
 
 			if(this.tabMain.SelectedTab == this.tpgAccessCounters) {
 				this.ctrlMemoryAccessCounters.RefreshData();
@@ -280,7 +284,7 @@ namespace Mesen.GUI.Debugger
 				if(tblDict == null) {
 					MessageBox.Show("Could not load TBL file.  The file selected file appears to be invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				} else {
-					this._getWorkspace().TblMappings = new List<string>(fileContents);
+					DebugWorkspaceManager.GetWorkspace().TblMappings = new List<string>(fileContents);
 					this.ctrlHexViewer.ByteCharConverter = new TblByteCharConverter(tblDict);
 					this.mnuShowCharacters.Checked = true;
 				}
@@ -289,7 +293,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuResetTblMappings_Click(object sender, EventArgs e)
 		{
-			this._getWorkspace().TblMappings = null;
+			DebugWorkspaceManager.GetWorkspace().TblMappings = null;
 			this.ctrlHexViewer.ByteCharConverter = null;
 		}
 
@@ -437,7 +441,7 @@ namespace Mesen.GUI.Debugger
 				}
 
 				mnuEditLabel.Enabled = !disableEditLabel && (this._memoryType == DebugMemoryType.CpuMemory || this.GetAddressType().HasValue);
-				mnuEditBreakpoint.Enabled = this._memoryType == DebugMemoryType.CpuMemory || this._memoryType == DebugMemoryType.PpuMemory;
+				mnuEditBreakpoint.Enabled = (this._memoryType == DebugMemoryType.CpuMemory || this._memoryType == DebugMemoryType.PpuMemory) && DebugWindowManager.GetDebugger() != null;
 				mnuAddWatch.Enabled = this._memoryType == DebugMemoryType.CpuMemory;
 				mnuFreeze.Enabled = this._memoryType == DebugMemoryType.CpuMemory;
 			};

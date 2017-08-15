@@ -404,13 +404,13 @@ void Console::Run()
 				_runLock.Release();
 				
 				PlatformUtilities::EnableScreensaver();
-				while(paused && !_stop && _debugger == nullptr) {
+				while(paused && !_stop && (!_debugger || !_debugger->CheckFlag(DebuggerFlags::DebuggerWindowEnabled))) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
 					paused = EmulationSettings::IsPaused();
 				}
 
-				if(_debugger != nullptr) {
+				if(_debugger && _debugger->CheckFlag(DebuggerFlags::DebuggerWindowEnabled)) {
 					//Prevent pausing when debugger is active
 					EmulationSettings::ClearFlags(EmulationFlags::Paused);
 				}

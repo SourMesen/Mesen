@@ -395,6 +395,8 @@
       <DependentUpon>ctrlPaletteDisplay.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\DbgImporter.cs" />
+    <Compile Include="Debugger\DebugWindowManager.cs" />
+    <Compile Include="Debugger\DebugWorkspaceManager.cs" />
     <Compile Include="Debugger\frmAssembler.cs">
       <SubType>Form</SubType>
     </Compile>

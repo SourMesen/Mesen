@@ -17,7 +17,7 @@ namespace Mesen.GUI.Debugger
 			get { return _watchEntries; }
 			set
 			{
-				_watchEntries = value;
+				_watchEntries = new List<string>(value);
 				WatchChanged?.Invoke(null, EventArgs.Empty);
 			}
 		}

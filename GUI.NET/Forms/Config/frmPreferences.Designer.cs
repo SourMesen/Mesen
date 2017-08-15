@@ -49,6 +49,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.btnOpenMesenFolder = new System.Windows.Forms.Button();
 			this.btnResetSettings = new System.Windows.Forms.Button();
+			this.chkConfirmExitResetPower = new System.Windows.Forms.CheckBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgShortcuts = new System.Windows.Forms.TabPage();
@@ -140,7 +141,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblUiDisplaySettings = new System.Windows.Forms.Label();
 			this.lblGameSelectionScreenSettings = new System.Windows.Forms.Label();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.chkConfirmExitResetPower = new System.Windows.Forms.CheckBox();
+			this.chkDeveloperMode = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
@@ -191,6 +192,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.tlpMain.ColumnCount = 1;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpMain.Controls.Add(this.chkDeveloperMode, 0, 13);
 			this.tlpMain.Controls.Add(this.lblPauseBackgroundSettings, 0, 3);
 			this.tlpMain.Controls.Add(this.chkSingleInstance, 0, 2);
 			this.tlpMain.Controls.Add(this.chkAutomaticallyCheckForUpdates, 0, 1);
@@ -203,12 +205,12 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.Controls.Add(this.chkAllowBackgroundInput, 0, 7);
 			this.tlpMain.Controls.Add(this.chkPauseWhenInBackground, 0, 6);
 			this.tlpMain.Controls.Add(this.chkPauseOnMovieEnd, 0, 5);
-			this.tlpMain.Controls.Add(this.tableLayoutPanel5, 0, 14);
+			this.tlpMain.Controls.Add(this.tableLayoutPanel5, 0, 15);
 			this.tlpMain.Controls.Add(this.chkConfirmExitResetPower, 0, 11);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 15;
+			this.tlpMain.RowCount = 16;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -218,6 +220,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -417,6 +420,17 @@ namespace Mesen.GUI.Forms.Config
 			this.btnResetSettings.Text = "Reset All Settings";
 			this.btnResetSettings.UseVisualStyleBackColor = true;
 			this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
+			// 
+			// chkConfirmExitResetPower
+			// 
+			this.chkConfirmExitResetPower.AutoSize = true;
+			this.chkConfirmExitResetPower.Location = new System.Drawing.Point(13, 253);
+			this.chkConfirmExitResetPower.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkConfirmExitResetPower.Name = "chkConfirmExitResetPower";
+			this.chkConfirmExitResetPower.Size = new System.Drawing.Size(293, 17);
+			this.chkConfirmExitResetPower.TabIndex = 25;
+			this.chkConfirmExitResetPower.Text = "Display confirmation dialog before reset/power cycle/exit";
+			this.chkConfirmExitResetPower.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
@@ -866,23 +880,23 @@ namespace Mesen.GUI.Forms.Config
 			this.nudNsfMoveToNextTrackTime.Location = new System.Drawing.Point(129, 3);
 			this.nudNsfMoveToNextTrackTime.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.nudNsfMoveToNextTrackTime.Maximum = new decimal(new int[] {
-				999,
-				0,
-				0,
-				0});
+            999,
+            0,
+            0,
+            0});
 			this.nudNsfMoveToNextTrackTime.Minimum = new decimal(new int[] {
-				5,
-				0,
-				0,
-				0});
+            5,
+            0,
+            0,
+            0});
 			this.nudNsfMoveToNextTrackTime.Name = "nudNsfMoveToNextTrackTime";
 			this.nudNsfMoveToNextTrackTime.Size = new System.Drawing.Size(44, 20);
 			this.nudNsfMoveToNextTrackTime.TabIndex = 3;
 			this.nudNsfMoveToNextTrackTime.Value = new decimal(new int[] {
-				5,
-				0,
-				0,
-				0});
+            5,
+            0,
+            0,
+            0});
 			// 
 			// lblNsfSeconds
 			// 
@@ -1598,16 +1612,16 @@ namespace Mesen.GUI.Forms.Config
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
-			// chkConfirmExitResetPower
+			// chkDeveloperMode
 			// 
-			this.chkConfirmExitResetPower.AutoSize = true;
-			this.chkConfirmExitResetPower.Location = new System.Drawing.Point(13, 253);
-			this.chkConfirmExitResetPower.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkConfirmExitResetPower.Name = "chkConfirmExitResetPower";
-			this.chkConfirmExitResetPower.Size = new System.Drawing.Size(293, 17);
-			this.chkConfirmExitResetPower.TabIndex = 25;
-			this.chkConfirmExitResetPower.Text = "Display confirmation dialog before reset/power cycle/exit";
-			this.chkConfirmExitResetPower.UseVisualStyleBackColor = true;
+			this.chkDeveloperMode.AutoSize = true;
+			this.chkDeveloperMode.Location = new System.Drawing.Point(13, 299);
+			this.chkDeveloperMode.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkDeveloperMode.Name = "chkDeveloperMode";
+			this.chkDeveloperMode.Size = new System.Drawing.Size(138, 17);
+			this.chkDeveloperMode.TabIndex = 26;
+			this.chkDeveloperMode.Text = "Enable developer mode";
+			this.chkDeveloperMode.UseVisualStyleBackColor = true;
 			// 
 			// frmPreferences
 			// 
@@ -1797,5 +1811,6 @@ namespace Mesen.GUI.Forms.Config
 		private ctrlPathSelection psScreenshots;
 		private ctrlPathSelection psAvi;
 		private System.Windows.Forms.CheckBox chkConfirmExitResetPower;
+		private System.Windows.Forms.CheckBox chkDeveloperMode;
 	}
 }

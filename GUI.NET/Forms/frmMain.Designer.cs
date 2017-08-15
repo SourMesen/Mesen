@@ -179,6 +179,12 @@ namespace Mesen.GUI.Forms
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRandomGame = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTakeScreenshot = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDebug = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAssembler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDebugDebugger = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
@@ -186,6 +192,8 @@ namespace Mesen.GUI.Forms
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHelpWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem25 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuEditHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
@@ -299,6 +307,7 @@ namespace Mesen.GUI.Forms
             this.mnuGame,
             this.mnuOptions,
             this.mnuTools,
+				this.mnuDebug,
             this.mnuHelp});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
@@ -1432,6 +1441,65 @@ namespace Mesen.GUI.Forms
 			this.mnuTakeScreenshot.Text = "Take Screenshot";
 			this.mnuTakeScreenshot.Click += new System.EventHandler(this.mnuTakeScreenshot_Click);
 			// 
+			// mnuDebug
+			// 
+			this.mnuDebug.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAssembler,
+            this.mnuDebugDebugger,
+            this.mnuMemoryViewer,
+            this.mnuPpuViewer,
+            this.mnuTraceLogger,
+            this.toolStripMenuItem25,
+            this.mnuEditHeader});
+			this.mnuDebug.Name = "mnuDebug";
+			this.mnuDebug.Size = new System.Drawing.Size(54, 20);
+			this.mnuDebug.Text = "Debug";
+			// 
+			// mnuAssembler
+			// 
+			this.mnuAssembler.Image = global::Mesen.GUI.Properties.Resources.Chip;
+			this.mnuAssembler.Name = "mnuAssembler";
+			this.mnuAssembler.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
+			this.mnuAssembler.Size = new System.Drawing.Size(196, 22);
+			this.mnuAssembler.Text = "Assembler";
+			this.mnuAssembler.Click += new System.EventHandler(this.mnuAssembler_Click);
+			// 
+			// mnuDebugDebugger
+			// 
+			this.mnuDebugDebugger.Image = global::Mesen.GUI.Properties.Resources.Bug;
+			this.mnuDebugDebugger.Name = "mnuDebugDebugger";
+			this.mnuDebugDebugger.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+			this.mnuDebugDebugger.Size = new System.Drawing.Size(196, 22);
+			this.mnuDebugDebugger.Text = "Debugger";
+			this.mnuDebugDebugger.Click += new System.EventHandler(this.mnuDebugDebugger_Click);
+			// 
+			// mnuMemoryViewer
+			// 
+			this.mnuMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuMemoryViewer.Name = "mnuMemoryViewer";
+			this.mnuMemoryViewer.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+			this.mnuMemoryViewer.Size = new System.Drawing.Size(196, 22);
+			this.mnuMemoryViewer.Text = "Memory Tools";
+			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
+			// 
+			// mnuPpuViewer
+			// 
+			this.mnuPpuViewer.Image = global::Mesen.GUI.Properties.Resources.Video;
+			this.mnuPpuViewer.Name = "mnuPpuViewer";
+			this.mnuPpuViewer.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+			this.mnuPpuViewer.Size = new System.Drawing.Size(196, 22);
+			this.mnuPpuViewer.Text = "PPU Viewer";
+			this.mnuPpuViewer.Click += new System.EventHandler(this.mnuPpuViewer_Click);
+			// 
+			// mnuTraceLogger
+			// 
+			this.mnuTraceLogger.Image = global::Mesen.GUI.Properties.Resources.LogWindow;
+			this.mnuTraceLogger.Name = "mnuTraceLogger";
+			this.mnuTraceLogger.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+			this.mnuTraceLogger.Size = new System.Drawing.Size(196, 22);
+			this.mnuTraceLogger.Text = "Trace Logger";
+			this.mnuTraceLogger.Click += new System.EventHandler(this.mnuTraceLogger_Click);
+			// 
 			// mnuHelp
 			// 
 			this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1485,6 +1553,19 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(198, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
+			// 
+			// toolStripMenuItem25
+			// 
+			this.toolStripMenuItem25.Name = "toolStripMenuItem25";
+			this.toolStripMenuItem25.Size = new System.Drawing.Size(193, 6);
+			// 
+			// mnuEditHeader
+			// 
+			this.mnuEditHeader.Image = global::Mesen.GUI.Properties.Resources.Edit;
+			this.mnuEditHeader.Name = "mnuEditHeader";
+			this.mnuEditHeader.Size = new System.Drawing.Size(196, 22);
+			this.mnuEditHeader.Text = "Edit iNES Header";
+			this.mnuEditHeader.Click += new System.EventHandler(this.mnuEditHeader_Click);
 			// 
 			// frmMain
 			// 
@@ -1670,6 +1751,14 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem24;
 		private System.Windows.Forms.ToolStripMenuItem mnuPowerOff;
 		private System.Windows.Forms.ToolStripMenuItem mnuHdPackEditor;
+		private System.Windows.Forms.ToolStripMenuItem mnuDebug;
+		private System.Windows.Forms.ToolStripMenuItem mnuAssembler;
+		private System.Windows.Forms.ToolStripMenuItem mnuDebugDebugger;
+		private System.Windows.Forms.ToolStripMenuItem mnuMemoryViewer;
+		private System.Windows.Forms.ToolStripMenuItem mnuPpuViewer;
+		private System.Windows.Forms.ToolStripMenuItem mnuTraceLogger;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem25;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditHeader;
 	}
 }
 

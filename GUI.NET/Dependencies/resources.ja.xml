@@ -348,6 +348,8 @@
       <Control ID="lblDisplayLanguage">言語:</Control>
       <Control ID="chkSingleInstance">Mesenを単一インスタンスモードにする</Control>
       <Control ID="chkAutomaticallyCheckForUpdates">自動的にアップデートを確認</Control>
+
+      <Control ID="chkDeveloperMode">開発者モードを有効にする</Control>
       
       <Control ID="lblPauseBackgroundSettings">ポーズ・バックグラウンド設定</Control>
       <Control ID="lblMiscSettings">その他</Control>

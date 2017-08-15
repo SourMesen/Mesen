@@ -63,6 +63,8 @@ namespace Mesen.GUI.Config
 
 		public bool ConfirmExitResetPower = false;
 
+		public bool DeveloperMode = false;
+
 		public UInt32 RewindBufferSize = 300;
 
 		public bool OverrideAviFolder = false;
