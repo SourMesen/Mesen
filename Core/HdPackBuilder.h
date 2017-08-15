@@ -21,6 +21,7 @@ private:
 
 	HdPackData _hdData;
 	std::unordered_map<HdTileKey, uint32_t> _tileUsageCount;
+	std::unordered_map<HdTileKey, HdPackTileInfo*> _tilesByKey;
 	std::map<uint32_t, std::map<uint32_t, vector<HdPackTileInfo*>>> _tilesByChrBankByPalette;
 	bool _isChrRam;
 	uint32_t _chrRamBankSize;
@@ -41,7 +42,7 @@ public:
 	HdPackBuilder(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize, bool isChrRam);
 	~HdPackBuilder();
 
-	void ProcessTile(uint32_t x, uint32_t y, uint16_t tileAddr, HdPpuTileInfo& tile, BaseMapper* mapper, bool isSprite, uint32_t chrBankHash);
+	void ProcessTile(uint32_t x, uint32_t y, uint16_t tileAddr, HdPpuTileInfo& tile, BaseMapper* mapper, bool isSprite, uint32_t chrBankHash, bool transparencyRequired);
 	void SaveHdPack();
 	
 	static void GetChrBankList(uint32_t *banks);

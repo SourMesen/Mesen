@@ -76,10 +76,11 @@ void HdPackBuilder::AddTile(HdPackTileInfo *tile, uint32_t usageCount)
 		paletteMap[palette][tile->TileIndex % 256] = tile;
 	}
 
+	_tilesByKey[tile->GetKey(false)] = tile;
 	_tileUsageCount[tile->GetKey(false)] = usageCount;
 }
 
-void HdPackBuilder::ProcessTile(uint32_t x, uint32_t y, uint16_t tileAddr, HdPpuTileInfo &tile, BaseMapper *mapper, bool isSprite, uint32_t chrBankHash)
+void HdPackBuilder::ProcessTile(uint32_t x, uint32_t y, uint16_t tileAddr, HdPpuTileInfo &tile, BaseMapper *mapper, bool isSprite, uint32_t chrBankHash, bool transparencyRequired)
 {
 	if(_flags & HdPackRecordFlags::IgnoreOverscan) {
 		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
@@ -104,14 +105,20 @@ void HdPackBuilder::ProcessTile(uint32_t x, uint32_t y, uint16_t tileAddr, HdPpu
 		hdTile->IsChrRamTile = _isChrRam;
 		hdTile->Brightness = 255;
 		hdTile->ChrBankId = _isChrRam ? chrBankHash : (tileAddr / 16 / 256);
+		hdTile->TransparencyRequired = transparencyRequired;
 
 		memcpy(hdTile->TileData, tile.TileData, 16);
-		GenerateHdTile(hdTile);
-		hdTile->UpdateFlags();
 
 		_hdData.Tiles.push_back(unique_ptr<HdPackTileInfo>(hdTile));
 		AddTile(hdTile, 1);
 	} else {
+		if(transparencyRequired) {
+			auto existingTile = _tilesByKey.find(tile.GetKey(false));
+			if(existingTile != _tilesByKey.end()) {
+				existingTile->second->TransparencyRequired = true;
+			}
+		}
+		
 		if(result->second < 0x7FFFFFFF) {
 			//Increase usage count
 			result->second++;
@@ -166,6 +173,11 @@ void HdPackBuilder::GenerateHdTile(HdPackTileInfo *tile)
 
 void HdPackBuilder::DrawTile(HdPackTileInfo *tile, int tileNumber, uint32_t *pngBuffer, int pageNumber, bool containsSpritesOnly)
 {
+	if(tile->HdTileData.empty()) {
+		GenerateHdTile(tile);
+		tile->UpdateFlags();
+	}
+
 	if(containsSpritesOnly && (_flags & HdPackRecordFlags::UseLargeSprites)) {
 		int row = tileNumber / 16;
 		int column = tileNumber % 16;

@@ -226,6 +226,7 @@ struct HdPackTileInfo : public HdTileKey
 	bool DefaultTile;
 	bool Blank;
 	bool HasTransparentPixels;
+	bool TransparencyRequired;
 	bool IsFullyTransparent;
 	vector<uint32_t> HdTileData;
 	uint32_t ChrBankId;
@@ -252,7 +253,7 @@ struct HdPackTileInfo : public HdTileKey
 			for(uint8_t j = 0; j < 8; j++) {
 				uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
 				uint32_t rgbColor;
-				if(IsSpriteTile()) {
+				if(IsSpriteTile() || TransparencyRequired) {
 					rgbColor = color == 0 ? 0x00FFFFFF : palette[(PaletteColors >> ((3 - color) * 8)) & 0x3F];
 				} else {
 					rgbColor = palette[(PaletteColors >> ((3 - color) * 8)) & 0x3F];
