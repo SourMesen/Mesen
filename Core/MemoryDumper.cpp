@@ -356,7 +356,7 @@ void MemoryDumper::GetSprites(uint32_t* frameBuffer)
 						destAddr = (y << 10) + (x << 3) + (i << 6) + j;
 					}
 
-					screenBuffer[destAddr] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(palette + color);
+					screenBuffer[destAddr] = color == 0 ? 0xFFFF : _ppu->ReadPaletteRAM(palette + color);
 				}
 			}
 		}

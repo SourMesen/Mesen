@@ -133,7 +133,12 @@ void VideoDecoder::DecodeFrame()
 void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length)
 {
 	for(uint32_t i = 0; i < length; i++) {
-		outputBuffer[i] = EmulationSettings::GetRgbPalette()[inputBuffer[i] & 0x3F];
+		if(inputBuffer[i] == 0xFFFF) {
+			//This pixel is transparent
+			outputBuffer[i] = 0;
+		} else {
+			outputBuffer[i] = EmulationSettings::GetRgbPalette()[inputBuffer[i] & 0x3F];
+		}
 	}
 }
 

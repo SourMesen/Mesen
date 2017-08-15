@@ -51,6 +51,7 @@ namespace Mesen.GUI.Debugger.Controls
 				Bitmap target = new Bitmap(256, 512);
 
 				using(Graphics g = Graphics.FromImage(target)) {
+					g.Clear(Color.Black);
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
