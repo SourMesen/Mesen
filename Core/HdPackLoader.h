@@ -27,6 +27,8 @@ private:
 	void InitializeHdPack();
 	void LoadCustomPalette();
 
+	void InitializeGlobalConditions();
+
 	bool ProcessImgTag(string src);
 	void ProcessPatchTag(vector<string> &tokens);
 	void ProcessOverscanTag(vector<string> &tokens);

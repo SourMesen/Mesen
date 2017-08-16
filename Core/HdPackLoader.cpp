@@ -112,6 +112,8 @@ bool HdPackLoader::LoadPack()
 			return false;
 		}
 
+		InitializeGlobalConditions();
+
 		for(string lineContent : StringUtilities::Split(string(hdDefinition.data(), hdDefinition.data() + hdDefinition.size()), '\n')) {
 			lineContent = lineContent.substr(0, lineContent.length() - 1);
 
@@ -176,6 +178,24 @@ bool HdPackLoader::ProcessImgTag(string src)
 		MessageManager::Log("[HDPack] Error loading HDPack: PNG file " + src + " could not be read.");
 		return false;
 	}
+}
+
+void HdPackLoader::InitializeGlobalConditions()
+{
+	HdPackCondition* hmirror = new HdPackCondition();
+	hmirror->Name = "hmirror";
+	hmirror->Type = HdPackConditionType::HorizontalMirroring;
+	_data->Conditions.push_back(unique_ptr<HdPackCondition>(hmirror));
+
+	HdPackCondition* vmirror = new HdPackCondition();
+	vmirror->Name = "vmirror";
+	vmirror->Type = HdPackConditionType::VerticalMirroring;
+	_data->Conditions.push_back(unique_ptr<HdPackCondition>(vmirror));
+
+	HdPackCondition* bgpriority = new HdPackCondition();
+	bgpriority->Name = "bgpriority";
+	bgpriority->Type = HdPackConditionType::BackgroundPriority;
+	_data->Conditions.push_back(unique_ptr<HdPackCondition>(bgpriority));
 }
 
 void HdPackLoader::ProcessOverscanTag(vector<string> &tokens)

@@ -109,6 +109,9 @@ enum class HdPackConditionType
 	SpriteAtPosition,
 	TileNearby,
 	SpriteNearby,
+	HorizontalMirroring,
+	VerticalMirroring,
+	BackgroundPriority,
 };
 
 struct HdPackCondition
@@ -121,9 +124,18 @@ struct HdPackCondition
 	int32_t TileIndex;
 	uint8_t TileData[16];
 
-	bool CheckCondition(HdPpuPixelInfo *screenTiles, int x, int y)
+	bool CheckCondition(HdPpuPixelInfo *screenTiles, int x, int y, HdPpuTileInfo* tile)
 	{
 		switch(Type) {
+			case HdPackConditionType::HorizontalMirroring:
+				return tile && tile->HorizontalMirroring;
+			
+			case HdPackConditionType::VerticalMirroring:
+				return tile && tile->VerticalMirroring;
+
+			case HdPackConditionType::BackgroundPriority:
+				return tile && tile->BackgroundPriority;
+
 			case HdPackConditionType::TileAtPosition:
 			case HdPackConditionType::SpriteAtPosition: {
 				int pixelIndex = (TileY << 8) + TileX;
@@ -233,10 +245,10 @@ struct HdPackTileInfo : public HdTileKey
 
 	vector<HdPackCondition*> Conditions;
 
-	bool MatchesCondition(HdPpuPixelInfo *screenTiles, int x, int y)
+	bool MatchesCondition(HdPpuPixelInfo *screenTiles, int x, int y, HdPpuTileInfo* tile)
 	{
 		for(HdPackCondition* condition : Conditions) {
-			if(!condition->CheckCondition(screenTiles, x, y)) {
+			if(!condition->CheckCondition(screenTiles, x, y, tile)) {
 				return false;
 			}
 		}

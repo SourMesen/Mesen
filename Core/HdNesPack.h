@@ -12,7 +12,7 @@ private:
 	__forceinline uint32_t AdjustBrightness(uint8_t input[4], uint16_t brightness);
 	__forceinline void DrawColor(uint32_t color, uint32_t* outputBuffer, uint32_t scale, uint32_t screenWidth);
 	__forceinline void DrawTile(HdPpuTileInfo &tileInfo, HdPackTileInfo &hdPackTileInfo, uint32_t* outputBuffer, uint32_t screenWidth);
-	__forceinline HdPackTileInfo* GetMatchingTile(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, HdTileKey& key);
+	__forceinline HdPackTileInfo* GetMatchingTile(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, HdPpuTileInfo* tile);
 
 	__forceinline bool IsNextToSprite(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y);
 	__forceinline uint32_t GetCustomBackgroundPixel(int x, int y, int offsetX, int offsetY);
