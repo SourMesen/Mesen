@@ -12,7 +12,6 @@ ScaleFilter::ScaleFilter(ScaleFilterType scaleFilterType, uint32_t scale)
 {
 	_scaleFilterType = scaleFilterType;
 	_filterScale = scale;
-	_decodedPpuBuffer = new uint32_t[PPU::PixelCount];
 
 	if(!_hqxInitDone && _scaleFilterType == ScaleFilterType::HQX) {
 		hqxInit();
@@ -22,68 +21,72 @@ ScaleFilter::ScaleFilter(ScaleFilterType scaleFilterType, uint32_t scale)
 
 ScaleFilter::~ScaleFilter()
 {
-	delete[] _decodedPpuBuffer;
+	if(_outputBuffer) {
+		delete[] _outputBuffer;
+	}
 }
 
-FrameInfo ScaleFilter::GetFrameInfo()
+uint32_t ScaleFilter::GetScale()
 {
-	OverscanDimensions overscan = GetOverscan();
-	return{ overscan.GetScreenWidth()*_filterScale, overscan.GetScreenHeight()*_filterScale, PPU::ScreenWidth*_filterScale, PPU::ScreenHeight*_filterScale, 4 };
+	return _filterScale;
 }
 
-void ScaleFilter::ApplyPrescaleFilter()
+void ScaleFilter::ApplyPrescaleFilter(uint32_t *inputArgbBuffer)
 {
-	uint32_t* outputBuffer = (uint32_t*)GetOutputBuffer();
+	uint32_t* outputBuffer = _outputBuffer;
 
-	OverscanDimensions overscan = GetOverscan();
-	uint32_t height = overscan.GetScreenHeight();
-	uint32_t width = overscan.GetScreenWidth();
-
-	uint32_t *inputBuffer = _decodedPpuBuffer;
-	for(uint32_t y = 0; y < height; y++) {
-		for(uint32_t x = 0; x < width; x++) {
+	for(uint32_t y = 0; y < _height; y++) {
+		for(uint32_t x = 0; x < _width; x++) {
 			for(uint32_t i = 0; i < _filterScale; i++) {
-				*(outputBuffer++) = *inputBuffer;
+				*(outputBuffer++) = *inputArgbBuffer;
 			}
-			inputBuffer++;
+			inputArgbBuffer++;
 		}
-		for(uint32_t i = 1; i< _filterScale; i++) {
-			memcpy(outputBuffer, outputBuffer - width*_filterScale, width*_filterScale *4);
-			outputBuffer += width*_filterScale;
+		for(uint32_t i = 1; i < _filterScale; i++) {
+			memcpy(outputBuffer, outputBuffer - _width*_filterScale, _width*_filterScale *4);
+			outputBuffer += _width*_filterScale;
 		}
 	}
 }
 
-void ScaleFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
+void ScaleFilter::UpdateOutputBuffer(uint32_t width, uint32_t height)
 {
-	DecodePpuBuffer(ppuOutputBuffer, _decodedPpuBuffer, false);
+	if(!_outputBuffer || width != _width || height != _height) {
+		if(_outputBuffer) {
+			delete[] _outputBuffer;
+		}
 
-	OverscanDimensions overscan = GetOverscan();
-	uint32_t height = overscan.GetScreenHeight();
-	uint32_t width = overscan.GetScreenWidth();
-	uint32_t* outputBuffer = (uint32_t*)GetOutputBuffer();
+		_width = width;
+		_height = height;
+		_outputBuffer = new uint32_t[_width*_height*_filterScale*_filterScale];
+	}
+}
+
+uint32_t* ScaleFilter::ApplyFilter(uint32_t *inputArgbBuffer, uint32_t width, uint32_t height)
+{
+	UpdateOutputBuffer(width, height);
 
 	if(_scaleFilterType == ScaleFilterType::xBRZ) {
-		xbrz::scale(_filterScale, _decodedPpuBuffer, outputBuffer, width, height, xbrz::ColorFormat::ARGB);
+		xbrz::scale(_filterScale, inputArgbBuffer, _outputBuffer, width, height, xbrz::ColorFormat::ARGB);
 	} else if(_scaleFilterType == ScaleFilterType::HQX) {
-		hqx(_filterScale, _decodedPpuBuffer, outputBuffer, width, height);
+		hqx(_filterScale, inputArgbBuffer, _outputBuffer, width, height);
 	} else if(_scaleFilterType == ScaleFilterType::Scale2x) {
-		scale(_filterScale, outputBuffer, width*sizeof(uint32_t)*_filterScale, _decodedPpuBuffer, width*sizeof(uint32_t), 4, width, height);
+		scale(_filterScale, _outputBuffer, width*sizeof(uint32_t)*_filterScale, inputArgbBuffer, width*sizeof(uint32_t), 4, width, height);
 	} else if(_scaleFilterType == ScaleFilterType::_2xSai) {
-		twoxsai_generic_xrgb8888(width, height, _decodedPpuBuffer, width, outputBuffer, width * _filterScale);
+		twoxsai_generic_xrgb8888(width, height, inputArgbBuffer, width, _outputBuffer, width * _filterScale);
 	} else if(_scaleFilterType == ScaleFilterType::Super2xSai) {
-		supertwoxsai_generic_xrgb8888(width, height, _decodedPpuBuffer, width, outputBuffer, width * _filterScale);
+		supertwoxsai_generic_xrgb8888(width, height, inputArgbBuffer, width, _outputBuffer, width * _filterScale);
 	} else if(_scaleFilterType == ScaleFilterType::SuperEagle) {
-		supereagle_generic_xrgb8888(width, height, _decodedPpuBuffer, width, outputBuffer, width * _filterScale);
+		supereagle_generic_xrgb8888(width, height, inputArgbBuffer, width, _outputBuffer, width * _filterScale);
 	} else if(_scaleFilterType == ScaleFilterType::Prescale) {
-		ApplyPrescaleFilter();
+		ApplyPrescaleFilter(inputArgbBuffer);
 	}
 
 	double scanlineIntensity = 1.0 - EmulationSettings::GetPictureSettings().ScanlineIntensity;
 	if(scanlineIntensity < 1.0) {
 		for(int y = 1, yMax = height * _filterScale; y < yMax; y += 2) {
 			for(int x = 0, xMax = width * _filterScale; x < xMax; x++) {
-				uint32_t &color = outputBuffer[y*xMax + x];
+				uint32_t &color = _outputBuffer[y*xMax + x];
 				uint8_t r = (color >> 16) & 0xFF, g = (color >> 8) & 0xFF, b = color & 0xFF;
 				r = (uint8_t)(r * scanlineIntensity);
 				g = (uint8_t)(g * scanlineIntensity);
@@ -92,4 +95,6 @@ void ScaleFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 			}
 		}
 	}
+
+	return _outputBuffer;
 }

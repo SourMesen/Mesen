@@ -611,6 +611,12 @@ namespace Mesen.GUI.Forms
 					mnuSelectDisk.Enabled = autoInsertDisabled;
 					mnuEjectDisk.Enabled = autoInsertDisabled;
 					mnuSwitchDiskSide.Enabled = autoInsertDisabled;
+
+					bool isHdPackLoader = InteropEmu.IsHdPackLoaded();
+					mnuNtscFilter.Enabled = !isHdPackLoader;
+					mnuNtscBisqwitQuarterFilter.Enabled = !isHdPackLoader;
+					mnuNtscBisqwitHalfFilter.Enabled = !isHdPackLoader;
+					mnuNtscBisqwitFullFilter.Enabled = !isHdPackLoader;
 				}
 			} catch { }
 		}

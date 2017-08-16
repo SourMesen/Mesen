@@ -9,6 +9,7 @@ using std::thread;
 #include "FrameInfo.h"
 
 class BaseVideoFilter;
+class ScaleFilter;
 class IRenderingDevice;
 struct HdPpuPixelInfo;
 
@@ -26,6 +27,7 @@ private:
 
 	uint16_t *_ppuOutputBuffer = nullptr;
 	HdPpuPixelInfo *_hdScreenTiles = nullptr;
+	bool _hdFilterEnabled = false;
 
 	unique_ptr<thread> _decodeThread;
 
@@ -40,6 +42,7 @@ private:
 
 	VideoFilterType _videoFilterType = VideoFilterType::None;
 	unique_ptr<BaseVideoFilter> _videoFilter;
+	unique_ptr<ScaleFilter> _scaleFilter;
 
 	void UpdateVideoFilter();
 

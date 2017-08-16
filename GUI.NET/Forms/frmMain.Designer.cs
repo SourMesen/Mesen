@@ -185,6 +185,8 @@ namespace Mesen.GUI.Forms
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem25 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuEditHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
@@ -192,8 +194,6 @@ namespace Mesen.GUI.Forms
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHelpWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem25 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuEditHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
@@ -307,7 +307,7 @@ namespace Mesen.GUI.Forms
             this.mnuGame,
             this.mnuOptions,
             this.mnuTools,
-				this.mnuDebug,
+            this.mnuDebug,
             this.mnuHelp});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
@@ -882,7 +882,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuScale4xFilter.Name = "mnuScale4xFilter";
 			this.mnuScale4xFilter.Size = new System.Drawing.Size(206, 22);
-			this.mnuScale4xFilter.Text = "Scale 4x";
+			this.mnuScale4xFilter.Text = "Scale4x";
 			this.mnuScale4xFilter.Click += new System.EventHandler(this.mnuScale4xFilter_Click);
 			// 
 			// toolStripMenuItem23
@@ -1500,6 +1500,19 @@ namespace Mesen.GUI.Forms
 			this.mnuTraceLogger.Text = "Trace Logger";
 			this.mnuTraceLogger.Click += new System.EventHandler(this.mnuTraceLogger_Click);
 			// 
+			// toolStripMenuItem25
+			// 
+			this.toolStripMenuItem25.Name = "toolStripMenuItem25";
+			this.toolStripMenuItem25.Size = new System.Drawing.Size(193, 6);
+			// 
+			// mnuEditHeader
+			// 
+			this.mnuEditHeader.Image = global::Mesen.GUI.Properties.Resources.Edit;
+			this.mnuEditHeader.Name = "mnuEditHeader";
+			this.mnuEditHeader.Size = new System.Drawing.Size(196, 22);
+			this.mnuEditHeader.Text = "Edit iNES Header";
+			this.mnuEditHeader.Click += new System.EventHandler(this.mnuEditHeader_Click);
+			// 
 			// mnuHelp
 			// 
 			this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1553,19 +1566,6 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(198, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
-			// 
-			// toolStripMenuItem25
-			// 
-			this.toolStripMenuItem25.Name = "toolStripMenuItem25";
-			this.toolStripMenuItem25.Size = new System.Drawing.Size(193, 6);
-			// 
-			// mnuEditHeader
-			// 
-			this.mnuEditHeader.Image = global::Mesen.GUI.Properties.Resources.Edit;
-			this.mnuEditHeader.Name = "mnuEditHeader";
-			this.mnuEditHeader.Size = new System.Drawing.Size(196, 22);
-			this.mnuEditHeader.Text = "Edit iNES Header";
-			this.mnuEditHeader.Click += new System.EventHandler(this.mnuEditHeader_Click);
 			// 
 			// frmMain
 			// 

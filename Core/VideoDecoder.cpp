@@ -65,42 +65,44 @@ void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
 void VideoDecoder::UpdateVideoFilter()
 {
 	VideoFilterType newFilter = EmulationSettings::GetVideoFilterType();
-	if(_hdScreenTiles) {
-		newFilter = VideoFilterType::HdPack;
-	}
 
-	if(_videoFilterType != newFilter || _videoFilter == nullptr) {
+	if(_videoFilterType != newFilter || _videoFilter == nullptr || (_hdScreenTiles && !_hdFilterEnabled) || (!_hdScreenTiles && _hdFilterEnabled)) {
 		_videoFilterType = newFilter;
+		_videoFilter.reset(new DefaultVideoFilter());
+		_scaleFilter.reset();
 
 		switch(_videoFilterType) {
-			case VideoFilterType::None: _videoFilter.reset(new DefaultVideoFilter()); break;
 			case VideoFilterType::NTSC: _videoFilter.reset(new NtscFilter()); break;
 			case VideoFilterType::BisqwitNtsc: _videoFilter.reset(new BisqwitNtscFilter(1)); break;
 			case VideoFilterType::BisqwitNtscHalfRes: _videoFilter.reset(new BisqwitNtscFilter(2)); break;
 			case VideoFilterType::BisqwitNtscQuarterRes: _videoFilter.reset(new BisqwitNtscFilter(4)); break;
-			case VideoFilterType::xBRZ2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 2)); break;
-			case VideoFilterType::xBRZ3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 3)); break;
-			case VideoFilterType::xBRZ4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 4)); break;
-			case VideoFilterType::xBRZ5x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 5)); break;
-			case VideoFilterType::xBRZ6x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 6)); break;
-			case VideoFilterType::HQ2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 2)); break;
-			case VideoFilterType::HQ3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 3)); break;
-			case VideoFilterType::HQ4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 4)); break;
-			case VideoFilterType::Scale2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 2)); break;
-			case VideoFilterType::Scale3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 3)); break;
-			case VideoFilterType::Scale4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 4)); break;
-			case VideoFilterType::_2xSai: _videoFilter.reset(new ScaleFilter(ScaleFilterType::_2xSai, 2)); break;
-			case VideoFilterType::Super2xSai: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Super2xSai, 2)); break;
-			case VideoFilterType::SuperEagle: _videoFilter.reset(new ScaleFilter(ScaleFilterType::SuperEagle, 2)); break;
+			case VideoFilterType::xBRZ2x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 2)); break;
+			case VideoFilterType::xBRZ3x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 3)); break;
+			case VideoFilterType::xBRZ4x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 4)); break;
+			case VideoFilterType::xBRZ5x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 5)); break;
+			case VideoFilterType::xBRZ6x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 6)); break;
+			case VideoFilterType::HQ2x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 2)); break;
+			case VideoFilterType::HQ3x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 3)); break;
+			case VideoFilterType::HQ4x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 4)); break;
+			case VideoFilterType::Scale2x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 2)); break;
+			case VideoFilterType::Scale3x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 3)); break;
+			case VideoFilterType::Scale4x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 4)); break;
+			case VideoFilterType::_2xSai: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::_2xSai, 2)); break;
+			case VideoFilterType::Super2xSai: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Super2xSai, 2)); break;
+			case VideoFilterType::SuperEagle: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::SuperEagle, 2)); break;
 
-			case VideoFilterType::Prescale2x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 2)); break;
-			case VideoFilterType::Prescale3x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 3)); break;
-			case VideoFilterType::Prescale4x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 4)); break;
-			case VideoFilterType::Prescale6x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 6)); break;
-			case VideoFilterType::Prescale8x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 8)); break;
-			case VideoFilterType::Prescale10x: _videoFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 10)); break;
+			case VideoFilterType::Prescale2x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 2)); break;
+			case VideoFilterType::Prescale3x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 3)); break;
+			case VideoFilterType::Prescale4x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 4)); break;
+			case VideoFilterType::Prescale6x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 6)); break;
+			case VideoFilterType::Prescale8x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 8)); break;
+			case VideoFilterType::Prescale10x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 10)); break;
+		}
 
-			case VideoFilterType::HdPack: _videoFilter.reset(new HdVideoFilter()); break;
+		_hdFilterEnabled = false;
+		if(_hdScreenTiles) {
+			_videoFilter.reset(new HdVideoFilter());
+			_hdFilterEnabled = true;
 		}
 	}
 }
@@ -109,10 +111,15 @@ void VideoDecoder::DecodeFrame()
 {
 	UpdateVideoFilter();
 
-	if(_videoFilterType == VideoFilterType::HdPack) {
+	if(_hdFilterEnabled) {
 		((HdVideoFilter*)_videoFilter.get())->SetHdScreenTiles(_hdScreenTiles);
 	}
 	_videoFilter->SendFrame(_ppuOutputBuffer);
+
+	uint32_t* outputBuffer = (uint32_t*)_videoFilter->GetOutputBuffer();
+	if(_scaleFilter) {
+		outputBuffer = _scaleFilter->ApplyFilter(outputBuffer, _videoFilter->GetFrameInfo().Width, _videoFilter->GetFrameInfo().Height);
+	}
 
 	ScreenSize screenSize;
 	GetScreenSize(screenSize, true);
@@ -123,11 +130,17 @@ void VideoDecoder::DecodeFrame()
 	_previousScreenSize = screenSize;
 	
 	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
+	if(_scaleFilter) {
+		frameInfo.Height *= _scaleFilter->GetScale();
+		frameInfo.Width *= _scaleFilter->GetScale();
+		frameInfo.OriginalHeight *= _scaleFilter->GetScale();
+		frameInfo.OriginalWidth *= _scaleFilter->GetScale();
+	}
 
 	_frameChanged = false;
 	
 	//Rewind manager will take care of sending the correct frame to the video renderer
-	RewindManager::SendFrame(_videoFilter->GetOutputBuffer(), frameInfo.Width, frameInfo.Height);
+	RewindManager::SendFrame(outputBuffer, frameInfo.Width, frameInfo.Height);
 }
 
 void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length)
