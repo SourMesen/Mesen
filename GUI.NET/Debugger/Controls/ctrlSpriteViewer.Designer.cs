@@ -52,6 +52,8 @@
 			this.picSprites = new System.Windows.Forms.PictureBox();
 			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
+			this.lblPalette = new System.Windows.Forms.Label();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpSpriteInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -95,10 +97,11 @@
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.25F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.75F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.tableLayoutPanel4.Controls.Add(this.lblPalette, 0, 4);
 			this.tableLayoutPanel4.Controls.Add(this.txtSpriteIndex, 1, 0);
 			this.tableLayoutPanel4.Controls.Add(this.lblSpriteIndex, 0, 0);
-			this.tableLayoutPanel4.Controls.Add(this.picPreview, 1, 4);
-			this.tableLayoutPanel4.Controls.Add(this.lblScreenPreview, 0, 4);
+			this.tableLayoutPanel4.Controls.Add(this.picPreview, 1, 5);
+			this.tableLayoutPanel4.Controls.Add(this.lblScreenPreview, 0, 5);
 			this.tableLayoutPanel4.Controls.Add(this.lblTile, 0, 3);
 			this.tableLayoutPanel4.Controls.Add(this.picTile, 1, 3);
 			this.tableLayoutPanel4.Controls.Add(this.lblPosition, 0, 2);
@@ -110,10 +113,12 @@
 			this.tableLayoutPanel4.Controls.Add(this.txtPaletteAddress, 3, 0);
 			this.tableLayoutPanel4.Controls.Add(this.txtTileAddress, 3, 1);
 			this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel1, 2, 2);
+			this.tableLayoutPanel4.Controls.Add(this.ctrlTilePalette, 1, 4);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-			this.tableLayoutPanel4.RowCount = 5;
+			this.tableLayoutPanel4.RowCount = 6;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -125,6 +130,7 @@
 			// 
 			// txtSpriteIndex
 			// 
+			this.txtSpriteIndex.BackColor = System.Drawing.SystemColors.Window;
 			this.txtSpriteIndex.Location = new System.Drawing.Point(94, 3);
 			this.txtSpriteIndex.Name = "txtSpriteIndex";
 			this.txtSpriteIndex.ReadOnly = true;
@@ -146,16 +152,16 @@
 			this.picPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.picPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanel4.SetColumnSpan(this.picPreview, 3);
-			this.picPreview.Location = new System.Drawing.Point(94, 217);
+			this.picPreview.Location = new System.Drawing.Point(94, 257);
 			this.picPreview.Name = "picPreview";
-			this.picPreview.Size = new System.Drawing.Size(258, 242);
+			this.picPreview.Size = new System.Drawing.Size(258, 231);
 			this.picPreview.TabIndex = 21;
 			this.picPreview.TabStop = false;
 			// 
 			// lblScreenPreview
 			// 
 			this.lblScreenPreview.AutoSize = true;
-			this.lblScreenPreview.Location = new System.Drawing.Point(3, 219);
+			this.lblScreenPreview.Location = new System.Drawing.Point(3, 259);
 			this.lblScreenPreview.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
 			this.lblScreenPreview.Name = "lblScreenPreview";
 			this.lblScreenPreview.Size = new System.Drawing.Size(85, 13);
@@ -188,12 +194,13 @@
 			this.lblPosition.AutoSize = true;
 			this.lblPosition.Location = new System.Drawing.Point(3, 58);
 			this.lblPosition.Name = "lblPosition";
-			this.lblPosition.Size = new System.Drawing.Size(70, 13);
+			this.lblPosition.Size = new System.Drawing.Size(73, 13);
 			this.lblPosition.TabIndex = 16;
-			this.lblPosition.Text = "Position (X,Y)";
+			this.lblPosition.Text = "Position (X,Y):";
 			// 
 			// txtPosition
 			// 
+			this.txtPosition.BackColor = System.Drawing.SystemColors.Window;
 			this.txtPosition.Location = new System.Drawing.Point(94, 55);
 			this.txtPosition.Name = "txtPosition";
 			this.txtPosition.ReadOnly = true;
@@ -212,6 +219,7 @@
 			// 
 			// txtTileIndex
 			// 
+			this.txtTileIndex.BackColor = System.Drawing.SystemColors.Window;
 			this.txtTileIndex.Location = new System.Drawing.Point(94, 29);
 			this.txtTileIndex.Name = "txtTileIndex";
 			this.txtTileIndex.ReadOnly = true;
@@ -240,6 +248,7 @@
 			// 
 			// txtPaletteAddress
 			// 
+			this.txtPaletteAddress.BackColor = System.Drawing.SystemColors.Window;
 			this.txtPaletteAddress.Location = new System.Drawing.Point(332, 3);
 			this.txtPaletteAddress.Name = "txtPaletteAddress";
 			this.txtPaletteAddress.ReadOnly = true;
@@ -248,6 +257,7 @@
 			// 
 			// txtTileAddress
 			// 
+			this.txtTileAddress.BackColor = System.Drawing.SystemColors.Window;
 			this.txtTileAddress.Location = new System.Drawing.Point(332, 29);
 			this.txtTileAddress.Name = "txtTileAddress";
 			this.txtTileAddress.ReadOnly = true;
@@ -335,6 +345,28 @@
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
+			// ctrlTilePalette
+			// 
+			this.ctrlTilePalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.tableLayoutPanel4.SetColumnSpan(this.ctrlTilePalette, 2);
+			this.ctrlTilePalette.DisplayIndexes = false;
+			this.ctrlTilePalette.HighlightMouseOver = false;
+			this.ctrlTilePalette.Location = new System.Drawing.Point(94, 217);
+			this.ctrlTilePalette.Name = "ctrlTilePalette";
+			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
+			this.ctrlTilePalette.TabIndex = 25;
+			// 
+			// lblPalette
+			// 
+			this.lblPalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblPalette.AutoSize = true;
+			this.lblPalette.Location = new System.Drawing.Point(3, 230);
+			this.lblPalette.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+			this.lblPalette.Name = "lblPalette";
+			this.lblPalette.Size = new System.Drawing.Size(43, 13);
+			this.lblPalette.TabIndex = 26;
+			this.lblPalette.Text = "Palette:";
+			// 
 			// ctrlSpriteViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -382,5 +414,7 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.ContextMenuStrip ctxMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
+		private System.Windows.Forms.Label lblPalette;
+		private ctrlTilePalette ctrlTilePalette;
 	}
 }

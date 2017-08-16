@@ -138,6 +138,8 @@ namespace Mesen.GUI.Debugger.Controls
 				tileAddr = _spritePatternAddr + (tileIndex << 4);
 			}
 
+			this.ctrlTilePalette.SelectedPalette = (attributes & 0x03) + 4;
+
 			int paletteAddr = 0x3F10 + ((attributes & 0x03) << 2);
 			bool verticalMirror = (attributes & 0x80) == 0x80;
 			bool horizontalMirror = (attributes & 0x40) == 0x40;

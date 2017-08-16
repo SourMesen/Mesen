@@ -394,9 +394,9 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetPalette")] private static extern void DebugGetPaletteWrapper(IntPtr frameBuffer);
-		public static byte[] DebugGetPalette()
+		public static int[] DebugGetPalette()
 		{
-			byte[] frameData = new byte[4*8*4];
+			int[] frameData = new int[4*8];
 
 			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
 			try {

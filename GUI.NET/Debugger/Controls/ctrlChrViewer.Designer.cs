@@ -50,16 +50,16 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.txtTileIndex = new System.Windows.Forms.TextBox();
 			this.picTile = new System.Windows.Forms.PictureBox();
-			this.picPaletteSelection = new System.Windows.Forms.PictureBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.picColorTooltip = new System.Windows.Forms.PictureBox();
 			this.picTileTooltip = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picChrBank1 = new System.Windows.Forms.PictureBox();
-			this.picChrBank2 = new System.Windows.Forms.PictureBox();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
+			this.picChrBank2 = new System.Windows.Forms.PictureBox();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpDisplayOptions.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -70,13 +70,12 @@
 			this.grpTileInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picPaletteSelection)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picColorTooltip)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picTileTooltip)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picChrBank1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picChrBank2)).BeginInit();
 			this.ctxMenu.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picChrBank2)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel3
@@ -282,10 +281,10 @@
 			this.tableLayoutPanel4.Controls.Add(this.label6, 0, 2);
 			this.tableLayoutPanel4.Controls.Add(this.txtTileIndex, 1, 0);
 			this.tableLayoutPanel4.Controls.Add(this.picTile, 1, 2);
-			this.tableLayoutPanel4.Controls.Add(this.picPaletteSelection, 1, 3);
 			this.tableLayoutPanel4.Controls.Add(this.label3, 0, 3);
 			this.tableLayoutPanel4.Controls.Add(this.picColorTooltip, 2, 3);
 			this.tableLayoutPanel4.Controls.Add(this.picTileTooltip, 2, 2);
+			this.tableLayoutPanel4.Controls.Add(this.ctrlTilePalette, 1, 3);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -359,18 +358,6 @@
 			this.picTile.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picTile_MouseMove);
 			this.picTile.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picTile_MouseUp);
 			// 
-			// picPaletteSelection
-			// 
-			this.picPaletteSelection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picPaletteSelection.Location = new System.Drawing.Point(77, 191);
-			this.picPaletteSelection.Name = "picPaletteSelection";
-			this.picPaletteSelection.Size = new System.Drawing.Size(130, 34);
-			this.picPaletteSelection.TabIndex = 13;
-			this.picPaletteSelection.TabStop = false;
-			this.picPaletteSelection.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPaletteSelection_MouseDown);
-			this.picPaletteSelection.MouseLeave += new System.EventHandler(this.picPaletteSelection_MouseLeave);
-			this.picPaletteSelection.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPaletteSelection_MouseMove);
-			// 
 			// label3
 			// 
 			this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -433,6 +420,21 @@
 			this.picChrBank1.MouseLeave += new System.EventHandler(this.picChrBank_MouseLeave);
 			this.picChrBank1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseMove);
 			// 
+			// ctxMenu
+			// 
+			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopyHdPack});
+			this.ctxMenu.Name = "ctxMenu";
+			this.ctxMenu.Size = new System.Drawing.Size(222, 26);
+			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuCopyHdPack
+			// 
+			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
+			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
+			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
+			// 
 			// picChrBank2
 			// 
 			this.picChrBank2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -454,20 +456,14 @@
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
 			// 
-			// ctxMenu
+			// ctrlTilePalette
 			// 
-			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuCopyHdPack});
-			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(222, 48);
-			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
-			// 
-			// mnuCopyHdPack
-			// 
-			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
-			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
-			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
-			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
+			this.ctrlTilePalette.DisplayIndexes = false;
+			this.ctrlTilePalette.HighlightMouseOver = false;
+			this.ctrlTilePalette.Location = new System.Drawing.Point(77, 191);
+			this.ctrlTilePalette.Name = "ctrlTilePalette";
+			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
+			this.ctrlTilePalette.TabIndex = 17;
 			// 
 			// ctrlChrViewer
 			// 
@@ -491,13 +487,12 @@
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picPaletteSelection)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picColorTooltip)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picTileTooltip)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picChrBank1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picChrBank2)).EndInit();
 			this.ctxMenu.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picChrBank2)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -528,7 +523,6 @@
 		private System.Windows.Forms.PictureBox picChrBank2;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.GroupBox grpDisplayOptions;
-		private System.Windows.Forms.PictureBox picPaletteSelection;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.PictureBox picColorTooltip;
 		private System.Windows.Forms.PictureBox picTileTooltip;
@@ -536,5 +530,6 @@
 		private System.Windows.Forms.PictureBox picPaletteTooltip;
 		private System.Windows.Forms.ContextMenuStrip ctxMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
+		private ctrlTilePalette ctrlTilePalette;
 	}
 }

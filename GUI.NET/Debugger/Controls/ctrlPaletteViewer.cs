@@ -16,7 +16,7 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlPaletteViewer : BaseControl
 	{
 		private byte[] _paletteRam;
-		private byte[] _palettePixelData;
+		private int[] _palettePixelData;
 		private int _paletteIndex = -1;
 
 		public ctrlPaletteViewer()

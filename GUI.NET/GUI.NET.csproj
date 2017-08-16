@@ -382,6 +382,12 @@
     <Compile Include="Debugger\Controls\ctrlTextbox.Designer.cs">
       <DependentUpon>ctrlTextbox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlTilePalette.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlTilePalette.Designer.cs">
+      <DependentUpon>ctrlTilePalette.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlWatch.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -830,6 +836,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlScrollableTextbox.resx">
       <DependentUpon>ctrlScrollableTextbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlTilePalette.resx">
+      <DependentUpon>ctrlTilePalette.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlWatch.resx">
       <DependentUpon>ctrlWatch.cs</DependentUpon>

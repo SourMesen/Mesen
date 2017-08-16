@@ -30,6 +30,8 @@
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picNametable = new System.Windows.Forms.PictureBox();
+			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpTileInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtPpuAddress = new System.Windows.Forms.TextBox();
@@ -54,15 +56,14 @@
 			this.chkShowPpuScrollOverlay = new System.Windows.Forms.CheckBox();
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
-			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
+			this.ctxMenu.SuspendLayout();
 			this.grpTileInfo.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
-			this.ctxMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -96,12 +97,27 @@
 			this.picNametable.TabStop = false;
 			this.picNametable.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picNametable_MouseMove);
 			// 
+			// ctxMenu
+			// 
+			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopyHdPack});
+			this.ctxMenu.Name = "ctxMenu";
+			this.ctxMenu.Size = new System.Drawing.Size(222, 26);
+			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuCopyHdPack
+			// 
+			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
+			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
+			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
+			// 
 			// grpTileInfo
 			// 
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
 			this.grpTileInfo.Location = new System.Drawing.Point(519, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.grpTileInfo.Size = new System.Drawing.Size(175, 330);
+			this.grpTileInfo.Size = new System.Drawing.Size(175, 353);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -129,10 +145,12 @@
 			this.tableLayoutPanel2.Controls.Add(this.lblNametableIndex, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.lblLocation, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.lblPpuAddress, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.ctrlTilePalette, 0, 9);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 10;
+			this.tableLayoutPanel2.RowCount = 11;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -143,11 +161,12 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 311);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 334);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// txtPpuAddress
 			// 
+			this.txtPpuAddress.BackColor = System.Drawing.SystemColors.Window;
 			this.txtPpuAddress.Location = new System.Drawing.Point(84, 3);
 			this.txtPpuAddress.Name = "txtPpuAddress";
 			this.txtPpuAddress.ReadOnly = true;
@@ -156,6 +175,7 @@
 			// 
 			// txtLocation
 			// 
+			this.txtLocation.BackColor = System.Drawing.SystemColors.Window;
 			this.txtLocation.Location = new System.Drawing.Point(84, 55);
 			this.txtLocation.Name = "txtLocation";
 			this.txtLocation.ReadOnly = true;
@@ -164,6 +184,7 @@
 			// 
 			// txtNametable
 			// 
+			this.txtNametable.BackColor = System.Drawing.SystemColors.Window;
 			this.txtNametable.Location = new System.Drawing.Point(84, 29);
 			this.txtNametable.Name = "txtNametable";
 			this.txtNametable.ReadOnly = true;
@@ -172,6 +193,7 @@
 			// 
 			// txtPaletteAddress
 			// 
+			this.txtPaletteAddress.BackColor = System.Drawing.SystemColors.Window;
 			this.txtPaletteAddress.Location = new System.Drawing.Point(84, 185);
 			this.txtPaletteAddress.Name = "txtPaletteAddress";
 			this.txtPaletteAddress.ReadOnly = true;
@@ -180,6 +202,7 @@
 			// 
 			// txtAttributeAddress
 			// 
+			this.txtAttributeAddress.BackColor = System.Drawing.SystemColors.Window;
 			this.txtAttributeAddress.Location = new System.Drawing.Point(84, 159);
 			this.txtAttributeAddress.Name = "txtAttributeAddress";
 			this.txtAttributeAddress.ReadOnly = true;
@@ -188,6 +211,7 @@
 			// 
 			// txtAttributeData
 			// 
+			this.txtAttributeData.BackColor = System.Drawing.SystemColors.Window;
 			this.txtAttributeData.Location = new System.Drawing.Point(84, 133);
 			this.txtAttributeData.Name = "txtAttributeData";
 			this.txtAttributeData.ReadOnly = true;
@@ -196,6 +220,7 @@
 			// 
 			// txtTileAddress
 			// 
+			this.txtTileAddress.BackColor = System.Drawing.SystemColors.Window;
 			this.txtTileAddress.Location = new System.Drawing.Point(84, 107);
 			this.txtTileAddress.Name = "txtTileAddress";
 			this.txtTileAddress.ReadOnly = true;
@@ -264,6 +289,7 @@
 			// 
 			// txtTileIndex
 			// 
+			this.txtTileIndex.BackColor = System.Drawing.SystemColors.Window;
 			this.txtTileIndex.Location = new System.Drawing.Point(84, 81);
 			this.txtTileIndex.Name = "txtTileIndex";
 			this.txtTileIndex.ReadOnly = true;
@@ -314,7 +340,7 @@
 			this.flowLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 336);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 359);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(181, 100);
@@ -353,20 +379,16 @@
 			this.chkShowAttributeGrid.UseVisualStyleBackColor = true;
 			this.chkShowAttributeGrid.Click += new System.EventHandler(this.chkShowAttributeGrid_Click);
 			// 
-			// ctxMenu
+			// ctrlTilePalette
 			// 
-			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuCopyHdPack});
-			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(222, 48);
-			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
-			// 
-			// mnuCopyHdPack
-			// 
-			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
-			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
-			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
-			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
+			this.ctrlTilePalette.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.tableLayoutPanel2.SetColumnSpan(this.ctrlTilePalette, 2);
+			this.ctrlTilePalette.DisplayIndexes = false;
+			this.ctrlTilePalette.HighlightMouseOver = false;
+			this.ctrlTilePalette.Location = new System.Drawing.Point(19, 283);
+			this.ctrlTilePalette.Name = "ctrlTilePalette";
+			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
+			this.ctrlTilePalette.TabIndex = 19;
 			// 
 			// ctrlNametableViewer
 			// 
@@ -377,13 +399,13 @@
 			this.Size = new System.Drawing.Size(697, 486);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).EndInit();
+			this.ctxMenu.ResumeLayout(false);
 			this.grpTileInfo.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
-			this.ctxMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -418,5 +440,6 @@
 		private System.Windows.Forms.Label lblPpuAddress;
 		private System.Windows.Forms.ContextMenuStrip ctxMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
+		private ctrlTilePalette ctrlTilePalette;
 	}
 }

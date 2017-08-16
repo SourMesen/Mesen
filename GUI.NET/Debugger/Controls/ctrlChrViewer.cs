@@ -28,8 +28,6 @@ namespace Mesen.GUI.Debugger.Controls
 		private bool _hoverBottomBank = false;
 		private int _hoverTileIndex = -1;
 
-		private int _selectedColor = 1;
-		private int _hoverColor = -1;
 		private int _tilePosX = -1;
 		private int _tilePosY = -1;
 
@@ -45,11 +43,14 @@ namespace Mesen.GUI.Debugger.Controls
 				this.cboHighlightType.SelectedIndex = 0;
 
 				this.picTile.Cursor = new Cursor(Properties.Resources.Pencil.GetHicon());
-				this.picPaletteSelection.Cursor = new Cursor(Properties.Resources.Pipette.GetHicon());
 
 				this.toolTip.SetToolTip(this.picTileTooltip, "Click on the tile to draw with the selected color." + Environment.NewLine + "Right button draws the background color.");
 				this.toolTip.SetToolTip(this.picColorTooltip, "Click on a color (or press 1-4) to select it.");
 				this.toolTip.SetToolTip(this.picPaletteTooltip, "Press Shift-1 to Shift-8 to select the palette.");
+
+				this.ctrlTilePalette.AllowSelection = true;
+				this.ctrlTilePalette.HighlightMouseOver = true;
+				this.ctrlTilePalette.DisplayIndexes = true;
 			}
 		}
 
@@ -116,7 +117,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			this.RefreshPreview(_hoverTileIndex >= 0 ? _hoverTileIndex : _tileIndex, _hoverTileIndex >= 0 ? _hoverBottomBank : _bottomBank);
-			this.RefreshPalettePicker();
+			ctrlTilePalette.RefreshPalette();
 		}
 
 		private UInt32 _chrSize;
@@ -157,6 +158,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void cboPalette_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._selectedPalette = this.cboPalette.SelectedIndex;
+			this.ctrlTilePalette.SelectedPalette = this._selectedPalette;
 			this.GetData();
 			this.RefreshViewer();
 		}
@@ -306,7 +308,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 			byte value = 0;
 			if(leftButton) {
-				value = (byte)_selectedColor;
+				value = (byte)ctrlTilePalette.SelectedColor;
 				byte1 |= (byte)(((value << 7) & 0x80) >> x);
 				byte2 |= (byte)(((value << 6) & 0x80) >> x);
 			}
@@ -335,77 +337,6 @@ namespace Mesen.GUI.Debugger.Controls
 			_drawing = false;
 		}
 
-		private void RefreshPalettePicker()
-		{
-			byte[] palette = InteropEmu.DebugGetPalette();
-			byte[] currentPalette = new byte[16];
-			Array.Copy(palette, cboPalette.SelectedIndex * 16, currentPalette, 0, 16);
-
-			GCHandle handle = GCHandle.Alloc(currentPalette, GCHandleType.Pinned);
-			try {
-				Bitmap source = new Bitmap(4, 1, 4*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap target = new Bitmap(128, 32);
-
-				using(Graphics g = Graphics.FromImage(target)) {
-					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-					g.ScaleTransform(32, 32);
-					g.DrawImageUnscaled(source, 0, 0);
-
-					g.ResetTransform();
-					DrawString("1", 5, 2, g);
-					DrawString("2", 37, 2, g);
-					DrawString("3", 69, 2, g);
-					DrawString("4", 101, 2, g);
-
-					using(Pen pen = new Pen(Color.LightBlue, 3)) {
-						g.DrawRectangle(pen, _selectedColor * 32 + 2, 2, 29, 29);
-					}
-					if(_hoverColor >= 0) {
-						using(Pen pen = new Pen(Color.DarkGray, 3)) {
-							g.DrawRectangle(pen, _hoverColor * 32 + 2, 2, 29, 29);
-						}
-					}
-				}
-				this.picPaletteSelection.Image = target;
-			} finally {
-				handle.Free();
-			}
-		}
-
-		private void DrawString(string number, int x, int y, Graphics g)
-		{
-			using(Font font = new Font(BaseControl.MonospaceFontFamily, 10)) {
-				for(int i = -1; i < 2; i++) {
-					for(int j = -1; j < 2; j++) {
-						if(i != 0 || j != 0) {
-							g.DrawString(number, font, Brushes.Black, j+x, i+y);
-						}
-					}
-				}
-				g.DrawString(number, font, Brushes.White, x, y);
-			}
-		}
-
-		private void picPaletteSelection_MouseMove(object sender, MouseEventArgs e)
-		{
-			_hoverColor = e.X / 32;
-			RefreshPalettePicker();
-		}
-
-		private void picPaletteSelection_MouseDown(object sender, MouseEventArgs e)
-		{
-			_selectedColor = e.X / 32;
-			RefreshPalettePicker();
-		}
-
-		private void picPaletteSelection_MouseLeave(object sender, EventArgs e)
-		{
-			_hoverColor = -1;
-			RefreshPalettePicker();
-		}
-
 		public void SelectPalette(int palette)
 		{
 			cboPalette.SelectedIndex = palette;
@@ -413,8 +344,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void SelectColor(int color)
 		{
-			_selectedColor = color;
-			RefreshPalettePicker();
+			ctrlTilePalette.SelectedColor = color;
 		}
 
 		string _copyData;

@@ -178,6 +178,8 @@ namespace Mesen.GUI.Debugger.Controls
 			int attributeAddr = baseAddress + 960 + ((_tileY & 0xFC) << 1) + (_tileX >> 2);
 			int paletteBaseAddr = ((attributeData >> shift) & 0x03) << 2;
 
+			this.ctrlTilePalette.SelectedPalette = (paletteBaseAddr >> 2);
+
 			this.txtPpuAddress.Text = _currentPpuAddress.ToString("X4");
 			this.txtNametable.Text = _nametableIndex.ToString();
 			this.txtLocation.Text = _tileX.ToString() + ", " + _tileY.ToString();
