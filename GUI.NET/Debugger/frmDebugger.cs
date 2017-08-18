@@ -720,10 +720,24 @@ namespace Mesen.GUI.Debugger
 		private void mnuImportLabels_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.SetFilter("All supported files (*.dbg)|*.dbg");
+			ofd.SetFilter("All supported files (*.dbg, *.mlb)|*.dbg;*.mlb");
 			if(ofd.ShowDialog() == DialogResult.OK) {
-				Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
-				dbgImporter.Import(ofd.FileName);
+				string ext = Path.GetExtension(ofd.FileName).ToLower();
+				if(ext == ".mlb") {
+					MesenLabelFile.Import(ofd.FileName);
+				} else {
+					Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
+					dbgImporter.Import(ofd.FileName);
+				}					
+			}
+		}
+
+		private void mnuExportLabels_Click(object sender, EventArgs e)
+		{
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.SetFilter("All supported files (*.mlb)|*.mlb");
+			if(sfd.ShowDialog() == DialogResult.OK) {
+				MesenLabelFile.Export(sfd.FileName);
 			}
 		}
 

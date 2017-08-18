@@ -12,6 +12,26 @@ namespace Mesen.GUI.Debugger
 		public AddressType AddressType;
 		public string Label;
 		public string Comment;
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			switch(AddressType) {
+				case AddressType.InternalRam: sb.Append("R:"); break;
+				case AddressType.PrgRom: sb.Append("P:"); break;
+				case AddressType.WorkRam: sb.Append("W:"); break;
+				case AddressType.SaveRam: sb.Append("S:"); break;
+				case AddressType.Register: sb.Append("G:"); break;
+			}
+			sb.Append(Address.ToString("X4"));
+			sb.Append(":");
+			sb.Append(Label);
+			if(!string.IsNullOrWhiteSpace(Comment)) {
+				sb.Append(":");
+				sb.Append(Comment.Replace(Environment.NewLine, "\\n").Replace("\n", "\\n").Replace("\r", "\\n"));
+			}
+			return sb.ToString();
+		}
 	}
 
 	public class LabelManager

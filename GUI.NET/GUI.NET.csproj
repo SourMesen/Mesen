@@ -512,6 +512,7 @@
     <Compile Include="Debugger\HexBox\TblByteCharConverter.cs" />
     <Compile Include="Debugger\HexBox\Util.cs" />
     <Compile Include="Debugger\LabelManager.cs" />
+    <Compile Include="Debugger\MesenLabelFile.cs" />
     <Compile Include="Debugger\TblLoader.cs" />
     <Compile Include="Debugger\TextboxHistory.cs" />
     <Compile Include="Debugger\WatchManager.cs" />
