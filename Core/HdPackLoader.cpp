@@ -79,6 +79,20 @@ bool HdPackLoader::LoadHdNesPack(VirtualFile &romFile, HdPackData &outData)
 	return false;
 }
 
+bool HdPackLoader::CheckFile(string filename)
+{
+	if(_loadFromZip) {
+		return _reader.CheckFile(filename);
+	} else {
+		ifstream file(FolderUtilities::CombinePath(_hdPackFolder, filename), ios::in | ios::binary);
+		if(file.good()) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool HdPackLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 {
 	fileData.clear();
@@ -153,6 +167,12 @@ bool HdPackLoader::LoadPack()
 			} else if(lineContent.substr(0, 9) == "<options>") {
 				tokens = StringUtilities::Split(lineContent.substr(9), ',');
 				ProcessOptionTag(tokens);
+			} else if(lineContent.substr(0, 5) == "<bgm>") {
+				tokens = StringUtilities::Split(lineContent.substr(5), ',');
+				ProcessBgmTag(tokens);
+			} else if(lineContent.substr(0, 5) == "<sfx>") {
+				tokens = StringUtilities::Split(lineContent.substr(5), ',');
+				ProcessSfxTag(tokens);
 			}
 		}
 
@@ -312,6 +332,8 @@ void HdPackLoader::ProcessOptionTag(vector<string> &tokens)
 	for(string token : tokens) {
 		if(token == "disableSpriteLimit") {
 			_data->OptionFlags |= (int)HdPackOptions::NoSpriteLimit;
+		} else if(token == "alternateRegisterRange") {
+			_data->OptionFlags |= (int)HdPackOptions::AlternateRegisterRange;
 		}
 	}
 }
@@ -399,6 +421,55 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 		_data->Backgrounds.push_back(backgroundInfo);
 	} else {
 		MessageManager::Log("[HDPack] Error while loading background: " + tokens[0]);
+	}
+}
+
+int HdPackLoader::ProcessSoundTrack(string albumString, string trackString, string filename)
+{
+	int album = std::stoi(albumString);
+	if(album < 0 || album > 255) {
+		MessageManager::Log("[HDPack] Invalid album value: " + albumString);
+		return -1;
+	}
+
+	int track = std::stoi(trackString);
+	if(track < 0 || track > 255) {
+		MessageManager::Log("[HDPack] Invalid track value: " + trackString);
+		return -1;
+	}
+
+	if(!CheckFile(filename)) {
+		MessageManager::Log("[HDPack] OGG file not found: " + filename);
+		return -1;
+	}
+
+	return album * 256 + track;
+
+}
+
+void HdPackLoader::ProcessBgmTag(vector<string> &tokens)
+{
+	int trackId = ProcessSoundTrack(tokens[0], tokens[1], tokens[2]);
+	if(trackId >= 0) {
+		if(_loadFromZip) {
+			VirtualFile file(_hdPackFolder, tokens[2]);
+			_data->BgmFilesById[trackId] = file;
+		} else {
+			_data->BgmFilesById[trackId] = FolderUtilities::CombinePath(_hdPackFolder, tokens[2]);
+		}
+	}
+}
+
+void HdPackLoader::ProcessSfxTag(vector<string> &tokens)
+{
+	int trackId = ProcessSoundTrack(tokens[0], tokens[1], tokens[2]);
+	if(trackId >= 0) {
+		if(_loadFromZip) {
+			VirtualFile file(_hdPackFolder, tokens[2]);
+			_data->SfxFilesById[trackId] = file;
+		} else {
+			_data->SfxFilesById[trackId] = FolderUtilities::CombinePath(_hdPackFolder, tokens[2]);
+		}
 	}
 }
 

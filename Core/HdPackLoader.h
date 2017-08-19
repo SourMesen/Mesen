@@ -22,6 +22,7 @@ private:
 
 	bool InitializeLoader(VirtualFile &romPath, HdPackData *data);
 	bool LoadFile(string filename, vector<uint8_t> &fileData);
+	bool CheckFile(string filename);
 
 	bool LoadPack();
 	void InitializeHdPack();
@@ -29,6 +30,7 @@ private:
 
 	void InitializeGlobalConditions();
 
+	//Video
 	bool ProcessImgTag(string src);
 	void ProcessPatchTag(vector<string> &tokens);
 	void ProcessOverscanTag(vector<string> &tokens);
@@ -36,6 +38,11 @@ private:
 	void ProcessTileTag(vector<string> &tokens, vector<HdPackCondition*> conditions);
 	void ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCondition*> conditions);
 	void ProcessOptionTag(vector<string>& tokens);
+
+	//Audio
+	int ProcessSoundTrack(string albumString, string trackString, string filename);
+	void ProcessBgmTag(vector<string> &tokens);
+	void ProcessSfxTag(vector<string> &tokens);
 
 	vector<HdPackCondition*> ParseConditionString(string conditionString, vector<unique_ptr<HdPackCondition>> &conditions);
 };

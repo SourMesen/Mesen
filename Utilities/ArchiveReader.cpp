@@ -48,6 +48,12 @@ vector<string> ArchiveReader::GetFileList(std::initializer_list<string> extensio
 	return filenames;
 }
 
+bool ArchiveReader::CheckFile(string filename)
+{
+	vector<string> files = InternalGetFileList();
+	return std::find(files.begin(), files.end(), filename) != files.end();
+}
+
 bool ArchiveReader::LoadArchive(std::istream &in)
 {
 	in.seekg(0, std::ios::end);

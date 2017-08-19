@@ -18,6 +18,7 @@ public:
 	std::stringstream GetStream(string filename);
 
 	vector<string> GetFileList(std::initializer_list<string> extensions = {});
+	bool CheckFile(string filename);
 
 	virtual bool ExtractFile(string filename, vector<uint8_t> &output) = 0;
 

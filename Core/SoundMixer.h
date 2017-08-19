@@ -10,7 +10,9 @@
 #include "StereoDelayFilter.h"
 #include "ReverbFilter.h"
 #include "CrossFeedFilter.h"
-#include "WaveRecorder.h"
+
+class WaveRecorder;
+class OggMixer;
 
 namespace orfanidis_eq {
 	class freq_grid;
@@ -28,9 +30,10 @@ private:
 	static SimpleLock _waveRecorderLock;
 	static double _fadeRatio;
 	static uint32_t _muteFrameCount;
+	static unique_ptr<OggMixer> _oggMixer;
 
 	static IAudioDevice* AudioDevice;
-	static const uint32_t MaxSampleRate = 48000;
+	static const uint32_t MaxSampleRate = 96000;
 	static const uint32_t MaxSamplesPerFrame = MaxSampleRate / 60 * 4 * 2; //x4 to allow CPU overclocking up to 10x, x2 for panning stereo
 	static const uint32_t MaxChannelCount = 11;
 	
@@ -96,4 +99,6 @@ public:
 
 	static void StopAudio(bool clearBuffer = false);
 	static void RegisterAudioDevice(IAudioDevice *audioDevice);
+
+	static OggMixer* GetOggMixer();
 };

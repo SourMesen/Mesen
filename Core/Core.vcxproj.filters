@@ -25,9 +25,6 @@
     <Filter Include="Nes\Interfaces">
       <UniqueIdentifier>{ca661408-b52a-4378-aef4-80fda1d64cd6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="VideoDecoder\HD">
-      <UniqueIdentifier>{a6994cb5-f9d2-416c-84ab-c1abe4975eb1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Nes\RomLoader">
       <UniqueIdentifier>{cfdbaafc-8e74-4e09-80fd-30f8bc833c88}</UniqueIdentifier>
     </Filter>
@@ -91,6 +88,9 @@
     </Filter>
     <Filter Include="Rewinder">
       <UniqueIdentifier>{52b03b24-dd62-4daf-bac8-bb60a555d3d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HdPacks">
+      <UniqueIdentifier>{a6994cb5-f9d2-416c-84ab-c1abe4975eb1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -194,10 +194,10 @@
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
     <ClInclude Include="HdNesPack.h">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
     </ClInclude>
     <ClInclude Include="HdPpu.h">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
     </ClInclude>
     <ClInclude Include="CodeDataLogger.h">
       <Filter>Debugger</Filter>
@@ -275,7 +275,7 @@
       <Filter>Nes</Filter>
     </ClInclude>
     <ClInclude Include="HdVideoFilter.h">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
     </ClInclude>
     <ClInclude Include="ExpressionEvaluator.h">
       <Filter>Debugger</Filter>
@@ -1181,16 +1181,25 @@
       <Filter>VideoDecoder</Filter>
     </ClInclude>
     <ClInclude Include="HdPackBuilder.h">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
     </ClInclude>
     <ClInclude Include="HdBuilderPpu.h">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
     </ClInclude>
     <ClInclude Include="HdData.h">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
     </ClInclude>
     <ClInclude Include="HdPackLoader.h">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
+    </ClInclude>
+    <ClInclude Include="OggReader.h">
+      <Filter>HdPacks</Filter>
+    </ClInclude>
+    <ClInclude Include="HdAudioDevice.h">
+      <Filter>HdPacks</Filter>
+    </ClInclude>
+    <ClInclude Include="OggMixer.h">
+      <Filter>HdPacks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1276,7 +1285,7 @@
       <Filter>Nes\APU</Filter>
     </ClCompile>
     <ClCompile Include="HdVideoFilter.cpp">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
     </ClCompile>
     <ClCompile Include="ExpressionEvaluator.cpp">
       <Filter>Debugger</Filter>
@@ -1417,13 +1426,22 @@
       <Filter>VideoDecoder</Filter>
     </ClCompile>
     <ClCompile Include="HdPackBuilder.cpp">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
     </ClCompile>
     <ClCompile Include="HdPackLoader.cpp">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
     </ClCompile>
     <ClCompile Include="HdNesPack.cpp">
-      <Filter>VideoDecoder\HD</Filter>
+      <Filter>HdPacks</Filter>
+    </ClCompile>
+    <ClCompile Include="OggMixer.cpp">
+      <Filter>HdPacks</Filter>
+    </ClCompile>
+    <ClCompile Include="OggReader.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="HdAudioDevice.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

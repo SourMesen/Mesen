@@ -161,6 +161,9 @@
     <ClInclude Include="VirtualFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stb_vorbis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -275,6 +278,9 @@
       <Filter>Patches</Filter>
     </ClCompile>
     <ClCompile Include="sha1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_vorbis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

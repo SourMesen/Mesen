@@ -1,20 +1,25 @@
 #include "stdafx.h"
 #include "../Utilities/orfanidis_eq.h"
+#include "../Utilities/stb_vorbis.h"
 #include "SoundMixer.h"
 #include "APU.h"
 #include "CPU.h"
 #include "VideoRenderer.h"
 #include "RewindManager.h"
+#include "WaveRecorder.h"
+#include "OggMixer.h"
 
 IAudioDevice* SoundMixer::AudioDevice = nullptr;
 unique_ptr<WaveRecorder> SoundMixer::_waveRecorder;
 SimpleLock SoundMixer::_waveRecorderLock;
 double SoundMixer::_fadeRatio;
 uint32_t SoundMixer::_muteFrameCount;
+unique_ptr<OggMixer> SoundMixer::_oggMixer;
 
 SoundMixer::SoundMixer()
 {
 	_eqFrequencyGrid.reset(new orfanidis_eq::freq_grid());
+	_oggMixer.reset();
 	_outputBuffer = new int16_t[SoundMixer::MaxSamplesPerFrame];
 	_blipBufLeft = blip_new(SoundMixer::MaxSamplesPerFrame);
 	_blipBufRight = blip_new(SoundMixer::MaxSamplesPerFrame);
@@ -64,6 +69,9 @@ void SoundMixer::StopAudio(bool clearBuffer)
 
 void SoundMixer::Reset()
 {
+	if(_oggMixer) {
+		_oggMixer->Reset();
+	}
 	_fadeRatio = 1.0;
 	_muteFrameCount = 0;
 
@@ -100,6 +108,10 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		for(size_t i = 0; i < sampleCount * 2; i += 2) {
 			_outputBuffer[i + 1] = _outputBuffer[i];
 		}
+	}
+
+	if(_oggMixer) {
+		_oggMixer->ApplySamples(_outputBuffer, sampleCount);
 	}
 
 	//Apply low pass filter/volume reduction when in background (based on options)
@@ -173,6 +185,9 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 		_clockRate = newRate;
 		blip_set_rates(_blipBufLeft, _clockRate, _sampleRate);
 		blip_set_rates(_blipBufRight, _clockRate, _sampleRate);
+		if(_oggMixer) {
+			_oggMixer->SetSampleRate(_sampleRate);
+		}
 	}
 
 	bool hasPanning = false;
@@ -347,4 +362,12 @@ uint32_t SoundMixer::GetMuteFrameCount()
 void SoundMixer::ResetMuteFrameCount()
 {
 	_muteFrameCount = 0;
+}
+
+OggMixer* SoundMixer::GetOggMixer()
+{
+	if(!_oggMixer) {
+		_oggMixer.reset(new OggMixer());
+	}
+	return _oggMixer.get();
 }

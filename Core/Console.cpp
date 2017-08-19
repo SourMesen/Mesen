@@ -29,6 +29,7 @@
 #include "RewindManager.h"
 #include "SaveStateManager.h"
 #include "HdPackBuilder.h"
+#include "HdAudioDevice.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -114,6 +115,10 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_memoryManager->RegisterIODevice(_apu.get());
 			_memoryManager->RegisterIODevice(_controlManager.get());
 			_memoryManager->RegisterIODevice(_mapper.get());
+			if(_hdData && (!_hdData->BgmFilesById.empty() || !_hdData->SfxFilesById.empty())) {
+				_hdAudioDevice.reset(new HdAudioDevice(_hdData.get()));
+				_memoryManager->RegisterIODevice(_hdAudioDevice.get());
+			}
 
 			_model = NesModel::Auto;
 			UpdateNesModel(false);
@@ -630,6 +635,7 @@ void Console::LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile)
 		_hdData.reset(new HdPackData());
 		if(!HdPackLoader::LoadHdNesPack(romFile, *_hdData.get())) {
 			_hdData.reset();
+			_hdAudioDevice.reset();
 		} else {
 			auto result = _hdData->PatchesByHash.find(romFile.GetSha1Hash());
 			if(result != _hdData->PatchesByHash.end()) {

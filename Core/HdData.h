@@ -396,6 +396,8 @@ struct HdPackData
 	vector<unique_ptr<HdPackCondition>> Conditions;
 	std::unordered_map<HdTileKey, vector<HdPackTileInfo*>> TileByKey;
 	std::unordered_map<string, string> PatchesByHash;
+	std::unordered_map<int, string> BgmFilesById;
+	std::unordered_map<int, string> SfxFilesById;
 	vector<uint32_t> Palette;
 
 	bool HasOverscanConfig = false;
@@ -416,4 +418,5 @@ enum class HdPackOptions
 {
 	None = 0,
 	NoSpriteLimit = 1,
+	AlternateRegisterRange = 2,
 };

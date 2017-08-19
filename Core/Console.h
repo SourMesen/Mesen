@@ -16,6 +16,7 @@ class MemoryManager;
 class ControlManager;
 class AutoSaveManager;
 class HdPackBuilder;
+class HdAudioDevice;
 struct HdPackData;
 enum class NesModel;
 enum class ScaleFilterType;
@@ -42,6 +43,7 @@ class Console
 
 		shared_ptr<HdPackBuilder> _hdPackBuilder;
 		unique_ptr<HdPackData> _hdData;
+		unique_ptr<HdAudioDevice> _hdAudioDevice;
 
 		NesModel _model;
 
