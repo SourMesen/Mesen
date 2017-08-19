@@ -107,6 +107,7 @@ class Console
 		static bool IsDebuggerAttached();
 
 		static HdPackData* GetHdData();
+		static bool IsHdPpu();
 
 		static void StartRecordingHdPack(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize);
 		static void StopRecordingHdPack();

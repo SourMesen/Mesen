@@ -533,7 +533,7 @@ namespace Mesen.GUI
 			yScroll = (int)(ppuScroll >> 16) & 0xFFFF;
 		}
 
-		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsHdPackLoaded();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsHdPpu();
 
 		[DllImport(DLLPath)] public static extern void HdBuilderStartRecording(
 			[MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string saveFolder,

@@ -475,7 +475,7 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport bool __stdcall IsHdPackLoaded() { return Console::GetHdData() != nullptr; }
+		DllExport bool __stdcall IsHdPpu() { return Console::IsHdPpu(); }
 
 		DllExport void __stdcall HdBuilderStartRecording(char* saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize) { Console::StartRecordingHdPack(saveFolder, filterType, scale, flags, chrRamBankSize); }
 		DllExport void __stdcall HdBuilderStopRecording() { Console::StopRecordingHdPack(); }

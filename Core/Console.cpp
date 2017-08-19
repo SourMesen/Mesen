@@ -97,7 +97,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_memoryManager.reset(new MemoryManager(_mapper));
 			_cpu.reset(new CPU(_memoryManager.get()));
 
-			if(_hdData) {
+			if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
 				_ppu.reset(new HdPpu(_mapper.get(), _hdData->Version));
 			} else if(NsfMapper::GetInstance()) {
 				//Disable most of the PPU for NSFs
@@ -626,6 +626,11 @@ void Console::SetNextFrameOverclockStatus(bool disabled)
 HdPackData* Console::GetHdData()
 {
 	return Instance->_hdData.get();
+}
+
+bool Console::IsHdPpu()
+{
+	return Instance->_hdData && std::dynamic_pointer_cast<HdPpu>(Instance->_ppu) != nullptr;
 }
 
 void Console::LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile)
