@@ -319,7 +319,7 @@ void RecordedRomTest::Save()
 		writer.AddFile(mmoFilename, "TestMovie.mmo");
 		std::remove(mmoFilename.c_str());
 
-		writer.AddFile(Console::GetRomPath(), "TestRom.nes");
+		writer.AddFile(Console::GetRomPath().GetFilePath(), "TestRom.nes");
 	}
 
 

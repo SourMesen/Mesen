@@ -50,10 +50,10 @@ namespace Mesen.GUI.Debugger
 		{
 			if(this.DialogResult == DialogResult.OK) {
 				using(SaveFileDialog sfd = new SaveFileDialog()) {
-					sfd.Filter = "NES roms (*.nes)|*.nes";
+					sfd.SetFilter("NES roms (*.nes)|*.nes");
 					sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".nes";
 					if(sfd.ShowDialog() == DialogResult.OK) {
-						InteropEmu.DebugSaveRomToDisk(sfd.FileName, ((NesHeader)Entity).ToBytes());
+						InteropEmu.DebugSaveRomToDisk(sfd.FileName, false, ((NesHeader)Entity).ToBytes());
 					} else {
 						e.Cancel = true;
 					}

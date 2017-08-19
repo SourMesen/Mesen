@@ -103,7 +103,7 @@ extern "C"
 	DllExport void __stdcall DebugStartCodeRunner(uint8_t* byteCode, uint32_t codeLength) { return GetDebugger()->StartCodeRunner(byteCode, codeLength); }
 	
 	DllExport void __stdcall DebugGetNesHeader(uint8_t* header) { GetDebugger()->GetNesHeader(header); }
-	DllExport void __stdcall DebugSaveRomToDisk(char* filename, uint8_t* header) { GetDebugger()->SaveRomToDisk(filename, header); }
+	DllExport void __stdcall DebugSaveRomToDisk(char* filename, bool saveIpsFile, uint8_t* header) { GetDebugger()->SaveRomToDisk(filename, saveIpsFile, header); }
 
 	DllExport int32_t __stdcall DebugFindSubEntryPoint(uint16_t relativeAddress) { return GetDebugger()->FindSubEntryPoint(relativeAddress); }
 

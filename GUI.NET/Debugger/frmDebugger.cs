@@ -858,11 +858,23 @@ namespace Mesen.GUI.Debugger
 		private void mnuSaveRom_Click(object sender, EventArgs e)
 		{
 			using(SaveFileDialog sfd = new SaveFileDialog()) {
-				sfd.Filter = "NES roms (*.nes)|*.nes";
+				sfd.SetFilter("NES roms (*.nes)|*.nes");
 				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + "_Modified.nes";
 				sfd.InitialDirectory = ConfigManager.DebuggerFolder;
 				if(sfd.ShowDialog() == DialogResult.OK) {
 					InteropEmu.DebugSaveRomToDisk(sfd.FileName);
+				}
+			}
+		}
+				
+		private void mnuSaveAsIps_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter("IPS patch files (*.ips)|*.ips");
+				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".ips";
+				sfd.InitialDirectory = ConfigManager.DebuggerFolder;
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					InteropEmu.DebugSaveRomToDisk(sfd.FileName, true);
 				}
 			}
 		}

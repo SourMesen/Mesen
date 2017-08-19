@@ -1,8 +1,10 @@
 #include "stdafx.h"
-#include "BaseMapper.h"
 #include <random>
 #include <assert.h>
 #include "../Utilities/FolderUtilities.h"
+#include "../Utilities/IpsPatcher.h"
+#include "BaseMapper.h"
+#include "Console.h"
 #include "CheatManager.h"
 #include "Debugger.h"
 #include "MemoryManager.h"
@@ -995,20 +997,30 @@ NESHeader BaseMapper::GetNesHeader()
 	return _nesHeader;
 }
 
-void BaseMapper::SaveRomToDisk(string filename, uint8_t* header)
+void BaseMapper::SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header)
 {
 	ofstream file(filename, ios::out | ios::binary);
 	if(file.good()) {
+		vector<uint8_t> originalFile;
+		Console::GetRomPath().ReadFile(originalFile);
+			
 		if(header) {
 			//Save original rom with edited header
 			file.write((char*)header, sizeof(NESHeader));
-			file.write((char*)_originalPrgRom.data(), _originalPrgRom.size());
-			file.write((char*)_originalChrRom.data(), _originalChrRom.size());
+			file.write((char*)originalFile.data()+sizeof(NESHeader), originalFile.size());
 		} else {
+			vector<uint8_t> newFile;
+			newFile.insert(newFile.end(), (uint8_t*)&_nesHeader, ((uint8_t*)&_nesHeader) + sizeof(NESHeader));
+			newFile.insert(newFile.end(), _prgRom, _prgRom + _prgSize);
+			newFile.insert(newFile.end(), _chrRom, _chrRom + _chrRomSize);
+
 			//Save edited rom
-			file.write((char*)&_nesHeader, sizeof(NESHeader));
-			file.write((char*)_prgRom, _prgSize);
-			file.write((char*)_chrRom, _onlyChrRam ? 0 : _chrRomSize);
+			if(saveAsIps) {
+				vector<uint8_t> patchData = IpsPatcher::CreatePatch(originalFile, newFile);
+				file.write((char*)patchData.data(), patchData.size());
+			} else {
+				file.write((char*)newFile.data(), newFile.size());
+			}
 		}
 		file.close();
 	}

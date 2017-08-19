@@ -214,5 +214,5 @@ public:
 	int32_t FromAbsoluteAddress(uint32_t addr, AddressType type = AddressType::PrgRom);
 
 	NESHeader GetNesHeader();
-	void SaveRomToDisk(string filename, uint8_t* header);
+	void SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header);
 };

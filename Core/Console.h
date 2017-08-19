@@ -90,7 +90,7 @@ class Console
 
 		static bool LoadROM(VirtualFile romFile, VirtualFile patchFile = {});
 		static bool LoadROM(string romName, HashInfo hashInfo);
-		static string GetRomPath();
+		static VirtualFile GetRomPath();
 		static string GetRomName();
 		static bool IsChrRam();
 		static RomFormat GetRomFormat();

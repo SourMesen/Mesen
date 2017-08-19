@@ -259,18 +259,18 @@ namespace Mesen.GUI
 			return header;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugSaveRomToDisk")] public static extern void DebugSaveRomToDiskWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, IntPtr headerBuffer);
-		public static void DebugSaveRomToDisk(string filename, byte[] header = null)
+		[DllImport(DLLPath, EntryPoint = "DebugSaveRomToDisk")] public static extern void DebugSaveRomToDiskWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool saveAsIps, IntPtr headerBuffer);
+		public static void DebugSaveRomToDisk(string filename, bool saveAsIps = false, byte[] header = null)
 		{
 			if(header != null) {
 				GCHandle handle = GCHandle.Alloc(header, GCHandleType.Pinned);
 				try {
-					InteropEmu.DebugSaveRomToDiskWrapper(filename, handle.AddrOfPinnedObject());
+					InteropEmu.DebugSaveRomToDiskWrapper(filename, saveAsIps, handle.AddrOfPinnedObject());
 				} finally {
 					handle.Free();
 				}
 			} else {
-				InteropEmu.DebugSaveRomToDiskWrapper(filename, IntPtr.Zero);
+				InteropEmu.DebugSaveRomToDiskWrapper(filename, saveAsIps, IntPtr.Zero);
 			}
 		}
 

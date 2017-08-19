@@ -163,7 +163,7 @@ bool Console::LoadROM(VirtualFile romFile, VirtualFile patchFile)
 
 bool Console::LoadROM(string romName, HashInfo hashInfo)
 {
-	string currentRomFilepath = Console::GetRomPath();
+	string currentRomFilepath = Console::GetRomPath().GetFilePath();
 	string currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
 	if(!currentRomFilepath.empty()) {
 		HashInfo gameHashInfo = Instance->_mapper->GetHashInfo();
@@ -191,9 +191,9 @@ bool Console::LoadROM(string romName, HashInfo hashInfo)
 	return false;
 }
 
-string Console::GetRomPath()
+VirtualFile Console::GetRomPath()
 {
-	return static_cast<VirtualFile>(Instance->_romFilepath).GetFilePath();
+	return static_cast<VirtualFile>(Instance->_romFilepath);
 }
 
 string Console::GetRomName()

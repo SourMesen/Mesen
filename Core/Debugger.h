@@ -199,7 +199,7 @@ public:
 	void StopCodeRunner();
 
 	void GetNesHeader(uint8_t* header);
-	void SaveRomToDisk(string filename, uint8_t* header);
+	void SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header);
 
 	int32_t FindSubEntryPoint(uint16_t relativeAddress);
 	
