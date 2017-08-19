@@ -32,6 +32,14 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public static void OpenAssembler(string code = "", UInt16 startAddress = 0, UInt16 blockLength = 0)
+		{
+			frmAssembler frm = new frmAssembler(code, startAddress, blockLength);
+			_openedWindows.Add(frm);
+			frm.FormClosed += Debugger_FormClosed;
+			frm.Show();
+		}
+
 		public static frmDebugger GetDebugger()
 		{
 			int index = _openedWindows.FindIndex((form) => form.GetType() == typeof(frmDebugger));

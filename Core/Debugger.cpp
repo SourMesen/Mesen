@@ -924,7 +924,12 @@ void Debugger::StopCodeRunner()
 	
 	//Break debugger when code has finished executing
 	SetNextStatement(_returnToAddress);
-	Debugger::Instance->Step(1);
+
+	if(CheckFlag(DebuggerFlags::DebuggerWindowEnabled)) {
+		Step(1);
+	} else {
+		Run();
+	}
 }
 
 void Debugger::GetNesHeader(uint8_t* header)

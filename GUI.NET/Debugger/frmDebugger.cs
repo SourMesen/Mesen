@@ -874,19 +874,14 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void OpenAssembler(string code, UInt16 startAddress, UInt16 blockLength = 0)
+		private void mnuAssembler_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler);
 		}
 
-		private void mnuAssembler_Click(object sender, EventArgs e)
-		{
-			this.OpenAssembler(string.Empty, 0x8000);
-		}
-
 		private void ctrlDebuggerCode_OnEditCode(AssemblerEventArgs args)
 		{
-			this.OpenAssembler(args.Code, args.StartAddress, args.BlockLength);
+			DebugWindowManager.OpenAssembler(args.Code, args.StartAddress, args.BlockLength);
 		}
 
 		private void mnuCode_DropDownOpening(object sender, EventArgs e)
