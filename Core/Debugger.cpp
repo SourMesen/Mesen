@@ -81,7 +81,9 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_frozenAddresses.insert(_frozenAddresses.end(), 0x10000, 0);
 
-	LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
+	if(!LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"))) {
+		_disassembler->Reset();
+	}
 		
 	Debugger::Instance = this;
 }
@@ -145,22 +147,36 @@ void Debugger::BreakIfDebugging()
 bool Debugger::LoadCdlFile(string cdlFilepath)
 {
 	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {
-		for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
-			if(_codeDataLogger->IsCode(i)) {
-				AddressTypeInfo info = { i, AddressType::PrgRom };
-				i = _disassembler->BuildCache(info, 0, _codeDataLogger->IsSubEntryPoint(i)) - 1;
-			}
-		}
-
-		for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
-			if(_codeDataLogger->IsSubEntryPoint(i)) {
-				_functionEntryPoints.emplace(i);
-			}
-		}
-		
+		UpdateCdlCache();
 		return true;
 	}
 	return false;
+}
+
+void Debugger::ResetCdl()
+{
+	_codeDataLogger->Reset();
+	UpdateCdlCache();
+}
+
+void Debugger::UpdateCdlCache()
+{
+	Console::Pause();
+	_disassembler->Reset();
+	for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
+		if(_codeDataLogger->IsCode(i)) {
+			AddressTypeInfo info = { i, AddressType::PrgRom };
+			i = _disassembler->BuildCache(info, 0, _codeDataLogger->IsSubEntryPoint(i)) - 1;
+		}
+	}
+
+	_functionEntryPoints.clear();
+	for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
+		if(_codeDataLogger->IsSubEntryPoint(i)) {
+			_functionEntryPoints.emplace(i);
+		}
+	}
+	Console::Resume();
 }
 
 bool Debugger::IsMarkedAsCode(uint16_t relativeAddress)

@@ -73,7 +73,7 @@ extern "C"
 	DllExport bool __stdcall DebugLoadCdlFile(char* cdlFilepath) { return GetDebugger()->LoadCdlFile(cdlFilepath); }
 	DllExport bool __stdcall DebugSaveCdlFile(char* cdlFilepath) { return GetDebugger()->GetCodeDataLogger()->SaveCdlFile(cdlFilepath); }
 	DllExport void __stdcall DebugGetCdlRatios(CdlRatios* cdlRatios) { *cdlRatios = GetDebugger()->GetCodeDataLogger()->GetRatios(); }
-	DllExport void __stdcall DebugResetCdlLog() { GetDebugger()->GetCodeDataLogger()->Reset(); }
+	DllExport void __stdcall DebugResetCdlLog() { GetDebugger()->ResetCdl(); }
 
 	DllExport int32_t __stdcall DebugEvaluateExpression(char* expression, EvalResultType *resultType) { return GetDebugger()->EvaluateExpression(expression, *resultType); }
 

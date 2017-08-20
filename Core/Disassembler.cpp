@@ -16,16 +16,24 @@ Disassembler::Disassembler(MemoryManager* memoryManager, BaseMapper* mapper, Deb
 	_memoryManager = memoryManager;
 	_mapper = mapper;
 
-	_disassembleCache.insert(_disassembleCache.end(), mapper->GetMemorySize(DebugMemoryType::PrgRom), shared_ptr<DisassemblyInfo>(nullptr));
-	_disassembleWorkRamCache.insert(_disassembleWorkRamCache.end(), mapper->GetMemorySize(DebugMemoryType::WorkRam), shared_ptr<DisassemblyInfo>(nullptr));
-	_disassembleSaveRamCache.insert(_disassembleSaveRamCache.end(), mapper->GetMemorySize(DebugMemoryType::SaveRam), shared_ptr<DisassemblyInfo>(nullptr));
-	_disassembleMemoryCache.insert(_disassembleMemoryCache.end(), 0x800, shared_ptr<DisassemblyInfo>(nullptr));
-
 	BuildOpCodeTables(false);
 }
 
 Disassembler::~Disassembler()
 {
+}
+
+void Disassembler::Reset()
+{
+	_disassembleCache.clear();
+	_disassembleWorkRamCache.clear();
+	_disassembleSaveRamCache.clear();
+	_disassembleMemoryCache.clear();
+
+	_disassembleCache.insert(_disassembleCache.end(), _mapper->GetMemorySize(DebugMemoryType::PrgRom), shared_ptr<DisassemblyInfo>(nullptr));
+	_disassembleWorkRamCache.insert(_disassembleWorkRamCache.end(), _mapper->GetMemorySize(DebugMemoryType::WorkRam), shared_ptr<DisassemblyInfo>(nullptr));
+	_disassembleSaveRamCache.insert(_disassembleSaveRamCache.end(), _mapper->GetMemorySize(DebugMemoryType::SaveRam), shared_ptr<DisassemblyInfo>(nullptr));
+	_disassembleMemoryCache.insert(_disassembleMemoryCache.end(), 0x800, shared_ptr<DisassemblyInfo>(nullptr));
 }
 
 void Disassembler::BuildOpCodeTables(bool useLowerCase)

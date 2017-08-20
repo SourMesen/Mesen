@@ -47,7 +47,8 @@ namespace Mesen.GUI.Debugger
 			ctrlProfiler.OnFunctionSelected += ctrlProfiler_OnFunctionSelected;
 
 			this.UpdateWorkspace();
-			this.AutoLoadDbgFile(true);
+			this.AutoLoadCdlFiles();
+			this.AutoLoadDbgFiles(true);
 
 			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
@@ -57,6 +58,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
 			this.mnuHighlightUnexecutedCode.Checked = ConfigManager.Config.DebugInfo.HighlightUnexecutedCode;
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
+			this.mnuAutoLoadCdlFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadCdlFiles;
 			this.mnuBreakOnReset.Checked = ConfigManager.Config.DebugInfo.BreakOnReset;
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
 			this.mnuBreakOnUnofficialOpcodes.Checked = ConfigManager.Config.DebugInfo.BreakOnUnofficialOpcodes;
@@ -146,7 +148,21 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void AutoLoadDbgFile(bool silent)
+		private void AutoLoadCdlFiles()
+		{
+			if(ConfigManager.Config.DebugInfo.AutoLoadCdlFiles) {
+				//This loads CDL files that are next to the rom - useful when developing with a compiler that can produce a CDL file
+				RomInfo info = InteropEmu.GetRomInfo();
+				string cdlPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".cdl");
+				if(File.Exists(cdlPath)) {
+					if(InteropEmu.DebugLoadCdlFile(cdlPath)) {
+						UpdateDebugger();
+					}
+				}
+			}
+		}
+
+		private void AutoLoadDbgFiles(bool silent)
 		{
 			if(ConfigManager.Config.DebugInfo.AutoLoadDbgFiles) {
 				RomInfo info = InteropEmu.GetRomInfo();
@@ -232,7 +248,8 @@ namespace Mesen.GUI.Debugger
 						mnuEditHeader.Enabled = mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
 
 						this.UpdateWorkspace();
-						this.AutoLoadDbgFile(true);
+						this.AutoLoadCdlFiles();
+						this.AutoLoadDbgFiles(true);
 						UpdateDebugger();
 						BreakpointManager.SetBreakpoints();
 
@@ -588,6 +605,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuResetCdlLog_Click(object sender, EventArgs e)
 		{
 			InteropEmu.DebugResetCdlLog();
+			UpdateDebugger();
 		}
 
 		private void ctrlBreakpoints_BreakpointNavigation(object sender, EventArgs e)
@@ -778,8 +796,16 @@ namespace Mesen.GUI.Debugger
 			if(_debuggerInitialized) {
 				ConfigManager.Config.DebugInfo.AutoLoadDbgFiles = mnuAutoLoadDbgFiles.Checked;
 				ConfigManager.ApplyChanges();
+				AutoLoadDbgFiles(false);
+			}
+		}
 
-				AutoLoadDbgFile(false);
+		private void mnuAutoLoadCdlFiles_Click(object sender, EventArgs e)
+		{
+			if(_debuggerInitialized) {
+				ConfigManager.Config.DebugInfo.AutoLoadCdlFiles = mnuAutoLoadCdlFiles.Checked;
+				ConfigManager.ApplyChanges();
+				AutoLoadCdlFiles();
 			}
 		}
 

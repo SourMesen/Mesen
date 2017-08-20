@@ -143,6 +143,7 @@ namespace Mesen.GUI.Config
 		public string FindOccurrencesLastSearch = string.Empty;
 
 		public bool AutoLoadDbgFiles = false;
+		public bool AutoLoadCdlFiles = false;
 		public bool DisableDefaultLabels = false;
 
 		public bool RefreshWatchWhileRunning = false;

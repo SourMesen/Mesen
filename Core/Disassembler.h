@@ -34,6 +34,7 @@ public:
 	~Disassembler();
 
 	void BuildOpCodeTables(bool useLowerCase);
+	void Reset();
 	
 	uint32_t BuildCache(AddressTypeInfo &info, uint16_t memoryAddr, bool isSubEntryPoint);
 	void InvalidateCache(AddressTypeInfo &info);
