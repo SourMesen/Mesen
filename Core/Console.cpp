@@ -551,6 +551,11 @@ void Console::SaveState(ostream &saveStream)
 		Instance->_apu->SaveSnapshot(&saveStream);
 		Instance->_controlManager->SaveSnapshot(&saveStream);
 		Instance->_mapper->SaveSnapshot(&saveStream);
+		if(Instance->_hdAudioDevice) {
+			Instance->_hdAudioDevice->SaveSnapshot(&saveStream);
+		} else {
+			Snapshotable::WriteEmptyBlock(&saveStream);
+		}
 	}
 }
 
@@ -567,6 +572,11 @@ void Console::LoadState(istream &loadStream)
 		Instance->_apu->LoadSnapshot(&loadStream);
 		Instance->_controlManager->LoadSnapshot(&loadStream);
 		Instance->_mapper->LoadSnapshot(&loadStream);
+		if(Instance->_hdAudioDevice) {
+			Instance->_hdAudioDevice->LoadSnapshot(&loadStream);
+		} else {
+			Snapshotable::SkipBlock(&loadStream);
+		}
 		
 		MessageManager::SendNotification(ConsoleNotificationType::StateLoaded);
 	}
@@ -636,11 +646,11 @@ bool Console::IsHdPpu()
 void Console::LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile)
 {
 	_hdData.reset();
+	_hdAudioDevice.reset();
 	if(EmulationSettings::CheckFlag(EmulationFlags::UseHdPacks)) {
 		_hdData.reset(new HdPackData());
 		if(!HdPackLoader::LoadHdNesPack(romFile, *_hdData.get())) {
 			_hdData.reset();
-			_hdAudioDevice.reset();
 		} else {
 			auto result = _hdData->PatchesByHash.find(romFile.GetSha1Hash());
 			if(result != _hdData->PatchesByHash.end()) {

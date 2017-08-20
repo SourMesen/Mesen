@@ -11,22 +11,43 @@ HdAudioDevice::HdAudioDevice(HdPackData * hdData)
 	_oggMixer = SoundMixer::GetOggMixer();
 }
 
-bool HdAudioDevice::PlayBgmTrack(uint8_t track)
+void HdAudioDevice::StreamState(bool saving)
 {
-	auto result = _hdData->BgmFilesById.find(_album * 256 + track);
+	int32_t trackOffset = 0;
+	if(saving) {
+		trackOffset = _oggMixer->GetBgmOffset();
+		if(trackOffset < 0) {
+			_lastBgmTrack = -1;
+		}
+		Stream(_album, _lastBgmTrack, trackOffset);
+	} else {
+		Stream(_album, _lastBgmTrack, trackOffset);
+		if(_lastBgmTrack != -1 && trackOffset > 0) {
+			PlayBgmTrack(_lastBgmTrack, trackOffset);
+		}
+	}
+}
+
+bool HdAudioDevice::PlayBgmTrack(uint8_t track, uint32_t startOffset)
+{
+	int trackId = _album * 256 + track;
+	auto result = _hdData->BgmFilesById.find(trackId);
 	if(result != _hdData->BgmFilesById.end()) {
-		return !_oggMixer->Play(result->second, false);
+		if(_oggMixer->Play(result->second, false, startOffset)) {
+			_lastBgmTrack = trackId;
+			return true;
+		}
 	} else {
 		MessageManager::Log("[HDPack] Invalid album+track combination: " + std::to_string(_album) + ":" + std::to_string(track));
-		return false;
 	}
+	return false;
 }
 
 bool HdAudioDevice::PlaySfx(uint8_t sfxNumber)
 {
 	auto result = _hdData->SfxFilesById.find(_album * 256 + sfxNumber);
 	if(result != _hdData->SfxFilesById.end()) {
-		return !_oggMixer->Play(result->second, true);
+		return !_oggMixer->Play(result->second, true, 0);
 	} else {
 		MessageManager::Log("[HDPack] Invalid album+sfx number combination: " + std::to_string(_album) + ":" + std::to_string(sfxNumber));
 		return false;
@@ -98,7 +119,7 @@ void HdAudioDevice::WriteRAM(uint16_t addr, uint8_t value)
 
 		//Play BGM track (0-255 = track number)
 		//Stop the current BGM and starts a new track
-		case 5: _trackError = PlayBgmTrack(value); break;
+		case 5: _trackError = PlayBgmTrack(value, 0); break;
 
 		//Play sound effect (0-255 = sfx number)
 		//Plays a new sound effect (no limit to the number of simultaneous sound effects)

@@ -80,11 +80,11 @@ void OggMixer::SetSampleRate(int sampleRate)
 	}
 }
 
-bool OggMixer::Play(string filename, bool isSfx)
+bool OggMixer::Play(string filename, bool isSfx, uint32_t startOffset)
 {
 	shared_ptr<OggReader> reader(new OggReader());
 	bool loop = !isSfx && (_options & (int)OggPlaybackOptions::Loop) != 0;
-	if(reader->Init(filename, loop, _sampleRate)) {
+	if(reader->Init(filename, loop, _sampleRate, startOffset)) {
 		if(isSfx) {
 			_sfx.push_back(reader);
 		} else {
@@ -107,4 +107,13 @@ void OggMixer::ApplySamples(int16_t * buffer, size_t sampleCount)
 		sfx->ApplySamples(buffer, sampleCount, _sfxVolume);
 	}
 	_sfx.erase(std::remove_if(_sfx.begin(), _sfx.end(), [](const shared_ptr<OggReader>& o) { return o->IsPlaybackOver(); }), _sfx.end());
+}
+
+int OggMixer::GetBgmOffset()
+{
+	if(_bgm) {
+		return _bgm->GetOffset();
+	} else {
+		return -1;
+	}
 }

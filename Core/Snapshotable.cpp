@@ -98,3 +98,16 @@ void Snapshotable::LoadSnapshot(istream* file)
 		throw new std::runtime_error("A call to StreamEndBlock is missing.");
 	}
 }
+
+void Snapshotable::WriteEmptyBlock(ostream* file)
+{
+	int blockSize = 0;
+	file->write((char*)&blockSize, sizeof(blockSize));
+}
+
+void Snapshotable::SkipBlock(istream* file)
+{
+	int blockSize = 0;
+	file->read((char*)&blockSize, sizeof(blockSize));
+	file->seekg(blockSize, ios::cur);
+}

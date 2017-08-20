@@ -22,7 +22,7 @@ OggReader::~OggReader()
 	}
 }
 
-bool OggReader::Init(string filename, bool loop, int sampleRate)
+bool OggReader::Init(string filename, bool loop, uint32_t sampleRate, uint32_t startOffset)
 {
 	int error;
 	VirtualFile file = filename;
@@ -32,6 +32,9 @@ bool OggReader::Init(string filename, bool loop, int sampleRate)
 		if(_vorbis) {
 			_loop = loop;
 			_oggSampleRate = stb_vorbis_get_info(_vorbis).sample_rate;
+			if(startOffset > 0) {
+				stb_vorbis_seek(_vorbis, startOffset);
+			}
 			blip_set_rates(_blipLeft, _oggSampleRate, sampleRate);
 			blip_set_rates(_blipRight, _oggSampleRate, sampleRate);
 			return true;
@@ -99,4 +102,9 @@ void OggReader::ApplySamples(int16_t * buffer, size_t sampleCount, uint8_t volum
 	for(size_t i = 0, len = samplesRead * 2; i < len; i++) {
 		buffer[i] += (int16_t)(_outputBuffer[i] * (EmulationSettings::GetMasterVolume() * volume / 255 / 10));
 	}
+}
+
+uint32_t OggReader::GetOffset()
+{
+	return stb_vorbis_get_file_offset(_vorbis);
 }

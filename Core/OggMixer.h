@@ -22,7 +22,7 @@ public:
 	void ApplySamples(int16_t* buffer, size_t sampleCount);
 	
 	void Reset();
-	bool Play(string filename, bool isSfx);
+	bool Play(string filename, bool isSfx, uint32_t startOffset);
 	void SetPlaybackOptions(uint8_t options);
 	void SetPausedFlag(bool paused);
 	void StopBgm();
@@ -31,4 +31,5 @@ public:
 	void SetSfxVolume(uint8_t volume);
 	bool IsBgmPlaying();
 	bool IsSfxPlaying();
+	int32_t GetBgmOffset();
 };

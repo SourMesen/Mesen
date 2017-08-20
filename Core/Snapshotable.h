@@ -158,4 +158,7 @@ protected:
 public:
 	void SaveSnapshot(ostream* file);
 	void LoadSnapshot(istream* file);
+
+	static void WriteEmptyBlock(ostream* file);
+	static void SkipBlock(istream* file);
 };
