@@ -865,5 +865,10 @@ namespace Mesen.GUI.Forms
 		{
 			CursorManager.OnMouseLeave();
 		}
+
+		private void ctrlRecentGames_OnRecentGameLoaded(Controls.RecentGameInfo gameInfo)
+		{
+			_currentRomPath = gameInfo.RomPath;
+		}
 	}
 }

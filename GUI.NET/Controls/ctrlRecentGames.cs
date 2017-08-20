@@ -17,6 +17,9 @@ namespace Mesen.GUI.Controls
 {
 	public partial class ctrlRecentGames : UserControl
 	{
+		public delegate void RecentGameLoadedHandler(RecentGameInfo gameInfo);
+		public event RecentGameLoadedHandler OnRecentGameLoaded;
+
 		public new event MouseEventHandler MouseMove
 		{
 			add { this.tlpPreviousState.MouseMove += value; }
@@ -33,14 +36,6 @@ namespace Mesen.GUI.Controls
 		private int _currentIndex = 0;
 		private List<RecentGameInfo> _recentGames = new List<RecentGameInfo>();
 		private PrivateFontCollection _fonts = new PrivateFontCollection();
-
-		private class RecentGameInfo
-		{
-			public string FileName { get; set; }
-			public string RomName { get; set; }
-			public ResourcePath RomPath { get; set; }
-			public DateTime Timestamp { get; set; }
-		}
 
 		public ctrlRecentGames()
 		{
@@ -226,6 +221,7 @@ namespace Mesen.GUI.Controls
 		private void LoadSelectedGame()
 		{
 			InteropEmu.LoadRecentGame(_recentGames[_currentIndex].FileName, ConfigManager.Config.PreferenceInfo.GameSelectionScreenResetGame);
+			OnRecentGameLoaded?.Invoke(_recentGames[_currentIndex]);
 		}
 
 		private bool _waitForRelease = false;
@@ -280,5 +276,13 @@ namespace Mesen.GUI.Controls
 			pe.Graphics.InterpolationMode = InterpolationMode;
 			base.OnPaint(pe);
 		}
+	}
+
+	public class RecentGameInfo
+	{
+		public string FileName { get; set; }
+		public string RomName { get; set; }
+		public ResourcePath RomPath { get; set; }
+		public DateTime Timestamp { get; set; }
 	}
 }
