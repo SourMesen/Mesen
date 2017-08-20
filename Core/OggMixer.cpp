@@ -18,7 +18,7 @@ void OggMixer::Reset()
 	_bgm.reset();
 	_sfx.clear();
 	_sfxVolume = 128;
-	_bgmVolume = 45;
+	_bgmVolume = 128;
 	_options = 0;
 	_sampleRate = EmulationSettings::GetSampleRate();
 	_paused = false;

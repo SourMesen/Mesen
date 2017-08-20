@@ -46,52 +46,75 @@ void HdAudioDevice::ProcessControlFlags(uint8_t flags)
 
 void HdAudioDevice::GetMemoryRanges(MemoryRanges & ranges)
 {
-	uint16_t baseRegisterAddr = (_hdData->OptionFlags & (int)HdPackOptions::AlternateRegisterRange) ? 0x5000 : 0x4000;
+	bool useAlternateRegisters = (_hdData->OptionFlags & (int)HdPackOptions::AlternateRegisterRange);
 	ranges.SetAllowOverride();
-	ranges.AddHandler(MemoryOperation::Any, baseRegisterAddr + 0xFF9, baseRegisterAddr + 0xFFF);
+
+	if(useAlternateRegisters) {
+		for(int i = 0; i < 7; i++) {
+			ranges.AddHandler(MemoryOperation::Write, 0x3002 + i * 0x10);
+		}
+		ranges.AddHandler(MemoryOperation::Read, 0x4018);
+		ranges.AddHandler(MemoryOperation::Read, 0x4019);
+	} else {
+		ranges.AddHandler(MemoryOperation::Any, 0x4100, 0x4106);
+	}
 }
 
 void HdAudioDevice::WriteRAM(uint16_t addr, uint8_t value)
 {
-	switch(addr & 0xFFF) {
+	//$4100/$3002: Playback Options
+	//$4101/$3012: Playback Control
+	//$4102/$3022: BGM Volume
+	//$4103/$3032: SFX Volume
+	//$4104/$3042: Album Number
+	//$4105/$3052: Play BGM Track
+	//$4106/$3062: Play SFX Track
+	int regNumber = addr > 0x4100 ? (addr & 0xF) : ((addr & 0xF0) >> 4);
+
+	switch(regNumber) {
 		//Playback Options
 		//Bit 0: Loop BGM
 		//Bit 1-7: Unused, reserved - must be 0
-		case 0xFF9: _oggMixer->SetPlaybackOptions(value); break;
+		case 0: _oggMixer->SetPlaybackOptions(value); break;
 
 		//Playback Control
 		//Bit 0: Toggle Pause/Resume (only affects BGM)
 		//Bit 1: Stop BGM
 		//Bit 2: Stop all SFX
 		//Bit 3-7: Unused, reserved - must be 0
-		case 0xFFA: ProcessControlFlags(value); break;
+		case 1: ProcessControlFlags(value); break;
 
 		//BGM Volume: 0 = mute, 255 = max
 		//Also has an immediate effect on currently playing BGM
-		case 0xFFB: _oggMixer->SetBgmVolume(value); break;
+		case 2: _oggMixer->SetBgmVolume(value); break;
 
 		//SFX Volume: 0 = mute, 255 = max
 		//Also has an immediate effect on all currently playing SFX
-		case 0xFFC: _oggMixer->SetSfxVolume(value); break;
+		case 3: _oggMixer->SetSfxVolume(value); break;
 
 		//Album number: 0-255 (Allows for up to 64k BGM and SFX tracks)
 		//No immediate effect - only affects subsequent $4FFE/$4FFF writes
-		case 0xFFD: _album = value; break;
+		case 4: _album = value; break;
 
 		//Play BGM track (0-255 = track number)
 		//Stop the current BGM and starts a new track
-		case 0xFFE: _trackError = PlayBgmTrack(value); break;
+		case 5: _trackError = PlayBgmTrack(value); break;
 
 		//Play sound effect (0-255 = sfx number)
 		//Plays a new sound effect (no limit to the number of simultaneous sound effects)
-		case 0xFFF: _trackError = PlaySfx(value); break;
+		case 6: _trackError = PlaySfx(value); break;
 	}
 }
 
 uint8_t HdAudioDevice::ReadRAM(uint16_t addr)
 {
-	switch(addr & 0xFFF) {
-		case 0xFFA:
+	//$4100/$4018: Status
+	//$4101/$4019: Revision
+	//$4102: 'N' (signature to help detection)
+	//$4103: 'E'
+	//$4103: 'A'
+	switch(addr & 0x7) {
+		case 0:
 			//Status
 			return (
 				(_oggMixer->IsBgmPlaying() ? 1 : 0) |
@@ -99,10 +122,10 @@ uint8_t HdAudioDevice::ReadRAM(uint16_t addr)
 				(_trackError ? 4 : 0)
 			);
 
-		case 0xFFC: return 'N'; //NES
-		case 0xFFD: return 'E'; //Enhanced
-		case 0xFFE: return 'A'; //Audio
-		case 0xFFF: return 1; //Revision
+		case 1: return 1; //Revision
+		case 2: return 'N'; //NES
+		case 3: return 'E'; //Enhanced
+		case 4: return 'A'; //Audio
 	}
 
 	return 0;
