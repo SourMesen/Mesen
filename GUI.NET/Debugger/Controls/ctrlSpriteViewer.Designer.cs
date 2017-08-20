@@ -31,6 +31,7 @@
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpSpriteInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblPalette = new System.Windows.Forms.Label();
 			this.txtSpriteIndex = new System.Windows.Forms.TextBox();
 			this.lblSpriteIndex = new System.Windows.Forms.Label();
 			this.picPreview = new System.Windows.Forms.PictureBox();
@@ -49,11 +50,10 @@
 			this.chkHorizontalMirroring = new System.Windows.Forms.CheckBox();
 			this.chkVerticalMirroring = new System.Windows.Forms.CheckBox();
 			this.chkBackgroundPriority = new System.Windows.Forms.CheckBox();
+			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.picSprites = new System.Windows.Forms.PictureBox();
 			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
-			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
-			this.lblPalette = new System.Windows.Forms.Label();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpSpriteInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -128,6 +128,17 @@
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(410, 491);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
+			// lblPalette
+			// 
+			this.lblPalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblPalette.AutoSize = true;
+			this.lblPalette.Location = new System.Drawing.Point(3, 230);
+			this.lblPalette.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+			this.lblPalette.Name = "lblPalette";
+			this.lblPalette.Size = new System.Drawing.Size(43, 13);
+			this.lblPalette.TabIndex = 26;
+			this.lblPalette.Text = "Palette:";
+			// 
 			// txtSpriteIndex
 			// 
 			this.txtSpriteIndex.BackColor = System.Drawing.SystemColors.Window;
@@ -157,6 +168,8 @@
 			this.picPreview.Size = new System.Drawing.Size(258, 231);
 			this.picPreview.TabIndex = 21;
 			this.picPreview.TabStop = false;
+			this.picPreview.MouseLeave += new System.EventHandler(this.picPreview_MouseLeave);
+			this.picPreview.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPreview_MouseMove);
 			// 
 			// lblScreenPreview
 			// 
@@ -317,6 +330,17 @@
 			this.chkBackgroundPriority.Text = "Background Priority";
 			this.chkBackgroundPriority.UseVisualStyleBackColor = true;
 			// 
+			// ctrlTilePalette
+			// 
+			this.ctrlTilePalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.tableLayoutPanel4.SetColumnSpan(this.ctrlTilePalette, 2);
+			this.ctrlTilePalette.DisplayIndexes = false;
+			this.ctrlTilePalette.HighlightMouseOver = false;
+			this.ctrlTilePalette.Location = new System.Drawing.Point(94, 217);
+			this.ctrlTilePalette.Name = "ctrlTilePalette";
+			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
+			this.ctrlTilePalette.TabIndex = 25;
+			// 
 			// picSprites
 			// 
 			this.picSprites.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -344,28 +368,6 @@
 			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
-			// 
-			// ctrlTilePalette
-			// 
-			this.ctrlTilePalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.tableLayoutPanel4.SetColumnSpan(this.ctrlTilePalette, 2);
-			this.ctrlTilePalette.DisplayIndexes = false;
-			this.ctrlTilePalette.HighlightMouseOver = false;
-			this.ctrlTilePalette.Location = new System.Drawing.Point(94, 217);
-			this.ctrlTilePalette.Name = "ctrlTilePalette";
-			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
-			this.ctrlTilePalette.TabIndex = 25;
-			// 
-			// lblPalette
-			// 
-			this.lblPalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblPalette.AutoSize = true;
-			this.lblPalette.Location = new System.Drawing.Point(3, 230);
-			this.lblPalette.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
-			this.lblPalette.Name = "lblPalette";
-			this.lblPalette.Size = new System.Drawing.Size(43, 13);
-			this.lblPalette.TabIndex = 26;
-			this.lblPalette.Text = "Palette:";
 			// 
 			// ctrlSpriteViewer
 			// 

@@ -20,6 +20,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private bool _largeSprites;
 		private int _spritePatternAddr;
 		private bool _forceRefresh;
+		private Point? _previewMousePosition = null;
 
 		public ctrlSpriteViewer()
 		{
@@ -64,6 +65,11 @@ namespace Mesen.GUI.Debugger.Controls
 				handle.Free();
 			}
 
+			if(_previewMousePosition.HasValue) {
+				SelectSpriteUnderCursor();
+			} else {
+				_selectedSprite = -1;
+			}
 			CreateScreenPreview();
 		}
 
@@ -116,13 +122,17 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			int tileX = Math.Min(e.X / 32, 31);
 			int tileY = Math.Min(e.Y / 64, 63);
-
 			int ramAddr = ((tileY << 3) + tileX) << 2;
 
 			if(ramAddr / 4 == _selectedSprite && !_forceRefresh) {
 				return;
 			}
 
+			UpdateTileInfo(ramAddr);
+		}
+
+		private void UpdateTileInfo(int ramAddr)
+		{
 			_forceRefresh = false;
 			_selectedSprite = ramAddr / 4;
 
@@ -154,11 +164,14 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkHorizontalMirroring.Checked = horizontalMirror;
 			this.chkBackgroundPriority.Checked = backgroundPriority;
 
+			int tileX = _selectedSprite % 8;
+			int tileY = _selectedSprite / 8;
+
 			Bitmap tile = new Bitmap(64, 128);
 			Bitmap tilePreview = new Bitmap(8, 16);
 			using(Graphics g = Graphics.FromImage(tilePreview)) {
-				g.DrawImage(((PictureBox)sender).Image, new Rectangle(0, 0, 8, 16), new Rectangle(tileX*32, tileY*64, 32, 64), GraphicsUnit.Pixel);
-			}			
+				g.DrawImage(picSprites.Image, new Rectangle(0, 0, 8, 16), new Rectangle(tileX*32, tileY*64, 32, 64), GraphicsUnit.Pixel);
+			}
 			using(Graphics g = Graphics.FromImage(tile)) {
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
@@ -214,6 +227,44 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			_copyData = sb.ToString();
+		}
+
+		private void picPreview_MouseMove(object sender, MouseEventArgs e)
+		{
+			_previewMousePosition = e.Location;
+			SelectSpriteUnderCursor();
+		}
+
+		private void SelectSpriteUnderCursor()
+		{
+			Point p = _previewMousePosition.Value;
+			int prevSprite = _selectedSprite;
+			_selectedSprite = -1;
+			for(int i = 0x100 - 4; i >= 0; i-=4) {
+				int spriteY = _spriteRam[i];
+				int tileIndex = _spriteRam[i + 1];
+				int attributes = _spriteRam[i + 2];
+				int spriteX = _spriteRam[i + 3];
+
+				if(p.X >= spriteX && p.X < spriteX + 8 && p.Y >= spriteY && p.Y < spriteY + (_largeSprites ? 16 : 8)) {
+					_selectedSprite = i / 4;
+					break;
+				}
+			}
+
+			if(prevSprite != _selectedSprite) {
+				if(_selectedSprite >= 0) {
+					UpdateTileInfo(_selectedSprite * 4);
+				}
+				CreateScreenPreview();
+			}
+		}
+
+		private void picPreview_MouseLeave(object sender, EventArgs e)
+		{
+			_previewMousePosition = null;
+			_selectedSprite = -1;
+			CreateScreenPreview();
 		}
 	}
 }
