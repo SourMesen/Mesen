@@ -106,6 +106,7 @@ namespace Mesen.GUI.Config
 		public bool ShowPpuScrollOverlay = true;
 		public bool ShowTileGrid = false;
 		public bool ShowAttributeGrid = false;
+		public bool HighlightChrTile = false;
 		public int PpuDisplayCycle = 0;
 		public int PpuDisplayScanline = 241;
 

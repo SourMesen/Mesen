@@ -27,6 +27,7 @@ namespace Mesen.GUI.Debugger
 
 			this._selectedTab = this.tpgNametableViewer;
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefresh;
+			this.ctrlNametableViewer.Connect(this.ctrlChrViewer);
 		}
 
 		protected override void OnLoad(EventArgs e)

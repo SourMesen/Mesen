@@ -54,6 +54,24 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		public int SelectedTileIndex
+		{
+			get { return cboChrSelection.SelectedIndex == 0 ? (_tileIndex + (_bottomBank ? 256 : 0)) : -1; }
+			set
+			{
+
+			}
+		}
+
+		public int SelectedPaletteIndex
+		{
+			get { return cboPalette.SelectedIndex; }
+			set
+			{
+
+			}
+		}
+	
 		public void GetData()
 		{
 			for(int i = 0; i < 2; i++) {

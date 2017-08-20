@@ -52,11 +52,12 @@
 			this.lblNametableIndex = new System.Windows.Forms.Label();
 			this.lblLocation = new System.Windows.Forms.Label();
 			this.lblPpuAddress = new System.Windows.Forms.Label();
+			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkShowPpuScrollOverlay = new System.Windows.Forms.CheckBox();
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
-			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
+			this.chkHighlightChrTile = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -335,15 +336,27 @@
 			this.lblPpuAddress.TabIndex = 17;
 			this.lblPpuAddress.Text = "PPU Addr:";
 			// 
+			// ctrlTilePalette
+			// 
+			this.ctrlTilePalette.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.tableLayoutPanel2.SetColumnSpan(this.ctrlTilePalette, 2);
+			this.ctrlTilePalette.DisplayIndexes = false;
+			this.ctrlTilePalette.HighlightMouseOver = false;
+			this.ctrlTilePalette.Location = new System.Drawing.Point(19, 283);
+			this.ctrlTilePalette.Name = "ctrlTilePalette";
+			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
+			this.ctrlTilePalette.TabIndex = 19;
+			// 
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
+			this.flowLayoutPanel1.Controls.Add(this.chkHighlightChrTile);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 359);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(181, 100);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(181, 124);
 			this.flowLayoutPanel1.TabIndex = 5;
 			// 
 			// chkShowPpuScrollOverlay
@@ -379,16 +392,16 @@
 			this.chkShowAttributeGrid.UseVisualStyleBackColor = true;
 			this.chkShowAttributeGrid.Click += new System.EventHandler(this.chkShowAttributeGrid_Click);
 			// 
-			// ctrlTilePalette
+			// chkHighlightChrTile
 			// 
-			this.ctrlTilePalette.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.tableLayoutPanel2.SetColumnSpan(this.ctrlTilePalette, 2);
-			this.ctrlTilePalette.DisplayIndexes = false;
-			this.ctrlTilePalette.HighlightMouseOver = false;
-			this.ctrlTilePalette.Location = new System.Drawing.Point(19, 283);
-			this.ctrlTilePalette.Name = "ctrlTilePalette";
-			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
-			this.ctrlTilePalette.TabIndex = 19;
+			this.chkHighlightChrTile.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.chkHighlightChrTile.Location = new System.Drawing.Point(3, 72);
+			this.chkHighlightChrTile.Name = "chkHighlightChrTile";
+			this.chkHighlightChrTile.Size = new System.Drawing.Size(150, 31);
+			this.chkHighlightChrTile.TabIndex = 4;
+			this.chkHighlightChrTile.Text = "Highlight tile selected in CHR viewer";
+			this.chkHighlightChrTile.UseVisualStyleBackColor = true;
+			this.chkHighlightChrTile.Click += new System.EventHandler(this.chkHighlightChrTile_Click);
 			// 
 			// ctrlNametableViewer
 			// 
@@ -441,5 +454,6 @@
 		private System.Windows.Forms.ContextMenuStrip ctxMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
 		private ctrlTilePalette ctrlTilePalette;
+		private System.Windows.Forms.CheckBox chkHighlightChrTile;
 	}
 }
