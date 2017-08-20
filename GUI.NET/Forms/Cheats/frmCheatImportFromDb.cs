@@ -57,7 +57,7 @@ namespace Mesen.GUI.Forms.Cheats
 			UpdateList();
 
 			RomInfo info = InteropEmu.GetRomInfo();
-			if(!string.IsNullOrWhiteSpace(info.RomName)) {
+			if(!string.IsNullOrWhiteSpace(info.GetRomName())) {
 				string loadedGameCrc = info.GetPrgCrcString();
 				for(int i = 0, len = lstGames.Items.Count; i < len; i++) {
 					if(((GameInfo)lstGames.Items[i]).Crc == loadedGameCrc) {

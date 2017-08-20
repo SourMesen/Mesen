@@ -70,7 +70,7 @@ namespace Mesen.GUI.Forms.Cheats
 		{
 			RomInfo romInfo = InteropEmu.GetRomInfo();
 			Dictionary<string, string> nameByCrc = new Dictionary<string, string>();
-			if(!string.IsNullOrWhiteSpace(romInfo.RomName)) {
+			if(!string.IsNullOrWhiteSpace(romInfo.GetRomName())) {
 				nameByCrc[romInfo.GetPrgCrcString()] = romInfo.GetRomName();
 			}
 			foreach(CheatInfo cheat in _cheats) {
@@ -88,7 +88,7 @@ namespace Mesen.GUI.Forms.Cheats
 
 			if(lstGameList.Items.Count > 0) {
 				if(gameCrc == null) {
-					if(_selectedItem == null && !string.IsNullOrWhiteSpace(romInfo.RomName)) {
+					if(_selectedItem == null && !string.IsNullOrWhiteSpace(romInfo.GetRomName())) {
 						gameCrc = romInfo.GetPrgCrcString();
 					} else {
 						gameCrc = _selectedItem?.Crc;

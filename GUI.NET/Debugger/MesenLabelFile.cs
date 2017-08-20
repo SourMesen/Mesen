@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mesen.GUI.Debugger
 {
@@ -23,7 +24,10 @@ namespace Mesen.GUI.Debugger
 			char[] separator = new char[1] { ':' };
 			foreach(string row in File.ReadAllLines(path, Encoding.UTF8)) {
 				string[] rowData = row.Split(separator, 4);
-
+				if(rowData.Length < 3) {
+					//Invalid row
+					continue;
+				}
 				AddressType type;
 				switch(rowData[0][0]) {
 					case 'G': type = AddressType.Register; break;
@@ -53,8 +57,14 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
+			int labelCount = 0;
 			foreach(KeyValuePair<AddressType, Dictionary<UInt32, CodeLabel>> kvp in labels) {
 				LabelManager.SetLabels(kvp.Value.Values);
+				labelCount += kvp.Value.Values.Count;
+			}
+
+			if(!silent) {
+				MessageBox.Show($"Import completed with {labelCount} labels imported.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 		}
 

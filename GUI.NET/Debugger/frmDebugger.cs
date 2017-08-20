@@ -149,10 +149,16 @@ namespace Mesen.GUI.Debugger
 		private void AutoLoadDbgFile(bool silent)
 		{
 			if(ConfigManager.Config.DebugInfo.AutoLoadDbgFiles) {
-				string dbgPath = Path.Combine(ConfigManager.Config.RecentFiles[0].RomFile.Folder, Path.GetFileNameWithoutExtension(ConfigManager.Config.RecentFiles[0].RomFile.FileName) + ".dbg");
+				RomInfo info = InteropEmu.GetRomInfo();
+				string dbgPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".dbg");
 				if(File.Exists(dbgPath)) {
 					Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
 					dbgImporter.Import(dbgPath, silent);
+				} else {
+					string mlbPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".mlb");
+					if(File.Exists(mlbPath)) {
+						MesenLabelFile.Import(mlbPath, silent);
+					}
 				}
 			}
 		}

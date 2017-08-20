@@ -188,7 +188,7 @@ namespace InteropEmu {
 		{
 			string romPath = filename;
 			if(romPath.empty()) {
-				_returnString = Console::GetRomName();
+				_returnString = Console::GetRomPath();
 				romInfo.RomName = _returnString.c_str();
 				romInfo.Crc32 = Console::GetHashInfo().Crc32Hash;
 				romInfo.PrgCrc32 = Console::GetHashInfo().PrgCrc32Hash;
@@ -199,7 +199,7 @@ namespace InteropEmu {
 				if(romLoader.LoadFile(romPath)) {
 					RomData romData = romLoader.GetRomData();
 
-					_returnString = romData.RomName;
+					_returnString = romPath;
 					romInfo.RomName = _returnString.c_str();
 					romInfo.Crc32 = romData.Crc32;
 					romInfo.PrgCrc32 = romData.PrgCrc32;

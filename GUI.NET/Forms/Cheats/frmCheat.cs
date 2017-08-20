@@ -71,7 +71,7 @@ namespace Mesen.GUI.Forms.Cheats
 				RomInfo romInfo = InteropEmu.GetRomInfo(resource);
 				_gameCrc = romInfo.GetPrgCrcString();
 				if(_gameCrc != null) {
-					((CheatInfo)Entity).GameName = Path.GetFileNameWithoutExtension(romInfo.RomName);
+					((CheatInfo)Entity).GameName = romInfo.GetRomName();
 					txtGameName.Text = ((CheatInfo)Entity).GameName;
 				}
 			}

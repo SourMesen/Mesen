@@ -1136,7 +1136,7 @@ namespace Mesen.GUI
 
 	public class RomInfo
 	{
-		public string RomName;
+		public ResourcePath RomFile;
 		public UInt32 Crc32;
 		public UInt32 PrgCrc32;
 		public RomFormat Format;
@@ -1144,7 +1144,7 @@ namespace Mesen.GUI
 
 		public RomInfo(InteropRomInfo romInfo)
 		{
-			this.RomName = UTF8Marshaler.GetStringFromIntPtr(romInfo.RomNamePointer);
+			this.RomFile = (ResourcePath)UTF8Marshaler.GetStringFromIntPtr(romInfo.RomNamePointer);
 			this.Crc32 = romInfo.Crc32;
 			this.PrgCrc32 = romInfo.PrgCrc32;
 			this.Format = romInfo.Format;
@@ -1153,7 +1153,7 @@ namespace Mesen.GUI
 
 		public string GetRomName()
 		{
-			return Path.GetFileNameWithoutExtension(this.RomName);
+			return Path.GetFileNameWithoutExtension(this.RomFile.FileName);
 		}
 
 		public string GetCrcString()
