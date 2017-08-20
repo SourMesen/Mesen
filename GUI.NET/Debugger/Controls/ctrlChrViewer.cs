@@ -54,21 +54,34 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int SelectedTileIndex
 		{
 			get { return cboChrSelection.SelectedIndex == 0 ? (_tileIndex + (_bottomBank ? 256 : 0)) : -1; }
 			set
 			{
-
+				_bottomBank = value >= 256 ? true : false;
+				if(chkLargeSprites.Checked) {
+					int y = (value % 256) / 16;
+					int x = value % 16;
+					int tmpX = x / 2 + ((y & 0x01) == 0x01 ? 8 : 0);
+					int tmpY = (y & 0xFE) + ((x & 0x01) == 0x01 ? 1 : 0);
+					_tileIndex = tmpY * 16 + tmpX;
+				} else {
+					_tileIndex = value % 256;
+				}
+				cboChrSelection.SelectedIndex = 0;
 			}
 		}
 
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int SelectedPaletteIndex
 		{
 			get { return cboPalette.SelectedIndex; }
 			set
 			{
-
+				cboPalette.SelectedIndex = value;
+				this.RefreshPreview(_tileIndex, _bottomBank);
 			}
 		}
 	

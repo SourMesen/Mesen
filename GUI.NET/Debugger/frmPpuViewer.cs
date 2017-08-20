@@ -167,5 +167,17 @@ namespace Mesen.GUI.Debugger
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
+
+		private void ctrlNametableViewer_OnSelectChrTile(object sender, EventArgs e)
+		{
+			tabMain.SelectTab(tpgChrViewer);
+		}
+
+		private void ctrlSpriteViewer_OnSelectTilePalette(int tileIndex, int paletteIndex)
+		{
+			ctrlChrViewer.SelectedTileIndex = tileIndex;
+			ctrlChrViewer.SelectedPaletteIndex = paletteIndex;
+			tabMain.SelectTab(tpgChrViewer);
+		}
 	}
 }

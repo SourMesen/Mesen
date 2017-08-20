@@ -14,6 +14,8 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlSpriteViewer : BaseControl
 	{
+		public delegate void SelectTilePaletteHandler(int tileIndex, int paletteIndex);
+		public event SelectTilePaletteHandler OnSelectTilePalette;
 		private byte[] _spriteRam;
 		private byte[] _spritePixelData;
 		private int _selectedSprite = -1;
@@ -26,11 +28,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 		}
-		protected override void OnLoad(EventArgs e)
-		{
- 			base.OnLoad(e);
-		}
-
+		
 		public void GetData()
 		{
 			DebugState state = new DebugState();
@@ -67,8 +65,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 			if(_previewMousePosition.HasValue) {
 				SelectSpriteUnderCursor();
-			} else {
-				_selectedSprite = -1;
 			}
 			CreateScreenPreview();
 		}
@@ -120,6 +116,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picSprites_MouseMove(object sender, MouseEventArgs e)
 		{
+			_previewMousePosition = null;
+
 			int tileX = Math.Min(e.X / 32, 31);
 			int tileY = Math.Min(e.Y / 64, 63);
 			int ramAddr = ((tileY << 3) + tileX) << 2;
@@ -198,6 +196,10 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void ctxMenu_Opening(object sender, CancelEventArgs e)
 		{
+			if(_selectedSprite < 0) {
+				return;
+			}
+
 			int ramAddr = _selectedSprite * 4;
 			int spriteY = _spriteRam[ramAddr];
 			int tileIndex = _spriteRam[ramAddr + 1];
@@ -262,9 +264,42 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picPreview_MouseLeave(object sender, EventArgs e)
 		{
-			_previewMousePosition = null;
-			_selectedSprite = -1;
 			CreateScreenPreview();
+		}
+
+		private void ShowInChrViewer()
+		{
+			if(_selectedSprite < 0) {
+				return;
+			}
+
+			int ramAddr = _selectedSprite * 4;
+			int tileIndex = _spriteRam[ramAddr + 1];
+			int palette = (_spriteRam[ramAddr + 2] & 0x03) + 4;
+
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+
+			if(_largeSprites) {
+				if(tileIndex % 2 == 1) {
+					tileIndex += 256;
+					tileIndex--;
+				}
+				OnSelectTilePalette?.Invoke(tileIndex, palette);
+			} else {
+				int tileIndexOffset = state.PPU.ControlFlags.SpritePatternAddr == 0x1000 ? 256 : 0;
+				OnSelectTilePalette?.Invoke(tileIndex+tileIndexOffset, palette);
+			}
+		}
+
+		private void picSprites_DoubleClick(object sender, EventArgs e)
+		{
+			ShowInChrViewer();
+		}
+
+		private void mnuShowInChrViewer_Click(object sender, EventArgs e)
+		{
+			ShowInChrViewer();
 		}
 	}
 }

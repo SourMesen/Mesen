@@ -87,7 +87,7 @@
 			// 
 			this.mnuClose.Image = global::Mesen.GUI.Properties.Resources.Exit;
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(152, 22);
+			this.mnuClose.Size = new System.Drawing.Size(103, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -106,14 +106,14 @@
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(138, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -121,7 +121,7 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -157,6 +157,7 @@
 			this.ctrlNametableViewer.Name = "ctrlNametableViewer";
 			this.ctrlNametableViewer.Size = new System.Drawing.Size(695, 520);
 			this.ctrlNametableViewer.TabIndex = 0;
+			this.ctrlNametableViewer.OnSelectChrTile += new System.EventHandler(this.ctrlNametableViewer_OnSelectChrTile);
 			// 
 			// tpgChrViewer
 			// 
@@ -194,6 +195,7 @@
 			this.ctrlSpriteViewer.Name = "ctrlSpriteViewer";
 			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 526);
 			this.ctrlSpriteViewer.TabIndex = 0;
+			this.ctrlSpriteViewer.OnSelectTilePalette += new Mesen.GUI.Debugger.Controls.ctrlSpriteViewer.SelectTilePaletteHandler(this.ctrlSpriteViewer_OnSelectTilePalette);
 			// 
 			// tpgPaletteViewer
 			// 

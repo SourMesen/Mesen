@@ -15,6 +15,8 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlNametableViewer : BaseControl
 	{
+		public event EventHandler OnSelectChrTile;
+
 		private byte[][] _nametablePixelData = new byte[4][];
 		private byte[][] _tileData = new byte[4][];
 		private byte[][] _attributeData = new byte[4][];
@@ -70,13 +72,7 @@ namespace Mesen.GUI.Debugger.Controls
 					GCHandle handle = GCHandle.Alloc(_nametablePixelData[i], GCHandleType.Pinned);
 					Bitmap source = new Bitmap(256, 240, 4*256, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
 					try {
-						int xOffset = i % 2 == 0 ? 0 : 256;
-						int yOffset = i <= 1 ? 0 : 240;
-						gNametable.DrawImage(source, new Rectangle(xOffset, yOffset, 256, 240), new Rectangle(0, 0, 256, 240), GraphicsUnit.Pixel);
-
-						if(_chrViewer.SelectedTileIndex >= 0 && this.chkHighlightChrTile.Checked) {
-							HighlightChrViewerTile(tileIndexOffset, gNametable, i, xOffset, yOffset);
-						}
+						gNametable.DrawImage(source, new Rectangle(i % 2 == 0 ? 0 : 256, i <= 1 ? 0 : 240, 256, 240), new Rectangle(0, 0, 256, 240), GraphicsUnit.Pixel);
 					} finally {
 						handle.Free();
 					}
@@ -107,6 +103,12 @@ namespace Mesen.GUI.Debugger.Controls
 			using(Graphics g = Graphics.FromImage(target)) {
 				g.DrawImage(_nametableImage, 0, 0);
 
+				for(int i = 0; i < 4; i++) {
+					if(_chrViewer.SelectedTileIndex >= 0 && this.chkHighlightChrTile.Checked) {
+						HighlightChrViewerTile(tileIndexOffset, g, i);
+					}
+				}
+
 				if(this._gridOverlay != null) {
 					g.DrawImage(this._gridOverlay, 0, 0);
 				}
@@ -119,12 +121,15 @@ namespace Mesen.GUI.Debugger.Controls
 			this.picNametable.Image = target;
 		}
 
-		private void HighlightChrViewerTile(int tileIndexOffset, Graphics gNametable, int i, int xOffset, int yOffset)
+		private void HighlightChrViewerTile(int tileIndexOffset, Graphics dest, int nametableIndex)
 		{
+			int xOffset = nametableIndex % 2 == 0 ? 0 : 256;
+			int yOffset = nametableIndex <= 1 ? 0 : 240;
+
 			using(Pen pen = new Pen(Color.Red, 2)) {
 				for(int j = 0; j < 960; j++) {
-					if(_tileData[i][j] + tileIndexOffset == _chrViewer.SelectedTileIndex) {
-						gNametable.DrawRectangle(pen, new Rectangle(xOffset + (j%32)*8-1, yOffset + (j/32)*8-1, 10, 10));
+					if(_tileData[nametableIndex][j] + tileIndexOffset == _chrViewer.SelectedTileIndex) {
+						dest.DrawRectangle(pen, new Rectangle(xOffset + (j%32)*8-1, yOffset + (j/32)*8-1, 10, 10));
 					}
 				}
 			}
@@ -297,6 +302,32 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			_copyData = sb.ToString();
+		}
+
+		private void ShowInChrViewer()
+		{
+			int tileIndex = _tileData[_nametableIndex][_tileY*32+_tileX];
+			int attributeData = _attributeData[_nametableIndex][_tileY*32+_tileX];
+			int shift = (_tileX & 0x02) | ((_tileY & 0x02) << 1);
+			int paletteIndex = ((attributeData >> shift) & 0x03);
+
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+			int tileIndexOffset = state.PPU.ControlFlags.BackgroundPatternAddr == 0x1000 ? 256 : 0;
+
+			_chrViewer.SelectedPaletteIndex = paletteIndex;
+			_chrViewer.SelectedTileIndex = tileIndex + tileIndexOffset;
+			OnSelectChrTile?.Invoke(null, EventArgs.Empty);
+		}
+
+		private void picNametable_DoubleClick(object sender, EventArgs e)
+		{
+			ShowInChrViewer();
+		}
+
+		private void mnuShowInChrViewer_Click(object sender, EventArgs e)
+		{
+			ShowInChrViewer();
 		}
 	}
 }
