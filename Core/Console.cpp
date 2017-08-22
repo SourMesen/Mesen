@@ -306,7 +306,7 @@ void Console::Stop()
 
 	shared_ptr<Debugger> debugger = _debugger;
 	if(debugger) {
-		debugger->Run();
+		debugger->Suspend();
 	}
 	_stopLock.Acquire();
 	_stopLock.Release();

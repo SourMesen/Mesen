@@ -21,6 +21,7 @@
 #include "PPU.h"
 #include "MemoryManager.h"
 #include "RewindManager.h"
+#include "DebugBreakHelper.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
@@ -147,7 +148,10 @@ void Debugger::BreakIfDebugging()
 bool Debugger::LoadCdlFile(string cdlFilepath)
 {
 	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {
+		//Can't use DebugBreakHelper due to the fact this is called in the constructor
+		Console::Pause();
 		UpdateCdlCache();
+		Console::Resume();
 		return true;
 	}
 	return false;
@@ -155,13 +159,13 @@ bool Debugger::LoadCdlFile(string cdlFilepath)
 
 void Debugger::ResetCdl()
 {
+	DebugBreakHelper helper(this);
 	_codeDataLogger->Reset();
 	UpdateCdlCache();
 }
 
 void Debugger::UpdateCdlCache()
 {
-	Console::Pause();
 	_disassembler->Reset();
 	for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 		if(_codeDataLogger->IsCode(i)) {
@@ -176,7 +180,6 @@ void Debugger::UpdateCdlCache()
 			_functionEntryPoints.emplace(i);
 		}
 	}
-	Console::Resume();
 }
 
 bool Debugger::IsMarkedAsCode(uint16_t relativeAddress)
@@ -858,7 +861,7 @@ shared_ptr<MemoryAccessCounter> Debugger::GetMemoryAccessCounter()
 
 bool Debugger::IsExecutionStopped()
 {
-	return _executionStopped;
+	return _executionStopped || !_console->IsRunning();
 }
 
 void Debugger::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info)
@@ -957,6 +960,19 @@ void Debugger::GetNesHeader(uint8_t* header)
 void Debugger::SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header)
 {
 	_mapper->SaveRomToDisk(filename, saveAsIps, header);
+}
+
+void Debugger::RevertPrgChrChanges()
+{
+	DebugBreakHelper helper(this);
+	_mapper->RevertPrgChrChanges();
+	_disassembler->Reset();
+	UpdateCdlCache();
+}
+
+bool Debugger::HasPrgChrChanges()
+{
+	return _mapper->HasPrgChrChanges();
 }
 
 int32_t Debugger::FindSubEntryPoint(uint16_t relativeAddress)

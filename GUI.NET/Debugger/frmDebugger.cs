@@ -127,8 +127,6 @@ namespace Mesen.GUI.Debugger
 			UpdateDebuggerFlags();
 			UpdateCdlRatios();
 			tmrCdlRatios.Start();
-
-			mnuEditHeader.Enabled = mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
 		}
 
 		protected override void OnActivated(EventArgs e)
@@ -148,6 +146,22 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void mnuFile_DropDownOpening(object sender, EventArgs e)
+		{
+			UpdateFileOptions();
+		}
+
+		private void UpdateFileOptions()
+		{
+			bool hasChanges = InteropEmu.DebugHasPrgChrChanges();
+			RomInfo romInfo = InteropEmu.GetRomInfo();
+			mnuSaveRom.Enabled = romInfo.Format == RomFormat.iNes && hasChanges && !romInfo.RomFile.Compressed;
+			mnuSaveAsIps.Enabled = romInfo.Format == RomFormat.iNes && hasChanges;
+			mnuRevertChanges.Enabled = hasChanges;
+			mnuSaveRomAs.Enabled = romInfo.Format == RomFormat.iNes;
+			mnuEditHeader.Enabled = romInfo.Format == RomFormat.iNes;
+		}
+
 		private void AutoLoadCdlFiles()
 		{
 			if(ConfigManager.Config.DebugInfo.AutoLoadCdlFiles) {
@@ -156,7 +170,7 @@ namespace Mesen.GUI.Debugger
 				string cdlPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".cdl");
 				if(File.Exists(cdlPath)) {
 					if(InteropEmu.DebugLoadCdlFile(cdlPath)) {
-						UpdateDebugger();
+						UpdateDebugger(false);
 					}
 				}
 			}
@@ -245,8 +259,6 @@ namespace Mesen.GUI.Debugger
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					this.BeginInvoke((MethodInvoker)(() => {
-						mnuEditHeader.Enabled = mnuSaveRom.Enabled = InteropEmu.GetRomInfo().Format == RomFormat.iNes;
-
 						this.UpdateWorkspace();
 						this.AutoLoadCdlFiles();
 						this.AutoLoadDbgFiles(true);
@@ -605,7 +617,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuResetCdlLog_Click(object sender, EventArgs e)
 		{
 			InteropEmu.DebugResetCdlLog();
-			UpdateDebugger();
+			UpdateDebugger(false);
 		}
 
 		private void ctrlBreakpoints_BreakpointNavigation(object sender, EventArgs e)
@@ -823,7 +835,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 
 			UpdateDebuggerFlags();
-			UpdateDebugger();
+			UpdateDebugger(false);
 		}
 
 		private void mnuDisassembleVerifiedCodeOnly_Click(object sender, EventArgs e)
@@ -886,8 +898,13 @@ namespace Mesen.GUI.Debugger
 				splitContainer.CollapsePanel();
 			}
 		}
-
+		
 		private void mnuSaveRom_Click(object sender, EventArgs e)
+		{
+			InteropEmu.DebugSaveRomToDisk(InteropEmu.GetRomInfo().RomFile.Path);
+		}
+
+		private void mnuSaveRomAs_Click(object sender, EventArgs e)
 		{
 			using(SaveFileDialog sfd = new SaveFileDialog()) {
 				sfd.SetFilter("NES roms (*.nes)|*.nes");
@@ -909,6 +926,12 @@ namespace Mesen.GUI.Debugger
 					InteropEmu.DebugSaveRomToDisk(sfd.FileName, true);
 				}
 			}
+		}
+
+		private void mnuRevertChanges_Click(object sender, EventArgs e)
+		{
+			InteropEmu.DebugRevertPrgChrChanges();
+			UpdateDebugger(false);
 		}
 
 		private void mnuEditHeader_Click(object sender, EventArgs e)

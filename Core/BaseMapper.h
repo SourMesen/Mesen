@@ -215,4 +215,6 @@ public:
 
 	NESHeader GetNesHeader();
 	void SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header);
+	void RevertPrgChrChanges();
+	bool HasPrgChrChanges();
 };

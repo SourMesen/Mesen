@@ -104,6 +104,8 @@ extern "C"
 	
 	DllExport void __stdcall DebugGetNesHeader(uint8_t* header) { GetDebugger()->GetNesHeader(header); }
 	DllExport void __stdcall DebugSaveRomToDisk(char* filename, bool saveIpsFile, uint8_t* header) { GetDebugger()->SaveRomToDisk(filename, saveIpsFile, header); }
+	DllExport bool __stdcall DebugHasPrgChrChanges() { return GetDebugger()->HasPrgChrChanges(); }
+	DllExport void __stdcall DebugRevertPrgChrChanges() { GetDebugger()->RevertPrgChrChanges(); }
 
 	DllExport int32_t __stdcall DebugFindSubEntryPoint(uint16_t relativeAddress) { return GetDebugger()->FindSubEntryPoint(relativeAddress); }
 

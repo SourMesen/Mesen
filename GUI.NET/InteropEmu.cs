@@ -246,6 +246,9 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugResetMemoryAccessCounts();
 		[DllImport(DLLPath)] public static extern void DebugResetProfiler();
 
+		[DllImport(DLLPath)] public static extern void DebugRevertPrgChrChanges();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugHasPrgChrChanges();
+
 		[DllImport(DLLPath, EntryPoint = "DebugGetNesHeader")] public static extern void DebugGetNesHeaderWrapper(IntPtr headerBuffer);
 		public static byte[] DebugGetNesHeader()
 		{

@@ -202,6 +202,8 @@ public:
 
 	void GetNesHeader(uint8_t* header);
 	void SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header);
+	void RevertPrgChrChanges();
+	bool HasPrgChrChanges();
 
 	int32_t FindSubEntryPoint(uint16_t relativeAddress);
 	

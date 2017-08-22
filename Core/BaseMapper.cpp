@@ -1025,3 +1025,24 @@ void BaseMapper::SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header)
 		file.close();
 	}
 }
+
+void BaseMapper::RevertPrgChrChanges()
+{
+	memcpy(_prgRom, _originalPrgRom.data(), _originalPrgRom.size());
+	if(_chrRom) {
+		memcpy(_chrRom, _originalChrRom.data(), _originalChrRom.size());
+	}
+}
+
+bool BaseMapper::HasPrgChrChanges()
+{
+	if(memcmp(_prgRom, _originalPrgRom.data(), _originalPrgRom.size()) != 0) {
+		return true;
+	}
+	if(_chrRom) {
+		if(memcmp(_chrRom, _originalChrRom.data(), _originalChrRom.size()) != 0) {
+			return true;
+		}
+	}
+	return false;
+}
