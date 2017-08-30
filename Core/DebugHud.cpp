@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "DebugHud.h"
 #include "DrawCommand.h"
 #include "DrawLineCommand.h"

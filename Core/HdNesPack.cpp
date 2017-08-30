@@ -70,7 +70,6 @@ void HdNesPack::DrawTile(HdPpuTileInfo &tileInfo, HdPackTileInfo &hdPackTileInfo
 		return;
 	}
 
-	uint32_t bgColor = _palette[tileInfo.PpuBackgroundColor];
 	uint32_t scale = GetScale();
 	uint32_t *bitmapData = hdPackTileInfo.HdTileData.data();
 	uint32_t tileWidth = 8 * scale;
@@ -165,9 +164,9 @@ HdPackTileInfo * HdNesPack::GetMatchingTile(HdPpuPixelInfo *screenTiles, uint32_
 	}
 
 	if(hdTile != hdData->TileByKey.end()) {
-		for(HdPackTileInfo* hdTile : hdTile->second) {
-			if(hdTile->MatchesCondition(screenTiles, x, y, tile)) {
-				return hdTile;
+		for(HdPackTileInfo* hdPackTile : hdTile->second) {
+			if(hdPackTile->MatchesCondition(screenTiles, x, y, tile)) {
+				return hdPackTile;
 			}
 		}
 	}
@@ -193,12 +192,12 @@ bool HdNesPack::IsNextToSprite(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t
 		}
 	};
 	for(int i = -1; i <= 1; i++) {
-		if(y + i < 0 || y + i >= PPU::ScreenHeight) {
+		if((int)y + i < 0 || y + i >= PPU::ScreenHeight) {
 			continue;
 		}
 
 		for(int j = -1; j <= 1; j++) {
-			if(x + j < 0 || x + j >= PPU::ScreenWidth) {
+			if((int)x + j < 0 || x + j >= PPU::ScreenWidth) {
 				continue;
 			}
 

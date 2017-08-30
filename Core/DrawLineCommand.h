@@ -17,7 +17,7 @@ protected:
 				DrawPixel(_x, i, _color);
 			}
 		} else {
-			double deltaErr = abs((double)yDiff / (double)xDiff);
+			double deltaErr = std::abs((double)yDiff / (double)xDiff);
 			double error = deltaErr - 0.5;
 			int y = _y;
 			for(int x = _x; x <= _x2; x++) {
@@ -33,7 +33,7 @@ protected:
 
 public:
 	DrawLineCommand(int x, int y, int x2, int y2, int color, int frameCount) :
-		_x(x), _y(y), _x2(x2), _y2(y2), _color(color), DrawCommand(frameCount)
+		DrawCommand(frameCount), _x(x), _y(y), _x2(x2), _y2(y2), _color(color)
 	{
 		if(!(_color & 0xFF000000)) {
 			_color |= 0xFF000000;

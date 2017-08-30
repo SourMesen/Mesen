@@ -857,6 +857,8 @@ namespace Mesen.GUI
 		public CPUState CPU;
 		public PPUDebugState PPU;
 		public CartridgeState Cartridge;
+		public ApuState APU;
+		public NesModel Model;
 	}
 
 	public struct CartridgeState
@@ -875,7 +877,7 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
 		public UInt32[] ChrSelectedPages;
 
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
 		public UInt32[] Nametables;
 	}
 
@@ -978,6 +980,113 @@ namespace Mesen.GUI
 		public bool NMIFlag;
 
 		public UInt16 DebugPC;
+	}
+
+	public struct ApuLengthCounterState
+	{
+		[MarshalAs(UnmanagedType.I1)]
+		public bool Halt;
+		public Byte Counter;
+		public Byte ReloadValue;
+	}
+
+	public struct ApuEnvelopeState
+	{
+		[MarshalAs(UnmanagedType.I1)]
+		public bool StartFlag;
+		[MarshalAs(UnmanagedType.I1)]
+		public bool Loop;
+		[MarshalAs(UnmanagedType.I1)]
+		public bool ConstantVolume;
+		public Byte Divider;
+		public Byte Counter;
+		public Byte Volume;
+	}
+
+	public struct ApuSquareState
+	{
+		public Byte Duty;
+		public Byte DutyPosition;
+		public UInt16 Period;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool SweepEnabled;
+		[MarshalAs(UnmanagedType.I1)]
+		public bool SweepNegate;
+		public Byte SweepPeriod;
+		public Byte SweepShift;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool Enabled;
+		public Byte OutputVolume;
+		public UInt32 Frequency;
+
+		public ApuLengthCounterState LengthCounter;
+		public ApuEnvelopeState Envelope;
+	}
+
+	public struct ApuTriangleState
+	{
+		public UInt16 Period;
+		public Byte SequencePosition;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool Enabled;
+		public UInt32 Frequency;
+		public Byte OutputVolume;
+
+		public ApuLengthCounterState LengthCounter;
+	}
+
+	public struct ApuNoiseState
+	{
+		public UInt16 Period;
+		public UInt16 ShiftRegister;
+		[MarshalAs(UnmanagedType.I1)]		
+		public bool ModeFlag;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool Enabled;
+		public UInt32 Frequency;
+		public Byte OutputVolume;
+
+		public ApuLengthCounterState LengthCounter;
+		public ApuEnvelopeState Envelope;
+	}
+
+	public struct ApuDmcState
+	{
+		public UInt16 SampleAddr;
+		public UInt16 SampleLength;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool Loop;
+		[MarshalAs(UnmanagedType.I1)]
+		public bool IrqEnabled;
+		public UInt16 Period;
+		public UInt16 BytesRemaining;
+
+		public UInt32 Frequency;
+		public Byte OutputVolume;
+	}
+
+	public struct ApuFrameCounterState
+	{
+		[MarshalAs(UnmanagedType.I1)]
+		public bool FiveStepMode;
+		public Byte SequencePosition;
+		[MarshalAs(UnmanagedType.I1)]
+		public bool IrqEnabled;
+	}
+
+	public struct ApuState
+	{
+		public ApuSquareState Square1;
+		public ApuSquareState Square2;
+		public ApuTriangleState Triangle;
+		public ApuNoiseState Noise;
+		public ApuDmcState Dmc;
+		public ApuFrameCounterState FrameCounter;
 	}
 
 	public enum StatusFlagFormat

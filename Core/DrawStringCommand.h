@@ -151,7 +151,7 @@ protected:
 
 public:
 	DrawStringCommand(int x, int y, string text, int color, int backColor, int frameCount) :
-		_x(x), _y(y), _text(text), _color(color), _backColor(backColor), DrawCommand(frameCount)
+		DrawCommand(frameCount), _x(x), _y(y), _color(color), _backColor(backColor), _text(text)
 	{
 		if(!(_color & 0xFF000000)) {
 			_color |= 0xFF000000;

@@ -13,8 +13,8 @@ private:
 public:
 	HdVideoFilter();
 
-	void ApplyFilter(uint16_t *ppuOutputBuffer);
-	FrameInfo GetFrameInfo();
+	void ApplyFilter(uint16_t *ppuOutputBuffer) override;
+	FrameInfo GetFrameInfo() override;
 	OverscanDimensions GetOverscan() override;
 	
 	void SetHdScreenTiles(HdPpuPixelInfo *screenTiles);

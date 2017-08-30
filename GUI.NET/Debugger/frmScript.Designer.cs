@@ -360,7 +360,6 @@
 			this.txtScriptContent.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtScriptContent.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.txtScriptContent.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtScriptContent.Hotkeys = resources.GetString("txtScriptContent.Hotkeys");
 			this.txtScriptContent.IsReplaceMode = false;
 			this.txtScriptContent.Language = FastColoredTextBoxNS.Language.Lua;
 			this.txtScriptContent.LeftBracket = '(';

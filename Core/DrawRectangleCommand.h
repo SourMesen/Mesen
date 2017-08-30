@@ -31,7 +31,7 @@ protected:
 
 public:
 	DrawRectangleCommand(int x, int y, int width, int height, int color, bool fill, int frameCount) :
-		_x(x), _y(y), _width(width), _height(height), _color(color), _fill(fill), DrawCommand(frameCount)
+		DrawCommand(frameCount), _x(x), _y(y), _width(width), _height(height), _color(color), _fill(fill)
 	{
 		if(!(_color & 0xFF000000)) {
 			_color |= 0xFF000000;

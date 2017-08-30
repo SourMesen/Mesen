@@ -15,7 +15,7 @@ protected:
 
 public:
 	DrawPixelCommand(int x, int y, int color, int frameCount) :
-		_x(x), _y(y), _color(color), DrawCommand(frameCount)
+		DrawCommand(frameCount), _x(x), _y(y), _color(color) 
 	{
 		if(!(_color & 0xFF000000)) {
 			_color |= 0xFF000000;
