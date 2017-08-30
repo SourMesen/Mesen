@@ -359,7 +359,7 @@ int32_t ExpressionEvaluator::Evaluate(vector<int> &rpnList, DebugState &state, E
 				case EvalOperators::BinaryNot: token = ~right; break;
 				case EvalOperators::LogicalNot: token = !right; break;
 				case EvalOperators::Bracket: token = _debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, right); break;
-				case EvalOperators::Braces: token = _debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, right) | (_debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, right+1) << 8); break;
+				case EvalOperators::Braces: token = _debugger->GetMemoryDumper()->GetMemoryValueWord(DebugMemoryType::CpuMemory, right); break;
 				default: throw std::runtime_error("Invalid operator");
 			}
 		}

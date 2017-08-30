@@ -287,17 +287,7 @@ void Console::ResetComponents(bool softReset)
 
 	SoundMixer::StopAudio(true);
 
-	if(softReset) {
-		if(_debugger) {
-			auto lock = _debuggerLock.AcquireSafe();
-			StopDebugger();
-			GetDebugger();
-		}
-
-		MessageManager::SendNotification(ConsoleNotificationType::GameReset);
-	} else {
-		MessageManager::SendNotification(ConsoleNotificationType::GameLoaded);
-	}
+	MessageManager::SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);
 }
 
 void Console::Stop()
@@ -378,6 +368,10 @@ void Console::Run()
 		if(currentFrameNumber != lastFrameNumber) {
 			if(_controlManager->GetLagFlag()) {
 				_lagCounter++;
+			}
+
+			if(_debugger) {
+				_debugger->ProcessEvent(EventType::StartFrame);
 			}
 
 			_rewindManager->ProcessEndOfFrame();
@@ -485,7 +479,7 @@ void Console::Run()
 
 bool Console::IsRunning()
 {
-	return !Instance->_stopLock.IsFree();
+	return !Instance->_stopLock.IsFree() && !Instance->_runLock.IsFree();
 }
 
 void Console::UpdateNesModel(bool sendNotification)
@@ -597,7 +591,7 @@ std::shared_ptr<Debugger> Console::GetDebugger(bool autoStart)
 {
 	auto lock = _debuggerLock.AcquireSafe();
 	if(!_debugger && autoStart) {
-		_debugger.reset(new Debugger(Console::Instance, _cpu, _ppu, _memoryManager, _mapper));
+		_debugger.reset(new Debugger(Console::Instance, _cpu, _ppu, _apu, _memoryManager, _mapper));
 	}
 	return _debugger;
 }

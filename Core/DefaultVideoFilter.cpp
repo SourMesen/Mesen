@@ -5,6 +5,7 @@
 #include <math.h>
 #include <algorithm>
 #include "PPU.h"
+#include "DebugHud.h"
 
 DefaultVideoFilter::DefaultVideoFilter()
 {
@@ -54,20 +55,25 @@ void DefaultVideoFilter::OnBeforeApplyFilter()
 
 void DefaultVideoFilter::DecodePpuBuffer(uint16_t *ppuOutputBuffer, uint32_t* outputBuffer, bool displayScanlines)
 {
+	uint32_t* out = outputBuffer;
 	OverscanDimensions overscan = GetOverscan();
 	double scanlineIntensity = 1.0 - EmulationSettings::GetPictureSettings().ScanlineIntensity;
 	for(uint32_t i = overscan.Top, iMax = 240 - overscan.Bottom; i < iMax; i++) {
 		if(displayScanlines && (i + overscan.Top) % 2 == 0) {
 			for(uint32_t j = overscan.Left, jMax = 256 - overscan.Right; j < jMax; j++) {
-				*outputBuffer = ProcessIntensifyBits(ppuOutputBuffer[i * 256 + j], scanlineIntensity);
-				outputBuffer++;
+				*out = ProcessIntensifyBits(ppuOutputBuffer[i * 256 + j], scanlineIntensity);
+				out++;
 			}
 		} else {
 			for(uint32_t j = overscan.Left, jMax = 256 - overscan.Right; j < jMax; j++) {
-				*outputBuffer = ProcessIntensifyBits(ppuOutputBuffer[i * 256 + j]);
-				outputBuffer++;
+				*out = ProcessIntensifyBits(ppuOutputBuffer[i * 256 + j]);
+				out++;
 			}
 		}
+	}
+
+	if(DebugHud::GetInstance()) {
+		DebugHud::GetInstance()->Draw(outputBuffer, overscan);
 	}
 }
 

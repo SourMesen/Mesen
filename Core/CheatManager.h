@@ -41,13 +41,15 @@ private:
 	CodeInfo GetPARCodeInfo(uint32_t parCode);
 	void AddCode(CodeInfo &code);
 	
+public:
+	CheatManager();
+
+	static CheatManager* GetInstance();
+
 	void AddGameGenieCode(string code);
 	void AddProActionRockyCode(uint32_t code);
 	void AddCustomCode(uint32_t address, uint8_t value, int32_t compareValue = -1, bool isRelativeAddress = true);
 	void ClearCodes();
-
-public:
-	CheatManager();
 
 	static vector<CodeInfo> GetCheats();
 	static void SetCheats(vector<CodeInfo> &cheats);

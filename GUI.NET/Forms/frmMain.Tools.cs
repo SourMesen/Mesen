@@ -45,6 +45,11 @@ namespace Mesen.GUI.Forms
 			DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler);
 		}
 
+		private void mnuScriptWindow_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.ScriptWindow);
+		}
+
 		private void mnuEditHeader_Click(object sender, EventArgs e)
 		{
 			using(frmEditHeader frm = new frmEditHeader()) {

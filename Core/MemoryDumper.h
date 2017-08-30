@@ -29,8 +29,10 @@ public:
 	void GetSprites(uint32_t* frameBuffer);
 	void GetPalette(uint32_t* frameBuffer);
 
-	uint8_t GetMemoryValue(DebugMemoryType memoryType, uint32_t address);
+	uint8_t GetMemoryValue(DebugMemoryType memoryType, uint32_t address, bool disableSideEffects = true);
+	uint16_t GetMemoryValueWord(DebugMemoryType memoryType, uint32_t address, bool disableSideEffects = true);
+	void SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value, bool preventRebuildCache = false, bool disableSideEffects = true);
+	void SetMemoryValueWord(DebugMemoryType memoryType, uint32_t address, uint16_t value, bool preventRebuildCache = false, bool disableSideEffects = true);
 	void SetMemoryValues(DebugMemoryType memoryType, uint32_t address, uint8_t* data, int32_t length);
-	void SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value, bool preventRebuildCache = false);
 	void SetMemoryState(DebugMemoryType type, uint8_t *buffer);
 };

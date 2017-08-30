@@ -78,7 +78,6 @@ struct CartridgeState
 	uint32_t Nametables[8];
 };
 
-
 struct PPUControlFlags
 {
 	bool VerticalWrite;
@@ -137,4 +136,97 @@ struct SpriteInfo : TileInfo
 	uint8_t SpriteX;
 
 	bool VerticalMirror; //used by HD ppu
+};
+
+struct ApuLengthCounterState
+{
+	bool Halt;
+	uint8_t Counter;
+	uint8_t ReloadValue;
+};
+
+struct ApuEnvelopeState
+{
+	bool StartFlag;
+	bool Loop;
+	bool ConstantVolume;
+	uint8_t Divider;
+	uint8_t Counter;
+	uint8_t Volume;
+};
+
+struct ApuSquareState
+{
+	uint8_t Duty;
+	uint8_t DutyPosition;
+	uint16_t Period;
+
+	bool SweepEnabled;
+	bool SweepNegate;
+	uint8_t SweepPeriod;
+	uint8_t SweepShift;
+
+	bool Enabled;
+	uint8_t OutputVolume;
+	uint32_t Frequency;
+
+	ApuLengthCounterState LengthCounter;
+	ApuEnvelopeState Envelope;
+};
+
+struct ApuTriangleState
+{
+	uint16_t Period;
+	uint8_t SequencePosition;
+
+	bool Enabled;
+	uint32_t Frequency;
+	uint8_t OutputVolume;
+
+	ApuLengthCounterState LengthCounter;
+};
+
+struct ApuNoiseState
+{
+	uint16_t Period;
+	uint16_t ShiftRegister;
+	bool ModeFlag;
+
+	bool Enabled;
+	uint32_t Frequency;
+	uint8_t OutputVolume;
+
+	ApuLengthCounterState LengthCounter;
+	ApuEnvelopeState Envelope;
+};
+
+struct ApuDmcState
+{
+	uint16_t SampleAddr;
+	uint16_t SampleLength;
+
+	bool Loop;
+	bool IrqEnabled;
+	uint16_t Period;
+	uint16_t BytesRemaining;
+
+	uint32_t Frequency;
+	uint8_t OutputVolume;
+};
+
+struct ApuFrameCounterState
+{
+	bool FiveStepMode;
+	uint8_t SequencePosition;
+	bool IrqEnabled;
+};
+
+struct ApuState
+{
+	ApuSquareState Square1;
+	ApuSquareState Square2;
+	ApuTriangleState Triangle;
+	ApuNoiseState Noise;
+	ApuDmcState Dmc;
+	ApuFrameCounterState FrameCounter;
 };

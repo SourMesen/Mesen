@@ -101,13 +101,22 @@ uint8_t* MemoryManager::GetInternalRAM()
 	return _internalRAM;
 }
 
-uint8_t MemoryManager::DebugRead(uint16_t addr, bool disableRegisterReads)
+uint8_t MemoryManager::DebugRead(uint16_t addr, bool disableSideEffects)
 {
 	uint8_t value = 0x00;
 	if(addr <= 0x1FFF) {
 		value = _internalRAM[addr & 0x07FF];
-	} else if(!disableRegisterReads || addr > 0x4017) {
-		value = ReadRegister(addr);
+	} else {
+		IMemoryHandler* handler = _ramReadHandlers[addr];
+		if(handler) {
+			if(handler == _mapper.get() && disableSideEffects) {
+				value = ((BaseMapper*)handler)->DebugReadRAM(addr);
+			} else {
+				value = handler->ReadRAM(addr);
+			}
+		} else {
+			value = GetOpenBus();
+		}
 	}
 
 	CheatManager::ApplyRamCodes(addr, value);
@@ -154,12 +163,19 @@ void MemoryManager::Write(uint16_t addr, uint8_t value)
 	}
 }
 
-void MemoryManager::DebugWrite(uint16_t addr, uint8_t value)
+void MemoryManager::DebugWrite(uint16_t addr, uint8_t value, bool disableSideEffects)
 {
 	if(addr <= 0x1FFF) {
 		_internalRAM[addr & 0x07FF] = value;
 	} else {
-		WriteRegister(addr, value);
+		IMemoryHandler* handler = _ramReadHandlers[addr];
+		if(handler) {
+			if(handler == _mapper.get() && disableSideEffects) {
+				((BaseMapper*)handler)->DebugWriteRAM(addr, value);
+			} else {
+				handler->WriteRAM(addr, value);
+			}
+		}
 	}
 }
 

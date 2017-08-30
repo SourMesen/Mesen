@@ -1,5 +1,6 @@
 #pragma once
 #include "Types.h"
+#include "EmulationSettings.h"
 
 enum class DebuggerFlags
 {
@@ -66,6 +67,8 @@ struct DebugState
 	State CPU;
 	PPUDebugState PPU;
 	CartridgeState Cartridge;
+	ApuState APU;
+	NesModel Model;
 };
 
 struct OperationInfo
@@ -73,4 +76,15 @@ struct OperationInfo
 	uint16_t Address;
 	int16_t Value;
 	MemoryOperationType OperationType;
+};
+
+enum class EventType
+{
+	Power = 0,
+	Reset = 1,
+	Nmi = 2,
+	Irq = 3,
+	StartFrame = 4,
+	EndFrame = 5,
+	CodeBreak = 6
 };

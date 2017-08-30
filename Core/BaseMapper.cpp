@@ -737,6 +737,16 @@ uint8_t BaseMapper::ReadRAM(uint16_t addr)
 	return MemoryManager::GetOpenBus();
 }
 
+uint8_t BaseMapper::DebugReadRAM(uint16_t addr)
+{
+	if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Read) {
+		return _prgPages[addr >> 8][(uint8_t)addr];
+	} else {
+		//assert(false);
+	}
+	return MemoryManager::GetOpenBus();
+}
+
 void BaseMapper::WriteRAM(uint16_t addr, uint8_t value)
 {
 	if(_isWriteRegisterAddr[addr]) {
@@ -744,6 +754,17 @@ void BaseMapper::WriteRAM(uint16_t addr, uint8_t value)
 			value &= _prgPages[addr >> 8][(uint8_t)addr];
 		}
 		WriteRegister(addr, value);
+	} else {
+		WritePrgRam(addr, value);
+	}
+}
+
+void BaseMapper::DebugWriteRAM(uint16_t addr, uint8_t value)
+{
+	if(_isWriteRegisterAddr[addr]) {
+		if(_hasBusConflicts) {
+			value &= _prgPages[addr >> 8][(uint8_t)addr];
+		}
 	} else {
 		WritePrgRam(addr, value);
 	}

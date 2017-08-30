@@ -211,3 +211,17 @@ void DeltaModulationChannel::SetReadBuffer()
 {
 	Instance->FillReadBuffer();
 }
+
+ApuDmcState DeltaModulationChannel::GetState()
+{
+	ApuDmcState state;
+	state.BytesRemaining = _bytesRemaining;
+	state.Frequency = (uint32_t)(CPU::GetClockRate(GetNesModel()) / 32.0 / (_period + 1));
+	state.IrqEnabled = _irqEnabled;
+	state.Loop = _loopFlag;
+	state.OutputVolume = _lastOutput;
+	state.Period = _period;
+	state.SampleAddr = _sampleAddr;
+	state.SampleLength = _sampleLength;
+	return state;
+}

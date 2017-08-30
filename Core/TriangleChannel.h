@@ -22,7 +22,6 @@ protected:
 		//The sequencer is clocked by the timer as long as both the linear counter and the length counter are nonzero. 
 		if(_lengthCounter > 0 && _linearCounter > 0) {
 			_sequencePosition = (_sequencePosition + 1) & 0x1F;
-
 			
 			if(_period >= 2 || !EmulationSettings::CheckFlag(EmulationFlags::SilenceTriangleHighFreq)) {
 				//Disabling the triangle channel when period is < 2 removes "pops" in the audio that are caused by the ultrasonic frequencies
@@ -100,5 +99,17 @@ public:
 		if(!_linearControlFlag) {
 			_linearReloadFlag = false;
 		}
+	}
+
+	ApuTriangleState GetState()
+	{
+		ApuTriangleState state;
+		state.Enabled = _enabled;
+		state.Frequency = (uint32_t)(CPU::GetClockRate(GetNesModel()) / 32.0 / (_period + 1));
+		state.LengthCounter = ApuLengthCounter::GetState();
+		state.OutputVolume = _lastOutput;
+		state.Period = _period;
+		state.SequencePosition = _sequencePosition;
+		return state;
 	}
 };

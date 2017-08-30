@@ -15,6 +15,7 @@ using std::unordered_set;
 #include "DebuggerTypes.h"
 
 class CPU;
+class APU;
 class PPU;
 class MemoryManager;
 class Console;
@@ -26,6 +27,8 @@ class MemoryAccessCounter;
 class Profiler;
 class CodeRunner;
 class BaseMapper;
+class ScriptHost;
+class DebugHud;
 
 class Debugger
 {
@@ -43,12 +46,18 @@ private:
 	shared_ptr<TraceLogger> _traceLogger;
 	shared_ptr<Profiler> _profiler;
 	unique_ptr<CodeRunner> _codeRunner;
+	unique_ptr<DebugHud> _debugHud;
 
 	shared_ptr<Console> _console;
 	shared_ptr<CPU> _cpu;
 	shared_ptr<PPU> _ppu;
+	shared_ptr<APU> _apu;
 	shared_ptr<MemoryManager> _memoryManager;
 	shared_ptr<BaseMapper> _mapper;
+
+	bool _hasScript;
+	int _nextScriptId;
+	vector<shared_ptr<ScriptHost>> _scripts;
 	
 	bool _bpUpdateNeeded;
 	SimpleLock _bpUpdateLock;
@@ -125,7 +134,7 @@ private:
 	void RemoveExcessCallstackEntries();
 
 public:
-	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
+	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
 	~Debugger();
 
 	void SetFlags(uint32_t flags);
@@ -185,7 +194,7 @@ public:
 	static void ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
 	static void ProcessVramWriteOperation(uint16_t addr, uint8_t value);
 	static void ProcessPpuCycle();
-
+	
 	static void SetLastFramePpuScroll(uint16_t x, uint16_t y);
 	uint32_t GetPpuScroll();
 
@@ -210,4 +219,11 @@ public:
 	static bool HasInputOverride(uint8_t port);
 	static uint32_t GetInputOverride(uint8_t port);
 	void SetInputOverride(uint8_t port, uint32_t state);
+
+	int32_t LoadScript(string content, int32_t scriptId);
+	void RemoveScript(int32_t scriptId);
+	const char* GetScriptLog(int32_t scriptId);
+	void ProcessCpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type);
+	void ProcessPpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type);
+	void ProcessEvent(EventType type);
 };

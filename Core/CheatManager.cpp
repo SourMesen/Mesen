@@ -13,6 +13,11 @@ CheatManager::CheatManager()
 	}
 }
 
+CheatManager * CheatManager::GetInstance()
+{
+	return Instance;
+}
+
 uint32_t CheatManager::DecodeValue(uint32_t code, uint32_t* bitIndexes, uint32_t bitCount)
 {
 	uint32_t result = 0;

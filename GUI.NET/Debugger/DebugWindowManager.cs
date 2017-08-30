@@ -25,6 +25,7 @@ namespace Mesen.GUI.Debugger
 					case DebugWindow.MemoryViewer: frm = new frmMemoryViewer(); break;
 					case DebugWindow.Assembler: frm = new frmAssembler(); break;
 					case DebugWindow.Debugger: frm = new frmDebugger(); break;
+					case DebugWindow.ScriptWindow: frm = new frmScript(); break;
 				}
 				_openedWindows.Add(frm);
 				frm.FormClosed += Debugger_FormClosed;
@@ -97,6 +98,7 @@ namespace Mesen.GUI.Debugger
 		MemoryViewer,
 		TraceLogger,
 		Assembler,
-		Debugger
+		Debugger,
+		ScriptWindow,
 	}
 }

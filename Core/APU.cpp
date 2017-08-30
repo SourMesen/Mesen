@@ -255,3 +255,15 @@ bool APU::IsApuEnabled()
 	//This is most likely due to the timing of the Frame Counter & DMC IRQs.
 	return _apuEnabled;
 }
+
+ApuState APU::GetState()
+{
+	ApuState state;
+	state.Dmc = _deltaModulationChannel->GetState();
+	state.FrameCounter = _frameCounter->GetState();
+	state.Noise = _noiseChannel->GetState();
+	state.Square1 = _squareChannel[0]->GetState();
+	state.Square2 = _squareChannel[1]->GetState();
+	state.Triangle = _triangleChannel->GetState();
+	return state;
+}

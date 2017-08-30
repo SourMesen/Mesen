@@ -90,7 +90,7 @@ bool OggReader::LoadSamples()
 
 void OggReader::ApplySamples(int16_t * buffer, size_t sampleCount, uint8_t volume)
 {
-	while(blip_samples_avail(_blipLeft) < sampleCount) {
+	while(blip_samples_avail(_blipLeft) < (int)sampleCount) {
 		if(!LoadSamples()) {
 			break;
 		}

@@ -471,6 +471,14 @@ namespace Mesen.GUI.Forms
 						ConfigManager.ApplyChanges();
 					}));
 					break;
+
+				case InteropEmu.ConsoleNotificationType.CodeBreak:
+					this.BeginInvoke((MethodInvoker)(() => {
+						if(DebugWindowManager.GetDebugger() == null) {
+							DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
+						}
+					}));
+					break;
 			}
 
 			if(e.NotificationType != InteropEmu.ConsoleNotificationType.PpuFrameDone) {
@@ -509,6 +517,7 @@ namespace Mesen.GUI.Forms
 					mnuPpuViewer.Enabled = running;
 					mnuTraceLogger.Enabled = running;
 					mnuDebugDebugger.Enabled = running;
+					mnuScriptWindow.Enabled = running;
 					mnuEditHeader.Enabled = running;
 
 					panelInfo.Visible = !running;

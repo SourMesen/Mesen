@@ -67,7 +67,7 @@ void HdAudioDevice::ProcessControlFlags(uint8_t flags)
 
 void HdAudioDevice::GetMemoryRanges(MemoryRanges & ranges)
 {
-	bool useAlternateRegisters = (_hdData->OptionFlags & (int)HdPackOptions::AlternateRegisterRange);
+	bool useAlternateRegisters = (_hdData->OptionFlags & (int)HdPackOptions::AlternateRegisterRange) == (int)HdPackOptions::AlternateRegisterRange;
 	ranges.SetAllowOverride();
 
 	if(useAlternateRegisters) {

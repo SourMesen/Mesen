@@ -32,7 +32,7 @@ bool StandardController::IsMicrophoneActive()
 	return false;
 }
 
-uint8_t StandardController::GetButtonState()
+ButtonState StandardController::GetButtonState()
 {
 	ButtonState state;
 
@@ -70,12 +70,12 @@ uint8_t StandardController::GetButtonState()
 		}
 	}
 
-	return state.ToByte();
+	return state;
 }
 
 uint32_t StandardController::GetNetPlayState()
 {
-	return GetButtonState();
+	return GetButtonState().ToByte();
 }
 
 uint8_t StandardController::GetPortOutput()
@@ -132,7 +132,7 @@ void StandardController::RefreshStateBuffer()
 
 uint8_t StandardController::RefreshState()
 {
-	return GetButtonState();
+	return GetButtonState().ToByte();
 }
 
 void StandardController::AddAdditionalController(shared_ptr<BaseControlDevice> controller)

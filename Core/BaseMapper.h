@@ -168,7 +168,9 @@ public:
 	RomFormat GetRomFormat();
 
 	__forceinline uint8_t ReadRAM(uint16_t addr) override;
+	uint8_t DebugReadRAM(uint16_t addr);
 	virtual void WriteRAM(uint16_t addr, uint8_t value) override;
+	void DebugWriteRAM(uint16_t addr, uint8_t value);
 	void WritePrgRam(uint16_t addr, uint8_t value);
 
 	__forceinline uint8_t InternalReadVRAM(uint16_t addr);

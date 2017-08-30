@@ -22,16 +22,19 @@
 #include "MemoryManager.h"
 #include "RewindManager.h"
 #include "DebugBreakHelper.h"
+#include "ScriptHost.h"
+#include "DebugHud.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
 
-Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
+Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
 {
 	_romName = Console::GetRomName();
 	_console = console;
 	_cpu = cpu;
 	_ppu = ppu;
+	_apu = apu;
 	_memoryManager = memoryManager;
 	_mapper = mapper;
 
@@ -43,6 +46,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
 	_profiler.reset(new Profiler(this));
 	_traceLogger.reset(new TraceLogger(this, memoryManager, _labelManager));
+	_debugHud.reset(new DebugHud());
 
 	_stepOut = false;
 	_stepCount = -1;
@@ -85,7 +89,10 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	if(!LoadCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"))) {
 		_disassembler->Reset();
 	}
-		
+
+	_hasScript = false;
+	_nextScriptId = 0;
+
 	Debugger::Instance = this;
 }
 
@@ -356,6 +363,8 @@ void Debugger::PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, b
 	_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(destCpuAddr));
 
 	_profiler->StackFunction(-1, _mapper->ToAbsoluteAddress(destCpuAddr));
+
+	ProcessEvent(forNmi ? EventType::Nmi : EventType::Irq);
 }
 
 void Debugger::ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
@@ -381,6 +390,9 @@ void Debugger::PrivateProcessPpuCycle()
 {
 	if(PPU::GetCurrentCycle() == (uint32_t)_ppuViewerCycle && PPU::GetCurrentScanline() == _ppuViewerScanline) {
 		MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame);
+	} 
+	if(PPU::GetCurrentCycle() == 0 && PPU::GetCurrentScanline() == 241) {
+		ProcessEvent(EventType::EndFrame);
 	}
 	
 	OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
@@ -538,6 +550,8 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	_currentReadAddr = nullptr;
 	_currentReadValue = nullptr;
 
+	ProcessCpuOperation(addr, value, type);
+
 	if(type == MemoryOperationType::Write) {
 		if(_frozenAddresses[addr]) {
 			return false;
@@ -563,6 +577,7 @@ bool Debugger::SleepUntilResume()
 		if(_sendNotification) {
 			SoundMixer::StopAudio();
 			MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
+			ProcessEvent(EventType::CodeBreak);
 			_stepOverAddr = -1;
 			if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
 				_ppu->DebugSendFrame();
@@ -594,6 +609,8 @@ void Debugger::PrivateProcessVramReadOperation(MemoryOperationType type, uint16_
 			SleepUntilResume();
 		}
 	}
+
+	ProcessPpuOperation(addr, value, MemoryOperationType::Read);
 }
 
 void Debugger::PrivateProcessVramWriteOperation(uint16_t addr, uint8_t value)
@@ -606,14 +623,18 @@ void Debugger::PrivateProcessVramWriteOperation(uint16_t addr, uint8_t value)
 			SleepUntilResume();
 		}
 	}
+
+	ProcessPpuOperation(addr, value, MemoryOperationType::Write);
 }
 
 void Debugger::GetState(DebugState *state, bool includeMapperInfo)
 {
+	state->Model = _console->GetModel();
 	state->CPU = _cpu->GetState();
 	state->PPU = _ppu->GetState();
 	if(includeMapperInfo) {
 		state->Cartridge = _mapper->GetState();
+		state->APU = _apu->GetState();
 	}
 }
 
@@ -1012,4 +1033,72 @@ uint32_t Debugger::GetInputOverride(uint8_t port)
 void Debugger::SetInputOverride(uint8_t port, uint32_t state)
 {
 	_inputOverride[port] = state;
+}
+
+int Debugger::LoadScript(string content, int32_t scriptId)
+{
+	DebugBreakHelper helper(this);
+	
+	if(scriptId < 0) {
+		shared_ptr<ScriptHost> script(new ScriptHost(_nextScriptId++));
+		script->LoadScript(content, this);
+		_scripts.push_back(script);
+		_hasScript = true;
+		return script->GetScriptId();
+	} else {
+		auto result = std::find_if(_scripts.begin(), _scripts.end(), [=](shared_ptr<ScriptHost> &script) {
+			return script->GetScriptId() == scriptId;
+		});
+		if(result != _scripts.end()) {
+			(*result)->LoadScript(content, this);
+			return scriptId;
+		}
+	}
+
+	return -1;
+}
+
+void Debugger::RemoveScript(int32_t scriptId)
+{
+	DebugBreakHelper helper(this);
+	_scripts.erase(std::remove_if(_scripts.begin(), _scripts.end(), [=](const shared_ptr<ScriptHost>& script) { return script->GetScriptId() == scriptId; }), _scripts.end());
+	_hasScript = _scripts.size() > 0;
+}
+
+const char* Debugger::GetScriptLog(int32_t scriptId)
+{
+	DebugBreakHelper helper(this);
+	for(shared_ptr<ScriptHost> &script : _scripts) {
+		if(script->GetScriptId() == scriptId) {
+			return script->GetLog();
+		}
+	}
+	return "";
+}
+
+void Debugger::ProcessCpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type)
+{
+	if(_hasScript) {
+		for(shared_ptr<ScriptHost> &script : _scripts) {
+			script->ProcessCpuOperation(addr, value, type);
+		}
+	}
+}
+
+void Debugger::ProcessPpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type)
+{
+	if(_hasScript) {
+		for(shared_ptr<ScriptHost> &script : _scripts) {
+			script->ProcessPpuOperation(addr, value, MemoryOperationType::Write);
+		}
+	}
+}
+
+void Debugger::ProcessEvent(EventType type)
+{
+	if(_hasScript) {
+		for(shared_ptr<ScriptHost> &script : _scripts) {
+			script->ProcessEvent(type);
+		}
+	}
 }

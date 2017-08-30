@@ -941,6 +941,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void mnuScriptWindow_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.ScriptWindow);
+		}
+
 		private void mnuAssembler_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler);

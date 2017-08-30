@@ -32,7 +32,7 @@ class Console
 		shared_ptr<RewindManager> _rewindManager;
 		shared_ptr<CPU> _cpu;
 		shared_ptr<PPU> _ppu;
-		unique_ptr<APU> _apu;
+		shared_ptr<APU> _apu;
 		shared_ptr<Debugger> _debugger;
 		SimpleLock _debuggerLock;
 		shared_ptr<BaseMapper> _mapper;

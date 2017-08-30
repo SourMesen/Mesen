@@ -84,7 +84,7 @@ namespace Mesen.GUI.Controls
 			} else if(this.FixedPanel == FixedPanel.Panel2) {
 				_originalDistance = this.SplitterDistance;
 				_originalMinSize = this.Panel2MinSize;
-				this.Panel2MinSize = 4;
+				this.Panel2MinSize = 2;
 				this.SplitterDistance = this.Orientation == Orientation.Horizontal ? this.Height : this.Width;
 
 				this.PanelCollapsed?.Invoke(this, EventArgs.Empty);

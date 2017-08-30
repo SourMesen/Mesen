@@ -183,4 +183,22 @@ public:
 			_reloadSweep = false;
 		}
 	}
+
+	ApuSquareState GetState()
+	{
+		ApuSquareState state;
+		state.Duty = _duty;
+		state.DutyPosition = _dutyPos;
+		state.Enabled = _enabled;
+		state.Envelope = ApuEnvelope::GetState();
+		state.Frequency = (uint32_t)(CPU::GetClockRate(GetNesModel()) / 16.0 / (_realPeriod + 1));
+		state.LengthCounter = ApuLengthCounter::GetState();
+		state.OutputVolume = _lastOutput;
+		state.Period = _realPeriod;
+		state.SweepEnabled = _sweepEnabled;
+		state.SweepNegate = _sweepNegate;
+		state.SweepPeriod = _sweepPeriod;
+		state.SweepShift = _sweepShift;
+		return state;
+	}
 };

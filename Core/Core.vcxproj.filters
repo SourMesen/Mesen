@@ -92,6 +92,15 @@
     <Filter Include="HdPacks">
       <UniqueIdentifier>{a6994cb5-f9d2-416c-84ab-c1abe4975eb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Debugger\Scripting">
+      <UniqueIdentifier>{ee232799-5562-4fea-946b-844786d6fd66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debugger\Scripting\DebugHud">
+      <UniqueIdentifier>{9e32ff0a-5fae-47bc-8007-404fd4d0204c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debugger\Scripting\Lua">
+      <UniqueIdentifier>{e1e8a5d2-aa9a-40e1-94eb-00adec1cdef3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -1201,6 +1210,36 @@
     <ClInclude Include="OggMixer.h">
       <Filter>HdPacks</Filter>
     </ClInclude>
+    <ClInclude Include="ScriptHost.h">
+      <Filter>Debugger\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptingContext.h">
+      <Filter>Debugger\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugHud.h">
+      <Filter>Debugger\Scripting\DebugHud</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawCommand.h">
+      <Filter>Debugger\Scripting\DebugHud</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawStringCommand.h">
+      <Filter>Debugger\Scripting\DebugHud</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawLineCommand.h">
+      <Filter>Debugger\Scripting\DebugHud</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawPixelCommand.h">
+      <Filter>Debugger\Scripting\DebugHud</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaApi.h">
+      <Filter>Debugger\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaCallHelper.h">
+      <Filter>Debugger\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaScriptingContext.h">
+      <Filter>Debugger\Scripting\Lua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1442,6 +1481,27 @@
     </ClCompile>
     <ClCompile Include="HdAudioDevice.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugHud.cpp">
+      <Filter>Debugger\Scripting\DebugHud</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawRectangleCommand.h">
+      <Filter>Debugger\Scripting\DebugHud</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptingContext.cpp">
+      <Filter>Debugger\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaScriptingContext.cpp">
+      <Filter>Debugger\Scripting\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaCallHelper.cpp">
+      <Filter>Debugger\Scripting\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaApi.cpp">
+      <Filter>Debugger\Scripting\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptHost.cpp">
+      <Filter>Debugger\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

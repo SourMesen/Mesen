@@ -90,6 +90,8 @@ namespace Mesen.GUI.Config
 
 	public class DebugInfo
 	{
+		private const int MaxRecentScripts = 10;
+
 		public DebugViewInfo LeftView;
 		public DebugViewInfo RightView;
 
@@ -161,6 +163,13 @@ namespace Mesen.GUI.Config
 		public bool TraceIndentCode = false;
 		public Size TraceLoggerSize = new Size(0, 0);
 
+		public Size ScriptWindowSize = new Size(0, 0);
+		public int ScriptCodeWindowHeight = 0;
+		public List<string> RecentScripts = new List<string>();
+		public bool SaveScriptBeforeRun = true;
+		public bool AutoReloadScript = false;
+		public int ScriptZoom = 100;
+
 		public DebugInfo()
 		{
 			LeftView = new DebugViewInfo();
@@ -177,6 +186,20 @@ namespace Mesen.GUI.Config
 				UseLabels = false,
 				StatusFormat = StatusFlagFormat.Hexadecimal
 			};
+		}
+
+		public void AddRecentScript(string scriptFile)
+		{
+			string existingItem = RecentScripts.Where((file) => file == scriptFile).FirstOrDefault();
+			if(existingItem != null) {
+				RecentScripts.Remove(existingItem);
+			}
+
+			RecentScripts.Insert(0, scriptFile);
+			if(RecentScripts.Count > DebugInfo.MaxRecentScripts) {
+				RecentScripts.RemoveAt(DebugInfo.MaxRecentScripts);
+			}
+			ConfigManager.ApplyChanges();
 		}
 	}
 }

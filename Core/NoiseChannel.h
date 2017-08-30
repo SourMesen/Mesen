@@ -85,4 +85,18 @@ public:
 				break;
 		}
 	}
+
+	ApuNoiseState GetState()
+	{
+		ApuNoiseState state;
+		state.Enabled = _enabled;
+		state.Envelope = ApuEnvelope::GetState();
+		state.Frequency = (uint32_t)((CPU::GetClockRate(GetNesModel()) / (_period + 1)) / (_modeFlag ? 93 : 1));
+		state.LengthCounter = ApuLengthCounter::GetState();
+		state.ModeFlag = _modeFlag;
+		state.OutputVolume = _lastOutput;
+		state.Period = _period;
+		state.ShiftRegister = _shiftRegister;
+		return state;
+	}
 };

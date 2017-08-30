@@ -214,4 +214,13 @@ public:
 			CPU::ClearIRQSource(IRQSource::FrameCounter);
 		}
 	}
+
+	ApuFrameCounterState GetState()
+	{
+		ApuFrameCounterState state;
+		state.IrqEnabled = !_inhibitIRQ;
+		state.SequencePosition = _currentStep;
+		state.FiveStepMode = _stepMode == 1;
+		return state;
+	}
 };

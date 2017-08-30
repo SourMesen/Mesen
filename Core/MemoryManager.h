@@ -39,9 +39,9 @@ class MemoryManager: public Snapshotable
 		void RegisterIODevice(IMemoryHandler *handler);
 		void UnregisterIODevice(IMemoryHandler *handler);
 
-		uint8_t DebugRead(uint16_t addr, bool disableRegisterReads = true);
+		uint8_t DebugRead(uint16_t addr, bool disableSideEffects = true);
 		uint16_t DebugReadWord(uint16_t addr);
-		void DebugWrite(uint16_t addr, uint8_t value);
+		void DebugWrite(uint16_t addr, uint8_t value, bool disableSideEffects = true);
 
 		uint8_t* GetInternalRAM();
 

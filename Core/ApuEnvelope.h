@@ -81,4 +81,16 @@ public:
 			_divider = _volume;
 		}
 	}
+
+	ApuEnvelopeState GetState()
+	{
+		ApuEnvelopeState state;
+		state.ConstantVolume = _constantVolume;
+		state.Counter = _counter;
+		state.Divider = _divider;
+		state.Loop = _lengthCounterHalt;
+		state.StartFlag = _start;
+		state.Volume = _volume;
+		return state;
+	}
 };

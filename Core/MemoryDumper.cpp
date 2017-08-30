@@ -126,7 +126,7 @@ void MemoryDumper::SetMemoryValues(DebugMemoryType memoryType, uint32_t address,
 	}
 }
 
-void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value, bool preventRebuildCache)
+void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value, bool preventRebuildCache, bool disableSideEffects)
 {
 	switch(memoryType) {
 		case DebugMemoryType::CpuMemory:
@@ -134,15 +134,15 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 			_debugger->GetAbsoluteAddressAndType(address, &info);
 			if(info.Address >= 0) {
 				switch(info.Type) {
-					case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value, preventRebuildCache); break;
-					case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value, preventRebuildCache); break;
-					case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value, preventRebuildCache); break;
-					case AddressType::SaveRam: SetMemoryValue(DebugMemoryType::SaveRam, info.Address, value, preventRebuildCache); break;
+					case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value, preventRebuildCache, disableSideEffects); break;
+					case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value, preventRebuildCache, disableSideEffects); break;
+					case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value, preventRebuildCache, disableSideEffects); break;
+					case AddressType::SaveRam: SetMemoryValue(DebugMemoryType::SaveRam, info.Address, value, preventRebuildCache, disableSideEffects); break;
 				}
 			}
 			break;
 
-		case DebugMemoryType::InternalRam: _memoryManager->DebugWrite(address, value); break;
+		case DebugMemoryType::InternalRam: _memoryManager->DebugWrite(address, value, disableSideEffects); break;
 
 		case DebugMemoryType::PaletteMemory: _ppu->WritePaletteRAM(address, value); break;
 		case DebugMemoryType::SpriteMemory: _ppu->GetSpriteRam()[address] = value; break;
@@ -166,7 +166,18 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 	}
 }
 
-uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t address)
+uint16_t MemoryDumper::GetMemoryValueWord(DebugMemoryType memoryType, uint32_t address, bool disableSideEffects)
+{
+	return GetMemoryValue(memoryType, address, disableSideEffects) | (GetMemoryValue(memoryType, address + 1, disableSideEffects) << 8);
+}
+
+void MemoryDumper::SetMemoryValueWord(DebugMemoryType memoryType, uint32_t address, uint16_t value, bool preventRebuildCache, bool disableSideEffects)
+{
+	SetMemoryValue(memoryType, address, (uint8_t)value, preventRebuildCache, disableSideEffects);
+	SetMemoryValue(memoryType, address + 1, (uint8_t)(value >> 8), preventRebuildCache, disableSideEffects);
+}
+
+uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t address, bool disableSideEffects)
 {
 	switch(memoryType) {
 		case DebugMemoryType::CpuMemory:
@@ -174,15 +185,15 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 			_debugger->GetAbsoluteAddressAndType(address, &info);
 			if(info.Address >= 0) {
 				switch(info.Type) {
-					case AddressType::InternalRam: return GetMemoryValue(DebugMemoryType::InternalRam, info.Address);
-					case AddressType::PrgRom: return GetMemoryValue(DebugMemoryType::PrgRom, info.Address);
-					case AddressType::WorkRam: return GetMemoryValue(DebugMemoryType::WorkRam, info.Address);
-					case AddressType::SaveRam: return GetMemoryValue(DebugMemoryType::SaveRam, info.Address);
+					case AddressType::InternalRam: return GetMemoryValue(DebugMemoryType::InternalRam, info.Address, disableSideEffects);
+					case AddressType::PrgRom: return GetMemoryValue(DebugMemoryType::PrgRom, info.Address, disableSideEffects);
+					case AddressType::WorkRam: return GetMemoryValue(DebugMemoryType::WorkRam, info.Address, disableSideEffects);
+					case AddressType::SaveRam: return GetMemoryValue(DebugMemoryType::SaveRam, info.Address, disableSideEffects);
 				}
 			}
 			break;
 
-		case DebugMemoryType::InternalRam: return _memoryManager->DebugRead(address);
+		case DebugMemoryType::InternalRam: return _memoryManager->DebugRead(address, disableSideEffects);
 
 		case DebugMemoryType::PaletteMemory: return _ppu->ReadPaletteRAM(address);
 		case DebugMemoryType::SpriteMemory: return _ppu->GetSpriteRam()[address];

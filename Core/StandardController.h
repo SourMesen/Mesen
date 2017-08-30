@@ -12,7 +12,6 @@ private:
 	uint8_t _lastButtonState = 0;
 
 	shared_ptr<BaseControlDevice> _additionalController;
-	uint8_t GetButtonState();
 
 protected:
 	uint8_t RefreshState() override;
@@ -21,6 +20,7 @@ protected:
 public:
 	StandardController(uint8_t port, bool emptyPort = false);
 
+	ButtonState GetButtonState();
 	uint32_t GetNetPlayState() override;
 
 	uint8_t GetPortOutput() override;

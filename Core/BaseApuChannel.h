@@ -9,12 +9,12 @@ class BaseApuChannel : public IMemoryHandler, public Snapshotable
 {
 private:
 	SoundMixer *_mixer;
-	int8_t _lastOutput;
 	uint32_t _previousCycle;
 	AudioChannel _channel;
 	NesModel _nesModel;
 
 protected:
+	int8_t _lastOutput;
 	uint16_t _timer = 0;
 	uint16_t _period = 0;
 

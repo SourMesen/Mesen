@@ -232,4 +232,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 			uint32_t argbColor = EmulationSettings::GetRgbPalette()[pixelData & 0x3F];
 			return (argbColor & 0xFF) + ((argbColor >> 8) & 0xFF) + ((argbColor >> 16) & 0xFF);
 		}
+
+		static uint16_t GetPixel(uint8_t x, uint8_t y)
+		{
+			return PPU::Instance->_currentOutputBuffer[y << 8 | x];
+		}
 };

@@ -52,4 +52,6 @@ public:
 	void SetEnabled(bool enabled);
 	void StartDmcTransfer();
 	static void SetReadBuffer();
+
+	ApuDmcState GetState();
 };

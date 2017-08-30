@@ -62,6 +62,8 @@ class APU : public Snapshotable, public IMemoryHandler
 		void WriteRAM(uint16_t addr, uint8_t value) override;
 		void GetMemoryRanges(MemoryRanges &ranges) override;
 
+		ApuState GetState();
+
 		void Exec();
 
 		__forceinline static void ExecStatic()
