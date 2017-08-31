@@ -74,30 +74,42 @@ namespace Mesen.GUI.Controls
 		protected override void OnAfterLabelEdit(LabelEditEventArgs e)
 		{
 			base.OnAfterLabelEdit(e);
-			string text = e.Label;
-			var item = this.Items[e.Item];
-			if(_pressedEsc) {
-				text = _originalText;
-				item = new ListViewItem(_originalText);
-				this.Items.Insert(e.Item, item);
+			if(e.Label != null) {
+				string text = e.Label;
+				var item = this.Items[e.Item];
+				AfterEdit?.Invoke(this, new LabelEditEventArgs(item.Index, text));
+			} else if(_pressedEsc) {
+				string text = _originalText;
+				var originalItem = this.Items[e.Item];
+				var newItem = new ListViewItem(_originalText);
+				newItem.SubItems.Add(originalItem.SubItems[1].Text);
+				this.Items.RemoveAt(e.Item);
+				this.Items.Insert(e.Item, newItem);
+				this.FocusedItem = newItem;
+				foreach(ListViewItem item in this.Items) {
+					item.Selected = false;
+				}
+				newItem.Selected = true;
 				_pressedEsc = false;
 			}
 			_originalText = null;
 			_editItemIndex = -1;
-			AfterEdit?.Invoke(this, new LabelEditEventArgs(item.Index, text));
 		}
 		
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if(_editItemIndex >= 0 && keyData == Keys.Escape) {
+			if(this.IsEditing && keyData == Keys.Escape) {
 				_pressedEsc = true;
 			}
-			return base.ProcessCmdKey(ref msg, keyData);
+			if(!this.IsEditing || keyData != Keys.Delete) {
+				return base.ProcessCmdKey(ref msg, keyData);
+			}
+			return false;
 		}
 
 		protected override void OnKeyPress(KeyPressEventArgs e)
 		{
-			if(this.LabelEdit && _editItemIndex < 0 && this.SelectedItems.Count > 0) {
+			if(this.LabelEdit && !this.IsEditing && this.SelectedItems.Count > 0) {
 				if(e.KeyChar >= 32 && e.KeyChar <= 127) {
 					_originalText = this.SelectedItems[0].Text;
 					this.SelectedItems[0].Text = e.KeyChar.ToString();

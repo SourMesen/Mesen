@@ -19,6 +19,9 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 			BreakpointManager.BreakpointsChanged += BreakpointManager_OnBreakpointChanged;
+			mnuRemoveBreakpoint.Enabled = false;
+			mnuEditBreakpoint.Enabled = false;
+			mnuGoToLocation.Enabled = false;
 		}
 
 		void BreakpointManager_OnBreakpointChanged(object sender, EventArgs e)

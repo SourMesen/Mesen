@@ -92,6 +92,7 @@ namespace Mesen.GUI.Debugger
 					item.SubItems[0].Text = watchContent[i].Expression;
 					item.SubItems[1].Text = watchContent[i].Value.ToString();
 					item.SubItems[1].ForeColor = watchContent[i].HasChanged ? Color.Red : Color.Black;
+					item.Selected = false;
 				}
 			}
 
@@ -138,7 +139,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuRemoveWatch_Click(object sender, EventArgs e)
 		{
-			if(lstWatch.SelectedItems.Count >= 1) {
+			if(lstWatch.SelectedItems.Count >= 1 && !lstWatch.IsEditing) {
 				var itemsToRemove = new List<int>();
 				foreach(ListViewItem item in lstWatch.SelectedItems) {
 					if(_currentSelection == -1) {
