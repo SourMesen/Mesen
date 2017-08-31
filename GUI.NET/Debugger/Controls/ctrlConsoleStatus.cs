@@ -93,6 +93,9 @@ namespace Mesen.GUI.Debugger
 
 			txtVRAMAddr.Text = state.State.VideoRamAddr.ToString("X4");
 			txtNTAddr.Text = (0x2000 | (state.State.VideoRamAddr & 0x0FFF)).ToString("X4");
+
+			chkWriteToggle.Checked = state.State.WriteToggle;
+			txtXScroll.Text = state.State.XScroll.ToString();
 		}
 
 		private void UpdateStack(UInt16 stackPointer)
@@ -149,9 +152,15 @@ namespace Mesen.GUI.Debugger
 				Int32.TryParse(txtScanline.Text, out scanline);
 				state.PPU.Scanline = scanline;
 
+				Int32 xScroll = 0;
+				Int32.TryParse(txtXScroll.Text, out xScroll);
+				state.PPU.State.XScroll = (byte)Math.Max(0, Math.Min(xScroll, 7));
+
 				UInt16 vramAddr = 0;
 				UInt16.TryParse(txtVRAMAddr.Text, System.Globalization.NumberStyles.HexNumber, null, out vramAddr);
 				state.PPU.State.VideoRamAddr = vramAddr;
+
+				state.PPU.State.WriteToggle = chkWriteToggle.Checked;
 
 				InteropEmu.DebugSetState(state);
 				_lastState = state;

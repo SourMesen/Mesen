@@ -900,7 +900,9 @@ namespace Mesen.GUI
 		public UInt16 VideoRamAddr;
 		public Byte XScroll;
 		public UInt16 TmpVideoRamAddr;
-		public Byte WriteToggle;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool WriteToggle;
 
 		public UInt16 HighBitShift;
 		public UInt16 LowBitShift;
