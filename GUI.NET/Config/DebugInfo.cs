@@ -59,7 +59,7 @@ namespace Mesen.GUI.Config
 						config = (DebugWorkspace)xmlSerializer.Deserialize(textReader);
 					}
 				} catch { }
-			} 
+			}
 
 			config._filePath = path;
 
@@ -140,7 +140,7 @@ namespace Mesen.GUI.Config
 		public bool BreakInPpuCycles = false;
 
 		public bool HighlightUnexecutedCode = true;
-		
+
 		public bool FindOccurrencesMatchCase = false;
 		public bool FindOccurrencesMatchWholeWord = false;
 		public string FindOccurrencesLastSearch = string.Empty;
@@ -169,6 +169,15 @@ namespace Mesen.GUI.Config
 		public bool SaveScriptBeforeRun = true;
 		public bool AutoReloadScript = false;
 		public int ScriptZoom = 100;
+
+		public bool AssemblerCodeHighlighting = true;
+		public XmlColor AssemblerOpcodeColor = Color.DarkSlateGray;
+		public XmlColor AssemblerLabelDefinitionColor = Color.Blue;
+		public XmlColor AssemblerImmediateColor = Color.Chocolate;
+		public XmlColor AssemblerAddressColor = Color.DarkRed;
+		public XmlColor AssemblerCommentColor = Color.Green;
+		public Size AssemblerSize = new Size(0, 0);
+		public int AssemblerZoom = 100;
 
 		public DebugInfo()
 		{
@@ -200,6 +209,45 @@ namespace Mesen.GUI.Config
 				RecentScripts.RemoveAt(DebugInfo.MaxRecentScripts);
 			}
 			ConfigManager.ApplyChanges();
+		}
+	}
+
+	public class XmlColor
+	{
+		private Color _color = Color.Black;
+
+		public XmlColor() { }
+		public XmlColor(Color c) { _color = c; }
+
+		[XmlIgnore]
+		public Color Color
+		{
+			get { return _color; }
+			set { _color = value; }
+		}
+		
+		public static implicit operator Color(XmlColor x)
+		{
+			return x.Color;
+		}
+
+		public static implicit operator XmlColor(Color c)
+		{
+			return new XmlColor(c);
+		}
+
+		[XmlAttribute]
+		public string ColorString
+		{
+			get { return ColorTranslator.ToHtml(_color); }
+			set
+			{
+				try {
+					_color = ColorTranslator.FromHtml(value);
+				} catch(Exception) {
+					_color = Color.Black;
+				}
+			}
 		}
 	}
 }

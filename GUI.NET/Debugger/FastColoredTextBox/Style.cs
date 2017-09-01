@@ -210,6 +210,14 @@ namespace FastColoredTextBoxNS
 
             return result;
         }
+		
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (ForeBrush != null)
+					ForeBrush.Dispose();
+        }
     }
 
     /// <summary>

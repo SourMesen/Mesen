@@ -32,12 +32,12 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmScript));
 			this.mnuMain = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNewScript = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSave = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRecentScripts = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
@@ -72,7 +72,6 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblScriptActive = new System.Windows.Forms.ToolStripStatusLabel();
-			this.mnuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMain.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.txtScriptContent)).BeginInit();
@@ -109,7 +108,7 @@
             this.mnuClose});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-			this.fileToolStripMenuItem.Text = "&File";
+			this.fileToolStripMenuItem.Text = "File";
 			// 
 			// mnuNewScript
 			// 
@@ -137,6 +136,13 @@
 			this.mnuSave.Size = new System.Drawing.Size(221, 22);
 			this.mnuSave.Text = "Save";
 			this.mnuSave.Click += new System.EventHandler(this.btnSave_Click);
+			// 
+			// mnuSaveAs
+			// 
+			this.mnuSaveAs.Name = "mnuSaveAs";
+			this.mnuSaveAs.Size = new System.Drawing.Size(221, 22);
+			this.mnuSaveAs.Text = "Save as...";
+			this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
 			// 
 			// toolStripMenuItem1
 			// 
@@ -170,7 +176,7 @@
             this.mnuShowLogWindow});
 			this.mnuView.Name = "mnuView";
 			this.mnuView.Size = new System.Drawing.Size(44, 20);
-			this.mnuView.Text = "&View";
+			this.mnuView.Text = "View";
 			this.mnuView.DropDownOpening += new System.EventHandler(this.mnuView_DropDownOpening);
 			// 
 			// fontSizeToolStripMenuItem
@@ -234,7 +240,7 @@
             this.mnuAutoReload});
 			this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
 			this.scriptToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
-			this.scriptToolStripMenuItem.Text = "&Script";
+			this.scriptToolStripMenuItem.Text = "Script";
 			// 
 			// mnuRun
 			// 
@@ -347,6 +353,7 @@
         '\"',
         '\'',
         '\''};
+			this.txtScriptContent.AutoIndentChars = false;
 			this.txtScriptContent.AutoIndentCharsPatterns = "\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>.+)\n";
 			this.txtScriptContent.AutoIndentExistingLines = false;
 			this.txtScriptContent.AutoScrollMinSize = new System.Drawing.Size(43, 14);
@@ -356,7 +363,7 @@
 			this.txtScriptContent.CharWidth = 8;
 			this.txtScriptContent.CommentPrefix = "--";
 			this.txtScriptContent.ContextMenuStrip = this.contextMenu;
-			this.txtScriptContent.CurrentLineColor = System.Drawing.Color.WhiteSmoke;
+			this.txtScriptContent.CurrentLineColor = System.Drawing.Color.Gainsboro;
 			this.txtScriptContent.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtScriptContent.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.txtScriptContent.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -474,13 +481,6 @@
 			this.lblScriptActive.Size = new System.Drawing.Size(109, 17);
 			this.lblScriptActive.Text = "Script is running";
 			this.lblScriptActive.Visible = false;
-			// 
-			// mnuSaveAs
-			// 
-			this.mnuSaveAs.Name = "mnuSaveAs";
-			this.mnuSaveAs.Size = new System.Drawing.Size(221, 22);
-			this.mnuSaveAs.Text = "Save as...";
-			this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
 			// 
 			// frmScript
 			// 

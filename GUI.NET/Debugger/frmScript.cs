@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Properties;
 
@@ -77,6 +78,7 @@ namespace Mesen.GUI.Debugger
 					ctrlSplit.SplitterDistance = ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight;
 				}
 			}
+			txtScriptContent.Font = new Font(BaseControl.MonospaceFontFamily, 10);
 			txtScriptContent.Zoom = ConfigManager.Config.DebugInfo.ScriptZoom;
 
 			if(!this.DesignMode) {
@@ -106,7 +108,7 @@ namespace Mesen.GUI.Debugger
 			if(_scriptId >= 0) {
 				InteropEmu.DebugRemoveScript(_scriptId);
 			}
-			ConfigManager.Config.DebugInfo.ScriptWindowSize = this.Size;
+			ConfigManager.Config.DebugInfo.ScriptWindowSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.Config.DebugInfo.SaveScriptBeforeRun = mnuSaveBeforeRun.Checked;
 			ConfigManager.Config.DebugInfo.AutoReloadScript = mnuAutoReload.Checked;
 			ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight = ctrlSplit.Panel2.Height <= 2 ? Int32.MaxValue : ctrlSplit.SplitterDistance;

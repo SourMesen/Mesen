@@ -27,6 +27,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -46,12 +47,20 @@
 			this.lblNoChanges = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.txtCode = new Mesen.GUI.Debugger.ZoomlessRichTextBox();
-			this.statCode = new System.Windows.Forms.StatusStrip();
-			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.lblLineNumber = new System.Windows.Forms.ToolStripStatusLabel();
+			this.txtCode = new FastColoredTextBoxNS.FastColoredTextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.ctrlHexBox = new Be.Windows.Forms.HexBox();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
+			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuConfigureColors = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuEnableSyntaxHighlighting = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpSettings.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -62,13 +71,14 @@
 			this.flowLayoutPanel3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.panel1.SuspendLayout();
-			this.statCode.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.txtCode)).BeginInit();
 			this.groupBox2.SuspendLayout();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnOk
 			// 
-			this.btnOk.Location = new System.Drawing.Point(186, 3);
+			this.btnOk.Location = new System.Drawing.Point(194, 3);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(75, 23);
 			this.btnOk.TabIndex = 0;
@@ -80,7 +90,7 @@
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(267, 3);
+			this.btnCancel.Location = new System.Drawing.Point(275, 3);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 1;
@@ -98,20 +108,21 @@
 			this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.groupBox2, 1, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 141F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(835, 557);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(835, 440);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// lstErrors
 			// 
+			this.lstErrors.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstErrors.FormattingEnabled = true;
-			this.lstErrors.Location = new System.Drawing.Point(3, 419);
+			this.lstErrors.Location = new System.Drawing.Point(3, 302);
 			this.lstErrors.Name = "lstErrors";
-			this.lstErrors.Size = new System.Drawing.Size(379, 134);
+			this.lstErrors.Size = new System.Drawing.Size(369, 135);
 			this.lstErrors.TabIndex = 2;
 			this.lstErrors.DoubleClick += new System.EventHandler(this.lstErrors_DoubleClick);
 			// 
@@ -119,9 +130,9 @@
 			// 
 			this.grpSettings.Controls.Add(this.tableLayoutPanel2);
 			this.grpSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpSettings.Location = new System.Drawing.Point(388, 419);
+			this.grpSettings.Location = new System.Drawing.Point(378, 302);
 			this.grpSettings.Name = "grpSettings";
-			this.grpSettings.Size = new System.Drawing.Size(444, 135);
+			this.grpSettings.Size = new System.Drawing.Size(454, 135);
 			this.grpSettings.TabIndex = 3;
 			this.grpSettings.TabStop = false;
 			this.grpSettings.Text = "Settings";
@@ -143,7 +154,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(438, 116);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(448, 116);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// btnExecute
@@ -169,7 +180,7 @@
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(438, 25);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(448, 25);
 			this.flowLayoutPanel1.TabIndex = 3;
 			// 
 			// label1
@@ -215,7 +226,7 @@
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 25);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(438, 25);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(448, 25);
 			this.flowLayoutPanel2.TabIndex = 4;
 			// 
 			// label2
@@ -256,10 +267,10 @@
 			this.flowLayoutPanel3.Controls.Add(this.lblNoChanges);
 			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(93, 86);
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(95, 86);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(345, 30);
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(353, 30);
 			this.flowLayoutPanel3.TabIndex = 5;
 			// 
 			// lblNoChanges
@@ -268,7 +279,7 @@
 			this.lblNoChanges.AutoSize = true;
 			this.lblNoChanges.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.lblNoChanges.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblNoChanges.Location = new System.Drawing.Point(6, 8);
+			this.lblNoChanges.Location = new System.Drawing.Point(14, 8);
 			this.lblNoChanges.Name = "lblNoChanges";
 			this.lblNoChanges.Size = new System.Drawing.Size(174, 13);
 			this.lblNoChanges.TabIndex = 2;
@@ -280,7 +291,7 @@
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox1.Location = new System.Drawing.Point(3, 3);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(379, 410);
+			this.groupBox1.Size = new System.Drawing.Size(369, 293);
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Code Editor";
@@ -289,68 +300,54 @@
 			// 
 			this.panel1.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.panel1.Controls.Add(this.txtCode);
-			this.panel1.Controls.Add(this.statCode);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(3, 16);
 			this.panel1.Name = "panel1";
 			this.panel1.Padding = new System.Windows.Forms.Padding(1);
-			this.panel1.Size = new System.Drawing.Size(373, 391);
+			this.panel1.Size = new System.Drawing.Size(363, 274);
 			this.panel1.TabIndex = 4;
 			// 
 			// txtCode
 			// 
-			this.txtCode.AcceptsTab = true;
-			this.txtCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtCode.AutoWordSelection = true;
-			this.txtCode.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtCode.DetectUrls = false;
-			this.txtCode.HideSelection = false;
+			this.txtCode.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+			this.txtCode.AutoIndentChars = false;
+			this.txtCode.AutoIndentExistingLines = false;
+			this.txtCode.AutoScrollMinSize = new System.Drawing.Size(43, 14);
+			this.txtCode.BackBrush = null;
+			this.txtCode.CharHeight = 14;
+			this.txtCode.CharWidth = 8;
+			this.txtCode.CurrentLineColor = System.Drawing.Color.Gainsboro;
+			this.txtCode.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.txtCode.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+			this.txtCode.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtCode.IsReplaceMode = false;
 			this.txtCode.Location = new System.Drawing.Point(1, 1);
 			this.txtCode.Name = "txtCode";
-			this.txtCode.Size = new System.Drawing.Size(371, 368);
-			this.txtCode.TabIndex = 4;
-			this.txtCode.Text = "";
-			this.txtCode.WordWrap = false;
-			this.txtCode.SelectionChanged += new System.EventHandler(this.txtCode_SelectionChanged);
-			this.txtCode.TextChanged += new System.EventHandler(this.txtCode_TextChanged);
-			this.txtCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCode_KeyDown);
-			// 
-			// statCode
-			// 
-			this.statCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.lblLineNumber});
-			this.statCode.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-			this.statCode.Location = new System.Drawing.Point(1, 370);
-			this.statCode.Name = "statCode";
-			this.statCode.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-			this.statCode.Size = new System.Drawing.Size(371, 20);
-			this.statCode.SizingGrip = false;
-			this.statCode.TabIndex = 5;
-			// 
-			// toolStripStatusLabel1
-			// 
-			this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Control;
-			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(32, 15);
-			this.toolStripStatusLabel1.Text = "Line:";
-			// 
-			// lblLineNumber
-			// 
-			this.lblLineNumber.BackColor = System.Drawing.SystemColors.Control;
-			this.lblLineNumber.Name = "lblLineNumber";
-			this.lblLineNumber.Size = new System.Drawing.Size(13, 15);
-			this.lblLineNumber.Text = "1";
+			this.txtCode.Paddings = new System.Windows.Forms.Padding(0);
+			this.txtCode.ReservedCountOfLineNumberChars = 3;
+			this.txtCode.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+			this.txtCode.Size = new System.Drawing.Size(361, 272);
+			this.txtCode.TabIndex = 6;
+			this.txtCode.Zoom = 100;
+			this.txtCode.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.txtCode_TextChanged);
 			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.ctrlHexBox);
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox2.Location = new System.Drawing.Point(388, 3);
+			this.groupBox2.Location = new System.Drawing.Point(378, 3);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(444, 410);
+			this.groupBox2.Size = new System.Drawing.Size(454, 293);
 			this.groupBox2.TabIndex = 5;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Assembled Byte Code";
@@ -367,18 +364,117 @@
 			this.ctrlHexBox.Name = "ctrlHexBox";
 			this.ctrlHexBox.ReadOnly = true;
 			this.ctrlHexBox.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-			this.ctrlHexBox.Size = new System.Drawing.Size(438, 391);
+			this.ctrlHexBox.Size = new System.Drawing.Size(448, 274);
 			this.ctrlHexBox.TabIndex = 1;
 			this.ctrlHexBox.UseFixedBytesPerLine = true;
 			this.ctrlHexBox.VScrollBarVisible = true;
+			// 
+			// menuStrip1
+			// 
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.viewToolStripMenuItem});
+			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(835, 24);
+			this.menuStrip1.TabIndex = 3;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// fileToolStripMenuItem
+			// 
+			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuClose});
+			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+			this.fileToolStripMenuItem.Text = "File";
+			// 
+			// mnuClose
+			// 
+			this.mnuClose.Image = global::Mesen.GUI.Properties.Resources.Exit;
+			this.mnuClose.Name = "mnuClose";
+			this.mnuClose.Size = new System.Drawing.Size(103, 22);
+			this.mnuClose.Text = "Close";
+			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
+			// 
+			// viewToolStripMenuItem
+			// 
+			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fontSizeToolStripMenuItem,
+            this.mnuConfigureColors,
+            this.toolStripMenuItem1,
+            this.mnuEnableSyntaxHighlighting});
+			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+			this.viewToolStripMenuItem.Text = "View";
+			// 
+			// fontSizeToolStripMenuItem
+			// 
+			this.fontSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuIncreaseFontSize,
+            this.mnuDecreaseFontSize,
+            this.mnuResetFontSize});
+			this.fontSizeToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Font;
+			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+			this.fontSizeToolStripMenuItem.Text = "Text Size";
+			// 
+			// mnuIncreaseFontSize
+			// 
+			this.mnuIncreaseFontSize.Name = "mnuIncreaseFontSize";
+			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "Ctrl++";
+			this.mnuIncreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemplus)));
+			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuIncreaseFontSize.Text = "Increase";
+			this.mnuIncreaseFontSize.Click += new System.EventHandler(this.mnuIncreaseFontSize_Click);
+			// 
+			// mnuDecreaseFontSize
+			// 
+			this.mnuDecreaseFontSize.Name = "mnuDecreaseFontSize";
+			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "Ctrl+-";
+			this.mnuDecreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemMinus)));
+			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuDecreaseFontSize.Text = "Decrease";
+			this.mnuDecreaseFontSize.Click += new System.EventHandler(this.mnuDecreaseFontSize_Click);
+			// 
+			// mnuResetFontSize
+			// 
+			this.mnuResetFontSize.Name = "mnuResetFontSize";
+			this.mnuResetFontSize.ShortcutKeyDisplayString = "Ctrl+0";
+			this.mnuResetFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
+			this.mnuResetFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuResetFontSize.Text = "Reset to Default";
+			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
+			// 
+			// mnuConfigureColors
+			// 
+			this.mnuConfigureColors.Image = global::Mesen.GUI.Properties.Resources.PipetteSmall;
+			this.mnuConfigureColors.Name = "mnuConfigureColors";
+			this.mnuConfigureColors.Size = new System.Drawing.Size(216, 22);
+			this.mnuConfigureColors.Text = "Configure Colors";
+			this.mnuConfigureColors.Click += new System.EventHandler(this.mnuConfigureColors_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(213, 6);
+			// 
+			// mnuEnableSyntaxHighlighting
+			// 
+			this.mnuEnableSyntaxHighlighting.CheckOnClick = true;
+			this.mnuEnableSyntaxHighlighting.Name = "mnuEnableSyntaxHighlighting";
+			this.mnuEnableSyntaxHighlighting.Size = new System.Drawing.Size(216, 22);
+			this.mnuEnableSyntaxHighlighting.Text = "Enable Syntax Highlighting";
+			this.mnuEnableSyntaxHighlighting.CheckedChanged += new System.EventHandler(this.mnuEnableSyntaxHighlighting_CheckedChanged);
 			// 
 			// frmAssembler
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(835, 557);
+			this.ClientSize = new System.Drawing.Size(835, 464);
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.Controls.Add(this.menuStrip1);
+			this.MainMenuStrip = this.menuStrip1;
 			this.MinimumSize = new System.Drawing.Size(851, 502);
 			this.Name = "frmAssembler";
 			this.Text = "Assembler";
@@ -395,11 +491,12 @@
 			this.flowLayoutPanel3.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
-			this.statCode.ResumeLayout(false);
-			this.statCode.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.txtCode)).EndInit();
 			this.groupBox2.ResumeLayout(false);
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -419,15 +516,23 @@
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.PictureBox picSizeWarning;
-		private ZoomlessRichTextBox txtCode;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Label lblNoChanges;
-		private System.Windows.Forms.StatusStrip statCode;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-		private System.Windows.Forms.ToolStripStatusLabel lblLineNumber;
 		private System.Windows.Forms.PictureBox picStartAddressWarning;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Button btnExecute;
+		private FastColoredTextBoxNS.FastColoredTextBox txtCode;
+		private System.Windows.Forms.MenuStrip menuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuClose;
+		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuEnableSyntaxHighlighting;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuConfigureColors;
+		private System.Windows.Forms.ToolStripMenuItem fontSizeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuIncreaseFontSize;
+		private System.Windows.Forms.ToolStripMenuItem mnuDecreaseFontSize;
+		private System.Windows.Forms.ToolStripMenuItem mnuResetFontSize;
 	}
 }

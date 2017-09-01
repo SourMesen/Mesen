@@ -168,27 +168,6 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        /// <summary>
-        /// Highlights syntax for given XML description file
-        /// </summary>
-        public virtual void HighlightSyntax(string XMLdescriptionFile, Range range)
-        {
-            SyntaxDescriptor desc = null;
-            if (!descByXMLfileNames.TryGetValue(XMLdescriptionFile, out desc))
-            {
-                var doc = new XmlDocument();
-                string file = XMLdescriptionFile;
-                if (!File.Exists(file))
-                    file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(file));
-
-                doc.LoadXml(File.ReadAllText(file));
-                desc = ParseXmlDescription(doc);
-                descByXMLfileNames[XMLdescriptionFile] = desc;
-            }
-
-            HighlightSyntax(desc, range);
-        }
-
         public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {
             var tb = (sender as FastColoredTextBox);

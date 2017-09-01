@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Be.Windows.Forms;
+using FastColoredTextBoxNS;
+using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
 
@@ -27,6 +29,16 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
+			if(!ConfigManager.Config.DebugInfo.AssemblerSize.IsEmpty) {
+				this.Size = ConfigManager.Config.DebugInfo.AssemblerSize;
+			}
+			mnuEnableSyntaxHighlighting.Checked = ConfigManager.Config.DebugInfo.AssemblerCodeHighlighting;
+
+			txtCode.Font = new Font(BaseControl.MonospaceFontFamily, 10);
+			txtCode.Zoom = ConfigManager.Config.DebugInfo.AssemblerZoom;
+
+			UpdateCodeHighlighting();
+
 			if(!string.IsNullOrWhiteSpace(code)) {
 				_isEditMode = true;
 				_containedRtiRts = ContainsRtiOrRts(code);
@@ -35,7 +47,6 @@ namespace Mesen.GUI.Debugger
 			_startAddress = startAddress;
 			_blockLength = blockLength;
 
-			txtCode.Font = new Font(BaseControl.MonospaceFontFamily, 10);
 			ctrlHexBox.Font = new Font(BaseControl.MonospaceFontFamily, 10, FontStyle.Regular);
 			ctrlHexBox.SelectionForeColor = Color.White;
 			ctrlHexBox.SelectionBackColor = Color.FromArgb(31, 123, 205);
@@ -46,12 +57,37 @@ namespace Mesen.GUI.Debugger
 
 			txtStartAddress.Text = _startAddress.ToString("X4");
 			txtCode.Text = code;
-			txtCode.Select(0, 0);
 
 			toolTip.SetToolTip(picSizeWarning, "Warning: The new code exceeds the original code's length." + Environment.NewLine + "Applying this modification will overwrite other portions of the code and potentially cause problems.");
 			toolTip.SetToolTip(picStartAddressWarning, "Warning: Start address is invalid.  Must be a valid hexadecimal string.");
 
 			UpdateWindow();
+		}
+
+		private void UpdateCodeHighlighting()
+		{
+			if(txtCode.SyntaxDescriptor != null) {
+				SyntaxDescriptor desc = txtCode.SyntaxDescriptor;
+				txtCode.SyntaxDescriptor = null;
+				txtCode.ClearStylesBuffer();
+				desc.Dispose();			
+			}
+
+			if(mnuEnableSyntaxHighlighting.Checked) {
+				SyntaxDescriptor syntax = new SyntaxDescriptor();
+				syntax.styles.Add(new TextStyle(new SolidBrush(ConfigManager.Config.DebugInfo.AssemblerOpcodeColor), Brushes.Transparent, FontStyle.Regular));
+				syntax.styles.Add(new TextStyle(new SolidBrush(ConfigManager.Config.DebugInfo.AssemblerLabelDefinitionColor), Brushes.Transparent, FontStyle.Regular));
+				syntax.styles.Add(new TextStyle(new SolidBrush(ConfigManager.Config.DebugInfo.AssemblerImmediateColor), Brushes.Transparent, FontStyle.Regular));
+				syntax.styles.Add(new TextStyle(new SolidBrush(ConfigManager.Config.DebugInfo.AssemblerAddressColor), Brushes.Transparent, FontStyle.Regular));
+				syntax.styles.Add(new TextStyle(new SolidBrush(ConfigManager.Config.DebugInfo.AssemblerCommentColor), Brushes.Transparent, FontStyle.Regular));
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[0], pattern = @"^[ \t]*(?<range>[a-zA-Z]{3}[*]{0,1})( |[^:a-zA-Z])", options = RegexOptions.Multiline });
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[1], pattern = @"^[ \t]*(?<range>[a-zA-Z_]*):", options = RegexOptions.Multiline });
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[2], pattern = @"^[ \t]*[a-zA-Z]{3}[*]{0,1}[ \t]+(?<range>#[$]{0,1}([A-Fa-f0-9])+)", options = RegexOptions.Multiline });
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[3], pattern = @"^[ \t]*[a-zA-Z]{3}[*]{0,1}[ \t]+[(]{0,1}(?<range>[$]{0,1}[A-Fa-f0-9]+)[)]{0,1}[ \t]*(,X|,Y|,x|,y){0,1}[)]{0,1}", options = RegexOptions.Multiline });
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[4], pattern = @"^[^;]*(?<range>;.*)", options = RegexOptions.Multiline });
+				txtCode.SyntaxDescriptor = syntax;
+				txtCode.OnTextChanged();
+			}
 		}
 
 		private bool ContainsRtiOrRts(string code)
@@ -148,23 +184,10 @@ namespace Mesen.GUI.Debugger
 
 			picStartAddressWarning.Visible = !_startAddressValid;
 		}
-
-		private void txtCode_TextChanged(object sender, EventArgs e)
+		
+		private void txtCode_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
 		{
 			UpdateWindow();
-		}
-
-		private void txtCode_KeyDown(object sender, KeyEventArgs e)
-		{
-			if(e.Control && e.KeyCode == Keys.V || e.Shift && e.KeyCode == Keys.Insert) {
-				txtCode.Paste(DataFormats.GetFormat("Text"));
-				e.Handled = true;
-			}
-		}
-
-		private void txtCode_SelectionChanged(object sender, EventArgs e)
-		{
-			lblLineNumber.Text = (txtCode.GetLineFromCharIndex(txtCode.GetFirstCharIndexOfCurrentLine()) + 1).ToString();
 		}
 
 		private void txtStartAddress_TextChanged(object sender, EventArgs e)
@@ -265,6 +288,49 @@ namespace Mesen.GUI.Debugger
 			this.Close();
 		}
 
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			base.OnClosing(e);
+			ConfigManager.Config.DebugInfo.AssemblerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.DebugInfo.AssemblerCodeHighlighting = mnuEnableSyntaxHighlighting.Checked;
+			ConfigManager.Config.DebugInfo.AssemblerZoom = txtCode.Zoom;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuClose_Click(object sender, EventArgs e)
+		{
+			this.Close();
+		}
+
+		private void mnuConfigureColors_Click(object sender, EventArgs e)
+		{
+			using(frmAssemblerColors frm = new frmAssemblerColors()) {
+				if(frm.ShowDialog() == DialogResult.OK) {
+					UpdateCodeHighlighting();
+				}
+			}
+		}
+
+		private void mnuEnableSyntaxHighlighting_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateCodeHighlighting();
+		}
+		
+		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
+		{
+			txtCode.ChangeFontSize(2);
+		}
+
+		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
+		{
+			txtCode.ChangeFontSize(-2);
+		}
+
+		private void mnuResetFontSize_Click(object sender, EventArgs e)
+		{
+			txtCode.RestoreFontSize();
+		}
+
 		enum AssemblerSpecialCodes
 		{
 			OK = 0,
@@ -285,13 +351,9 @@ namespace Mesen.GUI.Debugger
 		{
 			if(lstErrors.SelectedItem != null) {
 				int lineNumber = (lstErrors.SelectedItem as ErrorDetail).LineNumber;
-				int scrollIndex = txtCode.GetFirstCharIndexFromLine(Math.Max(0, lineNumber-1-txtCode.NumberOfVisibleLines/2));
-				txtCode.SelectionStart = scrollIndex + 2;
-				txtCode.ScrollToCaret();
-
-				int errorIndex = txtCode.GetFirstCharIndexFromLine(lineNumber-1);
-				txtCode.SelectionStart = errorIndex + 2;
-
+				txtCode.Selection = txtCode.GetLine(lineNumber - 1);
+				txtCode.SelectionLength = 0;
+				txtCode.DoCaretVisible();
 				txtCode.Focus();
 			}
 		}

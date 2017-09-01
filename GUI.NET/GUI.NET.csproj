@@ -478,6 +478,12 @@
     <Compile Include="Debugger\frmAssembler.Designer.cs">
       <DependentUpon>frmAssembler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmAssemblerColors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmAssemblerColors.Designer.cs">
+      <DependentUpon>frmAssemblerColors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmCodeTooltip.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -834,6 +840,7 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\PipetteSmall.png" />
     <None Include="Resources\Enum.png" />
     <None Include="Resources\Script.png" />
     <None Include="Resources\Function.png" />
@@ -943,6 +950,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmAssembler.resx">
       <DependentUpon>frmAssembler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmAssemblerColors.resx">
+      <DependentUpon>frmAssemblerColors.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmCodeTooltip.resx">
       <DependentUpon>frmCodeTooltip.cs</DependentUpon>
