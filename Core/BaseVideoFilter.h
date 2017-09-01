@@ -26,8 +26,8 @@ public:
 
 	uint8_t* GetOutputBuffer();
 	void SendFrame(uint16_t *ppuOutputBuffer);
-	void TakeScreenshot();
-	void TakeScreenshot(string filename, std::stringstream *stream = nullptr);
+	void TakeScreenshot(VideoFilterType filterType);
+	void TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream = nullptr);
 
 	virtual OverscanDimensions GetOverscan();
 	virtual FrameInfo GetFrameInfo() = 0;

@@ -72,31 +72,12 @@ void VideoDecoder::UpdateVideoFilter()
 		_scaleFilter.reset();
 
 		switch(_videoFilterType) {
+			case VideoFilterType::None: break;
 			case VideoFilterType::NTSC: _videoFilter.reset(new NtscFilter()); break;
 			case VideoFilterType::BisqwitNtsc: _videoFilter.reset(new BisqwitNtscFilter(1)); break;
 			case VideoFilterType::BisqwitNtscHalfRes: _videoFilter.reset(new BisqwitNtscFilter(2)); break;
 			case VideoFilterType::BisqwitNtscQuarterRes: _videoFilter.reset(new BisqwitNtscFilter(4)); break;
-			case VideoFilterType::xBRZ2x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 2)); break;
-			case VideoFilterType::xBRZ3x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 3)); break;
-			case VideoFilterType::xBRZ4x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 4)); break;
-			case VideoFilterType::xBRZ5x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 5)); break;
-			case VideoFilterType::xBRZ6x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 6)); break;
-			case VideoFilterType::HQ2x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 2)); break;
-			case VideoFilterType::HQ3x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 3)); break;
-			case VideoFilterType::HQ4x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 4)); break;
-			case VideoFilterType::Scale2x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 2)); break;
-			case VideoFilterType::Scale3x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 3)); break;
-			case VideoFilterType::Scale4x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 4)); break;
-			case VideoFilterType::_2xSai: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::_2xSai, 2)); break;
-			case VideoFilterType::Super2xSai: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Super2xSai, 2)); break;
-			case VideoFilterType::SuperEagle: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::SuperEagle, 2)); break;
-
-			case VideoFilterType::Prescale2x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 2)); break;
-			case VideoFilterType::Prescale3x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 3)); break;
-			case VideoFilterType::Prescale4x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 4)); break;
-			case VideoFilterType::Prescale6x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 6)); break;
-			case VideoFilterType::Prescale8x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 8)); break;
-			case VideoFilterType::Prescale10x: _scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 10)); break;
+			default: _scaleFilter = ScaleFilter::GetScaleFilter(_videoFilterType); break;
 		}
 
 		_hdFilterEnabled = false;
@@ -131,10 +112,7 @@ void VideoDecoder::DecodeFrame()
 	
 	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
 	if(_scaleFilter) {
-		frameInfo.Height *= _scaleFilter->GetScale();
-		frameInfo.Width *= _scaleFilter->GetScale();
-		frameInfo.OriginalHeight *= _scaleFilter->GetScale();
-		frameInfo.OriginalWidth *= _scaleFilter->GetScale();
+		frameInfo = _scaleFilter->GetFrameInfo(frameInfo);
 	}
 
 	_frameChanged = false;
@@ -245,13 +223,13 @@ bool VideoDecoder::IsRunning()
 void VideoDecoder::TakeScreenshot()
 {
 	if(_videoFilter) {
-		_videoFilter->TakeScreenshot();
+		_videoFilter->TakeScreenshot(_videoFilterType);
 	}
 }
 
 void VideoDecoder::TakeScreenshot(std::stringstream &stream)
 {
 	if(_videoFilter) {
-		_videoFilter->TakeScreenshot("", &stream);
+		_videoFilter->TakeScreenshot(_videoFilterType, "", &stream);
 	}
 }

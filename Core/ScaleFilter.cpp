@@ -98,3 +98,42 @@ uint32_t* ScaleFilter::ApplyFilter(uint32_t *inputArgbBuffer, uint32_t width, ui
 
 	return _outputBuffer;
 }
+
+shared_ptr<ScaleFilter> ScaleFilter::GetScaleFilter(VideoFilterType filter)
+{
+	shared_ptr<ScaleFilter> scaleFilter;
+	switch(filter) {
+		case VideoFilterType::xBRZ2x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 2)); break;
+		case VideoFilterType::xBRZ3x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 3)); break;
+		case VideoFilterType::xBRZ4x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 4)); break;
+		case VideoFilterType::xBRZ5x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 5)); break;
+		case VideoFilterType::xBRZ6x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 6)); break;
+		case VideoFilterType::HQ2x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 2)); break;
+		case VideoFilterType::HQ3x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 3)); break;
+		case VideoFilterType::HQ4x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::HQX, 4)); break;
+		case VideoFilterType::Scale2x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 2)); break;
+		case VideoFilterType::Scale3x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 3)); break;
+		case VideoFilterType::Scale4x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Scale2x, 4)); break;
+		case VideoFilterType::_2xSai: scaleFilter.reset(new ScaleFilter(ScaleFilterType::_2xSai, 2)); break;
+		case VideoFilterType::Super2xSai: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Super2xSai, 2)); break;
+		case VideoFilterType::SuperEagle: scaleFilter.reset(new ScaleFilter(ScaleFilterType::SuperEagle, 2)); break;
+
+		case VideoFilterType::Prescale2x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 2)); break;
+		case VideoFilterType::Prescale3x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 3)); break;
+		case VideoFilterType::Prescale4x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 4)); break;
+		case VideoFilterType::Prescale6x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 6)); break;
+		case VideoFilterType::Prescale8x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 8)); break;
+		case VideoFilterType::Prescale10x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::Prescale, 10)); break;
+	}
+	return scaleFilter;
+}
+
+FrameInfo ScaleFilter::GetFrameInfo(FrameInfo baseFrameInfo)
+{
+	FrameInfo info = baseFrameInfo;
+	info.Height *= this->GetScale();
+	info.Width *= this->GetScale();
+	info.OriginalHeight *= this->GetScale();
+	info.OriginalWidth *= this->GetScale();
+	return info;
+}

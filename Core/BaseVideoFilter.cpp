@@ -5,6 +5,7 @@
 #include "../Utilities/FolderUtilities.h"
 #include "Console.h"
 #include "StandardController.h"
+#include "ScaleFilter.h"
 
 BaseVideoFilter::BaseVideoFilter()
 {
@@ -60,28 +61,40 @@ uint8_t* BaseVideoFilter::GetOutputBuffer()
 	return _outputBuffer;
 }
 
-void BaseVideoFilter::TakeScreenshot(string filename, std::stringstream *stream)
+void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream)
 {
+	uint32_t* pngBuffer;
+	FrameInfo frameInfo;
 	uint32_t* frameBuffer = nullptr;
 	{
 		auto lock = _frameLock.AcquireSafe();
 		if(_bufferSize == 0 || !GetOutputBuffer()) {
 			return;
 		}
+
 		frameBuffer = (uint32_t*)new uint8_t[_bufferSize];
 		memcpy(frameBuffer, GetOutputBuffer(), _bufferSize);
+		frameInfo = GetFrameInfo();
+	}
+
+	shared_ptr<ScaleFilter> scaleFilter = ScaleFilter::GetScaleFilter(filterType);
+	if(scaleFilter) {
+		pngBuffer = scaleFilter->ApplyFilter(frameBuffer, frameInfo.Width, frameInfo.Height);
+		frameInfo = scaleFilter->GetFrameInfo(frameInfo);
+	} else {
+		pngBuffer = frameBuffer;
 	}
 
 	if(!filename.empty()) {
-		PNGHelper::WritePNG(filename, frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
+		PNGHelper::WritePNG(filename, pngBuffer, frameInfo.Width, frameInfo.Height);
 	} else {
-		PNGHelper::WritePNG(*stream, frameBuffer, GetFrameInfo().Width, GetFrameInfo().Height);
+		PNGHelper::WritePNG(*stream, pngBuffer, frameInfo.Width, frameInfo.Height);
 	}
 
 	delete[] frameBuffer;
 }
 
-void BaseVideoFilter::TakeScreenshot()
+void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType)
 {
 	string romFilename = FolderUtilities::GetFilename(Console::GetRomName(), false);
 
@@ -103,7 +116,7 @@ void BaseVideoFilter::TakeScreenshot()
 		counter++;
 	}
 
-	TakeScreenshot(ssFilename);
+	TakeScreenshot(filterType, ssFilename);
 
 	MessageManager::DisplayMessage("ScreenshotSaved", FolderUtilities::GetFilename(ssFilename, true));
 }

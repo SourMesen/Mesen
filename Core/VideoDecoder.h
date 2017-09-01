@@ -42,7 +42,7 @@ private:
 
 	VideoFilterType _videoFilterType = VideoFilterType::None;
 	unique_ptr<BaseVideoFilter> _videoFilter;
-	unique_ptr<ScaleFilter> _scaleFilter;
+	shared_ptr<ScaleFilter> _scaleFilter;
 
 	void UpdateVideoFilter();
 
