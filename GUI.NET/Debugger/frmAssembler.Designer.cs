@@ -48,6 +48,12 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.txtCode = new FastColoredTextBoxNS.FastColoredTextBox();
+			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCut = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPaste = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.ctrlHexBox = new Be.Windows.Forms.HexBox();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -72,6 +78,7 @@
 			this.groupBox1.SuspendLayout();
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.txtCode)).BeginInit();
+			this.contextMenu.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -326,6 +333,7 @@
 			this.txtCode.BackBrush = null;
 			this.txtCode.CharHeight = 14;
 			this.txtCode.CharWidth = 8;
+			this.txtCode.ContextMenuStrip = this.contextMenu;
 			this.txtCode.CurrentLineColor = System.Drawing.Color.Gainsboro;
 			this.txtCode.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtCode.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
@@ -338,8 +346,57 @@
 			this.txtCode.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
 			this.txtCode.Size = new System.Drawing.Size(361, 272);
 			this.txtCode.TabIndex = 6;
+			this.txtCode.TabLength = 2;
 			this.txtCode.Zoom = 100;
 			this.txtCode.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.txtCode_TextChanged);
+			// 
+			// contextMenu
+			// 
+			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopy,
+            this.mnuCut,
+            this.mnuPaste,
+            this.toolStripMenuItem5,
+            this.mnuSelectAll});
+			this.contextMenu.Name = "contextMenu";
+			this.contextMenu.Size = new System.Drawing.Size(165, 98);
+			// 
+			// mnuCopy
+			// 
+			this.mnuCopy.Name = "mnuCopy";
+			this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.mnuCopy.Size = new System.Drawing.Size(164, 22);
+			this.mnuCopy.Text = "Copy";
+			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
+			// 
+			// mnuCut
+			// 
+			this.mnuCut.Name = "mnuCut";
+			this.mnuCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+			this.mnuCut.Size = new System.Drawing.Size(164, 22);
+			this.mnuCut.Text = "Cut";
+			this.mnuCut.Click += new System.EventHandler(this.mnuCut_Click);
+			// 
+			// mnuPaste
+			// 
+			this.mnuPaste.Name = "mnuPaste";
+			this.mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+			this.mnuPaste.Size = new System.Drawing.Size(164, 22);
+			this.mnuPaste.Text = "Paste";
+			this.mnuPaste.Click += new System.EventHandler(this.mnuPaste_Click);
+			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(161, 6);
+			// 
+			// mnuSelectAll
+			// 
+			this.mnuSelectAll.Name = "mnuSelectAll";
+			this.mnuSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+			this.mnuSelectAll.Size = new System.Drawing.Size(164, 22);
+			this.mnuSelectAll.Text = "Select All";
+			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
 			// 
 			// groupBox2
 			// 
@@ -492,6 +549,7 @@
 			this.groupBox1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.txtCode)).EndInit();
+			this.contextMenu.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
@@ -534,5 +592,11 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuIncreaseFontSize;
 		private System.Windows.Forms.ToolStripMenuItem mnuDecreaseFontSize;
 		private System.Windows.Forms.ToolStripMenuItem mnuResetFontSize;
+		private System.Windows.Forms.ContextMenuStrip contextMenu;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopy;
+		private System.Windows.Forms.ToolStripMenuItem mnuCut;
+		private System.Windows.Forms.ToolStripMenuItem mnuPaste;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+		private System.Windows.Forms.ToolStripMenuItem mnuSelectAll;
 	}
 }

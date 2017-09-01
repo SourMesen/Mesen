@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,7 +26,7 @@ namespace Mesen.GUI.Debugger
 		private AutocompleteMenu _popupMenu;
 		private string _originalText = "";
 
-		public frmScript()
+		public frmScript(bool forceBlank = false)
 		{
 			InitializeComponent();
 
@@ -65,12 +66,32 @@ namespace Mesen.GUI.Debugger
 			_popupMenu.Items.SetAutocompleteItems(items);
 
 			UpdateRecentScripts();
+			
+			mnuTutorialScript.Checked = ConfigManager.Config.DebugInfo.ScriptStartupBehavior == ScriptStartupBehavior.ShowTutorial;
+			mnuBlankWindow.Checked = ConfigManager.Config.DebugInfo.ScriptStartupBehavior == ScriptStartupBehavior.ShowBlankWindow;
+			mnuAutoLoadLastScript.Checked = ConfigManager.Config.DebugInfo.ScriptStartupBehavior == ScriptStartupBehavior.LoadLastScript;
+			
+			if(!forceBlank) {
+				if(mnuAutoLoadLastScript.Checked && mnuRecentScripts.DropDownItems.Count > 0) {
+					string scriptToLoad = ConfigManager.Config.DebugInfo.RecentScripts.Where((s) => File.Exists(s)).FirstOrDefault();
+					if(scriptToLoad != null) {
+						LoadScriptFile(scriptToLoad, false);
+					}
+				} else if(mnuTutorialScript.Checked) {
+					using(Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Mesen.GUI.Debugger.Example.lua")) {
+						using(StreamReader reader = new StreamReader(stream)) {
+							txtScriptContent.Text = reader.ReadToEnd();
+							_originalText = txtScriptContent.Text;
+						}
+					}
+				}
+			}
 
 			if(!ConfigManager.Config.DebugInfo.ScriptWindowSize.IsEmpty) {
 				this.Size = ConfigManager.Config.DebugInfo.ScriptWindowSize;
 			}
 			mnuSaveBeforeRun.Checked = ConfigManager.Config.DebugInfo.SaveScriptBeforeRun;
-			mnuAutoReload.Checked = ConfigManager.Config.DebugInfo.AutoReloadScript;
+
 			if(ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight >= ctrlSplit.Panel1MinSize) {
 				if(ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight == Int32.MaxValue) {
 					ctrlSplit.CollapsePanel();
@@ -78,7 +99,7 @@ namespace Mesen.GUI.Debugger
 					ctrlSplit.SplitterDistance = ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight;
 				}
 			}
-			txtScriptContent.Font = new Font(BaseControl.MonospaceFontFamily, 10);
+			txtScriptContent.Font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize);
 			txtScriptContent.Zoom = ConfigManager.Config.DebugInfo.ScriptZoom;
 
 			if(!this.DesignMode) {
@@ -97,22 +118,26 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			if(_originalText != txtScriptContent.Text) {
-				DialogResult result = MessageBox.Show("You have unsaved changes for this script - would you like to save them?", "Script Window", MessageBoxButtons.YesNoCancel);
-				if((result == DialogResult.Yes && !SaveScript()) || result == DialogResult.Cancel) {
-					e.Cancel = true;
-					return;
-				}
+			if(!SavePrompt()) {
+				e.Cancel = true;
+				return;
 			}
-
+			
 			if(_scriptId >= 0) {
 				InteropEmu.DebugRemoveScript(_scriptId);
 			}
 			ConfigManager.Config.DebugInfo.ScriptWindowSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.Config.DebugInfo.SaveScriptBeforeRun = mnuSaveBeforeRun.Checked;
-			ConfigManager.Config.DebugInfo.AutoReloadScript = mnuAutoReload.Checked;
+			if(mnuAutoLoadLastScript.Checked) {
+				ConfigManager.Config.DebugInfo.ScriptStartupBehavior = ScriptStartupBehavior.LoadLastScript;
+			} else if(mnuTutorialScript.Checked) {
+				ConfigManager.Config.DebugInfo.ScriptStartupBehavior = ScriptStartupBehavior.ShowTutorial;
+			} else {
+				ConfigManager.Config.DebugInfo.ScriptStartupBehavior = ScriptStartupBehavior.ShowBlankWindow;
+			}
 			ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight = ctrlSplit.Panel2.Height <= 2 ? Int32.MaxValue : ctrlSplit.SplitterDistance;
 			ConfigManager.Config.DebugInfo.ScriptZoom = txtScriptContent.Zoom;
+			ConfigManager.Config.DebugInfo.AutoLoadLastScript = mnuAutoLoadLastScript.Checked;
 			ConfigManager.ApplyChanges();
 
 			base.OnClosing(e);
@@ -122,7 +147,6 @@ namespace Mesen.GUI.Debugger
 		{
 			if(keyData == Keys.Escape) {
 				StopScript();
-				return true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
@@ -137,16 +161,32 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void LoadScriptFile(string filepath)
+		private bool SavePrompt()
+		{
+			if(_originalText != txtScriptContent.Text) {
+				DialogResult result = MessageBox.Show("You have unsaved changes for this script - would you like to save them?", "Script Window", MessageBoxButtons.YesNoCancel);
+				if((result == DialogResult.Yes && !SaveScript()) || result == DialogResult.Cancel) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private void LoadScriptFile(string filepath, bool runScript = true)
 		{
 			if(File.Exists(filepath)) {
+				if(!SavePrompt()) {
+					return;
+				}
 				string content = File.ReadAllText(filepath);
 				SetFilePath(filepath);
 				txtScriptContent.Text = content;
 				txtScriptContent.ClearUndo();
 				ConfigManager.Config.DebugInfo.AddRecentScript(filepath);
 				UpdateRecentScripts();
-				RunScript();
+				if(runScript) {
+					RunScript();
+				}
 
 				_originalText = txtScriptContent.Text;
 				_lastTimestamp = File.GetLastWriteTime(filepath);
@@ -157,12 +197,14 @@ namespace Mesen.GUI.Debugger
 		{
 			mnuRecentScripts.DropDownItems.Clear();
 			foreach(string recentScript in ConfigManager.Config.DebugInfo.RecentScripts) {
-				ToolStripMenuItem tsmi = new ToolStripMenuItem();
-				tsmi.Text = Path.GetFileName(recentScript);
-				tsmi.Click += (object sender, EventArgs args) => {
-					LoadScriptFile(recentScript);
-				};
-				mnuRecentScripts.DropDownItems.Add(tsmi);
+				if(File.Exists(recentScript)) {
+					ToolStripMenuItem tsmi = new ToolStripMenuItem();
+					tsmi.Text = Path.GetFileName(recentScript);
+					tsmi.Click += (object sender, EventArgs args) => {
+						LoadScriptFile(recentScript);
+					};
+					mnuRecentScripts.DropDownItems.Add(tsmi);
+				}
 			}
 
 			mnuRecentScripts.Enabled = mnuRecentScripts.DropDownItems.Count > 0;
@@ -321,6 +363,11 @@ namespace Mesen.GUI.Debugger
 		{
 			txtScriptContent.Paste();
 		}
+		
+		private void mnuSelectAll_Click(object sender, EventArgs e)
+		{
+			txtScriptContent.SelectAll();
+		}
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
@@ -339,7 +386,28 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuNewScript_Click(object sender, EventArgs e)
 		{
-			DebugWindowManager.OpenDebugWindow(DebugWindow.ScriptWindow);
+			DebugWindowManager.OpenScriptWindow(true);
+		}
+
+		private void mnuAutoLoadLastScript_Click(object sender, EventArgs e)
+		{
+			mnuAutoLoadLastScript.Checked = true;
+			mnuTutorialScript.Checked = false;
+			mnuBlankWindow.Checked = false;
+		}
+
+		private void mnuTutorialScript_Click(object sender, EventArgs e)
+		{
+			mnuAutoLoadLastScript.Checked = false;
+			mnuTutorialScript.Checked = true;
+			mnuBlankWindow.Checked = false;
+		}
+
+		private void mnuBlankWindow_Click(object sender, EventArgs e)
+		{
+			mnuAutoLoadLastScript.Checked = false;
+			mnuTutorialScript.Checked = false;
+			mnuBlankWindow.Checked = true;
 		}
 
 		static readonly List<List<string>> _availableFunctions = new List<List<string>>() {
@@ -380,10 +448,34 @@ namespace Mesen.GUI.Debugger
 			new List<string> {"func","emu.addCheat","emu.addCheat(cheatCode)","cheatCode - *String* A game genie format cheat code.","","Activates a game genie cheat code (6 or 8 characters).\nNote: cheat codes added via this function are not permanent and not visible in the UI."},
 			new List<string> {"func","emu.clearCheats","emu.clearCheats()","","","Removes all active cheat codes (has no impact on cheat codes saved within the UI)"},
 			new List<string> {"func","emu.takeScreenshot","emu.takeScreenshot()","","*String* A binary string containing a PNG image.","Takes a screenshot and returns a PNG file as a string.\nThe screenshot is not saved to the disk."},
-			new List<string> {"enum","emu.eventType","emu.eventType.[value]","","","Values:\npower = 0,\nreset = 1,\nnmi = 2,\nirq = 3,\nstartFrame = 4,\nendFrame = 5,\ncodeBreak = 6\n\nUsed by addEventCallback / removeEventCallback calls."},
+			new List<string> {"enum","emu.eventType","emu.eventType.[value]","","","Values:\nreset = 0,\nnmi = 1,\nirq = 2,\nstartFrame = 3,\nendFrame = 4,\ncodeBreak = 5\n\nUsed by addEventCallback / removeEventCallback calls."},
+			new List<string> {"enum","emu.eventType.reset","Triggered when a soft reset occurs","","",""},
+			new List<string> {"enum","emu.eventType.nmi","Triggered when an nmi occurs","","",""},
+			new List<string> {"enum","emu.eventType.irq","Triggered when an irq occurs","","",""},
+			new List<string> {"enum","emu.eventType.startFrame","Triggered at the start of a frame (cycle 0, scanline -1)","","",""},
+			new List<string> {"enum","emu.eventType.endFrame","Triggered at the end of a frame (cycle 0, scanline 241)","","",""},
+			new List<string> {"enum","emu.eventType.codeBreak","Triggered when code execution breaks (e.g due to a breakpoint, etc.)","","",""},
 			new List<string> {"enum","emu.executeCountType","emu.executeCountType.[value]","","","Values:\ncpuCycles = 0,\nppuCycles = 1,\ncpuInstructions = 2\n\nUsed by execute calls." },
+			new List<string> {"enum","emu.executeCountType.cpuCycles","Count the number of CPU cycles","","",""},
+			new List<string> {"enum","emu.executeCountType.ppuCycles","Count the number of PPU cycles","","",""},
+			new List<string> {"enum","emu.executeCountType.cpuInstructions","Count the number of CPU instructions","","",""},
 			new List<string> {"enum","emu.memCallbackType","emu.memCallbackType.[value]","","","Values:\ncpuRead = 0,\ncpuWrite = 1,\ncpuExec = 2,\nppuRead = 3,\nppuWrite = 4\n\nUsed by addMemoryCallback / removeMemoryCallback calls."},
+			new List<string> {"enum","emu.memCallbackType.cpuRead","Triggered when a read instruction is executed","","",""},
+			new List<string> {"enum","emu.memCallbackType.cpuWrite","Triggered when a write instruction is executed","","",""},
+			new List<string> {"enum","emu.memCallbackType.cpuExec","Triggered when any memory read occurs due to the CPU's code execution","","",""},
+			new List<string> {"enum","emu.memCallbackType.ppuRead","Triggered when the PPU reads from its memory bus","","",""},
+			new List<string> {"enum","emu.memCallbackType.ppuWrite","Triggered when the PPU writes to its memory bus","","",""},
 			new List<string> {"enum","emu.memType","emu.memType.[value]", "","","Values:\ncpu = 0,\nppu = 1,\npalette = 2,\noam = 3,\nsecondaryOam = 4,\nprgRom = 5,\nchrRom = 6,\nchrRam = 7,\nworkRam = 8,\nsaveRam = 9\n\nUsed by read / write calls."},
+			new List<string> {"enum","emu.memType.cpu","CPU memory - $0000 to $FFFF","","",""},
+			new List<string> {"enum","emu.memType.ppu","PPU memory - $0000 to $3FFF","","",""},
+			new List<string> {"enum","emu.memType.palette","Palette memory - $00 to $3F","","",""},
+			new List<string> {"enum","emu.memType.oam","OAM memory - $00 to $FF","","",""},
+			new List<string> {"enum","emu.memType.secondaryOam","$00 to $1F","","",""},
+			new List<string> {"enum","emu.memType.prgRom","PRG ROM - Range varies by game","","",""},
+			new List<string> {"enum","emu.memType.chrRom","CHR ROM - Range varies by game","","",""},
+			new List<string> {"enum","emu.memType.chrRam","CHR RAM - Range varies by game","","",""},
+			new List<string> {"enum","emu.memType.workRam","Work RAM - Range varies by game","","",""},
+			new List<string> {"enum","emu.memType.saveRam","Save RAM - Range varies by game","","",""},
 		};
 	}
 

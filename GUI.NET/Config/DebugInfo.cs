@@ -167,7 +167,8 @@ namespace Mesen.GUI.Config
 		public int ScriptCodeWindowHeight = 0;
 		public List<string> RecentScripts = new List<string>();
 		public bool SaveScriptBeforeRun = true;
-		public bool AutoReloadScript = false;
+		public ScriptStartupBehavior ScriptStartupBehavior = ScriptStartupBehavior.ShowTutorial;
+		public bool AutoLoadLastScript = true;
 		public int ScriptZoom = 100;
 
 		public bool AssemblerCodeHighlighting = true;
@@ -211,6 +212,14 @@ namespace Mesen.GUI.Config
 			ConfigManager.ApplyChanges();
 		}
 	}
+
+	public enum ScriptStartupBehavior
+	{
+		ShowTutorial = 0,
+		ShowBlankWindow = 1,
+		LoadLastScript = 2
+	}
+
 
 	public class XmlColor
 	{

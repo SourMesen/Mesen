@@ -14,7 +14,8 @@ public:
 		_debugger = debugger;
 
 		if(!debugger->IsExecutionStopped()) {
-			debugger->Step(1, false);
+			debugger->SetSendNotificationFlag(false);
+			debugger->Step(1);
 			while(!debugger->IsExecutionStopped()) {}
 			_needResume = true;
 		}
@@ -24,6 +25,7 @@ public:
 	{
 		if(_needResume) {
 			_debugger->Run();
+			_debugger->SetSendNotificationFlag(true);
 		}
 	}
 };

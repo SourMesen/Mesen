@@ -55,6 +55,10 @@
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuSaveBeforeRun = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoReload = new System.Windows.Forms.ToolStripMenuItem();
+			this.onStartupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuBlankWindow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTutorialScript = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoLoadLastScript = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.btnOpen = new System.Windows.Forms.ToolStripButton();
 			this.btnSave = new System.Windows.Forms.ToolStripButton();
@@ -66,6 +70,8 @@
 			this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCut = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaste = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.ctrlSplit = new Mesen.GUI.Controls.ctrlSplitContainer();
 			this.txtLog = new System.Windows.Forms.TextBox();
 			this.tmrLog = new System.Windows.Forms.Timer(this.components);
@@ -91,7 +97,7 @@
             this.scriptToolStripMenuItem});
 			this.mnuMain.Location = new System.Drawing.Point(0, 0);
 			this.mnuMain.Name = "mnuMain";
-			this.mnuMain.Size = new System.Drawing.Size(425, 24);
+			this.mnuMain.Size = new System.Drawing.Size(965, 24);
 			this.mnuMain.TabIndex = 0;
 			this.mnuMain.Text = "menuStrip1";
 			// 
@@ -237,7 +243,8 @@
             this.mnuStop,
             this.toolStripMenuItem3,
             this.mnuSaveBeforeRun,
-            this.mnuAutoReload});
+            this.mnuAutoReload,
+            this.onStartupToolStripMenuItem});
 			this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
 			this.scriptToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
 			this.scriptToolStripMenuItem.Text = "Script";
@@ -247,7 +254,7 @@
 			this.mnuRun.Image = global::Mesen.GUI.Properties.Resources.Play;
 			this.mnuRun.Name = "mnuRun";
 			this.mnuRun.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRun.Size = new System.Drawing.Size(236, 22);
+			this.mnuRun.Size = new System.Drawing.Size(258, 22);
 			this.mnuRun.Text = "Run";
 			this.mnuRun.Click += new System.EventHandler(this.mnuRun_Click);
 			// 
@@ -256,28 +263,59 @@
 			this.mnuStop.Image = global::Mesen.GUI.Properties.Resources.Stop;
 			this.mnuStop.Name = "mnuStop";
 			this.mnuStop.ShortcutKeyDisplayString = "Esc";
-			this.mnuStop.Size = new System.Drawing.Size(236, 22);
+			this.mnuStop.Size = new System.Drawing.Size(258, 22);
 			this.mnuStop.Text = "Stop";
 			this.mnuStop.Click += new System.EventHandler(this.mnuStop_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(233, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(255, 6);
 			// 
 			// mnuSaveBeforeRun
 			// 
 			this.mnuSaveBeforeRun.CheckOnClick = true;
 			this.mnuSaveBeforeRun.Name = "mnuSaveBeforeRun";
-			this.mnuSaveBeforeRun.Size = new System.Drawing.Size(236, 22);
+			this.mnuSaveBeforeRun.Size = new System.Drawing.Size(258, 22);
 			this.mnuSaveBeforeRun.Text = "Auto-save before running";
 			// 
 			// mnuAutoReload
 			// 
 			this.mnuAutoReload.CheckOnClick = true;
 			this.mnuAutoReload.Name = "mnuAutoReload";
-			this.mnuAutoReload.Size = new System.Drawing.Size(236, 22);
+			this.mnuAutoReload.Size = new System.Drawing.Size(258, 22);
 			this.mnuAutoReload.Text = "Auto-reload when file changes";
+			// 
+			// onStartupToolStripMenuItem
+			// 
+			this.onStartupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuBlankWindow,
+            this.mnuTutorialScript,
+            this.mnuAutoLoadLastScript});
+			this.onStartupToolStripMenuItem.Name = "onStartupToolStripMenuItem";
+			this.onStartupToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+			this.onStartupToolStripMenuItem.Text = "When opening the script window...";
+			// 
+			// mnuBlankWindow
+			// 
+			this.mnuBlankWindow.Name = "mnuBlankWindow";
+			this.mnuBlankWindow.Size = new System.Drawing.Size(227, 22);
+			this.mnuBlankWindow.Text = "Display a blank code window";
+			this.mnuBlankWindow.Click += new System.EventHandler(this.mnuBlankWindow_Click);
+			// 
+			// mnuTutorialScript
+			// 
+			this.mnuTutorialScript.Name = "mnuTutorialScript";
+			this.mnuTutorialScript.Size = new System.Drawing.Size(227, 22);
+			this.mnuTutorialScript.Text = "Display the tutorial script";
+			this.mnuTutorialScript.Click += new System.EventHandler(this.mnuTutorialScript_Click);
+			// 
+			// mnuAutoLoadLastScript
+			// 
+			this.mnuAutoLoadLastScript.Name = "mnuAutoLoadLastScript";
+			this.mnuAutoLoadLastScript.Size = new System.Drawing.Size(227, 22);
+			this.mnuAutoLoadLastScript.Text = "Load the last script loaded";
+			this.mnuAutoLoadLastScript.Click += new System.EventHandler(this.mnuAutoLoadLastScript_Click);
 			// 
 			// toolStrip1
 			// 
@@ -290,7 +328,7 @@
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-			this.toolStrip1.Size = new System.Drawing.Size(425, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(965, 25);
 			this.toolStrip1.TabIndex = 1;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -378,7 +416,7 @@
 			this.txtScriptContent.RightBracket = ')';
 			this.txtScriptContent.RightBracket2 = '}';
 			this.txtScriptContent.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-			this.txtScriptContent.Size = new System.Drawing.Size(425, 240);
+			this.txtScriptContent.Size = new System.Drawing.Size(965, 421);
 			this.txtScriptContent.TabIndex = 3;
 			this.txtScriptContent.TabLength = 2;
 			this.txtScriptContent.Zoom = 100;
@@ -388,15 +426,17 @@
 			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuCopy,
             this.mnuCut,
-            this.mnuPaste});
+            this.mnuPaste,
+            this.toolStripMenuItem5,
+            this.mnuSelectAll});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(145, 70);
+			this.contextMenu.Size = new System.Drawing.Size(165, 98);
 			// 
 			// mnuCopy
 			// 
 			this.mnuCopy.Name = "mnuCopy";
 			this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.mnuCopy.Size = new System.Drawing.Size(144, 22);
+			this.mnuCopy.Size = new System.Drawing.Size(164, 22);
 			this.mnuCopy.Text = "Copy";
 			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
 			// 
@@ -404,7 +444,7 @@
 			// 
 			this.mnuCut.Name = "mnuCut";
 			this.mnuCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-			this.mnuCut.Size = new System.Drawing.Size(144, 22);
+			this.mnuCut.Size = new System.Drawing.Size(164, 22);
 			this.mnuCut.Text = "Cut";
 			this.mnuCut.Click += new System.EventHandler(this.mnuCut_Click);
 			// 
@@ -412,9 +452,22 @@
 			// 
 			this.mnuPaste.Name = "mnuPaste";
 			this.mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.mnuPaste.Size = new System.Drawing.Size(144, 22);
+			this.mnuPaste.Size = new System.Drawing.Size(164, 22);
 			this.mnuPaste.Text = "Paste";
 			this.mnuPaste.Click += new System.EventHandler(this.mnuPaste_Click);
+			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(161, 6);
+			// 
+			// mnuSelectAll
+			// 
+			this.mnuSelectAll.Name = "mnuSelectAll";
+			this.mnuSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+			this.mnuSelectAll.Size = new System.Drawing.Size(164, 22);
+			this.mnuSelectAll.Text = "Select All";
+			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
 			// 
 			// ctrlSplit
 			// 
@@ -434,8 +487,8 @@
 			// 
 			this.ctrlSplit.Panel2.Controls.Add(this.txtLog);
 			this.ctrlSplit.Panel2.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-			this.ctrlSplit.Size = new System.Drawing.Size(425, 335);
-			this.ctrlSplit.SplitterDistance = 242;
+			this.ctrlSplit.Size = new System.Drawing.Size(965, 516);
+			this.ctrlSplit.SplitterDistance = 423;
 			this.ctrlSplit.TabIndex = 4;
 			// 
 			// txtLog
@@ -447,7 +500,7 @@
 			this.txtLog.Name = "txtLog";
 			this.txtLog.ReadOnly = true;
 			this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtLog.Size = new System.Drawing.Size(425, 87);
+			this.txtLog.Size = new System.Drawing.Size(965, 87);
 			this.txtLog.TabIndex = 0;
 			// 
 			// tmrLog
@@ -461,16 +514,16 @@
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.lblScriptActive});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 384);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 565);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(425, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(965, 22);
 			this.statusStrip1.TabIndex = 6;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
 			// toolStripStatusLabel1
 			// 
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(410, 17);
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(950, 17);
 			this.toolStripStatusLabel1.Spring = true;
 			// 
 			// lblScriptActive
@@ -486,7 +539,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(425, 406);
+			this.ClientSize = new System.Drawing.Size(965, 587);
 			this.Controls.Add(this.ctrlSplit);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.mnuMain);
@@ -555,5 +608,11 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem mnuNewScript;
 		private System.Windows.Forms.ToolStripMenuItem mnuSaveAs;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+		private System.Windows.Forms.ToolStripMenuItem mnuSelectAll;
+		private System.Windows.Forms.ToolStripMenuItem onStartupToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuBlankWindow;
+		private System.Windows.Forms.ToolStripMenuItem mnuTutorialScript;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoLoadLastScript;
 	}
 }

@@ -370,10 +370,6 @@ void Console::Run()
 				_lagCounter++;
 			}
 
-			if(_debugger) {
-				_debugger->ProcessEvent(EventType::StartFrame);
-			}
-
 			_rewindManager->ProcessEndOfFrame();
 			EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
 			_disableOcNextFrame = false;
@@ -417,6 +413,10 @@ void Console::Run()
 				PlatformUtilities::DisableScreensaver();
 				_runLock.Acquire();								
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
+			}
+
+			if(_debugger) {
+				_debugger->ProcessEvent(EventType::StartFrame);
 			}
 
 			//Get next target time, and adjust based on whether we are ahead or behind

@@ -80,11 +80,10 @@ struct OperationInfo
 
 enum class EventType
 {
-	Power = 0,
-	Reset = 1,
-	Nmi = 2,
-	Irq = 3,
-	StartFrame = 4,
-	EndFrame = 5,
-	CodeBreak = 6
+	Reset = 0,
+	Nmi = 1,
+	Irq = 2,
+	StartFrame = 3,
+	EndFrame = 4,
+	CodeBreak = 5
 };

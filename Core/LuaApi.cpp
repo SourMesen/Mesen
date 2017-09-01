@@ -120,15 +120,21 @@ int LuaApi::GetLibrary(lua_State *lua)
 	lua_pushintvalue(ppuWrite, CallbackType::PpuWrite);
 	lua_settable(lua, -3);
 
-	lua_pushliteral(lua, "eventCallbackType");
+	lua_pushliteral(lua, "eventType");
 	lua_newtable(lua);
-	lua_pushintvalue(power, EventType::Power);
 	lua_pushintvalue(reset, EventType::Reset);
 	lua_pushintvalue(nmi, EventType::Nmi);
 	lua_pushintvalue(irq, EventType::Irq);
 	lua_pushintvalue(startFrame, EventType::StartFrame);
 	lua_pushintvalue(endFrame, EventType::EndFrame);
 	lua_pushintvalue(codeBreak, EventType::CodeBreak);
+	lua_settable(lua, -3);
+
+	lua_pushliteral(lua, "executeCountType");
+	lua_newtable(lua);
+	lua_pushintvalue(cpuCycles, ExecuteCountType::CpuCycles);
+	lua_pushintvalue(cpuInstructions, ExecuteCountType::CpuInstructions);
+	lua_pushintvalue(ppuCycles, ExecuteCountType::PpuCycles);
 	lua_settable(lua, -3);
 
 	return 1;
@@ -276,9 +282,10 @@ int LuaApi::RegisterEventCallback(lua_State *lua)
 	EventType type = (EventType)l.ReadInteger();
 	int reference = l.GetReference();
 	checkparams();
-	errorCond(type < EventType::Power || type > EventType::CodeBreak, "the specified type is invalid");
+	errorCond(type < EventType::Reset || type > EventType::CodeBreak, "the specified type is invalid");
 	errorCond(reference == LUA_NOREF, "the specified function could not be found");
 	_context->RegisterEventCallback(type, reference);
+	l.Return(reference);
 	return l.ReturnCount();
 }
 
@@ -288,7 +295,7 @@ int LuaApi::UnregisterEventCallback(lua_State *lua)
 	EventType type = (EventType)l.ReadInteger();
 	int reference = l.ReadInteger();
 	checkparams();
-	errorCond(type < EventType::Power || type > EventType::CodeBreak, "the specified type is invalid");
+	errorCond(type < EventType::Reset || type > EventType::CodeBreak, "the specified type is invalid");
 	errorCond(reference == LUA_NOREF, "function reference is invalid");
 	_context->UnregisterEventCallback(type, reference);
 	return l.ReturnCount();

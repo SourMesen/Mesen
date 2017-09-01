@@ -340,12 +340,12 @@ namespace FastColoredTextBoxNS
             point = AutocompleteParent.PointToClient(offset);
             point.Offset(2, tb.CharHeight);
             //
+            bool foundSelected = false;
             if (forced || (text.Length >= Menu.MinFragmentLength 
                 && tb.Selection.IsEmpty /*pops up only if selected range is empty*/
                 && (tb.Selection.Start > fragment.Start || text.Length == 0/*pops up only if caret is after first letter*/)))
             {
                 Menu.Fragment = fragment;
-                bool foundSelected = false;
                 //build popup menu
                 foreach (var item in sourceItems)
                 {
@@ -359,31 +359,29 @@ namespace FastColoredTextBoxNS
                         FocussedItemIndex = visibleItems.Count - 1;
                     }
                 }
-
-                if (foundSelected)
-                {
-                    AdjustScroll();
-                    DoSelectedVisible();
-                }
             }
 
             //show popup menu
             if (Count > 0)
             {
-                if (!Menu.Visible)
-                {
-                    CancelEventArgs args = new CancelEventArgs();
-                    Menu.OnOpening(args);
-                    if (!args.Cancel)
-                    {
-                        Menu.Location = point;
-                        Menu.Parent = AutocompleteParent;
-                        Menu.Show();
-                        Menu.BringToFront();
-                    }
-                }
-                else
-                    Invalidate();
+               CancelEventArgs args = new CancelEventArgs();
+               Menu.OnOpening(args);
+               if (!args.Cancel)
+               {
+                  Menu.Location = point;
+                  Menu.Parent = AutocompleteParent;
+
+                  if (foundSelected)
+                  {
+                        AdjustScroll();
+                        DoSelectedVisible();
+                  }
+
+                  Menu.Show();
+                  Menu.BringToFront();
+               }
+					Menu.Invalidate();
+					Invalidate();
             }
             else
                 Menu.Close();
@@ -645,6 +643,9 @@ namespace FastColoredTextBoxNS
                 case Keys.PageUp:
                     SelectNext(-10);
                     return true;
+                case Keys.OemPeriod:
+                    OnSelecting();
+                    return false;
                 case Keys.Enter:
                     OnSelecting();
                     return true;
@@ -695,8 +696,8 @@ namespace FastColoredTextBoxNS
                 toolTip.Hide(window);
                 return;
             }
-
-            var location = new Point(Right + 3 + Menu.Left, Menu.Top);
+				
+            var location = window.PointToClient(Menu.PointToScreen(new Point(Menu.Width + 3, 0)));
             if (string.IsNullOrEmpty(text))
             {
                 toolTip.ToolTipTitle = null;

@@ -34,15 +34,10 @@ namespace Mesen.GUI.Debugger
 			}
 			mnuEnableSyntaxHighlighting.Checked = ConfigManager.Config.DebugInfo.AssemblerCodeHighlighting;
 
-			txtCode.Font = new Font(BaseControl.MonospaceFontFamily, 10);
+			txtCode.Font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize);
 			txtCode.Zoom = ConfigManager.Config.DebugInfo.AssemblerZoom;
 
 			UpdateCodeHighlighting();
-
-			if(!string.IsNullOrWhiteSpace(code)) {
-				_isEditMode = true;
-				_containedRtiRts = ContainsRtiOrRts(code);
-			}
 
 			_startAddress = startAddress;
 			_blockLength = blockLength;
@@ -56,7 +51,18 @@ namespace Mesen.GUI.Debugger
 			ctrlHexBox.ByteProvider = new StaticByteProvider(new byte[0]);
 
 			txtStartAddress.Text = _startAddress.ToString("X4");
-			txtCode.Text = code;
+
+
+			if(!string.IsNullOrWhiteSpace(code)) {
+				_isEditMode = true;
+				_containedRtiRts = ContainsRtiOrRts(code);
+				txtCode.Text = code;
+			} else {
+				code = ";Input 6502 assembly here.\n;The resulting bytecode is\n;displayed on the right.\n; -Labels can be used.\n; -Use .byte to define data\n";
+				txtCode.Text = code;
+				txtCode.Selection = txtCode.GetLine(5);
+				txtCode.SelectionLength = 0;
+			}
 
 			toolTip.SetToolTip(picSizeWarning, "Warning: The new code exceeds the original code's length." + Environment.NewLine + "Applying this modification will overwrite other portions of the code and potentially cause problems.");
 			toolTip.SetToolTip(picStartAddressWarning, "Warning: Start address is invalid.  Must be a valid hexadecimal string.");
@@ -329,6 +335,26 @@ namespace Mesen.GUI.Debugger
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
 			txtCode.RestoreFontSize();
+		}
+		
+		private void mnuCopy_Click(object sender, EventArgs e)
+		{
+			txtCode.Copy();
+		}
+
+		private void mnuCut_Click(object sender, EventArgs e)
+		{
+			txtCode.Cut();
+		}
+
+		private void mnuPaste_Click(object sender, EventArgs e)
+		{
+			txtCode.Paste();
+		}
+
+		private void mnuSelectAll_Click(object sender, EventArgs e)
+		{
+			txtCode.SelectAll();
 		}
 
 		enum AssemblerSpecialCodes

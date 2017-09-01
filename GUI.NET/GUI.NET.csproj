@@ -840,6 +840,7 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <EmbeddedResource Include="Debugger\Example.lua" />
     <None Include="Resources\PipetteSmall.png" />
     <None Include="Resources\Enum.png" />
     <None Include="Resources\Script.png" />

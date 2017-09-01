@@ -58,7 +58,6 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_suspendCount = 0;
 
 	_lastInstruction = 0;
-	_sendNotification = false;
 
 	_currentReadAddr = nullptr;
 	_currentReadValue = nullptr;
@@ -584,8 +583,6 @@ bool Debugger::SleepUntilResume()
 			}
 		}
 
-		_sendNotification = true;
-
 		while(stepCount == 0 && !_stopFlag && _suspendCount == 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();
@@ -662,7 +659,6 @@ void Debugger::Step(uint32_t count, bool sendNotification)
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_ppuStepCount = -1;
-	_sendNotification = sendNotification;
 	_stepCount = count;
 }
 
@@ -700,6 +696,11 @@ void Debugger::StepBack()
 		_needRewind = true;
 		Run();
 	}
+}
+
+void Debugger::SetSendNotificationFlag(bool enabled)
+{
+	_sendNotification = enabled;
 }
 
 void Debugger::Run()

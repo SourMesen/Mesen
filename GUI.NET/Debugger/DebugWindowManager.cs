@@ -41,6 +41,14 @@ namespace Mesen.GUI.Debugger
 			frm.Show();
 		}
 
+		public static void OpenScriptWindow(bool forceBlank)
+		{
+			frmScript frm = new frmScript(forceBlank);
+			_openedWindows.Add(frm);
+			frm.FormClosed += Debugger_FormClosed;
+			frm.Show();
+		}
+
 		public static frmDebugger GetDebugger()
 		{
 			int index = _openedWindows.FindIndex((form) => form.GetType() == typeof(frmDebugger));

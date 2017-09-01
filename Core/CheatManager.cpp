@@ -162,7 +162,6 @@ void CheatManager::ApplyRamCodes(uint16_t addr, uint8_t &value)
 
 void CheatManager::ApplyPrgCodes(uint8_t *prgRam, uint32_t prgSize)
 {
-	Console::Pause();
 	for(uint32_t i = 0, len = i < Instance->_absoluteCheatCodes.size(); i < len; i++) {
 		CodeInfo code = Instance->_absoluteCheatCodes[i];
 		if(code.Address < prgSize) {
@@ -171,7 +170,6 @@ void CheatManager::ApplyPrgCodes(uint8_t *prgRam, uint32_t prgSize)
 			}
 		}
 	}
-	Console::Resume();
 }
 
 vector<CodeInfo> CheatManager::GetCheats()

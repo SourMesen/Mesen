@@ -162,6 +162,7 @@ public:
 	void StepOut();
 	void StepBack();
 	void Run();
+	void SetSendNotificationFlag(bool enabled);
 
 	bool LoadCdlFile(string cdlFilepath);
 	void ResetCdl();
