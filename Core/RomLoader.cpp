@@ -119,12 +119,8 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo)
 	return "";
 }
 
-string RomLoader::FindMatchingRomInFolder(string folder, string romFilename, HashInfo hashInfo, bool useFastSearch)
+string RomLoader::FindMatchingRom(vector<string> romFiles, string romFilename, HashInfo hashInfo, bool useFastSearch)
 {
-	std::transform(romFilename.begin(), romFilename.end(), romFilename.begin(), ::tolower);
-	std::unordered_set<string> validExtensions = { { ".nes", ".fds", "*.unif", "*.unif", "*.nsf", "*.nsfe", "*.7z", "*.zip" } };
-	vector<string> romFiles = FolderUtilities::GetFilesInFolder(folder, validExtensions, true);
-
 	if(useFastSearch) {
 		for(string romFile : romFiles) {
 			//Quick search by filename

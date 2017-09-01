@@ -634,7 +634,11 @@
     <Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Fichiers IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterTest">Fichiers de test (*.mtp)|*.mtp|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterCheat">Tous les formats supportés (*.cht, *.xml)|*.cht;*.xml</Message>
+    <Message ID="FilterSavestate">Sauvegardes d'états Mesen (*.mst)|*.mst|Tous les fichiers (*.*)|*.*</Message>
 
+    <Message ID="LoadFromFile">Charger à partir d'un fichier...</Message>
+    <Message ID="SaveToFile">Sauvegarder dans un fichier...</Message>
+    
     <Message ID="Resume">Continuer</Message>
     <Message ID="Pause">Pause</Message>
     <Message ID="StartServer">Démarrer serveur</Message>

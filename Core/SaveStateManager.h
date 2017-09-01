@@ -11,7 +11,7 @@ private:
 	static string GetStateFilepath(int stateIndex);	
 
 public:
-	static const uint32_t FileFormatVersion = 5;
+	static const uint32_t FileFormatVersion = 6;
 
 	static uint64_t GetStateInfo(int stateIndex);
 
@@ -19,8 +19,10 @@ public:
 	static bool LoadState();
 
 	static void SaveState(ostream &stream);
+	static bool SaveState(string filepath);
 	static void SaveState(int stateIndex, bool displayMessage = true);
-	static bool LoadState(istream &stream);
+	static bool LoadState(istream &stream, bool hashCheckRequired = true);
+	static bool LoadState(string filepath, bool hashCheckRequired = true);
 	static bool LoadState(int stateIndex);
 
 	static void SaveRecentGame(string romName, string romPath, string patchPath);

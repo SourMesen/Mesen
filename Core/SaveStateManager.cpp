@@ -61,27 +61,42 @@ void SaveStateManager::SaveState(ostream &stream)
 	stream.write((char*)&emuVersion, sizeof(emuVersion));
 	stream.write((char*)&SaveStateManager::FileFormatVersion, sizeof(uint32_t));
 
+	string sha1Hash = Console::GetHashInfo().Sha1Hash;
+	stream.write(sha1Hash.c_str(), sha1Hash.size());
+
+	string romName = Console::GetRomName();
+	uint32_t nameLength = (uint32_t)romName.size();
+	stream.write((char*)&nameLength, sizeof(uint32_t));
+	stream.write(romName.c_str(), romName.size());
+
 	Console::SaveState(stream);
 	Console::Resume();
+}
+
+bool SaveStateManager::SaveState(string filepath)
+{
+	ofstream file(filepath, ios::out | ios::binary);
+
+	if(file) {
+		SaveState(file);
+		file.close();
+		return true;
+	}
+	return false;
 }
 
 void SaveStateManager::SaveState(int stateIndex, bool displayMessage)
 {
 	string filepath = SaveStateManager::GetStateFilepath(stateIndex);
-	ofstream file(filepath, ios::out | ios::binary);
-
-	if(file) {
+	if(SaveState(filepath)) {
 		_lastIndex = stateIndex;
-		SaveState(file);
-		file.close();
-
 		if(displayMessage) {
 			MessageManager::DisplayMessage("SaveStates", "SaveStateSaved", std::to_string(stateIndex));
 		}
 	}
 }
 
-bool SaveStateManager::LoadState(istream &stream)
+bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 {
 	char header[3];
 	stream.read(header, 3);
@@ -95,9 +110,35 @@ bool SaveStateManager::LoadState(istream &stream)
 		}
 
 		stream.read((char*)&fileFormatVersion, sizeof(fileFormatVersion));
-		if(fileFormatVersion != SaveStateManager::FileFormatVersion) {
-			MessageManager::DisplayMessage("SaveStates", "SaveStateIncompatibleVersion"); // , std::to_string(stateIndex));
+		if(fileFormatVersion < 5) {
+			MessageManager::DisplayMessage("SaveStates", "SaveStateIncompatibleVersion");
 			return false;
+		} else if(fileFormatVersion == 5) {
+			//No SHA1 field in version 5
+			if(hashCheckRequired) {
+				MessageManager::DisplayMessage("SaveStates", "SaveStateIncompatibleVersion");
+				return false;
+			}
+		} else {
+			char hash[41] = {};
+			stream.read(hash, 40);
+
+			uint32_t nameLength = 0;
+			stream.read((char*)&nameLength, sizeof(uint32_t));
+			
+			vector<char> nameBuffer(nameLength);
+			stream.read(nameBuffer.data(), nameBuffer.size());
+			string romName(nameBuffer.data());
+			
+			if(Console::GetHashInfo().Sha1Hash != string(hash)) {
+				//Wrong game
+				HashInfo info;
+				info.Sha1Hash = hash;
+				if(!Console::LoadROM(romName, info)) {
+					MessageManager::DisplayMessage("SaveStates", "SaveStateMissingRom", romName);
+					return false;
+				}
+			}
 		}
 
 		Console::Pause();
@@ -106,32 +147,36 @@ bool SaveStateManager::LoadState(istream &stream)
 
 		return true;
 	}
-
+	MessageManager::DisplayMessage("SaveStates", "SaveStateInvalidFile");
 	return false;
+}
+
+bool SaveStateManager::LoadState(string filepath, bool hashCheckRequired)
+{
+	ifstream file(filepath, ios::in | ios::binary);
+	bool result = false;
+
+	if(file.good()) {
+		if(LoadState(file, hashCheckRequired)) {
+			result = true;
+		}
+		file.close();
+	} else {
+		MessageManager::DisplayMessage("SaveStates", "SaveStateEmpty");
+	}
+
+	return result;
 }
 
 bool SaveStateManager::LoadState(int stateIndex)
 {
 	string filepath = SaveStateManager::GetStateFilepath(stateIndex);
-	ifstream file(filepath, ios::in | ios::binary);
-	bool result = false;
-
-	if(file) {
-		if(LoadState(file)) {
-			_lastIndex = stateIndex;
-			MessageManager::DisplayMessage("SaveStates", "SaveStateLoaded", std::to_string(stateIndex));
-			result = true;
-		} else {
-			MessageManager::DisplayMessage("SaveStates", "SaveStateInvalidFile");
-		}
-		file.close();
-	} 
-	
-	if(!result) {
-		MessageManager::DisplayMessage("SaveStates", "SaveStateEmpty");
+	if(LoadState(filepath, true)) {
+		_lastIndex = stateIndex;
+		MessageManager::DisplayMessage("SaveStates", "SaveStateLoaded", std::to_string(stateIndex));
+		return true;
 	}
-
-	return result;
+	return false;
 }
 
 void SaveStateManager::SaveRecentGame(string romName, string romPath, string patchPath)
@@ -173,7 +218,7 @@ void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 	try {
 		Console::LoadROM(romPath, patchPath);
 		if(!resetGame) {
-			SaveStateManager::LoadState(stateStream);
+			SaveStateManager::LoadState(stateStream, false);
 		}
 	} catch(std::exception ex) { 
 		Console::GetInstance()->Stop();

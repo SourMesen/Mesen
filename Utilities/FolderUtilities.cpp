@@ -37,7 +37,7 @@ void FolderUtilities::AddKnownGameFolder(string gameFolder)
 
 	for(string folder : _gameFolders) {
 		std::transform(folder.begin(), folder.end(), folder.begin(), ::tolower);
-		if(folder.compare(gameFolder) == 0) {
+		if(folder.compare(lowerCaseFolder) == 0) {
 			alreadyExists = true;
 			break;
 		}
@@ -131,8 +131,13 @@ vector<string> FolderUtilities::GetFolders(string rootFolder)
 	} 
 
 	for(fs::recursive_directory_iterator i(fs::u8path(rootFolder)), end; i != end; i++) {
-		if(fs::is_directory(i->path())) {
-			folders.push_back(i->path().u8string());
+		if(i.depth() > 1) {
+			//Prevent excessive recursion
+			i.disable_recursion_pending();
+		} else {
+			if(fs::is_directory(i->path())) {
+				folders.push_back(i->path().u8string());
+			}
 		}
 	}
 

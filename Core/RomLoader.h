@@ -17,5 +17,5 @@ class RomLoader
 		bool LoadFile(string filename, vector<uint8_t> &fileData);
 
 		RomData GetRomData();
-		static string FindMatchingRomInFolder(string folder, string romFilename, HashInfo hashInfo, bool useFastSearch);
+		static string FindMatchingRom(vector<string> romFiles, string romFilename, HashInfo hashInfo, bool useFastSearch);
 };

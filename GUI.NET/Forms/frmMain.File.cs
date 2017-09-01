@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Properties;
 
 namespace Mesen.GUI.Forms
 {
@@ -58,10 +59,48 @@ namespace Mesen.GUI.Forms
 				if(!forSave) {
 					menu.DropDownItems.Add("-");
 					addSaveStateInfo(NumberOfSaveSlots+1);
+					menu.DropDownItems.Add("-");
+					ToolStripMenuItem loadFromFile = new ToolStripMenuItem(ResourceHelper.GetMessage("LoadFromFile"), Resources.FolderOpen);
+					loadFromFile.ShortcutKeys = Keys.Control | Keys.L;
+					loadFromFile.Click += LoadFromFile_Click;
+					menu.DropDownItems.Add(loadFromFile);
+				} else {
+					menu.DropDownItems.Add("-");
+					ToolStripMenuItem saveToFile = new ToolStripMenuItem(ResourceHelper.GetMessage("SaveToFile"), Resources.Floppy);
+					saveToFile.ShortcutKeys = Keys.Control | Keys.S;
+					saveToFile.Click += SaveToFile_Click;
+					menu.DropDownItems.Add(saveToFile);
 				}
 			}
 		}
-		
+
+		private void LoadFromFile_Click(object sender, EventArgs e)
+		{
+			if(_emuThread != null) {
+				using(OpenFileDialog ofd = new OpenFileDialog()) {
+					ofd.InitialDirectory = ConfigManager.SaveStateFolder;
+					ofd.SetFilter(ResourceHelper.GetMessage("FilterSavestate"));
+					if(ofd.ShowDialog() == DialogResult.OK) {
+						InteropEmu.LoadStateFile(ofd.FileName);
+					}
+				}
+			}
+		}
+
+		private void SaveToFile_Click(object sender, EventArgs e)
+		{
+			if(_emuThread != null) {
+				using(SaveFileDialog sfd = new SaveFileDialog()) {
+					sfd.InitialDirectory = ConfigManager.SaveStateFolder;
+					sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mst";
+					sfd.SetFilter(ResourceHelper.GetMessage("FilterSavestate"));
+					if(sfd.ShowDialog() == DialogResult.OK) {
+						InteropEmu.SaveStateFile(sfd.FileName);
+					}
+				}
+			}
+		}
+
 		private void mnuExit_Click(object sender, EventArgs e)
 		{
 			this.Close();

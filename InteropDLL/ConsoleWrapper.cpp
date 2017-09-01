@@ -312,7 +312,9 @@ namespace InteropEmu {
 		}
 
 		DllExport void __stdcall SaveState(uint32_t stateIndex) { SaveStateManager::SaveState(stateIndex); }
-		DllExport uint32_t __stdcall LoadState(uint32_t stateIndex) { return SaveStateManager::LoadState(stateIndex); }
+		DllExport void __stdcall LoadState(uint32_t stateIndex) { SaveStateManager::LoadState(stateIndex); }
+		DllExport void __stdcall SaveStateFile(char* filepath) { SaveStateManager::SaveState(filepath); }
+		DllExport void __stdcall LoadStateFile(char* filepath) { SaveStateManager::LoadState(filepath); }
 		DllExport int64_t  __stdcall GetStateInfo(uint32_t stateIndex) { return SaveStateManager::GetStateInfo(stateIndex); }
 
 		DllExport void __stdcall MoviePlay(char* filename) { MovieManager::Play(filename); }

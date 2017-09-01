@@ -501,7 +501,7 @@ int LuaApi::LoadSavestate(lua_State *lua)
 	checkstartframe();
 	stringstream ss;
 	ss << savestate;
-	l.Return(SaveStateManager::LoadState(ss));
+	l.Return(SaveStateManager::LoadState(ss, true));
 	return l.ReturnCount();
 }
 

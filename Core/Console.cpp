@@ -173,19 +173,24 @@ bool Console::LoadROM(string romName, HashInfo hashInfo)
 		}
 	}
 
+	string lcRomname = romName;
+	std::transform(lcRomname.begin(), lcRomname.end(), lcRomname.begin(), ::tolower);
+	std::unordered_set<string> validExtensions = { { ".nes", ".fds", "*.unif", "*.unif", "*.nsf", "*.nsfe", "*.7z", "*.zip" } };
+	vector<string> romFiles;
 	for(string folder : FolderUtilities::GetKnownGameFolders()) {
-		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, true);
-		if(!match.empty()) {
-			return Console::LoadROM(match);
-		}
+		vector<string> files = FolderUtilities::GetFilesInFolder(folder, validExtensions, true);
+		romFiles.insert(romFiles.end(), files.begin(), files.end());
+	}
+	
+	string match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, true);
+	if(!match.empty()) {
+		return Console::LoadROM(match);
 	}
 
 	//Perform slow CRC32 search for ROM
-	for(string folder : FolderUtilities::GetKnownGameFolders()) {
-		string match = RomLoader::FindMatchingRomInFolder(folder, romName, hashInfo, false);
-		if(!match.empty()) {
-			return Console::LoadROM(match);
-		}
+	match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, false);
+	if(!match.empty()) {
+		return Console::LoadROM(match);
 	}
 
 	return false;
