@@ -154,7 +154,7 @@ namespace Mesen.GUI.Debugger
 		private void LoadScript()
 		{
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
-				ofd.SetFilter("LUA scripts (*.lua)|*.lua");
+				ofd.SetFilter("Lua scripts (*.lua)|*.lua");
 				if(ofd.ShowDialog() == DialogResult.OK) {
 					LoadScriptFile(ofd.FileName);
 				}
@@ -249,7 +249,7 @@ namespace Mesen.GUI.Debugger
 		{
 			using(SaveFileDialog sfd = new SaveFileDialog()) {
 				sfd.FileName = newName;
-				sfd.SetFilter("LUA scripts (*.lua)|*.lua");
+				sfd.SetFilter("Lua scripts (*.lua)|*.lua");
 				if(sfd.ShowDialog() == DialogResult.OK) {
 					SetFilePath(sfd.FileName);
 					txtScriptContent.SaveToFile(_filePath, Encoding.UTF8);
@@ -412,9 +412,9 @@ namespace Mesen.GUI.Debugger
 
 		static readonly List<List<string>> _availableFunctions = new List<List<string>>() {
 			new List<string> {"enum", "emu", "", "", "", "", "" },
-			new List<string> {"func","emu.addEventCallback","emu.addEventCallback(function, type)","function - A LUA function.\ntype - *Enum* See eventCallbackType.","Returns an integer value that can be used to remove the callback by calling removeEventCallback.","Registers a callback function to be called whenever the specified event occurs.",},
+			new List<string> {"func","emu.addEventCallback","emu.addEventCallback(function, type)","function - A Lua function.\ntype - *Enum* See eventCallbackType.","Returns an integer value that can be used to remove the callback by calling removeEventCallback.","Registers a callback function to be called whenever the specified event occurs.",},
 			new List<string> {"func","emu.removeEventCallback","emu.removeEventCallback(reference, type)","reference - The value returned by the call to[addEventCallback] (#addEventCallback).\ntype - *Enum* See eventCallbackType.","","Removes a previously registered callback function.",},
-			new List<string> {"func","emu.addMemoryCallback","emu.addMemoryCallback(function, type, startAddress, endAddress)","function - A LUA function.\ntype - *Enum* See memCallbackType\nstartAddress - *Integer* Start of the CPU memory address range to register the callback on.\nendAddress - *Integer* End of the CPU memory address range to register the callback on.","Returns an integer value that can be used to remove the callback by callingremoveMemoryCallback.","Registers a callback function to be called whenever the specified event occurs."},
+			new List<string> {"func","emu.addMemoryCallback","emu.addMemoryCallback(function, type, startAddress, endAddress)","function - A Lua function.\ntype - *Enum* See memCallbackType\nstartAddress - *Integer* Start of the CPU memory address range to register the callback on.\nendAddress - *Integer* End of the CPU memory address range to register the callback on.","Returns an integer value that can be used to remove the callback by callingremoveMemoryCallback.","Registers a callback function to be called whenever the specified event occurs."},
 			new List<string> {"func","emu.removeMemoryCallback","emu.removeMemoryCallback(reference, type, startAddress, endAddress)","reference - The value returned by the call to[addMemoryCallback] (#addMemoryCallback).\ntype - *Enum* See memCallbackType.\nstartAddress - *Integer* Start of the CPU memory address range to unregister the callback from.\nendAddress - *Integer* End of the CPU memory address range to unregister the callback from.","","Removes a previously registered callback function."},
 			new List<string> {"func","emu.read","emu.read(address, type)","address - *Integer* The address/offset to read from.\ntype - *Enum* The type of memory to read from. See memType.","An 8-bit (read) or 16-bit (readWord) value.","Reads a value from the specified memory type.\nThe read / readWord variants may cause side-effects that can alter the emulation's behavior.\nThe debugRead/debugReadWord variants have no side-effects."},
 			new List<string> {"func","emu.readWord","emu.readWord(address, type)","address - *Integer* The address/offset to read from.\ntype - *Enum* The type of memory to read from. See memType.","An 8-bit (read) or 16-bit (readWord) value.","Reads a value from the specified memory type.\nThe read / readWord variants may cause side-effects that can alter the emulation's behavior.\nThe debugRead/debugReadWord variants have no side-effects."},

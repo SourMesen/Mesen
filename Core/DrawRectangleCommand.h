@@ -22,7 +22,7 @@ protected:
 				DrawPixel(_x + i, _y, _color);
 				DrawPixel(_x + i, _y + _height - 1, _color);
 			}
-			for(int i = 0; i < _height; i++) {
+			for(int i = 1; i < _height - 1; i++) {
 				DrawPixel(_x, _y + i, _color);
 				DrawPixel(_x + _width - 1, _y + i, _color);
 			}
@@ -33,8 +33,7 @@ public:
 	DrawRectangleCommand(int x, int y, int width, int height, int color, bool fill, int frameCount) :
 		DrawCommand(frameCount), _x(x), _y(y), _width(width), _height(height), _color(color), _fill(fill)
 	{
-		if(!(_color & 0xFF000000)) {
-			_color |= 0xFF000000;
-		}
+		//Invert alpha byte - 0 = opaque, 255 = transparent (this way, no need to specifiy alpha channel all the time)
+		_color = (~color & 0xFF000000) | (color & 0xFFFFFF);
 	}
 };

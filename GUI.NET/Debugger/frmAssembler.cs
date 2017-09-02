@@ -65,9 +65,9 @@ namespace Mesen.GUI.Debugger
 				_containedRtiRts = ContainsRtiOrRts(_initialCode);
 				txtCode.Text = _initialCode;
 			} else {
-				_initialCode = ";Input 6502 assembly here.\n;The resulting bytecode is\n;displayed on the right.\n; -Labels can be used.\n; -Use .byte to define data\n";
+				_initialCode = ";Tips:\n; -Labels can be used.\n; -Use .byte to define data\n";
 				txtCode.Text = _initialCode;
-				txtCode.Selection = txtCode.GetLine(5);
+				txtCode.Selection = txtCode.GetLine(3);
 				txtCode.SelectionLength = 0;
 			}
 

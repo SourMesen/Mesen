@@ -19,7 +19,11 @@ protected:
 			return;
 		}
 
-		if((color & 0xFF000000) != 0xFF000000) {
+		uint32_t alpha = (color & 0xFF000000);
+
+		if(alpha == 0) {
+			//do nothing
+		} else if(alpha != 0xFF000000) {
 			BlendColors((uint8_t*)&_argbBuffer[(y - _overscan.Top)*_overscan.GetScreenWidth() + (x - _overscan.Left)], (uint8_t*)&color);
 		} else {
 			_argbBuffer[(y - _overscan.Top)*_overscan.GetScreenWidth() + (x - _overscan.Left)] = color;
