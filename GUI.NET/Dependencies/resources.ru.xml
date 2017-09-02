@@ -529,7 +529,7 @@
       <Control ID="labelCopyright">© 2017 M. Bibaud (aka Sour)</Control>
       <Control ID="lblWebsite">Сайт:</Control>
       <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Версия: 0.9.1 (Beta)</Control>
+      <Control ID="labelVersion">Версия: 0.9.2 (Beta)</Control>
       <Control ID="lblDonate">If you want to support Mesen, please consider donating.&#xA;Thank you for your support!</Control>
       <Control ID="okButton">&amp;OK</Control>
     </Form>

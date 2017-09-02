@@ -152,7 +152,7 @@
 			this.labelVersion.Name = "labelVersion";
 			this.labelVersion.Size = new System.Drawing.Size(146, 17);
 			this.labelVersion.TabIndex = 0;
-			this.labelVersion.Text = "Version: 0.9.1 (Beta)";
+			this.labelVersion.Text = "Version: 0.9.2 (Beta)";
 			this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// okButton

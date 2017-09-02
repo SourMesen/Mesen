@@ -190,11 +190,6 @@ namespace Mesen.GUI.Forms
 		{
 			base.OnShown(e);
 
-			if(_showUpgradeMessage) {
-				MesenMsgBox.Show("UpgradeSuccess", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				_showUpgradeMessage = false;
-			}
-
 			if(ConfigManager.Config.WindowSize.HasValue) {
 				this.Size = ConfigManager.Config.WindowSize.Value;
 			}
@@ -203,6 +198,11 @@ namespace Mesen.GUI.Forms
 
 			this.menuStrip.VisibleChanged += new System.EventHandler(this.menuStrip_VisibleChanged);
 			this.UpdateRendererLocation();
+
+			if(_showUpgradeMessage) {
+				MesenMsgBox.Show("UpgradeSuccess", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				_showUpgradeMessage = false;
+			}
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
