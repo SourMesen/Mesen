@@ -109,8 +109,11 @@ uint8_t MemoryManager::DebugRead(uint16_t addr, bool disableSideEffects)
 	} else {
 		IMemoryHandler* handler = _ramReadHandlers[addr];
 		if(handler) {
-			if(handler == _mapper.get() && disableSideEffects) {
-				value = ((BaseMapper*)handler)->DebugReadRAM(addr);
+			if(disableSideEffects) {
+				if(handler == _mapper.get()) {
+					//Only allow reads from prg/chr ram/rom (e.g not ppu, apu, mapper registers, etc.)
+					value = ((BaseMapper*)handler)->DebugReadRAM(addr);
+				}
 			} else {
 				value = handler->ReadRAM(addr);
 			}
@@ -170,8 +173,11 @@ void MemoryManager::DebugWrite(uint16_t addr, uint8_t value, bool disableSideEff
 	} else {
 		IMemoryHandler* handler = _ramReadHandlers[addr];
 		if(handler) {
-			if(handler == _mapper.get() && disableSideEffects) {
-				((BaseMapper*)handler)->DebugWriteRAM(addr, value);
+			if(disableSideEffects) {
+				if(handler == _mapper.get()) {
+					//Only allow writes to prg/chr ram/rom (e.g not ppu, apu, mapper registers, etc.)
+					((BaseMapper*)handler)->DebugWriteRAM(addr, value);
+				}
 			} else {
 				handler->WriteRAM(addr, value);
 			}
