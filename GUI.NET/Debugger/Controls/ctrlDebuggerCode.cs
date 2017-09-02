@@ -209,7 +209,7 @@ namespace Mesen.GUI.Debugger
 					if(code.StartsWith("STP*") || code.StartsWith("NOP*")) {
 						//Transform unofficial opcodes that can't be reassembled properly into .byte statements
 						if(comment != null) {
-							comment.Insert(1, code + " - ");
+							comment.Insert(0, code + " - ");
 						} else {
 							comment = code;
 						}

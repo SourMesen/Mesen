@@ -24,6 +24,9 @@ namespace Mesen.GUI.Debugger
 		private bool _containedRtiRts = false;
 		private bool _isEditMode = false;
 		private bool _startAddressValid = true;
+		private string _initialCode = "";
+		private int _textVersion = 0;
+		private bool _updating = false;
 
 		public frmAssembler(string code = "", UInt16 startAddress = 0, UInt16 blockLength = 0)
 		{
@@ -39,6 +42,7 @@ namespace Mesen.GUI.Debugger
 
 			UpdateCodeHighlighting();
 
+			_initialCode = code;
 			_startAddress = startAddress;
 			_blockLength = blockLength;
 
@@ -51,18 +55,23 @@ namespace Mesen.GUI.Debugger
 			ctrlHexBox.ByteProvider = new StaticByteProvider(new byte[0]);
 
 			txtStartAddress.Text = _startAddress.ToString("X4");
+		}
 
-
-			if(!string.IsNullOrWhiteSpace(code)) {
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!string.IsNullOrWhiteSpace(_initialCode)) {
 				_isEditMode = true;
-				_containedRtiRts = ContainsRtiOrRts(code);
-				txtCode.Text = code;
+				_containedRtiRts = ContainsRtiOrRts(_initialCode);
+				txtCode.Text = _initialCode;
 			} else {
-				code = ";Input 6502 assembly here.\n;The resulting bytecode is\n;displayed on the right.\n; -Labels can be used.\n; -Use .byte to define data\n";
-				txtCode.Text = code;
+				_initialCode = ";Input 6502 assembly here.\n;The resulting bytecode is\n;displayed on the right.\n; -Labels can be used.\n; -Use .byte to define data\n";
+				txtCode.Text = _initialCode;
 				txtCode.Selection = txtCode.GetLine(5);
 				txtCode.SelectionLength = 0;
 			}
+
+			txtCode.ClearUndo();
 
 			toolTip.SetToolTip(picSizeWarning, "Warning: The new code exceeds the original code's length." + Environment.NewLine + "Applying this modification will overwrite other portions of the code and potentially cause problems.");
 			toolTip.SetToolTip(picStartAddressWarning, "Warning: Start address is invalid.  Must be a valid hexadecimal string.");
@@ -86,11 +95,11 @@ namespace Mesen.GUI.Debugger
 				syntax.styles.Add(new TextStyle(new SolidBrush(ConfigManager.Config.DebugInfo.AssemblerImmediateColor), Brushes.Transparent, FontStyle.Regular));
 				syntax.styles.Add(new TextStyle(new SolidBrush(ConfigManager.Config.DebugInfo.AssemblerAddressColor), Brushes.Transparent, FontStyle.Regular));
 				syntax.styles.Add(new TextStyle(new SolidBrush(ConfigManager.Config.DebugInfo.AssemblerCommentColor), Brushes.Transparent, FontStyle.Regular));
-				syntax.rules.Add(new RuleDesc() { style = syntax.styles[0], pattern = @"^[ \t]*(?<range>[a-zA-Z]{3}[*]{0,1})( |[^:a-zA-Z])", options = RegexOptions.Multiline });
-				syntax.rules.Add(new RuleDesc() { style = syntax.styles[1], pattern = @"^[ \t]*(?<range>[a-zA-Z_]*):", options = RegexOptions.Multiline });
-				syntax.rules.Add(new RuleDesc() { style = syntax.styles[2], pattern = @"^[ \t]*[a-zA-Z]{3}[*]{0,1}[ \t]+(?<range>#[$]{0,1}([A-Fa-f0-9])+)", options = RegexOptions.Multiline });
-				syntax.rules.Add(new RuleDesc() { style = syntax.styles[3], pattern = @"^[ \t]*[a-zA-Z]{3}[*]{0,1}[ \t]+[(]{0,1}(?<range>[$]{0,1}[A-Fa-f0-9]+)[)]{0,1}[ \t]*(,X|,Y|,x|,y){0,1}[)]{0,1}", options = RegexOptions.Multiline });
-				syntax.rules.Add(new RuleDesc() { style = syntax.styles[4], pattern = @"^[^;]*(?<range>;.*)", options = RegexOptions.Multiline });
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[0], pattern = @"(\n|^)[ \t]*(?<range>[a-zA-Z]{3}[*]{0,1})( |[^:a-zA-Z])" });
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[1], pattern = @"(\n|^)[ \t]*(?<range>[a-zA-Z_]*):" });
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[2], pattern = @"(\n|^)[ \t]*[a-zA-Z]{3}[*]{0,1}[ \t]+(?<range>#[$]{0,1}([A-Fa-f0-9])+)" });
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[3], pattern = @"(\n|^)[ \t]*[a-zA-Z]{3}[*]{0,1}[ \t]+[(]{0,1}(?<range>([$][A-Fa-f0-9]+)|([0-9]+))[)]{0,1}[ \t]*(,X|,Y|,x|,y){0,1}[)]{0,1}" });
+				syntax.rules.Add(new RuleDesc() { style = syntax.styles[4], pattern = @"(\n|^)[^\n;]*(?<range>;[^\n]*)" });
 				txtCode.SyntaxDescriptor = syntax;
 				txtCode.OnTextChanged();
 			}
@@ -130,45 +139,75 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateWindow()
 		{
-			short[] byteCode = InteropEmu.DebugAssembleCode(txtCode.Text, _startAddress);
-
-			List<byte> convertedByteCode = new List<byte>();
-			List<ErrorDetail> errorList = new List<ErrorDetail>();
-			string[] codeLines = txtCode.Text.Replace("\r", "").Split('\n');
-			int line = 1;
-			foreach(short s in byteCode) {
-				if(s >= 0) {
-					convertedByteCode.Add((byte)s);
-				} else if(s == (int)AssemblerSpecialCodes.EndOfLine) {
-					line++;
-				} else if(s < (int)AssemblerSpecialCodes.EndOfLine) {
-					string message = "unknown error";
-					switch((AssemblerSpecialCodes)s) {
-						case AssemblerSpecialCodes.ParsingError: message = "Invalid syntax"; break;
-						case AssemblerSpecialCodes.OutOfRangeJump: message = "Relative jump is out of range (-128 to 127)"; break;
-						case AssemblerSpecialCodes.LabelRedefinition: message = "Cannot redefine an existing label"; break;
-						case AssemblerSpecialCodes.MissingOperand: message = "Operand is missing"; break;
-						case AssemblerSpecialCodes.OperandOutOfRange: message = "Operand is out of range (invalid value)"; break;
-						case AssemblerSpecialCodes.InvalidHex: message = "Hexadecimal string is invalid"; break;
-						case AssemblerSpecialCodes.InvalidSpaces: message = "Operand cannot contain spaces"; break;
-						case AssemblerSpecialCodes.TrailingText: message = "Invalid text trailing at the end of line"; break;
-						case AssemblerSpecialCodes.UnknownLabel: message = "Unknown label"; break;
-						case AssemblerSpecialCodes.InvalidInstruction: message = "Invalid instruction"; break;
-					}
-					errorList.Add(new ErrorDetail() { Message = message + " - " + codeLines[line-1], LineNumber = line });
-					line++;
-				}
+			if(!this.IsHandleCreated) {
+				return;
 			}
 
-			_hasParsingErrors = errorList.Count > 0;
+			btnOk.Enabled = false;
+			btnExecute.Enabled = false;
 
-			lstErrors.BeginUpdate();
-			lstErrors.Items.Clear();
-			lstErrors.Items.AddRange(errorList.ToArray());
-			lstErrors.EndUpdate();
+			_textVersion++;
+			if(_updating) {
+				return;
+			}
 
-			ctrlHexBox.ByteProvider = new StaticByteProvider(convertedByteCode.ToArray());
+			_updating = true;
+			string text = txtCode.Text;
+			int version = _textVersion;
+			
+			Task.Run(() => {
+				short[] byteCode = InteropEmu.DebugAssembleCode(text, _startAddress);
 
+				this.BeginInvoke((Action)(() => {
+					_updating = false;
+					if(_textVersion != version) {
+						UpdateWindow();
+					}
+
+					List<byte> convertedByteCode = new List<byte>();
+					List<ErrorDetail> errorList = new List<ErrorDetail>();
+					string[] codeLines = txtCode.Text.Replace("\r", "").Split('\n');
+					int line = 1;
+					foreach(short s in byteCode) {
+						if(s >= 0) {
+							convertedByteCode.Add((byte)s);
+						} else if(s == (int)AssemblerSpecialCodes.EndOfLine) {
+							line++;
+						} else if(s < (int)AssemblerSpecialCodes.EndOfLine) {
+							string message = "unknown error";
+							switch((AssemblerSpecialCodes)s) {
+								case AssemblerSpecialCodes.ParsingError: message = "Invalid syntax"; break;
+								case AssemblerSpecialCodes.OutOfRangeJump: message = "Relative jump is out of range (-128 to 127)"; break;
+								case AssemblerSpecialCodes.LabelRedefinition: message = "Cannot redefine an existing label"; break;
+								case AssemblerSpecialCodes.MissingOperand: message = "Operand is missing"; break;
+								case AssemblerSpecialCodes.OperandOutOfRange: message = "Operand is out of range (invalid value)"; break;
+								case AssemblerSpecialCodes.InvalidHex: message = "Hexadecimal string is invalid"; break;
+								case AssemblerSpecialCodes.InvalidSpaces: message = "Operand cannot contain spaces"; break;
+								case AssemblerSpecialCodes.TrailingText: message = "Invalid text trailing at the end of line"; break;
+								case AssemblerSpecialCodes.UnknownLabel: message = "Unknown label"; break;
+								case AssemblerSpecialCodes.InvalidInstruction: message = "Invalid instruction"; break;
+							}
+							errorList.Add(new ErrorDetail() { Message = message + " - " + codeLines[line-1], LineNumber = line });
+							line++;
+						}
+					}
+
+					_hasParsingErrors = errorList.Count > 0;
+
+					lstErrors.BeginUpdate();
+					lstErrors.Items.Clear();
+					lstErrors.Items.AddRange(errorList.ToArray());
+					lstErrors.EndUpdate();
+
+					ctrlHexBox.ByteProvider = new StaticByteProvider(convertedByteCode.ToArray());
+
+					UpdateButtons();
+				}));
+			});
+		}
+
+		private void UpdateButtons()
+		{
 			if(_isEditMode) {
 				lblByteUsage.Text = ctrlHexBox.ByteProvider.Length.ToString() + " / " + _blockLength.ToString();
 				lblByteUsage.ForeColor = SizeExceeded ? Color.Red : Color.Black;
@@ -296,6 +335,11 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
+			if(_updating) {
+				e.Cancel = true;
+				return;
+			}
+
 			base.OnClosing(e);
 			ConfigManager.Config.DebugInfo.AssemblerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.Config.DebugInfo.AssemblerCodeHighlighting = mnuEnableSyntaxHighlighting.Checked;
