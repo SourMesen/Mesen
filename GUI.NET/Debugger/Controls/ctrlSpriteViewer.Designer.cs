@@ -35,6 +35,10 @@
 			this.txtSpriteIndex = new System.Windows.Forms.TextBox();
 			this.lblSpriteIndex = new System.Windows.Forms.Label();
 			this.picPreview = new System.Windows.Forms.PictureBox();
+			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.lblScreenPreview = new System.Windows.Forms.Label();
 			this.lblTile = new System.Windows.Forms.Label();
 			this.picTile = new System.Windows.Forms.PictureBox();
@@ -52,18 +56,14 @@
 			this.chkBackgroundPriority = new System.Windows.Forms.CheckBox();
 			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.picSprites = new System.Windows.Forms.PictureBox();
-			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpSpriteInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
+			this.ctxMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picSprites)).BeginInit();
-			this.ctxMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel3
@@ -174,6 +174,37 @@
 			this.picPreview.DoubleClick += new System.EventHandler(this.picSprites_DoubleClick);
 			this.picPreview.MouseLeave += new System.EventHandler(this.picPreview_MouseLeave);
 			this.picPreview.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPreview_MouseMove);
+			// 
+			// ctxMenu
+			// 
+			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuShowInChrViewer,
+            this.toolStripMenuItem1,
+            this.mnuCopyHdPack});
+			this.ctxMenu.Name = "ctxMenu";
+			this.ctxMenu.Size = new System.Drawing.Size(233, 76);
+			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuShowInChrViewer
+			// 
+			this.mnuShowInChrViewer.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
+			this.mnuShowInChrViewer.Name = "mnuShowInChrViewer";
+			this.mnuShowInChrViewer.ShortcutKeyDisplayString = "Dbl-Click";
+			this.mnuShowInChrViewer.Size = new System.Drawing.Size(232, 22);
+			this.mnuShowInChrViewer.Text = "View in CHR viewer";
+			this.mnuShowInChrViewer.Click += new System.EventHandler(this.mnuShowInChrViewer_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(229, 6);
+			// 
+			// mnuCopyHdPack
+			// 
+			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(232, 22);
+			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
+			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
 			// lblScreenPreview
 			// 
@@ -359,35 +390,6 @@
 			this.picSprites.MouseLeave += new System.EventHandler(this.picSprites_MouseLeave);
 			this.picSprites.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picSprites_MouseMove);
 			// 
-			// ctxMenu
-			// 
-			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuShowInChrViewer,
-            this.toolStripMenuItem1,
-            this.mnuCopyHdPack});
-			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(222, 76);
-			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
-			// 
-			// mnuCopyHdPack
-			// 
-			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
-			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
-			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
-			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 6);
-			// 
-			// mnuShowInChrViewer
-			// 
-			this.mnuShowInChrViewer.Name = "mnuShowInChrViewer";
-			this.mnuShowInChrViewer.Size = new System.Drawing.Size(221, 22);
-			this.mnuShowInChrViewer.Text = "Show in CHR viewer";
-			this.mnuShowInChrViewer.Click += new System.EventHandler(this.mnuShowInChrViewer_Click);
-			// 
 			// ctrlSpriteViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -400,11 +402,11 @@
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();
+			this.ctxMenu.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picSprites)).EndInit();
-			this.ctxMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}

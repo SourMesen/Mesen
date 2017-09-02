@@ -31,6 +31,8 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picNametable = new System.Windows.Forms.PictureBox();
 			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpTileInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -58,8 +60,6 @@
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
 			this.chkHighlightChrTile = new System.Windows.Forms.CheckBox();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -108,8 +108,22 @@
             this.toolStripMenuItem1,
             this.mnuCopyHdPack});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(222, 76);
+			this.ctxMenu.Size = new System.Drawing.Size(233, 76);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuShowInChrViewer
+			// 
+			this.mnuShowInChrViewer.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
+			this.mnuShowInChrViewer.Name = "mnuShowInChrViewer";
+			this.mnuShowInChrViewer.ShortcutKeyDisplayString = "Dbl-Click";
+			this.mnuShowInChrViewer.Size = new System.Drawing.Size(232, 22);
+			this.mnuShowInChrViewer.Text = "View in CHR viewer";
+			this.mnuShowInChrViewer.Click += new System.EventHandler(this.mnuShowInChrViewer_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 6);
 			// 
 			// mnuCopyHdPack
 			// 
@@ -123,7 +137,7 @@
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
 			this.grpTileInfo.Location = new System.Drawing.Point(519, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.grpTileInfo.Size = new System.Drawing.Size(175, 353);
+			this.grpTileInfo.Size = new System.Drawing.Size(175, 373);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -167,7 +181,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 334);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 354);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// txtPpuAddress
@@ -358,7 +372,7 @@
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkHighlightChrTile);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 359);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 379);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(181, 124);
@@ -407,18 +421,6 @@
 			this.chkHighlightChrTile.Text = "Highlight tile selected in CHR viewer";
 			this.chkHighlightChrTile.UseVisualStyleBackColor = true;
 			this.chkHighlightChrTile.Click += new System.EventHandler(this.chkHighlightChrTile_Click);
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 6);
-			// 
-			// mnuShowInChrViewer
-			// 
-			this.mnuShowInChrViewer.Name = "mnuShowInChrViewer";
-			this.mnuShowInChrViewer.Size = new System.Drawing.Size(221, 22);
-			this.mnuShowInChrViewer.Text = "Show in CHR viewer";
-			this.mnuShowInChrViewer.Click += new System.EventHandler(this.mnuShowInChrViewer_Click);
 			// 
 			// ctrlNametableViewer
 			// 

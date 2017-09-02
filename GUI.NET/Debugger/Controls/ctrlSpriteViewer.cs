@@ -23,6 +23,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _spritePatternAddr;
 		private bool _forceRefresh;
 		private Point? _previewMousePosition = null;
+		private int _contextMenuSpriteIndex = -1;
 
 		public ctrlSpriteViewer()
 		{
@@ -197,8 +198,11 @@ namespace Mesen.GUI.Debugger.Controls
 		private void ctxMenu_Opening(object sender, CancelEventArgs e)
 		{
 			if(_selectedSprite < 0) {
+				_contextMenuSpriteIndex = -1;
 				return;
 			}
+
+			_contextMenuSpriteIndex = _selectedSprite;
 
 			int ramAddr = _selectedSprite * 4;
 			int spriteY = _spriteRam[ramAddr];
@@ -269,11 +273,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void ShowInChrViewer()
 		{
-			if(_selectedSprite < 0) {
+			if(_contextMenuSpriteIndex < 0) {
 				return;
 			}
 
-			int ramAddr = _selectedSprite * 4;
+			int ramAddr = _contextMenuSpriteIndex * 4;
 			int tileIndex = _spriteRam[ramAddr + 1];
 			int palette = (_spriteRam[ramAddr + 2] & 0x03) + 4;
 
