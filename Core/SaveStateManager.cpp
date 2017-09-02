@@ -116,6 +116,7 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 		} else if(fileFormatVersion == 5) {
 			//No SHA1 field in version 5
 			if(hashCheckRequired) {
+				//Can't manually load < v5 save states, since we can't know what game the save state is for
 				MessageManager::DisplayMessage("SaveStates", "SaveStateIncompatibleVersion");
 				return false;
 			}
@@ -171,7 +172,7 @@ bool SaveStateManager::LoadState(string filepath, bool hashCheckRequired)
 bool SaveStateManager::LoadState(int stateIndex)
 {
 	string filepath = SaveStateManager::GetStateFilepath(stateIndex);
-	if(LoadState(filepath, true)) {
+	if(LoadState(filepath, false)) {
 		_lastIndex = stateIndex;
 		MessageManager::DisplayMessage("SaveStates", "SaveStateLoaded", std::to_string(stateIndex));
 		return true;
