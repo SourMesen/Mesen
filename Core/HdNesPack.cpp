@@ -213,7 +213,8 @@ uint32_t HdNesPack::GetCustomBackgroundPixel(int x, int y, int offsetX, int offs
 {
 	HdPackData *hdData = Console::GetHdData();
 	uint8_t brightness = hdData->Backgrounds[_backgroundIndex].Brightness;
-	uint32_t rgbColor = *(hdData->Backgrounds[_backgroundIndex].data() + (y * hdData->Scale + offsetY) * 256 * hdData->Scale + x * hdData->Scale + offsetX);
+	uint32_t width = hdData->Backgrounds[_backgroundIndex].Data->Width;
+	uint32_t rgbColor = *(hdData->Backgrounds[_backgroundIndex].data() + (y * hdData->Scale + offsetY) * width + x * hdData->Scale + offsetX);
 	if(brightness < 255) {
 		return AdjustBrightness((uint8_t*)&rgbColor, brightness);
 	} else {
@@ -253,7 +254,7 @@ void HdNesPack::GetPixels(HdPpuPixelInfo *screenTiles, uint32_t x, uint32_t y, H
 		}
 	}
 	
-	bool hasCustomBackground = _backgroundIndex >= 0 && y < hdData->Backgrounds[_backgroundIndex].Data->Height;
+	bool hasCustomBackground = _backgroundIndex >= 0 && (y+1)*hdData->Scale <= hdData->Backgrounds[_backgroundIndex].Data->Height && (x+1)*hdData->Scale <= hdData->Backgrounds[_backgroundIndex].Data->Width;
 	bool hasNonBackgroundSurrounding = hasCustomBackground ? IsNextToSprite(screenTiles, x, y) : false;
 	if(hasCustomBackground) {
 		DrawCustomBackground(outputBuffer, x, y, hdData->Scale, screenWidth);
