@@ -97,7 +97,10 @@ class VRC2_4 : public BaseMapper
 
 		void ProcessCpuClock() override
 		{
-			_irq.ProcessCpuClock();
+			if((_useHeuristics && _mapperID != 22) || _variant >= VRCVariant::VRC4a) {
+				//Only VRC4 supports IRQs
+				_irq.ProcessCpuClock();
+			}
 		}
 
 		void UpdateState()
@@ -132,8 +135,8 @@ class VRC2_4 : public BaseMapper
 				_prgReg0 = value & 0x1F;
 			} else if((_variant <= VRCVariant::VRC2c && addr >= 0x9000 && addr <= 0x9003) || (_variant >= VRCVariant::VRC4a && addr >= 0x9000 && addr <= 0x9001)) {
 				uint8_t mask = 0x03;
-				if(!_useHeuristics && (_variant == VRCVariant::VRC2a || _variant == VRCVariant::VRC2b)) {
-					//When we are certain this is a VRC2a/b game, only use the first bit for mirroring selection
+				if(!_useHeuristics && (_variant >= VRCVariant::VRC2a && _variant <= VRCVariant::VRC2c)) {
+					//When we are certain this is a VRC2 game, only use the first bit for mirroring selection
 					mask = 0x01;
 				}
 
