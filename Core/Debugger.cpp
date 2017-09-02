@@ -53,6 +53,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_ppuStepCount = -1;
+	_sendNotification = true;
 
 	_stopFlag = false;
 	_suspendCount = 0;
@@ -80,7 +81,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_bpUpdateNeeded = false;
 	_executionStopped = false;
 	_hideTopOfCallstack = false;
-
+	
 	memset(_inputOverride, 0, sizeof(_inputOverride));
 
 	_frozenAddresses.insert(_frozenAddresses.end(), 0x10000, 0);
