@@ -33,7 +33,7 @@ static string opName[256] = {
 	"BEQ",	"SBC",	"STP",	"ISC",	"NOP",	"SBC",	"INC",	"ISC",	"SED",	"SBC",	"NOP",	"ISC",	"NOP",	"SBC",	"INC",	"ISC"  //F
 };
 
-void Assembler::ProcessLine(string code, uint16_t &instructionAddress, vector<int16_t>& output, std::unordered_map<string, uint16_t> &labels)
+void Assembler::ProcessLine(string code, uint16_t &instructionAddress, vector<int16_t>& output, std::unordered_map<string, uint16_t> &labels, bool firstPass, std::unordered_map<string, uint16_t> &currentPassLabels)
 {
 	//Remove extra spaces as part of processing
 	size_t offset = code.find_first_of(',', 0);
@@ -57,17 +57,22 @@ void Assembler::ProcessLine(string code, uint16_t &instructionAddress, vector<in
 	} else if(std::regex_search(code, match, labelRegex)) {
 		string label = match.str(1);
 		string afterLabel = match.str(2);
-		labels[match.str(1)] = instructionAddress;
-		ProcessLine(afterLabel, instructionAddress, output, labels);
+		if(currentPassLabels.find(match.str(1)) != currentPassLabels.end()) {
+			output.push_back(AssemblerSpecialCodes::LabelRedefinition);
+		} else {
+			labels[match.str(1)] = instructionAddress;
+			currentPassLabels[match.str(1)] = instructionAddress;
+			ProcessLine(afterLabel, instructionAddress, output, labels, firstPass, currentPassLabels);
+		}
 		return;
 	} else if(std::regex_search(code, match, isCommentOrBlank)) {
 		output.push_back(AssemblerSpecialCodes::EndOfLine);
 		return;
 	} else if(std::regex_search(code, match, instRegex) && match.size() > 1) {
 		LineData lineData;
-		AssemblerSpecialCodes result = GetLineData(match, lineData, labels);
+		AssemblerSpecialCodes result = GetLineData(match, lineData, labels, firstPass);
 		if(result == AssemblerSpecialCodes::OK) {
-			AssembleInstruction(lineData, instructionAddress, output);
+			AssembleInstruction(lineData, instructionAddress, output, firstPass);
 		} else {
 			output.push_back(result);
 		}
@@ -76,7 +81,7 @@ void Assembler::ProcessLine(string code, uint16_t &instructionAddress, vector<in
 	}
 }
 
-AssemblerSpecialCodes Assembler::GetLineData(std::smatch match, LineData &lineData, std::unordered_map<string, uint16_t> &labels)
+AssemblerSpecialCodes Assembler::GetLineData(std::smatch match, LineData &lineData, std::unordered_map<string, uint16_t> &labels, bool firstPass)
 {
 	lineData.OpCode = match.str(1);
 	lineData.IsImmediate = !match.str(2).empty();
@@ -132,10 +137,10 @@ AssemblerSpecialCodes Assembler::GetLineData(std::smatch match, LineData &lineDa
 		}
 	}
 
-	return GetAddrModeAndOperandSize(lineData, labels);
+	return GetAddrModeAndOperandSize(lineData, labels, firstPass);
 }
 
-AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, std::unordered_map<string, uint16_t> &labels)
+AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, std::unordered_map<string, uint16_t> &labels, bool firstPass)
 {
 	int opSize = 0;
 	bool invalid = false;
@@ -191,7 +196,16 @@ AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, s
 				lineData.IsHex = true;
 				opSize = 1;
 			} else {
-				return AssemblerSpecialCodes::UnknownLabel;
+				if(firstPass) {
+					//First pass, we couldn't find a matching label, so it might be defined later on
+					//Pretend it exists for now
+					_needSecondPass = true;
+					lineData.Operand = "FFFF";
+					lineData.IsHex = true;
+					opSize = 2;
+				} else {
+					return AssemblerSpecialCodes::UnknownLabel;
+				}
 			}
 		}
 	} else {
@@ -203,6 +217,18 @@ AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, s
 		if(lineData.IsImmediate) {
 			if(lineData.HasOpeningParenthesis || opSize == 0) {
 				invalid = true;
+			} else if(opSize > 1) {
+				if(lineData.IsHex && HexUtilities::FromHex(operand) > 0xFF) {
+					//Can't be a 2-byte operand
+					invalid = true;
+				} else if(lineData.IsDecimal) {
+					int value = std::stoi(operand.c_str());
+					if(value < -128 || value > 255) {
+						//Can't be a 2-byte operand
+						invalid = true;
+					}
+				}
+				opSize = 1;
 			}
 			lineData.Mode = AddrMode::Imm; //or Rel
 		} else if(lineData.HasOpeningParenthesis) {
@@ -223,7 +249,8 @@ AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, s
 				if(opSize == 2) {
 					lineData.Mode = AddrMode::AbsX;
 				} else if(opSize == 1) {
-					lineData.Mode = AddrMode::ZeroX;
+					//Sometimes zero page addressing is not available, even if the operand is in the zero page
+					lineData.Mode = IsOpModeAvailable(lineData.OpCode, AddrMode::ZeroX) ? AddrMode::ZeroX : AddrMode::AbsX;
 				} else {
 					invalid = true;
 				}
@@ -231,7 +258,8 @@ AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, s
 				if(opSize == 2) {
 					lineData.Mode = AddrMode::AbsY;
 				} else if(opSize == 1) {
-					lineData.Mode = AddrMode::ZeroY;
+					//Sometimes zero page addressing is not available, even if the operand is in the zero page
+					lineData.Mode = IsOpModeAvailable(lineData.OpCode, AddrMode::ZeroY) ? AddrMode::ZeroY : AddrMode::AbsY;
 				} else {
 					invalid = true;
 				}
@@ -241,7 +269,8 @@ AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, s
 				} else if(opSize == 2) {
 					lineData.Mode = AddrMode::Abs;
 				} else if(opSize == 1) {
-					lineData.Mode = AddrMode::Zero;
+					//Sometimes zero page addressing is not available, even if the operand is in the zero page
+					lineData.Mode = IsOpModeAvailable(lineData.OpCode, AddrMode::Zero) ? AddrMode::Zero : AddrMode::Abs;
 				} else {
 					invalid = true;
 				}
@@ -260,7 +289,12 @@ AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, s
 	return invalid ? AssemblerSpecialCodes::ParsingError : AssemblerSpecialCodes::OK;
 }
 
-void Assembler::AssembleInstruction(LineData &lineData, uint16_t &instructionAddress, vector<int16_t>& output)
+bool Assembler::IsOpModeAvailable(string &opCode, AddrMode mode)
+{
+	return _availableModesByOpName[opCode].find(mode) != _availableModesByOpName[opCode].end();
+}
+
+void Assembler::AssembleInstruction(LineData &lineData, uint16_t &instructionAddress, vector<int16_t>& output, bool firstPass)
 {
 	bool foundMatch = false;
 	if(lineData.Mode == AddrMode::Imp && lineData.OpCode.compare("NOP") == 0) {
@@ -285,8 +319,16 @@ void Assembler::AssembleInstruction(LineData &lineData, uint16_t &instructionAdd
 						if(lineData.OperandSize == 2) {
 							if(lineData.Mode == AddrMode::Imm) {
 								//Hardcoded jump values must be 1-byte
-								output.push_back(AssemblerSpecialCodes::OutOfRangeJump);
-								return;
+								if(firstPass) {
+									//Pretend this is ok on first pass, we're just trying to find all labels
+									lineData.OperandSize = 1;
+									lineData.IsHex = true;
+									lineData.Operand = "0";
+									modeMatch = true;
+								} else {
+									output.push_back(AssemblerSpecialCodes::OutOfRangeJump);
+									return;
+								}
 							} else {
 								modeMatch = true;
 
@@ -296,8 +338,11 @@ void Assembler::AssembleInstruction(LineData &lineData, uint16_t &instructionAdd
 								int16_t addressGap = value - (instructionAddress + 2);
 								if(addressGap > 127 || addressGap < -128) {
 									//Gap too long, can't jump that far
-									output.push_back(AssemblerSpecialCodes::OutOfRangeJump);
-									return;
+									if(!firstPass) {
+										//Pretend this is ok on first pass, we're just trying to find all labels
+										output.push_back(AssemblerSpecialCodes::OutOfRangeJump);
+										return;
+									}
 								}
 
 								//Update data to match relative jump
@@ -344,14 +389,26 @@ Assembler::Assembler(shared_ptr<LabelManager> labelManager)
 	_labelManager = labelManager;
 }
 
-uint32_t Assembler::AssembleCode(string code, uint16_t startAddress, int16_t * assembledCode)
+uint32_t Assembler::AssembleCode(string code, uint16_t startAddress, int16_t* assembledCode)
 {
+	for(uint8_t i = 0; i < 255; i++) {
+		if(_availableModesByOpName.find(opName[i]) == _availableModesByOpName.end()) {
+			_availableModesByOpName[opName[i]] = std::unordered_set<AddrMode>();
+		}
+		_availableModesByOpName[opName[i]].emplace(DisassemblyInfo::OPMode[i]);
+	}
+
 	std::unordered_map<string, uint16_t> temporaryLabels;
+	std::unordered_map<string, uint16_t> currentPassLabels;
 
 	size_t i = 0;
 	vector<int16_t> output;
 	output.reserve(1000);
 
+	uint16_t originalStartAddr = startAddress;
+
+	vector<string> codeLines;
+	codeLines.reserve(100);
 	while(i < code.size()) {
 		size_t offset = code.find_first_of('\n', i);
 		string line;
@@ -362,8 +419,22 @@ uint32_t Assembler::AssembleCode(string code, uint16_t startAddress, int16_t * a
 			line = code.substr(i);
 			i = code.size();
 		}
+		codeLines.push_back(line);
+	}
 
-		ProcessLine(line, startAddress, output, temporaryLabels);
+	//Make 2 passes - first one to find all labels, second to assemble
+	_needSecondPass = false;
+	for(string &line : codeLines) {
+		ProcessLine(line, startAddress, output, temporaryLabels, true, currentPassLabels);
+	}
+	
+	if(_needSecondPass) {
+		currentPassLabels.clear();
+		output.clear();
+		startAddress = originalStartAddr;
+		for(string &line : codeLines) {
+			ProcessLine(line, startAddress, output, temporaryLabels, false, currentPassLabels);
+		}
 	}
 
 	memcpy(assembledCode, output.data(), output.size() * sizeof(uint16_t));

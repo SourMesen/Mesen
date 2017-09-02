@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <unordered_set>
 #include <regex>
 #include "CPU.h"
 
@@ -38,11 +39,16 @@ enum AssemblerSpecialCodes
 class Assembler
 {
 private:
+	std::unordered_map<string, std::unordered_set<AddrMode>> _availableModesByOpName;
+	bool _needSecondPass;
+
 	shared_ptr<LabelManager> _labelManager;
-	void ProcessLine(string code, uint16_t &instructionAddress, vector<int16_t>& output, std::unordered_map<string, uint16_t> &labels);
-	AssemblerSpecialCodes GetLineData(std::smatch match, LineData &lineData, std::unordered_map<string, uint16_t> &labels);
-	AssemblerSpecialCodes GetAddrModeAndOperandSize(LineData &lineData, std::unordered_map<string, uint16_t> &labels);
-	void AssembleInstruction(LineData &lineData, uint16_t &instructionAddress, vector<int16_t>& output);
+	void ProcessLine(string code, uint16_t &instructionAddress, vector<int16_t>& output, std::unordered_map<string, uint16_t> &labels, bool firstPass, std::unordered_map<string, uint16_t> &currentPassLabels);
+	AssemblerSpecialCodes GetLineData(std::smatch match, LineData &lineData, std::unordered_map<string, uint16_t> &labels, bool firstPass);
+	AssemblerSpecialCodes GetAddrModeAndOperandSize(LineData &lineData, std::unordered_map<string, uint16_t> &labels, bool firstPass);
+	void AssembleInstruction(LineData &lineData, uint16_t &instructionAddress, vector<int16_t>& output, bool firstPass);
+
+	bool IsOpModeAvailable(string &opCode, AddrMode mode);
 
 public:
 	Assembler(shared_ptr<LabelManager> labelManager);
