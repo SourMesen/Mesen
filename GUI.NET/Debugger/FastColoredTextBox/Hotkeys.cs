@@ -33,7 +33,7 @@ namespace FastColoredTextBoxNS
             this[KEYS.Control | KEYS.V] = FCTBAction.Paste;
             this[KEYS.Control | KEYS.A] = FCTBAction.SelectAll;
             this[KEYS.Control | KEYS.Z] = FCTBAction.Undo;
-            this[KEYS.Control | KEYS.R] = FCTBAction.Redo;
+            this[KEYS.Control | KEYS.Y] = FCTBAction.Redo;
             this[KEYS.Control | KEYS.U] = FCTBAction.UpperCase;
             this[KEYS.Shift | KEYS.Control | KEYS.U] = FCTBAction.LowerCase;
             this[KEYS.Control | KEYS.OemMinus] = FCTBAction.NavigateBackward;
