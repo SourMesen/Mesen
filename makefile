@@ -32,6 +32,7 @@ UTILOBJ=$(patsubst Utilities/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utiliti
 LINUXOBJ=$(patsubst Linux/%.cpp,Linux/$(OBJFOLDER)/%.o,$(wildcard Linux/*.cpp)) 
 LIBEVDEVOBJ=$(patsubst Linux/libevdev/%.c,Linux/$(OBJFOLDER)/%.o,$(wildcard Linux/libevdev/*.c))
 SEVENZIPOBJ=$(patsubst SevenZip/%.c,SevenZip/$(OBJFOLDER)/%.o,$(wildcard SevenZip/*.c))
+LUAOBJ=$(patsubst Lua/%.c,Lua/$(OBJFOLDER)/%.o,$(wildcard Lua/*.c))
 
 
 all: ui
@@ -57,6 +58,7 @@ rungametests:
 testhelper: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	mkdir -p TestHelper/$(OBJFOLDER)
 	ar -rcs TestHelper/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
+	ar -rcs TestHelper/$(OBJFOLDER)/libLua.a $(LUAOBJ)
 	ar -rcs TestHelper/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
 	ar -rcs TestHelper/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
 	ar -rcs TestHelper/$(OBJFOLDER)/libCore.a $(COREOBJ)	
@@ -64,6 +66,8 @@ testhelper: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 
 SevenZip/$(OBJFOLDER)/%.o: SevenZip/%.c
 	mkdir -p SevenZip/$(OBJFOLDER) && cd SevenZip/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -c $(patsubst SevenZip/%, ../%, $<)
+Lua/$(OBJFOLDER)/%.o: Lua/%.c
+	mkdir -p Lua/$(OBJFOLDER) && cd Lua/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -c $(patsubst Lua/%, ../%, $<)	
 Utilities/$(OBJFOLDER)/%.o: Utilities/%.cpp
 	mkdir -p Utilities/$(OBJFOLDER) && cd Utilities/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
 Utilities/$(OBJFOLDER)/%.o: Utilities/HQX/%.cpp
@@ -81,18 +85,20 @@ Linux/$(OBJFOLDER)/%.o: Linux/%.cpp
 Linux/$(OBJFOLDER)/%.o: Linux/libevdev/%.c
 	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Linux/%, ../%, $<)
 
-InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
+InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
 	mkdir -p InteropDLL/$(OBJFOLDER)
 	ar -rcs InteropDLL/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
+	ar -rcs InteropDLL/$(OBJFOLDER)/libLua.a $(LUAOBJ)
 	ar -rcs InteropDLL/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
 	ar -rcs InteropDLL/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
 	ar -rcs InteropDLL/$(OBJFOLDER)/libCore.a $(COREOBJ)
-	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
+	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lLua -lSevenZip -pthread -lSDL2 -lstdc++fs
 
 run:
 	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe
 
 clean:
+	rm Lua/$(OBJFOLDER) -r -f
 	rm SevenZip/$(OBJFOLDER) -r -f
 	rm Utilities/$(OBJFOLDER) -r -f
 	rm Core/$(OBJFOLDER) -r -f

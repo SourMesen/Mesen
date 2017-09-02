@@ -87,7 +87,7 @@
 			// 
 			this.btnOk.Location = new System.Drawing.Point(194, 3);
 			this.btnOk.Name = "btnOk";
-			this.btnOk.Size = new System.Drawing.Size(75, 23);
+			this.btnOk.Size = new System.Drawing.Size(70, 23);
 			this.btnOk.TabIndex = 0;
 			this.btnOk.Text = "Apply";
 			this.btnOk.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -99,7 +99,7 @@
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.Location = new System.Drawing.Point(275, 3);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(75, 23);
+			this.btnCancel.Size = new System.Drawing.Size(70, 23);
 			this.btnCancel.TabIndex = 1;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
@@ -147,8 +147,8 @@
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 2;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.23288F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.76712F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize, 21.23288F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Controls.Add(this.btnExecute, 0, 3);
 			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel1, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel2, 0, 1);
@@ -169,7 +169,7 @@
 			this.btnExecute.Image = global::Mesen.GUI.Properties.Resources.Play;
 			this.btnExecute.Location = new System.Drawing.Point(3, 89);
 			this.btnExecute.Name = "btnExecute";
-			this.btnExecute.Size = new System.Drawing.Size(87, 23);
+			this.btnExecute.Size = new System.Drawing.Size(82, 23);
 			this.btnExecute.TabIndex = 6;
 			this.btnExecute.Text = "Execute";
 			this.btnExecute.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -286,11 +286,11 @@
 			this.lblNoChanges.AutoSize = true;
 			this.lblNoChanges.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.lblNoChanges.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblNoChanges.Location = new System.Drawing.Point(14, 8);
+			this.lblNoChanges.Location = new System.Drawing.Point(0, 8);
 			this.lblNoChanges.Name = "lblNoChanges";
 			this.lblNoChanges.Size = new System.Drawing.Size(174, 13);
 			this.lblNoChanges.TabIndex = 2;
-			this.lblNoChanges.Text = "Current code matches original code";
+			this.lblNoChanges.Text = "New code matches original code";
 			// 
 			// groupBox1
 			// 

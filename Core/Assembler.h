@@ -39,7 +39,7 @@ enum AssemblerSpecialCodes
 class Assembler
 {
 private:
-	std::unordered_map<string, std::unordered_set<AddrMode>> _availableModesByOpName;
+	std::unordered_map<string, std::unordered_set<int>> _availableModesByOpName;
 	bool _needSecondPass;
 
 	shared_ptr<LabelManager> _labelManager;

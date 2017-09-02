@@ -291,7 +291,7 @@ AssemblerSpecialCodes Assembler::GetAddrModeAndOperandSize(LineData &lineData, s
 
 bool Assembler::IsOpModeAvailable(string &opCode, AddrMode mode)
 {
-	return _availableModesByOpName[opCode].find(mode) != _availableModesByOpName[opCode].end();
+	return _availableModesByOpName[opCode].find((int)mode) != _availableModesByOpName[opCode].end();
 }
 
 void Assembler::AssembleInstruction(LineData &lineData, uint16_t &instructionAddress, vector<int16_t>& output, bool firstPass)
@@ -393,9 +393,9 @@ uint32_t Assembler::AssembleCode(string code, uint16_t startAddress, int16_t* as
 {
 	for(uint8_t i = 0; i < 255; i++) {
 		if(_availableModesByOpName.find(opName[i]) == _availableModesByOpName.end()) {
-			_availableModesByOpName[opName[i]] = std::unordered_set<AddrMode>();
+			_availableModesByOpName[opName[i]] = std::unordered_set<int>();
 		}
-		_availableModesByOpName[opName[i]].emplace(DisassemblyInfo::OPMode[i]);
+		_availableModesByOpName[opName[i]].emplace((int)DisassemblyInfo::OPMode[i]);
 	}
 
 	std::unordered_map<string, uint16_t> temporaryLabels;
