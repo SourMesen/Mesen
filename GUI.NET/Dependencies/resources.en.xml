@@ -31,6 +31,7 @@
 
     <Message ID="RandomGameNoGameFound">Mesen could not find any games to load.</Message>
 
+    <Message ID="CannotWriteToFolder">The selected folder cannot be written to - please select another folder and try again.&#xA;&#xA;Details:&#xA;{0}</Message>
     <Message ID="InvalidPaths">The following path overrides are invalid:&#xA;&#xA;{0}&#xA;&#xA;Please use valid and writable folders and try again.</Message>
     <Message ID="CopyMesenDataPrompt">All files will be copied from:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Once the copy is completed, Mesen will restart.&#xA;Continue?</Message>    
 
@@ -50,7 +51,7 @@
     <Message ID="FileNotFound">File not found: {0}</Message>
     <Message ID="InvalidFdsBios">The selected bios file is invalid.</Message>
     
-    <Message ID="HDNesTooltip">This option allows Mesen to load HDNes-format HD packs if they are found.&#xA;&#xA;HD Packs should be placed in the "HdPacks" folder in a subfolder matching the name of the ROM.&#xA;e.g: MyRom.nes should have their HD Pack in "HdPacks\MyRom\hires.txt".&#xA;&#xA;Note: Support for HD Packs is a work in progress and some limitations remain.</Message>
+    <Message ID="HDNesTooltip">This option allows Mesen to load HDNes-format HD packs if they are found.&#xA;&#xA;HD Packs should be placed in the "HdPacks" folder in a subfolder matching the name of the ROM.&#xA;e.g: MyRom.nes should have their HD Pack in "HdPacks\MyRom\hires.txt".</Message>
     <Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
     <Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, it larger values may produce &#xA;better results).</Message>
     <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>

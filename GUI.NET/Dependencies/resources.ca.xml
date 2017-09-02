@@ -610,6 +610,10 @@
 
     <Message ID="RandomGameNoGameFound">Mesen ha sigut incapaç de trobar cap joc.</Message>
 
+    <Message ID="CannotWriteToFolder">The selected folder cannot be written to - please select another folder and try again.&#xA;&#xA;Details:&#xA;{0}</Message>
+    <Message ID="InvalidPaths">The following path overrides are invalid:&#xA;&#xA;{0}&#xA;&#xA;Please use valid and writable folders and try again.</Message>
+    <Message ID="CopyMesenDataPrompt">All files will be copied from:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Once the copy is completed, Mesen will restart.&#xA;Continue?</Message>
+
     <Message ID="NsfNextTrack">Pista següent (Manteniu per avançar ràpidament)</Message>
     <Message ID="NsfUnnamedTrack">[sense nom]</Message>
     <Message ID="NsfUnknownField">[desconegut]</Message>
@@ -622,7 +626,7 @@
     <Message ID="FileNotFound">Fitxer no trobat: {0}</Message>
     <Message ID="InvalidFdsBios">La bios seleccionada no és vàlida.</Message>
     
-    <Message ID="HDNesTooltip">Aquesta opció permet a Mesen carregar els paquets d'alta resolució d'HDNes que trobi.&#xA;&#xA;Els paquets d'alta resolució han d'estar a la carpeta "HdPacks" dins d'una altra carpeta amb el mateix nom que la ROM.&#xA;Exemple: Posem per cas que tenim una rom anomenada "LaMevaRom.nes", el seu paquet hauria d'estar a "HdPacks\LaMevaRom\hires.txt".&#xA;&#xA;Nota: El suport per paquets d'alta resolució encara no és perfecte, ja que romanen algunes limitacions.</Message>
+    <Message ID="HDNesTooltip">Aquesta opció permet a Mesen carregar els paquets d'alta resolució d'HDNes que trobi.&#xA;&#xA;Els paquets d'alta resolució han d'estar a la carpeta "HdPacks" dins d'una altra carpeta amb el mateix nom que la ROM.&#xA;Exemple: Posem per cas que tenim una rom anomenada "LaMevaRom.nes", el seu paquet hauria d'estar a "HdPacks\LaMevaRom\hires.txt".</Message>
     <Message ID="HdPackBuilderScaleHelp">Tria el tipus d'escalat i filtre de vídeo que s'utilitzaran quan es generin els fitxers PNG&#xA;per al paquet d'alta resolució. Fes servir els filtres de preescalat per a generar les tiles&#xA;a una escala major sense aplicar cap transformació als píxels.</Message>
     <Message ID="HdPackBuilderBankSizeHelp">Aquesta opció només està disponible per a jocs de RAM de tipus CHR. Els jocs de RAM de tipus CHR no tenen&#xA;"bancs" fixos - van sent creats dinàmicament pel codi del joc.&#xA;Aquesta opció altera el funcionament a l'hora d'agrupar les tiles&#xA;als fitxers PNG - un banc petit normalment donarà a lloc a menys fitxers &#xA;PNG (tot i que depenent en el codi del joc, valors més alts poden produir millors resultats).</Message>
     <Message ID="HdPackBuilderFrequencyHelp">Quan aquesta opció està activada, les tiles als fitxers PNG s'ordenen per la&#xA;freqüència amb les que es mostren a la pantalla mentre s'estigui gravant (les paletes &#xA;més comunes s'agruparan conjuntament al primer fitxer per a un nombre de banc &#xA;específic. Si aquesta casella està desmarcada, els fitxers PNG s'ordenaran per paleta - &#xA;en aquest cas, cada fitxer PNG contindrà només 4 colors diferents.</Message>

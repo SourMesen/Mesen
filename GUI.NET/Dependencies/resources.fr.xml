@@ -655,6 +655,7 @@
 
     <Message ID="RandomGameNoGameFound">Mesen n'a pas trouvé de jeu sur votre disque.</Message>
 
+    <Message ID="CannotWriteToFolder">Impossible d'écrire dans le dossier choisi - veuillez choisir un autre dossier et essayer à nouveau.&#xA;&#xA;Détails:&#xA;{0}</Message>
     <Message ID="InvalidPaths">Les dossiers suivants sont invalides :&#xA;&#xA;{0}&#xA;&#xA;Veuillez entrer des noms de dossier valides et essayer à nouveau.</Message>
     <Message ID="CopyMesenDataPrompt">Tous les fichiers seront copiés du dossier:&#xA;&#xA;{0}&#xA;au dossier&#xA;{1}&#xA;&#xA;Une fois la copie terminée, Mesen redémarrera.&#xA;Voulez-vous continuer?</Message>
 
@@ -674,7 +675,7 @@
     <Message ID="FileNotFound">Fichier non trouvé: {0}</Message>
     <Message ID="InvalidFdsBios">Le bios sélectionné est invalide.</Message>
     
-    <Message ID="HDNesTooltip">Cette option permet à Mesen de charger des packages de graphiques haute-résolution dans le même format que l'émulateur HDNes.&#xA;&#xA;Les packages haute-résolution doivent être placés dans le dossier "HdPacks", dans un sous-dossier correspondant au nom du ROM.&#xA;Exemple : Un package pour "MonRom.nes" doit être placé dans "HdPacks\MonRom\hires.txt".&#xA;&#xA;Note: Le support pour les packages haute-résolution n'est pas encore parfait - certaines limitations sont encore présentes.</Message>
+    <Message ID="HDNesTooltip">Cette option permet à Mesen de charger des packages de graphiques haute-résolution dans le même format que l'émulateur HDNes.&#xA;&#xA;Les packages haute-résolution doivent être placés dans le dossier "HdPacks", dans un sous-dossier correspondant au nom du ROM.&#xA;Exemple : Un package pour "MonRom.nes" doit être placé dans "HdPacks\MonRom\hires.txt".</Message>
     <Message ID="HdPackBuilderScaleHelp">Sélectionne la taille et le filtre à utiliser lors de la génération des fichiers PNG&#xA;pour le HD Pack. Utilisez les filtres "Prescale" pour générer l'image&#xA;avec une plus grande taille sans appliquer un filtre aux pixels.</Message>
     <Message ID="HdPackBuilderBankSizeHelp">Cette option est uniquement disponible pour les jeux de type CHR RAM. Les jeux CHR RAM&#xA;n'ont pas de banques CHR prédéfinies - elles sont générées dynamiquement par le code.&#xA;Cette option altère la façon dont le créateur de HD Packs groupe les tiles dans les fichiers PNG.&#xA;Une taille de banque plus petite résulte généralement en moins de fichier PNG différents&#xA; (mais les résultats varient d'un jeu à l'autre - une plus grosse valeur peut être mieux selon le jeu).</Message>
     <Message ID="HdPackBuilderFrequencyHelp">Quand cette option est activée, les tiles sont triés selon la fréquence à laquelle &#xA;elles apparaissent à l'écran pendant l'enregistrement (les palettes de couleurs plus &#xA;fréquentes seront regroupées dans la même image PNG pour une banque donnée.&#xA;Si cette option est désactivée, les tiles seront regroupées par palette, donc chaque&#xA;image PNG comportera au plus 4 couleurs différentes.</Message>

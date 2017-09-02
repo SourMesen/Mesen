@@ -122,8 +122,19 @@ namespace Mesen.GUI.Forms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			this.InitializeConfig();
-			this.Close();
+			string targetFolder = radStoragePortable.Checked ? ConfigManager.DefaultPortableFolder : ConfigManager.DefaultDocumentsFolder;
+			string testFile = Path.Combine(targetFolder, "test.txt");
+			try {
+				if(!Directory.Exists(targetFolder)) {
+					Directory.CreateDirectory(targetFolder);
+				}
+				File.WriteAllText(testFile, "test");
+				File.Delete(testFile);
+				this.InitializeConfig();
+				this.Close();
+			} catch(Exception ex) {
+				MesenMsgBox.Show("CannotWriteToFolder", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+			}
 		}
 
 		private void lblCancel_Click(object sender, EventArgs e)
