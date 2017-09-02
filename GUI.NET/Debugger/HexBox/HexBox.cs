@@ -3255,10 +3255,12 @@ namespace Be.Windows.Forms
 				if (_byteProvider == value)
 					return;
 
-				if (value == null)
-					ActivateEmptyKeyInterpreter();
-				else
-					ActivateKeyInterpreter();
+				if(_keyInterpreter == null) {
+					if(value == null)
+						ActivateEmptyKeyInterpreter();
+					else
+						ActivateKeyInterpreter();
+				}
 
 				if (_byteProvider != null)
 					_byteProvider.LengthChanged -= new EventHandler(_byteProvider_LengthChanged);
