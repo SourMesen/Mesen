@@ -36,9 +36,9 @@ namespace Mesen.GUI.Config
 
 		public bool ShowLagCounter = false;
 
-		[MinMax(0, 500)] public UInt32 EmulationSpeed = 100;
-		[MinMax(0, 500)] public UInt32 TurboSpeed = 300;
-		[MinMax(0, 500)] public UInt32 RewindSpeed = 100;
+		[MinMax(0, 5000)] public UInt32 EmulationSpeed = 100;
+		[MinMax(0, 5000)] public UInt32 TurboSpeed = 300;
+		[MinMax(0, 5000)] public UInt32 RewindSpeed = 100;
 
 		public EmulationInfo()
 		{

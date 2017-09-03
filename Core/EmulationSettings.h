@@ -370,6 +370,8 @@ private:
 	static uint8_t _versionMinor;
 	static uint8_t _versionRevision;
 
+	static const vector<uint32_t> _speedValues;
+
 	static uint32_t _ppuPaletteArgb[11][64];
 	static uint32_t _defaultPpuPalette[64];
 	static uint32_t _currentPalette[64];
@@ -700,19 +702,29 @@ public:
 
 	static void IncreaseEmulationSpeed()
 	{
-		if(_emulationSpeed > 0 && _emulationSpeed < 450) {
-			EmulationSettings::SetEmulationSpeed(_emulationSpeed + (_emulationSpeed < 100 ? 25 : 50), true);
-		} else {
+		if(_emulationSpeed == _speedValues.back()) {
 			EmulationSettings::SetEmulationSpeed(0, true);
+		} else if(_emulationSpeed != 0) {
+			for(size_t i = 0; i < _speedValues.size(); i++) {
+				if(_speedValues[i] > _emulationSpeed) {
+					EmulationSettings::SetEmulationSpeed(_speedValues[i], true);
+					break;
+				}
+			}
 		}
 	}
 
 	static void DecreaseEmulationSpeed()
 	{
 		if(_emulationSpeed == 0) {
-			EmulationSettings::SetEmulationSpeed(450, true);
-		} else if(_emulationSpeed > 25) {
-			EmulationSettings::SetEmulationSpeed(_emulationSpeed - (_emulationSpeed <= 100 ? 25 : 50), true);
+			EmulationSettings::SetEmulationSpeed(_speedValues.back(), true);
+		} else if(_emulationSpeed > _speedValues.front()) {
+			for(size_t i = _speedValues.size() - 1; i >= 0; i--) {
+				if(_speedValues[i] < _emulationSpeed) {
+					EmulationSettings::SetEmulationSpeed(_speedValues[i], true);
+					break;
+				}
+			}
 		}
 	}
 

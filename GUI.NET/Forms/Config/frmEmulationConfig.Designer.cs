@@ -183,7 +183,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.nudTurboSpeed.Location = new System.Drawing.Point(3, 3);
 			this.nudTurboSpeed.Maximum = new decimal(new int[] {
-            500,
+            5000,
             0,
             0,
             0});
@@ -227,7 +227,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.nudEmulationSpeed.Location = new System.Drawing.Point(3, 3);
 			this.nudEmulationSpeed.Maximum = new decimal(new int[] {
-            500,
+            5000,
             0,
             0,
             0});
@@ -281,7 +281,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.nudRewindSpeed.Location = new System.Drawing.Point(3, 3);
 			this.nudRewindSpeed.Maximum = new decimal(new int[] {
-            500,
+            5000,
             0,
             0,
             0});
