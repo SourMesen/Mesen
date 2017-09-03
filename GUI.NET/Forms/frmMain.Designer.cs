@@ -1457,6 +1457,7 @@ namespace Mesen.GUI.Forms
 			this.mnuDebug.Name = "mnuDebug";
 			this.mnuDebug.Size = new System.Drawing.Size(54, 20);
 			this.mnuDebug.Text = "Debug";
+			this.mnuDebug.DropDownOpening += new System.EventHandler(this.mnuDebug_DropDownOpening);
 			// 
 			// mnuAssembler
 			// 

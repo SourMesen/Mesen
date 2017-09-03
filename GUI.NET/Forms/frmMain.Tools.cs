@@ -15,6 +15,11 @@ namespace Mesen.GUI.Forms
 {
 	public partial class frmMain
 	{
+		private void mnuDebug_DropDownOpening(object sender, EventArgs e)
+		{
+			mnuEditHeader.Enabled = _emuThread != null && InteropEmu.GetRomInfo().Format == RomFormat.iNes;
+		}
+
 		private void mnuDebugger_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);

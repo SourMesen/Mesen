@@ -518,7 +518,6 @@ namespace Mesen.GUI.Forms
 					mnuTraceLogger.Enabled = running;
 					mnuDebugDebugger.Enabled = running;
 					mnuScriptWindow.Enabled = running;
-					mnuEditHeader.Enabled = running;
 
 					panelInfo.Visible = !running;
 					ctrlRecentGames.Visible = !running;
