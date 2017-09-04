@@ -746,7 +746,7 @@ void PPU::DrawPixel()
 
 void PPU::UpdateGrayscaleAndIntensifyBits()
 {
-	if(_scanline < 0 || _scanline > 241) {
+	if(_scanline < 0 || _scanline > _nmiScanline) {
 		return;
 	}
 
