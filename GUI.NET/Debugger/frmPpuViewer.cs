@@ -67,7 +67,7 @@ namespace Mesen.GUI.Debugger
 				this.GetData();
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
 			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame) {
-				if(!_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > 66) {
+				if(ConfigManager.Config.DebugInfo.PpuAutoRefresh && !_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > 66) {
 					//Update at 15 fps most
 					this.GetData();
 					this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
