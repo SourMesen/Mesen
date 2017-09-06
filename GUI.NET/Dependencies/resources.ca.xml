@@ -347,7 +347,7 @@
       <Control ID="chkSingleInstance">Permet només una sola instància de Mesen alhora</Control>
       <Control ID="chkAutomaticallyCheckForUpdates">Cerca actualitzacions automàticament</Control>
 
-      <Control ID="chkDeveloperMode">Enable developer mode</Control>
+      <Control ID="chkDeveloperMode">Activa el mode de desenvolupador</Control>
 
       <Control ID="lblPauseBackgroundSettings">Comportament en segon pla</Control>
       <Control ID="lblMiscSettings">Configuracions diverses</Control>
@@ -586,10 +586,10 @@
     <Message ID="FilterRomIps">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES(*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Pedaços IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Tots els fitxers (*.*)|*.*</Message>
     <Message ID="FilterTest">Fitxers de proves (*.mtp)|*.mtp|Tots els fitxers (*.*)|*.*</Message>
     <Message ID="FilterCheat">Tots els formats suportats (*.cht, *.xml)|*.cht;*.xml</Message>
-    <Message ID="FilterSavestate">Mesen Savestates (*.mst)|*.mst|Tots els fitxers (*.*)|*.*</Message>
+    <Message ID="FilterSavestate">Partides guardades de Mesen (*.mst)|*.mst|Tots els fitxers (*.*)|*.*</Message>
 
-    <Message ID="LoadFromFile">Load from file...</Message>
-    <Message ID="SaveToFile">Save to file...</Message>
+    <Message ID="LoadFromFile">Carrega des d'un fitxer...</Message>
+    <Message ID="SaveToFile">Desa al fitxer...</Message>
 
     <Message ID="Resume">Continua</Message>
     <Message ID="Pause">Pausa</Message>
@@ -610,9 +610,9 @@
 
     <Message ID="RandomGameNoGameFound">Mesen ha sigut incapaç de trobar cap joc.</Message>
 
-    <Message ID="CannotWriteToFolder">The selected folder cannot be written to - please select another folder and try again.&#xA;&#xA;Details:&#xA;{0}</Message>
-    <Message ID="InvalidPaths">The following path overrides are invalid:&#xA;&#xA;{0}&#xA;&#xA;Please use valid and writable folders and try again.</Message>
-    <Message ID="CopyMesenDataPrompt">All files will be copied from:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Once the copy is completed, Mesen will restart.&#xA;Continue?</Message>
+    <Message ID="CannotWriteToFolder">Incapaç d'escriure a la carpeta escollida - si us plau trieu una altra carpeta i torneu-ho a provar.&#xA;&#xA;Detalls:&#xA;{0}</Message>
+    <Message ID="InvalidPaths">Les carpetes següents són invàlides:&#xA;&#xA;{0}&#xA;&#xA;Si us plau, introduïu carpetes vàlides i torneu-ho a provar.</Message>
+    <Message ID="CopyMesenDataPrompt">Tots els fitxers es copiaran des de:&#xA;&#xA;{0}&#xA;a la carpeta&#xA;{1}&#xA;&#xA;Un cop s'hagi finalitzat la còpia, Mesen es reiniciarà.&#xA;Voleu continuar?</Message>
 
     <Message ID="NsfNextTrack">Pista següent (Manteniu per avançar ràpidament)</Message>
     <Message ID="NsfUnnamedTrack">[sense nom]</Message>
