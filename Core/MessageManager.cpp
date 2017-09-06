@@ -545,7 +545,7 @@ std::unordered_map<string, string> MessageManager::_caResources = {
 	{ "SaveStateIncompatibleVersion", u8"La partida guardada nº%1 és incompatible amb aquesta versió de Mesen." },
 	{ "SaveStateInvalidFile", u8"Fitxer de partida guardada invàlid." },
 	{ "SaveStateLoaded", u8"Partida guardada nº%1 carregada." },
-	{ "SaveStateMissingRom", u8"Missing ROM required (%1) to load save state." },
+	{ "SaveStateMissingRom", u8"No s'ha trobat la ROM necessària (%1) per carregar la partida guardada." },
 	{ "SaveStateNewerVersion", u8"Incapaç de carregar partides guardades creades per una versió més recent de Mesen. Si us plau, descarregueu-vos la darrera versió de Mesen." },
 	{ "SaveStateSaved", u8"Partida guardada nº%1 desada." },
 	{ "SaveStateSlotSelected", u8"Partida guardada nº%1 seleccionada." },
