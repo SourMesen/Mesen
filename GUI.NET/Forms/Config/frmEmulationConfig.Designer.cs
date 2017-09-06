@@ -747,7 +747,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblExtraScanlinesBeforeNmi.Name = "lblExtraScanlinesBeforeNmi";
 			this.lblExtraScanlinesBeforeNmi.Size = new System.Drawing.Size(165, 13);
 			this.lblExtraScanlinesBeforeNmi.TabIndex = 0;
-			this.lblExtraScanlinesBeforeNmi.Text = "Additionnal scanlines before NMI:";
+			this.lblExtraScanlinesBeforeNmi.Text = "Additional scanlines before NMI:";
 			// 
 			// lblExtraScanlinesAfterNmi
 			// 
@@ -757,7 +757,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblExtraScanlinesAfterNmi.Name = "lblExtraScanlinesAfterNmi";
 			this.lblExtraScanlinesAfterNmi.Size = new System.Drawing.Size(156, 13);
 			this.lblExtraScanlinesAfterNmi.TabIndex = 1;
-			this.lblExtraScanlinesAfterNmi.Text = "Additionnal scanlines after NMI:";
+			this.lblExtraScanlinesAfterNmi.Text = "Additional scanlines after NMI:";
 			// 
 			// flowLayoutPanel2
 			// 
