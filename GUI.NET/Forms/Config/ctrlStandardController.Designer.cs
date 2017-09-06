@@ -46,7 +46,9 @@
 			this.btnUp = new System.Windows.Forms.Button();
 			this.btnDown = new System.Windows.Forms.Button();
 			this.btnA = new System.Windows.Forms.Button();
+			this.picBackground = new System.Windows.Forms.PictureBox();
 			this.panel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picBackground)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// panel2
@@ -69,6 +71,7 @@
 			this.panel2.Controls.Add(this.btnUp);
 			this.panel2.Controls.Add(this.btnDown);
 			this.panel2.Controls.Add(this.btnA);
+			this.panel2.Controls.Add(this.picBackground);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel2.Location = new System.Drawing.Point(0, 0);
 			this.panel2.Margin = new System.Windows.Forms.Padding(0);
@@ -258,6 +261,15 @@
 			this.btnA.UseVisualStyleBackColor = true;
 			this.btnA.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
+			// picBackground
+			// 
+			this.picBackground.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.picBackground.Location = new System.Drawing.Point(0, 0);
+			this.picBackground.Name = "picBackground";
+			this.picBackground.Size = new System.Drawing.Size(585, 210);
+			this.picBackground.TabIndex = 30;
+			this.picBackground.TabStop = false;
+			// 
 			// ctrlStandardController
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -267,6 +279,7 @@
 			this.Size = new System.Drawing.Size(585, 210);
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picBackground)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -292,5 +305,6 @@
 		private System.Windows.Forms.Label lblSelect;
 		private System.Windows.Forms.Label lblMicrophone;
 		private System.Windows.Forms.Button btnMicrophone;
+		private System.Windows.Forms.PictureBox picBackground;
 	}
 }

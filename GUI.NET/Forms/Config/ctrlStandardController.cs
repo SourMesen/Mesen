@@ -28,6 +28,7 @@ namespace Mesen.GUI.Forms.Config
 			InitializeComponent();
 			if(LicenseManager.UsageMode != LicenseUsageMode.Designtime) {
 				Initialize(new KeyMappings());
+				UpdateBackground();
 			}
 		}
 
@@ -48,16 +49,25 @@ namespace Mesen.GUI.Forms.Config
 			new Point(56, 29)
 		};
 
-		protected override void OnPaint(PaintEventArgs e)
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			UpdateBackground();
+		}
+
+		private void UpdateBackground()
 		{
 			Rectangle rect = this.ClientRectangle;
 			rect.Inflate(-2, -2);
-			using(Pen pen = new Pen(Color.Black, 2f)) {
-				e.Graphics.DrawRectangle(pen, rect);
-				e.Graphics.DrawRectangle(pen, 226, 128, 159, 43);
-				e.Graphics.DrawPolygon(pen, _drawPoints);
+			Bitmap bitmap = new Bitmap(picBackground.Width, picBackground.Height);
+			using(Graphics g = Graphics.FromImage(bitmap)) {
+				using(Pen pen = new Pen(Color.Black, 2f)) {
+					g.DrawRectangle(pen, rect);
+					g.DrawRectangle(pen, 226, 128, 159, 43);
+					g.DrawPolygon(pen, _drawPoints);
+				}
 			}
-			base.OnPaint(e);
+			picBackground.Image = bitmap;
 		}
 
 		private void InitButton(Button btn, UInt32 scanCode)
