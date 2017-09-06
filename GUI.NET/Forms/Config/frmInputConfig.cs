@@ -80,7 +80,6 @@ namespace Mesen.GUI.Forms.Config
 
 		private void SetAvailableControllerTypes(ComboBox comboBox, InteropEmu.ControllerType[] controllerTypes, bool forceController)
 		{
-			object currentSelection = comboBox.SelectedItem;
 			comboBox.Items.Clear();
 			if(!forceController) {
 				comboBox.Items.Add(ResourceHelper.GetEnumText(InteropEmu.ControllerType.None));
@@ -89,8 +88,21 @@ namespace Mesen.GUI.Forms.Config
 				comboBox.Items.Add(ResourceHelper.GetEnumText(type));
 			}
 
-			comboBox.SelectedItem = currentSelection;
-			if(comboBox.SelectedIndex < 0) {
+			InputInfo inputInfo = (InputInfo)Entity;
+			string currentSelection = null;
+			if(comboBox == cboPlayer1) {
+				currentSelection = ResourceHelper.GetEnumText(inputInfo.Controllers[0].ControllerType);
+			} else if(comboBox == cboPlayer2) {
+				currentSelection = ResourceHelper.GetEnumText(inputInfo.Controllers[1].ControllerType);
+			} else if(comboBox == cboPlayer3) {
+				currentSelection = ResourceHelper.GetEnumText(inputInfo.Controllers[2].ControllerType);
+			} else if(comboBox == cboPlayer4) {
+				currentSelection = ResourceHelper.GetEnumText(inputInfo.Controllers[3].ControllerType);
+			}
+
+			if(currentSelection != null && comboBox.Items.Contains(currentSelection)) {
+				comboBox.SelectedItem = currentSelection;
+			} else {
 				comboBox.SelectedIndex = 0;
 			}
 		}
@@ -116,11 +128,6 @@ namespace Mesen.GUI.Forms.Config
 
 				UpdatePlayer3And4Visibility();
 				UpdateAvailableControllerTypes();
-
-				cboPlayer1.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[0].ControllerType);
-				cboPlayer2.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[1].ControllerType);
-				cboPlayer3.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[2].ControllerType);
-				cboPlayer4.SelectedItem = ResourceHelper.GetEnumText(ConfigManager.Config.InputInfo.Controllers[3].ControllerType);
 				
 				if(ConfigManager.Config.PreferenceInfo.DisableGameDatabase) {
 					//This option requires the game DB to be active
@@ -145,12 +152,14 @@ namespace Mesen.GUI.Forms.Config
 		{
 			bool visible = this.FourScoreAttached;
 
-			lblPlayer3.Visible = visible;
-			lblPlayer4.Visible = visible;
-			cboPlayer3.Visible = visible;
-			cboPlayer4.Visible = visible;
-			btnSetupP3.Visible = visible;
-			btnSetupP4.Visible = visible;
+			if(lblPlayer3.Visible != visible) {
+				lblPlayer3.Visible = visible;
+				lblPlayer4.Visible = visible;
+				cboPlayer3.Visible = visible;
+				cboPlayer4.Visible = visible;
+				btnSetupP3.Visible = visible;
+				btnSetupP4.Visible = visible;
+			}
 		}
 
 		private void cboNesType_SelectedIndexChanged(object sender, EventArgs e)
@@ -219,12 +228,13 @@ namespace Mesen.GUI.Forms.Config
 			}
 
 			Form frm = null;
+			InputInfo inputInfo = (InputInfo)Entity;
 			if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController))) {
-				frm = new frmControllerConfig(ConfigManager.Config.InputInfo.Controllers[index], index, cboConsoleType.GetEnumValue<ConsoleType>());
+				frm = new frmControllerConfig(inputInfo.Controllers[index], index, cboConsoleType.GetEnumValue<ConsoleType>());
 			} else if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper))) {
-				frm = new frmZapperConfig(ConfigManager.Config.InputInfo.Zapper);
+				frm = new frmZapperConfig(inputInfo.Zapper);
 			} else if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Zapper))) {
-				frm = new frmZapperConfig(ConfigManager.Config.InputInfo.Zapper);
+				frm = new frmZapperConfig(inputInfo.Zapper);
 			}
 
 			if(frm != null) {
@@ -271,7 +281,7 @@ namespace Mesen.GUI.Forms.Config
 
 			for(int i = 0; i < 4; i++) {
 				if(i < 2 || this.FourScoreAttached && ((i == 2 && btnSetupP3.Enabled) || (i == 3 && btnSetupP4.Enabled))) {
-					foreach(KeyMappings mappings in ConfigManager.Config.InputInfo.Controllers[i].Keys) {
+					foreach(KeyMappings mappings in ((InputInfo)Entity).Controllers[i].Keys) {
 						countMapping(i, mappings.A);
 						countMapping(i, mappings.B);
 						countMapping(i, mappings.Select);
@@ -288,13 +298,15 @@ namespace Mesen.GUI.Forms.Config
 				}
 			}
 
-			pnlConflictWarning.Visible = needWarning;
-			btnSetupP1.Image = portConflicts[0] ? Properties.Resources.Warning : null;
-			btnSetupP2.Image = portConflicts[1] ? Properties.Resources.Warning : null;
-			btnSetupP3.Image = portConflicts[2] ? Properties.Resources.Warning : null;
-			btnSetupP4.Image = portConflicts[3] ? Properties.Resources.Warning : null;
+			if(pnlConflictWarning.Visible != needWarning) {
+				pnlConflictWarning.Visible = needWarning;
+				btnSetupP1.Image = portConflicts[0] ? Properties.Resources.Warning : null;
+				btnSetupP2.Image = portConflicts[1] ? Properties.Resources.Warning : null;
+				btnSetupP3.Image = portConflicts[2] ? Properties.Resources.Warning : null;
+				btnSetupP4.Image = portConflicts[3] ? Properties.Resources.Warning : null;
 
-			this.Height = needWarning ? 360 : 310;
+				this.Height = needWarning ? 360 : 310;
+			}
 		}
 	}
 }
