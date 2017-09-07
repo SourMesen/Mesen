@@ -3,7 +3,8 @@ Mesen is a cross-platform NES/Famicom emulator for Windows & Linux built in C++ 
 If you want to support this project, please consider making a donation:  
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W97QP2LYC9H4W"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" title="Donate to this project using Paypal" alt="Donate to this project using Paypal"/></a>
 
-[Website (https://www.mesen.ca)](https://www.mesen.ca)
+[Website (https://www.mesen.ca)](https://www.mesen.ca)  
+[Documentation (https://www.mesen.ca/docs)](https://www.mesen.ca/docs)
 
 # Releases #
 
@@ -28,7 +29,7 @@ Packages are available here: https://aur.archlinux.org/packages/mesen
 Things that ***may or may not*** be added in the future, in no particular order:
 
 -Support for more UNIF boards and more NES/Famicom input devices  
--Debugger improvements (APU state display, scripting, etc.)  
+-Debugger improvements (APU state display, etc.)  
 -Shaders  
 -Improvements to movie file format to support a few things that currently do not work  
 -Libretro support  
