@@ -343,7 +343,7 @@ void HdPackLoader::ProcessOptionTag(vector<string> &tokens)
 
 void HdPackLoader::ProcessConditionTag(vector<string> &tokens)
 {
-	if(tokens.size() < 7) {
+	if(tokens.size() < 6) {
 		MessageManager::Log("[HDPack] Invalid condition tag");
 		return;
 	}
@@ -360,6 +360,9 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens)
 		condition->Type = HdPackConditionType::SpriteAtPosition;
 	} else if(tokens[1] == "spriteNearby") {
 		condition->Type = HdPackConditionType::SpriteNearby;
+	} else {
+		MessageManager::Log("[HDPack] Invalid condition type: " + tokens[1]);
+		return;
 	}
 
 	int index = 2;
@@ -381,7 +384,7 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens)
 		}
 		condition->TileIndex = -1;
 	} else {
-		condition->TileIndex = std::stoi(tokens[index++]);
+		condition->TileIndex = std::stoi(tileData);
 	}
 
 	condition->PaletteColors = HexUtilities::FromHex(tokens[index++]);
