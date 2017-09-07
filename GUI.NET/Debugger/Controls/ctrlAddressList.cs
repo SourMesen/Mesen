@@ -19,7 +19,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlAddressList()
 		{
 			InitializeComponent();
-			this.ctrlDataViewer.MarginWidth = 3;
+			this.ctrlDataViewer.MarginWidth = 5;
 			this.ctrlDataViewer.FontSize = BaseControl.DefaultFontSize;
 		}
 
@@ -33,6 +33,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ctrlDataViewer.Header = null;
 			this.ctrlDataViewer.TextLines = values.Select(val => val.ToString("X2")).ToArray();
 			this.ctrlDataViewer.LineNumbers = addresses;
+			this.ctrlDataViewer.LineIndentations = values.Select(val => 3).ToArray();
 			_addresses = addresses;
 		}
 

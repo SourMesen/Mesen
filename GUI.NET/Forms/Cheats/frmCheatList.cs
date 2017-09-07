@@ -32,11 +32,10 @@ namespace Mesen.GUI.Forms.Cheats
 				lstGameList.Select();
 
 				ctrlCheatFinder.OnAddCheat += CtrlCheatFinder_OnAddCheat;
-				tabMain.TabIndexChanged += TabMain_TabIndexChanged;
 			}
 		}
 
-		private void TabMain_TabIndexChanged(object sender, EventArgs e)
+		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ctrlCheatFinder.TabIsFocused = (tabMain.SelectedTab == tpgCheatFinder);
 		}

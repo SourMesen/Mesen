@@ -32,7 +32,7 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private List<byte[]> _memorySnapshots;
 		private List<FilterInfo> _filters;
-		private bool _tabIsFocused = true;
+		private bool _tabIsFocused = false;
 		
 		private enum CheatPrevFilterType
 		{
@@ -70,6 +70,7 @@ namespace Mesen.GUI.Forms.Cheats
 
 			if(LicenseManager.UsageMode != LicenseUsageMode.Designtime) {
 				Reset();
+				tmrRefresh.Start();
 			}
 		}
 				
@@ -99,8 +100,6 @@ namespace Mesen.GUI.Forms.Cheats
 			byte[] memory = InteropEmu.DebugGetInternalRam();
 			if(release) {
 				InteropEmu.DebugRelease();
-			} else {
-				System.Diagnostics.Debug.Print("test");
 			}
 
 			return memory;
@@ -108,7 +107,9 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private void tmrRefresh_Tick(object sender, EventArgs e)
 		{
-			RefreshAddressList();
+			if(_tabIsFocused) {
+				RefreshAddressList();
+			}
 		}
 
 		private void RefreshAddressList()

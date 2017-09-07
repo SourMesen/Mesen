@@ -59,9 +59,9 @@ namespace Mesen.GUI.Forms.Cheats
 			this.btnExportGame = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnExportSelectedCheats = new System.Windows.Forms.ToolStripMenuItem();
 			this.tpgCheatFinder = new System.Windows.Forms.TabPage();
+			this.ctrlCheatFinder = new Mesen.GUI.Forms.Cheats.ctrlCheatFinder();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkDisableCheats = new System.Windows.Forms.CheckBox();
-			this.ctrlCheatFinder = new Mesen.GUI.Forms.Cheats.ctrlCheatFinder();
 			this.baseConfigPanel.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tabCheats.SuspendLayout();
@@ -95,6 +95,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tabMain.SelectedIndex = 0;
 			this.tabMain.Size = new System.Drawing.Size(616, 257);
 			this.tabMain.TabIndex = 0;
+			this.tabMain.SelectedIndexChanged += new System.EventHandler(this.tabMain_SelectedIndexChanged);
 			// 
 			// tabCheats
 			// 
@@ -385,6 +386,14 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tpgCheatFinder.Text = "Cheat Finder";
 			this.tpgCheatFinder.UseVisualStyleBackColor = true;
 			// 
+			// ctrlCheatFinder
+			// 
+			this.ctrlCheatFinder.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlCheatFinder.Location = new System.Drawing.Point(3, 3);
+			this.ctrlCheatFinder.Name = "ctrlCheatFinder";
+			this.ctrlCheatFinder.Size = new System.Drawing.Size(602, 225);
+			this.ctrlCheatFinder.TabIndex = 0;
+			// 
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 1;
@@ -409,14 +418,6 @@ namespace Mesen.GUI.Forms.Cheats
 			this.chkDisableCheats.Text = "Disable all cheats";
 			this.chkDisableCheats.UseVisualStyleBackColor = true;
 			// 
-			// ctrlCheatFinder
-			// 
-			this.ctrlCheatFinder.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlCheatFinder.Location = new System.Drawing.Point(3, 3);
-			this.ctrlCheatFinder.Name = "ctrlCheatFinder";
-			this.ctrlCheatFinder.Size = new System.Drawing.Size(602, 225);
-			this.ctrlCheatFinder.TabIndex = 0;
-			// 
 			// frmCheatList
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -425,9 +426,9 @@ namespace Mesen.GUI.Forms.Cheats
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.MinimumSize = new System.Drawing.Size(632, 324);
 			this.Name = "frmCheatList";
+			this.ShowInTaskbar = true;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Cheats";
-			this.ShowInTaskbar = true;
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
 			this.Controls.SetChildIndex(this.tableLayoutPanel2, 0);
 			this.baseConfigPanel.ResumeLayout(false);

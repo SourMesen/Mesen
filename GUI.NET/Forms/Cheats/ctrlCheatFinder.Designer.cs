@@ -63,7 +63,7 @@
 			// 
 			// tmrRefresh
 			// 
-			this.tmrRefresh.Enabled = true;
+			this.tmrRefresh.Enabled = false;
 			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
 			// 
 			// grpFilters
