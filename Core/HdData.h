@@ -123,6 +123,7 @@ struct HdPackCondition
 	uint32_t PaletteColors;
 	int32_t TileIndex;
 	uint8_t TileData[16];
+	bool IsBuiltInCondition;
 
 	bool CheckCondition(HdPpuPixelInfo *screenTiles, int x, int y, HdPpuTileInfo* tile)
 	{

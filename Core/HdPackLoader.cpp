@@ -205,16 +205,19 @@ void HdPackLoader::InitializeGlobalConditions()
 	HdPackCondition* hmirror = new HdPackCondition();
 	hmirror->Name = "hmirror";
 	hmirror->Type = HdPackConditionType::HorizontalMirroring;
+	hmirror->IsBuiltInCondition = true;
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(hmirror));
 
 	HdPackCondition* vmirror = new HdPackCondition();
 	vmirror->Name = "vmirror";
 	vmirror->Type = HdPackConditionType::VerticalMirroring;
+	vmirror->IsBuiltInCondition = true;
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(vmirror));
 
 	HdPackCondition* bgpriority = new HdPackCondition();
 	bgpriority->Name = "bgpriority";
 	bgpriority->Type = HdPackConditionType::BackgroundPriority;
+	bgpriority->IsBuiltInCondition = true;
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(bgpriority));
 }
 
@@ -340,6 +343,11 @@ void HdPackLoader::ProcessOptionTag(vector<string> &tokens)
 
 void HdPackLoader::ProcessConditionTag(vector<string> &tokens)
 {
+	if(tokens.size() < 7) {
+		MessageManager::Log("[HDPack] Invalid condition tag");
+		return;
+	}
+
 	HdPackCondition *condition = new HdPackCondition();
 	tokens[0].erase(tokens[0].find_last_not_of(" \n\r\t") + 1);
 	condition->Name = tokens[0];
@@ -377,7 +385,7 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens)
 	}
 
 	condition->PaletteColors = HexUtilities::FromHex(tokens[index++]);
-
+	condition->IsBuiltInCondition = false;
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(condition));
 }
 

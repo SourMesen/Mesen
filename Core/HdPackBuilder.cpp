@@ -327,7 +327,9 @@ void HdPackBuilder::SaveHdPack()
 	savePng(-1);
 
 	for(unique_ptr<HdPackCondition> &condition : _hdData.Conditions) {
-		ss << condition->ToString() << std::endl;
+		if(!condition->IsBuiltInCondition) {
+			ss << condition->ToString() << std::endl;
+		}
 	}
 
 	for(HdBackgroundInfo &bgInfo : _hdData.Backgrounds) {
