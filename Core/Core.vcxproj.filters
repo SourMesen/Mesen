@@ -1479,9 +1479,6 @@
     <ClCompile Include="OggReader.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
-    <ClCompile Include="HdAudioDevice.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
     <ClCompile Include="DebugHud.cpp">
       <Filter>Debugger\Scripting\DebugHud</Filter>
     </ClCompile>
@@ -1502,6 +1499,9 @@
     </ClCompile>
     <ClCompile Include="ScriptHost.cpp">
       <Filter>Debugger\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="HdAudioDevice.cpp">
+      <Filter>HdPacks</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ bool PNGHelper::WritePNG(std::stringstream &stream, uint32_t* buffer, uint32_t x
 	//ARGB -> ABGR
 	uint32_t size = xSize * ySize * bitsPerPixel / 8 / 4;
 	for(uint32_t i = 0; i < size; i++) {
-		buffer[i] = 0xFF000000 | (buffer[i] & 0x00FF00) | ((buffer[i] & 0xFF0000) >> 16) | ((buffer[i] & 0xFF) << 16);
+		buffer[i] = (buffer[i] & 0xFF00FF00) | ((buffer[i] & 0xFF0000) >> 16) | ((buffer[i] & 0xFF) << 16);
 	}
 
 	void *pngData = tdefl_write_image_to_png_file_in_memory_ex(buffer, xSize, ySize, bitsPerPixel / 8, &pngSize, MZ_DEFAULT_LEVEL, MZ_FALSE);

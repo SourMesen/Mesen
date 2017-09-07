@@ -102,9 +102,9 @@ void NtscFilter::DoubleOutputHeight(uint32_t *ntscBuffer)
 				r = (uint8_t)(r * scanlineIntensity);
 				g = (uint8_t)(g * scanlineIntensity);
 				b = (uint8_t)(b * scanlineIntensity);
-				*(out + rowWidthOverscan) = (r << 16) | (g << 8) | b;
+				*(out + rowWidthOverscan) = 0xFF000000 | (r << 16) | (g << 8) | b;
 			} else {
-				*(out + rowWidthOverscan) = mixed;
+				*(out + rowWidthOverscan) = 0xFF000000 | mixed;
 			}
 			in++;
 			out++;
