@@ -394,6 +394,8 @@ void Console::Run()
 				_runLock.Acquire();
 			}
 
+			shared_ptr<Debugger> debugger = _debugger;
+
 			bool paused = EmulationSettings::IsPaused();
 			if(paused && !_stop) {
 				MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
@@ -404,13 +406,13 @@ void Console::Run()
 				_runLock.Release();
 				
 				PlatformUtilities::EnableScreensaver();
-				while(paused && !_stop && (!_debugger || !_debugger->CheckFlag(DebuggerFlags::DebuggerWindowEnabled))) {
+				while(paused && !_stop && (!debugger || !debugger->CheckFlag(DebuggerFlags::DebuggerWindowEnabled))) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
 					paused = EmulationSettings::IsPaused();
 				}
 
-				if(_debugger && _debugger->CheckFlag(DebuggerFlags::DebuggerWindowEnabled)) {
+				if(debugger && debugger->CheckFlag(DebuggerFlags::DebuggerWindowEnabled)) {
 					//Prevent pausing when debugger is active
 					EmulationSettings::ClearFlags(EmulationFlags::Paused);
 				}
@@ -420,8 +422,8 @@ void Console::Run()
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
 			}
 
-			if(_debugger) {
-				_debugger->ProcessEvent(EventType::StartFrame);
+			if(debugger) {
+				debugger->ProcessEvent(EventType::StartFrame);
 			}
 
 			//Get next target time, and adjust based on whether we are ahead or behind
