@@ -627,7 +627,9 @@
 
     <Message ID="LoadFromFile">Load from file...</Message>
     <Message ID="SaveToFile">Save to file...</Message>
-
+    
+    <Message ID="ClearHistory">Clear History</Message>
+    
     <Message ID="Resume">Continuar</Message>
     <Message ID="Pause">Pausa</Message>
     <Message ID="StartServer">Iniciar servidor</Message>

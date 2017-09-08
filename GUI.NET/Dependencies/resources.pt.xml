@@ -628,6 +628,8 @@
     <Message ID="LoadFromFile">Carregar de um arquivo...</Message>
     <Message ID="SaveToFile">Salvar para arquivo...</Message>
 
+    <Message ID="ClearHistory">Clear History</Message>
+
     <Message ID="Resume">Continuar</Message>
     <Message ID="Pause">Pausar</Message>
     <Message ID="StartServer">Iniciar servidor</Message>

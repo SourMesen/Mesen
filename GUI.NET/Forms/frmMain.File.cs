@@ -261,8 +261,18 @@ namespace Mesen.GUI.Forms
 				};
 				mnuRecentFiles.DropDownItems.Add(tsmi);
 			}
-
 			mnuRecentFiles.Enabled = mnuRecentFiles.DropDownItems.Count > 0;
+
+			mnuRecentFiles.DropDownItems.Add(new ToolStripSeparator());
+
+			ToolStripMenuItem clearHistory = new ToolStripMenuItem();
+			clearHistory.Text = ResourceHelper.GetMessage("ClearHistory");
+			clearHistory.Image = Resources.Close;
+			clearHistory.Click += (object sender, EventArgs args) => {
+				ConfigManager.Config.RecentFiles = new List<RecentItem>();
+				UpdateRecentFiles();
+			};
+			mnuRecentFiles.DropDownItems.Add(clearHistory);
 		}
 	}
 }

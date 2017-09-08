@@ -624,6 +624,8 @@
 
     <Message ID="LoadFromFile">ファイルからロードする…</Message>
     <Message ID="SaveToFile">ファイルに保存する…</Message>
+
+    <Message ID="ClearHistory">履歴を消去</Message>
     
     <Message ID="Resume">再開</Message>
     <Message ID="Pause">ポーズ</Message>

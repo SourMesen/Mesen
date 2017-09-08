@@ -639,6 +639,8 @@
 
     <Message ID="LoadFromFile">Charger à partir d'un fichier...</Message>
     <Message ID="SaveToFile">Sauvegarder dans un fichier...</Message>
+
+    <Message ID="ClearHistory">Effacer l'historique</Message>
     
     <Message ID="Resume">Continuer</Message>
     <Message ID="Pause">Pause</Message>

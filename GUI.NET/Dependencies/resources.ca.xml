@@ -594,6 +594,8 @@
     <Message ID="LoadFromFile">Carrega des d'un fitxer...</Message>
     <Message ID="SaveToFile">Desa al fitxer...</Message>
 
+    <Message ID="ClearHistory">Clear History</Message>
+
     <Message ID="Resume">Continua</Message>
     <Message ID="Pause">Pausa</Message>
     <Message ID="StartServer">Inicia un servidor</Message>

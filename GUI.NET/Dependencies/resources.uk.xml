@@ -629,6 +629,8 @@
 
     <Message ID="LoadFromFile">Load from file...</Message>
     <Message ID="SaveToFile">Save to file...</Message>
+
+    <Message ID="ClearHistory">Clear History</Message>
     
     <Message ID="Resume">Продовжити</Message>
     <Message ID="Pause">Пауза</Message>

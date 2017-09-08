@@ -15,6 +15,8 @@
     <Message ID="LoadFromFile">Load from file...</Message>
     <Message ID="SaveToFile">Save to file...</Message>
 
+    <Message ID="ClearHistory">Clear History</Message>
+
     <Message ID="Resume">Resume</Message>
     <Message ID="Pause">Pause</Message>
     <Message ID="StartServer">Start Server</Message>
