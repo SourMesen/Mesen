@@ -76,7 +76,8 @@ namespace Mesen.GUI.Config
 			CreateMimeType("x-mesen-nes", "nes", "NES Rom", mimeTypes, preferenceInfo.AssociateNesFiles);
 			CreateMimeType("x-mesen-fds", "fds", "FDS Rom", mimeTypes, preferenceInfo.AssociateFdsFiles);
 			CreateMimeType("x-mesen-nsf", "nsf", "Nintendo Sound File", mimeTypes, preferenceInfo.AssociateNsfFiles);
-			CreateMimeType("x-mesen-nsfe", "nsfe", "Nintendo Sound File (extended)", mimeTypes, preferenceInfo.AssociateNsfeFiles);
+			CreateMimeType("x-mesen-nsfe", "nsfe", "Nintendo Sound File (extended)", mimeTypes, preferenceInfo.AssociateNsfFiles);
+			CreateMimeType("x-mesen-mst", "mst", "Mesen Save State", mimeTypes, preferenceInfo.AssociateMstFiles);
 			CreateMimeType("x-mesen-mmo", "mmo", "Mesen Movie File", mimeTypes, preferenceInfo.AssociateMmoFiles);
 			CreateMimeType("x-mesen-unif", "unf", "NES Rom (UNIF)", mimeTypes, preferenceInfo.AssociateUnfFiles);
 

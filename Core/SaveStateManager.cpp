@@ -128,7 +128,7 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 			
 			vector<char> nameBuffer(nameLength);
 			stream.read(nameBuffer.data(), nameBuffer.size());
-			string romName(nameBuffer.data());
+			string romName(nameBuffer.data(), nameLength);
 			
 			if(Console::GetHashInfo().Sha1Hash != string(hash)) {
 				//Wrong game

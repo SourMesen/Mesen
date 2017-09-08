@@ -114,7 +114,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkUnfFormat = new System.Windows.Forms.CheckBox();
 			this.chkMmoFormat = new System.Windows.Forms.CheckBox();
 			this.chkNsfFormat = new System.Windows.Forms.CheckBox();
-			this.chkNsfeFormat = new System.Windows.Forms.CheckBox();
+			this.chkMstFormat = new System.Windows.Forms.CheckBox();
 			this.grpDataStorageLocation = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -1208,7 +1208,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpFileFormat.Controls.Add(this.chkUnfFormat, 0, 2);
 			this.tlpFileFormat.Controls.Add(this.chkMmoFormat, 1, 2);
 			this.tlpFileFormat.Controls.Add(this.chkNsfFormat, 1, 0);
-			this.tlpFileFormat.Controls.Add(this.chkNsfeFormat, 1, 1);
+			this.tlpFileFormat.Controls.Add(this.chkMstFormat, 1, 1);
 			this.tlpFileFormat.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpFileFormat.Location = new System.Drawing.Point(3, 16);
 			this.tlpFileFormat.Name = "tlpFileFormat";
@@ -1268,18 +1268,18 @@ namespace Mesen.GUI.Forms.Config
 			this.chkNsfFormat.Name = "chkNsfFormat";
 			this.chkNsfFormat.Size = new System.Drawing.Size(171, 17);
 			this.chkNsfFormat.TabIndex = 14;
-			this.chkNsfFormat.Text = ".NSF (Nintendo Sound Format)";
+			this.chkNsfFormat.Text = ".NSF/.NSFE (Nintendo Sound Format)";
 			this.chkNsfFormat.UseVisualStyleBackColor = true;
 			// 
 			// chkMstFormat
 			// 
-			this.chkNsfeFormat.AutoSize = true;
-			this.chkNsfeFormat.Location = new System.Drawing.Point(238, 26);
-			this.chkNsfeFormat.Name = "chkMstFormat";
-			this.chkNsfeFormat.Size = new System.Drawing.Size(226, 17);
-			this.chkNsfeFormat.TabIndex = 15;
-			this.chkNsfeFormat.Text = ".NSFE (Nintendo Sound Format Extended)";
-			this.chkNsfeFormat.UseVisualStyleBackColor = true;
+			this.chkMstFormat.AutoSize = true;
+			this.chkMstFormat.Location = new System.Drawing.Point(238, 26);
+			this.chkMstFormat.Name = "chkMstFormat";
+			this.chkMstFormat.Size = new System.Drawing.Size(226, 17);
+			this.chkMstFormat.TabIndex = 15;
+			this.chkMstFormat.Text = ".MST (Mesen Save State)";
+			this.chkMstFormat.UseVisualStyleBackColor = true;
 			// 
 			// grpDataStorageLocation
 			// 
@@ -1766,7 +1766,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.Label lblLastSyncDateTime;
 		private System.Windows.Forms.Timer tmrSyncDateTime;
 		private System.Windows.Forms.Button btnResync;
-		private System.Windows.Forms.CheckBox chkNsfeFormat;
+		private System.Windows.Forms.CheckBox chkMstFormat;
 		private System.Windows.Forms.CheckBox chkNsfFormat;
 		private System.Windows.Forms.TabPage tpgAdvanced;
 		private System.Windows.Forms.TabPage tpgNsf;

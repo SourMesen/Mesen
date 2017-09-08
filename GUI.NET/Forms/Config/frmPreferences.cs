@@ -32,7 +32,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AssociateFdsFiles", chkFdsFormat);
 			AddBinding("AssociateMmoFiles", chkMmoFormat);
 			AddBinding("AssociateNsfFiles", chkNsfFormat);
-			AddBinding("AssociateNsfeFiles", chkNsfeFormat);
+			AddBinding("AssociateMstFiles", chkMstFormat);
 			AddBinding("AssociateUnfFiles", chkUnfFormat);
 
 			AddBinding("NsfAutoDetectSilence", chkNsfAutoDetectSilence);

@@ -32,7 +32,7 @@ namespace Mesen.GUI.Config
 		public bool AssociateFdsFiles = false;
 		public bool AssociateMmoFiles = false;
 		public bool AssociateNsfFiles = false;
-		public bool AssociateNsfeFiles = false;
+		public bool AssociateMstFiles = false;
 		public bool AssociateUnfFiles = false;
 
 		public bool NsfDisableApuIrqs = true;
@@ -160,8 +160,9 @@ namespace Mesen.GUI.Config
 				FileAssociationHelper.UpdateFileAssociation("nes", preferenceInfo.AssociateNesFiles);
 				FileAssociationHelper.UpdateFileAssociation("fds", preferenceInfo.AssociateFdsFiles);
 				FileAssociationHelper.UpdateFileAssociation("mmo", preferenceInfo.AssociateMmoFiles);
+				FileAssociationHelper.UpdateFileAssociation("mst", preferenceInfo.AssociateMstFiles);
 				FileAssociationHelper.UpdateFileAssociation("nsf", preferenceInfo.AssociateNsfFiles);
-				FileAssociationHelper.UpdateFileAssociation("nsfe", preferenceInfo.AssociateNsfeFiles);
+				FileAssociationHelper.UpdateFileAssociation("nsfe", preferenceInfo.AssociateNsfFiles);
 				FileAssociationHelper.UpdateFileAssociation("unf", preferenceInfo.AssociateUnfFiles);
 			}
 

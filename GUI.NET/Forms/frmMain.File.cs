@@ -162,6 +162,8 @@ namespace Mesen.GUI.Forms
 			if(File.Exists(filename)) {
 				if(IsPatchFile(filename)) {
 					LoadPatchFile(filename);
+				} else if(Path.GetExtension(filename).ToLowerInvariant() == ".mst") {
+					InteropEmu.LoadStateFile(filename);
 				} else if(Path.GetExtension(filename).ToLowerInvariant() == ".mmo") {
 					InteropEmu.MoviePlay(filename);
 				} else {
