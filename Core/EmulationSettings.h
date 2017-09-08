@@ -289,6 +289,8 @@ enum class EmulatorShortcut
 
 	ToggleCheats,
 	ToggleAudio,
+	ToggleFastForward,
+	ToggleRewind,
 
 	RunSingleFrame,
 
@@ -347,9 +349,6 @@ enum class EmulatorShortcut
 	OpenMemoryTools,
 	OpenScriptWindow,
 	OpenTraceLogger,
-
-	ToggleFastForward,
-	ToggleRewind,
 };
 
 struct KeyCombination

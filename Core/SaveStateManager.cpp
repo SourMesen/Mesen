@@ -89,7 +89,6 @@ void SaveStateManager::SaveState(int stateIndex, bool displayMessage)
 {
 	string filepath = SaveStateManager::GetStateFilepath(stateIndex);
 	if(SaveState(filepath)) {
-		_lastIndex = stateIndex;
 		if(displayMessage) {
 			MessageManager::DisplayMessage("SaveStates", "SaveStateSaved", std::to_string(stateIndex));
 		}
@@ -173,7 +172,6 @@ bool SaveStateManager::LoadState(int stateIndex)
 {
 	string filepath = SaveStateManager::GetStateFilepath(stateIndex);
 	if(LoadState(filepath, false)) {
-		_lastIndex = stateIndex;
 		MessageManager::DisplayMessage("SaveStates", "SaveStateLoaded", std::to_string(stateIndex));
 		return true;
 	}

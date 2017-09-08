@@ -1387,6 +1387,8 @@ namespace Mesen.GUI
 
 		ToggleCheats,
 		ToggleAudio,
+		ToggleFastForward,
+		ToggleRewind,
 
 		RunSingleFrame,
 
@@ -1445,9 +1447,6 @@ namespace Mesen.GUI
 		OpenMemoryTools,
 		OpenScriptWindow,
 		OpenTraceLogger,
-
-		ToggleFastForward,
-		ToggleRewind,
 	}
 
 	public struct InteropCheatInfo
