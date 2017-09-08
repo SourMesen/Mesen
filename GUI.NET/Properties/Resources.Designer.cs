@@ -213,6 +213,16 @@ namespace Mesen.GUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Comment {
+            get {
+                object obj = ResourceManager.GetObject("Comment", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Controller {
             get {
                 object obj = ResourceManager.GetObject("Controller", resourceCulture);
@@ -296,6 +306,16 @@ namespace Mesen.GUI.Properties {
         internal static System.Drawing.Bitmap Enum {
             get {
                 object obj = ResourceManager.GetObject("Enum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Exclamation {
+            get {
+                object obj = ResourceManager.GetObject("Exclamation", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -109,6 +109,11 @@ namespace Mesen.GUI.Forms
 		{
 			CheckForUpdates(true);
 		}
+		
+		private void mnuOnlineHelp_Click(object sender, EventArgs e)
+		{
+			Process.Start("http://www.mesen.ca/docs");
+		}
 
 		private void mnuReportBug_Click(object sender, EventArgs e)
 		{
