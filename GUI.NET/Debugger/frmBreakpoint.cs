@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -109,6 +110,15 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 			picExpressionWarning.Visible = false;
+
+			if(radRange.Checked) {
+				int start = 0, end = 0;
+				int.TryParse(txtFrom.Text, NumberStyles.HexNumber, null, out start);
+				int.TryParse(txtTo.Text, NumberStyles.HexNumber, null, out end);
+				if(end < start) {
+					return false;
+				}
+			}
 
 			return chkRead.Checked || chkWrite.Checked || chkExec.Checked || chkReadVram.Checked || chkWriteVram.Checked || txtCondition.Text.Length > 0;
 		}
