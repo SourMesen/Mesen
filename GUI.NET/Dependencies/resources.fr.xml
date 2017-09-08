@@ -706,8 +706,10 @@
     <Message ID="ConfirmPowerCycle">Êtes-vous certain de vouloir arrêter et redémarrer le jeu?</Message>
     <Message ID="ConfirmExit">Êtes-vous certain de vouloir quitter?</Message>
 
-    <Message ID="EmulatorShortcutMappings_FastForward">Avance rapide</Message>
+    <Message ID="EmulatorShortcutMappings_FastForward">Avance rapide (garder enfoncé)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Activer/désactiver l'avance rapide</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Rembobiner</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleRewind">Activer/désactiver le rembobinage</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Reculer de 10 secondes</Message>
     <Message ID="EmulatorShortcutMappings_RewindOneMin">Reculer d'une minute</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Augmenter la vitesse</Message>
@@ -727,8 +729,8 @@
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Position de sauvegarde précédente</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Sauvegarder l'état à la position courante</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Charger l'état de la position courante</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleCheats">Activer/Désactiver tous les codes</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAudio">Activer/Désactiver l'audio</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleCheats">Activer/désactiver tous les codes</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAudio">Activer/désactiver l'audio</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">Avancer d'une seule image</Message>
 
     <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Éjecter le disque</Message>
@@ -738,9 +740,9 @@
     <Message ID="EmulatorShortcutMappings_SetScale4x">Taille de l'image 4x</Message>
     <Message ID="EmulatorShortcutMappings_SetScale5x">Taille de l'image 5x</Message>
     <Message ID="EmulatorShortcutMappings_SetScale6x">Taille de l'image 6x</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Activer/Désactiver le mode plein écran</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFps">Activer/Désactiver le compteur FPS</Message>
-    <Message ID="EmulatorShortcutMappings_MaxSpeed">Activer/Désactiver la vitesse maximale</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Activer/désactiver le mode plein écran</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFps">Activer/désactiver le compteur FPS</Message>
+    <Message ID="EmulatorShortcutMappings_MaxSpeed">Activer/désactiver la vitesse maximale</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Ouvrir un jeu aléatoire</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Sauvegarde d'état - Position 1</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Sauvegarde d'état - Position 2</Message>

@@ -694,7 +694,9 @@
     <Message ID="ConfirmExit">Are you sure you want to exit?</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Avance rápido</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Toggle Fast Forward</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Rebobinar</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleRewind">Toggle Rewind</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rebobinar 10 segundos</Message>
     <Message ID="EmulatorShortcutMappings_RewindOneMin">Rebobinar 1 minuto</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Aumentar velocidad</Message>

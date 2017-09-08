@@ -660,7 +660,9 @@
     <Message ID="ConfirmExit">Esteu segurs de voler sortir?</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Avanç ràpid</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Toggle Fast Forward</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Rebobina</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleRewind">Toggle Rewind</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rebobina 10 segons</Message>
     <Message ID="EmulatorShortcutMappings_RewindOneMin">Rebobina 1 minut</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Augmenta la velocitat</Message>

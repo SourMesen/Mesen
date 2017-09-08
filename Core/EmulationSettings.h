@@ -346,7 +346,10 @@ enum class EmulatorShortcut
 	OpenPpuViewer,
 	OpenMemoryTools,
 	OpenScriptWindow,
-	OpenTraceLogger
+	OpenTraceLogger,
+
+	ToggleFastForward,
+	ToggleRewind,
 };
 
 struct KeyCombination

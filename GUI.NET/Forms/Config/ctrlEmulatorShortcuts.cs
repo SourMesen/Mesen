@@ -23,7 +23,9 @@ namespace Mesen.GUI.Forms.Config
 		{
 			EmulatorShortcut[] displayOrder = new EmulatorShortcut[] {
 				EmulatorShortcut.FastForward,
+				EmulatorShortcut.ToggleFastForward,
 				EmulatorShortcut.Rewind,
+				EmulatorShortcut.ToggleRewind,
 				EmulatorShortcut.RewindTenSecs,
 				EmulatorShortcut.RewindOneMin,
 

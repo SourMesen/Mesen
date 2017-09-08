@@ -1444,7 +1444,10 @@ namespace Mesen.GUI
 		OpenPpuViewer,
 		OpenMemoryTools,
 		OpenScriptWindow,
-		OpenTraceLogger
+		OpenTraceLogger,
+
+		ToggleFastForward,
+		ToggleRewind,
 	}
 
 	public struct InteropCheatInfo

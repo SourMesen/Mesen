@@ -691,8 +691,10 @@
     <Message ID="ConfirmPowerCycle">ゲームを停止して再起動します。よろしいですか？</Message>
     <Message ID="ConfirmExit">Mesenを終了します。よろしいですか？</Message>
 
-    <Message ID="EmulatorShortcutMappings_FastForward">早送り</Message>
-    <Message ID="EmulatorShortcutMappings_Rewind">巻き戻す</Message>
+    <Message ID="EmulatorShortcutMappings_FastForward">早送り（押し続ける間だけ）</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFastForward">早送りをオン・オフにする</Message>
+    <Message ID="EmulatorShortcutMappings_Rewind">巻き戻す（押し続ける間だけ）</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleRewind">巻き戻しをオン・オフにする</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">１０秒前に戻る</Message>
     <Message ID="EmulatorShortcutMappings_RewindOneMin">１分前に戻る</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">速度を上げる</Message>

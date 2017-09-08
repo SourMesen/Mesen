@@ -88,6 +88,14 @@ void ShortcutKeyHandler::CheckMappedKeys()
 		EmulationSettings::ClearFlags(EmulationFlags::Turbo);
 	}
 
+	if(DetectKeyPress(EmulatorShortcut::ToggleFastForward)) {
+		if(EmulationSettings::CheckFlag(EmulationFlags::Turbo)) {
+			EmulationSettings::ClearFlags(EmulationFlags::Turbo);
+		} else {
+			EmulationSettings::SetFlags(EmulationFlags::Turbo);
+		}
+	}
+
 	if(VsControlManager::GetInstance() && !isNetplayClient && !isMovieActive) {
 		VsControlManager* manager = VsControlManager::GetInstance();
 		if(DetectKeyPress(EmulatorShortcut::VsServiceButton)) {
@@ -139,6 +147,14 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	}
 
 	if(!isNetplayClient && !isMovieActive && !EmulationSettings::CheckFlag(NsfPlayerEnabled)) {
+		if(DetectKeyPress(EmulatorShortcut::ToggleRewind)) {
+			if(RewindManager::IsRewinding()) {
+				RewindManager::StopRewinding();
+			} else {
+				RewindManager::StartRewinding();
+			}
+		}
+
 		if(DetectKeyPress(EmulatorShortcut::Rewind)) {
 			RewindManager::StartRewinding();
 		} else if(DetectKeyRelease(EmulatorShortcut::Rewind)) {

@@ -697,7 +697,9 @@
     <Message ID="ConfirmExit">Are you sure you want to exit?</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Швидке перемотування</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Toggle Fast Forward</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Перемотка</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleRewind">Toggle Rewind</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Перемотати 10 секунд</Message>
     <Message ID="EmulatorShortcutMappings_RewindOneMin">Перемотати 1 хвилину</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Збільшити Швидкість</Message>
