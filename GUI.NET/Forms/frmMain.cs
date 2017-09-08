@@ -929,17 +929,29 @@ namespace Mesen.GUI.Forms
 
 		private void frmMain_DragDrop(object sender, DragEventArgs e)
 		{
-			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-			if(File.Exists(files[0])) {
-				LoadFile(files[0]);
-				this.Activate();
+			try {
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				if(File.Exists(files[0])) {
+					LoadFile(files[0]);
+					this.Activate();
+				} else {
+					InteropEmu.DisplayMessage("Error", "File not found: " + files[0]);
+				}
+			} catch(Exception ex) {
+				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
 			}
 		}
 
 		private void frmMain_DragEnter(object sender, DragEventArgs e)
 		{
-			if(e.Data.GetDataPresent(DataFormats.FileDrop)) {
-				e.Effect = DragDropEffects.Copy;
+			try {
+				if(e.Data.GetDataPresent(DataFormats.FileDrop)) {
+					e.Effect = DragDropEffects.Copy;
+				} else {
+					InteropEmu.DisplayMessage("Error", "Unsupported operation.");
+				}
+			} catch(Exception ex) {
+				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
 			}
 		}
 
