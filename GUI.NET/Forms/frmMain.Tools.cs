@@ -20,41 +20,6 @@ namespace Mesen.GUI.Forms
 			mnuEditHeader.Enabled = _emuThread != null && InteropEmu.GetRomInfo().Format == RomFormat.iNes;
 		}
 
-		private void mnuDebugger_Click(object sender, EventArgs e)
-		{
-			DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
-		}
-
-		private void mnuDebugDebugger_Click(object sender, EventArgs e)
-		{
-			DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
-		}
-
-		private void mnuTraceLogger_Click(object sender, EventArgs e)
-		{
-			DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger);
-		}
-
-		private void mnuPpuViewer_Click(object sender, EventArgs e)
-		{
-			DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer);
-		}
-
-		private void mnuMemoryViewer_Click(object sender, EventArgs e)
-		{
-			DebugWindowManager.OpenDebugWindow(DebugWindow.MemoryViewer);
-		}
-
-		private void mnuAssembler_Click(object sender, EventArgs e)
-		{
-			DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler);
-		}
-
-		private void mnuScriptWindow_Click(object sender, EventArgs e)
-		{
-			DebugWindowManager.OpenDebugWindow(DebugWindow.ScriptWindow);
-		}
-
 		private void mnuEditHeader_Click(object sender, EventArgs e)
 		{
 			using(frmEditHeader frm = new frmEditHeader()) {
@@ -146,8 +111,8 @@ namespace Mesen.GUI.Forms
 				_cheatListWindow.Focus();
 			}
 		}
-
-		private void mnuRandomGame_Click(object sender, EventArgs e)
+		
+		private void LoadRandomGame()
 		{
 			IEnumerable<string> gameFolders = ConfigManager.Config.RecentFiles.Select(recentFile => recentFile.RomFile.Folder.ToLowerInvariant()).Distinct();
 			List<string> gameRoms = new List<string>();
@@ -193,11 +158,6 @@ namespace Mesen.GUI.Forms
 			} else {
 				_hdPackEditorWindow.Focus();
 			}
-		}
-		
-		private void mnuTakeScreenshot_Click(object sender, EventArgs e)
-		{
-			InteropEmu.TakeScreenshot();
 		}
 
 		private void mnuStartServer_Click(object sender, EventArgs e)

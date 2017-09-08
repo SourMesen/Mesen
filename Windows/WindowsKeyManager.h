@@ -28,6 +28,7 @@ class WindowsKeyManager : public IKeyManager
 		
 		std::thread _updateDeviceThread;
 		atomic<bool> _stopUpdateDeviceThread = false;
+		bool _disableAllKeys = false;
 
 		void StartUpdateDeviceThread();
 
@@ -38,12 +39,13 @@ class WindowsKeyManager : public IKeyManager
 		void RefreshState();
 		bool IsKeyPressed(uint32_t key);
 		bool IsMouseButtonPressed(MouseButton button);
-		uint32_t GetPressedKey();
+		vector<uint32_t> GetPressedKeys();
 		string GetKeyName(uint32_t key);
 		uint32_t GetKeyCode(string keyName);
 
 		void SetKeyState(uint16_t scanCode, bool state);
 		void ResetKeyState();
+		void SetDisabled(bool disabled);
 
 		void UpdateDevices();
 };

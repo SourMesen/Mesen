@@ -165,7 +165,7 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "VK_LAUNCH_APP2", 0xB7, "Start Application 2", "" },
 	//{ "-", 0xB8 - B9, "Reserved", "" },
 	{ "VK_OEM_1", 0xBA, ";", "" },
-	{ "VK_OEM_PLUS", 0xBB, "+", "" },
+	{ "VK_OEM_PLUS", 0xBB, "=", "" },
 	{ "VK_OEM_COMMA", 0xBC, ",", "" },
 	{ "VK_OEM_MINUS", 0xBD, "-", "" },
 	{ "VK_OEM_PERIOD", 0xBE, ".", "" },
@@ -282,6 +282,10 @@ void WindowsKeyManager::RefreshState()
 
 bool WindowsKeyManager::IsKeyPressed(uint32_t key)
 {
+	if(_disableAllKeys) {
+		return false;
+	}
+
 	if(key >= 0x10000) {
 		if(!_xInput || !_directInput) {
 			return false;
@@ -315,17 +319,18 @@ bool WindowsKeyManager::IsMouseButtonPressed(MouseButton button)
 	return false;
 }
 
-uint32_t WindowsKeyManager::GetPressedKey()
+vector<uint32_t> WindowsKeyManager::GetPressedKeys()
 {
+	vector<uint32_t> result;
 	if(!_xInput || !_directInput) {
-		return 0;
+		return result;
 	}
 
 	_xInput->RefreshState();
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
 		for(int j = 1; j <= 26; j++) {
 			if(_xInput->IsPressed(i, j)) {
-				return 0xFFFF + i * 0x100 + j;
+				result.push_back(0xFFFF + i * 0x100 + j);
 			}
 		}
 	}
@@ -334,17 +339,17 @@ uint32_t WindowsKeyManager::GetPressedKey()
 	for(int i = _directInput->GetJoystickCount() - 1; i >= 0; i--) {
 		for(int j = 0; j < 0x29; j++) {
 			if(_directInput->IsPressed(i, j)) {
-				return 0x11000 + i * 0x100 + j;
+				result.push_back(0x11000 + i * 0x100 + j);
 			}
 		}
 	}
 
 	for(int i = 0; i < 0x200; i++) {
 		if(_keyState[i]) {
-			return i;
+			result.push_back(i);
 		}
 	}
-	return 0;
+	return result;
 }
 
 string WindowsKeyManager::GetKeyName(uint32_t scanCode)
@@ -384,8 +389,18 @@ void WindowsKeyManager::SetKeyState(uint16_t scanCode, bool state)
 	if(scanCode > 0x1FF) {
 		_mouseState[scanCode & 0x03] = state;
 	} else {
+		uint32_t keyCode = MapVirtualKeyEx(scanCode & 0xFF, MAPVK_VSC_TO_VK, nullptr);
+		if(keyCode >= 0x10 && keyCode <= 0x12) {
+			//Ignore "ext" flag for alt, ctrl & shift
+			scanCode &= 0xFF;
+		}
 		_keyState[scanCode & 0x1FF] = state;
 	}
+}
+
+void WindowsKeyManager::SetDisabled(bool disabled)
+{
+	_disableAllKeys = disabled;
 }
 
 void WindowsKeyManager::ResetKeyState()

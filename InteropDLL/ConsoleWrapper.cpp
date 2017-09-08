@@ -22,6 +22,7 @@
 #include "../Core/MovieManager.h"
 #include "../Core/HdPackBuilder.h"
 #include "../Utilities/AviWriter.h"
+#include "../Core/ShortcutKeyHandler.h"
 
 #ifdef WIN32
 	#include "../Windows/Renderer.h"
@@ -36,13 +37,15 @@
 IRenderingDevice *_renderer = nullptr;
 IAudioDevice *_soundManager = nullptr;
 IKeyManager *_keyManager = nullptr;
+unique_ptr<ShortcutKeyHandler> _shortcutKeyHandler;
+
 void*  _windowHandle = nullptr;
 void* _viewerHandle = nullptr;
 string _returnString;
 string _logString;
 RecordedRomTest *_recordedRomTest = nullptr;
 
-typedef void (__stdcall *NotificationListenerCallback)(int);
+typedef void (__stdcall *NotificationListenerCallback)(int, void*);
 
 namespace InteropEmu {
 	class InteropNotificationListener : public INotificationListener
@@ -56,7 +59,7 @@ namespace InteropEmu {
 
 		void ProcessNotification(ConsoleNotificationType type, void* parameter)
 		{
-			_callback((int)type);
+			_callback((int)type, parameter);
 		}
 	};
 
@@ -80,6 +83,7 @@ namespace InteropEmu {
 		DllExport void __stdcall InitializeEmu(const char* homeFolder, void *windowHandle, void *viewerHandle, bool noAudio, bool noVideo, bool noInput)
 		{
 			FolderUtilities::SetHomeFolder(homeFolder);
+			_shortcutKeyHandler.reset(new ShortcutKeyHandler());
 
 			if(windowHandle != nullptr && viewerHandle != nullptr) {
 				_windowHandle = windowHandle;
@@ -137,7 +141,9 @@ namespace InteropEmu {
 		DllExport void __stdcall SetZapperDetectionRadius(uint32_t detectionRadius) { EmulationSettings::SetZapperDetectionRadius(detectionRadius); }
 		DllExport void __stdcall SetExpansionDevice(ExpansionPortDevice device) { EmulationSettings::SetExpansionDevice(device); }
 		DllExport void __stdcall SetConsoleType(ConsoleType type) { EmulationSettings::SetConsoleType(type); }
-		DllExport void __stdcall SetEmulatorKeys(EmulatorKeyMappingSet mappings) { EmulationSettings::SetEmulatorKeys(mappings); }
+		
+		DllExport void __stdcall ClearShortcutKeys() { EmulationSettings::ClearShortcutKeys(); }
+		DllExport void __stdcall SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex) { EmulationSettings::SetShortcutKey(shortcut, keyCombination, keySetIndex); }
 
 		DllExport ControllerType __stdcall GetControllerType(uint32_t port) { return EmulationSettings::GetControllerType(port); }
 		DllExport ExpansionPortDevice GetExpansionDevice() { return EmulationSettings::GetExpansionDevice(); }
@@ -150,8 +156,23 @@ namespace InteropEmu {
 		DllExport void __stdcall SetMousePosition(double x, double y) { ControlManager::SetMousePosition(x, y); }
 
 		DllExport void __stdcall UpdateInputDevices() { if(_keyManager) { _keyManager->UpdateDevices(); } }
-		DllExport uint32_t __stdcall GetPressedKey() { return ControlManager::GetPressedKey(); }
-		DllExport void __stdcall SetKeyState(int32_t scanCode, bool state) { if(_keyManager) { _keyManager->SetKeyState(scanCode, state); } }
+		DllExport void __stdcall GetPressedKeys(uint32_t *keyBuffer) { 
+			vector<uint32_t> pressedKeys = ControlManager::GetPressedKeys();
+			for(int i = 0; i < pressedKeys.size() && i < 3; i++) {
+				keyBuffer[i] = pressedKeys[i];
+			}
+		}
+		DllExport void __stdcall DisableAllKeys(bool disabled) {
+			if(_keyManager) {
+				_keyManager->SetDisabled(disabled);
+			}
+		}
+		DllExport void __stdcall SetKeyState(int32_t scanCode, bool state) { 
+			if(_keyManager) { 
+				_keyManager->SetKeyState(scanCode, state); 
+				_shortcutKeyHandler->ProcessKeys();
+			} 
+		}
 		DllExport void __stdcall ResetKeyState() { if(_keyManager) { _keyManager->ResetKeyState(); } }
 		DllExport const char* __stdcall GetKeyName(uint32_t keyCode) 
 		{
@@ -276,6 +297,8 @@ namespace InteropEmu {
 
 		DllExport void __stdcall Release()
 		{
+			_shortcutKeyHandler.reset();
+
 			Console::Release();
 			GameServer::StopServer();
 			GameClient::Disconnect();

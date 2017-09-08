@@ -399,6 +399,7 @@
       <Control ID="lblRewindMinutes">minutes (Memory Usage ≈1MB/min)</Control>
 
       <Control ID="tpgShortcuts">Горячие клавиши</Control>
+      <Control ID="lblShortcutWarning">Warning: Your current configuration contains conflicting key bindings. If this is not intentional, please review and correct your key bindings.</Control>
       <Control ID="colAction">Действие</Control>
       <Control ID="colBinding1">Вариант #1</Control>
       <Control ID="colBinding2">Вариант #2</Control>
@@ -719,6 +720,42 @@
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Enable/Disable Cheat Codes</Message>
     <Message ID="EmulatorShortcutMappings_ToggleAudio">Enable/Disable Audio</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">Run Single Frame</Message>
+
+    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Eject Disk</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale1x">Set Scale 1x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale2x">Set Scale 2x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale3x">Set Scale 3x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale4x">Set Scale 4x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale5x">Set Scale 5x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale6x">Set Scale 6x</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Toggle Fullscreen Mode</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFps">Toggle FPS Counter</Message>
+    <Message ID="EmulatorShortcutMappings_MaxSpeed">Toggle Maximum Speed</Message>
+    <Message ID="EmulatorShortcutMappings_LoadRandomGame">Load Random Game</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Save State - Slot 1</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Save State - Slot 2</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">Save State - Slot 3</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">Save State - Slot 4</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Save State - Slot 5</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Save State - Slot 6</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Save State - Slot 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateToFile">Save State to File</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Load State - Slot 1</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Load State - Slot 2</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">Load State - Slot 3</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">Load State - Slot 4</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">Load State - Slot 5</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Load State - Slot 6</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Load State - Slot 7</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Load State - Slot 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Load State from File</Message>
+    <Message ID="EmulatorShortcutMappings_OpenFile">Open File</Message>
+    <Message ID="EmulatorShortcutMappings_OpenDebugger">Open Debugger</Message>
+    <Message ID="EmulatorShortcutMappings_OpenAssembler">Open Assembler</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Open Ppu Viewer</Message>
+    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Open Memory Tools</Message>
+    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Open Script Window</Message>
+    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Open Trace Logger</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

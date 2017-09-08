@@ -35,6 +35,8 @@
       <Control ID="mnuScale2x">２倍</Control>
       <Control ID="mnuScale3x">３倍</Control>
       <Control ID="mnuScale4x">４倍</Control>
+      <Control ID="mnuScale5x">５倍</Control>
+      <Control ID="mnuScale6x">６倍</Control>
       <Control ID="mnuScaleCustom">カスタム</Control>
       <Control ID="mnuFullscreen">全画面表示</Control>
       <Control ID="mnuVideoFilter">画面エフェクト</Control>
@@ -399,6 +401,7 @@
       <Control ID="lblRewindMinutes">分をキープする (メモリの使用量：１分に約１MB)</Control>
 
       <Control ID="tpgShortcuts"> ショートカットキー </Control>
+      <Control ID="lblShortcutWarning">注意：　使っている設定の中には同じマッピングが何回もあります。　間違いでこの設定にした場合は、設定を確認して直してください。</Control>
       <Control ID="colAction">機能</Control>
       <Control ID="colBinding1">ショートカットキー1</Control>
       <Control ID="colBinding2">ショートカットキー2</Control>
@@ -712,6 +715,42 @@
     <Message ID="EmulatorShortcutMappings_ToggleCheats">チートコードを無効・有効にする</Message>
     <Message ID="EmulatorShortcutMappings_ToggleAudio">音声を無効・有効にする</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">次のフレームを表す</Message>
+
+    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - ディスクを取り出す</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale1x">映像サイズ １倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale2x">映像サイズ ２倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale3x">映像サイズ ３倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale4x">映像サイズ ４倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale5x">映像サイズ ５倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale6x">映像サイズ ６倍</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">全画面表示</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFps">フレームレート表示</Message>
+    <Message ID="EmulatorShortcutMappings_MaxSpeed">最高速度を無効・有効にする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadRandomGame">ランダムゲームを開く</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">クイックセーブスロット１に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">クイックセーブスロット２に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">クイックセーブスロット３に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">クイックセーブスロット４に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">クイックセーブスロット５に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">クイックセーブスロット６に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">クイックセーブスロット７に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateToFile">クイックセーブデータをファイルに保存する</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">クイックセーブスロット１からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">クイックセーブスロット２からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">クイックセーブスロット３からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">クイックセーブスロット４からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">クイックセーブスロット５からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">クイックセーブスロット６からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">クイックセーブスロット７からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">クイックセーブスロット８からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">クイックセーブデータをファイルからロードする</Message>
+    <Message ID="EmulatorShortcutMappings_OpenFile">ファイルを開く</Message>
+    <Message ID="EmulatorShortcutMappings_OpenDebugger">デバッガを開く</Message>
+    <Message ID="EmulatorShortcutMappings_OpenAssembler">アセンブラを開く</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">PPUビューアーを開く</Message>
+    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">メモリツールを開く</Message>
+    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">スクリプトウインドウを開く</Message>
+    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">トレースロガーを開く</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

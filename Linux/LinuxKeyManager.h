@@ -24,6 +24,7 @@ private:
 
 	std::thread _updateDeviceThread;
 	atomic<bool> _stopUpdateDeviceThread; 
+	bool _disableAllKeys;
 
 	void StartUpdateDeviceThread();
 
@@ -34,11 +35,13 @@ public:
 	void RefreshState();
 	bool IsKeyPressed(uint32_t key);
 	bool IsMouseButtonPressed(MouseButton button);
-	uint32_t GetPressedKey();
+	std::vector<uint32_t> GetPressedKeys();
 	string GetKeyName(uint32_t key);
 	uint32_t GetKeyCode(string keyName);
 
 	void UpdateDevices();
 	void SetKeyState(uint16_t scanCode, bool state);
 	void ResetKeyState();
+
+	void SetDisabled(bool disabled);
 };

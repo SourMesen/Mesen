@@ -56,7 +56,8 @@ bool EmulationSettings::_nsfDisableApuIrqs = true;
 uint32_t EmulationSettings::_autoSaveDelay = 5;
 bool EmulationSettings::_autoSaveNotify = false;
 
-EmulatorKeyMappingSet EmulationSettings::_emulatorKeys;
+SimpleLock EmulationSettings::_shortcutLock;
+std::unordered_map<int, KeyCombination> EmulationSettings::_emulatorKeys[2];
 
 RamPowerOnState EmulationSettings::_ramPowerOnState = RamPowerOnState::AllZeros;
 

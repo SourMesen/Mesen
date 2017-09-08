@@ -205,25 +205,6 @@ namespace Mesen.GUI.Forms
 			UpdateEmulationSpeedMenu();
 		}
 
-		private void mnuIncreaseSpeed_Click(object sender, EventArgs e)
-		{
-			InteropEmu.IncreaseEmulationSpeed();
-		}
-
-		private void mnuDecreaseSpeed_Click(object sender, EventArgs e)
-		{
-			InteropEmu.DecreaseEmulationSpeed();
-		}
-
-		private void mnuEmuSpeedMaximumSpeed_Click(object sender, EventArgs e)
-		{
-			if(ConfigManager.Config.EmulationInfo.EmulationSpeed == 0) {
-				SetEmulationSpeed(100);
-			} else {
-				SetEmulationSpeed(0);
-			}
-		}
-
 		private void mnuEmulationSpeedOption_Click(object sender, EventArgs e)
 		{
 			SetEmulationSpeed((uint)(int)((ToolStripItem)sender).Tag);
@@ -234,22 +215,6 @@ namespace Mesen.GUI.Forms
 			ConfigManager.Config.VideoInfo.UseBilinearInterpolation = mnuBilinearInterpolation.Checked;
 			ConfigManager.ApplyChanges();
 			VideoInfo.ApplyConfig();
-		}
-
-		private void mnuShowFPS_Click(object sender, EventArgs e)
-		{
-			UpdateEmulationFlags();
-		}
-
-		private void mnuScale_Click(object sender, EventArgs e)
-		{
-			UInt32 scale = UInt32.Parse((string)((ToolStripMenuItem)sender).Tag);
-			SetScale(scale);
-		}
-		
-		private void mnuFullscreen_Click(object sender, EventArgs e)
-		{
-			SetFullscreenState(!_fullscreenMode);
 		}
 
 		private void mnuNoneFilter_Click(object sender, EventArgs e)

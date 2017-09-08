@@ -14,52 +14,71 @@ namespace Mesen.GUI.Forms.Config
 	{
 		const int WM_KEYDOWN = 0x100;
 		const int WM_KEYUP = 0x101;
+		const int WM_SYSKEYDOWN = 0x104;
+		const int WM_SYSKEYUP = 0x105;
 
+		private bool _singleKeyMode = false;
 		private string[] _invalidKeys = new string[] { "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12" };
 
-		public frmGetKey()
+		public frmGetKey(bool singleKeyMode)
 		{
 			InitializeComponent();
+			_singleKeyMode = singleKeyMode;
+			if(_singleKeyMode) {
+				lblCurrentKeys.Height = 1;
+				lblCurrentKeys.Visible = false;
+			}
+			ShortcutKey = new KeyCombination();
 			InteropEmu.UpdateInputDevices();
 			InteropEmu.ResetKeyState();
+			
+			//Prevent other keybindings from interfering/activating
+			InteropEmu.DisableAllKeys(true);
+
 			Application.AddMessageFilter(this);
-			this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 		}
 
 		bool IMessageFilter.PreFilterMessage(ref Message m)
 		{
-			if(m.Msg == WM_KEYUP) {
+			if(m.Msg == WM_KEYUP || m.Msg == WM_SYSKEYUP) {
 				int virtualKeyCode = (Int32)m.WParam;
 				int scanCode = (Int32)(((Int64)m.LParam & 0x1FF0000) >> 16);
 				InteropEmu.SetKeyState(scanCode, false);
+			} else if(m.Msg == WM_SYSKEYDOWN || m.Msg == WM_KEYDOWN) {
+				int virtualKeyCode = (Int32)((Int64)m.WParam & 0xFF);
+				int scanCode = (Int32)(((Int64)m.LParam & 0x1FF0000) >> 16);
+				InteropEmu.SetKeyState(scanCode, true);
 			}
 
 			return false;
 		}
 
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			if(msg.Msg == WM_KEYDOWN) {
-				int virtualKeyCode = (Int32)((Int64)msg.WParam & 0xFF);
-				int scanCode = (Int32)(((Int64)msg.LParam & 0x1FF0000) >> 16);
-				InteropEmu.SetKeyState(scanCode, true);
-			}
-
-			return base.ProcessCmdKey(ref msg, keyData);
+			Application.RemoveMessageFilter(this);
+			InteropEmu.ResetKeyState();
+			InteropEmu.DisableAllKeys(false);
+			base.OnFormClosing(e);
 		}
 
-		public string BindedKeyName { get; set; }
-		public UInt32 BindedKeyCode { get; set; }
+		public KeyCombination ShortcutKey { get; set; }
+		private List<UInt32> _prevScanCodes = new List<UInt32>();
 
 		private void tmrCheckKey_Tick(object sender, EventArgs e)
 		{	
-			UInt32 scanCode = InteropEmu.GetPressedKey();
-			string pressedKey = InteropEmu.GetKeyName(scanCode);
-			if(!string.IsNullOrWhiteSpace(pressedKey) && !_invalidKeys.Contains(pressedKey)) {
-				BindedKeyName = pressedKey;
-				BindedKeyCode = scanCode;
-				this.Close();
+			List<UInt32> scanCodes = InteropEmu.GetPressedKeys();
+
+			KeyCombination key = new KeyCombination(_prevScanCodes);
+			lblCurrentKeys.Text = key.ToString();
+
+			if(_singleKeyMode && _prevScanCodes.Count > 0 || scanCodes.Count < _prevScanCodes.Count) {
+				if(!string.IsNullOrWhiteSpace(key.ToString())) {
+					ShortcutKey = key;
+					this.Close();
+				}
 			}
+
+			_prevScanCodes = scanCodes;
 		}
 	}
 }

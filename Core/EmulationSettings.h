@@ -272,45 +272,88 @@ struct KeyMappingSet
 	uint32_t TurboSpeed;
 };
 
-struct EmulatorKeyMappings
+enum class EmulatorShortcut
 {
-	uint32_t FastForward;
-	uint32_t Rewind;
-	uint32_t RewindTenSecs;
-	uint32_t RewindOneMin;
+	FastForward,
+	Rewind,
+	RewindTenSecs,
+	RewindOneMin,
 
-	uint32_t Pause;
-	uint32_t Reset;
-	uint32_t PowerCycle;
-	uint32_t PowerOff;
-	uint32_t Exit;
+	MoveToNextStateSlot,
+	MoveToPreviousStateSlot,
+	SaveState,
+	LoadState,
 
-	uint32_t MoveToNextStateSlot;
-	uint32_t MoveToPreviousStateSlot;
-	uint32_t SaveState;
-	uint32_t LoadState;
+	InsertNextDisk,
+	VsServiceButton,
 
-	uint32_t SwitchDiskSide;
-	uint32_t InsertNextDisk;
+	ToggleCheats,
+	ToggleAudio,
 
-	uint32_t InsertCoin1;
-	uint32_t InsertCoin2;
-	uint32_t VsServiceButton;
+	RunSingleFrame,
 
-	uint32_t TakeScreenshot;
-	uint32_t IncreaseSpeed;
-	uint32_t DecreaseSpeed;
+	// Everything below this is handled UI-side
+	SwitchDiskSide,
+	EjectDisk,
 
-	uint32_t ToggleCheats;
-	uint32_t ToggleAudio;
+	InsertCoin1,
+	InsertCoin2,
 
-	uint32_t RunSingleFrame;
+	TakeScreenshot,
+
+	IncreaseSpeed,
+	DecreaseSpeed,
+	MaxSpeed,
+
+	Pause,
+	Reset,
+	PowerCycle,
+	PowerOff,
+	Exit,
+
+	SetScale1x,
+	SetScale2x,
+	SetScale3x,
+	SetScale4x,
+	SetScale5x,
+	SetScale6x,
+	ToggleFullscreen,
+	ToggleFps,
+
+	LoadRandomGame,
+	SaveStateSlot1,
+	SaveStateSlot2,
+	SaveStateSlot3,
+	SaveStateSlot4,
+	SaveStateSlot5,
+	SaveStateSlot6,
+	SaveStateSlot7,
+	SaveStateToFile,
+
+	LoadStateSlot1,
+	LoadStateSlot2,
+	LoadStateSlot3,
+	LoadStateSlot4,
+	LoadStateSlot5,
+	LoadStateSlot6,
+	LoadStateSlot7,
+	LoadStateSlot8,
+	LoadStateFromFile,
+
+	OpenFile,
+	OpenDebugger,
+	OpenAssembler,
+	OpenPpuViewer,
+	OpenMemoryTools,
+	OpenScriptWindow,
+	OpenTraceLogger
 };
 
-struct EmulatorKeyMappingSet
+struct KeyCombination
 {
-	EmulatorKeyMappings KeySet1 = {};
-	EmulatorKeyMappings KeySet2 = {};
+	uint32_t Key1;
+	uint32_t Key2;
+	uint32_t Key3;
 };
 
 enum class Language
@@ -442,10 +485,11 @@ private:
 	static uint32_t _autoSaveDelay;
 	static bool _autoSaveNotify;
 
-	static EmulatorKeyMappingSet _emulatorKeys;
+	static std::unordered_map<int, KeyCombination> _emulatorKeys[2];
 
 	static RamPowerOnState _ramPowerOnState;
 	
+	static SimpleLock _shortcutLock;
 	static SimpleLock _lock;
 
 public:
@@ -1008,14 +1052,27 @@ public:
 		return _controllerKeys[port];
 	}
 
-	static void SetEmulatorKeys(EmulatorKeyMappingSet keyMappings)
+	static void ClearShortcutKeys()
 	{
-		_emulatorKeys = keyMappings;
+		auto lock = _shortcutLock.AcquireSafe();
+		_emulatorKeys[0].clear();
+		_emulatorKeys[1].clear();
 	}
 
-	static EmulatorKeyMappingSet GetEmulatorKeys()
+	static void SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex)
 	{
-		return _emulatorKeys;
+		auto lock = _shortcutLock.AcquireSafe();
+		_emulatorKeys[keySetIndex][(int)shortcut] = keyCombination;
+	}
+
+	static KeyCombination GetShortcutKey(EmulatorShortcut shortcut, int keySetIndex)
+	{
+		auto lock = _shortcutLock.AcquireSafe();
+		auto result = _emulatorKeys[keySetIndex].find((int)shortcut);
+		if(result != _emulatorKeys[keySetIndex].end()) {
+			return result->second;
+		}
+		return {};
 	}
 
 	static bool NeedControllerUpdate()

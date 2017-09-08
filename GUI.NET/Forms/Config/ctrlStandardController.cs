@@ -126,11 +126,11 @@ namespace Mesen.GUI.Forms.Config
 
 		private void btnMapping_Click(object sender, EventArgs e)
 		{
-			frmGetKey frm = new frmGetKey();
-			frm.ShowDialog();
-			((Button)sender).Text = frm.BindedKeyName;
-			((Button)sender).Tag = frm.BindedKeyCode;
-
+			using(frmGetKey frm = new frmGetKey(true)) {
+				frm.ShowDialog();
+				((Button)sender).Text = frm.ShortcutKey.ToString();
+				((Button)sender).Tag = frm.ShortcutKey.Key1;
+			}
 			this.OnChange?.Invoke(this, null);
 		}
 

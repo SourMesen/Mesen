@@ -14,14 +14,12 @@ namespace Mesen.GUI.Forms
 	partial class frmMain
 	{
 		const int NumberOfSaveSlots = 7;
-		private void InitializeStateMenu(ToolStripMenuItem menu, bool forSave)
+		private void UpdateStateMenu(ToolStripMenuItem menu, bool forSave)
 		{
 			if(this.InvokeRequired) {
-				this.BeginInvoke((MethodInvoker)(() => this.InitializeStateMenu(menu, forSave)));
+				this.BeginInvoke((MethodInvoker)(() => this.UpdateStateMenu(menu, forSave)));
 			} else {
-				menu.DropDownItems.Clear();
-
-				Action<uint> addSaveStateInfo = (i) => {
+				for(uint i = 1; i <= frmMain.NumberOfSaveSlots + (forSave ? 0 : 1); i++) {
 					Int64 fileTime = InteropEmu.GetStateInfo(i);
 					string label;
 					if(fileTime == 0) {
@@ -31,50 +29,67 @@ namespace Mesen.GUI.Forms
 						label = i.ToString() + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
 					}
 
-					ToolStripMenuItem item = new ToolStripMenuItem(label);
-					uint stateIndex = i;
-					item.Click += (object sender, EventArgs e) => {
-						if(_emuThread != null && !InteropEmu.IsNsf()) {
-							if(forSave) {
-								InteropEmu.SaveState(stateIndex);
-							} else {
-								if(!InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording()) {
-									InteropEmu.LoadState(stateIndex);
-								}
-							}
-						}
-					};
-
-					item.ShortcutKeys = (Keys)((int)Keys.F1 + i - 1);
-					if(forSave) {
-						item.ShortcutKeys |= Keys.Shift;
+					if(i == NumberOfSaveSlots + 1) {
+						//Autosave slot (load only)
+						menu.DropDownItems[NumberOfSaveSlots + 1].Text = label;
+					} else {
+						menu.DropDownItems[(int)i - 1].Text = label;
 					}
-					menu.DropDownItems.Add(item);
-				};
-
-				for(uint i = 1; i <= frmMain.NumberOfSaveSlots; i++) {
-					addSaveStateInfo(i);
-				}
-
-				if(!forSave) {
-					menu.DropDownItems.Add("-");
-					addSaveStateInfo(NumberOfSaveSlots+1);
-					menu.DropDownItems.Add("-");
-					ToolStripMenuItem loadFromFile = new ToolStripMenuItem(ResourceHelper.GetMessage("LoadFromFile"), Resources.FolderOpen);
-					loadFromFile.ShortcutKeys = Keys.Control | Keys.L;
-					loadFromFile.Click += LoadFromFile_Click;
-					menu.DropDownItems.Add(loadFromFile);
-				} else {
-					menu.DropDownItems.Add("-");
-					ToolStripMenuItem saveToFile = new ToolStripMenuItem(ResourceHelper.GetMessage("SaveToFile"), Resources.Floppy);
-					saveToFile.ShortcutKeys = Keys.Control | Keys.S;
-					saveToFile.Click += SaveToFile_Click;
-					menu.DropDownItems.Add(saveToFile);
 				}
 			}
 		}
 
-		private void LoadFromFile_Click(object sender, EventArgs e)
+		private void InitializeStateMenu(ToolStripMenuItem menu, bool forSave)
+		{
+			Action<uint> addSaveStateInfo = (i) => {
+				string label = i.ToString() + ". " + ResourceHelper.GetMessage("EmptyState");
+
+				ToolStripMenuItem item = new ToolStripMenuItem(label);
+				menu.DropDownItems.Add(item);
+
+				if(forSave) {
+					BindShortcut(item, (EmulatorShortcut)((int)EmulatorShortcut.SaveStateSlot1 + i - 1));
+				} else {
+					BindShortcut(item, (EmulatorShortcut)((int)EmulatorShortcut.LoadStateSlot1 + i - 1));
+				}
+			};
+
+			for(uint i = 1; i <= frmMain.NumberOfSaveSlots; i++) {
+				addSaveStateInfo(i);
+			}
+
+			if(!forSave) {
+				menu.DropDownItems.Add("-");
+				addSaveStateInfo(NumberOfSaveSlots+1);
+				menu.DropDownItems.Add("-");
+				ToolStripMenuItem loadFromFile = new ToolStripMenuItem(ResourceHelper.GetMessage("LoadFromFile"), Resources.FolderOpen);
+				menu.DropDownItems.Add(loadFromFile);
+				BindShortcut(loadFromFile, EmulatorShortcut.LoadStateFromFile);					
+			} else {
+				menu.DropDownItems.Add("-");
+				ToolStripMenuItem saveToFile = new ToolStripMenuItem(ResourceHelper.GetMessage("SaveToFile"), Resources.Floppy);
+				menu.DropDownItems.Add(saveToFile);
+				BindShortcut(saveToFile, EmulatorShortcut.SaveStateToFile);					
+			}
+		}
+
+		private void SaveState(uint slot)
+		{
+			if(_emuThread != null && !InteropEmu.IsNsf()) {
+				InteropEmu.SaveState(slot);
+			}
+		}
+
+		private void LoadState(uint slot)
+		{
+			if(_emuThread != null && !InteropEmu.IsNsf()) {
+				if(!InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording()) {
+					InteropEmu.LoadState(slot);
+				}
+			}
+		}
+
+		private void LoadStateFromFile()
 		{
 			if(_emuThread != null) {
 				using(OpenFileDialog ofd = new OpenFileDialog()) {
@@ -87,7 +102,7 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void SaveToFile_Click(object sender, EventArgs e)
+		private void SaveStateToFile()
 		{
 			if(_emuThread != null) {
 				using(SaveFileDialog sfd = new SaveFileDialog()) {
@@ -101,22 +116,17 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void mnuExit_Click(object sender, EventArgs e)
-		{
-			this.Close();
-		}
-
 		private void mnuSaveState_DropDownOpening(object sender, EventArgs e)
 		{
-			InitializeStateMenu(mnuSaveState, true);
+			UpdateStateMenu(mnuSaveState, true);
 		}
 
 		private void mnuLoadState_DropDownOpening(object sender, EventArgs e)
 		{
-			InitializeStateMenu(mnuLoadState, false);
+			UpdateStateMenu(mnuLoadState, false);
 		}
-		
-		private void mnuOpen_Click(object sender, EventArgs e)
+
+		private void OpenFile()
 		{
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
 				ofd.SetFilter(ResourceHelper.GetMessage("FilterRomIps"));

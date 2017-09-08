@@ -44,18 +44,21 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetZapperDetectionRadius(UInt32 detectionRadius);
 		[DllImport(DLLPath)] public static extern void SetExpansionDevice(ExpansionPortDevice device);
 		[DllImport(DLLPath)] public static extern void SetConsoleType(ConsoleType type);
-		[DllImport(DLLPath)] public static extern void SetEmulatorKeys(EmulatorKeyMappingSet mappings);
+		[DllImport(DLLPath)] public static extern void ClearShortcutKeys();
+		[DllImport(DLLPath)] public static extern void SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex);
 
 		[DllImport(DLLPath)] public static extern ControllerType GetControllerType(int port);
 		[DllImport(DLLPath)] public static extern ExpansionPortDevice GetExpansionDevice();
 		[DllImport(DLLPath)] public static extern ConsoleType GetConsoleType();
 
 		[DllImport(DLLPath)] public static extern void UpdateInputDevices();
-		[DllImport(DLLPath)] public static extern UInt32 GetPressedKey();
+
+		[DllImport(DLLPath, EntryPoint = "GetPressedKeys")] private static extern void GetPressedKeysWrapper(IntPtr keyBuffer);
 		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string keyName);
 		[DllImport(DLLPath, EntryPoint = "GetKeyName")] private static extern IntPtr GetKeyNameWrapper(UInt32 key);
 		[DllImport(DLLPath)] public static extern void SetKeyState(Int32 scanCode, [MarshalAs(UnmanagedType.I1)]bool pressed);
 		[DllImport(DLLPath)] public static extern void ResetKeyState();
+		[DllImport(DLLPath)] public static extern void DisableAllKeys([MarshalAs(UnmanagedType.I1)]bool disabled);
 
 		[DllImport(DLLPath)] public static extern void Run();
 		[DllImport(DLLPath)] public static extern void Pause();
@@ -589,6 +592,25 @@ namespace Mesen.GUI
 			return bankList;
 		}
 
+		public static List<UInt32> GetPressedKeys()
+		{
+			UInt32[] keyBuffer = new UInt32[3];
+			GCHandle handle = GCHandle.Alloc(keyBuffer, GCHandleType.Pinned);
+			try {
+				InteropEmu.GetPressedKeysWrapper(handle.AddrOfPinnedObject());
+			} finally {
+				handle.Free();
+			}
+
+			List<UInt32> keys = new List<UInt32>();
+			for(int i = 0; i < 3; i++) {
+				if(keyBuffer[i] != 0) {
+					keys.Add(keyBuffer[i]);
+				}
+			}
+			return keys;
+		}
+
 		public static NsfHeader NsfGetHeader()
 		{
 			NsfHeader header = new NsfHeader();
@@ -702,11 +724,7 @@ namespace Mesen.GUI
 			ConfigChanged = 14,
 			DisconnectedFromServer = 15,
 			PpuViewerDisplayFrame = 16,
-			RequestExit = 17,
-			ToggleCheats = 18,
-			ToggleAudio = 19,
-			RequestReset = 20,
-			RequestPowerCycle = 21,
+			ExecuteShortcut = 17,
 		}
 
 		public enum ControllerType
@@ -802,11 +820,12 @@ namespace Mesen.GUI
 		public class NotificationEventArgs
 		{
 			public ConsoleNotificationType NotificationType;
+			public IntPtr Parameter;
 		}
 
 		public class NotificationListener : IDisposable
 		{
-			public delegate void NotificationCallback(int type);
+			public delegate void NotificationCallback(int type, IntPtr parameter);
 			public delegate void NotificationEventHandler(NotificationEventArgs e);
 			public event NotificationEventHandler OnNotification;
 
@@ -816,8 +835,8 @@ namespace Mesen.GUI
 
 			public NotificationListener()
 			{
-				_callback = (int type) => {
-					this.ProcessNotification(type);
+				_callback = (int type, IntPtr parameter) => {
+					this.ProcessNotification(type, parameter);
 				};
 				_notificationListener = InteropEmu.RegisterNotificationCallback(_callback);
 			}
@@ -827,10 +846,13 @@ namespace Mesen.GUI
 				InteropEmu.UnregisterNotificationCallback(_notificationListener);
 			}
 
-			public void ProcessNotification(int type)
+			public void ProcessNotification(int type, IntPtr parameter)
 			{
 				if(this.OnNotification != null) {
-					this.OnNotification(new NotificationEventArgs() { NotificationType = (ConsoleNotificationType)type });
+					this.OnNotification(new NotificationEventArgs() {
+						NotificationType = (ConsoleNotificationType)type,
+						Parameter = parameter
+					});
 				}
 			}
 		}
@@ -1288,46 +1310,141 @@ namespace Mesen.GUI
 		}
 	};
 
-	public struct EmulatorKeyMappingSet
+	public struct KeyCombination
 	{
-		public EmulatorKeyMappings KeySet1;
-		public EmulatorKeyMappings KeySet2;
+		public UInt32 Key1;
+		public UInt32 Key2;
+		public UInt32 Key3;
+
+		public bool IsEmpty { get { return Key1 == 0 && Key2 == 0 && Key3 == 0; } }
+
+		public override string ToString()
+		{
+			return GetKeyNames();
+		}
+
+		public KeyCombination(List<UInt32> scanCodes = null)
+		{
+			if(scanCodes != null) {
+				Key1 = scanCodes.Count > 0 ? scanCodes[0] : 0;
+				Key2 = scanCodes.Count > 1 ? scanCodes[1] : 0;
+				Key3 = scanCodes.Count > 2 ? scanCodes[2] : 0;
+			} else {
+				Key1 = 0;
+				Key2 = 0;
+				Key3 = 0;
+			}
+		}
+
+		private string GetKeyNames()
+		{
+			List<UInt32> scanCodes = new List<uint>() { Key1, Key2, Key3 };
+			List<string> keyNames = scanCodes.Select((UInt32 scanCode) => InteropEmu.GetKeyName(scanCode)).Where((keyName) => !string.IsNullOrWhiteSpace(keyName)).ToList();
+			keyNames.Sort((string a, string b) => {
+				if(a == b) {
+					return 0;
+				}
+
+				if(a == "Ctrl") {
+					return -1;
+				} else if(b == "Ctrl") {
+					return 1;
+				}
+
+				if(a == "Alt") {
+					return -1;
+				} else if(b == "Alt") {
+					return 1;
+				}
+
+				if(a == "Shift") {
+					return -1;
+				} else if(b == "Shift") {
+					return 1;
+				}
+
+				return a.CompareTo(b);
+			});
+
+			return string.Join("+", keyNames);
+		}
 	}
 
-	public struct EmulatorKeyMappings
+	public enum EmulatorShortcut
 	{
-		public UInt32 FastForward;
+		FastForward,
+		Rewind,
+		RewindTenSecs,
+		RewindOneMin,
 
-		public UInt32 Rewind;
-		public UInt32 RewindTenSecs;
-		public UInt32 RewindOneMin;
+		MoveToNextStateSlot,
+		MoveToPreviousStateSlot,
+		SaveState,
+		LoadState,
 
-		public UInt32 Pause;
-		public UInt32 Reset;
-		public UInt32 PowerCycle;
-		public UInt32 PowerOff;
-		public UInt32 Exit;
+		InsertNextDisk,
+		VsServiceButton,
 
-		public UInt32 MoveToNextStateSlot;
-		public UInt32 MoveToPreviousStateSlot;
-		public UInt32 SaveState;
-		public UInt32 LoadState;
+		ToggleCheats,
+		ToggleAudio,
 
-		public UInt32 SwitchDiskSide;
-		public UInt32 InsertNextDisk;
+		RunSingleFrame,
 
-		public UInt32 InsertCoin1;
-		public UInt32 InsertCoin2;
-		public UInt32 VsServiceButton;
+		// Everything below this is handled UI-side
+		SwitchDiskSide,
+		EjectDisk,
 
-		public UInt32 TakeScreenshot;
-		public UInt32 IncreaseSpeed;
-		public UInt32 DecreaseSpeed;
+		InsertCoin1,
+		InsertCoin2,
 
-		public UInt32 ToggleCheats;
-		public UInt32 ToggleAudio;
+		TakeScreenshot,
 
-		public UInt32 RunSingleFrame;
+		IncreaseSpeed,
+		DecreaseSpeed,
+		MaxSpeed,
+
+		Pause,
+		Reset,
+		PowerCycle,
+		PowerOff,
+		Exit,
+
+		SetScale1x,
+		SetScale2x,
+		SetScale3x,
+		SetScale4x,
+		SetScale5x,
+		SetScale6x,
+		ToggleFullscreen,
+		ToggleFps,
+
+		LoadRandomGame,
+		SaveStateSlot1,
+		SaveStateSlot2,
+		SaveStateSlot3,
+		SaveStateSlot4,
+		SaveStateSlot5,
+		SaveStateSlot6,
+		SaveStateSlot7,
+		SaveStateToFile,
+
+		LoadStateSlot1,
+		LoadStateSlot2,
+		LoadStateSlot3,
+		LoadStateSlot4,
+		LoadStateSlot5,
+		LoadStateSlot6,
+		LoadStateSlot7,
+		LoadStateSlot8,
+		LoadStateFromFile,
+
+		OpenFile,
+		OpenDebugger,
+		OpenAssembler,
+		OpenPpuViewer,
+		OpenMemoryTools,
+		OpenScriptWindow,
+		OpenTraceLogger
 	}
 
 	public struct InteropCheatInfo

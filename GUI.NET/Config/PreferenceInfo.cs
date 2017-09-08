@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Config
@@ -48,8 +49,9 @@ namespace Mesen.GUI.Config
 		public bool CloudSaveIntegration = false;
 		public DateTime CloudLastSync = DateTime.MinValue;
 
-		public EmulatorKeyMappings? EmulatorKeySet1;
-		public EmulatorKeyMappings? EmulatorKeySet2;
+		public bool DefaultsInitialized = false;
+		public List<ShortcutKeyInfo> ShortcutKeys1;
+		public List<ShortcutKeyInfo> ShortcutKeys2;
 
 		public bool DisableGameDatabase = false;
 		public bool DisableOsd = false;
@@ -87,19 +89,63 @@ namespace Mesen.GUI.Config
 
 		public void InitializeDefaults()
 		{
-			if(EmulatorKeySet1 == null) {
-				EmulatorKeySet1 = new EmulatorKeyMappings() {
-					FastForward = InteropEmu.GetKeyCode("Tab"),
-					Rewind = InteropEmu.GetKeyCode("Backspace")
-				};
-			}
+			if(!DefaultsInitialized) {
+				ShortcutKeys1 = new List<ShortcutKeyInfo>();
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.FastForward, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Tab") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.Rewind, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Backspace") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.IncreaseSpeed, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("+") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.DecreaseSpeed, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("-") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.MaxSpeed, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F9") }));
 
-			if(EmulatorKeySet2 == null) {
-				EmulatorKeySet2 = new EmulatorKeyMappings() {
-					FastForward = InteropEmu.GetKeyCode("Pad1 R2"),
-					Rewind = InteropEmu.GetKeyCode("Pad1 L2")
-				};
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.ToggleFps, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F10") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.ToggleFullscreen, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F11") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.TakeScreenshot, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F12") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadRandomGame, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("Ins") }));
+
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.Reset, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("R") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.PowerCycle, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("T") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.Pause, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Esc") }));
+
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SetScale1x, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Alt"), Key2 = InteropEmu.GetKeyCode("1") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SetScale2x, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Alt"), Key2 = InteropEmu.GetKeyCode("2") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SetScale3x, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Alt"), Key2 = InteropEmu.GetKeyCode("3") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SetScale4x, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Alt"), Key2 = InteropEmu.GetKeyCode("4") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SetScale5x, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Alt"), Key2 = InteropEmu.GetKeyCode("5") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SetScale6x, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Alt"), Key2 = InteropEmu.GetKeyCode("6") }));
+
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenAssembler, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("A") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenDebugger, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("D") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenMemoryTools, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("M") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenPpuViewer, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("P") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenScriptWindow, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("J") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenTraceLogger, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("N") }));
+
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenFile, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("O") }));
+
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SaveStateSlot1, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Shift"), Key2 = InteropEmu.GetKeyCode("F1") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SaveStateSlot2, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Shift"), Key2 = InteropEmu.GetKeyCode("F2") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SaveStateSlot3, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Shift"), Key2 = InteropEmu.GetKeyCode("F3") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SaveStateSlot4, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Shift"), Key2 = InteropEmu.GetKeyCode("F4") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SaveStateSlot5, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Shift"), Key2 = InteropEmu.GetKeyCode("F5") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SaveStateSlot6, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Shift"), Key2 = InteropEmu.GetKeyCode("F6") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SaveStateSlot7, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Shift"), Key2 = InteropEmu.GetKeyCode("F7") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SaveStateToFile, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("S") }));
+
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlot1, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F1") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlot2, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F2") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlot3, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F3") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlot4, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F4") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlot5, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F5") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlot6, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F6") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlot7, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F7") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlot8, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F8") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateFromFile, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("L") }));
+
+				ShortcutKeys2 = new List<ShortcutKeyInfo>();
+				ShortcutKeys2.Add(new ShortcutKeyInfo(EmulatorShortcut.FastForward, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Pad1 R2") }));
+				ShortcutKeys2.Add(new ShortcutKeyInfo(EmulatorShortcut.Rewind, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Pad1 L2") }));
 			}
+			DefaultsInitialized = true;
 		}
 
 		static public void ApplyConfig()
@@ -141,11 +187,32 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.NsfShuffle, preferenceInfo.NsfShuffle);
 
 			InteropEmu.SetAutoSaveOptions(preferenceInfo.AutoSave ? (uint)preferenceInfo.AutoSaveDelay : 0, preferenceInfo.AutoSaveNotify);
-			InteropEmu.SetEmulatorKeys(new EmulatorKeyMappingSet() { KeySet1 = preferenceInfo.EmulatorKeySet1.Value, KeySet2 = preferenceInfo.EmulatorKeySet2.Value });
+
+			InteropEmu.ClearShortcutKeys();
+			foreach(ShortcutKeyInfo shortcutInfo in preferenceInfo.ShortcutKeys1) {
+				InteropEmu.SetShortcutKey(shortcutInfo.Shortcut, shortcutInfo.KeyCombination, 0);
+			}
+			foreach(ShortcutKeyInfo shortcutInfo in preferenceInfo.ShortcutKeys2) {
+				InteropEmu.SetShortcutKey(shortcutInfo.Shortcut, shortcutInfo.KeyCombination, 1);
+			}
 
 			InteropEmu.SetRewindBufferSize(preferenceInfo.RewindBufferSize);
 
 			InteropEmu.SetFolderOverrides(ConfigManager.SaveFolder, ConfigManager.SaveStateFolder, ConfigManager.ScreenshotFolder);
+		}
+	}
+
+	public class ShortcutKeyInfo
+	{
+		public EmulatorShortcut Shortcut;
+		public KeyCombination KeyCombination;
+
+		public ShortcutKeyInfo() { }
+
+		public ShortcutKeyInfo(EmulatorShortcut key, KeyCombination keyCombination)
+		{
+			Shortcut = key;
+			KeyCombination = keyCombination;
 		}
 	}
 }

@@ -59,7 +59,7 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 		static void RefreshKeyState();
 		static bool IsKeyPressed(uint32_t keyCode);
 		static bool IsMouseButtonPressed(MouseButton button);
-		static uint32_t GetPressedKey();
+		static vector<uint32_t> GetPressedKeys();
 		static string GetKeyName(uint32_t keyCode);
 		static uint32_t GetKeyCode(string keyName);
 		

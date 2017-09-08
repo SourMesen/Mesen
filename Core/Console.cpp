@@ -24,7 +24,6 @@
 #include "NsfPpu.h"
 #include "SoundMixer.h"
 #include "NsfMapper.h"
-#include "ShortcutKeyHandler.h"
 #include "MovieManager.h"
 #include "RewindManager.h"
 #include "SaveStateManager.h"
@@ -337,7 +336,6 @@ void Console::Run()
 	double targetTime;
 	uint32_t lastFrameNumber = -1;
 	
-	ShortcutKeyHandler shortcutKeyHandler;
 	_autoSaveManager.reset(new AutoSaveManager());
 
 	_runLock.Acquire();

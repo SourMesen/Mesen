@@ -53,12 +53,12 @@ bool ControlManager::IsMouseButtonPressed(MouseButton button)
 	return false;
 }
 
-uint32_t ControlManager::GetPressedKey()
+vector<uint32_t> ControlManager::GetPressedKeys()
 {
 	if(_keyManager != nullptr) {
-		return _keyManager->GetPressedKey();
+		return _keyManager->GetPressedKeys();
 	}
-	return 0;
+	return vector<uint32_t>();
 }
 
 string ControlManager::GetKeyName(uint32_t keyCode)

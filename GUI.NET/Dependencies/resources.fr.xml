@@ -200,7 +200,7 @@
       <Control ID="lblDisplayPosition">Position d'affichage :</Control>
       <Control ID="chkDisplayInputHorizontally">Afficher horizontalement</Control>
 
-      <Control ID="lblKeyBinding">Attention: Votre configuration actuel contient des conflicts - certaines touches sur votre clavier ou manetter sont mappées à plusieurs boutons sur la console. Veuillez réviser votre configuration et la corriger au besoin.</Control>
+      <Control ID="lblKeyBinding">Attention: Votre configuration actuelle contient des conflicts - certaines touches sur votre clavier ou manette sont mappées à plusieurs boutons sur la console. Veuillez réviser votre configuration et la corriger au besoin.</Control>
     </Form>
     <Form ID="frmControllerConfig" Title="Configuration de la manette">
       <Control ID="lblTurboSpeed">Vitesse du mode turbo:</Control>
@@ -400,6 +400,7 @@
       <Control ID="lblRewindMinutes">minutes (Utilise ≈1MB/min)</Control>
 
       <Control ID="tpgShortcuts">Raccourcis</Control>
+      <Control ID="lblShortcutWarning">Attention: Votre configuration actuelle contient des conflicts. Veuillez réviser votre configuration et la corriger au besoin.</Control>
       <Control ID="colAction">Action</Control>
       <Control ID="colBinding1">Raccourci #1</Control>
       <Control ID="colBinding2">Raccourci #2</Control>
@@ -729,6 +730,42 @@
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Activer/Désactiver tous les codes</Message>
     <Message ID="EmulatorShortcutMappings_ToggleAudio">Activer/Désactiver l'audio</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">Avancer d'une seule image</Message>
+
+    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Éjecter le disque</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale1x">Taille de l'image 1x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale2x">Taille de l'image 2x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale3x">Taille de l'image 3x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale4x">Taille de l'image 4x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale5x">Taille de l'image 5x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale6x">Taille de l'image 6x</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Activer/Désactiver le mode plein écran</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFps">Activer/Désactiver le compteur FPS</Message>
+    <Message ID="EmulatorShortcutMappings_MaxSpeed">Activer/Désactiver la vitesse maximale</Message>
+    <Message ID="EmulatorShortcutMappings_LoadRandomGame">Ouvrir un jeu aléatoire</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Sauvegarde d'état - Position 1</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Sauvegarde d'état - Position 2</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">Sauvegarde d'état - Position 3</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">Sauvegarde d'état - Position 4</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Sauvegarde d'état - Position 5</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Sauvegarde d'état - Position 6</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Sauvegarde d'état - Position 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateToFile">Sauvergarde l'état dans un fichier</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Chargement d'état - Position 1</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Chargement d'état - Position 2</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">Chargement d'état - Position 3</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">Chargement d'état - Position 4</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">Chargement d'état - Position 5</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Chargement d'état - Position 6</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Chargement d'état - Position 7</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Chargement d'état - Position 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Charger l'état à partir d'un fichier</Message>
+    <Message ID="EmulatorShortcutMappings_OpenFile">Ouvrir un fichier</Message>
+    <Message ID="EmulatorShortcutMappings_OpenDebugger">Ouvrir le débogueur</Message>
+    <Message ID="EmulatorShortcutMappings_OpenAssembler">Ouvrir l'assembleur</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Ouvrir le visualiseur du PPU</Message>
+    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Ouvrir les outils mémoire</Message>
+    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Ouvrir une fenêtre de script</Message>
+    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Ouvrir l'enregistreur de trace</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

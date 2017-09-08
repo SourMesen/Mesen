@@ -11,26 +11,6 @@ namespace Mesen.GUI.Forms
 {
 	public partial class frmMain
 	{
-		private void mnuPause_Click(object sender, EventArgs e)
-		{
-			PauseEmu();
-		}
-
-		private void mnuReset_Click(object sender, EventArgs e)
-		{
-			ResetEmu();
-		}
-
-		private void mnuPowerCycle_Click(object sender, EventArgs e)
-		{
-			PowerCycleEmu();
-		}
-
-		private void mnuPowerOff_Click(object sender, EventArgs e)
-		{
-			InteropEmu.Stop();
-		}
-
 		private void InitializeFdsDiskMenu()
 		{
 			if(this.InvokeRequired) {
@@ -61,16 +41,6 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void mnuEjectDisk_Click(object sender, EventArgs e)
-		{
-			InteropEmu.FdsEjectDisk();
-		}
-
-		private void mnuSwitchDiskSide_Click(object sender, EventArgs e)
-		{
-			InteropEmu.FdsSwitchDiskSide();
-		}
-		
 		private void InitializeVsSystemMenu()
 		{
 			if(this.InvokeRequired) {
@@ -81,16 +51,6 @@ namespace Mesen.GUI.Forms
 				mnuInsertCoin2.Visible = InteropEmu.IsVsSystem();
 				mnuVsGameConfig.Visible = InteropEmu.IsVsSystem();
 			}
-		}
-
-		private void mnuInsertCoin1_Click(object sender, EventArgs e)
-		{
-			InteropEmu.VsInsertCoin(0);
-		}
-
-		private void mnuInsertCoin2_Click(object sender, EventArgs e)
-		{
-			InteropEmu.VsInsertCoin(1);
 		}
 
 		private void ShowVsGameConfig()

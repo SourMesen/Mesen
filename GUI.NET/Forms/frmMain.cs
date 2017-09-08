@@ -26,6 +26,8 @@ namespace Mesen.GUI.Forms
 	{
 		private const int WM_KEYDOWN = 0x100;
 		private const int WM_KEYUP = 0x101;
+		const int WM_SYSKEYDOWN = 0x104;
+		const int WM_SYSKEYUP = 0x105;
 
 		private InteropEmu.NotificationListener _notifListener;
 		private Thread _emuThread;
@@ -45,6 +47,8 @@ namespace Mesen.GUI.Forms
 		private int _romLoadCounter = 0;
 		private bool _removeFocus = false;
 		private bool _showUpgradeMessage = false;
+
+		private Dictionary<EmulatorShortcut, Func<bool>> _actionEnabledFuncs = new Dictionary<EmulatorShortcut, Func<bool>>();
 
 		private string[] _commandLineArgs;
 		private bool _noAudio = false;
@@ -153,7 +157,10 @@ namespace Mesen.GUI.Forms
 			UpdateRecentFiles();
 
 			UpdateViewerSize();
-			
+
+			InitializeStateMenu(mnuSaveState, true);
+			InitializeStateMenu(mnuLoadState, false);
+
 			if(ConfigManager.Config.WindowLocation.HasValue) {
 				this.StartPosition = FormStartPosition.Manual;
 				this.Location = ConfigManager.Config.WindowLocation.Value;
@@ -189,6 +196,8 @@ namespace Mesen.GUI.Forms
 		protected override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);
+
+			this.BindShortcuts();
 
 			if(ConfigManager.Config.WindowSize.HasValue) {
 				this.Size = ConfigManager.Config.WindowSize.Value;
@@ -384,8 +393,8 @@ namespace Mesen.GUI.Forms
 					InitializeVsSystemMenu();
 					CheatInfo.ApplyCheats();
 					VsConfigInfo.ApplyConfig();
-					InitializeStateMenu(mnuSaveState, true);
-					InitializeStateMenu(mnuLoadState, false);
+					UpdateStateMenu(mnuSaveState, true);
+					UpdateStateMenu(mnuLoadState, false);
 					if(ConfigManager.Config.PreferenceInfo.ShowVsConfigOnLoad && InteropEmu.IsVsSystem()) {
 						this.Invoke((MethodInvoker)(() => {
 							this.ShowVsGameConfig();
@@ -441,34 +450,9 @@ namespace Mesen.GUI.Forms
 					}));
 					break;
 
-				case InteropEmu.ConsoleNotificationType.RequestReset:
-					this.BeginInvoke((MethodInvoker)(() => this.ResetEmu()));
-					break;
-
-				case InteropEmu.ConsoleNotificationType.RequestPowerCycle:
-					this.BeginInvoke((MethodInvoker)(() => this.PowerCycleEmu()));
-					break;
-
-				case InteropEmu.ConsoleNotificationType.RequestExit:
-					this.BeginInvoke((MethodInvoker)(() => this.Close()));
-					break;
-
-				case InteropEmu.ConsoleNotificationType.ToggleCheats:
+				case InteropEmu.ConsoleNotificationType.ExecuteShortcut:
 					this.BeginInvoke((MethodInvoker)(() => {
-						ConfigManager.Config.DisableAllCheats = !ConfigManager.Config.DisableAllCheats;
-						if(ConfigManager.Config.DisableAllCheats) {
-							InteropEmu.DisplayMessage("Cheats", "CheatsDisabled");
-						}
-						CheatInfo.ApplyCheats();
-						ConfigManager.ApplyChanges();
-					}));
-					break;
-
-				case InteropEmu.ConsoleNotificationType.ToggleAudio:
-					this.BeginInvoke((MethodInvoker)(() => {
-						ConfigManager.Config.AudioInfo.EnableAudio = !ConfigManager.Config.AudioInfo.EnableAudio;
-						AudioInfo.ApplyConfig();
-						ConfigManager.ApplyChanges();
+						ExecuteShortcut((EmulatorShortcut)e.Parameter);
 					}));
 					break;
 
@@ -485,7 +469,198 @@ namespace Mesen.GUI.Forms
 				UpdateMenus();
 			}
 		}
+
+		private void BindShortcuts()
+		{
+			Func<bool> runningNotClient = () => { return _emuThread != null && !InteropEmu.IsConnected(); };
+			Func<bool> runningNotClientNotMovie = () => { return _emuThread != null && !InteropEmu.IsConnected() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording(); };
+
+			Func<bool> runningNotNsf = () => { return _emuThread != null && !InteropEmu.IsNsf(); };
+			Func<bool> runningFdsNoAutoInsert = () => { return _emuThread != null && InteropEmu.FdsGetSideCount() > 0 && !InteropEmu.FdsIsAutoInsertDiskEnabled() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording(); };
+			Func<bool> runningVsSystem = () => { return _emuThread != null && InteropEmu.IsVsSystem() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording(); };
+
+			BindShortcut(mnuOpen, EmulatorShortcut.OpenFile);
+			BindShortcut(mnuExit, EmulatorShortcut.Exit);
+			BindShortcut(mnuIncreaseSpeed, EmulatorShortcut.IncreaseSpeed, runningNotClient);
+			BindShortcut(mnuDecreaseSpeed, EmulatorShortcut.DecreaseSpeed, runningNotClient);
+			BindShortcut(mnuEmuSpeedMaximumSpeed, EmulatorShortcut.MaxSpeed, runningNotClient);
+
+			BindShortcut(mnuPause, EmulatorShortcut.Pause, runningNotClient);
+			BindShortcut(mnuReset, EmulatorShortcut.Reset, runningNotClientNotMovie);
+			BindShortcut(mnuPowerCycle, EmulatorShortcut.PowerCycle, runningNotClientNotMovie);
+			BindShortcut(mnuPowerOff, EmulatorShortcut.PowerOff, runningNotClient);
+
+			BindShortcut(mnuSwitchDiskSide, EmulatorShortcut.SwitchDiskSide, runningFdsNoAutoInsert);
+			BindShortcut(mnuEjectDisk, EmulatorShortcut.EjectDisk, runningFdsNoAutoInsert);
+
+			BindShortcut(mnuInsertCoin1, EmulatorShortcut.InsertCoin1, runningVsSystem);
+			BindShortcut(mnuInsertCoin2, EmulatorShortcut.InsertCoin2, runningVsSystem);
+
+			BindShortcut(mnuShowFPS, EmulatorShortcut.ToggleFps);
+
+			BindShortcut(mnuScale1x, EmulatorShortcut.SetScale1x);
+			BindShortcut(mnuScale2x, EmulatorShortcut.SetScale2x);
+			BindShortcut(mnuScale3x, EmulatorShortcut.SetScale3x);
+			BindShortcut(mnuScale4x, EmulatorShortcut.SetScale4x);
+			BindShortcut(mnuScale5x, EmulatorShortcut.SetScale5x);
+			BindShortcut(mnuScale6x, EmulatorShortcut.SetScale6x);
+
+			BindShortcut(mnuFullscreen, EmulatorShortcut.ToggleFullscreen);
+
+			BindShortcut(mnuTakeScreenshot, EmulatorShortcut.TakeScreenshot, runningNotNsf);
+			BindShortcut(mnuRandomGame, EmulatorShortcut.LoadRandomGame);
+
+			BindShortcut(mnuDebugDebugger, EmulatorShortcut.OpenDebugger, runningNotClient);
+			BindShortcut(mnuDebugger, EmulatorShortcut.OpenDebugger, runningNotClient);
+			BindShortcut(mnuAssembler, EmulatorShortcut.OpenAssembler, runningNotClient);
+			BindShortcut(mnuMemoryViewer, EmulatorShortcut.OpenMemoryTools, runningNotClient);
+			BindShortcut(mnuPpuViewer, EmulatorShortcut.OpenPpuViewer, runningNotClient);
+			BindShortcut(mnuScriptWindow, EmulatorShortcut.OpenScriptWindow, runningNotClient);
+			BindShortcut(mnuTraceLogger, EmulatorShortcut.OpenTraceLogger, runningNotClient);
+		}
 		
+		private void BindShortcut(ToolStripMenuItem item, EmulatorShortcut shortcut, Func<bool> isActionEnabled = null)
+		{
+			item.Click += (object sender, EventArgs e) => {
+				if(isActionEnabled == null || isActionEnabled()) {
+					ExecuteShortcut(shortcut);
+				}
+			};
+
+			_actionEnabledFuncs[shortcut] = isActionEnabled;
+
+			if(item.OwnerItem is ToolStripMenuItem) {
+				Action updateShortcut = () => {
+					int keyIndex = ConfigManager.Config.PreferenceInfo.ShortcutKeys1.FindIndex((ShortcutKeyInfo shortcutInfo) => shortcutInfo.Shortcut == shortcut);
+					if(keyIndex >= 0) {
+						item.ShortcutKeyDisplayString = ConfigManager.Config.PreferenceInfo.ShortcutKeys1[keyIndex].KeyCombination.ToString();
+					} else {
+						keyIndex = ConfigManager.Config.PreferenceInfo.ShortcutKeys2.FindIndex((ShortcutKeyInfo shortcutInfo) => shortcutInfo.Shortcut == shortcut);
+						if(keyIndex >= 0) {
+							item.ShortcutKeyDisplayString = ConfigManager.Config.PreferenceInfo.ShortcutKeys2[keyIndex].KeyCombination.ToString();
+						} else {
+							item.ShortcutKeyDisplayString = "";
+						}
+					}
+					item.Enabled = isActionEnabled == null || isActionEnabled();
+				};
+
+				updateShortcut();
+
+				//Update item shortcut text when its parent opens
+				((ToolStripMenuItem)item.OwnerItem).DropDownOpening += (object sender, EventArgs e) => { updateShortcut(); };
+			}
+		}
+
+		private void ExecuteShortcut(EmulatorShortcut shortcut)
+		{
+			Func<bool> isActionEnabled;
+			if(_actionEnabledFuncs.TryGetValue(shortcut, out isActionEnabled)) {
+				isActionEnabled = _actionEnabledFuncs[shortcut];
+				if(isActionEnabled != null && !isActionEnabled()) {
+					//Action disabled
+					return;
+				}
+			}
+
+			switch(shortcut) {
+				case EmulatorShortcut.Pause: PauseEmu(); break;
+				case EmulatorShortcut.Reset: this.ResetEmu(); break;
+				case EmulatorShortcut.PowerCycle: this.PowerCycleEmu(); break;
+				case EmulatorShortcut.PowerOff: InteropEmu.Stop(); break;
+				case EmulatorShortcut.Exit: this.Close(); break;
+
+				case EmulatorShortcut.ToggleCheats: ToggleCheats(); break;
+				case EmulatorShortcut.ToggleAudio: ToggleAudio(); break;
+				case EmulatorShortcut.ToggleFps: ToggleFps(); break;
+				case EmulatorShortcut.MaxSpeed: ToggleMaxSpeed(); break;
+				case EmulatorShortcut.ToggleFullscreen: ToggleFullscreen(); break;
+
+				case EmulatorShortcut.OpenFile: OpenFile(); break;
+				case EmulatorShortcut.IncreaseSpeed: InteropEmu.IncreaseEmulationSpeed(); break;
+				case EmulatorShortcut.DecreaseSpeed: InteropEmu.DecreaseEmulationSpeed(); break;
+				case EmulatorShortcut.SwitchDiskSide: InteropEmu.FdsSwitchDiskSide(); break;
+				case EmulatorShortcut.EjectDisk: InteropEmu.FdsEjectDisk(); break;
+
+				case EmulatorShortcut.SetScale1x: SetScale(1); break;
+				case EmulatorShortcut.SetScale2x: SetScale(2); break;
+				case EmulatorShortcut.SetScale3x: SetScale(3); break;
+				case EmulatorShortcut.SetScale4x: SetScale(4); break;
+				case EmulatorShortcut.SetScale5x: SetScale(5); break;
+				case EmulatorShortcut.SetScale6x: SetScale(6); break;
+					
+				case EmulatorShortcut.InsertCoin1: InteropEmu.VsInsertCoin(0); break;
+				case EmulatorShortcut.InsertCoin2: InteropEmu.VsInsertCoin(1); break;
+
+				case EmulatorShortcut.TakeScreenshot: InteropEmu.TakeScreenshot(); break;
+				case EmulatorShortcut.LoadRandomGame: LoadRandomGame(); break;
+
+				case EmulatorShortcut.OpenAssembler: DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler); break;
+				case EmulatorShortcut.OpenDebugger: DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger); break;
+				case EmulatorShortcut.OpenTraceLogger: DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger); break;
+				case EmulatorShortcut.OpenPpuViewer: DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer); break;
+				case EmulatorShortcut.OpenMemoryTools: DebugWindowManager.OpenDebugWindow(DebugWindow.MemoryViewer); break;
+				case EmulatorShortcut.OpenScriptWindow: DebugWindowManager.OpenDebugWindow(DebugWindow.ScriptWindow); break;
+
+				case EmulatorShortcut.LoadStateFromFile: LoadStateFromFile(); break;
+				case EmulatorShortcut.SaveStateToFile: SaveStateToFile(); break;
+
+				case EmulatorShortcut.SaveStateSlot1: SaveState(1); break;
+				case EmulatorShortcut.SaveStateSlot2: SaveState(2); break;
+				case EmulatorShortcut.SaveStateSlot3: SaveState(3); break;
+				case EmulatorShortcut.SaveStateSlot4: SaveState(4); break;
+				case EmulatorShortcut.SaveStateSlot5: SaveState(5); break;
+				case EmulatorShortcut.SaveStateSlot6: SaveState(6); break;
+				case EmulatorShortcut.SaveStateSlot7: SaveState(7); break;
+				case EmulatorShortcut.LoadStateSlot1: LoadState(1); break;
+				case EmulatorShortcut.LoadStateSlot2: LoadState(2); break;
+				case EmulatorShortcut.LoadStateSlot3: LoadState(3); break;
+				case EmulatorShortcut.LoadStateSlot4: LoadState(4); break;
+				case EmulatorShortcut.LoadStateSlot5: LoadState(5); break;
+				case EmulatorShortcut.LoadStateSlot6: LoadState(6); break;
+				case EmulatorShortcut.LoadStateSlot7: LoadState(7); break;
+				case EmulatorShortcut.LoadStateSlot8: LoadState(8); break;
+			}
+		}
+
+		private void ToggleFullscreen()
+		{
+			SetFullscreenState(!_fullscreenMode);
+			mnuFullscreen.Checked = _fullscreenMode;
+		}
+
+		private void ToggleMaxSpeed()
+		{
+			if(ConfigManager.Config.EmulationInfo.EmulationSpeed == 0) {
+				SetEmulationSpeed(100);
+			} else {
+				SetEmulationSpeed(0);
+			}
+		}
+
+		private void ToggleFps()
+		{
+			mnuShowFPS.Checked = !mnuShowFPS.Checked;
+			UpdateEmulationFlags();
+		}
+
+		private static void ToggleAudio()
+		{
+			ConfigManager.Config.AudioInfo.EnableAudio = !ConfigManager.Config.AudioInfo.EnableAudio;
+			AudioInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private static void ToggleCheats()
+		{
+			ConfigManager.Config.DisableAllCheats = !ConfigManager.Config.DisableAllCheats;
+			if(ConfigManager.Config.DisableAllCheats) {
+				InteropEmu.DisplayMessage("Cheats", "CheatsDisabled");
+			}
+			CheatInfo.ApplyCheats();
+			ConfigManager.ApplyChanges();
+		}
+
 		private void UpdateFocusFlag()
 		{
 			bool hasFocus = false;
@@ -512,13 +687,6 @@ namespace Mesen.GUI.Forms
 					bool devMode = ConfigManager.Config.PreferenceInfo.DeveloperMode;
 					mnuDebug.Visible = devMode;
 
-					mnuAssembler.Enabled = running;
-					mnuMemoryViewer.Enabled = running;
-					mnuPpuViewer.Enabled = running;
-					mnuTraceLogger.Enabled = running;
-					mnuDebugDebugger.Enabled = running;
-					mnuScriptWindow.Enabled = running;
-
 					panelInfo.Visible = !running;
 					ctrlRecentGames.Visible = !running;
 
@@ -529,7 +697,6 @@ namespace Mesen.GUI.Forms
 
 					bool isNetPlayClient = InteropEmu.IsConnected();
 
-					mnuPause.Enabled = mnuPowerCycle.Enabled = mnuReset.Enabled = mnuPowerOff.Enabled = (running && !isNetPlayClient);
 					mnuSaveState.Enabled = (running && !isNetPlayClient && !InteropEmu.IsNsf());
 					mnuLoadState.Enabled = (running && !isNetPlayClient && !InteropEmu.IsNsf() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording());
 
@@ -567,9 +734,6 @@ namespace Mesen.GUI.Forms
 
 					mnuCheats.Enabled = !isNetPlayClient;
 					mnuEmulationSpeed.Enabled = !isNetPlayClient;
-					mnuIncreaseSpeed.Enabled = !isNetPlayClient;
-					mnuDecreaseSpeed.Enabled = !isNetPlayClient;
-					mnuEmuSpeedMaximumSpeed.Enabled = !isNetPlayClient;
 					mnuInput.Enabled = !isNetPlayClient;
 					mnuRegion.Enabled = !isNetPlayClient;
 
@@ -600,10 +764,8 @@ namespace Mesen.GUI.Forms
 					mnuTestRecordFrom.Enabled = (mnuTestRecordStart.Enabled || mnuTestRecordNow.Enabled || mnuTestRecordMovie.Enabled || mnuTestRecordTest.Enabled);
 
 					mnuDebugger.Visible = !devMode;
-					mnuDebugger.Enabled = !netPlay && running && !devMode;
 					mnuHdPackEditor.Enabled = !netPlay && running;
 
-					mnuTakeScreenshot.Enabled = running && !InteropEmu.IsNsf();
 					mnuNetPlay.Enabled = !InteropEmu.IsNsf();
 					if(running && InteropEmu.IsNsf()) {
 						mnuPowerCycle.Enabled = false;
@@ -617,8 +779,6 @@ namespace Mesen.GUI.Forms
 
 					bool autoInsertDisabled = !InteropEmu.FdsIsAutoInsertDiskEnabled();
 					mnuSelectDisk.Enabled = autoInsertDisabled;
-					mnuEjectDisk.Enabled = autoInsertDisabled;
-					mnuSwitchDiskSide.Enabled = autoInsertDisabled;
 
 					bool isHdPackLoader = InteropEmu.IsHdPpu();
 					mnuNtscFilter.Enabled = !isHdPackLoader;
@@ -695,21 +855,20 @@ namespace Mesen.GUI.Forms
 
 		bool IMessageFilter.PreFilterMessage(ref Message m)
 		{
-			if(m.Msg == WM_KEYUP) {
-				int scanCode = (Int32)(((Int64)m.LParam & 0x1FF0000) >> 16);
-				InteropEmu.SetKeyState(scanCode, false);
+			if(Application.OpenForms.Count > 0 && Application.OpenForms[0].ContainsFocus) {
+				if(m.Msg == WM_KEYUP || m.Msg == WM_SYSKEYUP) {
+					int scanCode = (Int32)(((Int64)m.LParam & 0x1FF0000) >> 16);
+					InteropEmu.SetKeyState(scanCode, false);
+				} else if(m.Msg == WM_SYSKEYDOWN || m.Msg == WM_KEYDOWN) {
+					int scanCode = (Int32)(((Int64)m.LParam & 0x1FF0000) >> 16);
+					InteropEmu.SetKeyState(scanCode, true);
+				}
 			}
-
 			return false;
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if(msg.Msg == WM_KEYDOWN) {
-				int scanCode = (Int32)(((Int64)msg.LParam & 0x1FF0000) >> 16);
-				InteropEmu.SetKeyState(scanCode, true);
-			}
-
 			if(!this.menuStrip.Enabled) {
 				//Make sure we disable all shortcut keys while the bar is disabled (i.e when running tests)
 				return false;
@@ -734,16 +893,6 @@ namespace Mesen.GUI.Forms
 			}
 			#endif
 
-			if(keyData == Keys.Escape && _emuThread != null && mnuPause.Enabled) {
-				PauseEmu();
-				return true;
-			} else if(keyData == Keys.Oemplus) {
-				mnuIncreaseSpeed.PerformClick();
-				return true;
-			} else if(keyData == Keys.OemMinus) {
-				mnuDecreaseSpeed.PerformClick();
-				return true;
-			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 		

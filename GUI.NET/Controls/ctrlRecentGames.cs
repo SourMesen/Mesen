@@ -228,9 +228,9 @@ namespace Mesen.GUI.Controls
 		private void tmrInput_Tick(object sender, EventArgs e)
 		{
 			//Use player 1's controls to navigate the recent game selection screen
-			if(!InteropEmu.IsRunning()) {
-				uint keyCode = InteropEmu.GetPressedKey();
-
+			if(Application.OpenForms.Count > 0 && Application.OpenForms[0].ContainsFocus && !InteropEmu.IsRunning()) {
+				List<uint> keyCodes = InteropEmu.GetPressedKeys();
+				uint keyCode = keyCodes.Count > 0 ? keyCodes[0] : 0;
 				if(keyCode > 0) {
 					if(!_waitForRelease) {
 						foreach(KeyMappings mapping in ConfigManager.Config.InputInfo.Controllers[0].Keys) {

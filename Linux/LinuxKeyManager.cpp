@@ -5,7 +5,7 @@
 #include "../Core/Console.h"
 
 static vector<KeyDefinition> _keyDefinitions = {
-	{ "", 9, "Escape", "" },
+	{ "", 9, "Esc", "" },
 	{ "", 10, "1", "" },
 	{ "", 11, "2", "" },
 	{ "", 12, "3", "" },
@@ -16,8 +16,8 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "", 17, "8", "" },
 	{ "", 18, "9", "" },
 	{ "", 19, "0", "" },
-	{ "", 20, "Minus", "" },
-	{ "", 21, "Equal", "" },
+	{ "", 20, "-", "" },
+	{ "", 21, "=", "" },
 	{ "", 22, "BackSpace", "" },
 	{ "", 23, "Tab", "" },
 	{ "", 24, "Q", "" },
@@ -33,7 +33,7 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "", 34, "Left Bracket", "" },
 	{ "", 35, "Right Bracket", "" },
 	{ "", 36, "Return", "" },
-	{ "", 37, "Left Control", "" },
+	{ "", 37, "Ctrl", "" },
 	{ "", 38, "A", "" },
 	{ "", 39, "S", "" },
 	{ "", 40, "D", "" },
@@ -46,7 +46,7 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "", 47, "Semicolor", "" },
 	{ "", 48, "Apostrophe", "" },
 	{ "", 49, "Grave", "" },
-	{ "", 50, "Left Shift", "" },
+	{ "", 50, "Shift", "" },
 	{ "", 51, "\\", "" },
 	{ "", 52, "Z", "" },
 	{ "", 53, "X", "" },
@@ -60,7 +60,7 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "", 61, "/", "" },
 	{ "", 62, "Right Shift", "" },
 	{ "", 63, "KP Multiply", "" },
-	{ "", 64, "Left Alt", "" },
+	{ "", 64, "Alt", "" },
 	{ "", 65, "Space", "" },
 	{ "", 66, "Caps Lock", "" },
 	{ "", 67, "F1", "" },
@@ -262,6 +262,7 @@ LinuxKeyManager::LinuxKeyManager()
 		}
 	}
 
+	_disableAllKeys = false;
 	_stopUpdateDeviceThread = false;
 	StartUpdateDeviceThread();	
 }
@@ -280,6 +281,10 @@ void LinuxKeyManager::RefreshState()
 
 bool LinuxKeyManager::IsKeyPressed(uint32_t key)
 {
+	if(_disableAllKeys) {
+		return false;
+	}
+
 	if(key >= 0x10000) {
 		uint8_t gamepadPort = (key - 0x10000) / 0x100;
 		uint8_t gamepadButton = (key - 0x10000) % 0x100;
@@ -303,22 +308,23 @@ bool LinuxKeyManager::IsMouseButtonPressed(MouseButton button)
 	return false;
 }
 
-uint32_t LinuxKeyManager::GetPressedKey()
+vector<uint32_t> LinuxKeyManager::GetPressedKeys()
 {
+	vector<uint32_t> pressedKeys;
 	for(size_t i = 0; i < _controllers.size(); i++) {
 		for(int j = 0; j <= 54; j++) {
 			if(_controllers[i]->IsButtonPressed(j)) {
-				return 0x10000 + i * 0x100 + j;
+				pressedKeys.push_back(0x10000 + i * 0x100 + j);
 			}
 		}
 	}
 
 	for(int i = 0; i < 0x200; i++) {
 		if(_keyState[i]) {
-			return i;
+			pressedKeys.push_back(i);
 		}
 	}
-	return 0;
+	return pressedKeys;
 }
 
 string LinuxKeyManager::GetKeyName(uint32_t key)
@@ -391,6 +397,17 @@ void LinuxKeyManager::SetKeyState(uint16_t scanCode, bool state)
 	if(scanCode > 0x1FF) {
 		_mouseState[scanCode & 0x03] = state;
 	} else {
+		scanCode &= 0xFF;
+		if(scanCode == 105) {
+			//Left + Right Ctrl
+			scanCode = 37;
+		} else if(scanCode == 62) {
+			//Left + Right Shift
+			scanCode = 50;
+		} else if(scanCode == 108) {
+			//Left + Right Alt
+			scanCode = 64;
+		}
 		_keyState[scanCode & 0xFF] = state;
 	}
 }
@@ -399,4 +416,9 @@ void LinuxKeyManager::ResetKeyState()
 {
 	memset(_mouseState, 0, sizeof(_mouseState));
 	memset(_keyState, 0, sizeof(_keyState));
+}
+
+void WindowsKeyManager::SetDisabled(bool disabled)
+{
+	_disableAllKeys = disabled;
 }

@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include <thread>
 #include <unordered_set>
+#include "../Utilities/SimpleLock.h"
 #include "EmulationSettings.h"
 
 class ShortcutKeyHandler
@@ -9,17 +10,24 @@ class ShortcutKeyHandler
 private:
 	std::thread _thread;
 	atomic<bool> _stopThread;
+	SimpleLock _lock;
 	
-	std::unordered_set<uint32_t> _keysDown;
-	std::unordered_set<uint32_t> _prevKeysDown;
+	int _keySetIndex;
+	vector<uint32_t> _pressedKeys;
+
+	std::unordered_set<EmulatorShortcut> _keysDown[2];
+	std::unordered_set<EmulatorShortcut> _prevKeysDown[2];
 	
-	void CheckMappedKeys(EmulatorKeyMappings mappings);
-	void ProcessKeys(EmulatorKeyMappingSet mappings);
+	void CheckMappedKeys();
 	
-	bool DetectKeyPress(uint32_t keyCode);
-	bool DetectKeyRelease(uint32_t keyCode);
+	bool IsKeyPressed(EmulatorShortcut key);
+
+	bool DetectKeyPress(EmulatorShortcut key);
+	bool DetectKeyRelease(EmulatorShortcut key);
 
 public:
 	ShortcutKeyHandler();
 	~ShortcutKeyHandler();
+
+	void ProcessKeys();
 };
