@@ -32,14 +32,17 @@ bool ShortcutKeyHandler::IsKeyPressed(EmulatorShortcut shortcut)
 
 	int keyCount = (comb.Key1 ? 1 : 0) + (comb.Key2 ? 1 : 0) + (comb.Key3 ? 1 : 0);
 
-	if(keyCount == 0) {
+	if(keyCount == 0 || _pressedKeys.empty()) {
 		return false;
 	}
 
 	if(_pressedKeys.size() != keyCount) {
-		//Only allow shortcuts that use as many keys as the number of keys pressed
+		//Only allow shortcuts that use as many keys as the number of keys pressed, unless there are no conflicts with other shortcuts
 		//e.g: Needed to prevent Shift-F1 from triggering a shortcut for F1
-		return false;
+		if(EmulationSettings::GetKeyUsage(comb.Key1) > 1 || (comb.Key2 && EmulationSettings::GetKeyUsage(comb.Key2) > 1) || (comb.Key3 && EmulationSettings::GetKeyUsage(comb.Key3) > 1)) {
+			//Conflicts found, do not activate shortcut when the number of keys is not exactly right
+			return false;
+		}
 	}
 
 	return ControlManager::IsKeyPressed(comb.Key1) &&
@@ -179,5 +182,5 @@ void ShortcutKeyHandler::ProcessKeys()
 		_keySetIndex = i;
 		CheckMappedKeys();
 		_prevKeysDown[i] = _keysDown[i];
-	}	
+	}
 }

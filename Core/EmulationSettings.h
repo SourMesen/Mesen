@@ -487,7 +487,8 @@ private:
 	static uint32_t _autoSaveDelay;
 	static bool _autoSaveNotify;
 
-	static std::unordered_map<int, KeyCombination> _emulatorKeys[2];
+	static std::unordered_map<uint32_t, KeyCombination> _emulatorKeys[2];
+	static std::unordered_map<uint32_t, uint32_t> _shortcutKeyUsage;
 
 	static RamPowerOnState _ramPowerOnState;
 	
@@ -1059,12 +1060,17 @@ public:
 		auto lock = _shortcutLock.AcquireSafe();
 		_emulatorKeys[0].clear();
 		_emulatorKeys[1].clear();
+		_shortcutKeyUsage.clear();
 	}
 
 	static void SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex)
 	{
 		auto lock = _shortcutLock.AcquireSafe();
 		_emulatorKeys[keySetIndex][(int)shortcut] = keyCombination;
+		
+		_shortcutKeyUsage[keyCombination.Key1]++;
+		_shortcutKeyUsage[keyCombination.Key2]++;
+		_shortcutKeyUsage[keyCombination.Key3]++;
 	}
 
 	static KeyCombination GetShortcutKey(EmulatorShortcut shortcut, int keySetIndex)
@@ -1075,6 +1081,12 @@ public:
 			return result->second;
 		}
 		return {};
+	}
+	
+	static int GetKeyUsage(int keyCode)
+	{
+		auto lock = _shortcutLock.AcquireSafe();
+		return _shortcutKeyUsage[keyCode];
 	}
 
 	static bool NeedControllerUpdate()
