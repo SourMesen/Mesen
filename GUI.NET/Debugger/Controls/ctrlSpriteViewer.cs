@@ -273,11 +273,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void ShowInChrViewer()
 		{
-			if(_contextMenuSpriteIndex < 0) {
+			if(_selectedSprite < 0 && _contextMenuSpriteIndex < 0) {
 				return;
 			}
 
-			int ramAddr = _contextMenuSpriteIndex * 4;
+			int ramAddr = (_selectedSprite >= 0 ? _selectedSprite : _contextMenuSpriteIndex) * 4;
 			int tileIndex = _spriteRam[ramAddr + 1];
 			int palette = (_spriteRam[ramAddr + 2] & 0x03) + 4;
 
