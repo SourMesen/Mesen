@@ -111,7 +111,7 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "", 115, "End", "" },
 	{ "", 116, "Down Arrow", "" },
 	{ "", 117, "Next", "" },
-	{ "", 118, "Insert", "" },
+	{ "", 118, "Ins", "" },
 	{ "", 119, "Delete", "" },
 	{ "", 121, "XF86AudioMute", "" },
 	{ "", 122, "XF86AudioLowerVolume", "" },
@@ -418,7 +418,7 @@ void LinuxKeyManager::ResetKeyState()
 	memset(_keyState, 0, sizeof(_keyState));
 }
 
-void WindowsKeyManager::SetDisabled(bool disabled)
+void LinuxKeyManager::SetDisabled(bool disabled)
 {
 	_disableAllKeys = disabled;
 }

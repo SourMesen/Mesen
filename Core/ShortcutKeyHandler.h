@@ -15,8 +15,8 @@ private:
 	int _keySetIndex;
 	vector<uint32_t> _pressedKeys;
 
-	std::unordered_set<EmulatorShortcut> _keysDown[2];
-	std::unordered_set<EmulatorShortcut> _prevKeysDown[2];
+	std::unordered_set<uint32_t> _keysDown[2];
+	std::unordered_set<uint32_t> _prevKeysDown[2];
 	
 	void CheckMappedKeys();
 	

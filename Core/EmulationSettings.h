@@ -763,7 +763,7 @@ public:
 		if(_emulationSpeed == 0) {
 			EmulationSettings::SetEmulationSpeed(_speedValues.back(), true);
 		} else if(_emulationSpeed > _speedValues.front()) {
-			for(size_t i = _speedValues.size() - 1; i >= 0; i--) {
+			for(int i = (int)_speedValues.size() - 1; i >= 0; i--) {
 				if(_speedValues[i] < _emulationSpeed) {
 					EmulationSettings::SetEmulationSpeed(_speedValues[i], true);
 					break;

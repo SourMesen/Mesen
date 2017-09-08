@@ -50,9 +50,9 @@ bool ShortcutKeyHandler::IsKeyPressed(EmulatorShortcut shortcut)
 bool ShortcutKeyHandler::DetectKeyPress(EmulatorShortcut shortcut)
 {
 	if(IsKeyPressed(shortcut)) {
-		_keysDown[_keySetIndex].emplace(shortcut);
+		_keysDown[_keySetIndex].emplace((uint32_t)shortcut);
 
-		if(_prevKeysDown[_keySetIndex].find(shortcut) == _prevKeysDown[_keySetIndex].end()) {
+		if(_prevKeysDown[_keySetIndex].find((uint32_t)shortcut) == _prevKeysDown[_keySetIndex].end()) {
 			return true;
 		}
 	}
@@ -62,7 +62,7 @@ bool ShortcutKeyHandler::DetectKeyPress(EmulatorShortcut shortcut)
 bool ShortcutKeyHandler::DetectKeyRelease(EmulatorShortcut shortcut)
 {
 	if(!IsKeyPressed(shortcut)) {
-		if(_prevKeysDown[_keySetIndex].find(shortcut) != _prevKeysDown[_keySetIndex].end()) {
+		if(_prevKeysDown[_keySetIndex].find((uint32_t)shortcut) != _prevKeysDown[_keySetIndex].end()) {
 			return true;
 		}
 	}
@@ -73,7 +73,6 @@ void ShortcutKeyHandler::CheckMappedKeys()
 {
 	bool isNetplayClient = GameClient::Connected();
 	bool isMovieActive = MovieManager::Playing() || MovieManager::Recording();
-	bool needConfirm = EmulationSettings::CheckFlag(ConfirmExitResetPower);
 
 	//Let the UI handle these shortcuts
 	for(uint64_t i = (uint64_t)EmulatorShortcut::SwitchDiskSide; i <= (uint64_t)EmulatorShortcut::OpenTraceLogger; i++) {

@@ -64,7 +64,6 @@
 			this.gridShortcuts.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.gridShortcuts.Size = new System.Drawing.Size(448, 216);
 			this.gridShortcuts.TabIndex = 2;
-			this.gridShortcuts.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridShortcuts_CellContentClick);
 			this.gridShortcuts.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridShortcuts_CellMouseDown);
 			// 
 			// colAction

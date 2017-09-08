@@ -167,31 +167,25 @@ namespace Mesen.GUI.Forms.Config
 			ConfigManager.Config.PreferenceInfo.ShortcutKeys2 = keySet2;
 		}
 
-		private void gridShortcuts_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
-			if(gridShortcuts.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0) {
-				DataGridViewButtonCell button = gridShortcuts.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewButtonCell;
-				if(button != null) {
-					using(frmGetKey frm = new frmGetKey(false)) {
-						frm.ShowDialog();
-						button.Value = frm.ShortcutKey.ToString();
-						button.Tag = frm.ShortcutKey;
-
-						CheckConflicts();
-					}
-				}
-			}
-		}
-
 		private void gridShortcuts_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			//Right-click on buttons to clear mappings
-			if(e.Button == MouseButtons.Right && gridShortcuts.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0) {
+			if(gridShortcuts.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0) {
 				DataGridViewButtonCell button = gridShortcuts.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewButtonCell;
 				if(button != null) {
-					button.Value = "";
-					button.Tag = new KeyCombination();
-					CheckConflicts();
+					if(e.Button == MouseButtons.Right) {
+						button.Value = "";
+						button.Tag = new KeyCombination();
+						CheckConflicts();
+					} else if(e.Button == MouseButtons.Left) {
+						using(frmGetKey frm = new frmGetKey(false)) {
+							frm.ShowDialog();
+							button.Value = frm.ShortcutKey.ToString();
+							button.Tag = frm.ShortcutKey;
+
+							CheckConflicts();
+						}
+					}
 				}
 			}
 		}

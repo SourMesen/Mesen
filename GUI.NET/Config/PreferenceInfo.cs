@@ -93,7 +93,7 @@ namespace Mesen.GUI.Config
 				ShortcutKeys1 = new List<ShortcutKeyInfo>();
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.FastForward, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Tab") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.Rewind, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Backspace") }));
-				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.IncreaseSpeed, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("+") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.IncreaseSpeed, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("=") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.DecreaseSpeed, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("-") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.MaxSpeed, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F9") }));
 

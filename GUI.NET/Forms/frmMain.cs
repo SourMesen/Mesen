@@ -177,6 +177,15 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.WindowSize.HasValue) {
 				this.ClientSize = ConfigManager.Config.WindowSize.Value;
 			}
+
+			if(Program.IsMono) {
+				//Mono does not trigger the activate/deactivate events when opening a modal popup, but it does set the form to disabled
+				//Use this to reset key states
+				this.EnabledChanged += (object s, EventArgs evt) => {
+					_removeFocus = !this.Enabled;
+					InteropEmu.ResetKeyState();
+				};
+			}
 		}
 
 		protected override void OnDeactivate(EventArgs e)
@@ -472,6 +481,7 @@ namespace Mesen.GUI.Forms
 
 		private void BindShortcuts()
 		{
+			Func<bool> notClient = () => { return !InteropEmu.IsConnected(); };
 			Func<bool> runningNotClient = () => { return _emuThread != null && !InteropEmu.IsConnected(); };
 			Func<bool> runningNotClientNotMovie = () => { return _emuThread != null && !InteropEmu.IsConnected() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording(); };
 
@@ -481,9 +491,9 @@ namespace Mesen.GUI.Forms
 
 			BindShortcut(mnuOpen, EmulatorShortcut.OpenFile);
 			BindShortcut(mnuExit, EmulatorShortcut.Exit);
-			BindShortcut(mnuIncreaseSpeed, EmulatorShortcut.IncreaseSpeed, runningNotClient);
-			BindShortcut(mnuDecreaseSpeed, EmulatorShortcut.DecreaseSpeed, runningNotClient);
-			BindShortcut(mnuEmuSpeedMaximumSpeed, EmulatorShortcut.MaxSpeed, runningNotClient);
+			BindShortcut(mnuIncreaseSpeed, EmulatorShortcut.IncreaseSpeed, notClient);
+			BindShortcut(mnuDecreaseSpeed, EmulatorShortcut.DecreaseSpeed, notClient);
+			BindShortcut(mnuEmuSpeedMaximumSpeed, EmulatorShortcut.MaxSpeed, notClient);
 
 			BindShortcut(mnuPause, EmulatorShortcut.Pause, runningNotClient);
 			BindShortcut(mnuReset, EmulatorShortcut.Reset, runningNotClientNotMovie);
