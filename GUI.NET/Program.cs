@@ -100,7 +100,7 @@ namespace Mesen.GUI
 					if(!ResourceManager.ExtractResources()) { 
 						return;
 					}
-				} catch(FileNotFoundException) {
+				} catch(FileNotFoundException e) {
 					string message = "The Microsoft .NET Framework 4.5 could not be found. Please download and install the latest version of the .NET Framework from Microsoft's website and try again.";
 					switch(ResourceHelper.GetCurrentLanguage()) {
 						case Language.French: message = "Le .NET Framework 4.5 de Microsoft n'a pas été trouvé. Veuillez télécharger la plus récente version du .NET Framework à partir du site de Microsoft et essayer à nouveau."; break;
@@ -110,7 +110,7 @@ namespace Mesen.GUI
 						case Language.Ukrainian: message = "Microsoft .NET Framework 4.5 не знайдений. Будь ласка завантажте і встановіть останню версію .NET Framework з сайту Microsoft і спробуйте знову."; break;
 						case Language.Portuguese: message = "Microsoft .NET Framework 4.5 não foi encontrado. Por favor, baixe a versão mais recente de .NET Framework do site da Microsoft e tente novamente."; break;
 					}
-					MessageBox.Show(message, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(message + Environment.NewLine + Environment.NewLine + e.ToString(), "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				} catch(Exception e) {
 					string message = "An unexpected error has occurred.\n\nError details:\n{0}";
