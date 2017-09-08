@@ -74,6 +74,7 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("ShowVsConfigOnLoad", chkShowVsConfigOnLoad);
 
+			AddBinding("GameFolder", psGame);
 			AddBinding("AviFolder", psAvi);
 			AddBinding("MovieFolder", psMovies);
 			AddBinding("SaveDataFolder", psSaveData);
@@ -81,6 +82,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("ScreenshotFolder", psScreenshots);
 			AddBinding("WaveFolder", psWave);
 
+			AddBinding("OverrideGameFolder", chkGameOverride);
 			AddBinding("OverrideAviFolder", chkAviOverride);
 			AddBinding("OverrideMovieFolder", chkMoviesOverride);
 			AddBinding("OverrideSaveDataFolder", chkSaveDataOverride);
@@ -249,6 +251,9 @@ namespace Mesen.GUI.Forms.Config
 			bool result = true;
 			List<string> invalidFolders = new List<string>();
 			try {
+				if(chkGameOverride.Checked && !CheckFolderPermissions(psGame.Text, false)) {
+					invalidFolders.Add(chkGameOverride.Text.Replace(":", "").Trim());
+				}
 				if(chkAviOverride.Checked && !CheckFolderPermissions(psAvi.Text)) {
 					invalidFolders.Add(chkAviOverride.Text.Replace(":", "").Trim());
 				}
@@ -278,7 +283,7 @@ namespace Mesen.GUI.Forms.Config
 			return result;
 		}
 
-		private bool CheckFolderPermissions(string folder)
+		private bool CheckFolderPermissions(string folder, bool checkWritePermission = true)
 		{
 			if(!Directory.Exists(folder)) {
 				try {
@@ -290,17 +295,20 @@ namespace Mesen.GUI.Forms.Config
 					return false;
 				}
 			}
-			try {
-				File.WriteAllText(Path.Combine(folder, "test.txt"), "");
-				File.Delete(Path.Combine(folder, "test.txt"));
-			} catch {
-				return false;
+			if(checkWritePermission) {
+				try {
+					File.WriteAllText(Path.Combine(folder, "test.txt"), "");
+					File.Delete(Path.Combine(folder, "test.txt"));
+				} catch {
+					return false;
+				}
 			}
 			return true;
 		}
 
 		private void UpdateFolderOverrideUi()
 		{
+			psGame.Enabled = chkGameOverride.Checked;
 			psAvi.Enabled = chkAviOverride.Checked;
 			psMovies.Enabled = chkMoviesOverride.Checked;
 			psSaveData.Enabled = chkSaveDataOverride.Checked;
@@ -308,6 +316,7 @@ namespace Mesen.GUI.Forms.Config
 			psScreenshots.Enabled = chkScreenshotsOverride.Checked;
 			psWave.Enabled = chkWaveOverride.Checked;
 
+			psGame.DisabledText = ResourceHelper.GetMessage("LastFolderUsed");
 			psAvi.DisabledText = ConfigManager.DefaultAviFolder;
 			psMovies.DisabledText = ConfigManager.DefaultMovieFolder;
 			psSaveData.DisabledText = ConfigManager.DefaultSaveDataFolder;

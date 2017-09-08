@@ -377,6 +377,7 @@
       <Control ID="lblDataLocation">Pasta:</Control>
 
       <Control ID="grpPathOverrides">Sobreposição de pastas</Control>
+      <Control ID="chkGameOverride">Games:</Control>
       <Control ID="chkAviOverride">Vídeos:</Control>
       <Control ID="chkScreenshotsOverride">Capturas de tela:</Control>
       <Control ID="chkSaveDataOverride">Dados salvos:</Control>
@@ -629,6 +630,7 @@
     <Message ID="SaveToFile">Salvar para arquivo...</Message>
 
     <Message ID="ClearHistory">Clear History</Message>
+    <Message ID="LastFolderUsed">Last Folder Used</Message>
 
     <Message ID="Resume">Continuar</Message>
     <Message ID="Pause">Pausar</Message>

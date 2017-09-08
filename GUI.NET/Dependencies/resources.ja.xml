@@ -381,6 +381,7 @@
       <Control ID="lblDataLocation">保存先:</Control>
 
       <Control ID="grpPathOverrides">デフォルトフォルダの変更</Control>
+      <Control ID="chkGameOverride">ゲーム:</Control>
       <Control ID="chkAviOverride">録画:</Control>
       <Control ID="chkScreenshotsOverride">スクリーンショット:</Control>
       <Control ID="chkSaveDataOverride">セーブデータ:</Control>
@@ -626,6 +627,7 @@
     <Message ID="SaveToFile">ファイルに保存する…</Message>
 
     <Message ID="ClearHistory">履歴を消去</Message>
+    <Message ID="LastFolderUsed">最後に使用したフォルダ</Message>
     
     <Message ID="Resume">再開</Message>
     <Message ID="Pause">ポーズ</Message>

@@ -363,12 +363,28 @@
       <Control ID="chkDisplayMovieIcons">Mostra una icona d'iniciar/gravar al reproduir o gravar una pel·lícula</Control>
       <Control ID="btnOpenMesenFolder">Obre la carpeta de Mesen</Control>
       <Control ID="btnResetSettings">Restableix tot</Control>
-      <Control ID="tpgFileAssociations">Associació de fitxers</Control>
+
+      <Control ID="tpgFiles">Files/Folders</Control>
       <Control ID="grpFileAssociations">Associació de fitxers</Control>
       <Control ID="chkNesFormat">.NES</Control>
       <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
       <Control ID="chkMmoFormat">.MMO (Pel·lícules de Mesen)</Control>
       <Control ID="chkMstFormat">.MST (Partides guardades de Mesen)</Control>
+      
+      <Control ID="grpDataStorageLocation">Data Storage Folder</Control>
+      <Control ID="radStorageDocuments">Store Mesen's data in my user profile</Control>
+      <Control ID="radStoragePortable">Store Mesen's data in the same folder as the application</Control>
+      <Control ID="lblDataLocation">Folder:</Control>
+
+      <Control ID="grpPathOverrides">Folder Overrides</Control>
+      <Control ID="chkGameOverride">Games:</Control>
+      <Control ID="chkAviOverride">Videos:</Control>
+      <Control ID="chkScreenshotsOverride">Screenshots:</Control>
+      <Control ID="chkSaveDataOverride">Save Data:</Control>
+      <Control ID="chkWaveOverride">Audio:</Control>
+      <Control ID="chkSaveStatesOverride">Save States:</Control>
+      <Control ID="chkMoviesOverride">Movies:</Control>
+
       <Control ID="tpgAdvanced">Avançat</Control>
       <Control ID="chkFdsAutoLoadDisk">Insereix automàticament la cara A del disc 1 al carregar un joc de la FDS</Control>
       <Control ID="chkFdsFastForwardOnLoad">Activa l'avanç ràpid automàticament en jocs de la FDS mentre el disc o la BIOS es carreguen</Control>
@@ -595,6 +611,7 @@
     <Message ID="SaveToFile">Desa al fitxer...</Message>
 
     <Message ID="ClearHistory">Clear History</Message>
+    <Message ID="LastFolderUsed">Last Folder Used</Message>
 
     <Message ID="Resume">Continua</Message>
     <Message ID="Pause">Pausa</Message>

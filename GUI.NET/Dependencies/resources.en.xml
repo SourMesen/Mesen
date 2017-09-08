@@ -16,6 +16,7 @@
     <Message ID="SaveToFile">Save to file...</Message>
 
     <Message ID="ClearHistory">Clear History</Message>
+    <Message ID="LastFolderUsed">Last Folder Used</Message>
 
     <Message ID="Resume">Resume</Message>
     <Message ID="Pause">Pause</Message>

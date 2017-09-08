@@ -69,6 +69,7 @@ namespace Mesen.GUI.Config
 
 		public UInt32 RewindBufferSize = 300;
 
+		public bool OverrideGameFolder = false;
 		public bool OverrideAviFolder = false;
 		public bool OverrideMovieFolder = false;
 		public bool OverrideSaveDataFolder = false;
@@ -76,6 +77,7 @@ namespace Mesen.GUI.Config
 		public bool OverrideScreenshotFolder = false;
 		public bool OverrideWaveFolder = false;
 
+		public string GameFolder = "";
 		public string AviFolder = "";
 		public string MovieFolder = "";
 		public string SaveDataFolder = "";

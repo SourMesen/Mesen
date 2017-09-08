@@ -271,6 +271,9 @@ namespace Mesen.GUI.Forms
 		void InitializeEmu()
 		{
 			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.ctrlRenderer.Handle, _noAudio, _noVideo, _noInput);
+			if(ConfigManager.Config.PreferenceInfo.OverrideGameFolder && Directory.Exists(ConfigManager.Config.PreferenceInfo.GameFolder)) {
+				InteropEmu.AddKnownGameFolder(ConfigManager.Config.PreferenceInfo.GameFolder);
+			}
 			foreach(RecentItem recentItem in ConfigManager.Config.RecentFiles) {
 				InteropEmu.AddKnownGameFolder(recentItem.RomFile.Folder);
 			}

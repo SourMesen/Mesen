@@ -379,6 +379,7 @@
       <Control ID="lblDataLocation">Folder:</Control>
 
       <Control ID="grpPathOverrides">Folder Overrides</Control>
+      <Control ID="chkGameOverride">Games:</Control>
       <Control ID="chkAviOverride">Videos:</Control>
       <Control ID="chkScreenshotsOverride">Screenshots:</Control>
       <Control ID="chkSaveDataOverride">Save Data:</Control>
@@ -631,6 +632,7 @@
     <Message ID="SaveToFile">Save to file...</Message>
 
     <Message ID="ClearHistory">Clear History</Message>
+    <Message ID="LastFolderUsed">Last Folder Used</Message>
     
     <Message ID="Resume">Продолжить</Message>
     <Message ID="Pause">Пауза</Message>

@@ -380,6 +380,7 @@
       <Control ID="lblDataLocation">Dossier:</Control>
       
       <Control ID="grpPathOverrides">Modification des dossiers par défaut</Control>
+      <Control ID="chkGameOverride">Jeux:</Control>
       <Control ID="chkAviOverride">Vidéos:</Control>
       <Control ID="chkScreenshotsOverride">Captures d'écran:</Control>
       <Control ID="chkSaveDataOverride">Fichier de sauvegarde:</Control>
@@ -641,6 +642,7 @@
     <Message ID="SaveToFile">Sauvegarder dans un fichier...</Message>
 
     <Message ID="ClearHistory">Effacer l'historique</Message>
+    <Message ID="LastFolderUsed">Dernier dossier utilisé</Message>
     
     <Message ID="Resume">Continuer</Message>
     <Message ID="Pause">Pause</Message>

@@ -130,10 +130,14 @@ namespace Mesen.GUI.Forms
 		{
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
 				ofd.SetFilter(ResourceHelper.GetMessage("FilterRomIps"));
-				if(ConfigManager.Config.RecentFiles.Count > 0) {
+
+				if(ConfigManager.Config.PreferenceInfo.OverrideGameFolder && Directory.Exists(ConfigManager.Config.PreferenceInfo.GameFolder)) {
+					ofd.InitialDirectory = ConfigManager.Config.PreferenceInfo.GameFolder;
+				} else if(ConfigManager.Config.RecentFiles.Count > 0) {
 					ofd.InitialDirectory = ConfigManager.Config.RecentFiles[0].RomFile.Folder;
 				}
-				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+
+				if(ofd.ShowDialog() == DialogResult.OK) {
 					LoadFile(ofd.FileName);
 				}
 			}

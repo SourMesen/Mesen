@@ -32,6 +32,7 @@ namespace Mesen.GUI.Forms.Config
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPreferences));
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+			this.chkDeveloperMode = new System.Windows.Forms.CheckBox();
 			this.lblPauseBackgroundSettings = new System.Windows.Forms.Label();
 			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
 			this.chkAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
@@ -92,6 +93,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpPathOverrides = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+			this.psGame = new Mesen.GUI.Forms.Config.ctrlPathSelection();
+			this.chkGameOverride = new System.Windows.Forms.CheckBox();
 			this.psWave = new Mesen.GUI.Forms.Config.ctrlPathSelection();
 			this.psMovies = new Mesen.GUI.Forms.Config.ctrlPathSelection();
 			this.psSaveData = new Mesen.GUI.Forms.Config.ctrlPathSelection();
@@ -141,7 +144,6 @@ namespace Mesen.GUI.Forms.Config
 			this.lblUiDisplaySettings = new System.Windows.Forms.Label();
 			this.lblGameSelectionScreenSettings = new System.Windows.Forms.Label();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.chkDeveloperMode = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
@@ -185,7 +187,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 385);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 419);
 			this.baseConfigPanel.Size = new System.Drawing.Size(497, 29);
 			// 
 			// tlpMain
@@ -227,8 +229,19 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(483, 353);
+			this.tlpMain.Size = new System.Drawing.Size(483, 387);
 			this.tlpMain.TabIndex = 1;
+			// 
+			// chkDeveloperMode
+			// 
+			this.chkDeveloperMode.AutoSize = true;
+			this.chkDeveloperMode.Location = new System.Drawing.Point(13, 299);
+			this.chkDeveloperMode.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkDeveloperMode.Name = "chkDeveloperMode";
+			this.chkDeveloperMode.Size = new System.Drawing.Size(138, 17);
+			this.chkDeveloperMode.TabIndex = 26;
+			this.chkDeveloperMode.Text = "Enable developer mode";
+			this.chkDeveloperMode.UseVisualStyleBackColor = true;
 			// 
 			// lblPauseBackgroundSettings
 			// 
@@ -391,7 +404,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel5.Controls.Add(this.btnOpenMesenFolder, 0, 0);
 			this.tableLayoutPanel5.Controls.Add(this.btnResetSettings, 2, 0);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 324);
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 358);
 			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 1;
@@ -444,7 +457,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(497, 385);
+			this.tabMain.Size = new System.Drawing.Size(497, 419);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -453,7 +466,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(489, 359);
+			this.tpgGeneral.Size = new System.Drawing.Size(489, 393);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -464,7 +477,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgShortcuts.Location = new System.Drawing.Point(4, 22);
 			this.tpgShortcuts.Name = "tpgShortcuts";
 			this.tpgShortcuts.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgShortcuts.Size = new System.Drawing.Size(489, 359);
+			this.tpgShortcuts.Size = new System.Drawing.Size(489, 393);
 			this.tpgShortcuts.TabIndex = 7;
 			this.tpgShortcuts.Text = "Shortcut Keys";
 			this.tpgShortcuts.UseVisualStyleBackColor = true;
@@ -474,7 +487,7 @@ namespace Mesen.GUI.Forms.Config
 			this.ctrlEmulatorShortcuts.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlEmulatorShortcuts.Location = new System.Drawing.Point(3, 3);
 			this.ctrlEmulatorShortcuts.Name = "ctrlEmulatorShortcuts";
-			this.ctrlEmulatorShortcuts.Size = new System.Drawing.Size(483, 353);
+			this.ctrlEmulatorShortcuts.Size = new System.Drawing.Size(483, 387);
 			this.ctrlEmulatorShortcuts.TabIndex = 0;
 			// 
 			// tpgSaveData
@@ -483,7 +496,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgSaveData.Location = new System.Drawing.Point(4, 22);
 			this.tpgSaveData.Name = "tpgSaveData";
 			this.tpgSaveData.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgSaveData.Size = new System.Drawing.Size(489, 359);
+			this.tpgSaveData.Size = new System.Drawing.Size(489, 393);
 			this.tpgSaveData.TabIndex = 3;
 			this.tpgSaveData.Text = "Save Data";
 			this.tpgSaveData.UseVisualStyleBackColor = true;
@@ -500,7 +513,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(483, 353);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(483, 387);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// grpCloudSaves
@@ -509,7 +522,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpCloudSaves.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCloudSaves.Location = new System.Drawing.Point(3, 76);
 			this.grpCloudSaves.Name = "grpCloudSaves";
-			this.grpCloudSaves.Size = new System.Drawing.Size(477, 274);
+			this.grpCloudSaves.Size = new System.Drawing.Size(477, 308);
 			this.grpCloudSaves.TabIndex = 2;
 			this.grpCloudSaves.TabStop = false;
 			this.grpCloudSaves.Text = "Cloud Saves";
@@ -526,7 +539,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpCloudSaves.RowCount = 2;
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpCloudSaves.Size = new System.Drawing.Size(471, 255);
+			this.tlpCloudSaves.Size = new System.Drawing.Size(471, 289);
 			this.tlpCloudSaves.TabIndex = 0;
 			// 
 			// tlpCloudSaveDesc
@@ -772,7 +785,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgNsf.Location = new System.Drawing.Point(4, 22);
 			this.tpgNsf.Name = "tpgNsf";
 			this.tpgNsf.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgNsf.Size = new System.Drawing.Size(489, 359);
+			this.tpgNsf.Size = new System.Drawing.Size(489, 393);
 			this.tpgNsf.TabIndex = 4;
 			this.tpgNsf.Text = "NSF";
 			this.tpgNsf.UseVisualStyleBackColor = true;
@@ -791,7 +804,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(483, 353);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(483, 387);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// flowLayoutPanel7
@@ -925,7 +938,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgFiles.Location = new System.Drawing.Point(4, 22);
 			this.tpgFiles.Name = "tpgFiles";
 			this.tpgFiles.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgFiles.Size = new System.Drawing.Size(489, 359);
+			this.tpgFiles.Size = new System.Drawing.Size(489, 393);
 			this.tpgFiles.TabIndex = 2;
 			this.tpgFiles.Text = "Folders/Files";
 			this.tpgFiles.UseVisualStyleBackColor = true;
@@ -946,7 +959,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(483, 353);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(483, 387);
 			this.tableLayoutPanel6.TabIndex = 13;
 			// 
 			// grpPathOverrides
@@ -957,7 +970,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpPathOverrides.Controls.Add(this.tableLayoutPanel10);
 			this.grpPathOverrides.Location = new System.Drawing.Point(3, 198);
 			this.grpPathOverrides.Name = "grpPathOverrides";
-			this.grpPathOverrides.Size = new System.Drawing.Size(477, 158);
+			this.grpPathOverrides.Size = new System.Drawing.Size(477, 186);
 			this.grpPathOverrides.TabIndex = 15;
 			this.grpPathOverrides.TabStop = false;
 			this.grpPathOverrides.Text = "Folder Overrides";
@@ -967,22 +980,26 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel10.ColumnCount = 2;
 			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel10.Controls.Add(this.psWave, 1, 0);
-			this.tableLayoutPanel10.Controls.Add(this.psMovies, 1, 1);
-			this.tableLayoutPanel10.Controls.Add(this.psSaveData, 1, 2);
-			this.tableLayoutPanel10.Controls.Add(this.psSaveStates, 1, 3);
-			this.tableLayoutPanel10.Controls.Add(this.psScreenshots, 1, 4);
-			this.tableLayoutPanel10.Controls.Add(this.psAvi, 1, 5);
-			this.tableLayoutPanel10.Controls.Add(this.chkAviOverride, 0, 5);
-			this.tableLayoutPanel10.Controls.Add(this.chkScreenshotsOverride, 0, 4);
-			this.tableLayoutPanel10.Controls.Add(this.chkSaveDataOverride, 0, 2);
-			this.tableLayoutPanel10.Controls.Add(this.chkWaveOverride, 0, 0);
-			this.tableLayoutPanel10.Controls.Add(this.chkSaveStatesOverride, 0, 3);
-			this.tableLayoutPanel10.Controls.Add(this.chkMoviesOverride, 0, 1);
+			this.tableLayoutPanel10.Controls.Add(this.psGame, 1, 0);
+			this.tableLayoutPanel10.Controls.Add(this.chkGameOverride, 0, 0);
+			this.tableLayoutPanel10.Controls.Add(this.psWave, 1, 2);
+			this.tableLayoutPanel10.Controls.Add(this.psMovies, 1, 3);
+			this.tableLayoutPanel10.Controls.Add(this.psSaveData, 1, 4);
+			this.tableLayoutPanel10.Controls.Add(this.psSaveStates, 1, 5);
+			this.tableLayoutPanel10.Controls.Add(this.psScreenshots, 1, 6);
+			this.tableLayoutPanel10.Controls.Add(this.psAvi, 1, 7);
+			this.tableLayoutPanel10.Controls.Add(this.chkAviOverride, 0, 7);
+			this.tableLayoutPanel10.Controls.Add(this.chkScreenshotsOverride, 0, 6);
+			this.tableLayoutPanel10.Controls.Add(this.chkSaveDataOverride, 0, 4);
+			this.tableLayoutPanel10.Controls.Add(this.chkWaveOverride, 0, 2);
+			this.tableLayoutPanel10.Controls.Add(this.chkSaveStatesOverride, 0, 5);
+			this.tableLayoutPanel10.Controls.Add(this.chkMoviesOverride, 0, 3);
 			this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-			this.tableLayoutPanel10.RowCount = 7;
+			this.tableLayoutPanel10.RowCount = 9;
+			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -990,8 +1007,33 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel10.Size = new System.Drawing.Size(471, 139);
+			this.tableLayoutPanel10.Size = new System.Drawing.Size(471, 167);
 			this.tableLayoutPanel10.TabIndex = 0;
+			// 
+			// psGame
+			// 
+			this.psGame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.psGame.DisabledText = "";
+			this.psGame.Location = new System.Drawing.Point(94, 0);
+			this.psGame.Margin = new System.Windows.Forms.Padding(0);
+			this.psGame.MaximumSize = new System.Drawing.Size(1000, 20);
+			this.psGame.MinimumSize = new System.Drawing.Size(0, 20);
+			this.psGame.Name = "psGame";
+			this.psGame.Size = new System.Drawing.Size(377, 20);
+			this.psGame.TabIndex = 13;
+			// 
+			// chkGameOverride
+			// 
+			this.chkGameOverride.AutoSize = true;
+			this.chkGameOverride.Location = new System.Drawing.Point(3, 3);
+			this.chkGameOverride.Name = "chkGameOverride";
+			this.chkGameOverride.Size = new System.Drawing.Size(62, 17);
+			this.chkGameOverride.TabIndex = 12;
+			this.chkGameOverride.Text = "Games:";
+			this.chkGameOverride.UseVisualStyleBackColor = true;
+			this.chkGameOverride.CheckedChanged += new System.EventHandler(this.chkOverride_CheckedChanged);
 			// 
 			// psWave
 			// 
@@ -999,7 +1041,7 @@ namespace Mesen.GUI.Forms.Config
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.psWave.DisabledText = "";
-			this.psWave.Location = new System.Drawing.Point(94, 0);
+			this.psWave.Location = new System.Drawing.Point(94, 28);
 			this.psWave.Margin = new System.Windows.Forms.Padding(0);
 			this.psWave.MaximumSize = new System.Drawing.Size(1000, 20);
 			this.psWave.MinimumSize = new System.Drawing.Size(0, 20);
@@ -1013,7 +1055,7 @@ namespace Mesen.GUI.Forms.Config
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.psMovies.DisabledText = "";
-			this.psMovies.Location = new System.Drawing.Point(94, 23);
+			this.psMovies.Location = new System.Drawing.Point(94, 51);
 			this.psMovies.Margin = new System.Windows.Forms.Padding(0);
 			this.psMovies.MaximumSize = new System.Drawing.Size(1000, 20);
 			this.psMovies.MinimumSize = new System.Drawing.Size(0, 20);
@@ -1027,7 +1069,7 @@ namespace Mesen.GUI.Forms.Config
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.psSaveData.DisabledText = "";
-			this.psSaveData.Location = new System.Drawing.Point(94, 46);
+			this.psSaveData.Location = new System.Drawing.Point(94, 74);
 			this.psSaveData.Margin = new System.Windows.Forms.Padding(0);
 			this.psSaveData.MaximumSize = new System.Drawing.Size(1000, 20);
 			this.psSaveData.MinimumSize = new System.Drawing.Size(0, 20);
@@ -1041,7 +1083,7 @@ namespace Mesen.GUI.Forms.Config
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.psSaveStates.DisabledText = "";
-			this.psSaveStates.Location = new System.Drawing.Point(94, 69);
+			this.psSaveStates.Location = new System.Drawing.Point(94, 97);
 			this.psSaveStates.Margin = new System.Windows.Forms.Padding(0);
 			this.psSaveStates.MaximumSize = new System.Drawing.Size(1000, 20);
 			this.psSaveStates.MinimumSize = new System.Drawing.Size(0, 20);
@@ -1055,7 +1097,7 @@ namespace Mesen.GUI.Forms.Config
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.psScreenshots.DisabledText = "";
-			this.psScreenshots.Location = new System.Drawing.Point(94, 92);
+			this.psScreenshots.Location = new System.Drawing.Point(94, 120);
 			this.psScreenshots.Margin = new System.Windows.Forms.Padding(0);
 			this.psScreenshots.MaximumSize = new System.Drawing.Size(1000, 20);
 			this.psScreenshots.MinimumSize = new System.Drawing.Size(0, 20);
@@ -1069,7 +1111,7 @@ namespace Mesen.GUI.Forms.Config
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.psAvi.DisabledText = "";
-			this.psAvi.Location = new System.Drawing.Point(94, 115);
+			this.psAvi.Location = new System.Drawing.Point(94, 143);
 			this.psAvi.Margin = new System.Windows.Forms.Padding(0);
 			this.psAvi.MaximumSize = new System.Drawing.Size(1000, 20);
 			this.psAvi.MinimumSize = new System.Drawing.Size(0, 20);
@@ -1080,7 +1122,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkAviOverride
 			// 
 			this.chkAviOverride.AutoSize = true;
-			this.chkAviOverride.Location = new System.Drawing.Point(3, 118);
+			this.chkAviOverride.Location = new System.Drawing.Point(3, 146);
 			this.chkAviOverride.Name = "chkAviOverride";
 			this.chkAviOverride.Size = new System.Drawing.Size(61, 17);
 			this.chkAviOverride.TabIndex = 4;
@@ -1091,7 +1133,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkScreenshotsOverride
 			// 
 			this.chkScreenshotsOverride.AutoSize = true;
-			this.chkScreenshotsOverride.Location = new System.Drawing.Point(3, 95);
+			this.chkScreenshotsOverride.Location = new System.Drawing.Point(3, 123);
 			this.chkScreenshotsOverride.Name = "chkScreenshotsOverride";
 			this.chkScreenshotsOverride.Size = new System.Drawing.Size(88, 17);
 			this.chkScreenshotsOverride.TabIndex = 3;
@@ -1102,7 +1144,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkSaveDataOverride
 			// 
 			this.chkSaveDataOverride.AutoSize = true;
-			this.chkSaveDataOverride.Location = new System.Drawing.Point(3, 49);
+			this.chkSaveDataOverride.Location = new System.Drawing.Point(3, 77);
 			this.chkSaveDataOverride.Name = "chkSaveDataOverride";
 			this.chkSaveDataOverride.Size = new System.Drawing.Size(80, 17);
 			this.chkSaveDataOverride.TabIndex = 0;
@@ -1113,7 +1155,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkWaveOverride
 			// 
 			this.chkWaveOverride.AutoSize = true;
-			this.chkWaveOverride.Location = new System.Drawing.Point(3, 3);
+			this.chkWaveOverride.Location = new System.Drawing.Point(3, 31);
 			this.chkWaveOverride.Name = "chkWaveOverride";
 			this.chkWaveOverride.Size = new System.Drawing.Size(56, 17);
 			this.chkWaveOverride.TabIndex = 5;
@@ -1124,7 +1166,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkSaveStatesOverride
 			// 
 			this.chkSaveStatesOverride.AutoSize = true;
-			this.chkSaveStatesOverride.Location = new System.Drawing.Point(3, 72);
+			this.chkSaveStatesOverride.Location = new System.Drawing.Point(3, 100);
 			this.chkSaveStatesOverride.Name = "chkSaveStatesOverride";
 			this.chkSaveStatesOverride.Size = new System.Drawing.Size(87, 17);
 			this.chkSaveStatesOverride.TabIndex = 2;
@@ -1135,7 +1177,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkMoviesOverride
 			// 
 			this.chkMoviesOverride.AutoSize = true;
-			this.chkMoviesOverride.Location = new System.Drawing.Point(3, 26);
+			this.chkMoviesOverride.Location = new System.Drawing.Point(3, 54);
 			this.chkMoviesOverride.Name = "chkMoviesOverride";
 			this.chkMoviesOverride.Size = new System.Drawing.Size(63, 17);
 			this.chkMoviesOverride.TabIndex = 1;
@@ -1229,11 +1271,11 @@ namespace Mesen.GUI.Forms.Config
 			this.chkNsfFormat.Text = ".NSF (Nintendo Sound Format)";
 			this.chkNsfFormat.UseVisualStyleBackColor = true;
 			// 
-			// chkNsfeFormat
+			// chkMstFormat
 			// 
 			this.chkNsfeFormat.AutoSize = true;
 			this.chkNsfeFormat.Location = new System.Drawing.Point(238, 26);
-			this.chkNsfeFormat.Name = "chkNsfeFormat";
+			this.chkNsfeFormat.Name = "chkMstFormat";
 			this.chkNsfeFormat.Size = new System.Drawing.Size(226, 17);
 			this.chkNsfeFormat.TabIndex = 15;
 			this.chkNsfeFormat.Text = ".NSFE (Nintendo Sound Format Extended)";
@@ -1355,7 +1397,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(489, 359);
+			this.tpgAdvanced.Size = new System.Drawing.Size(489, 393);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -1399,7 +1441,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(483, 353);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(483, 387);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// chkDisableGameSelectionScreen
@@ -1612,22 +1654,11 @@ namespace Mesen.GUI.Forms.Config
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
-			// chkDeveloperMode
-			// 
-			this.chkDeveloperMode.AutoSize = true;
-			this.chkDeveloperMode.Location = new System.Drawing.Point(13, 299);
-			this.chkDeveloperMode.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkDeveloperMode.Name = "chkDeveloperMode";
-			this.chkDeveloperMode.Size = new System.Drawing.Size(138, 17);
-			this.chkDeveloperMode.TabIndex = 26;
-			this.chkDeveloperMode.Text = "Enable developer mode";
-			this.chkDeveloperMode.UseVisualStyleBackColor = true;
-			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(497, 414);
+			this.ClientSize = new System.Drawing.Size(497, 448);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -1812,5 +1843,7 @@ namespace Mesen.GUI.Forms.Config
 		private ctrlPathSelection psAvi;
 		private System.Windows.Forms.CheckBox chkConfirmExitResetPower;
 		private System.Windows.Forms.CheckBox chkDeveloperMode;
+		private ctrlPathSelection psGame;
+		private System.Windows.Forms.CheckBox chkGameOverride;
 	}
 }
