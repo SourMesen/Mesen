@@ -130,15 +130,19 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 {
 	switch(memoryType) {
 		case DebugMemoryType::CpuMemory:
-			AddressTypeInfo info;
-			_debugger->GetAbsoluteAddressAndType(address, &info);
-			if(info.Address >= 0) {
-				switch(info.Type) {
-					case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value, preventRebuildCache, disableSideEffects); break;
-					case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value, preventRebuildCache, disableSideEffects); break;
-					case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value, preventRebuildCache, disableSideEffects); break;
-					case AddressType::SaveRam: SetMemoryValue(DebugMemoryType::SaveRam, info.Address, value, preventRebuildCache, disableSideEffects); break;
+			if(disableSideEffects) {
+				AddressTypeInfo info;
+				_debugger->GetAbsoluteAddressAndType(address, &info);
+				if(info.Address >= 0) {
+					switch(info.Type) {
+						case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value, preventRebuildCache, true); break;
+						case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value, preventRebuildCache, true); break;
+						case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value, preventRebuildCache, true); break;
+						case AddressType::SaveRam: SetMemoryValue(DebugMemoryType::SaveRam, info.Address, value, preventRebuildCache, true); break;
+					}
 				}
+			} else {
+				_memoryManager->DebugWrite(address, value, false);
 			}
 			break;
 
@@ -181,15 +185,19 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 {
 	switch(memoryType) {
 		case DebugMemoryType::CpuMemory:
-			AddressTypeInfo info;
-			_debugger->GetAbsoluteAddressAndType(address, &info);
-			if(info.Address >= 0) {
-				switch(info.Type) {
-					case AddressType::InternalRam: return GetMemoryValue(DebugMemoryType::InternalRam, info.Address, disableSideEffects);
-					case AddressType::PrgRom: return GetMemoryValue(DebugMemoryType::PrgRom, info.Address, disableSideEffects);
-					case AddressType::WorkRam: return GetMemoryValue(DebugMemoryType::WorkRam, info.Address, disableSideEffects);
-					case AddressType::SaveRam: return GetMemoryValue(DebugMemoryType::SaveRam, info.Address, disableSideEffects);
+			if(disableSideEffects) {
+				AddressTypeInfo info;
+				_debugger->GetAbsoluteAddressAndType(address, &info);
+				if(info.Address >= 0) {
+					switch(info.Type) {
+						case AddressType::InternalRam: return GetMemoryValue(DebugMemoryType::InternalRam, info.Address, true);
+						case AddressType::PrgRom: return GetMemoryValue(DebugMemoryType::PrgRom, info.Address, true);
+						case AddressType::WorkRam: return GetMemoryValue(DebugMemoryType::WorkRam, info.Address, true);
+						case AddressType::SaveRam: return GetMemoryValue(DebugMemoryType::SaveRam, info.Address, true);
+					}
 				}
+			} else {
+				return _memoryManager->DebugRead(address, false);
 			}
 			break;
 

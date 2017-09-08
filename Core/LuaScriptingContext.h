@@ -15,6 +15,6 @@ public:
 	~LuaScriptingContext();
 
 	bool LoadScript(string scriptContent, Debugger* debugger);
-	void CallMemoryCallback(int addr, int value, CallbackType type);
+	void CallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type);
 	int InternalCallEventCallback(EventType type);
 };

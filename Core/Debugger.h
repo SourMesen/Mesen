@@ -121,8 +121,8 @@ private:
 
 	void PrivateProcessPpuCycle();
 	bool PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
-	void PrivateProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
-	void PrivateProcessVramWriteOperation(uint16_t addr, uint8_t value);
+	void PrivateProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
+	void PrivateProcessVramWriteOperation(uint16_t addr, uint8_t &value);
 	bool HasMatchingBreakpoint(BreakpointType type, OperationInfo &operationInfo);
 	
 	void UpdateCallstack(uint32_t addr);
@@ -192,8 +192,8 @@ public:
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
 	
 	static bool ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
-	static void ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t value);
-	static void ProcessVramWriteOperation(uint16_t addr, uint8_t value);
+	static void ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
+	static void ProcessVramWriteOperation(uint16_t addr, uint8_t &value);
 	static void ProcessPpuCycle();
 	
 	static void SetLastFramePpuScroll(uint16_t x, uint16_t y);
@@ -224,7 +224,7 @@ public:
 	int32_t LoadScript(string content, int32_t scriptId);
 	void RemoveScript(int32_t scriptId);
 	const char* GetScriptLog(int32_t scriptId);
-	void ProcessCpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type);
-	void ProcessPpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type);
+	void ProcessCpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
+	void ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessEvent(EventType type);
 };

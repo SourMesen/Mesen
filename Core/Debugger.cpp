@@ -594,7 +594,7 @@ bool Debugger::SleepUntilResume()
 	return false;
 }
 
-void Debugger::PrivateProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t value)
+void Debugger::PrivateProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value)
 {
 	int32_t absoluteAddr = _mapper->ToAbsoluteChrAddress(addr);
 	_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
@@ -611,7 +611,7 @@ void Debugger::PrivateProcessVramReadOperation(MemoryOperationType type, uint16_
 	ProcessPpuOperation(addr, value, MemoryOperationType::Read);
 }
 
-void Debugger::PrivateProcessVramWriteOperation(uint16_t addr, uint8_t value)
+void Debugger::PrivateProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 {
 	if(_hasBreakpoint[BreakpointType::WriteVram]) {
 		OperationInfo operationInfo{ addr, value, MemoryOperationType::Write };
@@ -813,14 +813,14 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	return true;
 }
 
-void Debugger::ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t value)
+void Debugger::ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value)
 {
 	if(Debugger::Instance) {
 		Debugger::Instance->PrivateProcessVramReadOperation(type, addr, value);
 	}
 }
 
-void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t value)
+void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 {
 	if(Debugger::Instance) {
 		Debugger::Instance->PrivateProcessVramWriteOperation(addr, value);
@@ -1078,7 +1078,7 @@ const char* Debugger::GetScriptLog(int32_t scriptId)
 	return "";
 }
 
-void Debugger::ProcessCpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type)
+void Debugger::ProcessCpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type)
 {
 	if(_hasScript) {
 		for(shared_ptr<ScriptHost> &script : _scripts) {
@@ -1087,11 +1087,11 @@ void Debugger::ProcessCpuOperation(uint16_t addr, uint8_t value, MemoryOperation
 	}
 }
 
-void Debugger::ProcessPpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type)
+void Debugger::ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type)
 {
 	if(_hasScript) {
 		for(shared_ptr<ScriptHost> &script : _scripts) {
-			script->ProcessPpuOperation(addr, value, MemoryOperationType::Write);
+			script->ProcessPpuOperation(addr, value, type);
 		}
 	}
 }

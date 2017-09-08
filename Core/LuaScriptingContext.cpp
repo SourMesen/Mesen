@@ -40,15 +40,23 @@ bool LuaScriptingContext::LoadScript(string scriptContent, Debugger* debugger)
 	return false;
 }
 
-void LuaScriptingContext::CallMemoryCallback(int addr, int value, CallbackType type)
+void LuaScriptingContext::CallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type)
 {
 	LuaApi::SetContext(this);
 	for(int &ref : _callbacks[(int)type][addr]) {
+		int top = lua_gettop(_lua);
 		lua_rawgeti(_lua, LUA_REGISTRYINDEX, ref);
 		lua_pushinteger(_lua, addr);
-		lua_pushinteger(_lua, value);
-		if(lua_pcall(_lua, 2, 0, 0) != 0) {
+		lua_pushinteger(_lua, value);		
+		if(lua_pcall(_lua, 2, LUA_MULTRET, 0) != 0) {
 			Log(lua_tostring(_lua, -1));
+		} else {
+			int returnParamCount = lua_gettop(_lua) - top;
+			if(returnParamCount && lua_isinteger(_lua, -1)) {
+				int newValue = (int)lua_tointeger(_lua, -1);
+				value = (uint8_t)newValue;
+			}
+			lua_settop(_lua, top);
 		}
 	}
 }

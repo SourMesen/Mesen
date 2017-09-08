@@ -33,7 +33,7 @@ public:
 	void Log(string message);
 	const char* GetLog();
 
-	virtual void CallMemoryCallback(int addr, int value, CallbackType type) = 0;
+	virtual void CallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type) = 0;
 	virtual int InternalCallEventCallback(EventType type) = 0;
 
 	int CallEventCallback(EventType type);

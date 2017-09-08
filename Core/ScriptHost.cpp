@@ -31,7 +31,7 @@ bool ScriptHost::LoadScript(string scriptContent, Debugger* debugger)
 	return true;
 }
 
-void ScriptHost::ProcessCpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type)
+void ScriptHost::ProcessCpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type)
 {
 	if(_context) {
 		switch(type) {
@@ -42,7 +42,7 @@ void ScriptHost::ProcessCpuOperation(uint16_t addr, uint8_t value, MemoryOperati
 	}
 }
 
-void ScriptHost::ProcessPpuOperation(uint16_t addr, uint8_t value, MemoryOperationType type)
+void ScriptHost::ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type)
 {
 	if(_context) {
 		switch(type) {

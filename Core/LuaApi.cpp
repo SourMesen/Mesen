@@ -160,7 +160,7 @@ int LuaApi::WriteMemory(lua_State *lua)
 	checkparams();
 	errorCond(value > 255 || value < -128, "value out of range");
 	errorCond(address < 0, "address must be >= 0");
-	_memoryDumper->SetMemoryValue(type, address, value, false);
+	_memoryDumper->SetMemoryValue(type, address, value, false, false);
 	return l.ReturnCount();
 }
 
@@ -171,7 +171,7 @@ int LuaApi::DebugReadMemory(lua_State *lua)
 	int address = l.ReadInteger();
 	checkparams();
 	errorCond(address < 0, "address must be >= 0");
-	l.Return(_memoryDumper->GetMemoryValue(type, address));
+	l.Return(_memoryDumper->GetMemoryValue(type, address, true));
 	return l.ReturnCount();
 }
 
@@ -184,7 +184,7 @@ int LuaApi::DebugWriteMemory(lua_State *lua)
 	checkparams();
 	errorCond(value > 255 || value < -128, "value out of range");
 	errorCond(address < 0, "address must be >= 0");
-	_memoryDumper->SetMemoryValue(type, address, value);
+	_memoryDumper->SetMemoryValue(type, address, value, false, true);
 	return l.ReturnCount();
 }
 
@@ -208,7 +208,7 @@ int LuaApi::WriteMemoryWord(lua_State *lua)
 	checkparams();
 	errorCond(value > 65535 || value < -32768, "value out of range");
 	errorCond(address < 0, "address must be >= 0");
-	_memoryDumper->SetMemoryValueWord(type, address, value, false);
+	_memoryDumper->SetMemoryValueWord(type, address, value, false, false);
 	return l.ReturnCount();
 }
 
@@ -219,7 +219,7 @@ int LuaApi::DebugReadMemoryWord(lua_State *lua)
 	int address = l.ReadInteger();
 	checkparams();
 	errorCond(address < 0, "address must be >= 0");
-	l.Return(_memoryDumper->GetMemoryValueWord(type, address));
+	l.Return(_memoryDumper->GetMemoryValueWord(type, address, true));
 	return l.ReturnCount();
 }
 
@@ -232,7 +232,7 @@ int LuaApi::DebugWriteMemoryWord(lua_State *lua)
 	checkparams();
 	errorCond(value > 65535 || value < -32768, "value out of range");
 	errorCond(address < 0, "address must be >= 0");
-	_memoryDumper->SetMemoryValueWord(type, address, value);
+	_memoryDumper->SetMemoryValueWord(type, address, value, false, true);
 	return l.ReturnCount();
 }
 

@@ -82,6 +82,7 @@ namespace Mesen.GUI.Debugger
 						using(StreamReader reader = new StreamReader(stream)) {
 							txtScriptContent.Text = reader.ReadToEnd();
 							_originalText = txtScriptContent.Text;
+							txtScriptContent.ClearUndo();
 						}
 					}
 				}
