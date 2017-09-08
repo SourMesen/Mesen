@@ -168,21 +168,37 @@ namespace Mesen.GUI.Forms
 
 		private void LoadPatchFile(string patchFile)
 		{
-			if(_emuThread == null) {
-				if(MesenMsgBox.Show("SelectRomIps", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-					using(OpenFileDialog ofd = new OpenFileDialog()) {
-						ofd.SetFilter(ResourceHelper.GetMessage("FilterRom"));
-						if(ConfigManager.Config.RecentFiles.Count > 0) {
-							ofd.InitialDirectory = ConfigManager.Config.RecentFiles[0].RomFile.Folder;
-						}
+			string patchFolder = Path.GetDirectoryName(patchFile);
+			HashSet<string> romExtensions = new HashSet<string>() { ".nes", ".fds", ".unf" };
+			List<string> romsInFolder = new List<string>();
+			foreach(string filepath in Directory.EnumerateFiles(patchFolder)) {
+				if(romExtensions.Contains(Path.GetExtension(filepath).ToLowerInvariant())) {
+					romsInFolder.Add(filepath);
+				}
+			}
 
-						if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-							LoadROM(ofd.FileName, true, patchFile);
+			if(romsInFolder.Count == 1) {
+				//There is a single rom in the same folder as the IPS/BPS patch, use it automatically
+				LoadROM(romsInFolder[0], true, patchFile);
+			} else {
+				if(_emuThread == null) {
+					//Prompt the user for a rom to load
+					if(MesenMsgBox.Show("SelectRomIps", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+						using(OpenFileDialog ofd = new OpenFileDialog()) {
+							ofd.SetFilter(ResourceHelper.GetMessage("FilterRom"));
+							if(ConfigManager.Config.RecentFiles.Count > 0) {
+								ofd.InitialDirectory = ConfigManager.Config.RecentFiles[0].RomFile.Folder;
+							}
+
+							if(ofd.ShowDialog() == DialogResult.OK) {
+								LoadROM(ofd.FileName, true, patchFile);
+							}
 						}
 					}
+				} else if(MesenMsgBox.Show("PatchAndReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+					//Confirm that the user wants to patch the current rom and reset
+					LoadROM(_currentRomPath.Value, true, patchFile);
 				}
-			} else if(MesenMsgBox.Show("PatchAndReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.OK) {
-				LoadROM(_currentRomPath.Value, true, patchFile);
 			}
 		}
 
