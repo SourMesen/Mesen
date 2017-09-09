@@ -21,7 +21,17 @@ namespace Mesen.GUI.Config
 		public static bool DoNotSaveSettings { get; set; }
 
 		public static string DefaultPortableFolder { get { return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location); } }
-		public static string DefaultDocumentsFolder { get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Mesen"); } }
+		public static string DefaultDocumentsFolder
+		{
+			get
+			{
+				if(Program.IsMono) {
+					return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ".config", "mesen");
+				} else {
+					return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Mesen");
+				}
+			}
+		}
 
 		public static string DefaultAviFolder { get { return Path.Combine(HomeFolder, "Avi"); } }
 		public static string DefaultMovieFolder { get { return Path.Combine(HomeFolder, "Movies"); } }
@@ -35,16 +45,22 @@ namespace Mesen.GUI.Config
 			string portableFolder = DefaultPortableFolder;
 			string legacyPortableFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Mesen");
 			string documentsFolder = DefaultDocumentsFolder;
+			
+			//Linux only
+			string legacyDocumentsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Mesen");
 
 			string portableConfig = Path.Combine(portableFolder, "settings.xml");
 			string legacyPortableConfig = Path.Combine(legacyPortableFolder, "settings.xml");
 			string documentsConfig = Path.Combine(documentsFolder, "settings.xml");
+			string legacyDocumentsConfig = Path.Combine(legacyDocumentsFolder, "settings.xml");
 
 			HomeFolder = null;
 			if(File.Exists(portableConfig)) {
 				HomeFolder = portableFolder;
 			} else if(File.Exists(legacyPortableConfig)) {
 				HomeFolder = legacyPortableFolder;
+			} else if(Program.IsMono && File.Exists(legacyDocumentsConfig)) {
+				HomeFolder = legacyDocumentsFolder;
 			} else if(File.Exists(documentsConfig)) {
 				HomeFolder = documentsFolder;
 			}
@@ -64,11 +80,9 @@ namespace Mesen.GUI.Config
 		public static void CreateConfig(bool portable)
 		{
 			if(portable) {
-				string portableFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-				HomeFolder = portableFolder;
+				HomeFolder = DefaultPortableFolder;
 			} else {
-				string documentsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Mesen");
-				HomeFolder = documentsFolder;
+				HomeFolder = DefaultDocumentsFolder;
 			}
 
 			LoadConfig();
