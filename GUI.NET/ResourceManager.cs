@@ -14,8 +14,16 @@ namespace Mesen.GUI
 	{
 		private static void ExtractFile(ZipArchiveEntry entry, string outputFilename)
 		{
+			if(File.Exists(outputFilename)) {
+				try {
+					File.Delete(outputFilename);
+				} catch { }
+			}
 			try {
-				entry.ExtractToFile(outputFilename, true);
+				//On Mono, using overwrite = true for ExtractToFile crashes/kills any currently running instance that uses the file.
+				//This is probably a Mono bug?
+				//Better to attempt a delete & then extract, like now (and like it used to be) 
+				entry.ExtractToFile(outputFilename);
 			} catch { }
 		}
 

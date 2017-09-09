@@ -36,6 +36,11 @@ namespace Mesen.GUI
 				} catch {
 					_firstInstance = false;
 				}
+				try {
+					if(File.Exists("mesen.arguments")) {
+						File.Delete("mesen.arguments");
+					}
+				} catch { }
 			} else {
 				this._identifier = new Guid("{A46606B7-2D1C-4CC5-A52F-43BCAF094AED}");
 				this._mutex = new Mutex(true, _identifier.ToString(), out _firstInstance);
@@ -96,7 +101,7 @@ namespace Mesen.GUI
 					if(File.Exists("mesen.arguments")) {
 						try {
 							string[] arguments = File.ReadAllLines("mesen.arguments");
-							ThreadPool.QueueUserWorkItem(new WaitCallback(CallOnArgumentsReceived), arguments);
+							ThreadPool.QueueUserWorkItem(new WaitCallback(CallOnArgumentsReceived), arguments);							
 							File.Delete("mesen.arguments");
 						} catch { }
 					}
