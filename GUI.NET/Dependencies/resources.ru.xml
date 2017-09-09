@@ -91,6 +91,7 @@
       <Control ID="mnuTakeScreenshot">Сделать скриншот</Control>
       <Control ID="mnuRandomGame">Load Random Game</Control>
       <Control ID="mnuHelp">Помощь</Control>
+      <Control ID="mnuOnlineHelp">Online Help</Control>
       <Control ID="mnuCheckForUpdates">Проверить обновления</Control>
       <Control ID="mnuReportBug">Сообщить об ошибке</Control>
       <Control ID="mnuHelpWindow">Command-line options</Control>

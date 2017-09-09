@@ -93,6 +93,7 @@
       <Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
       <Control ID="mnuRandomGame">ランダムゲームを開く</Control>
       <Control ID="mnuHelp">ヘルプ</Control>
+      <Control ID="mnuOnlineHelp">オンラインヘルプ</Control>
       <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
       <Control ID="mnuReportBug">バグレポート</Control>
       <Control ID="mnuHelpWindow">コマンドラインオプション</Control>

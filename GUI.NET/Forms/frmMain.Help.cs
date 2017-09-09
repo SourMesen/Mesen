@@ -112,7 +112,8 @@ namespace Mesen.GUI.Forms
 		
 		private void mnuOnlineHelp_Click(object sender, EventArgs e)
 		{
-			Process.Start("http://www.mesen.ca/docs");
+			string platform = Program.IsMono ? "linux" : "win";
+			Process.Start("http://www.mesen.ca/docs/?v=" + InteropEmu.GetMesenVersion() + "&p=" + platform + "&l=" + ResourceHelper.GetLanguageCode());
 		}
 
 		private void mnuReportBug_Click(object sender, EventArgs e)

@@ -91,6 +91,7 @@
       <Control ID="mnuTakeScreenshot">Captura de tela</Control>
       <Control ID="mnuRandomGame">Carregar jogo aleatório</Control>
       <Control ID="mnuHelp">Ajuda</Control>
+      <Control ID="mnuOnlineHelp">Online Help</Control>
       <Control ID="mnuCheckForUpdates">Procurar atualizações</Control>
       <Control ID="mnuReportBug">Reportar um erro</Control>
       <Control ID="mnuHelpWindow">Opções de linha de comando</Control>
