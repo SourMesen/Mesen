@@ -158,7 +158,7 @@ namespace InteropEmu {
 		DllExport void __stdcall UpdateInputDevices() { if(_keyManager) { _keyManager->UpdateDevices(); } }
 		DllExport void __stdcall GetPressedKeys(uint32_t *keyBuffer) { 
 			vector<uint32_t> pressedKeys = ControlManager::GetPressedKeys();
-			for(int i = 0; i < pressedKeys.size() && i < 3; i++) {
+			for(size_t i = 0; i < pressedKeys.size() && i < 3; i++) {
 				keyBuffer[i] = pressedKeys[i];
 			}
 		}

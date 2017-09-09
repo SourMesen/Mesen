@@ -4,10 +4,10 @@
 #include "VsControlManager.h"
 #include "RewindManager.h"
 
-//Version 0.9.2
+//Version 0.9.3
 uint16_t EmulationSettings::_versionMajor = 0;
 uint8_t EmulationSettings::_versionMinor = 9;
-uint8_t EmulationSettings::_versionRevision = 2;
+uint8_t EmulationSettings::_versionRevision = 3;
 
 Language EmulationSettings::_displayLanguage = Language::English;
 
