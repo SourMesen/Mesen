@@ -350,14 +350,14 @@
       <Control ID="chkSingleInstance">Запускати тільки одну копію Mesen</Control>
       <Control ID="chkAutomaticallyCheckForUpdates">Автоматично перевіряти оновлення</Control>
 
-      <Control ID="chkDeveloperMode">Enable developer mode</Control>
+      <Control ID="chkDeveloperMode">Увімкнути режим розробника</Control>
 
       <Control ID="lblPauseBackgroundSettings">Пауза/Фонові настройки</Control>
       <Control ID="lblMiscSettings">Різнi настройки</Control>
       <Control ID="chkAutoHideMenu">Автоматично приховувати панель меню</Control>
       <Control ID="chkDisplayTitleBarInfo">Відображення додаткової інформації в рядку заголовка</Control>
 
-      <Control ID="chkConfirmExitResetPower">Display confirmation dialog before reset/power cycle/exit</Control>
+      <Control ID="chkConfirmExitResetPower">Відобразити діалогове вікно підтвердження перед скиданням/перезавантаженням/вихiдом</Control>
       <Control ID="chkPauseOnMovieEnd">Ставити на паузу після програвання запису</Control>
       <Control ID="chkAllowBackgroundInput">Дозволити введення в тлі</Control>
       <Control ID="chkPauseWhenInBackground">Ставити на паузу при втраті фокуса</Control>
@@ -367,26 +367,26 @@
       <Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
       <Control ID="btnResetSettings">Скинути всі налаштування</Control>
       
-      <Control ID="tpgFiles">Files/Folders</Control>
+      <Control ID="tpgFiles">Файли/Папки</Control>
       <Control ID="grpFileAssociations">Асоціації файлів</Control>
       <Control ID="chkNesFormat">.NES</Control>
       <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
       <Control ID="chkMmoFormat">.MMO (Записи)</Control>
       <Control ID="chkMstFormat">.MST (Збереження)</Control>
 
-      <Control ID="grpDataStorageLocation">Data Storage Folder</Control>
-      <Control ID="radStorageDocuments">Store Mesen's data in my user profile</Control>
-      <Control ID="radStoragePortable">Store Mesen's data in the same folder as the application</Control>
-      <Control ID="lblDataLocation">Folder:</Control>
+      <Control ID="grpDataStorageLocation">Папка зберігання даних</Control>
+      <Control ID="radStorageDocuments">Зберігати дані Mesen у моєму профілі користувача</Control>
+      <Control ID="radStoragePortable">Зберігати дані в тій же папці що і Mesen</Control>
+      <Control ID="lblDataLocation">Папка:</Control>
 
-      <Control ID="grpPathOverrides">Folder Overrides</Control>
-      <Control ID="chkGameOverride">Games:</Control>
-      <Control ID="chkAviOverride">Videos:</Control>
-      <Control ID="chkScreenshotsOverride">Screenshots:</Control>
+      <Control ID="grpPathOverrides">Перепам'ятовування папок</Control>
+      <Control ID="chkGameOverride">Iгри:</Control>
+      <Control ID="chkAviOverride">Вiдео:</Control>
+      <Control ID="chkScreenshotsOverride">Скріншоти:</Control>
       <Control ID="chkSaveDataOverride">Save Data:</Control>
-      <Control ID="chkWaveOverride">Audio:</Control>
+      <Control ID="chkWaveOverride">Аудiо:</Control>
       <Control ID="chkSaveStatesOverride">Save States:</Control>
-      <Control ID="chkMoviesOverride">Movies:</Control>
+      <Control ID="chkMoviesOverride">Фільми:</Control>
       
       <Control ID="tpgAdvanced">Розширені</Control>
       <Control ID="chkFdsAutoLoadDisk">Автоматично вставляти диск 1 стороною А при завантаженні FDS</Control>
@@ -598,23 +598,23 @@
       <Control ID="txtGeneralOptions">/fullscreen - Запустити Mesen у повноекранному режимi&#13;&#10;/DoNotSaveSettings - Заборонити збереження налаштувань на диску (корисно щоб запобігти становленню параметрів командного рядка за замовчуванням)</Control>
     </Form>
     <Form ID="frmCopyFiles" Title="Please wait...">
-      <Control ID="lblCopying">Copying:</Control>
+      <Control ID="lblCopying">Копіювання:</Control>
     </Form>
     <Form ID="frmConfigWizard" Title="Mesen - Configuration">
-      <Control ID="lblMesen">Mesen - NES Emulator</Control>
-      <Control ID="lblConfigWizard">Configuration Wizard</Control>
-      <Control ID="lblInitialSetup">Please take a moment to perform Mesen's initial setup.</Control>
-      <Control ID="lblStorageLocation">Data Storage Location</Control>
-      <Control ID="lblStorageHint">Select where you want to store Mesen's data:</Control>
-      <Control ID="radStorageDocuments">Store the data in my user profile</Control>
-      <Control ID="radStoragePortable">Store the data in the same folder as the application</Control>
-      <Control ID="lblDataLocation">Folder:</Control>
-      <Control ID="lblInputMappings">Input Mappings</Control>
-      <Control ID="lblInputHint">Select your preferred input methods:</Control>
-      <Control ID="lblMiscOptions">Other Options</Control>
-      <Control ID="chkCreateShortcut">Create a shortcut on my desktop</Control>
-      <Control ID="btnOk">CONFIRM</Control>
-      <Control ID="lblCancel">Cancel</Control>
+      <Control ID="lblMesen">Mesen - NES Эмулятор</Control>
+      <Control ID="lblConfigWizard">Майстер конфігурації</Control>
+      <Control ID="lblInitialSetup">Будь ласка почекайте щоб виконати початкову настройку Mesen.</Control>
+      <Control ID="lblStorageLocation">Місце зберігання даних</Control>
+      <Control ID="lblStorageHint">Виберіть де ви хочете зберегти дані Mesen:</Control>
+      <Control ID="radStorageDocuments">Зберігати дані в моєму профілі користувача</Control>
+      <Control ID="radStoragePortable">Зберігати дані в тій же папці що і програма</Control>
+      <Control ID="lblDataLocation">Папка:</Control>
+      <Control ID="lblInputMappings">Налаштування введення</Control>
+      <Control ID="lblInputHint">Виберіть бажанi методи введення:</Control>
+      <Control ID="lblMiscOptions">Інші параметри</Control>
+      <Control ID="chkCreateShortcut">Створити ярлик на робочому столі</Control>
+      <Control ID="btnOk">ПIДТВЕРДИТИ</Control>
+      <Control ID="lblCancel">Скасувати</Control>
     </Form>
   </Forms>
   <Messages>
@@ -629,11 +629,11 @@
     <Message ID="FilterCheat">Всі підтримувані формати (*.cht, *.xml)|*.cht;*.xml</Message>
     <Message ID="FilterSavestate">Mesen Savestates (*.mst)|*.mst|All Files (*.*)|*.*</Message>
 
-    <Message ID="LoadFromFile">Load from file...</Message>
-    <Message ID="SaveToFile">Save to file...</Message>
+    <Message ID="LoadFromFile">Завантажитти з файлу...</Message>
+    <Message ID="SaveToFile">Зберегти в файл...</Message>
 
-    <Message ID="ClearHistory">Clear History</Message>
-    <Message ID="LastFolderUsed">Last Folder Used</Message>
+    <Message ID="ClearHistory">Очистити історію</Message>
+    <Message ID="LastFolderUsed">Використовувана остання папка</Message>
     
     <Message ID="Resume">Продовжити</Message>
     <Message ID="Pause">Пауза</Message>
@@ -647,13 +647,13 @@
 
     <Message ID="RiskyOptionHint">(не рекомендовано)</Message>
 
-    <Message ID="ResetSettingsConfirmation">Warning: This will reset ALL of settings and cannot be undone!&#xA;&#xA;Continue?</Message>
+    <Message ID="ResetSettingsConfirmation">Попередження: це скине ВСІ налаштування і не може бути скасовано!&#xA;&#xA;Продовжити?</Message>
 
     <Message ID="RandomGameNoGameFound">Mesen не зміг знайти будь-які ігри для завантаження.</Message>
 
-    <Message ID="CannotWriteToFolder">The selected folder cannot be written to - please select another folder and try again.&#xA;&#xA;Details:&#xA;{0}</Message>
-    <Message ID="InvalidPaths">The following path overrides are invalid:&#xA;&#xA;{0}&#xA;&#xA;Please use valid and writable folders and try again.</Message>
-    <Message ID="CopyMesenDataPrompt">All files will be copied from:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Once the copy is completed, Mesen will restart.&#xA;Continue?</Message>
+    <Message ID="CannotWriteToFolder">Вибрану папку не можна записати - будь ласка виберіть іншу папку та спробуйте знову.&#xA;&#xA;Подробиці:&#xA;{0}</Message>
+    <Message ID="InvalidPaths">Наступні переопределені шляхи є недійсними:&#xA;&#xA;{0}&#xA;&#xA;Будь ласка використовуйте дійсні та доступні для запису папки та повторіть спробу.</Message>
+    <Message ID="CopyMesenDataPrompt">Всі файли будуть скопійовані з:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Після того як копія буде завершена, Mesen перезавантажиться.&#xA;Продовжити?</Message>
 
     <Message ID="CheatsFound">iгр {0}, читiв {1}</Message>
     <Message ID="CheatsImported">{0} читiв імпортовано для {1}.</Message>
@@ -665,7 +665,7 @@
     <Message ID="CouldNotInstallRuntime">The Visual Studio Runtime не встановлений.</Message>
     <Message ID="EmptyState">&lt;пусто&gt;</Message>
     <Message ID="ErrorWhileCheckingUpdates">Не вдалося перевірити оновлення. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
-    <Message ID="AutoUpdateDisabledMessage">Automatic updates are not enabled on this build - please download the latest version of the code and recompile Mesen to get the latest updates.</Message>
+    <Message ID="AutoUpdateDisabledMessage">Автоматичні оновлення не включені в цій збірці - будь ласка завантажте останню версію коду та перекомпілюйте Mesen щоб отримати останні оновлення.</Message>
     <Message ID="FdsBiosNotFound">FDS BIOS не знайдений. BIOS необхідний для запуску FDS игр.&#xA;&#xA;Вибрати BIOS зараз?</Message>
     <Message ID="FdsDiskSide">Диск {0} Сторона {1}</Message>
     <Message ID="FileNotFound">Файл не знайдено: {0}</Message>
@@ -697,14 +697,14 @@
     <Message ID="InvalidXmlFile">Обраний XML файл ({0}) не є коректним.</Message>
     <Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читiв для даної гри.</Message>
 
-    <Message ID="ConfirmReset">Are you sure you want to reset?</Message>
-    <Message ID="ConfirmPowerCycle">Are you sure you want to power cycle?</Message>
-    <Message ID="ConfirmExit">Are you sure you want to exit?</Message>
+    <Message ID="ConfirmReset">Ви впевнені що хочете скинути?</Message>
+    <Message ID="ConfirmPowerCycle">Ви впевнені що хочете зупинити та перезапустити?</Message>
+    <Message ID="ConfirmExit">Ви впевнені що хочете вийти?</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Швидке перемотування</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Toggle Fast Forward</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Переключити перемотування вперед</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Перемотка</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleRewind">Toggle Rewind</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleRewind">Переключити перемотування</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Перемотати 10 секунд</Message>
     <Message ID="EmulatorShortcutMappings_RewindOneMin">Перемотати 1 хвилину</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Збільшити Швидкість</Message>
@@ -728,17 +728,17 @@
     <Message ID="EmulatorShortcutMappings_ToggleAudio">Увімкнути/Вимкнути звук</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">Запуск Одного Кадру</Message>
 
-    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Eject Disk</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale1x">Set Scale 1x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale2x">Set Scale 2x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale3x">Set Scale 3x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale4x">Set Scale 4x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale5x">Set Scale 5x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale6x">Set Scale 6x</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Toggle Fullscreen Mode</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFps">Toggle FPS Counter</Message>
-    <Message ID="EmulatorShortcutMappings_MaxSpeed">Toggle Maximum Speed</Message>
-    <Message ID="EmulatorShortcutMappings_LoadRandomGame">Load Random Game</Message>
+    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Витягти диск</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale1x">Встановити масштаб 1x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale2x">Встановити масштаб 2x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale3x">Встановити масштаб 3x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale4x">Встановити масштаб 4x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale5x">Встановити масштаб 5x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale6x">Встановити масштаб 6x</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Переключити повноекранний режим</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFps">Переключити лічильник FPS</Message>
+    <Message ID="EmulatorShortcutMappings_MaxSpeed">Переключити максимальну швидкість</Message>
+    <Message ID="EmulatorShortcutMappings_LoadRandomGame">Завантажити випадкову гру/Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Save State - Slot 1</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Save State - Slot 2</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot3">Save State - Slot 3</Message>
@@ -746,7 +746,7 @@
     <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Save State - Slot 5</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Save State - Slot 6</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Save State - Slot 7</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateToFile">Save State to File</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateToFile">Зберегти стан в файл</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Load State - Slot 1</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Load State - Slot 2</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot3">Load State - Slot 3</Message>
@@ -755,14 +755,14 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Load State - Slot 6</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Load State - Slot 7</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Load State - Slot 8</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Load State from File</Message>
-    <Message ID="EmulatorShortcutMappings_OpenFile">Open File</Message>
-    <Message ID="EmulatorShortcutMappings_OpenDebugger">Open Debugger</Message>
-    <Message ID="EmulatorShortcutMappings_OpenAssembler">Open Assembler</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Open Ppu Viewer</Message>
-    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Open Memory Tools</Message>
-    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Open Script Window</Message>
-    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Open Trace Logger</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Завантажити стан з файлу</Message>
+    <Message ID="EmulatorShortcutMappings_OpenFile">Відкрити файл</Message>
+    <Message ID="EmulatorShortcutMappings_OpenDebugger">Відкрити Debugger</Message>
+    <Message ID="EmulatorShortcutMappings_OpenAssembler">Відкрити Assembler</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Відкрити Ppu Viewer</Message>
+    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Відкрити Memory Tools</Message>
+    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Відкрити Script Window</Message>
+    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Відкрити Trace Logger</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
