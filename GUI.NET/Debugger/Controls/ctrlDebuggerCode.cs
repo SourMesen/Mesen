@@ -309,10 +309,10 @@ namespace Mesen.GUI.Debugger
 				ctrlCodeViewer.Addressing = _addressing.ToArray();
 				ctrlCodeViewer.Comments = _comments.ToArray();
 
-				ctrlCodeViewer.TextLines = _codeLines.ToArray();
 				ctrlCodeViewer.LineNumbers = _lineNumbers.ToArray();
 				ctrlCodeViewer.TextLineNotes = _codeNotes.ToArray();
 				ctrlCodeViewer.LineNumberNotes = _lineNumberNotes.ToArray();
+				ctrlCodeViewer.TextLines = _codeLines.ToArray();
 
 				//These are all temporary and can be cleared right away
 				_lineNumbers.Clear();

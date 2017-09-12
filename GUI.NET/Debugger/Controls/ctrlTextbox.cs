@@ -667,11 +667,15 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateHorizontalScrollWidth()
 		{
-			if(_contents.Length > _maxLineWidthIndex) {
+			if(LineIndentations != null && LineIndentations.Length > _maxLineWidthIndex) {
 				using(Graphics g = this.CreateGraphics()) {
 					_maxLineWidth = (LineIndentations != null ? LineIndentations[_maxLineWidthIndex] : 0) + g.MeasureString(GetFullWidthString(_maxLineWidthIndex), this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
 					HorizontalScrollWidth = (int)(Math.Max(0, HorizontalScrollFactor + _maxLineWidth - (this.Width - GetMargin(g, true))) / HorizontalScrollFactor);
 				}
+			} else {
+				_maxLineWidth = 0;
+				HorizontalScrollPosition = 0;
+				HorizontalScrollWidth = 0;
 			}
 		}
 
