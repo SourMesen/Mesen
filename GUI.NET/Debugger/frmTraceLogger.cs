@@ -134,15 +134,17 @@ namespace Mesen.GUI.Debugger
 		{
 			switch(keyData) {
 				case Keys.C | Keys.Control:
-					if(_previousTrace != null) {
+					if(_previousTrace != null && !this.txtCondition.Focused && txtTraceLog.SelectionStart >= 0) {
 						string[] lines = _previousTrace.Split('\n');
 						StringBuilder sb = new StringBuilder();
-						for(int i = txtTraceLog.SelectionStart, end = txtTraceLog.SelectionStart + txtTraceLog.SelectionLength; i <= end; i++) {
+						for(int i = txtTraceLog.SelectionStart, end = txtTraceLog.SelectionStart + txtTraceLog.SelectionLength; i <= end && i < lines.Length; i++) {
 							sb.AppendLine(lines[i]);
 						}
 						Clipboard.SetText(sb.ToString());
+						return true;
 					}
-					return true;
+					break;
+
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
@@ -197,9 +199,9 @@ namespace Mesen.GUI.Debugger
 						txtTraceLog.ShowSingleContentLineNotes = chkShowByteCode.Checked;
 
 						txtTraceLog.LineIndentations = indent.ToArray();
-						txtTraceLog.TextLines = lineContent.ToArray();
 						txtTraceLog.LineNumbers = programCounter.ToArray();
 						txtTraceLog.TextLineNotes = byteCode.ToArray();
+						txtTraceLog.TextLines = lineContent.ToArray();
 
 						if(scrollToBottom) {
 							txtTraceLog.ScrollToLineIndex(txtTraceLog.LineCount - 1);
