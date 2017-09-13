@@ -92,7 +92,7 @@ namespace Mesen.GUI.Debugger
 					item.SubItems[0].Text = watchContent[i].Expression;
 					item.SubItems[1].Text = watchContent[i].Value.ToString();
 					item.SubItems[1].ForeColor = watchContent[i].HasChanged ? Color.Red : Color.Black;
-					item.Selected = false;
+					//item.Selected = false;
 				}
 			}
 
