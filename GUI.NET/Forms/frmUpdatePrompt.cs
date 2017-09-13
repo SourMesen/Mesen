@@ -72,7 +72,7 @@ namespace Mesen.GUI.Forms
 				frmDownloadProgress frmDownload = new frmDownloadProgress("http://www.mesen.ca/Services/GetLatestVersion.php?a=download&p=win&v=" + InteropEmu.GetMesenVersion(), srcFilePath);
 				if(frmDownload.ShowDialog() == DialogResult.OK) {
 					FileInfo fileInfo = new FileInfo(srcFilePath);
-					if(fileInfo.Length > 0 && GetSha1Hash(srcFilePath) == _fileHash) {
+					if(fileInfo.Length > 0 && ResourceManager.GetSha1Hash(File.ReadAllBytes(srcFilePath)) == _fileHash) {
 						if(Program.IsMono) {
 							Process.Start("mono", string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\"", updateHelper, srcFilePath, destFilePath, backupFilePath));
 						} else {
@@ -86,19 +86,6 @@ namespace Mesen.GUI.Forms
 				}
 			}
 #endif
-		}
-
-		private string GetSha1Hash(string filename)
-		{
-			using(SHA1Managed sha1 = new SHA1Managed()) {
-				byte[] hash = sha1.ComputeHash(File.ReadAllBytes(filename));
-
-				var sb = new StringBuilder(hash.Length * 2);
-				foreach(byte b in hash) {
-					sb.Append(b.ToString("x2"));
-				}
-				return sb.ToString();
-			}
 		}
 
 		private void picDonate_Click(object sender, EventArgs e)
