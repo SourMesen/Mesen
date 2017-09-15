@@ -116,9 +116,9 @@
       <Control ID="tpgGeneral">Geral</Control>
       <Control ID="tpgAdvanced">Avançado</Control>
       <Control ID="chkSwapDutyCycles">Inverter ciclos de canais quadrados (Imita velhos clones)</Control>
-      <Control ID="chkSilenceTriangleHighFreq">Cortar o canal de triângulo a frequências ultrassônicas (Reduz os "pops")</Control>
-      <Control ID="chkReduceDmcPopping">Reduz sons "popping" no canal DMC</Control>
-      <Control ID="chkDisableNoiseModeFlag">Disable noise channel mode flag</Control>
+      <Control ID="chkSilenceTriangleHighFreq">Cortar o canal de triângulo em frequências ultrassônicas (Reduz os "pops")</Control>
+      <Control ID="chkReduceDmcPopping">Reduzir a intensidade dos "pops" no canal DMC</Control>
+      <Control ID="chkDisableNoiseModeFlag">Desativar o modo alternativo no canal de ruído</Control>
       <Control ID="tpgEffects">Efeitos</Control>
       <Control ID="grpStereo">Estéreo</Control>
       <Control ID="radStereoDisabled">Desativar</Control>
@@ -126,7 +126,7 @@
       <Control ID="radStereoPanning">Panorâmico</Control>
       <Control ID="lblStereoDelayMs">ms</Control>
       <Control ID="lblStereoPanningAngle">(Ângulo em graus)</Control>
-      <Control ID="chkCrossFeedEnabled">Habilitar Crossfeed:</Control>
+      <Control ID="chkCrossFeedEnabled">Ativar mistura de canais</Control>
       <Control ID="grpReverb">Ressonância</Control>
       <Control ID="chkReverbEnabled">Ativar a ressonância</Control>
       <Control ID="lblReverbDelay">Atraso:</Control>
@@ -171,7 +171,7 @@
       <Control ID="trkSunsoftPan">Sunsoft</Control>
       
       <Control ID="tpgEqualizer">Equalizador</Control>
-      <Control ID="chkEnableEqualizer">Habilitar equalizador</Control>
+      <Control ID="chkEnableEqualizer">Ativar equalizador</Control>
     </Form>
     <Form ID="frmInputConfig" Title="Configuração de controles">
       <Control ID="btnOK">OK</Control>
@@ -461,7 +461,7 @@
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
     <Form ID="frmCheatImport" Title="Importar Cheats">
-      <Control ID="grpImportOptions">Importar Opções</Control>
+      <Control ID="grpImportOptions">Importar opções</Control>
       <Control ID="lblCheatFile">Arquivo de cheat:</Control>
       <Control ID="lblGame">Jogo:</Control>
       <Control ID="btnBrowseCheat">Procurar...</Control>
@@ -648,7 +648,7 @@
 
     <Message ID="ResetSettingsConfirmation">Aviso: isso irá redefinir TODAS as configurações e não pode ser desfeito!&#xA;&#xA;Continuar?</Message>
 
-    <Message ID="RandomGameNoGameFound">Mesen não encontrou nenhum jogo para carregar.</Message>
+    <Message ID="RandomGameNoGameFound">O Mesen não encontrou nenhum jogo para carregar.</Message>
 
     <Message ID="CannotWriteToFolder">A pasta selecionada não pode ser escrita - selecione outra pasta e tente novamente.&#xA;&#xA;Detalhes:&#xA;{0}</Message>
     <Message ID="InvalidPaths">As seguintes substituições de pastas são inválidas:&#xA;&#xA;{0}&#xA;&#xA;Use pastas válidas e graváveis ​​e tente novamente.</Message>
@@ -657,11 +657,11 @@
     <Message ID="NsfNextTrack">Track seguinte (Esperar para jogar mais rápido)</Message>
     <Message ID="NsfUnnamedTrack">[sem nome]</Message>
     <Message ID="NsfUnknownField">[desconhecido]</Message>
-    <Message ID="CouldNotInstallRuntime">O pacote Visual C++ Redistributable para Visual Studio 2015 não foi instalado corretamente.</Message>
+    <Message ID="CouldNotInstallRuntime">O Pacote Redistribuível do Visual C++ para Visual Studio 2015 não foi instalado corretamente.</Message>
     <Message ID="EmptyState">&lt;Não há estado salvo&gt;</Message>
     <Message ID="ErrorWhileCheckingUpdates">Houve um erro na busca por atualizações. Verifique sua conexão com a internet e tente de novo.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
     <Message ID="AutoUpdateDisabledMessage">As atualizações automáticas não estão ativadas nesta compilação - faça o download da versão mais recente do código e recompile o Mesen para obter as atualizações mais recentes.</Message>
-    <Message ID="FdsBiosNotFound">Não foi encontrada uma bios para FDS. É preciso de uma bios para jogos do FDS.&#xA;&#xA;Deseja selecionar uma bios manualmente?</Message>
+    <Message ID="FdsBiosNotFound">Não foi encontrada uma bios para o FDS. É preciso uma bios para jogos do FDS.&#xA;&#xA;Deseja selecionar uma bios manualmente?</Message>
     <Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
     <Message ID="FileNotFound">Arquivo não encontrado: {0}</Message>
     <Message ID="InvalidFdsBios">A bios selecionada é inválida.</Message>
@@ -669,10 +669,10 @@
     <Message ID="HDNesTooltip">Esta opção permite os pacotes de gráficos de alta resolução sejam carregados no mesmo formato que os do emulador HDNes.&#xA;&#xA;Os pacotes de alta resolução devem ser colocados nos "HdPacks" em uma subpasta com o mesmo nome da ROM.&#xA;Exemplo: Um pacote para "MinhaRom.nes" deve ser colocado em "HdPacks\MinhaRom\hires.txt".</Message>
     <Message ID="HdPackBuilderScaleHelp">Seleciona a escala e o filtro de vídeo a serem usados ​​ao gerar os arquivos PNG&#xA;para o PAcote HD. Usa os filtros "Preescala" para gerar os tiles&#xA;em uma escala maior sem aplicar qualquer transformação aos pixels.</Message>
     <Message ID="HdPackBuilderBankSizeHelp">Esta opção está disponível apenas para jogos de RAM CHR.  Jogos de RAM CHR não tem "bancos"&#xA;fixos - eles são criados dinamicamente pelo código do jogo.&#xA;Esta opção altera o comportamento do Criador de Pacotes de Alta Definição agrupando os tiles em &#xA;arquivos PNG - um tamanho de banco menor geralmente resultará em menos arquivos PNG &#xA;(mas, dependendo do código do jogo, valores maiores podem produzir &#xA;melhores resultados).</Message>
-    <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
-    <Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
-    <Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
-    <Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
+    <Message ID="HdPackBuilderFrequencyHelp">Quando esta opção está habilitada, os tiles em arquivos PNG são classificados pela&#xA;frequência na qual eles são exibidos na tela durante a gravação (paletas &#xA;mais comuns serão agrupadas no primeiro arquivo para um número de banco &#xA;específico). Se esta opção estiver desmarcada, os arquivos PNG serão classificados por paleta - &#xA;nesse caso, cada arquivo PNG conterá apenas 4 cores diferentes.</Message>
+    <Message ID="HdPackBuilderGroupBlankHelp">Esta opção agrupa todas os tiles em branco em sequência para os mesmos arquivos&#xA;PNG - isso ajuda a reduzir o número de arquivos PNG produzidos pela eliminação de &#xA;arquivos PNG quase vazios contendo apenas tiles em branco.</Message>
+    <Message ID="HdPackBuilderLargeSpritesHelp">Se habilitada, esta opção irá alterar a ordem de exibição dos bancos de CHR&#xA;contendo apenas sprites, de modo a tornar os sprites mais fáceis de editar no arquivo PNG.</Message>
+    <Message ID="HdPackBuilderIgnoreOverscanHelp">Quando habilitado, isso fará com que o construtor ignore quaisquer pixels na área de overscan.&#xA;Isso é útil em jogos que contenham falhas na borda externa da tela.&#xA;Combinações de paleta incorretas devido a essas falhas serão ignoradas e não serão mostradas nos arquivos PNG.</Message>
 
     <Message ID="MesenUpToDate">Você já utiliza a versão mais recente do Mesen.</Message>
     <Message ID="PatchAndReset">Aplicar o patch e reiniciar o jogo?</Message>
@@ -719,8 +719,8 @@
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Ir ao estado salvo anterior</Message>
     <Message ID="EmulatorShortcutMappings_SaveState">Salvar estado</Message>
     <Message ID="EmulatorShortcutMappings_LoadState">Carregar estado</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleCheats">Habilitar/Desabilitar códigos de cheat</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAudio">Habilitar/Desabilitar áudio</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleCheats">Ativar/Desativar códigos de cheat</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAudio">Ativar/Desativar áudio</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">Executar um só quadro</Message>
 
     <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Ejetar disco</Message>
@@ -826,10 +826,10 @@
       <Value ID="Ppu2C05E">RP2C05-05</Value>
     </Enum>
     <Enum ID="InputDisplayPosition">
-      <Value ID="TopLeft">Superior Esquerdo</Value>
+      <Value ID="TopLeft">Superior esquerdo</Value>
       <Value ID="TopRight">Superior direito</Value>
-      <Value ID="BottomLeft">Inferior Esquerdo</Value>
-      <Value ID="BottomRight">Inferior Direito</Value>
+      <Value ID="BottomLeft">Inferior esquerdo</Value>
+      <Value ID="BottomRight">Inferior direito</Value>
     </Enum>
     <Enum ID="RamPowerOnState">
       <Value ID="AllZeros">Todos os bits a 0 (Padrão)</Value>
