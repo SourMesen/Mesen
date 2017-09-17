@@ -28,21 +28,25 @@ ShortcutKeyHandler::~ShortcutKeyHandler()
 
 bool ShortcutKeyHandler::IsKeyPressed(EmulatorShortcut shortcut)
 {
-	KeyCombination comb = EmulationSettings::GetShortcutKey(shortcut, _keySetIndex);
+	KeyCombination keyComb = EmulationSettings::GetShortcutKey(shortcut, _keySetIndex);
+	vector<KeyCombination> supersets = EmulationSettings::GetShortcutSupersets(shortcut, _keySetIndex);
+	for(KeyCombination &superset : supersets) {
+		if(IsKeyPressed(superset)) {
+			//A superset is pressed, ignore this subset
+			return false;
+		}
+	}
 
+	//No supersets are pressed, check if all matching keys are pressed
+	return IsKeyPressed(keyComb);
+}
+
+bool ShortcutKeyHandler::IsKeyPressed(KeyCombination comb)
+{
 	int keyCount = (comb.Key1 ? 1 : 0) + (comb.Key2 ? 1 : 0) + (comb.Key3 ? 1 : 0);
 
 	if(keyCount == 0 || _pressedKeys.empty()) {
 		return false;
-	}
-
-	if(_pressedKeys.size() != keyCount) {
-		//Only allow shortcuts that use as many keys as the number of keys pressed, unless there are no conflicts with other shortcuts
-		//e.g: Needed to prevent Shift-F1 from triggering a shortcut for F1
-		if(EmulationSettings::GetKeyUsage(comb.Key1) > 1 || (comb.Key2 && EmulationSettings::GetKeyUsage(comb.Key2) > 1) || (comb.Key3 && EmulationSettings::GetKeyUsage(comb.Key3) > 1)) {
-			//Conflicts found, do not activate shortcut when the number of keys is not exactly right
-			return false;
-		}
 	}
 
 	return ControlManager::IsKeyPressed(comb.Key1) &&
@@ -53,9 +57,10 @@ bool ShortcutKeyHandler::IsKeyPressed(EmulatorShortcut shortcut)
 bool ShortcutKeyHandler::DetectKeyPress(EmulatorShortcut shortcut)
 {
 	if(IsKeyPressed(shortcut)) {
+		bool newlyPressed = _prevKeysDown[_keySetIndex].find((uint32_t)shortcut) == _prevKeysDown[_keySetIndex].end();
 		_keysDown[_keySetIndex].emplace((uint32_t)shortcut);
 
-		if(_prevKeysDown[_keySetIndex].find((uint32_t)shortcut) == _prevKeysDown[_keySetIndex].end()) {
+		if(newlyPressed && !_isKeyUp) {
 			return true;
 		}
 	}
@@ -137,7 +142,7 @@ void ShortcutKeyHandler::CheckMappedKeys()
 		MessageManager::SendNotification(ConsoleNotificationType::ExecuteShortcut, (void*)EmulatorShortcut::ToggleAudio);
 	}
 
-	if(IsKeyPressed(EmulatorShortcut::RunSingleFrame)) {
+	if(DetectKeyPress(EmulatorShortcut::RunSingleFrame)) {
 		if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
 			EmulationSettings::ClearFlags(EmulationFlags::Paused);
 			Console::Pause();
@@ -176,6 +181,21 @@ void ShortcutKeyHandler::ProcessKeys()
 	ControlManager::RefreshKeyState();
 
 	_pressedKeys = ControlManager::GetPressedKeys();
+	_isKeyUp = _pressedKeys.size() < _lastPressedKeys.size();
+
+	if(_pressedKeys.size() == _lastPressedKeys.size()) {
+		bool noChange = true;
+		for(int i = 0; i < _pressedKeys.size(); i++) {
+			if(_pressedKeys[i] != _lastPressedKeys[i]) {
+				noChange = false;
+				break;
+			}
+		}
+		if(noChange) {
+			//Same keys as before, nothing to do
+			return;
+		}
+	}
 
 	for(int i = 0; i < 2; i++) {
 		_keysDown[i].clear();
@@ -183,4 +203,6 @@ void ShortcutKeyHandler::ProcessKeys()
 		CheckMappedKeys();
 		_prevKeysDown[i] = _keysDown[i];
 	}
+
+	_lastPressedKeys = _pressedKeys;
 }

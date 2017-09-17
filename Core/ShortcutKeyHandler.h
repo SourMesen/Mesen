@@ -14,6 +14,8 @@ private:
 	
 	int _keySetIndex;
 	vector<uint32_t> _pressedKeys;
+	vector<uint32_t> _lastPressedKeys;
+	bool _isKeyUp;
 
 	std::unordered_set<uint32_t> _keysDown[2];
 	std::unordered_set<uint32_t> _prevKeysDown[2];
@@ -21,6 +23,7 @@ private:
 	void CheckMappedKeys();
 	
 	bool IsKeyPressed(EmulatorShortcut key);
+	bool IsKeyPressed(KeyCombination comb);
 
 	bool DetectKeyPress(EmulatorShortcut key);
 	bool DetectKeyRelease(EmulatorShortcut key);

@@ -356,6 +356,38 @@ struct KeyCombination
 	uint32_t Key1;
 	uint32_t Key2;
 	uint32_t Key3;
+
+	vector<uint32_t> GetKeys()
+	{
+		vector<uint32_t> result;
+		if(Key1) {
+			result.push_back(Key1);
+		}
+		if(Key2) {
+			result.push_back(Key2);
+		}
+		if(Key3) {
+			result.push_back(Key3);
+		}
+		return result;
+	}
+
+	bool IsSubsetOf(KeyCombination keyCombination)
+	{
+		vector<uint32_t> myKeys = GetKeys();
+		vector<uint32_t> otherKeys = keyCombination.GetKeys();
+
+		if(otherKeys.size() > myKeys.size()) {
+			for(int i = 0; i < myKeys.size(); i++) {
+				if(std::find(otherKeys.begin(), otherKeys.end(), myKeys[i]) == otherKeys.end()) {
+					//Current key combination contains a key not found in the other combination, so it's not a subset
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 };
 
 enum class Language
@@ -488,7 +520,7 @@ private:
 	static bool _autoSaveNotify;
 
 	static std::unordered_map<uint32_t, KeyCombination> _emulatorKeys[2];
-	static std::unordered_map<uint32_t, uint32_t> _shortcutKeyUsage;
+	static std::unordered_map<uint32_t, vector<KeyCombination>> _shortcutSupersets[2];
 
 	static RamPowerOnState _ramPowerOnState;
 	
@@ -1060,17 +1092,24 @@ public:
 		auto lock = _shortcutLock.AcquireSafe();
 		_emulatorKeys[0].clear();
 		_emulatorKeys[1].clear();
-		_shortcutKeyUsage.clear();
+		_shortcutSupersets[0].clear();
+		_shortcutSupersets[1].clear();
 	}
 
 	static void SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex)
 	{
 		auto lock = _shortcutLock.AcquireSafe();
-		_emulatorKeys[keySetIndex][(int)shortcut] = keyCombination;
+		_emulatorKeys[keySetIndex][(uint32_t)shortcut] = keyCombination;
 		
-		_shortcutKeyUsage[keyCombination.Key1]++;
-		_shortcutKeyUsage[keyCombination.Key2]++;
-		_shortcutKeyUsage[keyCombination.Key3]++;
+		for(int i = 0; i < 2; i++) {
+			for(std::pair<const uint32_t, KeyCombination> &kvp : _emulatorKeys[i]) {
+				if(keyCombination.IsSubsetOf(kvp.second)) {
+					_shortcutSupersets[keySetIndex][(uint32_t)shortcut].push_back(kvp.second);
+				} else if(kvp.second.IsSubsetOf(keyCombination)) {
+					_shortcutSupersets[i][kvp.first].push_back(keyCombination);
+				}
+			}
+		}
 	}
 
 	static KeyCombination GetShortcutKey(EmulatorShortcut shortcut, int keySetIndex)
@@ -1083,10 +1122,10 @@ public:
 		return {};
 	}
 	
-	static int GetKeyUsage(int keyCode)
+	static vector<KeyCombination> GetShortcutSupersets(EmulatorShortcut shortcut, int keySetIndex)
 	{
 		auto lock = _shortcutLock.AcquireSafe();
-		return _shortcutKeyUsage[keyCode];
+		return _shortcutSupersets[keySetIndex][(uint32_t)shortcut];
 	}
 
 	static bool NeedControllerUpdate()
