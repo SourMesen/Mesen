@@ -259,6 +259,11 @@ namespace Mesen.GUI.Forms.Config
 			// nudScale
 			// 
 			this.nudScale.DecimalPlaces = 2;
+			this.nudScale.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudScale.Location = new System.Drawing.Point(77, 0);
 			this.nudScale.Margin = new System.Windows.Forms.Padding(0);
 			this.nudScale.Maximum = new decimal(new int[] {
@@ -266,9 +271,20 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudScale.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudScale.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudScale.Name = "nudScale";
 			this.nudScale.Size = new System.Drawing.Size(48, 20);
 			this.nudScale.TabIndex = 21;
+			this.nudScale.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudScale.ValueChanged += new System.EventHandler(this.nudScale_ValueChanged);
 			this.nudScale.Click += new System.EventHandler(this.nudScale_Click);
 			this.nudScale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudScale_KeyDown);
@@ -328,6 +344,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudCustomRatio.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudCustomRatio.Minimum = new decimal(new int[] {
             1,
             0,
@@ -928,11 +945,33 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// nudOverscanLeft
 			// 
+			this.nudOverscanLeft.DecimalPlaces = 0;
+			this.nudOverscanLeft.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudOverscanLeft.Location = new System.Drawing.Point(0, 13);
 			this.nudOverscanLeft.Margin = new System.Windows.Forms.Padding(0);
+			this.nudOverscanLeft.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudOverscanLeft.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudOverscanLeft.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudOverscanLeft.Name = "nudOverscanLeft";
 			this.nudOverscanLeft.Size = new System.Drawing.Size(41, 20);
 			this.nudOverscanLeft.TabIndex = 2;
+			this.nudOverscanLeft.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudOverscanLeft.ValueChanged += new System.EventHandler(this.nudOverscan_ValueChanged);
 			// 
 			// flowLayoutPanel4
@@ -961,11 +1000,33 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// nudOverscanTop
 			// 
+			this.nudOverscanTop.DecimalPlaces = 0;
+			this.nudOverscanTop.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudOverscanTop.Location = new System.Drawing.Point(0, 13);
 			this.nudOverscanTop.Margin = new System.Windows.Forms.Padding(0);
+			this.nudOverscanTop.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudOverscanTop.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudOverscanTop.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudOverscanTop.Name = "nudOverscanTop";
 			this.nudOverscanTop.Size = new System.Drawing.Size(41, 20);
 			this.nudOverscanTop.TabIndex = 2;
+			this.nudOverscanTop.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudOverscanTop.ValueChanged += new System.EventHandler(this.nudOverscan_ValueChanged);
 			// 
 			// flowLayoutPanel5
@@ -994,11 +1055,33 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// nudOverscanBottom
 			// 
+			this.nudOverscanBottom.DecimalPlaces = 0;
+			this.nudOverscanBottom.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudOverscanBottom.Location = new System.Drawing.Point(0, 13);
 			this.nudOverscanBottom.Margin = new System.Windows.Forms.Padding(0);
+			this.nudOverscanBottom.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudOverscanBottom.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudOverscanBottom.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudOverscanBottom.Name = "nudOverscanBottom";
 			this.nudOverscanBottom.Size = new System.Drawing.Size(41, 20);
 			this.nudOverscanBottom.TabIndex = 2;
+			this.nudOverscanBottom.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudOverscanBottom.ValueChanged += new System.EventHandler(this.nudOverscan_ValueChanged);
 			// 
 			// flowLayoutPanel2
@@ -1027,11 +1110,33 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// nudOverscanRight
 			// 
+			this.nudOverscanRight.DecimalPlaces = 0;
+			this.nudOverscanRight.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudOverscanRight.Location = new System.Drawing.Point(0, 13);
 			this.nudOverscanRight.Margin = new System.Windows.Forms.Padding(0);
+			this.nudOverscanRight.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudOverscanRight.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudOverscanRight.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudOverscanRight.Name = "nudOverscanRight";
 			this.nudOverscanRight.Size = new System.Drawing.Size(41, 20);
 			this.nudOverscanRight.TabIndex = 1;
+			this.nudOverscanRight.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudOverscanRight.ValueChanged += new System.EventHandler(this.nudOverscan_ValueChanged);
 			// 
 			// tpgPalette
@@ -1185,41 +1290,45 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// chkDisableBackground
 			// 
-			this.chkDisableBackground.AutoSize = true;
 			this.chkDisableBackground.Checked = false;
+			this.chkDisableBackground.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chkDisableBackground.Location = new System.Drawing.Point(0, 0);
+			this.chkDisableBackground.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisableBackground.Name = "chkDisableBackground";
-			this.chkDisableBackground.Size = new System.Drawing.Size(219, 23);
+			this.chkDisableBackground.Size = new System.Drawing.Size(521, 23);
 			this.chkDisableBackground.TabIndex = 0;
 			this.chkDisableBackground.Text = "Disable background";
 			// 
 			// chkDisableSprites
 			// 
-			this.chkDisableSprites.AutoSize = true;
 			this.chkDisableSprites.Checked = false;
+			this.chkDisableSprites.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chkDisableSprites.Location = new System.Drawing.Point(0, 23);
+			this.chkDisableSprites.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisableSprites.Name = "chkDisableSprites";
-			this.chkDisableSprites.Size = new System.Drawing.Size(192, 23);
+			this.chkDisableSprites.Size = new System.Drawing.Size(521, 23);
 			this.chkDisableSprites.TabIndex = 1;
 			this.chkDisableSprites.Text = "Disable sprites";
 			// 
 			// chkForceBackgroundFirstColumn
 			// 
-			this.chkForceBackgroundFirstColumn.AutoSize = true;
 			this.chkForceBackgroundFirstColumn.Checked = false;
+			this.chkForceBackgroundFirstColumn.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chkForceBackgroundFirstColumn.Location = new System.Drawing.Point(0, 46);
+			this.chkForceBackgroundFirstColumn.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkForceBackgroundFirstColumn.Name = "chkForceBackgroundFirstColumn";
-			this.chkForceBackgroundFirstColumn.Size = new System.Drawing.Size(313, 23);
+			this.chkForceBackgroundFirstColumn.Size = new System.Drawing.Size(521, 23);
 			this.chkForceBackgroundFirstColumn.TabIndex = 2;
 			this.chkForceBackgroundFirstColumn.Text = "Force background display in first column";
 			// 
 			// chkForceSpritesFirstColumn
 			// 
-			this.chkForceSpritesFirstColumn.AutoSize = true;
 			this.chkForceSpritesFirstColumn.Checked = false;
+			this.chkForceSpritesFirstColumn.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chkForceSpritesFirstColumn.Location = new System.Drawing.Point(0, 69);
+			this.chkForceSpritesFirstColumn.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkForceSpritesFirstColumn.Name = "chkForceSpritesFirstColumn";
-			this.chkForceSpritesFirstColumn.Size = new System.Drawing.Size(281, 23);
+			this.chkForceSpritesFirstColumn.Size = new System.Drawing.Size(521, 23);
 			this.chkForceSpritesFirstColumn.TabIndex = 3;
 			this.chkForceSpritesFirstColumn.Text = "Force sprite display in first column";
 			// 
@@ -1403,7 +1512,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.PerformLayout();
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel9.ResumeLayout(false);
-			this.tableLayoutPanel9.PerformLayout();
 			this.contextPicturePresets.ResumeLayout(false);
 			this.contextPaletteList.ResumeLayout(false);
 			this.ResumeLayout(false);

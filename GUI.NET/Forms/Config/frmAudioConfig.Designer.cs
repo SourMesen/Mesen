@@ -578,6 +578,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudLatency.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudLatency.Minimum = new decimal(new int[] {
             15,
             0,
@@ -1456,6 +1457,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudStereoDelay.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudStereoDelay.Minimum = new decimal(new int[] {
             0,
             0,
@@ -1486,6 +1488,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudStereoPanning.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudStereoPanning.Minimum = new decimal(new int[] {
             180,
             0,
@@ -1624,6 +1627,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudCrossFeedRatio.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudCrossFeedRatio.Minimum = new decimal(new int[] {
             0,
             0,
@@ -1681,11 +1685,11 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// chkDisableNoiseModeFlag
 			// 
-			this.chkDisableNoiseModeFlag.AutoSize = true;
 			this.chkDisableNoiseModeFlag.Checked = false;
-			this.chkDisableNoiseModeFlag.Location = new System.Drawing.Point(0, 69);
+			this.chkDisableNoiseModeFlag.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkDisableNoiseModeFlag.Location = new System.Drawing.Point(0, 70);
 			this.chkDisableNoiseModeFlag.Name = "chkDisableNoiseModeFlag";
-			this.chkDisableNoiseModeFlag.Size = new System.Drawing.Size(277, 23);
+			this.chkDisableNoiseModeFlag.Size = new System.Drawing.Size(463, 23);
 			this.chkDisableNoiseModeFlag.TabIndex = 3;
 			this.chkDisableNoiseModeFlag.Text = "Disable noise channel mode flag";
 			// 
@@ -1700,11 +1704,11 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// chkSwapDutyCycles
 			// 
-			this.chkSwapDutyCycles.AutoSize = true;
 			this.chkSwapDutyCycles.Checked = false;
+			this.chkSwapDutyCycles.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chkSwapDutyCycles.Location = new System.Drawing.Point(0, 46);
 			this.chkSwapDutyCycles.Name = "chkSwapDutyCycles";
-			this.chkSwapDutyCycles.Size = new System.Drawing.Size(380, 23);
+			this.chkSwapDutyCycles.Size = new System.Drawing.Size(463, 24);
 			this.chkSwapDutyCycles.TabIndex = 0;
 			this.chkSwapDutyCycles.Text = "Swap square channels duty cycles (Mimics old clones)";
 			// 
@@ -1764,7 +1768,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpStereoFilter.ResumeLayout(false);
 			this.tlpStereoFilter.PerformLayout();
 			this.grpReverb.ResumeLayout(false);
-			this.grpReverb.PerformLayout();
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkReverbDelay)).EndInit();

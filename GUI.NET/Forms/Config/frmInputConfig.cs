@@ -305,8 +305,15 @@ namespace Mesen.GUI.Forms.Config
 				btnSetupP3.Image = portConflicts[2] ? Properties.Resources.Warning : null;
 				btnSetupP4.Image = portConflicts[3] ? Properties.Resources.Warning : null;
 
-				this.Height = needWarning ? 360 : 310;
+				this.Height = (int)((needWarning ? 360 : 310) * _yFactor);
 			}
+		}
+
+		float _yFactor = 1;
+		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+		{
+			_yFactor = factor.Height;
+			base.ScaleControl(factor, specified);
 		}
 	}
 }

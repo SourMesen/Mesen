@@ -555,11 +555,11 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpCloudSaveDesc.TabIndex = 0;
 			// 
 			// lblGoogleDriveIntegration
-			//
-			this.lblGoogleDriveIntegration.Dock = System.Windows.Forms.DockStyle.Top; 
+			// 
+			this.lblGoogleDriveIntegration.Dock = System.Windows.Forms.DockStyle.Top;
 			this.lblGoogleDriveIntegration.Location = new System.Drawing.Point(3, 0);
 			this.lblGoogleDriveIntegration.Name = "lblGoogleDriveIntegration";
-			this.lblGoogleDriveIntegration.Size = new System.Drawing.Size(464, 52);
+			this.lblGoogleDriveIntegration.Size = new System.Drawing.Size(465, 52);
 			this.lblGoogleDriveIntegration.TabIndex = 0;
 			this.lblGoogleDriveIntegration.Text = resources.GetString("lblGoogleDriveIntegration.Text");
 			this.lblGoogleDriveIntegration.UseWaitCursor = true;
@@ -747,6 +747,12 @@ namespace Mesen.GUI.Forms.Config
 			// nudAutoSave
 			// 
 			this.nudAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudAutoSave.DecimalPlaces = 0;
+			this.nudAutoSave.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudAutoSave.Location = new System.Drawing.Point(217, 1);
 			this.nudAutoSave.Margin = new System.Windows.Forms.Padding(0);
 			this.nudAutoSave.Maximum = new decimal(new int[] {
@@ -754,6 +760,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudAutoSave.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudAutoSave.Minimum = new decimal(new int[] {
             1,
             0,
@@ -832,6 +839,12 @@ namespace Mesen.GUI.Forms.Config
 			// nudNsfAutoDetectSilenceDelay
 			// 
 			this.nudNsfAutoDetectSilenceDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudNsfAutoDetectSilenceDelay.DecimalPlaces = 0;
+			this.nudNsfAutoDetectSilenceDelay.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudNsfAutoDetectSilenceDelay.Location = new System.Drawing.Point(145, 1);
 			this.nudNsfAutoDetectSilenceDelay.Margin = new System.Windows.Forms.Padding(0);
 			this.nudNsfAutoDetectSilenceDelay.Maximum = new decimal(new int[] {
@@ -839,6 +852,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudNsfAutoDetectSilenceDelay.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudNsfAutoDetectSilenceDelay.Minimum = new decimal(new int[] {
             200,
             0,
@@ -891,6 +905,12 @@ namespace Mesen.GUI.Forms.Config
 			// nudNsfMoveToNextTrackTime
 			// 
 			this.nudNsfMoveToNextTrackTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudNsfMoveToNextTrackTime.DecimalPlaces = 0;
+			this.nudNsfMoveToNextTrackTime.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudNsfMoveToNextTrackTime.Location = new System.Drawing.Point(129, 1);
 			this.nudNsfMoveToNextTrackTime.Margin = new System.Windows.Forms.Padding(0);
 			this.nudNsfMoveToNextTrackTime.Maximum = new decimal(new int[] {
@@ -898,6 +918,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudNsfMoveToNextTrackTime.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudNsfMoveToNextTrackTime.Minimum = new decimal(new int[] {
             5,
             0,
@@ -1469,11 +1490,12 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// chkDisableGameDatabase
 			// 
-			this.chkDisableGameDatabase.AutoSize = true;
 			this.chkDisableGameDatabase.Checked = false;
+			this.chkDisableGameDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chkDisableGameDatabase.Location = new System.Drawing.Point(0, 0);
+			this.chkDisableGameDatabase.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisableGameDatabase.Name = "chkDisableGameDatabase";
-			this.chkDisableGameDatabase.Size = new System.Drawing.Size(268, 23);
+			this.chkDisableGameDatabase.Size = new System.Drawing.Size(483, 23);
 			this.chkDisableGameDatabase.TabIndex = 6;
 			this.chkDisableGameDatabase.Text = "Disable built-in game database";
 			// 
@@ -1535,10 +1557,22 @@ namespace Mesen.GUI.Forms.Config
 			// nudRewindBufferSize
 			// 
 			this.nudRewindBufferSize.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudRewindBufferSize.DecimalPlaces = 0;
+			this.nudRewindBufferSize.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudRewindBufferSize.Location = new System.Drawing.Point(148, 0);
 			this.nudRewindBufferSize.Margin = new System.Windows.Forms.Padding(0);
 			this.nudRewindBufferSize.Maximum = new decimal(new int[] {
             900,
+            0,
+            0,
+            0});
+			this.nudRewindBufferSize.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudRewindBufferSize.Minimum = new decimal(new int[] {
+            0,
             0,
             0,
             0});

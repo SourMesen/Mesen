@@ -39,7 +39,7 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel1.Controls.Add(this.trackBar, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblValue, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblText, 0, 0);
@@ -61,7 +61,7 @@
 			this.trackBar.Maximum = 100;
 			this.trackBar.Minimum = -100;
 			this.trackBar.Name = "trackBar";
-			this.trackBar.Size = new System.Drawing.Size(168, 35);
+			this.trackBar.Size = new System.Drawing.Size(171, 35);
 			this.trackBar.TabIndex = 13;
 			this.trackBar.TickFrequency = 10;
 			this.trackBar.Value = 50;
@@ -72,10 +72,10 @@
 			this.lblValue.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblValue.BackColor = System.Drawing.Color.White;
 			this.lblValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.lblValue.Location = new System.Drawing.Point(171, 20);
-			this.lblValue.MinimumSize = new System.Drawing.Size(32, 17);
+			this.lblValue.Location = new System.Drawing.Point(174, 20);
+			this.lblValue.MinimumSize = new System.Drawing.Size(30, 17);
 			this.lblValue.Name = "lblValue";
-			this.lblValue.Size = new System.Drawing.Size(32, 17);
+			this.lblValue.Size = new System.Drawing.Size(30, 17);
 			this.lblValue.TabIndex = 17;
 			this.lblValue.Text = "100";
 			this.lblValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -86,7 +86,7 @@
 			this.lblText.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lblText.Location = new System.Drawing.Point(3, 0);
 			this.lblText.Name = "lblText";
-			this.lblText.Size = new System.Drawing.Size(162, 20);
+			this.lblText.Size = new System.Drawing.Size(165, 20);
 			this.lblText.TabIndex = 18;
 			this.lblText.Text = "Text";
 			this.lblText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
