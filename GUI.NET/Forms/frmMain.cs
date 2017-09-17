@@ -50,6 +50,7 @@ namespace Mesen.GUI.Forms
 		private bool _showUpgradeMessage = false;
 		private float _xFactor = 1;
 		private float _yFactor = 1;
+		private bool _enableResize = false;
 
 		private Dictionary<EmulatorShortcut, Func<bool>> _actionEnabledFuncs = new Dictionary<EmulatorShortcut, Func<bool>>();
 
@@ -224,6 +225,10 @@ namespace Mesen.GUI.Forms
 				MesenMsgBox.Show("UpgradeSuccess", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				_showUpgradeMessage = false;
 			}
+
+			//Ensure the resize event is not fired until the form is fully shown
+			//This is needed when DPI display settings is not set to 100%
+			_enableResize = true;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -332,7 +337,7 @@ namespace Mesen.GUI.Forms
 
 		private void frmMain_Resize(object sender, EventArgs e)
 		{
-			if(this.WindowState != FormWindowState.Minimized) {
+			if(_enableResize && this.WindowState != FormWindowState.Minimized) {
 				SetScaleBasedOnWindowSize();
 				ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
 				ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
