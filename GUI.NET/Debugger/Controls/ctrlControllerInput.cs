@@ -87,8 +87,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private Buttons ToggleButtonState(Buttons state, Point mouseLoc)
 		{
-			int scale = 2;
-			Point location = new Point(mouseLoc.X/scale, mouseLoc.Y/scale);
+			Point location = new Point((int)(mouseLoc.X/_xFactor), (int)(mouseLoc.Y/_yFactor));
 			
 			Rectangle upButton = new Rectangle(6, 2, 4, 4);
 			Rectangle downButton = new Rectangle(6, 10, 4, 4);
@@ -137,13 +136,23 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		float _xFactor = 1;
+		float _yFactor = 1;
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			_xFactor = (float)this.Width / 44;
+			_yFactor = (float)this.Height / 16;
+		}
+
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint(e);
 
 			e.Graphics.Clear(Color.LightGray);
 			
-			e.Graphics.ScaleTransform(2, 2);
+			e.Graphics.ScaleTransform(_xFactor, _yFactor);
+
 			e.Graphics.DrawRectangle(Pens.DarkSlateGray, 0, 0, 44, 16);
 			e.Graphics.FillRectangle(Brushes.DarkSlateGray, 6, 6, 4, 4);
 

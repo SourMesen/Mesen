@@ -87,6 +87,7 @@
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
 			this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
@@ -94,14 +95,15 @@
 			this.tpgMemoryViewer.SuspendLayout();
 			this.tpgAccessCounters.SuspendLayout();
 			this.tpgProfiler.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ctrlHexViewer
 			// 
 			this.ctrlHexViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlHexViewer.Location = new System.Drawing.Point(3, 28);
+			this.ctrlHexViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlHexViewer.Name = "ctrlHexViewer";
-			this.ctrlHexViewer.Size = new System.Drawing.Size(665, 346);
+			this.ctrlHexViewer.Size = new System.Drawing.Size(671, 352);
 			this.ctrlHexViewer.TabIndex = 0;
 			this.ctrlHexViewer.RequiredWidthChanged += new System.EventHandler(this.ctrlHexViewer_RequiredWidthChanged);
 			this.ctrlHexViewer.InitializeContextMenu += new System.EventHandler(this.ctrlHexViewer_InitializeContextMenu);
@@ -109,12 +111,16 @@
 			// 
 			// flowLayoutPanel1
 			// 
+			this.flowLayoutPanel1.AutoSize = true;
+			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Controls.Add(this.lblViewMemoryType);
 			this.flowLayoutPanel1.Controls.Add(this.cboMemoryType);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(6, 27);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 0);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(167, 27);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(166, 27);
 			this.flowLayoutPanel1.TabIndex = 1;
+			this.flowLayoutPanel1.WrapContents = false;
 			// 
 			// lblViewMemoryType
 			// 
@@ -255,7 +261,7 @@
 			// 
 			this.mnuHightlightReads.CheckOnClick = true;
 			this.mnuHightlightReads.Name = "mnuHightlightReads";
-			this.mnuHightlightReads.Size = new System.Drawing.Size(152, 22);
+			this.mnuHightlightReads.Size = new System.Drawing.Size(133, 22);
 			this.mnuHightlightReads.Text = "Reads";
 			this.mnuHightlightReads.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
@@ -263,7 +269,7 @@
 			// 
 			this.mnuHighlightWrites.CheckOnClick = true;
 			this.mnuHighlightWrites.Name = "mnuHighlightWrites";
-			this.mnuHighlightWrites.Size = new System.Drawing.Size(152, 22);
+			this.mnuHighlightWrites.Size = new System.Drawing.Size(133, 22);
 			this.mnuHighlightWrites.Text = "Writes";
 			this.mnuHighlightWrites.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
@@ -271,14 +277,14 @@
 			// 
 			this.mnuHighlightExecution.CheckOnClick = true;
 			this.mnuHighlightExecution.Name = "mnuHighlightExecution";
-			this.mnuHighlightExecution.Size = new System.Drawing.Size(152, 22);
+			this.mnuHighlightExecution.Size = new System.Drawing.Size(133, 22);
 			this.mnuHighlightExecution.Text = "Execution";
 			this.mnuHighlightExecution.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(130, 6);
 			// 
 			// fadeSpeedToolStripMenuItem
 			// 
@@ -290,7 +296,7 @@
             this.toolStripMenuItem7,
             this.mnuCustomFadeSpeed});
 			this.fadeSpeedToolStripMenuItem.Name = "fadeSpeedToolStripMenuItem";
-			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
 			this.fadeSpeedToolStripMenuItem.Text = "Fade speed";
 			// 
 			// mnuFadeSlow
@@ -505,9 +511,9 @@
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnImport,
             this.btnExport});
-			this.toolStrip1.Location = new System.Drawing.Point(3, 3);
+			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(665, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(671, 25);
 			this.toolStrip1.TabIndex = 3;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -544,12 +550,10 @@
 			// 
 			// tpgMemoryViewer
 			// 
-			this.tpgMemoryViewer.Controls.Add(this.flowLayoutPanel1);
-			this.tpgMemoryViewer.Controls.Add(this.ctrlHexViewer);
+			this.tpgMemoryViewer.Controls.Add(this.panel1);
 			this.tpgMemoryViewer.Controls.Add(this.toolStrip1);
 			this.tpgMemoryViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgMemoryViewer.Name = "tpgMemoryViewer";
-			this.tpgMemoryViewer.Padding = new System.Windows.Forms.Padding(3);
 			this.tpgMemoryViewer.Size = new System.Drawing.Size(671, 377);
 			this.tpgMemoryViewer.TabIndex = 0;
 			this.tpgMemoryViewer.Text = "Memory Viewer";
@@ -560,7 +564,6 @@
 			this.tpgAccessCounters.Controls.Add(this.ctrlMemoryAccessCounters);
 			this.tpgAccessCounters.Location = new System.Drawing.Point(4, 22);
 			this.tpgAccessCounters.Name = "tpgAccessCounters";
-			this.tpgAccessCounters.Padding = new System.Windows.Forms.Padding(3);
 			this.tpgAccessCounters.Size = new System.Drawing.Size(671, 377);
 			this.tpgAccessCounters.TabIndex = 1;
 			this.tpgAccessCounters.Text = "Access Counters";
@@ -569,9 +572,10 @@
 			// ctrlMemoryAccessCounters
 			// 
 			this.ctrlMemoryAccessCounters.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlMemoryAccessCounters.Location = new System.Drawing.Point(3, 3);
+			this.ctrlMemoryAccessCounters.Location = new System.Drawing.Point(0, 0);
+			this.ctrlMemoryAccessCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlMemoryAccessCounters.Name = "ctrlMemoryAccessCounters";
-			this.ctrlMemoryAccessCounters.Size = new System.Drawing.Size(665, 371);
+			this.ctrlMemoryAccessCounters.Size = new System.Drawing.Size(671, 377);
 			this.ctrlMemoryAccessCounters.TabIndex = 0;
 			// 
 			// tpgProfiler
@@ -597,6 +601,16 @@
 			this.tmrRefresh.Enabled = true;
 			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
 			// 
+			// panel1
+			// 
+			this.panel1.Controls.Add(this.flowLayoutPanel1);
+			this.panel1.Controls.Add(this.ctrlHexViewer);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel1.Location = new System.Drawing.Point(0, 25);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(671, 352);
+			this.panel1.TabIndex = 4;
+			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -619,6 +633,8 @@
 			this.tpgMemoryViewer.PerformLayout();
 			this.tpgAccessCounters.ResumeLayout(false);
 			this.tpgProfiler.ResumeLayout(false);
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -681,5 +697,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuHideWrittenBytes;
 		private System.Windows.Forms.ToolStripMenuItem mnuHideExecutedBytes;
 		private System.Windows.Forms.ToolStripMenuItem mnuFadeNever;
+		private System.Windows.Forms.Panel panel1;
 	}
 }

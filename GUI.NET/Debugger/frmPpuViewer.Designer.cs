@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Debugger
 {
 	partial class frmPpuViewer
 	{
@@ -49,9 +51,9 @@
 			this.ctrlPaletteViewer = new Mesen.GUI.Debugger.Controls.ctrlPaletteViewer();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblShowFrameAt = new System.Windows.Forms.Label();
-			this.nudScanline = new System.Windows.Forms.NumericUpDown();
+			this.nudScanline = new MesenNumericUpDown();
 			this.lblCycle = new System.Windows.Forms.Label();
-			this.nudCycle = new System.Windows.Forms.NumericUpDown();
+			this.nudCycle = new MesenNumericUpDown();
 			this.btnReset = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -60,8 +62,6 @@
 			this.tpgSpriteViewer.SuspendLayout();
 			this.tpgPaletteViewer.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudScanline)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudCycle)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -320,8 +320,6 @@
 			this.tpgPaletteViewer.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudScanline)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudCycle)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -347,9 +345,9 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Label lblShowFrameAt;
-		private System.Windows.Forms.NumericUpDown nudScanline;
+		private MesenNumericUpDown nudScanline;
 		private System.Windows.Forms.Label lblCycle;
-		private System.Windows.Forms.NumericUpDown nudCycle;
+		private MesenNumericUpDown nudCycle;
 		private System.Windows.Forms.Button btnReset;
 	}
 }

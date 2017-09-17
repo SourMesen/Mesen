@@ -143,11 +143,20 @@ namespace Mesen.GUI.Controls
 				UpdateSize();
 			}
 		}
+		
+		float _xFactor = 1;
+		float _yFactor = 1;
+		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+		{
+			_xFactor = factor.Width;
+			_yFactor = factor.Height;
+			base.ScaleControl(factor, specified);
+		}
 
 		private void UpdateSize()
 		{
 			tlpPreviousState.Visible = false;
-			Size maxSize = new Size(this.Size.Width - 120, this.Size.Height - 50);
+			Size maxSize = new Size(this.Size.Width - (int)(120 * _xFactor), this.Size.Height - (int)(50 * _yFactor));
 
 			if(picPreviousState.Image != null) {
 				double xRatio = (double)picPreviousState.Image.Width / maxSize.Width;

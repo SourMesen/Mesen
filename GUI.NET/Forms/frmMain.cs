@@ -42,11 +42,14 @@ namespace Mesen.GUI.Forms
 		private FormWindowState _originalWindowState;
 		private bool _fullscreenMode = false;
 		private Size? _nonNsfSize = null;
+		private Size _nonNsfMinimumSize;
 		private bool _isNsfPlayerMode = false;
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
 		private bool _removeFocus = false;
 		private bool _showUpgradeMessage = false;
+		private float _xFactor = 1;
+		private float _yFactor = 1;
 
 		private Dictionary<EmulatorShortcut, Func<bool>> _actionEnabledFuncs = new Dictionary<EmulatorShortcut, Func<bool>>();
 
@@ -309,12 +312,19 @@ namespace Mesen.GUI.Forms
 			this.Resize += frmMain_Resize;
 		}
 
+		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+		{
+			_xFactor = factor.Width;
+			_yFactor = factor.Height;
+			base.ScaleControl(factor, specified);
+		}
+
 		private void ResizeRecentGames(object sender, EventArgs e)
 		{
-			if(this.ClientSize.Height < 400) {
-				ctrlRecentGames.Height = this.ClientSize.Height - 125 + Math.Min(50, (400 - this.ClientSize.Height));
+			if(this.ClientSize.Height < 400 * _yFactor) {
+				ctrlRecentGames.Height = this.ClientSize.Height - (int)((125 - Math.Min(50, 400 - (int)(this.ClientSize.Height / _yFactor))) * _yFactor);
 			} else {
-				ctrlRecentGames.Height = this.ClientSize.Height - 125;
+				ctrlRecentGames.Height = this.ClientSize.Height - (int)(125 * _yFactor);
 			}
 			ctrlRecentGames.Width = this.ClientSize.Width;
 			ctrlRecentGames.Top = (this.HideMenuStrip && this.menuStrip.Visible) ? -menuStrip.Height : 0;
@@ -1017,8 +1027,9 @@ namespace Mesen.GUI.Forms
 
 					if(!this._isNsfPlayerMode) {
 						this._nonNsfSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
-						this.Size = new Size(380, 320);
-						this.MinimumSize = new Size(380, 320);
+						this._nonNsfMinimumSize = this.MinimumSize;
+						this.Size = ctrlNsfPlayer.WindowMinimumSize;
+						this.MinimumSize = ctrlNsfPlayer.WindowMinimumSize;
 					}
 					this._isNsfPlayerMode = true;
 					this.ctrlNsfPlayer.UpdateText();
@@ -1034,7 +1045,7 @@ namespace Mesen.GUI.Forms
 						_currentGame = header.GetSongName();
 					}
 				} else if(this._isNsfPlayerMode) {
-					this.MinimumSize = new Size(340, 280);
+					this.MinimumSize = this._nonNsfMinimumSize;
 					this.Size = this._nonNsfSize.Value;
 					this._nonNsfSize = null;
 					this._isNsfPlayerMode = false;

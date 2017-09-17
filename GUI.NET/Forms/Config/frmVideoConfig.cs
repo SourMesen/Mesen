@@ -162,13 +162,13 @@ namespace Mesen.GUI.Forms.Config
 
 		private void UpdateOverscanImage()
 		{
-			Bitmap overscan = new Bitmap(256, 240);
+			Bitmap overscan = new Bitmap(picOverscan.Width - 2, picOverscan.Height - 2);
 
 			using(Graphics g = Graphics.FromImage(overscan)) {
-				Rectangle bg = new Rectangle(0, 0, 256, 240);
-				g.FillRectangle(Brushes.DarkGray, bg);
+				g.Clear(Color.DarkGray);
 
 				Rectangle fg = new Rectangle((int)nudOverscanLeft.Value, (int)nudOverscanTop.Value, 256 - (int)nudOverscanLeft.Value - (int)nudOverscanRight.Value, 240 - (int)nudOverscanTop.Value - (int)nudOverscanBottom.Value);
+				g.ScaleTransform((float)overscan.Width / 256, (float)overscan.Height / 240);
 				g.FillRectangle(Brushes.LightCyan, fg);
 			}
 			picOverscan.Image = overscan;

@@ -176,18 +176,21 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picNametable_MouseMove(object sender, MouseEventArgs e)
 		{
+			int xPos = e.X * 512 / picNametable.Width;
+			int yPos = e.Y * 480 / picNametable.Height;
+			
 			_nametableIndex = 0;
-			if(e.X >= 256) {
+			if(xPos >= 256) {
 				_nametableIndex++;
 			}
-			if(e.Y >= 240) {
+			if(yPos >= 240) {
 				_nametableIndex+=2;
 			}
 
 			int baseAddress = 0x2000 + _nametableIndex * 0x400;
 
-			_tileX = Math.Min(e.X / 8, 63);
-			_tileY = Math.Min(e.Y / 8, 59);
+			_tileX = Math.Min(xPos / 8, 63);
+			_tileY = Math.Min(yPos / 8, 59);
 			int shift = (_tileX & 0x02) | ((_tileY & 0x02) << 1);
 
 			if(_nametableIndex % 2 == 1) {
@@ -226,7 +229,7 @@ namespace Mesen.GUI.Debugger.Controls
 			Bitmap tile = new Bitmap(64, 64);			
 			Bitmap tilePreview = new Bitmap(8, 8);
 			using(Graphics g = Graphics.FromImage(tilePreview)) {
-				g.DrawImage(_nametableImage, new Rectangle(0, 0, 8, 8), new Rectangle(e.X/8*8, e.Y/8*8, 8, 8), GraphicsUnit.Pixel);
+				g.DrawImage(_nametableImage, new Rectangle(0, 0, 8, 8), new Rectangle(xPos/8*8, yPos/8*8, 8, 8), GraphicsUnit.Pixel);
 			}			
 			using(Graphics g = Graphics.FromImage(tile)) {
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;

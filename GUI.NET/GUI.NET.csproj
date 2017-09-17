@@ -149,6 +149,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -252,6 +255,9 @@
     </Compile>
     <Compile Include="Controls\ctrlRecentGames.Designer.cs">
       <DependentUpon>ctrlRecentGames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MesenNumericUpDown.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="CursorManager.cs" />
     <Compile Include="Controls\ctrlRiskyOption.cs">
@@ -840,8 +846,12 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="app.manifest" />
     <None Include="Resources\Exclamation.png" />
     <None Include="Resources\Comment.png" />
+    <EmbeddedResource Include="Controls\MesenNumericUpDown.resx">
+      <DependentUpon>MesenNumericUpDown.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Example.lua" />
     <None Include="Resources\PipetteSmall.png" />
     <None Include="Resources\Enum.png" />

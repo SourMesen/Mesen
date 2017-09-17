@@ -52,7 +52,7 @@ namespace Mesen.GUI.Debugger.Controls
 					g.DrawImageUnscaled(source, 0, 0);
 
 					g.ScaleTransform(1f/32, 1f/32);
-					Font font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2);
+					Font font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2, GraphicsUnit.Pixel);
 					using(Brush bg = new SolidBrush(Color.FromArgb(150, Color.LightGray))) {
 						for(int y = 0; y < 8; y++) {
 							for(int x = 0; x < 4; x++) {
@@ -69,8 +69,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picPalette_MouseMove(object sender, MouseEventArgs e)
 		{
-			int tileX = Math.Min(e.X / 32, 31);
-			int tileY = Math.Min(e.Y / 32, 31);
+			int tileX = Math.Min(e.X * 128 / picPalette.Width / 32, 31);
+			int tileY = Math.Min(e.Y * 256 / picPalette.Height / 32, 31);
 
 			int tileIndex = tileY * 4 + tileX;
 
@@ -95,9 +95,8 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			using(frmSelectColor frm = new frmSelectColor()) {
 				if(frm.ShowDialog(this) == DialogResult.OK) {
-					int x = Math.Min(e.X / 32, 31);
-					int y = Math.Min(e.Y / 32, 31);
-
+					int x = Math.Min(e.X * 128 / picPalette.Width / 32, 31);
+					int y = Math.Min(e.Y * 256 / picPalette.Height / 32, 31);
 					int colorAddress = y * 4 + x;
 
 					InteropEmu.DebugSetMemoryValue(DebugMemoryType.PaletteMemory, (uint)colorAddress, (byte)frm.ColorIndex);

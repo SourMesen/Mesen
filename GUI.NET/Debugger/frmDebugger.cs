@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger
 
 		private InteropEmu.NotificationListener _notifListener;
 		private ctrlDebuggerCode _lastCodeWindow;
+		private Size _minimumSize;
 
 		public frmDebugger()
 		{
@@ -33,6 +34,8 @@ namespace Mesen.GUI.Debugger
 		protected override void OnLoad(EventArgs e)
 		{
  			base.OnLoad(e);
+
+			_minimumSize = this.MinimumSize;
 			 
 			if(Program.IsMono) {
 				//This doesn't work in Mono (menu is blank) - hide it for now
@@ -283,11 +286,11 @@ namespace Mesen.GUI.Debugger
 				tlpTop.ColumnStyles[1].SizeType = SizeType.Percent;
 				tlpTop.ColumnStyles[0].Width = 50f;
 				tlpTop.ColumnStyles[1].Width = 50f;
-				this.MinimumSize = new Size(1250, 725);
+				this.MinimumSize = new Size(_minimumSize.Width + 250, _minimumSize.Height);
 			} else {
 				tlpTop.ColumnStyles[1].SizeType = SizeType.Absolute;
 				tlpTop.ColumnStyles[1].Width = 0f;
-				this.MinimumSize = new Size(1000, 725);
+				this.MinimumSize = _minimumSize;
 			}
 			ctrlDebuggerCodeSplit.Visible = mnuSplitView.Checked;
 			return mnuSplitView.Checked;

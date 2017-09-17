@@ -19,6 +19,14 @@ namespace Mesen.GUI.Forms.Config
 			}
 		}
 
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			this.colAction.Width = (int)(this.Width / 2.2);
+			this.colBinding1.Width = this.Width / 4;
+			this.colBinding2.Width = this.Width / 4;
+		}
+
 		private void InitializeGrid()
 		{
 			EmulatorShortcut[] displayOrder = new EmulatorShortcut[] {

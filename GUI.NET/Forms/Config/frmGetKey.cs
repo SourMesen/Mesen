@@ -18,12 +18,15 @@ namespace Mesen.GUI.Forms.Config
 		const int WM_SYSKEYUP = 0x105;
 
 		private bool _singleKeyMode = false;
-		private string[] _invalidKeys = new string[] { "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12" };
 
 		public frmGetKey(bool singleKeyMode)
 		{
 			InitializeComponent();
 			_singleKeyMode = singleKeyMode;
+			if(_singleKeyMode) {
+				tableLayoutPanel1.RowStyles[1].SizeType = SizeType.Absolute;
+				tableLayoutPanel1.RowStyles[1].Height = 0;
+			}
 			if(_singleKeyMode) {
 				lblCurrentKeys.Height = 1;
 				lblCurrentKeys.Visible = false;

@@ -76,17 +76,17 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAutoSaveNotify = new System.Windows.Forms.CheckBox();
 			this.flpAutoSave = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkAutoSave = new System.Windows.Forms.CheckBox();
-			this.nudAutoSave = new System.Windows.Forms.NumericUpDown();
+			this.nudAutoSave = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblAutoSave = new System.Windows.Forms.Label();
 			this.tpgNsf = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkNsfAutoDetectSilence = new System.Windows.Forms.CheckBox();
-			this.nudNsfAutoDetectSilenceDelay = new System.Windows.Forms.NumericUpDown();
+			this.nudNsfAutoDetectSilenceDelay = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblNsfMillisecondsOfSilence = new System.Windows.Forms.Label();
 			this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkNsfMoveToNextTrackAfterTime = new System.Windows.Forms.CheckBox();
-			this.nudNsfMoveToNextTrackTime = new System.Windows.Forms.NumericUpDown();
+			this.nudNsfMoveToNextTrackTime = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblNsfSeconds = new System.Windows.Forms.Label();
 			this.chkNsfDisableApuIrqs = new System.Windows.Forms.CheckBox();
 			this.tpgFiles = new System.Windows.Forms.TabPage();
@@ -133,7 +133,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisplayTitleBarInfo = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblRewind = new System.Windows.Forms.Label();
-			this.nudRewindBufferSize = new System.Windows.Forms.NumericUpDown();
+			this.nudRewindBufferSize = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblRewindMinutes = new System.Windows.Forms.Label();
 			this.chkFdsAutoInsertDisk = new System.Windows.Forms.CheckBox();
 			this.chkShowGameTimer = new System.Windows.Forms.CheckBox();
@@ -162,13 +162,10 @@ namespace Mesen.GUI.Forms.Config
 			this.grpAutomaticSaves.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.flpAutoSave.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudAutoSave)).BeginInit();
 			this.tpgNsf.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudNsfAutoDetectSilenceDelay)).BeginInit();
 			this.flowLayoutPanel5.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudNsfMoveToNextTrackTime)).BeginInit();
 			this.tpgFiles.SuspendLayout();
 			this.tableLayoutPanel6.SuspendLayout();
 			this.grpPathOverrides.SuspendLayout();
@@ -182,7 +179,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -570,6 +566,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// btnEnableIntegration
 			// 
+			this.btnEnableIntegration.AutoSize = true;
 			this.btnEnableIntegration.Location = new System.Drawing.Point(3, 55);
 			this.btnEnableIntegration.Name = "btnEnableIntegration";
 			this.btnEnableIntegration.Size = new System.Drawing.Size(172, 23);
@@ -739,7 +736,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkAutoSave.AutoSize = true;
-			this.chkAutoSave.Location = new System.Drawing.Point(3, 4);
+			this.chkAutoSave.Location = new System.Drawing.Point(3, 3);
 			this.chkAutoSave.Name = "chkAutoSave";
 			this.chkAutoSave.Size = new System.Drawing.Size(211, 17);
 			this.chkAutoSave.TabIndex = 0;
@@ -749,7 +746,9 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// nudAutoSave
 			// 
-			this.nudAutoSave.Location = new System.Drawing.Point(220, 3);
+			this.nudAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudAutoSave.Location = new System.Drawing.Point(217, 1);
+			this.nudAutoSave.Margin = new System.Windows.Forms.Padding(0);
 			this.nudAutoSave.Maximum = new decimal(new int[] {
             600,
             0,
@@ -773,7 +772,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblAutoSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblAutoSave.AutoSize = true;
-			this.lblAutoSave.Location = new System.Drawing.Point(268, 6);
+			this.lblAutoSave.Location = new System.Drawing.Point(262, 5);
 			this.lblAutoSave.Name = "lblAutoSave";
 			this.lblAutoSave.Size = new System.Drawing.Size(99, 13);
 			this.lblAutoSave.TabIndex = 2;
@@ -823,7 +822,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkNsfAutoDetectSilence.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkNsfAutoDetectSilence.AutoSize = true;
-			this.chkNsfAutoDetectSilence.Location = new System.Drawing.Point(3, 4);
+			this.chkNsfAutoDetectSilence.Location = new System.Drawing.Point(3, 3);
 			this.chkNsfAutoDetectSilence.Name = "chkNsfAutoDetectSilence";
 			this.chkNsfAutoDetectSilence.Size = new System.Drawing.Size(139, 17);
 			this.chkNsfAutoDetectSilence.TabIndex = 1;
@@ -832,8 +831,9 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// nudNsfAutoDetectSilenceDelay
 			// 
-			this.nudNsfAutoDetectSilenceDelay.Location = new System.Drawing.Point(145, 3);
-			this.nudNsfAutoDetectSilenceDelay.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.nudNsfAutoDetectSilenceDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudNsfAutoDetectSilenceDelay.Location = new System.Drawing.Point(145, 1);
+			this.nudNsfAutoDetectSilenceDelay.Margin = new System.Windows.Forms.Padding(0);
 			this.nudNsfAutoDetectSilenceDelay.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -857,7 +857,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblNsfMillisecondsOfSilence.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblNsfMillisecondsOfSilence.AutoSize = true;
-			this.lblNsfMillisecondsOfSilence.Location = new System.Drawing.Point(205, 6);
+			this.lblNsfMillisecondsOfSilence.Location = new System.Drawing.Point(202, 5);
 			this.lblNsfMillisecondsOfSilence.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblNsfMillisecondsOfSilence.Name = "lblNsfMillisecondsOfSilence";
 			this.lblNsfMillisecondsOfSilence.Size = new System.Drawing.Size(111, 13);
@@ -880,7 +880,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkNsfMoveToNextTrackAfterTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkNsfMoveToNextTrackAfterTime.AutoSize = true;
-			this.chkNsfMoveToNextTrackAfterTime.Location = new System.Drawing.Point(3, 4);
+			this.chkNsfMoveToNextTrackAfterTime.Location = new System.Drawing.Point(3, 3);
 			this.chkNsfMoveToNextTrackAfterTime.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
 			this.chkNsfMoveToNextTrackAfterTime.Name = "chkNsfMoveToNextTrackAfterTime";
 			this.chkNsfMoveToNextTrackAfterTime.Size = new System.Drawing.Size(126, 17);
@@ -890,8 +890,9 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// nudNsfMoveToNextTrackTime
 			// 
-			this.nudNsfMoveToNextTrackTime.Location = new System.Drawing.Point(129, 3);
-			this.nudNsfMoveToNextTrackTime.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.nudNsfMoveToNextTrackTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudNsfMoveToNextTrackTime.Location = new System.Drawing.Point(129, 1);
+			this.nudNsfMoveToNextTrackTime.Margin = new System.Windows.Forms.Padding(0);
 			this.nudNsfMoveToNextTrackTime.Maximum = new decimal(new int[] {
             999,
             0,
@@ -915,7 +916,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblNsfSeconds.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblNsfSeconds.AutoSize = true;
-			this.lblNsfSeconds.Location = new System.Drawing.Point(176, 6);
+			this.lblNsfSeconds.Location = new System.Drawing.Point(173, 5);
 			this.lblNsfSeconds.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblNsfSeconds.Name = "lblNsfSeconds";
 			this.lblNsfSeconds.Size = new System.Drawing.Size(47, 13);
@@ -1266,7 +1267,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkNsfFormat.AutoSize = true;
 			this.chkNsfFormat.Location = new System.Drawing.Point(238, 3);
 			this.chkNsfFormat.Name = "chkNsfFormat";
-			this.chkNsfFormat.Size = new System.Drawing.Size(171, 17);
+			this.chkNsfFormat.Size = new System.Drawing.Size(207, 17);
 			this.chkNsfFormat.TabIndex = 14;
 			this.chkNsfFormat.Text = ".NSF/.NSFE (Nintendo Sound Format)";
 			this.chkNsfFormat.UseVisualStyleBackColor = true;
@@ -1276,7 +1277,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkMstFormat.AutoSize = true;
 			this.chkMstFormat.Location = new System.Drawing.Point(238, 26);
 			this.chkMstFormat.Name = "chkMstFormat";
-			this.chkMstFormat.Size = new System.Drawing.Size(226, 17);
+			this.chkMstFormat.Size = new System.Drawing.Size(149, 17);
 			this.chkMstFormat.TabIndex = 15;
 			this.chkMstFormat.Text = ".MST (Mesen Save State)";
 			this.chkMstFormat.UseVisualStyleBackColor = true;
@@ -1525,7 +1526,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblRewind.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblRewind.AutoSize = true;
-			this.lblRewind.Location = new System.Drawing.Point(3, 6);
+			this.lblRewind.Location = new System.Drawing.Point(3, 3);
 			this.lblRewind.Name = "lblRewind";
 			this.lblRewind.Size = new System.Drawing.Size(142, 13);
 			this.lblRewind.TabIndex = 3;
@@ -1533,7 +1534,9 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// nudRewindBufferSize
 			// 
-			this.nudRewindBufferSize.Location = new System.Drawing.Point(151, 3);
+			this.nudRewindBufferSize.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudRewindBufferSize.Location = new System.Drawing.Point(148, 0);
+			this.nudRewindBufferSize.Margin = new System.Windows.Forms.Padding(0);
 			this.nudRewindBufferSize.Maximum = new decimal(new int[] {
             900,
             0,
@@ -1552,7 +1555,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblRewindMinutes.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblRewindMinutes.AutoSize = true;
-			this.lblRewindMinutes.Location = new System.Drawing.Point(199, 6);
+			this.lblRewindMinutes.Location = new System.Drawing.Point(193, 3);
 			this.lblRewindMinutes.Name = "lblRewindMinutes";
 			this.lblRewindMinutes.Size = new System.Drawing.Size(175, 13);
 			this.lblRewindMinutes.TabIndex = 2;
@@ -1695,16 +1698,13 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4.PerformLayout();
 			this.flpAutoSave.ResumeLayout(false);
 			this.flpAutoSave.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudAutoSave)).EndInit();
 			this.tpgNsf.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			this.flowLayoutPanel7.ResumeLayout(false);
 			this.flowLayoutPanel7.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudNsfAutoDetectSilenceDelay)).EndInit();
 			this.flowLayoutPanel5.ResumeLayout(false);
 			this.flowLayoutPanel5.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudNsfMoveToNextTrackTime)).EndInit();
 			this.tpgFiles.ResumeLayout(false);
 			this.tableLayoutPanel6.ResumeLayout(false);
 			this.grpPathOverrides.ResumeLayout(false);
@@ -1725,7 +1725,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.PerformLayout();
 			this.flowLayoutPanel6.ResumeLayout(false);
 			this.flowLayoutPanel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudRewindBufferSize)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -1774,11 +1773,11 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
 		private System.Windows.Forms.CheckBox chkNsfMoveToNextTrackAfterTime;
-		private System.Windows.Forms.NumericUpDown nudNsfMoveToNextTrackTime;
+		private MesenNumericUpDown nudNsfMoveToNextTrackTime;
 		private System.Windows.Forms.Label lblNsfSeconds;
 		private System.Windows.Forms.CheckBox chkNsfAutoDetectSilence;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
-		private System.Windows.Forms.NumericUpDown nudNsfAutoDetectSilenceDelay;
+		private MesenNumericUpDown nudNsfAutoDetectSilenceDelay;
 		private System.Windows.Forms.Label lblNsfMillisecondsOfSilence;
 		private System.Windows.Forms.CheckBox chkNsfDisableApuIrqs;
 		private System.Windows.Forms.CheckBox chkUnfFormat;
@@ -1788,7 +1787,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.FlowLayoutPanel flpAutoSave;
 		private System.Windows.Forms.CheckBox chkAutoSave;
-		private System.Windows.Forms.NumericUpDown nudAutoSave;
+		private MesenNumericUpDown nudAutoSave;
 		private System.Windows.Forms.Label lblAutoSave;
 		private System.Windows.Forms.CheckBox chkAutoSaveNotify;
 		private System.Windows.Forms.TabPage tpgShortcuts;
@@ -1809,7 +1808,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.Button btnResetSettings;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
 		private System.Windows.Forms.Label lblRewind;
-		private System.Windows.Forms.NumericUpDown nudRewindBufferSize;
+		private MesenNumericUpDown nudRewindBufferSize;
 		private System.Windows.Forms.Label lblRewindMinutes;
 		private System.Windows.Forms.CheckBox chkShowVsConfigOnLoad;
 		private System.Windows.Forms.CheckBox chkDisableOsd;

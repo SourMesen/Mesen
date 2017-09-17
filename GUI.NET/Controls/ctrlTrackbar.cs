@@ -62,10 +62,10 @@ namespace Mesen.GUI.Controls
 		private void UpdateText()
 		{
 			if(this.Minimum == 0) {
-				txtValue.Text = trackBar.Value.ToString() + "%";
+				lblValue.Text = trackBar.Value.ToString() + "%";
 			} else {
-				txtValue.Text = (trackBar.Value / 10.0).ToString() + "dB";
-				txtValue.Font = new Font("Microsoft Sans Serif", 6.75F);
+				lblValue.Text = (trackBar.Value / 10.0).ToString() + "dB";
+				lblValue.Font = new Font("Microsoft Sans Serif", 6.75F);
 			}
 		}
 

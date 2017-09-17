@@ -31,27 +31,31 @@
 			this.lblViewMemoryType = new System.Windows.Forms.Label();
 			this.cboMemoryType = new System.Windows.Forms.ComboBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.ctrlScrollableTextbox = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
+			this.chkHighlightUninitRead = new System.Windows.Forms.CheckBox();
+			this.btnReset = new System.Windows.Forms.Button();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSort = new System.Windows.Forms.Label();
 			this.cboSort = new System.Windows.Forms.ComboBox();
-			this.chkHighlightUninitRead = new System.Windows.Forms.CheckBox();
-			this.btnReset = new System.Windows.Forms.Button();
-			this.ctrlScrollableTextbox = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
-			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// flowLayoutPanel1
 			// 
+			this.flowLayoutPanel1.AutoSize = true;
+			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Controls.Add(this.lblViewMemoryType);
 			this.flowLayoutPanel1.Controls.Add(this.cboMemoryType);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(167, 26);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(166, 27);
 			this.flowLayoutPanel1.TabIndex = 2;
+			this.flowLayoutPanel1.WrapContents = false;
 			// 
 			// lblViewMemoryType
 			// 
@@ -97,15 +101,77 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(514, 307);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
+			// ctrlScrollableTextbox
+			// 
+			this.ctrlScrollableTextbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tableLayoutPanel1.SetColumnSpan(this.ctrlScrollableTextbox, 2);
+			this.ctrlScrollableTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlScrollableTextbox.FontSize = 13F;
+			this.ctrlScrollableTextbox.Location = new System.Drawing.Point(3, 30);
+			this.ctrlScrollableTextbox.Name = "ctrlScrollableTextbox";
+			this.ctrlScrollableTextbox.ShowContentNotes = false;
+			this.ctrlScrollableTextbox.ShowLineNumberNotes = false;
+			this.ctrlScrollableTextbox.ShowSingleContentLineNotes = true;
+			this.ctrlScrollableTextbox.ShowSingleLineLineNumberNotes = false;
+			this.ctrlScrollableTextbox.Size = new System.Drawing.Size(508, 245);
+			this.ctrlScrollableTextbox.TabIndex = 0;
+			// 
+			// chkHighlightUninitRead
+			// 
+			this.chkHighlightUninitRead.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkHighlightUninitRead.AutoSize = true;
+			this.chkHighlightUninitRead.Location = new System.Drawing.Point(3, 284);
+			this.chkHighlightUninitRead.Name = "chkHighlightUninitRead";
+			this.chkHighlightUninitRead.Size = new System.Drawing.Size(422, 17);
+			this.chkHighlightUninitRead.TabIndex = 4;
+			this.chkHighlightUninitRead.Text = "Highlight uninitialized memory reads (only accurate if debugger is active at powe" +
+    "r on)";
+			this.chkHighlightUninitRead.UseVisualStyleBackColor = true;
+			this.chkHighlightUninitRead.CheckedChanged += new System.EventHandler(this.chkHighlightUninitRead_CheckedChanged);
+			// 
+			// btnReset
+			// 
+			this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnReset.Location = new System.Drawing.Point(436, 281);
+			this.btnReset.Name = "btnReset";
+			this.btnReset.Size = new System.Drawing.Size(75, 23);
+			this.btnReset.TabIndex = 5;
+			this.btnReset.Text = "Reset Counts";
+			this.btnReset.UseVisualStyleBackColor = true;
+			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.AutoSize = true;
+			this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.tableLayoutPanel2.ColumnCount = 2;
+			this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 2);
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel1, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel2, 1, 0);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 1;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(514, 27);
+			this.tableLayoutPanel2.TabIndex = 6;
+			// 
 			// flowLayoutPanel2
 			// 
 			this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.flowLayoutPanel2.AutoSize = true;
+			this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel2.Controls.Add(this.lblSort);
 			this.flowLayoutPanel2.Controls.Add(this.cboSort);
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(335, 3);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(338, 0);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(182, 26);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(176, 27);
 			this.flowLayoutPanel2.TabIndex = 3;
+			this.flowLayoutPanel2.WrapContents = false;
 			// 
 			// lblSort
 			// 
@@ -133,73 +199,22 @@
 			this.cboSort.TabIndex = 1;
 			this.cboSort.SelectedIndexChanged += new System.EventHandler(this.cboSort_SelectedIndexChanged);
 			// 
-			// chkHighlightUninitRead
-			// 
-			this.chkHighlightUninitRead.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkHighlightUninitRead.AutoSize = true;
-			this.chkHighlightUninitRead.Location = new System.Drawing.Point(3, 284);
-			this.chkHighlightUninitRead.Name = "chkHighlightUninitRead";
-			this.chkHighlightUninitRead.Size = new System.Drawing.Size(422, 17);
-			this.chkHighlightUninitRead.TabIndex = 4;
-			this.chkHighlightUninitRead.Text = "Highlight uninitialized memory reads (only accurate if debugger is active at powe" +
-    "r on)";
-			this.chkHighlightUninitRead.UseVisualStyleBackColor = true;
-			this.chkHighlightUninitRead.CheckedChanged += new System.EventHandler(this.chkHighlightUninitRead_CheckedChanged);
-			// 
-			// btnReset
-			// 
-			this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnReset.Location = new System.Drawing.Point(436, 281);
-			this.btnReset.Name = "btnReset";
-			this.btnReset.Size = new System.Drawing.Size(75, 23);
-			this.btnReset.TabIndex = 5;
-			this.btnReset.Text = "Reset Counts";
-			this.btnReset.UseVisualStyleBackColor = true;
-			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
-			// 
-			// ctrlScrollableTextbox
-			// 
-			this.ctrlScrollableTextbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tableLayoutPanel1.SetColumnSpan(this.ctrlScrollableTextbox, 2);
-			this.ctrlScrollableTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlScrollableTextbox.Location = new System.Drawing.Point(3, 35);
-			this.ctrlScrollableTextbox.Name = "ctrlScrollableTextbox";
-			this.ctrlScrollableTextbox.ShowContentNotes = false;
-			this.ctrlScrollableTextbox.ShowLineNumberNotes = false;
-			this.ctrlScrollableTextbox.Size = new System.Drawing.Size(508, 240);
-			this.ctrlScrollableTextbox.TabIndex = 0;
-			// 
-			// tableLayoutPanel2
-			// 
-			this.tableLayoutPanel2.ColumnCount = 2;
-			this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 2);
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel2, 1, 0);
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel1, 0, 0);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 1;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(514, 32);
-			this.tableLayoutPanel2.TabIndex = 6;
-			// 
 			// ctrlMemoryAccessCounters
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.Name = "ctrlMemoryAccessCounters";
 			this.Size = new System.Drawing.Size(514, 307);
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tableLayoutPanel2.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
-			this.tableLayoutPanel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}

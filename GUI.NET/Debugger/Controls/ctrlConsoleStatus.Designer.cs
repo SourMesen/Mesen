@@ -46,6 +46,8 @@
 			this.chkSpriteOverflow = new System.Windows.Forms.CheckBox();
 			this.chkSprite0Hit = new System.Windows.Forms.CheckBox();
 			this.chkVerticalBlank = new System.Windows.Forms.CheckBox();
+			this.lblXScroll = new System.Windows.Forms.Label();
+			this.txtXScroll = new System.Windows.Forms.TextBox();
 			this.grpControlMask = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkDrawLeftSpr = new System.Windows.Forms.CheckBox();
@@ -108,10 +110,10 @@
 			this.btnUndo = new System.Windows.Forms.Button();
 			this.grpInputStatus = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
-			this.ctrlControllerInput4 = new Mesen.GUI.Debugger.Controls.ctrlControllerInput();
 			this.ctrlControllerInput3 = new Mesen.GUI.Debugger.Controls.ctrlControllerInput();
-			this.ctrlControllerInput2 = new Mesen.GUI.Debugger.Controls.ctrlControllerInput();
+			this.ctrlControllerInput4 = new Mesen.GUI.Debugger.Controls.ctrlControllerInput();
 			this.ctrlControllerInput1 = new Mesen.GUI.Debugger.Controls.ctrlControllerInput();
+			this.ctrlControllerInput2 = new Mesen.GUI.Debugger.Controls.ctrlControllerInput();
 			this.tmrButton = new System.Windows.Forms.Timer(this.components);
 			this.contextGoTo = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuGoToIrqHandler = new System.Windows.Forms.ToolStripMenuItem();
@@ -119,8 +121,6 @@
 			this.mnuGoToResetHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToInitHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToPlayHandler = new System.Windows.Forms.ToolStripMenuItem();
-			this.lblXScroll = new System.Windows.Forms.Label();
-			this.txtXScroll = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -379,20 +379,45 @@
 			this.chkVerticalBlank.UseVisualStyleBackColor = true;
 			this.chkVerticalBlank.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
+			// lblXScroll
+			// 
+			this.lblXScroll.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblXScroll.AutoSize = true;
+			this.lblXScroll.Location = new System.Drawing.Point(0, 83);
+			this.lblXScroll.Margin = new System.Windows.Forms.Padding(0);
+			this.lblXScroll.Name = "lblXScroll";
+			this.lblXScroll.Size = new System.Drawing.Size(46, 13);
+			this.lblXScroll.TabIndex = 11;
+			this.lblXScroll.Text = "X Scroll:";
+			this.lblXScroll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// txtXScroll
+			// 
+			this.txtXScroll.Location = new System.Drawing.Point(66, 80);
+			this.txtXScroll.Margin = new System.Windows.Forms.Padding(0);
+			this.txtXScroll.Name = "txtXScroll";
+			this.txtXScroll.Size = new System.Drawing.Size(58, 20);
+			this.txtXScroll.TabIndex = 12;
+			this.txtXScroll.TextChanged += new System.EventHandler(this.OnOptionChanged);
+			// 
 			// grpControlMask
 			// 
 			this.grpControlMask.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpControlMask.AutoSize = true;
+			this.grpControlMask.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.grpControlMask.Controls.Add(this.tableLayoutPanel9);
 			this.grpControlMask.Location = new System.Drawing.Point(197, 0);
 			this.grpControlMask.Margin = new System.Windows.Forms.Padding(0);
 			this.grpControlMask.Name = "grpControlMask";
-			this.grpControlMask.Size = new System.Drawing.Size(250, 151);
+			this.grpControlMask.Size = new System.Drawing.Size(250, 138);
 			this.grpControlMask.TabIndex = 1;
 			this.grpControlMask.TabStop = false;
 			this.grpControlMask.Text = "Control && Mask";
 			// 
 			// tableLayoutPanel9
 			// 
+			this.tableLayoutPanel9.AutoSize = true;
+			this.tableLayoutPanel9.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.tableLayoutPanel9.ColumnCount = 2;
 			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.48536F));
 			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.51464F));
@@ -418,7 +443,7 @@
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel9.Size = new System.Drawing.Size(244, 132);
+			this.tableLayoutPanel9.Size = new System.Drawing.Size(244, 119);
 			this.tableLayoutPanel9.TabIndex = 1;
 			// 
 			// chkDrawLeftSpr
@@ -435,12 +460,14 @@
 			// 
 			// flowLayoutPanel7
 			// 
+			this.flowLayoutPanel7.AutoSize = true;
+			this.flowLayoutPanel7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel7.Controls.Add(this.lblSprAddr);
 			this.flowLayoutPanel7.Controls.Add(this.txtSprAddr);
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 24);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 22);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
-			this.flowLayoutPanel7.Size = new System.Drawing.Size(116, 26);
+			this.flowLayoutPanel7.Size = new System.Drawing.Size(101, 22);
 			this.flowLayoutPanel7.TabIndex = 22;
 			// 
 			// lblSprAddr
@@ -546,12 +573,14 @@
 			// 
 			// flowLayoutPanel6
 			// 
+			this.flowLayoutPanel6.AutoSize = true;
+			this.flowLayoutPanel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel6.Controls.Add(this.lblBGAddr);
 			this.flowLayoutPanel6.Controls.Add(this.txtBGAddr);
 			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(116, 24);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(101, 22);
 			this.flowLayoutPanel6.TabIndex = 21;
 			// 
 			// lblBGAddr
@@ -1173,10 +1202,10 @@
 			this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
 			this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
 			this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-			this.tableLayoutPanel11.Controls.Add(this.ctrlControllerInput4, 2, 0);
-			this.tableLayoutPanel11.Controls.Add(this.ctrlControllerInput3, 3, 0);
-			this.tableLayoutPanel11.Controls.Add(this.ctrlControllerInput2, 0, 0);
-			this.tableLayoutPanel11.Controls.Add(this.ctrlControllerInput1, 1, 0);
+			this.tableLayoutPanel11.Controls.Add(this.ctrlControllerInput3, 2, 0);
+			this.tableLayoutPanel11.Controls.Add(this.ctrlControllerInput4, 3, 0);
+			this.tableLayoutPanel11.Controls.Add(this.ctrlControllerInput1, 0, 0);
+			this.tableLayoutPanel11.Controls.Add(this.ctrlControllerInput2, 1, 0);
 			this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel11.Name = "tableLayoutPanel11";
@@ -1185,45 +1214,45 @@
 			this.tableLayoutPanel11.Size = new System.Drawing.Size(447, 48);
 			this.tableLayoutPanel11.TabIndex = 0;
 			// 
-			// ctrlControllerInput4
-			// 
-			this.ctrlControllerInput4.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.ctrlControllerInput4.Location = new System.Drawing.Point(233, 8);
-			this.ctrlControllerInput4.Name = "ctrlControllerInput4";
-			this.ctrlControllerInput4.PlayerNumber = 2;
-			this.ctrlControllerInput4.Size = new System.Drawing.Size(88, 32);
-			this.ctrlControllerInput4.TabIndex = 3;
-			this.ctrlControllerInput4.Text = "ctrlControllerInput4";
-			// 
 			// ctrlControllerInput3
 			// 
 			this.ctrlControllerInput3.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.ctrlControllerInput3.Location = new System.Drawing.Point(346, 8);
+			this.ctrlControllerInput3.Location = new System.Drawing.Point(233, 8);
 			this.ctrlControllerInput3.Name = "ctrlControllerInput3";
-			this.ctrlControllerInput3.PlayerNumber = 3;
+			this.ctrlControllerInput3.PlayerNumber = 2;
 			this.ctrlControllerInput3.Size = new System.Drawing.Size(88, 32);
-			this.ctrlControllerInput3.TabIndex = 2;
-			this.ctrlControllerInput3.Text = "ctrlControllerInput3";
+			this.ctrlControllerInput3.TabIndex = 3;
+			this.ctrlControllerInput3.Text = "ctrlControllerInput4";
 			// 
-			// ctrlControllerInput2
+			// ctrlControllerInput4
 			// 
-			this.ctrlControllerInput2.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.ctrlControllerInput2.Location = new System.Drawing.Point(11, 8);
-			this.ctrlControllerInput2.Name = "ctrlControllerInput2";
-			this.ctrlControllerInput2.PlayerNumber = 0;
-			this.ctrlControllerInput2.Size = new System.Drawing.Size(88, 32);
-			this.ctrlControllerInput2.TabIndex = 1;
-			this.ctrlControllerInput2.Text = "ctrlControllerInput2";
+			this.ctrlControllerInput4.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.ctrlControllerInput4.Location = new System.Drawing.Point(346, 8);
+			this.ctrlControllerInput4.Name = "ctrlControllerInput4";
+			this.ctrlControllerInput4.PlayerNumber = 3;
+			this.ctrlControllerInput4.Size = new System.Drawing.Size(88, 32);
+			this.ctrlControllerInput4.TabIndex = 2;
+			this.ctrlControllerInput4.Text = "ctrlControllerInput3";
 			// 
 			// ctrlControllerInput1
 			// 
 			this.ctrlControllerInput1.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.ctrlControllerInput1.Location = new System.Drawing.Point(122, 8);
+			this.ctrlControllerInput1.Location = new System.Drawing.Point(11, 8);
 			this.ctrlControllerInput1.Name = "ctrlControllerInput1";
-			this.ctrlControllerInput1.PlayerNumber = 1;
+			this.ctrlControllerInput1.PlayerNumber = 0;
 			this.ctrlControllerInput1.Size = new System.Drawing.Size(88, 32);
-			this.ctrlControllerInput1.TabIndex = 0;
-			this.ctrlControllerInput1.Text = "ctrlControllerInput1";
+			this.ctrlControllerInput1.TabIndex = 1;
+			this.ctrlControllerInput1.Text = "ctrlControllerInput2";
+			// 
+			// ctrlControllerInput2
+			// 
+			this.ctrlControllerInput2.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.ctrlControllerInput2.Location = new System.Drawing.Point(122, 8);
+			this.ctrlControllerInput2.Name = "ctrlControllerInput2";
+			this.ctrlControllerInput2.PlayerNumber = 1;
+			this.ctrlControllerInput2.Size = new System.Drawing.Size(88, 32);
+			this.ctrlControllerInput2.TabIndex = 0;
+			this.ctrlControllerInput2.Text = "ctrlControllerInput1";
 			// 
 			// tmrButton
 			// 
@@ -1276,27 +1305,6 @@
 			this.mnuGoToPlayHandler.Text = "Play Handler";
 			this.mnuGoToPlayHandler.Click += new System.EventHandler(this.mnuGoToPlayHandler_Click);
 			// 
-			// lblXScroll
-			// 
-			this.lblXScroll.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblXScroll.AutoSize = true;
-			this.lblXScroll.Location = new System.Drawing.Point(0, 83);
-			this.lblXScroll.Margin = new System.Windows.Forms.Padding(0);
-			this.lblXScroll.Name = "lblXScroll";
-			this.lblXScroll.Size = new System.Drawing.Size(46, 13);
-			this.lblXScroll.TabIndex = 11;
-			this.lblXScroll.Text = "X Scroll:";
-			this.lblXScroll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// txtXScroll
-			// 
-			this.txtXScroll.Location = new System.Drawing.Point(66, 80);
-			this.txtXScroll.Margin = new System.Windows.Forms.Padding(0);
-			this.txtXScroll.Name = "txtXScroll";
-			this.txtXScroll.Size = new System.Drawing.Size(58, 20);
-			this.txtXScroll.TabIndex = 12;
-			this.txtXScroll.TextChanged += new System.EventHandler(this.OnOptionChanged);
-			// 
 			// ctrlConsoleStatus
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1307,11 +1315,13 @@
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.grpPPUStatus.ResumeLayout(false);
 			this.tableLayoutPanel8.ResumeLayout(false);
+			this.tableLayoutPanel8.PerformLayout();
 			this.tableLayoutPanel7.ResumeLayout(false);
 			this.tableLayoutPanel7.PerformLayout();
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
 			this.grpControlMask.ResumeLayout(false);
+			this.grpControlMask.PerformLayout();
 			this.tableLayoutPanel9.ResumeLayout(false);
 			this.tableLayoutPanel9.PerformLayout();
 			this.flowLayoutPanel7.ResumeLayout(false);
@@ -1421,10 +1431,10 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToPlayHandler;
 		private System.Windows.Forms.GroupBox grpInputStatus;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
-		private Controls.ctrlControllerInput ctrlControllerInput1;
-		private Controls.ctrlControllerInput ctrlControllerInput4;
-		private Controls.ctrlControllerInput ctrlControllerInput3;
 		private Controls.ctrlControllerInput ctrlControllerInput2;
+		private Controls.ctrlControllerInput ctrlControllerInput3;
+		private Controls.ctrlControllerInput ctrlControllerInput4;
+		private Controls.ctrlControllerInput ctrlControllerInput1;
 		private System.Windows.Forms.CheckBox chkFrameCounter;
 		private System.Windows.Forms.CheckBox chkExternal;
 		private System.Windows.Forms.CheckBox chkNMI;

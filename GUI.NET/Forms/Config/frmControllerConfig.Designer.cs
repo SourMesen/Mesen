@@ -48,6 +48,10 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.lblTurboFast = new System.Windows.Forms.Label();
 			this.lblSlow = new System.Windows.Forms.Label();
+			this.pnlHint = new System.Windows.Forms.Panel();
+			this.flpHint = new System.Windows.Forms.FlowLayoutPanel();
+			this.picHint = new System.Windows.Forms.PictureBox();
+			this.lblHint = new System.Windows.Forms.Label();
 			this.mnuStripPreset = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuKeyboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuWasdLayout = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,10 +68,6 @@
 			this.mnuSnes30Controller = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSnes30Layout1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSnes30Layout2 = new System.Windows.Forms.ToolStripMenuItem();
-			this.pnlHint = new System.Windows.Forms.Panel();
-			this.flpHint = new System.Windows.Forms.FlowLayoutPanel();
-			this.picHint = new System.Windows.Forms.PictureBox();
-			this.lblHint = new System.Windows.Forms.Label();
 			this.baseConfigPanel.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgSet1.SuspendLayout();
@@ -78,10 +78,10 @@
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkTurboSpeed)).BeginInit();
 			this.panel1.SuspendLayout();
-			this.mnuStripPreset.SuspendLayout();
 			this.pnlHint.SuspendLayout();
 			this.flpHint.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHint)).BeginInit();
+			this.mnuStripPreset.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -97,7 +97,7 @@
 			this.ctrlStandardController0.Location = new System.Drawing.Point(0, 0);
 			this.ctrlStandardController0.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlStandardController0.Name = "ctrlStandardController0";
-			this.ctrlStandardController0.Size = new System.Drawing.Size(585, 197);
+			this.ctrlStandardController0.Size = new System.Drawing.Size(585, 209);
 			this.ctrlStandardController0.TabIndex = 0;
 			this.ctrlStandardController0.OnChange += new System.EventHandler(this.ctrlStandardController_OnChange);
 			// 
@@ -121,7 +121,7 @@
 			this.tpgSet1.Controls.Add(this.ctrlStandardController0);
 			this.tpgSet1.Location = new System.Drawing.Point(4, 23);
 			this.tpgSet1.Name = "tpgSet1";
-			this.tpgSet1.Size = new System.Drawing.Size(585, 197);
+			this.tpgSet1.Size = new System.Drawing.Size(585, 209);
 			this.tpgSet1.TabIndex = 0;
 			this.tpgSet1.Text = "Key Set #1";
 			this.tpgSet1.UseVisualStyleBackColor = true;
@@ -131,7 +131,7 @@
 			this.tpgSet2.Controls.Add(this.ctrlStandardController1);
 			this.tpgSet2.Location = new System.Drawing.Point(4, 23);
 			this.tpgSet2.Name = "tpgSet2";
-			this.tpgSet2.Size = new System.Drawing.Size(585, 208);
+			this.tpgSet2.Size = new System.Drawing.Size(585, 209);
 			this.tpgSet2.TabIndex = 1;
 			this.tpgSet2.Text = "Key Set #2";
 			this.tpgSet2.UseVisualStyleBackColor = true;
@@ -142,7 +142,7 @@
 			this.ctrlStandardController1.Location = new System.Drawing.Point(0, 0);
 			this.ctrlStandardController1.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlStandardController1.Name = "ctrlStandardController1";
-			this.ctrlStandardController1.Size = new System.Drawing.Size(585, 208);
+			this.ctrlStandardController1.Size = new System.Drawing.Size(585, 209);
 			this.ctrlStandardController1.TabIndex = 1;
 			this.ctrlStandardController1.OnChange += new System.EventHandler(this.ctrlStandardController_OnChange);
 			// 
@@ -151,7 +151,7 @@
 			this.tpgSet3.Controls.Add(this.ctrlStandardController2);
 			this.tpgSet3.Location = new System.Drawing.Point(4, 23);
 			this.tpgSet3.Name = "tpgSet3";
-			this.tpgSet3.Size = new System.Drawing.Size(585, 208);
+			this.tpgSet3.Size = new System.Drawing.Size(585, 209);
 			this.tpgSet3.TabIndex = 2;
 			this.tpgSet3.Text = "Key Set #3";
 			this.tpgSet3.UseVisualStyleBackColor = true;
@@ -162,7 +162,7 @@
 			this.ctrlStandardController2.Location = new System.Drawing.Point(0, 0);
 			this.ctrlStandardController2.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlStandardController2.Name = "ctrlStandardController2";
-			this.ctrlStandardController2.Size = new System.Drawing.Size(585, 208);
+			this.ctrlStandardController2.Size = new System.Drawing.Size(585, 209);
 			this.ctrlStandardController2.TabIndex = 1;
 			this.ctrlStandardController2.OnChange += new System.EventHandler(this.ctrlStandardController_OnChange);
 			// 
@@ -300,6 +300,52 @@
 			this.lblSlow.TabIndex = 0;
 			this.lblSlow.Text = "Slow";
 			// 
+			// pnlHint
+			// 
+			this.pnlHint.BackColor = System.Drawing.Color.WhiteSmoke;
+			this.pnlHint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tableLayoutPanel1.SetColumnSpan(this.pnlHint, 3);
+			this.pnlHint.Controls.Add(this.flpHint);
+			this.pnlHint.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pnlHint.Location = new System.Drawing.Point(3, 3);
+			this.pnlHint.Name = "pnlHint";
+			this.pnlHint.Size = new System.Drawing.Size(593, 29);
+			this.pnlHint.TabIndex = 5;
+			// 
+			// flpHint
+			// 
+			this.flpHint.Controls.Add(this.picHint);
+			this.flpHint.Controls.Add(this.lblHint);
+			this.flpHint.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flpHint.Location = new System.Drawing.Point(0, 0);
+			this.flpHint.Margin = new System.Windows.Forms.Padding(0);
+			this.flpHint.Name = "flpHint";
+			this.flpHint.Size = new System.Drawing.Size(591, 27);
+			this.flpHint.TabIndex = 0;
+			// 
+			// picHint
+			// 
+			this.picHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picHint.BackgroundImage = global::Mesen.GUI.Properties.Resources.Help;
+			this.picHint.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.picHint.Location = new System.Drawing.Point(3, 5);
+			this.picHint.Name = "picHint";
+			this.picHint.Size = new System.Drawing.Size(16, 16);
+			this.picHint.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+			this.picHint.TabIndex = 0;
+			this.picHint.TabStop = false;
+			// 
+			// lblHint
+			// 
+			this.lblHint.AutoSize = true;
+			this.lblHint.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblHint.Location = new System.Drawing.Point(25, 0);
+			this.lblHint.Name = "lblHint";
+			this.lblHint.Size = new System.Drawing.Size(403, 26);
+			this.lblHint.TabIndex = 1;
+			this.lblHint.Text = "Tabs with an icon contain key bindings for this player.\r\nEach button can be mappe" +
+    "d to up to 4 different keyboard keys or gamepad buttons.";
+			// 
 			// mnuStripPreset
 			// 
 			this.mnuStripPreset.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -424,49 +470,6 @@
 			this.mnuSnes30Layout2.Text = "Controller #2";
 			this.mnuSnes30Layout2.Click += new System.EventHandler(this.mnuSnes30Layout2_Click);
 			// 
-			// pnlHint
-			// 
-			this.pnlHint.BackColor = System.Drawing.Color.WhiteSmoke;
-			this.pnlHint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tableLayoutPanel1.SetColumnSpan(this.pnlHint, 3);
-			this.pnlHint.Controls.Add(this.flpHint);
-			this.pnlHint.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pnlHint.Location = new System.Drawing.Point(3, 3);
-			this.pnlHint.Name = "pnlHint";
-			this.pnlHint.Size = new System.Drawing.Size(593, 29);
-			this.pnlHint.TabIndex = 5;
-			// 
-			// flpHint
-			// 
-			this.flpHint.Controls.Add(this.picHint);
-			this.flpHint.Controls.Add(this.lblHint);
-			this.flpHint.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flpHint.Location = new System.Drawing.Point(0, 0);
-			this.flpHint.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.flpHint.Name = "flpHint";
-			this.flpHint.Size = new System.Drawing.Size(591, 27);
-			this.flpHint.TabIndex = 0;
-			// 
-			// picHint
-			// 
-			this.picHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.picHint.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picHint.Location = new System.Drawing.Point(3, 5);
-			this.picHint.Name = "picHint";
-			this.picHint.Size = new System.Drawing.Size(16, 16);
-			this.picHint.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-			this.picHint.TabIndex = 0;
-			this.picHint.TabStop = false;
-			// 
-			// lblHint
-			// 
-			this.lblHint.Location = new System.Drawing.Point(25, 0);
-			this.lblHint.Name = "lblHint";
-			this.lblHint.Size = new System.Drawing.Size(520, 27);
-			this.lblHint.TabIndex = 1;
-			this.lblHint.Text = "Tabs with an icon contain key bindings for this player.\r\nEach button can be mappe" +
-    "d to up to 4 different keyboard keys or gamepad buttons.";
-			// 
 			// frmControllerConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -491,11 +494,11 @@
 			((System.ComponentModel.ISupportInitialize)(this.trkTurboSpeed)).EndInit();
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
-			this.mnuStripPreset.ResumeLayout(false);
 			this.pnlHint.ResumeLayout(false);
 			this.flpHint.ResumeLayout(false);
 			this.flpHint.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHint)).EndInit();
+			this.mnuStripPreset.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}

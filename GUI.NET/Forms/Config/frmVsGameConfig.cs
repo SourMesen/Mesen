@@ -95,6 +95,7 @@ namespace Mesen.GUI.Forms.Config
 
 				int selectedIndex = (value >> currentBit) & ((1 << bitCount) - 1);
 				optionDropdown.SelectedIndex = selectedIndex;
+				optionDropdown.Dock = DockStyle.Fill;
 				currentBit += bitCount;
 				
 

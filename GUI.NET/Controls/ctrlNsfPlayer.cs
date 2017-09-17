@@ -19,6 +19,8 @@ namespace Mesen.GUI.Controls
 		private bool _fastForwarding = false;
 		private UInt32 _originalSpeed = 100;
 		private bool _disableShortcutKeys = false;
+		private float _xFactor = 1;
+		private float _yFactor = 1;
 
 		public ctrlNsfPlayer()
 		{
@@ -31,12 +33,45 @@ namespace Mesen.GUI.Controls
 			this.trkVolume.KeyUp += Child_KeyUp;
 		}
 
+		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+		{
+			_xFactor = factor.Width;
+			_yFactor = factor.Height;
+			base.ScaleControl(factor, specified);
+		}
+
+		public Size WindowMinimumSize
+		{
+			get
+			{
+				return new Size() {
+					Width = (int)(380 * _xFactor),
+					Height = (int)(320 * _yFactor)
+				};
+			}
+		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			ResizeUi();
+		}
+
+		private void ResizeUi()
+		{
+			this.tlpRepeatShuffle.Left = this.Width - tlpRepeatShuffle.Width - 10;
+			this.picBackground.MaximumSize = new Size(500, 90);
+			this.picBackground.Size = new Size(pnlBackground.Width, pnlBackground.Height);
+			this.picBackground.Left = (pnlBackground.Width - picBackground.Width) / 2;
+			this.picBackground.Top = (pnlBackground.Height - picBackground.Height) / 2;
+		}
+
 		private bool Repeat
 		{
 			get
 			{
 				bool repeat = ConfigManager.Config.PreferenceInfo.NsfRepeat;
-				picRepeat.Image = repeat ? Properties.Resources.RepeatEnabled : Properties.Resources.Repeat;
+				picRepeat.BackgroundImage = repeat ? Properties.Resources.RepeatEnabled : Properties.Resources.Repeat;
 				return repeat;
 			}
 			set
@@ -44,7 +79,7 @@ namespace Mesen.GUI.Controls
 				ConfigManager.Config.PreferenceInfo.NsfRepeat = value;
 				ConfigManager.ApplyChanges();
 				ConfigManager.Config.ApplyConfig();
-				picRepeat.Image = value ? Properties.Resources.RepeatEnabled : Properties.Resources.Repeat;
+				picRepeat.BackgroundImage = value ? Properties.Resources.RepeatEnabled : Properties.Resources.Repeat;
 			}
 		}
 
@@ -53,7 +88,7 @@ namespace Mesen.GUI.Controls
 			get
 			{
 				bool shuffle = ConfigManager.Config.PreferenceInfo.NsfShuffle;
-				picShuffle.Image = shuffle ? Properties.Resources.ShuffleEnabled : Properties.Resources.Shuffle;
+				picShuffle.BackgroundImage = shuffle ? Properties.Resources.ShuffleEnabled : Properties.Resources.Shuffle;
 				return shuffle;
 			}
 			set
@@ -61,7 +96,7 @@ namespace Mesen.GUI.Controls
 				ConfigManager.Config.PreferenceInfo.NsfShuffle = value;
 				ConfigManager.ApplyChanges();
 				ConfigManager.Config.ApplyConfig();
-				picShuffle.Image = value ? Properties.Resources.ShuffleEnabled : Properties.Resources.Shuffle;
+				picShuffle.BackgroundImage = value ? Properties.Resources.ShuffleEnabled : Properties.Resources.Shuffle;
 			}
 		}
 

@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Debugger
 {
 	partial class frmBreakIn
 	{
@@ -32,10 +34,9 @@
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.radCpuInstructions = new System.Windows.Forms.RadioButton();
 			this.radPpuCycles = new System.Windows.Forms.RadioButton();
-			this.nudCount = new System.Windows.Forms.NumericUpDown();
+			this.nudCount = new MesenNumericUpDown();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudCount)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -142,7 +143,6 @@
 			this.tableLayoutPanel1.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudCount)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -154,6 +154,6 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.RadioButton radCpuInstructions;
 		private System.Windows.Forms.RadioButton radPpuCycles;
-		private System.Windows.Forms.NumericUpDown nudCount;
+		private MesenNumericUpDown nudCount;
 	}
 }

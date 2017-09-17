@@ -66,14 +66,15 @@ namespace Mesen.GUI.Debugger
 			GCHandle handle = GCHandle.Alloc(this.PaletteData, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(16, 4, 16*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap target = new Bitmap(336, 336);
+				Bitmap target = new Bitmap(picPalette.Width - 2, picPalette.Height - 2);
 
-				Font font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2);
+				Font font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2, GraphicsUnit.Pixel);
 				using(Graphics g = Graphics.FromImage(target)) {
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
 					g.ScaleTransform(42, 42);
+					g.ScaleTransform((float)picPalette.Width / 336, (float)picPalette.Height / 336);
 					g.DrawImageUnscaled(source, 0, 0);
 					g.DrawImageUnscaled(source, -8, 4);
 
@@ -100,10 +101,13 @@ namespace Mesen.GUI.Debugger
 
 		private void picPalette_MouseDown(object sender, MouseEventArgs e)
 		{
-			int y = e.Y / 42 < 4 ? e.Y : (e.Y - 168);
-			int x = e.Y / 42 < 4 ? e.X : (e.X + 336);
+			float xPos = (float)e.X / picPalette.Image.Width;
+			float yPos = (float)e.Y / picPalette.Image.Height;
 
-			int offset = (x / 42) + (y / 42 * 16);
+			float y = yPos < 0.5 ? yPos : (yPos - 0.5f);
+			float x = yPos < 0.5 ? xPos : (xPos + 1);
+
+			int offset = (int)(x * 8) + (int)(y * 8) * 16;
 
 			ColorClick?.Invoke(offset);
 		}

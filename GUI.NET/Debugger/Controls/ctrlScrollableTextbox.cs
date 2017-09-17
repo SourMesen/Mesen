@@ -51,10 +51,8 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
-			if(Program.IsMono) {
-				this.panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
-				this.panelSearch.Location = new System.Drawing.Point(this.Width - this.panelSearch.Width - 20, -1);
-			}
+			this.panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+			this.panelSearch.Location = new System.Drawing.Point(this.Width - this.panelSearch.Width - 20, -1);
 
 			this.ctrlTextbox.ShowLineNumbers = true;
 			this.ctrlTextbox.ShowLineInHex = true;
@@ -72,9 +70,7 @@ namespace Mesen.GUI.Debugger
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
-			if(Program.IsMono) {
-				this.panelSearch.Location = new System.Drawing.Point(this.Width - this.panelSearch.Width - 20, -1);
-			}			
+			this.panelSearch.Location = new System.Drawing.Point(this.Width - this.panelSearch.Width - 20, -1);
 		}
 
 		public float FontSize

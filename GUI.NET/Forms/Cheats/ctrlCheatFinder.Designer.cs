@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Forms.Cheats
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Forms.Cheats
 {
 	partial class ctrlCheatFinder
 	{
@@ -38,7 +40,7 @@
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblCurrentValue = new System.Windows.Forms.Label();
 			this.cboCurrentFilterType = new System.Windows.Forms.ComboBox();
-			this.nudCurrentFilterValue = new System.Windows.Forms.NumericUpDown();
+			this.nudCurrentFilterValue = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.btnAddCurrentFilter = new System.Windows.Forms.Button();
 			this.btnReset = new System.Windows.Forms.Button();
 			this.btnUndo = new System.Windows.Forms.Button();
@@ -55,7 +57,6 @@
 			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel4.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudCurrentFilterValue)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.contextMenuStrip.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -63,7 +64,6 @@
 			// 
 			// tmrRefresh
 			// 
-			this.tmrRefresh.Enabled = false;
 			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
 			// 
 			// grpFilters
@@ -178,8 +178,9 @@
 			// 
 			// nudCurrentFilterValue
 			// 
-			this.nudCurrentFilterValue.Location = new System.Drawing.Point(205, 5);
-			this.nudCurrentFilterValue.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.nudCurrentFilterValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudCurrentFilterValue.Location = new System.Drawing.Point(202, 4);
+			this.nudCurrentFilterValue.Margin = new System.Windows.Forms.Padding(0);
 			this.nudCurrentFilterValue.Maximum = new decimal(new int[] {
             255,
             0,
@@ -192,7 +193,7 @@
 			// btnAddCurrentFilter
 			// 
 			this.btnAddCurrentFilter.AutoSize = true;
-			this.btnAddCurrentFilter.Location = new System.Drawing.Point(252, 3);
+			this.btnAddCurrentFilter.Location = new System.Drawing.Point(246, 3);
 			this.btnAddCurrentFilter.Name = "btnAddCurrentFilter";
 			this.btnAddCurrentFilter.Size = new System.Drawing.Size(75, 23);
 			this.btnAddCurrentFilter.TabIndex = 2;
@@ -329,7 +330,6 @@
 			this.flowLayoutPanel1.PerformLayout();
 			this.flowLayoutPanel4.ResumeLayout(false);
 			this.flowLayoutPanel4.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudCurrentFilterValue)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.contextMenuStrip.ResumeLayout(false);
@@ -352,7 +352,7 @@
 		private System.Windows.Forms.Button btnAddPrevFilter;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
 		private System.Windows.Forms.ComboBox cboCurrentFilterType;
-		private System.Windows.Forms.NumericUpDown nudCurrentFilterValue;
+		private MesenNumericUpDown nudCurrentFilterValue;
 		private System.Windows.Forms.Button btnAddCurrentFilter;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Button btnCreateCheat;

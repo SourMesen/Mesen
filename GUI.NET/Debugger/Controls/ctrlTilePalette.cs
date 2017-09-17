@@ -101,7 +101,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 					g.ResetTransform();
 
-					using(Font font = new Font(BaseControl.MonospaceFontFamily, 10)) {
+					using(Font font = new Font(BaseControl.MonospaceFontFamily, 10, GraphicsUnit.Pixel)) {
 						using(Brush bg = new SolidBrush(Color.FromArgb(150, Color.LightGray))) {
 							for(int i = 0; i < 4; i++) {
 								if(this.DisplayIndexes) {
@@ -131,13 +131,13 @@ namespace Mesen.GUI.Debugger.Controls
 		
 		private void picPaletteSelection_MouseMove(object sender, MouseEventArgs e)
 		{
-			_hoverColor = e.X / 32;
+			_hoverColor = e.X * 128 / this.Width / 32;
 			RefreshPalette();
 		}
 
 		private void picPaletteSelection_MouseDown(object sender, MouseEventArgs e)
 		{
-			this.SelectedColor = e.X / 32;
+			this.SelectedColor = e.X * 128 / this.Width / 32;
 			RefreshPalette();
 		}
 

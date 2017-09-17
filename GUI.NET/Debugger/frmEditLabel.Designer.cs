@@ -36,8 +36,8 @@
 			this.lblAddress = new System.Windows.Forms.Label();
 			this.cboRegion = new System.Windows.Forms.ComboBox();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-			this.txtAddress = new System.Windows.Forms.TextBox();
 			this.lblAddressSign = new System.Windows.Forms.Label();
+			this.txtAddress = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
@@ -51,9 +51,9 @@
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.Controls.Add(this.txtComment, 1, 3);
 			this.tableLayoutPanel1.Controls.Add(this.lblLabel, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.lblComment, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.txtComment, 1, 3);
 			this.tableLayoutPanel1.Controls.Add(this.txtLabel, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.lblRegion, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lblAddress, 0, 1);
@@ -66,7 +66,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(377, 233);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
@@ -142,10 +142,21 @@
 			this.flowLayoutPanel2.Controls.Add(this.lblAddressSign);
 			this.flowLayoutPanel2.Controls.Add(this.txtAddress);
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(60, 27);
-			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(200, 26);
 			this.flowLayoutPanel2.TabIndex = 7;
+			// 
+			// lblAddressSign
+			// 
+			this.lblAddressSign.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblAddressSign.AutoSize = true;
+			this.lblAddressSign.Location = new System.Drawing.Point(0, 6);
+			this.lblAddressSign.Margin = new System.Windows.Forms.Padding(0);
+			this.lblAddressSign.Name = "lblAddressSign";
+			this.lblAddressSign.Size = new System.Drawing.Size(13, 13);
+			this.lblAddressSign.TabIndex = 9;
+			this.lblAddressSign.Text = "$";
 			// 
 			// txtAddress
 			// 
@@ -154,17 +165,6 @@
 			this.txtAddress.Name = "txtAddress";
 			this.txtAddress.Size = new System.Drawing.Size(57, 20);
 			this.txtAddress.TabIndex = 8;
-			// 
-			// lblAddressSign
-			// 
-			this.lblAddressSign.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblAddressSign.AutoSize = true;
-			this.lblAddressSign.Location = new System.Drawing.Point(0, 6);
-			this.lblAddressSign.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.lblAddressSign.Name = "lblAddressSign";
-			this.lblAddressSign.Size = new System.Drawing.Size(13, 13);
-			this.lblAddressSign.TabIndex = 9;
-			this.lblAddressSign.Text = "$";
 			// 
 			// frmEditLabel
 			// 

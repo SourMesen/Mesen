@@ -37,9 +37,9 @@
 			this.picColor = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.picPalette = new System.Windows.Forms.PictureBox();
-			this.lblClickColorHint = new System.Windows.Forms.Label();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.picHelp = new System.Windows.Forms.PictureBox();
+			this.lblClickColorHint = new System.Windows.Forms.Label();
 			this.grpColorInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picColor)).BeginInit();
@@ -53,10 +53,10 @@
 			// 
 			this.grpColorInfo.Controls.Add(this.tableLayoutPanel4);
 			this.grpColorInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpColorInfo.Location = new System.Drawing.Point(137, 3);
+			this.grpColorInfo.Location = new System.Drawing.Point(135, 3);
 			this.grpColorInfo.Name = "grpColorInfo";
 			this.tableLayoutPanel3.SetRowSpan(this.grpColorInfo, 2);
-			this.grpColorInfo.Size = new System.Drawing.Size(542, 305);
+			this.grpColorInfo.Size = new System.Drawing.Size(544, 305);
 			this.grpColorInfo.TabIndex = 4;
 			this.grpColorInfo.TabStop = false;
 			this.grpColorInfo.Text = "Color Info";
@@ -83,7 +83,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(536, 286);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(538, 286);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// txtPaletteAddress
@@ -138,6 +138,7 @@
 			this.picColor.Location = new System.Drawing.Point(93, 55);
 			this.picColor.Name = "picColor";
 			this.picColor.Size = new System.Drawing.Size(66, 66);
+			this.picColor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picColor.TabIndex = 12;
 			this.picColor.TabStop = false;
 			// 
@@ -167,26 +168,21 @@
 			this.picPalette.Margin = new System.Windows.Forms.Padding(1);
 			this.picPalette.Name = "picPalette";
 			this.picPalette.Size = new System.Drawing.Size(130, 258);
+			this.picPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picPalette.TabIndex = 0;
 			this.picPalette.TabStop = false;
 			this.picPalette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
 			this.picPalette.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseMove);
 			// 
-			// lblClickColorHint
-			// 
-			this.lblClickColorHint.Location = new System.Drawing.Point(27, 0);
-			this.lblClickColorHint.Name = "lblClickColorHint";
-			this.lblClickColorHint.Size = new System.Drawing.Size(92, 32);
-			this.lblClickColorHint.TabIndex = 5;
-			this.lblClickColorHint.Text = "Click on a color to change it";
-			// 
 			// flowLayoutPanel1
 			// 
+			this.flowLayoutPanel1.AutoSize = true;
+			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Controls.Add(this.picHelp);
 			this.flowLayoutPanel1.Controls.Add(this.lblClickColorHint);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 263);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(128, 31);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(122, 42);
 			this.flowLayoutPanel1.TabIndex = 5;
 			// 
 			// picHelp
@@ -198,6 +194,14 @@
 			this.picHelp.Size = new System.Drawing.Size(18, 18);
 			this.picHelp.TabIndex = 9;
 			this.picHelp.TabStop = false;
+			// 
+			// lblClickColorHint
+			// 
+			this.lblClickColorHint.Location = new System.Drawing.Point(27, 0);
+			this.lblClickColorHint.Name = "lblClickColorHint";
+			this.lblClickColorHint.Size = new System.Drawing.Size(92, 42);
+			this.lblClickColorHint.TabIndex = 5;
+			this.lblClickColorHint.Text = "Click on a color to change it";
 			// 
 			// ctrlPaletteViewer
 			// 
@@ -211,6 +215,7 @@
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picColor)).EndInit();
 			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();

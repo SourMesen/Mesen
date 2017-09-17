@@ -119,8 +119,8 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			_previewMousePosition = null;
 
-			int tileX = Math.Min(e.X / 32, 31);
-			int tileY = Math.Min(e.Y / 64, 63);
+			int tileX = Math.Min(e.X * 256 / picSprites.Width / 32, 31);
+			int tileY = Math.Min(e.Y * 512 / picSprites.Height / 64, 63);
 			int ramAddr = ((tileY << 3) + tileX) << 2;
 
 			if(ramAddr / 4 == _selectedSprite && !_forceRefresh) {
@@ -244,6 +244,8 @@ namespace Mesen.GUI.Debugger.Controls
 		private void SelectSpriteUnderCursor()
 		{
 			Point p = _previewMousePosition.Value;
+			int xPos = p.X * 256 / picPreview.Width;
+			int yPos = p.Y * 240 / picPreview.Height;
 			int prevSprite = _selectedSprite;
 			_selectedSprite = -1;
 			for(int i = 0x100 - 4; i >= 0; i-=4) {
@@ -252,7 +254,7 @@ namespace Mesen.GUI.Debugger.Controls
 				int attributes = _spriteRam[i + 2];
 				int spriteX = _spriteRam[i + 3];
 
-				if(p.X >= spriteX && p.X < spriteX + 8 && p.Y >= spriteY && p.Y < spriteY + (_largeSprites ? 16 : 8)) {
+				if(xPos >= spriteX && xPos < spriteX + 8 && yPos >= spriteY && yPos < spriteY + (_largeSprites ? 16 : 8)) {
 					_selectedSprite = i / 4;
 					break;
 				}

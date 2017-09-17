@@ -47,12 +47,13 @@
 			this.lblVrc6 = new System.Windows.Forms.Label();
 			this.lblVrc7 = new System.Windows.Forms.Label();
 			this.lblSoundChips = new System.Windows.Forms.Label();
-			this.picBackground = new System.Windows.Forms.PictureBox();
 			this.trkVolume = new System.Windows.Forms.TrackBar();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.cboTrack = new System.Windows.Forms.ComboBox();
 			this.lblTrackTotal = new System.Windows.Forms.Label();
 			this.lblTime = new System.Windows.Forms.Label();
+			this.pnlBackground = new System.Windows.Forms.Panel();
+			this.picBackground = new System.Windows.Forms.PictureBox();
 			this.tmrFastForward = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.lblRecording = new System.Windows.Forms.Label();
@@ -65,20 +66,21 @@
 			this.lblSlowMotionIcon = new System.Windows.Forms.Label();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.tlpRepeatShuffle = new System.Windows.Forms.TableLayoutPanel();
 			this.picRepeat = new System.Windows.Forms.PictureBox();
 			this.picShuffle = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picBackground)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
+			this.pnlBackground.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picBackground)).BeginInit();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel1.SuspendLayout();
-			this.tableLayoutPanel5.SuspendLayout();
+			this.tlpRepeatShuffle.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picRepeat)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picShuffle)).BeginInit();
 			this.SuspendLayout();
@@ -95,10 +97,10 @@
 			this.tableLayoutPanel1.Controls.Add(this.btnPause, 2, 2);
 			this.tableLayoutPanel1.Controls.Add(this.btnNext, 3, 2);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.picBackground, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.trkVolume, 4, 2);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.lblTime, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.pnlBackground, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -360,28 +362,13 @@
 			this.lblSoundChips.TabIndex = 7;
 			this.lblSoundChips.Text = "Sound Chips:";
 			// 
-			// picBackground
-			// 
-			this.picBackground.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.picBackground.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.tableLayoutPanel1.SetColumnSpan(this.picBackground, 5);
-			this.picBackground.Image = global::Mesen.GUI.Properties.Resources.NsfBackground;
-			this.picBackground.Location = new System.Drawing.Point(66, 13);
-			this.picBackground.Margin = new System.Windows.Forms.Padding(10);
-			this.picBackground.MaximumSize = new System.Drawing.Size(334, 380);
-			this.picBackground.Name = "picBackground";
-			this.picBackground.Size = new System.Drawing.Size(238, 95);
-			this.picBackground.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.picBackground.TabIndex = 5;
-			this.picBackground.TabStop = false;
-			// 
 			// trkVolume
 			// 
 			this.trkVolume.Location = new System.Drawing.Point(257, 210);
 			this.trkVolume.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.trkVolume.Maximum = 100;
 			this.trkVolume.Name = "trkVolume";
-			this.trkVolume.Size = new System.Drawing.Size(104, 45);
+			this.trkVolume.Size = new System.Drawing.Size(106, 45);
 			this.trkVolume.TabIndex = 6;
 			this.trkVolume.TickFrequency = 10;
 			this.trkVolume.TickStyle = System.Windows.Forms.TickStyle.Both;
@@ -448,6 +435,28 @@
 			this.lblTime.TabIndex = 10;
 			this.lblTime.Text = "00:00";
 			this.lblTime.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// pnlBackground
+			// 
+			this.tableLayoutPanel1.SetColumnSpan(this.pnlBackground, 5);
+			this.pnlBackground.Controls.Add(this.picBackground);
+			this.pnlBackground.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pnlBackground.Location = new System.Drawing.Point(3, 3);
+			this.pnlBackground.Name = "pnlBackground";
+			this.pnlBackground.Size = new System.Drawing.Size(365, 115);
+			this.pnlBackground.TabIndex = 11;
+			// 
+			// picBackground
+			// 
+			this.picBackground.BackgroundImage = global::Mesen.GUI.Properties.Resources.NsfBackground;
+			this.picBackground.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.picBackground.Location = new System.Drawing.Point(114, -3);
+			this.picBackground.Margin = new System.Windows.Forms.Padding(0);
+			this.picBackground.MaximumSize = new System.Drawing.Size(500, 90);
+			this.picBackground.Name = "picBackground";
+			this.picBackground.Size = new System.Drawing.Size(150, 90);
+			this.picBackground.TabIndex = 5;
+			this.picBackground.TabStop = false;
 			// 
 			// tmrFastForward
 			// 
@@ -578,28 +587,29 @@
 			this.panel1.Size = new System.Drawing.Size(82, 18);
 			this.panel1.TabIndex = 0;
 			// 
-			// tableLayoutPanel5
+			// tlpRepeatShuffle
 			// 
-			this.tableLayoutPanel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.tableLayoutPanel5.ColumnCount = 1;
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel5.Controls.Add(this.picRepeat, 0, 1);
-			this.tableLayoutPanel5.Controls.Add(this.picShuffle, 0, 0);
-			this.tableLayoutPanel5.Location = new System.Drawing.Point(336, 8);
-			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-			this.tableLayoutPanel5.RowCount = 3;
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(30, 60);
-			this.tableLayoutPanel5.TabIndex = 14;
+			this.tlpRepeatShuffle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.tlpRepeatShuffle.ColumnCount = 1;
+			this.tlpRepeatShuffle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpRepeatShuffle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpRepeatShuffle.Controls.Add(this.picRepeat, 0, 1);
+			this.tlpRepeatShuffle.Controls.Add(this.picShuffle, 0, 0);
+			this.tlpRepeatShuffle.Location = new System.Drawing.Point(336, 8);
+			this.tlpRepeatShuffle.Margin = new System.Windows.Forms.Padding(0);
+			this.tlpRepeatShuffle.Name = "tlpRepeatShuffle";
+			this.tlpRepeatShuffle.RowCount = 3;
+			this.tlpRepeatShuffle.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpRepeatShuffle.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpRepeatShuffle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpRepeatShuffle.Size = new System.Drawing.Size(30, 60);
+			this.tlpRepeatShuffle.TabIndex = 14;
 			// 
 			// picRepeat
 			// 
+			this.picRepeat.BackgroundImage = global::Mesen.GUI.Properties.Resources.Repeat;
+			this.picRepeat.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.picRepeat.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picRepeat.Image = global::Mesen.GUI.Properties.Resources.Repeat;
 			this.picRepeat.Location = new System.Drawing.Point(3, 33);
 			this.picRepeat.Name = "picRepeat";
 			this.picRepeat.Size = new System.Drawing.Size(24, 24);
@@ -609,8 +619,9 @@
 			// 
 			// picShuffle
 			// 
+			this.picShuffle.BackgroundImage = global::Mesen.GUI.Properties.Resources.Shuffle;
+			this.picShuffle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.picShuffle.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picShuffle.Image = global::Mesen.GUI.Properties.Resources.Shuffle;
 			this.picShuffle.Location = new System.Drawing.Point(3, 3);
 			this.picShuffle.Name = "picShuffle";
 			this.picShuffle.Size = new System.Drawing.Size(24, 24);
@@ -623,7 +634,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
-			this.Controls.Add(this.tableLayoutPanel5);
+			this.Controls.Add(this.tlpRepeatShuffle);
 			this.Controls.Add(this.tableLayoutPanel4);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "ctrlNsfPlayer";
@@ -635,10 +646,11 @@
 			this.tableLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picBackground)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
+			this.pnlBackground.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picBackground)).EndInit();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			this.panel3.ResumeLayout(false);
@@ -647,7 +659,7 @@
 			this.panel2.PerformLayout();
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
-			this.tableLayoutPanel5.ResumeLayout(false);
+			this.tlpRepeatShuffle.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picRepeat)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picShuffle)).EndInit();
 			this.ResumeLayout(false);
@@ -693,8 +705,9 @@
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Label lblSlowMotion;
 		private System.Windows.Forms.Label lblSlowMotionIcon;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+		private System.Windows.Forms.TableLayoutPanel tlpRepeatShuffle;
 		private System.Windows.Forms.PictureBox picShuffle;
 		private System.Windows.Forms.PictureBox picRepeat;
+		private System.Windows.Forms.Panel pnlBackground;
 	}
 }

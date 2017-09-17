@@ -123,7 +123,7 @@
 			// 
 			this.lblStart.AutoSize = true;
 			this.lblStart.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblStart.Location = new System.Drawing.Point(324, 107);
+			this.lblStart.Location = new System.Drawing.Point(324, 104);
 			this.lblStart.Name = "lblStart";
 			this.lblStart.Size = new System.Drawing.Size(42, 18);
 			this.lblStart.TabIndex = 25;
@@ -133,7 +133,7 @@
 			// 
 			this.lblSelect.AutoSize = true;
 			this.lblSelect.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblSelect.Location = new System.Drawing.Point(237, 106);
+			this.lblSelect.Location = new System.Drawing.Point(237, 104);
 			this.lblSelect.Name = "lblSelect";
 			this.lblSelect.Size = new System.Drawing.Size(53, 18);
 			this.lblSelect.TabIndex = 24;
@@ -183,7 +183,7 @@
 			// 
 			// btnSelect
 			// 
-			this.btnSelect.Location = new System.Drawing.Point(228, 131);
+			this.btnSelect.Location = new System.Drawing.Point(228, 132);
 			this.btnSelect.Name = "btnSelect";
 			this.btnSelect.Size = new System.Drawing.Size(73, 37);
 			this.btnSelect.TabIndex = 12;
@@ -223,7 +223,7 @@
 			// 
 			// btnStart
 			// 
-			this.btnStart.Location = new System.Drawing.Point(310, 131);
+			this.btnStart.Location = new System.Drawing.Point(310, 132);
 			this.btnStart.Name = "btnStart";
 			this.btnStart.Size = new System.Drawing.Size(73, 37);
 			this.btnStart.TabIndex = 13;

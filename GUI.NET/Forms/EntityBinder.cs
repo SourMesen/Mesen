@@ -99,8 +99,8 @@ namespace Mesen.GUI.Forms
 						} else {
 							((TrackBar)kvp.Value).Value = (int)(uint)value;
 						}
-					} else if(kvp.Value is NumericUpDown) {
-						NumericUpDown nud = kvp.Value as NumericUpDown;
+					} else if(kvp.Value is MesenNumericUpDown) {
+						MesenNumericUpDown nud = kvp.Value as MesenNumericUpDown;
 						decimal val;
 						if(field.FieldType == typeof(UInt32)) {
 							val = (UInt32)value;
@@ -197,13 +197,13 @@ namespace Mesen.GUI.Forms
 							} else {
 								field.SetValue(Entity, (UInt32)((TrackBar)kvp.Value).Value);
 							}
-						} else if(kvp.Value is NumericUpDown) {
+						} else if(kvp.Value is MesenNumericUpDown) {
 							if(field.FieldType == typeof(UInt32)) {
-								field.SetValue(Entity, (UInt32)((NumericUpDown)kvp.Value).Value);
+								field.SetValue(Entity, (UInt32)((MesenNumericUpDown)kvp.Value).Value);
 							} else if(field.FieldType == typeof(Int32)) {
-								field.SetValue(Entity, (Int32)((NumericUpDown)kvp.Value).Value);
+								field.SetValue(Entity, (Int32)((MesenNumericUpDown)kvp.Value).Value);
 							} else {
-								field.SetValue(Entity, (double)((NumericUpDown)kvp.Value).Value);
+								field.SetValue(Entity, (double)((MesenNumericUpDown)kvp.Value).Value);
 							}
 						} else if(kvp.Value is ComboBox) {
 							if(field.FieldType.IsSubclassOf(typeof(Enum))) {

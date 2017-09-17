@@ -55,13 +55,13 @@ namespace Mesen.GUI.Controls
 			set
 			{
 				trackBar.Value = Math.Max(trackBar.Minimum, Math.Min(value, trackBar.Maximum));
-				txtValue.Text = trackBar.Value.ToString();
+				lblValue.Text = trackBar.Value.ToString();
 			}
 		}
 
 		private void trackBar_ValueChanged(object sender, EventArgs e)
 		{
-			txtValue.Text = trackBar.Value.ToString();
+			lblValue.Text = trackBar.Value.ToString();
 		}
 	}
 }

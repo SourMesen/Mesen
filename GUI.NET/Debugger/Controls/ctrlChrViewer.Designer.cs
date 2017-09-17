@@ -53,13 +53,13 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.picColorTooltip = new System.Windows.Forms.PictureBox();
 			this.picTileTooltip = new System.Windows.Forms.PictureBox();
+			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picChrBank1 = new System.Windows.Forms.PictureBox();
 			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.picChrBank2 = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpDisplayOptions.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -351,6 +351,7 @@
 			this.picTile.Location = new System.Drawing.Point(77, 55);
 			this.picTile.Name = "picTile";
 			this.picTile.Size = new System.Drawing.Size(130, 130);
+			this.picTile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picTile.TabIndex = 12;
 			this.picTile.TabStop = false;
 			this.picTile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picTile_MouseDown);
@@ -390,6 +391,15 @@
 			this.picTileTooltip.TabIndex = 16;
 			this.picTileTooltip.TabStop = false;
 			// 
+			// ctrlTilePalette
+			// 
+			this.ctrlTilePalette.DisplayIndexes = false;
+			this.ctrlTilePalette.HighlightMouseOver = false;
+			this.ctrlTilePalette.Location = new System.Drawing.Point(77, 191);
+			this.ctrlTilePalette.Name = "ctrlTilePalette";
+			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
+			this.ctrlTilePalette.TabIndex = 17;
+			// 
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 1;
@@ -414,6 +424,7 @@
 			this.picChrBank1.Margin = new System.Windows.Forms.Padding(1);
 			this.picChrBank1.Name = "picChrBank1";
 			this.picChrBank1.Size = new System.Drawing.Size(256, 257);
+			this.picChrBank1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picChrBank1.TabIndex = 0;
 			this.picChrBank1.TabStop = false;
 			this.picChrBank1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseDown);
@@ -444,6 +455,7 @@
 			this.picChrBank2.Margin = new System.Windows.Forms.Padding(1);
 			this.picChrBank2.Name = "picChrBank2";
 			this.picChrBank2.Size = new System.Drawing.Size(256, 257);
+			this.picChrBank2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picChrBank2.TabIndex = 1;
 			this.picChrBank2.TabStop = false;
 			this.picChrBank2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseDown);
@@ -455,15 +467,6 @@
 			this.toolTip.AutoPopDelay = 32700;
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
-			// 
-			// ctrlTilePalette
-			// 
-			this.ctrlTilePalette.DisplayIndexes = false;
-			this.ctrlTilePalette.HighlightMouseOver = false;
-			this.ctrlTilePalette.Location = new System.Drawing.Point(77, 191);
-			this.ctrlTilePalette.Name = "ctrlTilePalette";
-			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
-			this.ctrlTilePalette.TabIndex = 17;
 			// 
 			// ctrlChrViewer
 			// 

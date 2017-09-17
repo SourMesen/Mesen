@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Forms.NetPlay
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Forms.NetPlay
 {
 	partial class frmServerConfig
 	{
@@ -37,9 +39,8 @@
 			this.lblMaxPlayers = new System.Windows.Forms.Label();
 			this.lblPassword = new System.Windows.Forms.Label();
 			this.txtPassword = new System.Windows.Forms.TextBox();
-			this.nudNbPlayers = new System.Windows.Forms.NumericUpDown();
+			this.nudNbPlayers = new MesenNumericUpDown();
 			this.tlpMain.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudNbPlayers)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -211,7 +212,6 @@
 			this.Controls.SetChildIndex(this.tlpMain, 0);
 			this.tlpMain.ResumeLayout(false);
 			this.tlpMain.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudNbPlayers)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -223,7 +223,7 @@
 		private System.Windows.Forms.Label lblMaxPlayers;
 		private System.Windows.Forms.TextBox txtServerName;
 		private System.Windows.Forms.CheckBox chkSpectator;
-		private System.Windows.Forms.NumericUpDown nudNbPlayers;
+		private MesenNumericUpDown nudNbPlayers;
 		private System.Windows.Forms.CheckBox chkPublicServer;
 		private System.Windows.Forms.Label lblPassword;
 		private System.Windows.Forms.TextBox txtPassword;

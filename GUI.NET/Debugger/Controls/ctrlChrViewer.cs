@@ -217,8 +217,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picChrBank_MouseMove(object sender, MouseEventArgs e)
 		{
-			int tileX = Math.Min(e.X / 16, 15);
-			int tileY = Math.Min(e.Y / 16, 15);
+			int tileX = Math.Min(e.X * 256 / picChrBank1.Width / 16, 15);
+			int tileY = Math.Min(e.Y * 256 / picChrBank1.Height / 16, 15);
 
 			bool bottomBank = sender == this.picChrBank2;
 			int tileIndex = tileY * 16 + tileX;
@@ -234,8 +234,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picChrBank_MouseDown(object sender, MouseEventArgs e)
 		{
-			int tileX = Math.Min(e.X / 16, 15);
-			int tileY = Math.Min(e.Y / 16, 15);
+			int tileX = Math.Min(e.X * 256 / picChrBank1.Width / 16, 15);
+			int tileY = Math.Min(e.Y * 256 / picChrBank1.Height / 16, 15);
 
 			_tileIndex = tileY * 16 + tileX;
 			_bottomBank = sender == this.picChrBank2;
@@ -286,8 +286,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picTile_MouseMove(object sender, MouseEventArgs e)
 		{
-			int x = Math.Max(0, Math.Min(e.X / 16, 7));
-			int y = Math.Max(0, Math.Min(e.Y / 16, 7));
+			int x = Math.Max(0, Math.Min(e.X * 128 / picTile.Width / 16, 7));
+			int y = Math.Max(0, Math.Min(e.Y * 128 / picTile.Height / 16, 7));
 
 			if(x != _tilePosX || y != _tilePosY) {
 				_tilePosX = x;
@@ -358,8 +358,8 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			_drawing = true;
 
-			int x = Math.Max(0, Math.Min(e.X / 16, 7));
-			int y = Math.Max(0, Math.Min(e.Y / 16, 7));
+			int x = Math.Max(0, Math.Min(e.X * 128 / picTile.Width / 16, 7));
+			int y = Math.Max(0, Math.Min(e.Y * 128 / picTile.Height / 16, 7));
 			DrawPixel(e.Button == MouseButtons.Left, x, y);
 		}
 

@@ -45,7 +45,7 @@ namespace Mesen.GUI.Forms.Config
 			new Point(56, 29), new Point(56, 85), new Point(22, 85),
 			new Point(22, 130), new Point(56, 130), new Point(56, 181),
 			new Point(145, 181), new Point(145, 130), new Point(179, 130),
-			new Point(179, 85), new Point(145, 85), new Point(145, 28),
+			new Point(179, 85), new Point(145, 85), new Point(145, 29),
 			new Point(56, 29)
 		};
 
@@ -59,8 +59,11 @@ namespace Mesen.GUI.Forms.Config
 		{
 			Rectangle rect = this.ClientRectangle;
 			rect.Inflate(-2, -2);
+			float xFactor = picBackground.Width / 585f;
+			float yFactor = picBackground.Height / 210f;
 			Bitmap bitmap = new Bitmap(picBackground.Width, picBackground.Height);
 			using(Graphics g = Graphics.FromImage(bitmap)) {
+				g.ScaleTransform(xFactor, yFactor);
 				using(Pen pen = new Pen(Color.Black, 2f)) {
 					g.DrawRectangle(pen, rect);
 					g.DrawRectangle(pen, 226, 128, 159, 43);

@@ -38,6 +38,7 @@
 			this.picPaletteSelection.Location = new System.Drawing.Point(0, 0);
 			this.picPaletteSelection.Name = "picPaletteSelection";
 			this.picPaletteSelection.Size = new System.Drawing.Size(130, 34);
+			this.picPaletteSelection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picPaletteSelection.TabIndex = 14;
 			this.picPaletteSelection.TabStop = false;
 			this.picPaletteSelection.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPaletteSelection_MouseDown);

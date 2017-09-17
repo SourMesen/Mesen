@@ -48,15 +48,15 @@ namespace Mesen.GUI.Forms.Config
 			this.chkReduceSoundInBackground = new System.Windows.Forms.CheckBox();
 			this.chkEnableAudio = new System.Windows.Forms.CheckBox();
 			this.lblSampleRate = new System.Windows.Forms.Label();
-			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-			this.nudLatency = new System.Windows.Forms.NumericUpDown();
-			this.lblLatencyMs = new System.Windows.Forms.Label();
-			this.picLatencyWarning = new System.Windows.Forms.PictureBox();
-			this.lblLatencyWarning = new System.Windows.Forms.Label();
 			this.lblAudioLatency = new System.Windows.Forms.Label();
 			this.cboSampleRate = new System.Windows.Forms.ComboBox();
 			this.lblAudioDevice = new System.Windows.Forms.Label();
 			this.cboAudioDevice = new System.Windows.Forms.ComboBox();
+			this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblLatencyWarning = new System.Windows.Forms.Label();
+			this.picLatencyWarning = new System.Windows.Forms.PictureBox();
+			this.lblLatencyMs = new System.Windows.Forms.Label();
+			this.nudLatency = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.btnReset = new System.Windows.Forms.Button();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
@@ -108,15 +108,13 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpStereo = new System.Windows.Forms.GroupBox();
 			this.tlpStereoFilter = new System.Windows.Forms.TableLayoutPanel();
-			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-			this.nudStereoDelay = new System.Windows.Forms.NumericUpDown();
 			this.lblStereoDelayMs = new System.Windows.Forms.Label();
+			this.lblStereoPanningAngle = new System.Windows.Forms.Label();
 			this.radStereoDisabled = new System.Windows.Forms.RadioButton();
 			this.radStereoDelay = new System.Windows.Forms.RadioButton();
 			this.radStereoPanning = new System.Windows.Forms.RadioButton();
-			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
-			this.nudStereoPanning = new System.Windows.Forms.NumericUpDown();
-			this.lblStereoPanningAngle = new System.Windows.Forms.Label();
+			this.nudStereoDelay = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.nudStereoPanning = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.grpReverb = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkReverbEnabled = new System.Windows.Forms.CheckBox();
@@ -126,7 +124,7 @@ namespace Mesen.GUI.Forms.Config
 			this.trkReverbStrength = new System.Windows.Forms.TrackBar();
 			this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkCrossFeedEnabled = new System.Windows.Forms.CheckBox();
-			this.nudCrossFeedRatio = new System.Windows.Forms.NumericUpDown();
+			this.nudCrossFeedRatio = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblCrossFeedRatio = new System.Windows.Forms.Label();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -138,8 +136,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpVolume.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
-			this.flowLayoutPanel2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudLatency)).BeginInit();
+			this.tableLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picLatencyWarning)).BeginInit();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
@@ -155,16 +152,11 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4.SuspendLayout();
 			this.grpStereo.SuspendLayout();
 			this.tlpStereoFilter.SuspendLayout();
-			this.flowLayoutPanel3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudStereoDelay)).BeginInit();
-			this.flowLayoutPanel4.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudStereoPanning)).BeginInit();
 			this.grpReverb.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkReverbDelay)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.trkReverbStrength)).BeginInit();
 			this.flowLayoutPanel5.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudCrossFeedRatio)).BeginInit();
 			this.tpgAdvanced.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.SuspendLayout();
@@ -407,11 +399,11 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.Controls.Add(this.chkReduceSoundInBackground, 0, 5);
 			this.tableLayoutPanel2.Controls.Add(this.chkEnableAudio, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.lblSampleRate, 0, 2);
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel2, 1, 3);
 			this.tableLayoutPanel2.Controls.Add(this.lblAudioLatency, 0, 3);
 			this.tableLayoutPanel2.Controls.Add(this.cboSampleRate, 1, 2);
 			this.tableLayoutPanel2.Controls.Add(this.lblAudioDevice, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.cboAudioDevice, 1, 1);
+			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel7, 1, 3);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
@@ -431,7 +423,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkMuteSoundInBackground.AutoSize = true;
 			this.tableLayoutPanel2.SetColumnSpan(this.chkMuteSoundInBackground, 2);
-			this.chkMuteSoundInBackground.Location = new System.Drawing.Point(3, 107);
+			this.chkMuteSoundInBackground.Location = new System.Drawing.Point(3, 109);
 			this.chkMuteSoundInBackground.Name = "chkMuteSoundInBackground";
 			this.chkMuteSoundInBackground.Size = new System.Drawing.Size(182, 17);
 			this.chkMuteSoundInBackground.TabIndex = 14;
@@ -443,7 +435,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkReduceSoundInBackground.AutoSize = true;
 			this.tableLayoutPanel2.SetColumnSpan(this.chkReduceSoundInBackground, 2);
-			this.chkReduceSoundInBackground.Location = new System.Drawing.Point(3, 130);
+			this.chkReduceSoundInBackground.Location = new System.Drawing.Point(3, 132);
 			this.chkReduceSoundInBackground.Name = "chkReduceSoundInBackground";
 			this.chkReduceSoundInBackground.Size = new System.Drawing.Size(201, 17);
 			this.chkReduceSoundInBackground.TabIndex = 13;
@@ -472,79 +464,11 @@ namespace Mesen.GUI.Forms.Config
 			this.lblSampleRate.TabIndex = 0;
 			this.lblSampleRate.Text = "Sample Rate:";
 			// 
-			// flowLayoutPanel2
-			// 
-			this.flowLayoutPanel2.Controls.Add(this.nudLatency);
-			this.flowLayoutPanel2.Controls.Add(this.lblLatencyMs);
-			this.flowLayoutPanel2.Controls.Add(this.picLatencyWarning);
-			this.flowLayoutPanel2.Controls.Add(this.lblLatencyWarning);
-			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(77, 80);
-			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(386, 24);
-			this.flowLayoutPanel2.TabIndex = 4;
-			// 
-			// nudLatency
-			// 
-			this.nudLatency.Location = new System.Drawing.Point(3, 3);
-			this.nudLatency.Maximum = new decimal(new int[] {
-            300,
-            0,
-            0,
-            0});
-			this.nudLatency.Minimum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-			this.nudLatency.Name = "nudLatency";
-			this.nudLatency.Size = new System.Drawing.Size(45, 20);
-			this.nudLatency.TabIndex = 1;
-			this.nudLatency.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-			this.nudLatency.ValueChanged += new System.EventHandler(this.nudLatency_ValueChanged);
-			// 
-			// lblLatencyMs
-			// 
-			this.lblLatencyMs.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblLatencyMs.AutoSize = true;
-			this.lblLatencyMs.Location = new System.Drawing.Point(54, 6);
-			this.lblLatencyMs.Name = "lblLatencyMs";
-			this.lblLatencyMs.Size = new System.Drawing.Size(20, 13);
-			this.lblLatencyMs.TabIndex = 2;
-			this.lblLatencyMs.Text = "ms";
-			// 
-			// picLatencyWarning
-			// 
-			this.picLatencyWarning.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.picLatencyWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
-			this.picLatencyWarning.Location = new System.Drawing.Point(82, 5);
-			this.picLatencyWarning.Margin = new System.Windows.Forms.Padding(5, 3, 0, 3);
-			this.picLatencyWarning.Name = "picLatencyWarning";
-			this.picLatencyWarning.Size = new System.Drawing.Size(16, 16);
-			this.picLatencyWarning.TabIndex = 3;
-			this.picLatencyWarning.TabStop = false;
-			// 
-			// lblLatencyWarning
-			// 
-			this.lblLatencyWarning.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblLatencyWarning.AutoSize = true;
-			this.lblLatencyWarning.Location = new System.Drawing.Point(98, 6);
-			this.lblLatencyWarning.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.lblLatencyWarning.Name = "lblLatencyWarning";
-			this.lblLatencyWarning.Size = new System.Drawing.Size(192, 13);
-			this.lblLatencyWarning.TabIndex = 4;
-			this.lblLatencyWarning.Text = "Low values may cause sound problems";
-			// 
 			// lblAudioLatency
 			// 
 			this.lblAudioLatency.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblAudioLatency.AutoSize = true;
-			this.lblAudioLatency.Location = new System.Drawing.Point(3, 85);
+			this.lblAudioLatency.Location = new System.Drawing.Point(3, 86);
 			this.lblAudioLatency.Name = "lblAudioLatency";
 			this.lblAudioLatency.Size = new System.Drawing.Size(48, 13);
 			this.lblAudioLatency.TabIndex = 0;
@@ -583,6 +507,91 @@ namespace Mesen.GUI.Forms.Config
 			this.cboAudioDevice.Name = "cboAudioDevice";
 			this.cboAudioDevice.Size = new System.Drawing.Size(209, 21);
 			this.cboAudioDevice.TabIndex = 7;
+			// 
+			// tableLayoutPanel7
+			// 
+			this.tableLayoutPanel7.AutoSize = true;
+			this.tableLayoutPanel7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.tableLayoutPanel7.ColumnCount = 4;
+			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel7.Controls.Add(this.lblLatencyWarning, 3, 0);
+			this.tableLayoutPanel7.Controls.Add(this.picLatencyWarning, 2, 0);
+			this.tableLayoutPanel7.Controls.Add(this.lblLatencyMs, 1, 0);
+			this.tableLayoutPanel7.Controls.Add(this.nudLatency, 0, 0);
+			this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel7.Location = new System.Drawing.Point(77, 80);
+			this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+			this.tableLayoutPanel7.RowCount = 1;
+			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel7.Size = new System.Drawing.Size(386, 26);
+			this.tableLayoutPanel7.TabIndex = 15;
+			// 
+			// lblLatencyWarning
+			// 
+			this.lblLatencyWarning.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLatencyWarning.AutoSize = true;
+			this.lblLatencyWarning.Location = new System.Drawing.Point(98, 6);
+			this.lblLatencyWarning.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblLatencyWarning.Name = "lblLatencyWarning";
+			this.lblLatencyWarning.Size = new System.Drawing.Size(192, 13);
+			this.lblLatencyWarning.TabIndex = 4;
+			this.lblLatencyWarning.Text = "Low values may cause sound problems";
+			// 
+			// picLatencyWarning
+			// 
+			this.picLatencyWarning.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picLatencyWarning.BackgroundImage = global::Mesen.GUI.Properties.Resources.Warning;
+			this.picLatencyWarning.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.picLatencyWarning.Location = new System.Drawing.Point(82, 5);
+			this.picLatencyWarning.Margin = new System.Windows.Forms.Padding(5, 3, 0, 3);
+			this.picLatencyWarning.Name = "picLatencyWarning";
+			this.picLatencyWarning.Size = new System.Drawing.Size(16, 16);
+			this.picLatencyWarning.TabIndex = 3;
+			this.picLatencyWarning.TabStop = false;
+			// 
+			// lblLatencyMs
+			// 
+			this.lblLatencyMs.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLatencyMs.AutoSize = true;
+			this.lblLatencyMs.Location = new System.Drawing.Point(54, 6);
+			this.lblLatencyMs.Name = "lblLatencyMs";
+			this.lblLatencyMs.Size = new System.Drawing.Size(20, 13);
+			this.lblLatencyMs.TabIndex = 2;
+			this.lblLatencyMs.Text = "ms";
+			// 
+			// nudLatency
+			// 
+			this.nudLatency.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudLatency.DecimalPlaces = 0;
+			this.nudLatency.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudLatency.Location = new System.Drawing.Point(3, 3);
+			this.nudLatency.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+			this.nudLatency.Minimum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+			this.nudLatency.Name = "nudLatency";
+			this.nudLatency.Size = new System.Drawing.Size(45, 20);
+			this.nudLatency.TabIndex = 1;
+			this.nudLatency.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudLatency.ValueChanged += new System.EventHandler(this.nudLatency_ValueChanged);
 			// 
 			// btnReset
 			// 
@@ -865,7 +874,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkEnableEqualizer.AutoSize = true;
 			this.chkEnableEqualizer.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.chkEnableEqualizer.Location = new System.Drawing.Point(7, -1);
+			this.chkEnableEqualizer.Location = new System.Drawing.Point(7, 0);
 			this.chkEnableEqualizer.Name = "chkEnableEqualizer";
 			this.chkEnableEqualizer.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.chkEnableEqualizer.Size = new System.Drawing.Size(110, 17);
@@ -1352,14 +1361,17 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// tlpStereoFilter
 			// 
-			this.tlpStereoFilter.ColumnCount = 2;
+			this.tlpStereoFilter.ColumnCount = 3;
+			this.tlpStereoFilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpStereoFilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpStereoFilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpStereoFilter.Controls.Add(this.flowLayoutPanel3, 1, 1);
+			this.tlpStereoFilter.Controls.Add(this.lblStereoDelayMs, 2, 1);
+			this.tlpStereoFilter.Controls.Add(this.lblStereoPanningAngle, 2, 2);
 			this.tlpStereoFilter.Controls.Add(this.radStereoDisabled, 0, 0);
 			this.tlpStereoFilter.Controls.Add(this.radStereoDelay, 0, 1);
 			this.tlpStereoFilter.Controls.Add(this.radStereoPanning, 0, 2);
-			this.tlpStereoFilter.Controls.Add(this.flowLayoutPanel4, 1, 2);
+			this.tlpStereoFilter.Controls.Add(this.nudStereoDelay, 1, 1);
+			this.tlpStereoFilter.Controls.Add(this.nudStereoPanning, 1, 2);
 			this.tlpStereoFilter.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpStereoFilter.Location = new System.Drawing.Point(3, 16);
 			this.tlpStereoFilter.Name = "tlpStereoFilter";
@@ -1368,38 +1380,28 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpStereoFilter.Size = new System.Drawing.Size(451, 76);
 			this.tlpStereoFilter.TabIndex = 0;
-			// 
-			// flowLayoutPanel3
-			// 
-			this.flowLayoutPanel3.Controls.Add(this.nudStereoDelay);
-			this.flowLayoutPanel3.Controls.Add(this.lblStereoDelayMs);
-			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(72, 23);
-			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(379, 26);
-			this.flowLayoutPanel3.TabIndex = 1;
-			// 
-			// nudStereoDelay
-			// 
-			this.nudStereoDelay.Location = new System.Drawing.Point(3, 3);
-			this.nudStereoDelay.Name = "nudStereoDelay";
-			this.nudStereoDelay.Size = new System.Drawing.Size(45, 20);
-			this.nudStereoDelay.TabIndex = 1;
 			// 
 			// lblStereoDelayMs
 			// 
 			this.lblStereoDelayMs.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblStereoDelayMs.AutoSize = true;
-			this.lblStereoDelayMs.Location = new System.Drawing.Point(54, 6);
+			this.lblStereoDelayMs.Location = new System.Drawing.Point(120, 28);
 			this.lblStereoDelayMs.Name = "lblStereoDelayMs";
 			this.lblStereoDelayMs.Size = new System.Drawing.Size(20, 13);
 			this.lblStereoDelayMs.TabIndex = 1;
 			this.lblStereoDelayMs.Text = "ms";
+			// 
+			// lblStereoPanningAngle
+			// 
+			this.lblStereoPanningAngle.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblStereoPanningAngle.AutoSize = true;
+			this.lblStereoPanningAngle.Location = new System.Drawing.Point(120, 51);
+			this.lblStereoPanningAngle.Name = "lblStereoPanningAngle";
+			this.lblStereoPanningAngle.Size = new System.Drawing.Size(92, 13);
+			this.lblStereoPanningAngle.TabIndex = 1;
+			this.lblStereoPanningAngle.Text = "(Angle in degrees)";
 			// 
 			// radStereoDisabled
 			// 
@@ -1429,7 +1431,7 @@ namespace Mesen.GUI.Forms.Config
 			// radStereoPanning
 			// 
 			this.radStereoPanning.AutoSize = true;
-			this.radStereoPanning.Location = new System.Drawing.Point(3, 52);
+			this.radStereoPanning.Location = new System.Drawing.Point(3, 49);
 			this.radStereoPanning.Name = "radStereoPanning";
 			this.radStereoPanning.Size = new System.Drawing.Size(64, 17);
 			this.radStereoPanning.TabIndex = 3;
@@ -1438,20 +1440,47 @@ namespace Mesen.GUI.Forms.Config
 			this.radStereoPanning.Text = "Panning";
 			this.radStereoPanning.UseVisualStyleBackColor = true;
 			// 
-			// flowLayoutPanel4
+			// nudStereoDelay
 			// 
-			this.flowLayoutPanel4.Controls.Add(this.nudStereoPanning);
-			this.flowLayoutPanel4.Controls.Add(this.lblStereoPanningAngle);
-			this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel4.Location = new System.Drawing.Point(72, 49);
-			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-			this.flowLayoutPanel4.Size = new System.Drawing.Size(379, 26);
-			this.flowLayoutPanel4.TabIndex = 4;
+			this.nudStereoDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudStereoDelay.DecimalPlaces = 0;
+			this.nudStereoDelay.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudStereoDelay.Location = new System.Drawing.Point(72, 24);
+			this.nudStereoDelay.Margin = new System.Windows.Forms.Padding(0);
+			this.nudStereoDelay.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudStereoDelay.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudStereoDelay.Name = "nudStereoDelay";
+			this.nudStereoDelay.Size = new System.Drawing.Size(45, 20);
+			this.nudStereoDelay.TabIndex = 1;
+			this.nudStereoDelay.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			// 
 			// nudStereoPanning
 			// 
-			this.nudStereoPanning.Location = new System.Drawing.Point(3, 3);
+			this.nudStereoPanning.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudStereoPanning.DecimalPlaces = 0;
+			this.nudStereoPanning.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudStereoPanning.Location = new System.Drawing.Point(72, 47);
+			this.nudStereoPanning.Margin = new System.Windows.Forms.Padding(0);
 			this.nudStereoPanning.Maximum = new decimal(new int[] {
             180,
             0,
@@ -1465,30 +1494,27 @@ namespace Mesen.GUI.Forms.Config
 			this.nudStereoPanning.Name = "nudStereoPanning";
 			this.nudStereoPanning.Size = new System.Drawing.Size(45, 20);
 			this.nudStereoPanning.TabIndex = 1;
-			// 
-			// lblStereoPanningAngle
-			// 
-			this.lblStereoPanningAngle.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblStereoPanningAngle.AutoSize = true;
-			this.lblStereoPanningAngle.Location = new System.Drawing.Point(54, 6);
-			this.lblStereoPanningAngle.Name = "lblStereoPanningAngle";
-			this.lblStereoPanningAngle.Size = new System.Drawing.Size(92, 13);
-			this.lblStereoPanningAngle.TabIndex = 1;
-			this.lblStereoPanningAngle.Text = "(Angle in degrees)";
+			this.nudStereoPanning.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			// 
 			// grpReverb
 			// 
+			this.grpReverb.AutoSize = true;
 			this.grpReverb.Controls.Add(this.tableLayoutPanel5);
 			this.grpReverb.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpReverb.Location = new System.Drawing.Point(3, 104);
 			this.grpReverb.Name = "grpReverb";
-			this.grpReverb.Size = new System.Drawing.Size(457, 109);
+			this.grpReverb.Size = new System.Drawing.Size(457, 106);
 			this.grpReverb.TabIndex = 1;
 			this.grpReverb.TabStop = false;
 			this.grpReverb.Text = "Reverb";
 			// 
 			// tableLayoutPanel5
 			// 
+			this.tableLayoutPanel5.AutoSize = true;
 			this.tableLayoutPanel5.ColumnCount = 2;
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1505,7 +1531,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(451, 90);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(451, 87);
 			this.tableLayoutPanel5.TabIndex = 0;
 			// 
 			// chkReverbEnabled
@@ -1561,11 +1587,12 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// flowLayoutPanel5
 			// 
+			this.flowLayoutPanel5.AutoSize = true;
 			this.flowLayoutPanel5.Controls.Add(this.chkCrossFeedEnabled);
 			this.flowLayoutPanel5.Controls.Add(this.nudCrossFeedRatio);
 			this.flowLayoutPanel5.Controls.Add(this.lblCrossFeedRatio);
 			this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel5.Location = new System.Drawing.Point(6, 216);
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(6, 213);
 			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
 			this.flowLayoutPanel5.Size = new System.Drawing.Size(457, 25);
@@ -1586,16 +1613,38 @@ namespace Mesen.GUI.Forms.Config
 			// nudCrossFeedRatio
 			// 
 			this.nudCrossFeedRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.nudCrossFeedRatio.Location = new System.Drawing.Point(121, 3);
+			this.nudCrossFeedRatio.DecimalPlaces = 0;
+			this.nudCrossFeedRatio.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudCrossFeedRatio.Location = new System.Drawing.Point(118, 2);
+			this.nudCrossFeedRatio.Margin = new System.Windows.Forms.Padding(0);
+			this.nudCrossFeedRatio.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudCrossFeedRatio.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudCrossFeedRatio.Name = "nudCrossFeedRatio";
 			this.nudCrossFeedRatio.Size = new System.Drawing.Size(42, 20);
 			this.nudCrossFeedRatio.TabIndex = 2;
+			this.nudCrossFeedRatio.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			// 
 			// lblCrossFeedRatio
 			// 
 			this.lblCrossFeedRatio.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblCrossFeedRatio.AutoSize = true;
-			this.lblCrossFeedRatio.Location = new System.Drawing.Point(169, 6);
+			this.lblCrossFeedRatio.Location = new System.Drawing.Point(163, 6);
 			this.lblCrossFeedRatio.Name = "lblCrossFeedRatio";
 			this.lblCrossFeedRatio.Size = new System.Drawing.Size(15, 13);
 			this.lblCrossFeedRatio.TabIndex = 3;
@@ -1693,9 +1742,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
-			this.flowLayoutPanel2.ResumeLayout(false);
-			this.flowLayoutPanel2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudLatency)).EndInit();
+			this.tableLayoutPanel7.ResumeLayout(false);
+			this.tableLayoutPanel7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picLatencyWarning)).EndInit();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
@@ -1713,23 +1761,18 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel7.PerformLayout();
 			this.tpgEffects.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
+			this.tableLayoutPanel4.PerformLayout();
 			this.grpStereo.ResumeLayout(false);
 			this.tlpStereoFilter.ResumeLayout(false);
 			this.tlpStereoFilter.PerformLayout();
-			this.flowLayoutPanel3.ResumeLayout(false);
-			this.flowLayoutPanel3.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudStereoDelay)).EndInit();
-			this.flowLayoutPanel4.ResumeLayout(false);
-			this.flowLayoutPanel4.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudStereoPanning)).EndInit();
 			this.grpReverb.ResumeLayout(false);
+			this.grpReverb.PerformLayout();
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkReverbDelay)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.trkReverbStrength)).EndInit();
 			this.flowLayoutPanel5.ResumeLayout(false);
 			this.flowLayoutPanel5.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudCrossFeedRatio)).EndInit();
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
@@ -1743,11 +1786,10 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.CheckBox chkEnableAudio;
 		private System.Windows.Forms.Label lblAudioLatency;
-		private System.Windows.Forms.NumericUpDown nudLatency;
+		private MesenNumericUpDown nudLatency;
 		private System.Windows.Forms.Label lblLatencyMs;
 		private System.Windows.Forms.Button btnReset;
 		private System.Windows.Forms.Label lblSampleRate;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.ComboBox cboSampleRate;
 		private System.Windows.Forms.Label lblAudioDevice;
 		private System.Windows.Forms.ComboBox cboAudioDevice;
@@ -1776,14 +1818,12 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.GroupBox grpStereo;
 		private System.Windows.Forms.TableLayoutPanel tlpStereoFilter;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
-		private System.Windows.Forms.NumericUpDown nudStereoDelay;
+		private MesenNumericUpDown nudStereoDelay;
 		private System.Windows.Forms.Label lblStereoDelayMs;
 		private System.Windows.Forms.RadioButton radStereoDisabled;
 		private System.Windows.Forms.RadioButton radStereoDelay;
 		private System.Windows.Forms.RadioButton radStereoPanning;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
-		private System.Windows.Forms.NumericUpDown nudStereoPanning;
+		private MesenNumericUpDown nudStereoPanning;
 		private System.Windows.Forms.Label lblStereoPanningAngle;
 		private System.Windows.Forms.GroupBox grpReverb;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
@@ -1810,7 +1850,7 @@ namespace Mesen.GUI.Forms.Config
 		private Controls.ctrlHorizontalTrackbar trkSquare1Pan;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
 		private System.Windows.Forms.CheckBox chkCrossFeedEnabled;
-		private System.Windows.Forms.NumericUpDown nudCrossFeedRatio;
+		private MesenNumericUpDown nudCrossFeedRatio;
 		private System.Windows.Forms.Label lblCrossFeedRatio;
 		private Controls.ctrlHorizontalTrackbar trkTrianglePan;
 		private ctrlRiskyOption chkDisableNoiseModeFlag;
@@ -1844,5 +1884,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.Label lblEqualizerPreset;
 		private System.Windows.Forms.ComboBox cboEqualizerPreset;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
 	}
 }

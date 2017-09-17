@@ -154,6 +154,7 @@
 			// picBankPreview
 			// 
 			this.tableLayoutPanel3.SetColumnSpan(this.picBankPreview, 2);
+			this.picBankPreview.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.picBankPreview.Location = new System.Drawing.Point(3, 30);
 			this.picBankPreview.Name = "picBankPreview";
 			this.picBankPreview.Size = new System.Drawing.Size(257, 258);
@@ -242,7 +243,9 @@
 			// 
 			// picIgnoreOverscanHelp
 			// 
-			this.picIgnoreOverscanHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picIgnoreOverscanHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picIgnoreOverscanHelp.BackgroundImage = global::Mesen.GUI.Properties.Resources.Help;
+			this.picIgnoreOverscanHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.picIgnoreOverscanHelp.Location = new System.Drawing.Point(266, 3);
 			this.picIgnoreOverscanHelp.Name = "picIgnoreOverscanHelp";
 			this.picIgnoreOverscanHelp.Size = new System.Drawing.Size(16, 16);
@@ -295,7 +298,9 @@
 			// 
 			// picGroupBlankHelp
 			// 
-			this.picGroupBlankHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picGroupBlankHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picGroupBlankHelp.BackgroundImage = global::Mesen.GUI.Properties.Resources.Help;
+			this.picGroupBlankHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.picGroupBlankHelp.Location = new System.Drawing.Point(114, 3);
 			this.picGroupBlankHelp.Name = "picGroupBlankHelp";
 			this.picGroupBlankHelp.Size = new System.Drawing.Size(16, 16);
@@ -328,7 +333,9 @@
 			// 
 			// picFrequencyHelp
 			// 
-			this.picFrequencyHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picFrequencyHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picFrequencyHelp.BackgroundImage = global::Mesen.GUI.Properties.Resources.Help;
+			this.picFrequencyHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.picFrequencyHelp.Location = new System.Drawing.Point(182, 3);
 			this.picFrequencyHelp.Name = "picFrequencyHelp";
 			this.picFrequencyHelp.Size = new System.Drawing.Size(16, 16);
@@ -359,7 +366,9 @@
 			// 
 			// picLargeSpritesHelp
 			// 
-			this.picLargeSpritesHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picLargeSpritesHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picLargeSpritesHelp.BackgroundImage = global::Mesen.GUI.Properties.Resources.Help;
+			this.picLargeSpritesHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.picLargeSpritesHelp.Location = new System.Drawing.Point(172, 3);
 			this.picLargeSpritesHelp.Name = "picLargeSpritesHelp";
 			this.picLargeSpritesHelp.Size = new System.Drawing.Size(16, 16);
@@ -392,8 +401,10 @@
 			// 
 			// picBankSizeHelp
 			// 
-			this.picBankSizeHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picBankSizeHelp.Location = new System.Drawing.Point(114, 5);
+			this.picBankSizeHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picBankSizeHelp.BackgroundImage = global::Mesen.GUI.Properties.Resources.Help;
+			this.picBankSizeHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.picBankSizeHelp.Location = new System.Drawing.Point(114, 6);
 			this.picBankSizeHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picBankSizeHelp.Name = "picBankSizeHelp";
 			this.picBankSizeHelp.Size = new System.Drawing.Size(16, 16);
@@ -422,8 +433,10 @@
 			// 
 			// picScaleHelp
 			// 
-			this.picScaleHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picScaleHelp.Location = new System.Drawing.Point(114, 5);
+			this.picScaleHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picScaleHelp.BackgroundImage = global::Mesen.GUI.Properties.Resources.Help;
+			this.picScaleHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.picScaleHelp.Location = new System.Drawing.Point(114, 6);
 			this.picScaleHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picScaleHelp.Name = "picScaleHelp";
 			this.picScaleHelp.Size = new System.Drawing.Size(16, 16);
@@ -432,14 +445,14 @@
 			// 
 			// flowLayoutPanel2
 			// 
-			this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.flowLayoutPanel2.Controls.Add(this.btnStartRecording);
 			this.flowLayoutPanel2.Controls.Add(this.btnStopRecording);
+			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(348, 345);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(337, 345);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(264, 26);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(275, 26);
 			this.flowLayoutPanel2.TabIndex = 7;
 			// 
 			// btnStartRecording
@@ -448,7 +461,7 @@
 			this.btnStartRecording.AutoSize = true;
 			this.btnStartRecording.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.btnStartRecording.Image = global::Mesen.GUI.Properties.Resources.Record;
-			this.btnStartRecording.Location = new System.Drawing.Point(154, 3);
+			this.btnStartRecording.Location = new System.Drawing.Point(165, 3);
 			this.btnStartRecording.Name = "btnStartRecording";
 			this.btnStartRecording.Size = new System.Drawing.Size(107, 23);
 			this.btnStartRecording.TabIndex = 6;
@@ -461,10 +474,11 @@
 			// 
 			this.btnStopRecording.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnStopRecording.AutoSize = true;
+			this.btnStopRecording.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.btnStopRecording.Image = global::Mesen.GUI.Properties.Resources.Stop;
-			this.btnStopRecording.Location = new System.Drawing.Point(41, 3);
+			this.btnStopRecording.Location = new System.Drawing.Point(52, 3);
 			this.btnStopRecording.Name = "btnStopRecording";
-			this.btnStopRecording.Size = new System.Drawing.Size(107, 24);
+			this.btnStopRecording.Size = new System.Drawing.Size(107, 23);
 			this.btnStopRecording.TabIndex = 7;
 			this.btnStopRecording.Text = "Stop Recording";
 			this.btnStopRecording.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;

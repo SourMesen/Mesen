@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Debugger
 {
 	partial class frmFadeSpeed
 	{
@@ -30,9 +32,8 @@
 			this.lblAddress = new System.Windows.Forms.Label();
 			this.lblFrames = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.nudFrameCount = new System.Windows.Forms.NumericUpDown();
+			this.nudFrameCount = new MesenNumericUpDown();
 			this.tableLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudFrameCount)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -110,7 +111,6 @@
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.nudFrameCount)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -120,6 +120,6 @@
 		private System.Windows.Forms.Label lblAddress;
 		private System.Windows.Forms.Label lblFrames;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.NumericUpDown nudFrameCount;
+		private MesenNumericUpDown nudFrameCount;
 	}
 }

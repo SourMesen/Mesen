@@ -29,7 +29,7 @@
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.trackBar = new System.Windows.Forms.TrackBar();
-			this.txtValue = new System.Windows.Forms.TextBox();
+			this.lblValue = new System.Windows.Forms.Label();
 			this.lblText = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
@@ -41,7 +41,7 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.Controls.Add(this.trackBar, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.txtValue, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.lblValue, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblText, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -61,26 +61,25 @@
 			this.trackBar.Maximum = 100;
 			this.trackBar.Minimum = -100;
 			this.trackBar.Name = "trackBar";
-			this.trackBar.Size = new System.Drawing.Size(172, 35);
+			this.trackBar.Size = new System.Drawing.Size(168, 35);
 			this.trackBar.TabIndex = 13;
 			this.trackBar.TickFrequency = 10;
 			this.trackBar.Value = 50;
 			this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
 			// 
-			// txtValue
+			// lblValue
 			// 
-			this.txtValue.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.txtValue.BackColor = System.Drawing.Color.White;
-			this.txtValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtValue.Location = new System.Drawing.Point(175, 23);
-			this.txtValue.Multiline = true;
-			this.txtValue.Name = "txtValue";
-			this.txtValue.ReadOnly = true;
-			this.txtValue.Size = new System.Drawing.Size(28, 17);
-			this.txtValue.TabIndex = 17;
-			this.txtValue.TabStop = false;
-			this.txtValue.Text = "100";
-			this.txtValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.lblValue.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.lblValue.AutoSize = true;
+			this.lblValue.BackColor = System.Drawing.Color.White;
+			this.lblValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.lblValue.Location = new System.Drawing.Point(171, 20);
+			this.lblValue.MinimumSize = new System.Drawing.Size(32, 17);
+			this.lblValue.Name = "lblValue";
+			this.lblValue.Size = new System.Drawing.Size(32, 17);
+			this.lblValue.TabIndex = 17;
+			this.lblValue.Text = "100";
+			this.lblValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// lblText
 			// 
@@ -88,7 +87,7 @@
 			this.lblText.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lblText.Location = new System.Drawing.Point(3, 0);
 			this.lblText.Name = "lblText";
-			this.lblText.Size = new System.Drawing.Size(166, 20);
+			this.lblText.Size = new System.Drawing.Size(162, 20);
 			this.lblText.TabIndex = 18;
 			this.lblText.Text = "Text";
 			this.lblText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -114,7 +113,7 @@
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.TrackBar trackBar;
-		private System.Windows.Forms.TextBox txtValue;
+		private System.Windows.Forms.Label lblValue;
 		private System.Windows.Forms.Label lblText;
 	}
 }

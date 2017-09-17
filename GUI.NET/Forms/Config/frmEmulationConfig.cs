@@ -72,7 +72,7 @@ namespace Mesen.GUI.Forms.Config
 				nudExtraScanlinesBeforeNmi.Value = 0;
 			}
 			if(string.IsNullOrWhiteSpace(nudOverclockRate.Text)) {
-				nudOverclockRate.Value = 0;
+				nudOverclockRate.Value = 100;
 			}
 		}
 

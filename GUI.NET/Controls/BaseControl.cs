@@ -20,17 +20,11 @@ namespace Mesen.GUI.Controls
 			}
 		}
 
-		public new SizeF AutoScaleDimensions
-		{
-			set { 
-			}
-		} 
-
 		public new AutoScaleMode AutoScaleMode
 		{
 			set {
 				if(Program.IsMono) { 
-					base.AutoScaleMode = AutoScaleMode.None; 
+					base.AutoScaleMode = AutoScaleMode.None;
 				} else {
 					base.AutoScaleMode = value;
 				}
