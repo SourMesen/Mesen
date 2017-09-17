@@ -66,7 +66,7 @@ namespace Mesen.GUI.Debugger
 			GCHandle handle = GCHandle.Alloc(this.PaletteData, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(16, 4, 16*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap target = new Bitmap(picPalette.Width - 2, picPalette.Height - 2);
+				Bitmap target = new Bitmap(336, 336);
 
 				Font font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2, GraphicsUnit.Pixel);
 				using(Graphics g = Graphics.FromImage(target)) {
@@ -74,7 +74,6 @@ namespace Mesen.GUI.Debugger
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
 					g.ScaleTransform(42, 42);
-					g.ScaleTransform((float)picPalette.Width / 336, (float)picPalette.Height / 336);
 					g.DrawImageUnscaled(source, 0, 0);
 					g.DrawImageUnscaled(source, -8, 4);
 

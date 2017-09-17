@@ -40,6 +40,7 @@
 			this.picPalette.Margin = new System.Windows.Forms.Padding(1);
 			this.picPalette.Name = "picPalette";
 			this.picPalette.Size = new System.Drawing.Size(338, 338);
+			this.picPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picPalette.TabIndex = 1;
 			this.picPalette.TabStop = false;
 			this.picPalette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
