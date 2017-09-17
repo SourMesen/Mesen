@@ -134,21 +134,20 @@
 			// 
 			// lblExample
 			// 
-			this.lblExample.AutoSize = true;
 			this.lblExample.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.lblExample.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.lblExample.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblExample.Dock = System.Windows.Forms.DockStyle.Top;
 			this.lblExample.ForeColor = System.Drawing.SystemColors.HighlightText;
 			this.lblExample.Location = new System.Drawing.Point(3, 0);
 			this.lblExample.Name = "lblExample";
-			this.lblExample.Size = new System.Drawing.Size(556, 28);
+			this.lblExample.Size = new System.Drawing.Size(556, 38);
 			this.lblExample.TabIndex = 0;
 			this.lblExample.Text = "Mesen C:\\Games\\MyGame.nes /fullscreen /VideoFilter=NTSC /VideoScale=2 /OverscanTo" +
     "p=8 /OverscanBottom=8 /OverscanLeft=0 /OverscanRight=0 /DoNotSaveSettings";
 			// 
 			// lblExplanation
 			// 
-			this.lblExplanation.AutoSize = true;
+			this.lblExplanation.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lblExplanation.Location = new System.Drawing.Point(3, 28);
 			this.lblExplanation.Name = "lblExplanation";
 			this.lblExplanation.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);

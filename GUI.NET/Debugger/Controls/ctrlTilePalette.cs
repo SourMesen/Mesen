@@ -13,7 +13,7 @@ using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlTilePalette : UserControl
+	public partial class ctrlTilePalette : BaseControl
 	{
 		private int _selectedPalette = -1;
 		private bool _allowSelection = false;

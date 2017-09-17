@@ -84,8 +84,6 @@
 			// 
 			// grpSpriteInfo
 			// 
-			this.grpSpriteInfo.AutoSize = true;
-			this.grpSpriteInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.grpSpriteInfo.Controls.Add(this.tableLayoutPanel4);
 			this.grpSpriteInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpSpriteInfo.Location = new System.Drawing.Point(263, 3);
@@ -97,8 +95,6 @@
 			// 
 			// tableLayoutPanel4
 			// 
-			this.tableLayoutPanel4.AutoSize = true;
-			this.tableLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.tableLayoutPanel4.ColumnCount = 5;
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());

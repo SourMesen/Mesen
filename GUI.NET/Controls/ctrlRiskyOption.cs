@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Forms;
 using System.IO;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Controls
 {
-	public partial class ctrlRiskyOption : UserControl
+	public partial class ctrlRiskyOption : BaseControl
 	{
 		public ctrlRiskyOption()
 		{

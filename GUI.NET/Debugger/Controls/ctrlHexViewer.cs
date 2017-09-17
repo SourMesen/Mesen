@@ -14,7 +14,7 @@ using static Be.Windows.Forms.DynamicByteProvider;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlHexViewer : UserControl
+	public partial class ctrlHexViewer : BaseControl
 	{
 		private FindOptions _findOptions;
 		private StaticByteProvider _byteProvider;

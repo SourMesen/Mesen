@@ -24,7 +24,7 @@ namespace Mesen.GUI.Controls
 
 			if(!Program.IsMono) {
 				this.trackBar.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			}			
+			}
 		}
 
 		public int Minimum

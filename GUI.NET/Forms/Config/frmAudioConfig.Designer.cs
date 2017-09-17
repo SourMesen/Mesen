@@ -1502,7 +1502,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// grpReverb
 			// 
-			this.grpReverb.AutoSize = true;
 			this.grpReverb.Controls.Add(this.tableLayoutPanel5);
 			this.grpReverb.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpReverb.Location = new System.Drawing.Point(3, 104);
@@ -1514,7 +1513,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// tableLayoutPanel5
 			// 
-			this.tableLayoutPanel5.AutoSize = true;
 			this.tableLayoutPanel5.ColumnCount = 2;
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));

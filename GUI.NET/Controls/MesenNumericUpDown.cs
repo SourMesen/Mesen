@@ -99,6 +99,7 @@ namespace Mesen.GUI.Controls
 			// MesenNumericUpDown
 			// 
 			this.Controls.Add(this.nud);
+			this.MaximumSize = new Size(10000, 20);
 			this.Name = "MesenNumericUpDown";
 			this.Size = new System.Drawing.Size(48, 21);
 			((System.ComponentModel.ISupportInitialize)(this.nud)).EndInit();

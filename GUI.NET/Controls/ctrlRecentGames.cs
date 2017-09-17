@@ -12,10 +12,11 @@ using Mesen.GUI.Config;
 using System.Drawing.Text;
 using System.IO.Compression;
 using Mesen.GUI.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Controls
 {
-	public partial class ctrlRecentGames : UserControl
+	public partial class ctrlRecentGames : BaseControl
 	{
 		public delegate void RecentGameLoadedHandler(RecentGameInfo gameInfo);
 		public event RecentGameLoadedHandler OnRecentGameLoaded;

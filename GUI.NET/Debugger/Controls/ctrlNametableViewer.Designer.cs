@@ -135,13 +135,12 @@
 			// 
 			// grpTileInfo
 			// 
-			this.grpTileInfo.AutoSize = true;
 			this.grpTileInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
 			this.grpTileInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpTileInfo.Location = new System.Drawing.Point(519, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.grpTileInfo.Size = new System.Drawing.Size(175, 339);
+			this.grpTileInfo.Size = new System.Drawing.Size(175, 375);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";

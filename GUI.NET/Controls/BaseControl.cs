@@ -30,5 +30,15 @@ namespace Mesen.GUI.Controls
 				}
 			}
 		}
+
+		public new SizeF AutoScaleDimensions
+		{
+			set 
+			{ 
+				if(!Program.IsMono) { 
+					base.AutoScaleDimensions = value; 
+				}
+			}
+		} 		
 	}
 }

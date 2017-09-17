@@ -533,7 +533,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// tableLayoutPanel3
 			// 
-			this.tableLayoutPanel3.AutoSize = true;
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel4, 0, 5);
@@ -642,7 +641,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// grpOverclocking
 			// 
-			this.grpOverclocking.AutoSize = true;
 			this.grpOverclocking.Controls.Add(this.tableLayoutPanel2);
 			this.grpOverclocking.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpOverclocking.Location = new System.Drawing.Point(3, 26);
@@ -654,7 +652,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// tableLayoutPanel2
 			// 
-			this.tableLayoutPanel2.AutoSize = true;
 			this.tableLayoutPanel2.ColumnCount = 4;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -726,7 +723,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// grpPpuTiming
 			// 
-			this.grpPpuTiming.AutoSize = true;
 			this.grpPpuTiming.Controls.Add(this.tableLayoutPanel5);
 			this.grpPpuTiming.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpPpuTiming.Location = new System.Drawing.Point(3, 77);
@@ -738,7 +734,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// tableLayoutPanel5
 			// 
-			this.tableLayoutPanel5.AutoSize = true;
 			this.tableLayoutPanel5.ColumnCount = 2;
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());

@@ -34,6 +34,10 @@ namespace Mesen.GUI.Debugger
 				tmrButton.Enabled = true;
 			}
 
+			if(Program.IsMono) {
+				this.Font = new Font("Microsoft Sans Serif", 7.75F);
+			}
+
 			_cpuBinder.Entity = new CPUState();
 			_ppuControlBinder.Entity = new PPUControlFlags();
 			_ppuStatusBinder.Entity = new PPUStatusFlags();

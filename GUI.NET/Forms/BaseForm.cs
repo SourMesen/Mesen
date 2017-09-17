@@ -119,6 +119,27 @@ namespace Mesen.GUI.Forms
 				}
 			}				
 		}
+		
+		public new SizeF AutoScaleDimensions
+		{
+			set 
+			{ 
+				if(!Program.IsMono) { 
+					base.AutoScaleDimensions = value; 
+				}
+			}
+		} 
+				
+		public new AutoScaleMode AutoScaleMode
+		{
+			set {
+				if(Program.IsMono) { 
+					base.AutoScaleMode = AutoScaleMode.None;
+				} else {
+					base.AutoScaleMode = value;
+				}
+			}
+		}		
 
 		private void InitializeComponent()
 		{

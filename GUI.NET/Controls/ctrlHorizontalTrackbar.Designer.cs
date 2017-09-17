@@ -39,7 +39,7 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 			this.tableLayoutPanel1.Controls.Add(this.trackBar, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblValue, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblText, 0, 0);
@@ -70,7 +70,6 @@
 			// lblValue
 			// 
 			this.lblValue.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.lblValue.AutoSize = true;
 			this.lblValue.BackColor = System.Drawing.Color.White;
 			this.lblValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.lblValue.Location = new System.Drawing.Point(171, 20);

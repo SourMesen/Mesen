@@ -35,7 +35,6 @@
 			// 
 			// flowLayoutPanel1
 			// 
-			this.flowLayoutPanel1.AutoSize = true;
 			this.flowLayoutPanel1.Controls.Add(this.chkOption);
 			this.flowLayoutPanel1.Controls.Add(this.lblNotRecommended);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -73,8 +72,9 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.AutoSize = true;
 			this.Controls.Add(this.flowLayoutPanel1);
+			this.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.MinimumSize = new System.Drawing.Size(0, 23);
 			this.Name = "ctrlRiskyOption";
 			this.Size = new System.Drawing.Size(197, 23);
 			this.flowLayoutPanel1.ResumeLayout(false);

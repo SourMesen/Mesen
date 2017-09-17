@@ -555,8 +555,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpCloudSaveDesc.TabIndex = 0;
 			// 
 			// lblGoogleDriveIntegration
-			// 
-			this.lblGoogleDriveIntegration.AutoSize = true;
+			//
+			this.lblGoogleDriveIntegration.Dock = System.Windows.Forms.DockStyle.Top; 
 			this.lblGoogleDriveIntegration.Location = new System.Drawing.Point(3, 0);
 			this.lblGoogleDriveIntegration.Name = "lblGoogleDriveIntegration";
 			this.lblGoogleDriveIntegration.Size = new System.Drawing.Size(464, 52);
