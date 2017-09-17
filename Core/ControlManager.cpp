@@ -66,7 +66,7 @@ string ControlManager::GetKeyName(uint32_t keyCode)
 	if(_keyManager != nullptr) {
 		return _keyManager->GetKeyName(keyCode);
 	}
-	return 0;
+	return "";
 }
 
 uint32_t ControlManager::GetKeyCode(string keyName)
