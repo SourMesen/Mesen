@@ -51,6 +51,7 @@ namespace Mesen.GUI.Forms
 		private float _xFactor = 1;
 		private float _yFactor = 1;
 		private bool _enableResize = false;
+		private bool _overrideWindowSize = false;
 
 		private Dictionary<EmulatorShortcut, Func<bool>> _actionEnabledFuncs = new Dictionary<EmulatorShortcut, Func<bool>>();
 
@@ -146,9 +147,15 @@ namespace Mesen.GUI.Forms
 
 			menuTimer.Start();
 
-			this.ProcessCommandLineArguments(_commandLineArgs, true);
-
+			InteropEmu.ScreenSize originalSize = InteropEmu.GetScreenSize(false);
 			VideoInfo.ApplyConfig();
+			this.ProcessCommandLineArguments(_commandLineArgs, true);
+			VideoInfo.ApplyConfig();
+			InteropEmu.ScreenSize newSize = InteropEmu.GetScreenSize(false);
+			if(originalSize.Width != newSize.Width || originalSize.Height != newSize.Height) {
+				_overrideWindowSize = true;
+			}
+
 			InitializeVsSystemMenu();
 			InitializeFdsDiskMenu();
 			InitializeEmulationSpeedMenu();
@@ -178,7 +185,7 @@ namespace Mesen.GUI.Forms
 				CheckForUpdates(false);
 			}
 
-			if(ConfigManager.Config.WindowSize.HasValue) {
+			if(ConfigManager.Config.WindowSize.HasValue && !_overrideWindowSize) {
 				this.ClientSize = ConfigManager.Config.WindowSize.Value;
 			}
 
@@ -212,7 +219,7 @@ namespace Mesen.GUI.Forms
 
 			this.BindShortcuts();
 
-			if(ConfigManager.Config.WindowSize.HasValue) {
+			if(ConfigManager.Config.WindowSize.HasValue && !_overrideWindowSize) {
 				this.Size = ConfigManager.Config.WindowSize.Value;
 			}
 
