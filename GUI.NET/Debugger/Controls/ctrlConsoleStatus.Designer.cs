@@ -28,7 +28,6 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ctrlConsoleStatus));
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpPPUStatus = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -1162,7 +1161,7 @@
 			// 
 			this.btnGoto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnGoto.AutoSize = true;
-			this.btnGoto.Image = ((System.Drawing.Image)(resources.GetObject("btnGoto.Image")));
+			this.btnGoto.Image = global::Mesen.GUI.Properties.Resources.DownArrow;
 			this.btnGoto.Location = new System.Drawing.Point(378, 3);
 			this.btnGoto.Name = "btnGoto";
 			this.btnGoto.Size = new System.Drawing.Size(72, 23);

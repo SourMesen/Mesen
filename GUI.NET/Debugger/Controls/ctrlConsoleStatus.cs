@@ -38,6 +38,8 @@ namespace Mesen.GUI.Debugger
 				this.Font = new Font("Microsoft Sans Serif", 7.75F);
 			}
 
+			btnGoto.Image = BaseControl.DownArrow;
+
 			_cpuBinder.Entity = new CPUState();
 			_ppuControlBinder.Entity = new PPUControlFlags();
 			_ppuStatusBinder.Entity = new PPUStatusFlags();

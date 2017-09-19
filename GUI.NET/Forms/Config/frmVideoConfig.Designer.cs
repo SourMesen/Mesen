@@ -30,7 +30,6 @@ namespace Mesen.GUI.Forms.Config
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVideoConfig));
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.lblVideoScale = new System.Windows.Forms.Label();
 			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
@@ -450,23 +449,24 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel7.Controls.Add(this.btnSelectPreset, 1, 0);
 			this.tableLayoutPanel7.Controls.Add(this.btnResetPictureSettings, 0, 0);
 			this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 339);
+			this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 341);
 			this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel7.Name = "tableLayoutPanel7";
 			this.tableLayoutPanel7.RowCount = 1;
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel7.Size = new System.Drawing.Size(260, 31);
+			this.tableLayoutPanel7.Size = new System.Drawing.Size(260, 29);
 			this.tableLayoutPanel7.TabIndex = 3;
 			// 
 			// btnSelectPreset
 			// 
 			this.btnSelectPreset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnSelectPreset.AutoSize = true;
-			this.btnSelectPreset.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectPreset.Image")));
+			this.btnSelectPreset.Image = global::Mesen.GUI.Properties.Resources.DownArrow;
 			this.btnSelectPreset.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnSelectPreset.Location = new System.Drawing.Point(161, 5);
+			this.btnSelectPreset.Location = new System.Drawing.Point(158, 3);
 			this.btnSelectPreset.Name = "btnSelectPreset";
-			this.btnSelectPreset.Size = new System.Drawing.Size(96, 23);
+			this.btnSelectPreset.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.btnSelectPreset.Size = new System.Drawing.Size(99, 23);
 			this.btnSelectPreset.TabIndex = 3;
 			this.btnSelectPreset.Text = "Select Preset...";
 			this.btnSelectPreset.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -477,7 +477,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.btnResetPictureSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnResetPictureSettings.AutoSize = true;
-			this.btnResetPictureSettings.Location = new System.Drawing.Point(3, 5);
+			this.btnResetPictureSettings.Location = new System.Drawing.Point(3, 3);
 			this.btnResetPictureSettings.Name = "btnResetPictureSettings";
 			this.btnResetPictureSettings.Size = new System.Drawing.Size(75, 23);
 			this.btnResetPictureSettings.TabIndex = 3;
@@ -699,7 +699,8 @@ namespace Mesen.GUI.Forms.Config
 			this.grpCommon.Location = new System.Drawing.Point(0, 27);
 			this.grpCommon.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
 			this.grpCommon.Name = "grpCommon";
-			this.grpCommon.Size = new System.Drawing.Size(258, 240);
+			this.grpCommon.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.grpCommon.Size = new System.Drawing.Size(258, 242);
 			this.grpCommon.TabIndex = 3;
 			this.grpCommon.TabStop = false;
 			this.grpCommon.Text = "Common Settings";
@@ -715,7 +716,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4.Controls.Add(this.trkHue, 0, 2);
 			this.tableLayoutPanel4.Controls.Add(this.trkSaturation, 0, 3);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 15);
 			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 5;
@@ -724,7 +725,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(252, 221);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(252, 225);
 			this.tableLayoutPanel4.TabIndex = 4;
 			// 
 			// chkBilinearInterpolation
@@ -733,7 +734,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4.SetColumnSpan(this.chkBilinearInterpolation, 2);
 			this.chkBilinearInterpolation.Location = new System.Drawing.Point(3, 203);
 			this.chkBilinearInterpolation.Name = "chkBilinearInterpolation";
-			this.chkBilinearInterpolation.Size = new System.Drawing.Size(206, 15);
+			this.chkBilinearInterpolation.Size = new System.Drawing.Size(206, 17);
 			this.chkBilinearInterpolation.TabIndex = 28;
 			this.chkBilinearInterpolation.Text = "Use bilinear interpolation when scaling";
 			this.chkBilinearInterpolation.UseVisualStyleBackColor = true;
@@ -802,7 +803,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.grpScanlines.Controls.Add(this.trkScanlines);
 			this.grpScanlines.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpScanlines.Location = new System.Drawing.Point(0, 267);
+			this.grpScanlines.Location = new System.Drawing.Point(0, 269);
 			this.grpScanlines.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
 			this.grpScanlines.Name = "grpScanlines";
 			this.grpScanlines.Size = new System.Drawing.Size(258, 72);
@@ -1205,7 +1206,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.btnSelectPalette.AutoSize = true;
 			this.btnSelectPalette.Dock = System.Windows.Forms.DockStyle.Top;
-			this.btnSelectPalette.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectPalette.Image")));
+			this.btnSelectPalette.Image = global::Mesen.GUI.Properties.Resources.DownArrow;
 			this.btnSelectPalette.Location = new System.Drawing.Point(3, 3);
 			this.btnSelectPalette.Name = "btnSelectPalette";
 			this.btnSelectPalette.Size = new System.Drawing.Size(175, 23);

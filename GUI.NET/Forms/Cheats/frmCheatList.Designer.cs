@@ -29,7 +29,6 @@ namespace Mesen.GUI.Forms.Cheats
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCheatList));
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tabCheats = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -234,11 +233,11 @@ namespace Mesen.GUI.Forms.Cheats
             this.mnuDeleteCheat,
             this.mnuExportSelectedCheats});
 			this.contextMenuCheats.Name = "contextMenuCheats";
-			this.contextMenuCheats.Size = new System.Drawing.Size(160, 70);
+			this.contextMenuCheats.Size = new System.Drawing.Size(160, 92);
 			// 
 			// mnuAddCheat
 			// 
-			this.mnuAddCheat.Image = ((System.Drawing.Image)(resources.GetObject("mnuAddCheat.Image")));
+			this.mnuAddCheat.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAddCheat.Name = "mnuAddCheat";
 			this.mnuAddCheat.ShortcutKeys = System.Windows.Forms.Keys.Insert;
 			this.mnuAddCheat.Size = new System.Drawing.Size(159, 22);
@@ -280,7 +279,7 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			// btnAddCheat
 			// 
-			this.btnAddCheat.Image = ((System.Drawing.Image)(resources.GetObject("btnAddCheat.Image")));
+			this.btnAddCheat.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.btnAddCheat.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.btnAddCheat.Name = "btnAddCheat";
 			this.btnAddCheat.Size = new System.Drawing.Size(83, 20);

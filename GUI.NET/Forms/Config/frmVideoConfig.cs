@@ -73,6 +73,9 @@ namespace Mesen.GUI.Forms.Config
 
 			toolTip.SetToolTip(picHdNesTooltip, ResourceHelper.GetMessage("HDNesTooltip"));
 
+			btnSelectPreset.Image = BaseControl.DownArrow;
+			btnSelectPalette.Image = BaseControl.DownArrow;
+
 			UpdateOverscanImage();
 
 			ResourceHelper.ApplyResources(this, contextPaletteList);

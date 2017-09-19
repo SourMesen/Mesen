@@ -846,6 +846,7 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\DownArrowWin10.png" />
     <None Include="app.manifest" />
     <None Include="Resources\Exclamation.png" />
     <None Include="Resources\Comment.png" />
@@ -924,6 +925,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlConsoleStatus.resx">
       <DependentUpon>ctrlConsoleStatus.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlDebuggerCode.resx">
       <DependentUpon>ctrlDebuggerCode.cs</DependentUpon>
@@ -1043,6 +1045,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmControllerConfig.resx">
       <DependentUpon>frmControllerConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmCopyFiles.resx">
       <DependentUpon>frmCopyFiles.cs</DependentUpon>
@@ -1068,6 +1071,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Cheats\frmCheatList.resx">
       <DependentUpon>frmCheatList.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmVsGameConfig.resx">
       <DependentUpon>frmVsGameConfig.cs</DependentUpon>
@@ -1077,6 +1081,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmConfigWizard.resx">
       <DependentUpon>frmConfigWizard.cs</DependentUpon>
@@ -1101,6 +1106,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmUpdatePrompt.resx">
       <DependentUpon>frmUpdatePrompt.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HdPackEditor\frmHdPackEditor.resx">
       <DependentUpon>frmHdPackEditor.cs</DependentUpon>

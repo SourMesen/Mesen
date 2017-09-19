@@ -242,7 +242,7 @@
 			// 
 			this.btnSelectPreset.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.btnSelectPreset.AutoSize = true;
-			this.btnSelectPreset.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectPreset.Image")));
+			this.btnSelectPreset.Image = global::Mesen.GUI.Properties.Resources.DownArrow;
 			this.btnSelectPreset.Location = new System.Drawing.Point(3, 281);
 			this.btnSelectPreset.Name = "btnSelectPreset";
 			this.btnSelectPreset.Size = new System.Drawing.Size(105, 23);

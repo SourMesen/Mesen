@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Forms.Config
 {
@@ -33,6 +34,8 @@ namespace Mesen.GUI.Forms.Config
 				ctrlStandardController2.ShowMicrophone = true;
 				ctrlStandardController3.ShowMicrophone = true;
 			}
+
+			this.btnSelectPreset.Image = BaseControl.DownArrow;
 
 			ResourceHelper.ApplyResources(this, mnuStripPreset);
 
