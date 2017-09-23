@@ -62,20 +62,15 @@ void FDS::WriteFdsDisk(uint8_t value)
 
 void FDS::ClockIrq()
 {
-	if(_needIrq) {
-		CPU::SetIRQSource(IRQSource::External);
-		_needIrq = false;
-	}
-
-	if(_irqEnabled && _irqCounter > 0) {
-		_irqCounter--;
+	if(_irqEnabled) {
 		if(_irqCounter == 0) {
-			_needIrq = true;
-			if(_irqReloadEnabled) {
-				_irqCounter = _irqReloadValue;
-			} else {
+			CPU::SetIRQSource(IRQSource::External);
+			_irqCounter = _irqReloadValue;
+			if(!_irqRepeatEnabled) {
 				_irqEnabled = false;
 			}
+		} else {
+			_irqCounter--;
 		}
 	}
 }
@@ -308,29 +303,32 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 	switch(addr) {
 		case 0x4020:
 			_irqReloadValue = (_irqReloadValue & 0xFF00) | value;
-			CPU::ClearIRQSource(IRQSource::External);
 			break;
 
 		case 0x4021:
 			_irqReloadValue = (_irqReloadValue & 0x00FF) | (value << 8);
-			CPU::ClearIRQSource(IRQSource::External);
 			break;
 
 		case 0x4022:
-			_irqReloadEnabled = (value & 0x01) == 0x01;
-			_irqEnabled = (value & 0x02) == 0x02;
-			_irqCounter = _irqReloadValue;
-			if(_irqEnabled && !_irqReloadEnabled) {
-				//Needed by Kaettekita Mario Bros
-				//If done when _irqEnabled is false, Lutter breaks
-				_irqReloadValue = 0;
+			_irqRepeatEnabled = (value & 0x01) == 0x01;
+			_irqEnabled = (value & 0x02) == 0x02 && _diskRegEnabled;
+
+			if(_irqEnabled) {
+				_irqCounter = _irqReloadValue;
+			} else {
+				CPU::ClearIRQSource(IRQSource::External);
 			}
-			CPU::ClearIRQSource(IRQSource::External);
 			break;
 
 		case 0x4023:
 			_diskRegEnabled = (value & 0x01) == 0x01;
 			_soundRegEnabled = (value & 0x02) == 0x02;
+
+			if(!_diskRegEnabled) {
+				_irqEnabled = false;
+				CPU::ClearIRQSource(IRQSource::External);
+				CPU::ClearIRQSource(IRQSource::FdsDisk);
+			}
 			break;
 
 		case 0x4024:
@@ -430,10 +428,12 @@ void FDS::StreamState(bool saving)
 {
 	BaseMapper::StreamState(saving);
 
+	bool unusedNeedIrq = false;
+
 	SnapshotInfo audio{ _audio.get() };
-	Stream(_irqReloadValue, _irqCounter, _irqEnabled, _irqReloadEnabled, _diskRegEnabled, _soundRegEnabled, _writeDataReg, _motorOn, _resetTransfer,
+	Stream(_irqReloadValue, _irqCounter, _irqEnabled, _irqRepeatEnabled, _diskRegEnabled, _soundRegEnabled, _writeDataReg, _motorOn, _resetTransfer,
 		_readMode, _crcControl, _diskReady, _diskIrqEnabled, _extConWriteReg, _badCrc, _endOfHead, _readWriteEnabled, _readDataReg, _diskWriteProtected,
-		_diskNumber, _newDiskNumber, _newDiskInsertDelay, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, _needIrq,
+		_diskNumber, _newDiskNumber, _newDiskInsertDelay, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, unusedNeedIrq,
 		_transferComplete, _isDirty, audio);
 
 	if(!saving) {

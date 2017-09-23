@@ -24,7 +24,7 @@ private:
 	uint16_t _irqReloadValue = 0;
 	uint16_t _irqCounter = 0;
 	bool _irqEnabled = false;
-	bool _irqReloadEnabled = false;
+	bool _irqRepeatEnabled = false;
 
 	bool _diskRegEnabled = true;
 	bool _soundRegEnabled = true;
@@ -62,7 +62,6 @@ private:
 	bool _previousCrcControlFlag = false;
 	bool _gapEnded = true;
 	bool _scanningDisk = false;
-	bool _needIrq = false;
 	bool _transferComplete = false;
 	bool _isDirty = false;
 	
