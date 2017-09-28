@@ -146,24 +146,26 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			bool shift = keyData.HasFlag(Keys.Shift);
-			keyData &= ~Keys.Shift;
+			if(this.tabMain.SelectedTab == tpgChrViewer && !this.nudScanline.Focused && !this.nudCycle.Focused) {
+				bool shift = keyData.HasFlag(Keys.Shift);
+				keyData &= ~Keys.Shift;
 
-			if(keyData >= Keys.D1 && keyData <= Keys.D8) {
-				if(shift) {
-					this.ctrlChrViewer.SelectPalette(keyData - Keys.D1);
-				} else {
-					this.ctrlChrViewer.SelectColor((keyData - Keys.D1) % 4);
+				if(keyData >= Keys.D1 && keyData <= Keys.D8) {
+					if(shift) {
+						this.ctrlChrViewer.SelectPalette(keyData - Keys.D1);
+					} else {
+						this.ctrlChrViewer.SelectColor((keyData - Keys.D1) % 4);
+					}
+					return true;
 				}
-				return true;
-			}
-			if(keyData >= Keys.NumPad1 && keyData <= Keys.NumPad8) {
-				if(shift) {
-					this.ctrlChrViewer.SelectPalette(keyData - Keys.NumPad1);
-				} else {
-					this.ctrlChrViewer.SelectColor((keyData - Keys.NumPad1) % 4);
+				if(keyData >= Keys.NumPad1 && keyData <= Keys.NumPad8) {
+					if(shift) {
+						this.ctrlChrViewer.SelectPalette(keyData - Keys.NumPad1);
+					} else {
+						this.ctrlChrViewer.SelectColor((keyData - Keys.NumPad1) % 4);
+					}
+					return true;
 				}
-				return true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
