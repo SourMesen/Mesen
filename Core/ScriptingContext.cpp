@@ -3,6 +3,8 @@
 #include "ScriptingContext.h"
 #include "DebuggerTypes.h"
 
+string ScriptingContext::_log = "";
+
 void ScriptingContext::Log(string message)
 {
 	auto lock = _logLock.AcquireSafe();

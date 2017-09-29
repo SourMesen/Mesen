@@ -113,7 +113,9 @@ namespace Mesen.GUI.Debugger
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.GameStopped) {
 				this._scriptId = -1;
-				lblScriptActive.Visible = false;
+				this.BeginInvoke((Action)(() => {
+					lblScriptActive.Visible = false;
+				}));
 			}
 		}
 

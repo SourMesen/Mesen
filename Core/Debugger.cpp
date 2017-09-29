@@ -27,6 +27,7 @@
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
+string Debugger::_disassemblerOutput = "";
 
 Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
 {
@@ -81,6 +82,8 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_bpUpdateNeeded = false;
 	_executionStopped = false;
 	_hideTopOfCallstack = false;
+
+	_disassemblerOutput = "";
 	
 	memset(_inputOverride, 0, sizeof(_inputOverride));
 

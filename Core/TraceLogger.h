@@ -37,6 +37,10 @@ class TraceLogger
 {
 private:
 	static TraceLogger *_instance;
+
+	//Must be static to be thread-safe when switching game
+	static string _executionTrace;
+	
 	TraceLoggerOptions _options;
 	string _outputFilepath;
 	string _outputBuffer;
@@ -64,7 +68,6 @@ private:
 	DisassemblyInfo _disassemblyCacheCopy[ExecutionLogSize];
 
 	SimpleLock _lock;
-	string _executionTrace;
 	
 	void GetStatusFlag(string &output, uint8_t ps);
 	void AddRow(DisassemblyInfo &disassemblyInfo, DebugState &state);

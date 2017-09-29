@@ -12,6 +12,7 @@
 #include "../Utilities/FolderUtilities.h"
 
 TraceLogger *TraceLogger::_instance = nullptr;
+string TraceLogger::_executionTrace = "";
 
 TraceLogger::TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager)
 {

@@ -37,6 +37,9 @@ private:
 
 	const static int BreakpointTypeCount = 6;
 
+	//Must be static to be thread-safe when switching game
+	static string _disassemblerOutput;
+
 	shared_ptr<Disassembler> _disassembler;
 	shared_ptr<Assembler> _assembler;
 	shared_ptr<MemoryDumper> _memoryDumper;
@@ -93,7 +96,6 @@ private:
 	uint32_t _flags;
 
 	string _romName;
-	string _disassemblerOutput;
 	atomic<int32_t> _stepCount;
 	atomic<int32_t> _ppuStepCount;
 	atomic<int32_t> _stepCycleCount;

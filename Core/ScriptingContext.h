@@ -18,8 +18,11 @@ enum class CallbackType
 class ScriptingContext
 {
 private:
+	//Must be static to be thread-safe when switching game
+	//UI updates all script windows in a single thread, so this is safe
+	static string _log;
+
 	std::deque<string> _logRows;
-	string _log;
 	SimpleLock _logLock;
 	bool _inStartFrameEvent = false;
 
