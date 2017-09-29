@@ -716,7 +716,7 @@ uint8_t PPU::GetPixelColor()
 
 				if(spriteColor != 0) {
 					//First sprite without a 00 color, use it.
-					if(i == 0 && backgroundColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && !_statusFlags.Sprite0Hit && _cycle > _minimumDrawSpriteStandardCycle) {
+					if(i == 0 && spriteBgColor != 0 && _sprite0Visible && _cycle != 256 && _flags.BackgroundEnabled && !_statusFlags.Sprite0Hit && _cycle > _minimumDrawSpriteStandardCycle) {
 						//"The hit condition is basically sprite zero is in range AND the first sprite output unit is outputting a non-zero pixel AND the background drawing unit is outputting a non-zero pixel."
 						//"Sprite zero hits do not register at x=255" (cycle 256)
 						//"... provided that background and sprite rendering are both enabled"
