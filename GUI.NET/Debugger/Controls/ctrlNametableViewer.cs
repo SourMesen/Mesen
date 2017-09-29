@@ -177,9 +177,9 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picNametable_MouseMove(object sender, MouseEventArgs e)
 		{
-			int xPos = e.X * 512 / picNametable.Width;
-			int yPos = e.Y * 480 / picNametable.Height;
-
+			int xPos = e.X * 512 / (picNametable.Width - 2);
+			int yPos = e.Y * 480 / (picNametable.Height - 2);
+			
 			_nametableIndex = 0;
 			if(xPos >= 256) {
 				_nametableIndex++;

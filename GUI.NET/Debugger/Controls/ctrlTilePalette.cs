@@ -131,13 +131,13 @@ namespace Mesen.GUI.Debugger.Controls
 		
 		private void picPaletteSelection_MouseMove(object sender, MouseEventArgs e)
 		{
-			_hoverColor = e.X * 128 / this.Width / 32;
+			_hoverColor = e.X * 128 / (this.Width - 2) / 32;
 			RefreshPalette();
 		}
 
 		private void picPaletteSelection_MouseDown(object sender, MouseEventArgs e)
 		{
-			this.SelectedColor = e.X * 128 / this.Width / 32;
+			this.SelectedColor = e.X * 128 / (this.Width - 2) / 32;
 			RefreshPalette();
 		}
 

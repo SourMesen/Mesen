@@ -69,8 +69,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picPalette_MouseMove(object sender, MouseEventArgs e)
 		{
-			int tileX = Math.Min(e.X * 128 / picPalette.Width / 32, 31);
-			int tileY = Math.Min(e.Y * 256 / picPalette.Height / 32, 31);
+			int tileX = Math.Min(e.X * 128 / (picPalette.Width - 2) / 32, 31);
+			int tileY = Math.Min(e.Y * 256 / (picPalette.Height - 2) / 32, 31);
 
 			int tileIndex = tileY * 4 + tileX;
 

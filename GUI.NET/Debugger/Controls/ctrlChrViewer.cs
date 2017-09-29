@@ -217,8 +217,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picChrBank_MouseMove(object sender, MouseEventArgs e)
 		{
-			int tileX = Math.Min(e.X * 256 / picChrBank1.Width / 16, 15);
-			int tileY = Math.Min(e.Y * 256 / picChrBank1.Height / 16, 15);
+			int tileX = Math.Min(e.X * 256 / (picChrBank1.Width - 2) / 16, 15);
+			int tileY = Math.Min(e.Y * 256 / (picChrBank1.Height - 2) / 16, 15);
 
 			bool bottomBank = sender == this.picChrBank2;
 			int tileIndex = tileY * 16 + tileX;
@@ -234,8 +234,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picChrBank_MouseDown(object sender, MouseEventArgs e)
 		{
-			int tileX = Math.Min(e.X * 256 / picChrBank1.Width / 16, 15);
-			int tileY = Math.Min(e.Y * 256 / picChrBank1.Height / 16, 15);
+			int tileX = Math.Min(e.X * 256 / (picChrBank1.Width - 2) / 16, 15);
+			int tileY = Math.Min(e.Y * 256 / (picChrBank1.Height - 2)/ 16, 15);
 
 			_tileIndex = tileY * 16 + tileX;
 			_bottomBank = sender == this.picChrBank2;
