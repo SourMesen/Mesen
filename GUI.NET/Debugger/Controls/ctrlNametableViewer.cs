@@ -179,7 +179,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			int xPos = e.X * 512 / picNametable.Width;
 			int yPos = e.Y * 480 / picNametable.Height;
-			
+
 			_nametableIndex = 0;
 			if(xPos >= 256) {
 				_nametableIndex++;
@@ -192,7 +192,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 			_tileX = Math.Min(xPos / 8, 63);
 			_tileY = Math.Min(yPos / 8, 59);
-			int shift = (_tileX & 0x02) | ((_tileY & 0x02) << 1);
 
 			if(_nametableIndex % 2 == 1) {
 				_tileX -= 32;
@@ -201,6 +200,7 @@ namespace Mesen.GUI.Debugger.Controls
 				_tileY -= 30;
 			}
 
+			int shift = (_tileX & 0x02) | ((_tileY & 0x02) << 1);
 			int ppuAddress = (baseAddress + _tileX + _tileY * 32);
 			if(_currentPpuAddress == ppuAddress) {
 				return;
