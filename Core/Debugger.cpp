@@ -926,11 +926,13 @@ void Debugger::SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle)
 	_ppuViewerCycle = cycle;
 }
 
-void Debugger::SetLastFramePpuScroll(uint16_t x, uint16_t y)
+void Debugger::SetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly)
 {
 	if(Debugger::Instance) {
-		Debugger::Instance->_ppuScrollX = x;
-		Debugger::Instance->_ppuScrollY = y;
+		Debugger::Instance->_ppuScrollX = ((addr & 0x1F) << 3) | xScroll | ((addr & 0x400) ? 0x100 : 0);
+		if(!updateHorizontalScrollOnly) {
+			Debugger::Instance->_ppuScrollY = (((addr & 0x3E0) >> 2) | ((addr & 0x7000) >> 12)) + ((addr & 0x800) ? 240 : 0);
+		}
 	}
 }
 

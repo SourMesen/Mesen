@@ -330,6 +330,9 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			} else {
 				_state.XScroll = value & 0x07;
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x001F) | (value >> 3);
+
+				//Update debugger overlay X scroll only
+				Debugger::SetLastFramePpuScroll(_state.TmpVideoRamAddr, _state.XScroll, false);
 			}
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
@@ -341,6 +344,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				//A 3-cycle delay causes issues with the scanline test.
 				_updateVramAddrDelay = 2;
 				_updateVramAddr = _state.TmpVideoRamAddr;
+				Debugger::SetLastFramePpuScroll(_updateVramAddr, _state.XScroll, false);
 			} else {
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0xFF00) | ((value & 0x3F) << 8);
 			}
@@ -843,10 +847,7 @@ void PPU::ProcessScanline()
 				_oamCopybuffer = _secondarySpriteRAM[0];
 			}
 			if(_scanline == -1) {
-				Debugger::SetLastFramePpuScroll(
-					((_state.VideoRamAddr & 0x1F) << 3) | _state.XScroll | ((_state.VideoRamAddr & 0x400) ? 0x100 : 0),
-					(((_state.VideoRamAddr & 0x3E0) >> 2) | ((_state.VideoRamAddr & 0x7000) >> 12)) + ((_state.VideoRamAddr & 0x800) ? 240 : 0)
-				);
+				Debugger::SetLastFramePpuScroll(_state.VideoRamAddr, _state.XScroll, false);
 			}
 		} else if(_prevRenderingEnabled && (_cycle == 328 || _cycle == 336)) {
 			_state.LowBitShift <<= 8;

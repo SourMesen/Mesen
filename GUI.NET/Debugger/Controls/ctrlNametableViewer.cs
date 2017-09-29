@@ -25,6 +25,8 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _currentPpuAddress = -1;
 		private int _tileX = 0;
 		private int _tileY = 0;
+		private int _xScroll = 0;
+		private int _yScroll = 0;
 		private int _nametableIndex = 0;
 		private ctrlChrViewer _chrViewer;
 
@@ -48,6 +50,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void GetData()
 		{
+			InteropEmu.DebugGetPpuScroll(out _xScroll, out _yScroll);
+
 			for(int i = 0; i < 4; i++) {
 				InteropEmu.DebugGetNametable(i, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
 			}
@@ -56,9 +60,6 @@ namespace Mesen.GUI.Debugger.Controls
 		public void RefreshViewer()
 		{
 			_currentPpuAddress = -1;
-
-			int xScroll, yScroll;
-			InteropEmu.DebugGetPpuScroll(out xScroll, out yScroll);
 
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
@@ -114,7 +115,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				if(chkShowPpuScrollOverlay.Checked) {
-					DrawScrollOverlay(xScroll, yScroll, g);
+					DrawScrollOverlay(_xScroll, _yScroll, g);
 				}
 			}
 

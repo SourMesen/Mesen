@@ -196,7 +196,7 @@ public:
 	static void ProcessVramWriteOperation(uint16_t addr, uint8_t &value);
 	static void ProcessPpuCycle();
 	
-	static void SetLastFramePpuScroll(uint16_t x, uint16_t y);
+	static void SetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly);
 	uint32_t GetPpuScroll();
 
 	static void ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);

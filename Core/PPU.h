@@ -224,7 +224,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		{
 			return _secondarySpriteRAM;
 		}
-
+		
 		static uint32_t GetPixelBrightness(uint8_t x, uint8_t y)
 		{
 			//Used by Zapper, gives a rough approximation of the brightness level of the specific pixel
