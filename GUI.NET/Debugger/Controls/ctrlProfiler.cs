@@ -18,6 +18,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private Int64[] _exclusiveTime;
 		private Int64[] _inclusiveTime;
 		private Int64[] _callCount;
+		private object _resetLock = new object();
 
 		private int _sortColumn = 5;
 		private bool _sortOrder = true;
@@ -34,10 +35,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void RefreshData()
 		{
-			_exclusiveTime = InteropEmu.DebugGetProfilerData(ProfilerDataType.FunctionExclusive);
-			_inclusiveTime = InteropEmu.DebugGetProfilerData(ProfilerDataType.FunctionInclusive);
-			_callCount = InteropEmu.DebugGetProfilerData(ProfilerDataType.FunctionCallCount);
-
+			lock(_resetLock) {
+				_exclusiveTime = InteropEmu.DebugGetProfilerData(ProfilerDataType.FunctionExclusive);
+				_inclusiveTime = InteropEmu.DebugGetProfilerData(ProfilerDataType.FunctionInclusive);
+				_callCount = InteropEmu.DebugGetProfilerData(ProfilerDataType.FunctionCallCount);
+			}
 			RefreshList();
 		}
 
@@ -108,7 +110,9 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void btnReset_Click(object sender, EventArgs e)
 		{
-			InteropEmu.DebugResetProfiler();
+			lock(_resetLock) {
+				InteropEmu.DebugResetProfiler();
+			}
 			RefreshData();
 		}
 

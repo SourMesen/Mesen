@@ -7,20 +7,7 @@
 Profiler::Profiler(Debugger * debugger)
 {
 	_debugger = debugger;
-
-	_nextFunctionAddr = -1;
-	_currentCycleCount = 0;
-	_currentInstruction = 0;
-
-	int size = _debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::PrgRom);
-	_resetFunctionIndex = size;
-	_inMemoryFunctionIndex = size + 1;
-	_currentFunction = _resetFunctionIndex;
-
-	_cyclesByInstruction.insert(_cyclesByInstruction.end(), size + 2, 0);
-	_cyclesByFunction.insert(_cyclesByFunction.end(), size + 2, 0);
-	_cyclesByFunctionInclusive.insert(_cyclesByFunctionInclusive.end(), size + 2, 0);
-	_functionCallCount.insert(_functionCallCount.end(), size + 2, 0);
+	InternalReset();
 }
 
 void Profiler::ProcessCycle()
@@ -91,22 +78,33 @@ void Profiler::ProcessInstructionStart(int32_t absoluteAddr)
 void Profiler::Reset()
 {
 	DebugBreakHelper helper(_debugger);
+	InternalReset();
+}
+
+void Profiler::InternalReset()
+{
+	_nextFunctionAddr = -1;
+	_currentCycleCount = 0;
+	_currentInstruction = 0;
+
+	int size = _debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::PrgRom);
+	_resetFunctionIndex = size;
+	_inMemoryFunctionIndex = size + 1;
+	_currentFunction = _resetFunctionIndex;
 
 	_cyclesByInstruction.clear();
 	_cyclesByFunction.clear();
 	_cyclesByFunctionInclusive.clear();
 	_functionCallCount.clear();
 
-	_functionStack = std::stack<int32_t>();
-	_jsrStack = std::stack<int32_t>();
-	_cycleCountStack = std::stack<uint64_t>();
-
-	_currentCycleCount = 0;
+	_cyclesByInstruction.insert(_cyclesByInstruction.end(), size + 2, 0);
+	_cyclesByFunction.insert(_cyclesByFunction.end(), size + 2, 0);
+	_cyclesByFunctionInclusive.insert(_cyclesByFunctionInclusive.end(), size + 2, 0);
+	_functionCallCount.insert(_functionCallCount.end(), size + 2, 0);
 }
 
 void Profiler::GetProfilerData(int64_t * profilerData, ProfilerDataType type)
 {
-	DebugBreakHelper helper(_debugger);
 	vector<uint64_t> *dataArray = nullptr;
 
 	switch(type) {

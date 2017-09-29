@@ -36,6 +36,8 @@ private:
 	uint32_t _resetFunctionIndex;
 	uint32_t _inMemoryFunctionIndex;
 
+	void InternalReset();
+
 public:
 	Profiler(Debugger* debugger);
 
