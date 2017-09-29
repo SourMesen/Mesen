@@ -79,7 +79,7 @@
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(682, 516);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(682, 527);
 			this.tableLayoutPanel3.TabIndex = 3;
 			// 
 			// grpSpriteInfo
@@ -88,7 +88,7 @@
 			this.grpSpriteInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpSpriteInfo.Location = new System.Drawing.Point(263, 3);
 			this.grpSpriteInfo.Name = "grpSpriteInfo";
-			this.grpSpriteInfo.Size = new System.Drawing.Size(416, 510);
+			this.grpSpriteInfo.Size = new System.Drawing.Size(416, 521);
 			this.grpSpriteInfo.TabIndex = 4;
 			this.grpSpriteInfo.TabStop = false;
 			this.grpSpriteInfo.Text = "Sprite Info";
@@ -128,7 +128,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(410, 491);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(410, 502);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// lblPalette
@@ -169,7 +169,7 @@
 			this.picPreview.ContextMenuStrip = this.ctxMenu;
 			this.picPreview.Location = new System.Drawing.Point(94, 257);
 			this.picPreview.Name = "picPreview";
-			this.picPreview.Size = new System.Drawing.Size(258, 231);
+			this.picPreview.Size = new System.Drawing.Size(258, 242);
 			this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picPreview.TabIndex = 21;
 			this.picPreview.TabStop = false;
@@ -402,11 +402,9 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Name = "ctrlSpriteViewer";
-			this.Size = new System.Drawing.Size(682, 516);
+			this.Size = new System.Drawing.Size(682, 527);
 			this.tableLayoutPanel3.ResumeLayout(false);
-			this.tableLayoutPanel3.PerformLayout();
 			this.grpSpriteInfo.ResumeLayout(false);
-			this.grpSpriteInfo.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();
