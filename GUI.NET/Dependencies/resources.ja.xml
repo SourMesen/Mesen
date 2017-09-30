@@ -247,6 +247,7 @@
       <Control ID="tpgGeneral">全般</Control>
       <Control ID="lblVideoScale">画面サイズ:</Control>
       <Control ID="lblVideoFilter">画面エフェクト:</Control>
+      <Control ID="chkIntegerFpsMode">60.0 fpsモードを有効にする　（普段の60.1fpsに対して）</Control>
       <Control ID="chkBilinearInterpolation">バイリニア補間を有効にする</Control>
       <Control ID="chkVerticalSync">垂直同期を有効にする</Control>
       <Control ID="lblDisplayRatio">画面アスペクト:</Control>

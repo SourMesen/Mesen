@@ -124,6 +124,7 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
+			this.chkIntegerFpsMode = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -170,16 +171,18 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 3);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 1);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 2);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 4);
 			this.tlpMain.Controls.Add(this.nudScale, 1, 0);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 1);
-			this.tlpMain.Controls.Add(this.chkFullscreenForceIntegerScale, 0, 4);
-			this.tlpMain.Controls.Add(this.chkShowFps, 0, 5);
+			this.tlpMain.Controls.Add(this.chkFullscreenForceIntegerScale, 0, 5);
+			this.tlpMain.Controls.Add(this.chkShowFps, 0, 6);
+			this.tlpMain.Controls.Add(this.chkIntegerFpsMode, 0, 2);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 7;
+			this.tlpMain.RowCount = 8;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -228,7 +231,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
 			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
 			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 46);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 92);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
 			this.flowLayoutPanel7.Size = new System.Drawing.Size(521, 23);
@@ -364,7 +367,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkFullscreenForceIntegerScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkFullscreenForceIntegerScale.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkFullscreenForceIntegerScale, 2);
-			this.chkFullscreenForceIntegerScale.Location = new System.Drawing.Point(3, 95);
+			this.chkFullscreenForceIntegerScale.Location = new System.Drawing.Point(3, 118);
 			this.chkFullscreenForceIntegerScale.Name = "chkFullscreenForceIntegerScale";
 			this.chkFullscreenForceIntegerScale.Size = new System.Drawing.Size(289, 17);
 			this.chkFullscreenForceIntegerScale.TabIndex = 23;
@@ -376,7 +379,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFps.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 118);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 141);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
@@ -1456,6 +1459,18 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
+			// chkIntegerFpsMode
+			// 
+			this.chkIntegerFpsMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkIntegerFpsMode.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkIntegerFpsMode, 2);
+			this.chkIntegerFpsMode.Location = new System.Drawing.Point(3, 49);
+			this.chkIntegerFpsMode.Name = "chkIntegerFpsMode";
+			this.chkIntegerFpsMode.Size = new System.Drawing.Size(295, 17);
+			this.chkIntegerFpsMode.TabIndex = 24;
+			this.chkIntegerFpsMode.Text = "Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)";
+			this.chkIntegerFpsMode.UseVisualStyleBackColor = true;
+			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1615,5 +1630,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkFullscreenForceIntegerScale;
 		private System.Windows.Forms.CheckBox chkShowColorIndexes;
 		private Debugger.ctrlPaletteDisplay ctrlPaletteDisplay;
+		private System.Windows.Forms.CheckBox chkIntegerFpsMode;
 	}
 }

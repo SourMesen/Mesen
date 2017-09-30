@@ -29,7 +29,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("UseBilinearInterpolation", chkBilinearInterpolation);
 			AddBinding("VerticalSync", chkVerticalSync);
 			AddBinding("UseHdPacks", chkUseHdPacks);
-			
+			AddBinding("IntegerFpsMode", chkIntegerFpsMode);
+
 			AddBinding("VideoScale", nudScale);
 			AddBinding("AspectRatio", cboAspectRatio);
 			AddBinding("CustomAspectRatio", nudCustomRatio);

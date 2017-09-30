@@ -181,6 +181,15 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 		newRate = (uint32_t)(newRate * (double)EmulationSettings::GetOverclockRate() / 100);
 	}
 
+	if(EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode)) {
+		//Adjust sample rate when running at 60.0 fps instead of 60.1
+		if(_model == NesModel::NTSC) {
+			newRate = (uint32_t)(newRate * 60.0 / 60.0988118623484);
+		} else {
+			newRate = (uint32_t)(newRate * 50.0 / 50.00697796826829);
+		}
+	}
+
 	if(_clockRate != newRate || forceUpdate) {
 		_clockRate = newRate;
 		blip_set_rates(_blipBufLeft, _clockRate, _sampleRate);

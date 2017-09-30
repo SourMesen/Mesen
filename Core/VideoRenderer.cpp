@@ -92,7 +92,7 @@ void VideoRenderer::StartRecording(string filename, VideoCodec codec, uint32_t c
 	shared_ptr<AviRecorder> recorder(new AviRecorder());
 
 	FrameInfo frameInfo = VideoDecoder::GetInstance()->GetFrameInfo();
-	if(recorder->StartRecording(filename, codec, frameInfo.Width, frameInfo.Height, frameInfo.BitsPerPixel, 60098814, EmulationSettings::GetSampleRate(), compressionLevel)) {
+	if(recorder->StartRecording(filename, codec, frameInfo.Width, frameInfo.Height, frameInfo.BitsPerPixel, EmulationSettings::GetSampleRate(), compressionLevel)) {
 		_aviRecorder = recorder;
 	}
 }

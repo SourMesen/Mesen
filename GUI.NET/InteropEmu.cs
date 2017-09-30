@@ -1238,6 +1238,8 @@ namespace Mesen.GUI
 		NsfRepeat = 0x800000000000,
 		NsfShuffle = 0x1000000000000,
 
+		IntegerFpsMode = 0x2000000000000,
+
 		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,
 	}

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "AviRecorder.h"
 #include "MessageManager.h"
+#include "Console.h"
+#include "EmulationSettings.h"
 
 AviRecorder::AviRecorder()
 {
@@ -23,18 +25,28 @@ AviRecorder::~AviRecorder()
 	}
 }
 
-bool AviRecorder::StartRecording(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t fps, uint32_t audioSampleRate, uint32_t compressionLevel)
+uint32_t AviRecorder::GetFps()
+{
+	if(Console::GetModel() == NesModel::NTSC) {
+		return EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 60000000 : 60098812;
+	} else {
+		return EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 50000000 : 50006978;
+	}
+}
+
+bool AviRecorder::StartRecording(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t audioSampleRate, uint32_t compressionLevel)
 {
 	if(!_recording) {
 		_outputFile = filename;
 		_sampleRate = audioSampleRate;
 		_width = width;
 		_height = height;
+		_fps = GetFps();
 		_frameBufferLength = height * width * bpp;
 		_frameBuffer = new uint8_t[_frameBufferLength];
 
 		_aviWriter.reset(new AviWriter());
-		if(!_aviWriter->StartWrite(filename, codec, width, height, bpp, fps, audioSampleRate, compressionLevel)) {
+		if(!_aviWriter->StartWrite(filename, codec, width, height, bpp, _fps, audioSampleRate, compressionLevel)) {
 			_aviWriter.reset();
 			return false;
 		}
@@ -76,7 +88,7 @@ void AviRecorder::StopRecording()
 void AviRecorder::AddFrame(void* frameBuffer, uint32_t width, uint32_t height)
 {
 	if(_recording) {
-		if(_width != width || _height != height) {
+		if(_width != width || _height != height || _fps != GetFps()) {
 			StopRecording();
 		} else {
 			auto lock = _lock.AcquireSafe();

@@ -245,6 +245,7 @@
       <Control ID="tpgGeneral">Общие</Control>
       <Control ID="lblVideoScale">Размер :</Control>
       <Control ID="lblVideoFilter">Фильтр :</Control>
+      <Control ID="chkIntegerFpsMode">Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)</Control>
       <Control ID="chkVerticalSync">Включить вертикальную синхронизацию</Control>
       <Control ID="lblDisplayRatio">Соотношение сторон :</Control>
       <Control ID="lblCustomRatio">Custom ratio:</Control>

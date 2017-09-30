@@ -531,9 +531,9 @@ double Console::GetFrameDelay()
 		//60.1fps (NTSC), 50.01fps (PAL/Dendy)
 		switch(_model) {
 			default:
-			case NesModel::NTSC: frameDelay = 16.63926405550947; break;
+			case NesModel::NTSC: frameDelay = EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 16.6666666666666666667 : 16.63926405550947; break;
 			case NesModel::PAL:
-			case NesModel::Dendy: frameDelay = 19.99720920217466; break;
+			case NesModel::Dendy: frameDelay = EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 20 : 19.99720920217466; break;
 		}
 		frameDelay /= (double)emulationSpeed / 100.0;
 	}

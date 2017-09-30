@@ -22,14 +22,17 @@ private:
 	uint32_t _frameBufferLength;
 	uint32_t _sampleRate;
 
+	uint32_t _fps;
 	uint32_t _width;
 	uint32_t _height;
+
+	uint32_t GetFps();
 
 public:
 	AviRecorder();
 	virtual ~AviRecorder();
 
-	bool StartRecording(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t fps, uint32_t audioSampleRate, uint32_t compressionLevel);
+	bool StartRecording(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t audioSampleRate, uint32_t compressionLevel);
 	void StopRecording();
 
 	void AddFrame(void* frameBuffer, uint32_t width, uint32_t height);

@@ -23,6 +23,7 @@ namespace Mesen.GUI.Config
 		[MinMax(0.1, 5.0)] public double CustomAspectRatio = 1.0;
 		public bool VerticalSync = false;
 		public bool UseHdPacks = false;
+		public bool IntegerFpsMode = false;
 		public string PaletteData;
 
 		[MinMax(-100, 100)] public Int32 Brightness = 0;
@@ -66,6 +67,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.ShowFPS, videoInfo.ShowFPS);
 			InteropEmu.SetFlag(EmulationFlags.VerticalSync, videoInfo.VerticalSync);
 			InteropEmu.SetFlag(EmulationFlags.UseHdPacks, videoInfo.UseHdPacks);
+			InteropEmu.SetFlag(EmulationFlags.IntegerFpsMode, videoInfo.IntegerFpsMode);
 
 			InteropEmu.SetFlag(EmulationFlags.DisableBackground, videoInfo.DisableBackground);
 			InteropEmu.SetFlag(EmulationFlags.DisableSprites, videoInfo.DisableSprites);

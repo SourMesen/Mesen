@@ -243,6 +243,7 @@
       <Control ID="tpgGeneral">General</Control>
       <Control ID="lblVideoScale">Escala:</Control>
       <Control ID="lblVideoFilter">Filtre:</Control>
+      <Control ID="chkIntegerFpsMode">Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)</Control>
       <Control ID="chkVerticalSync">Activa la sincronització vertical</Control>
       <Control ID="lblDisplayRatio">Relació d'aspecte:</Control>
       <Control ID="lblCustomRatio">Relació personalitzada:</Control>
