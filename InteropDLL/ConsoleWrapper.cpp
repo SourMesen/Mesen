@@ -20,6 +20,7 @@
 #include "../Core/IRenderingDevice.h"
 #include "../Core/IAudioDevice.h"
 #include "../Core/MovieManager.h"
+#include "../Core/VirtualFile.h"
 #include "../Core/HdPackBuilder.h"
 #include "../Utilities/AviWriter.h"
 #include "../Core/ShortcutKeyHandler.h"
@@ -128,7 +129,7 @@ namespace InteropEmu {
 			std::ostringstream out;
 			shared_ptr<ArchiveReader> reader = ArchiveReader::GetReader(filename);
 			if(reader) {
-				for(string romName : reader->GetFileList({ ".nes", ".fds", ".nsf", ".nsfe", "*.unf" })) {
+				for(string romName : reader->GetFileList(VirtualFile::RomExtensions)) {
 					out << romName << "[!|!]";
 				}
 			}

@@ -758,6 +758,7 @@
     <ClInclude Include="UnRom_94.h" />
     <ClInclude Include="VideoDecoder.h" />
     <ClInclude Include="BaseVideoFilter.h" />
+    <ClInclude Include="VirtualFile.h" />
     <ClInclude Include="VRC1.h" />
     <ClInclude Include="VRC2_4.h" />
     <ClInclude Include="VRC3.h" />
@@ -875,6 +876,7 @@
     <ClCompile Include="VideoRenderer.cpp" />
     <ClCompile Include="VideoDecoder.cpp" />
     <ClCompile Include="BaseVideoFilter.cpp" />
+    <ClCompile Include="VirtualFile.cpp" />
     <ClCompile Include="VsControlManager.cpp" />
     <ClCompile Include="ScaleFilter.cpp" />
     <ClCompile Include="VsZapper.cpp" />

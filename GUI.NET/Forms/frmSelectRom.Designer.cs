@@ -75,7 +75,6 @@
 			this.lstRoms.Size = new System.Drawing.Size(457, 182);
 			this.lstRoms.TabIndex = 1;
 			this.lstRoms.SelectedIndexChanged += new System.EventHandler(this.lstRoms_SelectedIndexChanged);
-			this.lstRoms.DoubleClick += new System.EventHandler(this.lstRoms_DoubleClick);
 			// 
 			// flowLayoutPanel1
 			// 
@@ -99,7 +98,6 @@
 			this.btnOK.TabIndex = 0;
 			this.btnOK.Text = "OK";
 			this.btnOK.UseVisualStyleBackColor = true;
-			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
 			// 
 			// btnCancel
 			// 

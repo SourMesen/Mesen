@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "HdData.h"
 #include "../Utilities/ZipReader.h"
-#include "../Utilities/VirtualFile.h"
+#include "HdData.h"
+#include "VirtualFile.h"
 
 class HdPackLoader
 {

@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include <atomic>
 #include "../Utilities/SimpleLock.h"
-#include "../Utilities/VirtualFile.h"
+#include "VirtualFile.h"
 #include "RomData.h"
 
 class Debugger;

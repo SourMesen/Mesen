@@ -158,9 +158,6 @@
     <ClInclude Include="ArchiveReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VirtualFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stb_vorbis.h">
       <Filter>Header Files</Filter>
     </ClInclude>

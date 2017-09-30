@@ -215,9 +215,10 @@ void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 
 	Console::Pause();
 	try {
-		Console::LoadROM(romPath, patchPath);
-		if(!resetGame) {
-			SaveStateManager::LoadState(stateStream, false);
+		if(Console::LoadROM(romPath, patchPath)) {
+			if(!resetGame) {
+				SaveStateManager::LoadState(stateStream, false);
+			}
 		}
 	} catch(std::exception ex) { 
 		Console::GetInstance()->Stop();

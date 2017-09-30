@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include <algorithm>
 #include <unordered_set>
-#include "../Utilities/VirtualFile.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/CRC32.h"
 #include "../Utilities/sha1.h"
+#include "../Utilities/ArchiveReader.h"
+#include "VirtualFile.h"
 #include "RomLoader.h"
 #include "iNesLoader.h"
 #include "FdsLoader.h"
@@ -98,7 +99,7 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo)
 {
 	shared_ptr<ArchiveReader> reader = ArchiveReader::GetReader(filePath);
 	if(reader) {
-		for(string file : reader->GetFileList({ ".nes", ".fds", "*.unif", "*.unif", "*.nsf", "*.nsfe" })) {
+		for(string file : reader->GetFileList(VirtualFile::RomExtensions)) {
 			RomLoader loader;
 			vector<uint8_t> fileData;
 			if(loader.LoadFile(filePath)) {

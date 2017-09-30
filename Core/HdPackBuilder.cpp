@@ -1,6 +1,6 @@
 #include <algorithm>
 #include "stdafx.h"
-#include "../Utilities/VirtualFile.h"
+#include "VirtualFile.h"
 #include "HdPackBuilder.h"
 
 HdPackBuilder* HdPackBuilder::_instance = nullptr;

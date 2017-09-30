@@ -32,7 +32,6 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void LoadRecentGame([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath, [MarshalAs(UnmanagedType.I1)]bool resetGame);
 
 		[DllImport(DLLPath, EntryPoint = "GetArchiveRomList")] private static extern IntPtr GetArchiveRomListWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
-		public static List<string> GetArchiveRomList(string filename) { return new List<string>(PtrToStringUtf8(InteropEmu.GetArchiveRomListWrapper(filename)).Split(new string[] { "[!|!]" }, StringSplitOptions.RemoveEmptyEntries)); }
 
 		[DllImport(DLLPath)] public static extern void SetMousePosition(double x, double y);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasZapper();
@@ -671,6 +670,65 @@ namespace Mesen.GUI
 			return new List<string>(PtrToStringUtf8(InteropEmu.GetAudioDevicesWrapper()).Split(new string[1] { "||" }, StringSplitOptions.RemoveEmptyEntries));
 		}
 
+		public class ArchiveRomEntry
+		{
+			public string Filename;
+			public bool IsUtf8;
+
+			public override string ToString()
+			{
+				return Filename;
+			}
+		}
+
+		public static List<ArchiveRomEntry> GetArchiveRomList(string filename)
+		{
+			//Split the array on the [!|!] delimiter
+			byte[] buffer = PtrToByteArray(InteropEmu.GetArchiveRomListWrapper(filename));
+			List<List<byte>> filenames = new List<List<byte>>();
+			List<byte> filenameBytes = new List<byte>();
+			for(int i = 0; i < buffer.Length - 5; i++) {
+				if(buffer[i] == '[' && buffer[i+1] == '!' && buffer[i+2] == '|' && buffer[i+3] == '!' && buffer[i+4] == ']') {
+					filenames.Add(filenameBytes);
+					filenameBytes = new List<byte>();
+					i+=4;
+				} else {
+					filenameBytes.Add(buffer[i]);
+				}
+			}
+			filenames.Add(filenameBytes);
+
+			List<ArchiveRomEntry> entries = new List<ArchiveRomEntry>();
+
+			//Check whether or not each string is a valid utf8 filename, if not decode it using the system's default encoding.
+			//This is necessary because zip files do not have any rules when it comes to encoding filenames
+			for(int i = 0; i < filenames.Count; i++) {
+				byte[] originalBytes = filenames[i].ToArray();
+				string utf8Filename = Encoding.UTF8.GetString(originalBytes);
+				byte[] convertedBytes = Encoding.UTF8.GetBytes(utf8Filename);
+				bool equal = true;
+				if(originalBytes.Length == convertedBytes.Length) {
+					for(int j = 0; j < convertedBytes.Length; j++) {
+						if(convertedBytes[j] != originalBytes[j]) {
+							equal = false;
+							break;
+						}
+					}
+				} else {
+					equal = false;
+				}
+
+				if(!equal) {
+					//String doesn't appear to be an utf8 string, use the system's default encoding
+					entries.Add(new ArchiveRomEntry() { Filename = Encoding.Default.GetString(originalBytes), IsUtf8 = false });
+				} else {
+					entries.Add(new ArchiveRomEntry() { Filename = utf8Filename, IsUtf8 = true });
+				}
+			}
+
+			return entries;
+		}
+
 		private static byte[] _codeByteArray = new byte[0];
 		private static string PtrToStringUtf8(IntPtr ptr, UInt32 length = 0)
 		{
@@ -703,6 +761,23 @@ namespace Mesen.GUI
 				System.Runtime.InteropServices.Marshal.Copy(ptr, _codeByteArray, 0, len);
 				return System.Text.Encoding.UTF8.GetString(_codeByteArray, 0, len);
 			}
+		}
+
+		private static byte[] PtrToByteArray(IntPtr ptr)
+		{
+			if(ptr == IntPtr.Zero) {
+				return new byte[0];
+			}
+
+			int len = 0;
+			while(System.Runtime.InteropServices.Marshal.ReadByte(ptr, len) != 0) {
+				len++;
+			}
+
+			byte[] array = new byte[len];
+			System.Runtime.InteropServices.Marshal.Copy(ptr, array, 0, len);
+
+			return array;
 		}
 
 		public enum ConsoleNotificationType

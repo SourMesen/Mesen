@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "../Utilities/stb_vorbis.h"
 #include "../Utilities/blip_buf.h"
-#include "../Utilities/VirtualFile.h"
+#include "VirtualFile.h"
 #include "EmulationSettings.h"
 
 class OggReader

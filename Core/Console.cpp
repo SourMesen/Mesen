@@ -18,7 +18,7 @@
 #include "../Utilities/Timer.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/PlatformUtilities.h"
-#include "../Utilities/VirtualFile.h"
+#include "VirtualFile.h"
 #include "HdBuilderPpu.h"
 #include "HdPpu.h"
 #include "NsfPpu.h"

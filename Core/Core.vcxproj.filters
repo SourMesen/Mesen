@@ -1240,6 +1240,9 @@
     <ClInclude Include="LuaScriptingContext.h">
       <Filter>Debugger\Scripting\Lua</Filter>
     </ClInclude>
+    <ClInclude Include="VirtualFile.h">
+      <Filter>Nes\RomLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1502,6 +1505,9 @@
     </ClCompile>
     <ClCompile Include="HdAudioDevice.cpp">
       <Filter>HdPacks</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualFile.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
