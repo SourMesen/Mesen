@@ -120,12 +120,28 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 
+		private void SetUpdateScanlineCycle(int scanline, int cycle)
+		{
+			scanline = Math.Min(260, Math.Max(-1, scanline));
+			cycle = Math.Min(340, Math.Max(0, cycle));
+
+			InteropEmu.DebugSetPpuViewerScanlineCycle(scanline, cycle);
+			ConfigManager.Config.DebugInfo.PpuDisplayScanline = scanline;
+			ConfigManager.Config.DebugInfo.PpuDisplayCycle = cycle;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void nudScanlineCycle_TextChanged(object sender, EventArgs e)
+		{
+			int scanline, cycle;
+			if(int.TryParse(this.nudScanline.Text, out scanline) && int.TryParse(this.nudCycle.Text, out cycle)) {
+				SetUpdateScanlineCycle(int.Parse(this.nudScanline.Text), int.Parse(this.nudCycle.Text));
+			}
+		}
+
 		private void nudScanlineCycle_ValueChanged(object sender, EventArgs e)
 		{
-			InteropEmu.DebugSetPpuViewerScanlineCycle((int)this.nudScanline.Value, (int)this.nudCycle.Value);
-			ConfigManager.Config.DebugInfo.PpuDisplayScanline = (int)this.nudScanline.Value;
-			ConfigManager.Config.DebugInfo.PpuDisplayCycle = (int)this.nudCycle.Value;
-			ConfigManager.ApplyChanges();
+			SetUpdateScanlineCycle((int)this.nudScanline.Value, (int)this.nudCycle.Value);
 		}
 
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)

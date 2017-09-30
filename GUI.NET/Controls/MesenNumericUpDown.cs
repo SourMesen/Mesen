@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,29 +13,15 @@ namespace Mesen.GUI.Controls
 	{
 		private NumericUpDown nud;
 
-		public event EventHandler ValueChanged
-		{
-			add { nud.ValueChanged += value; }
-			remove { nud.ValueChanged -= value; }
-		}
+		public event EventHandler ValueChanged	{ add { nud.ValueChanged += value; } remove { nud.ValueChanged -= value; }	}
+		public new event EventHandler Validated { add { nud.Validated += value; } remove { nud.Validated -= value; } }
+		public new event EventHandler Click { add { nud.Click += value; } remove { nud.Click -= value; } }
+		public new event KeyEventHandler KeyDown { add { nud.KeyDown += value; } remove { nud.KeyDown -= value; } }
+		public new event KeyPressEventHandler KeyPress { add { nud.KeyPress += value; } remove { nud.KeyPress -= value; } }
 
-		public new event EventHandler Validated
-		{
-			add { nud.Validated += value; }
-			remove { nud.Validated -= value; }
-		}
-
-		public new event EventHandler Click
-		{
-			add { nud.Click += value; }
-			remove { nud.Click -= value; }
-		}
-
-		public new event KeyEventHandler KeyDown
-		{
-			add { nud.KeyDown += value; }
-			remove { nud.KeyDown -= value; }
-		}
+		[Browsable(true)]
+		[EditorBrowsable(EditorBrowsableState.Always)]
+		public new event EventHandler TextChanged { add { nud.TextChanged += value; } remove { nud.TextChanged -= value; } }
 
 		public decimal Value
 		{

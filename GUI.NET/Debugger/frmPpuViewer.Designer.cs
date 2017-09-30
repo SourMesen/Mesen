@@ -51,9 +51,9 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPaletteViewer = new Mesen.GUI.Debugger.Controls.ctrlPaletteViewer();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblShowFrameAt = new System.Windows.Forms.Label();
-			this.nudScanline = new MesenNumericUpDown();
+			this.nudScanline = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblCycle = new System.Windows.Forms.Label();
-			this.nudCycle = new MesenNumericUpDown();
+			this.nudCycle = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.btnReset = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -241,12 +241,19 @@ namespace Mesen.GUI.Debugger
 			// nudScanline
 			// 
 			this.nudScanline.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudScanline.DecimalPlaces = 0;
+			this.nudScanline.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudScanline.Location = new System.Drawing.Point(275, 4);
 			this.nudScanline.Maximum = new decimal(new int[] {
             260,
             0,
             0,
             0});
+			this.nudScanline.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudScanline.Minimum = new decimal(new int[] {
             1,
             0,
@@ -261,6 +268,7 @@ namespace Mesen.GUI.Debugger
             0,
             0});
 			this.nudScanline.ValueChanged += new System.EventHandler(this.nudScanlineCycle_ValueChanged);
+			this.nudScanline.TextChanged += new System.EventHandler(this.nudScanlineCycle_TextChanged);
 			// 
 			// lblCycle
 			// 
@@ -275,16 +283,34 @@ namespace Mesen.GUI.Debugger
 			// nudCycle
 			// 
 			this.nudCycle.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudCycle.DecimalPlaces = 0;
+			this.nudCycle.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudCycle.Location = new System.Drawing.Point(392, 4);
 			this.nudCycle.Maximum = new decimal(new int[] {
             340,
             0,
             0,
             0});
+			this.nudCycle.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudCycle.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudCycle.Name = "nudCycle";
 			this.nudCycle.Size = new System.Drawing.Size(52, 20);
 			this.nudCycle.TabIndex = 6;
+			this.nudCycle.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			this.nudCycle.ValueChanged += new System.EventHandler(this.nudScanlineCycle_ValueChanged);
+			this.nudCycle.TextChanged += new System.EventHandler(this.nudScanlineCycle_TextChanged);
 			// 
 			// btnReset
 			// 
