@@ -158,6 +158,9 @@ namespace Mesen.GUI.Debugger
 		{
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
 				ofd.SetFilter("Lua scripts (*.lua)|*.lua");
+				if(ConfigManager.Config.DebugInfo.RecentScripts.Count > 0) {
+					ofd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.DebugInfo.RecentScripts[0]);
+				}
 				if(ofd.ShowDialog() == DialogResult.OK) {
 					LoadScriptFile(ofd.FileName);
 				}
