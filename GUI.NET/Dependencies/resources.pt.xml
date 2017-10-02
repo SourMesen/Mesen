@@ -733,6 +733,12 @@
     <Message ID="EmulatorShortcutMappings_SetScale6x">Definir escala 6x</Message>
     <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Alternar tela cheia</Message>
     <Message ID="EmulatorShortcutMappings_ToggleFps">Alternar contador de quadros por segundo</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Toggle Game Timer</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Toggle Frame Counter</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Toggle Lag Counter</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleOsd">Toggle OSD (On-Screen Display)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleBackground">Toggle Background Layer</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleSprites">Toggle Sprite Layer</Message>
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidade máxima</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrear jogo aleatório</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Salvar estado - Posição 1</Message>

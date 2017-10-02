@@ -738,6 +738,12 @@
     <Message ID="EmulatorShortcutMappings_SetScale6x">Встановити масштаб 6x</Message>
     <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Переключити повноекранний режим</Message>
     <Message ID="EmulatorShortcutMappings_ToggleFps">Переключити лічильник FPS</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Toggle Game Timer</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Toggle Frame Counter</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Toggle Lag Counter</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleOsd">Toggle OSD (On-Screen Display)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleBackground">Toggle Background Layer</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleSprites">Toggle Sprite Layer</Message>
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Переключити максимальну швидкість</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Завантажити випадкову гру/Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Save State - Slot 1</Message>

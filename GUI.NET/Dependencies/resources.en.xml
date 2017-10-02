@@ -119,7 +119,14 @@
     <Message ID="EmulatorShortcutMappings_SetScale5x">Set Scale 5x</Message>
     <Message ID="EmulatorShortcutMappings_SetScale6x">Set Scale 6x</Message>
     <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Toggle Fullscreen Mode</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFps">Toggle FPS Counter</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFps">Toggle FPS Counter</Message>    
+    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Toggle Game Timer</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Toggle Frame Counter</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Toggle Lag Counter</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleOsd">Toggle OSD (On-Screen Display)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleBackground">Toggle Background Layer</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleSprites">Toggle Sprite Layer</Message>
+    
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Toggle Maximum Speed</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Load Random Game</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Save State - Slot 1</Message>

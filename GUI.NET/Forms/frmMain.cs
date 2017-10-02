@@ -609,6 +609,12 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.ToggleCheats: ToggleCheats(); break;
 				case EmulatorShortcut.ToggleAudio: ToggleAudio(); break;
 				case EmulatorShortcut.ToggleFps: ToggleFps(); break;
+				case EmulatorShortcut.ToggleBackground: ToggleBackground(); break;
+				case EmulatorShortcut.ToggleSprites: ToggleSprites(); break;
+				case EmulatorShortcut.ToggleGameTimer: ToggleGameTimer(); break;
+				case EmulatorShortcut.ToggleFrameCounter: ToggleFrameCounter(); break;
+				case EmulatorShortcut.ToggleLagCounter: ToggleLagCounter(); break;
+				case EmulatorShortcut.ToggleOsd: ToggleOsd(); break;
 				case EmulatorShortcut.MaxSpeed: ToggleMaxSpeed(); break;
 				case EmulatorShortcut.ToggleFullscreen: ToggleFullscreen(); break;
 
@@ -680,14 +686,56 @@ namespace Mesen.GUI.Forms
 			UpdateEmulationFlags();
 		}
 
-		private static void ToggleAudio()
+		private void ToggleAudio()
 		{
 			ConfigManager.Config.AudioInfo.EnableAudio = !ConfigManager.Config.AudioInfo.EnableAudio;
 			AudioInfo.ApplyConfig();
 			ConfigManager.ApplyChanges();
 		}
 
-		private static void ToggleCheats()
+		private void ToggleFrameCounter()
+		{
+			ConfigManager.Config.PreferenceInfo.ShowFrameCounter = !ConfigManager.Config.PreferenceInfo.ShowFrameCounter;
+			PreferenceInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private void ToggleLagCounter()
+		{
+			ConfigManager.Config.EmulationInfo.ShowLagCounter = !ConfigManager.Config.EmulationInfo.ShowLagCounter;
+			EmulationInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private void ToggleGameTimer()
+		{
+			ConfigManager.Config.PreferenceInfo.ShowGameTimer = !ConfigManager.Config.PreferenceInfo.ShowGameTimer;
+			PreferenceInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private void ToggleOsd()
+		{
+			ConfigManager.Config.PreferenceInfo.DisableOsd = !ConfigManager.Config.PreferenceInfo.DisableOsd;
+			PreferenceInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private void ToggleSprites()
+		{
+			ConfigManager.Config.VideoInfo.DisableSprites = !ConfigManager.Config.VideoInfo.DisableSprites;
+			VideoInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private void ToggleBackground()
+		{
+			ConfigManager.Config.VideoInfo.DisableBackground = !ConfigManager.Config.VideoInfo.DisableBackground;
+			VideoInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private void ToggleCheats()
 		{
 			ConfigManager.Config.DisableAllCheats = !ConfigManager.Config.DisableAllCheats;
 			if(ConfigManager.Config.DisableAllCheats) {

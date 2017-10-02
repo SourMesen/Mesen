@@ -323,6 +323,12 @@ enum class EmulatorShortcut
 	SetScale6x,
 	ToggleFullscreen,
 	ToggleFps,
+	ToggleGameTimer,
+	ToggleFrameCounter,
+	ToggleLagCounter,
+	ToggleOsd,
+	ToggleSprites,
+	ToggleBackground,
 
 	LoadRandomGame,
 	SaveStateSlot1,
