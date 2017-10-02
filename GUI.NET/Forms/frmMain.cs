@@ -383,6 +383,7 @@ namespace Mesen.GUI.Forms
 				this.frmMain_Resize(null, EventArgs.Empty);
 			}
 			this.Resize += frmMain_Resize;
+			UpdateViewerSize();
 			mnuFullscreen.Checked = enabled;
 		}
 
