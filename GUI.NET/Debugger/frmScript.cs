@@ -255,6 +255,9 @@ namespace Mesen.GUI.Debugger
 		{
 			using(SaveFileDialog sfd = new SaveFileDialog()) {
 				sfd.FileName = newName;
+				if(ConfigManager.Config.DebugInfo.RecentScripts.Count > 0) {
+					sfd.InitialDirectory = Path.GetDirectoryName(ConfigManager.Config.DebugInfo.RecentScripts[0]);
+				}
 				sfd.SetFilter("Lua scripts (*.lua)|*.lua");
 				if(sfd.ShowDialog() == DialogResult.OK) {
 					SetFilePath(sfd.FileName);
