@@ -243,7 +243,7 @@
       <Control ID="tpgGeneral">Geral</Control>
       <Control ID="lblVideoScale">Escala:</Control>
       <Control ID="lblVideoFilter">Filtro:</Control>
-      <Control ID="chkIntegerFpsMode">Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)</Control>
+      <Control ID="chkIntegerFpsMode">Ativar modo de FPS inteiro (ex: executar em 60 fps ao invés de 60.1)</Control>
       <Control ID="chkVerticalSync">Ativar a sincronização vertical</Control>
       <Control ID="lblDisplayRatio">Formato de imagem:</Control>
       <Control ID="lblCustomRatio">Proporção personalizada:</Control>
@@ -733,12 +733,12 @@
     <Message ID="EmulatorShortcutMappings_SetScale6x">Definir escala 6x</Message>
     <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Alternar tela cheia</Message>
     <Message ID="EmulatorShortcutMappings_ToggleFps">Alternar contador de quadros por segundo</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Toggle Game Timer</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Toggle Frame Counter</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Toggle Lag Counter</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleOsd">Toggle OSD (On-Screen Display)</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleBackground">Toggle Background Layer</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleSprites">Toggle Sprite Layer</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Alternar tempo de jogo</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Alternar contador de quadro</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lagr</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleOsd">Alternar OSD (Menu na tela)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar camada de fundo</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleSprites">Alternar camada de sprite</Message>
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidade máxima</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrear jogo aleatório</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Salvar estado - Posição 1</Message>
