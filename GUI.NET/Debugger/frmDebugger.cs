@@ -126,6 +126,7 @@ namespace Mesen.GUI.Debugger
 				//Break once to show code and then resume execution
 				InteropEmu.DebugStep(1);
 			}
+			InteropEmu.SetFlag(EmulationFlags.Paused, false);
 
 			UpdateDebuggerFlags();
 			UpdateCdlRatios();
