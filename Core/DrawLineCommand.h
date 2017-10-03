@@ -10,23 +10,24 @@ private:
 protected:
 	void InternalDraw()
 	{
-		int xDiff = _x2 - _x;
-		int yDiff = _y2 - _y;
-		if(xDiff == 0) {
-			for(int i = _y; i <= _y2; i++) {
-				DrawPixel(_x, i, _color);
+		int x = _x;
+		int y = _y;
+		int dx = abs(_x2 - x), sx = x < _x2 ? 1 : -1;
+		int dy = abs(_y2 - y), sy = y < _y2 ? 1 : -1;
+		int err = (dx > dy ? dx : -dy) / 2, e2;
+
+		while(true) {
+			DrawPixel(x, y, _color);
+			if(x == _x2 && y == _y2) {
+				break;
 			}
-		} else {
-			double deltaErr = std::abs((double)yDiff / (double)xDiff);
-			double error = deltaErr - 0.5;
-			int y = _y;
-			for(int x = _x; x <= _x2; x++) {
-				DrawPixel(x, y, _color);
-				error += deltaErr;
-				if(error >= 0.5) {
-					y++;
-					error -= 1.0;
-				}
+
+			e2 = err;
+			if(e2 > -dx) {
+				err -= dy; x += sx;
+			}
+			if(e2 < dy) {
+				err += dx; y += sy;
 			}
 		}
 	}
