@@ -143,11 +143,14 @@ int LuaApi::GetLibrary(lua_State *lua)
 int LuaApi::ReadMemory(lua_State *lua)
 {
 	LuaCallHelper l(lua);
+	l.ForceParamCount(3);
+	bool returnSignedValue = l.ReadBool();
 	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
 	int address = l.ReadInteger();
-	checkparams();
+	checkminparams(2);
 	errorCond(address < 0, "address must be >= 0");
-	l.Return(_memoryDumper->GetMemoryValue(type, address, false));
+	uint8_t value = _memoryDumper->GetMemoryValue(type, address, false);
+	l.Return(returnSignedValue ? (int8_t)value : value);
 	return l.ReturnCount();
 }
 
@@ -167,11 +170,14 @@ int LuaApi::WriteMemory(lua_State *lua)
 int LuaApi::DebugReadMemory(lua_State *lua)
 {
 	LuaCallHelper l(lua);
+	l.ForceParamCount(3);
+	bool returnSignedValue = l.ReadBool();
 	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
 	int address = l.ReadInteger();
-	checkparams();
+	checkminparams(2);
 	errorCond(address < 0, "address must be >= 0");
-	l.Return(_memoryDumper->GetMemoryValue(type, address, true));
+	uint8_t value = _memoryDumper->GetMemoryValue(type, address, true);
+	l.Return(returnSignedValue ? (int8_t)value : value);
 	return l.ReturnCount();
 }
 
@@ -191,11 +197,14 @@ int LuaApi::DebugWriteMemory(lua_State *lua)
 int LuaApi::ReadMemoryWord(lua_State *lua)
 {
 	LuaCallHelper l(lua);
+	l.ForceParamCount(3);
+	bool returnSignedValue = l.ReadBool();
 	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
 	int address = l.ReadInteger();
-	checkparams();
+	checkminparams(2);
 	errorCond(address < 0, "address must be >= 0");
-	l.Return(_memoryDumper->GetMemoryValueWord(type, address, false));
+	uint16_t value = _memoryDumper->GetMemoryValueWord(type, address, false);
+	l.Return(returnSignedValue ? (int16_t)value : value);
 	return l.ReturnCount();
 }
 
@@ -215,11 +224,14 @@ int LuaApi::WriteMemoryWord(lua_State *lua)
 int LuaApi::DebugReadMemoryWord(lua_State *lua)
 {
 	LuaCallHelper l(lua);
+	l.ForceParamCount(3);
+	bool returnSignedValue = l.ReadBool();
 	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
 	int address = l.ReadInteger();
-	checkparams();
+	checkminparams(2);
 	errorCond(address < 0, "address must be >= 0");
-	l.Return(_memoryDumper->GetMemoryValueWord(type, address, true));
+	uint16_t value = _memoryDumper->GetMemoryValueWord(type, address, true);
+	l.Return(returnSignedValue ? (int16_t)value : value);
 	return l.ReturnCount();
 }
 
