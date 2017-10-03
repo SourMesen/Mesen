@@ -2504,8 +2504,6 @@ namespace Be.Windows.Forms
 
 		void PaintHex(Graphics g, long startByte, long endByte)
 		{
-			Brush brush = new SolidBrush(GetDefaultForeColor());
-			Brush selBrush = new SolidBrush(_selectionForeColor);
 			Brush selBrushBack = new SolidBrush(_selectionBackColor);
 
 			int counter = -1;
@@ -2513,21 +2511,28 @@ namespace Be.Windows.Forms
 
 			bool isKeyInterpreterActive = _keyInterpreter == null || _keyInterpreter.GetType() == typeof(KeyInterpreter);
 
+			if(this.ByteColorProvider != null) {
+				this.ByteColorProvider.Prepare(_startByte, intern_endByte);
+			}
+
 			for (long i = startByte; i < intern_endByte + 1; i++)
 			{
 				counter++;
 				Point gridPoint = GetGridBytePoint(counter);
 				byte b = _byteProvider.ReadByte(i);
 
-				bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
-
-				if (isSelectedByte && isKeyInterpreterActive)
-				{
-					PaintHexStringSelected(g, b, selBrush, selBrushBack, gridPoint);
+				Color byteColor = this.ForeColor;
+				if(this.ByteColorProvider != null) {
+					byteColor = this.ByteColorProvider.GetByteColor(_startByte, i);
 				}
-				else
-				{
-					PaintHexString(g, b, brush, gridPoint);
+
+				bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
+				using(Brush byteBrush = new SolidBrush(byteColor)) {
+					if(isSelectedByte && isKeyInterpreterActive) {
+						PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint);
+					} else {
+						PaintHexString(g, b, byteBrush, gridPoint);
+					}
 				}
 			}
 		}
