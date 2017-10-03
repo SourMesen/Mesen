@@ -384,7 +384,7 @@ int LuaApi::GetPixel(lua_State *lua)
 	errorCond(x < 0 || x > 255 || y < 0 || y > 239, "invalid x,y coordinates (must be between 0-255, 0-239)");
 
 	//Ignores intensify & grayscale bits
-	l.Return(EmulationSettings::GetRgbPalette()[PPU::GetPixel(x, y) & 0x3F]);
+	l.Return(EmulationSettings::GetRgbPalette()[PPU::GetPixel(x, y) & 0x3F] & 0xFFFFFF);
 	return l.ReturnCount();
 }
 
