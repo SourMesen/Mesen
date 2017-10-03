@@ -484,7 +484,12 @@ void Console::Run()
 
 bool Console::IsRunning()
 {
-	return !Instance->_stopLock.IsFree() && !Instance->_runLock.IsFree();
+	return !Instance->_stopLock.IsFree();
+}
+
+bool Console::IsPaused()
+{
+	return _runLock.IsFree();
 }
 
 void Console::UpdateNesModel(bool sendNotification)

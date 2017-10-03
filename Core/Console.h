@@ -101,6 +101,7 @@ class Console
 		static void ResetLagCounter();
 
 		static bool IsRunning();
+		bool IsPaused();
 
 		static void SetNextFrameOverclockStatus(bool disabled);
 

@@ -887,7 +887,7 @@ shared_ptr<MemoryAccessCounter> Debugger::GetMemoryAccessCounter()
 
 bool Debugger::IsExecutionStopped()
 {
-	return _executionStopped || !_console->IsRunning();
+	return _executionStopped || _console->IsPaused();
 }
 
 void Debugger::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info)
