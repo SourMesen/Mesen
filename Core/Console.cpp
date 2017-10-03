@@ -292,6 +292,13 @@ void Console::ResetComponents(bool softReset)
 	SoundMixer::StopAudio(true);
 
 	MessageManager::SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);
+
+	if(softReset) {
+		shared_ptr<Debugger> debugger = _debugger;
+		if(debugger) {
+			debugger->ProcessEvent(EventType::Reset);
+		}
+	}
 }
 
 void Console::Stop()
