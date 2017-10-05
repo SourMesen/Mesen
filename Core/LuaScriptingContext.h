@@ -10,11 +10,13 @@ class LuaScriptingContext : public ScriptingContext
 private:
 	lua_State* _lua = nullptr;
 
+protected:
+	void InternalCallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type);
+	int InternalCallEventCallback(EventType type);
+
 public:
 	LuaScriptingContext();
 	~LuaScriptingContext();
 
 	bool LoadScript(string scriptContent, Debugger* debugger);
-	void CallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type);
-	int InternalCallEventCallback(EventType type);
 };

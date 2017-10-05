@@ -85,6 +85,11 @@ int LuaApi::GetLibrary(lua_State *lua)
 		{ "takeScreenshot", LuaApi::TakeScreenshot },
 		{ "saveSavestate", LuaApi::SaveSavestate },
 		{ "loadSavestate", LuaApi::LoadSavestate },
+		{ "saveSavestateAsync", LuaApi::SaveSavestateAsync },
+		{ "loadSavestateAsync", LuaApi::LoadSavestateAsync },
+		{ "getSavestateData", LuaApi::GetSavestateData },
+		{ "clearSavestateData", LuaApi::ClearSavestateData },
+		{ "isKeyPressed", LuaApi::IsKeyPressed },
 		{ "getInput", LuaApi::GetInput },
 		{ "setInput", LuaApi::SetInput },
 		{ "addCheat", LuaApi::AddCheat },
@@ -514,6 +519,57 @@ int LuaApi::LoadSavestate(lua_State *lua)
 	stringstream ss;
 	ss << savestate;
 	l.Return(SaveStateManager::LoadState(ss, true));
+	return l.ReturnCount();
+}
+
+int LuaApi::SaveSavestateAsync(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	int32_t slot = l.ReadInteger();
+	checkparams();
+	errorCond(slot < 0, "Slot must be >= 0");
+	_context->RequestSaveState(slot);
+	return l.ReturnCount();
+}
+
+int LuaApi::LoadSavestateAsync(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	int32_t slot = l.ReadInteger();
+	checkparams();
+	errorCond(slot < 0, "Slot must be >= 0");
+	_context->RequestLoadState(slot);
+	return l.ReturnCount();
+}
+
+int LuaApi::GetSavestateData(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	int32_t slot = l.ReadInteger();
+	checkparams();
+	errorCond(slot < 0, "Slot must be >= 0");
+	l.Return(_context->GetSavestateData(slot));
+	return l.ReturnCount();
+}
+
+int LuaApi::ClearSavestateData(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	int32_t slot = l.ReadInteger();
+	checkparams();
+	errorCond(slot < 0, "Slot must be >= 0");
+	_context->ClearSavestateData(slot);
+	return l.ReturnCount();
+}
+
+int LuaApi::IsKeyPressed(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	string keyName = l.ReadString();
+	checkparams();
+	uint32_t keyCode = ControlManager::GetKeyCode(keyName);
+	errorCond(keyCode == 0, "Invalid key name");
+	l.Return(ControlManager::IsKeyPressed(keyCode));
 	return l.ReturnCount();
 }
 

@@ -416,6 +416,8 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 {
 	OperationInfo operationInfo { addr, (int16_t)value, type };
 
+	ProcessCpuOperation(addr, value, type);
+
 	if(type == MemoryOperationType::ExecOpCode) {
 		if(_runToCycle == 0) {
 			_rewindCache.clear();
@@ -448,6 +450,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			_cpu->SetDebugPC(addr);
 			_needRewind = false;
 		}
+		ProcessScriptSaveState(addr, value);
 
 		_currentReadAddr = &addr;
 		_currentReadValue = &value;
@@ -552,8 +555,6 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 
 	_currentReadAddr = nullptr;
 	_currentReadValue = nullptr;
-
-	ProcessCpuOperation(addr, value, type);
 
 	if(type == MemoryOperationType::Write) {
 		if(_frozenAddresses[addr]) {
@@ -1081,6 +1082,19 @@ const char* Debugger::GetScriptLog(int32_t scriptId)
 		}
 	}
 	return "";
+}
+
+void Debugger::ProcessScriptSaveState(uint16_t &addr, uint8_t &value)
+{
+	if(_hasScript) {
+		for(shared_ptr<ScriptHost> &script : _scripts) {
+			if(script->ProcessSavestate()) {
+				addr = _cpu->GetState().PC;
+				value = _memoryManager->DebugRead(addr, false);
+				_cpu->SetDebugPC(addr);
+			}
+		}
+	}
 }
 
 void Debugger::ProcessCpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type)

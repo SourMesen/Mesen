@@ -22,4 +22,5 @@ public:
 	void ProcessCpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessEvent(EventType eventType);
+	bool ProcessSavestate();
 };

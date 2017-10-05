@@ -52,6 +52,13 @@ public:
 	static int SaveSavestate(lua_State *lua);
 	static int LoadSavestate(lua_State *lua);
 
+	static int SaveSavestateAsync(lua_State *lua);
+	static int LoadSavestateAsync(lua_State *lua);
+	static int GetSavestateData(lua_State *lua);
+	static int ClearSavestateData(lua_State *lua);
+
+	static int IsKeyPressed(lua_State *lua);
+
 	static int GetInput(lua_State *lua);
 	static int SetInput(lua_State *lua);
 

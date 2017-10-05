@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "ScriptingContext.h"
 #include "DebuggerTypes.h"
+#include "Console.h"
 
 string ScriptingContext::_log = "";
 
@@ -23,6 +24,13 @@ const char* ScriptingContext::GetLog()
 	}
 	_log = ss.str();
 	return _log.c_str();
+}
+
+void ScriptingContext::CallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type)
+{
+	_inExecOpEvent = type == CallbackType::CpuExec;
+	InternalCallMemoryCallback(addr, value, type);
+	_inExecOpEvent = false;
 }
 
 int ScriptingContext::CallEventCallback(EventType type)
@@ -87,4 +95,79 @@ void ScriptingContext::UnregisterEventCallback(EventType type, int reference)
 {
 	vector<int> &callbacks = _eventCallbacks[(int)type];
 	callbacks.erase(std::remove(callbacks.begin(), callbacks.end(), reference), callbacks.end());
+}
+
+void ScriptingContext::RequestSaveState(int slot)
+{
+	_saveSlot = slot;
+	if(_inExecOpEvent) {
+		SaveState();
+	} else {
+		_saveSlotData.erase(slot);
+	}
+}
+
+bool ScriptingContext::RequestLoadState(int slot)
+{
+	if(_saveSlotData.find(slot) != _saveSlotData.end()) {
+		_loadSlot = slot;
+		if(_inExecOpEvent) {
+			return LoadState();
+		} else {
+			return true;
+		}
+	}
+	return false;
+}
+
+void ScriptingContext::SaveState()
+{
+	if(_saveSlot >= 0) {
+		stringstream ss;
+		Console::SaveState(ss);
+
+		ss.seekg(0, std::ios::end);
+		uint32_t fileSize = (uint32_t)ss.tellg();
+		ss.seekg(0, std::ios::beg);
+		
+		_saveSlotData[_saveSlot] = ss.str();
+		_saveSlot = -1;
+	}
+}
+
+bool ScriptingContext::LoadState()
+{
+	if(_loadSlot >= 0 && _saveSlotData.find(_loadSlot) != _saveSlotData.end()) {
+		stringstream ss;
+		ss << _saveSlotData[_loadSlot];
+		Console::LoadState(ss);
+		_loadSlot = -1;
+		return true;
+	}
+	return false;
+}
+
+bool ScriptingContext::ProcessSavestate()
+{
+	SaveState();
+	return LoadState();
+}
+
+string ScriptingContext::GetSavestateData(int slot)
+{
+	if(slot >= 0) {
+		auto result = _saveSlotData.find(slot);
+		if(result != _saveSlotData.end()) {
+			return result->second;
+		}
+	}
+
+	return "";
+}
+
+void ScriptingContext::ClearSavestateData(int slot)
+{
+	if(slot >= 0) {
+		_saveSlotData.erase(slot);
+	}
 }

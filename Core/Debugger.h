@@ -226,6 +226,8 @@ public:
 	int32_t LoadScript(string content, int32_t scriptId);
 	void RemoveScript(int32_t scriptId);
 	const char* GetScriptLog(int32_t scriptId);
+
+	void ProcessScriptSaveState(uint16_t &addr, uint8_t &value);
 	void ProcessCpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessEvent(EventType type);

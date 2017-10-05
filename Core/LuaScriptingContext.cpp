@@ -40,7 +40,7 @@ bool LuaScriptingContext::LoadScript(string scriptContent, Debugger* debugger)
 	return false;
 }
 
-void LuaScriptingContext::CallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type)
+void LuaScriptingContext::InternalCallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type)
 {
 	LuaApi::SetContext(this);
 	for(int &ref : _callbacks[(int)type][addr]) {

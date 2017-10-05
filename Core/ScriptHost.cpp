@@ -58,3 +58,11 @@ void ScriptHost::ProcessEvent(EventType eventType)
 		_context->CallEventCallback(eventType);
 	}
 }
+
+bool ScriptHost::ProcessSavestate()
+{
+	if(_context) {
+		return _context->ProcessSavestate();
+	}
+	return false;
+}
