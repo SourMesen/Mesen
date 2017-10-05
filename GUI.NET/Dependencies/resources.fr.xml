@@ -245,7 +245,7 @@
       <Control ID="tpgGeneral">Général</Control>
       <Control ID="lblVideoScale">Échelle :</Control>
       <Control ID="lblVideoFilter">Filtre :</Control>
-      <Control ID="chkIntegerFpsMode">Activer le mode 60.0/50.0 FPS (au lieu du 60.1/50.1 FPS normalement utilisé)</Control>
+      <Control ID="chkIntegerFpsMode">Activer le mode 60.0/50.0 FPS (ex: exécution à 60.0 FPS au lieu de 60.1 FPS en mode NTSC)</Control>
       <Control ID="chkVerticalSync">Activer la synchronisation verticale</Control>
       <Control ID="lblDisplayRatio">Format d'image :</Control>
       <Control ID="lblCustomRatio">Ratio personalisé :</Control>
