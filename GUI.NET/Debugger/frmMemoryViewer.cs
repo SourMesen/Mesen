@@ -32,6 +32,10 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnLoad(e);
 
+			if(!ConfigManager.Config.DebugInfo.MemoryViewerSize.IsEmpty) {
+				this.Size = ConfigManager.Config.DebugInfo.MemoryViewerSize;
+			}
+
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
@@ -63,6 +67,7 @@ namespace Mesen.GUI.Debugger
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			base.OnFormClosing(e);
+			ConfigManager.Config.DebugInfo.MemoryViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			DebugWorkspaceManager.SaveWorkspace();
 		}
 

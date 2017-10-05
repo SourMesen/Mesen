@@ -132,6 +132,7 @@ namespace Mesen.GUI.Config
 		public bool RamHideReadBytes;
 		public bool RamHideWrittenBytes;
 		public bool RamHideExecutedBytes;
+		public Size MemoryViewerSize = new Size(0, 0);
 
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;
