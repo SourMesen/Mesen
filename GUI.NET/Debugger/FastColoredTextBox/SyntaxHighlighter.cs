@@ -115,10 +115,7 @@ namespace FastColoredTextBoxNS
         {
             get
             {
-                if (platformType == Platform.X86)
-                    return RegexOptions.Compiled;
-                else
-                    return RegexOptions.None;
+                return RegexOptions.Compiled;
             }
         }
 
