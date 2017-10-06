@@ -166,7 +166,7 @@ namespace Mesen.GUI.Debugger
 
 					List<byte> convertedByteCode = new List<byte>();
 					List<ErrorDetail> errorList = new List<ErrorDetail>();
-					string[] codeLines = txtCode.Text.Replace("\r", "").Split('\n');
+					string[] codeLines = text.Replace("\r", "").Split('\n');
 					int line = 1;
 					foreach(short s in byteCode) {
 						if(s >= 0) {
