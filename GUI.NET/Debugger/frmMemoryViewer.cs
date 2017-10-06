@@ -32,10 +32,6 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnLoad(e);
 
-			if(!ConfigManager.Config.DebugInfo.MemoryViewerSize.IsEmpty) {
-				this.Size = ConfigManager.Config.DebugInfo.MemoryViewerSize;
-			}
-
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
@@ -62,12 +58,18 @@ namespace Mesen.GUI.Debugger
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
 			this.mnuShowCharacters.CheckedChanged += new EventHandler(this.mnuShowCharacters_CheckedChanged);
+
+			if(!ConfigManager.Config.DebugInfo.MemoryViewerSize.IsEmpty) {
+				this.Size = ConfigManager.Config.DebugInfo.MemoryViewerSize;
+			}
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			base.OnFormClosing(e);
+			UpdateConfig();
 			ConfigManager.Config.DebugInfo.MemoryViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.ApplyChanges();
 			DebugWorkspaceManager.SaveWorkspace();
 		}
 
@@ -276,7 +278,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlHexViewer_RequiredWidthChanged(object sender, EventArgs e)
 		{
-			this.Size = new Size(this.ctrlHexViewer.RequiredWidth + this.Width - this.ctrlHexViewer.Width + 30, this.Height);
+			this.Size = new Size(this.ctrlHexViewer.RequiredWidth + 20, this.Height);
 		}
 
 		private void mnuLoadTblFile_Click(object sender, EventArgs e)

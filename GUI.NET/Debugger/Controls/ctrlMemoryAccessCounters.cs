@@ -22,6 +22,7 @@ namespace Mesen.GUI.Debugger.Controls
 			InitializeComponent();
 			
 			this.ctrlScrollableTextbox.FontSize = BaseControl.DefaultFontSize;
+			this.toolTip.SetToolTip(chkHighlightUninitRead, "The uninitialized memory reads highlight will only be accurate if the debugger was active when the game was loaded (or if the game has been power cycled since)");
 
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {

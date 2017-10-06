@@ -2981,7 +2981,7 @@ namespace Be.Windows.Forms
 					_recHex.Y,
 					(int)(_charSize.Width * _iHexMaxHBytes),
 					_recHex.Height);
-                requiredWidth += _recStringView.Width;
+                requiredWidth += _recStringView.Width + 40;
 			}
 			else
 			{

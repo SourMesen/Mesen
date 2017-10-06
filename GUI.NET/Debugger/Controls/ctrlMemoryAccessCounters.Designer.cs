@@ -27,6 +27,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblViewMemoryType = new System.Windows.Forms.Label();
 			this.cboMemoryType = new System.Windows.Forms.ComboBox();
@@ -38,10 +39,15 @@
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSort = new System.Windows.Forms.Label();
 			this.cboSort = new System.Windows.Forms.ComboBox();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.picHelp = new System.Windows.Forms.PictureBox();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.flowLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// flowLayoutPanel1
@@ -51,7 +57,7 @@
 			this.flowLayoutPanel1.Controls.Add(this.lblViewMemoryType);
 			this.flowLayoutPanel1.Controls.Add(this.cboMemoryType);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(166, 27);
 			this.flowLayoutPanel1.TabIndex = 2;
@@ -88,8 +94,8 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.Controls.Add(this.ctrlScrollableTextbox, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.chkHighlightUninitRead, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.btnReset, 1, 2);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -98,6 +104,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(514, 307);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
@@ -120,12 +127,11 @@
 			// 
 			this.chkHighlightUninitRead.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkHighlightUninitRead.AutoSize = true;
-			this.chkHighlightUninitRead.Location = new System.Drawing.Point(3, 284);
+			this.chkHighlightUninitRead.Location = new System.Drawing.Point(3, 6);
 			this.chkHighlightUninitRead.Name = "chkHighlightUninitRead";
-			this.chkHighlightUninitRead.Size = new System.Drawing.Size(422, 17);
+			this.chkHighlightUninitRead.Size = new System.Drawing.Size(192, 17);
 			this.chkHighlightUninitRead.TabIndex = 4;
-			this.chkHighlightUninitRead.Text = "Highlight uninitialized memory reads (only accurate if debugger is active at powe" +
-    "r on)";
+			this.chkHighlightUninitRead.Text = "Highlight uninitialized memory reads";
 			this.chkHighlightUninitRead.UseVisualStyleBackColor = true;
 			this.chkHighlightUninitRead.CheckedChanged += new System.EventHandler(this.chkHighlightUninitRead_CheckedChanged);
 			// 
@@ -167,7 +173,7 @@
 			this.flowLayoutPanel2.Controls.Add(this.lblSort);
 			this.flowLayoutPanel2.Controls.Add(this.cboSort);
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(338, 0);
-			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(176, 27);
 			this.flowLayoutPanel2.TabIndex = 3;
@@ -199,12 +205,48 @@
 			this.cboSort.TabIndex = 1;
 			this.cboSort.SelectedIndexChanged += new System.EventHandler(this.cboSort_SelectedIndexChanged);
 			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 3;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.picHelp, 1, 0);
+			this.tableLayoutPanel3.Controls.Add(this.chkHighlightUninitRead, 0, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 278);
+			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(433, 29);
+			this.tableLayoutPanel3.TabIndex = 2;
+			// 
+			// picHelp
+			// 
+			this.picHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picHelp.Location = new System.Drawing.Point(201, 6);
+			this.picHelp.Name = "picHelp";
+			this.picHelp.Size = new System.Drawing.Size(16, 16);
+			this.picHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+			this.picHelp.TabIndex = 5;
+			this.picHelp.TabStop = false;
+			// 
+			// toolTip
+			// 
+			this.toolTip.AutomaticDelay = 0;
+			this.toolTip.AutoPopDelay = 32700;
+			this.toolTip.InitialDelay = 10;
+			this.toolTip.ReshowDelay = 10;
+			// 
 			// ctrlMemoryAccessCounters
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.Margin = new System.Windows.Forms.Padding(0);
 			this.Name = "ctrlMemoryAccessCounters";
 			this.Size = new System.Drawing.Size(514, 307);
 			this.flowLayoutPanel1.ResumeLayout(false);
@@ -215,6 +257,9 @@
 			this.tableLayoutPanel2.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -232,5 +277,8 @@
 		private System.Windows.Forms.CheckBox chkHighlightUninitRead;
 		private System.Windows.Forms.Button btnReset;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+		private System.Windows.Forms.PictureBox picHelp;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }
