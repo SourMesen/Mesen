@@ -1133,7 +1133,7 @@
 			// 
 			this.txtCycleCount.Location = new System.Drawing.Point(234, 0);
 			this.txtCycleCount.Margin = new System.Windows.Forms.Padding(0);
-			this.txtCycleCount.MaxLength = 8;
+			this.txtCycleCount.MaxLength = 11;
 			this.txtCycleCount.Name = "txtCycleCount";
 			this.txtCycleCount.Size = new System.Drawing.Size(77, 20);
 			this.txtCycleCount.TabIndex = 9;
