@@ -89,11 +89,11 @@ namespace Mesen.GUI.Debugger
 
 			if(_freezeState != null && _freezeState[index]) {
 				return Color.Magenta;
-			} else if(_showExec && _execStamps[index] != 0 && (framesSinceExec < _framesToFade || _framesToFade == 0)) {
+			} else if(_showExec && _execStamps[index] != 0 && framesSinceExec >= 0 && (framesSinceExec < _framesToFade || _framesToFade == 0)) {
 				return Color.FromArgb(alpha, DarkerColor(Color.Green, (_framesToFade - framesSinceExec) / _framesToFade));
-			} else if(_showWrite && _writeStamps[index] != 0 && (framesSinceWrite < _framesToFade || _framesToFade == 0)) {
+			} else if(_showWrite && _writeStamps[index] != 0 && framesSinceWrite >= 0 && (framesSinceWrite < _framesToFade || _framesToFade == 0)) {
 				return Color.FromArgb(alpha, DarkerColor(Color.Red, (_framesToFade - framesSinceWrite) / _framesToFade));
-			} else if(_showRead && _readStamps[index] != 0 && (framesSinceRead < _framesToFade || _framesToFade == 0)) {
+			} else if(_showRead && _readStamps[index] != 0 && framesSinceRead >= 0 && (framesSinceRead < _framesToFade || _framesToFade == 0)) {
 				return Color.FromArgb(alpha, DarkerColor(Color.Blue, (_framesToFade - framesSinceRead) / _framesToFade));
 			}
 

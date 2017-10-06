@@ -296,6 +296,7 @@ void Console::ResetComponents(bool softReset)
 	if(softReset) {
 		shared_ptr<Debugger> debugger = _debugger;
 		if(debugger) {
+			debugger->ResetCounters();
 			debugger->ProcessEvent(EventType::Reset);
 		}
 	}
@@ -496,7 +497,7 @@ bool Console::IsRunning()
 
 bool Console::IsPaused()
 {
-	return _runLock.IsFree();
+	return _runLock.IsFree() || !_pauseLock.IsFree();
 }
 
 void Console::UpdateNesModel(bool sendNotification)
@@ -589,6 +590,11 @@ void Console::LoadState(istream &loadStream)
 			Snapshotable::SkipBlock(&loadStream);
 		}
 		
+		shared_ptr<Debugger> debugger = Instance->_debugger;
+		if(debugger) {
+			debugger->ResetCounters();
+		}
+
 		MessageManager::SendNotification(ConsoleNotificationType::StateLoaded);
 	}
 }

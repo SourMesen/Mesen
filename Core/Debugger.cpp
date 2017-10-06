@@ -1084,6 +1084,12 @@ const char* Debugger::GetScriptLog(int32_t scriptId)
 	return "";
 }
 
+void Debugger::ResetCounters()
+{
+	_memoryAccessCounter->ResetCounts();
+	_profiler->Reset();
+}
+
 void Debugger::ProcessScriptSaveState(uint16_t &addr, uint8_t &value)
 {
 	if(_hasScript) {
