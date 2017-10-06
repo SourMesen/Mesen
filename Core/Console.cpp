@@ -488,6 +488,7 @@ void Console::Run()
 	_runLock.Release();
 
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
+	MessageManager::SendNotification(ConsoleNotificationType::EmulationStopped);
 }
 
 bool Console::IsRunning()

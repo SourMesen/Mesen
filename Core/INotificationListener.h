@@ -20,8 +20,8 @@ enum class ConsoleNotificationType
 	ConfigChanged = 14,
 	DisconnectedFromServer = 15,
 	PpuViewerDisplayFrame = 16,
-
 	ExecuteShortcut = 17,
+	EmulationStopped = 18,
 };
 
 class INotificationListener

@@ -800,6 +800,7 @@ namespace Mesen.GUI
 			DisconnectedFromServer = 15,
 			PpuViewerDisplayFrame = 16,
 			ExecuteShortcut = 17,
+			EmulationStopped = 18,
 		}
 
 		public enum ControllerType

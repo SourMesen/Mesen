@@ -473,6 +473,12 @@ namespace Mesen.GUI.Forms
 					}));
 					break;
 
+				case InteropEmu.ConsoleNotificationType.EmulationStopped:
+					this.Invoke((Action)(() => {
+						DebugWindowManager.CloseAll();
+					}));
+					break;
+
 				case InteropEmu.ConsoleNotificationType.ResolutionChanged:
 					this.BeginInvoke((MethodInvoker)(() => {
 						UpdateViewerSize();
