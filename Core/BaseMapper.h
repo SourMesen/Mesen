@@ -186,11 +186,11 @@ public:
 		return value;
 	}
 
-	void InternalWriteVRAM(uint16_t addr, uint8_t value);
+	void DebugWriteVRAM(uint16_t addr, uint8_t value, bool disableSideEffects = true);
 	void WriteVRAM(uint16_t addr, uint8_t value);
 
 	__forceinline void ProcessVramAccess(uint16_t &addr);
-	uint8_t DebugReadVRAM(uint16_t addr);
+	uint8_t DebugReadVRAM(uint16_t addr, bool disableSideEffects = true);
 
 	static void InitializeRam(void* data, uint32_t length);
 

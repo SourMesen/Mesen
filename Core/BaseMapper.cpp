@@ -803,9 +803,12 @@ uint8_t BaseMapper::InternalReadVRAM(uint16_t addr)
 	return _vramOpenBusValue >= 0 ? _vramOpenBusValue : addr;
 }
 
-uint8_t BaseMapper::DebugReadVRAM(uint16_t addr)
+uint8_t BaseMapper::DebugReadVRAM(uint16_t addr, bool disableSideEffects)
 {
 	ProcessVramAccess(addr);
+	if(!disableSideEffects) {
+		NotifyVRAMAddressChange(addr);
+	}
 	return InternalReadVRAM(addr);
 }
 
@@ -814,9 +817,13 @@ uint8_t BaseMapper::MapperReadVRAM(uint16_t addr, MemoryOperationType operationT
 	return InternalReadVRAM(addr);
 }
 
-void BaseMapper::InternalWriteVRAM(uint16_t addr, uint8_t value)
+void BaseMapper::DebugWriteVRAM(uint16_t addr, uint8_t value, bool disableSideEffects)
 {
-	if(_chrPages[addr >> 8]) {
+	ProcessVramAccess(addr);
+	if(!disableSideEffects) {
+		NotifyVRAMAddressChange(addr);
+	}
+	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
 		_chrPages[addr >> 8][(uint8_t)addr] = value;
 	}
 }

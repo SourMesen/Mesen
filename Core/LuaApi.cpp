@@ -57,12 +57,8 @@ int LuaApi::GetLibrary(lua_State *lua)
 	static const luaL_Reg apilib[] = {
 		{ "read", LuaApi::ReadMemory },
 		{ "write", LuaApi::WriteMemory },
-		{ "debugRead", LuaApi::DebugReadMemory },
-		{ "debugWrite", LuaApi::DebugWriteMemory },
 		{ "readWord", LuaApi::ReadMemoryWord },
 		{ "writeWord", LuaApi::WriteMemoryWord },
-		{ "debugReadWord", LuaApi::DebugReadMemoryWord },
-		{ "debugWriteWord", LuaApi::DebugWriteMemoryWord },
 		{ "revertPrgChrChanges", LuaApi::RevertPrgChrChanges },
 		{ "addMemoryCallback", LuaApi::RegisterMemoryCallback },
 		{ "removeMemoryCallback", LuaApi::UnregisterMemoryCallback },
@@ -114,6 +110,8 @@ int LuaApi::GetLibrary(lua_State *lua)
 	lua_pushintvalue(chrRam, DebugMemoryType::ChrRam);
 	lua_pushintvalue(workRam, DebugMemoryType::WorkRam);
 	lua_pushintvalue(saveRam, DebugMemoryType::SaveRam);
+	lua_pushintvalue(cpuDebug, DebugMemoryType::CpuMemory | 0x100);
+	lua_pushintvalue(ppuDebug, DebugMemoryType::PpuMemory | 0x100);
 	lua_settable(lua, -3);
 
 	lua_pushliteral(lua, "memCallbackType");
@@ -150,11 +148,13 @@ int LuaApi::ReadMemory(lua_State *lua)
 	LuaCallHelper l(lua);
 	l.ForceParamCount(3);
 	bool returnSignedValue = l.ReadBool();
-	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
+	int type = l.ReadInteger();
+	bool disableSideEffects = (type & 0x100) == 0x100;
+	DebugMemoryType memType = (DebugMemoryType)(type & 0xFF);
 	int address = l.ReadInteger();
 	checkminparams(2);
 	errorCond(address < 0, "address must be >= 0");
-	uint8_t value = _memoryDumper->GetMemoryValue(type, address, false);
+	uint8_t value = _memoryDumper->GetMemoryValue(memType, address, disableSideEffects);
 	l.Return(returnSignedValue ? (int8_t)value : value);
 	return l.ReturnCount();
 }
@@ -162,40 +162,15 @@ int LuaApi::ReadMemory(lua_State *lua)
 int LuaApi::WriteMemory(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
+	int type = l.ReadInteger();
+	bool disableSideEffects = (type & 0x100) == 0x100;
+	DebugMemoryType memType = (DebugMemoryType)(type & 0xFF);
 	int value = l.ReadInteger();
 	int address = l.ReadInteger();
 	checkparams();
 	errorCond(value > 255 || value < -128, "value out of range");
 	errorCond(address < 0, "address must be >= 0");
-	_memoryDumper->SetMemoryValue(type, address, value, false, false);
-	return l.ReturnCount();
-}
-
-int LuaApi::DebugReadMemory(lua_State *lua)
-{
-	LuaCallHelper l(lua);
-	l.ForceParamCount(3);
-	bool returnSignedValue = l.ReadBool();
-	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
-	int address = l.ReadInteger();
-	checkminparams(2);
-	errorCond(address < 0, "address must be >= 0");
-	uint8_t value = _memoryDumper->GetMemoryValue(type, address, true);
-	l.Return(returnSignedValue ? (int8_t)value : value);
-	return l.ReturnCount();
-}
-
-int LuaApi::DebugWriteMemory(lua_State *lua)
-{
-	LuaCallHelper l(lua);
-	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
-	int value = l.ReadInteger();
-	int address = l.ReadInteger();
-	checkparams();
-	errorCond(value > 255 || value < -128, "value out of range");
-	errorCond(address < 0, "address must be >= 0");
-	_memoryDumper->SetMemoryValue(type, address, value, false, true);
+	_memoryDumper->SetMemoryValue(memType, address, value, false, disableSideEffects);
 	return l.ReturnCount();
 }
 
@@ -204,11 +179,13 @@ int LuaApi::ReadMemoryWord(lua_State *lua)
 	LuaCallHelper l(lua);
 	l.ForceParamCount(3);
 	bool returnSignedValue = l.ReadBool();
-	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
+	int type = l.ReadInteger();
+	bool disableSideEffects = (type & 0x100) == 0x100;
+	DebugMemoryType memType = (DebugMemoryType)(type & 0xFF);
 	int address = l.ReadInteger();
 	checkminparams(2);
 	errorCond(address < 0, "address must be >= 0");
-	uint16_t value = _memoryDumper->GetMemoryValueWord(type, address, false);
+	uint16_t value = _memoryDumper->GetMemoryValueWord(memType, address, disableSideEffects);
 	l.Return(returnSignedValue ? (int16_t)value : value);
 	return l.ReturnCount();
 }
@@ -216,40 +193,15 @@ int LuaApi::ReadMemoryWord(lua_State *lua)
 int LuaApi::WriteMemoryWord(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
+	int type = l.ReadInteger();
+	bool disableSideEffects = (type & 0x100) == 0x100;
+	DebugMemoryType memType = (DebugMemoryType)(type & 0xFF);
 	int value = l.ReadInteger();
 	int address = l.ReadInteger();
 	checkparams();
 	errorCond(value > 65535 || value < -32768, "value out of range");
 	errorCond(address < 0, "address must be >= 0");
-	_memoryDumper->SetMemoryValueWord(type, address, value, false, false);
-	return l.ReturnCount();
-}
-
-int LuaApi::DebugReadMemoryWord(lua_State *lua)
-{
-	LuaCallHelper l(lua);
-	l.ForceParamCount(3);
-	bool returnSignedValue = l.ReadBool();
-	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
-	int address = l.ReadInteger();
-	checkminparams(2);
-	errorCond(address < 0, "address must be >= 0");
-	uint16_t value = _memoryDumper->GetMemoryValueWord(type, address, true);
-	l.Return(returnSignedValue ? (int16_t)value : value);
-	return l.ReturnCount();
-}
-
-int LuaApi::DebugWriteMemoryWord(lua_State *lua)
-{
-	LuaCallHelper l(lua);
-	DebugMemoryType type = (DebugMemoryType)l.ReadInteger();
-	int value = l.ReadInteger();
-	int address = l.ReadInteger();
-	checkparams();
-	errorCond(value > 65535 || value < -32768, "value out of range");
-	errorCond(address < 0, "address must be >= 0");
-	_memoryDumper->SetMemoryValueWord(type, address, value, false, true);
+	_memoryDumper->SetMemoryValueWord(memType, address, value, false, disableSideEffects);
 	return l.ReturnCount();
 }
 
