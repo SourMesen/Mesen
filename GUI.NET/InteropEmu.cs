@@ -207,7 +207,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetMemoryValue(DebugMemoryType type, UInt32 address, byte value);
 		[DllImport(DLLPath)] public static extern void DebugSetInputOverride(Int32 port, Int32 state);
 
-		[DllImport(DLLPath)] public static extern Int32 DebugLoadScript([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string content, Int32 scriptId = -1);
+		[DllImport(DLLPath)] public static extern Int32 DebugLoadScript([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string name, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string content, Int32 scriptId = -1);
 		[DllImport(DLLPath)] public static extern void DebugRemoveScript(Int32 scriptId);
 		[DllImport(DLLPath, EntryPoint = "DebugGetScriptLog")] private static extern IntPtr DebugGetScriptLogWrapper(Int32 scriptId);
 		public static string DebugGetScriptLog(Int32 scriptId) { return PtrToStringUtf8(InteropEmu.DebugGetScriptLogWrapper(scriptId)).Replace("\n", Environment.NewLine); }

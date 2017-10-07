@@ -225,7 +225,7 @@ public:
 	static uint32_t GetInputOverride(uint8_t port);
 	void SetInputOverride(uint8_t port, uint32_t state);
 
-	int32_t LoadScript(string content, int32_t scriptId);
+	int32_t LoadScript(string name, string content, int32_t scriptId);
 	void RemoveScript(int32_t scriptId);
 	const char* GetScriptLog(int32_t scriptId);
 

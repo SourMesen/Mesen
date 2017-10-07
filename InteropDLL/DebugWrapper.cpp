@@ -111,7 +111,7 @@ extern "C"
 
 	DllExport void __stdcall DebugSetInputOverride(uint32_t port, uint32_t state) { GetDebugger()->SetInputOverride(port, state); }
 
-	DllExport int32_t __stdcall DebugLoadScript(char* content, int32_t scriptId) { return GetDebugger()->LoadScript(content, scriptId); }
+	DllExport int32_t __stdcall DebugLoadScript(char* name, char* content, int32_t scriptId) { return GetDebugger()->LoadScript(name, content, scriptId); }
 	DllExport void __stdcall DebugRemoveScript(int32_t scriptId) { GetDebugger()->RemoveScript(scriptId); }
 	DllExport const char* __stdcall DebugGetScriptLog(int32_t scriptId) { return GetDebugger()->GetScriptLog(scriptId); }
 };

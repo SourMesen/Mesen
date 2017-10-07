@@ -16,8 +16,10 @@ LuaScriptingContext::~LuaScriptingContext()
 	}
 }
 
-bool LuaScriptingContext::LoadScript(string scriptContent, Debugger* debugger)
+bool LuaScriptingContext::LoadScript(string scriptName, string scriptContent, Debugger* debugger)
 {
+	_scriptName = scriptName;
+
 	int iErr = 0;
 	_lua = luaL_newstate();
 	LuaApi::RegisterDebugger(debugger);
@@ -26,7 +28,7 @@ bool LuaScriptingContext::LoadScript(string scriptContent, Debugger* debugger)
 	luaL_openlibs(_lua);
 	luaL_requiref(_lua, "emu", LuaApi::GetLibrary, 1);
 	Log("Loading script...");
-	if((iErr = luaL_loadstring(_lua, scriptContent.c_str())) == 0) {
+	if((iErr = luaL_loadbufferx(_lua, scriptContent.c_str(), scriptContent.size(), ("@" + scriptName).c_str(), nullptr)) == 0) {
 		if((iErr = lua_pcall(_lua, 0, LUA_MULTRET, 0)) == 0) {
 			//Script loaded properly
 			Log("Script loaded successfully.");

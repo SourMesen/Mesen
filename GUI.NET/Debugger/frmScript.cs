@@ -216,13 +216,25 @@ namespace Mesen.GUI.Debugger
 			mnuRecentScripts.Enabled = mnuRecentScripts.DropDownItems.Count > 0;
 		}
 
+		private string ScriptName
+		{
+			get
+			{
+				if(_filePath != null) {
+					return Path.GetFileName(_filePath);
+				} else {
+					return "unnamed.lua";
+				}
+			}
+		}
+
 		private void RunScript()
 		{
 			if(_filePath != null && mnuSaveBeforeRun.Checked && txtScriptContent.UndoEnabled) {
 				txtScriptContent.SaveToFile(_filePath, Encoding.UTF8);
 			}
 
-			_scriptId = InteropEmu.DebugLoadScript(txtScriptContent.Text, _scriptId);
+			_scriptId = InteropEmu.DebugLoadScript(ScriptName, txtScriptContent.Text, _scriptId);
 			if(_scriptId < 0) {
 				MessageBox.Show("Error while loading script.");
 			} else {
@@ -233,12 +245,9 @@ namespace Mesen.GUI.Debugger
 		private void StopScript()
 		{
 			if(_scriptId >= 0) {
-				if(InteropEmu.DebugLoadScript(string.Empty, _scriptId) == 0) {
-					lblScriptActive.Visible = false;
-					_scriptId = -1;
-				} else {
-					MessageBox.Show("Error while stopping script.");
-				}
+				InteropEmu.DebugRemoveScript(_scriptId);
+				lblScriptActive.Visible = false;
+				_scriptId = -1;
 			}
 		}
 

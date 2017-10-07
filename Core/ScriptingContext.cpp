@@ -26,6 +26,11 @@ const char* ScriptingContext::GetLog()
 	return _log.c_str();
 }
 
+string ScriptingContext::GetScriptName()
+{
+	return _scriptName;
+}
+
 void ScriptingContext::CallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type)
 {
 	_inExecOpEvent = type == CallbackType::CpuExec;

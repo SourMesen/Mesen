@@ -18,15 +18,11 @@ const char* ScriptHost::GetLog()
 	return _context ? _context->GetLog() : "";
 }
 
-bool ScriptHost::LoadScript(string scriptContent, Debugger* debugger)
+bool ScriptHost::LoadScript(string scriptName, string scriptContent, Debugger* debugger)
 {
-	_context.reset();
-	if(scriptContent.size() > 0) {
-		_context.reset(new LuaScriptingContext());
-
-		if(!_context->LoadScript(scriptContent, debugger)) {
-			return false;
-		}
+	_context.reset(new LuaScriptingContext());
+	if(!_context->LoadScript(scriptName, scriptContent, debugger)) {
+		return false;
 	}
 	return true;
 }

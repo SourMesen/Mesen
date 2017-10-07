@@ -1048,28 +1048,23 @@ void Debugger::SetInputOverride(uint8_t port, uint32_t state)
 	_inputOverride[port] = state;
 }
 
-int Debugger::LoadScript(string content, int32_t scriptId)
+int Debugger::LoadScript(string name, string content, int32_t scriptId)
 {
 	DebugBreakHelper helper(this);
 	
 	if(scriptId < 0) {
 		shared_ptr<ScriptHost> script(new ScriptHost(_nextScriptId++));
-		script->LoadScript(content, this);
+		script->LoadScript(name, content, this);
 		_scripts.push_back(script);
 		_hasScript = true;
 		return script->GetScriptId();
 	} else {
-		if(content.empty()) {
-			RemoveScript(scriptId);
-			return 0;
-		} else {
-			auto result = std::find_if(_scripts.begin(), _scripts.end(), [=](shared_ptr<ScriptHost> &script) {
-				return script->GetScriptId() == scriptId;
-			});
-			if(result != _scripts.end()) {
-				(*result)->LoadScript(content, this);
-				return scriptId;
-			}
+		auto result = std::find_if(_scripts.begin(), _scripts.end(), [=](shared_ptr<ScriptHost> &script) {
+			return script->GetScriptId() == scriptId;
+		});
+		if(result != _scripts.end()) {
+			(*result)->LoadScript(name, content, this);
+			return scriptId;
 		}
 	}
 

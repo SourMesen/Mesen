@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "LuaApi.h"
 #include "../Utilities/HexUtilities.h"
+#include "../Utilities/FolderUtilities.h"
 #include "../Lua/lua.hpp"
 #include "LuaCallHelper.h"
 #include "Debugger.h"
@@ -92,6 +93,7 @@ int LuaApi::GetLibrary(lua_State *lua)
 		{ "clearCheats", LuaApi::ClearCheats },
 		{ "setState", LuaApi::SetState },
 		{ "getState", LuaApi::GetState },
+		{ "getScriptDataFolder", LuaApi::GetScriptDataFolder },
 		{ NULL,NULL }
 	};
 
@@ -596,6 +598,18 @@ int LuaApi::ClearCheats(lua_State *lua)
 	LuaCallHelper l(lua);
 	checkparams();
 	CheatManager::GetInstance()->ClearCodes();
+	return l.ReturnCount();
+}
+
+int LuaApi::GetScriptDataFolder(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	checkparams();
+	string baseFolder = FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "LuaScriptData");
+	FolderUtilities::CreateFolder(baseFolder);
+	string scriptFolder = FolderUtilities::CombinePath(baseFolder, FolderUtilities::GetFilename(_context->GetScriptName(), false));
+	FolderUtilities::CreateFolder(scriptFolder);
+	l.Return(scriptFolder);
 	return l.ReturnCount();
 }
 

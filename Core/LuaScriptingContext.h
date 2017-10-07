@@ -18,5 +18,5 @@ public:
 	LuaScriptingContext();
 	~LuaScriptingContext();
 
-	bool LoadScript(string scriptContent, Debugger* debugger);
+	bool LoadScript(string scriptName, string scriptContent, Debugger* debugger);
 };

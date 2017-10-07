@@ -32,6 +32,8 @@ private:
 	int32_t _loadSlot = -1;
 
 protected:
+	string _scriptName;
+
 	vector<int> _callbacks[5][0x10000];
 	vector<int> _eventCallbacks[7];
 
@@ -39,10 +41,12 @@ protected:
 	virtual int InternalCallEventCallback(EventType type) = 0;
 
 public:
-	virtual bool LoadScript(string scriptContent, Debugger* debugger) = 0;
+	virtual bool LoadScript(string scriptName, string scriptContent, Debugger* debugger) = 0;
 
 	void Log(string message);
 	const char* GetLog();
+
+	string GetScriptName();
 
 	void RequestSaveState(int slot);
 	bool RequestLoadState(int slot);
