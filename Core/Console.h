@@ -58,6 +58,7 @@ class Console
 		atomic<uint32_t> _lagCounter;
 		
 		bool _initialized = false;
+		std::thread::id _emulationThreadId;
 
 		void LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile);
 
@@ -71,6 +72,9 @@ class Console
 		~Console();
 		void Run();
 		void Stop();
+
+		static std::thread::id GetEmulationThreadId();
+
 		static void RequestReset();
 		static void Reset(bool softReset = true);
 		static void PowerCycle();

@@ -232,11 +232,13 @@ namespace Mesen.GUI.Debugger
 
 		private void StopScript()
 		{
-			_scriptId = InteropEmu.DebugLoadScript(string.Empty, _scriptId);
-			if(_scriptId < 0) {
-				MessageBox.Show("Error while stopping script.");
-			} else {
-				lblScriptActive.Visible = false;
+			if(_scriptId >= 0) {
+				if(InteropEmu.DebugLoadScript(string.Empty, _scriptId) == 0) {
+					lblScriptActive.Visible = false;
+					_scriptId = -1;
+				} else {
+					MessageBox.Show("Error while stopping script.");
+				}
 			}
 		}
 

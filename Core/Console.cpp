@@ -349,6 +349,8 @@ void Console::Run()
 	_runLock.Acquire();
 	_stopLock.Acquire();
 
+	_emulationThreadId = std::this_thread::get_id();
+
 	targetTime = GetFrameDelay();
 
 	VideoDecoder::GetInstance()->StartThread();
@@ -486,6 +488,8 @@ void Console::Run()
 
 	_stopLock.Release();
 	_runLock.Release();
+
+	_emulationThreadId = std::thread::id();
 
 	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
 	MessageManager::SendNotification(ConsoleNotificationType::EmulationStopped);
@@ -634,6 +638,11 @@ void Console::RequestReset()
 uint32_t Console::GetLagCounter()
 {
 	return Instance->_lagCounter;
+}
+
+std::thread::id Console::GetEmulationThreadId()
+{
+	return Instance->_emulationThreadId;
 }
 
 void Console::ResetLagCounter()

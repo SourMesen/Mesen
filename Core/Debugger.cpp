@@ -54,8 +54,8 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_ppuStepCount = -1;
-	_sendNotification = true;
 
+	_preventResume = 0;
 	_stopFlag = false;
 	_suspendCount = 0;
 
@@ -578,7 +578,7 @@ bool Debugger::SleepUntilResume()
 		auto lock = _breakLock.AcquireSafe();
 		_executionStopped = true;
 
-		if(_sendNotification) {
+		if(_preventResume == 0) {
 			SoundMixer::StopAudio();
 			MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
 			ProcessEvent(EventType::CodeBreak);
@@ -588,7 +588,7 @@ bool Debugger::SleepUntilResume()
 			}
 		}
 
-		while(stepCount == 0 && !_stopFlag && _suspendCount == 0) {
+		while((stepCount == 0 && !_stopFlag && _suspendCount == 0) || _preventResume > 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();
 		}
@@ -657,7 +657,7 @@ void Debugger::PpuStep(uint32_t count)
 	_stepCount = -1;
 }
 
-void Debugger::Step(uint32_t count, bool sendNotification)
+void Debugger::Step(uint32_t count)
 {
 	//Run CPU for [count] INSTRUCTIONS before breaking again
 	_stepOut = false;
@@ -701,11 +701,6 @@ void Debugger::StepBack()
 		_needRewind = true;
 		Run();
 	}
-}
-
-void Debugger::SetSendNotificationFlag(bool enabled)
-{
-	_sendNotification = enabled;
 }
 
 void Debugger::Run()
@@ -891,6 +886,16 @@ bool Debugger::IsExecutionStopped()
 	return _executionStopped || _console->IsPaused();
 }
 
+void Debugger::PreventResume()
+{
+	_preventResume++;
+}
+
+void Debugger::AllowResume()
+{
+	_preventResume--;
+}
+
 void Debugger::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info)
 {
 	if(relativeAddr < 0x2000) {
@@ -1054,12 +1059,17 @@ int Debugger::LoadScript(string content, int32_t scriptId)
 		_hasScript = true;
 		return script->GetScriptId();
 	} else {
-		auto result = std::find_if(_scripts.begin(), _scripts.end(), [=](shared_ptr<ScriptHost> &script) {
-			return script->GetScriptId() == scriptId;
-		});
-		if(result != _scripts.end()) {
-			(*result)->LoadScript(content, this);
-			return scriptId;
+		if(content.empty()) {
+			RemoveScript(scriptId);
+			return 0;
+		} else {
+			auto result = std::find_if(_scripts.begin(), _scripts.end(), [=](shared_ptr<ScriptHost> &script) {
+				return script->GetScriptId() == scriptId;
+			});
+			if(result != _scripts.end()) {
+				(*result)->LoadScript(content, this);
+				return scriptId;
+			}
 		}
 	}
 

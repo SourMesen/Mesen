@@ -65,6 +65,7 @@ private:
 	bool _bpUpdateNeeded;
 	SimpleLock _bpUpdateLock;
 
+	atomic<int32_t> _preventResume;
 	atomic<bool> _stopFlag;
 	atomic<bool> _executionStopped;
 	atomic<int32_t> _suspendCount;
@@ -102,7 +103,6 @@ private:
 	atomic<uint8_t> _lastInstruction;
 	atomic<bool> _stepOut;
 	atomic<int32_t> _stepOverAddr;
-	atomic<bool> _sendNotification;
 
 	int32_t _ppuViewerScanline;
 	int32_t _ppuViewerCycle;
@@ -158,13 +158,12 @@ public:
 	void Resume();
 
 	void PpuStep(uint32_t count = 1);
-	void Step(uint32_t count = 1, bool sendNotification = true);
+	void Step(uint32_t count = 1);
 	void StepCycles(uint32_t cycleCount = 1);
 	void StepOver();
 	void StepOut();
 	void StepBack();
 	void Run();
-	void SetSendNotificationFlag(bool enabled);
 
 	bool LoadCdlFile(string cdlFilepath);
 	void ResetCdl();
@@ -176,6 +175,9 @@ public:
 	void SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle);
 
 	bool IsExecutionStopped();
+
+	void PreventResume();
+	void AllowResume();
 
 	void GenerateCodeOutput();
 	const char* GetCode(uint32_t &length);
