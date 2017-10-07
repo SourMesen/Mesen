@@ -62,3 +62,11 @@ bool ScriptHost::ProcessSavestate()
 	}
 	return false;
 }
+
+bool ScriptHost::CheckStateLoadedFlag()
+{
+	if(_context) {
+		return _context->CheckStateLoadedFlag();
+	}
+	return false;
+}

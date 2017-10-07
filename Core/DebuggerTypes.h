@@ -85,5 +85,7 @@ enum class EventType
 	Irq = 2,
 	StartFrame = 3,
 	EndFrame = 4,
-	CodeBreak = 5
+	CodeBreak = 5,
+	StateLoaded = 6,
+	StateSaved = 7,
 };

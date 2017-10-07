@@ -231,8 +231,10 @@ public:
 
 	void ResetCounters();
 
+	void UpdateProgramCounter(uint16_t &addr, uint8_t &value);
+
 	void ProcessScriptSaveState(uint16_t &addr, uint8_t &value);
-	void ProcessCpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
+	void ProcessCpuOperation(uint16_t &addr, uint8_t &value, MemoryOperationType type);
 	void ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessEvent(EventType type);
 };

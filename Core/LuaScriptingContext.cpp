@@ -11,6 +11,26 @@ LuaScriptingContext::LuaScriptingContext() { }
 LuaScriptingContext::~LuaScriptingContext()
 {
 	if(_lua) {
+		//Cleanup all references, this is required to prevent crashes that can occur when calling lua_close
+		std::unordered_set<int> references;
+		for(int i = (int)CallbackType::CpuRead; i <= (int)CallbackType::PpuWrite; i++) {
+			for(int addr = 0; addr < 0x10000; addr++ ){
+				for(int &ref : _callbacks[i][addr]) {
+					references.emplace(ref);
+				}
+			}
+		}
+
+		for(int i = (int)EventType::Reset; i <= (int)EventType::StateSaved; i++) {
+			for(int &ref : _eventCallbacks[i]) {
+				references.emplace(ref);
+			}
+		}
+
+		for(const int &ref : references) {
+			luaL_unref(_lua, LUA_REGISTRYINDEX, ref);
+		}
+
 		lua_close(_lua);
 		_lua = nullptr;
 	}
@@ -40,6 +60,18 @@ bool LuaScriptingContext::LoadScript(string scriptName, string scriptContent, De
 		Log(lua_tostring(_lua, -1));
 	}
 	return false;
+}
+
+void LuaScriptingContext::UnregisterMemoryCallback(CallbackType type, int startAddr, int endAddr, int reference)
+{
+	ScriptingContext::UnregisterMemoryCallback(type, startAddr, endAddr, reference);
+	luaL_unref(_lua, LUA_REGISTRYINDEX, reference);
+}
+
+void LuaScriptingContext::UnregisterEventCallback(EventType type, int reference)
+{
+	ScriptingContext::UnregisterEventCallback(type, reference);
+	luaL_unref(_lua, LUA_REGISTRYINDEX, reference);
 }
 
 void LuaScriptingContext::InternalCallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type)

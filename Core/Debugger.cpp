@@ -430,7 +430,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			}
 
 			addr = _nextReadAddr;
-			value = _memoryManager->DebugRead(addr, false);
+			value = _memoryManager->DebugRead(addr, true);
 			_cpu->SetDebugPC(addr);
 			_nextReadAddr = -1;
 		} else if(_needRewind) {
@@ -445,9 +445,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			} else {
 				RewindManager::StartRewinding(true);
 			}
-			addr = _cpu->GetState().PC;
-			value = _memoryManager->DebugRead(addr, false);
-			_cpu->SetDebugPC(addr);
+			UpdateProgramCounter(addr, value);
 			_needRewind = false;
 		}
 		ProcessScriptSaveState(addr, value);
@@ -789,7 +787,7 @@ void Debugger::SetNextStatement(uint16_t addr)
 	if(_currentReadAddr) {
 		_cpu->SetDebugPC(addr);
 		*_currentReadAddr = addr;
-		*_currentReadValue = _memoryManager->DebugRead(addr, false);
+		*_currentReadValue = _memoryManager->DebugRead(addr, true);
 	} else {
 		//Can't change the address right away (CPU is in the middle of an instruction)
 		//Address will change after current instruction is done executing
@@ -1095,24 +1093,34 @@ void Debugger::ResetCounters()
 	_profiler->Reset();
 }
 
+void Debugger::UpdateProgramCounter(uint16_t &addr, uint8_t &value)
+{
+	addr = _cpu->GetState().PC;
+	value = _memoryManager->DebugRead(addr, true);
+	_cpu->SetDebugPC(addr);
+}
+
 void Debugger::ProcessScriptSaveState(uint16_t &addr, uint8_t &value)
 {
 	if(_hasScript) {
 		for(shared_ptr<ScriptHost> &script : _scripts) {
 			if(script->ProcessSavestate()) {
-				addr = _cpu->GetState().PC;
-				value = _memoryManager->DebugRead(addr, false);
-				_cpu->SetDebugPC(addr);
+				//Adjust PC and current addr/value if a state was loaded due to a call to loadSavestateAsync
+				UpdateProgramCounter(addr, value);
 			}
 		}
 	}
 }
 
-void Debugger::ProcessCpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type)
+void Debugger::ProcessCpuOperation(uint16_t &addr, uint8_t &value, MemoryOperationType type)
 {
 	if(_hasScript) {
 		for(shared_ptr<ScriptHost> &script : _scripts) {
 			script->ProcessCpuOperation(addr, value, type);
+			if(type == MemoryOperationType::ExecOpCode && script->CheckStateLoadedFlag()) {
+				//Adjust PC and current addr/value when a state was loaded during a CpuExec callback
+				UpdateProgramCounter(addr, value);
+			}
 		}
 	}
 }

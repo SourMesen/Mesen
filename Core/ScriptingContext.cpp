@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "ScriptingContext.h"
 #include "DebuggerTypes.h"
-#include "Console.h"
+#include "SaveStateManager.h"
 
 string ScriptingContext::_log = "";
 
@@ -50,6 +50,18 @@ int ScriptingContext::CallEventCallback(EventType type)
 bool ScriptingContext::CheckInStartFrameEvent()
 {
 	return _inStartFrameEvent;
+}
+
+bool ScriptingContext::CheckInExecOpEvent()
+{
+	return _inExecOpEvent;
+}
+
+bool ScriptingContext::CheckStateLoadedFlag()
+{
+	bool stateLoaded = _stateLoaded;
+	_stateLoaded = false;
+	return stateLoaded;
 }
 
 void ScriptingContext::RegisterMemoryCallback(CallbackType type, int startAddr, int endAddr, int reference)
@@ -129,7 +141,7 @@ void ScriptingContext::SaveState()
 {
 	if(_saveSlot >= 0) {
 		stringstream ss;
-		Console::SaveState(ss);
+		SaveStateManager::SaveState(ss);
 
 		ss.seekg(0, std::ios::end);
 		uint32_t fileSize = (uint32_t)ss.tellg();
@@ -145,11 +157,25 @@ bool ScriptingContext::LoadState()
 	if(_loadSlot >= 0 && _saveSlotData.find(_loadSlot) != _saveSlotData.end()) {
 		stringstream ss;
 		ss << _saveSlotData[_loadSlot];
-		Console::LoadState(ss);
+		bool result = SaveStateManager::LoadState(ss);
 		_loadSlot = -1;
-		return true;
+		if(result) {
+			_stateLoaded = true;
+		}
+		return result;
 	}
 	return false;
+}
+
+bool ScriptingContext::LoadState(string stateData)
+{
+	stringstream ss;
+	ss << stateData;
+	bool result = SaveStateManager::LoadState(ss);
+	if(result) {
+		_stateLoaded = true;
+	}
+	return result;
 }
 
 bool ScriptingContext::ProcessSavestate()

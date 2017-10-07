@@ -19,4 +19,7 @@ public:
 	~LuaScriptingContext();
 
 	bool LoadScript(string scriptName, string scriptContent, Debugger* debugger);
+	
+	void UnregisterMemoryCallback(CallbackType type, int startAddr, int endAddr, int reference) override;
+	void UnregisterEventCallback(EventType type, int reference) override;
 };

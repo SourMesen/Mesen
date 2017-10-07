@@ -29,7 +29,7 @@
 #define errorCond(cond, text) if(cond) { luaL_error(lua, text); return 0; }
 #define checkparams() if(!l.CheckParamCount()) { return 0; }
 #define checkminparams(x) if(!l.CheckParamCount(x)) { return 0; }
-#define checkstartframe() if(!_context->CheckInStartFrameEvent()) { error("This function cannot be called outside StartFrame event callback"); return 0; }
+#define checksavestateconditions() if(!_context->CheckInStartFrameEvent() && !_context->CheckInExecOpEvent()) { error("This function must be called inside a StartFrame event callback or a CpuExec memory operation callback"); return 0; }
 
 enum class ExecuteCountType
 {
@@ -133,6 +133,8 @@ int LuaApi::GetLibrary(lua_State *lua)
 	lua_pushintvalue(startFrame, EventType::StartFrame);
 	lua_pushintvalue(endFrame, EventType::EndFrame);
 	lua_pushintvalue(codeBreak, EventType::CodeBreak);
+	lua_pushintvalue(stateLoaded, EventType::StateLoaded);
+	lua_pushintvalue(stateSaved, EventType::StateSaved);
 	lua_settable(lua, -3);
 
 	lua_pushliteral(lua, "executeCountType");
@@ -253,7 +255,7 @@ int LuaApi::RegisterEventCallback(lua_State *lua)
 	EventType type = (EventType)l.ReadInteger();
 	int reference = l.GetReference();
 	checkparams();
-	errorCond(type < EventType::Reset || type > EventType::CodeBreak, "the specified type is invalid");
+	errorCond(type < EventType::Reset || type > EventType::StateSaved, "the specified type is invalid");
 	errorCond(reference == LUA_NOREF, "the specified function could not be found");
 	_context->RegisterEventCallback(type, reference);
 	l.Return(reference);
@@ -266,7 +268,7 @@ int LuaApi::UnregisterEventCallback(lua_State *lua)
 	EventType type = (EventType)l.ReadInteger();
 	int reference = l.ReadInteger();
 	checkparams();
-	errorCond(type < EventType::Reset || type > EventType::CodeBreak, "the specified type is invalid");
+	errorCond(type < EventType::Reset || type > EventType::StateSaved, "the specified type is invalid");
 	errorCond(reference == LUA_NOREF, "function reference is invalid");
 	_context->UnregisterEventCallback(type, reference);
 	return l.ReturnCount();
@@ -438,7 +440,7 @@ int LuaApi::Rewind(lua_State *lua)
 	LuaCallHelper l(lua);
 	int seconds = l.ReadInteger();
 	checkparams();
-	checkstartframe();
+	checksavestateconditions();
 	errorCond(seconds <= 0, "seconds must be >= 1");
 	RewindManager::RewindSeconds(seconds);
 	return l.ReturnCount();
@@ -457,7 +459,7 @@ int LuaApi::TakeScreenshot(lua_State *lua)
 int LuaApi::SaveSavestate(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	checkstartframe();
+	checksavestateconditions();
 	stringstream ss;
 	SaveStateManager::SaveState(ss);
 	l.Return(ss.str());
@@ -469,10 +471,8 @@ int LuaApi::LoadSavestate(lua_State *lua)
 	LuaCallHelper l(lua);
 	string savestate = l.ReadString();
 	checkparams();
-	checkstartframe();
-	stringstream ss;
-	ss << savestate;
-	l.Return(SaveStateManager::LoadState(ss, true));
+	checksavestateconditions();
+	l.Return(_context->LoadState(savestate));
 	return l.ReturnCount();
 }
 
@@ -492,7 +492,7 @@ int LuaApi::LoadSavestateAsync(lua_State *lua)
 	int32_t slot = l.ReadInteger();
 	checkparams();
 	errorCond(slot < 0, "Slot must be >= 0");
-	_context->RequestLoadState(slot);
+	l.Return(_context->RequestLoadState(slot));
 	return l.ReturnCount();
 }
 

@@ -7,6 +7,7 @@
 #include "Console.h"
 #include "EmulationSettings.h"
 #include "VideoDecoder.h"
+#include "Debugger.h"
 
 const uint32_t SaveStateManager::FileFormatVersion;
 atomic<uint32_t> SaveStateManager::_lastIndex(1);
@@ -54,8 +55,6 @@ bool SaveStateManager::LoadState()
 
 void SaveStateManager::SaveState(ostream &stream)
 {
-	Console::Pause();
-
 	uint32_t emuVersion = EmulationSettings::GetMesenVersion();
 	stream.write("MST", 3);
 	stream.write((char*)&emuVersion, sizeof(emuVersion));
@@ -70,7 +69,6 @@ void SaveStateManager::SaveState(ostream &stream)
 	stream.write(romName.c_str(), romName.size());
 
 	Console::SaveState(stream);
-	Console::Resume();
 }
 
 bool SaveStateManager::SaveState(string filepath)
@@ -78,8 +76,16 @@ bool SaveStateManager::SaveState(string filepath)
 	ofstream file(filepath, ios::out | ios::binary);
 
 	if(file) {
+		Console::Pause();
 		SaveState(file);
 		file.close();
+
+		shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+		if(debugger) {
+			debugger->ProcessEvent(EventType::StateSaved);
+		}
+
+		Console::Resume();
 		return true;
 	}
 	return false;
@@ -141,9 +147,7 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 			}
 		}
 
-		Console::Pause();
 		Console::LoadState(stream);
-		Console::Resume();
 
 		return true;
 	}
@@ -157,10 +161,16 @@ bool SaveStateManager::LoadState(string filepath, bool hashCheckRequired)
 	bool result = false;
 
 	if(file.good()) {
+		Console::Pause();
 		if(LoadState(file, hashCheckRequired)) {
 			result = true;
 		}
 		file.close();
+		shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+		if(debugger) {
+			debugger->ProcessEvent(EventType::StateLoaded);
+		}
+		Console::Resume();
 	} else {
 		MessageManager::DisplayMessage("SaveStates", "SaveStateEmpty");
 	}
