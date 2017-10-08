@@ -192,7 +192,7 @@ void ShortcutKeyHandler::ProcessKeys()
 
 	if(_pressedKeys.size() == _lastPressedKeys.size()) {
 		bool noChange = true;
-		for(int i = 0; i < _pressedKeys.size(); i++) {
+		for(size_t i = 0; i < _pressedKeys.size(); i++) {
 			if(_pressedKeys[i] != _lastPressedKeys[i]) {
 				noChange = false;
 				break;

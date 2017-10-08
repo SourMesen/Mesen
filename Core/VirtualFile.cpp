@@ -71,7 +71,7 @@ void VirtualFile::LoadFile()
 			if(reader) {
 				if(_innerFileIndex >= 0) {
 					vector<string> filelist = reader->GetFileList(VirtualFile::RomExtensions);
-					if(filelist.size() > _innerFileIndex) {
+					if((int32_t)filelist.size() > _innerFileIndex) {
 						reader->ExtractFile(filelist[_innerFileIndex], _data);
 					}
 				} else {

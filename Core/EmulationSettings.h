@@ -388,7 +388,7 @@ struct KeyCombination
 		vector<uint32_t> otherKeys = keyCombination.GetKeys();
 
 		if(otherKeys.size() > myKeys.size()) {
-			for(int i = 0; i < myKeys.size(); i++) {
+			for(size_t i = 0; i < myKeys.size(); i++) {
 				if(std::find(otherKeys.begin(), otherKeys.end(), myKeys[i]) == otherKeys.end()) {
 					//Current key combination contains a key not found in the other combination, so it's not a subset
 					return false;
