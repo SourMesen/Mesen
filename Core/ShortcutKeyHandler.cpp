@@ -143,14 +143,21 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::RunSingleFrame)) {
-		if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
-			EmulationSettings::ClearFlags(EmulationFlags::Paused);
-			Console::Pause();
-			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
-			EmulationSettings::SetFlags(EmulationFlags::Paused);
-			Console::Resume();
+		if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
+			shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+			if(debugger) {
+				debugger->PpuStep(89341);
+			}
 		} else {
-			EmulationSettings::SetFlags(EmulationFlags::Paused);
+			if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
+				EmulationSettings::ClearFlags(EmulationFlags::Paused);
+				Console::Pause();
+				std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
+				EmulationSettings::SetFlags(EmulationFlags::Paused);
+				Console::Resume();
+			} else {
+				EmulationSettings::SetFlags(EmulationFlags::Paused);
+			}
 		}
 	}
 
