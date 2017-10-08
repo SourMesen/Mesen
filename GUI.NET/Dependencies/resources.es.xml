@@ -695,14 +695,14 @@
     <Message ID="InvalidXmlFile">El archivo seleccionado ({0}) no es un archivo XML válido.</Message>
     <Message ID="NoMatchingCheats">El archivo de trucos seleccionado ({0}) no contiene trucos que coincidan con el juego seleccionado.</Message>
 
-    <Message ID="ConfirmReset">¿Seguro que desea reinciar?</Message>
+    <Message ID="ConfirmReset">¿Seguro que desea reiniciar?</Message>
     <Message ID="ConfirmPowerCycle">¿Seguro que desea detener y reiniciar?</Message>
-    <Message ID="ConfirmExit">¿Seguro que desa salir?</Message>
+    <Message ID="ConfirmExit">¿Seguro que desea salir?</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Avance rápido</Message>
     <Message ID="EmulatorShortcutMappings_ToggleFastForward">Activar avance rápido</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Rebobinar</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleRewind">Toggle Rewind</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleRewind">Alternar rebobinado</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rebobinar 10 segundos</Message>
     <Message ID="EmulatorShortcutMappings_RewindOneMin">Rebobinar 1 minuto</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Aumentar velocidad</Message>
@@ -724,7 +724,7 @@
     <Message ID="EmulatorShortcutMappings_LoadState">Cargar estado en la posición actual</Message>
     <Message ID="EmulatorShortcutMappings_ToggleCheats">Habilitar/Deshabilitar códigos de trucos</Message>
     <Message ID="EmulatorShortcutMappings_ToggleAudio">Habilitar/Deshabilitar sonido</Message>
-    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Ejecutar un sólo fotograma</Message>
+    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Ejecutar un solo fotograma</Message>
 
     <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Expulsar disco</Message>
     <Message ID="EmulatorShortcutMappings_SetScale1x">Establecer escala 1x</Message>
@@ -733,15 +733,15 @@
     <Message ID="EmulatorShortcutMappings_SetScale4x">Establecer escala 4x</Message>
     <Message ID="EmulatorShortcutMappings_SetScale5x">Establecer escala 5x</Message>
     <Message ID="EmulatorShortcutMappings_SetScale6x">Establecer escala 6x</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Activar pantalla completa</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFps">Activar contador de FPS</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Toggle Game Timer</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Toggle Frame Counter</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Toggle Lag Counter</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleOsd">Toggle OSD (On-Screen Display)</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleBackground">Toggle Background Layer</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleSprites">Toggle Sprite Layer</Message>
-    <Message ID="EmulatorShortcutMappings_MaxSpeed">Activar velocidad máxima</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Alternar pantalla completa</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFps">Alternar contador de FPS</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Alternar temporizador de juego</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Alternar contador de frames</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lag</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleOsd">Alternar OSD (Información en pantalla)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar capa de fondo</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleSprites">Alternar capa de sprite</Message>
+    <Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidad máxima</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Cargar juego aleatorio</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Guardar partida - Hueco 1</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Guardar partida - Hueco 2</Message>
