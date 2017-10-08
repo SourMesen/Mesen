@@ -449,6 +449,20 @@ void BaseMapper::StreamState(bool saving)
 	ArrayInfo<uint8_t> nametableIndexes = { _nametableIndexes, 4 };
 	Stream(_mirroringType, chrRam, workRam, saveRam, prgPageNumbers, chrPageNumbers, nametableIndexes);
 
+	bool hasExtraNametable[2] = { _cartNametableRam[0] != nullptr, _cartNametableRam[1] != nullptr };
+	Stream(hasExtraNametable[0], hasExtraNametable[1]);
+	
+	for(int i = 0; i < 2; i++) {
+		if(hasExtraNametable[i]) {
+			if(!_cartNametableRam[i]) {
+				_cartNametableRam[i] = new uint8_t[0x400];
+			}
+
+			ArrayInfo<uint8_t> ram = { _cartNametableRam[i], 0x400 };
+			Stream(ram);
+		}
+	}
+	
 	if(!saving) {
 		for(uint16_t i = 0; i < 64; i++) {
 			if(_prgPageNumbers[i] != 0xEEEEEEEE) {
