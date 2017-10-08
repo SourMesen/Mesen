@@ -1049,7 +1049,7 @@ void BaseMapper::SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header)
 		if(header) {
 			//Save original rom with edited header
 			file.write((char*)header, sizeof(NESHeader));
-			file.write((char*)originalFile.data()+sizeof(NESHeader), originalFile.size());
+			file.write((char*)originalFile.data()+sizeof(NESHeader), originalFile.size() - sizeof(NESHeader));
 		} else {
 			vector<uint8_t> newFile;
 			newFile.insert(newFile.end(), (uint8_t*)&_nesHeader, ((uint8_t*)&_nesHeader) + sizeof(NESHeader));
