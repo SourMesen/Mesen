@@ -976,7 +976,7 @@ void Debugger::StopCodeRunner()
 	//Break debugger when code has finished executing
 	SetNextStatement(_returnToAddress);
 
-	if(CheckFlag(DebuggerFlags::DebuggerWindowEnabled)) {
+	if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
 		Step(1);
 	} else {
 		Run();

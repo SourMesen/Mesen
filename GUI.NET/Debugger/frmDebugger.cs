@@ -243,7 +243,8 @@ namespace Mesen.GUI.Debugger
 			if(mnuBreakOnBrk.Checked) {
 				flags |= DebuggerFlags.BreakOnBrk;
 			}
-			InteropEmu.DebugSetFlags(flags | DebuggerFlags.DebuggerWindowEnabled);
+			InteropEmu.DebugSetFlags(flags);
+			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -563,6 +564,7 @@ namespace Mesen.GUI.Debugger
 			}
 
 			InteropEmu.DebugSetFlags(0);
+			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, false);
 			InteropEmu.DebugSetBreakpoints(new InteropBreakpoint[0], 0);
 			InteropEmu.DebugRun();
 

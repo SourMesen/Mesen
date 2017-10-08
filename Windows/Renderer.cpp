@@ -457,7 +457,7 @@ namespace NES
 
 	void Renderer::Render()
 	{
-		bool paused = EmulationSettings::IsPaused();
+		bool paused = EmulationSettings::IsPaused() && Console::IsRunning();
 		if(_noUpdateCount > 10 || _frameChanged || paused || IsMessageShown()) {
 			_noUpdateCount = 0;
 		

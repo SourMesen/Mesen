@@ -1316,6 +1316,8 @@ namespace Mesen.GUI
 
 		IntegerFpsMode = 0x2000000000000,
 
+		DebuggerWindowEnabled = 0x4000000000000,
+
 		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,
 	}
@@ -1332,7 +1334,6 @@ namespace Mesen.GUI
 		DisassembleEverythingButData = 0x20,
 		BreakOnBrk = 0x40,
 		BreakOnUnofficialOpCode = 0x80,
-		DebuggerWindowEnabled = 0x100,
 	}
 
 	public struct InteropRomInfo

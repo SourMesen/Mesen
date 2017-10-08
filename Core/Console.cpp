@@ -402,8 +402,6 @@ void Console::Run()
 				_runLock.Acquire();
 			}
 
-			shared_ptr<Debugger> debugger = _debugger;
-
 			bool paused = EmulationSettings::IsPaused();
 			if(paused && !_stop) {
 				MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
@@ -414,13 +412,13 @@ void Console::Run()
 				_runLock.Release();
 				
 				PlatformUtilities::EnableScreensaver();
-				while(paused && !_stop && (!debugger || !debugger->CheckFlag(DebuggerFlags::DebuggerWindowEnabled))) {
+				while(paused && !_stop) {
 					//Sleep until emulation is resumed
 					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
 					paused = EmulationSettings::IsPaused();
 				}
 
-				if(debugger && debugger->CheckFlag(DebuggerFlags::DebuggerWindowEnabled)) {
+				if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
 					//Prevent pausing when debugger is active
 					EmulationSettings::ClearFlags(EmulationFlags::Paused);
 				}
@@ -430,6 +428,7 @@ void Console::Run()
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
 			}
 
+			shared_ptr<Debugger> debugger = _debugger;
 			if(debugger) {
 				debugger->ProcessEvent(EventType::StartFrame);
 			}

@@ -12,7 +12,6 @@ enum class DebuggerFlags
 	DisassembleEverythingButData = 0x20,
 	BreakOnBrk = 0x40,
 	BreakOnUnofficialOpCode = 0x80,
-	DebuggerWindowEnabled = 0x100,
 };
 
 enum class AddressType
