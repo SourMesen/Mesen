@@ -574,8 +574,7 @@ bool Debugger::SleepUntilResume()
 	if(stepCount == 0 && !_stopFlag && _suspendCount == 0) {
 		//Break
 		auto lock = _breakLock.AcquireSafe();
-		_executionStopped = true;
-
+		
 		if(_preventResume == 0) {
 			SoundMixer::StopAudio();
 			MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
@@ -586,6 +585,7 @@ bool Debugger::SleepUntilResume()
 			}
 		}
 
+		_executionStopped = true;
 		while((stepCount == 0 && !_stopFlag && _suspendCount == 0) || _preventResume > 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();

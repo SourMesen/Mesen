@@ -34,11 +34,7 @@ void SimpleLock::Acquire()
 
 bool SimpleLock::IsFree()
 {
-	if(!_lock.test_and_set()) {
-		_lock.clear();
-		return true;
-	}
-	return false;
+	return _lockCount == 0;
 }
 
 void SimpleLock::WaitForRelease()
