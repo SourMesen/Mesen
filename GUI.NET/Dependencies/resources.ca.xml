@@ -91,7 +91,7 @@
       <Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
       <Control ID="mnuRandomGame">Carrega un joc a l'atzar</Control>
       <Control ID="mnuHelp">Ajuda</Control>
-      <Control ID="mnuOnlineHelp">Online Help</Control>
+      <Control ID="mnuOnlineHelp">Ajuda en línia</Control>
       <Control ID="mnuCheckForUpdates">Cerca actualitzacions</Control>
       <Control ID="mnuReportBug">Envia un error</Control>
       <Control ID="mnuHelpWindow">Opcions de la línia d'ordres</Control>
@@ -243,7 +243,7 @@
       <Control ID="tpgGeneral">General</Control>
       <Control ID="lblVideoScale">Escala:</Control>
       <Control ID="lblVideoFilter">Filtre:</Control>
-      <Control ID="chkIntegerFpsMode">Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)</Control>
+      <Control ID="chkIntegerFpsMode">Activa el mode 60.0/50.0 FPS (ex. s'executa a 60.0 FPS en comptes de 60.1 en mode NTSC)</Control>
       <Control ID="chkVerticalSync">Activa la sincronització vertical</Control>
       <Control ID="lblDisplayRatio">Relació d'aspecte:</Control>
       <Control ID="lblCustomRatio">Relació personalitzada:</Control>
@@ -366,26 +366,26 @@
       <Control ID="btnOpenMesenFolder">Obre la carpeta de Mesen</Control>
       <Control ID="btnResetSettings">Restableix tot</Control>
 
-      <Control ID="tpgFiles">Files/Folders</Control>
+      <Control ID="tpgFiles">Fitxers/Carpetes</Control>
       <Control ID="grpFileAssociations">Associació de fitxers</Control>
       <Control ID="chkNesFormat">.NES</Control>
       <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
       <Control ID="chkMmoFormat">.MMO (Pel·lícules de Mesen)</Control>
       <Control ID="chkMstFormat">.MST (Partides guardades de Mesen)</Control>
       
-      <Control ID="grpDataStorageLocation">Data Storage Folder</Control>
-      <Control ID="radStorageDocuments">Store Mesen's data in my user profile</Control>
-      <Control ID="radStoragePortable">Store Mesen's data in the same folder as the application</Control>
-      <Control ID="lblDataLocation">Folder:</Control>
+      <Control ID="grpDataStorageLocation">Carpeta d'emmagatzematge</Control>
+      <Control ID="radStorageDocuments">Desa les dades de Mesen al meu perfil d'usuari</Control>
+      <Control ID="radStoragePortable">Desa les dades de Mesen a la mateixa carpeta que l'aplicació</Control>
+      <Control ID="lblDataLocation">Carpeta:</Control>
 
-      <Control ID="grpPathOverrides">Folder Overrides</Control>
-      <Control ID="chkGameOverride">Games:</Control>
-      <Control ID="chkAviOverride">Videos:</Control>
-      <Control ID="chkScreenshotsOverride">Screenshots:</Control>
-      <Control ID="chkSaveDataOverride">Save Data:</Control>
-      <Control ID="chkWaveOverride">Audio:</Control>
-      <Control ID="chkSaveStatesOverride">Save States:</Control>
-      <Control ID="chkMoviesOverride">Movies:</Control>
+      <Control ID="grpPathOverrides">Localització de les carpetes d'emmagatzematge</Control>
+      <Control ID="chkGameOverride">Jocs:</Control>
+      <Control ID="chkAviOverride">Enregistraments de vídeo:</Control>
+      <Control ID="chkScreenshotsOverride">Captures de pantalla:</Control>
+      <Control ID="chkSaveDataOverride">Partides guardades:</Control>
+      <Control ID="chkWaveOverride">Enregistraments de so:</Control>
+      <Control ID="chkSaveStatesOverride">Partides guardades (instantànies):</Control>
+      <Control ID="chkMoviesOverride">Pel·lícules:</Control>
 
       <Control ID="tpgAdvanced">Avançat</Control>
       <Control ID="chkFdsAutoLoadDisk">Insereix automàticament la cara A del disc 1 al carregar un joc de la FDS</Control>
@@ -393,7 +393,7 @@
       <Control ID="chkFdsAutoInsertDisk">Canvia automàticament de disc en jocs de la FDS</Control>
       
       <Control ID="tpgShortcuts">Dreceres</Control>
-      <Control ID="lblShortcutWarning">Warning: Your current configuration contains conflicting key bindings. If this is not intentional, please review and correct your key bindings.</Control>
+      <Control ID="lblShortcutWarning">Advertència: La vostra configuració actual conté assignacions conflictives. Si això no ha estat intencionat, us preguem que reviseu i corregiu les vostres assignacions.</Control>
       <Control ID="colAction">Acció</Control>
       <Control ID="colBinding1">Drecera #1</Control>
       <Control ID="colBinding2">Drecera #2</Control>
@@ -612,8 +612,8 @@
     <Message ID="LoadFromFile">Carrega des d'un fitxer...</Message>
     <Message ID="SaveToFile">Desa al fitxer...</Message>
 
-    <Message ID="ClearHistory">Clear History</Message>
-    <Message ID="LastFolderUsed">Last Folder Used</Message>
+    <Message ID="ClearHistory">Esborra el registre</Message>
+    <Message ID="LastFolderUsed">Darrera carpeta utilitzada</Message>
 
     <Message ID="Resume">Continua</Message>
     <Message ID="Pause">Pausa</Message>
@@ -681,9 +681,9 @@
     <Message ID="ConfirmExit">Esteu segurs de voler sortir?</Message>
 
     <Message ID="EmulatorShortcutMappings_FastForward">Avanç ràpid</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Toggle Fast Forward</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Activa/Desactiva l'avanç ràpid</Message>
     <Message ID="EmulatorShortcutMappings_Rewind">Rebobina</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleRewind">Toggle Rewind</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleRewind">Activa/Desactiva el rebobinat</Message>
     <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rebobina 10 segons</Message>
     <Message ID="EmulatorShortcutMappings_RewindOneMin">Rebobina 1 minut</Message>
     <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Augmenta la velocitat</Message>
@@ -707,47 +707,47 @@
     <Message ID="EmulatorShortcutMappings_ToggleAudio">Activa/Desactiva el so</Message>
     <Message ID="EmulatorShortcutMappings_RunSingleFrame">Avança un sol fotograma</Message>
 
-    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Eject Disk</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale1x">Set Scale 1x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale2x">Set Scale 2x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale3x">Set Scale 3x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale4x">Set Scale 4x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale5x">Set Scale 5x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale6x">Set Scale 6x</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Toggle Fullscreen Mode</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFps">Toggle FPS Counter</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Toggle Game Timer</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Toggle Frame Counter</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Toggle Lag Counter</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleOsd">Toggle OSD (On-Screen Display)</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleBackground">Toggle Background Layer</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleSprites">Toggle Sprite Layer</Message>
-    <Message ID="EmulatorShortcutMappings_MaxSpeed">Toggle Maximum Speed</Message>
-    <Message ID="EmulatorShortcutMappings_LoadRandomGame">Load Random Game</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Save State - Slot 1</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Save State - Slot 2</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">Save State - Slot 3</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">Save State - Slot 4</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Save State - Slot 5</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Save State - Slot 6</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Save State - Slot 7</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateToFile">Save State to File</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Load State - Slot 1</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Load State - Slot 2</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">Load State - Slot 3</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">Load State - Slot 4</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">Load State - Slot 5</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Load State - Slot 6</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Load State - Slot 7</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Load State - Slot 8</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Load State from File</Message>
-    <Message ID="EmulatorShortcutMappings_OpenFile">Open File</Message>
-    <Message ID="EmulatorShortcutMappings_OpenDebugger">Open Debugger</Message>
-    <Message ID="EmulatorShortcutMappings_OpenAssembler">Open Assembler</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Open Ppu Viewer</Message>
-    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Open Memory Tools</Message>
-    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Open Script Window</Message>
-    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Open Trace Logger</Message>
+    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Expulsa el disc</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale1x">Mida de vídeo 1x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale2x">Mida de vídeo 2x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale3x">Mida de vídeo 3x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale4x">Mida de vídeo 4x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale5x">Mida de vídeo 5x</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale6x">Mida de vídeo 6x</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Activa/Desactiva el mode de pantalla completa</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFps">Mostra/Amaga els FPS</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Mostra/Amaga el comptador de temps de joc</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Mostra/Amaga el comptador de fotogrames</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Mostra/Amaga el comptador de latència</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleOsd">Mostra/Amaga la visualització en pantalla (OSD)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleBackground">Mostra/Amaga la capa de fons</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleSprites">Mostra/Amaga la capa de sprites</Message>
+    <Message ID="EmulatorShortcutMappings_MaxSpeed">Activa/Desactiva la velocitat màxima</Message>
+    <Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrega un joc a l'atzar</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Desa la partida - Posició 1</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Desa la partida - Posició 2</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">Desa la partida - Posició 3</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">Desa la partida - Posició 4</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Desa la partida - Posició 5</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Desa la partida - Posició 6</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Desa la partida - Posició 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateToFile">Desa la partida a un fitxer</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carrega la partida - Posició 1</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carrega la partida - Posició 2</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">Carrega la partida - Posició 3</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">Carrega la partida - Posició 4</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">Carrega la partida - Posició 5</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Carrega la partida - Posició 6</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Carrega la partida - Posició 7</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Carrega la partida - Posició 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carrega la partida des d'un fitxer</Message>
+    <Message ID="EmulatorShortcutMappings_OpenFile">Obre un fitxer</Message>
+    <Message ID="EmulatorShortcutMappings_OpenDebugger">Obre el depurador</Message>
+    <Message ID="EmulatorShortcutMappings_OpenAssembler">Obre l'assemblador</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Obre el visor de la PPU</Message>
+    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Obre les eines de memòria</Message>
+    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Obre la finestra de scripts</Message>
+    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Obre l'enregistrador de rastres</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
