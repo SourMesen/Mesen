@@ -317,7 +317,7 @@ namespace Mesen.GUI.Forms.Config
 			this.cboAspectRatio.Name = "cboAspectRatio";
 			this.cboAspectRatio.Size = new System.Drawing.Size(197, 21);
 			this.cboAspectRatio.TabIndex = 16;
-			this.cboAspectRatio.SelectionChangeCommitted += new System.EventHandler(this.cboAspectRatio_SelectionChangeCommitted);
+			this.cboAspectRatio.SelectedIndexChanged += new System.EventHandler(this.cboAspectRatio_SelectedIndexChanged);
 			// 
 			// lblCustomRatio
 			// 

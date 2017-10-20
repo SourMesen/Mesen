@@ -407,7 +407,7 @@
 			this.cboTrack.Size = new System.Drawing.Size(47, 21);
 			this.cboTrack.TabIndex = 8;
 			this.cboTrack.DropDown += new System.EventHandler(this.cboTrack_DropDown);
-			this.cboTrack.SelectionChangeCommitted += new System.EventHandler(this.cboTrack_SelectionChangeCommitted);
+			this.cboTrack.SelectedIndexChanged += new System.EventHandler(this.cboTrack_SelectedIndexChanged);
 			this.cboTrack.DropDownClosed += new System.EventHandler(this.cboTrack_DropDownClosed);
 			// 
 			// lblTrackTotal

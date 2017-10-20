@@ -221,7 +221,7 @@
 			this.cboChrSelection.Size = new System.Drawing.Size(150, 21);
 			this.cboChrSelection.TabIndex = 1;
 			this.cboChrSelection.DropDown += new System.EventHandler(this.cboChrSelection_DropDown);
-			this.cboChrSelection.SelectionChangeCommitted += new System.EventHandler(this.cboChrSelection_SelectionChangeCommitted);
+			this.cboChrSelection.SelectedIndexChanged += new System.EventHandler(this.cboChrSelection_SelectedIndexChanged);
 			// 
 			// flpHighlight
 			// 

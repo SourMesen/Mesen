@@ -400,7 +400,7 @@ namespace Mesen.GUI.Controls
 			_disableShortcutKeys = false;
 		}
 
-		private void cboTrack_SelectionChangeCommitted(object sender, EventArgs e)
+		private void cboTrack_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			int currentTrack = InteropEmu.NsfGetCurrentTrack();
 			if(currentTrack != cboTrack.SelectedIndex) {

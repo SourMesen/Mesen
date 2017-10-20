@@ -374,7 +374,7 @@ namespace Mesen.GUI.Forms.Config
 			}
 		}
 
-		private void cboAspectRatio_SelectionChangeCommitted(object sender, EventArgs e)
+		private void cboAspectRatio_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			UpdateCustomRatioVisibility();
 		}

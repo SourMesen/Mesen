@@ -208,7 +208,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.RefreshViewer();
 		}
 
-		private void cboChrSelection_SelectionChangeCommitted(object sender, EventArgs e)
+		private void cboChrSelection_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._chrSelection = this.cboChrSelection.SelectedIndex;
 			this.GetData();
