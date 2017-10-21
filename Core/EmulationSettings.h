@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include "stdafx.h"
 #include "MessageManager.h"
 #include "GameClient.h"
