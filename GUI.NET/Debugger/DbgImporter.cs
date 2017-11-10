@@ -77,8 +77,8 @@ namespace Mesen.GUI.Debugger
 					while(!File.Exists(sourceFile)) {
 						//Go back up folder structure to attempt to find the file
 						string oldPath = basePath;
-						basePath = Path.GetFullPath(Path.Combine(basePath, @"..\"));
-						if(basePath == oldPath) {
+						basePath = Path.GetDirectoryName(basePath);
+						if(basePath == null || basePath == oldPath) {
 							break;
 						}
 						sourceFile = Path.Combine(basePath, file.Name);
