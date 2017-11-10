@@ -226,8 +226,8 @@ void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8
 	uint16_t baseAttributeAddr = baseAddr + 960;
 	for(uint8_t y = 0; y < 30; y++) {
 		for(uint8_t x = 0; x < 32; x++) {
-			uint8_t tileIndex = _mapper->ReadVRAM(baseAddr + (y << 5) + x);
-			uint8_t attribute = _mapper->ReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
+			uint8_t tileIndex = _mapper->DebugReadVRAM(baseAddr + (y << 5) + x);
+			uint8_t attribute = _mapper->DebugReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
 			tileData[y * 32 + x] = tileIndex;
 			paletteData[y * 32 + x] = attribute;
 			uint8_t shift = (x & 0x02) | ((y & 0x02) << 1);
@@ -235,8 +235,8 @@ void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8
 			uint8_t paletteBaseAddr = ((attribute >> shift) & 0x03) << 2;
 			uint16_t tileAddr = bgAddr + (tileIndex << 4);
 			for(uint8_t i = 0; i < 8; i++) {
-				uint8_t lowByte = _mapper->ReadVRAM(tileAddr + i);
-				uint8_t highByte = _mapper->ReadVRAM(tileAddr + i + 8);
+				uint8_t lowByte = _mapper->DebugReadVRAM(tileAddr + i);
+				uint8_t highByte = _mapper->DebugReadVRAM(tileAddr + i + 8);
 				for(uint8_t j = 0; j < 8; j++) {
 					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
 					screenBuffer[(y << 11) + (x << 3) + (i << 8) + j] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color);
@@ -356,8 +356,8 @@ void MemoryDumper::GetSprites(uint32_t* frameBuffer)
 					tileAddr += 8;
 				}
 
-				uint8_t lowByte = _mapper->ReadVRAM(tileAddr + i);
-				uint8_t highByte = _mapper->ReadVRAM(tileAddr + i + 8);
+				uint8_t lowByte = _mapper->DebugReadVRAM(tileAddr + i);
+				uint8_t highByte = _mapper->DebugReadVRAM(tileAddr + i + 8);
 				for(uint8_t j = 0; j < 8; j++) {
 					uint8_t color;
 					if(horizontalMirror) {
