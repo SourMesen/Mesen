@@ -59,6 +59,7 @@ private:
 	shared_ptr<BaseMapper> _mapper;
 
 	bool _hasScript;
+	SimpleLock _scriptLock;
 	int _nextScriptId;
 	vector<shared_ptr<ScriptHost>> _scripts;
 	

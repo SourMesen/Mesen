@@ -1049,6 +1049,7 @@ void Debugger::SetInputOverride(uint8_t port, uint32_t state)
 int Debugger::LoadScript(string name, string content, int32_t scriptId)
 {
 	DebugBreakHelper helper(this);
+	auto lock = _scriptLock.AcquireSafe();
 	
 	if(scriptId < 0) {
 		shared_ptr<ScriptHost> script(new ScriptHost(_nextScriptId++));
@@ -1072,13 +1073,14 @@ int Debugger::LoadScript(string name, string content, int32_t scriptId)
 void Debugger::RemoveScript(int32_t scriptId)
 {
 	DebugBreakHelper helper(this);
+	auto lock = _scriptLock.AcquireSafe();
 	_scripts.erase(std::remove_if(_scripts.begin(), _scripts.end(), [=](const shared_ptr<ScriptHost>& script) { return script->GetScriptId() == scriptId; }), _scripts.end());
 	_hasScript = _scripts.size() > 0;
 }
 
 const char* Debugger::GetScriptLog(int32_t scriptId)
 {
-	DebugBreakHelper helper(this);
+	auto lock = _scriptLock.AcquireSafe();
 	for(shared_ptr<ScriptHost> &script : _scripts) {
 		if(script->GetScriptId() == scriptId) {
 			return script->GetLog();
