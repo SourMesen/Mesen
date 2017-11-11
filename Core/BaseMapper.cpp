@@ -834,11 +834,16 @@ uint8_t BaseMapper::MapperReadVRAM(uint16_t addr, MemoryOperationType operationT
 void BaseMapper::DebugWriteVRAM(uint16_t addr, uint8_t value, bool disableSideEffects)
 {
 	ProcessVramAccess(addr);
-	if(!disableSideEffects) {
+	if(disableSideEffects) {
+		if(_chrPages[addr >> 8]) {
+			//Always allow writes when side-effects are disabled
+			_chrPages[addr >> 8][(uint8_t)addr] = value;
+		}
+	} else {
 		NotifyVRAMAddressChange(addr);
-	}
-	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
-		_chrPages[addr >> 8][(uint8_t)addr] = value;
+		if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
+			_chrPages[addr >> 8][(uint8_t)addr] = value;
+		}
 	}
 }
 
