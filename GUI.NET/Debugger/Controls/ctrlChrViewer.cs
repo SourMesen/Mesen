@@ -331,8 +331,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 			int tileIndex = GetLargeSpriteIndex(_tileIndex);
 
-			byte orgByte1 = InteropEmu.DebugGetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + y));
-			byte orgByte2 = InteropEmu.DebugGetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + y + 8));
+			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
+			DebugMemoryType memType = ppuMemory? DebugMemoryType.PpuMemory : (isChrRam ? DebugMemoryType.ChrRam : DebugMemoryType.ChrRom);
+
+			byte orgByte1 = InteropEmu.DebugGetMemoryValue(memType, (UInt32)(baseAddress + tileIndex * 16 + y));
+			byte orgByte2 = InteropEmu.DebugGetMemoryValue(memType, (UInt32)(baseAddress + tileIndex * 16 + y + 8));
 
 			byte byte1 = (byte)(orgByte1 & ~(0x80 >> x));
 			byte byte2 = (byte)(orgByte2 & ~(0x80 >> x));
@@ -345,8 +348,8 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			if(byte1 != orgByte1 || byte2 != orgByte2) {
-				InteropEmu.DebugSetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + y), byte1);
-				InteropEmu.DebugSetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + y + 8), byte2);
+				InteropEmu.DebugSetMemoryValue(memType, (UInt32)(baseAddress + tileIndex * 16 + y), byte1);
+				InteropEmu.DebugSetMemoryValue(memType, (UInt32)(baseAddress + tileIndex * 16 + y + 8), byte2);
 
 				GetData();
 				RefreshViewer();
@@ -395,10 +398,11 @@ namespace Mesen.GUI.Debugger.Controls
 			int tileIndex = GetLargeSpriteIndex(_tileIndex);
 
 			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
+			DebugMemoryType memType = ppuMemory ? DebugMemoryType.PpuMemory : (isChrRam ? DebugMemoryType.ChrRam : DebugMemoryType.ChrRom);
 			StringBuilder sb = new StringBuilder();
 			if(isChrRam) {
 				for(int i = 0; i < 16; i++) {
-					sb.Append(InteropEmu.DebugGetMemoryValue(ppuMemory ? DebugMemoryType.PpuMemory : DebugMemoryType.ChrRom, (UInt32)(baseAddress + tileIndex * 16 + i)).ToString("X2"));
+					sb.Append(InteropEmu.DebugGetMemoryValue(memType, (UInt32)(baseAddress + tileIndex * 16 + i)).ToString("X2"));
 				}
 			} else {
 				int absoluteTileIndex = ppuMemory ? InteropEmu.DebugGetAbsoluteChrAddress((uint)(baseAddress+tileIndex*16))/16 : (baseAddress / 16 + tileIndex);

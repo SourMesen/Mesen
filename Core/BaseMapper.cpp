@@ -916,25 +916,38 @@ uint32_t BaseMapper::GetMemorySize(DebugMemoryType type)
 
 uint8_t BaseMapper::GetMemoryValue(DebugMemoryType memoryType, uint32_t address)
 {
-	switch(memoryType) {
-		case DebugMemoryType::ChrRom: return _onlyChrRam ? _chrRam[address] : _chrRom[address];
-		case DebugMemoryType::ChrRam: return _chrRam[address];
-		case DebugMemoryType::SaveRam: return _saveRam[address];
-		case DebugMemoryType::PrgRom: return _prgRom[address];
-		case DebugMemoryType::WorkRam: return _workRam[address];
-	}
+	uint32_t memorySize = GetMemorySize(memoryType);
+	if(memorySize > 0) {
+		if(address > memorySize) {
+			address %= memorySize;
+		}
 
+		switch(memoryType) {
+			case DebugMemoryType::ChrRom: return _chrRom[address];
+			case DebugMemoryType::ChrRam: return _chrRam[address];
+			case DebugMemoryType::SaveRam: return _saveRam[address];
+			case DebugMemoryType::PrgRom: return _prgRom[address];
+			case DebugMemoryType::WorkRam: return _workRam[address];
+		}
+	}
 	return 0;
 }
 
 void BaseMapper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value)
 {
-	switch(memoryType) {
-		case DebugMemoryType::ChrRom: _chrRom[address] = value; break;
-		case DebugMemoryType::ChrRam: _chrRam[address] = value; break;
-		case DebugMemoryType::SaveRam: _saveRam[address] = value; break;
-		case DebugMemoryType::PrgRom: _prgRom[address] = value; break;
-		case DebugMemoryType::WorkRam: _workRam[address] = value; break;
+	uint32_t memorySize = GetMemorySize(memoryType);
+	if(memorySize > 0) {
+		if(address > memorySize) {
+			address %= memorySize;
+		}
+
+		switch(memoryType) {
+			case DebugMemoryType::ChrRom: _chrRom[address] = value; break;
+			case DebugMemoryType::ChrRam: _chrRam[address] = value; break;
+			case DebugMemoryType::SaveRam: _saveRam[address] = value; break;
+			case DebugMemoryType::PrgRom: _prgRom[address] = value; break;
+			case DebugMemoryType::WorkRam: _workRam[address] = value; break;
+		}
 	}
 }
 

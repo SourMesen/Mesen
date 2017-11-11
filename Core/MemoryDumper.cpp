@@ -148,8 +148,8 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 
 		case DebugMemoryType::PpuMemory: _mapper->DebugWriteVRAM(address, value, disableSideEffects); break;
 		case DebugMemoryType::PaletteMemory: _ppu->WritePaletteRAM(address, value); break;
-		case DebugMemoryType::SpriteMemory: _ppu->GetSpriteRam()[address] = value; break;
-		case DebugMemoryType::SecondarySpriteMemory: _ppu->GetSecondarySpriteRam()[address] = value; break;
+		case DebugMemoryType::SpriteMemory: _ppu->GetSpriteRam()[address % 0x100] = value; break;
+		case DebugMemoryType::SecondarySpriteMemory: _ppu->GetSecondarySpriteRam()[address % 0x20] = value; break;
 
 		case DebugMemoryType::PrgRom:
 			_mapper->SetMemoryValue(memoryType, address, value);
@@ -202,8 +202,8 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 
 		case DebugMemoryType::PpuMemory: return _mapper->DebugReadVRAM(address, disableSideEffects);
 		case DebugMemoryType::PaletteMemory: return _ppu->ReadPaletteRAM(address);
-		case DebugMemoryType::SpriteMemory: return _ppu->GetSpriteRam()[address];
-		case DebugMemoryType::SecondarySpriteMemory: return _ppu->GetSecondarySpriteRam()[address];
+		case DebugMemoryType::SpriteMemory: return _ppu->GetSpriteRam()[address % 0x100];
+		case DebugMemoryType::SecondarySpriteMemory: return _ppu->GetSecondarySpriteRam()[address % 0x20];
 
 		case DebugMemoryType::PrgRom:
 		case DebugMemoryType::ChrRom:
