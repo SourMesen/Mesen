@@ -1243,6 +1243,9 @@
     <ClInclude Include="VirtualFile.h">
       <Filter>Nes\RomLoader</Filter>
     </ClInclude>
+    <ClInclude Include="RotateFilter.h">
+      <Filter>VideoDecoder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1508,6 +1511,9 @@
     </ClCompile>
     <ClCompile Include="VirtualFile.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="RotateFilter.cpp">
+      <Filter>VideoDecoder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

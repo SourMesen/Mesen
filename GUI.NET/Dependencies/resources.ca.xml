@@ -292,6 +292,7 @@
       <Control ID="mnuPresetMonochrome">Monocrom</Control>
 
       <Control ID="tpgAdvanced">Avançat</Control>
+      <Control ID="lblScreenRotation">Screen Rotation:</Control>
       <Control ID="chkDisableBackground">Desactiva el fons</Control>
       <Control ID="chkDisableSprites">Desactiva els sprites</Control>
       <Control ID="chkForceBackgroundFirstColumn">Força l'aparició del fons a la primera columna</Control>
@@ -764,6 +765,12 @@
       <Value ID="Standard">Estàndard (4:3)</Value>
       <Value ID="Widescreen">Pantalla panoràmica (16:9)</Value>
       <Value ID="Custom">Personalitzat</Value>
+    </Enum>
+    <Enum ID="ScreenRotation">
+      <Value ID="None">None</Value>
+      <Value ID="_90Degrees">90°</Value>
+      <Value ID="_180Degrees">180°</Value>
+      <Value ID="_270Degrees">270°</Value>
     </Enum>
     <Enum ID="VideoFilterType">
       <Value ID="None">Cap</Value>

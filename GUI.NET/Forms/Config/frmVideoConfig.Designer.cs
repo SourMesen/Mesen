@@ -44,6 +44,7 @@ namespace Mesen.GUI.Forms.Config
 			this.nudCustomRatio = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.chkFullscreenForceIntegerScale = new System.Windows.Forms.CheckBox();
 			this.chkShowFps = new System.Windows.Forms.CheckBox();
+			this.chkIntegerFpsMode = new System.Windows.Forms.CheckBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgPicture = new System.Windows.Forms.TabPage();
@@ -124,7 +125,8 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkIntegerFpsMode = new System.Windows.Forms.CheckBox();
+			this.lblScreenRotation = new System.Windows.Forms.Label();
+			this.cboScreenRotation = new System.Windows.Forms.ComboBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -385,6 +387,18 @@ namespace Mesen.GUI.Forms.Config
 			this.chkShowFps.TabIndex = 9;
 			this.chkShowFps.Text = "Show FPS";
 			this.chkShowFps.UseVisualStyleBackColor = true;
+			// 
+			// chkIntegerFpsMode
+			// 
+			this.chkIntegerFpsMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkIntegerFpsMode.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkIntegerFpsMode, 2);
+			this.chkIntegerFpsMode.Location = new System.Drawing.Point(3, 49);
+			this.chkIntegerFpsMode.Name = "chkIntegerFpsMode";
+			this.chkIntegerFpsMode.Size = new System.Drawing.Size(308, 17);
+			this.chkIntegerFpsMode.TabIndex = 24;
+			this.chkIntegerFpsMode.Text = "Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)";
+			this.chkIntegerFpsMode.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
@@ -1274,16 +1288,20 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// tableLayoutPanel9
 			// 
-			this.tableLayoutPanel9.ColumnCount = 1;
+			this.tableLayoutPanel9.ColumnCount = 2;
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel9.Controls.Add(this.chkDisableBackground, 0, 0);
-			this.tableLayoutPanel9.Controls.Add(this.chkDisableSprites, 0, 1);
-			this.tableLayoutPanel9.Controls.Add(this.chkForceBackgroundFirstColumn, 0, 2);
-			this.tableLayoutPanel9.Controls.Add(this.chkForceSpritesFirstColumn, 0, 3);
+			this.tableLayoutPanel9.Controls.Add(this.chkDisableBackground, 0, 1);
+			this.tableLayoutPanel9.Controls.Add(this.chkDisableSprites, 0, 2);
+			this.tableLayoutPanel9.Controls.Add(this.chkForceBackgroundFirstColumn, 0, 3);
+			this.tableLayoutPanel9.Controls.Add(this.chkForceSpritesFirstColumn, 0, 4);
+			this.tableLayoutPanel9.Controls.Add(this.lblScreenRotation, 0, 0);
+			this.tableLayoutPanel9.Controls.Add(this.cboScreenRotation, 1, 0);
 			this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-			this.tableLayoutPanel9.RowCount = 5;
+			this.tableLayoutPanel9.RowCount = 6;
+			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1295,8 +1313,9 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisableBackground
 			// 
 			this.chkDisableBackground.Checked = false;
+			this.tableLayoutPanel9.SetColumnSpan(this.chkDisableBackground, 2);
 			this.chkDisableBackground.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisableBackground.Location = new System.Drawing.Point(0, 0);
+			this.chkDisableBackground.Location = new System.Drawing.Point(0, 27);
 			this.chkDisableBackground.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisableBackground.Name = "chkDisableBackground";
 			this.chkDisableBackground.Size = new System.Drawing.Size(521, 23);
@@ -1306,8 +1325,9 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisableSprites
 			// 
 			this.chkDisableSprites.Checked = false;
+			this.tableLayoutPanel9.SetColumnSpan(this.chkDisableSprites, 2);
 			this.chkDisableSprites.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisableSprites.Location = new System.Drawing.Point(0, 23);
+			this.chkDisableSprites.Location = new System.Drawing.Point(0, 50);
 			this.chkDisableSprites.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisableSprites.Name = "chkDisableSprites";
 			this.chkDisableSprites.Size = new System.Drawing.Size(521, 23);
@@ -1317,8 +1337,9 @@ namespace Mesen.GUI.Forms.Config
 			// chkForceBackgroundFirstColumn
 			// 
 			this.chkForceBackgroundFirstColumn.Checked = false;
+			this.tableLayoutPanel9.SetColumnSpan(this.chkForceBackgroundFirstColumn, 2);
 			this.chkForceBackgroundFirstColumn.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkForceBackgroundFirstColumn.Location = new System.Drawing.Point(0, 46);
+			this.chkForceBackgroundFirstColumn.Location = new System.Drawing.Point(0, 73);
 			this.chkForceBackgroundFirstColumn.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkForceBackgroundFirstColumn.Name = "chkForceBackgroundFirstColumn";
 			this.chkForceBackgroundFirstColumn.Size = new System.Drawing.Size(521, 23);
@@ -1328,8 +1349,9 @@ namespace Mesen.GUI.Forms.Config
 			// chkForceSpritesFirstColumn
 			// 
 			this.chkForceSpritesFirstColumn.Checked = false;
+			this.tableLayoutPanel9.SetColumnSpan(this.chkForceSpritesFirstColumn, 2);
 			this.chkForceSpritesFirstColumn.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkForceSpritesFirstColumn.Location = new System.Drawing.Point(0, 69);
+			this.chkForceSpritesFirstColumn.Location = new System.Drawing.Point(0, 96);
 			this.chkForceSpritesFirstColumn.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkForceSpritesFirstColumn.Name = "chkForceSpritesFirstColumn";
 			this.chkForceSpritesFirstColumn.Size = new System.Drawing.Size(521, 23);
@@ -1459,17 +1481,24 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
-			// chkIntegerFpsMode
+			// lblScreenRotation
 			// 
-			this.chkIntegerFpsMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkIntegerFpsMode.AutoSize = true;
-			this.tlpMain.SetColumnSpan(this.chkIntegerFpsMode, 2);
-			this.chkIntegerFpsMode.Location = new System.Drawing.Point(3, 49);
-			this.chkIntegerFpsMode.Name = "chkIntegerFpsMode";
-			this.chkIntegerFpsMode.Size = new System.Drawing.Size(295, 17);
-			this.chkIntegerFpsMode.TabIndex = 24;
-			this.chkIntegerFpsMode.Text = "Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)";
-			this.chkIntegerFpsMode.UseVisualStyleBackColor = true;
+			this.lblScreenRotation.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblScreenRotation.AutoSize = true;
+			this.lblScreenRotation.Location = new System.Drawing.Point(3, 7);
+			this.lblScreenRotation.Name = "lblScreenRotation";
+			this.lblScreenRotation.Size = new System.Drawing.Size(87, 13);
+			this.lblScreenRotation.TabIndex = 4;
+			this.lblScreenRotation.Text = "Screen Rotation:";
+			// 
+			// cboScreenRotation
+			// 
+			this.cboScreenRotation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboScreenRotation.FormattingEnabled = true;
+			this.cboScreenRotation.Location = new System.Drawing.Point(96, 3);
+			this.cboScreenRotation.Name = "cboScreenRotation";
+			this.cboScreenRotation.Size = new System.Drawing.Size(77, 21);
+			this.cboScreenRotation.TabIndex = 5;
 			// 
 			// frmVideoConfig
 			// 
@@ -1528,6 +1557,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.PerformLayout();
 			this.tpgAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel9.ResumeLayout(false);
+			this.tableLayoutPanel9.PerformLayout();
 			this.contextPicturePresets.ResumeLayout(false);
 			this.contextPaletteList.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -1631,5 +1661,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkShowColorIndexes;
 		private Debugger.ctrlPaletteDisplay ctrlPaletteDisplay;
 		private System.Windows.Forms.CheckBox chkIntegerFpsMode;
+		private System.Windows.Forms.Label lblScreenRotation;
+		private System.Windows.Forms.ComboBox cboScreenRotation;
 	}
 }

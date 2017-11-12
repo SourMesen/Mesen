@@ -10,6 +10,7 @@ using std::thread;
 
 class BaseVideoFilter;
 class ScaleFilter;
+class RotateFilter;
 class IRenderingDevice;
 struct HdPpuPixelInfo;
 
@@ -39,10 +40,12 @@ private:
 
 	ScreenSize _previousScreenSize = {};
 	double _previousScale = 0;
+	FrameInfo _lastFrameInfo;
 
 	VideoFilterType _videoFilterType = VideoFilterType::None;
 	unique_ptr<BaseVideoFilter> _videoFilter;
 	shared_ptr<ScaleFilter> _scaleFilter;
+	shared_ptr<RotateFilter> _rotateFilter;
 
 	void UpdateVideoFilter();
 

@@ -36,6 +36,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("CustomAspectRatio", nudCustomRatio);
 			AddBinding("VideoFilter", cboFilter);
 
+			AddBinding("ScreenRotation", cboScreenRotation);
+
 			AddBinding("OverscanLeft", nudOverscanLeft);
 			AddBinding("OverscanRight", nudOverscanRight);
 			AddBinding("OverscanTop", nudOverscanTop);

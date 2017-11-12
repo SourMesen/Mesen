@@ -294,6 +294,7 @@
       <Control ID="mnuPresetMonochrome">Monochrome</Control>
 
       <Control ID="tpgAdvanced">Advanced</Control>
+      <Control ID="lblScreenRotation">Screen Rotation:</Control>
       <Control ID="chkDisableBackground">Disable background</Control>
       <Control ID="chkDisableSprites">Disable sprites</Control>
       <Control ID="chkForceBackgroundFirstColumn">Force background display in first column</Control>
@@ -786,6 +787,12 @@
       <Value ID="Standard">Стандарт (4:3)</Value>
       <Value ID="Widescreen">Широкий экран (16:9)</Value>
       <Value ID="Custom">Custom</Value>
+    </Enum>
+    <Enum ID="ScreenRotation">
+      <Value ID="None">None</Value>
+      <Value ID="_90Degrees">90°</Value>
+      <Value ID="_180Degrees">180°</Value>
+      <Value ID="_270Degrees">270°</Value>
     </Enum>
     <Enum ID="VideoFilterType">
       <Value ID="None">Отсутствует</Value>

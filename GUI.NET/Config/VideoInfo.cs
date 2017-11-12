@@ -20,6 +20,7 @@ namespace Mesen.GUI.Config
 		public VideoFilterType VideoFilter = VideoFilterType.None;
 		public bool UseBilinearInterpolation = false;
 		public VideoAspectRatio AspectRatio = VideoAspectRatio.NoStretching;
+		public ScreenRotation ScreenRotation = ScreenRotation.None;
 		[MinMax(0.1, 5.0)] public double CustomAspectRatio = 1.0;
 		public bool VerticalSync = false;
 		public bool UseHdPacks = false;
@@ -77,6 +78,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.UseCustomVsPalette, videoInfo.UseCustomVsPalette);
 
 			InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);
+
+			InteropEmu.SetScreenRotation((UInt32)videoInfo.ScreenRotation);
 
 			InteropEmu.SetVideoFilter(videoInfo.VideoFilter);
 			InteropEmu.SetVideoResizeFilter(videoInfo.UseBilinearInterpolation ? VideoResizeFilter.Bilinear : VideoResizeFilter.NearestNeighbor);

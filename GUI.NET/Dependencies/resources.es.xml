@@ -292,6 +292,7 @@
       <Control ID="mnuPresetMonochrome">Monocromo</Control>
 
       <Control ID="tpgAdvanced">Avanzado</Control>
+      <Control ID="lblScreenRotation">Screen Rotation:</Control>
       <Control ID="chkDisableBackground">Deshabilitar fondo</Control>
       <Control ID="chkDisableSprites">Deshabilitar sprites</Control>
       <Control ID="chkForceBackgroundFirstColumn">Forzar ver fondo en primera columna</Control>
@@ -783,6 +784,12 @@
       <Value ID="Standard">Estándar (4:3)</Value>
       <Value ID="Widescreen">Pantalla panorámica (16:9)</Value>
       <Value ID="Custom">Personalizado</Value>
+    </Enum>
+    <Enum ID="ScreenRotation">
+      <Value ID="None">None</Value>
+      <Value ID="_90Degrees">90°</Value>
+      <Value ID="_180Degrees">180°</Value>
+      <Value ID="_270Degrees">270°</Value>
     </Enum>
     <Enum ID="VideoFilterType">
       <Value ID="None">Ninguno</Value>

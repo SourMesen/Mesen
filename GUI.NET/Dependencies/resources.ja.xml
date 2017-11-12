@@ -296,6 +296,7 @@
       <Control ID="mnuPresetMonochrome">モノクロ</Control>
 
       <Control ID="tpgAdvanced">詳細設定</Control>
+      <Control ID="lblScreenRotation">画面の回転:</Control>
       <Control ID="chkDisableBackground">バックグラウンドを隠す</Control>
       <Control ID="chkDisableSprites">スプライトを隠す</Control>
       <Control ID="chkForceBackgroundFirstColumn">ゲームの設定を無視して、画面の一番左側にバックグラウンドを表す</Control>
@@ -781,6 +782,12 @@
       <Value ID="Standard">ノーマル (4:3)</Value>
       <Value ID="Widescreen">ワイド (16:9)</Value>
       <Value ID="Custom">カスタム</Value>
+    </Enum>
+    <Enum ID="ScreenRotation">
+      <Value ID="None">なし</Value>
+      <Value ID="_90Degrees">90度</Value>
+      <Value ID="_180Degrees">180度</Value>
+      <Value ID="_270Degrees">270度</Value>
     </Enum>
     <Enum ID="VideoFilterType">
       <Value ID="None">なし</Value>

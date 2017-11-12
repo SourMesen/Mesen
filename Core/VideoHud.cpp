@@ -21,7 +21,8 @@ void VideoHud::DrawHud(uint8_t *outputBuffer, FrameInfo frameInfo, OverscanDimen
 
 bool VideoHud::DisplayControllerInput(int inputPort, uint8_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan, uint32_t displayIndex)
 {
-	int scale = frameInfo.Width / overscan.GetScreenWidth();
+	bool axisInverted = (EmulationSettings::GetScreenRotation() % 180) != 0;
+	int scale = frameInfo.Width / (axisInverted ? overscan.GetScreenHeight() : overscan.GetScreenWidth());
 	uint32_t* rgbaBuffer = (uint32_t*)outputBuffer;
 
 	InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();

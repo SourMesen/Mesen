@@ -6,6 +6,7 @@
 #include "Console.h"
 #include "StandardController.h"
 #include "ScaleFilter.h"
+#include "RotateFilter.h"
 
 BaseVideoFilter::BaseVideoFilter()
 {
@@ -52,7 +53,6 @@ void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer)
 	UpdateBufferSize();
 	OnBeforeApplyFilter();
 	ApplyFilter(ppuOutputBuffer);
-	_videoHud.DrawHud(GetOutputBuffer(), GetFrameInfo(), GetOverscan());
 	_frameLock.Release();
 }
 
@@ -77,13 +77,24 @@ void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename
 		frameInfo = GetFrameInfo();
 	}
 
+	pngBuffer = frameBuffer;
+
+	uint32_t rotationAngle = EmulationSettings::GetScreenRotation();
+	shared_ptr<RotateFilter> rotateFilter;
+	if(rotationAngle > 0) {
+		rotateFilter.reset(new RotateFilter(rotationAngle));
+		pngBuffer = rotateFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height);
+		frameInfo = rotateFilter->GetFrameInfo(frameInfo);
+	}
+
 	shared_ptr<ScaleFilter> scaleFilter = ScaleFilter::GetScaleFilter(filterType);
 	if(scaleFilter) {
-		pngBuffer = scaleFilter->ApplyFilter(frameBuffer, frameInfo.Width, frameInfo.Height);
+		pngBuffer = scaleFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height);
 		frameInfo = scaleFilter->GetFrameInfo(frameInfo);
-	} else {
-		pngBuffer = frameBuffer;
 	}
+
+	VideoHud hud;
+	hud.DrawHud((uint8_t*)pngBuffer, frameInfo, EmulationSettings::GetOverscanDimensions());
 
 	if(!filename.empty()) {
 		PNGHelper::WritePNG(filename, pngBuffer, frameInfo.Width, frameInfo.Height);

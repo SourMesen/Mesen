@@ -423,6 +423,7 @@
     <ClInclude Include="HdData.h" />
     <ClInclude Include="HdPackBuilder.h" />
     <ClInclude Include="HdPackLoader.h" />
+    <ClInclude Include="RotateFilter.h" />
     <ClInclude Include="LuaApi.h" />
     <ClInclude Include="LuaCallHelper.h" />
     <ClInclude Include="LuaScriptingContext.h" />
@@ -845,6 +846,7 @@
     <ClCompile Include="RewindData.cpp" />
     <ClCompile Include="RewindManager.cpp" />
     <ClCompile Include="RomLoader.cpp" />
+    <ClCompile Include="RotateFilter.cpp" />
     <ClCompile Include="ScriptHost.cpp" />
     <ClCompile Include="ScriptingContext.cpp" />
     <ClCompile Include="ShortcutKeyHandler.cpp" />

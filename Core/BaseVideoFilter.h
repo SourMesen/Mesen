@@ -8,7 +8,6 @@
 class BaseVideoFilter
 {
 private:
-	VideoHud _videoHud;
 	uint8_t* _outputBuffer = nullptr;
 	uint32_t _bufferSize = 0;
 	SimpleLock _frameLock;

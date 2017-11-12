@@ -11,6 +11,7 @@
 #include "RewindManager.h"
 #include "PPU.h"
 #include "HdNesPack.h"
+#include "RotateFilter.h"
 
 unique_ptr<VideoDecoder> VideoDecoder::Instance;
 
@@ -43,7 +44,7 @@ VideoDecoder::~VideoDecoder()
 
 FrameInfo VideoDecoder::GetFrameInfo()
 {
-	return _videoFilter->GetFrameInfo();
+	return _lastFrameInfo;
 }
 
 void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
@@ -58,6 +59,11 @@ void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
 		if(aspectRatio != 0.0) {
 			size.Width = (uint32_t)(frameInfo.OriginalHeight * scale * aspectRatio * ((double)frameInfo.Width / frameInfo.OriginalWidth));
 		}
+
+		if(EmulationSettings::GetScreenRotation() % 180) {
+			std::swap(size.Width, size.Height);
+		}
+
 		size.Scale = scale;
 	}
 }
@@ -86,6 +92,14 @@ void VideoDecoder::UpdateVideoFilter()
 			_hdFilterEnabled = true;
 		}
 	}
+
+	if(EmulationSettings::GetScreenRotation() == 0 && _rotateFilter) {
+		_rotateFilter.reset();
+	} else if(EmulationSettings::GetScreenRotation() > 0) {
+		if(!_rotateFilter || _rotateFilter->GetAngle() != EmulationSettings::GetScreenRotation()) {
+			_rotateFilter.reset(new RotateFilter(EmulationSettings::GetScreenRotation()));
+		}
+	}
 }
 
 void VideoDecoder::DecodeFrame()
@@ -98,9 +112,20 @@ void VideoDecoder::DecodeFrame()
 	_videoFilter->SendFrame(_ppuOutputBuffer);
 
 	uint32_t* outputBuffer = (uint32_t*)_videoFilter->GetOutputBuffer();
-	if(_scaleFilter) {
-		outputBuffer = _scaleFilter->ApplyFilter(outputBuffer, _videoFilter->GetFrameInfo().Width, _videoFilter->GetFrameInfo().Height);
+	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
+
+	if(_rotateFilter) {
+		outputBuffer = _rotateFilter->ApplyFilter(outputBuffer, frameInfo.Width, frameInfo.Height);
+		frameInfo = _rotateFilter->GetFrameInfo(frameInfo);
 	}
+
+	if(_scaleFilter) {
+		outputBuffer = _scaleFilter->ApplyFilter(outputBuffer, frameInfo.Width, frameInfo.Height);
+		frameInfo = _scaleFilter->GetFrameInfo(frameInfo);
+	}
+
+	VideoHud hud;
+	hud.DrawHud((uint8_t*)outputBuffer, frameInfo, _videoFilter->GetOverscan());
 
 	ScreenSize screenSize;
 	GetScreenSize(screenSize, true);
@@ -110,10 +135,7 @@ void VideoDecoder::DecodeFrame()
 	_previousScale = EmulationSettings::GetVideoScale();
 	_previousScreenSize = screenSize;
 	
-	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
-	if(_scaleFilter) {
-		frameInfo = _scaleFilter->GetFrameInfo(frameInfo);
-	}
+	_lastFrameInfo = frameInfo;
 
 	_frameChanged = false;
 	

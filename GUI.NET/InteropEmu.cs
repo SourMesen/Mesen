@@ -166,6 +166,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetPpuNmiConfig(UInt32 extraScanlinesBeforeNmi, UInt32 extraScanlineAfterNmi);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
 		[DllImport(DLLPath)] public static extern void SetVideoScale(double scale);
+		[DllImport(DLLPath)] public static extern void SetScreenRotation(UInt32 angle);
 		[DllImport(DLLPath)] public static extern void SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio);
 		[DllImport(DLLPath)] public static extern void SetVideoFilter(VideoFilterType filter);
 		[DllImport(DLLPath)] public static extern void SetVideoResizeFilter(VideoResizeFilter filter);
@@ -1775,6 +1776,14 @@ namespace Mesen.GUI
 		Standard = 4,
 		Widescreen = 5,
 		Custom = 6
+	}
+
+	public enum ScreenRotation
+	{
+		None = 0,
+		_90Degrees = 90,
+		_180Degrees = 180,
+		_270Degrees = 270
 	}
 
 	public enum DebugMemoryType

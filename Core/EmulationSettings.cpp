@@ -74,6 +74,7 @@ PictureSettings EmulationSettings::_pictureSettings;
 NtscFilterSettings EmulationSettings::_ntscFilterSettings;
 bool EmulationSettings::_backgroundEnabled = true;
 bool EmulationSettings::_spritesEnabled = true;
+uint32_t EmulationSettings::_screenRotation = 0;
 
 ConsoleType EmulationSettings::_consoleType = ConsoleType::Nes;
 ExpansionPortDevice EmulationSettings::_expansionDevice = ExpansionPortDevice::None;

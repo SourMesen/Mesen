@@ -513,6 +513,7 @@ private:
 	static NtscFilterSettings _ntscFilterSettings;
 	static bool _backgroundEnabled;
 	static bool _spritesEnabled;
+	static uint32_t _screenRotation;
 
 	static ConsoleType _consoleType;
 	static ExpansionPortDevice _expansionDevice;
@@ -1033,6 +1034,16 @@ public:
 		return _videoScale;
 	}
 	
+	static void SetScreenRotation(uint32_t angle)
+	{
+		_screenRotation = angle;
+	}
+
+	static uint32_t GetScreenRotation()
+	{
+		return _screenRotation;
+	}
+
 	static uint32_t* GetRgbPalette()
 	{
 		return _currentPalette;
