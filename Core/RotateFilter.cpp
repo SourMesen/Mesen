@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "RotateFilter.h"
-#pragma once
 
 RotateFilter::RotateFilter(uint32_t angle)
 {
