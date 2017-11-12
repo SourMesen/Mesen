@@ -52,7 +52,7 @@ uint32_t * RotateFilter::ApplyFilter(uint32_t * inputArgbBuffer, uint32_t width,
 		}
 	} else if(_angle == 270) {
 		for(uint32_t i = 0; i < height; i++) {
-			for(uint32_t j = 0; j < width; j++) {
+			for(int j = (int)width - 1; j >= 0; j--) {
 				_outputBuffer[j*height + i] = *input;
 				input++;
 			}
