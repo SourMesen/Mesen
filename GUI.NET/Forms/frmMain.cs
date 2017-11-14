@@ -458,7 +458,9 @@ namespace Mesen.GUI.Forms
 					break;
 
 				case InteropEmu.ConsoleNotificationType.DisconnectedFromServer:
-					ConfigManager.Config.ApplyConfig();
+					this.BeginInvoke((MethodInvoker)(() => {
+						ConfigManager.Config.ApplyConfig();
+					}));
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameStopped:

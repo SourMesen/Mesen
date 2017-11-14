@@ -311,6 +311,7 @@ void SoundMixer::UpdateEqualizers(bool forceUpdate)
 	EqualizerFilterType type = EmulationSettings::GetEqualizerFilterType();
 	if(type != EqualizerFilterType::None) {
 		vector<double> bands = EmulationSettings::GetEqualizerBands();
+		vector<double> bandGains = EmulationSettings::GetBandGains();
 
 		if(bands.size() != _eqFrequencyGrid->get_number_of_bands()) {
 			_equalizerLeft.reset();
@@ -332,8 +333,8 @@ void SoundMixer::UpdateEqualizers(bool forceUpdate)
 		}
 
 		for(unsigned int i = 0; i < _eqFrequencyGrid->get_number_of_bands(); i++) {
-			_equalizerLeft->change_band_gain_db(i, EmulationSettings::GetBandGain(i));
-			_equalizerRight->change_band_gain_db(i, EmulationSettings::GetBandGain(i));
+			_equalizerLeft->change_band_gain_db(i, bandGains[i]);
+			_equalizerRight->change_band_gain_db(i, bandGains[i]);
 		}
 	} else {
 		_equalizerLeft.reset();

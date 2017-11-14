@@ -567,6 +567,7 @@ std::unordered_map<string, string> MessageManager::_caResources = {
 
 std::list<string> MessageManager::_log;
 SimpleLock MessageManager::_logLock;
+SimpleLock MessageManager::_notificationLock;
 IMessageManager* MessageManager::_messageManager = nullptr;
 vector<INotificationListener*> MessageManager::_notificationListeners;
 
@@ -651,16 +652,20 @@ string MessageManager::GetLog()
 
 void MessageManager::RegisterNotificationListener(INotificationListener* notificationListener)
 {
+	auto lock = _notificationLock.AcquireSafe();
 	MessageManager::_notificationListeners.push_back(notificationListener);
 }
 
 void MessageManager::UnregisterNotificationListener(INotificationListener* notificationListener)
 {
+	auto lock = _notificationLock.AcquireSafe();
 	MessageManager::_notificationListeners.erase(std::remove(MessageManager::_notificationListeners.begin(), MessageManager::_notificationListeners.end(), notificationListener), MessageManager::_notificationListeners.end());
 }
 
 void MessageManager::SendNotification(ConsoleNotificationType type, void* parameter)
 {
+	auto lock = _notificationLock.AcquireSafe();
+
 	//Iterate on a copy to prevent issues if a notification causes a listener to unregister itself
 	vector<INotificationListener*> listeners = MessageManager::_notificationListeners;
 	vector<INotificationListener*> processedListeners;

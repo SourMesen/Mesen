@@ -9,7 +9,7 @@ using std::thread;
 #include "ClientConnectionData.h"
 #include "GameClientConnection.h"
 
-unique_ptr<GameClient> GameClient::Instance;
+shared_ptr<GameClient> GameClient::_instance;
 
 GameClient::GameClient()
 {
@@ -29,36 +29,42 @@ GameClient::~GameClient()
 
 bool GameClient::Connected()
 {
-	if(Instance) {
-		return Instance->_connected;
-	} else {
-		return false;
-	}
+	shared_ptr<GameClient> instance = _instance;
+	return instance ? instance->_connected : false;
 }
 
 void GameClient::Connect(shared_ptr<ClientConnectionData> connectionData)
 {
-	Instance.reset(new GameClient());
-	Instance->PrivateConnect(connectionData);
-	Instance->_clientThread.reset(new thread(&GameClient::Exec, Instance.get()));
+	_instance.reset(new GameClient());
+	
+	shared_ptr<GameClient> instance = _instance;
+	if(instance) {
+		instance->PrivateConnect(connectionData);
+		instance->_clientThread.reset(new thread(&GameClient::Exec, instance.get()));
+	}
 }
 
 void GameClient::Disconnect()
 {
-	Instance.reset();
+	_instance.reset();
+}
+
+shared_ptr<GameClientConnection> GameClient::GetConnection()
+{
+	shared_ptr<GameClient> instance = _instance;
+	return instance ? instance->_connection : nullptr;
 }
 
 void GameClient::PrivateConnect(shared_ptr<ClientConnectionData> connectionData)
 {
 	_stop = false;
-	_socket.reset(new Socket());
-	if(_socket->Connect(connectionData->Host.c_str(), connectionData->Port)) {
-		_connection.reset(new GameClientConnection(_socket, connectionData));
+	shared_ptr<Socket> socket(new Socket());
+	if(socket->Connect(connectionData->Host.c_str(), connectionData->Port)) {
+		_connection.reset(new GameClientConnection(socket, connectionData));
 		_connected = true;
 	} else {
 		MessageManager::DisplayMessage("NetPlay", "CouldNotConnect");
 		_connected = false;
-		_socket.reset();
 	}
 }
 
@@ -71,7 +77,7 @@ void GameClient::Exec()
 				_connection->SendInput();
 			} else {
 				_connected = false;
-				_socket.reset();
+				_connection->Shutdown();
 				_connection.reset();
 				break;
 			}
@@ -89,34 +95,26 @@ void GameClient::ProcessNotification(ConsoleNotificationType type, void* paramet
 
 uint8_t GameClient::GetControllerState(uint8_t port)
 {
-	if(Instance && Instance->_connection) {
-		return Instance->_connection->GetControllerState(port);
-	}
-
-	return 0;
+	shared_ptr<GameClientConnection> connection = GetConnection();
+	return connection ? connection->GetControllerState(port) : 0;
 }
 
 void GameClient::SelectController(uint8_t port)
 {
-	if(Instance && Instance->_connection) {
-		Instance->_connection->SelectController(port);
+	shared_ptr<GameClientConnection> connection = GetConnection();
+	if(connection) {
+		connection->SelectController(port);
 	}
 }
 
 uint8_t GameClient::GetAvailableControllers()
 {
-	if(Instance && Instance->_connection) {
-		return Instance->_connection->GetAvailableControllers();
-	}
-
-	return 0;
+	shared_ptr<GameClientConnection> connection = GetConnection();
+	return connection ? connection->GetAvailableControllers() : 0;
 }
 
 uint8_t GameClient::GetControllerPort()
 {
-	if(Instance && Instance->_connection) {
-		return Instance->_connection->GetControllerPort();
-	}
-
-	return GameConnection::SpectatorPort;
+	shared_ptr<GameClientConnection> connection = GetConnection();
+	return connection ? connection->GetControllerPort() : GameConnection::SpectatorPort;
 }

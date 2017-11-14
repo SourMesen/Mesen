@@ -28,16 +28,16 @@ RewindManager::~RewindManager()
 void RewindManager::ClearBuffer()
 {
 	if(_instance) {
-		_instance->_history.clear();
-		_instance->_historyBackup.clear();
-		_instance->_currentHistory = RewindData();
-		_instance->_framesToFastForward = 0;
-		_instance->_videoHistory.clear();
-		_instance->_videoHistoryBuilder.clear();
-		_instance->_audioHistory.clear();
-		_instance->_audioHistoryBuilder.clear();
-		_instance->_rewindState = RewindState::Stopped;
-		_instance->AddHistoryBlock();
+		_history.clear();
+		_historyBackup.clear();
+		_currentHistory = RewindData();
+		_framesToFastForward = 0;
+		_videoHistory.clear();
+		_videoHistoryBuilder.clear();
+		_audioHistory.clear();
+		_audioHistoryBuilder.clear();
+		_rewindState = RewindState::Stopped;
+		_currentHistory = RewindData();
 	}
 }
 
@@ -73,6 +73,8 @@ void RewindManager::ProcessNotification(ConsoleNotificationType type, void * par
 					_currentHistory.FrameCount++;
 					break;
 			}
+		} else {
+			ClearBuffer();
 		}
 	}
 }
@@ -80,15 +82,17 @@ void RewindManager::ProcessNotification(ConsoleNotificationType type, void * par
 void RewindManager::AddHistoryBlock()
 {
 	uint32_t maxHistorySize = EmulationSettings::GetRewindBufferSize() * 120;	
-	while(_history.size() > maxHistorySize) {
-		_history.pop_front();
-	}
+	if(maxHistorySize > 0) {
+		while(_history.size() > maxHistorySize) {
+			_history.pop_front();
+		}
 
-	if(_currentHistory.FrameCount > 0) {
-		_history.push_back(_currentHistory);
+		if(_currentHistory.FrameCount > 0) {
+			_history.push_back(_currentHistory);
+		}
+		_currentHistory = RewindData();
+		_currentHistory.SaveState();
 	}
-	_currentHistory = RewindData();
-	_currentHistory.SaveState();
 }
 
 void RewindManager::PopHistory()

@@ -22,6 +22,7 @@ private:
 	static std::unordered_map<string, string> _caResources;
 
 	static SimpleLock _logLock;
+	static SimpleLock _notificationLock;
 	static std::list<string> _log;
 
 public:

@@ -10,13 +10,14 @@ class ClientConnectionData;
 class GameClient : public INotificationListener
 {
 private:
-	static unique_ptr<GameClient> Instance;
+	static shared_ptr<GameClient> _instance;
 	unique_ptr<thread> _clientThread;
 	atomic<bool> _stop;
 
-	shared_ptr<Socket> _socket;
-	unique_ptr<GameClientConnection> _connection;
+	shared_ptr<GameClientConnection> _connection;
 	bool _connected = false;
+
+	static shared_ptr<GameClientConnection> GetConnection();
 
 	void PrivateConnect(shared_ptr<ClientConnectionData> connectionData);
 	void Exec();

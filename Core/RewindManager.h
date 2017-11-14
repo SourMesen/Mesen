@@ -39,6 +39,8 @@ private:
 
 	void ProcessFrame(void *frameBuffer, uint32_t width, uint32_t height);
 	bool ProcessAudio(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate);
+	
+	void ClearBuffer();
 
 public:
 	RewindManager();
@@ -46,9 +48,7 @@ public:
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	void ProcessEndOfFrame();
-
-	static void ClearBuffer();
-
+	
 	static void RecordInput(uint8_t port, uint8_t input);
 	static uint8_t GetInput(uint8_t port);
 

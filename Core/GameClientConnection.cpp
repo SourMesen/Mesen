@@ -27,12 +27,20 @@ GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr
 
 GameClientConnection::~GameClientConnection()
 {
-	_shutdown = true;
-	DisableControllers();
+	Shutdown();
+}
 
-	MessageManager::SendNotification(ConsoleNotificationType::DisconnectedFromServer);
-	MessageManager::DisplayMessage("NetPlay", "ConnectionLost");
-	MessageManager::UnregisterNotificationListener(this);
+void GameClientConnection::Shutdown()
+{
+	if(!_shutdown) {
+		_shutdown = true;
+		DisableControllers();
+
+		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+		MessageManager::UnregisterNotificationListener(this);
+		MessageManager::SendNotification(ConsoleNotificationType::DisconnectedFromServer);
+		MessageManager::DisplayMessage("NetPlay", "ConnectionLost");
+	}
 }
 
 void GameClientConnection::SendHandshake()
@@ -49,6 +57,7 @@ void GameClientConnection::SendControllerSelection(uint8_t port)
 
 void GameClientConnection::ClearInputData()
 {
+	LockHandler lock = _writeLock.AcquireSafe();
 	for(int i = 0; i < 4; i++) {
 		_inputSize[i] = 0;
 		_inputData[i].clear();

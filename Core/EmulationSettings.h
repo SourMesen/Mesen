@@ -537,6 +537,7 @@ private:
 	static RamPowerOnState _ramPowerOnState;
 	
 	static SimpleLock _shortcutLock;
+	static SimpleLock _equalizerLock;
 	static SimpleLock _lock;
 
 public:
@@ -658,29 +659,37 @@ public:
 		_audioSettingsChanged = true;
 	}
 
-	static double GetBandGain(int band)
+	static vector<double> GetBandGains()
 	{
-		if(band < (int)_bandGains.size()) {
-			return _bandGains[band];
-		} else {
-			return 0;
-		}
+		auto lock = _equalizerLock.AcquireSafe();
+		return _bandGains;
 	}
 
 	static void SetBandGain(int band, double gain)
 	{
+		auto lock = _equalizerLock.AcquireSafe();
 		if(band < (int)_bandGains.size()) {
 			_bandGains[band] = gain;
+			_audioSettingsChanged = true;
 		}
-		_audioSettingsChanged = true;
 	}
-	
+
 	static vector<double> GetEqualizerBands()
 	{
+		auto lock = _equalizerLock.AcquireSafe();
 		return _bands;
 	}
 
-	static void SetEqualizerBands(double *bands, uint32_t bandCount);
+	static void SetEqualizerBands(double *bands, uint32_t bandCount)
+	{
+		auto lock = _equalizerLock.AcquireSafe();
+		_bands.clear();
+		_bandGains.clear();
+		for(uint32_t i = 0; i < bandCount; i++) {
+			_bands.push_back(bands[i]);
+			_bandGains.push_back(0);
+		}
+	}
 
 	static EqualizerFilterType GetEqualizerFilterType()
 	{
@@ -830,7 +839,10 @@ public:
 		return _rewindSpeed;
 	}
 
-	static void SetRewindBufferSize(uint32_t seconds);
+	static void SetRewindBufferSize(uint32_t seconds)
+	{
+		_rewindBufferSize = seconds;
+	}
 
 	static uint32_t GetRewindBufferSize()
 	{

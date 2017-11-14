@@ -20,6 +20,7 @@ GameConnection::GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConne
 
 void GameConnection::ReadSocket()
 {
+	auto lock = _socketLock.AcquireSafe();
 	int bytesReceived = _socket->Recv((char*)_readBuffer + _readPosition, 0x40000 - _readPosition, 0);
 	if(bytesReceived > 0) {
 		_readPosition += bytesReceived;
@@ -32,7 +33,7 @@ bool GameConnection::ExtractMessage(void *buffer, uint32_t &messageLength)
 
 	if(messageLength > 1000000) {
 		MessageManager::Log("[Netplay] Invalid data received, closing connection.");
-		_socket->Close();
+		Disconnect();
 		return false;
 	}
 
@@ -71,13 +72,13 @@ NetMessage* GameConnection::ReadMessage()
 
 void GameConnection::SendNetMessage(NetMessage &message)
 {
-	_socketLock.Acquire();
+	auto lock = _socketLock.AcquireSafe();
 	message.Send(*_socket.get());
-	_socketLock.Release();
 }
 
 void GameConnection::Disconnect()
 {
+	auto lock = _socketLock.AcquireSafe();
 	_socket->Close();
 }
 

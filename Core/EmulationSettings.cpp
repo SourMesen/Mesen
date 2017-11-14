@@ -31,6 +31,7 @@ double EmulationSettings::_stereoAngle = 0;
 double EmulationSettings::_reverbStrength = 0;
 double EmulationSettings::_reverbDelay = 0;
 uint32_t EmulationSettings::_crossFeedRatio = 0;
+SimpleLock EmulationSettings::_equalizerLock;
 
 NesModel EmulationSettings::_model = NesModel::Auto;
 PpuModel EmulationSettings::_ppuModel = PpuModel::Ppu2C02;
@@ -114,28 +115,6 @@ uint8_t EmulationSettings::_paletteLut[11][64] = {
 	/* 2C05-04 */   { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,15,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,15,62,63 },
 	/* 2C05-05 */   { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,15,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,15,62,63 },
 };
-
-void EmulationSettings::SetEqualizerBands(double *bands, uint32_t bandCount)
-{
-	Console::Pause();
-	_bands.clear();
-	_bandGains.clear();
-	for(uint32_t i = 0; i < bandCount; i++) {
-		_bands.push_back(bands[i]);
-		_bandGains.push_back(0);
-	}
-	Console::Resume();
-}
-
-void EmulationSettings::SetRewindBufferSize(uint32_t seconds)
-{
-	if(seconds == 0 || _rewindBufferSize == 0) {
-		Console::Pause();
-		RewindManager::ClearBuffer();
-		Console::Resume();
-	}
-	_rewindBufferSize = seconds;
-}
 
 uint32_t EmulationSettings::GetEmulationSpeed(bool ignoreTurbo)
 {
