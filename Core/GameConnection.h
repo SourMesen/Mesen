@@ -18,8 +18,8 @@ class GameConnection
 protected:
 	shared_ptr<Socket> _socket;
 	shared_ptr<ClientConnectionData> _connectionData;
-	uint8_t _readBuffer[0x40000];
-	uint8_t _messageBuffer[0x40000];
+	uint8_t _readBuffer[0x40000] = {};
+	uint8_t _messageBuffer[0x40000] = {};
 	int _readPosition = 0;
 	SimpleLock _socketLock;
 

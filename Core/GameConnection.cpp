@@ -31,7 +31,7 @@ bool GameConnection::ExtractMessage(void *buffer, uint32_t &messageLength)
 	messageLength = _readBuffer[0] | (_readBuffer[1] << 8) | (_readBuffer[2] << 16) | (_readBuffer[3] << 24);
 
 	if(messageLength > 1000000) {
-		std::cout << "Invalid data received, closing connection" << std::endl;
+		MessageManager::Log("[Netplay] Invalid data received, closing connection.");
 		_socket->Close();
 		return false;
 	}
@@ -51,17 +51,19 @@ NetMessage* GameConnection::ReadMessage()
 {
 	ReadSocket();
 
-	uint32_t messageLength;		
-	if(ExtractMessage(_messageBuffer, messageLength)) {
-		switch((MessageType)_messageBuffer[0]) {
-			case MessageType::HandShake: return new HandShakeMessage(_messageBuffer, messageLength);
-			case MessageType::SaveState: return new SaveStateMessage(_messageBuffer, messageLength);
-			case MessageType::InputData: return new InputDataMessage(_messageBuffer, messageLength);
-			case MessageType::MovieData: return new MovieDataMessage(_messageBuffer, messageLength);
-			case MessageType::GameInformation: return new GameInformationMessage(_messageBuffer, messageLength);
-			case MessageType::PlayerList: return new PlayerListMessage(_messageBuffer, messageLength);
-			case MessageType::SelectController: return new SelectControllerMessage(_messageBuffer, messageLength);
-			case MessageType::ForceDisconnect: return new ForceDisconnectMessage(_messageBuffer, messageLength);
+	if(_readPosition > 4) {
+		uint32_t messageLength;
+		if(ExtractMessage(_messageBuffer, messageLength)) {
+			switch((MessageType)_messageBuffer[0]) {
+				case MessageType::HandShake: return new HandShakeMessage(_messageBuffer, messageLength);
+				case MessageType::SaveState: return new SaveStateMessage(_messageBuffer, messageLength);
+				case MessageType::InputData: return new InputDataMessage(_messageBuffer, messageLength);
+				case MessageType::MovieData: return new MovieDataMessage(_messageBuffer, messageLength);
+				case MessageType::GameInformation: return new GameInformationMessage(_messageBuffer, messageLength);
+				case MessageType::PlayerList: return new PlayerListMessage(_messageBuffer, messageLength);
+				case MessageType::SelectController: return new SelectControllerMessage(_messageBuffer, messageLength);
+				case MessageType::ForceDisconnect: return new ForceDisconnectMessage(_messageBuffer, messageLength);
+			}
 		}
 	}
 	return nullptr;
