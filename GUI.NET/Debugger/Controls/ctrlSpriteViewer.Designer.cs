@@ -86,9 +86,9 @@
 			// 
 			this.grpSpriteInfo.Controls.Add(this.tableLayoutPanel4);
 			this.grpSpriteInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpSpriteInfo.Location = new System.Drawing.Point(263, 3);
+			this.grpSpriteInfo.Location = new System.Drawing.Point(269, 3);
 			this.grpSpriteInfo.Name = "grpSpriteInfo";
-			this.grpSpriteInfo.Size = new System.Drawing.Size(416, 521);
+			this.grpSpriteInfo.Size = new System.Drawing.Size(410, 521);
 			this.grpSpriteInfo.TabIndex = 4;
 			this.grpSpriteInfo.TabStop = false;
 			this.grpSpriteInfo.Text = "Sprite Info";
@@ -128,7 +128,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(410, 502);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(404, 502);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// lblPalette
@@ -385,8 +385,8 @@
 			// 
 			this.picSprites.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picSprites.ContextMenuStrip = this.ctxMenu;
-			this.picSprites.Location = new System.Drawing.Point(1, 1);
-			this.picSprites.Margin = new System.Windows.Forms.Padding(1);
+			this.picSprites.Location = new System.Drawing.Point(4, 4);
+			this.picSprites.Margin = new System.Windows.Forms.Padding(4);
 			this.picSprites.Name = "picSprites";
 			this.picSprites.Size = new System.Drawing.Size(258, 514);
 			this.picSprites.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;

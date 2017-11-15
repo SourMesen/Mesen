@@ -100,7 +100,7 @@
 			// 
 			this.grpDisplayOptions.Controls.Add(this.tableLayoutPanel1);
 			this.grpDisplayOptions.Dock = System.Windows.Forms.DockStyle.Top;
-			this.grpDisplayOptions.Location = new System.Drawing.Point(267, 300);
+			this.grpDisplayOptions.Location = new System.Drawing.Point(269, 300);
 			this.grpDisplayOptions.Name = "grpDisplayOptions";
 			this.grpDisplayOptions.Size = new System.Drawing.Size(264, 133);
 			this.grpDisplayOptions.TabIndex = 4;
@@ -262,7 +262,7 @@
 			// 
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel4);
 			this.grpTileInfo.Dock = System.Windows.Forms.DockStyle.Top;
-			this.grpTileInfo.Location = new System.Drawing.Point(267, 3);
+			this.grpTileInfo.Location = new System.Drawing.Point(269, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
 			this.grpTileInfo.Size = new System.Drawing.Size(264, 291);
 			this.grpTileInfo.TabIndex = 4;
@@ -412,7 +412,7 @@
 			this.tableLayoutPanel3.SetRowSpan(this.tableLayoutPanel2, 2);
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(258, 519);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(260, 520);
 			this.tableLayoutPanel2.TabIndex = 7;
 			// 
 			// picChrBank1
@@ -423,7 +423,7 @@
 			this.picChrBank1.Location = new System.Drawing.Point(1, 1);
 			this.picChrBank1.Margin = new System.Windows.Forms.Padding(1);
 			this.picChrBank1.Name = "picChrBank1";
-			this.picChrBank1.Size = new System.Drawing.Size(256, 257);
+			this.picChrBank1.Size = new System.Drawing.Size(258, 258);
 			this.picChrBank1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picChrBank1.TabIndex = 0;
 			this.picChrBank1.TabStop = false;
@@ -451,10 +451,10 @@
 			this.picChrBank2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picChrBank2.ContextMenuStrip = this.ctxMenu;
 			this.picChrBank2.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picChrBank2.Location = new System.Drawing.Point(1, 260);
+			this.picChrBank2.Location = new System.Drawing.Point(1, 261);
 			this.picChrBank2.Margin = new System.Windows.Forms.Padding(1);
 			this.picChrBank2.Name = "picChrBank2";
-			this.picChrBank2.Size = new System.Drawing.Size(256, 257);
+			this.picChrBank2.Size = new System.Drawing.Size(258, 258);
 			this.picChrBank2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picChrBank2.TabIndex = 1;
 			this.picChrBank2.TabStop = false;

@@ -144,7 +144,6 @@ namespace Mesen.GUI.Debugger
 			this.tpgNametableViewer.Controls.Add(this.ctrlNametableViewer);
 			this.tpgNametableViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgNametableViewer.Name = "tpgNametableViewer";
-			this.tpgNametableViewer.Padding = new System.Windows.Forms.Padding(3);
 			this.tpgNametableViewer.Size = new System.Drawing.Size(701, 526);
 			this.tpgNametableViewer.TabIndex = 0;
 			this.tpgNametableViewer.Text = "Nametable Viewer";
@@ -153,9 +152,9 @@ namespace Mesen.GUI.Debugger
 			// ctrlNametableViewer
 			// 
 			this.ctrlNametableViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlNametableViewer.Location = new System.Drawing.Point(3, 3);
+			this.ctrlNametableViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlNametableViewer.Name = "ctrlNametableViewer";
-			this.ctrlNametableViewer.Size = new System.Drawing.Size(695, 520);
+			this.ctrlNametableViewer.Size = new System.Drawing.Size(701, 526);
 			this.ctrlNametableViewer.TabIndex = 0;
 			this.ctrlNametableViewer.OnSelectChrTile += new System.EventHandler(this.ctrlNametableViewer_OnSelectChrTile);
 			// 
@@ -164,7 +163,6 @@ namespace Mesen.GUI.Debugger
 			this.tpgChrViewer.Controls.Add(this.ctrlChrViewer);
 			this.tpgChrViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgChrViewer.Name = "tpgChrViewer";
-			this.tpgChrViewer.Padding = new System.Windows.Forms.Padding(3);
 			this.tpgChrViewer.Size = new System.Drawing.Size(701, 526);
 			this.tpgChrViewer.TabIndex = 1;
 			this.tpgChrViewer.Text = "CHR Viewer";
@@ -173,9 +171,10 @@ namespace Mesen.GUI.Debugger
 			// ctrlChrViewer
 			// 
 			this.ctrlChrViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlChrViewer.Location = new System.Drawing.Point(3, 3);
+			this.ctrlChrViewer.Location = new System.Drawing.Point(0, 0);
+			this.ctrlChrViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlChrViewer.Name = "ctrlChrViewer";
-			this.ctrlChrViewer.Size = new System.Drawing.Size(695, 520);
+			this.ctrlChrViewer.Size = new System.Drawing.Size(701, 526);
 			this.ctrlChrViewer.TabIndex = 2;
 			// 
 			// tpgSpriteViewer

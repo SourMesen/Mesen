@@ -53,10 +53,10 @@
 			// 
 			this.grpColorInfo.Controls.Add(this.tableLayoutPanel4);
 			this.grpColorInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpColorInfo.Location = new System.Drawing.Point(135, 3);
+			this.grpColorInfo.Location = new System.Drawing.Point(141, 3);
 			this.grpColorInfo.Name = "grpColorInfo";
 			this.tableLayoutPanel3.SetRowSpan(this.grpColorInfo, 2);
-			this.grpColorInfo.Size = new System.Drawing.Size(544, 305);
+			this.grpColorInfo.Size = new System.Drawing.Size(538, 305);
 			this.grpColorInfo.TabIndex = 4;
 			this.grpColorInfo.TabStop = false;
 			this.grpColorInfo.Text = "Color Info";
@@ -83,7 +83,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(538, 286);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(532, 286);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// txtPaletteAddress
@@ -164,8 +164,8 @@
 			// 
 			this.picPalette.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picPalette.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picPalette.Location = new System.Drawing.Point(1, 1);
-			this.picPalette.Margin = new System.Windows.Forms.Padding(1);
+			this.picPalette.Location = new System.Drawing.Point(4, 4);
+			this.picPalette.Margin = new System.Windows.Forms.Padding(4);
 			this.picPalette.Name = "picPalette";
 			this.picPalette.Size = new System.Drawing.Size(130, 258);
 			this.picPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -180,9 +180,9 @@
 			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Controls.Add(this.picHelp);
 			this.flowLayoutPanel1.Controls.Add(this.lblClickColorHint);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 263);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 269);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(122, 42);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(122, 39);
 			this.flowLayoutPanel1.TabIndex = 5;
 			// 
 			// picHelp

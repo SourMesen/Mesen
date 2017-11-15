@@ -91,8 +91,8 @@
 			// 
 			this.picNametable.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picNametable.ContextMenuStrip = this.ctxMenu;
-			this.picNametable.Location = new System.Drawing.Point(1, 1);
-			this.picNametable.Margin = new System.Windows.Forms.Padding(1);
+			this.picNametable.Location = new System.Drawing.Point(4, 4);
+			this.picNametable.Margin = new System.Windows.Forms.Padding(4);
 			this.picNametable.Name = "picNametable";
 			this.tableLayoutPanel1.SetRowSpan(this.picNametable, 2);
 			this.picNametable.Size = new System.Drawing.Size(514, 482);
@@ -138,9 +138,9 @@
 			this.grpTileInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
 			this.grpTileInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpTileInfo.Location = new System.Drawing.Point(519, 3);
+			this.grpTileInfo.Location = new System.Drawing.Point(525, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.grpTileInfo.Size = new System.Drawing.Size(175, 375);
+			this.grpTileInfo.Size = new System.Drawing.Size(169, 375);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -187,7 +187,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(169, 320);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(163, 356);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// txtPpuAddress
@@ -382,10 +382,10 @@
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkHighlightChrTile);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(516, 345);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(522, 381);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(181, 139);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(175, 109);
 			this.flowLayoutPanel1.TabIndex = 5;
 			// 
 			// chkShowPpuScrollOverlay
