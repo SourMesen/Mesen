@@ -50,13 +50,18 @@ namespace Mesen.GUI.Debugger
 			_entityBinder.AddBinding("StatusFormat", cboStatusFlagFormat);
 			_entityBinder.UpdateUI();
 
+			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
+			this.toolTip.SetToolTip(this.picHelp, "When a condition is given, instructions will only be logged by the trace logger if the condition returns a value not equal to 0 or false." + Environment.NewLine + Environment.NewLine + frmBreakpoint.GetConditionTooltip(false));
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
 			UpdateMenu();
 			txtTraceLog.FontSize = 10;
 			tmrUpdateLog.Start();
 			RefreshLog(true);
-
-			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
-			this.toolTip.SetToolTip(this.picHelp, "When a condition is given, instructions will only be logged by the trace logger if the condition returns a value not equal to 0 or false." + Environment.NewLine + Environment.NewLine + frmBreakpoint.GetConditionTooltip(false));
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
