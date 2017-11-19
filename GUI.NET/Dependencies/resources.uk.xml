@@ -294,7 +294,7 @@
       <Control ID="mnuPresetMonochrome">Монохромний</Control>
 
       <Control ID="tpgAdvanced">Розширенi</Control>
-      <Control ID="lblScreenRotation">Screen Rotation:</Control>
+      <Control ID="lblScreenRotation">Поворот екрана:</Control>
       <Control ID="chkDisableBackground">Відключити фон</Control>
       <Control ID="chkDisableSprites">Відключити спрайти</Control>
       <Control ID="chkForceBackgroundFirstColumn">Примусово показувати фон у першому стовпці</Control>
@@ -789,7 +789,7 @@
       <Value ID="Custom">Custom</Value>
     </Enum>
     <Enum ID="ScreenRotation">
-      <Value ID="None">None</Value>
+      <Value ID="None">Нiякий</Value>
       <Value ID="_90Degrees">90°</Value>
       <Value ID="_180Degrees">180°</Value>
       <Value ID="_270Degrees">270°</Value>
