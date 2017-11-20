@@ -98,7 +98,7 @@
       <Control ID="mnuAbout">Sobre...</Control>
 
       <!-- Archive Load Message -->
-      <Control ID="lblExtractingFile">Extraindo arquivo, por favor espere...</Control>
+      <Control ID="lblExtractingFile">Extraindo arquivo, por favor aguarde...</Control>
 
       <!-- NSF Player -->
       <Control ID="lblTitle">Título</Control>
@@ -131,8 +131,8 @@
       <Control ID="chkReverbEnabled">Ativar a ressonância</Control>
       <Control ID="lblReverbDelay">Atraso:</Control>
       <Control ID="lblReverbStrength">Força:</Control>
-      <Control ID="chkMuteSoundInBackground">Silenciar Mesen quando estiver em segundo plano</Control>
-      <Control ID="chkReduceSoundInBackground">Abaixar o volume do Mesen quando estiver em segundo plano</Control>
+      <Control ID="chkMuteSoundInBackground">Silenciar o Mesen quando estiver em segundo plano</Control>
+      <Control ID="chkReduceSoundInBackground">Reduzir o volume do Mesen quando estiver em segundo plano</Control>
       <Control ID="chkEnableAudio">Ativar o som</Control>
       <Control ID="lblSampleRate">Frequência de amostra:</Control>
       <Control ID="lblLatencyMs">ms</Control>
@@ -292,7 +292,7 @@
       <Control ID="mnuPresetMonochrome">Monocromo</Control>
 
       <Control ID="tpgAdvanced">Avançado</Control>
-      <Control ID="lblScreenRotation">Screen Rotation:</Control>
+      <Control ID="lblScreenRotation">Rotação da tela:</Control>
       <Control ID="chkDisableBackground">Desabilitar fundo</Control>
       <Control ID="chkDisableSprites">Desabilitar sprites</Control>
       <Control ID="chkForceBackgroundFirstColumn">Forçar ver fundo em primeira coluna</Control>
@@ -489,7 +489,7 @@
       <Control ID="btnImport">Importar</Control>
       <Control ID="btnExport">Exportar</Control>
       <Control ID="btnExportAllCheats">Todos os cheats</Control>
-      <Control ID="btnExportGame">Jogo Selecionado</Control>
+      <Control ID="btnExportGame">Jogo selecionado</Control>
       <Control ID="mnuExportGame">Exportar</Control>
       <Control ID="btnExportSelectedCheats">Cheats selecionados</Control>
       <Control ID="mnuExportSelectedCheats">Exportar</Control>
@@ -564,8 +564,8 @@
       <Control ID="lblAviFile">Salvar para:</Control>
       <Control ID="lblCodec">Codec de vídeo:</Control>
       <Control ID="lblCompressionLevel">Nível de compressão:</Control>
-      <Control ID="lblLowCompression">baixo&#13;(fast)</Control>
-      <Control ID="lblHighCompression">alto&#13;(slow)</Control>
+      <Control ID="lblLowCompression">baixo&#13;(lento)</Control>
+      <Control ID="lblHighCompression">alto&#13;(rápido)</Control>
       <Control ID="btnBrowse">Procurar...</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
@@ -591,7 +591,7 @@
       <Control ID="tpgGeneral">Geral</Control>
       <Control ID="tpgVideoOptions">Opções de vídeo</Control>
       <Control ID="tpgAudioOptions">Opções de áudio</Control>
-      <Control ID="tpgEmulationOptions">Opção de emulaçãos</Control>
+      <Control ID="tpgEmulationOptions">Opções de emulação</Control>
       <Control ID="lblExplanation">Isso iniciará o Mesen em modo de tela cheia com a rom "MyGame.nes" carregada. Também usará o filtro NTSC, configurado em uma escala 2x e ajusta as configurações de Overscan. O sinalizador "DoNotSaveSettings" é usado para evitar que a linha de comando altere de forma permanente as configurações do Mesen.</Control>
       <Control ID="txtGeneralOptions">/fullscreen - Inicia o Mesen em modo tela cheia&#13;&#10;/DoNotSaveSettings - Impede que as configurações sejam salvas no disco (útil para evitar que as opções da linha de comando se tornem as configurações padrão)</Control>
     </Form>
@@ -638,7 +638,7 @@
     <Message ID="StartServer">Iniciar servidor</Message>
     <Message ID="StopServer">Parar servidor</Message>
     <Message ID="ConnectToServer">Conectar a um servidor</Message>
-    <Message ID="Disconnect">Deconectar</Message>
+    <Message ID="Disconnect">Desconectar</Message>
     <Message ID="PlayerNumber">Jogador {0}</Message>
 
     <Message ID="CheatsFound">{0} e {1} cheats de jogos presentes na base de dados</Message>
@@ -656,7 +656,7 @@
     <Message ID="InvalidPaths">As seguintes substituições de pastas são inválidas:&#xA;&#xA;{0}&#xA;&#xA;Use pastas válidas e graváveis ​​e tente novamente.</Message>
     <Message ID="CopyMesenDataPrompt">Todos os arquivos serão copiados de:&#xA;&#xA;{0}&#xA;para&#xA;{1}&#xA;&#xA;Uma vez que a cópia esteja completa, o Mesen reiniciará.&#xA;Continuar?</Message>
 
-    <Message ID="NsfNextTrack">Track seguinte (Esperar para jogar mais rápido)</Message>
+    <Message ID="NsfNextTrack">Faixa seguinte (Esperar para jogar mais rápido)</Message>
     <Message ID="NsfUnnamedTrack">[sem nome]</Message>
     <Message ID="NsfUnknownField">[desconhecido]</Message>
     <Message ID="CouldNotInstallRuntime">O Pacote Redistribuível do Visual C++ para Visual Studio 2015 não foi instalado corretamente.</Message>
@@ -669,7 +669,7 @@
     <Message ID="InvalidFdsBios">A bios selecionada é inválida.</Message>
     
     <Message ID="HDNesTooltip">Esta opção permite os pacotes de gráficos de alta resolução sejam carregados no mesmo formato que os do emulador HDNes.&#xA;&#xA;Os pacotes de alta resolução devem ser colocados nos "HdPacks" em uma subpasta com o mesmo nome da ROM.&#xA;Exemplo: Um pacote para "MinhaRom.nes" deve ser colocado em "HdPacks\MinhaRom\hires.txt".</Message>
-    <Message ID="HdPackBuilderScaleHelp">Seleciona a escala e o filtro de vídeo a serem usados ​​ao gerar os arquivos PNG&#xA;para o PAcote HD. Usa os filtros "Preescala" para gerar os tiles&#xA;em uma escala maior sem aplicar qualquer transformação aos pixels.</Message>
+    <Message ID="HdPackBuilderScaleHelp">Seleciona a escala e o filtro de vídeo a serem usados ​​ao gerar os arquivos PNG&#xA;para o Pacote HD. Usa os filtros "Preescala" para gerar os tiles&#xA;em uma escala maior sem aplicar qualquer transformação aos pixels.</Message>
     <Message ID="HdPackBuilderBankSizeHelp">Esta opção está disponível apenas para jogos de RAM CHR.  Jogos de RAM CHR não tem "bancos"&#xA;fixos - eles são criados dinamicamente pelo código do jogo.&#xA;Esta opção altera o comportamento do Criador de Pacotes de Alta Definição agrupando os tiles em &#xA;arquivos PNG - um tamanho de banco menor geralmente resultará em menos arquivos PNG &#xA;(mas, dependendo do código do jogo, valores maiores podem produzir &#xA;melhores resultados).</Message>
     <Message ID="HdPackBuilderFrequencyHelp">Quando esta opção está habilitada, os tiles em arquivos PNG são classificados pela&#xA;frequência na qual eles são exibidos na tela durante a gravação (paletas &#xA;mais comuns serão agrupadas no primeiro arquivo para um número de banco &#xA;específico). Se esta opção estiver desmarcada, os arquivos PNG serão classificados por paleta - &#xA;nesse caso, cada arquivo PNG conterá apenas 4 cores diferentes.</Message>
     <Message ID="HdPackBuilderGroupBlankHelp">Esta opção agrupa todas os tiles em branco em sequência para os mesmos arquivos&#xA;PNG - isso ajuda a reduzir o número de arquivos PNG produzidos pela eliminação de &#xA;arquivos PNG quase vazios contendo apenas tiles em branco.</Message>
@@ -784,7 +784,7 @@
       <Value ID="Custom">Personalizado</Value>
     </Enum>
     <Enum ID="ScreenRotation">
-      <Value ID="None">None</Value>
+      <Value ID="None">Nenhuma</Value>
       <Value ID="_90Degrees">90°</Value>
       <Value ID="_180Degrees">180°</Value>
       <Value ID="_270Degrees">270°</Value>
@@ -867,7 +867,7 @@
       <Value ID="English">English</Value>
       <Value ID="French">Français</Value>
       <Value ID="Japanese">日本語</Value>
-      <Value ID="Portuguese">Português</Value>
+      <Value ID="Portuguese">Português-BR</Value>
       <Value ID="Russian">Русский</Value>
       <Value ID="Spanish">Español</Value>
       <Value ID="Ukrainian">Українська</Value>
