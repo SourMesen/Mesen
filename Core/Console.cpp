@@ -29,13 +29,20 @@
 #include "SaveStateManager.h"
 #include "HdPackBuilder.h"
 #include "HdAudioDevice.h"
+#include "FDS.h"
+#include "SystemActionManager.h"
+#include "FdsSystemActionManager.h"
+#include "VsSystemActionManager.h"
+#include "IBarcodeReader.h"
+#include "IBattery.h"
+#include "KeyManager.h"
+#include "BatteryManager.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
 Console::Console()
 {
 	_resetRequested = false;
-	_lagCounter = 0;
 }
 
 Console::~Console()
@@ -51,17 +58,26 @@ shared_ptr<Console> Console::GetInstance()
 
 void Console::Release()
 {
-	Console::Instance.reset(new Console());
+	Console::Instance.reset();
+}
+
+void Console::SaveBatteries()
+{
+	_mapper->SaveBattery();
+
+	shared_ptr<IBattery> device = std::dynamic_pointer_cast<IBattery>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort));
+	if(device) {
+		device->SaveBattery();
+	}
 }
 
 bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 {
 	SoundMixer::StopAudio();
-	StopRecordingHdPack();
 
 	if(!_romFilepath.empty() && _mapper) {
 		//Ensure we save any battery file before loading a new game
-		_mapper->SaveBattery();
+		SaveBatteries();
 
 		//Save current game state before loading another one
 		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename);
@@ -71,7 +87,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		LoadHdPack(romFile, patchFile);
 		if(patchFile.IsValid()) {
 			if(romFile.ApplyPatch(patchFile)) {
-				MessageManager::DisplayMessage("Patch", "ApplyingPatch", FolderUtilities::GetFilename(patchFile.GetFilePath(), true));
+				MessageManager::DisplayMessage("Patch", "ApplyingPatch", patchFile.GetFileName());
 			} else {
 				//Patch failed
 			}
@@ -79,6 +95,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		vector<uint8_t> fileData;
 		romFile.ReadFile(fileData);
 
+		BatteryManager::Initialize(FolderUtilities::GetFilename(romFile.GetFileName(), false));
 		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFile.GetFileName(), fileData);
 		if(mapper) {
 			if(_mapper) {
@@ -86,8 +103,15 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
 			}
 
-			_romFilepath = romFile;
-			_patchFilename = patchFile;
+			if(_romFilepath != (string)romFile || _patchFilename != (string)patchFile) {
+				_romFilepath = romFile;
+				_patchFilename = patchFile;
+				
+				//Changed game, stop all recordings
+				MovieManager::Stop();
+				SoundMixer::StopRecording();
+				StopRecordingHdPack();
+			}
 
 			_autoSaveManager.reset(new AutoSaveManager());
 			VideoDecoder::GetInstance()->StopThread();
@@ -95,20 +119,29 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_mapper = mapper;
 			_memoryManager.reset(new MemoryManager(_mapper));
 			_cpu.reset(new CPU(_memoryManager.get()));
-
-			if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
-				_ppu.reset(new HdPpu(_mapper.get(), _hdData->Version));
-			} else if(NsfMapper::GetInstance()) {
-				//Disable most of the PPU for NSFs
-				_ppu.reset(new NsfPpu(_mapper.get()));
-			} else {
-				_ppu.reset(new PPU(_mapper.get()));
-			}
-			
 			_apu.reset(new APU(_memoryManager.get()));
 
-			_controlManager.reset(_mapper->GetGameSystem() == GameSystem::VsUniSystem ? new VsControlManager() : new ControlManager());
+			switch(_mapper->GetGameSystem()) {
+				case GameSystem::FDS: _systemActionManager.reset(new FdsSystemActionManager(Console::GetInstance(), _mapper)); break;
+				case GameSystem::VsUniSystem: _systemActionManager.reset(new VsSystemActionManager(Console::GetInstance())); break;
+				default: _systemActionManager.reset(new SystemActionManager(Console::GetInstance())); break;
+			}
+
+			if(_mapper->GetGameSystem() == GameSystem::VsUniSystem) {
+				_controlManager.reset(new VsControlManager(_systemActionManager, _mapper->GetMapperControlDevice()));
+			} else {
+				_controlManager.reset(new ControlManager(_systemActionManager, _mapper->GetMapperControlDevice()));
+			}
 			_controlManager->UpdateControlDevices();
+			
+			if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
+				_ppu.reset(new HdPpu(_mapper.get(), _controlManager.get(), _hdData->Version));
+			} else if(NsfMapper::GetInstance()) {
+				//Disable most of the PPU for NSFs
+				_ppu.reset(new NsfPpu(_mapper.get(), _controlManager.get()));
+			} else {
+				_ppu.reset(new PPU(_mapper.get(), _controlManager.get()));
+			}
 
 			_memoryManager->RegisterIODevice(_ppu.get());
 			_memoryManager->RegisterIODevice(_apu.get());
@@ -125,7 +158,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_initialized = true;
 
 			if(_debugger) {
-				auto lock = _debuggerLock.AcquireSafe();
 				StopDebugger();
 				GetDebugger();
 			}
@@ -133,6 +165,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			ResetComponents(false);
 
 			_rewindManager.reset(new RewindManager());
+			_controlManager->UpdateInputState();
 
 			VideoDecoder::GetInstance()->StartThread();
 
@@ -147,6 +180,9 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			return true;
 		}
 	}
+
+	//Reset battery source to current game if new game failed to load
+	BatteryManager::Initialize(FolderUtilities::GetFilename(GetRomName(), false));
 
 	MessageManager::DisplayMessage("Error", "CouldNotLoadFile", romFile.GetFileName());
 	return false;
@@ -163,12 +199,30 @@ bool Console::LoadROM(VirtualFile romFile, VirtualFile patchFile)
 bool Console::LoadROM(string romName, HashInfo hashInfo)
 {
 	string currentRomFilepath = Console::GetRomPath().GetFilePath();
-	string currentFolder = FolderUtilities::GetFolderName(currentRomFilepath);
 	if(!currentRomFilepath.empty()) {
 		HashInfo gameHashInfo = Instance->_mapper->GetHashInfo();
 		if(gameHashInfo.Crc32Hash == hashInfo.Crc32Hash || gameHashInfo.Sha1Hash.compare(hashInfo.Sha1Hash) == 0 || gameHashInfo.PrgChrMd5Hash.compare(hashInfo.PrgChrMd5Hash) == 0) {
-			//Current game matches, no need to do anything
+			//Current game matches, power cycle game and return
+			Instance->PowerCycle();
 			return true;
+		}
+	}
+
+	string match = FindMatchingRom(romName, hashInfo);
+	if(!match.empty()) {
+		return Console::LoadROM(match);
+	}
+	return false;
+}
+
+string Console::FindMatchingRom(string romName, HashInfo hashInfo)
+{
+	VirtualFile currentRom = Console::GetRomPath();
+	if(currentRom.IsValid() && !Console::GetPatchFile().IsValid()) {
+		HashInfo gameHashInfo = Instance->_mapper->GetHashInfo();
+		if(gameHashInfo.Crc32Hash == hashInfo.Crc32Hash || gameHashInfo.Sha1Hash.compare(hashInfo.Sha1Hash) == 0 || gameHashInfo.PrgChrMd5Hash.compare(hashInfo.PrgChrMd5Hash) == 0) {
+			//Current game matches
+			return currentRom;
 		}
 	}
 
@@ -180,19 +234,19 @@ bool Console::LoadROM(string romName, HashInfo hashInfo)
 		vector<string> files = FolderUtilities::GetFilesInFolder(folder, validExtensions, true);
 		romFiles.insert(romFiles.end(), files.begin(), files.end());
 	}
-	
+
 	string match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, true);
 	if(!match.empty()) {
-		return Console::LoadROM(match);
+		return match;
 	}
 
 	//Perform slow CRC32 search for ROM
 	match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, false);
 	if(!match.empty()) {
-		return Console::LoadROM(match);
+		return match;
 	}
 
-	return false;
+	return "";
 }
 
 VirtualFile Console::GetRomPath()
@@ -207,6 +261,11 @@ string Console::GetRomName()
 	} else {
 		return "";
 	}
+}
+
+VirtualFile Console::GetPatchFile()
+{
+	return Instance ? Instance->_patchFilename : VirtualFile();
 }
 
 RomFormat Console::GetRomFormat()
@@ -240,45 +299,36 @@ NesModel Console::GetModel()
 	return Instance->_model;
 }
 
+shared_ptr<SystemActionManager> Console::GetSystemActionManager()
+{
+	return _systemActionManager;
+}
+
 void Console::PowerCycle()
 {
-	if(Instance->_initialized && !Instance->_romFilepath.empty()) {
-		LoadROM(Instance->_romFilepath, Instance->_patchFilename);
+	if(_initialized && !_romFilepath.empty()) {
+		LoadROM(_romFilepath, _patchFilename);
 	}
 }
 
 void Console::Reset(bool softReset)
 {
 	if(Instance->_initialized) {
-		if(softReset && EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset)) {
-			//Allow mid-frame resets to allow the PPU to get out-of-sync
-			RequestReset();
-		} else {
-			MovieManager::Stop();
-			SoundMixer::StopRecording();
-
-			Console::Pause();
-			if(Instance->_initialized) {
-				if(softReset) {
-					Instance->ResetComponents(softReset);
-				} else {
-					//Full reset of all objects to ensure the emulator always starts in the exact same state
-					LoadROM(Instance->_romFilepath, Instance->_patchFilename);
-				}
+		if(softReset) {
+			if(EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset)) {
+				//Allow mid-frame resets to allow the PPU to get out-of-sync
+				RequestReset();
+			} else {
+				Instance->_systemActionManager->Reset();
 			}
-			Console::Resume();
+		} else {
+			Instance->_systemActionManager->PowerCycle();
 		}
 	}
 }
 
 void Console::ResetComponents(bool softReset)
 {
-	MovieManager::Stop();
-	if(!softReset) {
-		SoundMixer::StopRecording();
-		_hdPackBuilder.reset();
-	}
-	
 	_memoryManager->Reset(softReset);
 	if(!EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
 		_ppu->Reset();
@@ -287,9 +337,7 @@ void Console::ResetComponents(bool softReset)
 	_cpu->Reset(softReset, _model);
 	_controlManager->Reset(softReset);
 
-	_lagCounter = 0;
-
-	SoundMixer::StopAudio(true);
+	KeyManager::UpdateDevices();
 
 	MessageManager::SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);
 
@@ -379,15 +427,9 @@ void Console::Run()
 
 		uint32_t currentFrameNumber = PPU::GetFrameCount();
 		if(currentFrameNumber != lastFrameNumber) {
-			if(_controlManager->GetLagFlag()) {
-				_lagCounter++;
-			}
-
 			_rewindManager->ProcessEndOfFrame();
 			EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
 			_disableOcNextFrame = false;
-
-			lastFrameNumber = PPU::GetFrameCount();
 
 			//Sleep until we're ready to start the next frame
 			clockTimer.WaitUntil(targetTime);
@@ -427,6 +469,8 @@ void Console::Run()
 				_runLock.Acquire();								
 				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
 			}
+			
+			_systemActionManager->ProcessSystemActions();
 
 			shared_ptr<Debugger> debugger = _debugger;
 			if(debugger) {
@@ -443,6 +487,8 @@ void Console::Run()
 			if(targetTime < 0) {
 				targetTime = 0;
 			}
+
+			lastFrameNumber = PPU::GetFrameCount();
 			
 			if(_stop) {
 				_stop = false;
@@ -472,7 +518,7 @@ void Console::Run()
 
 	if(!_romFilepath.empty() && _mapper) {
 		//Ensure we save any battery file before unloading anything
-		_mapper->SaveBattery();
+		SaveBatteries();
 	}
 
 	_romFilepath = "";
@@ -575,21 +621,21 @@ void Console::SaveState(ostream &saveStream)
 	}
 }
 
-void Console::LoadState(istream &loadStream)
+void Console::LoadState(istream &loadStream, uint32_t stateVersion)
 {
 	if(Instance->_initialized) {
 		//Stop any movie that might have been playing/recording if a state is loaded
 		//(Note: Loading a state is disabled in the UI while a movie is playing/recording)
 		MovieManager::Stop();
 
-		Instance->_cpu->LoadSnapshot(&loadStream);
-		Instance->_ppu->LoadSnapshot(&loadStream);
-		Instance->_memoryManager->LoadSnapshot(&loadStream);
-		Instance->_apu->LoadSnapshot(&loadStream);
-		Instance->_controlManager->LoadSnapshot(&loadStream);
-		Instance->_mapper->LoadSnapshot(&loadStream);
+		Instance->_cpu->LoadSnapshot(&loadStream, stateVersion);
+		Instance->_ppu->LoadSnapshot(&loadStream, stateVersion);
+		Instance->_memoryManager->LoadSnapshot(&loadStream, stateVersion);
+		Instance->_apu->LoadSnapshot(&loadStream, stateVersion);
+		Instance->_controlManager->LoadSnapshot(&loadStream, stateVersion);
+		Instance->_mapper->LoadSnapshot(&loadStream, stateVersion);
 		if(Instance->_hdAudioDevice) {
-			Instance->_hdAudioDevice->LoadSnapshot(&loadStream);
+			Instance->_hdAudioDevice->LoadSnapshot(&loadStream, stateVersion);
 		} else {
 			Snapshotable::SkipBlock(&loadStream);
 		}
@@ -616,16 +662,16 @@ void Console::LoadState(uint8_t *buffer, uint32_t bufferSize)
 
 std::shared_ptr<Debugger> Console::GetDebugger(bool autoStart)
 {
-	auto lock = _debuggerLock.AcquireSafe();
-	if(!_debugger && autoStart) {
-		_debugger.reset(new Debugger(Console::Instance, _cpu, _ppu, _apu, _memoryManager, _mapper));
+	shared_ptr<Debugger> debugger = _debugger;
+	if(!debugger && autoStart) {
+		debugger.reset(new Debugger(Console::Instance, _cpu, _ppu, _apu, _memoryManager, _mapper));
+		_debugger = debugger;
 	}
-	return _debugger;
+	return debugger;
 }
 
 void Console::StopDebugger()
 {
-	auto lock = _debuggerLock.AcquireSafe();
 	_debugger.reset();
 }
 
@@ -634,19 +680,21 @@ void Console::RequestReset()
 	Instance->_resetRequested = true;
 }
 
-uint32_t Console::GetLagCounter()
-{
-	return Instance->_lagCounter;
-}
-
 std::thread::id Console::GetEmulationThreadId()
 {
 	return Instance->_emulationThreadId;
 }
 
+uint32_t Console::GetLagCounter()
+{
+	return Instance->_controlManager->GetLagCounter();
+}
+
 void Console::ResetLagCounter()
 {
-	Instance->_lagCounter = 0;
+	Console::Pause();
+	Instance->_controlManager->ResetLagCounter();
+	Console::Reset();
 }
 
 bool Console::IsDebuggerAttached()
@@ -697,7 +745,7 @@ void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType
 
 	Instance->_memoryManager->UnregisterIODevice(Instance->_ppu.get());
 	Instance->_ppu.reset();
-	Instance->_ppu.reset(new HdBuilderPpu(Instance->_mapper.get(), Instance->_hdPackBuilder.get(), chrRamBankSize));
+	Instance->_ppu.reset(new HdBuilderPpu(Instance->_mapper.get(), Instance->_controlManager.get(), Instance->_hdPackBuilder.get(), chrRamBankSize));
 	Instance->_memoryManager->RegisterIODevice(Instance->_ppu.get());
 
 	Instance->LoadState(saveState);
@@ -713,12 +761,42 @@ void Console::StopRecordingHdPack()
 
 		Instance->_memoryManager->UnregisterIODevice(Instance->_ppu.get());
 		Instance->_ppu.reset();
-		Instance->_ppu.reset(new PPU(Instance->_mapper.get()));
+		Instance->_ppu.reset(new PPU(Instance->_mapper.get(), Instance->_controlManager.get()));
 		Instance->_memoryManager->RegisterIODevice(Instance->_ppu.get());
 
 		Instance->_hdPackBuilder.reset();
 
 		Instance->LoadState(saveState);
 		Console::Resume();
+	}
+}
+
+ConsoleFeatures Console::GetAvailableFeatures()
+{
+	ConsoleFeatures features = ConsoleFeatures::None;
+	if(_mapper) {
+		features = (ConsoleFeatures)((int)features | (int)_mapper->GetAvailableFeatures());
+
+		if(dynamic_cast<VsControlManager*>(_controlManager.get())) {
+			features = (ConsoleFeatures)((int)features | (int)ConsoleFeatures::VsSystem);
+		}
+
+		if(std::dynamic_pointer_cast<IBarcodeReader>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort))) {
+			features = (ConsoleFeatures)((int)features | (int)ConsoleFeatures::BarcodeReader);
+		}
+	}
+	return features;
+}
+
+void Console::InputBarcode(uint64_t barcode, uint32_t digitCount)
+{
+	shared_ptr<IBarcodeReader> barcodeReader = std::dynamic_pointer_cast<IBarcodeReader>(_mapper->GetMapperControlDevice());
+	if(barcodeReader) {
+		barcodeReader->InputBarcode(barcode, digitCount);
+	}
+
+	barcodeReader = std::dynamic_pointer_cast<IBarcodeReader>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort));
+	if(barcodeReader) {
+		barcodeReader->InputBarcode(barcode, digitCount);
 	}
 }

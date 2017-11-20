@@ -1,72 +1,80 @@
 #pragma once
-
 #include "stdafx.h"
 #include "EmulationSettings.h"
 #include "Snapshotable.h"
-
-struct ButtonState
-{
-	bool Up = false;
-	bool Down = false;
-	bool Left = false;
-	bool Right = false;
-
-	bool A = false;
-	bool B = false;
-
-	bool Select = false;
-	bool Start = false;
-
-	uint8_t ToByte()
-	{
-		//"Button status for each controller is returned as an 8-bit report in the following order: A, B, Select, Start, Up, Down, Left, Right."
-		return (uint8_t)A | ((uint8_t)B << 1) | ((uint8_t)Select << 2) | ((uint8_t)Start << 3) |
-				((uint8_t)Up << 4) | ((uint8_t)Down << 5) | ((uint8_t)Left << 6) | ((uint8_t)Right << 7);
-	}
-
-	void FromByte(uint8_t stateData)
-	{
-		A = (stateData & 0x01) == 0x01;
-		B = (stateData & 0x02) == 0x02;
-		Select = (stateData & 0x04) == 0x04;
-		Start = (stateData & 0x08) == 0x08;
-		Up = (stateData & 0x10) == 0x10;
-		Down = (stateData & 0x20) == 0x20;
-		Left = (stateData & 0x40) == 0x40;
-		Right = (stateData & 0x80) == 0x80;
-	}
-};
+#include "ControlManager.h"
+#include "ControlDeviceState.h"
 
 class BaseControlDevice : public Snapshotable
 {
 protected:
-	uint8_t _port;
-	uint8_t _currentState;
+	ControlDeviceState _state;
 	vector<KeyMapping> _keyMappings;
-	uint32_t _turboSpeed = 0;
-	bool _famiconDevice = false;
+	bool _strobe;
+	uint8_t _port;
 
-	uint8_t GetPort();
-	void AddKeyMappings(KeyMappingSet keyMappings);
+	virtual void RefreshStateBuffer() { }
+	virtual void StreamState(bool saving);
+	
+	void EnsureCapacity(int32_t minBitCount);
+	uint32_t GetByteIndex(uint8_t bit);
+	virtual bool HasCoordinates();
+	virtual bool IsRawString();
 
-	//Defined in controller-specific code and called when we need to read a device's state
-	virtual uint8_t RefreshState() = 0;	
-	virtual uint8_t ProcessNetPlayState(uint32_t netplayState);
+	bool IsCurrentPort(uint16_t addr);
+	bool IsExpansionDevice();
+	void StrobeProcessRead();
+	void StrobeProcessWrite(uint8_t value);
 
-	virtual void StreamState(bool saving) override;
+	virtual string GetKeyNames() { return ""; }
 
+	void SetPressedState(uint8_t bit, uint32_t keyCode);
+	void SetPressedState(uint8_t bit, bool enabled);
+
+	void SetCoordinates(MousePosition pos);
+
+	void SetMovement(MouseMovement mov);
+	MouseMovement GetMovement();
+	
+	virtual void InternalSetStateFromInput();
+	
 public:
-	//Used by controller-specific code to get the current state (buttons, position, etc)
-	uint8_t GetControlState();
+	static const uint8_t ExpDevicePort = 4;
+	static const uint8_t ConsoleInputPort = 5;
+	static const uint8_t MapperInputPort = 6;
+	static const uint8_t PortCount = MapperInputPort + 1;
 
-	BaseControlDevice(uint8_t port);
+	BaseControlDevice(uint8_t port, KeyMappingSet keyMappingSet = KeyMappingSet());
 	virtual ~BaseControlDevice();
 
-	//Called when reading $4016/7
-	virtual uint8_t GetPortOutput() = 0;
+	uint8_t GetPort();
 
-	virtual uint32_t GetNetPlayState() = 0;
+	bool IsPressed(uint8_t bit);
+	MousePosition GetCoordinates();
 
-	//Used by standard controllers when $4017.1 is set
-	virtual void RefreshStateBuffer();
+	void ClearState();
+	void SetBit(uint8_t bit);
+	void ClearBit(uint8_t bit);
+	void InvertBit(uint8_t bit);
+	void SetBitValue(uint8_t bit, bool set);
+	
+	void SetTextState(string state);
+	string GetTextState();
+
+	void SetStateFromInput();
+	virtual void OnAfterSetState() { }
+	
+	void SetRawState(ControlDeviceState state);
+	ControlDeviceState GetRawState();
+
+	template<typename T>
+	shared_ptr<T> GetState()
+	{
+		return std::dynamic_pointer_cast<T>(_state);
+	}
+
+	virtual uint8_t ReadRAM(uint16_t addr) = 0;
+	virtual void WriteRAM(uint16_t addr, uint8_t value) = 0;
+	
+	void static SwapButtons(shared_ptr<BaseControlDevice> state1, uint8_t button1, shared_ptr<BaseControlDevice> state2, uint8_t button2);
 };

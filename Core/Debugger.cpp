@@ -24,6 +24,7 @@
 #include "DebugBreakHelper.h"
 #include "ScriptHost.h"
 #include "DebugHud.h"
+#include "StandardController.h"
 
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
@@ -1025,22 +1026,6 @@ int32_t Debugger::FindSubEntryPoint(uint16_t relativeAddress)
 	return address > relativeAddress ? relativeAddress : (address + 1);
 }
 
-bool Debugger::HasInputOverride(uint8_t port)
-{
-	if(Debugger::Instance) {
-		return Debugger::Instance->_inputOverride[port] != 0;
-	}
-	return false;
-}
-
-uint32_t Debugger::GetInputOverride(uint8_t port)
-{
-	if(Debugger::Instance) {
-		return Debugger::Instance->_inputOverride[port];
-	}
-	return 0;
-}
-
 void Debugger::SetInputOverride(uint8_t port, uint32_t state)
 {
 	_inputOverride[port] = state;
@@ -1141,6 +1126,24 @@ void Debugger::ProcessEvent(EventType type)
 	if(_hasScript) {
 		for(shared_ptr<ScriptHost> &script : _scripts) {
 			script->ProcessEvent(type);
+		}
+	}
+
+	if(type == EventType::InputPolled) {
+		for(int i = 0; i < 4; i++) {
+			if(_inputOverride[i] != 0) {
+				shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(ControlManager::GetControlDevice(i));
+				if(controller) {
+					controller->SetBitValue(StandardController::Buttons::A, (_inputOverride[i] & 0x01) != 0);
+					controller->SetBitValue(StandardController::Buttons::B, (_inputOverride[i] & 0x02) != 0);
+					controller->SetBitValue(StandardController::Buttons::Select, (_inputOverride[i] & 0x04) != 0);
+					controller->SetBitValue(StandardController::Buttons::Start, (_inputOverride[i] & 0x08) != 0);
+					controller->SetBitValue(StandardController::Buttons::Up, (_inputOverride[i] & 0x10) != 0);
+					controller->SetBitValue(StandardController::Buttons::Down, (_inputOverride[i] & 0x20) != 0);
+					controller->SetBitValue(StandardController::Buttons::Left, (_inputOverride[i] & 0x40) != 0);
+					controller->SetBitValue(StandardController::Buttons::Right, (_inputOverride[i] & 0x80) != 0);
+				}
+			}
 		}
 	}
 }

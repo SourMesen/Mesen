@@ -7,16 +7,18 @@
 #include "Debugger.h"
 #include "BaseMapper.h"
 #include "RewindManager.h"
+#include "ControlManager.h"
 
 PPU* PPU::Instance = nullptr;
 
-PPU::PPU(BaseMapper *mapper)
+PPU::PPU(BaseMapper *mapper, ControlManager *controlManager)
 {
 	PPU::Instance = this;
 
 	EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
 
 	_mapper = mapper;
+	_controlManager = controlManager;
 	_outputBuffers[0] = new uint16_t[256 * 240];
 	_outputBuffers[1] = new uint16_t[256 * 240];
 
@@ -1075,6 +1077,10 @@ void PPU::Exec()
 		Debugger::ProcessPpuCycle();
 		
 		UpdateApuStatus();
+		
+		if(_scanline == EmulationSettings::GetInputPollScanline()) {
+			_controlManager->UpdateInputState();
+		}
 
 		//Cycle = 0
 		if(_scanline == -1) {

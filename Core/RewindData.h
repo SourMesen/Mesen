@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <deque>
+#include "BaseControlDevice.h"
 
 class RewindData
 {
@@ -11,7 +12,7 @@ private:
 	void CompressState(string stateData, vector<uint8_t> &compressedState);
 
 public:
-	std::deque<uint8_t> InputLogs[4];
+	std::deque<ControlDeviceState> InputLogs[BaseControlDevice::PortCount];
 	int32_t FrameCount = 0;
 
 	void LoadState();

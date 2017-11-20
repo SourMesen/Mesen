@@ -36,7 +36,7 @@ protected:
 	string _scriptName;
 
 	vector<int> _callbacks[5][0x10000];
-	vector<int> _eventCallbacks[8];
+	vector<int> _eventCallbacks[(int)EventType::EventTypeSize];
 
 	virtual void InternalCallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type) = 0;
 	virtual int InternalCallEventCallback(EventType type) = 0;

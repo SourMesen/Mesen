@@ -26,7 +26,7 @@ bool RomLoader::LoadFile(VirtualFile romFile)
 
 bool RomLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 {
-	if(fileData.size() < 10) {
+	if(fileData.size() < 15) {
 		return false;
 	}
 
@@ -104,7 +104,7 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo)
 			vector<uint8_t> fileData;
 			if(loader.LoadFile(filePath)) {
 				if(hashInfo.Crc32Hash == loader._romData.Crc32 || hashInfo.Sha1Hash.compare(loader._romData.Sha1) == 0) {
-					return filePath+"\n"+file;
+					return VirtualFile(filePath, file);
 				}
 			}
 		}
@@ -123,12 +123,15 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo)
 string RomLoader::FindMatchingRom(vector<string> romFiles, string romFilename, HashInfo hashInfo, bool useFastSearch)
 {
 	if(useFastSearch) {
-		for(string romFile : romFiles) {
+		string lcRomFile = romFilename;
+		std::transform(lcRomFile.begin(), lcRomFile.end(), lcRomFile.begin(), ::tolower);
+
+		for(string currentFile : romFiles) {
 			//Quick search by filename
-			string lcRomFile = romFile;
-			std::transform(lcRomFile.begin(), lcRomFile.end(), lcRomFile.begin(), ::tolower);
-			if(FolderUtilities::GetFilename(lcRomFile, false).compare(FolderUtilities::GetFilename(romFilename, false)) == 0) {
-				string match = RomLoader::FindMatchingRomInFile(romFile, hashInfo);
+			string lcCurrentFile = currentFile;
+			std::transform(lcCurrentFile.begin(), lcCurrentFile.end(), lcCurrentFile.begin(), ::tolower);
+			if(FolderUtilities::GetFilename(lcRomFile, false).compare(FolderUtilities::GetFilename(lcCurrentFile, false)) == 0) {
+				string match = RomLoader::FindMatchingRomInFile(currentFile, hashInfo);
 				if(!match.empty()) {
 					return match;
 				}

@@ -15,8 +15,5 @@ protected:
 	}
 
 public:
-	NsfPpu(BaseMapper* mapper) : PPU(mapper)
-	{
-
-	}
+	using PPU::PPU;
 };

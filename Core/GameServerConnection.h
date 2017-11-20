@@ -3,20 +3,22 @@
 #include <deque>
 #include "GameConnection.h"
 #include "StandardController.h"
-#include "IGameBroadcaster.h"
 #include "INotificationListener.h"
+#include "BaseControlDevice.h"
+#include "ControlDeviceState.h"
 
 class HandShakeMessage;
 
 class GameServerConnection : public GameConnection, public INotificationListener
 {
 private:
-	static GameServerConnection* _netPlayDevices[4];
+	static GameServerConnection* _netPlayDevices[BaseControlDevice::PortCount];
 
-	list<uint32_t> _inputData;
+	list<ControlDeviceState> _inputData;
 	int _controllerPort;	
 	bool _handshakeCompleted = false;
-	void PushState(uint32_t state);
+
+	void PushState(ControlDeviceState state);
 	void SendGameInformation();
 	void SelectControllerPort(uint8_t port);
 
@@ -35,8 +37,8 @@ public:
 	GameServerConnection(shared_ptr<Socket> socket);
 	~GameServerConnection();
 
-	uint32_t GetState();
-	void SendMovieData(uint8_t state, uint8_t port);
+	ControlDeviceState GetState();
+	void SendMovieData(uint8_t port, ControlDeviceState state);
 
 	string GetPlayerName();
 	uint8_t GetControllerPort();

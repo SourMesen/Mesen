@@ -8,6 +8,7 @@
 #include "CheatManager.h"
 #include "Debugger.h"
 #include "MemoryManager.h"
+#include "BatteryManager.h"
 
 void BaseMapper::WriteRegister(uint16_t addr, uint8_t value) { }
 uint8_t BaseMapper::ReadRegister(uint16_t addr) { return 0; }
@@ -338,40 +339,22 @@ bool BaseMapper::HasBattery()
 void BaseMapper::LoadBattery()
 {
 	if(HasBattery()) {
-		ifstream batteryFile(_batteryFilename, ios::in | ios::binary);
-		if(batteryFile) {
-			batteryFile.read((char*)_saveRam, _saveRamSize);
-			batteryFile.close();
-		}
+		BatteryManager::LoadBattery(".sav", _saveRam, _saveRamSize);
 	}
 
 	if(_hasChrBattery) {
-		ifstream batteryFile(_batteryFilename + ".chr", ios::in | ios::binary);
-		if(batteryFile) {
-			batteryFile.read((char*)_chrRam, _chrRamSize);
-			batteryFile.close();
-		}
+		BatteryManager::LoadBattery(".sav.chr", _chrRam, _chrRamSize);
 	}
 }
 
 void BaseMapper::SaveBattery()
 {
 	if(HasBattery()) {
-		ofstream batteryFile(_batteryFilename, ios::out | ios::binary);
-
-		if(batteryFile) {
-			batteryFile.write((char*)_saveRam, _saveRamSize);
-
-			batteryFile.close();
-		}
+		BatteryManager::SaveBattery(".sav", _saveRam, _saveRamSize);
 	}
 
 	if(_hasChrBattery) {
-		ofstream batteryFile(_batteryFilename + ".chr", ios::out | ios::binary);
-		if(batteryFile) {
-			batteryFile.write((char*)_chrRam, _chrRamSize);
-			batteryFile.close();
-		}
+		BatteryManager::SaveBattery(".sav.chr", _chrRam, _chrRamSize);
 	}
 }
 
@@ -449,17 +432,19 @@ void BaseMapper::StreamState(bool saving)
 	ArrayInfo<uint8_t> nametableIndexes = { _nametableIndexes, 4 };
 	Stream(_mirroringType, chrRam, workRam, saveRam, prgPageNumbers, chrPageNumbers, nametableIndexes);
 
-	bool hasExtraNametable[2] = { _cartNametableRam[0] != nullptr, _cartNametableRam[1] != nullptr };
-	Stream(hasExtraNametable[0], hasExtraNametable[1]);
-	
-	for(int i = 0; i < 2; i++) {
-		if(hasExtraNametable[i]) {
-			if(!_cartNametableRam[i]) {
-				_cartNametableRam[i] = new uint8_t[0x400];
-			}
+	if(GetStateVersion() >= 7) {
+		bool hasExtraNametable[2] = { _cartNametableRam[0] != nullptr, _cartNametableRam[1] != nullptr };
+		Stream(hasExtraNametable[0], hasExtraNametable[1]);
 
-			ArrayInfo<uint8_t> ram = { _cartNametableRam[i], 0x400 };
-			Stream(ram);
+		for(int i = 0; i < 2; i++) {
+			if(hasExtraNametable[i]) {
+				if(!_cartNametableRam[i]) {
+					_cartNametableRam[i] = new uint8_t[0x400];
+				}
+
+				ArrayInfo<uint8_t> ram = { _cartNametableRam[i], 0x400 };
+				Stream(ram);
+			}
 		}
 	}
 	
@@ -496,7 +481,7 @@ void BaseMapper::Initialize(RomData &romData)
 	_hasBattery = (romData.HasBattery || ForceBattery());
 
 	if(romData.SaveRamSize == -1 || ForceSaveRamSize()) {
-		_saveRamSize = GetSaveRamSize(); //Needed because we need to call SaveBattery() in the destructor (and calling virtual functions in the destructor doesn't work correctly)
+		_saveRamSize = GetSaveRamSize();
 	} else {
 		_saveRamSize = romData.SaveRamSize;
 	}
@@ -580,7 +565,7 @@ void BaseMapper::Initialize(RomData &romData)
 	} else if(GetChrRamSize()) {
 		InitializeChrRam();
 	}
-
+	
 	//Load battery data if present
 	LoadBattery();
 
@@ -712,6 +697,16 @@ void BaseMapper::SetMirroringType(MirroringType type)
 		case MirroringType::ScreenAOnly: SetNametables(0, 0, 0, 0);	break;
 		case MirroringType::ScreenBOnly: SetNametables(1, 1, 1, 1);	break;
 	}
+}
+
+ConsoleFeatures BaseMapper::GetAvailableFeatures()
+{
+	return ConsoleFeatures::None;
+}
+
+shared_ptr<BaseControlDevice> BaseMapper::GetMapperControlDevice()
+{
+	return _mapperControlDevice;
 }
 
 GameSystem BaseMapper::GetGameSystem()

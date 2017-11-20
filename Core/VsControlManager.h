@@ -8,6 +8,8 @@
 #include "StandardController.h"
 #include "MovieManager.h"
 
+class BaseControlDevice;
+
 enum class VsInputType
 {
 	Default = 0,
@@ -23,14 +25,11 @@ class VsControlManager : public ControlManager
 private:
 	static VsControlManager *_instance;
 	uint8_t _prgChrSelectBit;
-	uint8_t _dipSwitches = 0;
-	bool _serviceButton = false;
-	bool _coinInserted[2] = { };
-	int32_t _coinInsertCycle[2] = { };
 	VsInputType _inputType = VsInputType::Default;
-	
+	bool _refreshState = false;
+
 	uint32_t _protectionCounter = 0;
-	uint32_t _protectionData[3][32] = { 
+	const uint32_t _protectionData[3][32] = { 
 		{
 			0xFF, 0xBF, 0xB7, 0x97, 0x97, 0x17, 0x57, 0x4F,
 			0x6F, 0x6B, 0xEB, 0xA9, 0xB1, 0x90, 0x94, 0x14,
@@ -51,207 +50,25 @@ private:
 		}
 	};
 
-private:
-	void UpdateCoinInsertedFlags()
-	{
-		int32_t cycle = CPU::GetCycleCount();
-		for(int i = 0; i < 2; i++) {
-			if(_coinInserted[i] && cycle - _coinInsertCycle[i] > 120000) {
-				_coinInserted[i] = false;
-			}
-		}
-	}
+	ControllerType GetControllerType(uint8_t port) override;
 
 public:
-	VsControlManager()
-	{
-		_instance = this;
-	}
+	VsControlManager(shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice);
+	virtual ~VsControlManager();
 
-	virtual ~VsControlManager()
-	{
-		if(_instance == this) {
-			_instance = nullptr;
-		}
-	}
+	void StreamState(bool saving) override;
+	void Reset(bool softReset) override;
 
-	shared_ptr<BaseControlDevice> GetZapper(uint8_t port) override
-	{
-		return shared_ptr<BaseControlDevice>(new VsZapper(port));
-	}
-
-	void Reset(bool softReset) override
-	{
-		_protectionCounter = 0;
-	}
-
-	static VsControlManager* GetInstance()
-	{
-		return _instance;
-	}
-
-	void StreamState(bool saving) override
-	{
-		ControlManager::StreamState(saving);
-		Stream(_prgChrSelectBit, _protectionCounter);
-	}
-
-	void InsertCoin(uint8_t port)
-	{
-		assert(port < 2);
-
-		_coinInsertCycle[port] = CPU::GetCycleCount();
-		_coinInserted[port] = true;
-	}
-
-	void SetDipSwitches(uint8_t dipSwitches)
-	{
-		_dipSwitches = dipSwitches;
-	}
-
-	void SetInputType(VsInputType inputType)
-	{
-		_inputType = inputType;
-	}
-
-	void SetServiceButtonState(bool pushed)
-	{
-		_serviceButton = pushed;
-	}
-
-	void GetMemoryRanges(MemoryRanges &ranges) override
-	{
-		ControlManager::GetMemoryRanges(ranges);
-		ranges.AddHandler(MemoryOperation::Read, 0x4020, 0x5FFF);
-		ranges.AddHandler(MemoryOperation::Write, 0x4020, 0x5FFF);
-	}
-
-	uint8_t GetPrgChrSelectBit()
-	{
-		return _prgChrSelectBit;
-	}
-
-	void RemapControllerButtons()
-	{
-		ButtonState ports[2];
-		shared_ptr<StandardController> controllers[2];
-		controllers[0] = std::dynamic_pointer_cast<StandardController>(GetControlDevice(0));
-		controllers[1] = std::dynamic_pointer_cast<StandardController>(GetControlDevice(1));
-		if(controllers[0]) {
-			ports[0].FromByte(controllers[0]->GetInternalState());
-		}
-		if(controllers[1]) {
-			ports[1].FromByte(controllers[1]->GetInternalState());
-		}
-
-		if(_inputType == VsInputType::TypeA) {
-			std::swap(ports[0], ports[1]);
-
-			std::swap(ports[0].Select, ports[0].Start);
-			std::swap(ports[1].Select, ports[1].Start);
-		} else if(_inputType == VsInputType::TypeB) {
-			std::swap(ports[1].Select, ports[0].Start);
-			std::swap(ports[1].Start, ports[0].Select);
-		} else if(_inputType == VsInputType::TypeC) {
-			ports[1].Select = ports[0].Start;
-			ports[0].Select = false;
-			ports[0].Start = false;
-		} else if(_inputType == VsInputType::TypeD) {
-			std::swap(ports[1].Select, ports[0].Start);
-			std::swap(ports[1].Start, ports[0].Select);
-			ports[0].Select = !ports[0].Select;
-			ports[1].Select = !ports[1].Select;
-		} else if(_inputType == VsInputType::TypeE) {
-			std::swap(ports[0], ports[1]);
-
-			std::swap(ports[0].B, ports[1].A);
-			std::swap(ports[1].Select, ports[1].Start);
-			std::swap(ports[0].Select, ports[0].Start);
-		}
-
-		if(controllers[0]) {
-			controllers[0]->SetInternalState((controllers[0]->GetInternalState() & ~0xFF) | ports[0].ToByte());
-		}
-		if(controllers[1]) {
-			controllers[1]->SetInternalState((controllers[1]->GetInternalState() & ~0xFF) | ports[1].ToByte());
-		}
-	}
-
-	void RefreshAllPorts() override
-	{
-		ControlManager::RefreshAllPorts();
-		if(!MovieManager::Playing() && _inputType != VsInputType::Default) {
-			RemapControllerButtons();
-		}
-	}
-
-	uint8_t ReadRAM(uint16_t addr) override
-	{
-		UpdateCoinInsertedFlags();
-
-		uint8_t value = 0;
-		
-		uint32_t crc = Console::GetHashInfo().PrgCrc32Hash;
-		
-		switch(addr) {
-			case 0x4016:
-				value = GetPortValue(1) & 0x01;
-				if(_coinInserted[0]) {
-					value |= 0x20;
-				}
-				if(_coinInserted[1]) {
-					value |= 0x40;
-				}
-				if(_serviceButton) {
-					value |= 0x04;
-				}
-
-				value |= ((_dipSwitches & 0x01) ? 0x08 : 0x00);
-				value |= ((_dipSwitches & 0x02) ? 0x10 : 0x00);
-				break;
-			
-			case 0x4017:
-				value = GetPortValue(0) & 0x01;
-
-				value |= ((_dipSwitches & 0x04) ? 0x04 : 0x00);
-				value |= ((_dipSwitches & 0x08) ? 0x08 : 0x00);
-				value |= ((_dipSwitches & 0x10) ? 0x10 : 0x00);
-				value |= ((_dipSwitches & 0x20) ? 0x20 : 0x00);
-				value |= ((_dipSwitches & 0x40) ? 0x40 : 0x00);
-				value |= ((_dipSwitches & 0x80) ? 0x80 : 0x00);
-				break;
-
-			case 0x5E00:
-				_protectionCounter = 0;
-				break;
-
-			case 0x5E01:
-				if(crc == 0xEB2DBA63 || crc == 0x98CFE016) {
-					//TKO Boxing
-					value = _protectionData[0][_protectionCounter++ & 0x1F];
-				} else if(crc == 0x135ADF7C) {
-					//RBI Baseball
-					value = _protectionData[1][_protectionCounter++ & 0x1F];
-				}
-				break;
-
-			default:
-				if((crc == 0xF9D3B0A3 || crc == 0x66BB838F || crc == 0x9924980A) && addr >= 0x5400 && addr <= 0x57FF) {
-					//Super devious
-					return _protectionData[2][_protectionCounter++ & 0x1F];
-				}
-				break;
-		}
-
-		return value;
-	}
+	static VsControlManager* GetInstance();	
 	
-	void WriteRAM(uint16_t addr, uint8_t value) override
-	{
-		ControlManager::WriteRAM(addr, value);
+	void SetInputType(VsInputType inputType);
+	
+	void GetMemoryRanges(MemoryRanges &ranges) override;
 
-		if(addr == 0x4016) {
-			_prgChrSelectBit = (value >> 2) & 0x01;
-		}
-	}
+	uint8_t GetPrgChrSelectBit();
+
+	void RemapControllerButtons();
+
+	uint8_t ReadRAM(uint16_t addr) override;	
+	void WriteRAM(uint16_t addr, uint8_t value) override;
 };

@@ -28,6 +28,10 @@
 		private void InitializeComponent()
 		{
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.lblL = new System.Windows.Forms.Label();
+			this.lblR = new System.Windows.Forms.Label();
+			this.btnL = new System.Windows.Forms.Button();
+			this.btnR = new System.Windows.Forms.Button();
 			this.lblB = new System.Windows.Forms.Label();
 			this.lblA = new System.Windows.Forms.Label();
 			this.lblTurboA = new System.Windows.Forms.Label();
@@ -53,6 +57,10 @@
 			// 
 			// panel2
 			// 
+			this.panel2.Controls.Add(this.lblL);
+			this.panel2.Controls.Add(this.lblR);
+			this.panel2.Controls.Add(this.btnL);
+			this.panel2.Controls.Add(this.btnR);
 			this.panel2.Controls.Add(this.lblB);
 			this.panel2.Controls.Add(this.lblA);
 			this.panel2.Controls.Add(this.lblTurboA);
@@ -78,6 +86,44 @@
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(585, 210);
 			this.panel2.TabIndex = 3;
+			// 
+			// lblL
+			// 
+			this.lblL.AutoSize = true;
+			this.lblL.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblL.Location = new System.Drawing.Point(276, 77);
+			this.lblL.Name = "lblL";
+			this.lblL.Size = new System.Drawing.Size(17, 18);
+			this.lblL.TabIndex = 34;
+			this.lblL.Text = "L";
+			// 
+			// lblR
+			// 
+			this.lblR.AutoSize = true;
+			this.lblR.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblR.Location = new System.Drawing.Point(359, 77);
+			this.lblR.Name = "lblR";
+			this.lblR.Size = new System.Drawing.Size(19, 18);
+			this.lblR.TabIndex = 33;
+			this.lblR.Text = "R";
+			// 
+			// btnL
+			// 
+			this.btnL.Location = new System.Drawing.Point(233, 17);
+			this.btnL.Name = "btnL";
+			this.btnL.Size = new System.Drawing.Size(61, 59);
+			this.btnL.TabIndex = 32;
+			this.btnL.Text = "L";
+			this.btnL.UseVisualStyleBackColor = true;
+			// 
+			// btnR
+			// 
+			this.btnR.Location = new System.Drawing.Point(315, 17);
+			this.btnR.Name = "btnR";
+			this.btnR.Size = new System.Drawing.Size(61, 59);
+			this.btnR.TabIndex = 31;
+			this.btnR.Text = "R";
+			this.btnR.UseVisualStyleBackColor = true;
 			// 
 			// lblB
 			// 
@@ -108,6 +154,7 @@
 			this.lblTurboA.Size = new System.Drawing.Size(62, 18);
 			this.lblTurboA.TabIndex = 27;
 			this.lblTurboA.Text = "Turbo A";
+			this.lblTurboA.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// lblTurboB
 			// 
@@ -118,6 +165,7 @@
 			this.lblTurboB.Size = new System.Drawing.Size(65, 18);
 			this.lblTurboB.TabIndex = 26;
 			this.lblTurboB.Text = "Turbo B";
+			this.lblTurboB.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// lblStart
 			// 
@@ -159,7 +207,6 @@
 			this.btnMicrophone.Text = "D";
 			this.btnMicrophone.UseVisualStyleBackColor = true;
 			this.btnMicrophone.Visible = false;
-			this.btnMicrophone.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnTurboB
 			// 
@@ -169,7 +216,6 @@
 			this.btnTurboB.TabIndex = 21;
 			this.btnTurboB.Text = "B";
 			this.btnTurboB.UseVisualStyleBackColor = true;
-			this.btnTurboB.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnRight
 			// 
@@ -179,7 +225,6 @@
 			this.btnRight.TabIndex = 16;
 			this.btnRight.Text = "Right";
 			this.btnRight.UseVisualStyleBackColor = true;
-			this.btnRight.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnSelect
 			// 
@@ -189,7 +234,6 @@
 			this.btnSelect.TabIndex = 12;
 			this.btnSelect.Text = "Q";
 			this.btnSelect.UseVisualStyleBackColor = true;
-			this.btnSelect.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnLeft
 			// 
@@ -199,7 +243,6 @@
 			this.btnLeft.TabIndex = 17;
 			this.btnLeft.Text = "Left";
 			this.btnLeft.UseVisualStyleBackColor = true;
-			this.btnLeft.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnTurboA
 			// 
@@ -209,7 +252,6 @@
 			this.btnTurboA.TabIndex = 20;
 			this.btnTurboA.Text = "A";
 			this.btnTurboA.UseVisualStyleBackColor = true;
-			this.btnTurboA.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnB
 			// 
@@ -219,7 +261,6 @@
 			this.btnB.TabIndex = 15;
 			this.btnB.Text = "B";
 			this.btnB.UseVisualStyleBackColor = true;
-			this.btnB.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnStart
 			// 
@@ -229,7 +270,6 @@
 			this.btnStart.TabIndex = 13;
 			this.btnStart.Text = "W";
 			this.btnStart.UseVisualStyleBackColor = true;
-			this.btnStart.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnUp
 			// 
@@ -239,7 +279,6 @@
 			this.btnUp.TabIndex = 18;
 			this.btnUp.Text = "Up";
 			this.btnUp.UseVisualStyleBackColor = true;
-			this.btnUp.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnDown
 			// 
@@ -249,7 +288,6 @@
 			this.btnDown.TabIndex = 19;
 			this.btnDown.Text = "Down";
 			this.btnDown.UseVisualStyleBackColor = true;
-			this.btnDown.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// btnA
 			// 
@@ -259,21 +297,19 @@
 			this.btnA.TabIndex = 14;
 			this.btnA.Text = "A";
 			this.btnA.UseVisualStyleBackColor = true;
-			this.btnA.Click += new System.EventHandler(this.btnMapping_Click);
 			// 
 			// picBackground
 			// 
-			this.picBackground.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.picBackground.Location = new System.Drawing.Point(0, 0);
 			this.picBackground.Name = "picBackground";
 			this.picBackground.Size = new System.Drawing.Size(585, 210);
+			this.picBackground.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
 			this.picBackground.TabIndex = 30;
 			this.picBackground.TabStop = false;
 			// 
 			// ctrlStandardController
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.Controls.Add(this.panel2);
 			this.Name = "ctrlStandardController";
 			this.Size = new System.Drawing.Size(585, 210);
@@ -306,5 +342,9 @@
 		private System.Windows.Forms.Label lblMicrophone;
 		private System.Windows.Forms.Button btnMicrophone;
 		private System.Windows.Forms.PictureBox picBackground;
+		private System.Windows.Forms.Label lblL;
+		private System.Windows.Forms.Label lblR;
+		private System.Windows.Forms.Button btnL;
+		private System.Windows.Forms.Button btnR;
 	}
 }

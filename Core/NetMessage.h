@@ -58,6 +58,26 @@ protected:
 		}
 	}
 
+	void StreamArray(vector<uint8_t> &data)
+	{
+		uint32_t length = (uint32_t)data.size();
+		Stream<uint32_t>(length);
+		if(_sending) {
+			uint8_t* bytes = (uint8_t*)data.data();
+			for(uint32_t i = 0, len = length; i < len; i++) {
+				_buffer.push_back(bytes[i]);
+				_position++;
+			}
+		} else {
+			data.resize(length, 0);
+			uint8_t* bytes = (uint8_t*)data.data();
+			for(uint32_t i = 0, len = length; i < len; i++) {
+				bytes[i] = _buffer[_position];
+				_position++;
+			}
+		}
+	}
+
 	void StreamState()
 	{
 		Stream<MessageType>(_type);

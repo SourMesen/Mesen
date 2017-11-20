@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "EmulationSettings.h"
 #include "Console.h"
-#include "VsControlManager.h"
 #include "RewindManager.h"
 
 //Version 0.9.3
@@ -62,6 +61,7 @@ std::unordered_map<uint32_t, KeyCombination> EmulationSettings::_emulatorKeys[2]
 std::unordered_map<uint32_t, vector<KeyCombination>> EmulationSettings::_shortcutSupersets[2];
 
 RamPowerOnState EmulationSettings::_ramPowerOnState = RamPowerOnState::AllZeros;
+uint32_t EmulationSettings::_dipSwitches = 0;
 
 InputDisplaySettings EmulationSettings::_inputDisplaySettings = { 0, InputDisplayPosition::TopLeft, false };
 
@@ -69,7 +69,7 @@ OverscanDimensions EmulationSettings::_overscan;
 VideoFilterType EmulationSettings::_videoFilterType = VideoFilterType::None;
 VideoResizeFilter EmulationSettings::_resizeFilter = VideoResizeFilter::NearestNeighbor;
 double EmulationSettings::_videoScale = 1;
-VideoAspectRatio EmulationSettings::_aspectRatio = VideoAspectRatio::Auto;
+VideoAspectRatio EmulationSettings::_aspectRatio = VideoAspectRatio::NoStretching;
 double EmulationSettings::_customAspectRatio = 1.0;
 PictureSettings EmulationSettings::_pictureSettings;
 NtscFilterSettings EmulationSettings::_ntscFilterSettings;
@@ -83,6 +83,8 @@ ControllerType EmulationSettings::_controllerTypes[4] = { ControllerType::None, 
 KeyMappingSet EmulationSettings::_controllerKeys[4] = { KeyMappingSet(), KeyMappingSet(), KeyMappingSet(), KeyMappingSet() };
 bool EmulationSettings::_needControllerUpdate = false;
 uint32_t EmulationSettings::_zapperDetectionRadius = 0;
+double EmulationSettings::_mouseSensitivity = 1.0;
+int32_t EmulationSettings::_inputPollScanline = 240;
 
 uint32_t EmulationSettings::_defaultPpuPalette[64] = { /* 2C02 */ 0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E, 0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800, 0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFADADAD, 0xFF155FD9, 0xFF4240FF, 0xFF7527FE, 0xFFA01ACC, 0xFFB71E7B, 0xFFB53120, 0xFF994E00, 0xFF6B6D00, 0xFF388700, 0xFF0C9300, 0xFF008F32, 0xFF007C8D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFF64B0FF, 0xFF9290FF, 0xFFC676FF, 0xFFF36AFF, 0xFFFE6ECC, 0xFFFE8170, 0xFFEA9E22, 0xFFBCBE00, 0xFF88D800, 0xFF5CE430, 0xFF45E082, 0xFF48CDDE, 0xFF4F4F4F, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFFC0DFFF, 0xFFD3D2FF, 0xFFE8C8FF, 0xFFFBC2FF, 0xFFFEC4EA, 0xFFFECCC5, 0xFFF7D8A5, 0xFFE4E594, 0xFFCFEF96, 0xFFBDF4AB, 0xFFB3F3CC, 0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000 };
 
@@ -143,3 +145,62 @@ double EmulationSettings::GetAspectRatio()
 	}
 	return 0.0;
 }
+
+const vector<string> NesModelNames = {
+	"Auto",
+	"NTSC",
+	"PAL",
+	"Dendy"
+};
+
+const vector<string> ConsoleTypeNames = {
+	"Nes",
+	"Famicom",
+};
+
+const vector<string> ControllerTypeNames = {
+	"None",
+	"StandardController",
+	"Zapper",
+	"ArkanoidController",
+	"SnesController",
+	"PowerPad",
+	"SnesMouse",
+	"SuborMouse",
+	"VsZapper"
+};
+
+const vector<string> ExpansionPortDeviceNames = {
+	"None",
+	"Zapper",
+	"FourPlayerAdapter",
+	"ArkanoidController",
+	"OekaKidsTablet",
+	"FamilyTrainerMat",
+	"KonamiHyperShot",
+	"FamilyBasicKeyboard",
+	"PartyTap",
+	"Pachinko",
+	"ExcitingBoxing",
+	"JissenMahjong",
+	"SuborKeyboard",
+	"BarcodeBattler",
+	"HoriTrack",
+	"BandaiHyperShot",
+	"AsciiTurboFile",
+	"BattleBox",
+};
+
+const vector<string> PpuModelNames = {
+	"Ppu2C02",
+	"Ppu2C03",
+	"Ppu2C04A",
+	"Ppu2C04B",
+	"Ppu2C04C",
+	"Ppu2C04D",
+	"Ppu2C05A",
+	"Ppu2C05B",
+	"Ppu2C05C",
+	"Ppu2C05D",
+	"Ppu2C05E"
+};

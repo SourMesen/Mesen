@@ -22,8 +22,7 @@ protected:
 			SelectPRGPage(0, prgBank);
 			SelectPRGPage(1, prgBank);
 		} else {
-			SelectPRGPage(0, prgBank & 0xFE);
-			SelectPRGPage(1, (prgBank & 0xFE) + 1);
+			SelectPrgPage2x(0, prgBank & 0x06);
 		}
 		SelectCHRPage(0, (addr >> 3) & 0x07);
 

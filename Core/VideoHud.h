@@ -3,6 +3,8 @@
 #include "EmulationSettings.h"
 #include "FrameInfo.h"
 
+struct ControlDeviceState;
+
 class VideoHud
 {
 private:
@@ -11,7 +13,7 @@ private:
 	static const vector<uint32_t> _recordIcon;
 
 	void BlendColors(uint32_t* output, uint32_t input);
-	bool DisplayControllerInput(int inputPort, uint8_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan, uint32_t displayIndex);
+	bool DisplayControllerInput(ControlDeviceState &state, int inputPort, uint8_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan, uint32_t displayIndex);
 	void DrawMovieIcons(uint8_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan);
 
 public:

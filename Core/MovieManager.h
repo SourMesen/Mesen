@@ -2,8 +2,12 @@
 #include "stdafx.h"
 #include "MessageManager.h"
 #include "EmulationSettings.h"
+#include "IInputProvider.h"
 
-class IMovie
+class MovieRecorder;
+class VirtualFile;
+
+class IMovie : public IInputProvider
 {
 protected:
 	void EndMovie()
@@ -16,29 +20,20 @@ protected:
 	}
 
 public:
-	virtual void RecordState(uint8_t port, uint8_t value) = 0;
-	virtual uint8_t GetState(uint8_t port) = 0;
-
-	virtual void Record(string filename, bool reset) = 0;
-	virtual bool Play(stringstream &filestream, bool autoLoadRom) = 0;
-
-	virtual bool IsRecording() = 0;
+	virtual bool Play(VirtualFile &file) = 0;
 	virtual bool IsPlaying() = 0;
 };
 
 class MovieManager
 {
 private:
-	static shared_ptr<IMovie> _instance;
+	static shared_ptr<IMovie> _player;
+	static shared_ptr<MovieRecorder> _recorder;
 
 public:
 	static void Record(string filename, bool reset);
-	static void Play(string filename);
-	static bool Play(std::stringstream &filestream, bool autoLoadRom);
+	static void Play(VirtualFile file);
 	static void Stop();
 	static bool Playing();
 	static bool Recording();
-
-	static void RecordState(uint8_t port, uint8_t value);
-	static uint8_t GetState(uint8_t port);
 };

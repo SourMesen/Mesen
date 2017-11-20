@@ -20,5 +20,13 @@ namespace Mesen.GUI.Forms.Config
 			Entity = zapperInfo;
 			AddBinding("DetectionRadius", trkRadius);
 		}
+
+		protected override void OnFormClosed(FormClosedEventArgs e)
+		{
+			//Do not save anything, the parent input form will handle the changes
+			if(this.DialogResult == DialogResult.OK) {
+				UpdateObject();
+			}
+		}
 	}
 }

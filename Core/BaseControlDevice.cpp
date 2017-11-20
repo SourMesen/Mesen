@@ -1,30 +1,17 @@
 #include "stdafx.h"
 #include "BaseControlDevice.h"
-#include "ControlManager.h"
-#include "MovieManager.h"
-#include "EmulationSettings.h"
-#include "GameClient.h"
-#include "GameServerConnection.h"
-#include "AutomaticRomTest.h"
-#include "RewindManager.h"
-#include "Debugger.h"
+#include "KeyManager.h"
+#include "../Utilities/StringUtilities.h"
 
-BaseControlDevice::BaseControlDevice(uint8_t port)
+BaseControlDevice::BaseControlDevice(uint8_t port, KeyMappingSet keyMappingSet)
 {
 	_port = port;
-	_famiconDevice = EmulationSettings::GetConsoleType() == ConsoleType::Famicom;
-	if(EmulationSettings::GetControllerType(port) == ControllerType::StandardController) {
-		AddKeyMappings(EmulationSettings::GetControllerKeys(port));
-	}
+	_strobe = false;
+	_keyMappings = keyMappingSet.GetKeyMappingArray();
 }
 
 BaseControlDevice::~BaseControlDevice()
 {
-}
-
-void BaseControlDevice::StreamState(bool saving)
-{
-	Stream(_currentState);
 }
 
 uint8_t BaseControlDevice::GetPort()
@@ -32,60 +19,243 @@ uint8_t BaseControlDevice::GetPort()
 	return _port;
 }
 
-void BaseControlDevice::AddKeyMappings(KeyMappingSet keyMappings)
+void BaseControlDevice::SetStateFromInput()
 {
-	if(keyMappings.Mapping1.HasKeySet()) {
-		_keyMappings.push_back(keyMappings.Mapping1);
-	}
-	if(keyMappings.Mapping2.HasKeySet()) {
-		_keyMappings.push_back(keyMappings.Mapping2);
-	}
-	if(keyMappings.Mapping3.HasKeySet()) {
-		_keyMappings.push_back(keyMappings.Mapping3);
-	}
-	if(keyMappings.Mapping4.HasKeySet()) {
-		_keyMappings.push_back(keyMappings.Mapping4);
-	}
-	_turboSpeed = keyMappings.TurboSpeed;
+	ClearState();
+	InternalSetStateFromInput();
 }
 
-void BaseControlDevice::RefreshStateBuffer()
+void BaseControlDevice::InternalSetStateFromInput()
 {
-	//Do nothing by default - used by standard controllers and some others
 }
 
-uint8_t BaseControlDevice::ProcessNetPlayState(uint32_t netplayState)
+void BaseControlDevice::StreamState(bool saving)
 {
-	return netplayState;
+	ArrayInfo<uint8_t> state{ _state.State.data(), (uint32_t)_state.State.size() };
+	Stream(_strobe, state);
 }
 
-uint8_t BaseControlDevice::GetControlState()
+bool BaseControlDevice::IsCurrentPort(uint16_t addr)
 {
-	GameServerConnection* netPlayDevice = GameServerConnection::GetNetPlayDevice(_port);
-	if(RewindManager::IsRewinding()) {
-		_currentState = RewindManager::GetInput(_port);
-	} else if(MovieManager::Playing()) {
-		_currentState = MovieManager::GetState(_port);
-	} else if(GameClient::Connected()) {
-		_currentState = GameClient::GetControllerState(_port);
-	} else if(AutomaticRomTest::Running()) {
-		_currentState = AutomaticRomTest::GetControllerState(_port);
-	} else if(netPlayDevice) {
-		_currentState = ProcessNetPlayState(netPlayDevice->GetState());
-	} else if(Debugger::HasInputOverride(_port)) {
-		_currentState = ProcessNetPlayState(Debugger::GetInputOverride(_port));
+	return _port == (addr - 0x4016);
+}
+
+bool BaseControlDevice::IsExpansionDevice()
+{
+	return _port == BaseControlDevice::ExpDevicePort;
+}
+
+void BaseControlDevice::StrobeProcessRead()
+{
+	if(_strobe) {
+		RefreshStateBuffer();
+	}
+}
+
+void BaseControlDevice::StrobeProcessWrite(uint8_t value)
+{
+	bool prevStrobe = _strobe;
+	_strobe = (value & 0x01) == 0x01;
+
+	if(prevStrobe && !_strobe) {
+		RefreshStateBuffer();
+	}
+}
+
+void BaseControlDevice::ClearState()
+{
+	_state = ControlDeviceState();
+}
+
+ControlDeviceState BaseControlDevice::GetRawState()
+{
+	return _state;
+}
+
+void BaseControlDevice::SetRawState(ControlDeviceState state)
+{
+	_state = state;
+}
+
+void BaseControlDevice::SetTextState(string textState)
+{
+	ClearState();
+
+	if(IsRawString()) {
+		_state.State.insert(_state.State.end(), textState.begin(), textState.end());
 	} else {
-		_currentState = RefreshState();
+		if(HasCoordinates()) {
+			vector<string> data = StringUtilities::Split(textState, ' ');
+			if(data.size() >= 3) {
+				MousePosition pos;
+				try {
+					pos.X = (int16_t)std::stol(data[0]);
+					pos.Y = (int16_t)std::stol(data[1]);
+				} catch(std::exception ex) {
+					pos.X = -1;
+					pos.Y = -1;
+				}
+				SetCoordinates(pos);
+				textState = data[2];
+			}
+		}
+
+		int i = 0;
+		for(char c : textState) {
+			if(c != '.') {
+				SetBit(i);
+			}
+			i++;
+		}
 	}
+}
 
-	if(MovieManager::Recording()) {
-		MovieManager::RecordState(_port, _currentState);
+string BaseControlDevice::GetTextState()
+{
+	if(IsRawString()) {
+		return string((char*)_state.State.data(), _state.State.size());
+	} else {
+		string keyNames = GetKeyNames();
+		string output = "";
+
+		if(HasCoordinates()) {
+			MousePosition pos = GetCoordinates();
+			output += std::to_string(pos.X) + " " + std::to_string(pos.Y) + " ";
+		}
+
+		for(size_t i = 0; i < keyNames.size(); i++) {
+			output += IsPressed((uint8_t)i) ? keyNames[i] : '.';
+		}
+
+		return output;
 	}
+}
 
-	//For NetPlay
-	ControlManager::BroadcastInput(_port, _currentState);
+void BaseControlDevice::EnsureCapacity(int32_t minBitCount)
+{
+	uint32_t minByteCount = minBitCount / 8 + 1 + (HasCoordinates() ? 32 : 0);
+	int32_t gap = minByteCount - (int32_t)_state.State.size();
 
-	RewindManager::RecordInput(_port, _currentState);
+	if(gap > 0) {
+		_state.State.insert(_state.State.end(), gap, 0);
+	}
+}
 
-	return _currentState;
+bool BaseControlDevice::HasCoordinates()
+{
+	return false;
+}
+
+bool BaseControlDevice::IsRawString()
+{
+	return false;
+}
+
+uint32_t BaseControlDevice::GetByteIndex(uint8_t bit)
+{
+	return bit / 8 + (HasCoordinates() ? 4 : 0);
+}
+
+bool BaseControlDevice::IsPressed(uint8_t bit)
+{
+	EnsureCapacity(bit);
+	uint8_t bitMask = 1 << (bit % 8);
+	return (_state.State[GetByteIndex(bit)] & bitMask) != 0;
+}
+
+void BaseControlDevice::SetBitValue(uint8_t bit, bool set)
+{
+	if(set) {
+		SetBit(bit);
+	} else {
+		ClearBit(bit);
+	}
+}
+
+void BaseControlDevice::SetBit(uint8_t bit)
+{
+	EnsureCapacity(bit);
+	uint8_t bitMask = 1 << (bit % 8);
+	_state.State[GetByteIndex(bit)] |= bitMask;
+}
+
+void BaseControlDevice::ClearBit(uint8_t bit)
+{
+	EnsureCapacity(bit);
+	uint8_t bitMask = 1 << (bit % 8);
+	_state.State[GetByteIndex(bit)] &= ~bitMask;
+}
+
+void BaseControlDevice::InvertBit(uint8_t bit)
+{
+	if(IsPressed(bit)) {
+		ClearBit(bit);
+	} else {
+		SetBit(bit);
+	}
+}
+
+void BaseControlDevice::SetPressedState(uint8_t bit, uint32_t keyCode)
+{
+	if(EmulationSettings::InputEnabled() && KeyManager::IsKeyPressed(keyCode)) {
+		SetBit(bit);
+	}
+}
+
+void BaseControlDevice::SetPressedState(uint8_t bit, bool enabled)
+{
+	if(enabled) {
+		SetBit(bit);
+	}
+}
+
+void BaseControlDevice::SetCoordinates(MousePosition pos)
+{
+	EnsureCapacity(-1);
+
+	_state.State[0] = pos.X & 0xFF;
+	_state.State[1] = (pos.X >> 8) & 0xFF;
+	_state.State[2] = pos.Y & 0xFF;
+	_state.State[3] = (pos.Y >> 8) & 0xFF;
+}
+
+MousePosition BaseControlDevice::GetCoordinates()
+{
+	EnsureCapacity(-1);
+
+	MousePosition pos;
+	pos.X = _state.State[0] | (_state.State[1] << 8);
+	pos.Y = _state.State[2] | (_state.State[3] << 8);
+	return pos;
+}
+
+void BaseControlDevice::SetMovement(MouseMovement mov)
+{
+	MouseMovement prev = GetMovement();
+	mov.dx += prev.dx;
+	mov.dy += prev.dy;
+	SetCoordinates({ mov.dx, mov.dy });
+}
+
+MouseMovement BaseControlDevice::GetMovement()
+{
+	MousePosition pos = GetCoordinates();
+	SetCoordinates({ 0, 0 });
+	return { pos.X, pos.Y };
+}
+
+void BaseControlDevice::SwapButtons(shared_ptr<BaseControlDevice> state1, uint8_t button1, shared_ptr<BaseControlDevice> state2, uint8_t button2)
+{
+	bool pressed1 = state1->IsPressed(button1);
+	bool pressed2 = state2->IsPressed(button2);
+
+	state1->ClearBit(button1);
+	state2->ClearBit(button2);
+
+	if(pressed1) {
+		state2->SetBit(button2);
+	}
+	if(pressed2) {
+		state1->SetBit(button1);
+	}
 }

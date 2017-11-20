@@ -1,16 +1,23 @@
 #include "stdafx.h"
 #include "VideoHud.h"
 #include "ControlManager.h"
+#include "BaseControlDevice.h"
+#include "ControlDeviceState.h"
 #include "StandardController.h"
+#include "FourScore.h"
+#include "Zapper.h"
 #include "MovieManager.h"
 
 void VideoHud::DrawHud(uint8_t *outputBuffer, FrameInfo frameInfo, OverscanDimensions overscan)
 {
 	uint32_t displayCount = 0;
 	InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
+	
+	//TODO: FIX
+	vector<ControlDeviceState> states = ControlManager::GetPortStates();
 	for(int inputPort = 0; inputPort < 4; inputPort++) {
 		if((settings.VisiblePorts >> inputPort) & 0x01) {
-			if(DisplayControllerInput(inputPort, outputBuffer, frameInfo, overscan, displayCount)) {
+			if(DisplayControllerInput(states[inputPort], inputPort, outputBuffer, frameInfo, overscan, displayCount)) {
 				displayCount++;
 			}
 		}
@@ -19,7 +26,7 @@ void VideoHud::DrawHud(uint8_t *outputBuffer, FrameInfo frameInfo, OverscanDimen
 	DrawMovieIcons(outputBuffer, frameInfo, overscan);
 }
 
-bool VideoHud::DisplayControllerInput(int inputPort, uint8_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan, uint32_t displayIndex)
+bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, uint8_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan, uint32_t displayIndex)
 {
 	bool axisInverted = (EmulationSettings::GetScreenRotation() % 180) != 0;
 	int scale = frameInfo.Width / (axisInverted ? overscan.GetScreenHeight() : overscan.GetScreenWidth());
@@ -47,14 +54,17 @@ bool VideoHud::DisplayControllerInput(int inputPort, uint8_t *outputBuffer, Fram
 			break;
 	}
 
-	int port = inputPort > 1 ? inputPort - 2 : inputPort;
-	shared_ptr<StandardController> device = std::dynamic_pointer_cast<StandardController>(ControlManager::GetControlDevice(port));
-	if(inputPort > 1 && device) {
-		device = std::dynamic_pointer_cast<StandardController>(device->GetAdditionalController());
+	int32_t buttonState = -1;
+
+	shared_ptr<BaseControlDevice> device = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(inputPort), 0);
+	device->SetRawState(state);
+
+	shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(device);
+	if(controller) {
+		buttonState = controller->ToByte();
 	}
 
-	if(device) {
-		uint8_t buttonState = device->GetLastButtonState();
+	if(buttonState >= 0) {
 		for(int y = 0; y < 13 * scale; y++) {
 			for(int x = 0; x < 38 * scale; x++) {
 				uint32_t bufferPos = (yStart + y)*frameInfo.Width + (xStart + x);
@@ -72,6 +82,26 @@ bool VideoHud::DisplayControllerInput(int inputPort, uint8_t *outputBuffer, Fram
 		}
 		return true;
 	}
+
+	shared_ptr<Zapper> zapper = std::dynamic_pointer_cast<Zapper>(device);
+	if(zapper) {
+		MousePosition pos = zapper->GetCoordinates();
+		if(pos.X != -1 && pos.Y != -1) {
+			for(int i = -1; i <= 1; i++) {
+				int y = (pos.Y - overscan.Top) * scale + i;
+				if(y < 0 || y >(int)frameInfo.Height) continue;
+
+				for(int j = -1; j <= 1; j++) {
+					int x = (pos.X - overscan.Left) * scale + j;
+					if(x < 0 || x > (int)frameInfo.Width) continue;
+
+					uint32_t bufferPos = y*frameInfo.Width + x;
+					BlendColors(rgbaBuffer + bufferPos, 0xFFFF0000);
+				}
+			}
+		}		
+	}
+
 	return false;
 }
 

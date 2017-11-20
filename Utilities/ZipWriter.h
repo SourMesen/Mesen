@@ -9,9 +9,13 @@ private:
 	string _zipFilename;
 
 public:
-	ZipWriter(string zipFilename);
+	ZipWriter();
 	~ZipWriter();
 
+	bool Initialize(string filename);
+	bool Save();
+
 	void AddFile(string filepath, string zipFilename);
+	void AddFile(vector<uint8_t> &fileData, string zipFilename);
 	void AddFile(std::stringstream &filestream, string zipFilename);
 };

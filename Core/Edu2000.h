@@ -8,7 +8,7 @@ private:
 	uint8_t _reg;
 
 protected:
-	uint16_t GetPRGPageSize() override { return 0x2000; }
+	uint16_t GetPRGPageSize() override { return 0x8000; }
 	uint16_t GetCHRPageSize() override { return 0x2000; }
 	uint32_t GetWorkRamSize() override { return 0x8000; }
 	uint32_t GetWorkRamPageSize() override { return 0x2000; }
@@ -31,7 +31,7 @@ protected:
 
 	void UpdatePrg()
 	{
-		SelectPrgPage4x(0, (_reg & 0x1F) << 2);
+		SelectPRGPage(0, _reg & 0x1F);
 		SetCpuMemoryMapping(0x6000, 0x7FFF, (_reg >> 6) & 0x03, PrgMemoryType::WorkRam);
 	}
 

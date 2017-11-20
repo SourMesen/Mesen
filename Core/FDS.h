@@ -13,10 +13,7 @@ class FDS : public BaseMapper
 {
 private:
 	static const uint32_t NoDiskInserted = 0xFF;
-	static const uint32_t DiskInsertDelay = 3600000; //approx 2 sec delay
-	static bool _disableAutoInsertDisk;
-
-	static FDS* Instance;
+	bool _disableAutoInsertDisk;
 
 	unique_ptr<FdsAudio> _audio;
 
@@ -53,9 +50,7 @@ private:
 	bool _diskWriteProtected = false;
 
 	//Internal values
-	uint32_t _diskNumber = 0;
-	uint32_t _newDiskNumber = 0;
-	uint32_t _newDiskInsertDelay = 0;
+	uint32_t _diskNumber = FDS::NoDiskInserted;
 	uint32_t _diskPosition = 0;
 	uint32_t _delay = 0;	
 	uint16_t _crcAccumulator;
@@ -63,7 +58,6 @@ private:
 	bool _gapEnded = true;
 	bool _scanningDisk = false;
 	bool _transferComplete = false;
-	bool _isDirty = false;
 	
 	vector<uint8_t> _fdsRawData;
 	vector<vector<uint8_t>> _fdsDiskSides;
@@ -83,6 +77,8 @@ protected:
 
 	void InitMapper() override;
 	void InitMapper(RomData &romData) override;
+	void LoadDiskData(vector<uint8_t> ipsData = vector<uint8_t>());
+	vector<uint8_t> CreateIpsPatch();
 	void Reset(bool softReset) override;
 
 	uint32_t GetFdsDiskSideSize(uint8_t side);
@@ -93,8 +89,6 @@ protected:
 	
 	void ProcessCpuClock() override;
 	void UpdateCrc(uint8_t value);
-
-	bool IsDiskInserted();
 
 	void WriteRegister(uint16_t addr, uint8_t value) override;
 	uint8_t ReadRegister(uint16_t addr) override;
@@ -108,12 +102,14 @@ public:
 	~FDS();
 
 	void SaveBattery() override;
+	ConsoleFeatures GetAvailableFeatures() override;
 
-	static uint32_t GetSideCount();
+	uint32_t GetSideCount();
 
-	static void InsertDisk(uint32_t diskNumber);
-	static void InsertNextDisk();
-	static void SwitchDiskSide();
-	static void EjectDisk();
-	static bool IsAutoInsertDiskEnabled();
+	void EjectDisk();
+	void InsertDisk(uint32_t diskNumber);
+	uint32_t GetCurrentDisk();
+	bool IsDiskInserted();
+
+	bool IsAutoInsertDiskEnabled();
 };

@@ -76,6 +76,7 @@
 #include "MagicKidGooGoo.h"
 #include "Mapper15.h"
 #include "Mapper35.h"
+#include "Mapper39.h"
 #include "Mapper40.h"
 #include "Mapper42.h"
 #include "Mapper43.h"
@@ -319,6 +320,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 36: return new Txc22000();
 		case 37: return new MMC3_37();
 		case 38: return new UnlPci556();
+		case 39: return new Mapper39();
 		case 40: return new Mapper40();
 		case 41: return new Caltron41();
 		case 42: return new Mapper42();

@@ -7,6 +7,7 @@
 #include "Debugger.h"
 #include "MovieManager.h"
 #include "PPU.h"
+#include "VirtualFile.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/md5.h"
 #include "../Utilities/ZipWriter.h"
@@ -129,8 +130,12 @@ void RecordedRomTest::Record(string filename, bool reset)
 	}
 }
 
-void RecordedRomTest::RecordFromMovie(string testFilename, stringstream &movieStream, bool autoLoadRom)
+void RecordedRomTest::RecordFromMovie(string testFilename, VirtualFile movieFile)
 {
+	if(!movieFile.IsValid()) {
+		return;
+	}
+
 	_filename = testFilename;
 
 	string mrtFilename = FolderUtilities::CombinePath(FolderUtilities::GetFolderName(testFilename), FolderUtilities::GetFilename(testFilename, false) + ".mrt");
@@ -143,24 +148,11 @@ void RecordedRomTest::RecordFromMovie(string testFilename, stringstream &movieSt
 		_recording = true;
 
 		//Start playing movie
-		MovieManager::Play(movieStream, autoLoadRom);
-		movieStream.seekg(0, ios::beg);
-		_movieStream << movieStream.rdbuf();
-
+		MovieManager::Play(movieFile);
+		movieFile.ReadFile(_movieData);
 		_recordingFromMovie = true;
 
 		Console::Resume();
-	}
-}
-
-void RecordedRomTest::RecordFromMovie(string testFilename, string movieFilename)
-{
-	stringstream ss;
-	ifstream file(movieFilename, ios::in | ios::binary);
-	if(file) {
-		ss << file.rdbuf();
-		file.close();
-		RecordFromMovie(testFilename, ss, true);
 	}
 }
 
@@ -168,8 +160,9 @@ void RecordedRomTest::RecordFromTest(string newTestFilename, string existingTest
 {
 	ZipReader zipReader;
 	zipReader.LoadArchive(existingTestFilename);
-	std::stringstream testMovie = zipReader.GetStream("TestMovie.mmo");
-	std::stringstream testRom = zipReader.GetStream("TestRom.nes");
+	stringstream testMovie, testRom;
+	zipReader.GetStream("TestMovie.mmo", testMovie);
+	zipReader.GetStream("TestRom.nes", testRom);
 	VirtualFile romFile(testRom, newTestFilename);
 
 	if(testMovie && testRom) {
@@ -178,7 +171,7 @@ void RecordedRomTest::RecordFromTest(string newTestFilename, string existingTest
 		testRom.seekg(0, ios::beg);
 		_romStream << testRom.rdbuf();
 
-		RecordFromMovie(newTestFilename, testMovie, false);
+		RecordFromMovie(newTestFilename, VirtualFile(existingTestFilename, "TestMovie.mmo"));
 		Console::Resume();
 	}
 }
@@ -198,13 +191,16 @@ int32_t RecordedRomTest::Run(string filename)
 		EmulationSettings::SetNesModel(NesModel::NTSC);
 	}
 
+	VirtualFile testMovie(filename, "TestMovie.mmo");
+	VirtualFile testRom(filename, "TestRom.nes");
+
 	ZipReader zipReader;
 	zipReader.LoadArchive(filename);
-	std::stringstream testData = zipReader.GetStream("TestData.mrt");
-	std::stringstream testMovie = zipReader.GetStream("TestMovie.mmo");
-	std::stringstream testRom = zipReader.GetStream("TestRom.nes");
+	
+	stringstream testData;
+	zipReader.GetStream("TestData.mrt", testData);
 
-	if(testData && testMovie && testRom) {
+	if(testData && testMovie.IsValid() && testRom.IsValid()) {
 		char header[3];
 		testData.read((char*)&header, 3);
 		if(memcmp((char*)&header, "MRT", 3) != 0) {
@@ -235,26 +231,10 @@ int32_t RecordedRomTest::Run(string filename)
 		_currentCount = _repetitionCount.front();
 		_repetitionCount.pop_front();
 
-		shared_ptr<ArchiveReader> reader = ArchiveReader::GetReader(testRom);
-		if(reader) {
-			//Some older test files contain a zip file instead of a rom file, grab the first rom we can find in the zip
-			vector<string> files = reader->GetFileList({ ".nes" });
-			vector<uint8_t> fileData;
-			if(files.size() > 0 && reader->ExtractFile(files[0], fileData)) {
-				testRom = std::stringstream();
-				testRom.write((char*)fileData.data(), fileData.size());
-				testRom.seekg(0, ios::beg);
-			} else {
-				return -3;
-			}
-		}
-
-		VirtualFile testRomFile(testRom, filename);
-
 		//Start playing movie
-		if(Console::LoadROM(testRomFile)) {
+		if(Console::LoadROM(testRom)) {
 			_runningTest = true;
-			MovieManager::Play(testMovie, false);
+			MovieManager::Play(testMovie);
 
 			Console::Resume();
 			EmulationSettings::ClearFlags(EmulationFlags::Paused);
@@ -305,14 +285,15 @@ void RecordedRomTest::Save()
 
 	_file.close();
 
-	ZipWriter writer(_filename);
+	ZipWriter writer;
+	writer.Initialize(_filename);
 
 	string mrtFilename = FolderUtilities::CombinePath(FolderUtilities::GetFolderName(_filename), FolderUtilities::GetFilename(_filename, false) + ".mrt");
 	writer.AddFile(mrtFilename, "TestData.mrt");
 	std::remove(mrtFilename.c_str());
 
 	if(_recordingFromMovie) {
-		writer.AddFile(_movieStream, "TestMovie.mmo");
+		writer.AddFile(_movieData, "TestMovie.mmo");
 		writer.AddFile(_romStream, "TestRom.nes");
 	} else {
 		string mmoFilename = FolderUtilities::CombinePath(FolderUtilities::GetFolderName(_filename), FolderUtilities::GetFilename(_filename, false) + ".mmo");
@@ -321,7 +302,7 @@ void RecordedRomTest::Save()
 
 		writer.AddFile(Console::GetRomPath().GetFilePath(), "TestRom.nes");
 	}
-
+	writer.Save();
 
 	MessageManager::DisplayMessage("Test", "TestFileSavedTo", FolderUtilities::GetFilename(_filename, true));
 }

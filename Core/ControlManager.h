@@ -7,75 +7,68 @@
 
 class BaseControlDevice;
 class Zapper;
-class IGameBroadcaster;
-class IKeyManager;
-enum class MouseButton;
-
-struct MousePosition
-{
-	int32_t X;
-	int32_t Y;
-};
+class SystemActionManager;
+class IInputRecorder;
+class IInputProvider;
+struct ControlDeviceState;
+enum class ControllerType;
+enum class ExpansionPortDevice;
 
 class ControlManager : public Snapshotable, public IMemoryHandler
 {
-	private:
-		static unique_ptr<IKeyManager> _keyManager;
-		static shared_ptr<BaseControlDevice> _controlDevices[2];
-		static IGameBroadcaster* _gameBroadcaster;
-		static MousePosition _mousePosition;
+private:
+	static ControlManager* _instance;
+	static vector<IInputRecorder*> _inputRecorders;
+	static vector<IInputProvider*> _inputProviders;
+	static SimpleLock _deviceLock;
 
-		bool _isLagging = false;
-		bool _refreshState = false;
+	vector<shared_ptr<BaseControlDevice>> _controlDevices;
 
-		uint8_t GetOpenBusMask(uint8_t port);
+	shared_ptr<BaseControlDevice> _systemActionManager;
+	shared_ptr<BaseControlDevice> _mapperControlDevice;
 
-		template<typename T> shared_ptr<T> GetExpansionDevice();
+	uint32_t _lagCounter = 0;
+	bool _isLagging = false;
+	bool _refreshState = false;
 
-		virtual shared_ptr<BaseControlDevice> GetZapper(uint8_t port);
+	uint8_t GetOpenBusMask(uint8_t port);
+	void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice);
 
-		static void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice, uint8_t port);
-		void UnregisterControlDevice(uint8_t port);
+protected:
+	virtual void StreamState(bool saving) override;
+	virtual ControllerType GetControllerType(uint8_t port);
 
-	protected:
-		uint8_t GetPortValue(uint8_t port);
-		virtual void RefreshAllPorts();
+public:
 
-		virtual void StreamState(bool saving) override;
+	ControlManager(shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice);
+	virtual ~ControlManager();
 
-	public:
-		ControlManager();
-		virtual ~ControlManager();
+	void UpdateControlDevices();
+	void UpdateInputState();
 
-		void UpdateControlDevices();
-		bool GetLagFlag();
+	uint32_t GetLagCounter();
+	void ResetLagCounter();
 
-		virtual void Reset(bool softReset);
-		
-		static void RegisterBroadcaster(IGameBroadcaster* gameBroadcaster);
-		static void UnregisterBroadcaster(IGameBroadcaster* gameBroadcaster);
+	virtual void Reset(bool softReset);
 
-		static void RegisterKeyManager(IKeyManager* keyManager);
-		static void RefreshKeyState();
-		static bool IsKeyPressed(uint32_t keyCode);
-		static bool IsMouseButtonPressed(MouseButton button);
-		static vector<uint32_t> GetPressedKeys();
-		static string GetKeyName(uint32_t keyCode);
-		static uint32_t GetKeyCode(string keyName);
-		
-		static shared_ptr<BaseControlDevice> GetControlDevice(uint8_t port);
+	static void RegisterInputProvider(IInputProvider* provider);
+	static void UnregisterInputProvider(IInputProvider* provider);
 
-		static void SetMousePosition(double x, double y);
-		static MousePosition GetMousePosition();
+	static void RegisterInputRecorder(IInputRecorder* recorder);
+	static void UnregisterInputRecorder(IInputRecorder* recorder);
 
-		static void BroadcastInput(uint8_t port, uint8_t state);
+	static vector<ControlDeviceState> GetPortStates();
 
-		virtual void GetMemoryRanges(MemoryRanges &ranges) override
-		{
-			ranges.AddHandler(MemoryOperation::Read, 0x4016, 0x4017);
-			ranges.AddHandler(MemoryOperation::Write, 0x4016);
-		}
-		
-		virtual uint8_t ReadRAM(uint16_t addr) override;
-		virtual void WriteRAM(uint16_t addr, uint8_t value) override;
+	static shared_ptr<BaseControlDevice> GetControlDevice(uint8_t port);
+	static shared_ptr<BaseControlDevice> CreateControllerDevice(ControllerType type, uint8_t port);
+	static shared_ptr<BaseControlDevice> CreateExpansionDevice(ExpansionPortDevice type);
+
+	virtual void GetMemoryRanges(MemoryRanges &ranges) override
+	{
+		ranges.AddHandler(MemoryOperation::Read, 0x4016, 0x4017);
+		ranges.AddHandler(MemoryOperation::Write, 0x4016);
+	}
+
+	virtual uint8_t ReadRAM(uint16_t addr) override;
+	virtual void WriteRAM(uint16_t addr, uint8_t value) override;
 };

@@ -14,64 +14,105 @@ namespace Mesen.GUI.Forms.Config
 {
 	public partial class frmControllerConfig : BaseConfigForm
 	{
+		private List<BaseInputConfigControl> _controls = new List<BaseInputConfigControl>();
 		private KeyPresets _presets = new KeyPresets();
+		private ControllerInfo _controllerInfo;
+		private int _portNumber;
+		private ConsoleType _consoleType;
+		private InteropEmu.ControllerType _controllerType;
 
-		public frmControllerConfig(ControllerInfo controllerInfo, int portNumber, ConsoleType consoleType)
+		public frmControllerConfig(ControllerInfo controllerInfo, int portNumber, ConsoleType consoleType, InteropEmu.ControllerType controllerType)
 		{
 			InitializeComponent();
 
-			Entity = controllerInfo;
+			if(!this.DesignMode) {
+				Entity = controllerInfo;
 
-			AddBinding("TurboSpeed", trkTurboSpeed);
-			ctrlStandardController0.Initialize(controllerInfo.Keys[0]);
-			ctrlStandardController1.Initialize(controllerInfo.Keys[1]);
-			ctrlStandardController2.Initialize(controllerInfo.Keys[2]);
-			ctrlStandardController3.Initialize(controllerInfo.Keys[3]);
+				AddBinding("TurboSpeed", trkTurboSpeed);
 
-			if(portNumber == 1 && consoleType == ConsoleType.Famicom) {
-				ctrlStandardController0.ShowMicrophone = true;
-				ctrlStandardController1.ShowMicrophone = true;
-				ctrlStandardController2.ShowMicrophone = true;
-				ctrlStandardController3.ShowMicrophone = true;
+				_controllerInfo = controllerInfo;
+				_portNumber = portNumber;
+				_consoleType = consoleType;
+				_controllerType = controllerType;
+			}
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
+			switch(_controllerType) {
+				case InteropEmu.ControllerType.StandardController:
+				case InteropEmu.ControllerType.SnesController:
+					for(int i = 0; i < 4; i++) {
+						_controls.Add(new ctrlStandardController(_controllerInfo.Keys[i], _portNumber, _consoleType, _controllerType));
+					}
+					btnSelectPreset.Image = BaseControl.DownArrow;
+					break;
+
+				case InteropEmu.ControllerType.PowerPad:
+					for(int i = 0; i < 4; i++) {
+						_controls.Add(new ctrlPowerPadConfig(_controllerInfo.Keys[i]));
+					}
+					tlpMain.Controls.Remove(tlpStandardController);
+					break;
 			}
 
-			this.btnSelectPreset.Image = BaseControl.DownArrow;
+			TabPage[] tabPages = new TabPage[4] { tpgSet1, tpgSet2, tpgSet3, tpgSet4 };
+			TableLayoutPanel[] layoutPanels = new TableLayoutPanel[4] { tlpSet1, tlpSet2, tlpSet3, tlpSet4 };
+			float factor = (float)(tabPages[0].Height - 10) / _controls[0].Height;
+			for(int i = 0; i < 4; i++) {
+				layoutPanels[i].Controls.Add(_controls[i]);
+				_controls[i].Anchor = AnchorStyles.None;
+				_controls[i].Scale(new SizeF(factor, factor));
+			}
 
 			ResourceHelper.ApplyResources(this, mnuStripPreset);
 
-			this.Text += ": " + ResourceHelper.GetMessage("PlayerNumber", (portNumber + 1).ToString());
+			this.Text += ": " + ResourceHelper.GetMessage("PlayerNumber", (_portNumber + 1).ToString());
 		}
 
-		private ctrlStandardController GetControllerControl()
+		protected override void OnFormClosed(FormClosedEventArgs e)
+		{
+			//Do not save anything, the parent input form will handle the changes
+			if(this.DialogResult == DialogResult.OK) {
+				_controls[0].UpdateKeyMappings();
+				_controls[1].UpdateKeyMappings();
+				_controls[2].UpdateKeyMappings();
+				_controls[3].UpdateKeyMappings();
+				UpdateObject();
+			}
+		}
+
+		private BaseInputConfigControl GetControllerControl()
 		{
 			if(tabMain.SelectedTab == tpgSet1) {
-				return ctrlStandardController0;
+				return _controls[0];
 			} else if(tabMain.SelectedTab == tpgSet2) {
-				return ctrlStandardController1;
+				return _controls[1];
 			} else if(tabMain.SelectedTab == tpgSet3) {
-				return ctrlStandardController2;
+				return _controls[2];
 			} else if(tabMain.SelectedTab == tpgSet4) {
-				return ctrlStandardController3;
+				return _controls[3];
 			}
 
-			return ctrlStandardController0;
+			return _controls[0];
 		}
 
 		private void UpdateTabIcons()
 		{
-			tpgSet1.ImageIndex = (int)ctrlStandardController0.GetKeyType() - 1;
-			tpgSet2.ImageIndex = (int)ctrlStandardController1.GetKeyType() - 1;
-			tpgSet3.ImageIndex = (int)ctrlStandardController2.GetKeyType() - 1;
-			tpgSet4.ImageIndex = (int)ctrlStandardController3.GetKeyType() - 1;
+			tpgSet1.ImageIndex = (int)_controls[0].GetKeyType() - 1;
+			tpgSet2.ImageIndex = (int)_controls[1].GetKeyType() - 1;
+			tpgSet3.ImageIndex = (int)_controls[2].GetKeyType() - 1;
+			tpgSet4.ImageIndex = (int)_controls[3].GetKeyType() - 1;
 		}
 
 		protected override void UpdateConfig()
 		{
-			ControllerInfo controllerInfo = (ControllerInfo)Entity;
-			controllerInfo.Keys[0] = ctrlStandardController0.GetKeyMappings();
-			controllerInfo.Keys[1] = ctrlStandardController1.GetKeyMappings();
-			controllerInfo.Keys[2] = ctrlStandardController2.GetKeyMappings();
-			controllerInfo.Keys[3] = ctrlStandardController3.GetKeyMappings();
+			_controls[0].UpdateKeyMappings();
+			_controls[1].UpdateKeyMappings();
+			_controls[2].UpdateKeyMappings();
+			_controls[3].UpdateKeyMappings();
 			base.UpdateConfig();
 		}
 
@@ -79,13 +120,13 @@ namespace Mesen.GUI.Forms.Config
 		{
 			ControllerInfo controllerInfo = (ControllerInfo)Entity;
 			if(tabMain.SelectedTab == tpgSet1) {
-				ctrlStandardController0.ClearKeys();
+				_controls[0].ClearKeys();
 			} else if(tabMain.SelectedTab == tpgSet2) {
-				ctrlStandardController1.ClearKeys();
+				_controls[1].ClearKeys();
 			} else if(tabMain.SelectedTab == tpgSet3) {
-				ctrlStandardController2.ClearKeys();
+				_controls[2].ClearKeys();
 			} else if(tabMain.SelectedTab == tpgSet4) {
-				ctrlStandardController3.ClearKeys();
+				_controls[3].ClearKeys();
 			}
 		}
 

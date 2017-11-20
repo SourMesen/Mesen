@@ -28,6 +28,9 @@ void GameDatabase::InitDatabase()
 		while(db.good()) {
 			string lineContent;
 			std::getline(db, lineContent);
+			if(lineContent[lineContent.size() - 1] == '\r') {
+				lineContent = lineContent.substr(0, lineContent.size() - 1);
+			}
 			if(lineContent.empty() || lineContent[0] == '#') {
 				continue;
 			}
@@ -105,7 +108,7 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 		ExpansionPortDevice expDevice = ExpansionPortDevice::None;
 		EmulationSettings::ClearFlags(EmulationFlags::HasFourScore);
 
-		bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS);
+		bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
 
 		if(inputType.compare("Zapper") == 0) {
 			MessageManager::Log("[DB] Input: Zapper connected");
@@ -134,6 +137,45 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 			MessageManager::Log("[DB] Input: Oeka Kids Tablet connected");
 			system = GameSystem::Famicom;
 			expDevice = ExpansionPortDevice::OekaKidsTablet;
+		} else if(inputType.compare("KonamiHypershot") == 0) {
+			MessageManager::Log("[DB] Input: Konami Hyper Shot connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::KonamiHyperShot;
+		} else if(inputType.compare("FamilyKeyboard") == 0) {
+			MessageManager::Log("[DB] Input: Family Basic Keyboard connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::FamilyBasicKeyboard;
+		} else if(inputType.compare("PartyTap") == 0) {
+			MessageManager::Log("[DB] Input: Party Tap connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::PartyTap;
+		} else if(inputType.compare("Pachinko") == 0) {
+			MessageManager::Log("[DB] Input: Pachinko controller connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::Pachinko;
+		} else if(inputType.compare("ExcitingBoxing") == 0) {
+			MessageManager::Log("[DB] Input: Exciting Boxing controller connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::ExcitingBoxing;
+		} else if(inputType.compare("SuborKeyboard") == 0) {
+			MessageManager::Log("[DB] Input: Subor mouse connected");
+			MessageManager::Log("[DB] Input: Subor keyboard connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::SuborKeyboard;
+			//TODO: FIX
+			//controllers[2] = ControllerType::SuborMouse;
+		} else if(inputType.compare("Mahjong") == 0) {
+			MessageManager::Log("[DB] Input: Jissen Mahjong controller connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::JissenMahjong;
+		} else if(inputType.compare("BarCodeWorld") == 0) {
+			MessageManager::Log("[DB] Input: Barcode Battler barcode reader connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::BarcodeBattler;
+		} else if(inputType.compare("BandaiHypershot") == 0) {
+			MessageManager::Log("[DB] Input: Bandai Hyper Shot gun connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::BandaiHyperShot;
 		} else {
 			MessageManager::Log("[DB] Input: 2 standard controllers connected");
 		}

@@ -1,16 +1,14 @@
 #include "stdafx.h"
+#include "../Utilities/IpsPatcher.h"
+#include "Console.h"
 #include "FDS.h"
 #include "CPU.h"
 #include "FdsAudio.h"
 #include "MemoryManager.h"
-
-FDS* FDS::Instance = nullptr;
-bool FDS::_disableAutoInsertDisk = false;
+#include "BatteryManager.h"
 
 void FDS::InitMapper()
 {
-	_newDiskNumber = (IsAutoInsertDiskEnabled() || EmulationSettings::CheckFlag(EmulationFlags::FdsAutoLoadDisk)) ? 0 : FDS::NoDiskInserted;
-
 	//FDS BIOS
 	SetCpuMemoryMapping(0xE000, 0xFFFF, 0, PrgMemoryType::PrgRom, MemoryAccessType::Read);
 
@@ -27,6 +25,38 @@ void FDS::InitMapper(RomData &romData)
 	_fdsDiskSides = romData.FdsDiskData;
 	_fdsDiskHeaders = romData.FdsDiskHeaders;
 	_fdsRawData = romData.RawData;
+	
+	//Apply save data (saved as an IPS file), if found
+	vector<uint8_t> ipsData = BatteryManager::LoadBattery(".ips");
+	LoadDiskData(ipsData);
+}
+
+void FDS::LoadDiskData(vector<uint8_t> ipsData)
+{
+	_fdsDiskSides.clear();
+	_fdsDiskHeaders.clear();
+	
+	FdsLoader loader;
+	vector<uint8_t> patchedData;
+	if(ipsData.size() > 0 && IpsPatcher::PatchBuffer(ipsData, _fdsRawData, patchedData)) {
+		loader.LoadDiskData(patchedData, _fdsDiskSides, _fdsDiskHeaders);
+	} else {
+		loader.LoadDiskData(_fdsRawData, _fdsDiskSides, _fdsDiskHeaders);
+	}
+}
+
+vector<uint8_t> FDS::CreateIpsPatch()
+{
+	FdsLoader loader;
+	bool needHeader = (memcmp(_fdsRawData.data(), "FDS\x1a", 4) == 0);
+	vector<uint8_t> newData = loader.RebuildFdsFile(_fdsDiskSides, needHeader);	
+	return IpsPatcher::CreatePatch(_fdsRawData, newData);
+}
+
+void FDS::SaveBattery()
+{
+	vector<uint8_t> ipsData = CreateIpsPatch();
+	BatteryManager::SaveBattery(".ips", ipsData.data(), (uint32_t)ipsData.size());
 }
 
 void FDS::Reset(bool softReset)
@@ -54,9 +84,6 @@ void FDS::WriteFdsDisk(uint8_t value)
 {
 	assert(_diskNumber < _fdsDiskSides.size());
 	assert(_diskPosition < _fdsDiskSides[_diskNumber].size());
-	if(_fdsDiskSides[_diskNumber][_diskPosition - 2] != value) {
-		_isDirty = true;
-	}
 	_fdsDiskSides[_diskNumber][_diskPosition - 2] = value;
 }
 
@@ -73,11 +100,6 @@ void FDS::ClockIrq()
 			_irqCounter--;
 		}
 	}
-}
-
-bool FDS::IsAutoInsertDiskEnabled()
-{
-	return !_disableAutoInsertDisk && EmulationSettings::CheckFlag(EmulationFlags::FdsAutoInsertDisk);
 }
 
 uint8_t FDS::ReadRAM(uint16_t addr)
@@ -124,7 +146,6 @@ uint8_t FDS::ReadRAM(uint16_t addr)
 
 		if(matchIndex >= 0) {
 			//Found a single match, insert it
-			_newDiskNumber = matchIndex;
 			_diskNumber = matchIndex;
 			if(matchIndex > 0) {
 				//Make sure we disable fast forward
@@ -176,14 +197,6 @@ void FDS::ProcessCpuClock()
 
 	ClockIrq();
 	_audio->Clock();
-
-	if(_newDiskInsertDelay > 0) {
-		//Insert new disk after delay expires, to allow games to notice the disk was ejected
-		_newDiskInsertDelay--;
-		_diskNumber = FDS::NoDiskInserted;
-	} else {
-		_diskNumber = _newDiskNumber;
-	}
 
 	if(_diskNumber == FDS::NoDiskInserted || !_motorOn) {
 		//Disk has been ejected
@@ -366,11 +379,6 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 	}
 }
 
-bool FDS::IsDiskInserted()
-{
-	return _diskNumber != FDS::NoDiskInserted;
-}
-
 uint8_t FDS::ReadRegister(uint16_t addr)
 {
 	uint8_t value = MemoryManager::GetOpenBus();
@@ -411,7 +419,6 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 					//Eject the current disk and insert a new one in 300k cycles (~10 frames)
 					_autoDiskSwitchCounter = 300000;
 					_diskNumber = NoDiskInserted;
-					_newDiskNumber = NoDiskInserted;
 				}
 				return value;
 
@@ -429,14 +436,35 @@ void FDS::StreamState(bool saving)
 	BaseMapper::StreamState(saving);
 
 	bool unusedNeedIrq = false;
+	uint32_t unusedNewDiskNumber = 0;
+	uint32_t unusedNewDiskInsertDelay = 0;
+	bool unusedIsDirty = false;
 
 	SnapshotInfo audio{ _audio.get() };
+	
 	Stream(_irqReloadValue, _irqCounter, _irqEnabled, _irqRepeatEnabled, _diskRegEnabled, _soundRegEnabled, _writeDataReg, _motorOn, _resetTransfer,
 		_readMode, _crcControl, _diskReady, _diskIrqEnabled, _extConWriteReg, _badCrc, _endOfHead, _readWriteEnabled, _readDataReg, _diskWriteProtected,
-		_diskNumber, _newDiskNumber, _newDiskInsertDelay, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, unusedNeedIrq,
-		_transferComplete, _isDirty, audio);
+		_diskNumber, unusedNewDiskNumber, unusedNewDiskInsertDelay, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, unusedNeedIrq,
+		_transferComplete, unusedIsDirty, audio);
 
-	if(!saving) {
+	if(saving) {
+		vector<uint8_t> ipsData = CreateIpsPatch();
+		uint32_t size = (uint32_t)ipsData.size();
+		Stream(size);
+		
+		ArrayInfo<uint8_t> data{ ipsData.data(), (uint32_t)ipsData.size() };
+		Stream(data);
+	} else {
+		uint32_t size = 0;
+		Stream(size);
+		if(size > 0) {
+			vector<uint8_t> ipsData(size, 0);			
+			ArrayInfo<uint8_t> data{ ipsData.data(), (uint32_t)ipsData.size() };
+			Stream(data);
+		
+			LoadDiskData(ipsData);
+		}
+
 		//Make sure we disable fast forwarding when loading a state
 		//Otherwise it's possible to get stuck in fast forward mode
 		_gameStarted = true;
@@ -445,8 +473,6 @@ void FDS::StreamState(bool saving)
 
 FDS::FDS()
 {
-	FDS::Instance = this;
-
 	_audio.reset(new FdsAudio());
 }
 
@@ -454,68 +480,41 @@ FDS::~FDS()
 {
 	//Restore emulation speed to normal when closing
 	EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
-
-	if(FDS::Instance == this) {
-		FDS::Instance = nullptr;
-	}
 }
 
-void FDS::SaveBattery()
+ConsoleFeatures FDS::GetAvailableFeatures()
 {
-	if(_isDirty) {
-		FdsLoader loader;
-		loader.SaveIpsFile(_romFilepath, _fdsRawData, _fdsDiskSides);
-	}
+	return ConsoleFeatures::Fds;
 }
 
 uint32_t FDS::GetSideCount()
 {
-	if(FDS::Instance) {
-		return (uint32_t)FDS::Instance->_fdsDiskSides.size();
-	} else {
-		return 0;
-	}
-}
-
-void FDS::InsertDisk(uint32_t diskNumber)
-{
-	if(FDS::Instance) {
-		Console::Pause();
-		FDS::Instance->_newDiskNumber = diskNumber;
-		FDS::Instance->_newDiskInsertDelay = FDS::DiskInsertDelay;
-		Console::Resume();
-
-		MessageManager::SendNotification(ConsoleNotificationType::FdsDiskChanged);
-	}
-}
-
-void FDS::InsertNextDisk()
-{
-	InsertDisk(((FDS::Instance->_diskNumber & 0xFE) + 2) % GetSideCount());
-}
-
-void FDS::SwitchDiskSide()
-{
-	if(FDS::Instance) {
-		Console::Pause();
-		if(FDS::Instance->_newDiskInsertDelay == 0 && FDS::Instance->_diskNumber != NoDiskInserted) {
-			FDS::Instance->_newDiskNumber = (FDS::Instance->_diskNumber & 0x01) ? (FDS::Instance->_diskNumber & 0xFE) : (FDS::Instance->_diskNumber | 0x01);
-			FDS::Instance->_newDiskInsertDelay = FDS::DiskInsertDelay;
-		}
-		Console::Resume();
-
-		MessageManager::SendNotification(ConsoleNotificationType::FdsDiskChanged);
-	}
+	return (uint32_t)_fdsDiskSides.size();
 }
 
 void FDS::EjectDisk()
 {
-	if(FDS::Instance) {
-		Console::Pause();
-		FDS::Instance->_newDiskNumber = NoDiskInserted;
-		FDS::Instance->_newDiskInsertDelay = 0;
-		Console::Resume();
+	_diskNumber = FDS::NoDiskInserted;
+}
 
-		MessageManager::SendNotification(ConsoleNotificationType::FdsDiskChanged);
+void FDS::InsertDisk(uint32_t diskNumber)
+{
+	if(_diskNumber == FDS::NoDiskInserted) {
+		_diskNumber = diskNumber;
 	}
+}
+
+uint32_t FDS::GetCurrentDisk()
+{
+	return _diskNumber;
+}
+
+bool FDS::IsDiskInserted()
+{
+	return _diskNumber != FDS::NoDiskInserted;
+}
+
+bool FDS::IsAutoInsertDiskEnabled()
+{
+	return !_disableAutoInsertDisk && EmulationSettings::CheckFlag(EmulationFlags::FdsAutoInsertDisk);
 }

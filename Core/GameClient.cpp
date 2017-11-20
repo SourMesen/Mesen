@@ -93,12 +93,6 @@ void GameClient::ProcessNotification(ConsoleNotificationType type, void* paramet
 	}
 }
 
-uint8_t GameClient::GetControllerState(uint8_t port)
-{
-	shared_ptr<GameClientConnection> connection = GetConnection();
-	return connection ? connection->GetControllerState(port) : 0;
-}
-
 void GameClient::SelectController(uint8_t port)
 {
 	shared_ptr<GameClientConnection> connection = GetConnection();

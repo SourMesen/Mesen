@@ -230,3 +230,24 @@ struct ApuState
 	ApuDmcState Dmc;
 	ApuFrameCounterState FrameCounter;
 };
+
+struct MousePosition
+{
+	int16_t X;
+	int16_t Y;
+};
+
+struct MouseMovement
+{
+	int16_t dx;
+	int16_t dy;
+};
+
+enum class ConsoleFeatures
+{
+	None = 0,
+	Fds = 1,
+	Nsf = 2,
+	VsSystem = 4,
+	BarcodeReader = 8,
+};

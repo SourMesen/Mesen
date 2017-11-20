@@ -24,6 +24,10 @@
 #include "../Core/HdPackBuilder.h"
 #include "../Utilities/AviWriter.h"
 #include "../Core/ShortcutKeyHandler.h"
+#include "../Core/SystemActionManager.h"
+#include "../Core/FdsSystemActionManager.h"
+#include "../Core/VsSystemActionManager.h"
+#include "../Core/KeyManager.h"
 
 #ifdef WIN32
 	#include "../Windows/Renderer.h"
@@ -113,7 +117,7 @@ namespace InteropEmu {
 						_keyManager = new LinuxKeyManager();
 					#endif				
 					
-					ControlManager::RegisterKeyManager(_keyManager);
+					KeyManager::RegisterKeyManager(_keyManager);
 				}
 			}
 		}
@@ -154,11 +158,12 @@ namespace InteropEmu {
 		DllExport bool __stdcall HasFourScore() { return EmulationSettings::CheckFlag(EmulationFlags::HasFourScore); }
 		DllExport bool __stdcall HasArkanoidPaddle() { return EmulationSettings::HasArkanoidPaddle(); }
 
-		DllExport void __stdcall SetMousePosition(double x, double y) { ControlManager::SetMousePosition(x, y); }
+		DllExport void __stdcall SetMousePosition(double x, double y) { KeyManager::SetMousePosition(x, y); }
+		DllExport void __stdcall SetMouseMovement(int16_t x, int16_t y) { KeyManager::SetMouseMovement(x, y); }
 
 		DllExport void __stdcall UpdateInputDevices() { if(_keyManager) { _keyManager->UpdateDevices(); } }
 		DllExport void __stdcall GetPressedKeys(uint32_t *keyBuffer) { 
-			vector<uint32_t> pressedKeys = ControlManager::GetPressedKeys();
+			vector<uint32_t> pressedKeys = KeyManager::GetPressedKeys();
 			for(size_t i = 0; i < pressedKeys.size() && i < 3; i++) {
 				keyBuffer[i] = pressedKeys[i];
 			}
@@ -177,12 +182,12 @@ namespace InteropEmu {
 		DllExport void __stdcall ResetKeyState() { if(_keyManager) { _keyManager->ResetKeyState(); } }
 		DllExport const char* __stdcall GetKeyName(uint32_t keyCode) 
 		{
-			_returnString = ControlManager::GetKeyName(keyCode);
+			_returnString = KeyManager::GetKeyName(keyCode);
 			return _returnString.c_str();
 		}
 		DllExport uint32_t __stdcall GetKeyCode(char* keyName) { 
 			if(keyName) {
-				return ControlManager::GetKeyCode(keyName);
+				return KeyManager::GetKeyCode(keyName);
 			} else {
 				return 0;
 			}
@@ -238,8 +243,8 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport void __stdcall Reset() { Console::Reset(); }
-		DllExport void __stdcall PowerCycle() { Console::PowerCycle(); }
+		DllExport void __stdcall Reset() { Console::Reset(true); }
+		DllExport void __stdcall PowerCycle() { Console::Reset(false); }
 		DllExport void __stdcall ResetLagCounter() { Console::ResetLagCounter(); }
 
 		DllExport void __stdcall StartServer(uint16_t port, char* hostPlayerName) { GameServer::StartServer(port, hostPlayerName); }
@@ -341,7 +346,7 @@ namespace InteropEmu {
 		DllExport void __stdcall LoadStateFile(char* filepath) { SaveStateManager::LoadState(filepath); }
 		DllExport int64_t  __stdcall GetStateInfo(uint32_t stateIndex) { return SaveStateManager::GetStateInfo(stateIndex); }
 
-		DllExport void __stdcall MoviePlay(char* filename) { MovieManager::Play(filename); }
+		DllExport void __stdcall MoviePlay(char* filename) { MovieManager::Play(string(filename)); }
 		DllExport void __stdcall MovieRecord(char* filename, bool reset) { MovieManager::Record(filename, reset); }
 		DllExport void __stdcall MovieStop() { MovieManager::Stop(); }
 		DllExport bool __stdcall MoviePlaying() { return MovieManager::Playing(); }
@@ -379,7 +384,7 @@ namespace InteropEmu {
 		DllExport void __stdcall RomTestRecordFromMovie(char* testFilename, char* movieFilename) 
 		{
 			_recordedRomTest = new RecordedRomTest();
-			_recordedRomTest->RecordFromMovie(testFilename, movieFilename);
+			_recordedRomTest->RecordFromMovie(testFilename, string(movieFilename));
 		}
 
 		DllExport void __stdcall RomTestRecordFromTest(char* newTestFilename, char* existingTestFilename) 
@@ -452,10 +457,14 @@ namespace InteropEmu {
 		DllExport void __stdcall SetAudioDevice(char* audioDevice) { if(_soundManager) { _soundManager->SetAudioDevice(audioDevice); } }
 
 		DllExport void __stdcall GetScreenSize(ScreenSize &size, bool ignoreScale) { VideoDecoder::GetInstance()->GetScreenSize(size, ignoreScale); }
-		
+
+		DllExport void __stdcall InputBarcode(uint64_t barCode, int32_t digitCount) { Console::GetInstance()->InputBarcode(barCode, digitCount); }
+
+		DllExport ConsoleFeatures __stdcall GetAvailableFeatures() { return Console::GetInstance()->GetAvailableFeatures(); }
+
 		//NSF functions
 		DllExport bool __stdcall IsNsf() { return NsfMapper::GetInstance() != nullptr; }
-		DllExport void __stdcall NsfSelectTrack(uint8_t trackNumber) { 
+		DllExport void __stdcall NsfSelectTrack(uint8_t trackNumber) {
 			if(NsfMapper::GetInstance()) {
 				NsfMapper::GetInstance()->SelectTrack(trackNumber);
 			}
@@ -476,19 +485,43 @@ namespace InteropEmu {
 		}
 
 		//FDS functions
-		DllExport uint32_t __stdcall FdsGetSideCount() { return FDS::GetSideCount(); }
-		DllExport void __stdcall FdsEjectDisk() { FDS::EjectDisk(); }
-		DllExport void __stdcall FdsInsertDisk(uint32_t diskNumber) { FDS::InsertDisk(diskNumber); }
-		DllExport void __stdcall FdsSwitchDiskSide() { FDS::SwitchDiskSide(); }
-		DllExport bool __stdcall FdsIsAutoInsertDiskEnabled() { return FDS::IsAutoInsertDiskEnabled(); }
+		DllExport uint32_t __stdcall FdsGetSideCount() {
+			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			return sam ? sam->GetSideCount() : 0;
+		}
+
+		DllExport void __stdcall FdsEjectDisk() {
+			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			if(sam) {
+				sam->EjectDisk();
+			}
+		}
+
+		DllExport void __stdcall FdsInsertDisk(uint32_t diskNumber) {
+			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			if(sam) {
+				sam->InsertDisk(diskNumber);
+			}
+		}
+
+		DllExport void __stdcall FdsSwitchDiskSide() {
+			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			if(sam) {
+				sam->SwitchDiskSide();
+			}
+		}
+
+		DllExport bool __stdcall FdsIsAutoInsertDiskEnabled() {
+			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			return sam ? sam->IsAutoInsertDiskEnabled() : false;
+		}
 
 		//VS System functions
 		DllExport bool __stdcall IsVsSystem() { return VsControlManager::GetInstance() != nullptr; }
-		DllExport void __stdcall VsInsertCoin(uint32_t port) 
-		{ 
-			VsControlManager* vs = VsControlManager::GetInstance();
-			if(vs) {
-				vs->InsertCoin(port);
+		DllExport void __stdcall VsInsertCoin(uint32_t port) {
+			shared_ptr<VsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<VsSystemActionManager>();
+			if(sam) {
+				sam->InsertCoin(port);
 			}
 		}
 
@@ -497,7 +530,7 @@ namespace InteropEmu {
 			VsControlManager* vs = VsControlManager::GetInstance();
 			if(vs) {
 				EmulationSettings::SetPpuModel(model);
-				vs->SetDipSwitches(dipSwitches);
+				EmulationSettings::SetDipSwitches(dipSwitches);
 				vs->SetInputType(inputType);
 			}
 		}

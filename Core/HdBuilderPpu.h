@@ -6,6 +6,8 @@
 #include "RewindManager.h"
 #include "HdPackBuilder.h"
 
+class ControlManager;
+
 class HdBuilderPpu : public PPU
 {
 private:
@@ -108,7 +110,7 @@ protected:
 	}
 
 public:
-	HdBuilderPpu(BaseMapper* mapper, HdPackBuilder* hdPackBuilder, uint32_t chrRamBankSize) : PPU(mapper)
+	HdBuilderPpu(BaseMapper* mapper, ControlManager* controlManager, HdPackBuilder* hdPackBuilder, uint32_t chrRamBankSize) : PPU(mapper, controlManager)
 	{
 		_hdPackBuilder = hdPackBuilder;
 		_chrRamBankSize = chrRamBankSize;

@@ -244,7 +244,7 @@ void HdPackLoader::ProcessPatchTag(vector<string> &tokens)
 		return;
 	}
 
-	std::transform(tokens[1].begin(), tokens[1].end(), tokens[1].begin(), ::tolower);
+	std::transform(tokens[1].begin(), tokens[1].end(), tokens[1].begin(), ::toupper);
 	if(_loadFromZip) {
 		_data->PatchesByHash[tokens[1]] = VirtualFile(_hdPackFolder, tokens[0]);
 	} else {

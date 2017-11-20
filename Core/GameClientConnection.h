@@ -4,16 +4,18 @@
 #include "GameConnection.h"
 #include "../Utilities/AutoResetEvent.h"
 #include "../Utilities/SimpleLock.h"
-#include "StandardController.h"
+#include "BaseControlDevice.h"
+#include "IInputProvider.h"
+#include "ControlDeviceState.h"
 
 class ClientConnectionData;
 
-class GameClientConnection : public GameConnection, public INotificationListener
+class GameClientConnection : public GameConnection, public INotificationListener, public IInputProvider
 {
 private:
-	std::deque<uint8_t> _inputData[4];
-	atomic<uint32_t> _inputSize[4];
-	AutoResetEvent _waitForInput[4];
+	std::deque<ControlDeviceState> _inputData[BaseControlDevice::PortCount];
+	atomic<uint32_t> _inputSize[BaseControlDevice::PortCount];
+	AutoResetEvent _waitForInput[BaseControlDevice::PortCount];
 	SimpleLock _writeLock;
 	atomic<bool> _shutdown;
 	atomic<bool> _enableControllers;
@@ -23,7 +25,7 @@ private:
 
 	shared_ptr<BaseControlDevice> _controlDevice;
 	shared_ptr<BaseControlDevice> _newControlDevice;
-	uint32_t _lastInputSent = 0x00;
+	ControlDeviceState _lastInputSent;
 	bool _gameLoaded = false;
 	uint8_t _controllerPort = GameConnection::SpectatorPort;
 
@@ -31,7 +33,7 @@ private:
 	void SendHandshake();
 	void SendControllerSelection(uint8_t port);
 	void ClearInputData();
-	void PushControllerState(uint8_t port, uint8_t state);
+	void PushControllerState(uint8_t port, ControlDeviceState state);
 	void DisableControllers();
 
 protected:
@@ -45,7 +47,8 @@ public:
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 
-	uint8_t GetControllerState(uint8_t port);
+	bool SetInput(BaseControlDevice *device);
+	void InitControlDevice();
 	void SendInput();
 
 	void SelectController(uint8_t port);

@@ -18,6 +18,7 @@
 #include "StandardController.h"
 #include "PPU.h"
 #include "CheatManager.h"
+#include "KeyManager.h"
 
 #define lua_pushintvalue(name, value) lua_pushliteral(lua, #name); lua_pushinteger(lua, (int)value); lua_settable(lua, -3);
 #define lua_pushboolvalue(name, value) lua_pushliteral(lua, #name); lua_pushboolean(lua, (int)value); lua_settable(lua, -3);
@@ -135,6 +136,7 @@ int LuaApi::GetLibrary(lua_State *lua)
 	lua_pushintvalue(codeBreak, EventType::CodeBreak);
 	lua_pushintvalue(stateLoaded, EventType::StateLoaded);
 	lua_pushintvalue(stateSaved, EventType::StateSaved);
+	lua_pushintvalue(inputPolled, EventType::InputPolled);
 	lua_settable(lua, -3);
 
 	lua_pushliteral(lua, "executeCountType");
@@ -255,7 +257,7 @@ int LuaApi::RegisterEventCallback(lua_State *lua)
 	EventType type = (EventType)l.ReadInteger();
 	int reference = l.GetReference();
 	checkparams();
-	errorCond(type < EventType::Reset || type > EventType::StateSaved, "the specified type is invalid");
+	errorCond(type < EventType::Reset || type >= EventType::EventTypeSize, "the specified type is invalid");
 	errorCond(reference == LUA_NOREF, "the specified function could not be found");
 	_context->RegisterEventCallback(type, reference);
 	l.Return(reference);
@@ -268,7 +270,7 @@ int LuaApi::UnregisterEventCallback(lua_State *lua)
 	EventType type = (EventType)l.ReadInteger();
 	int reference = l.ReadInteger();
 	checkparams();
-	errorCond(type < EventType::Reset || type > EventType::StateSaved, "the specified type is invalid");
+	errorCond(type < EventType::Reset || type >= EventType::EventTypeSize, "the specified type is invalid");
 	errorCond(reference == LUA_NOREF, "function reference is invalid");
 	_context->UnregisterEventCallback(type, reference);
 	return l.ReturnCount();
@@ -280,7 +282,7 @@ int LuaApi::DrawString(lua_State *lua)
 	l.ForceParamCount(6);
 	int frameCount = l.ReadInteger(1);
 	int backColor = l.ReadInteger(0);
-	int color = l.ReadInteger(0xFFFFFFFF);
+	int color = l.ReadInteger(0xFFFFFF);
 	string text = l.ReadString();
 	int y = l.ReadInteger();
 	int x = l.ReadInteger();
@@ -294,8 +296,9 @@ int LuaApi::DrawString(lua_State *lua)
 int LuaApi::DrawLine(lua_State *lua)
 {
 	LuaCallHelper l(lua);
+	l.ForceParamCount(6);
 	int frameCount = l.ReadInteger(1);
-	int color = l.ReadInteger(0xFFFFFFFF);
+	int color = l.ReadInteger(0xFFFFFF);
 	int y2 = l.ReadInteger();
 	int x2 = l.ReadInteger();
 	int y = l.ReadInteger();
@@ -310,6 +313,7 @@ int LuaApi::DrawLine(lua_State *lua)
 int LuaApi::DrawPixel(lua_State *lua)
 {
 	LuaCallHelper l(lua);
+	l.ForceParamCount(4);
 	int frameCount = l.ReadInteger(1);
 	int color = l.ReadInteger();
 	int y = l.ReadInteger();
@@ -324,9 +328,10 @@ int LuaApi::DrawPixel(lua_State *lua)
 int LuaApi::DrawRectangle(lua_State *lua)
 {
 	LuaCallHelper l(lua);
+	l.ForceParamCount(7);
 	int frameCount = l.ReadInteger(1);
 	bool fill = l.ReadBool(false);
-	int color = l.ReadInteger(0xFFFFFFFF);
+	int color = l.ReadInteger(0xFFFFFF);
 	int height = l.ReadInteger();
 	int width = l.ReadInteger();
 	int y = l.ReadInteger();
@@ -364,14 +369,14 @@ int LuaApi::GetPixel(lua_State *lua)
 int LuaApi::GetMouseState(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	MousePosition pos = ControlManager::GetMousePosition();
+	MousePosition pos = KeyManager::GetMousePosition();
 	checkparams();
 	lua_newtable(lua);
 	lua_pushintvalue(x, pos.X);
 	lua_pushintvalue(y, pos.Y);
-	lua_pushboolvalue(left, ControlManager::IsMouseButtonPressed(MouseButton::LeftButton));
-	lua_pushboolvalue(middle, ControlManager::IsMouseButtonPressed(MouseButton::MiddleButton));
-	lua_pushboolvalue(right, ControlManager::IsMouseButtonPressed(MouseButton::RightButton));
+	lua_pushboolvalue(left, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
+	lua_pushboolvalue(middle, KeyManager::IsMouseButtonPressed(MouseButton::MiddleButton));
+	lua_pushboolvalue(right, KeyManager::IsMouseButtonPressed(MouseButton::RightButton));
 	return 1;
 }
 
@@ -521,9 +526,9 @@ int LuaApi::IsKeyPressed(lua_State *lua)
 	LuaCallHelper l(lua);
 	string keyName = l.ReadString();
 	checkparams();
-	uint32_t keyCode = ControlManager::GetKeyCode(keyName);
+	uint32_t keyCode = KeyManager::GetKeyCode(keyName);
 	errorCond(keyCode == 0, "Invalid key name");
-	l.Return(ControlManager::IsKeyPressed(keyCode));
+	l.Return(KeyManager::IsKeyPressed(keyCode));
 	return l.ReturnCount();
 }
 
@@ -537,22 +542,25 @@ int LuaApi::GetInput(lua_State *lua)
 	shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(ControlManager::GetControlDevice(port));
 	errorCond(controller == nullptr, "Input port must be connected to a standard controller");
 
-	ButtonState state = controller->GetButtonState();
 	lua_newtable(lua);
-	lua_pushboolvalue(a, state.A);
-	lua_pushboolvalue(b, state.B);
-	lua_pushboolvalue(start, state.Start);
-	lua_pushboolvalue(select, state.Select);
-	lua_pushboolvalue(up, state.Up);
-	lua_pushboolvalue(down, state.Down);
-	lua_pushboolvalue(left, state.Left);
-	lua_pushboolvalue(right, state.Right);
+	lua_pushboolvalue(a, controller->IsPressed(StandardController::Buttons::A));
+	lua_pushboolvalue(b, controller->IsPressed(StandardController::Buttons::B));
+	lua_pushboolvalue(start, controller->IsPressed(StandardController::Buttons::Start));
+	lua_pushboolvalue(select, controller->IsPressed(StandardController::Buttons::Select));
+	lua_pushboolvalue(up, controller->IsPressed(StandardController::Buttons::Up));
+	lua_pushboolvalue(down, controller->IsPressed(StandardController::Buttons::Down));
+	lua_pushboolvalue(left, controller->IsPressed(StandardController::Buttons::Left));
+	lua_pushboolvalue(right, controller->IsPressed(StandardController::Buttons::Right));
 	return 1;
 }
 
 int LuaApi::SetInput(lua_State *lua)
 {
-	lua_settop(lua, 2);
+	LuaCallHelper l(lua);
+	lua_settop(lua, 3);
+	
+	bool allowUserInput = l.ReadBool();
+
 	luaL_checktype(lua, 2, LUA_TTABLE);
 	lua_getfield(lua, 2, "a");
 	lua_getfield(lua, 2, "b");
@@ -563,21 +571,31 @@ int LuaApi::SetInput(lua_State *lua)
 	lua_getfield(lua, 2, "left");
 	lua_getfield(lua, 2, "right");
 
-	LuaCallHelper l(lua);
-	ButtonState buttonState;
-	buttonState.Right = l.ReadBool();
-	buttonState.Left = l.ReadBool();
-	buttonState.Down = l.ReadBool();
-	buttonState.Up = l.ReadBool();
-	buttonState.Select = l.ReadBool();
-	buttonState.Start = l.ReadBool();
-	buttonState.B = l.ReadBool();
-	buttonState.A = l.ReadBool();
+	Nullable<bool> right = l.ReadOptionalBool();
+	Nullable<bool> left = l.ReadOptionalBool();
+	Nullable<bool> down = l.ReadOptionalBool();
+	Nullable<bool> up = l.ReadOptionalBool();
+	Nullable<bool> select = l.ReadOptionalBool();
+	Nullable<bool> start = l.ReadOptionalBool();
+	Nullable<bool> b = l.ReadOptionalBool();
+	Nullable<bool> a = l.ReadOptionalBool();
+
 	lua_pop(lua, 1);
 	int port = l.ReadInteger();
 
-	_debugger->SetInputOverride(port, buttonState.ToByte());
 	errorCond(port < 0 || port > 3, "Invalid port number - must be between 0 to 3");
+
+	shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(ControlManager::GetControlDevice(port));
+	errorCond(controller == nullptr, "Input port must be connected to a standard controller");
+
+	if(right.HasValue || !allowUserInput) controller->SetBitValue(StandardController::Buttons::Right, right.Value);
+	if(left.HasValue || !allowUserInput) controller->SetBitValue(StandardController::Buttons::Left, left.Value);
+	if(down.HasValue || !allowUserInput) controller->SetBitValue(StandardController::Buttons::Down, down.Value);
+	if(up.HasValue || !allowUserInput) controller->SetBitValue(StandardController::Buttons::Up, up.Value);
+	if(select.HasValue || !allowUserInput) controller->SetBitValue(StandardController::Buttons::Select, select.Value);
+	if(start.HasValue || !allowUserInput) controller->SetBitValue(StandardController::Buttons::Start, start.Value);
+	if(b.HasValue || !allowUserInput) controller->SetBitValue(StandardController::Buttons::B, b.Value);
+	if(a.HasValue || !allowUserInput) controller->SetBitValue(StandardController::Buttons::A, a.Value);
 
 	return l.ReturnCount();
 }

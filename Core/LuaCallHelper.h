@@ -2,6 +2,13 @@
 #include "stdafx.h"
 #include "../Lua/lua.hpp"
 
+template<typename T>
+struct Nullable
+{
+	bool HasValue = false;
+	T Value = {};
+};
+
 class LuaCallHelper
 {
 private:
@@ -21,6 +28,9 @@ public:
 	uint32_t ReadInteger(uint32_t defaultValue = 0);
 	string ReadString();
 	int GetReference();
+
+	Nullable<bool> ReadOptionalBool();
+	Nullable<uint32_t> ReadOptionalInteger();
 
 	void Return(bool value);
 	void Return(int value);

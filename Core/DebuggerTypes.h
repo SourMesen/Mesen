@@ -87,4 +87,6 @@ enum class EventType
 	CodeBreak = 5,
 	StateLoaded = 6,
 	StateSaved = 7,
+	InputPolled = 8,
+	EventTypeSize
 };

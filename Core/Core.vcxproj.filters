@@ -52,9 +52,6 @@
     <Filter Include="Nes\Mappers\FDS">
       <UniqueIdentifier>{4a7af167-f6cb-4173-b7ca-04ed7c5858b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Nes\Controllers">
-      <UniqueIdentifier>{acd315c2-48ad-4243-a997-bb9a970c24bd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Nes\APU\Filters">
       <UniqueIdentifier>{783f3638-4293-480f-b525-2485c4209ff5}</UniqueIdentifier>
     </Filter>
@@ -100,6 +97,21 @@
     </Filter>
     <Filter Include="Debugger\Scripting\Lua">
       <UniqueIdentifier>{e1e8a5d2-aa9a-40e1-94eb-00adec1cdef3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Nes\Input">
+      <UniqueIdentifier>{acd315c2-48ad-4243-a997-bb9a970c24bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Nes\Input\System">
+      <UniqueIdentifier>{b7a48fc3-5ebb-4aa7-93ae-f70d58bdbfd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Nes\Input\Storage">
+      <UniqueIdentifier>{fdd6ac29-77ce-4db5-8d06-2aa27f95a41c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Nes\Input\BarcodeReaders">
+      <UniqueIdentifier>{38798114-2511-4cce-97a7-c6adac514423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Nes\Input\Controllers">
+      <UniqueIdentifier>{7b42e684-9487-4031-a769-a05934998777}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +272,6 @@
       <Filter>NetPlay</Filter>
     </ClInclude>
     <ClInclude Include="GameServerConnection.h">
-      <Filter>NetPlay</Filter>
-    </ClInclude>
-    <ClInclude Include="IGameBroadcaster.h">
       <Filter>NetPlay</Filter>
     </ClInclude>
     <ClInclude Include="Console.h">
@@ -505,14 +514,8 @@
     <ClInclude Include="VideoRenderer.h">
       <Filter>VideoDecoder</Filter>
     </ClInclude>
-    <ClInclude Include="StandardController.h">
-      <Filter>Nes\Controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="Zapper.h">
-      <Filter>Nes\Controllers</Filter>
-    </ClInclude>
     <ClInclude Include="BaseControlDevice.h">
-      <Filter>Nes\Controllers</Filter>
+      <Filter>Nes\Input</Filter>
     </ClInclude>
     <ClInclude Include="PlayerListMessage.h">
       <Filter>NetPlay\Messages</Filter>
@@ -522,9 +525,6 @@
     </ClInclude>
     <ClInclude Include="ForceDisconnectMessage.h">
       <Filter>NetPlay\Messages</Filter>
-    </ClInclude>
-    <ClInclude Include="ArkanoidController.h">
-      <Filter>Nes\Controllers</Filter>
     </ClInclude>
     <ClInclude Include="StereoPanningFilter.h">
       <Filter>Nes\APU\Filters</Filter>
@@ -675,9 +675,6 @@
     </ClInclude>
     <ClInclude Include="Mapper227.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
-    </ClInclude>
-    <ClInclude Include="VsZapper.h">
-      <Filter>Nes\Controllers</Filter>
     </ClInclude>
     <ClInclude Include="NsfLoader.h">
       <Filter>Nes\RomLoader</Filter>
@@ -843,9 +840,6 @@
     </ClInclude>
     <ClInclude Include="Racermate.h">
       <Filter>Nes\Mappers</Filter>
-    </ClInclude>
-    <ClInclude Include="OekaKidsTablet.h">
-      <Filter>Nes\Controllers</Filter>
     </ClInclude>
     <ClInclude Include="MMC3_114.h">
       <Filter>Nes\Mappers\MMC</Filter>
@@ -1243,8 +1237,122 @@
     <ClInclude Include="VirtualFile.h">
       <Filter>Nes\RomLoader</Filter>
     </ClInclude>
+    <ClInclude Include="Mapper39.h">
+      <Filter>Nes\Mappers\Unnamed</Filter>
+    </ClInclude>
+    <ClInclude Include="MovieRecorder.h">
+      <Filter>Movies</Filter>
+    </ClInclude>
+    <ClInclude Include="IBarcodeReader.h">
+      <Filter>Nes\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IBattery.h">
+      <Filter>Nes\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyManager.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="IInputProvider.h">
+      <Filter>Nes\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IInputRecorder.h">
+      <Filter>Nes\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlDeviceState.h">
+      <Filter>Nes\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="BatteryManager.h">
+      <Filter>Nes</Filter>
+    </ClInclude>
     <ClInclude Include="RotateFilter.h">
       <Filter>VideoDecoder</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemActionManager.h">
+      <Filter>Nes\Input\System</Filter>
+    </ClInclude>
+    <ClInclude Include="DatachBarcodeReader.h">
+      <Filter>Nes\Input\BarcodeReaders</Filter>
+    </ClInclude>
+    <ClInclude Include="BarcodeBattlerReader.h">
+      <Filter>Nes\Input\BarcodeReaders</Filter>
+    </ClInclude>
+    <ClInclude Include="AsciiTurboFile.h">
+      <Filter>Nes\Input\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleBox.h">
+      <Filter>Nes\Input\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="FdsSystemActionManager.h">
+      <Filter>Nes\Input\System</Filter>
+    </ClInclude>
+    <ClInclude Include="VsSystemActionManager.h">
+      <Filter>Nes\Input\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ArkanoidController.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="BandaiMicrophone.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="BandaiHyperShot.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ExcitingBoxingController.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="FamilyBasicDataRecorder.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="FamilyBasicKeyboard.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="FamilyMatTrainer.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="FourScore.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="HoriTrack.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="JissenMahjongController.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="KonamiHyperShot.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="OekaKidsTablet.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="PachinkoController.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="PartyTap.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerPad.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="SnesController.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="SnesMouse.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardController.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="SuborKeyboard.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="SuborMouse.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="VsZapper.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Zapper.h">
+      <Filter>Nes\Input\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1350,17 +1458,8 @@
     <ClCompile Include="VideoRenderer.cpp">
       <Filter>VideoDecoder</Filter>
     </ClCompile>
-    <ClCompile Include="StandardController.cpp">
-      <Filter>Nes\Controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="Zapper.cpp">
-      <Filter>Nes\Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="BaseControlDevice.cpp">
-      <Filter>Nes\Controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="ArkanoidController.cpp">
-      <Filter>Nes\Controllers</Filter>
+      <Filter>Nes\Input</Filter>
     </ClCompile>
     <ClCompile Include="StereoPanningFilter.cpp">
       <Filter>Nes\APU\Filters</Filter>
@@ -1395,17 +1494,11 @@
     <ClCompile Include="GameDatabase.cpp">
       <Filter>Nes\RomLoader</Filter>
     </ClCompile>
-    <ClCompile Include="VsZapper.cpp">
-      <Filter>Nes\Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="NsfMapper.cpp">
       <Filter>Nes\Mappers</Filter>
     </ClCompile>
     <ClCompile Include="VideoHud.cpp">
       <Filter>VideoDecoder</Filter>
-    </ClCompile>
-    <ClCompile Include="OekaKidsTablet.cpp">
-      <Filter>Nes\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="AutoSaveManager.cpp">
       <Filter>Misc</Filter>
@@ -1482,9 +1575,6 @@
     <ClCompile Include="OggMixer.cpp">
       <Filter>HdPacks</Filter>
     </ClCompile>
-    <ClCompile Include="OggReader.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
     <ClCompile Include="DebugHud.cpp">
       <Filter>Debugger\Scripting\DebugHud</Filter>
     </ClCompile>
@@ -1509,8 +1599,20 @@
     <ClCompile Include="HdAudioDevice.cpp">
       <Filter>HdPacks</Filter>
     </ClCompile>
+    <ClCompile Include="OggReader.cpp">
+      <Filter>HdPacks</Filter>
+    </ClCompile>
     <ClCompile Include="VirtualFile.cpp">
+      <Filter>Nes\RomLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="MovieRecorder.cpp">
+      <Filter>Movies</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyManager.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="BatteryManager.cpp">
+      <Filter>Nes</Filter>
     </ClCompile>
     <ClCompile Include="RotateFilter.cpp">
       <Filter>VideoDecoder</Filter>

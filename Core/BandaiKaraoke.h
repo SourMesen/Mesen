@@ -3,13 +3,15 @@
 #include "BaseMapper.h"
 #include "ControlManager.h"
 #include "StandardController.h"
+#include "BandaiMicrophone.h"
 
 class BandaiKaraoke : public BaseMapper
 {
 protected:
-	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
-	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
-	virtual bool AllowRegisterRead() override { return true; }
+	uint16_t GetPRGPageSize() override { return 0x4000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	bool AllowRegisterRead() override { return true; }
+	bool HasBusConflicts() override { return true; }
 
 	void InitMapper() override
 	{
@@ -19,12 +21,13 @@ protected:
 		SelectPRGPage(0, 0);
 		SelectPRGPage(1, 0x07);
 		SelectCHRPage(0, 0);
+
+		_mapperControlDevice.reset(new BandaiMicrophone(EmulationSettings::GetControllerKeys(0)));
 	}
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
-		//Microphone not implemented - always return A/B buttons as not pressed
-		return 0x03;
+		return _mapperControlDevice->ReadRAM(addr) | MemoryManager::GetOpenBus(0xF8);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

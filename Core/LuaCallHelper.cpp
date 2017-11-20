@@ -50,6 +50,36 @@ bool LuaCallHelper::ReadBool(bool defaultValue)
 	return value;
 }
 
+Nullable<bool> LuaCallHelper::ReadOptionalBool()
+{
+	_paramCount++;
+	Nullable<bool> result;
+	if(lua_isboolean(_lua, -1)) {
+		result.HasValue = true;
+		result.Value = lua_toboolean(_lua, -1) != 0;
+	} else if(lua_isnumber(_lua, -1)) {
+		result.HasValue = true;
+		result.Value = lua_tonumber(_lua, -1) != 0;
+	}
+	lua_pop(_lua, 1);
+	return result;
+}
+
+Nullable<uint32_t> LuaCallHelper::ReadOptionalInteger()
+{
+	_paramCount++;
+	Nullable<uint32_t> result;
+	if(lua_isinteger(_lua, -1)) {
+		result.HasValue = true;
+		result.Value = (uint32_t)lua_tointeger(_lua, -1);
+	} else if(lua_isnumber(_lua, -1)) {
+		result.HasValue = true;
+		result.Value = (uint32_t)lua_tonumber(_lua, -1);
+	}
+	lua_pop(_lua, 1);
+	return result;
+}
+
 uint32_t LuaCallHelper::ReadInteger(uint32_t defaultValue)
 {
 	_paramCount++;

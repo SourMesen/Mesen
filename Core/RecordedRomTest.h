@@ -5,6 +5,8 @@
 #include "INotificationListener.h"
 #include "../Utilities/AutoResetEvent.h"
 
+class VirtualFile;
+
 class RecordedRomTest : public INotificationListener
 {
 private:
@@ -18,8 +20,8 @@ private:
 	std::deque<uint8_t> _repetitionCount;
 	uint8_t _currentCount;
 	
-	//Used when make a test out of an existing movie/test
-	stringstream _movieStream;
+	//Used when making a test out of an existing movie/test
+	vector<uint8_t> _movieData;
 	stringstream _romStream;
 
 	string _filename;
@@ -32,7 +34,6 @@ private:
 	void ValidateFrame(uint16_t* ppuFrameBuffer);
 	void SaveFrame(uint16_t* ppuFrameBuffer);
 	void Save();
-	void RecordFromMovie(string testFilename, stringstream &movieStream, bool autoLoadRom);
 
 public:
 	RecordedRomTest();
@@ -40,7 +41,7 @@ public:
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	void Record(string filename, bool reset);
-	void RecordFromMovie(string testFilename, string movieFilename);
+	void RecordFromMovie(string testFilename, VirtualFile movieFile);
 	void RecordFromTest(string newTestFilename, string existingTestFilename);
 	int32_t Run(string filename);
 	void Stop();

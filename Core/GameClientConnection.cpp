@@ -10,6 +10,9 @@
 #include "ControlManager.h"
 #include "ClientConnectionData.h"
 #include "StandardController.h"
+#include "Zapper.h"
+#include "ArkanoidController.h"
+#include "BandaiHyperShot.h"
 #include "SelectControllerMessage.h"
 #include "PlayerListMessage.h"
 #include "ForceDisconnectMessage.h"
@@ -22,6 +25,7 @@ GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr
 
 	MessageManager::RegisterNotificationListener(this);
 	MessageManager::DisplayMessage("NetPlay", "ConnectedToServer");
+	ControlManager::RegisterInputProvider(this);
 	SendHandshake();
 }
 
@@ -36,10 +40,11 @@ void GameClientConnection::Shutdown()
 		_shutdown = true;
 		DisableControllers();
 
-		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+		ControlManager::UnregisterInputProvider(this);
 		MessageManager::UnregisterNotificationListener(this);
 		MessageManager::SendNotification(ConsoleNotificationType::DisconnectedFromServer);
 		MessageManager::DisplayMessage("NetPlay", "ConnectionLost");
+		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 	}
 }
 
@@ -58,7 +63,7 @@ void GameClientConnection::SendControllerSelection(uint8_t port)
 void GameClientConnection::ClearInputData()
 {
 	LockHandler lock = _writeLock.AcquireSafe();
-	for(int i = 0; i < 4; i++) {
+	for(int i = 0; i < BaseControlDevice::PortCount; i++) {
 		_inputSize[i] = 0;
 		_inputData[i].clear();
 	}
@@ -76,14 +81,7 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 				ClearInputData();
 				((SaveStateMessage*)message)->LoadState();
 				_enableControllers = true;
-				switch(EmulationSettings::GetControllerType(_controllerPort)) {
-					case ControllerType::StandardController: _controlDevice.reset(new StandardController(0)); break;
-					
-					case ControllerType::Zapper:
-					case ControllerType::ArkanoidController: 
-						_controlDevice = ControlManager::GetControlDevice(_controllerPort); 
-						break;
-				}
+				InitControlDevice();
 				Console::Resume();
 			}
 			break;
@@ -131,7 +129,7 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 	}
 }
 
-void GameClientConnection::PushControllerState(uint8_t port, uint8_t state)
+void GameClientConnection::PushControllerState(uint8_t port, ControlDeviceState state)
 {
 	LockHandler lock = _writeLock.AcquireSafe();
 	_inputData[port].push_back(state);
@@ -147,14 +145,17 @@ void GameClientConnection::DisableControllers()
 	//Used to prevent deadlocks when client is trying to fill its buffer while the host changes the current game/settings/etc. (i.e situations where we need to call Console::Pause())
 	ClearInputData();
 	_enableControllers = false;
-	for(int i = 0; i < 4; i++) {
+	for(int i = 0; i < BaseControlDevice::PortCount; i++) {
 		_waitForInput[i].Signal();
 	}
 }
 
-uint8_t GameClientConnection::GetControllerState(uint8_t port)
+bool GameClientConnection::SetInput(BaseControlDevice *device)
 {
+	device->SetRawState(ControlDeviceState());
+
 	if(_enableControllers) {
+		uint8_t port = device->GetPort();
 		while(_inputSize[port] == 0) {
 			_waitForInput[port].Wait();
 
@@ -164,12 +165,12 @@ uint8_t GameClientConnection::GetControllerState(uint8_t port)
 			}
 
 			if(_shutdown || !_enableControllers) {
-				return 0;
+				return true;
 			}
 		}
 
 		LockHandler lock = _writeLock.AcquireSafe();
-		uint8_t state = _inputData[port].front();
+		ControlDeviceState state = _inputData[port].front();
 		_inputData[port].pop_front();
 		_inputSize[port]--;
 
@@ -180,18 +181,27 @@ uint8_t GameClientConnection::GetControllerState(uint8_t port)
 			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 			EmulationSettings::SetEmulationSpeed(100);
 		}
-		return state;
+
+		device->SetRawState(state);
+		return true;
 	}
-	return 0;
+	return true;
 }
-	
+
+void GameClientConnection::InitControlDevice()
+{
+	if(_controllerPort == BaseControlDevice::ExpDevicePort) {
+		_newControlDevice = ControlManager::CreateExpansionDevice(EmulationSettings::GetExpansionDevice());
+	} else {
+		//Pretend we are using port 0 (to use player 1's keybindings during netplay)
+		_newControlDevice = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(_controllerPort), 0);
+	}
+}
+
 void GameClientConnection::ProcessNotification(ConsoleNotificationType type, void* parameter)
 {
 	if(type == ConsoleNotificationType::ConfigChanged) {
-		switch(EmulationSettings::GetControllerType(_controllerPort)) {
-			case ControllerType::StandardController: _newControlDevice.reset(new StandardController(0)); break;
-			case ControllerType::Zapper: _newControlDevice = ControlManager::GetControlDevice(_controllerPort); break;
-		}
+		InitControlDevice();
 	}
 }
 
@@ -203,9 +213,10 @@ void GameClientConnection::SendInput()
 			_newControlDevice.reset();
 		}
 
-		uint32_t inputState = 0;
+		ControlDeviceState inputState;
 		if(_controlDevice) {
-			inputState = _controlDevice->GetNetPlayState();
+			_controlDevice->SetStateFromInput();
+			inputState = _controlDevice->GetRawState();
 		}
 		
 		if(_lastInputSent != inputState) {
@@ -223,9 +234,9 @@ void GameClientConnection::SelectController(uint8_t port)
 
 uint8_t GameClientConnection::GetAvailableControllers()
 {
-	uint8_t availablePorts = 0x0F;
+	uint8_t availablePorts = (1 << BaseControlDevice::PortCount) - 1;
 	for(PlayerInfo &playerInfo : _playerList) {
-		if(playerInfo.ControllerPort < 4) {
+		if(playerInfo.ControllerPort < BaseControlDevice::PortCount) {
 			availablePorts &= ~(1 << playerInfo.ControllerPort);
 		}
 	}

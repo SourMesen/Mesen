@@ -15,15 +15,16 @@ ArchiveReader::~ArchiveReader()
 	}
 }
 
-std::stringstream ArchiveReader::GetStream(string filename)
+bool ArchiveReader::GetStream(string filename, std::stringstream &stream)
 {
-	std::stringstream ss;
 	if(_initialized) {
 		vector<uint8_t> fileData;
-		ExtractFile(filename, fileData);
-		ss.write((char*)fileData.data(), fileData.size());
+		if(ExtractFile(filename, fileData)) {
+			stream.write((char*)fileData.data(), fileData.size());
+			return true;
+		}
 	}
-	return ss;
+	return false;
 }
 
 vector<string> ArchiveReader::GetFileList(std::initializer_list<string> extensions)
@@ -67,8 +68,14 @@ bool ArchiveReader::LoadArchive(std::istream &in)
 
 	_buffer = new uint8_t[(uint32_t)filesize];
 	in.read((char*)_buffer, filesize);
+	in.seekg(0, std::ios::beg);
 	bool result = LoadArchive(_buffer, (size_t)filesize);
 	return result;
+}
+
+bool ArchiveReader::LoadArchive(vector<uint8_t> &data)
+{
+	return LoadArchive(data.data(), data.size());
 }
 
 bool ArchiveReader::LoadArchive(void* buffer, size_t size)

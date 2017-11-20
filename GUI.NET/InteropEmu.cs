@@ -34,6 +34,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath, EntryPoint = "GetArchiveRomList")] private static extern IntPtr GetArchiveRomListWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
 
 		[DllImport(DLLPath)] public static extern void SetMousePosition(double x, double y);
+		[DllImport(DLLPath)] public static extern void SetMouseMovement(Int16 x, Int16 y);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasZapper();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasArkanoidPaddle();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HasFourScore();
@@ -51,6 +52,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern ConsoleType GetConsoleType();
 
 		[DllImport(DLLPath)] public static extern void UpdateInputDevices();
+
+		[DllImport(DLLPath)] public static extern ConsoleFeatures GetAvailableFeatures();
 
 		[DllImport(DLLPath, EntryPoint = "GetPressedKeys")] private static extern void GetPressedKeysWrapper(IntPtr keyBuffer);
 		[DllImport(DLLPath)] public static extern UInt32 GetKeyCode([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string keyName);
@@ -134,6 +137,8 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsVsSystem();
 		[DllImport(DLLPath)] public static extern void VsInsertCoin(UInt32 port);
 		[DllImport(DLLPath)] public static extern void VsSetGameConfig(PpuModel model, VsInputType inputType, byte dipSwitches);
+
+		[DllImport(DLLPath)] public static extern void InputBarcode(UInt64 barcode, Int32 digitCount);
 
 		[DllImport(DLLPath)] public static extern void SetCheats([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropCheatInfo[] cheats, UInt32 length);
 
@@ -795,13 +800,12 @@ namespace Mesen.GUI
 			PpuFrameDone = 9,
 			MovieEnded = 10,
 			ResolutionChanged = 11,
-			FdsDiskChanged = 12,
-			FdsBiosNotFound = 13,
-			ConfigChanged = 14,
-			DisconnectedFromServer = 15,
-			PpuViewerDisplayFrame = 16,
-			ExecuteShortcut = 17,
-			EmulationStopped = 18,
+			FdsBiosNotFound = 12,
+			ConfigChanged = 13,
+			DisconnectedFromServer = 14,
+			PpuViewerDisplayFrame = 15,
+			ExecuteShortcut = 16,
+			EmulationStopped = 17,
 		}
 
 		public enum ControllerType
@@ -810,6 +814,10 @@ namespace Mesen.GUI
 			StandardController = 1,
 			Zapper = 2,
 			ArkanoidController = 3,
+			SnesController = 4,
+			PowerPad = 5,
+			SnesMouse = 6,
+			SuborMouse = 7,
 		}
 
 		public enum ExpansionPortDevice
@@ -819,6 +827,19 @@ namespace Mesen.GUI
 			FourPlayerAdapter = 2,
 			ArkanoidController = 3,
 			OekaKidsTablet = 4,
+			FamilyTrainerMat = 5,
+			KonamiHyperShot = 6,
+			FamilyBasicKeyboard = 7,
+			PartyTap = 8,
+			Pachinko = 9,
+			ExcitingBoxing = 10,
+			JissenMahjong = 11,
+			SuborKeyboard = 12,
+			BarcodeBattler = 13,
+			HoriTrack = 14,
+			BandaiHyperShot = 15,
+			AsciiTurboFile = 16,
+			BattleBox = 17,
 		}
 
 		public enum VsInputType
@@ -870,6 +891,29 @@ namespace Mesen.GUI
 			public UInt32 TurboStart;
 			public UInt32 TurboSelect;
 			public UInt32 Microphone;
+			public UInt32 LButton;
+			public UInt32 RButton;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+			public UInt32[] PowerPadButtons;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 72)]
+			public UInt32[] FamilyBasicKeyboardButtons;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+			public UInt32[] PartyTapButtons;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+			public UInt32[] PachinkoButtons;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+			public UInt32[] ExcitingBoxingButtons;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+			public UInt32[] JissenMahjongButtons;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 99)]
+			public UInt32[] SuborKeyboardButtons;
 		}
 
 		public enum StereoFilter
@@ -1400,7 +1444,11 @@ namespace Mesen.GUI
 
 		public override string ToString()
 		{
-			return GetKeyNames();
+			if(IsEmpty) {
+				return "";
+			} else {
+				return GetKeyNames();
+			}
 		}
 
 		public KeyCombination(List<UInt32> scanCodes = null)
@@ -1478,6 +1526,8 @@ namespace Mesen.GUI
 
 		InsertCoin1,
 		InsertCoin2,
+
+		InputBarcode,
 
 		TakeScreenshot,
 
@@ -1776,6 +1826,16 @@ namespace Mesen.GUI
 		Standard = 4,
 		Widescreen = 5,
 		Custom = 6
+	}
+
+	[Flags]
+	public enum ConsoleFeatures
+	{
+		None = 0,
+		Fds = 1,
+		Nsf = 2,
+		VsSystem = 4,
+		BarcodeReader = 8,
 	}
 
 	public enum ScreenRotation

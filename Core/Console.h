@@ -5,6 +5,7 @@
 #include "../Utilities/SimpleLock.h"
 #include "VirtualFile.h"
 #include "RomData.h"
+#include "SaveStateManager.h"
 
 class Debugger;
 class BaseMapper;
@@ -17,9 +18,11 @@ class ControlManager;
 class AutoSaveManager;
 class HdPackBuilder;
 class HdAudioDevice;
+class SystemActionManager;
 struct HdPackData;
 enum class NesModel;
 enum class ScaleFilterType;
+enum class ConsoleFeatures;
 
 class Console
 {
@@ -34,10 +37,11 @@ class Console
 		shared_ptr<PPU> _ppu;
 		shared_ptr<APU> _apu;
 		shared_ptr<Debugger> _debugger;
-		SimpleLock _debuggerLock;
 		shared_ptr<BaseMapper> _mapper;
 		unique_ptr<ControlManager> _controlManager;
 		shared_ptr<MemoryManager> _memoryManager;
+
+		shared_ptr<SystemActionManager> _systemActionManager;
 
 		unique_ptr<AutoSaveManager> _autoSaveManager;
 
@@ -55,17 +59,17 @@ class Console
 		bool _disableOcNextFrame = false;
 
 		atomic<bool> _resetRequested;
-		atomic<uint32_t> _lagCounter;
 		
 		bool _initialized = false;
 		std::thread::id _emulationThreadId;
 
 		void LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile);
 
-		void ResetComponents(bool softReset);
 		bool Initialize(VirtualFile &romFile, VirtualFile &patchFile);
 		void UpdateNesModel(bool sendNotification);
 		double GetFrameDelay();
+
+		void SaveBatteries();
 
 	public:
 		Console();
@@ -73,11 +77,23 @@ class Console
 		void Run();
 		void Stop();
 
+		shared_ptr<SystemActionManager> GetSystemActionManager();
+
+		template<typename T>
+		shared_ptr<T> GetSystemActionManager()
+		{
+			return std::dynamic_pointer_cast<T>(_systemActionManager);
+		}
+
+		ConsoleFeatures GetAvailableFeatures();
+		void InputBarcode(uint64_t barcode, uint32_t digitCount);
+
 		static std::thread::id GetEmulationThreadId();
 
 		static void RequestReset();
 		static void Reset(bool softReset = true);
-		static void PowerCycle();
+		void PowerCycle();
+		void ResetComponents(bool softReset);
 
 		//Used to pause the emu loop to perform thread-safe operations
 		static void Pause();
@@ -85,17 +101,19 @@ class Console
 		//Used to resume the emu loop after calling Pause()
 		static void Resume();
 
-		std::shared_ptr<Debugger> GetDebugger(bool autoStart = true);
+		shared_ptr<Debugger> GetDebugger(bool autoStart = true);
 		void StopDebugger();
 
 		static void SaveState(ostream &saveStream);
-		static void LoadState(istream &loadStream);
+		static void LoadState(istream &loadStream, uint32_t stateVersion = SaveStateManager::FileFormatVersion);
 		static void LoadState(uint8_t *buffer, uint32_t bufferSize);
 
 		static bool LoadROM(VirtualFile romFile, VirtualFile patchFile = {});
 		static bool LoadROM(string romName, HashInfo hashInfo);
+		static string FindMatchingRom(string romName, HashInfo hashInfo);
 		static VirtualFile GetRomPath();
 		static string GetRomName();
+		static VirtualFile GetPatchFile();
 		static bool IsChrRam();
 		static RomFormat GetRomFormat();
 		static HashInfo GetHashInfo();

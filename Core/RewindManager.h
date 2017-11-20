@@ -3,6 +3,8 @@
 #include <deque>
 #include "INotificationListener.h"
 #include "RewindData.h"
+#include "IInputProvider.h"
+#include "IInputRecorder.h"
 
 enum class RewindState
 {
@@ -13,7 +15,7 @@ enum class RewindState
 	Debugging = 4
 };
 
-class RewindManager : public INotificationListener
+class RewindManager : public INotificationListener, public IInputProvider, public IInputRecorder
 {
 private:
 	static const uint32_t BufferSize = 30; //Number of frames between each save state
@@ -48,9 +50,9 @@ public:
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	void ProcessEndOfFrame();
-	
-	static void RecordInput(uint8_t port, uint8_t input);
-	static uint8_t GetInput(uint8_t port);
+
+	void RecordInput(BaseControlDevice *device) override;
+	bool SetInput(BaseControlDevice *device) override;
 
 	static void StartRewinding(bool forDebugger = false);
 	static void StopRewinding(bool forDebugger = false);

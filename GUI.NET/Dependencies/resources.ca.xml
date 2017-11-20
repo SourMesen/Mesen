@@ -19,6 +19,7 @@
       <Control ID="mnuVsGameConfig">Configuració de joc VS</Control>
       <Control ID="mnuInsertCoin1">Insereix moneda (1)</Control>
       <Control ID="mnuInsertCoin2">Insereix moneda (2)</Control>
+      <Control ID="mnuInputBarcode">Input Barcode</Control>
       <Control ID="mnuOptions">Opcions</Control>
       <Control ID="mnuEmulationSpeed">Velocitat</Control>
       <Control ID="mnuEmuSpeedNormal">Normal (100%)</Control>
@@ -597,6 +598,11 @@
       <Control ID="lblExplanation">Això iniciarà Mesen en mode de pantalla completa i amb la rom "MyGame.nes" carregada. A més, farà servir el filtre NTSC ajustat a una escala de 2x i configurarà les opcions de sobreescaneig. El paràmetre "DoNotSaveSettings" s'utilitza per evitar que els canvis efectuats des de la línia d'ordres es desin permanentment a la configuració de Mesen.</Control>
       <Control ID="txtGeneralOptions">/fullscreen - Inicia Mesen en pantalla completa&#13;&#10;/DoNotSaveSettings - Evita que els canvis es desin (útil per a evitar que les opcions de la línia d'ordres es converteixin en la configuració per defecte)</Control>
     </Form>
+    <Form ID="frmInputBarCode" Title="Input Barcode...">
+      <Control ID="lblBarcode">Barcode:</Control>
+      <Control ID="btnOK">D'acord</Control>
+      <Control ID="btnCancel">Cancel·la</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Tots els fitxers (*.*)|*.*</Message>
@@ -756,6 +762,30 @@
       <Value ID="StandardController">Comandament estàndard</Value>
       <Value ID="Zapper">Zapper</Value>
       <Value ID="ArkanoidController">Comandament Arkanoid</Value>
+      <Value ID="SnesController">SNES Controller</Value>
+      <Value ID="PowerPad">Power Pad</Value>
+      <Value ID="SnesMouse">SNES Mouse</Value>
+      <Value ID="SuborMouse">Subor Mouse</Value>
+    </Enum>
+    <Enum ID="ExpansionPortDevice">
+      <Value ID="None">Cap</Value>
+      <Value ID="Zapper">Zapper</Value>
+      <Value ID="FourPlayerAdapter">Adaptador per a 4 jugadors</Value>
+      <Value ID="ArkanoidController">Comandament Arkanoid</Value>
+      <Value ID="OekaKidsTablet">Tauleta Oeka Kids</Value>
+      <Value ID="FamilyTrainerMat">Family Trainer</Value>
+      <Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
+      <Value ID="FamilyBasicKeyboard">Family Basic Keyboard</Value>
+      <Value ID="PartyTap">Partytap</Value>
+      <Value ID="Pachinko">Pachinko Controller</Value>
+      <Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
+      <Value ID="JissenMahjong">Jissen Mahjong Controller</Value>
+      <Value ID="SuborKeyboard">Subor Keyboard</Value>
+      <Value ID="BarcodeBattler">Barcode Battler</Value>
+      <Value ID="HoriTrack">Hori Track</Value>
+      <Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
+      <Value ID="AsciiTurboFile">Turbo File</Value>
+      <Value ID="BattleBox">Battle Box</Value>
     </Enum>
     <Enum ID="VideoAspectRatio">
       <Value ID="NoStretching">Per defecte (no estirar)</Value>
@@ -802,13 +832,6 @@
     <Enum ID="ConsoleType">
       <Value ID="Nes">NES</Value>
       <Value ID="Famicom">Famicom</Value>
-    </Enum>
-    <Enum ID="ExpansionPortDevice">
-      <Value ID="None">Cap</Value>
-      <Value ID="Zapper">Zapper</Value>
-      <Value ID="FourPlayerAdapter">Adaptador per a 4 jugadors</Value>
-      <Value ID="ArkanoidController">Comandament Arkanoid</Value>
-      <Value ID="OekaKidsTablet">Tauleta Oeka Kids</Value>
     </Enum>
     <Enum ID="PpuModel">
       <Value ID="Ppu2C03">RP2C03</Value>

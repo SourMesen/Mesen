@@ -19,6 +19,7 @@
       <Control ID="mnuVsGameConfig">Configuration du jeu VS</Control>
       <Control ID="mnuInsertCoin1">Insérer une pièce (1)</Control>
       <Control ID="mnuInsertCoin2">Insérer une pièce (2)</Control>
+      <Control ID="mnuInputBarcode">Entrer un code-barres</Control>
       <Control ID="mnuOptions">Options</Control>
       <Control ID="mnuEmulationSpeed">Vitesse</Control>
       <Control ID="mnuEmuSpeedNormal">Normale (100%)</Control>
@@ -60,6 +61,7 @@
       <Control ID="mnuNetPlayPlayer2">Joueur 2</Control>
       <Control ID="mnuNetPlayPlayer3">Joueur 3</Control>
       <Control ID="mnuNetPlayPlayer4">Joueur 4</Control>
+      <Control ID="mnuNetPlayPlayer5">Port d'extension</Control>
       <Control ID="mnuNetPlaySpectator">Spectateur</Control>
       <Control ID="mnuFindServer">Trouver un serveur publique...</Control>
       <Control ID="mnuProfile">Configurer votre profil</Control>
@@ -628,6 +630,11 @@
       <Control ID="btnOk">CONFIRMER</Control>
       <Control ID="lblCancel">Annuler</Control>
     </Form>
+    <Form ID="frmInputBarCode" Title="Entrer un code-barres">
+      <Control ID="lblBarcode">Code-barres :</Control>
+      <Control ID="btnOk">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Tous les fichiers (*.*)|*.*</Message>
@@ -788,6 +795,30 @@
       <Value ID="StandardController">Manette standard</Value>
       <Value ID="Zapper">Zapper</Value>
       <Value ID="ArkanoidController">Manette Arkanoid</Value>
+      <Value ID="SnesController">Manette SNES</Value>
+      <Value ID="PowerPad">Power Pad</Value>
+      <Value ID="SnesMouse">Souris SNES</Value>
+      <Value ID="SuborMouse">Souris Subor</Value>
+    </Enum>
+    <Enum ID="ExpansionPortDevice">
+      <Value ID="None">Aucun</Value>
+      <Value ID="Zapper">Zapper</Value>
+      <Value ID="FourPlayerAdapter">Adapteur pour 4 joueurs</Value>
+      <Value ID="ArkanoidController">Manette Arkanoid</Value>
+      <Value ID="OekaKidsTablet">Tablette Oeka Kids</Value>
+      <Value ID="FamilyTrainerMat">Family Trainer</Value>
+      <Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
+      <Value ID="FamilyBasicKeyboard">Clavier Family Basic</Value>
+      <Value ID="PartyTap">Partytap</Value>
+      <Value ID="Pachinko">Manette Pachinko</Value>
+      <Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
+      <Value ID="JissenMahjong">Manette Jissen Mah-jong</Value>
+      <Value ID="SuborKeyboard">Clavier Subor</Value>
+      <Value ID="BarcodeBattler">Barcode Battler</Value>
+      <Value ID="HoriTrack">Hori Track</Value>
+      <Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
+      <Value ID="AsciiTurboFile">Turbo File</Value>
+      <Value ID="BattleBox">Battle Box</Value>
     </Enum>
     <Enum ID="VideoAspectRatio">
       <Value ID="NoStretching">Défaut (Aucun étirement)</Value>
@@ -834,13 +865,6 @@
     <Enum ID="ConsoleType">
       <Value ID="Nes">NES</Value>
       <Value ID="Famicom">Famicom</Value>
-    </Enum>
-    <Enum ID="ExpansionPortDevice">
-      <Value ID="None">Aucun</Value>
-      <Value ID="Zapper">Zapper</Value>
-      <Value ID="FourPlayerAdapter">Adapteur pour 4 joueurs</Value>
-      <Value ID="ArkanoidController">Manette Arkanoid</Value>
-      <Value ID="OekaKidsTablet">Tablette Oeka Kids</Value>
     </Enum>
     <Enum ID="PpuModel">
       <Value ID="Ppu2C03">RP2C03</Value>

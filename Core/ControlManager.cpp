@@ -1,190 +1,217 @@
 #include "stdafx.h"
 #include "ControlManager.h"
-#include "StandardController.h"
-#include "Zapper.h"
-#include "ArkanoidController.h"
-#include "OekaKidsTablet.h"
+#include "BaseMapper.h"
 #include "EmulationSettings.h"
 #include "Console.h"
 #include "GameServerConnection.h"
 #include "MemoryManager.h"
-#include "PPU.h"
 #include "IKeyManager.h"
+#include "IInputProvider.h"
+#include "IInputRecorder.h"
+#include "BatteryManager.h"
+#include "StandardController.h"
+#include "Zapper.h"
+#include "ArkanoidController.h"
+#include "OekaKidsTablet.h"
+#include "FourScore.h"
+#include "SnesController.h"
+#include "SnesMouse.h"
+#include "PowerPad.h"
+#include "FamilyMatTrainer.h"
+#include "KonamiHyperShot.h"
+#include "FamilyBasicKeyboard.h"
+#include "FamilyBasicDataRecorder.h"
+#include "PartyTap.h"
+#include "PachinkoController.h"
+#include "ExcitingBoxingController.h"
+#include "SuborKeyboard.h"
+#include "SuborMouse.h"
+#include "JissenMahjongController.h"
+#include "BarcodeBattlerReader.h"
+#include "HoriTrack.h"
+#include "BandaiHyperShot.h"
+#include "VsZapper.h"
+#include "AsciiTurboFile.h"
+#include "BattleBox.h"
 
-unique_ptr<IKeyManager> ControlManager::_keyManager = nullptr;
-shared_ptr<BaseControlDevice> ControlManager::_controlDevices[2] = { nullptr, nullptr };
-IGameBroadcaster* ControlManager::_gameBroadcaster = nullptr;
-MousePosition ControlManager::_mousePosition = { -1, -1 };
+ControlManager* ControlManager::_instance = nullptr;
+vector<IInputRecorder*> ControlManager::_inputRecorders;
+vector<IInputProvider*> ControlManager::_inputProviders;
+SimpleLock ControlManager::_deviceLock;
 
-ControlManager::ControlManager()
+ControlManager::ControlManager(shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice)
 {
-
+	_systemActionManager = systemActionManager;
+	_mapperControlDevice = mapperControlDevice;
+	_instance = this;
 }
 
 ControlManager::~ControlManager()
 {
-}
-
-void ControlManager::RegisterKeyManager(IKeyManager* keyManager)
-{
-	_keyManager.reset(keyManager);
-}
-
-void ControlManager::RefreshKeyState()
-{
-	if(_keyManager != nullptr) {
-		return _keyManager->RefreshState();
+	if(_instance == this) {
+		_instance = nullptr;
 	}
 }
 
-bool ControlManager::IsKeyPressed(uint32_t keyCode)
+void ControlManager::RegisterInputProvider(IInputProvider* provider)
 {
-	if(_keyManager != nullptr) {
-		return _keyManager->IsKeyPressed(keyCode);
-	}
-	return false;
+	auto lock = _deviceLock.AcquireSafe();
+	_inputProviders.push_back(provider);
 }
 
-bool ControlManager::IsMouseButtonPressed(MouseButton button)
+void ControlManager::UnregisterInputProvider(IInputProvider* provider)
 {
-	if(_keyManager != nullptr) {
-		return _keyManager->IsMouseButtonPressed(button);
-	}
-	return false;
+	auto lock = _deviceLock.AcquireSafe();
+	vector<IInputProvider*> &vec = _inputProviders;
+	vec.erase(std::remove(vec.begin(), vec.end(), provider), vec.end());
 }
 
-vector<uint32_t> ControlManager::GetPressedKeys()
+void ControlManager::RegisterInputRecorder(IInputRecorder* provider)
 {
-	if(_keyManager != nullptr) {
-		return _keyManager->GetPressedKeys();
-	}
-	return vector<uint32_t>();
+	auto lock = _deviceLock.AcquireSafe();
+	_inputRecorders.push_back(provider);
 }
 
-string ControlManager::GetKeyName(uint32_t keyCode)
+void ControlManager::UnregisterInputRecorder(IInputRecorder* provider)
 {
-	if(_keyManager != nullptr) {
-		return _keyManager->GetKeyName(keyCode);
-	}
-	return "";
+	auto lock = _deviceLock.AcquireSafe();
+	vector<IInputRecorder*> &vec = _inputRecorders;
+	vec.erase(std::remove(vec.begin(), vec.end(), provider), vec.end());
 }
 
-uint32_t ControlManager::GetKeyCode(string keyName)
+vector<ControlDeviceState> ControlManager::GetPortStates()
 {
-	if(_keyManager != nullptr) {
-		return _keyManager->GetKeyCode(keyName);
-	}
-	return 0;
-}
+	auto lock = _deviceLock.AcquireSafe();
 
-void ControlManager::RegisterBroadcaster(IGameBroadcaster* gameBroadcaster)
-{
-	ControlManager::_gameBroadcaster = gameBroadcaster;
-}
-
-void ControlManager::UnregisterBroadcaster(IGameBroadcaster* gameBroadcaster)
-{
-	if(ControlManager::_gameBroadcaster == gameBroadcaster) {
-		ControlManager::_gameBroadcaster = nullptr;
+	vector<ControlDeviceState> states;
+	for(int i = 0; i < 4; i++) {
+		shared_ptr<BaseControlDevice> device = GetControlDevice(i);
+		if(device) {
+			states.push_back(device->GetRawState());
+		} else {
+			states.push_back(ControlDeviceState());
+		}
 	}
-}
-
-void ControlManager::BroadcastInput(uint8_t port, uint8_t state)
-{
-	if(ControlManager::_gameBroadcaster) {
-		//Used when acting as a game server
-		ControlManager::_gameBroadcaster->BroadcastInput(state, port);
-	}
+	return states;
 }
 
 shared_ptr<BaseControlDevice> ControlManager::GetControlDevice(uint8_t port)
 {
-	return ControlManager::_controlDevices[port];
+	auto lock = _deviceLock.AcquireSafe();
+
+	auto result = std::find_if(_instance->_controlDevices.begin(), _instance->_controlDevices.end(), [port](const shared_ptr<BaseControlDevice> control) { return control->GetPort() == port; });
+	if(result != _instance->_controlDevices.end()) {
+		return *result;
+	}
+	return nullptr;
 }
 
-void ControlManager::RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice, uint8_t port)
+void ControlManager::RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice)
 {
-	ControlManager::_controlDevices[port] = controlDevice;
+	_controlDevices.push_back(controlDevice);
 }
 
-void ControlManager::UnregisterControlDevice(uint8_t port)
+ControllerType ControlManager::GetControllerType(uint8_t port)
 {
-	ControlManager::_controlDevices[port].reset();
+	return EmulationSettings::GetControllerType(port);
 }
 
-void ControlManager::RefreshAllPorts()
+shared_ptr<BaseControlDevice> ControlManager::CreateControllerDevice(ControllerType type, uint8_t port)
 {
-	if(_keyManager) {
-		_keyManager->RefreshState();
+	shared_ptr<BaseControlDevice> device;
+
+	switch(type) {
+		case ControllerType::StandardController: device.reset(new StandardController(port, EmulationSettings::GetControllerKeys(port))); break;
+		case ControllerType::Zapper: device.reset(new Zapper(port)); break;
+		case ControllerType::ArkanoidController: device.reset(new ArkanoidController(port)); break;
+		case ControllerType::SnesController: device.reset(new SnesController(port, EmulationSettings::GetControllerKeys(port))); break;
+		case ControllerType::PowerPad: device.reset(new PowerPad(port, EmulationSettings::GetControllerKeys(port))); break;
+		case ControllerType::SnesMouse: device.reset(new SnesMouse(port)); break;
+		case ControllerType::SuborMouse: device.reset(new SuborMouse(port)); break;
+		case ControllerType::VsZapper: device.reset(new VsZapper(port)); break;
 	}
 
-	for(int i = 0; i < 2; i++) {
-		if(ControlManager::_controlDevices[i]) {
-			ControlManager::_controlDevices[i]->RefreshStateBuffer();
-		}
-	}
+	return device;
 }
 
-shared_ptr<BaseControlDevice> ControlManager::GetZapper(uint8_t port)
+shared_ptr<BaseControlDevice> ControlManager::CreateExpansionDevice(ExpansionPortDevice type)
 {
-	return shared_ptr<BaseControlDevice>(new Zapper(port));
+	shared_ptr<BaseControlDevice> device;
+
+	switch(type) {
+		case ExpansionPortDevice::Zapper: device.reset(new Zapper(BaseControlDevice::ExpDevicePort)); break;
+		case ExpansionPortDevice::ArkanoidController: device.reset(new ArkanoidController(BaseControlDevice::ExpDevicePort)); break;
+		case ExpansionPortDevice::OekaKidsTablet: device.reset(new OekaKidsTablet()); break;
+		case ExpansionPortDevice::FamilyTrainerMat: device.reset(new FamilyMatTrainer(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::KonamiHyperShot: device.reset(new KonamiHyperShot(EmulationSettings::GetControllerKeys(0), EmulationSettings::GetControllerKeys(1))); break;
+		case ExpansionPortDevice::FamilyBasicKeyboard: device.reset(new FamilyBasicKeyboard(EmulationSettings::GetControllerKeys(0))); break; //TODO: tape reader
+		case ExpansionPortDevice::PartyTap: device.reset(new PartyTap(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::Pachinko: device.reset(new PachinkoController(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::ExcitingBoxing: device.reset(new ExcitingBoxingController(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::JissenMahjong: device.reset(new JissenMahjongController(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::SuborKeyboard: device.reset(new SuborKeyboard(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::BarcodeBattler: device.reset(new BarcodeBattlerReader()); break;
+		case ExpansionPortDevice::HoriTrack: device.reset(new HoriTrack(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::BandaiHyperShot: device.reset(new BandaiHyperShot(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::AsciiTurboFile: device.reset(new AsciiTurboFile()); break;
+		case ExpansionPortDevice::BattleBox: device.reset(new BattleBox()); break;
+
+		case ExpansionPortDevice::FourPlayerAdapter:
+		default: break;
+	}
+
+	return device;
 }
 
 void ControlManager::UpdateControlDevices()
 {
+	auto lock = _deviceLock.AcquireSafe();
+
+	//Reset update flag
+	EmulationSettings::NeedControllerUpdate();
+
+	ControlManager::_controlDevices.clear();
+
+	ControlManager::RegisterControlDevice(_systemActionManager);
+
 	bool fourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
+	ConsoleType consoleType = EmulationSettings::GetConsoleType();
 	ExpansionPortDevice expansionDevice = EmulationSettings::GetExpansionDevice();
-	
-	if(EmulationSettings::GetConsoleType() != ConsoleType::Famicom) {
+
+	if(consoleType != ConsoleType::Famicom) {
 		expansionDevice = ExpansionPortDevice::None;
 	} else if(expansionDevice != ExpansionPortDevice::FourPlayerAdapter) {
 		fourScore = false;
 	}
 
-	for(int i = 0; i < 2; i++) {
-		shared_ptr<BaseControlDevice> device;
-		bool forceController =
-			i == 1 && EmulationSettings::GetControllerType(1) != ControllerType::StandardController && 
-			(expansionDevice == ExpansionPortDevice::ArkanoidController || expansionDevice == ExpansionPortDevice::Zapper || expansionDevice == ExpansionPortDevice::OekaKidsTablet);
-
-		bool controllerRequired = forceController || (EmulationSettings::GetConsoleType() == ConsoleType::Famicom && !EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior));
-
-		if(fourScore || controllerRequired) {
-			//Need to set standard controller in all slots if four score (to allow emulation to work correctly)
-			device.reset(new StandardController(i, forceController));
-		} else {
-			switch(EmulationSettings::GetControllerType(i)) {
-				case ControllerType::StandardController: device.reset(new StandardController(i)); break;
-				case ControllerType::Zapper: device = GetZapper(i); break;
-				case ControllerType::ArkanoidController: device.reset(new ArkanoidController(i)); break;
-			}
-		}
-
+	for(int i = 0; i < (fourScore ? 4 : 2); i++) {
+		shared_ptr<BaseControlDevice> device = CreateControllerDevice(GetControllerType(i), i);
 		if(device) {
-			ControlManager::RegisterControlDevice(device, i);
-
-			if(fourScore) {
-				if(EmulationSettings::GetControllerType(i + 2) == ControllerType::StandardController) {
-					std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<StandardController>(new StandardController(i + 2)));
-				}
-			} else if(i == 1 || expansionDevice == ExpansionPortDevice::ArkanoidController) {
-				switch(expansionDevice) {
-					case ExpansionPortDevice::Zapper: std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<Zapper>(new Zapper(2))); break;
-					case ExpansionPortDevice::ArkanoidController: std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<ArkanoidController>(new ArkanoidController(2))); break;
-					case ExpansionPortDevice::OekaKidsTablet: std::dynamic_pointer_cast<StandardController>(device)->AddAdditionalController(shared_ptr<OekaKidsTablet>(new OekaKidsTablet(2))); break;
-					default: break;
-				}
-			}
-
-		} else {
-			//Remove current device if it's no longer in use
-			ControlManager::UnregisterControlDevice(i);
+			ControlManager::RegisterControlDevice(device);
 		}
+	}
+
+	if(fourScore && consoleType == ConsoleType::Nes) {
+		//FourScore is only used to provide the signature for reads past the first 16 reads
+		ControlManager::RegisterControlDevice(shared_ptr<FourScore>(new FourScore()));
+	}
+
+	shared_ptr<BaseControlDevice> expDevice = CreateExpansionDevice(expansionDevice);
+	if(expDevice) {
+		ControlManager::RegisterControlDevice(expDevice);
+	}
+
+	if(_mapperControlDevice) {
+		ControlManager::RegisterControlDevice(_mapperControlDevice);
 	}
 }
 
 uint8_t ControlManager::GetOpenBusMask(uint8_t port)
 {
+	//"In the NES and Famicom, the top three (or five) bits are not driven, and so retain the bits of the previous byte on the bus. 
+	//Usually this is the most significant byte of the address of the controller port - 0x40.
+	//Paperboy relies on this behavior and requires that reads from the controller ports return exactly $40 or $41 as appropriate."
+
 	switch(EmulationSettings::GetConsoleType()) {
 		default:
 		case ConsoleType::Nes:
@@ -203,82 +230,87 @@ uint8_t ControlManager::GetOpenBusMask(uint8_t port)
 	}
 }
 
-uint8_t ControlManager::GetPortValue(uint8_t port)
+void ControlManager::UpdateInputState()
 {
-	if(_refreshState) {
-		//Reload until strobe bit is set to off
-		RefreshAllPorts();
+	if(_isLagging) {
+		_lagCounter++;
+	} else {
+		_isLagging = true;
 	}
-	shared_ptr<BaseControlDevice> device = GetControlDevice(port);
 
-	//"In the NES and Famicom, the top three (or five) bits are not driven, and so retain the bits of the previous byte on the bus. 
-	//Usually this is the most significant byte of the address of the controller port - 0x40.
-	//Paperboy relies on this behavior and requires that reads from the controller ports return exactly $40 or $41 as appropriate."
-	uint8_t value = MemoryManager::GetOpenBus(GetOpenBusMask(port));
-	if(device) {
-		value |= device->GetPortOutput();
-		
-		if(port == 0 && EmulationSettings::GetConsoleType() == ConsoleType::Famicom) {
-			//Connect $4016.2 to the 2nd controller's microphone on Famicoms
-			shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(GetControlDevice(1));
-			if(controller && controller->IsMicrophoneActive()) {
-				value |= 0x04;
+	auto lock = _deviceLock.AcquireSafe();
+
+	string log = "";
+	for(shared_ptr<BaseControlDevice> &device : _controlDevices) {
+		device->ClearState();
+
+		bool inputSet = false;
+		for(size_t i = 0; i < _inputProviders.size(); i++) {
+			IInputProvider* provider = _inputProviders[i];
+			if(provider->SetInput(device.get())) {
+				inputSet = true;
+				break;
 			}
 		}
+
+		if(!inputSet) {
+			device->SetStateFromInput();
+		}
+
+		device->OnAfterSetState();
+
+		shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+		if(debugger) {
+			debugger->ProcessEvent(EventType::InputPolled);
+		}
+
+		log += "|" + device->GetTextState();
+		
+		for(IInputRecorder* recorder : _inputRecorders) {
+			recorder->RecordInput(device.get());
+		}
+	}
+	
+	for(IInputRecorder* recorder : _inputRecorders) {
+		recorder->EndFrame();
 	}
 
-	return value;
+	MessageManager::Log(log);
+}
+
+uint32_t ControlManager::GetLagCounter()
+{
+	return _lagCounter;
+}
+
+void ControlManager::ResetLagCounter()
+{
+	_lagCounter = 0;
 }
 
 uint8_t ControlManager::ReadRAM(uint16_t addr)
 {
-	//Used for lag counter
-	//Any frame where the input is read does not count as lag
+	//Used for lag counter - any frame where the input is read does not count as lag
 	_isLagging = false;
 
-	switch(addr) {
-		case 0x4016: return GetPortValue(0);
-		case 0x4017: return GetPortValue(1);
+	uint8_t value = MemoryManager::GetOpenBus(GetOpenBusMask(addr - 0x4016));
+	for(shared_ptr<BaseControlDevice> &device : _controlDevices) {
+		value |= device->ReadRAM(addr);
 	}
+	return value;
 
-	return 0;
-}
-
-template<typename T>
-shared_ptr<T> ControlManager::GetExpansionDevice()
-{
-	shared_ptr<StandardController> controller;
-	controller = std::dynamic_pointer_cast<StandardController>(GetControlDevice(1));
-	if(controller) {
-		shared_ptr<T> expansionDevice;
-		expansionDevice = std::dynamic_pointer_cast<T>(controller->GetAdditionalController());
-		return expansionDevice;
-	}
-	return nullptr;
 }
 
 void ControlManager::WriteRAM(uint16_t addr, uint8_t value)
 {
-	//$4016 writes
-	bool previousState = _refreshState;
-	_refreshState = (value & 0x01) == 0x01;
-
-	auto tablet = GetExpansionDevice<OekaKidsTablet>();
-	if(tablet) {
-		tablet->WriteRam(value);
-	} else {
-		if(previousState && !_refreshState) {
-			//Refresh controller once strobe bit is disabled
-			RefreshAllPorts();
-		}
+	for(shared_ptr<BaseControlDevice> &device : _controlDevices) {
+		device->WriteRAM(addr, value);
 	}
 }
 
 void ControlManager::Reset(bool softReset)
 {
-	if(_keyManager != nullptr) {
-		_keyManager->UpdateDevices();
-	}
+	ResetLagCounter();
 }
 
 void ControlManager::StreamState(bool saving)
@@ -304,8 +336,11 @@ void ControlManager::StreamState(bool saving)
 		}
 	}
 
+	int32_t unusedMousePositionX = 0;
+	int32_t unusedMousePositionY = 0;
+
 	ArrayInfo<ControllerType> types = { controllerTypes, 4 };
-	Stream(_refreshState, _mousePosition.X, _mousePosition.Y, nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior, zapperDetectionRadius);
+	Stream(_refreshState, unusedMousePositionX, unusedMousePositionY, nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior, zapperDetectionRadius, _lagCounter);
 
 	if(!saving) {
 		EmulationSettings::SetNesModel(nesModel);
@@ -322,31 +357,10 @@ void ControlManager::StreamState(bool saving)
 		UpdateControlDevices();
 	}
 
-	SnapshotInfo device0{ GetControlDevice(0).get() };
-	SnapshotInfo device1{ GetControlDevice(1).get() };
-	Stream(device0, device1);
-}
-
-void ControlManager::SetMousePosition(double x, double y)
-{
-	if(x < 0 || y < 0) {
-		_mousePosition.X = -1;
-		_mousePosition.Y = -1;
-	} else {
-		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
-		_mousePosition.X = (int32_t)(x * (PPU::ScreenWidth - overscan.Left - overscan.Right) + overscan.Left);
-		_mousePosition.Y = (int32_t)(y * (PPU::ScreenHeight - overscan.Top - overscan.Bottom) + overscan.Top);
+	if(GetStateVersion() >= 7) {
+		for(uint8_t i = 0; i < _controlDevices.size(); i++) {
+			SnapshotInfo device{ _controlDevices[i].get() };
+			Stream(device);
+		}
 	}
-}
-
-MousePosition ControlManager::GetMousePosition()
-{
-	return _mousePosition;
-}
-
-bool ControlManager::GetLagFlag()
-{
-	bool flag = _isLagging;
-	_isLagging = true;
-	return flag;
 }

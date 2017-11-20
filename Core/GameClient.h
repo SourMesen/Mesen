@@ -34,7 +34,5 @@ public:
 	static uint8_t GetControllerPort();
 	static uint8_t GetAvailableControllers();
 
-	static uint8_t GetControllerState(uint8_t port);
-
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 };

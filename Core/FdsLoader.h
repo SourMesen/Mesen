@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include <algorithm>
 #include "../Utilities/FolderUtilities.h"
-#include "../Utilities/IpsPatcher.h"
 #include "../Utilities/CRC32.h"
 #include "../Utilities/sha1.h"
 #include "RomData.h"
@@ -50,6 +49,21 @@ private:
 		}
 	}
 
+	vector<uint8_t> LoadBios()
+	{
+		//For FDS, the PRG ROM is the FDS BIOS (8k)
+		vector<uint8_t> biosData;
+
+		ifstream biosFile("FdsBios.bin", ios::in | ios::binary);
+		if(biosFile) {
+			return vector<uint8_t>(std::istreambuf_iterator<char>(biosFile), {});
+		} else {
+			MessageManager::SendNotification(ConsoleNotificationType::FdsBiosNotFound);
+		}
+		return {};
+	}
+
+public:
 	vector<uint8_t> RebuildFdsFile(vector<vector<uint8_t>> diskData, bool needHeader)
 	{
 		vector<uint8_t> output;
@@ -93,7 +107,7 @@ private:
 		return output;
 	}
 
-	void LoadDiskData(vector<uint8_t>& romFile, RomData &romData)
+	void LoadDiskData(vector<uint8_t>& romFile, vector<vector<uint8_t>> &diskData, vector<vector<uint8_t>> &diskHeaders)
 	{
 		uint8_t numberOfSides = 0;
 		size_t fileOffset = 0;
@@ -106,12 +120,12 @@ private:
 		}
 
 		for(uint32_t i = 0; i < numberOfSides; i++) {
-			romData.FdsDiskData.push_back(vector<uint8_t>());
-			vector<uint8_t> &fdsDiskImage = romData.FdsDiskData.back();
+			diskData.push_back(vector<uint8_t>());
+			vector<uint8_t> &fdsDiskImage = diskData.back();
 
-			romData.FdsDiskHeaders.push_back(vector<uint8_t>(romFile.data() + fileOffset + 1, romFile.data() + fileOffset + 57));
+			diskHeaders.push_back(vector<uint8_t>(romFile.data() + fileOffset + 1, romFile.data() + fileOffset + 57));
 
-			AddGaps(fdsDiskImage, &romFile[fileOffset]);			
+			AddGaps(fdsDiskImage, &romFile[fileOffset]);
 			fileOffset += FdsDiskSideCapacity;
 
 			//Ensure the image is 65500 bytes
@@ -121,48 +135,8 @@ private:
 		}
 	}
 
-	vector<uint8_t> LoadBios()
+	RomData LoadRom(vector<uint8_t> &romFile, string filename)
 	{
-		//For FDS, the PRG ROM is the FDS BIOS (8k)
-		vector<uint8_t> biosData;
-
-		ifstream biosFile("FdsBios.bin", ios::in | ios::binary);
-		if(biosFile) {
-			return vector<uint8_t>(std::istreambuf_iterator<char>(biosFile), {});
-		} else {
-			MessageManager::SendNotification(ConsoleNotificationType::FdsBiosNotFound);
-		}
-		return {};
-	}
-
-public:
-	void SaveIpsFile(string filename, vector<uint8_t> &originalDiskData, vector<vector<uint8_t>> &currentDiskData)
-	{
-		bool needHeader = (memcmp(originalDiskData.data(), "FDS\x1a", 4) == 0);
-		vector<uint8_t> newData = RebuildFdsFile(currentDiskData, needHeader);
-		vector<uint8_t> ipsData = IpsPatcher::CreatePatch(originalDiskData, newData);
-			
-		string fdsSaveFilepath = FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), FolderUtilities::GetFilename(filename, false) + ".ips");
-		ofstream outputIps(fdsSaveFilepath, ios::binary);
-		if(outputIps) {
-			outputIps.write((char*)ipsData.data(), ipsData.size());
-			outputIps.close();
-		}
-	}
-
-	RomData LoadRom(vector<uint8_t> romFile, string filename)
-	{
-		//Note: "romFile" is intentionally passed by copy - modifying the original array will alter the "RawData" property which 
-		//is used when saving the IPS file for FDS save data.  If the RawData is modified by this function, then the IPS file will
-		//will only contain new changes, and all previous save data will be lost/corrupted.
-
-		//Apply save data (saved as an IPS file), if found
-		string fdsSaveFilepath = FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), FolderUtilities::GetFilename(filename, false) + ".ips");
-		vector<uint8_t> patchedData;
-		if(IpsPatcher::PatchBuffer(fdsSaveFilepath, romFile, patchedData)) {
-			romFile = patchedData;
-		}
-
 		RomData romData;
 
 		romData.Sha1 = SHA1::GetHash(romFile);
@@ -177,8 +151,6 @@ public:
 
 		if(romData.PrgRom.size() != 0x2000) {
 			romData.Error = true;
-		} else {
-			LoadDiskData(romFile, romData);
 		}
 
 		//Setup default controllers

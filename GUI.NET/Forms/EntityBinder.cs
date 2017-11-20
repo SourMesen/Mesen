@@ -163,6 +163,10 @@ namespace Mesen.GUI.Forms
 								value = (object)Byte.Parse((string)value, numberStyle);
 							} else if(field.FieldType == typeof(UInt16)) {
 								value = (object)UInt16.Parse((string)value, numberStyle);
+							} else if(field.FieldType == typeof(UInt64)) {
+								value = (object)UInt64.Parse((string)value, numberStyle);
+							} else if(field.FieldType == typeof(Int64)) {
+								value = (object)Int64.Parse((string)value, numberStyle);
 							}
 							field.SetValue(Entity, value);
 						} else if(kvp.Value is ctrlPathSelection) {

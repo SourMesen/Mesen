@@ -121,6 +121,7 @@ public:
 	static NsfMapper* GetInstance();
 
 	void SetNesModel(NesModel model) override;
+	ConsoleFeatures GetAvailableFeatures() override;
 
 	void SelectTrack(uint8_t trackNumber);
 	uint8_t GetCurrentTrack();

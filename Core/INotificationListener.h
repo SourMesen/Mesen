@@ -15,13 +15,12 @@ enum class ConsoleNotificationType
 	PpuFrameDone = 9,
 	MovieEnded = 10,
 	ResolutionChanged = 11,
-	FdsDiskChanged = 12,
-	FdsBiosNotFound = 13,
-	ConfigChanged = 14,
-	DisconnectedFromServer = 15,
-	PpuViewerDisplayFrame = 16,
-	ExecuteShortcut = 17,
-	EmulationStopped = 18,
+	FdsBiosNotFound = 12,
+	ConfigChanged = 13,
+	DisconnectedFromServer = 14,
+	PpuViewerDisplayFrame = 15,
+	ExecuteShortcut = 16,
+	EmulationStopped = 17,
 };
 
 class INotificationListener

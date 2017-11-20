@@ -180,7 +180,7 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "VK_OEM_8", 0xDF, "Used for miscellaneous characters; it can vary by keyboard.", "" },
 	//{ "-", 0xE0, "Reserved", "" },
 	//{ "-", 0xE1, "OEM specific", "" },
-	{ "VK_OEM_102", 0xE2, "\\", "" },
+	{ "VK_OEM_102", 0xE2, "Pipe", "" },
 	//{ "-", 0xE3 - E4, "OEM specific", "" },
 	{ "VK_PROCESSKEY", 0xE5, "IME PROCESS", "" },
 	//{ "-", 0xE6, "OEM specific", "" },

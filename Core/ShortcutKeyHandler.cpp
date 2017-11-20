@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "ShortcutKeyHandler.h"
 #include "EmulationSettings.h"
-#include "ControlManager.h"
+#include "KeyManager.h"
 #include "VideoDecoder.h"
-#include "VsControlManager.h"
 #include "FDS.h"
 #include "SaveStateManager.h"
 #include "RewindManager.h"
+#include "SystemActionManager.h"
+#include "FdsSystemActionManager.h"
+#include "VsSystemActionManager.h"
+#include "MovieManager.h"
 
 ShortcutKeyHandler::ShortcutKeyHandler()
 {
@@ -49,9 +52,9 @@ bool ShortcutKeyHandler::IsKeyPressed(KeyCombination comb)
 		return false;
 	}
 
-	return ControlManager::IsKeyPressed(comb.Key1) &&
-		(comb.Key2 == 0 || ControlManager::IsKeyPressed(comb.Key2)) &&
-		(comb.Key3 == 0 || ControlManager::IsKeyPressed(comb.Key3));
+	return KeyManager::IsKeyPressed(comb.Key1) &&
+		(comb.Key2 == 0 || KeyManager::IsKeyPressed(comb.Key2)) &&
+		(comb.Key3 == 0 || KeyManager::IsKeyPressed(comb.Key3));
 }
 
 bool ShortcutKeyHandler::DetectKeyPress(EmulatorShortcut shortcut)
@@ -104,18 +107,21 @@ void ShortcutKeyHandler::CheckMappedKeys()
 		}
 	}
 
-	if(VsControlManager::GetInstance() && !isNetplayClient && !isMovieActive) {
-		VsControlManager* manager = VsControlManager::GetInstance();
+	shared_ptr<VsSystemActionManager> vsSam = Console::GetInstance()->GetSystemActionManager<VsSystemActionManager>();
+	if(vsSam && !isNetplayClient && !isMovieActive) {
 		if(DetectKeyPress(EmulatorShortcut::VsServiceButton)) {
-			manager->SetServiceButtonState(true);
+			vsSam->SetServiceButtonState(true);
 		}
 		if(DetectKeyRelease(EmulatorShortcut::VsServiceButton)) {
-			manager->SetServiceButtonState(false);
+			vsSam->SetServiceButtonState(false);
 		}
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::InsertNextDisk) && !isNetplayClient && !isMovieActive) {
-		FDS::InsertNextDisk();
+		shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+		if(sam) {
+			sam->InsertNextDisk();
+		}
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::MoveToNextStateSlot)) {
@@ -185,9 +191,9 @@ void ShortcutKeyHandler::CheckMappedKeys()
 void ShortcutKeyHandler::ProcessKeys()
 {
 	auto lock = _lock.AcquireSafe();
-	ControlManager::RefreshKeyState();
+	KeyManager::RefreshKeyState();
 
-	_pressedKeys = ControlManager::GetPressedKeys();
+	_pressedKeys = KeyManager::GetPressedKeys();
 	_isKeyUp = _pressedKeys.size() < _lastPressedKeys.size();
 
 	if(_pressedKeys.size() == _lastPressedKeys.size()) {

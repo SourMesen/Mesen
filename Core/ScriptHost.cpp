@@ -15,7 +15,8 @@ int ScriptHost::GetScriptId()
 
 const char* ScriptHost::GetLog()
 {
-	return _context ? _context->GetLog() : "";
+	shared_ptr<ScriptingContext> context = _context;
+	return context ? context->GetLog() : "";
 }
 
 bool ScriptHost::LoadScript(string scriptName, string scriptContent, Debugger* debugger)

@@ -53,6 +53,17 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
+		private void InitializeBarcodeReaderMenu()
+		{
+			if(this.InvokeRequired) {
+				this.BeginInvoke((MethodInvoker)(() => InitializeBarcodeReaderMenu()));
+			} else {
+				bool hasBarcodeReader = InteropEmu.GetAvailableFeatures().HasFlag(ConsoleFeatures.BarcodeReader);
+				sepBarcode.Visible = hasBarcodeReader;
+				mnuInputBarcode.Visible = hasBarcodeReader;
+			}
+		}
+
 		private void ShowVsGameConfig()
 		{
 			VsConfigInfo configInfo = VsConfigInfo.GetCurrentGameConfig(true);

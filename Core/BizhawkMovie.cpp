@@ -1,4 +1,7 @@
 #include "stdafx.h"
+#include "SystemActionManager.h"
+#include "FdsSystemActionManager.h"
+#include "VsSystemActionManager.h"
 #include "BizhawkMovie.h"
 #include "VsControlManager.h"
 #include "FDS.h"
@@ -7,84 +10,101 @@
 BizhawkMovie::BizhawkMovie()
 {
 	_originalPowerOnState = EmulationSettings::GetRamPowerOnState();
-	MessageManager::RegisterNotificationListener(this);
 }
 
 BizhawkMovie::~BizhawkMovie()
 {
-	MessageManager::UnregisterNotificationListener(this);
-	EmulationSettings::SetRamPowerOnState(_originalPowerOnState);
+	Stop();
 }
 
-void BizhawkMovie::ProcessNotification(ConsoleNotificationType type, void* parameter)
+void BizhawkMovie::Stop()
 {
-	if(type == ConsoleNotificationType::PpuFrameDone) {
-		int32_t frameNumber = PPU::GetFrameCount();
+	if(_isPlaying) {
+		EndMovie();
+		EmulationSettings::SetRamPowerOnState(_originalPowerOnState);
+		_isPlaying = false;
+	}
+	ControlManager::UnregisterInputProvider(this);
+}
+
+bool BizhawkMovie::SetInput(BaseControlDevice *device)
+{
+	SystemActionManager* actionManager = dynamic_cast<SystemActionManager*>(device);
+	int32_t frameNumber = PPU::GetFrameCount();
+	if(actionManager) {
 		if(frameNumber < (int32_t)_systemActionByFrame.size()) {
 			uint32_t systemAction = _systemActionByFrame[frameNumber];
 			if(systemAction & 0x01) {
-				//Power, not implemented yet
+				actionManager->SetBit(SystemActionManager::Buttons::PowerButton);
 			}
 			if(systemAction & 0x02) {
-				//Reset, not implemented yet
+				actionManager->SetBit(SystemActionManager::Buttons::ResetButton);
 			}
-			
-			if(FDS::GetSideCount()) {
+
+			VsSystemActionManager* vsActionManager = dynamic_cast<VsSystemActionManager*>(device);
+			if(vsActionManager) {
+				if(systemAction & 0x04) {
+					actionManager->SetBit(VsSystemActionManager::VsButtons::InsertCoin1);
+				}
+				if(systemAction & 0x08) {
+					actionManager->SetBit(VsSystemActionManager::VsButtons::InsertCoin2);
+				}
+				if(systemAction & 0x10) {
+					actionManager->SetBit(VsSystemActionManager::VsButtons::ServiceButton);
+				}
+			}
+
+			FdsSystemActionManager* fdsActionManager = dynamic_cast<FdsSystemActionManager*>(device);
+			if(fdsActionManager) {
 				//FDS timings between NesHawk & Mesen are currently significantly different
 				//So FDS games will always go out of sync
 				if(systemAction & 0x04) {
-					FDS::EjectDisk();
-				} else if(systemAction >= 8) {
+					fdsActionManager->SetBit(FdsSystemActionManager::FdsButtons::EjectDiskButton);
+				}
+				
+				if(systemAction >= 8) {
 					systemAction >>= 3;
 					uint32_t diskNumber = 0;
 					while(!(systemAction & 0x01)) {
 						systemAction >>= 1;
 						diskNumber++;
 					}
-					FDS::InsertDisk(diskNumber);
-				}
-			} else if(VsControlManager::GetInstance()) {
-				if(VsControlManager::GetInstance()) {
-					if(systemAction & 0x04) {
-						VsControlManager::GetInstance()->InsertCoin(0);
-					}
-					if(systemAction & 0x08) {
-						VsControlManager::GetInstance()->InsertCoin(1);
-					}
-					VsControlManager::GetInstance()->SetServiceButtonState(systemAction & 0x10 ? true : false);
+
+					fdsActionManager->SetBit(FdsSystemActionManager::FdsButtons::InsertDisk1 + diskNumber);
 				}
 			}
 		}
-	}
-}
-
-uint8_t BizhawkMovie::GetState(uint8_t port)
-{
-	int32_t frameNumber = PPU::GetFrameCount() - (PPU::GetCurrentScanline() >= 240 ? 0 : 1);
-	if(frameNumber < (int32_t)_dataByFrame[0].size()) {
-		return _dataByFrame[port][frameNumber];
 	} else {
-		EndMovie();
-		EmulationSettings::SetRamPowerOnState(_originalPowerOnState);
-		_isPlaying = false;
-		return 0;
+		int port = device->GetPort();
+		StandardController* controller = dynamic_cast<StandardController*>(device);
+		if(controller) {
+			if(frameNumber < (int32_t)_dataByFrame[port].size()) {
+				controller->SetTextState(_dataByFrame[port][frameNumber]);
+			} else {
+				Stop();
+			}
+		}
 	}
+
+	return true;
 }
 
-bool BizhawkMovie::InitializeGameData(ZipReader & reader)
+bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 {
-	std::stringstream ss = reader.GetStream("Header.txt");
+	stringstream fileData;
+	if(!reader.GetStream("Header.txt", fileData)) {
+		return false;
+	}
 
-	bool result = false;
-	while(!ss.eof()) {
+	while(!fileData.eof()) {
 		string line;
-		std::getline(ss, line);
+		std::getline(fileData, line);
 		if(line.compare(0, 4, "SHA1", 4) == 0) {
 			if(line.size() >= 45) {
 				HashInfo hashInfo;
 				hashInfo.Sha1Hash = line.substr(5, 40);
 				if(Console::LoadROM("", hashInfo)) {
-					result = true;
+					return true;
 				}
 			}
 		} else if(line.compare(0, 3, "MD5", 3) == 0) {
@@ -93,31 +113,37 @@ bool BizhawkMovie::InitializeGameData(ZipReader & reader)
 				hashInfo.PrgChrMd5Hash = line.substr(4, 32);
 				std::transform(hashInfo.PrgChrMd5Hash.begin(), hashInfo.PrgChrMd5Hash.end(), hashInfo.PrgChrMd5Hash.begin(), ::toupper);
 				if(Console::LoadROM("", hashInfo)) {
-					result = true;
+					return true;
 				}
 			}
 		}
 	}
-	return result;
+	return false;
 }
 
-bool BizhawkMovie::InitializeInputData(ZipReader & reader)
+bool BizhawkMovie::InitializeInputData(ZipReader &reader)
 {
-	const uint8_t orValues[8] = { 0x10, 0x20, 0x40, 0x80, 0x08, 0x04, 0x02, 0x01 };
-	std::stringstream ss = reader.GetStream("Input Log.txt");
-
-	int systemActionCount = 2;
-	if(FDS::GetSideCount() > 0) {
-		//Eject disk + Insert Disk #XX
-		systemActionCount += FDS::GetSideCount() + 1;
-	} else if(VsControlManager::GetInstance()) {
-		//Insert coin 1, 2 + service button
-		systemActionCount += 3;
+	stringstream inputData;
+	if(!reader.GetStream("Input Log.txt", inputData)) {
+		return false;
 	}
 
-	while(!ss.eof()) {
+	int systemActionCount = 2;
+	shared_ptr<FdsSystemActionManager> fdsActionManager = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+	if(fdsActionManager) {
+		//Eject disk + Insert Disk #XX
+		systemActionCount += fdsActionManager->GetSideCount() + 1;
+	} else {
+		shared_ptr<VsSystemActionManager> vsActionManager = Console::GetInstance()->GetSystemActionManager<VsSystemActionManager>();
+		if(vsActionManager) {
+			//Insert coin 1, 2 + service button
+			systemActionCount += 3;
+		}
+	}
+	
+	while(!inputData.eof()) {
 		string line;
-		std::getline(ss, line);
+		std::getline(inputData, line);
 
 		if(line.size() > 0 && line[0] == '|') {
 			line.erase(std::remove(line.begin(), line.end(), '|'), line.end());
@@ -132,20 +158,16 @@ bool BizhawkMovie::InitializeInputData(ZipReader & reader)
 			}
 			_systemActionByFrame.push_back(systemAction);
 
-			//Only supports regular controllers (up to 4 of them)
-			for(int i = 0; i < 8*4; i++) {
-				uint8_t port = i / 8;
-
-				if(port <= 3) {
-					uint8_t portValue = 0;
-					for(int j = 0; j < 8 && i + j + systemActionCount < (int)line.size(); j++) {
-						if(line[i+j+systemActionCount] != '.') {
-							portValue |= orValues[j];
-						}
-					}
-					i += 7;
-					_dataByFrame[port].push_back(portValue);
-				}
+			line = line.substr(systemActionCount);
+			int port = 0;
+			while(line.size() >= 8) {
+				_dataByFrame[port].push_back(line.substr(0, 8));
+				line = line.substr(8);
+				port++;
+			}
+			while(port < 4) {
+				_dataByFrame[port].push_back("........");
+				port++;
 			}
 		}
 	}
@@ -153,39 +175,28 @@ bool BizhawkMovie::InitializeInputData(ZipReader & reader)
 	return _dataByFrame[0].size() > 0;
 }
 
-bool BizhawkMovie::Play(stringstream & filestream, bool autoLoadRom)
+bool BizhawkMovie::Play(VirtualFile &file)
 {
 	Console::Pause();
 	ZipReader reader;
-	reader.LoadArchive(filestream);
-	if(InitializeGameData(reader)) {
-		if(InitializeInputData(reader)) {
-			//NesHawk initializes memory to 1s
-			EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllOnes);
-			Console::Reset(false);
-			_isPlaying = true;
-		}
+
+	std::stringstream ss;
+	file.ReadFile(ss);
+
+	reader.LoadArchive(ss);
+	ControlManager::RegisterInputProvider(this);
+	if(InitializeInputData(reader) && InitializeGameData(reader)) {
+		//NesHawk initializes memory to 1s
+		EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllOnes);
+		_isPlaying = true;
+	} else {
+		ControlManager::UnregisterInputProvider(this);
 	}
 	Console::Resume();
 	return _isPlaying;
 }
 
-bool BizhawkMovie::IsRecording()
-{
-	return false;
-}
-
 bool BizhawkMovie::IsPlaying()
 {
 	return _isPlaying;
-}
-
-void BizhawkMovie::RecordState(uint8_t port, uint8_t value)
-{
-	//Not implemented
-}
-
-void BizhawkMovie::Record(string filename, bool reset)
-{
-	//Not implemented
 }

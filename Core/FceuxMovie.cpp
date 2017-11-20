@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include <algorithm>
+#include "../Utilities/StringUtilities.h"
 #include "../Utilities/HexUtilities.h"
+#include "ControlManager.h"
 #include "FceuxMovie.h"
 #include "Console.h"
 
@@ -26,10 +28,13 @@ vector<uint8_t> FceuxMovie::Base64Decode(string in)
 
 bool FceuxMovie::InitializeData(stringstream &filestream)
 {
-	const uint8_t orValues[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
-	uint32_t systemActionCount = 0;
-
 	bool result = false;
+
+	_dataByFrame[0].push_back("");
+	_dataByFrame[1].push_back("");
+	_dataByFrame[2].push_back("");
+	_dataByFrame[3].push_back("");
+
 	while(!filestream.eof()) {
 		string line;
 		std::getline(filestream, line);
@@ -43,31 +48,27 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 				return false;
 			}
 		} else if(line.size() > 0 && line[0] == '|') {
-			line.erase(std::remove(line.begin(), line.end(), '|'), line.end());
-			line = line.substr(1, line.size() - 2);
+			vector<string> lineData = StringUtilities::Split(line.substr(1), '|');
+
+			if(lineData.size() == 0) {
+				continue;
+			}
 
 			//Read power/reset/FDS/VS/etc. commands
-			/*uint32_t systemAction = 0;
-			for(int i = 0; i < systemActionCount; i++) {
-				if(line[i] != '.') {
-					systemAction |= (1 << i);
-				}
+			uint32_t systemAction = 0;
+			try {
+				systemAction = (uint32_t)std::atol(lineData[0].c_str());
+			} catch(std::exception ex) {
 			}
-			_systemActionByFrame.push_back(systemAction);*/
+			_systemActionByFrame.push_back(systemAction);
 
 			//Only supports regular controllers (up to 4 of them)
-			for(int i = 0; i < 8 * 4; i++) {
-				uint8_t port = i / 8;
-
-				if(port <= 3) {
-					uint8_t portValue = 0;
-					for(int j = 0; j < 8 && i + j + systemActionCount < line.size(); j++) {
-						if(line[i + j + systemActionCount] != '.') {
-							portValue |= orValues[j];
-						}
-					}
-					i += 7;
-					_dataByFrame[port].push_back(portValue);
+			for(size_t i = 1; i < lineData.size() && i < 5; i++) {
+				if(lineData[i].size() >= 8) {
+					string data = lineData[i].substr(3, 1) + lineData[i].substr(2, 1) + lineData[i].substr(1, 1) + lineData[i].substr(0, 1);
+					_dataByFrame[i - 1].push_back(data + lineData[i].substr(4, 4));
+				} else {
+					_dataByFrame[i - 1].push_back("");
 				}
 			}
 		}
@@ -75,14 +76,19 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 	return result;
 }
 
-bool FceuxMovie::Play(stringstream & filestream, bool autoLoadRom)
+bool FceuxMovie::Play(VirtualFile &file)
 {
 	Console::Pause();
-	if(InitializeData(filestream)) {
+	
+	std::stringstream ss;
+	file.ReadFile(ss);
+	if(InitializeData(ss)) {
 		EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllZeros);
+		ControlManager::RegisterInputProvider(this);
 		Console::Reset(false);
 		_isPlaying = true;
 	}
+
 	Console::Resume();
 	return _isPlaying;
 }

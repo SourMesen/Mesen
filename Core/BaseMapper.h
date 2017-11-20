@@ -9,8 +9,11 @@
 #include "DebuggerTypes.h"
 #include "Debugger.h"
 #include "Types.h"
+#include "IBattery.h"
 
-class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener
+class BaseControlDevice;
+
+class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener, public IBattery
 {
 private:
 	MirroringType _mirroringType;
@@ -51,6 +54,8 @@ private:
 	vector<uint8_t> _originalChrRom;
 
 protected:
+	shared_ptr<BaseControlDevice> _mapperControlDevice;
+
 	NESHeader _nesHeader;
 	GameInfo _databaseInfo;
 
@@ -151,6 +156,8 @@ public:
 	virtual ~BaseMapper();
 	virtual void Reset(bool softReset);
 
+	virtual ConsoleFeatures GetAvailableFeatures();
+
 	virtual void SetNesModel(NesModel model) { }
 	virtual void ProcessCpuClock() { }
 	virtual void NotifyVRAMAddressChange(uint16_t addr);
@@ -158,10 +165,12 @@ public:
 	virtual void GetMemoryRanges(MemoryRanges &ranges) override;
 	
 	void ApplyCheats();
-	virtual void SaveBattery();
+	
+	virtual void SaveBattery() override;
 
 	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
+	shared_ptr<BaseControlDevice> GetMapperControlDevice();
 	GameSystem GetGameSystem();
 	HashInfo GetHashInfo();
 	string GetRomName();

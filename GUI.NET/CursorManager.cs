@@ -17,6 +17,7 @@ namespace Mesen.GUI
 		private static Point _lastPosition;
 		private static Timer _tmrHideMouse = new Timer();
 		private static Timer _tmrCheckMouseMove = new Timer();
+		private static bool _mouseCaptured = false;
 
 		static CursorManager()
 		{
@@ -32,10 +33,8 @@ namespace Mesen.GUI
 			//Rarely the cursor becomes hidden despite leaving the window or moving
 			//Have not been able to find a reliable way to reproduce it yet
 			//This is a patch to prevent that bug from having any negative impact
-			if(_lastPosition != Cursor.Position) {
-				if(!InteropEmu.HasArkanoidPaddle()) {
-					ShowMouse();
-				}
+			if(!_mouseCaptured && _lastPosition != Cursor.Position) {
+				ShowMouse();
 				_lastPosition = Cursor.Position;
 			}
 		}
@@ -69,25 +68,45 @@ namespace Mesen.GUI
 
 		public static bool NeedMouseIcon
 		{
-			get { return InteropEmu.GetExpansionDevice() == InteropEmu.ExpansionPortDevice.OekaKidsTablet || InteropEmu.HasZapper(); }
+			get {
+				switch(InteropEmu.GetExpansionDevice()) {
+					case InteropEmu.ExpansionPortDevice.OekaKidsTablet:
+					case InteropEmu.ExpansionPortDevice.BandaiHyperShot:
+						return true;
+				}
+				if(InteropEmu.HasZapper()) {
+					return true;
+				}
+				return false;
+			}
 		}
 
 		public static void OnMouseMove(Control ctrl)
 		{
-			if(!InteropEmu.IsRunning() || InteropEmu.IsPaused() || !InteropEmu.HasArkanoidPaddle()) {
-				ShowMouse();
-			} else if(InteropEmu.HasArkanoidPaddle() && !CursorManager.NeedMouseIcon) {
+			if(_mouseCaptured && AllowMouseCapture) {
 				HideMouse();
-			}
+				_tmrHideMouse.Stop();
+				Form frm = Application.OpenForms[0];
+				Point centerPos = frm.PointToScreen(new Point(frm.Width / 2, frm.Height / 2));
+				Point diff = new Point(Cursor.Position.X - centerPos.X, Cursor.Position.Y - centerPos.Y);
+				if(diff.X != 0 || diff.Y != 0) {
+					InteropEmu.SetMouseMovement((Int16)diff.X, (Int16)diff.Y);
+					Cursor.Position = centerPos;
+				}
+			} else {
+				if(!InteropEmu.IsRunning() || InteropEmu.IsPaused()) {
+					ShowMouse();
+				}
 
-			_tmrHideMouse.Stop();
+				_tmrHideMouse.Stop();
 
-			if(!CursorManager.NeedMouseIcon) {
-				//Only hide mouse if no zapper (otherwise this could be pretty annoying)
-				ctrl.Cursor = Cursors.Default;
+				if(!CursorManager.NeedMouseIcon) {
+					//Only hide mouse if no zapper (otherwise this could be pretty annoying)
+					ctrl.Cursor = Cursors.Default;
 
-				if(InteropEmu.IsRunning() && !InteropEmu.IsPaused()) {
-					_tmrHideMouse.Start();
+					if(InteropEmu.IsRunning() && !InteropEmu.IsPaused()) {
+						_tmrHideMouse.Start();
+					}
 				}
 			}
 		}
@@ -96,6 +115,48 @@ namespace Mesen.GUI
 		{
 			_tmrHideMouse.Stop();
 			ShowMouse();
+		}
+
+		public static bool AllowMouseCapture
+		{
+			get
+			{
+				if(InteropEmu.IsPaused()) {
+					return false;
+				}
+
+				switch(InteropEmu.GetExpansionDevice()) {
+					case InteropEmu.ExpansionPortDevice.ArkanoidController:
+					case InteropEmu.ExpansionPortDevice.HoriTrack:
+						return true;
+				}
+				for(int i = 0; i < 4; i++) {
+					switch(InteropEmu.GetControllerType(i)) {
+						case InteropEmu.ControllerType.ArkanoidController:
+						case InteropEmu.ControllerType.SnesMouse:
+						case InteropEmu.ControllerType.SuborMouse:
+							return true;
+					}
+				}
+				return false;
+			}
+		}
+
+		public static void ReleaseMouse()
+		{
+			_mouseCaptured = false;
+			ShowMouse();
+		}
+
+		public static void CaptureMouse()
+		{
+			if(AllowMouseCapture) {
+				_mouseCaptured = true;
+				HideMouse();
+				Form frm = Application.OpenForms[0];
+				Point centerPos = frm.PointToScreen(new Point(frm.Width / 2, frm.Height / 2));
+				Cursor.Position = centerPos;
+			}
 		}
 	}
 }

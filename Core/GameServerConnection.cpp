@@ -15,8 +15,9 @@
 #include "PlayerListMessage.h"
 #include "GameServer.h"
 #include "ForceDisconnectMessage.h"
+#include "BaseControlDevice.h"
 
-GameServerConnection* GameServerConnection::_netPlayDevices[4] = { nullptr,nullptr,nullptr,nullptr };
+GameServerConnection* GameServerConnection::_netPlayDevices[BaseControlDevice::PortCount] = { };
 
 GameServerConnection::GameServerConnection(shared_ptr<Socket> socket) : GameConnection(socket, nullptr)
 {
@@ -45,7 +46,7 @@ void GameServerConnection::SendGameInformation()
 	Console::Resume();
 }
 
-void GameServerConnection::SendMovieData(uint8_t state, uint8_t port)
+void GameServerConnection::SendMovieData(uint8_t port, ControlDeviceState state)
 {
 	if(_handshakeCompleted) {
 		MovieDataMessage message(state, port);
@@ -60,17 +61,18 @@ void GameServerConnection::SendForceDisconnectMessage(string disconnectMessage)
 	Disconnect();
 }
 
-void GameServerConnection::PushState(uint32_t state)
+void GameServerConnection::PushState(ControlDeviceState state)
 {
 	if(_inputData.size() == 0 || state != _inputData.back()) {
+		_inputData.clear();
 		_inputData.push_back(state);
 	}
 }
 
-uint32_t GameServerConnection::GetState()
+ControlDeviceState GameServerConnection::GetState()
 {
 	size_t inputBufferSize = _inputData.size();
-	uint32_t stateData = 0;
+	ControlDeviceState stateData;
 	if(inputBufferSize > 0) {
 		stateData = _inputData.front();
 		if(inputBufferSize > 1) {
@@ -162,7 +164,6 @@ void GameServerConnection::ProcessNotification(ConsoleNotificationType type, voi
 		case ConsoleNotificationType::GameReset:
 		case ConsoleNotificationType::StateLoaded:
 		case ConsoleNotificationType::CheatAdded:
-		case ConsoleNotificationType::FdsDiskChanged:
 		case ConsoleNotificationType::ConfigChanged:
 			SendGameInformation();
 			break;
@@ -179,7 +180,7 @@ void GameServerConnection::RegisterNetPlayDevice(GameServerConnection* device, u
 void GameServerConnection::UnregisterNetPlayDevice(GameServerConnection* device)
 {
 	if(device != nullptr) {
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < BaseControlDevice::PortCount; i++) {
 			if(GameServerConnection::_netPlayDevices[i] == device) {
 				GameServerConnection::_netPlayDevices[i] = nullptr;
 				break;
@@ -196,7 +197,7 @@ GameServerConnection* GameServerConnection::GetNetPlayDevice(uint8_t port)
 uint8_t GameServerConnection::GetFirstFreeControllerPort()
 {
 	uint8_t hostPost = GameServer::GetHostControllerPort();
-	for(int i = 0; i < 4; i++) {
+	for(int i = 0; i < BaseControlDevice::PortCount; i++) {
 		if(hostPost != i && GameServerConnection::_netPlayDevices[i] == nullptr) {
 			return i;
 		}

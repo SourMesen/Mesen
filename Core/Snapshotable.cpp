@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <algorithm>
 #include "Snapshotable.h"
+#include "SaveStateManager.h"
 
 void Snapshotable::StreamStartBlock()
 {
@@ -57,13 +58,15 @@ void Snapshotable::Stream(Snapshotable* snapshotable)
 		stream.write((char*)buffer, size);
 		stream.seekg(0, ios::beg);
 		stream.seekp(0, ios::beg);
-		snapshotable->LoadSnapshot(&stream);
+		snapshotable->LoadSnapshot(&stream, _stateVersion);
 		delete[] buffer;
 	}
 }
 
 void Snapshotable::SaveSnapshot(ostream* file)
 {
+	_stateVersion = SaveStateManager::FileFormatVersion;
+
 	_stream = new uint8_t[0xFFFFF];
 	_position = 0;
 	_saving = true;
@@ -79,8 +82,10 @@ void Snapshotable::SaveSnapshot(ostream* file)
 	}
 }
 
-void Snapshotable::LoadSnapshot(istream* file)
+void Snapshotable::LoadSnapshot(istream* file, uint32_t stateVersion)
 {
+	_stateVersion = stateVersion;
+
 	_stream = new uint8_t[0xFFFFF];
 	memset((char*)_stream, 0, 0xFFFFF);
 	_position = 0;

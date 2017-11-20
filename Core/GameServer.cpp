@@ -17,7 +17,8 @@ GameServer::GameServer(uint16_t listenPort, string hostPlayerName)
 	_port = listenPort;
 	_hostPlayerName = hostPlayerName;
 	_hostControllerPort = 0;
-	ControlManager::RegisterBroadcaster(this);
+	ControlManager::RegisterInputRecorder(this);
+	ControlManager::RegisterInputProvider(this);
 }
 
 GameServer::~GameServer()
@@ -27,7 +28,8 @@ GameServer::~GameServer()
 
 	Stop();
 
-	ControlManager::UnregisterBroadcaster(this);
+	ControlManager::UnregisterInputRecorder(this);
+	ControlManager::UnregisterInputProvider(this);
 }
 
 void GameServer::AcceptConnections()
@@ -65,6 +67,31 @@ list<shared_ptr<GameServerConnection>> GameServer::GetConnectionList()
 		return Instance->_openConnections;
 	} else {
 		return list<shared_ptr<GameServerConnection>>();
+	}
+}
+
+bool GameServer::SetInput(BaseControlDevice *device)
+{
+	uint8_t port = device->GetPort();
+
+	GameServerConnection* connection = GameServerConnection::GetNetPlayDevice(port);
+	if(connection) {
+		//Device is controlled by a client
+		device->SetRawState(connection->GetState());
+		return true;
+	}
+
+	//Host is controlling this device
+	return false;
+}
+
+void GameServer::RecordInput(BaseControlDevice *device)
+{
+	for(shared_ptr<GameServerConnection> connection : _openConnections) {
+		if(!connection->ConnectionError()) {
+			//Send movie stream
+			connection->SendMovieData(device->GetPort(), device->GetRawState());
+		}
 	}
 }
 
@@ -114,16 +141,6 @@ bool GameServer::Started()
 	}
 }
 
-void GameServer::BroadcastInput(uint8_t inputData, uint8_t port)
-{
-	for(shared_ptr<GameServerConnection> connection : _openConnections) {
-		if(!connection->ConnectionError()) {
-			//Send movie stream
-			connection->SendMovieData(inputData, port);
-		}
-	}
-}
-
 string GameServer::GetHostPlayerName()
 {
 	if(GameServer::Started()) {
@@ -155,9 +172,9 @@ void GameServer::SetHostControllerPort(uint8_t port)
 
 uint8_t GameServer::GetAvailableControllers()
 {
-	uint8_t availablePorts = 0x0F;
+	uint8_t availablePorts = (1 << BaseControlDevice::PortCount) - 1;
 	for(PlayerInfo &playerInfo : GetPlayerList()) {
-		if(playerInfo.ControllerPort < 4) {
+		if(playerInfo.ControllerPort < BaseControlDevice::PortCount) {
 			availablePorts &= ~(1 << playerInfo.ControllerPort);
 		}
 	}

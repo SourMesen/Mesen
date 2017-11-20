@@ -3,46 +3,45 @@
 #include "stdafx.h"
 #include "CheatManager.h"
 #include "MovieManager.h"
+#include "ControlManager.h"
+#include "BatteryManager.h"
+#include "VirtualFile.h"
 
-struct MovieData
-{
-	uint32_t SaveStateSize = 0;
-	uint32_t DataSize[4];
-	vector<uint16_t> PortData[4];
-};
+class ZipReader;
 
-class MesenMovie : public IMovie
+class MesenMovie : public IMovie, public IBatteryProvider, public std::enable_shared_from_this<MesenMovie>
 {
 private:
-	const uint32_t MovieFormatVersion = 5;
-	bool _recording = false;
+	VirtualFile _movieFile;
+	shared_ptr<ZipReader> _reader;
 	bool _playing = false;
-	uint8_t _counter[4];
-	uint8_t _lastState[4];
-	uint32_t _readPosition[4];
-	ofstream _file;
+	size_t _readIndex = 0;
+	size_t _deviceIndex = 0;
+	vector<vector<string>> _inputData;
+	vector<string> _cheats;
+	std::unordered_map<string, string> _settings;
 	string _filename;
-	stringstream _startState;
-	MovieData _data;
-	vector<CodeInfo> _cheatList;
 
 private:
-	void Reset();
-	bool Save();
+	void ParseSettings(stringstream &data);
+	void ApplySettings();
+	bool LoadGame();
 	void Stop();
-	bool Load(std::stringstream &file, bool autoLoadRom);
 
-protected:
-	void PushState(uint8_t port);
-	void Record(string filename, bool reset);
-	bool Play(stringstream &filestream, bool autoLoadRom);
-
-	bool IsPlaying();
-	bool IsRecording();
+	uint32_t LoadInt(std::unordered_map<string, string> &settings, string name);
+	bool LoadBool(std::unordered_map<string, string> &settings, string name);
+	string LoadString(std::unordered_map<string, string> &settings, string name);
+	void LoadCheats();
+	bool LoadCheat(string cheatData, CodeInfo &code);
 
 public:
+	MesenMovie();
 	~MesenMovie();
 
-	void RecordState(uint8_t port, uint8_t state);
-	uint8_t GetState(uint8_t port);
+	bool Play(VirtualFile &file) override;
+	bool SetInput(BaseControlDevice* device) override;
+	bool IsPlaying();
+
+	// Inherited via IBatteryProvider
+	virtual vector<uint8_t> LoadBattery(string extension) override;
 };

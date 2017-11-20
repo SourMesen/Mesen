@@ -3,10 +3,12 @@
 #include <thread>
 #include "GameServerConnection.h"
 #include "INotificationListener.h"
+#include "IInputProvider.h"
+#include "IInputRecorder.h"
 
 using std::thread;
 
-class GameServer : public IGameBroadcaster
+class GameServer : public IInputRecorder, public IInputProvider
 {
 private:
 	static unique_ptr<GameServer> Instance;
@@ -44,5 +46,6 @@ public:
 
 	static list<shared_ptr<GameServerConnection>> GetConnectionList();
 
-	virtual void BroadcastInput(uint8_t inputData, uint8_t port);
+	bool SetInput(BaseControlDevice *device) override;
+	void RecordInput(BaseControlDevice *device) override;
 };

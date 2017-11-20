@@ -35,6 +35,7 @@ private:
 	uint8_t* _stream;
 	uint32_t _position;
 	uint32_t _streamSize;
+	uint32_t _stateVersion = 0;
 
 	bool _inBlock = false;
 	uint8_t* _blockBuffer = nullptr;
@@ -145,6 +146,8 @@ protected:
 	virtual void StreamState(bool saving) = 0;
 	virtual void AfterLoadState() { }
 
+	uint32_t GetStateVersion() { return _stateVersion; }
+
 	void Stream(Snapshotable* snapshotable);
 
 	template<typename... T>
@@ -157,7 +160,7 @@ protected:
 
 public:
 	void SaveSnapshot(ostream* file);
-	void LoadSnapshot(istream* file);
+	void LoadSnapshot(istream* file, uint32_t stateVersion);
 
 	static void WriteEmptyBlock(ostream* file);
 	static void SkipBlock(istream* file);

@@ -12,23 +12,44 @@ using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Forms.Config
 {
-	public partial class ctrlStandardController : BaseControl
+	public partial class ctrlStandardController : BaseInputConfigControl
 	{
-		public event EventHandler OnChange;
+		private bool _isSnesController = false;
 
-		public enum MappedKeyType
-		{
-			None,
-			Keyboard,
-			Controller
-		}
-
-		public ctrlStandardController()
+		public ctrlStandardController(KeyMappings mappings, int portNumber, ConsoleType consoleType, InteropEmu.ControllerType controllerType) : base(mappings)
 		{
 			InitializeComponent();
 			if(LicenseManager.UsageMode != LicenseUsageMode.Designtime) {
-				Initialize(new KeyMappings());
+				picBackground.Resize += picBackground_Resize;
 				UpdateBackground();
+
+				IsSnesController = controllerType == InteropEmu.ControllerType.SnesController;
+				ShowMicrophone = portNumber == 1 && consoleType == ConsoleType.Famicom;
+
+				Initialize(mappings);
+			}
+		}
+
+		private void picBackground_Resize(object sender, EventArgs e)
+		{
+			this.BeginInvoke((Action)(()=> UpdateBackground()));
+		}
+
+		public bool IsSnesController 
+		{
+			set
+			{
+				_isSnesController = value;
+
+				if(value) {
+					lblTurboA.Text = _isSnesController ? "X" : "Turbo A";
+					lblTurboB.Text = _isSnesController ? "Y" : "Turbo B";
+				}
+
+				btnL.Visible = value;
+				lblL.Visible = value;
+				btnR.Visible = value;
+				lblR.Visible = value;
 			}
 		}
 
@@ -48,24 +69,16 @@ namespace Mesen.GUI.Forms.Config
 			new Point(179, 85), new Point(145, 85), new Point(145, 29),
 			new Point(56, 29)
 		};
-
-		protected override void OnResize(EventArgs e)
+		
+		public void UpdateBackground()
 		{
-			base.OnResize(e);
-			UpdateBackground();
-		}
-
-		private void UpdateBackground()
-		{
-			Rectangle rect = this.ClientRectangle;
-			rect.Inflate(-2, -2);
 			float xFactor = picBackground.Width / 585f;
 			float yFactor = picBackground.Height / 210f;
 			Bitmap bitmap = new Bitmap(picBackground.Width, picBackground.Height);
 			using(Graphics g = Graphics.FromImage(bitmap)) {
 				g.ScaleTransform(xFactor, yFactor);
 				using(Pen pen = new Pen(Color.Black, 2f)) {
-					g.DrawRectangle(pen, rect);
+					g.DrawRectangle(pen, 1, 1, 585 - 4, 210 - 4);
 					g.DrawRectangle(pen, 226, 128, 159, 43);
 					g.DrawPolygon(pen, _drawPoints);
 				}
@@ -73,13 +86,7 @@ namespace Mesen.GUI.Forms.Config
 			picBackground.Image = bitmap;
 		}
 
-		private void InitButton(Button btn, UInt32 scanCode)
-		{
-			btn.Text = InteropEmu.GetKeyName(scanCode);
-			btn.Tag = scanCode;
-		}
-
-		public void Initialize(KeyMappings mappings)
+		public override void Initialize(KeyMappings mappings)
 		{
 			InitButton(btnA, mappings.A);
 			InitButton(btnB, mappings.B);
@@ -92,69 +99,29 @@ namespace Mesen.GUI.Forms.Config
 			InitButton(btnTurboA, mappings.TurboA);
 			InitButton(btnTurboB, mappings.TurboB);
 			InitButton(btnMicrophone, mappings.Microphone);
+			InitButton(btnL, mappings.LButton);
+			InitButton(btnR, mappings.RButton);
 
-			this.OnChange?.Invoke(this, null);
+			this.OnChange();
 		}
-
-		public MappedKeyType GetKeyType()
+		
+		public override void UpdateKeyMappings()
 		{
-			KeyMappings mappings = GetKeyMappings();
-			MappedKeyType keyType = MappedKeyType.None;
-			if(mappings.A > 0xFFFF || mappings.B > 0xFFFF || mappings.Down > 0xFFFF || mappings.Left > 0xFFFF || mappings.Right > 0xFFFF || mappings.Select > 0xFFFF ||
-				mappings.Start > 0xFFFF || mappings.TurboA > 0xFFFF || mappings.TurboB > 0xFFFF || mappings.TurboSelect > 0xFFFF || mappings.TurboStart > 0xFFFF || mappings.Up > 0xFFFF) {
-				keyType = MappedKeyType.Controller;
-			} else if(mappings.A > 0 || mappings.B > 0 || mappings.Down > 0 || mappings.Left > 0 || mappings.Right > 0 || mappings.Select > 0 ||
-				mappings.Start > 0 || mappings.TurboA > 0 || mappings.TurboB > 0 || mappings.TurboSelect > 0 || mappings.TurboStart > 0 || mappings.Up > 0) {
-				keyType = MappedKeyType.Keyboard;
-			}
-			return keyType;
-		}
-
-		public void ClearKeys()
-		{
-			InitButton(btnA, 0);
-			InitButton(btnB, 0);
-			InitButton(btnStart, 0);
-			InitButton(btnSelect, 0);
-			InitButton(btnUp, 0);
-			InitButton(btnDown, 0);
-			InitButton(btnLeft, 0);
-			InitButton(btnRight, 0);
-			InitButton(btnTurboA, 0);
-			InitButton(btnTurboB, 0);
-			InitButton(btnMicrophone, 0);
-
-			this.OnChange?.Invoke(this, null);
-		}
-
-		private void btnMapping_Click(object sender, EventArgs e)
-		{
-			using(frmGetKey frm = new frmGetKey(true)) {
-				frm.ShowDialog();
-				((Button)sender).Text = frm.ShortcutKey.ToString();
-				((Button)sender).Tag = frm.ShortcutKey.Key1;
-			}
-			this.OnChange?.Invoke(this, null);
-		}
-
-		public KeyMappings GetKeyMappings()
-		{
-			KeyMappings mappings = new KeyMappings() {
-				A = (UInt32)btnA.Tag,
-				B = (UInt32)btnB.Tag,
-				Start = (UInt32)btnStart.Tag,
-				Select = (UInt32)btnSelect.Tag,
-				Up = (UInt32)btnUp.Tag,
-				Down = (UInt32)btnDown.Tag,
-				Left = (UInt32)btnLeft.Tag,
-				Right = (UInt32)btnRight.Tag,
-				TurboA = (UInt32)btnTurboA.Tag,
-				TurboB = (UInt32)btnTurboB.Tag,
-				TurboSelect = 0,
-				TurboStart = 0,
-				Microphone = (UInt32)btnMicrophone.Tag,
-			};
-			return mappings;
+			_mappings.A = (UInt32)btnA.Tag;
+			_mappings.B = (UInt32)btnB.Tag;
+			_mappings.Start = (UInt32)btnStart.Tag;
+			_mappings.Select = (UInt32)btnSelect.Tag;
+			_mappings.Up = (UInt32)btnUp.Tag;
+			_mappings.Down = (UInt32)btnDown.Tag;
+			_mappings.Left = (UInt32)btnLeft.Tag;
+			_mappings.Right = (UInt32)btnRight.Tag;
+			_mappings.TurboA = (UInt32)btnTurboA.Tag;
+			_mappings.TurboB = (UInt32)btnTurboB.Tag;
+			_mappings.TurboSelect = 0;
+			_mappings.TurboStart = 0;
+			_mappings.Microphone = (UInt32)btnMicrophone.Tag;
+			_mappings.LButton = (UInt32)btnL.Tag;
+			_mappings.RButton = (UInt32)btnR.Tag;
 		}
 	}
 }

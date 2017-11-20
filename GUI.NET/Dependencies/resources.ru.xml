@@ -19,6 +19,7 @@
       <Control ID="mnuVsGameConfig">Конфигурация VS</Control>
       <Control ID="mnuInsertCoin1">Вставить монету в слот 1</Control>
       <Control ID="mnuInsertCoin2">Вставить монету в слот 2</Control>
+      <Control ID="mnuInputBarcode">Input Barcode</Control>
       <Control ID="mnuOptions">Опции</Control>
       <Control ID="mnuEmulationSpeed">Скорость эмуляции</Control>
       <Control ID="mnuEmuSpeedNormal">Нормальная (100%)</Control>
@@ -617,7 +618,12 @@
       <Control ID="chkCreateShortcut">Create a shortcut on my desktop</Control>
       <Control ID="btnOk">CONFIRM</Control>
       <Control ID="lblCancel">Cancel</Control>
-    </Form>  
+    </Form>
+    <Form ID="frmInputBarCode" Title="Input Barcode...">
+      <Control ID="lblBarcode">Barcode:</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Отмена</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">Все файлы (*.*)|*.*</Message>
@@ -778,6 +784,30 @@
       <Value ID="StandardController">Стандартный контроллер</Value>
       <Value ID="Zapper">Zapper</Value>
       <Value ID="ArkanoidController">Arkanoid</Value>
+      <Value ID="SnesController">SNES Controller</Value>
+      <Value ID="PowerPad">Power Pad</Value>
+      <Value ID="SnesMouse">SNES Mouse</Value>
+      <Value ID="SuborMouse">Subor Mouse</Value>
+    </Enum>
+    <Enum ID="ExpansionPortDevice">
+      <Value ID="None">Пусто</Value>
+      <Value ID="Zapper">Zapper</Value>
+      <Value ID="FourPlayerAdapter">Адаптер на 4 игрока</Value>
+      <Value ID="ArkanoidController">Arkanoid</Value>
+      <Value ID="OekaKidsTablet">Oeka Kids Tablet</Value>
+      <Value ID="FamilyTrainerMat">Family Trainer</Value>
+      <Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
+      <Value ID="FamilyBasicKeyboard">Family Basic Keyboard</Value>
+      <Value ID="PartyTap">Partytap</Value>
+      <Value ID="Pachinko">Pachinko Controller</Value>
+      <Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
+      <Value ID="JissenMahjong">Jissen Mahjong Controller</Value>
+      <Value ID="SuborKeyboard">Subor Keyboard</Value>
+      <Value ID="BarcodeBattler">Barcode Battler</Value>
+      <Value ID="HoriTrack">Hori Track</Value>
+      <Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
+      <Value ID="AsciiTurboFile">Turbo File</Value>
+      <Value ID="BattleBox">Battle Box</Value>
     </Enum>
     <Enum ID="VideoAspectRatio">
       <Value ID="NoStretching">Default (No Stretching)</Value>
@@ -824,13 +854,6 @@
     <Enum ID="ConsoleType">
       <Value ID="Nes">NES</Value>
       <Value ID="Famicom">Famicom</Value>
-    </Enum>
-    <Enum ID="ExpansionPortDevice">
-      <Value ID="None">Пусто</Value>
-      <Value ID="Zapper">Zapper</Value>
-      <Value ID="FourPlayerAdapter">Адаптер на 4 игрока</Value>
-      <Value ID="ArkanoidController">Arkanoid</Value>
-      <Value ID="OekaKidsTablet">Oeka Kids Tablet</Value>
     </Enum>
     <Enum ID="PpuModel">
       <Value ID="Ppu2C03">RP2C03</Value>

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <assert.h>
 #include <cstring>
+#include <sstream>
 #include "IpsPatcher.h"
 
 class IpsRecord
@@ -67,6 +68,13 @@ bool IpsPatcher::PatchBuffer(string ipsFilepath, vector<uint8_t> &input, vector<
 		return PatchBuffer(ipsFile, input, output);
 	}
 	return false;
+}
+
+bool IpsPatcher::PatchBuffer(vector<uint8_t> &ipsData, vector<uint8_t> &input, vector<uint8_t> &output)
+{
+	std::stringstream ss;
+	ss.write((char*)ipsData.data(), ipsData.size());
+	return PatchBuffer(ss, input, output);
 }
 
 bool IpsPatcher::PatchBuffer(std::istream &ipsFile, vector<uint8_t> &input, vector<uint8_t> &output)

@@ -159,6 +159,7 @@ namespace Mesen.GUI.Forms
 			InitializeVsSystemMenu();
 			InitializeFdsDiskMenu();
 			InitializeEmulationSpeedMenu();
+			InitializeBarcodeReaderMenu();
 
 			UpdateVideoSettings();
 
@@ -415,6 +416,7 @@ namespace Mesen.GUI.Forms
 			if(this.HideMenuStrip) {
 				this.menuStrip.Visible = false;
 			}
+			CursorManager.CaptureMouse();
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -426,6 +428,7 @@ namespace Mesen.GUI.Forms
 					InitializeNsfMode(false, true);
 					InitializeFdsDiskMenu();
 					InitializeVsSystemMenu();
+					InitializeBarcodeReaderMenu();
 					CheatInfo.ApplyCheats();
 					VsConfigInfo.ApplyConfig();
 					UpdateStateMenu(mnuSaveState, true);
@@ -517,11 +520,12 @@ namespace Mesen.GUI.Forms
 		{
 			Func<bool> notClient = () => { return !InteropEmu.IsConnected(); };
 			Func<bool> runningNotClient = () => { return _emuThread != null && !InteropEmu.IsConnected(); };
-			Func<bool> runningNotClientNotMovie = () => { return _emuThread != null && !InteropEmu.IsConnected() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording(); };
+			Func<bool> runningNotClientNotMovie = () => { return _emuThread != null && !InteropEmu.IsConnected() && !InteropEmu.MoviePlaying(); };
 
 			Func<bool> runningNotNsf = () => { return _emuThread != null && !InteropEmu.IsNsf(); };
-			Func<bool> runningFdsNoAutoInsert = () => { return _emuThread != null && InteropEmu.FdsGetSideCount() > 0 && !InteropEmu.FdsIsAutoInsertDiskEnabled() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording(); };
-			Func<bool> runningVsSystem = () => { return _emuThread != null && InteropEmu.IsVsSystem() && !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording(); };
+			Func<bool> runningFdsNoAutoInsert = () => { return _emuThread != null && InteropEmu.FdsGetSideCount() > 0 && !InteropEmu.FdsIsAutoInsertDiskEnabled() && !InteropEmu.MoviePlaying() && !InteropEmu.IsConnected(); };
+			Func<bool> runningVsSystem = () => { return _emuThread != null && InteropEmu.IsVsSystem() && !InteropEmu.MoviePlaying() && !InteropEmu.IsConnected(); };
+			Func<bool> hasBarcodeReader = () => { return InteropEmu.GetAvailableFeatures().HasFlag(ConsoleFeatures.BarcodeReader) && !InteropEmu.IsConnected(); };
 
 			BindShortcut(mnuOpen, EmulatorShortcut.OpenFile);
 			BindShortcut(mnuExit, EmulatorShortcut.Exit);
@@ -539,6 +543,8 @@ namespace Mesen.GUI.Forms
 
 			BindShortcut(mnuInsertCoin1, EmulatorShortcut.InsertCoin1, runningVsSystem);
 			BindShortcut(mnuInsertCoin2, EmulatorShortcut.InsertCoin2, runningVsSystem);
+
+			BindShortcut(mnuInputBarcode, EmulatorShortcut.InputBarcode, hasBarcodeReader);
 
 			BindShortcut(mnuShowFPS, EmulatorShortcut.ToggleFps);
 
@@ -641,6 +647,12 @@ namespace Mesen.GUI.Forms
 					
 				case EmulatorShortcut.InsertCoin1: InteropEmu.VsInsertCoin(0); break;
 				case EmulatorShortcut.InsertCoin2: InteropEmu.VsInsertCoin(1); break;
+
+				case EmulatorShortcut.InputBarcode:
+					using(frmInputBarcode frm = new frmInputBarcode()) {
+						frm.ShowDialog();
+					}
+					break;
 
 				case EmulatorShortcut.TakeScreenshot: InteropEmu.TakeScreenshot(); break;
 				case EmulatorShortcut.LoadRandomGame: LoadRandomGame(); break;
@@ -807,15 +819,22 @@ namespace Mesen.GUI.Forms
 						mnuNetPlayPlayer2.Enabled = (availableControllers & 0x02) == 0x02;
 						mnuNetPlayPlayer3.Enabled = (availableControllers & 0x04) == 0x04;
 						mnuNetPlayPlayer4.Enabled = (availableControllers & 0x08) == 0x08;
+
+						bool isFamicom = InteropEmu.GetConsoleType() == ConsoleType.Famicom;
+						mnuNetPlayPlayer5.Visible = isFamicom;
+						mnuNetPlayPlayer5.Enabled = (availableControllers & 0x10) == 0x10 && InteropEmu.GetExpansionDevice() != InteropEmu.ExpansionPortDevice.FourPlayerAdapter;
+
 						mnuNetPlayPlayer1.Text = ResourceHelper.GetMessage("PlayerNumber", "1") + " (" + ResourceHelper.GetEnumText(InteropEmu.NetPlayGetControllerType(0)) + ")";
 						mnuNetPlayPlayer2.Text = ResourceHelper.GetMessage("PlayerNumber", "2") + " (" + ResourceHelper.GetEnumText(InteropEmu.NetPlayGetControllerType(1)) + ")";
 						mnuNetPlayPlayer3.Text = ResourceHelper.GetMessage("PlayerNumber", "3") + " (" + ResourceHelper.GetEnumText(InteropEmu.NetPlayGetControllerType(2)) + ")";
 						mnuNetPlayPlayer4.Text = ResourceHelper.GetMessage("PlayerNumber", "4") + " (" + ResourceHelper.GetEnumText(InteropEmu.NetPlayGetControllerType(3)) + ")";
+						mnuNetPlayPlayer5.Text = ResourceHelper.GetMessage("ExpansionDevice") + " (" + ResourceHelper.GetEnumText(InteropEmu.GetExpansionDevice()) + ")";
 
 						mnuNetPlayPlayer1.Checked = (currentControllerPort == 0);
 						mnuNetPlayPlayer2.Checked = (currentControllerPort == 1);
 						mnuNetPlayPlayer3.Checked = (currentControllerPort == 2);
 						mnuNetPlayPlayer4.Checked = (currentControllerPort == 3);
+						mnuNetPlayPlayer5.Checked = (currentControllerPort == 4);
 						mnuNetPlaySpectator.Checked = (currentControllerPort == 0xFF);
 
 						mnuNetPlaySpectator.Enabled = true;
@@ -966,6 +985,10 @@ namespace Mesen.GUI.Forms
 				return false;
 			}
 
+			if(keyData == Keys.Escape) {
+				CursorManager.ReleaseMouse();
+			}
+
 			if(this.HideMenuStrip && (keyData & Keys.Alt) == Keys.Alt) {
 				if(this.menuStrip.Visible && !this.menuStrip.ContainsFocus) {
 					this.menuStrip.Visible = false;
@@ -1036,8 +1059,8 @@ namespace Mesen.GUI.Forms
 
 		private void ctrlRenderer_DoubleClick(object sender, EventArgs e)
 		{
-			if(!CursorManager.NeedMouseIcon && !InteropEmu.HasArkanoidPaddle()) {
-				//Disable double clicking (used to switch to fullscreen mode) when using zapper/arkanoid controller
+			if(!CursorManager.NeedMouseIcon && !CursorManager.AllowMouseCapture) {
+				//Disable double clicking (used to switch to fullscreen mode) when using a mouse-controlled device
 				SetFullscreenState(!_fullscreenMode);
 			}
 		}
@@ -1047,6 +1070,7 @@ namespace Mesen.GUI.Forms
 			if(this.HideMenuStrip) {
 				this.menuStrip.Visible = false;
 			}
+			CursorManager.CaptureMouse();
 
 			ctrlRenderer.Focus();
 		}

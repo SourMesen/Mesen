@@ -19,6 +19,7 @@
       <Control ID="mnuVsGameConfig">VSゲームの設定</Control>
       <Control ID="mnuInsertCoin1">インサートコイン 1</Control>
       <Control ID="mnuInsertCoin2">インサートコイン 2</Control>
+      <Control ID="mnuInputCode">バーコードを入力</Control>
       <Control ID="mnuOptions">設定</Control>
       <Control ID="mnuEmulationSpeed">速度</Control>
       <Control ID="mnuEmuSpeedNormal">通常　(100%)</Control>
@@ -613,6 +614,11 @@
       <Control ID="btnOk">確認</Control>
       <Control ID="lblCancel">キャンセル</Control>
     </Form>
+    <Form ID="frmInputBarCode" Title="バーコードを入力">
+      <Control ID="lblBarcode">バーコード：</Control>
+      <Control ID="btnOk">入力</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
   </Forms>
   <Messages>
     <Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
@@ -773,6 +779,30 @@
       <Value ID="StandardController">ファミコンコントローラ</Value>
       <Value ID="Zapper">ガン</Value>
       <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
+      <Value ID="SnesController">スーパーファミコンコントローラ</Value>
+      <Value ID="PowerPad">パワーパッド</Value>
+      <Value ID="SnesMouse">スーパーファミコマウス</Value>
+      <Value ID="SuborMouse">Suborマウス</Value>
+    </Enum>
+    <Enum ID="ExpansionPortDevice">
+      <Value ID="None">なし</Value>
+      <Value ID="Zapper">ガン</Value>
+      <Value ID="FourPlayerAdapter">4-Player Adapter</Value>
+      <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
+      <Value ID="OekaKidsTablet">おえかきっずタブレット</Value>
+      <Value ID="FamilyTrainerMat">ファミリートレーナー</Value>
+      <Value ID="KonamiHyperShot">Konamiハイパーショット</Value>
+      <Value ID="FamilyBasicKeyboard">Family Basicキーボード</Value>
+      <Value ID="PartyTap">Partytap</Value>
+      <Value ID="Pachinko">パチンココントローラ</Value>
+      <Value ID="ExcitingBoxing">エキサイティングボクシングエアバッグ</Value>
+      <Value ID="JissenMahjong">実践麻雀コントローラ</Value>
+      <Value ID="SuborKeyboard">Suborキーボード</Value>
+      <Value ID="BarcodeBattler">バーコードバトラー</Value>
+      <Value ID="HoriTrack">ホリトラク</Value>
+      <Value ID="BandaiHyperShot">Bandaiハイパーショット</Value>
+      <Value ID="AsciiTurboFile">Turbo File</Value>
+      <Value ID="BattleBox">バトルボックス</Value>
     </Enum>
     <Enum ID="VideoAspectRatio">
       <Value ID="NoStretching">デフォルト (1:1)</Value>
@@ -819,13 +849,6 @@
     <Enum ID="ConsoleType">
       <Value ID="Nes">NES</Value>
       <Value ID="Famicom">ファミコン</Value>
-    </Enum>
-    <Enum ID="ExpansionPortDevice">
-      <Value ID="None">なし</Value>
-      <Value ID="Zapper">ガン</Value>
-      <Value ID="FourPlayerAdapter">4-Player Adapter</Value>
-      <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
-      <Value ID="OekaKidsTablet">おえかきっずタブレット</Value>
     </Enum>
     <Enum ID="PpuModel">
       <Value ID="Ppu2C03">RP2C03</Value>

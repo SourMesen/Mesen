@@ -4,6 +4,7 @@
 #include "Console.h"
 #include "VideoRenderer.h"
 #include "SoundMixer.h"
+#include "BaseControlDevice.h"
 
 RewindManager* RewindManager::_instance = nullptr;
 
@@ -15,6 +16,8 @@ RewindManager::RewindManager()
 	AddHistoryBlock();
 
 	MessageManager::RegisterNotificationListener(this);
+	ControlManager::RegisterInputProvider(this);
+	ControlManager::RegisterInputRecorder(this);
 }
 
 RewindManager::~RewindManager()
@@ -23,6 +26,8 @@ RewindManager::~RewindManager()
 		_instance = nullptr;
 	}
 	MessageManager::UnregisterNotificationListener(this);
+	ControlManager::UnregisterInputProvider(this);
+	ControlManager::UnregisterInputRecorder(this);
 }
 
 void RewindManager::ClearBuffer()
@@ -262,21 +267,23 @@ bool RewindManager::ProcessAudio(int16_t * soundBuffer, uint32_t sampleCount, ui
 	}
 }
 
-void RewindManager::RecordInput(uint8_t port, uint8_t input)
+void RewindManager::RecordInput(BaseControlDevice *device)
 {
 	if(EmulationSettings::GetRewindBufferSize() > 0 && _instance && _instance->_rewindState == RewindState::Stopped) {
-		_instance->_currentHistory.InputLogs[port].push_back(input);
+		_instance->_currentHistory.InputLogs[device->GetPort()].push_back(device->GetRawState());
 	}
 }
 
-uint8_t RewindManager::GetInput(uint8_t port)
+bool RewindManager::SetInput(BaseControlDevice *device)
 {
-	if(!_instance->_currentHistory.InputLogs[port].empty()) {
-		uint8_t value = _instance->_currentHistory.InputLogs[port].front();
+	uint8_t port = device->GetPort();
+	if(!_instance->_currentHistory.InputLogs[port].empty() && RewindManager::IsRewinding()) {
+		ControlDeviceState state = _instance->_currentHistory.InputLogs[port].front();
 		_instance->_currentHistory.InputLogs[port].pop_front();
-		return value;
+		device->SetRawState(state);
+		return true;
 	} else {
-		return 0;
+		return false;
 	}
 }
 

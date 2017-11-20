@@ -103,21 +103,6 @@ enum class EqualizerFilterType
 	Chebyshev2 = 3
 };
 
-enum class NesModel
-{
-	Auto = 0,
-	NTSC = 1,
-	PAL = 2,
-	Dendy = 3,
-};
-
-enum class RamPowerOnState
-{
-	AllZeros = 0,
-	AllOnes = 1,
-	Random = 2
-};
-
 enum class ScaleFilterType
 {
 	xBRZ = 0,
@@ -223,20 +208,44 @@ struct NtscFilterSettings
 	double QFilterLength = 0;
 };
 
+enum class RamPowerOnState
+{
+	AllZeros = 0,
+	AllOnes = 1,
+	Random = 2
+};
+
+extern const vector<string> NesModelNames;
+enum class NesModel
+{
+	Auto = 0,
+	NTSC = 1,
+	PAL = 2,
+	Dendy = 3,
+};
+
+extern const vector<string> ConsoleTypeNames;
 enum class ConsoleType
 {
 	Nes = 0,
 	Famicom = 1
 };
 
+extern const vector<string> ControllerTypeNames;
 enum class ControllerType
 {
 	None = 0,
 	StandardController = 1,
 	Zapper = 2,
 	ArkanoidController = 3,
+	SnesController = 4,
+	PowerPad = 5,
+	SnesMouse = 6,
+	SuborMouse = 7,
+	VsZapper = 8
 };
 
+extern const vector<string> ExpansionPortDeviceNames;
 enum class ExpansionPortDevice
 {
 	None = 0,
@@ -244,6 +253,35 @@ enum class ExpansionPortDevice
 	FourPlayerAdapter = 2,
 	ArkanoidController = 3,
 	OekaKidsTablet = 4,
+	FamilyTrainerMat = 5,
+	KonamiHyperShot = 6,
+	FamilyBasicKeyboard = 7,
+	PartyTap = 8,
+	Pachinko = 9,
+	ExcitingBoxing = 10,
+	JissenMahjong = 11,
+	SuborKeyboard = 12,
+	BarcodeBattler = 13,
+	HoriTrack = 14,
+	BandaiHyperShot = 15,
+	AsciiTurboFile = 16,
+	BattleBox = 17,
+};
+
+extern const vector<string> PpuModelNames;
+enum class PpuModel
+{
+	Ppu2C02 = 0,
+	Ppu2C03 = 1,
+	Ppu2C04A = 2,
+	Ppu2C04B = 3,
+	Ppu2C04C = 4,
+	Ppu2C04D = 5,
+	Ppu2C05A = 6,
+	Ppu2C05B = 7,
+	Ppu2C05C = 8,
+	Ppu2C05D = 9,
+	Ppu2C05E = 10
 };
 
 struct KeyMapping
@@ -261,10 +299,20 @@ struct KeyMapping
 	uint32_t TurboStart = 0;
 	uint32_t TurboSelect = 0;
 	uint32_t Microphone = 0;
+	uint32_t LButton = 0;
+	uint32_t RButton = 0;
+
+	uint32_t PowerPadButtons[12] = {};
+	uint32_t FamilyBasicKeyboardButtons[72] = {};
+	uint32_t PartyTapButtons[6] = {};
+	uint32_t PachinkoButtons[2] = {};
+	uint32_t ExcitingBoxingButtons[8] = {};
+	uint32_t JissenMahjongButtons[21] = {};
+	uint32_t SuborKeyboardButtons[99] = {};
 
 	bool HasKeySet()
 	{
-		return A || B || Up || Down || Left || Right || Start || Select || TurboA || TurboB || TurboStart || TurboSelect || Microphone;
+		return true || A || B || Up || Down || Left || Right || Start || Select || TurboA || TurboB || TurboStart || TurboSelect || Microphone || LButton || RButton;
 	}
 };
 
@@ -274,7 +322,25 @@ struct KeyMappingSet
 	KeyMapping Mapping2;
 	KeyMapping Mapping3;
 	KeyMapping Mapping4;
-	uint32_t TurboSpeed;
+	uint32_t TurboSpeed = 0;
+
+	vector<KeyMapping> GetKeyMappingArray()
+	{
+		vector<KeyMapping> keyMappings;
+		if(Mapping1.HasKeySet()) {
+			keyMappings.push_back(Mapping1);
+		}
+		if(Mapping2.HasKeySet()) {
+			keyMappings.push_back(Mapping2);
+		}
+		if(Mapping3.HasKeySet()) {
+			keyMappings.push_back(Mapping3);
+		}
+		if(Mapping4.HasKeySet()) {
+			keyMappings.push_back(Mapping4);
+		}
+		return keyMappings;
+	}
 };
 
 enum class EmulatorShortcut
@@ -305,6 +371,8 @@ enum class EmulatorShortcut
 
 	InsertCoin1,
 	InsertCoin2,
+	
+	InputBarcode,
 
 	TakeScreenshot,
 
@@ -421,21 +489,6 @@ enum class StereoFilter
 	Panning = 2,
 };
 
-enum class PpuModel
-{
-	Ppu2C02 = 0,
-	Ppu2C03 = 1,
-	Ppu2C04A = 2,
-	Ppu2C04B = 3,
-	Ppu2C04C = 4,
-	Ppu2C04D = 5,
-	Ppu2C05A = 6,
-	Ppu2C05B = 7,
-	Ppu2C05C = 8,
-	Ppu2C05D = 9,
-	Ppu2C05E = 10
-};
-
 enum class InputDisplayPosition
 {
 	TopLeft = 0,
@@ -521,6 +574,8 @@ private:
 	static KeyMappingSet _controllerKeys[4];
 	static bool _needControllerUpdate;
 	static uint32_t _zapperDetectionRadius;
+	static double _mouseSensitivity;
+	static int32_t _inputPollScanline;
 
 	static int32_t _nsfAutoDetectSilenceDelay;
 	static int32_t _nsfMoveToNextTrackTime;
@@ -535,6 +590,7 @@ private:
 	static std::unordered_map<uint32_t, vector<KeyCombination>> _shortcutSupersets[2];
 
 	static RamPowerOnState _ramPowerOnState;
+	static uint32_t _dipSwitches;
 	
 	static SimpleLock _shortcutLock;
 	static SimpleLock _equalizerLock;
@@ -608,6 +664,11 @@ public:
 	static bool IsPaused()
 	{
 		return (CheckFlag(EmulationFlags::Paused) || (CheckFlag(EmulationFlags::InBackground) && CheckFlag(EmulationFlags::PauseWhenInBackground) && !GameClient::Connected())) && !CheckFlag(EmulationFlags::DebuggerWindowEnabled);
+	}
+
+	static bool InputEnabled()
+	{
+		return !EmulationSettings::CheckFlag(EmulationFlags::InBackground) || EmulationSettings::CheckFlag(EmulationFlags::AllowBackgroundInput);
 	}
 
 	static void SetNesModel(NesModel model)
@@ -1172,6 +1233,16 @@ public:
 		}
 	}
 
+	static void SetMouseSensitivity(double sensitivity)
+	{
+		_mouseSensitivity = sensitivity;
+	}
+
+	static double GetMouseSensitivity()
+	{
+		return _mouseSensitivity;
+	}
+
 	static void SetZapperDetectionRadius(uint32_t detectionRadius)
 	{
 		_zapperDetectionRadius = detectionRadius;
@@ -1180,6 +1251,16 @@ public:
 	static uint32_t GetZapperDetectionRadius()
 	{
 		return _zapperDetectionRadius;
+	}
+
+	static void SetInputPollScanline(int32_t scanline)
+	{
+		_inputPollScanline = scanline;
+	}
+
+	static int32_t GetInputPollScanline()
+	{
+		return _inputPollScanline;
 	}
 
 	static bool HasZapper()
@@ -1244,5 +1325,15 @@ public:
 	{
 		showMessage = _autoSaveNotify;
 		return _autoSaveDelay;
+	}
+
+	static void SetDipSwitches(uint32_t dipSwitches)
+	{
+		_dipSwitches = dipSwitches;
+	}
+
+	static uint32_t GetDipSwitches()
+	{
+		return _dipSwitches;
 	}
 };

@@ -44,11 +44,13 @@ namespace Mesen.GUI.Forms.Config
 
 			UpdateConflictWarning();
 		}
-		
+
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
 			base.OnFormClosed(e);
-			InputInfo.ApplyConfig();
+			if(DialogResult == DialogResult.OK) {
+				InputInfo.ApplyConfig();
+			}
 		}
 
 		protected override void AfterUpdateUI()
@@ -63,13 +65,25 @@ namespace Mesen.GUI.Forms.Config
 			bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
 			bool p3and4visible = (isNes && chkFourScore.Checked) || (!isNes && ((InputInfo)Entity).ExpansionPortDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter);
 
-			List<InteropEmu.ControllerType> controllerTypes = new List<InteropEmu.ControllerType>(new InteropEmu.ControllerType[] { InteropEmu.ControllerType.StandardController });
+			List<InteropEmu.ControllerType> controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.StandardController };
+			if(!isNes) {
+				controllerTypes.Add(InteropEmu.ControllerType.SnesMouse);
+			}
 			SetAvailableControllerTypes(cboPlayer3, controllerTypes.ToArray(), false);
 			SetAvailableControllerTypes(cboPlayer4, controllerTypes.ToArray(), false);
 
-			if(isNes && !chkFourScore.Checked) {
-				controllerTypes.Add(InteropEmu.ControllerType.Zapper);
-				controllerTypes.Add(InteropEmu.ControllerType.ArkanoidController);
+			if(isNes) {
+				if(!chkFourScore.Checked) {
+					controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.StandardController };
+					controllerTypes.Add(InteropEmu.ControllerType.ArkanoidController);
+					controllerTypes.Add(InteropEmu.ControllerType.PowerPad);
+					controllerTypes.Add(InteropEmu.ControllerType.Zapper);
+					controllerTypes.Add(InteropEmu.ControllerType.SnesController);
+				}
+				controllerTypes.Add(InteropEmu.ControllerType.SnesMouse);
+				controllerTypes.Add(InteropEmu.ControllerType.SuborMouse);
+			} else {
+				controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.StandardController };
 			}
 
 			bool isOriginalFamicom = !isNes && !ConfigManager.Config.EmulationInfo.UseNes101Hvc101Behavior;
@@ -185,7 +199,8 @@ namespace Mesen.GUI.Forms.Config
 				UpdateInterface();
 			}
 
-			btnSetupExp.Enabled = cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Zapper));
+			btnSetupExp.Enabled = cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Zapper)) ||
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.FamilyTrainerMat));
 		}
 
 		private void cboPlayerController_SelectedIndexChanged(object sender, EventArgs e)
@@ -193,7 +208,10 @@ namespace Mesen.GUI.Forms.Config
 			object selectedItem = ((ComboBox)sender).SelectedItem;
 
 			bool enableButton = selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController)) ||
-										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper));
+										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper)) ||
+										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SnesController)) ||
+										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.PowerPad));
+
 			if(sender == cboPlayer1) {
 				btnSetupP1.Enabled = enableButton;
 			} else if(sender == cboPlayer2) {
@@ -211,31 +229,49 @@ namespace Mesen.GUI.Forms.Config
 			int index = 0;
 			object selectedItem = null;
 			if(sender == btnSetupP1) {
-				selectedItem = cboPlayer1.SelectedItem;
+				selectedItem = cboPlayer1.GetEnumValue<InteropEmu.ControllerType>();
 				index = 0;
 			} else if(sender == btnSetupP2) {
-				selectedItem = cboPlayer2.SelectedItem;
+				selectedItem = cboPlayer2.GetEnumValue<InteropEmu.ControllerType>();
 				index = 1;
 			} else if(sender == btnSetupP3) {
-				selectedItem = cboPlayer3.SelectedItem;
+				selectedItem = cboPlayer3.GetEnumValue<InteropEmu.ControllerType>();
 				index = 2;
 			} else if(sender == btnSetupP4) {
-				selectedItem = cboPlayer4.SelectedItem;
+				selectedItem = cboPlayer4.GetEnumValue<InteropEmu.ControllerType>();
 				index = 3;
 			} else if(sender == btnSetupExp) {
-				selectedItem = cboExpansionPort.SelectedItem;
+				selectedItem = cboExpansionPort.GetEnumValue<InteropEmu.ExpansionPortDevice>();
 				index = 0;
 			}
 
 			Form frm = null;
 			InputInfo inputInfo = (InputInfo)Entity;
-			if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController))) {
-				frm = new frmControllerConfig(inputInfo.Controllers[index], index, cboConsoleType.GetEnumValue<ConsoleType>());
-			} else if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper))) {
-				frm = new frmZapperConfig(inputInfo.Zapper);
-			} else if(selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Zapper))) {
-				frm = new frmZapperConfig(inputInfo.Zapper);
-			}
+			if(selectedItem is InteropEmu.ControllerType) {
+				InteropEmu.ControllerType type = (InteropEmu.ControllerType)selectedItem;
+				switch(type) {
+					case InteropEmu.ControllerType.StandardController:
+					case InteropEmu.ControllerType.SnesController:
+					case InteropEmu.ControllerType.PowerPad:
+						frm = new frmControllerConfig(inputInfo.Controllers[index], index, cboConsoleType.GetEnumValue<ConsoleType>(), type);
+						break;
+
+					case InteropEmu.ControllerType.Zapper:
+						frm = new frmZapperConfig(inputInfo.Zapper);
+						break;
+				}
+			} else if(selectedItem is InteropEmu.ExpansionPortDevice) {
+				InteropEmu.ExpansionPortDevice device = (InteropEmu.ExpansionPortDevice)selectedItem;
+				switch(device) {
+					case InteropEmu.ExpansionPortDevice.FamilyTrainerMat:
+						frm = new frmControllerConfig(inputInfo.Controllers[index], index, cboConsoleType.GetEnumValue<ConsoleType>(), InteropEmu.ControllerType.PowerPad);
+						break;
+
+					case InteropEmu.ExpansionPortDevice.Zapper:
+						frm = new frmZapperConfig(inputInfo.Zapper);
+						break;
+				}
+			}				
 
 			if(frm != null) {
 				Button btn = (Button)sender;
@@ -300,12 +336,19 @@ namespace Mesen.GUI.Forms.Config
 
 			if(pnlConflictWarning.Visible != needWarning) {
 				pnlConflictWarning.Visible = needWarning;
-				btnSetupP1.Image = portConflicts[0] ? Properties.Resources.Warning : null;
-				btnSetupP2.Image = portConflicts[1] ? Properties.Resources.Warning : null;
-				btnSetupP3.Image = portConflicts[2] ? Properties.Resources.Warning : null;
-				btnSetupP4.Image = portConflicts[3] ? Properties.Resources.Warning : null;
-
 				this.Height = (int)((needWarning ? 360 : 310) * _yFactor);
+			}
+			if(portConflicts[0] == (btnSetupP1.Image == null)) {
+				btnSetupP1.Image = portConflicts[0] ? Properties.Resources.Warning : null;
+			}
+			if(portConflicts[0] == (btnSetupP2.Image == null)) {
+				btnSetupP2.Image = portConflicts[1] ? Properties.Resources.Warning : null;
+			}
+			if(portConflicts[2] == (btnSetupP3.Image == null)) {
+				btnSetupP3.Image = portConflicts[2] ? Properties.Resources.Warning : null;
+			}
+			if(portConflicts[3] == (btnSetupP4.Image == null)) {
+				btnSetupP4.Image = portConflicts[3] ? Properties.Resources.Warning : null;
 			}
 		}
 

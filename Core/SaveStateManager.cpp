@@ -147,7 +147,7 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 			}
 		}
 
-		Console::LoadState(stream);
+		Console::LoadState(stream, fileFormatVersion);
 
 		return true;
 	}
@@ -192,7 +192,8 @@ void SaveStateManager::SaveRecentGame(string romName, string romPath, string pat
 {
 	if(!EmulationSettings::CheckFlag(EmulationFlags::ConsoleMode) && !EmulationSettings::CheckFlag(EmulationFlags::DisableGameSelectionScreen) && Console::GetRomFormat() != RomFormat::Nsf) {
 		string filename = FolderUtilities::GetFilename(Console::GetRomName(), false) + ".rgd";
-		ZipWriter writer(FolderUtilities::CombinePath(FolderUtilities::GetRecentGamesFolder(), filename));
+		ZipWriter writer;
+		writer.Initialize(FolderUtilities::CombinePath(FolderUtilities::GetRecentGamesFolder(), filename));
 
 		std::stringstream pngStream;
 		VideoDecoder::GetInstance()->TakeScreenshot(pngStream);
@@ -207,6 +208,7 @@ void SaveStateManager::SaveRecentGame(string romName, string romPath, string pat
 		romInfoStream << romPath << std::endl;
 		romInfoStream << patchPath << std::endl;
 		writer.AddFile(romInfoStream, "RomInfo.txt");
+		writer.Save();
 	}
 }
 
@@ -215,8 +217,9 @@ void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 	ZipReader reader;
 	reader.LoadArchive(filename);
 
-	std::stringstream romInfoStream = reader.GetStream("RomInfo.txt");
-	std::stringstream stateStream = reader.GetStream("Savestate.mst");
+	stringstream romInfoStream, stateStream;
+	reader.GetStream("RomInfo.txt", romInfoStream);
+	reader.GetStream("Savestate.mst", stateStream);
 
 	string romName, romPath, patchPath;
 	std::getline(romInfoStream, romName);

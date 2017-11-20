@@ -51,6 +51,8 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.InsertCoin2,
 				EmulatorShortcut.VsServiceButton,
 
+				EmulatorShortcut.InputBarcode,
+
 				EmulatorShortcut.TakeScreenshot,
 				EmulatorShortcut.LoadRandomGame,
 				EmulatorShortcut.RunSingleFrame,

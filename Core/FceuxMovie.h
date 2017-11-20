@@ -11,5 +11,5 @@ private:
 	bool InitializeData(stringstream &filestream);
 
 public:
-	bool Play(stringstream &filestream, bool autoLoadRom) override;
+	bool Play(VirtualFile &file) override;
 };

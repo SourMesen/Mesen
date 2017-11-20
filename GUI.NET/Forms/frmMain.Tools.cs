@@ -214,6 +214,11 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.NetPlaySelectController(3);
 		}
+		
+		private void mnuNetPlayPlayer5_Click(object sender, EventArgs e)
+		{
+			InteropEmu.NetPlaySelectController(4);
+		}
 
 		private void mnuNetPlaySpectator_Click(object sender, EventArgs e)
 		{

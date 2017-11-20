@@ -4,95 +4,68 @@
 #include "MesenMovie.h"
 #include "BizhawkMovie.h"
 #include "FceuxMovie.h"
+#include "MovieRecorder.h"
+#include "VirtualFile.h"
 
-shared_ptr<IMovie> MovieManager::_instance;
+shared_ptr<IMovie> MovieManager::_player;
+shared_ptr<MovieRecorder> MovieManager::_recorder;
 
 void MovieManager::Record(string filename, bool reset)
 {
-	shared_ptr<IMovie> movie(new MesenMovie());
-	movie->Record(filename, reset);
-	_instance = movie;
-}
-
-void MovieManager::Play(string filename)
-{
-	ifstream file(filename, ios::in | ios::binary);
-	if(file.good()) {
-		std::stringstream ss;
-		ss << file.rdbuf();
-		file.close();
-		if(MovieManager::Play(ss, true)) {
-			MessageManager::DisplayMessage("Movies", "MoviePlaying", FolderUtilities::GetFilename(filename, true));
-		}
+	shared_ptr<MovieRecorder> recorder(new MovieRecorder());
+	if(recorder->Record(filename, reset)) {
+		_recorder = recorder;
 	}
 }
 
-bool MovieManager::Play(std::stringstream &filestream, bool autoLoadRom)
+void MovieManager::Play(VirtualFile file)
 {
-	char header[3] = { };
-	filestream.read(header, 3);
-	filestream.seekg(0, ios::beg);
+	vector<uint8_t> fileData;
+	if(file.IsValid() && file.ReadFile(fileData)) {
+		shared_ptr<IMovie> player;
+		if(memcmp(fileData.data(), "MMO", 3) == 0) {
+			//Old movie format, no longer supported
+			MessageManager::DisplayMessage("Movies", "MovieIncompatibleVersion");
+		} else if(memcmp(fileData.data(), "PK", 2) == 0) {
+			//Mesen or Bizhawk movie
+			ZipReader reader;
+			reader.LoadArchive(fileData);
 
-	if(memcmp(header, "MMO", 3) == 0) {
-		shared_ptr<IMovie> movie(new MesenMovie());
-		if(movie->Play(filestream, autoLoadRom)) {
-			_instance = movie;
-			return true;
+			vector<string> files = reader.GetFileList();
+			if(std::find(files.begin(), files.end(), "GameSettings.txt") != files.end()) {
+				player.reset(new MesenMovie());
+			} else {
+				player.reset(new BizhawkMovie());
+			}
+		} else if(memcmp(fileData.data(), "ver", 3) == 0) {
+			player.reset(new FceuxMovie());
 		}
-	} else if(memcmp(header, "PK", 2) == 0) {
-		shared_ptr<IMovie> movie(new BizhawkMovie());
-		if(movie->Play(filestream, autoLoadRom)) {
-			_instance = movie;
-			return true;
-		}
-	} else if(memcmp(header, "ver", 3) == 0) {
-		shared_ptr<IMovie> movie(new FceuxMovie());
-		if(movie->Play(filestream, autoLoadRom)) {
-			_instance = movie;
-			return true;
+
+		if(player && player->Play(file)) {
+			_player = player;
+
+			MessageManager::DisplayMessage("Movies", "MoviePlaying", file.GetFileName());
 		}
 	}
-
-	return false;
 }
 
 void MovieManager::Stop()
 {
-	if(_instance && _instance->IsPlaying()) {
-		MessageManager::DisplayMessage("Movies", "MovieEnded");
+	_player.reset();
+
+	if(_recorder) {
+		_recorder->Stop();
+		_recorder.reset();
 	}
-	_instance.reset();
 }
 
 bool MovieManager::Playing()
 {
-	if(_instance) {
-		return _instance->IsPlaying();
-	} else {
-		return false;
-	}
+	shared_ptr<IMovie> player = _player;
+	return player && player->IsPlaying();
 }
 
 bool MovieManager::Recording()
 {
-	if(_instance) {
-		return _instance->IsRecording();
-	} else {
-		return false;
-	}
-}
-
-void MovieManager::RecordState(uint8_t port, uint8_t value)
-{
-	if(_instance) {
-		_instance->RecordState(port, value);
-	}
-}
-
-uint8_t MovieManager::GetState(uint8_t port)
-{
-	if(_instance) {
-		return _instance->GetState(port);
-	}
-	return 0;
+	return _recorder != nullptr;
 }

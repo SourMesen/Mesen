@@ -5,6 +5,8 @@
 #include "VideoDecoder.h"
 #include "RewindManager.h"
 
+class ControlManager;
+
 class HdPpu : public PPU
 {
 private:
@@ -126,7 +128,7 @@ protected:
 	}
 
 public:
-	HdPpu(BaseMapper* mapper, uint32_t version) : PPU(mapper)
+	HdPpu(BaseMapper* mapper, ControlManager* controlManager, uint32_t version) : PPU(mapper, controlManager)
 	{
 		_screenTileBuffers[0] = new HdPpuPixelInfo[256 * 240];
 		_screenTileBuffers[1] = new HdPpuPixelInfo[256 * 240];

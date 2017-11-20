@@ -10,6 +10,7 @@
 enum class NesModel;
 
 class BaseMapper;
+class ControlManager;
 
 enum PPURegisters
 {
@@ -100,6 +101,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		int32_t _oamDecayCycles[0x40];
 		bool _enableOamDecay;
+
+		ControlManager *_controlManager;
 		
 		void UpdateStatusFlag();
 
@@ -158,7 +161,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		static const uint32_t PixelCount = 256*240;
 		static const uint32_t OutputBufferSize = 256*240*2;
 
-		PPU(BaseMapper *mapper);
+		PPU(BaseMapper *mapper, ControlManager *controlManager);
 		virtual ~PPU();
 
 		void Reset();

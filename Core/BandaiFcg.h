@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseMapper.h"
 #include "CPU.h"
+#include "MemoryManager.h"
+#include "DatachBarcodeReader.h"
 
 class BandaiFcg : public BaseMapper
 {
@@ -11,6 +13,7 @@ private:
 	uint8_t _prgPage;
 	uint8_t _prgBankSelect;
 	uint8_t _chrRegs[8];
+	shared_ptr<DatachBarcodeReader> _barcodeReader;
 
 protected:
 	uint16_t GetPRGPageSize() override { return 0x4000; }
@@ -18,6 +21,7 @@ protected:
 	uint16_t RegisterStartAddress() override { return 0x6000; }
 	uint16_t RegisterEndAddress() override { return 0xFFFF; }
 	bool AllowRegisterRead() override { return true; }
+	ConsoleFeatures GetAvailableFeatures() override { return _mapperID == 157 ? ConsoleFeatures::BarcodeReader : ConsoleFeatures::None; }
 
 	void InitMapper() override
 	{
@@ -27,14 +31,22 @@ protected:
 		_irqReload = 0;
 		_prgPage = 0;
 		_prgBankSelect = 0;
+		
+		if(_mapperID == 157) {
+			//"Mapper 157 is used for Datach Joint ROM System boards"
+			_barcodeReader.reset(new DatachBarcodeReader());
+			_mapperControlDevice = _barcodeReader;
+		}
 
-		//Only allow reads from 0x6000 to 0xFFFF
+		//Only allow reads from 0x6000 to 0x7FFF
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
 
 		if(_mapperID != 16 || GetPRGPageCount() >= 0x20) {
 			//"For iNES Mapper 153 (with SRAM), the writeable ports must only be mirrored across $8000-$FFFF."
 			//"Mappers 157 and 159 do not need to support the FCG-1 and -2 and so should only mirror the ports across $8000-$FFFF."
-			RemoveRegisterRange(0x6000, 0x7FFF, MemoryOperation::Any);
+
+			//TODO: Check if this is needed
+			//RemoveRegisterRange(0x6000, 0x7FFF, MemoryOperation::Any);
 		}
 
 		//Last bank
@@ -61,11 +73,11 @@ protected:
 			_irqCounter--;
 		}
 	}
-
+	
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		//Pretend EEPROM data is always 0
-		return 0;
+		return _barcodeReader->GetOutput() | MemoryManager::GetOpenBus(0xE7);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

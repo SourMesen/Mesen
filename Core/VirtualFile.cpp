@@ -110,9 +110,8 @@ string VirtualFile::GetFileName()
 
 string VirtualFile::GetSha1Hash()
 {
-	string hash = SHA1::GetHash(_data);
-	std::transform(hash.begin(), hash.end(), hash.begin(), ::tolower);
-	return hash;
+	LoadFile();
+	return SHA1::GetHash(_data);
 }
 
 bool VirtualFile::ReadFile(vector<uint8_t>& out)
@@ -136,7 +135,7 @@ bool VirtualFile::ReadFile(std::stringstream & out)
 	return false;
 }
 
-bool VirtualFile::ApplyPatch(VirtualFile & patch)
+bool VirtualFile::ApplyPatch(VirtualFile &patch)
 {
 	//Apply patch file
 	bool result = false;
