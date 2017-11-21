@@ -79,9 +79,6 @@ MouseMovement KeyManager::GetMouseMovement()
 {
 	double factor = EmulationSettings::GetVideoScale() * EmulationSettings::GetMouseSensitivity();
 	MouseMovement mov;
-	int16_t x = _xMouseMovement;
-	int16_t y = _yMouseMovement;
-
 	mov.dx = (int16_t)(_xMouseMovement / factor);
 	mov.dy = (int16_t)(_yMouseMovement / factor);
 	_xMouseMovement -= (int16_t)(mov.dx * factor);

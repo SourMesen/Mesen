@@ -39,7 +39,7 @@ public:
 	{
 	}
 
-	uint8_t ReadRAM(uint16_t addr)
+	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4017) {
 			if(_strobe) {
@@ -56,7 +56,7 @@ public:
 		return 0;
 	}
 
-	void WriteRAM(uint16_t addr, uint8_t value)
+	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		_strobe = (value & 0x01) == 0x01;
 		bool shift = ((value >> 1) & 0x01) == 0x01;

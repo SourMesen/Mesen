@@ -41,7 +41,7 @@ public:
 		SaveBattery();
 	}
 
-	void SaveBattery()
+	void SaveBattery() override
 	{
 		BatteryManager::SaveBattery(".bb", (uint8_t*)_data, BattleBox::FileSize);
 	}

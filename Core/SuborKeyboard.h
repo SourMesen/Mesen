@@ -71,6 +71,12 @@ protected:
 		Stream(_row, _column, _enabled);
 	}
 
+	void RefreshStateBuffer() override
+	{
+		_row = 0;
+		_column = 0;
+	}	
+
 public:
 	SuborKeyboard(KeyMappingSet keyMappings) : BaseControlDevice(BaseControlDevice::ExpDevicePort, keyMappings)
 	{
@@ -88,12 +94,6 @@ public:
 			}
 		}
 		return 0;
-	}
-
-	void RefreshStateBuffer()
-	{
-		_row = 0;
-		_column = 0;
 	}
 
 	void WriteRAM(uint16_t addr, uint8_t value) override

@@ -35,12 +35,12 @@ public:
 	{
 	}
 
-	void WriteRAM(uint16_t addr, uint8_t value)
+	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		StrobeProcessWrite(value);
 	}
 
-	uint8_t ReadRAM(uint16_t addr)
+	uint8_t ReadRAM(uint16_t addr) override
 	{
 		uint8_t output = 0;
 		if((addr == 0x4016 && (_port & 0x01) == 0) || (addr == 0x4017 && (_port & 0x01) == 1)) {
@@ -68,8 +68,8 @@ public:
 		uint32_t upFlag = mov.dy < 0 ? 0x80 : 0;
 		uint32_t leftFlag = mov.dx < 0 ? 0x80 : 0;
 
-		mov.dx = std::min(std::abs(mov.dx), 31);
-		mov.dy = std::min(std::abs(mov.dy), 31);
+		mov.dx = std::min<int16_t>(std::abs(mov.dx), 31);
+		mov.dy = std::min<int16_t>(std::abs(mov.dy), 31);
 
 		if(mov.dx <= 1 && mov.dy <= 1) {
 			//1-byte packet

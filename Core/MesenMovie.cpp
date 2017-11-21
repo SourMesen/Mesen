@@ -142,7 +142,7 @@ void MesenMovie::ParseSettings(stringstream &data)
 
 		if(!line.empty()) {
 			size_t index = line.find_first_of(' ');
-			if(index >= 0) {
+			if(index != string::npos) {
 				string name = line.substr(0, index);
 				string value = line.substr(index + 1);
 
@@ -191,6 +191,14 @@ void MesenMovie::ApplySettings()
 	ControllerType controller3 = FromString(LoadString(_settings, MovieKeys::Controller3), ControllerTypeNames, ControllerType::None);
 	ControllerType controller4 = FromString(LoadString(_settings, MovieKeys::Controller4), ControllerTypeNames, ControllerType::None);
 	ExpansionPortDevice expansionDevice = FromString<ExpansionPortDevice>(LoadString(_settings, MovieKeys::ExpansionDevice), ExpansionPortDeviceNames, ExpansionPortDevice::None);
+
+	EmulationSettings::SetNesModel(region);
+	EmulationSettings::SetConsoleType(consoleType);
+	EmulationSettings::SetControllerType(0, controller1);
+	EmulationSettings::SetControllerType(1, controller2);
+	EmulationSettings::SetControllerType(2, controller3);
+	EmulationSettings::SetControllerType(3, controller4);
+	EmulationSettings::SetExpansionDevice(expansionDevice);
 
 	uint32_t ramPowerOnState = LoadInt(_settings, MovieKeys::RamPowerOnState);
 	if(ramPowerOnState == 0xFF) {

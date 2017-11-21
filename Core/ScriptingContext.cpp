@@ -142,11 +142,6 @@ void ScriptingContext::SaveState()
 	if(_saveSlot >= 0) {
 		stringstream ss;
 		SaveStateManager::SaveState(ss);
-
-		ss.seekg(0, std::ios::end);
-		uint32_t fileSize = (uint32_t)ss.tellg();
-		ss.seekg(0, std::ios::beg);
-		
 		_saveSlotData[_saveSlot] = ss.str();
 		_saveSlot = -1;
 	}

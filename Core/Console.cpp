@@ -265,7 +265,7 @@ string Console::GetRomName()
 
 VirtualFile Console::GetPatchFile()
 {
-	return Instance ? Instance->_patchFilename : VirtualFile();
+	return Instance ? (VirtualFile)Instance->_patchFilename : VirtualFile();
 }
 
 RomFormat Console::GetRomFormat()

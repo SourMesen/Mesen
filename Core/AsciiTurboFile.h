@@ -34,7 +34,7 @@ public:
 		SaveBattery();
 	}
 
-	void SaveBattery()
+	void SaveBattery() override
 	{
 		BatteryManager::SaveBattery(".tf", _data, AsciiTurboFile::FileSize);
 	}

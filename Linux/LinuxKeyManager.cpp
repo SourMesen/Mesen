@@ -111,7 +111,7 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "", 115, "End", "" },
 	{ "", 116, "Down Arrow", "" },
 	{ "", 117, "Page Down", "" },
-	{ "", 118, "Ins", "" },
+	{ "", 118, "Insert", "" },
 	{ "", 119, "Delete", "" },
 	{ "", 121, "XF86AudioMute", "" },
 	{ "", 122, "XF86AudioLowerVolume", "" },

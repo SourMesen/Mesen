@@ -20,7 +20,6 @@ protected:
 	void InternalSetStateFromInput() override
 	{
 		if(EmulationSettings::InputEnabled()) {
-			MousePosition pos = KeyManager::GetMousePosition();
 			SetPressedState(Buttons::Fire, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
 		}
 

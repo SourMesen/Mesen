@@ -40,7 +40,7 @@ public:
 
 	bool Play(VirtualFile &file) override;
 	bool SetInput(BaseControlDevice* device) override;
-	bool IsPlaying();
+	bool IsPlaying() override;
 
 	// Inherited via IBatteryProvider
 	virtual vector<uint8_t> LoadBattery(string extension) override;

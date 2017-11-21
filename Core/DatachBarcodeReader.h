@@ -67,7 +67,7 @@ public:
 		}
 	}
 
-	void InputBarcode(uint64_t barcode, uint32_t digitCount)
+	void InputBarcode(uint64_t barcode, uint32_t digitCount) override
 	{
 		_newBarcode = barcode;
 		_newBarcodeDigitCount = digitCount;
@@ -189,12 +189,12 @@ public:
 		}
 	}
 
-	uint8_t ReadRAM(uint16_t addr)
+	uint8_t ReadRAM(uint16_t addr) override
 	{
 		return 0;
 	}
 
-	void WriteRAM(uint16_t addr, uint8_t value)
+	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 	}
 };

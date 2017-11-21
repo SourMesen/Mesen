@@ -21,7 +21,7 @@ public:
 	{
 	}
 
-	uint8_t ReadRAM(uint16_t addr)
+	uint8_t ReadRAM(uint16_t addr) override
 	{
 		uint8_t output = 0;
 		if(addr == 0x4016) {

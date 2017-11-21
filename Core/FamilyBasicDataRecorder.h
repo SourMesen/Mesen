@@ -8,7 +8,7 @@
 class FamilyBasicDataRecorder : public BaseControlDevice
 {
 private:
-	const uint32_t SamplingRate = 88;
+	static const uint32_t SamplingRate = 88;
 	vector<uint8_t> _saveData;
 	bool _enabled = false;
 	int32_t _lastCycle = -1;
@@ -34,7 +34,7 @@ public:
 					_readStartCycle = CPU::GetCycleCount();
 				}
 
-				int readPos = (CPU::GetCycleCount() - _readStartCycle) / 88;
+				int readPos = (CPU::GetCycleCount() - _readStartCycle) / FamilyBasicDataRecorder::SamplingRate;
 
 				if((int32_t)_saveData.size() > readPos) {
 					uint8_t value = (_saveData[readPos] & 0x01) << 1;

@@ -47,7 +47,7 @@ public:
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 
-	bool SetInput(BaseControlDevice *device);
+	bool SetInput(BaseControlDevice *device) override;
 	void InitControlDevice();
 	void SendInput();
 
