@@ -240,7 +240,7 @@ void ControlManager::UpdateInputState()
 
 	auto lock = _deviceLock.AcquireSafe();
 
-	string log = "";
+	//string log = "";
 	for(shared_ptr<BaseControlDevice> &device : _controlDevices) {
 		device->ClearState();
 
@@ -258,24 +258,18 @@ void ControlManager::UpdateInputState()
 		}
 
 		device->OnAfterSetState();
-
-		shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
-		if(debugger) {
-			debugger->ProcessEvent(EventType::InputPolled);
-		}
-
-		log += "|" + device->GetTextState();
-		
-		for(IInputRecorder* recorder : _inputRecorders) {
-			recorder->RecordInput(device.get());
-		}
+		//log += "|" + device->GetTextState();
 	}
-	
+
+	shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+	if(debugger) {
+		debugger->ProcessEvent(EventType::InputPolled);
+	}
+
 	for(IInputRecorder* recorder : _inputRecorders) {
-		recorder->EndFrame();
+		recorder->RecordInput(_controlDevices);
 	}
-
-	MessageManager::Log(log);
+	//MessageManager::Log(log);
 }
 
 uint32_t ControlManager::GetLagCounter()

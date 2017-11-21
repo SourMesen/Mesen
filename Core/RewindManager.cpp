@@ -267,10 +267,12 @@ bool RewindManager::ProcessAudio(int16_t * soundBuffer, uint32_t sampleCount, ui
 	}
 }
 
-void RewindManager::RecordInput(BaseControlDevice *device)
+void RewindManager::RecordInput(vector<shared_ptr<BaseControlDevice>> devices)
 {
 	if(EmulationSettings::GetRewindBufferSize() > 0 && _instance && _instance->_rewindState == RewindState::Stopped) {
-		_instance->_currentHistory.InputLogs[device->GetPort()].push_back(device->GetRawState());
+		for(shared_ptr<BaseControlDevice> &device : devices) {
+			_instance->_currentHistory.InputLogs[device->GetPort()].push_back(device->GetRawState());
+		}
 	}
 }
 

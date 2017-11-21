@@ -1,10 +1,10 @@
 #pragma once
+#include "stdafx.h"
 
 class BaseControlDevice;
 
 class IInputRecorder
 {
 public:
-	virtual void RecordInput(BaseControlDevice *device) = 0;
-	virtual void EndFrame() { }
+	virtual void RecordInput(vector<shared_ptr<BaseControlDevice>> devices) = 0;
 };

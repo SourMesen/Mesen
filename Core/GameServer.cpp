@@ -85,12 +85,14 @@ bool GameServer::SetInput(BaseControlDevice *device)
 	return false;
 }
 
-void GameServer::RecordInput(BaseControlDevice *device)
+void GameServer::RecordInput(vector<shared_ptr<BaseControlDevice>> devices)
 {
-	for(shared_ptr<GameServerConnection> connection : _openConnections) {
-		if(!connection->ConnectionError()) {
-			//Send movie stream
-			connection->SendMovieData(device->GetPort(), device->GetRawState());
+	for(shared_ptr<BaseControlDevice> &device : devices) {
+		for(shared_ptr<GameServerConnection> connection : _openConnections) {
+			if(!connection->ConnectionError()) {
+				//Send movie stream
+				connection->SendMovieData(device->GetPort(), device->GetRawState());
+			}
 		}
 	}
 }

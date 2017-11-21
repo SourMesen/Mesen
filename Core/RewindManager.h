@@ -51,7 +51,7 @@ public:
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	void ProcessEndOfFrame();
 
-	void RecordInput(BaseControlDevice *device) override;
+	void RecordInput(vector<shared_ptr<BaseControlDevice>> devices) override;
 	bool SetInput(BaseControlDevice *device) override;
 
 	static void StartRewinding(bool forDebugger = false);

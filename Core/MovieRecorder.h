@@ -31,8 +31,7 @@ public:
 	bool Record(string filename, bool reset);
 	bool Stop();
 
-	void RecordInput(BaseControlDevice *device) override;
-	void EndFrame() override;
+	void RecordInput(vector<shared_ptr<BaseControlDevice>> devices) override;
 
 	// Inherited via IBatteryRecorder
 	virtual void OnLoadBattery(string extension, vector<uint8_t> batteryData) override;

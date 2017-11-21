@@ -47,5 +47,5 @@ public:
 	static list<shared_ptr<GameServerConnection>> GetConnectionList();
 
 	bool SetInput(BaseControlDevice *device) override;
-	void RecordInput(BaseControlDevice *device) override;
+	void RecordInput(vector<shared_ptr<BaseControlDevice>> devices) override;
 };
