@@ -479,7 +479,7 @@ namespace Mesen.GUI.Forms
 					break;
 
 				case InteropEmu.ConsoleNotificationType.EmulationStopped:
-					this.Invoke((Action)(() => {
+					this.BeginInvoke((Action)(() => {
 						DebugWindowManager.CloseAll();
 					}));
 					break;
