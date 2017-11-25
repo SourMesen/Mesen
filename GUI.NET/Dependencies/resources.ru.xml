@@ -20,6 +20,10 @@
       <Control ID="mnuInsertCoin1">Вставить монету в слот 1</Control>
       <Control ID="mnuInsertCoin2">Вставить монету в слот 2</Control>
       <Control ID="mnuInputBarcode">Input Barcode</Control>
+      <Control ID="mnuTapeRecorder">Tape Recorder</Control>
+      <Control ID="mnuLoadTapeFile">Load from file...</Control>
+      <Control ID="mnuStartRecordTapeFile">Record to file...</Control>
+      <Control ID="mnuStopRecordTapeFile">Stop recording</Control>
       <Control ID="mnuOptions">Опции</Control>
       <Control ID="mnuEmulationSpeed">Скорость эмуляции</Control>
       <Control ID="mnuEmuSpeedNormal">Нормальная (100%)</Control>
@@ -636,6 +640,7 @@
     <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
     <Message ID="FilterCheat">Все поддерживаемые форматы (*.cht, *.xml)|*.cht;*.xml</Message>
     <Message ID="FilterSavestate">Mesen Savestates (*.mst)|*.mst|All Files (*.*)|*.*</Message>
+    <Message ID="FilterTapeFiles">Family Basic Tape files (*.fbt)|*.fbt|All Files (*.*)|*.*</Message>
 
     <Message ID="LoadFromFile">Load from file...</Message>
     <Message ID="SaveToFile">Save to file...</Message>

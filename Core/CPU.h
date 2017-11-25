@@ -785,7 +785,18 @@ public:
 	static const uint32_t ClockRateDendy = 1773448;
 
 	CPU(MemoryManager *memoryManager);
+	
 	static int32_t GetCycleCount() { return CPU::Instance->_cycleCount; }
+	
+	static int32_t GetElapsedCycles(int32_t prevCycleCount)
+	{
+		if(prevCycleCount > Instance->_cycleCount) {
+			return 0xFFFFFFFF - prevCycleCount + Instance->_cycleCount + 1;
+		} else {
+			return Instance->_cycleCount - prevCycleCount;
+		}
+	}
+
 	static void SetNMIFlag() { CPU::Instance->_state.NMIFlag = true; }
 	static void ClearNMIFlag() { CPU::Instance->_state.NMIFlag = false; }
 	static void SetIRQMask(uint8_t mask) { CPU::Instance->_irqMask = mask; }

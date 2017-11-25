@@ -19,7 +19,11 @@
       <Control ID="mnuVsGameConfig">VSゲームの設定</Control>
       <Control ID="mnuInsertCoin1">インサートコイン 1</Control>
       <Control ID="mnuInsertCoin2">インサートコイン 2</Control>
-      <Control ID="mnuInputCode">バーコードを入力</Control>
+      <Control ID="mnuInputBarcode">バーコードを入力</Control>
+      <Control ID="mnuTapeRecorder">テープレコーダー</Control>
+      <Control ID="mnuLoadTapeFile">ファイルから再生する</Control>
+      <Control ID="mnuStartRecordTapeFile">ファイルに録音する</Control>
+      <Control ID="mnuStopRecordTapeFile">録音を停止する</Control>
       <Control ID="mnuOptions">設定</Control>
       <Control ID="mnuEmulationSpeed">速度</Control>
       <Control ID="mnuEmuSpeedNormal">通常　(100%)</Control>
@@ -631,6 +635,7 @@
     <Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
     <Message ID="FilterCheat">対応するすべてのファイル (*.cht, *.xml)|*.cht;*.xml</Message>
     <Message ID="FilterSavestate">Mesenのクイックセーブデータ (*.mst)|*.mst|すべてのファイル (*.*)|*.*</Message>
+    <Message ID="FilterTapeFiles">Family Basicテープファイル (*.fbt)|*.fbt|すべてのファイル (*.*)|*.*</Message>
 
     <Message ID="LoadFromFile">ファイルからロードする…</Message>
     <Message ID="SaveToFile">ファイルに保存する…</Message>

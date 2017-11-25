@@ -85,7 +85,7 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4017) {
-			int32_t elapsedCycles = CPU::GetCycleCount() - _insertCycle;
+			int32_t elapsedCycles = CPU::GetElapsedCycles(_insertCycle);
 			constexpr uint32_t cyclesPerBit = CPU::ClockRateNtsc / 1200;
 
 			uint32_t streamPosition = elapsedCycles / cyclesPerBit;

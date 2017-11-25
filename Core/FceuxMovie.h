@@ -7,7 +7,6 @@
 class FceuxMovie : public BizhawkMovie
 {
 private:
-	vector<uint8_t> Base64Decode(string in);
 	bool InitializeData(stringstream &filestream);
 
 public:

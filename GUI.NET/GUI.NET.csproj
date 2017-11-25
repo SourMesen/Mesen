@@ -861,6 +861,7 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\Tape.png" />
     <None Include="Resources\DownArrowWin10.png" />
     <None Include="app.manifest" />
     <None Include="Resources\Exclamation.png" />
@@ -1275,6 +1276,7 @@
     <None Include="Resources\BreakpointDisabled.png" />
     <None Include="Resources\BreakpointEnableDisable.png" />
     <None Include="Resources\ArrowKeys.png" />
+    <None Include="Resources\Barcode.png" />
     <Content Include="Resources\coins.png" />
     <None Include="Resources\DipSwitches.png" />
     <None Include="Resources\MesenIcon.png" />

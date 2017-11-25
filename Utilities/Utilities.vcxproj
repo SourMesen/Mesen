@@ -323,6 +323,7 @@
   <ItemGroup>
     <ClInclude Include="ArchiveReader.h" />
     <ClInclude Include="AviWriter.h" />
+    <ClInclude Include="Base64.h" />
     <ClInclude Include="blip_buf.h" />
     <ClInclude Include="BpsPatcher.h" />
     <ClInclude Include="CamstudioCodec.h" />

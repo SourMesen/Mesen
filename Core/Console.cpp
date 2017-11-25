@@ -33,6 +33,7 @@
 #include "SystemActionManager.h"
 #include "FdsSystemActionManager.h"
 #include "VsSystemActionManager.h"
+#include "FamilyBasicDataRecorder.h"
 #include "IBarcodeReader.h"
 #include "IBattery.h"
 #include "KeyManager.h"
@@ -784,6 +785,10 @@ ConsoleFeatures Console::GetAvailableFeatures()
 		if(std::dynamic_pointer_cast<IBarcodeReader>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort))) {
 			features = (ConsoleFeatures)((int)features | (int)ConsoleFeatures::BarcodeReader);
 		}
+
+		if(std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2))) {
+			features = (ConsoleFeatures)((int)features | (int)ConsoleFeatures::TapeRecorder);
+		}
 	}
 	return features;
 }
@@ -799,4 +804,44 @@ void Console::InputBarcode(uint64_t barcode, uint32_t digitCount)
 	if(barcodeReader) {
 		barcodeReader->InputBarcode(barcode, digitCount);
 	}
+}
+
+void Console::LoadTapeFile(string filepath)
+{
+	shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
+	if(dataRecorder) {
+		Console::Pause();
+		dataRecorder->LoadFromFile(filepath);
+		Console::Resume();
+	}
+}
+
+void Console::StartRecordingTapeFile(string filepath)
+{
+	shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
+	if(dataRecorder) {
+		Console::Pause();
+		dataRecorder->StartRecording(filepath);
+		Console::Resume();
+	}
+}
+
+void Console::StopRecordingTapeFile()
+{
+	shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
+	if(dataRecorder) {
+		Console::Pause();
+		dataRecorder->StopRecording();
+		Console::Resume();
+	}
+}
+
+bool Console::IsRecordingTapeFile()
+{
+	shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
+	if(dataRecorder) {
+		return dataRecorder->IsRecording();
+	}
+
+	return false;
 }

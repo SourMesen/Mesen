@@ -140,6 +140,11 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void InputBarcode(UInt64 barcode, Int32 digitCount);
 
+		[DllImport(DLLPath)] public static extern void LoadTapeFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath);
+		[DllImport(DLLPath)] public static extern void StartRecordingTapeFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath);
+		[DllImport(DLLPath)] public static extern void StopRecordingTapeFile();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRecordingTapeFile();
+
 		[DllImport(DLLPath)] public static extern void SetCheats([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropCheatInfo[] cheats, UInt32 length);
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool CheckFlag(EmulationFlags flag);
@@ -1836,6 +1841,7 @@ namespace Mesen.GUI
 		Nsf = 2,
 		VsSystem = 4,
 		BarcodeReader = 8,
+		TapeRecorder = 16,
 	}
 
 	public enum ScreenRotation

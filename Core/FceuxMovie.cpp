@@ -2,29 +2,10 @@
 #include <algorithm>
 #include "../Utilities/StringUtilities.h"
 #include "../Utilities/HexUtilities.h"
+#include "../Utilities/Base64.h"
 #include "ControlManager.h"
 #include "FceuxMovie.h"
 #include "Console.h"
-
-vector<uint8_t> FceuxMovie::Base64Decode(string in)
-{
-	vector<uint8_t> out;
-
-	vector<int> T(256, -1);
-	for(int i = 0; i<64; i++) T["ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[i]] = i;
-
-	int val = 0, valb = -8;
-	for(uint8_t c : in) {
-		if(T[c] == -1) break;
-		val = (val << 6) + T[c];
-		valb += 6;
-		if(valb >= 0) {
-			out.push_back(val >> valb);
-			valb -= 8;
-		}
-	}
-	return out;
-}
 
 bool FceuxMovie::InitializeData(stringstream &filestream)
 {
@@ -39,7 +20,7 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 		string line;
 		std::getline(filestream, line);
 		if(line.compare(0, 19, "romChecksum base64:", 19) == 0) {
-			vector<uint8_t> md5array = Base64Decode(line.substr(19, line.size() - 20));
+			vector<uint8_t> md5array = Base64::Decode(line.substr(19, line.size() - 20));
 			HashInfo hashInfo;
 			hashInfo.PrgChrMd5Hash = HexUtilities::ToHex(md5array);
 			if(Console::LoadROM("", hashInfo)) {

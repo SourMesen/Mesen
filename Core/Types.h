@@ -250,4 +250,5 @@ enum class ConsoleFeatures
 	Nsf = 2,
 	VsSystem = 4,
 	BarcodeReader = 8,
+	TapeRecorder = 16,
 };

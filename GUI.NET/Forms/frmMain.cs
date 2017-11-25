@@ -156,10 +156,7 @@ namespace Mesen.GUI.Forms
 				_overrideWindowSize = true;
 			}
 
-			InitializeVsSystemMenu();
-			InitializeFdsDiskMenu();
 			InitializeEmulationSpeedMenu();
-			InitializeBarcodeReaderMenu();
 
 			UpdateVideoSettings();
 
@@ -426,9 +423,6 @@ namespace Mesen.GUI.Forms
 					_currentGame = InteropEmu.GetRomInfo().GetRomName();
 					InteropEmu.SetNesModel(ConfigManager.Config.Region);
 					InitializeNsfMode(false, true);
-					InitializeFdsDiskMenu();
-					InitializeVsSystemMenu();
-					InitializeBarcodeReaderMenu();
 					CheatInfo.ApplyCheats();
 					VsConfigInfo.ApplyConfig();
 					UpdateStateMenu(mnuSaveState, true);
@@ -873,6 +867,12 @@ namespace Mesen.GUI.Forms
 					mnuTestRecordMovie.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuTestRecordTest.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuTestRecordFrom.Enabled = (mnuTestRecordStart.Enabled || mnuTestRecordNow.Enabled || mnuTestRecordMovie.Enabled || mnuTestRecordTest.Enabled);
+
+					bool tapeRecording = InteropEmu.IsRecordingTapeFile();
+					mnuTapeRecorder.Enabled = !isNetPlayClient;
+					mnuLoadTapeFile.Enabled = !isNetPlayClient;
+					mnuStartRecordTapeFile.Enabled = !tapeRecording && !isNetPlayClient;
+					mnuStopRecordTapeFile.Enabled = tapeRecording;
 
 					mnuDebugger.Visible = !devMode;
 					mnuHdPackEditor.Enabled = !netPlay && running;

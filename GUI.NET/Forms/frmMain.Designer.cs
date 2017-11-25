@@ -66,6 +66,10 @@ namespace Mesen.GUI.Forms
 			this.mnuInsertCoin2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.sepBarcode = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuInputBarcode = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTapeRecorder = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuLoadTapeFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuStartRecordTapeFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuStopRecordTapeFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEmulationSpeed = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEmuSpeedNormal = new System.Windows.Forms.ToolStripMenuItem();
@@ -403,10 +407,12 @@ namespace Mesen.GUI.Forms
             this.mnuInsertCoin1,
             this.mnuInsertCoin2,
             this.sepBarcode,
-            this.mnuInputBarcode});
+            this.mnuInputBarcode,
+            this.mnuTapeRecorder});
 			this.mnuGame.Name = "mnuGame";
 			this.mnuGame.Size = new System.Drawing.Size(50, 20);
 			this.mnuGame.Text = "Game";
+			this.mnuGame.DropDownOpening += new System.EventHandler(this.mnuGame_DropDownOpening);
 			// 
 			// mnuPause
 			// 
@@ -507,11 +513,46 @@ namespace Mesen.GUI.Forms
 			// 
 			// mnuInputBarcode
 			// 
-			this.mnuInputBarcode.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuInputBarcode.Image = global::Mesen.GUI.Properties.Resources.Barcode;
 			this.mnuInputBarcode.Name = "mnuInputBarcode";
 			this.mnuInputBarcode.Size = new System.Drawing.Size(182, 22);
 			this.mnuInputBarcode.Text = "Input Barcode...";
 			this.mnuInputBarcode.Visible = false;
+			// 
+			// mnuTapeRecorder
+			// 
+			this.mnuTapeRecorder.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuLoadTapeFile,
+            this.mnuStartRecordTapeFile,
+            this.mnuStopRecordTapeFile});
+			this.mnuTapeRecorder.Image = global::Mesen.GUI.Properties.Resources.Tape;
+			this.mnuTapeRecorder.Name = "mnuTapeRecorder";
+			this.mnuTapeRecorder.Size = new System.Drawing.Size(182, 22);
+			this.mnuTapeRecorder.Text = "Tape Recorder";
+			// 
+			// mnuLoadTapeFile
+			// 
+			this.mnuLoadTapeFile.Image = global::Mesen.GUI.Properties.Resources.Import;
+			this.mnuLoadTapeFile.Name = "mnuLoadTapeFile";
+			this.mnuLoadTapeFile.Size = new System.Drawing.Size(179, 22);
+			this.mnuLoadTapeFile.Text = "Load from file...";
+			this.mnuLoadTapeFile.Click += new System.EventHandler(this.mnuLoadTapeFile_Click);
+			// 
+			// mnuStartRecordTapeFile
+			// 
+			this.mnuStartRecordTapeFile.Image = global::Mesen.GUI.Properties.Resources.Export;
+			this.mnuStartRecordTapeFile.Name = "mnuStartRecordTapeFile";
+			this.mnuStartRecordTapeFile.Size = new System.Drawing.Size(179, 22);
+			this.mnuStartRecordTapeFile.Text = "Record to file...";
+			this.mnuStartRecordTapeFile.Click += new System.EventHandler(this.mnuStartRecordTapeFile_Click);
+			// 
+			// mnuStopRecordTapeFile
+			// 
+			this.mnuStopRecordTapeFile.Image = global::Mesen.GUI.Properties.Resources.Stop;
+			this.mnuStopRecordTapeFile.Name = "mnuStopRecordTapeFile";
+			this.mnuStopRecordTapeFile.Size = new System.Drawing.Size(179, 22);
+			this.mnuStopRecordTapeFile.Text = "Stop recording";
+			this.mnuStopRecordTapeFile.Click += new System.EventHandler(this.mnuStopRecordTapeFile_Click);
 			// 
 			// mnuOptions
 			// 
@@ -1759,6 +1800,10 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripSeparator sepBarcode;
 		private System.Windows.Forms.ToolStripMenuItem mnuInputBarcode;
 		private System.Windows.Forms.ToolStripMenuItem mnuNetPlayPlayer5;
+		private System.Windows.Forms.ToolStripMenuItem mnuTapeRecorder;
+		private System.Windows.Forms.ToolStripMenuItem mnuLoadTapeFile;
+		private System.Windows.Forms.ToolStripMenuItem mnuStartRecordTapeFile;
+		private System.Windows.Forms.ToolStripMenuItem mnuStopRecordTapeFile;
 	}
 }
 

@@ -122,7 +122,6 @@ namespace Mesen.GUI.Forms
 					ResourceHelper.ApplyResources(this);
 					UpdateMenus();
 					UpdateRecentFiles();
-					InitializeFdsDiskMenu();
 					InitializeNsfMode(true);
 					ctrlRecentGames.UpdateGameInfo();
 				} else {

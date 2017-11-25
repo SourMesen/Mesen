@@ -460,6 +460,11 @@ namespace InteropEmu {
 
 		DllExport void __stdcall InputBarcode(uint64_t barCode, int32_t digitCount) { Console::GetInstance()->InputBarcode(barCode, digitCount); }
 
+		DllExport void __stdcall LoadTapeFile(char *filepath) { Console::GetInstance()->LoadTapeFile(filepath); }
+		DllExport void __stdcall StartRecordingTapeFile(char *filepath) { Console::GetInstance()->StartRecordingTapeFile(filepath); }
+		DllExport void __stdcall StopRecordingTapeFile() { Console::GetInstance()->StopRecordingTapeFile(); }
+		DllExport bool __stdcall IsRecordingTapeFile() { return Console::GetInstance()->IsRecordingTapeFile(); }
+
 		DllExport ConsoleFeatures __stdcall GetAvailableFeatures() { return Console::GetInstance()->GetAvailableFeatures(); }
 
 		//NSF functions

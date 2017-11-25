@@ -58,7 +58,7 @@ public:
 
 	uint8_t GetOutput()
 	{
-		int32_t elapsedCycles = CPU::GetCycleCount() - _insertCycle;
+		int32_t elapsedCycles = CPU::GetElapsedCycles(_insertCycle);
 		int32_t bitNumber = elapsedCycles / 1000;
 		if(bitNumber < (int32_t)_data.size()) {
 			return _data[bitNumber];

@@ -97,11 +97,13 @@ vector<ControlDeviceState> ControlManager::GetPortStates()
 
 shared_ptr<BaseControlDevice> ControlManager::GetControlDevice(uint8_t port)
 {
-	auto lock = _deviceLock.AcquireSafe();
+	if(_instance) {
+		auto lock = _deviceLock.AcquireSafe();
 
-	auto result = std::find_if(_instance->_controlDevices.begin(), _instance->_controlDevices.end(), [port](const shared_ptr<BaseControlDevice> control) { return control->GetPort() == port; });
-	if(result != _instance->_controlDevices.end()) {
-		return *result;
+		auto result = std::find_if(_instance->_controlDevices.begin(), _instance->_controlDevices.end(), [port](const shared_ptr<BaseControlDevice> control) { return control->GetPort() == port; });
+		if(result != _instance->_controlDevices.end()) {
+			return *result;
+		}
 	}
 	return nullptr;
 }
@@ -203,6 +205,11 @@ void ControlManager::UpdateControlDevices()
 
 	if(_mapperControlDevice) {
 		ControlManager::RegisterControlDevice(_mapperControlDevice);
+	}
+
+	if(std::dynamic_pointer_cast<FamilyBasicKeyboard>(expDevice)) {
+		//Automatically connect the data recorder if the keyboard is connected
+		ControlManager::RegisterControlDevice(shared_ptr<FamilyBasicDataRecorder>(new FamilyBasicDataRecorder()));
 	}
 }
 

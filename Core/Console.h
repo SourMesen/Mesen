@@ -88,6 +88,11 @@ class Console
 		ConsoleFeatures GetAvailableFeatures();
 		void InputBarcode(uint64_t barcode, uint32_t digitCount);
 
+		void LoadTapeFile(string filepath);
+		void StartRecordingTapeFile(string filepath);
+		void StopRecordingTapeFile();
+		bool IsRecordingTapeFile();
+		
 		static std::thread::id GetEmulationThreadId();
 
 		static void RequestReset();

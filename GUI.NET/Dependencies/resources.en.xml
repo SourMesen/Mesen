@@ -11,6 +11,7 @@
     <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
     <Message ID="FilterCheat">All supported formats (*.cht, *.xml)|*.cht;*.xml</Message>
     <Message ID="FilterSavestate">Mesen Savestates (*.mst)|*.mst|All files (*.*)|*.*</Message>
+    <Message ID="FilterTapeFiles">Family Basic Tape files (*.fbt)|*.fbt|All Files (*.*)|*.*</Message>
 
     <Message ID="LoadFromFile">Load from file...</Message>
     <Message ID="SaveToFile">Save to file...</Message>

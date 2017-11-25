@@ -1,50 +1,133 @@
 #pragma once
 #include "stdafx.h"
-#include <deque>
+#include "../Utilities/Base64.h"
 #include "BaseControlDevice.h"
 #include "CPU.h"
 
-//TODO: Integration with UI
 class FamilyBasicDataRecorder : public BaseControlDevice
 {
 private:
 	static const uint32_t SamplingRate = 88;
-	vector<uint8_t> _saveData;
+	vector<uint8_t> _data;
+	vector<uint8_t> _fileData;
 	bool _enabled = false;
-	int32_t _lastCycle = -1;
-	int32_t _readStartCycle = -1;
+	bool _isPlaying = false;
+	int32_t _cycle = -1;
+
+	bool _isRecording = false;
+	string _recordFilePath;
 
 protected:
 	void StreamState(bool saving) override
 	{
 		BaseControlDevice::StreamState(saving);
-		Stream(_enabled);
+
+		uint32_t dataSize = _data.size();
+		Stream(_enabled, _isPlaying, _cycle, dataSize);
+
+		if(!saving) {
+			_data.resize(dataSize);
+		}
+
+		ArrayInfo<uint8_t> data{ _data.data(), _data.size() };
+		Stream(data);
+
+		if(!saving && _isRecording) {
+			StopRecording();
+		}
+	}
+
+	bool IsRawString()
+	{
+		return true;
 	}
 
 public:
-	FamilyBasicDataRecorder() : BaseControlDevice(BaseControlDevice::ExpDevicePort)
+	FamilyBasicDataRecorder() : BaseControlDevice(BaseControlDevice::ExpDevicePort2)
 	{
+	}
+
+	~FamilyBasicDataRecorder()
+	{
+		if(_isRecording) {
+			StopRecording();
+		}
+	}
+
+	void InternalSetStateFromInput()
+	{
+		if(_fileData.size() > 0) {
+			SetTextState(Base64::Encode(_fileData));
+			_fileData.clear();
+		}
+	}
+
+	void OnAfterSetState()
+	{
+		if(_state.State.size() > 0) {
+			_data = Base64::Decode(GetTextState());
+			_cycle = CPU::GetCycleCount();
+			_isPlaying = true;
+			_isRecording = false;
+		}
+	}
+
+	void LoadFromFile(VirtualFile file)
+	{
+		if(file.IsValid()) {
+			vector<uint8_t> fileData;
+			file.ReadFile(fileData);
+			_fileData = fileData;
+		}
+	}
+
+	bool IsRecording()
+	{
+		return _isRecording;
+	}
+
+	void StartRecording(string filePath)
+	{
+		_isPlaying = false;
+		_recordFilePath = filePath;
+		_data.clear();
+		_cycle = CPU::GetCycleCount();
+		_isRecording = true;
+	}
+
+	void StopRecording()
+	{
+		_isRecording = false;
+
+		vector<uint8_t> fileData;
+		
+		int bitPos = 0;
+		uint8_t currentByte = 0;
+		for(uint8_t bitValue : _data) {
+			currentByte |= (bitValue & 0x01) << bitPos;
+			bitPos = (bitPos + 1) % 8;
+			if(bitPos == 0) {
+				fileData.push_back(currentByte);
+				currentByte = 0;
+			}
+		}
+
+		ofstream out(_recordFilePath, ios::binary);
+		if(out) {
+			out.write((char*)fileData.data(), fileData.size());
+		}
 	}
 
 	uint8_t ReadRAM(uint16_t addr) override
 	{
-		if(addr == 0x4016) {
-			if(EmulationSettings::CheckFlag(EmulationFlags::ShowFrameCounter)) {
-				if(_readStartCycle == -1) {
-					_readStartCycle = CPU::GetCycleCount();
-				}
+		if(addr == 0x4016 && _isPlaying) {
+			int32_t readPos = CPU::GetElapsedCycles(_cycle) / FamilyBasicDataRecorder::SamplingRate;
 
-				int readPos = (CPU::GetCycleCount() - _readStartCycle) / FamilyBasicDataRecorder::SamplingRate;
-
-				if((int32_t)_saveData.size() > readPos) {
-					uint8_t value = (_saveData[readPos] & 0x01) << 1;
-					return _enabled ? value : 0;
-				}
+			if((int32_t)_data.size() > readPos / 8) {
+				uint8_t value = ((_data[readPos / 8] >> (readPos % 8)) & 0x01) << 1;
+				return _enabled ? value : 0;
 			} else {
-				if(!EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
-					_lastCycle = -1;
-					_readStartCycle = -1;
-				}
+				_isPlaying = false;
 			}
 		}
 
@@ -55,19 +138,10 @@ public:
 	{
 		_enabled = (value & 0x04) != 0;
 
-		if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
-			if(_lastCycle == -1) {
-				_saveData.clear();
-				_lastCycle = CPU::GetCycleCount() - 88;
-			}
-			while(_lastCycle < CPU::GetCycleCount()) {
-				_saveData.push_back(value & 0x01);
-				_lastCycle += 88;
-			}
-		} else {
-			if(!EmulationSettings::CheckFlag(EmulationFlags::ShowFrameCounter)) {
-				_lastCycle = -1;
-				_readStartCycle = -1;
+		if(_isRecording) {
+			while(CPU::GetElapsedCycles(_cycle) > FamilyBasicDataRecorder::SamplingRate) {
+				_data.push_back(value & 0x01);
+				_cycle += 88;
 			}
 		}
 	}

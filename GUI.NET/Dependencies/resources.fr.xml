@@ -20,6 +20,10 @@
       <Control ID="mnuInsertCoin1">Insérer une pièce (1)</Control>
       <Control ID="mnuInsertCoin2">Insérer une pièce (2)</Control>
       <Control ID="mnuInputBarcode">Entrer un code-barres</Control>
+      <Control ID="mnuTapeRecorder">Enregistreur de données</Control>
+      <Control ID="mnuLoadTapeFile">Charger un fichier...</Control>
+      <Control ID="mnuStartRecordTapeFile">Enregistrer dans un fichier...</Control>
+      <Control ID="mnuStopRecordTapeFile">Arrêter l'enregistrement</Control>
       <Control ID="mnuOptions">Options</Control>
       <Control ID="mnuEmulationSpeed">Vitesse</Control>
       <Control ID="mnuEmuSpeedNormal">Normale (100%)</Control>
@@ -647,6 +651,7 @@
     <Message ID="FilterTest">Fichiers de test (*.mtp)|*.mtp|Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterCheat">Tous les formats supportés (*.cht, *.xml)|*.cht;*.xml</Message>
     <Message ID="FilterSavestate">Sauvegardes d'états Mesen (*.mst)|*.mst|Tous les fichiers (*.*)|*.*</Message>
+    <Message ID="FilterTapeFiles">Fichiers de cassettes Family Basic (*.fbt)|*.fbt|Tous les fichiers (*.*)|*.*</Message>
 
     <Message ID="LoadFromFile">Charger à partir d'un fichier...</Message>
     <Message ID="SaveToFile">Sauvegarder dans un fichier...</Message>
