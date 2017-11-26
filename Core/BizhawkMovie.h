@@ -16,6 +16,7 @@ protected:
 	vector<uint32_t> _systemActionByFrame;
 	vector<string> _dataByFrame[4];
 	bool _isPlaying = false;
+	bool _gameLoaded = false;
 	RamPowerOnState _originalPowerOnState;
 
 public:

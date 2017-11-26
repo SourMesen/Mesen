@@ -30,7 +30,7 @@ void BizhawkMovie::Stop()
 bool BizhawkMovie::SetInput(BaseControlDevice *device)
 {
 	SystemActionManager* actionManager = dynamic_cast<SystemActionManager*>(device);
-	int32_t frameNumber = PPU::GetFrameCount();
+	int32_t frameNumber = _gameLoaded ? PPU::GetFrameCount() : 0;
 	if(actionManager) {
 		if(frameNumber < (int32_t)_systemActionByFrame.size()) {
 			uint32_t systemAction = _systemActionByFrame[frameNumber];
@@ -96,6 +96,8 @@ bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 		return false;
 	}
 
+	_gameLoaded = false;
+
 	while(!fileData.eof()) {
 		string line;
 		std::getline(fileData, line);
@@ -104,6 +106,7 @@ bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 				HashInfo hashInfo;
 				hashInfo.Sha1Hash = line.substr(5, 40);
 				if(Console::LoadROM("", hashInfo)) {
+					_gameLoaded = true;
 					return true;
 				}
 			}
@@ -113,6 +116,7 @@ bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 				hashInfo.PrgChrMd5Hash = line.substr(4, 32);
 				std::transform(hashInfo.PrgChrMd5Hash.begin(), hashInfo.PrgChrMd5Hash.end(), hashInfo.PrgChrMd5Hash.begin(), ::toupper);
 				if(Console::LoadROM("", hashInfo)) {
+					_gameLoaded = true;
 					return true;
 				}
 			}

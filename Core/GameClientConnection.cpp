@@ -152,8 +152,6 @@ void GameClientConnection::DisableControllers()
 
 bool GameClientConnection::SetInput(BaseControlDevice *device)
 {
-	device->SetRawState(ControlDeviceState());
-
 	if(_enableControllers) {
 		uint8_t port = device->GetPort();
 		while(_inputSize[port] == 0) {
@@ -183,7 +181,6 @@ bool GameClientConnection::SetInput(BaseControlDevice *device)
 		}
 
 		device->SetRawState(state);
-		return true;
 	}
 	return true;
 }

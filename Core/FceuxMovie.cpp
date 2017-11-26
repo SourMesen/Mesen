@@ -24,6 +24,7 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 			HashInfo hashInfo;
 			hashInfo.PrgChrMd5Hash = HexUtilities::ToHex(md5array);
 			if(Console::LoadROM("", hashInfo)) {
+				_gameLoaded = true;
 				result = true;
 			} else {
 				return false;

@@ -8,6 +8,7 @@
 #include "EmulationSettings.h"
 #include "VideoDecoder.h"
 #include "Debugger.h"
+#include "MovieManager.h"
 
 const uint32_t SaveStateManager::FileFormatVersion;
 atomic<uint32_t> SaveStateManager::_lastIndex(1);
@@ -146,6 +147,10 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 				}
 			}
 		}
+
+		//Stop any movie that might have been playing/recording if a state is loaded
+		//(Note: Loading a state is disabled in the UI while a movie is playing/recording)
+		MovieManager::Stop();
 
 		Console::LoadState(stream, fileFormatVersion);
 

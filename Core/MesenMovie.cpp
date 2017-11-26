@@ -12,6 +12,7 @@
 #include "MovieRecorder.h"
 #include "BatteryManager.h"
 #include "VirtualFile.h"
+#include "PPU.h"
 
 MesenMovie::MesenMovie()
 {
@@ -33,14 +34,15 @@ void MesenMovie::Stop()
 
 bool MesenMovie::SetInput(BaseControlDevice *device)
 {
-	if(_inputData.size() > _readIndex && _inputData[_readIndex].size() > _deviceIndex) {
-		device->SetTextState(_inputData[_readIndex][_deviceIndex]);
+	uint32_t inputRowIndex = _gameLoaded ? PPU::GetFrameCount() - _firstFrameNumber : 0;
+
+	if(_inputData.size() > inputRowIndex && _inputData[inputRowIndex].size() > _deviceIndex) {
+		device->SetTextState(_inputData[inputRowIndex][_deviceIndex]);
 
 		_deviceIndex++;
-		if(_deviceIndex >= _inputData[_readIndex].size()) {
+		if(_deviceIndex >= _inputData[inputRowIndex].size()) {
 			//Move to the next frame's data
 			_deviceIndex = 0;
-			_readIndex++;
 		}
 	} else {
 		Stop();
@@ -88,7 +90,6 @@ bool MesenMovie::Play(VirtualFile &file)
 		}
 	}
 
-	_readIndex = 0;
 	_deviceIndex = 0;
 
 	ParseSettings(settingsData);
@@ -99,10 +100,15 @@ bool MesenMovie::Play(VirtualFile &file)
 	ControlManager::RegisterInputProvider(this);
 	ApplySettings();
 
+	_gameLoaded = false;
+
 	if(!LoadGame()) {
 		Console::Resume();
 		return false;
 	}
+
+	_gameLoaded = true;
+	_firstFrameNumber = 0;
 
 	stringstream saveStateData;
 	if(_reader->GetStream("SaveState.mst", saveStateData)) {
@@ -110,9 +116,7 @@ bool MesenMovie::Play(VirtualFile &file)
 			Console::Resume();
 			return false;
 		} else {
-			//Reset to first line of the input log
-			//TODO: Change this to allow rewinding during movie playback
-			_readIndex = 0;
+			_firstFrameNumber = PPU::GetFrameCount();
 		}
 	}
 

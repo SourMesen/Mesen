@@ -625,10 +625,6 @@ void Console::SaveState(ostream &saveStream)
 void Console::LoadState(istream &loadStream, uint32_t stateVersion)
 {
 	if(Instance->_initialized) {
-		//Stop any movie that might have been playing/recording if a state is loaded
-		//(Note: Loading a state is disabled in the UI while a movie is playing/recording)
-		MovieManager::Stop();
-
 		Instance->_cpu->LoadSnapshot(&loadStream, stateVersion);
 		Instance->_ppu->LoadSnapshot(&loadStream, stateVersion);
 		Instance->_memoryManager->LoadSnapshot(&loadStream, stateVersion);

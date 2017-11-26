@@ -15,12 +15,14 @@ private:
 	VirtualFile _movieFile;
 	shared_ptr<ZipReader> _reader;
 	bool _playing = false;
-	size_t _readIndex = 0;
 	size_t _deviceIndex = 0;
 	vector<vector<string>> _inputData;
 	vector<string> _cheats;
 	std::unordered_map<string, string> _settings;
 	string _filename;
+	
+	bool _gameLoaded = false;
+	uint32_t _firstFrameNumber = 0;
 
 private:
 	void ParseSettings(stringstream &data);
