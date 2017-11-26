@@ -449,19 +449,14 @@ void FDS::StreamState(bool saving)
 
 	if(saving) {
 		vector<uint8_t> ipsData = CreateIpsPatch();
-		uint32_t size = (uint32_t)ipsData.size();
-		Stream(size);
-		
-		ArrayInfo<uint8_t> data{ ipsData.data(), (uint32_t)ipsData.size() };
+		VectorInfo<uint8_t> data{ &ipsData };
 		Stream(data);
 	} else {
-		uint32_t size = 0;
-		Stream(size);
-		if(size > 0) {
-			vector<uint8_t> ipsData(size, 0);			
-			ArrayInfo<uint8_t> data{ ipsData.data(), (uint32_t)ipsData.size() };
-			Stream(data);
+		vector<uint8_t> ipsData;
+		VectorInfo<uint8_t> data{ &ipsData };
+		Stream(data);
 		
+		if(ipsData.size() > 0) {
 			LoadDiskData(ipsData);
 		}
 

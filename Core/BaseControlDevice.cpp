@@ -31,7 +31,7 @@ void BaseControlDevice::InternalSetStateFromInput()
 
 void BaseControlDevice::StreamState(bool saving)
 {
-	ArrayInfo<uint8_t> state{ _state.State.data(), (uint32_t)_state.State.size() };
+	VectorInfo<uint8_t> state{ &_state.State };
 	Stream(_strobe, state);
 }
 

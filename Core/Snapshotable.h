@@ -12,6 +12,12 @@ struct ArrayInfo
 };
 
 template<typename T>
+struct VectorInfo
+{
+	vector<T>* Vector;
+};
+
+template<typename T>
 struct ValueInfo
 {
 	T* Value;
@@ -104,6 +110,27 @@ private:
 
 		//Load the number of elements requested, or the maximum possible (based on what is present in the save state)
 		for(uint32_t i = 0; i < info.ElementCount && i < count; i++) {
+			StreamElement<T>(*pointer);
+			pointer++;
+		}
+	}
+
+	template<typename T>
+	void InternalStream(VectorInfo<T> &info)
+	{
+		vector<T> *vector = info.Vector;
+
+		uint32_t count = (uint32_t)vector->size();
+		StreamElement<uint32_t>(count);
+
+		if(!_saving) {
+			vector->resize(count);
+			memset(vector->data(), 0, sizeof(T)*count);
+		}
+
+		//Load the number of elements requested
+		T* pointer = vector->data();
+		for(uint32_t i = 0; i < count; i++) {
 			StreamElement<T>(*pointer);
 			pointer++;
 		}

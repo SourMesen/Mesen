@@ -22,15 +22,8 @@ protected:
 	{
 		BaseControlDevice::StreamState(saving);
 
-		uint32_t dataSize = _data.size();
-		Stream(_enabled, _isPlaying, _cycle, dataSize);
-
-		if(!saving) {
-			_data.resize(dataSize);
-		}
-
-		ArrayInfo<uint8_t> data{ _data.data(), _data.size() };
-		Stream(data);
+		VectorInfo<uint8_t> data{ &_data };
+		Stream(_enabled, _isPlaying, _cycle, data);
 
 		if(!saving && _isRecording) {
 			StopRecording();

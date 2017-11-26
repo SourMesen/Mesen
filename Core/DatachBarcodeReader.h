@@ -17,13 +17,7 @@ protected:
 	{
 		BaseControlDevice::StreamState(saving);
 
-		uint32_t dataSize = (uint32_t)_data.size();
-		Stream(dataSize);
-		if(!saving) {
-			_data.resize(dataSize);
-		}
-
-		ArrayInfo<uint8_t> data{ _data.data(), dataSize };
+		VectorInfo<uint8_t> data{ &_data };
 		Stream(_insertCycle, _newBarcode, _newBarcodeDigitCount, data);
 	}
 
