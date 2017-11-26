@@ -39,7 +39,7 @@ private:
 	void Stop();
 	void ForceStop();
 
-	void ProcessFrame(void *frameBuffer, uint32_t width, uint32_t height);
+	void ProcessFrame(void *frameBuffer, uint32_t width, uint32_t height, bool forRewind);
 	bool ProcessAudio(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate);
 	
 	void ClearBuffer();
@@ -60,6 +60,6 @@ public:
 	static bool IsStepBack();
 	static void RewindSeconds(uint32_t seconds);
 
-	static void SendFrame(void *frameBuffer, uint32_t width, uint32_t height);
+	static void SendFrame(void *frameBuffer, uint32_t width, uint32_t height, bool forRewind);
 	static bool SendAudio(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate);
 };

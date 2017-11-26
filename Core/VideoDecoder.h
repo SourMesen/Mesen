@@ -58,7 +58,7 @@ public:
 
 	static void Release();
 
-	void DecodeFrame();
+	void DecodeFrame(bool synchronous = false);
 	void TakeScreenshot();
 	void TakeScreenshot(std::stringstream &stream);
 

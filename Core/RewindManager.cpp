@@ -130,7 +130,7 @@ void RewindManager::Start(bool forDebugger)
 		_audioHistoryBuilder.clear();
 		_audioHistory.clear();
 		_historyBackup.clear();
-
+		
 		PopHistory();
 		SoundMixer::StopAudio(true);
 		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
@@ -216,9 +216,16 @@ void RewindManager::ProcessEndOfFrame()
 	}
 }
 
-void RewindManager::ProcessFrame(void * frameBuffer, uint32_t width, uint32_t height)
+void RewindManager::ProcessFrame(void * frameBuffer, uint32_t width, uint32_t height, bool forRewind)
 {
 	if(_rewindState == RewindState::Starting || _rewindState == RewindState::Started) {
+		if(!forRewind) {
+			//Ignore any frames that occur between start of rewind process & first rewinded frame completed
+			//These are caused by the fact that VideoDecoder is asynchronous - a previous (extra) frame can end up
+			//in the rewind queue, which causes display glitches
+			return;
+		}
+
 		_videoHistoryBuilder.push_back(vector<uint32_t>((uint32_t*)frameBuffer, (uint32_t*)frameBuffer + width*height));
 
 		if(_videoHistoryBuilder.size() == _historyBackup.front().FrameCount) {
@@ -335,10 +342,10 @@ void RewindManager::RewindSeconds(uint32_t seconds)
 	}
 }
 
-void RewindManager::SendFrame(void * frameBuffer, uint32_t width, uint32_t height)
+void RewindManager::SendFrame(void * frameBuffer, uint32_t width, uint32_t height, bool forRewind)
 {
 	if(_instance) {
-		_instance->ProcessFrame(frameBuffer, width, height);
+		_instance->ProcessFrame(frameBuffer, width, height, forRewind);
 	} else {
 		VideoRenderer::GetInstance()->UpdateFrame(frameBuffer, width, height);
 	}

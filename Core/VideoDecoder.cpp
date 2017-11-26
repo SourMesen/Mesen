@@ -102,7 +102,7 @@ void VideoDecoder::UpdateVideoFilter()
 	}
 }
 
-void VideoDecoder::DecodeFrame()
+void VideoDecoder::DecodeFrame(bool synchronous)
 {
 	UpdateVideoFilter();
 
@@ -140,7 +140,7 @@ void VideoDecoder::DecodeFrame()
 	_frameChanged = false;
 	
 	//Rewind manager will take care of sending the correct frame to the video renderer
-	RewindManager::SendFrame(outputBuffer, frameInfo.Width, frameInfo.Height);
+	RewindManager::SendFrame(outputBuffer, frameInfo.Width, frameInfo.Height, synchronous);
 }
 
 void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length)
@@ -180,7 +180,7 @@ void VideoDecoder::UpdateFrameSync(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixe
 {
 	_hdScreenTiles = hdPixelInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
-	DecodeFrame();
+	DecodeFrame(true);
 	_frameCount++;
 }
 
