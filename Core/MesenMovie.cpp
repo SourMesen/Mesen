@@ -100,15 +100,18 @@ bool MesenMovie::Play(VirtualFile &file)
 	ControlManager::RegisterInputProvider(this);
 	ApplySettings();
 
-	_gameLoaded = false;
+	_firstFrameNumber = 0;
 
-	if(!LoadGame()) {
+	//Disable auto-configure input option (otherwise the movie file's input types are ignored)
+	bool autoConfigureInput = EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput);
+	EmulationSettings::ClearFlags(EmulationFlags::AutoConfigureInput);
+	_gameLoaded = LoadGame();
+	EmulationSettings::SetFlagState(EmulationFlags::AutoConfigureInput, autoConfigureInput);
+
+	if(!_gameLoaded) {
 		Console::Resume();
 		return false;
 	}
-
-	_gameLoaded = true;
-	_firstFrameNumber = 0;
 
 	stringstream saveStateData;
 	if(_reader->GetStream("SaveState.mst", saveStateData)) {
