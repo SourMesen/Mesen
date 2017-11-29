@@ -13,7 +13,6 @@ void VideoHud::DrawHud(uint8_t *outputBuffer, FrameInfo frameInfo, OverscanDimen
 	uint32_t displayCount = 0;
 	InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
 	
-	//TODO: FIX
 	vector<ControlDeviceState> states = ControlManager::GetPortStates();
 	for(int inputPort = 0; inputPort < 4; inputPort++) {
 		if((settings.VisiblePorts >> inputPort) & 0x01) {

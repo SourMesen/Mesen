@@ -146,7 +146,7 @@ shared_ptr<BaseControlDevice> ControlManager::CreateExpansionDevice(ExpansionPor
 		case ExpansionPortDevice::OekaKidsTablet: device.reset(new OekaKidsTablet()); break;
 		case ExpansionPortDevice::FamilyTrainerMat: device.reset(new FamilyMatTrainer(EmulationSettings::GetControllerKeys(0))); break;
 		case ExpansionPortDevice::KonamiHyperShot: device.reset(new KonamiHyperShot(EmulationSettings::GetControllerKeys(0), EmulationSettings::GetControllerKeys(1))); break;
-		case ExpansionPortDevice::FamilyBasicKeyboard: device.reset(new FamilyBasicKeyboard(EmulationSettings::GetControllerKeys(0))); break; //TODO: tape reader
+		case ExpansionPortDevice::FamilyBasicKeyboard: device.reset(new FamilyBasicKeyboard(EmulationSettings::GetControllerKeys(0))); break;
 		case ExpansionPortDevice::PartyTap: device.reset(new PartyTap(EmulationSettings::GetControllerKeys(0))); break;
 		case ExpansionPortDevice::Pachinko: device.reset(new PachinkoController(EmulationSettings::GetControllerKeys(0))); break;
 		case ExpansionPortDevice::ExcitingBoxing: device.reset(new ExcitingBoxingController(EmulationSettings::GetControllerKeys(0))); break;

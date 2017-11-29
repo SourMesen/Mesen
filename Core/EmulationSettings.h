@@ -925,8 +925,10 @@ public:
 
 	static void DisableOverclocking(bool disabled)
 	{
-		_disableOverclocking = disabled;
-		UpdateEffectiveOverclockRate();
+		if(_disableOverclocking != disabled) {
+			_disableOverclocking = disabled;
+			UpdateEffectiveOverclockRate();
+		}
 	}
 
 	static uint32_t GetOverclockRateSetting()

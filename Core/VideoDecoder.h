@@ -12,6 +12,7 @@ class BaseVideoFilter;
 class ScaleFilter;
 class RotateFilter;
 class IRenderingDevice;
+class VideoHud;
 struct HdPpuPixelInfo;
 
 struct ScreenSize
@@ -31,6 +32,7 @@ private:
 	bool _hdFilterEnabled = false;
 
 	unique_ptr<thread> _decodeThread;
+	unique_ptr<VideoHud> _hud;
 
 	AutoResetEvent _waitForFrame;
 	

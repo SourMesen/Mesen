@@ -124,8 +124,9 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 		frameInfo = _scaleFilter->GetFrameInfo(frameInfo);
 	}
 
-	VideoHud hud;
-	hud.DrawHud((uint8_t*)outputBuffer, frameInfo, _videoFilter->GetOverscan());
+	if(_hud) {
+		_hud->DrawHud((uint8_t*)outputBuffer, frameInfo, _videoFilter->GetOverscan());
+	}
 
 	ScreenSize screenSize;
 	GetScreenSize(screenSize, true);
@@ -209,7 +210,7 @@ void VideoDecoder::StartThread()
 		_frameChanged = false;
 		_frameCount = 0;
 		_waitForFrame.Reset();
-
+		_hud.reset(new VideoHud());
 		_decodeThread.reset(new thread(&VideoDecoder::DecodeThread, this));
 	}
 }
@@ -223,6 +224,7 @@ void VideoDecoder::StopThread()
 
 		_decodeThread.reset();
 
+		_hud.reset();
 		_hdScreenTiles = nullptr;
 		EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
 		UpdateVideoFilter();
