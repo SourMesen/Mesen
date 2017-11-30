@@ -52,18 +52,18 @@ private:
 
 	void DrawPauseScreen();
 
-	float MeasureString(std::wstring text);
-	bool ContainsCharacter(wchar_t character);
+	float MeasureString(std::wstring text) override;
+	bool ContainsCharacter(wchar_t character) override;
 
 public:
 	SdlRenderer(void* windowHandle);
 	virtual ~SdlRenderer();
 
-	void UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height);
-	void Render();
-	void Reset();
+	void UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height) override;
+	void Render() override;
+	void Reset() override;
 
-	void DrawString(std::wstring message, int x, int y, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255, uint8_t opacity = 255);
+	void DrawString(std::wstring message, int x, int y, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255, uint8_t opacity = 255) override;
 	
 	void SetFullscreenMode(bool fullscreen, void* windowHandle, uint32_t monitorWidth, uint32_t monitorHeight) override;
 };

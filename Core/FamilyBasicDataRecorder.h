@@ -30,10 +30,18 @@ protected:
 		}
 	}
 
-	bool IsRawString()
+	bool IsRawString() override
 	{
 		return true;
 	}
+
+	void InternalSetStateFromInput() override
+	{
+		if(_fileData.size() > 0) {
+			SetTextState(Base64::Encode(_fileData));
+			_fileData.clear();
+		}
+	}	
 
 public:
 	FamilyBasicDataRecorder() : BaseControlDevice(BaseControlDevice::ExpDevicePort2)
@@ -47,15 +55,7 @@ public:
 		}
 	}
 
-	void InternalSetStateFromInput()
-	{
-		if(_fileData.size() > 0) {
-			SetTextState(Base64::Encode(_fileData));
-			_fileData.clear();
-		}
-	}
-
-	void OnAfterSetState()
+	void OnAfterSetState() override
 	{
 		if(_state.State.size() > 0) {
 			_data = Base64::Decode(GetTextState());
