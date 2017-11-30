@@ -85,7 +85,7 @@ namespace Mesen.GUI.Forms
 			Configuration configBackup = ConfigManager.Config.Clone();
 			bool cancelled = false;
 			using(frmVideoConfig frm = new frmVideoConfig()) {
-				cancelled = frm.ShowDialog(sender) == DialogResult.Cancel;
+				cancelled = frm.ShowDialog(sender, this) == DialogResult.Cancel;
 			}
 			if(cancelled) {
 				ConfigManager.RevertToBackup(configBackup);
@@ -96,19 +96,25 @@ namespace Mesen.GUI.Forms
 			if((cancelled || (screenSize.Height == originalScreenSize.Height && screenSize.Width == originalScreenSize.Width)) && this.WindowState == FormWindowState.Normal) {
 				this.Size = originalSize;
 			}
+			if(_fullscreenMode && ConfigManager.Config.VideoInfo.UseExclusiveFullscreen && _frmFullscreenRenderer == null) {
+				StopFullscreenWindowMode();
+				if(!this._isNsfPlayerMode) {
+					SetFullscreenState(true);
+				}
+			}
 		}
 
 		private void mnuInput_Click(object sender, EventArgs e)
 		{
 			using(frmInputConfig frm = new frmInputConfig()) {
-				frm.ShowDialog(sender);
+				frm.ShowDialog(sender, this);
 			}
 		}
 
 		private void mnuAudioConfig_Click(object sender, EventArgs e)
 		{
 			using(frmAudioConfig frm = new frmAudioConfig()) {
-				frm.ShowDialog(sender);
+				frm.ShowDialog(sender, this);
 			}
 			this.ctrlNsfPlayer.UpdateVolume();
 		}
@@ -116,7 +122,7 @@ namespace Mesen.GUI.Forms
 		private void mnuPreferences_Click(object sender, EventArgs e)
 		{
 			using(frmPreferences frm = new frmPreferences()) {
-				if(frm.ShowDialog(sender) == DialogResult.OK) {
+				if(frm.ShowDialog(sender, this) == DialogResult.OK) {
 					ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
 					ResourceHelper.UpdateEmuLanguage();
 					ResourceHelper.ApplyResources(this);
@@ -137,7 +143,7 @@ namespace Mesen.GUI.Forms
 		private void mnuEmulationConfig_Click(object sender, EventArgs e)
 		{
 			using(frmEmulationConfig frm = new frmEmulationConfig()) {
-				frm.ShowDialog(sender);
+				frm.ShowDialog(sender, this);
 			}
 		}
 

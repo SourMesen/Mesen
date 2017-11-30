@@ -18,7 +18,7 @@ namespace Mesen.GUI.Forms
 				ofd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 				ofd.InitialDirectory = ConfigManager.TestFolder;
 				ofd.Multiselect = true;
-				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(ofd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 					List<string> passedTests = new List<string>();
 					List<string> failedTests = new List<string>();
 					List<int> failedFrameCount = new List<int>();
@@ -79,7 +79,7 @@ namespace Mesen.GUI.Forms
 				sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 				sfd.InitialDirectory = ConfigManager.TestFolder;
 				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mtp";
-				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(sfd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 					InteropEmu.RomTestRecord(sfd.FileName, resetEmu);
 				}
 			}
@@ -90,12 +90,12 @@ namespace Mesen.GUI.Forms
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
 				ofd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
 				ofd.InitialDirectory = ConfigManager.MovieFolder;
-				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(ofd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 					SaveFileDialog sfd = new SaveFileDialog();
 					sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 					sfd.InitialDirectory = ConfigManager.TestFolder;
 					sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
-					if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					if(sfd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 						InteropEmu.RomTestRecordFromMovie(sfd.FileName, ofd.FileName);
 					}
 				}
@@ -108,12 +108,12 @@ namespace Mesen.GUI.Forms
 				ofd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 				ofd.InitialDirectory = ConfigManager.TestFolder;
 
-				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(ofd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 					SaveFileDialog sfd = new SaveFileDialog();
 					sfd.SetFilter(ResourceHelper.GetMessage("FilterTest"));
 					sfd.InitialDirectory = ConfigManager.TestFolder;
 					sfd.FileName = Path.GetFileNameWithoutExtension(ofd.FileName) + ".mtp";
-					if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					if(sfd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 						InteropEmu.RomTestRecordFromTest(sfd.FileName, ofd.FileName);
 					}
 				}
@@ -124,7 +124,7 @@ namespace Mesen.GUI.Forms
 		{
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
 				ofd.SetFilter("*.nes|*.nes");
-				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(ofd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 					string filename = ofd.FileName;
 
 					Task.Run(() => {

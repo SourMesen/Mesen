@@ -24,6 +24,8 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void SetDisplayLanguage(Language lang);
 
+		[DllImport(DLLPath)] public static extern void SetFullscreenMode([MarshalAs(UnmanagedType.I1)]bool fullscreen, IntPtr windowHandle, UInt32 monitorWidth, UInt32 monitorHeight);
+
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRunning();
 
 		[DllImport(DLLPath)] public static extern void LoadROM([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string patchFile);

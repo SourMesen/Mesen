@@ -51,6 +51,7 @@ namespace Mesen.GUI.Config
 		public bool ForceSpritesFirstColumn = false;
 
 		public bool FullscreenForceIntegerScale = false;
+		public bool UseExclusiveFullscreen = false;
 
 		public bool UseCustomVsPalette = false;
 		public bool ShowColorIndexes = true;

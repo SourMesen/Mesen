@@ -101,7 +101,7 @@ namespace Mesen.GUI.Forms
 		private void mnuAbout_Click(object sender, EventArgs e)
 		{
 			using(frmAbout frm = new frmAbout()) {
-				frm.ShowDialog();
+				frm.ShowDialog(this);
 			}
 		}
 

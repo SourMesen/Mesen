@@ -80,7 +80,7 @@ namespace Mesen.GUI.Forms
 				ofd.SetFilter(ResourceHelper.GetMessage("FilterTapeFiles"));
 				ofd.InitialDirectory = ConfigManager.SaveFolder;
 				ofd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".fbt";
-				if(ofd.ShowDialog() == DialogResult.OK) {
+				if(ofd.ShowDialog(this) == DialogResult.OK) {
 					InteropEmu.LoadTapeFile(ofd.FileName);
 				}
 			}
@@ -92,7 +92,7 @@ namespace Mesen.GUI.Forms
 				sfd.SetFilter(ResourceHelper.GetMessage("FilterTapeFiles"));
 				sfd.InitialDirectory = ConfigManager.SaveFolder;
 				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".fbt";
-				if(sfd.ShowDialog() == DialogResult.OK) {
+				if(sfd.ShowDialog(this) == DialogResult.OK) {
 					InteropEmu.StartRecordingTapeFile(sfd.FileName);
 				}
 			}

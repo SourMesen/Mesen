@@ -19,16 +19,12 @@ using Mesen.GUI.Forms.Config;
 using Mesen.GUI.Forms.HdPackEditor;
 using Mesen.GUI.Forms.NetPlay;
 using Mesen.GUI.GoogleDriveIntegration;
+using Mesen.GUI.Properties;
 
 namespace Mesen.GUI.Forms
 {
-	public partial class frmMain : BaseForm, IMessageFilter
+	public partial class frmMain : BaseInputForm
 	{
-		private const int WM_KEYDOWN = 0x100;
-		private const int WM_KEYUP = 0x101;
-		const int WM_SYSKEYDOWN = 0x104;
-		const int WM_SYSKEYUP = 0x105;
-
 		private InteropEmu.NotificationListener _notifListener;
 		private Thread _emuThread;
 		private frmLogWindow _logWindow;
@@ -46,12 +42,13 @@ namespace Mesen.GUI.Forms
 		private bool _isNsfPlayerMode = false;
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
-		private bool _removeFocus = false;
 		private bool _showUpgradeMessage = false;
 		private float _xFactor = 1;
 		private float _yFactor = 1;
 		private bool _enableResize = false;
 		private bool _overrideWindowSize = false;
+
+		private frmFullscreenRenderer _frmFullscreenRenderer = null;
 
 		private Dictionary<EmulatorShortcut, Func<bool>> _actionEnabledFuncs = new Dictionary<EmulatorShortcut, Func<bool>>();
 
@@ -186,29 +183,6 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.WindowSize.HasValue && !_overrideWindowSize) {
 				this.ClientSize = ConfigManager.Config.WindowSize.Value;
 			}
-
-			if(Program.IsMono) {
-				//Mono does not trigger the activate/deactivate events when opening a modal popup, but it does set the form to disabled
-				//Use this to reset key states
-				this.EnabledChanged += (object s, EventArgs evt) => {
-					_removeFocus = !this.Enabled;
-					InteropEmu.ResetKeyState();
-				};
-			}
-		}
-
-		protected override void OnDeactivate(EventArgs e)
-		{
-			base.OnDeactivate(e);
-			_removeFocus = true;
-			InteropEmu.ResetKeyState();
-		}
-
-		protected override void OnActivated(EventArgs e)
-		{
-			base.OnActivated(e);
-			_removeFocus = false;
-			InteropEmu.ResetKeyState();
 		}
 
 		protected override void OnShown(EventArgs e)
@@ -283,7 +257,7 @@ namespace Mesen.GUI.Forms
 
 		void InitializeEmu()
 		{
-			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, this.ctrlRenderer.Handle, _noAudio, _noVideo, _noInput);
+			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, ctrlRenderer.Handle, _noAudio, _noVideo, _noInput);
 			if(ConfigManager.Config.PreferenceInfo.OverrideGameFolder && Directory.Exists(ConfigManager.Config.PreferenceInfo.GameFolder)) {
 				InteropEmu.AddKnownGameFolder(ConfigManager.Config.PreferenceInfo.GameFolder);
 			}
@@ -349,47 +323,108 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void SetScaleBasedOnWindowSize()
+		private void SetScaleBasedOnDimensions(Size dimensions)
 		{
 			_customSize = true;
 			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(true);
-			double verticalScale = (double)panelRenderer.ClientSize.Height / size.Height;
-			double horizontalScale = (double)panelRenderer.ClientSize.Width / size.Width;
+			double verticalScale = (double)dimensions.Height / size.Height;
+			double horizontalScale = (double)dimensions.Width / size.Width;
 			double scale = Math.Min(verticalScale, horizontalScale);
-			if(_fullscreenMode && ConfigManager.Config.VideoInfo.FullscreenForceIntegerScale) {
+			if(ConfigManager.Config.VideoInfo.FullscreenForceIntegerScale) {
 				scale = Math.Floor(scale);
 			}
 			UpdateScaleMenu(scale);
 			VideoInfo.ApplyConfig();
 		}
 
+		private void SetScaleBasedOnWindowSize()
+		{
+			SetScaleBasedOnDimensions(panelRenderer.ClientSize);
+		}
+
+		private void SetScaleBasedOnScreenSize()
+		{
+			SetScaleBasedOnDimensions(Screen.FromControl(this).Bounds.Size);
+		}
+
+		private void StopExclusiveFullscreenMode()
+		{
+			if(_frmFullscreenRenderer != null) {
+				_frmFullscreenRenderer.Close();
+			}
+		}
+
+		private void StartExclusiveFullscreenMode()
+		{
+			Size screenSize = Screen.FromControl(this).Bounds.Size;
+			_frmFullscreenRenderer = new frmFullscreenRenderer();
+			_frmFullscreenRenderer.Shown += (object sender, EventArgs e) => {
+				ctrlRenderer.Visible = false;
+				SetScaleBasedOnScreenSize();
+				InteropEmu.SetFullscreenMode(true, _frmFullscreenRenderer.Handle, (UInt32)screenSize.Width, (UInt32)screenSize.Height);
+			};
+			_frmFullscreenRenderer.FormClosing += (object sender, FormClosingEventArgs e) => {
+				InteropEmu.SetFullscreenMode(false, ctrlRenderer.Handle, (UInt32)screenSize.Width, (UInt32)screenSize.Height);
+				_frmFullscreenRenderer = null;
+				ctrlRenderer.Visible = true;
+				_fullscreenMode = false;
+				frmMain_Resize(null, EventArgs.Empty);
+			};
+			_frmFullscreenRenderer.Show();
+		}
+
+		private void StartFullscreenWindowMode()
+		{
+			this.menuStrip.Visible = false;
+			_originalWindowState = this.WindowState;
+			this.WindowState = FormWindowState.Normal;
+			this.FormBorderStyle = FormBorderStyle.None;
+			this.WindowState = FormWindowState.Maximized;
+			SetScaleBasedOnWindowSize();
+		}
+
+		private void StopFullscreenWindowMode()
+		{
+			this.menuStrip.Visible = true;
+			this.WindowState = _originalWindowState;
+			this.FormBorderStyle = FormBorderStyle.Sizable;
+			this.frmMain_Resize(null, EventArgs.Empty);
+		}
+
 		private void SetFullscreenState(bool enabled)
 		{
-			this.Resize -= frmMain_Resize;
-			_fullscreenMode = enabled;
-			if(enabled) {
-				this.menuStrip.Visible = false;
-				_originalWindowState = this.WindowState;
-				this.WindowState = FormWindowState.Normal;
-				this.FormBorderStyle = FormBorderStyle.None;
-				this.WindowState = FormWindowState.Maximized;
-				SetScaleBasedOnWindowSize();
-			} else {
-				this.menuStrip.Visible = true;
-				this.WindowState = _originalWindowState;
-				this.FormBorderStyle = FormBorderStyle.Sizable;
-				this.frmMain_Resize(null, EventArgs.Empty);
+			if(this._isNsfPlayerMode) {
+				enabled = false;
 			}
-			this.Resize += frmMain_Resize;
-			UpdateViewerSize();
+
+			_fullscreenMode = enabled;
 			mnuFullscreen.Checked = enabled;
+
+			if(ConfigManager.Config.VideoInfo.UseExclusiveFullscreen) {
+				if(_emuThread != null) {
+					if(enabled) {
+						StartExclusiveFullscreenMode();
+					} else {
+						StopExclusiveFullscreenMode();
+					}
+				}
+			} else {
+				this.Resize -= frmMain_Resize;
+				if(enabled) {
+					StartFullscreenWindowMode();
+				} else {
+					StopFullscreenWindowMode();
+				}
+				this.Resize += frmMain_Resize;
+				UpdateViewerSize();
+			}
 		}
 
 		private bool HideMenuStrip
 		{
 			get
 			{
-				return _fullscreenMode || ConfigManager.Config.PreferenceInfo.AutoHideMenu;
+				return (_fullscreenMode && !ConfigManager.Config.VideoInfo.UseExclusiveFullscreen) || ConfigManager.Config.PreferenceInfo.AutoHideMenu;
 			}
 		}
 
@@ -469,6 +504,10 @@ namespace Mesen.GUI.Forms
 							_hdPackEditorWindow.Close();
 						}
 						ctrlRecentGames.Initialize();
+						if(e.Parameter == IntPtr.Zero) {
+							//We are completely stopping the emulation, close fullscreen mode
+							StopExclusiveFullscreenMode();
+						}
 					}));
 					break;
 
@@ -607,6 +646,8 @@ namespace Mesen.GUI.Forms
 				}
 			}
 
+			bool restoreFullscreen = _frmFullscreenRenderer != null;
+
 			switch(shortcut) {
 				case EmulatorShortcut.Pause: PauseEmu(); break;
 				case EmulatorShortcut.Reset: this.ResetEmu(); break;
@@ -624,7 +665,7 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.ToggleLagCounter: ToggleLagCounter(); break;
 				case EmulatorShortcut.ToggleOsd: ToggleOsd(); break;
 				case EmulatorShortcut.MaxSpeed: ToggleMaxSpeed(); break;
-				case EmulatorShortcut.ToggleFullscreen: ToggleFullscreen(); break;
+				case EmulatorShortcut.ToggleFullscreen: ToggleFullscreen(); restoreFullscreen = false; break;
 
 				case EmulatorShortcut.OpenFile: OpenFile(); break;
 				case EmulatorShortcut.IncreaseSpeed: InteropEmu.IncreaseEmulationSpeed(); break;
@@ -644,7 +685,7 @@ namespace Mesen.GUI.Forms
 
 				case EmulatorShortcut.InputBarcode:
 					using(frmInputBarcode frm = new frmInputBarcode()) {
-						frm.ShowDialog();
+						frm.ShowDialog(this, this);
 					}
 					break;
 
@@ -676,6 +717,11 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.LoadStateSlot6: LoadState(6); break;
 				case EmulatorShortcut.LoadStateSlot7: LoadState(7); break;
 				case EmulatorShortcut.LoadStateSlot8: LoadState(8); break;
+			}
+
+			if(restoreFullscreen && _frmFullscreenRenderer == null) {
+				//Need to restore fullscreen mode after showing a dialog
+				this.SetFullscreenState(true);
 			}
 		}
 
@@ -759,22 +805,6 @@ namespace Mesen.GUI.Forms
 			ConfigManager.ApplyChanges();
 		}
 
-		private void UpdateFocusFlag()
-		{
-			bool hasFocus = false;
-			if(Application.OpenForms.Count > 0) {
-				if(Application.OpenForms[0].ContainsFocus) {
-					hasFocus = true;
-				}
-			}
-
-			if(_removeFocus) {
-				hasFocus = false;
-			}
-
-			InteropEmu.SetFlag(EmulationFlags.InBackground, !hasFocus);
-		}
-
 		private void UpdateMenus()
 		{
 			try {
@@ -790,7 +820,6 @@ namespace Mesen.GUI.Forms
 
 					ctrlLoading.Visible = (_romLoadCounter > 0);
 
-					UpdateFocusFlag();
 					UpdateWindowTitle();
 
 					bool isNetPlayClient = InteropEmu.IsConnected();
@@ -964,20 +993,6 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		bool IMessageFilter.PreFilterMessage(ref Message m)
-		{
-			if(Application.OpenForms.Count > 0 && Application.OpenForms[0].ContainsFocus) {
-				if(m.Msg == WM_KEYUP || m.Msg == WM_SYSKEYUP) {
-					int scanCode = (Int32)(((Int64)m.LParam & 0x1FF0000) >> 16);
-					InteropEmu.SetKeyState(scanCode, false);
-				} else if(m.Msg == WM_SYSKEYDOWN || m.Msg == WM_KEYDOWN) {
-					int scanCode = (Int32)(((Int64)m.LParam & 0x1FF0000) >> 16);
-					InteropEmu.SetKeyState(scanCode, true);
-				}
-			}
-			return false;
-		}
-
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if(!this.menuStrip.Enabled) {
@@ -1016,7 +1031,7 @@ namespace Mesen.GUI.Forms
 			if(MesenMsgBox.Show("FdsBiosNotFound", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
 				using(OpenFileDialog ofd = new OpenFileDialog()) {
 					ofd.SetFilter(ResourceHelper.GetMessage("FilterAll"));
-					if(ofd.ShowDialog() == DialogResult.OK) {
+					if(ofd.ShowDialog(this) == DialogResult.OK) {
 						string hash = MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant();
 						if(hash == "ca30b50f880eb660a320674ed365ef7a" || hash == "c1a9e9415a6adde3c8563c622d4c9fce") {
 							File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));
@@ -1113,6 +1128,8 @@ namespace Mesen.GUI.Forms
 				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode(updateTextOnly, gameLoaded)));
 			} else {
 				if(InteropEmu.IsNsf()) {
+					this.SetFullscreenState(false);
+
 					if(gameLoaded) {
 						//Force emulation speed to 100 when loading a NSF
 						SetEmulationSpeed(100);
@@ -1131,7 +1148,6 @@ namespace Mesen.GUI.Forms
 					}
 					this.ctrlNsfPlayer.Visible = true;					
 					this.ctrlNsfPlayer.Focus();
-
 
 					NsfHeader header = InteropEmu.NsfGetHeader();
 					if(header.HasSongName) {

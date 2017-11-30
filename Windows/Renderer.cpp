@@ -29,24 +29,73 @@ namespace NES
 		CleanupDevice();
 	}
 
+	void Renderer::SetFullscreenMode(bool fullscreen, void* windowHandle, uint32_t monitorWidth, uint32_t monitorHeight)
+	{
+		if(fullscreen != _fullscreen || _hWnd != (HWND)windowHandle) {
+			_hWnd = (HWND)windowHandle;
+			_monitorWidth = monitorWidth;
+			_monitorHeight = monitorHeight;
+			_newFullscreen = fullscreen;
+		}
+	}
+
 	void Renderer::SetScreenSize(uint32_t width, uint32_t height)
 	{
 		ScreenSize screenSize;
 		VideoDecoder::GetInstance()->GetScreenSize(screenSize, false);
 
-		if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter()) {
-			_frameLock.Acquire();
-			_nesFrameHeight = height;
-			_nesFrameWidth = width;
-			_newFrameBufferSize = width*height;
+		if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter() || _newFullscreen != _fullscreen) {
+			auto frameLock = _frameLock.AcquireSafe();
+			auto textureLock = _textureLock.AcquireSafe();
+			VideoDecoder::GetInstance()->GetScreenSize(screenSize, false);
+			if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter() || _newFullscreen != _fullscreen) {
+				_nesFrameHeight = height;
+				_nesFrameWidth = width;
+				_newFrameBufferSize = width*height;
 
-			_screenHeight = screenSize.Height;
-			_screenWidth = screenSize.Width;
+				bool needReset = _fullscreen != _newFullscreen;
+				bool fullscreenResizeMode = _fullscreen && _newFullscreen;
 
-			_screenBufferSize = _screenHeight*_screenWidth;
+				if(_pSwapChain && _fullscreen && !_newFullscreen) {
+					HRESULT hr = _pSwapChain->SetFullscreenState(FALSE, NULL);
+					if(FAILED(hr)) {
+						MessageManager::Log("SetFullscreenState(FALSE) failed - Error:" + std::to_string(hr));
+					}
+				}
 
-			Reset();
-			_frameLock.Release();
+				_fullscreen = _newFullscreen;
+
+				_screenHeight = screenSize.Height;
+				_screenWidth = screenSize.Width;
+
+				if(_fullscreen) {
+					_realScreenHeight = _monitorHeight;
+					_realScreenWidth = _monitorWidth;
+				} else {
+					_realScreenHeight = screenSize.Height;
+					_realScreenWidth = screenSize.Width;
+				}
+
+				_leftMargin = (_realScreenWidth - _screenWidth) / 2;
+				_topMargin = (_realScreenHeight - _screenHeight) / 2;
+
+				_screenBufferSize = _realScreenHeight*_realScreenWidth;
+
+				if(!_pSwapChain || needReset) {
+					Reset();
+				} else {
+					if(fullscreenResizeMode) {
+						ResetNesBuffers();
+						CreateNesBuffers();
+					} else {
+						ResetNesBuffers();
+						ReleaseRenderTargetView();
+						_pSwapChain->ResizeBuffers(1, _realScreenWidth, _realScreenHeight, DXGI_FORMAT_B8G8R8A8_UNORM, 0);
+						CreateRenderTargetView();
+						CreateNesBuffers();
+					}
+				}
+			}
 		}
 	}
 
@@ -62,6 +111,37 @@ namespace NES
 	}
 
 	void Renderer::CleanupDevice()
+	{
+		ResetNesBuffers();
+		ReleaseRenderTargetView();
+		if(_pAlphaEnableBlendingState) {
+			_pAlphaEnableBlendingState->Release();
+			_pAlphaEnableBlendingState = nullptr;
+		}
+		if(_pDepthDisabledStencilState) {
+			_pDepthDisabledStencilState->Release();
+			_pDepthDisabledStencilState = nullptr;
+		}
+		if(_samplerState) {
+			_samplerState->Release();
+			_samplerState = nullptr;
+		}
+		if(_pSwapChain) {
+			_pSwapChain->SetFullscreenState(false, nullptr);
+			_pSwapChain->Release();
+			_pSwapChain = nullptr;
+		}
+		if(_pDeviceContext) {
+			_pDeviceContext->Release();
+			_pDeviceContext = nullptr;
+		}
+		if(_pd3dDevice) {
+			_pd3dDevice->Release();
+			_pd3dDevice = nullptr;
+		}
+	}
+
+	void Renderer::ResetNesBuffers()
 	{
 		if(_pTexture) {
 			_pTexture->Release();
@@ -87,34 +167,69 @@ namespace NES
 			delete[] _textureBuffer[1];
 			_textureBuffer[1] = nullptr;
 		}
-		if(_samplerState) {
-			_samplerState->Release();
-			_samplerState = nullptr;
-		}
+	}
+
+	void Renderer::ReleaseRenderTargetView()
+	{
 		if(_pRenderTargetView) {
 			_pRenderTargetView->Release();
 			_pRenderTargetView = nullptr;
 		}
-		if(_pSwapChain) {
-			_pSwapChain->Release();
-			_pSwapChain = nullptr;
+	}
+
+	HRESULT Renderer::CreateRenderTargetView()
+	{
+		// Create a render target view
+		ID3D11Texture2D* pBackBuffer = nullptr;
+		HRESULT hr = _pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+		if(FAILED(hr)) {
+			MessageManager::Log("SwapChain::GetBuffer() failed - Error:" + std::to_string(hr));
+			return hr;
 		}
-		if(_pDeviceContext) {
-			_pDeviceContext->Release();
-			_pDeviceContext = nullptr;
+
+		hr = _pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &_pRenderTargetView);
+		pBackBuffer->Release();
+		if(FAILED(hr)) {
+			MessageManager::Log("D3DDevice::CreateRenderTargetView() failed - Error:" + std::to_string(hr));
+			return hr;
 		}
-		if(_pd3dDevice) {
-			_pd3dDevice->Release();
-			_pd3dDevice = nullptr;
+
+		_pDeviceContext->OMSetRenderTargets(1, &_pRenderTargetView, nullptr);
+
+		return S_OK;
+	}
+
+	HRESULT Renderer::CreateNesBuffers()
+	{
+		_textureBuffer[0] = new uint8_t[_nesFrameWidth*_nesFrameHeight * 4];
+		_textureBuffer[1] = new uint8_t[_nesFrameWidth*_nesFrameHeight * 4];
+		memset(_textureBuffer[0], 0, _nesFrameWidth*_nesFrameHeight * 4);
+		memset(_textureBuffer[1], 0, _nesFrameWidth*_nesFrameHeight * 4);
+
+		_pTexture = CreateTexture(_nesFrameWidth, _nesFrameHeight);
+		if(!_pTexture) {
+			return S_FALSE;
 		}
-		if(_pAlphaEnableBlendingState) {
-			_pAlphaEnableBlendingState->Release();
-			_pAlphaEnableBlendingState = nullptr;
+		_overlayTexture = CreateTexture(8, 8);
+		if(!_overlayTexture) {
+			return S_FALSE;
 		}
-		if(_pDepthDisabledStencilState) {
-			_pDepthDisabledStencilState->Release();
-			_pDepthDisabledStencilState = nullptr;
+		_pTextureSrv = GetShaderResourceView(_pTexture);
+		if(!_pTextureSrv) {
+			return S_FALSE;
 		}
+		_pOverlaySrv = GetShaderResourceView(_overlayTexture);
+		if(!_pOverlaySrv) {
+			return S_FALSE;
+		}
+
+		////////////////////////////////////////////////////////////////////////////
+		_spriteBatch.reset(new SpriteBatch(_pDeviceContext));
+
+		_largeFont.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.64.spritefont"));
+		_font.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.24.spritefont"));
+
+		return S_OK;
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -149,8 +264,8 @@ namespace NES
 		DXGI_SWAP_CHAIN_DESC sd;
 		ZeroMemory(&sd, sizeof(sd));
 		sd.BufferCount = 1;
-		sd.BufferDesc.Width = _screenWidth;
-		sd.BufferDesc.Height = _screenHeight;
+		sd.BufferDesc.Width = _realScreenWidth;
+		sd.BufferDesc.Height = _realScreenHeight;
 		sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		sd.BufferDesc.RefreshRate.Numerator = 60;
 		sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -167,6 +282,10 @@ namespace NES
 			featureLevel = D3D_FEATURE_LEVEL_11_1;
 			hr = D3D11CreateDeviceAndSwapChain(nullptr, driverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &featureLevel, &_pDeviceContext);
 
+			/*if(FAILED(hr)) {
+				MessageManager::Log("D3D11CreateDeviceAndSwapChain() failed - Error:" + std::to_string(hr));
+			}*/
+
 			if(hr == E_INVALIDARG) {
 				// DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1 so we need to retry without it
 				featureLevel = D3D_FEATURE_LEVEL_11_0;
@@ -177,23 +296,27 @@ namespace NES
 				break;
 			}
 		}
+
 		if(FAILED(hr)) {
 			MessageManager::Log("D3D11CreateDeviceAndSwapChain() failed - Error:" + std::to_string(hr));
 			return hr;
 		}
 
-		// Create a render target view
-		ID3D11Texture2D* pBackBuffer = nullptr;
-		hr = _pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-		if(FAILED(hr)) {
-			MessageManager::Log("SwapChain::GetBuffer() failed - Error:" + std::to_string(hr));
-			return hr;
+		if(_fullscreen) {
+			hr = _pSwapChain->SetFullscreenState(TRUE, NULL);
+			if(FAILED(hr)) {
+				MessageManager::Log("SetFullscreenState(true) failed - Error:" + std::to_string(hr));
+				MessageManager::Log("Switching back to windowed mode");
+				hr = _pSwapChain->SetFullscreenState(FALSE, NULL);
+				if(FAILED(hr)) {
+					MessageManager::Log("SetFullscreenState(false) failed - Error:" + std::to_string(hr));
+					return hr;
+				}
+			}
 		}
 
-		hr = _pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &_pRenderTargetView);
-		pBackBuffer->Release();
+		hr = CreateRenderTargetView();
 		if(FAILED(hr)) {
-			MessageManager::Log("D3DDevice::CreateRenderTargetView() failed - Error:" + std::to_string(hr));
 			return hr;
 		}
 
@@ -250,46 +373,32 @@ namespace NES
 	
 		_pDeviceContext->OMSetBlendState(_pAlphaEnableBlendingState, blendFactor, 0xffffffff);
 		_pDeviceContext->OMSetDepthStencilState(_pDepthDisabledStencilState, 1);
-		_pDeviceContext->OMSetRenderTargets(1, &_pRenderTargetView, nullptr);
 
 		// Setup the viewport
 		D3D11_VIEWPORT vp;
-		vp.Width = (FLOAT)_screenWidth;
-		vp.Height = (FLOAT)_screenHeight;
+		vp.Width = (FLOAT)2560;
+		vp.Height = (FLOAT)1440;
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 		_pDeviceContext->RSSetViewports(1, &vp);
 
-		_textureBuffer[0] = new uint8_t[_nesFrameWidth*_nesFrameHeight*4];
-		_textureBuffer[1] = new uint8_t[_nesFrameWidth*_nesFrameHeight*4];
-		memset(_textureBuffer[0], 0, _nesFrameWidth*_nesFrameHeight*4);
-		memset(_textureBuffer[1], 0, _nesFrameWidth*_nesFrameHeight*4);
-
-		_pTexture = CreateTexture(_nesFrameWidth, _nesFrameHeight);
-		if(!_pTexture) {
-			return S_FALSE;
-		}
-		_overlayTexture = CreateTexture(8, 8);
-		if(!_overlayTexture) {
-			return S_FALSE;
-		}
-		_pTextureSrv = GetShaderResourceView(_pTexture);
-		if(!_pTextureSrv) {
-			return S_FALSE;
-		}
-		_pOverlaySrv = GetShaderResourceView(_overlayTexture);
-		if(!_pOverlaySrv) {
-			return S_FALSE;
+		hr = CreateNesBuffers();
+		if(FAILED(hr)) {
+			return hr;
 		}
 
-		////////////////////////////////////////////////////////////////////////////
-		_spriteBatch.reset(new SpriteBatch(_pDeviceContext));
+		hr = CreateSamplerState();
+		if(FAILED(hr)) {
+			return hr;
+		}
 
-		_largeFont.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.64.spritefont"));
-		_font.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.24.spritefont"));
+		return S_OK;
+	}
 
+	HRESULT Renderer::CreateSamplerState()
+	{
 		_resizeFilter = EmulationSettings::GetVideoResizeFilter();
 
 		//Sample state
@@ -305,14 +414,13 @@ namespace NES
 		samplerDesc.MipLODBias = 0.0f;
 		samplerDesc.MaxAnisotropy = 1;
 		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-		
-		hr = _pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
+
+		HRESULT hr = _pd3dDevice->CreateSamplerState(&samplerDesc, &_samplerState);
 		if(FAILED(hr)) {
 			MessageManager::Log("D3DDevice::CreateSamplerState() failed - Error:" + std::to_string(hr));
-			return hr;
 		}
 
-		return S_OK;
+		return hr;
 	}
 
 	ID3D11Texture2D* Renderer::CreateTexture(uint32_t width, uint32_t height)
@@ -367,7 +475,7 @@ namespace NES
 			font = _font.get();
 		}
 
-		font->DrawString(_spriteBatch.get(), text, XMFLOAT2(x, y), color, 0.0f, XMFLOAT2(0, 0), scale);
+		font->DrawString(_spriteBatch.get(), text, XMFLOAT2(x+_leftMargin, y+_topMargin), color, 0.0f, XMFLOAT2(0, 0), scale);
 	}
 
 	void Renderer::UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height)
@@ -376,9 +484,12 @@ namespace NES
 
 		uint32_t bpp = 4;
 		auto lock = _textureLock.AcquireSafe();
-		memcpy(_textureBuffer[0], frameBuffer, width*height*bpp);
-		_needFlip = true;		
-		_frameChanged = true;
+		if(_textureBuffer[0]) {
+			//_textureBuffer[0] may be null if directx failed to initialize properly
+			memcpy(_textureBuffer[0], frameBuffer, width*height*bpp);
+			_needFlip = true;
+			_frameChanged = true;
+		}
 	}
 
 	void Renderer::DrawNESScreen()
@@ -416,10 +527,10 @@ namespace NES
 		_pDeviceContext->Unmap(_pTexture, 0);
 
 		RECT destRect;
-		destRect.left = 0;
-		destRect.top = 0;
-		destRect.right = _screenWidth;
-		destRect.bottom = _screenHeight;
+		destRect.left = _leftMargin;
+		destRect.top = _topMargin;
+		destRect.right = _screenWidth+_leftMargin;
+		destRect.bottom = _screenHeight+_topMargin;
 
 		_spriteBatch->Draw(_pTextureSrv, destRect);
 	}
@@ -428,9 +539,9 @@ namespace NES
 	{
 		RECT destRect;
 		destRect.left = 0;
-		destRect.right = _screenWidth;
-		destRect.bottom = _screenHeight;
 		destRect.top = 0;
+		destRect.right = _realScreenWidth;
+		destRect.bottom = _realScreenHeight;
 
 		D3D11_MAPPED_SUBRESOURCE dd;
 		HRESULT hr = _pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
@@ -452,7 +563,9 @@ namespace NES
 		_spriteBatch->Draw(_pOverlaySrv, destRect);
 		
 		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
-		DrawString("PAUSE", (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2, (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8, Colors::AntiqueWhite, 1.0f, _largeFont.get());
+		float x = (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2;
+		float y = (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8;
+		DrawString("PAUSE", x, y, Colors::AntiqueWhite, 1.0f, _largeFont.get());
 	}
 
 	void Renderer::Render()
@@ -462,6 +575,18 @@ namespace NES
 			_noUpdateCount = 0;
 		
 			auto lock = _frameLock.AcquireSafe();
+			if(_newFullscreen != _fullscreen) {
+				SetScreenSize(_nesFrameWidth, _nesFrameHeight);
+			}
+
+			if(_pDeviceContext == nullptr) {
+				//DirectX failed to initialize, try to init
+				Reset();
+				if(_pDeviceContext == nullptr) {
+					//Can't init, prevent crash
+					return;
+				}
+			}
 
 			// Clear the back buffer 
 			_pDeviceContext->ClearRenderTargetView(_pRenderTargetView, Colors::Black);
@@ -499,7 +624,7 @@ namespace NES
 	void Renderer::DrawString(std::wstring message, int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t opacity)
 	{
 		XMVECTORF32 color = { (float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, (float)opacity / 255.0f };
-		_font->DrawString(_spriteBatch.get(), message.c_str(), XMFLOAT2((float)x, (float)y), color);
+		_font->DrawString(_spriteBatch.get(), message.c_str(), XMFLOAT2((float)x+_leftMargin, (float)y+_topMargin), color);
 	}
 
 	float Renderer::MeasureString(std::wstring text)

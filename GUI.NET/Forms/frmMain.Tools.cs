@@ -33,7 +33,7 @@ namespace Mesen.GUI.Forms
 				sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
 				sfd.InitialDirectory = ConfigManager.MovieFolder;
 				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
-				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(sfd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 					InteropEmu.MovieRecord(sfd.FileName, resetEmu);
 				}
 			}
@@ -44,7 +44,7 @@ namespace Mesen.GUI.Forms
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
 				ofd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
 				ofd.InitialDirectory = ConfigManager.MovieFolder;
-				if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(ofd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 					InteropEmu.MoviePlay(ofd.FileName);
 				}
 			}
@@ -71,7 +71,7 @@ namespace Mesen.GUI.Forms
 				sfd.SetFilter(ResourceHelper.GetMessage("FilterWave"));
 				sfd.InitialDirectory = ConfigManager.WaveFolder;
 				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".wav";
-				if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if(sfd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
 					InteropEmu.WaveRecord(sfd.FileName);
 				}
 			}
@@ -85,7 +85,7 @@ namespace Mesen.GUI.Forms
 		private void mnuAviRecord_Click(object sender, EventArgs e)
 		{
 			using(frmRecordAvi frm = new frmRecordAvi()) {
-				if(frm.ShowDialog(mnuVideoRecorder) == DialogResult.OK) {
+				if(frm.ShowDialog(mnuVideoRecorder, this) == DialogResult.OK) {
 					InteropEmu.AviRecord(frm.Filename, ConfigManager.Config.AviRecordInfo.Codec, ConfigManager.Config.AviRecordInfo.CompressionLevel);
 				}
 			}
@@ -166,7 +166,7 @@ namespace Mesen.GUI.Forms
 				Task.Run(() => InteropEmu.StopServer());
 			} else {
 				using(frmServerConfig frm = new frmServerConfig()) {
-					if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
+					if(frm.ShowDialog(sender, this) == System.Windows.Forms.DialogResult.OK) {
 						InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port, ConfigManager.Config.Profile.PlayerName);
 					}
 				}
@@ -179,7 +179,7 @@ namespace Mesen.GUI.Forms
 				Task.Run(() => InteropEmu.Disconnect());
 			} else {
 				using(frmClientConfig frm = new frmClientConfig()) {
-					if(frm.ShowDialog(sender) == System.Windows.Forms.DialogResult.OK) {
+					if(frm.ShowDialog(sender, this) == System.Windows.Forms.DialogResult.OK) {
 						Task.Run(() => {
 							InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.ClientConnectionInfo.Spectator);
 						});
@@ -191,7 +191,7 @@ namespace Mesen.GUI.Forms
 		private void mnuProfile_Click(object sender, EventArgs e)
 		{
 			using(frmPlayerProfile frm = new frmPlayerProfile()) {
-				frm.ShowDialog(sender);
+				frm.ShowDialog(sender, this);
 			}
 		}
 

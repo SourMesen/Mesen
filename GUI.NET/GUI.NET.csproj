@@ -612,6 +612,9 @@
     <Compile Include="Forms\BaseConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\BaseInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Cheats\ctrlCheatFinder.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -678,9 +681,7 @@
     <Compile Include="Forms\Config\frmCopyFiles.Designer.cs">
       <DependentUpon>frmCopyFiles.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Config\frmGetKey.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forms\Config\frmGetKey.cs" />
     <Compile Include="Forms\Config\frmGetKey.Designer.cs">
       <DependentUpon>frmGetKey.cs</DependentUpon>
     </Compile>
@@ -757,6 +758,9 @@
     <Compile Include="Forms\frmDownloadProgress.Designer.cs">
       <DependentUpon>frmDownloadProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmFullscreenRenderer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\frmHelp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -777,27 +781,21 @@
     </Compile>
     <Compile Include="Forms\frmMain.File.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Game.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Options.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Tests.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Tools.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Help.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmRecordAvi.cs">
       <SubType>Form</SubType>
@@ -831,9 +829,7 @@
     <Compile Include="Forms\NetPlay\frmClientConfig.Designer.cs">
       <DependentUpon>frmClientConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forms\frmMain.cs" />
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
@@ -1034,6 +1030,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BaseInputForm.resx">
+      <DependentUpon>BaseInputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Cheats\ctrlCheatFinder.resx">
       <DependentUpon>ctrlCheatFinder.cs</DependentUpon>

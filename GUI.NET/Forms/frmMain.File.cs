@@ -95,7 +95,7 @@ namespace Mesen.GUI.Forms
 				using(OpenFileDialog ofd = new OpenFileDialog()) {
 					ofd.InitialDirectory = ConfigManager.SaveStateFolder;
 					ofd.SetFilter(ResourceHelper.GetMessage("FilterSavestate"));
-					if(ofd.ShowDialog() == DialogResult.OK) {
+					if(ofd.ShowDialog(this) == DialogResult.OK) {
 						InteropEmu.LoadStateFile(ofd.FileName);
 					}
 				}
@@ -109,7 +109,7 @@ namespace Mesen.GUI.Forms
 					sfd.InitialDirectory = ConfigManager.SaveStateFolder;
 					sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mst";
 					sfd.SetFilter(ResourceHelper.GetMessage("FilterSavestate"));
-					if(sfd.ShowDialog() == DialogResult.OK) {
+					if(sfd.ShowDialog(this) == DialogResult.OK) {
 						InteropEmu.SaveStateFile(sfd.FileName);
 					}
 				}
@@ -137,7 +137,7 @@ namespace Mesen.GUI.Forms
 					ofd.InitialDirectory = ConfigManager.Config.RecentFiles[0].RomFile.Folder;
 				}
 
-				if(ofd.ShowDialog() == DialogResult.OK) {
+				if(ofd.ShowDialog(this) == DialogResult.OK) {
 					LoadFile(ofd.FileName);
 				}
 			}
@@ -196,7 +196,7 @@ namespace Mesen.GUI.Forms
 								ofd.InitialDirectory = ConfigManager.Config.RecentFiles[0].RomFile.Folder;
 							}
 
-							if(ofd.ShowDialog() == DialogResult.OK) {
+							if(ofd.ShowDialog(this) == DialogResult.OK) {
 								LoadROM(ofd.FileName, true, patchFile);
 							}
 						}

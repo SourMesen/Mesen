@@ -17,6 +17,11 @@ SdlRenderer::~SdlRenderer()
 	Cleanup();
 }
 
+void SdlRenderer::SetFullscreenMode(bool fullscreen, void* windowHandle, uint32_t monitorWidth, uint32_t monitorHeight)
+{
+	//TODO: Implement exclusive fullscreen for Linux
+}
+
 void SdlRenderer::Init()
 {
 	SDL_InitSubSystem(SDL_INIT_VIDEO);

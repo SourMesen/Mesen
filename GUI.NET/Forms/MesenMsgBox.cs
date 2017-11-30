@@ -20,7 +20,7 @@ namespace Mesen.GUI.Forms
 					return MessageBox.Show(string.Format("Critical error (" + text + ")"), "Mesen", buttons, icon);
 				}
 			} else {
-				return MessageBox.Show(ResourceHelper.GetMessage(text, args), "Mesen", buttons, icon);
+				return MessageBox.Show(Application.OpenForms[0], ResourceHelper.GetMessage(text, args), "Mesen", buttons, icon);
 			}
 		}
 	}

@@ -44,6 +44,7 @@ namespace Mesen.GUI.Forms.Config
 			this.nudCustomRatio = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.chkFullscreenForceIntegerScale = new System.Windows.Forms.CheckBox();
 			this.chkShowFps = new System.Windows.Forms.CheckBox();
+			this.chkUseExclusiveFullscreen = new System.Windows.Forms.CheckBox();
 			this.chkIntegerFpsMode = new System.Windows.Forms.CheckBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
@@ -108,6 +109,8 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisableSprites = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkForceBackgroundFirstColumn = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkForceSpritesFirstColumn = new Mesen.GUI.Controls.ctrlRiskyOption();
+			this.lblScreenRotation = new System.Windows.Forms.Label();
+			this.cboScreenRotation = new System.Windows.Forms.ComboBox();
 			this.contextPicturePresets = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuPresetComposite = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPresetSVideo = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,8 +128,6 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
-			this.lblScreenRotation = new System.Windows.Forms.Label();
-			this.cboScreenRotation = new System.Windows.Forms.ComboBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -173,17 +174,18 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 3);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 1);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 4);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 6);
 			this.tlpMain.Controls.Add(this.nudScale, 1, 0);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 1);
 			this.tlpMain.Controls.Add(this.chkFullscreenForceIntegerScale, 0, 5);
-			this.tlpMain.Controls.Add(this.chkShowFps, 0, 6);
+			this.tlpMain.Controls.Add(this.chkShowFps, 0, 7);
+			this.tlpMain.Controls.Add(this.chkUseExclusiveFullscreen, 0, 4);
 			this.tlpMain.Controls.Add(this.chkIntegerFpsMode, 0, 2);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 8;
+			this.tlpMain.RowCount = 9;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -192,6 +194,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.Size = new System.Drawing.Size(521, 370);
 			this.tlpMain.TabIndex = 1;
 			// 
@@ -233,7 +236,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
 			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
 			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 92);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 138);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
 			this.flowLayoutPanel7.Size = new System.Drawing.Size(521, 23);
@@ -381,12 +384,24 @@ namespace Mesen.GUI.Forms.Config
 			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFps.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 141);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 164);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
 			this.chkShowFps.Text = "Show FPS";
 			this.chkShowFps.UseVisualStyleBackColor = true;
+			// 
+			// chkUseExclusiveFullscreen
+			// 
+			this.chkUseExclusiveFullscreen.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkUseExclusiveFullscreen.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkUseExclusiveFullscreen, 2);
+			this.chkUseExclusiveFullscreen.Location = new System.Drawing.Point(3, 95);
+			this.chkUseExclusiveFullscreen.Name = "chkUseExclusiveFullscreen";
+			this.chkUseExclusiveFullscreen.Size = new System.Drawing.Size(169, 17);
+			this.chkUseExclusiveFullscreen.TabIndex = 24;
+			this.chkUseExclusiveFullscreen.Text = "Use exclusive fullscreen mode";
+			this.chkUseExclusiveFullscreen.UseVisualStyleBackColor = true;
 			// 
 			// chkIntegerFpsMode
 			// 
@@ -1358,6 +1373,25 @@ namespace Mesen.GUI.Forms.Config
 			this.chkForceSpritesFirstColumn.TabIndex = 3;
 			this.chkForceSpritesFirstColumn.Text = "Force sprite display in first column";
 			// 
+			// lblScreenRotation
+			// 
+			this.lblScreenRotation.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblScreenRotation.AutoSize = true;
+			this.lblScreenRotation.Location = new System.Drawing.Point(3, 7);
+			this.lblScreenRotation.Name = "lblScreenRotation";
+			this.lblScreenRotation.Size = new System.Drawing.Size(87, 13);
+			this.lblScreenRotation.TabIndex = 4;
+			this.lblScreenRotation.Text = "Screen Rotation:";
+			// 
+			// cboScreenRotation
+			// 
+			this.cboScreenRotation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboScreenRotation.FormattingEnabled = true;
+			this.cboScreenRotation.Location = new System.Drawing.Point(96, 3);
+			this.cboScreenRotation.Name = "cboScreenRotation";
+			this.cboScreenRotation.Size = new System.Drawing.Size(77, 21);
+			this.cboScreenRotation.TabIndex = 5;
+			// 
 			// contextPicturePresets
 			// 
 			this.contextPicturePresets.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1480,25 +1514,6 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Size = new System.Drawing.Size(254, 22);
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
-			// 
-			// lblScreenRotation
-			// 
-			this.lblScreenRotation.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblScreenRotation.AutoSize = true;
-			this.lblScreenRotation.Location = new System.Drawing.Point(3, 7);
-			this.lblScreenRotation.Name = "lblScreenRotation";
-			this.lblScreenRotation.Size = new System.Drawing.Size(87, 13);
-			this.lblScreenRotation.TabIndex = 4;
-			this.lblScreenRotation.Text = "Screen Rotation:";
-			// 
-			// cboScreenRotation
-			// 
-			this.cboScreenRotation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboScreenRotation.FormattingEnabled = true;
-			this.cboScreenRotation.Location = new System.Drawing.Point(96, 3);
-			this.cboScreenRotation.Name = "cboScreenRotation";
-			this.cboScreenRotation.Size = new System.Drawing.Size(77, 21);
-			this.cboScreenRotation.TabIndex = 5;
 			// 
 			// frmVideoConfig
 			// 
@@ -1663,5 +1678,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkIntegerFpsMode;
 		private System.Windows.Forms.Label lblScreenRotation;
 		private System.Windows.Forms.ComboBox cboScreenRotation;
+		private System.Windows.Forms.CheckBox chkUseExclusiveFullscreen;
 	}
 }

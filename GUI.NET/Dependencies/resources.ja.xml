@@ -260,6 +260,7 @@
       <Control ID="chkFullscreenForceIntegerScale">全画面表示モードに入る時、画面サイズの倍率を整数にする</Control>
       <Control ID="chkShowFps">フレームレート表示</Control>
       <Control ID="chkUseHdPacks">HDNesのHDパックを使う</Control>
+      <Control ID="chkUseExclusiveFullscreen">排他的なフルスクリーンモードを使う</Control>
       <Control ID="tpgOverscan">オーバースキャン</Control>
       <Control ID="grpCropping">オーバースキャン</Control>
       <Control ID="lblLeft">左</Control>

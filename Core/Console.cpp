@@ -101,7 +101,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		if(mapper) {
 			if(_mapper) {
 				//Send notification only if a game was already running and we successfully loaded the new one
-				MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
+				MessageManager::SendNotification(ConsoleNotificationType::GameStopped, (void*)1);
 			}
 
 			if(_romFilepath != (string)romFile || _patchFilename != (string)patchFile) {

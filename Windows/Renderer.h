@@ -52,6 +52,16 @@ namespace NES {
 		const uint32_t _bytesPerPixel = 4;
 		uint32_t _screenBufferSize = 0;
 
+		bool _newFullscreen = false;
+		bool _fullscreen = false;
+
+		uint32_t _realScreenHeight = 240;
+		uint32_t _realScreenWidth = 256;
+		uint32_t _leftMargin = 0;
+		uint32_t _topMargin = 0;
+		uint32_t _monitorWidth = 0;
+		uint32_t _monitorHeight = 0;
+
 		uint32_t _nesFrameHeight = 0;
 		uint32_t _nesFrameWidth = 0;
 		uint32_t _newFrameBufferSize = 0;
@@ -76,9 +86,17 @@ namespace NES {
 		float MeasureString(std::wstring text);
 		bool ContainsCharacter(wchar_t character);
 
+		HRESULT CreateRenderTargetView();
+		void ReleaseRenderTargetView();
+		HRESULT CreateNesBuffers();
+		void ResetNesBuffers();
+		HRESULT CreateSamplerState();
+
 	public:
 		Renderer(HWND hWnd);
 		~Renderer();
+
+		void SetFullscreenMode(bool fullscreen, void* windowHandle, uint32_t monitorWidth, uint32_t monitorHeight);
 
 		void Reset();
 		void Render();

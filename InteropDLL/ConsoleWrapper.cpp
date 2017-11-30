@@ -122,6 +122,14 @@ namespace InteropEmu {
 			}
 		}
 
+		DllExport void __stdcall SetFullscreenMode(bool fullscreen, void *windowHandle, uint32_t monitorWidth, uint32_t monitorHeight)
+		{
+			if(_renderer) {
+				_renderer->SetFullscreenMode(fullscreen, windowHandle, monitorWidth, monitorHeight);
+			}
+		}
+
+
 		DllExport bool __stdcall IsRunning() { return Console::IsRunning(); }
 
 		DllExport void __stdcall LoadROM(char* filename, char* patchFile) { Console::LoadROM((string)filename, (string)patchFile); }

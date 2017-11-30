@@ -256,6 +256,7 @@
       <Control ID="chkFullscreenForceIntegerScale">Fes servir valors enters d'escalat al mode de pantalla completa</Control>
       <Control ID="chkShowFps">Mostra els FPS</Control>
       <Control ID="chkUseHdPacks">Fes servir els paquets d'alta resolució d'HDNes</Control>
+      <Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
       <Control ID="tpgOverscan">Sobreescaneig</Control>
       <Control ID="grpCropping">Retall de vídeo</Control>
       <Control ID="lblLeft">Esquerra</Control>

@@ -258,6 +258,7 @@
       <Control ID="chkFullscreenForceIntegerScale">Використовуйте цілі значення масштабу при введенні повноекранного режиму</Control>
       <Control ID="chkShowFps">Показувати FPS</Control>
       <Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
+      <Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Overscan</Control>
       <Control ID="lblLeft">Злiва</Control>

@@ -259,6 +259,7 @@
       <Control ID="chkFullscreenForceIntegerScale">Utiliser une valeur entière pour l'échelle vidéo en mode plein écran</Control>
       <Control ID="chkShowFps">Afficher le FPS</Control>
       <Control ID="chkUseHdPacks">Utiliser les packs haute-définition de HDNes</Control>
+      <Control ID="chkUseExclusiveFullscreen">Utiliser le mode plein écran exclusif</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Overscan</Control>
       <Control ID="lblLeft">Gauche</Control>

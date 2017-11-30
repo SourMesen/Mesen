@@ -258,6 +258,7 @@
       <Control ID="chkFullscreenForceIntegerScale">Use integer scale values when entering fullscreen mode</Control>
       <Control ID="chkShowFps">Показывать FPS</Control>
       <Control ID="chkUseHdPacks">Использовать HDNes HD packs</Control>
+      <Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Overscan</Control>
       <Control ID="lblLeft">Слева</Control>

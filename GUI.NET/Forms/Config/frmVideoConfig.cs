@@ -66,6 +66,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("ForceBackgroundFirstColumn", chkForceBackgroundFirstColumn);
 			AddBinding("ForceSpritesFirstColumn", chkForceSpritesFirstColumn);
 			AddBinding("FullscreenForceIntegerScale", chkFullscreenForceIntegerScale);
+			AddBinding("UseExclusiveFullscreen", chkUseExclusiveFullscreen);
 
 			AddBinding("UseCustomVsPalette", chkUseCustomVsPalette);
 
@@ -83,6 +84,11 @@ namespace Mesen.GUI.Forms.Config
 
 			ResourceHelper.ApplyResources(this, contextPaletteList);
 			ResourceHelper.ApplyResources(this, contextPicturePresets);
+
+			if(Program.IsMono) {
+				//Not available in the linux build (for now)
+				chkUseExclusiveFullscreen.Visible = false;
+			}
 		}
 
 		private void UpdatePalette()

@@ -256,6 +256,7 @@
       <Control ID="chkFullscreenForceIntegerScale">Usar valores de escala inteira ao entrar no modo de tela cheia</Control>
       <Control ID="chkShowFps">Mostrar FPS</Control>
       <Control ID="chkUseHdPacks">Usar os pacotes de alta definição do HDNes</Control>
+      <Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Recorte</Control>
       <Control ID="lblLeft">Esquerda</Control>
