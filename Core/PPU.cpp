@@ -46,6 +46,7 @@ void PPU::Reset()
 {
 	_cyclesNeeded = 0;
 
+	_needStateUpdate = false;
 	_prevRenderingEnabled = false;
 	_renderingEnabled = false;
 
@@ -278,7 +279,8 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 				}
 
 				UpdateVideoRamAddr();
-				_ignoreVramRead = 2;
+				_ignoreVramRead = 6;
+				_needStateUpdate = true;
 			}
 			break;
 
@@ -344,6 +346,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 
 				//Video RAM update is apparently delayed by 2-3 PPU cycles (based on Visual NES findings)
 				//A 3-cycle delay causes issues with the scanline test.
+				_needStateUpdate = true;
 				_updateVramAddrDelay = 2;
 				_updateVramAddr = _state.TmpVideoRamAddr;
 				Debugger::SetLastFramePpuScroll(_updateVramAddr, _state.XScroll, false);
@@ -443,6 +446,10 @@ void PPU::SetMaskRegister(uint8_t value)
 	_flags.BackgroundEnabled = (_state.Mask & 0x08) == 0x08;
 	_flags.SpritesEnabled = (_state.Mask & 0x10) == 0x10;
 	_flags.IntensifyBlue = (_state.Mask & 0x80) == 0x80;
+
+	if(_renderingEnabled != (_flags.BackgroundEnabled | _flags.SpritesEnabled)) {
+		_needStateUpdate = true;
+	}
 
 	UpdateMinimumDrawCycles();
 
@@ -1109,9 +1116,21 @@ void PPU::Exec()
 		}
 	}
 
+	if(_needStateUpdate) {
+		UpdateState();
+	}
+}
+
+void PPU::UpdateState()
+{
+	_needStateUpdate = false;
+
 	//Rendering enabled flag is apparently set with a 1 cycle delay (i.e setting it at cycle 5 will render cycle 6 like cycle 5 and then take the new settings for cycle 7)
 	_prevRenderingEnabled = _renderingEnabled;
 	_renderingEnabled = _flags.BackgroundEnabled | _flags.SpritesEnabled;
+	if(_prevRenderingEnabled != _renderingEnabled) {
+		_needStateUpdate = true;
+	}
 
 	if(_updateVramAddrDelay > 0) {
 		_updateVramAddrDelay--;
@@ -1121,6 +1140,15 @@ void PPU::Exec()
 			//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
 			//"4) Should be clocked when A12 changes to 1 via $2006 write"
 			_mapper->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
+		} else {
+			_needStateUpdate = true;
+		}
+	}
+
+	if(_ignoreVramRead > 0) {
+		_ignoreVramRead--;
+		if(_ignoreVramRead > 0) {
+			_needStateUpdate = true;
 		}
 	}
 }
@@ -1147,10 +1175,6 @@ void PPU::ExecStatic()
 			PPU::Instance->Exec();
 			Instance->_cyclesNeeded--;
 		}
-	}
-
-	if(PPU::Instance->_ignoreVramRead) {
-		PPU::Instance->_ignoreVramRead--;
 	}
 }
 
@@ -1183,7 +1207,7 @@ void PPU::StreamState(bool saving)
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
 		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, unusedSpriteDmaAddr,
 		unusedSpriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, unusedSkipScrollIncrement, paletteRam, spriteRam, secondarySpriteRam,
-		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter, _updateVramAddr, _updateVramAddrDelay);
+		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter, _updateVramAddr, _updateVramAddrDelay, _needStateUpdate);
 
 	for(int i = 0; i < 64; i++) {
 		Stream(_spriteTiles[i].SpriteX, _spriteTiles[i].LowByte, _spriteTiles[i].HighByte, _spriteTiles[i].PaletteOffset, _spriteTiles[i].HorizontalMirror, _spriteTiles[i].BackgroundPriority);

@@ -409,93 +409,92 @@ void Console::Run()
 	UpdateNesModel(true);
 
 	bool crashed = false;
-	while(true) { 
-		try {
+	try {
+		while(true) {
 			_cpu->Exec();
-		} catch(const std::runtime_error &ex) {
-			crashed = true;
-			MessageManager::DisplayMessage("Error", "GameCrash", ex.what());
-			break;
-		}
 
-		if(_resetRequested) {
-			//Used by NSF player to reset console after changing track
-			//Also used with DisablePpuReset option to reset mid-frame
-			MovieManager::Stop();
-			ResetComponents(true);
-			_resetRequested = false;
-		}
-
-		uint32_t currentFrameNumber = PPU::GetFrameCount();
-		if(currentFrameNumber != lastFrameNumber) {
-			_rewindManager->ProcessEndOfFrame();
-			EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
-			_disableOcNextFrame = false;
-
-			//Sleep until we're ready to start the next frame
-			clockTimer.WaitUntil(targetTime);
-			
-			if(!_pauseLock.IsFree()) {
-				//Need to temporarely pause the emu (to save/load a state, etc.)
-				_runLock.Release();
-
-				//Spin wait until we are allowed to start again
-				_pauseLock.WaitForRelease();
-
-				_runLock.Acquire();
+			if(_resetRequested) {
+				//Used by NSF player to reset console after changing track
+				//Also used with DisablePpuReset option to reset mid-frame
+				MovieManager::Stop();
+				ResetComponents(true);
+				_resetRequested = false;
 			}
 
-			bool paused = EmulationSettings::IsPaused();
-			if(paused && !_stop) {
-				MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
-				
-				//Prevent audio from looping endlessly while game is paused
-				SoundMixer::StopAudio();
+			uint32_t currentFrameNumber = PPU::GetFrameCount();
+			if(currentFrameNumber != lastFrameNumber) {
+				_rewindManager->ProcessEndOfFrame();
+				EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
+				_disableOcNextFrame = false;
 
-				_runLock.Release();
-				
-				PlatformUtilities::EnableScreensaver();
-				while(paused && !_stop) {
-					//Sleep until emulation is resumed
-					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
-					paused = EmulationSettings::IsPaused();
+				//Sleep until we're ready to start the next frame
+				clockTimer.WaitUntil(targetTime);
+
+				if(!_pauseLock.IsFree()) {
+					//Need to temporarely pause the emu (to save/load a state, etc.)
+					_runLock.Release();
+
+					//Spin wait until we are allowed to start again
+					_pauseLock.WaitForRelease();
+
+					_runLock.Acquire();
 				}
 
-				if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
-					//Prevent pausing when debugger is active
-					EmulationSettings::ClearFlags(EmulationFlags::Paused);
+				bool paused = EmulationSettings::IsPaused();
+				if(paused && !_stop) {
+					MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
+
+					//Prevent audio from looping endlessly while game is paused
+					SoundMixer::StopAudio();
+
+					_runLock.Release();
+
+					PlatformUtilities::EnableScreensaver();
+					while(paused && !_stop) {
+						//Sleep until emulation is resumed
+						std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
+						paused = EmulationSettings::IsPaused();
+					}
+
+					if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
+						//Prevent pausing when debugger is active
+						EmulationSettings::ClearFlags(EmulationFlags::Paused);
+					}
+
+					PlatformUtilities::DisableScreensaver();
+					_runLock.Acquire();
+					MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
 				}
 
-				PlatformUtilities::DisableScreensaver();
-				_runLock.Acquire();								
-				MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
-			}
-			
-			_systemActionManager->ProcessSystemActions();
+				_systemActionManager->ProcessSystemActions();
 
-			shared_ptr<Debugger> debugger = _debugger;
-			if(debugger) {
-				debugger->ProcessEvent(EventType::StartFrame);
-			}
+				shared_ptr<Debugger> debugger = _debugger;
+				if(debugger) {
+					debugger->ProcessEvent(EventType::StartFrame);
+				}
 
-			//Get next target time, and adjust based on whether we are ahead or behind
-			double timeLag = EmulationSettings::GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
-			UpdateNesModel(true);
-			targetTime = GetFrameDelay();
+				//Get next target time, and adjust based on whether we are ahead or behind
+				double timeLag = EmulationSettings::GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
+				UpdateNesModel(true);
+				targetTime = GetFrameDelay();
 
-			clockTimer.Reset();
-			targetTime -= timeLag;
-			if(targetTime < 0) {
-				targetTime = 0;
-			}
+				clockTimer.Reset();
+				targetTime -= timeLag;
+				if(targetTime < 0) {
+					targetTime = 0;
+				}
 
-			lastFrameNumber = PPU::GetFrameCount();
-			
-			if(_stop) {
-				_stop = false;
-				break;
+				lastFrameNumber = PPU::GetFrameCount();
+
+				if(_stop) {
+					_stop = false;
+					break;
+				}
 			}
 		}
+	} catch(const std::runtime_error &ex) {
+		crashed = true;
+		MessageManager::DisplayMessage("Error", "GameCrash", ex.what());
 	}
 
 	if(!crashed) {

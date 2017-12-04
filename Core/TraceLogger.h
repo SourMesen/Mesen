@@ -88,6 +88,7 @@ public:
 
 	const char* GetExecutionTrace(uint32_t lineCount);
 
+	static void LogStatic(char *log);
 	static void LogStatic(string log);
 
 };

@@ -51,12 +51,54 @@ private:
 	bool _saving;
 
 private:
+	void EnsureCapacity(uint32_t typeSize)
+	{
+		//Make sure the current block/stream is large enough to fit the next write
+		uint32_t oldSize;
+		uint32_t sizeRequired;
+		uint8_t *oldBuffer;
+		if(_inBlock) {
+			oldBuffer = _blockBuffer;
+			oldSize = _blockSize;
+			sizeRequired = _blockPosition + typeSize;
+		} else {
+			oldBuffer = _stream;
+			oldSize = _streamSize;
+			sizeRequired = _position + typeSize;
+		}
+
+		uint8_t *newBuffer = nullptr;
+		uint32_t newSize = oldSize * 2;
+		if(oldSize < sizeRequired) {
+			while(newSize < sizeRequired) {
+				newSize *= 2;
+			}
+
+			newBuffer = new uint8_t[newSize];
+			memcpy(newBuffer, oldBuffer, oldSize);
+			delete[] oldBuffer;
+		}
+		
+		if(newBuffer) {
+			if(_inBlock) {
+				_blockBuffer = newBuffer;
+				_blockSize = newSize;
+			} else {
+				_stream = newBuffer;
+				_streamSize = newSize;
+			}
+		}
+	}
+
 	template<typename T>
 	void StreamElement(T &value, T defaultValue = T())
 	{
 		if(_saving) {
 			uint8_t* bytes = (uint8_t*)&value;
 			int typeSize = sizeof(T);
+
+			EnsureCapacity(typeSize);
+
 			for(int i = 0; i < typeSize; i++) {
 				if(_inBlock) {
 					_blockBuffer[_blockPosition++] = bytes[i];

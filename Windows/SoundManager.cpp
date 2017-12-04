@@ -149,12 +149,15 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate, bool isStereo)
 	// Release the temporary buffer.
 	tempBuffer->Release();
 
+	_playing = false;
+
 	return true;
 }
 
 
 void SoundManager::Release()
 {
+	_playing = false;
 	_needReset = false;
 	_lastWriteOffset = 0;
 
@@ -209,6 +212,7 @@ void SoundManager::Pause()
 	if(_secondaryBuffer) {
 		_secondaryBuffer->Stop();
 	}
+	_playing = false;
 }
 
 void SoundManager::Stop()
@@ -217,12 +221,14 @@ void SoundManager::Stop()
 		_secondaryBuffer->Stop();
 		ClearSecondaryBuffer();
 	}
+	_playing = false;
 }
 
 void SoundManager::Play()
 {
 	if(_secondaryBuffer) {
 		_secondaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
+		_playing = true;
 	}
 }
 
@@ -232,6 +238,18 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32
 	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset) {
 		Release();
 		InitializeDirectSound(sampleRate, isStereo);
+		_secondaryBuffer->SetFrequency(sampleRate);
+		_emulationSpeed = 100;
+	}
+
+	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
+	if(emulationSpeed != _emulationSpeed) {
+		uint32_t targetRate = sampleRate;
+		if(emulationSpeed > 0 && emulationSpeed < 100) {
+			targetRate = (uint32_t)(targetRate * ((double)emulationSpeed / 100.0));
+		}
+		_secondaryBuffer->SetFrequency(targetRate);
+		_emulationSpeed = emulationSpeed;
 	}
 
 	if(isStereo) {
@@ -261,17 +279,9 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32
 		_secondaryBuffer->SetCurrentPosition(_lastWriteOffset - byteLatency);
 	}
 
-	uint32_t targetRate = sampleRate;
-	if(EmulationSettings::GetEmulationSpeed() > 0 && EmulationSettings::GetEmulationSpeed() < 100) {
-		targetRate = (uint32_t)(targetRate * ((double)EmulationSettings::GetEmulationSpeed() / 100.0));
-	}
-	_secondaryBuffer->SetFrequency(targetRate);
-
 	CopyToSecondaryBuffer((uint8_t*)soundBuffer, soundBufferSize);
 
-	DWORD status;
-	_secondaryBuffer->GetStatus(&status);
-	if(!(status & DSBSTATUS_PLAYING) && _lastWriteOffset >= byteLatency) {
+	if(!_playing && _lastWriteOffset >= byteLatency) {
 		Play();
 	}
 }

@@ -28,7 +28,6 @@ private:
 	vector<SoundDeviceInfo> GetAvailableDeviceInfo();
 	static bool CALLBACK DirectSoundEnumProc(LPGUID lpGUID, LPCWSTR lpszDesc, LPCSTR lpszDrvName, LPVOID lpContext);
 	bool InitializeDirectSound(uint32_t sampleRate, bool isStereo);
-	void ShutdownDirectSound();
 	void ClearSecondaryBuffer();
 	void CopyToSecondaryBuffer(uint8_t *data, uint32_t size);
 
@@ -41,6 +40,8 @@ private:
 	uint16_t _previousLatency = 0;
 	uint32_t _sampleRate = 0;
 	bool _isStereo = false;
+	bool _playing = false;
+	uint32_t _emulationSpeed = 100;
 
 	IDirectSound8* _directSound;
 	IDirectSoundBuffer* _primaryBuffer;

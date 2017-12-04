@@ -87,6 +87,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		bool _oamCopyDone;
 		uint8_t _overflowBugCounter;
 
+		bool _needStateUpdate;
 		bool _renderingEnabled;
 		bool _prevRenderingEnabled;
 
@@ -141,6 +142,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		__forceinline virtual void DrawPixel();
 		void UpdateGrayscaleAndIntensifyBits();
 		virtual void SendFrame();
+
+		void UpdateState();
 
 		void UpdateApuStatus();
 

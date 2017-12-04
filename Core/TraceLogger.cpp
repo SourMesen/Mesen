@@ -67,6 +67,13 @@ void TraceLogger::StopLogging()
 	}
 }
 
+void TraceLogger::LogStatic(char *log)
+{
+	if(_instance && _instance->_logToFile && _instance->_options.ShowExtraInfo) {
+		LogStatic(string(log));
+	}
+}
+
 void TraceLogger::LogStatic(string log)
 {
 	if(_instance && _instance->_logToFile && _instance->_options.ShowExtraInfo) {

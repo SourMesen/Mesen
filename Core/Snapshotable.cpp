@@ -9,11 +9,15 @@ void Snapshotable::StreamStartBlock()
 		throw new std::runtime_error("Cannot start a new block before ending the last block");
 	}
 
-	_blockBuffer = new uint8_t[0xFFFFF];
 	if(!_saving) {
 		InternalStream(_blockSize);
-		ArrayInfo<uint8_t> arrayInfo = { _blockBuffer, std::min((uint32_t)0xFFFFF, _blockSize) };
+		_blockSize = std::min(_blockSize, (uint32_t)0xFFFFF);
+		_blockBuffer = new uint8_t[_blockSize];
+		ArrayInfo<uint8_t> arrayInfo = { _blockBuffer, _blockSize };
 		InternalStream(arrayInfo);
+	} else {
+		_blockSize = 0x100;
+		_blockBuffer = new uint8_t[_blockSize];
 	}
 	_blockPosition = 0;
 	_inBlock = true;
@@ -67,7 +71,8 @@ void Snapshotable::SaveSnapshot(ostream* file)
 {
 	_stateVersion = SaveStateManager::FileFormatVersion;
 
-	_stream = new uint8_t[0xFFFFF];
+	_streamSize = 0x1000;
+	_stream = new uint8_t[_streamSize];
 	_position = 0;
 	_saving = true;
 
@@ -86,12 +91,11 @@ void Snapshotable::LoadSnapshot(istream* file, uint32_t stateVersion)
 {
 	_stateVersion = stateVersion;
 
-	_stream = new uint8_t[0xFFFFF];
-	memset((char*)_stream, 0, 0xFFFFF);
 	_position = 0;
 	_saving = false;
 
 	file->read((char*)&_streamSize, sizeof(_streamSize));
+	_stream = new uint8_t[_streamSize];
 	file->read((char*)_stream, _streamSize);
 	StreamState(_saving);
 
