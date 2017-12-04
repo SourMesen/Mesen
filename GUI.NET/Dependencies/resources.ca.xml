@@ -19,11 +19,11 @@
       <Control ID="mnuVsGameConfig">Configuració de joc VS</Control>
       <Control ID="mnuInsertCoin1">Insereix moneda (1)</Control>
       <Control ID="mnuInsertCoin2">Insereix moneda (2)</Control>
-      <Control ID="mnuInputBarcode">Input Barcode</Control>
-      <Control ID="mnuTapeRecorder">Tape Recorder</Control>
-      <Control ID="mnuLoadTapeFile">Load from file...</Control>
-      <Control ID="mnuStartRecordTapeFile">Record to file...</Control>
-      <Control ID="mnuStopRecordTapeFile">Stop recording</Control>
+      <Control ID="mnuInputBarcode">Introdueix un codi de barres</Control>
+      <Control ID="mnuTapeRecorder">Enregistrador de dades</Control>
+      <Control ID="mnuLoadTapeFile">Carrega des d'un fitxer...</Control>
+      <Control ID="mnuStartRecordTapeFile">Enregistra al fitxer...</Control>
+      <Control ID="mnuStopRecordTapeFile">Atura</Control>
       <Control ID="mnuOptions">Opcions</Control>
       <Control ID="mnuEmulationSpeed">Velocitat</Control>
       <Control ID="mnuEmuSpeedNormal">Normal (100%)</Control>
@@ -65,6 +65,7 @@
       <Control ID="mnuNetPlayPlayer2">Jugador 2</Control>
       <Control ID="mnuNetPlayPlayer3">Jugador 3</Control>
       <Control ID="mnuNetPlayPlayer4">Jugador 4</Control>
+      <Control ID="mnuNetPlayPlayer5">Port d'extensió</Control>
       <Control ID="mnuNetPlaySpectator">Espectador</Control>
       <Control ID="mnuFindServer">Cerca un servidor públic...</Control>
       <Control ID="mnuProfile">Configura el teu perfil</Control>
@@ -256,7 +257,7 @@
       <Control ID="chkFullscreenForceIntegerScale">Fes servir valors enters d'escalat al mode de pantalla completa</Control>
       <Control ID="chkShowFps">Mostra els FPS</Control>
       <Control ID="chkUseHdPacks">Fes servir els paquets d'alta resolució d'HDNes</Control>
-      <Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
+      <Control ID="chkUseExclusiveFullscreen">Fes servir el mode de pantalla completa exclusiva</Control>
       <Control ID="tpgOverscan">Sobreescaneig</Control>
       <Control ID="grpCropping">Retall de vídeo</Control>
       <Control ID="lblLeft">Esquerra</Control>
@@ -298,7 +299,7 @@
       <Control ID="mnuPresetMonochrome">Monocrom</Control>
 
       <Control ID="tpgAdvanced">Avançat</Control>
-      <Control ID="lblScreenRotation">Screen Rotation:</Control>
+      <Control ID="lblScreenRotation">Rotació de la pantalla:</Control>
       <Control ID="chkDisableBackground">Desactiva el fons</Control>
       <Control ID="chkDisableSprites">Desactiva els sprites</Control>
       <Control ID="chkForceBackgroundFirstColumn">Força l'aparició del fons a la primera columna</Control>
@@ -603,8 +604,8 @@
       <Control ID="lblExplanation">Això iniciarà Mesen en mode de pantalla completa i amb la rom "MyGame.nes" carregada. A més, farà servir el filtre NTSC ajustat a una escala de 2x i configurarà les opcions de sobreescaneig. El paràmetre "DoNotSaveSettings" s'utilitza per evitar que els canvis efectuats des de la línia d'ordres es desin permanentment a la configuració de Mesen.</Control>
       <Control ID="txtGeneralOptions">/fullscreen - Inicia Mesen en pantalla completa&#13;&#10;/DoNotSaveSettings - Evita que els canvis es desin (útil per a evitar que les opcions de la línia d'ordres es converteixin en la configuració per defecte)</Control>
     </Form>
-    <Form ID="frmInputBarCode" Title="Input Barcode...">
-      <Control ID="lblBarcode">Barcode:</Control>
+    <Form ID="frmInputBarCode" Title="Introducció d'un codi de barres...">
+      <Control ID="lblBarcode">Codi de barres:</Control>
       <Control ID="btnOK">D'acord</Control>
       <Control ID="btnCancel">Cancel·la</Control>
     </Form>
@@ -620,7 +621,7 @@
     <Message ID="FilterTest">Fitxers de proves (*.mtp)|*.mtp|Tots els fitxers (*.*)|*.*</Message>
     <Message ID="FilterCheat">Tots els formats suportats (*.cht, *.xml)|*.cht;*.xml</Message>
     <Message ID="FilterSavestate">Partides guardades de Mesen (*.mst)|*.mst|Tots els fitxers (*.*)|*.*</Message>
-    <Message ID="FilterTapeFiles">Family Basic Tape files (*.fbt)|*.fbt|Tots els fitxers (*.*)|*.*</Message>
+    <Message ID="FilterTapeFiles">Fitxers de cassets Family Basic (*.fbt)|*.fbt|Tots els fitxers (*.*)|*.*</Message>
 
     <Message ID="LoadFromFile">Carrega des d'un fitxer...</Message>
     <Message ID="SaveToFile">Desa al fitxer...</Message>
@@ -781,12 +782,12 @@
       <Value ID="OekaKidsTablet">Tauleta Oeka Kids</Value>
       <Value ID="FamilyTrainerMat">Family Trainer</Value>
       <Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
-      <Value ID="FamilyBasicKeyboard">Family Basic Keyboard</Value>
+      <Value ID="FamilyBasicKeyboard">Teclat Family Basic</Value>
       <Value ID="PartyTap">Partytap</Value>
-      <Value ID="Pachinko">Pachinko Controller</Value>
+      <Value ID="Pachinko">Comandament Pachinko</Value>
       <Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
-      <Value ID="JissenMahjong">Jissen Mahjong Controller</Value>
-      <Value ID="SuborKeyboard">Subor Keyboard</Value>
+      <Value ID="JissenMahjong">Comandament Jissen Mahjong</Value>
+      <Value ID="SuborKeyboard">Teclat Subor</Value>
       <Value ID="BarcodeBattler">Barcode Battler</Value>
       <Value ID="HoriTrack">Hori Track</Value>
       <Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
@@ -803,7 +804,7 @@
       <Value ID="Custom">Personalitzat</Value>
     </Enum>
     <Enum ID="ScreenRotation">
-      <Value ID="None">None</Value>
+      <Value ID="None">Cap</Value>
       <Value ID="_90Degrees">90°</Value>
       <Value ID="_180Degrees">180°</Value>
       <Value ID="_270Degrees">270°</Value>
