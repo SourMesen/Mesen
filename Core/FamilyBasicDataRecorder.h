@@ -57,7 +57,7 @@ public:
 
 	void OnAfterSetState() override
 	{
-		if(_state.State.size() > 0) {
+		if(GetRawState().State.size() > 0) {
 			_data = Base64::Decode(GetTextState());
 			_cycle = CPU::GetCycleCount();
 			_isPlaying = true;

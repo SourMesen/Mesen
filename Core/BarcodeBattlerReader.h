@@ -30,7 +30,8 @@ protected:
 
 	void InitBarcodeStream()
 	{
-		string barcodeText(_state.State.begin(), _state.State.end());
+		vector<uint8_t> state = GetRawState().State;
+		string barcodeText(state.begin(), state.end());
 
 		//Signature at the end, needed for code to be recognized
 		barcodeText += "EPOCH\xD\xA";
