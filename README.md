@@ -31,7 +31,6 @@ Things that ***may or may not*** be added in the future, in no particular order:
 -Support for more UNIF boards and more NES/Famicom input devices  
 -Debugger improvements (APU state display, etc.)  
 -Shaders  
--Improvements to movie file format to support a few things that currently do not work  
 -Libretro support  
 -TAS editor  
 
@@ -50,6 +49,7 @@ To compile and run Mesen under Linux, you will need:
 * SDL2  (package: libsdl2-dev)
 
 The makefile contains some more information at the top.  Running "make" will build the x64 version by default, and then "make run" should start the emulator.  
+LTO is supported under clang, which gives a large performance boost (25-30%+), so turning it on is highly recommended (see makefile for details).  
 
 
 ## LICENSE ##

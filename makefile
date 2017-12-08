@@ -2,15 +2,29 @@
 #Both clang & gcc work fine - clang seems to output faster code
 #The only external dependency is SDL2 - everything else is pretty standard.
 #Run "make" to build, "make run" to run
+
+#----------------------
+#Platform Configuration
+#----------------------
 #To specify whether you want to build for x86 or x64:
 #"MESENPLATFORM=x86 make" or "MESENPLATFORM=x64 make"
 #Default is x64
+
+#-----------------------
+# Link Time Optimization
+#-----------------------
+#LTO is supported for clang only
+#LTO gives a 25-30% performance boost, so use it whenever you can
+#Usage: LTO=true make
 
 CPPC=clang++
 GCCOPTIONS=-fPIC -Wall --std=c++14 -O3
 
 CC=clang
 CCOPTIONS=-fPIC -Wall -O3
+
+AR=ar -rcs
+LINKFLAG=
 
 ifeq ($(MESENPLATFORM),x86)
 	MESENPLATFORM=x86
@@ -21,6 +35,13 @@ else
 	MESENPLATFORM=x64
 	GCCOPTIONS += -m64
 	CCOPTIONS += -m64
+endif
+
+ifeq ($(LTO),true)
+	AR=llvm-ar q
+	CCOPTIONS += -flto
+	GCCOPTIONS += -flto
+	LINKFLAG=-fuse-ld=gold
 endif
 
 OBJFOLDER=obj.$(MESENPLATFORM)
@@ -57,12 +78,12 @@ rungametests:
 
 testhelper: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	mkdir -p TestHelper/$(OBJFOLDER)
-	ar -rcs TestHelper/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
-	ar -rcs TestHelper/$(OBJFOLDER)/libLua.a $(LUAOBJ)
-	ar -rcs TestHelper/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
-	ar -rcs TestHelper/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
-	ar -rcs TestHelper/$(OBJFOLDER)/libCore.a $(COREOBJ)	
-	cd TestHelper/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -o testhelper ../*.cpp ../../InteropDLL/ConsoleWrapper.cpp -L ./ -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
+	$(AR) TestHelper/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
+	$(AR) TestHelper/$(OBJFOLDER)/libLua.a $(LUAOBJ)
+	$(AR) TestHelper/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
+	$(AR) TestHelper/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
+	$(AR) TestHelper/$(OBJFOLDER)/libCore.a $(COREOBJ)	
+	cd TestHelper/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -o testhelper ../*.cpp ../../InteropDLL/ConsoleWrapper.cpp -L ./ -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
 
 SevenZip/$(OBJFOLDER)/%.o: SevenZip/%.c
 	mkdir -p SevenZip/$(OBJFOLDER) && cd SevenZip/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -c $(patsubst SevenZip/%, ../%, $<)
@@ -87,15 +108,18 @@ Linux/$(OBJFOLDER)/%.o: Linux/libevdev/%.c
 
 InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
 	mkdir -p InteropDLL/$(OBJFOLDER)
-	ar -rcs InteropDLL/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
-	ar -rcs InteropDLL/$(OBJFOLDER)/libLua.a $(LUAOBJ)
-	ar -rcs InteropDLL/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
-	ar -rcs InteropDLL/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
-	ar -rcs InteropDLL/$(OBJFOLDER)/libCore.a $(COREOBJ)
-	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lLua -lSevenZip -pthread -lSDL2 -lstdc++fs
+	$(AR) InteropDLL/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
+	$(AR) InteropDLL/$(OBJFOLDER)/libLua.a $(LUAOBJ)
+	$(AR) InteropDLL/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
+	$(AR) InteropDLL/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
+	$(AR) InteropDLL/$(OBJFOLDER)/libCore.a $(COREOBJ)
+	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lLua -lSevenZip -pthread -lSDL2 -lstdc++fs
+
+debug:
+	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe
 
 run:
-	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe
+	mono $(RELEASEFOLDER)/Mesen.exe
 
 clean:
 	rm Lua/$(OBJFOLDER) -r -f
