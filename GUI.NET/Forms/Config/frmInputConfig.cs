@@ -43,6 +43,22 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisplayInputHorizontally", chkDisplayInputHorizontally);
 
 			UpdateConflictWarning();
+
+			//Sort expansion port dropdown alphabetically, but keep the "None" option at the top
+			SortDropdown(cboExpansionPort, ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.None));
+		}
+
+		private void SortDropdown(ComboBox dropdown, string optionAtTop)
+		{
+			dropdown.Sorted = true;
+			dropdown.Sorted = false;
+			int index = dropdown.FindStringExact(optionAtTop);
+
+			if(index >= 0) {
+				object topOption = dropdown.Items[index];
+				dropdown.Items.RemoveAt(index);
+				dropdown.Items.Insert(0, topOption);
+			}
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
@@ -113,6 +129,8 @@ namespace Mesen.GUI.Forms.Config
 			} else if(comboBox == cboPlayer4) {
 				currentSelection = ResourceHelper.GetEnumText(inputInfo.Controllers[3].ControllerType);
 			}
+
+			SortDropdown(comboBox, ResourceHelper.GetEnumText(InteropEmu.ControllerType.None));
 
 			if(currentSelection != null && comboBox.Items.Contains(currentSelection)) {
 				comboBox.SelectedItem = currentSelection;
@@ -200,7 +218,12 @@ namespace Mesen.GUI.Forms.Config
 			}
 
 			btnSetupExp.Enabled = cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Zapper)) ||
-										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.FamilyTrainerMat));
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.FamilyTrainerMat)) ||
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.ExcitingBoxing)) ||
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.JissenMahjong)) ||
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.FamilyBasicKeyboard)) ||
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.SuborKeyboard)) ||
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.PartyTap));
 		}
 
 		private void cboPlayerController_SelectedIndexChanged(object sender, EventArgs e)
@@ -252,8 +275,11 @@ namespace Mesen.GUI.Forms.Config
 				switch(type) {
 					case InteropEmu.ControllerType.StandardController:
 					case InteropEmu.ControllerType.SnesController:
-					case InteropEmu.ControllerType.PowerPad:
 						frm = new frmControllerConfig(inputInfo.Controllers[index], index, cboConsoleType.GetEnumValue<ConsoleType>(), type);
+						break;
+
+					case InteropEmu.ControllerType.PowerPad:
+						frm = new frmPowerPadConfig(inputInfo.Controllers[index], index);
 						break;
 
 					case InteropEmu.ControllerType.Zapper:
@@ -264,7 +290,27 @@ namespace Mesen.GUI.Forms.Config
 				InteropEmu.ExpansionPortDevice device = (InteropEmu.ExpansionPortDevice)selectedItem;
 				switch(device) {
 					case InteropEmu.ExpansionPortDevice.FamilyTrainerMat:
-						frm = new frmControllerConfig(inputInfo.Controllers[index], index, cboConsoleType.GetEnumValue<ConsoleType>(), InteropEmu.ControllerType.PowerPad);
+						frm = new frmPowerPadConfig(inputInfo.Controllers[index], index);
+						break;
+
+					case InteropEmu.ExpansionPortDevice.PartyTap:
+						frm = new frmPartytapConfig(inputInfo.Controllers[index]);
+						break;
+
+					case InteropEmu.ExpansionPortDevice.ExcitingBoxing:
+						frm = new frmExcitingBoxingConfig(inputInfo.Controllers[index]);
+						break;
+
+					case InteropEmu.ExpansionPortDevice.JissenMahjong:
+						frm = new frmJissenMahjongConfig(inputInfo.Controllers[index]);
+						break;
+
+					case InteropEmu.ExpansionPortDevice.FamilyBasicKeyboard:
+						frm = new frmFamilyBasicKeyboardConfig(inputInfo.Controllers[index]);
+						break;
+
+					case InteropEmu.ExpansionPortDevice.SuborKeyboard:
+						frm = new frmSuborKeyboardConfig(inputInfo.Controllers[index]);
 						break;
 
 					case InteropEmu.ExpansionPortDevice.Zapper:

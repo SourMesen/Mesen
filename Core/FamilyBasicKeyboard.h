@@ -45,7 +45,7 @@ private:
 
 	string GetKeyNames() override
 	{
-		return "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456798rsdiecSs[]udlrd,:;_/-^12345678ysagck";
+		return "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789rsdiecSs[]udlrd,:;_/-^12345678ysagck";
 	}
 
 	void InternalSetStateFromInput() override

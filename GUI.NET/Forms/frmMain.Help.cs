@@ -19,10 +19,25 @@ namespace Mesen.GUI.Forms
 			Version oldVersion = new Version(ConfigManager.Config.MesenVersion);
 			if(oldVersion < newVersion) {
 				//Upgrade
-				if(oldVersion <= new Version("0.9.1")) {
-					//Version 0.9.1-
-					//Remove all old cheats with a CRC value of 0 (bugged FDS cheats)
-					ConfigManager.Config.Cheats = ConfigManager.Config.Cheats.Where((cheat) => cheat.GameCrc != "00000000" && cheat.GameCrc.Length == 8).ToList();
+				if(oldVersion <= new Version("0.3.0")) {
+					//Version 0.3.0-
+					//Remove all old VS system config to make sure the new defaults are used
+					ConfigManager.Config.VsConfig = new List<VsConfigInfo>();
+				}
+				
+				if(oldVersion <= new Version("0.4.1")) {
+					//Version 0.4.1-
+					//Remove all old cheats (Game matching/CRC logic has been changed and no longer compatible)
+					ConfigManager.Config.Cheats = new List<CheatInfo>();
+				}
+
+				if(oldVersion <= new Version("0.5.3")) {
+					//Version 0.5.3-
+					//Reduce sound latency if still using default
+					if(ConfigManager.Config.AudioInfo.AudioLatency == 100) {
+						//50ms is a fairly safe number - seems to work fine as low as 20ms (varies by computer)
+						ConfigManager.Config.AudioInfo.AudioLatency = 50;
+					}
 				}
 
 				if(oldVersion <= new Version("0.9.0")) {
@@ -35,25 +50,23 @@ namespace Mesen.GUI.Forms
 					ConfigManager.Config.RecentFiles.Clear();
 				}
 
-				if(oldVersion <= new Version("0.5.3")) {
-					//Version 0.5.3-
-					//Reduce sound latency if still using default
-					if(ConfigManager.Config.AudioInfo.AudioLatency == 100) {
-						//50ms is a fairly safe number - seems to work fine as low as 20ms (varies by computer)
-						ConfigManager.Config.AudioInfo.AudioLatency = 50;
-					}
+				if(oldVersion <= new Version("0.9.1")) {
+					//Version 0.9.1-
+					//Remove all old cheats with a CRC value of 0 (bugged FDS cheats)
+					ConfigManager.Config.Cheats = ConfigManager.Config.Cheats.Where((cheat) => cheat.GameCrc != "00000000" && cheat.GameCrc.Length == 8).ToList();
 				}
-
-				if(oldVersion <= new Version("0.4.1")) {
-					//Version 0.4.1-
-					//Remove all old cheats (Game matching/CRC logic has been changed and no longer compatible)
-					ConfigManager.Config.Cheats = new List<CheatInfo>();
-				}
-
-				if(oldVersion <= new Version("0.3.0")) {
-					//Version 0.3.0-
-					//Remove all old VS system config to make sure the new defaults are used
-					ConfigManager.Config.VsConfig = new List<VsConfigInfo>();
+				
+				if(oldVersion <= new Version("0.9.3")) {
+					//Version 0.9.3-
+					//Set default keys for some of the new controller types
+					KeyPresets presets = new KeyPresets();
+					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].ExcitingBoxingButtons = presets.ExcitingBoxing.ExcitingBoxingButtons;
+					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].FamilyBasicKeyboardButtons = presets.FamilyBasic.FamilyBasicKeyboardButtons;
+					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].JissenMahjongButtons = presets.JissenMahjong.JissenMahjongButtons;
+					//ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
+					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
+					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
+					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
 				}
 
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();

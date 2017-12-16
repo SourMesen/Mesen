@@ -33,7 +33,7 @@ namespace Mesen.GUI.Config
 		public UInt32[] PartyTapButtons = new UInt32[6];
 		public UInt32[] PachinkoButtons = new UInt32[2];
 		public UInt32[] ExcitingBoxingButtons = new UInt32[8];
-		public UInt32[] JissenMahjong = new UInt32[21];
+		public UInt32[] JissenMahjongButtons = new UInt32[21];
 		public UInt32[] SuborKeyboardButtons = new UInt32[99];
 
 		public KeyMappings()
@@ -43,13 +43,13 @@ namespace Mesen.GUI.Config
 		public KeyMappings Clone()
 		{
 			KeyMappings clone = (KeyMappings)this.MemberwiseClone();
-			clone.PowerPadButtons = new UInt32[12];
-			clone.FamilyBasicKeyboardButtons = new UInt32[72];
-			clone.PartyTapButtons = new UInt32[6];
-			clone.PachinkoButtons = new UInt32[2];
-			clone.ExcitingBoxingButtons = new UInt32[8];
-			clone.JissenMahjong = new UInt32[21];
-			clone.SuborKeyboardButtons = new UInt32[99];
+			clone.PowerPadButtons = (UInt32[])this.PowerPadButtons.Clone();
+			clone.FamilyBasicKeyboardButtons = (UInt32[])this.FamilyBasicKeyboardButtons.Clone();
+			clone.PartyTapButtons = (UInt32[])this.PartyTapButtons.Clone();
+			clone.PachinkoButtons = (UInt32[])this.PachinkoButtons.Clone();
+			clone.ExcitingBoxingButtons = (UInt32[])this.ExcitingBoxingButtons.Clone();
+			clone.JissenMahjongButtons = (UInt32[])this.JissenMahjongButtons.Clone();
+			clone.SuborKeyboardButtons = (UInt32[])this.SuborKeyboardButtons.Clone();			
 			return clone;
 		}
 
@@ -73,93 +73,16 @@ namespace Mesen.GUI.Config
 			mapping.LButton = LButton;
 			mapping.RButton = RButton;
 			mapping.PowerPadButtons = PowerPadButtons;
-			//mapping.FamilyBasicKeyboardButtons = FamilyBasicKeyboardButtons;
-
-			mapping.FamilyBasicKeyboardButtons = new UInt32[72] {
-				InteropEmu.GetKeyCode("A"), InteropEmu.GetKeyCode("B"), InteropEmu.GetKeyCode("C"), InteropEmu.GetKeyCode("D"),
-				InteropEmu.GetKeyCode("E"), InteropEmu.GetKeyCode("F"), InteropEmu.GetKeyCode("G"), InteropEmu.GetKeyCode("H"),
-				InteropEmu.GetKeyCode("I"), InteropEmu.GetKeyCode("J"), InteropEmu.GetKeyCode("K"), InteropEmu.GetKeyCode("L"),
-				InteropEmu.GetKeyCode("M"), InteropEmu.GetKeyCode("N"), InteropEmu.GetKeyCode("O"), InteropEmu.GetKeyCode("P"),
-				InteropEmu.GetKeyCode("Q"), InteropEmu.GetKeyCode("R"), InteropEmu.GetKeyCode("S"), InteropEmu.GetKeyCode("T"),
-				InteropEmu.GetKeyCode("U"), InteropEmu.GetKeyCode("V"), InteropEmu.GetKeyCode("W"), InteropEmu.GetKeyCode("X"),
-				InteropEmu.GetKeyCode("Y"), InteropEmu.GetKeyCode("Z"), InteropEmu.GetKeyCode("0"), InteropEmu.GetKeyCode("1"),
-				InteropEmu.GetKeyCode("2"), InteropEmu.GetKeyCode("3"), InteropEmu.GetKeyCode("4"), InteropEmu.GetKeyCode("5"),
-				InteropEmu.GetKeyCode("6"), InteropEmu.GetKeyCode("7"), InteropEmu.GetKeyCode("8"), InteropEmu.GetKeyCode("9"),
-				InteropEmu.GetKeyCode("Enter"), InteropEmu.GetKeyCode("Spacebar"), InteropEmu.GetKeyCode("Delete"), InteropEmu.GetKeyCode("Insert"),
-				InteropEmu.GetKeyCode("Esc"), InteropEmu.GetKeyCode("Ctrl"), InteropEmu.GetKeyCode("RIGHT SHIFT"), InteropEmu.GetKeyCode("Shift"),
-				InteropEmu.GetKeyCode("["), InteropEmu.GetKeyCode("]"),
-				InteropEmu.GetKeyCode("Up Arrow"), InteropEmu.GetKeyCode("Down Arrow"), InteropEmu.GetKeyCode("Left Arrow"), InteropEmu.GetKeyCode("Right Arrow"),
-				InteropEmu.GetKeyCode("."), InteropEmu.GetKeyCode(","), InteropEmu.GetKeyCode("'"), InteropEmu.GetKeyCode(";"),
-				InteropEmu.GetKeyCode("="), InteropEmu.GetKeyCode("/"), InteropEmu.GetKeyCode("-"), InteropEmu.GetKeyCode("`"),
-				InteropEmu.GetKeyCode("F1"), InteropEmu.GetKeyCode("F2"), InteropEmu.GetKeyCode("F3"), InteropEmu.GetKeyCode("F4"),
-				InteropEmu.GetKeyCode("F5"), InteropEmu.GetKeyCode("F6"), InteropEmu.GetKeyCode("F7"), InteropEmu.GetKeyCode("F8"),
-				InteropEmu.GetKeyCode("\\"), InteropEmu.GetKeyCode("Page Up"), InteropEmu.GetKeyCode("F9"), InteropEmu.GetKeyCode("Page Down"),
-				InteropEmu.GetKeyCode("Home"), InteropEmu.GetKeyCode("End")
-			};
-
-			mapping.PartyTapButtons = new UInt32[6] {
-				InteropEmu.GetKeyCode("1"),
-				InteropEmu.GetKeyCode("2"),
-				InteropEmu.GetKeyCode("3"),
-				InteropEmu.GetKeyCode("4"),
-				InteropEmu.GetKeyCode("5"),
-				InteropEmu.GetKeyCode("6"),
-			};
+			mapping.FamilyBasicKeyboardButtons = FamilyBasicKeyboardButtons;
+			mapping.PartyTapButtons= PartyTapButtons;
+			mapping.PachinkoButtons = PachinkoButtons;
+			mapping.ExcitingBoxingButtons= ExcitingBoxingButtons;
+			mapping.JissenMahjongButtons = JissenMahjongButtons;
+			mapping.SuborKeyboardButtons = SuborKeyboardButtons;
 
 			mapping.PachinkoButtons = new UInt32[2] {
 				InteropEmu.GetKeyCode("I"),
 				InteropEmu.GetKeyCode("K"),
-			};
-
-			mapping.ExcitingBoxingButtons = new UInt32[8] {
-				InteropEmu.GetKeyCode("Numpad 7"),
-				InteropEmu.GetKeyCode("Numpad 6"),
-				InteropEmu.GetKeyCode("Numpad 4"),
-				InteropEmu.GetKeyCode("Numpad 9"),
-				InteropEmu.GetKeyCode("Numpad 1"),
-				InteropEmu.GetKeyCode("Numpad 5"),
-				InteropEmu.GetKeyCode("Numpad 3"),
-				InteropEmu.GetKeyCode("Numpad 8"),
-			};
-
-			mapping.JissenMahjongButtons = new UInt32[21] {
-				InteropEmu.GetKeyCode("A"),
-				InteropEmu.GetKeyCode("B"),
-				InteropEmu.GetKeyCode("C"),
-				InteropEmu.GetKeyCode("D"),
-				InteropEmu.GetKeyCode("E"),
-				InteropEmu.GetKeyCode("F"),
-				InteropEmu.GetKeyCode("G"),
-				InteropEmu.GetKeyCode("H"),
-				InteropEmu.GetKeyCode("I"),
-				InteropEmu.GetKeyCode("J"),
-				InteropEmu.GetKeyCode("K"),
-				InteropEmu.GetKeyCode("L"),
-				InteropEmu.GetKeyCode("M"),
-				InteropEmu.GetKeyCode("N"),
-				InteropEmu.GetKeyCode("Spacebar"),
-				InteropEmu.GetKeyCode("Enter"),
-				InteropEmu.GetKeyCode("1"),
-				InteropEmu.GetKeyCode("2"),
-				InteropEmu.GetKeyCode("3"),
-				InteropEmu.GetKeyCode("4"),
-				InteropEmu.GetKeyCode("5"),
-			};
-
-			mapping.SuborKeyboardButtons = new UInt32[99] {
-				InteropEmu.GetKeyCode("4"), InteropEmu.GetKeyCode("G"), InteropEmu.GetKeyCode("F"), InteropEmu.GetKeyCode("C"), InteropEmu.GetKeyCode("F2"), InteropEmu.GetKeyCode("E"), InteropEmu.GetKeyCode("5"), InteropEmu.GetKeyCode("V"),
-				InteropEmu.GetKeyCode("2"), InteropEmu.GetKeyCode("D"), InteropEmu.GetKeyCode("S"), InteropEmu.GetKeyCode("End"), InteropEmu.GetKeyCode("F1"), InteropEmu.GetKeyCode("W"), InteropEmu.GetKeyCode("3"), InteropEmu.GetKeyCode("X"),
-				InteropEmu.GetKeyCode("Insert"), InteropEmu.GetKeyCode("Backspace"), InteropEmu.GetKeyCode("Page Down"), InteropEmu.GetKeyCode("Right Arrow"), InteropEmu.GetKeyCode("F8"), InteropEmu.GetKeyCode("Page Up"), InteropEmu.GetKeyCode("Delete"), InteropEmu.GetKeyCode("Home"),
-				InteropEmu.GetKeyCode("9"), InteropEmu.GetKeyCode("I"), InteropEmu.GetKeyCode("L"), InteropEmu.GetKeyCode(","), InteropEmu.GetKeyCode("F5"), InteropEmu.GetKeyCode("O"), InteropEmu.GetKeyCode("0"), InteropEmu.GetKeyCode("."),
-				InteropEmu.GetKeyCode("]"), InteropEmu.GetKeyCode("Enter"), InteropEmu.GetKeyCode("Up Arrow"), InteropEmu.GetKeyCode("Left Arrow"), InteropEmu.GetKeyCode("F7"), InteropEmu.GetKeyCode("["), InteropEmu.GetKeyCode("\\"), InteropEmu.GetKeyCode("Down Arrow"),
-				InteropEmu.GetKeyCode("Q"), InteropEmu.GetKeyCode("Caps Lock"), InteropEmu.GetKeyCode("Z"), InteropEmu.GetKeyCode("Tab"), InteropEmu.GetKeyCode("Esc"), InteropEmu.GetKeyCode("A"), InteropEmu.GetKeyCode("1"), InteropEmu.GetKeyCode("Ctrl"),
-				InteropEmu.GetKeyCode("7"), InteropEmu.GetKeyCode("Y"), InteropEmu.GetKeyCode("K"), InteropEmu.GetKeyCode("M"), InteropEmu.GetKeyCode("F4"), InteropEmu.GetKeyCode("U"), InteropEmu.GetKeyCode("8"), InteropEmu.GetKeyCode("J"),
-				InteropEmu.GetKeyCode("-"), InteropEmu.GetKeyCode(";"), InteropEmu.GetKeyCode("'"), InteropEmu.GetKeyCode("/"), InteropEmu.GetKeyCode("F6"), InteropEmu.GetKeyCode("P"), InteropEmu.GetKeyCode("="), InteropEmu.GetKeyCode("Shift"),
-				InteropEmu.GetKeyCode("T"), InteropEmu.GetKeyCode("H"), InteropEmu.GetKeyCode("N"), InteropEmu.GetKeyCode("Spacebar"), InteropEmu.GetKeyCode("F3"), InteropEmu.GetKeyCode("R"), InteropEmu.GetKeyCode("6"), InteropEmu.GetKeyCode("B"),
-				InteropEmu.GetKeyCode("Numpad Enter"), 0, 0, 0,
-				InteropEmu.GetKeyCode("Left Menu"), InteropEmu.GetKeyCode("Numpad 4"), InteropEmu.GetKeyCode("Numpad 7"), InteropEmu.GetKeyCode("F11"), InteropEmu.GetKeyCode("F12"), InteropEmu.GetKeyCode("Numpad 1"), InteropEmu.GetKeyCode("Numpad 2"), InteropEmu.GetKeyCode("Numpad 8"),
-				InteropEmu.GetKeyCode("Numpad -"), InteropEmu.GetKeyCode("Numpad +"), InteropEmu.GetKeyCode("Numpad *"), InteropEmu.GetKeyCode("Numpad 9"), InteropEmu.GetKeyCode("F10"), InteropEmu.GetKeyCode("Numpad 5"), InteropEmu.GetKeyCode("Numpad /"), InteropEmu.GetKeyCode("Num Lock"),
-				InteropEmu.GetKeyCode("`"), InteropEmu.GetKeyCode("Numpad 6"), InteropEmu.GetKeyCode("Pause"), InteropEmu.GetKeyCode("F9"), InteropEmu.GetKeyCode("Numpad 3"), InteropEmu.GetKeyCode("Numpad ."), InteropEmu.GetKeyCode("Numpad 0")
 			};
 
 			return mapping;
@@ -233,6 +156,18 @@ namespace Mesen.GUI.Config
 					if(DefaultMapping.HasFlag(DefaultKeyMappingType.ArrowKeys)) {
 						controllerInfo.Keys.Add(presets.ArrowLayout);
 					}
+					if(controllerInfo.Keys.Count == 0) {
+						controllerInfo.Keys.Add(new KeyMappings());
+					}
+
+					controllerInfo.Keys[0].ExcitingBoxingButtons = presets.ExcitingBoxing.ExcitingBoxingButtons;
+					controllerInfo.Keys[0].FamilyBasicKeyboardButtons = presets.FamilyBasic.FamilyBasicKeyboardButtons;
+					controllerInfo.Keys[0].JissenMahjongButtons = presets.JissenMahjong.JissenMahjongButtons;
+					//controllerInfo.Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
+					controllerInfo.Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
+					controllerInfo.Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
+					controllerInfo.Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
+
 				}
 				Controllers.Add(controllerInfo);
 			}

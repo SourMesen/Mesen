@@ -20,7 +20,8 @@ namespace Mesen.GUI.Forms
 
 		public BaseInputForm()
 		{
-			if(!this.DesignMode) {
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
 				_inputForms.Push(this);
 				Application.AddMessageFilter(this);
 				this._tmrUpdateBackground = new Timer();

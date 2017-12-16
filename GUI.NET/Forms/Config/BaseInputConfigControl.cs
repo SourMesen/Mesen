@@ -13,7 +13,6 @@ namespace Mesen.GUI.Forms.Config
 	public class BaseInputConfigControl : BaseControl
 	{
 		public event EventHandler Change;
-		protected KeyMappings _mappings;
 		protected HashSet<Button> _buttons = new HashSet<Button>();
 
 		public enum MappedKeyType
@@ -23,21 +22,19 @@ namespace Mesen.GUI.Forms.Config
 			Controller
 		}
 
-		private BaseInputConfigControl() { }
-
-		public BaseInputConfigControl(KeyMappings mappings)
+		public BaseInputConfigControl()
 		{
-			_mappings = mappings;
 		}
 
 		public virtual void Initialize(KeyMappings mappings) { }
-		public virtual void UpdateKeyMappings() { }
+		public virtual void UpdateKeyMappings(KeyMappings mappings) { }
 
 		protected void InitButton(Button btn, UInt32 scanCode)
 		{
 			if(!_buttons.Contains(btn)) {
 				_buttons.Add(btn);
 				btn.Click += btnMapping_Click;
+				btn.AutoEllipsis = true;
 			}
 			btn.Text = InteropEmu.GetKeyName(scanCode);
 			btn.Tag = scanCode;
@@ -52,9 +49,9 @@ namespace Mesen.GUI.Forms.Config
 		{
 			MappedKeyType keyType = MappedKeyType.None;
 			foreach(Button btn in _buttons) {
-				if((int)btn.Tag > 0xFFFF) {
+				if((UInt32)btn.Tag > 0xFFFF) {
 					return MappedKeyType.Controller;
-				} else if((int)btn.Tag > 0) {
+				} else if((UInt32)btn.Tag > 0) {
 					keyType = MappedKeyType.Keyboard;
 				}
 			}

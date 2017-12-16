@@ -127,8 +127,13 @@ namespace Mesen.GUI.Forms
 				return e.ToString();
 			}
 		}
-
+		
 		public static void ApplyResources(Form form)
+		{
+			ApplyResources(form, form.Name);
+		}
+
+		public static void ApplyResources(Form form, string formName)
 		{
 			if(form is frmMain && _originalEnglishResources == null) {
 				_originalEnglishResources = BuildResourceFile(form);
@@ -136,9 +141,9 @@ namespace Mesen.GUI.Forms
 
 			XmlNode baseNode = null;
 			if(form is frmMain && _language == Language.English) {
-				baseNode = _originalEnglishResources.SelectSingleNode("/Resources/Forms/Form[@ID='" + form.Name + "']");
+				baseNode = _originalEnglishResources.SelectSingleNode("/Resources/Forms/Form[@ID='" + formName + "']");
 			} else {
-				baseNode = _resources.SelectSingleNode("/Resources/Forms/Form[@ID='" + form.Name + "']");
+				baseNode = _resources.SelectSingleNode("/Resources/Forms/Form[@ID='" + formName + "']");
 			}
 
 			if(baseNode != null) {
@@ -153,6 +158,17 @@ namespace Mesen.GUI.Forms
 
 			if(baseNode != null) {
 				ApplyResources(baseNode, contextMenu.Items);
+			}
+		}
+		
+		private static void ApplyResources(XmlNode baseNode, UserControl control)
+		{
+			XmlNode controlNode = _resources.SelectSingleNode("/Resources/UserControls/UserControl[@ID='" + control.GetType().Name + "']");
+
+			if(controlNode != null) {
+				ApplyResources(controlNode, control.Controls);
+			} else {
+				ApplyResources(baseNode, control.Controls);
 			}
 		}
 
@@ -170,7 +186,7 @@ namespace Mesen.GUI.Forms
 					name = ((DataGridViewColumn)ctrl).Name;
 				}
 
-			var controlNode = baseNode.SelectSingleNode("Control[@ID='" + name + "']");
+				var controlNode = baseNode.SelectSingleNode("Control[@ID='" + name + "']");
 				if(controlNode != null) {
 					if(ctrl is Control) {
 						((Control)ctrl).Text = controlNode.InnerText;
@@ -198,6 +214,8 @@ namespace Mesen.GUI.Forms
 					ApplyResources(baseNode, ((ToolStrip)ctrl).Items);
 				} else if(ctrl is ToolStripSplitButton) {
 					ApplyResources(baseNode, ((ToolStripSplitButton)ctrl).DropDownItems);
+				} else if(ctrl is UserControl) {
+					ApplyResources(baseNode, ctrl as UserControl);
 				} else if(ctrl is Control) {
 					ApplyResources(baseNode, ((Control)ctrl).Controls);
 				} else if(ctrl is ToolStripMenuItem) {

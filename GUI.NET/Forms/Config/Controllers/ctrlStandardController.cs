@@ -16,17 +16,13 @@ namespace Mesen.GUI.Forms.Config
 	{
 		private bool _isSnesController = false;
 
-		public ctrlStandardController(KeyMappings mappings, int portNumber, ConsoleType consoleType, InteropEmu.ControllerType controllerType) : base(mappings)
+		public ctrlStandardController()
 		{
 			InitializeComponent();
 			if(LicenseManager.UsageMode != LicenseUsageMode.Designtime) {
+				IsSnesController = false;
 				picBackground.Resize += picBackground_Resize;
 				UpdateBackground();
-
-				IsSnesController = controllerType == InteropEmu.ControllerType.SnesController;
-				ShowMicrophone = portNumber == 1 && consoleType == ConsoleType.Famicom;
-
-				Initialize(mappings);
 			}
 		}
 
@@ -105,23 +101,23 @@ namespace Mesen.GUI.Forms.Config
 			this.OnChange();
 		}
 		
-		public override void UpdateKeyMappings()
+		public override void UpdateKeyMappings(KeyMappings mappings)
 		{
-			_mappings.A = (UInt32)btnA.Tag;
-			_mappings.B = (UInt32)btnB.Tag;
-			_mappings.Start = (UInt32)btnStart.Tag;
-			_mappings.Select = (UInt32)btnSelect.Tag;
-			_mappings.Up = (UInt32)btnUp.Tag;
-			_mappings.Down = (UInt32)btnDown.Tag;
-			_mappings.Left = (UInt32)btnLeft.Tag;
-			_mappings.Right = (UInt32)btnRight.Tag;
-			_mappings.TurboA = (UInt32)btnTurboA.Tag;
-			_mappings.TurboB = (UInt32)btnTurboB.Tag;
-			_mappings.TurboSelect = 0;
-			_mappings.TurboStart = 0;
-			_mappings.Microphone = (UInt32)btnMicrophone.Tag;
-			_mappings.LButton = (UInt32)btnL.Tag;
-			_mappings.RButton = (UInt32)btnR.Tag;
+			mappings.A = (UInt32)btnA.Tag;
+			mappings.B = (UInt32)btnB.Tag;
+			mappings.Start = (UInt32)btnStart.Tag;
+			mappings.Select = (UInt32)btnSelect.Tag;
+			mappings.Up = (UInt32)btnUp.Tag;
+			mappings.Down = (UInt32)btnDown.Tag;
+			mappings.Left = (UInt32)btnLeft.Tag;
+			mappings.Right = (UInt32)btnRight.Tag;
+			mappings.TurboA = (UInt32)btnTurboA.Tag;
+			mappings.TurboB = (UInt32)btnTurboB.Tag;
+			mappings.TurboSelect = 0;
+			mappings.TurboStart = 0;
+			mappings.Microphone = (UInt32)btnMicrophone.Tag;
+			mappings.LButton = (UInt32)btnL.Tag;
+			mappings.RButton = (UInt32)btnR.Tag;
 		}
 	}
 }

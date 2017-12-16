@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Config
+﻿using System;
+
+namespace Mesen.GUI.Config
 {
 	public class KeyPresets
 	{
@@ -10,6 +12,24 @@
 		KeyMappings[] _xboxLayouts = new KeyMappings[2];
 		KeyMappings[] _ps4Layouts = new KeyMappings[2];
 		KeyMappings[] _snes30Layouts = new KeyMappings[2];
+
+		KeyMappings _familyBasic;
+		public KeyMappings FamilyBasic { get { return _familyBasic.Clone(); } }
+
+		KeyMappings _excitingBoxing;
+		public KeyMappings ExcitingBoxing { get { return _excitingBoxing.Clone(); } }
+
+		KeyMappings _partyTap;
+		public KeyMappings PartyTap { get { return _partyTap.Clone(); } }
+
+		KeyMappings _powerPad;
+		public KeyMappings PowerPad { get { return _powerPad.Clone(); } }
+		
+		KeyMappings _jissenMahjong;
+		public KeyMappings JissenMahjong { get { return _jissenMahjong.Clone(); } }
+
+		KeyMappings _suborKeyboard;
+		public KeyMappings SuborKeyboard { get { return _suborKeyboard.Clone(); } }
 
 		public KeyMappings WasdLayout { get { return _wasdLayout.Clone(); } }
 		public KeyMappings ArrowLayout { get { return _arrowLayout.Clone(); } }
@@ -121,6 +141,145 @@
 					};
 				}
 			}
+
+			_familyBasic = new KeyMappings() {
+				FamilyBasicKeyboardButtons = new UInt32[72] {
+					InteropEmu.GetKeyCode("A"), InteropEmu.GetKeyCode("B"), InteropEmu.GetKeyCode("C"), InteropEmu.GetKeyCode("D"),
+					InteropEmu.GetKeyCode("E"), InteropEmu.GetKeyCode("F"), InteropEmu.GetKeyCode("G"), InteropEmu.GetKeyCode("H"),
+					InteropEmu.GetKeyCode("I"), InteropEmu.GetKeyCode("J"), InteropEmu.GetKeyCode("K"), InteropEmu.GetKeyCode("L"),
+					InteropEmu.GetKeyCode("M"), InteropEmu.GetKeyCode("N"), InteropEmu.GetKeyCode("O"), InteropEmu.GetKeyCode("P"),
+					InteropEmu.GetKeyCode("Q"), InteropEmu.GetKeyCode("R"), InteropEmu.GetKeyCode("S"), InteropEmu.GetKeyCode("T"),
+					InteropEmu.GetKeyCode("U"), InteropEmu.GetKeyCode("V"), InteropEmu.GetKeyCode("W"), InteropEmu.GetKeyCode("X"),
+					InteropEmu.GetKeyCode("Y"), InteropEmu.GetKeyCode("Z"), InteropEmu.GetKeyCode("0"), InteropEmu.GetKeyCode("1"),
+					InteropEmu.GetKeyCode("2"), InteropEmu.GetKeyCode("3"), InteropEmu.GetKeyCode("4"), InteropEmu.GetKeyCode("5"),
+					InteropEmu.GetKeyCode("6"), InteropEmu.GetKeyCode("7"), InteropEmu.GetKeyCode("8"), InteropEmu.GetKeyCode("9"),
+					InteropEmu.GetKeyCode("Enter"), InteropEmu.GetKeyCode("Spacebar"), InteropEmu.GetKeyCode("Delete"), InteropEmu.GetKeyCode("Insert"),
+					InteropEmu.GetKeyCode("Esc"), InteropEmu.GetKeyCode("Ctrl"), InteropEmu.GetKeyCode("Menu"), InteropEmu.GetKeyCode("Shift"),
+					InteropEmu.GetKeyCode("["), InteropEmu.GetKeyCode("]"),
+					InteropEmu.GetKeyCode("Up Arrow"), InteropEmu.GetKeyCode("Down Arrow"), InteropEmu.GetKeyCode("Left Arrow"), InteropEmu.GetKeyCode("Right Arrow"),
+					InteropEmu.GetKeyCode("."), InteropEmu.GetKeyCode(","), InteropEmu.GetKeyCode("'"), InteropEmu.GetKeyCode(";"),
+					InteropEmu.GetKeyCode("="), InteropEmu.GetKeyCode("/"), InteropEmu.GetKeyCode("-"), InteropEmu.GetKeyCode("`"),
+					InteropEmu.GetKeyCode("F1"), InteropEmu.GetKeyCode("F2"), InteropEmu.GetKeyCode("F3"), InteropEmu.GetKeyCode("F4"),
+					InteropEmu.GetKeyCode("F5"), InteropEmu.GetKeyCode("F6"), InteropEmu.GetKeyCode("F7"), InteropEmu.GetKeyCode("F8"),
+					InteropEmu.GetKeyCode("\\"), InteropEmu.GetKeyCode("Backspace"), InteropEmu.GetKeyCode("F9"), InteropEmu.GetKeyCode("Alt"),
+					InteropEmu.GetKeyCode("Home"), InteropEmu.GetKeyCode("End")
+				}
+			};
+
+			_powerPad = new KeyMappings() {
+				PowerPadButtons = new UInt32[12] {
+					InteropEmu.GetKeyCode("R"),
+					InteropEmu.GetKeyCode("T"),
+					InteropEmu.GetKeyCode("Y"),
+					InteropEmu.GetKeyCode("U"),
+					InteropEmu.GetKeyCode("F"),
+					InteropEmu.GetKeyCode("G"),
+					InteropEmu.GetKeyCode("H"),
+					InteropEmu.GetKeyCode("J"),
+					InteropEmu.GetKeyCode("V"),
+					InteropEmu.GetKeyCode("B"),
+					InteropEmu.GetKeyCode("N"),
+					InteropEmu.GetKeyCode("M"),
+				}
+			};
+
+			_partyTap = new KeyMappings() {
+				PartyTapButtons = new UInt32[6] {
+					InteropEmu.GetKeyCode("1"),
+					InteropEmu.GetKeyCode("2"),
+					InteropEmu.GetKeyCode("3"),
+					InteropEmu.GetKeyCode("4"),
+					InteropEmu.GetKeyCode("5"),
+					InteropEmu.GetKeyCode("6"),
+				}
+			};
+
+			_excitingBoxing = new KeyMappings() {
+				ExcitingBoxingButtons = new UInt32[8] {
+					InteropEmu.GetKeyCode("Numpad 7"),
+					InteropEmu.GetKeyCode("Numpad 6"),
+					InteropEmu.GetKeyCode("Numpad 4"),
+					InteropEmu.GetKeyCode("Numpad 9"),
+					InteropEmu.GetKeyCode("Numpad 1"),
+					InteropEmu.GetKeyCode("Numpad 5"),
+					InteropEmu.GetKeyCode("Numpad 3"),
+					InteropEmu.GetKeyCode("Numpad 8"),
+				}
+			};
+
+			_jissenMahjong = new KeyMappings() {
+				JissenMahjongButtons = new UInt32[21] {
+					InteropEmu.GetKeyCode("A"),
+					InteropEmu.GetKeyCode("B"),
+					InteropEmu.GetKeyCode("C"),
+					InteropEmu.GetKeyCode("D"),
+					InteropEmu.GetKeyCode("E"),
+					InteropEmu.GetKeyCode("F"),
+					InteropEmu.GetKeyCode("G"),
+					InteropEmu.GetKeyCode("H"),
+					InteropEmu.GetKeyCode("I"),
+					InteropEmu.GetKeyCode("J"),
+					InteropEmu.GetKeyCode("K"),
+					InteropEmu.GetKeyCode("L"),
+					InteropEmu.GetKeyCode("M"),
+					InteropEmu.GetKeyCode("N"),
+					InteropEmu.GetKeyCode("Spacebar"),
+					InteropEmu.GetKeyCode("Enter"),
+					InteropEmu.GetKeyCode("1"),
+					InteropEmu.GetKeyCode("2"),
+					InteropEmu.GetKeyCode("3"),
+					InteropEmu.GetKeyCode("4"),
+					InteropEmu.GetKeyCode("5"),
+				}
+			};
+
+			_suborKeyboard = new KeyMappings() {
+				SuborKeyboardButtons = new UInt32[99] {
+					InteropEmu.GetKeyCode("A"), InteropEmu.GetKeyCode("B"), InteropEmu.GetKeyCode("C"), InteropEmu.GetKeyCode("D"),
+					InteropEmu.GetKeyCode("E"), InteropEmu.GetKeyCode("F"), InteropEmu.GetKeyCode("G"), InteropEmu.GetKeyCode("H"),
+					InteropEmu.GetKeyCode("I"), InteropEmu.GetKeyCode("J"), InteropEmu.GetKeyCode("K"), InteropEmu.GetKeyCode("L"),
+					InteropEmu.GetKeyCode("M"), InteropEmu.GetKeyCode("N"), InteropEmu.GetKeyCode("O"), InteropEmu.GetKeyCode("P"),
+					InteropEmu.GetKeyCode("Q"), InteropEmu.GetKeyCode("R"), InteropEmu.GetKeyCode("S"), InteropEmu.GetKeyCode("T"),
+					InteropEmu.GetKeyCode("U"), InteropEmu.GetKeyCode("V"), InteropEmu.GetKeyCode("W"), InteropEmu.GetKeyCode("X"),
+					InteropEmu.GetKeyCode("Y"), InteropEmu.GetKeyCode("Z"), InteropEmu.GetKeyCode("0"), InteropEmu.GetKeyCode("1"),
+					InteropEmu.GetKeyCode("2"), InteropEmu.GetKeyCode("3"), InteropEmu.GetKeyCode("4"), InteropEmu.GetKeyCode("5"),
+					InteropEmu.GetKeyCode("6"), InteropEmu.GetKeyCode("7"), InteropEmu.GetKeyCode("8"), InteropEmu.GetKeyCode("9"),
+					InteropEmu.GetKeyCode("F1"), InteropEmu.GetKeyCode("F2"), InteropEmu.GetKeyCode("F3"), InteropEmu.GetKeyCode("F4"),
+					InteropEmu.GetKeyCode("F5"), InteropEmu.GetKeyCode("F6"), InteropEmu.GetKeyCode("F7"), InteropEmu.GetKeyCode("F8"),
+					InteropEmu.GetKeyCode("F9"), InteropEmu.GetKeyCode("F10"), InteropEmu.GetKeyCode("F11"), InteropEmu.GetKeyCode("F12"),
+
+					InteropEmu.GetKeyCode("Numpad 0"), InteropEmu.GetKeyCode("Numpad 1"), InteropEmu.GetKeyCode("Numpad 2"), InteropEmu.GetKeyCode("Numpad 3"),
+					InteropEmu.GetKeyCode("Numpad 4"), InteropEmu.GetKeyCode("Numpad 5"), InteropEmu.GetKeyCode("Numpad 6"), InteropEmu.GetKeyCode("Numpad 7"),
+					InteropEmu.GetKeyCode("Numpad 8"), InteropEmu.GetKeyCode("Numpad 9"),
+
+					InteropEmu.GetKeyCode("Numpad Enter"), InteropEmu.GetKeyCode("Numpad ."),
+					InteropEmu.GetKeyCode("Numpad +"), InteropEmu.GetKeyCode("Numpad *"),
+					InteropEmu.GetKeyCode("Numpad /"), InteropEmu.GetKeyCode("Numpad -"),
+
+					InteropEmu.GetKeyCode("Num Lock"),
+
+					InteropEmu.GetKeyCode(","), InteropEmu.GetKeyCode("."), InteropEmu.GetKeyCode(";"), InteropEmu.GetKeyCode("'"),
+					InteropEmu.GetKeyCode("/"), InteropEmu.GetKeyCode("\\"),
+					InteropEmu.GetKeyCode("="), InteropEmu.GetKeyCode("-"), InteropEmu.GetKeyCode("`"),
+
+					InteropEmu.GetKeyCode("["), InteropEmu.GetKeyCode("]"),
+
+					InteropEmu.GetKeyCode("Caps Lock"), InteropEmu.GetKeyCode("Pause"),
+
+					InteropEmu.GetKeyCode("Ctrl"), InteropEmu.GetKeyCode("Shift"), InteropEmu.GetKeyCode("Alt"),
+
+					InteropEmu.GetKeyCode("Spacebar"), InteropEmu.GetKeyCode("Backspace"), InteropEmu.GetKeyCode("Tab"), InteropEmu.GetKeyCode("Esc"), InteropEmu.GetKeyCode("Enter"),
+
+					InteropEmu.GetKeyCode("End"), InteropEmu.GetKeyCode("Home"),
+					InteropEmu.GetKeyCode("Insert"), InteropEmu.GetKeyCode("Delete"),
+
+					InteropEmu.GetKeyCode("Page Up"), InteropEmu.GetKeyCode("Page Down"),
+
+					InteropEmu.GetKeyCode("Up Arrow"), InteropEmu.GetKeyCode("Down Arrow"), InteropEmu.GetKeyCode("Left Arrow"), InteropEmu.GetKeyCode("Right Arrow"),
+
+					0,0,0
+				}
+			};
 		}
 	}
 }

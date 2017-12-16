@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using System.ComponentModel;
 
 namespace Mesen.GUI.Forms
 {
@@ -14,14 +15,16 @@ namespace Mesen.GUI.Forms
 		{
 			InitializeComponent();
 
-			_validateTimer = new Timer();
-			_validateTimer.Interval = 50;
-			_validateTimer.Tick += OnValidateInput;
-			_validateTimer.Start();
-
 			_binder = new EntityBinder();
-
 			this.ShowInTaskbar = false;
+
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				_validateTimer = new Timer();
+				_validateTimer.Interval = 50;
+				_validateTimer.Tick += OnValidateInput;
+				_validateTimer.Start();
+			}
 		}
 
 		public new bool ShowInTaskbar

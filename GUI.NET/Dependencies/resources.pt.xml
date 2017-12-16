@@ -208,42 +208,6 @@
 
       <Control ID="lblKeyBinding">Aviso: a configuração atual contém atribuições conflitantes - alguns botões físicos em seu teclado ou gamepad são mapeados para vários botões no controle NES. Se isso não for intencional, reveja e corrija suas atribuições.</Control>
     </Form>
-    <Form ID="frmControllerConfig" Title="Configuração de controles">
-      <Control ID="lblTurboSpeed">Velocidade de modo turbo:</Control>
-      <Control ID="lblTurboFast">Rápido</Control>
-      <Control ID="lblSlow">Lento</Control>
-      <Control ID="tpgSet1">Mapeado #1</Control>
-      <Control ID="tpgSet2">Mapeado #2</Control>
-      <Control ID="tpgSet3">Mapeado #3</Control>
-      <Control ID="btnSelectPreset">Selecionar valor preestabelecido...</Control>
-      <Control ID="mnuKeyboard">Teclado</Control>
-      <Control ID="mnuWasdLayout">Utilizar teclas WASD</Control>
-      <Control ID="mnuArrowLayout">Utilizar setas</Control>
-      <Control ID="mnuFceuxLayout">Controles de FCEUX</Control>
-      <Control ID="mnuNestopiaLayout">Controles de Nestopia</Control>
-      <Control ID="mnuXboxController">Controle de Xbox</Control>
-      <Control ID="mnuXboxLayout1">Layout #1</Control>
-      <Control ID="mnuXboxLayout2">Layout #2</Control>
-      <Control ID="mnuPs4Controller">Controle de Ps4</Control>
-      <Control ID="mnuPs4Layout1">Layout #1</Control>
-      <Control ID="mnuPs4Layout2">Layout #2</Control>
-      <Control ID="mnuSnes30Controller">Controle de SNES30</Control>
-      <Control ID="mnuSnes30Layout1">Layout #1</Control>
-      <Control ID="mnuSnes30Layout2">Layout #2</Control>
-      <Control ID="tpgSet4">Mapeado #4</Control>
-      <Control ID="lblHint">As guias com um ícone contêm atribuições para este jogador.&#13;&#10;Cada botão pode ser mapeado para até 4 teclas de teclado ou botões do gamepad diferentes.</Control>
-      <Control ID="btnReset">Reiniciar</Control>
-      <Control ID="btnClear">Desfazer controles</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Cancelar</Control>
-    </Form>
-    <Form ID="frmZapperConfig" Title="Configuração do Zapper">
-      <Control ID="lblSmall">Curta</Control>
-      <Control ID="lblLarge">Longa</Control>
-      <Control ID="lblDetectRadius">Raio de detecção de luz:</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Cancelar</Control>
-    </Form>
     <Form ID="frmVideoConfig" Title="Opções de vídeo">
       <Control ID="tpgGeneral">Geral</Control>
       <Control ID="lblVideoScale">Escala:</Control>
@@ -465,7 +429,7 @@
     </Form>
     <Form ID="frmCheatImportFromDb" Title="Importar cheats de BBDD">
       <Control ID="lblSearch">Buscar</Control>
-      <Control ID="btnOK">Ok</Control>
+      <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
     <Form ID="frmCheatImport" Title="Importar Cheats">
@@ -558,12 +522,12 @@
     </Form>
     <Form ID="frmPlayerProfile" Title="Perfil do Jogador">
       <Control ID="lblName">Nome</Control>
-      <Control ID="btnOK">Ok</Control>
+      <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
     <Form ID="frmSelectRom" Title="Selecionar ROM...">
       <Control ID="btnCancel">Cancelar</Control>
-      <Control ID="btnOK">Ok</Control>
+      <Control ID="btnOK">OK</Control>
       <Control ID="lblSearch">Buscar</Control>
     </Form>
     <Form ID="frmRecordAvi" Title="Gravador de vídeo">
@@ -622,10 +586,72 @@
     </Form>
     <Form ID="frmInputBarCode" Title="Input Barcode...">
       <Control ID="lblBarcode">Barcode:</Control>
-      <Control ID="btnOK">Ok</Control>
+      <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
-  </Forms>  
+    <Form ID="BaseInputConfigForm" Title="">
+      <Control ID="lblHint">As guias com um ícone contêm atribuições para este jogador.&#13;&#10;Cada botão pode ser mapeado para até 4 teclas de teclado ou botões do gamepad diferentes.</Control>
+      <Control ID="tpgSet1">Mapeado #1</Control>
+      <Control ID="tpgSet2">Mapeado #2</Control>
+      <Control ID="tpgSet3">Mapeado #3</Control>
+      <Control ID="tpgSet4">Mapeado #4</Control>
+      <Control ID="btnSetDefault">Use Default Bindings</Control>
+      <Control ID="btnClear">Desfazer controles</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Cancelar</Control>
+    </Form>
+    <Form ID="frmControllerConfig" Title="Configuração de controles">
+      <Control ID="lblTurboSpeed">Velocidade de modo turbo:</Control>
+      <Control ID="lblTurboFast">Rápido</Control>
+      <Control ID="lblSlow">Lento</Control>
+      <Control ID="btnSelectPreset">Selecionar valor preestabelecido...</Control>
+      <Control ID="mnuKeyboard">Teclado</Control>
+      <Control ID="mnuWasdLayout">Utilizar teclas WASD</Control>
+      <Control ID="mnuArrowLayout">Utilizar setas</Control>
+      <Control ID="mnuFceuxLayout">Controles de FCEUX</Control>
+      <Control ID="mnuNestopiaLayout">Controles de Nestopia</Control>
+      <Control ID="mnuXboxController">Controle de Xbox</Control>
+      <Control ID="mnuXboxLayout1">Layout #1</Control>
+      <Control ID="mnuXboxLayout2">Layout #2</Control>
+      <Control ID="mnuPs4Controller">Controle de Ps4</Control>
+      <Control ID="mnuPs4Layout1">Layout #1</Control>
+      <Control ID="mnuPs4Layout2">Layout #2</Control>
+      <Control ID="mnuSnes30Controller">Controle de SNES30</Control>
+      <Control ID="mnuSnes30Layout1">Layout #1</Control>
+      <Control ID="mnuSnes30Layout2">Layout #2</Control>      
+    </Form>
+    <Form ID="frmZapperConfig" Title="Configuração do Zapper">
+      <Control ID="lblSmall">Curta</Control>
+      <Control ID="lblLarge">Longa</Control>
+      <Control ID="lblDetectRadius">Raio de detecção de luz:</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Cancelar</Control>
+    </Form>
+    <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
+    </Form>
+    <Form ID="frmFamilyBasicKeyboard" Title="Family Basic Keyboard">
+    </Form>
+    <Form ID="frmJissenMahjongConfig" Title="Jissen Mahjong Controller">
+    </Form>
+    <Form ID="frmPartyTapConfig" Title="Partytap">
+    </Form>
+    <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
+    </Form>
+    <Form ID="frmSuborKeyboard" Title="Subor Keyboard">
+    </Form>
+  </Forms>
+  <UserControls>
+    <UserControl ID="ctrlExcitingBoxingConfig">
+      <Control ID="lblLeftHook">Left Hook</Control>
+      <Control ID="lblRightHook">Right Hook</Control>
+      <Control ID="lblLeftJab">Left Jab</Control>
+      <Control ID="lblRightJab">Right Jab</Control>
+      <Control ID="lblStraight">Straight</Control>
+      <Control ID="lblBody">Body</Control>
+      <Control ID="lblMoveLeft">Move Left</Control>
+      <Control ID="lblMoveRight">Move Right</Control>
+    </UserControl>
+  </UserControls>
   <Messages>
     <Message ID="FilterAll">Todos os tipos de arquivo (*.*)|*.*</Message>
     <Message ID="FilterMovie">Vídeos (*.mmo)|*.mmo|Todos os arquivos (*.*)|*.*</Message>

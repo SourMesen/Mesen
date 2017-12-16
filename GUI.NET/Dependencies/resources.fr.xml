@@ -209,44 +209,6 @@
 
       <Control ID="lblKeyBinding">Attention: Votre configuration actuelle contient des conflicts - certaines touches sur votre clavier ou manette sont mappées à plusieurs boutons sur la console. Veuillez réviser votre configuration et la corriger au besoin.</Control>
     </Form>
-    <Form ID="frmControllerConfig" Title="Configuration de la manette">
-      <Control ID="lblTurboSpeed">Vitesse du mode turbo:</Control>
-      <Control ID="lblTurboFast">Rapide</Control>
-      <Control ID="lblSlow">Lente</Control>
-      <Control ID="tpgSet1">Mappage #1</Control>
-      <Control ID="tpgSet2">Mappage #2</Control>
-      <Control ID="tpgSet3">Mappage #3</Control>
-      <Control ID="tpgSet4">Mappage #4</Control>
-
-      <Control ID="btnSelectPreset">Choisir un préréglage...</Control>
-      <Control ID="mnuKeyboard">Clavier</Control>
-      <Control ID="mnuWasdLayout">Déplacement avec WSAD</Control>
-      <Control ID="mnuArrowLayout">Déplacement avec les flèches</Control>
-      <Control ID="mnuFceuxLayout">Disposition par défaut de FCEUX</Control>
-      <Control ID="mnuNestopiaLayout">Disposition par défaut de Nestopia</Control>      
-      <Control ID="mnuXboxController">Manette Xbox</Control>
-      <Control ID="mnuXboxLayout1">Manette #1</Control>
-      <Control ID="mnuXboxLayout2">Manette #2</Control>
-      <Control ID="mnuPs4Controller">Manette PS4</Control>
-      <Control ID="mnuPs4Layout1">Manette #1</Control>
-      <Control ID="mnuPs4Layout2">Manette #2</Control>
-      <Control ID="mnuSnes30Controller">Manette SNES30</Control>
-      <Control ID="mnuSnes30Layout1">Manette #1</Control>
-      <Control ID="mnuSnes30Layout2">Manette #2</Control>
-
-      <Control ID="lblHint">Les tabs sans icône sont vides.&#13;&#10;Chaque bouton peut être mappé à 4 boutons différents sur votre clavier et/ou votre manette.</Control>
-      
-      <Control ID="btnClear">Effacer le mappage</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Annuler</Control>
-    </Form>
-    <Form ID="frmZapperConfig" Title="Configuration du zapper">
-      <Control ID="lblSmall">Petit</Control>
-      <Control ID="lblLarge">Large</Control>
-      <Control ID="lblDetectRadius">Rayon de détection de la lumière :</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Annuler</Control>
-    </Form>
     <Form ID="frmVideoConfig" Title="Options vidéo">
       <Control ID="tpgGeneral">Général</Control>
       <Control ID="lblVideoScale">Échelle :</Control>
@@ -637,10 +599,74 @@
     </Form>
     <Form ID="frmInputBarCode" Title="Entrer un code-barres">
       <Control ID="lblBarcode">Code-barres :</Control>
-      <Control ID="btnOk">OK</Control>
+      <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
+
+    <Form ID="BaseInputConfigForm" Title="">
+      <Control ID="lblHint">Les tabs sans icône sont vides.&#13;&#10;Chaque bouton peut être mappé à 4 boutons différents sur votre clavier et/ou votre manette.</Control>
+      <Control ID="tpgSet1">Mappage #1</Control>
+      <Control ID="tpgSet2">Mappage #2</Control>
+      <Control ID="tpgSet3">Mappage #3</Control>
+      <Control ID="tpgSet4">Mappage #4</Control>
+      <Control ID="btnSetDefault">Utiliser les défauts</Control>
+      <Control ID="btnClear">Effacer le mappage</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
+    <Form ID="frmControllerConfig" Title="Configuration de la manette">
+      <Control ID="lblTurboSpeed">Vitesse du mode turbo:</Control>
+      <Control ID="lblTurboFast">Rapide</Control>
+      <Control ID="lblSlow">Lente</Control>
+  
+      <Control ID="btnSelectPreset">Choisir un préréglage...</Control>
+      <Control ID="mnuKeyboard">Clavier</Control>
+      <Control ID="mnuWasdLayout">Déplacement avec WSAD</Control>
+      <Control ID="mnuArrowLayout">Déplacement avec les flèches</Control>
+      <Control ID="mnuFceuxLayout">Disposition par défaut de FCEUX</Control>
+      <Control ID="mnuNestopiaLayout">Disposition par défaut de Nestopia</Control>
+      <Control ID="mnuXboxController">Manette Xbox</Control>
+      <Control ID="mnuXboxLayout1">Manette #1</Control>
+      <Control ID="mnuXboxLayout2">Manette #2</Control>
+      <Control ID="mnuPs4Controller">Manette PS4</Control>
+      <Control ID="mnuPs4Layout1">Manette #1</Control>
+      <Control ID="mnuPs4Layout2">Manette #2</Control>
+      <Control ID="mnuSnes30Controller">Manette SNES30</Control>
+      <Control ID="mnuSnes30Layout1">Manette #1</Control>
+      <Control ID="mnuSnes30Layout2">Manette #2</Control>
+    </Form>
+    <Form ID="frmZapperConfig" Title="Configuration du zapper">
+      <Control ID="lblSmall">Petit</Control>
+      <Control ID="lblLarge">Large</Control>
+      <Control ID="lblDetectRadius">Rayon de détection de la lumière :</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
+    <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
+    </Form>
+    <Form ID="frmFamilyBasicKeyboard" Title="Clavier Family Basic">
+    </Form>
+    <Form ID="frmJissenMahjongConfig" Title="Manette Jissen Mah-jong">
+    </Form>
+    <Form ID="frmPartyTapConfig" Title="Partytap">
+    </Form>
+    <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
+    </Form>
+    <Form ID="frmSuborKeyboard" Title="Clavier Subor">
+    </Form>
   </Forms>
+  <UserControls>
+    <UserControl ID="ctrlExcitingBoxingConfig">
+      <Control ID="lblLeftHook">Crochet gauche</Control>
+      <Control ID="lblRightHook">Crochet droit</Control>
+      <Control ID="lblLeftJab">Direct gauche</Control>
+      <Control ID="lblRightJab">Direct droit</Control>
+      <Control ID="lblStraight">Direct centre</Control>
+      <Control ID="lblBody">Direct court</Control>
+      <Control ID="lblMoveLeft">Déplacement gauche</Control>
+      <Control ID="lblMoveRight">Déplacement droit</Control>
+    </UserControl>
+  </UserControls>
   <Messages>
     <Message ID="FilterAll">Tous les fichiers (*.*)|*.*</Message>
     <Message ID="FilterMovie">Films (*.mmo)|*.mmo|Tous les fichiers (*.*)|*.*</Message>

@@ -209,42 +209,6 @@
 
       <Control ID="lblKeyBinding">Advertència: La vostra configuració actual conté assignacions conflictives - algunes tecles del vostre teclat o botons del comandament han estat assignats a múltiples botons al comandament de la NES. Si això no ha estat intencionat, us preguem que reviseu i corregiu les vostres assignacions.</Control>
     </Form>
-    <Form ID="frmControllerConfig" Title="Configuració del comandament">
-      <Control ID="lblTurboSpeed">Velocitat del mode turbo:</Control>
-      <Control ID="lblTurboFast">Ràpida</Control>
-      <Control ID="lblSlow">Lenta</Control>
-      <Control ID="tpgSet1">Distribució #1</Control>
-      <Control ID="tpgSet2">Distribució #2</Control>
-      <Control ID="tpgSet3">Distribució #3</Control>
-      <Control ID="btnSelectPreset">Tria una plantilla...</Control>
-      <Control ID="mnuKeyboard">Teclat</Control>
-      <Control ID="mnuWasdLayout">Distribució WASD</Control>
-      <Control ID="mnuArrowLayout">Distribució de tecles de direcció</Control>
-      <Control ID="mnuFceuxLayout">Distribució per defecte de FCEUX</Control>
-      <Control ID="mnuNestopiaLayout">Distribució per defecte de Nestopia</Control>
-      <Control ID="mnuXboxController">Comandament de l'Xbox</Control>
-      <Control ID="mnuXboxLayout1">Comandament #1</Control>
-      <Control ID="mnuXboxLayout2">Comandament #2</Control>
-      <Control ID="mnuPs4Controller">Comandament de la PS4</Control>
-      <Control ID="mnuPs4Layout1">Comandament #1</Control>
-      <Control ID="mnuPs4Layout2">Comandament #2</Control>
-      <Control ID="mnuSnes30Controller">Comandament SNES30</Control>
-      <Control ID="mnuSnes30Layout1">Comandament #1</Control>
-      <Control ID="mnuSnes30Layout2">Comandament #2</Control>
-      <Control ID="tpgSet4">Distribució #4</Control>
-      <Control ID="lblHint">Les pestanyes amb una icona contenen per aquest jugador.&#13;&#10;Cada botó es pot assignar a fins a 4 tecles de teclat o botons de comandament diferents.</Control>
-      <Control ID="btnReset">Restableix</Control>
-      <Control ID="btnClear">Esborra les asignacions</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmZapperConfig" Title="Configuració del Zapper">
-      <Control ID="lblSmall">Curt</Control>
-      <Control ID="lblLarge">Llarg</Control>
-      <Control ID="lblDetectRadius">Radi de detecció lumínica:</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
     <Form ID="frmVideoConfig" Title="Opcions de vídeo">
       <Control ID="tpgGeneral">General</Control>
       <Control ID="lblVideoScale">Escala:</Control>
@@ -609,7 +573,69 @@
       <Control ID="btnOK">D'acord</Control>
       <Control ID="btnCancel">Cancel·la</Control>
     </Form>
+    <Form ID="BaseInputConfigForm" Title="">
+      <Control ID="lblHint">Les pestanyes amb una icona contenen per aquest jugador.&#13;&#10;Cada botó es pot assignar a fins a 4 tecles de teclat o botons de comandament diferents.</Control>
+      <Control ID="tpgSet1">Distribució #1</Control>
+      <Control ID="tpgSet2">Distribució #2</Control>
+      <Control ID="tpgSet3">Distribució #3</Control>
+      <Control ID="tpgSet4">Distribució #4</Control>
+      <Control ID="btnSetDefault">Use Default Bindings</Control>
+      <Control ID="btnClear">Esborra les asignacions</Control>
+      <Control ID="btnOK">D'acord</Control>
+      <Control ID="btnCancel">Cancel·la</Control>
+    </Form>
+    <Form ID="frmControllerConfig" Title="Configuració del comandament">
+      <Control ID="lblTurboSpeed">Velocitat del mode turbo:</Control>
+      <Control ID="lblTurboFast">Ràpida</Control>
+      <Control ID="lblSlow">Lenta</Control>
+      <Control ID="btnSelectPreset">Tria una plantilla...</Control>
+      <Control ID="mnuKeyboard">Teclat</Control>
+      <Control ID="mnuWasdLayout">Distribució WASD</Control>
+      <Control ID="mnuArrowLayout">Distribució de tecles de direcció</Control>
+      <Control ID="mnuFceuxLayout">Distribució per defecte de FCEUX</Control>
+      <Control ID="mnuNestopiaLayout">Distribució per defecte de Nestopia</Control>
+      <Control ID="mnuXboxController">Comandament de l'Xbox</Control>
+      <Control ID="mnuXboxLayout1">Comandament #1</Control>
+      <Control ID="mnuXboxLayout2">Comandament #2</Control>
+      <Control ID="mnuPs4Controller">Comandament de la PS4</Control>
+      <Control ID="mnuPs4Layout1">Comandament #1</Control>
+      <Control ID="mnuPs4Layout2">Comandament #2</Control>
+      <Control ID="mnuSnes30Controller">Comandament SNES30</Control>
+      <Control ID="mnuSnes30Layout1">Comandament #1</Control>
+      <Control ID="mnuSnes30Layout2">Comandament #2</Control>
+    </Form>
+    <Form ID="frmZapperConfig" Title="Configuració del Zapper">
+      <Control ID="lblSmall">Curt</Control>
+      <Control ID="lblLarge">Llarg</Control>
+      <Control ID="lblDetectRadius">Radi de detecció lumínica:</Control>
+      <Control ID="btnOK">D'acord</Control>
+      <Control ID="btnCancel">Cancel·la</Control>
+    </Form>
+    <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
+    </Form>
+    <Form ID="frmFamilyBasicKeyboard" Title="Teclat Family Basic">
+    </Form>
+    <Form ID="frmJissenMahjongConfig" Title="Comandament Jissen Mahjong">
+    </Form>
+    <Form ID="frmPartyTapConfig" Title="Partytap">
+    </Form>
+    <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
+    </Form>
+    <Form ID="frmSuborKeyboard" Title="Teclat Subor">
+    </Form>
   </Forms>
+  <UserControls>
+    <UserControl ID="ctrlExcitingBoxingConfig">
+      <Control ID="lblLeftHook">Left Hook</Control>
+      <Control ID="lblRightHook">Right Hook</Control>
+      <Control ID="lblLeftJab">Left Jab</Control>
+      <Control ID="lblRightJab">Right Jab</Control>
+      <Control ID="lblStraight">Straight</Control>
+      <Control ID="lblBody">Body</Control>
+      <Control ID="lblMoveLeft">Move Left</Control>
+      <Control ID="lblMoveRight">Move Right</Control>
+    </UserControl>
+  </UserControls>
   <Messages>
     <Message ID="FilterAll">Tots els fitxers (*.*)|*.*</Message>
     <Message ID="FilterMovie">Pel·lícules (*.mmo)|*.mmo|Tots els fitxers (*.*)|*.*</Message>

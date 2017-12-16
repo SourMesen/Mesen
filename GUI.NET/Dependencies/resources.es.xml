@@ -208,42 +208,6 @@
 
       <Control ID="lblKeyBinding">Advertencia: su configuración actual contiene asignaciones conflictivas - algunas teclas de su teclado o botones del mando se han asignado a varios botones del mando de la NES. Si esto no es intencionado, revise y corrija las asignaciones.</Control>
     </Form>
-    <Form ID="frmControllerConfig" Title="Configuración de controles">
-      <Control ID="lblTurboSpeed">Velocidad de modo turbo:</Control>
-      <Control ID="lblTurboFast">Rápido</Control>
-      <Control ID="lblSlow">Lento</Control>
-      <Control ID="tpgSet1">Mapeado #1</Control>
-      <Control ID="tpgSet2">Mapeado #2</Control>
-      <Control ID="tpgSet3">Mapeado #3</Control>
-      <Control ID="btnSelectPreset">Seleccionar valor preestablecido...</Control>
-      <Control ID="mnuKeyboard">Teclado</Control>
-      <Control ID="mnuWasdLayout">Utilizar teclas WASD</Control>
-      <Control ID="mnuArrowLayout">Utilizar cursores</Control>
-      <Control ID="mnuFceuxLayout">Controles por defecto de FCEUX</Control>
-      <Control ID="mnuNestopiaLayout">Controles por defecto de Nestopia</Control>
-      <Control ID="mnuXboxController">Mando de Xbox</Control>
-      <Control ID="mnuXboxLayout1">Mando #1</Control>
-      <Control ID="mnuXboxLayout2">Mando #2</Control>
-      <Control ID="mnuPs4Controller">Mando de PS4</Control>
-      <Control ID="mnuPs4Layout1">Mando #1</Control>
-      <Control ID="mnuPs4Layout2">Mando #2</Control>
-      <Control ID="mnuSnes30Controller">Mando de SNES30</Control>
-      <Control ID="mnuSnes30Layout1">Mando #1</Control>
-      <Control ID="mnuSnes30Layout2">Mando #2</Control>
-      <Control ID="tpgSet4">Mapeado #4</Control>
-      <Control ID="lblHint">Las pestañas con icono contienen las asignaciones del jugador.&#13;&#10;Cada botón se puede asignar a hasta 4 teclas de teclado o botones de mando diferentes.</Control>
-      <Control ID="btnReset">Reiniciar</Control>
-      <Control ID="btnClear">Deshacer controles</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Cancelar</Control>
-    </Form>
-    <Form ID="frmZapperConfig" Title="Configuración del Zapper">
-      <Control ID="lblSmall">Corto</Control>
-      <Control ID="lblLarge">Largo</Control>
-      <Control ID="lblDetectRadius">Radio de detección lumínica:</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Cancelar</Control>
-    </Form>
     <Form ID="frmVideoConfig" Title="Opciones de video">
       <Control ID="tpgGeneral">General</Control>
       <Control ID="lblVideoScale">Escala:</Control>
@@ -627,7 +591,70 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
+    <Form ID="BaseInputConfigForm" Title="">
+      <Control ID="lblHint">Las pestañas con icono contienen las asignaciones del jugador.&#13;&#10;Cada botón se puede asignar a hasta 4 teclas de teclado o botones de mando diferentes.</Control>
+      <Control ID="tpgSet1">Mapeado #1</Control>
+      <Control ID="tpgSet2">Mapeado #2</Control>
+      <Control ID="tpgSet3">Mapeado #3</Control>
+      <Control ID="tpgSet4">Mapeado #4</Control>
+      <Control ID="btnSetDefault">Use Default Bindings</Control>
+      <Control ID="btnClear">Deshacer controles</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Cancelar</Control>
+    </Form>
+    <Form ID="frmControllerConfig" Title="Configuración de controles">
+      <Control ID="lblTurboSpeed">Velocidad de modo turbo:</Control>
+      <Control ID="lblTurboFast">Rápido</Control>
+      <Control ID="lblSlow">Lento</Control>
+      <Control ID="btnSelectPreset">Seleccionar valor preestablecido...</Control>
+      <Control ID="mnuKeyboard">Teclado</Control>
+      <Control ID="mnuWasdLayout">Utilizar teclas WASD</Control>
+      <Control ID="mnuArrowLayout">Utilizar cursores</Control>
+      <Control ID="mnuFceuxLayout">Controles por defecto de FCEUX</Control>
+      <Control ID="mnuNestopiaLayout">Controles por defecto de Nestopia</Control>
+      <Control ID="mnuXboxController">Mando de Xbox</Control>
+      <Control ID="mnuXboxLayout1">Mando #1</Control>
+      <Control ID="mnuXboxLayout2">Mando #2</Control>
+      <Control ID="mnuPs4Controller">Mando de PS4</Control>
+      <Control ID="mnuPs4Layout1">Mando #1</Control>
+      <Control ID="mnuPs4Layout2">Mando #2</Control>
+      <Control ID="mnuSnes30Controller">Mando de SNES30</Control>
+      <Control ID="mnuSnes30Layout1">Mando #1</Control>
+      <Control ID="mnuSnes30Layout2">Mando #2</Control>
+    </Form>
+    <Form ID="frmZapperConfig" Title="Configuración del Zapper">
+      <Control ID="lblSmall">Corto</Control>
+      <Control ID="lblLarge">Largo</Control>
+      <Control ID="lblDetectRadius">Radio de detección lumínica:</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Cancelar</Control>
+    </Form>
+
+    <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
+    </Form>
+    <Form ID="frmFamilyBasicKeyboard" Title="Family Basic Keyboard">
+    </Form>
+    <Form ID="frmJissenMahjongConfig" Title="Jissen Mahjong Controller">
+    </Form>
+    <Form ID="frmPartyTapConfig" Title="Partytap">
+    </Form>
+    <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
+    </Form>
+    <Form ID="frmSuborKeyboard" Title="Subor Keyboard">
+    </Form>
   </Forms>
+  <UserControls>
+    <UserControl ID="ctrlExcitingBoxingConfig">
+      <Control ID="lblLeftHook">Left Hook</Control>
+      <Control ID="lblRightHook">Right Hook</Control>
+      <Control ID="lblLeftJab">Left Jab</Control>
+      <Control ID="lblRightJab">Right Jab</Control>
+      <Control ID="lblStraight">Straight</Control>
+      <Control ID="lblBody">Body</Control>
+      <Control ID="lblMoveLeft">Move Left</Control>
+      <Control ID="lblMoveRight">Move Right</Control>
+    </UserControl>
+  </UserControls>
   <Messages>
     <Message ID="FilterAll">Todos los tipos de archivo (*.*)|*.*</Message>
     <Message ID="FilterMovie">Videos (*.mmo)|*.mmo|Todos los archivos (*.*)|*.*</Message>

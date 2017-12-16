@@ -642,6 +642,9 @@
     </Compile>
     <Compile Include="Forms\Cheats\MesenCheatExporter.cs" />
     <Compile Include="Forms\Cheats\NestopiaCheatLoader.cs" />
+    <Compile Include="Forms\Config\BaseInputConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Config\BaseInputConfigControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -657,22 +660,94 @@
     <Compile Include="Forms\Config\ctrlEmulatorShortcuts.Designer.cs">
       <DependentUpon>ctrlEmulatorShortcuts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlSuborKeyboardConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlSuborKeyboardConfig.Designer.cs">
+      <DependentUpon>ctrlSuborKeyboardConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlFamilyBasicKeyboardConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlFamilyBasicKeyboardConfig.Designer.cs">
+      <DependentUpon>ctrlFamilyBasicKeyboardConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\ctrlKeyBindingHint.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\ctrlKeyBindingHint.Designer.cs">
+      <DependentUpon>ctrlKeyBindingHint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlJissenMahjongConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlJissenMahjongConfig.Designer.cs">
+      <DependentUpon>ctrlJissenMahjongConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Config\ctrlPathSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\Config\ctrlPathSelection.Designer.cs">
       <DependentUpon>ctrlPathSelection.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Config\ctrlStandardController.cs">
+    <Compile Include="Forms\Config\Controllers\ctrlPartytapConfig.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\Config\ctrlStandardController.Designer.cs">
+    <Compile Include="Forms\Config\Controllers\ctrlPartytapConfig.Designer.cs">
+      <DependentUpon>ctrlPartytapConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlExcitingBoxingConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlExcitingBoxingConfig.Designer.cs">
+      <DependentUpon>ctrlExcitingBoxingConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlStandardController.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlStandardController.Designer.cs">
       <DependentUpon>ctrlStandardController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Config\frmControllerConfig.cs">
+    <Compile Include="Forms\Config\Controllers\frmSuborKeyboardConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Config\frmControllerConfig.Designer.cs">
+    <Compile Include="Forms\Config\Controllers\frmSuborKeyboardConfig.Designer.cs">
+      <DependentUpon>frmSuborKeyboardConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmJissenMahjongConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmJissenMahjongConfig.Designer.cs">
+      <DependentUpon>frmJissenMahjongConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmFamilyBasicKeyboardConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmFamilyBasicKeyboardConfig.Designer.cs">
+      <DependentUpon>frmFamilyBasicKeyboardConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmPartytapConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmPartytapConfig.Designer.cs">
+      <DependentUpon>frmPartytapConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmExcitingBoxingConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmExcitingBoxingConfig.Designer.cs">
+      <DependentUpon>frmExcitingBoxingConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmPowerPadConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmPowerPadConfig.Designer.cs">
+      <DependentUpon>frmPowerPadConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmControllerConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmControllerConfig.Designer.cs">
       <DependentUpon>frmControllerConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Config\frmCopyFiles.cs">
@@ -681,7 +756,9 @@
     <Compile Include="Forms\Config\frmCopyFiles.Designer.cs">
       <DependentUpon>frmCopyFiles.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Config\frmGetKey.cs" />
+    <Compile Include="Forms\Config\frmGetKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Config\frmGetKey.Designer.cs">
       <DependentUpon>frmGetKey.cs</DependentUpon>
     </Compile>
@@ -727,16 +804,16 @@
     <Compile Include="Forms\Config\frmVsGameConfig.Designer.cs">
       <DependentUpon>frmVsGameConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Config\ctrlPowerPadConfig.cs">
+    <Compile Include="Forms\Config\Controllers\ctrlPowerPadConfig.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\Config\ctrlPowerPadConfig.Designer.cs">
+    <Compile Include="Forms\Config\Controllers\ctrlPowerPadConfig.Designer.cs">
       <DependentUpon>ctrlPowerPadConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Config\frmZapperConfig.cs">
+    <Compile Include="Forms\Config\Controllers\frmZapperConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Config\frmZapperConfig.Designer.cs">
+    <Compile Include="Forms\Config\Controllers\frmZapperConfig.Designer.cs">
       <DependentUpon>frmZapperConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\EntityBinder.cs" />
@@ -781,21 +858,27 @@
     </Compile>
     <Compile Include="Forms\frmMain.File.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Game.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Options.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Tests.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Tools.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmMain.Help.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmRecordAvi.cs">
       <SubType>Form</SubType>
@@ -829,7 +912,9 @@
     <Compile Include="Forms\NetPlay\frmClientConfig.Designer.cs">
       <DependentUpon>frmClientConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmMain.cs" />
+    <Compile Include="Forms\frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
@@ -1046,19 +1131,64 @@
     <EmbeddedResource Include="Forms\Cheats\frmCheatImportFromDb.resx">
       <DependentUpon>frmCheatImportFromDb.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\BaseInputConfigForm.resx">
+      <DependentUpon>BaseInputConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlDipSwitch.resx">
       <DependentUpon>ctrlDipSwitch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlEmulatorShortcuts.resx">
       <DependentUpon>ctrlEmulatorShortcuts.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\ctrlSuborKeyboardConfig.resx">
+      <DependentUpon>ctrlSuborKeyboardConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\ctrlFamilyBasicKeyboardConfig.resx">
+      <DependentUpon>ctrlFamilyBasicKeyboardConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\ctrlKeyBindingHint.resx">
+      <DependentUpon>ctrlKeyBindingHint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\ctrlJissenMahjongConfig.resx">
+      <DependentUpon>ctrlJissenMahjongConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlPathSelection.resx">
       <DependentUpon>ctrlPathSelection.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Config\ctrlStandardController.resx">
+    <EmbeddedResource Include="Forms\Config\Controllers\ctrlPartytapConfig.resx">
+      <DependentUpon>ctrlPartytapConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\ctrlExcitingBoxingConfig.resx">
+      <DependentUpon>ctrlExcitingBoxingConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\ctrlStandardController.resx">
       <DependentUpon>ctrlStandardController.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Config\frmControllerConfig.resx">
+    <EmbeddedResource Include="Forms\Config\Controllers\frmSuborKeyboardConfig.resx">
+      <DependentUpon>frmSuborKeyboardConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\frmJissenMahjongConfig.resx">
+      <DependentUpon>frmJissenMahjongConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\frmFamilyBasicKeyboardConfig.resx">
+      <DependentUpon>frmFamilyBasicKeyboardConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\frmPartytapConfig.resx">
+      <DependentUpon>frmPartytapConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\frmExcitingBoxingConfig.resx">
+      <DependentUpon>frmExcitingBoxingConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\frmPowerPadConfig.resx">
+      <DependentUpon>frmPowerPadConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\frmControllerConfig.resx">
       <DependentUpon>frmControllerConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -1091,10 +1221,10 @@
     <EmbeddedResource Include="Forms\Config\frmVsGameConfig.resx">
       <DependentUpon>frmVsGameConfig.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Config\ctrlPowerPadConfig.resx">
+    <EmbeddedResource Include="Forms\Config\Controllers\ctrlPowerPadConfig.resx">
       <DependentUpon>ctrlPowerPadConfig.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Config\frmZapperConfig.resx">
+    <EmbeddedResource Include="Forms\Config\Controllers\frmZapperConfig.resx">
       <DependentUpon>frmZapperConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAbout.resx">

@@ -208,44 +208,6 @@
 
       <Control ID="lblKeyBinding">Увага: Ваша поточна конфігурація містить конфліктуючі поєднання клавіш - деякі фізичні кнопки на вашому ключовому словнику або геймпадi відображаються на кількох кнопках на контролері NES. Якщо це не навмисне, перегляньте та виправте ключi.</Control>
     </Form>
-    <Form ID="frmControllerConfig" Title="Налаштування контролера">
-      <Control ID="lblTurboSpeed">Швидкість турбо-кнопок:</Control>
-      <Control ID="lblTurboFast">Швидко</Control>
-      <Control ID="lblSlow">Повiльно</Control>
-      <Control ID="tpgSet1">Контролер #1</Control>
-      <Control ID="tpgSet2">Контролер #2</Control>
-      <Control ID="tpgSet3">Контролер #3</Control>
-      <Control ID="tpgSet4">Контролер #4</Control>
-
-      <Control ID="btnSelectPreset">Пресети</Control>
-      <Control ID="mnuKeyboard">Клавіатура</Control>
-      <Control ID="mnuWasdLayout">WSAD розкладка</Control>
-      <Control ID="mnuArrowLayout">Курсорні клавіші</Control>
-      <Control ID="mnuFceuxLayout">FCEUX</Control>
-      <Control ID="mnuNestopiaLayout">Nestopia</Control>
-      <Control ID="mnuXboxController">Xbox геймпад</Control>
-      <Control ID="mnuXboxLayout1">Контролер #1</Control>
-      <Control ID="mnuXboxLayout2">Контролер #2</Control>
-      <Control ID="mnuPs4Controller">PS4 геймпад</Control>
-      <Control ID="mnuPs4Layout1">Контролер #1</Control>
-      <Control ID="mnuPs4Layout2">Контролер #2</Control>
-      <Control ID="mnuSnes30Controller">SNES30 геймпад</Control>
-      <Control ID="mnuSnes30Layout1">Контролер #1</Control>
-      <Control ID="mnuSnes30Layout2">Контролер #2</Control>
-
-      <Control ID="lblHint">Вкладки з піктограмою містять ключові прив'язки для цього гравця.&#13;&#10;Кожна кнопка може бути віднесена до 4 різних клавіш клавіатури або геймпада.</Control>     
-
-      <Control ID="btnClear">Очистити</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Відміна</Control>
-    </Form>
-    <Form ID="frmZapperConfig" Title="Конфiгурацiя Zapper">
-      <Control ID="lblSmall">Малий</Control>
-      <Control ID="lblLarge">Великий</Control>
-      <Control ID="lblDetectRadius">Радіус виявлення світла:</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Відміна</Control>
-    </Form>
     <Form ID="frmVideoConfig" Title="Налаштування вiдео">
       <Control ID="tpgGeneral">Загальнi</Control>
       <Control ID="lblVideoScale">Розмір :</Control>
@@ -629,7 +591,70 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Вiдмiна</Control>
     </Form>
+    <Form ID="BaseInputConfigForm" Title="">
+      <Control ID="lblHint">Вкладки з піктограмою містять ключові прив'язки для цього гравця.&#13;&#10;Кожна кнопка може бути віднесена до 4 різних клавіш клавіатури або геймпада.</Control>
+      <Control ID="tpgSet1">Контролер #1</Control>
+      <Control ID="tpgSet2">Контролер #2</Control>
+      <Control ID="tpgSet3">Контролер #3</Control>
+      <Control ID="tpgSet4">Контролер #4</Control>
+      <Control ID="btnSetDefault">Use Default Bindings</Control>
+      <Control ID="btnClear">Очистити</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Відміна</Control>
+    </Form>
+    <Form ID="frmControllerConfig" Title="Налаштування контролера">
+      <Control ID="lblTurboSpeed">Швидкість турбо-кнопок:</Control>
+      <Control ID="lblTurboFast">Швидко</Control>
+      <Control ID="lblSlow">Повiльно</Control>
+
+      <Control ID="btnSelectPreset">Пресети</Control>
+      <Control ID="mnuKeyboard">Клавіатура</Control>
+      <Control ID="mnuWasdLayout">WSAD розкладка</Control>
+      <Control ID="mnuArrowLayout">Курсорні клавіші</Control>
+      <Control ID="mnuFceuxLayout">FCEUX</Control>
+      <Control ID="mnuNestopiaLayout">Nestopia</Control>
+      <Control ID="mnuXboxController">Xbox геймпад</Control>
+      <Control ID="mnuXboxLayout1">Контролер #1</Control>
+      <Control ID="mnuXboxLayout2">Контролер #2</Control>
+      <Control ID="mnuPs4Controller">PS4 геймпад</Control>
+      <Control ID="mnuPs4Layout1">Контролер #1</Control>
+      <Control ID="mnuPs4Layout2">Контролер #2</Control>
+      <Control ID="mnuSnes30Controller">SNES30 геймпад</Control>
+      <Control ID="mnuSnes30Layout1">Контролер #1</Control>
+      <Control ID="mnuSnes30Layout2">Контролер #2</Control>
+    </Form>
+    <Form ID="frmZapperConfig" Title="Конфiгурацiя Zapper">
+      <Control ID="lblSmall">Малий</Control>
+      <Control ID="lblLarge">Великий</Control>
+      <Control ID="lblDetectRadius">Радіус виявлення світла:</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Відміна</Control>
+    </Form>
+    <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
+    </Form>
+    <Form ID="frmFamilyBasicKeyboard" Title="Family Basic Keyboard">
+    </Form>
+    <Form ID="frmJissenMahjongConfig" Title="Jissen Mahjong Controller">
+    </Form>
+    <Form ID="frmPartyTapConfig" Title="Partytap">
+    </Form>
+    <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
+    </Form>
+    <Form ID="frmSuborKeyboard" Title="Subor Keyboard">
+    </Form>
   </Forms>
+  <UserControls>
+    <UserControl ID="ctrlExcitingBoxingConfig">
+      <Control ID="lblLeftHook">Left Hook</Control>
+      <Control ID="lblRightHook">Right Hook</Control>
+      <Control ID="lblLeftJab">Left Jab</Control>
+      <Control ID="lblRightJab">Right Jab</Control>
+      <Control ID="lblStraight">Straight</Control>
+      <Control ID="lblBody">Body</Control>
+      <Control ID="lblMoveLeft">Move Left</Control>
+      <Control ID="lblMoveRight">Move Right</Control>
+    </UserControl>
+  </UserControls>
   <Messages>
     <Message ID="FilterAll">Всi файли (*.*)|*.*</Message>
     <Message ID="FilterMovie">Записи (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>

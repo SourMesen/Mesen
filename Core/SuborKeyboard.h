@@ -10,21 +10,30 @@ private:
 	bool _enabled = false;
 
 protected:
+	string GetKeyNames() override
+	{
+		return "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567891234567890120123456789edpmdmncdsasbemglrcpcsasbteeehidududlr123";
+	}
+
 	enum Buttons
 	{
-		Num4, G, F, C, F2, E, Num5, V,
-		Num2, D, S, End, F1, W, Num3, X,
-		Ins, Backspace, PageDown, Right, F8, PageUp, Delete, Home,
-		Num9, I, L, Comma, F5, O, Num0, Dot,
-		RightBracket, Enter, Up, Left, F7, LeftBracket, Backslash, Down,
-		Q, CapsLock, Z, Tab, Esc, A, Num1, Ctrl,
-		Num7, Y, K, M, F4, U, Num8, J,
-		Minus, SemiColon, Apostrophe, Slash, F6, P, Equal, Shift,
-		T, H, N, Space, F3, R, Num6, B,
-		NumpadEnter, Unknown1, Unknown2, Unknown3,
-		LeftMenu, Numpad4, Numpad7, F11, F12, Numpad1, Numpad2, Numpad8,
-		NumpadMinus, NumpadPlus, NumpadMultiply, Numpad9, F10, Numpad5, NumpadDivide, NumLock,
-		Grave, Numpad6, Pause, F9, Numpad3, NumpadDot, Numpad0
+		A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+		Num0, Num1, Num2, Num3, Num4, Num5, Num6, Num7, Num8, Num9,
+		F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
+		Numpad0, Numpad1, Numpad2, Numpad3, Numpad4, Numpad5, Numpad6, Numpad7, Numpad8, Numpad9,
+		NumpadEnter, NumpadDot, NumpadPlus, NumpadMultiply, NumpadDivide, NumpadMinus, NumLock,
+		Comma, Dot, SemiColon, Apostrophe,
+		Slash, Backslash,
+		Equal, Minus, Grave,
+		LeftBracket, RightBracket, 		
+		CapsLock, Pause,
+		Ctrl, Shift, Alt,
+		Space, Backspace, Tab, Esc, Enter,
+		End, Home,
+		Ins, Delete,
+		PageUp, PageDown,
+		Up, Down, Left, Right,
+		Unknown1, Unknown2, Unknown3,
 	};
 
 	Buttons _keyboardMatrix[104] = {
@@ -38,7 +47,7 @@ protected:
 		Minus, SemiColon, Apostrophe, Slash, F6, P, Equal, Shift,
 		T, H, N, Space, F3, R, Num6, B,
 		Numpad6, NumpadEnter, Numpad4, Numpad8, Numpad2, Unknown1, Unknown2, Unknown3,
-		LeftMenu, Numpad4, Numpad7, F11, F12, Numpad1, Numpad2, Numpad8,
+		Alt, Numpad4, Numpad7, F11, F12, Numpad1, Numpad2, Numpad8,
 		NumpadMinus, NumpadPlus, NumpadMultiply, Numpad9, F10, Numpad5, NumpadDivide, NumLock,
 		Grave, Numpad6, Pause, Space, F9, Numpad3, NumpadDot, Numpad0
 	};
@@ -87,7 +96,6 @@ public:
 		if(addr == 0x4017) {
 			if(_enabled) {
 				uint8_t value = ((~GetActiveKeys(_row, _column)) << 1) & 0x1E;
-				MessageManager::Log(std::to_string(value));
 				return value;
 			} else {
 				return 0x1E;
