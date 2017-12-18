@@ -61,7 +61,7 @@ protected:
 						tileInfo.Sprite[j].IsChrRamTile = _isChrRam;
 						if(_isChrRam) {
 							for(int k = 0; k < 16; k++) {
-								tileInfo.Sprite[j].TileData[k] = _mapper->GetMemoryValue(DebugMemoryType::ChrRom, sprite.AbsoluteTileAddr / 16 * 16 + k);
+								tileInfo.Sprite[j].TileData[k] = _mapper->GetMemoryValue(DebugMemoryType::ChrRam, sprite.AbsoluteTileAddr / 16 * 16 + k);
 							}
 						}
 
@@ -109,7 +109,7 @@ protected:
 				tileInfo.Tile.IsChrRamTile = _isChrRam;
 				if(_isChrRam) {
 					for(int i = 0; i < 16; i++) {
-						tileInfo.Tile.TileData[i] = _mapper->GetMemoryValue(DebugMemoryType::ChrRom, lastTile->AbsoluteTileAddr / 16 * 16 + i);
+						tileInfo.Tile.TileData[i] = _mapper->GetMemoryValue(DebugMemoryType::ChrRam, lastTile->AbsoluteTileAddr / 16 * 16 + i);
 					}
 				}
 

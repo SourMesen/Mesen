@@ -48,6 +48,7 @@ protected:
 			}
 
 			bool hasBgSprite = false;
+			DebugMemoryType memoryType = _isChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom;
 			if(_lastSprite && _flags.SpritesEnabled) {
 				if(backgroundColor == 0) {
 					for(uint8_t i = 0; i < _spriteCount; i++) {
@@ -63,7 +64,7 @@ protected:
 					sprite.PaletteColors = ReadPaletteRAM(_lastSprite->PaletteOffset + 3) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 2) << 8) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 1) << 16) | 0xFF000000;
 					sprite.IsChrRamTile = _isChrRam;
 					for(int i = 0; i < 16; i++) {
-						sprite.TileData[i] = _mapper->GetMemoryValue(DebugMemoryType::ChrRom, _lastSprite->AbsoluteTileAddr / 16 * 16 + i);
+						sprite.TileData[i] = _mapper->GetMemoryValue(memoryType, _lastSprite->AbsoluteTileAddr / 16 * 16 + i);
 					}
 
 					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, _lastSprite->AbsoluteTileAddr, sprite, _mapper, false, _bankHashes[_lastSprite->TileAddr / _chrRamBankSize], false);
@@ -77,7 +78,7 @@ protected:
 					tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 3) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 1) << 16) | (ReadPaletteRAM(0) << 24);
 					tile.IsChrRamTile = _isChrRam;
 					for(int i = 0; i < 16; i++) {
-						tile.TileData[i] = _mapper->GetMemoryValue(DebugMemoryType::ChrRom, lastTile->AbsoluteTileAddr / 16 * 16 + i);
+						tile.TileData[i] = _mapper->GetMemoryValue(memoryType, lastTile->AbsoluteTileAddr / 16 * 16 + i);
 					}
 
 					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, lastTile->AbsoluteTileAddr, tile, _mapper, false, _bankHashes[lastTile->TileAddr / _chrRamBankSize], hasBgSprite);
