@@ -56,6 +56,8 @@ public:
 
 	bool IsPressed(uint8_t bit);
 	MousePosition GetCoordinates();
+	
+	virtual bool IsKeyboard();
 
 	void ClearState();
 	void SetBit(uint8_t bit);

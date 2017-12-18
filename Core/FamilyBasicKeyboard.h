@@ -87,6 +87,11 @@ public:
 	{
 	}
 
+	bool IsKeyboard() override
+	{
+		return true;
+	}
+
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4017) {

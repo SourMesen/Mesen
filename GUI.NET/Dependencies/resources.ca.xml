@@ -738,6 +738,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insereix el següent disc</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insereix moneda (1)</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insereix moneda (2)</Message>
+    <Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
     <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Botó de servei</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Selecciona la següent partida guardada</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Selecciona l'anterior partida guardada</Message>
@@ -762,6 +763,7 @@
     <Message ID="EmulatorShortcutMappings_ToggleOsd">Mostra/Amaga la visualització en pantalla (OSD)</Message>
     <Message ID="EmulatorShortcutMappings_ToggleBackground">Mostra/Amaga la capa de fons</Message>
     <Message ID="EmulatorShortcutMappings_ToggleSprites">Mostra/Amaga la capa de sprites</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Activa/Desactiva la velocitat màxima</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrega un joc a l'atzar</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Desa la partida - Posició 1</Message>

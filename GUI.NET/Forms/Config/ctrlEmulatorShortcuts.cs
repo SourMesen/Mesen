@@ -74,6 +74,7 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.ToggleSprites,
 				EmulatorShortcut.ToggleCheats,
 				EmulatorShortcut.ToggleAudio,
+				EmulatorShortcut.ToggleKeyboardMode,
 
 				EmulatorShortcut.MaxSpeed,
 				EmulatorShortcut.IncreaseSpeed,

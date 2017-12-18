@@ -362,6 +362,7 @@ enum class EmulatorShortcut
 	ToggleAudio,
 	ToggleFastForward,
 	ToggleRewind,
+	ToggleKeyboardMode,
 
 	RunSingleFrame,
 
@@ -585,6 +586,8 @@ private:
 
 	static uint32_t _autoSaveDelay;
 	static bool _autoSaveNotify;
+
+	static bool _keyboardModeEnabled;
 
 	static std::unordered_map<uint32_t, KeyCombination> _emulatorKeys[2];
 	static std::unordered_map<uint32_t, vector<KeyCombination>> _shortcutSupersets[2];
@@ -1337,5 +1340,26 @@ public:
 	static uint32_t GetDipSwitches()
 	{
 		return _dipSwitches;
+	}
+
+	static bool IsKeyboardMode()
+	{
+		return _keyboardModeEnabled;
+	}
+
+	static void EnableKeyboardMode()
+	{
+		if(!_keyboardModeEnabled) {
+			_keyboardModeEnabled = true;
+			MessageManager::DisplayMessage("Input", "KeyboardModeEnabled");
+		}
+	}
+
+	static void DisableKeyboardMode()
+	{
+		if(_keyboardModeEnabled) {
+			_keyboardModeEnabled = false;
+			MessageManager::DisplayMessage("Input", "KeyboardModeDisabled");
+		}
 	}
 };

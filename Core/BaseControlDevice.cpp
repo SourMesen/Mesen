@@ -148,6 +148,11 @@ void BaseControlDevice::EnsureCapacity(int32_t minBitCount)
 	}
 }
 
+bool BaseControlDevice::IsKeyboard()
+{
+	return false;
+}
+
 bool BaseControlDevice::HasCoordinates()
 {
 	return false;
@@ -207,7 +212,12 @@ void BaseControlDevice::InvertBit(uint8_t bit)
 
 void BaseControlDevice::SetPressedState(uint8_t bit, uint32_t keyCode)
 {
-	if(EmulationSettings::InputEnabled() && KeyManager::IsKeyPressed(keyCode)) {
+	if(IsKeyboard() && keyCode < 0x200 && !EmulationSettings::IsKeyboardMode()) {
+		//Prevent keyboard device input when keyboard mode is off
+		return;
+	}
+
+	if(EmulationSettings::InputEnabled() && (!EmulationSettings::IsKeyboardMode() || keyCode >= 0x200 || IsKeyboard()) && KeyManager::IsKeyPressed(keyCode)) {
 		SetBit(bit);
 	}
 }

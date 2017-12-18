@@ -16,6 +16,7 @@ private:
 	vector<uint32_t> _pressedKeys;
 	vector<uint32_t> _lastPressedKeys;
 	bool _isKeyUp;
+	bool _keyboardMode;
 
 	std::unordered_set<uint32_t> _keysDown[2];
 	std::unordered_set<uint32_t> _prevKeysDown[2];
@@ -24,6 +25,7 @@ private:
 	
 	bool IsKeyPressed(EmulatorShortcut key);
 	bool IsKeyPressed(KeyCombination comb);
+	bool IsKeyPressed(uint32_t keyCode);
 
 	bool DetectKeyPress(EmulatorShortcut key);
 	bool DetectKeyRelease(EmulatorShortcut key);

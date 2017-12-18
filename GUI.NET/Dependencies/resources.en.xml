@@ -104,6 +104,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insert Next Disk</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insert Coin 1</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insert Coin 2</Message>
+    <Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
     <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Service Button</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Select Next Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Select Previous Save Slot</Message>
@@ -128,6 +129,7 @@
     <Message ID="EmulatorShortcutMappings_ToggleOsd">Toggle OSD (On-Screen Display)</Message>
     <Message ID="EmulatorShortcutMappings_ToggleBackground">Toggle Background Layer</Message>
     <Message ID="EmulatorShortcutMappings_ToggleSprites">Toggle Sprite Layer</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
     
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Toggle Maximum Speed</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Load Random Game</Message>

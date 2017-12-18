@@ -758,6 +758,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставить следующий диск</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставить монету в слот 1</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Вставить монету в слот 2</Message>
+    <Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
     <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Сервисная кнопка</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Следующий слот для сохранений</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Предыдущий слот для сохранений</Message>
@@ -782,6 +783,7 @@
     <Message ID="EmulatorShortcutMappings_ToggleOsd">Toggle OSD (On-Screen Display)</Message>
     <Message ID="EmulatorShortcutMappings_ToggleBackground">Toggle Background Layer</Message>
     <Message ID="EmulatorShortcutMappings_ToggleSprites">Toggle Sprite Layer</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Toggle Maximum Speed</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Load Random Game</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Save State - Slot 1</Message>

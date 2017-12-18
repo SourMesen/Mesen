@@ -757,6 +757,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insertar siguiente disco</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insertar moneda (1)</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insertar moneda (2)</Message>
+    <Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
     <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Botón de servicio</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Ir a posición de guardado siguiente</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Ir a posición de guardado anterior</Message>
@@ -781,6 +782,7 @@
     <Message ID="EmulatorShortcutMappings_ToggleOsd">Alternar OSD (Información en pantalla)</Message>
     <Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar capa de fondo</Message>
     <Message ID="EmulatorShortcutMappings_ToggleSprites">Alternar capa de sprite</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidad máxima</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Cargar juego aleatorio</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Guardar partida - Hueco 1</Message>

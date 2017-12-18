@@ -753,6 +753,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - 次のディスクを入れる</Message>    
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - インサートコイン 1</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - インサートコイン 2</Message>
+    <Message ID="EmulatorShortcutMappings_InputBarcode">バーコードを入力</Message>
     <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - サービスボタン</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">次のクイックセーブスロットを選ぶ</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">前のクイックセーブスロットを選ぶ</Message>
@@ -777,6 +778,7 @@
     <Message ID="EmulatorShortcutMappings_ToggleOsd">オンスクリーン表示を無効・有効にする</Message>
     <Message ID="EmulatorShortcutMappings_ToggleBackground">バックグラウンドレイヤー表示</Message>
     <Message ID="EmulatorShortcutMappings_ToggleSprites">スプライトレイヤー表示</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">キーボードモードを無効・有効にする</Message>
     <Message ID="EmulatorShortcutMappings_MaxSpeed">最高速度を無効・有効にする</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">ランダムゲームを開く</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">クイックセーブスロット１に保存する</Message>

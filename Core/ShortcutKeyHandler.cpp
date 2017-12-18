@@ -10,10 +10,14 @@
 #include "FdsSystemActionManager.h"
 #include "VsSystemActionManager.h"
 #include "MovieManager.h"
+#include "ControlManager.h"
 
 ShortcutKeyHandler::ShortcutKeyHandler()
 {
 	_keySetIndex = 0;
+	_isKeyUp = false;
+	_keyboardMode = false;
+
 	_stopThread = false;
 	_thread = std::thread([=]() {
 		while(!_stopThread) {
@@ -52,9 +56,18 @@ bool ShortcutKeyHandler::IsKeyPressed(KeyCombination comb)
 		return false;
 	}
 
-	return KeyManager::IsKeyPressed(comb.Key1) &&
-		(comb.Key2 == 0 || KeyManager::IsKeyPressed(comb.Key2)) &&
-		(comb.Key3 == 0 || KeyManager::IsKeyPressed(comb.Key3));
+	return IsKeyPressed(comb.Key1) &&
+		(comb.Key2 == 0 || IsKeyPressed(comb.Key2)) &&
+		(comb.Key3 == 0 || IsKeyPressed(comb.Key3));
+}
+
+bool ShortcutKeyHandler::IsKeyPressed(uint32_t keyCode)
+{
+	if(keyCode >= 0x200 || !_keyboardMode) {
+		return KeyManager::IsKeyPressed(keyCode);
+	} else {
+		return false;
+	}
 }
 
 bool ShortcutKeyHandler::DetectKeyPress(EmulatorShortcut shortcut)
@@ -84,6 +97,18 @@ void ShortcutKeyHandler::CheckMappedKeys()
 {
 	bool isNetplayClient = GameClient::Connected();
 	bool isMovieActive = MovieManager::Playing() || MovieManager::Recording();
+
+	_keyboardMode = false;
+	if(DetectKeyPress(EmulatorShortcut::ToggleKeyboardMode)) {
+		if(EmulationSettings::IsKeyboardMode()) {
+			EmulationSettings::DisableKeyboardMode();
+		} else {
+			if(ControlManager::HasKeyboard()) {
+				EmulationSettings::EnableKeyboardMode();
+			}
+		}
+	}
+	_keyboardMode = EmulationSettings::IsKeyboardMode();
 
 	//Let the UI handle these shortcuts
 	for(uint64_t i = (uint64_t)EmulatorShortcut::SwitchDiskSide; i <= (uint64_t)EmulatorShortcut::OpenTraceLogger; i++) {

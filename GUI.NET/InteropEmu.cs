@@ -1524,6 +1524,7 @@ namespace Mesen.GUI
 		ToggleAudio,
 		ToggleFastForward,
 		ToggleRewind,
+		ToggleKeyboardMode,
 
 		RunSingleFrame,
 

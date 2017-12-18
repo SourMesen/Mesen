@@ -62,6 +62,7 @@ public:
 	static shared_ptr<BaseControlDevice> GetControlDevice(uint8_t port);
 	static shared_ptr<BaseControlDevice> CreateControllerDevice(ControllerType type, uint8_t port);
 	static shared_ptr<BaseControlDevice> CreateExpansionDevice(ExpansionPortDevice type);
+	static bool HasKeyboard();
 
 	virtual void GetMemoryRanges(MemoryRanges &ranges) override
 	{

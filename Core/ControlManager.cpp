@@ -172,6 +172,8 @@ void ControlManager::UpdateControlDevices()
 	//Reset update flag
 	EmulationSettings::NeedControllerUpdate();
 
+	bool hadKeyboard = HasKeyboard();
+
 	ControlManager::_controlDevices.clear();
 
 	ControlManager::RegisterControlDevice(_systemActionManager);
@@ -203,6 +205,13 @@ void ControlManager::UpdateControlDevices()
 		ControlManager::RegisterControlDevice(expDevice);
 	}
 
+	bool hasKeyboard = HasKeyboard();
+	if(!hasKeyboard) {
+		EmulationSettings::DisableKeyboardMode();
+	} else if(!hadKeyboard && hasKeyboard) {
+		EmulationSettings::EnableKeyboardMode();
+	}
+
 	if(_mapperControlDevice) {
 		ControlManager::RegisterControlDevice(_mapperControlDevice);
 	}
@@ -211,6 +220,12 @@ void ControlManager::UpdateControlDevices()
 		//Automatically connect the data recorder if the keyboard is connected
 		ControlManager::RegisterControlDevice(shared_ptr<FamilyBasicDataRecorder>(new FamilyBasicDataRecorder()));
 	}
+}
+
+bool ControlManager::HasKeyboard()
+{
+	shared_ptr<BaseControlDevice> expDevice = GetControlDevice(BaseControlDevice::ExpDevicePort);
+	return expDevice && expDevice->IsKeyboard();
 }
 
 uint8_t ControlManager::GetOpenBusMask(uint8_t port)

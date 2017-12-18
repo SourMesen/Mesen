@@ -56,6 +56,8 @@ bool EmulationSettings::_nsfDisableApuIrqs = true;
 uint32_t EmulationSettings::_autoSaveDelay = 5;
 bool EmulationSettings::_autoSaveNotify = false;
 
+bool EmulationSettings::_keyboardModeEnabled = false;
+
 SimpleLock EmulationSettings::_shortcutLock;
 std::unordered_map<uint32_t, KeyCombination> EmulationSettings::_emulatorKeys[2];
 std::unordered_map<uint32_t, vector<KeyCombination>> EmulationSettings::_shortcutSupersets[2];
