@@ -49,21 +49,20 @@ protected:
 					SpriteInfo& sprite = _spriteTiles[i];
 					if(shift >= 0 && shift < 8) {
 						tileInfo.Sprite[j].TileIndex = sprite.AbsoluteTileAddr / 16;
-						if(_version >= 100) {
-							tileInfo.Sprite[j].PaletteColors = 0xFF000000 | ReadPaletteRAM(sprite.PaletteOffset + 3) | (ReadPaletteRAM(sprite.PaletteOffset + 2) << 8) | (ReadPaletteRAM(sprite.PaletteOffset + 1) << 16);
-						} else {
-							tileInfo.Sprite[j].PaletteColors = ReadPaletteRAM(sprite.PaletteOffset + 3) | (ReadPaletteRAM(sprite.PaletteOffset + 2) << 8) | (ReadPaletteRAM(sprite.PaletteOffset + 1) << 16);
-						}
-						tileInfo.Sprite[j].OffsetY = sprite.OffsetY;
-						if(tileInfo.Sprite[j].OffsetY >= 8) {
-							tileInfo.Sprite[j].OffsetY -= 8;
-						}
-						tileInfo.Sprite[j].IsChrRamTile = _isChrRam;
 						if(_isChrRam) {
-							for(int k = 0; k < 16; k++) {
-								tileInfo.Sprite[j].TileData[k] = _mapper->GetMemoryValue(DebugMemoryType::ChrRam, sprite.AbsoluteTileAddr / 16 * 16 + k);
-							}
+							_mapper->CopyChrRamTile(sprite.AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Sprite[j].TileData);
 						}
+						if(_version >= 100) {
+							tileInfo.Sprite[j].PaletteColors = 0xFF000000 | _paletteRAM[sprite.PaletteOffset + 3] | (_paletteRAM[sprite.PaletteOffset + 2] << 8) | (_paletteRAM[sprite.PaletteOffset + 1] << 16);
+						} else {
+							tileInfo.Sprite[j].PaletteColors = _paletteRAM[sprite.PaletteOffset + 3] | (_paletteRAM[sprite.PaletteOffset + 2] << 8) | (_paletteRAM[sprite.PaletteOffset + 1] << 16);
+						}
+						if(sprite.OffsetY >= 8) {
+							tileInfo.Sprite[j].OffsetY = sprite.OffsetY - 8;
+						} else {
+							tileInfo.Sprite[j].OffsetY = sprite.OffsetY;
+						}
+
 
 						tileInfo.Sprite[j].OffsetX = shift;
 						tileInfo.Sprite[j].HorizontalMirroring = sprite.HorizontalMirror;
@@ -99,23 +98,16 @@ protected:
 
 			if(_flags.BackgroundEnabled && _cycle > _minimumDrawBgCycle) {
 				tileInfo.Tile.TileIndex = lastTile->AbsoluteTileAddr / 16;
+				if(_isChrRam) {
+					_mapper->CopyChrRamTile(lastTile->AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Tile.TileData);
+				}
 				if(_version >= 100) {
-					tileInfo.Tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 3) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 1) << 16) | (ReadPaletteRAM(0) << 24);
+					tileInfo.Tile.PaletteColors = _paletteRAM[lastTile->PaletteOffset + 3] | (_paletteRAM[lastTile->PaletteOffset + 2] << 8) | (_paletteRAM[lastTile->PaletteOffset + 1] << 16) | (_paletteRAM[0] << 24);
 				} else {
-					tileInfo.Tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 3) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 1) << 16);
+					tileInfo.Tile.PaletteColors = _paletteRAM[lastTile->PaletteOffset + 3] | (_paletteRAM[lastTile->PaletteOffset + 2] << 8) | (_paletteRAM[lastTile->PaletteOffset + 1] << 16);
 				}
 				tileInfo.Tile.OffsetY = lastTile->OffsetY;
-				tileInfo.Tile.BackgroundPriority = false;
-				tileInfo.Tile.IsChrRamTile = _isChrRam;
-				if(_isChrRam) {
-					for(int i = 0; i < 16; i++) {
-						tileInfo.Tile.TileData[i] = _mapper->GetMemoryValue(DebugMemoryType::ChrRam, lastTile->AbsoluteTileAddr / 16 * 16 + i);
-					}
-				}
-
 				tileInfo.Tile.OffsetX = (_state.XScroll + ((_cycle - 1) & 0x07)) & 0x07;
-				tileInfo.Tile.HorizontalMirroring = false;
-				tileInfo.Tile.VerticalMirroring = false;
 			} else {
 				tileInfo.Tile.TileIndex = HdPpuTileInfo::NoTile;
 			}
@@ -130,11 +122,27 @@ protected:
 public:
 	HdPpu(BaseMapper* mapper, ControlManager* controlManager, uint32_t version) : PPU(mapper, controlManager)
 	{
-		_screenTileBuffers[0] = new HdPpuPixelInfo[256 * 240];
-		_screenTileBuffers[1] = new HdPpuPixelInfo[256 * 240];
-		_screenTiles = _screenTileBuffers[0];
 		_isChrRam = !_mapper->HasChrRom();
 		_version = version;
+
+		_screenTileBuffers[0] = new HdPpuPixelInfo[256 * 240];
+		_screenTileBuffers[1] = new HdPpuPixelInfo[256 * 240];
+
+		for(int i = 0; i < 256 * 240; i++) {
+			for(int j = 0; j < 2; j++) {
+				_screenTileBuffers[j][i].Tile.BackgroundPriority = false;
+				_screenTileBuffers[j][i].Tile.IsChrRamTile = _isChrRam;
+				_screenTileBuffers[j][i].Tile.HorizontalMirroring = false;
+				_screenTileBuffers[j][i].Tile.VerticalMirroring = false;
+
+				for(int k = 0; k < 4; k++) {
+					_screenTileBuffers[j][i].Sprite[k].IsChrRamTile = _isChrRam;
+				}
+			}
+		}
+
+		_screenTiles = _screenTileBuffers[0];
+
 	}
 
 	~HdPpu()

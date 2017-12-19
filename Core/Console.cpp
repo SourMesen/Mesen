@@ -85,6 +85,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 	}
 	
 	if(romFile.IsValid()) {
+		VideoDecoder::GetInstance()->StopThread();
+
 		LoadHdPack(romFile, patchFile);
 		if(patchFile.IsValid()) {
 			if(romFile.ApplyPatch(patchFile)) {
@@ -115,7 +117,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			}
 
 			_autoSaveManager.reset(new AutoSaveManager());
-			VideoDecoder::GetInstance()->StopThread();
 			
 			_mapper = mapper;
 			_memoryManager.reset(new MemoryManager(_mapper));
@@ -184,6 +185,9 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 
 	//Reset battery source to current game if new game failed to load
 	BatteryManager::Initialize(FolderUtilities::GetFilename(GetRomName(), false));
+	if(_mapper) {
+		VideoDecoder::GetInstance()->StartThread();
+	}
 
 	MessageManager::DisplayMessage("Error", "CouldNotLoadFile", romFile.GetFileName());
 	return false;

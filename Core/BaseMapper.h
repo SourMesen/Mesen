@@ -203,6 +203,8 @@ public:
 
 	static void InitializeRam(void* data, uint32_t length);
 
+	void CopyChrRamTile(uint32_t address, uint8_t *dest);
+
 	//Debugger Helper Functions
 	bool HasChrRam();
 	bool HasChrRom();
