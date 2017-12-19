@@ -223,6 +223,7 @@ namespace Mesen.GUI.Forms.Config
 										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.JissenMahjong)) ||
 										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.FamilyBasicKeyboard)) ||
 										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.SuborKeyboard)) ||
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Pachinko)) ||
 										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.PartyTap));
 		}
 
@@ -295,6 +296,10 @@ namespace Mesen.GUI.Forms.Config
 
 					case InteropEmu.ExpansionPortDevice.PartyTap:
 						frm = new frmPartytapConfig(inputInfo.Controllers[index]);
+						break;
+
+					case InteropEmu.ExpansionPortDevice.Pachinko:
+						frm = new frmPachinkoConfig(inputInfo.Controllers[index]);
 						break;
 
 					case InteropEmu.ExpansionPortDevice.ExcitingBoxing:

@@ -22,6 +22,9 @@ namespace Mesen.GUI.Config
 		KeyMappings _partyTap;
 		public KeyMappings PartyTap { get { return _partyTap.Clone(); } }
 
+		KeyMappings _pachinko;
+		public KeyMappings Pachinko { get { return _pachinko.Clone(); } }
+
 		KeyMappings _powerPad;
 		public KeyMappings PowerPad { get { return _powerPad.Clone(); } }
 		
@@ -191,6 +194,13 @@ namespace Mesen.GUI.Config
 					InteropEmu.GetKeyCode("4"),
 					InteropEmu.GetKeyCode("5"),
 					InteropEmu.GetKeyCode("6"),
+				}
+			};
+
+			_pachinko = new KeyMappings() {
+				PachinkoButtons = new UInt32[2] {
+					InteropEmu.GetKeyCode("R"),
+					InteropEmu.GetKeyCode("F")
 				}
 			};
 

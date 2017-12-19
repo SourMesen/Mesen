@@ -627,7 +627,7 @@
     </Form>
     <Form ID="frmExcitingBoxingConfig" Title="エキサイティングボクシングエアバッグ">
     </Form>
-    <Form ID="frmFamilyBasicKeyboard" Title="Family Basicキーボード">
+    <Form ID="frmFamilyBasicKeyboardConfig" Title="Family Basicキーボード">
     </Form>
     <Form ID="frmJissenMahjongConfig" Title="実践麻雀コントローラ">
     </Form>
@@ -635,7 +635,9 @@
     </Form>
     <Form ID="frmPowerPadConfig" Title="パワーパッド ・ ファミリートレーナー">
     </Form>
-    <Form ID="frmSuborKeyboard" Title="Suborキーボード">
+    <Form ID="frmSuborKeyboardConfig" Title="Suborキーボード">
+    </Form>
+    <Form ID="frmPachinkoConfig" Title="パチンココントローラ">
     </Form>
   </Forms>
   <UserControls>
@@ -648,6 +650,10 @@
       <Control ID="lblBody">Body</Control>
       <Control ID="lblMoveLeft">Move Left</Control>
       <Control ID="lblMoveRight">Move Right</Control>
+    </UserControl>
+    <UserControl ID="ctrlPachinkoConfig">
+      <Control ID="lblPress">押す</Control>
+      <Control ID="lblRelease">放す</Control>
     </UserControl>
   </UserControls>
   <Messages>

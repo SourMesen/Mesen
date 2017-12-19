@@ -80,11 +80,6 @@ namespace Mesen.GUI.Config
 			mapping.JissenMahjongButtons = JissenMahjongButtons;
 			mapping.SuborKeyboardButtons = SuborKeyboardButtons;
 
-			mapping.PachinkoButtons = new UInt32[2] {
-				InteropEmu.GetKeyCode("I"),
-				InteropEmu.GetKeyCode("K"),
-			};
-
 			return mapping;
 		}
 	}
@@ -163,7 +158,7 @@ namespace Mesen.GUI.Config
 					controllerInfo.Keys[0].ExcitingBoxingButtons = presets.ExcitingBoxing.ExcitingBoxingButtons;
 					controllerInfo.Keys[0].FamilyBasicKeyboardButtons = presets.FamilyBasic.FamilyBasicKeyboardButtons;
 					controllerInfo.Keys[0].JissenMahjongButtons = presets.JissenMahjong.JissenMahjongButtons;
-					//controllerInfo.Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
+					controllerInfo.Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
 					controllerInfo.Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
 					controllerInfo.Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
 					controllerInfo.Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;

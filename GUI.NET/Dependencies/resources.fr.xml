@@ -644,7 +644,7 @@
     </Form>
     <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
     </Form>
-    <Form ID="frmFamilyBasicKeyboard" Title="Clavier Family Basic">
+    <Form ID="frmFamilyBasicKeyboardConfig" Title="Clavier Family Basic">
     </Form>
     <Form ID="frmJissenMahjongConfig" Title="Manette Jissen Mah-jong">
     </Form>
@@ -652,7 +652,9 @@
     </Form>
     <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
     </Form>
-    <Form ID="frmSuborKeyboard" Title="Clavier Subor">
+    <Form ID="frmSuborKeyboardConfig" Title="Clavier Subor">
+    </Form>
+    <Form ID="frmPachinkoConfig" Title="Manette Pachinko">
     </Form>
   </Forms>
   <UserControls>
@@ -665,6 +667,10 @@
       <Control ID="lblBody">Direct court</Control>
       <Control ID="lblMoveLeft">Déplacement gauche</Control>
       <Control ID="lblMoveRight">Déplacement droit</Control>
+    </UserControl>
+    <UserControl ID="ctrlPachinkoConfig">
+      <Control ID="lblPress">Appuyer</Control>
+      <Control ID="lblRelease">Relâcher</Control>
     </UserControl>
   </UserControls>
   <Messages>

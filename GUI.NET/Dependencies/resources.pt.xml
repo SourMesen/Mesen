@@ -629,7 +629,7 @@
     </Form>
     <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
     </Form>
-    <Form ID="frmFamilyBasicKeyboard" Title="Family Basic Keyboard">
+    <Form ID="frmFamilyBasicKeyboardConfig" Title="Family Basic Keyboard">
     </Form>
     <Form ID="frmJissenMahjongConfig" Title="Jissen Mahjong Controller">
     </Form>
@@ -637,7 +637,9 @@
     </Form>
     <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
     </Form>
-    <Form ID="frmSuborKeyboard" Title="Subor Keyboard">
+    <Form ID="frmSuborKeyboardConfig" Title="Subor Keyboard">
+    </Form>
+    <Form ID="frmPachinkoConfig" Title="Pachinko Controller">
     </Form>
   </Forms>
   <UserControls>
@@ -650,6 +652,10 @@
       <Control ID="lblBody">Body</Control>
       <Control ID="lblMoveLeft">Move Left</Control>
       <Control ID="lblMoveRight">Move Right</Control>
+    </UserControl>
+    <UserControl ID="ctrlPachinkoConfig">
+      <Control ID="lblPress">Press</Control>
+      <Control ID="lblRelease">Release</Control>
     </UserControl>
   </UserControls>
   <Messages>

@@ -613,7 +613,7 @@
     </Form>
     <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
     </Form>
-    <Form ID="frmFamilyBasicKeyboard" Title="Teclat Family Basic">
+    <Form ID="frmFamilyBasicKeyboardConfig" Title="Teclat Family Basic">
     </Form>
     <Form ID="frmJissenMahjongConfig" Title="Comandament Jissen Mahjong">
     </Form>
@@ -621,7 +621,9 @@
     </Form>
     <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
     </Form>
-    <Form ID="frmSuborKeyboard" Title="Teclat Subor">
+    <Form ID="frmSuborKeyboardConfig" Title="Teclat Subor">
+    </Form>
+    <Form ID="frmPachinkoConfig" Title="Comandament Pachinko">
     </Form>
   </Forms>
   <UserControls>
@@ -634,6 +636,10 @@
       <Control ID="lblBody">Body</Control>
       <Control ID="lblMoveLeft">Move Left</Control>
       <Control ID="lblMoveRight">Move Right</Control>
+    </UserControl>
+    <UserControl ID="ctrlPachinkoConfig">
+      <Control ID="lblPress">Press</Control>
+      <Control ID="lblRelease">Release</Control>
     </UserControl>
   </UserControls>
   <Messages>

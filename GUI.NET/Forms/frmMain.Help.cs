@@ -63,7 +63,7 @@ namespace Mesen.GUI.Forms
 					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].ExcitingBoxingButtons = presets.ExcitingBoxing.ExcitingBoxingButtons;
 					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].FamilyBasicKeyboardButtons = presets.FamilyBasic.FamilyBasicKeyboardButtons;
 					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].JissenMahjongButtons = presets.JissenMahjong.JissenMahjongButtons;
-					//ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
+					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
 					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
 					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
 					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
