@@ -25,7 +25,7 @@ void KeyManager::RefreshKeyState()
 bool KeyManager::IsKeyPressed(uint32_t keyCode)
 {
 	if(_keyManager != nullptr) {
-		return _keyManager->IsKeyPressed(keyCode);
+		return EmulationSettings::InputEnabled() && _keyManager->IsKeyPressed(keyCode);
 	}
 	return false;
 }
@@ -33,7 +33,7 @@ bool KeyManager::IsKeyPressed(uint32_t keyCode)
 bool KeyManager::IsMouseButtonPressed(MouseButton button)
 {
 	if(_keyManager != nullptr) {
-		return _keyManager->IsMouseButtonPressed(button);
+		return EmulationSettings::InputEnabled() && _keyManager->IsMouseButtonPressed(button);
 	}
 	return false;
 }

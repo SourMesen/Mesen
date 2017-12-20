@@ -215,6 +215,10 @@ void ShortcutKeyHandler::CheckMappedKeys()
 
 void ShortcutKeyHandler::ProcessKeys()
 {
+	if(!EmulationSettings::InputEnabled()) {
+		return;
+	}
+
 	auto lock = _lock.AcquireSafe();
 	KeyManager::RefreshKeyState();
 
