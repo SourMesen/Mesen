@@ -60,6 +60,7 @@
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.picChrBank2 = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpDisplayOptions.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -434,15 +435,16 @@
 			// ctxMenu
 			// 
 			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuCopyHdPack});
+            this.mnuCopyHdPack,
+            this.mnuCopyToClipboard});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(222, 26);
+			this.ctxMenu.Size = new System.Drawing.Size(248, 70);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuCopyHdPack
 			// 
 			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
-			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(247, 22);
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
@@ -467,6 +469,15 @@
 			this.toolTip.AutoPopDelay = 32700;
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
+			// 
+			// mnuCopyToClipboard
+			// 
+			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
+			this.mnuCopyToClipboard.Name = "mnuCopyToClipboard";
+			this.mnuCopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.mnuCopyToClipboard.Size = new System.Drawing.Size(247, 22);
+			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
+			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);
 			// 
 			// ctrlChrViewer
 			// 
@@ -534,5 +545,6 @@
 		private System.Windows.Forms.ContextMenuStrip ctxMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
 		private ctrlTilePalette ctrlTilePalette;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyToClipboard;
 	}
 }

@@ -415,5 +415,21 @@ namespace Mesen.GUI.Debugger.Controls
 
 			_copyData = sb.ToString();
 		}
+
+		private void mnuCopyToClipboard_Click(object sender, EventArgs e)
+		{
+			CopyToClipboard();
+		}
+
+		public void CopyToClipboard()
+		{
+			using(Bitmap copy = new Bitmap(256, 512)) {
+				using(Graphics g = Graphics.FromImage(copy)) {
+					g.DrawImage(_chrBanks[0], 0, 0);
+					g.DrawImage(_chrBanks[1], 0, 256);
+				}
+				Clipboard.SetImage(copy);
+			}
+		}
 	}
 }

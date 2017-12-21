@@ -39,6 +39,7 @@
 			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.lblScreenPreview = new System.Windows.Forms.Label();
 			this.lblTile = new System.Windows.Forms.Label();
 			this.picTile = new System.Windows.Forms.PictureBox();
@@ -174,6 +175,7 @@
 			this.picPreview.TabIndex = 21;
 			this.picPreview.TabStop = false;
 			this.picPreview.DoubleClick += new System.EventHandler(this.picSprites_DoubleClick);
+			this.picPreview.MouseEnter += new System.EventHandler(this.picPreview_MouseEnter);
 			this.picPreview.MouseLeave += new System.EventHandler(this.picPreview_MouseLeave);
 			this.picPreview.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPreview_MouseMove);
 			// 
@@ -182,9 +184,10 @@
 			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuShowInChrViewer,
             this.toolStripMenuItem1,
-            this.mnuCopyHdPack});
+            this.mnuCopyHdPack,
+            this.mnuCopyToClipboard});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(233, 54);
+			this.ctxMenu.Size = new System.Drawing.Size(248, 98);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuShowInChrViewer
@@ -207,6 +210,15 @@
 			this.mnuCopyHdPack.Size = new System.Drawing.Size(232, 22);
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
+			// 
+			// mnuCopyToClipboard
+			// 
+			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
+			this.mnuCopyToClipboard.Name = "mnuCopyToClipboard";
+			this.mnuCopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.mnuCopyToClipboard.Size = new System.Drawing.Size(247, 22);
+			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
+			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);
 			// 
 			// lblScreenPreview
 			// 
@@ -393,6 +405,7 @@
 			this.picSprites.TabIndex = 0;
 			this.picSprites.TabStop = false;
 			this.picSprites.DoubleClick += new System.EventHandler(this.picSprites_DoubleClick);
+			this.picSprites.MouseEnter += new System.EventHandler(this.picSprites_MouseEnter);
 			this.picSprites.MouseLeave += new System.EventHandler(this.picSprites_MouseLeave);
 			this.picSprites.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picSprites_MouseMove);
 			// 
@@ -447,5 +460,6 @@
 		private ctrlTilePalette ctrlTilePalette;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowInChrViewer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyToClipboard;
 	}
 }

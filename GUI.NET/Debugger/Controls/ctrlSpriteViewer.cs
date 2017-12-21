@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
+using System.Drawing.Imaging;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -24,10 +25,16 @@ namespace Mesen.GUI.Debugger.Controls
 		private bool _forceRefresh;
 		private Point? _previewMousePosition = null;
 		private int _contextMenuSpriteIndex = -1;
+		private bool _copyPreview = false;
+		private Bitmap _imgSprites;
+		private Bitmap _screenPreview = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
 
 		public ctrlSpriteViewer()
 		{
 			InitializeComponent();
+
+			picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
+			picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
 		}
 		
 		public void GetData()
@@ -47,19 +54,17 @@ namespace Mesen.GUI.Debugger.Controls
 
 			GCHandle handle = GCHandle.Alloc(_spritePixelData, GCHandleType.Pinned);
 			try {
-				Bitmap source = new Bitmap(64, 128, 4*64, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap target = new Bitmap(256, 512);
-
-				using(Graphics g = Graphics.FromImage(target)) {
+				_imgSprites = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+				using(Graphics g = Graphics.FromImage(picSprites.Image)) {
 					g.Clear(Color.FromArgb(64, 64, 64));
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
 					
 					g.ScaleTransform(4, 4);
-					g.DrawImageUnscaled(source, 0, 0);
+					g.DrawImageUnscaled(_imgSprites, 0, 0);
 				}
-				picSprites.Image = target;
+				picSprites.Invalidate();
 			} finally {
 				handle.Free();
 			}
@@ -74,16 +79,13 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			GCHandle handle = GCHandle.Alloc(_spritePixelData, GCHandleType.Pinned);
 			try {
-				Bitmap source = new Bitmap(64, 128, 4*64, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap screenPreview = new Bitmap(256, 240);
+				Bitmap source = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
 
-				using(Graphics g = Graphics.FromImage(screenPreview)) {
+				using(Graphics g = Graphics.FromImage(_screenPreview)) {
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-					using(Brush b = new SolidBrush(Color.FromArgb(64, 64, 64))) {
-						g.FillRectangle(b, 0, 0, 256, 240);
-					}
+					g.Clear(Color.Transparent);
 
 					for(int i = 63; i >= 0; i--) {
 						if(i != _selectedSprite) {
@@ -95,7 +97,12 @@ namespace Mesen.GUI.Debugger.Controls
 						DrawSprite(source, g, _selectedSprite);
 					}
 				}
-				picPreview.Image = screenPreview;
+
+				using(Graphics g = Graphics.FromImage(picPreview.Image)) {
+					g.Clear(Color.FromArgb(64, 64, 64));
+					g.DrawImage(_screenPreview, 0, 0);
+				}
+				picPreview.Invalidate();
 			} finally {
 				handle.Free();
 			}
@@ -308,6 +315,33 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuShowInChrViewer_Click(object sender, EventArgs e)
 		{
 			ShowInChrViewer();
+		}
+
+		private void picSprites_MouseEnter(object sender, EventArgs e)
+		{
+			_copyPreview = false;
+		}
+
+		private void picPreview_MouseEnter(object sender, EventArgs e)
+		{
+			_copyPreview = true;
+		}
+
+		private void mnuCopyToClipboard_Click(object sender, EventArgs e)
+		{
+			CopyToClipboard();
+		}
+
+		public void CopyToClipboard()
+		{
+			Bitmap src = _copyPreview ? _screenPreview : _imgSprites;
+			using(Bitmap target = new Bitmap(src.Width, src.Height)) {
+				using(Graphics g = Graphics.FromImage(target)) {
+					g.Clear(Color.FromArgb(64, 64, 64));
+					g.DrawImage(src, 0, 0);
+				}
+				Clipboard.SetImage(target);
+			}
 		}
 	}
 }

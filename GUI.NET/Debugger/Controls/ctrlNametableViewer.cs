@@ -333,5 +333,15 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			ShowInChrViewer();
 		}
+
+		private void mnuCopyToClipboard_Click(object sender, EventArgs e)
+		{
+			CopyToClipboard();
+		}
+
+		public void CopyToClipboard()
+		{
+			Clipboard.SetImage(_nametableImage);
+		}
 	}
 }

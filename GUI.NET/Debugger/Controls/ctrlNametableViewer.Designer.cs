@@ -60,6 +60,7 @@
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
 			this.chkHighlightChrTile = new System.Windows.Forms.CheckBox();
+			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -107,9 +108,10 @@
 			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuShowInChrViewer,
             this.toolStripMenuItem1,
-            this.mnuCopyHdPack});
+            this.mnuCopyHdPack,
+            this.mnuCopyToClipboard});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(233, 54);
+			this.ctxMenu.Size = new System.Drawing.Size(248, 98);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuShowInChrViewer
@@ -117,19 +119,19 @@
 			this.mnuShowInChrViewer.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
 			this.mnuShowInChrViewer.Name = "mnuShowInChrViewer";
 			this.mnuShowInChrViewer.ShortcutKeyDisplayString = "Dbl-Click";
-			this.mnuShowInChrViewer.Size = new System.Drawing.Size(232, 22);
+			this.mnuShowInChrViewer.Size = new System.Drawing.Size(247, 22);
 			this.mnuShowInChrViewer.Text = "View in CHR viewer";
 			this.mnuShowInChrViewer.Click += new System.EventHandler(this.mnuShowInChrViewer_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(229, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(244, 6);
 			// 
 			// mnuCopyHdPack
 			// 
 			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
-			this.mnuCopyHdPack.Size = new System.Drawing.Size(232, 22);
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(247, 22);
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
@@ -432,6 +434,15 @@
 			this.chkHighlightChrTile.UseVisualStyleBackColor = true;
 			this.chkHighlightChrTile.Click += new System.EventHandler(this.chkHighlightChrTile_Click);
 			// 
+			// mnuCopyToClipboard
+			// 
+			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
+			this.mnuCopyToClipboard.Name = "mnuCopyToClipboard";
+			this.mnuCopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.mnuCopyToClipboard.Size = new System.Drawing.Size(247, 22);
+			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
+			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);
+			// 
 			// ctrlNametableViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -488,5 +499,6 @@
 		private System.Windows.Forms.CheckBox chkHighlightChrTile;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowInChrViewer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyToClipboard;
 	}
 }
