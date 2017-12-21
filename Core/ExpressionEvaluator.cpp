@@ -61,7 +61,7 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 	size_t len = expression.size();
 	do {
 		char c = std::tolower(expression[pos]);
-		if(c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '_') {
+		if(c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '_' || c == '@') {
 			//Only letters, numbers and underscore are allowed in code labels
 			token += c;
 			pos++;
@@ -162,7 +162,7 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 		} else {
 			if(c == '$') {
 				break;
-			} else if((c < 'a' || c > 'z') && c != '_') {
+			} else if((c < 'a' || c > 'z') && c != '_' && c != '@') {
 				//Not a number, not a letter, this is an operator
 				isOperator = true;
 				output += c;
