@@ -744,6 +744,7 @@ int LuaApi::GetState(lua_State *lua)
 
 	lua_newtable(lua);
 	lua_pushintvalue(region, state.Model);
+	lua_pushintvalue(clockRate, CPU::GetClockRate(Console::GetModel()));
 
 	lua_starttable("cpu");
 	lua_pushintvalue(a, state.CPU.A);
@@ -858,7 +859,7 @@ int LuaApi::GetState(lua_State *lua)
 
 	lua_starttable("dmc");
 	lua_pushintvalue(bytesRemaining, state.APU.Dmc.BytesRemaining);
-	lua_pushdoublevalue(frequency, state.APU.Dmc.Frequency);
+	lua_pushdoublevalue(sampleRate, state.APU.Dmc.SampleRate);
 	lua_pushboolvalue(irqEnabled, state.APU.Dmc.IrqEnabled);
 	lua_pushboolvalue(loop, state.APU.Dmc.Loop);
 	lua_pushintvalue(outputVolume, state.APU.Dmc.OutputVolume);

@@ -202,6 +202,7 @@ struct ApuNoiseState
 
 struct ApuDmcState
 {
+	double SampleRate;
 	uint16_t SampleAddr;
 	uint16_t SampleLength;
 
@@ -210,7 +211,6 @@ struct ApuDmcState
 	uint16_t Period;
 	uint16_t BytesRemaining;
 
-	double Frequency;
 	uint8_t OutputVolume;
 };
 
