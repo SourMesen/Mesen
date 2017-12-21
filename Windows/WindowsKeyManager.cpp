@@ -392,7 +392,7 @@ void WindowsKeyManager::SetKeyState(uint16_t scanCode, bool state)
 		uint32_t keyCode = MapVirtualKeyEx(scanCode & 0xFF, MAPVK_VSC_TO_VK, nullptr);
 		if(keyCode >= 0x10 && keyCode <= 0x12) {
 			//Ignore "ext" flag for alt, ctrl & shift
-			scanCode &= 0xFF;
+			scanCode = MapVirtualKeyEx(keyCode, MAPVK_VK_TO_VSC, nullptr);
 		}
 		_keyState[scanCode & 0x1FF] = state;
 	}
