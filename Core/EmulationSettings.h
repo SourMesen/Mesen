@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "MessageManager.h"
 #include "GameClient.h"
+#include "KeyManager.h"
 #include "../Utilities/SimpleLock.h"
 
 enum EmulationFlags : uint64_t
@@ -433,9 +434,9 @@ enum class EmulatorShortcut
 
 struct KeyCombination
 {
-	uint32_t Key1;
-	uint32_t Key2;
-	uint32_t Key3;
+	uint32_t Key1 = 0;
+	uint32_t Key2 = 0;
+	uint32_t Key3 = 0;
 
 	vector<uint32_t> GetKeys()
 	{
@@ -589,8 +590,8 @@ private:
 
 	static bool _keyboardModeEnabled;
 
-	static std::unordered_map<uint32_t, KeyCombination> _emulatorKeys[2];
-	static std::unordered_map<uint32_t, vector<KeyCombination>> _shortcutSupersets[2];
+	static std::unordered_map<uint32_t, KeyCombination> _emulatorKeys[3];
+	static std::unordered_map<uint32_t, vector<KeyCombination>> _shortcutSupersets[3];
 
 	static RamPowerOnState _ramPowerOnState;
 	static uint32_t _dipSwitches;
@@ -1192,8 +1193,16 @@ public:
 		auto lock = _shortcutLock.AcquireSafe();
 		_emulatorKeys[0].clear();
 		_emulatorKeys[1].clear();
+		_emulatorKeys[2].clear();
 		_shortcutSupersets[0].clear();
 		_shortcutSupersets[1].clear();
+		_shortcutSupersets[2].clear();
+		
+		//Add Alt-F4 as a fake shortcut to prevent Alt-F4 from triggering Alt or F4 key bindings. (e.g load save state 4)
+		KeyCombination keyComb;
+		keyComb.Key1 = KeyManager::GetKeyCode("Alt");
+		keyComb.Key2 = KeyManager::GetKeyCode("F4");
+		SetShortcutKey(EmulatorShortcut::Exit, keyComb, 2);
 	}
 
 	static void SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex)
@@ -1201,7 +1210,7 @@ public:
 		auto lock = _shortcutLock.AcquireSafe();
 		_emulatorKeys[keySetIndex][(uint32_t)shortcut] = keyCombination;
 		
-		for(int i = 0; i < 2; i++) {
+		for(int i = 0; i < 3; i++) {
 			for(std::pair<const uint32_t, KeyCombination> &kvp : _emulatorKeys[i]) {
 				if(keyCombination.IsSubsetOf(kvp.second)) {
 					_shortcutSupersets[keySetIndex][(uint32_t)shortcut].push_back(kvp.second);

@@ -59,8 +59,8 @@ bool EmulationSettings::_autoSaveNotify = false;
 bool EmulationSettings::_keyboardModeEnabled = false;
 
 SimpleLock EmulationSettings::_shortcutLock;
-std::unordered_map<uint32_t, KeyCombination> EmulationSettings::_emulatorKeys[2];
-std::unordered_map<uint32_t, vector<KeyCombination>> EmulationSettings::_shortcutSupersets[2];
+std::unordered_map<uint32_t, KeyCombination> EmulationSettings::_emulatorKeys[3];
+std::unordered_map<uint32_t, vector<KeyCombination>> EmulationSettings::_shortcutSupersets[3];
 
 RamPowerOnState EmulationSettings::_ramPowerOnState = RamPowerOnState::AllZeros;
 uint32_t EmulationSettings::_dipSwitches = 0;
