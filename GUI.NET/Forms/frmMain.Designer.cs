@@ -534,7 +534,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuLoadTapeFile.Image = global::Mesen.GUI.Properties.Resources.Import;
 			this.mnuLoadTapeFile.Name = "mnuLoadTapeFile";
-			this.mnuLoadTapeFile.Size = new System.Drawing.Size(179, 22);
+			this.mnuLoadTapeFile.Size = new System.Drawing.Size(157, 22);
 			this.mnuLoadTapeFile.Text = "Load from file...";
 			this.mnuLoadTapeFile.Click += new System.EventHandler(this.mnuLoadTapeFile_Click);
 			// 
@@ -542,7 +542,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuStartRecordTapeFile.Image = global::Mesen.GUI.Properties.Resources.Export;
 			this.mnuStartRecordTapeFile.Name = "mnuStartRecordTapeFile";
-			this.mnuStartRecordTapeFile.Size = new System.Drawing.Size(179, 22);
+			this.mnuStartRecordTapeFile.Size = new System.Drawing.Size(157, 22);
 			this.mnuStartRecordTapeFile.Text = "Record to file...";
 			this.mnuStartRecordTapeFile.Click += new System.EventHandler(this.mnuStartRecordTapeFile_Click);
 			// 
@@ -550,7 +550,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuStopRecordTapeFile.Image = global::Mesen.GUI.Properties.Resources.Stop;
 			this.mnuStopRecordTapeFile.Name = "mnuStopRecordTapeFile";
-			this.mnuStopRecordTapeFile.Size = new System.Drawing.Size(179, 22);
+			this.mnuStopRecordTapeFile.Size = new System.Drawing.Size(157, 22);
 			this.mnuStopRecordTapeFile.Text = "Stop recording";
 			this.mnuStopRecordTapeFile.Click += new System.EventHandler(this.mnuStopRecordTapeFile_Click);
 			// 
@@ -1099,7 +1099,7 @@ namespace Mesen.GUI.Forms
             this.mnuRandomGame,
             this.mnuTakeScreenshot});
 			this.mnuTools.Name = "mnuTools";
-			this.mnuTools.Size = new System.Drawing.Size(48, 20);
+			this.mnuTools.Size = new System.Drawing.Size(47, 20);
 			this.mnuTools.Text = "Tools";
 			// 
 			// mnuNetPlay
@@ -1612,7 +1612,7 @@ namespace Mesen.GUI.Forms
 			this.Controls.Add(this.panelRenderer);
 			this.Controls.Add(this.menuStrip);
 			this.MainMenuStrip = this.menuStrip;
-			this.MinimumSize = new System.Drawing.Size(340, 280);
+			this.MinimumSize = new System.Drawing.Size(340, 230);
 			this.Name = "frmMain";
 			this.Text = "Mesen";
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
