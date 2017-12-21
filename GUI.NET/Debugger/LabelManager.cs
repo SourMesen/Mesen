@@ -32,6 +32,11 @@ namespace Mesen.GUI.Debugger
 			}
 			return sb.ToString();
 		}
+
+		public int GetRelativeAddress()
+		{
+			return InteropEmu.DebugGetRelativeAddress(this.Address, this.AddressType);
+		}
 	}
 
 	public class LabelManager

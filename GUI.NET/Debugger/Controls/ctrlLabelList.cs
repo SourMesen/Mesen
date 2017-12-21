@@ -99,7 +99,7 @@ namespace Mesen.GUI.Debugger.Controls
 				if(label.Label.Length > 0) {
 					ListViewItem item = new ListViewItem(label.Label);
 
-					Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
+					Int32 relativeAddress = label.GetRelativeAddress();
 					if(relativeAddress >= 0) {
 						item.SubItems.Add("$" + relativeAddress.ToString("X4"));
 					} else {
@@ -149,6 +149,8 @@ namespace Mesen.GUI.Debugger.Controls
 			mnuDelete.Enabled = lstLabels.SelectedItems.Count > 0;
 			mnuEdit.Enabled = lstLabels.SelectedItems.Count == 1;
 			mnuFindOccurrences.Enabled = lstLabels.SelectedItems.Count == 1;
+			mnuAddToWatch.Enabled = lstLabels.SelectedItems.Count == 1;
+			mnuAddBreakpoint.Enabled = lstLabels.SelectedItems.Count == 1;
 		}
 
 		private void mnuDelete_Click(object sender, EventArgs e)
@@ -208,6 +210,49 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			lstLabels.ListViewItemSorter = new LabelComparer(e.Column, _descSort);
 			_prevSortColumn = e.Column;
+		}
+
+		private void mnuAddBreakpoint_Click(object sender, EventArgs e)
+		{
+			if(lstLabels.SelectedItems.Count > 0) {
+				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
+				if(label.AddressType == AddressType.PrgRom) {
+					BreakpointManager.AddBreakpoint(new Breakpoint() {
+						BreakOnExec = true,
+						BreakOnRead = true,
+						BreakOnWrite = false,
+						Address = label.Address,
+						StartAddress = label.Address,
+						EndAddress = label.Address,
+						AddressType = BreakpointAddressType.SingleAddress,
+						IsAbsoluteAddress = true
+					});
+				} else {
+					int address = label.GetRelativeAddress();
+					if(address >= 0) {
+						if(BreakpointManager.GetMatchingBreakpoint(address) == null) {
+							BreakpointManager.AddBreakpoint(new Breakpoint() {
+								BreakOnExec = true,
+								BreakOnRead = true,
+								BreakOnWrite = true,
+								Address = (UInt32)address,
+								StartAddress = (UInt32)address,
+								EndAddress = (UInt32)address,
+								AddressType = BreakpointAddressType.SingleAddress,
+								IsAbsoluteAddress = true
+							});
+						}
+					}
+				}
+			}
+		}
+
+		private void mnuAddToWatch_Click(object sender, EventArgs e)
+		{
+			if(lstLabels.SelectedItems.Count > 0) {
+				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
+				WatchManager.AddWatch("[" + label.Label + "]");
+			}			
 		}
 	}
 }

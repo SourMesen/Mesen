@@ -34,8 +34,10 @@
 			this.colMemoryAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -81,9 +83,11 @@
 			this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuEditLabel,
             this.toolStripMenuItem1,
+            this.mnuAddBreakpoint,
+            this.toolStripMenuItem2,
             this.mnuFindOccurrences});
 			this.contextMenuStrip.Name = "contextMenuStrip";
-			this.contextMenuStrip.Size = new System.Drawing.Size(167, 76);
+			this.contextMenuStrip.Size = new System.Drawing.Size(167, 104);
 			this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
 			// 
 			// mnuEditLabel
@@ -95,6 +99,24 @@
 			this.mnuEditLabel.Text = "Edit Label";
 			this.mnuEditLabel.Click += new System.EventHandler(this.mnuEditLabel_Click);
 			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
+			// 
+			// mnuAddBreakpoint
+			// 
+			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
+			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(166, 22);
+			this.mnuAddBreakpoint.Text = "Add breakpoint";
+			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 6);
+			// 
 			// mnuFindOccurrences
 			// 
 			this.mnuFindOccurrences.Image = global::Mesen.GUI.Properties.Resources.Find;
@@ -102,11 +124,6 @@
 			this.mnuFindOccurrences.Size = new System.Drawing.Size(166, 22);
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
 			// 
 			// ctrlFunctionList
 			// 
@@ -130,5 +147,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEditLabel;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindOccurrences;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 	}
 }

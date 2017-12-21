@@ -38,6 +38,9 @@
 			this.colFunctionLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colFunctionAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colMemoryAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -48,9 +51,12 @@
             this.mnuEdit,
             this.mnuDelete,
             this.toolStripMenuItem1,
+            this.mnuAddBreakpoint,
+            this.mnuAddToWatch,
+            this.toolStripMenuItem2,
             this.mnuFindOccurrences});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(167, 120);
+			this.contextMenu.Size = new System.Drawing.Size(167, 170);
 			this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.mnuActions_Opening);
 			// 
 			// mnuAdd
@@ -128,6 +134,27 @@
 			this.colMemoryAddress.Text = "ROM Addr";
 			this.colMemoryAddress.Width = 84;
 			// 
+			// mnuAddToWatch
+			// 
+			this.mnuAddToWatch.Image = global::Mesen.GUI.Properties.Resources.Add;
+			this.mnuAddToWatch.Name = "mnuAddToWatch";
+			this.mnuAddToWatch.Size = new System.Drawing.Size(166, 22);
+			this.mnuAddToWatch.Text = "Add to watch";
+			this.mnuAddToWatch.Click += new System.EventHandler(this.mnuAddToWatch_Click);
+			// 
+			// mnuAddBreakpoint
+			// 
+			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
+			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(166, 22);
+			this.mnuAddBreakpoint.Text = "Add breakpoint";
+			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 6);
+			// 
 			// ctrlLabelList
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -152,5 +179,8 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEdit;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindOccurrences;
+		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
+		private System.Windows.Forms.ToolStripMenuItem mnuAddToWatch;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 	}
 }

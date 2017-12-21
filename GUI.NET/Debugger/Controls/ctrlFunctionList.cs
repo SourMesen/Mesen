@@ -137,18 +137,38 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuFindOccurrences_Click(object sender, EventArgs e)
 		{
-			CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
-			if(label != null) {
-				OnFindOccurrence?.Invoke(label.Label, null);
-			} else {
-				OnFindOccurrence?.Invoke("$" + ((int)lstFunctions.SelectedItems[0].SubItems[1].Tag).ToString("X4"), null);
-			}			
+			if(lstFunctions.SelectedItems.Count > 0) {
+				CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
+				if(label != null) {
+					OnFindOccurrence?.Invoke(label.Label, null);
+				} else {
+					OnFindOccurrence?.Invoke("$" + ((int)lstFunctions.SelectedItems[0].SubItems[1].Tag).ToString("X4"), null);
+				}
+			}
 		}
 
 		private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
 		{
 			mnuEditLabel.Enabled = lstFunctions.SelectedItems.Count == 1;
 			mnuFindOccurrences.Enabled = lstFunctions.SelectedItems.Count == 1;
+		}
+
+		private void mnuAddBreakpoint_Click(object sender, EventArgs e)
+		{
+			if(lstFunctions.SelectedItems.Count > 0) {
+				CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
+				int absoluteAddress = (int)lstFunctions.SelectedItems[0].SubItems[2].Tag;
+				BreakpointManager.AddBreakpoint(new Breakpoint() {
+					BreakOnExec = true,
+					BreakOnRead = false,
+					BreakOnWrite = false,
+					Address = (UInt32)absoluteAddress,
+					StartAddress = (UInt32)absoluteAddress,
+					EndAddress = (UInt32)absoluteAddress,
+					AddressType = BreakpointAddressType.SingleAddress,
+					IsAbsoluteAddress = true
+				});
+			}
 		}
 	}
 }
