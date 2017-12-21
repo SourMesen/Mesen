@@ -216,7 +216,7 @@ ApuDmcState DeltaModulationChannel::GetState()
 {
 	ApuDmcState state;
 	state.BytesRemaining = _bytesRemaining;
-	state.Frequency = (uint32_t)(CPU::GetClockRate(GetNesModel()) / 32.0 / (_period + 1));
+	state.Frequency = CPU::GetClockRate(GetNesModel()) / 32.0 / (_period + 1);
 	state.IrqEnabled = _irqEnabled;
 	state.Loop = _loopFlag;
 	state.OutputVolume = _lastOutput;

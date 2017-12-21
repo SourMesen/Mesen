@@ -168,7 +168,7 @@ struct ApuSquareState
 
 	bool Enabled;
 	uint8_t OutputVolume;
-	uint32_t Frequency;
+	double Frequency;
 
 	ApuLengthCounterState LengthCounter;
 	ApuEnvelopeState Envelope;
@@ -180,7 +180,7 @@ struct ApuTriangleState
 	uint8_t SequencePosition;
 
 	bool Enabled;
-	uint32_t Frequency;
+	double Frequency;
 	uint8_t OutputVolume;
 
 	ApuLengthCounterState LengthCounter;
@@ -193,7 +193,7 @@ struct ApuNoiseState
 	bool ModeFlag;
 
 	bool Enabled;
-	uint32_t Frequency;
+	double Frequency;
 	uint8_t OutputVolume;
 
 	ApuLengthCounterState LengthCounter;
@@ -210,7 +210,7 @@ struct ApuDmcState
 	uint16_t Period;
 	uint16_t BytesRemaining;
 
-	uint32_t Frequency;
+	double Frequency;
 	uint8_t OutputVolume;
 };
 

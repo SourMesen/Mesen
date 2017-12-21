@@ -21,7 +21,9 @@
 #include "KeyManager.h"
 
 #define lua_pushintvalue(name, value) lua_pushliteral(lua, #name); lua_pushinteger(lua, (int)value); lua_settable(lua, -3);
+#define lua_pushdoublevalue(name, value) lua_pushliteral(lua, #name); lua_pushnumber(lua, (double)value); lua_settable(lua, -3);
 #define lua_pushboolvalue(name, value) lua_pushliteral(lua, #name); lua_pushboolean(lua, (int)value); lua_settable(lua, -3);
+#define lua_pushstringvalue(name, value) lua_pushliteral(lua, #name); lua_pushstring(lua, value.c_str()); lua_settable(lua, -3);
 #define lua_starttable(name) lua_pushliteral(lua, name); lua_newtable(lua);
 #define lua_endtable() lua_settable(lua, -3);
 #define lua_readint(name, dest) lua_getfield(lua, -1, #name); dest = l.ReadInteger();
@@ -95,6 +97,8 @@ int LuaApi::GetLibrary(lua_State *lua)
 		{ "setState", LuaApi::SetState },
 		{ "getState", LuaApi::GetState },
 		{ "getScriptDataFolder", LuaApi::GetScriptDataFolder },
+		{ "getRomInfo", LuaApi::GetRomInfo },
+		{ "getLogWindowLog", LuaApi::GetLogWindowLog },
 		{ NULL,NULL }
 	};
 
@@ -631,6 +635,34 @@ int LuaApi::GetScriptDataFolder(lua_State *lua)
 	return l.ReturnCount();
 }
 
+int LuaApi::GetRomInfo(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	checkparams();
+
+	lua_newtable(lua);
+	lua_pushstringvalue(name, Console::GetRomName());
+	lua_pushstringvalue(path, ((string)Console::GetRomPath()));
+
+	HashInfo hashInfo = Console::GetHashInfo();
+	lua_pushintvalue(fileCrc32Hash, hashInfo.Crc32Hash);
+	lua_pushstringvalue(fileSha1Hash, hashInfo.Sha1Hash);
+	lua_pushintvalue(prgChrCrc32Hash, hashInfo.PrgCrc32Hash);
+	lua_pushstringvalue(prgChrMd5Hash, hashInfo.PrgChrMd5Hash);
+	lua_pushintvalue(format, Console::GetRomFormat());
+	lua_pushboolvalue(isChrRam, Console::IsChrRam());
+	return 1;
+}
+
+int LuaApi::GetLogWindowLog(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	checkparams();
+	
+	l.Return(MessageManager::GetLog());
+	return l.ReturnCount();
+}
+
 int LuaApi::SetState(lua_State *lua)
 {
 	LuaCallHelper l(lua);
@@ -806,7 +838,7 @@ int LuaApi::GetState(lua_State *lua)
 
 	lua_starttable("triangle");
 	lua_pushboolvalue(enabled, state.APU.Triangle.Enabled);
-	lua_pushintvalue(frequency, state.APU.Triangle.Frequency);
+	lua_pushdoublevalue(frequency, state.APU.Triangle.Frequency);
 	PushLengthCounterState(lua, state.APU.Triangle.LengthCounter);
 	lua_pushintvalue(outputVolume, state.APU.Triangle.OutputVolume);
 	lua_pushintvalue(period, state.APU.Triangle.Period);
@@ -815,7 +847,7 @@ int LuaApi::GetState(lua_State *lua)
 
 	lua_starttable("noise");
 	lua_pushboolvalue(enabled, state.APU.Noise.Enabled);
-	lua_pushintvalue(frequency, state.APU.Noise.Frequency);
+	lua_pushdoublevalue(frequency, state.APU.Noise.Frequency);
 	PushEnvelopeState(lua, state.APU.Noise.Envelope);
 	PushLengthCounterState(lua, state.APU.Noise.LengthCounter);
 	lua_pushboolvalue(modeFlag, state.APU.Noise.ModeFlag);
@@ -826,7 +858,7 @@ int LuaApi::GetState(lua_State *lua)
 
 	lua_starttable("dmc");
 	lua_pushintvalue(bytesRemaining, state.APU.Dmc.BytesRemaining);
-	lua_pushintvalue(frequency, state.APU.Dmc.Frequency);
+	lua_pushdoublevalue(frequency, state.APU.Dmc.Frequency);
 	lua_pushboolvalue(irqEnabled, state.APU.Dmc.IrqEnabled);
 	lua_pushboolvalue(loop, state.APU.Dmc.Loop);
 	lua_pushintvalue(outputVolume, state.APU.Dmc.OutputVolume);
@@ -850,7 +882,7 @@ void LuaApi::PushSquareState(lua_State *lua, ApuSquareState & state)
 {
 	lua_pushintvalue(duty, state.Duty);
 	lua_pushintvalue(dutyPosition, state.DutyPosition);
-	lua_pushintvalue(frequency, state.Frequency);
+	lua_pushdoublevalue(frequency, state.Frequency);
 	lua_pushintvalue(period, state.Period);
 	lua_pushboolvalue(sweepEnabled, state.SweepEnabled);
 	lua_pushboolvalue(sweepNegate, state.SweepNegate);
