@@ -144,18 +144,6 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 	RewindManager::SendFrame(outputBuffer, frameInfo.Width, frameInfo.Height, synchronous);
 }
 
-void VideoDecoder::DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length)
-{
-	for(uint32_t i = 0; i < length; i++) {
-		if(inputBuffer[i] == 0xFFFF) {
-			//This pixel is transparent
-			outputBuffer[i] = 0;
-		} else {
-			outputBuffer[i] = EmulationSettings::GetRgbPalette()[inputBuffer[i] & 0x3F];
-		}
-	}
-}
-
 void VideoDecoder::DecodeThread()
 {
 	//This thread will decode the PPU's output (color ID to RGB, intensify r/g/b and produce a HD version of the frame if needed)

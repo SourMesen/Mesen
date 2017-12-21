@@ -51,7 +51,7 @@ namespace Mesen.GUI.Debugger.Controls
 				Bitmap target = new Bitmap(256, 512);
 
 				using(Graphics g = Graphics.FromImage(target)) {
-					g.Clear(Color.Black);
+					g.Clear(Color.FromArgb(64, 64, 64));
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
@@ -81,7 +81,9 @@ namespace Mesen.GUI.Debugger.Controls
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-					g.FillRectangle(Brushes.Black, 0, 0, 256, 240);
+					using(Brush b = new SolidBrush(Color.FromArgb(64, 64, 64))) {
+						g.FillRectangle(b, 0, 0, 256, 240);
+					}
 
 					for(int i = 63; i >= 0; i--) {
 						if(i != _selectedSprite) {

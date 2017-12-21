@@ -220,7 +220,7 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 
 void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
 {
-	uint16_t *screenBuffer = new uint16_t[256 * 240];
+	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
 	uint16_t bgAddr = _ppu->GetState().ControlFlags.BackgroundPatternAddr;
 	uint16_t baseAddr = 0x2000 + nametableIndex * 0x400;
 	uint16_t baseAttributeAddr = baseAddr + 960;
@@ -239,23 +239,18 @@ void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8
 				uint8_t highByte = _mapper->DebugReadVRAM(tileAddr + i + 8);
 				for(uint8_t j = 0; j < 8; j++) {
 					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
-					screenBuffer[(y << 11) + (x << 3) + (i << 8) + j] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color);
+					frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
 				}
 			}
 		}
 	}
-
-	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 256 * 240);
-
-	delete[] screenBuffer;
 }
 
 void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType)
 {
-	uint16_t *screenBuffer = new uint16_t[128 * 128];
+	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
 	uint8_t chrBuffer[0x1000];
 	bool chrIsDrawn[0x1000];
-	bool tileUsed[0x4000];
 	bool isChrRam = _mapper->GetMemorySize(DebugMemoryType::ChrRam) > 0;
 	if(bankIndex == 0 || bankIndex == 1) {
 		uint16_t baseAddr = bankIndex == 0 ? 0x0000 : 0x1000;
@@ -270,7 +265,7 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 		if(baseAddr + 0xFFF >= chrSize) {
 			//Out of range, return to prevent crash
 			return;
-		} 
+		}
 
 		vector<uint8_t> chrData(chrSize, 0);
 		_mapper->CopyMemory(isChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom, chrData.data());
@@ -303,31 +298,23 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 						position = (y << 10) + (x << 3) + (i << 7) + j;
 					}
 
-					screenBuffer[position] = color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color);
-					tileUsed[position] = isDrawn;
+					frameBuffer[position] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
+					if(highlightType != CdlHighlightType::None && isDrawn == (highlightType != CdlHighlightType::HighlightUsed)) {
+						frameBuffer[position] &= 0x4FFFFFFF;
+					}
 				}
 			}
 		}
 	}
-
-	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 128 * 128);
-
-	if(highlightType != CdlHighlightType::None) {
-		for(int i = 0; i < 0x4000; i++) {
-			if(tileUsed[i] == (highlightType != CdlHighlightType::HighlightUsed)) {
-				frameBuffer[i] &= 0x4FFFFFFF;
-			}
-		}
-	}
-
-	delete[] screenBuffer;
 }
 
 void MemoryDumper::GetSprites(uint32_t* frameBuffer)
 {
-	uint16_t *screenBuffer = new uint16_t[64 * 128];
-	memset(screenBuffer, 0, 64 * 128 * sizeof(uint16_t));
+	for(int i = 0; i < 64 * 128; i++) {
+		frameBuffer[i] = 0x00404040;
+	}
 	uint8_t *spriteRam = _ppu->GetSpriteRam();
+	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
 
 	uint16_t spriteAddr = _ppu->GetState().ControlFlags.SpritePatternAddr;
 	bool largeSprites = _ppu->GetState().ControlFlags.LargeSprites;
@@ -373,23 +360,19 @@ void MemoryDumper::GetSprites(uint32_t* frameBuffer)
 						destAddr = (y << 10) + (x << 3) + (i << 6) + j;
 					}
 
-					screenBuffer[destAddr] = color == 0 ? 0xFFFF : _ppu->ReadPaletteRAM(palette + color);
+					if(color != 0) {
+						frameBuffer[destAddr] = rgbPalette[_ppu->ReadPaletteRAM(palette + color) & 0x3F];
+					}
 				}
 			}
 		}
 	}
-
-	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 64 * 128);
-
-	delete[] screenBuffer;
 }
 
 void MemoryDumper::GetPalette(uint32_t* frameBuffer)
 {
-	uint16_t *screenBuffer = new uint16_t[4 * 8];
+	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
 	for(uint8_t i = 0; i < 32; i++) {
-		screenBuffer[i] = _ppu->ReadPaletteRAM(i);
+		frameBuffer[i] = rgbPalette[_ppu->ReadPaletteRAM(i) & 0x3F];
 	}
-	VideoDecoder::GetInstance()->DebugDecodeFrame(screenBuffer, frameBuffer, 4 * 8);
-	delete[] screenBuffer;
 }

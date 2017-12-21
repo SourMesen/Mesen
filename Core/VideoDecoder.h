@@ -69,8 +69,6 @@ public:
 	FrameInfo GetFrameInfo();
 	void GetScreenSize(ScreenSize &size, bool ignoreScale);
 
-	void DebugDecodeFrame(uint16_t* inputBuffer, uint32_t* outputBuffer, uint32_t length);
-
 	void UpdateFrameSync(void* frameBuffer, HdPpuPixelInfo *screenTiles = nullptr);
 	void UpdateFrame(void* frameBuffer, HdPpuPixelInfo *screenTiles = nullptr);
 
