@@ -370,6 +370,11 @@ namespace Mesen.GUI.Forms
 				_fullscreenMode = false;
 				frmMain_Resize(null, EventArgs.Empty);
 			};
+
+			Screen currentScreen = Screen.FromHandle(this.Handle);
+			_frmFullscreenRenderer.StartPosition = FormStartPosition.Manual;
+			_frmFullscreenRenderer.Top = currentScreen.Bounds.Top;
+			_frmFullscreenRenderer.Left = currentScreen.Bounds.Left;
 			_frmFullscreenRenderer.Show();
 		}
 
