@@ -94,6 +94,8 @@ namespace Mesen.GUI
 					Cursor.Position = centerPos;
 				}
 			} else {
+				_mouseCaptured = false;
+
 				if(!InteropEmu.IsRunning() || InteropEmu.IsPaused()) {
 					ShowMouse();
 				}
@@ -122,6 +124,10 @@ namespace Mesen.GUI
 			get
 			{
 				if(InteropEmu.IsPaused()) {
+					return false;
+				}
+
+				if(InteropEmu.CheckFlag(EmulationFlags.InBackground)) {
 					return false;
 				}
 
