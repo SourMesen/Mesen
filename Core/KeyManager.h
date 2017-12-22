@@ -25,7 +25,7 @@ public:
 	static void UpdateDevices();
 	
 	static void SetMouseMovement(int16_t x, int16_t y);
-	static MouseMovement GetMouseMovement();
+	static MouseMovement GetMouseMovement(double mouseSensitivity);
 	
 	static void SetMousePosition(double x, double y);
 	static MousePosition GetMousePosition();

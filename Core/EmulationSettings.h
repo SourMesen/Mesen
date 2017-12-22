@@ -484,6 +484,15 @@ enum class Language
 	Catalan = 8
 };
 
+enum class MouseDevice
+{
+	Unknown = 0,
+	SnesMouse,
+	SuborMouse,
+	ArkanoidController,
+	HoriTrack
+};
+
 enum class StereoFilter
 {
 	None = 0,
@@ -576,7 +585,7 @@ private:
 	static KeyMappingSet _controllerKeys[4];
 	static bool _needControllerUpdate;
 	static uint32_t _zapperDetectionRadius;
-	static double _mouseSensitivity;
+	static std::unordered_map<MouseDevice, double> _mouseSensitivity;
 	static int32_t _inputPollScanline;
 
 	static int32_t _nsfAutoDetectSilenceDelay;
@@ -1247,14 +1256,19 @@ public:
 		}
 	}
 
-	static void SetMouseSensitivity(double sensitivity)
+	static void SetMouseSensitivity(MouseDevice device, double sensitivity)
 	{
-		_mouseSensitivity = sensitivity;
+		_mouseSensitivity[device] = sensitivity;
 	}
 
-	static double GetMouseSensitivity()
+	static double GetMouseSensitivity(MouseDevice device)
 	{
-		return _mouseSensitivity;
+		auto result = _mouseSensitivity.find(device);
+		if(result != _mouseSensitivity.end()) {
+			return result->second;
+		} else {
+			return 1.0;
+		}
 	}
 
 	static void SetZapperDetectionRadius(uint32_t detectionRadius)

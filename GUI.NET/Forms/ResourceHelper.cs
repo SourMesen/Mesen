@@ -147,7 +147,9 @@ namespace Mesen.GUI.Forms
 			}
 
 			if(baseNode != null) {
-				form.Text = baseNode.Attributes["Title"].Value;
+				if(baseNode.Attributes["Title"] != null) {
+					form.Text = baseNode.Attributes["Title"].Value;
+				}
 				ApplyResources(baseNode, form.Controls);
 			}
 		}

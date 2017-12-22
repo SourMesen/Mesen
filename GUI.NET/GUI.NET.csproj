@@ -660,6 +660,12 @@
     <Compile Include="Forms\Config\Controllers\frmPachinkoConfig.Designer.cs">
       <DependentUpon>frmPachinkoConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Config\Controllers\frmMouseConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmMouseConfig.Designer.cs">
+      <DependentUpon>frmMouseConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Config\ctrlDipSwitch.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1152,6 +1158,9 @@
     <EmbeddedResource Include="Forms\Config\Controllers\frmPachinkoConfig.resx">
       <DependentUpon>frmPachinkoConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\frmMouseConfig.resx">
+      <DependentUpon>frmMouseConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlDipSwitch.resx">
       <DependentUpon>ctrlDipSwitch.cs</DependentUpon>

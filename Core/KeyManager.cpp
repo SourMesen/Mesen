@@ -75,14 +75,16 @@ void KeyManager::SetMouseMovement(int16_t x, int16_t y)
 	_yMouseMovement += y;
 }
 
-MouseMovement KeyManager::GetMouseMovement()
+MouseMovement KeyManager::GetMouseMovement(double mouseSensitivity)
 {
-	double factor = EmulationSettings::GetVideoScale() * EmulationSettings::GetMouseSensitivity();
+	double factor = EmulationSettings::GetVideoScale() / mouseSensitivity;
 	MouseMovement mov;
-	mov.dx = (int16_t)(_xMouseMovement / factor);
-	mov.dy = (int16_t)(_yMouseMovement / factor);
-	_xMouseMovement -= (int16_t)(mov.dx * factor);
-	_yMouseMovement -= (int16_t)(mov.dy * factor);
+	int16_t x = _xMouseMovement;
+	int16_t y = _yMouseMovement;
+	mov.dx = (int16_t)(x / factor);
+	mov.dy = (int16_t)(y/ factor);
+	_xMouseMovement -= x;
+	_yMouseMovement -= y;
 
 	return mov;
 }

@@ -586,7 +586,7 @@
       <Control ID="btnOK">入力</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
-    <Form ID="BaseInputConfigForm" Title="">
+    <Form ID="BaseInputConfigForm">
       <Control ID="lblHint">アイコンの付いてあるタブにはマッピングが設定されています。&#13;&#10;コントローラのボタンはキーボードのキーとゲームパッドのボタンを同時にマッピング出来ます。</Control>
       <Control ID="tpgSet1">キーセット 1</Control>
       <Control ID="tpgSet2">キーセット 2</Control>
@@ -597,7 +597,7 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
-    <Form ID="frmControllerConfig" Title="コントローラ設定">
+    <Form ID="frmControllerConfig">
       <Control ID="lblTurboSpeed">ターボの速度:</Control>
       <Control ID="lblTurboFast">速い</Control>
       <Control ID="lblSlow">遅い</Control>
@@ -618,26 +618,33 @@
       <Control ID="mnuSnes30Layout1">コントローラ１</Control>
       <Control ID="mnuSnes30Layout2">コントローラ２</Control>
     </Form>
-    <Form ID="frmZapperConfig" Title="ガン設定">
+    <Form ID="frmZapperConfig">
       <Control ID="lblSmall">小</Control>
       <Control ID="lblLarge">大</Control>
       <Control ID="lblDetectRadius">光検出範囲:</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">キャンセル</Control>
     </Form>
-    <Form ID="frmExcitingBoxingConfig" Title="エキサイティングボクシングエアバッグ">
+    <Form ID="frmMouseConfig">
+      <Control ID="lblLow">低い</Control>
+      <Control ID="lblHigh">高い</Control>
+      <Control ID="lblSensitivity">感度：</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
     </Form>
-    <Form ID="frmFamilyBasicKeyboardConfig" Title="Family Basicキーボード">
+    <Form ID="frmExcitingBoxingConfig">
     </Form>
-    <Form ID="frmJissenMahjongConfig" Title="実践麻雀コントローラ">
+    <Form ID="frmFamilyBasicKeyboardConfig">
     </Form>
-    <Form ID="frmPartyTapConfig" Title="Partytap">
+    <Form ID="frmJissenMahjongConfig">
     </Form>
-    <Form ID="frmPowerPadConfig" Title="パワーパッド ・ ファミリートレーナー">
+    <Form ID="frmPartyTapConfig">
     </Form>
-    <Form ID="frmSuborKeyboardConfig" Title="Suborキーボード">
+    <Form ID="frmPowerPadConfig">
     </Form>
-    <Form ID="frmPachinkoConfig" Title="パチンココントローラ">
+    <Form ID="frmSuborKeyboardConfig">
+    </Form>
+    <Form ID="frmPachinkoConfig">
     </Form>
   </Forms>
   <UserControls>

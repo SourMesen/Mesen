@@ -573,7 +573,7 @@
       <Control ID="btnOK">D'acord</Control>
       <Control ID="btnCancel">Cancel·la</Control>
     </Form>
-    <Form ID="BaseInputConfigForm" Title="">
+    <Form ID="BaseInputConfigForm">
       <Control ID="lblHint">Les pestanyes amb una icona contenen per aquest jugador.&#13;&#10;Cada botó es pot assignar a fins a 4 tecles de teclat o botons de comandament diferents.</Control>
       <Control ID="tpgSet1">Distribució #1</Control>
       <Control ID="tpgSet2">Distribució #2</Control>
@@ -584,7 +584,7 @@
       <Control ID="btnOK">D'acord</Control>
       <Control ID="btnCancel">Cancel·la</Control>
     </Form>
-    <Form ID="frmControllerConfig" Title="Configuració del comandament">
+    <Form ID="frmControllerConfig">
       <Control ID="lblTurboSpeed">Velocitat del mode turbo:</Control>
       <Control ID="lblTurboFast">Ràpida</Control>
       <Control ID="lblSlow">Lenta</Control>
@@ -604,26 +604,33 @@
       <Control ID="mnuSnes30Layout1">Comandament #1</Control>
       <Control ID="mnuSnes30Layout2">Comandament #2</Control>
     </Form>
-    <Form ID="frmZapperConfig" Title="Configuració del Zapper">
+    <Form ID="frmZapperConfig">
       <Control ID="lblSmall">Curt</Control>
       <Control ID="lblLarge">Llarg</Control>
       <Control ID="lblDetectRadius">Radi de detecció lumínica:</Control>
       <Control ID="btnOK">D'acord</Control>
       <Control ID="btnCancel">Cancel·la</Control>
     </Form>
-    <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
+    <Form ID="frmMouseConfig">
+      <Control ID="lblLow">Low</Control>
+      <Control ID="lblHigh">High</Control>
+      <Control ID="lblSensitivity">Sensitivity:</Control>
+      <Control ID="btnOK">D'acord</Control>
+      <Control ID="btnCancel">Cancel·la</Control>
     </Form>
-    <Form ID="frmFamilyBasicKeyboardConfig" Title="Teclat Family Basic">
+    <Form ID="frmExcitingBoxingConfig">
     </Form>
-    <Form ID="frmJissenMahjongConfig" Title="Comandament Jissen Mahjong">
+    <Form ID="frmFamilyBasicKeyboardConfig">
     </Form>
-    <Form ID="frmPartyTapConfig" Title="Partytap">
+    <Form ID="frmJissenMahjongConfig">
     </Form>
-    <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
+    <Form ID="frmPartyTapConfig">
     </Form>
-    <Form ID="frmSuborKeyboardConfig" Title="Teclat Subor">
+    <Form ID="frmPowerPadConfig">
     </Form>
-    <Form ID="frmPachinkoConfig" Title="Comandament Pachinko">
+    <Form ID="frmSuborKeyboardConfig">
+    </Form>
+    <Form ID="frmPachinkoConfig">
     </Form>
   </Forms>
   <UserControls>

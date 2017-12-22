@@ -46,6 +46,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetZapperDetectionRadius(UInt32 detectionRadius);
 		[DllImport(DLLPath)] public static extern void SetExpansionDevice(ExpansionPortDevice device);
 		[DllImport(DLLPath)] public static extern void SetConsoleType(ConsoleType type);
+		[DllImport(DLLPath)] public static extern void SetMouseSensitivity(MouseDevice device, double sensitivity);
 		[DllImport(DLLPath)] public static extern void ClearShortcutKeys();
 		[DllImport(DLLPath)] public static extern void SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex);
 
@@ -847,6 +848,15 @@ namespace Mesen.GUI
 			BandaiHyperShot = 15,
 			AsciiTurboFile = 16,
 			BattleBox = 17,
+		}
+
+		public enum MouseDevice
+		{
+			Unknown = 0,
+			SnesMouse,
+			SuborMouse,
+			ArkanoidController,
+			HoriTrack
 		}
 
 		public enum VsInputType

@@ -25,7 +25,7 @@ protected:
 	{
 		if(EmulationSettings::InputEnabled()) {
 			SetPressedState(Buttons::Fire, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
-			SetMovement(KeyManager::GetMouseMovement());
+			SetMovement(KeyManager::GetMouseMovement(EmulationSettings::GetMouseSensitivity(MouseDevice::ArkanoidController)));
 		}
 	}
 

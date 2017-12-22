@@ -603,7 +603,7 @@
       <Control ID="btnCancel">Annuler</Control>
     </Form>
 
-    <Form ID="BaseInputConfigForm" Title="">
+    <Form ID="BaseInputConfigForm">
       <Control ID="lblHint">Les tabs sans icône sont vides.&#13;&#10;Chaque bouton peut être mappé à 4 boutons différents sur votre clavier et/ou votre manette.</Control>
       <Control ID="tpgSet1">Mappage #1</Control>
       <Control ID="tpgSet2">Mappage #2</Control>
@@ -614,7 +614,7 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
-    <Form ID="frmControllerConfig" Title="Configuration de la manette">
+    <Form ID="frmControllerConfig">
       <Control ID="lblTurboSpeed">Vitesse du mode turbo:</Control>
       <Control ID="lblTurboFast">Rapide</Control>
       <Control ID="lblSlow">Lente</Control>
@@ -635,26 +635,33 @@
       <Control ID="mnuSnes30Layout1">Manette #1</Control>
       <Control ID="mnuSnes30Layout2">Manette #2</Control>
     </Form>
-    <Form ID="frmZapperConfig" Title="Configuration du zapper">
+    <Form ID="frmZapperConfig">
       <Control ID="lblSmall">Petit</Control>
       <Control ID="lblLarge">Large</Control>
       <Control ID="lblDetectRadius">Rayon de détection de la lumière :</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
-    <Form ID="frmExcitingBoxingConfig" Title="Exciting Boxing Punching Bag">
+    <Form ID="frmMouseConfig">
+      <Control ID="lblLow">Faible</Control>
+      <Control ID="lblHigh">Élevée</Control>
+      <Control ID="lblSensitivity">Sensibilité :</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
     </Form>
-    <Form ID="frmFamilyBasicKeyboardConfig" Title="Clavier Family Basic">
+    <Form ID="frmExcitingBoxingConfig">
     </Form>
-    <Form ID="frmJissenMahjongConfig" Title="Manette Jissen Mah-jong">
+    <Form ID="frmFamilyBasicKeyboardConfig">
     </Form>
-    <Form ID="frmPartyTapConfig" Title="Partytap">
+    <Form ID="frmJissenMahjongConfig">
     </Form>
-    <Form ID="frmPowerPadConfig" Title="Power Pad / Family Trainer">
+    <Form ID="frmPartyTapConfig">
     </Form>
-    <Form ID="frmSuborKeyboardConfig" Title="Clavier Subor">
+    <Form ID="frmPowerPadConfig">
     </Form>
-    <Form ID="frmPachinkoConfig" Title="Manette Pachinko">
+    <Form ID="frmSuborKeyboardConfig">
+    </Form>
+    <Form ID="frmPachinkoConfig">
     </Form>
   </Forms>
   <UserControls>

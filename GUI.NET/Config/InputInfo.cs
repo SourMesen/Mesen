@@ -111,6 +111,11 @@ namespace Mesen.GUI.Config
 		[MinMax(0, 3)] public UInt32 DetectionRadius = 0;
 	}
 
+	public class MouseInfo
+	{
+		[MinMax(0, 3)] public UInt32 Sensitivity = 1;
+	}
+
 	public class InputInfo
 	{
 		public DefaultKeyMappingType DefaultMapping;
@@ -130,6 +135,10 @@ namespace Mesen.GUI.Config
 		[XmlElement(ElementName = "InputDevice")]
 		public List<ControllerInfo> Controllers = new List<ControllerInfo>();
 		public ZapperInfo Zapper = new ZapperInfo();
+		public MouseInfo ArkanoidController = new MouseInfo();
+		public MouseInfo HoriTrack = new MouseInfo();
+		public MouseInfo SnesMouse = new MouseInfo();
+		public MouseInfo SuborMouse = new MouseInfo();
 
 		public void InitializeDefaults()
 		{
@@ -193,6 +202,11 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetInputDisplaySettings(displayPorts, inputInfo.DisplayInputPosition, inputInfo.DisplayInputHorizontally);
 
 			InteropEmu.SetZapperDetectionRadius(inputInfo.Zapper.DetectionRadius);
+
+			InteropEmu.SetMouseSensitivity(InteropEmu.MouseDevice.ArkanoidController, (inputInfo.ArkanoidController.Sensitivity + 1) / 2.0);
+			InteropEmu.SetMouseSensitivity(InteropEmu.MouseDevice.HoriTrack, (inputInfo.HoriTrack.Sensitivity + 1) / 2.0);
+			InteropEmu.SetMouseSensitivity(InteropEmu.MouseDevice.SnesMouse, (inputInfo.SnesMouse.Sensitivity + 1) / 2.0);
+			InteropEmu.SetMouseSensitivity(InteropEmu.MouseDevice.SuborMouse, (inputInfo.SuborMouse.Sensitivity + 1) / 2.0);
 		}
 	}
 }

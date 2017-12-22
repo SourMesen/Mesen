@@ -30,7 +30,7 @@ protected:
 	{
 		SetPressedState(Buttons::Left, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
 		SetPressedState(Buttons::Right, KeyManager::IsMouseButtonPressed(MouseButton::RightButton));
-		SetMovement(KeyManager::GetMouseMovement());
+		SetMovement(KeyManager::GetMouseMovement(EmulationSettings::GetMouseSensitivity(MouseDevice::SnesMouse)));
 	}
 
 public:

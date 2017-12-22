@@ -224,6 +224,8 @@ namespace Mesen.GUI.Forms.Config
 										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.FamilyBasicKeyboard)) ||
 										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.SuborKeyboard)) ||
 										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Pachinko)) ||
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.ArkanoidController)) ||
+										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.HoriTrack)) ||
 										cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.PartyTap));
 		}
 
@@ -234,6 +236,9 @@ namespace Mesen.GUI.Forms.Config
 			bool enableButton = selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController)) ||
 										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper)) ||
 										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SnesController)) ||
+										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SnesMouse)) ||
+										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SuborMouse)) ||
+										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.ArkanoidController)) ||
 										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.PowerPad));
 
 			if(sender == cboPlayer1) {
@@ -252,20 +257,26 @@ namespace Mesen.GUI.Forms.Config
 		{
 			int index = 0;
 			object selectedItem = null;
+			string selectedText = "";
 			if(sender == btnSetupP1) {
 				selectedItem = cboPlayer1.GetEnumValue<InteropEmu.ControllerType>();
+				selectedText = cboPlayer1.SelectedItem.ToString();
 				index = 0;
 			} else if(sender == btnSetupP2) {
 				selectedItem = cboPlayer2.GetEnumValue<InteropEmu.ControllerType>();
+				selectedText = cboPlayer2.SelectedItem.ToString();
 				index = 1;
 			} else if(sender == btnSetupP3) {
 				selectedItem = cboPlayer3.GetEnumValue<InteropEmu.ControllerType>();
+				selectedText = cboPlayer3.SelectedItem.ToString();
 				index = 2;
 			} else if(sender == btnSetupP4) {
 				selectedItem = cboPlayer4.GetEnumValue<InteropEmu.ControllerType>();
+				selectedText = cboPlayer4.SelectedItem.ToString();
 				index = 3;
 			} else if(sender == btnSetupExp) {
 				selectedItem = cboExpansionPort.GetEnumValue<InteropEmu.ExpansionPortDevice>();
+				selectedText = cboExpansionPort.SelectedItem.ToString();
 				index = 0;
 			}
 
@@ -285,6 +296,18 @@ namespace Mesen.GUI.Forms.Config
 
 					case InteropEmu.ControllerType.Zapper:
 						frm = new frmZapperConfig(inputInfo.Zapper);
+						break;
+
+					case InteropEmu.ControllerType.SnesMouse:
+						frm = new frmMouseConfig(inputInfo.SnesMouse);
+						break;
+
+					case InteropEmu.ControllerType.SuborMouse:
+						frm = new frmMouseConfig(inputInfo.SuborMouse);
+						break;
+
+					case InteropEmu.ControllerType.ArkanoidController:
+						frm = new frmMouseConfig(inputInfo.ArkanoidController);
 						break;
 				}
 			} else if(selectedItem is InteropEmu.ExpansionPortDevice) {
@@ -319,7 +342,16 @@ namespace Mesen.GUI.Forms.Config
 						break;
 
 					case InteropEmu.ExpansionPortDevice.Zapper:
+					case InteropEmu.ExpansionPortDevice.BandaiHyperShot:
 						frm = new frmZapperConfig(inputInfo.Zapper);
+						break;
+
+					case InteropEmu.ExpansionPortDevice.HoriTrack:
+						frm = new frmMouseConfig(inputInfo.HoriTrack);
+						break;
+
+					case InteropEmu.ExpansionPortDevice.ArkanoidController:
+						frm = new frmMouseConfig(inputInfo.ArkanoidController);
 						break;
 				}
 			}				
@@ -339,6 +371,7 @@ namespace Mesen.GUI.Forms.Config
 					point.X -= frm.Width - btn.Width;
 				}
 
+				frm.Text = selectedText;
 				frm.StartPosition = FormStartPosition.Manual;
 				frm.Top = point.Y;
 				frm.Left = point.X;

@@ -154,6 +154,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetZapperDetectionRadius(uint32_t detectionRadius) { EmulationSettings::SetZapperDetectionRadius(detectionRadius); }
 		DllExport void __stdcall SetExpansionDevice(ExpansionPortDevice device) { EmulationSettings::SetExpansionDevice(device); }
 		DllExport void __stdcall SetConsoleType(ConsoleType type) { EmulationSettings::SetConsoleType(type); }
+		DllExport void __stdcall SetMouseSensitivity(MouseDevice device, double sensitivity) { EmulationSettings::SetMouseSensitivity(device, sensitivity); }
 		
 		DllExport void __stdcall ClearShortcutKeys() { EmulationSettings::ClearShortcutKeys(); }
 		DllExport void __stdcall SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex) { EmulationSettings::SetShortcutKey(shortcut, keyCombination, keySetIndex); }
