@@ -70,9 +70,7 @@
       <Control ID="mnuProfile">Configurar perfil</Control>
       <Control ID="mnuMovies">Vídeos</Control>
       <Control ID="mnuPlayMovie">Reproduzir...</Control>
-      <Control ID="mnuRecordFrom">Gravar a partir de...</Control>
-      <Control ID="mnuRecordFromStart">Do início do jogo</Control>
-      <Control ID="mnuRecordFromNow">Do estado atual</Control>
+      <Control ID="mnuRecordMovie">Gravar...</Control>
       <Control ID="mnuStopMovie">Parar</Control>
       <Control ID="mnuVideoRecorder">Gravador de vídeo</Control>
       <Control ID="mnuAviRecord">Gravar...</Control>
@@ -584,6 +582,16 @@
       <Control ID="btnOk">CONFIRMAR</Control>
       <Control ID="lblCancel">Cancelar</Control>
     </Form>
+    <Form ID="frmRecordMovie" Title="Movie Recording Options">
+      <Control ID="lblSaveTo">Save to:</Control>
+      <Control ID="lblRecordFrom">Record from:</Control>
+      <Control ID="lblMovieInformation">Movie Information (optional)</Control>
+      <Control ID="lblAuthor">Author:</Control>
+      <Control ID="lblDescription">Description:</Control>
+      <Control ID="btnBrowse">Procurar...</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Cancelar</Control>
+    </Form>
     <Form ID="frmInputBarCode" Title="Input Barcode...">
       <Control ID="lblBarcode">Barcode:</Control>
       <Control ID="btnOK">OK</Control>
@@ -947,6 +955,11 @@
       <Value ID="None">Nenhum (Sem comprimir)</Value>
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
+    </Enum>
+    <Enum ID="RecordMovieFrom">
+      <Value ID="StartWithoutSaveData">Power on</Value>
+      <Value ID="StartWithSaveData">Power on, with save data</Value>
+      <Value ID="CurrentState">Current state</Value>
     </Enum>
   </Enums>
 </Resources>

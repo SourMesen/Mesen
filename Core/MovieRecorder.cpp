@@ -18,9 +18,11 @@ MovieRecorder::~MovieRecorder()
 {
 }
 
-bool MovieRecorder::Record(string filename, bool reset)
+bool MovieRecorder::Record(RecordMovieOptions options)
 {
-	_filename = filename;
+	_filename = options.Filename;
+	_author = options.Author;
+	_description = options.Description;
 	_writer.reset(new ZipWriter());
 	_inputData = stringstream();
 	_saveStateData = stringstream();
@@ -31,18 +33,21 @@ bool MovieRecorder::Record(string filename, bool reset)
 		return false;
 	} else {
 		Console::Pause();
-		
-		//TODO: Prevent game from loading battery from disk when not recording battery files
-		BatteryManager::SetBatteryProvider(shared_from_this());
+
+		if(options.RecordFrom == RecordMovieFrom::StartWithoutSaveData) {
+			BatteryManager::SetBatteryProvider(shared_from_this());
+		}
 
 		//Save existing battery files
-		BatteryManager::SetBatteryRecorder(shared_from_this());
+		if(options.RecordFrom == RecordMovieFrom::StartWithSaveData) {
+			BatteryManager::SetBatteryRecorder(shared_from_this());
+		}
 		ControlManager::RegisterInputRecorder(this);
-		if(reset) {
-			Console::GetInstance()->PowerCycle();
-		} else {
+		if(options.RecordFrom == RecordMovieFrom::CurrentState) {
 			SaveStateManager::SaveState(_saveStateData);
 			_hasSaveState = true;
+		} else {
+			Console::GetInstance()->PowerCycle();
 		}
 		BatteryManager::SetBatteryRecorder(nullptr);
 		Console::Resume();
@@ -158,6 +163,13 @@ bool MovieRecorder::Stop()
 		stringstream out;
 		GetGameSettings(out);
 		_writer->AddFile(out, "GameSettings.txt");
+
+		if(!_author.empty() || !_description.empty()) {
+			stringstream movieInfo;
+			WriteString(movieInfo, "Author", _author);
+			movieInfo << "Description\n" << _description;
+			_writer->AddFile(movieInfo, "MovieInfo.txt");
+		}
 
 		VirtualFile patchFile = Console::GetPatchFile();
 		vector<uint8_t> patchData;

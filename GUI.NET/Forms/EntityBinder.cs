@@ -68,7 +68,7 @@ namespace Mesen.GUI.Forms
 						if(value is IFormattable) {
 							kvp.Value.Text = ((IFormattable)value).ToString(format == eNumberFormat.Decimal ? "" : "X", System.Globalization.CultureInfo.InvariantCulture);
 						} else {
-							kvp.Value.Text = (string)value;
+							kvp.Value.Text = ((string)value).Replace(Environment.NewLine, "\n").Replace("\n", Environment.NewLine);
 						}
 					} else if(kvp.Value is ctrlPathSelection) {
 						kvp.Value.Text = (string)value;

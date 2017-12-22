@@ -3,6 +3,7 @@
 #include "MessageManager.h"
 #include "EmulationSettings.h"
 #include "IInputProvider.h"
+#include "Types.h"
 
 class MovieRecorder;
 class VirtualFile;
@@ -31,7 +32,7 @@ private:
 	static shared_ptr<MovieRecorder> _recorder;
 
 public:
-	static void Record(string filename, bool reset);
+	static void Record(RecordMovieOptions options);
 	static void Play(VirtualFile file);
 	static void Stop();
 	static bool Playing();

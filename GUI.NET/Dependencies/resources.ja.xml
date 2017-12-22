@@ -72,9 +72,7 @@
       <Control ID="mnuProfile">プロファイル設定</Control>
       <Control ID="mnuMovies">動画</Control>
       <Control ID="mnuPlayMovie">再生</Control>
-      <Control ID="mnuRecordFrom">録画</Control>
-      <Control ID="mnuRecordFromStart">最初から</Control>
-      <Control ID="mnuRecordFromNow">この時点から</Control>
+      <Control ID="mnuRecordMovie">録画</Control>
       <Control ID="mnuStopMovie">停止</Control>
       <Control ID="mnuSoundRecorder">サウンドレコーダー</Control>
       <Control ID="mnuWaveRecord">録音</Control>
@@ -581,6 +579,16 @@
       <Control ID="btnOk">確認</Control>
       <Control ID="lblCancel">キャンセル</Control>
     </Form>
+    <Form ID="frmRecordMovie" Title="録画設定">
+      <Control ID="lblSaveTo">保存先：</Control>
+      <Control ID="lblRecordFrom">録画開始時点：</Control>
+      <Control ID="lblMovieInformation">映画情報　（任意）</Control>
+      <Control ID="lblAuthor">作者：</Control>
+      <Control ID="lblDescription">説明：</Control>
+      <Control ID="btnBrowse">参照...</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">キャンセル</Control>
+    </Form>
     <Form ID="frmInputBarCode" Title="バーコードを入力">
       <Control ID="lblBarcode">バーコード：</Control>
       <Control ID="btnOK">入力</Control>
@@ -946,6 +954,11 @@
       <Value ID="None">圧縮なし</Value>
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
+    </Enum>
+    <Enum ID="RecordMovieFrom">
+      <Value ID="StartWithoutSaveData">パワーオンから</Value>
+      <Value ID="StartWithSaveData">パワーオンから　（セーブデータ付き）</Value>
+      <Value ID="CurrentState">今から</Value>
     </Enum>
   </Enums>
 </Resources>

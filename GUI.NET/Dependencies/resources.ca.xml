@@ -71,9 +71,7 @@
       <Control ID="mnuProfile">Configura el teu perfil</Control>
       <Control ID="mnuMovies">Pel·lícules</Control>
       <Control ID="mnuPlayMovie">Reprodueix...</Control>
-      <Control ID="mnuRecordFrom">Enregistra des...</Control>
-      <Control ID="mnuRecordFromStart">Del principi</Control>
-      <Control ID="mnuRecordFromNow">D'ara</Control>
+      <Control ID="mnuRecordMovie">Enregistra...</Control>
       <Control ID="mnuStopMovie">Atura</Control>
       <Control ID="mnuSoundRecorder">Enregistrador de so</Control>
       <Control ID="mnuWaveRecord">Enregistra...</Control>
@@ -568,6 +566,16 @@
       <Control ID="lblExplanation">Això iniciarà Mesen en mode de pantalla completa i amb la rom "MyGame.nes" carregada. A més, farà servir el filtre NTSC ajustat a una escala de 2x i configurarà les opcions de sobreescaneig. El paràmetre "DoNotSaveSettings" s'utilitza per evitar que els canvis efectuats des de la línia d'ordres es desin permanentment a la configuració de Mesen.</Control>
       <Control ID="txtGeneralOptions">/fullscreen - Inicia Mesen en pantalla completa&#13;&#10;/DoNotSaveSettings - Evita que els canvis es desin (útil per a evitar que les opcions de la línia d'ordres es converteixin en la configuració per defecte)</Control>
     </Form>
+    <Form ID="frmRecordMovie" Title="Movie Recording Options">
+      <Control ID="lblSaveTo">Save to:</Control>
+      <Control ID="lblRecordFrom">Record from:</Control>
+      <Control ID="lblMovieInformation">Movie Information (optional)</Control>
+      <Control ID="lblAuthor">Author:</Control>
+      <Control ID="lblDescription">Description:</Control>
+      <Control ID="btnBrowse">Navega...</Control>
+      <Control ID="btnOK">D'acord</Control>
+      <Control ID="btnCancel">Cancel·la</Control>
+    </Form>
     <Form ID="frmInputBarCode" Title="Introducció d'un codi de barres...">
       <Control ID="lblBarcode">Codi de barres:</Control>
       <Control ID="btnOK">D'acord</Control>
@@ -931,6 +939,11 @@
       <Value ID="None">Cap (vídeo sense compressió)</Value>
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
+    </Enum>
+    <Enum ID="RecordMovieFrom">
+      <Value ID="StartWithoutSaveData">Power on</Value>
+      <Value ID="StartWithSaveData">Power on, with save data</Value>
+      <Value ID="CurrentState">Current state</Value>
     </Enum>
   </Enums>
 </Resources>

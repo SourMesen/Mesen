@@ -285,7 +285,12 @@
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
     </Enum>
-
+    <Enum ID="RecordMovieFrom">
+      <Value ID="StartWithoutSaveData">Power on</Value>
+      <Value ID="StartWithSaveData">Power on, with save data</Value>
+      <Value ID="CurrentState">Current state</Value>
+    </Enum>
+    
     <!-- Resources below are used by the debugger only - no translation is needed -->
     <Enum ID="StatusFlagFormat">
       <Value ID="Hexadecimal">Hexadecimal</Value>

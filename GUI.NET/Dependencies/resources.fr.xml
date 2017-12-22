@@ -71,9 +71,7 @@
       <Control ID="mnuProfile">Configurer votre profil</Control>
       <Control ID="mnuMovies">Films</Control>
       <Control ID="mnuPlayMovie">Jouer...</Control>
-      <Control ID="mnuRecordFrom">Enregistrer à partir...</Control>
-      <Control ID="mnuRecordFromStart">Du début du jeu</Control>
-      <Control ID="mnuRecordFromNow">De maintenant</Control>
+      <Control ID="mnuRecordMovie">Enregistrer...</Control>
       <Control ID="mnuStopMovie">Arrêter</Control>
       <Control ID="mnuSoundRecorder">Enregistreur audio</Control>
       <Control ID="mnuWaveRecord">Enregistrer...</Control>
@@ -597,12 +595,21 @@
       <Control ID="btnOk">CONFIRMER</Control>
       <Control ID="lblCancel">Annuler</Control>
     </Form>
+    <Form ID="frmRecordMovie" Title="Options d'enregistrement du film">
+      <Control ID="lblSaveTo">Sauvegarder sous :</Control>
+      <Control ID="lblRecordFrom">Enregistrer à partir:</Control>
+      <Control ID="lblMovieInformation">Information sur le film (optionel)</Control>
+      <Control ID="lblAuthor">Auteur :</Control>
+      <Control ID="lblDescription">Description :</Control>
+      <Control ID="btnBrowse">Parcourir...</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Annuler</Control>
+    </Form>
     <Form ID="frmInputBarCode" Title="Entrer un code-barres">
       <Control ID="lblBarcode">Code-barres :</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Annuler</Control>
     </Form>
-
     <Form ID="BaseInputConfigForm">
       <Control ID="lblHint">Les tabs sans icône sont vides.&#13;&#10;Chaque bouton peut être mappé à 4 boutons différents sur votre clavier et/ou votre manette.</Control>
       <Control ID="tpgSet1">Mappage #1</Control>
@@ -963,6 +970,11 @@
       <Value ID="None">Aucun (Vidéo non-compressé)</Value>
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
+    </Enum>
+    <Enum ID="RecordMovieFrom">
+      <Value ID="StartWithoutSaveData">Du début</Value>
+      <Value ID="StartWithSaveData">Du début (en incluant les sauvegardes)</Value>
+      <Value ID="CurrentState">De maintenant</Value>
     </Enum>
   </Enums>
 </Resources>

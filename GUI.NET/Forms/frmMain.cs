@@ -880,10 +880,8 @@ namespace Mesen.GUI.Forms
 					bool movieRecording = InteropEmu.MovieRecording();
 					mnuPlayMovie.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuStopMovie.Enabled = running && !netPlay && (moviePlaying || movieRecording);
-					mnuRecordFrom.Enabled = running && !moviePlaying && !movieRecording;
-					mnuRecordFromStart.Enabled = running && !isNetPlayClient && !moviePlaying && !movieRecording;
-					mnuRecordFromNow.Enabled = running && !moviePlaying && !movieRecording;
-
+					mnuRecordMovie.Enabled = running && !moviePlaying && !movieRecording && !isNetPlayClient;
+					
 					bool waveRecording = InteropEmu.WaveIsRecording();
 					mnuWaveRecord.Enabled = running && !waveRecording;
 					mnuWaveStop.Enabled = running && waveRecording;
@@ -914,7 +912,7 @@ namespace Mesen.GUI.Forms
 					mnuNetPlay.Enabled = !InteropEmu.IsNsf();
 					if(running && InteropEmu.IsNsf()) {
 						mnuPowerCycle.Enabled = false;
-						mnuMovies.Enabled = mnuPlayMovie.Enabled = mnuStopMovie.Enabled = mnuRecordFrom.Enabled = mnuRecordFromStart.Enabled = mnuRecordFromNow.Enabled = false;
+						mnuMovies.Enabled = mnuPlayMovie.Enabled = mnuStopMovie.Enabled = mnuRecordMovie.Enabled = false;
 					}
 
 					mnuRegionAuto.Checked = ConfigManager.Config.Region == NesModel.Auto;

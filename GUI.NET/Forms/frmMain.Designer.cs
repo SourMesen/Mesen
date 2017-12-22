@@ -156,9 +156,7 @@ namespace Mesen.GUI.Forms
 			this.mnuProfile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMovies = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPlayMovie = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRecordFrom = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRecordFromStart = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRecordFromNow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRecordMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStopMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCheats = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem22 = new System.Windows.Forms.ToolStripSeparator();
@@ -1215,7 +1213,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuMovies.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuPlayMovie,
-            this.mnuRecordFrom,
+            this.mnuRecordMovie,
             this.mnuStopMovie});
 			this.mnuMovies.Image = global::Mesen.GUI.Properties.Resources.Movie;
 			this.mnuMovies.Name = "mnuMovies";
@@ -1226,39 +1224,23 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuPlayMovie.Image = global::Mesen.GUI.Properties.Resources.Play;
 			this.mnuPlayMovie.Name = "mnuPlayMovie";
-			this.mnuPlayMovie.Size = new System.Drawing.Size(149, 22);
+			this.mnuPlayMovie.Size = new System.Drawing.Size(152, 22);
 			this.mnuPlayMovie.Text = "Play...";
 			this.mnuPlayMovie.Click += new System.EventHandler(this.mnuPlayMovie_Click);
 			// 
-			// mnuRecordFrom
+			// mnuRecordMovie
 			// 
-			this.mnuRecordFrom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuRecordFromStart,
-            this.mnuRecordFromNow});
-			this.mnuRecordFrom.Image = global::Mesen.GUI.Properties.Resources.Record;
-			this.mnuRecordFrom.Name = "mnuRecordFrom";
-			this.mnuRecordFrom.Size = new System.Drawing.Size(149, 22);
-			this.mnuRecordFrom.Text = "Record from...";
-			// 
-			// mnuRecordFromStart
-			// 
-			this.mnuRecordFromStart.Name = "mnuRecordFromStart";
-			this.mnuRecordFromStart.Size = new System.Drawing.Size(99, 22);
-			this.mnuRecordFromStart.Text = "Start";
-			this.mnuRecordFromStart.Click += new System.EventHandler(this.mnuRecordFromStart_Click);
-			// 
-			// mnuRecordFromNow
-			// 
-			this.mnuRecordFromNow.Name = "mnuRecordFromNow";
-			this.mnuRecordFromNow.Size = new System.Drawing.Size(99, 22);
-			this.mnuRecordFromNow.Text = "Now";
-			this.mnuRecordFromNow.Click += new System.EventHandler(this.mnuRecordFromNow_Click);
+			this.mnuRecordMovie.Image = global::Mesen.GUI.Properties.Resources.Record;
+			this.mnuRecordMovie.Name = "mnuRecordMovie";
+			this.mnuRecordMovie.Size = new System.Drawing.Size(152, 22);
+			this.mnuRecordMovie.Text = "Record...";
+			this.mnuRecordMovie.Click += new System.EventHandler(this.mnuRecordMovie_Click);
 			// 
 			// mnuStopMovie
 			// 
 			this.mnuStopMovie.Image = global::Mesen.GUI.Properties.Resources.Stop;
 			this.mnuStopMovie.Name = "mnuStopMovie";
-			this.mnuStopMovie.Size = new System.Drawing.Size(149, 22);
+			this.mnuStopMovie.Size = new System.Drawing.Size(152, 22);
 			this.mnuStopMovie.Text = "Stop";
 			this.mnuStopMovie.Click += new System.EventHandler(this.mnuStopMovie_Click);
 			// 
@@ -1654,9 +1636,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuPlayMovie;
 		private System.Windows.Forms.ToolStripMenuItem mnuDebugger;
 		private System.Windows.Forms.ToolStripMenuItem mnuTakeScreenshot;
-		private System.Windows.Forms.ToolStripMenuItem mnuRecordFrom;
-		private System.Windows.Forms.ToolStripMenuItem mnuRecordFromStart;
-		private System.Windows.Forms.ToolStripMenuItem mnuRecordFromNow;
+		private System.Windows.Forms.ToolStripMenuItem mnuRecordMovie;
 		private System.Windows.Forms.ToolStripMenuItem mnuStopMovie;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem mnuExit;

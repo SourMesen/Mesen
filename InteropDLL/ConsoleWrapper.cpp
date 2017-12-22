@@ -356,7 +356,7 @@ namespace InteropEmu {
 		DllExport int64_t  __stdcall GetStateInfo(uint32_t stateIndex) { return SaveStateManager::GetStateInfo(stateIndex); }
 
 		DllExport void __stdcall MoviePlay(char* filename) { MovieManager::Play(string(filename)); }
-		DllExport void __stdcall MovieRecord(char* filename, bool reset) { MovieManager::Record(filename, reset); }
+		DllExport void __stdcall MovieRecord(RecordMovieOptions options) { MovieManager::Record(options); }
 		DllExport void __stdcall MovieStop() { MovieManager::Stop(); }
 		DllExport bool __stdcall MoviePlaying() { return MovieManager::Playing(); }
 		DllExport bool __stdcall MovieRecording() { return MovieManager::Recording(); }

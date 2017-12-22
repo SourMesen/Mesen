@@ -252,3 +252,20 @@ enum class ConsoleFeatures
 	BarcodeReader = 8,
 	TapeRecorder = 16,
 };
+
+enum class RecordMovieFrom
+{
+	StartWithoutSaveData = 0,
+	StartWithSaveData,
+	CurrentState
+};
+
+struct RecordMovieOptions
+{
+public:
+	char Filename[2000] = {};
+	char Author[250] = {};
+	char Description[10000] = {};
+
+	RecordMovieFrom RecordFrom = RecordMovieFrom::StartWithoutSaveData;
+};

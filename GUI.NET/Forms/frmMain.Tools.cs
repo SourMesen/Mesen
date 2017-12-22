@@ -27,18 +27,6 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void RecordMovie(bool resetEmu)
-		{
-			using(SaveFileDialog sfd = new SaveFileDialog()) {
-				sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
-				sfd.InitialDirectory = ConfigManager.MovieFolder;
-				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
-				if(sfd.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
-					InteropEmu.MovieRecord(sfd.FileName, resetEmu);
-				}
-			}
-		}
-
 		private void mnuPlayMovie_Click(object sender, EventArgs e)
 		{
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
@@ -54,15 +42,12 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.MovieStop();
 		}
-
-		private void mnuRecordFromStart_Click(object sender, EventArgs e)
+		
+		private void mnuRecordMovie_Click(object sender, EventArgs e)
 		{
-			RecordMovie(true);
-		}
-
-		private void mnuRecordFromNow_Click(object sender, EventArgs e)
-		{
-			RecordMovie(false);
+			using(frmRecordMovie frm = new frmRecordMovie()) {
+				frm.ShowDialog(mnuMovies, this);
+			}
 		}
 
 		private void mnuWaveRecord_Click(object sender, EventArgs e)

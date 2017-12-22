@@ -211,6 +211,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\MovieRecordInfo.cs" />
     <Compile Include="Config\ConfigAttributes.cs" />
     <Compile Include="Config\AviRecordInfo.cs" />
     <Compile Include="Config\DebugInfo.cs" />
@@ -898,6 +899,12 @@
       <DependentUpon>frmMain.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\frmRecordMovie.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmRecordMovie.Designer.cs">
+      <DependentUpon>frmRecordMovie.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmRecordAvi.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1276,6 +1283,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmRecordMovie.resx">
+      <DependentUpon>frmRecordMovie.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRecordAvi.resx">
       <DependentUpon>frmRecordAvi.cs</DependentUpon>

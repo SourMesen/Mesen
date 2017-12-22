@@ -70,9 +70,7 @@
       <Control ID="mnuProfile">Налаштувати профіль</Control>
       <Control ID="mnuMovies">Записи</Control>
       <Control ID="mnuPlayMovie">Програти</Control>
-      <Control ID="mnuRecordFrom">Записати</Control>
-      <Control ID="mnuRecordFromStart">Спочатку</Control>
-      <Control ID="mnuRecordFromNow">Негайно</Control>
+      <Control ID="mnuRecordMovie">Записати</Control>
       <Control ID="mnuStopMovie">Зупинити запис</Control>
       <Control ID="mnuSoundRecorder">Запис звуку</Control>
       <Control ID="mnuWaveRecord">Почати</Control>
@@ -586,6 +584,16 @@
       <Control ID="btnOk">ПIДТВЕРДИТИ</Control>
       <Control ID="lblCancel">Скасувати</Control>
     </Form>
+    <Form ID="frmRecordMovie" Title="Movie Recording Options">
+      <Control ID="lblSaveTo">Save to:</Control>
+      <Control ID="lblRecordFrom">Record from:</Control>
+      <Control ID="lblMovieInformation">Movie Information (optional)</Control>
+      <Control ID="lblAuthor">Author:</Control>
+      <Control ID="lblDescription">Description:</Control>
+      <Control ID="btnBrowse">Огляд...</Control>
+      <Control ID="btnOK">OK</Control>
+      <Control ID="btnCancel">Вiдмiна</Control>
+    </Form>
     <Form ID="frmInputBarCode" Title="Input Barcode...">
       <Control ID="lblBarcode">Barcode:</Control>
       <Control ID="btnOK">OK</Control>
@@ -951,6 +959,11 @@
       <Value ID="None">Немає (Нестислено)</Value>
       <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
       <Value ID="CSCD">Camstudio (CSCD)</Value>
+    </Enum>
+    <Enum ID="RecordMovieFrom">
+      <Value ID="StartWithoutSaveData">Power on</Value>
+      <Value ID="StartWithSaveData">Power on, with save data</Value>
+      <Value ID="CurrentState">Current state</Value>
     </Enum>
   </Enums>
 </Resources>

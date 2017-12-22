@@ -98,7 +98,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath, EntryPoint = "GetLog")] private static extern IntPtr GetLogWrapper();
 
 		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
-		[DllImport(DLLPath)] public static extern void MovieRecord([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool reset);
+		[DllImport(DLLPath)] public static extern void MovieRecord(RecordMovieOptions options);
 		[DllImport(DLLPath)] public static extern void MovieStop();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MoviePlaying();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MovieRecording();
@@ -1718,6 +1718,48 @@ namespace Mesen.GUI
 		{
 			return Encoding.UTF8.GetString(this.TrackName, 0, Array.IndexOf(this.TrackName, (Byte)0)).Split(new string[] { "[!|!]" }, StringSplitOptions.None);
 		}
+	}
+
+	public enum RecordMovieFrom
+	{
+		StartWithoutSaveData,
+		StartWithSaveData,
+		CurrentState
+	}
+
+	public struct RecordMovieOptions
+	{
+		private const int AuthorMaxSize = 250;
+		private const int DescriptionMaxSize = 10000;
+		private const int FilenameMaxSize = 2000;
+
+		public RecordMovieOptions(string filename, string author, string description, RecordMovieFrom recordFrom)
+		{
+			Author = Encoding.UTF8.GetBytes(author);
+			Array.Resize(ref Author, AuthorMaxSize);
+			Author[AuthorMaxSize-1] = 0;
+
+			Description = Encoding.UTF8.GetBytes(description.Replace("\r", ""));
+			Array.Resize(ref Description, DescriptionMaxSize);
+			Description[DescriptionMaxSize-1] = 0;
+
+			Filename = Encoding.UTF8.GetBytes(filename);
+			Array.Resize(ref Filename, FilenameMaxSize);
+			Filename[FilenameMaxSize-1] = 0;
+
+			RecordFrom = recordFrom;
+		}
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = FilenameMaxSize)]
+		public byte[] Filename;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = AuthorMaxSize)]
+		public byte[] Author;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = DescriptionMaxSize)]
+		public byte[] Description;
+
+		public RecordMovieFrom RecordFrom;
 	}
 
 	[Flags]

@@ -10,10 +10,10 @@
 shared_ptr<IMovie> MovieManager::_player;
 shared_ptr<MovieRecorder> MovieManager::_recorder;
 
-void MovieManager::Record(string filename, bool reset)
+void MovieManager::Record(RecordMovieOptions options)
 {
 	shared_ptr<MovieRecorder> recorder(new MovieRecorder());
-	if(recorder->Record(filename, reset)) {
+	if(recorder->Record(options)) {
 		_recorder = recorder;
 	}
 }

@@ -4,6 +4,7 @@
 #include "IInputRecorder.h"
 #include "CheatManager.h"
 #include "BatteryManager.h"
+#include "Types.h"
 
 class ZipWriter;
 
@@ -12,6 +13,8 @@ class MovieRecorder : public IInputRecorder, public IBatteryRecorder, public IBa
 private:
 	static const uint32_t MovieFormatVersion = 1;
 	string _filename;
+	string _author;
+	string _description;
 	unique_ptr<ZipWriter> _writer;
 	std::unordered_map<string, vector<uint8_t>> _batteryData;
 	stringstream _inputData;
@@ -28,7 +31,7 @@ public:
 	MovieRecorder();
 	~MovieRecorder();
 
-	bool Record(string filename, bool reset);
+	bool Record(RecordMovieOptions options);
 	bool Stop();
 
 	void RecordInput(vector<shared_ptr<BaseControlDevice>> devices) override;
