@@ -99,7 +99,11 @@ namespace Mesen.GUI.Forms.Config
 				controllerTypes.Add(InteropEmu.ControllerType.SnesMouse);
 				controllerTypes.Add(InteropEmu.ControllerType.SuborMouse);
 			} else {
-				controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.StandardController };
+				controllerTypes = new List<InteropEmu.ControllerType>() {
+					InteropEmu.ControllerType.StandardController,
+					InteropEmu.ControllerType.SnesMouse,
+					InteropEmu.ControllerType.SuborMouse
+				};
 			}
 
 			bool isOriginalFamicom = !isNes && !ConfigManager.Config.EmulationInfo.UseNes101Hvc101Behavior;

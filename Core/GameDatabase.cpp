@@ -162,8 +162,7 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 			MessageManager::Log("[DB] Input: Subor keyboard connected");
 			system = GameSystem::Famicom;
 			expDevice = ExpansionPortDevice::SuborKeyboard;
-			//TODO: FIX
-			//controllers[2] = ControllerType::SuborMouse;
+			controllers[1] = ControllerType::SuborMouse;
 		} else if(inputType.compare("Mahjong") == 0) {
 			MessageManager::Log("[DB] Input: Jissen Mahjong controller connected");
 			system = GameSystem::Famicom;
