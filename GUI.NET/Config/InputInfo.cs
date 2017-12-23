@@ -89,6 +89,7 @@ namespace Mesen.GUI.Config
 		public InteropEmu.ControllerType ControllerType = InteropEmu.ControllerType.StandardController;
 		public List<KeyMappings> Keys = new List<KeyMappings>();
 		public UInt32 TurboSpeed = 2;
+		public bool PowerpadUseSideA = false;
 
 		public InteropEmu.KeyMappingSet GetKeyMappingSet()
 		{
@@ -102,6 +103,7 @@ namespace Mesen.GUI.Config
 			mappingSet.Mapping3 = Keys[2].ToInteropMapping();
 			mappingSet.Mapping4 = Keys[3].ToInteropMapping();
 			mappingSet.TurboSpeed = TurboSpeed;
+			mappingSet.PowerpadUseSideA = PowerpadUseSideA;
 			return mappingSet;
 		}
 	}

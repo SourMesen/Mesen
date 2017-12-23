@@ -7,6 +7,7 @@ class PowerPad : public BaseControlDevice
 private:
 	uint8_t _stateBufferL;
 	uint8_t _stateBufferH;
+	bool _useSideA = false;
 
 protected:
 	string GetKeyNames() override
@@ -17,8 +18,15 @@ protected:
 	void InternalSetStateFromInput() override
 	{
 		for(KeyMapping keyMapping : _keyMappings) {
-			for(int i = 0; i < 12; i++) {
-				SetPressedState(i, keyMapping.PowerPadButtons[i]);
+			for(int i = 0; i < 3; i++) {
+				for(int j = 0; j < 4; j++) {
+					if(_useSideA) {
+						//Invert the order of each row
+						SetPressedState(i*4+j, keyMapping.PowerPadButtons[i*4+(3-j)]);
+					} else {
+						SetPressedState(i*4+j, keyMapping.PowerPadButtons[i*4+j]);
+					}
+				}
 			}
 		}
 	}
@@ -46,6 +54,7 @@ protected:
 public:
 	PowerPad(uint8_t port, KeyMappingSet keyMappings) : BaseControlDevice(port, keyMappings)
 	{
+		_useSideA = keyMappings.PowerpadUseSideA;
 	}
 
 	uint8_t ReadRAM(uint16_t addr) override

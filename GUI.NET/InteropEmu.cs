@@ -891,6 +891,9 @@ namespace Mesen.GUI
 			public KeyMapping Mapping3;
 			public KeyMapping Mapping4;
 			public UInt32 TurboSpeed;
+
+			[MarshalAs(UnmanagedType.I1)]
+			public bool PowerpadUseSideA;
 		}
 
 		public struct KeyMapping

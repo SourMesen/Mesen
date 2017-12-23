@@ -324,6 +324,7 @@ struct KeyMappingSet
 	KeyMapping Mapping3;
 	KeyMapping Mapping4;
 	uint32_t TurboSpeed = 0;
+	bool PowerpadUseSideA = false;
 
 	vector<KeyMapping> GetKeyMappingArray()
 	{

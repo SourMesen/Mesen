@@ -28,6 +28,8 @@ namespace Mesen.GUI.Forms.Config
 				ctrlPowerPadConfig2.Initialize(controllerInfo.Keys[2]);
 				ctrlPowerPadConfig3.Initialize(controllerInfo.Keys[3]);
 
+				AddBinding("PowerpadUseSideA", chkUseSideA);
+
 				this.Text += ": " + ResourceHelper.GetMessage("PlayerNumber", (portNumber + 1).ToString());
 			}
 		}
@@ -40,6 +42,14 @@ namespace Mesen.GUI.Forms.Config
 		private void btnSetDefault_Click(object sender, EventArgs e)
 		{
 			GetControllerControl().Initialize(Presets.PowerPad);
+		}
+
+		private void chkShowSideA_CheckedChanged(object sender, EventArgs e)
+		{
+			ctrlPowerPadConfig0.ShowSideA = chkUseSideA.Checked;
+			ctrlPowerPadConfig1.ShowSideA = chkUseSideA.Checked;
+			ctrlPowerPadConfig2.ShowSideA = chkUseSideA.Checked;
+			ctrlPowerPadConfig3.ShowSideA = chkUseSideA.Checked;
 		}
 	}
 }

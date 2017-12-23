@@ -665,6 +665,7 @@
     <Form ID="frmPartyTapConfig">
     </Form>
     <Form ID="frmPowerPadConfig">
+      <Control ID="chkUseSideA">Utiliser le côté A</Control>
     </Form>
     <Form ID="frmSuborKeyboardConfig">
     </Form>
