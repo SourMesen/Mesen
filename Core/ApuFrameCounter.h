@@ -43,6 +43,8 @@ public:
 
 	void Reset(bool softReset)
 	{
+		_nesModel = NesModel::Auto;
+
 		_nextIrqCycle = 29828;
 
 		_previousCycle = 0;
