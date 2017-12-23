@@ -161,6 +161,11 @@ namespace Mesen.GUI.Forms
 			InteropEmu.SetNesModel(ConfigManager.Config.Region);
 		}
 		
+		private void mnuShowFPS_Click(object sender, EventArgs e)
+		{
+			ToggleFps();
+		}
+
 		private void UpdateEmulationFlags()
 		{
 			ConfigManager.Config.VideoInfo.ShowFPS = mnuShowFPS.Checked;
