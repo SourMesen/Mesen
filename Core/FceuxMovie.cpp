@@ -16,6 +16,8 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 	_dataByFrame[2].push_back("");
 	_dataByFrame[3].push_back("");
 
+	ControlManager::ResetPollCounter();
+
 	while(!filestream.eof()) {
 		string line;
 		std::getline(filestream, line);
@@ -24,7 +26,6 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 			HashInfo hashInfo;
 			hashInfo.PrgChrMd5Hash = HexUtilities::ToHex(md5array);
 			if(Console::LoadROM("", hashInfo)) {
-				_gameLoaded = true;
 				result = true;
 			} else {
 				return false;

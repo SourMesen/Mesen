@@ -38,6 +38,7 @@ ControlManager* ControlManager::_instance = nullptr;
 vector<IInputRecorder*> ControlManager::_inputRecorders;
 vector<IInputProvider*> ControlManager::_inputProviders;
 SimpleLock ControlManager::_deviceLock;
+uint32_t ControlManager::_pollCounter = 0;
 
 ControlManager::ControlManager(shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice)
 {
@@ -292,6 +293,8 @@ void ControlManager::UpdateInputState()
 		recorder->RecordInput(_controlDevices);
 	}
 	//MessageManager::Log(log);
+
+	ControlManager::_pollCounter++;
 }
 
 uint32_t ControlManager::GetLagCounter()
@@ -302,6 +305,16 @@ uint32_t ControlManager::GetLagCounter()
 void ControlManager::ResetLagCounter()
 {
 	_lagCounter = 0;
+}
+
+uint32_t ControlManager::GetPollCounter()
+{
+	return ControlManager::_pollCounter;
+}
+
+void ControlManager::ResetPollCounter()
+{
+	ControlManager::_pollCounter = 0;
 }
 
 uint8_t ControlManager::ReadRAM(uint16_t addr)
@@ -354,9 +367,10 @@ void ControlManager::StreamState(bool saving)
 
 	int32_t unusedMousePositionX = 0;
 	int32_t unusedMousePositionY = 0;
+	bool unusedRefreshState = false;
 
 	ArrayInfo<ControllerType> types = { controllerTypes, 4 };
-	Stream(_refreshState, unusedMousePositionX, unusedMousePositionY, nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior, zapperDetectionRadius, _lagCounter);
+	Stream(unusedRefreshState, unusedMousePositionX, unusedMousePositionY, nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior, zapperDetectionRadius, _lagCounter, _pollCounter);
 
 	if(!saving) {
 		EmulationSettings::SetNesModel(nesModel);

@@ -22,14 +22,17 @@ private:
 	static vector<IInputProvider*> _inputProviders;
 	static SimpleLock _deviceLock;
 
+	//Static so that power cycle does not reset its value
+	static uint32_t _pollCounter;
+
 	vector<shared_ptr<BaseControlDevice>> _controlDevices;
 
 	shared_ptr<BaseControlDevice> _systemActionManager;
 	shared_ptr<BaseControlDevice> _mapperControlDevice;
 
+
 	uint32_t _lagCounter = 0;
 	bool _isLagging = false;
-	bool _refreshState = false;
 
 	uint8_t GetOpenBusMask(uint8_t port);
 	void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice);
@@ -48,6 +51,9 @@ public:
 
 	uint32_t GetLagCounter();
 	void ResetLagCounter();
+
+	static uint32_t GetPollCounter();
+	static void ResetPollCounter();
 
 	virtual void Reset(bool softReset);
 

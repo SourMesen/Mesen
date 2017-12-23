@@ -20,9 +20,6 @@ private:
 	vector<string> _cheats;
 	std::unordered_map<string, string> _settings;
 	string _filename;
-	
-	bool _gameLoaded = false;
-	uint32_t _firstFrameNumber = 0;
 
 private:
 	void ParseSettings(stringstream &data);

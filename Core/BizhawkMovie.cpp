@@ -1,11 +1,11 @@
 #include "stdafx.h"
+#include "ControlManager.h"
 #include "SystemActionManager.h"
 #include "FdsSystemActionManager.h"
 #include "VsSystemActionManager.h"
 #include "BizhawkMovie.h"
 #include "VsControlManager.h"
 #include "FDS.h"
-#include "PPU.h"
 
 BizhawkMovie::BizhawkMovie()
 {
@@ -30,10 +30,10 @@ void BizhawkMovie::Stop()
 bool BizhawkMovie::SetInput(BaseControlDevice *device)
 {
 	SystemActionManager* actionManager = dynamic_cast<SystemActionManager*>(device);
-	int32_t frameNumber = _gameLoaded ? PPU::GetFrameCount() : 0;
+	int32_t pollCounter = ControlManager::GetPollCounter();
 	if(actionManager) {
-		if(frameNumber < (int32_t)_systemActionByFrame.size()) {
-			uint32_t systemAction = _systemActionByFrame[frameNumber];
+		if(pollCounter < (int32_t)_systemActionByFrame.size()) {
+			uint32_t systemAction = _systemActionByFrame[pollCounter];
 			if(systemAction & 0x01) {
 				actionManager->SetBit(SystemActionManager::Buttons::PowerButton);
 			}
@@ -78,8 +78,8 @@ bool BizhawkMovie::SetInput(BaseControlDevice *device)
 		int port = device->GetPort();
 		StandardController* controller = dynamic_cast<StandardController*>(device);
 		if(controller) {
-			if(frameNumber < (int32_t)_dataByFrame[port].size()) {
-				controller->SetTextState(_dataByFrame[port][frameNumber]);
+			if(pollCounter < (int32_t)_dataByFrame[port].size()) {
+				controller->SetTextState(_dataByFrame[port][pollCounter]);
 			} else {
 				Stop();
 			}
@@ -96,7 +96,7 @@ bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 		return false;
 	}
 
-	_gameLoaded = false;
+	ControlManager::ResetPollCounter();
 
 	while(!fileData.eof()) {
 		string line;
@@ -106,7 +106,6 @@ bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 				HashInfo hashInfo;
 				hashInfo.Sha1Hash = line.substr(5, 40);
 				if(Console::LoadROM("", hashInfo)) {
-					_gameLoaded = true;
 					return true;
 				}
 			}
@@ -116,7 +115,6 @@ bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 				hashInfo.PrgChrMd5Hash = line.substr(4, 32);
 				std::transform(hashInfo.PrgChrMd5Hash.begin(), hashInfo.PrgChrMd5Hash.end(), hashInfo.PrgChrMd5Hash.begin(), ::toupper);
 				if(Console::LoadROM("", hashInfo)) {
-					_gameLoaded = true;
 					return true;
 				}
 			}

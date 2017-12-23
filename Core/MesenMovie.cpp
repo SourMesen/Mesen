@@ -12,7 +12,6 @@
 #include "MovieRecorder.h"
 #include "BatteryManager.h"
 #include "VirtualFile.h"
-#include "PPU.h"
 
 MesenMovie::MesenMovie()
 {
@@ -34,7 +33,7 @@ void MesenMovie::Stop()
 
 bool MesenMovie::SetInput(BaseControlDevice *device)
 {
-	uint32_t inputRowIndex = _gameLoaded ? PPU::GetFrameCount() - _firstFrameNumber : 0;
+	uint32_t inputRowIndex = ControlManager::GetPollCounter();
 
 	if(_inputData.size() > inputRowIndex && _inputData[inputRowIndex].size() > _deviceIndex) {
 		device->SetTextState(_inputData[inputRowIndex][_deviceIndex]);
@@ -100,15 +99,14 @@ bool MesenMovie::Play(VirtualFile &file)
 	ControlManager::RegisterInputProvider(this);
 	ApplySettings();
 
-	_firstFrameNumber = 0;
-
 	//Disable auto-configure input option (otherwise the movie file's input types are ignored)
 	bool autoConfigureInput = EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput);
 	EmulationSettings::ClearFlags(EmulationFlags::AutoConfigureInput);
-	_gameLoaded = LoadGame();
+	ControlManager::ResetPollCounter();
+	bool gameLoaded = LoadGame();
 	EmulationSettings::SetFlagState(EmulationFlags::AutoConfigureInput, autoConfigureInput);
 
-	if(!_gameLoaded) {
+	if(!gameLoaded) {
 		Console::Resume();
 		return false;
 	}
@@ -119,7 +117,7 @@ bool MesenMovie::Play(VirtualFile &file)
 			Console::Resume();
 			return false;
 		} else {
-			_firstFrameNumber = PPU::GetFrameCount();
+			ControlManager::ResetPollCounter();
 		}
 	}
 
