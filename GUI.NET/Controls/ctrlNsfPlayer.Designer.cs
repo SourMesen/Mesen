@@ -28,11 +28,11 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.btnPrevious = new System.Windows.Forms.Button();
 			this.btnPause = new System.Windows.Forms.Button();
 			this.btnNext = new System.Windows.Forms.Button();
-			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.tlpNsfInfo = new System.Windows.Forms.TableLayoutPanel();
 			this.lblCopyrightValue = new System.Windows.Forms.Label();
 			this.lblArtistValue = new System.Windows.Forms.Label();
 			this.lblTitleValue = new System.Windows.Forms.Label();
@@ -69,8 +69,8 @@
 			this.tlpRepeatShuffle = new System.Windows.Forms.TableLayoutPanel();
 			this.picRepeat = new System.Windows.Forms.PictureBox();
 			this.picShuffle = new System.Windows.Forms.PictureBox();
-			this.tableLayoutPanel1.SuspendLayout();
-			this.tableLayoutPanel2.SuspendLayout();
+			this.tlpMain.SuspendLayout();
+			this.tlpNsfInfo.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
@@ -85,33 +85,33 @@
 			((System.ComponentModel.ISupportInitialize)(this.picShuffle)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// tableLayoutPanel1
+			// tlpMain
 			// 
-			this.tableLayoutPanel1.ColumnCount = 5;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Controls.Add(this.btnPrevious, 1, 2);
-			this.tableLayoutPanel1.Controls.Add(this.btnPause, 2, 2);
-			this.tableLayoutPanel1.Controls.Add(this.btnNext, 3, 2);
-			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.trkVolume, 4, 2);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.lblTime, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.pnlBackground, 0, 0);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 4;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(371, 281);
-			this.tableLayoutPanel1.TabIndex = 0;
+			this.tlpMain.ColumnCount = 5;
+			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpMain.Controls.Add(this.btnPrevious, 1, 2);
+			this.tlpMain.Controls.Add(this.btnPause, 2, 2);
+			this.tlpMain.Controls.Add(this.btnNext, 3, 2);
+			this.tlpMain.Controls.Add(this.tlpNsfInfo, 0, 1);
+			this.tlpMain.Controls.Add(this.trkVolume, 4, 2);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel1, 0, 2);
+			this.tlpMain.Controls.Add(this.lblTime, 0, 3);
+			this.tlpMain.Controls.Add(this.pnlBackground, 0, 0);
+			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpMain.Location = new System.Drawing.Point(0, 0);
+			this.tlpMain.Name = "tlpMain";
+			this.tlpMain.RowCount = 4;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpMain.Size = new System.Drawing.Size(371, 281);
+			this.tlpMain.TabIndex = 0;
 			// 
 			// btnPrevious
 			// 
@@ -151,35 +151,35 @@
 			this.btnNext.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnNext_MouseDown);
 			this.btnNext.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnNext_MouseUp);
 			// 
-			// tableLayoutPanel2
+			// tlpNsfInfo
 			// 
-			this.tableLayoutPanel2.AutoSize = true;
-			this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.tableLayoutPanel2.ColumnCount = 4;
-			this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 5);
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Controls.Add(this.lblCopyrightValue, 2, 2);
-			this.tableLayoutPanel2.Controls.Add(this.lblArtistValue, 2, 1);
-			this.tableLayoutPanel2.Controls.Add(this.lblTitleValue, 2, 0);
-			this.tableLayoutPanel2.Controls.Add(this.lblArtist, 1, 1);
-			this.tableLayoutPanel2.Controls.Add(this.lblTitle, 1, 0);
-			this.tableLayoutPanel2.Controls.Add(this.lblCopyright, 1, 2);
-			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 2, 3);
-			this.tableLayoutPanel2.Controls.Add(this.lblSoundChips, 1, 3);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 121);
-			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 4;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(371, 86);
-			this.tableLayoutPanel2.TabIndex = 3;
+			this.tlpNsfInfo.AutoSize = true;
+			this.tlpNsfInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.tlpNsfInfo.ColumnCount = 4;
+			this.tlpMain.SetColumnSpan(this.tlpNsfInfo, 5);
+			this.tlpNsfInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpNsfInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpNsfInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+			this.tlpNsfInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpNsfInfo.Controls.Add(this.lblCopyrightValue, 2, 2);
+			this.tlpNsfInfo.Controls.Add(this.lblArtistValue, 2, 1);
+			this.tlpNsfInfo.Controls.Add(this.lblTitleValue, 2, 0);
+			this.tlpNsfInfo.Controls.Add(this.lblArtist, 1, 1);
+			this.tlpNsfInfo.Controls.Add(this.lblTitle, 1, 0);
+			this.tlpNsfInfo.Controls.Add(this.lblCopyright, 1, 2);
+			this.tlpNsfInfo.Controls.Add(this.tableLayoutPanel3, 2, 3);
+			this.tlpNsfInfo.Controls.Add(this.lblSoundChips, 1, 3);
+			this.tlpNsfInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.tlpNsfInfo.Location = new System.Drawing.Point(0, 121);
+			this.tlpNsfInfo.Margin = new System.Windows.Forms.Padding(0);
+			this.tlpNsfInfo.Name = "tlpNsfInfo";
+			this.tlpNsfInfo.RowCount = 4;
+			this.tlpNsfInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNsfInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNsfInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNsfInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpNsfInfo.Size = new System.Drawing.Size(371, 86);
+			this.tlpNsfInfo.TabIndex = 3;
 			// 
 			// lblCopyrightValue
 			// 
@@ -250,7 +250,7 @@
 			// tableLayoutPanel3
 			// 
 			this.tableLayoutPanel3.ColumnCount = 6;
-			this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanel3, 2);
+			this.tlpNsfInfo.SetColumnSpan(this.tableLayoutPanel3, 2);
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -277,12 +277,12 @@
 			// 
 			this.lblMmc5.AutoSize = true;
 			this.lblMmc5.BackColor = System.Drawing.Color.Transparent;
-			this.lblMmc5.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblMmc5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblMmc5.ForeColor = System.Drawing.Color.White;
-			this.lblMmc5.Location = new System.Drawing.Point(25, 0);
+			this.lblMmc5.Location = new System.Drawing.Point(28, 0);
 			this.lblMmc5.Margin = new System.Windows.Forms.Padding(0);
 			this.lblMmc5.Name = "lblMmc5";
-			this.lblMmc5.Size = new System.Drawing.Size(35, 15);
+			this.lblMmc5.Size = new System.Drawing.Size(38, 13);
 			this.lblMmc5.TabIndex = 2;
 			this.lblMmc5.Text = "MMC5";
 			// 
@@ -290,12 +290,12 @@
 			// 
 			this.lblFds.AutoSize = true;
 			this.lblFds.BackColor = System.Drawing.Color.Transparent;
-			this.lblFds.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblFds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblFds.ForeColor = System.Drawing.Color.White;
 			this.lblFds.Location = new System.Drawing.Point(0, 0);
 			this.lblFds.Margin = new System.Windows.Forms.Padding(0);
 			this.lblFds.Name = "lblFds";
-			this.lblFds.Size = new System.Drawing.Size(25, 15);
+			this.lblFds.Size = new System.Drawing.Size(28, 13);
 			this.lblFds.TabIndex = 0;
 			this.lblFds.Text = "FDS";
 			// 
@@ -303,12 +303,12 @@
 			// 
 			this.lblNamco.AutoSize = true;
 			this.lblNamco.BackColor = System.Drawing.Color.Transparent;
-			this.lblNamco.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblNamco.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblNamco.ForeColor = System.Drawing.Color.White;
-			this.lblNamco.Location = new System.Drawing.Point(60, 0);
+			this.lblNamco.Location = new System.Drawing.Point(66, 0);
 			this.lblNamco.Margin = new System.Windows.Forms.Padding(0);
 			this.lblNamco.Name = "lblNamco";
-			this.lblNamco.Size = new System.Drawing.Size(37, 15);
+			this.lblNamco.Size = new System.Drawing.Size(41, 13);
 			this.lblNamco.TabIndex = 1;
 			this.lblNamco.Text = "Namco";
 			// 
@@ -316,12 +316,12 @@
 			// 
 			this.lblSunsoft.AutoSize = true;
 			this.lblSunsoft.BackColor = System.Drawing.Color.Transparent;
-			this.lblSunsoft.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblSunsoft.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblSunsoft.ForeColor = System.Drawing.Color.White;
-			this.lblSunsoft.Location = new System.Drawing.Point(97, 0);
+			this.lblSunsoft.Location = new System.Drawing.Point(107, 0);
 			this.lblSunsoft.Margin = new System.Windows.Forms.Padding(0);
 			this.lblSunsoft.Name = "lblSunsoft";
-			this.lblSunsoft.Size = new System.Drawing.Size(37, 15);
+			this.lblSunsoft.Size = new System.Drawing.Size(43, 13);
 			this.lblSunsoft.TabIndex = 5;
 			this.lblSunsoft.Text = "Sunsoft";
 			// 
@@ -329,12 +329,12 @@
 			// 
 			this.lblVrc6.AutoSize = true;
 			this.lblVrc6.BackColor = System.Drawing.Color.Transparent;
-			this.lblVrc6.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblVrc6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblVrc6.ForeColor = System.Drawing.Color.White;
-			this.lblVrc6.Location = new System.Drawing.Point(134, 0);
+			this.lblVrc6.Location = new System.Drawing.Point(150, 0);
 			this.lblVrc6.Margin = new System.Windows.Forms.Padding(0);
 			this.lblVrc6.Name = "lblVrc6";
-			this.lblVrc6.Size = new System.Drawing.Size(32, 15);
+			this.lblVrc6.Size = new System.Drawing.Size(35, 13);
 			this.lblVrc6.TabIndex = 4;
 			this.lblVrc6.Text = "VRC6";
 			// 
@@ -342,12 +342,12 @@
 			// 
 			this.lblVrc7.AutoSize = true;
 			this.lblVrc7.BackColor = System.Drawing.Color.Transparent;
-			this.lblVrc7.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblVrc7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblVrc7.ForeColor = System.Drawing.Color.White;
-			this.lblVrc7.Location = new System.Drawing.Point(166, 0);
+			this.lblVrc7.Location = new System.Drawing.Point(185, 0);
 			this.lblVrc7.Margin = new System.Windows.Forms.Padding(0);
 			this.lblVrc7.Name = "lblVrc7";
-			this.lblVrc7.Size = new System.Drawing.Size(32, 15);
+			this.lblVrc7.Size = new System.Drawing.Size(35, 13);
 			this.lblVrc7.TabIndex = 3;
 			this.lblVrc7.Text = "VRC7";
 			// 
@@ -426,7 +426,7 @@
 			// 
 			this.lblTime.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.lblTime.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.lblTime, 5);
+			this.tlpMain.SetColumnSpan(this.lblTime, 5);
 			this.lblTime.ForeColor = System.Drawing.Color.White;
 			this.lblTime.Location = new System.Drawing.Point(168, 258);
 			this.lblTime.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
@@ -438,7 +438,7 @@
 			// 
 			// pnlBackground
 			// 
-			this.tableLayoutPanel1.SetColumnSpan(this.pnlBackground, 5);
+			this.tlpMain.SetColumnSpan(this.pnlBackground, 5);
 			this.pnlBackground.Controls.Add(this.picBackground);
 			this.pnlBackground.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.pnlBackground.Location = new System.Drawing.Point(3, 3);
@@ -636,14 +636,14 @@
 			this.BackColor = System.Drawing.Color.Black;
 			this.Controls.Add(this.tlpRepeatShuffle);
 			this.Controls.Add(this.tableLayoutPanel4);
-			this.Controls.Add(this.tableLayoutPanel1);
+			this.Controls.Add(this.tlpMain);
 			this.Name = "ctrlNsfPlayer";
 			this.Size = new System.Drawing.Size(371, 281);
 			this.VisibleChanged += new System.EventHandler(this.ctrlNsfPlayer_VisibleChanged);
-			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
-			this.tableLayoutPanel2.ResumeLayout(false);
-			this.tableLayoutPanel2.PerformLayout();
+			this.tlpMain.ResumeLayout(false);
+			this.tlpMain.PerformLayout();
+			this.tlpNsfInfo.ResumeLayout(false);
+			this.tlpNsfInfo.PerformLayout();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).EndInit();
@@ -668,11 +668,11 @@
 
 		#endregion
 
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel tlpMain;
 		private System.Windows.Forms.Button btnPause;
 		private System.Windows.Forms.Button btnPrevious;
 		private System.Windows.Forms.Button btnNext;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.TableLayoutPanel tlpNsfInfo;
 		private System.Windows.Forms.Label lblCopyrightValue;
 		private System.Windows.Forms.Label lblArtistValue;
 		private System.Windows.Forms.Label lblTitleValue;

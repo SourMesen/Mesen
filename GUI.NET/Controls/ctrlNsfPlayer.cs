@@ -418,6 +418,24 @@ namespace Mesen.GUI.Controls
 		{
 			this.Shuffle = !this.Shuffle;
 		}
+
+		public new event MouseEventHandler MouseMove
+		{
+			add
+			{
+				this.pnlBackground.MouseMove += value;
+				this.picBackground.MouseMove += value;
+				this.tlpMain.MouseMove += value;
+				this.tlpNsfInfo.MouseMove += value;
+			}
+			remove
+			{
+				this.pnlBackground.MouseMove -= value;
+				this.picBackground.MouseMove -= value;
+				this.tlpMain.MouseMove -= value;
+				this.tlpNsfInfo.MouseMove -= value;
+			}
+		}
 	}
 
 	public class ComboboxItem

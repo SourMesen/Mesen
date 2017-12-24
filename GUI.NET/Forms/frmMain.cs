@@ -1175,5 +1175,13 @@ namespace Mesen.GUI.Forms
 		{
 			_currentRomPath = gameInfo.RomPath;
 		}
+
+		private void ctrlNsfPlayer_MouseMove(object sender, MouseEventArgs e)
+		{
+			if(this.HideMenuStrip && !this.menuStrip.ContainsFocus) {
+				Point nsfPlayerPosition = this.ctrlNsfPlayer.PointToClient(((Control)sender).PointToScreen(e.Location));
+				this.menuStrip.Visible = nsfPlayerPosition.Y < 30;
+			}
+		}
 	}
 }
