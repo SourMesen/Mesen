@@ -43,6 +43,7 @@ namespace Mesen.GUI.Forms
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
+			CursorManager.CaptureMouse();
 			SetMouseButtonState(Control.MouseButtons);
 		}
 

@@ -30,6 +30,15 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if(keyData == Keys.Escape) {
+				CursorManager.ReleaseMouse();
+			}
+
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
 		bool IMessageFilter.PreFilterMessage(ref Message m)
 		{
 			if(this.ContainsFocus) {

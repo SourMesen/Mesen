@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI
 {
@@ -157,6 +158,9 @@ namespace Mesen.GUI
 		public static void CaptureMouse()
 		{
 			if(AllowMouseCapture) {
+				if(!_mouseCaptured) {
+					InteropEmu.DisplayMessage("Input", ResourceHelper.GetMessage("MouseModeEnabled"));
+				}
 				_mouseCaptured = true;
 				HideMouse();
 				Form frm = Application.OpenForms[0];

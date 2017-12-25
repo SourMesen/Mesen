@@ -695,6 +695,8 @@
 
     <Message ID="ClearHistory">Clear History</Message>
     <Message ID="LastFolderUsed">Last Folder Used</Message>
+
+    <Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>    
     
     <Message ID="Resume">Продолжить</Message>
     <Message ID="Pause">Пауза</Message>

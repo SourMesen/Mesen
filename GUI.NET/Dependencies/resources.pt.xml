@@ -693,6 +693,8 @@
     <Message ID="ClearHistory">Limpar histórico</Message>
     <Message ID="LastFolderUsed">Última pasta usada</Message>
 
+    <Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
+
     <Message ID="Resume">Continuar</Message>
     <Message ID="Pause">Pausar</Message>
     <Message ID="StartServer">Iniciar servidor</Message>

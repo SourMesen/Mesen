@@ -1003,10 +1003,6 @@ namespace Mesen.GUI.Forms
 				return false;
 			}
 
-			if(keyData == Keys.Escape) {
-				CursorManager.ReleaseMouse();
-			}
-
 			if(this.HideMenuStrip && (keyData & Keys.Alt) == Keys.Alt) {
 				if(this.menuStrip.Visible && !this.menuStrip.ContainsFocus) {
 					this.menuStrip.Visible = false;

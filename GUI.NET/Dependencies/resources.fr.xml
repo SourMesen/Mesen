@@ -706,7 +706,9 @@
 
     <Message ID="ClearHistory">Effacer l'historique</Message>
     <Message ID="LastFolderUsed">Dernier dossier utilisé</Message>
-    
+
+    <Message ID="MouseModeEnabled">Mode souris activé - appuyez sur ESC ou pause pour y mettre fin.</Message>
+
     <Message ID="Resume">Continuer</Message>
     <Message ID="Pause">Pause</Message>
     <Message ID="StartServer">Démarrer serveur</Message>

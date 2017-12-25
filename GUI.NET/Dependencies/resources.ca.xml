@@ -677,6 +677,8 @@
     <Message ID="ClearHistory">Esborra el registre</Message>
     <Message ID="LastFolderUsed">Darrera carpeta utilitzada</Message>
 
+    <Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
+
     <Message ID="Resume">Continua</Message>
     <Message ID="Pause">Pausa</Message>
     <Message ID="StartServer">Inicia un servidor</Message>
