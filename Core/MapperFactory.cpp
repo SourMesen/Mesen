@@ -150,6 +150,7 @@
 #include "MMC3_189.h"
 #include "MMC3_196.h"
 #include "MMC3_197.h"
+#include "MMC3_198.h"
 #include "MMC3_199.h"
 #include "MMC3_205.h"
 #include "MMC3_215.h"
@@ -457,6 +458,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 195: return new MMC3_ChrRam(0x00, 0x03, 4);
 		case 196: return new MMC3_196();
 		case 197: return new MMC3_197();
+		case 198: return new MMC3_198();
 		case 199: return new MMC3_199();
 		case 200: return new Mapper200();
 		case 201: return new Mapper201();

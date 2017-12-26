@@ -424,6 +424,7 @@
     <ClInclude Include="IInputProvider.h" />
     <ClInclude Include="IInputRecorder.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="MMC3_198.h" />
     <ClInclude Include="MovieRecorder.h" />
     <ClInclude Include="AsciiTurboFile.h" />
     <ClInclude Include="SystemActionManager.h" />

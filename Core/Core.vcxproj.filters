@@ -1354,6 +1354,9 @@
     <ClInclude Include="Zapper.h">
       <Filter>Nes\Input\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="MMC3_198.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
