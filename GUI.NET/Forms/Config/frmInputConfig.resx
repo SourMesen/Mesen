@@ -121,6 +121,6 @@
     <value>17, 17</value>
   </metadata>
   <data name="lblKeyBinding.Text" xml:space="preserve">
-    <value>Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyword or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.</value>
+    <value>Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyboard or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.</value>
   </data>
 </root>

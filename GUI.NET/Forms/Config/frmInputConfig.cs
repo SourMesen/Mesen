@@ -423,35 +423,98 @@ namespace Mesen.GUI.Forms.Config
 		private void UpdateConflictWarning()
 		{
 			bool needWarning = false;
-			bool[] portConflicts = new bool[4];
-			Dictionary<uint, int> mappedKeys = new Dictionary<uint, int>();
+			bool[] portConflicts = new bool[6];
+			Dictionary<uint, List<int>> mappedKeys = new Dictionary<uint, List<int>>();
 			Action<int, uint> countMapping = (int port, uint keyCode) => {
 				if(keyCode > 0) {
 					if(mappedKeys.ContainsKey(keyCode)) {
 						needWarning = true;
-						portConflicts[port] = true;
-						portConflicts[mappedKeys[keyCode]] = true;
+						mappedKeys[keyCode].Add(port);
+						foreach(int conflictingPorts in mappedKeys[keyCode]) {
+							portConflicts[conflictingPorts] = true;
+						}
 					} else {
-						mappedKeys.Add(keyCode, port);
+						mappedKeys.Add(keyCode, new List<int>() { port });
 					}
 				}
 			};
 
+			InputInfo inputInfo = (InputInfo)Entity;
 			for(int i = 0; i < 4; i++) {
+				ControllerInfo controllerInfo = inputInfo.Controllers[i];
 				if(i < 2 || this.FourScoreAttached && ((i == 2 && btnSetupP3.Enabled) || (i == 3 && btnSetupP4.Enabled))) {
-					foreach(KeyMappings mappings in ((InputInfo)Entity).Controllers[i].Keys) {
-						countMapping(i, mappings.A);
-						countMapping(i, mappings.B);
-						countMapping(i, mappings.Select);
-						countMapping(i, mappings.Start);
-						countMapping(i, mappings.TurboA);
-						countMapping(i, mappings.TurboB);
-						countMapping(i, mappings.TurboSelect);
-						countMapping(i, mappings.TurboStart);
-						countMapping(i, mappings.Up);
-						countMapping(i, mappings.Down);
-						countMapping(i, mappings.Left);
-						countMapping(i, mappings.Right);
+					foreach(KeyMappings mappings in controllerInfo.Keys) {
+						switch(controllerInfo.ControllerType) {
+							case InteropEmu.ControllerType.StandardController:
+							case InteropEmu.ControllerType.SnesController:
+								countMapping(i, mappings.A);
+								countMapping(i, mappings.B);
+								countMapping(i, mappings.Select);
+								countMapping(i, mappings.Start);
+								countMapping(i, mappings.TurboA);
+								countMapping(i, mappings.TurboB);
+								countMapping(i, mappings.TurboSelect);
+								countMapping(i, mappings.TurboStart);
+								countMapping(i, mappings.Up);
+								countMapping(i, mappings.Down);
+								countMapping(i, mappings.Left);
+								countMapping(i, mappings.Right);
+								if(i == 1 && inputInfo.ConsoleType == ConsoleType.Famicom && controllerInfo.ControllerType == InteropEmu.ControllerType.StandardController) {
+									countMapping(i, mappings.Microphone);
+								}
+								if(controllerInfo.ControllerType == InteropEmu.ControllerType.SnesController) {
+									countMapping(i, mappings.LButton);
+									countMapping(i, mappings.RButton);
+
+								}
+								break;
+							case InteropEmu.ControllerType.PowerPad:
+								foreach(UInt32 button in mappings.PowerPadButtons) {
+									countMapping(i, button);
+								}
+								break;
+						}
+					}
+				}
+			}
+
+			if(inputInfo.ConsoleType == ConsoleType.Famicom) {
+				foreach(KeyMappings mappings in inputInfo.Controllers[0].Keys) {
+					switch(inputInfo.ExpansionPortDevice) {
+						case InteropEmu.ExpansionPortDevice.ExcitingBoxing:
+							foreach(UInt32 button in mappings.ExcitingBoxingButtons) {
+								countMapping(4, button);
+							}
+							break;
+						case InteropEmu.ExpansionPortDevice.FamilyTrainerMat:
+							foreach(UInt32 button in mappings.PowerPadButtons) {
+								countMapping(4, button);
+							}
+							break;
+						case InteropEmu.ExpansionPortDevice.JissenMahjong:
+							foreach(UInt32 button in mappings.JissenMahjongButtons) {
+								countMapping(4, button);
+							}
+							break;
+						case InteropEmu.ExpansionPortDevice.Pachinko:
+							foreach(UInt32 button in mappings.PachinkoButtons) {
+								countMapping(4, button);
+							}
+							break;
+						case InteropEmu.ExpansionPortDevice.PartyTap:
+							foreach(UInt32 button in mappings.PartyTapButtons) {
+								countMapping(4, button);
+							}
+							break;
+					}
+				}
+			}
+
+			if(_hasCartridgeInput && btnSetupCartridge.Enabled) {
+				//Bandai microphone
+				foreach(KeyMappings mappings in inputInfo.Controllers[0].Keys) {
+					foreach(UInt32 button in mappings.BandaiMicrophoneButtons) {
+						countMapping(5, button);
 					}
 				}
 			}
@@ -463,7 +526,7 @@ namespace Mesen.GUI.Forms.Config
 			if(portConflicts[0] == (btnSetupP1.Image == null)) {
 				btnSetupP1.Image = portConflicts[0] ? Properties.Resources.Warning : null;
 			}
-			if(portConflicts[0] == (btnSetupP2.Image == null)) {
+			if(portConflicts[1] == (btnSetupP2.Image == null)) {
 				btnSetupP2.Image = portConflicts[1] ? Properties.Resources.Warning : null;
 			}
 			if(portConflicts[2] == (btnSetupP3.Image == null)) {
@@ -471,6 +534,12 @@ namespace Mesen.GUI.Forms.Config
 			}
 			if(portConflicts[3] == (btnSetupP4.Image == null)) {
 				btnSetupP4.Image = portConflicts[3] ? Properties.Resources.Warning : null;
+			}
+			if(portConflicts[4] == (btnSetupExp.Image == null)) {
+				btnSetupExp.Image = portConflicts[4] ? Properties.Resources.Warning : null;
+			}
+			if(portConflicts[5] == (btnSetupCartridge.Image == null)) {
+				btnSetupCartridge.Image = portConflicts[5] ? Properties.Resources.Warning : null;
 			}
 		}
 
