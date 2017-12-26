@@ -334,5 +334,18 @@ namespace Mesen.GUI.Debugger.Controls
 			get { return this.ctrlHexBox.ReadOnly; }
 			set { this.ctrlHexBox.ReadOnly = value; }
 		}
+
+		public delegate void ByteMouseHoverHandler(int address);
+		public event ByteMouseHoverHandler ByteMouseHover; 
+		private void ctrlHexBox_MouseMove(object sender, MouseEventArgs e)
+		{
+			BytePositionInfo bpi = ctrlHexBox.GetHexBytePositionInfo(e.Location);
+			ByteMouseHover?.Invoke((int)bpi.Index);
+		}
+
+		private void ctrlHexBox_MouseLeave(object sender, EventArgs e)
+		{
+			ByteMouseHover?.Invoke(-1);
+		}
 	}
 }

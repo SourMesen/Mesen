@@ -34,6 +34,8 @@ namespace Mesen.GUI.Debugger
 
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
+			this.mnuShowLabelInfoOnMouseOver.Checked = ConfigManager.Config.DebugInfo.RamShowLabelInfo;
+
 			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
 			
 			this.mnuHighlightExecution.Checked = ConfigManager.Config.DebugInfo.RamHighlightExecution;
@@ -218,6 +220,7 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.RamAutoRefresh = this.mnuAutoRefresh.Checked;
 			ConfigManager.Config.DebugInfo.RamShowCharacters = this.mnuShowCharacters.Checked;
+			ConfigManager.Config.DebugInfo.RamShowLabelInfo = this.mnuShowLabelInfoOnMouseOver.Checked;
 			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlHexViewer.HexFont.Size;
 
 			ConfigManager.Config.DebugInfo.RamHighlightExecution = this.mnuHighlightExecution.Checked;
@@ -499,6 +502,78 @@ namespace Mesen.GUI.Debugger
 			using(frmMemoryViewerColors frm = new frmMemoryViewerColors()) {
 				if(frm.ShowDialog(this, this) == DialogResult.OK) {
 					this.RefreshData();
+				}
+			}
+		}
+
+		private frmCodeTooltip _tooltip = null;
+		private CodeLabel _lastLabelTooltip = null;
+		private void ctrlHexViewer_ByteMouseHover(int address)
+		{
+			if(address < 0 || !mnuShowLabelInfoOnMouseOver.Checked) {
+				if(_tooltip != null) {
+					_tooltip.Close();
+					_lastLabelTooltip = null;
+				}
+				return;
+			}
+
+			CodeLabel label = null;
+			switch(_memoryType) {
+				case DebugMemoryType.CpuMemory:
+					AddressTypeInfo info = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)address, ref info);
+					if(info.Address >= 0) {
+						label = LabelManager.GetLabel((UInt32)info.Address, info.Type);
+					} 
+					if(label == null) {
+						label = LabelManager.GetLabel((UInt32)address, AddressType.Register);
+					}
+					break;
+
+				case DebugMemoryType.InternalRam:
+					label = LabelManager.GetLabel((UInt32)address, AddressType.InternalRam);
+					break;
+
+				case DebugMemoryType.WorkRam:
+					label = LabelManager.GetLabel((UInt32)address, AddressType.WorkRam);
+					break;
+
+				case DebugMemoryType.SaveRam:
+					label = LabelManager.GetLabel((UInt32)address, AddressType.SaveRam);
+					break;
+
+				case DebugMemoryType.PrgRom:
+					label = LabelManager.GetLabel((UInt32)address, AddressType.PrgRom);
+					break;
+			}
+
+			if(label != null) {
+				if(_lastLabelTooltip != label) {
+					if(_tooltip != null) {
+						_tooltip.Close();
+					}
+
+					Dictionary<string, string> values = new Dictionary<string, string>();
+					if(!string.IsNullOrWhiteSpace(label.Label)) {
+						values["Label"] = label.Label;
+					}
+					values["Address"] = "$" + label.Address.ToString("X4");
+					values["Address Type"] = label.AddressType.ToString();
+					if(!string.IsNullOrWhiteSpace(label.Comment)) {
+						values["Comment"] = label.Comment;
+					}
+					_tooltip = new frmCodeTooltip(values);
+					_tooltip.Left = Cursor.Position.X + 10;
+					_tooltip.Top = Cursor.Position.Y + 10;
+					_tooltip.Show(this);
+
+					_lastLabelTooltip = label;
+				}
+			} else {
+				if(_tooltip != null) {
+					_tooltip.Close();
+					_lastLabelTooltip = null;
 				}
 			}
 		}

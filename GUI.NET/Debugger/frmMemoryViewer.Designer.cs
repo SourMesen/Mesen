@@ -70,14 +70,16 @@
 			this.mnuHideWrittenBytes = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHideExecutedBytes = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuConfigureColors = new System.Windows.Forms.ToolStripMenuItem();
 			this.fontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCharacters = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowLabelInfoOnMouseOver = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,7 +96,6 @@
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
 			this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
-			this.mnuConfigureColors = new System.Windows.Forms.ToolStripMenuItem();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
@@ -115,6 +116,7 @@
 			this.ctrlHexViewer.RequiredWidthChanged += new System.EventHandler(this.ctrlHexViewer_RequiredWidthChanged);
 			this.ctrlHexViewer.InitializeContextMenu += new System.EventHandler(this.ctrlHexViewer_InitializeContextMenu);
 			this.ctrlHexViewer.ByteChanged += new Be.Windows.Forms.DynamicByteProvider.ByteChangedHandler(this.ctrlHexViewer_ByteChanged);
+			this.ctrlHexViewer.ByteMouseHover += new Mesen.GUI.Debugger.Controls.ctrlHexViewer.ByteMouseHoverHandler(this.ctrlHexViewer_ByteMouseHover);
 			// 
 			// flowLayoutPanel1
 			// 
@@ -249,7 +251,8 @@
             this.mnuRefresh,
             this.toolStripMenuItem2,
             this.mnuAutoRefresh,
-            this.mnuShowCharacters});
+            this.mnuShowCharacters,
+            this.mnuShowLabelInfoOnMouseOver});
 			this.mnuView.Name = "mnuView";
 			this.mnuView.Size = new System.Drawing.Size(44, 20);
 			this.mnuView.Text = "View";
@@ -263,7 +266,7 @@
             this.toolStripMenuItem6,
             this.fadeSpeedToolStripMenuItem});
 			this.highlightToolStripMenuItem.Name = "highlightToolStripMenuItem";
-			this.highlightToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+			this.highlightToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
 			this.highlightToolStripMenuItem.Text = "Memory Access Highlighting";
 			// 
 			// mnuHightlightReads
@@ -359,7 +362,7 @@
             this.mnuHighlightChrDrawnBytes,
             this.mnuHighlightChrReadBytes});
 			this.dataTypeHighlightingToolStripMenuItem.Name = "dataTypeHighlightingToolStripMenuItem";
-			this.dataTypeHighlightingToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+			this.dataTypeHighlightingToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
 			this.dataTypeHighlightingToolStripMenuItem.Text = "Data Type Highlighting";
 			// 
 			// mnuHighlightCodeBytes
@@ -403,7 +406,7 @@
             this.mnuHideWrittenBytes,
             this.mnuHideExecutedBytes});
 			this.fadeToolStripMenuItem.Name = "fadeToolStripMenuItem";
-			this.fadeToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+			this.fadeToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
 			this.fadeToolStripMenuItem.Text = "De-emphasize";
 			// 
 			// mnuHideUnusedBytes
@@ -441,16 +444,15 @@
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(245, 6);
 			// 
-			// mnuRefresh
+			// mnuConfigureColors
 			// 
-			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
-			this.mnuRefresh.Name = "mnuRefresh";
-			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(228, 22);
-			this.mnuRefresh.Text = "Refresh";
-			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
+			this.mnuConfigureColors.Image = global::Mesen.GUI.Properties.Resources.PipetteSmall;
+			this.mnuConfigureColors.Name = "mnuConfigureColors";
+			this.mnuConfigureColors.Size = new System.Drawing.Size(248, 22);
+			this.mnuConfigureColors.Text = "Configure Colors";
+			this.mnuConfigureColors.Click += new System.EventHandler(this.mnuConfigureColors_Click);
 			// 
 			// fontSizeToolStripMenuItem
 			// 
@@ -460,7 +462,7 @@
             this.mnuResetFontSize});
 			this.fontSizeToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Font;
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
-			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
 			this.fontSizeToolStripMenuItem.Text = "Text Size";
 			// 
 			// mnuIncreaseFontSize
@@ -490,10 +492,19 @@
 			this.mnuResetFontSize.Text = "Reset to Default";
 			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
 			// 
+			// mnuRefresh
+			// 
+			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
+			this.mnuRefresh.Name = "mnuRefresh";
+			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
+			this.mnuRefresh.Size = new System.Drawing.Size(248, 22);
+			this.mnuRefresh.Text = "Refresh";
+			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
+			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(245, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -501,7 +512,7 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(228, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(248, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -511,8 +522,15 @@
 			this.mnuShowCharacters.CheckOnClick = true;
 			this.mnuShowCharacters.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuShowCharacters.Name = "mnuShowCharacters";
-			this.mnuShowCharacters.Size = new System.Drawing.Size(228, 22);
+			this.mnuShowCharacters.Size = new System.Drawing.Size(248, 22);
 			this.mnuShowCharacters.Text = "Show characters";
+			// 
+			// mnuShowLabelInfoOnMouseOver
+			// 
+			this.mnuShowLabelInfoOnMouseOver.CheckOnClick = true;
+			this.mnuShowLabelInfoOnMouseOver.Name = "mnuShowLabelInfoOnMouseOver";
+			this.mnuShowLabelInfoOnMouseOver.Size = new System.Drawing.Size(248, 22);
+			this.mnuShowLabelInfoOnMouseOver.Text = "Show label tooltip on mouseover";
 			// 
 			// toolStripMenuItem1
 			// 
@@ -665,14 +683,6 @@
 			this.tmrRefresh.Enabled = true;
 			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
 			// 
-			// mnuConfigureColors
-			// 
-			this.mnuConfigureColors.Image = global::Mesen.GUI.Properties.Resources.PipetteSmall;
-			this.mnuConfigureColors.Name = "mnuConfigureColors";
-			this.mnuConfigureColors.Size = new System.Drawing.Size(228, 22);
-			this.mnuConfigureColors.Text = "Configure Colors";
-			this.mnuConfigureColors.Click += new System.EventHandler(this.mnuConfigureColors_Click);
-			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -767,5 +777,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuHighlightChrDrawnBytes;
 		private System.Windows.Forms.ToolStripMenuItem mnuHighlightChrReadBytes;
 		private System.Windows.Forms.ToolStripMenuItem mnuConfigureColors;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowLabelInfoOnMouseOver;
 	}
 }

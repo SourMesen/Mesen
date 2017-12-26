@@ -7,7 +7,7 @@ namespace Be.Windows.Forms
     /// <summary>
     /// Represents a position in the HexBox control
     /// </summary>
-    struct BytePositionInfo
+    internal struct BytePositionInfo
     {
         public BytePositionInfo(long index, int characterPosition)
         {

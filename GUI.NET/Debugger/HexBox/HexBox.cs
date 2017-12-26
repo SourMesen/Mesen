@@ -1868,7 +1868,7 @@ namespace Be.Windows.Forms
 			}
 		}
 
-		BytePositionInfo GetHexBytePositionInfo(Point p)
+		internal BytePositionInfo GetHexBytePositionInfo(Point p)
 		{
 			System.Diagnostics.Debug.WriteLine("GetHexBytePositionInfo()", "HexBox");
 
