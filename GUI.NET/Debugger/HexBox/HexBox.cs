@@ -1716,6 +1716,8 @@ namespace Be.Windows.Forms
 
 			InternalSelect(start, length);
 			ScrollByteIntoView();
+
+			ActivateKeyInterpreter();
 		}
 
 		void InternalSelect(long start, long length)

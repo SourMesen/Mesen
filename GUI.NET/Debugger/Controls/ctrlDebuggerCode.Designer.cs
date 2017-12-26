@@ -48,6 +48,7 @@
 			this.mnuHidePrgAddresses = new System.Windows.Forms.ToolStripMenuItem();
 			this.sepEditLabel = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.sepAddToWatch = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,6 +96,7 @@
             this.mnuShowLineNotes,
             this.sepEditLabel,
             this.mnuEditLabel,
+            this.mnuEditInMemoryViewer,
             this.mnuToggleBreakpoint,
             this.sepAddToWatch,
             this.mnuAddToWatch,
@@ -249,6 +251,15 @@
 			this.mnuEditLabel.Size = new System.Drawing.Size(258, 22);
 			this.mnuEditLabel.Text = "Edit Label";
 			this.mnuEditLabel.Click += new System.EventHandler(this.mnuEditLabel_Click);
+			// 
+			// mnuEditInMemoryViewer
+			// 
+			this.mnuEditInMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuEditInMemoryViewer.Name = "mnuEditInMemoryViewer";
+			this.mnuEditInMemoryViewer.ShortcutKeys = System.Windows.Forms.Keys.F1;
+			this.mnuEditInMemoryViewer.Size = new System.Drawing.Size(258, 22);
+			this.mnuEditInMemoryViewer.Text = "Edit in Memory Viewer";
+			this.mnuEditInMemoryViewer.Click += new System.EventHandler(this.mnuEditInMemoryViewer_Click);
 			// 
 			// mnuToggleBreakpoint
 			// 
@@ -536,5 +547,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSubroutine;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSelectedCode;
 		private System.Windows.Forms.ToolStripMenuItem copySelectionToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
 	}
 }

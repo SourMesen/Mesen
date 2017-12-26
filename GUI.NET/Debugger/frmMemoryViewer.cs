@@ -73,7 +73,14 @@ namespace Mesen.GUI.Debugger
 			DebugWorkspaceManager.SaveWorkspace();
 		}
 
-		void InitTblMappings()
+		public void ShowAddress(int address)
+		{
+			tabMain.SelectedTab = tpgMemoryViewer;
+			cboMemoryType.SetEnumValue(DebugMemoryType.CpuMemory);
+			ctrlHexViewer.GoToAddress(address);
+		}
+
+		private void InitTblMappings()
 		{
 			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace();
 			if(workspace.TblMappings != null && workspace.TblMappings.Count > 0) {
@@ -86,7 +93,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
+		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshData()));

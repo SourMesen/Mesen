@@ -116,6 +116,14 @@ namespace Mesen.GUI.Debugger.Controls
 			this.SetFontSize(BaseControl.DefaultFontSize);
 		}
 
+		public void GoToAddress(int address)
+		{
+			this.ctrlHexBox.ScrollByteIntoView(GetData().Length - 1);
+			this.ctrlHexBox.ScrollByteIntoView(address);
+			this.ctrlHexBox.Select(address, 0);
+			this.ctrlHexBox.Focus();
+		}
+
 		public void GoToAddress()
 		{
 			GoToAddress address = new GoToAddress();
@@ -128,8 +136,7 @@ namespace Mesen.GUI.Debugger.Controls
 			Point topLeft = this.PointToScreen(new Point(0, 0));
 			frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
 			if(frm.ShowDialog() == DialogResult.OK) {
-				this.ctrlHexBox.ScrollByteIntoView((int)address.Address);
-				this.ctrlHexBox.Focus();
+				GoToAddress((int)address.Address);
 			}
 		}
 

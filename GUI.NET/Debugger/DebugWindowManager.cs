@@ -9,7 +9,7 @@ namespace Mesen.GUI.Debugger
 {
 	public class DebugWindowManager
 	{
-		private static List<Form> _openedWindows = new List<Form>();
+		private static HashSet<Form> _openedWindows = new HashSet<Form>();
 
 		public static void OpenDebugWindow(DebugWindow window)
 		{
@@ -41,6 +41,18 @@ namespace Mesen.GUI.Debugger
 			frm.Show();
 		}
 
+		public static void OpenMemoryViewer(int address)
+		{
+			frmMemoryViewer frm = GetMemoryViewer();
+			if(frm == null) {
+				frm = new frmMemoryViewer();
+				frm.FormClosed += Debugger_FormClosed;
+				_openedWindows.Add(frm);
+			}
+			frm.Show();
+			frm.ShowAddress(address);
+		}
+
 		public static void OpenScriptWindow(bool forceBlank)
 		{
 			frmScript frm = new frmScript(forceBlank);
@@ -51,11 +63,12 @@ namespace Mesen.GUI.Debugger
 
 		public static frmDebugger GetDebugger()
 		{
-			int index = _openedWindows.FindIndex((form) => form.GetType() == typeof(frmDebugger));
-			if(index >= 0) {
-				return (frmDebugger)_openedWindows[index];
-			}
-			return null;
+			return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmDebugger)) as frmDebugger;
+		}
+
+		public static frmMemoryViewer GetMemoryViewer()
+		{
+			return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmMemoryViewer)) as frmMemoryViewer;
 		}
 
 		public static void CloseAll()
@@ -69,24 +82,13 @@ namespace Mesen.GUI.Debugger
 		private static Form GetExistingSingleInstanceWindow(DebugWindow window)
 		{
 			//Only one of each of these windows can be opened at once, check if one is already opened
-			int index = -1;
 			switch(window) {
-				case DebugWindow.TraceLogger:
-					index = _openedWindows.FindIndex((form) => form.GetType() == typeof(frmTraceLogger));
-					break;
-				case DebugWindow.Assembler:
-					index = _openedWindows.FindIndex((form) => form.GetType() == typeof(frmAssembler));
-					break;
-				case DebugWindow.Debugger:
-					index = _openedWindows.FindIndex((form) => form.GetType() == typeof(frmDebugger));
-					break;
+				case DebugWindow.TraceLogger: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmTraceLogger));
+				case DebugWindow.Assembler: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmAssembler));
+				case DebugWindow.Debugger: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmDebugger));
 			}
 
-			if(index >= 0) {
-				return _openedWindows[index];
-			} else {
-				return null;
-			}
+			return null;
 		}
 
 		private static void Debugger_FormClosed(object sender, FormClosedEventArgs e)

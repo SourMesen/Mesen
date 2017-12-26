@@ -480,6 +480,9 @@ namespace Mesen.GUI.Debugger
 				mnuEditLabel.Enabled = true;
 				mnuEditLabel.Text = $"Edit Label ({word})";
 
+				mnuEditInMemoryViewer.Enabled = true;
+				mnuEditInMemoryViewer.Text = $"Edit in Memory Viewer ({word})";
+
 				return true;
 			} else {
 				mnuGoToLocation.Enabled = false;
@@ -490,9 +493,17 @@ namespace Mesen.GUI.Debugger
 				mnuFindOccurrences.Text = "Find Occurrences";
 				mnuEditLabel.Enabled = false;
 				mnuEditLabel.Text = "Edit Label";
+				mnuEditInMemoryViewer.Enabled = false;
+				mnuEditInMemoryViewer.Text = $"Edit in Memory Viewer";
 
-				_lastClickedAddress = ctrlCodeViewer.GetLineNumberAtPosition(mouseLocation.Y);
-				if(mouseLocation.X < this.ctrlCodeViewer.CodeMargin && _lastClickedAddress >= 0) {
+
+				if(mouseLocation.X < this.ctrlCodeViewer.CodeMargin) {
+					_lastClickedAddress = ctrlCodeViewer.GetLineNumberAtPosition(mouseLocation.Y);
+				} else {
+					_lastClickedAddress = ctrlCodeViewer.LastSelectedLine;
+				}
+
+				if(_lastClickedAddress >= 0) {
 					//Cursor is in the margin, over an address label					
 					string address = $"${_lastClickedAddress.ToString("X4")}";
 					_newWatchValue = $"[{address}]";
@@ -504,7 +515,8 @@ namespace Mesen.GUI.Debugger
 					mnuFindOccurrences.Text = $"Find Occurrences ({address})";
 					mnuEditLabel.Enabled = true;
 					mnuEditLabel.Text = $"Edit Label ({address})";
-
+					mnuEditInMemoryViewer.Enabled = true;
+					mnuEditInMemoryViewer.Text = $"Edit in Memory Viewer ({address})";
 					return true;
 				}
 
@@ -866,6 +878,13 @@ namespace Mesen.GUI.Debugger
 		private void copySelectionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			this.ctrlCodeViewer.CopySelection();
+		}
+
+		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
+		{
+			if(UpdateContextMenu(_previousLocation)) {
+				DebugWindowManager.OpenMemoryViewer(_lastClickedAddress);
+			}
 		}
 	}
 
