@@ -53,6 +53,8 @@ namespace Mesen.GUI.Config
 		public List<ShortcutKeyInfo> ShortcutKeys1;
 		public List<ShortcutKeyInfo> ShortcutKeys2;
 
+		public bool AlwaysOnTop = false;
+
 		public bool DisableGameDatabase = false;
 		public bool DisableOsd = false;
 

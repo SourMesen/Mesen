@@ -70,6 +70,7 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.ToggleFrameCounter,
 				EmulatorShortcut.ToggleLagCounter,
 				EmulatorShortcut.ToggleOsd,
+				EmulatorShortcut.ToggleAlwaysOnTop,
 				EmulatorShortcut.ToggleBackground,
 				EmulatorShortcut.ToggleSprites,
 				EmulatorShortcut.ToggleCheats,

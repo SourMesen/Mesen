@@ -131,6 +131,7 @@
     <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Toggle Frame Counter</Message>
     <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Toggle Lag Counter</Message>
     <Message ID="EmulatorShortcutMappings_ToggleOsd">Toggle OSD (On-Screen Display)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Toggle Display on Top</Message>
     <Message ID="EmulatorShortcutMappings_ToggleBackground">Toggle Background Layer</Message>
     <Message ID="EmulatorShortcutMappings_ToggleSprites">Toggle Sprite Layer</Message>
     <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>

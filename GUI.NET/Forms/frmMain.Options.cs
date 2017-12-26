@@ -130,6 +130,7 @@ namespace Mesen.GUI.Forms
 					UpdateRecentFiles();
 					InitializeNsfMode(true);
 					ctrlRecentGames.UpdateGameInfo();
+					TopMost = ConfigManager.Config.PreferenceInfo.AlwaysOnTop;
 				} else {
 					UpdateVideoSettings();
 					UpdateMenus();

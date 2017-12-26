@@ -426,6 +426,7 @@ enum class EmulatorShortcut
 	ToggleFrameCounter,
 	ToggleLagCounter,
 	ToggleOsd,
+	ToggleAlwaysOnTop,
 	ToggleSprites,
 	ToggleBackground,
 

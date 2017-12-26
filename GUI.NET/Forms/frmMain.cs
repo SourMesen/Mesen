@@ -159,6 +159,8 @@ namespace Mesen.GUI.Forms
 
 			InitializeEmu();
 
+			TopMost = ConfigManager.Config.PreferenceInfo.AlwaysOnTop;
+
 			UpdateMenus();
 			UpdateRecentFiles();
 
@@ -669,6 +671,7 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.ToggleFrameCounter: ToggleFrameCounter(); break;
 				case EmulatorShortcut.ToggleLagCounter: ToggleLagCounter(); break;
 				case EmulatorShortcut.ToggleOsd: ToggleOsd(); break;
+				case EmulatorShortcut.ToggleAlwaysOnTop: ToggleAlwaysOnTop(); break;
 				case EmulatorShortcut.MaxSpeed: ToggleMaxSpeed(); break;
 				case EmulatorShortcut.ToggleFullscreen: ToggleFullscreen(); restoreFullscreen = false; break;
 
@@ -784,6 +787,13 @@ namespace Mesen.GUI.Forms
 			ConfigManager.Config.PreferenceInfo.DisableOsd = !ConfigManager.Config.PreferenceInfo.DisableOsd;
 			PreferenceInfo.ApplyConfig();
 			ConfigManager.ApplyChanges();
+		}
+
+		private void ToggleAlwaysOnTop()
+		{
+			ConfigManager.Config.PreferenceInfo.AlwaysOnTop = !ConfigManager.Config.PreferenceInfo.AlwaysOnTop;
+			ConfigManager.ApplyChanges();
+			this.TopMost = ConfigManager.Config.PreferenceInfo.AlwaysOnTop;
 		}
 
 		private void ToggleSprites()

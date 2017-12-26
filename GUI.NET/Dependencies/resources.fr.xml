@@ -401,6 +401,8 @@
       <Control ID="chkDisableGameDatabase">Désactiver la base de données des jeux</Control>
       <Control ID="chkDisableOsd">Désactiver les messages à l'écran (OSD)</Control>
 
+      <Control ID="chkAlwaysOnTop">Afficher la fenêtre au premier plan</Control>
+
       <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Jouer la piste suivante après</Control>
       <Control ID="lblNsfMillisecondsOfSilence">millisecondes de silence</Control>
@@ -825,6 +827,7 @@
     <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Activer/désactiver le compteur d'images</Message>
     <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Activer/désactiver le compteur de lag</Message>
     <Message ID="EmulatorShortcutMappings_ToggleOsd">Activer/désactiver les messages à l'écran (OSD)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Activer/désactiver l'affichage en premier plan</Message>
     <Message ID="EmulatorShortcutMappings_ToggleBackground">Activer/désactiver l'arrière-plan</Message>
     <Message ID="EmulatorShortcutMappings_ToggleSprites">Activer/désactiver les sprites</Message>
     <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Activer/désactiver le mode clavier</Message>

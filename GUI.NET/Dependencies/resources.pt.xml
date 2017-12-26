@@ -398,6 +398,8 @@
       <Control ID="chkDisableGameDatabase">Desabilitar a base de dados de jogos</Control>
       <Control ID="chkDisableOsd">Desativar exibição na tela (OSD)</Control>
 
+      <Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>
+
       <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Reproduzir a faixa seguinte depois</Control>
       <Control ID="lblNsfMillisecondsOfSilence">milissegundos de silêncio</Control>
@@ -810,6 +812,7 @@
     <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Alternar contador de quadro</Message>
     <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lagr</Message>
     <Message ID="EmulatorShortcutMappings_ToggleOsd">Alternar OSD (Menu na tela)</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Toggle Display on Top</Message>
     <Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar camada de fundo</Message>
     <Message ID="EmulatorShortcutMappings_ToggleSprites">Alternar camada de sprite</Message>
     <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>

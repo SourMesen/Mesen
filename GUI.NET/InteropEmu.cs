@@ -1577,6 +1577,7 @@ namespace Mesen.GUI
 		ToggleFrameCounter,
 		ToggleLagCounter,
 		ToggleOsd,
+		ToggleAlwaysOnTop,
 		ToggleSprites,
 		ToggleBackground,
 
