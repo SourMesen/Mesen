@@ -934,6 +934,9 @@ namespace Mesen.GUI
 
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 99)]
 			public UInt32[] SuborKeyboardButtons;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public UInt32[] BandaiMicrophoneButtons;
 		}
 
 		public enum StereoFilter
@@ -1900,6 +1903,8 @@ namespace Mesen.GUI
 		VsSystem = 4,
 		BarcodeReader = 8,
 		TapeRecorder = 16,
+		BandaiMicrophone = 32,
+		DatachBarcodeReader = 64,
 	}
 
 	public enum ScreenRotation

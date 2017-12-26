@@ -67,6 +67,7 @@ namespace Mesen.GUI.Forms
 					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
 					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
 					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
+					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
 				}
 
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();

@@ -310,10 +310,35 @@ struct KeyMapping
 	uint32_t ExcitingBoxingButtons[8] = {};
 	uint32_t JissenMahjongButtons[21] = {};
 	uint32_t SuborKeyboardButtons[99] = {};
+	uint32_t BandaiMicrophoneButtons[3] = {};
 
 	bool HasKeySet()
 	{
-		return true || A || B || Up || Down || Left || Right || Start || Select || TurboA || TurboB || TurboStart || TurboSelect || Microphone || LButton || RButton;
+		if(A || B || Up || Down || Left || Right || Start || Select || TurboA || TurboB || TurboStart || TurboSelect || Microphone || LButton || RButton) {
+			return true;
+		}
+
+		bool hasKeyBinding = false;
+		hasKeyBinding |= HasKeyBinding(PowerPadButtons, sizeof(PowerPadButtons) / sizeof(PowerPadButtons[0]));
+		hasKeyBinding |= HasKeyBinding(FamilyBasicKeyboardButtons, sizeof(FamilyBasicKeyboardButtons) / sizeof(FamilyBasicKeyboardButtons[0]));
+		hasKeyBinding |= HasKeyBinding(PartyTapButtons, sizeof(PartyTapButtons) / sizeof(PartyTapButtons[0]));
+		hasKeyBinding |= HasKeyBinding(PachinkoButtons, sizeof(PachinkoButtons) / sizeof(PachinkoButtons[0]));
+		hasKeyBinding |= HasKeyBinding(ExcitingBoxingButtons, sizeof(ExcitingBoxingButtons) / sizeof(ExcitingBoxingButtons[0]));
+		hasKeyBinding |= HasKeyBinding(JissenMahjongButtons, sizeof(JissenMahjongButtons) / sizeof(JissenMahjongButtons[0]));
+		hasKeyBinding |= HasKeyBinding(SuborKeyboardButtons, sizeof(SuborKeyboardButtons) / sizeof(SuborKeyboardButtons[0]));
+		hasKeyBinding |= HasKeyBinding(BandaiMicrophoneButtons, sizeof(BandaiMicrophoneButtons) / sizeof(BandaiMicrophoneButtons[0]));
+		return hasKeyBinding;
+	}
+
+private:
+	bool HasKeyBinding(uint32_t* buttons, uint32_t count)
+	{
+		for(uint32_t i = 0; i < count; i++) {
+			if(buttons[i] != 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 };
 

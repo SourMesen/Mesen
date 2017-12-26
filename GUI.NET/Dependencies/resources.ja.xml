@@ -185,6 +185,8 @@
       <Control ID="btnSetupP4">設定</Control>
       <Control ID="btnSetupP3">設定</Control>
       <Control ID="btnSetupExp">設定</Control>
+      <Control ID="btnSetupCartridge">設定</Control>
+      <Control ID="lblCartridge">ロムカセット:</Control>
       <Control ID="lblPlayer1">プレーヤー 1:</Control>
       <Control ID="lblPlayer2">プレーヤー 2:</Control>
       <Control ID="lblPlayer4">プレーヤー 4:</Control>
@@ -655,6 +657,8 @@
     </Form>
     <Form ID="frmPachinkoConfig">
     </Form>
+    <Form ID="frmBandaiMicrophone">
+    </Form>
   </Forms>
   <UserControls>
     <UserControl ID="ctrlExcitingBoxingConfig">
@@ -670,6 +674,9 @@
     <UserControl ID="ctrlPachinkoConfig">
       <Control ID="lblPress">押す</Control>
       <Control ID="lblRelease">放す</Control>
+    </UserControl>
+    <UserControl ID="ctrlBandaiMicrophone">
+      <Control ID="lblMicrophone">マイク</Control>
     </UserControl>
   </UserControls>
   <Messages>
@@ -692,7 +699,9 @@
     <Message ID="LastFolderUsed">最後に使用したフォルダ</Message>
 
     <Message ID="MouseModeEnabled">マウスモード有効。 無効にするにはESCやポースボタンを使ってください。</Message>
-
+    <Message ID="BandaiMicrophone">Bandaiマイクロフォン</Message>
+    <Message ID="DatachBarcodeReader">Datachバーコードリーダー</Message>
+    
     <Message ID="Resume">再開</Message>
     <Message ID="Pause">ポーズ</Message>
     <Message ID="StartServer">サーバを起動する</Message>

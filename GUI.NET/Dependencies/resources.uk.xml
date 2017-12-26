@@ -183,6 +183,8 @@
       <Control ID="btnSetupP4">Налаштувати</Control>
       <Control ID="btnSetupP3">Налаштувати</Control>
       <Control ID="btnSetupExp">Налаштувати</Control>
+      <Control ID="btnSetupCartridge">Налаштувати</Control>
+      <Control ID="lblCartridge">Cartridge:</Control>
       <Control ID="lblPlayer1">Контролер 1:</Control>
       <Control ID="lblPlayer2">Контролер 2:</Control>
       <Control ID="lblPlayer4">Контролер 4:</Control>
@@ -660,6 +662,8 @@
     </Form>
     <Form ID="frmPachinkoConfig">
     </Form>
+    <Form ID="frmBandaiMicrophone">
+    </Form>
   </Forms>
   <UserControls>
     <UserControl ID="ctrlExcitingBoxingConfig">
@@ -675,6 +679,9 @@
     <UserControl ID="ctrlPachinkoConfig">
       <Control ID="lblPress">Press</Control>
       <Control ID="lblRelease">Release</Control>
+    </UserControl>
+    <UserControl ID="ctrlBandaiMicrophone">
+      <Control ID="lblMicrophone">Microphone</Control>
     </UserControl>
   </UserControls>
   <Messages>
@@ -697,7 +704,9 @@
     <Message ID="LastFolderUsed">Використовувана остання папка</Message>
 
     <Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
-    
+    <Message ID="BandaiMicrophone">Bandai Microphone</Message>
+    <Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
+   
     <Message ID="Resume">Продовжити</Message>
     <Message ID="Pause">Пауза</Message>
     <Message ID="StartServer">Запустити сервер</Message>

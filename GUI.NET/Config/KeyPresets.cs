@@ -34,6 +34,9 @@ namespace Mesen.GUI.Config
 		KeyMappings _suborKeyboard;
 		public KeyMappings SuborKeyboard { get { return _suborKeyboard.Clone(); } }
 
+		KeyMappings _bandaiMicrophone;
+		public KeyMappings BandaiMicrophone { get { return _bandaiMicrophone.Clone(); } }
+
 		public KeyMappings WasdLayout { get { return _wasdLayout.Clone(); } }
 		public KeyMappings ArrowLayout { get { return _arrowLayout.Clone(); } }
 		public KeyMappings NestopiaLayout { get { return _nestopiaLayout.Clone(); } }
@@ -201,6 +204,14 @@ namespace Mesen.GUI.Config
 				PachinkoButtons = new UInt32[2] {
 					InteropEmu.GetKeyCode("R"),
 					InteropEmu.GetKeyCode("F")
+				}
+			};
+
+			_bandaiMicrophone = new KeyMappings() {
+				BandaiMicrophoneButtons = new UInt32[3] {
+					InteropEmu.GetKeyCode("1"),
+					InteropEmu.GetKeyCode("2"),
+					InteropEmu.GetKeyCode("3")
 				}
 			};
 

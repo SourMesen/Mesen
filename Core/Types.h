@@ -251,6 +251,8 @@ enum class ConsoleFeatures
 	VsSystem = 4,
 	BarcodeReader = 8,
 	TapeRecorder = 16,
+	BandaiMicrophone = 32,
+	DatachBarcodeReader = 64
 };
 
 enum class RecordMovieFrom

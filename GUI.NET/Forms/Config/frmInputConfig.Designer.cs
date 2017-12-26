@@ -54,6 +54,9 @@
 			this.picWarning = new System.Windows.Forms.PictureBox();
 			this.lblKeyBinding = new System.Windows.Forms.Label();
 			this.btnSetupExp = new System.Windows.Forms.Button();
+			this.lblCartridge = new System.Windows.Forms.Label();
+			this.cboCartridge = new System.Windows.Forms.ComboBox();
+			this.btnSetupCartridge = new System.Windows.Forms.Button();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpDisplayInput = new System.Windows.Forms.GroupBox();
@@ -83,7 +86,7 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 308);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 242);
 			this.baseConfigPanel.Size = new System.Drawing.Size(370, 29);
 			// 
 			// tabMain
@@ -94,7 +97,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(370, 308);
+			this.tabMain.Size = new System.Drawing.Size(370, 242);
 			this.tabMain.TabIndex = 11;
 			// 
 			// tpgControllers
@@ -102,7 +105,7 @@
 			this.tpgControllers.Controls.Add(this.tlpControllers);
 			this.tpgControllers.Location = new System.Drawing.Point(4, 22);
 			this.tpgControllers.Name = "tpgControllers";
-			this.tpgControllers.Size = new System.Drawing.Size(362, 282);
+			this.tpgControllers.Size = new System.Drawing.Size(362, 216);
 			this.tpgControllers.TabIndex = 0;
 			this.tpgControllers.Text = "Controllers";
 			this.tpgControllers.UseVisualStyleBackColor = true;
@@ -133,10 +136,13 @@
 			this.tlpControllers.Controls.Add(this.chkAutoConfigureInput, 0, 2);
 			this.tlpControllers.Controls.Add(this.pnlConflictWarning, 0, 0);
 			this.tlpControllers.Controls.Add(this.btnSetupExp, 2, 6);
+			this.tlpControllers.Controls.Add(this.lblCartridge, 0, 9);
+			this.tlpControllers.Controls.Add(this.cboCartridge, 1, 9);
+			this.tlpControllers.Controls.Add(this.btnSetupCartridge, 2, 9);
 			this.tlpControllers.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpControllers.Location = new System.Drawing.Point(0, 0);
 			this.tlpControllers.Name = "tlpControllers";
-			this.tlpControllers.RowCount = 10;
+			this.tlpControllers.RowCount = 11;
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
@@ -146,8 +152,9 @@
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpControllers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpControllers.Size = new System.Drawing.Size(362, 282);
+			this.tlpControllers.Size = new System.Drawing.Size(362, 216);
 			this.tlpControllers.TabIndex = 0;
 			// 
 			// btnSetupP4
@@ -411,12 +418,44 @@
 			this.btnSetupExp.Visible = false;
 			this.btnSetupExp.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
+			// lblCartridge
+			// 
+			this.lblCartridge.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblCartridge.AutoSize = true;
+			this.lblCartridge.Location = new System.Drawing.Point(3, 289);
+			this.lblCartridge.Name = "lblCartridge";
+			this.lblCartridge.Size = new System.Drawing.Size(52, 13);
+			this.lblCartridge.TabIndex = 21;
+			this.lblCartridge.Text = "Cartridge:";
+			// 
+			// cboCartridge
+			// 
+			this.cboCartridge.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.cboCartridge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboCartridge.FormattingEnabled = true;
+			this.cboCartridge.Location = new System.Drawing.Point(90, 284);
+			this.cboCartridge.Name = "cboCartridge";
+			this.cboCartridge.Size = new System.Drawing.Size(201, 21);
+			this.cboCartridge.TabIndex = 23;
+			// 
+			// btnSetupCartridge
+			// 
+			this.btnSetupCartridge.AutoSize = true;
+			this.btnSetupCartridge.Location = new System.Drawing.Point(297, 284);
+			this.btnSetupCartridge.Name = "btnSetupCartridge";
+			this.btnSetupCartridge.Size = new System.Drawing.Size(62, 23);
+			this.btnSetupCartridge.TabIndex = 24;
+			this.btnSetupCartridge.Text = "Setup";
+			this.btnSetupCartridge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnSetupCartridge.UseVisualStyleBackColor = true;
+			this.btnSetupCartridge.Click += new System.EventHandler(this.btnSetupCartridge_Click);
+			// 
 			// tpgAdvanced
 			// 
 			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel2);
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
-			this.tpgAdvanced.Size = new System.Drawing.Size(362, 282);
+			this.tpgAdvanced.Size = new System.Drawing.Size(362, 313);
 			this.tpgAdvanced.TabIndex = 5;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -432,7 +471,7 @@
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(362, 282);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(362, 313);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// grpDisplayInput
@@ -562,7 +601,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
-			this.ClientSize = new System.Drawing.Size(370, 337);
+			this.ClientSize = new System.Drawing.Size(370, 271);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -634,5 +673,8 @@
 		private System.Windows.Forms.Label lblKeyBinding;
 		private System.Windows.Forms.PictureBox picWarning;
 		private System.Windows.Forms.Button btnSetupExp;
+		private System.Windows.Forms.Label lblCartridge;
+		private System.Windows.Forms.ComboBox cboCartridge;
+		private System.Windows.Forms.Button btnSetupCartridge;
 	}
 }

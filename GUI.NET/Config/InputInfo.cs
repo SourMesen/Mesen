@@ -35,6 +35,7 @@ namespace Mesen.GUI.Config
 		public UInt32[] ExcitingBoxingButtons = new UInt32[8];
 		public UInt32[] JissenMahjongButtons = new UInt32[21];
 		public UInt32[] SuborKeyboardButtons = new UInt32[99];
+		public UInt32[] BandaiMicrophoneButtons = new UInt32[3];
 
 		public KeyMappings()
 		{
@@ -50,6 +51,7 @@ namespace Mesen.GUI.Config
 			clone.ExcitingBoxingButtons = (UInt32[])this.ExcitingBoxingButtons.Clone();
 			clone.JissenMahjongButtons = (UInt32[])this.JissenMahjongButtons.Clone();
 			clone.SuborKeyboardButtons = (UInt32[])this.SuborKeyboardButtons.Clone();			
+			clone.BandaiMicrophoneButtons = (UInt32[])this.BandaiMicrophoneButtons.Clone();			
 			return clone;
 		}
 
@@ -79,6 +81,7 @@ namespace Mesen.GUI.Config
 			mapping.ExcitingBoxingButtons= ExcitingBoxingButtons;
 			mapping.JissenMahjongButtons = JissenMahjongButtons;
 			mapping.SuborKeyboardButtons = SuborKeyboardButtons;
+			mapping.BandaiMicrophoneButtons = BandaiMicrophoneButtons;
 
 			return mapping;
 		}
@@ -173,6 +176,7 @@ namespace Mesen.GUI.Config
 					controllerInfo.Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
 					controllerInfo.Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
 					controllerInfo.Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
+					controllerInfo.Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
 
 				}
 				Controllers.Add(controllerInfo);

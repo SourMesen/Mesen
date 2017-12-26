@@ -12,6 +12,7 @@ protected:
 	uint16_t GetCHRPageSize() override { return 0x2000; }
 	bool AllowRegisterRead() override { return true; }
 	bool HasBusConflicts() override { return true; }
+	ConsoleFeatures GetAvailableFeatures() { return ConsoleFeatures::BandaiMicrophone; }
 
 	void InitMapper() override
 	{

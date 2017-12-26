@@ -21,7 +21,7 @@ protected:
 	uint16_t RegisterStartAddress() override { return 0x6000; }
 	uint16_t RegisterEndAddress() override { return 0xFFFF; }
 	bool AllowRegisterRead() override { return true; }
-	ConsoleFeatures GetAvailableFeatures() override { return _mapperID == 157 ? ConsoleFeatures::BarcodeReader : ConsoleFeatures::None; }
+	ConsoleFeatures GetAvailableFeatures() override { return _mapperID == 157 ? (ConsoleFeatures)((int)ConsoleFeatures::BarcodeReader | (int)ConsoleFeatures::DatachBarcodeReader) : ConsoleFeatures::None; }
 
 	void InitMapper() override
 	{
@@ -77,7 +77,7 @@ protected:
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		//Pretend EEPROM data is always 0
-		return _barcodeReader->GetOutput() | MemoryManager::GetOpenBus(0xE7);
+		return (_barcodeReader ? _barcodeReader->GetOutput() : 0) | MemoryManager::GetOpenBus(0xE7);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

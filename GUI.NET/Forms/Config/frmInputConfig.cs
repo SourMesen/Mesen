@@ -13,6 +13,8 @@ namespace Mesen.GUI.Forms.Config
 {
 	public partial class frmInputConfig : BaseConfigForm
 	{
+		private bool _hasCartridgeInput = false;
+
 		public frmInputConfig()
 		{
 			InitializeComponent();
@@ -42,10 +44,32 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisplayInputPosition", cboDisplayInputPosition);
 			AddBinding("DisplayInputHorizontally", chkDisplayInputHorizontally);
 
-			UpdateConflictWarning();
-
 			//Sort expansion port dropdown alphabetically, but keep the "None" option at the top
 			SortDropdown(cboExpansionPort, ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.None));
+
+			UpdateCartridgeInputUi();
+			UpdateConflictWarning();
+		}
+
+		private void UpdateCartridgeInputUi()
+		{
+			ConsoleFeatures features = InteropEmu.GetAvailableFeatures();
+			bool hasCartridgeInput = features.HasFlag(ConsoleFeatures.BandaiMicrophone) || features.HasFlag(ConsoleFeatures.DatachBarcodeReader);
+			_hasCartridgeInput = hasCartridgeInput;
+			lblCartridge.Visible = hasCartridgeInput;
+			cboCartridge.Visible = hasCartridgeInput;
+			btnSetupCartridge.Visible = hasCartridgeInput;
+			btnSetupCartridge.Enabled = features.HasFlag(ConsoleFeatures.BandaiMicrophone);
+			if(hasCartridgeInput) {
+				if(features.HasFlag(ConsoleFeatures.BandaiMicrophone)) {
+					cboCartridge.Items.Add(ResourceHelper.GetMessage("BandaiMicrophone"));
+					cboCartridge.SelectedIndex = 0;
+				} else if(features.HasFlag(ConsoleFeatures.DatachBarcodeReader)) {
+					cboCartridge.Items.Add(ResourceHelper.GetMessage("DatachBarcodeReader"));
+					cboCartridge.SelectedIndex = 0;
+				}
+				this.Height += (int)(30 * _yFactor);
+			}
 		}
 
 		private void SortDropdown(ComboBox dropdown, string optionAtTop)
@@ -361,29 +385,39 @@ namespace Mesen.GUI.Forms.Config
 			}				
 
 			if(frm != null) {
-				Button btn = (Button)sender;
-				Point point = btn.PointToScreen(new Point(0, btn.Height));
-				Rectangle screen = Screen.FromControl(btn).Bounds;
-
-				if(frm.Height + point.Y > screen.Bottom) {
-					//Show on top instead
-					point.Y -= btn.Height + frm.Height;
-				}
-
-				if(frm.Width + point.X > screen.Right) {
-					//Show on left instead
-					point.X -= frm.Width - btn.Width;
-				}
-
-				frm.Text = selectedText;
-				frm.StartPosition = FormStartPosition.Manual;
-				frm.Top = point.Y;
-				frm.Left = point.X;
-				if(frm.ShowDialog(this) == DialogResult.OK) {
-					UpdateConflictWarning();
-				}
-				frm.Dispose();
+				OpenSetupWindow(frm, (Button)sender, selectedText);
 			}
+		}
+
+		private void OpenSetupWindow(Form frm, Button btn, string title)
+		{
+			Point point = btn.PointToScreen(new Point(0, btn.Height));
+			Rectangle screen = Screen.FromControl(btn).Bounds;
+
+			if(frm.Height + point.Y > screen.Bottom) {
+				//Show on top instead
+				point.Y -= btn.Height + frm.Height;
+			}
+
+			if(frm.Width + point.X > screen.Right) {
+				//Show on left instead
+				point.X -= frm.Width - btn.Width;
+			}
+
+			frm.Text = title;
+			frm.StartPosition = FormStartPosition.Manual;
+			frm.Top = point.Y;
+			frm.Left = point.X;
+			if(frm.ShowDialog(this) == DialogResult.OK) {
+				UpdateConflictWarning();
+			}
+			frm.Dispose();
+		}
+		
+		private void btnSetupCartridge_Click(object sender, EventArgs e)
+		{
+			Form frm = new frmBandaiMicrophone(((InputInfo)Entity).Controllers[0]);
+			OpenSetupWindow(frm, (Button)sender, cboCartridge.SelectedItem.ToString());
 		}
 
 		private void UpdateConflictWarning()
@@ -424,7 +458,7 @@ namespace Mesen.GUI.Forms.Config
 
 			if(pnlConflictWarning.Visible != needWarning) {
 				pnlConflictWarning.Visible = needWarning;
-				this.Height = (int)((needWarning ? 360 : 310) * _yFactor);
+				this.Height = (int)(((needWarning ? 360 : 310) + (_hasCartridgeInput ? 30 : 0)) * _yFactor);
 			}
 			if(portConflicts[0] == (btnSetupP1.Image == null)) {
 				btnSetupP1.Image = portConflicts[0] ? Properties.Resources.Warning : null;

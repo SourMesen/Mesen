@@ -184,6 +184,8 @@
       <Control ID="btnSetupP4">Configuració</Control>
       <Control ID="btnSetupP3">Configuració</Control>
       <Control ID="btnSetupExp">Configuració</Control>
+      <Control ID="btnSetupCartridge">Configuració</Control>
+      <Control ID="lblCartridge">Cartridge:</Control>
       <Control ID="lblPlayer1">Jugador 1:</Control>
       <Control ID="lblPlayer2">Jugador 2:</Control>
       <Control ID="lblPlayer4">Jugador 4:</Control>
@@ -641,6 +643,8 @@
     </Form>
     <Form ID="frmPachinkoConfig">
     </Form>
+    <Form ID="frmBandaiMicrophone">
+    </Form>
   </Forms>
   <UserControls>
     <UserControl ID="ctrlExcitingBoxingConfig">
@@ -656,6 +660,9 @@
     <UserControl ID="ctrlPachinkoConfig">
       <Control ID="lblPress">Press</Control>
       <Control ID="lblRelease">Release</Control>
+    </UserControl>
+    <UserControl ID="ctrlBandaiMicrophone">
+      <Control ID="lblMicrophone">Microphone</Control>
     </UserControl>
   </UserControls>
   <Messages>
@@ -678,6 +685,8 @@
     <Message ID="LastFolderUsed">Darrera carpeta utilitzada</Message>
 
     <Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
+    <Message ID="BandaiMicrophone">Bandai Microphone</Message>
+    <Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
 
     <Message ID="Resume">Continua</Message>
     <Message ID="Pause">Pausa</Message>

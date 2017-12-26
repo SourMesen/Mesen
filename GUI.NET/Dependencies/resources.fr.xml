@@ -184,10 +184,12 @@
       <Control ID="btnSetupP4">Configuration</Control>
       <Control ID="btnSetupP3">Configuration</Control>
       <Control ID="btnSetupExp">Configuration</Control>
-      <Control ID="lblPlayer1">Joueur 1:</Control>
-      <Control ID="lblPlayer2">Joueur 2:</Control>
-      <Control ID="lblPlayer4">Joueur 4:</Control>
-      <Control ID="lblPlayer3">Joueur 3:</Control>
+      <Control ID="btnSetupCartridge">Configuration</Control>
+      <Control ID="lblCartridge">Cartouche :</Control>
+      <Control ID="lblPlayer1">Joueur 1 :</Control>
+      <Control ID="lblPlayer2">Joueur 2 :</Control>
+      <Control ID="lblPlayer4">Joueur 4 :</Control>
+      <Control ID="lblPlayer3">Joueur 3 :</Control>
       <Control ID="btnSetupP1">Configuration</Control>
       <Control ID="btnSetupP2">Configuration</Control>
       <Control ID="lblNesType">Type de console :</Control>
@@ -671,6 +673,8 @@
     </Form>
     <Form ID="frmPachinkoConfig">
     </Form>
+    <Form ID="frmBandaiMicrophone">
+    </Form>
   </Forms>
   <UserControls>
     <UserControl ID="ctrlExcitingBoxingConfig">
@@ -686,6 +690,9 @@
     <UserControl ID="ctrlPachinkoConfig">
       <Control ID="lblPress">Appuyer</Control>
       <Control ID="lblRelease">Relâcher</Control>
+    </UserControl>
+    <UserControl ID="ctrlBandaiMicrophone">
+      <Control ID="lblMicrophone">Microphone</Control>
     </UserControl>
   </UserControls>
   <Messages>
@@ -708,7 +715,9 @@
     <Message ID="LastFolderUsed">Dernier dossier utilisé</Message>
 
     <Message ID="MouseModeEnabled">Mode souris activé - appuyez sur ESC ou pause pour y mettre fin.</Message>
-
+    <Message ID="BandaiMicrophone">Microphone Bandai</Message>
+    <Message ID="DatachBarcodeReader">Lecteur code-barres Datach</Message>
+    
     <Message ID="Resume">Continuer</Message>
     <Message ID="Pause">Pause</Message>
     <Message ID="StartServer">Démarrer serveur</Message>

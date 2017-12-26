@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseControlDevice.h"
+#include "PPU.h"
 
 class BandaiMicrophone : public BaseControlDevice
 {
@@ -14,11 +15,16 @@ protected:
 
 	void InternalSetStateFromInput() override
 	{
+		//Make sure the key bindings are properly updated (not ideal, but good enough)
+		_keyMappings = EmulationSettings::GetControllerKeys(0).GetKeyMappingArray();
+
 		for(KeyMapping keyMapping : _keyMappings) {
-			//TODO: Add proper key mappings
-			SetPressedState(Buttons::A, keyMapping.A);
-			SetPressedState(Buttons::B, keyMapping.B);
-			SetPressedState(Buttons::Microphone, keyMapping.Microphone);
+			SetPressedState(Buttons::A, keyMapping.BandaiMicrophoneButtons[0]);
+			SetPressedState(Buttons::B, keyMapping.BandaiMicrophoneButtons[1]);
+			if((PPU::GetFrameCount() % 2) == 0) {
+				//Alternate between 1 and 0s (not sure if the game does anything with this data?)
+				SetPressedState(Buttons::Microphone, keyMapping.BandaiMicrophoneButtons[2]);
+			}
 		}
 	}
 
