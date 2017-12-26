@@ -50,5 +50,14 @@ namespace Mesen.GUI.Debugger
 				ConfigManager.ApplyChanges();
 			}
 		}
+
+		private void btnReset_Click(object sender, EventArgs e)
+		{
+			picOpcode.BackColor = Color.DarkSlateGray;
+			picLabelDefinition.BackColor = Color.Blue;
+			picImmediate.BackColor = Color.Chocolate;
+			picAddress.BackColor = Color.DarkRed;
+			picComment.BackColor = Color.Green;
+		}
 	}
 }

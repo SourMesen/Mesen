@@ -486,6 +486,12 @@
     <Compile Include="Debugger\frmAssembler.Designer.cs">
       <DependentUpon>frmAssembler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmMemoryViewerColors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmMemoryViewerColors.Designer.cs">
+      <DependentUpon>frmMemoryViewerColors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmAssemblerColors.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1100,6 +1106,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmAssembler.resx">
       <DependentUpon>frmAssembler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmMemoryViewerColors.resx">
+      <DependentUpon>frmMemoryViewerColors.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmAssemblerColors.resx">
       <DependentUpon>frmAssemblerColors.cs</DependentUpon>

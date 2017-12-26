@@ -355,7 +355,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuConfigureColors_Click(object sender, EventArgs e)
 		{
 			using(frmAssemblerColors frm = new frmAssemblerColors()) {
-				if(frm.ShowDialog() == DialogResult.OK) {
+				if(frm.ShowDialog(this, this) == DialogResult.OK) {
 					UpdateCodeHighlighting();
 				}
 			}

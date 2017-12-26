@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Be.Windows.Forms;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger
 {
@@ -35,10 +36,10 @@ namespace Mesen.GUI.Debugger
 			if(_cdlData != null) {
 				if((_cdlData[index] & 0x01) != 0 && _highlightDrawnBytes) {
 					//Drawn (CHR ROM)
-					bgColor = Color.DarkSeaGreen;
+					bgColor = ConfigManager.Config.DebugInfo.RamChrDrawnByteColor;
 				} else if((_cdlData[index] & 0x02) != 0 && _highlightReadBytes) {
 					//Read (CHR ROM)
-					bgColor = Color.LightSteelBlue;
+					bgColor = ConfigManager.Config.DebugInfo.RamChrReadByteColor;
 				}
 			}
 

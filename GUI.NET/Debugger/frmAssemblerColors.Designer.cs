@@ -38,6 +38,8 @@
 			this.lblAddress = new System.Windows.Forms.Label();
 			this.lblComment = new System.Windows.Forms.Label();
 			this.picOpcode = new System.Windows.Forms.PictureBox();
+			this.btnReset = new System.Windows.Forms.Button();
+			this.baseConfigPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picComment)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picAddress)).BeginInit();
@@ -48,8 +50,10 @@
 			// 
 			// baseConfigPanel
 			// 
+			this.baseConfigPanel.Controls.Add(this.btnReset);
 			this.baseConfigPanel.Location = new System.Drawing.Point(0, 210);
-			this.baseConfigPanel.Size = new System.Drawing.Size(238, 29);
+			this.baseConfigPanel.Size = new System.Drawing.Size(310, 29);
+			this.baseConfigPanel.Controls.SetChildIndex(this.btnReset, 0);
 			// 
 			// tableLayoutPanel1
 			// 
@@ -76,7 +80,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(238, 210);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(310, 210);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// picComment
@@ -184,16 +188,28 @@
 			this.picOpcode.TabStop = false;
 			this.picOpcode.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
+			// btnReset
+			// 
+			this.btnReset.Location = new System.Drawing.Point(3, 3);
+			this.btnReset.Name = "btnReset";
+			this.btnReset.Size = new System.Drawing.Size(102, 23);
+			this.btnReset.TabIndex = 4;
+			this.btnReset.Text = "Use default colors";
+			this.btnReset.UseVisualStyleBackColor = true;
+			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+			// 
 			// frmAssemblerColors
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(238, 239);
+			this.ClientSize = new System.Drawing.Size(310, 239);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "frmAssemblerColors";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Configure Colors...";
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
+			this.baseConfigPanel.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picComment)).EndInit();
@@ -218,5 +234,6 @@
 		private System.Windows.Forms.PictureBox picImmediate;
 		private System.Windows.Forms.PictureBox picLabelDefinition;
 		private System.Windows.Forms.PictureBox picOpcode;
+		private System.Windows.Forms.Button btnReset;
 	}
 }

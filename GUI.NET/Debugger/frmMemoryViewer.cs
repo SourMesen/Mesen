@@ -493,5 +493,14 @@ namespace Mesen.GUI.Debugger
 			this.UpdateConfig();
 			this.UpdateByteColorProvider();
 		}
+
+		private void mnuConfigureColors_Click(object sender, EventArgs e)
+		{
+			using(frmMemoryViewerColors frm = new frmMemoryViewerColors()) {
+				if(frm.ShowDialog(this, this) == DialogResult.OK) {
+					this.RefreshData();
+				}
+			}
+		}
 	}
 }

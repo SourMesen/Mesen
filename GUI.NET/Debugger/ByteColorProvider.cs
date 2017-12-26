@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Be.Windows.Forms;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger
 {
@@ -108,21 +109,21 @@ namespace Mesen.GUI.Debugger
 			if(_cdlData != null) {
 				if((_cdlData[index] & 0x01) != 0 && _highlightCodeBytes) {
 					//Code
-					bgColor = Color.DarkSeaGreen;
+					bgColor = ConfigManager.Config.DebugInfo.RamCodeByteColor;
 				} else if((_cdlData[index] & 0x02) != 0 && _highlightDataBytes) {
 					//Data
-					bgColor = Color.LightSteelBlue;
+					bgColor = ConfigManager.Config.DebugInfo.RamDataByteColor;
 				}
 			}
 
 			if(_freezeState != null && _freezeState[index]) {
 				return Color.Magenta;
 			} else if(_showExec && _execStamps[index] != 0 && framesSinceExec >= 0 && (framesSinceExec < _framesToFade || _framesToFade == 0)) {
-				return Color.FromArgb(alpha, DarkerColor(Color.Green, (_framesToFade - framesSinceExec) / _framesToFade));
+				return Color.FromArgb(alpha, DarkerColor(ConfigManager.Config.DebugInfo.RamExecColor, (_framesToFade - framesSinceExec) / _framesToFade));
 			} else if(_showWrite && _writeStamps[index] != 0 && framesSinceWrite >= 0 && (framesSinceWrite < _framesToFade || _framesToFade == 0)) {
-				return Color.FromArgb(alpha, DarkerColor(Color.Red, (_framesToFade - framesSinceWrite) / _framesToFade));
+				return Color.FromArgb(alpha, DarkerColor(ConfigManager.Config.DebugInfo.RamWriteColor, (_framesToFade - framesSinceWrite) / _framesToFade));
 			} else if(_showRead && _readStamps[index] != 0 && framesSinceRead >= 0 && (framesSinceRead < _framesToFade || _framesToFade == 0)) {
-				return Color.FromArgb(alpha, DarkerColor(Color.Blue, (_framesToFade - framesSinceRead) / _framesToFade));
+				return Color.FromArgb(alpha, DarkerColor(ConfigManager.Config.DebugInfo.RamReadColor, (_framesToFade - framesSinceRead) / _framesToFade));
 			}
 
 			return Color.FromArgb(alpha, Color.Black);
