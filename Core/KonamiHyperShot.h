@@ -33,9 +33,9 @@ protected:
 			}
 		}
 
-		for(KeyMapping keyMapping : _keyMappings) {
-			SetPressedState(Buttons::Player1Jump, keyMapping.A);
-			SetPressedState(Buttons::Player1Run, keyMapping.B);
+		for(KeyMapping keyMapping : _p2KeyMappings) {
+			SetPressedState(Buttons::Player2Jump, keyMapping.A);
+			SetPressedState(Buttons::Player2Run, keyMapping.B);
 
 			uint8_t turboFreq = 1 << (4 - _p2TurboSpeed);
 			bool turboOn = (uint8_t)(PPU::GetFrameCount() % turboFreq) < turboFreq / 2;
