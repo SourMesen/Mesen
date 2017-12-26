@@ -44,6 +44,11 @@ namespace Mesen.GUI.Debugger
 			this.mnuHideWrittenBytes.Checked = ConfigManager.Config.DebugInfo.RamHideWrittenBytes;
 			this.mnuHideExecutedBytes.Checked = ConfigManager.Config.DebugInfo.RamHideExecutedBytes;
 
+			this.mnuHighlightChrDrawnBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightChrDrawnBytes;
+			this.mnuHighlightChrReadBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightChrReadBytes;
+			this.mnuHighlightCodeBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightCodeBytes;
+			this.mnuHighlightDataBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightDataBytes;
+
 			this.UpdateFadeOptions();
 
 			this.InitTblMappings();
@@ -124,7 +129,18 @@ namespace Mesen.GUI.Debugger
 						mnuHideUnusedBytes.Checked,
 						mnuHideReadBytes.Checked,
 						mnuHideWrittenBytes.Checked,
-						mnuHideExecutedBytes.Checked
+						mnuHideExecutedBytes.Checked,
+						mnuHighlightDataBytes.Checked,
+						mnuHighlightCodeBytes.Checked
+					);
+					break;
+
+				case DebugMemoryType.PpuMemory:
+				case DebugMemoryType.ChrRom:
+					this.ctrlHexViewer.ByteColorProvider = new ChrByteColorProvider(
+						(DebugMemoryType)this.cboMemoryType.SelectedIndex,
+						mnuHighlightChrDrawnBytes.Checked,
+						mnuHighlightChrReadBytes.Checked
 					);
 					break;
 
@@ -212,6 +228,11 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamHideWrittenBytes = this.mnuHideWrittenBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
+
+			ConfigManager.Config.DebugInfo.RamHighlightChrDrawnBytes = this.mnuHighlightChrDrawnBytes.Checked;
+			ConfigManager.Config.DebugInfo.RamHighlightChrReadBytes = this.mnuHighlightChrReadBytes.Checked;
+			ConfigManager.Config.DebugInfo.RamHighlightCodeBytes = this.mnuHighlightCodeBytes.Checked;
+			ConfigManager.Config.DebugInfo.RamHighlightDataBytes = this.mnuHighlightDataBytes.Checked;
 
 			ConfigManager.ApplyChanges();
 		}

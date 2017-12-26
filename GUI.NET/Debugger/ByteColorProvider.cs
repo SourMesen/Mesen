@@ -14,6 +14,7 @@ namespace Mesen.GUI.Debugger
 		Int32[] _writeCounts;
 		Int32[] _execCounts;
 		bool[] _freezeState;
+		byte[] _cdlData;
 		DebugState _state = new DebugState();
 		bool _showExec;
 		bool _showWrite;
@@ -23,8 +24,10 @@ namespace Mesen.GUI.Debugger
 		bool _hideReadBytes;
 		bool _hideWrittenBytes;
 		bool _hideExecutedBytes;
+		bool _highlightDataBytes;
+		bool _highlightCodeBytes;
 
-		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade, bool hideUnusedBytes, bool hideReadBytes, bool hideWrittenBytes, bool hideExecutedBytes)
+		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade, bool hideUnusedBytes, bool hideReadBytes, bool hideWrittenBytes, bool hideExecutedBytes, bool highlightDataBytes, bool highlightCodeBytes)
 		{
 			_memoryType = memoryType;
 			_showExec = showExec;
@@ -35,6 +38,8 @@ namespace Mesen.GUI.Debugger
 			_hideReadBytes = hideReadBytes;
 			_hideWrittenBytes = hideWrittenBytes;
 			_hideExecutedBytes = hideExecutedBytes;
+			_highlightDataBytes = highlightDataBytes;
+			_highlightCodeBytes = highlightCodeBytes;
 		}
 
 		public void Prepare(long firstByteIndex, long lastByteIndex)
@@ -49,6 +54,18 @@ namespace Mesen.GUI.Debugger
 			_readCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Read);
 			_writeCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Write);
 			_execCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Exec);
+
+			_cdlData = null;
+			if(_highlightDataBytes || _highlightCodeBytes) {
+				switch(_memoryType) {
+					case DebugMemoryType.ChrRom:
+					case DebugMemoryType.PpuMemory:
+					case DebugMemoryType.CpuMemory:
+					case DebugMemoryType.PrgRom:
+						_cdlData = InteropEmu.DebugGetCdlData((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType);
+						break;
+				}
+			}
 
 			InteropEmu.DebugGetState(ref _state);
 		}
@@ -66,7 +83,7 @@ namespace Mesen.GUI.Debugger
 			return Color.FromArgb((int)(input.R * brightnessPercentage), (int)(input.G * brightnessPercentage), (int)(input.B * brightnessPercentage));
 		}
 
-		public Color GetByteColor(long firstByteIndex, long byteIndex)
+		public Color GetByteColor(long firstByteIndex, long byteIndex, out Color bgColor)
 		{
 			const int CyclesPerFrame = 29780;
 			long index = byteIndex - firstByteIndex;
@@ -85,6 +102,17 @@ namespace Mesen.GUI.Debugger
 			}
 			if(isRead && !_hideReadBytes || isWritten && !_hideWrittenBytes || isExecuted && !_hideExecutedBytes || isUnused && !_hideUnusedBytes) {
 				alpha = 255;
+			}
+
+			bgColor = Color.Transparent;
+			if(_cdlData != null) {
+				if((_cdlData[index] & 0x01) != 0 && _highlightCodeBytes) {
+					//Code
+					bgColor = Color.DarkSeaGreen;
+				} else if((_cdlData[index] & 0x02) != 0 && _highlightDataBytes) {
+					//Data
+					bgColor = Color.LightSteelBlue;
+				}
 			}
 
 			if(_freezeState != null && _freezeState[index]) {

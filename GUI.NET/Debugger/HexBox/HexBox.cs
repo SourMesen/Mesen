@@ -2524,8 +2524,9 @@ namespace Be.Windows.Forms
 				byte b = _byteProvider.ReadByte(i);
 
 				Color byteColor = this.ForeColor;
+				Color bgColor = Color.Transparent;
 				if(this.ByteColorProvider != null) {
-					byteColor = this.ByteColorProvider.GetByteColor(_startByte, i);
+					byteColor = this.ByteColorProvider.GetByteColor(_startByte, i, out bgColor);
 				}
 
 				bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
@@ -2533,7 +2534,13 @@ namespace Be.Windows.Forms
 					if(isSelectedByte && isKeyInterpreterActive) {
 						PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint);
 					} else {
-						PaintHexString(g, b, byteBrush, gridPoint);
+						if(bgColor != Color.Transparent) {
+							using(Brush bgBrush = new SolidBrush(bgColor)) {
+								PaintHexStringSelected(g, b, byteBrush, bgBrush, gridPoint);
+							}
+						} else {
+							PaintHexString(g, b, byteBrush, gridPoint);
+						}
 					}
 				}
 			}
@@ -2625,15 +2632,22 @@ namespace Be.Windows.Forms
 
 				using(Brush selBrushBack = new SolidBrush(_selectionBackColor)) {
 					Color byteColor = this.ForeColor;
+					Color bgColor = Color.Transparent;
 					if(this.ByteColorProvider != null) {
-						byteColor = this.ByteColorProvider.GetByteColor(_startByte, i);
+						byteColor = this.ByteColorProvider.GetByteColor(_startByte, i, out bgColor);
 					}
 
 					using(Brush byteBrush = new SolidBrush(byteColor)) {
 						if(isSelectedByte && isKeyInterpreterActive) {
 							PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint);
 						} else {
-							PaintHexString(g, b, byteBrush, gridPoint);
+							if(bgColor != Color.Transparent) {
+								using(Brush bgBrush = new SolidBrush(bgColor)) {
+									PaintHexStringSelected(g, b, byteBrush, bgBrush, gridPoint);
+								}
+							} else {
+								PaintHexString(g, b, byteBrush, gridPoint);
+							}
 						}
 
 						string s;

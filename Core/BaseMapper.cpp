@@ -753,7 +753,9 @@ uint8_t BaseMapper::DebugReadRAM(uint16_t addr)
 	} else {
 		//assert(false);
 	}
-	return MemoryManager::GetOpenBus();
+	
+	//Fake open bus
+	return addr >> 8;
 }
 
 void BaseMapper::WriteRAM(uint16_t addr, uint8_t value)

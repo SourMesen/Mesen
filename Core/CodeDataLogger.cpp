@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "CodeDataLogger.h"
+#include "Debugger.h"
 
-CodeDataLogger::CodeDataLogger(uint32_t prgSize, uint32_t chrSize)
+CodeDataLogger::CodeDataLogger(Debugger *debugger, uint32_t prgSize, uint32_t chrSize)
 {
+	_debugger = debugger;
 	_prgSize = prgSize;
 	_chrSize = chrSize;
 	_cdlData = new uint8_t[prgSize+chrSize];
@@ -154,4 +156,27 @@ bool CodeDataLogger::IsRead(uint32_t absoluteAddr)
 bool CodeDataLogger::IsDrawn(uint32_t absoluteAddr)
 {
 	return (_cdlData[absoluteAddr + _prgSize] & (uint8_t)CdlChrFlags::Drawn) == (uint8_t)CdlChrFlags::Drawn;
+}
+
+void CodeDataLogger::GetCdlData(uint32_t offset, uint32_t length, DebugMemoryType memoryType, uint8_t * cdlData)
+{
+	if(memoryType == DebugMemoryType::PrgRom) {
+		for(uint32_t i = 0; i < length; i++) {
+			cdlData[i] = _cdlData[offset + i];
+		}
+	} else if(memoryType == DebugMemoryType::ChrRom) {
+		for(uint32_t i = 0; i < length; i++) {
+			cdlData[i] = _cdlData[_prgSize + offset + i];
+		}
+	} else if(memoryType == DebugMemoryType::CpuMemory) {
+		for(uint32_t i = 0; i < length; i++) {
+			int32_t absoluteAddress = _debugger->GetAbsoluteAddress(offset + i);
+			cdlData[i] = absoluteAddress >= 0 ? _cdlData[absoluteAddress] : 0;
+		}
+	} else if(memoryType == DebugMemoryType::PpuMemory) {
+		for(uint32_t i = 0; i < length; i++) {
+			int32_t absoluteAddress = _debugger->GetAbsoluteChrAddress(offset + i);
+			cdlData[i] = absoluteAddress >= 0 ? _cdlData[_prgSize + absoluteAddress] : 0;
+		}
+	}
 }

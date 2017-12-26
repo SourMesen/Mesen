@@ -2,6 +2,9 @@
 
 #include "stdafx.h"
 #include "../Utilities/SimpleLock.h"
+#include "DebuggerTypes.h"
+
+class Debugger;
 
 enum class CdlPrgFlags
 {
@@ -33,6 +36,7 @@ struct CdlRatios
 class CodeDataLogger
 {
 private:
+	Debugger* _debugger = nullptr;
 	uint8_t *_cdlData = nullptr;
 	uint32_t _prgSize = 0;
 	uint32_t _chrSize = 0;
@@ -46,7 +50,7 @@ private:
 	SimpleLock _lock;
 	
 public:
-	CodeDataLogger(uint32_t prgSize, uint32_t chrSize);
+	CodeDataLogger(Debugger *debugger, uint32_t prgSize, uint32_t chrSize);
 	~CodeDataLogger();
 
 	void Reset();
@@ -64,4 +68,6 @@ public:
 	bool IsData(uint32_t absoluteAddr);
 	bool IsRead(uint32_t absoluteAddr);
 	bool IsDrawn(uint32_t absoluteAddr);
+
+	void GetCdlData(uint32_t offset, uint32_t length, DebugMemoryType memoryType, uint8_t* cdlData);
 };

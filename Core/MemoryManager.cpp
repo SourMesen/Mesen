@@ -118,7 +118,8 @@ uint8_t MemoryManager::DebugRead(uint16_t addr, bool disableSideEffects)
 				value = handler->ReadRAM(addr);
 			}
 		} else {
-			value = GetOpenBus();
+			//Fake open bus
+			value = addr >> 8;
 		}
 	}
 

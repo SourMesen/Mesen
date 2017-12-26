@@ -299,7 +299,7 @@ namespace Mesen.GUI
 				InteropEmu.DebugSaveRomToDiskWrapper(filename, saveAsIps, IntPtr.Zero);
 			}
 		}
-
+		
 		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper(ref UInt32 length);
 		public static string DebugGetCode(bool forceRefresh)
 		{
@@ -517,6 +517,21 @@ namespace Mesen.GUI
 			}
 
 			return freezeState;
+		}
+
+		[DllImport(DLLPath, EntryPoint = "DebugGetCdlData")] private static extern void DebugGetCdlDataWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, IntPtr counts);
+		public static byte[] DebugGetCdlData(UInt32 offset, UInt32 length, DebugMemoryType type)
+		{
+			byte[] cdlData = new byte[length];
+
+			GCHandle hResult = GCHandle.Alloc(cdlData, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetCdlDataWrapper(offset, length, type, hResult.AddrOfPinnedObject());
+			} finally {
+				hResult.Free();
+			}
+
+			return cdlData;
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetCallstack")] private static extern void DebugGetCallstackWrapper(IntPtr callstackAbsolute, IntPtr callstackRelative);
