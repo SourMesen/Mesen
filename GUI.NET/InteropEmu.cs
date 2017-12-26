@@ -300,11 +300,11 @@ namespace Mesen.GUI
 			}
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper(out UInt32 length);
-		public static string DebugGetCode()
+		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper(ref UInt32 length);
+		public static string DebugGetCode(bool forceRefresh)
 		{
-			UInt32 length;
-			IntPtr ptrCodeString = InteropEmu.DebugGetCodeWrapper(out length);
+			UInt32 length = forceRefresh ? UInt32.MaxValue : 0;
+			IntPtr ptrCodeString = InteropEmu.DebugGetCodeWrapper(ref length);
 			if(ptrCodeString == IntPtr.Zero) {
 				return null;
 			} else {

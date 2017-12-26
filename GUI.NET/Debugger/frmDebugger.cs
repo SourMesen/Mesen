@@ -322,7 +322,7 @@ namespace Mesen.GUI.Debugger
 			UpdateDebuggerFlags();
 			UpdateVectorAddresses();
 
-			string newCode = InteropEmu.DebugGetCode();
+			string newCode = InteropEmu.DebugGetCode(_firstBreak);
 			if(newCode != null) {
 				ctrlDebuggerCode.Code = newCode;
 			}
