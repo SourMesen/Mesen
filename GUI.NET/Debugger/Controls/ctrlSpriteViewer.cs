@@ -206,14 +206,20 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void ctxMenu_Opening(object sender, CancelEventArgs e)
 		{
+			mnuCopyAllSpritesHdPack.Visible = Control.ModifierKeys == Keys.Shift;
+			
 			if(_selectedSprite < 0) {
 				_contextMenuSpriteIndex = -1;
 				return;
 			}
 
 			_contextMenuSpriteIndex = _selectedSprite;
+			_copyData = ToHdPackFormat(_selectedSprite);
+		}
 
-			int ramAddr = _selectedSprite * 4;
+		private string ToHdPackFormat(int spriteIndex)
+		{
+			int ramAddr = spriteIndex * 4;
 			int spriteY = _spriteRam[ramAddr];
 			int tileIndex = _spriteRam[ramAddr + 1];
 			int palette = (_spriteRam[ramAddr + 2] & 0x03) + 4;
@@ -233,7 +239,7 @@ namespace Mesen.GUI.Debugger.Controls
 					sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PpuMemory, (UInt32)(tileAddr + i)).ToString("X2"));
 				}
 			} else {
-				int absoluteTileIndex = InteropEmu.DebugGetAbsoluteChrAddress((uint)tileAddr)/16;
+				int absoluteTileIndex = InteropEmu.DebugGetAbsoluteChrAddress((uint)tileAddr) / 16;
 				sb.Append(absoluteTileIndex.ToString());
 			}
 			sb.Append(",FF");
@@ -241,7 +247,7 @@ namespace Mesen.GUI.Debugger.Controls
 				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PaletteMemory, (uint)(palette * 4 + i)).ToString("X2"));
 			}
 
-			_copyData = sb.ToString();
+			return sb.ToString();
 		}
 
 		private void picPreview_MouseMove(object sender, MouseEventArgs e)
@@ -341,6 +347,24 @@ namespace Mesen.GUI.Debugger.Controls
 					g.DrawImage(src, 0, 0);
 				}
 				Clipboard.SetImage(target);
+			}
+		}
+
+		private void mnuCopyAllSpritesHdPack_Click(object sender, EventArgs e)
+		{
+			StringBuilder sb = new StringBuilder();
+			for(int i = 0; i < 64; i++) {
+				int ramAddr = i * 4;
+				int spriteY = _spriteRam[ramAddr];
+				int spriteX = _spriteRam[ramAddr+3];
+				if(spriteY >= 0 && spriteY < 240) {
+					sb.AppendLine(ToHdPackFormat(i) + "," + spriteX.ToString() + "," + spriteY.ToString());
+				}
+			}
+			if(sb.Length > 0) {
+				Clipboard.SetText(sb.ToString());
+			} else {
+				Clipboard.Clear();
 			}
 		}
 	}

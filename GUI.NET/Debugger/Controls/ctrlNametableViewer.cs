@@ -278,12 +278,15 @@ namespace Mesen.GUI.Debugger.Controls
 			Clipboard.SetText(_copyData);
 		}
 
-		private void ctxMenu_Opening(object sender, CancelEventArgs e)
+		private string ToHdPackFormat(int nametableIndex, int nametableTileIndex)
 		{
+			int x = nametableTileIndex % 32;
+			int y = nametableTileIndex / 32;
+
 			int baseAddress = 0x2000 + _nametableIndex * 0x400;
-			int tileIndex = _tileData[_nametableIndex][_tileY*32+_tileX];
-			int attributeData = _attributeData[_nametableIndex][_tileY*32+_tileX];
-			int shift = (_tileX & 0x02) | ((_tileY & 0x02) << 1);
+			int tileIndex = _tileData[_nametableIndex][nametableTileIndex];
+			int attributeData = _attributeData[_nametableIndex][nametableTileIndex];
+			int shift = (x & 0x02) | ((y & 0x02) << 1);
 			int paletteBaseAddr = ((attributeData >> shift) & 0x03) << 2;
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
@@ -304,8 +307,13 @@ namespace Mesen.GUI.Debugger.Controls
 			for(int i = 0; i < 4; i++) {
 				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PaletteMemory, (uint)(paletteBaseAddr + i)).ToString("X2"));
 			}
+			return sb.ToString();
+		}
 
-			_copyData = sb.ToString();
+		private void ctxMenu_Opening(object sender, CancelEventArgs e)
+		{
+			mnuCopyNametableHdPack.Visible = Control.ModifierKeys == Keys.Shift;
+			_copyData = ToHdPackFormat(_nametableIndex, _tileY * 32 + _tileX);
 		}
 
 		private void ShowInChrViewer()
@@ -342,6 +350,17 @@ namespace Mesen.GUI.Debugger.Controls
 		public void CopyToClipboard()
 		{
 			Clipboard.SetImage(_nametableImage);
+		}
+
+		private void mnuCopyNametableHdPack_Click(object sender, EventArgs e)
+		{
+			StringBuilder sb = new StringBuilder();
+			for(int y = 0; y < 30; y++) {
+				for(int x = 0; x < 32; x++) {
+					sb.AppendLine(ToHdPackFormat(_nametableIndex, y*32+x) + "," + (x * 8).ToString() + "," + (y*8).ToString());
+				}
+			}
+			Clipboard.SetText(sb.ToString());
 		}
 	}
 }

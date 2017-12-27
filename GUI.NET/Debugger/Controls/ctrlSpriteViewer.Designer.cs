@@ -57,6 +57,7 @@
 			this.chkBackgroundPriority = new System.Windows.Forms.CheckBox();
 			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.picSprites = new System.Windows.Forms.PictureBox();
+			this.mnuCopyAllSpritesHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpSpriteInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -185,9 +186,10 @@
             this.mnuShowInChrViewer,
             this.toolStripMenuItem1,
             this.mnuCopyHdPack,
+            this.mnuCopyAllSpritesHdPack,
             this.mnuCopyToClipboard});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(248, 98);
+			this.ctxMenu.Size = new System.Drawing.Size(255, 120);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuShowInChrViewer
@@ -195,19 +197,19 @@
 			this.mnuShowInChrViewer.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
 			this.mnuShowInChrViewer.Name = "mnuShowInChrViewer";
 			this.mnuShowInChrViewer.ShortcutKeyDisplayString = "Dbl-Click";
-			this.mnuShowInChrViewer.Size = new System.Drawing.Size(232, 22);
+			this.mnuShowInChrViewer.Size = new System.Drawing.Size(254, 22);
 			this.mnuShowInChrViewer.Text = "View in CHR viewer";
 			this.mnuShowInChrViewer.Click += new System.EventHandler(this.mnuShowInChrViewer_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(229, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(251, 6);
 			// 
 			// mnuCopyHdPack
 			// 
 			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
-			this.mnuCopyHdPack.Size = new System.Drawing.Size(232, 22);
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(254, 22);
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
@@ -216,7 +218,7 @@
 			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
 			this.mnuCopyToClipboard.Name = "mnuCopyToClipboard";
 			this.mnuCopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.mnuCopyToClipboard.Size = new System.Drawing.Size(247, 22);
+			this.mnuCopyToClipboard.Size = new System.Drawing.Size(254, 22);
 			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
 			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);
 			// 
@@ -409,6 +411,13 @@
 			this.picSprites.MouseLeave += new System.EventHandler(this.picSprites_MouseLeave);
 			this.picSprites.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picSprites_MouseMove);
 			// 
+			// mnuCopyAllSpritesHdPack
+			// 
+			this.mnuCopyAllSpritesHdPack.Name = "mnuCopyAllSpritesHdPack";
+			this.mnuCopyAllSpritesHdPack.Size = new System.Drawing.Size(254, 22);
+			this.mnuCopyAllSpritesHdPack.Text = "Copy All Sprites (HD Pack Format)";
+			this.mnuCopyAllSpritesHdPack.Click += new System.EventHandler(this.mnuCopyAllSpritesHdPack_Click);
+			// 
 			// ctrlSpriteViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -461,5 +470,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuShowInChrViewer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyToClipboard;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyAllSpritesHdPack;
 	}
 }
