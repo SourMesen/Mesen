@@ -333,6 +333,12 @@ void Console::Reset(bool softReset)
 		} else {
 			Instance->_systemActionManager->PowerCycle();
 		}
+
+		//Resume from code break if needed (otherwise reset doesn't happen right away)
+		shared_ptr<Debugger> debugger = Instance->_debugger;
+		if(debugger) {
+			debugger->Run();
+		}
 	}
 }
 
