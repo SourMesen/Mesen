@@ -35,6 +35,8 @@ namespace Mesen.GUI.Forms
 		private Image _playButton = Mesen.GUI.Properties.Resources.Play;
 		private string _currentGame = null;
 		private bool _customSize = false;
+		private double? _switchOptionScale = null;
+		private bool _fullscreenRequested = false;
 		private FormWindowState _originalWindowState;
 		private Size _originalWindowMinimumSize;
 		private bool _fullscreenMode = false;
@@ -53,7 +55,7 @@ namespace Mesen.GUI.Forms
 
 		private Dictionary<EmulatorShortcut, Func<bool>> _actionEnabledFuncs = new Dictionary<EmulatorShortcut, Func<bool>>();
 
-		private string[] _commandLineArgs;
+		private List<string> _commandLineArgs;
 		private bool _noAudio = false;
 		private bool _noVideo = false;
 		private bool _noInput = false;
@@ -72,57 +74,61 @@ namespace Mesen.GUI.Forms
 			_fonts.AddFontFile(Path.Combine(ConfigManager.HomeFolder, "Resources", "PixelFont.ttf"));
 			lblVersion.Font = new Font(_fonts.Families[0], 11);
 
-			_commandLineArgs = args;
+			_commandLineArgs = PreprocessCommandLineArguments(args);
 
 			Application.AddMessageFilter(this);
 			this.Resize += ResizeRecentGames;
 			this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 		}
 
-		public void ProcessCommandLineArguments(string[] args, bool forStartup)
+		public List<string> PreprocessCommandLineArguments(string[] args)
 		{
 			var switches = new List<string>();
 			for(int i = 0; i < args.Length; i++) {
 				if(args[i] != null) {
-					switches.Add(args[i].ToLowerInvariant().Replace("--", "/").Replace("-", "/").Replace("=/", "=-"));
+					string arg = args[i].Replace("--", "/").Replace("-", "/").Replace("=/", "=-");
+					if(arg.StartsWith("/")) {
+						arg = arg.ToLowerInvariant();
+					}
+					switches.Add(arg);
 				}
 			}
+			return switches;
+		}
 
+		public void ProcessCommandLineArguments(List<string> switches, bool forStartup)
+		{
 			if(forStartup) {
 				_noVideo = switches.Contains("/novideo");
 				_noAudio = switches.Contains("/noaudio");
 				_noInput = switches.Contains("/noinput");
 			}
 
-			if(switches.Contains("/fullscreen")) {
-				this.SetFullscreenState(true);
-			}
 			if(switches.Contains("/donotsavesettings")) {
 				ConfigManager.DoNotSaveSettings = true;
 			}
+
 			ConfigManager.ProcessSwitches(switches);
 		}
 
-		public void LoadGameFromCommandLine(string[] args)
+		public void LoadGameFromCommandLine(List<string> switches)
 		{
-			if(args.Length > 0) {
-				foreach(string arg in args) {
-					if(arg != null) {
-						string path = arg;
-						try {
-							if(File.Exists(path)) {
-								this.LoadFile(path);
-								break;
-							}
+			foreach(string arg in switches) {
+				if(arg != null) {
+					string path = arg;
+					try {
+						if(File.Exists(path)) {
+							this.LoadFile(path);
+							break;
+						}
 
-							//Try loading file as a relative path to the folder Mesen was started from
-							path = Path.Combine(Program.OriginalFolder, path);
-							if(File.Exists(path)) {
-								this.LoadFile(path);
-								break;
-							}
-						} catch { }
-					}
+						//Try loading file as a relative path to the folder Mesen was started from
+						path = Path.Combine(Program.OriginalFolder, path);
+						if(File.Exists(path)) {
+							this.LoadFile(path);
+							break;
+						}
+					} catch { }
 				}
 			}
 		}
@@ -188,6 +194,24 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
+		private void ProcessFullscreenSwitch(List<string> switches)
+		{
+			if(switches.Contains("/fullscreen")) {
+				double scale = ConfigManager.Config.VideoInfo.VideoScale;
+				if(!ConfigManager.Config.VideoInfo.UseExclusiveFullscreen) {
+					//Go into fullscreen mode right away
+					SetFullscreenState(true);
+				}
+
+				_fullscreenRequested = true;
+				foreach(string option in switches) {
+					if(option.StartsWith("/videoscale=")) {
+						_switchOptionScale = scale;
+					}
+				}
+			}
+		}
+
 		protected override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);
@@ -211,6 +235,8 @@ namespace Mesen.GUI.Forms
 			//Ensure the resize event is not fired until the form is fully shown
 			//This is needed when DPI display settings is not set to 100%
 			_enableResize = true;
+
+			ProcessFullscreenSwitch(_commandLineArgs);
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -381,11 +407,13 @@ namespace Mesen.GUI.Forms
 			_frmFullscreenRenderer.Show();
 		}
 
-		private void StartFullscreenWindowMode()
+		private void StartFullscreenWindowMode(bool saveState)
 		{
 			this.menuStrip.Visible = false;
-			_originalWindowState = this.WindowState;
-			_originalWindowMinimumSize = this.MinimumSize;
+			if(saveState) {
+				_originalWindowState = this.WindowState;
+				_originalWindowMinimumSize = this.MinimumSize;
+			}
 			this.MinimumSize = new Size(0, 0);
 			this.WindowState = FormWindowState.Normal;
 			this.FormBorderStyle = FormBorderStyle.None;
@@ -408,6 +436,7 @@ namespace Mesen.GUI.Forms
 				enabled = false;
 			}
 
+			bool saveState = !_fullscreenMode;
 			_fullscreenMode = enabled;
 			mnuFullscreen.Checked = enabled;
 
@@ -422,7 +451,7 @@ namespace Mesen.GUI.Forms
 			} else {
 				this.Resize -= frmMain_Resize;
 				if(enabled) {
-					StartFullscreenWindowMode();
+					StartFullscreenWindowMode(saveState);
 				} else {
 					StopFullscreenWindowMode();
 				}
@@ -530,7 +559,7 @@ namespace Mesen.GUI.Forms
 
 				case InteropEmu.ConsoleNotificationType.ResolutionChanged:
 					this.BeginInvoke((MethodInvoker)(() => {
-						UpdateViewerSize();
+						ProcessResolutionChanged();
 					}));
 					break;
 
@@ -557,6 +586,25 @@ namespace Mesen.GUI.Forms
 
 			if(e.NotificationType != InteropEmu.ConsoleNotificationType.PpuFrameDone) {
 				UpdateMenus();
+			}
+		}
+
+		private void ProcessResolutionChanged()
+		{
+			//Force scale specified by command line options, when using /fullscreen
+			if(_fullscreenRequested) {
+				SetFullscreenState(true);
+				if(_switchOptionScale.HasValue) {
+					//If a VideoScale is specified in command line, apply it
+					SetScale(_switchOptionScale.Value);
+				}
+				_fullscreenRequested = false;
+			} else if(_switchOptionScale.HasValue) {
+				//For exclusive fullscreen, resolution changed will be called twice, need to set the scale one more time here
+				SetScale(_switchOptionScale.Value);
+				_switchOptionScale = null;
+			} else {
+				UpdateViewerSize();
 			}
 		}
 
