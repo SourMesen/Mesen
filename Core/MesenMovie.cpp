@@ -232,6 +232,7 @@ void MesenMovie::ApplySettings()
 	EmulationSettings::SetFlagState(EmulationFlags::DisableOamAddrBug, LoadBool(_settings, MovieKeys::DisableOamAddrBug));
 	EmulationSettings::SetFlagState(EmulationFlags::UseNes101Hvc101Behavior, LoadBool(_settings, MovieKeys::UseNes101Hvc101Behavior));
 	EmulationSettings::SetFlagState(EmulationFlags::EnableOamDecay, LoadBool(_settings, MovieKeys::EnableOamDecay));
+	EmulationSettings::SetFlagState(EmulationFlags::DisablePpuReset, LoadBool(_settings, MovieKeys::DisablePpuReset));
 
 	//VS System flags
 	EmulationSettings::SetPpuModel(FromString(LoadString(_settings, MovieKeys::PpuModel), PpuModelNames, PpuModel::Ppu2C02));

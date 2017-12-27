@@ -58,8 +58,6 @@ class Console
 
 		bool _disableOcNextFrame = false;
 
-		atomic<bool> _resetRequested;
-		
 		bool _initialized = false;
 		std::thread::id _emulationThreadId;
 
@@ -95,7 +93,6 @@ class Console
 		
 		static std::thread::id GetEmulationThreadId();
 
-		static void RequestReset();
 		static void Reset(bool softReset = true);
 		void PowerCycle();
 		void ResetComponents(bool softReset);

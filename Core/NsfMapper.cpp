@@ -402,7 +402,7 @@ void NsfMapper::InternalSelectTrack(uint8_t trackNumber, bool requestReset)
 		//Need to change track while running
 		//Some NSFs keep the interrupt flag on at all times, preventing us from triggering an IRQ to change tracks
 		//Forcing the console to reset ensures changing tracks always works, even with a bad NSF file
-		Console::RequestReset();
+		Console::Reset(true);
 	} else {
 		//Selecting tracking after a reset
 		SoundMixer::SetFadeRatio(1.0);

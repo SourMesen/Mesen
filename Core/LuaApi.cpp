@@ -407,7 +407,7 @@ int LuaApi::Reset(lua_State *lua)
 {
 	LuaCallHelper l(lua);
 	checkparams();
-	Console::RequestReset();
+	Console::Reset(true);
 	return l.ReturnCount();
 }
 

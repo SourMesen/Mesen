@@ -43,7 +43,6 @@ shared_ptr<Console> Console::Instance(new Console());
 
 Console::Console()
 {
-	_resetRequested = false;
 }
 
 Console::~Console()
@@ -324,12 +323,7 @@ void Console::Reset(bool softReset)
 {
 	if(Instance->_initialized) {
 		if(softReset) {
-			if(EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset)) {
-				//Allow mid-frame resets to allow the PPU to get out-of-sync
-				RequestReset();
-			} else {
-				Instance->_systemActionManager->Reset();
-			}
+			Instance->_systemActionManager->Reset();
 		} else {
 			Instance->_systemActionManager->PowerCycle();
 		}
@@ -426,14 +420,6 @@ void Console::Run()
 	try {
 		while(true) {
 			_cpu->Exec();
-
-			if(_resetRequested) {
-				//Used by NSF player to reset console after changing track
-				//Also used with DisablePpuReset option to reset mid-frame
-				MovieManager::Stop();
-				ResetComponents(true);
-				_resetRequested = false;
-			}
 
 			uint32_t currentFrameNumber = PPU::GetFrameCount();
 			if(currentFrameNumber != lastFrameNumber) {
@@ -683,11 +669,6 @@ std::shared_ptr<Debugger> Console::GetDebugger(bool autoStart)
 void Console::StopDebugger()
 {
 	_debugger.reset();
-}
-
-void Console::RequestReset()
-{
-	Instance->_resetRequested = true;
 }
 
 std::thread::id Console::GetEmulationThreadId()

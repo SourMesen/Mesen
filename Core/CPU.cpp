@@ -238,7 +238,7 @@ uint16_t CPU::FetchOperand()
 	
 	if(NsfMapper::GetInstance()) {
 		//Don't stop emulation on CPU crash when playing NSFs, reset cpu instead
-		Console::RequestReset();
+		Console::Reset(true);
 		return 0;
 	} else {
 		throw std::runtime_error("Invalid OP code - CPU crashed");
