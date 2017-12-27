@@ -36,6 +36,7 @@ namespace Mesen.GUI.Forms
 		private string _currentGame = null;
 		private bool _customSize = false;
 		private FormWindowState _originalWindowState;
+		private Size _originalWindowMinimumSize;
 		private bool _fullscreenMode = false;
 		private Size? _nonNsfSize = null;
 		private Size _nonNsfMinimumSize;
@@ -384,6 +385,8 @@ namespace Mesen.GUI.Forms
 		{
 			this.menuStrip.Visible = false;
 			_originalWindowState = this.WindowState;
+			_originalWindowMinimumSize = this.MinimumSize;
+			this.MinimumSize = new Size(0, 0);
 			this.WindowState = FormWindowState.Normal;
 			this.FormBorderStyle = FormBorderStyle.None;
 			this.WindowState = FormWindowState.Maximized;
@@ -394,6 +397,7 @@ namespace Mesen.GUI.Forms
 		{
 			this.menuStrip.Visible = true;
 			this.WindowState = _originalWindowState;
+			this.MinimumSize = _originalWindowMinimumSize;
 			this.FormBorderStyle = FormBorderStyle.Sizable;
 			this.frmMain_Resize(null, EventArgs.Empty);
 		}
