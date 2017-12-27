@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CodeDataLogger.h"
 #include "Debugger.h"
+#include "LabelManager.h"
 
 CodeDataLogger::CodeDataLogger(Debugger *debugger, uint32_t prgSize, uint32_t chrSize)
 {
@@ -163,6 +164,9 @@ void CodeDataLogger::GetCdlData(uint32_t offset, uint32_t length, DebugMemoryTyp
 	if(memoryType == DebugMemoryType::PrgRom) {
 		for(uint32_t i = 0; i < length; i++) {
 			cdlData[i] = _cdlData[offset + i];
+			if(_debugger->GetLabelManager()->HasLabelOrComment(offset + i, AddressType::PrgRom)) {
+				cdlData[i] |= 0x04; //Has label or comment
+			}
 		}
 	} else if(memoryType == DebugMemoryType::ChrRom) {
 		for(uint32_t i = 0; i < length; i++) {
@@ -172,6 +176,9 @@ void CodeDataLogger::GetCdlData(uint32_t offset, uint32_t length, DebugMemoryTyp
 		for(uint32_t i = 0; i < length; i++) {
 			int32_t absoluteAddress = _debugger->GetAbsoluteAddress(offset + i);
 			cdlData[i] = absoluteAddress >= 0 ? _cdlData[absoluteAddress] : 0;
+			if(_debugger->GetLabelManager()->HasLabelOrComment(offset + i)) {
+				cdlData[i] |= 0x04; //Has label or comment
+			}
 		}
 	} else if(memoryType == DebugMemoryType::PpuMemory) {
 		for(uint32_t i = 0; i < length; i++) {

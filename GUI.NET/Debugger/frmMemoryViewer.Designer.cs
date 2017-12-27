@@ -96,6 +96,8 @@
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
 			this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
+			this.mnuHighlightLabelledBytes = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
@@ -260,9 +262,9 @@
 			// highlightToolStripMenuItem
 			// 
 			this.highlightToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuHightlightReads,
-            this.mnuHighlightWrites,
             this.mnuHighlightExecution,
+            this.mnuHighlightWrites,
+            this.mnuHightlightReads,
             this.toolStripMenuItem6,
             this.fadeSpeedToolStripMenuItem});
 			this.highlightToolStripMenuItem.Name = "highlightToolStripMenuItem";
@@ -273,7 +275,7 @@
 			// 
 			this.mnuHightlightReads.CheckOnClick = true;
 			this.mnuHightlightReads.Name = "mnuHightlightReads";
-			this.mnuHightlightReads.Size = new System.Drawing.Size(133, 22);
+			this.mnuHightlightReads.Size = new System.Drawing.Size(152, 22);
 			this.mnuHightlightReads.Text = "Reads";
 			this.mnuHightlightReads.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
@@ -281,7 +283,7 @@
 			// 
 			this.mnuHighlightWrites.CheckOnClick = true;
 			this.mnuHighlightWrites.Name = "mnuHighlightWrites";
-			this.mnuHighlightWrites.Size = new System.Drawing.Size(133, 22);
+			this.mnuHighlightWrites.Size = new System.Drawing.Size(152, 22);
 			this.mnuHighlightWrites.Text = "Writes";
 			this.mnuHighlightWrites.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
@@ -289,14 +291,14 @@
 			// 
 			this.mnuHighlightExecution.CheckOnClick = true;
 			this.mnuHighlightExecution.Name = "mnuHighlightExecution";
-			this.mnuHighlightExecution.Size = new System.Drawing.Size(133, 22);
+			this.mnuHighlightExecution.Size = new System.Drawing.Size(152, 22);
 			this.mnuHighlightExecution.Text = "Execution";
 			this.mnuHighlightExecution.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(130, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
 			// 
 			// fadeSpeedToolStripMenuItem
 			// 
@@ -308,7 +310,7 @@
             this.toolStripMenuItem7,
             this.mnuCustomFadeSpeed});
 			this.fadeSpeedToolStripMenuItem.Name = "fadeSpeedToolStripMenuItem";
-			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.fadeSpeedToolStripMenuItem.Text = "Fade speed";
 			// 
 			// mnuFadeSlow
@@ -356,6 +358,8 @@
 			// dataTypeHighlightingToolStripMenuItem
 			// 
 			this.dataTypeHighlightingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuHighlightLabelledBytes,
+            this.toolStripMenuItem8,
             this.mnuHighlightCodeBytes,
             this.mnuHighlightDataBytes,
             this.toolStripMenuItem11,
@@ -683,6 +687,18 @@
 			this.tmrRefresh.Enabled = true;
 			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
 			// 
+			// mnuHighlightLabelledBytes
+			// 
+			this.mnuHighlightLabelledBytes.CheckOnClick = true;
+			this.mnuHighlightLabelledBytes.Name = "mnuHighlightLabelledBytes";
+			this.mnuHighlightLabelledBytes.Size = new System.Drawing.Size(204, 22);
+			this.mnuHighlightLabelledBytes.Text = "Labelled bytes";
+			// 
+			// toolStripMenuItem8
+			// 
+			this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+			this.toolStripMenuItem8.Size = new System.Drawing.Size(201, 6);
+			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -778,5 +794,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuHighlightChrReadBytes;
 		private System.Windows.Forms.ToolStripMenuItem mnuConfigureColors;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowLabelInfoOnMouseOver;
+		private System.Windows.Forms.ToolStripMenuItem mnuHighlightLabelledBytes;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
 	}
 }

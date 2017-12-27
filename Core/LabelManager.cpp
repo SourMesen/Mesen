@@ -10,13 +10,7 @@ LabelManager::LabelManager(shared_ptr<BaseMapper> mapper)
 
 void LabelManager::SetLabel(uint32_t address, AddressType addressType, string label, string comment)
 {
-	switch(addressType) {
-		case AddressType::InternalRam: address |= 0x70000000; break;
-		case AddressType::PrgRom: address |= 0x60000000; break;
-		case AddressType::WorkRam: address |= 0x50000000; break;
-		case AddressType::SaveRam: address |= 0x40000000; break;
-		case AddressType::Register: address |= 0x30000000; break;
-	}
+	address = GetLabelAddress(address, addressType);
 
 	auto existingLabel = _codeLabels.find(address);
 	if(existingLabel != _codeLabels.end()) {
@@ -37,6 +31,18 @@ void LabelManager::SetLabel(uint32_t address, AddressType addressType, string la
 	if(!comment.empty()) {
 		_codeComments.emplace(address, comment);
 	}
+}
+
+int32_t LabelManager::GetLabelAddress(uint32_t absoluteAddr, AddressType addressType)
+{
+	switch(addressType) {
+		case AddressType::InternalRam: absoluteAddr |= 0x70000000; break;
+		case AddressType::PrgRom: absoluteAddr |= 0x60000000; break;
+		case AddressType::WorkRam: absoluteAddr |= 0x50000000; break;
+		case AddressType::SaveRam: absoluteAddr |= 0x40000000; break;
+		case AddressType::Register: absoluteAddr |= 0x30000000; break;
+	}
+	return absoluteAddr;
 }
 
 int32_t LabelManager::GetLabelAddress(uint16_t relativeAddr, bool checkRegisters)
@@ -142,4 +148,30 @@ int32_t LabelManager::GetLabelRelativeAddress(string label)
 		return _mapper->FromAbsoluteAddress(address & 0x0FFFFFFF, type);
 	}
 	return -1;
+}
+
+bool LabelManager::HasLabelOrComment(uint16_t relativeAddr)
+{
+	int32_t labelAddr = GetLabelAddress(relativeAddr, true);
+
+	if(labelAddr >= 0) {
+		return
+			_codeLabels.find(labelAddr) != _codeLabels.end() ||
+			_codeComments.find(labelAddr) != _codeComments.end();
+	}
+
+	return false;
+}
+
+bool LabelManager::HasLabelOrComment(uint32_t absoluteAddr, AddressType addressType)
+{
+	int32_t labelAddr = GetLabelAddress(absoluteAddr, addressType);
+
+	if(labelAddr >= 0) {
+		return
+			_codeLabels.find(labelAddr) != _codeLabels.end() ||
+			_codeComments.find(labelAddr) != _codeComments.end();
+	}
+
+	return false;
 }

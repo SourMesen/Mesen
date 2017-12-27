@@ -133,6 +133,7 @@ namespace Mesen.GUI.Config
 		public bool RamHideReadBytes = false;
 		public bool RamHideWrittenBytes = false;
 		public bool RamHideExecutedBytes = false;
+		public bool RamHighlightLabelledBytes = false;
 		public bool RamHighlightChrDrawnBytes = false;
 		public bool RamHighlightChrReadBytes = false;
 		public bool RamHighlightCodeBytes = false;
@@ -140,6 +141,7 @@ namespace Mesen.GUI.Config
 		public XmlColor RamReadColor = Color.Blue;
 		public XmlColor RamWriteColor = Color.Red;
 		public XmlColor RamExecColor = Color.Green;
+		public XmlColor RamLabelledByteColor = Color.LightPink;
 		public XmlColor RamCodeByteColor = Color.DarkSeaGreen;
 		public XmlColor RamDataByteColor = Color.LightSteelBlue;
 		public XmlColor RamChrDrawnByteColor = Color.DarkSeaGreen;

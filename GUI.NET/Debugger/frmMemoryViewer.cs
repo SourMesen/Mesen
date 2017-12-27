@@ -46,6 +46,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuHideWrittenBytes.Checked = ConfigManager.Config.DebugInfo.RamHideWrittenBytes;
 			this.mnuHideExecutedBytes.Checked = ConfigManager.Config.DebugInfo.RamHideExecutedBytes;
 
+			this.mnuHighlightLabelledBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightLabelledBytes;
 			this.mnuHighlightChrDrawnBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightChrDrawnBytes;
 			this.mnuHighlightChrReadBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightChrReadBytes;
 			this.mnuHighlightCodeBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightCodeBytes;
@@ -133,7 +134,8 @@ namespace Mesen.GUI.Debugger
 						mnuHideWrittenBytes.Checked,
 						mnuHideExecutedBytes.Checked,
 						mnuHighlightDataBytes.Checked,
-						mnuHighlightCodeBytes.Checked
+						mnuHighlightCodeBytes.Checked,
+						mnuHighlightLabelledBytes.Checked
 					);
 					break;
 

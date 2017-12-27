@@ -27,8 +27,9 @@ namespace Mesen.GUI.Debugger
 		bool _hideExecutedBytes;
 		bool _highlightDataBytes;
 		bool _highlightCodeBytes;
+		bool _highlightLabelledBytes;
 
-		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade, bool hideUnusedBytes, bool hideReadBytes, bool hideWrittenBytes, bool hideExecutedBytes, bool highlightDataBytes, bool highlightCodeBytes)
+		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade, bool hideUnusedBytes, bool hideReadBytes, bool hideWrittenBytes, bool hideExecutedBytes, bool highlightDataBytes, bool highlightCodeBytes, bool highlightLabelledBytes)
 		{
 			_memoryType = memoryType;
 			_showExec = showExec;
@@ -41,6 +42,7 @@ namespace Mesen.GUI.Debugger
 			_hideExecutedBytes = hideExecutedBytes;
 			_highlightDataBytes = highlightDataBytes;
 			_highlightCodeBytes = highlightCodeBytes;
+			_highlightLabelledBytes = highlightLabelledBytes;
 		}
 
 		public void Prepare(long firstByteIndex, long lastByteIndex)
@@ -57,7 +59,7 @@ namespace Mesen.GUI.Debugger
 			_execCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Exec);
 
 			_cdlData = null;
-			if(_highlightDataBytes || _highlightCodeBytes) {
+			if(_highlightDataBytes || _highlightCodeBytes || _highlightLabelledBytes) {
 				switch(_memoryType) {
 					case DebugMemoryType.ChrRom:
 					case DebugMemoryType.PpuMemory:
@@ -107,7 +109,10 @@ namespace Mesen.GUI.Debugger
 
 			bgColor = Color.Transparent;
 			if(_cdlData != null) {
-				if((_cdlData[index] & 0x01) != 0 && _highlightCodeBytes) {
+				if((_cdlData[index] & 0x04) != 0 && _highlightLabelledBytes) {
+					//Labels/comments
+					bgColor = ConfigManager.Config.DebugInfo.RamLabelledByteColor;
+				} else if((_cdlData[index] & 0x01) != 0 && _highlightCodeBytes) {
 					//Code
 					bgColor = ConfigManager.Config.DebugInfo.RamCodeByteColor;
 				} else if((_cdlData[index] & 0x02) != 0 && _highlightDataBytes) {

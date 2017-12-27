@@ -26,6 +26,7 @@ private:
 
 	shared_ptr<BaseMapper> _mapper;
 
+	int32_t GetLabelAddress(uint32_t absoluteAddr, AddressType addressType);
 	int32_t GetLabelAddress(uint16_t relativeAddr, bool checkRegisters);
 
 public:
@@ -38,4 +39,7 @@ public:
 	string GetLabel(uint16_t relativeAddr, bool checkRegisters);
 	string GetComment(uint16_t relativeAddr);
 	void GetLabelAndComment(uint16_t relativeAddr, string &label, string &comment);
+
+	bool HasLabelOrComment(uint16_t relativeAddr);
+	bool HasLabelOrComment(uint32_t absoluteAddr, AddressType addressType);
 };
