@@ -4,6 +4,7 @@
 #include "../Utilities/FolderUtilities.h"
 
 string BatteryManager::_romName;
+bool BatteryManager::_saveEnabled = true;
 std::weak_ptr<IBatteryRecorder> BatteryManager::_recorder;
 std::weak_ptr<IBatteryProvider> BatteryManager::_provider;
 
@@ -15,6 +16,11 @@ void BatteryManager::Initialize(string romName)
 string BatteryManager::GetBasePath()
 {
 	return FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), _romName);
+}
+
+void BatteryManager::SetSaveEnabled(bool enabled)
+{
+	_saveEnabled = enabled;
 }
 
 void BatteryManager::SetBatteryProvider(shared_ptr<IBatteryProvider> provider)
@@ -29,9 +35,11 @@ void BatteryManager::SetBatteryRecorder(shared_ptr<IBatteryRecorder> recorder)
 
 void BatteryManager::SaveBattery(string extension, uint8_t* data, uint32_t length)
 {
-	ofstream out(GetBasePath() + extension, ios::binary);
-	if(out) {
-		out.write((char*)data, length);
+	if(_saveEnabled) {
+		ofstream out(GetBasePath() + extension, ios::binary);
+		if(out) {
+			out.write((char*)data, length);
+		}
 	}
 }
 

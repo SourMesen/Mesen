@@ -117,7 +117,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			}
 
 			_autoSaveManager.reset(new AutoSaveManager());
-			
+
 			_mapper = mapper;
 			_memoryManager.reset(new MemoryManager(_mapper));
 			_cpu.reset(new CPU(_memoryManager.get()));
@@ -129,12 +129,16 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				default: _systemActionManager.reset(new SystemActionManager(Console::GetInstance())); break;
 			}
 
+			//Temporarely disable battery saves to prevent battery files from being created for the wrong game (for Battle Box & Turbo File)
+			BatteryManager::SetSaveEnabled(false);
 			if(_mapper->GetGameSystem() == GameSystem::VsUniSystem) {
 				_controlManager.reset(new VsControlManager(_systemActionManager, _mapper->GetMapperControlDevice()));
 			} else {
 				_controlManager.reset(new ControlManager(_systemActionManager, _mapper->GetMapperControlDevice()));
 			}
 			_controlManager->UpdateControlDevices();
+			//Re-enable battery saves
+			BatteryManager::SetSaveEnabled(true);
 			
 			if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
 				_ppu.reset(new HdPpu(_mapper.get(), _controlManager.get(), _hdData->Version));
