@@ -98,7 +98,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath, EntryPoint = "GetLog")] private static extern IntPtr GetLogWrapper();
 
 		[DllImport(DLLPath)] public static extern void MoviePlay([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
-		[DllImport(DLLPath)] public static extern void MovieRecord(RecordMovieOptions options);
+		[DllImport(DLLPath)] public static extern void MovieRecord(ref RecordMovieOptions options);
 		[DllImport(DLLPath)] public static extern void MovieStop();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MoviePlaying();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool MovieRecording();

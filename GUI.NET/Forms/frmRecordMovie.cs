@@ -32,12 +32,13 @@ namespace Mesen.GUI.Forms
 		{
 			base.OnFormClosed(e);
 			if(this.DialogResult == DialogResult.OK) {
-				InteropEmu.MovieRecord(new RecordMovieOptions(
+				RecordMovieOptions options = new RecordMovieOptions(
 					this.txtFilename.Text,
 					this.txtAuthor.Text,
 					this.txtDescription.Text,
 					this.cboRecordFrom.GetEnumValue<RecordMovieFrom>()
-				));
+				);
+				InteropEmu.MovieRecord(ref options);
 			}
 		}
 
