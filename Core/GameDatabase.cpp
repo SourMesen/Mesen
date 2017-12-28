@@ -107,7 +107,8 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 		ControllerType controllers[4] = { ControllerType::StandardController, ControllerType::StandardController, ControllerType::None, ControllerType::None };
 		ExpansionPortDevice expDevice = ExpansionPortDevice::None;
 		EmulationSettings::ClearFlags(EmulationFlags::HasFourScore);
-
+		
+		bool isVsSystem = system == GameSystem::VsUniSystem;
 		bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
 
 		if(inputType.compare("Zapper") == 0) {
@@ -115,7 +116,12 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 			if(isFamicom) {
 				expDevice = ExpansionPortDevice::Zapper;
 			} else {
-				controllers[1] = ControllerType::Zapper;
+				if(isVsSystem) {
+					//VS Duck Hunt, etc. need the zapper in the first port
+					controllers[0] = ControllerType::Zapper;
+				} else {
+					controllers[1] = ControllerType::Zapper;
+				}
 			}
 		} else if(inputType.compare("FourPlayer") == 0) {
 			MessageManager::Log("[DB] Input: Four player adapter connected");
@@ -175,10 +181,27 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 			MessageManager::Log("[DB] Input: Bandai Hyper Shot gun connected");
 			system = GameSystem::Famicom;
 			expDevice = ExpansionPortDevice::BandaiHyperShot;
+		} else if(inputType.compare("BattleBox") == 0) {
+			MessageManager::Log("[DB] Input: Battle Box connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::BattleBox;
+		} else if(inputType.compare("TurboFile") == 0) {
+			MessageManager::Log("[DB] Input: Ascii Turbo File connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::AsciiTurboFile;
+		} else if(inputType.compare("FamilyTrainer") == 0) {
+			MessageManager::Log("[DB] Input: Family Trainer mat connected");
+			system = GameSystem::Famicom;
+			expDevice = ExpansionPortDevice::FamilyTrainerMat;
+		} else if(inputType.compare("PowerPad") == 0 || inputType.compare("FamilyFunFitness") == 0) {
+			MessageManager::Log("[DB] Input: Power Pad connected");
+			system = GameSystem::NesNtsc;
+			controllers[1] = ControllerType::PowerPad;
 		} else {
 			MessageManager::Log("[DB] Input: 2 standard controllers connected");
 		}
 
+		isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
 		EmulationSettings::SetConsoleType(isFamicom ? ConsoleType::Famicom : ConsoleType::Nes);
 		for(int i = 0; i < 4; i++) {
 			EmulationSettings::SetControllerType(i, controllers[i]);
