@@ -44,7 +44,7 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		uint8_t output = 0;
-		if(IsCurrentPort(addr)) {
+		if((IsExpansionDevice() && addr == 0x4017) || IsCurrentPort(addr)) {
 			output = (IsLightFound() ? 0 : 0x08) | (IsPressed(Zapper::Buttons::Fire) ? 0x10 : 0x00);
 		}
 		return output;
