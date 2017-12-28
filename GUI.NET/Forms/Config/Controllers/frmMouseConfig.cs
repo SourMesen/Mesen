@@ -27,6 +27,7 @@ namespace Mesen.GUI.Forms.Config
 			if(this.DialogResult == DialogResult.OK) {
 				UpdateObject();
 			}
+			base.OnFormClosed(e);			
 		}
 	}
 }

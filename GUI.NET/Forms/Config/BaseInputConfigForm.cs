@@ -44,6 +44,7 @@ namespace Mesen.GUI.Forms.Config
 				UpdateKeyMappings();
 				UpdateObject();
 			}
+			base.OnFormClosed(e);			
 		}
 
 		protected override bool ValidateInput()
