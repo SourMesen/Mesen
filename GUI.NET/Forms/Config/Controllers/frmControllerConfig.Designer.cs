@@ -83,8 +83,8 @@
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Controls.Add(this.flowLayoutPanel2);
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 336);
-			this.baseConfigPanel.Size = new System.Drawing.Size(623, 29);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 318);
+			this.baseConfigPanel.Size = new System.Drawing.Size(599, 29);
 			this.baseConfigPanel.Controls.SetChildIndex(this.flowLayoutPanel2, 0);
 			// 
 			// tabMain
@@ -101,7 +101,7 @@
 			this.tabMain.Location = new System.Drawing.Point(3, 3);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(617, 253);
+			this.tabMain.Size = new System.Drawing.Size(593, 235);
 			this.tabMain.TabIndex = 3;
 			// 
 			// tpgSet1
@@ -109,7 +109,7 @@
 			this.tpgSet1.Controls.Add(this.ctrlStandardController0);
 			this.tpgSet1.Location = new System.Drawing.Point(4, 23);
 			this.tpgSet1.Name = "tpgSet1";
-			this.tpgSet1.Size = new System.Drawing.Size(609, 226);
+			this.tpgSet1.Size = new System.Drawing.Size(585, 208);
 			this.tpgSet1.TabIndex = 0;
 			this.tpgSet1.Text = "Key Set #1";
 			this.tpgSet1.UseVisualStyleBackColor = true;
@@ -119,7 +119,7 @@
 			this.ctrlStandardController0.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlStandardController0.Location = new System.Drawing.Point(0, 0);
 			this.ctrlStandardController0.Name = "ctrlStandardController0";
-			this.ctrlStandardController0.Size = new System.Drawing.Size(609, 226);
+			this.ctrlStandardController0.Size = new System.Drawing.Size(585, 208);
 			this.ctrlStandardController0.TabIndex = 0;
 			// 
 			// tpgSet2
@@ -127,7 +127,7 @@
 			this.tpgSet2.Controls.Add(this.ctrlStandardController1);
 			this.tpgSet2.Location = new System.Drawing.Point(4, 23);
 			this.tpgSet2.Name = "tpgSet2";
-			this.tpgSet2.Size = new System.Drawing.Size(609, 222);
+			this.tpgSet2.Size = new System.Drawing.Size(585, 210);
 			this.tpgSet2.TabIndex = 1;
 			this.tpgSet2.Text = "Key Set #2";
 			this.tpgSet2.UseVisualStyleBackColor = true;
@@ -137,7 +137,7 @@
 			this.ctrlStandardController1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlStandardController1.Location = new System.Drawing.Point(0, 0);
 			this.ctrlStandardController1.Name = "ctrlStandardController1";
-			this.ctrlStandardController1.Size = new System.Drawing.Size(609, 222);
+			this.ctrlStandardController1.Size = new System.Drawing.Size(585, 210);
 			this.ctrlStandardController1.TabIndex = 1;
 			// 
 			// tpgSet3
@@ -145,7 +145,7 @@
 			this.tpgSet3.Controls.Add(this.ctrlStandardController2);
 			this.tpgSet3.Location = new System.Drawing.Point(4, 23);
 			this.tpgSet3.Name = "tpgSet3";
-			this.tpgSet3.Size = new System.Drawing.Size(609, 222);
+			this.tpgSet3.Size = new System.Drawing.Size(585, 210);
 			this.tpgSet3.TabIndex = 2;
 			this.tpgSet3.Text = "Key Set #3";
 			this.tpgSet3.UseVisualStyleBackColor = true;
@@ -155,7 +155,7 @@
 			this.ctrlStandardController2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlStandardController2.Location = new System.Drawing.Point(0, 0);
 			this.ctrlStandardController2.Name = "ctrlStandardController2";
-			this.ctrlStandardController2.Size = new System.Drawing.Size(609, 222);
+			this.ctrlStandardController2.Size = new System.Drawing.Size(585, 210);
 			this.ctrlStandardController2.TabIndex = 1;
 			// 
 			// tpgSet4
@@ -163,7 +163,7 @@
 			this.tpgSet4.Controls.Add(this.ctrlStandardController3);
 			this.tpgSet4.Location = new System.Drawing.Point(4, 23);
 			this.tpgSet4.Name = "tpgSet4";
-			this.tpgSet4.Size = new System.Drawing.Size(609, 226);
+			this.tpgSet4.Size = new System.Drawing.Size(585, 210);
 			this.tpgSet4.TabIndex = 3;
 			this.tpgSet4.Text = "Key Set #4";
 			this.tpgSet4.UseVisualStyleBackColor = true;
@@ -173,7 +173,7 @@
 			this.ctrlStandardController3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlStandardController3.Location = new System.Drawing.Point(0, 0);
 			this.ctrlStandardController3.Name = "ctrlStandardController3";
-			this.ctrlStandardController3.Size = new System.Drawing.Size(609, 226);
+			this.ctrlStandardController3.Size = new System.Drawing.Size(585, 210);
 			this.ctrlStandardController3.TabIndex = 1;
 			// 
 			// imageList
@@ -221,7 +221,7 @@
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpMain.Size = new System.Drawing.Size(623, 305);
+			this.tlpMain.Size = new System.Drawing.Size(599, 287);
 			this.tlpMain.TabIndex = 23;
 			// 
 			// tlpStandardController
@@ -236,20 +236,20 @@
 			this.tlpStandardController.Controls.Add(this.lblTurboSpeed, 1, 0);
 			this.tlpStandardController.Controls.Add(this.btnSelectPreset, 0, 0);
 			this.tlpStandardController.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tlpStandardController.Location = new System.Drawing.Point(0, 259);
+			this.tlpStandardController.Location = new System.Drawing.Point(0, 241);
 			this.tlpStandardController.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpStandardController.Name = "tlpStandardController";
 			this.tlpStandardController.RowCount = 2;
 			this.tlpStandardController.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 			this.tlpStandardController.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpStandardController.Size = new System.Drawing.Size(623, 46);
+			this.tlpStandardController.Size = new System.Drawing.Size(599, 46);
 			this.tlpStandardController.TabIndex = 6;
 			// 
 			// panel1
 			// 
 			this.panel1.Controls.Add(this.lblTurboFast);
 			this.panel1.Controls.Add(this.lblSlow);
-			this.panel1.Location = new System.Drawing.Point(500, 32);
+			this.panel1.Location = new System.Drawing.Point(476, 32);
 			this.panel1.Margin = new System.Windows.Forms.Padding(0);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(120, 14);
@@ -277,7 +277,7 @@
 			// trkTurboSpeed
 			// 
 			this.trkTurboSpeed.LargeChange = 2;
-			this.trkTurboSpeed.Location = new System.Drawing.Point(503, 3);
+			this.trkTurboSpeed.Location = new System.Drawing.Point(479, 3);
 			this.trkTurboSpeed.Maximum = 3;
 			this.trkTurboSpeed.Name = "trkTurboSpeed";
 			this.trkTurboSpeed.Size = new System.Drawing.Size(117, 26);
@@ -287,7 +287,7 @@
 			// 
 			this.lblTurboSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblTurboSpeed.AutoSize = true;
-			this.lblTurboSpeed.Location = new System.Drawing.Point(425, 9);
+			this.lblTurboSpeed.Location = new System.Drawing.Point(401, 9);
 			this.lblTurboSpeed.Name = "lblTurboSpeed";
 			this.lblTurboSpeed.Size = new System.Drawing.Size(72, 13);
 			this.lblTurboSpeed.TabIndex = 1;
@@ -437,14 +437,14 @@
 			this.ctrlKeyBindingHint1.Location = new System.Drawing.Point(0, 0);
 			this.ctrlKeyBindingHint1.Name = "ctrlKeyBindingHint1";
 			this.ctrlKeyBindingHint1.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-			this.ctrlKeyBindingHint1.Size = new System.Drawing.Size(623, 31);
+			this.ctrlKeyBindingHint1.Size = new System.Drawing.Size(599, 31);
 			this.ctrlKeyBindingHint1.TabIndex = 24;
 			// 
 			// frmControllerConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(623, 365);
+			this.ClientSize = new System.Drawing.Size(599, 347);
 			this.Controls.Add(this.tlpMain);
 			this.Controls.Add(this.ctrlKeyBindingHint1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
