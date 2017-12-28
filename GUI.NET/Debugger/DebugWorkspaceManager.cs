@@ -50,10 +50,15 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public static void SetupWorkspace()
+		public static void SetupWorkspace(bool saveCurrentWorkspace = true)
 		{
+			string romName = InteropEmu.GetRomInfo().GetRomName();
 			lock(_lock) {
-				if(_workspace != null) {
+				if(_workspace != null && _romName == romName) {
+					if(saveCurrentWorkspace) {
+						SaveWorkspace();
+					}
+
 					//Setup labels
 					if(_workspace.Labels.Count == 0) {
 						LabelManager.ResetLabels();
@@ -70,22 +75,24 @@ namespace Mesen.GUI.Debugger
 
 					//Load breakpoints
 					BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
+				} else {
+					Clear();
 				}
 			}
 		}
 
-		public static DebugWorkspace GetWorkspace(bool forceReload = false)
+		public static DebugWorkspace GetWorkspace()
 		{
 			string romName = InteropEmu.GetRomInfo().GetRomName();
-			if(_workspace == null || _romName != romName || forceReload) {
+			if(_workspace == null || _romName != romName) {
 				lock(_lock) {
-					if(_workspace == null || _romName != romName || forceReload) {
+					if(_workspace == null || _romName != romName) {
 						if(_workspace != null) {
 							SaveWorkspace();
 						}
 						_romName = InteropEmu.GetRomInfo().GetRomName();
 						_workspace = DebugWorkspace.GetWorkspace();
-						SetupWorkspace();						
+						SetupWorkspace(false);						
 					}
 				}
 			}

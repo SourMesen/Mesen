@@ -514,13 +514,8 @@ namespace Mesen.GUI.Forms
 					}));
 
 					Task.Run(() => {
-						if(ConfigManager.Config.PreferenceInfo.DeveloperMode) {
-							//Preload workspace in the background to be able to open debugging tools faster
-							DebugWorkspaceManager.GetWorkspace(true);
-						} else {
-							//If a workspace is already loaded, make sure we setup the labels, watch, etc properly
-							DebugWorkspaceManager.SetupWorkspace();
-						}
+						//If a workspace is already loaded for this game, make sure we setup the labels, watch, etc properly
+						DebugWorkspaceManager.SetupWorkspace();
 					});
 					break;
 
