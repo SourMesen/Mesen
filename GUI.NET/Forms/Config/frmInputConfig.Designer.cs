@@ -167,7 +167,6 @@
 			this.btnSetupP4.Text = "Setup";
 			this.btnSetupP4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupP4.UseVisualStyleBackColor = true;
-			this.btnSetupP4.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
 			// btnSetupP3
 			// 
@@ -179,7 +178,6 @@
 			this.btnSetupP3.Text = "Setup";
 			this.btnSetupP3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupP3.UseVisualStyleBackColor = true;
-			this.btnSetupP3.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
 			// lblPlayer1
 			// 
@@ -210,7 +208,6 @@
 			this.cboPlayer4.Name = "cboPlayer4";
 			this.cboPlayer4.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer4.TabIndex = 8;
-			this.cboPlayer4.SelectedIndexChanged += new System.EventHandler(this.cboPlayerController_SelectedIndexChanged);
 			// 
 			// cboPlayer3
 			// 
@@ -221,7 +218,6 @@
 			this.cboPlayer3.Name = "cboPlayer3";
 			this.cboPlayer3.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer3.TabIndex = 7;
-			this.cboPlayer3.SelectedIndexChanged += new System.EventHandler(this.cboPlayerController_SelectedIndexChanged);
 			// 
 			// cboPlayer1
 			// 
@@ -232,7 +228,6 @@
 			this.cboPlayer1.Name = "cboPlayer1";
 			this.cboPlayer1.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer1.TabIndex = 4;
-			this.cboPlayer1.SelectedIndexChanged += new System.EventHandler(this.cboPlayerController_SelectedIndexChanged);
 			// 
 			// lblPlayer4
 			// 
@@ -253,7 +248,6 @@
 			this.cboPlayer2.Name = "cboPlayer2";
 			this.cboPlayer2.Size = new System.Drawing.Size(201, 21);
 			this.cboPlayer2.TabIndex = 6;
-			this.cboPlayer2.SelectedIndexChanged += new System.EventHandler(this.cboPlayerController_SelectedIndexChanged);
 			// 
 			// lblPlayer3
 			// 
@@ -275,7 +269,6 @@
 			this.btnSetupP1.Text = "Setup";
 			this.btnSetupP1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupP1.UseVisualStyleBackColor = true;
-			this.btnSetupP1.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
 			// btnSetupP2
 			// 
@@ -287,7 +280,6 @@
 			this.btnSetupP2.Text = "Setup";
 			this.btnSetupP2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupP2.UseVisualStyleBackColor = true;
-			this.btnSetupP2.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
 			// lblNesType
 			// 
@@ -310,7 +302,6 @@
 			this.cboConsoleType.Name = "cboConsoleType";
 			this.cboConsoleType.Size = new System.Drawing.Size(109, 21);
 			this.cboConsoleType.TabIndex = 14;
-			this.cboConsoleType.SelectedIndexChanged += new System.EventHandler(this.cboNesType_SelectedIndexChanged);
 			// 
 			// lblExpansionPort
 			// 
@@ -331,7 +322,6 @@
 			this.cboExpansionPort.Name = "cboExpansionPort";
 			this.cboExpansionPort.Size = new System.Drawing.Size(201, 21);
 			this.cboExpansionPort.TabIndex = 17;
-			this.cboExpansionPort.SelectedIndexChanged += new System.EventHandler(this.cboExpansionPort_SelectedIndexChanged);
 			// 
 			// chkFourScore
 			// 
@@ -344,7 +334,6 @@
 			this.chkFourScore.TabIndex = 15;
 			this.chkFourScore.Text = "Use Four Score accessory";
 			this.chkFourScore.UseVisualStyleBackColor = true;
-			this.chkFourScore.CheckedChanged += new System.EventHandler(this.chkFourScore_CheckedChanged);
 			// 
 			// chkAutoConfigureInput
 			// 
@@ -416,7 +405,6 @@
 			this.btnSetupExp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupExp.UseVisualStyleBackColor = true;
 			this.btnSetupExp.Visible = false;
-			this.btnSetupExp.Click += new System.EventHandler(this.btnSetup_Click);
 			// 
 			// lblCartridge
 			// 
@@ -448,7 +436,6 @@
 			this.btnSetupCartridge.Text = "Setup";
 			this.btnSetupCartridge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnSetupCartridge.UseVisualStyleBackColor = true;
-			this.btnSetupCartridge.Click += new System.EventHandler(this.btnSetupCartridge_Click);
 			// 
 			// tpgAdvanced
 			// 

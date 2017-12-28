@@ -51,6 +51,22 @@ namespace Mesen.GUI.Forms.Config
 			UpdateConflictWarning();
 		}
 
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
+			btnSetupP1.Click += btnSetup_Click;
+			btnSetupP2.Click += btnSetup_Click;
+			btnSetupP3.Click += btnSetup_Click;
+			btnSetupP4.Click += btnSetup_Click;
+			
+			cboConsoleType.SelectedIndexChanged += cboNesType_SelectedIndexChanged;
+			cboExpansionPort.SelectedIndexChanged += cboExpansionPort_SelectedIndexChanged;
+			chkFourScore.CheckedChanged += chkFourScore_CheckedChanged;
+			btnSetupExp.Click += btnSetup_Click;
+			btnSetupCartridge.Click += btnSetupCartridge_Click;
+		}
+
 		private void UpdateCartridgeInputUi()
 		{
 			ConsoleFeatures features = InteropEmu.GetAvailableFeatures();
@@ -102,23 +118,28 @@ namespace Mesen.GUI.Forms.Config
 
 		private void UpdateAvailableControllerTypes()
 		{
+			cboPlayer1.SelectedIndexChanged -= cboPlayerController_SelectedIndexChanged;
+			cboPlayer2.SelectedIndexChanged -= cboPlayerController_SelectedIndexChanged;
+			cboPlayer3.SelectedIndexChanged -= cboPlayerController_SelectedIndexChanged;
+			cboPlayer4.SelectedIndexChanged -= cboPlayerController_SelectedIndexChanged;
+
 			bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
 			bool p3and4visible = (isNes && chkFourScore.Checked) || (!isNes && ((InputInfo)Entity).ExpansionPortDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter);
 			bool isOriginalFamicom = !isNes && !ConfigManager.Config.EmulationInfo.UseNes101Hvc101Behavior;
 
-			List<InteropEmu.ControllerType> controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.StandardController };
-			if(!isOriginalFamicom) {
-				controllerTypes.Add(InteropEmu.ControllerType.None);
-				controllerTypes.Add(InteropEmu.ControllerType.SnesMouse);
-				controllerTypes.Add(InteropEmu.ControllerType.SuborMouse);
-				if(!isNes) {
-					controllerTypes.Add(InteropEmu.ControllerType.SnesController);
-				}
+			List<InteropEmu.ControllerType> controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.None, InteropEmu.ControllerType.StandardController };
+			controllerTypes.Add(InteropEmu.ControllerType.SnesMouse);
+			controllerTypes.Add(InteropEmu.ControllerType.SuborMouse);
+			if(!isNes) {
+				controllerTypes.Add(InteropEmu.ControllerType.SnesController);
 			}
 			SetAvailableControllerTypes(cboPlayer3, controllerTypes.ToArray());
 			SetAvailableControllerTypes(cboPlayer4, controllerTypes.ToArray());
 
-			if(isNes && !chkFourScore.Checked) {
+			if(isOriginalFamicom) {
+				//Original famicom only allows standard controllers in port 1/2
+				controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.StandardController };
+			} else if(isNes && !chkFourScore.Checked) {
 				//These use more than just bit 0, and won't work on the four score
 				controllerTypes.Add(InteropEmu.ControllerType.ArkanoidController);
 				controllerTypes.Add(InteropEmu.ControllerType.PowerPad);
@@ -128,6 +149,11 @@ namespace Mesen.GUI.Forms.Config
 
 			SetAvailableControllerTypes(cboPlayer1, controllerTypes.ToArray());
 			SetAvailableControllerTypes(cboPlayer2, controllerTypes.ToArray());
+
+			cboPlayer1.SelectedIndexChanged += cboPlayerController_SelectedIndexChanged;
+			cboPlayer2.SelectedIndexChanged += cboPlayerController_SelectedIndexChanged;
+			cboPlayer3.SelectedIndexChanged += cboPlayerController_SelectedIndexChanged;
+			cboPlayer4.SelectedIndexChanged += cboPlayerController_SelectedIndexChanged;
 		}
 
 		private void SetAvailableControllerTypes(ComboBox comboBox, InteropEmu.ControllerType[] controllerTypes)
@@ -170,24 +196,23 @@ namespace Mesen.GUI.Forms.Config
 
 		private void UpdateInterface()
 		{
-			if(!this.Updating) {
-				bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
-				cboExpansionPort.Visible = !isNes;
-				lblExpansionPort.Visible = !isNes;
-				btnSetupExp.Visible = !isNes;
-				chkFourScore.Visible = isNes;
+			bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
+			cboExpansionPort.Visible = !isNes;
+			lblExpansionPort.Visible = !isNes;
+			btnSetupExp.Visible = !isNes;
+			chkFourScore.Visible = isNes;
 
-				UpdatePlayer3And4Visibility();
-				UpdateAvailableControllerTypes();
+			UpdatePlayer3And4Visibility();
+			UpdateAvailableControllerTypes();
+			UpdateSetupButtons();
 				
-				if(ConfigManager.Config.PreferenceInfo.DisableGameDatabase) {
-					//This option requires the game DB to be active
-					chkAutoConfigureInput.Enabled = false;
-					chkAutoConfigureInput.Checked = false;
-				}
-
-				UpdateConflictWarning();
+			if(ConfigManager.Config.PreferenceInfo.DisableGameDatabase) {
+				//This option requires the game DB to be active
+				chkAutoConfigureInput.Enabled = false;
+				chkAutoConfigureInput.Checked = false;
 			}
+
+			UpdateConflictWarning();
 		}
 
 		private bool FourScoreAttached
@@ -215,29 +240,42 @@ namespace Mesen.GUI.Forms.Config
 
 		private void cboNesType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(!this.Updating) {
-				UpdateObject();
-				if(((InputInfo)Entity).ConsoleType == ConsoleType.Famicom) {
-					((InputInfo)Entity).Controllers[0].ControllerType = InteropEmu.ControllerType.StandardController;
-					((InputInfo)Entity).Controllers[1].ControllerType = InteropEmu.ControllerType.StandardController;
-				}
-				UpdateInterface();
+			UpdateObject();
+			if(((InputInfo)Entity).ConsoleType == ConsoleType.Famicom) {
+				((InputInfo)Entity).Controllers[0].ControllerType = InteropEmu.ControllerType.StandardController;
+				((InputInfo)Entity).Controllers[1].ControllerType = InteropEmu.ControllerType.StandardController;
 			}
+			UpdateInterface();
 		}
 
 		private void chkFourScore_CheckedChanged(object sender, EventArgs e)
 		{
-			if(!this.Updating) {
-				UpdateObject();
-				UpdateInterface();
-			}
+			UpdateObject();
+			UpdateInterface();
 		}
 
 		private void cboExpansionPort_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(!this.Updating) {
-				UpdateObject();
-				UpdateInterface();
+			UpdateObject();
+			UpdateInterface();
+		}
+
+		private void UpdateSetupButtons()
+		{
+			List<ComboBox> dropdowns = new List<ComboBox>() { cboPlayer1, cboPlayer2, cboPlayer3, cboPlayer4 };
+			List<Button> buttons = new List<Button>() { btnSetupP1, btnSetupP2, btnSetupP3, btnSetupP4 };
+
+			for(int i = 0; i < 4; i++) {
+				object selectedItem = dropdowns[i].SelectedItem;
+				bool enableButton = selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController)) ||
+											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper)) ||
+											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SnesController)) ||
+											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SnesMouse)) ||
+											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SuborMouse)) ||
+											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.ArkanoidController)) ||
+											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.PowerPad));
+
+				buttons[i].Enabled = enableButton;
 			}
 
 			btnSetupExp.Enabled = cboExpansionPort.SelectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ExpansionPortDevice.Zapper)) ||
@@ -254,26 +292,8 @@ namespace Mesen.GUI.Forms.Config
 
 		private void cboPlayerController_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			object selectedItem = ((ComboBox)sender).SelectedItem;
-
-			bool enableButton = selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.StandardController)) ||
-										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.Zapper)) ||
-										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SnesController)) ||
-										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SnesMouse)) ||
-										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SuborMouse)) ||
-										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.ArkanoidController)) ||
-										selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.PowerPad));
-
-			if(sender == cboPlayer1) {
-				btnSetupP1.Enabled = enableButton;
-			} else if(sender == cboPlayer2) {
-				btnSetupP2.Enabled = enableButton;
-			} else if(sender == cboPlayer3) {
-				btnSetupP3.Enabled = enableButton;
-			} else if(sender == cboPlayer4) {
-				btnSetupP4.Enabled = enableButton;
-			}
-			UpdateConflictWarning();
+			UpdateObject();
+			UpdateInterface();
 		}
 
 		private void btnSetup_Click(object sender, EventArgs e)
@@ -404,7 +424,7 @@ namespace Mesen.GUI.Forms.Config
 			frm.Top = point.Y;
 			frm.Left = point.X;
 			if(frm.ShowDialog(this) == DialogResult.OK) {
-				UpdateConflictWarning();
+				UpdateInterface();
 			}
 			frm.Dispose();
 		}
