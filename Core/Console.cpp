@@ -163,6 +163,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_initialized = true;
 
 			if(_debugger) {
+				//Reset debugger if it was running before
+				auto lock = _debuggerLock.AcquireSafe();
 				StopDebugger();
 				GetDebugger();
 			}
@@ -660,8 +662,13 @@ std::shared_ptr<Debugger> Console::GetDebugger(bool autoStart)
 {
 	shared_ptr<Debugger> debugger = _debugger;
 	if(!debugger && autoStart) {
-		debugger.reset(new Debugger(Console::Instance, _cpu, _ppu, _apu, _memoryManager, _mapper));
-		_debugger = debugger;
+		//Lock to make sure we don't try to start debuggers in 2 separate threads at once
+		auto lock = _debuggerLock.AcquireSafe();
+		debugger = _debugger;
+		if(!debugger) {
+			debugger.reset(new Debugger(Console::Instance, _cpu, _ppu, _apu, _memoryManager, _mapper));
+			_debugger = debugger;
+		}
 	}
 	return debugger;
 }

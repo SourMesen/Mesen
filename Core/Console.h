@@ -31,6 +31,7 @@ class Console
 		SimpleLock _pauseLock;
 		SimpleLock _runLock;
 		SimpleLock _stopLock;
+		SimpleLock _debuggerLock;
 
 		shared_ptr<RewindManager> _rewindManager;
 		shared_ptr<CPU> _cpu;
