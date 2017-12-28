@@ -177,8 +177,17 @@ namespace Mesen.GUI.Config
 					controllerInfo.Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
 					controllerInfo.Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
 					controllerInfo.Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
-
+				} else if(Controllers.Count == 1) {
+					if(controllerInfo.Keys.Count == 0) {
+						controllerInfo.Keys.Add(new KeyMappings());
+					}
+					controllerInfo.Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
 				}
+
+				while(controllerInfo.Keys.Count < 4) {
+					controllerInfo.Keys.Add(new KeyMappings());
+				}
+
 				Controllers.Add(controllerInfo);
 			}
 		}
