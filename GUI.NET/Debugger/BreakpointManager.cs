@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,17 @@ namespace Mesen.GUI.Debugger
 {
 	public class BreakpointManager
 	{
+		private static object _lock = new object();
 		private static List<Breakpoint> _breakpoints = new List<Breakpoint>();
 
 		public static event EventHandler BreakpointsChanged;
-		public static List<Breakpoint> Breakpoints { get { return _breakpoints; } }
+		public static ReadOnlyCollection<Breakpoint> Breakpoints {
+			get {
+				lock(_lock) {
+					return _breakpoints.ToList().AsReadOnly();
+				}
+			}
+		}
 
 		public static void RefreshBreakpoints(Breakpoint bp = null)
 		{
@@ -23,11 +31,23 @@ namespace Mesen.GUI.Debugger
 			SetBreakpoints();
 		}
 
+		public static void SetBreakpoints(List<Breakpoint> breakpoints)
+		{
+			lock(_lock) {
+				_breakpoints = breakpoints.ToList();
+			}
+
+			//Don't refresh breakpoints, doing so will cause them to be enabled even if the debugger window is closed
+			//RefreshBreakpoints();
+		}
+
 		public static void EditBreakpoint(Breakpoint bp)
 		{
 			if(new frmBreakpoint(bp).ShowDialog() == DialogResult.OK) {
-				if(!Breakpoints.Contains(bp)) {
-					Breakpoints.Add(bp);
+				lock(_lock) {
+					if(!_breakpoints.Contains(bp)) {
+						_breakpoints.Add(bp);
+					}
 				}
 				RefreshBreakpoints(bp);
 			}
@@ -35,13 +55,17 @@ namespace Mesen.GUI.Debugger
 
 		public static void RemoveBreakpoint(Breakpoint bp)
 		{
-			Breakpoints.Remove(bp);
+			lock(_lock) {
+				_breakpoints.Remove(bp);
+			}
 			RefreshBreakpoints(bp);
 		}
 
 		public static void AddBreakpoint(Breakpoint bp)
 		{
-			Breakpoints.Add(bp);
+			lock(_lock) {
+				_breakpoints.Add(bp);
+			}
 			RefreshBreakpoints(bp);
 		}
 
@@ -53,12 +77,12 @@ namespace Mesen.GUI.Debugger
 		public static Breakpoint GetMatchingBreakpoint(UInt32 startAddress, UInt32 endAddress, bool ppuBreakpoint)
 		{
 			bool isAddressRange = startAddress != endAddress;
-			return BreakpointManager.Breakpoints.Where((bp) =>
-				!bp.IsAbsoluteAddress &&
-				((!isAddressRange && bp.Address == startAddress) || (isAddressRange && bp.StartAddress == startAddress && bp.EndAddress == endAddress)) &&
-				((!ppuBreakpoint && (bp.BreakOnExec || bp.BreakOnRead || bp.BreakOnWrite)) ||
-				 (ppuBreakpoint && (bp.BreakOnReadVram || bp.BreakOnWriteVram)))
-			).FirstOrDefault();
+			return Breakpoints.Where((bp) =>
+					!bp.IsAbsoluteAddress &&
+					((!isAddressRange && bp.Address == startAddress) || (isAddressRange && bp.StartAddress == startAddress && bp.EndAddress == endAddress)) &&
+					((!ppuBreakpoint && (bp.BreakOnExec || bp.BreakOnRead || bp.BreakOnWrite)) ||
+					 (ppuBreakpoint && (bp.BreakOnReadVram || bp.BreakOnWriteVram)))
+				).FirstOrDefault();
 		}
 
 		public static void ToggleBreakpoint(int address, bool toggleEnabled)
@@ -86,7 +110,7 @@ namespace Mesen.GUI.Debugger
 		public static void SetBreakpoints()
 		{
 			List<InteropBreakpoint> breakpoints = new List<InteropBreakpoint>();
-			foreach(Breakpoint bp in BreakpointManager.Breakpoints) {
+			foreach(Breakpoint bp in Breakpoints) {
 				if(bp.Enabled) {
 					breakpoints.Add(bp.ToInteropBreakpoint());
 				}

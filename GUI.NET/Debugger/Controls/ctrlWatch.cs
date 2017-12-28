@@ -31,7 +31,11 @@ namespace Mesen.GUI.Debugger
 
 		private void WatchManager_WatchChanged(object sender, EventArgs e)
 		{
-			this.UpdateWatch();
+			if(this.InvokeRequired) {
+				this.BeginInvoke((Action)(() => this.UpdateWatch()));
+			} else {
+				this.UpdateWatch();
+			}
 		}
 
 		protected override void OnLoad(EventArgs e)

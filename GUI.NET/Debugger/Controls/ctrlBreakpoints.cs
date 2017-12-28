@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Controls;
+using System.Collections.ObjectModel;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -26,7 +27,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 		void BreakpointManager_OnBreakpointChanged(object sender, EventArgs e)
 		{
-			RefreshList();
+			if(this.InvokeRequired) {
+				this.BeginInvoke((Action)(() => RefreshList()));
+			} else {
+				RefreshList();
+			}
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -38,8 +43,9 @@ namespace Mesen.GUI.Debugger.Controls
 		public void RefreshListAddresses()
 		{
 			lstBreakpoints.BeginUpdate();
-			for(int i = 0; i < BreakpointManager.Breakpoints.Count; i++) {
-				lstBreakpoints.Items[i].SubItems[2].Text = BreakpointManager.Breakpoints[i].GetAddressString();
+			ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
+			for(int i = 0; i < breakpoints.Count; i++) {
+				lstBreakpoints.Items[i].SubItems[2].Text = breakpoints[i].GetAddressString();
 			}
 			lstBreakpoints.EndUpdate();
 		}

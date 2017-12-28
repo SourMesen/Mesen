@@ -513,10 +513,15 @@ namespace Mesen.GUI.Forms
 						UpdateViewerSize();
 					}));
 
-					if(ConfigManager.Config.PreferenceInfo.DeveloperMode) {
-						//Preload workspace in the background to be able to open debugging tools faster
-						Task.Run(() => { DebugWorkspace.GetWorkspace(); });
-					}
+					Task.Run(() => {
+						if(ConfigManager.Config.PreferenceInfo.DeveloperMode) {
+							//Preload workspace in the background to be able to open debugging tools faster
+							DebugWorkspaceManager.GetWorkspace(true);
+						} else {
+							//If a workspace is already loaded, make sure we setup the labels, watch, etc properly
+							DebugWorkspaceManager.SetupWorkspace();
+						}
+					});
 					break;
 
 				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
