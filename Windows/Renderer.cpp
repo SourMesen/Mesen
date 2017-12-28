@@ -53,7 +53,7 @@ namespace NES
 				_nesFrameWidth = width;
 				_newFrameBufferSize = width*height;
 
-				bool needReset = _fullscreen != _newFullscreen;
+				bool needReset = _fullscreen != _newFullscreen || _resizeFilter != EmulationSettings::GetVideoResizeFilter();
 				bool fullscreenResizeMode = _fullscreen && _newFullscreen;
 
 				if(_pSwapChain && _fullscreen && !_newFullscreen) {
