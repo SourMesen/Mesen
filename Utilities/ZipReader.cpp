@@ -48,7 +48,9 @@ bool ZipReader::ExtractFile(string filename, vector<uint8_t> &output)
 		size_t uncompSize;
 		void *p = mz_zip_reader_extract_file_to_heap(&_zipArchive, filename.c_str(), &uncompSize, 0);
 		if(!p) {
+#ifdef _DEBUG
 			std::cout << "mz_zip_reader_extract_file_to_heap() failed!" << std::endl;
+#endif
 			return false;
 		}
 

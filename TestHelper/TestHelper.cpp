@@ -75,8 +75,13 @@ void RunEmu()
 
 void __stdcall OnNotificationReceived(ConsoleNotificationType type)
 {
+	static int count = 0;
 	if(type == ConsoleNotificationType::GameLoaded) {
-		runThread = new std::thread(RunEmu);
+		count++;
+		if(count % 2 == 0) {
+			//GameLoaded is fired twice because of how the test roms are coded, we want to start running the test on the 2nd time only
+			runThread = new std::thread(RunEmu);
+		}
 	}
 }
 
@@ -171,7 +176,7 @@ int main(int argc, char* argv[])
 		testIndex = 0;
 		timer.Reset();
 
-		int numberOfThreads = 4;
+		int numberOfThreads = 16;
 		for(int i = 0; i < numberOfThreads; i++) {
 			std::thread *testThread = new std::thread(RunTest);
 			testThreads.push_back(testThread);

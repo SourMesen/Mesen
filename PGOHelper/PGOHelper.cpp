@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
 	vector<char*> testRoms{
 		"..\\..\\Games\\Super Dodge Ball (USA).nes",
 		"..\\..\\Games\\Super Mario Bros. (USA).nes",
+		"..\\..\\Games\\Mega Man (USA).nes",
 		"..\\..\\Games\\Mega Man 2 (USA).nes",
 		"..\\..\\Games\\Mega Man 3 (USA).nes",
 		"..\\..\\Games\\Mega Man 4 (USA).nes",
@@ -65,8 +66,8 @@ int main(int argc, char* argv[])
 		"..\\..\\Games\\Dragon Warrior IV (USA).nes"
 	};
 
-	SetFlags(0x8000000000000000); //EmulationFlags::ConsoleMode
-	InitializeEmu("C:\\Windows\\Temp\\Mesen", nullptr, nullptr, false, false, false);
+	SetFlags(0x8000000000000000 | 0x20); //EmulationFlags::ConsoleMode | UseHdPacks
+	InitializeEmu("C:\\Code\\PGOMesen", nullptr, nullptr, false, false, false);
 	LoadROM(testRoms[0], "");
 	std::cout << "Running: " << testRoms[0] << std::endl;
 
