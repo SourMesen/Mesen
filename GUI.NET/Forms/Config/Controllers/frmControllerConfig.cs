@@ -88,7 +88,7 @@ namespace Mesen.GUI.Forms.Config
 
 		private void mnuXboxLayout2_Click(object sender, EventArgs e)
 		{
-			GetControllerControl().Initialize(Presets.XboxLayout1);
+			GetControllerControl().Initialize(Presets.XboxLayout2);
 		}
 
 		private void mnuPs4Layout1_Click(object sender, EventArgs e)
