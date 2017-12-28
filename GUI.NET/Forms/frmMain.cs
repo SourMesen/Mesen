@@ -144,8 +144,6 @@ namespace Mesen.GUI.Forms
 			mnuTests.Visible = false;
 			#endif
 
-			PerformUpgrade();
-
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
@@ -164,6 +162,8 @@ namespace Mesen.GUI.Forms
 
 			UpdateVideoSettings();
 
+			InitializeCore();
+			PerformUpgrade();
 			InitializeEmu();
 
 			TopMost = ConfigManager.Config.PreferenceInfo.AlwaysOnTop;
@@ -284,9 +284,13 @@ namespace Mesen.GUI.Forms
 			this.UpdateMenus();
 		}
 
-		void InitializeEmu()
+		void InitializeCore()
 		{
 			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, this.Handle, ctrlRenderer.Handle, _noAudio, _noVideo, _noInput);
+		}
+
+		void InitializeEmu()
+		{
 			if(ConfigManager.Config.PreferenceInfo.OverrideGameFolder && Directory.Exists(ConfigManager.Config.PreferenceInfo.GameFolder)) {
 				InteropEmu.AddKnownGameFolder(ConfigManager.Config.PreferenceInfo.GameFolder);
 			}
