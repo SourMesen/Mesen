@@ -91,7 +91,7 @@ public:
 		ApuNoiseState state;
 		state.Enabled = _enabled;
 		state.Envelope = ApuEnvelope::GetState();
-		state.Frequency = CPU::GetClockRate(GetNesModel()) / (_period + 1) / (_modeFlag ? 93 : 1);
+		state.Frequency = (double)CPU::GetClockRate(GetNesModel()) / (_period + 1) / (_modeFlag ? 93 : 1);
 		state.LengthCounter = ApuLengthCounter::GetState();
 		state.ModeFlag = _modeFlag;
 		state.OutputVolume = _lastOutput;

@@ -220,7 +220,7 @@ ApuDmcState DeltaModulationChannel::GetState()
 	state.Loop = _loopFlag;
 	state.OutputVolume = _lastOutput;
 	state.Period = _period;
-	state.SampleRate = CPU::GetClockRate(GetNesModel()) / (_period + 1);
+	state.SampleRate = (double)CPU::GetClockRate(GetNesModel()) / (_period + 1);
 	state.SampleAddr = _sampleAddr;
 	state.SampleLength = _sampleLength;
 	return state;
