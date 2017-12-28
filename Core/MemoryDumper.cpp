@@ -310,9 +310,8 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 
 void MemoryDumper::GetSprites(uint32_t* frameBuffer)
 {
-	for(int i = 0; i < 64 * 128; i++) {
-		frameBuffer[i] = 0x00404040;
-	}
+	memset(frameBuffer, 0, 64*128*sizeof(uint32_t));
+
 	uint8_t *spriteRam = _ppu->GetSpriteRam();
 	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
 
