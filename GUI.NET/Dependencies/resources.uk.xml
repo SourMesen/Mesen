@@ -212,7 +212,7 @@
       <Control ID="tpgGeneral">Загальнi</Control>
       <Control ID="lblVideoScale">Розмір :</Control>
       <Control ID="lblVideoFilter">Фiльтр :</Control>
-      <Control ID="chkIntegerFpsMode">Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)</Control>
+      <Control ID="chkIntegerFpsMode">Увімкнути ціле число режиму FPS (e.g: працювати в 60 fps замiсть 60.1)</Control>
       <Control ID="chkVerticalSync">Включити вертикальну синхронізацію</Control>
       <Control ID="lblDisplayRatio">Співвідношення сторін :</Control>
       <Control ID="lblCustomRatio">Користувацьке співвідношення:</Control>
@@ -220,8 +220,8 @@
       <Control ID="chkFullscreenForceIntegerScale">Використовуйте цілі значення масштабу при введенні повноекранного режиму</Control>
       <Control ID="chkShowFps">Показувати FPS</Control>
       <Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
-      <Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
-      <Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
+      <Control ID="chkUseExclusiveFullscreen">Використовувати ексклюзивний режим повного екрану</Control>
+      <Control ID="lblRequestedRefreshRate">Запитувана частота оновлення:</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Overscan</Control>
       <Control ID="lblLeft">Злiва</Control>
