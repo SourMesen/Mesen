@@ -223,6 +223,7 @@
       <Control ID="chkShowFps">フレームレート表示</Control>
       <Control ID="chkUseHdPacks">HDNesのHDパックを使う</Control>
       <Control ID="chkUseExclusiveFullscreen">排他的なフルスクリーンモードを使う</Control>
+      <Control ID="lblRequestedRefreshRate">リフレッシュレート:</Control>
       <Control ID="tpgOverscan">オーバースキャン</Control>
       <Control ID="grpCropping">オーバースキャン</Control>
       <Control ID="lblLeft">左</Control>
@@ -881,6 +882,14 @@
       <Value ID="Standard">ノーマル (4:3)</Value>
       <Value ID="Widescreen">ワイド (16:9)</Value>
       <Value ID="Custom">カスタム</Value>
+    </Enum>
+    <Enum ID="VideoRefreshRates">
+      <Value ID="_50">50 Hz</Value>
+      <Value ID="_60">60 Hz</Value>
+      <Value ID="_100">100 Hz</Value>
+      <Value ID="_120">120 Hz</Value>
+      <Value ID="_200">200 Hz</Value>
+      <Value ID="_240">240 Hz</Value>
     </Enum>
     <Enum ID="ScreenRotation">
       <Value ID="None">なし</Value>

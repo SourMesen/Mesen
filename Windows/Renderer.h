@@ -78,7 +78,7 @@ namespace NES {
 		void DrawNESScreen();
 		void DrawPauseScreen();
 
-		std::wstring WrapText(string text, SpriteFont* font, float maxLineWidth, uint32_t &lineCount);
+		
 		void DrawString(string message, float x, float y, DirectX::FXMVECTOR color, float scale, SpriteFont* font = nullptr);
 		void DrawString(std::wstring message, float x, float y, DirectX::FXMVECTOR color, float scale, SpriteFont* font = nullptr);
 

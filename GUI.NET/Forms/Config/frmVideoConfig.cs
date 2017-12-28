@@ -30,6 +30,9 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("VerticalSync", chkVerticalSync);
 			AddBinding("UseHdPacks", chkUseHdPacks);
 			AddBinding("IntegerFpsMode", chkIntegerFpsMode);
+			AddBinding("FullscreenForceIntegerScale", chkFullscreenForceIntegerScale);
+			AddBinding("UseExclusiveFullscreen", chkUseExclusiveFullscreen);
+			AddBinding("ExclusiveFullscreenRefreshRate", cboRefreshRate);
 
 			AddBinding("VideoScale", nudScale);
 			AddBinding("AspectRatio", cboAspectRatio);
@@ -65,8 +68,6 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisableSprites", chkDisableSprites);
 			AddBinding("ForceBackgroundFirstColumn", chkForceBackgroundFirstColumn);
 			AddBinding("ForceSpritesFirstColumn", chkForceSpritesFirstColumn);
-			AddBinding("FullscreenForceIntegerScale", chkFullscreenForceIntegerScale);
-			AddBinding("UseExclusiveFullscreen", chkUseExclusiveFullscreen);
 
 			AddBinding("UseCustomVsPalette", chkUseCustomVsPalette);
 
@@ -427,6 +428,11 @@ namespace Mesen.GUI.Forms.Config
 		private void chkShowColorIndexes_CheckedChanged(object sender, EventArgs e)
 		{
 			this.RefreshPalette();
+		}
+
+		private void chkUseExclusiveFullscreen_CheckedChanged(object sender, EventArgs e)
+		{
+			flpRefreshRate.Visible = chkUseExclusiveFullscreen.Checked;
 		}
 	}
 }

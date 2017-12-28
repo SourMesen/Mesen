@@ -222,6 +222,7 @@
       <Control ID="chkShowFps">Afficher le FPS</Control>
       <Control ID="chkUseHdPacks">Utiliser les packs haute-définition de HDNes</Control>
       <Control ID="chkUseExclusiveFullscreen">Utiliser le mode plein écran exclusif</Control>
+      <Control ID="lblRequestedRefreshRate">Taux de rafraîchissement :</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Overscan</Control>
       <Control ID="lblLeft">Gauche</Control>
@@ -897,6 +898,14 @@
       <Value ID="Standard">Standard (4:3)</Value>
       <Value ID="Widescreen">Écran large (16:9)</Value>
       <Value ID="Custom">Personalisé</Value>
+    </Enum>
+    <Enum ID="VideoRefreshRates">
+      <Value ID="_50">50 Hz</Value>
+      <Value ID="_60">60 Hz</Value>
+      <Value ID="_100">100 Hz</Value>
+      <Value ID="_120">120 Hz</Value>
+      <Value ID="_200">200 Hz</Value>
+      <Value ID="_240">240 Hz</Value>
     </Enum>
     <Enum ID="ScreenRotation">
       <Value ID="None">Aucune</Value>

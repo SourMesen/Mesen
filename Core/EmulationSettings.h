@@ -605,6 +605,7 @@ private:
 	static bool _backgroundEnabled;
 	static bool _spritesEnabled;
 	static uint32_t _screenRotation;
+	static uint32_t _exclusiveRefreshRate;
 
 	static ConsoleType _consoleType;
 	static ExpansionPortDevice _expansionDevice;
@@ -1157,6 +1158,16 @@ public:
 	static uint32_t GetScreenRotation()
 	{
 		return _screenRotation;
+	}
+
+	static void SetExclusiveRefreshRate(uint32_t refreshRate)
+	{
+		_exclusiveRefreshRate = refreshRate;
+	}
+
+	static uint32_t GetExclusiveRefreshRate()
+	{
+		return _exclusiveRefreshRate;
 	}
 
 	static uint32_t* GetRgbPalette()

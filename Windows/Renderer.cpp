@@ -267,9 +267,10 @@ namespace NES
 		sd.BufferDesc.Width = _realScreenWidth;
 		sd.BufferDesc.Height = _realScreenHeight;
 		sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		sd.BufferDesc.RefreshRate.Numerator = 60;
+		sd.BufferDesc.RefreshRate.Numerator = EmulationSettings::GetExclusiveRefreshRate();
 		sd.BufferDesc.RefreshRate.Denominator = 1;
 		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		sd.Flags = _fullscreen ? DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH : 0;
 		sd.OutputWindow = _hWnd;
 		sd.SampleDesc.Count = 1;
 		sd.SampleDesc.Quality = 0;
@@ -296,7 +297,7 @@ namespace NES
 				break;
 			}
 		}
-
+		
 		if(FAILED(hr)) {
 			MessageManager::Log("D3D11CreateDeviceAndSwapChain() failed - Error:" + std::to_string(hr));
 			return hr;

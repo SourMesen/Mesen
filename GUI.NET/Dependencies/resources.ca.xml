@@ -222,6 +222,7 @@
       <Control ID="chkShowFps">Mostra els FPS</Control>
       <Control ID="chkUseHdPacks">Fes servir els paquets d'alta resolució d'HDNes</Control>
       <Control ID="chkUseExclusiveFullscreen">Fes servir el mode de pantalla completa exclusiva</Control>
+      <Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
       <Control ID="tpgOverscan">Sobreescaneig</Control>
       <Control ID="grpCropping">Retall de vídeo</Control>
       <Control ID="lblLeft">Esquerra</Control>
@@ -866,6 +867,14 @@
       <Value ID="Standard">Estàndard (4:3)</Value>
       <Value ID="Widescreen">Pantalla panoràmica (16:9)</Value>
       <Value ID="Custom">Personalitzat</Value>
+    </Enum>
+    <Enum ID="VideoRefreshRates">
+      <Value ID="_50">50 Hz</Value>
+      <Value ID="_60">60 Hz</Value>
+      <Value ID="_100">100 Hz</Value>
+      <Value ID="_120">120 Hz</Value>
+      <Value ID="_200">200 Hz</Value>
+      <Value ID="_240">240 Hz</Value>
     </Enum>
     <Enum ID="ScreenRotation">
       <Value ID="None">Cap</Value>

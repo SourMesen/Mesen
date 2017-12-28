@@ -31,6 +31,7 @@ namespace Mesen.GUI.Forms.Config
 		{
 			this.components = new System.ComponentModel.Container();
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+			this.chkUseExclusiveFullscreen = new System.Windows.Forms.CheckBox();
 			this.lblVideoScale = new System.Windows.Forms.Label();
 			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
 			this.lblDisplayRatio = new System.Windows.Forms.Label();
@@ -44,8 +45,9 @@ namespace Mesen.GUI.Forms.Config
 			this.nudCustomRatio = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.chkFullscreenForceIntegerScale = new System.Windows.Forms.CheckBox();
 			this.chkShowFps = new System.Windows.Forms.CheckBox();
-			this.chkUseExclusiveFullscreen = new System.Windows.Forms.CheckBox();
 			this.chkIntegerFpsMode = new System.Windows.Forms.CheckBox();
+			this.cboRefreshRate = new System.Windows.Forms.ComboBox();
+			this.lblRequestedRefreshRate = new System.Windows.Forms.Label();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgPicture = new System.Windows.Forms.TabPage();
@@ -128,6 +130,7 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
+			this.flpRefreshRate = new System.Windows.Forms.FlowLayoutPanel();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -159,6 +162,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel9.SuspendLayout();
 			this.contextPicturePresets.SuspendLayout();
 			this.contextPaletteList.SuspendLayout();
+			this.flpRefreshRate.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -171,21 +175,23 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.ColumnCount = 2;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpMain.Controls.Add(this.chkUseExclusiveFullscreen, 0, 4);
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 3);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 1);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 6);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 7);
 			this.tlpMain.Controls.Add(this.nudScale, 1, 0);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 1);
-			this.tlpMain.Controls.Add(this.chkFullscreenForceIntegerScale, 0, 5);
-			this.tlpMain.Controls.Add(this.chkShowFps, 0, 7);
-			this.tlpMain.Controls.Add(this.chkUseExclusiveFullscreen, 0, 4);
+			this.tlpMain.Controls.Add(this.chkFullscreenForceIntegerScale, 0, 6);
+			this.tlpMain.Controls.Add(this.chkShowFps, 0, 8);
 			this.tlpMain.Controls.Add(this.chkIntegerFpsMode, 0, 2);
+			this.tlpMain.Controls.Add(this.flpRefreshRate, 0, 5);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 9;
+			this.tlpMain.RowCount = 10;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -197,6 +203,19 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.Size = new System.Drawing.Size(521, 370);
 			this.tlpMain.TabIndex = 1;
+			// 
+			// chkUseExclusiveFullscreen
+			// 
+			this.chkUseExclusiveFullscreen.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkUseExclusiveFullscreen.AutoSize = true;
+			this.tlpMain.SetColumnSpan(this.chkUseExclusiveFullscreen, 2);
+			this.chkUseExclusiveFullscreen.Location = new System.Drawing.Point(3, 95);
+			this.chkUseExclusiveFullscreen.Name = "chkUseExclusiveFullscreen";
+			this.chkUseExclusiveFullscreen.Size = new System.Drawing.Size(169, 17);
+			this.chkUseExclusiveFullscreen.TabIndex = 24;
+			this.chkUseExclusiveFullscreen.Text = "Use exclusive fullscreen mode";
+			this.chkUseExclusiveFullscreen.UseVisualStyleBackColor = true;
+			this.chkUseExclusiveFullscreen.CheckedChanged += new System.EventHandler(this.chkUseExclusiveFullscreen_CheckedChanged);
 			// 
 			// lblVideoScale
 			// 
@@ -236,7 +255,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
 			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
 			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 138);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 165);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
 			this.flowLayoutPanel7.Size = new System.Drawing.Size(521, 23);
@@ -372,7 +391,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkFullscreenForceIntegerScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkFullscreenForceIntegerScale.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkFullscreenForceIntegerScale, 2);
-			this.chkFullscreenForceIntegerScale.Location = new System.Drawing.Point(3, 118);
+			this.chkFullscreenForceIntegerScale.Location = new System.Drawing.Point(3, 145);
 			this.chkFullscreenForceIntegerScale.Name = "chkFullscreenForceIntegerScale";
 			this.chkFullscreenForceIntegerScale.Size = new System.Drawing.Size(289, 17);
 			this.chkFullscreenForceIntegerScale.TabIndex = 23;
@@ -384,24 +403,12 @@ namespace Mesen.GUI.Forms.Config
 			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFps.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 164);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 191);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
 			this.chkShowFps.Text = "Show FPS";
 			this.chkShowFps.UseVisualStyleBackColor = true;
-			// 
-			// chkUseExclusiveFullscreen
-			// 
-			this.chkUseExclusiveFullscreen.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkUseExclusiveFullscreen.AutoSize = true;
-			this.tlpMain.SetColumnSpan(this.chkUseExclusiveFullscreen, 2);
-			this.chkUseExclusiveFullscreen.Location = new System.Drawing.Point(3, 95);
-			this.chkUseExclusiveFullscreen.Name = "chkUseExclusiveFullscreen";
-			this.chkUseExclusiveFullscreen.Size = new System.Drawing.Size(169, 17);
-			this.chkUseExclusiveFullscreen.TabIndex = 24;
-			this.chkUseExclusiveFullscreen.Text = "Use exclusive fullscreen mode";
-			this.chkUseExclusiveFullscreen.UseVisualStyleBackColor = true;
 			// 
 			// chkIntegerFpsMode
 			// 
@@ -414,6 +421,31 @@ namespace Mesen.GUI.Forms.Config
 			this.chkIntegerFpsMode.TabIndex = 24;
 			this.chkIntegerFpsMode.Text = "Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)";
 			this.chkIntegerFpsMode.UseVisualStyleBackColor = true;
+			// 
+			// cboRefreshRate
+			// 
+			this.cboRefreshRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboRefreshRate.FormattingEnabled = true;
+			this.cboRefreshRate.Items.AddRange(new object[] {
+            "Auto",
+            "NTSC (8:7)",
+            "PAL (18:13)",
+            "Standard (4:3)",
+            "Widescreen (16:9)"});
+			this.cboRefreshRate.Location = new System.Drawing.Point(137, 3);
+			this.cboRefreshRate.Name = "cboRefreshRate";
+			this.cboRefreshRate.Size = new System.Drawing.Size(68, 21);
+			this.cboRefreshRate.TabIndex = 25;
+			// 
+			// lblRequestedRefreshRate
+			// 
+			this.lblRequestedRefreshRate.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.lblRequestedRefreshRate.AutoSize = true;
+			this.lblRequestedRefreshRate.Location = new System.Drawing.Point(3, 7);
+			this.lblRequestedRefreshRate.Name = "lblRequestedRefreshRate";
+			this.lblRequestedRefreshRate.Size = new System.Drawing.Size(128, 13);
+			this.lblRequestedRefreshRate.TabIndex = 17;
+			this.lblRequestedRefreshRate.Text = "Requested Refresh Rate:";
 			// 
 			// tabMain
 			// 
@@ -1515,6 +1547,19 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
+			// flpRefreshRate
+			// 
+			this.tlpMain.SetColumnSpan(this.flpRefreshRate, 2);
+			this.flpRefreshRate.Controls.Add(this.lblRequestedRefreshRate);
+			this.flpRefreshRate.Controls.Add(this.cboRefreshRate);
+			this.flpRefreshRate.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flpRefreshRate.Location = new System.Drawing.Point(30, 115);
+			this.flpRefreshRate.Margin = new System.Windows.Forms.Padding(30, 0, 0, 0);
+			this.flpRefreshRate.Name = "flpRefreshRate";
+			this.flpRefreshRate.Size = new System.Drawing.Size(491, 27);
+			this.flpRefreshRate.TabIndex = 26;
+			this.flpRefreshRate.Visible = false;
+			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1575,6 +1620,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel9.PerformLayout();
 			this.contextPicturePresets.ResumeLayout(false);
 			this.contextPaletteList.ResumeLayout(false);
+			this.flpRefreshRate.ResumeLayout(false);
+			this.flpRefreshRate.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1679,5 +1726,8 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.Label lblScreenRotation;
 		private System.Windows.Forms.ComboBox cboScreenRotation;
 		private System.Windows.Forms.CheckBox chkUseExclusiveFullscreen;
+		private System.Windows.Forms.Label lblRequestedRefreshRate;
+		private System.Windows.Forms.ComboBox cboRefreshRate;
+		private System.Windows.Forms.FlowLayoutPanel flpRefreshRate;
 	}
 }

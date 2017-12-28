@@ -203,6 +203,14 @@
       <Value ID="Widescreen">Widescreen (16:9)</Value>
       <Value ID="Custom">Custom</Value>
     </Enum>
+    <Enum ID="VideoRefreshRates">
+      <Value ID="_50">50 Hz</Value>
+      <Value ID="_60">60 Hz</Value>
+      <Value ID="_100">100 Hz</Value>
+      <Value ID="_120">120 Hz</Value>
+      <Value ID="_200">200 Hz</Value>
+      <Value ID="_240">240 Hz</Value>
+    </Enum>
     <Enum ID="ScreenRotation">
       <Value ID="None">None</Value>
       <Value ID="_90Degrees">90°</Value>

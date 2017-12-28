@@ -221,6 +221,7 @@
       <Control ID="chkShowFps">Показывать FPS</Control>
       <Control ID="chkUseHdPacks">Использовать HDNes HD packs</Control>
       <Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
+      <Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Overscan</Control>
       <Control ID="lblLeft">Слева</Control>
@@ -886,6 +887,14 @@
       <Value ID="Standard">Стандарт (4:3)</Value>
       <Value ID="Widescreen">Широкий экран (16:9)</Value>
       <Value ID="Custom">Custom</Value>
+    </Enum>
+    <Enum ID="VideoRefreshRates">
+      <Value ID="_50">50 Hz</Value>
+      <Value ID="_60">60 Hz</Value>
+      <Value ID="_100">100 Hz</Value>
+      <Value ID="_120">120 Hz</Value>
+      <Value ID="_200">200 Hz</Value>
+      <Value ID="_240">240 Hz</Value>
     </Enum>
     <Enum ID="ScreenRotation">
       <Value ID="None">None</Value>
