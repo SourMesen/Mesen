@@ -234,6 +234,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
 
+			ConfigManager.Config.DebugInfo.RamHighlightLabelledBytes = this.mnuHighlightLabelledBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightChrDrawnBytes = this.mnuHighlightChrDrawnBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightChrReadBytes = this.mnuHighlightChrReadBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightCodeBytes = this.mnuHighlightCodeBytes.Checked;
