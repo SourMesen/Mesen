@@ -60,14 +60,16 @@ namespace Mesen.GUI.Forms
 					//Version 0.9.3-
 					//Set default keys for some of the new controller types
 					KeyPresets presets = new KeyPresets();
-					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].ExcitingBoxingButtons = presets.ExcitingBoxing.ExcitingBoxingButtons;
-					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].FamilyBasicKeyboardButtons = presets.FamilyBasic.FamilyBasicKeyboardButtons;
-					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].JissenMahjongButtons = presets.JissenMahjong.JissenMahjongButtons;
-					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
-					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
-					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
-					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
-					ConfigManager.Config.InputInfo.Controllers[0].Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
+					if(ConfigManager.Config.InputInfo.Controllers.Count > 0 && ConfigManager.Config.InputInfo.Controllers[0].Keys.Count > 0) {
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].ExcitingBoxingButtons = presets.ExcitingBoxing.ExcitingBoxingButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].FamilyBasicKeyboardButtons = presets.FamilyBasic.FamilyBasicKeyboardButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].JissenMahjongButtons = presets.JissenMahjong.JissenMahjongButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
+					}
 				}
 
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();
