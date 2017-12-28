@@ -104,44 +104,35 @@ namespace Mesen.GUI.Forms.Config
 		{
 			bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
 			bool p3and4visible = (isNes && chkFourScore.Checked) || (!isNes && ((InputInfo)Entity).ExpansionPortDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter);
-
-			List<InteropEmu.ControllerType> controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.StandardController };
-			if(!isNes) {
-				controllerTypes.Add(InteropEmu.ControllerType.SnesMouse);
-			}
-			SetAvailableControllerTypes(cboPlayer3, controllerTypes.ToArray(), false);
-			SetAvailableControllerTypes(cboPlayer4, controllerTypes.ToArray(), false);
-
-			if(isNes) {
-				if(!chkFourScore.Checked) {
-					controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.StandardController };
-					controllerTypes.Add(InteropEmu.ControllerType.ArkanoidController);
-					controllerTypes.Add(InteropEmu.ControllerType.PowerPad);
-					controllerTypes.Add(InteropEmu.ControllerType.Zapper);
-					controllerTypes.Add(InteropEmu.ControllerType.SnesController);
-				}
-				controllerTypes.Add(InteropEmu.ControllerType.SnesMouse);
-				controllerTypes.Add(InteropEmu.ControllerType.SuborMouse);
-			} else {
-				controllerTypes = new List<InteropEmu.ControllerType>() {
-					InteropEmu.ControllerType.StandardController,
-					InteropEmu.ControllerType.SnesMouse,
-					InteropEmu.ControllerType.SuborMouse
-				};
-			}
-
 			bool isOriginalFamicom = !isNes && !ConfigManager.Config.EmulationInfo.UseNes101Hvc101Behavior;
 
-			SetAvailableControllerTypes(cboPlayer1, controllerTypes.ToArray(), isOriginalFamicom);
-			SetAvailableControllerTypes(cboPlayer2, controllerTypes.ToArray(), isOriginalFamicom);
+			List<InteropEmu.ControllerType> controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.StandardController };
+			if(!isOriginalFamicom) {
+				controllerTypes.Add(InteropEmu.ControllerType.None);
+				controllerTypes.Add(InteropEmu.ControllerType.SnesMouse);
+				controllerTypes.Add(InteropEmu.ControllerType.SuborMouse);
+				if(!isNes) {
+					controllerTypes.Add(InteropEmu.ControllerType.SnesController);
+				}
+			}
+			SetAvailableControllerTypes(cboPlayer3, controllerTypes.ToArray());
+			SetAvailableControllerTypes(cboPlayer4, controllerTypes.ToArray());
+
+			if(isNes && !chkFourScore.Checked) {
+				//These use more than just bit 0, and won't work on the four score
+				controllerTypes.Add(InteropEmu.ControllerType.ArkanoidController);
+				controllerTypes.Add(InteropEmu.ControllerType.PowerPad);
+				controllerTypes.Add(InteropEmu.ControllerType.Zapper);
+				controllerTypes.Add(InteropEmu.ControllerType.SnesController);
+			}
+
+			SetAvailableControllerTypes(cboPlayer1, controllerTypes.ToArray());
+			SetAvailableControllerTypes(cboPlayer2, controllerTypes.ToArray());
 		}
 
-		private void SetAvailableControllerTypes(ComboBox comboBox, InteropEmu.ControllerType[] controllerTypes, bool forceController)
+		private void SetAvailableControllerTypes(ComboBox comboBox, InteropEmu.ControllerType[] controllerTypes)
 		{
 			comboBox.Items.Clear();
-			if(!forceController) {
-				comboBox.Items.Add(ResourceHelper.GetEnumText(InteropEmu.ControllerType.None));
-			}
 			foreach(InteropEmu.ControllerType type in controllerTypes) {
 				comboBox.Items.Add(ResourceHelper.GetEnumText(type));
 			}
@@ -226,6 +217,10 @@ namespace Mesen.GUI.Forms.Config
 		{
 			if(!this.Updating) {
 				UpdateObject();
+				if(((InputInfo)Entity).ConsoleType == ConsoleType.Famicom) {
+					((InputInfo)Entity).Controllers[0].ControllerType = InteropEmu.ControllerType.StandardController;
+					((InputInfo)Entity).Controllers[1].ControllerType = InteropEmu.ControllerType.StandardController;
+				}
 				UpdateInterface();
 			}
 		}
