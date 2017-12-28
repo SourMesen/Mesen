@@ -167,7 +167,7 @@
 			// 
 			this.picPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.picPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tableLayoutPanel4.SetColumnSpan(this.picPreview, 3);
+			this.tableLayoutPanel4.SetColumnSpan(this.picPreview, 4);
 			this.picPreview.ContextMenuStrip = this.ctxMenu;
 			this.picPreview.Location = new System.Drawing.Point(94, 257);
 			this.picPreview.Name = "picPreview";
@@ -269,7 +269,7 @@
 			this.txtPosition.Location = new System.Drawing.Point(94, 55);
 			this.txtPosition.Name = "txtPosition";
 			this.txtPosition.ReadOnly = true;
-			this.txtPosition.Size = new System.Drawing.Size(53, 20);
+			this.txtPosition.Size = new System.Drawing.Size(66, 20);
 			this.txtPosition.TabIndex = 18;
 			// 
 			// lblTileIndex

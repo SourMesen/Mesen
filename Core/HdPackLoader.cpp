@@ -120,6 +120,7 @@ bool HdPackLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 
 bool HdPackLoader::LoadPack()
 {
+	string currentLine;
 	try {
 		vector<uint8_t> hdDefinition;
 		if(!LoadFile("hires.txt", hdDefinition)) {
@@ -129,7 +130,10 @@ bool HdPackLoader::LoadPack()
 		InitializeGlobalConditions();
 
 		for(string lineContent : StringUtilities::Split(string(hdDefinition.data(), hdDefinition.data() + hdDefinition.size()), '\n')) {
-			lineContent = lineContent.substr(0, lineContent.length() - 1);
+			if(lineContent[lineContent.size() - 1] == '\r') {
+				lineContent = lineContent.substr(0, lineContent.size() - 1);
+			}
+			currentLine = lineContent;			
 
 			vector<HdPackCondition*> conditions;
 			if(lineContent.substr(0, 1) == "[") {
@@ -181,7 +185,7 @@ bool HdPackLoader::LoadPack()
 
 		return true;
 	} catch(std::exception ex) {
-		MessageManager::Log(string("[HDPack] Error loading HDPack: ") + ex.what());
+		MessageManager::Log(string("[HDPack] Error loading HDPack: ") + ex.what() + " on line: " + currentLine);
 		return false;
 	}
 }

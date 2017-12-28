@@ -613,7 +613,7 @@ private:
 	static KeyMappingSet _controllerKeys[4];
 	static bool _needControllerUpdate;
 	static uint32_t _zapperDetectionRadius;
-	static std::unordered_map<MouseDevice, double> _mouseSensitivity;
+	static std::unordered_map<int, double> _mouseSensitivity;
 	static int32_t _inputPollScanline;
 
 	static int32_t _nsfAutoDetectSilenceDelay;
@@ -1296,12 +1296,12 @@ public:
 
 	static void SetMouseSensitivity(MouseDevice device, double sensitivity)
 	{
-		_mouseSensitivity[device] = sensitivity;
+		_mouseSensitivity[(int)device] = sensitivity;
 	}
 
 	static double GetMouseSensitivity(MouseDevice device)
 	{
-		auto result = _mouseSensitivity.find(device);
+		auto result = _mouseSensitivity.find((int)device);
 		if(result != _mouseSensitivity.end()) {
 			return result->second;
 		} else {

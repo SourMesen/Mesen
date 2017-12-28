@@ -1205,7 +1205,7 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)]
 		public bool Enabled;
 		public Byte OutputVolume;
-		public UInt32 Frequency;
+		public double Frequency;
 
 		public ApuLengthCounterState LengthCounter;
 		public ApuEnvelopeState Envelope;
@@ -1218,7 +1218,7 @@ namespace Mesen.GUI
 
 		[MarshalAs(UnmanagedType.I1)]
 		public bool Enabled;
-		public UInt32 Frequency;
+		public double Frequency;
 		public Byte OutputVolume;
 
 		public ApuLengthCounterState LengthCounter;
@@ -1233,7 +1233,7 @@ namespace Mesen.GUI
 
 		[MarshalAs(UnmanagedType.I1)]
 		public bool Enabled;
-		public UInt32 Frequency;
+		public double Frequency;
 		public Byte OutputVolume;
 
 		public ApuLengthCounterState LengthCounter;
@@ -1252,7 +1252,7 @@ namespace Mesen.GUI
 		public UInt16 Period;
 		public UInt16 BytesRemaining;
 
-		public UInt32 Frequency;
+		public double SampleRate;
 		public Byte OutputVolume;
 	}
 
