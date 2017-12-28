@@ -124,6 +124,10 @@ namespace Mesen.GUI
 		{
 			get
 			{
+				if(!InteropEmu.IsRunning()) {
+					return false;
+				}
+
 				if(InteropEmu.IsPaused()) {
 					return false;
 				}
