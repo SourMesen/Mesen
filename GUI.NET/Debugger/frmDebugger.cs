@@ -175,7 +175,7 @@ namespace Mesen.GUI.Debugger
 				string cdlPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".cdl");
 				if(File.Exists(cdlPath)) {
 					if(InteropEmu.DebugLoadCdlFile(cdlPath)) {
-						UpdateDebugger(false);
+						UpdateDebugger(false, false);
 					}
 				}
 			}
@@ -268,7 +268,7 @@ namespace Mesen.GUI.Debugger
 						this.UpdateWorkspace();
 						this.AutoLoadCdlFiles();
 						this.AutoLoadDbgFiles(true);
-						UpdateDebugger();
+						UpdateDebugger(true, false);
 						BreakpointManager.SetBreakpoints();
 
 						if(!ConfigManager.Config.DebugInfo.BreakOnReset) {
@@ -310,7 +310,7 @@ namespace Mesen.GUI.Debugger
 			mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
 		}
 
-		public void UpdateDebugger(bool updateActiveAddress = true)
+		public void UpdateDebugger(bool updateActiveAddress = true, bool bringToFront = true)
 		{
 			if(!_debuggerInitialized) {
 				return;
@@ -358,7 +358,9 @@ namespace Mesen.GUI.Debugger
 			ctrlCpuMemoryMapping.UpdateCpuRegions(state.Cartridge);
 			ctrlPpuMemoryMapping.UpdatePpuRegions(state.Cartridge);
 
-			this.BringToFront();
+			if(bringToFront) {
+				this.BringToFront();
+			}
 
 			if(_firstBreak) {
 				InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, false);
@@ -590,7 +592,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlConsoleStatus_OnStateChanged(object sender, EventArgs e)
 		{
-			UpdateDebugger(true);
+			UpdateDebugger(true, false);
 		}
 
 		private void tmrCdlRatios_Tick(object sender, EventArgs e)
@@ -742,7 +744,7 @@ namespace Mesen.GUI.Debugger
 			DebugWorkspaceManager.SaveWorkspace();
 			ctrlLabelList.UpdateLabelList();
 			ctrlFunctionList.UpdateFunctionList(true);
-			UpdateDebugger(false);
+			UpdateDebugger(false, false);
 		}
 
 		private void ctrlLabelList_OnLabelSelected(object relativeAddress, EventArgs e)
