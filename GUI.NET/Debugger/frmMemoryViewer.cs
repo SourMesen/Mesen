@@ -511,6 +511,7 @@ namespace Mesen.GUI.Debugger
 
 		private frmCodeTooltip _tooltip = null;
 		private CodeLabel _lastLabelTooltip = null;
+		private int _lastTooltipAddress = -1;
 		private void ctrlHexViewer_ByteMouseHover(int address)
 		{
 			if(address < 0 || !mnuShowLabelInfoOnMouseOver.Checked) {
@@ -520,6 +521,12 @@ namespace Mesen.GUI.Debugger
 				}
 				return;
 			}
+
+			if(_lastTooltipAddress == address) {
+				return;
+			}
+
+			_lastTooltipAddress = address;
 
 			CodeLabel label = null;
 			switch(_memoryType) {
