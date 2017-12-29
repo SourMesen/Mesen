@@ -32,22 +32,22 @@ bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, 
 	uint32_t* rgbaBuffer = (uint32_t*)outputBuffer;
 
 	InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
-	uint32_t yStart, xStart; 
+	uint32_t yStart, xStart;
 	switch(settings.DisplayPosition) {
-		case InputDisplayPosition::TopLeft: 
+		case InputDisplayPosition::TopLeft:
 			xStart = 3 * scale + (settings.DisplayHorizontally ? displayIndex * 40 * scale : 0);
 			yStart = 5 * scale + (settings.DisplayHorizontally ? 0 : displayIndex * 14 * scale);
 			break;
-		case InputDisplayPosition::TopRight: 
+		case InputDisplayPosition::TopRight:
 			xStart = frameInfo.Width - 40 * scale - (settings.DisplayHorizontally ? displayIndex * 40 * scale : 0);
 			yStart = 5 * scale + (settings.DisplayHorizontally ? 0 : displayIndex * 14 * scale);
 			break;
-		case InputDisplayPosition::BottomLeft: 
+		case InputDisplayPosition::BottomLeft:
 			xStart = 3 * scale + (settings.DisplayHorizontally ? displayIndex * 40 * scale : 0);
 			yStart = frameInfo.Height - 15 * scale - (settings.DisplayHorizontally ? 0 : displayIndex * 14 * scale);
 			break;
 		default:
-		case InputDisplayPosition::BottomRight: 
+		case InputDisplayPosition::BottomRight:
 			xStart = frameInfo.Width - 40 * scale - (settings.DisplayHorizontally ? displayIndex * 40 * scale : 0);
 			yStart = frameInfo.Height - 15 * scale - (settings.DisplayHorizontally ? 0 : displayIndex * 14 * scale);
 			break;
@@ -56,6 +56,10 @@ bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, 
 	int32_t buttonState = -1;
 
 	shared_ptr<BaseControlDevice> device = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(inputPort), 0);
+	if(!device) {
+		return false;
+	}
+
 	device->SetRawState(state);
 
 	shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(device);
