@@ -107,6 +107,8 @@ namespace Mesen.GUI.Config
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.TakeScreenshot, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F12") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadRandomGame, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("Insert") }));
 
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SwitchDiskSide, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("B") }));
+
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.Reset, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("R") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.PowerCycle, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("T") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.Pause, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Esc") }));

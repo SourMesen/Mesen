@@ -53,27 +53,29 @@ public:
 				SetBit(FdsSystemActionManager::FdsButtons::InsertDisk1 + _insertDiskNumber);
 			}
 		}
-	}
 
-	void ProcessSystemActions() override
-	{
-		SystemActionManager::ProcessSystemActions();
+		bool needEject = IsPressed(FdsSystemActionManager::FdsButtons::EjectDiskButton);
+		int diskToInsert = -1;
+		for(int i = 0; i < 16; i++) {
+			if(IsPressed(FdsSystemActionManager::FdsButtons::InsertDisk1 + i)) {
+				diskToInsert = i;
+				break;
+			}
+		}
 
-		shared_ptr<FDS> mapper = _mapper.lock();
-		if(mapper) {
-			if(IsPressed(FdsSystemActionManager::FdsButtons::EjectDiskButton)) {
+		if(needEject || diskToInsert >= 0) {
+			shared_ptr<FDS> mapper = _mapper.lock();
+			if(needEject) {
 				mapper->EjectDisk();
 			}
 
-			for(int i = 0; i < 16; i++) {
-				if(IsPressed(FdsSystemActionManager::FdsButtons::InsertDisk1 + i)) {
-					mapper->InsertDisk(i);
-					break;
-				}
+			if(diskToInsert >= 0) {
+				mapper->InsertDisk(diskToInsert);
+				
 			}
 		}
 	}
-
+	
 	void EjectDisk()
 	{
 		_needEjectDisk = true;

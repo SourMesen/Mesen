@@ -61,7 +61,7 @@ public:
 		_needPowerCycle = true;
 	}
 
-	virtual void ProcessSystemActions()
+	void ProcessSystemActions()
 	{
 		shared_ptr<Console> console = _console.lock();
 		if(console) {
@@ -70,6 +70,7 @@ public:
 			}
 			if(IsPressed(SystemActionManager::Buttons::PowerButton)) {
 				console->PowerCycle();
+				//Calling PowerCycle() causes this object to be deleted - no code must be written below this line
 			}
 		}
 	}
