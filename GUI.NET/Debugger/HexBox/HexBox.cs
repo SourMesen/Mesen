@@ -2420,7 +2420,6 @@ namespace Be.Windows.Forms
 				int caretWidth = (this.InsertActive) ? 1 : (int)_charSize.Width;
 				int caretHeight = (int)_charSize.Height;
 				e.Graphics.FillRectangle(Brushes.Yellow, _caretPos.X - 1, _caretPos.Y, caretWidth, caretHeight);
-				e.Graphics.DrawRectangle(Pens.Gray, _caretPos.X - 1, _caretPos.Y, caretWidth, caretHeight);
 			}
 
 			if (_lineInfoVisible)
@@ -2440,6 +2439,12 @@ namespace Be.Windows.Forms
 				PaintHeaderRow(e.Graphics);
 			if (_groupSeparatorVisible)
 				PaintColumnSeparator(e.Graphics);
+
+			if(_caretVisible && this.Focused && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
+				int caretWidth = (this.InsertActive) ? 1 : (int)_charSize.Width;
+				int caretHeight = (int)_charSize.Height;
+				e.Graphics.DrawRectangle(Pens.Gray, _caretPos.X - 1, _caretPos.Y, caretWidth, caretHeight);
+			}
 		}
 
 
@@ -2517,6 +2522,9 @@ namespace Be.Windows.Forms
 				this.ByteColorProvider.Prepare(_startByte, intern_endByte);
 			}
 
+			bool prevSelected = false;
+			Color prevBgColor = Color.Transparent;
+
 			for (long i = startByte; i < intern_endByte + 1; i++)
 			{
 				counter++;
@@ -2532,16 +2540,19 @@ namespace Be.Windows.Forms
 				bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
 				using(Brush byteBrush = new SolidBrush(byteColor)) {
 					if(isSelectedByte && isKeyInterpreterActive) {
-						PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint);
+						PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint, prevSelected);
+						prevSelected = true;
 					} else {
 						if(bgColor != Color.Transparent) {
 							using(Brush bgBrush = new SolidBrush(bgColor)) {
-								PaintHexStringSelected(g, b, byteBrush, bgBrush, gridPoint);
+								PaintHexStringSelected(g, b, byteBrush, bgBrush, gridPoint, prevBgColor == bgColor);
 							}
 						} else {
 							PaintHexString(g, b, byteBrush, gridPoint);
 						}
+						prevSelected = false;
 					}
+					prevBgColor = bgColor;
 				}
 			}
 		}
@@ -2568,7 +2579,7 @@ namespace Be.Windows.Forms
 			g.DrawString(sB.Substring(1, 1), Font, brush, headerPointF, _stringFormat);
 		}
 
-		void PaintHexStringSelected(Graphics g, byte b, Brush brush, Brush brushBack, Point gridPoint)
+		void PaintHexStringSelected(Graphics g, byte b, Brush brush, Brush brushBack, Point gridPoint, bool extendBack = false)
 		{
 			string sB = b.ToString(_hexStringFormat, System.Threading.Thread.CurrentThread.CurrentCulture);
 			if (sB.Length == 1)
@@ -2576,10 +2587,19 @@ namespace Be.Windows.Forms
 
 			PointF bytePointF = GetBytePointF(gridPoint);
 
-			bool isLastLineChar = (gridPoint.X + 1 == _iHexMaxHBytes);
-			float bcWidth = (isLastLineChar) ? _charSize.Width * 2 : _charSize.Width * 3;
+			bool isFirstLineChar = (gridPoint.X == 0);
+			extendBack &= !isFirstLineChar;
+			float bcWidth = extendBack ? _charSize.Width * 3 : _charSize.Width * 2;
 
-			g.FillRectangle(brushBack, bytePointF.X, bytePointF.Y, bcWidth, _charSize.Height);
+			g.FillRectangle(brushBack, extendBack ? bytePointF.X - _charSize.Width : bytePointF.X, bytePointF.Y, bcWidth, _charSize.Height);
+			if(_selectionLength == 0 && _caretPos.Y == bytePointF.Y && _caretPos.X >= bytePointF.X && _caretPos.X <= bytePointF.X + bcWidth) {
+				if(_caretVisible && this.Focused && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
+					//Redraw caret over background color
+					int caretWidth = (this.InsertActive) ? 1 : (int)_charSize.Width;
+					int caretHeight = (int)_charSize.Height;
+					g.FillRectangle(Brushes.Yellow, _caretPos.X - 1, _caretPos.Y, caretWidth, caretHeight);
+				}
+			}
 			g.DrawString(sB.Substring(0, 1), Font, brush, bytePointF, _stringFormat);
 			bytePointF.X += _charSize.Width;
 			g.DrawString(sB.Substring(1, 1), Font, brush, bytePointF, _stringFormat);
@@ -2612,6 +2632,9 @@ namespace Be.Windows.Forms
 				this.ByteColorProvider.Prepare(_startByte, intern_endByte);
 			}
 
+			bool prevSelected = false;
+			Color prevBgColor = Color.Transparent;
+
 			for(long i = startByte; i < intern_endByte + 1; i++) {
 				counter++;
 				Point gridPoint = GetGridBytePoint(counter);
@@ -2639,16 +2662,19 @@ namespace Be.Windows.Forms
 
 					using(Brush byteBrush = new SolidBrush(byteColor)) {
 						if(isSelectedByte && isKeyInterpreterActive) {
-							PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint);
+							PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint, prevSelected);
+							prevSelected = true;
 						} else {
 							if(bgColor != Color.Transparent) {
 								using(Brush bgBrush = new SolidBrush(bgColor)) {
-									PaintHexStringSelected(g, b, byteBrush, bgBrush, gridPoint);
+									PaintHexStringSelected(g, b, byteBrush, bgBrush, gridPoint, prevBgColor == bgColor);
 								}
 							} else {
 								PaintHexString(g, b, byteBrush, gridPoint);
 							}
+							prevSelected = false;
 						}
+						prevBgColor = bgColor;
 
 						string s;
 						if(skipCount > 0) {
